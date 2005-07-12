@@ -1,0 +1,334 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/lockdown/reboot</key>
+      <applyto>/apps/gnome-power/lockdown/reboot</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>User cannot reboot the machine</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/lockdown/shutdown</key>
+      <applyto>/apps/gnome-power/lockdown/shutdown</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>User cannot shutdown the machine</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/lockdown/hibernate</key>
+      <applyto>/apps/gnome-power/lockdown/hibernate</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>User cannot hibernate the machine</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/lockdown/suspend</key>
+      <applyto>/apps/gnome-power/lockdown/suspend</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>User cannot suspend the machine</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/displayIcon</key>
+      <applyto>/apps/gnome-power/general/displayIcon</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether to display a permanent icon</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/displayIconFull</key>
+      <applyto>/apps/gnome-power/general/displayIconFull</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether we display icons when they are full</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/lowThreshold</key>
+      <applyto>/apps/gnome-power/general/lowThreshold</applyto>
+      <owner>gnome-power</owner>
+      <type>int</type>
+      <default>20</default>
+      <locale name="C">
+        <short>The powerdevice low-icon threshold.</short>
+        <long>The percentage that the powerdevice has to get to be considered "low enough" to display an icon.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasAcAdapter</key>
+      <applyto>/apps/gnome-power/general/hasAcAdapter</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has an ac_adapter</short>
+        <long>If the machine has an AC adapter (usually laptops) then this key should be set.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasButtons</key>
+      <applyto>/apps/gnome-power/general/hasButtons</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has power buttons</short>
+        <long>If the machine has an power, sleep or lid buttons then this key should be set.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasBatteries</key>
+      <applyto>/apps/gnome-power/general/hasBatteries</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine have primary batteries</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasUPS</key>
+      <applyto>/apps/gnome-power/general/hasUPS</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a UPS attached</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasDisplays</key>
+      <applyto>/apps/gnome-power/general/hasDisplays</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a display (that can be blanked) attached.</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasHardDrive</key>
+      <applyto>/apps/gnome-power/general/hasHardDrive</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a hard-drive (that can be spun-down) attached.</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasLCD</key>
+      <applyto>/apps/gnome-power/general/hasLCD</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a LCD (brightness variable) attached.</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasMouse</key>
+      <applyto>/apps/gnome-power/general/hasMouse</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a wireless mouse attached.</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/hasKeyboard</key>
+      <applyto>/apps/gnome-power/general/hasKeyboard</applyto>
+      <owner>gnome-power</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the machine has a wireless keyboard attached.</short>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/AC/Brightness</key>
+      <applyto>/apps/gnome-power/policy/AC/Brightness</applyto>
+      <type>int</type>
+      <default>90</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/AC/SleepComputer</key>
+      <applyto>/apps/gnome-power/policy/AC/SleepComputer</applyto>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/AC/SleepDisplay</key>
+      <applyto>/apps/gnome-power/policy/AC/SleepDisplay</applyto>
+      <type>int</type>
+      <default>60</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/AC/SleepHardDrive</key>
+      <applyto>/apps/gnome-power/policy/AC/SleepHardDrive</applyto>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/Batteries/Brightness</key>
+      <applyto>/apps/gnome-power/policy/Batteries/Brightness</applyto>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/Batteries/SleepComputer</key>
+      <applyto>/apps/gnome-power/policy/Batteries/SleepComputer</applyto>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/Batteries/SleepDisplay</key>
+      <applyto>/apps/gnome-power/policy/Batteries/SleepDisplay</applyto>
+      <type>int</type>
+      <default>10</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/Batteries/SleepHardDrive</key>
+      <applyto>/apps/gnome-power/policy/Batteries/SleepHardDrive</applyto>
+      <type>int</type>
+      <default>5</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+   
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/ButtonPower</key>
+      <applyto>/apps/gnome-power/policy/ButtonPower</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/ButtonSuspend</key>
+      <applyto>/apps/gnome-power/policy/ButtonSuspend</applyto>
+      <type>string</type>
+      <default>suspend</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/ButtonLid</key>
+      <applyto>/apps/gnome-power/policy/ButtonLid</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/SleepType</key>
+      <applyto>/apps/gnome-power/policy/SleepType</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/ACFail</key>
+      <applyto>/apps/gnome-power/policy/ACFail</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/BatteryCritical</key>
+      <applyto>/apps/gnome-power/policy/BatteryCritical</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/policy/UPSCritical</key>
+      <applyto>/apps/gnome-power/policy/UPSCritical</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>Short description.</short>
+      </locale>
+   </schema>
+
+  </schemalist>
+</gconfschemafile>

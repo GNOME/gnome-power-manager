@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: nxml -*-->
+<!DOCTYPE moduleset SYSTEM "moduleset.dtd">
+<?xml-stylesheet type="text/xsl" href="moduleset.xsl"?>
+
+<!-- Include the following line to the gnome-x.xx.modules that jhbuild uses to build gnome
+  
+<include href="gnome-power.modules" />
+
+You can then build gnome-power by running "jhbuild build gnome-power"
+More info about jhbuild you can find here 
+http://www.jamesh.id.au/software/jhbuild/
+
+-->
+
+<moduleset>
+  <cvsroot name="gnome-power.sf.net"
+     root=":pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power"
+     password="" />
+
+  <cvsmodule id="gnome-power" cvsroot="gnome-power.sf.net">
+    <dependencies>
+      <dep package="libgnomeui" />
+      <dep package="hal" />
+      <dep package="libwnck" />
+      <dep package="gtk+" />
+      <dep package="gconf" />
+      <dep package="intltool" />
+      <dep package="libglade" />
+    </dependencies>
+  </cvsmodule>
+
+</moduleset>

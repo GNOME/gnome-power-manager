@@ -1,0 +1,34 @@
+			      GNOME Power Manager
+			   A Power Manager for GNOME
+
+GNOME Power Manager is a GNOME session daemon that acts as a policy agent on top of 
+the Project Utopia stack, which includes the kernel, hotplug, udev, and HAL. GNOME 
+Power Manager listens for HAL events and responds with user-configurable reactions.
+Currently it supports UPS's, laptop batteries and AC adapters. Its goal is to be 
+architecture neutral and free of polling and other hacks.
+
+Most of the code is actually in HAL for abstracting various power aware devices 
+(UPS's) and frameworks (ACPI, PMU, APM etc.) - so the desktop parts are fairly 
+lightweight and straightforward to write.
+
+GNOME Power Manager comes in three parts:
+
+	- gnome-power-manager:	    the manager daemon itself
+	- gnome-power-preferences:  the control panel program, for configuration
+
+To build, GNOME Power Manager requires
+
+	- libgnomeui-2.0
+	- libglade-2.0
+	- libhal-0 (from HAL 0.5.00 or later)
+	- libdbus-1 (from D-BUS 0.30 or later)
+	- libdbus-glib-1 (from D-BUS 0.30 or later)
+
+To run, gnome-power-manager requires hald to be running.
+
+For more information, please see http://gnome-power.sourceforge.net/
+
+=== Failing to install gconf schema? ===
+
+The amended configure line is needed when installing to a local gconf root (non root)
+./configure --prefix=/home/hughsie/root --with-gconf-source=xml::/home/hughsie/.gconf

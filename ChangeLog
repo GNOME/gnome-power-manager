@@ -1,0 +1,634 @@
+2005-07-12  David Zeuthen  <davidz@redhat.com>
+
+	* src/gpm-notification.c (create_icon_pixbuf): Use the new icons
+	for system-wide power state so it's much easier to theme
+
+	* src/Makefile.am:
+	(Data_DATA): Add pixmaps/gnome-power-system[-ac]-[0-8]-of-8.png
+
+	* src/pixmaps/gnome-power-system[-ac]-[0-8]-of-8.png: New files
+
+2005-07-11  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power.spec.in : Added depend of PowerManager - this is now the
+	only way we can call root scripts. PowerManager is only a temp fix,
+	HAL will have the required actions soon.
+	Fedora Extras fixes from Andreas Thienemann, thanks!
+
+	* gnome-power.schemas.in : Removed the scripts/ gconf directory.
+	Removed the ShowIconLow boolean as we don't support this anymore.
+
+	* src/gpm-dbus-common.c : Add convert_dbus_enum_to_string () so we can make
+	the interactive prompts more user-friendly.
+
+	* src/gpm-dbus-list.c : Removed, as we can use the dbus tools instead.
+
+	gnome-power-manager.sgml, gnome-power-preferences.sgml : New files from
+	Oliver Grawert <ogra@ubuntu.com> for man support. Still need to fill these
+	in to be complete, and up to date (and to patch Makefile and spec) but
+	I've uploaded them so people can see them and improve them.
+
+2005-07-07 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-common.h : Renamed net.sf.PowerManager to 
+	net.sf.GnomePower so we can use a desktop agnostic backend.
+	Add PM_DBUS_INTERFACE as a test.
+
+	* src/gpm-dbus-common.h : Create pm_do_action () as a test using PM_DBUS.
+
+2005-07-04 Richard Hughes  <richard@hughsie.com>
+
+	* dbus-interface.html : New file, detailing the DBUS interface and 
+	progress.
+
+	* src/gpm-dbus-server.c : Continue to impliment the spec (above)
+
+	* src/gpm-dbus-test.c : Start writing lots of tests so we can really
+	pound the PowerManager DBUS interface.
+
+	* src/gpm-main.c : Now does action ACPower fail. Noticed by Ow Mun Heng.
+
+	* .cvsignore, po/.cvsignore, src/.cvsignore : New files to help me
+	keep on top of the CVS directories.
+
+2005-07-02 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-test.[c|h] New files for test DBUS service.
+	* src/gpm-dbus-list.[c|h] New files for test DBUS service.
+	* src/gpm-dbus-server.[c|h] New files for test DBUS service.
+	* src/gpm-dbus-test.[c|h] New files for test DBUS service.
+	* gnome-power.conf : New DBUS conf file
+	(belongs in /etc/dbus-1/system.d/)
+
+	* src/Makefile.am : Added the above files to build the new DBUS bits.
+
+	* src/clipboard.{c|h} : Removed these files as we can use DBUS for
+	startup checking.
+
+	* Makefile.am : Installed /etc/dbus-1/system.d/gnome-power.conf
+	* gnome-power.spec.in : Install /etc/dbus-1/system.d/gnome-power.conf
+	and restart messagebus.
+
+2005-07-01 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-notification.c : Removed the low icon code in prep for
+	DavidZ and Andrei's patches. Code is simpler and less complicated.
+	Also created create_virtual_of_type() to play with. May be usefull for
+	multi-instance devices like batteries where we want to average the values.
+
+2005-06-30 Richard Hughes  <richard@hughsie.com>
+
+	* src/prefs.glade : split some options into a new tab.
+	
+	* src/gpm-notification.c : After discussing with Paul Ionescu, I've
+	created the new funtion get_percentagecharge_batteries () that
+	understands multibattery setups. Hopefully this should be useful.
+	Also made this function work. += is the correct line, =+ is incorrect!
+
+	* src/gpm-notification.c : Also added the new functions 
+	get_tooltip_state () and get_object_tooltip () which will hopefully 
+	help the work Andrei is doing with the new left click menu.
+
+2005-06-28 Richard Hughes  <richard@hughsie.com>
+
+	* Makefile.am : Fix typo that was tripping up intltool-*
+	* src/Makefile.am : Add *.h files so that we pass make distcheck
+	Patches from Andrew Duggan - thanks.
+
+2005-06-27 Richard Hughes  <richard@hughsie.com>
+
+	* PATCH: Converted names to be clearer on advice of Jaap Haitsma:
+	common 	-> 	gpm-common
+	gpm 	-> 	gpm-main
+	gpn 	-> 	gpm-notification
+	prefs 	-> 	gpm-prefs
+
+	You can get the old versions using:
+	http://www.cs.utexas.edu/users/almstrum/cs373/general/cvsguide.html#revision
+
+	* Removed icons.{c|h} as we don't need stub functions.
+
+2005-06-22 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpn.{h|c} : Add showIfFull to IconData struct so we can update
+	on the fly.
+
+	* src/prefs.c : Fix a bug where we automatically overwrite the value of
+	displayIconFull and displayIconLow (to true) on g-p-p startup.
+
+	* src/Makefile.am : Remove discharging.png as it's no longer part of 
+	the build.
+
+	* src/gpn.c : new function get_object_of_powertype () - helps us with
+	the displayIconFull problem. We should do the right thing with the
+	main icon now. Reported by Paul Ionescu - Thanks.
+
+2005-06-21 Richard Hughes  <richard@hughsie.com>
+
+	* src/common.c : Add POWER_AC_ADAPTER to convert_powerdevice_to_gnomeicon
+	
+	* src/gpm.c (add_ac_adapter) : Make sure we set struct fields 
+	(like isRechargeable) to a known value. Fixes the problem of a desktop
+	showing an ac_adapter icon with an overlay.
+	Also create a new funtion (read_battery_data)to seporate creating the 
+	battery object and populating it. Solves the crash at boot with no 
+	batteries inserted. We can also populate known data if the battery isn't
+	present like we did for ac_adapter.
+	Reported by Paul Ionescu. - Thanks.
+	
+	* src/Makefile.am : Change ac_adapter.png to gnome-dev-acadapter.png
+
+2005-06-19 Richard Hughes  <richard@hughsie.com>
+
+	* po/de.po : New file - translation from Hendrik Brandt - thanks!
+
+	* src/{gpm|prefs|gpn|common}.c : Mark some strings translatable
+
+	* po/POTFILES.in : Add the above files for translation.
+
+	* configure.in : add translation de.
+	
+	* src/gpn.c : Add initial LCD work, but don't enable it yet.
+	
+2005-06-19 Richard Hughes  <richard@hughsie.com>
+
+	* src/{gpm|prefs|gpn}.c : replace /apps/gnome-power/ with GCONF_ROOT
+
+	* src/common.c : make some simple functions return gchar rather than
+	GString to speed them up. We don't need to be overly clever for no gain.
+	Removed convert_powerdevice_to_haltype () as unused.
+
+	* gnome-power.schemas.in : Add /apps/gnome-power/general/displayIconFull
+	so we can ignore a fully charged device. Requested as feature.
+	Also add:
+	/schemas/apps/gnome-power/lockdown/{shutdown|suspend|hibernate|reboot}
+	so we can use sabayon to lock down users to not do specific things.
+	Distros can use this (e.g. Fedora) if they consider an action dangerous.
+	We could use HAL in the future for this information, and we definatly 
+	need to work out what the hardware can do. No point displaying
+	"Hibernate" if the machine is of type APM, for instance.
+
+	* src/prefs.c : Added variable displayIconFull and added in checks for
+	the new checkbox checkbutton_display_icon_full.
+
+	* src/common.h : Added lockdown stuff to SetupData. 
+
+	* src/gpm.c, src/gpn.c : Read in lockdown information to SetupData, and
+	apply when needed. Only refreshed on program invocation as the data
+	isn't going to change frequently, if at all.
+
+2005-06-18 Richard Hughes  <richard@hughsie.com>
+
+	* configure.in : Bump to 0.0.6 as I released 0.0.5 today.
+
+	* src/prefs.c : Remove the horror that was getPolicyFromWidgetname ()
+	- replace with sexy g_object pointers.
+
+	* gnome-power.schemas.in : Add /schemas/apps/gnome-power/scripts/
+	{shutdown|suspend|hibernate|reboot} after talking to David Zeuthen about
+	HAL events (which might not be used on all distros/archs..)
+	We can always use:
+		dbus-send --system --dest=org.freedesktop.Hal  \
+		/org/freedesktop/Hal/devices/computer \
+		org.freedesktop.Hal.Device.SystemPower.Suspend
+	When HAL event support is added, this can be patched in by distros.
+
+	* src/common.h : Added ACTION_REBOOT
+
+	* src/gpn.c : Added callback_actions_activated so we can get some
+	callbacks for the actions such as "Shutdown"
+	Also add menu_add_separator_item to split the menu up a bit,
+	Add menu_add_action_item's for all the states. At the moment all the
+	states are shown (irrespective to whether supported) but this is mainly
+	for my testing.
+
+	* src/Makefile.am, src/pixmaps/gnome-* : Add icons for actions.
+
+	* src/common.c, src/prefs.c : Remove stdio.h includes as not required.
+
+	* src/info.c : Removed as unused.
+
+	* src/gpm.c : Added call to g_type_init () as some users were getting:
+	GLib-GObject-CRITICAL **: gtype.c:2254: initialization assertion failed,
+	use IA__g_type_init() prior to this function.
+	- lets hops this fixes it.
+
+	* src/gnome-power.spec.in : Fixed a typo where integer should be int.
+
+2005-06-16 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c, src/common.c : valgrind doesn't like "Conditional jump or
+	move depends on uninitialised value(s)" when ->present is assumed true.
+	Add check in add_ac_adapter () just use the ->percentageCharge directly.
+
+	* src/gpn.c (create_icon_pixbuf) : Use gtk_icon_info_free () as we 
+	leak memory otherwise. Thanks valgrind.
+
+	* src/gpm.c : Add check for battery.charge_level.rate so we don't spew
+	g_message's.
+
+2005-06-15 Richard Hughes  <richard@hughsie.com>
+
+	* src/*.[ch] : Fix from David Zeuthen to get rid of DOS newlines.
+	The moral of the story is not to email yourself code from outlook.
+
+	* src/*.[ch] : Add in GPLv2 text to make licencing clearer.
+
+	* src/*.c : Make code better fit in 80 char line.
+
+	* src/gpm.c : Remove UPS hack as patch is upstream.
+
+	* src/logger.* : Removed these files as we are swiching to glib 
+	based logging.
+
+	* src/gpn.c, src/gpm.c, src/common.c, src/icons.c, src/prefs.c : Switch
+	to g_log functions from GPM_ type macros. Smaller code, yay.
+
+	* src/common.c : New function, g_log_ignore (this will ignore messages
+	for us when non-verbose)
+
+2005-06-13 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpn.c, src/gpm.c, src/common.c, src/icons.c, src/prefs.c : 
+	Remove "!= NULL" from g_assert statements as not needed.
+
+	* Added code from Andrei Yurkevich for dynamic icons,
+	e.g. icons that do not have the colour bar hardcoded. Big thank you.
+
+	* src/gpn.c : New functions: level_bar_get_color, create_icon_pixbuf
+
+	* src/icons.c : new function: icon_modify_image_pixbuf
+
+	* src/common.c : New function: convert_powerdevice_to_gnomeicon
+	Removed : get_icon_filename, get_powerstate_discrete
+
+	* src/Makefile.am : Remove all the icons, and move some to pixmaps,
+	also removed reference to object_table.c
+
+	* src/icons/* : Removed thanks to Andrei!
+
+	* src/pixmaps/* : Removed existing, replaced with GNOME default
+	device icons so we are portable without complicated 
+	configue.in checks.
+
+	* src/gpn.* : Removed filename field as it's not needed.
+
+	* src/object_table.* : removed array functions, g_ptr_array is quick
+	and more efficient than an array ,and gives us smaller, more 
+	elegant code.
+
+	* src/common.h : removed MAX_ICONS for good :-)
+
+	* configure.in : Bumped version to 0.0.5 (as we have had a 
+	LOT of new code in the last few weeks)
+
+2005-05-31 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpn.c, src/gpn.c : New files - takes the notification
+	functions out of gpm.c and make it more manageable in size.
+	For the moment, use shared variables (no need for IPC as we 
+	are still one program..)
+
+	* src/gpm.c : Convert to use the new gpn_ functions provided
+	by gpn.c - also allow us to use the new constants ICON_MAIN,
+	ICON_LOW and ICON_ALL.
+
+2005-05-29 Richard Hughes  <richard@hughsie.com>
+
+	* src/object_table.c : make object_table_find return void, and
+	convert slotData to NULL if we do not find object - this will
+	trigger the g_assert'ion, rather than seg-faulting in 
+	gpm.c:property_modified
+
+	* src/gpm.c : To prevent g_assert'ing when first adding an 
+	ac_adapter after we have booted, add ac_adapter 
+	unconditionaly on present state.
+
+2005-05-25 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : Add new functon "powerDeviceToHalType" to convert
+	the powerDevice to the HAL name.
+	Get action_policy_do working again, so that *Shutdown* events
+	are triggered.
+	Simplify property_modified so that we only check battery* and
+	ac_adapter* keys. Also BUG when we can't find the device, as
+	this signifies a bug in HAL.
+
+	* src/icons/primary* : Rename the battery- icons to primary to 
+	avoid confusion with other types of batteries (this lets us use 
+	powerDeviceToHalType and simplify getIconFilenameFromSlot)
+
+	* src/icons/pda*-c|-d* : Create the PDA charging/discharging
+	icons so we could use them in the future if we wish.
+
+	* src/Makefile.am : Add new PDA icons, and stop installing
+	icons that we no longer use!
+
+	* src/*.c : Changed some StudlyCaps function names to be more
+	C-like, and consistant e.g. 
+	"getHoursStringFromMinutes" -> "get_timestring_from_minutes"
+	Also changed a lot of int's to gint's and chars to gchars for
+	glib portibility (makes no difference at the moment).
+
+2005-05-25 Richard Hughes  <richard@hughsie.com>
+
+	* src/common.c, src/common.h, src/gpm.c : Add a patch from
+	Andrei Yurkevich for PDA support, see http://synce.sf.net
+	for the hal-addon. Thanks!
+
+	* src/common.c : refactored a lump of code to the function
+	HalTypeToPowerDevice to abstract gpm.c a little.
+
+2005-05-17 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : AC_ADAPTER should not be a valid choice for 
+	icon_low - check for this. Also document a few functions while
+	I'm here.
+
+2005-05-16 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c, src/common.c, src/icons.c, src/prefs.c : Add a 
+	load of g_assert's to try and find all the funny crashes and get
+	rid of the unneeded error paths where abort would be the best 
+	solution.
+
+	* src/gpm.c : Be a lot more careful with freeing memory.
+	Remove kludgey string logic in getIconFilenameFromSlot and use 
+	itegers and %03i format.
+
+	* src/preferences.glade : Add the low threshold slider.
+
+	* src/prefs.c : Support the new slider, adding new callback tools
+	and modifying policy lookup function (getPolicyFromWidgetname)
+
+	* src/gpm.c : Make threshold slider dynamically add/remove low icon.
+
+2005-05-14 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : Fix a segfault in the situation on having no low
+	power devices attached. Should also sort the problem of running 
+	GPM on a PC without any powerdevices, but this I'll have to check.
+	Fixed a memory-leak where we were not calling free_icon_structure
+	after removing an icon.
+
+2005-05-13 Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : fixed the saving of remaining_time for batteries.
+	Rename the function mememe as it's a point of embarrassment. :-)
+	Make get_main_tooltip use powerDeviceToString for consistency.
+
+	* gnome-power.schemas.in : Added lowThreshold to the schema
+
+2005-05-12 Richard Hughes  <richard@hughsie.com>
+
+	* src/common.*, src/gpm.c : FINALLY sorted out the mess that was icon
+	and tooltip generation. Next on my list is the actions support which
+	is a mess as well. Lots of changes.
+
+	* src/icons.* : Removed the filename parameter from icon_create to
+	avoid having to do clever things before creating the icon. This may 
+	display the GTK broken image for a split second while loading, 
+	although I can't see it on my laptop at all.
+
+	* src/object_table.c : Removed use of removed properties. Less junk.
+
+	* gnome-power.schemas.in : Added displayIconLow to the schema
+
+	* src/prefs.c, src/preferences.glade : Added displayIconLow support.
+
+2005-05-11  Richard Hughes  <richard@hughsie.com>
+
+	* src/common.* : Got rid of the ACPI calculation as the patch is now
+	in HAL CVS that makes time_remaining part of the interface. Nice.
+
+	* src/gpm.c : Got rid of the special case ACPI calculations.
+
+	* gnome-power.schemas.in : Updates policy to reflect what we are 
+	actually using, and choose some defaults.
+
+	* src/common.c : policyoption_to_enum, enum_to_policyoption :
+	new functions to convert the enum ACTION_HIBERNATE into a string
+	"hibernate" and vice versa, for use in gconf to prettyfy names.
+	Still needs some work.
+
+2005-05-09  Richard Hughes  <richard@hughsie.com>
+
+	* src/* : Changed printf => g_print and fprintf(stderr) => GPM_ERROR
+	on advice of Jaap Haitsma, thanks.
+
+	* ../hal : Fixed up so that UPS's always set battery.present = TRUE.
+	Also making progress on moving battery.time_remaining into HAL, rather
+	than the mess of special cases we have in GPM at the moment.
+	
+	* src/common.* : New function, powerDeviceToString to make easy work
+	of converting a magic number into a human string.
+
+2005-05-08  Richard Hughes  <richard@hughsie.com>
+
+	* src/icons.c, src/icons.h : Re-implimented the notification area 
+	icon destroy/create/modify functions to be more logical and
+	segfault friendly as these functions have caused lots of crashes.
+	Also made the dropdown menu icon specific rather than global for the
+	different types of icon.
+
+	* src/gpm.c : Changed to use new icon functions and misc cleanups.
+	
+	* src/common.h : Removed redundant icon checking fields.
+
+	* src/prefs.c : Make the icon checkbox get it's value from gconf.
+
+2005-05-05  Richard Hughes  <richard@hughsie.com>
+
+	* New frontend according the GNOME HIG (2 weeks work!)
+
+	* Backend displaying multiline tooltip and single icon, unless
+	battery device is low (todo!)
+
+	* Begin switching char* functions into GString functions.
+
+2005-04-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/preferences.glade : misc grammar/spelling fixes from 
+	Simon Howard, Thanks!
+
+	* src/icons/ups-*-*.png, src/Makefile.am: New UPS discharge and 
+	charge icons to match battery.
+
+	* src/common.c : Support new UPS charging and discharging icons.
+
+2005-04-18  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in, NEWS : Bumped version to 0.0.4
+
+	* src/prefs.c : Removed the users ability to show/hide the 
+	ac-adapter icon as this is going away in 0.0.4
+
+	* src/gpm.c, src/alert.c : Removed the alert checkbox on the 
+	advice of Paul Ionescu.
+
+	* src/common.c : Removed getFilenameNumberFormat to simplify logic.
+
+	* src/common.h : Added isDischarging property because 
+	isDischarging != isCharging :-)
+
+	* src/icons/battery-*-*.png, src/Makefile.am: New discharge and 
+	charge icons, thanks to Paul Ionescu for the mockup and 
+	David Zeuthen for the idea.
+
+2005-04-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : Fix some seg-faulting goodness when we try to modify 
+	a tooltip of an icon that was never created.
+	Also added lots of function comments.
+
+	* src/prefs.c : Make checkboxes use a SList like the combos.
+	This neatens things up, and means gconf policy name doesn't have to 
+	match the libglade widgetname.
+	Made the "help" button lauch a web-browser displaying g-p-m homepage.
+	Also added lots of function comments.
+
+2005-04-06  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am : Tidy up, don't include .h files here.
+
+	* src/prefs.c : Got rid of the nasty, nasty arrays.
+
+	* src/prefs.h : New file, just for preferences stuff
+
+2005-04-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm.c : Patch from Andrei Yurkevich to fix seg-fault on DBUS
+	initialisation, thanks!
+
+	* src/prefs.c : Massive overhaul so that gconf ky name is decoupled
+	from libglade name - this lets us choose pretty names in gconf.
+	Also made so that lcd_brightness is measured in percent in gconf
+	so power-users could make changes without looking up the enum.
+	Added error checking and suitable framework.
+
+	* gnome-power.schemas.in, src/gpm.c, src/prefs.c : Make gconf names 
+	pretty, not ones derived from libglade.
+
+2005-04-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/alert.c, src/alert.glade : New files for the about dialogue for
+	battery low notification.
+
+	* src/Makefile.am, Makefile.am : added information for gnome-power-alert,
+	Uncommented the gconf install line, install .desktop file.
+
+	* src/pixmaps/* : Added new icons with battery icons superimposed. 
+
+	* src/common.*, src/gpm.* : Removed .enabled from the struct, now using 
+	POWER_NONE to signify that there is no device. Also done lots more checking 
+	for NULL for the slotBase structures being passed around.
+
+	* gnome-power-preferences.desktop.in : New file, create launcher to modify
+	GNOME Power Preferences from the GNOME system menu.
+
+	* gnome-power.spec.in : First version of the RPM spec, based mainly on
+	GNOME Volume Manager's spec file. Produces RPM's ok, I think.
+
+2005-04-03  Richard Hughes  <richard@hughsie.com>
+
+	* autogen.sh : Made to automatically run ./configure on the advice of
+	Jaap Haitsma.
+
+	* src/gpm.c src/common.c : Add tweaks, and start to make interface suitable
+	for DBUS.
+
+	* src/common.h, src/icons.h, src/object_table.h : Split prototypes for 
+	header files to clean up include mess.
+
+2005-04-01  Richard Hughes  <richard@hughsie.com>
+
+	* src/logger.c, src/logger.h : New files for logging
+	Shamelessly copied from hald, by David Zeuthen
+
+	* src/gpm.c, src/common.c : Updated to better support Logitech mice and
+	changed all the printing to stdout to use the new logging functions.
+
+	* src/gpm.c, src/prefs.c, src/common.h, src/preferences.glade :
+	Implemented the /icons/icon* gconf properties so that users can hide
+	or show icons.
+
+	* src/common.h : Removed type for battery, now we'll use a string for speed.
+
+	* Makefile.am : Removed local-build powermanager.c - oops.
+
+2005-03-30  Richard Hughes  <richard@hughsie.com>
+
+	* doc/ : removed the temporary directory and split into the new
+	CVS module www.
+
+	* src2/ : removed the developmental directory and split into the new
+	CVS module power-manager. The code is in flux, and probably will
+	not compile or run for a while. I'm concentrating on PowerManager before
+	I work anymore on the GNOME GUI.
+
+	* www/* : Updated the directory with new php based layout from Jaap.
+
+2005-03-25  Richard Hughes  <richard@hughsie.com>
+
+	* prefs.c, preferences.glade : rebuild menus...
+	New file structure, with tabbed layout and more options. There are
+	no schemes now, as they make no logical sense in the current format.
+
+	* g-p-m.schemas.in, added new properties for policy, and removed schemes.
+
+	* docs/index.html, change references to module head to gnome-power
+	For GNOME Power Manager to build in jhbuild, the CVS module name must
+	be similar to the project. Renamed head to gnome-power.
+
+	* gnome-power.modules, new file:
+	Added template for jhbuild users, thanks Jaap Haitsma!
+
+	* TODO, Added list of things to do!
+	* NEWS, Added list of releases, well, both of them.
+	* README, Added link to website.
+	* HACKING, Added plea for help!
+
+2005-03-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/common.c, new function : updateLogic()
+	This function runs through the old state, calculates the new 
+	state, then performs and notification actions. It obsoletes 
+	most of do_action() and all of the hasBatteriesCheck type code. 
+
+	* src/gpm.c, Misc, Hooks added to most of the update code to support 
+	updateLogic (where appropriate).
+
+	* src/common.h, make enums match CodingStyle, also added lots more
+	states to the StateData structure to support updateLogic().
+
+	* src/common.c, Made the percentage/mWh calculations more common, and more 
+	resistant to errors.
+
+	* src/prefs.c, Made the PowerState ComboBox change the others according to 
+	policy. Also values now populated dynamically, not in the glade file.
+	Static policy in use, and documentation has been updated.
+	
+2005-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/prefs.c, new file:  - also imported all the pixmaps into 
+	cvs and worked trying to connect up all the signals.
+
+	* src/gpm.c: Added new option to drop-down on all the icons for preferences
+	dialogue, and set the file to execute.
+
+	* src/common.c: Also added preliminary gconf backend, "Preferences" will 
+	dynamically adjust it's output depending on the gconf settings.
+
+	* Removed some compiled files that snuck into CVS.
+
+2005-03-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/properties.glade, new file:
+	Added preliminary glade properties file, with thanks to David Zeuthen
+	for the original.
+
+	* mkinstalldirs, new file: Add a needed file for "make install". Oops.
+
+2005-03-21  Richard Hughes  <richard@hughsie.com>
+
+	* Initial release of 0.0.2

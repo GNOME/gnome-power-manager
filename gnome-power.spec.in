@@ -1,0 +1,65 @@
+Summary: GNOME Power Manager
+Name: gnome-power
+Version: @VERSION@
+Release: 1%{?dist}
+License: GPL
+Group: Applications/System
+Source: http://dl.sourceforge.net/gnom-power/gnome-power-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+URL: http://gnome-power.sourceforge.net/
+BuildPrereq: libgnomeui-devel, libglade2-devel, hal-devel, dbus-devel >= 0.30
+Requires: gnome-mime-data, gnome-icon-theme, hal >= 0.5.00, kernel >= 2.6, control-center >= 2.0
+Requires: dbus >= 0.30
+Requires: PowerManager
+
+%description
+GNOME Power Manager uses the information and facilities provided by HAL 
+displaying icons and handling user callbacks in an interactive GNOME session. 
+GNOME Power Preferences allows authorised users to set policy and 
+change preferences.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+%makeinstall
+unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
+%find_lang %name
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+SCHEMAS="gnome-power.schemas"
+for S in $SCHEMAS; do
+  gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/$S >/dev/null
+done
+/sbin/service messagebus condrestart
+
+%files -f %{name}.lang
+%defattr(-,root,root)
+%doc AUTHORS ChangeLog COPYING README
+%{_bindir}/*
+%{_datadir}/*
+%{_sysconfdir}/gconf/schemas/*.schemas
+%dir %{_sysconfdir}/dbus-1/system.d
+%config %{_sysconfdir}/dbus-1/system.d/gnome-power.conf
+
+%changelog
+* Mon Jun 18 2005 Richard Hughes <richard@hughsie.com> 0.1.0-1
+- New RPM version 0.1.0
+
+* Mon Jun 18 2005 Richard Hughes <richard@hughsie.com> 0.0.5-1
+- New RPM version 0.0.5
+
+%changelog
+* Mon Apr 04 2005 Richard Hughes <richard@hughsie.com> 0.0.3-1
+- initial packaging of 0.0.3
+
