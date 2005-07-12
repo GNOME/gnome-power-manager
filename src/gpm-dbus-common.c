@@ -355,3 +355,51 @@ get_bool_value_pm (DBusConnection *connection, const char *action, gboolean *dat
 	dbus_message_unref (reply);
 	return TRUE;
 }
+
+gboolean
+get_bool_value_pm_int_string (DBusConnection *connection, const char *action, gboolean *data_bool, const int value, const char *string)
+{
+	DBusMessage *message;
+	DBusMessage *reply;
+	DBusError error;
+	int ret;
+	*data_bool = FALSE;
+
+	message = dbus_message_new_method_call (PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE, action);
+
+	if (!message) {
+		g_print ("dbus_message_new_signal failed to construct message.\n");
+		return FALSE;
+	}
+	dbus_message_append_args (message, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &string, DBUS_TYPE_INVALID);
+
+	dbus_error_init (&error);
+	reply = dbus_connection_send_with_reply_and_block (connection, message, -1, &error);
+	dbus_message_unref (message);
+
+	if (dbus_error_is_set (&error)) {
+		if (!strcmp (error.name, DBUS_NO_SERVICE_ERROR))
+			g_print ("DBUS_NO_SERVICE_ERROR?\n");
+		g_print ("dbus(): %s raised:\n %s\n\n", error.name, error.message);
+		dbus_error_free (&error);
+		return FALSE;
+	}
+
+	if (reply == NULL) {
+		g_print ("'%s' reply message was NULL, expecting bool data!\n", action);
+		return FALSE;
+	}
+
+	dbus_error_init (&error);
+	ret = dbus_message_get_args (reply, &error, DBUS_TYPE_BOOLEAN, data_bool, DBUS_TYPE_INVALID);
+	if (!ret) {
+		g_print ("dbus_message_get_args(): error while getting args: name='%s' message='%s'\n", error.name, error.message);
+		if (dbus_error_is_set (&error))
+			dbus_error_free (&error);
+		dbus_message_unref (reply);
+		return FALSE;
+	}
+
+	dbus_message_unref (reply);
+	return TRUE;
+}

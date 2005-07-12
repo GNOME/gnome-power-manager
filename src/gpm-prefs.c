@@ -37,7 +37,6 @@ static gboolean system_bus, isVerbose;
 static HasData hasData;
 gboolean displayIcon = TRUE;
 gboolean displayIconFull = TRUE;
-gboolean displayIconLow = TRUE;
 
 /** Sets/Hides GTK visibility
  *
@@ -168,8 +167,6 @@ gconf_key_action (const char *key)
 		displayIcon = value;
 	else if (strcmp (key, GCONF_ROOT "general/displayIconFull") == 0)
 		displayIconFull = value;
-	else if (strcmp (key, GCONF_ROOT "general/displayIconLow") == 0)
-		displayIconLow = value;
 	else {
 		g_warning ("Urecognised key [%s]", key);
 		return;

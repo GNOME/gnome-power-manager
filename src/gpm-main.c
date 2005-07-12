@@ -56,6 +56,19 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+/** Convenience function.
+ *  Prints errors due to wrong values expected (exposes bugs, rather than hides them)
+ */
+static void
+dbus_error_print (DBusError *error)
+{
+	g_assert (error);
+	if (dbus_error_is_set (error)) {
+		g_warning ("DBUS:%s", error->message);
+		dbus_error_free (error);
+	}
+}
+
 /** Do an interactive alert
  *
  *  @param  text		the text to be used in the dialogue
@@ -198,6 +211,67 @@ pm_do_action (const gchar *action)
 		g_warning ("%s failed", action);
 }
 
+/** For this specific hard-drive, set the spin-down timeout
+ *
+ *  @param  device		The device, e.g. /dev/hda
+ *  @param  minutes		How many minutes to set the spin-down for
+ */
+static void
+set_hdd_spindown_device (gchar *device, int minutes)
+{
+	DBusConnection *connection;
+	DBusError error;
+	gboolean boolvalue = FALSE;
+	dbus_error_init (&error);
+	connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
+
+	if (setup.doAction && !get_bool_value_pm_int_string (connection, "hdparm", &boolvalue, minutes, device)) {
+		GString *gs = g_string_new ("bug");
+		g_string_printf (gs, _("PowerManager service is not running.\n"
+				     "%s cannot perform hard-drive timout changes."), NICENAME);
+		do_interactive_alert (gs->str);
+		g_string_free (gs, TRUE);
+	} else if (!boolvalue)
+		g_warning ("hard-drive timout change failed");
+
+}
+
+/** For each hard-drive in the system, set the spin-down timeout
+ *
+ *  @param  minutes		How many minutes to set the spin-down for
+ */
+static void
+set_hdd_spindown (int minutes)
+{
+	gint i, num_devices;
+	char **device_names;
+	DBusError error;
+
+	/* find devices of type hard-disks from HAL */
+	dbus_error_init (&error);
+	device_names = libhal_find_device_by_capability (hal_ctx, "storage", 
+							&num_devices, &error);
+	dbus_error_print (&error);
+	if (device_names == NULL)
+		g_warning ("Couldn't obtain list of storage");
+	for (i = 0; i < num_devices; i++) {
+		char *udi = device_names[i];
+		dbus_error_init (&error);
+		gchar *type = libhal_device_get_property_string (hal_ctx, udi, "storage.drive_type", &error);
+		dbus_error_print (&error);
+		if (strcmp (type, "disk") == 0) {
+			dbus_error_init (&error);
+			gchar *device = libhal_device_get_property_string (hal_ctx, udi, "block.device", &error);
+			dbus_error_print (&error);
+			g_debug ("Setting device %s to sleep after %i minutes\n", device, minutes);
+			set_hdd_spindown_device (device, minutes);
+			libhal_free_string (device);
+		}
+		libhal_free_string (type);
+	}
+	libhal_free_string_array (device_names);
+}
+
 /** Do the action dictated by policy from gconf
  *
  *  @param  policy_number	What to do!
@@ -332,8 +406,17 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 		if (state_data.onBatteryPower) {
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
 			action_policy_do (get_policy_string (GCONF_ROOT "policy/ACFail"));
-		} else
+			GConfClient *client = gconf_client_get_default ();
+			gint value = gconf_client_get_int (client, 
+								GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
+			set_hdd_spindown (value);
+		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
+			GConfClient *client = gconf_client_get_default ();
+			gint value = gconf_client_get_int (client, 
+								GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
+			set_hdd_spindown (value);
+		}
 #if 0
 		if (has_data.hasDisplays) {
 			if (state_data.onBatteryPower)
@@ -412,19 +495,6 @@ update_has_logic (GPtrArray *parray, gboolean coldplug)
 		&has_data.hasHardDrive, &has_datanew.hasHardDrive, coldplug);
 	compare_bool_set_gconf (GCONF_ROOT "general/hasDisplays", 
 		&has_data.hasDisplays, &has_datanew.hasDisplays, coldplug);
-}
-
-/** Convenience function.
- *  Prints errors due to wrong values expected (exposes bugs, rather than hides them)
- */
-static void
-dbus_error_print (DBusError *error)
-{
-	g_assert (error);
-	if (dbus_error_is_set (error)) {
-		g_warning ("DBUS:%s", error->message);
-		dbus_error_free (error);
-	}
 }
 
 /** Generic exit
