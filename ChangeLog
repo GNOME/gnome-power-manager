@@ -1,6 +1,14 @@
-2005-07-13  Amanpreet Singh Alam <amanpreetalam@yahoo.com>
+2005-07-13  Richard Hughes  <richard@hughsie.com>
 
-	*configure.in: Add Locale pa (Punjabi) in ALL_LINGUAS.
+	* configure.in: Add check for libnotify.
+
+	* src/gpm-common.c: Add initial code for libnotify support. Patches for
+	libnotify and DBUS 0.33 have been sent upstream, along with a spec file
+	for FC4. Ubuntu is also packaging this in the next few weeks, so the
+	extra dep shouldn't be a problem.
+
+	* src/gpm-common.c (property_modified): Fix bug where update_state_logic
+	was being called with coldplug TRUE, when it quite plainly isn't.
 
 2005-07-12  Richard Hughes  <richard@hughsie.com>
 
