@@ -1,0 +1,435 @@
+# English translation of gnome-power-manager.
+# Copyright (C) 2005 THE gnome-power-manager'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-power-manager package.
+# Арангел Ангов <ufo@linux.net.mk>, 2005.
+# , fuzzy
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-13 19:41+0000\n"
+"PO-Revision-Date: 2005-07-13 23:53+0200\n"
+"Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
+"Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
+
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Конфигурирајте менаџмент за енергија"
+
+#: ../gnome-power-preferences.desktop.in.h:2
+msgid "GNOME Power Preferences"
+msgstr "Преференци за енергија за Гном"
+
+#: ../gnome-power.schemas.in.h:1
+msgid "If the machine has a LCD (brightness variable) attached."
+msgstr "Ако машината користи LCD (променлива за светлина)."
+
+#: ../gnome-power.schemas.in.h:2
+msgid "If the machine has a UPS attached"
+msgstr "Ако машината користи UPS"
+
+#: ../gnome-power.schemas.in.h:3
+msgid "If the machine has a display (that can be blanked) attached."
+msgstr "Ако машината користи приказ (кој што може да биде испразнет)."
+
+#: ../gnome-power.schemas.in.h:4
+msgid "If the machine has a hard-drive (that can be spun-down) attached."
+msgstr "Ако машината има тврд диск."
+
+#: ../gnome-power.schemas.in.h:5
+msgid "If the machine has a wireless keyboard attached."
+msgstr "Ако машината има безжична тастатура."
+
+#: ../gnome-power.schemas.in.h:6
+msgid "If the machine has a wireless mouse attached."
+msgstr "Ако машината има безжично глувче."
+
+#: ../gnome-power.schemas.in.h:7
+msgid ""
+"If the machine has an AC adapter (usually laptops) then this key should be "
+"set."
+msgstr "Ако машината има AC адаптер (најчесто лаптопи) тогаш ова копче треба да е поставено."
+
+#: ../gnome-power.schemas.in.h:8
+msgid "If the machine has an ac_adapter"
+msgstr "Ако машината има ac _адаптер"
+
+#: ../gnome-power.schemas.in.h:9
+msgid ""
+"If the machine has an power, sleep or lid buttons then this key should be "
+"set."
+msgstr "Ако машината има копчиња за вклучување или за мирување тогаш ова копче треба да е поставено."
+
+#: ../gnome-power.schemas.in.h:10
+msgid "If the machine has power buttons"
+msgstr "Ако машината има копчиња за вклучување"
+
+#: ../gnome-power.schemas.in.h:11
+msgid "If the machine have primary batteries"
+msgstr "Ако машината има примарни батерии"
+
+#: ../gnome-power.schemas.in.h:12
+msgid "Short description."
+msgstr "Краток опис."
+
+#: ../gnome-power.schemas.in.h:13
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to display an icon."
+msgstr ""
+"Процентот кој што треба да го постигне уредот за напојување за да се смета за „доволно ниско“ за прикажување на иконата."
+
+#: ../gnome-power.schemas.in.h:14
+msgid "The powerdevice low-icon threshold."
+msgstr "Иконата за низок процент на преостаната енергија."
+
+#: ../gnome-power.schemas.in.h:15
+msgid "User cannot hibernate the machine"
+msgstr "Корисникот не може да ја хибернира машината"
+
+#: ../gnome-power.schemas.in.h:16
+msgid "User cannot reboot the machine"
+msgstr "Корисникот не може да ја рестартира машината"
+
+#: ../gnome-power.schemas.in.h:17
+msgid "User cannot shutdown the machine"
+msgstr "Корисникот не може да ја исклучи машината"
+
+#: ../gnome-power.schemas.in.h:18
+msgid "User cannot suspend the machine"
+msgstr "Корисникот не може да ја суспендира машината"
+
+#: ../gnome-power.schemas.in.h:19
+msgid "Whether to display a permanent icon"
+msgstr "Дали да прикажува трајна икона"
+
+#: ../gnome-power.schemas.in.h:20
+msgid "Whether to display icons when devices are at full capacity"
+msgstr "Дали да прикажува икони кога уредите се целосно наполнети"
+
+#: ../src/eggtrayicon.c:117
+msgid "Orientation"
+msgstr "Ориентација"
+
+#: ../src/eggtrayicon.c:118
+msgid "The orientation of the tray."
+msgstr "Ориентацијата на просторот за спуштени програми."
+
+#: ../src/gpm-common.c:142
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-common.c:144
+msgid "AC Adapter"
+msgstr "AC адаптер"
+
+#: ../src/gpm-common.c:146
+msgid "Logitech mouse"
+msgstr "Logitech глувче"
+
+#: ../src/gpm-common.c:148
+msgid "Logitech keyboard"
+msgstr "Logitech тастатура"
+
+#: ../src/gpm-common.c:150
+msgid "Laptop battery"
+msgstr "Батерија на лаптоп"
+
+#: ../src/gpm-common.c:152
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-common.c:153
+msgid "Unknown device"
+msgstr "Непознат уред"
+
+#: ../src/gpm-common.c:212
+msgid "missing"
+msgstr "недостасува"
+
+#: ../src/gpm-common.c:214
+msgid "charging"
+msgstr "се полни"
+
+#: ../src/gpm-common.c:216
+msgid "discharging"
+msgstr "се празни"
+
+#: ../src/gpm-common.c:220
+msgid "fully charged"
+msgstr "целосно наполнета"
+
+#: ../src/gpm-common.c:223
+msgid "charged"
+msgstr "наполнета"
+
+#: ../src/gpm-common.c:224
+msgid "unknown"
+msgstr "непознато"
+
+#: ../src/gpm-common.c:243
+msgid "1 minute"
+msgstr "1 минута"
+
+#: ../src/gpm-common.c:245
+#, c-format
+msgid "%i minutes"
+msgstr "%i минути"
+
+#: ../src/gpm-common.c:251
+msgid "1 hour"
+msgstr "1 час"
+
+#: ../src/gpm-common.c:253
+#, c-format
+msgid "%i hours"
+msgstr "%i часови"
+
+#: ../src/gpm-common.c:257
+msgid "1 hour 1 minute"
+msgstr "1 час 1 минута"
+
+#: ../src/gpm-common.c:260
+#, c-format
+msgid "1 hour %i minutes"
+msgstr "1 час %i минути"
+
+#: ../src/gpm-common.c:263
+#, c-format
+msgid "%i hours %i minutes"
+msgstr "%i часови %i минути"
+
+#: ../src/gpm-dbus-common.c:44
+msgid "screensave"
+msgstr "затишје"
+
+#: ../src/gpm-dbus-common.c:46
+msgid "shutdown"
+msgstr "исклучи"
+
+#: ../src/gpm-dbus-common.c:48
+msgid "software suspend"
+msgstr "софтверски суспендирање"
+
+#: ../src/gpm-dbus-common.c:50
+msgid "hibernation"
+msgstr "хибернација"
+
+#: ../src/gpm-dbus-common.c:52
+msgid "session log off"
+msgstr "одјава од сесија"
+
+#: ../src/gpm-main.c:188
+#, c-format
+msgid ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explaination given is: %s"
+msgstr ""
+"Програмата '%s го спречува %s да се изврши.\n"
+"\n"
+"Објаснувањето е: %s"
+
+#: ../src/gpm-main.c:200
+#, c-format
+msgid ""
+"The program '%s' has not returned data that is preventing the %s from "
+"occurring."
+msgstr ""
+"Програмата '%s' не врати податоци кои што спречуваат да се случи %s."
+
+#: ../src/gpm-main.c:224
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+msgstr ""
+"Сервисот PowerManager не работи.\n"
+"%s не можам да изведам %s."
+
+#: ../src/gpm-main.c:248
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timout changes."
+msgstr ""
+"Сервисот PowerManager не работи.\n"
+"%s не може да ги изврши промените на тврдиот диск."
+
+#: ../src/gpm-main.c:418
+msgid "AC Adapter has been removed"
+msgstr "AC адаптерот е отстранет"
+
+#: ../src/gpm-main.c:721
+msgid "Couldn't obtain list of batteries"
+msgstr "Не можам да ја добијам листата на батерии"
+
+#: ../src/gpm-main.c:732
+msgid "Couldn't obtain list of ac_adapters"
+msgstr "Не можам да ја добијам листата на ac _адаптери"
+
+#: ../src/gpm-main.c:933
+msgid "Power button has been pressed"
+msgstr "Притиснато е копчето за вклучување"
+
+#: ../src/gpm-main.c:940
+msgid "Sleep button has been pressed"
+msgstr "Притиснато е копчето за мирување"
+
+#: ../src/gpm-main.c:953
+msgid "Lid has been opened"
+msgstr "Лаптопот е отворен"
+
+#: ../src/gpm-main.c:1045
+msgid "Please report bugs to richard@hughsie.com\n"
+msgstr "Ве молам пријавувате грешки на richard@hughsie.com\n"
+
+#: ../src/gpm-notification.c:323
+msgid " until charged"
+msgstr "додека да се наполни"
+
+#: ../src/gpm-notification.c:325
+msgid " remaining"
+msgstr "преостанато"
+
+#: ../src/gpm-notification.c:335
+msgid "Computer is running on battery power"
+msgstr "Компјутерот работи на батерии"
+
+#: ../src/gpm-notification.c:337
+msgid "Computer is running on UPS power"
+msgstr "Компјутерот работи на енергија од UPS"
+
+#: ../src/gpm-notification.c:339
+msgid "Computer is running on AC power"
+msgstr "Компјутерот работи на AC енергија"
+
+#: ../src/gpm-notification.c:623
+msgid "Reboot"
+msgstr "Рестартирај"
+
+#: ../src/gpm-notification.c:626 ../src/gpm-prefs.c:328
+msgid "Shutdown"
+msgstr "Исклучи"
+
+#: ../src/gpm-notification.c:629 ../src/gpm-prefs.c:326
+msgid "Suspend"
+msgstr "Суспендирај"
+
+#: ../src/gpm-notification.c:632 ../src/gpm-prefs.c:327 ../src/gpm-prefs.c:331
+msgid "Hibernate"
+msgstr "Хибернација"
+
+#: ../src/gpm-prefs.c:324
+msgid "Do nothing"
+msgstr "Не прави ништо"
+
+#: ../src/gpm-prefs.c:325
+msgid "Send warning"
+msgstr "Испрати предупредување"
+
+#: ../src/gpm-prefs.c:330
+msgid "Quick sleep"
+msgstr "Брзо мирување"
+
+#: ../src/preferences.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Општо</b>"
+
+#: ../src/preferences.glade.h:2
+msgid "<b>Notification area</b>"
+msgstr "<b>Област за известување</b>"
+
+#: ../src/preferences.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>Други опции</b>"
+
+#: ../src/preferences.glade.h:4
+msgid "<b>Running on AC adapter</b>"
+msgstr "<b>Кога работи на AC адаптер</b>"
+
+#: ../src/preferences.glade.h:5
+msgid "<b>Running on batteries</b>"
+msgstr "<b>Кога работи на батерии</b>"
+
+#: ../src/preferences.glade.h:6
+msgid "Advanced"
+msgstr "Напредно"
+
+#: ../src/preferences.glade.h:7
+msgid "Battery is critical when below:"
+msgstr "Батеријата е при крај кога е под:"
+
+#: ../src/preferences.glade.h:8
+msgid "Computer sleep type:"
+msgstr "Тип на мирување:"
+
+#: ../src/preferences.glade.h:9
+msgid "Display devices that are fully charged"
+msgstr "Прикажи целосно наполнети уреди"
+
+#: ../src/preferences.glade.h:10
+msgid "Display main icon"
+msgstr "Прикажи главна икона"
+
+#: ../src/preferences.glade.h:11
+msgid "Double click notification icon:"
+msgstr "Двоен клик врз иконата за известување:"
+
+#: ../src/preferences.glade.h:12
+msgid "Options"
+msgstr "Опции"
+
+#: ../src/preferences.glade.h:13
+msgid "Power Preferences"
+msgstr "Преференци за енергија"
+
+#: ../src/preferences.glade.h:14
+msgid "Put computer to sleep after:"
+msgstr "Стави го компјутерот во мирување по:"
+
+#: ../src/preferences.glade.h:15
+msgid "Put display to sleep after:"
+msgstr "Стави го екранот во мирување по:"
+
+#: ../src/preferences.glade.h:16
+msgid "Put hard drive to sleep after:"
+msgstr "Стави го тврдиот диск во мирување по:"
+
+#: ../src/preferences.glade.h:17
+msgid "Set display brightness:"
+msgstr "Постави светлина на екранот:"
+
+#: ../src/preferences.glade.h:18
+msgid "Sleep"
+msgstr "Мирувај"
+
+#: ../src/preferences.glade.h:19
+msgid "When AC power disconnected:"
+msgstr "Кога ќе се исклучи адаптерот од струја:"
+
+#: ../src/preferences.glade.h:20
+msgid "When UPS power critical:"
+msgstr "Кога е при крај енергијата на UPS-от:"
+
+#: ../src/preferences.glade.h:21
+msgid "When battery power critical:"
+msgstr "Кога батеријата е при крај:"
+
+#: ../src/preferences.glade.h:22
+msgid "When laptop lid is closed:"
+msgstr "Кога е затворен лаптопот:"
+
+#: ../src/preferences.glade.h:23
+msgid "When power button pressed:"
+msgstr "Кога е притиснато копчето за вклучување:"
+
+#: ../src/preferences.glade.h:24
+msgid "When suspend button pressed:"
+msgstr "Кога ќе биде притиснато копчето за суспензија:"
+
