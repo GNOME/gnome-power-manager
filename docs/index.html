@@ -1,0 +1,451 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+ <title>GNOME Power Manager</title>
+ <link rel="stylesheet" href="index.css" type="text/css" />
+</head>
+<body>
+
+<center>
+<img src="images/logo.png">
+</center>
+
+<h2>Why is this important</h2>
+
+<p>
+<b>Power management in Linux sucks.</b>
+Depending if you are running a PPC or i386 PC the different power management facilities are vastly different.
+To get your machine to suspend on lid press is already possible, but is difficult to know what config files to modify.
+To get your LCD screen brightness set to 50% when you remove the AC Adapter of your laptop is probably possible with a clever little Perl script, but is not something that comes ready configured on a standard Linux distro.
+Any of these things need the user to become the super-user to do the action. This needs to change before Linux is accepted as a contender for the corporate desktop.
+</p>
+
+<p>
+GNOME Power Manager gets all information from HAL using information from org.freedesktop.Hal.
+GNOME Power Manager does not do independent probing for data, it relies on HAL, in this way it can stay very lightweight and uncomplicated.
+Its goal is to be architecture neutral and free of polling and other hacks.
+</p>
+
+<center>
+<img src="images/plan.png">
+</center>
+<p class="caption">
+The role GNOME Power Manager, HAL, and the Kernel play in Power Management.
+</p>
+
+<p>
+So far, we have supported:
+</p>
+
+<ol>
+<li>Laptop batteries
+<li>AC Adapters
+<li>APC UPS's
+<li>SynCE PDA's
+<li>Logitech Wireless Mice
+<li>Logitech Wireless Keyboards
+</ol>
+
+<h2>How does HAL help?</h2>
+
+<p>
+HAL is the de-facto Hardware Abstraction Layer for the Linux desktop.
+David Zeuthen (and myself and lots of others) have written different addons for hald (the HAL daemon) that populate different devices with additional properties, e.g. battery.charge.current_level that can be queried in an architecture-neutral way.
+</p>
+<p>
+With all the new HAL code, and the GNOME Power Manager services, we can disable loading of pmud/acpid/apmd and keep everything managed in one place.
+</p>
+<center>
+<img src="images/hal-addbatt.png">
+</center>
+<p class="caption">
+New ACPI objects in the HAL device tree.
+</p>
+
+<center>
+<img src="images/hal-button.png">
+</center>
+<p class="caption">
+Pressing the power/sleep/lid buttons now generate events
+</p>
+
+<p>
+GNOME Power Manager owns the session D-BUS service net.sf.GnomePower and runs a session daemon (i.e. once per logged in user) and optionally displays battery status and low battery notifications. 
+</p>
+
+<p>
+The session daemon is very resource friendly. Other than the initial coldplug, it uses internal caching for all the power devices, so no additional lookups are needed for each update event.
+It will only update the displayed icon on a powerState change, but will update the tooltip on every percentage change.
+It should use *very little* CPU and memory.
+GNOME Power Manager is written in C, and has additional dependencies of:
+</p>
+<ol>
+<li>hal (0.5/CVS better)
+<li>dbus (0.30)
+<li>libnotify (0.0.1)
+</ol>
+
+<h2>Notification Icon</h2>
+<p>
+The notification icon can display a device in the tray.
+The icons can be themed with custom icons for each theme, or fallback to a standard default.
+<center>
+<img src="images/gpm-taskbar.png">
+<img src="images/demo.png">
+</center>
+<p class="caption">
+Existing output of the notification area icon, and the planned new tooltip design.
+</p>
+
+<center>
+<img src="images/drop-down.png">
+</center>
+<p class="caption">
+Example right-click menu that gives the options and actions
+</p>
+
+<p>
+Each action in the right-click menu can be disabled in DBUS, to limit users to performing 'safe' commands from the desktop. e.g. If hibernate is known to crash on a specific Toshiba laptop, it can be disabled in gconf, but still allowing the user to suspend, shutdown etc.
+</p>
+
+<center>
+<img src="images/gconf.png">
+</center>
+<p class="caption">
+Lockdown possible via gconf
+</p>
+<p>
+It is expected that HAL will provide the data that allows GPM to decide what options are available.
+</p>
+
+<h3>Methods</h3>
+
+<p>
+The methods provided by GPM are provided for client programs to use.
+</p>
+
+<h3>bool isUserIdle ()</h3>
+<p>Returns true is the user has been idle for the timeout set in gconf.</p>
+<pre>status: stub</pre>
+
+<h3>bool isRunningOnMains ()</h3>
+<p>Returns true if we are running on mains (usefull for scripts)</p>
+<pre>status: stub</pre>
+
+<h3>bool isActive ()</h3>
+<p>Returns true if we are running. Testing function.</p>
+<pre>status: complete</pre>
+
+<h3>Server Signals</h3>
+
+<p>
+The signals are emitted when state is changed or an action is about to happen.
+</p>
+
+<h3>mainsStatusChanged (bool isRunningOnMains)</h3>
+<p>emitted when the mains power connection changes</p>
+<pre>status: complete</pre>
+
+<h3>userIdleStatusChanged (bool isIdle)</h3>
+<p>emitted when the use is idle / no longer idle</p>
+<pre>status: none</pre>
+
+<h3>actionAboutToHappen (enum action)</h3>
+<p>registered vetoers MUST respond to this signal using vetoACK, vetoNAK, vetoWait 
+with ten seconds otherwise they are kicked out as vetoers (to work around 
+broken apps)</p>
+<pre>status: complete</pre>
+
+<h3>performingAction (enum action)</h3>
+<p>Just a signal, no response is required, nor allowed.</p>
+<pre>status: complete</pre>
+
+<p>
+Action is defined as: 
+</p>
+
+<pre>
+SCREENSAVE =  1, 
+POWEROFF   =  2, 
+SUSPEND    =  4, 
+HIBERNATE  =  8, 
+LOGOFF     =  16, 
+ALL        =  255
+</pre>
+
+<h2>Client Signals</h2>
+
+<p>
+Client signals are sent from an application to GPM.
+If an application registers its interest in a action, it is given the chance to ack, or nack the situation.
+</p>
+<p>
+The situation:
+User presses shutdown, but Abiword has an unsaved document open.
+Abiword is informed of the impending shutdown, but issues a nack, followed by a screen that asks the user if he would like to save the document.
+It can then resume the shutdown using the signal ack.
+</p>
+<p>
+Similarly, if Evolution is indexing a database (that would be corrupted if interrupted) and needs at least 3 seconds to flush buffers, it can pause the shutdown using wait.
+The signals currently available are:
+</p>
+
+<h3>vetoActionRegisterInterest (enum action, gchar localizedAppname)</h3>
+<p>Used for signing up for vetoing a specific action</p>
+<pre>status: complete</pre>
+
+<h3>vetoActionUnregisterInterest (enum action)</h3>
+<p>Used to unregister the applications interest in a specific action.
+Note: GPM will automatically unregister clients that disconnect from the bus</p>
+<pre>status: semi-complete, assumes ALL</pre>
+
+<h3>vetoACK (enum action)</h3>
+Vetoer allows a specific action to take place
+<pre>status: complete</pre>
+
+<h3>vetoNACK (enum action, gchar localizedReason)</h3>
+<p>Vetoer doesn't allow a specific action to take place; g-p-m SHOULD display a 
+notification to the user that the action cannot take place and what the vetoing 
+application is.</p>
+<pre>status: complete</pre>
+
+<h3>vetoWait (enum action, int timeout, gchar localizedReason)</h3>
+<p>Vetoer asks for a timeout of timeout ms before g-p-m should try to perform the 
+action again. It is legal for the vetoer to call vetoACK before the timeout.
+If the (accumulated) delay amounts to more than one second, g-p-m SHOULD 
+display a notification about who is blocking the action.</p>
+<pre>status: not present yet</pre>
+
+<p>
+This part of GNOME Power Manager has a test suite, gnome-power-dbus-test that can be used to test the out-of-order and error conditions.
+It also shows any limitations or bugs in GNOME Power Manager. For example, running gnome-power-dbus-test --doNACK and selecting shutdown from the drop down menu would give the following dialog from GPM:
+</p>
+
+<center>
+<img src="images/nack-sunday.png">
+</center>
+<p class="caption">
+The error message from the GNOME Power Manager 0.1.0
+</p>
+
+<center>
+<img src="images/nack-libnotify.png">
+</center>
+<p class="caption">
+The libnotify error message using CVS.
+</p>
+
+<p>
+This message should probably be a persistent tooltip, but for the moment serves the purposes of testing very well.
+</p>
+
+<h2><a name="gconf"></a>GConf keys</h2>
+
+<p>The <b>session</b> keys are located at /apps/gnome-power/general.
+These are used for GNOME Power Manager and GNOME Power Preferences as IPC to update in real time what hardware is present, and to store the user preferences for what icons are shown.
+In this way, GNOME Power Preferences does not have lots of duplicated code and can use the state generated in g-p-m.
+</p>
+<p>
+Hardware keys are located at /apps/power-manager/general
+</p>
+<ul>
+<li>bool hasDisplays</li>
+<li>bool hasHardDrive</li>
+<li>bool hasLCD</li>
+<li>bool hasAcAdapter</li>
+<li>bool hasButtons</li>
+<li>bool hasBatteries</li>
+<li>bool hasUPS</li>
+</ul>
+
+<h2>PowerManager</h2>
+
+<p>
+GnomePower uses PowerManager to launch scripts.
+<b>PowerManager is a temporary bodge!</b>
+When HAL 0.5.4 is released with actions support, PowerManager will become obsolete.
+</p>
+<p>
+PowerManager is a simple DBUS daemon that runs as the root user and holds the system connection name net.sf.PowerManager.
+Only root is allowed to run this program, (this can be changed in /etc/dbus-1/system.d/PowerManager.conf) as it's entire purpose is to allow non-root users to run the scripts /usr/sbin/pm-*.
+This is also configurable in the above PowerManager.conf config file.
+By default, all users are allowed to connect to the system DBUS net.sf.PowerManager connection.
+</p>
+<center>
+<img src="images/libnotify-powermanager.png">
+</center>
+<p class="caption">
+At the moment, GNOME Power Manager requires the PowerManager system service to be running.
+</p>
+
+<p>
+You can issue the following methods:
+</p>
+
+<pre>
+bool isActive ()
+bool shutdown ()
+bool restart ()
+bool hibernate ()
+bool suspend ()
+bool hdparm (timeout, device)
+</pre>
+
+<p>
+You can lock out specific users, or groups of users by adding to /etc/dbus-1/system.d/PowerManager.conf:
+</p>
+<pre>
+        &lt;policy user="suzy"&gt;
+                &lt;deny send_destination="net.sf.PowerManager"/&gt;
+                &lt;deny send_interface="net.sf.PowerManager"/&gt;
+        &lt;/policy&gt;</pre>
+
+<h2>pmscripts</h2>
+
+<p>
+pmscripts is the package that installs the scripts:
+</p>
+
+<pre>
+/usr/sbin/pm-shutdown
+/usr/sbin/pm-hibernate
+/usr/sbin/pm-restart
+/usr/sbin/pm-suspend
+</pre>
+
+<p>
+These scripts can be changed by distributions, to better fit in with the existing power-management infrastructure. e.g. Gentoo can have the fast-shutdown feature enabled, but Fedora may want to use the more conventional /sbin/shutdown -h now.
+In a similar way, the hibernate script could read a config file and use different methods for hibernation, e.g. suspend2, or software suspend, or some other method.
+</p>
+<p>It is expected that certain values are passed down to the pmscripts from HAL, for example PMSYSTEM="ACPI" so that specific things can be tested for. At the moment we do not pass variables, but it's fairly trivial to find out these things here anyway.
+<p>
+These scripts are intended to be used by the root user only, or a daemon running as root.
+They could be a symlink if required, this is left to the packager.
+</p>
+
+<h2>GNOME Power Preferences</h2>
+
+<p>
+Power preferences is a simple program that lets the authorized user change the actions associated with each action. 
+Devices that are not present are not shown, e.g. the UPS options are not visible to the user, unless one is plugged in, similarly, battery options are hidden for desktop users.
+</p>
+
+<center>
+<img src="images/pref-main.png">
+<img src="images/pref-options.png">
+</center>
+<p class="caption">
+Preferences options
+</p>
+
+<h2>
+<a name="uses"></a>Uses of GNOME Power Manager infrastructure</h2>
+<ul>
+<li>A dialogue that warns the user when on UPS power, that automatically begins a kind shutdown when the power gets critically low.</li>
+<li>An icon that allows a user to dim the LCD screen with a slider, and does do automatically when going from mains to battery power on a laptop.</li>
+<li>An icon, that when an additional battery is inserted, updates it's display to show two batteries and recalculates how much time remaining. Would work for wireless mouse and keyboards, UPS's and PDA's.</li>
+<li>A daemon that does a clean shutdown when the battery is critically low or does a soft-suspend when you close the lid on your laptop (or press the "suspend" button on your PC).</li>
+<li>Tell Totem to use a codec that does low quality processing to conserve battery power.</li>
+<li>Postpone indexing of databases (e.g. up2date) or other heavy operations until on mains power.</li>
+<li>Presentation programs / movie players don't want the screensaver starting or screen blanking.</li>
+</ul>
+
+<h2>Getting The Code</h2>
+<p>
+The latest 'stable' code (with tarballs and RPM's for Fedora Core 4) can be found at <a href="https://sourceforge.net/project/showfiles.php?group_id=133929">sourceforge</a>.
+</p>
+<p>
+<a href="http://udu.wiki.ubuntu.com/UbuntuDownUnder/BreezyGoals">Ubuntu Breezy</a> packages are to be found <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power">here</a>. Thanks to Oliver Grawert for the package.</p>
+
+<h3>CVS</h3>
+<p>
+You can check out the latest GNOME Power Manager code using CVS:<br>
+</p>
+<pre>
+export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
+cvs -z3 checkout gnome-power-manager
+</pre>
+
+<p>
+You can check out the latest PowerManager and pmscripts code using CVS:<br>
+</p>
+<pre>
+cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout power-manager
+cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout pmscripts
+</pre>
+
+<h3>For Fedora users of anything-other-than-i386:</h3>
+<p>
+To rebuild the .src.rpm to your architecture use:
+</p>
+<pre>
+rpm --rebuild *.src.rpm
+</pre>
+
+<h3>jhbuild</h3>
+
+<p>
+If you want to use GNOME CVS, jhbuild can now build GNOME Power Manager using:
+</p>
+<pre>
+jhbuild build gnome-power
+</pre>
+
+<h2>Why doesn't it autostart?</h2>
+<p>
+For the moment, you will have to run GNOME Power Manager from a terminal (it will not autostart.) but will hopefully be either patched into the default upstream startup, or will use gnome-services when it arrives in mainline.
+</p>
+<center>
+<img src="images/gnome-session.png">
+</center>
+<p class="caption">
+You can launch gnome-power-manager automatically using the gnome-session-properties program
+</p>
+
+<h2>Can you help?</h2>
+
+<p>
+Please contact <a href="mailto:richard@hughsie.com">me</a> for any issues, or bugs you find with the GNOME Power Manager.
+</p>
+<p>
+There is also a <a href="https://lists.sourceforge.net/lists/listinfo/gnome-power-devel">gnome-power-devel mailing list</a>.
+</p>
+
+<h3>Submitting fixes / enhancements</h3>
+<p>
+Be sure to add an entry into the ChangeLog file telling me what the patch does and what files are changed.
+Also, break any patch files up into logical chunks that are easier to check and apply one-by-one.
+</p>
+
+
+<h2><a name="thanks"></a>Thanks</h2>
+<p>
+I've been getting lots of good feedback (and code!) from different people, with lots of new ideas and points for improvements.
+So even if you are not a programmer, you can still help. This project is moving really fast because of all the help and comments I've received, notable mention goes to (in no particular order):
+</p>
+<ul>
+<li>David Zeuthen</li>
+<li>Andrei Yurkevich</li>
+<li>Eugenia Loli-Queru (gnomefiles.org)</li>
+<li>Jaap Haitsma</li>
+<li>Paul Ionescu</li>
+<li>Sourceforge.net</li>
+</ul>
+
+<p>
+With large lumps of code from:
+</p>
+
+<ul>
+<li>GNOME Volume Manager (C) 2005 Robert Love</li>
+<li>lshal   (C) 2003 David Zeuthen</li>
+<li>notibat (C) 2004 Benjamin Kahn</li>
+</ul>
+
+<h2><a name="who"></a>Who am I</h2>
+<p>
+My name is Richard Hughes, and I'm a 22 year old student from Guildford, studying MEng Electrical and Computer Engineering at Surrey University.<br>
+</p>
+
+</body>
+</html>
