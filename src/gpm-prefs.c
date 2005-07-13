@@ -33,7 +33,7 @@
 #include "gpm-main.h"
 
 static GladeXML *all_pref_widgets;
-static gboolean system_bus, isVerbose;
+static gboolean isVerbose;
 static HasData hasData;
 gboolean displayIcon = TRUE;
 gboolean displayIconFull = TRUE;
@@ -215,11 +215,19 @@ static void
 callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 {
 	g_assert (widget);
-	GConfClient *client = gconf_client_get_default ();
+
 	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
+/* 
+ * Code for divisions of 10 seconds, unfinished
+ *
+	int v2 = (int (value / 10)) * 10;
+	gtk_range_set_value (GTK_RANGE (widget), v2);
+	if (v2 != value)
+		return;
+*/
+	GConfClient *client = gconf_client_get_default ();
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_assert (policypath);
-
 	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
 	gconf_client_set_int (client, gconfpath, value, NULL);
@@ -261,10 +269,9 @@ callback_check_changed (GtkWidget *widget, gpointer user_data)
 static void
 print_usage (void)
 {
-	g_print ("\nusage : gnome-power-preferences [--system-bus] [--verbose] [--help]\n");
+	g_print ("\nusage : gnome-power-preferences [--verbose] [--help]\n");
 	g_print (
 		"\n"
-		"        --system-bus            Use the gconf system bus\n"
 		"        --verbose               Show extra debugging\n"
 		"        --help                  Show this information and exit\n"
 		"\n");
@@ -403,13 +410,10 @@ main (int argc, char **argv)
 	GtkWidget *widget = NULL;
 	int a;
 
-	system_bus = FALSE;
 	isVerbose = FALSE;
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--verbose") == 0)
 			isVerbose = TRUE;
-		else if (strcmp (argv[a], "--system-bus") == 0)
-			system_bus = TRUE;
 		else if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();
 			return EXIT_SUCCESS;
@@ -444,6 +448,10 @@ main (int argc, char **argv)
 	/* get values from gconf */
 	gconf_key_action (GCONF_ROOT "general/displayIcon");
 	gconf_key_action (GCONF_ROOT "general/displayIconFull");
+
+	/* disable these until the backend code is in place */
+	gtk_set_visibility ("combobox_double_click", FALSE);
+	gtk_set_visibility ("label_double_click", FALSE);
 
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",

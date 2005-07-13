@@ -57,6 +57,23 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+static void
+use_libnotify (const char *content, const int urgency)
+{
+		const char *summary = NICENAME;
+		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   urgency,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 10,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+		if (!n)
+			g_warning ("failed to send notification (%s)", content);
+}
+
 /** Convenience function.
  *  Prints errors due to wrong values expected (exposes bugs, rather than hides them)
  */
@@ -173,21 +190,7 @@ dbus_action (gint action)
 				       "The explaination given is: %s"), 
 				     regprog->appName->str, actionstr, regprog->reason->str);
 		g_message ("%s", gs->str);
-		
-		const char *summary = NICENAME;
-		const char *content = gs->str;
-		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   NOTIFY_URGENCY_CRITICAL,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 10,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-		if (!n)
-			g_warning ("failed to send notification (%s)", content);
-		
+		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 		g_string_free (gs, TRUE);
 		return FALSE;
 	}
@@ -198,19 +201,7 @@ dbus_action (gint action)
 				     "is preventing the %s from occurring."),
 				     regprog->appName->str, actionstr);
 		g_message ("%s", gs->str);
-		const char *summary = NICENAME;
-		const char *content = gs->str;
-		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   NOTIFY_URGENCY_CRITICAL,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 10,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-		if (!n)
-			g_warning ("failed to send notification (%s)", content);
+		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 		g_string_free (gs, TRUE);
 		return FALSE;
 	}
@@ -232,19 +223,7 @@ pm_do_action (const gchar *action)
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform a %s."), NICENAME, action);
-		const char *summary = NICENAME;
-		const char *content = gs->str;
-		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   NOTIFY_URGENCY_CRITICAL,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 10,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-		if (!n)
-			g_warning ("failed to send notification (%s)", content);
+		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 		g_string_free (gs, TRUE);
 	} else if (!boolvalue)
 		g_warning ("%s failed", action);
@@ -268,19 +247,7 @@ set_hdd_spindown_device (gchar *device, int minutes)
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform hard-drive timout changes."), NICENAME);
-		const char *summary = NICENAME;
-		const char *content = gs->str;
-		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   NOTIFY_URGENCY_CRITICAL,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 10,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-		if (!n)
-			g_warning ("failed to send notification (%s)", content);
+		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
 		g_string_free (gs, TRUE);
 	} else if (!boolvalue)
 		g_warning ("hard-drive timout change failed");
@@ -445,24 +412,12 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 		state_data.onBatteryPower = state_datanew.onBatteryPower;
 		if (state_data.onBatteryPower) {
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
-			int todo = get_policy_string (GCONF_ROOT "policy/ACFail");
+			int policy = get_policy_string (GCONF_ROOT "policy/ACFail");
 			/* only do notification if not coldplug */
-			if (!coldplug && todo == ACTION_WARNING) {
-				const char *summary = NICENAME;
-				const char *content = _("AC Adapter has been removed");
-				NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   NOTIFY_URGENCY_NORMAL,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 5,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-				if (!n)
-					g_warning ("failed to send notification (%s)", content);
-			} else
-				action_policy_do (todo);
+			if (!coldplug && policy == ACTION_WARNING)
+				use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
+			else
+				action_policy_do (policy);
 		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
 		}
@@ -972,17 +927,33 @@ device_condition (LibHalContext *ctx,
 		dbus_error_print (&error);
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
-			action_policy_do (get_policy_string (GCONF_ROOT "policy/ButtonPower"));
+			int policy = get_policy_string (GCONF_ROOT "policy/ButtonPower");
+			/* only do notification if not coldplug */
+			if (policy == ACTION_WARNING)
+				use_libnotify (_("Power button has been pressed"), NOTIFY_URGENCY_NORMAL);
+			else
+				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
-			action_policy_do (get_policy_string (GCONF_ROOT "policy/ButtonSuspend"));
+			int policy = get_policy_string (GCONF_ROOT "policy/ButtonSuspend");
+			/* only do notification if not coldplug */
+			if (policy == ACTION_WARNING)
+				use_libnotify (_("Sleep button has been pressed"), NOTIFY_URGENCY_NORMAL);
+			else
+				action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
 			gboolean value;
 			/* we only do a lid event when the lid is OPENED */
 			dbus_error_init (&error);
 			value = libhal_device_get_property_bool (ctx, udi, "button.state.value", &error);
 			dbus_error_print (&error);
-			if (value)
-				action_policy_do (get_policy_string (GCONF_ROOT "policy/ButtonLid"));
+			if (value) {
+				int policy = get_policy_string (GCONF_ROOT "policy/ButtonLid");
+				/* only do notification if not coldplug */
+				if (policy == ACTION_WARNING)
+					use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
+				else
+					action_policy_do (policy);
+			}
 		} else
 			g_warning ("Button '%s' unrecognised", type);
 		libhal_free_string (type);
@@ -997,7 +968,6 @@ static void print_usage (void)
 	g_print ("\nusage : gnome-power-manager [options]\n");
 	g_print (
 		"\n"
-		"    --system-bus     Use the gconf system bus\n"
 		"    --disable        Do not perform the action, e.g. suspend\n"
 		"    --has-quit       Include the quit button on the drop-down\n"
 		"    --no-actions     Do not include the actions in the drop-down\n"
@@ -1036,7 +1006,6 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	setup.useSystemBus = FALSE;
 	setup.isVerbose = FALSE;
 	setup.doAction = TRUE;
 	setup.hasQuit = FALSE;
@@ -1044,8 +1013,6 @@ main (int argc, char *argv[])
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--verbose") == 0)
 			setup.isVerbose = TRUE;
-		else if (strcmp (argv[a], "--system-bus") == 0)
-			setup.useSystemBus = TRUE;
 		else if (strcmp (argv[a], "--disable") == 0)
 			setup.doAction = FALSE;
 		else if (strcmp (argv[a], "--has-quit") == 0)
@@ -1072,7 +1039,7 @@ main (int argc, char *argv[])
 
 	/* initialise libnotify */
 	if (!notify_init(NICENAME))
-		g_error ("stop!!");
+		g_error ("Cannot initialise libnotify!");
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));

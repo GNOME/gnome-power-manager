@@ -7,7 +7,7 @@
 <body>
 
 <center>
-<img src="images/logo.png">
+<img src="images/logo.png" alt="[img]"/>
 </center>
 
 <h2>Why is this important</h2>
@@ -27,7 +27,7 @@ Its goal is to be architecture neutral and free of polling and other hacks.
 </p>
 
 <center>
-<img src="images/plan.png">
+<img src="images/plan.png" alt="[img]"/>
 </center>
 <p class="caption">
 The role GNOME Power Manager, HAL, and the Kernel play in Power Management.
@@ -38,12 +38,12 @@ So far, we have supported:
 </p>
 
 <ol>
-<li>Laptop batteries
-<li>AC Adapters
-<li>APC UPS's
-<li>SynCE PDA's
-<li>Logitech Wireless Mice
-<li>Logitech Wireless Keyboards
+<li>Laptop batteries</li>
+<li>AC Adapters</li>
+<li>APC UPS's</li>
+<li>SynCE PDA's</li>
+<li>Logitech Wireless Mice</li>
+<li>Logitech Wireless Keyboards</li>
 </ol>
 
 <h2>How does HAL help?</h2>
@@ -56,14 +56,14 @@ David Zeuthen (and myself and lots of others) have written different addons for 
 With all the new HAL code, and the GNOME Power Manager services, we can disable loading of pmud/acpid/apmd and keep everything managed in one place.
 </p>
 <center>
-<img src="images/hal-addbatt.png">
+<img src="images/hal-addbatt.png" alt="[img]"/>
 </center>
 <p class="caption">
 New ACPI objects in the HAL device tree.
 </p>
 
 <center>
-<img src="images/hal-button.png">
+<img src="images/hal-button.png" alt="[img]"/>
 </center>
 <p class="caption">
 Pressing the power/sleep/lid buttons now generate events
@@ -80,25 +80,27 @@ It should use *very little* CPU and memory.
 GNOME Power Manager is written in C, and has additional dependencies of:
 </p>
 <ol>
-<li>hal (0.5/CVS better)
-<li>dbus (0.30)
-<li>libnotify (0.0.1)
+<li>hal (0.5/CVS better)</li>
+<li>dbus (0.30)</li>
+<li>libnotify (0.0.1)</li>
 </ol>
 
 <h2>Notification Icon</h2>
 <p>
 The notification icon can display a device in the tray.
 The icons can be themed with custom icons for each theme, or fallback to a standard default.
+</p>
+
 <center>
-<img src="images/gpm-taskbar.png">
-<img src="images/demo.png">
+<img src="images/gpm-taskbar.png" alt="[img]"/>
+<img src="images/demo.png" alt="[img]"/>
 </center>
 <p class="caption">
 Existing output of the notification area icon, and the planned new tooltip design.
 </p>
 
 <center>
-<img src="images/drop-down.png">
+<img src="images/drop-down.png" alt="[img]"/>
 </center>
 <p class="caption">
 Example right-click menu that gives the options and actions
@@ -109,7 +111,7 @@ Each action in the right-click menu can be disabled in DBUS, to limit users to p
 </p>
 
 <center>
-<img src="images/gconf.png">
+<img src="images/gconf.png" alt="[img]"/>
 </center>
 <p class="caption">
 Lockdown possible via gconf
@@ -222,14 +224,14 @@ It also shows any limitations or bugs in GNOME Power Manager. For example, runni
 </p>
 
 <center>
-<img src="images/nack-sunday.png">
+<img src="images/nack-sunday.png" alt="[img]"/>
 </center>
 <p class="caption">
 The error message from the GNOME Power Manager 0.1.0
 </p>
 
 <center>
-<img src="images/nack-libnotify.png">
+<img src="images/nack-libnotify.png" alt="[img]"/>
 </center>
 <p class="caption">
 The libnotify error message using CVS.
@@ -272,7 +274,7 @@ This is also configurable in the above PowerManager.conf config file.
 By default, all users are allowed to connect to the system DBUS net.sf.PowerManager connection.
 </p>
 <center>
-<img src="images/libnotify-powermanager.png">
+<img src="images/libnotify-powermanager.png" alt="[img]"/>
 </center>
 <p class="caption">
 At the moment, GNOME Power Manager requires the PowerManager system service to be running.
@@ -317,7 +319,10 @@ pmscripts is the package that installs the scripts:
 These scripts can be changed by distributions, to better fit in with the existing power-management infrastructure. e.g. Gentoo can have the fast-shutdown feature enabled, but Fedora may want to use the more conventional /sbin/shutdown -h now.
 In a similar way, the hibernate script could read a config file and use different methods for hibernation, e.g. suspend2, or software suspend, or some other method.
 </p>
-<p>It is expected that certain values are passed down to the pmscripts from HAL, for example PMSYSTEM="ACPI" so that specific things can be tested for. At the moment we do not pass variables, but it's fairly trivial to find out these things here anyway.
+<p>
+It is expected that certain values are passed down to the pmscripts from HAL, for example PMSYSTEM="ACPI" so that specific things can be tested for.
+At the moment we do not pass variables, but it's fairly trivial to find out these things here anyway.
+</p>
 <p>
 These scripts are intended to be used by the root user only, or a daemon running as root.
 They could be a symlink if required, this is left to the packager.
@@ -331,8 +336,8 @@ Devices that are not present are not shown, e.g. the UPS options are not visible
 </p>
 
 <center>
-<img src="images/pref-main.png">
-<img src="images/pref-options.png">
+<img src="images/pref-main.png" alt="[img]"/>
+<img src="images/pref-options.png" alt="[img]"/>
 </center>
 <p class="caption">
 Preferences options
@@ -359,7 +364,7 @@ The latest 'stable' code (with tarballs and RPM's for Fedora Core 4) can be foun
 
 <h3>CVS</h3>
 <p>
-You can check out the latest GNOME Power Manager code using CVS:<br>
+You can check out the latest GNOME Power Manager code using CVS:
 </p>
 <pre>
 export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
@@ -367,7 +372,7 @@ cvs -z3 checkout gnome-power-manager
 </pre>
 
 <p>
-You can check out the latest PowerManager and pmscripts code using CVS:<br>
+You can check out the latest PowerManager and pmscripts code using CVS:
 </p>
 <pre>
 cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout power-manager
@@ -396,7 +401,7 @@ jhbuild build gnome-power
 For the moment, you will have to run GNOME Power Manager from a terminal (it will not autostart.) but will hopefully be either patched into the default upstream startup, or will use gnome-services when it arrives in mainline.
 </p>
 <center>
-<img src="images/gnome-session.png">
+<img src="images/gnome-session.png" alt="[img]"/>
 </center>
 <p class="caption">
 You can launch gnome-power-manager automatically using the gnome-session-properties program
@@ -444,7 +449,7 @@ With large lumps of code from:
 
 <h2><a name="who"></a>Who am I</h2>
 <p>
-My name is Richard Hughes, and I'm a 22 year old student from Guildford, studying MEng Electrical and Computer Engineering at Surrey University.<br>
+My name is Richard Hughes, and I'm a 22 year old student from Guildford, studying MEng Electrical and Computer Engineering at Surrey University.
 </p>
 
 </body>

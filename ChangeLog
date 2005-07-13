@@ -7,16 +7,24 @@
 	for FC4. Ubuntu is also packaging this in the next few weeks, so the
 	extra dep shouldn't be a problem.
 
+	* src/gpm-main.c (use_libnotify): new function, convenience. Added lots more
+	notifications where we used to have dialogues, for the warning states.
+
 	* src/gpm-common.c (property_modified): Fix bug where update_state_logic
 	was being called with coldplug TRUE, when it quite plainly isn't.
 
-	src/gpm-common.c (get_timestring_from_minutes): Fix translationable string
+	* src/gpm-common.c (get_timestring_from_minutes): Fix translationable string
 	to be constant number. Fix from Hendrik Brandt, thanks.
 
-	gnome-power.schemas.in : Change tense of a description to be less like the
+	* gnome-power.schemas.in : Change tense of a description to be less like the
 	borg :-) Fix from Hendrik Brandt, thanks.
 
 	* doc/*: Added lots more information and other images.
+
+	* src/preferencs.glade: Name the new label label_double_click so we can
+	disable it :-)
+
+	* src/gpm-prefs.c: Disable the double click stuff for now
 
 2005-07-12  Richard Hughes  <richard@hughsie.com>
 
