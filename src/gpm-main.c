@@ -36,6 +36,7 @@
 #include <gnome.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <libnotify/notify.h>
 
 #include <libhal.h>
 #include "gpm-common.h"
@@ -172,7 +173,21 @@ dbus_action (gint action)
 				       "The explaination given is: %s"), 
 				     regprog->appName->str, actionstr, regprog->reason->str);
 		g_message ("%s", gs->str);
-		do_interactive_alert (gs->str);
+		
+		const char *summary = NICENAME;
+		const char *content = gs->str;
+		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   NOTIFY_URGENCY_CRITICAL,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 10,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+		if (!n)
+			g_warning ("failed to send notification (%s)", content);
+		
 		g_string_free (gs, TRUE);
 		return FALSE;
 	}
@@ -183,7 +198,19 @@ dbus_action (gint action)
 				     "is preventing the %s from occurring."),
 				     regprog->appName->str, actionstr);
 		g_message ("%s", gs->str);
-		do_interactive_alert (gs->str);
+		const char *summary = NICENAME;
+		const char *content = gs->str;
+		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   NOTIFY_URGENCY_CRITICAL,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 10,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+		if (!n)
+			g_warning ("failed to send notification (%s)", content);
 		g_string_free (gs, TRUE);
 		return FALSE;
 	}
@@ -205,7 +232,19 @@ pm_do_action (const gchar *action)
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform a %s."), NICENAME, action);
-		do_interactive_alert (gs->str);
+		const char *summary = NICENAME;
+		const char *content = gs->str;
+		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   NOTIFY_URGENCY_CRITICAL,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 10,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+		if (!n)
+			g_warning ("failed to send notification (%s)", content);
 		g_string_free (gs, TRUE);
 	} else if (!boolvalue)
 		g_warning ("%s failed", action);
@@ -229,7 +268,19 @@ set_hdd_spindown_device (gchar *device, int minutes)
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform hard-drive timout changes."), NICENAME);
-		do_interactive_alert (gs->str);
+		const char *summary = NICENAME;
+		const char *content = gs->str;
+		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   NOTIFY_URGENCY_CRITICAL,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 10,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+		if (!n)
+			g_warning ("failed to send notification (%s)", content);
 		g_string_free (gs, TRUE);
 	} else if (!boolvalue)
 		g_warning ("hard-drive timout change failed");
@@ -282,37 +333,51 @@ action_policy_do (gint policy_number)
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
-		g_debug ("*ACTION* Send warning");
-		do_interactive_alert ("Warning!");
+		g_warning ("*ACTION* Send warning should be done locally!");
+		do_interactive_alert ("Warning (should be done locally)!");
 	} else if (policy_number == ACTION_REBOOT) {
 		g_debug ("*ACTION* Reboot");
 		if (dbus_action (GPM_DBUS_POWEROFF))
 			pm_do_action ("restart");
-/*			run_gconf_script (GCONF_ROOT "scripts/restart");*/
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
 		if (dbus_action (GPM_DBUS_SUSPEND))
 			pm_do_action ("suspend");
-/*			run_gconf_script (GCONF_ROOT "scripts/suspend");*/
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
 		if (dbus_action (GPM_DBUS_HIBERNATE))
 			pm_do_action ("hibernate");
-/*			run_gconf_script (GCONF_ROOT "scripts/hibernate");*/
 	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
 		if (dbus_action (GPM_DBUS_POWEROFF))
 			pm_do_action ("shutdown");
-/*			run_gconf_script (GCONF_ROOT "scripts/shutdown");*/
 	} else if (policy_number == ACTION_BATTERY_CHARGE) {
 		g_debug ("*ACTION* Battery Charging");
 	} else if (policy_number == ACTION_BATTERY_DISCHARGE) {
 		g_debug ("*ACTION* Battery Discharging");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
+		/* spin down the hard-drives */
+		GConfClient *client = gconf_client_get_default ();
+		gint value = gconf_client_get_int (client, 
+							GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
+		set_hdd_spindown (value);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
+#if 0
+		if (has_data.hasDisplays) {
+			if (state_data.onBatteryPower)
+				policy ("lcd_batteries");
+			else
+				policy ("lcd_mains");
+		}
+#endif
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
+		/* spin down the hard-drives */
+		GConfClient *client = gconf_client_get_default ();
+		gint value = gconf_client_get_int (client, 
+							GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
+		set_hdd_spindown (value);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
@@ -335,30 +400,6 @@ compare_bool_set_gconf (const gchar *gconfpath, gboolean *has_dataold, gboolean 
 		g_debug ("%s = %i", gconfpath, *has_datanew);
 	}
 }
-
-/** Description
- *
- *  @param  xxxx		test
- */
-#if 0
-static void
-do_policy_percent (int action)
-{
-	if (action == ACTION_POWER_STATE_CHANGE) {
-		g_debug ("DBUS: %s = %i", "onBatteryPower", state_data.onBatteryPower);
-		if (has_data.hasDisplays && has_data.hasLCD) {
-			if (state_data.onBatteryPower)
-				action_policy_percent ("LCDBatteryPercentage");
-			else
-				action_policy_percent ("LCDMainsPercentage");
-		}
-		if (has_data.hasBatteries) {
-			if (state_data.onBatteryPower)
-				action_policy_do ("BatteryFailAction");
-		}
-	}
-}
-#endif
 
 /** Recalculate logic of StateData, without any DBUS, all cached internally
  * Exported DBUS interface values goes here :-)
@@ -398,44 +439,39 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 		g_debug ("Cannot be on batteries if have none...");
 		state_datanew.onBatteryPower = FALSE;
 	}
-	g_debug ("onBatteryPower = %i", state_datanew.onBatteryPower);
+	g_debug ("onBatteryPower = %i (coldplug=%i)", state_datanew.onBatteryPower, coldplug);
 
 	if (coldplug || state_datanew.onBatteryPower != state_data.onBatteryPower) {
 		state_data.onBatteryPower = state_datanew.onBatteryPower;
-		/*do_policy_percent (ACTION_POWER_STATE_CHANGE);*/
 		if (state_data.onBatteryPower) {
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
-			action_policy_do (get_policy_string (GCONF_ROOT "policy/ACFail"));
-			GConfClient *client = gconf_client_get_default ();
-			gint value = gconf_client_get_int (client, 
-								GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
-			set_hdd_spindown (value);
+			int todo = get_policy_string (GCONF_ROOT "policy/ACFail");
+			/* only do notification if not coldplug */
+			if (!coldplug && todo == ACTION_WARNING) {
+				const char *summary = NICENAME;
+				const char *content = _("AC Adapter has been removed");
+				NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+											   NULL,
+											   NOTIFY_URGENCY_NORMAL,
+											   summary, content,
+											   NULL, /* no icon 			*/
+											   TRUE, time(NULL) + 5,
+											   NULL, /* no hints 			*/
+											   NULL, /* no user data 		*/
+											   0);   /* no actions 			*/
+				if (!n)
+					g_warning ("failed to send notification (%s)", content);
+			} else
+				action_policy_do (todo);
 		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
-			GConfClient *client = gconf_client_get_default ();
-			gint value = gconf_client_get_int (client, 
-								GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
-			set_hdd_spindown (value);
 		}
-#if 0
-		if (has_data.hasDisplays) {
-			if (state_data.onBatteryPower)
-				action_policy_percent ("lcd_batteries");
-			else
-				action_policy_percent ("lcd_mains");
-		}
-		if (has_data.hasBatteries) {
-			if (state_data.onBatteryPower)
-				action_policy_do ("combo_battery_fail");
-		}
-#endif
 	}
 
 	if (coldplug || state_datanew.onUPSPower != state_data.onUPSPower) {
 		state_data.onUPSPower = state_datanew.onUPSPower;
 		g_debug ("DBUS: %s = %i", "onUPSPower", state_data.onUPSPower);
 	}
-
 }
 
 /** Recalculate logic of HasData, without any DBUS, all cached internally
@@ -905,9 +941,9 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	}
 
 	if (updateHas)
-		update_has_logic (objectData, TRUE);
+		update_has_logic (objectData, FALSE);
 	if (updateState)
-		update_state_logic (objectData, TRUE);
+		update_state_logic (objectData, FALSE);
 
 	update_percentage_charge (slotData);
 	gpn_icon_update ();
@@ -1033,6 +1069,10 @@ main (int argc, char *argv[])
 		gnome_client_flush (master);
 	}
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
+
+	/* initialise libnotify */
+	if (!notify_init(NICENAME))
+		g_error ("stop!!");
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));

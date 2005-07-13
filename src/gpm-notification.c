@@ -27,6 +27,8 @@
 
 #include <gconf/gconf-client.h>
 #include <gdk/gdk.h>
+#include <libnotify/notify.h>
+
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"

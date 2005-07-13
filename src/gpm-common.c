@@ -232,7 +232,6 @@ get_chargestate_string (GenericObject *slotData)
 GString *
 get_timestring_from_minutes (gint minutes)
 {
-	/* g_debug ("get_timestring_from_minutes (%i)", minutes)); */
 	GString* timestring;
 	gint hours;
 
@@ -241,7 +240,7 @@ get_timestring_from_minutes (gint minutes)
 
 	timestring = g_string_new ("");
 	if (minutes == 1)
-		g_string_printf (timestring, _("%i minute"), minutes);
+		g_string_printf (timestring, _("1 minute"));
 	else if (minutes < 60)
 		g_string_printf (timestring, _("%i minutes"), minutes);
 	else {
@@ -249,17 +248,16 @@ get_timestring_from_minutes (gint minutes)
 		minutes = minutes - (hours * 60);
 		if (minutes == 0) {
 			if (hours == 1)
-				g_string_printf (timestring, _("%i hour"), hours);
+				g_string_printf (timestring, _("1 hour"));
 			else
 				g_string_printf (timestring, _("%i hours"), hours);
 		} else {
 			if (hours == 1) {
 				if (minutes == 1)
-					g_string_printf (timestring, 
-					_("%i hour %i minute"), hours, minutes);
+					g_string_printf (timestring, _("1 hour 1 minute"));
 				else
 					g_string_printf (timestring, 
-					_("%i hour %i minutes"), hours, minutes);
+					_("1 hour %i minutes"), minutes);
 			} else
 				g_string_printf (timestring, 
 					_("%i hours %i minutes"), hours, minutes);

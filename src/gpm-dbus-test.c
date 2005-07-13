@@ -81,7 +81,7 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 			if (doACK)
 				dbus_send_signal_int (connection, "vetoACK", value);
 			if (doNACK)
-				dbus_send_signal_int_string (connection, "vetoNACK", value, "It's a Sunday!");
+				dbus_send_signal_int_string (connection, "vetoNACK", value, "Unsaved file needs to be saved.");
 		} else {
 			g_print ("actionAboutToHappen received, but error getting message: %s\n", error.message);
 			dbus_error_free (&error);

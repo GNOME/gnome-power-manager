@@ -1,11 +1,12 @@
-INCLUDES =						\
-	$(GLIB_CFLAGS)					\
-	$(HAL_CFLAGS)					\
-	$(DBUS_CFLAGS)					\
-	$(GNOME_CFLAGS)					\
-	-DBINDIR=\"$(bindir)\"			   	\
+INCLUDES =										\
+	$(GLIB_CFLAGS)								\
+	$(HAL_CFLAGS)								\
+	$(DBUS_CFLAGS)								\
+	$(GNOME_CFLAGS)								\
+	$(LIBNOTIFY_CFLAGS)							\
+	-DBINDIR=\"$(bindir)\"			   			\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"  	\
-	-DDATADIR=\"$(datadir)\"			\
+	-DDATADIR=\"$(datadir)\"					\
 	-DGPM_DATA=\""$(datadir)/gnome-power/"\"
 
 
@@ -37,7 +38,7 @@ gnome_power_manager_SOURCES = 	\
 	gpm-notification.c	\
 	gpm-main.h		\
 	gpm-main.c			
-gnome_power_manager_LDADD = $(GLIB_LIBS) $(HAL_LIBS) $(GNOME_LIBS) $(DBUS_LIBS)
+gnome_power_manager_LDADD = $(GLIB_LIBS) $(HAL_LIBS) $(GNOME_LIBS) $(DBUS_LIBS) $(LIBNOTIFY_LIBS)
 
 EXTRA_DIST =			\
 	$(Data_DATA)

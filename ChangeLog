@@ -10,6 +10,12 @@
 	* src/gpm-common.c (property_modified): Fix bug where update_state_logic
 	was being called with coldplug TRUE, when it quite plainly isn't.
 
+	src/gpm-common.c (get_timestring_from_minutes): Fix translationable string
+	to be constant number. Fix from Hendrik Brandt, thanks.
+
+	gnome-power.schemas.in : Change tense of a description to be less like the
+	borg :-) Fix from Hendrik Brandt, thanks.
+
 2005-07-12  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c (set_hdd_spindown): New stub function that sets the
