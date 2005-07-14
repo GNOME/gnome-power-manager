@@ -132,5 +132,7 @@ void update_percentage_charge (GenericObject *slotData);
 GString *get_timestring_from_minutes (gint minutes);
 gchar *convert_powerdevice_to_string (gint powerDevice);
 gchar *get_chargestate_string (GenericObject *slotData);
+void create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice);
+GString *get_time_string (GenericObject *slotData);
 
 #endif	/* _COMMON_H */

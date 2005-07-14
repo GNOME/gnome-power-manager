@@ -45,9 +45,7 @@ typedef struct {
 
 void update_icon (IconData *tdicon);
 void free_icon_structure (IconData *tdicon);
-GenericObject * get_low_icon_slot (void);
 GenericObject * get_main_icon_slot (void);
-GString * get_low_tooltip (IconData *tdicon);
 GString * get_main_tooltip (IconData *tdicon);
 
 /* doesn't belong here, but maybe if gpn gets it's own process it will belong :-) */

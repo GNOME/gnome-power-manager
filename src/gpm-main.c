@@ -414,10 +414,12 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
 			int policy = get_policy_string (GCONF_ROOT "policy/ACFail");
 			/* only do notification if not coldplug */
-			if (!coldplug && policy == ACTION_WARNING)
-				use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
-			else
-				action_policy_do (policy);
+			if (!coldplug) {
+				if (policy == ACTION_WARNING)
+					use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
+				else
+					action_policy_do (policy);
+				}
 		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
 		}
@@ -850,7 +852,14 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	/* if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
 	 */
-	g_assert (slotData);
+	if (!slotData) {
+		g_warning ("slotData is NULL! udi=%s\n"
+				   "This is probably a bug in HAL where we are getting "
+				   "is_removed=false, is_added=false before the capability "
+				   "had been added. In addon-hid-ups this is likely to happen."
+				   , udi);
+		return;
+	}
 	gboolean updateHas = FALSE;
 	gboolean updateState = FALSE;
 
@@ -900,8 +909,48 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	if (updateState)
 		update_state_logic (objectData, FALSE);
 
+	/* find old (taking into account multi-device machines) */
+	int oldCharge, newCharge;
+	if (slotData->isRechargeable) {
+		GenericObject slotDataVirt = {.percentageCharge = 100};
+		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
+		oldCharge = slotDataVirt.percentageCharge;
+	} else
+		oldCharge = slotData->percentageCharge;
+
+	/* calculate the new value */
 	update_percentage_charge (slotData);
+
+	/* find new (taking into account multi-device machines) */
+	if (slotData->isRechargeable) {
+		GenericObject slotDataVirt = {.percentageCharge = 100}; /* multibattery */
+		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
+		newCharge = slotDataVirt.percentageCharge;
+	} else
+		newCharge = slotData->percentageCharge;
+
 	gpn_icon_update ();
+
+	/* do we need to notify the user we are getting low ? */
+	if (oldCharge != newCharge) {
+		g_debug ("percentage change %i -> %i", oldCharge, newCharge);
+		if (slotData->isDischarging) {
+			GConfClient *client = gconf_client_get_default ();
+			gint lowThreshold = gconf_client_get_int (client, 
+							GCONF_ROOT "general/lowThreshold", NULL);
+			if (newCharge < lowThreshold) {
+				GString *gs = g_string_new ("");
+				char *device = convert_powerdevice_to_string (slotData->powerDevice);
+				GString *remaining = get_time_string (slotData);;
+				g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+					device, newCharge, remaining->str);
+				g_message ("%s", gs->str);
+				use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+				g_string_free (gs, TRUE);
+				g_string_free (remaining, TRUE);
+			}
+		}
+	}
 }
 
 /** Invoked when a property of a device in the Global Device List is
@@ -928,14 +977,12 @@ device_condition (LibHalContext *ctx,
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			int policy = get_policy_string (GCONF_ROOT "policy/ButtonPower");
-			/* only do notification if not coldplug */
 			if (policy == ACTION_WARNING)
 				use_libnotify (_("Power button has been pressed"), NOTIFY_URGENCY_NORMAL);
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
 			int policy = get_policy_string (GCONF_ROOT "policy/ButtonSuspend");
-			/* only do notification if not coldplug */
 			if (policy == ACTION_WARNING)
 				use_libnotify (_("Sleep button has been pressed"), NOTIFY_URGENCY_NORMAL);
 			else
@@ -948,7 +995,6 @@ device_condition (LibHalContext *ctx,
 			dbus_error_print (&error);
 			if (value) {
 				int policy = get_policy_string (GCONF_ROOT "policy/ButtonLid");
-				/* only do notification if not coldplug */
 				if (policy == ACTION_WARNING)
 					use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
 				else

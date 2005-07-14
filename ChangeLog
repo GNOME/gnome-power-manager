@@ -30,6 +30,9 @@
 
 	* src/gpm-prefs.c: Disable the double click stuff for now
 
+	* src/gpm-main.c (property_modified): Add the code where the user is
+	informed of the low battery state. This works for any rechargeable device.
+
 2005-07-12  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c (set_hdd_spindown): New stub function that sets the

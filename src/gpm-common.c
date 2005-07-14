@@ -29,6 +29,79 @@
 #include <gnome.h>
 #include "gpm-common.h"
 
+GPtrArray *objectData;
+
+/** Gets the timestring from a slot object
+ *
+ *  @param  slotData		the GenericObject reference
+ *  @return			the timestring, e.g. "13 minutes until charged"
+ */
+GString *
+get_time_string (GenericObject *slotData)
+{
+	g_assert (slotData);
+	g_debug ("get_time_string");
+	GString* timestring = NULL;
+	timestring = get_timestring_from_minutes (slotData->minutesRemaining);
+	if (!timestring)
+		return NULL;
+	if (slotData->isCharging)
+		timestring = g_string_append (timestring, _(" until charged"));
+	else
+		timestring = g_string_append (timestring, _(" remaining"));
+
+	return timestring;
+}
+
+/** Returns a virtual device that takes into account having more than one device
+ *  that needs to be averaged. Currently we are calculating:
+ *  percentageCharge and minutesRemaining only.
+ *
+ *  @param  slotDataReturn	the object returned. Must not be NULL
+ *  @param  powerDevice		the object to be returned. Usually POWER_PRIMARY_BATTERY
+ */
+void
+create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
+{
+	g_assert (slotDataReturn);
+
+	GenericObject *slotData;
+	gint a;
+	gint objectCount = 0;
+	GenericObject *slotDataTemp[5]; /* not going to get more than 5 objects */
+
+	for (a=0;a<objectData->len;a++) {
+		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
+		if (slotData->powerDevice == powerDevice && slotData->present) {
+			slotDataTemp[objectCount] = slotData;
+			objectCount++;
+		}
+	}
+	/* no objects */
+	if (objectCount == 0) {
+		g_warning ("create_virtual_of_type couldn't find device type %i", powerDevice);
+		slotDataReturn = NULL;
+		return;
+	}
+
+	/* short cut */
+	if (objectCount == 1) {
+		slotDataReturn->percentageCharge = slotDataTemp[0]->percentageCharge;
+		slotDataReturn->minutesRemaining = slotDataTemp[0]->minutesRemaining;
+		return;
+	}
+
+	/* work out average */
+	gint percentageCharge = 0;
+	gint minutesRemaining = 0;
+	for (a=0;a<objectCount;a++) {
+		percentageCharge += slotDataTemp[a]->percentageCharge;
+		minutesRemaining += slotDataTemp[a]->minutesRemaining;
+	}
+	slotDataReturn->percentageCharge = percentageCharge / objectCount;
+	slotDataReturn->minutesRemaining = minutesRemaining / objectCount;
+}
+
 void
 g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {

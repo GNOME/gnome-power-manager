@@ -32,7 +32,7 @@
 #include "gpm-main.h"
 #include "gpm-dbus-common.h"
 
-/** Converts an dbus ENUM to it's string representation
+/** Converts an dbus ENUM to it's string representation 
  *
  *  @param  value		The dbus ENUM
  *  @return			action string, e.g. "Shutdown"
