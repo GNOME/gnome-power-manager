@@ -7,348 +7,455 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-06-20 21:27+0100\n"
-"PO-Revision-Date: 2005-06-20 20:30+0100\n"
-"Last-Translator: Richard Hughes <richard@hughsie.com>\n"
+"POT-Creation-Date: 2005-07-15 10:19+0100\n"
+"PO-Revision-Date: 2005-07-15 10:24+0100\n"
+"Last-Translator: James Ogley <james@usr-local-bin.org>\n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
 
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Configure power management"
+
+#: ../gnome-power-preferences.desktop.in.h:2
+msgid "GNOME Power Preferences"
+msgstr "GNOME Power Preferences"
+
 #: ../gnome-power.schemas.in.h:1
-msgid "Do we show low devices?"
-msgstr ""
+msgid "If the machine has a LCD (brightness variable) attached."
+msgstr "If the machine has an LCD (brightness variable) attached."
 
 #: ../gnome-power.schemas.in.h:2
-msgid "Hibernatation script location"
-msgstr ""
+msgid "If the machine has a UPS attached"
+msgstr "If the machine has a UPS attached"
 
 #: ../gnome-power.schemas.in.h:3
-msgid "If the machine has a LCD (brightness variable) attached."
-msgstr ""
+msgid "If the machine has a display (that can be blanked) attached."
+msgstr "If the machine has a display (that can be blanked) attached."
 
 #: ../gnome-power.schemas.in.h:4
-msgid "If the machine has a UPS attached"
-msgstr ""
+msgid "If the machine has a hard-drive (that can be spun-down) attached."
+msgstr "If the machine has a hard-drive (that can be spun-down) attached."
 
 #: ../gnome-power.schemas.in.h:5
-msgid "If the machine has a display (that can be blanked) attached."
-msgstr ""
+msgid "If the machine has a wireless keyboard attached."
+msgstr "If the machine has a wireless keyboard attached."
 
 #: ../gnome-power.schemas.in.h:6
-msgid "If the machine has a hard-drive (that can be spun-down) attached."
-msgstr ""
+msgid "If the machine has a wireless mouse attached."
+msgstr "If the machine has a wireless mouse attached."
 
 #: ../gnome-power.schemas.in.h:7
-msgid "If the machine has a wireless keyboard attached."
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:8
-msgid "If the machine has a wireless mouse attached."
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:9
 msgid ""
 "If the machine has an AC adapter (usually laptops) then this key should be "
 "set."
 msgstr ""
+"If the machine has an AC adapter (usually laptops) then this key should be "
+"set."
 
-#: ../gnome-power.schemas.in.h:10
+#: ../gnome-power.schemas.in.h:8
 msgid "If the machine has an ac_adapter"
-msgstr ""
+msgstr "If the machine has an ac_adapter"
 
-#: ../gnome-power.schemas.in.h:11
+#: ../gnome-power.schemas.in.h:9
 msgid ""
 "If the machine has an power, sleep or lid buttons then this key should be "
 "set."
 msgstr ""
+"If the machine has a power, sleep or lid button then this key should be set."
+
+#: ../gnome-power.schemas.in.h:10
+msgid "If the machine has power buttons"
+msgstr "If the machine has power buttons"
+
+#: ../gnome-power.schemas.in.h:11
+msgid "If the machine have primary batteries"
+msgstr "If the machine has primary batteries"
 
 #: ../gnome-power.schemas.in.h:12
-msgid "If the machine has power buttons"
-msgstr ""
+msgid "Short description."
+msgstr "Short description."
 
 #: ../gnome-power.schemas.in.h:13
-msgid "If the machine have primary batteries"
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:14
-msgid "Reboot script location"
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:15
-msgid "Short description."
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:16
-msgid "Shutdown script location"
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:17
-msgid "Suspend script location"
-msgstr ""
-
-#: ../gnome-power.schemas.in.h:18
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to display an icon."
 msgstr ""
+"The percentage that the power device has to get to to be considered "
+"\"lowenough\" to display an icon."
+
+#: ../gnome-power.schemas.in.h:14
+msgid "The powerdevice low-icon threshold."
+msgstr "The power device low-icon threshold."
+
+#: ../gnome-power.schemas.in.h:15
+msgid "User cannot hibernate the machine"
+msgstr "User cannot hibernate the machine"
+
+#: ../gnome-power.schemas.in.h:16
+msgid "User cannot reboot the machine"
+msgstr "User cannot reboot the machine"
+
+#: ../gnome-power.schemas.in.h:17
+msgid "User cannot shutdown the machine"
+msgstr "User cannot shutdown the machine"
+
+#: ../gnome-power.schemas.in.h:18
+msgid "User cannot suspend the machine"
+msgstr "User cannot suspend the machine"
 
 #: ../gnome-power.schemas.in.h:19
-msgid "The powerdevice low-icon threshold."
-msgstr ""
+msgid "Whether to display a permanent icon"
+msgstr "Whether to display a permanent icon"
 
 #: ../gnome-power.schemas.in.h:20
-msgid "User cannot hibernate the machine"
-msgstr ""
+msgid "Whether to display icons when devices are at full capacity"
+msgstr "Whether we display icons when devices are at full capacity"
 
-#: ../gnome-power.schemas.in.h:21
-msgid "User cannot reboot the machine"
-msgstr ""
+#: ../src/eggtrayicon.c:117
+msgid "Orientation"
+msgstr "Orientation"
 
-#: ../gnome-power.schemas.in.h:22
-msgid "User cannot shutdown the machine"
-msgstr ""
+#: ../src/eggtrayicon.c:118
+msgid "The orientation of the tray."
+msgstr "The orientation of the tray."
 
-#: ../gnome-power.schemas.in.h:23
-msgid "User cannot suspend the machine"
-msgstr ""
+#: ../src/gpm-common.c:49
+msgid " until charged"
+msgstr " until charged"
 
-#: ../gnome-power.schemas.in.h:24
-msgid "Whether to display a permanent icon"
-msgstr ""
+#: ../src/gpm-common.c:51
+msgid " remaining"
+msgstr " remaining"
 
-#: ../gnome-power.schemas.in.h:25
-msgid "Whether we display icons when they are full"
+#: ../src/gpm-common.c:215
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-common.c:217
+msgid "AC Adapter"
+msgstr "AC Adapter"
+
+#: ../src/gpm-common.c:219
+msgid "Logitech mouse"
+msgstr "Logitech mouse"
+
+#: ../src/gpm-common.c:221
+msgid "Logitech keyboard"
+msgstr "Logitech keyboard"
+
+#: ../src/gpm-common.c:223
+msgid "Laptop battery"
+msgstr "Laptop battery"
+
+#: ../src/gpm-common.c:225
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-common.c:226
+msgid "Unknown device"
+msgstr "Unknown device"
+
+#: ../src/gpm-common.c:285
+msgid "missing"
+msgstr "missing"
+
+#: ../src/gpm-common.c:287
+msgid "charging"
+msgstr "charging"
+
+#: ../src/gpm-common.c:289
+msgid "discharging"
+msgstr "discharging"
+
+#: ../src/gpm-common.c:293
+msgid "fully charged"
+msgstr "fully charged"
+
+#: ../src/gpm-common.c:296
+msgid "charged"
+msgstr "charged"
+
+#: ../src/gpm-common.c:297
+msgid "unknown"
+msgstr "unknown"
+
+#: ../src/gpm-common.c:316
+msgid "1 minute"
+msgstr "1i minute"
+
+#: ../src/gpm-common.c:318
+#, c-format
+msgid "%i minutes"
+msgstr "%i minute"
+
+#: ../src/gpm-common.c:324
+msgid "1 hour"
+msgstr "1 hour"
+
+#: ../src/gpm-common.c:326
+#, c-format
+msgid "%i hours"
+msgstr "%i hours"
+
+#: ../src/gpm-common.c:330
+msgid "1 hour 1 minute"
+msgstr "1 hour 1 minute"
+
+#: ../src/gpm-common.c:333
+#, c-format
+msgid "1 hour %i minutes"
+msgstr "1 hour %i minutes"
+
+#: ../src/gpm-common.c:336
+#, c-format
+msgid "%i hours %i minutes"
+msgstr "%i hours %i minutes"
+
+#: ../src/gpm-dbus-common.c:44
+msgid "screensave"
+msgstr "screensave"
+
+#: ../src/gpm-dbus-common.c:46
+msgid "shutdown"
+msgstr "shutdown"
+
+#: ../src/gpm-dbus-common.c:48
+msgid "software suspend"
+msgstr "software suspend"
+
+#: ../src/gpm-dbus-common.c:50
+msgid "hibernation"
+msgstr "hibernation"
+
+#: ../src/gpm-dbus-common.c:52
+msgid "session log off"
+msgstr "session log off"
+
+#: ../src/gpm-main.c:188
+#, c-format
+msgid ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explaination given is: %s"
 msgstr ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explaination given is: %s"
+
+#: ../src/gpm-main.c:200
+#, c-format
+msgid ""
+"The program '%s' has not returned data that is preventing the %s from "
+"occurring."
+msgstr ""
+"The program '%s' has not returned data that is preventing the %s from "
+"occurring."
+
+#: ../src/gpm-main.c:224
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+msgstr ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+
+#: ../src/gpm-main.c:248
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timout changes."
+msgstr ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timout changes."
+
+#: ../src/gpm-main.c:419
+msgid "AC Adapter has been removed"
+msgstr "AC Adapter has been removed"
+
+#: ../src/gpm-main.c:723
+msgid "Couldn't obtain list of batteries"
+msgstr "Couldn't obtain list of batteries"
+
+#: ../src/gpm-main.c:734
+msgid "Couldn't obtain list of ac_adapters"
+msgstr "Couldn't obtain list of ac_adapters"
+
+#: ../src/gpm-main.c:945
+#, c-format
+msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+msgstr "The %s (%i%%) is <b>critically low</b> (%s)"
+
+#: ../src/gpm-main.c:981
+msgid "Power button has been pressed"
+msgstr "Power button has been pressed:"
+
+#: ../src/gpm-main.c:987
+msgid "Sleep button has been pressed"
+msgstr "Sleep button has been pressed:"
+
+#: ../src/gpm-main.c:999
+msgid "Lid has been opened"
+msgstr "Lid has been opened"
+
+#: ../src/gpm-main.c:1091
+msgid "Please report bugs to richard@hughsie.com\n"
+msgstr "Please report bugs to richard@hughsie.com\n"
+
+#: ../src/gpm-notification.c:263
+msgid "Computer is running on battery power"
+msgstr "Computer is running on battery power"
+
+#: ../src/gpm-notification.c:265
+msgid "Computer is running on UPS power"
+msgstr "Computer is running on UPS power"
+
+#: ../src/gpm-notification.c:267
+msgid "Computer is running on AC power"
+msgstr "Computer is running on AC power"
+
+#: ../src/gpm-notification.c:551
+msgid "Reboot"
+msgstr "Reboot"
+
+#: ../src/gpm-notification.c:554 ../src/gpm-prefs.c:328
+msgid "Shutdown"
+msgstr "Shutdown"
+
+#: ../src/gpm-notification.c:557 ../src/gpm-prefs.c:326
+msgid "Suspend"
+msgstr "Suspend"
+
+#: ../src/gpm-notification.c:560 ../src/gpm-prefs.c:327 ../src/gpm-prefs.c:331
+msgid "Hibernate"
+msgstr "Hibernate"
+
+#: ../src/gpm-prefs.c:324
+msgid "Do nothing"
+msgstr "Do nothing"
+
+#: ../src/gpm-prefs.c:325
+msgid "Send warning"
+msgstr "Send warning"
+
+#: ../src/gpm-prefs.c:330
+msgid "Quick sleep"
+msgstr "Quick sleep"
 
 #: ../src/preferences.glade.h:1
 msgid "<b>General</b>"
-msgstr ""
+msgstr "<b>General</b>"
 
 #: ../src/preferences.glade.h:2
 msgid "<b>Notification area</b>"
-msgstr ""
+msgstr "<b>Notification area</b>"
 
 #: ../src/preferences.glade.h:3
-msgid "<b>Running on AC adapter</b>"
-msgstr ""
+msgid "<b>Other Options</b>"
+msgstr "<b>Other Options</b>"
 
 #: ../src/preferences.glade.h:4
-msgid "<b>Running on batteries</b>"
-msgstr ""
+msgid "<b>Running on AC adapter</b>"
+msgstr "<b>Running on AC adapter</b>"
 
 #: ../src/preferences.glade.h:5
-msgid "Battery is critical when below:"
-msgstr ""
+msgid "<b>Running on batteries</b>"
+msgstr "<b>Running on batteries</b>"
 
 #: ../src/preferences.glade.h:6
-msgid "Computer sleep type:"
-msgstr ""
+msgid "Advanced"
+msgstr "Advanced"
 
 #: ../src/preferences.glade.h:7
-msgid "Display devices that are fully charged"
-msgstr ""
+msgid "Battery is critical when below:"
+msgstr "Battery is critical when below:"
 
 #: ../src/preferences.glade.h:8
-msgid "Display low battery icons"
-msgstr ""
+msgid "Computer sleep type:"
+msgstr "Computer sleep type:"
 
 #: ../src/preferences.glade.h:9
-msgid "Display main icon"
-msgstr ""
+msgid "Display devices that are fully charged"
+msgstr "Display devices that are fully charged"
 
 #: ../src/preferences.glade.h:10
-msgid "Options"
-msgstr ""
+msgid "Display main icon"
+msgstr "Display main icon"
 
 #: ../src/preferences.glade.h:11
-msgid "Power Preferences"
-msgstr ""
+msgid "Double click notification icon:"
+msgstr "Double click notification icon:"
 
 #: ../src/preferences.glade.h:12
-msgid "Put computer to sleep after:"
-msgstr ""
+msgid "Options"
+msgstr "Options"
 
 #: ../src/preferences.glade.h:13
-msgid "Put display to sleep after:"
-msgstr ""
+msgid "Power Preferences"
+msgstr "Power Preferences"
 
 #: ../src/preferences.glade.h:14
-msgid "Put hard drive to sleep after:"
-msgstr ""
+msgid "Put computer to sleep after:"
+msgstr "Put computer to sleep after:"
 
 #: ../src/preferences.glade.h:15
-msgid "Set display brightness:"
-msgstr ""
+msgid "Put display to sleep after:"
+msgstr "Put display to sleep after:"
 
 #: ../src/preferences.glade.h:16
-msgid "Sleep"
-msgstr ""
+msgid "Put hard drive to sleep after:"
+msgstr "Put hard drive to sleep after:"
 
 #: ../src/preferences.glade.h:17
-msgid "When AC power disconnected:"
-msgstr ""
+msgid "Set display brightness:"
+msgstr "Set display brightness:"
 
 #: ../src/preferences.glade.h:18
-msgid "When UPS power critical:"
-msgstr ""
+msgid "Sleep"
+msgstr "Sleep"
 
 #: ../src/preferences.glade.h:19
-msgid "When battery power critical:"
-msgstr ""
+msgid "When AC power disconnected:"
+msgstr "When AC power disconnected:"
 
 #: ../src/preferences.glade.h:20
-msgid "When laptop lid is closed:"
-msgstr ""
+msgid "When UPS power critical:"
+msgstr "When UPS power is critical:"
 
 #: ../src/preferences.glade.h:21
-msgid "When power button pressed:"
-msgstr ""
+msgid "When battery power critical:"
+msgstr "When battery power is critical:"
 
 #: ../src/preferences.glade.h:22
+msgid "When laptop lid is closed:"
+msgstr "When laptop lid is closed:"
+
+#: ../src/preferences.glade.h:23
+msgid "When power button pressed:"
+msgstr "When power button is pressed:"
+
+#: ../src/preferences.glade.h:24
 msgid "When suspend button pressed:"
-msgstr ""
+msgstr "When suspend button is pressed:"
 
-#: ../src/gpn.c:215
-msgid " until charged"
-msgstr ""
+#~ msgid "Do we show low devices?"
+#~ msgstr "Do we show low devices?"
 
-#: ../src/gpn.c:217
-msgid " remaining"
-msgstr ""
+#~ msgid "Hibernatation script location"
+#~ msgstr "Hibernatation script location"
 
-#: ../src/gpn.c:239
-msgid "Computer is running on battery power"
-msgstr ""
+#~ msgid "Reboot script location"
+#~ msgstr "Reboot script location"
 
-#: ../src/gpn.c:241
-msgid "Computer is running on UPS power"
-msgstr ""
+#~ msgid "Shutdown script location"
+#~ msgstr "Shutdown script location"
 
-#: ../src/gpn.c:243
-msgid "Computer is running on AC power"
-msgstr ""
+#~ msgid "Suspend script location"
+#~ msgstr "Suspend script location"
 
-#: ../src/gpn.c:499
-msgid "Reboot"
-msgstr ""
-
-#: ../src/gpn.c:501 ../src/prefs.c:325
-msgid "Shutdown"
-msgstr ""
-
-#: ../src/gpn.c:503 ../src/prefs.c:323
-msgid "Suspend"
-msgstr ""
-
-#: ../src/gpn.c:505 ../src/prefs.c:324 ../src/prefs.c:328
-msgid "Hibernate"
-msgstr ""
-
-#: ../src/common.c:140
-msgid "UPS"
-msgstr ""
-
-#: ../src/common.c:142
-msgid "Logitech mouse"
-msgstr ""
-
-#: ../src/common.c:144
-msgid "Logitech keyboard"
-msgstr ""
-
-#: ../src/common.c:146
-msgid "Laptop battery"
-msgstr ""
-
-#: ../src/common.c:148
-msgid "PDA"
-msgstr ""
-
-#: ../src/common.c:149
-msgid "Unknown device"
-msgstr ""
-
-#: ../src/common.c:202
-msgid "missing"
-msgstr ""
-
-#: ../src/common.c:204
-msgid "charging"
-msgstr ""
-
-#: ../src/common.c:206
-msgid "discharging"
-msgstr ""
-
-#: ../src/common.c:210
-msgid "fully charged"
-msgstr ""
-
-#: ../src/common.c:213
-msgid "charged"
-msgstr ""
-
-#: ../src/common.c:214
-msgid "unknown"
-msgstr ""
-
-#: ../src/common.c:234
-#, c-format
-msgid "%i minute"
-msgstr ""
-
-#: ../src/common.c:236
-#, c-format
-msgid "%i minutes"
-msgstr ""
-
-#: ../src/common.c:242
-#, c-format
-msgid "%i hour"
-msgstr ""
-
-#: ../src/common.c:244
-#, c-format
-msgid "%i hours"
-msgstr ""
-
-#: ../src/common.c:249
-#, c-format
-msgid "%i hour %i minute"
-msgstr ""
-
-#: ../src/common.c:252
-#, c-format
-msgid "%i hour %i minutes"
-msgstr ""
-
-#: ../src/common.c:255
-#, c-format
-msgid "%i hours %i minutes"
-msgstr ""
-
-#: ../src/gpm.c:530
-msgid "Couldn't obtain list of batteries"
-msgstr ""
-
-#: ../src/gpm.c:541
-msgid "Couldn't obtain list of ac_adapters"
-msgstr ""
-
-#: ../src/gpm.c:887
-msgid "Please report bugs to richard@hughsie.com\n"
-msgstr ""
-
-#: ../src/prefs.c:321
-msgid "Do nothing"
-msgstr ""
-
-#: ../src/prefs.c:322
-msgid "Send warning"
-msgstr ""
-
-#: ../src/prefs.c:327
-msgid "Quick sleep"
-msgstr ""
+#~ msgid "Display low battery icons"
+#~ msgstr "Display low battery icons"
