@@ -134,7 +134,7 @@ dbus_send_signal_int_string (DBusConnection *connection, const char *action, con
 gboolean
 dbus_send_signal_bool (DBusConnection *connection, const char *action, gboolean value)
 {
-	g_assert (connection);
+	g_return_val_if_fail (connection, FALSE);
 	DBusMessage *message;
 	message = dbus_message_new_signal (GPM_DBUS_PATH, GPM_DBUS_INTERFACE_SIGNAL, action);
 	if (!message) {
@@ -152,7 +152,7 @@ dbus_send_signal_bool (DBusConnection *connection, const char *action, gboolean 
 gboolean
 dbus_send_signal_int (DBusConnection *connection, const char *action, gint value)
 {
-	g_assert (connection);
+	g_return_val_if_fail (connection, FALSE);
 	DBusMessage *message;
 	message = dbus_message_new_signal (GPM_DBUS_PATH, GPM_DBUS_INTERFACE_SIGNAL, action);
 	if (!message) {

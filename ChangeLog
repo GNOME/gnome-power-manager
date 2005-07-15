@@ -1,3 +1,20 @@
+2005-07-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-server.c (vetoActionUnregisterInterest): Add an option so we
+	can supress the error (for random client disconnections)
+
+	* src/gpm-prefs.c (main): set hscale_battery_critical on load, not just on
+	change,	else we get the slider changing in unpredictable ways.
+
+	* src/gpm-*.c: s/g_assert/g_return_if_fail and g_return_val_if_fail
+	This will make the programs a little more error friendly (we still get
+	critical errors, but the program doesn't die)
+
+	* src/gpm-notification.c: Finish removing the low_icon mess.
+
+	* src/gpm-notification.c (callback_about_activated): Added translatable
+	string "Unknown Translator" for all you translators to get a bit of credit.
+
 2005-07-15  Terance Sola  <terance@lyse.net>
 
 	* configure.in: Added "nb" and "no" to ALL_LINGUAS.

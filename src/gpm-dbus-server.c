@@ -114,7 +114,7 @@ vetoNACK (const char *dbusName, gint flags, char *reason)
 static void
 vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
 {
-	g_assert (registered);
+	g_return_if_fail (registered);
 
 	int a;
 	a = vetoFindName (dbusName);
@@ -145,13 +145,14 @@ vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  */
 static void
-vetoActionUnregisterInterest (const char *dbusName, gint flags)
+vetoActionUnregisterInterest (const char *dbusName, gint flags, gboolean suppressError)
 {
-	g_assert (registered);
+	g_return_if_fail (registered);
 
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
-		g_warning ("Program '%s' has called vetoActionUnregisterInterest "
+		if (!suppressError)
+			g_warning ("Program '%s' has called vetoActionUnregisterInterest "
 			   "without calling vetoActionRegisterInterest!", dbusName);
 		return;
 	}
@@ -188,7 +189,7 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 		g_debug ("'%s' -> '%s'\n", oldservicename, newservicename);
 		if (strlen(newservicename) > 0) {
 			g_warning ("Disconnected due to crash '%s'", newservicename);
-			vetoActionUnregisterInterest (newservicename, GPM_DBUS_ALL);
+			vetoActionUnregisterInterest (newservicename, GPM_DBUS_ALL, TRUE);
 		}
 		return DBUS_HANDLER_RESULT_HANDLED;
 	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "vetoActionRegisterInterest")) {
@@ -206,7 +207,7 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 		gint value;
 		dbus_error_init (&error);
 		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
-			vetoActionUnregisterInterest (from, value);
+			vetoActionUnregisterInterest (from, value, FALSE);
 		} else {
 			g_warning ("vetoActionUnregisterInterest received, but error getting message: %s", error.message);
 			dbus_error_free (&error);

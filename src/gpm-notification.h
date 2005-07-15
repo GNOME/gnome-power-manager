@@ -43,15 +43,14 @@ typedef struct {
 	gint displayOptions;
 } IconData;
 
-void update_icon (IconData *tdicon);
-void free_icon_structure (IconData *tdicon);
+void free_icon_structure (void);
 GenericObject * get_main_icon_slot (void);
-GString * get_main_tooltip (IconData *tdicon);
+GString * get_main_tooltip (void);
 
 /* doesn't belong here, but maybe if gpn gets it's own process it will belong :-) */
 void callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
-/* wrapper functions, so icon_main and icon_low are not shared */
+/* wrapper functions */
 void gpn_icon_initialise ();
 void gpn_icon_destroy ();
 void gpn_icon_update ();

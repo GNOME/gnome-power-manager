@@ -46,7 +46,7 @@ gboolean displayIconFull = TRUE;
 static void
 gtk_set_visibility (const char *widgetname, gboolean set)
 {
-	g_assert (widgetname);
+	g_return_if_fail (widgetname);
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
@@ -68,7 +68,7 @@ gtk_set_visibility (const char *widgetname, gboolean set)
 static void
 gtk_set_check (const char *widgetname, gboolean set)
 {
-	g_assert (widgetname);
+	g_return_if_fail (widgetname);
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
@@ -139,7 +139,7 @@ recalc (void)
 static void
 gconf_key_action (const char *key)
 {
-	g_assert (key);
+	g_return_if_fail (key);
 	gboolean value;
 	GConfClient *client = gconf_client_get_default ();
 
@@ -180,7 +180,7 @@ gconf_key_action (const char *key)
 static void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	g_assert (client);
+	g_return_if_fail (client);
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
@@ -194,11 +194,11 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 static void
 callback_combo_changed (GtkWidget *widget, gpointer user_data)
 {
-	g_assert (widget);
+	g_return_if_fail (widget);
 	GConfClient *client = gconf_client_get_default ();
 	gint value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_assert (policypath);
+	g_return_if_fail (policypath);
 
 	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
@@ -214,7 +214,7 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 static void
 callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 {
-	g_assert (widget);
+	g_return_if_fail (widget);
 
 	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
 /* 
@@ -238,7 +238,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 
 	GConfClient *client = gconf_client_get_default ();
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_assert (policypath);
+	g_return_if_fail (policypath);
 	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
 	gconf_client_set_int (client, gconfpath, value, NULL);
@@ -261,11 +261,11 @@ callback_help (GtkWidget *widget, gpointer user_data)
 static void
 callback_check_changed (GtkWidget *widget, gpointer user_data)
 {
-	g_assert (widget);
+	g_return_if_fail (widget);
 	GConfClient *client = gconf_client_get_default ();
 	gboolean value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_assert (policypath);
+	g_return_if_fail (policypath);
 	/*int policytype = (int) g_object_get_data ((GObject*) widget, "policytype");*/
 
 	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
@@ -324,10 +324,11 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 static void
 combo_setup_action (const char *widgetname, const char *policypath, int policytype)
 {
-	g_assert (widgetname);
+	g_return_if_fail (widgetname);
 	GConfClient *client = gconf_client_get_default ();
 
 	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	g_return_if_fail (widget);
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
 
@@ -366,8 +367,8 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 static void
 hscale_setup_action (const char *widgetname, const char *policypath, int policytype)
 {
-	g_assert (widgetname);
-	g_assert (policypath);
+	g_return_if_fail (widgetname);
+	g_return_if_fail (policypath);
 	GConfClient *client = gconf_client_get_default ();
 	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 
@@ -396,8 +397,8 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 static void
 checkbox_setup_action (const char *widgetname, const char *policypath)
 {
-	g_assert (widgetname);
-	g_assert (policypath);
+	g_return_if_fail (widgetname);
+	g_return_if_fail (policypath);
 	GConfClient *client = gconf_client_get_default ();
 	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_check_changed), NULL);
@@ -483,8 +484,10 @@ main (int argc, char **argv)
 		"policy/BatteryCritical", POLICY_CHOICE);
 	combo_setup_action ("combobox_ups_critical",
 		"policy/UPSCritical", POLICY_CHOICE);
+#if 0
 	combo_setup_action ("combobox_sleep_type",
 		"policy/SleepType", POLICY_NONE);
+#endif
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
@@ -507,6 +510,12 @@ main (int argc, char **argv)
 		"general/lowThreshold", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_critical", 
 		"general/criticalThreshold", POLICY_PERCENT);
+
+	/* set up upper limit for battery_critical */
+	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
+	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
+	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
+	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
 	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
 	gconf_key_action (GCONF_ROOT "general/hasBatteries");

@@ -39,7 +39,7 @@ GPtrArray *objectData;
 GString *
 get_time_string (GenericObject *slotData)
 {
-	g_assert (slotData);
+	g_return_val_if_fail (slotData, NULL);
 	g_debug ("get_time_string");
 	GString* timestring = NULL;
 	timestring = get_timestring_from_minutes (slotData->minutesRemaining);
@@ -63,7 +63,7 @@ get_time_string (GenericObject *slotData)
 void
 create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
 {
-	g_assert (slotDataReturn);
+	g_return_if_fail (slotDataReturn);
 
 	GenericObject *slotData;
 	gint a;
@@ -119,7 +119,7 @@ g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *me
 int
 convert_string_to_policy (const gchar *gconfstring)
 {
-	g_assert (gconfstring);
+	g_return_val_if_fail (gconfstring, ACTION_UNKNOWN);
 	if (strcmp (gconfstring, "nothing") == 0)
 		return ACTION_NOTHING;
 	if (strcmp (gconfstring, "suspend") == 0)
@@ -164,7 +164,7 @@ convert_policy_to_string (gint value)
  */
 gint convert_haltype_to_powerdevice (const gchar *type)
 {
-	g_assert (type);
+	g_return_val_if_fail (type, POWER_UNKNOWN);
 	if (strcmp (type, "ac_adapter") == 0)
 		return POWER_AC_ADAPTER;
 	else if (strcmp (type, "ups") == 0)
@@ -236,8 +236,8 @@ convert_powerdevice_to_string (gint powerDevice)
 void
 update_percentage_charge (GenericObject *slotData)
 {
-	g_assert (slotData);
-	g_assert (slotData->powerDevice != POWER_NONE);
+	g_return_if_fail (slotData);
+	g_return_if_fail (slotData->powerDevice != POWER_NONE);
 
 	/* These devices cannot have charge, assume 0% */
 	if (!slotData->present ||
@@ -280,7 +280,7 @@ update_percentage_charge (GenericObject *slotData)
 gchar *
 get_chargestate_string (GenericObject *slotData)
 {
-	g_assert (slotData);
+	g_return_val_if_fail (slotData, NULL);
 	if (!slotData->present)
 		return _("missing");
 	else if (slotData->isCharging)

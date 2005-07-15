@@ -85,7 +85,7 @@ use_libnotify (const char *content, const int urgency)
 static void
 dbus_error_print (DBusError *error)
 {
-	g_assert (error);
+	g_return_if_fail (error);
 	if (dbus_error_is_set (error)) {
 		g_warning ("DBUS:%s", error->message);
 		dbus_error_free (error);
@@ -100,7 +100,7 @@ dbus_error_print (DBusError *error)
 static void
 do_interactive_alert (const gchar *text)
 {
-	g_assert (text);
+	g_return_if_fail (text);
 
 	GtkWidget *widget = gnome_message_box_new (text, 
                                 GNOME_MESSAGE_BOX_WARNING,
@@ -118,7 +118,7 @@ do_interactive_alert (const gchar *text)
 gint
 get_policy_string (const gchar *gconfpath)
 {
-	g_assert (gconfpath);
+	g_return_val_if_fail (gconfpath, -1);
 	GConfClient *client = gconf_client_get_default ();
 	gchar *valuestr = gconf_client_get_string (client, gconfpath, NULL);
 	gint value = convert_string_to_policy (valuestr);
@@ -363,7 +363,7 @@ action_policy_do (gint policy_number)
 static void
 compare_bool_set_gconf (const gchar *gconfpath, gboolean *has_dataold, gboolean *has_datanew, gboolean force)
 {
-	g_assert (gconfpath);
+	g_return_if_fail (gconfpath);
 	GConfClient *client = gconf_client_get_default ();
 
 	if (force || *has_datanew != *has_dataold) {
@@ -380,7 +380,7 @@ compare_bool_set_gconf (const gchar *gconfpath, gboolean *has_dataold, gboolean 
 static void
 update_state_logic (GPtrArray *parray, gboolean coldplug)
 {
-	g_assert (parray);
+	g_return_if_fail (parray);
 	gint a;
 	GenericObject *slotData;
 	/* set up temp. state */
@@ -443,7 +443,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 static void
 update_has_logic (GPtrArray *parray, gboolean coldplug)
 {
-	g_assert (parray);
+	g_return_if_fail (parray);
 
 	gint a;
 	GenericObject *slotData;
@@ -513,12 +513,12 @@ gpm_exit (void)
 void
 genericobject_print (GPtrArray *parray)
 {
-	g_assert (parray);
+	g_return_if_fail (parray);
 	int a;
 	GenericObject *slotData;
 	for (a=0;a<parray->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		g_assert (slotData);
+		g_return_if_fail (slotData);
 		g_print ("[%i] udi: %s\n", a, slotData->udi);
 		g_print ("     powerDevice: %i\n", slotData->powerDevice);
 	}
@@ -536,7 +536,7 @@ find_udi_parray_index (GPtrArray *parray, const char *udi)
 	int a;
 	for (a=0;a<parray->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		g_assert (slotData);
+		g_return_val_if_fail (slotData, -1);
 		if (strcmp (slotData->udi, udi) == 0)
 			return a;
 	}
@@ -586,7 +586,7 @@ static void
 add_ac_adapter (const gchar *udi)
 {
 	DBusError error;
-	g_assert (udi);
+	g_return_if_fail (udi);
 	GenericObject *slotData = genericobject_add (objectData, udi);
 	if (slotData) {
 		slotData->powerDevice = POWER_AC_ADAPTER;
@@ -612,7 +612,7 @@ add_ac_adapter (const gchar *udi)
 static void
 read_battery_data (GenericObject *slotData)
 {
-	g_assert (slotData);
+	g_return_if_fail (slotData);
 	DBusError error;
 
 	/* initialise to known defaults */
@@ -677,7 +677,7 @@ read_battery_data (GenericObject *slotData)
 static void
 add_battery (const gchar *udi)
 {
-	g_assert (udi);
+	g_return_if_fail (udi);
 	DBusError error;
 	gchar *type = NULL;
 
@@ -751,7 +751,7 @@ coldplug_devices (void)
 static void
 remove_devices (const char *udi)
 {
-	g_assert (udi);
+	g_return_if_fail (udi);
 	int a = find_udi_parray_index (objectData, udi);
 	if (a == -1) {
 		g_debug ("Asked to remove '%s' when not present", udi);
@@ -769,7 +769,7 @@ remove_devices (const char *udi)
 static void
 device_removed (LibHalContext *ctx, const char *udi)
 {
-	g_assert (udi);
+	g_return_if_fail (udi);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just disappear from the device tree
@@ -792,8 +792,8 @@ device_removed (LibHalContext *ctx, const char *udi)
 static void
 device_new_capability (LibHalContext *ctx, const char *udi, const char *capability)
 {
-	g_assert (udi);
-	g_assert (capability);
+	g_return_if_fail (udi);
+	g_return_if_fail (capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just appear in the device tree
@@ -817,8 +817,8 @@ static void
 property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		   dbus_bool_t is_removed, dbus_bool_t is_added)
 {
-	g_assert (udi);
-	g_assert (key);
+	g_return_if_fail (udi);
+	g_return_if_fail (key);
 	DBusError error;
 	GenericObject *slotData;
 
@@ -993,7 +993,7 @@ device_condition (LibHalContext *ctx,
 		  const char *condition_name,
 		  const char *condition_details)
 {
-	g_assert (udi);
+	g_return_if_fail (udi);
 	DBusError error;
 	gchar *type;
 

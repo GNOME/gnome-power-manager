@@ -38,13 +38,13 @@ HasData has_data;
 StateData state_data;
 SetupData setup;
 
-static IconData icon_main, icon_low;
+static IconData main_icon;
 GPtrArray *objectData;
 
 /** Calculate the color of the charge level bar
  *
  *  @param  level		the chargeLevel of the object, 0..100
- *  @return			the RGB colour
+ *  @return				the RGB colour
  */
 static guint32
 level_bar_get_color (guint level)
@@ -96,7 +96,6 @@ gtk_icon_theme_fallback (const char *name, int size)
 /** Gets an icon (pixbuf) suitable for the object
  *
  *  @param  td			Address of the icon
- *  @param  tooltip		The new tooltip
  */
 static GdkPixbuf *
 create_icon_pixbuf (GenericObject *slotData)
@@ -165,12 +164,11 @@ create_icon_pixbuf (GenericObject *slotData)
 /** Frees resources and hides notification area icon
  *
  *  @param  td			Address of the icon
- *  @param  tooltip		The new tooltip
  */
 void
 icon_destroy (TrayData **td)
 {
-	g_assert (*td);
+	g_return_if_fail (*td);
 	g_debug ("icon_destroy");
 	if ((*td)->popup_menu)
 		g_free ((*td)->popup_menu);
@@ -183,52 +181,40 @@ icon_destroy (TrayData **td)
 void
 gpn_icon_initialise ()
 {
-	IconData *icon;
 	GConfClient *client = gconf_client_get_default ();
-
-	icon = &icon_main;
-	free_icon_structure (icon);
-	icon->show = gconf_client_get_bool (client, GCONF_ROOT "general/displayIcon", NULL);
-	icon->showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/displayIconFull", NULL);
+	free_icon_structure ();
+	main_icon.show = gconf_client_get_bool (client, GCONF_ROOT "general/displayIcon", NULL);
+	main_icon.showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/displayIconFull", NULL);
 }
 
 /* wrapper function */
 void
 gpn_icon_destroy ()
 {
-	IconData *icon;
-	icon = &icon_main;
-	if (icon->td)
-		icon_destroy (&(icon->td));
-	free_icon_structure (icon);
-}
-
-/* wrapper function */
-void
-gpn_icon_update ()
-{
-	update_icon (&icon_main);
+	if (main_icon.td)
+		icon_destroy (&(main_icon.td));
+	free_icon_structure ();
 }
 
 /* wrapper function */
 void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	g_assert (client);
-	g_assert (entry);
+	g_return_if_fail (client);
+	g_return_if_fail (entry);
 	g_debug ("callback_gconf_key_changed (%s)", entry->key);
 
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
 	if (strcmp (entry->key, GCONF_ROOT "general/displayIcon") == 0) {
-		icon_main.show = gconf_client_get_bool (client, entry->key, NULL);
+		main_icon.show = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "general/displayIconFull") == 0) {
-		icon_main.showIfFull = gconf_client_get_bool (client, entry->key, NULL);
+		main_icon.showIfFull = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "general/lowThreshold") == 0) {
-		icon_low.displayOptions = gconf_client_get_int (client, entry->key, NULL);
+		main_icon.displayOptions = gconf_client_get_int (client, entry->key, NULL);
 		gpn_icon_update ();
 	}
 }
@@ -277,10 +263,9 @@ get_object_tooltip (GenericObject *slotData)
  *
  */
 GString *
-get_main_tooltip (IconData *tdicon)
+get_main_tooltip (void)
 {
-	g_assert (tdicon);
-	g_assert (tdicon->slotData);
+	g_return_val_if_fail (main_icon.slotData, NULL);
 	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
 	gint a;
@@ -333,15 +318,15 @@ get_main_icon_slot (void)
 	 * PDA and others should never be a main icon.
 	 */
 
-	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, icon_main.showIfFull);
+	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, main_icon.showIfFull);
 	if (slotData)
 		return slotData;
 
-	slotData = get_object_of_powertype (POWER_UPS, icon_main.showIfFull);
+	slotData = get_object_of_powertype (POWER_UPS, main_icon.showIfFull);
 	if (slotData)
 		return slotData;
 
-	slotData = get_object_of_powertype (POWER_AC_ADAPTER, icon_main.showIfFull);
+	slotData = get_object_of_powertype (POWER_AC_ADAPTER, main_icon.showIfFull);
 	if (slotData)
 		return slotData;
 
@@ -351,17 +336,16 @@ get_main_icon_slot (void)
 
 /** Frees icon structure
  *
- *  @param  tdicon		The icon pointer that needs to be freed
  */
 void
-free_icon_structure (IconData *tdicon)
+free_icon_structure (void)
 {
-	g_assert (tdicon);
+	g_return_if_fail (&main_icon);
 	g_debug ("free_icon_structure");
-	if (tdicon->tooltip)
-		g_string_free (tdicon->tooltip, TRUE);
-	tdicon->tooltip = NULL;
-	tdicon->td = NULL;
+	if (main_icon.tooltip)
+		g_string_free (main_icon.tooltip, TRUE);
+	main_icon.tooltip = NULL;
+	main_icon.td = NULL;
 }
 
 /** Callback for actions boxes
@@ -395,6 +379,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	GdkPixbuf *pixbuf = NULL;
 	const gchar *authors[] = { "Richard Hughes <richard@hughsie.com>", NULL };
 	const gchar *documenters[] = { NULL };
+	const gchar *translator = _("Unknown Translator");
 
 	if (about)
 	{
@@ -409,7 +394,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 			_(NICEDESC),
 			(const char **)authors,
 			(const char **)documenters,
-			NULL,
+			(const char *)translator,
 			pixbuf);
 
 	if (pixbuf)
@@ -472,7 +457,7 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
 	/* get image */
 	GtkWidget *image = gtk_image_new ();
 	GdkPixbuf *pixbuf = gtk_icon_theme_fallback (icon, 16);
-	g_assert (pixbuf);
+	g_return_if_fail (pixbuf);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 
 	GtkWidget *item = gtk_image_menu_item_new_with_label (name);
@@ -491,8 +476,8 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
 static void
 menu_main_create (TrayData *td)
 {
-	g_assert (td);
-	g_assert (td->popup_menu == NULL);
+	g_return_if_fail (td);
+	g_return_if_fail (td->popup_menu == NULL);
 	g_debug ("menu_main_create");
 	GtkWidget *item;
 	td->popup_menu = gtk_menu_new ();
@@ -587,13 +572,12 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *td)
 
 /** Creates icon in the notification area
  *
- *  @param  td			Address of the icon
- *  @param  filename		The filename of the icon
+ *  @param  td				Address of the icon
  */
 void
 icon_create (TrayData **td)
 {
-	g_assert (*td == NULL);
+	g_return_if_fail (*td == NULL);
 	g_debug ("icon_create");
 	GtkWidget *evbox;
 
@@ -628,40 +612,38 @@ icon_create (TrayData **td)
 
 /** Update icon by showing it, hiding it, or modifying it, as applicable
  *
- *  @param  tdicon		The icon pointer that needs to be updated
  */
 void
-update_icon (IconData *tdicon)
+gpn_icon_update (void)
 {
-	g_assert (tdicon);
-	g_debug ("update_icon");
-	if (tdicon->tooltip)
-		g_string_free (tdicon->tooltip, TRUE);
-	tdicon->tooltip = NULL;
+	g_return_if_fail (&main_icon);
+	if (main_icon.tooltip)
+		g_string_free (main_icon.tooltip, TRUE);
+	main_icon.tooltip = NULL;
 
-	tdicon->slotData = get_main_icon_slot ();
-	if (tdicon->slotData)
-		tdicon->tooltip = get_main_tooltip (&icon_main);
+	main_icon.slotData = get_main_icon_slot ();
+	if (main_icon.slotData)
+		main_icon.tooltip = get_main_tooltip ();
 
-	if (tdicon->show && tdicon->slotData) {
-		if (!tdicon->td) {
-			icon_create (&(tdicon->td));
-			if (!(tdicon->td->popup_menu))
-				menu_main_create (tdicon->td);
+	if (main_icon.show && main_icon.slotData) {
+		if (!main_icon.td) {
+			icon_create (&(main_icon.td));
+			if (!(main_icon.td->popup_menu))
+				menu_main_create (main_icon.td);
 		}
 
-		GdkPixbuf *pixbuf = create_icon_pixbuf (tdicon->slotData);
-		gtk_image_set_from_pixbuf (GTK_IMAGE (tdicon->td->image), pixbuf);
+		GdkPixbuf *pixbuf = create_icon_pixbuf (main_icon.slotData);
+		gtk_image_set_from_pixbuf (GTK_IMAGE (main_icon.td->image), pixbuf);
 		g_object_unref (pixbuf);
 
-		if (tdicon->tooltip)
-			gtk_tooltips_set_tip (tdicon->td->tray_icon_tooltip, 
-				GTK_WIDGET (tdicon->td->tray_icon), 
-				tdicon->tooltip->str, NULL);
+		if (main_icon.tooltip)
+			gtk_tooltips_set_tip (main_icon.td->tray_icon_tooltip, 
+				GTK_WIDGET (main_icon.td->tray_icon), 
+				main_icon.tooltip->str, NULL);
 	} else {
-		if (tdicon->td) {
-			icon_destroy (&(tdicon->td));
-			free_icon_structure (tdicon);
+		if (main_icon.td) {
+			icon_destroy (&(main_icon.td));
+			free_icon_structure ();
 		}
 	}
 }
