@@ -225,6 +225,17 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	if (v2 != value)
 		return;
 */
+
+/* if this is hscale for battery_low, then set upper range of hscale for 
+ * battery_critical maximum to value
+ * (This stops criticalThreshold > lowThreshold)
+ */
+	if (strcmp (gtk_widget_get_name (widget), "hscale_battery_low") == 0) {
+		GtkWidget *widget2;
+		widget2 = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
+		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
+	}
+
 	GConfClient *client = gconf_client_get_default ();
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_assert (policypath);
@@ -492,8 +503,10 @@ main (int argc, char **argv)
 		"policy/Batteries/SleepDisplay", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness", 
 		"policy/Batteries/Brightness", POLICY_PERCENT);
-	hscale_setup_action ("hscale_critical_low", 
+	hscale_setup_action ("hscale_battery_low", 
 		"general/lowThreshold", POLICY_PERCENT);
+	hscale_setup_action ("hscale_battery_critical", 
+		"general/criticalThreshold", POLICY_PERCENT);
 
 	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
 	gconf_key_action (GCONF_ROOT "general/hasBatteries");

@@ -34,6 +34,11 @@
 
 GPtrArray *registered;
 
+/** Finds the registered list position from the dbus connection name.
+ *
+ *  @param  dbusName	The dbus connection, e.g. 0:13
+ *  @return				The position
+ */
 static int
 vetoFindName (const char *dbusName)
 {
@@ -48,6 +53,11 @@ vetoFindName (const char *dbusName)
 	return -1;
 }
 
+/** Process the vetoACK signal
+ *
+ *  @param  dbusName	The dbus connection, e.g. 0:13
+ *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
+ */
 static void
 vetoACK (const char *dbusName, gint flags)
 {
@@ -68,6 +78,12 @@ vetoACK (const char *dbusName, gint flags)
 	regprog->isACK = TRUE;
 }
 
+/** Process the vetoNACK signal
+ *
+ *  @param  dbusName	The dbus connection, e.g. 0:13
+ *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
+ *  @param  reason		The reason given for the NACK
+ */
 static void
 vetoNACK (const char *dbusName, gint flags, char *reason)
 {
@@ -89,6 +105,12 @@ vetoNACK (const char *dbusName, gint flags, char *reason)
 	regprog->reason = g_string_new (reason);
 }
 
+/** Process the vetoActionRegisterInterest signal
+ *
+ *  @param  dbusName	The dbus connection, e.g. 0:13
+ *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
+ *  @param  appname		The localised application name, e.g. "Totem"
+ */
 static void
 vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
 {
@@ -117,6 +139,11 @@ vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
 	g_ptr_array_add (registered, (gpointer) reg);
 }
 
+/** Process the vetoActionUnregisterInterest signal
+ *
+ *  @param  dbusName	The dbus connection, e.g. 0:13
+ *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
+ */
 static void
 vetoActionUnregisterInterest (const char *dbusName, gint flags)
 {

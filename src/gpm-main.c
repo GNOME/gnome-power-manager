@@ -57,6 +57,11 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+/** Convenience function to call libnotify
+ *
+ *  @param  content		The content text, e.g. "Battery low"
+ *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
+ */
 static void
 use_libnotify (const char *content, const int urgency)
 {
@@ -610,14 +615,16 @@ read_battery_data (GenericObject *slotData)
 	g_assert (slotData);
 	DBusError error;
 
+	/* initialise to known defaults */
+	slotData->minutesRemaining = 0;
+	slotData->rawCharge = 0;
+	slotData->rawLastFull = 0;
+	slotData->isRechargeable = FALSE;
+	slotData->isCharging = FALSE;
+	slotData->isDischarging = FALSE;
+
 	if (!slotData->present) {
 		g_debug ("Battery %s not present!", slotData->udi);
-		slotData->minutesRemaining = 0;
-		slotData->rawCharge = 0;
-		slotData->rawLastFull = 0;
-		slotData->isRechargeable = FALSE;
-		slotData->isCharging = FALSE;
-		slotData->isDischarging = FALSE;
 		return;
 	}
 
@@ -826,6 +833,7 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	slotData = genericobject_find (objectData, udi);
 
 #if 0
+	/* I think this code is now obsolete, now we are checking for bugs in HAL */
 	dbus_error_init (&error);
 	gchar *type = libhal_device_get_property_string (hal_ctx, udi, "info.category", &error);
 	dbus_error_print (&error);
@@ -899,8 +907,9 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		dbus_error_print (&error);
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		/* ignore */
+		return;
 	} else {
-		g_warning ("Cannot recognise key '%s' from UDI '%s'", key, udi);
+		g_debug ("Cannot recognise key '%s' from UDI '%s'", key, udi);
 		return;
 	}
 
@@ -938,11 +947,29 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 			GConfClient *client = gconf_client_get_default ();
 			gint lowThreshold = gconf_client_get_int (client, 
 							GCONF_ROOT "general/lowThreshold", NULL);
-			if (newCharge < lowThreshold) {
+			gint criticalThreshold = gconf_client_get_int (client, 
+							GCONF_ROOT "general/criticalThreshold", NULL);
+			/* critical warning */
+			if (newCharge < criticalThreshold) {
+				int policy = get_policy_string (GCONF_ROOT "policy/BatteryCritical");
+				if (policy == ACTION_WARNING) {
+					GString *gs = g_string_new ("");
+					char *device = convert_powerdevice_to_string (slotData->powerDevice);
+					GString *remaining = get_time_string (slotData);;
+					g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+						device, newCharge, remaining->str);
+					g_message ("%s", gs->str);
+					use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+					g_string_free (gs, TRUE);
+					g_string_free (remaining, TRUE);
+				} else
+					action_policy_do (policy);
+			/* low warning */
+			} else if (newCharge < lowThreshold) {
 				GString *gs = g_string_new ("");
 				char *device = convert_powerdevice_to_string (slotData->powerDevice);
 				GString *remaining = get_time_string (slotData);;
-				g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+				g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"), 
 					device, newCharge, remaining->str);
 				g_message ("%s", gs->str);
 				use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);

@@ -64,6 +64,13 @@ level_bar_get_color (guint level)
 	return (0xff + red * 0x01000000 + green * 0x00010000);
 }
 
+/** Get a image (pixbuf) trying the theme first, falling back to locally 
+ * if not present. This means we do not have to check in configure.in for lots
+ * of obscure icons.
+ *
+ *  @param  name	the icon name, e.g. gnome-battery
+ *  @param  size	the icon size, e.g. 22
+ */
 static GdkPixbuf *
 gtk_icon_theme_fallback (const char *name, int size)
 {
@@ -86,56 +93,27 @@ gtk_icon_theme_fallback (const char *name, int size)
 	return pixbuf;
 }
 
-#if 0
-static gint
-get_percentagecharge_batteries (void)
-{
-	GenericObject *slotData;
-	gint a;
-	gint batteryCount = 0;
-	gint batteryCharge[5]; /* not going to get more than 5 batteries */
-
-	for (a=0;a<objectData->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
-		if (slotData->powerDevice == POWER_PRIMARY_BATTERY && slotData->present) {
-			batteryCharge[batteryCount] = slotData->percentageCharge;
-			batteryCount++;
-		}
-	}
-	/* no batteries */
-	if (batteryCount == 0)
-		return 0;
-
-	/* short cut */
-	if (batteryCount == 1)
-		return batteryCharge[0];
-
-	/* work out average */
-	gint totalCharge = 0;
-	for (a=0;a<batteryCount;a++) {
-		totalCharge += batteryCharge[a];
-	}
-	
-	return totalCharge / batteryCount;
-}
-#endif
-
+/** Gets an icon (pixbuf) suitable for the object
+ *
+ *  @param  td			Address of the icon
+ *  @param  tooltip		The new tooltip
+ */
 static GdkPixbuf *
-create_icon_pixbuf (GenericObject *object)
+create_icon_pixbuf (GenericObject *slotData)
 {
-	g_assert (object);
+	g_assert (slotData);
 	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
 	/** TODO: make this set from gconf */
 	const gboolean alwaysUseGenerated = FALSE;
 
-	if (!alwaysUseGenerated && object->powerDevice == POWER_PRIMARY_BATTERY) {
+	if (!alwaysUseGenerated && slotData->powerDevice == POWER_PRIMARY_BATTERY) {
 		int num;
 		gchar *computed_name;
 
 		/* have to work out for all objects for multibattery setups */
 		GenericObject slotDataVirt = {.percentageCharge = 100};
-		create_virtual_of_type (&slotDataVirt, object->powerDevice);
+		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
 
 		num = ((slotDataVirt.percentageCharge + 4) * 8 ) / 100;
 		if (num < 0) num = 0;
@@ -146,13 +124,13 @@ create_icon_pixbuf (GenericObject *object)
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else {
-		gchar *name = convert_powerdevice_to_gnomeicon (object->powerDevice);
+		gchar *name = convert_powerdevice_to_gnomeicon (slotData->powerDevice);
 		g_assert (name);
 		pixbuf = gtk_icon_theme_fallback (name, 24);
 		g_assert (pixbuf);
 
 		/* merge with AC emblem if needed */
-		if (object->isCharging) {
+		if (slotData->isCharging) {
 			GdkPixbuf *emblem = gdk_pixbuf_new_from_file (GPM_DATA "emblem-ac.png", &err);
 			g_assert (emblem);
 			gdk_pixbuf_composite (emblem, pixbuf, 0, 0, 24, 24, 0, 0, 1.0, 1.0, GDK_INTERP_BILINEAR, 0xFF);
@@ -160,7 +138,7 @@ create_icon_pixbuf (GenericObject *object)
 		}
 		
 		/* merge with level bar if needed */
-		if (object->isRechargeable) {
+		if (slotData->isRechargeable) {
 			GdkPixbuf *emblem = gdk_pixbuf_new_from_file (GPM_DATA "emblem-bar.png", &err);
 			g_assert (emblem);
 			gdk_pixbuf_composite (emblem, pixbuf, 0, 0, 24, 24, 0, 0, 1.0, 1.0, GDK_INTERP_BILINEAR, 0xFF);
@@ -168,7 +146,7 @@ create_icon_pixbuf (GenericObject *object)
 
 			/* have to work out for all objects for multibattery setups */
 			GenericObject slotDataVirt = {.percentageCharge = 100};
-			create_virtual_of_type (&slotDataVirt, object->powerDevice);
+			create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
 
 			gfloat c = ((gfloat) slotDataVirt.percentageCharge) / 100.0;
 			guint h = (guint) (19.0 * c);
@@ -318,6 +296,12 @@ get_main_tooltip (IconData *tdicon)
 	return tooltip;
 }
 
+/** Gets an example icon for the taskbar
+ *
+ *  @param	powerDevice		the power type, e.g. POWER_UPS
+ *  @param	displayFull		should we display icons for full devices?
+ *  @return					pointer to the applicable data type
+ */
 static GenericObject *
 get_object_of_powertype (int powerDevice, gboolean displayFull)
 {

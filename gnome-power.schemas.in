@@ -74,8 +74,20 @@
       <type>int</type>
       <default>20</default>
       <locale name="C">
-        <short>The powerdevice low-icon threshold.</short>
-        <long>The percentage that the powerdevice has to get to be considered "low enough" to display an icon.</long>
+        <short>The powerdevice warning threshold.</short>
+        <long>The percentage that the powerdevice has to get to be considered "low enough" to warn the user.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power/general/criticalThreshold</key>
+      <applyto>/apps/gnome-power/general/criticalThreshold</applyto>
+      <owner>gnome-power</owner>
+      <type>int</type>
+      <default>5</default>
+      <locale name="C">
+        <short>The powerdevice action threshold.</short>
+        <long>The percentage that the powerdevice has to get to be considered "low enough" to perform an action.</long>
       </locale>
     </schema>
 

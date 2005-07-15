@@ -5,7 +5,10 @@ TODO:
  * Make pure GNOME/Glib
  * get rid of clipboard.c and use glib functions.
  * valgrind says Conditional jump or move depends on uninitialised value(s) on 209 (->present)
-"
+
+for sliders, set critical on load, not just on change (else jumpy)
+dont force unregister, then error. check first.
+
 Document Error:
 WARNING: failed to install schema `/schemas/apps/gnome-power/policy/button_sleep'
 

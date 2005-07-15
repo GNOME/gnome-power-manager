@@ -1,3 +1,22 @@
+2005-07-14  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power.preferences.desktop.in: 
+	Replace "GNOME Power Preferences" with "Power Preferences" - we shouldn't 
+	have "GNOME" in the Preferences menu title.
+
+	* src/gpm-main.c (read_battery_data): Re-arrange the initialisation to 
+	known defaults so that valgrind doesn't get upset with a UPS attached.
+
+	* gnome-power.schemas.in: Added criticalThreshold value
+
+	* gpm-prefs.c (callback_hscale_changed): Add in new code for 
+	criticalThreshold, and make sure that criticalThreshold > lowThreshold
+	by changing the limits of the criticalThreshold slider.
+
+	* src/gpm-main.c (property_modified): Added notification and action for
+	battery critical. Now we are cooking with gas. 
+	p.s. Thanks to the translators for all the recent work. Appreciated.
+
 2005-07-15  Abel Cheung  <maddog@linuxhall.org>
 
 	* configure.in: Added "mk" to ALL_LINGUAS.
@@ -44,7 +63,7 @@
 
 	* MAINTAINERS, README.cvs: new files, needed for movement to GNOME CVS 
 	servers. I'll update the help when they allow anonymous checkouts.
-	
+
 	* doc/*: New folder with quite a bit of documentation in HTML form.
 
 2005-07-12  David Zeuthen  <davidz@redhat.com>
@@ -128,7 +147,7 @@
 2005-06-30 Richard Hughes  <richard@hughsie.com>
 
 	* src/prefs.glade : split some options into a new tab.
-	
+
 	* src/gpm-notification.c : After discussing with Paul Ionescu, I've
 	created the new funtion get_percentagecharge_batteries () that
 	understands multibattery setups. Hopefully this should be useful.
@@ -175,7 +194,7 @@
 2005-06-21 Richard Hughes  <richard@hughsie.com>
 
 	* src/common.c : Add POWER_AC_ADAPTER to convert_powerdevice_to_gnomeicon
-	
+
 	* src/gpm.c (add_ac_adapter) : Make sure we set struct fields 
 	(like isRechargeable) to a known value. Fixes the problem of a desktop
 	showing an ac_adapter icon with an overlay.
@@ -184,7 +203,7 @@
 	batteries inserted. We can also populate known data if the battery isn't
 	present like we did for ac_adapter.
 	Reported by Paul Ionescu. - Thanks.
-	
+
 	* src/Makefile.am : Change ac_adapter.png to gnome-dev-acadapter.png
 
 2005-06-19 Richard Hughes  <richard@hughsie.com>
@@ -196,9 +215,9 @@
 	* po/POTFILES.in : Add the above files for translation.
 
 	* configure.in : add translation de.
-	
+
 	* src/gpn.c : Add initial LCD work, but don't enable it yet.
-	
+
 2005-06-19 Richard Hughes  <richard@hughsie.com>
 
 	* src/{gpm|prefs|gpn}.c : replace /apps/gnome-power/ with GCONF_ROOT
@@ -468,7 +487,7 @@
 	* ../hal : Fixed up so that UPS's always set battery.present = TRUE.
 	Also making progress on moving battery.time_remaining into HAL, rather
 	than the mess of special cases we have in GPM at the moment.
-	
+
 	* src/common.* : New function, powerDeviceToString to make easy work
 	of converting a magic number into a human string.
 
@@ -481,7 +500,7 @@
 	different types of icon.
 
 	* src/gpm.c : Changed to use new icon functions and misc cleanups.
-	
+
 	* src/common.h : Removed redundant icon checking fields.
 
 	* src/prefs.c : Make the icon checkbox get it's value from gconf.
@@ -656,7 +675,7 @@
 	* src/prefs.c, Made the PowerState ComboBox change the others according to 
 	policy. Also values now populated dynamically, not in the glade file.
 	Static policy in use, and documentation has been updated.
-	
+
 2005-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/prefs.c, new file:  - also imported all the pixmaps into 
