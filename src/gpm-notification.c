@@ -33,12 +33,13 @@
 #include "gpm-main.h"
 #include "gpm-notification.h"
 
-/* shared with gpm.c */
+/* shared with gpm-main.c */
 HasData has_data;
 StateData state_data;
 SetupData setup;
 
 static IconData main_icon;
+static TrayData *eggtrayicon = NULL;
 GPtrArray *objectData;
 
 /** Calculate the color of the charge level bar
@@ -166,15 +167,17 @@ create_icon_pixbuf (GenericObject *slotData)
  *  @param  td			Address of the icon
  */
 void
-icon_destroy (TrayData **td)
+icon_destroy (void)
 {
-	g_return_if_fail (*td);
+	g_return_if_fail (eggtrayicon);
 	g_debug ("icon_destroy");
-	if ((*td)->popup_menu)
-		g_free ((*td)->popup_menu);
-	gtk_widget_hide_all (GTK_WIDGET ((*td)->tray_icon));
-	g_free (*td);
-	*td = NULL;
+	if (eggtrayicon->popup_menu)
+		g_free (eggtrayicon->popup_menu);
+	if (eggtrayicon->tray_icon_tooltip)
+		g_free (eggtrayicon->tray_icon_tooltip);
+	gtk_widget_hide_all (GTK_WIDGET (eggtrayicon->tray_icon));
+	g_free (eggtrayicon);
+	eggtrayicon = NULL;
 }
 
 /* wrapper function */
@@ -191,8 +194,8 @@ gpn_icon_initialise ()
 void
 gpn_icon_destroy ()
 {
-	if (main_icon.td)
-		icon_destroy (&(main_icon.td));
+	if (eggtrayicon)
+		icon_destroy ();
 	free_icon_structure ();
 }
 
@@ -212,9 +215,6 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "general/displayIconFull") == 0) {
 		main_icon.showIfFull = gconf_client_get_bool (client, entry->key, NULL);
-		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "general/lowThreshold") == 0) {
-		main_icon.displayOptions = gconf_client_get_int (client, entry->key, NULL);
 		gpn_icon_update ();
 	}
 }
@@ -345,7 +345,7 @@ free_icon_structure (void)
 	if (main_icon.tooltip)
 		g_string_free (main_icon.tooltip, TRUE);
 	main_icon.tooltip = NULL;
-	main_icon.td = NULL;
+	eggtrayicon = NULL;
 }
 
 /** Callback for actions boxes
@@ -474,24 +474,24 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
  *  @return			MenuData object
  */
 static void
-menu_main_create (TrayData *td)
+menu_main_create (void)
 {
-	g_return_if_fail (td);
-	g_return_if_fail (td->popup_menu == NULL);
+	g_return_if_fail (eggtrayicon);
+	g_return_if_fail (eggtrayicon->popup_menu == NULL);
 	g_debug ("menu_main_create");
 	GtkWidget *item;
-	td->popup_menu = gtk_menu_new ();
+	eggtrayicon->popup_menu = gtk_menu_new ();
 
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
 	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_prefs_activated), (gpointer) td->popup_menu);
-	gtk_menu_shell_append (GTK_MENU_SHELL (td->popup_menu), item);
+			  G_CALLBACK (callback_prefs_activated), (gpointer) eggtrayicon->popup_menu);
+	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
 	item = gtk_image_menu_item_new_from_stock (GNOME_STOCK_ABOUT, NULL);
 	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_about_activated), (gpointer) td->popup_menu);
-	gtk_menu_shell_append (GTK_MENU_SHELL (td->popup_menu), item);
+			  G_CALLBACK (callback_about_activated), (gpointer) eggtrayicon->popup_menu);
+	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
 	if (0) {
@@ -500,7 +500,7 @@ menu_main_create (TrayData *td)
 		GdkPixbuf *pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
 		gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 		gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
-		gtk_menu_shell_append (GTK_MENU_SHELL (td->popup_menu), item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 		gtk_widget_show(item);
 
 		GtkWidget *submenu = gtk_menu_new ();
@@ -514,27 +514,27 @@ menu_main_create (TrayData *td)
 	}
 
 	if (setup.hasActions) {
-		menu_add_separator_item (td->popup_menu);
+		menu_add_separator_item (eggtrayicon->popup_menu);
 		if (!setup.lockdownReboot)
-			menu_add_action_item (td->popup_menu, "gnome-reboot",
+			menu_add_action_item (eggtrayicon->popup_menu, "gnome-reboot",
 					      _("Reboot"), "reboot");
 		if (!setup.lockdownShutdown)
-			menu_add_action_item (td->popup_menu, "gnome-shutdown",
+			menu_add_action_item (eggtrayicon->popup_menu, "gnome-shutdown",
 					      _("Shutdown"), "shutdown");
 		if (!setup.lockdownSuspend)
-			menu_add_action_item (td->popup_menu, "gnome-dev-memory",
+			menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
 					      _("Suspend"), "suspend");
 		if (!setup.lockdownHibernate)
-			menu_add_action_item (td->popup_menu, "gnome-dev-harddisk",
+			menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
 					      _("Hibernate"), "hibernate");
 	}
 	if (setup.hasQuit) {
-		menu_add_separator_item (td->popup_menu);
+		menu_add_separator_item (eggtrayicon->popup_menu);
 		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
 		g_signal_connect (G_OBJECT (item), "activate", 
-				  G_CALLBACK(callback_quit_activated), (gpointer) td->popup_menu);
+				  G_CALLBACK(callback_quit_activated), (gpointer) eggtrayicon->popup_menu);
 		gtk_widget_show(item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (td->popup_menu), item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	}
 }
 
@@ -542,12 +542,12 @@ menu_main_create (TrayData *td)
  *
  */
 static gboolean
-tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *td)
+tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 {
-	if (!td || !td->popup_menu)
+	if (!eggtrayicon || !eggtrayicon->popup_menu)
 		return TRUE;
 	if (event->button == 3) {
-		gtk_menu_popdown (GTK_MENU (td->popup_menu));
+		gtk_menu_popdown (GTK_MENU (eggtrayicon->popup_menu));
 		return FALSE;
 	}
 	return TRUE;
@@ -557,13 +557,13 @@ tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *td)
  *
  */
 static gboolean
-tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *td)
+tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 {
 	g_debug ("button : %i", event->button);
-	if (!td || !td->popup_menu)
+	if (!eggtrayicon || !(eggtrayicon->popup_menu))
 		return TRUE;
 	if (event->button == 3) {
-		gtk_menu_popup (GTK_MENU (td->popup_menu), NULL, NULL, NULL, 
+		gtk_menu_popup (GTK_MENU (eggtrayicon->popup_menu), NULL, NULL, NULL, 
 			NULL, event->button, event->time);
 		return TRUE;
 	}
@@ -572,42 +572,40 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *td)
 
 /** Creates icon in the notification area
  *
- *  @param  td				Address of the icon
  */
 void
-icon_create (TrayData **td)
+icon_create (void)
 {
-	g_return_if_fail (*td == NULL);
-	g_debug ("icon_create");
+	g_return_if_fail (!eggtrayicon);
 	GtkWidget *evbox;
 
 	/* create new tray object */
-	*td = g_new0 (TrayData, 1);
+	eggtrayicon = g_new0 (TrayData, 1);
 
 	/* Event box */
 	evbox = gtk_event_box_new ();
-	(*td)->evbox = evbox;
-	(*td)->tray_icon = egg_tray_icon_new (NICENAME);
-	(*td)->tray_icon_tooltip = gtk_tooltips_new ();
-	(*td)->popup_menu = NULL;
+	eggtrayicon->evbox = evbox;
+	eggtrayicon->tray_icon = egg_tray_icon_new (NICENAME);
+	eggtrayicon->tray_icon_tooltip = gtk_tooltips_new ();
+	eggtrayicon->popup_menu = NULL;
 
 #if 0
 	/* image */
 	gchar *fullpath = g_strconcat (GPM_DATA, filename, NULL);
-	(*td)->image = gtk_image_new_from_file (fullpath);
+	eggtrayicon->image = gtk_image_new_from_file (fullpath);
 	g_free (fullpath);
 #endif
 	/* will produce a broken image.. */
-	(*td)->image = gtk_image_new_from_file ("");
+	eggtrayicon->image = gtk_image_new_from_file ("");
 	g_signal_connect (G_OBJECT (evbox), "button_press_event", 
-			  G_CALLBACK (tray_icon_press), (gpointer) *td);
+			  G_CALLBACK (tray_icon_press), (gpointer) eggtrayicon);
 	g_signal_connect (G_OBJECT (evbox), "button_release_event", 
-			  G_CALLBACK (tray_icon_release), (gpointer) *td);
+			  G_CALLBACK (tray_icon_release), (gpointer) eggtrayicon);
 
-	gtk_container_add (GTK_CONTAINER (evbox), (*td)->image);
-	gtk_container_add (GTK_CONTAINER ((*td)->tray_icon), evbox);
+	gtk_container_add (GTK_CONTAINER (evbox), eggtrayicon->image);
+	gtk_container_add (GTK_CONTAINER (eggtrayicon->tray_icon), evbox);
 
-	gtk_widget_show_all (GTK_WIDGET ((*td)->tray_icon));
+	gtk_widget_show_all (GTK_WIDGET (eggtrayicon->tray_icon));
 }
 
 /** Update icon by showing it, hiding it, or modifying it, as applicable
@@ -626,23 +624,23 @@ gpn_icon_update (void)
 		main_icon.tooltip = get_main_tooltip ();
 
 	if (main_icon.show && main_icon.slotData) {
-		if (!main_icon.td) {
-			icon_create (&(main_icon.td));
-			if (!(main_icon.td->popup_menu))
-				menu_main_create (main_icon.td);
+		if (!eggtrayicon) {
+			icon_create ();
+			if (!(eggtrayicon->popup_menu))
+				menu_main_create ();
 		}
 
 		GdkPixbuf *pixbuf = create_icon_pixbuf (main_icon.slotData);
-		gtk_image_set_from_pixbuf (GTK_IMAGE (main_icon.td->image), pixbuf);
+		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
 		g_object_unref (pixbuf);
 
 		if (main_icon.tooltip)
-			gtk_tooltips_set_tip (main_icon.td->tray_icon_tooltip, 
-				GTK_WIDGET (main_icon.td->tray_icon), 
+			gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip, 
+				GTK_WIDGET (eggtrayicon->tray_icon), 
 				main_icon.tooltip->str, NULL);
 	} else {
-		if (main_icon.td) {
-			icon_destroy (&(main_icon.td));
+		if (eggtrayicon) {
+			icon_destroy ();
 			free_icon_structure ();
 		}
 	}

@@ -20,6 +20,12 @@
  *
  **************************************************************************/
 
+/* 
+ * TODO
+ * This file will change when we use the glib bindings of DBUS
+ * when version 0.34+ is being carried by distros.
+ */
+
 #include <glib.h>
 #include <string.h>
 #include <dbus/dbus.h>

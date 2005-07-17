@@ -1,3 +1,13 @@
+2005-07-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-notification.c: Made eggtrayicon a global, and got rid of the
+	complicated icon->td structure. We don't need to be so complicated now
+	we only have one icon.
+
+	* src/*dbus*.c: Added note that we will be changing to glib bindings soon. 
+
+	* TODO: updated.
+
 2005-07-17  Christophe Merlet  <redfox@redfoxcenter.org>
 
 	* configure.in: Added "fr" to ALL_LINGUAS.

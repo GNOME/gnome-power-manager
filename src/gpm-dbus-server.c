@@ -20,6 +20,12 @@
  *
  **************************************************************************/
 
+/* 
+ * TODO
+ * This file will be made 40% smaller when we use the glib bindings of DBUS
+ * when version 0.34+ is being carried by distros.
+ */
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif

@@ -37,10 +37,7 @@ typedef struct {
 	gboolean show;
 	gboolean showIfFull;
 	GString *tooltip;
-	TrayData *td;
 	GenericObject *slotData;
-	gint currentObject;
-	gint displayOptions;
 } IconData;
 
 void free_icon_structure (void);
