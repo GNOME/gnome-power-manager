@@ -1,0 +1,462 @@
+# French translation of gnome-power-manager.
+# Copyright (C) 2005 Fre Software Foundation, Inc. 
+# This file is distributed under the same license as the gnome-power-manager package.
+#
+# Yann Simon <yann.simon.fr@gmail.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager 0.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-17 17:18+0200\n"
+"PO-Revision-Date: 2005-07-17 17:04+0200\n"
+"Last-Translator: Yann Simon <yann.simon.fr@gmail.com>\n"
+"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Configure la gestion d'énergie"
+
+#: gnome-power-preferences.desktop.in.h:2 src/preferences.glade.h:13
+msgid "Power Preferences"
+msgstr "Préférences de gestion d'énergie"
+
+#: gnome-power.schemas.in.h:1
+msgid "If the machine has a LCD (brightness variable) attached."
+msgstr "Si la machine dispose d'un écran plat (à la luminosité réglable)."
+
+#: gnome-power.schemas.in.h:2
+msgid "If the machine has a UPS attached"
+msgstr "Si la machine dispose d'un onduleur"
+
+#: gnome-power.schemas.in.h:3
+msgid "If the machine has a display (that can be blanked) attached."
+msgstr "Si la machine dispose d'un écran (qui peut être mis en veille)"
+
+#: gnome-power.schemas.in.h:4
+msgid "If the machine has a hard-drive (that can be spun-down) attached."
+msgstr "Si la machine dispose d'un disque dur (qui peut être mis en veille)"
+
+#: gnome-power.schemas.in.h:5
+msgid "If the machine has a wireless keyboard attached."
+msgstr "En cas d'utilisation d'un clavier sans fil."
+
+#: gnome-power.schemas.in.h:6
+msgid "If the machine has a wireless mouse attached."
+msgstr "En cas d'utilisation d'une souris sans fil."
+
+#: gnome-power.schemas.in.h:7
+msgid ""
+"If the machine has an AC adapter (usually laptops) then this key should be "
+"set."
+msgstr ""
+"En cas d'utilisation d'un adaptateur secteur (principalement pour les "
+"portables), cette clé doit être activée."
+
+#: gnome-power.schemas.in.h:8
+msgid "If the machine has an ac_adapter"
+msgstr "Si la machine dispose d'une alimentation secteur via un adaptateur"
+
+#: gnome-power.schemas.in.h:9
+msgid ""
+"If the machine has an power, sleep or lid buttons then this key should be "
+"set."
+msgstr ""
+"Si la machine dispose de boutons d'alimentation, de veille ou de ?, cette "
+"clé doit être activée"
+
+#: gnome-power.schemas.in.h:10
+msgid "If the machine has power buttons"
+msgstr "Si la machine dispose de boutons d'alimentation "
+
+#: gnome-power.schemas.in.h:11
+msgid "If the machine have primary batteries"
+msgstr "Si la machine dispose de batteries primaires"
+
+#: gnome-power.schemas.in.h:12
+msgid "Short description."
+msgstr "Description brève."
+
+#: gnome-power.schemas.in.h:13
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr ""
+"Pourcentage au-dessous duquel la batterie du périphérique est considérée "
+"« assez basse » pour effectuer une action."
+
+#: gnome-power.schemas.in.h:14
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to warn the user."
+msgstr ""
+"Pourcentage au-dessous duquel la batterie du périphérique est considérée "
+"« assez basse » pour avertir l'utilisateur."
+
+#: gnome-power.schemas.in.h:15
+msgid "The powerdevice action threshold."
+msgstr "Seuil d'action de batterie."
+
+#: gnome-power.schemas.in.h:16
+msgid "The powerdevice warning threshold."
+msgstr "Seuil d'avertissement de batterie."
+
+#: gnome-power.schemas.in.h:17
+msgid "User cannot hibernate the machine"
+msgstr "L'utilisateur ne peut pas mettre sa machine en hibernation"
+
+#: gnome-power.schemas.in.h:18
+msgid "User cannot reboot the machine"
+msgstr "L'utilisateur ne peut pas redémarrer sa machine"
+
+#: gnome-power.schemas.in.h:19
+msgid "User cannot shutdown the machine"
+msgstr "L'utilisateur ne peut pas éteindre sa machine"
+
+#: gnome-power.schemas.in.h:20
+msgid "User cannot suspend the machine"
+msgstr "L'utilisateur ne peut pas mettre sa machine en veille prolongée"
+
+#: gnome-power.schemas.in.h:21
+msgid "Whether to display a permanent icon"
+msgstr "Si affichage d'une icône en permanence"
+
+#: gnome-power.schemas.in.h:22
+msgid "Whether to display icons when devices are at full capacity"
+msgstr ""
+"Indique si il faut afficher des icônes quand les batteries sont pleines"
+
+#: src/eggtrayicon.c:117
+msgid "Orientation"
+msgstr "Orientation"
+
+#: src/eggtrayicon.c:118
+msgid "The orientation of the tray."
+msgstr "Orientation de la barre."
+
+#: src/gpm-common.c:49
+msgid " until charged"
+msgstr " avant chargement"
+
+#: src/gpm-common.c:51
+msgid " remaining"
+msgstr " restant(e)s"
+
+#: src/gpm-common.c:215
+msgid "UPS"
+msgstr "Onduleur"
+
+#: src/gpm-common.c:217
+msgid "AC Adapter"
+msgstr "Adaptateur de courant secteur"
+
+#: src/gpm-common.c:219
+msgid "Logitech mouse"
+msgstr "Souris Logitech"
+
+#: src/gpm-common.c:221
+msgid "Logitech keyboard"
+msgstr "Clavier Logitech"
+
+#: src/gpm-common.c:223
+msgid "Laptop battery"
+msgstr "Batterie d'ordinateur portable"
+
+#: src/gpm-common.c:225
+msgid "PDA"
+msgstr "PDA"
+
+#: src/gpm-common.c:226
+msgid "Unknown device"
+msgstr "Matériel inconnu"
+
+#: src/gpm-common.c:285
+msgid "missing"
+msgstr "manquant"
+
+#: src/gpm-common.c:287
+msgid "charging"
+msgstr "en charge"
+
+#: src/gpm-common.c:289
+msgid "discharging"
+msgstr "en décharge"
+
+#: src/gpm-common.c:293
+msgid "fully charged"
+msgstr "complètement chargé"
+
+#: src/gpm-common.c:296
+msgid "charged"
+msgstr "chargé"
+
+#: src/gpm-common.c:297
+msgid "unknown"
+msgstr "inconnu"
+
+#: src/gpm-common.c:316
+msgid "1 minute"
+msgstr "1 minute"
+
+#: src/gpm-common.c:318
+#, c-format
+msgid "%i minutes"
+msgstr "%i minutes "
+
+#: src/gpm-common.c:324
+msgid "1 hour"
+msgstr "1 heure"
+
+#: src/gpm-common.c:326
+#, c-format
+msgid "%i hours"
+msgstr "%i heures"
+
+#: src/gpm-common.c:330
+msgid "1 hour 1 minute"
+msgstr "1 heure 1 minute"
+
+#: src/gpm-common.c:333
+#, c-format
+msgid "1 hour %i minutes"
+msgstr "1 heure %i minutes"
+
+#: src/gpm-common.c:336
+#, c-format
+msgid "%i hours %i minutes"
+msgstr "%i heures %i minutes"
+
+#: src/gpm-dbus-common.c:44
+msgid "screensave"
+msgstr "mise en veille de l'écran"
+
+#: src/gpm-dbus-common.c:46
+msgid "shutdown"
+msgstr "arrêt"
+
+#: src/gpm-dbus-common.c:48
+msgid "software suspend"
+msgstr "mise en veille prolongée"
+
+#: src/gpm-dbus-common.c:50
+msgid "hibernation"
+msgstr "hibernation"
+
+#: src/gpm-dbus-common.c:52
+msgid "session log off"
+msgstr "déconnexion de la session"
+
+#: src/gpm-main.c:193
+#, c-format
+msgid ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explaination given is: %s"
+msgstr ""
+"Le programme « %s » a empêché l'action suivante : « %s ».\n"
+"\n"
+"L'explication donnée est : %s"
+
+#: src/gpm-main.c:205
+#, c-format
+msgid ""
+"The program '%s' has not returned data that is preventing the %s from "
+"occurring."
+msgstr ""
+"Le programme « %s » n'ayant pas retourné de données, cela a empêché l'action "
+"suivante : « %s »."
+
+#: src/gpm-main.c:229
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+msgstr ""
+"Le service PowerManager n'est pas démarré.\n"
+"%s ne peut pas effectuer l'action suivante : « %s »."
+
+#: src/gpm-main.c:253
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timout changes."
+msgstr ""
+"Le service PowerManager n'est pas démarré.\n"
+"%s ne peut modifier les temps de mise en veille du disque dur."
+
+#: src/gpm-main.c:424
+msgid "AC Adapter has been removed"
+msgstr "L'adaptateur secteur a été enlevé"
+
+#: src/gpm-main.c:730
+msgid "Couldn't obtain list of batteries"
+msgstr "Impossible de lister les batteries"
+
+#: src/gpm-main.c:741
+msgid "Couldn't obtain list of ac_adapters"
+msgstr "Impossible de lister les adaptateurs secteur"
+
+#: src/gpm-main.c:959
+#, c-format
+msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+msgstr "Le %s (%i%%) est <b>critiquement faible</b> (%s)"
+
+#: src/gpm-main.c:972
+#, c-format
+msgid "The %s (%i%%) is <b>low</b> (%s)"
+msgstr "Le %s (%i%%) est <b>faible</b> (%s)"
+
+#: src/gpm-main.c:1008
+msgid "Power button has been pressed"
+msgstr "Le bouton d'alimentation a été pressé"
+
+#: src/gpm-main.c:1014
+msgid "Sleep button has been pressed"
+msgstr "Le bouton de veille a été pressé"
+
+#: src/gpm-main.c:1026
+msgid "Lid has been opened"
+msgstr "Lid a été ouvert"
+
+#: src/gpm-main.c:1118
+msgid "Please report bugs to richard@hughsie.com\n"
+msgstr "Veuillez rapporter les problèmes rencontrés à richard@hughsie.com\n"
+
+#: src/gpm-notification.c:227
+msgid "Computer is running on battery power"
+msgstr "L'ordinateur est alimenté par batteries"
+
+#: src/gpm-notification.c:229
+msgid "Computer is running on UPS power"
+msgstr "L'ordinateur est alimenté par un onduleur"
+
+#: src/gpm-notification.c:231
+msgid "Computer is running on AC power"
+msgstr "L'ordinateur est alimenté par le courant secteur"
+
+#: src/gpm-notification.c:382
+msgid "Unknown Translator"
+msgstr "Yann Simon <yann.simon.fr@gmail.com>"
+
+#: src/gpm-notification.c:520
+msgid "Reboot"
+msgstr "Redémarrage"
+
+#: src/gpm-notification.c:523 src/gpm-prefs.c:340
+msgid "Shutdown"
+msgstr "Arrêt"
+
+#: src/gpm-notification.c:526 src/gpm-prefs.c:338
+msgid "Suspend"
+msgstr "Mise en veille prolongée"
+
+#: src/gpm-notification.c:529 src/gpm-prefs.c:339 src/gpm-prefs.c:343
+msgid "Hibernate"
+msgstr "Hibernation"
+
+#: src/gpm-prefs.c:336
+msgid "Do nothing"
+msgstr "Ne fait rien"
+
+#: src/gpm-prefs.c:337
+msgid "Send warning"
+msgstr "Envoie un avertissement"
+
+#: src/gpm-prefs.c:342
+msgid "Quick sleep"
+msgstr "Mise en veille rapide"
+
+#: src/preferences.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Général</b>"
+
+#: src/preferences.glade.h:2
+msgid "<b>Notification area</b>"
+msgstr "<b>Aire de notification</b>"
+
+#: src/preferences.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>Autres options</b>"
+
+#: src/preferences.glade.h:4
+msgid "<b>Running on AC adapter</b>"
+msgstr "<b>Alimenté par le secteur</b>"
+
+#: src/preferences.glade.h:5
+msgid "<b>Running on batteries</b>"
+msgstr "<b>Alimenté par batteries</b>"
+
+#: src/preferences.glade.h:6
+msgid "Advanced"
+msgstr "Avancé"
+
+#: src/preferences.glade.h:7
+msgid "Battery is critical when below:"
+msgstr "La batterie est critique au-dessous de :"
+
+#: src/preferences.glade.h:8
+msgid "Battery is low when below:"
+msgstr "La batterie est faible au-dessous de :"
+
+#: src/preferences.glade.h:9
+msgid "Display devices that are fully charged"
+msgstr "Afficher les périphériques quand ils sont complètement chargés"
+
+#: src/preferences.glade.h:10
+msgid "Display main icon"
+msgstr "Afficher l'icône principale"
+
+#: src/preferences.glade.h:11
+msgid "Double click notification icon:"
+msgstr "Icône de notification d'un double-clique :"
+
+#: src/preferences.glade.h:12
+msgid "Options"
+msgstr "Options"
+
+#: src/preferences.glade.h:14
+msgid "Put computer to sleep after:"
+msgstr "Met l'ordinateur en veille après :"
+
+#: src/preferences.glade.h:15
+msgid "Put display to sleep after:"
+msgstr "Met l'écran en veille après :"
+
+#: src/preferences.glade.h:16
+msgid "Put hard drive to sleep after:"
+msgstr "Met le disque dur en veille après :"
+
+#: src/preferences.glade.h:17
+msgid "Set display brightness:"
+msgstr "Règle la luminosité :"
+
+#: src/preferences.glade.h:18
+msgid "Sleep"
+msgstr "Veille"
+
+#: src/preferences.glade.h:19
+msgid "When AC power disconnected:"
+msgstr "Quand le courant du secteur est déconnecté :"
+
+#: src/preferences.glade.h:20
+msgid "When UPS power critical:"
+msgstr "Quand le courant de l'onduleur est critique :"
+
+#: src/preferences.glade.h:21
+msgid "When battery power critical:"
+msgstr "Quand le niveau de la batterie est critique :"
+
+#: src/preferences.glade.h:22
+msgid "When laptop lid is closed:"
+msgstr "Quand l'écran du portable est rabattu :"
+
+#: src/preferences.glade.h:23
+msgid "When power button pressed:"
+msgstr "Quand on appuie sur le bouton d'alimentation :"
+
+#: src/preferences.glade.h:24
+msgid "When suspend button pressed:"
+msgstr "Quand on appuie sur le bouton de veille :"
