@@ -64,14 +64,14 @@ vetoFindName (const char *dbusName)
  *  @param  dbusName	The dbus connection, e.g. 0:13
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  */
-static void
+static gboolean
 vetoACK (const char *dbusName, gint flags)
 {
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
 		g_warning ("Program '%s' sent vetoACK.\n"
 			   "It MUST call vetoActionRegisterInterest first!", dbusName);
-		return;
+		return FALSE;
 	}
 
 	RegProgram *regprog = (RegProgram *) g_ptr_array_index (registered, a);
@@ -82,6 +82,7 @@ vetoACK (const char *dbusName, gint flags)
 	g_string_free (flagtext, TRUE);
 
 	regprog->isACK = TRUE;
+	return TRUE;
 }
 
 /** Process the vetoNACK signal
@@ -267,6 +268,20 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 			}
 		message_reply = dbus_message_new_method_return (message);
 		gboolean data_value = FALSE; /** TODO */
+		dbus_message_append_args (message_reply, DBUS_TYPE_BOOLEAN, &data_value, DBUS_TYPE_INVALID);
+		return message_reply;
+	} else if (dbus_message_is_method_call (message, GPM_DBUS_SERVICE, "vetoACK")) {
+		g_debug ("Got 'vetoACK'\n");
+		gint value;
+		gboolean data_value = FALSE;
+		const char *from = dbus_message_get_sender (message);
+		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
+			data_value = vetoACK (from, value);
+		} else {
+			g_warning ("vetoACK received, but error getting message: %s", error->message);
+			dbus_error_free (error);
+		}
+		message_reply = dbus_message_new_method_return (message);
 		dbus_message_append_args (message_reply, DBUS_TYPE_BOOLEAN, &data_value, DBUS_TYPE_INVALID);
 		return message_reply;
 	} else if (dbus_message_is_method_call (message, GPM_DBUS_SERVICE, "isRunningOnMains")) {

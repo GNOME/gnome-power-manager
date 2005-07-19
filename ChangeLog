@@ -1,3 +1,27 @@
+2005-07-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/pixmaps/gnome-power.png: New file (we now have an icon thanks to 
+	Diana Fong)
+
+	* src/pixmaps/Makefile.am: Added gnome-power.png
+
+	* configure.in: We now require dbus-glib-0.35.2 (an unpopular move). 
+	I want to use the new glib bindings throughout the programs. There is too
+	many dbus wrapper-type functions that add to bload and make the program
+	generally difficult to read. After reading the dbus-glib sample code, 
+	I'm sure this is the way to go. For all you FC4 users, rawhide's DBUS seems
+	to work well with no ill effects.
+
+	* doc/*: Updated documentation with new logo, and a few new screenshots.
+
+	* src/gpm-dbus-test.c: Converted to just use the glib bindings - this file
+	is a bit of a mess at the moment, but you see the plan. I'm thinging making
+	ACK, NACK etc, into methods instead of signals. Methods seem more the right
+	thing to use, so I'll start converting gpm-dbus-server.c to accept these
+	methods instead.
+
+	* src/gpm-dbus-server: Add in method support for ACK, others to follow.
+
 2005-07-18  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Changed module name to gnome-power-manager to better

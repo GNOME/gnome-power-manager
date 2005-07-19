@@ -388,7 +388,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 		return;
 	}
 
-	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "battery-48.png", NULL);
+	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 	about = gnome_about_new(NICENAME, VERSION,
 			"Copyright \xc2\xa9 2005 Richard Hughes",
 			_(NICEDESC),
