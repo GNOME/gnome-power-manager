@@ -1,3 +1,16 @@
+2005-07-18  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Changed module name to gnome-power-manager to better
+	reflect the gnome module name. The next release will have a tarball
+	gnome-power-manager.tar.gz instead of gnome-power.tar.gz
+
+	* src/pixmaps/Makefile.am: New file, splitting from src/Makefile.am -
+	I should have done this a long time ago.
+
+	* Makefile.am, src/Makefile.am: Tidy up, and move the build of 
+	preferences.glade to src/ - it never belonged here anyway.
+	Also, we'll now use /usr/share/gnome-power-manager to be more specific.
+
 2005-07-18  Adam Weinberger  <adamw@gnome.org>
 
 	* configure.in: Added en_CA to ALL_LINGUAS. I think it's important
