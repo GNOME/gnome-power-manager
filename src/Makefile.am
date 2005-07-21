@@ -1,4 +1,4 @@
-SUBDIRS = pixmaps
+SUBDIRS = pixmaps sounds icons
 
 pkgdata_DATA =									\
 	preferences.glade

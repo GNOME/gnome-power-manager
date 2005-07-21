@@ -67,6 +67,9 @@ vetoFindName (const char *dbusName)
 static gboolean
 vetoACK (const char *dbusName, gint flags)
 {
+	g_return_val_if_fail (registered, FALSE);
+	g_return_val_if_fail (dbusName, FALSE);
+
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
 		g_warning ("Program '%s' sent vetoACK.\n"
@@ -94,6 +97,9 @@ vetoACK (const char *dbusName, gint flags)
 static gboolean
 vetoNACK (const char *dbusName, gint flags, char *reason)
 {
+	g_return_val_if_fail (registered, FALSE);
+	g_return_val_if_fail (dbusName, FALSE);
+
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
 		g_warning ("Program '%s' sent vetoNACK.\n"
@@ -169,7 +175,7 @@ vetoActionUnregisterInterest (const char *dbusName, gint flags, gboolean suppres
 	RegProgram *regprog = (RegProgram *) g_ptr_array_index (registered, a);
 	GString *flagtext = convert_gpmdbus_to_string (flags);
 	g_debug ("vetoActionUnregisterInterest received from %s\n"
-		 " ENUM = %s, Application = %s\n", regprog->dbusName->str,
+			 " ENUM = %s, Application = %s\n", regprog->dbusName->str,
 		 	flagtext->str, regprog->appName->str);
 	g_string_free (flagtext, TRUE);
 
@@ -188,7 +194,8 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 
 	/* A signal from the connection saying we are about to be disconnected */
 	if (dbus_message_is_signal (message, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
-		char *oldservicename, *newservicename;
+		char *oldservicename = NULL;
+		char *newservicename = NULL;
 		if (!dbus_message_get_args (message, NULL,
 					    DBUS_TYPE_STRING, &oldservicename,
 					    DBUS_TYPE_STRING, &newservicename,
@@ -197,7 +204,7 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 			return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 		}
 		g_debug ("'%s' -> '%s'\n", oldservicename, newservicename);
-		if (strlen(newservicename) > 0) {
+		if (newservicename && strlen(newservicename) > 0) {
 			g_warning ("Disconnected due to crash '%s'", newservicename);
 			vetoActionUnregisterInterest (newservicename, GPM_DBUS_ALL, TRUE);
 		}

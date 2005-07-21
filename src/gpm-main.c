@@ -57,6 +57,8 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+#define NOTIFY_TIMOUT		10
+
 /** Convenience function to call libnotify
  *
  *  @param  content		The content text, e.g. "Battery low"
@@ -72,8 +74,12 @@ use_libnotify (const char *content, const int urgency)
 	GHashTable *hints = NULL;
 	if (use_hints) {
 		hints = notify_hints_new();
-		notify_hints_set_int(hints, "x", x);
-		notify_hints_set_int(hints, "y", y);
+		notify_hints_set_int (hints, "x", x);
+		notify_hints_set_int (hints, "y", y);
+		if (urgency == NOTIFY_URGENCY_CRITICAL)
+			notify_hints_set_string (hints, "sound-file", GPM_DATA "critical.wav");
+		else
+			notify_hints_set_string (hints, "sound-file", GPM_DATA "normal.wav");
 	}
 	const char *summary = NICENAME;
 	NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
@@ -81,7 +87,7 @@ use_libnotify (const char *content, const int urgency)
 										   urgency,
 										   summary, content,
 										   icon, /* no icon 			*/
-										   TRUE, time(NULL) + 10,
+										   TRUE, time(NULL) + NOTIFY_TIMOUT,
 										   hints,
 										   NULL, /* no user data 		*/
 										   0);   /* no actions 			*/

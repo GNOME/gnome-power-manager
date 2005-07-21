@@ -103,11 +103,23 @@ recalc (void)
 	/* top frame */
 	gtk_set_visibility ("frame_batteries", hasData.hasBatteries);
 	gtk_set_visibility ("combobox_battery_critical", hasData.hasBatteries);
+	gtk_set_visibility ("label_battery_critical_action", hasData.hasBatteries);
 	gtk_set_visibility ("label_battery_critical", hasData.hasBatteries);
+	gtk_set_visibility ("label_battery_low", hasData.hasBatteries);
+	gtk_set_visibility ("hscale_battery_low", hasData.hasBatteries);
+	gtk_set_visibility ("hscale_battery_critical", hasData.hasBatteries);
+	/* assumes only battery options are in this frame */
+	gtk_set_visibility ("frame_other_options", hasData.hasBatteries);
 
 	/* options */
 	gtk_set_visibility ("combobox_button_lid", hasData.hasButtonLid);
 	gtk_set_visibility ("label_button_lid", hasData.hasButtonLid);
+
+	gtk_set_visibility ("combobox_button_power", hasData.hasButtonPower);
+	gtk_set_visibility ("label_button_power", hasData.hasButtonPower);
+
+	gtk_set_visibility ("combobox_button_suspend", hasData.hasButtonSleep);
+	gtk_set_visibility ("label_button_suspend", hasData.hasButtonSleep);
 
 	gtk_set_visibility ("combobox_ac_fail", hasData.hasAcAdapter);
 	gtk_set_visibility ("label_ac_fail", hasData.hasAcAdapter);

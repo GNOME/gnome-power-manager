@@ -77,7 +77,7 @@ gtk_icon_theme_fallback (const char *name, int size)
 {
 	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
-	g_debug ("name = '%s'\n", name);
+	g_debug ("gtk_icon_theme_fallback : name = '%s', size = %i", name, size);
 	if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name)) {
 		GtkIconInfo *iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
 		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
@@ -87,6 +87,7 @@ gtk_icon_theme_fallback (const char *name, int size)
 		 * We cannot find this specific themed GNOME icon so use builtin
 		 * fallbacks. This makes GPM more portible between distros
 		 */
+		g_debug ("gtk_icon_theme_fallback: doing fallback as not found in theme");
 		GString *fallback = g_string_new ("error?");
 		g_string_printf (fallback, "%s%s.png", GPM_DATA, name);
 		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
@@ -120,7 +121,8 @@ create_icon_pixbuf (GenericObject *slotData)
 		else if (num > 8) num = 8;
 		computed_name = g_strdup_printf ("gnome-power-system%s-%d-of-8", 
 						 state_data.onBatteryPower ? "" : "-ac", num);
-		pixbuf = gtk_icon_theme_fallback (computed_name, 24);
+		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
+		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else {
@@ -406,8 +408,11 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	const gchar *documenters[] = { NULL };
 	const gchar *translator = _("Unknown Translator");
 
-	if (about)
-	{
+	/* no point displaying translator is it's me */
+	if (strcmp (translator, "Unknown Translator") == 0)
+		translator = NULL;
+
+	if (about) {
 		gdk_window_raise (about->window);
 		gdk_window_show (about->window);
 		return;

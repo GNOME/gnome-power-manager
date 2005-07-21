@@ -38,7 +38,7 @@
 	  <property name="enable_popup">False</property>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox2">
+	    <widget class="GtkVBox" id="vbox_sleep">
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
@@ -656,7 +656,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox4">
+	    <widget class="GtkVBox" id="vbox_options">
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
@@ -692,7 +692,7 @@
 			  <property name="column_spacing">5</property>
 
 			  <child>
-			    <widget class="GtkLabel" id="label14">
+			    <widget class="GtkLabel" id="label_button_power">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">When power button pressed:</property>
 			      <property name="use_underline">False</property>
@@ -720,7 +720,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label15">
+			    <widget class="GtkLabel" id="label_button_suspend">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">When suspend button pressed:</property>
 			      <property name="use_underline">False</property>
@@ -804,7 +804,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkLabel" id="label_battery_critical">
+			    <widget class="GtkLabel" id="label_battery_critical_action">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">When battery power critical:</property>
 			      <property name="use_underline">False</property>
@@ -1075,7 +1075,7 @@
 	  </child>
 
 	  <child>
-	    <widget class="GtkVBox" id="vbox6">
+	    <widget class="GtkVBox" id="vbox_advanced">
 	      <property name="border_width">5</property>
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
@@ -1180,7 +1180,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkFrame" id="frame3">
+		<widget class="GtkFrame" id="frame_other_options">
 		  <property name="visible">True</property>
 		  <property name="label_xalign">0</property>
 		  <property name="label_yalign">0.5</property>
@@ -1199,7 +1199,7 @@
 		      <property name="right_padding">0</property>
 
 		      <child>
-			<widget class="GtkTable" id="table8">
+			<widget class="GtkTable" id="table_other_options">
 			  <property name="border_width">5</property>
 			  <property name="visible">True</property>
 			  <property name="n_rows">2</property>
@@ -1309,7 +1309,7 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkLabel" id="label18">
+		    <widget class="GtkLabel" id="label_other_options">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">&lt;b&gt;Other Options&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
