@@ -1,3 +1,34 @@
+2005-07-21  Richard Hughes  <richard@hughsie.com>
+
+	* dbus-interface.html: Removed as information is more up to date in docs/
+
+	* autogen.sh: Changed to use gnome-common
+
+	* src/sounds/critial.wav: New sound file from GAIM for critical notification
+
+	* src/sounds/normal.wav: New sound file from Iagno for other notifications
+
+	* src/gpm-main.c (use_libnotify): Now do a sound for the notifications.
+	I don't think libnotify supports this yet, but when it does, this should
+	"just-work" :-)
+
+	* src/gpm-prefs.c (recalc): Add support for missing lid/power/sleep buttons.
+
+	* src/preferences.glade: Name the labels so that the above works correctly.
+
+	* gnome-power.spec.in: Add gnome-common dep, and update others.
+
+	* configure.in: Add src/sounds/Makefile and src/icons/Makefile
+
+	* src/sounds/Makefile.am: New file, to add the wave files.
+
+	* src/icons/Makefile.am: New file, and move over the icons. This means we
+	can install different icon sets, e.g. bluecurve, gnome or LowContrast if
+	people don't like the icons.
+
+	* src/gpm-notification.c (callback_about_activated): No point displaying
+	"Unknown Translator" for un-translated files.
+
 2005-07-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/pixmaps/gnome-power-system*.png: New icons thanks to Diana Fong
