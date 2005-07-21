@@ -1,3 +1,23 @@
+2005-07-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/pixmaps/gnome-power-system*.png: New icons thanks to Diana Fong
+	and David Zeuthen. They look great - thanks!
+
+	* docs/images/*.png: Update screenshots to a bit more recent.
+
+	* src/gpm-notification.c (get_icon_position): New function, tell libnotify 
+	where to point to. This is a bit rough-and-ready at the moment but seems to
+	work well.
+
+	* src/gpm-main.c (use_libnotify): Now setting an image with position, lets
+	see what people think.
+
+	* src/gpm-dbus-server.c (dbus_method_handler): Add in all the existing
+	signals as methods. dbus-glib, where for art thou. :-)
+
+	* src/gpm-dbus-server.c (dbus_signal_filter): Removed support for the 
+	signal API.
+
 2005-07-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/pixmaps/gnome-power.png: New file (we now have an icon thanks to 
@@ -7,7 +27,7 @@
 
 	* configure.in: We now require dbus-glib-0.35.2 (an unpopular move). 
 	I want to use the new glib bindings throughout the programs. There is too
-	many dbus wrapper-type functions that add to bload and make the program
+	many dbus wrapper-type functions that add to bloat and make the program
 	generally difficult to read. After reading the dbus-glib sample code, 
 	I'm sure this is the way to go. For all you FC4 users, rawhide's DBUS seems
 	to work well with no ill effects.
@@ -20,7 +40,7 @@
 	thing to use, so I'll start converting gpm-dbus-server.c to accept these
 	methods instead.
 
-	* src/gpm-dbus-server: Add in method support for ACK, others to follow.
+	* src/gpm-dbus-server.c: Add in method support for ACK, others to follow.
 
 2005-07-18  Richard Hughes  <richard@hughsie.com>
 
