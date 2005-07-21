@@ -175,7 +175,7 @@ LOGOFF     =  16,
 ALL        =  255
 </pre>
 
-<h2>Client Signals</h2>
+<h2>Client Methods</h2>
 
 <p>
 Client signals are sent from an application to GPM.
@@ -192,26 +192,26 @@ Similarly, if Evolution is indexing a database (that would be corrupted if inter
 The signals currently available are:
 </p>
 
-<h3>vetoActionRegisterInterest (enum action, gchar localizedAppname)</h3>
+<h3>bool vetoActionRegisterInterest (enum action, gchar localizedAppname)</h3>
 <p>Used for signing up for vetoing a specific action</p>
 <pre>status: complete</pre>
 
-<h3>vetoActionUnregisterInterest (enum action)</h3>
+<h3>bool vetoActionUnregisterInterest (enum action)</h3>
 <p>Used to unregister the applications interest in a specific action.
 Note: GPM will automatically unregister clients that disconnect from the bus</p>
 <pre>status: semi-complete, assumes ALL</pre>
 
-<h3>vetoACK (enum action)</h3>
+<h3>bool vetoACK (enum action)</h3>
 Vetoer allows a specific action to take place
 <pre>status: complete</pre>
 
-<h3>vetoNACK (enum action, gchar localizedReason)</h3>
+<h3>bool vetoNACK (enum action, gchar localizedReason)</h3>
 <p>Vetoer doesn't allow a specific action to take place; g-p-m SHOULD display a 
 notification to the user that the action cannot take place and what the vetoing 
 application is.</p>
 <pre>status: complete</pre>
 
-<h3>vetoWait (enum action, int timeout, gchar localizedReason)</h3>
+<h3>bool vetoWait (enum action, int timeout, gchar localizedReason)</h3>
 <p>Vetoer asks for a timeout of timeout ms before g-p-m should try to perform the 
 action again. It is legal for the vetoer to call vetoACK before the timeout.
 If the (accumulated) delay amounts to more than one second, g-p-m SHOULD 
@@ -220,7 +220,8 @@ display a notification about who is blocking the action.</p>
 
 <p>
 This part of GNOME Power Manager has a test suite, gnome-power-dbus-test that can be used to test the out-of-order and error conditions.
-It also shows any limitations or bugs in GNOME Power Manager. For example, running gnome-power-dbus-test --doNACK and selecting shutdown from the drop down menu would give the following dialog from GPM:
+It also shows any limitations or bugs in GNOME Power Manager.
+For example, running gnome-power-dbus-test --doNACK and selecting shutdown from the drop down menu would give the following dialog from GPM:
 </p>
 
 <center>
@@ -232,13 +233,10 @@ The error message from the GNOME Power Manager 0.1.0
 
 <center>
 <img src="images/nack-libnotify.png" alt="[img]"/>
+<img src="images/nothing-libnotify.png" alt="[img]"/>
 </center>
 <p class="caption">
-The libnotify error message using CVS.
-</p>
-
-<p>
-This message should probably be a persistent tooltip, but for the moment serves the purposes of testing very well.
+The libnotify error messages using CVS.
 </p>
 
 <h2><a name="gconf"></a>GConf keys</h2>
@@ -447,6 +445,7 @@ So even if you are not a programmer, you can still help. This project is moving 
 <li>Eugenia Loli-Queru (gnomefiles.org)</li>
 <li>Jaap Haitsma</li>
 <li>Paul Ionescu</li>
+<li>Diana Fong</li>
 <li>Sourceforge.net</li>
 </ul>
 
