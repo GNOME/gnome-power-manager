@@ -65,18 +65,29 @@ DBusConnection *connsession = NULL;
 static void
 use_libnotify (const char *content, const int urgency)
 {
-		const char *summary = NICENAME;
-		NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
-											   NULL,
-											   urgency,
-											   summary, content,
-											   NULL, /* no icon 			*/
-											   TRUE, time(NULL) + 10,
-											   NULL, /* no hints 			*/
-											   NULL, /* no user data 		*/
-											   0);   /* no actions 			*/
-		if (!n)
-			g_warning ("failed to send notification (%s)", content);
+	gint x, y;
+	gboolean use_hints;
+	use_hints = get_icon_position (&x, &y);
+	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
+	GHashTable *hints = NULL;
+	if (use_hints) {
+		hints = notify_hints_new();
+		notify_hints_set_int(hints, "x", x);
+		notify_hints_set_int(hints, "y", y);
+	}
+	const char *summary = NICENAME;
+	NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+										   NULL,
+										   urgency,
+										   summary, content,
+										   icon, /* no icon 			*/
+										   TRUE, time(NULL) + 10,
+										   hints,
+										   NULL, /* no user data 		*/
+										   0);   /* no actions 			*/
+	notify_icon_destroy(icon);	
+	if (!n)
+		g_warning ("failed to send notification (%s)", content);
 }
 
 /** Convenience function.

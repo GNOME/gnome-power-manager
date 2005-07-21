@@ -91,14 +91,14 @@ vetoACK (const char *dbusName, gint flags)
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  *  @param  reason		The reason given for the NACK
  */
-static void
+static gboolean
 vetoNACK (const char *dbusName, gint flags, char *reason)
 {
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
 		g_warning ("Program '%s' sent vetoNACK.\n"
 			   "It MUST call vetoActionRegisterInterest first!", dbusName);
-		return;
+		return FALSE;
 	}
 
 	RegProgram *regprog = (RegProgram *) g_ptr_array_index (registered, a);
@@ -110,6 +110,7 @@ vetoNACK (const char *dbusName, gint flags, char *reason)
 
 	regprog->isNACK = TRUE;
 	regprog->reason = g_string_new (reason);
+	return TRUE;
 }
 
 /** Process the vetoActionRegisterInterest signal
@@ -118,17 +119,17 @@ vetoNACK (const char *dbusName, gint flags, char *reason)
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  *  @param  appname		The localised application name, e.g. "Totem"
  */
-static void
+static gboolean
 vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
 {
-	g_return_if_fail (registered);
+	g_return_val_if_fail (registered, FALSE);
 
 	int a;
 	a = vetoFindName (dbusName);
 	if (a != -1) {
 		g_warning ("Program '%s' has already called "
 			   "vetoActionRegisterInterest on this DBUS connection!", appName);
-		return;
+		return FALSE;
 	}
 
 	GString *flagtext = convert_gpmdbus_to_string (flags);
@@ -144,6 +145,7 @@ vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
 	reg->isACK = FALSE;
 	reg->isNACK = FALSE;
 	g_ptr_array_add (registered, (gpointer) reg);
+	return TRUE;
 }
 
 /** Process the vetoActionUnregisterInterest signal
@@ -151,17 +153,17 @@ vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
  *  @param  dbusName	The dbus connection, e.g. 0:13
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  */
-static void
+static gboolean
 vetoActionUnregisterInterest (const char *dbusName, gint flags, gboolean suppressError)
 {
-	g_return_if_fail (registered);
+	g_return_val_if_fail (registered, FALSE);
 
 	int a = vetoFindName (dbusName);
 	if (a == -1) {
 		if (!suppressError)
 			g_warning ("Program '%s' has called vetoActionUnregisterInterest "
 			   "without calling vetoActionRegisterInterest!", dbusName);
-		return;
+		return FALSE;
 	}
 
 	RegProgram *regprog = (RegProgram *) g_ptr_array_index (registered, a);
@@ -174,6 +176,7 @@ vetoActionUnregisterInterest (const char *dbusName, gint flags, gboolean suppres
 	/* remove from list */
 	g_ptr_array_remove_index (registered, a);
 	g_free (regprog);
+	return TRUE;
 }
 
 DBusHandlerResult
@@ -197,48 +200,6 @@ dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user
 		if (strlen(newservicename) > 0) {
 			g_warning ("Disconnected due to crash '%s'", newservicename);
 			vetoActionUnregisterInterest (newservicename, GPM_DBUS_ALL, TRUE);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "vetoActionRegisterInterest")) {
-		gint value;
-		dbus_error_init (&error);
-		char *appname;
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID)) {
-			vetoActionRegisterInterest (from, value, appname);
-		} else {
-			g_warning ("vetoActionRegisterInterest received, but error getting message: %s", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "vetoActionUnregisterInterest")) {
-		gint value;
-		dbus_error_init (&error);
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
-			vetoActionUnregisterInterest (from, value, FALSE);
-		} else {
-			g_warning ("vetoActionUnregisterInterest received, but error getting message: %s", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "vetoACK")) {
-		gint value;
-		dbus_error_init (&error);
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
-			vetoACK (from, value);
-		} else {
-			g_warning ("vetoACK received, but error getting message: %s", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "vetoNACK")) {
-		gint value;
-		dbus_error_init (&error);
-		char *reason;
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &reason, DBUS_TYPE_INVALID)) {
-			vetoNACK (from, value, reason);
-		} else {
-			g_warning ("vetoNACK received, but error getting message: %s", error.message);
-			dbus_error_free (&error);
 		}
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
@@ -279,6 +240,50 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 			data_value = vetoACK (from, value);
 		} else {
 			g_warning ("vetoACK received, but error getting message: %s", error->message);
+			dbus_error_free (error);
+		}
+		message_reply = dbus_message_new_method_return (message);
+		dbus_message_append_args (message_reply, DBUS_TYPE_BOOLEAN, &data_value, DBUS_TYPE_INVALID);
+		return message_reply;
+	} else if (dbus_message_is_method_call (message, GPM_DBUS_SERVICE, "vetoNACK")) {
+		g_debug ("Got 'vetoNACK'\n");
+		gint value;
+		gboolean data_value = FALSE;
+		char *reason;
+		const char *from = dbus_message_get_sender (message);
+		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &reason, DBUS_TYPE_INVALID)) {
+			data_value = vetoNACK (from, value, reason);
+		} else {
+			g_warning ("vetoNACK received, but error getting message: %s", error->message);
+			dbus_error_free (error);
+		}
+		message_reply = dbus_message_new_method_return (message);
+		dbus_message_append_args (message_reply, DBUS_TYPE_BOOLEAN, &data_value, DBUS_TYPE_INVALID);
+		return message_reply;
+	} else if (dbus_message_is_method_call (message, GPM_DBUS_SERVICE, "vetoActionRegisterInterest")) {
+		g_debug ("Got 'vetoActionRegisterInterest'\n");
+		gint value;
+		gboolean data_value = FALSE;
+		char *appname;
+		const char *from = dbus_message_get_sender (message);
+		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID)) {
+			data_value = vetoActionRegisterInterest (from, value, appname);
+		} else {
+			g_warning ("vetoActionRegisterInterest received, but error getting message: %s", error->message);
+			dbus_error_free (error);
+		}
+		message_reply = dbus_message_new_method_return (message);
+		dbus_message_append_args (message_reply, DBUS_TYPE_BOOLEAN, &data_value, DBUS_TYPE_INVALID);
+		return message_reply;
+	} else if (dbus_message_is_method_call (message, GPM_DBUS_SERVICE, "vetoActionUnregisterInterest")) {
+		g_debug ("Got 'vetoActionUnregisterInterest'\n");
+		gint value;
+		gboolean data_value = FALSE;
+		const char *from = dbus_message_get_sender (message);
+		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
+			data_value = vetoActionUnregisterInterest (from, value, TRUE);
+		} else {
+			g_warning ("vetoActionUnregisterInterest received, but error getting message: %s", error->message);
 			dbus_error_free (error);
 		}
 		message_reply = dbus_message_new_method_return (message);

@@ -24,8 +24,6 @@
 #include <string.h>
 #include <dbus/dbus-glib.h>
 /*
-#include <dbus/dbus.h>
-#include <dbus/dbus-glib-lowlevel.h>
 #include "gpm-dbus-common.h"
 */
 #include "gpm-main.h"
@@ -379,7 +377,8 @@ main (int argc, char **argv)
 	/* Start the event loop */
 	g_main_loop_run (loop);
 
-	/* close session connection */
+	/* close session connections */
+	g_object_unref (signal_proxy);
 	g_object_unref (session_proxy);
 	return 0;
 }

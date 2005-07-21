@@ -17,9 +17,11 @@ INCLUDES =										\
 	-DDATADIR=\"$(datadir)\"					\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"
 
-bin_PROGRAMS = \
+bin_PROGRAMS =									\
 	gnome-power-manager							\
-	gnome-power-preferences						\
+	gnome-power-preferences
+
+noinst_PROGRAMS = 								\
 	gnome-power-dbus-test
 
 gnome_power_dbus_test_SOURCES =					\

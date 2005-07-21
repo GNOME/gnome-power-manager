@@ -368,13 +368,38 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		g_warning ("No handler for '%s'", action);
 }
 
+/** Gets the position to "point" to (i.e. bottom of the icon)
+ *
+ *  @param	x				X co-ordinate return
+ *  @param	y				Y co-ordinate return
+ *  @return					Success, return FALSE when no icon present
+ *
+ * TODO : Need to cope when panel is on left, right, or bottom of screen.
+ */
+gboolean
+get_icon_position (gint *x, gint *y)
+{
+	g_return_val_if_fail (eggtrayicon, FALSE);
+	g_return_val_if_fail (eggtrayicon->image, FALSE);
+	g_return_val_if_fail (eggtrayicon->image->window, FALSE);
+
+	gdk_window_get_origin (eggtrayicon->image->window, x, y);
+	g_debug ("x1=%i, y1=%i\n", *x, *y);
+
+	GdkPixbuf* pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (eggtrayicon->image));
+	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
+	*y += gdk_pixbuf_get_height (pixbuf);
+	g_debug ("x2=%i, y2=%i\n", *x, *y);
+	
+	return TRUE;
+}
+
 /** Callback for "about" box
  *
  */
 static void
 callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	g_debug ("callback_about_activated");
 	static GtkWidget *about = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	const gchar *authors[] = { "Richard Hughes <richard@hughsie.com>", NULL };
