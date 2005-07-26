@@ -10,6 +10,10 @@
 	Added support for writing /apps/gnome-screensaver/dpms_suspend for
 	gnome-screensaver.
 
+	* configure.in, src/Makefile.am, src/gpm-notification.c, 
+	src/prefs.c: Make libnotify a configurable build option, on the advice
+	of David Zeuthen.
+
 2005-07-25  Richard Hughes  <richard@hughsie.com>
 
 	* gnome-power.spec.in: Do not restart messagebus on install
