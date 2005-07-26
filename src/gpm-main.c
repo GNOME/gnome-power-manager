@@ -57,7 +57,6 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
-#define NOTIFY_TIMOUT		10
 
 /** Convenience function to call libnotify
  *
@@ -83,14 +82,14 @@ use_libnotify (const char *content, const int urgency)
 	}
 	const char *summary = NICENAME;
 	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
-										   NULL,
-										   urgency,
-										   summary, content,
-										   icon, /* no icon 			*/
-										   TRUE, time(NULL) + NOTIFY_TIMOUT,
-										   hints,
-										   NULL, /* no user data 		*/
-										   0);   /* no actions 			*/
+			   NULL,
+			   urgency,
+			   summary, content,
+			   icon, /* no icon 			*/
+			   TRUE, time(NULL) + NOTIFY_TIMOUT,
+			   hints,
+			   NULL, /* no user data 		*/
+			   0);   /* no actions 			*/
 	notify_icon_destroy(icon);	
 	if (!n)
 		g_warning ("failed to send notification (%s)", content);
@@ -290,7 +289,7 @@ set_hdd_spindown (int minutes)
 	/* find devices of type hard-disks from HAL */
 	dbus_error_init (&error);
 	device_names = libhal_find_device_by_capability (hal_ctx, "storage", 
-							&num_devices, &error);
+					&num_devices, &error);
 	dbus_error_print (&error);
 	if (device_names == NULL)
 		g_warning ("Couldn't obtain list of storage");
@@ -349,7 +348,7 @@ action_policy_do (gint policy_number)
 		/* spin down the hard-drives */
 		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
-							GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
+					GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
 #if 0
@@ -365,12 +364,12 @@ action_policy_do (gint policy_number)
 		/* spin down the hard-drives */
 		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
-							GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
+					GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
-								policy_number);
+			policy_number);
 }
 
 /** Compare the old and the new values, if different or force'd then updates gconf
@@ -438,9 +437,9 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-					use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
+			use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
 				else
-					action_policy_do (policy);
+			action_policy_do (policy);
 				}
 		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
@@ -741,7 +740,7 @@ coldplug_devices (void)
 	/* devices of type battery */
 	dbus_error_init (&error);
 	device_names = libhal_find_device_by_capability (hal_ctx, "battery", 
-							&num_devices, &error);
+					&num_devices, &error);
 	dbus_error_print (&error);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of batteries"));
@@ -752,7 +751,7 @@ coldplug_devices (void)
 	/* devices of type ac_adapter */
 	dbus_error_init (&error);
 	device_names = libhal_find_device_by_capability (hal_ctx, "ac_adapter",
-							&num_devices, &error);
+					&num_devices, &error);
 	dbus_error_print (&error);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of ac_adapters"));
@@ -963,31 +962,31 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		if (slotData->isDischarging) {
 			GConfClient *client = gconf_client_get_default ();
 			gint lowThreshold = gconf_client_get_int (client, 
-							GCONF_ROOT "general/lowThreshold", NULL);
+					GCONF_ROOT "general/lowThreshold", NULL);
 			gint criticalThreshold = gconf_client_get_int (client, 
-							GCONF_ROOT "general/criticalThreshold", NULL);
+					GCONF_ROOT "general/criticalThreshold", NULL);
 			/* critical warning */
 			if (newCharge < criticalThreshold) {
 				int policy = get_policy_string (GCONF_ROOT "policy/BatteryCritical");
 				if (policy == ACTION_WARNING) {
-					GString *gs = g_string_new ("");
-					char *device = convert_powerdevice_to_string (slotData->powerDevice);
-					GString *remaining = get_time_string (slotData);;
-					g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
-						device, newCharge, remaining->str);
-					g_message ("%s", gs->str);
-					use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
-					g_string_free (gs, TRUE);
-					g_string_free (remaining, TRUE);
+			GString *gs = g_string_new ("");
+			char *device = convert_powerdevice_to_string (slotData->powerDevice);
+			GString *remaining = get_time_string (slotData);;
+			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+				device, newCharge, remaining->str);
+			g_message ("%s", gs->str);
+			use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+			g_string_free (gs, TRUE);
+			g_string_free (remaining, TRUE);
 				} else
-					action_policy_do (policy);
+			action_policy_do (policy);
 			/* low warning */
 			} else if (newCharge < lowThreshold) {
 				GString *gs = g_string_new ("");
 				char *device = convert_powerdevice_to_string (slotData->powerDevice);
 				GString *remaining = get_time_string (slotData);;
 				g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"), 
-					device, newCharge, remaining->str);
+			device, newCharge, remaining->str);
 				g_message ("%s", gs->str);
 				use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 				g_string_free (gs, TRUE);
@@ -1040,9 +1039,9 @@ device_condition (LibHalContext *ctx,
 			if (value) {
 				int policy = get_policy_string (GCONF_ROOT "policy/ButtonLid");
 				if (policy == ACTION_WARNING)
-					use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
+			use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
 				else
-					action_policy_do (policy);
+			action_policy_do (policy);
 			}
 		} else
 			g_warning ("Button '%s' unrecognised", type);

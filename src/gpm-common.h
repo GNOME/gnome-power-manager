@@ -26,6 +26,8 @@
 #include "eggtrayicon.h"
 #include <gnome.h>
 
+#define NOTIFY_TIMOUT		10
+
 typedef enum {
 	POLICY_NONE,
 	POLICY_PERCENT,
