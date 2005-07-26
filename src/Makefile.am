@@ -41,11 +41,13 @@ gnome_power_preferences_SOURCES =			\
 	gpm-common.h					\
 	gpm-common.c
 
+if HAVE_LIBNOTIFY
 gnome_power_preferences_LDADD =				\
-	$(GLIB_LIBS)					\
-	$(GNOME_LIBS)					\
-	$(HAL_LIBS)					\
-	$(LIBNOTIFY_LIBS)
+	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS)
+else
+gnome_power_preferences_LDADD =				\
+	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS)
+endif
 
 gnome_power_manager_SOURCES =				\
 	eggtrayicon.h					\
@@ -61,9 +63,10 @@ gnome_power_manager_SOURCES =				\
 	gpm-main.h					\
 	gpm-main.c			
 
+if HAVE_LIBNOTIFY
 gnome_power_manager_LDADD =				\
-	$(GLIB_LIBS)					\
-	$(GNOME_LIBS)					\
-	$(HAL_LIBS)					\
-	$(DBUS_LIBS)					\
-	$(LIBNOTIFY_LIBS)
+	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
+else
+gnome_power_manager_LDADD =				\
+	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
+endif

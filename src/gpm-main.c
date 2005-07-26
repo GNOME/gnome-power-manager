@@ -36,7 +36,9 @@
 #include <gnome.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#if HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
+#endif
 
 #include <libhal.h>
 #include "gpm-common.h"
@@ -66,6 +68,7 @@ DBusConnection *connsession = NULL;
 static void
 use_libnotify (const char *content, const int urgency)
 {
+#if HAVE_LIBNOTIFY
 	gint x, y;
 	gboolean use_hints;
 	use_hints = get_icon_position (&x, &y);
@@ -93,6 +96,15 @@ use_libnotify (const char *content, const int urgency)
 	notify_icon_destroy(icon);	
 	if (!n)
 		g_warning ("failed to send notification (%s)", content);
+#else
+	GtkWidget *widget;
+	widget = gnome_message_box_new (content, 
+                                GNOME_MESSAGE_BOX_WARNING,
+                                GNOME_STOCK_BUTTON_OK, 
+                                NULL);
+	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
+	gtk_widget_show (widget);
+#endif
 }
 
 /** Convenience function.
@@ -1128,9 +1140,11 @@ main (int argc, char *argv[])
 	}
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
 
+#if HAVE_LIBNOTIFY
 	/* initialise libnotify */
-	if (!notify_init(NICENAME))
+	if (!notify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
+#endif
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));

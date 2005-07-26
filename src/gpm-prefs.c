@@ -27,7 +27,9 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#if HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
+#endif
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -47,6 +49,7 @@ gboolean displayIconFull = TRUE;
 static void
 use_libnotify (const char *content, const int urgency)
 {
+#if HAVE_LIBNOTIFY
 	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
 	const char *summary = NICENAME;
 	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
@@ -61,6 +64,15 @@ use_libnotify (const char *content, const int urgency)
 	notify_icon_destroy(icon);	
 	if (!n)
 		g_warning ("failed to send notification (%s)", content);
+#else
+	GtkWidget *widget;
+	widget = gnome_message_box_new (content, 
+                                GNOME_MESSAGE_BOX_WARNING,
+                                GNOME_STOCK_BUTTON_OK, 
+                                NULL);
+	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
+	gtk_widget_show (widget);
+#endif
 }
 
 /** Sets/Hides GTK visibility
@@ -478,9 +490,11 @@ main (int argc, char **argv)
 		g_error ("Main window failed to load, aborting");
 	g_signal_connect (G_OBJECT (widget), "delete_event", G_CALLBACK (gtk_main_quit), NULL);
 
+#if HAVE_LIBNOTIFY
 	/* initialise libnotify */
-	if (!notify_init(NICENAME))
+	if (!notify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
+#endif
 
 	/* Get the help and quit buttons */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");

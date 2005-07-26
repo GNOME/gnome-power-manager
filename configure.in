@@ -19,6 +19,8 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_PROG_INTLTOOL([0.27.2])
 AM_GLIB_GNU_GETTEXT
 
+AC_ARG_ENABLE(libnotify,          [  --enable-libnotify        build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
+
 PKG_CHECK_MODULES(GLIB, glib-2.0 gobject-2.0)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
@@ -26,10 +28,6 @@ AC_SUBST(GLIB_LIBS)
 PKG_CHECK_MODULES(HAL, hal >= 0.5.0)
 AC_SUBST(HAL_CFLAGS)
 AC_SUBST(HAL_LIBS)
-
-PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.0.1)
-AC_SUBST(LIBNOTIFY_CFLAGS)
-AC_SUBST(LIBNOTIFY_LIBS)
 
 PKG_CHECK_MODULES(DBUS, dbus-glib-1 >= 0.35.2 dbus-1 >= 0.35.2 gthread-2.0)
 AC_SUBST(DBUS_CFLAGS)
@@ -45,6 +43,32 @@ AM_GCONF_SOURCE_2
 CPPFLAGS="$CPPFLAGS -ansi -Wall"
 LDFLAGS="$LDFLAGS -ansi -Wall"
 
+# libnotify detection
+if test x$enable_libnotify = xno ; then
+    have_libnotify=no;
+else
+    # See if we have sufficiently new libnotify library
+    #AC_CHECK_LIB(libnotify, libnotify_removable_context_path, 
+    #             have_libnotify=yes, have_libnotify=no)
+    PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.0.1, have_libnotify=yes, have_libnotify=no)
+
+    if test x$enable_libnotify = xauto ; then
+        if test x$have_libnotify = xno ; then
+                AC_MSG_WARN([Sufficiently new libnotify library not found])
+        fi
+    else 
+        if test x$have_libnotify = xno ; then
+                AC_MSG_ERROR([libnotify explicitly required, and sufficiently new libnotify library not found])
+        fi
+    fi
+fi
+
+AM_CONDITIONAL(HAVE_LIBNOTIFY, test x$have_libnotify = xyes)
+
+if test x$have_libnotify = xyes ; then
+    AC_DEFINE(HAVE_LIBNOTIFY,1,[libnotify support])
+fi
+
 AC_OUTPUT([
 Makefile
 src/Makefile
@@ -55,4 +79,14 @@ po/Makefile.in
 gnome-power.spec
 ])
 
-set | grep share
+dnl ==========================================================================
+echo "
+                    GNOME Power Manager $VERSION
+                  =============================
+
+        prefix:                   ${prefix}
+        compiler:                 ${CC}
+        cflags:                   ${CFLAGS}
+        cppflags:                 ${CPPFLAGS}
+        libnotify support:        ${have_libnotify}
+"
