@@ -34,6 +34,7 @@
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
+static gboolean hasGnomeScreensaver;
 static HasData hasData;
 gboolean displayIcon = TRUE;
 gboolean displayIconFull = TRUE;
@@ -387,10 +388,8 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
 
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	gint value = gconf_client_get_int (client, gconfpath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", widgetname, gconfpath, value);
-	g_free (gconfpath);
+	gint value = gconf_client_get_int (client, policypath, NULL);
+	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 
 	if (policytype == POLICY_PERCENT)
 		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_percent), NULL);
@@ -456,6 +455,7 @@ main (int argc, char **argv)
 	GConfClient *client = gconf_client_get_default ();
 	gconf_client_add_dir (client, "/apps/gnome-power", GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (client, "/apps/gnome-power", callback_gconf_key_changed, widget, NULL, NULL);
+	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
 
 	/* Get the main_window quit */
 	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
@@ -477,6 +477,9 @@ main (int argc, char **argv)
 	gtk_set_visibility ("combobox_double_click", FALSE);
 	gtk_set_visibility ("label_double_click", FALSE);
 
+	/* need to set action is installed */
+	gtk_set_visibility ("button_gnome_screensave", FALSE);
+
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",
 		"general/displayIcon");
@@ -496,38 +499,47 @@ main (int argc, char **argv)
 		"policy/BatteryCritical", POLICY_CHOICE);
 	combo_setup_action ("combobox_ups_critical",
 		"policy/UPSCritical", POLICY_CHOICE);
-#if 0
 	combo_setup_action ("combobox_sleep_type",
 		"policy/SleepType", POLICY_NONE);
-#endif
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
-		"policy/AC/SleepComputer", POLICY_TIME);
+		GCONF_ROOT "policy/AC/SleepComputer", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_hdd", 
-		"policy/AC/SleepHardDrive", POLICY_TIME);
+		GCONF_ROOT "policy/AC/SleepHardDrive", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_display", 
-		"policy/AC/SleepDisplay", POLICY_TIME);
+		GCONF_ROOT "policy/AC/SleepDisplay", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_brightness", 
-		"policy/AC/Brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/AC/Brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_batteries_computer", 
-		"policy/Batteries/SleepComputer", POLICY_TIME);
+		GCONF_ROOT "policy/Batteries/SleepComputer", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_hdd", 
-		"policy/Batteries/SleepHardDrive", POLICY_TIME);
+		GCONF_ROOT "policy/Batteries/SleepHardDrive", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_display", 
-		"policy/Batteries/SleepDisplay", POLICY_TIME);
+		GCONF_ROOT "policy/Batteries/SleepDisplay", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness", 
-		"policy/Batteries/Brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/Batteries/Brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_low", 
-		"general/lowThreshold", POLICY_PERCENT);
+		GCONF_ROOT "general/lowThreshold", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_critical", 
-		"general/criticalThreshold", POLICY_PERCENT);
+		GCONF_ROOT "general/criticalThreshold", POLICY_PERCENT);
 
 	/* set up upper limit for battery_critical */
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
 	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
+
+#if future
+	gboolean bvalue = FALSE;
+	bvalue = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+	if (bvalue) {
+
+	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
+	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
+	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
+	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
+#endif
 
 	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
 	gconf_key_action (GCONF_ROOT "general/hasBatteries");
