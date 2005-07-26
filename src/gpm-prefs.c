@@ -213,12 +213,10 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_return_if_fail (policypath);
 
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
+	g_debug ("[%s] = (%i)", policypath, value);
 
 	gchar *policyoption = convert_policy_to_string (value);
-	gconf_client_set_string (client, gconfpath, policyoption, NULL);
-	g_free (gconfpath);
+	gconf_client_set_string (client, policypath, policyoption, NULL);
 }
 
 /** Callback for hscale_changed
@@ -252,10 +250,8 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	GConfClient *client = gconf_client_get_default ();
 	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_return_if_fail (policypath);
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
-	gconf_client_set_int (client, gconfpath, value, NULL);
-	g_free (gconfpath);
+	g_debug ("[%s] = (%i)", policypath, value);
+	gconf_client_set_int (client, policypath, value, NULL);
 }
 
 /** Callback for button_help
@@ -281,10 +277,8 @@ callback_check_changed (GtkWidget *widget, gpointer user_data)
 	g_return_if_fail (policypath);
 	/*int policytype = (int) g_object_get_data ((GObject*) widget, "policytype");*/
 
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", policypath, gconfpath, value);
-	gconf_client_set_bool (client, gconfpath, value, NULL);
-	g_free (gconfpath);
+	g_debug ("[%s] = (%i)", policypath, value);
+	gconf_client_set_bool (client, policypath, value, NULL);
 }
 
 /** Prints program usage.
@@ -356,9 +350,7 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 	}
 
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	gchar *policyoption = gconf_client_get_string (client, gconfpath, NULL);
-	g_free (gconfpath);
+	gchar *policyoption = gconf_client_get_string (client, policypath, NULL);
 
 	if (!policyoption) {
 		g_warning ("gconf_client_get_string for widget '%s' failed (policy='%s')!!", widgetname, policypath);
@@ -415,10 +407,8 @@ checkbox_setup_action (const char *widgetname, const char *policypath)
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_check_changed), NULL);
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 
-	gchar *gconfpath = g_strconcat (GCONF_ROOT, policypath, NULL);
-	gboolean value = gconf_client_get_bool (client, gconfpath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", widgetname, gconfpath, value);
-	g_free (gconfpath);
+	gboolean value = gconf_client_get_bool (client, policypath, NULL);
+	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), value);
 }
 
