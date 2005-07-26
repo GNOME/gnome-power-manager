@@ -1,5 +1,17 @@
 2005-07-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.c: Make sure we only use GCONF_ROOT once.
+	Add libnotify box informing user that they do not have gnome-screensaver
+	DPMS support.
+
+	* src/gpm-common.h: Move NOTIFY_TIMOUT here.
+
+	* src/gpm-main.c: Remove invalid gconf check.
+	Added support for writing /apps/gnome-screensaver/dpms_suspend for
+	gnome-screensaver.
+
+2005-07-25  Richard Hughes  <richard@hughsie.com>
+
 	* gnome-power.spec.in: Do not restart messagebus on install
 
 	* src/gnome-power-service.xml: new file, prepare for dbus glib'ification.
