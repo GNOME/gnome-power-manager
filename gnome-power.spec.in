@@ -24,7 +24,7 @@ change preferences.
 %setup -q
 
 %build
-%configure
+%configure --enable-libnotify
 make
 
 %install
