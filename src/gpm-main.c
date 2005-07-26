@@ -348,24 +348,26 @@ action_policy_do (gint policy_number)
 		/* spin down the hard-drives */
 		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
-					GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
+			GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
+		/* set dpms_suspend to our value */
+		gint displaytimout = gconf_client_get_int (client, 
+			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
+		gconf_client_set_int (client, 
+			"/apps/gnome-screensaver/dpms_suspend", displaytimout, NULL);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
-#if 0
-		if (has_data.hasDisplays) {
-			if (state_data.onBatteryPower)
-				policy ("lcd_batteries");
-			else
-				policy ("lcd_mains");
-		}
-#endif
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
 		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
-					GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
+			GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
+		/* set dpms_suspend to our value */
+		gint displaytimout = gconf_client_get_int (client, 
+			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
+		gconf_client_set_int (client, 
+			"/apps/gnome-screensaver/dpms_suspend", displaytimout, NULL);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
@@ -962,9 +964,9 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		if (slotData->isDischarging) {
 			GConfClient *client = gconf_client_get_default ();
 			gint lowThreshold = gconf_client_get_int (client, 
-					GCONF_ROOT "general/lowThreshold", NULL);
+			GCONF_ROOT "general/lowThreshold", NULL);
 			gint criticalThreshold = gconf_client_get_int (client, 
-					GCONF_ROOT "general/criticalThreshold", NULL);
+			GCONF_ROOT "general/criticalThreshold", NULL);
 			/* critical warning */
 			if (newCharge < criticalThreshold) {
 				int policy = get_policy_string (GCONF_ROOT "policy/BatteryCritical");
