@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<node name="/">
+  <interface name="net.sf.PowerManagerInterface">
+
+    <method name="isUserIdle">
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="isRunningOnMains">
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="isActive">
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="vetoActionRegisterInterest">
+      <arg type="i"/>
+      <arg type="s"/>
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="vetoActionUnregisterInterest">
+      <arg type="i"/>
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="vetoACK">
+      <arg type="i"/>
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="vetoNACK">
+      <arg type="i"/>
+      <arg type="s"/>
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="vetoWait">
+      <arg type="i"/>
+      <arg type="i"/>
+      <arg type="s"/>
+      <arg type="b" direction="out"/>
+    </method>
+
+  </interface>
+</node>
