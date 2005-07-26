@@ -82,7 +82,7 @@ use_libnotify (const char *content, const int urgency)
 			notify_hints_set_string (hints, "sound-file", GPM_DATA "normal.wav");
 	}
 	const char *summary = NICENAME;
-	NotifyHandle *n = notify_send_notification(NULL, /* replaces nothing 	*/
+	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
 										   NULL,
 										   urgency,
 										   summary, content,
@@ -1154,7 +1154,7 @@ main (int argc, char *argv[])
 	dbus_error_init (&error);
 	connsession = dbus_bus_get (DBUS_BUS_SESSION, &error);
 	if (!connsession) {
-		g_warning ("Failed to connect to the D-BUS daemon: %s", error.message);
+		g_error ("dbus_bus_get DBUS_BUS_SESSION failed: %s", error.message);
 		dbus_error_free (&error);
 		return 1;
 	}
@@ -1197,7 +1197,7 @@ main (int argc, char *argv[])
 	dbus_error_init (&error);
 	connsystem = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (!connsystem)
-		g_error ("HAL error: dbus_bus_get: %s: %s", error.name, error.message);
+		g_error ("dbus_bus_get DBUS_BUS_SYSTEM failed: %s: %s", error.name, error.message);
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
 	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem))
