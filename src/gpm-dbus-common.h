@@ -37,13 +37,16 @@
 #define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
 
 #define	PM_DBUS_SERVICE				"net.sf.PowerManager"
-#define	PM_DBUS_PATH				"/net/sf/PowerManager"
-#define	PM_DBUS_INTERFACE			"net.sf.PowerManager"
+#define	PM_DBUS_PATH				"/PMObject"
+#define	PM_DBUS_INTERFACE			"net.sf.PowerManagerInterface"
 #define	PM_DBUS_INTERFACE_SIGNAL	"net.sf.PowerManager.Signal"
 #define	PM_DBUS_INTERFACE_ERROR		"net.sf.PowerManager.Error"
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
+#if IGNORENONGLIB
+/* remove when all g-p-m is glib only */
+#else
 gboolean dbus_send_signal (DBusConnection *connection, const char *action);
 gboolean dbus_send_signal_string (DBusConnection *connection, const char *action, const char *messagetext);
 gboolean dbus_send_signal_bool (DBusConnection *connection, const char *action, gboolean value);
@@ -52,6 +55,7 @@ gboolean dbus_send_signal_int_string (DBusConnection *connection, const char *ac
 
 gboolean send_method_string (DBusConnection *connection, const char *action);
 gboolean get_bool_value (DBusConnection *connection, const char *action, gboolean *data_bool);
+#endif
 
 GString *convert_gpmdbus_to_string (gint value);
 gchar *convert_dbus_enum_to_string (gint value);
