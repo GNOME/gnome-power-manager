@@ -23,23 +23,12 @@
 #include <glib.h>
 #include <string.h>
 #include <dbus/dbus-glib.h>
-/*
-#include "gpm-dbus-common.h"
-*/
 #include "gpm-main.h"
 
-#define	GPM_DBUS_SERVICE			"net.sf.GnomePower"
-#define	GPM_DBUS_PATH				"/net/sf/GnomePower"
-#define	GPM_DBUS_INTERFACE			"net.sf.GnomePower"
-#define	GPM_DBUS_INTERFACE_SIGNAL	"net.sf.GnomePower.Signal"
-#define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
-
-#define GPM_DBUS_SCREENSAVE	1
-#define GPM_DBUS_POWEROFF	2
-#define GPM_DBUS_SUSPEND	4
-#define GPM_DBUS_HIBERNATE	8
-#define GPM_DBUS_LOGOFF		16
-#define GPM_DBUS_ALL		255
+/* we do not need these defines when all is GLIB */
+#define IGNORENONGLIB	TRUE
+#include "gpm-dbus-common.h"
+#undef IGNORENONGLIB
 
 #define GPM_DBUS_TEST_APP "GNOME Power Test"
 
@@ -52,13 +41,13 @@ static gboolean doNACK = FALSE;
 static void
 process_error (GError *error)
 {
-		if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
-			g_printerr ("Caught remote method exception %s: %s\n",
-						dbus_g_error_get_name (error),
-						error->message);
-		else
-			g_printerr ("Error: %s\n", error->message);
-		g_error_free (error);
+	if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
+		g_printerr ("Caught remote method exception %s: %s\n",
+					dbus_g_error_get_name (error),
+					error->message);
+	else
+		g_printerr ("Error: %s\n", error->message);
+	g_error_free (error);
 }
 
 static void
@@ -70,23 +59,17 @@ signal_handler_mainsStatusChanged (DBusGProxy *proxy, gboolean value, gpointer u
 static void
 signal_handler_performingAction (DBusGProxy *proxy, gint value, gpointer user_data)
 {
-#if 0
 	GString *flags = convert_gpmdbus_to_string (value);
 	g_print ("performingAction received: ENUM = %s\n", flags->str);
 	g_string_free (flags, TRUE);
-#endif
-	g_print ("performingAction received: ENUM = %i\n", value);
 }
 
 static void
 signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user_data)
 {
-#if 0
 	GString *flags = convert_gpmdbus_to_string (value);
 	g_print ("actionAboutToHappen received: ENUM = %s\n", flags->str);
 	g_string_free (flags, TRUE);
-#endif
-	g_print ("actionAboutToHappen received: ENUM = %i\n", value);
 
 	GError *error = NULL;
 	gboolean boolret;
@@ -103,65 +86,12 @@ signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user
 			process_error (error);
 }
 
-#if 0
-DBusHandlerResult
-dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user_data)
+static void
+name_owner_changed (DBusGProxy *proxy, const char *name, const char *prev_owner, const char *new_owner, gpointer user_data)
 {
-	/* User data is the event loop we are running in */
-	GMainLoop *loop = user_data;
-
-	/* A signal from the connection saying we are about to be disconnected */
-	if (dbus_message_is_signal (message, DBUS_INTERFACE_DBUS, "Disconnected")) {
-		g_print ("Disconnected\n");
-		/* Tell the main loop to quit */
-		g_main_loop_quit (loop);
-		/* We have handled this message, don't pass it on */
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "mainsStatusChanged")) {
-		DBusError error;
-		gboolean value;
-		dbus_error_init (&error);
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_BOOLEAN, &value, DBUS_TYPE_INVALID)) {
-			g_print ("mainsStatusChanged received: AC = %i\n", value);
-		} else {
-			g_print ("mainsStatusChanged received, but error getting message: %s\n", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "performingAction")) {
-		DBusError error;
-		gint value;
-		dbus_error_init (&error);
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
-			GString *flags = convert_gpmdbus_to_string (value);
-			g_print ("performingAction received: ENUM = %s\n", flags->str);
-			g_string_free (flags, TRUE);
-		} else {
-			g_print ("performingAction received, but error getting message: %s\n", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	} else if (dbus_message_is_signal (message, GPM_DBUS_INTERFACE_SIGNAL, "actionAboutToHappen")) {
-		DBusError error;
-		gint value;
-		dbus_error_init (&error);
-		if (dbus_message_get_args (message, &error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
-			GString *flags = convert_gpmdbus_to_string (value);
-			g_print ("actionAboutToHappen received: ENUM = %s\n", flags->str);
-			g_string_free (flags, TRUE);
-			if (doACK)
-				dbus_send_signal_int (connection, "vetoACK", value);
-			if (doNACK)
-				dbus_send_signal_int_string (connection, "vetoNACK", value, "Unsaved file needs to be saved.");
-		} else {
-			g_print ("actionAboutToHappen received, but error getting message: %s\n", error.message);
-			dbus_error_free (&error);
-		}
-		return DBUS_HANDLER_RESULT_HANDLED;
-	}
-	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+	g_print ("(signal NameOwnerChanged) name owner changed for %s from %s to %s\n",
+				name, prev_owner, new_owner);
 }
-#endif
 
 /** Prints program usage.
  *
@@ -174,17 +104,17 @@ static void print_usage (void)
 		"		--help               Show this information and exit\n"
 		"\n"
 		" METHODS\n"
-		"		--isUserIdle         xxx\n"
-		"		--isRunningOnMains   xxx\n"
-		"		--isActive           xxx\n"
+		"		--isUserIdle         Checks if the user is idle\n"
+		"		--isRunningOnMains   Checks to see if user is running on mains\n"
+		"		--isActive           Checks to see if user is active\n"
 		" MONITOR\n"
-		"		--monitor            xxx\n"
-		"		--doNothing          xxx\n"
-		"		--doACK              xxx\n"
-		"		--doNACK             xxx\n"
+		"		--monitor            Monitors bus, outputing to consol\n"
+		"		--doNothing          vetoActionRegisterInterest, then does nothing on actionAboutToHappen.\n"
+		"		--doACK              vetoActionRegisterInterest, then does vetoACK on actionAboutToHappen\n"
+		"		--doNACK             vetoActionRegisterInterest, then does vetoNACK on actionAboutToHappen\n"
 		" SYNC\n"
-		"		--registerUnregister xxx\n"
-		"		--wrongACK\n"
+		"		--registerUnregister Abuses vetoActionRegisterInterest and vetoActionUnregisterInterest\n"
+		"		--wrongACK           Abuses ACK and NACK"
 		"\n");
 }
 
@@ -206,8 +136,7 @@ main (int argc, char **argv)
 
 	/* Get a connection to the session connection */
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (session_connection == NULL)
-	{
+	if (session_connection == NULL) {
 		g_printerr ("Failed to open connection to bus: %s\n", error->message);
 		g_error_free (error);
 		return 0;
@@ -237,24 +166,16 @@ main (int argc, char **argv)
 	dbus_g_proxy_connect_signal (signal_proxy, "actionAboutToHappen", 
 		G_CALLBACK (signal_handler_actionAboutToHappen), NULL, NULL);
 
+	/* add session connection tracking */
+	DBusGProxy *dbus_proxy = dbus_g_proxy_new_for_name (session_connection,
+							DBUS_SERVICE_DBUS,
+							DBUS_PATH_DBUS,
+							DBUS_INTERFACE_DBUS);
 
-#if 0
-	/* Set up this connection to work in a GLib event loop */
-	dbus_connection_setup_with_g_main (connection, NULL);
-#endif
-
-	/* listening to messages from all objects as no path is specified 
-	 * This will provide a link back for an object changed request
-	 */
-#if 0
-	dbus_bus_add_match (connection, "type='signal',interface='" GPM_DBUS_INTERFACE_SIGNAL "'", &error);
-	if (dbus_error_is_set (&error)) {
-		g_print ("dbus_bus_add_match Failed. Error says: \n'%s'\n", error.message);
-		return 0;
-	}
-	if (!dbus_connection_add_filter (connection, dbus_signal_filter, loop, NULL))
-		g_print ("Cannot apply filter\n");
-#endif
+	dbus_g_proxy_add_signal (dbus_proxy, "NameOwnerChanged",
+		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (dbus_proxy, "NameOwnerChanged",
+		G_CALLBACK (name_owner_changed), NULL, NULL);
 
 	gboolean isOkay = FALSE;
 	gboolean doMonitor = FALSE;
@@ -278,10 +199,6 @@ main (int argc, char **argv)
 									G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				process_error (error);
-#if 0
-			dbus_g_proxy_call_no_reply (session_proxy, "vetoNACK", 
-					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_STRING, "It's a Sunday", G_TYPE_INVALID);
-#endif
 			if (!dbus_g_proxy_call (session_proxy, "vetoNACK", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_STRING, "It's a Sunday", G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
