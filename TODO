@@ -1,8 +1,19 @@
 TODO:
 
  * Convert DBUS to glib bindings (wait for 0.35 to hit updates-released)
+
  * Use gnome-screensaver (use DBUS) for idle time calculation
+
  * Use gnome-screensaver to set dpms and screensave timouts via gconf keys
+	if /apps/gnome-screensaver/dpms_enabled is false
+	  hide options from user and explain why
+	if true,
+      set minutes in /apps/gnome-screensaver/dpms_off
+
  * Use the callbacks in libnotify to do a "What's this?" type help prompt.
+  - Problem with sebfault in libnotify with this, bug sent upstream
+
  * Convert to using http://live.gnome.org/GnomeDocUtilsMigrationHowTo
- 
+  - No documetation yet, so not a lot to translate.
+
+ * Add back sleep type so we know what to do.

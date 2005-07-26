@@ -1,3 +1,22 @@
+2005-07-25  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power.spec.in: Do not restart messagebus on install
+
+	* src/gnome-power-service.xml: new file, prepare for dbus glib'ification.
+	We will be able to remove lots of code when we use the glib bindings.
+
+2005-07-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-test.c: Added back the NameOwnerChanged signals.
+	Add some #ifdefs to allow test.c to use gpm-dbus-common.h
+	Added some help text in the --help screen.
+
+2005-07-21  Richard Hughes  <richard@hughsie.com>
+
+	* README, docs/index.html: updated dep information.
+
+	* src/preferences.glade: Add some new sexy stuff.
+
 2005-07-21  Richard Hughes  <richard@hughsie.com>
 
 	* dbus-interface.html: Removed as information is more up to date in docs/
@@ -13,6 +32,8 @@
 	"just-work" :-)
 
 	* src/gpm-prefs.c (recalc): Add support for missing lid/power/sleep buttons.
+	Also add the GCONF_ROOT prefix to the keys manually, so we can use
+	gnome-screensaver ones in the future.
 
 	* src/preferences.glade: Name the labels so that the above works correctly.
 

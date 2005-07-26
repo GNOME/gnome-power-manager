@@ -1,7 +1,7 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL
 Group: Applications/System
 Source: http://dl.sourceforge.net/gnome-power/gnome-power-manager-%{version}.tar.gz
@@ -43,7 +43,6 @@ SCHEMAS="gnome-power.schemas"
 for S in $SCHEMAS; do
   gconftool-2 --makefile-install-rule %{_sysconfdir}/gconf/schemas/$S >/dev/null
 done
-/sbin/service messagebus condrestart
 
 %files -f %{name}.lang
 %defattr(-,root,root)
