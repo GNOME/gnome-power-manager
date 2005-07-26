@@ -1133,15 +1133,6 @@ main (int argc, char *argv[])
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));
 
-	/*
-	 * check for the latest set of GConf keys
-	 * this will check the newest install of the GConf schema
-	 */
-	gchar *value = gconf_client_get_string (client, GCONF_ROOT "scripts/shutdown", NULL);
-	if (!value)
-		g_warning ("The GConf schema was not installed correctly!");
-	g_free (value);
-
 	setup.lockdownReboot = gconf_client_get_bool (client, GCONF_ROOT "lockdown/reboot", NULL);
 	setup.lockdownShutdown = gconf_client_get_bool (client, GCONF_ROOT "lockdown/shutdown", NULL);
 	setup.lockdownHibernate = gconf_client_get_bool (client, GCONF_ROOT "lockdown/hibernate", NULL);
