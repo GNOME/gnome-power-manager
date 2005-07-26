@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <libnotify/notify.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -34,10 +35,33 @@
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
-static gboolean hasGnomeScreensaver;
 static HasData hasData;
 gboolean displayIcon = TRUE;
 gboolean displayIconFull = TRUE;
+
+/** Convenience function to call libnotify
+ *
+ *  @param  content		The content text, e.g. "Battery low"
+ *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
+ */
+static void
+use_libnotify (const char *content, const int urgency)
+{
+	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
+	const char *summary = NICENAME;
+	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
+			   NULL,
+			   urgency,
+			   summary, content,
+			   icon, /* no icon 			*/
+			   TRUE, time(NULL) + NOTIFY_TIMOUT,
+			   NULL,
+			   NULL, /* no user data 		*/
+			   0);   /* no actions 			*/
+	notify_icon_destroy(icon);	
+	if (!n)
+		g_warning ("failed to send notification (%s)", content);
+}
 
 /** Sets/Hides GTK visibility
  *
@@ -51,7 +75,7 @@ gtk_set_visibility (const char *widgetname, gboolean set)
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
-		g_warning ("widget '%s' failed to load, aborting", widgetname);
+		g_warning ("gtk_set_visibility: widget '%s' not found", widgetname);
 		return;
 	}
 
@@ -136,8 +160,8 @@ recalc (void)
 
 	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
 	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
-	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays);
-	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays);
+	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
+	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
 
 	gtk_set_visibility ("hscale_ac_hdd", hasData.hasHardDrive);
 	gtk_set_visibility ("label_ac_hdd", hasData.hasHardDrive);
@@ -170,8 +194,6 @@ gconf_key_action (const char *key)
 		hasData.hasButtonSleep = value;
 	else if (strcmp (key, GCONF_ROOT "general/hasButtonLid") == 0)
 		hasData.hasButtonLid = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasDisplays") == 0)
-		hasData.hasDisplays = value;
 	else if (strcmp (key, GCONF_ROOT "general/hasHardDrive") == 0)
 		hasData.hasHardDrive = value;
 	else if (strcmp (key, GCONF_ROOT "general/hasLCD") == 0)
@@ -180,6 +202,9 @@ gconf_key_action (const char *key)
 		displayIcon = value;
 	else if (strcmp (key, GCONF_ROOT "general/displayIconFull") == 0)
 		displayIconFull = value;
+	/* data is not got from HAL, but from gnome-screensaver */
+	else if (strcmp (key, "/apps/gnome-screensaver/dpms_enabled") == 0)
+		hasData.hasDisplays = value;
 	else {
 		g_warning ("Urecognised key [%s]", key);
 		return;
@@ -453,6 +478,10 @@ main (int argc, char **argv)
 		g_error ("Main window failed to load, aborting");
 	g_signal_connect (G_OBJECT (widget), "delete_event", G_CALLBACK (gtk_main_quit), NULL);
 
+	/* initialise libnotify */
+	if (!notify_init(NICENAME))
+		g_error ("Cannot initialise libnotify!");
+
 	/* Get the help and quit buttons */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
@@ -467,30 +496,27 @@ main (int argc, char **argv)
 	gtk_set_visibility ("combobox_double_click", FALSE);
 	gtk_set_visibility ("label_double_click", FALSE);
 
-	/* need to set action is installed */
-	gtk_set_visibility ("button_gnome_screensave", FALSE);
-
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",
-		"general/displayIcon");
+		GCONF_ROOT "general/displayIcon");
 	checkbox_setup_action ("checkbutton_display_icon_full",
-		"general/displayIconFull");
+		GCONF_ROOT "general/displayIconFull");
 
 	/* comboboxes */
 	combo_setup_action ("combobox_button_power",
-		"policy/ButtonPower", POLICY_CHOICE);
+		GCONF_ROOT "policy/ButtonPower", POLICY_CHOICE);
 	combo_setup_action ("combobox_button_suspend",
-		"policy/ButtonSuspend", POLICY_CHOICE);
+		GCONF_ROOT "policy/ButtonSuspend", POLICY_CHOICE);
 	combo_setup_action ("combobox_button_lid",
-		"policy/ButtonLid", POLICY_CHOICE);
+		GCONF_ROOT "policy/ButtonLid", POLICY_CHOICE);
 	combo_setup_action ("combobox_ac_fail",
-		"policy/ACFail", POLICY_CHOICE);
+		GCONF_ROOT "policy/ACFail", POLICY_CHOICE);
 	combo_setup_action ("combobox_battery_critical",
-		"policy/BatteryCritical", POLICY_CHOICE);
+		GCONF_ROOT "policy/BatteryCritical", POLICY_CHOICE);
 	combo_setup_action ("combobox_ups_critical",
-		"policy/UPSCritical", POLICY_CHOICE);
+		GCONF_ROOT "policy/UPSCritical", POLICY_CHOICE);
 	combo_setup_action ("combobox_sleep_type",
-		"policy/SleepType", POLICY_NONE);
+		GCONF_ROOT "policy/SleepType", POLICY_NONE);
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
@@ -520,16 +546,15 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
-#if future
-	gboolean bvalue = FALSE;
-	bvalue = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
-	if (bvalue) {
-
+	hasData.hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
 	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
 	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
 	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
 	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
-#endif
+	if (!hasData.hasDisplays) {
+		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
+		gtk_set_visibility ("button_gnome_screensave", FALSE);
+	}
 
 	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
 	gconf_key_action (GCONF_ROOT "general/hasBatteries");
