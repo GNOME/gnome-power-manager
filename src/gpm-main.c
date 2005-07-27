@@ -89,7 +89,7 @@ use_libnotify (const char *content, const int urgency)
 			   urgency,
 			   summary, content,
 			   icon, /* no icon 			*/
-			   TRUE, time(NULL) + NOTIFY_TIMOUT,
+			   TRUE, NOTIFY_TIMOUT,
 			   hints,
 			   NULL, /* no user data 		*/
 			   0);   /* no actions 			*/
