@@ -25,6 +25,8 @@ noinst_PROGRAMS = 					\
 	gnome-power-dbus-test
 
 gnome_power_dbus_test_SOURCES =				\
+	hal-glib.h					\
+	hal-glib.c					\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
 	gpm-dbus-test.c
@@ -52,6 +54,8 @@ endif
 gnome_power_manager_SOURCES =				\
 	eggtrayicon.h					\
 	eggtrayicon.c					\
+	hal-glib.h					\
+	hal-glib.c					\
 	gpm-dbus-server.h				\
 	gpm-dbus-server.c				\
 	gpm-dbus-common.h				\

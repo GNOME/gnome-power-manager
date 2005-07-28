@@ -47,6 +47,8 @@
 #include "gpm-dbus-common.h"
 #include "gpm-dbus-server.h"
 
+#include "hal-glib.h"
+
 /* static */
 static LibHalContext *hal_ctx;
 
@@ -59,6 +61,60 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+static void
+signal_handler_PropertyModified (DBusGProxy *proxy, 
+	char *udi, 
+	char *key, 
+	gboolean is_removed, 
+	gboolean is_added, 
+	gpointer user_data)
+{
+	g_print ("udi = %s\n", udi);
+	g_print ("key = %s\n", key);
+	g_print ("is_removed = %i, is_added = %i\n", is_removed, is_added);
+}
+
+static void
+do_stuff ()
+{
+#if 0
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal", 
+		"/org/freedesktop/Hal/devices", 
+		"org.freedesktop.Hal.Device");
+
+	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
+		DBUS_TYPE_INT32, 
+		DBUS_TYPE_ARRAY,
+		DBUS_STRUCT_BEGIN_CHAR_AS_STRING
+		DBUS_TYPE_STRING_AS_STRING
+		DBUS_TYPE_BOOLEAN_AS_STRING
+		DBUS_TYPE_BOOLEAN_AS_STRING
+		DBUS_STRUCT_END_CHAR_AS_STRING, 
+		G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
+		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
+#endif
+
+#if 0
+	char *udi2 = "/org/freedesktop/Hal/devices/acpi_ADP1";
+	char *key2 = "ac_adapter.present";
+	char *capability = "ac_adapter";
+	
+	char **devices;
+	devices = hal_find_device_capability (capability);
+
+	int i;
+	for (i = 0; devices[i]; i++) {
+		if (!devices[i])
+			break;
+		g_print ("udi = %s\n", devices[i]);
+	}
+	/*exit (1);*/
+#endif
+
+}
 
 /** Convenience function to call libnotify
  *
@@ -105,19 +161,6 @@ use_libnotify (const char *content, const int urgency)
 	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
 	gtk_widget_show (widget);
 #endif
-}
-
-/** Convenience function.
- *  Prints errors due to wrong values expected (exposes bugs, rather than hides them)
- */
-static void
-dbus_error_print (DBusError *error)
-{
-	g_return_if_fail (error);
-	if (dbus_error_is_set (error)) {
-		g_warning ("DBUS:%s", error->message);
-		dbus_error_free (error);
-	}
 }
 
 /** Do an interactive alert
@@ -294,33 +337,26 @@ set_hdd_spindown_device (gchar *device, int minutes)
 static void
 set_hdd_spindown (int minutes)
 {
-	gint i, num_devices;
+	gint i;
 	char **device_names;
-	DBusError error;
 
 	/* find devices of type hard-disks from HAL */
-	dbus_error_init (&error);
-	device_names = libhal_find_device_by_capability (hal_ctx, "storage", 
-					&num_devices, &error);
-	dbus_error_print (&error);
+	device_names = hal_find_device_capability ("storage");
 	if (device_names == NULL)
 		g_warning ("Couldn't obtain list of storage");
-	for (i = 0; i < num_devices; i++) {
+	for (i = 0; device_names[i]; i++) {
 		char *udi = device_names[i];
-		dbus_error_init (&error);
-		gchar *type = libhal_device_get_property_string (hal_ctx, udi, "storage.drive_type", &error);
-		dbus_error_print (&error);
+		gchar *type = hal_device_get_string (udi, "storage.drive_type");
 		if (strcmp (type, "disk") == 0) {
-			dbus_error_init (&error);
-			gchar *device = libhal_device_get_property_string (hal_ctx, udi, "block.device", &error);
-			dbus_error_print (&error);
+			gchar *device = hal_device_get_string (udi, "block.device");
 			g_debug ("Setting device %s to sleep after %i minutes\n", device, minutes);
 			set_hdd_spindown_device (device, minutes);
-			libhal_free_string (device);
+			g_free (device);
 		}
-		libhal_free_string (type);
+		g_free (type);
+		g_free (udi);
 	}
-	libhal_free_string_array (device_names);
+	g_free (device_names);
 }
 
 /** Do the action dictated by policy from gconf
@@ -615,7 +651,6 @@ genericobject_add (GPtrArray *parray, const char *udi)
 static void
 add_ac_adapter (const gchar *udi)
 {
-	DBusError error;
 	g_return_if_fail (udi);
 	GenericObject *slotData = genericobject_add (objectData, udi);
 	if (slotData) {
@@ -623,10 +658,7 @@ add_ac_adapter (const gchar *udi)
 		slotData->percentageCharge = 0;
 		g_debug ("Device '%s' added", udi);
 		/* ac_adapter batteries might be missing */
-		dbus_error_init (&error);
-		slotData->present = libhal_device_get_property_bool (hal_ctx,
-			udi, "ac_adapter.present", &error);
-		dbus_error_print (&error);
+		slotData->present = hal_device_get_bool (udi, "ac_adapter.present");
 		slotData->isRechargeable = FALSE;
 		slotData->isCharging = FALSE;
 		slotData->isDischarging = FALSE;
@@ -643,7 +675,6 @@ static void
 read_battery_data (GenericObject *slotData)
 {
 	g_return_if_fail (slotData);
-	DBusError error;
 
 	/* initialise to known defaults */
 	slotData->minutesRemaining = 0;
@@ -659,43 +690,20 @@ read_battery_data (GenericObject *slotData)
 	}
 
 	/* set cached variables up */
-	dbus_error_init (&error);
-	slotData->minutesRemaining = libhal_device_get_property_int (hal_ctx,
-		slotData->udi, "battery.remaining_time", &error) / 60;
-	dbus_error_print (&error);
+	slotData->minutesRemaining = hal_device_get_int (slotData->udi, "battery.remaining_time") / 60;
 
 	/*
 	 * We need the RAW readings so we keep functions modular and 
 	 * acpi/apm neutral
 	 */
-	dbus_error_init (&error);
-	slotData->rawCharge = libhal_device_get_property_int (hal_ctx,
-		slotData->udi, "battery.charge_level.current", &error);
-	dbus_error_print (&error);
-
-	/* 
-	 * We need the RAW readings so we can process them later on
-	 * for time remaining
-	 */
-	dbus_error_init (&error);
-	slotData->rawLastFull = libhal_device_get_property_int (hal_ctx,
-		slotData->udi, "battery.charge_level.last_full", &error);
-	dbus_error_print (&error);
+	slotData->rawCharge = hal_device_get_int (slotData->udi, "battery.charge_level.current");
+	slotData->rawLastFull = hal_device_get_int (slotData->udi, "battery.charge_level.last_full");
 
 	/* battery might not be rechargeable, have to check */
-	dbus_error_init (&error);
-	slotData->isRechargeable = libhal_device_get_property_bool (hal_ctx,
-		slotData->udi, "battery.is_rechargeable", &error);
-	dbus_error_print (&error);
+	slotData->isRechargeable = hal_device_get_bool (slotData->udi, "battery.is_rechargeable");
 	if (slotData->isRechargeable) {
-		dbus_error_init (&error);
-		slotData->isCharging = libhal_device_get_property_bool (hal_ctx,
-			slotData->udi, "battery.rechargeable.is_charging", &error);
-		dbus_error_print (&error);
-		dbus_error_init (&error);
-		slotData->isDischarging = libhal_device_get_property_bool (hal_ctx,
-			slotData->udi, "battery.rechargeable.is_discharging", &error);
-		dbus_error_print (&error);
+		slotData->isCharging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging");
+		slotData->isDischarging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging");
 	}
 	update_percentage_charge (slotData);
 }
@@ -708,7 +716,6 @@ static void
 add_battery (const gchar *udi)
 {
 	g_return_if_fail (udi);
-	DBusError error;
 	gchar *type = NULL;
 
 	GenericObject *slotData = genericobject_add (objectData, udi);
@@ -718,21 +725,16 @@ add_battery (const gchar *udi)
 	}
 
 	/* PMU/ACPI batteries might be missing */
-	dbus_error_init (&error);
-	slotData->present = libhal_device_get_property_bool (hal_ctx,
-		udi, "battery.present", &error);
-	dbus_error_print (&error);
+	slotData->present = hal_device_get_bool (udi, "battery.present");
 
 	/* battery is refined using the .type property */
-	dbus_error_init (&error);
-	type = libhal_device_get_property_string (hal_ctx, udi, "battery.type", &error);
-	dbus_error_print (&error);
+	type = hal_device_get_string (udi, "battery.type");
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
 		return;
 	}
 	slotData->powerDevice = convert_haltype_to_powerdevice (type);
-	libhal_free_string (type);
+	g_free (type);
 
 	gchar *device = convert_powerdevice_to_string (slotData->powerDevice);
 	g_debug ("%s added", device);
@@ -747,31 +749,28 @@ add_battery (const gchar *udi)
 static void
 coldplug_devices (void)
 {
-	gint i, num_devices;
+	gint i;
 	char **device_names;
-	DBusError error;
 
 	/* devices of type battery */
-	dbus_error_init (&error);
-	device_names = libhal_find_device_by_capability (hal_ctx, "battery", 
-					&num_devices, &error);
-	dbus_error_print (&error);
+	device_names = hal_find_device_capability ("battery");
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of batteries"));
-	for (i = 0; i < num_devices; i++)
+	for (i = 0; device_names[i]; i++) {
 		add_battery (device_names[i]);
-	libhal_free_string_array (device_names);
+		g_free (device_names[i]);
+	}
+	g_free (device_names);
 
 	/* devices of type ac_adapter */
-	dbus_error_init (&error);
-	device_names = libhal_find_device_by_capability (hal_ctx, "ac_adapter",
-					&num_devices, &error);
-	dbus_error_print (&error);
+	device_names = hal_find_device_capability ("ac_adapter");
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of ac_adapters"));
-	for (i = 0; i < num_devices; i++)
+	for (i = 0; device_names[i]; i++) {
 		add_ac_adapter (device_names[i]);
-	libhal_free_string_array (device_names);
+		g_free (device_names[i]);
+	}
+	g_free (device_names);
 }
 
 /** Removes any type of device
@@ -849,7 +848,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 {
 	g_return_if_fail (udi);
 	g_return_if_fail (key);
-	DBusError error;
 	GenericObject *slotData;
 
 	/* only process modified entries, not added or removed keys */
@@ -861,32 +859,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		return;
 
 	slotData = genericobject_find (objectData, udi);
-
-#if 0
-	/* I think this code is now obsolete, now we are checking for bugs in HAL */
-	dbus_error_init (&error);
-	gchar *type = libhal_device_get_property_string (hal_ctx, udi, "info.category", &error);
-	dbus_error_print (&error);
-	libhal_free_string (type);
-		g_warning ("Cannot find UDI '%s' in the objectData", udi);
-		if (powerDevice == POWER_AC_ADAPTER)) {
-			add_ac_adapter (udi);
-			object_table_find (udi, &slotData, objectData);
-		} else if (powerDevice != POWER_BATTERY || strcmp (type, "hiddev") == 0)  {
-			add_battery (udi);
-			object_table_find (udi, &slotData, objectData);
-		} else if (strcmp (type, "button") == 0)  {
-			/* we should do nothing here - we do not cache the button state */
-			return;
-		} else {
-			g_warning ("Unrecognised category '%s'!", type);
-			libhal_free_string (type);
-			return;
-		}
-		libhal_free_string (type);
-	}
-#endif
-
 	/* if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
 	 */
@@ -904,37 +876,25 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	g_debug ("key = '%s'", key);
 	g_debug ("udi = '%s'", udi);
 	if (strcmp (key, "battery.present") == 0) {
-		dbus_error_init (&error);
-		slotData->present = libhal_device_get_property_bool (ctx, udi, key, &error);
-		dbus_error_print (&error);
+		slotData->present = hal_device_get_bool (udi, key);
 		/* read in values */
 		read_battery_data (slotData);
 		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "ac_adapter.present") == 0) {
-		dbus_error_init (&error);
-		slotData->present = libhal_device_get_property_bool (ctx, udi, key, &error);
-		dbus_error_print (&error);
+		slotData->present = hal_device_get_bool (udi, key);
 		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		dbus_error_init (&error);
-		slotData->isCharging = libhal_device_get_property_bool (ctx, udi, key, &error);
-		dbus_error_print (&error);
+		slotData->isCharging = hal_device_get_bool (udi, key);
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		dbus_error_init (&error);
-		slotData->isDischarging = libhal_device_get_property_bool (ctx, udi, key, &error);
-		dbus_error_print (&error);
+		slotData->isDischarging = hal_device_get_bool (udi, key);
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		dbus_error_init (&error);
-		slotData->rawCharge = libhal_device_get_property_int (ctx, udi, key, &error);
-		dbus_error_print (&error);
+		slotData->rawCharge = hal_device_get_int (udi, key);
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		dbus_error_init (&error);
-		slotData->minutesRemaining = libhal_device_get_property_int (ctx, udi, key, &error) / 60;
-		dbus_error_print (&error);
+		slotData->minutesRemaining = hal_device_get_int (udi, key) / 60;
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		/* ignore */
 		return;
@@ -1024,13 +984,10 @@ device_condition (LibHalContext *ctx,
 		  const char *condition_details)
 {
 	g_return_if_fail (udi);
-	DBusError error;
 	gchar *type;
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
-		dbus_error_init (&error);
-		type = libhal_device_get_property_string (hal_ctx, udi, "button.type", &error);
-		dbus_error_print (&error);
+		type = hal_device_get_string (udi, "button.type");
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			int policy = get_policy_string (GCONF_ROOT "policy/ButtonPower");
@@ -1047,9 +1004,7 @@ device_condition (LibHalContext *ctx,
 		} else if (strcmp (type, "lid") == 0) {
 			gboolean value;
 			/* we only do a lid event when the lid is OPENED */
-			dbus_error_init (&error);
-			value = libhal_device_get_property_bool (ctx, udi, "button.state.value", &error);
-			dbus_error_print (&error);
+			value = hal_device_get_bool (udi, "button.state.value");
 			if (value) {
 				int policy = get_policy_string (GCONF_ROOT "policy/ButtonLid");
 				if (policy == ACTION_WARNING)
@@ -1059,7 +1014,7 @@ device_condition (LibHalContext *ctx,
 			}
 		} else
 			g_warning ("Button '%s' unrecognised", type);
-		libhal_free_string (type);
+		g_free (type);
 	}
 }
 
@@ -1131,6 +1086,8 @@ main (int argc, char *argv[])
 	if (!setup.isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
+	do_stuff ();
+	
 	gnome_program_init ("GNOME Power Manager", VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
 	GnomeClient *master = gnome_master_client ();
 	GnomeClientFlags flags = gnome_client_get_flags (master);

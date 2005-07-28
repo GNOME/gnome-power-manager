@@ -25,6 +25,8 @@
 #include <dbus/dbus-glib.h>
 #include "gpm-main.h"
 
+#include "hal-glib.h"
+
 /* we do not need these defines when all is GLIB */
 #define IGNORENONGLIB	TRUE
 #include "gpm-dbus-common.h"
@@ -37,18 +39,6 @@ DBusGProxy *signal_proxy;
 
 static gboolean doACK = FALSE;
 static gboolean doNACK = FALSE;
-
-static void
-process_error (GError *error)
-{
-	if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
-		g_printerr ("Caught remote method exception %s: %s\n",
-					dbus_g_error_get_name (error),
-					error->message);
-	else
-		g_printerr ("Error: %s\n", error->message);
-	g_error_free (error);
-}
 
 static void
 signal_handler_mainsStatusChanged (DBusGProxy *proxy, gboolean value, gpointer user_data)
@@ -78,12 +68,12 @@ signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user
 		if (!dbus_g_proxy_call (session_proxy, "vetoACK", &error, 
 								G_TYPE_INT, value, G_TYPE_INVALID,
 								G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-			process_error (error);
+			dbus_glib_error (error);
 	if (doNACK)
 		if (!dbus_g_proxy_call (session_proxy, "vetoNACK", &error, 
 				G_TYPE_INT, value, G_TYPE_STRING, "Unsaved file needs to be saved.", G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-			process_error (error);
+			dbus_glib_error (error);
 }
 
 static void
@@ -135,13 +125,7 @@ main (int argc, char **argv)
 	loop = g_main_loop_new (NULL, FALSE);
 
 	/* Get a connection to the session connection */
-	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (session_connection == NULL) {
-		g_printerr ("Failed to open connection to bus: %s\n", error->message);
-		g_error_free (error);
-		return 0;
-	}
-
+	session_connection = get_session_connection ();
 	session_proxy = dbus_g_proxy_new_for_name (session_connection,
 							GPM_DBUS_SERVICE,
 							GPM_DBUS_PATH,
@@ -198,11 +182,11 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoACK", &error, 
 									G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			if (!dbus_g_proxy_call (session_proxy, "vetoNACK", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_STRING, "It's a Sunday", G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 
 		} else if (strcmp (argv[a], "--registerUnregister") == 0) {
 			isOkay = TRUE;
@@ -213,7 +197,7 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			/* 
 			 * testing double registering
 			 * TODO : this now fails, but it should pass if the flags are different
@@ -221,29 +205,29 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 									G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			/* 
 			 * testing double unregistering
 			 */
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			/* 
 			 * testing program quit (should do automatic disconnect)
 			 */
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doACK") == 0) {
 			isOkay = TRUE;
 			doMonitor = TRUE;
@@ -252,7 +236,7 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doNACK") == 0) {
 			isOkay = TRUE;
 			doMonitor = TRUE;
@@ -261,7 +245,7 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doNothing") == 0) {
 			isOkay = TRUE;
 			doMonitor = TRUE;
@@ -269,7 +253,7 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--isActive") == 0 || 
 				 strcmp (argv[a], "--isUserIdle") == 0 || 
 				 strcmp (argv[a], "--isRunningOnMains") == 0) {
@@ -278,7 +262,7 @@ main (int argc, char **argv)
 			if (!dbus_g_proxy_call (session_proxy, argv[a]+2, &error, 
 					G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
-				process_error (error);
+				dbus_glib_error (error);
 			if (boolret)
 				g_print ("%s TRUE\n", argv[a]+2);
 			else	
