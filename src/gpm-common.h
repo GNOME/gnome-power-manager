@@ -26,8 +26,25 @@
 #include "eggtrayicon.h"
 #include <gnome.h>
 
+/* Set the timout of the libnotify notifications */
 #define NOTIFY_TIMOUT		10
+
+/* only set true when using the CVS of HAL */
 #define CVSHAL			FALSE
+
+/* debug switch for a faster ac_adapter route */
+#define QUICK_AC 		1
+
+/* for faster code, with less checks */
+#define G_DISABLE_ASSERT	0
+
+/* where our settings are stored in the gconf tree */
+#define GCONF_ROOT_SANS_SLASH	"/apps/gnome-power"
+#define GCONF_ROOT		GCONF_ROOT_SANS_SLASH "/"
+
+/* common descriptions of this program */
+#define NICENAME 		_("GNOME Power Manager")
+#define NICEDESC 		_("Power Manager for the GNOME desktop")
 
 #if !HAVE_LIBNOTIFY
 #define NOTIFY_URGENCY_CRITICAL	1
@@ -118,7 +135,6 @@ typedef struct {
 typedef struct {
 	gboolean present;
 	gint slot;
-	/** TODO Make GString */
 	gchar udi[128];
 	gint powerDevice;
 #if !CVSHAL

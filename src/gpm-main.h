@@ -25,17 +25,6 @@
 #ifndef _GPM_H
 #define _GPM_H
 
-#define QUICK_AC 	1
-#define G_DISABLE_ASSERT 0
-
-/* where our settings are stored in the gconf tree */
-#define GCONF_ROOT_SANS_SLASH	"/apps/gnome-power"
-#define GCONF_ROOT		GCONF_ROOT_SANS_SLASH "/"
-#define SELECTION_NAME 		"_GPM_SELECTION"
-
-#define NICENAME 		_("GNOME Power Manager")
-#define NICEDESC 		_("Power Manager for the GNOME desktop")
-
 void action_policy_do (gint policy_number);
 
 #endif	/* _GPM_H */
