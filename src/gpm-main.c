@@ -77,7 +77,7 @@ signal_handler_PropertyModified (DBusGProxy *proxy,
 #endif
 
 static void
-do_stuff ()
+glib_experiment ()
 {
 #if 0
 	DBusGConnection *system_connection = get_system_connection ();
@@ -98,24 +98,6 @@ do_stuff ()
 	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
 		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
 #endif
-
-#if 0
-	char *udi2 = "/org/freedesktop/Hal/devices/acpi_ADP1";
-	char *key2 = "ac_adapter.present";
-	char *capability = "ac_adapter";
-	
-	char **devices;
-	devices = hal_find_device_capability (capability);
-
-	int i;
-	for (i = 0; devices[i]; i++) {
-		if (!devices[i])
-			break;
-		g_print ("udi = %s\n", devices[i]);
-	}
-	/*exit (1);*/
-#endif
-
 }
 
 /** Convenience function to call libnotify
@@ -131,11 +113,14 @@ use_libnotify (const char *content, const int urgency)
 	gboolean use_hints;
 	use_hints = get_icon_position (&x, &y);
 	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
-	GHashTable *hints = NULL;
+	NotifyHints *hints = NULL;
 	if (use_hints) {
 		hints = notify_hints_new();
+#if 0
+/* libnotify hint support is broken */
 		notify_hints_set_int (hints, "x", x);
 		notify_hints_set_int (hints, "y", y);
+#endif
 		if (urgency == NOTIFY_URGENCY_CRITICAL)
 			notify_hints_set_string (hints, "sound-file", GPM_DATA "critical.wav");
 		else
@@ -163,24 +148,6 @@ use_libnotify (const char *content, const int urgency)
 	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
 	gtk_widget_show (widget);
 #endif
-}
-
-/** Do an interactive alert
- *
- *  @param  text		the text to be used in the dialogue
- * 				e.g. "Logitech MX-1000 mouse"
- */
-static void
-do_interactive_alert (const gchar *text)
-{
-	g_return_if_fail (text);
-
-	GtkWidget *widget = gnome_message_box_new (text, 
-                                GNOME_MESSAGE_BOX_WARNING,
-                                GNOME_STOCK_BUTTON_OK, 
-                                NULL);
-	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
-	gtk_widget_show (widget);
 }
 
 /** Gets policy from gconf
@@ -349,7 +316,7 @@ set_hdd_spindown_device (gchar *device, int minutes)
 		g_string_free (gs, TRUE);
 	}
 	if (!boolret)
-		g_warning ("hard-drive timout change failed");
+		g_warning ("hard-drive timeout change failed");
 	g_object_unref (G_OBJECT (pm_proxy));
 }
 
@@ -393,7 +360,6 @@ action_policy_do (gint policy_number)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
 		g_warning ("*ACTION* Send warning should be done locally!");
-		do_interactive_alert ("Warning (should be done locally)!");
 	} else if (policy_number == ACTION_REBOOT) {
 		g_debug ("*ACTION* Reboot");
 		if (dbus_action (GPM_DBUS_POWEROFF))
@@ -685,8 +651,10 @@ add_ac_adapter (const gchar *udi)
 		slotData->isRechargeable = FALSE;
 		slotData->isCharging = FALSE;
 		slotData->isDischarging = FALSE;
+#if !CVSHAL
 		slotData->rawLastFull = 0;
 		slotData->rawCharge = 0;
+#endif
 		slotData->isRechargeable = 0;
 		slotData->percentageCharge = 0;
 		slotData->minutesRemaining = 0;
@@ -701,8 +669,10 @@ read_battery_data (GenericObject *slotData)
 
 	/* initialise to known defaults */
 	slotData->minutesRemaining = 0;
+#if !CVSHAL
 	slotData->rawCharge = 0;
 	slotData->rawLastFull = 0;
+#endif
 	slotData->isRechargeable = FALSE;
 	slotData->isCharging = FALSE;
 	slotData->isDischarging = FALSE;
@@ -715,20 +685,25 @@ read_battery_data (GenericObject *slotData)
 	/* set cached variables up */
 	slotData->minutesRemaining = hal_device_get_int (slotData->udi, "battery.remaining_time") / 60;
 
+#if !CVSHAL
 	/*
 	 * We need the RAW readings so we keep functions modular and 
 	 * acpi/apm neutral
 	 */
 	slotData->rawCharge = hal_device_get_int (slotData->udi, "battery.charge_level.current");
 	slotData->rawLastFull = hal_device_get_int (slotData->udi, "battery.charge_level.last_full");
-
+#else
+	slotData->percentageCharge = hal_device_get_int (slotData->udi, "battery.charge_level.percentage");
+#endif
 	/* battery might not be rechargeable, have to check */
 	slotData->isRechargeable = hal_device_get_bool (slotData->udi, "battery.is_rechargeable");
 	if (slotData->isRechargeable) {
 		slotData->isCharging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging");
 		slotData->isDischarging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging");
 	}
+#if !CVSHAL
 	update_percentage_charge (slotData);
+#endif
 }
 
 /** Adds a battery device, of any type. Also sets up properties on cached object
@@ -914,8 +889,13 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		slotData->isDischarging = hal_device_get_bool (udi, key);
 		updateState = TRUE;
+#if !CVSHAL
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
 		slotData->rawCharge = hal_device_get_int (udi, key);
+#else
+	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
+		slotData->percentageCharge = hal_device_get_int (udi, key);
+#endif
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		slotData->minutesRemaining = hal_device_get_int (udi, key) / 60;
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
@@ -940,8 +920,10 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	} else
 		oldCharge = slotData->percentageCharge;
 
+#if !CVSHAL
 	/* calculate the new value */
 	update_percentage_charge (slotData);
+#endif
 
 	/* find new (taking into account multi-device machines) */
 	if (slotData->isRechargeable) {
@@ -1109,9 +1091,9 @@ main (int argc, char *argv[])
 	if (!setup.isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
-	do_stuff ();
+	glib_experiment ();
 	
-	gnome_program_init ("GNOME Power Manager", VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
+	gnome_program_init (NICENAME, VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
 	GnomeClient *master = gnome_master_client ();
 	GnomeClientFlags flags = gnome_client_get_flags (master);
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
@@ -1121,7 +1103,6 @@ main (int argc, char *argv[])
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
 
 #if HAVE_LIBNOTIFY
-	/* initialise libnotify */
 	if (!notify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
 #endif

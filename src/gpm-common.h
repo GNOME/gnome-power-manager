@@ -27,6 +27,7 @@
 #include <gnome.h>
 
 #define NOTIFY_TIMOUT		10
+#define CVSHAL			FALSE
 
 #if !HAVE_LIBNOTIFY
 #define NOTIFY_URGENCY_CRITICAL	1
@@ -120,8 +121,10 @@ typedef struct {
 	/** TODO Make GString */
 	gchar udi[128];
 	gint powerDevice;
+#if !CVSHAL
 	gint rawLastFull;
 	gint rawCharge;
+#endif
 	gint isRechargeable;
 	gint percentageCharge;
 	gint minutesRemaining;

@@ -226,6 +226,7 @@ convert_powerdevice_to_string (gint powerDevice)
 	return _("Unknown device");
 }
 
+#if !CVSHAL
 /** Updates .percentageCharge in a GenericObject
  *  This function is needed because of the different ways that batteries 
  *  can represent their charge.
@@ -271,6 +272,7 @@ update_percentage_charge (GenericObject *slotData)
 	}
 	return;
 }
+#endif
 
 /** Gets the charge state string from a slot object
  *
