@@ -61,6 +61,7 @@ GPtrArray *registered = NULL;
 
 DBusConnection *connsession = NULL;
 
+#if 0
 static void
 signal_handler_PropertyModified (DBusGProxy *proxy, 
 	char *udi, 
@@ -73,6 +74,7 @@ signal_handler_PropertyModified (DBusGProxy *proxy,
 	g_print ("key = %s\n", key);
 	g_print ("is_removed = %i, is_added = %i\n", is_removed, is_added);
 }
+#endif
 
 static void
 do_stuff ()
@@ -289,20 +291,31 @@ static void
 pm_do_action (const gchar *action)
 {
 	g_debug ("action = %s\n", action);
-	DBusConnection *connection;
-	DBusError error;
-	gboolean boolvalue = FALSE;
-	dbus_error_init (&error);
-	connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
+	GError *error = NULL;
+	gboolean boolret;
 
-	if (setup.doAction && !get_bool_value_pm (connection, action, &boolvalue)) {
-		GString *gs = g_string_new ("bug");
+	if (!setup.doAction) {
+		g_warning ("Ignoring event as setup.doAction FALSE");
+		return;
+	}
+
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
+
+	if (!dbus_g_proxy_call (pm_proxy, action, &error, 
+			G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		GString *gs = g_string_new ("");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform a %s."), NICENAME, action);
-		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
 		g_string_free (gs, TRUE);
-	} else if (!boolvalue)
+	}
+	if (!boolret)
 		g_warning ("%s failed", action);
+	g_object_unref (G_OBJECT (pm_proxy));
 }
 
 /** For this specific hard-drive, set the spin-down timeout
@@ -313,21 +326,31 @@ pm_do_action (const gchar *action)
 static void
 set_hdd_spindown_device (gchar *device, int minutes)
 {
-	DBusConnection *connection;
-	DBusError error;
-	gboolean boolvalue = FALSE;
-	dbus_error_init (&error);
-	connection = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
+	GError *error = NULL;
+	gboolean boolret;
 
-	if (setup.doAction && !get_bool_value_pm_int_string (connection, "hdparm", &boolvalue, minutes, device)) {
+	if (!setup.doAction) {
+		g_warning ("Ignoring event as setup.doAction FALSE");
+		return;
+	}
+
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
+
+	if (!dbus_g_proxy_call (pm_proxy, "hdparm", &error, 
+			G_TYPE_INT, minutes, G_TYPE_STRING, device, G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
 				     "%s cannot perform hard-drive timout changes."), NICENAME);
 		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
 		g_string_free (gs, TRUE);
-	} else if (!boolvalue)
+	}
+	if (!boolret)
 		g_warning ("hard-drive timout change failed");
-
+	g_object_unref (G_OBJECT (pm_proxy));
 }
 
 /** For each hard-drive in the system, set the spin-down timeout
@@ -943,24 +966,24 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 			if (newCharge < criticalThreshold) {
 				int policy = get_policy_string (GCONF_ROOT "policy/BatteryCritical");
 				if (policy == ACTION_WARNING) {
-			GString *gs = g_string_new ("");
-			char *device = convert_powerdevice_to_string (slotData->powerDevice);
-			GString *remaining = get_time_string (slotData);;
-			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
-				device, newCharge, remaining->str);
-			g_message ("%s", gs->str);
-			use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
-			g_string_free (gs, TRUE);
-			g_string_free (remaining, TRUE);
+					GString *gs = g_string_new ("");
+					char *device = convert_powerdevice_to_string (slotData->powerDevice);
+					GString *remaining = get_time_string (slotData);;
+					g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+						device, newCharge, remaining->str);
+					g_message ("%s", gs->str);
+					use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+					g_string_free (gs, TRUE);
+					g_string_free (remaining, TRUE);
 				} else
-			action_policy_do (policy);
+					action_policy_do (policy);
 			/* low warning */
 			} else if (newCharge < lowThreshold) {
 				GString *gs = g_string_new ("");
 				char *device = convert_powerdevice_to_string (slotData->powerDevice);
 				GString *remaining = get_time_string (slotData);;
 				g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"), 
-			device, newCharge, remaining->str);
+					device, newCharge, remaining->str);
 				g_message ("%s", gs->str);
 				use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 				g_string_free (gs, TRUE);
@@ -1023,7 +1046,7 @@ device_condition (LibHalContext *ctx,
  */
 static void print_usage (void)
 {
-	g_print ("\nusage : gnome-power-manager [options]\n");
+	g_print ("usage : gnome-power-manager [options]\n");
 	g_print (
 		"\n"
 		"    --disable        Do not perform the action, e.g. suspend\n"
@@ -1036,8 +1059,8 @@ static void print_usage (void)
 
 /** Entry point
  *
- *  @param  argc		Number of arguments given to program
- *  @param  argv		Arguments given to program
+ *  @param  argc	Number of arguments given to program
+ *  @param  argv	Arguments given to program
  *  @return			Return code
  */
 int
