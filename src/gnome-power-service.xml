@@ -15,34 +15,39 @@
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="vetoActionRegisterInterest">
+    <method name="ActionRegister">
       <arg type="i"/>
       <arg type="s"/>
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="vetoActionUnregisterInterest">
+    <method name="ActionUnregister">
       <arg type="i"/>
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="vetoACK">
+    <method name="Ack">
       <arg type="i"/>
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="vetoNACK">
+    <method name="Nack">
       <arg type="i"/>
       <arg type="s"/>
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="vetoWait">
+    <method name="Wait">
       <arg type="i"/>
       <arg type="i"/>
       <arg type="s"/>
       <arg type="b" direction="out"/>
     </method>
+
+    <signal name="mainsStatusChanged"/>
+    <signal name="userIdleStatusChanged"/>
+    <signal name="actionAboutToHappen"/>
+    <signal name="performingAction"/>
 
   </interface>
 </node>
