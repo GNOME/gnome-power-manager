@@ -189,9 +189,6 @@ DBusHandlerResult
 dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user_data)
 {
 	/* User data is the event loop we are running in */
-	const char *from = dbus_message_get_sender (message);
-	DBusError error;
-
 	/* A signal from the connection saying we are about to be disconnected */
 	if (dbus_message_is_signal (message, DBUS_INTERFACE_DBUS, "NameOwnerChanged")) {
 		char *oldservicename = NULL;
