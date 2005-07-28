@@ -4,7 +4,8 @@ pkgdata_DATA =						\
 	preferences.glade
 
 EXTRA_DIST =						\
-	$(pkgdata_DATA)
+	$(pkgdata_DATA)					\
+	gnome-power-service.xml
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
