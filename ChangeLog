@@ -1,3 +1,20 @@
+2005-07-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/hal-glib.c, src/hal-glib.h: new files for the glib libhal functions
+
+	* src/Makefile.am: add hal-glib.{c|h} into the build.
+	
+	* src/gpm-main.c: use the glib libhal functions as it makes everything
+	easier to read and debug.
+
+	* src/gpm-main.c (pm_do_action, set_hdd_spindown_device): Communicate
+	with PowerManager using the glib bindings. Notice a trend?
+
+	* Makefile.am: Remove Makefile.in's on maintainer-clean
+
+	* src/gnome-power-service.xml: Update without the veto prefix, 
+	and add signals - this will prepare for the glib bindings in the future.
+
 2005-07-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: Make sure we only use GCONF_ROOT once.
