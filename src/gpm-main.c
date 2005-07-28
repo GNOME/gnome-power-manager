@@ -59,8 +59,6 @@ SetupData setup;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
 
-DBusConnection *connsession = NULL;
-
 #if 0
 static void
 signal_handler_PropertyModified (DBusGProxy *proxy, 
@@ -116,11 +114,8 @@ use_libnotify (const char *content, const int urgency)
 	NotifyHints *hints = NULL;
 	if (use_hints) {
 		hints = notify_hints_new();
-#if 0
-/* libnotify hint support is broken */
 		notify_hints_set_int (hints, "x", x);
 		notify_hints_set_int (hints, "y", y);
-#endif
 		if (urgency == NOTIFY_URGENCY_CRITICAL)
 			notify_hints_set_string (hints, "sound-file", GPM_DATA "critical.wav");
 		else
@@ -183,18 +178,22 @@ run_gconf_script (const char *path)
 static gboolean
 dbus_action (gint action)
 {
+	DBusGConnection *connGsession = get_session_connection ();
+	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
 	dbus_send_signal_int (connsession, "actionAboutToHappen", action);
 
 	RegProgram *regprog = NULL;
 	int a;
 	const int maxwait = 5;
-
+	gboolean retval;
+	
 	gboolean allACK = FALSE;
 	gboolean anyNACK = FALSE;
 
 	if (registered->len == 0) {
 		g_debug ("No connected clients");
-		return TRUE;
+		retval = TRUE;
+		goto unref;
 	}
 	g_debug ("Registered clients = %i\n", registered->len);
 	
@@ -237,7 +236,8 @@ dbus_action (gint action)
 		g_message ("%s", gs->str);
 		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 		g_string_free (gs, TRUE);
-		return FALSE;
+		retval = FALSE;
+		goto unref;
 	}
 	if (!allACK) {
 		GString *gs = g_string_new ("");
@@ -248,10 +248,14 @@ dbus_action (gint action)
 		g_message ("%s", gs->str);
 		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
 		g_string_free (gs, TRUE);
-		return FALSE;
+		retval = FALSE;
+		goto unref;
 	}
 	dbus_send_signal_int (connsession, "performingAction", action);
-	return TRUE;
+	retval = TRUE;
+unref:
+	dbus_g_connection_unref (connGsession);
+	return retval;
 }
 
 static void
@@ -283,6 +287,7 @@ pm_do_action (const gchar *action)
 	if (!boolret)
 		g_warning ("%s failed", action);
 	g_object_unref (G_OBJECT (pm_proxy));
+	dbus_g_connection_unref (system_connection);
 }
 
 /** For this specific hard-drive, set the spin-down timeout
@@ -318,6 +323,7 @@ set_hdd_spindown_device (gchar *device, int minutes)
 	if (!boolret)
 		g_warning ("hard-drive timeout change failed");
 	g_object_unref (G_OBJECT (pm_proxy));
+	dbus_g_connection_unref (system_connection);
 }
 
 /** For each hard-drive in the system, set the spin-down timeout
@@ -356,6 +362,8 @@ set_hdd_spindown (int minutes)
 void
 action_policy_do (gint policy_number)
 {
+	DBusGConnection *connGsession = get_session_connection ();
+	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
@@ -409,6 +417,7 @@ action_policy_do (gint policy_number)
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
 			policy_number);
+	dbus_g_connection_unref (connGsession);
 }
 
 /** Compare the old and the new values, if different or force'd then updates gconf
@@ -429,7 +438,7 @@ compare_bool_set_gconf (const gchar *gconfpath, gboolean *has_dataold, gboolean 
 }
 
 /** Recalculate logic of StateData, without any DBUS, all cached internally
- * Exported DBUS interface values goes here :-)
+ *  Exported DBUS interface values goes here :-)
  *  @param  coldplug		If set, send events even if they are the same
  */
 static void
@@ -1051,6 +1060,7 @@ main (int argc, char *argv[])
 	gint a;
 	GMainLoop *loop;
 	DBusError error;
+	GError *gerror = NULL;
 
 	g_type_init ();
 	if (!g_thread_supported ())
@@ -1117,14 +1127,26 @@ main (int argc, char *argv[])
 
 	loop = g_main_loop_new (NULL, FALSE);
 
-	/* Initialise DBUS SESSION conections */
-	dbus_error_init (&error);
-	connsession = dbus_bus_get (DBUS_BUS_SESSION, &error);
-	if (!connsession) {
-		g_error ("dbus_bus_get DBUS_BUS_SESSION failed: %s", error.message);
-		dbus_error_free (&error);
-		return 1;
-	}
+	/* Initialise DBUS conections */
+	DBusGConnection *connGsystem = get_system_connection ();
+	DBusGConnection *connGsession = get_session_connection ();
+	DBusGProxy *gpm_proxy = dbus_g_proxy_new_for_name (connGsession,
+		GPM_DBUS_SERVICE,
+		GPM_DBUS_PATH, 
+		GPM_DBUS_INTERFACE);
+	DBusGProxy *bus_proxy = dbus_g_proxy_new_for_name (connGsession, 
+		DBUS_SERVICE_DBUS,
+		DBUS_PATH_DBUS,
+		DBUS_INTERFACE_DBUS);
+	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (connGsystem,
+		"org.freedesktop.Hal",
+		"/org/freedesktop/Hal/devices", 
+		"org.freedesktop.Hal.Device");
+
+	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
+	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
+	DBusConnection *connsystem = dbus_g_connection_get_connection (connGsystem);
+
 	/* listening to messages from all objects as no path is specified */
 	dbus_error_init (&error);
 	dbus_bus_add_match (connsession,
@@ -1138,20 +1160,29 @@ main (int argc, char *argv[])
 			    ",sender='" DBUS_SERVICE_DBUS "'"
 			    ",member='NameOwnerChanged'",
 			    NULL);
-
 	if (dbus_error_is_set (&error))
 		g_error ("dbus_bus_add_match Failed. Error says: \n'%s'", error.message);
 	if (!dbus_connection_add_filter (connsession, dbus_signal_filter, loop, NULL))
 		g_warning ("Cannot add signal filter");
-	dbus_error_init (&error);
-	if (dbus_bus_name_has_owner (connsession, GPM_DBUS_SERVICE, &error)) {
+
+	guint request_name_result;
+	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,
+		G_TYPE_STRING, GPM_DBUS_SERVICE,
+		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+		G_TYPE_INVALID,
+		G_TYPE_UINT, &request_name_result,
+		G_TYPE_INVALID))
+	g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, gerror->message);
+	if (request_name_result != 1 /* NEED_TO_FIND_VALUE */) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
+
 	dbus_error_init (&error);
 	dbus_bus_request_name (connsession, GPM_DBUS_SERVICE, 0, &error);
 	if (dbus_error_is_set (&error))
 		g_error ("dbus_bus_acquire_service() failed: '%s'", error.message);
+
 	DBusObjectPathVTable vtable = {
 		NULL,
 		dbus_message_handler,
@@ -1159,12 +1190,6 @@ main (int argc, char *argv[])
 	if (!dbus_connection_register_object_path (connsession, GPM_DBUS_PATH, &vtable, dbus_method_handler))
 		g_warning ("Cannot register method handler");
 
-	/* Initilise HAL DBUS connection */
-	DBusConnection *connsystem = NULL;
-	dbus_error_init (&error);
-	connsystem = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (!connsystem)
-		g_error ("dbus_bus_get DBUS_BUS_SYSTEM failed: %s: %s", error.name, error.message);
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
 	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem))
@@ -1175,12 +1200,6 @@ main (int argc, char *argv[])
 	libhal_ctx_set_device_removed (hal_ctx, device_removed);
 	libhal_ctx_set_device_new_capability (hal_ctx, device_new_capability);
 	libhal_ctx_set_device_condition (hal_ctx, device_condition);
-
-	/* set up SESSION and SYSTEM connections with glib loop */
-	dbus_connection_set_exit_on_disconnect (connsession, FALSE);
-	dbus_connection_setup_with_g_main (connsession, NULL);
-	dbus_connection_set_exit_on_disconnect (connsystem, FALSE);
-	dbus_connection_setup_with_g_main (connsystem, NULL);
 	libhal_device_property_watch_all (hal_ctx, &error);
 
 	objectData = g_ptr_array_new ();
@@ -1214,10 +1233,11 @@ main (int argc, char *argv[])
 	libhal_ctx_free (hal_ctx);
 
 	/* free all DBUS SESSION and SYSTEM connections */
-	dbus_connection_disconnect (connsession);
-	dbus_connection_unref (connsession);
-	dbus_connection_disconnect (connsystem);
-	dbus_connection_unref (connsystem);
+	g_object_unref (G_OBJECT (gpm_proxy));
+	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (bus_proxy));
+	dbus_g_connection_unref (connGsession);
+	dbus_g_connection_unref (connGsystem);
 
 	gpm_exit ();
 	return 0;
