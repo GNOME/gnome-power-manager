@@ -25,7 +25,7 @@ PKG_CHECK_MODULES(GLIB, glib-2.0 gobject-2.0)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
-PKG_CHECK_MODULES(HAL, hal >= 0.5.0)
+PKG_CHECK_MODULES(HAL, hal >= 0.5.3)
 AC_SUBST(HAL_CFLAGS)
 AC_SUBST(HAL_LIBS)
 
@@ -50,7 +50,7 @@ else
     # See if we have sufficiently new libnotify library
     #AC_CHECK_LIB(libnotify, libnotify_removable_context_path, 
     #             have_libnotify=yes, have_libnotify=no)
-    PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.0.1, have_libnotify=yes, have_libnotify=no)
+    PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= 0.2.1, have_libnotify=yes, have_libnotify=no)
 
     if test x$enable_libnotify = xauto ; then
         if test x$have_libnotify = xno ; then

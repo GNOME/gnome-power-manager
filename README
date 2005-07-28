@@ -23,8 +23,8 @@ To build, GNOME Power Manager requires
 	- libhal-0 (from HAL 0.5.2 or later)
 	- libdbus-1 (from D-BUS 0.35 or later)
 	- libdbus-glib-1 (from D-BUS 0.35 or later)
-	- libnotify (from 0.0.1 or later)
-	- notification-daemon (from 0.0.1 or later)
+	- libnotify (from 0.2.1 or later)
+	- notification-daemon (from 0.2.1 or later)
 
 To run, gnome-power-manager requires hald to be running.
 
@@ -33,4 +33,4 @@ For more information, please see http://gnome-power.sourceforge.net/
 === Failing to install gconf schema? ===
 
 The amended configure line is needed when installing to a local gconf root (non root)
-./configure --prefix=/home/hughsie/root --with-gconf-source=xml::/home/hughsie/.gconf
+./configure --prefix=/home/hughsie/root --with-gconf-source=xml::/home/hughsie/.gconf --enable-libnotify
