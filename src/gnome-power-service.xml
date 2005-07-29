@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <node name="/">
-  <interface name="net.sf.PowerManagerInterface">
+  <interface name="net.sf.GnomePower">
 
     <method name="isUserIdle">
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="isRunningOnMains">
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="isActive">
+    <method name="isOnMains">
       <arg type="b" direction="out"/>
     </method>
 
@@ -37,17 +33,21 @@
       <arg type="b" direction="out"/>
     </method>
 
+<!--
     <method name="Wait">
       <arg type="i"/>
       <arg type="i"/>
       <arg type="s"/>
       <arg type="b" direction="out"/>
     </method>
+-->
 
+<!--
     <signal name="mainsStatusChanged"/>
     <signal name="userIdleStatusChanged"/>
     <signal name="actionAboutToHappen"/>
     <signal name="performingAction"/>
+-->
 
   </interface>
 </node>
