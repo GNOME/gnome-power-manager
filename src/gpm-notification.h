@@ -41,10 +41,9 @@ typedef struct {
 } IconData;
 
 void free_icon_structure (void);
-GenericObject * get_main_icon_slot (void);
-GString * get_main_tooltip (void);
-
-/* doesn't belong here, but maybe if gpn gets it's own process it will belong :-) */
+GenericObject *get_main_icon_slot (void);
+GString *get_main_tooltip (void);
+gboolean get_icon_position (gint *x, gint *y);
 void callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
 /* wrapper functions */
