@@ -34,7 +34,7 @@
 
 #define GPM_DBUS_TEST_APP "GNOME Power Test"
 
-DBusGProxy *session_proxy;
+DBusGProxy *gpm_proxy;
 DBusGProxy *signal_proxy;
 
 static gboolean doACK = FALSE;
@@ -65,12 +65,12 @@ signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user
 	gboolean boolret;
 
 	if (doACK)
-		if (!dbus_g_proxy_call (session_proxy, "vetoACK", &error, 
+		if (!dbus_g_proxy_call (gpm_proxy, "vetoACK", &error, 
 								G_TYPE_INT, value, G_TYPE_INVALID,
 								G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 			dbus_glib_error (error);
 	if (doNACK)
-		if (!dbus_g_proxy_call (session_proxy, "vetoNACK", &error, 
+		if (!dbus_g_proxy_call (gpm_proxy, "vetoNACK", &error, 
 				G_TYPE_INT, value, G_TYPE_STRING, "Unsaved file needs to be saved.", G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 			dbus_glib_error (error);
@@ -99,11 +99,11 @@ static void print_usage (void)
 		"		--isActive           Checks to see if user is active\n"
 		" MONITOR\n"
 		"		--monitor            Monitors bus, outputing to consol\n"
-		"		--doNothing          vetoActionRegisterInterest, then does nothing on actionAboutToHappen.\n"
-		"		--doACK              vetoActionRegisterInterest, then does vetoACK on actionAboutToHappen\n"
-		"		--doNACK             vetoActionRegisterInterest, then does vetoNACK on actionAboutToHappen\n"
+		"		--doNothing          ActionRegister, then does nothing on actionAboutToHappen.\n"
+		"		--doACK              ActionRegister, then does vetoACK on actionAboutToHappen\n"
+		"		--doNACK             ActionRegister, then does vetoNACK on actionAboutToHappen\n"
 		" SYNC\n"
-		"		--registerUnregister Abuses vetoActionRegisterInterest and vetoActionUnregisterInterest\n"
+		"		--registerUnregister Abuses ActionRegister and ActionUnregister\n"
 		"		--wrongACK           Abuses ACK and NACK"
 		"\n");
 }
@@ -126,7 +126,7 @@ main (int argc, char **argv)
 
 	/* Get a connection to the session connection */
 	session_connection = get_session_connection ();
-	session_proxy = dbus_g_proxy_new_for_name (session_connection,
+	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 							GPM_DBUS_SERVICE,
 							GPM_DBUS_PATH,
 							GPM_DBUS_INTERFACE);
@@ -179,11 +179,11 @@ main (int argc, char **argv)
 			 * testing sending ACK and NACK before Registering
 			 */
 
-			if (!dbus_g_proxy_call (session_proxy, "vetoACK", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "Ack", &error, 
 									G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
-			if (!dbus_g_proxy_call (session_proxy, "vetoNACK", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "Nack", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_STRING, "It's a Sunday", G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -194,7 +194,7 @@ main (int argc, char **argv)
 			/* 
 			 * testing unregistering before registering
 			 */
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionUnregister", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -202,29 +202,29 @@ main (int argc, char **argv)
 			 * testing double registering
 			 * TODO : this now fails, but it should pass if the flags are different
 			 */
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 									G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 			/* 
 			 * testing double unregistering
 			 */
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionUnregister", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionUnregisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionUnregister", &error, 
 					G_TYPE_INT, GPM_DBUS_ALL, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 			/* 
 			 * testing program quit (should do automatic disconnect)
 			 */
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -233,7 +233,7 @@ main (int argc, char **argv)
 			doMonitor = TRUE;
 			doACK = TRUE;
 			g_print ("Testing ACK with monitor\n");
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -242,7 +242,7 @@ main (int argc, char **argv)
 			doMonitor = TRUE;
 			doNACK = TRUE;
 			g_print ("Testing NACK with monitor\n");
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -250,16 +250,15 @@ main (int argc, char **argv)
 			isOkay = TRUE;
 			doMonitor = TRUE;
 			g_print ("Testing no-response with monitor\n");
-			if (!dbus_g_proxy_call (session_proxy, "vetoActionRegisterInterest", &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
 					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
-		} else if (strcmp (argv[a], "--isActive") == 0 || 
-				 strcmp (argv[a], "--isUserIdle") == 0 || 
-				 strcmp (argv[a], "--isRunningOnMains") == 0) {
+		} else if (strcmp (argv[a], "--isUserIdle") == 0 || 
+			   strcmp (argv[a], "--isRunningOnMains") == 0) {
 			isOkay = TRUE;
 
-			if (!dbus_g_proxy_call (session_proxy, argv[a]+2, &error, 
+			if (!dbus_g_proxy_call (gpm_proxy, argv[a]+2, &error, 
 					G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
@@ -280,6 +279,6 @@ main (int argc, char **argv)
 
 	/* close session connections */
 	g_object_unref (signal_proxy);
-	g_object_unref (session_proxy);
+	g_object_unref (gpm_proxy);
 	return 0;
 }

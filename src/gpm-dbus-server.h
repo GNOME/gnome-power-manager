@@ -29,8 +29,8 @@ typedef struct {
 	GString *reason;
 	gint flags;
 	gint timeout;
-	volatile gboolean isNACK;
-	volatile gboolean isACK;
+	gboolean isNACK;
+	gboolean isACK;
 } RegProgram;
 
 DBusHandlerResult dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user_data);

@@ -75,3 +75,9 @@ else
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
+
+BUILT_SOURCES = \
+	gnome-power-glue.h
+
+gnome-power-glue.h: gnome-power-service.xml
+	libtool --mode=execute dbus-binding-tool --prefix=gpm_object --mode=glib-server --output=gnome-power-glue.h $(srcdir)/gnome-power-service.xml

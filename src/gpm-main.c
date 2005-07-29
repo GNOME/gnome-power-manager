@@ -49,6 +49,35 @@
 
 #include "hal-glib.h"
 
+#define GPMGLIB		FALSE /* doesn't work yet */
+
+#if GPMGLIB
+typedef struct GPMObject GPMObject;
+typedef struct GPMObjectClass GPMObjectClass;
+GType gpm_object_get_type (void);
+struct GPMObject {GObject parent;};
+struct GPMObjectClass {GObjectClass parent;};
+#define GPM_TYPE_OBJECT			(gpm_object_get_type ())
+#define GPM_OBJECT(object)		(G_TYPE_CHECK_INSTANCE_CAST ((object), GPM_TYPE_OBJECT, GPMObject))
+#define GPM_OBJECT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GPM_TYPE_OBJECT, GPMObjectClass))
+#define GPM_IS_OBJECT(object)		(G_TYPE_CHECK_INSTANCE_TYPE ((object), GPM_TYPE_OBJECT))
+#define GPM_IS_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GPM_TYPE_OBJECT))
+#define GPM_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_OBJECT, GPMObjectClass))
+G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
+
+gboolean gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error);
+gboolean gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
+gboolean gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error);
+gboolean gpm_object_is_on_mains (GPMObject *obj, gboolean *ret, GError **error);
+gboolean gpm_object_action_register (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
+gboolean gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error);
+
+#include "gnome-power-glue.h"
+
+static void gpm_object_init (GPMObject *obj) { }
+static void gpm_object_class_init (GPMObjectClass *klass) { }
+#endif
+
 /* static */
 static LibHalContext *hal_ctx;
 
@@ -59,7 +88,59 @@ SetupData setup;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
 
-#if 0
+#if GPMGLIB
+/* 
+ * i know these don't belong here, but I have a problem:
+ *
+ * I need a way to get the connection name, like we used to using
+ *    dbus_message_get_sender (message);
+ * but glib bindings abstract away the message.
+ * walters to fix :-)
+ */
+gboolean 
+gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_ack (%i)", value);
+	return TRUE;
+}
+
+gboolean
+gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_nack (%i, '%s')", value, reason);
+	return TRUE;
+}
+
+gboolean
+gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_is_user_idle ()");
+	return TRUE;
+}
+
+gboolean
+gpm_object_is_on_mains (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_is_on_mains ()");
+	return TRUE;
+}
+
+gboolean
+gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_action_register (%i, '%s')", value, name);
+	return TRUE;
+}
+
+gboolean
+gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_action_unregister (%i)", value);
+	return TRUE;
+}
+#endif
+
+#if LIBHAL_EXPERIMENT
 static void
 signal_handler_PropertyModified (DBusGProxy *proxy, 
 	char *udi, 
@@ -77,7 +158,7 @@ signal_handler_PropertyModified (DBusGProxy *proxy,
 static void
 glib_experiment ()
 {
-#if 0
+#if LIBHAL_EXPERIMENT
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", 
@@ -161,6 +242,7 @@ get_policy_string (const gchar *gconfpath)
 	return value;
 }
 
+#if UBUNTU
 static void
 run_gconf_script (const char *path)
 {
@@ -174,6 +256,7 @@ run_gconf_script (const char *path)
 	} else
 		g_warning ("'%s' is missing!", path);
 }
+#endif
 
 static gboolean
 dbus_action (gint action)
@@ -1067,6 +1150,10 @@ main (int argc, char *argv[])
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 
+#if GPMGLIB
+	dbus_g_object_type_install_info (GPM_TYPE_OBJECT, &dbus_glib_gpm_object_object_info);
+#endif
+
 	dbus_error_init (&error);
 
 	gconf_init (argc, argv, NULL);
@@ -1144,9 +1231,10 @@ main (int argc, char *argv[])
 		"org.freedesktop.Hal.Device");
 
 	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
-	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
 	DBusConnection *connsystem = dbus_g_connection_get_connection (connGsystem);
 
+#if !GPMGLIB
+	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
 	/* listening to messages from all objects as no path is specified */
 	dbus_error_init (&error);
 	dbus_bus_add_match (connsession,
@@ -1165,6 +1253,7 @@ main (int argc, char *argv[])
 	if (!dbus_connection_add_filter (connsession, dbus_signal_filter, loop, NULL))
 		g_warning ("Cannot add signal filter");
 
+#endif
 	guint request_name_result;
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
@@ -1178,6 +1267,10 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
+#if GPMGLIB
+	GPMObject *obj = g_object_new (GPM_TYPE_OBJECT, NULL);
+	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
+#else
 	dbus_error_init (&error);
 	dbus_bus_request_name (connsession, GPM_DBUS_SERVICE, 0, &error);
 	if (dbus_error_is_set (&error))
@@ -1189,6 +1282,7 @@ main (int argc, char *argv[])
 	};
 	if (!dbus_connection_register_object_path (connsession, GPM_DBUS_PATH, &vtable, dbus_method_handler))
 		g_warning ("Cannot register method handler");
+#endif
 
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
