@@ -1,5 +1,11 @@
 2005-07-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gnome-power-service.xml: Comment out stuff we are not using.
+
+	* src/gpm-main.c: Continue playing with glib.
+
+2005-07-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/hal-glib.c, src/hal-glib.h: new files for the glib libhal functions
 
 	* src/Makefile.am: add hal-glib.{c|h} into the build.
@@ -8,7 +14,8 @@
 	easier to read and debug.
 
 	* src/gpm-main.c (pm_do_action, set_hdd_spindown_device): Communicate
-	with PowerManager using the glib bindings. Notice a trend?
+	with PowerManager using the glib bindings. Try and initialise as much
+	as we can with dbus-glib. Notice a trend?
 
 	* src/gpm-main.h: put all constants in gpm-common.c
 
