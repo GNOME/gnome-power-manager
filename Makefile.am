@@ -52,6 +52,7 @@ DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
+	src/gnome-power-glue.h				\
 	gnome-power-preferences.desktop			\
 	gnome-power.schemas
 
