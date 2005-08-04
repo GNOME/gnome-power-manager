@@ -298,7 +298,7 @@ static void
 callback_help (GtkWidget *widget, gpointer user_data)
 {
 	/* for now, show website */
-	gnome_url_show ("http://gnome-power.sourceforge.net/", NULL);
+	gnome_url_show (GPMURL, NULL);
 }
 
 /** Callback for check_changed
@@ -480,8 +480,8 @@ main (int argc, char **argv)
 
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	GConfClient *client = gconf_client_get_default ();
-	gconf_client_add_dir (client, "/apps/gnome-power", GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (client, "/apps/gnome-power", callback_gconf_key_changed, widget, NULL, NULL);
+	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, callback_gconf_key_changed, widget, NULL, NULL);
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
 
 	/* Get the main_window quit */
@@ -492,7 +492,7 @@ main (int argc, char **argv)
 
 #if HAVE_LIBNOTIFY
 	/* initialise libnotify */
-	if (!notify_init (NICENAME))
+	if (!notify_glib_init(NICENAME, NULL))
 		g_error ("Cannot initialise libnotify!");
 #endif
 
