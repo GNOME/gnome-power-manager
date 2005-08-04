@@ -80,10 +80,10 @@ It should use *very little* CPU and memory.
 GNOME Power Manager is written in C, and has additional dependencies of:
 </p>
 <ol>
-<li>hal (0.5.2/CVS better)</li>
-<li>dbus-glib (0.35)</li>
-<li>libnotify (0.0.1)</li>
-<li>notification-daemon (0.0.1)</li>
+<li>hal (0.5.3 better)</li>
+<li>dbus-glib (0.35.2)</li>
+<li>libnotify (0.2.1) [optional, but highly recommended]</li>
+<li>notification-daemon (0.2.1) [optional, but highly recommended]</li>
 </ol>
 
 <h2>Notification Icon</h2>
@@ -154,7 +154,7 @@ The signals are emitted when state is changed or an action is about to happen.
 <pre>status: none</pre>
 
 <h3>actionAboutToHappen (enum action)</h3>
-<p>registered vetoers MUST respond to this signal using vetoACK, vetoNAK, vetoWait 
+<p>registered vetoers MUST respond to this signal using Ack, vetoNAK, vetoWait 
 with ten seconds otherwise they are kicked out as vetoers (to work around 
 broken apps)</p>
 <pre>status: complete</pre>
@@ -193,28 +193,28 @@ Similarly, if Evolution is indexing a database (that would be corrupted if inter
 The signals currently available are:
 </p>
 
-<h3>bool vetoActionRegisterInterest (enum action, gchar localizedAppname)</h3>
+<h3>bool ActionRegister (enum action, gchar localizedAppname)</h3>
 <p>Used for signing up for vetoing a specific action</p>
 <pre>status: complete</pre>
 
-<h3>bool vetoActionUnregisterInterest (enum action)</h3>
+<h3>bool ActionUnregister (enum action)</h3>
 <p>Used to unregister the applications interest in a specific action.
 Note: GPM will automatically unregister clients that disconnect from the bus</p>
 <pre>status: semi-complete, assumes ALL</pre>
 
-<h3>bool vetoACK (enum action)</h3>
+<h3>bool Ack (enum action)</h3>
 Vetoer allows a specific action to take place
 <pre>status: complete</pre>
 
-<h3>bool vetoNACK (enum action, gchar localizedReason)</h3>
+<h3>bool Nack (enum action, gchar localizedReason)</h3>
 <p>Vetoer doesn't allow a specific action to take place; g-p-m SHOULD display a 
 notification to the user that the action cannot take place and what the vetoing 
 application is.</p>
 <pre>status: complete</pre>
 
-<h3>bool vetoWait (enum action, int timeout, gchar localizedReason)</h3>
+<h3>bool Wait (enum action, int timeout, gchar localizedReason)</h3>
 <p>Vetoer asks for a timeout of timeout ms before g-p-m should try to perform the 
-action again. It is legal for the vetoer to call vetoACK before the timeout.
+action again. It is legal for the vetoer to call Ack before the timeout.
 If the (accumulated) delay amounts to more than one second, g-p-m SHOULD 
 display a notification about who is blocking the action.</p>
 <pre>status: not present yet</pre>

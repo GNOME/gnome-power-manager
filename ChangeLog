@@ -1,8 +1,26 @@
+2005-08-04  Richard Hughes  <richard@hughsie.com>
+	* gpm-common.h: Add GPMURL define
+
+	* gpm-dbus-common.{c|h}: Remove the signal stuff we don't use and we 
+	now use the glib method stuff unconditionally, so remove them.
+
+	* gpm-main.c: Use the libnotify glib initialisation stuff.
+	Also start experimenting with GLIB methods.
+
+	* gpm-prefs.c: Use the libnotify glib initialisation stuff.
+
+	* configure.in: Bump to 0.2.1
+
+	* Makefile.am: Add the glib glue stuff.
+
 2005-07-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gnome-power-service.xml: Comment out stuff we are not using.
 
 	* src/gpm-main.c: Continue playing with glib.
+
+	* src/gpm-dbus-common.{c|h}: Remove the obsolete method functions
+	Signals are next on the hit-list.
 
 2005-07-28  Richard Hughes  <richard@hughsie.com>
 
