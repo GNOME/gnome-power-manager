@@ -57,6 +57,14 @@ typedef struct GPMObjectClass GPMObjectClass;
 GType gpm_object_get_type (void);
 struct GPMObject {GObject parent;};
 struct GPMObjectClass {GObjectClass parent;};
+
+enum
+{
+	MAINS_CHANGED,
+	LAST_SIGNAL
+};
+static guint signals[LAST_SIGNAL] = { 0 };
+
 #define GPM_TYPE_OBJECT			(gpm_object_get_type ())
 #define GPM_OBJECT(object)		(G_TYPE_CHECK_INSTANCE_CAST ((object), GPM_TYPE_OBJECT, GPMObject))
 #define GPM_OBJECT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GPM_TYPE_OBJECT, GPMObjectClass))
@@ -75,7 +83,16 @@ gboolean gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret
 #include "gnome-power-glue.h"
 
 static void gpm_object_init (GPMObject *obj) { }
-static void gpm_object_class_init (GPMObjectClass *klass) { }
+static void gpm_object_class_init (GPMObjectClass *klass)
+{
+	signals[MAINS_CHANGED] =
+		g_signal_new ("mains_status_changed",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+}
 #endif
 
 /* static */
@@ -217,10 +234,10 @@ use_libnotify (const char *content, const int urgency)
 		g_warning ("failed to send notification (%s)", content);
 #else
 	GtkWidget *widget;
-	widget = gnome_message_box_new (content, 
-                                GNOME_MESSAGE_BOX_WARNING,
-                                GNOME_STOCK_BUTTON_OK, 
-                                NULL);
+	widget = gnome_message_box_new (content,
+			GNOME_MESSAGE_BOX_WARNING,
+			GNOME_STOCK_BUTTON_OK, 
+			NULL);
 	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
 	gtk_widget_show (widget);
 #endif
@@ -497,6 +514,19 @@ action_policy_do (gint policy_number)
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimout, NULL);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
+/*sexy*/
+
+#if 0
+	DBusGProxy *gpm_proxy = dbus_g_proxy_new_for_name (connGsession,
+		GPM_DBUS_SERVICE,
+		GPM_DBUS_PATH, 
+		GPM_DBUS_INTERFACE);
+
+	dbus_g_proxy_call_no_reply (gpm_proxy, "mainsStatusChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+#endif
+
+
+
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
 			policy_number);
@@ -1200,7 +1230,7 @@ main (int argc, char *argv[])
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
 
 #if HAVE_LIBNOTIFY
-	if (!notify_init (NICENAME))
+	if (!notify_glib_init(NICENAME, NULL))
 		g_error ("Cannot initialise libnotify!");
 #endif
 
@@ -1270,6 +1300,9 @@ main (int argc, char *argv[])
 #if GPMGLIB
 	GPMObject *obj = g_object_new (GPM_TYPE_OBJECT, NULL);
 	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
+
+	g_signal_emit (obj, signals[MAINS_CHANGED], 0, FALSE);
+
 #else
 	dbus_error_init (&error);
 	dbus_bus_request_name (connsession, GPM_DBUS_SERVICE, 0, &error);
