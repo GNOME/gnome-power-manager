@@ -46,6 +46,9 @@
 #define NICENAME 		_("GNOME Power Manager")
 #define NICEDESC 		_("Power Manager for the GNOME desktop")
 
+/* help location */
+#define GPMURL	 		"http://gnome-power.sourceforge.net/"
+
 #if !HAVE_LIBNOTIFY
 #define NOTIFY_URGENCY_CRITICAL	1
 #define NOTIFY_URGENCY_NORMAL	2
