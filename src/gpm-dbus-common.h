@@ -30,15 +30,15 @@
 #define GPM_DBUS_LOGOFF		16
 #define GPM_DBUS_ALL		255
 
-#define	GPM_DBUS_SERVICE			"net.sf.GnomePower"
-#define	GPM_DBUS_PATH				"/net/sf/GnomePower"
-#define	GPM_DBUS_INTERFACE			"net.sf.GnomePower"
+#define	GPM_DBUS_SERVICE		"net.sf.GnomePower"
+#define	GPM_DBUS_PATH			"/net/sf/GnomePower"
+#define	GPM_DBUS_INTERFACE		"net.sf.GnomePower"
 #define	GPM_DBUS_INTERFACE_SIGNAL	"net.sf.GnomePower.Signal"
 #define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
 
-#define	PM_DBUS_SERVICE				"net.sf.PowerManager"
-#define	PM_DBUS_PATH				"/PMObject"
-#define	PM_DBUS_INTERFACE			"net.sf.PowerManagerInterface"
+#define	PM_DBUS_SERVICE			"net.sf.PowerManager"
+#define	PM_DBUS_PATH			"/net/sf/PowerManager"
+#define	PM_DBUS_INTERFACE		"net.sf.PowerManagerInterface"
 #define	PM_DBUS_INTERFACE_SIGNAL	"net.sf.PowerManager.Signal"
 #define	PM_DBUS_INTERFACE_ERROR		"net.sf.PowerManager.Error"
 
@@ -47,14 +47,8 @@
 #if IGNORENONGLIB
 /* remove when all g-p-m is glib only */
 #else
-gboolean dbus_send_signal (DBusConnection *connection, const char *action);
-gboolean dbus_send_signal_string (DBusConnection *connection, const char *action, const char *messagetext);
 gboolean dbus_send_signal_bool (DBusConnection *connection, const char *action, gboolean value);
 gboolean dbus_send_signal_int (DBusConnection *connection, const char *action, gint value);
-gboolean dbus_send_signal_int_string (DBusConnection *connection, const char *action, const gint value, const char *messagetext);
-
-gboolean send_method_string (DBusConnection *connection, const char *action);
-gboolean get_bool_value (DBusConnection *connection, const char *action, gboolean *data_bool);
 #endif
 
 GString *convert_gpmdbus_to_string (gint value);
