@@ -1,0 +1,453 @@
+# Ukrainian translation of gnome-power-manager  
+# Copyright (C) 2005 Free Software Foundation, Inc.  
+# Maxim Dziumanenko <mvd@mylinux.com.ua>, 2005  
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-08-09 13:20+0200\n"
+"PO-Revision-Date: 2005-08-09 18:18+0300\n"
+"Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.ua>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Налаштовування керування живленням"
+
+#: ../gnome-power-preferences.desktop.in.h:2
+#: ../src/preferences.glade.h:14
+msgid "Power Preferences"
+msgstr "параметри живлення"
+
+#: ../gnome-power.schemas.in.h:1
+msgid "If the machine has a LCD (brightness variable) attached."
+msgstr "Чи до комп'ютера підключений LCD-монітор (зі змінною яскравістю)"
+
+#: ../gnome-power.schemas.in.h:2
+msgid "If the machine has a UPS attached"
+msgstr "Чи комп'ютер підключений до UPS"
+
+#: ../gnome-power.schemas.in.h:3
+msgid "If the machine has a display (that can be blanked) attached."
+msgstr "Чи до комп'ютера підключений монітор (який може згасати)."
+
+#: ../gnome-power.schemas.in.h:4
+msgid "If the machine has a hard-drive (that can be spun-down) attached."
+msgstr "Чи комп'ютер має жорсткий диск (який може зупиняти двигун)."
+
+#: ../gnome-power.schemas.in.h:5
+msgid "If the machine has a wireless keyboard attached."
+msgstr "Чи комп'ютер має бездротову клавіатуру."
+
+#: ../gnome-power.schemas.in.h:6
+msgid "If the machine has a wireless mouse attached."
+msgstr "Чи комп'ютер має бездротову мишу."
+
+#: ../gnome-power.schemas.in.h:7
+msgid "If the machine has an AC adapter (usually laptops) then this key should be set."
+msgstr "Чи комп'ютер має адаптер живлення від змінного струму (зазвичай для портативних комп'ютерів)."
+
+#: ../gnome-power.schemas.in.h:8
+msgid "If the machine has an ac_adapter"
+msgstr "Чи комп'ютер має ac_adapter"
+
+#: ../gnome-power.schemas.in.h:9
+msgid "If the machine has an power, sleep or lid buttons then this key should be set."
+msgstr "Чи комп'ютер має кнопки вмикання живлення, засипання або закривання екрану." 
+
+#: ../gnome-power.schemas.in.h:10
+msgid "If the machine has power buttons"
+msgstr "Чи комп'ютер має кнопки вмикання живлення"
+
+#: ../gnome-power.schemas.in.h:11
+msgid "If the machine have primary batteries"
+msgstr "Чи комп'ютер має постійний акумулятор"
+
+#: ../gnome-power.schemas.in.h:12
+msgid "Short description."
+msgstr "Короткий опис."
+
+#: ../gnome-power.schemas.in.h:13
+msgid "The percentage that the powerdevice has to get to be considered \"low enough\" to perform an action."
+msgstr "Відсоток заряду джерела живлення, який розглядається як \"досить низький\" для реагування."
+
+#: ../gnome-power.schemas.in.h:14
+msgid "The percentage that the powerdevice has to get to be considered \"low enough\" to warn the user."
+msgstr "Відсоток заряду джерела живлення, який розглядається як \"досить низький\" для попередження користувача."
+
+#: ../gnome-power.schemas.in.h:15
+msgid "The powerdevice action threshold."
+msgstr "Поріг джерела живлення для реагування."
+
+#: ../gnome-power.schemas.in.h:16
+msgid "The powerdevice warning threshold."
+msgstr "Поріг джерела живлення для попередження."
+
+#: ../gnome-power.schemas.in.h:17
+msgid "User cannot hibernate the machine"
+msgstr "Користувач не може перевести комп'ютер у режим сну"
+
+#: ../gnome-power.schemas.in.h:18
+msgid "User cannot reboot the machine"
+msgstr "Користувач не може перезавантажити комп'ютер"
+
+#: ../gnome-power.schemas.in.h:19
+msgid "User cannot shutdown the machine"
+msgstr "Користувач не може вимкнути комп'ютер"
+
+#: ../gnome-power.schemas.in.h:20
+msgid "User cannot suspend the machine"
+msgstr "Користувач не може призупинити комп'ютер"
+
+#: ../gnome-power.schemas.in.h:21
+msgid "Whether to display a permanent icon"
+msgstr "Чи відображати постійно значок"
+
+#: ../gnome-power.schemas.in.h:22
+msgid "Whether to display icons when devices are at full capacity"
+msgstr "Чи відображати значок коли пристрої повністю заряджені"
+
+#: ../src/eggtrayicon.c:117
+msgid "Orientation"
+msgstr "Орієнтація"
+
+#: ../src/eggtrayicon.c:118
+msgid "The orientation of the tray."
+msgstr "Орієнтація лотка."
+
+#: ../src/gpm-common.c:49
+msgid " until charged"
+msgstr " до заряду"
+
+#: ../src/gpm-common.c:51
+msgid " remaining"
+msgstr " лилось"
+
+#: ../src/gpm-common.c:215
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-common.c:217
+msgid "AC Adapter"
+msgstr "Адаптер живлення від змінного струму"
+
+#: ../src/gpm-common.c:219
+msgid "Logitech mouse"
+msgstr "Миша Logitech"
+
+#: ../src/gpm-common.c:221
+msgid "Logitech keyboard"
+msgstr "Клавіатура Logitech"
+
+#: ../src/gpm-common.c:223
+msgid "Laptop battery"
+msgstr "Батарея портативного комп'ютера"
+
+#: ../src/gpm-common.c:225
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-common.c:226
+msgid "Unknown device"
+msgstr "Невідомий пристрій"
+
+#: ../src/gpm-common.c:287
+msgid "missing"
+msgstr "відсутній"
+
+#: ../src/gpm-common.c:289
+msgid "charging"
+msgstr "заряджається"
+
+#: ../src/gpm-common.c:291
+msgid "discharging"
+msgstr "розряджається"
+
+#: ../src/gpm-common.c:295
+msgid "fully charged"
+msgstr "повністю перезаряджено"
+
+#: ../src/gpm-common.c:298
+msgid "charged"
+msgstr "заряджено"
+
+#: ../src/gpm-common.c:299
+msgid "unknown"
+msgstr "невідомо"
+
+#: ../src/gpm-common.c:318
+msgid "1 minute"
+msgstr "1 хвилина"
+
+#: ../src/gpm-common.c:320
+#, c-format
+msgid "%i minutes"
+msgstr "%i хвилин"
+
+#: ../src/gpm-common.c:326
+msgid "1 hour"
+msgstr "1 година"
+
+#: ../src/gpm-common.c:328
+#, c-format
+msgid "%i hours"
+msgstr "%i годин"
+
+#: ../src/gpm-common.c:332
+msgid "1 hour 1 minute"
+msgstr "1 година 1 хвилина"
+
+#: ../src/gpm-common.c:335
+#, c-format
+msgid "1 hour %i minutes"
+msgstr "1 година %i хвилин"
+
+#: ../src/gpm-common.c:338
+#, c-format
+msgid "%i hours %i minutes"
+msgstr "%i годин %i хвилин"
+
+#: ../src/gpm-dbus-common.c:50
+msgid "screensave"
+msgstr "збереження екрану"
+
+#: ../src/gpm-dbus-common.c:52
+msgid "shutdown"
+msgstr "вимикання"
+
+#: ../src/gpm-dbus-common.c:54
+msgid "software suspend"
+msgstr "призупинення"
+
+#: ../src/gpm-dbus-common.c:56
+msgid "hibernation"
+msgstr "засипання"
+
+#: ../src/gpm-dbus-common.c:58
+msgid "session log off"
+msgstr "завершення сеансу"
+
+#: ../src/gpm-main.c:315
+#, c-format
+msgid ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explaination given is: %s"
+msgstr ""
+"Програма '%s' заважає виконати %s.\n"
+"\n"
+"Пояснення: %s"
+
+#: ../src/gpm-main.c:328
+#, c-format
+msgid "The program '%s' has not returned data that is preventing the %s from occurring."
+msgstr "Програма '%s' не повернула дані, що заважає виконати %s."
+
+#: ../src/gpm-main.c:365
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+msgstr ""
+"Служба PowerManager не запущена.\n"
+"%s не може виконати %s."
+
+#: ../src/gpm-main.c:401
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timout changes."
+msgstr ""
+"Служба PowerManager не запущена.\n"
+"%s не може виконати зміни таймауту жорстких дисків."
+
+#: ../src/gpm-main.c:571
+msgid "AC Adapter has been removed"
+msgstr "Адаптер живлення від змінного струму видалено"
+
+#: ../src/gpm-main.c:848
+msgid "Couldn't obtain list of batteries"
+msgstr "Не вдається отримати список батарей"
+
+#: ../src/gpm-main.c:858
+msgid "Couldn't obtain list of ac_adapters"
+msgstr "Не вдається отримати список ac_adapters"
+
+#: ../src/gpm-main.c:1046
+#, c-format
+msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+msgstr "%s (%i%%) <b>критично низький</b> (%s)"
+
+#: ../src/gpm-main.c:1059
+#, c-format
+msgid "The %s (%i%%) is <b>low</b> (%s)"
+msgstr "%s (%i%%) <b>низький</b> (%s)"
+
+#: ../src/gpm-main.c:1092
+msgid "Power button has been pressed"
+msgstr "Натиснуто кнопку вимикання живлення"
+
+#: ../src/gpm-main.c:1098
+msgid "Sleep button has been pressed"
+msgstr "Натиснуто кнопку засипання"
+
+#: ../src/gpm-main.c:1108
+msgid "Lid has been opened"
+msgstr "Відкрити Lid"
+
+#: ../src/gpm-main.c:1208
+msgid "Please report bugs to richard@hughsie.com\n"
+msgstr "Сповіщайте про помилки richard@hughsie.com\n"
+
+#: ../src/gpm-notification.c:231
+msgid "Computer is running on battery power"
+msgstr "Система живиться від батареї"
+
+#: ../src/gpm-notification.c:233
+msgid "Computer is running on UPS power"
+msgstr "Система живиться від UPS"
+
+#: ../src/gpm-notification.c:235
+msgid "Computer is running on AC power"
+msgstr "Система живиться від мережі змінного струму"
+
+#: ../src/gpm-notification.c:411
+msgid "Unknown Translator"
+msgstr "Невідомий перекладач"
+
+#: ../src/gpm-notification.c:552
+msgid "Reboot"
+msgstr "Перезавантажити"
+
+#: ../src/gpm-notification.c:555
+#: ../src/gpm-prefs.c:384
+msgid "Shutdown"
+msgstr "Вимкнути"
+
+#: ../src/gpm-notification.c:558
+#: ../src/gpm-prefs.c:382
+msgid "Suspend"
+msgstr "Призупинити"
+
+#: ../src/gpm-notification.c:561
+#: ../src/gpm-prefs.c:383
+#: ../src/gpm-prefs.c:387
+msgid "Hibernate"
+msgstr "Заснути"
+
+#: ../src/gpm-prefs.c:380
+msgid "Do nothing"
+msgstr "Нічого не робити"
+
+#: ../src/gpm-prefs.c:381
+msgid "Send warning"
+msgstr "Надіслати попередження"
+
+#: ../src/gpm-prefs.c:386
+msgid "Quick sleep"
+msgstr "Швидке засипання"
+
+#: ../src/preferences.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Загальне</b>"
+
+#: ../src/preferences.glade.h:2
+msgid "<b>Notification area</b>"
+msgstr "<b>Область сповіщення</b>"
+
+#: ../src/preferences.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>Інші параметри</b>"
+
+#: ../src/preferences.glade.h:4
+msgid "<b>Running on AC adapter</b>"
+msgstr "<b>Система живиться від мережі змінного струму</b>"
+
+#: ../src/preferences.glade.h:5
+msgid "<b>Running on batteries</b>"
+msgstr "<b>Система живиться від батарей</b>"
+
+#: ../src/preferences.glade.h:6
+msgid "Advanced"
+msgstr "Додатково"
+
+#: ../src/preferences.glade.h:7
+msgid "Battery is critical when below:"
+msgstr "Рівень заряду батареї критичний нижче:"
+
+#: ../src/preferences.glade.h:8
+msgid "Battery is low when below:"
+msgstr "Рівень заряду батареї низький нижче:"
+
+#: ../src/preferences.glade.h:9
+msgid "Computer sleep type:"
+msgstr "Тип засипання комп'ютера:"
+
+#: ../src/preferences.glade.h:10
+msgid "Display devices that are fully charged"
+msgstr "Відображати пристрої, які неповністю заряджені"
+
+#: ../src/preferences.glade.h:11
+msgid "Display main icon"
+msgstr "Відображати головний значок"
+
+#: ../src/preferences.glade.h:12
+msgid "Double click notification icon:"
+msgstr "Подвійне клацання на значку області сповіщення:"
+
+#: ../src/preferences.glade.h:13
+msgid "Options"
+msgstr "Параметри"
+
+#: ../src/preferences.glade.h:15
+msgid "Put computer to sleep after:"
+msgstr "Переводити комп'ютер у режим сну після:"
+
+#: ../src/preferences.glade.h:16
+msgid "Put display to sleep after:"
+msgstr "Переводити екран у режим сну після:"
+
+#: ../src/preferences.glade.h:17
+msgid "Put hard drive to sleep after:"
+msgstr "Переводити жорсткий диск у режим сну після:"
+
+#: ../src/preferences.glade.h:18
+msgid "Screensaver Properties"
+msgstr "Властивості зберігання екрану"
+
+#: ../src/preferences.glade.h:19
+msgid "Set display brightness:"
+msgstr "Встановити яскравість дисплею:"
+
+#: ../src/preferences.glade.h:20
+msgid "Sleep"
+msgstr "Призупинення"
+
+#: ../src/preferences.glade.h:21
+msgid "When AC power disconnected:"
+msgstr "При відключенні джерела змінного струму:"
+
+#: ../src/preferences.glade.h:22
+msgid "When UPS power critical:"
+msgstr "При низькому заряді UPS:"
+
+#: ../src/preferences.glade.h:23
+msgid "When battery power critical:"
+msgstr "При критичному заряді батареї:"
+
+#: ../src/preferences.glade.h:24
+msgid "When laptop lid is closed:"
+msgstr "При закриванні екрану ноутбука:"
+
+#: ../src/preferences.glade.h:25
+msgid "When power button pressed:"
+msgstr "При натисканні кнопки вимикання живлення:"
+
+#: ../src/preferences.glade.h:26
+msgid "When suspend button pressed:"
+msgstr "При натисканні кнопки засипання:"
+
