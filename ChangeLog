@@ -1,8 +1,24 @@
+2005-08-04  Richard Hughes  <richard@hughsie.com>
+
+	* Update src/pixmaps/gnome-dev-acadapter.png so that it matches the
+	"dfong" bluecurve theme.
+
+	* gpm-main.c: Continue playing with LIBHAL_EXPERIMENT so that we can
+	remove the libhal dep and use the pure glib bindings. With this we are
+	uncovering lots of problems with the glib dbus bindings and so is a good
+	thing :-) If you use LIBHAL_EXPERIMENT then please use CVS dbus, else
+	little will work. Thanks to davidz and walters for all the help so far.
+
+	* src/gpm_marshal.list: Added marshal file for use by glib-genmarshal
+
+	* src/Makefile.am: Add support for gpm_marshall.c and gpm_marshall.h
+
 2005-08-09  Maxim Dziumanenko <mvd@mylinux.ua>
 
 	* configure.in: Added "uk" to ALL_LINGUAS.
 
 2005-08-04  Richard Hughes  <richard@hughsie.com>
+
 	* gpm-common.h: Add GPMURL define
 
 	* gpm-dbus-common.{c|h}: Remove the signal stuff we don't use and we 
