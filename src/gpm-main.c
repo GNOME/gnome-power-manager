@@ -49,7 +49,8 @@
 
 #include "hal-glib.h"
 
-#define GPMGLIB		FALSE /* doesn't work yet */
+#define GPMGLIB			FALSE /* doesn't work yet */
+#define LIBHAL_EXPERIMENT 	FALSE /* needs CVS DBUS */
 
 #if GPMGLIB
 typedef struct GPMObject GPMObject;
@@ -107,7 +108,7 @@ GPtrArray *registered = NULL;
 
 #if GPMGLIB
 /* 
- * i know these don't belong here, but I have a problem:
+ * I know these don't belong here, but I have a problem:
  *
  * I need a way to get the connection name, like we used to using
  *    dbus_message_get_sender (message);
@@ -166,6 +167,7 @@ signal_handler_PropertyModified (DBusGProxy *proxy,
 	gboolean is_added, 
 	gpointer user_data)
 {
+	g_error ("signal_handler_PropertyModified!!");
 	g_print ("udi = %s\n", udi);
 	g_print ("key = %s\n", key);
 	g_print ("is_removed = %i, is_added = %i\n", is_removed, is_added);
@@ -176,21 +178,17 @@ static void
 glib_experiment ()
 {
 #if LIBHAL_EXPERIMENT
+
+#include "gpm_marshal.h"
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", 
-		"/org/freedesktop/Hal/devices", 
+		"/org/freedesktop/Hal/devices/acpi_BAT1", 
 		"org.freedesktop.Hal.Device");
-
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
+		G_TYPE_NONE, G_TYPE_INT, G_TYPE_BOXED, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
-		DBUS_TYPE_INT32, 
-		DBUS_TYPE_ARRAY,
-		DBUS_STRUCT_BEGIN_CHAR_AS_STRING
-		DBUS_TYPE_STRING_AS_STRING
-		DBUS_TYPE_BOOLEAN_AS_STRING
-		DBUS_TYPE_BOOLEAN_AS_STRING
-		DBUS_STRUCT_END_CHAR_AS_STRING, 
-		G_TYPE_INVALID);
+		G_TYPE_INT, G_TYPE_VALUE_ARRAY, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
 		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
 #endif
@@ -1317,6 +1315,7 @@ main (int argc, char *argv[])
 		g_warning ("Cannot register method handler");
 #endif
 
+#if !LIBHAL_EXPERIMENT
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
 	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem))
@@ -1328,6 +1327,7 @@ main (int argc, char *argv[])
 	libhal_ctx_set_device_new_capability (hal_ctx, device_new_capability);
 	libhal_ctx_set_device_condition (hal_ctx, device_condition);
 	libhal_device_property_watch_all (hal_ctx, &error);
+#endif
 
 	objectData = g_ptr_array_new ();
 	registered = g_ptr_array_new ();
@@ -1354,10 +1354,12 @@ main (int argc, char *argv[])
 		g_free (g_ptr_array_index (registered, a));
 	g_ptr_array_free (registered, TRUE);
 
+#if !LIBHAL_EXPERIMENT
 	/* free all HAL stuff */
 	dbus_error_init (&error);
 	libhal_ctx_shutdown (hal_ctx, &error);
 	libhal_ctx_free (hal_ctx);
+#endif
 
 	/* free all DBUS SESSION and SYSTEM connections */
 	g_object_unref (G_OBJECT (gpm_proxy));
