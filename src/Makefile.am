@@ -5,7 +5,8 @@ pkgdata_DATA =						\
 
 EXTRA_DIST =						\
 	$(pkgdata_DATA)					\
-	gnome-power-service.xml
+	gnome-power-service.xml				\
+	gpm_marshal.list
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
@@ -55,6 +56,8 @@ endif
 gnome_power_manager_SOURCES =				\
 	eggtrayicon.h					\
 	eggtrayicon.c					\
+	gpm_marshal.h					\
+	gpm_marshal.c					\
 	hal-glib.h					\
 	hal-glib.c					\
 	gpm-dbus-server.h				\
@@ -77,7 +80,25 @@ gnome_power_manager_LDADD =				\
 endif
 
 BUILT_SOURCES = \
-	gnome-power-glue.h
+	gnome-power-glue.h				\
+	gpm_marshal.c					\
+	gpm_marshal.h
+
+gpm_marshal.h: gpm_marshal.list
+	cd $(srcdir) \
+	&& glib-genmarshal --prefix=gpm_marshal gpm_marshal.list --header >> xgen-gmh \
+	&& (cmp -s xgen-gmh gpm_marshal.h || cp xgen-gmh gpm_marshal.h) \
+	&& rm -f xgen-gmh xgen-gmh~
+
+gpm_marshal.c: gpm_marshal.list
+	cd $(srcdir) \
+	&& glib-genmarshal --prefix=gpm_marshal gpm_marshal.list --body >> xgen-gmc \
+	&& (cmp -s xgen-gmc gpm_marshal.c || cp xgen-gmc gpm_marshal.c) \
+	&& rm -f xgen-gmc xgen-gmc~
 
 gnome-power-glue.h: gnome-power-service.xml
 	libtool --mode=execute dbus-binding-tool --prefix=gpm_object --mode=glib-server --output=gnome-power-glue.h $(srcdir)/gnome-power-service.xml
+
+clean-local:
+	rm -f *~
+	rm -f gpm_marshal.c gpm_marshal.h
