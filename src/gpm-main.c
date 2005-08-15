@@ -50,7 +50,7 @@
 #include "hal-glib.h"
 
 #define GPMGLIB			FALSE	/* doesn't work yet */
-#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
+#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
 
 #if GPMGLIB
 typedef struct GPMObject GPMObject;
@@ -499,10 +499,12 @@ action_policy_do (gint policy_number)
 			GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
 		/* set dpms_suspend to our value */
+#if HAVE_GSCREENSAVER
 		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
+#endif
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
@@ -511,11 +513,20 @@ action_policy_do (gint policy_number)
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
+#if HAVE_GSCREENSAVER
 		/* set dpms_suspend to our value */
 		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
+			
+			
+			
+			
+			
+			
+			
+#endif
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
 /*sexy*/
 

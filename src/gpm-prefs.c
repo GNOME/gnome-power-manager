@@ -214,9 +214,12 @@ gconf_key_action (const char *key)
 		displayIcon = value;
 	else if (strcmp (key, GCONF_ROOT "general/displayIconFull") == 0)
 		displayIconFull = value;
+#if HAVE_GSCREENSAVER
 	/* data is not got from HAL, but from gnome-screensaver */
 	else if (strcmp (key, "/apps/gnome-screensaver/dpms_enabled") == 0)
 		hasData.hasDisplays = value;
+#endif
+		
 	else {
 		g_warning ("Urecognised key [%s]", key);
 		return;
@@ -482,8 +485,9 @@ main (int argc, char **argv)
 	GConfClient *client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, callback_gconf_key_changed, widget, NULL, NULL);
+#if HAVE_GSCREENSAVER
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
-
+#endif
 	/* Get the main_window quit */
 	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
 	if (!widget)
@@ -560,22 +564,26 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
+#if HAVE_GSCREENSAVER
 	hasData.hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+#else
+	hasData.hasDisplays = FALSE;
+#endif
 	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
 	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
 	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
 	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
-	if (!hasData.hasDisplays) {
+	gtk_set_visibility ("button_gnome_screensave", hasData.hasDisplays);
+#if HAVE_GSCREENSAVER
+	if (!hasData.hasDisplays)
 		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
-		gtk_set_visibility ("button_gnome_screensave", FALSE);
-	}
+#endif
 
 	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
 	gconf_key_action (GCONF_ROOT "general/hasBatteries");
 	gconf_key_action (GCONF_ROOT "general/hasAcAdapter");
 	gconf_key_action (GCONF_ROOT "general/hasUPS");
 	gconf_key_action (GCONF_ROOT "general/hasLCD");
-	gconf_key_action (GCONF_ROOT "general/hasDisplays");
 	gconf_key_action (GCONF_ROOT "general/hasUPS");
 	gconf_key_action (GCONF_ROOT "general/hasButtonLid");
 	gconf_key_action (GCONF_ROOT "general/hasButtonSleep");
