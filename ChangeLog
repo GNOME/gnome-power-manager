@@ -3,6 +3,16 @@
 	* Apply patch from Steev Klimaszewski to change a TIMOUT to TIMEOUT
 	- which I blame entirely on this laptop keyboard.
 
+	* configure.in: Add --enable-gscreensaver to configure arguments so that
+	we do not try to read in the gconf values and throw an error if this
+	program is not built. We still need to write the auto check for 
+	gnome-screensaver in configure.in. Spotted by Steev Klimaszewski.
+	
+
+	
+	* gpm-main.c, gpm-main.c: Sprinkle with #if HAVE_GSCREENSAVER so that
+	we disable the un-needed parts.
+
 2005-08-14  Richard Hughes  <richard@hughsie.com>
 
 	* Update src/pixmaps/gnome-dev-acadapter.png so that it matches the
