@@ -33,14 +33,13 @@
 #define	GPM_DBUS_SERVICE		"net.sf.GnomePower"
 #define	GPM_DBUS_PATH			"/net/sf/GnomePower"
 #define	GPM_DBUS_INTERFACE		"net.sf.GnomePower"
+
 #define	GPM_DBUS_INTERFACE_SIGNAL	"net.sf.GnomePower.Signal"
 #define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
 
 #define	PM_DBUS_SERVICE			"net.sf.PowerManager"
 #define	PM_DBUS_PATH			"/net/sf/PowerManager"
 #define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
-#define	PM_DBUS_INTERFACE_SIGNAL	"net.sf.PowerManager.Signal"
-#define	PM_DBUS_INTERFACE_ERROR		"net.sf.PowerManager.Error"
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 

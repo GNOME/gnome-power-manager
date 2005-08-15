@@ -49,8 +49,8 @@
 
 #include "hal-glib.h"
 
-#define GPMGLIB			FALSE	/* doesn't work yet */
-#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
+#define GPMGLIB			TRUE	/* doesn't work yet */
+#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
 
 #if GPMGLIB
 typedef struct GPMObject GPMObject;
