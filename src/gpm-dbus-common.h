@@ -38,7 +38,7 @@
 
 #define	PM_DBUS_SERVICE			"net.sf.PowerManager"
 #define	PM_DBUS_PATH			"/net/sf/PowerManager"
-#define	PM_DBUS_INTERFACE		"net.sf.PowerManagerInterface"
+#define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
 #define	PM_DBUS_INTERFACE_SIGNAL	"net.sf.PowerManager.Signal"
 #define	PM_DBUS_INTERFACE_ERROR		"net.sf.PowerManager.Error"
 
