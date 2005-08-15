@@ -26,8 +26,8 @@
 #include "eggtrayicon.h"
 #include <gnome.h>
 
-/* Set the timout of the libnotify notifications */
-#define NOTIFY_TIMOUT		10
+/* Set the timeout of the libnotify notifications */
+#define NOTIFY_TIMEOUT		10
 
 /* only set true when using the CVS of HAL */
 #define CVSHAL			FALSE

@@ -49,8 +49,8 @@
 
 #include "hal-glib.h"
 
-#define GPMGLIB			FALSE /* doesn't work yet */
-#define LIBHAL_EXPERIMENT 	FALSE /* needs CVS DBUS */
+#define GPMGLIB			FALSE	/* doesn't work yet */
+#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
 
 #if GPMGLIB
 typedef struct GPMObject GPMObject;
@@ -185,8 +185,13 @@ glib_experiment ()
 		"org.freedesktop.Hal", 
 		"/org/freedesktop/Hal/devices/acpi_BAT1", 
 		"org.freedesktop.Hal.Device");
+
+	GType struct_array_type;
+	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
+
+
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
-		G_TYPE_NONE, G_TYPE_INT, G_TYPE_BOXED, G_TYPE_INVALID);
+		G_TYPE_NONE, G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
 		G_TYPE_INT, G_TYPE_VALUE_ARRAY, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
@@ -223,7 +228,7 @@ use_libnotify (const char *content, const int urgency)
 			   urgency,
 			   summary, content,
 			   icon, /* no icon 			*/
-			   TRUE, NOTIFY_TIMOUT,
+			   TRUE, NOTIFY_TIMEOUT,
 			   hints,
 			   NULL, /* no user data 		*/
 			   0);   /* no actions 			*/
@@ -414,7 +419,7 @@ set_hdd_spindown_device (gchar *device, int minutes)
 		dbus_glib_error (error);
 		GString *gs = g_string_new ("bug");
 		g_string_printf (gs, _("PowerManager service is not running.\n"
-				     "%s cannot perform hard-drive timout changes."), NICENAME);
+				     "%s cannot perform hard-drive timeout changes."), NICENAME);
 		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
 		g_string_free (gs, TRUE);
 	}
@@ -494,10 +499,10 @@ action_policy_do (gint policy_number)
 			GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
 		/* set dpms_suspend to our value */
-		gint displaytimout = gconf_client_get_int (client, 
+		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
 		gconf_client_set_int (client, 
-			"/apps/gnome-screensaver/dpms_suspend", displaytimout, NULL);
+			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
@@ -507,10 +512,10 @@ action_policy_do (gint policy_number)
 			GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
 		/* set dpms_suspend to our value */
-		gint displaytimout = gconf_client_get_int (client, 
+		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
 		gconf_client_set_int (client, 
-			"/apps/gnome-screensaver/dpms_suspend", displaytimout, NULL);
+			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
 /*sexy*/
 
