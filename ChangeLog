@@ -5,10 +5,12 @@
 	source substantially. I will be making the GPMGLIB stuff enforced,
 	i.e. removing compatability with the older dbus's.
 
-	* src/gpm-main.c (action_policy_do): Add the commands to lock the screen
-	using gnome-screensaver. This is only a temp fix until g-s supports the
-	required LockScreen () methods when we will switch to using DBUS.
-	Based on a patch by Diego González.
+	* src/gpm-main.c (action_policy_do): New function (gscreensaver_lock).
+	Add the commands to lock the screen using gnome-screensaver. Thanks to
+	Diego González for the basis for this patch.
+
+	* src/gpm-common.h: Add the GS_DBUS_SERVICE, GS_DBUS_PATH, and
+	GS_DBUS_INTERFACE defines here.
 
 2005-08-15  Richard Hughes  <richard@hughsie.com>
 

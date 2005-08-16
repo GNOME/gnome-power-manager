@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * common.h : Common functions shared between modules
+ * gpm-common.h : Common functions shared between modules
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
@@ -27,50 +27,56 @@
 #include <gnome.h>
 
 /* Set the timeout of the libnotify notifications */
-#define NOTIFY_TIMEOUT		10
+#define NOTIFY_TIMEOUT			10
 
 /* only set true when using the CVS of HAL, i.e. ones that have charge_level.percentage */
-#define CVSHAL			FALSE
+#define CVSHAL				FALSE
 
 /* for faster code, with less checks */
-#define G_DISABLE_ASSERT	0
+#define G_DISABLE_ASSERT		0
 
 /* where our settings are stored in the gconf tree */
-#define GCONF_ROOT_SANS_SLASH	"/apps/gnome-power"
-#define GCONF_ROOT		GCONF_ROOT_SANS_SLASH "/"
+#define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power"
+#define GCONF_ROOT			GCONF_ROOT_SANS_SLASH "/"
 
 /* common descriptions of this program */
-#define NICENAME 		_("GNOME Power Manager")
-#define NICEDESC 		_("Power Manager for the GNOME desktop")
+#define NICENAME 			_("GNOME Power Manager")
+#define NICEDESC 			_("Power Manager for the GNOME desktop")
 
 /* help location */
-#define GPMURL	 		"http://gnome-power.sourceforge.net/"
+#define GPMURL	 			"http://gnome-power.sourceforge.net/"
 
 
-#define GPM_DBUS_SCREENSAVE	1
-#define GPM_DBUS_POWEROFF	2
-#define GPM_DBUS_SUSPEND	4
-#define GPM_DBUS_HIBERNATE	8
-#define GPM_DBUS_LOGOFF		16
-#define GPM_DBUS_ALL		255
+#define GPM_DBUS_SCREENSAVE		1
+#define GPM_DBUS_POWEROFF		2
+#define GPM_DBUS_SUSPEND		4
+#define GPM_DBUS_HIBERNATE		8
+#define GPM_DBUS_LOGOFF			16
+#define GPM_DBUS_ALL			255
 
 #define	GPM_DBUS_SERVICE		"net.sf.GnomePower"
 #define	GPM_DBUS_PATH			"/net/sf/GnomePower"
 #define	GPM_DBUS_INTERFACE		"net.sf.GnomePower"
 
+#if !GPMGLIB
 #define	GPM_DBUS_INTERFACE_SIGNAL	"net.sf.GnomePower.Signal"
 #define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
+#endif
 
 #define	PM_DBUS_SERVICE			"net.sf.PowerManager"
 #define	PM_DBUS_PATH			"/net/sf/PowerManager"
 #define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
 
+#define GS_DBUS_SERVICE			"org.gnome.screensaver"
+#define GS_DBUS_PATH			"/org/gnome/screensaver"
+#define GS_DBUS_INTERFACE		"org.gnome.screensaver"
+
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
 #if !HAVE_LIBNOTIFY
-#define NOTIFY_URGENCY_CRITICAL	1
-#define NOTIFY_URGENCY_NORMAL	2
-#define NOTIFY_URGENCY_LOW	3
+#define NOTIFY_URGENCY_CRITICAL		1
+#define NOTIFY_URGENCY_NORMAL		2
+#define NOTIFY_URGENCY_LOW		3
 #endif
 
 typedef enum {

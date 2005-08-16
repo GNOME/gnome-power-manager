@@ -48,7 +48,7 @@
 
 #include "hal-glib.h"
 
-#define GPMGLIB			TRUE	/* doesn't work yet */
+#define GPMGLIB			TRUE	/* doesn't quite work yet */
 #define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
 
 #if GPMGLIB
@@ -205,7 +205,6 @@ glib_experiment ()
 	GType struct_array_type;
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
 
-
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
 		G_TYPE_NONE, G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
@@ -298,7 +297,6 @@ static gboolean
 dbus_action (gint action)
 {
 	DBusGConnection *connGsession = get_session_connection ();
-	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
 #if GPMGLIB
 	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, action);
 #endif
@@ -478,6 +476,37 @@ set_hdd_spindown (int minutes)
 	g_free (device_names);
 }
 
+#if HAVE_GSCREENSAVER
+/** If set to lock on screensave, instruct gnome-screensaver to lock screen
+ *  and return TRUE.
+ *  if set not to lock, then do nothing, and return FALSE.
+ */
+static gboolean
+gscreensaver_lock (void)
+{
+	GConfClient *client = gconf_client_get_default ();
+	gboolean should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+	if (!should_lock)
+		return FALSE;
+	GError *error = NULL;
+	DBusGConnection *session_connection = get_session_connection ();
+	DBusGProxy *gs_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GS_DBUS_SERVICE, GS_DBUS_PATH, GS_DBUS_INTERFACE);
+	gboolean boolret;
+	if (!dbus_g_proxy_call (gs_proxy, "lock", &error, 
+				G_TYPE_INVALID, 
+				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		use_libnotify (_("GNOME Screensaver service is not running.\n"
+			       "Screen cannot be locked."), NOTIFY_URGENCY_NORMAL);
+	}
+	if (!boolret)
+		g_warning ("gnome-screensaver lock failed");
+	g_object_unref (G_OBJECT (gs_proxy));
+	return TRUE;
+}
+#endif
+
 /** Do the action dictated by policy from gconf
  *
  *  @param  policy_number	What to do!
@@ -485,7 +514,6 @@ set_hdd_spindown (int minutes)
 void
 action_policy_do (gint policy_number)
 {
-	DBusGConnection *connGsession = get_session_connection ();
 	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
@@ -498,28 +526,14 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
 #if HAVE_GSCREENSAVER
-		/*
-		 * This code will lock the screen using gnome-screensaver
-		 * this code is only a bodge until g-s supports the dbus method
-		 * LockScreen(), when we will switch to using that.
-		 */
-		gboolean should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
-		if (should_lock)
-			if (!g_spawn_command_line_async ("gnome-screensaver-command --lock", NULL))
-				g_warning ("couldn't execute: gnome-screensaver-command\n");			
+		gscreensaver_lock ();
 #endif
 		if (dbus_action (GPM_DBUS_SUSPEND))
 			pm_do_action ("suspend");
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
 #if HAVE_GSCREENSAVER
-		/*
-		 * This code will lock the screen using gnome-screensaver. See above.
-		 */
-		gboolean should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
-		if (should_lock)
-			if (!g_spawn_command_line_async ("gnome-screensaver-command --lock", NULL))
-				g_warning ("couldn't execute: gnome-screensaver-command\n");			
+		gscreensaver_lock ();
 #endif
 		if (dbus_action (GPM_DBUS_HIBERNATE))
 			pm_do_action ("hibernate");

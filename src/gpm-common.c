@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * common.c : Common functions shared between modules
+ * gpm-common.c : Common functions shared between modules
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
