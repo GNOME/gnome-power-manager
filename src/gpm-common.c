@@ -31,6 +31,54 @@
 
 GPtrArray *objectData;
 
+/** Converts an dbus ENUM to it's string representation 
+ *
+ *  @param  value		The dbus ENUM
+ *  @return				action string, e.g. "Shutdown"
+ */
+gchar *
+convert_dbus_enum_to_string (gint value)
+{
+	if (value == GPM_DBUS_SCREENSAVE)
+		return _("screensave");
+	else if (value == GPM_DBUS_POWEROFF)
+		return _("shutdown");
+	else if (value == GPM_DBUS_SUSPEND)
+		return _("software suspend");
+	else if (value == GPM_DBUS_HIBERNATE)
+		return _("hibernation");
+	else if (value == GPM_DBUS_LOGOFF)
+		return _("session log off");
+	g_warning ("value '%i' not converted", value);
+	return NULL;
+}
+
+/** Converts an dbus ENUMs to it's text representation 
+ * (only really useful for debugging)
+ *
+ *  @param  value		The dbus ENUM's
+ *  @return				action string, e.g. "{GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF}"
+ */
+GString *
+convert_gpmdbus_to_string (gint value)
+{
+	GString *retval = g_string_new ("{");
+	if (value & GPM_DBUS_SCREENSAVE)
+		g_string_append (retval, "GPM_DBUS_SCREENSAVE|");
+	if (value & GPM_DBUS_POWEROFF)
+		g_string_append (retval, "GPM_DBUS_POWEROFF|");
+	if (value & GPM_DBUS_SUSPEND)
+		g_string_append (retval, "GPM_DBUS_SUSPEND|");
+	if (value & GPM_DBUS_HIBERNATE)
+		g_string_append (retval, "GPM_DBUS_HIBERNATE|");
+	if (value & GPM_DBUS_LOGOFF)
+		g_string_append (retval, "GPM_DBUS_LOGOFF|");
+
+	/* replace the final | with } */
+	retval->str[retval->len-1] = '}';
+	return retval;
+}
+
 /** Gets the timestring from a slot object
  *
  *  @param  slotData		the GenericObject reference

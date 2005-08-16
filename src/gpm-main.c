@@ -20,7 +20,7 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  **************************************************************************/
 
@@ -44,13 +44,12 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
-#include "gpm-dbus-common.h"
 #include "gpm-dbus-server.h"
 
 #include "hal-glib.h"
 
 #define GPMGLIB			TRUE	/* doesn't work yet */
-#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
+#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
 
 #if GPMGLIB
 typedef struct GPMObject GPMObject;
@@ -58,10 +57,13 @@ typedef struct GPMObjectClass GPMObjectClass;
 GType gpm_object_get_type (void);
 struct GPMObject {GObject parent;};
 struct GPMObjectClass {GObjectClass parent;};
+GPMObject *obj;
 
 enum
 {
 	MAINS_CHANGED,
+	ACTION_ABOUT_TO_HAPPEN,
+	PERFORMING_ACTION,
 	LAST_SIGNAL
 };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -88,6 +90,20 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 {
 	signals[MAINS_CHANGED] =
 		g_signal_new ("mains_status_changed",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals[ACTION_ABOUT_TO_HAPPEN] =
+		g_signal_new ("action_about_to_happen",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals[PERFORMING_ACTION] =
+		g_signal_new ("performing_action",
 			G_OBJECT_CLASS_TYPE (klass),
 			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
 			0, NULL, NULL,
@@ -283,7 +299,9 @@ dbus_action (gint action)
 {
 	DBusGConnection *connGsession = get_session_connection ();
 	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
-	dbus_send_signal_int (connsession, "actionAboutToHappen", action);
+#if GPMGLIB
+	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, action);
+#endif
 
 	RegProgram *regprog = NULL;
 	int a;
@@ -354,7 +372,9 @@ dbus_action (gint action)
 		retval = FALSE;
 		goto unref;
 	}
-	dbus_send_signal_int (connsession, "performingAction", action);
+#if GPMGLIB
+	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, action);
+#endif
 	retval = TRUE;
 unref:
 	dbus_g_connection_unref (connGsession);
@@ -505,7 +525,9 @@ action_policy_do (gint policy_number)
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 #endif
-		dbus_send_signal_bool (connsession, "mainsStatusChanged", FALSE);
+#if GPMGLIB
+		g_signal_emit (obj, signals[MAINS_CHANGED], 0, FALSE);
+#endif
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
@@ -527,24 +549,12 @@ action_policy_do (gint policy_number)
 			
 			
 #endif
-		dbus_send_signal_bool (connsession, "mainsStatusChanged", TRUE);
-/*sexy*/
-
-#if 0
-	DBusGProxy *gpm_proxy = dbus_g_proxy_new_for_name (connGsession,
-		GPM_DBUS_SERVICE,
-		GPM_DBUS_PATH, 
-		GPM_DBUS_INTERFACE);
-
-	dbus_g_proxy_call_no_reply (gpm_proxy, "mainsStatusChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+#if GPMGLIB
+		g_signal_emit (obj, signals[MAINS_CHANGED], 0, TRUE);
 #endif
-
-
-
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
 			policy_number);
-	dbus_g_connection_unref (connGsession);
 }
 
 /** Compare the old and the new values, if different or force'd then updates gconf
@@ -1168,8 +1178,6 @@ static void print_usage (void)
 	g_print (
 		"\n"
 		"    --disable        Do not perform the action, e.g. suspend\n"
-		"    --has-quit       Include the quit button on the drop-down\n"
-		"    --no-actions     Do not include the actions in the drop-down\n"
 		"    --verbose        Show extra debugging\n"
 		"    --help           Show this information and exit\n"
 		"\n");
@@ -1212,17 +1220,11 @@ main (int argc, char *argv[])
 
 	setup.isVerbose = FALSE;
 	setup.doAction = TRUE;
-	setup.hasQuit = FALSE;
-	setup.hasActions = TRUE;
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--verbose") == 0)
 			setup.isVerbose = TRUE;
 		else if (strcmp (argv[a], "--disable") == 0)
 			setup.doAction = FALSE;
-		else if (strcmp (argv[a], "--has-quit") == 0)
-			setup.hasQuit = TRUE;
-		else if (strcmp (argv[a], "--no-actions") == 0)
-			setup.hasActions = FALSE;
 		else if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();
 			return EXIT_SUCCESS;
@@ -1312,11 +1314,8 @@ main (int argc, char *argv[])
 	}
 
 #if GPMGLIB
-	GPMObject *obj = g_object_new (GPM_TYPE_OBJECT, NULL);
+	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
 	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
-
-	g_signal_emit (obj, signals[MAINS_CHANGED], 0, FALSE);
-
 #else
 	dbus_error_init (&error);
 	dbus_bus_request_name (connsession, GPM_DBUS_SERVICE, 0, &error);

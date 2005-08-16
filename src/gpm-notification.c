@@ -47,7 +47,7 @@ GPtrArray *objectData;
 /** Calculate the color of the charge level bar
  *
  *  @param  level		the chargeLevel of the object, 0..100
- *  @return				the RGB colour
+ *  @return			the RGB colour
  */
 static guint32
 level_bar_get_color (guint level)
@@ -360,11 +360,7 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
 	char *action = g_object_get_data ((GObject*) menuitem, "action");
 	g_debug ("action = '%s'", action);
-	if (strcmp (action, "shutdown") == 0)
-		action_policy_do (ACTION_SHUTDOWN);
-	else if (strcmp (action, "reboot") == 0)
-		action_policy_do (ACTION_REBOOT);
-	else if (strcmp (action, "suspend") == 0)
+	if (strcmp (action, "suspend") == 0)
 		action_policy_do (ACTION_SUSPEND);
 	else if (strcmp (action, "hibernate") == 0)
 		action_policy_do (ACTION_HIBERNATE);
@@ -410,15 +406,15 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	const gchar *documenters[] = { NULL };
 	const gchar *translator = _("Unknown Translator");
 
-	/* no point displaying translator is it's me */
-	if (strcmp (translator, "Unknown Translator") == 0)
-		translator = NULL;
-
 	if (about) {
 		gdk_window_raise (about->window);
 		gdk_window_show (about->window);
 		return;
 	}
+
+	/* no point displaying translator is it's me */
+	if (strcmp (translator, "Unknown Translator") == 0)
+		translator = NULL;
 
 	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 	about = gnome_about_new(NICENAME, VERSION,
@@ -436,25 +432,6 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 			  G_CALLBACK (gtk_widget_destroyed), &about);
 	g_object_add_weak_pointer (G_OBJECT (about), (void**)&(about));
 	gtk_widget_show(about);
-}
-
-/** Callback for quit
- *
- */
-static void
-callback_quit_activated (GtkMenuItem *menuitem, gpointer user_date)
-{
-	g_debug ("callback_quit_activated");
-	GnomeClient *master;
-	GnomeClientFlags flags;
-	master = gnome_master_client ();
-	flags = gnome_client_get_flags (master);
-	if (flags & GNOME_CLIENT_IS_CONNECTED) {
-		gnome_client_set_restart_style (master,	GNOME_RESTART_NEVER);
-		gnome_client_flush (master);
-	}
-	gpn_icon_destroy ();
-	exit (0);
 }
 
 /** Callback for preferences
@@ -526,48 +503,32 @@ menu_main_create (void)
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
-	if (0) {
-		item = gtk_image_menu_item_new_with_label ("LCD Brightness");
-		GtkWidget *image = gtk_image_new ();
-		GdkPixbuf *pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
-		gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-		gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
-		gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-		gtk_widget_show(item);
+#if 0
+	item = gtk_image_menu_item_new_with_label ("LCD Brightness");
+	GtkWidget *image = gtk_image_new ();
+	GdkPixbuf *pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
+	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
+	gtk_widget_show(item);
+	GtkWidget *submenu = gtk_menu_new ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM(item), submenu);
+	menu_add_action_item (submenu, "brightness-000", "0%", "brightness000");
+	menu_add_action_item (submenu, "brightness-025", "25%", "brightness025");
+	menu_add_action_item (submenu, "brightness-050", "50%", "brightness050");
+	menu_add_action_item (submenu, "brightness-075", "75%", "brightness075");
+	menu_add_action_item (submenu, "brightness-100", "100%", "brightness100");
+#endif
 
-		GtkWidget *submenu = gtk_menu_new ();
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM(item), submenu);
-
-		menu_add_action_item (submenu, "brightness-000", "0%", "brightness000");
-		menu_add_action_item (submenu, "brightness-025", "25%", "brightness025");
-		menu_add_action_item (submenu, "brightness-050", "50%", "brightness050");
-		menu_add_action_item (submenu, "brightness-075", "75%", "brightness075");
-		menu_add_action_item (submenu, "brightness-100", "100%", "brightness100");
-	}
-
-	if (setup.hasActions) {
+	/* add the actions if not locked down in gconf */
+	if (!setup.lockdownSuspend || !setup.lockdownHibernate)
 		menu_add_separator_item (eggtrayicon->popup_menu);
-		if (!setup.lockdownReboot)
-			menu_add_action_item (eggtrayicon->popup_menu, "gnome-reboot",
-					      _("Reboot"), "reboot");
-		if (!setup.lockdownShutdown)
-			menu_add_action_item (eggtrayicon->popup_menu, "gnome-shutdown",
-					      _("Shutdown"), "shutdown");
-		if (!setup.lockdownSuspend)
-			menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
-					      _("Suspend"), "suspend");
-		if (!setup.lockdownHibernate)
-			menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
-					      _("Hibernate"), "hibernate");
-	}
-	if (setup.hasQuit) {
-		menu_add_separator_item (eggtrayicon->popup_menu);
-		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
-		g_signal_connect (G_OBJECT (item), "activate", 
-				  G_CALLBACK(callback_quit_activated), (gpointer) eggtrayicon->popup_menu);
-		gtk_widget_show(item);
-		gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-	}
+	if (!setup.lockdownSuspend)
+		menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
+				      _("Suspend"), "suspend");
+	if (!setup.lockdownHibernate)
+		menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
+				      _("Hibernate"), "hibernate");
 }
 
 /** private click release callback

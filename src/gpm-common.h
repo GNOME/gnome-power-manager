@@ -29,11 +29,8 @@
 /* Set the timeout of the libnotify notifications */
 #define NOTIFY_TIMEOUT		10
 
-/* only set true when using the CVS of HAL */
+/* only set true when using the CVS of HAL, i.e. ones that have charge_level.percentage */
 #define CVSHAL			FALSE
-
-/* debug switch for a faster ac_adapter route */
-#define QUICK_AC 		1
 
 /* for faster code, with less checks */
 #define G_DISABLE_ASSERT	0
@@ -48,6 +45,27 @@
 
 /* help location */
 #define GPMURL	 		"http://gnome-power.sourceforge.net/"
+
+
+#define GPM_DBUS_SCREENSAVE	1
+#define GPM_DBUS_POWEROFF	2
+#define GPM_DBUS_SUSPEND	4
+#define GPM_DBUS_HIBERNATE	8
+#define GPM_DBUS_LOGOFF		16
+#define GPM_DBUS_ALL		255
+
+#define	GPM_DBUS_SERVICE		"net.sf.GnomePower"
+#define	GPM_DBUS_PATH			"/net/sf/GnomePower"
+#define	GPM_DBUS_INTERFACE		"net.sf.GnomePower"
+
+#define	GPM_DBUS_INTERFACE_SIGNAL	"net.sf.GnomePower.Signal"
+#define	GPM_DBUS_INTERFACE_ERROR	"net.sf.GnomePower.Error"
+
+#define	PM_DBUS_SERVICE			"net.sf.PowerManager"
+#define	PM_DBUS_PATH			"/net/sf/PowerManager"
+#define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
+
+#define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
 #if !HAVE_LIBNOTIFY
 #define NOTIFY_URGENCY_CRITICAL	1
@@ -125,10 +143,7 @@ typedef struct {
 
 typedef struct {
 	gboolean isVerbose;
-	gboolean useSystemBus;
 	gboolean doAction;
-	gboolean hasQuit;
-	gboolean hasActions;
 	gboolean lockdownReboot;
 	gboolean lockdownShutdown;
 	gboolean lockdownHibernate;
@@ -152,6 +167,9 @@ typedef struct {
 } GenericObject;
 
 void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
+
+GString *convert_gpmdbus_to_string (gint value);
+gchar *convert_dbus_enum_to_string (gint value);
 
 gint convert_string_to_policy (const gchar *gconfstring);
 gint convert_haltype_to_powerdevice (const gchar *type);

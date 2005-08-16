@@ -16,7 +16,7 @@
  * 
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA	02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  **************************************************************************/
 
@@ -24,13 +24,8 @@
 #include <string.h>
 #include <dbus/dbus-glib.h>
 #include "gpm-main.h"
-
+#include "gpm-common.h"
 #include "hal-glib.h"
-
-/* we do not need these defines when all is GLIB */
-#define IGNORENONGLIB	TRUE
-#include "gpm-dbus-common.h"
-#undef IGNORENONGLIB
 
 #define GPM_DBUS_TEST_APP "GNOME Power Test"
 
@@ -133,7 +128,7 @@ main (int argc, char **argv)
 	signal_proxy = dbus_g_proxy_new_for_name (session_connection,
 							GPM_DBUS_SERVICE,
 							GPM_DBUS_PATH,
-							GPM_DBUS_INTERFACE_SIGNAL);
+							GPM_DBUS_INTERFACE);
 
 	dbus_g_proxy_add_signal (signal_proxy, "mainsStatusChanged", 
 		G_TYPE_BOOLEAN, G_TYPE_INVALID);

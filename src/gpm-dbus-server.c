@@ -29,7 +29,7 @@
 #include <dbus/dbus.h>
 #include <dbus/dbus-glib.h>
 #include "gpm-main.h"
-#include "gpm-dbus-common.h"
+#include "gpm-common.h"
 #include "gpm-dbus-server.h"
 
 GPtrArray *registered;
