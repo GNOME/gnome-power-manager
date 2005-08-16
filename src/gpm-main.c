@@ -486,7 +486,7 @@ void
 action_policy_do (gint policy_number)
 {
 	DBusGConnection *connGsession = get_session_connection ();
-	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
+	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
@@ -497,10 +497,30 @@ action_policy_do (gint policy_number)
 			pm_do_action ("restart");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
+#if HAVE_GSCREENSAVER
+		/*
+		 * This code will lock the screen using gnome-screensaver
+		 * this code is only a bodge until g-s supports the dbus method
+		 * LockScreen(), when we will switch to using that.
+		 */
+		gboolean should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+		if (should_lock)
+			if (!g_spawn_command_line_async ("gnome-screensaver-command --lock", NULL))
+				g_warning ("couldn't execute: gnome-screensaver-command\n");			
+#endif
 		if (dbus_action (GPM_DBUS_SUSPEND))
 			pm_do_action ("suspend");
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
+#if HAVE_GSCREENSAVER
+		/*
+		 * This code will lock the screen using gnome-screensaver. See above.
+		 */
+		gboolean should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+		if (should_lock)
+			if (!g_spawn_command_line_async ("gnome-screensaver-command --lock", NULL))
+				g_warning ("couldn't execute: gnome-screensaver-command\n");			
+#endif
 		if (dbus_action (GPM_DBUS_HIBERNATE))
 			pm_do_action ("hibernate");
 	} else if (policy_number == ACTION_SHUTDOWN) {
@@ -514,7 +534,6 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
 		/* spin down the hard-drives */
-		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
@@ -531,7 +550,6 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
-		GConfClient *client = gconf_client_get_default ();
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
 		set_hdd_spindown (value);
