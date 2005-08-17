@@ -549,12 +549,12 @@ action_policy_do (gint policy_number)
 		g_debug ("*DBUS* Now battery powered");
 		/* spin down the hard-drives */
 		gint value = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
+			GCONF_ROOT "policy/battery/sleep_hdd", NULL);
 		set_hdd_spindown (value);
 		/* set dpms_suspend to our value */
 #if HAVE_GSCREENSAVER
 		gint displaytimeout = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/ac/sleep_display", NULL);
+			GCONF_ROOT "policy/battery/sleep_display", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 #endif

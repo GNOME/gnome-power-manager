@@ -544,13 +544,13 @@ main (int argc, char **argv)
 	hscale_setup_action ("hscale_ac_brightness", 
 		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_batteries_computer", 
-		GCONF_ROOT "policy/ac/sleep_computer", POLICY_TIME);
+		GCONF_ROOT "policy/battery/sleep_computer", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_hdd", 
-		GCONF_ROOT "policy/ac/sleep_hdd", POLICY_TIME);
+		GCONF_ROOT "policy/battery/sleep_hdd", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_display", 
-		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
+		GCONF_ROOT "policy/battery/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness", 
-		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/battery/brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_low", 
 		GCONF_ROOT "general/threshold_low", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_critical", 
