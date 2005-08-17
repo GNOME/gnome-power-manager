@@ -1,6 +1,7 @@
 TODO:
 
- * Convert DBUS to glib bindings (wait for 0.35 to hit updates-released)
+ * Convert DBUS bits to glib bindings (wait for 0.35 to hit updates-released)
+ * change api to include a "key" so we can use glib bindings.
 
  * Use gnome-screensaver (use DBUS) for idle time calculation
 
@@ -10,3 +11,7 @@ TODO:
   - No documetation yet, so not a lot to translate.
 
  * Add back sleep type so we know what to do.
+
+ * All saved values in gconf should be in seconds, not minutes.
+
+ * The hasBla gconf keys have to go. DBUS is our friend here I think.

@@ -1,3 +1,20 @@
+2005-08-17  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power.schemas.in: Remove /apps/gnome-power/lockdown/* as we can
+	now use hald. Remove /apps/gnome-power-manager/policy/UPSCritical as we
+	can use BatteryCritical. Improved lots of short descriptions. 
+	Do s/gnome-power/gnome-power-manager and s/AC/ac and 
+	s/Batteries/batteries (and convert StudlyCaps to usual_style) so that
+	we are more consistant as a Gnome application. Fixes suggested by
+	David Zeuthen.
+
+	* gpm-notification.c, gpm-main.c, gpm-common.h: remove lockdown stuff,
+	and also use the new gconf keynames.
+
+	* gpm-prefs.c: Remove combobox_ups_critical
+
+	* TODO: Update.
+
 2005-08-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-dbus-common.{c|h}: Now the GLIB signal stuff is working,
