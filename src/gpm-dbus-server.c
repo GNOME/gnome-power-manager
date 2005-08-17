@@ -24,6 +24,8 @@
 #  include <config.h>
 #endif
 
+#if 0
+
 #include <glib.h>
 #include <string.h>
 #include <dbus/dbus.h>
@@ -321,42 +323,4 @@ dbus_create_error_reply (DBusMessage *message)
 	return reply;
 }
 
-DBusHandlerResult
-dbus_message_handler (DBusConnection *connection, DBusMessage *message, void *user_data)
-{
-	DBusMessage *(*handler) (DBusMessage *, DBusError *) = user_data;
-	DBusMessage *reply = NULL;
-	DBusError error;
-
-	g_return_val_if_fail (handler != NULL, DBUS_HANDLER_RESULT_NOT_YET_HANDLED);
-
-	dbus_error_init (&error);
-
-	/* Invoke the object's handler */
-	reply = handler (message, &error);
-
-	/* If we got an error, turn it into an error message reply */
-	if (dbus_error_is_set (&error)) {
-		if (reply) {
-			dbus_message_unref (reply);
-			reply = dbus_message_new_error (message,
-							GPM_DBUS_INTERFACE_ERROR,
-							"Internal error: got a reply and an error!");
-		} else
-			reply = dbus_message_new_error (message,
-							GPM_DBUS_INTERFACE_ERROR,
-							error.message);
-		dbus_error_free (&error);
-	} else if (!reply)
-		reply = dbus_create_error_reply (message);
-
-	if (!reply)
-		g_error ("Out of memory");
-	else if (!dbus_connection_send (connection, reply, NULL))
-		g_error ("Out of memory");
-
-	if (reply)
-		dbus_message_unref (reply);
-
-	return DBUS_HANDLER_RESULT_HANDLED;
-}
+#endif

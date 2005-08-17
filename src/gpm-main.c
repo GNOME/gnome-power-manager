@@ -30,7 +30,6 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 
 #include <gdk/gdkx.h>
 #include <gnome.h>
@@ -48,10 +47,8 @@
 
 #include "hal-glib.h"
 
-#define GPMGLIB			TRUE	/* doesn't quite work yet */
 #define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
 
-#if GPMGLIB
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
 GType gpm_object_get_type (void);
@@ -110,7 +107,6 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 			g_cclosure_marshal_VOID__BOOLEAN,
 			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
-#endif
 
 /* static */
 static LibHalContext *hal_ctx;
@@ -122,7 +118,6 @@ SetupData setup;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
 
-#if GPMGLIB
 /* 
  * I know these don't belong here, but I have a problem:
  *
@@ -172,7 +167,27 @@ gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError 
 	g_warning ("STUB: gpm_object_action_unregister (%i)", value);
 	return TRUE;
 }
-#endif
+
+gboolean
+gpm_emit_about_to_happen (const gint value)
+{
+	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, value);
+	return TRUE;
+}
+
+gboolean
+gpm_emit_performing_action (const gint value)
+{
+	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, value);
+	return TRUE;
+}
+
+gboolean
+gpm_emit_mains_changed (const gboolean value)
+{
+	g_signal_emit (obj, signals[MAINS_CHANGED], 0, value);
+	return TRUE;
+}
 
 #if LIBHAL_EXPERIMENT
 static void
@@ -277,29 +292,11 @@ get_policy_string (const gchar *gconfpath)
 	return value;
 }
 
-#if UBUNTU
-static void
-run_gconf_script (const char *path)
-{
-	GConfClient *client = gconf_client_get_default ();
-	gchar *command = gconf_client_get_string (client, path, NULL);
-	if (command) {
-		g_debug ("Executing '%s'", command);
-		if (setup.doAction && !g_spawn_command_line_async (command, NULL))
-			g_warning ("Couldn't execute '%s'.", command);
-		g_free (command);
-	} else
-		g_warning ("'%s' is missing!", path);
-}
-#endif
-
 static gboolean
 dbus_action (gint action)
 {
 	DBusGConnection *connGsession = get_session_connection ();
-#if GPMGLIB
-	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, action);
-#endif
+	gpm_emit_about_to_happen (action);
 
 	RegProgram *regprog = NULL;
 	int a;
@@ -370,9 +367,7 @@ dbus_action (gint action)
 		retval = FALSE;
 		goto unref;
 	}
-#if GPMGLIB
-	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, action);
-#endif
+	gpm_emit_performing_action (action);
 	retval = TRUE;
 unref:
 	dbus_g_connection_unref (connGsession);
@@ -558,9 +553,7 @@ action_policy_do (gint policy_number)
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 #endif
-#if GPMGLIB
-		g_signal_emit (obj, signals[MAINS_CHANGED], 0, FALSE);
-#endif
+		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
@@ -581,9 +574,7 @@ action_policy_do (gint policy_number)
 			
 			
 #endif
-#if GPMGLIB
-		g_signal_emit (obj, signals[MAINS_CHANGED], 0, TRUE);
-#endif
+		gpm_emit_mains_changed (TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
 			policy_number);
@@ -654,9 +645,9 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-			use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
+					use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
 				else
-			action_policy_do (policy);
+					action_policy_do (policy);
 				}
 		} else {
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
@@ -1234,10 +1225,7 @@ main (int argc, char *argv[])
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 
-#if GPMGLIB
 	dbus_g_object_type_install_info (GPM_TYPE_OBJECT, &dbus_glib_gpm_object_object_info);
-#endif
-
 	dbus_error_init (&error);
 
 	gconf_init (argc, argv, NULL);
@@ -1306,27 +1294,6 @@ main (int argc, char *argv[])
 	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
 	DBusConnection *connsystem = dbus_g_connection_get_connection (connGsystem);
 
-#if !GPMGLIB
-	DBusConnection *connsession = dbus_g_connection_get_connection (connGsession);
-	/* listening to messages from all objects as no path is specified */
-	dbus_error_init (&error);
-	dbus_bus_add_match (connsession,
-			    "type='signal'"
-			    ",interface='" GPM_DBUS_INTERFACE_SIGNAL "'", 
-			    &error);
-
-	dbus_bus_add_match (connsession,
-			    "type='signal'"
-			    ",interface='" DBUS_INTERFACE_DBUS "'"
-			    ",sender='" DBUS_SERVICE_DBUS "'"
-			    ",member='NameOwnerChanged'",
-			    NULL);
-	if (dbus_error_is_set (&error))
-		g_error ("dbus_bus_add_match Failed. Error says: \n'%s'", error.message);
-	if (!dbus_connection_add_filter (connsession, dbus_signal_filter, loop, NULL))
-		g_warning ("Cannot add signal filter");
-
-#endif
 	guint request_name_result;
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
@@ -1340,22 +1307,8 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
-#if GPMGLIB
 	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
 	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
-#else
-	dbus_error_init (&error);
-	dbus_bus_request_name (connsession, GPM_DBUS_SERVICE, 0, &error);
-	if (dbus_error_is_set (&error))
-		g_error ("dbus_bus_acquire_service() failed: '%s'", error.message);
-
-	DBusObjectPathVTable vtable = {
-		NULL,
-		dbus_message_handler,
-	};
-	if (!dbus_connection_register_object_path (connsession, GPM_DBUS_PATH, &vtable, dbus_method_handler))
-		g_warning ("Cannot register method handler");
-#endif
 
 #if !LIBHAL_EXPERIMENT
 	if (!(hal_ctx = libhal_ctx_new ()))

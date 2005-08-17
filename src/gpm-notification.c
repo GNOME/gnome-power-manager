@@ -289,7 +289,7 @@ get_main_tooltip (void)
  *
  *  @param	powerDevice		the power type, e.g. POWER_UPS
  *  @param	displayFull		should we display icons for full devices?
- *  @return					pointer to the applicable data type
+ *  @return				pointer to the applicable data type
  */
 static GenericObject *
 get_object_of_powertype (int powerDevice, gboolean displayFull)

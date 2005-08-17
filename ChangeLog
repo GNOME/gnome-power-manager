@@ -15,6 +15,10 @@
 
 	* TODO: Update.
 
+	* src/gpm-main.c: Remove the GPMGLIB stuff as we don't compile anymore
+	with !GPMGLIB thanks to all the new code. 
+	Also refactored the signal stuff into nice inline functions.
+
 2005-08-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-dbus-common.{c|h}: Now the GLIB signal stuff is working,
