@@ -190,8 +190,8 @@ gpn_icon_initialise ()
 {
 	GConfClient *client = gconf_client_get_default ();
 	free_icon_structure ();
-	main_icon.show = gconf_client_get_bool (client, GCONF_ROOT "general/displayIcon", NULL);
-	main_icon.showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/displayIconFull", NULL);
+	main_icon.show = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+	main_icon.showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
 }
 
 /* wrapper function */
@@ -214,10 +214,10 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
-	if (strcmp (entry->key, GCONF_ROOT "general/displayIcon") == 0) {
+	if (strcmp (entry->key, GCONF_ROOT "general/display_icon") == 0) {
 		main_icon.show = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "general/displayIconFull") == 0) {
+	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
 		main_icon.showIfFull = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
 	}

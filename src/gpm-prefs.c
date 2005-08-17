@@ -161,9 +161,6 @@ recalc (void)
 	gtk_set_visibility ("combobox_ac_fail", hasData.hasAcAdapter);
 	gtk_set_visibility ("label_ac_fail", hasData.hasAcAdapter);
 
-	gtk_set_visibility ("combobox_ups_critical", hasData.hasUPS);
-	gtk_set_visibility ("label_ups_critical", hasData.hasUPS);
-
 	/* variables */
 	gtk_set_visibility ("hscale_ac_brightness", hasData.hasLCD);
 	gtk_set_visibility ("label_ac_brightness", hasData.hasLCD);
