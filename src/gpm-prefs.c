@@ -210,9 +210,9 @@ gconf_key_action (const char *key)
 		hasData.hasHardDrive = value;
 	else if (strcmp (key, GCONF_ROOT "general/hasLCD") == 0)
 		hasData.hasLCD = value;
-	else if (strcmp (key, GCONF_ROOT "general/displayIcon") == 0)
+	else if (strcmp (key, GCONF_ROOT "general/display_icon") == 0)
 		displayIcon = value;
-	else if (strcmp (key, GCONF_ROOT "general/displayIconFull") == 0)
+	else if (strcmp (key, GCONF_ROOT "general/display_icon_full") == 0)
 		displayIconFull = value;
 #if HAVE_GSCREENSAVER
 	/* data is not got from HAL, but from gnome-screensaver */
@@ -365,7 +365,7 @@ format_value_callback_time (GtkScale *scale, gdouble value)
  *
  *  @param  widgetname		the libglade widget name
  *  @param  policypath		the GConf policy path, 
- *				e.g. "policy/AC/Brightness"
+ *				e.g. "policy/ac/brightness"
  *  @param  policytype		the policy ptye, e.g. POLICY_PERCENT
  */
 static void
@@ -406,7 +406,7 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
  *
  *  @param  widgetname		the libglade widget name
  *  @param  policypath		the GConf policy path, 
- *				e.g. "policy/AC/Brightness"
+ *				e.g. "policy/ac/brightness"
  *  @param  policytype		the policy ptye, e.g. POLICY_PERCENT
  */
 static void
@@ -435,7 +435,7 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
  *
  *  @param  widgetname		the libglade widget name
  *  @param  policypath		the GConf policy path, 
- *				e.g. "policy/AC/Brightness"
+ *				e.g. "policy/ac/brightness"
  */
 static void
 checkbox_setup_action (const char *widgetname, const char *policypath)
@@ -507,8 +507,8 @@ main (int argc, char **argv)
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
 
 	/* get values from gconf */
-	gconf_key_action (GCONF_ROOT "general/displayIcon");
-	gconf_key_action (GCONF_ROOT "general/displayIconFull");
+	gconf_key_action (GCONF_ROOT "general/display_icon");
+	gconf_key_action (GCONF_ROOT "general/display_icon_full");
 
 	/* disable these until the backend code is in place */
 	gtk_set_visibility ("combobox_double_click", FALSE);
@@ -516,47 +516,45 @@ main (int argc, char **argv)
 
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",
-		GCONF_ROOT "general/displayIcon");
+		GCONF_ROOT "general/display_icon");
 	checkbox_setup_action ("checkbutton_display_icon_full",
-		GCONF_ROOT "general/displayIconFull");
+		GCONF_ROOT "general/display_icon_full");
 
 	/* comboboxes */
 	combo_setup_action ("combobox_button_power",
-		GCONF_ROOT "policy/ButtonPower", POLICY_CHOICE);
+		GCONF_ROOT "policy/button_power", POLICY_CHOICE);
 	combo_setup_action ("combobox_button_suspend",
-		GCONF_ROOT "policy/ButtonSuspend", POLICY_CHOICE);
+		GCONF_ROOT "policy/button_suspend", POLICY_CHOICE);
 	combo_setup_action ("combobox_button_lid",
-		GCONF_ROOT "policy/ButtonLid", POLICY_CHOICE);
+		GCONF_ROOT "policy/button_lid", POLICY_CHOICE);
 	combo_setup_action ("combobox_ac_fail",
-		GCONF_ROOT "policy/ACFail", POLICY_CHOICE);
+		GCONF_ROOT "policy/ac_fail", POLICY_CHOICE);
 	combo_setup_action ("combobox_battery_critical",
-		GCONF_ROOT "policy/BatteryCritical", POLICY_CHOICE);
-	combo_setup_action ("combobox_ups_critical",
-		GCONF_ROOT "policy/UPSCritical", POLICY_CHOICE);
+		GCONF_ROOT "policy/battery_critical", POLICY_CHOICE);
 	combo_setup_action ("combobox_sleep_type",
-		GCONF_ROOT "policy/SleepType", POLICY_NONE);
+		GCONF_ROOT "policy/sleep_type", POLICY_NONE);
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
-		GCONF_ROOT "policy/AC/SleepComputer", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_computer", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_hdd", 
-		GCONF_ROOT "policy/AC/SleepHardDrive", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_hdd", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_display", 
-		GCONF_ROOT "policy/AC/SleepDisplay", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_brightness", 
-		GCONF_ROOT "policy/AC/Brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_batteries_computer", 
-		GCONF_ROOT "policy/Batteries/SleepComputer", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_computer", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_hdd", 
-		GCONF_ROOT "policy/Batteries/SleepHardDrive", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_hdd", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_display", 
-		GCONF_ROOT "policy/Batteries/SleepDisplay", POLICY_TIME);
+		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness", 
-		GCONF_ROOT "policy/Batteries/Brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_low", 
-		GCONF_ROOT "general/lowThreshold", POLICY_PERCENT);
+		GCONF_ROOT "general/threshold_low", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_critical", 
-		GCONF_ROOT "general/criticalThreshold", POLICY_PERCENT);
+		GCONF_ROOT "general/threshold_critical", POLICY_PERCENT);
 
 	/* set up upper limit for battery_critical */
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");

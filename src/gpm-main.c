@@ -549,12 +549,12 @@ action_policy_do (gint policy_number)
 		g_debug ("*DBUS* Now battery powered");
 		/* spin down the hard-drives */
 		gint value = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/Batteries/SleepHardDrive", NULL);
+			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
 		set_hdd_spindown (value);
 		/* set dpms_suspend to our value */
 #if HAVE_GSCREENSAVER
 		gint displaytimeout = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
+			GCONF_ROOT "policy/ac/sleep_display", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 #endif
@@ -565,12 +565,12 @@ action_policy_do (gint policy_number)
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
 		gint value = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/AC/SleepHardDrive", NULL);
+			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
 		set_hdd_spindown (value);
 #if HAVE_GSCREENSAVER
 		/* set dpms_suspend to our value */
 		gint displaytimeout = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/Batteries/SleepDisplay", NULL);
+			GCONF_ROOT "policy/ac/sleep_display", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
 			
@@ -650,7 +650,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 		state_data.onBatteryPower = state_datanew.onBatteryPower;
 		if (state_data.onBatteryPower) {
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
-			int policy = get_policy_string (GCONF_ROOT "policy/ACFail");
+			int policy = get_policy_string (GCONF_ROOT "policy/ac_fail");
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
@@ -1124,7 +1124,7 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 			GCONF_ROOT "general/criticalThreshold", NULL);
 			/* critical warning */
 			if (newCharge < criticalThreshold) {
-				int policy = get_policy_string (GCONF_ROOT "policy/BatteryCritical");
+				int policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 				if (policy == ACTION_WARNING) {
 					GString *gs = g_string_new ("");
 					char *device = convert_powerdevice_to_string (slotData->powerDevice);
@@ -1173,13 +1173,13 @@ device_condition (LibHalContext *ctx,
 		type = hal_device_get_string (udi, "button.type");
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
-			int policy = get_policy_string (GCONF_ROOT "policy/ButtonPower");
+			int policy = get_policy_string (GCONF_ROOT "policy/button_power");
 			if (policy == ACTION_WARNING)
 				use_libnotify (_("Power button has been pressed"), NOTIFY_URGENCY_NORMAL);
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
-			int policy = get_policy_string (GCONF_ROOT "policy/ButtonSuspend");
+			int policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			if (policy == ACTION_WARNING)
 				use_libnotify (_("Sleep button has been pressed"), NOTIFY_URGENCY_NORMAL);
 			else
@@ -1189,7 +1189,7 @@ device_condition (LibHalContext *ctx,
 			/* we only do a lid event when the lid is OPENED */
 			value = hal_device_get_bool (udi, "button.state.value");
 			if (value) {
-				int policy = get_policy_string (GCONF_ROOT "policy/ButtonLid");
+				int policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				if (policy == ACTION_WARNING)
 			use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
 				else
@@ -1284,11 +1284,6 @@ main (int argc, char *argv[])
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));
-
-	setup.lockdownReboot = gconf_client_get_bool (client, GCONF_ROOT "lockdown/reboot", NULL);
-	setup.lockdownShutdown = gconf_client_get_bool (client, GCONF_ROOT "lockdown/shutdown", NULL);
-	setup.lockdownHibernate = gconf_client_get_bool (client, GCONF_ROOT "lockdown/hibernate", NULL);
-	setup.lockdownSuspend = gconf_client_get_bool (client, GCONF_ROOT "lockdown/suspend", NULL);
 
 	loop = g_main_loop_new (NULL, FALSE);
 

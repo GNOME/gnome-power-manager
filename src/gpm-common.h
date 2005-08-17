@@ -36,7 +36,7 @@
 #define G_DISABLE_ASSERT		0
 
 /* where our settings are stored in the gconf tree */
-#define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power"
+#define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power-manager"
 #define GCONF_ROOT			GCONF_ROOT_SANS_SLASH "/"
 
 /* common descriptions of this program */
@@ -150,10 +150,6 @@ typedef struct {
 typedef struct {
 	gboolean isVerbose;
 	gboolean doAction;
-	gboolean lockdownReboot;
-	gboolean lockdownShutdown;
-	gboolean lockdownHibernate;
-	gboolean lockdownSuspend;
 } SetupData;
 
 typedef struct {

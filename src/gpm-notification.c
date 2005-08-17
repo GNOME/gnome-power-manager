@@ -520,15 +520,12 @@ menu_main_create (void)
 	menu_add_action_item (submenu, "brightness-100", "100%", "brightness100");
 #endif
 
-	/* add the actions if not locked down in gconf */
-	if (!setup.lockdownSuspend || !setup.lockdownHibernate)
-		menu_add_separator_item (eggtrayicon->popup_menu);
-	if (!setup.lockdownSuspend)
-		menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
-				      _("Suspend"), "suspend");
-	if (!setup.lockdownHibernate)
-		menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
-				      _("Hibernate"), "hibernate");
+	/* add the actions */
+	menu_add_separator_item (eggtrayicon->popup_menu);
+	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
+			      _("Suspend"), "suspend");
+	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
+			      _("Hibernate"), "hibernate");
 }
 
 /** private click release callback
