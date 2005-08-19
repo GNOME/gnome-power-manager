@@ -38,9 +38,7 @@
 /* shared with gpm-main.c */
 HasData has_data;
 StateData state_data;
-SetupData setup;
 
-static IconData main_icon;
 static TrayData *eggtrayicon = NULL;
 GPtrArray *objectData;
 
@@ -188,10 +186,7 @@ icon_destroy (void)
 void
 gpn_icon_initialise ()
 {
-	GConfClient *client = gconf_client_get_default ();
-	free_icon_structure ();
-	main_icon.show = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
-	main_icon.showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
+	eggtrayicon = NULL;
 }
 
 /* wrapper function */
@@ -200,7 +195,7 @@ gpn_icon_destroy ()
 {
 	if (eggtrayicon)
 		icon_destroy ();
-	free_icon_structure ();
+	eggtrayicon = NULL;
 }
 
 /* wrapper function */
@@ -215,10 +210,8 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 		return;
 
 	if (strcmp (entry->key, GCONF_ROOT "general/display_icon") == 0) {
-		main_icon.show = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
-		main_icon.showIfFull = gconf_client_get_bool (client, entry->key, NULL);
 		gpn_icon_update ();
 	}
 }
@@ -269,7 +262,6 @@ get_object_tooltip (GenericObject *slotData)
 GString *
 get_main_tooltip (void)
 {
-	g_return_val_if_fail (main_icon.slotData, NULL);
 	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
 	gint a;
@@ -308,7 +300,7 @@ get_object_of_powertype (int powerDevice, gboolean displayFull)
 }
 
 
-/** Finds the best selection for the "main" icon in the notification area
+/** Finds the best selection for the icon in the notification area
  *
  *  @return  		The pointer to the main icon, or NULL if none needed
  */
@@ -316,40 +308,28 @@ GenericObject *
 get_main_icon_slot (void)
 {
 	GenericObject *slotData;
+	GConfClient *client = gconf_client_get_default ();
+	gboolean showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
 	/*
 	 * Our preferred choice is:
 	 * Battery, UPS, AC_ADAPTER
 	 * PDA and others should never be a main icon.
 	 */
 
-	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, main_icon.showIfFull);
+	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, showIfFull);
 	if (slotData)
 		return slotData;
 
-	slotData = get_object_of_powertype (POWER_UPS, main_icon.showIfFull);
+	slotData = get_object_of_powertype (POWER_UPS, showIfFull);
 	if (slotData)
 		return slotData;
 
-	slotData = get_object_of_powertype (POWER_AC_ADAPTER, main_icon.showIfFull);
+	slotData = get_object_of_powertype (POWER_AC_ADAPTER, showIfFull);
 	if (slotData)
 		return slotData;
 
 	g_warning ("Cannot find preferred main device");
 	return NULL;
-}
-
-/** Frees icon structure
- *
- */
-void
-free_icon_structure (void)
-{
-	g_return_if_fail (&main_icon);
-	g_debug ("free_icon_structure");
-	if (main_icon.tooltip)
-		g_string_free (main_icon.tooltip, TRUE);
-	main_icon.tooltip = NULL;
-	eggtrayicon = NULL;
 }
 
 /** Callback for actions boxes
@@ -452,15 +432,6 @@ callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
 }
 
 static void
-menu_add_separator_item (GtkWidget *menu)
-{
-	GtkWidget *item;
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-}
-
-static void
 menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char *type)
 {
 	/* get image */
@@ -504,6 +475,8 @@ menu_main_create (void)
 	gtk_widget_show (item);
 
 #if 0
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	item = gtk_image_menu_item_new_with_label ("LCD Brightness");
 	GtkWidget *image = gtk_image_new ();
 	GdkPixbuf *pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
@@ -521,7 +494,8 @@ menu_main_create (void)
 #endif
 
 	/* add the actions */
-	menu_add_separator_item (eggtrayicon->popup_menu);
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
 			      _("Suspend"), "suspend");
 	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
@@ -604,34 +578,35 @@ icon_create (void)
 void
 gpn_icon_update (void)
 {
-	g_return_if_fail (&main_icon);
-	if (main_icon.tooltip)
-		g_string_free (main_icon.tooltip, TRUE);
-	main_icon.tooltip = NULL;
 
-	main_icon.slotData = get_main_icon_slot ();
-	if (main_icon.slotData)
-		main_icon.tooltip = get_main_tooltip ();
+	GConfClient *client = gconf_client_get_default ();
+	gboolean iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+	if (iconShow)
+		g_warning ("display_icon is set to false, no icon will be displayed");
 
-	if (main_icon.show && main_icon.slotData) {
+	GenericObject *slotData = get_main_icon_slot ();
+	if (iconShow && slotData) {
 		if (!eggtrayicon) {
+			/* create icon */
 			icon_create ();
 			if (!(eggtrayicon->popup_menu))
 				menu_main_create ();
 		}
-
-		GdkPixbuf *pixbuf = create_icon_pixbuf (main_icon.slotData);
+		/* modify icon */
+		GdkPixbuf *pixbuf = create_icon_pixbuf (slotData);
 		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
 		g_object_unref (pixbuf);
 
-		if (main_icon.tooltip)
-			gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip, 
-				GTK_WIDGET (eggtrayicon->tray_icon), 
-				main_icon.tooltip->str, NULL);
+		GString *tooltip = get_main_tooltip ();
+		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,
+			GTK_WIDGET (eggtrayicon->tray_icon),
+			tooltip->str, NULL);
+		g_string_free (tooltip, TRUE);
 	} else {
+		/* remove icon */
 		if (eggtrayicon) {
 			icon_destroy ();
-			free_icon_structure ();
+			eggtrayicon = NULL;
 		}
 	}
 }

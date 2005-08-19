@@ -32,6 +32,9 @@
 /* only set true when using the CVS of HAL, i.e. ones that have charge_level.percentage */
 #define CVSHAL				FALSE
 
+/* Do no actions. Set to true for testing */
+#define GPM_SIMULATE			TRUE
+
 /* for faster code, with less checks */
 #define G_DISABLE_ASSERT		0
 
@@ -140,11 +143,6 @@ typedef struct {
 	gboolean onBatteryPower;
 	gboolean onUPSPower;
 } StateData;
-
-typedef struct {
-	gboolean isVerbose;
-	gboolean doAction;
-} SetupData;
 
 typedef struct {
 	gboolean present;

@@ -3,8 +3,6 @@
  * gpm.h : gnome-power-manager
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
- * Taken in part from:
- * - notibat (C) 2004 Benjamin Kahn <xkahn@zoned.net>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

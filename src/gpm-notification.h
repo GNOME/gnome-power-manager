@@ -33,13 +33,6 @@ typedef struct {
 	GtkWidget *evbox;
 } TrayData;
 
-typedef struct {
-	gboolean show;
-	gboolean showIfFull;
-	GString *tooltip;
-	GenericObject *slotData;
-} IconData;
-
 void free_icon_structure (void);
 GenericObject *get_main_icon_slot (void);
 GString *get_main_tooltip (void);

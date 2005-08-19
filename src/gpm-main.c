@@ -114,9 +114,9 @@ static LibHalContext *hal_ctx;
 /* no need for IPC with globals */
 HasData has_data;
 StateData state_data;
-SetupData setup;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
+gboolean isVerbose;
 
 /* 
  * I know these don't belong here, but I have a problem:
@@ -381,10 +381,10 @@ pm_do_action (const gchar *action)
 	GError *error = NULL;
 	gboolean boolret;
 
-	if (!setup.doAction) {
-		g_warning ("Ignoring event as setup.doAction FALSE");
-		return;
-	}
+#if GPM_SIMULATE
+	g_warning ("Ignoring event as DO_ACTION FALSE");
+	return;
+#endif
 
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -417,10 +417,10 @@ set_hdd_spindown_device (gchar *device, int minutes)
 	GError *error = NULL;
 	gboolean boolret;
 
-	if (!setup.doAction) {
-		g_warning ("Ignoring event as setup.doAction FALSE");
-		return;
-	}
+#if !GPM_SIMULATE
+	g_warning ("Ignoring event as setup.doAction FALSE");
+	return;
+#endif
 
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -974,7 +974,7 @@ device_removed (LibHalContext *ctx, const char *udi)
 	/* our state has changed, update */
 	update_has_logic (objectData, FALSE);
 	update_state_logic (objectData, FALSE);
-	if (setup.isVerbose)
+	if (isVerbose)
 		genericobject_print (objectData);
 	gpn_icon_update ();
 }
@@ -1238,20 +1238,17 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	setup.isVerbose = FALSE;
-	setup.doAction = TRUE;
+	isVerbose = FALSE;
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--verbose") == 0)
-			setup.isVerbose = TRUE;
-		else if (strcmp (argv[a], "--disable") == 0)
-			setup.doAction = FALSE;
+			isVerbose = TRUE;
 		else if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();
 			return EXIT_SUCCESS;
 		}
 	}
 
-	if (!setup.isVerbose)
+	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
 	glib_experiment ();
@@ -1291,9 +1288,6 @@ main (int argc, char *argv[])
 		"/org/freedesktop/Hal/devices", 
 		"org.freedesktop.Hal.Device");
 
-	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
-	DBusConnection *connsystem = dbus_g_connection_get_connection (connGsystem);
-
 	guint request_name_result;
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
@@ -1311,6 +1305,9 @@ main (int argc, char *argv[])
 	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
 
 #if !LIBHAL_EXPERIMENT
+	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
+	DBusConnection *connsystem = dbus_g_connection_get_connection (connGsystem);
+
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
 	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem))
@@ -1328,7 +1325,7 @@ main (int argc, char *argv[])
 	registered = g_ptr_array_new ();
 
 	coldplug_devices ();
-	if (setup.isVerbose)
+	if (isVerbose)
 		genericobject_print (objectData);
 
 	update_has_logic (objectData, TRUE);
