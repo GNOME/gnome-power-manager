@@ -9,6 +9,26 @@
 	Remove the setupData field as we can now set GPM_SIMULATE (instead of
 	doActions) and verbose is just a global now.
 
+	* gpm-notification.c: Removed the ability to generate our own icons,
+	so we'll rely on the packaged ones. This desision wasn't taken lightly,
+	but a11y considerations meant this had to be removed.
+
+	* gpm-common.c: Add the HAL dbus defines.
+
+	* gpm-main.c: Start adding the CVS HAL method support in. Also 
+	un-#if the GSCREENSAVER stuff - worst case we get a dbus warning if
+	not present.
+
+	* gnome-power.spec.in, doc/index.html: Bump to dep of hal 0.5.4
+
+	* gpm-dbus-test.c: s/GPM_DBUS_POWEROFF/GPM_DBUS_SHUTDOWN to match.
+
+	* gnome-power.schemas.in: Add general/cmd_reboot and 
+	general/cmd_shutdown so that we can get rid of PowerManager.
+
+	* doc/index.html: Remove pmscripts as this has been taken over with
+	pm-utils carried upstream.
+
 2005-08-17  Richard Hughes  <richard@hughsie.com>
 
 	* gnome-power.schemas.in: Remove /apps/gnome-power/lockdown/* as we can
