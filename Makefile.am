@@ -1,7 +1,7 @@
 SUBDIRS = src po
 
 schemadir = $(sysconfdir)/gconf/schemas
-schema_in_files = gnome-power.schemas.in
+schema_in_files = gnome-power-manager.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 @INTLTOOL_SCHEMAS_RULE@
 
@@ -11,7 +11,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 dbusconfdir = $(sysconfdir)/dbus-1/system.d
-dbusconf_DATA = gnome-power.conf
+dbusconf_DATA = gnome-power-manager.conf
 
 man_MANS =						\
 	gnome-power-manager.1				\
@@ -19,9 +19,9 @@ man_MANS =						\
 
 EXTRA_DIST =						\
 	HACKING						\
-	gnome-power.spec				\
-	gnome-power.spec.in				\
-	gnome-power.schemas.in				\
+	gnome-power-manager.spec			\
+	gnome-power-manager.spec.in			\
+	gnome-power-manager.schemas.in			\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
 	$(dbusconf_DATA)				\
@@ -54,7 +54,7 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	src/gnome-power-glue.h				\
 	gnome-power-preferences.desktop			\
-	gnome-power.schemas
+	gnome-power-manager.schemas
 
 MAINTAINERCLEANFILES =					\
 	Makefile.in					\
