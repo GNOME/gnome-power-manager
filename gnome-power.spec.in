@@ -8,13 +8,12 @@ Source: http://dl.sourceforge.net/gnome-power/gnome-power-manager-%{version}.tar
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL: http://gnome-power.sourceforge.net/
 BuildPrereq: libgnomeui-devel, libglade2-devel
-BuildPrereq: hal-devel >= 0.5.3, dbus-devel >= 0.35
+BuildPrereq: hal-devel >= 0.5.4, dbus-devel >= 0.35
 BuildPrereq: gnome-common
 Requires: gnome-mime-data, gnome-icon-theme
-Requires: hal >= 0.5.3, kernel >= 2.6
+Requires: hal >= 0.5.4, kernel >= 2.6
 Requires: dbus >= 0.35, dbus-glib >= 0.35
 Requires: libnotify >= 0.2.1
-Requires: PowerManager
 
 %description
 GNOME Power Manager uses the information and facilities provided by HAL 

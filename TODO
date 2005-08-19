@@ -6,12 +6,15 @@ TODO:
 
  * Use the callbacks in libnotify to do a "What's this?" type help prompt.
 
- * Add back sleep type so we know what to do.
+ * Fix sleep type so we know what to do.
 
  * All saved values in gconf should be in seconds, not minutes.
 
- * The hasBla gconf keys have to go. DBUS is our friend here I think.
+ * The hasBla gconf keys have to go. Calculate in g-p-p
 
  * depend on hal 0.5.4 and get rid of the !CVSHAL stuff
 
  * use hal for suspend and hinernate, and gconf for shutdown and restart
+
+ * hal_device_get_int has to return success value (rather than data - pass this
+   by ref)so we can test for: not exist(battery.charge_level.percentage)
