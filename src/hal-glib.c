@@ -86,7 +86,7 @@ hal_device_get_bool (const gchar *udi, const gchar *key)
 	g_return_val_if_fail (key, FALSE);
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
 	GError *error = NULL;
 	gboolean value = FALSE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
@@ -109,7 +109,7 @@ hal_device_get_string (const gchar *udi, const gchar *key)
 	g_return_val_if_fail (key, NULL);
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
 	GError *error = NULL;
 	gchar *value = NULL;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
@@ -132,7 +132,7 @@ hal_device_get_int (const gchar *udi, const gchar *key)
 	g_return_val_if_fail (key, 0);
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
 	GError *error = NULL;
 	gint value = 0;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
@@ -149,9 +149,9 @@ hal_find_device_capability (const gchar *capability)
 	g_return_val_if_fail (capability, NULL);
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", 
-		"/org/freedesktop/Hal/Manager", 
-		"org.freedesktop.Hal.Manager");
+		HAL_DBUS_SERVICE, 
+		HAL_DBUS_PATH_MANAGER, 
+		HAL_DBUS_INTERFACE_MANAGER);
 	GError *error = NULL;
 	char **value = 0;
 	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 

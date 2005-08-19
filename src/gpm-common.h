@@ -66,9 +66,10 @@
 
 #define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
 #define	HAL_DBUS_PATH_COMPUTER		"/org/freedesktop/Hal/devices/computer"
+#define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
 #define	HAL_DBUS_INTERFACE_PM		"org.freedesktop.Hal.Device.SystemPowerManagement"
 #define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
-
+#define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
 
 #define GS_DBUS_SERVICE			"org.gnome.screensaver"
 #define GS_DBUS_PATH			"/org/gnome/screensaver"
