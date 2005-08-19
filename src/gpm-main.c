@@ -48,6 +48,7 @@
 #include "hal-glib.h"
 
 #define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
+#define USE_POWERMANAGER	FALSE   /* experimental to be FALSE */
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
@@ -213,9 +214,9 @@ glib_experiment ()
 #include "gpm_marshal.h"
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", 
+		HAL_DBUS_SERVICE, 
 		"/org/freedesktop/Hal/devices/acpi_BAT1", 
-		"org.freedesktop.Hal.Device");
+		HAL_DBUS_INTERFACE_DEVICE);
 
 	GType struct_array_type;
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
@@ -295,9 +296,8 @@ get_policy_string (const gchar *gconfpath)
 static gboolean
 dbus_action (gint action)
 {
-	DBusGConnection *connGsession = get_session_connection ();
 	gpm_emit_about_to_happen (action);
-
+#if 0
 	RegProgram *regprog = NULL;
 	int a;
 	const int maxwait = 5;
@@ -367,25 +367,69 @@ dbus_action (gint action)
 		retval = FALSE;
 		goto unref;
 	}
+#endif
 	gpm_emit_performing_action (action);
-	retval = TRUE;
-unref:
-	dbus_g_connection_unref (connGsession);
-	return retval;
+	return TRUE;
 }
 
+#if !USE_POWERMANAGER
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
+ *
+ */
+static void
+hal_suspend (int wakeup)
+{
+	GError *error = NULL;
+	gint ret;
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	if (!dbus_g_proxy_call (pm_proxy, "Suspend", &error, 
+			G_TYPE_INT, wakeup, G_TYPE_INVALID,
+			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend failed (HAL error?)");
+	}
+	if (ret != 0)
+		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend call failed (%i)", ret);
+	g_object_unref (G_OBJECT (pm_proxy));
+	dbus_g_connection_unref (system_connection);
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
+ *
+ */
+static void
+hal_hibernate ()
+{
+	GError *error = NULL;
+	gint ret;
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	if (!dbus_g_proxy_call (pm_proxy, "Hibernate", &error, 
+			G_TYPE_INVALID,
+			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate failed (HAL error?)");
+	}
+	if (ret != 0)
+		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate call failed (%i)", ret);
+	g_object_unref (G_OBJECT (pm_proxy));
+	dbus_g_connection_unref (system_connection);
+}
+#endif
+
+#if USE_POWERMANAGER
+/** Uses PowerManager (depreciated...)
+ *
+ */
 static void
 pm_do_action (const gchar *action)
 {
 	g_debug ("action = %s\n", action);
 	GError *error = NULL;
 	gboolean boolret;
-
-#if GPM_SIMULATE
-	g_warning ("Ignoring event as DO_ACTION FALSE");
-	return;
-#endif
-
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
@@ -405,6 +449,7 @@ pm_do_action (const gchar *action)
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
 }
+#endif
 
 /** For this specific hard-drive, set the spin-down timeout
  *
@@ -416,12 +461,6 @@ set_hdd_spindown_device (gchar *device, int minutes)
 {
 	GError *error = NULL;
 	gboolean boolret;
-
-#if !GPM_SIMULATE
-	g_warning ("Ignoring event as setup.doAction FALSE");
-	return;
-#endif
-
 	DBusGConnection *system_connection = get_system_connection ();
 	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
@@ -471,7 +510,6 @@ set_hdd_spindown (int minutes)
 	g_free (device_names);
 }
 
-#if HAVE_GSCREENSAVER
 /** If set to lock on screensave, instruct gnome-screensaver to lock screen
  *  and return TRUE.
  *  if set not to lock, then do nothing, and return FALSE.
@@ -500,7 +538,20 @@ gscreensaver_lock (void)
 	g_object_unref (G_OBJECT (gs_proxy));
 	return TRUE;
 }
-#endif
+
+static void
+run_gconf_script (const char *path)
+{
+	GConfClient *client = gconf_client_get_default ();
+	gchar *command = gconf_client_get_string (client, path, NULL);
+	if (command) {
+		g_debug ("Executing '%s'", command);
+		if (!g_spawn_command_line_async (command, NULL))
+			g_warning ("Couldn't execute '%s'.", command);
+		g_free (command);
+	} else
+		g_warning ("'%s' is missing!", path);
+}
 
 /** Do the action dictated by policy from gconf
  *
@@ -509,33 +560,45 @@ gscreensaver_lock (void)
 void
 action_policy_do (gint policy_number)
 {
+#if !GPM_SIMULATE
+	g_warning ("Ignoring action_policy_do event as simulating!");
+	return;
+#endif
 	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
 		g_warning ("*ACTION* Send warning should be done locally!");
-	} else if (policy_number == ACTION_REBOOT) {
+	} else if (policy_number == ACTION_REBOOT && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Reboot");
-		if (dbus_action (GPM_DBUS_POWEROFF))
-			pm_do_action ("restart");
-	} else if (policy_number == ACTION_SUSPEND) {
+#if !USE_POWERMANAGER
+		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
+#else
+		pm_do_action ("restart");
+#endif
+	} else if (policy_number == ACTION_SUSPEND && dbus_action (GPM_DBUS_SUSPEND)) {
 		g_debug ("*ACTION* Suspend");
-#if HAVE_GSCREENSAVER
 		gscreensaver_lock ();
+#if !USE_POWERMANAGER
+		hal_suspend (0);
+#else
+		pm_do_action ("suspend");
 #endif
-		if (dbus_action (GPM_DBUS_SUSPEND))
-			pm_do_action ("suspend");
-	} else if (policy_number == ACTION_HIBERNATE) {
+	} else if (policy_number == ACTION_HIBERNATE && dbus_action (GPM_DBUS_HIBERNATE)) {
 		g_debug ("*ACTION* Hibernate");
-#if HAVE_GSCREENSAVER
 		gscreensaver_lock ();
+#if !USE_POWERMANAGER
+		hal_hibernate ();
+#else
+		pm_do_action ("hibernate");
 #endif
-		if (dbus_action (GPM_DBUS_HIBERNATE))
-			pm_do_action ("hibernate");
-	} else if (policy_number == ACTION_SHUTDOWN) {
+	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Shutdown");
-		if (dbus_action (GPM_DBUS_POWEROFF))
-			pm_do_action ("shutdown");
+#if !USE_POWERMANAGER
+		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
+#else
+		pm_do_action ("shutdown");
+#endif
 	} else if (policy_number == ACTION_BATTERY_CHARGE) {
 		g_debug ("*ACTION* Battery Charging");
 	} else if (policy_number == ACTION_BATTERY_DISCHARGE) {
@@ -543,24 +606,25 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
 		/* spin down the hard-drives */
+#if USE_POWERMANAGER
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_hdd", NULL);
 		set_hdd_spindown (value);
+#endif
 		/* set dpms_suspend to our value */
-#if HAVE_GSCREENSAVER
 		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_display", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
-#endif
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
+#if USE_POWERMANAGER
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
 		set_hdd_spindown (value);
-#if HAVE_GSCREENSAVER
+#endif
 		/* set dpms_suspend to our value */
 		gint displaytimeout = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_display", NULL);
@@ -573,7 +637,6 @@ action_policy_do (gint policy_number)
 			
 			
 			
-#endif
 		gpm_emit_mains_changed (TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
