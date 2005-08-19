@@ -185,7 +185,7 @@ main (int argc, char **argv)
 
 		} else if (strcmp (argv[a], "--registerUnregister") == 0) {
 			isOkay = TRUE;
-			g_print ("Registering and Unregistering GPM_DBUS_POWEROFF\n");
+			g_print ("Registering and Unregistering GPM_DBUS_SHUTDOWN\n");
 			/* 
 			 * testing unregistering before registering
 			 */
@@ -198,11 +198,11 @@ main (int argc, char **argv)
 			 * TODO : this now fails, but it should pass if the flags are different
 			 */
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+					G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-									G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+									G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 									G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 			/* 
@@ -220,7 +220,7 @@ main (int argc, char **argv)
 			 * testing program quit (should do automatic disconnect)
 			 */
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+					G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doACK") == 0) {
@@ -229,7 +229,7 @@ main (int argc, char **argv)
 			doACK = TRUE;
 			g_print ("Testing ACK with monitor\n");
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+					G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doNACK") == 0) {
@@ -238,7 +238,7 @@ main (int argc, char **argv)
 			doNACK = TRUE;
 			g_print ("Testing NACK with monitor\n");
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+					G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--doNothing") == 0) {
@@ -246,7 +246,7 @@ main (int argc, char **argv)
 			doMonitor = TRUE;
 			g_print ("Testing no-response with monitor\n");
 			if (!dbus_g_proxy_call (gpm_proxy, "ActionRegister", &error, 
-					G_TYPE_INT, GPM_DBUS_POWEROFF | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
+					G_TYPE_INT, GPM_DBUS_SHUTDOWN | GPM_DBUS_LOGOFF, G_TYPE_STRING, GPM_DBUS_TEST_APP, G_TYPE_INVALID,
 					G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 				dbus_glib_error (error);
 		} else if (strcmp (argv[a], "--isUserIdle") == 0 || 

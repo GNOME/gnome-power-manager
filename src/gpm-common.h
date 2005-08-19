@@ -30,7 +30,7 @@
 #define NOTIFY_TIMEOUT			10
 
 /* only set true when using the CVS of HAL, i.e. ones that have charge_level.percentage */
-#define CVSHAL				FALSE
+#define CVSHAL				TRUE
 
 /* Do no actions. Set to true for testing */
 #define GPM_SIMULATE			TRUE
@@ -50,7 +50,7 @@
 #define GPMURL	 			"http://gnome-power.sourceforge.net/"
 
 #define GPM_DBUS_SCREENSAVE		1
-#define GPM_DBUS_POWEROFF		2
+#define GPM_DBUS_SHUTDOWN		2
 #define GPM_DBUS_SUSPEND		4
 #define GPM_DBUS_HIBERNATE		8
 #define GPM_DBUS_LOGOFF			16
@@ -63,6 +63,12 @@
 #define	PM_DBUS_SERVICE			"net.sf.PowerManager"
 #define	PM_DBUS_PATH			"/net/sf/PowerManager"
 #define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
+
+#define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
+#define	HAL_DBUS_PATH_COMPUTER		"/org/freedesktop/Hal/devices/computer"
+#define	HAL_DBUS_INTERFACE_PM		"org.freedesktop.Hal.Device.SystemPowerManagement"
+#define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
+
 
 #define GS_DBUS_SERVICE			"org.gnome.screensaver"
 #define GS_DBUS_PATH			"/org/gnome/screensaver"

@@ -41,7 +41,7 @@ convert_dbus_enum_to_string (gint value)
 {
 	if (value == GPM_DBUS_SCREENSAVE)
 		return _("screensave");
-	else if (value == GPM_DBUS_POWEROFF)
+	else if (value == GPM_DBUS_SHUTDOWN)
 		return _("shutdown");
 	else if (value == GPM_DBUS_SUSPEND)
 		return _("software suspend");
@@ -65,8 +65,8 @@ convert_gpmdbus_to_string (gint value)
 	GString *retval = g_string_new ("{");
 	if (value & GPM_DBUS_SCREENSAVE)
 		g_string_append (retval, "GPM_DBUS_SCREENSAVE|");
-	if (value & GPM_DBUS_POWEROFF)
-		g_string_append (retval, "GPM_DBUS_POWEROFF|");
+	if (value & GPM_DBUS_SHUTDOWN)
+		g_string_append (retval, "GPM_DBUS_SHUTDOWN|");
 	if (value & GPM_DBUS_SUSPEND)
 		g_string_append (retval, "GPM_DBUS_SUSPEND|");
 	if (value & GPM_DBUS_HIBERNATE)
