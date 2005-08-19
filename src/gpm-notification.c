@@ -42,29 +42,6 @@ StateData state_data;
 static TrayData *eggtrayicon = NULL;
 GPtrArray *objectData;
 
-/** Calculate the color of the charge level bar
- *
- *  @param  level		the chargeLevel of the object, 0..100
- *  @return			the RGB colour
- */
-static guint32
-level_bar_get_color (guint level)
-{
-	guint8 red, green;
-	gfloat c;
-
-	red = green = 204; /* 0xCC */
-	if (level < 50) {
-		c = ((gfloat) level) / 50.0;
-		green = (guint8) (gfloat) (204.0 * c);
-	}
-	if (level > 50) {
-		c = (100.0 - (gfloat) level) / 50.0;
-		red = (guint8) (gfloat) (204.0 * c);
-	}
-	return (0xff + red * 0x01000000 + green * 0x00010000);
-}
-
 /** Get a image (pixbuf) trying the theme first, falling back to locally 
  * if not present. This means we do not have to check in configure.in for lots
  * of obscure icons.
@@ -104,11 +81,7 @@ create_icon_pixbuf (GenericObject *slotData)
 {
 	g_assert (slotData);
 	GdkPixbuf *pixbuf = NULL;
-	GError *err = NULL;
-	/** TODO: make this set from gconf */
-	const gboolean alwaysUseGenerated = FALSE;
-
-	if (!alwaysUseGenerated && slotData->powerDevice == POWER_PRIMARY_BATTERY) {
+	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
 		int num;
 		gchar *computed_name;
 
@@ -125,40 +98,6 @@ create_icon_pixbuf (GenericObject *slotData)
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
-	} else {
-		gchar *name = convert_powerdevice_to_gnomeicon (slotData->powerDevice);
-		g_assert (name);
-		pixbuf = gtk_icon_theme_fallback (name, 24);
-		g_assert (pixbuf);
-
-		/* merge with AC emblem if needed */
-		if (slotData->isCharging) {
-			GdkPixbuf *emblem = gdk_pixbuf_new_from_file (GPM_DATA "emblem-ac.png", &err);
-			g_assert (emblem);
-			gdk_pixbuf_composite (emblem, pixbuf, 0, 0, 24, 24, 0, 0, 1.0, 1.0, GDK_INTERP_BILINEAR, 0xFF);
-			g_object_unref (emblem);
-		}
-		
-		/* merge with level bar if needed */
-		if (slotData->isRechargeable) {
-			GdkPixbuf *emblem = gdk_pixbuf_new_from_file (GPM_DATA "emblem-bar.png", &err);
-			g_assert (emblem);
-			gdk_pixbuf_composite (emblem, pixbuf, 0, 0, 24, 24, 0, 0, 1.0, 1.0, GDK_INTERP_BILINEAR, 0xFF);
-			g_object_unref (emblem);
-
-			/* have to work out for all objects for multibattery setups */
-			GenericObject slotDataVirt = {.percentageCharge = 100};
-			create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
-
-			gfloat c = ((gfloat) slotDataVirt.percentageCharge) / 100.0;
-			guint h = (guint) (19.0 * c);
-			if (h < 1) h = 1;
-			if (h > 19) h = 19;
-
-			GdkPixbuf *bar = gdk_pixbuf_new_subpixbuf (pixbuf, 20, 22 - h, 3, h);
-			gdk_pixbuf_fill (bar, level_bar_get_color (slotDataVirt.percentageCharge));
-			g_object_unref (bar);
-		}
 	}
 
 	return pixbuf;
