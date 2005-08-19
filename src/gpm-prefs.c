@@ -383,7 +383,8 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
 	} else if (policytype == POLICY_NONE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Quick sleep"));
+		g_warning ("%s (%p) seems not to work", widgetname, widget);
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 	}
 
