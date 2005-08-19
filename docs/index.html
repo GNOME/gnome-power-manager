@@ -80,7 +80,7 @@ It should use *very little* CPU and memory.
 GNOME Power Manager is written in C, and has additional dependencies of:
 </p>
 <ol>
-<li>hal (0.5.3 better)</li>
+<li>hal (0.5.4 better)</li>
 <li>dbus-glib (0.35.2)</li>
 <li>libnotify (0.2.1) [optional, but highly recommended]</li>
 <li>notification-daemon (0.2.1) [optional, but highly recommended]</li>
@@ -264,19 +264,13 @@ Hardware keys are located at /apps/power-manager/general
 <p>
 GnomePower uses PowerManager to launch scripts.
 <b>PowerManager is a temporary bodge!</b>
-When HAL 0.5.4 is released with actions support, PowerManager will become obsolete.
+When HAL 0.5.4 is released (really soon!) with actions support, PowerManager will become obsolete.
 </p>
 <p>
 PowerManager is a simple DBUS daemon that runs as the root user and holds the system connection name net.sf.PowerManager.
 Only root is allowed to run this program, (this can be changed in /etc/dbus-1/system.d/PowerManager.conf) as it's entire purpose is to allow non-root users to run the scripts /usr/sbin/pm-*.
 This is also configurable in the above PowerManager.conf config file.
 By default, all users are allowed to connect to the system DBUS net.sf.PowerManager connection.
-</p>
-<center>
-<img src="images/libnotify-powermanager.png" alt="[img]"/>
-</center>
-<p class="caption">
-At the moment, GNOME Power Manager requires the PowerManager system service to be running.
 </p>
 
 <p>
@@ -291,41 +285,6 @@ bool hibernate ()
 bool suspend ()
 bool hdparm (timeout, device)
 </pre>
-
-<p>
-You can lock out specific users, or groups of users by adding to /etc/dbus-1/system.d/PowerManager.conf:
-</p>
-<pre>
-        &lt;policy user="suzy"&gt;
-                &lt;deny send_destination="net.sf.PowerManager"/&gt;
-                &lt;deny send_interface="net.sf.PowerManager"/&gt;
-        &lt;/policy&gt;</pre>
-
-<h2>pmscripts</h2>
-
-<p>
-pmscripts is the package that installs the scripts:
-</p>
-
-<pre>
-/usr/sbin/pm-shutdown
-/usr/sbin/pm-hibernate
-/usr/sbin/pm-restart
-/usr/sbin/pm-suspend
-</pre>
-
-<p>
-These scripts can be changed by distributions, to better fit in with the existing power-management infrastructure. e.g. Gentoo can have the fast-shutdown feature enabled, but Fedora may want to use the more conventional /sbin/shutdown -h now.
-In a similar way, the hibernate script could read a config file and use different methods for hibernation, e.g. suspend2, or software suspend, or some other method.
-</p>
-<p>
-It is expected that certain values are passed down to the pmscripts from HAL, for example PMSYSTEM="ACPI" so that specific things can be tested for.
-At the moment we do not pass variables, but it's fairly trivial to find out these things here anyway.
-</p>
-<p>
-These scripts are intended to be used by the root user only, or a daemon running as root.
-They could be a symlink if required, this is left to the packager.
-</p>
 
 <h2>GNOME Power Preferences</h2>
 
@@ -384,11 +343,10 @@ cvs -z3 checkout gnome-power-manager
 </pre>
 
 <p>
-You can check out the latest PowerManager and pmscripts code using CVS:
+You can check out the latest PowerManager code using CVS:
 </p>
 <pre>
 cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout power-manager
-cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout pmscripts
 </pre>
 
 <h3>For Fedora users of anything-other-than-i386:</h3>
@@ -396,7 +354,7 @@ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/gnome-power checkout pmscripts
 To rebuild the .src.rpm to your architecture use:
 </p>
 <pre>
-rpm --rebuild *.src.rpm
+rpmbuild --rebuild *.src.rpm
 </pre>
 
 <h3>jhbuild</h3>
