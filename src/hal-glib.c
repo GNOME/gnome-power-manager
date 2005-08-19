@@ -26,6 +26,7 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include "gpm-common.h"
 
 void
 dbus_glib_error (GError *error)
