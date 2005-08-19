@@ -581,8 +581,8 @@ gpn_icon_update (void)
 
 	GConfClient *client = gconf_client_get_default ();
 	gboolean iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
-	if (iconShow)
-		g_warning ("display_icon is set to false, no icon will be displayed");
+	if (!iconShow)
+		g_warning ("The key " GCONF_ROOT "general/display_icon is set to false, no icon will be displayed");
 
 	GenericObject *slotData = get_main_icon_slot ();
 	if (iconShow && slotData) {
