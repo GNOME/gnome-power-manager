@@ -133,20 +133,6 @@ typedef enum {
 } ButtonDevice;
 
 typedef struct {
-	gboolean hasDisplays;
-	gboolean hasHardDrive;
-	gboolean hasLCD;
-	gboolean hasMouse;
-	gboolean hasKeyboard;
-	gboolean hasAcAdapter;
-	gboolean hasButtonPower;
-	gboolean hasButtonSleep;
-	gboolean hasButtonLid;
-	gboolean hasBatteries;
-	gboolean hasUPS;
-} HasData;
-
-typedef struct {
 	int idleTime;
 	gboolean onBatteryPower;
 	gboolean onUPSPower;

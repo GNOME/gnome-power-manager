@@ -24,6 +24,8 @@
  *
  **************************************************************************/
 
+#include <glib.h>
+#include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
@@ -34,12 +36,10 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-main.h"
+#include "hal-glib.h"
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
-static HasData hasData;
-gboolean displayIcon = TRUE;
-gboolean displayIconFull = TRUE;
 
 /** Convenience function to call libnotify
  *
@@ -115,6 +115,28 @@ gtk_set_check (const char *widgetname, gboolean set)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), set);
 }
 
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param  capability	The capability, e.g. "battery"
+ *  @return		Number of devices of that capability
+ */
+static gint
+get_devices_capability (const gchar *capability)
+{
+	gint i;
+	char **names;
+	/* devices of type battery */
+	hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	for (i = 0; names[i]; i++) {};
+	hal_free_capability (names);
+	g_debug ("%i devices of capability %s", i, capability);
+	return i;
+}
+
 /** Shows/hides/renames controls based on hasData, i.e. what hardware is in the system.
  *
  */
@@ -122,12 +144,30 @@ static void
 recalc (void)
 {
 	GtkWidget *widget;
+	GConfClient *client = gconf_client_get_default ();
 	/* checkboxes */
+
+	gboolean displayIcon = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+	gboolean displayIconFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
 	gtk_set_check ("checkbutton_display_icon", displayIcon);
 	gtk_set_check ("checkbutton_display_icon_full", displayIconFull);
 
+	gboolean hasBatteries = (get_devices_capability ("battery") > 0);
+	gboolean hasAcAdapter = (get_devices_capability ("ac_adapter") > 0);
+	gboolean hasButtonPower = (get_devices_capability ("button") > 0); /* todo specify further by type */
+	gboolean hasButtonSleep = (get_devices_capability ("button") > 0);
+	gboolean hasButtonLid = (get_devices_capability ("button") > 0);
+	gboolean hasHardDrive = (get_devices_capability ("storage") > 0);
+	gboolean hasLCD = (get_devices_capability ("lcd_panel") > 0);
+
+#if HAVE_GSCREENSAVER
+	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+#else
+	gboolean hasDisplays = FALSE;
+#endif
+
 	/* frame labels */
-	if (hasData.hasBatteries) {
+	if (hasBatteries) {
 		widget = glade_xml_get_widget (all_pref_widgets, "label_frame_ac");
 		gtk_label_set_markup (GTK_LABEL (widget), "<b>Running on AC adapter</b>");
 		widget = glade_xml_get_widget (all_pref_widgets, "label_frame_batteries");
@@ -138,44 +178,51 @@ recalc (void)
 	}
 
 	/* top frame */
-	gtk_set_visibility ("frame_batteries", hasData.hasBatteries);
-	gtk_set_visibility ("combobox_battery_critical", hasData.hasBatteries);
-	gtk_set_visibility ("label_battery_critical_action", hasData.hasBatteries);
-	gtk_set_visibility ("label_battery_critical", hasData.hasBatteries);
-	gtk_set_visibility ("label_battery_low", hasData.hasBatteries);
-	gtk_set_visibility ("hscale_battery_low", hasData.hasBatteries);
-	gtk_set_visibility ("hscale_battery_critical", hasData.hasBatteries);
+	gtk_set_visibility ("frame_batteries", hasBatteries);
+	gtk_set_visibility ("combobox_battery_critical", hasBatteries);
+	gtk_set_visibility ("label_battery_critical_action", hasBatteries);
+	gtk_set_visibility ("label_battery_critical", hasBatteries);
+	gtk_set_visibility ("label_battery_low", hasBatteries);
+	gtk_set_visibility ("hscale_battery_low", hasBatteries);
+	gtk_set_visibility ("hscale_battery_critical", hasBatteries);
 	/* assumes only battery options are in this frame */
-	gtk_set_visibility ("frame_other_options", hasData.hasBatteries);
+	gtk_set_visibility ("frame_other_options", hasBatteries);
 
 	/* options */
-	gtk_set_visibility ("combobox_button_lid", hasData.hasButtonLid);
-	gtk_set_visibility ("label_button_lid", hasData.hasButtonLid);
+	gtk_set_visibility ("combobox_button_lid", hasButtonLid);
+	gtk_set_visibility ("label_button_lid", hasButtonLid);
 
-	gtk_set_visibility ("combobox_button_power", hasData.hasButtonPower);
-	gtk_set_visibility ("label_button_power", hasData.hasButtonPower);
+	gtk_set_visibility ("combobox_button_power", hasButtonPower);
+	gtk_set_visibility ("label_button_power", hasButtonPower);
 
-	gtk_set_visibility ("combobox_button_suspend", hasData.hasButtonSleep);
-	gtk_set_visibility ("label_button_suspend", hasData.hasButtonSleep);
+	gtk_set_visibility ("combobox_button_suspend", hasButtonSleep);
+	gtk_set_visibility ("label_button_suspend", hasButtonSleep);
 
-	gtk_set_visibility ("combobox_ac_fail", hasData.hasAcAdapter);
-	gtk_set_visibility ("label_ac_fail", hasData.hasAcAdapter);
+	gtk_set_visibility ("combobox_ac_fail", hasAcAdapter);
+	gtk_set_visibility ("label_ac_fail", hasAcAdapter);
 
 	/* variables */
-	gtk_set_visibility ("hscale_ac_brightness", hasData.hasLCD);
-	gtk_set_visibility ("label_ac_brightness", hasData.hasLCD);
-	gtk_set_visibility ("hscale_batteries_brightness", hasData.hasLCD);
-	gtk_set_visibility ("label_batteries_brightness", hasData.hasLCD);
+	gtk_set_visibility ("hscale_ac_brightness", hasLCD);
+	gtk_set_visibility ("label_ac_brightness", hasLCD);
+	gtk_set_visibility ("hscale_batteries_brightness", hasLCD);
+	gtk_set_visibility ("label_batteries_brightness", hasLCD);
 
-	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
-	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
-	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
-	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
+	gtk_set_visibility ("hscale_ac_display", hasDisplays);
+	gtk_set_visibility ("label_ac_display", hasDisplays);
+	gtk_set_visibility ("hscale_batteries_display", hasDisplays & hasBatteries);
+	gtk_set_visibility ("label_batteries_display", hasDisplays & hasBatteries);
 
-	gtk_set_visibility ("hscale_ac_hdd", hasData.hasHardDrive);
-	gtk_set_visibility ("label_ac_hdd", hasData.hasHardDrive);
-	gtk_set_visibility ("hscale_batteries_hdd", hasData.hasHardDrive);
-	gtk_set_visibility ("label_batteries_hdd", hasData.hasHardDrive);
+	gtk_set_visibility ("hscale_ac_hdd", hasHardDrive);
+	gtk_set_visibility ("label_ac_hdd", hasHardDrive);
+	gtk_set_visibility ("hscale_batteries_hdd", hasHardDrive);
+	gtk_set_visibility ("label_batteries_hdd", hasHardDrive);
+
+	/* set the display stuff to set gnome-screensaver dpms timeout */
+	gtk_set_visibility ("hscale_ac_display", hasDisplays);
+	gtk_set_visibility ("label_ac_display", hasDisplays);
+	gtk_set_visibility ("hscale_batteries_display", hasDisplays & hasBatteries);
+	gtk_set_visibility ("label_batteries_display", hasDisplays & hasBatteries);
+	gtk_set_visibility ("button_gnome_screensave", hasDisplays);
 }
 
 /** Perform the interactive action when a bool gconf key has been changed
@@ -186,41 +233,10 @@ static void
 gconf_key_action (const char *key)
 {
 	g_return_if_fail (key);
-	gboolean value;
-	GConfClient *client = gconf_client_get_default ();
-
-	value = gconf_client_get_bool (client, key, NULL);
-
-	if (strcmp (key, GCONF_ROOT "general/hasUPS") == 0)
-		hasData.hasUPS = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasAcAdapter") == 0)
-		hasData.hasAcAdapter = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasBatteries") == 0)
-		hasData.hasBatteries = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasButtonPower") == 0)
-		hasData.hasButtonPower = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasButtonSleep") == 0)
-		hasData.hasButtonSleep = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasButtonLid") == 0)
-		hasData.hasButtonLid = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasHardDrive") == 0)
-		hasData.hasHardDrive = value;
-	else if (strcmp (key, GCONF_ROOT "general/hasLCD") == 0)
-		hasData.hasLCD = value;
-	else if (strcmp (key, GCONF_ROOT "general/display_icon") == 0)
-		displayIcon = value;
-	else if (strcmp (key, GCONF_ROOT "general/display_icon_full") == 0)
-		displayIconFull = value;
-#if HAVE_GSCREENSAVER
-	/* data is not got from HAL, but from gnome-screensaver */
-	else if (strcmp (key, "/apps/gnome-screensaver/dpms_enabled") == 0)
-		hasData.hasDisplays = value;
-#endif
-		
-	else {
-		g_warning ("Urecognised key [%s]", key);
-		return;
-	}
+/* 
+ * just recalculate the UI, as the keys are read there.
+ * this removes the need for lots of global variables.
+ */
 	recalc ();
 }
 
@@ -508,6 +524,8 @@ main (int argc, char **argv)
 	gconf_key_action (GCONF_ROOT "general/display_icon");
 	gconf_key_action (GCONF_ROOT "general/display_icon_full");
 
+	recalc ();
+
 	/* disable these until the backend code is in place */
 	gtk_set_visibility ("combobox_double_click", FALSE);
 	gtk_set_visibility ("label_double_click", FALSE);
@@ -561,30 +579,10 @@ main (int argc, char **argv)
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
 #if HAVE_GSCREENSAVER
-	hasData.hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
-#else
-	hasData.hasDisplays = FALSE;
-#endif
-	gtk_set_visibility ("hscale_ac_display", hasData.hasDisplays);
-	gtk_set_visibility ("label_ac_display", hasData.hasDisplays);
-	gtk_set_visibility ("hscale_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
-	gtk_set_visibility ("label_batteries_display", hasData.hasDisplays & hasData.hasBatteries);
-	gtk_set_visibility ("button_gnome_screensave", hasData.hasDisplays);
-#if HAVE_GSCREENSAVER
-	if (!hasData.hasDisplays)
+	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+	if (!hasDisplays)
 		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
 #endif
-
-	gconf_key_action (GCONF_ROOT "general/hasHardDrive");
-	gconf_key_action (GCONF_ROOT "general/hasBatteries");
-	gconf_key_action (GCONF_ROOT "general/hasAcAdapter");
-	gconf_key_action (GCONF_ROOT "general/hasUPS");
-	gconf_key_action (GCONF_ROOT "general/hasLCD");
-	gconf_key_action (GCONF_ROOT "general/hasUPS");
-	gconf_key_action (GCONF_ROOT "general/hasButtonLid");
-	gconf_key_action (GCONF_ROOT "general/hasButtonSleep");
-	gconf_key_action (GCONF_ROOT "general/hasButtonPower");
-
 	gtk_main ();
 	return 0;
 }

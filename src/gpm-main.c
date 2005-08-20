@@ -113,7 +113,9 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 static LibHalContext *hal_ctx;
 
 /* no need for IPC with globals */
-HasData has_data;
+gboolean hasAcAdapter;
+gboolean hasBatteries;
+
 StateData state_data;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
@@ -507,9 +509,8 @@ set_hdd_spindown (int minutes)
 			g_free (device);
 		}
 		g_free (type);
-		g_free (udi);
 	}
-	g_free (device_names);
+	hal_free_capability (device_names);
 }
 
 /** If set to lock on screensave, instruct gnome-screensaver to lock screen
@@ -645,23 +646,6 @@ action_policy_do (gint policy_number)
 			policy_number);
 }
 
-/** Compare the old and the new values, if different or force'd then updates gconf
- *
- *  @param  name		general gconf name, e.g. hasButtons
- */
-static void
-compare_bool_set_gconf (const gchar *gconfpath, gboolean *has_dataold, gboolean *has_datanew, gboolean force)
-{
-	g_return_if_fail (gconfpath);
-	GConfClient *client = gconf_client_get_default ();
-
-	if (force || *has_datanew != *has_dataold) {
-		*has_dataold = *has_datanew;
-		gconf_client_set_bool (client, gconfpath, *has_datanew, NULL);
-		g_debug ("%s = %i", gconfpath, *has_datanew);
-	}
-}
-
 /** Recalculate logic of StateData, without any DBUS, all cached internally
  *  Exported DBUS interface values goes here :-)
  *  @param  coldplug		If set, send events even if they are the same
@@ -686,7 +670,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 	}
 
 	/* get old value */
-	if (has_data.hasBatteries == TRUE) {
+	if (hasBatteries == TRUE) {
 		/* Reverse logic as only one ac_adapter is needed to be "on mains power" */
 		for (a=0;a<parray->len;a++) {
 			slotData = (GenericObject *) g_ptr_array_index (parray, a);
@@ -737,51 +721,19 @@ update_has_logic (GPtrArray *parray, gboolean coldplug)
 	gint a;
 	GenericObject *slotData;
 	/* set up temp. state */
-	HasData has_datanew;
-	has_datanew.hasBatteries = FALSE;
-	has_datanew.hasAcAdapter = FALSE;
-	has_datanew.hasButtonPower = TRUE;
-	has_datanew.hasButtonSleep = TRUE;
-	has_datanew.hasButtonLid = TRUE;
-	has_datanew.hasUPS = FALSE;
-	has_datanew.hasDisplays = TRUE;
-	has_datanew.hasHardDrive = TRUE;
-	has_datanew.hasLCD = FALSE;
+	hasBatteries = FALSE;
+	hasAcAdapter = FALSE;
 
 	for (a=0;a<parray->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		if (slotData->powerDevice == POWER_UPS)
-			has_datanew.hasUPS = TRUE;
-		else if (slotData->powerDevice == POWER_MOUSE)
-			has_datanew.hasMouse = TRUE;
-		else if (slotData->powerDevice == POWER_KEYBOARD)
-			has_datanew.hasKeyboard = TRUE;
-		else if (slotData->powerDevice == POWER_PRIMARY_BATTERY)
+		if (slotData->powerDevice == POWER_PRIMARY_BATTERY)
 			if (slotData->present)
-				has_datanew.hasBatteries = TRUE;
+				hasBatteries = TRUE;
 			else
 				g_debug ("Battery missing?!?");
 		else if (slotData->powerDevice == POWER_AC_ADAPTER)
-			has_datanew.hasAcAdapter = TRUE;
+			hasAcAdapter = TRUE;
 	}
-	compare_bool_set_gconf (GCONF_ROOT "general/hasUPS", 
-		&has_data.hasUPS, &has_datanew.hasUPS, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasButtonPower", 
-		&has_data.hasButtonPower, &has_datanew.hasButtonPower, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasButtonSleep", 
-		&has_data.hasButtonSleep, &has_datanew.hasButtonSleep, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasButtonLid", 
-		&has_data.hasButtonLid, &has_datanew.hasButtonLid, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasAcAdapter", 
-		&has_data.hasAcAdapter, &has_datanew.hasAcAdapter, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasBatteries", 
-		&has_data.hasBatteries, &has_datanew.hasBatteries, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasLCD", 
-		&has_data.hasLCD, &has_datanew.hasLCD, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasHardDrive", 
-		&has_data.hasHardDrive, &has_datanew.hasHardDrive, coldplug);
-	compare_bool_set_gconf (GCONF_ROOT "general/hasDisplays", 
-		&has_data.hasDisplays, &has_datanew.hasDisplays, coldplug);
 }
 
 /** Generic exit
@@ -991,21 +943,17 @@ coldplug_devices (void)
 	hal_find_device_capability ("battery", &device_names);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of batteries"));
-	for (i = 0; device_names[i]; i++) {
+	for (i = 0; device_names[i]; i++)
 		add_battery (device_names[i]);
-		g_free (device_names[i]);
-	}
-	g_free (device_names);
+	hal_free_capability (device_names);
 
 	/* devices of type ac_adapter */
 	hal_find_device_capability ("ac_adapter", &device_names);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of ac_adapters"));
-	for (i = 0; device_names[i]; i++) {
+	for (i = 0; device_names[i]; i++)
 		add_ac_adapter (device_names[i]);
-		g_free (device_names[i]);
-	}
-	g_free (device_names);
+	hal_free_capability (device_names);
 }
 
 /** Removes any type of device

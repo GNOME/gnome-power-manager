@@ -189,3 +189,17 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
+
+/** frees value result of hal_find_device_capability
+ *
+ */
+void
+hal_free_capability (gchar **value)
+{
+	gint i;
+	for (i = 0; value[i]; i++) {
+		g_free (value[i]);
+	}
+	g_free (value);
+}
+

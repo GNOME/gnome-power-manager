@@ -24,6 +24,7 @@ gboolean hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *valu
 gboolean hal_device_get_string (const gchar *udi, const gchar *key, gchar **value);
 gboolean hal_device_get_int (const gchar *udi, const gchar *key, gint *value);
 gboolean hal_find_device_capability (const gchar *capability, gchar ***value);
+void hal_free_capability (gchar **value);
 
 DBusGConnection *get_system_connection (void);
 DBusGConnection *get_session_connection (void);

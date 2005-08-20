@@ -36,7 +36,6 @@
 #include "gpm-notification.h"
 
 /* shared with gpm-main.c */
-HasData has_data;
 StateData state_data;
 
 static TrayData *eggtrayicon = NULL;

@@ -40,6 +40,8 @@ gnome_power_dbus_test_LDADD =				\
 	$(DBUS_LIBS)
 
 gnome_power_preferences_SOURCES =			\
+	hal-glib.h					\
+	hal-glib.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
