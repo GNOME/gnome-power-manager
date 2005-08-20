@@ -3,6 +3,10 @@
 	* Make the gnome-power.foo files into gnome-power-manager.foo files.
 	CVS churn...
 
+	* gpm-common.h, hal-glib.c, hal-glib.h, gpm-main.c: Make
+	hal_device_get_* to return success value rather than data so we can 
+	test for the tag not existing. This is needed for CVSHAL.
+
 2005-08-19  Richard Hughes  <richard@hughsie.com>
 
 	* gpm-notification.c, gpm-main.c, gpm-notification.h, gpm-common.h:

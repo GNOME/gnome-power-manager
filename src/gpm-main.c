@@ -490,16 +490,18 @@ set_hdd_spindown (int minutes)
 {
 	gint i;
 	char **device_names;
+	gchar *type;
+	gchar *device;
 
 	/* find devices of type hard-disks from HAL */
-	device_names = hal_find_device_capability ("storage");
+	hal_find_device_capability ("storage", &device_names);
 	if (device_names == NULL)
 		g_warning ("Couldn't obtain list of storage");
 	for (i = 0; device_names[i]; i++) {
 		char *udi = device_names[i];
-		gchar *type = hal_device_get_string (udi, "storage.drive_type");
+		hal_device_get_string (udi, "storage.drive_type", &type);
 		if (strcmp (type, "disk") == 0) {
-			gchar *device = hal_device_get_string (udi, "block.device");
+			hal_device_get_string (udi, "block.device", &device);
 			g_debug ("Setting device %s to sleep after %i minutes\n", device, minutes);
 			set_hdd_spindown_device (device, minutes);
 			g_free (device);
@@ -879,7 +881,7 @@ add_ac_adapter (const gchar *udi)
 		slotData->percentageCharge = 0;
 		g_debug ("Device '%s' added", udi);
 		/* ac_adapter batteries might be missing */
-		slotData->present = hal_device_get_bool (udi, "ac_adapter.present");
+		hal_device_get_bool (udi, "ac_adapter.present", &slotData->present);
 		slotData->isRechargeable = FALSE;
 		slotData->isCharging = FALSE;
 		slotData->isDischarging = FALSE;
@@ -915,23 +917,26 @@ read_battery_data (GenericObject *slotData)
 	}
 
 	/* set cached variables up */
-	slotData->minutesRemaining = hal_device_get_int (slotData->udi, "battery.remaining_time") / 60;
+	gint tempval;
+	hal_device_get_int (slotData->udi, "battery.remaining_time", &tempval);
+	if (tempval > 0)
+		slotData->minutesRemaining = tempval / 60;
 
 #if !CVSHAL
 	/*
 	 * We need the RAW readings so we keep functions modular and 
 	 * acpi/apm neutral
 	 */
-	slotData->rawCharge = hal_device_get_int (slotData->udi, "battery.charge_level.current");
-	slotData->rawLastFull = hal_device_get_int (slotData->udi, "battery.charge_level.last_full");
+	hal_device_get_int (slotData->udi, "battery.charge_level.current", &slotData->rawCharge);
+	hal_device_get_int (slotData->udi, "battery.charge_level.last_full", &slotData->rawLastFull);
 #else
-	slotData->percentageCharge = hal_device_get_int (slotData->udi, "battery.charge_level.percentage");
+	hal_device_get_int (slotData->udi, "battery.charge_level.percentage", &slotData->percentageCharge);
 #endif
 	/* battery might not be rechargeable, have to check */
-	slotData->isRechargeable = hal_device_get_bool (slotData->udi, "battery.is_rechargeable");
+	hal_device_get_bool (slotData->udi, "battery.is_rechargeable", &slotData->isRechargeable);
 	if (slotData->isRechargeable) {
-		slotData->isCharging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging");
-		slotData->isDischarging = hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging");
+		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging", &slotData->isCharging);
+		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging", &slotData->isDischarging);
 	}
 #if !CVSHAL
 	update_percentage_charge (slotData);
@@ -955,10 +960,10 @@ add_battery (const gchar *udi)
 	}
 
 	/* PMU/ACPI batteries might be missing */
-	slotData->present = hal_device_get_bool (udi, "battery.present");
+	hal_device_get_bool (udi, "battery.present", &slotData->present);
 
 	/* battery is refined using the .type property */
-	type = hal_device_get_string (udi, "battery.type");
+	hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
 		return;
@@ -983,7 +988,7 @@ coldplug_devices (void)
 	char **device_names;
 
 	/* devices of type battery */
-	device_names = hal_find_device_capability ("battery");
+	hal_find_device_capability ("battery", &device_names);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of batteries"));
 	for (i = 0; device_names[i]; i++) {
@@ -993,7 +998,7 @@ coldplug_devices (void)
 	g_free (device_names);
 
 	/* devices of type ac_adapter */
-	device_names = hal_find_device_capability ("ac_adapter");
+	hal_find_device_capability ("ac_adapter", &device_names);
 	if (device_names == NULL)
 		g_warning (_("Couldn't obtain list of ac_adapters"));
 	for (i = 0; device_names[i]; i++) {
@@ -1106,30 +1111,33 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	g_debug ("key = '%s'", key);
 	g_debug ("udi = '%s'", udi);
 	if (strcmp (key, "battery.present") == 0) {
-		slotData->present = hal_device_get_bool (udi, key);
+		hal_device_get_bool (udi, key, &slotData->present);
 		/* read in values */
 		read_battery_data (slotData);
 		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "ac_adapter.present") == 0) {
-		slotData->present = hal_device_get_bool (udi, key);
+		hal_device_get_bool (udi, key, &slotData->present);
 		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		slotData->isCharging = hal_device_get_bool (udi, key);
+		hal_device_get_bool (udi, key, &slotData->isCharging);
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		slotData->isDischarging = hal_device_get_bool (udi, key);
+		hal_device_get_bool (udi, key, &slotData->isDischarging);
 		updateState = TRUE;
 #if !CVSHAL
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		slotData->rawCharge = hal_device_get_int (udi, key);
+		hal_device_get_int (udi, key, &slotData->rawCharge);
 #else
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		slotData->percentageCharge = hal_device_get_int (udi, key);
+		hal_device_get_int (udi, key, &slotData->percentageCharge);
 #endif
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		slotData->minutesRemaining = hal_device_get_int (udi, key) / 60;
+		gint tempval;
+		hal_device_get_int (udi, key, &tempval);
+		if (tempval > 0)
+			slotData->minutesRemaining = tempval / 60;
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		/* ignore */
 		return;
@@ -1224,7 +1232,7 @@ device_condition (LibHalContext *ctx,
 	gchar *type;
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
-		type = hal_device_get_string (udi, "button.type");
+		hal_device_get_string (udi, "button.type", &type);
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			int policy = get_policy_string (GCONF_ROOT "policy/button_power");
@@ -1241,7 +1249,7 @@ device_condition (LibHalContext *ctx,
 		} else if (strcmp (type, "lid") == 0) {
 			gboolean value;
 			/* we only do a lid event when the lid is OPENED */
-			value = hal_device_get_bool (udi, "button.state.value");
+			hal_device_get_bool (udi, "button.state.value", &value);
 			if (value) {
 				int policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				if (policy == ACTION_WARNING)
@@ -1347,9 +1355,9 @@ main (int argc, char *argv[])
 		DBUS_PATH_DBUS,
 		DBUS_INTERFACE_DBUS);
 	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (connGsystem,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/devices", 
-		"org.freedesktop.Hal.Device");
+		HAL_DBUS_SERVICE,
+		HAL_DBUS_PATH_DEVICES, 
+		HAL_DBUS_INTERFACE_DEVICE);
 
 	guint request_name_result;
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,

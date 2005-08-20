@@ -65,6 +65,7 @@
 #define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
 
 #define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
+#define	HAL_DBUS_PATH_DEVICES		"/org/freedesktop/Hal/devices"
 #define	HAL_DBUS_PATH_COMPUTER		"/org/freedesktop/Hal/devices/computer"
 #define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
 #define	HAL_DBUS_INTERFACE_PM		"org.freedesktop.Hal.Device.SystemPowerManagement"
