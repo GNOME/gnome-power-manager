@@ -676,13 +676,13 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 	}
 
 	/* get old value */
-	if (hasBatteries == TRUE) {
+	if (hasBatteries) {
 		/* Reverse logic as only one ac_adapter is needed to be "on mains power" */
 		for (a=0;a<parray->len;a++) {
 			slotData = (GenericObject *) g_ptr_array_index (parray, a);
-			if (slotData->powerDevice == POWER_AC_ADAPTER && slotData->present) {
+			if (slotData->powerDevice == POWER_AC_ADAPTER && !slotData->present) {
 				g_debug ("onBatteryPower FALSE as ac_adapter present");
-				state_datanew.onBatteryPower = FALSE;
+				state_datanew.onBatteryPower = TRUE;
 				break;
 				}
 		}
@@ -1060,13 +1060,9 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
 			slotData->minutesRemaining = tempval / 60;
-	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
+	} else
 		/* ignore */
 		return;
-	} else {
-		g_debug ("Cannot recognise key '%s' from UDI '%s'", key, udi);
-		return;
-	}
 
 	if (updateState)
 		update_state_logic (objectData, FALSE);

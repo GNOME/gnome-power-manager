@@ -2,6 +2,7 @@
 
 	gpm-main.c (update_has_logic): removed as we can trivially move the
 	remaining checks into the state check function.
+	Fix detection of onBatteryPower so that it's instantaneous.
 
 	gpm-prefs.c (get_devices_capability_with_value): New function, so that
 	we can match a capability with a key string. Useful for buttons and ide
