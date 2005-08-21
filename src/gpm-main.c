@@ -113,9 +113,6 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 static LibHalContext *hal_ctx;
 
 /* no need for IPC with globals */
-gboolean hasAcAdapter;
-gboolean hasBatteries;
-
 StateData state_data;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
@@ -660,9 +657,18 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 	StateData state_datanew;
 	state_datanew.onBatteryPower = FALSE;
 	state_datanew.onUPSPower = FALSE;
+	gboolean hasBatteries = FALSE;
+	gboolean hasAcAdapter = FALSE;
 
 	for (a=0;a<parray->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (parray, a);
+		if (slotData->powerDevice == POWER_PRIMARY_BATTERY)
+			if (slotData->present)
+				hasBatteries = TRUE;
+			else
+				g_debug ("Battery '%s' missing?!?", slotData->udi);
+		else if (slotData->powerDevice == POWER_AC_ADAPTER)
+			hasAcAdapter = TRUE;
 		if (slotData->powerDevice == POWER_UPS && slotData->isDischarging)
 			state_datanew.onUPSPower = TRUE;
 		if (slotData->powerDevice == POWER_PRIMARY_BATTERY && slotData->isDischarging)
@@ -706,33 +712,6 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 	if (coldplug || state_datanew.onUPSPower != state_data.onUPSPower) {
 		state_data.onUPSPower = state_datanew.onUPSPower;
 		g_debug ("DBUS: %s = %i", "onUPSPower", state_data.onUPSPower);
-	}
-}
-
-/** Recalculate logic of HasData, without any DBUS, all cached internally
- *  All complicated convoluted logic goes here :-)
- *  @param  coldplug		If set, send events even if they are the same
- */
-static void
-update_has_logic (GPtrArray *parray, gboolean coldplug)
-{
-	g_return_if_fail (parray);
-
-	gint a;
-	GenericObject *slotData;
-	/* set up temp. state */
-	hasBatteries = FALSE;
-	hasAcAdapter = FALSE;
-
-	for (a=0;a<parray->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		if (slotData->powerDevice == POWER_PRIMARY_BATTERY)
-			if (slotData->present)
-				hasBatteries = TRUE;
-			else
-				g_debug ("Battery missing?!?");
-		else if (slotData->powerDevice == POWER_AC_ADAPTER)
-			hasAcAdapter = TRUE;
 	}
 }
 
@@ -988,7 +967,6 @@ device_removed (LibHalContext *ctx, const char *udi)
 	 */
 	remove_devices (udi);
 	/* our state has changed, update */
-	update_has_logic (objectData, FALSE);
 	update_state_logic (objectData, FALSE);
 	if (isVerbose)
 		genericobject_print (objectData);
@@ -1013,7 +991,6 @@ device_new_capability (LibHalContext *ctx, const char *udi, const char *capabili
 	if (strcmp (capability, "battery") == 0) {
 		add_battery (udi);
 		/* our state has changed, update */
-		update_has_logic (objectData, FALSE);
 		update_state_logic (objectData, FALSE);
 		gpn_icon_update ();
 	}
@@ -1053,7 +1030,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 				   , udi);
 		return;
 	}
-	gboolean updateHas = FALSE;
 	gboolean updateState = FALSE;
 
 	g_debug ("key = '%s'", key);
@@ -1062,11 +1038,9 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		hal_device_get_bool (udi, key, &slotData->present);
 		/* read in values */
 		read_battery_data (slotData);
-		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "ac_adapter.present") == 0) {
 		hal_device_get_bool (udi, key, &slotData->present);
-		updateHas = TRUE;
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_device_get_bool (udi, key, &slotData->isCharging);
@@ -1094,8 +1068,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		return;
 	}
 
-	if (updateHas)
-		update_has_logic (objectData, FALSE);
 	if (updateState)
 		update_state_logic (objectData, FALSE);
 
@@ -1347,7 +1319,6 @@ main (int argc, char *argv[])
 	if (isVerbose)
 		genericobject_print (objectData);
 
-	update_has_logic (objectData, TRUE);
 	update_state_logic (objectData, TRUE);
 
 	gpn_icon_initialise ();

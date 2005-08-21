@@ -125,7 +125,6 @@ get_devices_capability (const gchar *capability)
 {
 	gint i;
 	char **names;
-	/* devices of type battery */
 	hal_find_device_capability (capability, &names);
 	if (!names) {
 		g_debug ("No devices of capability %s", capability);
@@ -135,6 +134,36 @@ get_devices_capability (const gchar *capability)
 	hal_free_capability (names);
 	g_debug ("%i devices of capability %s", i, capability);
 	return i;
+}
+
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param  capability	The capability, e.g. "battery"
+ *  @param  key		The key to match, e.g. "button.type"
+ *  @param  value	The key match, e.g. "power"
+ *  @return		Number of devices of that capability
+ */
+static gint
+get_devices_capability_with_value (const gchar *capability, const gchar *key, const gchar *value)
+{
+	gint i;
+	gint valid = 0;
+	gchar **names;
+	gchar *type;
+	hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	for (i = 0; names[i]; i++) {
+		hal_device_get_string (names[i], key, &type);
+		if (strcmp (type, value) == 0)
+			valid++;
+		g_free (type);
+	};
+	hal_free_capability (names);
+	g_debug ("%i devices of capability %s where %s is %s", valid, capability, key, value);
+	return valid;
 }
 
 /** Shows/hides/renames controls based on hasData, i.e. what hardware is in the system.
@@ -152,13 +181,13 @@ recalc (void)
 	gtk_set_check ("checkbutton_display_icon", displayIcon);
 	gtk_set_check ("checkbutton_display_icon_full", displayIconFull);
 
-	gboolean hasBatteries = (get_devices_capability ("battery") > 0);
-	gboolean hasAcAdapter = (get_devices_capability ("ac_adapter") > 0);
-	gboolean hasButtonPower = (get_devices_capability ("button") > 0); /* todo specify further by type */
-	gboolean hasButtonSleep = (get_devices_capability ("button") > 0);
-	gboolean hasButtonLid = (get_devices_capability ("button") > 0);
-	gboolean hasHardDrive = (get_devices_capability ("storage") > 0);
-	gboolean hasLCD = (get_devices_capability ("lcd_panel") > 0);
+	gboolean hasBatteries =   (get_devices_capability ("battery") > 0);
+	gboolean hasAcAdapter =   (get_devices_capability ("ac_adapter") > 0);
+	gboolean hasButtonPower = (get_devices_capability_with_value ("button", "button.type", "power") > 0);
+	gboolean hasButtonSleep = (get_devices_capability_with_value ("button", "button.type", "sleep") > 0);
+	gboolean hasButtonLid =   (get_devices_capability_with_value ("button", "button.type", "lid") > 0);
+	gboolean hasHardDrive =   (get_devices_capability_with_value ("storage", "storage.bus", "ide") > 0);
+	gboolean hasLCD = 	  (get_devices_capability ("lcd_panel") > 0);
 
 #if HAVE_GSCREENSAVER
 	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
@@ -225,21 +254,6 @@ recalc (void)
 	gtk_set_visibility ("button_gnome_screensave", hasDisplays);
 }
 
-/** Perform the interactive action when a bool gconf key has been changed
- *
- *  @param  key			full gconf key path
- */
-static void
-gconf_key_action (const char *key)
-{
-	g_return_if_fail (key);
-/* 
- * just recalculate the UI, as the keys are read there.
- * this removes the need for lots of global variables.
- */
-	recalc ();
-}
-
 /** Callback for gconf_key_changed
  *
  */
@@ -250,8 +264,11 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
-	if (gconf_entry_get_value (entry)->type == GCONF_VALUE_BOOL)
-		gconf_key_action (entry->key);
+	/* 
+	 * just recalculate the UI, as the gconf keys are read there.
+	 * this removes the need for lots of global variables.
+	 */
+	recalc ();
 }
 
 /** Callback for combo_changed
@@ -520,10 +537,7 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (all_pref_widgets, "button_help");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
 
-	/* get values from gconf */
-	gconf_key_action (GCONF_ROOT "general/display_icon");
-	gconf_key_action (GCONF_ROOT "general/display_icon_full");
-
+	/* set gtk enables/disables */
 	recalc ();
 
 	/* disable these until the backend code is in place */
