@@ -29,7 +29,7 @@ The libnotify error messages using CVS.
 <pre>status: stub</pre>
 
 <h3>bool isRunningOnMains ()</h3>
-<p>Returns true if we are running on mains (usefull for scripts)</p>
+<p>Returns true if we are running on mains (useful for scripts)</p>
 <pre>status: stub</pre>
 
 <h3>Server Signals</h3>

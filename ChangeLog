@@ -1,10 +1,14 @@
+2005-08-23  Richard Hughes  <richard@hughsie.com>
+
+	* po/*.po, src/gpm-main.c: Changed explaination to explanation.
+
 2005-08-21  Richard Hughes  <richard@hughsie.com>
 
-	gpm-main.c (update_has_logic): removed as we can trivially move the
+	src/gpm-main.c (update_has_logic): removed as we can trivially move the
 	remaining checks into the state check function.
 	Fix detection of onBatteryPower so that it's instantaneous.
 
-	gpm-prefs.c (get_devices_capability_with_value): New function, so that
+	src/gpm-prefs.c (get_devices_capability_with_value): New function, so that
 	we can match a capability with a key string. Useful for buttons and ide
 	drives.
 
@@ -13,12 +17,12 @@
 	* Make the gnome-power.foo files into gnome-power-manager.foo files.
 	CVS churn...
 
-	* gpm-common.h, hal-glib.c, hal-glib.h, gpm-main.c: Make
+	* src/gpm-common.h, src/hal-glib.c, src/hal-glib.h, src/gpm-main.c: Make
 	hal_device_get_* to return success value rather than data so we can 
 	test for the tag not existing. This is needed for CVSHAL.
 	Also add hal_free_capability convenience function.
 
-	* gpm-prefs.c, gpm-main.c, gpm-common.h: Start getting rid of has* 
+	* src/gpm-prefs.c, src/gpm-main.c, src/gpm-common.h: Start getting rid of has* 
 	gconf data keys	- all that remain are hasBatteries and hasAcAdaptor - 
 	also need to make proper the solution in gpm-prefs w.r.t. the 
 	button handling.
@@ -28,7 +32,7 @@
 
 2005-08-19  Richard Hughes  <richard@hughsie.com>
 
-	* gpm-notification.c, gpm-main.c, gpm-notification.h, gpm-common.h:
+	* src/gpm-notification.c, src/gpm-main.c, gpm-notification.h, src/gpm-common.h:
 	Add a warning when show_icon is set to false.
 	Remove the struct IconData as the show and show_if_full gconf values
 	can now be read for each icon refresh as they are quick. The global
@@ -37,19 +41,19 @@
 	Remove the setupData field as we can now set GPM_SIMULATE (instead of
 	doActions) and verbose is just a global now.
 
-	* gpm-notification.c: Removed the ability to generate our own icons,
+	* src/gpm-notification.c: Removed the ability to generate our own icons,
 	so we'll rely on the packaged ones. This desision wasn't taken lightly,
 	but a11y considerations meant this had to be removed.
 
-	* gpm-common.h: Add the HAL dbus defines.
+	* src/gpm-common.h: Add the HAL dbus defines.
 
-	* gpm-main.c: Start adding the CVS HAL method support in. Also 
+	* src/gpm-main.c: Start adding the CVS HAL method support in. Also 
 	un-#if the GSCREENSAVER stuff - worst case we get a dbus warning if
 	not present.
 
 	* gnome-power.spec.in, doc/index.html: Bump to dep of hal 0.5.4
 
-	* gpm-dbus-test.c: s/GPM_DBUS_POWEROFF/GPM_DBUS_SHUTDOWN to match.
+	* src/gpm-dbus-test.c: s/GPM_DBUS_POWEROFF/GPM_DBUS_SHUTDOWN to match.
 
 	* gnome-power.schemas.in: Add general/cmd_reboot and 
 	general/cmd_shutdown so that we can get rid of PowerManager.
@@ -67,8 +71,8 @@
 	we are more consistant as a Gnome application. Fixes suggested by
 	David Zeuthen.
 
-	* gpm-notification.c, gpm-main.c, gpm-common.h: remove lockdown stuff,
-	and also use the new gconf keynames.
+	* src/gpm-notification.c, src/gpm-main.c, src/gpm-common.h: remove 
+	lockdown stuff,	and also use the new gconf keynames.
 
 	* gpm-prefs.c: Remove combobox_ups_critical
 
