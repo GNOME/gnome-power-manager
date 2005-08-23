@@ -346,7 +346,7 @@ dbus_action (gint action)
 		gchar *actionstr = convert_dbus_enum_to_string (action);
 		g_string_printf (gs, _("The program '%s' is preventing the %s "
 				       "from occurring.\n\n"
-				       "The explaination given is: %s"), 
+				       "The explanation given is: %s"), 
 				     regprog->appName->str, actionstr, regprog->reason->str);
 		g_message ("%s", gs->str);
 		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
