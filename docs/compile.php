@@ -38,6 +38,11 @@ export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
 cvs -z3 checkout gnome-power-manager
 </pre>
 
+<h3>Statistics</h3>
+<p>
+You can get project statistics from <a href="http://cia.navi.cx/stats/project/gnome/gnome-power-manager/.rss">navi.cx</a> in RSS format or access graphs from <a href="http://sourceforge.net/project/stats/?group_id=133929&ugn=gnome-power">Sourceforge</a>/
+</p>
+
 <h3>jhbuild</h3>
 <p>
 If you want to use GNOME CVS, jhbuild can now build GNOME Power Manager using:
