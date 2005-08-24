@@ -417,6 +417,26 @@ hal_hibernate ()
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
 }
+
+static void
+hal_setlowpowermode (gboolean set)
+{
+	GError *error = NULL;
+	gint ret;
+	DBusGConnection *system_connection = get_system_connection ();
+	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	if (!dbus_g_proxy_call (pm_proxy, "SetPowerSave", &error, 
+			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
+			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave failed (HAL error?)");
+	}
+	if (ret != 0)
+		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave call failed (%i)", ret);
+	g_object_unref (G_OBJECT (pm_proxy));
+	dbus_g_connection_unref (system_connection);
+}
 #endif
 
 #if USE_POWERMANAGER
@@ -610,6 +630,8 @@ action_policy_do (gint policy_number)
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_hdd", NULL);
 		set_hdd_spindown (value);
+#else
+		hal_setlowpowermode (TRUE);
 #endif
 		/* set dpms_suspend to our value */
 		gint displaytimeout = gconf_client_get_int (client, 
@@ -624,6 +646,8 @@ action_policy_do (gint policy_number)
 		gint value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
 		set_hdd_spindown (value);
+#else
+		hal_setlowpowermode (TRUE);
 #endif
 		/* set dpms_suspend to our value */
 		gint displaytimeout = gconf_client_get_int (client, 

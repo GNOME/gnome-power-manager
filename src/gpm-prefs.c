@@ -241,11 +241,6 @@ recalc (void)
 	gtk_set_visibility ("hscale_batteries_display", hasDisplays & hasBatteries);
 	gtk_set_visibility ("label_batteries_display", hasDisplays & hasBatteries);
 
-	gtk_set_visibility ("hscale_ac_hdd", hasHardDrive);
-	gtk_set_visibility ("label_ac_hdd", hasHardDrive);
-	gtk_set_visibility ("hscale_batteries_hdd", hasHardDrive);
-	gtk_set_visibility ("label_batteries_hdd", hasHardDrive);
-
 	/* set the display stuff to set gnome-screensaver dpms timeout */
 	gtk_set_visibility ("hscale_ac_display", hasDisplays);
 	gtk_set_visibility ("label_ac_display", hasDisplays);
@@ -541,8 +536,7 @@ main (int argc, char **argv)
 	recalc ();
 
 	/* disable these until the backend code is in place */
-	gtk_set_visibility ("combobox_double_click", FALSE);
-	gtk_set_visibility ("label_double_click", FALSE);
+	gtk_set_visibility ("checkbutton_hdd_spindown", FALSE);
 
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",
@@ -567,16 +561,12 @@ main (int argc, char **argv)
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
 		GCONF_ROOT "policy/ac/sleep_computer", POLICY_TIME);
-	hscale_setup_action ("hscale_ac_hdd", 
-		GCONF_ROOT "policy/ac/sleep_hdd", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_display", 
 		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_brightness", 
 		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
 	hscale_setup_action ("hscale_batteries_computer", 
 		GCONF_ROOT "policy/battery/sleep_computer", POLICY_TIME);
-	hscale_setup_action ("hscale_batteries_hdd", 
-		GCONF_ROOT "policy/battery/sleep_hdd", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_display", 
 		GCONF_ROOT "policy/battery/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness", 

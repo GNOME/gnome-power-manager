@@ -1,3 +1,12 @@
+2005-08-21  Richard Hughes  <richard@hughsie.com>
+
+	src/gpm-main.c, src/preferences.glade: removed the user setting of 
+	hard drive spindown time, and double click action.
+	This was agued by many as having no place in the UI.
+
+	src/gpm-main.c (hal_setlowpowermode): add a new funtion to call 
+	SetPowerSave on the HAL root computer object.
+
 2005-08-23  Richard Hughes  <richard@hughsie.com>
 
 	* po/*.po, src/gpm-main.c: Changed explaination to explanation.
