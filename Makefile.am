@@ -10,7 +10,7 @@ desktop_in_files = gnome-power-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-dbusconfdir = $(sysconfdir)/dbus-1/system.d
+dbusconfdir = $(DBUS_SYS_DIR)
 dbusconf_DATA = gnome-power-manager.conf
 
 man_MANS =						\

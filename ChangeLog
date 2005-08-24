@@ -7,6 +7,14 @@
 	src/gpm-main.c (hal_setlowpowermode): add a new funtion to call 
 	SetPowerSave on the HAL root computer object.
 
+	Makefile.am: Use the new define, DBUS_SYS_DIR
+
+	configure.in: Add configuration for DBUS_SYS_DIR and DBUS_SERVICES_DIR
+	I hope these don't break the RPM :-)
+
+	gnome-power-manager.service.in: new file, will act as a future service
+	file for the dbus service.
+
 2005-08-23  Richard Hughes  <richard@hughsie.com>
 
 	* po/*.po, src/gpm-main.c: Changed explaination to explanation.

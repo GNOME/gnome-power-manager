@@ -21,6 +21,30 @@ AM_GLIB_GNU_GETTEXT
 
 AC_ARG_ENABLE(libnotify,          [  --enable-libnotify      build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
 AC_ARG_ENABLE(gscreensaver,       [  --enable-gscreensaver   build with gnome-screensaver support],enable_gscreensaver=$enableval,enable_gscreensaver=auto)
+AC_ARG_WITH(dbus-sys,             [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
+AC_ARG_WITH(dbus-services,        [  --with-dbus-services=<dir>   where D-BUS services directory is])
+
+SYSCONFDIR="$sysconfdir"
+LIBDIR="$libdir"
+DATADIR="$datadir"
+
+if ! test -z "$with_dbus_sys" ; then
+	DBUS_SYS_DIR="$with_dbus_sys"
+else
+	DBUS_SYS_DIR="$SYSCONFDIR/dbus-1/system.d"
+fi
+
+if ! test -z "$with_dbus_services" ; then
+	DBUS_SERVICES_DIR="$with_dbus_services"
+else
+	# D-BUS 0.23 and higher use $prefix/share/dbus-1/services
+	DBUS_SERVICES_DIR="$DATADIR/dbus-1/services"
+fi
+
+AC_SUBST(DBUS_SYS_DIR)
+AC_SUBST(DBUS_SERVICES_DIR)
+AC_DEFINE_UNQUOTED(DBUS_SYSTEMD_DIR, "$DBUS_SYS_DIR", [Where system.d dir for DBUS is])
+AC_DEFINE_UNQUOTED(DBUS_SERVICES_DIR, "$DBUS_SERVICES_DIR", [Where services dir for DBUS is])
 
 PKG_CHECK_MODULES(GLIB, glib-2.0 gobject-2.0)
 AC_SUBST(GLIB_CFLAGS)
@@ -108,4 +132,7 @@ echo "
         cppflags:                  ${CPPFLAGS}
         libnotify support:         ${have_libnotify}
         gnome-screensaver support: ${have_gscreensaver}
+        dbus-1 system.d dir:       $DBUS_SYS_DIR
+        dbus-1 services dir:       $DBUS_SERVICES_DIR
+	gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR
 "
