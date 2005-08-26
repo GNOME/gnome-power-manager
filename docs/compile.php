@@ -20,22 +20,43 @@
     I have been running the rawhide DBUS and HAL here on a normal FC4 install and everything apprears to work normally.
     <b>Standard disclaimers apply.</b> Do not do this on a production machine.
    </p>
-   <pre>
-    yum -y --enablerepo=development update hal dbus
-   </pre>
+   <pre>yum -y --enablerepo=development update hal dbus</pre>
   </td>
  </tr>
  <tr>
   <td valign="top"><img src="images/icon-ubuntu.png"/></td>
-  <td>Packages by Oliver Grawert for <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a></td>
+  <td>
+   <p>
+    Packages by Oliver Grawert for <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a>
+   </p>
+   <pre>apt-get -y install gnome-power-manager</pre>
+  </td>
  </tr>
  <tr>
   <td valign="top"><img src="images/icon-forsight.png"/></td>
-  <td>Package by Ken Vandine for <a href="http://www.foresightlinux.com/downloads/">Forsight Linux</a></td>
+  <td>
+   <p>
+    Package by Ken Vandine for <a href="http://www.foresightlinux.com/downloads/">Forsight Linux</a>
+   </p>
+  </td>
  </tr>
  <tr>
   <td valign="top"><img src="images/icon-gentoo.png"/></td>
-  <td>ebuild by Steev Klimaszewski for <a href="http://dev.cardoe.com/gentopia">Gentoo Linux</a></td>
+  <td>
+   <p>
+    ebuild by Steev Klimaszewski for <a href="https://dev.cardoe.com/gentopia/">Gentoo Linux</a>
+   </p>
+<pre>
+emerge subversion
+cd /usr/local/
+svn co https://dev.cardoe.com/gentopia/svn/overlay/ portage-gentopia
+edit /etc/make.conf
+set PORTDIR_OVERLAY="/usr/local/portage-gentopia"
+# If you already have an overlay then do this
+# PORTDIR_OVERLAY="/usr/local/portage /usr/local/portage-gentopia"
+emerge -av dbus hal pmount gnome-power-manager udev
+</pre>
+  </td>
  </tr>
 </table>
 <hr>
@@ -55,17 +76,12 @@ export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
 cvs -z3 checkout gnome-power-manager
 </pre>
 
-<h3>Statistics</h3>
-<p>
-You can get project statistics from <a href="http://cia.navi.cx/stats/project/gnome/gnome-power-manager/.rss">navi.cx</a> in RSS format or access graphs from <a href="http://sourceforge.net/project/stats/?group_id=133929&ugn=gnome-power">Sourceforge</a>.
-</p>
-
 <h3>jhbuild</h3>
 <p>
 If you want to use GNOME CVS, jhbuild can now build GNOME Power Manager using:
 </p>
 <pre>
-jhbuild build gnome-power
+jhbuild build gnome-power-manager
 </pre>
 
 <h2>Compiling The Code</h2>
@@ -120,7 +136,7 @@ $ make
 </pre>
 <p>
 We are installing two files locally, the DBUS services and system.d files.
-We have to install locally so that messagebus has to pick up our .conf file to allow connections.
+We have to install locally so that messagebus picks up our .conf file to allow connections.
 Now, as root, we will install the programs, pixmaps and manpages into the /usr/local root.
 </p>
 <pre>
@@ -134,18 +150,6 @@ Now we can run the compiled program!
 <pre>
 $ /usr/local/bin/gnome-power-manager --verbose
 </pre>
-<hr>
-
-<h2>Why doesn't it autostart?</h2>
-<p>
-For the moment, you will have to run GNOME Power Manager from a terminal (it will not autostart.) but will hopefully be either patched into the default upstream startup, or will use gnome-services when it arrives in mainline.
-</p>
-<center>
-<img src="images/gnome-session.png" alt="[img]"/>
-</center>
-<p class="caption">
-You can launch gnome-power-manager automatically using the gnome-session-properties program
-</p>
 
 <?php
 	include('./footer.php');

@@ -10,6 +10,15 @@
 
 <hr>
 <p class="faqquestion">
+Can I get updates to the progress of GNOME Power Manager? Do you have an RSS feed?
+</p>
+<p class="faqanswer">
+You can get CVS updates from <a href="http://cia.navi.cx/stats/project/gnome/gnome-power-manager/.rss">navi.cx</a> in RSS format.
+There are also project statistics and access graphs provided by <a href="http://sourceforge.net/project/stats/?group_id=133929&ugn=gnome-power">Sourceforge</a>.
+</p>
+
+<hr>
+<p class="faqquestion">
 I run Debian stable/unstable. Can I run GNOME Power Manager?
 </p>
 <p class="faqanswer">
@@ -46,6 +55,22 @@ Why doesn't my video adaptor come back after a suspend? It just displays black.
 <p class="faqanswer">
 You may need to add a s3 command to your kernel boot string so that the kernel can re-initialise your video card.
 See <a href="data/video.txt">this document</a> for more details, or to see if your system has been identified as needing the switch.
+</p>
+
+<hr>
+<p class="faqquestion">
+Why doesn't GNOME Power manager autostart?
+</p>
+<p class="faqanswer">
+For the moment, you will have to run GNOME Power Manager from a terminal (it will not autostart).
+It will hopefully be either patched into the default upstream startup, or will use gnome-services when it arrives in mainline.
+You can also use gnome-session (this is what I do) to launch GNOME Power Manager for each session.
+</p>
+<center>
+<img src="images/gnome-session.png" alt="[img]"/>
+</center>
+<p class="caption">
+You can launch gnome-power-manager automatically using the gnome-session-properties program
 </p>
 
 <?php
