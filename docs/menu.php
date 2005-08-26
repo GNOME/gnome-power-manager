@@ -21,6 +21,9 @@
    <a href="compile.php" class="menu">Getting the Code</a>
   </td><td></td>
   <td class="menu">
+   <a href="faq.php" class="menu">FAQ</a>
+  </td><td></td>
+  <td class="menu">
    <a href="contact.php" class="menu">Contact</a>
   </td><td></td>
   <td class="menu">
