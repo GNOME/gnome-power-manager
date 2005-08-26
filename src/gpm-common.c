@@ -274,54 +274,6 @@ convert_powerdevice_to_string (gint powerDevice)
 	return _("Unknown device");
 }
 
-#if !CVSHAL
-/** Updates .percentageCharge in a GenericObject
- *  This function is needed because of the different ways that batteries 
- *  can represent their charge.
- *
- *  @param  slotData		the GenericObject reference
- *  @param  datavalue 		Data value, either percentage or new mWh current
- */
-void
-update_percentage_charge (GenericObject *slotData)
-{
-	g_return_if_fail (slotData);
-	g_return_if_fail (slotData->powerDevice != POWER_NONE);
-
-	/* These devices cannot have charge, assume 0% */
-	if (!slotData->present ||
-	    slotData->powerDevice==POWER_AC_ADAPTER || 
-	    slotData->powerDevice==POWER_UNKNOWN ) {
-		slotData->percentageCharge = 0;
-		return;
-	}
-
-	/* shouldn't happen */
-	if (slotData->rawLastFull <= 0) {
-		g_debug ("Error: slotData->rawLastFull = %i", slotData->rawLastFull);
-		slotData->rawLastFull = 100;
-	}
-
-	/* 
-	 * Work out the ACTUAL percentage charge of the battery 
-	 * using cached values
-	 */
-	slotData->percentageCharge = ((double) slotData->rawCharge / 
-					(double) slotData->rawLastFull) * 100;
-
-	/* make sure results are sensible */
-	if (slotData->percentageCharge < 0) {
-		g_debug ("Error: slotData->percentageCharge = %i", slotData->percentageCharge);
-		slotData->percentageCharge = 0;
-	}
-	if (slotData->percentageCharge > 100) {
-		g_debug ("Error: slotData->percentageCharge = %i", slotData->percentageCharge);
-		slotData->percentageCharge = 100;
-	}
-	return;
-}
-#endif
-
 /** Gets the charge state string from a slot object
  *
  *  @param  slotData		the GenericObject reference

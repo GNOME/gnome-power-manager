@@ -840,10 +840,6 @@ add_ac_adapter (const gchar *udi)
 		slotData->isRechargeable = FALSE;
 		slotData->isCharging = FALSE;
 		slotData->isDischarging = FALSE;
-#if !CVSHAL
-		slotData->rawLastFull = 0;
-		slotData->rawCharge = 0;
-#endif
 		slotData->isRechargeable = 0;
 		slotData->percentageCharge = 0;
 		slotData->minutesRemaining = 0;
@@ -858,10 +854,6 @@ read_battery_data (GenericObject *slotData)
 
 	/* initialise to known defaults */
 	slotData->minutesRemaining = 0;
-#if !CVSHAL
-	slotData->rawCharge = 0;
-	slotData->rawLastFull = 0;
-#endif
 	slotData->isRechargeable = FALSE;
 	slotData->isCharging = FALSE;
 	slotData->isDischarging = FALSE;
@@ -877,25 +869,13 @@ read_battery_data (GenericObject *slotData)
 	if (tempval > 0)
 		slotData->minutesRemaining = tempval / 60;
 
-#if !CVSHAL
-	/*
-	 * We need the RAW readings so we keep functions modular and 
-	 * acpi/apm neutral
-	 */
-	hal_device_get_int (slotData->udi, "battery.charge_level.current", &slotData->rawCharge);
-	hal_device_get_int (slotData->udi, "battery.charge_level.last_full", &slotData->rawLastFull);
-#else
 	hal_device_get_int (slotData->udi, "battery.charge_level.percentage", &slotData->percentageCharge);
-#endif
 	/* battery might not be rechargeable, have to check */
 	hal_device_get_bool (slotData->udi, "battery.is_rechargeable", &slotData->isRechargeable);
 	if (slotData->isRechargeable) {
 		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging", &slotData->isCharging);
 		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging", &slotData->isDischarging);
 	}
-#if !CVSHAL
-	update_percentage_charge (slotData);
-#endif
 }
 
 /** Adds a battery device, of any type. Also sets up properties on cached object
@@ -1072,13 +1052,8 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		hal_device_get_bool (udi, key, &slotData->isDischarging);
 		updateState = TRUE;
-#if !CVSHAL
-	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		hal_device_get_int (udi, key, &slotData->rawCharge);
-#else
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_device_get_int (udi, key, &slotData->percentageCharge);
-#endif
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
 		hal_device_get_int (udi, key, &tempval);
@@ -1099,11 +1074,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		oldCharge = slotDataVirt.percentageCharge;
 	} else
 		oldCharge = slotData->percentageCharge;
-
-#if !CVSHAL
-	/* calculate the new value */
-	update_percentage_charge (slotData);
-#endif
 
 	/* find new (taking into account multi-device machines) */
 	if (slotData->isRechargeable) {
