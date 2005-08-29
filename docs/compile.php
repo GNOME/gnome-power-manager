@@ -10,7 +10,7 @@
 </p>
 <table>
  <tr>
-  <td valign="top"><img src="images/icon-redhat.png"/></td>
+  <td valign="top"><img src="images/icon-redhat.png" alt="[img]"/></td>
   <td>
    <p>
     Package by me for <a href="http://sourceforge.net/project/showfiles.php?group_id=133929">Fedora Core 4</a>
@@ -21,19 +21,25 @@
     <b>Standard disclaimers apply.</b> Do not do this on a production machine.
    </p>
    <pre>yum -y --enablerepo=development update hal dbus</pre>
+   <p>
+    You will have to install libnotify and notification daemon to use the libnotify features of GNOME Power Manager.
+    libnotify will appear in fedora development soon, but until then you can use <a href="data/">these</a> packages if you wish.
+    <b>Standard disclaimers apply.</b>
+   </p>
+   <pre>rpm -ivh libnotify-0.2.2-1.i386.rpm notification-daemon-0.2.2-1.i386.rpm</pre>
   </td>
  </tr>
  <tr>
-  <td valign="top"><img src="images/icon-ubuntu.png"/></td>
+  <td valign="top"><img src="images/icon-ubuntu.png" alt="[img]"/></td>
   <td>
    <p>
     Packages by Oliver Grawert for <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a>
    </p>
-   <pre>apt-get -y install gnome-power-manager</pre>
+   <pre>apt-get -y install gnome-power-manager libnotify notification-daemon</pre>
   </td>
  </tr>
  <tr>
-  <td valign="top"><img src="images/icon-forsight.png"/></td>
+  <td valign="top"><img src="images/icon-forsight.png" alt="[img]"/></td>
   <td>
    <p>
     Package by Ken Vandine for <a href="http://www.foresightlinux.com/downloads/">Forsight Linux</a>
@@ -41,7 +47,7 @@
   </td>
  </tr>
  <tr>
-  <td valign="top"><img src="images/icon-gentoo.png"/></td>
+  <td valign="top"><img src="images/icon-gentoo.png" alt="[img]"/></td>
   <td>
    <p>
     ebuild by Steev Klimaszewski for <a href="https://dev.cardoe.com/gentopia/">Gentoo Linux</a>
@@ -59,13 +65,12 @@ emerge -av dbus hal pmount gnome-power-manager udev
   </td>
  </tr>
 </table>
-<hr>
+<hr/>
 
 <h2>Getting The Source</h2>
 <p>
 The latest 'stable' tarballs can be found at <a href="https://sourceforge.net/project/showfiles.php?group_id=133929">sourceforge</a>.
 </p>
-<p>
 
 <h3>CVS</h3>
 <p>
@@ -103,14 +108,14 @@ NB: Your command for restarting dbus maybe different to the above.
 It may be easier to reboot your computer instead of restarting messagebus.
 </p>
 
-<hr>
-<h3>Fedora Core 4 & GNOME Power Manager CVS HOWTO</h3>
+<hr/>
+<h3>Fedora Core 4 &amp; GNOME Power Manager CVS HOWTO</h3>
 <p>
 <b>THESE NOTES ARE UNFINISHED AND MAY NOT WORK</b>
 </p>
 <p>
-Install DBUS and HAL from Rawhide as detailed at the top of the page.
-We will also install standard GNOME build tools (if not already installed), and the other GNU automake type stuff here too.
+Install DBUS and HAL from Rawhide, and install libnotify, libnotify-devel and notification-daemon as detailed at the top of the page.
+You will have to also install standard GNOME build tools (if not already installed), and the other GNU automake type stuff.
 Start by opening a terminal and doing (as root):
 </p>
 <pre>
@@ -118,11 +123,9 @@ Start by opening a terminal and doing (as root):
 # yum -y groupinstall "Development Tools"
 # yum -y install libwnck-devel
 # yum -y install gtk+-devel
-# yum -y install hal-devel
+# yum -y --enablerepo=development install hal-devel
 </pre>
 <p>
-We will have to install libnotify and notification daemon from SVN to use the optional libnotify dependancy.
-libnotify will appear in fedora development soon, but until then you can use <a href="(TODO)">these</a>  packages if you wish.
 Now we will build gnome power manager (as a user account).
 </p>
 <pre>

@@ -8,16 +8,16 @@
  Please read through these questions before asking the list these common questions.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 Can I get updates to the progress of GNOME Power Manager? Do you have an RSS feed?
 </p>
 <p class="faqanswer">
 You can get CVS updates from <a href="http://cia.navi.cx/stats/project/gnome/gnome-power-manager/.rss">navi.cx</a> in RSS format.
-There are also project statistics and access graphs provided by <a href="http://sourceforge.net/project/stats/?group_id=133929&ugn=gnome-power">Sourceforge</a>.
+There are also project statistics and access graphs provided by <a href="http://sourceforge.net/project/stats/?group_id=133929&amp;ugn=gnome-power">Sourceforge</a>.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 I run Debian stable/unstable. Can I run GNOME Power Manager?
 </p>
@@ -26,7 +26,7 @@ No. Debian do not follow new HAL and DBUS releases like other bleeding-edge dist
 Ubuntu is the only Debian based distro that I know that follows upstream so closely.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 Why do we need such an up-to-date DBUS?
 </p>
@@ -38,7 +38,7 @@ Also, some bugs in the newer DBUS's have been fixed that impact the operation of
 You are welcome to patch G-P-M to work with an older DBUS if you wish.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 Why do we need such an up-to-date HAL?
 </p>
@@ -48,7 +48,7 @@ You cannot patch G-P-M to support an older HAL, as it *will not* work.
 Encourage your distro to update their version of HAL, and then G-P-M will work.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 Why doesn't my video adaptor come back after a suspend? It just displays black.
 </p>
@@ -57,7 +57,7 @@ You may need to add a s3 command to your kernel boot string so that the kernel c
 See <a href="data/video.txt">this document</a> for more details, or to see if your system has been identified as needing the switch.
 </p>
 
-<hr>
+<hr/>
 <p class="faqquestion">
 Why doesn't GNOME Power manager autostart?
 </p>
