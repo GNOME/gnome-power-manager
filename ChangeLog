@@ -1,5 +1,19 @@
 2005-08-30  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Bump to 0.2.0, signifying the obsolete of PowerManager.
+	Also raise hal dep to 0.5.4
+
+	* src/gpm-main.c: Remove code using USE_POWERMANAGER.
+
+	* gnome-power-manager.schemas.in: Use "halt -s", not shutdown.
+
+	* doc/faq.php: Explain the obsolete PowerManager.
+
+	* gnome-power-manager.spec.in: Add "Obsoletes: PowerManager" so that
+	we uninstall the PowerManager Daemon.
+
+2005-08-30  Richard Hughes  <richard@hughsie.com>
+
 	* src/preferences.glade: Fix the combobox padding, and make all siders
 	update policy to "continous" so we can do some clever stuff with steps.
 
