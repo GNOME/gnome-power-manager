@@ -47,8 +47,7 @@
 
 #include "hal-glib.h"
 
-#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
-#define USE_POWERMANAGER	FALSE   /* experimental to be FALSE */
+#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
@@ -371,97 +370,6 @@ dbus_action (gint action)
 	return TRUE;
 }
 
-#if USE_POWERMANAGER
-/** Uses PowerManager (depreciated...)
- *
- */
-static void
-pm_do_action (const gchar *action)
-{
-	g_debug ("action = %s\n", action);
-	GError *error = NULL;
-	gboolean boolret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
-		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
-
-	if (!dbus_g_proxy_call (pm_proxy, action, &error, 
-			G_TYPE_INVALID,
-			G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		GString *gs = g_string_new ("");
-		g_string_printf (gs, _("PowerManager service is not running.\n"
-				     "%s cannot perform a %s."), NICENAME, action);
-		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
-		g_string_free (gs, TRUE);
-	}
-	if (!boolret)
-		g_warning ("%s failed", action);
-	g_object_unref (G_OBJECT (pm_proxy));
-	dbus_g_connection_unref (system_connection);
-}
-#endif
-
-/** For this specific hard-drive, set the spin-down timeout
- *
- *  @param  device		The device, e.g. /dev/hda
- *  @param  minutes		How many minutes to set the spin-down for
- */
-static void
-set_hdd_spindown_device (gchar *device, int minutes)
-{
-	GError *error = NULL;
-	gboolean boolret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
-		PM_DBUS_SERVICE, PM_DBUS_PATH, PM_DBUS_INTERFACE);
-
-	if (!dbus_g_proxy_call (pm_proxy, "hdparm", &error, 
-			G_TYPE_INT, minutes, G_TYPE_STRING, device, G_TYPE_INVALID,
-			G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		GString *gs = g_string_new ("bug");
-		g_string_printf (gs, _("PowerManager service is not running.\n"
-				     "%s cannot perform hard-drive timeout changes."), NICENAME);
-		use_libnotify (gs->str, NOTIFY_URGENCY_NORMAL);
-		g_string_free (gs, TRUE);
-	}
-	if (!boolret)
-		g_warning ("hard-drive timeout change failed");
-	g_object_unref (G_OBJECT (pm_proxy));
-	dbus_g_connection_unref (system_connection);
-}
-
-/** For each hard-drive in the system, set the spin-down timeout
- *
- *  @param  minutes		How many minutes to set the spin-down for
- */
-static void
-set_hdd_spindown (int minutes)
-{
-	gint i;
-	char **device_names;
-	gchar *type;
-	gchar *device;
-
-	/* find devices of type hard-disks from HAL */
-	hal_find_device_capability ("storage", &device_names);
-	if (device_names == NULL)
-		g_warning ("Couldn't obtain list of storage");
-	for (i = 0; device_names[i]; i++) {
-		char *udi = device_names[i];
-		hal_device_get_string (udi, "storage.drive_type", &type);
-		if (strcmp (type, "disk") == 0) {
-			hal_device_get_string (udi, "block.device", &device);
-			g_debug ("Setting device %s to sleep after %i minutes\n", device, minutes);
-			set_hdd_spindown_device (device, minutes);
-			g_free (device);
-		}
-		g_free (type);
-	}
-	hal_free_capability (device_names);
-}
-
 /** If set to lock on screensave, instruct gnome-screensaver to lock screen
  *  and return TRUE.
  *  if set not to lock, then do nothing, and return FALSE.
@@ -524,52 +432,29 @@ action_policy_do (gint policy_number)
 		g_warning ("*ACTION* Send warning should be done locally!");
 	} else if (policy_number == ACTION_REBOOT && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Reboot");
-#if !USE_POWERMANAGER
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
-#else
-		pm_do_action ("restart");
-#endif
 	} else if (policy_number == ACTION_SUSPEND && dbus_action (GPM_DBUS_SUSPEND)) {
 		g_debug ("*ACTION* Suspend");
 		gscreensaver_lock ();
-#if !USE_POWERMANAGER
 		hal_suspend (0);
-#else
-		pm_do_action ("suspend");
-#endif
 	} else if (policy_number == ACTION_HIBERNATE && dbus_action (GPM_DBUS_HIBERNATE)) {
 		g_debug ("*ACTION* Hibernate");
 		gscreensaver_lock ();
-#if !USE_POWERMANAGER
 		hal_hibernate ();
-#else
-		pm_do_action ("hibernate");
-#endif
 	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Shutdown");
-#if !USE_POWERMANAGER
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
-#else
-		pm_do_action ("shutdown");
-#endif
 	} else if (policy_number == ACTION_BATTERY_CHARGE) {
 		g_debug ("*ACTION* Battery Charging");
 	} else if (policy_number == ACTION_BATTERY_DISCHARGE) {
 		g_debug ("*ACTION* Battery Discharging");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
-		/* spin down the hard-drives */
-#if USE_POWERMANAGER
-		value = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/battery/sleep_hdd", NULL);
-		set_hdd_spindown (value);
-
-#else
+		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/brightness", NULL);
 		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
-#endif
 		/* set dpms_suspend to our value */
 		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_display", NULL);
@@ -578,29 +463,16 @@ action_policy_do (gint policy_number)
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
-		/* spin down the hard-drives */
-#if USE_POWERMANAGER
-		value = gconf_client_get_int (client, 
-			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
-		set_hdd_spindown (value);
-#else
+		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/brightness", NULL);
 		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
-#endif
 		/* set dpms_suspend to our value */
 		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_display", NULL);
 		gconf_client_set_int (client, 
 			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
-			
-			
-			
-			
-			
-			
-			
 		gpm_emit_mains_changed (TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i", 
