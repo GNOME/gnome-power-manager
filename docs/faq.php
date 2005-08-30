@@ -10,6 +10,17 @@
 
 <hr/>
 <p class="faqquestion">
+What is PowerManager - why was GNOME Power Manager depending on it, but now obsoletes it?
+</p>
+<p class="faqanswer">
+Before HAL had the method support (added in 0.5.4), GNOME Power Manager used an external daemon running as root to do all the dirty work.
+This daemon was called PowerManager.
+This is now obsolete with the newest HAL, and with the new work that we have done, HAL far surpasses the capabilities of PowerManager.
+<b>PowerManager and pmscripts are now obsolete.</b>
+</p>
+
+<hr/>
+<p class="faqquestion">
 Can I get updates to the progress of GNOME Power Manager? Do you have an RSS feed?
 </p>
 <p class="faqanswer">
