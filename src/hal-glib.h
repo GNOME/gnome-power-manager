@@ -26,6 +26,11 @@ gboolean hal_device_get_int (const gchar *udi, const gchar *key, gint *value);
 gboolean hal_find_device_capability (const gchar *capability, gchar ***value);
 void hal_free_capability (gchar **value);
 
+void hal_set_brightness (int brightness);
+void hal_suspend (int wakeup);
+void hal_hibernate (void);
+void hal_setlowpowermode (gboolean set);
+
 DBusGConnection *get_system_connection (void);
 DBusGConnection *get_session_connection (void);
 
