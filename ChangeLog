@@ -1,18 +1,58 @@
+2005-08-30  Richard Hughes  <richard@hughsie.com>
+
+	* src/preferences.glade: Fix the combobox padding, and make all siders
+	update policy to "continous" so we can do some clever stuff with steps.
+
+	* src/gpm-prefs.c: Rename capability to lcdpanel.
+
+	* src/gpm-main.c: fix a warning for:
+	"g_value_set_uint: assertion `G_VALUE_HOLDS_UINT (value)' failed"
+	by switching to return a G_TYPE_UINT value.
+
+	* src/gpm-main: (hal_set_brightness, hal_set_brightness_item):
+	Create new functions to support the new 
+	org.freedesktop.Hal.Device.LCDPanel.SetBrightness method.
+
+	* src/gpm-common.h: Add HAL_DBUS_INTERFACE_LCD
+
+	* src/hal-glib.{c|h}: Move hal specificy code into here from gpm-main.
+
+	* src/gpm-prefs: (format_value_callback_percent): Set to 1 digit
+	precision, e.g. 56.3% so we can do steps.
+
+	* src/gpm-prefs: (callback_hscale_changed): Add divisions support so
+	we can lock to correct values for LCD brightness. 
+	This also lets us snap to 5 minute intervals for the sleep hscale's.
+
+2005-08-26  Richard Hughes  <richard@hughsie.com>
+
+	* doc/compile.php: Add information about CVS and Fedora core, and
+	Fedora rawhide.
+
+	* doc/faq.php, doc/menu.php, doc/index.css: Add FAQ page.
+
 2005-08-21  Richard Hughes  <richard@hughsie.com>
 
-	src/gpm-main.c, src/preferences.glade: removed the user setting of 
+	* src/gpm-common.c: removed update_percentage_charge as we now depend on
+	CVS HAL.
+
+	* src/gpm-main.c: Remove all code paths that rely on !CVSHAL.
+
+2005-08-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c, src/preferences.glade: removed the user setting of 
 	hard drive spindown time, and double click action.
 	This was agued by many as having no place in the UI.
 
-	src/gpm-main.c (hal_setlowpowermode): add a new funtion to call 
+	* src/gpm-main.c (hal_setlowpowermode): add a new funtion to call 
 	SetPowerSave on the HAL root computer object.
 
-	Makefile.am: Use the new define, DBUS_SYS_DIR
+	* Makefile.am: Use the new define, DBUS_SYS_DIR
 
-	configure.in: Add configuration for DBUS_SYS_DIR and DBUS_SERVICES_DIR
+	* configure.in: Add configuration for DBUS_SYS_DIR and DBUS_SERVICES_DIR
 	I hope these don't break the RPM :-)
 
-	gnome-power-manager.service.in: new file, will act as a future service
+	* gnome-power-manager.service.in: new file, will act as a future service
 	file for the dbus service.
 
 2005-08-23  Richard Hughes  <richard@hughsie.com>
@@ -21,13 +61,13 @@
 
 2005-08-21  Richard Hughes  <richard@hughsie.com>
 
-	src/gpm-main.c (update_has_logic): removed as we can trivially move the
+	* src/gpm-main.c (update_has_logic): removed as we can trivially move the
 	remaining checks into the state check function.
 	Fix detection of onBatteryPower so that it's instantaneous.
 
-	src/gpm-prefs.c (get_devices_capability_with_value): New function, so that
-	we can match a capability with a key string. Useful for buttons and ide
-	drives.
+	* src/gpm-prefs.c (get_devices_capability_with_value): New function, so
+	that we can match a capability with a key string. Useful for buttons
+	and ide drives.
 
 2005-08-20  Richard Hughes  <richard@hughsie.com>
 
