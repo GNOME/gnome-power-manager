@@ -47,7 +47,7 @@
 
 #include "hal-glib.h"
 
-#define LIBHAL_EXPERIMENT 	TRUE	/* needs CVS DBUS */
+#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
