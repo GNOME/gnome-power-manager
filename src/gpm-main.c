@@ -371,74 +371,6 @@ dbus_action (gint action)
 	return TRUE;
 }
 
-#if !USE_POWERMANAGER
-/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
- *
- */
-static void
-hal_suspend (int wakeup)
-{
-	GError *error = NULL;
-	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
-		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
-	if (!dbus_g_proxy_call (pm_proxy, "Suspend", &error, 
-			G_TYPE_INT, wakeup, G_TYPE_INVALID,
-			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend failed (HAL error?)");
-	}
-	if (ret != 0)
-		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend call failed (%i)", ret);
-	g_object_unref (G_OBJECT (pm_proxy));
-	dbus_g_connection_unref (system_connection);
-}
-
-/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
- *
- */
-static void
-hal_hibernate ()
-{
-	GError *error = NULL;
-	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
-		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
-	if (!dbus_g_proxy_call (pm_proxy, "Hibernate", &error, 
-			G_TYPE_INVALID,
-			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate failed (HAL error?)");
-	}
-	if (ret != 0)
-		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate call failed (%i)", ret);
-	g_object_unref (G_OBJECT (pm_proxy));
-	dbus_g_connection_unref (system_connection);
-}
-
-static void
-hal_setlowpowermode (gboolean set)
-{
-	GError *error = NULL;
-	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
-		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
-	if (!dbus_g_proxy_call (pm_proxy, "SetPowerSave", &error, 
-			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
-			G_TYPE_INT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave failed (HAL error?)");
-	}
-	if (ret != 0)
-		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave call failed (%i)", ret);
-	g_object_unref (G_OBJECT (pm_proxy));
-	dbus_g_connection_unref (system_connection);
-}
-#endif
-
 #if USE_POWERMANAGER
 /** Uses PowerManager (depreciated...)
  *
@@ -584,6 +516,7 @@ action_policy_do (gint policy_number)
 	g_warning ("Ignoring action_policy_do event as simulating!");
 	return;
 #endif
+	gint value;
 	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
@@ -627,33 +560,40 @@ action_policy_do (gint policy_number)
 		g_debug ("*DBUS* Now battery powered");
 		/* spin down the hard-drives */
 #if USE_POWERMANAGER
-		gint value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_hdd", NULL);
 		set_hdd_spindown (value);
+
 #else
+		value = gconf_client_get_int (client, 
+			GCONF_ROOT "policy/battery/brightness", NULL);
+		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
 #endif
 		/* set dpms_suspend to our value */
-		gint displaytimeout = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_display", NULL);
 		gconf_client_set_int (client, 
-			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
+			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* spin down the hard-drives */
 #if USE_POWERMANAGER
-		gint value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_hdd", NULL);
 		set_hdd_spindown (value);
 #else
+		value = gconf_client_get_int (client, 
+			GCONF_ROOT "policy/ac/brightness", NULL);
+		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
 #endif
 		/* set dpms_suspend to our value */
-		gint displaytimeout = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/ac/sleep_display", NULL);
 		gconf_client_set_int (client, 
-			"/apps/gnome-screensaver/dpms_suspend", displaytimeout, NULL);
+			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
 			
 			
 			
