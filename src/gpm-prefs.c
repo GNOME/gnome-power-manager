@@ -25,6 +25,7 @@
  **************************************************************************/
 
 #include <glib.h>
+#include <math.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
@@ -117,8 +118,8 @@ gtk_set_check (const char *widgetname, gboolean set)
 
 /** Get the number of devices on system with a specific capability
  *
- *  @param  capability	The capability, e.g. "battery"
- *  @return		Number of devices of that capability
+ *  @param  capability		The capability, e.g. "battery"
+ *  @return			Number of devices of that capability
  */
 static gint
 get_devices_capability (const gchar *capability)
@@ -130,6 +131,7 @@ get_devices_capability (const gchar *capability)
 		g_debug ("No devices of capability %s", capability);
 		return 0;
 	}
+	/* iterate to find number of items */
 	for (i = 0; names[i]; i++) {};
 	hal_free_capability (names);
 	g_debug ("%i devices of capability %s", i, capability);
@@ -138,10 +140,10 @@ get_devices_capability (const gchar *capability)
 
 /** Get the number of devices on system with a specific capability
  *
- *  @param  capability	The capability, e.g. "battery"
- *  @param  key		The key to match, e.g. "button.type"
- *  @param  value	The key match, e.g. "power"
- *  @return		Number of devices of that capability
+ *  @param  capability		The capability, e.g. "battery"
+ *  @param  key			The key to match, e.g. "button.type"
+ *  @param  value		The key match, e.g. "power"
+ *  @return			Number of devices of that capability
  */
 static gint
 get_devices_capability_with_value (const gchar *capability, const gchar *key, const gchar *value)
@@ -187,7 +189,7 @@ recalc (void)
 	gboolean hasButtonSleep = (get_devices_capability_with_value ("button", "button.type", "sleep") > 0);
 	gboolean hasButtonLid =   (get_devices_capability_with_value ("button", "button.type", "lid") > 0);
 	gboolean hasHardDrive =   (get_devices_capability_with_value ("storage", "storage.bus", "ide") > 0);
-	gboolean hasLCD = 	  (get_devices_capability ("lcd_panel") > 0);
+	gboolean hasLCD = 	  (get_devices_capability ("lcdpanel") > 0);
 
 #if HAVE_GSCREENSAVER
 	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
@@ -263,7 +265,9 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 	 * just recalculate the UI, as the gconf keys are read there.
 	 * this removes the need for lots of global variables.
 	 */
+#if WHY_DO_WE_DO_THIS
 	recalc ();
+#endif
 }
 
 /** Callback for combo_changed
@@ -284,6 +288,26 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 	gconf_client_set_string (client, policypath, policyoption, NULL);
 }
 
+/** Gets the number of brightness steps the LCD adaptor supports
+ *
+ *  @return  			Number of steps
+ */
+static int
+hal_get_brightness_steps ()
+{
+	char **names;
+	int levels = 0;
+	hal_find_device_capability ("lcdpanel", &names);
+	if (!names) {
+		g_debug ("No devices of capability lcdpanel");
+		return 0;
+	}
+	/* only use the first one */
+	hal_device_get_int (names[0], "lcdpanel.num_levels", &levels);
+	hal_free_capability (names);
+	return levels;
+}
+
 /** Callback for hscale_changed
  *
  */
@@ -291,29 +315,57 @@ static void
 callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 {
 	g_return_if_fail (widget);
+	GConfClient *client = gconf_client_get_default ();
+	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
 
 	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
-/* 
- * Code for divisions of 10 seconds, unfinished
- *
-	int v2 = (int (value / 10)) * 10;
-	gtk_range_set_value (GTK_RANGE (widget), v2);
-	if (v2 != value)
-		return;
-*/
+	gint oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
 
-/* if this is hscale for battery_low, then set upper range of hscale for 
- * battery_critical maximum to value
- * (This stops criticalThreshold > lowThreshold)
- */
-	if (strcmp (gtk_widget_get_name (widget), "hscale_battery_low") == 0) {
+	gdouble divisions = -1;
+	/* 
+	 * Code for divisions of 10 seconds, unfinished
+	 *
+	 */
+	const char *widgetname = gtk_widget_get_name (widget);
+	if (strcmp (widgetname, "hscale_ac_brightness") == 0)
+		divisions = 100.0 / hal_get_brightness_steps ();
+	else if (strcmp (widgetname, "hscale_batteries_brightness") == 0)
+		divisions = 100.0 / hal_get_brightness_steps ();
+	else if (strcmp (widgetname, "hscale_ac_computer") == 0)
+		divisions = 5;
+	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
+		divisions = 5;
+
+	if (divisions > 0) {
+		double double_segment = ((gdouble) value / divisions);
+		double v2 = ceil(double_segment) * divisions;
+		gtk_range_set_value (GTK_RANGE (widget), v2);
+		/* if not different, then we'll return, and wait for the proper event */
+		if ((int) v2 != (int) value)
+			return;
+	}
+
+	/*
+	 * if calculated value not different to existing gconf value, 
+	 * then no point continuing
+	 */
+	if (oldgconfvalue == value)
+		return;
+
+	/* if this is hscale for battery_low, then set upper range of hscale for 
+	 * battery_critical maximum to value
+	 * (This stops criticalThreshold > lowThreshold)
+	 */
+	if (strcmp (widgetname, "hscale_battery_low") == 0) {
 		GtkWidget *widget2;
 		widget2 = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
 	}
 
-	GConfClient *client = gconf_client_get_default ();
-	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
+	/* for AC, change the brightness in real-time */
+	if (strcmp (widgetname, "hscale_ac_brightness") == 0)
+		hal_set_brightness (value);
+
 	g_return_if_fail (policypath);
 	g_debug ("[%s] = (%i)", policypath, value);
 	gconf_client_set_int (client, policypath, value, NULL);
@@ -366,7 +418,7 @@ print_usage (void)
 static gchar*
 format_value_callback_percent (GtkScale *scale, gdouble value)
 {
-	return g_strdup_printf ("%i%%", (int) value);
+	return g_strdup_printf ("%4.1f%%", value);
 }
 
 /** simple callback that converts minutes into pretty text
