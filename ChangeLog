@@ -1,5 +1,15 @@
 2005-08-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/icons/gnome-power-system-ups-{0..8}-of-8.png: Added back by 
+	popular request.
+
+	* src/icons/Makefile.am: Add UPS icons.
+
+	* src/gpm-notification.c: use UPS icons. Also fix a bug where {junk}%
+	was dislayed when primary battery not present.
+
+2005-08-30  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in: Bump to 0.2.0, signifying the obsolete of PowerManager.
 	Also raise hal dep to 0.5.4
 
