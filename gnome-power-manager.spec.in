@@ -26,7 +26,11 @@ change preferences.
 %setup -q
 
 %build
-%configure --enable-libnotify
+%configure \
+	--enable-libnotify					\
+        --prefix=%{buildroot}					\
+        --with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
+        --with-dbus-services=%{buildroot}/usr/share/dbus-1/services
 make
 
 %install
@@ -42,12 +46,12 @@ rm -rf $RPM_BUILD_ROOT
 %post
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
-	%{_sysconfdir}/gconf/schemas/gnome-power.schemas >/dev/null
+	%{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas >/dev/null
 
 %preun
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-uninstall-rule \
-        %{_sysconfdir}/gconf/schemas/gnome-power.schemas >/dev/null
+        %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas >/dev/null
 
 
 %files -f %{name}.lang
@@ -57,7 +61,7 @@ gconftool-2 --makefile-uninstall-rule \
 %{_datadir}/*
 %{_sysconfdir}/gconf/schemas/*.schemas
 %dir %{_sysconfdir}/dbus-1/system.d
-%config %{_sysconfdir}/dbus-1/system.d/gnome-power.conf
+%config %{_sysconfdir}/dbus-1/system.d/gnome-power-manager.conf
 
 %changelog
 * Mon Jun 19 2005 Richard Hughes <richard@hughsie.com> 0.1.1-1
