@@ -97,6 +97,17 @@ create_icon_pixbuf (GenericObject *slotData)
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
+	} else if (slotData->powerDevice == POWER_UPS) {
+		int num;
+		gchar *computed_name;
+		num = ((slotData->percentageCharge + 4) * 8 ) / 100;
+		if (num < 0) num = 0;
+		else if (num > 8) num = 8;
+		computed_name = g_strdup_printf ("gnome-power-system-ups-%d-of-8", num);
+		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
+		g_debug ("computed_name = %s", computed_name);
+		g_assert (pixbuf != NULL);
+		g_free (computed_name);
 	}
 
 	return pixbuf;
@@ -177,11 +188,16 @@ get_object_tooltip (GenericObject *slotData)
 		tooltip = g_string_new ("bug?");
 		GString *remaining = get_time_string (slotData);
 		gchar *chargestate = get_chargestate_string (slotData);
-		g_string_printf (tooltip, "%s %s (%i%%)", 
+		if (slotData->present) {
+			g_string_printf (tooltip, "%s %s (%i%%)", 
 					devicestr, chargestate, slotData->percentageCharge);
-		if (remaining) {
-			g_string_append_printf (tooltip, "\n%s", remaining->str);
-			g_string_free (remaining, TRUE);
+			if (remaining) {
+				g_string_append_printf (tooltip, "\n%s", remaining->str);
+				g_string_free (remaining, TRUE);
+			}
+		} else {
+			g_string_printf (tooltip, "%s %s", 
+					devicestr, chargestate);
 		}
 	} else if (slotData->powerDevice == POWER_KEYBOARD ||
 		   slotData->powerDevice == POWER_MOUSE) {
@@ -412,7 +428,7 @@ menu_main_create (void)
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
-#if 0
+#if 1
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	item = gtk_image_menu_item_new_with_label ("LCD Brightness");

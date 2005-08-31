@@ -291,7 +291,7 @@ get_chargestate_string (GenericObject *slotData)
 		return _("discharging");
 	else if (!slotData->isCharging && 
 		 !slotData->isDischarging && 
-		 slotData->percentageCharge > 98)
+		 slotData->percentageCharge > 99)
 		return _("fully charged");
 	else if (!slotData->isCharging &&
 		 !slotData->isDischarging)
