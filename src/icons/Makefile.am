@@ -22,4 +22,13 @@ Data_DATA =										\
 	gnome-power-system-ac-5-of-8.png			\
 	gnome-power-system-ac-6-of-8.png			\
 	gnome-power-system-ac-7-of-8.png			\
-	gnome-power-system-ac-8-of-8.png
+	gnome-power-system-ac-8-of-8.png			\
+	gnome-power-system-ups-0-of-8.png			\
+	gnome-power-system-ups-1-of-8.png			\
+	gnome-power-system-ups-2-of-8.png			\
+	gnome-power-system-ups-3-of-8.png			\
+	gnome-power-system-ups-4-of-8.png			\
+	gnome-power-system-ups-5-of-8.png			\
+	gnome-power-system-ups-6-of-8.png			\
+	gnome-power-system-ups-7-of-8.png			\
+	gnome-power-system-ups-8-of-8.png
