@@ -69,7 +69,7 @@
 #define	HAL_DBUS_PATH_COMPUTER		"/org/freedesktop/Hal/devices/computer"
 #define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
 #define	HAL_DBUS_INTERFACE_PM		"org.freedesktop.Hal.Device.SystemPowerManagement"
-#define	HAL_DBUS_INTERFACE_LCD		"org.freedesktop.Hal.Device.LCDPanel"
+#define	HAL_DBUS_INTERFACE_LCD		"org.freedesktop.Hal.Device.LaptopPanel"
 #define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
 #define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
 
@@ -84,14 +84,6 @@
 #define NOTIFY_URGENCY_NORMAL		2
 #define NOTIFY_URGENCY_LOW		3
 #endif
-
-typedef enum {
-	POLICY_NONE,
-	POLICY_PERCENT,
-	POLICY_CHOICE,
-	POLICY_BOOLEAN,
-	POLICY_TIME
-} PolicyType;
 
 typedef enum {
 	ACTION_NOTHING,

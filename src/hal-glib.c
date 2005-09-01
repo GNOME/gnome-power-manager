@@ -203,7 +203,7 @@ hal_free_capability (gchar **value)
 	g_free (value);
 }
 
-/** Uses org.freedesktop.Hal.Device.LCDPanel.SetBrightness ()
+/** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
  *
  *  @param  brightness		LCD Brightness to set to
  */
@@ -228,7 +228,7 @@ hal_set_brightness_item (const char *udi, int brightness)
 	dbus_g_connection_unref (system_connection);
 }
 
-/** Sets *all* the lcdpanel objects to the required brightness level
+/** Sets *all* the laptop_panel objects to the required brightness level
  *
  *  @param  brightness		LCD Brightness to set to
  */
@@ -237,12 +237,12 @@ hal_set_brightness (int brightness)
 {
 	gint i;
 	char **names;
-	hal_find_device_capability ("lcdpanel", &names);
+	hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
-		g_debug ("No devices of capability lcdpanel");
+		g_debug ("No devices of capability laptop_panel");
 		return;
 	}
-	/* iterate to seteach lcdpanel object */
+	/* iterate to seteach laptop_panel object */
 	for (i = 0; names[i]; i++)
 		hal_set_brightness_item (names[i], brightness);
 	hal_free_capability (names);
@@ -296,6 +296,10 @@ hal_hibernate (void)
 	dbus_g_connection_unref (system_connection);
 }
 
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
+ *
+ *  @param  set		Set for low power mode
+ */
 void
 hal_setlowpowermode (gboolean set)
 {
@@ -314,4 +318,56 @@ hal_setlowpowermode (gboolean set)
 		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave call failed (%i)", ret);
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
+}
+
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param  capability		The capability, e.g. "battery"
+ *  @return			Number of devices of that capability
+ */
+gint
+hal_num_devices_of_capability (const gchar *capability)
+{
+	gint i;
+	char **names;
+	hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	/* iterate to find number of items */
+	for (i = 0; names[i]; i++) {};
+	hal_free_capability (names);
+	g_debug ("%i devices of capability %s", i, capability);
+	return i;
+}
+
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param  capability		The capability, e.g. "battery"
+ *  @param  key			The key to match, e.g. "button.type"
+ *  @param  value		The key match, e.g. "power"
+ *  @return			Number of devices of that capability
+ */
+gint
+hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value)
+{
+	gint i;
+	gint valid = 0;
+	gchar **names;
+	gchar *type;
+	hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	for (i = 0; names[i]; i++) {
+		hal_device_get_string (names[i], key, &type);
+		if (strcmp (type, value) == 0)
+			valid++;
+		g_free (type);
+	};
+	hal_free_capability (names);
+	g_debug ("%i devices of capability %s where %s is %s", valid, capability, key, value);
+	return valid;
 }

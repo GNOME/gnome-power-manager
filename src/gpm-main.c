@@ -517,7 +517,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 		for (a=0;a<parray->len;a++) {
 			slotData = (GenericObject *) g_ptr_array_index (parray, a);
 			if (slotData->powerDevice == POWER_AC_ADAPTER && !slotData->present) {
-				g_debug ("onBatteryPower FALSE as ac_adapter present");
+				g_debug ("onBatteryPower TRUE as ac_adapter not present");
 				state_datanew.onBatteryPower = TRUE;
 				break;
 				}
