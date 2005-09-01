@@ -1,3 +1,18 @@
+2005-08-31  Richard Hughes  <richard@hughsie.com>
+
+	* Release of 0.2.0
+
+This new release brings lots of new features and updated translations.
+The preferences program now supports LCD brightness, and works with gnome-screensaver to set the DPMS timeout for monitors.
+The website has been updated with a new design with lots more content.
+*WARNING* this program depends on new DBUS and HAL libraries to install, due to the recent changes in HAL. See the new FAQ page (http://gnome-power.sourceforge.net/faq.php) for more details.
+Working with HAL 0.5.4, lots of problems have been solved.
+This includes the need for a external DBUS daemon - now we use HAL to launch scripts.
+Many more batteries are supported, as well as support for most of the broken ACPI BIOSes.
+
+This release has had little testing (and a *lot* has changed internally since 0.1.0), so expect a few bugs, and teething problems.
+The wait between 0.1.0 and 0.2.0 has been required for the newest HAL to be released. Expect more frequent releases in the future.
+
 2005-06-15  Richard Hughes  <richard@hughsie.com>
 
 	* Release of 0.0.4
