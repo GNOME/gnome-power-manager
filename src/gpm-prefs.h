@@ -23,15 +23,12 @@
 #ifndef _PREFS_H
 #define _PREFS_H
 
-typedef struct {
-	int value;
-	char *human_string;
-} ComboData;
-
-typedef struct {
-	char *widgetname;
-	char *policy;
-	GSList *dataset;
-} ComboList;
+typedef enum {
+	POLICY_SLEEP,
+	POLICY_PERCENT,
+	POLICY_CHOICE,
+	POLICY_BOOLEAN,
+	POLICY_TIME
+} PolicyType;
 
 #endif	/* _PREFS_H */

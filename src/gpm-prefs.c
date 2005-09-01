@@ -116,58 +116,6 @@ gtk_set_check (const char *widgetname, gboolean set)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), set);
 }
 
-/** Get the number of devices on system with a specific capability
- *
- *  @param  capability		The capability, e.g. "battery"
- *  @return			Number of devices of that capability
- */
-static gint
-get_devices_capability (const gchar *capability)
-{
-	gint i;
-	char **names;
-	hal_find_device_capability (capability, &names);
-	if (!names) {
-		g_debug ("No devices of capability %s", capability);
-		return 0;
-	}
-	/* iterate to find number of items */
-	for (i = 0; names[i]; i++) {};
-	hal_free_capability (names);
-	g_debug ("%i devices of capability %s", i, capability);
-	return i;
-}
-
-/** Get the number of devices on system with a specific capability
- *
- *  @param  capability		The capability, e.g. "battery"
- *  @param  key			The key to match, e.g. "button.type"
- *  @param  value		The key match, e.g. "power"
- *  @return			Number of devices of that capability
- */
-static gint
-get_devices_capability_with_value (const gchar *capability, const gchar *key, const gchar *value)
-{
-	gint i;
-	gint valid = 0;
-	gchar **names;
-	gchar *type;
-	hal_find_device_capability (capability, &names);
-	if (!names) {
-		g_debug ("No devices of capability %s", capability);
-		return 0;
-	}
-	for (i = 0; names[i]; i++) {
-		hal_device_get_string (names[i], key, &type);
-		if (strcmp (type, value) == 0)
-			valid++;
-		g_free (type);
-	};
-	hal_free_capability (names);
-	g_debug ("%i devices of capability %s where %s is %s", valid, capability, key, value);
-	return valid;
-}
-
 /** Shows/hides/renames controls based on hasData, i.e. what hardware is in the system.
  *
  */
@@ -183,13 +131,13 @@ recalc (void)
 	gtk_set_check ("checkbutton_display_icon", displayIcon);
 	gtk_set_check ("checkbutton_display_icon_full", displayIconFull);
 
-	gboolean hasBatteries =   (get_devices_capability ("battery") > 0);
-	gboolean hasAcAdapter =   (get_devices_capability ("ac_adapter") > 0);
-	gboolean hasButtonPower = (get_devices_capability_with_value ("button", "button.type", "power") > 0);
-	gboolean hasButtonSleep = (get_devices_capability_with_value ("button", "button.type", "sleep") > 0);
-	gboolean hasButtonLid =   (get_devices_capability_with_value ("button", "button.type", "lid") > 0);
-	gboolean hasHardDrive =   (get_devices_capability_with_value ("storage", "storage.bus", "ide") > 0);
-	gboolean hasLCD = 	  (get_devices_capability ("lcdpanel") > 0);
+	gboolean hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
+	gboolean hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
+	gboolean hasButtonPower = (hal_num_devices_of_capability_with_value ("button", "button.type", "power") > 0);
+	gboolean hasButtonSleep = (hal_num_devices_of_capability_with_value ("button", "button.type", "sleep") > 0);
+	gboolean hasButtonLid =   (hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0);
+	gboolean hasHardDrive =   (hal_num_devices_of_capability_with_value ("storage", "storage.bus", "ide") > 0);
+	gboolean hasLCD = 	  (hal_num_devices_of_capability ("laptop_panel") > 0);
 
 #if HAVE_GSCREENSAVER
 	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
@@ -297,13 +245,13 @@ hal_get_brightness_steps ()
 {
 	char **names;
 	int levels = 0;
-	hal_find_device_capability ("lcdpanel", &names);
+	hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
-		g_debug ("No devices of capability lcdpanel");
+		g_debug ("No devices of capability laptop_panel");
 		return 0;
 	}
 	/* only use the first one */
-	hal_device_get_int (names[0], "lcdpanel.num_levels", &levels);
+	hal_device_get_int (names[0], "laptop_panel.num_levels", &levels);
 	hal_free_capability (names);
 	return levels;
 }
@@ -412,7 +360,7 @@ print_usage (void)
 		"\n");
 }
 
-/** simple callback just appending a "%" to the reading
+/** simple callback formatting a GtkScale to "10.0%"
  *
  */
 static gchar*
@@ -443,7 +391,7 @@ format_value_callback_time (GtkScale *scale, gdouble value)
  *  @param  widgetname		the libglade widget name
  *  @param  policypath		the GConf policy path, 
  *				e.g. "policy/ac/brightness"
- *  @param  policytype		the policy ptye, e.g. POLICY_PERCENT
+ *  @param  policytype		the policy type, e.g. POLICY_PERCENT
  */
 static void
 combo_setup_action (const char *widgetname, const char *policypath, int policytype)
@@ -462,8 +410,7 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
-	} else if (policytype == POLICY_NONE) {
-		g_warning ("%s (%p) seems not to work", widgetname, widget);
+	} else if (policytype == POLICY_SLEEP) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 	}
@@ -608,7 +555,7 @@ main (int argc, char **argv)
 	combo_setup_action ("combobox_battery_critical",
 		GCONF_ROOT "policy/battery_critical", POLICY_CHOICE);
 	combo_setup_action ("combobox_sleep_type",
-		GCONF_ROOT "policy/sleep_type", POLICY_NONE);
+		GCONF_ROOT "policy/sleep_type", POLICY_SLEEP);
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
