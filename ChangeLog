@@ -1,7 +1,25 @@
+2005-09-01  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.2.1
+
+	* src/gpm-common.h: s/LCDPanel/LaptopPanel to match HAL CVS.
+	Move g-p-p enums to gpm-prefs.h.
+
+	* src/gpm-prefs.c: Move get_devices_capability and 
+	get_devices_capability_with_value to src/hal-glib.c (
+	hal_num_devices_of_capability, hal_num_devices_of_capability_with_value)
+	Also do s/POLICY_NONE/POLICY_SLEEP.
+
+	src/hal-glib.c: s/LCDPanel/LaptopPanel to match HAL CVS.
+
+	src/preferences.glade: Fix combobox_sleep_type, and move to options tab.
+
 2005-08-30  Richard Hughes  <richard@hughsie.com>
 
 	* src/icons/gnome-power-system-ups-{0..8}-of-8.png: Added back by 
 	popular request.
+
+	* NEWS: Update.
 
 	* src/icons/Makefile.am: Add UPS icons.
 
