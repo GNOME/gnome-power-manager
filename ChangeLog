@@ -6,6 +6,10 @@
 	* src/gpm-common.h, gpm-main.c: s/LCDPanel/LaptopPanel to match HAL CVS.
 	Move g-p-p enums to gpm-prefs.h.
 
+	* src/gpm-main.c: Fix a problem for Andrew Duggan where the incorrect
+	ACPI reading was tripping up our over-zealous checks. I've removed the
+	check that was the issue, which should hopefully fix the issue.
+
 	* src/gpm-prefs.c: Move get_devices_capability and 
 	get_devices_capability_with_value to src/hal-glib.c (
 	hal_num_devices_of_capability, hal_num_devices_of_capability_with_value)

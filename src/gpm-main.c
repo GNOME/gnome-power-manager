@@ -507,8 +507,10 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			hasAcAdapter = TRUE;
 		if (slotData->powerDevice == POWER_UPS && slotData->isDischarging)
 			state_datanew.onUPSPower = TRUE;
+#if BUG_ANDREW_DUGGAN
 		if (slotData->powerDevice == POWER_PRIMARY_BATTERY && slotData->isDischarging)
 			state_datanew.onBatteryPower = TRUE;
+#endif
 	}
 
 	/* get old value */
