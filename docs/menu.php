@@ -24,6 +24,9 @@
    <a href="faq.php" class="menu">FAQ</a>
   </td><td></td>
   <td class="menu">
+   <a href="report_bug.php" class="menu">Bugs</a>
+  </td><td></td>
+  <td class="menu">
    <a href="contact.php" class="menu">Contact</a>
   </td><td></td>
   <td class="menu">
