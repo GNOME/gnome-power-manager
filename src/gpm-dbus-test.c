@@ -53,11 +53,12 @@ static void
 signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user_data)
 {
 	GString *flags = convert_gpmdbus_to_string (value);
+	GError *error = NULL;
+	gboolean boolret;
+
 	g_print ("actionAboutToHappen received: ENUM = %s\n", flags->str);
 	g_string_free (flags, TRUE);
 
-	GError *error = NULL;
-	gboolean boolret;
 
 	if (doACK)
 		if (!dbus_g_proxy_call (gpm_proxy, "vetoACK", &error, 
@@ -108,7 +109,11 @@ main (int argc, char **argv)
 {
 	GMainLoop *loop;
 	DBusGConnection *session_connection;
+	DBusGProxy *dbus_proxy;
 	GError *error = NULL;
+	gboolean isOkay;
+	gboolean doMonitor;
+	gboolean boolret;
 
 	/* initialise threads */
 	g_type_init ();
@@ -146,7 +151,7 @@ main (int argc, char **argv)
 		G_CALLBACK (signal_handler_actionAboutToHappen), NULL, NULL);
 
 	/* add session connection tracking */
-	DBusGProxy *dbus_proxy = dbus_g_proxy_new_for_name (session_connection,
+	dbus_proxy = dbus_g_proxy_new_for_name (session_connection,
 							DBUS_SERVICE_DBUS,
 							DBUS_PATH_DBUS,
 							DBUS_INTERFACE_DBUS);
@@ -156,9 +161,8 @@ main (int argc, char **argv)
 	dbus_g_proxy_connect_signal (dbus_proxy, "NameOwnerChanged",
 		G_CALLBACK (name_owner_changed), NULL, NULL);
 
-	gboolean isOkay = FALSE;
-	gboolean doMonitor = FALSE;
-	gboolean boolret;
+	isOkay = FALSE;
+	doMonitor = FALSE;
 
 	int a;
 	for (a=1; a < argc; a++) {
@@ -259,7 +263,7 @@ main (int argc, char **argv)
 				dbus_glib_error (error);
 			if (boolret)
 				g_print ("%s TRUE\n", argv[a]+2);
-			else	
+			else
 				g_print ("%s FALSE\n", argv[a]+2);
 		}
 	}

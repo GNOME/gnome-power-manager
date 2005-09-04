@@ -87,9 +87,10 @@ convert_gpmdbus_to_string (gint value)
 GString *
 get_time_string (GenericObject *slotData)
 {
-	g_return_val_if_fail (slotData, NULL);
-	g_debug ("get_time_string");
 	GString* timestring = NULL;
+
+	g_return_val_if_fail (slotData, NULL);
+
 	timestring = get_timestring_from_minutes (slotData->minutesRemaining);
 	if (!timestring)
 		return NULL;
@@ -111,14 +112,17 @@ get_time_string (GenericObject *slotData)
 void
 create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
 {
-	g_return_if_fail (slotDataReturn);
-
 	GenericObject *slotData;
 	gint a;
 	gint objectCount = 0;
+	gint percentageCharge;
+	gint minutesRemaining;
+
 	GenericObject *slotDataTemp[5]; /* not going to get more than 5 objects */
 
-	for (a=0;a<objectData->len;a++) {
+	g_return_if_fail (slotDataReturn);
+
+	for (a=0; a < objectData->len; a++) {
 		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
 		if (slotData->powerDevice == powerDevice && slotData->present) {
 			slotDataTemp[objectCount] = slotData;
@@ -140,8 +144,8 @@ create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
 	}
 
 	/* work out average */
-	gint percentageCharge = 0;
-	gint minutesRemaining = 0;
+	percentageCharge = 0;
+	minutesRemaining = 0;
 	for (a=0;a<objectCount;a++) {
 		percentageCharge += slotDataTemp[a]->percentageCharge;
 		minutesRemaining += slotDataTemp[a]->minutesRemaining;

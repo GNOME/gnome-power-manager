@@ -88,13 +88,18 @@ get_session_connection (void)
 gboolean
 hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 {
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
 	g_return_val_if_fail (udi, FALSE);
 	g_return_val_if_fail (key, FALSE);
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+
+	system_connection = get_system_connection ();
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
-	GError *error = NULL;
-	gboolean retval = TRUE;
+	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
@@ -116,13 +121,18 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 gboolean
 hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 {
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
 	g_return_val_if_fail (udi, FALSE);
 	g_return_val_if_fail (key, FALSE);
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+
+	system_connection = get_system_connection ();
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
-	GError *error = NULL;
-	gboolean retval = TRUE;
+	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_STRING, value, G_TYPE_INVALID)) {
@@ -144,13 +154,18 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 gboolean
 hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 {
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
 	g_return_val_if_fail (udi, 0);
 	g_return_val_if_fail (key, 0);
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+
+	system_connection = get_system_connection ();
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_DEVICE);
-	GError *error = NULL;
-	gboolean retval = TRUE;
+	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_INT, value, G_TYPE_INVALID)) {
@@ -171,14 +186,19 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 gboolean
 hal_find_device_capability (const gchar *capability, gchar ***value)
 {
-	g_return_val_if_fail (capability, NULL);
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
+	g_return_val_if_fail (capability, FALSE);
+
+	system_connection = get_system_connection ();
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, 
 		HAL_DBUS_PATH_MANAGER, 
 		HAL_DBUS_INTERFACE_MANAGER);
-	GError *error = NULL;
-	gboolean retval = TRUE;
+	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
 			G_TYPE_STRING, capability, G_TYPE_INVALID,
 			G_TYPE_STRV, value, G_TYPE_INVALID)) {
@@ -197,6 +217,7 @@ void
 hal_free_capability (gchar **value)
 {
 	gint i;
+	g_return_if_fail (value);
 	for (i = 0; value[i]; i++) {
 		g_free (value[i]);
 	}
@@ -206,46 +227,65 @@ hal_free_capability (gchar **value)
 /** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
  *
  *  @param  brightness		LCD Brightness to set to
+ *  @return			Success
  */
-static void
+static gboolean
 hal_set_brightness_item (const char *udi, int brightness)
 {
 	GError *error = NULL;
 	gint ret;
+	gboolean retval;
+	DBusGConnection *system_connection;
+	DBusGProxy *pm_proxy;
+
+	g_return_val_if_fail (udi, FALSE);
+
 	g_debug ("Setting %s to brightness %i", udi, brightness);
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+
+	system_connection = get_system_connection ();
+	pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, udi, HAL_DBUS_INTERFACE_LCD);
+	retval = TRUE;
 	if (!dbus_g_proxy_call (pm_proxy, "SetBrightness", &error, 
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_warning (HAL_DBUS_INTERFACE_LCD ".SetBrightness failed (HAL error?)");
+		retval = FALSE;
 	}
-	if (ret != 0)
+	if (ret != 0) {
 		g_warning (HAL_DBUS_INTERFACE_LCD ".SetBrightness call failed (%i)", ret);
+		retval = FALSE;
+	}
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
+	return retval;
 }
 
 /** Sets *all* the laptop_panel objects to the required brightness level
  *
  *  @param  brightness		LCD Brightness to set to
+ *  @return			Success, true if *all* adaptors changed
  */
-void
+gboolean
 hal_set_brightness (int brightness)
 {
 	gint i;
-	char **names;
+	gchar **names;
+	gboolean retval;
+
 	hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
 		g_debug ("No devices of capability laptop_panel");
-		return;
+		return FALSE;
 	}
+	retval = TRUE;
 	/* iterate to seteach laptop_panel object */
 	for (i = 0; names[i]; i++)
-		hal_set_brightness_item (names[i], brightness);
+		if (!hal_set_brightness_item (names[i], brightness))
+			retval = FALSE;
 	hal_free_capability (names);
+	return retval;
 }
 
 
@@ -253,71 +293,98 @@ hal_set_brightness (int brightness)
  *
  *  @param  wakeup		Seconds to wakeup, currently unsupported
  */
-void
+gboolean
 hal_suspend (int wakeup)
 {
-	GError *error = NULL;
 	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+	DBusGConnection *system_connection;
+	DBusGProxy *pm_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
+	system_connection = get_system_connection ();
+	pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	retval = TRUE;
 	if (!dbus_g_proxy_call (pm_proxy, "Suspend", &error, 
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend failed (HAL error?)");
+		retval = FALSE;
 	}
-	if (ret != 0)
+	if (ret != 0) {
 		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend call failed (%i)", ret);
+		retval = FALSE;
+	}
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
+	return retval;
 }
 
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
  *
  */
-void
+gboolean
 hal_hibernate (void)
 {
-	GError *error = NULL;
 	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+	DBusGConnection *system_connection;
+	DBusGProxy *pm_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
+	system_connection = get_system_connection ();
+	pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	retval = TRUE;
 	if (!dbus_g_proxy_call (pm_proxy, "Hibernate", &error, 
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate failed (HAL error?)");
+		retval = FALSE;
 	}
-	if (ret != 0)
+	if (ret != 0) {
 		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate call failed (%i)", ret);
+		retval = FALSE;
+	}
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
+	return retval;
 }
 
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
  *
  *  @param  set		Set for low power mode
  */
-void
+gboolean
 hal_setlowpowermode (gboolean set)
 {
-	GError *error = NULL;
 	gint ret;
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *pm_proxy = dbus_g_proxy_new_for_name (system_connection,
+	DBusGConnection *system_connection;
+	DBusGProxy *pm_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
+	system_connection = get_system_connection ();
+	pm_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE, HAL_DBUS_PATH_COMPUTER, HAL_DBUS_INTERFACE_PM);
+	retval = TRUE;
 	if (!dbus_g_proxy_call (pm_proxy, "SetPowerSave", &error, 
 			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave failed (HAL error?)");
+		retval = FALSE;
 	}
-	if (ret != 0)
+	if (ret != 0) {
 		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave call failed (%i)", ret);
+		retval = FALSE;
+	}
 	g_object_unref (G_OBJECT (pm_proxy));
 	dbus_g_connection_unref (system_connection);
+	return retval;
 }
 
 /** Get the number of devices on system with a specific capability
@@ -329,7 +396,7 @@ gint
 hal_num_devices_of_capability (const gchar *capability)
 {
 	gint i;
-	char **names;
+	gchar **names;
 	hal_find_device_capability (capability, &names);
 	if (!names) {
 		g_debug ("No devices of capability %s", capability);
@@ -370,4 +437,24 @@ hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *
 	hal_free_capability (names);
 	g_debug ("%i devices of capability %s where %s is %s", valid, capability, key, value);
 	return valid;
+}
+
+/** Gets the number of brightness steps the (first) LCD adaptor supports
+ *
+ *  @return  			Number of steps
+ */
+gint
+hal_get_brightness_steps (void)
+{
+	gchar **names;
+	gint levels = 0;
+	hal_find_device_capability ("laptop_panel", &names);
+	if (!names) {
+		g_debug ("No devices of capability laptop_panel");
+		return 0;
+	}
+	/* only use the first one */
+	hal_device_get_int (names[0], "laptop_panel.num_levels", &levels);
+	hal_free_capability (names);
+	return levels;
 }

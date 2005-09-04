@@ -30,7 +30,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
-#if HAVE_LIBNOTIFY
+#if defined(HAVE_LIBNOTIFY)
 #include <libnotify/notify.h>
 #endif
 
@@ -50,7 +50,7 @@ static gboolean isVerbose;
 static void
 use_libnotify (const char *content, const int urgency)
 {
-#if HAVE_LIBNOTIFY
+#if defined(HAVE_LIBNOTIFY)
 	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
 	const char *summary = NICENAME;
 	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
@@ -62,7 +62,7 @@ use_libnotify (const char *content, const int urgency)
 			   NULL,
 			   NULL, /* no user data 		*/
 			   0);   /* no actions 			*/
-	notify_icon_destroy(icon);	
+	notify_icon_destroy(icon);
 	if (!n)
 		g_warning ("failed to send notification (%s)", content);
 #else
@@ -84,8 +84,10 @@ use_libnotify (const char *content, const int urgency)
 static void
 gtk_set_visibility (const char *widgetname, gboolean set)
 {
-	g_return_if_fail (widgetname);
 	GtkWidget *widget;
+
+	g_return_if_fail (widgetname);
+
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
 		g_warning ("gtk_set_visibility: widget '%s' not found", widgetname);
@@ -106,8 +108,10 @@ gtk_set_visibility (const char *widgetname, gboolean set)
 static void
 gtk_set_check (const char *widgetname, gboolean set)
 {
-	g_return_if_fail (widgetname);
 	GtkWidget *widget;
+
+	g_return_if_fail (widgetname);
+
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
 		g_warning ("widget '%s' failed to load, aborting", widgetname);
@@ -124,25 +128,38 @@ recalc (void)
 {
 	GtkWidget *widget;
 	GConfClient *client = gconf_client_get_default ();
-	/* checkboxes */
 
+	gboolean hasBatteries;
+	gboolean hasAcAdapter;
+	gboolean hasButtonPower;
+	gboolean hasButtonSleep;
+	gboolean hasButtonLid;
+	gboolean hasLCD;
+	gboolean hasDisplays;
+	gboolean useGnomeScreensaver;
+
+	/* checkboxes */
 	gboolean displayIcon = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
 	gboolean displayIconFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
 	gtk_set_check ("checkbutton_display_icon", displayIcon);
 	gtk_set_check ("checkbutton_display_icon_full", displayIconFull);
 
-	gboolean hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
-	gboolean hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
-	gboolean hasButtonPower = (hal_num_devices_of_capability_with_value ("button", "button.type", "power") > 0);
-	gboolean hasButtonSleep = (hal_num_devices_of_capability_with_value ("button", "button.type", "sleep") > 0);
-	gboolean hasButtonLid =   (hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0);
-	gboolean hasHardDrive =   (hal_num_devices_of_capability_with_value ("storage", "storage.bus", "ide") > 0);
-	gboolean hasLCD = 	  (hal_num_devices_of_capability ("laptop_panel") > 0);
+	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
+	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
+	hasButtonPower = (hal_num_devices_of_capability_with_value ("button", "button.type", "power") > 0);
+	hasButtonSleep = (hal_num_devices_of_capability_with_value ("button", "button.type", "sleep") > 0);
+	hasButtonLid =   (hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0);
+#if 0
+	hasHardDrive =   (hal_num_devices_of_capability_with_value ("storage", "storage.bus", "ide") > 0);
+#endif
+	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
 
-#if HAVE_GSCREENSAVER
-	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+#if defined(HAVE_GSCREENSAVER)
+	hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+	useGnomeScreensaver = TRUE;
 #else
-	gboolean hasDisplays = FALSE;
+	hasDisplays = FALSE;
+	useGnomeScreensaver = FALSE;
 #endif
 
 	/* frame labels */
@@ -196,7 +213,7 @@ recalc (void)
 	gtk_set_visibility ("label_ac_display", hasDisplays);
 	gtk_set_visibility ("hscale_batteries_display", hasDisplays & hasBatteries);
 	gtk_set_visibility ("label_batteries_display", hasDisplays & hasBatteries);
-	gtk_set_visibility ("button_gnome_screensave", hasDisplays);
+	gtk_set_visibility ("button_gnome_screensave", useGnomeScreensaver);
 }
 
 /** Callback for gconf_key_changed
@@ -213,7 +230,7 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 	 * just recalculate the UI, as the gconf keys are read there.
 	 * this removes the need for lots of global variables.
 	 */
-#if WHY_DO_WE_DO_THIS
+#if 0
 	recalc ();
 #endif
 }
@@ -224,36 +241,21 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 static void
 callback_combo_changed (GtkWidget *widget, gpointer user_data)
 {
+	GConfClient *client;
+	gint value;
+	gchar *policypath;
+	gchar *policyoption;
+
 	g_return_if_fail (widget);
-	GConfClient *client = gconf_client_get_default ();
-	gint value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
-	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
+	client = gconf_client_get_default ();
+	value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
+	policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_return_if_fail (policypath);
 
 	g_debug ("[%s] = (%i)", policypath, value);
 
-	gchar *policyoption = convert_policy_to_string (value);
+	policyoption = convert_policy_to_string (value);
 	gconf_client_set_string (client, policypath, policyoption, NULL);
-}
-
-/** Gets the number of brightness steps the LCD adaptor supports
- *
- *  @return  			Number of steps
- */
-static int
-hal_get_brightness_steps ()
-{
-	char **names;
-	int levels = 0;
-	hal_find_device_capability ("laptop_panel", &names);
-	if (!names) {
-		g_debug ("No devices of capability laptop_panel");
-		return 0;
-	}
-	/* only use the first one */
-	hal_device_get_int (names[0], "laptop_panel.num_levels", &levels);
-	hal_free_capability (names);
-	return levels;
 }
 
 /** Callback for hscale_changed
@@ -262,19 +264,26 @@ hal_get_brightness_steps ()
 static void
 callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 {
-	g_return_if_fail (widget);
-	GConfClient *client = gconf_client_get_default ();
-	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
-
-	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
-	gint oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
-
+	GConfClient *client;
+	const char *widgetname;
+	gchar *policypath;
+	gint value;
+	gint oldgconfvalue;
 	gdouble divisions = -1;
+
+	g_return_if_fail (widget);
+
+	client = gconf_client_get_default ();
+	policypath = g_object_get_data ((GObject*) widget, "policypath");
+
+	value = (int) gtk_range_get_value (GTK_RANGE (widget));
+	oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
+
 	/* 
 	 * Code for divisions of 10 seconds, unfinished
 	 *
 	 */
-	const char *widgetname = gtk_widget_get_name (widget);
+	widgetname = gtk_widget_get_name (widget);
 	if (strcmp (widgetname, "hscale_ac_brightness") == 0)
 		divisions = 100.0 / hal_get_brightness_steps ();
 	else if (strcmp (widgetname, "hscale_batteries_brightness") == 0)
@@ -335,10 +344,15 @@ callback_help (GtkWidget *widget, gpointer user_data)
 static void
 callback_check_changed (GtkWidget *widget, gpointer user_data)
 {
+	GConfClient *client;
+	gboolean value;
+	gchar *policypath;
+
 	g_return_if_fail (widget);
-	GConfClient *client = gconf_client_get_default ();
-	gboolean value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	char *policypath = g_object_get_data ((GObject*) widget, "policypath");
+
+	client = gconf_client_get_default ();
+	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_return_if_fail (policypath);
 	/*int policytype = (int) g_object_get_data ((GObject*) widget, "policytype");*/
 
@@ -375,9 +389,10 @@ format_value_callback_percent (GtkScale *scale, gdouble value)
 static gchar*
 format_value_callback_time (GtkScale *scale, gdouble value)
 {
-	char unitstring[32];
+	gchar unitstring[32];
 	GString *strvalue;
-	if (value == 0)
+
+	if ((gint) value == 0)
 		return g_strdup_printf ("Never");
 
 	strvalue = get_timestring_from_minutes (value);
@@ -396,11 +411,16 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 static void
 combo_setup_action (const char *widgetname, const char *policypath, int policytype)
 {
+	GConfClient *client;
+	GtkWidget *widget;
+	gchar *policyoption;
+	gint value;
 	g_return_if_fail (widgetname);
-	GConfClient *client = gconf_client_get_default ();
 
-	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	client = gconf_client_get_default ();
+	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	g_return_if_fail (widget);
+
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
 
@@ -415,14 +435,14 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
 	}
 
-	gchar *policyoption = gconf_client_get_string (client, policypath, NULL);
+	policyoption = gconf_client_get_string (client, policypath, NULL);
 
 	if (!policyoption) {
 		g_warning ("gconf_client_get_string for widget '%s' failed (policy='%s')!!", widgetname, policypath);
 		return;
 	}
 
-	gint value = convert_string_to_policy (policyoption);
+	value = convert_string_to_policy (policyoption);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), value);
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (callback_combo_changed), NULL);
 }
@@ -437,15 +457,20 @@ combo_setup_action (const char *widgetname, const char *policypath, int policyty
 static void
 hscale_setup_action (const char *widgetname, const char *policypath, int policytype)
 {
+	GConfClient *client;
+	GtkWidget *widget;
+	gint value;
+
 	g_return_if_fail (widgetname);
 	g_return_if_fail (policypath);
-	GConfClient *client = gconf_client_get_default ();
-	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+
+	client = gconf_client_get_default ();
+	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
 
-	gint value = gconf_client_get_int (client, policypath, NULL);
+	value = gconf_client_get_int (client, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 
 	if (policytype == POLICY_PERCENT)
@@ -465,14 +490,19 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 static void
 checkbox_setup_action (const char *widgetname, const char *policypath)
 {
+	GConfClient *client;
+	GtkWidget *widget;
+	gboolean value;
+
 	g_return_if_fail (widgetname);
 	g_return_if_fail (policypath);
-	GConfClient *client = gconf_client_get_default ();
-	GtkWidget *widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+
+	client = gconf_client_get_default ();
+	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_check_changed), NULL);
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 
-	gboolean value = gconf_client_get_bool (client, policypath, NULL);
+	value = gconf_client_get_bool (client, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), value);
 }
@@ -483,10 +513,13 @@ checkbox_setup_action (const char *widgetname, const char *policypath)
 int
 main (int argc, char **argv)
 {
+	GtkWidget *widget = NULL;
+	gint a;
+	gint value;
+	GConfClient *client;
+
 	gtk_init (&argc, &argv);
 	gconf_init (argc, argv, NULL);
-	GtkWidget *widget = NULL;
-	int a;
 
 	isVerbose = FALSE;
 	for (a=1; a < argc; a++) {
@@ -507,10 +540,10 @@ main (int argc, char **argv)
 		g_error ("glade file failed to load, aborting");
 
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
-	GConfClient *client = gconf_client_get_default ();
+	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, callback_gconf_key_changed, widget, NULL, NULL);
-#if HAVE_GSCREENSAVER
+#if defined(HAVE_GSCREENSAVER)
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
 #endif
 	/* Get the main_window quit */
@@ -519,7 +552,7 @@ main (int argc, char **argv)
 		g_error ("Main window failed to load, aborting");
 	g_signal_connect (G_OBJECT (widget), "delete_event", G_CALLBACK (gtk_main_quit), NULL);
 
-#if HAVE_LIBNOTIFY
+#if defined(HAVE_LIBNOTIFY)
 	/* initialise libnotify */
 	if (!notify_glib_init(NICENAME, NULL))
 		g_error ("Cannot initialise libnotify!");
@@ -577,11 +610,11 @@ main (int argc, char **argv)
 
 	/* set up upper limit for battery_critical */
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
-	gint value = (int) gtk_range_get_value (GTK_RANGE (widget));
+	value = (gint) gtk_range_get_value (GTK_RANGE (widget));
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
-#if HAVE_GSCREENSAVER
+#if defined(HAVE_GSCREENSAVER)
 	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
 	if (!hasDisplays)
 		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);

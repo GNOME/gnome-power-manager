@@ -79,7 +79,7 @@
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
-#if !HAVE_LIBNOTIFY
+#if !defined(HAVE_LIBNOTIFY)
 #define NOTIFY_URGENCY_CRITICAL		1
 #define NOTIFY_URGENCY_NORMAL		2
 #define NOTIFY_URGENCY_LOW		3

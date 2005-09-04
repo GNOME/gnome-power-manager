@@ -34,6 +34,7 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
+#include "hal-glib.h"
 
 /* shared with gpm-main.c */
 StateData state_data;
@@ -63,8 +64,9 @@ gtk_icon_theme_fallback (const char *name, int size)
 		 * We cannot find this specific themed GNOME icon so use builtin
 		 * fallbacks. This makes GPM more portible between distros
 		 */
+		GString *fallback;
 		g_debug ("gtk_icon_theme_fallback: doing fallback as not found in theme");
-		GString *fallback = g_string_new ("error?");
+		fallback = g_string_new ("error?");
 		g_string_printf (fallback, "%s%s.png", GPM_DATA, name);
 		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
 	}
@@ -78,19 +80,23 @@ gtk_icon_theme_fallback (const char *name, int size)
 static GdkPixbuf *
 create_icon_pixbuf (GenericObject *slotData)
 {
-	g_assert (slotData);
 	GdkPixbuf *pixbuf = NULL;
-	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
-		int num;
-		gchar *computed_name;
+	GenericObject slotDataVirt;
+	gint num;
+	gchar *computed_name;
 
+	g_assert (slotData);
+
+	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
 		/* have to work out for all objects for multibattery setups */
-		GenericObject slotDataVirt = {.percentageCharge = 100};
+		slotDataVirt.percentageCharge = 100;
 		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
 
 		num = ((slotDataVirt.percentageCharge + 4) * 8 ) / 100;
-		if (num < 0) num = 0;
-		else if (num > 8) num = 8;
+		if (num < 0)
+			num = 0;
+		else if (num > 8)
+			num = 8;
 		computed_name = g_strdup_printf ("gnome-power-system%s-%d-of-8", 
 						 state_data.onBatteryPower ? "" : "-ac", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
@@ -98,11 +104,11 @@ create_icon_pixbuf (GenericObject *slotData)
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_UPS) {
-		int num;
-		gchar *computed_name;
 		num = ((slotData->percentageCharge + 4) * 8 ) / 100;
-		if (num < 0) num = 0;
-		else if (num > 8) num = 8;
+		if (num < 0)
+			num = 0;
+		else if (num > 8)
+			num = 8;
 		computed_name = g_strdup_printf ("gnome-power-system-ups-%d-of-8", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
 		g_debug ("computed_name = %s", computed_name);
@@ -181,13 +187,19 @@ get_tooltip_state (void)
 GString *
 get_object_tooltip (GenericObject *slotData)
 {
+	GString *remaining = NULL;
 	GString *tooltip = NULL;
-	gchar *devicestr = convert_powerdevice_to_string (slotData->powerDevice);
+	gchar *devicestr;
+	gchar *chargestate;
+
+	g_return_val_if_fail (slotData, NULL);
+
+	devicestr = convert_powerdevice_to_string (slotData->powerDevice);
 	if (slotData->powerDevice == POWER_PRIMARY_BATTERY ||
 	    slotData->powerDevice == POWER_UPS) {
 		tooltip = g_string_new ("bug?");
-		GString *remaining = get_time_string (slotData);
-		gchar *chargestate = get_chargestate_string (slotData);
+		remaining = get_time_string (slotData);
+		chargestate = get_chargestate_string (slotData);
 		if (slotData->present) {
 			g_string_printf (tooltip, "%s %s (%i%%)", 
 					devicestr, chargestate, slotData->percentageCharge);
@@ -218,15 +230,16 @@ get_main_tooltip (void)
 {
 	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
+	GString* temptip;
 	gint a;
 
 	tooltip = get_tooltip_state ();
 
 	for (a=0;a<objectData->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
-		GString* temp = get_object_tooltip (slotData);
-		if (temp && slotData->powerDevice != POWER_AC_ADAPTER)
-			g_string_append_printf (tooltip, "\n%s", temp->str);
+		temptip = get_object_tooltip (slotData);
+		if (temptip && slotData->powerDevice != POWER_AC_ADAPTER)
+			g_string_append_printf (tooltip, "\n%s", temptip->str);
 	}
 	return tooltip;
 }
@@ -292,7 +305,7 @@ get_main_icon_slot (void)
 static void
 callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	char *action = g_object_get_data ((GObject*) menuitem, "action");
+	gchar *action = g_object_get_data ((GObject*) menuitem, "action");
 	g_debug ("action = '%s'", action);
 	if (strcmp (action, "suspend") == 0)
 		action_policy_do (ACTION_SUSPEND);
@@ -313,6 +326,8 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 gboolean
 get_icon_position (gint *x, gint *y)
 {
+	GdkPixbuf* pixbuf;
+
 	g_return_val_if_fail (eggtrayicon, FALSE);
 	g_return_val_if_fail (eggtrayicon->image, FALSE);
 	g_return_val_if_fail (eggtrayicon->image->window, FALSE);
@@ -320,11 +335,10 @@ get_icon_position (gint *x, gint *y)
 	gdk_window_get_origin (eggtrayicon->image->window, x, y);
 	g_debug ("x1=%i, y1=%i\n", *x, *y);
 
-	GdkPixbuf* pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (eggtrayicon->image));
+	pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (eggtrayicon->image));
 	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
 	*y += gdk_pixbuf_get_height (pixbuf);
 	g_debug ("x2=%i, y2=%i\n", *x, *y);
-	
 	return TRUE;
 }
 
@@ -374,11 +388,12 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 static void
 callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	g_debug ("callback_prefs_activated");
 	gboolean retval;
 	gchar *path;
 
 	path = g_strconcat (BINDIR, "/", "gnome-power-preferences", NULL);
+	g_debug ("callback_prefs_activated: %s", path);
+
 	retval = g_spawn_command_line_async (path, NULL);
 	if (retval == FALSE)
 		g_warning ("Couldn't execute command: %s", path);
@@ -389,12 +404,18 @@ static void
 menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char *type)
 {
 	/* get image */
-	GtkWidget *image = gtk_image_new ();
-	GdkPixbuf *pixbuf = gtk_icon_theme_fallback (icon, 16);
+	GtkWidget *item;
+	GtkWidget *image;
+	GdkPixbuf *pixbuf;
+
+	image = gtk_image_new ();
+	pixbuf = gtk_icon_theme_fallback (icon, 16);
+
 	g_return_if_fail (pixbuf);
+
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 
-	GtkWidget *item = gtk_image_menu_item_new_with_label (name);
+	item = gtk_image_menu_item_new_with_label (name);
 	if (type)
 		g_object_set_data ((GObject*) item, "action", (gpointer) type);
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
@@ -410,10 +431,11 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
 static void
 menu_main_create (void)
 {
+	GtkWidget *item;
+
 	g_return_if_fail (eggtrayicon);
 	g_return_if_fail (eggtrayicon->popup_menu == NULL);
-	g_debug ("menu_main_create");
-	GtkWidget *item;
+
 	eggtrayicon->popup_menu = gtk_menu_new ();
 
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
@@ -428,23 +450,25 @@ menu_main_create (void)
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
-#if 1
+#if 0
+	GtkWidget *image;
+	GdkPixbuf *pixbuf;
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	item = gtk_image_menu_item_new_with_label ("LCD Brightness");
-	GtkWidget *image = gtk_image_new ();
-	GdkPixbuf *pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
+	image = gtk_image_new ();
+	pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show(item);
 	GtkWidget *submenu = gtk_menu_new ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(item), submenu);
-	menu_add_action_item (submenu, "brightness-000", "0%", "brightness000");
-	menu_add_action_item (submenu, "brightness-025", "25%", "brightness025");
-	menu_add_action_item (submenu, "brightness-050", "50%", "brightness050");
-	menu_add_action_item (submenu, "brightness-075", "75%", "brightness075");
-	menu_add_action_item (submenu, "brightness-100", "100%", "brightness100");
+	gint a = hal_get_brightness_steps ();
+	gint b;
+	for (b = 0; b < a; b++) {
+		menu_add_action_item (submenu, "brightness-000", "0%", "brightness000");
+	}
 #endif
 
 	/* add the actions */
@@ -494,8 +518,9 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 void
 icon_create (void)
 {
-	g_return_if_fail (!eggtrayicon);
 	GtkWidget *evbox;
+
+	g_return_if_fail (!eggtrayicon);
 
 	/* create new tray object */
 	eggtrayicon = g_new0 (TrayData, 1);
@@ -533,12 +558,19 @@ void
 gpn_icon_update (void)
 {
 
-	GConfClient *client = gconf_client_get_default ();
-	gboolean iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+	GConfClient *client;
+	gboolean iconShow;
+	GenericObject *slotData;
+	GdkPixbuf *pixbuf;
+	GString *tooltip;
+
+	client = gconf_client_get_default ();
+	iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+
 	if (!iconShow)
 		g_warning ("The key " GCONF_ROOT "general/display_icon is set to false, no icon will be displayed");
 
-	GenericObject *slotData = get_main_icon_slot ();
+	slotData = get_main_icon_slot ();
 	if (iconShow && slotData) {
 		if (!eggtrayicon) {
 			/* create icon */
@@ -547,11 +579,11 @@ gpn_icon_update (void)
 				menu_main_create ();
 		}
 		/* modify icon */
-		GdkPixbuf *pixbuf = create_icon_pixbuf (slotData);
+		pixbuf = create_icon_pixbuf (slotData);
 		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
 		g_object_unref (pixbuf);
 
-		GString *tooltip = get_main_tooltip ();
+		tooltip = get_main_tooltip ();
 		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,
 			GTK_WIDGET (eggtrayicon->tray_icon),
 			tooltip->str, NULL);

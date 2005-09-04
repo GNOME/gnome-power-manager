@@ -20,21 +20,28 @@
  *
  **************************************************************************/
 
+#ifndef _HALGLIB_H
+#define _HALGLIB_H
+
+#include <dbus/dbus-glib.h>
+
 gboolean hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value);
 gboolean hal_device_get_string (const gchar *udi, const gchar *key, gchar **value);
 gboolean hal_device_get_int (const gchar *udi, const gchar *key, gint *value);
 gboolean hal_find_device_capability (const gchar *capability, gchar ***value);
 gint hal_num_devices_of_capability (const gchar *capability);
 gint hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value);
-
 void hal_free_capability (gchar **value);
 
-void hal_set_brightness (int brightness);
-void hal_suspend (int wakeup);
-void hal_hibernate (void);
-void hal_setlowpowermode (gboolean set);
+gint hal_get_brightness_steps (void);
+gboolean hal_set_brightness (int brightness);
+gboolean hal_suspend (int wakeup);
+gboolean hal_hibernate (void);
+gboolean hal_setlowpowermode (gboolean set);
 
 DBusGConnection *get_system_connection (void);
 DBusGConnection *get_session_connection (void);
 
 void dbus_glib_error (GError *error);
+
+#endif	/* _HALGLIB_H */
