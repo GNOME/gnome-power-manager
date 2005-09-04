@@ -1,3 +1,19 @@
+2005-09-04  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Add -fstack-check -pedantic -Wfloat-equal -Wundef 
+	-Wpointer-arith -Wbad-function-cast -Wredundant-decls to check code.
+
+	* docs/images/drop-down.png, docs/gnome_power_manager.php: 
+	Remove surpus image.
+
+	* docs/images/gpm-taskbar.png, docs/images/pref-advanced.png, 
+	docs/images/pref-main.png, docs/images/pref-options.png: Update.
+
+	* src/gpm-common.c, src/gpm-common.h, src/gpm-dbus-test.c, 
+	src/gpm-main.c, src/gpm-notification.c, src/gpm-prefs.c,
+	hal-glib.c, hal-glib.h: Fix up *lots* of compiler warnings, and make
+	more C99 compliant. Also refactored code a little.
+
 2005-09-01  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Bump to 0.2.1
