@@ -1074,6 +1074,7 @@ static void print_usage (void)
 		"\n"
 		"    --disable        Do not perform the action, e.g. suspend\n"
 		"    --verbose        Show extra debugging\n"
+		"    --version        Show the installed version and quit\n"
 		"    --help           Show this information and exit\n"
 		"\n");
 }
@@ -1127,6 +1128,10 @@ main (int argc, char *argv[])
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--verbose") == 0)
 			isVerbose = TRUE;
+		else if (strcmp (argv[a], "--version") == 0) {
+			g_print ("%s %s", NICENAME, VERSION);
+			return EXIT_SUCCESS;
+		}
 		else if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();
 			return EXIT_SUCCESS;
