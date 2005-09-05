@@ -49,10 +49,10 @@ gnome_power_preferences_SOURCES =			\
 
 if HAVE_LIBNOTIFY
 gnome_power_preferences_LDADD =				\
-	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS)
+	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 else
 gnome_power_preferences_LDADD =				\
-	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS)
+	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
 
 gnome_power_manager_SOURCES =				\
