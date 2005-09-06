@@ -76,7 +76,9 @@ G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
 gboolean gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error);
 gboolean gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
 gboolean gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error);
-gboolean gpm_object_is_on_mains (GPMObject *obj, gboolean *ret, GError **error);
+gboolean gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error);
+gboolean gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error);
+gboolean gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_action_register (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
 gboolean gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error);
 
@@ -117,6 +119,82 @@ GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
 gboolean isVerbose;
 
+gboolean
+gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_is_user_idle ()");
+	return TRUE;
+}
+
+/** Find out if we are on battery power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_mains ()");
+	*ret = state_data.onBatteryPower;
+	return TRUE;
+}
+
+/** Find out if we are on ac power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_mains ()");
+	*ret = !state_data.onBatteryPower & !state_data.onUPSPower;
+	return TRUE;
+}
+
+/** Find out if we are on ups power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_ups ()");
+	*ret = state_data.onUPSPower;
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.actionAboutToHappen
+ *
+ */
+gboolean
+gpm_emit_about_to_happen (const gint value)
+{
+	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, value);
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.performingAction
+ *
+ */
+gboolean
+gpm_emit_performing_action (const gint value)
+{
+	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, value);
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.mainsStatusChanged
+ *
+ */
+gboolean
+gpm_emit_mains_changed (const gboolean value)
+{
+	g_signal_emit (obj, signals[MAINS_CHANGED], 0, value);
+	return TRUE;
+}
+
 /* 
  * I know these don't belong here, but I have a problem:
  *
@@ -140,20 +218,6 @@ gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GErro
 }
 
 gboolean
-gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_is_user_idle ()");
-	return TRUE;
-}
-
-gboolean
-gpm_object_is_on_mains (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_is_on_mains ()");
-	return TRUE;
-}
-
-gboolean
 gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *ret, GError **error)
 {
 	g_warning ("STUB: gpm_object_action_register (%i, '%s')", value, name);
@@ -167,40 +231,29 @@ gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError 
 	return TRUE;
 }
 
-gboolean
-gpm_emit_about_to_happen (const gint value)
-{
-	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, value);
-	return TRUE;
-}
-
-gboolean
-gpm_emit_performing_action (const gint value)
-{
-	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, value);
-	return TRUE;
-}
-
-gboolean
-gpm_emit_mains_changed (const gboolean value)
-{
-	g_signal_emit (obj, signals[MAINS_CHANGED], 0, value);
-	return TRUE;
-}
-
 #if LIBHAL_EXPERIMENT
-static void
-signal_handler_PropertyModified (DBusGProxy *proxy, 
-	gchar *udi, 
-	gchar *key, 
-	gboolean is_removed, 
-	gboolean is_added, 
-	gpointer user_data)
+void
+signal_handler_PropertyModified (DBusGProxy *proxy,
+				 gint type,
+				 GPtrArray *properties)
 {
-	g_error ("signal_handler_PropertyModified!!");
-	g_print ("udi = %s\n", udi);
-	g_print ("key = %s\n", key);
-	g_print ("is_removed = %i, is_added = %i\n", is_removed, is_added);
+	GValueArray *array;
+	guint i;
+	g_print ("got PropertyModified for %d\n", type);
+
+	for (i = 0; i < properties->len; i++) {
+		array = g_ptr_array_index (properties, i);
+		if (array->n_values != 3) {
+			g_warning ("array->n_values invalid (!3)");
+			return;
+		}
+		char *key = g_value_get_string (g_value_array_get_nth (array, 0));
+		gboolean is_added = g_value_get_boolean (g_value_array_get_nth (array, 1));
+		gboolean is_removed = g_value_get_boolean (g_value_array_get_nth (array, 2));
+
+		g_print ("key:%s, added: %i, removed: %i\n", key, is_added, is_removed);
+		/*g_print ("name=%s, path=%s, interface=%s\n", proxy->name, proxy->path, proxy->interface);*/
+	}
 }
 #endif
 
@@ -218,11 +271,10 @@ glib_experiment ()
 
 	GType struct_array_type;
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
-
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
 		G_TYPE_NONE, G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
-		G_TYPE_INT, G_TYPE_VALUE_ARRAY, G_TYPE_INVALID);
+		G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
 		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
 #endif
@@ -438,7 +490,7 @@ run_gconf_script (const char *path)
 void
 action_policy_do (gint policy_number)
 {
-#if !GPM_SIMULATE
+#if GPM_SIMULATE
 	g_warning ("Ignoring action_policy_do event as simulating!");
 	return;
 #endif
