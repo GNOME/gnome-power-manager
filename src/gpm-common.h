@@ -27,13 +27,10 @@
 #include <gnome.h>
 
 /* Set the timeout of the libnotify notifications */
-#define NOTIFY_TIMEOUT			10
-
-/* only set true when using the CVS of HAL, i.e. ones that have charge_level.percentage */
-#define CVSHAL				TRUE
+#define NOTIFY_TIMEOUT			5
 
 /* Do no actions. Set to true for testing */
-#define GPM_SIMULATE			TRUE
+#define GPM_SIMULATE			FALSE
 
 /* for faster code, with less checks */
 #define G_DISABLE_ASSERT		0
@@ -56,13 +53,9 @@
 #define GPM_DBUS_LOGOFF			16
 #define GPM_DBUS_ALL			255
 
-#define	GPM_DBUS_SERVICE		"net.sf.GnomePower"
-#define	GPM_DBUS_PATH			"/net/sf/GnomePower"
-#define	GPM_DBUS_INTERFACE		"net.sf.GnomePower"
-
-#define	PM_DBUS_SERVICE			"net.sf.PowerManager"
-#define	PM_DBUS_PATH			"/net/sf/PowerManager"
-#define	PM_DBUS_INTERFACE		"net.sf.PowerManager"
+#define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
+#define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
+#define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
 
 #define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
 #define	HAL_DBUS_PATH_DEVICES		"/org/freedesktop/Hal/devices"
@@ -136,10 +129,6 @@ typedef struct {
 	gint slot;
 	gchar udi[128];
 	gint powerDevice;
-#if !CVSHAL
-	gint rawLastFull;
-	gint rawCharge;
-#endif
 	gint isRechargeable;
 	gint percentageCharge;
 	gint minutesRemaining;
