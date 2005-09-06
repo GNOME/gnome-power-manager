@@ -3,7 +3,10 @@
 	include('./menu.php');
 ?>
 
-<h2>Reporting a Bug</h2>
+<h1>Reporting a Bug</h2>
+<h2>
+<a name="general_bugs"></a>General Bugs
+</h2>
 <p>
  When GNOME Power Manager doesn't work, there is lots that could be wrong.
  To help me diagnose the problem, please supply the following information:
@@ -40,6 +43,18 @@ gnome-power-manager --verbose
 
 Then <a href="mailto:richard@hughsie.com">email me</a> as much of this data as possible.
 
+<h2>
+<a name="suspend_does_nothing"></a>Hibernate and Suspend do *nothing*
+</h2>
+When you try to suspend or hibernate, HAL executes the /usr/sbin/hal-system-power-{hibernate|suspend} scripts.
+Try running:
+<pre>/usr/sbin/hald --daemon=no --verbose=yes --retain-privileges</pre>
+and start 
+<pre>
+gnome-power-manager --verbose
+</pre>
+in another tab. Then try to suspend.
+<a href="mailto:richard@hughsie.com">Send me</a> both outputs please, along with any information about the distro you are running.
 <?php
 	include('./footer.php');
 ?>

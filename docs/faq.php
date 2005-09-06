@@ -10,6 +10,15 @@
 
 <hr/>
 <p class="faqquestion">
+Nothing happens when I click suspend or hibernate... What should I do?
+</p>
+<p class="faqanswer">
+HAL might not *yet* support your distro, or you might have found a bug in GNOME Power Manager.
+Refer to the <a href="report_bug.php#suspend_does_nothing">Reporting Bugs</a> section.
+</p>
+
+<hr/>
+<p class="faqquestion">
 What is PowerManager - why was GNOME Power Manager depending on it, but now obsoletes it?
 </p>
 <p class="faqanswer">
