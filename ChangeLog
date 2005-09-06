@@ -1,3 +1,30 @@
+2005-09-06  Richard Hughes  <richard@hughsie.com>
+
+	* po/pl.po: New Polish translation by Michał Kastelik 
+	<mkastelik@gmail.com> - Many thanks.
+
+	* configure.in: add pl translation.
+
+	* gnome-power-manager.conf, src/gnome-power-service.xml, src/gpm-common.h
+	s/net.sf.PowerManager/org.gnome.GnomePowerManager
+
+	* docs/dbus_interface.php, src/gnome-power-service.xml, src/gpm-main.c: 
+	Add isOnBattery, isOnUps, isOnAC and remove isRunningOnMains.
+
+	* src/gpm-common.h: Remove last bits of CVSHAL (obs. now we depend on 
+	0.5.4). Also make GPM_SIMULATE half-logical.
+
+	* src/gpm-main.c: make more of LIBHAL_EXPERIMENT work - 
+	a future libhal replacement. (note, still disabled)
+
+	* src/gpm-prefs.c: new function, gpm_is_on_mains() - so we can adjust
+	the correct LCD slider depending if we are on AC or batteries.
+
+	NEWS: Update, and format to standards, not just a random dumping ground
+	for all my pre-paste news :-)
+
+	doc/faq.php, doc/report_bug.php: Update with latest FAQ's :-)
+
 2005-09-05  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: bump to 0.2.2

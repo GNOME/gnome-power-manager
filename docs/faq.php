@@ -10,6 +10,20 @@
 
 <hr/>
 <p class="faqquestion">
+How do I query GNOME Power Manager's battery state from my shell script?
+</p>
+<p class="faqanswer">
+You can use the dbus-send program. For example, to get the boolean value for the IsOnBattery method, you would use the following:
+<pre>
+dbus-send --session --print-reply \
+--dest=org.gnome.GnomePowerManager \
+/org/gnome/GnomePowerManager \
+org.gnome.GnomePowerManager.isOnBattery
+</pre>
+</p>
+
+<hr/>
+<p class="faqquestion">
 Nothing happens when I click suspend or hibernate... What should I do?
 </p>
 <p class="faqanswer">
