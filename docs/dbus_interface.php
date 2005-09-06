@@ -28,8 +28,16 @@ The libnotify error messages using CVS.
 <p>Returns true is the user has been idle for the timeout set in gconf.</p>
 <pre>status: stub</pre>
 
-<h3>bool isRunningOnMains ()</h3>
-<p>Returns true if we are running on mains (useful for scripts)</p>
+<h3>bool isRunningOnBattery ()</h3>
+<p>Returns true if we are running on batteries</p>
+<pre>status: stub</pre>
+
+<h3>bool isRunningOnUps ()</h3>
+<p>Returns true if we are running on UPS Power</p>
+<pre>status: stub</pre>
+
+<h3>bool isRunningOnAC ()</h3>
+<p>Returns true if we are running on AC (i.e. plugged in power source)</p>
 <pre>status: stub</pre>
 
 <h3>Server Signals</h3>
