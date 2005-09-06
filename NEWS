@@ -1,40 +1,101 @@
-2005-08-31  Richard Hughes  <richard@hughsie.com>
+==========
+GNOME Power Manager 0.2.2
+==========
 
-	* Release of 0.2.1
+Released September xx, 2005
 
-Fixes present:
-The reboot and halt gconf typos have been fixed.
-Lots more code compliant with C99.
-gnome-power-manager now sports a --version argument.
-New Italian translation by Daniele Medri
-Fix a problem reported by Andrew Duggan where the incorrect ACPI reading was tripping up our over-zealous HAL checks.
-Rename LCDPanel to LaptopPanel to match HAL CVS. LCD brightness is officially supported now.
-Fix the combobox error for "Sleep Type"
-Website updated with a "bug reporting" section.
+- New Polish translation by Michał Kastelik 
+- Switch to using org.gnome.GnomePowerManager rather than net.sf.GnomePower
+- Add the new DBUS api calls isRunningOnBattery(), isRunningOnUps(), and
+  isRunningOnAC() and remove isRunningOnMains().
+- LCD slider brightness now adjusts the correct immediate state whilst on 
+  battery power.
+- Fix from wrobell to fix compilation on PLD Linux.
 
-2005-08-31  Richard Hughes  <richard@hughsie.com>
+==========
+GNOME Power Manager 0.2.1
+==========
 
-	* Release of 0.2.0
+Released September 5, 2005
 
-This new release brings lots of new features and updated translations.
-The preferences program now supports LCD brightness, and works with gnome-screensaver to set the DPMS timeout for monitors.
-The website has been updated with a new design with lots more content.
-*WARNING* this program depends on new DBUS and HAL libraries to install, due to the recent changes in HAL. See the new FAQ page (http://gnome-power.sourceforge.net/faq.php) for more details.
-Working with HAL 0.5.4, lots of problems have been solved.
-This includes the need for a external DBUS daemon - now we use HAL to launch scripts.
-Many more batteries are supported, as well as support for most of the broken ACPI BIOSes.
+- The reboot and halt gconf typos have been fixed.
+- Lots more code compliant with C99.
+- gnome-power-manager now sports a --version argument.
+- New Italian translation by Daniele Medri
+- Fix a problem reported by Andrew Duggan where the incorrect ACPI reading was
+  tripping up our over-zealous HAL checks.
+- Rename LCDPanel to LaptopPanel to match HAL CVS. LCD brightness is
+  officially supported now.
+- Fix the combobox error for "Sleep Type"
+- Website updated with a "bug reporting" section.
 
-This release has had little testing (and a *lot* has changed internally since 0.1.0), so expect a few bugs, and teething problems.
-The wait between 0.1.0 and 0.2.0 has been required for the newest HAL to be released. Expect more frequent releases in the future.
+==========
+GNOME Power Manager 0.2.0
+==========
 
-2005-06-15  Richard Hughes  <richard@hughsie.com>
+Released August 31, 2005
 
-	* Release of 0.0.4
+- This new release brings lots of new features and updated translations.
+- The preferences program now supports LCD brightness, and works with 
+  gnome-screensaver to set the DPMS timeout for monitors.
+- The website has been updated with a new design with lots more content.
+- *WARNING* this program depends on new DBUS and HAL libraries to install, 
+  due to the recent changes in HAL. See the new FAQ page 
+  (http://gnome-power.sourceforge.net/faq.php) for more details.
+- Working with HAL 0.5.4, lots of problems have been solved.
+- This includes the need for a external DBUS daemon - now we use HAL to 
+  launch scripts.
+- Many more batteries are supported, as well as support for most of the 
+  broken ACPI BIOSes.
+- This release has had little testing (and a *lot* has changed internally 
+  since 0.1.0), so expect a few bugs, and teething problems.
+- The wait between 0.1.0 and 0.2.0 has been required for the newest HAL to be
+  released. Expect more frequent releases in the future.
 
-2005-04-17  Richard Hughes  <richard@hughsie.com>
+==========
+GNOME Power Manager 0.1.0
+==========
 
-	* Release of 0.0.3
+Released July 12, 2005
 
-2005-03-21  Richard Hughes  <richard@hughsie.com>
+- Massive changes!
+- A new DBUS system daemon, pmscripts that you can edit for suspend2 or 
+  swsup hibernation.
+- Lots of new features including a full client API for shutdown/logoff 
+  notification to applications.
 
-	* Initial release of 0.0.2
+==========
+GNOME Power Manager 0.0.5
+==========
+
+Released June 18, 2005
+
+- PDA support
+- Totally re-written backend and lots of architectural changes.
+- Icons now generated on the fly, logging improved.
+- Events now configuable, code tidied up.
+
+==========
+GNOME Power Manager 0.0.4
+==========
+
+Released June 15, 2005
+
+==========
+GNOME Power Manager 0.0.3
+==========
+
+Released April 17, 2005
+
+- Lots of bugfixes, new features, new preferences program - supporting 
+  wireless mice and keyboards, pda's and the usual laptop batteries...
+
+==========
+GNOME Power Manager 0.0.2
+==========
+
+Released March 24, 2005
+
+- Pre-release version, mostly proof of concept.
+- Newer (and better :-) code is always found in CVS.
+- Other ideas or comments welcome.
