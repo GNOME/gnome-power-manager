@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <node name="/">
-  <interface name="net.sf.GnomePower">
+  <interface name="org.gnome.GnomePowerManager">
 
     <method name="isUserIdle">
       <arg type="b" direction="out"/>
     </method>
 
-    <method name="isOnMains">
+    <method name="isOnBattery">
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="isOnUps">
+      <arg type="b" direction="out"/>
+    </method>
+
+    <method name="isOnAc">
       <arg type="b" direction="out"/>
     </method>
 

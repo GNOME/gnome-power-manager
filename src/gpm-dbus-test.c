@@ -62,8 +62,8 @@ signal_handler_actionAboutToHappen (DBusGProxy *proxy, gint value, gpointer user
 
 	if (doACK)
 		if (!dbus_g_proxy_call (gpm_proxy, "vetoACK", &error, 
-								G_TYPE_INT, value, G_TYPE_INVALID,
-								G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
+				G_TYPE_INT, value, G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID))
 			dbus_glib_error (error);
 	if (doNACK)
 		if (!dbus_g_proxy_call (gpm_proxy, "vetoNACK", &error, 
