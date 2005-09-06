@@ -76,6 +76,34 @@ use_libnotify (const char *content, const int urgency)
 #endif
 }
 
+/** queries org.gnome.GnomePowerManager.isOnBattery
+ *
+ *  @param  value	return value, passed by ref
+ *  @return		TRUE for success, FALSE for failure
+ */
+gboolean
+gpm_is_on_mains (gboolean *value)
+{
+	DBusGConnection *session_connection;
+	DBusGProxy *gpm_proxy;
+	GError *error = NULL;
+	gboolean retval;
+
+	session_connection = get_session_connection ();
+	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GPM_DBUS_SERVICE, GPM_DBUS_PATH, GPM_DBUS_INTERFACE);
+	retval = TRUE;
+	if (!dbus_g_proxy_call (gpm_proxy, "isOnBattery", &error, 
+			G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		*value = FALSE;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (gpm_proxy));
+	return retval;
+}
+
 /** Sets/Hides GTK visibility
  *
  *  @param  widgetname		the libglade widget name
@@ -270,6 +298,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	gint value;
 	gint oldgconfvalue;
 	gdouble divisions = -1;
+	gboolean onbattery;
 
 	g_return_if_fail (widget);
 
@@ -319,9 +348,13 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
 	}
 
-	/* for AC, change the brightness in real-time */
-	if (strcmp (widgetname, "hscale_ac_brightness") == 0)
-		hal_set_brightness (value);
+	/* for AC and battery, change the brightness in real-time */
+	if (gpm_is_on_mains (&onbattery)) {
+		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) || 
+		    (onbattery && strcmp (widgetname, "hscale_batteries_brightness") == 0))
+			hal_set_brightness (value);
+	} else
+		g_warning (GPM_DBUS_SERVICE ".isOnBattery failed");
 
 	g_return_if_fail (policypath);
 	g_debug ("[%s] = (%i)", policypath, value);
