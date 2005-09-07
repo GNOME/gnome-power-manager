@@ -1,12 +1,23 @@
 2005-09-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: Warn user when dbus session server is not running
+
+	* doc/faq.php: Add FAQ entry for the libnotify dbus problem.
+
+	* src/hal-glib.c: Make get_system_connection and get_session_connection
+	not abort on failed connection (as we wan't to trap the error.)
+
 	* po/pl.po: New Polish translation by Michał Kastelik 
 	<mkastelik@gmail.com> - Many thanks.
 
 	* configure.in: add pl translation.
 
-	* gnome-power-manager.conf, src/gnome-power-service.xml, src/gpm-common.h
-	s/net.sf.PowerManager/org.gnome.GnomePowerManager
+	* configure.in, Makefile.am: Make docbook2man a automatic configurable.
+	If this program is missing, the man files will not be built.
+	Suggested by Eugenia Loli-Queru.
+
+	* gnome-power-manager.conf, src/gnome-power-service.xml, 
+	src/gpm-common.h: s/net.sf.PowerManager/org.gnome.GnomePowerManager
 
 	* docs/dbus_interface.php, src/gnome-power-service.xml, src/gpm-main.c: 
 	Add isOnBattery, isOnUps, isOnAC and remove isRunningOnMains.

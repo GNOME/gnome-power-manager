@@ -257,10 +257,10 @@ signal_handler_PropertyModified (DBusGProxy *proxy,
 }
 #endif
 
+#if LIBHAL_EXPERIMENT
 static void
 glib_experiment ()
 {
-#if LIBHAL_EXPERIMENT
 
 #include "gpm_marshal.h"
 	DBusGConnection *system_connection = get_system_connection ();
@@ -277,8 +277,8 @@ glib_experiment ()
 		G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
 		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
-#endif
 }
+#endif
 
 /** Convenience function to call libnotify
  *
@@ -1193,7 +1193,35 @@ main (int argc, char *argv[])
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
+	/*
+	 * Initialize system DBUS conection - this *shouldn't* fail as HAL
+	 * will not work without the system messagebus.
+	 */
+	connGsystem = get_system_connection ();
+	if (connGsystem == 0) {
+		g_print ("%s cannot start until you start the dbus system daemon\n", NICENAME);
+		g_print ("This is usually started in initscripts, and is usually called messagebus\n");
+		g_print ("It is STRONGLY recommended you reboot your compter after restarting messagebus\n\n");
+		exit (1);
+	}
+	/*
+	 * Initialize session DBUS conection - this *might* fail as it's 
+	 * potentially the first time the user will use this functionality.
+	 * If so, tell them how to fix the issue.
+	 */
+	connGsession = get_session_connection ();
+	if (!connGsystem == 0) {
+		g_print ("%s cannot start until you start the dbus session daemon\n", NICENAME);
+		g_print ("This is usually started in X or gnome startup (depending on distro)\n");
+		g_print ("You can launch the session dbus-daemon manually with this command:\n");
+		g_print ("eval `dbus-launch --auto-syntax`\n\n");
+		g_print ("If this works, add \"dbus-lauch --auto-syntax\" to ~/.xinitrc\n\n");
+		exit (1);
+	}
+
+#if LIBHAL_EXPERIMENT
 	glib_experiment ();
+#endif
 	gnome_program_init (NICENAME, VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
@@ -1213,9 +1241,6 @@ main (int argc, char *argv[])
 
 	loop = g_main_loop_new (NULL, FALSE);
 
-	/* Initialise DBUS conections */
-	connGsystem = get_system_connection ();
-	connGsession = get_session_connection ();
 	gpm_proxy = dbus_g_proxy_new_for_name (connGsession,
 		GPM_DBUS_SERVICE,
 		GPM_DBUS_PATH, 

@@ -44,9 +44,9 @@ dbus_glib_error (GError *error)
 	g_error_free (error);
 }
 
-/** Get the system connection, abort if not possible
+/** Get the system connection
  *
- *  @return		A valid DBusGConnection
+ *  @return		A DBusGConnection, or NULL in the event of an error
  */
 DBusGConnection *
 get_system_connection (void)
@@ -54,16 +54,15 @@ get_system_connection (void)
 	GError *error = NULL;
 	DBusGConnection *connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (connection == NULL) {
-		g_printerr ("Failed to open connection to system bus: %s\n", error->message);
+		g_warning ("Failed to open connection to dbus system bus: %s\n", error->message);
 		g_error_free (error);
-		g_assert_not_reached ();
 	}
 	return connection;
 }
 
-/** Get the session connection, abort if not possible
+/** Get the session connection
  *
- *  @return		A valid DBusGConnection
+ *  @return		A DBusGConnection, or NULL in the event of an error
  */
 DBusGConnection *
 get_session_connection (void)
@@ -71,9 +70,8 @@ get_session_connection (void)
 	GError *error = NULL;
 	DBusGConnection *connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
-		g_printerr ("Failed to open connection to session bus: %s\n", error->message);
+		g_warning ("Failed to open connection to dbus session bus: %s\n", error->message);
 		g_error_free (error);
-		g_assert_not_reached ();
 	}
 	return connection;
 }

@@ -2,15 +2,20 @@
 GNOME Power Manager 0.2.2
 ==========
 
-Released September xx, 2005
+Released September 07, 2005
 
-- New Polish translation by Michał Kastelik 
+- We now check for the presence on the session and system dbus connections,
+  and tell the user what they have to do, to fix the problem.
+- New Polish translation by Michał Kastelik
 - Switch to using org.gnome.GnomePowerManager rather than net.sf.GnomePower
 - Add the new DBUS api calls isOnBattery(), isOnUps(), and isOnAC() and 
   remove isRunningOnMains().
 - LCD slider brightness now adjusts the correct immediate state whilst on 
-  battery power.
+  battery power and AC.
 - Fix from wrobell to fix compilation on PLD Linux.
+- Made docbook2man optional. If this program is missing, the man files will 
+  not be built.	Suggested by Eugenia Loli-Queru to fix Arch Linux compilation.
+- Add lots more answered questions on the FAQ page.
 
 ==========
 GNOME Power Manager 0.2.1
