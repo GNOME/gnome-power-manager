@@ -8,6 +8,28 @@
  Please read through these questions before asking the list these common questions.
 </p>
 
+<a name="dbus_session_error"></a><hr/>
+<p class="faqquestion">
+Why do I get the error:
+<pre>
+./gnome-power-manager(7889): libnotify: Error connecting to session bus: 
+Failed to connect to socket /tmp/dbus-Emfs6JOgHK: Connection refused
+** ERROR **: Cannot initialise libnotify!
+aborting...
+</pre>
+</p>
+<p class="faqanswer">
+Most distro's set up the dbus session daemon when you log in to X, or when running GNOME.
+If your distro does not do this you will have to manually run:
+</p>
+<pre>
+eval `dbus-launch --auto-syntax`
+</pre>
+<p class="faqanswer">
+If this works, you can add this to your <a href="http://mail.gnome.org/archives/muine-list/2004-December/msg00038.html">X startup</a>.<br>
+<b>GNOME Power Manager later than 0.2.1 warns the user, rather than give this cryptic libnotify message</b>
+</p>
+
 <hr/>
 <p class="faqquestion">
 How do I query GNOME Power Manager's battery state from my shell script?
