@@ -9,7 +9,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL: http://gnome-power.sourceforge.net/
 BuildPrereq: libgnomeui-devel, libglade2-devel
 BuildPrereq: hal-devel >= 0.5.4, dbus-devel >= 0.35
-BuildPrereq: gnome-common
+BuildPrereq: gnome-common, docbook-utils
 Requires: gnome-mime-data, gnome-icon-theme
 Requires: hal >= 0.5.4, kernel >= 2.6
 Requires: dbus >= 0.35, dbus-glib >= 0.35
