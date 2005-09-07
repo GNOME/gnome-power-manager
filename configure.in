@@ -111,6 +111,12 @@ if test x$have_gscreensaver = xyes ; then
     AC_DEFINE(HAVE_GSCREENSAVER,1,[gscreensaver support])
 fi
 
+AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
+if test "$DOCBOOK2MAN" = "no" ; then
+	AC_MSG_WARN([docbook2man not found, will not be able to build man documentation])
+	fi
+AM_CONDITIONAL(HAVE_DOCBOOK2MAN, [test "$DOCBOOK2MAN" != "no"])
+
 AC_OUTPUT([
 Makefile
 src/Makefile

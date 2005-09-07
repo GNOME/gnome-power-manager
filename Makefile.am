@@ -13,9 +13,11 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 dbusconfdir = $(DBUS_SYS_DIR)
 dbusconf_DATA = gnome-power-manager.conf
 
+if HAVE_DOCBOOK2MAN
 man_MANS =						\
 	gnome-power-manager.1				\
 	gnome-power-preferences.1
+endif
 
 EXTRA_DIST =						\
 	HACKING						\
@@ -42,11 +44,13 @@ clean-local :
 	rm -f *.1
 	rm -f manpage.*
 
+if HAVE_DOCBOOK2MAN
 gnome-power-manager.1: gnome-power-manager.sgml
 	docbook2man $? > $@
 
 gnome-power-preferences.1: gnome-power-preferences.sgml
 	docbook2man $? > $@
+endif
 
 DISTCLEANFILES =					\
 	intltool-extract				\
