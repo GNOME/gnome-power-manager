@@ -29,9 +29,6 @@
   <td class="menu">
    <a href="contact.php" class="menu">Contact</a>
   </td><td></td>
-  <td class="menu">
-   <a href="pm.php" class="menu">(obsolete stuff)</a>
-  </td><td></td>
  </tr>
 </table>
 
