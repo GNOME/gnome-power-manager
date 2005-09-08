@@ -28,19 +28,20 @@
 #include <dbus/dbus-glib.h>
 #include "gpm-common.h"
 
-/** Handle a glib error, freeing if needed
- *
+/** Handle a glib error, freeing if needed.
+ *  We echo to debug, as we don't want the typical user sending in bug reports.
+ *  Use --verbose to view these warnings.
  */
 void
 dbus_glib_error (GError *error)
 {
 	g_return_if_fail (error);
 	if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
-		g_printerr ("Caught remote method exception %s: %s\n",
+		g_debug ("Caught remote method exception %s: %s\n",
 					dbus_g_error_get_name (error),
 					error->message);
 	else
-		g_printerr ("Error: %s\n", error->message);
+		g_debug ("Error: %s\n", error->message);
 	g_error_free (error);
 }
 
@@ -308,7 +309,7 @@ hal_suspend (int wakeup)
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend failed (HAL error?)");
+		g_warning (HAL_DBUS_INTERFACE_PM ".Suspend failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {
@@ -340,7 +341,7 @@ hal_hibernate (void)
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate failed (HAL error?)");
+		g_warning (HAL_DBUS_INTERFACE_PM ".Hibernate failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {
@@ -373,7 +374,7 @@ hal_setlowpowermode (gboolean set)
 			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
-		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave failed (HAL error?)");
+		g_warning (HAL_DBUS_INTERFACE_PM ".SetPowerSave failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {

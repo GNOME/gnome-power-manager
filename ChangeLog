@@ -1,4 +1,19 @@
-2005-09-05  Richard Hughes  <richard@hughsie.com>
+2005-09-08  Richard Hughes  <richard@hughsie.com>
+
+	* docs/faq.php, docs/index.css: Update, and make a quick table for all
+	new faq's at the top of the page.
+
+	* src/hal-glib.c (dbus_glib_error): Do not print to warning level for
+	a missing key, only print to debug. This was causing false bugreports.
+
+	* src/gpm-main.c (main): Fix the typo for session connection checks.
+	This was the reason 0.2.2.1 was pushed out the door so fast. Thanks to
+	Mike Bydalek for testing and reporting the problem so fast.
+
+	* gnome-power-manager.spec.in: Fix the problem where stderr wasn't
+	being redirected in the gconf section.
+
+2005-09-07  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: bump to 0.2.3
 
