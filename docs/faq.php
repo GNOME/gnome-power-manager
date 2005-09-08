@@ -5,7 +5,49 @@
 
 <h2>Frequently Asked Questions</h2>
 <p>
- Please read through these questions before asking the list these common questions.
+ Please read through these common questions and answers before emailing the mailing list.
+</p>
+
+<ul>
+<li>
+  <a href="#set_power_save" class="faqtable">Why do I get the error: <b>SetPowerSave call failed</b>?</a>
+</li><li>
+  <a href="#dbus_session_error" class="faqtable">Why do I get the error: <b>libnotify: Error connecting to session bus:</b>?</a>
+</li><li>
+  <a href="#shell_script" class="faqtable">How do I query the battery state from my shell script?</a>
+</li><li>
+  <a href="#suspend_failure" class="faqtable">Nothing happens when I click suspend or hibernate!</a>
+</li><li>
+  <a href="#power_manager" class="faqtable">What is PowerManager?</a>
+</li><li>
+  <a href="#updates" class="faqtable">Can I get updates to the progress of GNOME Power Manager?</a>
+</li><li>
+  <a href="#debian_unstable" class="faqtable">I run Debian stable/unstable. Can I run GNOME Power Manager?</a>
+</li><li>
+  <a href="#update_dbus" class="faqtable">Why do we need such an up-to-date DBUS?</a>
+</li><li>
+  <a href="#update_hal" class="faqtable">Why do we need such an up-to-date HAL?</a>
+</li><li>
+  <a href="#video_s3" class="faqtable">Why doesn't my video adaptor come back after a suspend?</a>
+</li><li>
+  <a href="#autostart" class="faqtable">Why doesn't GNOME Power manager autostart?</a>
+</li>
+</ul>
+
+<br>
+<br>
+<a name="set_power_save"></a><hr/>
+<p class="faqquestion">
+Why do I get the error:
+<pre>
+** (gnome-power-manager:9234): WARNING **: 
+org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave call failed (1)
+</pre>
+</p>
+<p class="faqanswer">
+HAL does not yet do anything with this function call, it is a stub, and returns false.
+Future HAL versions will use SetPowerSave to set a lowpower mode.
+You can safely ignore this message.
 </p>
 
 <a name="dbus_session_error"></a><hr/>
@@ -30,7 +72,7 @@ If this works, you can add this to your <a href="http://mail.gnome.org/archives/
 <b>GNOME Power Manager later than 0.2.1 warns the user, rather than give this cryptic libnotify message</b>
 </p>
 
-<hr/>
+<a name="shell_script"></a><hr/>
 <p class="faqquestion">
 How do I query GNOME Power Manager's battery state from my shell script?
 </p>
@@ -44,16 +86,16 @@ org.gnome.GnomePowerManager.isOnBattery
 </pre>
 </p>
 
-<hr/>
+<a name="suspend_failure"></a><hr/>
 <p class="faqquestion">
-Nothing happens when I click suspend or hibernate... What should I do?
+Nothing happens when I click suspend or hibernate.
 </p>
 <p class="faqanswer">
 HAL might not *yet* support your distro, or you might have found a bug in GNOME Power Manager.
 Refer to the <a href="report_bug.php#suspend_does_nothing">Reporting Bugs</a> section.
 </p>
 
-<hr/>
+<a name="power_manager"></a><hr/>
 <p class="faqquestion">
 What is PowerManager - why was GNOME Power Manager depending on it, but now obsoletes it?
 </p>
@@ -64,7 +106,7 @@ This is now obsolete with the newest HAL, and with the new work that we have don
 <b>PowerManager and pmscripts are now obsolete.</b>
 </p>
 
-<hr/>
+<a name="updates"></a><hr/>
 <p class="faqquestion">
 Can I get updates to the progress of GNOME Power Manager? Do you have an RSS feed?
 </p>
@@ -73,7 +115,7 @@ You can get CVS updates from <a href="http://cia.navi.cx/stats/project/gnome/gno
 There are also project statistics and access graphs provided by <a href="http://sourceforge.net/project/stats/?group_id=133929&amp;ugn=gnome-power">Sourceforge</a>.
 </p>
 
-<hr/>
+<a name="debian_unstable"></a><hr/>
 <p class="faqquestion">
 I run Debian stable/unstable. Can I run GNOME Power Manager?
 </p>
@@ -82,7 +124,7 @@ No. Debian do not follow new HAL and DBUS releases like other bleeding-edge dist
 Ubuntu is the only Debian based distro that I know that follows upstream so closely.
 </p>
 
-<hr/>
+<a name="update_dbus"></a><hr/>
 <p class="faqquestion">
 Why do we need such an up-to-date DBUS?
 </p>
@@ -94,7 +136,7 @@ Also, some bugs in the newer DBUS's have been fixed that impact the operation of
 You are welcome to patch G-P-M to work with an older DBUS if you wish.
 </p>
 
-<hr/>
+<a name="update_hal"></a><hr/>
 <p class="faqquestion">
 Why do we need such an up-to-date HAL?
 </p>
@@ -104,7 +146,7 @@ You cannot patch G-P-M to support an older HAL, as it *will not* work.
 Encourage your distro to update their version of HAL, and then G-P-M will work.
 </p>
 
-<hr/>
+<a name="video_s3"></a><hr/>
 <p class="faqquestion">
 Why doesn't my video adaptor come back after a suspend? It just displays black.
 </p>
@@ -113,7 +155,7 @@ You may need to add a s3 command to your kernel boot string so that the kernel c
 See <a href="data/video.txt">this document</a> for more details, or to see if your system has been identified as needing the switch.
 </p>
 
-<hr/>
+<a name="autostart"></a><hr/>
 <p class="faqquestion">
 Why doesn't GNOME Power manager autostart?
 </p>
