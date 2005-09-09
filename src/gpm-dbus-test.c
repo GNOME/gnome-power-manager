@@ -25,7 +25,10 @@
 #include <dbus/dbus-glib.h>
 #include "gpm-main.h"
 #include "gpm-common.h"
-#include "hal-glib.h"
+
+#include "dbus-common.h"
+#include "glibhal-main.h"
+#include "glibhal-extras.h"
 
 #define GPM_DBUS_TEST_APP "GNOME Power Test"
 
@@ -92,7 +95,8 @@ static void print_usage (void)
 		" METHODS\n"
 		"		--isUserIdle         Checks if the user is idle\n"
 		"		--isRunningOnMains   Checks to see if user is running on mains\n"
-		"		--isActive           Checks to see if user is active\n"
+		"		--isActive           Checks to see if user is active\n");
+	g_print (
 		" MONITOR\n"
 		"		--monitor            Monitors bus, outputing to consol\n"
 		"		--doNothing          ActionRegister, then does nothing on actionAboutToHappen.\n"
@@ -114,6 +118,7 @@ main (int argc, char **argv)
 	gboolean isOkay;
 	gboolean doMonitor;
 	gboolean boolret;
+	int a;
 
 	/* initialise threads */
 	g_type_init ();
@@ -125,7 +130,7 @@ main (int argc, char **argv)
 	loop = g_main_loop_new (NULL, FALSE);
 
 	/* Get a connection to the session connection */
-	session_connection = get_session_connection ();
+	dbus_get_session_connection (&session_connection);
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 							GPM_DBUS_SERVICE,
 							GPM_DBUS_PATH,
@@ -164,7 +169,6 @@ main (int argc, char **argv)
 	isOkay = FALSE;
 	doMonitor = FALSE;
 
-	int a;
 	for (a=1; a < argc; a++) {
 		if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();

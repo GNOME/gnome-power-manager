@@ -34,7 +34,6 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
-#include "hal-glib.h"
 
 /* shared with gpm-main.c */
 StateData state_data;
@@ -172,19 +171,6 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 }
 
 GString *
-get_tooltip_state (void)
-{
-	GString *tooltip;
-	if (state_data.onBatteryPower)
-		tooltip = g_string_new (_("Computer is running on battery power"));
-	else if (state_data.onUPSPower)
-		tooltip = g_string_new (_("Computer is running on UPS power"));
-	else
-		tooltip = g_string_new (_("Computer is running on AC power"));
-	return tooltip;
-}
-
-GString *
 get_object_tooltip (GenericObject *slotData)
 {
 	GString *remaining = NULL;
@@ -233,7 +219,12 @@ get_main_tooltip (void)
 	GString* temptip;
 	gint a;
 
-	tooltip = get_tooltip_state ();
+	if (state_data.onBatteryPower)
+		tooltip = g_string_new (_("Computer is running on battery power"));
+	else if (state_data.onUPSPower)
+		tooltip = g_string_new (_("Computer is running on UPS power"));
+	else
+		tooltip = g_string_new (_("Computer is running on AC power"));
 
 	for (a=0;a<objectData->len;a++) {
 		slotData = (GenericObject *) g_ptr_array_index (objectData, a);

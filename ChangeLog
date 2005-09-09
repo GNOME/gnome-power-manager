@@ -1,5 +1,26 @@
 2005-09-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/hal-glib.{c|h} : Removed these files.
+
+	* src/dbus-common.{c|h} : New files providing the basic dbus glib
+	functionality, e.g. dbus_get_service.
+
+	* src/glibhal-main.{c|h} : New files providing the core glibhal
+	functionality, e.g. reading a boolean value.
+
+	* src/glibhal-extras.{c|h} : New files providing the extra glibhal
+	functionality, e.g. changing the screen brightness.
+
+	* src/glibhal-callback.{c|h} : New files providing the callback
+	functionality of glibhal, e.g. libhal_device_removed.
+
+	* src/*.c : Adjusted to new glibhal framework 
+	(which we still don't use yet - working with the old libhal)
+
+	* src/Makefile.am : Adjusted to new glibhal framework.
+
+2005-09-08  Richard Hughes  <richard@hughsie.com>
+
 	* docs/faq.php, docs/index.css: Update, and make a quick table for all
 	new faq's at the top of the page.
 
@@ -9,6 +30,9 @@
 	* src/gpm-main.c (main): Fix the typo for session connection checks.
 	This was the reason 0.2.2.1 was pushed out the door so fast. Thanks to
 	Mike Bydalek for testing and reporting the problem so fast.
+
+	* src/gpm-notification.c (get_tooltip_state): removed and inlined as 
+	only one user.
 
 	* gnome-power-manager.spec.in: Fix the problem where stderr wasn't
 	being redirected in the gconf section.

@@ -1,0 +1,140 @@
+/***************************************************************************
+ *
+ * dbus-common.c : Common GLIB DBUS routines
+ *
+ * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ **************************************************************************/
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <glib.h>
+#include <dbus/dbus-glib.h>
+#include "gpm_marshal.h"
+
+/** Handle a glib error, freeing if needed.
+ *  We echo to debug, as we don't want the typical user sending in bug reports.
+ *  Use --verbose to view these warnings.
+ */
+gboolean
+dbus_glib_error (GError *error)
+{
+	g_return_val_if_fail (error, FALSE);
+	if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
+		g_debug ("Caught remote method exception %s: %s",
+					dbus_g_error_get_name (error),
+					error->message);
+	else
+		g_debug ("Error: %s", error->message);
+	g_error_free (error);
+	return TRUE;
+}
+
+/** Gets the DBUS service
+ *
+ *  @connection			A valid DBUS connection
+ *  @service			Service, e.g. org.gnome.random
+ *  @return			Success value.
+ */
+gboolean
+dbus_get_service (DBusGConnection *connection, const char *service)
+{
+	DBusGProxy *bus_proxy;
+	GError *error = NULL;
+	gboolean ret = TRUE;
+	guint request_name_result;
+
+	g_assert (connection);
+	g_assert (service);
+
+	bus_proxy = dbus_g_proxy_new_for_name (connection, 
+		DBUS_SERVICE_DBUS,
+		DBUS_PATH_DBUS,
+		DBUS_INTERFACE_DBUS);
+
+	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
+		G_TYPE_STRING, service,
+		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+		G_TYPE_INVALID,
+		G_TYPE_UINT, &request_name_result,
+		G_TYPE_INVALID)) {
+		g_error ("Failed to acquire %s: %s", service, error->message);
+		ret = FALSE;
+	}
+
+	if (ret && request_name_result != 1 /* NEED_TO_FIND_VALUE */)
+		ret = FALSE;
+
+	/* free the bus_proxy */
+	g_object_unref (G_OBJECT (bus_proxy));
+	return ret;
+}
+
+/** Gets the dbus session service, informing user if not found
+ *
+ *  @connection			A valid DBUS connection, passed by ref
+ *  @return			Success value.
+ */
+gboolean
+dbus_get_session_connection (DBusGConnection **connection)
+{
+	GError *error = NULL;
+	/*
+	 * Initialize session DBUS conection - this *might* fail as it's 
+	 * potentially the first time the user will use this functionality.
+	 * If so, tell them how to fix the issue.
+	 */
+	*connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (*connection == NULL) {
+		g_warning ("Failed to open connection to dbus session bus: %s\n", error->message);
+		dbus_glib_error (error);
+		g_print ("This program cannot start until you start the dbus session daemon\n");
+		g_print ("This is usually started in X or gnome startup (depending on distro)\n");
+		g_print ("You can launch the session dbus-daemon manually with this command:\n");
+		g_print ("eval `dbus-launch --auto-syntax`\n\n");
+		g_print ("If this works, add \"dbus-lauch --auto-syntax\" to ~/.xinitrc\n\n");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/** Gets the dbus session service, informing user if not found
+ *
+ *  @connection			A valid DBUS connection, passed by ref
+ *  @return			Success value.
+ */
+gboolean
+dbus_get_system_connection (DBusGConnection **connection)
+{
+	GError *error = NULL;
+	/*
+	 * Initialize system DBUS conection - this *shouldn't* fail as HAL
+	 * will not work without the system messagebus.
+	 */
+	*connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (*connection == NULL) {
+		g_warning ("Failed to open connection to dbus system bus: %s\n", error->message);
+		dbus_glib_error (error);
+		g_print ("This program cannot start until you start the dbus system daemon\n");
+		g_print ("This is usually started in initscripts, and is usually called messagebus\n");
+		g_print ("It is STRONGLY recommended you reboot your compter after restarting messagebus\n\n");
+		return FALSE;
+	}
+	return TRUE;
+}

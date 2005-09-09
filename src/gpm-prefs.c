@@ -37,7 +37,10 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-main.h"
-#include "hal-glib.h"
+
+#include "dbus-common.h"
+#include "glibhal-main.h"
+#include "glibhal-extras.h"
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
@@ -89,7 +92,7 @@ gpm_is_on_mains (gboolean *value)
 	GError *error = NULL;
 	gboolean retval;
 
-	session_connection = get_session_connection ();
+	dbus_get_session_connection (&session_connection);
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE, GPM_DBUS_PATH, GPM_DBUS_INTERFACE);
 	retval = TRUE;

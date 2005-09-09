@@ -32,9 +32,6 @@
 /* Do no actions. Set to true for testing */
 #define GPM_SIMULATE			FALSE
 
-/* for faster code, with less checks */
-#define G_DISABLE_ASSERT		0
-
 /* where our settings are stored in the gconf tree */
 #define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power-manager"
 #define GCONF_ROOT			GCONF_ROOT_SANS_SLASH "/"
@@ -56,19 +53,6 @@
 #define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
-
-#define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
-#define	HAL_DBUS_PATH_DEVICES		"/org/freedesktop/Hal/devices"
-#define	HAL_DBUS_PATH_COMPUTER		"/org/freedesktop/Hal/devices/computer"
-#define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
-#define	HAL_DBUS_INTERFACE_PM		"org.freedesktop.Hal.Device.SystemPowerManagement"
-#define	HAL_DBUS_INTERFACE_LCD		"org.freedesktop.Hal.Device.LaptopPanel"
-#define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
-#define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
-
-#define GS_DBUS_SERVICE			"org.gnome.screensaver"
-#define GS_DBUS_PATH			"/org/gnome/screensaver"
-#define GS_DBUS_INTERFACE		"org.gnome.screensaver"
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 

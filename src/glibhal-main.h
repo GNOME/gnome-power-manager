@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * hal-glib.h : GLIB replacement for libhal, unfinished
+ * glibhal-main.h : GLIB replacement for libhal
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
@@ -20,8 +20,8 @@
  *
  **************************************************************************/
 
-#ifndef _HALGLIB_H
-#define _HALGLIB_H
+#ifndef _GLIBHALMAIN_H
+#define _GLIBHALMAIN_H
 
 #include <dbus/dbus-glib.h>
 
@@ -33,15 +33,4 @@ gint hal_num_devices_of_capability (const gchar *capability);
 gint hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value);
 void hal_free_capability (gchar **value);
 
-gint hal_get_brightness_steps (void);
-gboolean hal_set_brightness (int brightness);
-gboolean hal_suspend (int wakeup);
-gboolean hal_hibernate (void);
-gboolean hal_setlowpowermode (gboolean set);
-
-DBusGConnection *get_system_connection (void);
-DBusGConnection *get_session_connection (void);
-
-void dbus_glib_error (GError *error);
-
-#endif	/* _HALGLIB_H */
+#endif	/* _GLIBHALMAIN_H */

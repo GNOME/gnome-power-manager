@@ -28,7 +28,7 @@
 #  include <config.h>
 #endif
 
-#define LIBHAL_EXPERIMENT 	FALSE	/* needs CVS DBUS */
+#define LIBHAL_EXPERIMENT 	FALSE
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
@@ -47,7 +47,10 @@
 #include "gpm-notification.h"
 #include "gpm-dbus-server.h"
 
-#include "hal-glib.h"
+#include "dbus-common.h"
+#include "glibhal-main.h"
+#include "glibhal-callback.h"
+#include "glibhal-extras.h"
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
@@ -111,7 +114,9 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 }
 
 /* static */
+#if !LIBHAL_EXPERIMENT
 static LibHalContext *hal_ctx;
+#endif
 
 /* no need for IPC with globals */
 StateData state_data;
@@ -231,54 +236,21 @@ gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError 
 	return TRUE;
 }
 
-#if LIBHAL_EXPERIMENT
-void
-signal_handler_PropertyModified (DBusGProxy *proxy,
-				 gint type,
-				 GPtrArray *properties)
+/** If set to lock on screensave, instruct gnome-screensaver to lock screen
+ *  and return TRUE.
+ *  if set not to lock, then do nothing, and return FALSE.
+ */
+gboolean
+check_gscreensaver_lock (void)
 {
-	GValueArray *array;
-	guint i;
-	g_print ("got PropertyModified for %d\n", type);
-
-	for (i = 0; i < properties->len; i++) {
-		array = g_ptr_array_index (properties, i);
-		if (array->n_values != 3) {
-			g_warning ("array->n_values invalid (!3)");
-			return;
-		}
-		char *key = g_value_get_string (g_value_array_get_nth (array, 0));
-		gboolean is_added = g_value_get_boolean (g_value_array_get_nth (array, 1));
-		gboolean is_removed = g_value_get_boolean (g_value_array_get_nth (array, 2));
-
-		g_print ("key:%s, added: %i, removed: %i\n", key, is_added, is_removed);
-		/*g_print ("name=%s, path=%s, interface=%s\n", proxy->name, proxy->path, proxy->interface);*/
-	}
+	GConfClient *client = gconf_client_get_default ();
+	gboolean should_lock;
+	should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+	if (!should_lock)
+		return FALSE;
+	gscreensaver_lock ();
+	return TRUE;
 }
-#endif
-
-#if LIBHAL_EXPERIMENT
-static void
-glib_experiment ()
-{
-
-#include "gpm_marshal.h"
-	DBusGConnection *system_connection = get_system_connection ();
-	DBusGProxy *hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		HAL_DBUS_SERVICE, 
-		"/org/freedesktop/Hal/devices/acpi_BAT1", 
-		HAL_DBUS_INTERFACE_DEVICE);
-
-	GType struct_array_type;
-	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
-	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
-		G_TYPE_NONE, G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
-	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
-		G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
-		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
-}
-#endif
 
 /** Convenience function to call libnotify
  *
@@ -370,7 +342,7 @@ dbus_action (gint action)
 		retval = TRUE;
 		goto unref;
 	}
-	g_debug ("Registered clients = %i\n", registered->len);
+	g_debug ("Registered clients = %i", registered->len);
 	
 	GTimer* gt = g_timer_new ();
 	do {
@@ -387,9 +359,9 @@ dbus_action (gint action)
 				break;
 			}
 			if (regprog->isACK)
-				g_debug ("ACK!\n");
+				g_debug ("ACK!");
 			if (regprog->isNACK) {
-				g_debug ("NACK!\n");
+				g_debug ("NACK!");
 				anyNACK = TRUE;
 				break;
 			}
@@ -431,47 +403,12 @@ dbus_action (gint action)
 	return TRUE;
 }
 
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
- */
-static gboolean
-gscreensaver_lock (void)
-{
-	GError *error = NULL;
-	GConfClient *client = gconf_client_get_default ();
-	gboolean should_lock;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
-	gboolean boolret;
-
-	should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
-	if (!should_lock)
-		return FALSE;
-	session_connection = get_session_connection ();
-	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
-			GS_DBUS_SERVICE, GS_DBUS_PATH, GS_DBUS_INTERFACE);
-	if (!dbus_g_proxy_call (gs_proxy, "lock", &error, 
-				G_TYPE_INVALID, 
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		use_libnotify (_("GNOME Screensaver service is not running.\n"
-			       "Screen cannot be locked."), NOTIFY_URGENCY_NORMAL);
-	}
-	if (!boolret)
-		g_warning ("gnome-screensaver lock failed");
-	g_object_unref (G_OBJECT (gs_proxy));
-	return TRUE;
-}
-
 static void
 run_gconf_script (const char *path)
 {
 	GConfClient *client;
 	gchar *command;
-
 	g_return_if_fail (path);
-
 	client = gconf_client_get_default ();
 	command = gconf_client_get_string (client, path, NULL);
 	if (command) {
@@ -505,11 +442,11 @@ action_policy_do (gint policy_number)
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND && dbus_action (GPM_DBUS_SUSPEND)) {
 		g_debug ("*ACTION* Suspend");
-		gscreensaver_lock ();
+		check_gscreensaver_lock ();
 		hal_suspend (0);
 	} else if (policy_number == ACTION_HIBERNATE && dbus_action (GPM_DBUS_HIBERNATE)) {
 		g_debug ("*ACTION* Hibernate");
-		gscreensaver_lock ();
+		check_gscreensaver_lock ();
 		hal_hibernate ();
 	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Shutdown");
@@ -582,11 +519,6 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			hasAcAdapter = TRUE;
 		if (slotData->powerDevice == POWER_UPS && slotData->isDischarging)
 			state_datanew.onUPSPower = TRUE;
-#if 0
-/* ANDREW DUGGAN */
-		if (slotData->powerDevice == POWER_PRIMARY_BATTERY && slotData->isDischarging)
-			state_datanew.onBatteryPower = TRUE;
-#endif
 	}
 
 	/* get old value */
@@ -638,26 +570,6 @@ gpm_exit (void)
 	g_debug ("Quitting!");
 	gpn_icon_destroy ();
 	exit (0);
-}
-
-/** Prints the objectData table with any parameters
- *
- *  @param  parray		pointer array to GenericObject
- */
-void
-genericobject_print (GPtrArray *parray)
-{
-	gint a;
-	GenericObject *slotData;
-
-	g_return_if_fail (parray);
-
-	for (a=0;a<parray->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		g_return_if_fail (slotData);
-		g_print ("[%i] udi: %s\n", a, slotData->udi);
-		g_print ("     powerDevice: %i\n", slotData->powerDevice);
-	}
 }
 
 /** Finds a device from the objectData table
@@ -737,24 +649,29 @@ static void
 add_ac_adapter (const gchar *udi)
 {
 	GenericObject *slotData;
-
 	g_return_if_fail (udi);
-
 	slotData = genericobject_add (objectData, udi);
-	if (slotData) {
-		slotData->powerDevice = POWER_AC_ADAPTER;
-		slotData->percentageCharge = 0;
-		g_debug ("Device '%s' added", udi);
-		/* ac_adapter batteries might be missing */
-		hal_device_get_bool (udi, "ac_adapter.present", &slotData->present);
-		slotData->isRechargeable = FALSE;
-		slotData->isCharging = FALSE;
-		slotData->isDischarging = FALSE;
-		slotData->isRechargeable = 0;
-		slotData->percentageCharge = 0;
-		slotData->minutesRemaining = 0;
-	} else
-		g_warning ("Device '%s' already added!", udi);
+
+#if LIBHAL_EXPERIMENT
+	/* register this with HAL so we get PropertyModified events */
+	libhal_register_property_modified (udi);
+#endif
+	if (!slotData) {
+		g_warning ("Cannot add '%s' object to table!", udi);
+		return;
+	}
+
+	slotData->powerDevice = POWER_AC_ADAPTER;
+	slotData->percentageCharge = 0;
+	g_debug ("Device '%s' added", udi);
+	/* ac_adapter batteries might be missing */
+	hal_device_get_bool (udi, "ac_adapter.present", &slotData->present);
+	slotData->isRechargeable = FALSE;
+	slotData->isCharging = FALSE;
+	slotData->isDischarging = FALSE;
+	slotData->isRechargeable = 0;
+	slotData->percentageCharge = 0;
+	slotData->minutesRemaining = 0;
 }
 
 static void
@@ -804,9 +721,14 @@ add_battery (const gchar *udi)
 
 	slotData = genericobject_add (objectData, udi);
 	if (!slotData) {
-		g_warning ("Cannot add object to table!");
+		g_debug ("Cannot add '%s' object to table!", udi);
 		return;
 	}
+
+#if LIBHAL_EXPERIMENT
+	/* register this with HAL so we get PropertyModified events */
+	libhal_register_property_modified (udi);
+#endif
 
 	/* PMU/ACPI batteries might be missing */
 	hal_device_get_bool (udi, "battery.present", &slotData->present);
@@ -831,27 +753,57 @@ add_battery (const gchar *udi)
  *
  */
 static void
-coldplug_devices (void)
+coldplug_batteries (void)
 {
 	gint i;
 	gchar **device_names;
-
 	/* devices of type battery */
 	hal_find_device_capability ("battery", &device_names);
 	if (device_names == NULL)
-		g_warning (_("Couldn't obtain list of batteries"));
+		g_debug (_("Couldn't obtain list of batteries"));
 	for (i = 0; device_names[i]; i++)
 		add_battery (device_names[i]);
 	hal_free_capability (device_names);
+}
 
+/** Coldplugs devices of type ac_adaptor at startup
+ *
+ */
+static void
+coldplug_acadapter (void)
+{
+	gint i;
+	gchar **device_names;
 	/* devices of type ac_adapter */
 	hal_find_device_capability ("ac_adapter", &device_names);
 	if (device_names == NULL)
-		g_warning (_("Couldn't obtain list of ac_adapters"));
+		g_debug (_("Couldn't obtain list of ac_adapters"));
 	for (i = 0; device_names[i]; i++)
 		add_ac_adapter (device_names[i]);
 	hal_free_capability (device_names);
 }
+
+/** Coldplugs devices of type ac_adaptor at startup
+ *
+ */
+#if LIBHAL_EXPERIMENT
+static void
+coldplug_buttons (void)
+{
+	gint i;
+	gchar **device_names;
+	/* devices of type button */
+	hal_find_device_capability ("button", &device_names);
+	for (i = 0; device_names[i]; i++) {
+		/*
+		 * We register this here, as buttons are not present
+		 * in object data, and do not need to be added manually.
+		*/
+		libhal_register_condition (device_names[i]);
+	}
+	hal_free_capability (device_names);
+}
+#endif
 
 /** Removes any type of device
  *
@@ -879,9 +831,14 @@ remove_devices (const char *udi)
  *  @param  udi			UDI
  */
 static void
+#if LIBHAL_EXPERIMENT
+hal_device_removed (const char *udi)
+#else
 device_removed (LibHalContext *ctx, const char *udi)
+#endif
 {
 	g_return_if_fail (udi);
+	g_debug ("hal_device_removed: udi=%s", udi);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just disappear from the device tree
@@ -889,8 +846,6 @@ device_removed (LibHalContext *ctx, const char *udi)
 	remove_devices (udi);
 	/* our state has changed, update */
 	update_state_logic (objectData, FALSE);
-	if (isVerbose)
-		genericobject_print (objectData);
 	gpn_icon_update ();
 }
 
@@ -900,11 +855,17 @@ device_removed (LibHalContext *ctx, const char *udi)
  *  @param  udi			UDI
  *  @param  capability		Name of capability
  */
+
 static void
+#if LIBHAL_EXPERIMENT
+hal_new_capability (const char *udi, const char *capability)
+#else
 device_new_capability (LibHalContext *ctx, const char *udi, const char *capability)
+#endif
 {
 	g_return_if_fail (udi);
 	g_return_if_fail (capability);
+	g_debug ("hal_new_capability: udi=%s, capability=%s", udi, capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just appear in the device tree
@@ -977,8 +938,12 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
  *  @param  key                 Key of property
  */
 static void
+#if LIBHAL_EXPERIMENT
+hal_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
+#else
 property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		   dbus_bool_t is_removed, dbus_bool_t is_added)
+#endif
 {
 	GenericObject *slotData;
 	GenericObject slotDataVirt;
@@ -986,6 +951,7 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	gint oldCharge;
 	gint newCharge;
 
+	g_debug ("hal_property_modified: udi=%s, key=%s, a=%i, r=%i", udi, key, is_added, is_removed);
 	g_return_if_fail (udi);
 	g_return_if_fail (key);
 
@@ -1011,8 +977,6 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	}
 	updateState = FALSE;
 
-	g_debug ("key = '%s'", key);
-	g_debug ("udi = '%s'", udi);
 	if (strcmp (key, "battery.present") == 0) {
 		hal_device_get_bool (udi, key, &slotData->present);
 		/* read in values */
@@ -1074,15 +1038,22 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
  *  @param  message             D-BUS message with parameters
  */
 static void
+#if LIBHAL_EXPERIMENT
+hal_condition (const char *udi,
+		const char *condition_name,
+		const char *condition_details)
+#else
 device_condition (LibHalContext *ctx,
 		  const char *udi, 
 		  const char *condition_name,
 		  const char *condition_details)
+#endif
 {
 	gchar *type;
 	gint policy;
 	gboolean value;
 
+	g_debug ("hal_condition: udi=%s, condition_name=%s, condition_details=%s", udi, condition_name, condition_details);
 	g_return_if_fail (udi);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
@@ -1142,19 +1113,14 @@ main (int argc, char *argv[])
 {
 	gint a;
 	GMainLoop *loop;
-	DBusError error;
 	GConfClient *client;
-	GError *gerror = NULL;
 	GnomeClient *master;
 	GnomeClientFlags flags;
 
-	DBusGConnection *connGsystem;
-	DBusGConnection *connGsession;
-	DBusGProxy *gpm_proxy;
-	DBusGProxy *bus_proxy;
-	DBusGProxy *hal_proxy;
-	guint request_name_result;
+	DBusGConnection *system_connection;
+	DBusGConnection *session_connection;
 #if !LIBHAL_EXPERIMENT
+	DBusError error;
 	DBusConnection *connsystem;
 #endif
 
@@ -1164,7 +1130,9 @@ main (int argc, char *argv[])
 	dbus_g_thread_init ();
 
 	dbus_g_object_type_install_info (GPM_TYPE_OBJECT, &dbus_glib_gpm_object_object_info);
+#if !LIBHAL_EXPERIMENT
 	dbus_error_init (&error);
+#endif
 
 	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
@@ -1190,38 +1158,17 @@ main (int argc, char *argv[])
 		}
 	}
 
+	/* set log level */
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
-	/*
-	 * Initialize system DBUS conection - this *shouldn't* fail as HAL
-	 * will not work without the system messagebus.
-	 */
-	connGsystem = get_system_connection ();
-	if (connGsystem == 0) {
-		g_print ("%s cannot start until you start the dbus system daemon\n", NICENAME);
-		g_print ("This is usually started in initscripts, and is usually called messagebus\n");
-		g_print ("It is STRONGLY recommended you reboot your compter after restarting messagebus\n\n");
+	/* check dbus connections, exit if not valid */
+	if (!dbus_get_system_connection (&system_connection))
 		exit (1);
-	}
-	/*
-	 * Initialize session DBUS conection - this *might* fail as it's 
-	 * potentially the first time the user will use this functionality.
-	 * If so, tell them how to fix the issue.
-	 */
-	connGsession = get_session_connection ();
-	if (!connGsystem == 0) {
-		g_print ("%s cannot start until you start the dbus session daemon\n", NICENAME);
-		g_print ("This is usually started in X or gnome startup (depending on distro)\n");
-		g_print ("You can launch the session dbus-daemon manually with this command:\n");
-		g_print ("eval `dbus-launch --auto-syntax`\n\n");
-		g_print ("If this works, add \"dbus-lauch --auto-syntax\" to ~/.xinitrc\n\n");
+	if (!dbus_get_session_connection (&session_connection))
 		exit (1);
-	}
 
-#if LIBHAL_EXPERIMENT
-	glib_experiment ();
-#endif
+	/* initialise gnome */
 	gnome_program_init (NICENAME, VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
@@ -1239,39 +1186,19 @@ main (int argc, char *argv[])
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Please report bugs to richard@hughsie.com\n"));
 
-	loop = g_main_loop_new (NULL, FALSE);
-
-	gpm_proxy = dbus_g_proxy_new_for_name (connGsession,
-		GPM_DBUS_SERVICE,
-		GPM_DBUS_PATH, 
-		GPM_DBUS_INTERFACE);
-	bus_proxy = dbus_g_proxy_new_for_name (connGsession, 
-		DBUS_SERVICE_DBUS,
-		DBUS_PATH_DBUS,
-		DBUS_INTERFACE_DBUS);
-	hal_proxy = dbus_g_proxy_new_for_name (connGsystem,
-		HAL_DBUS_SERVICE,
-		HAL_DBUS_PATH_DEVICES, 
-		HAL_DBUS_INTERFACE_DEVICE);
-
-	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &gerror,
-		G_TYPE_STRING, GPM_DBUS_SERVICE,
-		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
-		G_TYPE_INVALID,
-		G_TYPE_UINT, &request_name_result,
-		G_TYPE_INVALID))
-	g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, gerror->message);
-	if (request_name_result != 1 /* NEED_TO_FIND_VALUE */) {
+	/* see if we can get the unique name */
+	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE)) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
 
+	loop = g_main_loop_new (NULL, FALSE);
 	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
-	dbus_g_connection_register_g_object (connGsession, GPM_DBUS_PATH, G_OBJECT (obj));
+	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
 
 #if !LIBHAL_EXPERIMENT
-	/* convert to legacy DBusConnection as most of g-p-m is old-fashioned */
-	connsystem = dbus_g_connection_get_connection (connGsystem);
+	/* convert to legacy DBusConnection */
+	connsystem = dbus_g_connection_get_connection (system_connection);
 
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
@@ -1286,15 +1213,25 @@ main (int argc, char *argv[])
 	libhal_device_property_watch_all (hal_ctx, &error);
 #endif
 
+#if LIBHAL_EXPERIMENT
+	libhal_glib_init ();
+	/* assign the callback functions */
+	libhal_device_removed (hal_device_removed);
+	libhal_device_new_capability (hal_new_capability);
+	libhal_device_property_modified (hal_property_modified);
+	libhal_device_condition (hal_condition);
+#endif
+
 	objectData = g_ptr_array_new ();
 	registered = g_ptr_array_new ();
 
-	coldplug_devices ();
-	if (isVerbose)
-		genericobject_print (objectData);
+	coldplug_batteries ();
+	coldplug_acadapter ();
+#if LIBHAL_EXPERIMENT
+	coldplug_buttons ();
+#endif
 
 	update_state_logic (objectData, TRUE);
-
 	gpn_icon_initialise ();
 	gpn_icon_update ();
 
@@ -1311,18 +1248,11 @@ main (int argc, char *argv[])
 	g_ptr_array_free (registered, TRUE);
 
 #if !LIBHAL_EXPERIMENT
-	/* free all HAL stuff */
+	/* free all old HAL stuff */
 	dbus_error_init (&error);
 	libhal_ctx_shutdown (hal_ctx, &error);
 	libhal_ctx_free (hal_ctx);
 #endif
-
-	/* free all DBUS SESSION and SYSTEM connections */
-	g_object_unref (G_OBJECT (gpm_proxy));
-	g_object_unref (G_OBJECT (hal_proxy));
-	g_object_unref (G_OBJECT (bus_proxy));
-	dbus_g_connection_unref (connGsession);
-	dbus_g_connection_unref (connGsystem);
 
 	gpm_exit ();
 	return 0;

@@ -27,8 +27,12 @@ noinst_PROGRAMS = 					\
 	gnome-power-dbus-test
 
 gnome_power_dbus_test_SOURCES =				\
-	hal-glib.h					\
-	hal-glib.c					\
+	dbus-common.h					\
+	dbus-common.c					\
+	glibhal-main.h				\
+	glibhal-main.c				\
+	glibhal-extras.h				\
+	glibhal-extras.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-dbus-test.c
@@ -40,8 +44,12 @@ gnome_power_dbus_test_LDADD =				\
 	$(DBUS_LIBS)
 
 gnome_power_preferences_SOURCES =			\
-	hal-glib.h					\
-	hal-glib.c					\
+	dbus-common.h					\
+	dbus-common.c					\
+	glibhal-main.h				\
+	glibhal-main.c				\
+	glibhal-extras.h				\
+	glibhal-extras.c				\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
@@ -60,8 +68,14 @@ gnome_power_manager_SOURCES =				\
 	eggtrayicon.c					\
 	gpm_marshal.h					\
 	gpm_marshal.c					\
-	hal-glib.h					\
-	hal-glib.c					\
+	dbus-common.h					\
+	dbus-common.c					\
+	glibhal-main.h				\
+	glibhal-main.c				\
+	glibhal-callback.h				\
+	glibhal-callback.c				\
+	glibhal-extras.h				\
+	glibhal-extras.c				\
 	gpm-dbus-server.h				\
 	gpm-dbus-server.c				\
 	gpm-common.h					\
