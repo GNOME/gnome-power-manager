@@ -40,24 +40,51 @@ typedef struct {
 	HalDeviceLostCapability		device_lost_capability;
 	HalDevicePropertyModified	device_property_modified;
 	HalDeviceCondition		device_condition;
-	gboolean			registered_device_added;
-	gboolean			registered_device_removed;
-	gboolean			registered_device_new_capability;
-	gboolean			registered_device_lost_capability;
-	gboolean			registered_device_condition;
-} HalContext;
+} HalFunctions;
 
-gboolean libhal_glib_init (void);
-#if 1
-gboolean libhal_device_removed (HalDeviceRemoved callback);
-#endif
-gboolean libhal_device_added (HalDeviceAdded callback);
-gboolean libhal_device_new_capability (HalDeviceNewCapability callback);
-gboolean libhal_device_lost_capability (HalDeviceLostCapability callback);
-gboolean libhal_device_property_modified (HalDevicePropertyModified callback);
-gboolean libhal_device_condition (HalDeviceCondition callback);
+typedef struct {
+	gboolean			device_added;
+	gboolean			device_removed;
+	gboolean			device_new_capability;
+	gboolean			device_lost_capability;
+	gboolean			device_condition;
+} HalRegistered;
 
-void libhal_register_property_modified (const char *udi);
-void libhal_register_condition (const char *udi);
+typedef struct {
+	DBusGProxy			*device_added;
+	DBusGProxy			*device_removed;
+	DBusGProxy			*device_new_capability;
+	DBusGProxy			*device_lost_capability;
+	GPtrArray 			*device_condition;
+	GPtrArray 			*device_property_modified;
+} HalConnections;
+
+typedef struct {
+	char				udi[128];
+	DBusGProxy			*proxy;
+} UdiProxy;
+
+gboolean glibhal_init (void);
+gboolean glibhal_shutdown (void);
+
+gboolean glibhal_method_device_removed (HalDeviceRemoved callback);
+gboolean glibhal_method_device_added (HalDeviceAdded callback);
+gboolean glibhal_method_device_new_capability (HalDeviceNewCapability callback);
+gboolean glibhal_method_device_lost_capability (HalDeviceLostCapability callback);
+gboolean glibhal_method_device_property_modified (HalDevicePropertyModified callback);
+gboolean glibhal_method_device_condition (HalDeviceCondition callback);
+
+gboolean glibhal_register_device_property_modified (const char *udi);
+gboolean glibhal_register_device_condition (const char *udi);
+
+gboolean glibhal_watch_add_device_property_modified (const char *udi);
+gboolean glibhal_watch_add_device_condition (const char *udi);
+
+gboolean glibhal_watch_remove_device_removed ();
+gboolean glibhal_watch_remove_device_added ();
+gboolean glibhal_watch_remove_device_new_capability ();
+gboolean glibhal_watch_remove_device_lost_capability ();
+gboolean glibhal_watch_remove_device_property_modified (const char *udi);
+gboolean glibhal_watch_remove_device_condition (const char *udi);
 
 #endif	/* _GLIBHALCALLBACK_H */

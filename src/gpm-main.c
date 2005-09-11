@@ -28,7 +28,7 @@
 #  include <config.h>
 #endif
 
-#define LIBHAL_EXPERIMENT 	FALSE
+#define GLIBHAL 	FALSE
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
@@ -114,7 +114,7 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 }
 
 /* static */
-#if !LIBHAL_EXPERIMENT
+#if !GLIBHAL
 static LibHalContext *hal_ctx;
 #endif
 
@@ -652,9 +652,9 @@ add_ac_adapter (const gchar *udi)
 	g_return_if_fail (udi);
 	slotData = genericobject_add (objectData, udi);
 
-#if LIBHAL_EXPERIMENT
+#if GLIBHAL
 	/* register this with HAL so we get PropertyModified events */
-	libhal_register_property_modified (udi);
+	glibhal_watch_add_device_property_modified (udi);
 #endif
 	if (!slotData) {
 		g_warning ("Cannot add '%s' object to table!", udi);
@@ -725,9 +725,9 @@ add_battery (const gchar *udi)
 		return;
 	}
 
-#if LIBHAL_EXPERIMENT
+#if GLIBHAL
 	/* register this with HAL so we get PropertyModified events */
-	libhal_register_property_modified (udi);
+	glibhal_watch_add_device_property_modified (udi);
 #endif
 
 	/* PMU/ACPI batteries might be missing */
@@ -786,7 +786,6 @@ coldplug_acadapter (void)
 /** Coldplugs devices of type ac_adaptor at startup
  *
  */
-#if LIBHAL_EXPERIMENT
 static void
 coldplug_buttons (void)
 {
@@ -799,23 +798,34 @@ coldplug_buttons (void)
 		 * We register this here, as buttons are not present
 		 * in object data, and do not need to be added manually.
 		*/
-		libhal_register_condition (device_names[i]);
+#if GLIBHAL
+		glibhal_watch_add_device_condition (device_names[i]);
+#endif
 	}
 	hal_free_capability (device_names);
 }
-#endif
 
-/** Removes any type of device
+/** Invoked when a device is removed from the Global Device List. 
+ *  Removes any type of device from the objectData database and removes the
+ *  watch on it's UDI.
  *
  *  @param  udi			UDI
  */
 static void
-remove_devices (const char *udi)
+#if GLIBHAL
+hal_device_removed (const char *udi)
+#else
+device_removed (LibHalContext *ctx, const char *udi)
+#endif
 {
-	gint a;
+	int a;
 
 	g_return_if_fail (udi);
-
+	g_debug ("hal_device_removed: udi=%s", udi);
+	/*
+	 * UPS's/mice/keyboards don't use battery.present
+	 * they just disappear from the device tree
+	 */
 	a = find_udi_parray_index (objectData, udi);
 	if (a == -1) {
 		g_debug ("Asked to remove '%s' when not present", udi);
@@ -823,27 +833,9 @@ remove_devices (const char *udi)
 	}
 	g_debug ("Removed '%s'", udi);
 	g_ptr_array_remove_index (objectData, a);
-}
-
-/** Invoked when a device is removed from the Global Device List. Simply
- *  prints a message on stderr.
- *
- *  @param  udi			UDI
- */
-static void
-#if LIBHAL_EXPERIMENT
-hal_device_removed (const char *udi)
-#else
-device_removed (LibHalContext *ctx, const char *udi)
+#if GLIBHAL
+	glibhal_watch_remove_device_property_modified (udi);
 #endif
-{
-	g_return_if_fail (udi);
-	g_debug ("hal_device_removed: udi=%s", udi);
-	/*
-	 * UPS's/mice/keyboards don't use battery.present
-	 * they just disappear from the device tree
-	 */
-	remove_devices (udi);
 	/* our state has changed, update */
 	update_state_logic (objectData, FALSE);
 	gpn_icon_update ();
@@ -857,15 +849,15 @@ device_removed (LibHalContext *ctx, const char *udi)
  */
 
 static void
-#if LIBHAL_EXPERIMENT
-hal_new_capability (const char *udi, const char *capability)
+#if GLIBHAL
+hal_device_new_capability (const char *udi, const char *capability)
 #else
 device_new_capability (LibHalContext *ctx, const char *udi, const char *capability)
 #endif
 {
 	g_return_if_fail (udi);
 	g_return_if_fail (capability);
-	g_debug ("hal_new_capability: udi=%s, capability=%s", udi, capability);
+	g_debug ("hal_device_new_capability: udi=%s, capability=%s", udi, capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just appear in the device tree
@@ -938,8 +930,8 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
  *  @param  key                 Key of property
  */
 static void
-#if LIBHAL_EXPERIMENT
-hal_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
+#if GLIBHAL
+hal_device_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
 #else
 property_modified (LibHalContext *ctx, const char *udi, const char *key,
 		   dbus_bool_t is_removed, dbus_bool_t is_added)
@@ -951,7 +943,7 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
 	gint oldCharge;
 	gint newCharge;
 
-	g_debug ("hal_property_modified: udi=%s, key=%s, a=%i, r=%i", udi, key, is_added, is_removed);
+	g_debug ("hal_device_property_modified: udi=%s, key=%s, a=%i, r=%i", udi, key, is_added, is_removed);
 	g_return_if_fail (udi);
 	g_return_if_fail (key);
 
@@ -1038,8 +1030,8 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
  *  @param  message             D-BUS message with parameters
  */
 static void
-#if LIBHAL_EXPERIMENT
-hal_condition (const char *udi,
+#if GLIBHAL
+hal_device_condition (const char *udi,
 		const char *condition_name,
 		const char *condition_details)
 #else
@@ -1053,7 +1045,7 @@ device_condition (LibHalContext *ctx,
 	gint policy;
 	gboolean value;
 
-	g_debug ("hal_condition: udi=%s, condition_name=%s, condition_details=%s", udi, condition_name, condition_details);
+	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s", udi, condition_name, condition_details);
 	g_return_if_fail (udi);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
@@ -1116,10 +1108,9 @@ main (int argc, char *argv[])
 	GConfClient *client;
 	GnomeClient *master;
 	GnomeClientFlags flags;
-
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
-#if !LIBHAL_EXPERIMENT
+#if !GLIBHAL
 	DBusError error;
 	DBusConnection *connsystem;
 #endif
@@ -1128,11 +1119,7 @@ main (int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
-
 	dbus_g_object_type_install_info (GPM_TYPE_OBJECT, &dbus_glib_gpm_object_object_info);
-#if !LIBHAL_EXPERIMENT
-	dbus_error_init (&error);
-#endif
 
 	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
@@ -1196,9 +1183,10 @@ main (int argc, char *argv[])
 	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
 	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
 
-#if !LIBHAL_EXPERIMENT
+#if !GLIBHAL
 	/* convert to legacy DBusConnection */
 	connsystem = dbus_g_connection_get_connection (system_connection);
+	dbus_error_init (&error);
 
 	if (!(hal_ctx = libhal_ctx_new ()))
 		g_error ("HAL error: libhal_ctx_new");
@@ -1210,26 +1198,24 @@ main (int argc, char *argv[])
 	libhal_ctx_set_device_removed (hal_ctx, device_removed);
 	libhal_ctx_set_device_new_capability (hal_ctx, device_new_capability);
 	libhal_ctx_set_device_condition (hal_ctx, device_condition);
+	/* bad, bad - we have to check and filter */
 	libhal_device_property_watch_all (hal_ctx, &error);
-#endif
-
-#if LIBHAL_EXPERIMENT
-	libhal_glib_init ();
+#else
+	glibhal_init ();
 	/* assign the callback functions */
-	libhal_device_removed (hal_device_removed);
-	libhal_device_new_capability (hal_new_capability);
-	libhal_device_property_modified (hal_property_modified);
-	libhal_device_condition (hal_condition);
+	glibhal_method_device_removed (hal_device_removed);
+	glibhal_method_device_new_capability (hal_device_new_capability);
+	glibhal_method_device_property_modified (hal_device_property_modified);
+	glibhal_method_device_condition (hal_device_condition);
 #endif
 
 	objectData = g_ptr_array_new ();
 	registered = g_ptr_array_new ();
 
+	/* sets up these devices in the objectData and adds watches */
 	coldplug_batteries ();
 	coldplug_acadapter ();
-#if LIBHAL_EXPERIMENT
 	coldplug_buttons ();
-#endif
 
 	update_state_logic (objectData, TRUE);
 	gpn_icon_initialise ();
@@ -1247,11 +1233,13 @@ main (int argc, char *argv[])
 		g_free (g_ptr_array_index (registered, a));
 	g_ptr_array_free (registered, TRUE);
 
-#if !LIBHAL_EXPERIMENT
+#if !GLIBHAL
 	/* free all old HAL stuff */
 	dbus_error_init (&error);
 	libhal_ctx_shutdown (hal_ctx, &error);
 	libhal_ctx_free (hal_ctx);
+#else
+	glibhal_shutdown ();
 #endif
 
 	gpm_exit ();
