@@ -603,9 +603,6 @@ main (int argc, char **argv)
 	/* set gtk enables/disables */
 	recalc ();
 
-	/* disable these until the backend code is in place */
-	gtk_set_visibility ("checkbutton_hdd_spindown", FALSE);
-
 	/* checkboxes */
 	checkbox_setup_action ("checkbutton_display_icon",
 		GCONF_ROOT "general/display_icon");
