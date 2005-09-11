@@ -476,6 +476,8 @@ glibhal_shutdown (void)
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
 		glibhal_watch_remove_device_property_modified (udiproxy->udi);
 	}
+	g_ptr_array_free (proxy.device_condition, TRUE);
+	g_ptr_array_free (proxy.device_property_modified, TRUE);
 
 	return TRUE;
 }
