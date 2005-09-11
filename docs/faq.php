@@ -33,17 +33,16 @@
   <a href="#autostart" class="faqtable">Why doesn't GNOME Power manager autostart?</a>
 </li>
 </ul>
-
-<br>
-<br>
+<br/>
+<br/>
 <a name="set_power_save"></a><hr/>
 <p class="faqquestion">
 Why do I get the error:
+</p>
 <pre>
 ** (gnome-power-manager:9234): WARNING **: 
 org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave call failed (1)
 </pre>
-</p>
 <p class="faqanswer">
 HAL does not yet do anything with this function call, it is a stub, and returns false.
 Future HAL versions will use SetPowerSave to set a lowpower mode.
@@ -53,13 +52,13 @@ You can safely ignore this message.
 <a name="dbus_session_error"></a><hr/>
 <p class="faqquestion">
 Why do I get the error:
+</p>
 <pre>
 ./gnome-power-manager(7889): libnotify: Error connecting to session bus: 
 Failed to connect to socket /tmp/dbus-Emfs6JOgHK: Connection refused
 ** ERROR **: Cannot initialise libnotify!
 aborting...
 </pre>
-</p>
 <p class="faqanswer">
 Most distro's set up the dbus session daemon when you log in to X, or when running GNOME.
 If your distro does not do this you will have to manually run:
@@ -68,7 +67,7 @@ If your distro does not do this you will have to manually run:
 eval `dbus-launch --auto-syntax`
 </pre>
 <p class="faqanswer">
-If this works, you can add this to your <a href="http://mail.gnome.org/archives/muine-list/2004-December/msg00038.html">X startup</a>.<br>
+If this works, you can add this to your <a href="http://mail.gnome.org/archives/muine-list/2004-December/msg00038.html">X startup</a>.<br/>
 <b>GNOME Power Manager later than 0.2.1 warns the user, rather than give this cryptic libnotify message</b>
 </p>
 
@@ -77,14 +76,15 @@ If this works, you can add this to your <a href="http://mail.gnome.org/archives/
 How do I query GNOME Power Manager's battery state from my shell script?
 </p>
 <p class="faqanswer">
-You can use the dbus-send program. For example, to get the boolean value for the IsOnBattery method, you would use the following:
+You can use the dbus-send program.
+For example, to get the boolean value for the IsOnBattery method, you would use the following:
+</p>
 <pre>
 dbus-send --session --print-reply \
 --dest=org.gnome.GnomePowerManager \
 /org/gnome/GnomePowerManager \
 org.gnome.GnomePowerManager.isOnBattery
 </pre>
-</p>
 
 <a name="suspend_failure"></a><hr/>
 <p class="faqquestion">
