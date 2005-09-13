@@ -33,6 +33,7 @@ EXTRA_DIST =						\
 	gnome-power-manager.schemas.in			\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
+	$(service_in_files)				\
 	$(dbusconf_DATA)				\
 	intltool-extract.in				\
 	intltool-merge.in				\
@@ -65,7 +66,8 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	src/gnome-power-glue.h				\
 	gnome-power-preferences.desktop			\
-	gnome-power-manager.schemas
+	gnome-power-manager.schemas			\
+	gnome-power-manager.service
 
 MAINTAINERCLEANFILES =					\
 	Makefile.in					\

@@ -4,7 +4,13 @@ GNOME Power Manager 0.2.3
 
 Released September xx, 2005
 
-- TODO.
+- Comboboxes now have sane values by default.
+- Lots more code cleanups.
+- 100% GLIB DBUS support - this is faster than libhal, but has not been tested
+  much, and is disabled for now.
+- DBUS services now works, so we init g-p-m with just a query to 
+  org.gnome.GnomePowerManager. This makes it easy to make sure g-p-m has been
+  started.
 
 ==========
 GNOME Power Manager 0.2.2
