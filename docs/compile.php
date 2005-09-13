@@ -17,10 +17,14 @@
    </p>
    <p>
     You will need to install the rawhide versions of DBUS and HAL to satisfy the build requirements.
-    I have been running the rawhide DBUS and HAL here on a normal FC4 install and everything apprears to work normally.
+    The rawhide kernel is often more current than the FC4 updates kernel, and has many ACPI bugfixes not present in updates-released.
+    I have been running the rawhide kernel, DBUS and HAL here on a normal FC4 install and everything apprears to work normally.
     <b>Standard disclaimers apply.</b> Do not do this on a production machine.
    </p>
-   <pre>yum -y --enablerepo=development update hal dbus</pre>
+   <pre>
+    yum -y --enablerepo=development update hal dbus kernel
+    yum -y --enablerepo=development install pmscripts
+   </pre>
    <p>
     You will have to install libnotify and notification daemon to use the libnotify features of GNOME Power Manager.
     libnotify will appear in fedora development soon, but until then you can use <a href="data/">these</a> packages if you wish.
