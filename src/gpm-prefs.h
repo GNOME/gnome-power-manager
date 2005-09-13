@@ -24,10 +24,7 @@
 #define _PREFS_H
 
 typedef enum {
-	POLICY_SLEEP,
 	POLICY_PERCENT,
-	POLICY_CHOICE,
-	POLICY_BOOLEAN,
 	POLICY_TIME
 } PolicyType;
 

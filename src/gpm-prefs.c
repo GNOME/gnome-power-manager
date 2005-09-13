@@ -24,6 +24,10 @@
  *
  **************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <glib.h>
 #include <math.h>
 #include <dbus/dbus-glib.h>
@@ -44,6 +48,36 @@
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
+
+/** Finds out if we are running on AC
+ *
+ *  @param  value		The return value, passed by ref
+ *  @return			Success
+ */
+gboolean
+gpm_is_on_ac (gboolean *value)
+{
+	DBusGConnection *session_connection;
+	DBusGProxy *gpm_proxy;
+	GError *error = NULL;
+	gboolean retval = TRUE;
+
+	dbus_get_session_connection (&session_connection);
+	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GPM_DBUS_SERVICE,
+			GPM_DBUS_PATH,
+			GPM_DBUS_INTERFACE);
+	if (!dbus_g_proxy_call (gpm_proxy, "isOnAc", &error, 
+			G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		*value = FALSE;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (gpm_proxy));
+	return retval;
+}
+
 
 /** Convenience function to call libnotify
  *
@@ -276,16 +310,22 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 	gint value;
 	gchar *policypath;
 	gchar *policyoption;
+	GPtrArray *policydata;
+	int *pdata;
 
 	g_return_if_fail (widget);
 	client = gconf_client_get_default ();
 	value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_return_if_fail (policypath);
+	policydata = g_object_get_data ((GObject*) widget, "policydata");
 
-	g_debug ("[%s] = (%i)", policypath, value);
+	/* we have to convert from the virtual mapping to a policy mapping */
+	pdata = (int*) g_ptr_array_index (policydata, value);
+	
+	g_debug ("[%s] = (%i)", policypath, *pdata);
 
-	policyoption = convert_policy_to_string (value);
+	/* we have to convert to the gconf store string */
+	policyoption = convert_policy_to_string (*pdata);
 	gconf_client_set_string (client, policypath, policyoption, NULL);
 }
 
@@ -437,52 +477,6 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 	return g_strdup_printf ("%s", unitstring);
 }
 
-/** Sets the comboboxes up to the gconf value, and sets up callbacks.
- *
- *  @param  widgetname		the libglade widget name
- *  @param  policypath		the GConf policy path, 
- *				e.g. "policy/ac/brightness"
- *  @param  policytype		the policy type, e.g. POLICY_PERCENT
- */
-static void
-combo_setup_action (const char *widgetname, const char *policypath, int policytype)
-{
-	GConfClient *client;
-	GtkWidget *widget;
-	gchar *policyoption;
-	gint value;
-	g_return_if_fail (widgetname);
-
-	client = gconf_client_get_default ();
-	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
-	g_return_if_fail (widget);
-
-	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
-	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
-
-	if (policytype == POLICY_CHOICE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Send warning"));
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
-	} else if (policytype == POLICY_SLEEP) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
-	}
-
-	policyoption = gconf_client_get_string (client, policypath, NULL);
-
-	if (!policyoption) {
-		g_warning ("gconf_client_get_string for widget '%s' failed (policy='%s')!!", widgetname, policypath);
-		return;
-	}
-
-	value = convert_string_to_policy (policyoption);
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), value);
-	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (callback_combo_changed), NULL);
-}
-
 /** Sets the hscales up to the gconf value, and sets up callbacks.
  *
  *  @param  widgetname		the libglade widget name
@@ -543,6 +537,69 @@ checkbox_setup_action (const char *widgetname, const char *policypath)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), value);
 }
 
+/** Sets the comboboxes up to the gconf value, and sets up callbacks.
+ *
+ *  @param  widgetname		the libglade widget name
+ *  @param  policypath		the GConf policy path, 
+ *				e.g. "policy/ac/brightness"
+ *  @param  ptrarray		the policy data, in a pointer array
+ */
+static void
+combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *ptrarray)
+{
+	GConfClient *client;
+	GtkWidget *widget;
+	gchar *policyoption;
+	gint value;
+	int a;
+	int *pdata;
+
+	g_return_if_fail (widgetname);
+	client = gconf_client_get_default ();
+	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	g_return_if_fail (widget);
+
+	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
+	g_object_set_data ((GObject*) widget, "policydata", (gpointer) ptrarray);
+
+	/* add text to combo boxes in order of parray */
+	for (a=0;a < ptrarray->len;a++) {
+		pdata = (int*) g_ptr_array_index (ptrarray, a);
+		if (*pdata == ACTION_SHUTDOWN)
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
+		else if (*pdata == ACTION_SUSPEND)
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Suspend"));
+		else if (*pdata == ACTION_HIBERNATE)
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Hibernate"));
+		else if (*pdata == ACTION_WARNING)
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Send warning"));
+		else if (*pdata == ACTION_NOTHING)
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Do nothing"));
+		else
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Unknown");
+	}
+
+	/* we have to get the gconf string, and convert it into a policy option */
+	policyoption = gconf_client_get_string (client, policypath, NULL);
+	if (!policyoption) {
+		g_warning ("gconf_client_get_string for widget '%s' failed (policy='%s')!!", widgetname, policypath);
+		return;
+	}
+
+	/* select the correct entry, i.e. map the policy to virtual mapping */
+	value = convert_string_to_policy (policyoption);
+	for (a=0;a < ptrarray->len;a++) {
+		pdata = (int*) g_ptr_array_index (ptrarray, a);
+		if (*pdata == value) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), a);
+			break;
+		}
+	}
+
+	/* connect this signal up to the genric changed box */
+	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (callback_combo_changed), NULL);
+}
+
 /** Main program
  *
  */
@@ -551,8 +608,24 @@ main (int argc, char **argv)
 {
 	GtkWidget *widget = NULL;
 	gint a;
+	gboolean has_gpm_connection;
 	gint value;
 	GConfClient *client;
+
+	/* provide dynamic storage for comboboxes */
+	GPtrArray *ptrarr_button_power;
+	GPtrArray *ptrarr_button_suspend;
+	GPtrArray *ptrarr_button_lid;
+	GPtrArray *ptrarr_ac_fail;
+	GPtrArray *ptrarr_battery_critical;
+	GPtrArray *ptrarr_sleep_type;
+
+	/* provide pointers to enums */
+	int pSuspend 	= 	ACTION_SUSPEND;
+	int pShutdown 	= 	ACTION_SHUTDOWN;
+	int pHibernate 	= 	ACTION_HIBERNATE;
+	int pNothing 	= 	ACTION_NOTHING;
+	int pWarning 	= 	ACTION_WARNING;
 
 	gtk_init (&argc, &argv);
 	gconf_init (argc, argv, NULL);
@@ -594,6 +667,15 @@ main (int argc, char **argv)
 		g_error ("Cannot initialise libnotify!");
 #endif
 
+	/*
+	 * We should warn if g-p-m is not running - but still allow to continue
+	 * Note, that the query alone will be enough to lauch g-p-m using
+	 * the service file.
+	 */
+	has_gpm_connection = gpm_is_on_ac (&a);
+	if (!has_gpm_connection)
+		use_libnotify ("Cannot connect to GNOME Power Manager.\nMake sure that it is running", NOTIFY_URGENCY_NORMAL);
+
 	/* Get the help and quit buttons */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
@@ -604,24 +686,56 @@ main (int argc, char **argv)
 	recalc ();
 
 	/* checkboxes */
-	checkbox_setup_action ("checkbutton_display_icon",
-		GCONF_ROOT "general/display_icon");
-	checkbox_setup_action ("checkbutton_display_icon_full",
-		GCONF_ROOT "general/display_icon_full");
+	checkbox_setup_action ("checkbutton_display_icon", GCONF_ROOT "general/display_icon");
+	checkbox_setup_action ("checkbutton_display_icon_full", GCONF_ROOT "general/display_icon_full");
+	/*
+	 * Set up combo boxes with "ideal" values - if a enum is unavailable
+	 * e.g. hibernate has been disabled, then it will be filtered out
+	 * automatically.
+	 */
+	/* power button */
+	ptrarr_button_power = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_button_power, (gpointer) &pNothing);
+	g_ptr_array_add (ptrarr_button_power, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_button_power, (gpointer) &pHibernate);
+	g_ptr_array_add (ptrarr_button_power, (gpointer) &pShutdown);
+	combo_setup_dynamic ("combobox_button_power", GCONF_ROOT "policy/button_power", ptrarr_button_power);
 
-	/* comboboxes */
-	combo_setup_action ("combobox_button_power",
-		GCONF_ROOT "policy/button_power", POLICY_CHOICE);
-	combo_setup_action ("combobox_button_suspend",
-		GCONF_ROOT "policy/button_suspend", POLICY_CHOICE);
-	combo_setup_action ("combobox_button_lid",
-		GCONF_ROOT "policy/button_lid", POLICY_CHOICE);
-	combo_setup_action ("combobox_ac_fail",
-		GCONF_ROOT "policy/ac_fail", POLICY_CHOICE);
-	combo_setup_action ("combobox_battery_critical",
-		GCONF_ROOT "policy/battery_critical", POLICY_CHOICE);
-	combo_setup_action ("combobox_sleep_type",
-		GCONF_ROOT "policy/sleep_type", POLICY_SLEEP);
+	/* sleep button */
+	ptrarr_button_suspend = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pNothing);
+	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pHibernate);
+	combo_setup_dynamic ("combobox_button_suspend", GCONF_ROOT "policy/button_suspend", ptrarr_button_power);
+
+	/* lid "button" */
+	ptrarr_button_lid = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pNothing);
+	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pHibernate);
+	combo_setup_dynamic ("combobox_button_lid", GCONF_ROOT "policy/button_lid", ptrarr_button_lid);
+
+	/* AC fail */
+	ptrarr_ac_fail = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pNothing);
+	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pWarning);
+	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pHibernate);
+	combo_setup_dynamic ("combobox_ac_fail", GCONF_ROOT "policy/ac_fail", ptrarr_ac_fail);
+
+	/* battery critical */
+	ptrarr_battery_critical = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pNothing);
+	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pHibernate);
+	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pShutdown);
+	combo_setup_dynamic ("combobox_battery_critical", GCONF_ROOT "policy/battery_critical", ptrarr_battery_critical);
+
+	/* sleep type */
+	ptrarr_sleep_type = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pHibernate);
+	combo_setup_dynamic ("combobox_sleep_type", GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer", 
@@ -653,5 +767,11 @@ main (int argc, char **argv)
 		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
 #endif
 	gtk_main ();
+	g_ptr_array_free (ptrarr_button_power, TRUE);
+	g_ptr_array_free (ptrarr_button_suspend, TRUE);
+	g_ptr_array_free (ptrarr_button_lid, TRUE);
+	g_ptr_array_free (ptrarr_ac_fail, TRUE);
+	g_ptr_array_free (ptrarr_battery_critical, TRUE);
+	g_ptr_array_free (ptrarr_sleep_type, TRUE);
 	return 0;
 }
