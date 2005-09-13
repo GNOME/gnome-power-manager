@@ -1,3 +1,25 @@
+2005-09-13  Richard Hughes  <richard@hughsie.com>
+
+	* Makefile.am, gnome-power-manager.service.in : Make DBUS 
+	auto-launch services work.
+
+	* docs/compile.php : Add note about pmscripts and rawhide kernel
+
+	* glibhal-callback : Rename registered to reg to avoid GCC complaining.
+
+	* src/gpm-main.c : Add info to check the FAQ page before reporting 
+	emailing me with bugs.
+
+	* src/gpm-notification.c : Change #if to #if defined(foo) to shut up
+	GCC's extra warnings. Add note about running on a desktop machine.
+
+	* src/gpm-prefs.c : Add config.h - this was causing libnotify not to 
+	be defined. 
+	Also add gpm_is_on_ac () so we can jumpstart g-p-m if not running, and
+	display a warning if impossible.
+	Also convert to the dynamic option comboboxes. This allows us to choose
+	more sane options for each combo.
+
 2005-09-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-callback.{c|h} : Finish the backend code.
