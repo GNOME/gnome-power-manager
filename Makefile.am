@@ -13,11 +13,18 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 dbusconfdir = $(DBUS_SYS_DIR)
 dbusconf_DATA = gnome-power-manager.conf
 
+servicedir       = $(DBUS_SERVICES_DIR)
+service_in_files = gnome-power-manager.service.in
+service_DATA     = $(service_in_files:.service.in=.service)
+
 if HAVE_DOCBOOK2MAN
 man_MANS =						\
 	gnome-power-manager.1				\
 	gnome-power-preferences.1
 endif
+
+$(service_DATA): $(service_in_files) Makefile
+	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
 EXTRA_DIST =						\
 	HACKING						\
