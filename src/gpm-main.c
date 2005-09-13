@@ -1171,7 +1171,9 @@ main (int argc, char *argv[])
 #endif
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
-	g_print (_("Please report bugs to richard@hughsie.com\n"));
+	g_print (_("Report bugs to richard@hughsie.com\n"));
+	g_print (_("Please check the faq page before reporting bugs!\n"));
+	g_print ("  * http://gnome-power.sourceforge.net/faq.php *");
 
 	/* see if we can get the unique name */
 	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE)) {
