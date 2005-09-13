@@ -33,8 +33,4 @@ typedef struct {
 	gboolean isACK;
 } RegProgram;
 
-DBusHandlerResult dbus_signal_filter (DBusConnection *connection, DBusMessage *message, void *user_data);
-DBusMessage *dbus_method_handler (DBusMessage *message, DBusError *error);
-DBusHandlerResult dbus_message_handler (DBusConnection *connection, DBusMessage *message, void *user_data);
-
 #endif	/* _GPMDBUSSERVER_H */
