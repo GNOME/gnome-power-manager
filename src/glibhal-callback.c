@@ -34,7 +34,7 @@
 #include "gpm_marshal.h"
 
 HalFunctions function;
-HalRegistered registered;
+HalRegistered reg;
 HalConnections proxy;
 
 /****************************************************************************
@@ -122,10 +122,10 @@ glibhal_watch_add_device_removed (void)
 
 	g_assert (function.initialized);
 	g_assert (!function.device_removed);
-	g_assert (!registered.device_removed);
+	g_assert (!reg.device_removed);
 
 	g_debug ("glibhal: DeviceRemoved: Registered");
-	registered.device_removed = TRUE;
+	reg.device_removed = TRUE;
 	/*dbus_get_system_connection (&system_connection);*/
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 
@@ -148,10 +148,10 @@ glibhal_watch_add_device_new_capability (void)
 
 	g_assert (function.initialized);
 	g_assert (!function.device_new_capability);
-	g_assert (!registered.device_new_capability);
+	g_assert (!reg.device_new_capability);
 
 	g_debug ("glibhal: NewCapability: Registered");
-	registered.device_new_capability = TRUE;
+	reg.device_new_capability = TRUE;
 	dbus_get_system_connection (&system_connection);
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
 		"org.freedesktop.Hal",
@@ -187,7 +187,7 @@ glibhal_watch_add_device_condition (const char *udi)
 	}
 
 	g_debug ("glibhal: Condition: Registered UDI '%s'", udi);
-	registered.device_condition = TRUE;
+	reg.device_condition = TRUE;
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		"org.freedesktop.Hal", 
@@ -367,7 +367,7 @@ gboolean
 glibhal_method_device_removed (HalDeviceRemoved callback)
 {
 	g_assert (function.initialized);
-	if (!registered.device_removed)
+	if (!reg.device_removed)
 		glibhal_watch_add_device_removed ();
 	function.device_removed = callback;
 	return TRUE;
@@ -385,7 +385,7 @@ gboolean
 glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 {
 	g_assert (function.initialized);
-	if (!registered.device_new_capability)
+	if (!reg.device_new_capability)
 		glibhal_watch_add_device_new_capability ();
 	function.device_new_capability = callback;
 	return TRUE;
@@ -434,11 +434,11 @@ glibhal_init (void)
 	function.device_property_modified = NULL;
 	function.device_condition = NULL;
 
-	registered.device_added = FALSE;
-	registered.device_removed = FALSE;
-	registered.device_new_capability = FALSE;
-	registered.device_lost_capability = FALSE;
-	registered.device_condition = FALSE;
+	reg.device_added = FALSE;
+	reg.device_removed = FALSE;
+	reg.device_new_capability = FALSE;
+	reg.device_lost_capability = FALSE;
+	reg.device_condition = FALSE;
 
 	proxy.device_added = NULL;
 	proxy.device_removed = NULL;
