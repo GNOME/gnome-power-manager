@@ -27,7 +27,7 @@
 
 #include <gconf/gconf-client.h>
 #include <gdk/gdk.h>
-#if HAVE_LIBNOTIFY
+#if defined(HAVE_LIBNOTIFY)
 #include <libnotify/notify.h>
 #endif
 
@@ -286,7 +286,7 @@ get_main_icon_slot (void)
 	if (slotData)
 		return slotData;
 
-	g_warning ("Cannot find preferred main device");
+	g_warning ("Cannot find preferred main device. This may be because you are running on a desktop machine!");
 	return NULL;
 }
 
