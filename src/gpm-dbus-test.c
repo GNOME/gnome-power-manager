@@ -132,13 +132,13 @@ main (int argc, char **argv)
 	/* Get a connection to the session connection */
 	dbus_get_session_connection (&session_connection);
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
-							GPM_DBUS_SERVICE,
-							GPM_DBUS_PATH,
-							GPM_DBUS_INTERFACE);
+			GPM_DBUS_SERVICE,
+			GPM_DBUS_PATH,
+			GPM_DBUS_INTERFACE);
 	signal_proxy = dbus_g_proxy_new_for_name (session_connection,
-							GPM_DBUS_SERVICE,
-							GPM_DBUS_PATH,
-							GPM_DBUS_INTERFACE);
+			GPM_DBUS_SERVICE,
+			GPM_DBUS_PATH,
+			GPM_DBUS_INTERFACE);
 
 	dbus_g_proxy_add_signal (signal_proxy, "mainsStatusChanged", 
 		G_TYPE_BOOLEAN, G_TYPE_INVALID);
