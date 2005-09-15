@@ -28,8 +28,6 @@
 #  include <config.h>
 #endif
 
-#define GLIBHAL 	FALSE
-
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 
@@ -116,7 +114,7 @@ static void gpm_object_class_init (GPMObjectClass *klass)
 }
 
 /* static */
-#if !GLIBHAL
+#if !defined(GLIBHAL)
 static LibHalContext *hal_ctx;
 #endif
 
@@ -663,7 +661,7 @@ add_ac_adapter (const gchar *udi)
 	g_return_if_fail (udi);
 	slotData = genericobject_add (objectData, udi);
 
-#if GLIBHAL
+#if defined(GLIBHAL)
 	/* register this with HAL so we get PropertyModified events */
 	glibhal_watch_add_device_property_modified (udi);
 #endif
@@ -736,7 +734,7 @@ add_battery (const gchar *udi)
 		return;
 	}
 
-#if GLIBHAL
+#if defined(GLIBHAL)
 	/* register this with HAL so we get PropertyModified events */
 	glibhal_watch_add_device_property_modified (udi);
 #endif
@@ -809,7 +807,7 @@ coldplug_buttons (void)
 		 * We register this here, as buttons are not present
 		 * in object data, and do not need to be added manually.
 		*/
-#if GLIBHAL
+#if defined(GLIBHAL)
 		glibhal_watch_add_device_condition (device_names[i]);
 #endif
 	}
@@ -823,7 +821,7 @@ coldplug_buttons (void)
  *  @param  udi			UDI
  */
 static void
-#if GLIBHAL
+#if defined(GLIBHAL)
 hal_device_removed (const char *udi)
 #else
 device_removed (LibHalContext *ctx, const char *udi)
@@ -844,7 +842,7 @@ device_removed (LibHalContext *ctx, const char *udi)
 	}
 	g_debug ("Removed '%s'", udi);
 	g_ptr_array_remove_index (objectData, a);
-#if GLIBHAL
+#if defined(GLIBHAL)
 	glibhal_watch_remove_device_property_modified (udi);
 #endif
 	/* our state has changed, update */
@@ -860,7 +858,7 @@ device_removed (LibHalContext *ctx, const char *udi)
  */
 
 static void
-#if GLIBHAL
+#if defined(GLIBHAL)
 hal_device_new_capability (const char *udi, const char *capability)
 #else
 device_new_capability (LibHalContext *ctx, const char *udi, const char *capability)
@@ -941,7 +939,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
  *  @param  key                 Key of property
  */
 static void
-#if GLIBHAL
+#if defined(GLIBHAL)
 hal_device_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
 #else
 property_modified (LibHalContext *ctx, const char *udi, const char *key,
@@ -1041,7 +1039,7 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
  *  @param  message             D-BUS message with parameters
  */
 static void
-#if GLIBHAL
+#if defined(GLIBHAL)
 hal_device_condition (const char *udi,
 		const char *condition_name,
 		const char *condition_details)
@@ -1121,7 +1119,7 @@ main (int argc, char *argv[])
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
-#if !GLIBHAL
+#if !defined(GLIBHAL)
 	DBusError error;
 	DBusConnection *connsystem;
 #endif
@@ -1196,7 +1194,7 @@ main (int argc, char *argv[])
 	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
 	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
 
-#if !GLIBHAL
+#if !defined(GLIBHAL)
 	/* convert to legacy DBusConnection */
 	connsystem = dbus_g_connection_get_connection (system_connection);
 	dbus_error_init (&error);
@@ -1271,7 +1269,7 @@ main (int argc, char *argv[])
 		g_free (g_ptr_array_index (registered, a));
 	g_ptr_array_free (registered, TRUE);
 
-#if !GLIBHAL
+#if !defined(GLIBHAL)
 	/* free all old HAL stuff */
 	dbus_error_init (&error);
 	libhal_ctx_shutdown (hal_ctx, &error);
