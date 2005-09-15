@@ -25,8 +25,10 @@ So even if you are not a programmer, you can still help. This project is moving 
 </p>
 <ul>
 <li>David Zeuthen</li>
+<li>Matthias Grimm</li>
+<li>Matthew Garrett</li>
 <li>Andrei Yurkevich</li>
-<li>Eugenia Loli-Queru (gnomefiles.org)</li>
+<li>Eugenia Loli-Queru</li>
 <li>Jaap Haitsma</li>
 <li>Paul Ionescu</li>
 <li>Diana Fong</li>

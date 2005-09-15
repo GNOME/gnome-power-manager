@@ -2,6 +2,22 @@
 	include('./header.php');
 	include('./menu.php');
 ?>
+<p>
+GNOME Power Manager owns the session D-BUS service net.sf.GnomePower and runs a session daemon (i.e. once per logged in user) and optionally displays battery status and low battery notifications. 
+</p>
+
+<p>
+The session daemon is very resource friendly. Other than the initial coldplug, it uses internal caching for all the power devices, so no additional lookups are needed for each update event.
+It will only update the displayed icon on a powerState change, but will update the tooltip on every percentage change.
+It should use *very little* CPU and memory.
+GNOME Power Manager is written in C, and has additional dependencies of:
+</p>
+<ol>
+<li>hal (0.5.4 or better)</li>
+<li>dbus-glib (0.35.2)</li>
+<li>libnotify (0.2.1) [optional, but highly recommended]</li>
+<li>notification-daemon (0.2.1) [optional, but highly recommended]</li>
+</ol>
 
 <h2>Notification Icon</h2>
 <p>

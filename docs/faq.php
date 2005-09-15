@@ -10,6 +10,8 @@
 
 <ul>
 <li>
+  <a href="#slow_hal_updates" class="faqtable">Why do events (such as removing the AC adapter) take so long to register?</a>
+</li><li>
   <a href="#set_power_save" class="faqtable">Why do I get the error: <b>SetPowerSave call failed</b>?</a>
 </li><li>
   <a href="#dbus_session_error" class="faqtable">Why do I get the error: <b>libnotify: Error connecting to session bus:</b>?</a>
@@ -35,6 +37,29 @@
 </ul>
 <br/>
 <br/>
+<a name="slow_hal_updates"></a><hr/>
+<p class="faqquestion">
+I'm running ACPI. Why do events (such as removing the AC adapter) take so long to register?
+</p>
+<p class="faqanswer">
+One of two things might be the problem.
+</p>
+<ol>
+<li>HAL might not be running the addon that captures the acpi event.</li>
+<li>You BIOS could be faulty, and might need a work-around. Please send a bug report.</li>
+</ol>
+<p>
+For the first case, try to find the hal processes that are running:
+</p>
+<pre>
+ps -a | grep hal
+</pre>
+<p>
+And check for the process hald-addon-acpi.
+If it is not being run, then please make sure that HAL is being run with the <b>--retain-privileges</b> option in the haldaemon initscript.
+An anternative to this is to use acpid, rather than the kernel proc file.
+</p>
+
 <a name="set_power_save"></a><hr/>
 <p class="faqquestion">
 Why do I get the error:
