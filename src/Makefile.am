@@ -70,8 +70,8 @@ gnome_power_manager_SOURCES =				\
 	gpm_marshal.c					\
 	dbus-common.h					\
 	dbus-common.c					\
-	glibhal-main.h				\
-	glibhal-main.c				\
+	glibhal-main.h					\
+	glibhal-main.c					\
 	glibhal-callback.h				\
 	glibhal-callback.c				\
 	glibhal-extras.h				\
@@ -80,6 +80,10 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-server.c				\
 	gpm-common.h					\
 	gpm-common.c					\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
+	gpm-idle.h					\
+	gpm-idle.c					\
 	gpm-notification.h				\
 	gpm-notification.c				\
 	gpm-main.h					\
