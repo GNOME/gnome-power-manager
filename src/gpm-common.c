@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -31,7 +31,7 @@
 
 GPtrArray *objectData;
 
-/** Converts an dbus ENUM to it's string representation 
+/** Converts an dbus ENUM to it's string representation
  *
  *  @param  value		The dbus ENUM
  *  @return				action string, e.g. "Shutdown"
@@ -53,7 +53,7 @@ convert_dbus_enum_to_string (gint value)
 	return NULL;
 }
 
-/** Converts an dbus ENUMs to it's text representation 
+/** Converts an dbus ENUMs to it's text representation
  * (only really useful for debugging)
  *
  *  @param  value		The dbus ENUM's
@@ -293,8 +293,8 @@ get_chargestate_string (GenericObject *slotData)
 		return _("charging");
 	else if (slotData->isDischarging)
 		return _("discharging");
-	else if (!slotData->isCharging && 
-		 !slotData->isDischarging && 
+	else if (!slotData->isCharging &&
+		 !slotData->isDischarging &&
 		 slotData->percentageCharge > 99)
 		return _("fully charged");
 	else if (!slotData->isCharging &&
@@ -306,7 +306,7 @@ get_chargestate_string (GenericObject *slotData)
 /** Returns the time string, e.g. "2 hours 3 minutes"
  *
  *  @param  minutes		Minutes to convert to string
- *  @return			The timestring 
+ *  @return			The timestring
  */
 GString *
 get_timestring_from_minutes (gint minutes)
@@ -335,10 +335,10 @@ get_timestring_from_minutes (gint minutes)
 				if (minutes == 1)
 					g_string_printf (timestring, _("1 hour 1 minute"));
 				else
-					g_string_printf (timestring, 
+					g_string_printf (timestring,
 					_("1 hour %i minutes"), minutes);
 			} else
-				g_string_printf (timestring, 
+				g_string_printf (timestring,
 					_("%i hours %i minutes"), hours, minutes);
 		}
 	}

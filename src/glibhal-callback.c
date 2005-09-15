@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -130,12 +130,12 @@ glibhal_watch_add_device_removed (void)
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 
 	proxy.device_removed = dbus_g_proxy_new_for_name_owner (system_connection,
-		"org.freedesktop.Hal", 
-		"/org/freedesktop/Hal/Manager", 
+		"org.freedesktop.Hal",
+		"/org/freedesktop/Hal/Manager",
 		"org.freedesktop.Hal.Manager", &error);
-	dbus_g_proxy_add_signal (proxy.device_removed, "DeviceRemoved", 
+	dbus_g_proxy_add_signal (proxy.device_removed, "DeviceRemoved",
 		G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (proxy.device_removed, "DeviceRemoved", 
+	dbus_g_proxy_connect_signal (proxy.device_removed, "DeviceRemoved",
 		G_CALLBACK (signal_handler_DeviceRemoved), NULL, NULL);
 }
 
@@ -155,7 +155,7 @@ glibhal_watch_add_device_new_capability (void)
 	dbus_get_system_connection (&system_connection);
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
 		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/Manager", 
+		"/org/freedesktop/Hal/Manager",
 		"org.freedesktop.Hal.Manager", &error);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
@@ -190,14 +190,14 @@ glibhal_watch_add_device_condition (const char *udi)
 	reg.device_condition = TRUE;
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
-		"org.freedesktop.Hal", 
+		"org.freedesktop.Hal",
 		udi,
 		"org.freedesktop.Hal.Device", &error);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_add_signal (hal_proxy, "Condition", 
+	dbus_g_proxy_add_signal (hal_proxy, "Condition",
 		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal_proxy, "Condition", 
+	dbus_g_proxy_connect_signal (hal_proxy, "Condition",
 		G_CALLBACK (signal_handler_Condition), NULL, NULL);
 
 	/* allocate and add to array */
@@ -233,16 +233,16 @@ glibhal_watch_add_device_property_modified (const char *udi)
 	g_debug ("glibhal: PropertyModified: Registered UDI '%s'", udi);
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
-		"org.freedesktop.Hal", 
-		udi, 
+		"org.freedesktop.Hal",
+		udi,
 		"org.freedesktop.Hal.Device", &error);
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
-	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED, 
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED,
 		G_TYPE_NONE, G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
-	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified", 
+	dbus_g_proxy_add_signal (hal_proxy, "PropertyModified",
 		G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified", 
+	dbus_g_proxy_connect_signal (hal_proxy, "PropertyModified",
 		G_CALLBACK (signal_handler_PropertyModified), NULL, NULL);
 
 	/* allocate and add to array */
@@ -422,9 +422,9 @@ glibhal_method_device_condition (HalDeviceCondition callback)
  ****************************************************************************/
 
 gboolean
-glibhal_init (void)
+glibhal_callback_init (void)
 {
-	g_debug ("glibhal: init");
+	g_debug ("glibhal_callback: init");
 	function.initialized = TRUE;
 
 	function.device_added = NULL;
@@ -452,7 +452,7 @@ glibhal_init (void)
 }
 
 gboolean
-glibhal_shutdown (void)
+glibhal_callback_shutdown (void)
 {
 	int a;
 	UdiProxy *udiproxy;

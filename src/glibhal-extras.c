@@ -8,12 +8,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -55,7 +55,7 @@ hal_set_brightness_item (const char *udi, int brightness)
 		udi,
 		"org.freedesktop.Hal.Device.LaptopPanel");
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error,
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -114,7 +114,7 @@ hal_suspend (int wakeup)
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -145,7 +145,7 @@ hal_hibernate (void)
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "Hibernate", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "Hibernate", &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -177,7 +177,7 @@ hal_setlowpowermode (gboolean set)
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
 			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -210,33 +210,4 @@ hal_get_brightness_steps (void)
 	hal_device_get_int (names[0], "laptop_panel.num_levels", &levels);
 	hal_free_capability (names);
 	return levels;
-}
-
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
- */
-gboolean
-gscreensaver_lock (void)
-{
-	GError *error = NULL;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
-	gboolean boolret;
-
-	dbus_get_session_connection (&session_connection);
-	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
-			"org.gnome.screensaver",
-			"/org/gnome/screensaver",
-			"org.gnome.screensaver");
-	if (!dbus_g_proxy_call (gs_proxy, "lock", &error, 
-				G_TYPE_INVALID, 
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_warning ("gnome-screensaver service is not running.");
-	}
-	if (!boolret)
-		g_warning ("gnome-screensaver lock failed");
-	g_object_unref (G_OBJECT (gs_proxy));
-	return TRUE;
 }
