@@ -1,5 +1,38 @@
 2005-09-13  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: bump to 0.2.3.2
+	Also add the command line --enable-glibhal to try out the new code.
+
+	* gnome-power-manager.spec.in: Updated with davidz's (redhat) changes.
+
+	* docs/contact.php : Add Matthias Grimm, and Matthew Garrett to the 
+	credits - thanks guys!
+
+	* docs/faq.php: Add "Why do events take so long to register?"
+
+	* docs/gnome_power_manager.php : Move content from index.
+
+	* docs/index.php: Add content from Matthias Grimm.
+
+	* src/gpm-screensaver.{c|h}: New files for the GNOME Screensaver stuff.
+
+	* src/gpm-idle.{c|h}: New files for the idle calculation stuff.
+
+	* src/Makefile.am : Add these new files to gnome_power_manager
+
+	* src/glibhal-* : Some tidying up, and wightspace fixes.
+
+	* src/glibhal-main.{c|h} : Add is_hald_running (), hal_pm_check ().
+
+	* src/gpm-main.c : Add calls to gscreensaver_set_throttle.
+	Also check that we can connect to HAL before we start issuing commands,
+	thanks to Trond Husø for pointing this out!
+	Call the idle calculation function every 5 seconds.
+
+	* src/gpm-prefs.{c|h} : Wightspace fixes.
+
+2005-09-13  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in: bump to 0.2.3.1
 
 	* Makefile.am, gnome-power-manager.service.in : Make DBUS 
