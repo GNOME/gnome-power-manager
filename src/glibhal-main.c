@@ -31,6 +31,40 @@
 #include "dbus-common.h"
 #include "glibhal-main.h"
 
+/** Finds out if hal is running
+ *
+ *  @return		TRUE for success, FALSE for failure
+ */
+gboolean
+is_hald_running (void)
+{
+	gchar *udi;
+	gboolean running;
+	running = hal_device_get_string (
+		"/org/freedesktop/Hal/devices/computer",
+		"info.udi", &udi);
+	g_free (udi);
+	if (running)
+		return TRUE;
+	return FALSE;
+}
+
+/** Finds out if power management functions are running (only ACPI, PMU, APM)
+ *
+ *  @return		TRUE for success, FALSE for failure
+ */
+gboolean
+hal_pm_check (void)
+{
+	gboolean pm;
+	hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.is_enabled", &pm);
+	if (pm)
+		return TRUE;
+	return FALSE;
+}
+
 /** glib libhal replacement to get boolean type
  *
  *  @param  udi		The UDI of the device
@@ -70,6 +104,8 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
  *  @param  key		The key to query
  *  @param  value	return value, passed by ref
  *  @return		TRUE for success, FALSE for failure
+ *
+ * NOTE: You must g_free () the return value.
  */
 gboolean
 hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
