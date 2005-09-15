@@ -12,12 +12,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
@@ -46,6 +46,8 @@
 #include "gpm-main.h"
 #include "gpm-notification.h"
 #include "gpm-dbus-server.h"
+#include "gpm-idle.h"
+#include "gpm-screensaver.h"
 
 #include "dbus-common.h"
 #include "glibhal-main.h"
@@ -152,7 +154,7 @@ gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
 gboolean
 gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
 {
-	g_debug ("gpm_object_is_on_mains ()");
+	g_debug ("gpm_object_is_on_ac ()");
 	*ret = !state_data.onBatteryPower & !state_data.onUPSPower;
 	return TRUE;
 }
@@ -200,7 +202,7 @@ gpm_emit_mains_changed (const gboolean value)
 	return TRUE;
 }
 
-/* 
+/*
  * I know these don't belong here, but I have a problem:
  *
  * I need a way to get the connection name, like we used to using
@@ -208,7 +210,7 @@ gpm_emit_mains_changed (const gboolean value)
  * but glib bindings abstract away the message.
  * walters to fix :-)
  */
-gboolean 
+gboolean
 gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
 {
 	g_warning ("STUB: gpm_object_ack (%i)", value);
@@ -289,14 +291,14 @@ use_libnotify (const char *content, const int urgency)
 			   hints,
 			   NULL, /* no user data 		*/
 			   0);   /* no actions 			*/
-	notify_icon_destroy(icon);	
+	notify_icon_destroy(icon);
 	if (!n)
 		g_warning ("failed to send notification (%s)", content);
 #else
 	GtkWidget *widget;
 	widget = gnome_message_box_new (content,
 			GNOME_MESSAGE_BOX_WARNING,
-			GNOME_STOCK_BUTTON_OK, 
+			GNOME_STOCK_BUTTON_OK,
 			NULL);
 	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
 	gtk_widget_show (widget);
@@ -333,7 +335,7 @@ dbus_action (gint action)
 	gint a;
 	const int maxwait = 5;
 	gboolean retval;
-	
+
 	gboolean allACK = FALSE;
 	gboolean anyNACK = FALSE;
 
@@ -343,7 +345,7 @@ dbus_action (gint action)
 		goto unref;
 	}
 	g_debug ("Registered clients = %i", registered->len);
-	
+
 	GTimer* gt = g_timer_new ();
 	do {
 
@@ -378,7 +380,7 @@ dbus_action (gint action)
 		gchar *actionstr = convert_dbus_enum_to_string (action);
 		g_string_printf (gs, _("The program '%s' is preventing the %s "
 				       "from occurring.\n\n"
-				       "The explanation given is: %s"), 
+				       "The explanation given is: %s"),
 				     regprog->appName->str, actionstr, regprog->reason->str);
 		g_message ("%s", gs->str);
 		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
@@ -458,31 +460,40 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
 		/* set brightness and lowpower mode */
-		value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/brightness", NULL);
 		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
-		/* set dpms_suspend to our value */
-		value = gconf_client_get_int (client, 
+		/* set gnome screensaver dpms_suspend to our value */
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/sleep_display", NULL);
-		gconf_client_set_int (client, 
+		gconf_client_set_int (client,
 			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+		/*
+		 * make sure gnome-screensaver disables screensaving,
+		 * and enables monitor shut-off instead
+		 */
+		gscreensaver_set_throttle (TRUE);
+		/* emit siganal */
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
 		g_debug ("*DBUS* Now mains powered");
 		/* set brightness and lowpower mode */
-		value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/ac/brightness", NULL);
 		hal_set_brightness (value);
 		hal_setlowpowermode (TRUE);
 		/* set dpms_suspend to our value */
-		value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/ac/sleep_display", NULL);
-		gconf_client_set_int (client, 
+		gconf_client_set_int (client,
 			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+		/* make sure gnome-screensaver enables screensaving */
+		gscreensaver_set_throttle (FALSE);
+		/* emit siganal */
 		gpm_emit_mains_changed (TRUE);
 	} else
-		g_warning ("action_policy_do called with unknown action %i", 
+		g_warning ("action_policy_do called with unknown action %i",
 			policy_number);
 }
 
@@ -805,7 +816,7 @@ coldplug_buttons (void)
 	hal_free_capability (device_names);
 }
 
-/** Invoked when a device is removed from the Global Device List. 
+/** Invoked when a device is removed from the Global Device List.
  *  Removes any type of device from the objectData database and removes the
  *  watch on it's UDI.
  *
@@ -901,7 +912,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			device = convert_powerdevice_to_string (slotData->powerDevice);
 			remaining = get_time_string (slotData);;
 			gs = g_string_new ("");
-			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"), 
+			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"),
 				device, newCharge, remaining->str);
 			g_message ("%s", gs->str);
 			use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
@@ -914,7 +925,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		device = convert_powerdevice_to_string (slotData->powerDevice);
 		remaining = get_time_string (slotData);;
 		gs = g_string_new ("");
-		g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"), 
+		g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"),
 			device, newCharge, remaining->str);
 		g_message ("%s", gs->str);
 		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
@@ -1036,7 +1047,7 @@ hal_device_condition (const char *udi,
 		const char *condition_details)
 #else
 device_condition (LibHalContext *ctx,
-		  const char *udi, 
+		  const char *udi,
 		  const char *condition_name,
 		  const char *condition_details)
 #endif
@@ -1124,7 +1135,7 @@ main (int argc, char *argv[])
 	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, 
+	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH,
 		callback_gconf_key_changed, NULL, NULL, NULL);
 
 	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
@@ -1190,12 +1201,21 @@ main (int argc, char *argv[])
 	connsystem = dbus_g_connection_get_connection (system_connection);
 	dbus_error_init (&error);
 
-	if (!(hal_ctx = libhal_ctx_new ()))
-		g_error ("HAL error: libhal_ctx_new");
-	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem))
-		g_error ("HAL error: libhal_ctx_set_dbus_connection: %s: %s", error.name, error.message);
-	if (!libhal_ctx_init (hal_ctx, &error))
-		g_error ("HAL error: libhal_ctx_init: %s: %s", error.name, error.message);
+	if (!(hal_ctx = libhal_ctx_new ())) {
+		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
+		g_warning ("HAL error: libhal_ctx_new");
+		exit (1);
+	}
+	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem)) {
+		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
+		g_warning ("HAL error: libhal_ctx_set_dbus_connection: %s: %s", error.name, error.message);
+		exit (1);
+	}
+	if (!libhal_ctx_init (hal_ctx, &error)) {
+		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
+		g_warning ("HAL error: libhal_ctx_init: %s: %s", error.name, error.message);
+		exit (1);
+	}
 	libhal_ctx_set_device_property_modified (hal_ctx, property_modified);
 	libhal_ctx_set_device_removed (hal_ctx, device_removed);
 	libhal_ctx_set_device_new_capability (hal_ctx, device_new_capability);
@@ -1203,7 +1223,20 @@ main (int argc, char *argv[])
 	/* bad, bad - we have to check and filter */
 	libhal_device_property_watch_all (hal_ctx, &error);
 #else
-	glibhal_init ();
+
+	if (!is_hald_running ()) {
+		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
+		g_warning ("HAL error: is_hald_running FALSE!");
+		exit (1);
+	}
+
+	if (!hal_pm_check ()) {
+		use_libnotify ("HAL does not have PowerManagement capability!", NOTIFY_URGENCY_CRITICAL);
+		g_warning ("HAL error: hal_pm_check FALSE!");
+		exit (1);
+	}
+
+	glibhal_callback_init ();
 	/* assign the callback functions */
 	glibhal_method_device_removed (hal_device_removed);
 	glibhal_method_device_new_capability (hal_device_new_capability);
@@ -1223,6 +1256,9 @@ main (int argc, char *argv[])
 	gpn_icon_initialise ();
 	gpn_icon_update ();
 
+	/* set up idle calculation function */
+	g_timeout_add (5000, update_idle_function, NULL);
+
 	g_main_loop_run (loop);
 
 	/* free objectData */
@@ -1241,7 +1277,7 @@ main (int argc, char *argv[])
 	libhal_ctx_shutdown (hal_ctx, &error);
 	libhal_ctx_free (hal_ctx);
 #else
-	glibhal_shutdown ();
+	glibhal_callback_shutdown ();
 #endif
 
 	gpm_exit ();
