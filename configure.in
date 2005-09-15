@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gnome-power-manager, 0.2.3.1)
+AC_INIT(gnome-power-manager, 0.2.3.2)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -19,6 +19,7 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_PROG_INTLTOOL([0.27.2])
 AM_GLIB_GNU_GETTEXT
 
+AC_ARG_ENABLE(glibhal,            [  --enable-glibhal        build with glibhal support (EXPERIMENTAL)],enable_glibhal=$enableval,enable_glibhal=no)
 AC_ARG_ENABLE(libnotify,          [  --enable-libnotify      build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
 AC_ARG_ENABLE(gscreensaver,       [  --enable-gscreensaver   build with gnome-screensaver support],enable_gscreensaver=$enableval,enable_gscreensaver=auto)
 AC_ARG_WITH(dbus-sys,             [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
@@ -89,6 +90,12 @@ if test x$have_libnotify = xyes ; then
     AC_DEFINE(HAVE_LIBNOTIFY,1,[libnotify support])
 fi
 
+if test x$enable_glibhal = xyes ; then
+    AC_DEFINE(GLIBHAL,1,[GLIBHAL support])
+else
+    enable_glibhal = "no"
+fi
+
 # gnome-screensaver detection
 if test x$enable_gscreensaver = xno ; then
     have_gscreensaver=no;
@@ -137,6 +144,7 @@ echo "
         cflags:                    ${CFLAGS}
         cppflags:                  ${CPPFLAGS}
         libnotify support:         ${have_libnotify}
+        glibhal support:           ${enable_glibhal}
         gnome-screensaver support: ${have_gscreensaver}
         dbus-1 system.d dir:       $DBUS_SYS_DIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR
