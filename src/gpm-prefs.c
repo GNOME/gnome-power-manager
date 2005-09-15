@@ -12,12 +12,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -67,7 +67,7 @@ gpm_is_on_ac (gboolean *value)
 			GPM_DBUS_SERVICE,
 			GPM_DBUS_PATH,
 			GPM_DBUS_INTERFACE);
-	if (!dbus_g_proxy_call (gpm_proxy, "isOnAc", &error, 
+	if (!dbus_g_proxy_call (gpm_proxy, "isOnAc", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -104,9 +104,9 @@ use_libnotify (const char *content, const int urgency)
 		g_warning ("failed to send notification (%s)", content);
 #else
 	GtkWidget *widget;
-	widget = gnome_message_box_new (content, 
+	widget = gnome_message_box_new (content,
                                 GNOME_MESSAGE_BOX_WARNING,
-                                GNOME_STOCK_BUTTON_OK, 
+                                GNOME_STOCK_BUTTON_OK,
                                 NULL);
 	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
 	gtk_widget_show (widget);
@@ -130,7 +130,7 @@ gpm_is_on_mains (gboolean *value)
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE, GPM_DBUS_PATH, GPM_DBUS_INTERFACE);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (gpm_proxy, "isOnBattery", &error, 
+	if (!dbus_g_proxy_call (gpm_proxy, "isOnBattery", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
@@ -291,7 +291,7 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
-	/* 
+	/*
 	 * just recalculate the UI, as the gconf keys are read there.
 	 * this removes the need for lots of global variables.
 	 */
@@ -321,7 +321,7 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 
 	/* we have to convert from the virtual mapping to a policy mapping */
 	pdata = (int*) g_ptr_array_index (policydata, value);
-	
+
 	g_debug ("[%s] = (%i)", policypath, *pdata);
 
 	/* we have to convert to the gconf store string */
@@ -351,7 +351,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	value = (int) gtk_range_get_value (GTK_RANGE (widget));
 	oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
 
-	/* 
+	/*
 	 * Code for divisions of 10 seconds, unfinished
 	 *
 	 */
@@ -375,13 +375,13 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	}
 
 	/*
-	 * if calculated value not different to existing gconf value, 
+	 * if calculated value not different to existing gconf value,
 	 * then no point continuing
 	 */
 	if (oldgconfvalue == value)
 		return;
 
-	/* if this is hscale for battery_low, then set upper range of hscale for 
+	/* if this is hscale for battery_low, then set upper range of hscale for
 	 * battery_critical maximum to value
 	 * (This stops criticalThreshold > lowThreshold)
 	 */
@@ -393,7 +393,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 
 	/* for AC and battery, change the brightness in real-time */
 	if (gpm_is_on_mains (&onbattery)) {
-		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) || 
+		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) ||
 		    (onbattery && strcmp (widgetname, "hscale_batteries_brightness") == 0))
 			hal_set_brightness (value);
 	} else
@@ -480,7 +480,7 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 /** Sets the hscales up to the gconf value, and sets up callbacks.
  *
  *  @param  widgetname		the libglade widget name
- *  @param  policypath		the GConf policy path, 
+ *  @param  policypath		the GConf policy path,
  *				e.g. "policy/ac/brightness"
  *  @param  policytype		the policy ptye, e.g. POLICY_PERCENT
  */
@@ -514,7 +514,7 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 /** Sets the checkboxes up to the gconf value, and sets up callbacks.
  *
  *  @param  widgetname		the libglade widget name
- *  @param  policypath		the GConf policy path, 
+ *  @param  policypath		the GConf policy path,
  *				e.g. "policy/ac/brightness"
  */
 static void
@@ -540,7 +540,7 @@ checkbox_setup_action (const char *widgetname, const char *policypath)
 /** Sets the comboboxes up to the gconf value, and sets up callbacks.
  *
  *  @param  widgetname		the libglade widget name
- *  @param  policypath		the GConf policy path, 
+ *  @param  policypath		the GConf policy path,
  *				e.g. "policy/ac/brightness"
  *  @param  ptrarray		the policy data, in a pointer array
  */
@@ -738,21 +738,21 @@ main (int argc, char **argv)
 	combo_setup_dynamic ("combobox_sleep_type", GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
 
 	/* sliders */
-	hscale_setup_action ("hscale_ac_computer", 
+	hscale_setup_action ("hscale_ac_computer",
 		GCONF_ROOT "policy/ac/sleep_computer", POLICY_TIME);
-	hscale_setup_action ("hscale_ac_display", 
+	hscale_setup_action ("hscale_ac_display",
 		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
-	hscale_setup_action ("hscale_ac_brightness", 
+	hscale_setup_action ("hscale_ac_brightness",
 		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
-	hscale_setup_action ("hscale_batteries_computer", 
+	hscale_setup_action ("hscale_batteries_computer",
 		GCONF_ROOT "policy/battery/sleep_computer", POLICY_TIME);
-	hscale_setup_action ("hscale_batteries_display", 
+	hscale_setup_action ("hscale_batteries_display",
 		GCONF_ROOT "policy/battery/sleep_display", POLICY_TIME);
-	hscale_setup_action ("hscale_batteries_brightness", 
+	hscale_setup_action ("hscale_batteries_brightness",
 		GCONF_ROOT "policy/battery/brightness", POLICY_PERCENT);
-	hscale_setup_action ("hscale_battery_low", 
+	hscale_setup_action ("hscale_battery_low",
 		GCONF_ROOT "general/threshold_low", POLICY_PERCENT);
-	hscale_setup_action ("hscale_battery_critical", 
+	hscale_setup_action ("hscale_battery_critical",
 		GCONF_ROOT "general/threshold_critical", POLICY_PERCENT);
 
 	/* set up upper limit for battery_critical */
