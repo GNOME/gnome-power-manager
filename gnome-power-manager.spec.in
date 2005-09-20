@@ -1,20 +1,25 @@
+
+%define hal_version  0.5.4
+%define dbus_version 0.35
+
 Summary: GNOME Power Manager
 Name: gnome-power-manager
-Version: @VERSION@
-Release: 1%{?dist}
+Version: 0.2.3.2
+Release: 1
 License: GPL
 Group: Applications/System
-Source: http://dl.sourceforge.net/gnome-power/gnome-power-manager-%{version}.tar.gz
+Source: gnome-power-manager-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL: http://gnome-power.sourceforge.net/
-BuildPrereq: libgnomeui-devel, libglade2-devel
-BuildPrereq: hal-devel >= 0.5.4, dbus-devel >= 0.35
-BuildPrereq: gnome-common, docbook-utils
-Requires: gnome-mime-data, gnome-icon-theme
-Requires: hal >= 0.5.4, kernel >= 2.6
-Requires: dbus >= 0.35, dbus-glib >= 0.35
-Requires: libnotify >= 0.2.1
-Obsoletes: PowerManager
+BuildPrereq: libgnomeui-devel
+BuildPrereq: libglade2-devel
+BuildPrereq: libwnck-devel
+BuildPrereq: hal-devel >= %{hal_version}
+BuildPrereq: dbus-devel >= %{dbus_version}
+Requires: gnome-mime-data
+Requires: gnome-icon-theme
+Requires: hal >= %{hal_version}
+Requires: dbus-glib >= %{dbus_version}
 
 %description
 GNOME Power Manager uses the information and facilities provided by HAL 
@@ -27,8 +32,6 @@ change preferences.
 
 %build
 %configure \
-	--disable-schemas-install				\
-	--enable-libnotify					\
         --prefix=%{buildroot}					\
         --with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
         --with-dbus-services=%{buildroot}/usr/share/dbus-1/services
@@ -39,6 +42,13 @@ rm -rf $RPM_BUILD_ROOT
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 %makeinstall
 unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
+
+desktop-file-install --vendor gnome --delete-original                   \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications                         \
+  --add-only-show-in GNOME                                              \
+  --add-category X-Red-Hat-Base                                         \
+  $RPM_BUILD_ROOT%{_datadir}/applications/*
+
 %find_lang %name
 
 %clean
@@ -59,12 +69,18 @@ gconftool-2 --makefile-uninstall-rule \
 %defattr(-,root,root)
 %doc AUTHORS ChangeLog COPYING README
 %{_bindir}/*
-%{_datadir}/*
+%{_datadir}/applications/*
+%{_datadir}/dbus-1/*
+%{_datadir}/gnome-power-manager/*
+%{_datadir}/man/*
+# TODO: remove system.d as g-p-m shouldn't be on the system bus
+%{_sysconfdir}/dbus-1/system.d/*
 %{_sysconfdir}/gconf/schemas/*.schemas
-%dir %{_sysconfdir}/dbus-1/system.d
-%config %{_sysconfdir}/dbus-1/system.d/gnome-power-manager.conf
 
 %changelog
+* Fri Sep 02 2005 David Zeuthen <davidz@redhat.com> 0.2.3.1-1
+- Initial import based on an SRPM from Richard Hughes
+
 * Mon Jun 19 2005 Richard Hughes <richard@hughsie.com> 0.1.1-1
 - New RPM version 0.1.1
 
@@ -77,4 +93,5 @@ gconftool-2 --makefile-uninstall-rule \
 %changelog
 * Mon Apr 04 2005 Richard Hughes <richard@hughsie.com> 0.0.3-1
 - initial packaging of 0.0.3
+
 
