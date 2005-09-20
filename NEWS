@@ -1,11 +1,11 @@
 ==========
-GNOME Power Manager 0.2.3
+GNOME Power Manager 0.2.4
 ==========
 
 Released September xx, 2005
 
-- Comboboxes now have sane values available.
-- Lots more code cleanups, and modularization.
+- Comboboxes now only have "sane" values available.
+- Lots more code cleanups, and more modularization.
 - 100% GLIB DBUS support - this is faster than libhal, but has not been tested
   much, and is disabled for now. Use ./configure --enable-glibhal to test.
 - DBUS services now works, so we init g-p-m with just a query to 
@@ -14,6 +14,9 @@ Released September xx, 2005
 - Now we control GNOME Screensaver so that we don't use screensavers on battery
   but just blank the screen.
 - Lots of updates to the website.
+- Fixed specfile to be 100% RedHat approved format.
+- Now we only call SetLowPower if system.formfactor is laptop.
+- We detect GNOME Screensaver at runtime, rather than a configure option.
 
 ==========
 GNOME Power Manager 0.2.2

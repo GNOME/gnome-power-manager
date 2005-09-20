@@ -31,6 +31,32 @@
 #include "glibhal-main.h"
 #include "gpm-screensaver.h"
 
+/** Finds out if gnome-screensaver is running
+ *
+ *  @return		TRUE for success, FALSE for failure
+ */
+gboolean
+gscreensaver_is_running (void)
+{
+	GError *error = NULL;
+	DBusGConnection *session_connection;
+	DBusGProxy *gs_proxy;
+	gboolean boolret;
+
+	dbus_get_session_connection (&session_connection);
+	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GS_LISTENER_SERVICE,
+			GS_LISTENER_PATH,
+			GS_LISTENER_INTERFACE);
+	if (!dbus_g_proxy_call (gs_proxy, "poke", &error,
+				G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		boolret = FALSE;
+	}
+	g_object_unref (G_OBJECT (gs_proxy));
+	return boolret;}
+
 /** If set to lock on screensave, instruct gnome-screensaver to lock screen
  *  and return TRUE.
  *  if set not to lock, then do nothing, and return FALSE.

@@ -21,7 +21,6 @@ AM_GLIB_GNU_GETTEXT
 
 AC_ARG_ENABLE(glibhal,            [  --enable-glibhal        build with glibhal support (EXPERIMENTAL)],enable_glibhal=$enableval,enable_glibhal=no)
 AC_ARG_ENABLE(libnotify,          [  --enable-libnotify      build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
-AC_ARG_ENABLE(gscreensaver,       [  --enable-gscreensaver   build with gnome-screensaver support],enable_gscreensaver=$enableval,enable_gscreensaver=auto)
 AC_ARG_WITH(dbus-sys,             [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
 AC_ARG_WITH(dbus-services,        [  --with-dbus-services=<dir>   where D-BUS services directory is])
 
@@ -96,28 +95,6 @@ else
     enable_glibhal = "no"
 fi
 
-# gnome-screensaver detection
-if test x$enable_gscreensaver = xno ; then
-    have_gscreensaver=no;
-else
-    # See if we have sufficiently new gscreensaver library
-    # TODO - How do we test for gnome-screensaver?
-    PKG_CHECK_MODULES(GSCREENSAVER, gscreensaver >= 0.0.1, have_gscreensaver=yes, have_gscreensaver=no)
-    if test x$enable_gscreensaver = xauto ; then
-        if test x$have_gscreensaver = xno ; then
-                AC_MSG_WARN([Sufficiently new gnome-screensaver library not found])
-        fi
-    else 
-        if test x$have_gscreensaver = xno ; then
-                AC_MSG_ERROR([gnome-screensaver explicitly required, but gnome-screensaver not found])
-        fi
-    fi
-fi
-AM_CONDITIONAL(HAVE_GSCREENSAVER, test x$have_gscreensaver = xyes)
-if test x$have_gscreensaver = xyes ; then
-    AC_DEFINE(HAVE_GSCREENSAVER,1,[gscreensaver support])
-fi
-
 AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
 if test "$DOCBOOK2MAN" = "no" ; then
 	AC_MSG_WARN([docbook2man not found, will not be able to build man documentation])
@@ -145,7 +122,6 @@ echo "
         cppflags:                  ${CPPFLAGS}
         libnotify support:         ${have_libnotify}
         glibhal support:           ${enable_glibhal}
-        gnome-screensaver support: ${have_gscreensaver}
         dbus-1 system.d dir:       $DBUS_SYS_DIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR
 	gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR

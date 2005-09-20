@@ -46,10 +46,12 @@ gnome_power_dbus_test_LDADD =				\
 gnome_power_preferences_SOURCES =			\
 	dbus-common.h					\
 	dbus-common.c					\
-	glibhal-main.h				\
-	glibhal-main.c				\
+	glibhal-main.h					\
+	glibhal-main.c					\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\

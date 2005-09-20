@@ -45,6 +45,7 @@
 #include "dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
+#include "gpm-screensaver.h"
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
@@ -201,7 +202,6 @@ recalc (void)
 	gboolean hasButtonLid;
 	gboolean hasLCD;
 	gboolean hasDisplays;
-	gboolean useGnomeScreensaver;
 
 	/* checkboxes */
 	gboolean displayIcon = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
@@ -219,13 +219,13 @@ recalc (void)
 #endif
 	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
 
-#if defined(HAVE_GSCREENSAVER)
-	hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
-	useGnomeScreensaver = TRUE;
-#else
-	hasDisplays = FALSE;
-	useGnomeScreensaver = FALSE;
-#endif
+	if (gscreensaver_is_running ()) {
+		gtk_set_visibility ("button_gnome_screensave", TRUE);
+		hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+	} else {
+		gtk_set_visibility ("button_gnome_screensave", FALSE);
+		hasDisplays = FALSE;
+	}
 
 	/* frame labels */
 	if (hasBatteries) {
@@ -278,7 +278,6 @@ recalc (void)
 	gtk_set_visibility ("label_ac_display", hasDisplays);
 	gtk_set_visibility ("hscale_batteries_display", hasDisplays & hasBatteries);
 	gtk_set_visibility ("label_batteries_display", hasDisplays & hasBatteries);
-	gtk_set_visibility ("button_gnome_screensave", useGnomeScreensaver);
 }
 
 /** Callback for gconf_key_changed
@@ -643,6 +642,11 @@ main (int argc, char **argv)
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
+	/* check if we have GNOME Screensaver, but have disabled dpms */
+	if (gscreensaver_is_running ())
+		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL))
+			use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
+
 	/* load the interface */
 	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
 	if (!all_pref_widgets)
@@ -652,9 +656,12 @@ main (int argc, char **argv)
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, callback_gconf_key_changed, widget, NULL, NULL);
-#if defined(HAVE_GSCREENSAVER)
+	/*
+	 * we add this even if it doesn't exist as gnome-screensaver might be 
+	 * installed when g-p-m is running
+	 */
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
-#endif
+
 	/* Get the main_window quit */
 	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
 	if (!widget)
@@ -761,11 +768,6 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
-#if defined(HAVE_GSCREENSAVER)
-	gboolean hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
-	if (!hasDisplays)
-		use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
-#endif
 	gtk_main ();
 	g_ptr_array_free (ptrarr_button_power, TRUE);
 	g_ptr_array_free (ptrarr_button_suspend, TRUE);

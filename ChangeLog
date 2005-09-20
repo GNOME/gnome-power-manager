@@ -3,6 +3,16 @@
 	* src/glibhal-extras.c (hal_setlowpowermode): Only call SetPowerSave
 	if system.formfactor is "laptop". Patch pending for PMU for HAL.
 
+	* src/gpm-prefs.c: Remove all the GSCREENSAVER #ifdefs and switch to
+	runtime detection of the dbus service.
+
+	* configure.in: Remove detection for gnome-screensaver as we now do
+	this at runtime.
+
+	* src/Makefile.am: Add gpm-screensaver.{c|h} to gnome_power_preferences.
+
+	* src/gpm-screensaver.{c|h}: Add funtion gscreensaver_is_running ().
+
 2005-09-13  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: bump to 0.2.3.2
