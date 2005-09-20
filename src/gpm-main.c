@@ -1182,7 +1182,7 @@ main (int argc, char *argv[])
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Report bugs to richard@hughsie.com\n"));
 	g_print (_("Please check the faq page before reporting bugs!\n"));
-	g_print ("  * http://gnome-power.sourceforge.net/faq.php *");
+	g_print ("  * http://gnome-power.sourceforge.net/faq.php *\n");
 
 	/* see if we can get the unique name */
 	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE)) {
@@ -1255,7 +1255,7 @@ main (int argc, char *argv[])
 	gpn_icon_update ();
 
 	/* set up idle calculation function */
-	g_timeout_add (5000, update_idle_function, NULL);
+	g_timeout_add (60*1000, update_idle_function, NULL);
 
 	g_main_loop_run (loop);
 
