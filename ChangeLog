@@ -1,3 +1,8 @@
+2005-09-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/glibhal-extras.c (hal_setlowpowermode): Only call SetPowerSave
+	if system.formfactor is "laptop". Patch pending for PMU for HAL.
+
 2005-09-13  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: bump to 0.2.3.2

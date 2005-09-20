@@ -172,6 +172,21 @@ hal_setlowpowermode (gboolean set)
 	DBusGProxy *hal_proxy;
 	GError *error = NULL;
 	gboolean retval;
+	gchar *formfactor;
+
+	/* always present */
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer", "system.formfactor", &formfactor);
+/* TODO: DO NOT NEED after 0.5.5 is released */
+	if (!formfactor) {
+		g_debug ("system.formfactor not set! If you have PMU, please update HAL to get the latest fixes.");
+		return FALSE;
+	}
+	if (strcmp (formfactor, "laptop") != 0) {
+		g_debug ("This machine is not identified as a laptop. system.formfactor is %s.", formfactor);
+		g_free (formfactor);
+		return FALSE;
+	}
+	g_free (formfactor);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
