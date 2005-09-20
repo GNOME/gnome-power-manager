@@ -10,6 +10,8 @@
 
 <ul>
 <li>
+  <a href="#pmu_less_than_acpi" class="faqtable">Why doesn't PMU have the same functionality as ACPI?</a>
+</li><li>
   <a href="#slow_hal_updates" class="faqtable">Why do events (such as removing the AC adapter) take so long to register?</a>
 </li><li>
   <a href="#set_power_save" class="faqtable">Why do I get the error: <b>SetPowerSave call failed</b>?</a>
@@ -37,6 +39,24 @@
 </ul>
 <br/>
 <br/>
+
+<a name="pmu_less_than_acpi"></a><hr/>
+<p class="faqquestion">
+Why doesn't PMU have the same functionality as ACPI?
+</p>
+<p class="faqanswer">
+I only have an ACPI laptop, so cannot code the PMU specific parts,
+What I see needs to be done:
+</p>
+<ol>
+<li>HAL has to be able to set and restore the LCD brightness. Maybe we can use pbbcmd for this.</li>
+<li>HAL has to be able to suspend and hibernate the computer. This comes for free when PMU integrates with /sys/power/state (soon)</li>
+</ol>
+<p class="faqanswer">
+Like I said, I do not own PMU hardware (can you donate me an old, broken, unwanted powerbook?) so it is difficult for me to test.
+Help, as always, is really appreciated.
+</p>
+
 <a name="slow_hal_updates"></a><hr/>
 <p class="faqquestion">
 I'm running ACPI. Why do events (such as removing the AC adapter) take so long to register?
@@ -48,16 +68,16 @@ One of two things might be the problem.
 <li>HAL might not be running the addon that captures the acpi event.</li>
 <li>You BIOS could be faulty, and might need a work-around. Please send a bug report.</li>
 </ol>
-<p>
+<p class="faqanswer">
 For the first case, try to find the hal processes that are running:
 </p>
 <pre>
 ps -a | grep hal
 </pre>
-<p>
+<p class="faqanswer">
 And check for the process hald-addon-acpi.
 If it is not being run, then please make sure that HAL is being run with the <b>--retain-privileges</b> option in the haldaemon initscript.
-An anternative to this is to use acpid, rather than the kernel proc file.
+An alternative to this is to use acpid, rather than the kernel proc file.
 </p>
 
 <a name="set_power_save"></a><hr/>

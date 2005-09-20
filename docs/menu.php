@@ -9,6 +9,9 @@
    <a href="hal.php" class="menu">HAL</a>
   </td><td></td>
   <td class="menu">
+   <a href="powerbook.php" class="menu">PMU Support</a>
+  </td><td></td>
+  <td class="menu">
    <a href="gnome_power_manager.php" class="menu">Power Manager</a>
   </td><td></td>
   <td class="menu">
