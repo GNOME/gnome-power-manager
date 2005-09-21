@@ -441,27 +441,6 @@ menu_main_create (void)
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
-#if 0
-	GtkWidget *image;
-	GdkPixbuf *pixbuf;
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-	item = gtk_image_menu_item_new_with_label ("LCD Brightness");
-	image = gtk_image_new ();
-	pixbuf = gtk_icon_theme_fallback ("brightness-100", 16);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
-	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-	gtk_widget_show(item);
-	GtkWidget *submenu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM(item), submenu);
-	gint a = hal_get_brightness_steps ();
-	gint b;
-	for (b = 0; b < a; b++) {
-		menu_add_action_item (submenu, "brightness-000", "0%", "brightness000");
-	}
-#endif
-
 	/* add the actions */
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);

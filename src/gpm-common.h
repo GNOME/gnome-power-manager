@@ -128,7 +128,6 @@ gchar *convert_dbus_enum_to_string (gint value);
 gint convert_string_to_policy (const gchar *gconfstring);
 gint convert_haltype_to_powerdevice (const gchar *type);
 gchar *convert_policy_to_string (gint value);
-gchar *convert_powerdevice_to_gnomeicon (gint powerDevice);
 
 void update_percentage_charge (GenericObject *slotData);
 GString *get_timestring_from_minutes (gint minutes);

@@ -232,29 +232,6 @@ gint convert_haltype_to_powerdevice (const gchar *type)
 	return POWER_UNKNOWN;
 }
 
-/** Converts a powerDevice to it's GNOME icon
- *
- *  @param  powerDevice		The powerDevice ENUM
- *  @return			GNOME Icon, e.g. "gnome-dev-pda"
- */
-gchar *
-convert_powerdevice_to_gnomeicon (gint powerDevice)
-{
-	if (powerDevice == POWER_UPS)
-		return "gnome-dev-ups";
-	else if (powerDevice == POWER_MOUSE)
-		return "gnome-dev-mouse-optical";
-	else if (powerDevice == POWER_AC_ADAPTER)
-		return "gnome-dev-acadapter";
-	else if (powerDevice == POWER_KEYBOARD)
-		return "gnome-dev-keyboard";
-	else if (powerDevice == POWER_PRIMARY_BATTERY)
-		return "gnome-dev-battery";
-	else if (powerDevice == POWER_PDA)
-		return "gnome-dev-pda";
-	return NULL;
-}
-
 /** Converts a powerDevice to it's human readable form
  *
  *  @param  powerDevice		The powerDevice ENUM
