@@ -1,3 +1,16 @@
+2005-09-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-common.{c|h}: remove unused function 
+	convert_powerdevice_to_gnomeicon.
+
+	* src/gpm-notification.c: remove the LCD sub menu as the icons have
+	now gone. This belongs in an applet, if at all.
+
+	* gnome-power-manager.spec.in: Add back the libnotify stuff as we are
+	not building locally for redhat, and we provide libnotify rpm's.
+
+	* configure.in: Bump to 0.2.4.
+
 2005-09-21  Rodrigo Moya <rodrigo@novell.com>
 
 	* src/gpm-main.c: include dbus-glib-lowlevel for

@@ -1,10 +1,9 @@
-
 %define hal_version  0.5.4
 %define dbus_version 0.35
 
 Summary: GNOME Power Manager
 Name: gnome-power-manager
-Version: 0.2.3.2
+Version: 0.2.4
 Release: 1
 License: GPL
 Group: Applications/System
@@ -32,6 +31,7 @@ change preferences.
 
 %build
 %configure \
+	--enable-libnotify					\
         --prefix=%{buildroot}					\
         --with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
         --with-dbus-services=%{buildroot}/usr/share/dbus-1/services
