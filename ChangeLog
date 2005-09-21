@@ -1,3 +1,8 @@
+2005-09-21  Rodrigo Moya <rodrigo@novell.com>
+
+	* src/gpm-main.c: include dbus-glib-lowlevel for
+	dbus_g_connection_get_connection for clean 64bit compilation.
+
 2005-09-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-extras.c (hal_setlowpowermode): Only call SetPowerSave

@@ -30,6 +30,7 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 
 #include <gdk/gdkx.h>
 #include <gnome.h>
