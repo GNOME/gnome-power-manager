@@ -16,42 +16,20 @@
     Package by me for <a href="http://sourceforge.net/project/showfiles.php?group_id=133929">Fedora Core Rawhide</a>
    </p>
    <p>
-    You will need to install the rawhide versions of DBUS and HAL to satisfy the build requirements.
+    Alternativly you can use the new (and lightly tested) YUM repo - just copy <a href="data/utopia.repo">this file</a> to <b>/etc/yum.repos.d/</b>:
+    And do:
+   </p>
+<pre>
+yum -y install gnome-power-manager
+</pre>
+   <p>
     The rawhide kernel is often more current than the FC4 updates kernel, and has many ACPI bugfixes not present in updates-released.
-    To run the rawhide kernel, DBUS and HAL on a normal FC4 install <b>you will have to pull in lots of dependancies</b> and lots of stuff <b>may not work</b> normally.
-    <b>Big flashing red disclaimers apply. Do not do this on a production machine.</b>
+    To run the rawhide kernel on a normal FC4 install <b>you will have to pull in lots of kernel dependancies</b> but these all seem to work fine on a standard FC4 install.
+    To do this, optionally do:
    </p>
 <pre>
-yum -y --enablerepo=development update hal dbus kernel
-yum -y --enablerepo=development install pm-utils
+yum -y --enablerepo=development update kernel
 </pre>
-   <p>
-    You may be able to rebuild hal, dbus and pm-utils from src.rpm's from the Fedora Development repo, to install cleanly on a FC4 system.
-    If you have done so, then please email me instructions and I will put them here.
-    The following <i>might</i> work.
-   </p>
-   <p>
-    Visit <a href="http://download.fedora.redhat.com/pub/fedora/linux/core/development/SRPMS/">the rawhide source page</a> and download:
-   </p>
-   <ul>
-    <li>hal-0.5.4.src.rpm</li>
-    <li>dbus-0.50.0.src.rpm</li>
-    <li>pm-utils-0.04.src.rpm</li>
-   </ul>
-   <p>
-    Then do (as root):
-   </p>
-<pre>
-rpmbuild --rebuild dbus* && rpm -Uvh /usr/src/redhat/RPMS/i386/dbus*
-rpmbuild --rebuild hal* && rpm -Uvh /usr/src/redhat/RPMS/i386/hal*
-rpmbuild --rebuild pm-utils* && rpm -Uvh /usr/src/redhat/RPMS/i386/pm-utils*
-</pre>
-   <p>
-    You will have to install libnotify and notification daemon to use the libnotify features of GNOME Power Manager.
-    libnotify will appear in fedora development soon, but until then you can use <a href="data/">these</a> packages if you wish.
-    <b>Standard disclaimers apply.</b>
-   </p>
-   <pre>rpm -ivh libnotify-0.2.2-1.i386.rpm notification-daemon-0.2.2-1.i386.rpm</pre>
   </td>
  </tr>
  <tr>
@@ -143,6 +121,15 @@ Install DBUS and HAL from Rawhide, and install libnotify, libnotify-devel and no
 You will have to also install standard GNOME build tools (if not already installed), and the other GNU automake type stuff.
 Start by opening a terminal and doing (as root):
 </p>
+   <p>
+    You can also install the rawhide versions of DBUS and HAL to satisfy the build requirements.
+    To run the rawhide DBUS and HAL on a normal FC4 install <b>you will have to pull in lots of dependancies</b> and lots of stuff <b>may not work</b> normally.
+    <b>Big flashing red disclaimers apply. Do not do this on a production machine.</b>
+   </p>
+<pre>
+yum -y --enablerepo=development update hal dbus
+yum -y --enablerepo=development install pm-utils
+</pre>
 <pre>
 # yum -y groupinstall "GNOME Software Development"
 # yum -y groupinstall "Development Tools"
