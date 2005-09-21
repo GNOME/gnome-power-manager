@@ -386,7 +386,7 @@ callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
 	g_debug ("callback_prefs_activated: %s", path);
 
 	retval = g_spawn_command_line_async (path, NULL);
-	if (retval == FALSE)
+	if (!retval)
 		g_warning ("Couldn't execute command: %s", path);
 	g_free (path);
 }

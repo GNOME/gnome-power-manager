@@ -413,6 +413,18 @@ callback_help (GtkWidget *widget, gpointer user_data)
 	gnome_url_show (GPMURL, NULL);
 }
 
+/** Callback for button_gnome_screensave
+ *
+ */
+static void
+callback_screensave (GtkWidget *widget, gpointer user_data)
+{
+	gboolean retval;
+	retval = g_spawn_command_line_async ("gnome-screensaver-preferences", NULL);
+	if (!retval)
+		g_warning ("Couldn't execute gnome-screensaver-preferences");
+}
+
 /** Callback for check_changed
  *
  */
@@ -642,16 +654,6 @@ main (int argc, char **argv)
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
-	/* check if we have GNOME Screensaver, but have disabled dpms */
-	if (gscreensaver_is_running ())
-		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL))
-			use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
-
-	/* load the interface */
-	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
-	if (!all_pref_widgets)
-		g_error ("glade file failed to load, aborting");
-
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
@@ -662,17 +664,27 @@ main (int argc, char **argv)
 	 */
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
 
-	/* Get the main_window quit */
-	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
-	if (!widget)
-		g_error ("Main window failed to load, aborting");
-	g_signal_connect (G_OBJECT (widget), "delete_event", G_CALLBACK (gtk_main_quit), NULL);
-
 #if defined(HAVE_LIBNOTIFY)
 	/* initialise libnotify */
 	if (!notify_glib_init(NICENAME, NULL))
 		g_error ("Cannot initialise libnotify!");
 #endif
+
+	/* check if we have GNOME Screensaver, but have disabled dpms */
+	if (gscreensaver_is_running ())
+		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL))
+			use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
+
+	/* load the interface */
+	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
+	if (!all_pref_widgets)
+		g_error ("glade file failed to load, aborting");
+
+	/* Get the main_window quit */
+	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
+	if (!widget)
+		g_error ("Main window failed to load, aborting");
+	g_signal_connect (G_OBJECT (widget), "delete_event", G_CALLBACK (gtk_main_quit), NULL);
 
 	/*
 	 * We should warn if g-p-m is not running - but still allow to continue
@@ -683,11 +695,13 @@ main (int argc, char **argv)
 	if (!has_gpm_connection)
 		use_libnotify ("Cannot connect to GNOME Power Manager.\nMake sure that it is running", NOTIFY_URGENCY_NORMAL);
 
-	/* Get the help and quit buttons */
+	/* Set the button callbacks */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
 	widget = glade_xml_get_widget (all_pref_widgets, "button_help");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
+	widget = glade_xml_get_widget (all_pref_widgets, "button_gnome_screensave");
+	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_screensave), NULL);
 
 	/* set gtk enables/disables */
 	recalc ();
