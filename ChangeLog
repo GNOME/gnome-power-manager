@@ -1,5 +1,17 @@
 2005-09-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.c (main): Actually make gnome-screensaver detection 
+	work, and tie the sliders into divisions of 5 minutes.
+
+	* gnome-power-manager.spec.in: Add dep on gnome-screensaver
+	Also fix the directory owning problem, where we couldn't access our
+	shared files on some machines.
+	Reported by Ben Liblit <liblit@cs.wisc.edu> -- Thanks.
+
+	* configure.in: Bump to 0.2.5 (odd = unstable).
+
+2005-09-21  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.{c|h}: remove unused function 
 	convert_powerdevice_to_gnomeicon.
 

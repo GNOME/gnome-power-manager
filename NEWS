@@ -1,11 +1,22 @@
 ==========
-GNOME Power Manager 0.2.4
+GNOME Power Manager 0.2.6
 ==========
 
 Released September xx, 2005
 
-- We now have a YUM repo that contains all the needed updates for a FC4 system.
-  You do not now have to update some of your fedora system to the unstable
+- We now depend on gnome-screensaver for the RPM install.
+- gnome-screensaver support runtime detection has been improved
+  (no timeouts now)
+
+==========
+GNOME Power Manager 0.2.4
+==========
+
+Released September 21, 2005
+
+- We now have an experimental yum repo that contains all the needed updates
+  for a standard FC4 system.
+  You do not now have to update your fedora system to the unstable
   rawhide repo. All packages have been built by me for FC4.
 - Comboboxes now only have "sane" values available.
 - Lots more code cleanups, and more modularization.
@@ -17,9 +28,9 @@ Released September xx, 2005
 - Now we control GNOME Screensaver so that we don't use screensavers on battery
   but just blank the screen.
 - Lots of updates to the website.
-- Fixed specfile to be 100% RedHat approved format.
+- Fixed specfile to be in RedHat approved format.
 - Now we only call SetLowPower if system.formfactor is laptop.
-- We detect GNOME Screensaver at runtime, rather than a configure option.
+- We detect GNOME Screensaver at runtime, rather than with a configure option.
 
 ==========
 GNOME Power Manager 0.2.2
