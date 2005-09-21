@@ -1,10 +1,10 @@
 %define hal_version  0.5.4
-%define dbus_version 0.35
+%define dbus_version 0.50
 
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: 0.2.4
-Release: 1
+Release: 2
 License: GPL
 Group: Applications/System
 Source: gnome-power-manager-%{version}.tar.gz
@@ -17,6 +17,8 @@ BuildPrereq: hal-devel >= %{hal_version}
 BuildPrereq: dbus-devel >= %{dbus_version}
 Requires: gnome-mime-data
 Requires: gnome-icon-theme
+Requires: libnotify >= 0.2.2
+Requires: notification-daemon >= 0.2.2
 Requires: hal >= %{hal_version}
 Requires: dbus-glib >= %{dbus_version}
 
