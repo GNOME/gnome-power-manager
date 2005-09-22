@@ -369,7 +369,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 
 	g_signal_connect (G_OBJECT (about), "destroy", 
 			  G_CALLBACK (gtk_widget_destroyed), &about);
-	g_object_add_weak_pointer (G_OBJECT (about), (void**)&(about));
+	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)&(about));
 	gtk_widget_show(about);
 }
 

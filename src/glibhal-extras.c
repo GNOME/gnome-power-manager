@@ -24,6 +24,7 @@
 #  include <config.h>
 #endif
 
+#include <string.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 

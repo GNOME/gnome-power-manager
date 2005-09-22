@@ -1,3 +1,11 @@
+2005-09-22  Rodrigo Moya <rodrigo@novell.com>
+
+	* src/gpm-prefs.c:
+	* src/glibhal-extras.c: added missing string.h for 64bit compilation.
+
+	* src/gpm-notification.c (callback_about_activated): fixed 64bit
+	warning.
+
 2005-09-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c (main): Actually make gnome-screensaver detection 
