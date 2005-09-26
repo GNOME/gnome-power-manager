@@ -1,10 +1,7 @@
-%define hal_version  0.5.4
-%define dbus_version 0.50
-
 Summary: GNOME Power Manager
 Name: gnome-power-manager
-Version: 0.2.4
-Release: 2
+Version: @VERSION@
+Release: 1
 License: GPL
 Group: Applications/System
 Source: gnome-power-manager-%{version}.tar.gz
@@ -13,15 +10,15 @@ URL: http://gnome-power.sourceforge.net/
 BuildPrereq: libgnomeui-devel
 BuildPrereq: libglade2-devel
 BuildPrereq: libwnck-devel
-BuildPrereq: hal-devel >= %{hal_version}
-BuildPrereq: dbus-devel >= %{dbus_version}
+BuildPrereq: hal-devel >= 0.5.4
+BuildPrereq: dbus-devel >= 0.50
 Requires: gnome-mime-data
 Requires: gnome-icon-theme
 Requires: libnotify >= 0.2.2
 Requires: notification-daemon >= 0.2.2
 Requires: gnome-screensaver >= 0.0.10
-Requires: hal >= %{hal_version}
-Requires: dbus-glib >= %{dbus_version}
+Requires: hal >= 0.5.4
+Requires: dbus-glib >= 0.50
 
 %description
 GNOME Power Manager uses the information and facilities provided by HAL 
@@ -61,11 +58,13 @@ rm -rf $RPM_BUILD_ROOT
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
 	%{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas &>/dev/null
+killall -HUP gconfd-2 || :
 
 %preun
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-uninstall-rule \
         %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas &>/dev/null
+killall -HUP gconfd-2 || :
 
 
 %files -f %{name}.lang
