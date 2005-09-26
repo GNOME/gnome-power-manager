@@ -1,3 +1,8 @@
+2005-09-26  Robert Love  <rml@novell.com>
+
+	* src/gpm-main.c: Daemonize by default, via daemon(3).  Add
+	  "--no-daemon" flag.
+
 2005-09-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c, src/gpm-idle.c, src/gpm-screensaver.{c|h}, 

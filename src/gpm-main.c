@@ -1097,6 +1097,7 @@ static void print_usage (void)
 	g_print (
 		"\n"
 		"    --disable        Do not perform the action, e.g. suspend\n"
+		"    --no-daemon      Do not daemonize.\n"
 		"    --verbose        Show extra debugging\n"
 		"    --version        Show the installed version and quit\n"
 		"    --help           Show this information and exit\n"
@@ -1119,6 +1120,7 @@ main (int argc, char *argv[])
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
+	gboolean no_daemon = FALSE;
 #if !defined(GLIBHAL)
 	DBusError error;
 	DBusConnection *connsystem;
@@ -1148,6 +1150,8 @@ main (int argc, char *argv[])
 			g_print ("%s %s", NICENAME, VERSION);
 			return EXIT_SUCCESS;
 		}
+		else if (strcmp (argv[a], "--no-daemon") == 0)
+			no_daemon = TRUE;
 		else if (strcmp (argv[a], "--help") == 0) {
 			print_usage ();
 			return EXIT_SUCCESS;
@@ -1183,6 +1187,9 @@ main (int argc, char *argv[])
 	g_print (_("Report bugs to richard@hughsie.com\n"));
 	g_print (_("Please check the faq page before reporting bugs!\n"));
 	g_print ("  * http://gnome-power.sourceforge.net/faq.php *\n");
+
+	if (!no_daemon && daemon (0, 0))
+		g_error ("Could not daemonize: %s", g_strerror (errno));
 
 	/* see if we can get the unique name */
 	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE)) {
