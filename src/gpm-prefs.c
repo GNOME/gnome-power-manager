@@ -352,15 +352,10 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
 
 	/*
-	 * Code for divisions of 10 seconds, unfinished
-	 *
+	 * Code for divisions of 5 seconds
 	 */
 	widgetname = gtk_widget_get_name (widget);
-	if (strcmp (widgetname, "hscale_ac_brightness") == 0)
-		divisions = 100.0 / hal_get_brightness_steps ();
-	else if (strcmp (widgetname, "hscale_batteries_brightness") == 0)
-		divisions = 100.0 / hal_get_brightness_steps ();
-	else if (strcmp (widgetname, "hscale_ac_computer") == 0)
+	if (strcmp (widgetname, "hscale_ac_computer") == 0)
 		divisions = 5;
 	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
 		divisions = 5;
@@ -462,13 +457,26 @@ print_usage (void)
 		"\n");
 }
 
-/** simple callback formatting a GtkScale to "10.0%"
+/** simple callback formatting a GtkScale to "10%"
  *
  */
 static gchar*
 format_value_callback_percent (GtkScale *scale, gdouble value)
 {
-	return g_strdup_printf ("%4.1f%%", value);
+	return g_strdup_printf ("%i%%", (gint) value);
+}
+
+/** callback formatting a GtkScale to brightness levels
+ *
+ */
+static gchar*
+format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
+{
+	int *steps;
+	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
+	if (!steps)
+		return NULL;
+	return g_strdup_printf ("%i%%", (gint) value * 100 / (*steps - 1));
 }
 
 /** simple callback that converts minutes into pretty text
@@ -494,7 +502,7 @@ format_value_callback_time (GtkScale *scale, gdouble value)
  *  @param  widgetname		the libglade widget name
  *  @param  policypath		the GConf policy path,
  *				e.g. "policy/ac/brightness"
- *  @param  policytype		the policy ptye, e.g. POLICY_PERCENT
+ *  @param  policytype		the policy type, e.g. POLICY_PERCENT
  */
 static void
 hscale_setup_action (const char *widgetname, const char *policypath, int policytype)
@@ -515,7 +523,9 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 	value = gconf_client_get_int (client, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 
-	if (policytype == POLICY_PERCENT)
+	if (policytype == POLICY_LCD)
+		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_percent_lcd), NULL);
+	else if (policytype == POLICY_PERCENT)
 		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_percent), NULL);
 	else
 		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_time), NULL);
@@ -765,13 +775,13 @@ main (int argc, char **argv)
 	hscale_setup_action ("hscale_ac_display",
 		GCONF_ROOT "policy/ac/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_ac_brightness",
-		GCONF_ROOT "policy/ac/brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/ac/brightness", POLICY_LCD);
 	hscale_setup_action ("hscale_batteries_computer",
 		GCONF_ROOT "policy/battery/sleep_computer", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_display",
 		GCONF_ROOT "policy/battery/sleep_display", POLICY_TIME);
 	hscale_setup_action ("hscale_batteries_brightness",
-		GCONF_ROOT "policy/battery/brightness", POLICY_PERCENT);
+		GCONF_ROOT "policy/battery/brightness", POLICY_LCD);
 	hscale_setup_action ("hscale_battery_low",
 		GCONF_ROOT "general/threshold_low", POLICY_PERCENT);
 	hscale_setup_action ("hscale_battery_critical",
@@ -779,9 +789,22 @@ main (int argc, char **argv)
 
 	/* set up upper limit for battery_critical */
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
+	gtk_range_set_range (GTK_RANGE (widget), 0, 25);
 	value = (gint) gtk_range_get_value (GTK_RANGE (widget));
+
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
+
+	/* set the top end for LCD sliders */
+	value = hal_get_brightness_steps ();
+
+	widget = glade_xml_get_widget (all_pref_widgets, "hscale_ac_brightness");
+	gtk_range_set_range (GTK_RANGE (widget), 0, value - 1);
+	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &value);
+
+	widget = glade_xml_get_widget (all_pref_widgets, "hscale_batteries_brightness");
+	gtk_range_set_range (GTK_RANGE (widget), 0, value - 1);
+	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &value);
 
 	gtk_main ();
 	g_ptr_array_free (ptrarr_button_power, TRUE);

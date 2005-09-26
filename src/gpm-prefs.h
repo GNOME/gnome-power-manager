@@ -25,6 +25,7 @@
 
 typedef enum {
 	POLICY_PERCENT,
+	POLICY_LCD,
 	POLICY_TIME
 } PolicyType;
 
