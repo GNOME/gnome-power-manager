@@ -461,7 +461,7 @@ action_policy_do (gint policy_number)
 		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/brightness", NULL);
-		hal_set_brightness (value);
+		hal_set_brightness_dim (value);
 		hal_setlowpowermode (TRUE);
 		/* set gnome screensaver dpms_suspend to our value */
 		value = gconf_client_get_int (client,
@@ -480,7 +480,7 @@ action_policy_do (gint policy_number)
 		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/ac/brightness", NULL);
-		hal_set_brightness (value);
+		hal_set_brightness_dim (value);
 		hal_setlowpowermode (TRUE);
 		/* set dpms_suspend to our value */
 		value = gconf_client_get_int (client,
