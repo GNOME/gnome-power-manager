@@ -1,3 +1,33 @@
+2005-09-26  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c, src/gpm-idle.c, src/gpm-screensaver.{c|h}, 
+	src/glibhal-extras.c, .cvsignore, src/Makefile.am: Fix build warnings.
+	Patch from Robert Love <rml@novell.com>, Many thanks.
+
+2005-09-26  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power-manager.spec.in: Now kill gconfd-2 on update to force 
+	schema, and use @VERSION@ to make my life easier.
+
+	* docs/compile.php, docs/faq.php: Add new information
+
+	* src/glibhal-extras.c (hal_get_brightness_item): New function, to 
+	get the LCD brightness value.
+	(hal_set_brightness_dim): New function, allows us to dim the screen
+	slowly, rather than one big jump.
+	We now support ONLY the new SetBrightness HAL API in HAL CVS.
+	http://article.gmane.org/gmane.comp.freedesktop.hal/3280
+
+	* src/gpm-notification.c: Remove some #if 0 stuff.
+
+	* src/gpm-prefs.c: make the new functionality of format_value_callback_percent_lcd () so the slider can step only to allowed values.
+
+	* src/preferences.glade: Make percentages have no decimal points.
+
+	* src/gpm-main.c: Use the hal_set_brightness_dim functionality.
+
+	* configure.in: Bump to 0.2.5.1
+
 2005-09-22  Rodrigo Moya <rodrigo@novell.com>
 
 	* src/gpm-prefs.c:

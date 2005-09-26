@@ -29,6 +29,7 @@
 
 #include <glib.h>
 #include "gpm-idle.h"
+#include "gpm-screensaver.h"
 
 /* global in this file */
 cpudata		old;

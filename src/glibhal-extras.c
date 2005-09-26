@@ -168,13 +168,13 @@ hal_set_brightness_dim (int brightness)
 			for (a=old_level-1; a >= brightness; a--) {
 				if (!hal_set_brightness_item (names[i], a))
 					break;
-				usleep (1000 * DIM_INTERVAL);
+				g_usleep (1000 * DIM_INTERVAL);
 			}
 		} else {
 			for (a=old_level+1; a <= brightness; a++) {
 				if (!hal_set_brightness_item (names[i], a))
 					break;
-				usleep (1000 * DIM_INTERVAL);
+				g_usleep (1000 * DIM_INTERVAL);
 			}
 		}
 	}

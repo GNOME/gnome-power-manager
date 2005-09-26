@@ -4,9 +4,16 @@ GNOME Power Manager 0.2.6
 
 Released September xx, 2005
 
-- We now depend on gnome-screensaver for the RPM install.
+- We now depend on gnome-screensaver for the RPM install so DPMS can 
+  get tested.
 - gnome-screensaver support runtime detection has been improved
   (no timeouts now)
+- Fixed lots of 64bit warnings thanks to Rodrigo Moya <rodrigo@novell.com>
+- GNOME Power Manager is now in Fedora Core Rawhide!
+- The screen now dims gently (rather than a big brightness change) when
+  changing brightness states.
+- We now support ONLY the new SetBrightness HAL API in HAL CVS.
+  http://article.gmane.org/gmane.comp.freedesktop.hal/3280
 
 ==========
 GNOME Power Manager 0.2.4

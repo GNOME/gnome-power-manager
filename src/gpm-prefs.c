@@ -338,7 +338,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	GConfClient *client;
 	const char *widgetname;
 	gchar *policypath;
-	gint value;
+	gdouble value;
 	gint oldgconfvalue;
 	gdouble divisions = -1;
 	gboolean onbattery;
@@ -348,7 +348,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	client = gconf_client_get_default ();
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
 
-	value = (int) gtk_range_get_value (GTK_RANGE (widget));
+	value = gtk_range_get_value (GTK_RANGE (widget));
 	oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
 
 	/*
@@ -370,10 +370,10 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	}
 
 	/*
-	 * if calculated value not different to existing gconf value,
-	 * then no point continuing
+	 * if calculated value not substantially different to existing
+	 * gconf value, then no point continuing
 	 */
-	if (oldgconfvalue == value)
+	if (fabs (oldgconfvalue - value) < 0.1)
 		return;
 
 	/* if this is hscale for battery_low, then set upper range of hscale for
@@ -395,8 +395,8 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 		g_warning (GPM_DBUS_SERVICE ".isOnBattery failed");
 
 	g_return_if_fail (policypath);
-	g_debug ("[%s] = (%i)", policypath, value);
-	gconf_client_set_int (client, policypath, value, NULL);
+	g_debug ("[%s] = (%f)", policypath, value);
+	gconf_client_set_int (client, policypath, (gint) value, NULL);
 }
 
 /** Callback for button_help
@@ -631,7 +631,8 @@ main (int argc, char **argv)
 	GtkWidget *widget = NULL;
 	gint a;
 	gboolean has_gpm_connection;
-	gint value;
+	gdouble value;
+	gint steps;
 	GConfClient *client;
 
 	/* provide dynamic storage for comboboxes */
@@ -790,21 +791,21 @@ main (int argc, char **argv)
 	/* set up upper limit for battery_critical */
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
 	gtk_range_set_range (GTK_RANGE (widget), 0, 25);
-	value = (gint) gtk_range_get_value (GTK_RANGE (widget));
+	value = gtk_range_get_value (GTK_RANGE (widget));
 
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
 	/* set the top end for LCD sliders */
-	value = hal_get_brightness_steps ();
+	steps = hal_get_brightness_steps ();
 
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_ac_brightness");
-	gtk_range_set_range (GTK_RANGE (widget), 0, value - 1);
-	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &value);
+	gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
+	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 
 	widget = glade_xml_get_widget (all_pref_widgets, "hscale_batteries_brightness");
-	gtk_range_set_range (GTK_RANGE (widget), 0, value - 1);
-	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &value);
+	gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
+	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 
 	gtk_main ();
 	g_ptr_array_free (ptrarr_button_power, TRUE);

@@ -78,8 +78,6 @@ gnome_power_manager_SOURCES =				\
 	glibhal-callback.c				\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
-	gpm-dbus-server.h				\
-	gpm-dbus-server.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\

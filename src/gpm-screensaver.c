@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * glibhal-extras.c : GLIB replacement for libhal, the extra stuff
+ * gpm-screensaver.c : GLIB replacement for libhal, the extra stuff
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *

@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * glibhal-extras.h : GLIB replacement for libhal, the extra stuff
+ * gpm-screensaver.h : GLIB replacement for libhal, the extra stuff
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
@@ -30,5 +30,6 @@
 gboolean gscreensaver_lock (void);
 gboolean gscreensaver_set_throttle (gboolean throttle);
 gboolean gscreensaver_is_running (void);
+gboolean gscreensaver_get_idle (void);
 
 #endif	/* _GPMSCREENSAVER_H */
