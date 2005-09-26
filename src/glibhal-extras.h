@@ -25,6 +25,7 @@
 
 gint hal_get_brightness_steps (void);
 gboolean hal_set_brightness (int brightness);
+gboolean hal_set_brightness_dim (int brightness);
 gboolean hal_suspend (int wakeup);
 gboolean hal_hibernate (void);
 gboolean hal_setlowpowermode (gboolean set);
