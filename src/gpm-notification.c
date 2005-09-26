@@ -53,9 +53,12 @@ gtk_icon_theme_fallback (const char *name, int size)
 {
 	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
+	GString *fallback;
+	GtkIconInfo *iinfo;
+
 	g_debug ("gtk_icon_theme_fallback : name = '%s', size = %i", name, size);
 	if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name)) {
-		GtkIconInfo *iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+		iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
 		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
 		gtk_icon_info_free (iinfo);
 	} else {
@@ -63,11 +66,11 @@ gtk_icon_theme_fallback (const char *name, int size)
 		 * We cannot find this specific themed GNOME icon so use builtin
 		 * fallbacks. This makes GPM more portible between distros
 		 */
-		GString *fallback;
 		g_debug ("gtk_icon_theme_fallback: doing fallback as not found in theme");
 		fallback = g_string_new ("error?");
 		g_string_printf (fallback, "%s%s.png", GPM_DATA, name);
 		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
+		g_string_free (fallback, TRUE);
 	}
 	return pixbuf;
 }
@@ -357,7 +360,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 
 	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 	about = gnome_about_new(NICENAME, VERSION,
-			"Copyright \xc2\xa9 2005 Richard Hughes",
+			"Copyright \xc2\xa9 2005 Richard Hughes <richard@hughsie.com>",
 			_(NICEDESC),
 			(const char **)authors,
 			(const char **)documenters,
@@ -502,12 +505,6 @@ icon_create (void)
 	eggtrayicon->tray_icon_tooltip = gtk_tooltips_new ();
 	eggtrayicon->popup_menu = NULL;
 
-#if 0
-	/* image */
-	gchar *fullpath = g_strconcat (GPM_DATA, filename, NULL);
-	eggtrayicon->image = gtk_image_new_from_file (fullpath);
-	g_free (fullpath);
-#endif
 	/* will produce a broken image.. */
 	eggtrayicon->image = gtk_image_new_from_file ("");
 	g_signal_connect (G_OBJECT (evbox), "button_press_event", 
