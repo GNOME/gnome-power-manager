@@ -44,7 +44,6 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
-#include "gpm-dbus-server.h"
 #include "gpm-idle.h"
 #include "gpm-screensaver.h"
 

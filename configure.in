@@ -65,8 +65,7 @@ AC_SUBST(GNOME_LIBS)
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
-CPPFLAGS="$CPPFLAGS -ansi -Wall -fstack-check -pedantic -Wfloat-equal -Wundef -Wpointer-arith -Wbad-function-cast -Wredundant-decls"
-LDFLAGS="$LDFLAGS -ansi -Wall -fstack-check -pedantic -Wfloat-equal -Wundef -Wpointer-arith -Wbad-function-cast -Wredundant-decls"
+CFLAGS="$CFLAGS -Wall -Wfloat-equal -Wundef -Wpointer-arith -Wbad-function-cast -Wredundant-decls"
 
 # libnotify detection
 if test x$enable_libnotify = xno ; then
@@ -119,7 +118,6 @@ echo "
         prefix:                    ${prefix}
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
-        cppflags:                  ${CPPFLAGS}
         libnotify support:         ${have_libnotify}
         glibhal support:           ${enable_glibhal}
         dbus-1 system.d dir:       $DBUS_SYS_DIR
