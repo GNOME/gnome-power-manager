@@ -13,23 +13,35 @@
   <td valign="top"><img src="images/icon-redhat.png" alt="[img]"/></td>
   <td>
    <p>
-    Package by me for <a href="http://sourceforge.net/project/showfiles.php?group_id=133929">Fedora Core Rawhide</a>
+    YUM Repo by me for <a href="data/utopia.repo">Fedora Core 4</a>
    </p>
    <p>
-    Alternativly you can use the new (and lightly tested) YUM repo - just copy <a href="data/utopia.repo">this file</a> to <b>/etc/yum.repos.d/</b>:
+    It is recommended that you use the new (and lightly tested) YUM repo - just copy <a href="data/utopia.repo">this file</a> to <b>/etc/yum.repos.d/</b>:
     And do:
    </p>
 <pre>
 yum -y install gnome-power-manager
 </pre>
    <p>
+    Also, if you use evince in FC4, the default FC4 version prints "symbol lookup error: evince: undefined symbol: dbus_g_proxy_invoke" on load, and refuses to work.
+    Note that the rawhide evince has the same bug, and nothing has been done yet.
+    You can use my experimental evince package (dbus stuff turned off, but otherwise identical to the FC4 one) in the above repo, until the evince guys sort out thier dbus versioning.
+   </p>
+<pre>
+yum -y upgrade evince
+</pre>
+   <p>
     The rawhide kernel is often more current than the FC4 updates kernel, and has many ACPI bugfixes not present in updates-released.
-    To run the rawhide kernel on a normal FC4 install <b>you will have to pull in lots of kernel dependancies</b> but these all seem to work fine on a standard FC4 install.
+    To run the rawhide kernel on a normal FC4 install <b>you will have to pull in *lots* of system dependancies</b> and these may break a standard FC4 install.
     To do this, optionally do:
    </p>
 <pre>
 yum -y --enablerepo=development update kernel
 </pre>
+   <p>
+    Also, the current FC4 updates-release kernel, 2.6.12-1.1447_FC4 is *really* broken for ACPI.
+    Either use an older kernel, or use the rawhide one. See the bugzilla <a href="https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=167281">here</a>.
+   </p>
   </td>
  </tr>
  <tr>

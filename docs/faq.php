@@ -10,6 +10,8 @@
 
 <ul>
 <li>
+  <a href="#hald_selinux" class="faqtable">SELinux doesn't let HAL write to /proc/acpi!</a>
+</li><li>
   <a href="#pmu_less_than_acpi" class="faqtable">Why doesn't PMU have the same functionality as ACPI?</a>
 </li><li>
   <a href="#slow_hal_updates" class="faqtable">Why do events (such as removing the AC adapter) take so long to register?</a>
@@ -39,6 +41,21 @@
 </ul>
 <br/>
 <br/>
+
+<a name="hald_selinux"></a><hr/>
+<p class="faqquestion">
+SELinux doesn't let HAL write to /proc/acpi!
+</p>
+<p class="faqanswer">
+I'm no selinux guy, but this is reported to fix the problem.
+Please email me if you have better instructions, or a better fix!
+</p>
+<pre>
+allow hald_t proc_t:file write;
+allow hald_t unconfined_t:fifo_file read;
+allow hald_t usbfs_t:dir read;
+allow hald_t usbfs_t:file { ioctl write };
+</pre>
 
 <a name="pmu_less_than_acpi"></a><hr/>
 <p class="faqquestion">
