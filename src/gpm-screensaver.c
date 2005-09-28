@@ -159,9 +159,9 @@ gscreensaver_get_idle (void)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (gs_proxy, "getIdle", &error,
+	if (!dbus_g_proxy_call (gs_proxy, "getIdleTime", &error,
 				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &value, G_TYPE_INVALID)) {
+				G_TYPE_INT, &value, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;

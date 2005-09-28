@@ -11,6 +11,10 @@
 	always setup with deault value NULL. This may break stuff, but will
 	make debugging easier.
 
+	* src/gpm-notification.c (callback_about_activated): Use the 
+	gtk_about_dialog functionality instead of replying on depreciated
+	functionality. Also add GNU licence and the translators.
+
 2005-09-26  Robert Love  <rml@novell.com>
 
 	* src/gpm-main.c: Daemonize by default, via daemon(3).  Add

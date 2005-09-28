@@ -353,47 +353,79 @@ get_icon_position (gint *x, gint *y)
 	return TRUE;
 }
 
+/** Function for "about" box URL press
+ *
+ */
+void 
+callback_about_activated_url (GtkAboutDialog *about, const gchar *link, gpointer data)
+{
+	gnome_url_show (link, NULL);
+}
+
 /** Callback for "about" box
  *
  */
 static void
 callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	static GtkWidget *about = NULL;
-	GdkPixbuf *pixbuf = NULL;
-	const gchar *authors[] = { "Richard Hughes <richard@hughsie.com>", NULL };
-	const gchar *documenters[] = { NULL };
-	const gchar *translator = _("Unknown Translator");
+	const gchar *authors[] = {
+		"Richard Hughes <richard@hughsie.com>",
+		NULL};
+	const gchar *documenters[] = {
+		"Richard Hughes <richard@hughsie.com>",
+		NULL};
+	const gchar *artists[] = {
+		"Diana Fong <dfong@redhat.com>",
+		NULL};
+	const gchar *translators = 
+		"Michał Kastelik <mkastelik@gmail.com> (Polish)\n"
+		"Daniele Medri <daniele@medri.org> (Italian)\n"
+		"Yann Simon <yann.simon.fr@gmail.com> (French)\n"
+		"Maxim Dziumanenko <mvd@mylinux.ua> (Ukrainian)\n"
+		"Raphael Higino <raphaelh@cvs.gnome.org> (Brazilian Portuguese)\n"
+		"Adam Weinberger <adamw@gnome.org> (Canadian English)\n"
+		"Terance Sola <terance@lyse.net> (Norwegian bokmål)\n"
+		"Christian Rose <menthos@menthos.com> (Swedish)\n"
+		"James Ogley <james@usr-local-bin.org> (British English)\n"
+		"Francisco Javier F. Serrador <serrador@cvs.gnome.org> (Spanish)\n"
+		"Amanpreet Singh Alam <amanpreetalam@yahoo.com> (Punjabi)\n"
+		"Funda Wang <fundawang@linux.net.cn> (Simplified Chinese)\n"
+		"Hendrik Brandt <heb@gnome-de.org> (German translation)\n";
 
-	/* assertion checks */
-	g_assert (menuitem);
+	const gchar *gplv2 = 
+		"This program is free software; you can redistribute it and/or modify \n"
+		"it under the terms of the GNU General Public License as published\n"
+		"by the Free Software Foundation; either version 2 of the\n"
+		"License, or (at your option) any later version.\n\n"
+		"This program is distributed in the hope that it will be useful, \n"
+		"but WITHOUT ANY WARRANTY; without even the implied warranty of \n"
+		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+		"See the GNU General Public License for more details.\n\n"
+		"You should have received a copy of the GNU General Public \n"
+		"License along with this program; if not, write to the Free \n"
+		"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, \n"
+		"Boston, MA  02110-1301, USA.\n";
 
-	if (about) {
-		gdk_window_raise (about->window);
-		gdk_window_show (about->window);
-		return;
-	}
-
-	/* no point displaying translator is it's me */
-	if (strcmp (translator, "Unknown Translator") == 0)
-		translator = NULL;
-
-	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
-	about = gnome_about_new(NICENAME, VERSION,
-			"Copyright \xc2\xa9 2005 Richard Hughes <richard@hughsie.com>",
-			_(NICEDESC),
-			(const char **)authors,
-			(const char **)documenters,
-			(const char *)translator,
-			pixbuf);
-
-	if (pixbuf)
-		gdk_pixbuf_unref (pixbuf);
-
-	g_signal_connect (G_OBJECT (about), "destroy", 
-			  G_CALLBACK (gtk_widget_destroyed), &about);
-	g_object_add_weak_pointer (G_OBJECT (about), (gpointer *)&(about));
-	gtk_widget_show(about);
+	GtkWidget *about = gtk_about_dialog_new ();
+	GdkPixbuf *logo = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
+	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), "GNOME Power Manager");
+	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
+	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), "\xc2\xa9 2005 Richard Hughes <richard@hughsie.com>");
+	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about), "Power Manager for GNOME Desktop");
+	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), gplv2);
+/* TODO -- why does this fail?
+	gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (about), TRUE);
+*/
+	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about), GPMURL);
+	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (about), "SourceForge Homepage");
+	gtk_about_dialog_set_url_hook (callback_about_activated_url, NULL, NULL);
+	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
+	gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG (about), artists);
+	gtk_about_dialog_set_documenters (GTK_ABOUT_DIALOG (about), documenters);
+	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about), translators);
+	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (about), logo);
+	gtk_widget_show (about);
+	g_object_unref (logo);
 }
 
 /** Callback for preferences
