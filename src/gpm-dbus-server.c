@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * gpm-dbus-server.h : DBUS listener
+ * gpm-dbus-server.c : DBUS listener
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *

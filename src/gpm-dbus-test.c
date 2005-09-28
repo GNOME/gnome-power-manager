@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * gpm-dbus-test.h : DBUS test program
+ * gpm-dbus-test.c : DBUS test program
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *

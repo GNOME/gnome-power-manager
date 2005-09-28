@@ -107,8 +107,7 @@ cpudata_copy (cpudata *to, cpudata *from)
 #if 0
 /*
  * Normalise a cpudata structure to Hz.
- * This is precision is required because 100 / POLL_FREQUENCY may be
- * non-integer.
+ * This precision is required because 100 / POLL_FREQUENCY may be non-integer.
  * Also, we cannot assume 100 / POLL_FREQUENCY == total, as we may have taken
  * longer to do the read than we had planned.
  */
