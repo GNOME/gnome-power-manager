@@ -1,0 +1,104 @@
+/***************************************************************************
+ *
+ * gpm-libnotify.c : LibNotify shared code
+ *    Note, this code can still be used without libnotify compiled in,
+ *    as it fall backs to a standard modal messsagebox.
+ *
+ * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ **************************************************************************/
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <glib.h>
+#include <gnome.h>
+#include "gpm-common.h"
+#if HAVE_LIBNOTIFY
+#include <libnotify/notify.h>
+#endif
+
+/** Convenience function to call libnotify
+ *
+ *  @param  content		The content text, e.g. "Battery low"
+ *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
+ */
+gboolean
+libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
+{
+#if HAVE_LIBNOTIFY
+	NotifyHandle *n = NULL;
+
+	/* assertion checks */
+	g_assert (content);
+
+	if (urgency == NOTIFY_URGENCY_CRITICAL)
+		g_warning ("libnotify: %s : %s", NICENAME, content);
+	else
+		g_debug ("libnotify: %s : %s", NICENAME, content);
+	n = notify_send_notification (NULL, /* replaces nothing 	*/
+			   NULL,
+			   urgency,
+			   NICENAME, content,
+			   NULL, /* no icon 			*/
+			   TRUE, NOTIFY_TIMEOUT,
+			   NULL, /* no hints */
+			   NULL, /* no user data 		*/
+			   0);   /* no actions 			*/
+	if (!n) {
+		g_warning ("failed to send notification (%s)", content);
+		return FALSE;
+	}
+	return TRUE;
+#else
+	GtkWidget *widget = NULL;
+
+	/* assertion checks */
+	g_assert (content);
+
+	widget = gnome_message_box_new (content,
+			GNOME_MESSAGE_BOX_WARNING,
+			GNOME_STOCK_BUTTON_OK,
+			NULL);
+	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
+	gtk_widget_show (widget);
+	return TRUE;
+#endif
+}
+
+/** Initialiser for libnotify
+ *
+ *  @param  nicename		The nicename, e.g. "GNOME Power Manager"
+ */
+gboolean
+libnotify_init (const gchar *nicename)
+{
+	gboolean ret = TRUE;
+
+	/* assertion checks */
+	g_assert (nicename);
+
+	/*
+	 * When libnotify has settled down we will switch to runtime detection
+	 * like we do for gnome-screensaver
+	 */
+#if HAVE_LIBNOTIFY
+	ret = notify_glib_init (nicename, NULL);
+#endif
+	return ret;
+}
