@@ -38,7 +38,7 @@ for i in /proc/acpi/battery/*/*; do echo $i; cat $i; done
 
 <p>This will turn on verbose debugging for GNOME Power Manager.</p>
 <pre>
-gnome-power-manager --verbose
+gnome-power-manager --no-daemon --verbose
 </pre>
 
 Then <a href="mailto:richard@hughsie.com">email me</a> as much of this data as possible.
