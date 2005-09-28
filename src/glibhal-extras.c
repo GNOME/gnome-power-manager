@@ -84,7 +84,6 @@ hal_set_brightness_item (const gchar *udi, gint brightness)
 	DBusGProxy *hal_proxy = NULL;
 
 	/* assertion checks */
-	g_assert (brightness);
 	g_assert (udi);
 
 	hal_device_get_int (udi, "laptop_panel.num_levels", &levels);
