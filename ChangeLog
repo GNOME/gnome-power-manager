@@ -1,3 +1,16 @@
+2005-09-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-libnotify.{c|h}: Factor out the notification stuff into
+	these two new files.
+
+	* src/gpm-prefs.c, src/gpm-prefs.c: use the new libnotify stuff and
+	delete the local functions which do the same thing.
+
+	* src/*.{c|h}: I've audited these files and added complete NULL 
+	dereference assert checks, and made sure *all* local pointers are
+	always setup with deault value NULL. This may break stuff, but will
+	make debugging easier.
+
 2005-09-26  Robert Love  <rml@novell.com>
 
 	* src/gpm-main.c: Daemonize by default, via daemon(3).  Add
