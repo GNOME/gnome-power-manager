@@ -5,6 +5,7 @@
 
 	* src/gpm-prefs.c, src/gpm-prefs.c: use the new libnotify stuff and
 	delete the local functions which do the same thing.
+	Also fix desktops that do not have an LCD panel. Oops.
 
 	* src/*.{c|h}: I've audited these files and added complete NULL 
 	dereference assert checks, and made sure *all* local pointers are

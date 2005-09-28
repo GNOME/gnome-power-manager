@@ -305,7 +305,7 @@ hal_get_brightness_steps (void)
 	gchar **names = NULL;
 	gint levels = 0;
 	hal_find_device_capability ("laptop_panel", &names);
-	if (!names) {
+	if (!names || !names[0]) {
 		g_debug ("No devices of capability laptop_panel");
 		return 0;
 	}

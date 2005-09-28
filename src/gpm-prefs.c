@@ -659,6 +659,9 @@ main (int argc, char **argv)
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
 
+	/* initialise gnome */
+	gnome_program_init ("GNOME Power Preferences", VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
+
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
