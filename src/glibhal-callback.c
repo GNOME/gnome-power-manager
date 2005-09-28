@@ -45,11 +45,16 @@ HalConnections proxy;
 static void
 signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *properties)
 {
-	GValueArray *array;
+	GValueArray *array = NULL;
 	guint i;
 	const char *udi;
 	const char *key;
-	gboolean added, removed;
+	gboolean added;
+	gboolean removed;
+
+	/* assertion checks */
+	g_assert (proxy);
+	g_assert (properties);
 
 	if (!function.device_property_modified) {
 		g_warning ("glibhal: signal_handler_PropertyModified when no function!");
@@ -73,8 +78,12 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 
 /* DeviceRemoved */
 static void
-signal_handler_DeviceRemoved (DBusGProxy *proxy, char *udi)
+signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 {
+	/* assertion checks */
+	g_assert (proxy);
+	g_assert (udi);
+
 	if (!function.device_removed) {
 		g_warning ("glibhal: signal_handler_DeviceRemoved when no function!");
 		return;
@@ -85,8 +94,13 @@ signal_handler_DeviceRemoved (DBusGProxy *proxy, char *udi)
 
 /* NewCapability */
 static void
-signal_handler_NewCapability (DBusGProxy *proxy, char *udi, char *capability)
+signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
 {
+	/* assertion checks */
+	g_assert (capability);
+	g_assert (proxy);
+	g_assert (udi);
+
 	if (!function.device_new_capability) {
 		g_warning ("glibhal: signal_handler_NewCapability when no function!");
 		return;
@@ -97,8 +111,13 @@ signal_handler_NewCapability (DBusGProxy *proxy, char *udi, char *capability)
 
 /* Condition */
 static void
-signal_handler_Condition (DBusGProxy *proxy, char *name, char *details)
+signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 {
+	/* assertion checks */
+	g_assert (proxy);
+	g_assert (name);
+	g_assert (details);
+
 	const char *udi;
 	if (!function.device_condition) {
 		g_warning ("glibhal: signal_handler_Condition when no function!");
@@ -120,6 +139,7 @@ glibhal_watch_add_device_removed (void)
 	DBusGConnection *system_connection;
 	GError *error = NULL;
 
+	/* assertion checks */
 	g_assert (function.initialized);
 	g_assert (!function.device_removed);
 	g_assert (!reg.device_removed);
@@ -146,6 +166,7 @@ glibhal_watch_add_device_new_capability (void)
 	DBusGConnection *system_connection;
 	GError *error = NULL;
 
+	/* assertion checks */
 	g_assert (function.initialized);
 	g_assert (!function.device_new_capability);
 	g_assert (!reg.device_new_capability);
@@ -170,11 +191,13 @@ gboolean
 glibhal_watch_add_device_condition (const char *udi)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	int a;
 	UdiProxy *udiproxy;
 
+	/* assertion checks */
+	g_assert (udi);
 	g_assert (function.initialized);
 
 	/* need to check for previous add */
@@ -214,13 +237,15 @@ gboolean
 glibhal_watch_add_device_property_modified (const char *udi)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GType struct_array_type;
 	GError *error = NULL;
 	int a;
 	UdiProxy *udiproxy;
 
+	/* assertion checks */
 	g_assert (function.initialized);
+	g_assert (udi);
 
 	/* need to check for previous add */
 	for (a=0;a < proxy.device_property_modified->len;a++) {
@@ -273,7 +298,7 @@ glibhal_watch_remove_device_removed (void)
 }
 
 gboolean
-glibhal_watch_remove_device_added ()
+glibhal_watch_remove_device_added (void)
 {
 	if (!proxy.device_added) {
 		g_warning ("glibhal: glibhal_watch_remove_added when no watch!");
@@ -286,7 +311,7 @@ glibhal_watch_remove_device_added ()
 }
 
 gboolean
-glibhal_watch_remove_device_new_capability ()
+glibhal_watch_remove_device_new_capability (void)
 {
 	if (!proxy.device_new_capability) {
 		g_warning ("glibhal: glibhal_watch_remove_new_capability when no watch!");
@@ -299,7 +324,7 @@ glibhal_watch_remove_device_new_capability ()
 }
 
 gboolean
-glibhal_watch_remove_device_lost_capability ()
+glibhal_watch_remove_device_lost_capability (void)
 {
 	if (!proxy.device_lost_capability) {
 		g_warning ("glibhal: glibhal_watch_remove_lost_capability when no watch!");
@@ -316,6 +341,10 @@ gboolean
 glibhal_watch_remove_device_property_modified (const char *udi)
 {
 	int a;
+
+	/* assertion checks */
+	g_assert (udi);
+
 	UdiProxy *udiproxy = NULL;
 	for (a=0;a < proxy.device_property_modified->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
@@ -340,6 +369,10 @@ gboolean
 glibhal_watch_remove_device_condition (const char *udi)
 {
 	int a;
+
+	/* assertion checks */
+	g_assert (udi);
+
 	UdiProxy *udiproxy = NULL;
 	for (a=0;a < proxy.device_condition->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_condition, a);
@@ -366,7 +399,10 @@ glibhal_watch_remove_device_condition (const char *udi)
 gboolean
 glibhal_method_device_removed (HalDeviceRemoved callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	if (!reg.device_removed)
 		glibhal_watch_add_device_removed ();
 	function.device_removed = callback;
@@ -376,7 +412,10 @@ glibhal_method_device_removed (HalDeviceRemoved callback)
 gboolean
 glibhal_method_device_added (HalDeviceAdded callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	function.device_added = callback;
 	return TRUE;
 }
@@ -384,7 +423,10 @@ glibhal_method_device_added (HalDeviceAdded callback)
 gboolean
 glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	if (!reg.device_new_capability)
 		glibhal_watch_add_device_new_capability ();
 	function.device_new_capability = callback;
@@ -394,7 +436,10 @@ glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 gboolean
 glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	function.device_lost_capability = callback;
 	return TRUE;
 }
@@ -402,7 +447,10 @@ glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
 gboolean
 glibhal_method_device_property_modified (HalDevicePropertyModified callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	g_debug ("glibhal: PropertyModified: Registered");
 	function.device_property_modified = callback;
 	return TRUE;
@@ -411,7 +459,10 @@ glibhal_method_device_property_modified (HalDevicePropertyModified callback)
 gboolean
 glibhal_method_device_condition (HalDeviceCondition callback)
 {
+	/* assertion checks */
+	g_assert (callback);
 	g_assert (function.initialized);
+
 	g_debug ("glibhal: Condition: Registered");
 	function.device_condition = callback;
 	return TRUE;

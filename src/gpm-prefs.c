@@ -35,18 +35,16 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
-#if defined(HAVE_LIBNOTIFY)
-#include <libnotify/notify.h>
-#endif
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
+#include "gpm-libnotify.h"
 #include "gpm-main.h"
+#include "gpm-screensaver.h"
 
 #include "dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
-#include "gpm-screensaver.h"
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;
@@ -59,10 +57,13 @@ static gboolean isVerbose;
 gboolean
 gpm_is_on_ac (gboolean *value)
 {
-	DBusGConnection *session_connection;
-	DBusGProxy *gpm_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gpm_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval = TRUE;
+
+	/* assertion checks */
+	g_assert (value);
 
 	dbus_get_session_connection (&session_connection);
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -80,41 +81,6 @@ gpm_is_on_ac (gboolean *value)
 	return retval;
 }
 
-
-/** Convenience function to call libnotify
- *
- *  @param  content		The content text, e.g. "Battery low"
- *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
- */
-static void
-use_libnotify (const char *content, const int urgency)
-{
-#if defined(HAVE_LIBNOTIFY)
-	NotifyIcon *icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
-	const char *summary = NICENAME;
-	NotifyHandle *n = notify_send_notification (NULL, /* replaces nothing 	*/
-			   NULL,
-			   urgency,
-			   summary, content,
-			   icon, /* no icon 			*/
-			   TRUE, NOTIFY_TIMEOUT,
-			   NULL,
-			   NULL, /* no user data 		*/
-			   0);   /* no actions 			*/
-	notify_icon_destroy(icon);
-	if (!n)
-		g_warning ("failed to send notification (%s)", content);
-#else
-	GtkWidget *widget;
-	widget = gnome_message_box_new (content,
-                                GNOME_MESSAGE_BOX_WARNING,
-                                GNOME_STOCK_BUTTON_OK,
-                                NULL);
-	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
-	gtk_widget_show (widget);
-#endif
-}
-
 /** queries org.gnome.GnomePowerManager.isOnBattery
  *
  *  @param  value	return value, passed by ref
@@ -123,10 +89,13 @@ use_libnotify (const char *content, const int urgency)
 gboolean
 gpm_is_on_mains (gboolean *value)
 {
-	DBusGConnection *session_connection;
-	DBusGProxy *gpm_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gpm_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
+
+	/* assertion checks */
+	g_assert (value);
 
 	dbus_get_session_connection (&session_connection);
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -151,9 +120,10 @@ gpm_is_on_mains (gboolean *value)
 static void
 gtk_set_visibility (const char *widgetname, gboolean set)
 {
-	GtkWidget *widget;
+	GtkWidget *widget = NULL;
 
-	g_return_if_fail (widgetname);
+	/* assertion checks */
+	g_assert (widgetname);
 
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
@@ -175,9 +145,10 @@ gtk_set_visibility (const char *widgetname, gboolean set)
 static void
 gtk_set_check (const char *widgetname, gboolean set)
 {
-	GtkWidget *widget;
+	GtkWidget *widget = NULL;
 
-	g_return_if_fail (widgetname);
+	/* assertion checks */
+	g_assert (widgetname);
 
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	if (!widget) {
@@ -193,7 +164,7 @@ gtk_set_check (const char *widgetname, gboolean set)
 static void
 recalc (void)
 {
-	GtkWidget *widget;
+	GtkWidget *widget = NULL;
 	GConfClient *client = gconf_client_get_default ();
 
 	gboolean hasBatteries;
@@ -287,7 +258,9 @@ recalc (void)
 static void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	g_return_if_fail (client);
+	/* assertion checks */
+	g_assert (client);
+
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
@@ -306,21 +279,23 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 static void
 callback_combo_changed (GtkWidget *widget, gpointer user_data)
 {
-	GConfClient *client;
+	GConfClient *client = NULL;
 	gint value;
-	gchar *policypath;
-	gchar *policyoption;
-	GPtrArray *policydata;
-	int *pdata;
+	gchar *policypath = NULL;
+	gchar *policyoption = NULL;
+	GPtrArray *policydata = NULL;
+	gint *pdata = NULL;
 
-	g_return_if_fail (widget);
+	/* assertion checks */
+	g_assert (widget);
+
 	client = gconf_client_get_default ();
 	value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
 	policydata = g_object_get_data ((GObject*) widget, "policydata");
 
 	/* we have to convert from the virtual mapping to a policy mapping */
-	pdata = (int*) g_ptr_array_index (policydata, value);
+	pdata = (gint*) g_ptr_array_index (policydata, value);
 
 	g_debug ("[%s] = (%i)", policypath, *pdata);
 
@@ -335,15 +310,16 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 static void
 callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 {
-	GConfClient *client;
-	const char *widgetname;
-	gchar *policypath;
+	GConfClient *client = NULL;
+	const gchar *widgetname = NULL;
+	gchar *policypath = NULL;
 	gdouble value;
 	gint oldgconfvalue;
 	gdouble divisions = -1;
 	gboolean onbattery;
 
-	g_return_if_fail (widget);
+	/* assertion checks */
+	g_assert (widget);
 
 	client = gconf_client_get_default ();
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
@@ -427,11 +403,12 @@ callback_screensave (GtkWidget *widget, gpointer user_data)
 static void
 callback_check_changed (GtkWidget *widget, gpointer user_data)
 {
-	GConfClient *client;
+	GConfClient *client = NULL;
 	gboolean value;
-	gchar *policypath;
+	gchar *policypath = NULL;
 
-	g_return_if_fail (widget);
+	/* assertion checks */
+	g_assert (widget);
 
 	client = gconf_client_get_default ();
 	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
@@ -463,6 +440,9 @@ print_usage (void)
 static gchar*
 format_value_callback_percent (GtkScale *scale, gdouble value)
 {
+	/* assertion checks */
+	g_assert (scale);
+
 	return g_strdup_printf ("%i%%", (gint) value);
 }
 
@@ -472,7 +452,11 @@ format_value_callback_percent (GtkScale *scale, gdouble value)
 static gchar*
 format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
 {
-	int *steps;
+	int *steps = NULL;
+
+	/* assertion checks */
+	g_assert (scale);
+
 	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
 	if (!steps)
 		return NULL;
@@ -486,7 +470,10 @@ static gchar*
 format_value_callback_time (GtkScale *scale, gdouble value)
 {
 	gchar unitstring[32];
-	GString *strvalue;
+	GString *strvalue = NULL;
+
+	/* assertion checks */
+	g_assert (scale);
 
 	if ((gint) value == 0)
 		return g_strdup_printf ("Never");
@@ -507,12 +494,13 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 static void
 hscale_setup_action (const char *widgetname, const char *policypath, int policytype)
 {
-	GConfClient *client;
-	GtkWidget *widget;
+	GConfClient *client = NULL;
+	GtkWidget *widget = NULL;
 	gint value;
 
-	g_return_if_fail (widgetname);
-	g_return_if_fail (policypath);
+	/* assertion checks */
+	g_assert (widgetname);
+	g_assert (policypath);
 
 	client = gconf_client_get_default ();
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
@@ -542,12 +530,13 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 static void
 checkbox_setup_action (const char *widgetname, const char *policypath)
 {
-	GConfClient *client;
-	GtkWidget *widget;
+	GConfClient *client = NULL;
+	GtkWidget *widget = NULL;
 	gboolean value;
 
-	g_return_if_fail (widgetname);
-	g_return_if_fail (policypath);
+	/* assertion checks */
+	g_assert (widgetname);
+	g_assert (policypath);
 
 	client = gconf_client_get_default ();
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
@@ -569,14 +558,18 @@ checkbox_setup_action (const char *widgetname, const char *policypath)
 static void
 combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *ptrarray)
 {
-	GConfClient *client;
-	GtkWidget *widget;
-	gchar *policyoption;
+	GConfClient *client = NULL;
+	GtkWidget *widget = NULL;
+	gchar *policyoption = NULL;
 	gint value;
-	int a;
-	int *pdata;
+	gint a;
+	gint *pdata = NULL;
 
-	g_return_if_fail (widgetname);
+	/* assertion checks */
+	g_assert (widgetname);
+	g_assert (policypath);
+	g_assert (ptrarray);
+
 	client = gconf_client_get_default ();
 	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
 	g_return_if_fail (widget);
@@ -586,7 +579,7 @@ combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *
 
 	/* add text to combo boxes in order of parray */
 	for (a=0;a < ptrarray->len;a++) {
-		pdata = (int*) g_ptr_array_index (ptrarray, a);
+		pdata = (gint*) g_ptr_array_index (ptrarray, a);
 		if (*pdata == ACTION_SHUTDOWN)
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget), _("Shutdown"));
 		else if (*pdata == ACTION_SUSPEND)
@@ -629,19 +622,19 @@ int
 main (int argc, char **argv)
 {
 	GtkWidget *widget = NULL;
+	GConfClient *client = NULL;
 	gint a;
 	gboolean has_gpm_connection;
 	gdouble value;
 	gint steps;
-	GConfClient *client;
 
 	/* provide dynamic storage for comboboxes */
-	GPtrArray *ptrarr_button_power;
-	GPtrArray *ptrarr_button_suspend;
-	GPtrArray *ptrarr_button_lid;
-	GPtrArray *ptrarr_ac_fail;
-	GPtrArray *ptrarr_battery_critical;
-	GPtrArray *ptrarr_sleep_type;
+	GPtrArray *ptrarr_button_power = NULL;
+	GPtrArray *ptrarr_button_suspend = NULL;
+	GPtrArray *ptrarr_button_lid = NULL;
+	GPtrArray *ptrarr_ac_fail = NULL;
+	GPtrArray *ptrarr_battery_critical = NULL;
+	GPtrArray *ptrarr_sleep_type = NULL;
 
 	/* provide pointers to enums */
 	int pSuspend 	= 	ACTION_SUSPEND;
@@ -676,16 +669,14 @@ main (int argc, char **argv)
 	 */
 	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
 
-#if defined(HAVE_LIBNOTIFY)
-	/* initialise libnotify */
-	if (!notify_glib_init(NICENAME, NULL))
+	/* Initialise libnotify, if compiled in. */
+	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
-#endif
 
 	/* check if we have GNOME Screensaver, but have disabled dpms */
 	if (gscreensaver_is_running ())
 		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL))
-			use_libnotify ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", NOTIFY_URGENCY_NORMAL);
+			libnotify_event ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", LIBNOTIFY_URGENCY_NORMAL, NULL);
 
 	/* load the interface */
 	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
@@ -705,7 +696,7 @@ main (int argc, char **argv)
 	 */
 	has_gpm_connection = gpm_is_on_ac (&a);
 	if (!has_gpm_connection)
-		use_libnotify ("Cannot connect to GNOME Power Manager.\nMake sure that it is running", NOTIFY_URGENCY_NORMAL);
+		libnotify_event ("Cannot connect to GNOME Power Manager.\nMake sure that it is running", LIBNOTIFY_URGENCY_NORMAL, NULL);
 
 	/* Set the button callbacks */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");

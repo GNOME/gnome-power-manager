@@ -25,13 +25,9 @@
 
 #include <dbus/dbus-glib.h>
 
-/* depreciated... */
-DBusGConnection *get_system_connection (void);
-DBusGConnection *get_session_connection (void);
-
 gboolean dbus_glib_error (GError *error);
 gboolean dbus_get_system_connection (DBusGConnection **connection);
 gboolean dbus_get_session_connection (DBusGConnection **connection);
-gboolean dbus_get_service (DBusGConnection *connection, const char *service);
+gboolean dbus_get_service (DBusGConnection *connection, const gchar *service);
 
 #endif	/* _DBUSCOMMON_H */

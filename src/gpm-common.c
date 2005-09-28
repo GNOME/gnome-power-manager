@@ -27,14 +27,115 @@
 #include <glib.h>
 #include <gdk/gdkx.h>
 #include <gnome.h>
+#include <gconf/gconf-client.h>
 #include "gpm-common.h"
 
 GPtrArray *objectData;
 
+/** Finds a device from the objectData table
+ *
+ *  @param  parray		pointer array to GenericObject
+ *  @param  udi			HAL UDI
+ */
+gint
+find_udi_parray_index (GPtrArray *parray, const gchar *udi)
+{
+	GenericObject *slotData = NULL;
+	gint a;
+
+	/* assertion checks */
+	g_assert (parray);
+	g_assert (udi);
+
+	for (a=0;a<parray->len;a++) {
+		slotData = (GenericObject *) g_ptr_array_index (parray, a);
+		g_return_val_if_fail (slotData, -1);
+		if (strcmp (slotData->udi, udi) == 0)
+			return a;
+	}
+	return -1;
+}
+
+/** Finds a device from the objectData table
+ *
+ *  @param  parray		pointer array to GenericObject
+ *  @param  udi			HAL UDI
+ */
+GenericObject *
+genericobject_find (GPtrArray *parray, const gchar *udi)
+{
+	gint a;
+
+	/* assertion checks */
+	g_assert (parray);
+	g_assert (udi);
+
+	a = find_udi_parray_index (parray, udi);
+	if (a != -1)
+		return (GenericObject *) g_ptr_array_index (parray, a);
+	return NULL;
+}
+
+/** Adds a device to the objectData table *IF DOES NOT EXIST*
+ *
+ *  @param  parray		pointer array to GenericObject
+ *  @param  udi			HAL UDI
+ *  @return			TRUE if we added to the table
+ */
+GenericObject *
+genericobject_add (GPtrArray *parray, const gchar *udi)
+{
+	GenericObject *slotData = NULL;
+	gint a;
+
+	/* assertion checks */
+	g_assert (parray);
+	g_assert (udi);
+
+	a = find_udi_parray_index (parray, udi);
+	if (a != -1)
+		return NULL;
+
+	slotData = g_new (GenericObject, 1);
+	strcpy (slotData->udi, udi);
+	slotData->powerDevice = POWER_UNKNOWN;
+	slotData->slot = a;
+	g_ptr_array_add (parray, (gpointer) slotData);
+	return slotData;
+}
+
+/** Runs a file set in GConf
+ *
+ *  @param  value		The gconf path
+ *  @return			Success
+ */
+gboolean
+run_gconf_script (const char *path)
+{
+	GConfClient *client = NULL;
+	gchar *command = NULL;
+	gboolean ret = FALSE;
+
+	/* assertion checks */
+	g_assert (path);
+
+	client = gconf_client_get_default ();
+	command = gconf_client_get_string (client, path, NULL);
+	if (command) {
+		g_debug ("Executing '%s'", command);
+		ret = g_spawn_command_line_async (command, NULL);
+		if (!ret)
+			g_warning ("Couldn't execute '%s'.", command);
+		g_free (command);
+	} else
+		g_warning ("'%s' is missing!", path);
+	return ret;
+}
+
 /** Converts an dbus ENUM to it's string representation
  *
  *  @param  value		The dbus ENUM
- *  @return				action string, e.g. "Shutdown"
+ *  @return			action string, e.g. "Shutdown"
  */
 gchar *
 convert_dbus_enum_to_string (gint value)
@@ -89,7 +190,8 @@ get_time_string (GenericObject *slotData)
 {
 	GString* timestring = NULL;
 
-	g_return_val_if_fail (slotData, NULL);
+	/* assertion checks */
+	g_assert (slotData);
 
 	timestring = get_timestring_from_minutes (slotData->minutesRemaining);
 	if (!timestring)
@@ -112,7 +214,7 @@ get_time_string (GenericObject *slotData)
 void
 create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
 {
-	GenericObject *slotData;
+	GenericObject *slotData = NULL;
 	gint a;
 	gint objectCount = 0;
 	gint percentageCharge;
@@ -120,7 +222,8 @@ create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
 
 	GenericObject *slotDataTemp[5]; /* not going to get more than 5 objects */
 
-	g_return_if_fail (slotDataReturn);
+	/* assertion checks */
+	g_assert (slotDataReturn);
 
 	for (a=0; a < objectData->len; a++) {
 		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
@@ -171,7 +274,9 @@ g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *me
 int
 convert_string_to_policy (const gchar *gconfstring)
 {
-	g_return_val_if_fail (gconfstring, ACTION_UNKNOWN);
+	/* assertion checks */
+	g_assert (gconfstring);
+
 	if (strcmp (gconfstring, "nothing") == 0)
 		return ACTION_NOTHING;
 	if (strcmp (gconfstring, "suspend") == 0)
@@ -216,7 +321,9 @@ convert_policy_to_string (gint value)
  */
 gint convert_haltype_to_powerdevice (const gchar *type)
 {
-	g_return_val_if_fail (type, POWER_UNKNOWN);
+	/* assertion checks */
+	g_assert (type);
+
 	if (strcmp (type, "ac_adapter") == 0)
 		return POWER_AC_ADAPTER;
 	else if (strcmp (type, "ups") == 0)
@@ -263,7 +370,9 @@ convert_powerdevice_to_string (gint powerDevice)
 gchar *
 get_chargestate_string (GenericObject *slotData)
 {
-	g_return_val_if_fail (slotData, NULL);
+	/* assertion checks */
+	g_assert (slotData);
+
 	if (!slotData->present)
 		return _("missing");
 	else if (slotData->isCharging)
@@ -288,7 +397,7 @@ get_chargestate_string (GenericObject *slotData)
 GString *
 get_timestring_from_minutes (gint minutes)
 {
-	GString* timestring;
+	GString* timestring = NULL;
 	gint hours;
 
 	if (minutes == 0)

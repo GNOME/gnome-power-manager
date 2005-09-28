@@ -111,9 +111,9 @@ static void print_usage (void)
 int
 main (int argc, char **argv)
 {
-	GMainLoop *loop;
-	DBusGConnection *session_connection;
-	DBusGProxy *dbus_proxy;
+	GMainLoop *loop = NULL;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *dbus_proxy = NULL;
 	GError *error = NULL;
 	gboolean isOkay;
 	gboolean doMonitor;

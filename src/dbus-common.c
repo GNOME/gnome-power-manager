@@ -55,11 +55,12 @@ dbus_glib_error (GError *error)
 gboolean
 dbus_get_service (DBusGConnection *connection, const char *service)
 {
-	DBusGProxy *bus_proxy;
+	DBusGProxy *bus_proxy = NULL;
 	GError *error = NULL;
 	gboolean ret = TRUE;
 	guint request_name_result;
 
+	/* assertion checks */
 	g_assert (connection);
 	g_assert (service);
 

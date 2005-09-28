@@ -53,8 +53,11 @@ gtk_icon_theme_fallback (const char *name, int size)
 {
 	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
-	GString *fallback;
-	GtkIconInfo *iinfo;
+	GString *fallback = NULL;
+	GtkIconInfo *iinfo = NULL;
+
+	/* assertion checks */
+	g_assert (name);
 
 	g_debug ("gtk_icon_theme_fallback : name = '%s', size = %i", name, size);
 	if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name)) {
@@ -85,8 +88,9 @@ create_icon_pixbuf (GenericObject *slotData)
 	GdkPixbuf *pixbuf = NULL;
 	GenericObject slotDataVirt;
 	gint num;
-	gchar *computed_name;
+	gchar *computed_name = NULL;
 
+	/* assertion checks */
 	g_assert (slotData);
 
 	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
@@ -128,7 +132,9 @@ create_icon_pixbuf (GenericObject *slotData)
 void
 icon_destroy (void)
 {
-	g_return_if_fail (eggtrayicon);
+	/* assertion checks */
+	g_assert (eggtrayicon);
+
 	g_debug ("icon_destroy");
 	if (eggtrayicon->popup_menu)
 		g_free (eggtrayicon->popup_menu);
@@ -141,14 +147,14 @@ icon_destroy (void)
 
 /* wrapper function */
 void
-gpn_icon_initialise ()
+gpn_icon_initialise (void)
 {
 	eggtrayicon = NULL;
 }
 
 /* wrapper function */
 void
-gpn_icon_destroy ()
+gpn_icon_destroy (void)
 {
 	if (eggtrayicon)
 		icon_destroy ();
@@ -159,8 +165,10 @@ gpn_icon_destroy ()
 void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	g_return_if_fail (client);
-	g_return_if_fail (entry);
+	/* assertion checks */
+	g_assert (client);
+	g_assert (entry);
+
 	g_debug ("callback_gconf_key_changed (%s)", entry->key);
 
 	if (gconf_entry_get_value (entry) == NULL)
@@ -178,10 +186,11 @@ get_object_tooltip (GenericObject *slotData)
 {
 	GString *remaining = NULL;
 	GString *tooltip = NULL;
-	gchar *devicestr;
-	gchar *chargestate;
+	gchar *devicestr = NULL;
+	gchar *chargestate = NULL;
 
-	g_return_val_if_fail (slotData, NULL);
+	/* assertion checks */
+	g_assert (slotData);
 
 	devicestr = convert_powerdevice_to_string (slotData->powerDevice);
 	if (slotData->powerDevice == POWER_PRIMARY_BATTERY ||
@@ -219,7 +228,7 @@ get_main_tooltip (void)
 {
 	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
-	GString* temptip;
+	GString *temptip = NULL;
 	gint a;
 
 	if (state_data.onBatteryPower)
@@ -247,7 +256,7 @@ get_main_tooltip (void)
 static GenericObject *
 get_object_of_powertype (int powerDevice, gboolean displayFull)
 {
-	GenericObject *slotData;
+	GenericObject *slotData = NULL;
 	gint a;
 	/* return value only if not full, or iconDisplayFull set true*/
 	for (a=0;a<objectData->len;a++) {
@@ -268,7 +277,7 @@ get_object_of_powertype (int powerDevice, gboolean displayFull)
 GenericObject *
 get_main_icon_slot (void)
 {
-	GenericObject *slotData;
+	GenericObject *slotData = NULL;
 	GConfClient *client = gconf_client_get_default ();
 	gboolean showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
 	/*
@@ -299,7 +308,12 @@ get_main_icon_slot (void)
 static void
 callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	gchar *action = g_object_get_data ((GObject*) menuitem, "action");
+	gchar *action = NULL;
+
+	/* assertion checks */
+	g_assert (menuitem);
+
+	action = g_object_get_data ((GObject*) menuitem, "action");
 	g_debug ("action = '%s'", action);
 	if (strcmp (action, "suspend") == 0)
 		action_policy_do (ACTION_SUSPEND);
@@ -320,11 +334,14 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 gboolean
 get_icon_position (gint *x, gint *y)
 {
-	GdkPixbuf* pixbuf;
+	GdkPixbuf* pixbuf = NULL;
 
-	g_return_val_if_fail (eggtrayicon, FALSE);
-	g_return_val_if_fail (eggtrayicon->image, FALSE);
-	g_return_val_if_fail (eggtrayicon->image->window, FALSE);
+	/* assertion checks */
+	g_assert (x);
+	g_assert (y);
+	g_assert (eggtrayicon);
+	g_assert (eggtrayicon->image);
+	g_assert (eggtrayicon->image->window);
 
 	gdk_window_get_origin (eggtrayicon->image->window, x, y);
 	g_debug ("x1=%i, y1=%i\n", *x, *y);
@@ -347,6 +364,9 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	const gchar *authors[] = { "Richard Hughes <richard@hughsie.com>", NULL };
 	const gchar *documenters[] = { NULL };
 	const gchar *translator = _("Unknown Translator");
+
+	/* assertion checks */
+	g_assert (menuitem);
 
 	if (about) {
 		gdk_window_raise (about->window);
@@ -383,7 +403,10 @@ static void
 callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
 	gboolean retval;
-	gchar *path;
+	gchar *path = NULL;
+
+	/* assertion checks */
+	g_assert (menuitem);
 
 	path = g_strconcat (BINDIR, "/", "gnome-power-preferences", NULL);
 	g_debug ("callback_prefs_activated: %s", path);
@@ -398,9 +421,15 @@ static void
 menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char *type)
 {
 	/* get image */
-	GtkWidget *item;
-	GtkWidget *image;
-	GdkPixbuf *pixbuf;
+	GtkWidget *item = NULL;
+	GtkWidget *image = NULL;
+	GdkPixbuf *pixbuf = NULL;
+
+	/* assertion checks */
+	g_assert (menu);
+	g_assert (icon);
+	g_assert (name);
+	g_assert (type);
 
 	image = gtk_image_new ();
 	pixbuf = gtk_icon_theme_fallback (icon, 16);
@@ -425,10 +454,10 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
 static void
 menu_main_create (void)
 {
-	GtkWidget *item;
+	GtkWidget *item = NULL;
 
-	g_return_if_fail (eggtrayicon);
-	g_return_if_fail (eggtrayicon->popup_menu == NULL);
+	g_assert (eggtrayicon);
+	g_assert (eggtrayicon->popup_menu == NULL);
 
 	eggtrayicon->popup_menu = gtk_menu_new ();
 
@@ -459,6 +488,11 @@ menu_main_create (void)
 static gboolean
 tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 {
+	/* assertion checks */
+	g_assert (widget);
+	g_assert (event);
+	g_assert (eggtrayicon);
+
 	if (!eggtrayicon || !eggtrayicon->popup_menu)
 		return TRUE;
 	if (event->button == 3) {
@@ -474,6 +508,11 @@ tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 static gboolean
 tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 {
+	/* assertion checks */
+	g_assert (widget);
+	g_assert (event);
+	g_assert (eggtrayicon);
+
 	g_debug ("button : %i", event->button);
 	if (!eggtrayicon || !(eggtrayicon->popup_menu))
 		return TRUE;
@@ -491,9 +530,10 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 void
 icon_create (void)
 {
-	GtkWidget *evbox;
+	GtkWidget *evbox = NULL;
 
-	g_return_if_fail (!eggtrayicon);
+	/* assertion checks */
+	g_assert (!eggtrayicon);
 
 	/* create new tray object */
 	eggtrayicon = g_new0 (TrayData, 1);
@@ -525,11 +565,11 @@ void
 gpn_icon_update (void)
 {
 
-	GConfClient *client;
+	GConfClient *client = NULL;
 	gboolean iconShow;
-	GenericObject *slotData;
-	GdkPixbuf *pixbuf;
-	GString *tooltip;
+	GenericObject *slotData = NULL;
+	GdkPixbuf *pixbuf = NULL;
+	GString *tooltip = NULL;
 
 	client = gconf_client_get_default ();
 	iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);

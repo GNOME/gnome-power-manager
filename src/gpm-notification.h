@@ -40,8 +40,8 @@ gboolean get_icon_position (gint *x, gint *y);
 void callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
 /* wrapper functions */
-void gpn_icon_initialise ();
-void gpn_icon_destroy ();
-void gpn_icon_update ();
+void gpn_icon_initialise (void);
+void gpn_icon_destroy (void);
+void gpn_icon_update (void);
 
 #endif	/* _GPN_H */

@@ -25,12 +25,12 @@
 
 #include <dbus/dbus-glib.h>
 
-typedef void (*HalDeviceAdded) (const char *udi);
-typedef void (*HalDeviceRemoved) (const char *udi);
-typedef void (*HalDeviceNewCapability) (const char *udi, const char *capability);
-typedef void (*HalDeviceLostCapability) (const char *udi, const char *capability);
-typedef void (*HalDevicePropertyModified) (const char *udi, const char *key, gboolean removed, gboolean added);
-typedef void (*HalDeviceCondition) (const char *udi, const char *name, const char *detail);
+typedef void (*HalDeviceAdded) (const gchar *udi);
+typedef void (*HalDeviceRemoved) (const gchar *udi);
+typedef void (*HalDeviceNewCapability) (const gchar *udi, const gchar *capability);
+typedef void (*HalDeviceLostCapability) (const gchar *udi, const gchar *capability);
+typedef void (*HalDevicePropertyModified) (const gchar *udi, const gchar *key, gboolean removed, gboolean added);
+typedef void (*HalDeviceCondition) (const gchar *udi, const gchar *name, const gchar *detail);
 
 typedef struct {
 	gboolean			initialized;
@@ -60,7 +60,7 @@ typedef struct {
 } HalConnections;
 
 typedef struct {
-	char				udi[128];
+	gchar				udi[128];
 	DBusGProxy			*proxy;
 } UdiProxy;
 
@@ -74,17 +74,17 @@ gboolean glibhal_method_device_lost_capability (HalDeviceLostCapability callback
 gboolean glibhal_method_device_property_modified (HalDevicePropertyModified callback);
 gboolean glibhal_method_device_condition (HalDeviceCondition callback);
 
-gboolean glibhal_register_device_property_modified (const char *udi);
-gboolean glibhal_register_device_condition (const char *udi);
+gboolean glibhal_register_device_property_modified (const gchar *udi);
+gboolean glibhal_register_device_condition (const gchar *udi);
 
-gboolean glibhal_watch_add_device_property_modified (const char *udi);
-gboolean glibhal_watch_add_device_condition (const char *udi);
+gboolean glibhal_watch_add_device_property_modified (const gchar *udi);
+gboolean glibhal_watch_add_device_condition (const gchar *udi);
 
 gboolean glibhal_watch_remove_device_removed ();
 gboolean glibhal_watch_remove_device_added ();
 gboolean glibhal_watch_remove_device_new_capability ();
 gboolean glibhal_watch_remove_device_lost_capability ();
-gboolean glibhal_watch_remove_device_property_modified (const char *udi);
-gboolean glibhal_watch_remove_device_condition (const char *udi);
+gboolean glibhal_watch_remove_device_property_modified (const gchar *udi);
+gboolean glibhal_watch_remove_device_condition (const gchar *udi);
 
 #endif	/* _GLIBHALCALLBACK_H */

@@ -20,12 +20,182 @@
  *
  **************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+
+#include <glib.h>
+#include <gnome.h>
+#include <dbus/dbus-glib.h>
+#include "gpm-dbus-server.h"
+#include "gpm-common.h"
+#include "dbus-common.h"
+
+G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
+
+guint signals[LAST_SIGNAL] = { 0 };
+
+GPMObject *obj;
+StateData state_data;
+
+static void
+gpm_object_init (GPMObject *obj) { }
+
+static void
+gpm_object_class_init (GPMObjectClass *klass)
+{
+	signals[MAINS_CHANGED] =
+		g_signal_new ("mains_status_changed",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals[ACTION_ABOUT_TO_HAPPEN] =
+		g_signal_new ("action_about_to_happen",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals[PERFORMING_ACTION] =
+		g_signal_new ("performing_action",
+			G_OBJECT_CLASS_TYPE (klass),
+			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+			0, NULL, NULL,
+			g_cclosure_marshal_VOID__BOOLEAN,
+			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+}
+
+/** registers org.gnome.GnomePowerManager
+ ** This function MUST be called before DBUS service will work.
+ *
+ */
+gboolean
+gpm_object_register (void)
+{
+	DBusGConnection *session_connection = NULL;
+	dbus_get_session_connection (&session_connection);
+	g_assert (session_connection);
+	dbus_get_service (session_connection, GPM_DBUS_SERVICE);
+	obj = g_object_new (gpm_object_get_type (), NULL);
+	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.actionAboutToHappen
+ *
+ */
+gboolean
+gpm_emit_about_to_happen (const gint value)
+{
+	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, value);
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.performingAction
+ *
+ */
+gboolean
+gpm_emit_performing_action (const gint value)
+{
+	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, value);
+	return TRUE;
+}
+
+/** emits org.gnome.GnomePowerManager.mainsStatusChanged
+ *
+ */
+gboolean
+gpm_emit_mains_changed (const gboolean value)
+{
+	g_signal_emit (obj, signals[MAINS_CHANGED], 0, value);
+	return TRUE;
+}
+
+/** Find out if user is idle
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_is_user_idle ()");
+	return TRUE;
+}
+
+/** Find out if we are on battery power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_mains ()");
+	*ret = state_data.onBatteryPower;
+	return TRUE;
+}
+
+/** Find out if we are on ac power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_ac ()");
+	*ret = !state_data.onBatteryPower & !state_data.onUPSPower;
+	return TRUE;
+}
+
+/** Find out if we are on ups power
+ *
+ *  @param  ret			The returned data value
+ *  @return			Success.
+ */
+gboolean
+gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
+{
+	g_debug ("gpm_object_is_on_ups ()");
+	*ret = state_data.onUPSPower;
+	return TRUE;
+}
+
+/*
+ * I need a way to get the connection name, like we used to using
+ *    dbus_message_get_sender (message);
+ * but glib bindings abstract away the message.
+ * walters to fix :-)
+ */
+gboolean
+gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_ack (%i)", value);
+	return TRUE;
+}
+
+gboolean
+gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_nack (%i, '%s')", value, reason);
+	return TRUE;
+}
+
+gboolean
+gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_action_register (%i, '%s')", value, name);
+	return TRUE;
+}
+
+gboolean
+gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error)
+{
+	g_warning ("STUB: gpm_object_action_unregister (%i)", value);
+	return TRUE;
+}
 
 #if 0
-
 #include <glib.h>
 #include <string.h>
 #include <dbus/dbus.h>

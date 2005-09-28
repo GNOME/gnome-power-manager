@@ -35,7 +35,7 @@ typedef struct {
 
 gboolean update_idle_function (gpointer data);
 
-gboolean set_cpu_idle_limit (const int percentage);
+gboolean set_cpu_idle_limit (const gint percentage);
 gboolean get_is_cpu_idle ();
 
 #endif	/* _GPMIDLE_H */

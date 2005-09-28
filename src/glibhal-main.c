@@ -44,9 +44,7 @@ is_hald_running (void)
 		"/org/freedesktop/Hal/devices/computer",
 		"info.udi", &udi);
 	g_free (udi);
-	if (running)
-		return TRUE;
-	return FALSE;
+	return running;
 }
 
 /** Finds out if power management functions are running (only ACPI, PMU, APM)
@@ -60,9 +58,7 @@ hal_pm_check (void)
 	hal_device_get_bool (
 		"/org/freedesktop/Hal/devices/computer",
 		"power_management.is_enabled", &pm);
-	if (pm)
-		return TRUE;
-	return FALSE;
+	return pm;
 }
 
 /** glib libhal replacement to get boolean type
@@ -76,12 +72,14 @@ gboolean
 hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
-	g_return_val_if_fail (udi, FALSE);
-	g_return_val_if_fail (key, FALSE);
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (key);
+	g_assert (value);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -111,12 +109,14 @@ gboolean
 hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
-	g_return_val_if_fail (udi, FALSE);
-	g_return_val_if_fail (key, FALSE);
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (key);
+	g_assert (value);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -144,12 +144,14 @@ gboolean
 hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
-	g_return_val_if_fail (udi, 0);
-	g_return_val_if_fail (key, 0);
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (key);
+	g_assert (value);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -176,11 +178,13 @@ gboolean
 hal_find_device_capability (const gchar *capability, gchar ***value)
 {
 	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
-	g_return_val_if_fail (capability, FALSE);
+	/* assertion checks */
+	g_assert (capability);
+	g_assert (value);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -206,7 +210,10 @@ void
 hal_free_capability (gchar **value)
 {
 	gint i;
-	g_return_if_fail (value);
+
+	/* assertion checks */
+	g_assert (value);
+
 	for (i = 0; value[i]; i++) {
 		g_free (value[i]);
 	}
@@ -223,6 +230,10 @@ hal_num_devices_of_capability (const gchar *capability)
 {
 	gint i;
 	gchar **names;
+
+	/* assertion checks */
+	g_assert (capability);
+
 	hal_find_device_capability (capability, &names);
 	if (!names) {
 		g_debug ("No devices of capability %s", capability);
@@ -249,6 +260,12 @@ hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *
 	gint valid = 0;
 	gchar **names;
 	gchar *type;
+
+	/* assertion checks */
+	g_assert (capability);
+	g_assert (key);
+	g_assert (value);
+
 	hal_find_device_capability (capability, &names);
 	if (!names) {
 		g_debug ("No devices of capability %s", capability);

@@ -26,10 +26,28 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include <gconf/gconf-client.h>
 
 #include "dbus-common.h"
 #include "glibhal-main.h"
 #include "gpm-screensaver.h"
+
+/** If set to lock on screensave, instruct gnome-screensaver to lock screen
+ *  and return TRUE.
+ *  if set not to lock, then do nothing, and return FALSE.
+ */
+gboolean
+gscreensaver_lock_check (void)
+{
+	GConfClient *client = gconf_client_get_default ();
+	gboolean should_lock;
+
+	should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+	if (!should_lock)
+		return FALSE;
+	gscreensaver_lock ();
+	return TRUE;
+}
 
 /** Finds out if gnome-screensaver is running
  *
@@ -39,8 +57,8 @@ gboolean
 gscreensaver_is_running (void)
 {
 	GError *error = NULL;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
 
@@ -67,8 +85,8 @@ gboolean
 gscreensaver_set_throttle (gboolean throttle)
 {
 	GError *error = NULL;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret;
 
 	dbus_get_session_connection (&session_connection);
@@ -99,8 +117,8 @@ gboolean
 gscreensaver_lock (void)
 {
 	GError *error = NULL;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret;
 
 	dbus_get_session_connection (&session_connection);
@@ -131,8 +149,8 @@ gboolean
 gscreensaver_get_idle (void)
 {
 	GError *error = NULL;
-	DBusGConnection *session_connection;
-	DBusGProxy *gs_proxy;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
 	gboolean value;
 

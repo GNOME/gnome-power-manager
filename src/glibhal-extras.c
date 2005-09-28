@@ -40,14 +40,16 @@
  *  @return			Success
  */
 gboolean
-hal_get_brightness_item (const char *udi, int *brightness)
+hal_get_brightness_item (const gchar *udi, gint *brightness)
 {
 	GError *error = NULL;
 	gboolean retval;
-	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
 
-	g_return_val_if_fail (udi, FALSE);
+	/* assertion checks */
+	g_assert (brightness);
+	g_assert (udi);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -72,16 +74,18 @@ hal_get_brightness_item (const char *udi, int *brightness)
  *  @return			Success
  */
 static gboolean
-hal_set_brightness_item (const char *udi, int brightness)
+hal_set_brightness_item (const gchar *udi, gint brightness)
 {
 	GError *error = NULL;
 	gint ret;
-	int levels;
+	gint levels;
 	gboolean retval;
-	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
 
-	g_return_val_if_fail (udi, FALSE);
+	/* assertion checks */
+	g_assert (brightness);
+	g_assert (udi);
 
 	hal_device_get_int (udi, "laptop_panel.num_levels", &levels);
 	if (brightness >= levels || brightness < 0 ) {
@@ -117,7 +121,7 @@ hal_set_brightness_item (const char *udi, int brightness)
  *  @return			Success, true if *all* adaptors changed
  */
 gboolean
-hal_set_brightness (int brightness)
+hal_set_brightness (gint brightness)
 {
 	gint i;
 	gchar **names;
@@ -144,7 +148,7 @@ hal_set_brightness (int brightness)
  *  @return			Success, true if *all* adaptors changed
  */
 gboolean
-hal_set_brightness_dim (int brightness)
+hal_set_brightness_dim (gint brightness)
 {
 	gint i, a;
 	gchar **names;
@@ -188,11 +192,11 @@ hal_set_brightness_dim (int brightness)
  *  @param  wakeup		Seconds to wakeup, currently unsupported
  */
 gboolean
-hal_suspend (int wakeup)
+hal_suspend (gint wakeup)
 {
 	gint ret;
-	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -222,8 +226,8 @@ gboolean
 hal_hibernate (void)
 {
 	gint ret;
-	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -254,15 +258,14 @@ gboolean
 hal_setlowpowermode (gboolean set)
 {
 	gint ret;
-	DBusGConnection *system_connection;
-	DBusGProxy *hal_proxy;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
-	gchar *formfactor;
+	gchar *formfactor = NULL;
 
 	/* always present */
 	hal_device_get_string ("/org/freedesktop/Hal/devices/computer", "system.formfactor", &formfactor);
-/* TODO: DO NOT NEED after 0.5.5 is released */
 	if (!formfactor) {
 		g_debug ("system.formfactor not set! If you have PMU, please update HAL to get the latest fixes.");
 		return FALSE;
@@ -300,7 +303,7 @@ hal_setlowpowermode (gboolean set)
 gint
 hal_get_brightness_steps (void)
 {
-	gchar **names;
+	gchar **names = NULL;
 	gint levels = 0;
 	hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {

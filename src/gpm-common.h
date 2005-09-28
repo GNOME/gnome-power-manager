@@ -56,12 +56,6 @@
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
-#if !defined(HAVE_LIBNOTIFY)
-#define NOTIFY_URGENCY_CRITICAL		1
-#define NOTIFY_URGENCY_NORMAL		2
-#define NOTIFY_URGENCY_LOW		3
-#endif
-
 typedef enum {
 	ACTION_NOTHING,
 	ACTION_WARNING,
@@ -135,5 +129,11 @@ gchar *convert_powerdevice_to_string (gint powerDevice);
 gchar *get_chargestate_string (GenericObject *slotData);
 void create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice);
 GString *get_time_string (GenericObject *slotData);
+gboolean run_gconf_script (const char *path);
+
+gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
+GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
+GenericObject *genericobject_add (GPtrArray *parray, const gchar *udi);
+
 
 #endif	/* _COMMON_H */

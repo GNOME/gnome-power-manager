@@ -52,6 +52,8 @@ gnome_power_preferences_SOURCES =			\
 	glibhal-extras.c				\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
+	gpm-libnotify.h					\
+	gpm-libnotify.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
@@ -78,10 +80,14 @@ gnome_power_manager_SOURCES =				\
 	glibhal-callback.c				\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
+	gpm-dbus-server.h				\
+	gpm-dbus-server.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
+	gpm-libnotify.h					\
+	gpm-libnotify.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-notification.h				\

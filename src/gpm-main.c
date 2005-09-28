@@ -36,272 +36,26 @@
 #include <gnome.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
-#if HAVE_LIBNOTIFY
-#include <libnotify/notify.h>
-#endif
 
-#include <libhal.h>
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
 #include "gpm-idle.h"
 #include "gpm-screensaver.h"
+#include "gpm-libnotify.h"
+#include "gpm-dbus-server.h"
 
 #include "dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
 #include "glibhal-extras.h"
-
-typedef struct GPMObject GPMObject;
-typedef struct GPMObjectClass GPMObjectClass;
-GType gpm_object_get_type (void);
-struct GPMObject {GObject parent;};
-struct GPMObjectClass {GObjectClass parent;};
-GPMObject *obj;
-
-enum
-{
-	MAINS_CHANGED,
-	ACTION_ABOUT_TO_HAPPEN,
-	PERFORMING_ACTION,
-	LAST_SIGNAL
-};
-static guint signals[LAST_SIGNAL] = { 0 };
-
-#define GPM_TYPE_OBJECT			(gpm_object_get_type ())
-#define GPM_OBJECT(object)		(G_TYPE_CHECK_INSTANCE_CAST ((object), GPM_TYPE_OBJECT, GPMObject))
-#define GPM_OBJECT_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GPM_TYPE_OBJECT, GPMObjectClass))
-#define GPM_IS_OBJECT(object)		(G_TYPE_CHECK_INSTANCE_TYPE ((object), GPM_TYPE_OBJECT))
-#define GPM_IS_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GPM_TYPE_OBJECT))
-#define GPM_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_OBJECT, GPMObjectClass))
-G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
-
-gboolean gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error);
-gboolean gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
-gboolean gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error);
-gboolean gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error);
-gboolean gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error);
-gboolean gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error);
-gboolean gpm_object_action_register (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
-gboolean gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error);
-
 #include "gnome-power-glue.h"
-
-static void gpm_object_init (GPMObject *obj) { }
-static void gpm_object_class_init (GPMObjectClass *klass)
-{
-	signals[MAINS_CHANGED] =
-		g_signal_new ("mains_status_changed",
-			G_OBJECT_CLASS_TYPE (klass),
-			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-			0, NULL, NULL,
-			g_cclosure_marshal_VOID__BOOLEAN,
-			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals[ACTION_ABOUT_TO_HAPPEN] =
-		g_signal_new ("action_about_to_happen",
-			G_OBJECT_CLASS_TYPE (klass),
-			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-			0, NULL, NULL,
-			g_cclosure_marshal_VOID__BOOLEAN,
-			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals[PERFORMING_ACTION] =
-		g_signal_new ("performing_action",
-			G_OBJECT_CLASS_TYPE (klass),
-			G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
-			0, NULL, NULL,
-			g_cclosure_marshal_VOID__BOOLEAN,
-			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-}
-
-/* static */
-#if !defined(GLIBHAL)
-static LibHalContext *hal_ctx;
-#endif
 
 /* no need for IPC with globals */
 StateData state_data;
 GPtrArray *objectData = NULL;
 GPtrArray *registered = NULL;
 gboolean isVerbose;
-
-gboolean
-gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_is_user_idle ()");
-	return TRUE;
-}
-
-/** Find out if we are on battery power
- *
- *  @param  ret			The returned data value
- *  @return			Success.
- */
-gboolean
-gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_debug ("gpm_object_is_on_mains ()");
-	*ret = state_data.onBatteryPower;
-	return TRUE;
-}
-
-/** Find out if we are on ac power
- *
- *  @param  ret			The returned data value
- *  @return			Success.
- */
-gboolean
-gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_debug ("gpm_object_is_on_ac ()");
-	*ret = !state_data.onBatteryPower & !state_data.onUPSPower;
-	return TRUE;
-}
-
-/** Find out if we are on ups power
- *
- *  @param  ret			The returned data value
- *  @return			Success.
- */
-gboolean
-gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
-{
-	g_debug ("gpm_object_is_on_ups ()");
-	*ret = state_data.onUPSPower;
-	return TRUE;
-}
-
-/** emits org.gnome.GnomePowerManager.actionAboutToHappen
- *
- */
-gboolean
-gpm_emit_about_to_happen (const gint value)
-{
-	g_signal_emit (obj, signals[ACTION_ABOUT_TO_HAPPEN], 0, value);
-	return TRUE;
-}
-
-/** emits org.gnome.GnomePowerManager.performingAction
- *
- */
-gboolean
-gpm_emit_performing_action (const gint value)
-{
-	g_signal_emit (obj, signals[PERFORMING_ACTION], 0, value);
-	return TRUE;
-}
-
-/** emits org.gnome.GnomePowerManager.mainsStatusChanged
- *
- */
-gboolean
-gpm_emit_mains_changed (const gboolean value)
-{
-	g_signal_emit (obj, signals[MAINS_CHANGED], 0, value);
-	return TRUE;
-}
-
-/*
- * I know these don't belong here, but I have a problem:
- *
- * I need a way to get the connection name, like we used to using
- *    dbus_message_get_sender (message);
- * but glib bindings abstract away the message.
- * walters to fix :-)
- */
-gboolean
-gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_ack (%i)", value);
-	return TRUE;
-}
-
-gboolean
-gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_nack (%i, '%s')", value, reason);
-	return TRUE;
-}
-
-gboolean
-gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_action_register (%i, '%s')", value, name);
-	return TRUE;
-}
-
-gboolean
-gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error)
-{
-	g_warning ("STUB: gpm_object_action_unregister (%i)", value);
-	return TRUE;
-}
-
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
- */
-gboolean
-check_gscreensaver_lock (void)
-{
-	GConfClient *client = gconf_client_get_default ();
-	gboolean should_lock;
-	should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
-	if (!should_lock)
-		return FALSE;
-	gscreensaver_lock ();
-	return TRUE;
-}
-
-/** Convenience function to call libnotify
- *
- *  @param  content		The content text, e.g. "Battery low"
- *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
- */
-static void
-use_libnotify (const char *content, const int urgency)
-{
-#if HAVE_LIBNOTIFY
-	NotifyHandle *n;
-	NotifyIcon *icon;
-	NotifyHints *hints;
-	char *summary;
-	gint x, y;
-	gboolean use_hints;
-	use_hints = get_icon_position (&x, &y);
-	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
-	hints = NULL;
-	if (use_hints) {
-		hints = notify_hints_new();
-		notify_hints_set_int (hints, "x", x);
-		notify_hints_set_int (hints, "y", y);
-		if (urgency == NOTIFY_URGENCY_CRITICAL)
-			notify_hints_set_string (hints, "sound-file", GPM_DATA "critical.wav");
-		else
-			notify_hints_set_string (hints, "sound-file", GPM_DATA "normal.wav");
-	}
-	summary = NICENAME;
-	n = notify_send_notification (NULL, /* replaces nothing 	*/
-			   NULL,
-			   urgency,
-			   summary, content,
-			   icon, /* no icon 			*/
-			   TRUE, NOTIFY_TIMEOUT,
-			   hints,
-			   NULL, /* no user data 		*/
-			   0);   /* no actions 			*/
-	notify_icon_destroy(icon);
-	if (!n)
-		g_warning ("failed to send notification (%s)", content);
-#else
-	GtkWidget *widget;
-	widget = gnome_message_box_new (content,
-			GNOME_MESSAGE_BOX_WARNING,
-			GNOME_STOCK_BUTTON_OK,
-			NULL);
-	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
-	gtk_widget_show (widget);
-#endif
-}
 
 /** Gets policy from gconf
  *
@@ -311,11 +65,12 @@ use_libnotify (const char *content, const int urgency)
 gint
 get_policy_string (const gchar *gconfpath)
 {
-	GConfClient *client;
-	gchar *valuestr;
+	GConfClient *client = NULL;
+	gchar *valuestr = NULL;
 	gint value;
 
-	g_return_val_if_fail (gconfpath, -1);
+	/* assertion checks */
+	g_assert (gconfpath);
 
 	client = gconf_client_get_default ();
 	valuestr = gconf_client_get_string (client, gconfpath, NULL);
@@ -380,8 +135,7 @@ dbus_action (gint action)
 				       "from occurring.\n\n"
 				       "The explanation given is: %s"),
 				     regprog->appName->str, actionstr, regprog->reason->str);
-		g_message ("%s", gs->str);
-		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		g_string_free (gs, TRUE);
 		retval = FALSE;
 		goto unref;
@@ -392,8 +146,7 @@ dbus_action (gint action)
 		g_string_printf (gs, _("The program '%s' has not returned data that "
 				     "is preventing the %s from occurring."),
 				     regprog->appName->str, actionstr);
-		g_message ("%s", gs->str);
-		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		g_string_free (gs, TRUE);
 		retval = FALSE;
 		goto unref;
@@ -401,23 +154,6 @@ dbus_action (gint action)
 #endif
 	gpm_emit_performing_action (action);
 	return TRUE;
-}
-
-static void
-run_gconf_script (const char *path)
-{
-	GConfClient *client;
-	gchar *command;
-	g_return_if_fail (path);
-	client = gconf_client_get_default ();
-	command = gconf_client_get_string (client, path, NULL);
-	if (command) {
-		g_debug ("Executing '%s'", command);
-		if (!g_spawn_command_line_async (command, NULL))
-			g_warning ("Couldn't execute '%s'.", command);
-		g_free (command);
-	} else
-		g_warning ("'%s' is missing!", path);
 }
 
 /** Do the action dictated by policy from gconf
@@ -442,11 +178,11 @@ action_policy_do (gint policy_number)
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND && dbus_action (GPM_DBUS_SUSPEND)) {
 		g_debug ("*ACTION* Suspend");
-		check_gscreensaver_lock ();
+		gscreensaver_lock_check ();
 		hal_suspend (0);
 	} else if (policy_number == ACTION_HIBERNATE && dbus_action (GPM_DBUS_HIBERNATE)) {
 		g_debug ("*ACTION* Hibernate");
-		check_gscreensaver_lock ();
+		gscreensaver_lock_check ();
 		hal_hibernate ();
 	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Shutdown");
@@ -503,14 +239,15 @@ static void
 update_state_logic (GPtrArray *parray, gboolean coldplug)
 {
 	gint a;
-	GenericObject *slotData;
+	GenericObject *slotData = NULL;
 	/* set up temp. state */
 	StateData state_datanew;
 	gboolean hasBatteries;
 	gboolean hasAcAdapter;
 	gint policy;
 
-	g_return_if_fail (parray);
+	/* assertion checks */
+	g_assert (parray);
 
 	state_datanew.onBatteryPower = FALSE;
 	state_datanew.onUPSPower = FALSE;
@@ -555,7 +292,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-					use_libnotify (_("AC Adapter has been removed"), NOTIFY_URGENCY_NORMAL);
+					libnotify_event (_("AC Adapter has been removed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
 				else
 					action_policy_do (policy);
 				}
@@ -576,78 +313,25 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 static void
 gpm_exit (void)
 {
+	gint a;
 	g_debug ("Quitting!");
+
+	/* free objectData */
+	for (a=0;a<objectData->len;a++)
+		g_free (g_ptr_array_index (objectData, a));
+	g_ptr_array_free (objectData, TRUE);
+
+	/* free registered */
+	for (a=0;a<registered->len;a++)
+		g_free (g_ptr_array_index (registered, a));
+	g_ptr_array_free (registered, TRUE);
+
+	/* free glibhal callbacks */
+	glibhal_callback_shutdown ();
+
+	/* free icon */
 	gpn_icon_destroy ();
 	exit (0);
-}
-
-/** Finds a device from the objectData table
- *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
- */
-static gint
-find_udi_parray_index (GPtrArray *parray, const char *udi)
-{
-	GenericObject *slotData;
-	gint a;
-
-	g_return_val_if_fail (parray, -1);
-	g_return_val_if_fail (udi, -1);
-
-	for (a=0;a<parray->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		g_return_val_if_fail (slotData, -1);
-		if (strcmp (slotData->udi, udi) == 0)
-			return a;
-	}
-	return -1;
-}
-
-/** Finds a device from the objectData table
- *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
- */
-static GenericObject *
-genericobject_find (GPtrArray *parray, const char *udi)
-{
-	gint a;
-
-	g_return_val_if_fail (parray, NULL);
-	g_return_val_if_fail (udi, NULL);
-
-	a = find_udi_parray_index (parray, udi);
-	if (a != -1)
-		return (GenericObject *) g_ptr_array_index (parray, a);
-	return NULL;
-}
-
-/** Adds a device to the objectData table *IF DOES NOT EXIST*
- *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
- *  @return			TRUE if we added to the table
- */
-static GenericObject *
-genericobject_add (GPtrArray *parray, const char *udi)
-{
-	GenericObject *slotData;
-	gint a;
-
-	g_return_val_if_fail (parray, NULL);
-	g_return_val_if_fail (udi, NULL);
-
-	a = find_udi_parray_index (parray, udi);
-	if (a != -1)
-		return NULL;
-
-	slotData = g_new (GenericObject, 1);
-	strcpy (slotData->udi, udi);
-	slotData->powerDevice = POWER_UNKNOWN;
-	slotData->slot = a;
-	g_ptr_array_add (parray, (gpointer) slotData);
-	return slotData;
 }
 
 /** Adds a ac_adapter device. Also sets up properties on cached object
@@ -657,18 +341,19 @@ genericobject_add (GPtrArray *parray, const char *udi)
 static void
 add_ac_adapter (const gchar *udi)
 {
-	GenericObject *slotData;
-	g_return_if_fail (udi);
-	slotData = genericobject_add (objectData, udi);
+	GenericObject *slotData = NULL;
 
-#if defined(GLIBHAL)
-	/* register this with HAL so we get PropertyModified events */
-	glibhal_watch_add_device_property_modified (udi);
-#endif
+	/* assertion checks */
+	g_assert (udi);
+
+	slotData = genericobject_add (objectData, udi);
 	if (!slotData) {
 		g_warning ("Cannot add '%s' object to table!", udi);
 		return;
 	}
+
+	/* register this with HAL so we get PropertyModified events */
+	glibhal_watch_add_device_property_modified (udi);
 
 	slotData->powerDevice = POWER_AC_ADAPTER;
 	slotData->percentageCharge = 0;
@@ -688,7 +373,8 @@ read_battery_data (GenericObject *slotData)
 {
 	gint tempval;
 
-	g_return_if_fail (slotData);
+	/* assertion checks */
+	g_assert (slotData);
 
 	/* initialise to known defaults */
 	slotData->minutesRemaining = 0;
@@ -722,22 +408,18 @@ read_battery_data (GenericObject *slotData)
 static void
 add_battery (const gchar *udi)
 {
-	gchar *type;
-	gchar *device;
-	GenericObject *slotData;
+	gchar *type = NULL;
+	gchar *device = NULL;
+	GenericObject *slotData = NULL;
 
-	g_return_if_fail (udi);
+	/* assertion checks */
+	g_assert (udi);
 
 	slotData = genericobject_add (objectData, udi);
 	if (!slotData) {
 		g_debug ("Cannot add '%s' object to table!", udi);
 		return;
 	}
-
-#if defined(GLIBHAL)
-	/* register this with HAL so we get PropertyModified events */
-	glibhal_watch_add_device_property_modified (udi);
-#endif
 
 	/* PMU/ACPI batteries might be missing */
 	hal_device_get_bool (udi, "battery.present", &slotData->present);
@@ -748,6 +430,10 @@ add_battery (const gchar *udi)
 		g_warning ("Battery %s has no type!", udi);
 		return;
 	}
+
+	/* register this with HAL so we get PropertyModified events */
+	glibhal_watch_add_device_property_modified (udi);
+
 	slotData->powerDevice = convert_haltype_to_powerdevice (type);
 	g_free (type);
 
@@ -765,11 +451,11 @@ static void
 coldplug_batteries (void)
 {
 	gint i;
-	gchar **device_names;
+	gchar **device_names = NULL;
 	/* devices of type battery */
 	hal_find_device_capability ("battery", &device_names);
 	if (device_names == NULL)
-		g_debug (_("Couldn't obtain list of batteries"));
+		g_debug ("Couldn't obtain list of batteries");
 	for (i = 0; device_names[i]; i++)
 		add_battery (device_names[i]);
 	hal_free_capability (device_names);
@@ -782,11 +468,11 @@ static void
 coldplug_acadapter (void)
 {
 	gint i;
-	gchar **device_names;
+	gchar **device_names = NULL;
 	/* devices of type ac_adapter */
 	hal_find_device_capability ("ac_adapter", &device_names);
 	if (device_names == NULL)
-		g_debug (_("Couldn't obtain list of ac_adapters"));
+		g_debug ("Couldn't obtain list of ac_adapters");
 	for (i = 0; device_names[i]; i++)
 		add_ac_adapter (device_names[i]);
 	hal_free_capability (device_names);
@@ -799,7 +485,7 @@ static void
 coldplug_buttons (void)
 {
 	gint i;
-	gchar **device_names;
+	gchar **device_names = NULL;
 	/* devices of type button */
 	hal_find_device_capability ("button", &device_names);
 	for (i = 0; device_names[i]; i++) {
@@ -807,9 +493,7 @@ coldplug_buttons (void)
 		 * We register this here, as buttons are not present
 		 * in object data, and do not need to be added manually.
 		*/
-#if defined(GLIBHAL)
 		glibhal_watch_add_device_condition (device_names[i]);
-#endif
 	}
 	hal_free_capability (device_names);
 }
@@ -821,15 +505,13 @@ coldplug_buttons (void)
  *  @param  udi			UDI
  */
 static void
-#if defined(GLIBHAL)
 hal_device_removed (const char *udi)
-#else
-device_removed (LibHalContext *ctx, const char *udi)
-#endif
 {
 	int a;
 
-	g_return_if_fail (udi);
+	/* assertion checks */
+	g_assert (udi);
+
 	g_debug ("hal_device_removed: udi=%s", udi);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
@@ -842,9 +524,8 @@ device_removed (LibHalContext *ctx, const char *udi)
 	}
 	g_debug ("Removed '%s'", udi);
 	g_ptr_array_remove_index (objectData, a);
-#if defined(GLIBHAL)
+	/* remove watch */
 	glibhal_watch_remove_device_property_modified (udi);
-#endif
 	/* our state has changed, update */
 	update_state_logic (objectData, FALSE);
 	gpn_icon_update ();
@@ -858,14 +539,11 @@ device_removed (LibHalContext *ctx, const char *udi)
  */
 
 static void
-#if defined(GLIBHAL)
 hal_device_new_capability (const char *udi, const char *capability)
-#else
-device_new_capability (LibHalContext *ctx, const char *udi, const char *capability)
-#endif
 {
-	g_return_if_fail (udi);
-	g_return_if_fail (capability);
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (capability);
 	g_debug ("hal_device_new_capability: udi=%s, capability=%s", udi, capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
@@ -888,14 +566,15 @@ device_new_capability (LibHalContext *ctx, const char *udi, const char *capabili
 static void
 notify_user_low_batt (GenericObject *slotData, gint newCharge)
 {
-	GConfClient *client;
+	GConfClient *client = NULL;
 	gint lowThreshold;
 	gint criticalThreshold;
-	GString *gs;
-	GString *remaining;
-	gchar *device;
+	GString *gs = NULL;
+	GString *remaining = NULL;
+	gchar *device = NULL;
 
-	g_return_if_fail (slotData);
+	/* assertion checks */
+	g_assert (slotData);
 
 	if (!slotData->isDischarging)
 		return;
@@ -912,8 +591,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			gs = g_string_new ("");
 			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"),
 				device, newCharge, remaining->str);
-			g_message ("%s", gs->str);
-			use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
 			g_string_free (gs, TRUE);
 			g_string_free (remaining, TRUE);
 		} else
@@ -925,8 +603,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		gs = g_string_new ("");
 		g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"),
 			device, newCharge, remaining->str);
-		g_message ("%s", gs->str);
-		use_libnotify (gs->str, NOTIFY_URGENCY_CRITICAL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		g_string_free (gs, TRUE);
 		g_string_free (remaining, TRUE);
 	}
@@ -939,22 +616,19 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
  *  @param  key                 Key of property
  */
 static void
-#if defined(GLIBHAL)
 hal_device_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
-#else
-property_modified (LibHalContext *ctx, const char *udi, const char *key,
-		   dbus_bool_t is_removed, dbus_bool_t is_added)
-#endif
 {
-	GenericObject *slotData;
+	GenericObject *slotData = NULL;
 	GenericObject slotDataVirt;
 	gboolean updateState;
 	gint oldCharge;
 	gint newCharge;
 
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (key);
+
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, a=%i, r=%i", udi, key, is_added, is_removed);
-	g_return_if_fail (udi);
-	g_return_if_fail (key);
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed||is_added)
@@ -1039,23 +713,20 @@ property_modified (LibHalContext *ctx, const char *udi, const char *key,
  *  @param  message             D-BUS message with parameters
  */
 static void
-#if defined(GLIBHAL)
 hal_device_condition (const char *udi,
 		const char *condition_name,
 		const char *condition_details)
-#else
-device_condition (LibHalContext *ctx,
-		  const char *udi,
-		  const char *condition_name,
-		  const char *condition_details)
-#endif
 {
-	gchar *type;
+	gchar *type = NULL;
 	gint policy;
 	gboolean value;
 
+	/* assertion checks */
+	g_assert (udi);
+	g_assert (condition_name);
+	g_assert (condition_details);
+
 	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s", udi, condition_name, condition_details);
-	g_return_if_fail (udi);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
 		hal_device_get_string (udi, "button.type", &type);
@@ -1063,13 +734,13 @@ device_condition (LibHalContext *ctx,
 		if (strcmp (type, "power") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_power");
 			if (policy == ACTION_WARNING)
-				use_libnotify (_("Power button has been pressed"), NOTIFY_URGENCY_NORMAL);
+				libnotify_event (_("Power button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			if (policy == ACTION_WARNING)
-				use_libnotify (_("Sleep button has been pressed"), NOTIFY_URGENCY_NORMAL);
+				libnotify_event (_("Sleep button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
@@ -1078,9 +749,9 @@ device_condition (LibHalContext *ctx,
 			if (value) {
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				if (policy == ACTION_WARNING)
-			use_libnotify (_("Lid has been opened"), NOTIFY_URGENCY_NORMAL);
+					libnotify_event (_("Lid has been opened"), LIBNOTIFY_URGENCY_NORMAL, NULL);
 				else
-			action_policy_do (policy);
+					action_policy_do (policy);
 			}
 		} else
 			g_warning ("Button '%s' unrecognised", type);
@@ -1114,23 +785,19 @@ int
 main (int argc, char *argv[])
 {
 	gint a;
-	GMainLoop *loop;
-	GConfClient *client;
-	GnomeClient *master;
+	GMainLoop *loop = NULL;
+	GConfClient *client = NULL;
+	GnomeClient *master = NULL;
 	GnomeClientFlags flags;
-	DBusGConnection *system_connection;
-	DBusGConnection *session_connection;
+	DBusGConnection *system_connection = NULL;
+	DBusGConnection *session_connection = NULL;
 	gboolean no_daemon = FALSE;
-#if !defined(GLIBHAL)
-	DBusError error;
-	DBusConnection *connsystem;
-#endif
 
 	g_type_init ();
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
-	dbus_g_object_type_install_info (GPM_TYPE_OBJECT, &dbus_glib_gpm_object_object_info);
+	dbus_g_object_type_install_info (gpm_object_get_type (), &dbus_glib_gpm_object_object_info);
 
 	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
@@ -1178,10 +845,9 @@ main (int argc, char *argv[])
 	}
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
 
-#if HAVE_LIBNOTIFY
-	if (!notify_glib_init(NICENAME, NULL))
+	/* Initialise libnotify, if compiled in. */
+	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
-#endif
 
 	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
 	g_print (_("Report bugs to richard@hughsie.com\n"));
@@ -1198,46 +864,17 @@ main (int argc, char *argv[])
 	}
 
 	loop = g_main_loop_new (NULL, FALSE);
-	obj = g_object_new (GPM_TYPE_OBJECT, NULL);
-	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
-
-#if !defined(GLIBHAL)
-	/* convert to legacy DBusConnection */
-	connsystem = dbus_g_connection_get_connection (system_connection);
-	dbus_error_init (&error);
-
-	if (!(hal_ctx = libhal_ctx_new ())) {
-		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
-		g_warning ("HAL error: libhal_ctx_new");
-		exit (1);
-	}
-	if (!libhal_ctx_set_dbus_connection (hal_ctx, connsystem)) {
-		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
-		g_warning ("HAL error: libhal_ctx_set_dbus_connection: %s: %s", error.name, error.message);
-		exit (1);
-	}
-	if (!libhal_ctx_init (hal_ctx, &error)) {
-		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
-		g_warning ("HAL error: libhal_ctx_init: %s: %s", error.name, error.message);
-		exit (1);
-	}
-	libhal_ctx_set_device_property_modified (hal_ctx, property_modified);
-	libhal_ctx_set_device_removed (hal_ctx, device_removed);
-	libhal_ctx_set_device_new_capability (hal_ctx, device_new_capability);
-	libhal_ctx_set_device_condition (hal_ctx, device_condition);
-	/* bad, bad - we have to check and filter */
-	libhal_device_property_watch_all (hal_ctx, &error);
-#else
-
+	/* register dbus service */
+	gpm_object_register ();
+	/* check HAL is running */
 	if (!is_hald_running ()) {
-		use_libnotify ("GNOME Power Manager cannot connect to HAL!", NOTIFY_URGENCY_CRITICAL);
-		g_warning ("HAL error: is_hald_running FALSE!");
+		libnotify_event (_("GNOME Power Manager cannot connect to HAL!"), LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		exit (1);
 	}
 
+	/* check we have PM capability */
 	if (!hal_pm_check ()) {
-		use_libnotify ("HAL does not have PowerManagement capability!", NOTIFY_URGENCY_CRITICAL);
-		g_warning ("HAL error: hal_pm_check FALSE!");
+		libnotify_event (_("HAL does not have PowerManagement capability"), LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		exit (1);
 	}
 
@@ -1247,7 +884,6 @@ main (int argc, char *argv[])
 	glibhal_method_device_new_capability (hal_device_new_capability);
 	glibhal_method_device_property_modified (hal_device_property_modified);
 	glibhal_method_device_condition (hal_device_condition);
-#endif
 
 	objectData = g_ptr_array_new ();
 	registered = g_ptr_array_new ();
@@ -1265,25 +901,6 @@ main (int argc, char *argv[])
 	g_timeout_add (60*1000, update_idle_function, NULL);
 
 	g_main_loop_run (loop);
-
-	/* free objectData */
-	for (a=0;a<objectData->len;a++)
-		g_free (g_ptr_array_index (objectData, a));
-	g_ptr_array_free (objectData, TRUE);
-
-	/* free registered */
-	for (a=0;a<registered->len;a++)
-		g_free (g_ptr_array_index (registered, a));
-	g_ptr_array_free (registered, TRUE);
-
-#if !defined(GLIBHAL)
-	/* free all old HAL stuff */
-	dbus_error_init (&error);
-	libhal_ctx_shutdown (hal_ctx, &error);
-	libhal_ctx_free (hal_ctx);
-#else
-	glibhal_callback_shutdown ();
-#endif
 
 	gpm_exit ();
 	return 0;

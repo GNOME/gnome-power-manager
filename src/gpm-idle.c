@@ -52,6 +52,9 @@ cpudata_get_values (cpudata *data)
 	char str[80];
 	FILE *fd;
 
+	/* assertion checks */
+	g_assert (data);
+
 	fd = fopen("/proc/stat", "r");
 	if (!fd)
 		return FALSE;
@@ -72,6 +75,11 @@ cpudata_get_values (cpudata *data)
 static void
 cpudata_diff (cpudata *data2, cpudata *data1, cpudata *diff)
 {
+	/* assertion checks */
+	g_assert (data1);
+	g_assert (data2);
+	g_assert (diff);
+
 	diff->user = data1->user - data2->user;
 	diff->nice = data1->nice - data2->nice;
 	diff->system = data1->system - data2->system;
@@ -85,6 +93,10 @@ cpudata_diff (cpudata *data2, cpudata *data1, cpudata *diff)
 static void
 cpudata_copy (cpudata *to, cpudata *from)
 {
+	/* assertion checks */
+	g_assert (to);
+	g_assert (from);
+
 	to->user = from->user;
 	to->nice = from->nice;
 	to->system = from->system;
@@ -103,6 +115,9 @@ cpudata_copy (cpudata *to, cpudata *from)
 static void
 cpudata_normalize (cpudata *data)
 {
+	/* assertion checks */
+	g_assert (data);
+
 	double factor = 100.0 / (double) data->total;
 	data->user = (double) data->user * factor;
 	data->nice = (double) data->nice * factor;
@@ -147,14 +162,14 @@ cpu_update_data (void)
  *  @param  percentage		The percentage load we are allowed "at idle"
  */
 gboolean
-set_cpu_idle_limit (const int percentage)
+set_cpu_idle_limit (const gint percentage)
 {
 	cpu_background_load_data = percentage;
 	return TRUE;
 }
 
 gboolean
-get_is_cpu_idle ()
+get_is_cpu_idle (void)
 {
 	return isUserIdle;
 }
