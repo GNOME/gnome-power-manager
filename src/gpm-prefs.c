@@ -158,6 +158,23 @@ gtk_set_check (const char *widgetname, gboolean set)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), set);
 }
 
+/** Modifies a GTK Label
+ *
+ *  @param  widgetname		the libglade widget name
+ *  @param  label		The new text
+ */
+static void
+gtk_set_label (const char *widgetname, const gchar *label)
+{
+	GtkWidget *widget = NULL;
+
+	/* assertion checks */
+	g_assert (widgetname);
+
+	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	gtk_label_set_markup (GTK_LABEL (widget), label);
+}
+
 /** Shows/hides/renames controls based on hasData, i.e. what hardware is in the system.
  *
  */
@@ -615,6 +632,50 @@ combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *
 	g_signal_connect (G_OBJECT (widget), "changed", G_CALLBACK (callback_combo_changed), NULL);
 }
 
+void
+refresh_info_page (void)
+{
+	gchar *returnstring;
+
+	/* set vendor */
+	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+				"smbios.system.manufacturer",
+				&returnstring)) {
+		gtk_set_label ("label_info_vendor", returnstring);
+		g_free (returnstring);
+	} else
+		gtk_set_visibility ("label_info_vendor", FALSE);
+
+	/* set model */
+	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+				"smbios.system.product",
+				&returnstring)) {
+		gtk_set_label ("label_info_model", returnstring);
+		g_free (returnstring);
+	} else
+		gtk_set_visibility ("label_info_model", FALSE);
+
+	/* set formfactor */
+	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+				"smbios.chassis.type",
+				&returnstring)) {
+		gtk_set_label ("label_info_formfactor", returnstring);
+		g_free (returnstring);
+	} else
+		gtk_set_visibility ("label_info_formfactor", FALSE);
+
+	/* Hardcoded for now */
+	gtk_set_check ("checkbutton_info_suspend", TRUE);
+	gtk_set_check ("checkbutton_info_hibernate", TRUE);
+	gtk_set_check ("checkbutton_info_cpufreq", FALSE);
+	gtk_set_check ("checkbutton_info_lowpowermode", hal_is_laptop ());
+
+	/* TODO */
+	gtk_set_visibility ("frame_info_batteries", FALSE);
+	gtk_set_visibility ("frame_info_ups", FALSE);
+
+}
+
 /** Main program
  *
  */
@@ -801,6 +862,10 @@ main (int argc, char **argv)
 	gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 
+	/* set up info page */
+	refresh_info_page ();
+
+	/* main loop */
 	gtk_main ();
 	g_ptr_array_free (ptrarr_button_power, TRUE);
 	g_ptr_array_free (ptrarr_button_suspend, TRUE);
