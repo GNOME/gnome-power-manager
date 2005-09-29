@@ -34,6 +34,30 @@
 
 #define DIM_INTERVAL		20
 
+/** Returns true if system.formfactor == "laptop"
+ *
+ */
+gboolean
+hal_is_laptop (void)
+{
+	gboolean ret = TRUE;
+	gchar *formfactor = NULL;
+
+	/* always present */
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer", "system.formfactor", &formfactor);
+	if (!formfactor) {
+		g_debug ("system.formfactor not set! If you have PMU, please update HAL to get the latest fixes.");
+		/* no need to free */
+		return FALSE;
+	}
+	if (strcmp (formfactor, "laptop") != 0) {
+		g_debug ("This machine is not identified as a laptop. system.formfactor is %s.", formfactor);
+		ret = FALSE;
+	}
+	g_free (formfactor);
+	return ret;
+}
+
 /** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
  *
  *  @param  brightness		LCD Brightness to set to
@@ -263,18 +287,9 @@ hal_setlowpowermode (gboolean set)
 	gboolean retval;
 	gchar *formfactor = NULL;
 
-	/* always present */
-	hal_device_get_string ("/org/freedesktop/Hal/devices/computer", "system.formfactor", &formfactor);
-	if (!formfactor) {
-		g_debug ("system.formfactor not set! If you have PMU, please update HAL to get the latest fixes.");
+	/* abort if we are not a "qualified" laptop */
+	if (!hal_is_laptop ())
 		return FALSE;
-	}
-	if (strcmp (formfactor, "laptop") != 0) {
-		g_debug ("This machine is not identified as a laptop. system.formfactor is %s.", formfactor);
-		g_free (formfactor);
-		return FALSE;
-	}
-	g_free (formfactor);
 
 	dbus_get_system_connection (&system_connection);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
