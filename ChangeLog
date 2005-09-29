@@ -13,6 +13,12 @@
 	* src/preferences.glade: Add the new "Information" tab with system
 	information. This is all very immature, and likely to change.
 
+	* src/gpm-prefs.c (combo_setup_dynamic), 
+	src/gpm-main.c (get_policy_string): Make sure we check for a null
+	gconf return string. This was reported by Myk Melez <myk@mozilla.org>
+	where the gconf schema installation was incorrect. This means we 
+	shouldn't trigger the assert in gpm_common.c (convert_string_to_policy).
+
 2005-09-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-libnotify.{c|h}: Factor out the notification stuff into

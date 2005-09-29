@@ -614,8 +614,8 @@ combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *
 	/* we have to get the gconf string, and convert it into a policy option */
 	policyoption = gconf_client_get_string (client, policypath, NULL);
 	if (!policyoption) {
-		g_warning ("gconf_client_get_string for widget '%s' failed (policy='%s')!!", widgetname, policypath);
-		return;
+		g_warning ("Cannot find %s, maybe a bug in the gconf schema!", gconfpath);
+		return 0;
 	}
 
 	/* select the correct entry, i.e. map the policy to virtual mapping */
@@ -636,6 +636,7 @@ void
 refresh_info_page (void)
 {
 	gchar *returnstring;
+	GtkWidget *widget = NULL;
 
 	/* set vendor */
 	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
@@ -665,10 +666,21 @@ refresh_info_page (void)
 		gtk_set_visibility ("label_info_formfactor", FALSE);
 
 	/* Hardcoded for now */
-	gtk_set_check ("checkbutton_info_suspend", TRUE);
-	gtk_set_check ("checkbutton_info_hibernate", TRUE);
-	gtk_set_check ("checkbutton_info_cpufreq", FALSE);
-	gtk_set_check ("checkbutton_info_lowpowermode", hal_is_laptop ());
+	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_suspend");
+	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_hibernate");
+	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+
+	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_cpufreq");
+	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+
+	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_lowpowermode");
+	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), hal_is_laptop ());
 
 	/* TODO */
 	gtk_set_visibility ("frame_info_batteries", FALSE);

@@ -74,6 +74,10 @@ get_policy_string (const gchar *gconfpath)
 
 	client = gconf_client_get_default ();
 	valuestr = gconf_client_get_string (client, gconfpath, NULL);
+	if (!valuestr) {
+		g_warning ("Cannot find %s, maybe a bug in the gconf schema!", gconfpath);
+		return 0;
+	}
 	value = convert_string_to_policy (valuestr);
 	g_free (valuestr);
 	return value;
