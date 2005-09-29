@@ -1,3 +1,18 @@
+2005-09-29  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.2.5.3
+
+	* src/glibhal-extras.c (hal_is_laptop): Factor out this code into it's
+	own function so we can use it in a different way...
+
+	* src/gpm-prefs.c (gtk_set_label): Make a simple wrapper...
+
+	* src/gpm-prefs.c (refresh_info_page) Make a function to populate the
+	new "Information" tab present in the glade file.
+
+	* src/preferences.glade: Add the new "Information" tab with system
+	information. This is all very immature, and likely to change.
+
 2005-09-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-libnotify.{c|h}: Factor out the notification stuff into
