@@ -38,6 +38,8 @@ double		loadpercentage;
 int		cpu_background_load_data;
 gboolean	isUserIdle;
 
+gboolean	disable_gs = TRUE;
+
 /* 
  * The values are:
  * user    -  Time spent in user space (for all processes)
@@ -177,6 +179,10 @@ gboolean
 update_idle_function (gpointer data)
 {
 	cpu_update_data ();
-	gscreensaver_get_idle ();
+	/* only poll gnome screensaver if we succeeded last time */
+	if (disable_gs && !gscreensaver_get_idle ()) {
+		g_warning ("getIdleTime polling disabled");
+		disable_gs = FALSE;
+	}
 	return TRUE;
 }
