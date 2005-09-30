@@ -8,6 +8,13 @@
 	* src/gpm-libnotify.c: Added back (in a better way) the 
 	libnotify-points-to-icon feature. 
 
+	* src/gpm-prefs.c: Turn on DPMS if not enabled at start.
+
+	* src/gpm-screensaver.c: Attempt to get return val right.
+
+	* src/gpm-idle.c: Do not continue to poll gnome-screensaver if the
+	first call failed. This will avoid a warning every minute.
+
 	* src/gpm-main.c, src/gpm-notification.c: Use the new libnotify
 	widget centering functionality.
 
