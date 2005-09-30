@@ -133,7 +133,7 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
  ****************************************************************************/
 
 /* DeviceRemoved */
-static void
+static gboolean
 glibhal_watch_add_device_removed (void)
 {
 	DBusGConnection *system_connection;
@@ -146,8 +146,8 @@ glibhal_watch_add_device_removed (void)
 
 	g_debug ("glibhal: DeviceRemoved: Registered");
 	reg.device_removed = TRUE;
-	/*dbus_get_system_connection (&system_connection);*/
-	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 
 	proxy.device_removed = dbus_g_proxy_new_for_name_owner (system_connection,
 		"org.freedesktop.Hal",
@@ -157,10 +157,11 @@ glibhal_watch_add_device_removed (void)
 		G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy.device_removed, "DeviceRemoved",
 		G_CALLBACK (signal_handler_DeviceRemoved), NULL, NULL);
+	return TRUE;
 }
 
 /* NewCapability */
-static void
+static gboolean
 glibhal_watch_add_device_new_capability (void)
 {
 	DBusGConnection *system_connection;
@@ -173,7 +174,8 @@ glibhal_watch_add_device_new_capability (void)
 
 	g_debug ("glibhal: NewCapability: Registered");
 	reg.device_new_capability = TRUE;
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
 		"org.freedesktop.Hal",
 		"/org/freedesktop/Hal/Manager",
@@ -184,6 +186,7 @@ glibhal_watch_add_device_new_capability (void)
 		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy.device_new_capability, "NewCapability",
 		G_CALLBACK (signal_handler_NewCapability), NULL, NULL);
+	return TRUE;
 }
 
 /* Condition */
@@ -211,7 +214,8 @@ glibhal_watch_add_device_condition (const char *udi)
 
 	g_debug ("glibhal: Condition: Registered UDI '%s'", udi);
 	reg.device_condition = TRUE;
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		"org.freedesktop.Hal",
 		udi,
@@ -256,7 +260,8 @@ glibhal_watch_add_device_property_modified (const char *udi)
 		}
 	}
 	g_debug ("glibhal: PropertyModified: Registered UDI '%s'", udi);
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		"org.freedesktop.Hal",
 		udi,

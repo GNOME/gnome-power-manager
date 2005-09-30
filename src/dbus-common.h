@@ -25,9 +25,17 @@
 
 #include <dbus/dbus-glib.h>
 
+#if !defined (G_GNUC_WARNUNCHECKED)
+#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define G_GNUC_WARNUNCHECKED 		__attribute__((warn_unused_result))
+#else
+#define G_GNUC_WARNUNCHECKED
+#endif /* __GNUC__ */
+#endif
+
 gboolean dbus_glib_error (GError *error);
-gboolean dbus_get_system_connection (DBusGConnection **connection);
-gboolean dbus_get_session_connection (DBusGConnection **connection);
-gboolean dbus_get_service (DBusGConnection *connection, const gchar *service);
+gboolean dbus_get_system_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
+gboolean dbus_get_session_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
+gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) G_GNUC_WARNUNCHECKED;
 
 #endif	/* _DBUSCOMMON_H */

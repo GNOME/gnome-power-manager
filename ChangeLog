@@ -18,6 +18,10 @@
 	* src/gpm-main.c, src/gpm-notification.c: Use the new libnotify
 	widget centering functionality.
 
+	* src/*.c: Use new the macros G_GNUC_WARNUNCHECKED for a few vital
+	functions (where we MUST check the return value), and then fix up
+	all my sloppy programming...
+
 2005-09-29  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Bump to 0.2.5.3

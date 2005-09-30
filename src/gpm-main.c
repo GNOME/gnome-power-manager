@@ -541,7 +541,6 @@ hal_device_removed (const char *udi)
  *  @param  udi			UDI
  *  @param  capability		Name of capability
  */
-
 static void
 hal_device_new_capability (const char *udi, const char *capability)
 {
@@ -632,7 +631,7 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	g_assert (udi);
 	g_assert (key);
 
-	g_debug ("hal_device_property_modified: udi=%s, key=%s, a=%i, r=%i", udi, key, is_added, is_removed);
+	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i", udi, key, is_added, is_removed);
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed||is_added)
@@ -648,10 +647,10 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	 */
 	if (!slotData) {
 		g_warning ("slotData is NULL! udi=%s\n"
-				   "This is probably a bug in HAL where we are getting "
-				   "is_removed=false, is_added=false before the capability "
-				   "had been added. In addon-hid-ups this is likely to happen."
-				   , udi);
+			   "This is probably a bug in HAL where we are getting "
+			   "is_removed=false, is_added=false before the capability "
+			   "had been added. In addon-hid-ups this is likely to happen."
+			   , udi);
 		return;
 	}
 	updateState = FALSE;
@@ -861,15 +860,13 @@ main (int argc, char *argv[])
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
-	/* see if we can get the unique name */
-	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE)) {
+	/* register dbus service */
+	if (!gpm_object_register ()) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
 
 	loop = g_main_loop_new (NULL, FALSE);
-	/* register dbus service */
-	gpm_object_register ();
 	/* check HAL is running */
 	if (!is_hald_running ()) {
 		libnotify_event (_("GNOME Power Manager cannot connect to HAL!"), LIBNOTIFY_URGENCY_CRITICAL, NULL);

@@ -75,7 +75,8 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	g_assert (brightness);
 	g_assert (udi);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
 		udi,
@@ -117,7 +118,8 @@ hal_set_brightness_item (const gchar *udi, gint brightness)
 	}
 	g_debug ("Setting %s to brightness %i", udi, brightness);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
 		udi,
@@ -223,7 +225,8 @@ hal_suspend (gint wakeup)
 	GError *error = NULL;
 	gboolean retval;
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
@@ -254,7 +257,8 @@ hal_hibernate (void)
 	GError *error = NULL;
 	gboolean retval;
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
@@ -285,13 +289,13 @@ hal_setlowpowermode (gboolean set)
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
-	gchar *formfactor = NULL;
 
 	/* abort if we are not a "qualified" laptop */
 	if (!hal_is_laptop ())
 		return FALSE;
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", "/org/freedesktop/Hal/devices/computer", "org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;

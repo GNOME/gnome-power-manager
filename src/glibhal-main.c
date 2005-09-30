@@ -81,7 +81,8 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	g_assert (key);
 	g_assert (value);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
 	retval = TRUE;
@@ -118,7 +119,8 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	g_assert (key);
 	g_assert (value);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
 	retval = TRUE;
@@ -153,7 +155,8 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	g_assert (key);
 	g_assert (value);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
 	retval = TRUE;
@@ -186,7 +189,8 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 	g_assert (capability);
 	g_assert (value);
 
-	dbus_get_system_connection (&system_connection);
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", 
 		"/org/freedesktop/Hal/Manager", 

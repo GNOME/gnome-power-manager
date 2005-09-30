@@ -62,7 +62,8 @@ gscreensaver_is_running (void)
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
@@ -89,7 +90,8 @@ gscreensaver_set_throttle (gboolean throttle)
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret;
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
@@ -121,7 +123,8 @@ gscreensaver_lock (void)
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret;
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
@@ -154,7 +157,8 @@ gscreensaver_get_idle (void)
 	gboolean boolret = TRUE;
 	guint value;
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
@@ -166,7 +170,7 @@ gscreensaver_get_idle (void)
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
-/*g_print ("gscreensaver_get_idle: %i\n", value);*/
+	g_print ("gscreensaver_get_idle: %i\n", value);
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
 		g_debug ("gnome-screensaver get idle failed");

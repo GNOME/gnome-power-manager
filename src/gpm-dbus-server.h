@@ -23,6 +23,14 @@
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
 
+#if !defined (G_GNUC_WARNUNCHECKED)
+#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define G_GNUC_WARNUNCHECKED 		__attribute__((warn_unused_result))
+#else
+#define G_GNUC_WARNUNCHECKED
+#endif /* __GNUC__ */
+#endif
+
 enum
 {
 	MAINS_CHANGED,
@@ -37,7 +45,7 @@ GType gpm_object_get_type (void);
 struct GPMObject {GObject parent;};
 struct GPMObjectClass {GObjectClass parent;};
 
-gboolean gpm_object_register (void);
+gboolean gpm_object_register (void) G_GNUC_WARNUNCHECKED;
 gboolean gpm_emit_about_to_happen (const gint value);
 gboolean gpm_emit_performing_action (const gint value);
 gboolean gpm_emit_mains_changed (const gboolean value);

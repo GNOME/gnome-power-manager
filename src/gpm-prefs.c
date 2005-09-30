@@ -65,7 +65,8 @@ gpm_is_on_ac (gboolean *value)
 	/* assertion checks */
 	g_assert (value);
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE,
 			GPM_DBUS_PATH,
@@ -97,7 +98,9 @@ gpm_is_on_mains (gboolean *value)
 	/* assertion checks */
 	g_assert (value);
 
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
+
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE, GPM_DBUS_PATH, GPM_DBUS_INTERFACE);
 	retval = TRUE;

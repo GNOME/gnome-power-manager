@@ -130,7 +130,8 @@ main (int argc, char **argv)
 	loop = g_main_loop_new (NULL, FALSE);
 
 	/* Get a connection to the session connection */
-	dbus_get_session_connection (&session_connection);
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE,
 			GPM_DBUS_PATH,
