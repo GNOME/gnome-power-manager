@@ -614,8 +614,8 @@ combo_setup_dynamic (const char *widgetname, const char *policypath, GPtrArray *
 	/* we have to get the gconf string, and convert it into a policy option */
 	policyoption = gconf_client_get_string (client, policypath, NULL);
 	if (!policyoption) {
-		g_warning ("Cannot find %s, maybe a bug in the gconf schema!", gconfpath);
-		return 0;
+		g_warning ("Cannot find %s, maybe a bug in the gconf schema!", policyoption);
+		return;
 	}
 
 	/* select the correct entry, i.e. map the policy to virtual mapping */
@@ -667,19 +667,19 @@ refresh_info_page (void)
 
 	/* Hardcoded for now */
 	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_suspend");
-	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
 	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_hibernate");
-	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
 	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_cpufreq");
-	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
 
 	widget = glade_xml_get_widget (all_pref_widgets, "checkbutton_info_lowpowermode");
-	gtk_widget_set_sensitive (GTK_TOGGLE_BUTTON (widget), FALSE);
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), hal_is_laptop ());
 
 	/* TODO */
