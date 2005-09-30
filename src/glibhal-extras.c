@@ -32,7 +32,7 @@
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
 
-#define DIM_INTERVAL		20
+#define DIM_INTERVAL		10
 
 /** Returns true if system.formfactor == "laptop"
  *
