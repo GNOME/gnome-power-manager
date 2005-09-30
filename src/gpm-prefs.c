@@ -751,8 +751,10 @@ main (int argc, char **argv)
 
 	/* check if we have GNOME Screensaver, but have disabled dpms */
 	if (gscreensaver_is_running ())
-		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL))
-			libnotify_event ("You have not got DPMS support enabled in gnome-screensaver. You cannot cannot change the screen shutdown time using this program.", LIBNOTIFY_URGENCY_NORMAL, NULL);
+		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL)) {
+			libnotify_event ("You have not got DPMS support enabled in gnome-screensaver. GNOME Power Manager will enable it now.", LIBNOTIFY_URGENCY_NORMAL, NULL);
+			gconf_client_set_bool (client, "/apps/gnome-screensaver/dpms_enabled", TRUE, NULL);
+		}
 
 	/* load the interface */
 	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
