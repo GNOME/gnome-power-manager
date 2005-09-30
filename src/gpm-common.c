@@ -30,7 +30,30 @@
 #include <gconf/gconf-client.h>
 #include "gpm-common.h"
 
-GPtrArray *objectData;
+/** Gets the position to "point" to (i.e. center of the icon)
+ *
+ *  @param	widget		the GtkWidget
+ *  @param	x		X co-ordinate return
+ *  @param	y		Y co-ordinate return
+ *  @return			Success, return FALSE when no icon present
+ */
+gboolean
+get_widget_position (GtkWidget *widget, gint *x, gint *y)
+{
+	GdkPixbuf* pixbuf = NULL;
+
+	/* assertion checks */
+	g_assert (widget);
+	g_assert (x);
+	g_assert (y);
+
+	gdk_window_get_origin (GDK_WINDOW (widget->window), x, y);
+	pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (widget));
+	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
+	*y += gdk_pixbuf_get_height (pixbuf);
+	g_debug ("widget position x=%i, y=%i", *x, *y);
+	return TRUE;
+}
 
 /** Finds a device from the objectData table
  *
@@ -212,7 +235,7 @@ get_time_string (GenericObject *slotData)
  *  @param  powerDevice		the object to be returned. Usually POWER_PRIMARY_BATTERY
  */
 void
-create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice)
+create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice)
 {
 	GenericObject *slotData = NULL;
 	gint a;

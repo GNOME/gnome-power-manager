@@ -96,7 +96,7 @@ create_icon_pixbuf (GenericObject *slotData)
 	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
 		/* have to work out for all objects for multibattery setups */
 		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
+		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
 
 		num = ((slotDataVirt.percentageCharge + 4) * 8 ) / 100;
 		if (num < 0)
@@ -323,7 +323,7 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		g_warning ("No handler for '%s'", action);
 }
 
-/** Gets the position to "point" to (i.e. bottom of the icon)
+/** Returns the Gtkimage that is the notification icon
  *
  *  @param	x				X co-ordinate return
  *  @param	y				Y co-ordinate return
@@ -331,26 +331,10 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
  *
  * TODO : Need to cope when panel is on left, right, or bottom of screen.
  */
-gboolean
-get_icon_position (gint *x, gint *y)
+GtkWidget *
+get_notification_icon (void)
 {
-	GdkPixbuf* pixbuf = NULL;
-
-	/* assertion checks */
-	g_assert (x);
-	g_assert (y);
-	g_assert (eggtrayicon);
-	g_assert (eggtrayicon->image);
-	g_assert (eggtrayicon->image->window);
-
-	gdk_window_get_origin (eggtrayicon->image->window, x, y);
-	g_debug ("x1=%i, y1=%i\n", *x, *y);
-
-	pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (eggtrayicon->image));
-	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
-	*y += gdk_pixbuf_get_height (pixbuf);
-	g_debug ("x2=%i, y2=%i\n", *x, *y);
-	return TRUE;
+	return GTK_WIDGET (eggtrayicon->image);
 }
 
 /** Function for "about" box URL press

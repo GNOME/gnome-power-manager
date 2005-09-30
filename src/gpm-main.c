@@ -139,7 +139,7 @@ dbus_action (gint action)
 				       "from occurring.\n\n"
 				       "The explanation given is: %s"),
 				     regprog->appName->str, actionstr, regprog->reason->str);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 		g_string_free (gs, TRUE);
 		retval = FALSE;
 		goto unref;
@@ -150,7 +150,7 @@ dbus_action (gint action)
 		g_string_printf (gs, _("The program '%s' has not returned data that "
 				     "is preventing the %s from occurring."),
 				     regprog->appName->str, actionstr);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 		g_string_free (gs, TRUE);
 		retval = FALSE;
 		goto unref;
@@ -296,7 +296,7 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-					libnotify_event (_("AC Adapter has been removed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
+					libnotify_event (_("AC Adapter has been removed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 				else
 					action_policy_do (policy);
 				}
@@ -595,7 +595,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			gs = g_string_new ("");
 			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"),
 				device, newCharge, remaining->str);
-			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
+			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 			g_string_free (gs, TRUE);
 			g_string_free (remaining, TRUE);
 		} else
@@ -607,7 +607,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		gs = g_string_new ("");
 		g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"),
 			device, newCharge, remaining->str);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 		g_string_free (gs, TRUE);
 		g_string_free (remaining, TRUE);
 	}
@@ -687,7 +687,7 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	/* find old (taking into account multi-device machines) */
 	if (slotData->isRechargeable) {
 		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
+		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
 		oldCharge = slotDataVirt.percentageCharge;
 	} else
 		oldCharge = slotData->percentageCharge;
@@ -695,7 +695,7 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	/* find new (taking into account multi-device machines) */
 	if (slotData->isRechargeable) {
 		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (&slotDataVirt, slotData->powerDevice);
+		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
 		newCharge = slotDataVirt.percentageCharge;
 	} else
 		newCharge = slotData->percentageCharge;
@@ -738,13 +738,13 @@ hal_device_condition (const char *udi,
 		if (strcmp (type, "power") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_power");
 			if (policy == ACTION_WARNING)
-				libnotify_event (_("Power button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
+				libnotify_event (_("Power button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			if (policy == ACTION_WARNING)
-				libnotify_event (_("Sleep button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, NULL);
+				libnotify_event (_("Sleep button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
@@ -753,7 +753,7 @@ hal_device_condition (const char *udi,
 			if (value) {
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				if (policy == ACTION_WARNING)
-					libnotify_event (_("Lid has been opened"), LIBNOTIFY_URGENCY_NORMAL, NULL);
+					libnotify_event (_("Lid has been opened"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 				else
 					action_policy_do (policy);
 			}

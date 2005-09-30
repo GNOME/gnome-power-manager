@@ -43,23 +43,39 @@ libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
 {
 #if HAVE_LIBNOTIFY
 	NotifyHandle *n = NULL;
+	NotifyIcon *icon = NULL;
+	NotifyHints *hints = NULL;
+	gint x, y;
 
 	/* assertion checks */
 	g_assert (content);
 
+	if (point) {
+		get_widget_position (point, &x, &y);
+		g_debug ("x1=%i, y1=%i\n", x, y);
+		hints = notify_hints_new();
+		notify_hints_set_int (hints, "x", x);
+		notify_hints_set_int (hints, "y", y);
+	}
+
+	/* echo to terminal too */
 	if (urgency == NOTIFY_URGENCY_CRITICAL)
 		g_warning ("libnotify: %s : %s", NICENAME, content);
 	else
 		g_debug ("libnotify: %s : %s", NICENAME, content);
-	n = notify_send_notification (NULL, /* replaces nothing 	*/
+
+	/* use default g-p-m icon for now */
+	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
+	n = notify_send_notification (NULL, /* replaces nothing */
 			   NULL,
 			   urgency,
 			   NICENAME, content,
-			   NULL, /* no icon 			*/
+			   icon, /* icon */
 			   TRUE, NOTIFY_TIMEOUT,
-			   NULL, /* no hints */
-			   NULL, /* no user data 		*/
-			   0);   /* no actions 			*/
+			   hints, /* hints */
+			   NULL, /* no user data */
+			   0);   /* no actions */
+	notify_icon_destroy(icon);
 	if (!n) {
 		g_warning ("failed to send notification (%s)", content);
 		return FALSE;

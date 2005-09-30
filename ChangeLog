@@ -1,3 +1,16 @@
+2005-09-30  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.2.5.4
+
+	* src/gpm-common.c (get_widget_position): new function to get center
+	point of a widget.
+
+	* src/gpm-libnotify.c: Added back (in a better way) the 
+	libnotify-points-to-icon feature. 
+
+	* src/gpm-main.c, src/gpm-notification.c: Use the new libnotify
+	widget centering functionality.
+
 2005-09-29  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Bump to 0.2.5.3

@@ -116,6 +116,7 @@ typedef struct {
 
 void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
 
+gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
 GString *convert_gpmdbus_to_string (gint value);
 gchar *convert_dbus_enum_to_string (gint value);
 
@@ -127,7 +128,7 @@ void update_percentage_charge (GenericObject *slotData);
 GString *get_timestring_from_minutes (gint minutes);
 gchar *convert_powerdevice_to_string (gint powerDevice);
 gchar *get_chargestate_string (GenericObject *slotData);
-void create_virtual_of_type (GenericObject *slotDataReturn, gint powerDevice);
+void create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice);
 GString *get_time_string (GenericObject *slotData);
 gboolean run_gconf_script (const char *path);
 
