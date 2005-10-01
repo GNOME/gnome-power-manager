@@ -161,26 +161,6 @@ gpn_icon_destroy (void)
 	eggtrayicon = NULL;
 }
 
-/* wrapper function */
-void
-callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	/* assertion checks */
-	g_assert (client);
-	g_assert (entry);
-
-	g_debug ("callback_gconf_key_changed (%s)", entry->key);
-
-	if (gconf_entry_get_value (entry) == NULL)
-		return;
-
-	if (strcmp (entry->key, GCONF_ROOT "general/display_icon") == 0) {
-		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
-		gpn_icon_update ();
-	}
-}
-
 GString *
 get_object_tooltip (GenericObject *slotData)
 {

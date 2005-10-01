@@ -36,10 +36,7 @@ typedef struct {
 void free_icon_structure (void);
 GenericObject *get_main_icon_slot (void);
 GString *get_main_tooltip (void);
-
 GtkWidget *get_notification_icon (void);
-
-void callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
 
 /* wrapper functions */
 void gpn_icon_initialise (void);
