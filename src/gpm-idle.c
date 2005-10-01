@@ -178,11 +178,14 @@ get_is_cpu_idle (void)
 gboolean
 update_idle_function (gpointer data)
 {
+	gint gstime;
+
 	cpu_update_data ();
 	/* only poll gnome screensaver if we succeeded last time */
-	if (disable_gs && !gscreensaver_get_idle ()) {
+	if (disable_gs && !gscreensaver_get_idle (&gstime)) {
 		g_warning ("getIdleTime polling disabled");
 		disable_gs = FALSE;
-	}
+	} else
+	g_debug ("update_idle_function: gstime = %i", gstime);
 	return TRUE;
 }

@@ -31,6 +31,6 @@ gboolean gscreensaver_lock (void);
 gboolean gscreensaver_lock_check (void);
 gboolean gscreensaver_set_throttle (gboolean throttle);
 gboolean gscreensaver_is_running (void);
-gboolean gscreensaver_get_idle (void);
+gboolean gscreensaver_get_idle (gint *time);
 
 #endif	/* _GPMSCREENSAVER_H */

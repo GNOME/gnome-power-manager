@@ -52,7 +52,6 @@ libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
 
 	if (point) {
 		get_widget_position (point, &x, &y);
-		g_debug ("x1=%i, y1=%i\n", x, y);
 		hints = notify_hints_new();
 		notify_hints_set_int (hints, "x", x);
 		notify_hints_set_int (hints, "y", y);

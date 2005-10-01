@@ -88,8 +88,9 @@ gscreensaver_set_throttle (gboolean throttle)
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
-	gboolean boolret;
+	gboolean boolret = TRUE;
 
+	g_debug ("gnome-screensaver setThrottleEnabled : %i", throttle);
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -98,7 +99,7 @@ gscreensaver_set_throttle (gboolean throttle)
 			GS_LISTENER_INTERFACE);
 	if (!dbus_g_proxy_call (gs_proxy, "setThrottleEnabled", &error,
 				G_TYPE_BOOLEAN, throttle, G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+				G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
@@ -123,6 +124,7 @@ gscreensaver_lock (void)
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret;
 
+	g_debug ("gnome-screensaver lock");
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -149,13 +151,12 @@ gscreensaver_lock (void)
  *  if set not to lock, then do nothing, and return FALSE.
  */
 gboolean
-gscreensaver_get_idle (void)
+gscreensaver_get_idle (gint *time)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
-	guint value;
 
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
@@ -165,12 +166,12 @@ gscreensaver_get_idle (void)
 			GS_LISTENER_INTERFACE);
 	if (!dbus_g_proxy_call (gs_proxy, "getIdleTime", &error,
 				G_TYPE_INVALID,
-				G_TYPE_UINT, &value, G_TYPE_INVALID)) {
+				G_TYPE_UINT, time, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
-	g_print ("gscreensaver_get_idle: %i\n", value);
+	g_print ("gscreensaver_get_idle: %i\n", *time);
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
 		g_debug ("gnome-screensaver get idle failed");
