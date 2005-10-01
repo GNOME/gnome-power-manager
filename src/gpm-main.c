@@ -370,7 +370,8 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-					libnotify_event (_("AC Adapter has been removed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+					libnotify_event (_("AC Adapter has been removed"),
+						LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 				else
 					action_policy_do (policy);
 				}
@@ -470,12 +471,16 @@ read_battery_data (GenericObject *slotData)
 	if (tempval > 0)
 		slotData->minutesRemaining = tempval / 60;
 
-	hal_device_get_int (slotData->udi, "battery.charge_level.percentage", &slotData->percentageCharge);
+	hal_device_get_int (slotData->udi, "battery.charge_level.percentage",
+		&slotData->percentageCharge);
 	/* battery might not be rechargeable, have to check */
-	hal_device_get_bool (slotData->udi, "battery.is_rechargeable", &slotData->isRechargeable);
+	hal_device_get_bool (slotData->udi, "battery.is_rechargeable",
+		&slotData->isRechargeable);
 	if (slotData->isRechargeable) {
-		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging", &slotData->isCharging);
-		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging", &slotData->isDischarging);
+		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging",
+			&slotData->isCharging);
+		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging",
+			&slotData->isDischarging);
 	}
 }
 
@@ -711,7 +716,8 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	g_assert (udi);
 	g_assert (key);
 
-	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i", udi, key, is_added, is_removed);
+	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
+		udi, key, is_added, is_removed);
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed||is_added)
@@ -722,7 +728,8 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 		return;
 
 	slotData = genericobject_find (objectData, udi);
-	/* if we BUG here then *HAL* has a problem where key modification is
+	/*
+	 * if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
 	 */
 	if (!slotData) {
@@ -812,7 +819,8 @@ hal_device_condition (const char *udi,
 	g_assert (condition_name);
 	g_assert (condition_details);
 
-	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s", udi, condition_name, condition_details);
+	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s",
+		udi, condition_name, condition_details);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
 		hal_device_get_string (udi, "button.type", &type);
@@ -820,13 +828,15 @@ hal_device_condition (const char *udi,
 		if (strcmp (type, "power") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_power");
 			if (policy == ACTION_WARNING)
-				libnotify_event (_("Power button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+				libnotify_event (_("Power button has been pressed"),
+					LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			if (policy == ACTION_WARNING)
-				libnotify_event (_("Sleep button has been pressed"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+				libnotify_event (_("Sleep button has been pressed"),
+					LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 			else
 				action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
@@ -835,7 +845,8 @@ hal_device_condition (const char *udi,
 			if (value) {
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				if (policy == ACTION_WARNING)
-					libnotify_event (_("Lid has been opened"), LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+					libnotify_event (_("Lid has been opened"),
+						LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 				else
 					action_policy_do (policy);
 			}
