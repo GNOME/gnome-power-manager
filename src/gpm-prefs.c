@@ -2,6 +2,9 @@
  *
  * gpm-prefs.c : GNOME Power Preferences
  *
+ * This is the main g-p-m module, responsible for loading the glade file, 
+ * populating and disabling widgets, and writing out configuration to gconf.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * Taken in part from:
@@ -82,9 +85,7 @@ gpm_is_on_ac (gboolean *value)
 	return retval;
 }
 
-/** queries org.gnome.GnomePowerManager.isOnBattery	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
-		divisions = 5;
-
+/** queries org.gnome.GnomePowerManager.isOnBattery
  *
  *  @param  value	return value, passed by ref
  *  @return		TRUE for success, FALSE for failure
@@ -215,7 +216,7 @@ recalc (void)
 
 	if (gscreensaver_is_running ()) {
 		gtk_set_visibility ("button_gnome_screensave", TRUE);
-		hasDisplays = gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL);
+		hasDisplays = gconf_client_get_bool (client, GS_GCONF_ROOT "dpms_enabled", NULL);
 	} else {
 		gtk_set_visibility ("button_gnome_screensave", FALSE);
 		hasDisplays = FALSE;
@@ -276,6 +277,7 @@ recalc (void)
 
 /** Callback for gconf_key_changed
  *
+ *  TODO: Do we still need this?
  */
 static void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
@@ -285,14 +287,6 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
-
-	/*
-	 * just recalculate the UI, as the gconf keys are read there.
-	 * this removes the need for lots of global variables.
-	 */
-#if 0
-	recalc ();
-#endif
 }
 
 /** Callback for combo_changed
@@ -538,13 +532,17 @@ hscale_setup_action (const char *widgetname, const char *policypath, int policyt
 	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 
 	if (policytype == POLICY_LCD)
-		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_percent_lcd), NULL);
+		g_signal_connect (G_OBJECT (widget), "format-value",
+			G_CALLBACK (format_value_callback_percent_lcd), NULL);
 	else if (policytype == POLICY_PERCENT)
-		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_percent), NULL);
+		g_signal_connect (G_OBJECT (widget), "format-value",
+			G_CALLBACK (format_value_callback_percent), NULL);
 	else
-		g_signal_connect (G_OBJECT (widget), "format-value", G_CALLBACK (format_value_callback_time), NULL);
+		g_signal_connect (G_OBJECT (widget), "format-value",
+			G_CALLBACK (format_value_callback_time), NULL);
 	gtk_range_set_value (GTK_RANGE (widget), (int) value);
-	g_signal_connect (G_OBJECT (widget), "value-changed", G_CALLBACK (callback_hscale_changed), NULL);
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+		G_CALLBACK (callback_hscale_changed), NULL);
 }
 
 /** Sets the checkboxes up to the gconf value, and sets up callbacks.
@@ -747,12 +745,14 @@ main (int argc, char **argv)
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, callback_gconf_key_changed, widget, NULL, NULL);
+	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, 
+		callback_gconf_key_changed, widget, NULL, NULL);
 	/*
 	 * we add this even if it doesn't exist as gnome-screensaver might be 
 	 * installed when g-p-m is running
 	 */
-	gconf_client_notify_add (client, "/apps/gnome-screensaver", callback_gconf_key_changed, widget, NULL, NULL);
+	gconf_client_notify_add (client, GS_GCONF_ROOT_NO_SLASH,
+		callback_gconf_key_changed, widget, NULL, NULL);
 
 	/* Initialise libnotify, if compiled in. */
 	if (!libnotify_init (NICENAME))
@@ -760,9 +760,10 @@ main (int argc, char **argv)
 
 	/* check if we have GNOME Screensaver, but have disabled dpms */
 	if (gscreensaver_is_running ())
-		if (!gconf_client_get_bool (client, "/apps/gnome-screensaver/dpms_enabled", NULL)) {
-			libnotify_event ("You have not got DPMS support enabled in gnome-screensaver. GNOME Power Manager will enable it now.", LIBNOTIFY_URGENCY_NORMAL, NULL);
-			gconf_client_set_bool (client, "/apps/gnome-screensaver/dpms_enabled", TRUE, NULL);
+		if (!gconf_client_get_bool (client, GS_GCONF_ROOT "dpms_enabled", NULL)) {
+			libnotify_event ("You have not got DPMS support enabled in gnome-screensaver.\n"
+				"GNOME Power Manager will enable it now.", LIBNOTIFY_URGENCY_NORMAL, NULL);
+			gconf_client_set_bool (client, GS_GCONF_ROOT "dpms_enabled", TRUE, NULL);
 		}
 
 	/* load the interface */
@@ -783,7 +784,8 @@ main (int argc, char **argv)
 	 */
 	has_gpm_connection = gpm_is_on_ac (&a);
 	if (!has_gpm_connection)
-		libnotify_event ("Cannot connect to GNOME Power Manager.\nMake sure that it is running", LIBNOTIFY_URGENCY_NORMAL, NULL);
+		libnotify_event ("Cannot connect to GNOME Power Manager.\n"
+			"Make sure that it is running", LIBNOTIFY_URGENCY_NORMAL, NULL);
 
 	/* Set the button callbacks */
 	widget = glade_xml_get_widget (all_pref_widgets, "button_close");
@@ -810,21 +812,24 @@ main (int argc, char **argv)
 	g_ptr_array_add (ptrarr_button_power, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_button_power, (gpointer) &pHibernate);
 	g_ptr_array_add (ptrarr_button_power, (gpointer) &pShutdown);
-	combo_setup_dynamic ("combobox_button_power", GCONF_ROOT "policy/button_power", ptrarr_button_power);
+	combo_setup_dynamic ("combobox_button_power", 
+		GCONF_ROOT "policy/button_power", ptrarr_button_power);
 
 	/* sleep button */
 	ptrarr_button_suspend = g_ptr_array_new ();
 	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pNothing);
 	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_button_suspend", GCONF_ROOT "policy/button_suspend", ptrarr_button_power);
+	combo_setup_dynamic ("combobox_button_suspend",
+		GCONF_ROOT "policy/button_suspend", ptrarr_button_power);
 
 	/* lid "button" */
 	ptrarr_button_lid = g_ptr_array_new ();
 	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pNothing);
 	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_button_lid", GCONF_ROOT "policy/button_lid", ptrarr_button_lid);
+	combo_setup_dynamic ("combobox_button_lid",
+		GCONF_ROOT "policy/button_lid", ptrarr_button_lid);
 
 	/* AC fail */
 	ptrarr_ac_fail = g_ptr_array_new ();
@@ -832,7 +837,8 @@ main (int argc, char **argv)
 	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pWarning);
 	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_ac_fail", GCONF_ROOT "policy/ac_fail", ptrarr_ac_fail);
+	combo_setup_dynamic ("combobox_ac_fail",
+		GCONF_ROOT "policy/ac_fail", ptrarr_ac_fail);
 
 	/* battery critical */
 	ptrarr_battery_critical = g_ptr_array_new ();
@@ -840,13 +846,15 @@ main (int argc, char **argv)
 	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pHibernate);
 	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pShutdown);
-	combo_setup_dynamic ("combobox_battery_critical", GCONF_ROOT "policy/battery_critical", ptrarr_battery_critical);
+	combo_setup_dynamic ("combobox_battery_critical",
+		GCONF_ROOT "policy/battery_critical", ptrarr_battery_critical);
 
 	/* sleep type */
 	ptrarr_sleep_type = g_ptr_array_new ();
 	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pSuspend);
 	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_sleep_type", GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
+	combo_setup_dynamic ("combobox_sleep_type",
+		GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer",

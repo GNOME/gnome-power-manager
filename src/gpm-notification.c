@@ -1,7 +1,9 @@
 /***************************************************************************
  *
  * gpm-notification.c : GNOME Power Notification 
- *         (Panel functions for GNOME Power Manager)
+ *
+ * This module provides panel functions for g-p-m, and is closely linked
+ * to gpm-main.c
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
@@ -34,6 +36,7 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
+#include "gpm-libnotify.h"
 
 /* shared with gpm-main.c */
 StateData state_data;
@@ -61,7 +64,8 @@ gtk_icon_theme_fallback (const char *name, int size)
 
 	g_debug ("gtk_icon_theme_fallback : name = '%s', size = %i", name, size);
 	if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name)) {
-		iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+		iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
+				name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
 		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
 		gtk_icon_info_free (iinfo);
 	} else {

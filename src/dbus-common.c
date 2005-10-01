@@ -2,6 +2,11 @@
  *
  * dbus-common.c : Common GLIB DBUS routines
  *
+ * This module contains all the dbus checker functions, that make
+ * some attempt to sanitise the dbus error codes. It also gives
+ * output to the user in the event they cannot connect to the session
+ * or system dbus connections.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

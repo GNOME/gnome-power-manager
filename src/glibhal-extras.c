@@ -2,6 +2,9 @@
  *
  * glibhal-extras.c : GLIB replacement for libhal, the extra stuff
  *
+ * This module uses the functionality of glibhal-main to do some clever
+ * things to HAL objects, for example dimming the LCD screen.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

@@ -27,10 +27,14 @@
 #define GS_LISTENER_PATH	"/org/gnome/screensaver"
 #define GS_LISTENER_INTERFACE	"org.gnome.screensaver"
 
+#define GS_GCONF_ROOT		"/apps/gnome-screensaver/"
+#define GS_GCONF_ROOT_NO_SLASH	"/apps/gnome-screensaver"
+
 gboolean gscreensaver_lock (void);
 gboolean gscreensaver_lock_check (void);
 gboolean gscreensaver_set_throttle (gboolean throttle);
 gboolean gscreensaver_is_running (void);
 gboolean gscreensaver_get_idle (gint *time);
+gboolean gscreensaver_set_dpms_timeout (gint timeout);
 
 #endif	/* _GPMSCREENSAVER_H */

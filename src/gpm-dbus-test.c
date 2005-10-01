@@ -2,6 +2,13 @@
  *
  * gpm-dbus-test.c : DBUS test program
  *
+ * This is a test program that fully exercises the DBUS API provided
+ * in g-p-m. It is not expeted to be installed on the users system, but
+ * instead be used a development aide.
+ *
+ * TODO
+ *  - Fix to use up to date g-p-m API.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

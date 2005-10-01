@@ -2,6 +2,9 @@
  *
  * gpm-screensaver.c : GLIB replacement for libhal, the extra stuff
  *
+ * This module deals with communicating through DBUS to 
+ * GNOME Screensaver.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -32,6 +35,23 @@
 #include "glibhal-main.h"
 #include "gpm-screensaver.h"
 
+/** Sets the DPMS timeout to a known value
+ *
+ *  @param timeout		Timeout in minutes
+ */
+gboolean
+gscreensaver_set_dpms_timeout (gint timeout)
+{
+	GConfClient *client;
+
+	if (timeout < 0 || timeout > 10 * 60 * 60)
+		return FALSE;
+	g_debug ("Adjusting gnome-screensaver dpms_suspend value to %i.", timeout);
+	client = gconf_client_get_default ();
+	gconf_client_set_int (client, GS_GCONF_ROOT "dpms_suspend", timeout, NULL);
+	return TRUE;
+}
+
 /** If set to lock on screensave, instruct gnome-screensaver to lock screen
  *  and return TRUE.
  *  if set not to lock, then do nothing, and return FALSE.
@@ -42,7 +62,7 @@ gscreensaver_lock_check (void)
 	GConfClient *client = gconf_client_get_default ();
 	gboolean should_lock;
 
-	should_lock = gconf_client_get_bool (client, "/apps/gnome-screensaver/lock", NULL);
+	should_lock = gconf_client_get_bool (client, GS_GCONF_ROOT "lock", NULL);
 	if (!should_lock)
 		return FALSE;
 	gscreensaver_lock ();

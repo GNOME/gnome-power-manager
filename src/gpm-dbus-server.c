@@ -2,6 +2,13 @@
  *
  * gpm-dbus-server.c : DBUS listener
  *
+ * This module handles all th low-level glib DBUS API, and provides
+ * the high level hooks into the gpm_object to send signals,
+ * and call methods on the gpm_object.
+ *
+ * TODO:
+ *  - Get the DBUS G-P-M API sorted, and perhaps use GConversation.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

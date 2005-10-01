@@ -2,6 +2,10 @@
  *
  * gpm-common.c : Common functions shared between modules
  *
+ * This module contains functions that are shared between g-p-m and
+ * g-p-m so that as much code can be re-used as possible.
+ * There's a bit of everything in this file...
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

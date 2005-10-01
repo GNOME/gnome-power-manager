@@ -2,6 +2,9 @@
  *
  * gpm-main.c : GNOME Power Manager
  *
+ * This is the main daemon for g-p-m. It handles all the setup and
+ * tear-down of all the dynamic arrays, mainloops and icons in g-p-m.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * Taken in part from:
@@ -118,17 +121,13 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 		/* set new suspend timeouts */
 		if (state_data.onBatteryPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
-			g_debug ("Adjusting g-s dpms_suspend value to %i.", value);
-			gconf_client_set_int (client,
-				"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+			gscreensaver_set_dpms_timeout (value);
 		}
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_display") == 0) {
 		/* set new suspend timeouts */
 		if (!state_data.onBatteryPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
-			g_debug ("Adjusting g-s dpms_suspend value to %i.", value);
-			gconf_client_set_int (client,
-				"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+			gscreensaver_set_dpms_timeout (value);
 		}
 	}
 
@@ -259,14 +258,13 @@ action_policy_do (gint policy_number)
 		g_debug ("*DBUS* Now battery powered");
 		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/battery/brightness", NULL);
+				GCONF_ROOT "policy/battery/brightness", NULL);
 		hal_set_brightness_dim (value);
 		hal_setlowpowermode (TRUE);
 		/* set gnome screensaver dpms_suspend to our value */
 		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/battery/sleep_display", NULL);
-		gconf_client_set_int (client,
-			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+				GCONF_ROOT "policy/battery/sleep_display", NULL);
+		gscreensaver_set_dpms_timeout (value);
 		/*
 		 * make sure gnome-screensaver disables screensaving,
 		 * and enables monitor shut-off instead
@@ -296,14 +294,13 @@ action_policy_do (gint policy_number)
 		hal_setlowpowermode (TRUE);
 		/* set dpms_suspend to our value */
 		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/ac/sleep_display", NULL);
-		gconf_client_set_int (client,
-			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+				GCONF_ROOT "policy/ac/sleep_display", NULL);
+		gscreensaver_set_dpms_timeout (value);
 		/* make sure gnome-screensaver enables screensaving */
 		gscreensaver_set_throttle (FALSE);
 		/* set the new sleep (inactivity) value */
 		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/ac/sleep_computer", NULL);
+				GCONF_ROOT "policy/ac/sleep_computer", NULL);
 		gpm_idle_set_timeout (value);
 		/* emit siganal */
 		gpm_emit_mains_changed (TRUE);

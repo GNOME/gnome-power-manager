@@ -2,6 +2,15 @@
  *
  * gpm-idle.c : Idle calculation routines
  *
+ * This module handles all the idle and load checking for g-p-m. It
+ * uses the functionality of gnome-screensaver, and it's own load
+ * calculator to call a user specified callback on user idle.
+ *
+ * NOTE:
+ *  - gpm_idle_set_callback (x) and gpm_idle_set_timeout (x) must be called
+ *    before a g_timeout is added to the main loop.
+ *    e.g. g_timeout_add (POLL_FREQUENCY * 1000, gpm_idle_update, NULL);
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

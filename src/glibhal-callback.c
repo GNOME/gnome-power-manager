@@ -2,6 +2,13 @@
  *
  * glibhal-callbacks.c : GLIB replacement for libhal, providing callbacks
  *
+ * This module handles the callbacks for HAL, and lets a program register
+ * a hook, and assign a callback. It is designed as a more robust framework
+ * than using libhal.
+ *
+ * TODO
+ * - Do we need the .initialized stuff, or can we just check for NULL?
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or

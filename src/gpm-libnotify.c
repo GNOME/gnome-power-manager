@@ -1,7 +1,12 @@
 /***************************************************************************
  *
  * gpm-libnotify.c : LibNotify shared code
- *    Note, this code can still be used without libnotify compiled in,
+ *
+ * This module allows a really easy way to provide libnotify boxes to
+ * the user, and is used throughout g-p-m and g-p-p.
+ *
+ * NOTE:
+ *  - This code can still be used without libnotify compiled in,
  *    as it fall backs to a standard modal messsagebox.
  *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>

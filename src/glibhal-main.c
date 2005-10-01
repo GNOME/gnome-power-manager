@@ -2,6 +2,9 @@
  *
  * glibhal-main.c : GLIB replacement for libhal
  *
+ * This module is a direct replacement for libhal, and allows the user to
+ * query and set keys in a more glib way than using libhal.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or
