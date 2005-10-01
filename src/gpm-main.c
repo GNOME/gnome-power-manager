@@ -579,20 +579,25 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	/* assertion checks */
 	g_assert (slotData);
 
-	if (!slotData->isDischarging)
+	if (!slotData->isDischarging) {
+		g_debug ("battery is not discharging!");
 		return;
+	}
+
 	client = gconf_client_get_default ();
-	lowThreshold = gconf_client_get_int (client, GCONF_ROOT "general/lowThreshold", NULL);
-	criticalThreshold = gconf_client_get_int (client, GCONF_ROOT "general/criticalThreshold", NULL);
+	lowThreshold = gconf_client_get_int (client, GCONF_ROOT "general/threshold_low", NULL);
+	criticalThreshold = gconf_client_get_int (client, GCONF_ROOT "general/threshold_critical", NULL);
+	g_debug ("lowThreshold = %i, criticalThreshold = %i", lowThreshold, criticalThreshold);
 
 	/* critical warning */
 	if (newCharge < criticalThreshold) {
+		g_debug ("battery is critical!");
 		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 		if (policy == ACTION_WARNING) {
 			device = convert_powerdevice_to_string (slotData->powerDevice);
 			remaining = get_time_string (slotData);;
 			gs = g_string_new ("");
-			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b> (%s)"),
+			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b>\n(%s)"),
 				device, newCharge, remaining->str);
 			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 			g_string_free (gs, TRUE);
@@ -601,10 +606,11 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			action_policy_do (policy);
 	/* low warning */
 	} else if (newCharge < lowThreshold) {
+		g_debug ("battery is low!");
 		device = convert_powerdevice_to_string (slotData->powerDevice);
 		remaining = get_time_string (slotData);;
 		gs = g_string_new ("");
-		g_string_printf (gs, _("The %s (%i%%) is <b>low</b> (%s)"),
+		g_string_printf (gs, _("The %s (%i%%) is <b>low</b>\n(%s)"),
 			device, newCharge, remaining->str);
 		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 		g_string_free (gs, TRUE);
@@ -655,6 +661,16 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	}
 	updateState = FALSE;
 
+	/* find old percentageCharge (taking into account multi-device machines) */
+	if (slotData->isRechargeable) {
+		slotDataVirt.percentageCharge = 100;
+		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
+		oldCharge = slotDataVirt.percentageCharge;
+	} else
+		oldCharge = slotData->percentageCharge;
+	g_warning ("oldCharge = %i", oldCharge);
+
+	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
 		hal_device_get_bool (udi, key, &slotData->present);
 		/* read in values */
@@ -683,21 +699,14 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 	if (updateState)
 		update_state_logic (objectData, FALSE);
 
-	/* find old (taking into account multi-device machines) */
-	if (slotData->isRechargeable) {
-		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-		oldCharge = slotDataVirt.percentageCharge;
-	} else
-		oldCharge = slotData->percentageCharge;
-
-	/* find new (taking into account multi-device machines) */
+	/* find new percentageCharge (taking into account multi-device machines) */
 	if (slotData->isRechargeable) {
 		slotDataVirt.percentageCharge = 100;
 		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
 		newCharge = slotDataVirt.percentageCharge;
 	} else
 		newCharge = slotData->percentageCharge;
+	g_warning ("newCharge = %i", newCharge);
 
 	gpn_icon_update ();
 
