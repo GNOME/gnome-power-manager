@@ -35,10 +35,8 @@
 cpudata		old;
 gboolean	init;
 double		loadpercentage;
-int		cpu_background_load_data;
-gboolean	isUserIdle;
-
-gboolean	disable_gs = TRUE;
+gint		time_idle_callback;
+IdleCallback	callbackfunction;
 
 /* 
  * The values are:
@@ -127,7 +125,7 @@ cpudata_normalize (cpudata *data)
 }
 #endif
 
-static void
+static gint
 cpu_update_data (void)
 {
 	cpudata new;
@@ -136,10 +134,9 @@ cpu_update_data (void)
 	/* fill "old" value manually */
 	if (!init) {
 		init = TRUE;
-		cpu_background_load_data = 10; /* % */
 		cpudata_get_values (&old);
-		isUserIdle = FALSE;
-		return;
+		time_idle_callback = 0;
+		return 0;
 	}
 
 	/* work out the differences */
@@ -154,38 +151,57 @@ cpu_update_data (void)
 		loadpercentage = (double) diff.total / (double) diff.idle;
 	else
 		loadpercentage = 100;
-	g_debug ("load=%2.2f", loadpercentage);
+	return loadpercentage;
 }
 
-/** Sets the idle limit, i.e. how hard the computer can work while
- ** considered "at idle" - background tasks.
- *
- *  @param  percentage		The percentage load we are allowed "at idle"
- */
 gboolean
-set_cpu_idle_limit (const gint percentage)
+gpm_idle_set_timeout (gint timeout)
 {
-	cpu_background_load_data = percentage;
+	time_idle_callback = timeout;
 	return TRUE;
 }
 
 gboolean
-get_is_cpu_idle (void)
+gpm_idle_set_callback (IdleCallback callback)
 {
-	return isUserIdle;
+	callbackfunction = callback;
+	return TRUE;
 }
 
 gboolean
-update_idle_function (gpointer data)
+gpm_idle_update (gpointer data)
 {
-	gint gstime;
+	gint gstime = 0;
+	gint load;
 
-	cpu_update_data ();
-	/* only poll gnome screensaver if we succeeded last time */
-	if (disable_gs && !gscreensaver_get_idle (&gstime)) {
+	if (!callbackfunction) {
+		g_warning ("gpm_idle_set_callback has not been called so no function set!");
+		return FALSE; /* will stop polling */
+	}
+
+	if (time_idle_callback == 0) {
+		g_warning ("gpm_idle_set_timeout has not been called so no timeout set!");
+		return FALSE; /* will stop polling */
+	}
+
+	/* get our computed load value */
+	load = cpu_update_data ();
+
+	/* get idle time from g-s */
+	if (!gscreensaver_get_idle (&gstime)) {
 		g_warning ("getIdleTime polling disabled");
-		disable_gs = FALSE;
-	} else
-	g_debug ("update_idle_function: gstime = %i", gstime);
+		return FALSE; /* will stop polling */
+	}
+	g_debug ("gpm_idle_update: gstime = %i, load = %i", gstime, load);
+
+	/*
+	 * The load has to be less than IDLE_LIMIT so we do not suspend or 
+	 * shutdown halfway thru a heavy CPU utility, e.g. disk update, 
+	 * rpm transaction, or kernel compile.
+	 */
+	if (gstime > time_idle_callback && load < IDLE_LIMIT) {
+		g_debug ("running callback function");
+		callbackfunction (gstime);
+	}
 	return TRUE;
 }

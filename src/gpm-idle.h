@@ -23,7 +23,15 @@
 #ifndef _GPMIDLE_H
 #define _GPMIDLE_H
 
-#define POLL_FREQUENCY	2
+/*
+ * How many seconds between polling?
+ */
+#define POLL_FREQUENCY	5
+/*
+ * Sets the idle percent limit, i.e. how hard the computer can work 
+ * while considered "at idle"
+ */
+#define IDLE_LIMIT	5
 
 typedef struct {
 	long unsigned user;
@@ -33,9 +41,10 @@ typedef struct {
 	long unsigned total;
 } cpudata;
 
-gboolean update_idle_function (gpointer data);
+typedef void (*IdleCallback) (const gint timeout);
 
-gboolean set_cpu_idle_limit (const gint percentage);
-gboolean get_is_cpu_idle ();
+gboolean gpm_idle_set_callback (IdleCallback callback);
+gboolean gpm_idle_update (gpointer data);
+gboolean gpm_idle_set_timeout (gint timeout);
 
 #endif	/* _GPMIDLE_H */

@@ -3,12 +3,19 @@
 	* src/gpm-idle.c (update_idle_function): Actually print the return
 	value of gscreensaver_get_idle ();
 
+	* src/gpm-notification.c: Moved callback_gconf_key_changed () to
+	src/gpm-main.c so we can do clever stuff. Not sure why it was ever in
+	this file in the first place...
+
 	* src/gpm-main.c: Fix two typos in the gconf keys threshold_low and 
 	threshold_critical, and one thinko in the order of calculating the
 	old and new charges. The warnings and auto-action should now work
 	again now. Found as a co-incidence of running out of battery power...
 
-	* gpm-screensaver.c: setThrottleEnabled now doesn't return us a value.
+	* src/gpm-main.c, src/gpm-idle.c: Add in the full idle functionality,
+	so that we can either suspend or hibernate when we are deemed idle.
+
+	* src/gpm-screensaver.c: setThrottleEnabled now doesn't return us a value.
 	Fix our calling function to also return the value of getIdleTime,
 	rather than just the success.
 

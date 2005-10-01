@@ -83,6 +83,40 @@ get_policy_string (const gchar *gconfpath)
 	return value;
 }
 
+/** Callback for gconf modified keys (that we are watching).
+ *
+ */
+void
+callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	gint value;
+
+	/* assertion checks */
+	g_assert (client);
+	g_assert (entry);
+
+	g_debug ("callback_gconf_key_changed (%s)", entry->key);
+
+	if (gconf_entry_get_value (entry) == NULL)
+		return;
+
+	if (strcmp (entry->key, GCONF_ROOT "general/display_icon") == 0) {
+		gpn_icon_update ();
+	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
+		gpn_icon_update ();
+	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_computer") == 0) {
+		/* set new suspend timeouts */
+		value = gconf_client_get_int (client, entry->key, NULL);
+		if (state_data.onBatteryPower)
+			gpm_idle_set_timeout (value);
+	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_computer") == 0) {
+		/* set new suspend timeouts */
+		value = gconf_client_get_int (client, entry->key, NULL);
+		if (!state_data.onBatteryPower)
+			gpm_idle_set_timeout (value);
+	}
+}
+
 static gboolean
 dbus_action (gint action)
 {
@@ -196,6 +230,15 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_BATTERY_DISCHARGE) {
 		g_debug ("*ACTION* Battery Discharging");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
+		/*
+		 * This case does 5 things:
+		 *
+		 * 1. Sets the brightness level
+		 * 2. Sets HAL to be in LaptopMode (only if laptop)
+		 * 3. Sets DPMS timeout to be our batteries policy value
+		 * 4. Sets GNOME Screensaver to not run fancy screensavers
+		 * 5. Sets our inactivity sleep timeout to batteries policy
+		 */
 		g_debug ("*DBUS* Now battery powered");
 		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client,
@@ -212,9 +255,22 @@ action_policy_do (gint policy_number)
 		 * and enables monitor shut-off instead
 		 */
 		gscreensaver_set_throttle (TRUE);
+		/* set the new sleep (inactivity) value */
+		value = gconf_client_get_int (client,
+			GCONF_ROOT "policy/battery/sleep_computer", NULL);
+		gpm_idle_set_timeout (value);
 		/* emit siganal */
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
+		/*
+		 * This case does 5 things:
+		 *
+		 * 1. Sets the brightness level
+		 * 2. Sets HAL to not be in LaptopMode
+		 * 3. Sets DPMS timeout to be our ac policy value
+		 * 4. Sets GNOME Screensaver to run fancy screensavers
+		 * 5. Sets our inactivity sleep timeout to ac policy
+		 */
 		g_debug ("*DBUS* Now mains powered");
 		/* set brightness and lowpower mode */
 		value = gconf_client_get_int (client,
@@ -228,6 +284,10 @@ action_policy_do (gint policy_number)
 			"/apps/gnome-screensaver/dpms_suspend", value, NULL);
 		/* make sure gnome-screensaver enables screensaving */
 		gscreensaver_set_throttle (FALSE);
+		/* set the new sleep (inactivity) value */
+		value = gconf_client_get_int (client,
+			GCONF_ROOT "policy/ac/sleep_computer", NULL);
+		gpm_idle_set_timeout (value);
 		/* emit siganal */
 		gpm_emit_mains_changed (TRUE);
 	} else
@@ -668,7 +728,6 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 		oldCharge = slotDataVirt.percentageCharge;
 	} else
 		oldCharge = slotData->percentageCharge;
-	g_warning ("oldCharge = %i", oldCharge);
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
@@ -706,8 +765,9 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 		newCharge = slotDataVirt.percentageCharge;
 	} else
 		newCharge = slotData->percentageCharge;
-	g_warning ("newCharge = %i", newCharge);
+	g_debug ("newCharge = %i, oldCharge = %i", newCharge, oldCharge);
 
+	/* update icon */
 	gpn_icon_update ();
 
 	/* do we need to notify the user we are getting low ? */
@@ -787,6 +847,25 @@ static void print_usage (void)
 		"\n");
 }
 
+/** Callback for the idle function.
+ *
+ *  @param  timeout	Time in minutes that computer has been idle
+ */
+void
+idle_callback (gint timeout)
+{
+	gint policy;
+	GString *gs;
+
+	gs = g_string_new ("");
+	g_string_printf (gs, _("Computer has been idle for %i minutes"), timeout);
+	policy = get_policy_string (GCONF_ROOT "policy/ac_fail");
+	libnotify_event (gs->str, LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+	/* can only be hibernate or suspend */
+	action_policy_do (policy);
+	g_string_free (gs, TRUE);
+}
+
 /** Entry point
  *
  *  @param  argc	Number of arguments given to program
@@ -797,6 +876,7 @@ int
 main (int argc, char *argv[])
 {
 	gint a;
+	gint value;
 	GMainLoop *loop = NULL;
 	GConfClient *client = NULL;
 	GnomeClient *master = NULL;
@@ -907,8 +987,21 @@ main (int argc, char *argv[])
 	gpn_icon_initialise ();
 	gpn_icon_update ();
 
+	/* get idle value from gconf */
+	if (state_data.onBatteryPower) {
+		value = gconf_client_get_int (client, 
+			GCONF_ROOT "policy/battery/sleep_computer", NULL);
+	} else {
+		value = gconf_client_get_int (client,
+			GCONF_ROOT "policy/ac/sleep_computer", NULL);
+	}
+	gpm_idle_set_timeout (value);
+	
+	/* set callback for the timout action */
+	gpm_idle_set_callback (idle_callback);
+
 	/* set up idle calculation function */
-	g_timeout_add (60*1000, update_idle_function, NULL);
+	g_timeout_add (POLL_FREQUENCY * 1000, gpm_idle_update, NULL);
 
 	g_main_loop_run (loop);
 

@@ -4,7 +4,7 @@ GNOME Power Manager 0.2.6
 
 Released October xx, 2005
 
-- gnome-screensaver support runtime detection has been improved
+- GNOME Screensaver support runtime detection has been improved
   (no timeouts now)
 - Fixed lots of 64bit warnings thanks to Rodrigo Moya <rodrigo@novell.com>
 - GNOME Power Manager is now in Fedora Core Rawhide!
@@ -12,17 +12,25 @@ Released October xx, 2005
   changing brightness states.
 - We now support ONLY the new SetBrightness HAL API in HAL CVS.
   http://article.gmane.org/gmane.comp.freedesktop.hal/3280
+  You will have to be using HAL CVS for brightness changing to work.
 - We now do not require libhal as all communication to hald is done through
   the DBUS glib bindings.
 - All source files now have lots of asserts that should make any code logic
   errors easy to spot. Please report any regressions.
 - Thanks to Robert Love, we now daemonize when being run. Use --no-daemonise
   to disable this.
-- A new "About" box that doesn't use depreciated functions...
+- A new "About" box that follows the GNOME HIG...
 - A new "Information" tab that tells you a bit about your computers' power
-  management capability.
+  management capability. This is very young and will have much more
+  information in the future about batteries, UPS's etc.
 - Lots of fixes and improvements to the core code, with thanks to Theetjuh
   and Myk Melez for testing the code so well.
+- GNOME Power Manager now notifies you your battery is low *and* how much time
+  you have remaining. This fixes a regression from 0.2.2.
+- Working with GNOME Screensaver, we now work out the idle time so we can
+  suspend or hibernate in a period of keyboard and mouse in-activity. 
+  The load value is also computed, so we can avoid sleeing when CPU 
+  intensive programs are left running, e.g. kernel compiles or simulations.
 
 ==========
 GNOME Power Manager 0.2.4
