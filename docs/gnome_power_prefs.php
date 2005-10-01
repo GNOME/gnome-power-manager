@@ -31,6 +31,14 @@ Preferences options
 Advanced preferences
 </p>
 
+<center>
+<img src="images/pref-info.png" alt="[img]"/>
+</center>
+<p class="caption">
+Information about your computer.
+In the future, this will display information about your batteries and UPS's.
+</p>
+
 <?php
 	include('footer.php');
 ?>

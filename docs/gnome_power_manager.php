@@ -29,7 +29,21 @@ The icons can be themed with custom icons for each theme, or fallback to a stand
 <img src="images/gpm-taskbar.png" alt="[img]"/>
 </center>
 <p class="caption">
-Example right-click menu that gives the options and actions
+Example right-click menu that gives the options and actions.
+</p>
+
+<center>
+<img src="images/gpm-tooltip.png" alt="[img]"/>
+</center>
+<p class="caption">
+The tooltip displayed by GNOME Power Manager.
+</p>
+
+<center>
+<img src="images/gpm-low-batt.png" alt="[img]"/>
+</center>
+<p class="caption">
+The libnotify message that reminds the user that the battery is low.
 </p>
 
 <h2>
