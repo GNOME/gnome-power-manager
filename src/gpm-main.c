@@ -89,7 +89,7 @@ get_policy_string (const gchar *gconfpath)
 void
 callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	gint value;
+	gint value = 0;
 
 	/* assertion checks */
 	g_assert (client);
@@ -114,7 +114,24 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 		value = gconf_client_get_int (client, entry->key, NULL);
 		if (!state_data.onBatteryPower)
 			gpm_idle_set_timeout (value);
+	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_display") == 0) {
+		/* set new suspend timeouts */
+		if (state_data.onBatteryPower) {
+			value = gconf_client_get_int (client, entry->key, NULL);
+			g_debug ("Adjusting g-s dpms_suspend value to %i.", value);
+			gconf_client_set_int (client,
+				"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+		}
+	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_display") == 0) {
+		/* set new suspend timeouts */
+		if (!state_data.onBatteryPower) {
+			value = gconf_client_get_int (client, entry->key, NULL);
+			g_debug ("Adjusting g-s dpms_suspend value to %i.", value);
+			gconf_client_set_int (client,
+				"/apps/gnome-screensaver/dpms_suspend", value, NULL);
+		}
 	}
+
 }
 
 static gboolean

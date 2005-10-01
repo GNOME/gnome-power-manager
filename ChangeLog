@@ -2,6 +2,7 @@
 
 	* src/gpm-idle.c (update_idle_function): Actually print the return
 	value of gscreensaver_get_idle ();
+	Also check the value of the timeout to check it's not set to zero.
 
 	* src/gpm-notification.c: Moved callback_gconf_key_changed () to
 	src/gpm-main.c so we can do clever stuff. Not sure why it was ever in
@@ -11,6 +12,9 @@
 	threshold_critical, and one thinko in the order of calculating the
 	old and new charges. The warnings and auto-action should now work
 	again now. Found as a co-incidence of running out of battery power...
+	(callback_gconf_key_changed): Add case where g-p-p should force an
+	update to dmps_suspend without having to change state.
+	Reported by Theetjuh <theetjuh@gmail.com>.
 
 	* src/gpm-main.c, src/gpm-idle.c: Add in the full idle functionality,
 	so that we can either suspend or hibernate when we are deemed idle.
@@ -18,6 +22,17 @@
 	* src/gpm-screensaver.c: setThrottleEnabled now doesn't return us a value.
 	Fix our calling function to also return the value of getIdleTime,
 	rather than just the success.
+
+	* docs/gnome_power_manager.php, docs/gnome_power_preferences.php:
+	Add a couple of new images and update the text a bit.
+
+	* src/glibhal-extras.c: Return a success value, and pass in steps by
+	reference.
+
+	* src/gpm-prefs.c: make sure hscale_batteries_display and 
+	hscale_ac_display are set to 5 minute divisions.
+	Also, only set the LCD slider points if we have LCD hardware.
+	This removes a warning on desktop systems.
 
 2005-09-30  Richard Hughes  <richard@hughsie.com>
 

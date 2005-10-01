@@ -82,7 +82,9 @@ gpm_is_on_ac (gboolean *value)
 	return retval;
 }
 
-/** queries org.gnome.GnomePowerManager.isOnBattery
+/** queries org.gnome.GnomePowerManager.isOnBattery	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
+		divisions = 5;
+
  *
  *  @param  value	return value, passed by ref
  *  @return		TRUE for success, FALSE for failure
@@ -354,6 +356,10 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	if (strcmp (widgetname, "hscale_ac_computer") == 0)
 		divisions = 5;
 	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
+		divisions = 5;
+	else if (strcmp (widgetname, "hscale_batteries_display") == 0)
+		divisions = 5;
+	else if (strcmp (widgetname, "hscale_ac_display") == 0)
 		divisions = 5;
 
 	if (divisions > 0) {
@@ -869,15 +875,16 @@ main (int argc, char **argv)
 	gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
 	/* set the top end for LCD sliders */
-	steps = hal_get_brightness_steps ();
+	if (hal_get_brightness_steps (&steps)) {
+		/* only set steps if we have LCD device */
+		widget = glade_xml_get_widget (all_pref_widgets, "hscale_ac_brightness");
+		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
+		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 
-	widget = glade_xml_get_widget (all_pref_widgets, "hscale_ac_brightness");
-	gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
-	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
-
-	widget = glade_xml_get_widget (all_pref_widgets, "hscale_batteries_brightness");
-	gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
-	g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
+		widget = glade_xml_get_widget (all_pref_widgets, "hscale_batteries_brightness");
+		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
+		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
+	}
 
 	/* set up info page */
 	refresh_info_page ();

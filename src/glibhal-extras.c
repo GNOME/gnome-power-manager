@@ -318,18 +318,22 @@ hal_setlowpowermode (gboolean set)
  *
  *  @return  			Number of steps
  */
-gint
-hal_get_brightness_steps (void)
+gboolean
+hal_get_brightness_steps (gint *steps)
 {
 	gchar **names = NULL;
-	gint levels = 0;
+
+	/* assertion checks */
+	g_assert (steps);
+
 	hal_find_device_capability ("laptop_panel", &names);
 	if (!names || !names[0]) {
 		g_debug ("No devices of capability laptop_panel");
-		return 0;
+		*steps = 0;
+		return FALSE;
 	}
 	/* only use the first one */
-	hal_device_get_int (names[0], "laptop_panel.num_levels", &levels);
+	hal_device_get_int (names[0], "laptop_panel.num_levels", steps);
 	hal_free_capability (names);
-	return levels;
+	return TRUE;
 }

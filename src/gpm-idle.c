@@ -35,7 +35,7 @@
 cpudata		old;
 gboolean	init;
 double		loadpercentage;
-gint		time_idle_callback;
+gint		time_idle_callback = 0;
 IdleCallback	callbackfunction;
 
 /* 
@@ -135,7 +135,6 @@ cpu_update_data (void)
 	if (!init) {
 		init = TRUE;
 		cpudata_get_values (&old);
-		time_idle_callback = 0;
 		return 0;
 	}
 
@@ -157,6 +156,11 @@ cpu_update_data (void)
 gboolean
 gpm_idle_set_timeout (gint timeout)
 {
+	if (timeout <= 0 || timeout > 10 * 60 * 60) {
+		g_warning ("gpm_idle_set_timeout was called with value = %i", timeout);
+		return FALSE;
+	}
+	g_debug ("gpm_idle_set_timeout = %i", timeout);
 	time_idle_callback = timeout;
 	return TRUE;
 }
