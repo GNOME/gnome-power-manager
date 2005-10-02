@@ -1,3 +1,16 @@
+2005-10-02  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.2.6.1
+
+	* src/gpm-idle.c (gpm_idle_update): Don't return FALSE is timeout is
+	set to zero, as the polling will stop. The polling needs to continue
+	in case the value is changed in g-conf.
+
+	* src/gpm-notification.c (gtk_icon_theme_fallback): Do the icon
+	fallback is a more robust way (so sizes are unimportant).
+	(create_icon_pixbuf): Return the pixmap for type POWER_AC_ADAPTER.
+	Fixes problems reported by Dumitru Ciobarcianu.
+
 2005-10-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-idle.c (update_idle_function): Actually print the return
