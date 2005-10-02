@@ -1,8 +1,10 @@
-/***************************************************************************
- *
- * gpm-common.h : Common functions shared between modules
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+/*! @file	gpm-common.h
+ *  @brief	Common functions shared between modules
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,18 +18,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
-#ifndef _COMMON_H
-#define _COMMON_H
+#ifndef _GPMCOMMON_H
+#define _GPMCOMMON_H
 
 #include "eggtrayicon.h"
 #include <gnome.h>
-
-/* Set the timeout of the libnotify notifications */
-#define NOTIFY_TIMEOUT			5
 
 /* Do no actions. Set to true for testing */
 #define GPM_SIMULATE			FALSE
@@ -56,6 +55,7 @@
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
+/** The action type */
 typedef enum {
 	ACTION_NOTHING,
 	ACTION_WARNING,
@@ -64,54 +64,42 @@ typedef enum {
 	ACTION_SHUTDOWN,
 	ACTION_UNKNOWN,
 	ACTION_REBOOT,
-	ACTION_POWER_STATE_CHANGE,
-	ACTION_UPS_LOW,
-	ACTION_UPS_CHARGE,
-	ACTION_UPS_DISCHARGE,
-	ACTION_BATTERY_CHARGE,
-	ACTION_BATTERY_DISCHARGE,
-	ACTION_BATTERY_LOW,
 	ACTION_NOW_BATTERYPOWERED,
-	ACTION_NOW_MAINSPOWERED,
-	ACTION_NOW_HASBATTERIES,
-	ACTION_NOW_NOBATTERIES
+	ACTION_NOW_MAINSPOWERED
 } ActionType;
 
+/** The device type of the cached object */
 typedef enum {
-	POWER_NONE,
-	POWER_UNKNOWN,
-	POWER_AC_ADAPTER,
-	POWER_PRIMARY_BATTERY,
-	POWER_UPS,
-	POWER_MOUSE,
-	POWER_KEYBOARD,
-	POWER_LCD,
-	POWER_PDA
+	POWER_NONE,		/**< The blank device			*/
+	POWER_UNKNOWN,		/**< An unknown device			*/
+	POWER_AC_ADAPTER,	/**< An AC Adapter			*/
+	POWER_PRIMARY_BATTERY,	/**< A laptop battery			*/
+	POWER_UPS,		/**< An Uninterruptible Power Supply	*/
+	POWER_MOUSE,		/**< A wireless, battery mouse		*/
+	POWER_KEYBOARD,		/**< A wireless, battery keyboard	*/
+	POWER_PDA		/**< A Personal Digital Assistant	*/
 } PowerDevice;
 
-typedef enum {
-	BUTTON_POWER,
-	BUTTON_SLEEP,
-	BUTTON_LID,
-	BUTTON_UNKNOWN
-} ButtonDevice;
-
+/** The state object used to cache the state of the computer */
 typedef struct {
-	int idleTime;
-	gboolean onBatteryPower;
-	gboolean onUPSPower;
+	gboolean onBatteryPower;/**< Are we on battery power?		*/
+	gboolean onUPSPower;	/**< Are we on UPS power?		*/
 } StateData;
 
+/** The generic object used to cache the hal objects locally.
+ *
+ * This is used to minimise the number of lookups to make sure
+ * that the DBUS traffic is kept to a minimum.
+ */
 typedef struct {
-	gboolean present;
-	gint slot;
-	gchar udi[128];
-	gint powerDevice;
-	gint isRechargeable;
-	gint percentageCharge;
-	gint minutesRemaining;
-	gboolean isCharging;
-	gboolean isDischarging;
+	gboolean present;	/**< If the device is present		*/
+	gchar udi[128];		/**< The HAL UDI			*/
+	gint powerDevice;	/**< The device type from PowerDevice	*/
+	gint isRechargeable;	/**< If device is rechargeable		*/
+	gint percentageCharge;	/**< The percentage charge remaining	*/
+	gint minutesRemaining;	/**< Minutes remaining until charged	*/
+	gboolean isCharging;	/**< If device is charging		*/
+	gboolean isDischarging;	/**< If device is discharging		*/
 } GenericObject;
 
 void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
@@ -124,7 +112,6 @@ gint convert_string_to_policy (const gchar *gconfstring);
 gint convert_haltype_to_powerdevice (const gchar *type);
 gchar *convert_policy_to_string (gint value);
 
-void update_percentage_charge (GenericObject *slotData);
 GString *get_timestring_from_minutes (gint minutes);
 gchar *convert_powerdevice_to_string (gint powerDevice);
 gchar *get_chargestate_string (GenericObject *slotData);
@@ -136,5 +123,4 @@ gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_add (GPtrArray *parray, const gchar *udi);
 
-
-#endif	/* _COMMON_H */
+#endif	/* _GPMCOMMON_H */

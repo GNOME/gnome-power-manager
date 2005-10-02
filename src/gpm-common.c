@@ -1,12 +1,14 @@
-/***************************************************************************
- *
- * gpm-common.c : Common functions shared between modules
+/*! @file	gpm-common.c
+ *  @brief	Common functions shared between modules
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module contains functions that are shared between g-p-m and
  * g-p-m so that as much code can be re-used as possible.
  * There's a bit of everything in this file...
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,9 +22,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -61,8 +63,8 @@ get_widget_position (GtkWidget *widget, gint *x, gint *y)
 
 /** Finds a device from the objectData table
  *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
+ *  @param	parray		pointer array to GenericObject
+ *  @param	udi		HAL UDI
  */
 gint
 find_udi_parray_index (GPtrArray *parray, const gchar *udi)
@@ -85,8 +87,8 @@ find_udi_parray_index (GPtrArray *parray, const gchar *udi)
 
 /** Finds a device from the objectData table
  *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
+ *  @param	parray		pointer array to GenericObject
+ *  @param	udi		HAL UDI
  */
 GenericObject *
 genericobject_find (GPtrArray *parray, const gchar *udi)
@@ -105,8 +107,8 @@ genericobject_find (GPtrArray *parray, const gchar *udi)
 
 /** Adds a device to the objectData table *IF DOES NOT EXIST*
  *
- *  @param  parray		pointer array to GenericObject
- *  @param  udi			HAL UDI
+ *  @param	parray		pointer array to GenericObject
+ *  @param	udi		HAL UDI
  *  @return			TRUE if we added to the table
  */
 GenericObject *
@@ -126,14 +128,13 @@ genericobject_add (GPtrArray *parray, const gchar *udi)
 	slotData = g_new (GenericObject, 1);
 	strcpy (slotData->udi, udi);
 	slotData->powerDevice = POWER_UNKNOWN;
-	slotData->slot = a;
 	g_ptr_array_add (parray, (gpointer) slotData);
 	return slotData;
 }
 
 /** Runs a file set in GConf
  *
- *  @param  value		The gconf path
+ *  @param	path		The gconf path
  *  @return			Success
  */
 gboolean
@@ -161,7 +162,7 @@ run_gconf_script (const char *path)
 
 /** Converts an dbus ENUM to it's string representation
  *
- *  @param  value		The dbus ENUM
+ *  @param	value		The dbus ENUM
  *  @return			action string, e.g. "Shutdown"
  */
 gchar *
@@ -184,8 +185,8 @@ convert_dbus_enum_to_string (gint value)
 /** Converts an dbus ENUMs to it's text representation
  * (only really useful for debugging)
  *
- *  @param  value		The dbus ENUM's
- *  @return				action string, e.g. "{GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF}"
+ *  @param	value		The dbus ENUM's
+ *  @return			action string, e.g. "{GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF}"
  */
 GString *
 convert_gpmdbus_to_string (gint value)
@@ -209,7 +210,7 @@ convert_gpmdbus_to_string (gint value)
 
 /** Gets the timestring from a slot object
  *
- *  @param  slotData		the GenericObject reference
+ *  @param	slotData	the GenericObject reference
  *  @return			the timestring, e.g. "13 minutes until charged"
  */
 GString *
@@ -232,11 +233,13 @@ get_time_string (GenericObject *slotData)
 }
 
 /** Returns a virtual device that takes into account having more than one device
- *  that needs to be averaged. Currently we are calculating:
- *  percentageCharge and minutesRemaining only.
+ *  that needs to be averaged.
  *
- *  @param  slotDataReturn	the object returned. Must not be NULL
- *  @param  powerDevice		the object to be returned. Usually POWER_PRIMARY_BATTERY
+ *  @note	Currently we are calculating percentageCharge and minutesRemaining only.
+ *
+ *  @param	objectData	the device database
+ *  @param	slotDataReturn	the object returned. Must not be NULL
+ *  @param	powerDevice	the object to be returned. Usually POWER_PRIMARY_BATTERY
  */
 void
 create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice)
@@ -321,7 +324,7 @@ convert_string_to_policy (const gchar *gconfstring)
 
 /** Converts an action ENUM to it's string representation
  *
- *  @param  powerDevice		The action ENUM
+ *  @param  value		The action ENUM
  *  @return			action string, e.g. "shutdown"
  */
 gchar *
@@ -343,7 +346,7 @@ convert_policy_to_string (gint value)
 
 /** Converts an HAL string representation to it's ENUM
  *
- *  @param  gconfstring		The HAL battery type
+ *  @param  type		The HAL battery type
  *  @return			The powerDevice ENUM
  */
 gint convert_haltype_to_powerdevice (const gchar *type)

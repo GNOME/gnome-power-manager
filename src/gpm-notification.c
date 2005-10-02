@@ -1,27 +1,29 @@
-/***************************************************************************
- *
- * gpm-notification.c : GNOME Power Notification 
+/*! @file	gpm-notification.c
+ *  @brief	GNOME Power Notification
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module provides panel functions for g-p-m, and is closely linked
  * to gpm-main.c
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -40,19 +42,22 @@
 
 /* shared with gpm-main.c */
 StateData state_data;
-
 static TrayData *eggtrayicon = NULL;
 GPtrArray *objectData;
 
 /** Get a image (pixbuf) trying the theme first, falling back to locally 
- * if not present. This means we do not have to check in configure.in for lots
- * of obscure icons.
+ *  if not present. This means we do not have to check in configure.in for lots
+ *  of obscure icons.
  *
- *  @param  name	the icon name, e.g. gnome-battery
- *  @param  size	the icon size, e.g. 22
+ *  @param	name		the icon name, e.g. gnome-battery
+ *  @param	size		the icon size, e.g. 22
+ *  @return			A valid GdkPixbuf image
+ *
+ *  @note	If we cannot find the specific themed GNOME icon we use the
+ *		builtin fallbacks. This makes GPM more portible between distros
  */
 static GdkPixbuf *
-gtk_icon_theme_fallback (const char *name, int size)
+gtk_icon_theme_fallback (const gchar *name, gint size)
 {
 	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
@@ -69,10 +74,6 @@ gtk_icon_theme_fallback (const char *name, int size)
 		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
 		gtk_icon_info_free (iinfo);
 	} else {
-		/* 
-		 * We cannot find this specific themed GNOME icon so use builtin
-		 * fallbacks. This makes GPM more portible between distros
-		 */
 		g_debug ("Using fallback icon for %s", name);
 		fallback = g_string_new ("");
 		g_string_printf (fallback, GPM_DATA "%s.png", name);
@@ -86,9 +87,33 @@ gtk_icon_theme_fallback (const char *name, int size)
 	return pixbuf;
 }
 
+/** Finds the icon index value for the percentage charge
+ *
+ *  @param	percent		The percentage value
+ *  @return			A scale 0..8
+ */
+static gint
+get_index_from_percent (gint percent)
+{
+	gint num;
+	/* invalid input */
+	if (percent < 0)
+		return 0;
+	if (percent > 100)
+		return 8;
+	/* work out value */
+	num = ((percent + 4) * 8 ) / 100;
+	if (num < 0)
+		return 0;
+	else if (num > 8)
+		return 8;
+	return num;
+}
+
 /** Gets an icon (pixbuf) suitable for the object
  *
- *  @param  td			Address of the icon
+ *  @param	slotData	A cached data object
+ *  @return			A valid GdkPixbuf image
  */
 static GdkPixbuf *
 create_icon_pixbuf (GenericObject *slotData)
@@ -105,24 +130,15 @@ create_icon_pixbuf (GenericObject *slotData)
 		/* have to work out for all objects for multibattery setups */
 		slotDataVirt.percentageCharge = 100;
 		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-
-		num = ((slotDataVirt.percentageCharge + 4) * 8 ) / 100;
-		if (num < 0)
-			num = 0;
-		else if (num > 8)
-			num = 8;
+		num = get_index_from_percent (slotDataVirt.percentageCharge);
 		computed_name = g_strdup_printf ("gnome-power-system%s-%d-of-8", 
-						 state_data.onBatteryPower ? "" : "-ac", num);
+					state_data.onBatteryPower ? "" : "-ac", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_UPS) {
-		num = ((slotData->percentageCharge + 4) * 8 ) / 100;
-		if (num < 0)
-			num = 0;
-		else if (num > 8)
-			num = 8;
+		num = get_index_from_percent (slotDataVirt.percentageCharge);
 		computed_name = g_strdup_printf ("gnome-power-system-ups-%d-of-8", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
 		g_debug ("computed_name = %s", computed_name);
@@ -131,22 +147,22 @@ create_icon_pixbuf (GenericObject *slotData)
 	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
 		pixbuf = gtk_icon_theme_fallback ("gnome-dev-acadapter", 22);
 	} else {
-		g_error ("create_icon_pixbuf called with unknown type %i!", slotData->powerDevice);
+		g_error ("create_icon_pixbuf called with unknown type %i!",
+			slotData->powerDevice);
 	}
 	/* make sure we got something */
 	if (!pixbuf)
 		g_error ("Failed to get pixbuf.\n"
 			 "Maybe GNOME Power Manager is not installed correctly!");
-
 	return pixbuf;
 }
 
 /** Frees resources and hides notification area icon
  *
- *  @param  td			Address of the icon
+ *  @param	eggtrayicon	A valid TrayIcon
  */
 void
-icon_destroy (void)
+icon_destroy (TrayData *eggtrayicon)
 {
 	/* assertion checks */
 	g_assert (eggtrayicon);
@@ -161,22 +177,22 @@ icon_destroy (void)
 	eggtrayicon = NULL;
 }
 
-/* wrapper function */
-void
-gpn_icon_initialise (void)
-{
-	eggtrayicon = NULL;
-}
-
-/* wrapper function */
+/** Frees icon, wrapper function
+ *
+ */
 void
 gpn_icon_destroy (void)
 {
 	if (eggtrayicon)
-		icon_destroy ();
+		icon_destroy (eggtrayicon);
 	eggtrayicon = NULL;
 }
 
+/** Gets the tooltip for a specific device object
+ *
+ *  @param	slotData	A cached data object
+ *  @return			Part of the tooltip
+ */
 GString *
 get_object_tooltip (GenericObject *slotData)
 {
@@ -218,6 +234,7 @@ get_object_tooltip (GenericObject *slotData)
 
 /** Returns the tooltip for the main icon. Text logic goes here :-)
  *
+ *  @return			The complete tooltip
  */
 GString *
 get_main_tooltip (void)
@@ -245,9 +262,9 @@ get_main_tooltip (void)
 
 /** Gets an example icon for the taskbar
  *
- *  @param	powerDevice		the power type, e.g. POWER_UPS
- *  @param	displayFull		should we display icons for full devices?
- *  @return				pointer to the applicable data type
+ *  @param	powerDevice	The power type, e.g. POWER_UPS
+ *  @param	displayFull	Should we display icons for full devices?
+ *  @return			cached object pointer to the applicable data type
  */
 static GenericObject *
 get_object_of_powertype (int powerDevice, gboolean displayFull)
@@ -269,18 +286,18 @@ get_object_of_powertype (int powerDevice, gboolean displayFull)
 /** Finds the best selection for the icon in the notification area
  *
  *  @return  		The pointer to the main icon, or NULL if none needed
+ *
+ *  @note	Our preferred choice is:
+ *	 	Battery, UPS, AC_ADAPTER
+ *		PDA and others should never be a main icon.
  */
 GenericObject *
 get_main_icon_slot (void)
 {
 	GenericObject *slotData = NULL;
 	GConfClient *client = gconf_client_get_default ();
-	gboolean showIfFull = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon_full", NULL);
-	/*
-	 * Our preferred choice is:
-	 * Battery, UPS, AC_ADAPTER
-	 * PDA and others should never be a main icon.
-	 */
+	gboolean showIfFull = gconf_client_get_bool (client, 
+		GCONF_ROOT "general/display_icon_full", NULL);
 
 	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, showIfFull);
 	if (slotData)
@@ -294,12 +311,15 @@ get_main_icon_slot (void)
 	if (slotData)
 		return slotData;
 
-	g_warning ("Cannot find preferred main device. This may be because you are running on a desktop machine!");
+	g_warning ("Cannot find preferred main device."
+		   "This may be because you are running on a desktop machine.");
 	return NULL;
 }
 
 /** Callback for actions boxes
  *
+ *  @param	menuitem	The part of the menu that was clicked
+ *  @param	user_data	Unused
  */
 static void
 callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
@@ -319,13 +339,9 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		g_warning ("No handler for '%s'", action);
 }
 
-/** Returns the Gtkimage that is the notification icon
+/** Returns the GtkWidget that is the notification icon
  *
- *  @param	x				X co-ordinate return
- *  @param	y				Y co-ordinate return
- *  @return					Success, return FALSE when no icon present
- *
- * TODO : Need to cope when panel is on left, right, or bottom of screen.
+ *  @return			Success, return FALSE when no icon present
  */
 GtkWidget *
 get_notification_icon (void)
@@ -335,15 +351,22 @@ get_notification_icon (void)
 
 /** Function for "about" box URL press
  *
+ *  @param	about		The about dialogue
+ *  @param	link		The URL that was clicked
+ *  @param	user_data	Ununsed
  */
 void 
-callback_about_activated_url (GtkAboutDialog *about, const gchar *link, gpointer data)
+callback_about_activated_url (GtkAboutDialog *about,
+	const gchar *link,
+	gpointer user_data)
 {
 	gnome_url_show (link, NULL);
 }
 
 /** Callback for "about" box
  *
+ *  @param	menuitem	The menuitem that was clicked
+ *  @param	user_data	Ununsed
  */
 static void
 callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
@@ -357,59 +380,37 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	const gchar *artists[] = {
 		"Diana Fong <dfong@redhat.com>",
 		NULL};
-	const gchar *translators = 
-		"Michał Kastelik <mkastelik@gmail.com> (Polish)\n"
-		"Daniele Medri <daniele@medri.org> (Italian)\n"
-		"Yann Simon <yann.simon.fr@gmail.com> (French)\n"
-		"Maxim Dziumanenko <mvd@mylinux.ua> (Ukrainian)\n"
-		"Raphael Higino <raphaelh@cvs.gnome.org> (Brazilian Portuguese)\n"
-		"Adam Weinberger <adamw@gnome.org> (Canadian English)\n"
-		"Terance Sola <terance@lyse.net> (Norwegian bokmål)\n"
-		"Christian Rose <menthos@menthos.com> (Swedish)\n"
-		"James Ogley <james@usr-local-bin.org> (British English)\n"
-		"Francisco Javier F. Serrador <serrador@cvs.gnome.org> (Spanish)\n"
-		"Amanpreet Singh Alam <amanpreetalam@yahoo.com> (Punjabi)\n"
-		"Funda Wang <fundawang@linux.net.cn> (Simplified Chinese)\n"
-		"Hendrik Brandt <heb@gnome-de.org> (German translation)\n";
-
-	const gchar *gplv2 = 
-		"This program is free software; you can redistribute it and/or modify \n"
-		"it under the terms of the GNU General Public License as published\n"
-		"by the Free Software Foundation; either version 2 of the\n"
-		"License, or (at your option) any later version.\n\n"
-		"This program is distributed in the hope that it will be useful, \n"
-		"but WITHOUT ANY WARRANTY; without even the implied warranty of \n"
-		"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-		"See the GNU General Public License for more details.\n\n"
-		"You should have received a copy of the GNU General Public \n"
-		"License along with this program; if not, write to the Free \n"
-		"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, \n"
-		"Boston, MA  02110-1301, USA.\n";
 
 	GtkWidget *about = gtk_about_dialog_new ();
 	GdkPixbuf *logo = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), "GNOME Power Manager");
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
-	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), "\xc2\xa9 2005 Richard Hughes <richard@hughsie.com>");
-	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about), "Power Manager for GNOME Desktop");
-	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), gplv2);
-/* TODO -- why does this fail?
+	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), 
+		"\xc2\xa9 2005 Richard Hughes <richard@hughsie.com>");
+	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about),
+		"Power Manager for GNOME Desktop");
+	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), GPLV2);
+/** @todo why does gtk_about_dialog_set_wrap_license fail?
 	gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (about), TRUE);
 */
 	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about), GPMURL);
-	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (about), "SourceForge Homepage");
+	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (about),
+		"SourceForge Homepage");
 	gtk_about_dialog_set_url_hook (callback_about_activated_url, NULL, NULL);
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
 	gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG (about), artists);
 	gtk_about_dialog_set_documenters (GTK_ABOUT_DIALOG (about), documenters);
-	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about), translators);
+	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about),
+		GPMTRANSLATORS);
 	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (about), logo);
 	gtk_widget_show (about);
 	g_object_unref (logo);
 }
 
-/** Callback for preferences
+/** Callback so that we can set the preferences
  *
+ *  @param	menuitem	The menuitem that was clicked
+ *  @param	user_data	Ununsed
  */
 static void
 callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
@@ -429,8 +430,18 @@ callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
 	g_free (path);
 }
 
+/** Callback so that we can set the preferences
+ *
+ *  @param	menu		The menu
+ *  @param	icon		The icon filename (no .png)
+ *  @param	name		The text title
+ *  @param	type		The type of menu item, e.g. hibernate
+ */
 static void
-menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char *type)
+menu_add_action_item (GtkWidget *menu,
+	const gchar *icon,
+	const gchar *name,
+	const gchar *type)
 {
 	/* get image */
 	GtkWidget *item = NULL;
@@ -476,13 +487,15 @@ menu_main_create (void)
 
 	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
 	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_prefs_activated), (gpointer) eggtrayicon->popup_menu);
+			  G_CALLBACK (callback_prefs_activated),
+			  (gpointer) eggtrayicon->popup_menu);
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
 	item = gtk_image_menu_item_new_from_stock (GNOME_STOCK_ABOUT, NULL);
 	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_about_activated), (gpointer) eggtrayicon->popup_menu);
+			  G_CALLBACK (callback_about_activated),
+			  (gpointer) eggtrayicon->popup_menu);
 	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
 	gtk_widget_show (item);
 
@@ -497,19 +510,23 @@ menu_main_create (void)
 
 /** private click release callback
  *
+ *  @param	widget		Unused
+ *  @param	event		The mouse button event
+ *  @param	traydata	The TrayData object in use
+ *  @return			If the popup-menu is already shown
  */
 static gboolean
-tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
+tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
 	g_assert (widget);
 	g_assert (event);
-	g_assert (eggtrayicon);
+	g_assert (traydata);
 
-	if (!eggtrayicon || !eggtrayicon->popup_menu)
+	if (!traydata || !traydata->popup_menu)
 		return TRUE;
 	if (event->button == 3) {
-		gtk_menu_popdown (GTK_MENU (eggtrayicon->popup_menu));
+		gtk_menu_popdown (GTK_MENU (traydata->popup_menu));
 		return FALSE;
 	}
 	return TRUE;
@@ -517,21 +534,25 @@ tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
 
 /** private click press callback
  *
+ *  @param	widget		Unused
+ *  @param	event		The mouse button event
+ *  @param	traydata	The TrayData object in use
+ *  @return			If the popup-menu is already shown
  */
 static gboolean
-tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *ignore)
+tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
 	g_assert (widget);
 	g_assert (event);
-	g_assert (eggtrayicon);
+	g_assert (traydata);
 
 	g_debug ("button : %i", event->button);
-	if (!eggtrayicon || !(eggtrayicon->popup_menu))
+	if (!traydata || !(traydata->popup_menu))
 		return TRUE;
 	if (event->button == 3) {
-		gtk_menu_popup (GTK_MENU (eggtrayicon->popup_menu), NULL, NULL, NULL, 
-			NULL, event->button, event->time);
+		gtk_menu_popup (GTK_MENU (traydata->popup_menu), NULL, NULL,
+			NULL, NULL, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;
@@ -584,7 +605,8 @@ gpn_icon_update (void)
 	GString *tooltip = NULL;
 
 	client = gconf_client_get_default ();
-	iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
+	iconShow = gconf_client_get_bool (client, 
+				GCONF_ROOT "general/display_icon", NULL);
 
 	if (!iconShow)
 		g_warning ("The key " GCONF_ROOT "general/display_icon"
@@ -613,7 +635,7 @@ gpn_icon_update (void)
 	} else {
 		/* remove icon */
 		if (eggtrayicon) {
-			icon_destroy ();
+			icon_destroy (eggtrayicon);
 			eggtrayicon = NULL;
 		}
 	}

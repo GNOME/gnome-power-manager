@@ -1,8 +1,10 @@
-/***************************************************************************
- *
- * prefs.h : Header for GNOME Power Preferences
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+/*! @file	gpm-prefs.h
+ *  @brief	GNOME Power Preferences
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +18,20 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
+#ifndef _GPMPREFS_H
+#define _GPMPREFS_H
+
+/** The policy tipe, required because the sliders all do different things
  *
- **************************************************************************/
-
-#ifndef _PREFS_H
-#define _PREFS_H
-
+ */
 typedef enum {
-	POLICY_PERCENT,
-	POLICY_LCD,
-	POLICY_TIME
+	POLICY_PERCENT,	/**< Policy is of type percent 0..100	*/
+	POLICY_LCD,	/**< Policy is of type LCD 0..x		*/
+	POLICY_TIME	/**< Policy is of type time 0..120	*/
 } PolicyType;
 
-#endif	/* _PREFS_H */
+#endif	/* _GPMPREFS_H */

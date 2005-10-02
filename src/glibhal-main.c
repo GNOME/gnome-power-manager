@@ -1,27 +1,29 @@
-/***************************************************************************
- *
- * glibhal-main.c : GLIB replacement for libhal
+/*! @file	glibhal-main.c
+ *  @brief	GLIB replacement for libhal, the extra stuff
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module is a direct replacement for libhal, and allows the user to
  * query and set keys in a more glib way than using libhal.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -36,7 +38,7 @@
 
 /** Finds out if hal is running
  *
- *  @return		TRUE for success, FALSE for failure
+ *  @return		TRUE if haldaemon is running
  */
 gboolean
 is_hald_running (void)
@@ -52,7 +54,7 @@ is_hald_running (void)
 
 /** Finds out if power management functions are running (only ACPI, PMU, APM)
  *
- *  @return		TRUE for success, FALSE for failure
+ *  @return		TRUE if haldaemon has power management capability
  */
 gboolean
 hal_pm_check (void)
@@ -66,10 +68,10 @@ hal_pm_check (void)
 
 /** glib libhal replacement to get boolean type
  *
- *  @param  udi		The UDI of the device
- *  @param  key		The key to query
- *  @param  value	return value, passed by ref
- *  @return		TRUE for success, FALSE for failure
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
  */
 gboolean
 hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
@@ -102,12 +104,12 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 
 /** glib libhal replacement to get string type
  *
- *  @param  udi		The UDI of the device
- *  @param  key		The key to query
- *  @param  value	return value, passed by ref
- *  @return		TRUE for success, FALSE for failure
+ *  @note	You must g_free () the return value.
  *
- * NOTE: You must g_free () the return value.
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
  */
 gboolean
 hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
@@ -140,10 +142,10 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 
 /** glib libhal replacement to get integer type
  *
- *  @param  udi		The UDI of the device
- *  @param  key		The key to query
- *  @param  value	return value, passed by ref
- *  @return		TRUE for success, FALSE for failure
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
  */
 gboolean
 hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
@@ -176,9 +178,9 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 
 /** glib libhal replacement to get devices with capability
  *
- *  @param  capability	The capability, e.g. "battery"
- *  @param  value	return value, passed by ref
- *  @return		TRUE for success, FALSE for failure
+ *  @param	capability	The capability, e.g. "battery"
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
  */
 gboolean
 hal_find_device_capability (const gchar *capability, gchar ***value)
@@ -212,6 +214,7 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 
 /** frees value result of hal_find_device_capability
  *
+ *  @param	value		The list of strings to free
  */
 void
 hal_free_capability (gchar **value)
@@ -229,7 +232,7 @@ hal_free_capability (gchar **value)
 
 /** Get the number of devices on system with a specific capability
  *
- *  @param  capability		The capability, e.g. "battery"
+ *  @param	capability	The capability, e.g. "battery"
  *  @return			Number of devices of that capability
  */
 gint
@@ -255,13 +258,14 @@ hal_num_devices_of_capability (const gchar *capability)
 
 /** Get the number of devices on system with a specific capability
  *
- *  @param  capability		The capability, e.g. "battery"
- *  @param  key			The key to match, e.g. "button.type"
- *  @param  value		The key match, e.g. "power"
+ *  @param	capability	The capability, e.g. "battery"
+ *  @param	key		The key to match, e.g. "button.type"
+ *  @param	value		The key match, e.g. "power"
  *  @return			Number of devices of that capability
  */
 gint
-hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value)
+hal_num_devices_of_capability_with_value (const gchar *capability, 
+	const gchar *key, const gchar *value)
 {
 	gint i;
 	gint valid = 0;
@@ -285,6 +289,7 @@ hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *
 		g_free (type);
 	};
 	hal_free_capability (names);
-	g_debug ("%i devices of capability %s where %s is %s", valid, capability, key, value);
+	g_debug ("%i devices of capability %s where %s is %s", 
+		valid, capability, key, value);
 	return valid;
 }

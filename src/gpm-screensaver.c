@@ -1,11 +1,13 @@
-/***************************************************************************
+/*! @file	gpm-screensaver.c
+ *  @brief	Functions to query and control GNOME Screensaver
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
- * gpm-screensaver.c : GLIB replacement for libhal, the extra stuff
- *
- * This module deals with communicating through DBUS to 
+ * This module deals with communicating through DBUS and gconf to 
  * GNOME Screensaver.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,9 +21,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -37,7 +39,8 @@
 
 /** Sets the DPMS timeout to a known value
  *
- *  @param timeout		Timeout in minutes
+ *  @param	timeout		Timeout in minutes
+ *  @return			TRUE if timeout was valid
  */
 gboolean
 gscreensaver_set_dpms_timeout (gint timeout)
@@ -46,15 +49,18 @@ gscreensaver_set_dpms_timeout (gint timeout)
 
 	if (timeout < 0 || timeout > 10 * 60 * 60)
 		return FALSE;
-	g_debug ("Adjusting gnome-screensaver dpms_suspend value to %i.", timeout);
+	g_debug ("Adjusting gnome-screensaver dpms_suspend to %i.", timeout);
 	client = gconf_client_get_default ();
 	gconf_client_set_int (client, GS_GCONF_ROOT "dpms_suspend", timeout, NULL);
 	return TRUE;
 }
 
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
+/** If set to lock on screensave, do so.
+ *
+ * Instruct gnome-screensaver to lock screen if set gconf, if not to lock,
+ * then do nothing, and return FALSE.
+ *
+ *  @return			TRUE if we locked the screen
  */
 gboolean
 gscreensaver_lock_check (void)
@@ -71,7 +77,7 @@ gscreensaver_lock_check (void)
 
 /** Finds out if gnome-screensaver is running
  *
- *  @return		TRUE for success, FALSE for failure
+ *  @return			TRUE if gnome-screensaver is running
  */
 gboolean
 gscreensaver_is_running (void)
@@ -98,9 +104,10 @@ gscreensaver_is_running (void)
 	return boolret;
 }
 
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
+/** Sets the throttle for gnome-screensaver
+ *
+ *  @param	throttle	If we should disable CPU hungry screensavers
+ *  @return			TRUE if gnome-screensaver changed its status.
  */
 gboolean
 gscreensaver_set_throttle (gboolean throttle)
@@ -132,9 +139,9 @@ gscreensaver_set_throttle (gboolean throttle)
 	return TRUE;
 }
 
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
+/** Lock the screen using GNOME Screensaver
+ *
+ *  @return			TRUE if gnome-screensaver locked the screen.
  */
 gboolean
 gscreensaver_lock (void)
@@ -166,9 +173,10 @@ gscreensaver_lock (void)
 	return TRUE;
 }
 
-/** If set to lock on screensave, instruct gnome-screensaver to lock screen
- *  and return TRUE.
- *  if set not to lock, then do nothing, and return FALSE.
+/** Lock the screen using GNOME Screensaver
+ *
+ *  @param	time		The returned idle time, passed by ref.
+ *  @return			TRUE if we got a valid idle time.
  */
 gboolean
 gscreensaver_get_idle (gint *time)

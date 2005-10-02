@@ -1,5 +1,18 @@
 2005-10-02  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Bump to 0.2.7. Add in Doxygen configure logic.
+
+	* docs/code: New directory for the Doxygen generated pages
+
+	* docs/Makefile.am, docs/.cvsignore: Add these files so we can 
+	build ./code.
+
+	* docs/code/Makefile.am, docs/code/Doxygen.in: Add Doxygen build files.
+
+	* src/*.c, src/*.h: Add Doxygen comments. Phew!
+
+2005-10-02  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in: Bump to 0.2.6.1
 
 	* src/gpm-idle.c (gpm_idle_update): Don't return FALSE is timeout is

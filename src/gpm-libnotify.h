@@ -1,27 +1,34 @@
-/***************************************************************************
- *
- * gpm-libnotify.h : LibNotify shared code
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+/*! @file	gpm-libnotify.h
+ *  @brief	LibNotify shared code and fallback code
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ *  @note	This code can still be used without libnotify compiled in,
+ *    		as it fall backs to a standard modal messsagebox.
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifndef _GPMLIBNOTIFY_H
 #define _GPMLIBNOTIFY_H
+
+/** Set the timeout of the libnotify notifications */
+#define NOTIFY_TIMEOUT			5
 
 #define LIBNOTIFY_URGENCY_CRITICAL	1
 #define LIBNOTIFY_URGENCY_NORMAL	2

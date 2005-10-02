@@ -1,36 +1,34 @@
-/***************************************************************************
- *
- * gpm-idle.c : Idle calculation routines
+/*! @file	gpm-idle.c
+ *  @brief	Idle calculation routines
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module handles all the idle and load checking for g-p-m. It
  * uses the functionality of gnome-screensaver, and it's own load
  * calculator to call a user specified callback on user idle.
  *
- * NOTE:
- *  - gpm_idle_set_callback (x) and gpm_idle_set_timeout (x) must be called
- *    before a g_timeout is added to the main loop.
- *    e.g. g_timeout_add (POLL_FREQUENCY * 1000, gpm_idle_update, NULL);
- *
- * TODO:
- *  - Functions need descriptions.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ *  @note	gpm_idle_set_callback (x) and gpm_idle_set_timeout (x)
+ *		must be called before a g_timeout is added to the main loop.
+ *    		e.g. g_timeout_add (POLL_FREQ * 1000, gpm_idle_update, NULL);
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -50,12 +48,15 @@ double		loadpercentage;
 gint		time_idle_callback = 0;
 IdleCallback	callbackfunction;
 
-/* 
- * The values are:
- * user    -  Time spent in user space (for all processes)
- * nice    -  Time spent in niced tasks (tasks with positive nice value)
- * system  -  Time spent in Kernel space
- * idle    -  Time the processor was not busy with any running process. 
+/** Gets the raw CPU values from /proc/stat
+ *
+ *  @param	data		An empty, pre-allocated CPU object
+ *  @return			If we can read the /proc/stat file
+ *
+ * @note	user	- Time spent in user space (for all processes)
+ * 		nice	- Time spent in niced tasks (tasks with +ve nice value)
+ * 		system	- Time spent in Kernel space
+ * 		idle	- Time the processor was not busy. 
  */
 static gboolean
 cpudata_get_values (cpudata *data)
@@ -81,8 +82,11 @@ cpudata_get_values (cpudata *data)
 	return TRUE;
 }
 
-/*
- * Diff two CPU structures
+/** Diff two CPU structures
+ *
+ *  @param	data1		The newer CPU data struct
+ *  @param	data2		The older CPU data struct
+ *  @param	diff		The difference CPU data struct
  */
 static void
 cpudata_diff (cpudata *data2, cpudata *data1, cpudata *diff)
@@ -99,8 +103,10 @@ cpudata_diff (cpudata *data2, cpudata *data1, cpudata *diff)
 	diff->total = data1->total - data2->total;
 }
 
-/*
- * Copy a CPU structures
+/** Diff two CPU structures
+ *
+ *  @param	to		The new CPU data struct
+ *  @param	from		The old CPU data struct
  */
 static void
 cpudata_copy (cpudata *to, cpudata *from)
@@ -117,11 +123,14 @@ cpudata_copy (cpudata *to, cpudata *from)
 }
 
 #if 0
-/*
- * Normalise a cpudata structure to Hz.
- * This precision is required because 100 / POLL_FREQUENCY may be non-integer.
- * Also, we cannot assume 100 / POLL_FREQUENCY == total, as we may have taken
- * longer to do the read than we had planned.
+/** Normalise a cpudata structure to Hz.
+ *
+ *  @param	data		The CPU data struct
+ *
+ *  @note	This precision is required because 100 / POLL_FREQUENCY may
+ *		be non-integer.
+ * 		Also, we cannot assume 100 / POLL_FREQUENCY == total, as we
+ *		may have taken longer to do the read than we had planned.
  */
 static void
 cpudata_normalize (cpudata *data)
@@ -137,6 +146,10 @@ cpudata_normalize (cpudata *data)
 }
 #endif
 
+/** Returns the CPU's load
+ *
+ *  @return			The CPU load
+ */
 static gint
 cpu_update_data (void)
 {
@@ -165,7 +178,12 @@ cpu_update_data (void)
 	return loadpercentage;
 }
 
-/* TODO: Description */
+/** Sets the idle timeout
+ *
+ *  @param	timeout		The idle timeout to set before calling our
+ *				assigned Callback function.
+ *  @return			If timeout was valid
+ */
 gboolean
 gpm_idle_set_timeout (gint timeout)
 {
@@ -178,6 +196,11 @@ gpm_idle_set_timeout (gint timeout)
 	return TRUE;
 }
 
+/** Sets the idle callback
+ *
+ *  @param	callback	The assigned Callback function.
+ *  @return			Success.
+ */
 gboolean
 gpm_idle_set_callback (IdleCallback callback)
 {
@@ -185,6 +208,11 @@ gpm_idle_set_callback (IdleCallback callback)
 	return TRUE;
 }
 
+/** Find out if we should call out callback.
+ *
+ *  @param	data		Unused
+ *  @return			If we should continue to poll
+ */
 gboolean
 gpm_idle_update (gpointer data)
 {

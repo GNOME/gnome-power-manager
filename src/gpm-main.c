@@ -1,15 +1,16 @@
-/***************************************************************************
- *
- * gpm-main.c : GNOME Power Manager
+/*! @file	gpm-main.c
+ *  @brief	GNOME Power Manager session daemon
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ *  @note	Taken in part from:
+ *  @note	lshal   (C) 2003 David Zeuthen, <david@fubar.dk>
+ *  @note	notibat (C) 2004 Benjamin Kahn, <xkahn@zoned.net>
  *
  * This is the main daemon for g-p-m. It handles all the setup and
  * tear-down of all the dynamic arrays, mainloops and icons in g-p-m.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
- *
- * Taken in part from:
- * - lshal   (C) 2003 David Zeuthen, <david@fubar.dk>
- * - notibat (C) 2004 Benjamin Kahn, <xkahn@zoned.net>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +24,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -62,7 +63,7 @@ gboolean isVerbose;
 
 /** Gets policy from gconf
  *
- *  @param  name		gconf policy name
+ *  @param	gconfpath	gconf policy name
  *  @return 			the int gconf value of the policy
  */
 gint
@@ -88,9 +89,16 @@ get_policy_string (const gchar *gconfpath)
 
 /** Callback for gconf modified keys (that we are watching).
  *
+ * @param	client		A valid GConfClient
+ * @param	cnxn_id		Unknown
+ * @param	entry		The key that was modified
+ * @param	user_data	user_data pointer. No function.
  */
-void
-callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data)
+static void
+callback_gconf_key_changed (GConfClient *client,
+	guint cnxn_id,
+	GConfEntry *entry,
+	gpointer user_data)
 {
 	gint value = 0;
 
@@ -133,6 +141,13 @@ callback_gconf_key_changed (GConfClient *client, guint cnxn_id, GConfEntry *entr
 
 }
 
+/** A function to find out if we perform the action, and to emit signals.
+ *
+ * @param	action		The action ENUM
+ * @return			Whether the action should go ahead
+ *
+ * @todo	This has to be converted to a new g-p-m API.
+ */
 static gboolean
 dbus_action (gint action)
 {
@@ -140,7 +155,7 @@ dbus_action (gint action)
 #if 0
 	RegProgram *regprog = NULL;
 	gint a;
-	const int maxwait = 5;
+	const gint maxwait = 5;
 	gboolean retval;
 
 	gboolean allACK = FALSE;
@@ -212,7 +227,9 @@ dbus_action (gint action)
 
 /** Do the action dictated by policy from gconf
  *
- *  @param  policy_number	What to do!
+ *  @param	policy_number	The policy ENUM value
+ *
+ *  @todo	Add the actions to doxygen.
  */
 void
 action_policy_do (gint policy_number)
@@ -241,10 +258,6 @@ action_policy_do (gint policy_number)
 	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
 		g_debug ("*ACTION* Shutdown");
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
-	} else if (policy_number == ACTION_BATTERY_CHARGE) {
-		g_debug ("*ACTION* Battery Charging");
-	} else if (policy_number == ACTION_BATTERY_DISCHARGE) {
-		g_debug ("*ACTION* Battery Discharging");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		/*
 		 * This case does 5 things:
@@ -310,8 +323,9 @@ action_policy_do (gint policy_number)
 }
 
 /** Recalculate logic of StateData, without any DBUS, all cached internally
- *  Exported DBUS interface values goes here :-)
- *  @param  coldplug		If set, send events even if they are the same
+ *
+ *  @param	parray		The ObjectData array
+ *  @param	coldplug	If set, send events even if they are the same
  */
 static void
 update_state_logic (GPtrArray *parray, gboolean coldplug)
@@ -413,11 +427,12 @@ gpm_exit (void)
 	exit (0);
 }
 
-/** Adds a ac_adapter device. Also sets up properties on cached object
+/** Adds an ac_adapter device. Also sets up properties on cached object
  *
- *  @param  udi			UDI
+ *  @param	udi		The HAL UDI
+ *  @return			If we added a valid AC Adapter
  */
-static void
+static gboolean
 add_ac_adapter (const gchar *udi)
 {
 	GenericObject *slotData = NULL;
@@ -428,7 +443,7 @@ add_ac_adapter (const gchar *udi)
 	slotData = genericobject_add (objectData, udi);
 	if (!slotData) {
 		g_warning ("Cannot add '%s' object to table!", udi);
-		return;
+		return FALSE;
 	}
 
 	/* register this with HAL so we get PropertyModified events */
@@ -445,9 +460,15 @@ add_ac_adapter (const gchar *udi)
 	slotData->isRechargeable = 0;
 	slotData->percentageCharge = 0;
 	slotData->minutesRemaining = 0;
+	return TRUE;
 }
 
-static void
+/** Adds an ac_adapter device. Also sets up properties on cached object
+ *
+ *  @param	slotData	The cached object
+ *  @return			If battery is present
+ */
+static gboolean
 read_battery_data (GenericObject *slotData)
 {
 	gint tempval;
@@ -463,7 +484,7 @@ read_battery_data (GenericObject *slotData)
 
 	if (!slotData->present) {
 		g_debug ("Battery %s not present!", slotData->udi);
-		return;
+		return FALSE;
 	}
 
 	/* set cached variables up */
@@ -482,13 +503,15 @@ read_battery_data (GenericObject *slotData)
 		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging",
 			&slotData->isDischarging);
 	}
+	return TRUE;
 }
 
 /** Adds a battery device, of any type. Also sets up properties on cached object
  *
  *  @param  udi			UDI
+ *  @return			If we added a valid battery
  */
-static void
+static gboolean
 add_battery (const gchar *udi)
 {
 	gchar *type = NULL;
@@ -501,7 +524,7 @@ add_battery (const gchar *udi)
 	slotData = genericobject_add (objectData, udi);
 	if (!slotData) {
 		g_debug ("Cannot add '%s' object to table!", udi);
-		return;
+		return FALSE;
 	}
 
 	/* PMU/ACPI batteries might be missing */
@@ -511,7 +534,7 @@ add_battery (const gchar *udi)
 	hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
-		return;
+		return FALSE;
 	}
 
 	/* register this with HAL so we get PropertyModified events */
@@ -525,52 +548,66 @@ add_battery (const gchar *udi)
 
 	/* read in values */
 	read_battery_data (slotData);
+	return TRUE;
 }
 
 /** Coldplugs devices of type battery & ups at startup
  *
+ *  @return			If any devices of capability battery were found.
  */
-static void
+static gboolean
 coldplug_batteries (void)
 {
 	gint i;
 	gchar **device_names = NULL;
 	/* devices of type battery */
 	hal_find_device_capability ("battery", &device_names);
-	if (device_names == NULL)
+	if (!device_names) {
 		g_debug ("Couldn't obtain list of batteries");
+		return FALSE;
+	}
 	for (i = 0; device_names[i]; i++)
 		add_battery (device_names[i]);
 	hal_free_capability (device_names);
+	return TRUE;
 }
 
 /** Coldplugs devices of type ac_adaptor at startup
  *
+ *  @return			If any devices of capability ac_adapter were found.
  */
-static void
+static gboolean
 coldplug_acadapter (void)
 {
 	gint i;
 	gchar **device_names = NULL;
 	/* devices of type ac_adapter */
 	hal_find_device_capability ("ac_adapter", &device_names);
-	if (device_names == NULL)
+	if (!device_names) {
 		g_debug ("Couldn't obtain list of ac_adapters");
+		return FALSE;
+	}
 	for (i = 0; device_names[i]; i++)
 		add_ac_adapter (device_names[i]);
 	hal_free_capability (device_names);
+	return TRUE;
 }
 
 /** Coldplugs devices of type ac_adaptor at startup
  *
+ *  @return			If any devices of capability button were found.
  */
-static void
+static gboolean
 coldplug_buttons (void)
 {
 	gint i;
 	gchar **device_names = NULL;
 	/* devices of type button */
 	hal_find_device_capability ("button", &device_names);
+	if (!device_names) {
+		g_debug ("Couldn't obtain list of buttons");
+		return FALSE;
+	}
 	for (i = 0; device_names[i]; i++) {
 		/*
 		 * We register this here, as buttons are not present
@@ -579,16 +616,17 @@ coldplug_buttons (void)
 		glibhal_watch_add_device_condition (device_names[i]);
 	}
 	hal_free_capability (device_names);
+	return TRUE;
 }
 
 /** Invoked when a device is removed from the Global Device List.
  *  Removes any type of device from the objectData database and removes the
  *  watch on it's UDI.
  *
- *  @param  udi			UDI
+ *  @param	udi		The HAL UDI
  */
 static void
-hal_device_removed (const char *udi)
+hal_device_removed (const gchar *udi)
 {
 	int a;
 
@@ -617,16 +655,17 @@ hal_device_removed (const char *udi)
 /** Invoked when device in the Global Device List acquires a new capability.
  *  Prints the name of the capability to stderr.
  *
- *  @param  udi			UDI
- *  @param  capability		Name of capability
+ *  @param	udi		UDI
+ *  @param	capability	Name of capability
  */
 static void
-hal_device_new_capability (const char *udi, const char *capability)
+hal_device_new_capability (const gchar *udi, const gchar *capability)
 {
 	/* assertion checks */
 	g_assert (udi);
 	g_assert (capability);
-	g_debug ("hal_device_new_capability: udi=%s, capability=%s", udi, capability);
+	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
+		udi, capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just appear in the device tree
@@ -642,10 +681,11 @@ hal_device_new_capability (const char *udi, const char *capability)
 /** Invoked when device in the Global Device List acquires a new capability.
  *  Prints the name of the capability to stderr.
  *
- *  @param  slotData		Data structure
- *  @param  newCharge		New charge value (%)
+ *  @param	slotData	Data structure
+ *  @param	newCharge	New charge value (%)
+ *  @return			If a warning was sent
  */
-static void
+static gboolean
 notify_user_low_batt (GenericObject *slotData, gint newCharge)
 {
 	GConfClient *client = NULL;
@@ -660,13 +700,16 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 
 	if (!slotData->isDischarging) {
 		g_debug ("battery is not discharging!");
-		return;
+		return FALSE;
 	}
 
 	client = gconf_client_get_default ();
-	lowThreshold = gconf_client_get_int (client, GCONF_ROOT "general/threshold_low", NULL);
-	criticalThreshold = gconf_client_get_int (client, GCONF_ROOT "general/threshold_critical", NULL);
-	g_debug ("lowThreshold = %i, criticalThreshold = %i", lowThreshold, criticalThreshold);
+	lowThreshold = gconf_client_get_int (client,
+		GCONF_ROOT "general/threshold_low", NULL);
+	criticalThreshold = gconf_client_get_int (client,
+		GCONF_ROOT "general/threshold_critical", NULL);
+	g_debug ("lowThreshold = %i, criticalThreshold = %i",
+		lowThreshold, criticalThreshold);
 
 	/* critical warning */
 	if (newCharge < criticalThreshold) {
@@ -678,33 +721,44 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			gs = g_string_new ("");
 			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b>\n(%s)"),
 				device, newCharge, remaining->str);
-			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
+			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL,
+				get_notification_icon ());
 			g_string_free (gs, TRUE);
 			g_string_free (remaining, TRUE);
 		} else
 			action_policy_do (policy);
+		return TRUE;
+	}
 	/* low warning */
-	} else if (newCharge < lowThreshold) {
+	if (newCharge < lowThreshold) {
 		g_debug ("battery is low!");
 		device = convert_powerdevice_to_string (slotData->powerDevice);
 		remaining = get_time_string (slotData);;
 		gs = g_string_new ("");
 		g_string_printf (gs, _("The %s (%i%%) is <b>low</b>\n(%s)"),
 			device, newCharge, remaining->str);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
+		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL,
+			get_notification_icon ());
 		g_string_free (gs, TRUE);
 		g_string_free (remaining, TRUE);
+		return TRUE;
 	}
+	return FALSE;
 }
 
 /** Invoked when a property of a device in the Global Device List is
  *  changed, and we have we have subscribed to changes for that device.
  *
- *  @param  udi                 Univerisal Device Id
- *  @param  key                 Key of property
+ *  @param	udi		The HAL UDI
+ *  @param	key		Property key
+ *  @param	is_added	If the key was added
+ *  @param	is_removed	If the key was removed
  */
 static void
-hal_device_property_modified (const char *udi, const char *key, gboolean is_added, gboolean is_removed)
+hal_device_property_modified (const gchar *udi,
+	const gchar *key,
+	gboolean is_added,
+	gboolean is_removed)
 {
 	GenericObject *slotData = NULL;
 	GenericObject slotDataVirt;
@@ -801,14 +855,14 @@ hal_device_property_modified (const char *udi, const char *key, gboolean is_adde
 /** Invoked when a property of a device in the Global Device List is
  *  changed, and we have we have subscribed to changes for that device.
  *
- *  @param  udi                 Univerisal Device Id
- *  @param  condition_name      Name of condition
- *  @param  message             D-BUS message with parameters
+ *  @param	udi			Univerisal Device Id
+ *  @param	condition_name		Name of condition
+ *  @param	condition_details	D-BUS message with parameters
  */
 static void
-hal_device_condition (const char *udi,
-		const char *condition_name,
-		const char *condition_details)
+hal_device_condition (const gchar *udi,
+	const gchar *condition_name,
+	const gchar *condition_details)
 {
 	gchar *type = NULL;
 	gint policy;
@@ -859,7 +913,8 @@ hal_device_condition (const char *udi,
 /** Prints program usage.
  *
  */
-static void print_usage (void)
+static void
+print_usage (void)
 {
 	g_print ("usage : gnome-power-manager [options]\n");
 	g_print (
@@ -874,7 +929,7 @@ static void print_usage (void)
 
 /** Callback for the idle function.
  *
- *  @param  timeout	Time in minutes that computer has been idle
+ *  @param	timeout		Time in minutes that computer has been idle
  */
 void
 idle_callback (gint timeout)
@@ -891,10 +946,10 @@ idle_callback (gint timeout)
 	g_string_free (gs, TRUE);
 }
 
-/** Entry point
+/** Main entry point
  *
- *  @param  argc	Number of arguments given to program
- *  @param  argv	Arguments given to program
+ *  @param	argc		Number of arguments given to program
+ *  @param	argv		Arguments given to program
  *  @return			Return code
  */
 int
@@ -914,11 +969,13 @@ main (int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
-	dbus_g_object_type_install_info (gpm_object_get_type (), &dbus_glib_gpm_object_object_info);
+	dbus_g_object_type_install_info (gpm_object_get_type (),
+		&dbus_glib_gpm_object_object_info);
 
 	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
-	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH, GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH,
+		GCONF_CLIENT_PRELOAD_NONE, NULL);
 	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH,
 		callback_gconf_key_changed, NULL, NULL, NULL);
 
@@ -944,7 +1001,8 @@ main (int argc, char *argv[])
 
 	/* set log level */
 	if (!isVerbose)
-		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, g_log_ignore, NULL);
+		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
+			g_log_ignore, NULL);
 
 	/* check dbus connections, exit if not valid */
 	if (!dbus_get_system_connection (&system_connection))
@@ -983,13 +1041,15 @@ main (int argc, char *argv[])
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */
 	if (!is_hald_running ()) {
-		libnotify_event (_("GNOME Power Manager cannot connect to HAL!"), LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		libnotify_event (_("GNOME Power Manager cannot connect to HAL!"),
+			LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		exit (1);
 	}
 
 	/* check we have PM capability */
 	if (!hal_pm_check ()) {
-		libnotify_event (_("HAL does not have PowerManagement capability"), LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		libnotify_event (_("HAL does not have PowerManagement capability"),
+			LIBNOTIFY_URGENCY_CRITICAL, NULL);
 		exit (1);
 	}
 
@@ -1009,7 +1069,6 @@ main (int argc, char *argv[])
 	coldplug_buttons ();
 
 	update_state_logic (objectData, TRUE);
-	gpn_icon_initialise ();
 	gpn_icon_update ();
 
 	/* get idle value from gconf */

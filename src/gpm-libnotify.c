@@ -1,31 +1,31 @@
-/***************************************************************************
- *
- * gpm-libnotify.c : LibNotify shared code
+/*! @file	gpm-libnotify.c
+ *  @brief	LibNotify shared code and fallback code
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ *  @note	This code can still be used without libnotify compiled in,
+ *    		as it fall backs to a standard modal messsagebox.
  *
  * This module allows a really easy way to provide libnotify boxes to
  * the user, and is used throughout g-p-m and g-p-p.
- *
- * NOTE:
- *  - This code can still be used without libnotify compiled in,
- *    as it fall backs to a standard modal messsagebox.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -34,14 +34,20 @@
 #include <glib.h>
 #include <gnome.h>
 #include "gpm-common.h"
+#include "gpm-libnotify.h"
 #if HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
 
 /** Convenience function to call libnotify
  *
- *  @param  content		The content text, e.g. "Battery low"
- *  @param  value		The urgency, e.g NOTIFY_URGENCY_CRITICAL
+ *  @param	content		The content text, e.g. "Battery low"
+ *  @param	urgency		The urgency, e.g NOTIFY_URGENCY_CRITICAL
+ *  @param	point		The GtkWidget to point to. NULL is valid.
+ *  @return			Success, if a notification is displayed.
+ *
+ *  @note	The message is printed to console with either g_warning or
+ *		g_debug functions depending on the urgency.
  */
 gboolean
 libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
@@ -103,7 +109,14 @@ libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
 
 /** Initialiser for libnotify
  *
- *  @param  nicename		The nicename, e.g. "GNOME Power Manager"
+ *  @param	nicename	The nicename, e.g. "GNOME Power Manager"
+ *  @return			If we initialised correctly.
+ *
+ *  @note	This function must be called before any calls to
+ *		libnotify_event are made.
+ *
+ *  @todo	When libnotify has settled down we will switch to runtime
+ *		detection like we do for gnome-screensaver
  */
 gboolean
 libnotify_init (const gchar *nicename)
@@ -112,11 +125,6 @@ libnotify_init (const gchar *nicename)
 
 	/* assertion checks */
 	g_assert (nicename);
-
-	/*
-	 * When libnotify has settled down we will switch to runtime detection
-	 * like we do for gnome-screensaver
-	 */
 #if HAVE_LIBNOTIFY
 	ret = notify_glib_init (nicename, NULL);
 #endif

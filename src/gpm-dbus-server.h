@@ -1,8 +1,10 @@
-/***************************************************************************
- *
- * gpm-dbus-server.h : DBUS listener
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+/*! @file	gpm-dbus-server.h
+ *  @brief	DBUS listener and signal abstraction
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,9 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
@@ -31,17 +33,23 @@
 #endif /* __GNUC__ */
 #endif
 
+/** The dbus signal type
+ *
+ */
 enum
 {
-	MAINS_CHANGED,
-	ACTION_ABOUT_TO_HAPPEN,
-	PERFORMING_ACTION,
-	LAST_SIGNAL
+	MAINS_CHANGED,		/**< Signal mainsStatusChanged		*/
+	ACTION_ABOUT_TO_HAPPEN,	/**< Signal actionAboutToHappen		*/
+	PERFORMING_ACTION,	/**< Signal performingAction		*/
+	LAST_SIGNAL		/**< The last signal...			*/
 };
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
+
+/** The GObject type reference */
 GType gpm_object_get_type (void);
+
 struct GPMObject {GObject parent;};
 struct GPMObjectClass {GObjectClass parent;};
 

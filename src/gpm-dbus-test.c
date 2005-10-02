@@ -1,31 +1,33 @@
-/***************************************************************************
- *
- * gpm-dbus-test.c : DBUS test program
+/*! @file	gpm-dbus-test.c
+ *  @brief	DBUS test program
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This is a test program that fully exercises the DBUS API provided
  * in g-p-m. It is not expeted to be installed on the users system, but
  * instead be used a development aide.
  *
- * TODO
- *  - Fix to use up to date g-p-m API.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ *  @todo	Fix to use up to date g-p-m API.
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+
 
 #include <glib.h>
 #include <string.h>
@@ -36,6 +38,8 @@
 #include "dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
+
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
 #define GPM_DBUS_TEST_APP "GNOME Power Test"
 
@@ -293,3 +297,5 @@ main (int argc, char **argv)
 	g_object_unref (gpm_proxy);
 	return 0;
 }
+
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */

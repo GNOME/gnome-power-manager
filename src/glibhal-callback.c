@@ -1,15 +1,14 @@
-/***************************************************************************
- *
- * glibhal-callbacks.c : GLIB replacement for libhal, providing callbacks
+/*! @file	glibhal-callback.c
+ *  @brief	GLIB replacement for libhal, providing callbacks
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module handles the callbacks for HAL, and lets a program register
  * a hook, and assign a callback. It is designed as a more robust framework
  * than using libhal.
- *
- * TODO
- * - Do we need the .initialized stuff, or can we just check for NULL?
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +22,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -44,18 +43,19 @@ HalFunctions function;
 HalRegistered reg;
 HalConnections proxy;
 
-/****************************************************************************
- *    Signal handlers to assign callbacks
- ****************************************************************************/
-
-/* PropertyModified */
+/** PropertyModified signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	type		Unused
+ *  @param	properties	A linked list of type UdiProxy
+ */
 static void
 signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *properties)
 {
 	GValueArray *array = NULL;
 	guint i;
-	const char *udi;
-	const char *key;
+	const gchar *udi;
+	const gchar *key;
 	gboolean added;
 	gboolean removed;
 
@@ -83,7 +83,11 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 	}
 }
 
-/* DeviceRemoved */
+/** DeviceRemoved signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	udi		The HAL UDI
+ */
 static void
 signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 {
@@ -99,7 +103,12 @@ signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 	function.device_removed (udi);
 }
 
-/* NewCapability */
+/** NewCapability signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	udi		The HAL UDI
+ *  @param	capability	The HAL capability
+ */
 static void
 signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
 {
@@ -116,7 +125,12 @@ signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
 	function.device_new_capability (udi, capability);
 }
 
-/* Condition */
+/** Condition signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	name		The Condition name, e.g. ButtonPressed
+ *  @param	details		Unknown
+ */
 static void
 signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 {
@@ -125,7 +139,7 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 	g_assert (name);
 	g_assert (details);
 
-	const char *udi;
+	const gchar *udi;
 	if (!function.device_condition) {
 		g_warning ("glibhal: signal_handler_Condition when no function!");
 		return;
@@ -135,11 +149,10 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 	function.device_condition (udi, name, details);
 }
 
-/****************************************************************************
- *    Watch add functions to set up DBUS
- ****************************************************************************/
-
-/* DeviceRemoved */
+/** Removed watch removal 
+ *
+ *  @return			If we removed the watch successfully
+ */
 static gboolean
 glibhal_watch_add_device_removed (void)
 {
@@ -147,7 +160,6 @@ glibhal_watch_add_device_removed (void)
 	GError *error = NULL;
 
 	/* assertion checks */
-	g_assert (function.initialized);
 	g_assert (!function.device_removed);
 	g_assert (!reg.device_removed);
 
@@ -167,7 +179,10 @@ glibhal_watch_add_device_removed (void)
 	return TRUE;
 }
 
-/* NewCapability */
+/** NewCapability watch removal 
+ *
+ *  @return			If we removed the watch successfully
+ */
 static gboolean
 glibhal_watch_add_device_new_capability (void)
 {
@@ -175,7 +190,6 @@ glibhal_watch_add_device_new_capability (void)
 	GError *error = NULL;
 
 	/* assertion checks */
-	g_assert (function.initialized);
 	g_assert (!function.device_new_capability);
 	g_assert (!reg.device_new_capability);
 
@@ -188,7 +202,8 @@ glibhal_watch_add_device_new_capability (void)
 		"/org/freedesktop/Hal/Manager",
 		"org.freedesktop.Hal.Manager", &error);
 
-	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
+		G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (proxy.device_new_capability, "NewCapability",
 		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy.device_new_capability, "NewCapability",
@@ -196,9 +211,13 @@ glibhal_watch_add_device_new_capability (void)
 	return TRUE;
 }
 
-/* Condition */
+/** Condition watch removal 
+ *
+ *  @param	udi		The HAL UDI
+ *  @return			If we removed the watch successfully
+ */
 gboolean
-glibhal_watch_add_device_condition (const char *udi)
+glibhal_watch_add_device_condition (const gchar *udi)
 {
 	DBusGConnection *system_connection;
 	DBusGProxy *hal_proxy = NULL;
@@ -208,7 +227,6 @@ glibhal_watch_add_device_condition (const char *udi)
 
 	/* assertion checks */
 	g_assert (udi);
-	g_assert (function.initialized);
 
 	/* need to check for previous add */
 	for (a=0;a < proxy.device_condition->len;a++) {
@@ -228,7 +246,8 @@ glibhal_watch_add_device_condition (const char *udi)
 		udi,
 		"org.freedesktop.Hal.Device", &error);
 
-	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING, G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
+		G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_add_signal (hal_proxy, "Condition",
 		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal_proxy, "Condition",
@@ -243,9 +262,13 @@ glibhal_watch_add_device_condition (const char *udi)
 	return TRUE;
 }
 
-/* PropertyModified */
+/** PropertyModified watch removal
+ *
+ *  @param	udi		The HAL UDI
+ *  @return			If we removed the watch successfully
+ */
 gboolean
-glibhal_watch_add_device_property_modified (const char *udi)
+glibhal_watch_add_device_property_modified (const gchar *udi)
 {
 	DBusGConnection *system_connection;
 	DBusGProxy *hal_proxy = NULL;
@@ -255,7 +278,6 @@ glibhal_watch_add_device_property_modified (const char *udi)
 	UdiProxy *udiproxy;
 
 	/* assertion checks */
-	g_assert (function.initialized);
 	g_assert (udi);
 
 	/* need to check for previous add */
@@ -291,11 +313,10 @@ glibhal_watch_add_device_property_modified (const char *udi)
 	return TRUE;
 }
 
-/****************************************************************************
- *    Watch remove functions to pull down DBUS
- ****************************************************************************/
-
-/* DeviceRemoved */
+/** DeviceRemoved watch callback handler
+ *
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
 glibhal_watch_remove_device_removed (void)
 {
@@ -309,6 +330,10 @@ glibhal_watch_remove_device_removed (void)
 	return TRUE;
 }
 
+/** DeviceAdded watch callback handler
+ *
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
 glibhal_watch_remove_device_added (void)
 {
@@ -322,6 +347,10 @@ glibhal_watch_remove_device_added (void)
 	return TRUE;
 }
 
+/** NewCapability watch callback handler
+ *
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
 glibhal_watch_remove_device_new_capability (void)
 {
@@ -335,6 +364,10 @@ glibhal_watch_remove_device_new_capability (void)
 	return TRUE;
 }
 
+/** LostCapability watch callback handler
+ *
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
 glibhal_watch_remove_device_lost_capability (void)
 {
@@ -348,9 +381,13 @@ glibhal_watch_remove_device_lost_capability (void)
 	return TRUE;
 }
 
-/* PropertyModified */
+/** PropertyModified watch callback handler
+ *
+ *  @param	udi		The HAL UDI
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
-glibhal_watch_remove_device_property_modified (const char *udi)
+glibhal_watch_remove_device_property_modified (const gchar *udi)
 {
 	int a;
 
@@ -376,9 +413,13 @@ glibhal_watch_remove_device_property_modified (const char *udi)
 	return TRUE;
 }
 
-/* Condition */
+/** Condition watch callback handler
+ *
+ *  @param	udi		The HAL UDI
+ *  @return			If we handled the watch callback okay
+ */
 gboolean
-glibhal_watch_remove_device_condition (const char *udi)
+glibhal_watch_remove_device_condition (const gchar *udi)
 {
 	int a;
 
@@ -404,16 +445,15 @@ glibhal_watch_remove_device_condition (const char *udi)
 	return TRUE;
 }
 
-/****************************************************************************
- *    Functions to assign callbacks
- ****************************************************************************/
-
+/** DeviceRemoved callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_removed (HalDeviceRemoved callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	if (!reg.device_removed)
 		glibhal_watch_add_device_removed ();
@@ -421,23 +461,29 @@ glibhal_method_device_removed (HalDeviceRemoved callback)
 	return TRUE;
 }
 
+/** DeviceAdded callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_added (HalDeviceAdded callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	function.device_added = callback;
 	return TRUE;
 }
 
+/** NewCapability callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	if (!reg.device_new_capability)
 		glibhal_watch_add_device_new_capability ();
@@ -445,51 +491,58 @@ glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 	return TRUE;
 }
 
+/** LostCapability callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	function.device_lost_capability = callback;
 	return TRUE;
 }
 
+/** PropertyModified callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_property_modified (HalDevicePropertyModified callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	g_debug ("glibhal: PropertyModified: Registered");
 	function.device_property_modified = callback;
 	return TRUE;
 }
 
+/** Condition callback assignment
+ *
+ *  @return			If we assigned the callback okay
+ */
 gboolean
 glibhal_method_device_condition (HalDeviceCondition callback)
 {
 	/* assertion checks */
 	g_assert (callback);
-	g_assert (function.initialized);
 
 	g_debug ("glibhal: Condition: Registered");
 	function.device_condition = callback;
 	return TRUE;
 }
 
-/****************************************************************************
- *    General stuff
- ****************************************************************************/
-
+/** Initialise glibhal callback support
+ *
+ *  @return			If we initialised glibhal callbacks okay
+ */
 gboolean
 glibhal_callback_init (void)
 {
 	g_debug ("glibhal_callback: init");
-	function.initialized = TRUE;
-
 	function.device_added = NULL;
 	function.device_removed = NULL;
 	function.device_new_capability = NULL;
@@ -514,6 +567,10 @@ glibhal_callback_init (void)
 	return TRUE;
 }
 
+/** Shutdown glibhal callback support, freeing memory
+ *
+ *  @return			If we shutdown glibhal callbacks okay
+ */
 gboolean
 glibhal_callback_shutdown (void)
 {

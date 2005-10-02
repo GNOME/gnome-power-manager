@@ -1,29 +1,31 @@
-/***************************************************************************
- *
- * dbus-common.c : Common GLIB DBUS routines
+/*! @file	dbus-common.c
+ *  @brief	Common GLIB DBUS routines
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module contains all the dbus checker functions, that make
  * some attempt to sanitise the dbus error codes. It also gives
  * output to the user in the event they cannot connect to the session
  * or system dbus connections.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -32,6 +34,7 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include "gpm_marshal.h"
+#include "dbus-common.h"
 
 /** Handle a glib error, freeing if needed.
  *  We echo to debug, as we don't want the typical user sending in bug reports.
@@ -53,12 +56,12 @@ dbus_glib_error (GError *error)
 
 /** Gets the DBUS service
  *
- *  @connection			A valid DBUS connection
- *  @service			Service, e.g. org.gnome.random
+ *  @param	connection	A valid DBUS connection
+ *  @param	service		Service, e.g. org.gnome.random
  *  @return			Success value.
  */
 gboolean
-dbus_get_service (DBusGConnection *connection, const char *service)
+dbus_get_service (DBusGConnection *connection, const gchar *service)
 {
 	DBusGProxy *bus_proxy = NULL;
 	GError *error = NULL;
@@ -94,27 +97,31 @@ dbus_get_service (DBusGConnection *connection, const char *service)
 
 /** Gets the dbus session service, informing user if not found
  *
- *  @connection			A valid DBUS connection, passed by ref
+ * Initialize session DBUS conection - this *might* fail as it's 
+ * potentially the first time the user will use this functionality.
+ * If so, tell them how to fix the issue.
+ *
+ *  @param	connection	A valid DBUS connection, passed by ref
  *  @return			Success value.
  */
 gboolean
 dbus_get_session_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
-	/*
-	 * Initialize session DBUS conection - this *might* fail as it's 
-	 * potentially the first time the user will use this functionality.
-	 * If so, tell them how to fix the issue.
-	 */
 	*connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (*connection == NULL) {
-		g_warning ("Failed to open connection to dbus session bus: %s\n", error->message);
+		g_warning ("Failed to open connection to dbus session bus: %s\n",
+			error->message);
 		dbus_glib_error (error);
-		g_print ("This program cannot start until you start the dbus session daemon\n");
-		g_print ("This is usually started in X or gnome startup (depending on distro)\n");
-		g_print ("You can launch the session dbus-daemon manually with this command:\n");
-		g_print ("eval `dbus-launch --auto-syntax`\n\n");
-		g_print ("If this works, add \"dbus-lauch --auto-syntax\" to ~/.xinitrc\n\n");
+		g_print ("This program cannot start until you start the dbus"
+			 "session daemon\n"
+			 "This is usually started in X or gnome startup "
+			 "(depending on distro)\n"
+			 "You can launch the session dbus-daemon manually with"
+			 "this command:\n"
+			 "eval `dbus-launch --auto-syntax`\n\n"
+			 "If this works, add \"dbus-lauch --auto-syntax\" "
+			 "to ~/.xinitrc\n\n");
 		return FALSE;
 	}
 	return TRUE;
@@ -122,24 +129,26 @@ dbus_get_session_connection (DBusGConnection **connection)
 
 /** Gets the dbus session service, informing user if not found
  *
- *  @connection			A valid DBUS connection, passed by ref
+ * This *shouldn't* fail as HAL will not work without the system messagebus.
+ *
+ *  @param	connection	A valid DBUS connection, passed by ref
  *  @return			Success value.
  */
 gboolean
 dbus_get_system_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
-	/*
-	 * Initialize system DBUS conection - this *shouldn't* fail as HAL
-	 * will not work without the system messagebus.
-	 */
 	*connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (*connection == NULL) {
-		g_warning ("Failed to open connection to dbus system bus: %s\n", error->message);
+		g_warning ("Failed to open connection to dbus system bus: %s\n",
+			error->message);
 		dbus_glib_error (error);
-		g_print ("This program cannot start until you start the dbus system daemon\n");
-		g_print ("This is usually started in initscripts, and is usually called messagebus\n");
-		g_print ("It is STRONGLY recommended you reboot your compter after restarting messagebus\n\n");
+		g_print ("This program cannot start until you start the dbus"
+			 "system daemon\n"
+			 "This is usually started in initscripts, and is "
+			 "usually called messagebus\n"
+			 "It is STRONGLY recommended you reboot your compter"
+			 "after restarting messagebus\n\n");
 		return FALSE;
 	}
 	return TRUE;

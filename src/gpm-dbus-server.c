@@ -1,15 +1,16 @@
-/***************************************************************************
- *
- * gpm-dbus-server.c : DBUS listener
+/*! @file	gpm-dbus-server.c
+ *  @brief	DBUS listener and signal abstraction
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
  *
  * This module handles all th low-level glib DBUS API, and provides
  * the high level hooks into the gpm_object to send signals,
  * and call methods on the gpm_object.
  *
- * TODO:
- *  - Get the DBUS G-P-M API sorted, and perhaps use GConversation.
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+ * @todo	Get the DBUS G-P-M API sorted, perhaps using GConversation.
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +24,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- *
- **************************************************************************/
-
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #include <glib.h>
 #include <gnome.h>
@@ -72,8 +72,10 @@ gpm_object_class_init (GPMObjectClass *klass)
 }
 
 /** registers org.gnome.GnomePowerManager
- ** This function MUST be called before DBUS service will work.
  *
+ *  @return			If we successfully registered the object
+ *
+ *  @note	This function MUST be called before DBUS service will work.
  */
 gboolean
 gpm_object_register (void)
@@ -91,6 +93,8 @@ gpm_object_register (void)
 
 /** emits org.gnome.GnomePowerManager.actionAboutToHappen
  *
+ *  @param	value		The value we should sent with the signal
+ *  @return			If we successfully emmitted the signal
  */
 gboolean
 gpm_emit_about_to_happen (const gint value)
@@ -101,6 +105,8 @@ gpm_emit_about_to_happen (const gint value)
 
 /** emits org.gnome.GnomePowerManager.performingAction
  *
+ *  @param	value		The value we should sent with the signal
+ *  @return			If we successfully emmitted the signal
  */
 gboolean
 gpm_emit_performing_action (const gint value)
@@ -111,6 +117,8 @@ gpm_emit_performing_action (const gint value)
 
 /** emits org.gnome.GnomePowerManager.mainsStatusChanged
  *
+ *  @param	value		The value we should sent with the signal
+ *  @return			If we successfully emmitted the signal
  */
 gboolean
 gpm_emit_mains_changed (const gboolean value)
@@ -121,8 +129,10 @@ gpm_emit_mains_changed (const gboolean value)
 
 /** Find out if user is idle
  *
- *  @param  ret			The returned data value
- *  @return			Success.
+ *  @param	obj		The GPM DBUS object
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
  */
 gboolean
 gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
@@ -133,8 +143,10 @@ gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error)
 
 /** Find out if we are on battery power
  *
- *  @param  ret			The returned data value
- *  @return			Success.
+ *  @param	obj		The GPM DBUS object
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
  */
 gboolean
 gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
@@ -146,8 +158,10 @@ gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
 
 /** Find out if we are on ac power
  *
- *  @param  ret			The returned data value
- *  @return			Success.
+ *  @param	obj		The GPM DBUS object
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
  */
 gboolean
 gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
@@ -159,8 +173,10 @@ gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
 
 /** Find out if we are on ups power
  *
- *  @param  ret			The returned data value
- *  @return			Success.
+ *  @param	obj		The GPM DBUS object
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
  */
 gboolean
 gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
@@ -170,11 +186,17 @@ gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
 	return TRUE;
 }
 
-/*
- * I need a way to get the connection name, like we used to using
- *    dbus_message_get_sender (message);
- * but glib bindings abstract away the message.
- * walters to fix :-)
+/** ACKnowledge action
+ *
+ *  @param	obj		The GPM DBUS object
+ *  @param	value		The passed data value
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
+ *
+ *  @bug	I need a way to get the connection name, like we used to using
+ *    		dbus_message_get_sender (message);
+ * 		but glib bindings abstract away the message.
  */
 gboolean
 gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
@@ -183,6 +205,15 @@ gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error)
 	return TRUE;
 }
 
+/** Not ACKnowledge action (i.e. abort)
+ *
+ *  @param	obj		The GPM DBUS object
+ *  @param	value		The passed data value
+ *  @param	reason		The reason action was NAK'd
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
+ */
 gboolean
 gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error)
 {
@@ -190,6 +221,15 @@ gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GErro
 	return TRUE;
 }
 
+/** Register action
+ *
+ *  @param	obj		The GPM DBUS object
+ *  @param	value		The passed data value
+ *  @param	name		The application name
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
+ */
 gboolean
 gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *ret, GError **error)
 {
@@ -197,6 +237,14 @@ gpm_object_action_register (GPMObject *obj, gint value, gchar *name, gboolean *r
 	return TRUE;
 }
 
+/** Unregister action
+ *
+ *  @param	obj		The GPM DBUS object
+ *  @param	value		The passed data value
+ *  @param	ret		The returned data value
+ *  @param	error		Any error value to return, by ref.
+ *  @return			Query success
+ */
 gboolean
 gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error)
 {
@@ -220,8 +268,8 @@ GPtrArray *registered;
  *  @param  dbusName	The dbus connection, e.g. 0:13
  *  @return				The position
  */
-static int
-vetoFindName (const char *dbusName)
+static gint
+vetoFindName (const gchar *dbusName)
 {
 	int a;
 	RegProgram *regprog;
@@ -240,7 +288,7 @@ vetoFindName (const char *dbusName)
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  */
 static gboolean
-vetoACK (const char *dbusName, gint flags)
+vetoACK (const gchar *dbusName, gint flags)
 {
 	g_return_val_if_fail (registered, FALSE);
 	g_return_val_if_fail (dbusName, FALSE);
@@ -270,7 +318,7 @@ vetoACK (const char *dbusName, gint flags)
  *  @param  reason		The reason given for the NACK
  */
 static gboolean
-vetoNACK (const char *dbusName, gint flags, char *reason)
+vetoNACK (const gchar *dbusName, gint flags, gchar *reason)
 {
 	g_return_val_if_fail (registered, FALSE);
 	g_return_val_if_fail (dbusName, FALSE);
@@ -301,7 +349,7 @@ vetoNACK (const char *dbusName, gint flags, char *reason)
  *  @param  appname		The localised application name, e.g. "Totem"
  */
 static gboolean
-vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
+vetoActionRegisterInterest (const gchar *dbusName, gint flags, gchar *appName)
 {
 	g_return_val_if_fail (registered, FALSE);
 
@@ -335,7 +383,7 @@ vetoActionRegisterInterest (const char *dbusName, gint flags, gchar *appName)
  *  @param  flags		The dbus flags, e.g. GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF
  */
 static gboolean
-vetoActionUnregisterInterest (const char *dbusName, gint flags, gboolean suppressError)
+vetoActionUnregisterInterest (const gchar *dbusName, gint flags, gboolean suppressError)
 {
 	g_return_val_if_fail (registered, FALSE);
 
@@ -414,7 +462,7 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 		g_debug ("Got 'vetoACK'\n");
 		gint value;
 		gboolean data_value = FALSE;
-		const char *from = dbus_message_get_sender (message);
+		const gchar *from = dbus_message_get_sender (message);
 		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
 			data_value = vetoACK (from, value);
 		} else {
@@ -429,7 +477,7 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 		gint value;
 		gboolean data_value = FALSE;
 		char *reason;
-		const char *from = dbus_message_get_sender (message);
+		const gchar *from = dbus_message_get_sender (message);
 		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &reason, DBUS_TYPE_INVALID)) {
 			data_value = vetoNACK (from, value, reason);
 		} else {
@@ -444,7 +492,7 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 		gint value;
 		gboolean data_value = FALSE;
 		char *appname;
-		const char *from = dbus_message_get_sender (message);
+		const gchar *from = dbus_message_get_sender (message);
 		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_STRING, &appname, DBUS_TYPE_INVALID)) {
 			data_value = vetoActionRegisterInterest (from, value, appname);
 		} else {
@@ -458,7 +506,7 @@ dbus_method_handler (DBusMessage *message, DBusError *error)
 		g_debug ("Got 'vetoActionUnregisterInterest'\n");
 		gint value;
 		gboolean data_value = FALSE;
-		const char *from = dbus_message_get_sender (message);
+		const gchar *from = dbus_message_get_sender (message);
 		if (dbus_message_get_args (message, error, DBUS_TYPE_INT32, &value, DBUS_TYPE_INVALID)) {
 			data_value = vetoActionUnregisterInterest (from, value, TRUE);
 		} else {

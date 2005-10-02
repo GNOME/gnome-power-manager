@@ -1,8 +1,10 @@
-/***************************************************************************
- *
- * glibhal-callback.h : GLIB replacement for libhal, providing callbacks
- *
- * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
+/*! @file	glibhal-callback.h
+ *  @brief	GLIB replacement for libhal, providing callbacks
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-10-02
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,9 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- **************************************************************************/
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #ifndef _GLIBHALCALLBACK_H
 #define _GLIBHALCALLBACK_H
@@ -32,8 +34,8 @@ typedef void (*HalDeviceLostCapability) (const gchar *udi, const gchar *capabili
 typedef void (*HalDevicePropertyModified) (const gchar *udi, const gchar *key, gboolean removed, gboolean added);
 typedef void (*HalDeviceCondition) (const gchar *udi, const gchar *name, const gchar *detail);
 
+/** The stored callback functions */
 typedef struct {
-	gboolean			initialized;
 	HalDeviceAdded			device_added;
 	HalDeviceRemoved		device_removed;
 	HalDeviceNewCapability		device_new_capability;
@@ -42,6 +44,7 @@ typedef struct {
 	HalDeviceCondition		device_condition;
 } HalFunctions;
 
+/** If the watch has been registered */
 typedef struct {
 	gboolean			device_added;
 	gboolean			device_removed;
@@ -50,6 +53,7 @@ typedef struct {
 	gboolean			device_condition;
 } HalRegistered;
 
+/** The DBUS connections used by each watch */
 typedef struct {
 	DBusGProxy			*device_added;
 	DBusGProxy			*device_removed;
@@ -59,6 +63,7 @@ typedef struct {
 	GPtrArray 			*device_property_modified;
 } HalConnections;
 
+/** The UDI linked list object for PropertyModified */
 typedef struct {
 	gchar				udi[128];
 	DBusGProxy			*proxy;
@@ -73,9 +78,6 @@ gboolean glibhal_method_device_new_capability (HalDeviceNewCapability callback);
 gboolean glibhal_method_device_lost_capability (HalDeviceLostCapability callback);
 gboolean glibhal_method_device_property_modified (HalDevicePropertyModified callback);
 gboolean glibhal_method_device_condition (HalDeviceCondition callback);
-
-gboolean glibhal_register_device_property_modified (const gchar *udi);
-gboolean glibhal_register_device_condition (const gchar *udi);
 
 gboolean glibhal_watch_add_device_property_modified (const gchar *udi);
 gboolean glibhal_watch_add_device_condition (const gchar *udi);
