@@ -11,6 +11,9 @@
  *    before a g_timeout is added to the main loop.
  *    e.g. g_timeout_add (POLL_FREQUENCY * 1000, gpm_idle_update, NULL);
  *
+ * TODO:
+ *  - Functions need descriptions.
+ *
  * Copyright (C) 2005 Richard Hughes, <richard@hughsie.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -162,6 +165,7 @@ cpu_update_data (void)
 	return loadpercentage;
 }
 
+/* TODO: Description */
 gboolean
 gpm_idle_set_timeout (gint timeout)
 {
@@ -189,12 +193,17 @@ gpm_idle_update (gpointer data)
 
 	if (!callbackfunction) {
 		g_warning ("gpm_idle_set_callback has not been called so no function set!");
-		return FALSE; /* will stop polling */
+		/* will stop polling */
+		return FALSE;
 	}
 
 	if (time_idle_callback == 0) {
-		g_warning ("gpm_idle_set_timeout has not been called so no timeout set!");
-		return FALSE; /* will stop polling */
+		g_debug ("gpm_idle_set_timeout has not been called so no idle processing done");
+		/*
+		 * Will not stop polling, as user could increase value by changing
+		 * g-conf value using g-p-p
+		 */
+		return TRUE;
 	}
 
 	/* get our computed load value */
