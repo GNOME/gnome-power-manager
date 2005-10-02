@@ -62,10 +62,10 @@ gtk_icon_theme_fallback (const char *name, int size)
 	/* assertion checks */
 	g_assert (name);
 
-	g_debug ("gtk_icon_theme_fallback : name = '%s', size = %i", name, size);
-	if (gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name)) {
-		iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
-				name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+	iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
+			name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+	if (iinfo) {
+		g_debug ("Using stock icon for %s", name);
 		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
 		gtk_icon_info_free (iinfo);
 	} else {
@@ -73,12 +73,15 @@ gtk_icon_theme_fallback (const char *name, int size)
 		 * We cannot find this specific themed GNOME icon so use builtin
 		 * fallbacks. This makes GPM more portible between distros
 		 */
-		g_debug ("gtk_icon_theme_fallback: doing fallback as not found in theme");
-		fallback = g_string_new ("error?");
+		g_debug ("Using fallback icon for %s", name);
+		fallback = g_string_new ("");
 		g_string_printf (fallback, "%s%s.png", GPM_DATA, name);
 		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
 		g_string_free (fallback, TRUE);
 	}
+	/* check we actually got the icon */
+	if (!pixbuf)
+		g_warning ("failed to get %s!", name);
 	return pixbuf;
 }
 
@@ -124,7 +127,13 @@ create_icon_pixbuf (GenericObject *slotData)
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
+	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
+		pixbuf = gtk_icon_theme_fallback ("gnome-dev-acadapter.png", 22);
+	} else {
+		g_error ("create_icon_pixbuf called with unknown type %i!", slotData->powerDevice);
 	}
+	/* make sure we got something */
+	g_assert (pixbuf);
 
 	return pixbuf;
 }
@@ -564,7 +573,6 @@ icon_create (void)
 void
 gpn_icon_update (void)
 {
-
 	GConfClient *client = NULL;
 	gboolean iconShow;
 	GenericObject *slotData = NULL;
@@ -575,7 +583,8 @@ gpn_icon_update (void)
 	iconShow = gconf_client_get_bool (client, GCONF_ROOT "general/display_icon", NULL);
 
 	if (!iconShow)
-		g_warning ("The key " GCONF_ROOT "general/display_icon is set to false, no icon will be displayed");
+		g_warning ("The key " GCONF_ROOT "general/display_icon"
+				" is set to false, no icon will be displayed");
 
 	slotData = get_main_icon_slot ();
 	if (iconShow && slotData) {
@@ -587,6 +596,8 @@ gpn_icon_update (void)
 		}
 		/* modify icon */
 		pixbuf = create_icon_pixbuf (slotData);
+		if (!pixbuf)
+			g_error ("Failed to get pixbuf for icon");
 		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
 		g_object_unref (pixbuf);
 
