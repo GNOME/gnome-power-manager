@@ -75,7 +75,8 @@ gtk_icon_theme_fallback (const char *name, int size)
 		 */
 		g_debug ("Using fallback icon for %s", name);
 		fallback = g_string_new ("");
-		g_string_printf (fallback, "%s%s.png", GPM_DATA, name);
+		g_string_printf (fallback, GPM_DATA "%s.png", name);
+		g_debug ("Using filename %s", fallback->str);
 		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
 		g_string_free (fallback, TRUE);
 	}
@@ -128,12 +129,14 @@ create_icon_pixbuf (GenericObject *slotData)
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
-		pixbuf = gtk_icon_theme_fallback ("gnome-dev-acadapter.png", 22);
+		pixbuf = gtk_icon_theme_fallback ("gnome-dev-acadapter", 22);
 	} else {
 		g_error ("create_icon_pixbuf called with unknown type %i!", slotData->powerDevice);
 	}
 	/* make sure we got something */
-	g_assert (pixbuf);
+	if (!pixbuf)
+		g_error ("Failed to get pixbuf.\n"
+			 "Maybe GNOME Power Manager is not installed correctly!");
 
 	return pixbuf;
 }
@@ -451,7 +454,8 @@ menu_add_action_item (GtkWidget *menu, const char *icon, const char *name, char 
 	if (type)
 		g_object_set_data ((GObject*) item, "action", (gpointer) type);
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
-	g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (callback_actions_activated), (gpointer) menu);
+	g_signal_connect (G_OBJECT (item), "activate", 
+		G_CALLBACK (callback_actions_activated), (gpointer) menu);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 }
