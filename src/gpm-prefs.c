@@ -168,23 +168,6 @@ gtk_set_check (const gchar *widgetname, gboolean set)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), set);
 }
 
-/** Modifies a GTK Label
- *
- *  @param	widgetname	The libglade widget name
- *  @param	label		The new text
- */
-static void
-gtk_set_label (const gchar *widgetname, const gchar *label)
-{
-	GtkWidget *widget = NULL;
-
-	/* assertion checks */
-	g_assert (widgetname);
-
-	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
-	gtk_label_set_markup (GTK_LABEL (widget), label);
-}
-
 /** Shows/hides/renames controls based on hasData
  *  i.e. what hardware is in the system.
  *
@@ -698,70 +681,6 @@ combo_setup_dynamic (const gchar *widgetname,
 		G_CALLBACK (callback_combo_changed), NULL);
 }
 
-/** Sets up the Information tab with the correct information
- *
- *  @todo  We need to set the battery and UPS information here.
- */
-void
-refresh_info_page (void)
-{
-	gchar *returnstring;
-	GtkWidget *widget = NULL;
-
-	/* set vendor */
-	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-				"smbios.system.manufacturer",
-				&returnstring)) {
-		gtk_set_label ("label_info_vendor", returnstring);
-		g_free (returnstring);
-	} else
-		gtk_set_visibility ("label_info_vendor", FALSE);
-
-	/* set model */
-	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-				"smbios.system.product",
-				&returnstring)) {
-		gtk_set_label ("label_info_model", returnstring);
-		g_free (returnstring);
-	} else
-		gtk_set_visibility ("label_info_model", FALSE);
-
-	/* set formfactor */
-	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-				"smbios.chassis.type",
-				&returnstring)) {
-		gtk_set_label ("label_info_formfactor", returnstring);
-		g_free (returnstring);
-	} else
-		gtk_set_visibility ("label_info_formfactor", FALSE);
-
-	/* Hardcoded for now */
-	widget = glade_xml_get_widget (all_pref_widgets,
-			"checkbutton_info_suspend");
-	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-	widget = glade_xml_get_widget (all_pref_widgets,
-			"checkbutton_info_hibernate");
-	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-	widget = glade_xml_get_widget (all_pref_widgets,
-			"checkbutton_info_cpufreq");
-	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
-
-	widget = glade_xml_get_widget (all_pref_widgets,
-			"checkbutton_info_lowpowermode");
-	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), hal_is_laptop ());
-
-	/* TODO */
-	gtk_set_visibility ("frame_info_batteries", FALSE);
-	gtk_set_visibility ("frame_info_ups", FALSE);
-
-}
-
 /** Main entry point
  *
  *  @param	argc		Number of arguments given to program
@@ -842,7 +761,7 @@ main (int argc, char **argv)
 		}
 
 	/* load the interface */
-	all_pref_widgets = glade_xml_new (GPM_DATA "preferences.glade", NULL, NULL);
+	all_pref_widgets = glade_xml_new (GPM_DATA "gpm-prefs.glade", NULL, NULL);
 	if (!all_pref_widgets)
 		g_error ("glade file failed to load, aborting");
 
@@ -973,9 +892,6 @@ main (int argc, char **argv)
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 	}
-
-	/* set up info page */
-	refresh_info_page ();
 
 	/* main loop */
 	gtk_main ();
