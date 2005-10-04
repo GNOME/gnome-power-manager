@@ -25,13 +25,7 @@
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
 
-#if !defined (G_GNUC_WARNUNCHECKED)
-#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
-#define G_GNUC_WARNUNCHECKED 		__attribute__((warn_unused_result))
-#else
-#define G_GNUC_WARNUNCHECKED
-#endif /* __GNUC__ */
-#endif
+#include "compiler.h"
 
 /** The dbus signal type
  *

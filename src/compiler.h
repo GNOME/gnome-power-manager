@@ -1,7 +1,7 @@
-/*! @file	dbus-common.h
- *  @brief	Common GLIB DBUS routines
+/*! @file	compiler.h
+ *  @brief	Common compiler stuff
  *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-10-02
+ *  @date	2005-10-04
  */
 /*
  * Licensed under the GNU General Public License Version 2
@@ -21,15 +21,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef _DBUSCOMMON_H
-#define _DBUSCOMMON_H
+#ifndef _COMPILER_H
+#define _COMPILER_H
 
-#include <dbus/dbus-glib.h>
-#include "compiler.h"
+/** This will warn us if we don't check the return value */
+#if !defined (G_GNUC_WARNUNCHECKED)
+#if    __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define G_GNUC_WARNUNCHECKED 		__attribute__((warn_unused_result))
+#else
+#define G_GNUC_WARNUNCHECKED
+#endif /* __GNUC__ */
+#endif
 
-gboolean dbus_glib_error (GError *error);
-gboolean dbus_get_system_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
-gboolean dbus_get_session_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
-gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) G_GNUC_WARNUNCHECKED;
 
-#endif	/* _DBUSCOMMON_H */
+#endif	/* _COMPILER_H */
