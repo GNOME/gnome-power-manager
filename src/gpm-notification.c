@@ -39,6 +39,7 @@
 #include "gpm-main.h"
 #include "gpm-notification.h"
 #include "gpm-libnotify.h"
+#include "compiler.h"
 
 /* shared with gpm-main.c */
 StateData state_data;
@@ -49,17 +50,17 @@ GPtrArray *objectData;
  *  if not present. This means we do not have to check in configure.in for lots
  *  of obscure icons.
  *
+ *  @param	pixbuf		A returned GTK pixbuf
  *  @param	name		the icon name, e.g. gnome-battery
  *  @param	size		the icon size, e.g. 22
- *  @return			A valid GdkPixbuf image
+ *  @return			If we found a valid image
  *
  *  @note	If we cannot find the specific themed GNOME icon we use the
  *		builtin fallbacks. This makes GPM more portible between distros
  */
-static GdkPixbuf *
-gtk_icon_theme_fallback (const gchar *name, gint size)
+static gboolean G_GNUC_WARNUNCHECKED
+gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size) 
 {
-	GdkPixbuf *pixbuf = NULL;
 	GError *err = NULL;
 	GString *fallback = NULL;
 	GtkIconInfo *iinfo = NULL;
@@ -71,20 +72,22 @@ gtk_icon_theme_fallback (const gchar *name, gint size)
 			name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
 	if (iinfo) {
 		g_debug ("Using stock icon for %s", name);
-		pixbuf = gtk_icon_info_load_icon (iinfo, &err);
+		*pixbuf = gtk_icon_info_load_icon (iinfo, &err);
 		gtk_icon_info_free (iinfo);
 	} else {
 		g_debug ("Using fallback icon for %s", name);
 		fallback = g_string_new ("");
 		g_string_printf (fallback, GPM_DATA "%s.png", name);
 		g_debug ("Using filename %s", fallback->str);
-		pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
+		*pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
 		g_string_free (fallback, TRUE);
 	}
 	/* check we actually got the icon */
-	if (!pixbuf)
+	if (!*pixbuf) {
 		g_warning ("failed to get %s!", name);
-	return pixbuf;
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /** Finds the icon index value for the percentage charge
@@ -133,19 +136,22 @@ create_icon_pixbuf (GenericObject *slotData)
 		num = get_index_from_percent (slotDataVirt.percentageCharge);
 		computed_name = g_strdup_printf ("gnome-power-%s-%d-of-8", 
 					state_data.onBatteryPower ? "bat" : "ac", num);
-		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
+		if (!gpm_icon_theme_fallback (&pixbuf, computed_name, 22))
+			g_error ("Could not find %s!", computed_name);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_UPS) {
 		num = get_index_from_percent (slotData->percentageCharge);
 		computed_name = g_strdup_printf ("gnome-power-ups-%d-of-8", num);
-		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
+		if (!gpm_icon_theme_fallback (&pixbuf, computed_name, 22))
+			g_error ("Could not find %s!", computed_name);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
-		pixbuf = gtk_icon_theme_fallback ("gnome-dev-acadapter", 22);
+		if (!gpm_icon_theme_fallback (&pixbuf, "gnome-dev-acadapter", 22))
+			g_error ("Could not find gnome-dev-acadapter!");
 	} else {
 		g_error ("create_icon_pixbuf called with unknown type %i!",
 			slotData->powerDevice);
@@ -316,60 +322,13 @@ get_main_icon_slot (void)
 	return NULL;
 }
 
-/** Callback for actions boxes
- *
- *  @param	menuitem	The part of the menu that was clicked
- *  @param	user_data	Unused
- */
-static void
-callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
-{
-	gchar *action = NULL;
-
-	/* assertion checks */
-	g_assert (menuitem);
-
-	action = g_object_get_data ((GObject*) menuitem, "action");
-	g_debug ("action = '%s'", action);
-	if (strcmp (action, "suspend") == 0)
-		action_policy_do (ACTION_SUSPEND);
-	else if (strcmp (action, "hibernate") == 0)
-		action_policy_do (ACTION_HIBERNATE);
-	else
-		g_warning ("No handler for '%s'", action);
-}
-
-/** Returns the GtkWidget that is the notification icon
- *
- *  @return			Success, return FALSE when no icon present
- */
-GtkWidget *
-get_notification_icon (void)
-{
-	return GTK_WIDGET (eggtrayicon->image);
-}
-
-/** Function for "about" box URL press
- *
- *  @param	about		The about dialogue
- *  @param	link		The URL that was clicked
- *  @param	user_data	Ununsed
- */
-void 
-callback_about_activated_url (GtkAboutDialog *about,
-	const gchar *link,
-	gpointer user_data)
-{
-	gnome_url_show (link, NULL);
-}
-
 /** Callback for "about" box
  *
  *  @param	menuitem	The menuitem that was clicked
  *  @param	user_data	Ununsed
  */
 static void
-callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
+callback_about_activated (void)
 {
 	const gchar *authors[] = {
 		"Richard Hughes <richard@hughsie.com>",
@@ -390,13 +349,7 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about),
 		"Power Manager for GNOME Desktop");
 	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), GPLV2);
-/** @todo why does gtk_about_dialog_set_wrap_license fail?
-	gtk_about_dialog_set_wrap_license (GTK_ABOUT_DIALOG (about), TRUE);
-*/
 	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about), GPMURL);
-	gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG (about),
-		"SourceForge Homepage");
-	gtk_about_dialog_set_url_hook (callback_about_activated_url, NULL, NULL);
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
 	gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG (about), artists);
 	gtk_about_dialog_set_documenters (GTK_ABOUT_DIALOG (about), documenters);
@@ -407,35 +360,57 @@ callback_about_activated (GtkMenuItem *menuitem, gpointer user_data)
 	g_object_unref (logo);
 }
 
-/** Callback so that we can set the preferences
+/** Callback for actions boxes
  *
- *  @param	menuitem	The menuitem that was clicked
- *  @param	user_data	Ununsed
+ *  @param	menuitem	The part of the menu that was clicked
+ *  @param	user_data	Unused
  */
 static void
-callback_prefs_activated (GtkMenuItem *menuitem, gpointer user_data)
+callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
-	gboolean retval;
-	gchar *path = NULL;
+	gchar *action = NULL;
 
 	/* assertion checks */
 	g_assert (menuitem);
 
-	path = g_strconcat (BINDIR, "/", "gnome-power-preferences", NULL);
-	g_debug ("callback_prefs_activated: %s", path);
+	action = g_object_get_data ((GObject*) menuitem, "action");
+	g_assert (action);
 
-	retval = g_spawn_command_line_async (path, NULL);
-	if (!retval)
-		g_warning ("Couldn't execute command: %s", path);
-	g_free (path);
+	g_debug ("action = '%s'", action);
+	if (strcmp (action, "suspend") == 0) {
+		action_policy_do (ACTION_SUSPEND);
+	} else if (strcmp (action, "hibernate") == 0) {
+		action_policy_do (ACTION_HIBERNATE);
+	} else if (strcmp (action, "about") == 0) {
+		callback_about_activated ();
+	} else if (strcmp (action, "system") == 0) {
+		/* launch info */
+		run_bin_program ("gnome-power-info");
+	} else if (strcmp (action, "preferences") == 0) {
+		/* launch preferences */
+		run_bin_program ("gnome-power-preferences");
+	} else
+		g_warning ("No handler for '%s'", action);
 }
 
-/** Callback so that we can set the preferences
+/** Returns the GtkWidget that is the notification icon
+ *
+ *  @return			Success, return FALSE when no icon present
+ */
+GtkWidget *
+get_notification_icon (void)
+{
+	return GTK_WIDGET (eggtrayicon->image);
+}
+
+/** Function to set callbacks, and to get icons.
  *
  *  @param	menu		The menu
  *  @param	icon		The icon filename (no .png)
  *  @param	name		The text title
  *  @param	type		The type of menu item, e.g. hibernate
+ *
+ *  @todo	Need to work out why there is not stock_preferences
  */
 static void
 menu_add_action_item (GtkWidget *menu,
@@ -455,57 +430,62 @@ menu_add_action_item (GtkWidget *menu,
 	g_assert (type);
 
 	image = gtk_image_new ();
-	pixbuf = gtk_icon_theme_fallback (icon, 16);
-
-	g_return_if_fail (pixbuf);
-
+	if (!gpm_icon_theme_fallback (&pixbuf, icon, 16))
+		g_error ("Cannot find menu pixmap %s", icon);
+	/* set image */
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-
 	item = gtk_image_menu_item_new_with_label (name);
-	if (type)
-		g_object_set_data ((GObject*) item, "action", (gpointer) type);
+
+	/* set action data */
+	g_object_set_data ((GObject*) item, "action", (gpointer) type);
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
+
+	/* connect to the callback */
 	g_signal_connect (G_OBJECT (item), "activate", 
 		G_CALLBACK (callback_actions_activated), (gpointer) menu);
+
+	/* append to the menu, and show */
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 }
 
-/** Creates panel menu
+/** Creates right-click panel menu
  *
- *  @return			MenuData object
+ *  @param	eggtrayicon	A valid TrayIcon
+ *  @return			Success
  */
-static void
-menu_main_create (void)
+static gboolean
+menu_main_create (TrayData *trayicon)
 {
 	GtkWidget *item = NULL;
 
-	g_assert (eggtrayicon);
-	g_assert (eggtrayicon->popup_menu == NULL);
+	/* assertion checks */
+	g_assert (trayicon);
+	g_assert (trayicon->popup_menu == NULL);
 
-	eggtrayicon->popup_menu = gtk_menu_new ();
+	trayicon->popup_menu = gtk_menu_new ();
 
-	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PREFERENCES, NULL);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_prefs_activated),
-			  (gpointer) eggtrayicon->popup_menu);
-	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-	gtk_widget_show (item);
-
-	item = gtk_image_menu_item_new_from_stock (GNOME_STOCK_ABOUT, NULL);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (callback_about_activated),
-			  (gpointer) eggtrayicon->popup_menu);
-	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
+	/* add Preferences */
+	/**  @bug	stock_preferences doesn't exist! */
+	menu_add_action_item (trayicon->popup_menu, "stock-properties",
+			      _("Preferences"), "preferences");
+	/* add About */
+	menu_add_action_item (trayicon->popup_menu, "stock_about",
+			      _("About"), "about");
+	/* add System */
+	menu_add_action_item (trayicon->popup_menu, "stock_notebook",
+			      _("System"), "system");
+	/* add seporator */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (trayicon->popup_menu), item);
 	gtk_widget_show (item);
 
 	/* add the actions */
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (eggtrayicon->popup_menu), item);
-	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-memory",
+	menu_add_action_item (trayicon->popup_menu, "gnome-dev-memory",
 			      _("Suspend"), "suspend");
 	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
 			      _("Hibernate"), "hibernate");
+	return TRUE;
 }
 
 /** private click release callback
@@ -618,7 +598,7 @@ gpn_icon_update (void)
 			/* create icon */
 			icon_create ();
 			if (!(eggtrayicon->popup_menu))
-				menu_main_create ();
+				menu_main_create (eggtrayicon);
 		}
 		/* modify icon */
 		pixbuf = create_icon_pixbuf (slotData);
