@@ -1,3 +1,16 @@
+2005-10-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-client.{c|h}: Abstract this away from gpm-prefs.c
+
+	* src/gpm-gtk-utils.{c|h}: Abstract this away from gpm-prefs.c
+
+	* src/gpm-prefs.c: Make lots smaller :-) This is in prep for another
+	program, g-p-i.
+
+	* src/Makefile.am: Add these extra files.
+
+	* src/dbus-common.{c|h}: Rename to gpm-dbus-common.{c|h}
+
 2005-10-04  Rodrigo Moya <rodrigo@novell.com>
 
 	* src/gpm-main.c (hal_device_property_modified): display a notification
@@ -10,6 +23,26 @@
 	* src/sounds: Remove.
 
 	* src/icons, src/gpm-notification.c: Rename icons to better suit gpm.
+
+	* src/preferences.glade: Remove
+
+	* src/gpm-prefs.glade, src/gpm-info.glade: Add these new files.
+	I've split the information stuff into it's own glade file as requested
+	by Robert Love.
+
+	* src/compiler.h: Add this file to hold all the GCC4 check ifdefs.
+
+	* src/gpm-prefs.c, src/Makefile.am: Update glade file reference.
+	Remove the information page refresher stuff and move to gpm-info.c
+
+	* src/gpm-notification.c: Use run_bin_program to lauch (all) our
+	external programs.
+	Also coalesce all the custom functions in (menu_main_create) to use
+	just menu_add_action_item (which lets us group the callbacks too)
+	Also fix so the seporator is shown...
+
+	* src/gpm-common.{c|h}: Add run_bin_program to allow us to run
+	g-p-p and the new g-p-i (to come... :-) programs.
 
 	* doc/*: Update so www has it's own directory, and move down html into
 	a lower level doxygen directory.
