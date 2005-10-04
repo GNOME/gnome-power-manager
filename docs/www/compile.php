@@ -62,6 +62,23 @@ yum -y --enablerepo=development update kernel
   </td>
  </tr>
  <tr>
+  <td valign="top"><img src="images/icon-suse.png" alt="[img]"/></td>
+  <td>
+   <p>
+    Package by James Ogley for <a href="http://www.novell.com/linux/suse/">SUSE Linux</a>
+   </p>
+   <p>
+    To use this APT repo, please follow the instructions on the <a href="http://usr-local-bin.org/rpms/usr-local-bin.php">usr-local-bin.org</a> website.
+    Then you can use the following command:
+<pre>
+apt-get update
+apt-get upgrade
+apt-get install gnome-power-manager
+</pre>
+   </p>
+  </td>
+ </tr>
+ <tr>
   <td valign="top"><img src="images/icon-gentoo.png" alt="[img]"/></td>
   <td>
    <p>
