@@ -132,6 +132,32 @@ genericobject_add (GPtrArray *parray, const gchar *udi)
 	return slotData;
 }
 
+/** Runs a tool in BINDIR
+ *
+ *  @param	path		The program name
+ *  @return			Success
+ *
+ *  @note	This will append a prefix of BINDIR to the path
+ *		It is mainly used to run g-p-p and g-p-i
+ */
+gboolean
+run_bin_program (const gchar *program)
+{
+	gchar *path = NULL;
+	gboolean ret = TRUE;
+
+	/* assertion checks */
+	g_assert (program);
+
+	path = g_strconcat (BINDIR, "/", program, NULL);
+	if (!g_spawn_command_line_async (path, NULL)) {
+		g_warning ("Couldn't execute command: %s", path);
+		ret = FALSE;
+	}
+	g_free (path);
+	return ret;
+}
+
 /** Runs a file set in GConf
  *
  *  @param	path		The gconf path

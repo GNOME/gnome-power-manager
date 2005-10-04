@@ -118,6 +118,7 @@ gchar *get_chargestate_string (GenericObject *slotData);
 void create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice);
 GString *get_time_string (GenericObject *slotData);
 gboolean run_gconf_script (const char *path);
+gboolean run_bin_program (const gchar *program);
 
 gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
