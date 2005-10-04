@@ -112,15 +112,15 @@
 <a name="l00131"></a>00131         slotDataVirt.<a class="code" href="structGenericObject.html#o4">percentageCharge</a> = 100;
 <a name="l00132"></a>00132         <a class="code" href="gpm-common_8c.html#a8">create_virtual_of_type</a> (<a class="code" href="gpm-main_8c.html#a1">objectData</a>, &amp;slotDataVirt, slotData-&gt;<a class="code" href="structGenericObject.html#o2">powerDevice</a>);
 <a name="l00133"></a>00133         num = <a class="code" href="gpm-notification_8c.html#a4">get_index_from_percent</a> (slotDataVirt.<a class="code" href="structGenericObject.html#o4">percentageCharge</a>);
-<a name="l00134"></a>00134         computed_name = g_strdup_printf (<span class="stringliteral">"gnome-power-system%s-%d-of-8"</span>, 
-<a name="l00135"></a>00135                     state_data.<a class="code" href="structStateData.html#o0">onBatteryPower</a> ? <span class="stringliteral">""</span> : <span class="stringliteral">"-ac"</span>, num);
+<a name="l00134"></a>00134         computed_name = g_strdup_printf (<span class="stringliteral">"gnome-power-%s-%d-of-8"</span>, 
+<a name="l00135"></a>00135                     state_data.<a class="code" href="structStateData.html#o0">onBatteryPower</a> ? <span class="stringliteral">"bat"</span> : <span class="stringliteral">"ac"</span>, num);
 <a name="l00136"></a>00136         pixbuf = <a class="code" href="gpm-notification_8c.html#a3">gtk_icon_theme_fallback</a> (computed_name, 22);
 <a name="l00137"></a>00137         g_debug (<span class="stringliteral">"computed_name = %s"</span>, computed_name);
 <a name="l00138"></a>00138         g_assert (pixbuf != NULL);
 <a name="l00139"></a>00139         g_free (computed_name);
 <a name="l00140"></a>00140     } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (slotData-&gt;<a class="code" href="structGenericObject.html#o2">powerDevice</a> == <a class="code" href="gpm-common_8h.html#a50a29">POWER_UPS</a>) {
-<a name="l00141"></a>00141         num = <a class="code" href="gpm-notification_8c.html#a4">get_index_from_percent</a> (slotDataVirt.<a class="code" href="structGenericObject.html#o4">percentageCharge</a>);
-<a name="l00142"></a>00142         computed_name = g_strdup_printf (<span class="stringliteral">"gnome-power-system-ups-%d-of-8"</span>, num);
+<a name="l00141"></a>00141         num = <a class="code" href="gpm-notification_8c.html#a4">get_index_from_percent</a> (slotData-&gt;<a class="code" href="structGenericObject.html#o4">percentageCharge</a>);
+<a name="l00142"></a>00142         computed_name = g_strdup_printf (<span class="stringliteral">"gnome-power-ups-%d-of-8"</span>, num);
 <a name="l00143"></a>00143         pixbuf = <a class="code" href="gpm-notification_8c.html#a3">gtk_icon_theme_fallback</a> (computed_name, 22);
 <a name="l00144"></a>00144         g_debug (<span class="stringliteral">"computed_name = %s"</span>, computed_name);
 <a name="l00145"></a>00145         g_assert (pixbuf != NULL);
@@ -532,7 +532,7 @@
 <a name="l00640"></a>00640         }
 <a name="l00641"></a>00641     }
 <a name="l00642"></a>00642 }
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Tue Oct 4 13:56:52 2005 for GNOME Power Manager by&nbsp;
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Tue Oct 4 15:28:18 2005 for GNOME Power Manager by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.4.4 </small></address>
 </body>

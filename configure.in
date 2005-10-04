@@ -19,21 +19,33 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_PROG_INTLTOOL([0.27.2])
 AM_GLIB_GNU_GETTEXT
 
+AC_SUBST(SYSCONFDIR, $sysconfdir)
+AC_SUBST(DATADIR, $datadir)
+AC_SUBST(BINDIR, $bindir)
+AC_SUBST(SBINDIR, $sbindir)
+
 AC_ARG_ENABLE(libnotify,          [  --enable-libnotify      build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
 AC_ARG_ENABLE(doxygen-docs,       [  --enable-doxygen-docs   build DOXYGEN documentation (requires Doxygen)],enable_doxygen_docs=$enableval,enable_doxygen_docs=auto)
 AC_ARG_WITH(dbus-sys,             [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
 AC_ARG_WITH(dbus-services,        [  --with-dbus-services=<dir>   where D-BUS services directory is])
 
-SYSCONFDIR="$sysconfdir"
-LIBDIR="$libdir"
-DATADIR="$datadir"
+# documentation target
+AC_ARG_WITH(doc-dir,   [  --with-doc-dir=[dirname] directory to install documentation])
+if ! test -z "$with_doc_dir"; then
+   DOCDIR="$with_doc_dir/gnome-power-manager-$VERSION"
+else
+   DOCDIR="$DATADIR/doc/gnome-power-manager-$VERSION"
+fi
+AC_SUBST(DOCDIR)
 
+# dbus system
 if ! test -z "$with_dbus_sys" ; then
 	DBUS_SYS_DIR="$with_dbus_sys"
 else
 	DBUS_SYS_DIR="$SYSCONFDIR/dbus-1/system.d"
 fi
 
+# dbus services
 if ! test -z "$with_dbus_services" ; then
 	DBUS_SERVICES_DIR="$with_dbus_services"
 else
@@ -127,11 +139,9 @@ AC_OUTPUT([
 Makefile
 src/Makefile
 src/pixmaps/Makefile
-src/sounds/Makefile
 src/icons/Makefile
 docs/Makefile
-docs/code/Makefile
-docs/code/Doxyfile
+docs/Doxyfile
 po/Makefile.in
 gnome-power-manager.spec
 ])
@@ -146,6 +156,7 @@ echo "
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
         building Doxygen docs:     ${enable_doxygen_docs}
+        documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR
 	gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR

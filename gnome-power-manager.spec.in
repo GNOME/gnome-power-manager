@@ -31,9 +31,11 @@ change preferences.
 %build
 %configure \
 	--enable-libnotify					\
-        --prefix=%{buildroot}					\
-        --with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
-        --with-dbus-services=%{buildroot}/usr/share/dbus-1/services
+	--enable-doxygen-docs=no				\
+	--prefix=%{buildroot}					\
+	--with-doc-dir=%{buildroot}/usr/share/doc		\
+	--with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
+	--with-dbus-services=%{buildroot}/usr/share/dbus-1/services
 make
 
 %install

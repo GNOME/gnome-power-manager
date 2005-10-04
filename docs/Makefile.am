@@ -1,12 +1,14 @@
-if DOXYGEN_DOCS_ENABLED
-
 EXTRA_DIST = \
 	Doxyfile		\
 	Doxyfile.in		\
 	utopia.repo		\
 	video.txt
 
-htmldocdir = $(DOCDIR)
+if DOXYGEN_DOCS_ENABLED
+
+DISTCLEANFILES = doxygen/*
+
+htmldocdir = $(DOCDIR)/doxygen
 htmldoc_DATA = doxygen/*
 
 doxygen/* : Doxyfile
