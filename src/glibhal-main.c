@@ -33,7 +33,7 @@
 #include <string.h>
 #include <dbus/dbus-glib.h>
 
-#include "dbus-common.h"
+#include "gpm-dbus-common.h"
 #include "glibhal-main.h"
 
 /** Finds out if hal is running

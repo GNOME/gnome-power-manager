@@ -33,7 +33,7 @@
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
 
-#include "dbus-common.h"
+#include "gpm-dbus-common.h"
 #include "glibhal-main.h"
 #include "gpm-screensaver.h"
 

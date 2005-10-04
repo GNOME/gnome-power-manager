@@ -29,12 +29,12 @@ noinst_PROGRAMS = 					\
 
 gnome_power_dbus_test_SOURCES =				\
 	compiler.h					\
-	dbus-common.h					\
-	dbus-common.c					\
 	glibhal-main.h					\
 	glibhal-main.c					\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
+	gpm-dbus-common.h				\
+	gpm-dbus-common.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-dbus-test.c
@@ -47,16 +47,20 @@ gnome_power_dbus_test_LDADD =				\
 
 gnome_power_preferences_SOURCES =			\
 	compiler.h					\
-	dbus-common.h					\
-	dbus-common.c					\
 	glibhal-main.h					\
 	glibhal-main.c					\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
+	gpm-dbus-common.h				\
+	gpm-dbus-common.c				\
+	gpm-dbus-client.h				\
+	gpm-dbus-client.c				\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-libnotify.h					\
 	gpm-libnotify.c					\
+	gpm-gtk-utils.h					\
+	gpm-gtk-utils.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
@@ -75,14 +79,14 @@ gnome_power_manager_SOURCES =				\
 	eggtrayicon.c					\
 	gpm_marshal.h					\
 	gpm_marshal.c					\
-	dbus-common.h					\
-	dbus-common.c					\
 	glibhal-main.h					\
 	glibhal-main.c					\
 	glibhal-callback.h				\
 	glibhal-callback.c				\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
+	gpm-dbus-common.h				\
+	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\
 	gpm-dbus-server.c				\
 	gpm-common.h					\

@@ -48,8 +48,8 @@
 #include "gpm-screensaver.h"
 #include "gpm-libnotify.h"
 #include "gpm-dbus-server.h"
+#include "gpm-dbus-common.h"
 
-#include "dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
 #include "glibhal-extras.h"

@@ -33,7 +33,7 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 
-#include "dbus-common.h"
+#include "gpm-dbus-common.h"
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
 

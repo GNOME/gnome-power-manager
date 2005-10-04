@@ -33,7 +33,7 @@
 #include <dbus/dbus-glib.h>
 #include "gpm-dbus-server.h"
 #include "gpm-common.h"
-#include "dbus-common.h"
+#include "gpm-dbus-common.h"
 
 G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
 
