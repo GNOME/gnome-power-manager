@@ -6,8 +6,6 @@ EXTRA_DIST = \
 
 if DOXYGEN_DOCS_ENABLED
 
-DISTCLEANFILES = doxygen/*
-
 htmldocdir = $(DOCDIR)/doxygen
 htmldoc_DATA = doxygen/*
 
@@ -20,5 +18,6 @@ clean-local:
 	rm -f *~
 
 DISTCLEANFILES =					\
+	doxygen/*					\
 	Makefile					\
 	Makefile.in
