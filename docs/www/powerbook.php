@@ -9,15 +9,6 @@
  Things that I need to figure out before PMU is as well supported as ACPI
 </p>
 
-<h2>How to find out if machine a laptop or desktop</h2>
-
-<p>
- dmidecode is used by acpi to populate the smbios.* fields.
- Using these fields we populate the system.formfactor field to be either laptop, desktop, or unknown.
- GNOME Power Manager uses this field to set the low power state in HAL.
- We need a way to get the machine type from the pmu.
-</p>
-
 <h2>How to set the LCD brightness in software.</h2>
 
 <p>
