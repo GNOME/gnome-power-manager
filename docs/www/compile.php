@@ -70,11 +70,31 @@ yum -y --enablerepo=development update kernel
    <p>
     To use this APT repo, please follow the instructions on the <a href="http://usr-local-bin.org/rpms/usr-local-bin.php">usr-local-bin.org</a> website.
     Then you can use the following command:
+   </p>
 <pre>
 apt-get update
 apt-get upgrade
 apt-get install gnome-power-manager
 </pre>
+  </td>
+ </tr>
+ <tr>
+  <td valign="top"><img src="images/icon-arch.png" alt="[img]"/></td>
+  <td>
+   <p>
+    Compile notes for <a href="http://archlinux.org/">Arch Linux</a>
+   </p>
+   <p>
+    If you try to compile the tarball with Arch Linux, you may get the error
+   </p>
+<pre>
+libtool: link: cannot find the library `/usr/lib/libgobject-2.0.la'
+</pre>
+   <p>
+    GNOME Power Manager uses pkgconfig (like most open-source projects, but Arch Linux has a bug
+    where libnotify.la references other files.
+    The .la files are soon to be removed from Arch Linux, and if you manually delete the file libnotify.la,
+    the tarball will compile. Bug found by Eugenia Loli-Queru.
    </p>
   </td>
  </tr>
