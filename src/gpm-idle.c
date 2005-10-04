@@ -53,10 +53,11 @@ IdleCallback	callbackfunction;
  *  @param	data		An empty, pre-allocated CPU object
  *  @return			If we can read the /proc/stat file
  *
- * @note	user	- Time spent in user space (for all processes)
- * 		nice	- Time spent in niced tasks (tasks with +ve nice value)
- * 		system	- Time spent in Kernel space
- * 		idle	- Time the processor was not busy. 
+ * @note	- user		Time spent in user space (for all processes)
+ * 		- nice		Time spent in niced tasks 
+				(tasks with positive nice value)
+ * 		- system	Time spent in Kernel space
+ * 		- idle		Time the processor was not busy. 
  */
 static gboolean
 cpudata_get_values (cpudata *data)
@@ -212,6 +213,10 @@ gpm_idle_set_callback (IdleCallback callback)
  *
  *  @param	data		Unused
  *  @return			If we should continue to poll
+ *
+ *  @note	The load has to be less than IDLE_LIMIT so we do not suspend
+ *		or shutdown halfway thru a heavy CPU utility, e.g. disk update, 
+ *		rpm transaction, or kernel compile.
  */
 gboolean
 gpm_idle_update (gpointer data)
@@ -220,16 +225,18 @@ gpm_idle_update (gpointer data)
 	gint load;
 
 	if (!callbackfunction) {
-		g_warning ("gpm_idle_set_callback has not been called so no function set!");
+		g_warning ("gpm_idle_set_callback has not been called so no"
+			   "function set!");
 		/* will stop polling */
 		return FALSE;
 	}
 
 	if (time_idle_callback == 0) {
-		g_debug ("gpm_idle_set_timeout has not been called so no idle processing done");
+		g_debug ("gpm_idle_set_timeout has not been called with a valid "
+			 "timeout so no idle processing done");
 		/*
-		 * Will not stop polling, as user could increase value by changing
-		 * g-conf value using g-p-p
+		 * Will not stop polling, as user could increase value by
+		 * changing g-conf value using g-p-p
 		 */
 		return TRUE;
 	}
@@ -244,11 +251,7 @@ gpm_idle_update (gpointer data)
 	}
 	g_debug ("gpm_idle_update: gstime = %i, load = %i", gstime, load);
 
-	/*
-	 * The load has to be less than IDLE_LIMIT so we do not suspend or 
-	 * shutdown halfway thru a heavy CPU utility, e.g. disk update, 
-	 * rpm transaction, or kernel compile.
-	 */
+	/* check if "idle" enough */
 	if (gstime > time_idle_callback && load < IDLE_LIMIT) {
 		g_debug ("running callback function");
 		callbackfunction (gstime);

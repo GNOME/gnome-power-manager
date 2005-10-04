@@ -131,15 +131,15 @@ create_icon_pixbuf (GenericObject *slotData)
 		slotDataVirt.percentageCharge = 100;
 		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
 		num = get_index_from_percent (slotDataVirt.percentageCharge);
-		computed_name = g_strdup_printf ("gnome-power-system%s-%d-of-8", 
-					state_data.onBatteryPower ? "" : "-ac", num);
+		computed_name = g_strdup_printf ("gnome-power-%s-%d-of-8", 
+					state_data.onBatteryPower ? "bat" : "ac", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_UPS) {
-		num = get_index_from_percent (slotDataVirt.percentageCharge);
-		computed_name = g_strdup_printf ("gnome-power-system-ups-%d-of-8", num);
+		num = get_index_from_percent (slotData->percentageCharge);
+		computed_name = g_strdup_printf ("gnome-power-ups-%d-of-8", num);
 		pixbuf = gtk_icon_theme_fallback (computed_name, 22);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
