@@ -18,3 +18,7 @@ endif # DOXYGEN_DOCS_ENABLED
 
 clean-local:
 	rm -f *~
+
+DISTCLEANFILES =					\
+	Makefile					\
+	Makefile.in

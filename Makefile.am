@@ -64,13 +64,14 @@ DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
-	src/gnome-power-glue.h				\
+	Makefile					\
+	Makefile.in					\
+	gnome-power-manager-*.tar.gz			\
 	gnome-power-preferences.desktop			\
 	gnome-power-manager.schemas			\
 	gnome-power-manager.service
 
 MAINTAINERCLEANFILES =					\
-	Makefile.in					\
 	aclocal.m4					\
 	config.guess					\
 	config.h.in					\
@@ -83,10 +84,5 @@ MAINTAINERCLEANFILES =					\
 	missing						\
 	autom4te.cache/*				\
 	Makefile.in					\
-	po/Makefile.in					\
-	src/pixmaps/Makefile.in				\
-	src/Makefile.in					\
-	src/sounds/Makefile.in				\
-	src/icons/Makefile.in				\
 	po/$(GETTEXT_PACKAGE).pot			\
 	po/*.bak

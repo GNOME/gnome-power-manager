@@ -32,3 +32,7 @@ Data_DATA =						\
 	gnome-power-ups-6-of-8.png			\
 	gnome-power-ups-7-of-8.png			\
 	gnome-power-ups-8-of-8.png
+
+DISTCLEANFILES =					\
+	Makefile					\
+	Makefile.in
