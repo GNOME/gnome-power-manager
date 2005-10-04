@@ -1,4 +1,4 @@
-/*! @file	dbus-common.h
+/*! @file	gpm-dbus-common.h
  *  @brief	Common GLIB DBUS routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02

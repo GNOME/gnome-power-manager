@@ -1,4 +1,4 @@
-/*! @file	dbus-common.c
+/*! @file	gpm-dbus-common.c
  *  @brief	Common GLIB DBUS routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -34,7 +34,7 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include "gpm_marshal.h"
-#include "dbus-common.h"
+#include "gpm-dbus-common.h"
 
 /** Handle a glib error, freeing if needed.
  *  We echo to debug, as we don't want the typical user sending in bug reports.
