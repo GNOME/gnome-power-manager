@@ -22,7 +22,8 @@ INCLUDES =						\
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
-	gnome-power-preferences
+	gnome-power-preferences				\
+	gnome-power-info
 
 noinst_PROGRAMS = 					\
 	gnome-power-dbus-test
@@ -40,6 +41,26 @@ gnome_power_dbus_test_SOURCES =				\
 	gpm-dbus-test.c
 
 gnome_power_dbus_test_LDADD =				\
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(HAL_LIBS)					\
+	$(DBUS_LIBS)
+
+gnome_power_info_SOURCES =				\
+	compiler.h					\
+	glibhal-main.h					\
+	glibhal-main.c					\
+	glibhal-extras.h				\
+	glibhal-extras.c				\
+	gpm-gtk-utils.h					\
+	gpm-gtk-utils.c					\
+	gpm-dbus-common.h				\
+	gpm-dbus-common.c				\
+	gpm-common.h					\
+	gpm-common.c					\
+	gpm-info.c
+
+gnome_power_info_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\

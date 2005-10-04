@@ -88,7 +88,7 @@ gpm_gtk_set_check (GladeXML *allwidgets, const gchar *widgetname, gboolean set)
  *  @return			Success
  */
 gboolean
-gtk_set_label (GladeXML *allwidgets, const gchar *widgetname, const gchar *label)
+gpm_gtk_set_label (GladeXML *allwidgets, const gchar *widgetname, const gchar *label)
 {
 	GtkWidget *widget = NULL;
 

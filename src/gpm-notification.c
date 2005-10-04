@@ -324,8 +324,6 @@ get_main_icon_slot (void)
 
 /** Callback for "about" box
  *
- *  @param	menuitem	The menuitem that was clicked
- *  @param	user_data	Ununsed
  */
 static void
 callback_about_activated (void)
@@ -451,7 +449,7 @@ menu_add_action_item (GtkWidget *menu,
 
 /** Creates right-click panel menu
  *
- *  @param	eggtrayicon	A valid TrayIcon
+ *  @param	trayicon	A valid TrayIcon
  *  @return			Success
  */
 static gboolean

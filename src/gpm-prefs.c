@@ -47,10 +47,11 @@
 #include "gpm-screensaver.h"
 #include "gpm-dbus-client.h"
 #include "gpm-dbus-common.h"
+#include "gpm-gtk-utils.h"
+
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
 
-#include "gpm-gtk-utils.h"
 
 static GladeXML *all_pref_widgets;
 static gboolean isVerbose;

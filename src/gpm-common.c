@@ -134,7 +134,7 @@ genericobject_add (GPtrArray *parray, const gchar *udi)
 
 /** Runs a tool in BINDIR
  *
- *  @param	path		The program name
+ *  @param	program		The program name
  *  @return			Success
  *
  *  @note	This will append a prefix of BINDIR to the path

@@ -26,6 +26,6 @@
 
 gboolean gpm_gtk_set_visibility (GladeXML *all_widgets, const gchar *widgetname, gboolean set);
 gboolean gpm_gtk_set_check (GladeXML *all_widgets, const gchar *widgetname, gboolean set);
-gboolean gtk_set_label (GladeXML *all_widgets, const gchar *widgetname, const gchar *label);
+gboolean gpm_gtk_set_label (GladeXML *all_widgets, const gchar *widgetname, const gchar *label);
 
 #endif	/* _GPMGTKUTILS_H */
