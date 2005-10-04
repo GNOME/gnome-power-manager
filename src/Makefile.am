@@ -1,7 +1,8 @@
 SUBDIRS = pixmaps icons
 
 pkgdata_DATA =						\
-	preferences.glade
+	gpm-info.glade					\
+	gpm-prefs.glade
 
 EXTRA_DIST =						\
 	$(pkgdata_DATA)					\
@@ -27,10 +28,11 @@ noinst_PROGRAMS = 					\
 	gnome-power-dbus-test
 
 gnome_power_dbus_test_SOURCES =				\
+	compiler.h					\
 	dbus-common.h					\
 	dbus-common.c					\
-	glibhal-main.h				\
-	glibhal-main.c				\
+	glibhal-main.h					\
+	glibhal-main.c					\
 	glibhal-extras.h				\
 	glibhal-extras.c				\
 	gpm-common.h					\
@@ -44,6 +46,7 @@ gnome_power_dbus_test_LDADD =				\
 	$(DBUS_LIBS)
 
 gnome_power_preferences_SOURCES =			\
+	compiler.h					\
 	dbus-common.h					\
 	dbus-common.c					\
 	glibhal-main.h					\
