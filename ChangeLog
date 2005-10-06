@@ -1,3 +1,12 @@
+2005-10-06  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c (read_battery_data): Try to get an debug report if
+	we are missing battery.remaining_time or 
+	battery.charge_level.percentage.
+
+	* src/gpm-notificiation.c (get_notification_icon): Check before
+	dereferencing eggtrayicon.
+
 2005-10-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-dbus-client.{c|h}: Abstract this away from gpm-prefs.c

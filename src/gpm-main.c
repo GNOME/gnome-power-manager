@@ -234,10 +234,6 @@ dbus_action (gint action)
 void
 action_policy_do (gint policy_number)
 {
-#if GPM_SIMULATE
-	g_warning ("Ignoring action_policy_do event as simulating!");
-	return;
-#endif
 	gint value;
 	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
@@ -463,7 +459,7 @@ add_ac_adapter (const gchar *udi)
 	return TRUE;
 }
 
-/** Adds an ac_adapter device. Also sets up properties on cached object
+/** Adds an battery device. Also sets up properties on cached object
  *
  *  @param	slotData	The cached object
  *  @return			If battery is present
@@ -471,13 +467,15 @@ add_ac_adapter (const gchar *udi)
 static gboolean
 read_battery_data (GenericObject *slotData)
 {
-	gint tempval;
+	gint seconds_remaining;
+	gboolean is_present;
 
 	/* assertion checks */
 	g_assert (slotData);
 
 	/* initialise to known defaults */
 	slotData->minutesRemaining = 0;
+	slotData->percentageCharge = 0;
 	slotData->isRechargeable = FALSE;
 	slotData->isCharging = FALSE;
 	slotData->isDischarging = FALSE;
@@ -487,13 +485,6 @@ read_battery_data (GenericObject *slotData)
 		return FALSE;
 	}
 
-	/* set cached variables up */
-	hal_device_get_int (slotData->udi, "battery.remaining_time", &tempval);
-	if (tempval > 0)
-		slotData->minutesRemaining = tempval / 60;
-
-	hal_device_get_int (slotData->udi, "battery.charge_level.percentage",
-		&slotData->percentageCharge);
 	/* battery might not be rechargeable, have to check */
 	hal_device_get_bool (slotData->udi, "battery.is_rechargeable",
 		&slotData->isRechargeable);
@@ -502,6 +493,29 @@ read_battery_data (GenericObject *slotData)
 			&slotData->isCharging);
 		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging",
 			&slotData->isDischarging);
+	}
+
+	/* sanity check that remaining time exists (if it should) */
+	is_present = hal_device_get_int (slotData->udi,
+			"battery.remaining_time", &seconds_remaining);
+	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
+		libnotify_event ("GNOME Power Manager could not read your batteries remaining time.\n"
+				 "Please report this as a bug, providing the information <a href=\""
+				 "http://gnome-power.sourceforge.net/report_bug.php\">here</a>.",
+				 LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
+	} else if (seconds_remaining > 0) {
+		/* we have to scale this to minutes */
+		slotData->minutesRemaining = seconds_remaining / 60;
+	}
+
+	/* sanity check that remaining time exists (if it should) */
+	is_present = hal_device_get_int (slotData->udi,
+			"battery.charge_level.percentage", &slotData->percentageCharge);
+	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
+		libnotify_event ("GNOME Power Manager could not read your batteries percentage charge.\n"
+				 "Please report this as a bug, providing the information <a href=\""
+				 "http://gnome-power.sourceforge.net/report_bug.php\">here</a>.",
+				 LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
 	}
 	return TRUE;
 }
