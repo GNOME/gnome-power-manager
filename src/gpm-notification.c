@@ -398,6 +398,9 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 GtkWidget *
 get_notification_icon (void)
 {
+	/* no asserts required, as we are allowed to be called when no icon */
+	if (!eggtrayicon)
+		return NULL;
 	return GTK_WIDGET (eggtrayicon->image);
 }
 
