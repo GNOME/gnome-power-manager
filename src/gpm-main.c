@@ -1008,7 +1008,7 @@ main (int argc, char *argv[])
 		if (strcmp (argv[a], "--verbose") == 0)
 			isVerbose = TRUE;
 		else if (strcmp (argv[a], "--version") == 0) {
-			g_print ("%s %s", NICENAME, VERSION);
+			g_print ("%s %s\n", NICENAME, VERSION);
 			return EXIT_SUCCESS;
 		}
 		else if (strcmp (argv[a], "--no-daemon") == 0)
