@@ -1,47 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <interface name="org.gnome.GnomePowerManager">
-
-    <method name="isUserIdle">
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="isOnBattery">
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="isOnUps">
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="isOnAc">
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="ActionRegister">
-      <arg type="i"/>
-      <arg type="s"/>
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="ActionUnregister">
-      <arg type="i"/>
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="Ack">
-      <arg type="i"/>
-      <arg type="b" direction="out"/>
-    </method>
-
-    <method name="Nack">
-      <arg type="i"/>
-      <arg type="s"/>
-      <arg type="b" direction="out"/>
-    </method>
-
-<!--
+	<interface name="org.gnome.GnomePowerManager">
+		<method name="isUserIdle">
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="isOnBattery">
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="isOnUps">
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="isOnAc">
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="ActionRegister">
+			<arg type="i"/>
+			<arg type="s"/>
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="ActionUnregister">
+			<arg type="i"/>
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="Ack">
+			<arg type="i"/>
+			<arg type="b" direction="out"/>
+		</method>
+		<method name="Nack">
+			<arg type="i"/>
+			<arg type="s"/>
+			<arg type="b" direction="out"/>
+		</method>
+		<!--
     <method name="Wait">
       <arg type="i"/>
       <arg type="i"/>
@@ -49,13 +39,11 @@
       <arg type="b" direction="out"/>
     </method>
 -->
-
-    <signal name="mainsStatusChanged"/>
-    <signal name="performingAction"/>
+		<signal name="mainsStatusChanged"/>
+		<signal name="performingAction"/>
 <!--
     <signal name="userIdleStatusChanged"/>
 -->
-    <signal name="actionAboutToHappen"/>
-
-  </interface>
+		<signal name="actionAboutToHappen"/>
+	</interface>
 </node>
