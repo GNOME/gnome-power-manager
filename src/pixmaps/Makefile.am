@@ -4,6 +4,9 @@ EXTRA_DIST =					\
 Datadir = $(datadir)/gnome-power-manager/
 
 Data_DATA =					\
+	stock_about.png				\
+	stock_notebook.png			\
+	stock-properties.png			\
 	gnome-power.png				\
 	gnome-dev-acadapter.png			\
 	gnome-dev-keyboard.png			\
