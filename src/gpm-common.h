@@ -28,9 +28,6 @@
 #include "eggtrayicon.h"
 #include <gnome.h>
 
-/* Do no actions. Set to true for testing */
-#define GPM_SIMULATE			FALSE
-
 /* where our settings are stored in the gconf tree */
 #define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power-manager"
 #define GCONF_ROOT			GCONF_ROOT_SANS_SLASH "/"
@@ -57,15 +54,15 @@
 
 /** The action type */
 typedef enum {
-	ACTION_NOTHING,
-	ACTION_WARNING,
-	ACTION_SUSPEND,
-	ACTION_HIBERNATE,
-	ACTION_SHUTDOWN,
-	ACTION_UNKNOWN,
-	ACTION_REBOOT,
-	ACTION_NOW_BATTERYPOWERED,
-	ACTION_NOW_MAINSPOWERED
+	ACTION_NOTHING,		/**< Do nothing! Yes nothing.		*/
+	ACTION_UNKNOWN,		/**< The action is unknown		*/
+	ACTION_WARNING,		/**< Use libnotify and send warning	*/
+	ACTION_SUSPEND,		/**< Suspend please.			*/
+	ACTION_HIBERNATE,	/**< Hibernate please			*/
+	ACTION_SHUTDOWN,	/**< Shutdown please			*/
+	ACTION_REBOOT,		/**< Reboot please			*/
+	ACTION_NOW_BATTERYPOWERED,	/**< We are now battery powered	*/
+	ACTION_NOW_MAINSPOWERED	/**< We are now mains powered		*/
 } ActionType;
 
 /** The device type of the cached object */

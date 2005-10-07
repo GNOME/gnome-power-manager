@@ -53,7 +53,7 @@
 #include "glibhal-extras.h"
 
 
-static GladeXML *all_pref_widgets;
+static GladeXML *prefwidgets;
 static gboolean isVerbose;
 
 /** Shows/hides/renames controls based on hasData
@@ -79,8 +79,8 @@ recalc (void)
 		GCONF_ROOT "general/display_icon", NULL);
 	gboolean displayIconFull = gconf_client_get_bool (client,
 		GCONF_ROOT "general/display_icon_full", NULL);
-	gpm_gtk_set_check (all_pref_widgets, "checkbutton_display_icon", displayIcon);
-	gpm_gtk_set_check (all_pref_widgets, "checkbutton_display_icon_full", displayIconFull);
+	gpm_gtk_set_check (prefwidgets, "checkbutton_display_icon", displayIcon);
+	gpm_gtk_set_check (prefwidgets, "checkbutton_display_icon_full", displayIconFull);
 
 	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
 	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
@@ -97,65 +97,65 @@ recalc (void)
 	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
 
 	if (gscreensaver_is_running ()) {
-		gpm_gtk_set_visibility (all_pref_widgets, "button_gnome_screensave", TRUE);
+		gpm_gtk_set_visibility (prefwidgets, "button_gnome_screensave", TRUE);
 		hasDisplays = gconf_client_get_bool (client,
 				GS_GCONF_ROOT "dpms_enabled", NULL);
 	} else {
-		gpm_gtk_set_visibility (all_pref_widgets, "button_gnome_screensave", FALSE);
+		gpm_gtk_set_visibility (prefwidgets, "button_gnome_screensave", FALSE);
 		hasDisplays = FALSE;
 	}
 
 	/* frame labels */
 	if (hasBatteries) {
-		widget = glade_xml_get_widget (all_pref_widgets, "label_frame_ac");
+		widget = glade_xml_get_widget (prefwidgets, "label_frame_ac");
 		gtk_label_set_markup (GTK_LABEL (widget), "<b>Running on AC adapter</b>");
-		widget = glade_xml_get_widget (all_pref_widgets, "label_frame_batteries");
+		widget = glade_xml_get_widget (prefwidgets, "label_frame_batteries");
 		gtk_label_set_markup (GTK_LABEL (widget), "<b>Running on batteries</b>");
 	} else {
-		widget = glade_xml_get_widget (all_pref_widgets, "label_frame_ac");
+		widget = glade_xml_get_widget (prefwidgets, "label_frame_ac");
 		gtk_label_set_markup (GTK_LABEL (widget), "<b>Configuration</b>");
 	}
 
 	/* top frame */
-	gpm_gtk_set_visibility (all_pref_widgets, "frame_batteries", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "combobox_battery_critical", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_battery_critical_action", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_battery_critical", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_battery_low", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_battery_low", hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_battery_critical", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "frame_batteries", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "combobox_battery_critical", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "label_battery_critical_action", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "label_battery_critical", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "label_battery_low", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_battery_low", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_battery_critical", hasBatteries);
 	/* assumes only battery options are in this frame */
-	gpm_gtk_set_visibility (all_pref_widgets, "frame_other_options", hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "frame_other_options", hasBatteries);
 
 	/* options */
-	gpm_gtk_set_visibility (all_pref_widgets, "combobox_button_lid", hasButtonLid);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_button_lid", hasButtonLid);
+	gpm_gtk_set_visibility (prefwidgets, "combobox_button_lid", hasButtonLid);
+	gpm_gtk_set_visibility (prefwidgets, "label_button_lid", hasButtonLid);
 
-	gpm_gtk_set_visibility (all_pref_widgets, "combobox_button_power", hasButtonPower);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_button_power", hasButtonPower);
+	gpm_gtk_set_visibility (prefwidgets, "combobox_button_power", hasButtonPower);
+	gpm_gtk_set_visibility (prefwidgets, "label_button_power", hasButtonPower);
 
-	gpm_gtk_set_visibility (all_pref_widgets, "combobox_button_suspend", hasButtonSleep);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_button_suspend", hasButtonSleep);
+	gpm_gtk_set_visibility (prefwidgets, "combobox_button_suspend", hasButtonSleep);
+	gpm_gtk_set_visibility (prefwidgets, "label_button_suspend", hasButtonSleep);
 
-	gpm_gtk_set_visibility (all_pref_widgets, "combobox_ac_fail", hasAcAdapter);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_ac_fail", hasAcAdapter);
+	gpm_gtk_set_visibility (prefwidgets, "combobox_ac_fail", hasAcAdapter);
+	gpm_gtk_set_visibility (prefwidgets, "label_ac_fail", hasAcAdapter);
 
 	/* variables */
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_ac_brightness", hasLCD);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_ac_brightness", hasLCD);
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_batteries_brightness", hasLCD);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_batteries_brightness", hasLCD);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_brightness", hasLCD);
+	gpm_gtk_set_visibility (prefwidgets, "label_ac_brightness", hasLCD);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_brightness", hasLCD);
+	gpm_gtk_set_visibility (prefwidgets, "label_batteries_brightness", hasLCD);
 
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_batteries_display", hasDisplays & hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_batteries_display", hasDisplays & hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_display", hasDisplays);
+	gpm_gtk_set_visibility (prefwidgets, "label_ac_display", hasDisplays);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_display", hasDisplays & hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "label_batteries_display", hasDisplays & hasBatteries);
 
 	/* set the display stuff to set gnome-screensaver dpms timeout */
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (all_pref_widgets, "hscale_batteries_display", hasDisplays & hasBatteries);
-	gpm_gtk_set_visibility (all_pref_widgets, "label_batteries_display", hasDisplays & hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_display", hasDisplays);
+	gpm_gtk_set_visibility (prefwidgets, "label_ac_display", hasDisplays);
+	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_display", hasDisplays & hasBatteries);
+	gpm_gtk_set_visibility (prefwidgets, "label_batteries_display", hasDisplays & hasBatteries);
 }
 
 /** Callback for gconf_key_changed
@@ -278,7 +278,7 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	 */
 	if (strcmp (widgetname, "hscale_battery_low") == 0) {
 		GtkWidget *widget2;
-		widget2 = glade_xml_get_widget (all_pref_widgets,
+		widget2 = glade_xml_get_widget (prefwidgets,
 			"hscale_battery_critical");
 		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
 	}
@@ -335,12 +335,21 @@ callback_check_changed (GtkWidget *widget, gpointer user_data)
 	GConfClient *client = NULL;
 	gboolean value;
 	gchar *policypath = NULL;
+	const gchar *widgetname;
 
 	/* assertion checks */
 	g_assert (widget);
 
-	client = gconf_client_get_default ();
+	widgetname = gtk_widget_get_name (widget);
 	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	if (strcmp (widgetname, "checkbutton_display_icon") == 0) {
+		/* makes no sense to have this enabled */
+		gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
+		gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_others", value);
+	}
+
+	client = gconf_client_get_default ();
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
 	g_return_if_fail (policypath);
 
@@ -443,7 +452,7 @@ hscale_setup_action (const gchar *widgetname, const gchar *policypath, gint poli
 	g_assert (policypath);
 
 	client = gconf_client_get_default ();
-	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	widget = glade_xml_get_widget (prefwidgets, widgetname);
 
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
 	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
@@ -483,7 +492,7 @@ checkbox_setup_action (const gchar *widgetname, const gchar *policypath)
 	g_assert (policypath);
 
 	client = gconf_client_get_default ();
-	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	widget = glade_xml_get_widget (prefwidgets, widgetname);
 	g_signal_connect (G_OBJECT (widget), "clicked",
 		G_CALLBACK (callback_check_changed), NULL);
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
@@ -518,7 +527,7 @@ combo_setup_dynamic (const gchar *widgetname,
 	g_assert (ptrarray);
 
 	client = gconf_client_get_default ();
-	widget = glade_xml_get_widget (all_pref_widgets, widgetname);
+	widget = glade_xml_get_widget (prefwidgets, widgetname);
 	g_return_if_fail (widget);
 
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
@@ -649,12 +658,12 @@ main (int argc, char **argv)
 		}
 
 	/* load the interface */
-	all_pref_widgets = glade_xml_new (GPM_DATA "gpm-prefs.glade", NULL, NULL);
-	if (!all_pref_widgets)
+	prefwidgets = glade_xml_new (GPM_DATA "gpm-prefs.glade", NULL, NULL);
+	if (!prefwidgets)
 		g_error ("glade file failed to load, aborting");
 
 	/* Get the main_window quit */
-	widget = glade_xml_get_widget (all_pref_widgets, "window_preferences");
+	widget = glade_xml_get_widget (prefwidgets, "window_preferences");
 	if (!widget)
 		g_error ("Main window failed to load, aborting");
 	g_signal_connect (G_OBJECT (widget), "delete_event",
@@ -671,11 +680,11 @@ main (int argc, char **argv)
 			"Make sure that it is running", LIBNOTIFY_URGENCY_NORMAL, NULL);
 
 	/* Set the button callbacks */
-	widget = glade_xml_get_widget (all_pref_widgets, "button_close");
+	widget = glade_xml_get_widget (prefwidgets, "button_close");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
-	widget = glade_xml_get_widget (all_pref_widgets, "button_help");
+	widget = glade_xml_get_widget (prefwidgets, "button_help");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
-	widget = glade_xml_get_widget (all_pref_widgets, "button_gnome_screensave");
+	widget = glade_xml_get_widget (prefwidgets, "button_gnome_screensave");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_screensave), NULL);
 
 	/* set gtk enables/disables */
@@ -686,6 +695,8 @@ main (int argc, char **argv)
 		GCONF_ROOT "general/display_icon");
 	checkbox_setup_action ("checkbutton_display_icon_full",
 		GCONF_ROOT "general/display_icon_full");
+	checkbox_setup_action ("checkbutton_display_icon_others",
+		GCONF_ROOT "general/display_icon_others");
 	/*
 	 * Set up combo boxes with "ideal" values - if a enum is unavailable
 	 * e.g. hibernate has been disabled, then it will be filtered out
@@ -760,26 +771,33 @@ main (int argc, char **argv)
 		GCONF_ROOT "general/threshold_critical", POLICY_PERCENT);
 
 	/* set up upper limit for battery_critical */
-	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_low");
+	widget = glade_xml_get_widget (prefwidgets, "hscale_battery_low");
 	gtk_range_set_range (GTK_RANGE (widget), 0, 25);
 	value = gtk_range_get_value (GTK_RANGE (widget));
 
-	widget = glade_xml_get_widget (all_pref_widgets, "hscale_battery_critical");
-	gtk_range_set_range (GTK_RANGE (widget), 0, value);
+	widget = glade_xml_get_widget (prefwidgets, "hscale_battery_critical");
+	if (value > 0)
+		gtk_range_set_range (GTK_RANGE (widget), 0, value);
 
 	/* set the top end for LCD sliders */
 	if (hal_get_brightness_steps (&steps)) {
 		/* only set steps if we have LCD device */
-		widget = glade_xml_get_widget (all_pref_widgets,
+		widget = glade_xml_get_widget (prefwidgets,
 			"hscale_ac_brightness");
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 
-		widget = glade_xml_get_widget (all_pref_widgets,
+		widget = glade_xml_get_widget (prefwidgets,
 			"hscale_batteries_brightness");
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 	}
+
+	/* makes sense to have disable the inactive checkboxes */
+	widget = glade_xml_get_widget (prefwidgets, "checkbutton_display_icon");
+	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
+	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_others", value);
 
 	/* main loop */
 	gtk_main ();

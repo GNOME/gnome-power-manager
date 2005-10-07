@@ -103,13 +103,13 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 }
 
 /** glib libhal replacement to get string type
- *
- *  @note	You must g_free () the return value.
- *
+
  *  @param	udi		The UDI of the device
  *  @param	key		The key to query
  *  @param	value		return value, passed by ref
  *  @return			TRUE for success, FALSE for failure
+ *
+ *  @note	You must g_free () the return value.
  */
 gboolean
 hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)

@@ -115,6 +115,8 @@ callback_gconf_key_changed (GConfClient *client,
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
 		gpn_icon_update ();
+	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_others") == 0) {
+		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_computer") == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);

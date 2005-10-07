@@ -24,8 +24,9 @@
 #ifndef _GPMGTKUTILS_H
 #define _GPMGTKUTILS_H
 
-gboolean gpm_gtk_set_visibility (GladeXML *all_widgets, const gchar *widgetname, gboolean set);
-gboolean gpm_gtk_set_check (GladeXML *all_widgets, const gchar *widgetname, gboolean set);
-gboolean gpm_gtk_set_label (GladeXML *all_widgets, const gchar *widgetname, const gchar *label);
+gboolean gpm_gtk_set_visibility (GladeXML *allwidgets, const gchar *widgetname, gboolean set);
+gboolean gpm_gtk_set_check (GladeXML *allwidgets, const gchar *widgetname, gboolean set);
+gboolean gpm_gtk_set_label (GladeXML *allwidgets, const gchar *widgetname, const gchar *label);
+gboolean gpm_gtk_set_sensitive (GladeXML *allwidgets, const gchar *widgetname, gboolean set);
 
 #endif	/* _GPMGTKUTILS_H */

@@ -243,7 +243,7 @@ get_object_tooltip (GenericObject *slotData)
  *  @return			The complete tooltip
  */
 GString *
-get_main_tooltip (void)
+get_full_tooltip (void)
 {
 	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
@@ -581,40 +581,57 @@ gpn_icon_update (void)
 {
 	GConfClient *client = NULL;
 	gboolean iconShow;
+	gboolean iconShowAlways;
+	gboolean use_notif_icon;
 	GenericObject *slotData = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	GString *tooltip = NULL;
 
 	client = gconf_client_get_default ();
+	/* do we want to display the icon */
 	iconShow = gconf_client_get_bool (client, 
 				GCONF_ROOT "general/display_icon", NULL);
+	/* do we need to force an icon? */
+	iconShowAlways = gconf_client_get_bool (client, 
+				GCONF_ROOT "general/display_icon_others", NULL);
 
-	if (!iconShow)
-		g_warning ("The key " GCONF_ROOT "general/display_icon"
-				" is set to false, no icon will be displayed");
-
+	/* we may return NULL (which is okay) if no pixmap is available */
 	slotData = get_main_icon_slot ();
-	if (iconShow && slotData) {
+
+	/* calculate logic */
+	use_notif_icon = (iconShow && slotData) || (iconShow && iconShowAlways);
+
+	if (use_notif_icon) {
 		if (!eggtrayicon) {
 			/* create icon */
 			icon_create ();
 			if (!(eggtrayicon->popup_menu))
 				menu_main_create (eggtrayicon);
 		}
-		/* modify icon */
-		pixbuf = create_icon_pixbuf (slotData);
+		/* get pixbuf for icon */
+		if (slotData) {
+			/* use object to form icon */
+			pixbuf = create_icon_pixbuf (slotData);
+		} else {
+			/* use standard fallback (the g-p-m icon) */
+			if (!gpm_icon_theme_fallback (&pixbuf, "desktop-force", 24))
+				g_error ("Cannot get iconShowAlways!");
+		}
 		if (!pixbuf)
 			g_error ("Failed to get pixbuf for icon");
 		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
 		g_object_unref (pixbuf);
 
-		tooltip = get_main_tooltip ();
+		tooltip = get_full_tooltip ();
 		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,
 			GTK_WIDGET (eggtrayicon->tray_icon),
 			tooltip->str, NULL);
 		g_string_free (tooltip, TRUE);
 	} else {
 		/* remove icon */
+		g_warning ("The key " GCONF_ROOT "general/display_icon"
+			   "and " GCONF_ROOT "general/display_icon_others"
+			   " are both set to false, so no icon will be displayed");
 		if (eggtrayicon) {
 			icon_destroy (eggtrayicon);
 			eggtrayicon = NULL;

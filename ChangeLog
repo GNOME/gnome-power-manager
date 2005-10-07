@@ -1,11 +1,27 @@
 2005-10-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-gtk-utils.{c|h} (gpm_gtk_set_sensitive): Add new function
+	to let us quickly set widget sensitivity.
+
+	* src/gpm-prefs.c, src-gpm-main.c, gnome-power-schemas.in, 
+	src/gpm-prefs.glade, src/gpm-notification.c: Add the new 
+	display_icon_others functionality so we can support desktops with
+	wireless mice. This is turned off by default.
+
+2005-10-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c (read_battery_data): Try to get an debug report if
 	we are missing battery.remaining_time or 
 	battery.charge_level.percentage.
+	Also add a newline after the version string -- patch thanks to 
+	Wouter Bolsterlee <uws+gnome@xs4all.nl>
 
 	* src/gpm-notificiation.c (get_notification_icon): Check before
 	dereferencing eggtrayicon.
+
+	* src/pixmaps/stock_about.png, src/pixmaps/stock_notebook.png
+	src/pixmaps/stock-properties.png, src/pixmaps/Makefile.am: Add default
+	fallbacks as not present on debian.
 
 2005-10-04  Richard Hughes  <richard@hughsie.com>
 

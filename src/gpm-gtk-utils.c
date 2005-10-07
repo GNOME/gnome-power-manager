@@ -80,6 +80,30 @@ gpm_gtk_set_check (GladeXML *allwidgets, const gchar *widgetname, gboolean set)
 	return TRUE;
 }
 
+/** Make GTK Checkbox sensitive or not sensitive
+ *
+ *  @param	allwidgets	The glade XML
+ *  @param	widgetname	The libglade widget name
+ *  @param	set		Should check be ticked?
+ *  @return			Success
+ */
+gboolean
+gpm_gtk_set_sensitive (GladeXML *allwidgets, const gchar *widgetname, gboolean set)
+{
+	GtkWidget *widget = NULL;
+
+	/* assertion checks */
+	g_assert (widgetname);
+
+	widget = glade_xml_get_widget (allwidgets, widgetname);
+	if (!widget) {
+		g_warning ("widget '%s' failed to load, aborting", widgetname);
+		return FALSE;
+	}
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), set);
+	return TRUE;
+}
+
 /** Modifies a GTK Label
  *
  *  @param	allwidgets	The glade XML
