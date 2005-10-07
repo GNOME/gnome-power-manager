@@ -618,7 +618,7 @@ main (int argc, char **argv)
 			g_log_ignore, NULL);
 
 	/* initialise gnome */
-	gnome_program_init ("GNOME Power Preferences", VERSION,
+	gnome_program_init ("Power Preferences", VERSION,
 		LIBGNOMEUI_MODULE, argc, argv, NULL);
 
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
