@@ -35,6 +35,75 @@
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 #include "gpm-common.h"
+#include "compiler.h"
+
+/** Sets a widget image to a themed 
+ *
+ *  @param	widget		The widget to set
+ *  @param	name		The icon name, e.g. gnome-dev-battery
+ *  @param	size		The icon size, e.g. 24
+ *  @return			Success if the icon was set
+ */
+gboolean
+gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size)
+{
+	/* set image */
+	GdkPixbuf *pixbuf = NULL;
+	if (!gpm_icon_theme_fallback (&pixbuf, name, size)) {
+		g_warning ("Cannot find themed icon '%s'", name);
+		return FALSE;
+	}
+	gtk_image_set_from_pixbuf (GTK_IMAGE (widget), pixbuf);
+	g_object_unref (pixbuf);
+	return TRUE;
+}
+
+/** Get a image (pixbuf) trying the theme first, falling back to locally 
+ *  if not present. This means we do not have to check in configure.in for lots
+ *  of obscure icons.
+ *
+ *  @param	pixbuf		A returned GTK pixbuf
+ *  @param	name		the icon name, e.g. gnome-battery
+ *  @param	size		the icon size, e.g. 22
+ *  @return			If we found a valid image
+ *
+ *  @note	If we cannot find the specific themed GNOME icon we use the
+ *		builtin fallbacks. This makes GPM more portible between distros
+ *
+ *  @note	You need to deallocate the pixbuf with g_object_unref ();
+ *
+ */
+gboolean G_GNUC_WARNUNCHECKED
+gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size) 
+{
+	GError *err = NULL;
+	GString *fallback = NULL;
+	GtkIconInfo *iinfo = NULL;
+
+	/* assertion checks */
+	g_assert (name);
+
+	iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
+			name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+	if (iinfo) {
+		g_debug ("Using stock icon for %s", name);
+		*pixbuf = gtk_icon_info_load_icon (iinfo, &err);
+		gtk_icon_info_free (iinfo);
+	} else {
+		g_debug ("Using fallback icon for %s", name);
+		fallback = g_string_new ("");
+		g_string_printf (fallback, GPM_DATA "%s.png", name);
+		g_debug ("Using filename %s", fallback->str);
+		*pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
+		g_string_free (fallback, TRUE);
+	}
+	/* check we actually got the icon */
+	if (!*pixbuf) {
+		g_warning ("failed to get %s!", name);
+		return FALSE;
+	}
+	return TRUE;
+}
 
 /** Gets the position to "point" to (i.e. center of the icon)
  *

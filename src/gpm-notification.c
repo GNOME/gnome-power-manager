@@ -46,50 +46,6 @@ StateData state_data;
 static TrayData *eggtrayicon = NULL;
 GPtrArray *objectData;
 
-/** Get a image (pixbuf) trying the theme first, falling back to locally 
- *  if not present. This means we do not have to check in configure.in for lots
- *  of obscure icons.
- *
- *  @param	pixbuf		A returned GTK pixbuf
- *  @param	name		the icon name, e.g. gnome-battery
- *  @param	size		the icon size, e.g. 22
- *  @return			If we found a valid image
- *
- *  @note	If we cannot find the specific themed GNOME icon we use the
- *		builtin fallbacks. This makes GPM more portible between distros
- */
-static gboolean G_GNUC_WARNUNCHECKED
-gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size) 
-{
-	GError *err = NULL;
-	GString *fallback = NULL;
-	GtkIconInfo *iinfo = NULL;
-
-	/* assertion checks */
-	g_assert (name);
-
-	iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
-			name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
-	if (iinfo) {
-		g_debug ("Using stock icon for %s", name);
-		*pixbuf = gtk_icon_info_load_icon (iinfo, &err);
-		gtk_icon_info_free (iinfo);
-	} else {
-		g_debug ("Using fallback icon for %s", name);
-		fallback = g_string_new ("");
-		g_string_printf (fallback, GPM_DATA "%s.png", name);
-		g_debug ("Using filename %s", fallback->str);
-		*pixbuf = gdk_pixbuf_new_from_file (fallback->str, &err);
-		g_string_free (fallback, TRUE);
-	}
-	/* check we actually got the icon */
-	if (!*pixbuf) {
-		g_warning ("failed to get %s!", name);
-		return FALSE;
-	}
-	return TRUE;
-}
-
 /** Finds the icon index value for the percentage charge
  *
  *  @param	percent		The percentage value

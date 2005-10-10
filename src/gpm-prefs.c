@@ -901,6 +901,12 @@ main (int argc, char **argv)
 	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
 	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_others", value);
 
+	/* set themed battery and ac_adapter icons */
+	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");
+	gpm_set_icon_with_theme (widget, "gnome-dev-battery", 48);
+	widget = glade_xml_get_widget (prefwidgets, "image_side_acadapter");
+	gpm_set_icon_with_theme (widget, "gnome-fs-socket", 48);
+
 	/* main loop */
 	gtk_main ();
 	g_ptr_array_free (ptrarr_button_power, TRUE);

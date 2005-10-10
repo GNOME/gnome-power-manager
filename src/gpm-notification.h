@@ -67,7 +67,7 @@ typedef struct {
 } TrayData;
 
 GenericObject *get_main_icon_slot (void);
-GString *get_main_tooltip (void);
+GString *get_full_tooltip (void);
 GtkWidget *get_notification_icon (void);
 
 /* wrapper functions */

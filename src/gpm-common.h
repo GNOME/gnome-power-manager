@@ -25,8 +25,10 @@
 #ifndef _GPMCOMMON_H
 #define _GPMCOMMON_H
 
-#include "eggtrayicon.h"
 #include <gnome.h>
+
+#include "eggtrayicon.h"
+#include "compiler.h"
 
 /* where our settings are stored in the gconf tree */
 #define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power-manager"
@@ -120,5 +122,7 @@ gboolean run_bin_program (const gchar *program);
 gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_add (GPtrArray *parray, const gchar *udi);
+gboolean gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size);
+gboolean gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size);
 
 #endif	/* _GPMCOMMON_H */
