@@ -213,6 +213,112 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 	gconf_client_set_string (client, policypath, policyoption, NULL);
 }
 
+/** Gets the battery percentage time for the number of minutes
+ *
+ * @param	value		The number of minutes we would last
+ * @return			The time we would last (in minutes) for the
+ *				percentage battery charge. 0 for invalid.
+ *
+ * @note	Only takes into accound first battery, as this is an estimate.
+ */
+gint
+get_battery_time_for_percentage (gint value)
+{
+	/** /bug	Need to use HAL to get battery */
+	gchar *udi = "/org/freedesktop/Hal/devices/acpi_BAT1";
+	gint percentage;
+	gint time;
+	gboolean discharging;
+
+	hal_device_get_bool (udi, "battery.rechargeable.is_discharging", &discharging);
+
+	/* rate information is useless when charging */
+	if (!discharging)
+		return 0;
+
+	/* get values. if they are wrong, return 0 */
+	hal_device_get_int (udi, "battery.charge_level.percentage", &percentage);
+	hal_device_get_int (udi, "battery.remaining_time", &time);
+
+	if (time > 0 && percentage > 0) {
+		time = time / 60;
+		return (value * ((double) time / (double) percentage));
+	}
+	return 0;
+}
+
+/** Set the "Estimated" battery string widget
+ *
+ * @param	widget		The widget we want to change
+ * @param	value		The number of minutes we would last
+ *
+ * @note	Return value is "Estimated 6 minutes" in italic.
+ */
+static void
+set_estimated_label_widget (GtkWidget *widget, gint value)
+{
+	GString *timestring;
+
+	/* assertion checks */
+	g_assert (widget);
+
+	if (value > 1) {
+		timestring = get_timestring_from_minutes (value);
+		g_string_prepend (timestring, "<i>Estimated ");
+		g_string_append (timestring, "</i>");
+		gtk_widget_show_all (GTK_WIDGET (widget));
+		gtk_label_set_markup (GTK_LABEL (widget), timestring->str);
+		g_string_free (timestring, TRUE);
+	} else {
+		/* hide if no valid number */
+		gtk_widget_hide_all (GTK_WIDGET (widget));
+	}
+}
+
+/** Set the extra widget stuff, the cleverness of g-p-p
+ *
+ * @param	widgetname	The widgetname to effect
+ */
+static void
+set_widget_extra_stuff (const gchar *widgetname)
+{
+	GtkWidget *widget = NULL;
+	GtkWidget *widget2 = NULL;
+	gint timepercentage;
+	gint value;
+
+	/* assertion checks */
+	g_assert (widgetname);
+
+	widget = glade_xml_get_widget (prefwidgets, widgetname);
+	value = gtk_range_get_value (GTK_RANGE (widget));
+
+	/*
+	 * if this is hscale for battery_low, then set upper range of hscale for
+	 * battery_critical maximum to value
+	 * (This stops criticalThreshold > lowThreshold)
+	 */
+	if (strcmp (widgetname, "hscale_battery_low") == 0) {
+		widget2 = glade_xml_get_widget (prefwidgets,
+			"hscale_battery_critical");
+		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
+	}
+
+	/*
+	 * Set the estimated time for these two sliders
+	 */
+	if (strcmp (widgetname, "hscale_battery_low") == 0) {
+		timepercentage = get_battery_time_for_percentage (value);
+		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_low_estimate");
+		set_estimated_label_widget (widget2, timepercentage);
+	}
+	if (strcmp (widgetname, "hscale_battery_critical") == 0) {
+		timepercentage = get_battery_time_for_percentage (value);
+		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_critical_estimate");
+		set_estimated_label_widget (widget2, timepercentage);
+	}
+}
+
 /** Callback for hscale_changed
  *
  * @param	widget		The combobox widget
@@ -272,16 +378,8 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	if (fabs (oldgconfvalue - value) < 0.1)
 		return;
 
-	/* if this is hscale for battery_low, then set upper range of hscale for
-	 * battery_critical maximum to value
-	 * (This stops criticalThreshold > lowThreshold)
-	 */
-	if (strcmp (widgetname, "hscale_battery_low") == 0) {
-		GtkWidget *widget2;
-		widget2 = glade_xml_get_widget (prefwidgets,
-			"hscale_battery_critical");
-		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
-	}
+	/* do all the clever widget stuff */
+	set_widget_extra_stuff (widgetname);
 
 	/* for AC and battery, change the brightness in real-time */
 	if (gpm_is_on_mains (&onbattery)) {
@@ -792,6 +890,10 @@ main (int argc, char **argv)
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 	}
+
+	/* do all the clever widget stuff */
+	set_widget_extra_stuff ("hscale_battery_low");
+	set_widget_extra_stuff ("hscale_battery_critical");
 
 	/* makes sense to have disable the inactive checkboxes */
 	widget = glade_xml_get_widget (prefwidgets, "checkbutton_display_icon");
