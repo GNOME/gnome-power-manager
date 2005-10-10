@@ -175,14 +175,15 @@ run_gconf_script (const char *path)
 
 	client = gconf_client_get_default ();
 	command = gconf_client_get_string (client, path, NULL);
-	if (command) {
-		g_debug ("Executing '%s'", command);
-		ret = g_spawn_command_line_async (command, NULL);
-		if (!ret)
-			g_warning ("Couldn't execute '%s'.", command);
-		g_free (command);
-	} else
+	if (!command) {
 		g_warning ("'%s' is missing!", path);
+		return FALSE;
+	}
+	g_debug ("Executing '%s'", command);
+	ret = g_spawn_command_line_async (command, NULL);
+	if (!ret)
+		g_warning ("Couldn't execute '%s'.", command);
+	g_free (command);
 	return ret;
 }
 

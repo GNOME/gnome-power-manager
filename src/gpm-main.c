@@ -838,9 +838,10 @@ hal_device_property_modified (const gchar *udi,
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_device_get_int (udi, key, &slotData->percentageCharge);
-
+		/* give notification @100% */
 		if (slotData->percentageCharge == 100) {
-			libnotify_event (_("Your battery is now fully charged"), LIBNOTIFY_URGENCY_LOW,
+			libnotify_event (_("Your battery is now fully charged"),
+					 LIBNOTIFY_URGENCY_LOW,
 					 get_notification_icon ());
 		}
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
