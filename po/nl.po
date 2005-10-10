@@ -1,0 +1,463 @@
+# English translation of GNOME Power Manager.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# Richard Hughes <richard@hughsie.com>, 2005.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: GNOME Power Manager 0.2.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-07-15 10:19+0100\n"
+"PO-Revision-Date: 2005-07-15 10:24+0100\n"
+"Last-Translator: Theetjuh <theetjuh@gmail.com>\n"
+"Language-Team: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Configureer stroombeheer"
+
+#: ../gnome-power-preferences.desktop.in.h:2
+msgid "GNOME Power Preferences"
+msgstr "GNOME Stroom Voorkeur"
+
+#: ../gnome-power.schemas.in.h:1
+msgid "If the machine has a LCD (brightness variable) attached."
+msgstr "Of de machine een LCD (variabele helderheid) heeft aangesloten."
+
+#: ../gnome-power.schemas.in.h:2
+msgid "If the machine has a UPS attached"
+msgstr "Of de machine een UPS heeft aangesloten."
+
+#: ../gnome-power.schemas.in.h:3
+msgid "If the machine has a display (that can be blanked) attached."
+msgstr "Of de machine een beeldscherm (die geblindeerd kan worden) heeft "
+"aangesloten."
+#: ../gnome-power.schemas.in.h:4
+msgid "If the machine has a hard-drive (that can be spun-down) attached."
+msgstr "Of de machine een hardeschijf (die langzamer kan draaien) heeft "
+"aangesloten."
+
+#: ../gnome-power.schemas.in.h:5
+msgid "If the machine has a wireless keyboard attached."
+msgstr "Of de machine een draadloos toetsenbord heeft aangesloten."
+
+#: ../gnome-power.schemas.in.h:6
+msgid "If the machine has a wireless mouse attached."
+msgstr "Of de machine een draadloze muis heeft aangesloten."
+
+#: ../gnome-power.schemas.in.h:7
+msgid ""
+"If the machine has an AC adapter (usually laptops) then this key should be "
+"set."
+msgstr ""
+"Of de machine een netspanning adapter heeft (meestal laptops) dan moet deze "
+"sleutel worden geplaatst."
+
+#: ../gnome-power.schemas.in.h:8
+msgid "If the machine has an ac_adapter"
+msgstr "Of de machine een netspanning adapter heeft"
+
+#: ../gnome-power.schemas.in.h:9
+msgid ""
+"If the machine has an power, sleep or lid buttons then this key should be "
+"set."
+msgstr ""
+"Of de machine een power, slaap of beeldscherm knop heeft dan moet deze sleutel worden "
+"geplaatst."
+
+#: ../gnome-power.schemas.in.h:10
+msgid "If the machine has power buttons"
+msgstr "Of de machine power knoppen heeft"
+
+#: ../gnome-power.schemas.in.h:11
+msgid "If the machine have primary batteries"
+msgstr "Of de machine primaire batterijen heeft"
+
+#: ../gnome-power.schemas.in.h:12
+msgid "Short description."
+msgstr "Korte beschrijving."
+
+#: ../gnome-power.schemas.in.h:13
+msgid ""
+"The percentage that the power device has to get to to be considered \"low enough"
+"\" to display an icon."
+msgstr ""
+"Het percentage dat het stroom apparaat moet krijgen om overwogen \"low enough\""
+" te worden een pictogram te laten zien."
+
+#: ../gnome-power.schemas.in.h:14
+msgid "The powerdevice low-icon threshold."
+msgstr "De drempel van het stroomapparaat laag-pictogram."
+
+#: ../gnome-power.schemas.in.h:15
+msgid "User cannot hibernate the machine"
+msgstr "De gebruiker kan de machine niet in slaapstand zetten"
+
+#: ../gnome-power.schemas.in.h:16
+msgid "User cannot reboot the machine"
+msgstr "De gebruiker kan de machine niet herstarten"
+
+#: ../gnome-power.schemas.in.h:17
+msgid "User cannot shutdown the machine"
+msgstr "De gebruiker kan de machine niet uitzetten"
+
+#: ../gnome-power.schemas.in.h:18
+msgid "User cannot suspend the machine"
+msgstr "De gebruiker kan de machine niet op schorten"
+
+#: ../gnome-power.schemas.in.h:19
+msgid "Whether to display a permanent icon"
+msgstr "Al dan niet een permanent pictogram tonen"
+
+#: ../gnome-power.schemas.in.h:20
+msgid "Whether to display icons when devices are at full capacity"
+msgstr "Al dan niet pictogrammen tonen wanneer de apparaten op volledige capaciteit zijn"
+
+#: ../src/eggtrayicon.c:117
+msgid "Orientation"
+msgstr "Richtlijn"
+
+#: ../src/eggtrayicon.c:118
+msgid "The orientation of the tray."
+msgstr "De richtlijn van de taakbalk."
+
+#: ../src/gpm-common.c:49
+msgid " until charged"
+msgstr " tot opgeladen"
+
+#: ../src/gpm-common.c:51
+msgid " remaining"
+msgstr " resterende"
+
+#: ../src/gpm-common.c:215
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-common.c:217
+msgid "AC Adapter"
+msgstr "Netstroom adapter"
+
+#: ../src/gpm-common.c:219
+msgid "Logitech mouse"
+msgstr "Logitech muis"
+
+#: ../src/gpm-common.c:221
+msgid "Logitech keyboard"
+msgstr "Logitech toetsenbord"
+
+#: ../src/gpm-common.c:223
+msgid "Laptop battery"
+msgstr "Laptop batterij"
+
+#: ../src/gpm-common.c:225
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-common.c:226
+msgid "Unknown device"
+msgstr "Onbekend apparaat"
+
+#: ../src/gpm-common.c:285
+msgid "missing"
+msgstr "verloren"
+
+#: ../src/gpm-common.c:287
+msgid "charging"
+msgstr "opladen"
+
+#: ../src/gpm-common.c:289
+msgid "discharging"
+msgstr "ontladen"
+
+#: ../src/gpm-common.c:293
+msgid "fully charged"
+msgstr "volledig opgeladen"
+
+#: ../src/gpm-common.c:296
+msgid "charged"
+msgstr "opgeladen"
+
+#: ../src/gpm-common.c:297
+msgid "unknown"
+msgstr "onbekend"
+
+#: ../src/gpm-common.c:316
+msgid "1 minute"
+msgstr "1 minuut"
+
+#: ../src/gpm-common.c:318
+#, c-format
+msgid "%i minutes"
+msgstr "%i minuten"
+
+#: ../src/gpm-common.c:324
+msgid "1 hour"
+msgstr "1 uur"
+
+#: ../src/gpm-common.c:326
+#, c-format
+msgid "%i hours"
+msgstr "%i uren"
+
+#: ../src/gpm-common.c:330
+msgid "1 hour 1 minute"
+msgstr "1 uur 1 minuut"
+
+#: ../src/gpm-common.c:333
+#, c-format
+msgid "1 hour %i minutes"
+msgstr "1 uur %i minuten"
+
+#: ../src/gpm-common.c:336
+#, c-format
+msgid "%i hours %i minutes"
+msgstr "%i uren %i minuten"
+
+#: ../src/gpm-dbus-common.c:44
+msgid "screensave"
+msgstr "schermbeveilig"
+
+#: ../src/gpm-dbus-common.c:46
+msgid "shutdown"
+msgstr "afsluiten"
+
+#: ../src/gpm-dbus-common.c:48
+msgid "software suspend"
+msgstr "softwarematig op schorten"
+
+#: ../src/gpm-dbus-common.c:50
+msgid "hibernation"
+msgstr "slaapstand"
+
+#: ../src/gpm-dbus-common.c:52
+msgid "session log off"
+msgstr "session log uit"
+
+#: ../src/gpm-main.c:188
+#, c-format
+msgid ""
+"The program '%s' is preventing the %s from occurring.\n"
+"\n"
+"The explanation given is: %s"
+msgstr ""
+"Het programma '%s' verhindert het %s voorkomen.\n"
+"\n"
+"De gegeven verklaring is: %s"
+
+#: ../src/gpm-main.c:200
+#, c-format
+msgid ""
+"The program '%s' has not returned data that is preventing the %s from "
+"occurring."
+msgstr ""
+"Het programma '%s' geen gegevens zijn teruggekeerd die het %s verhinderen "
+"voorkomen ."
+
+#: ../src/gpm-main.c:224
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform a %s."
+msgstr ""
+"PowerManager service draait niet.\n"
+"%s kan niet een %s uitvoeren."
+
+#: ../src/gpm-main.c:248
+#, c-format
+msgid ""
+"PowerManager service is not running.\n"
+"%s cannot perform hard-drive timeout changes."
+msgstr ""
+"PowerManager service draait niet.\n"
+"%s kan de hardeschijf onderbreking veranderingen niet uitvoeren."
+
+#: ../src/gpm-main.c:419
+msgid "AC Adapter has been removed"
+msgstr "Netstroom adapter is verwijderd"
+
+#: ../src/gpm-main.c:723
+msgid "Couldn't obtain list of batteries"
+msgstr "Kon geen lijst van batterijen verkrijgen"
+
+#: ../src/gpm-main.c:734
+msgid "Couldn't obtain list of ac_adapters"
+msgstr "Kon geen lijst van netstroom adapters verkrijgen"
+
+#: ../src/gpm-main.c:945
+#, c-format
+msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+msgstr "Het %s (%i%%) is <b>kritisch laag</b> (%s)"
+
+#: ../src/gpm-main.c:981
+msgid "Power button has been pressed"
+msgstr "Power knop is ingedrukt:"
+
+#: ../src/gpm-main.c:987
+msgid "Sleep button has been pressed"
+msgstr "Slaap knop is ingedrukt:"
+
+#: ../src/gpm-main.c:999
+msgid "Lid has been opened"
+msgstr "Deksel is geopend"
+
+#: ../src/gpm-main.c:1091
+msgid "Please report bugs to richard@hughsie.com\n"
+msgstr "Gelieve fouten te melden aan richard@hughsie.com\n"
+
+#: ../src/gpm-notification.c:263
+msgid "Computer is running on battery power"
+msgstr "Computer draait op batterij stroom"
+
+#: ../src/gpm-notification.c:265
+msgid "Computer is running on UPS power"
+msgstr "Computer draait op UPS stroom"
+
+#: ../src/gpm-notification.c:267
+msgid "Computer is running on AC power"
+msgstr "Computer draait op netspanning"
+
+#: ../src/gpm-notification.c:551
+msgid "Reboot"
+msgstr "Herstarten"
+
+#: ../src/gpm-notification.c:554 ../src/gpm-prefs.c:328
+msgid "Shutdown"
+msgstr "Afsluiten"
+
+#: ../src/gpm-notification.c:557 ../src/gpm-prefs.c:326
+msgid "Suspend"
+msgstr "Opschorten"
+
+#: ../src/gpm-notification.c:560 ../src/gpm-prefs.c:327 ../src/gpm-prefs.c:331
+msgid "Hibernate"
+msgstr "Slaapstand"
+
+#: ../src/gpm-prefs.c:324
+msgid "Do nothing"
+msgstr "Niets doen"
+
+#: ../src/gpm-prefs.c:325
+msgid "Send warning"
+msgstr "Stuur waarschuwing"
+
+#: ../src/gpm-prefs.c:330
+msgid "Quick sleep"
+msgstr "Snelle slaap"
+
+#: ../src/preferences.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Algemeen</b>"
+
+#: ../src/preferences.glade.h:2
+msgid "<b>Notification area</b>"
+msgstr "<b>Berichten gebied</b>"
+
+#: ../src/preferences.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>Andere Opties</b>"
+
+#: ../src/preferences.glade.h:4
+msgid "<b>Running on AC adapter</b>"
+msgstr "<b>Draait op netstroom adapter</b>"
+
+#: ../src/preferences.glade.h:5
+msgid "<b>Running on batteries</b>"
+msgstr "<b>Draait op batterijen</b>"
+
+#: ../src/preferences.glade.h:6
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: ../src/preferences.glade.h:7
+msgid "Battery is critical when below:"
+msgstr "Batterij is kritiek wanneer onder:"
+
+#: ../src/preferences.glade.h:8
+msgid "Computer sleep type:"
+msgstr "Computer slaap type:"
+
+#: ../src/preferences.glade.h:9
+msgid "Display devices that are fully charged"
+msgstr "Vertoon apparaten die volledig zijn opgeladen"
+
+#: ../src/preferences.glade.h:10
+msgid "Display main icon"
+msgstr "Vertoon hoofdpictogram"
+
+#: ../src/preferences.glade.h:11
+msgid "Double click notification icon:"
+msgstr "Dubbel klik berichten pictogram:"
+
+#: ../src/preferences.glade.h:12
+msgid "Options"
+msgstr "Opties"
+
+#: ../src/preferences.glade.h:13
+msgid "Power Preferences"
+msgstr "Stroom voorkeuren"
+
+#: ../src/preferences.glade.h:14
+msgid "Put computer to sleep after:"
+msgstr "Zet computer in slaapstand na:"
+
+#: ../src/preferences.glade.h:15
+msgid "Put display to sleep after:"
+msgstr "Zet beeldscherm in slaapstand na:"
+
+#: ../src/preferences.glade.h:16
+msgid "Put hard drive to sleep after:"
+msgstr "Zet hardeschijf in slaapstand na:"
+
+#: ../src/preferences.glade.h:17
+msgid "Set display brightness:"
+msgstr "Zet beeldscherm helderheid:"
+
+#: ../src/preferences.glade.h:18
+msgid "Sleep"
+msgstr "Slaap"
+
+#: ../src/preferences.glade.h:19
+msgid "When AC power disconnected:"
+msgstr "Wanneer netspanning is verloren:"
+
+#: ../src/preferences.glade.h:20
+msgid "When UPS power critical:"
+msgstr "Wanneer UPS stroom kritiek is:"
+
+#: ../src/preferences.glade.h:21
+msgid "When battery power critical:"
+msgstr "Wanneer batterij stroom kritiek is:"
+
+#: ../src/preferences.glade.h:22
+msgid "When laptop lid is closed:"
+msgstr "Wanneer laptopscherm is gesloten:"
+
+#: ../src/preferences.glade.h:23
+msgid "When power button pressed:"
+msgstr "Wanneer power knop is ingedrukt:"
+
+#: ../src/preferences.glade.h:24
+msgid "When suspend button pressed:"
+msgstr "Wanneer suspend knop is ingedrukt:"
+
+#~ msgid "Do we show low devices?"
+#~ msgstr "Do we show low devices?"
+
+#~ msgid "Hibernatation script location"
+#~ msgstr "Hibernatation script location"
+
+#~ msgid "Reboot script location"
+#~ msgstr "Reboot script location"
+
+#~ msgid "Shutdown script location"
+#~ msgstr "Shutdown script location"
+
+#~ msgid "Suspend script location"
+#~ msgstr "Suspend script location"
+
+#~ msgid "Display low battery icons"
+#~ msgstr "Display low battery icons"
