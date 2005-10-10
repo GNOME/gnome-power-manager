@@ -96,6 +96,8 @@ create_icon_pixbuf (GenericObject *slotData)
 			g_error ("Could not find %s!", computed_name);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
+		/* have to be careful when using g_free */
+		g_assert (computed_name);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_UPS) {
 		num = get_index_from_percent (slotData->percentageCharge);
@@ -104,6 +106,8 @@ create_icon_pixbuf (GenericObject *slotData)
 			g_error ("Could not find %s!", computed_name);
 		g_debug ("computed_name = %s", computed_name);
 		g_assert (pixbuf != NULL);
+		/* have to be careful when using g_free */
+		g_assert (computed_name);
 		g_free (computed_name);
 	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
 		if (!gpm_icon_theme_fallback (&pixbuf, "gnome-dev-acadapter", 22))

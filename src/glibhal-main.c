@@ -48,6 +48,8 @@ is_hald_running (void)
 	running = hal_device_get_string (
 		"/org/freedesktop/Hal/devices/computer",
 		"info.udi", &udi);
+	/* have to be careful when using g_free */
+	g_assert (udi);
 	g_free (udi);
 	return running;
 }
@@ -224,7 +226,9 @@ hal_free_capability (gchar **value)
 	/* assertion checks */
 	g_assert (value);
 
-	for (i = 0; value[i]; i++) {
+	for (i=0; value[i]; i++) {
+		/* have to be careful using g_free */
+		g_assert (value[i]);
 		g_free (value[i]);
 	}
 	g_free (value);
@@ -286,6 +290,8 @@ hal_num_devices_of_capability_with_value (const gchar *capability,
 		hal_device_get_string (names[i], key, &type);
 		if (strcmp (type, value) == 0)
 			valid++;
+		/* have to be careful when using g_free */
+		g_assert (type);
 		g_free (type);
 	};
 	hal_free_capability (names);
