@@ -40,7 +40,7 @@ static GladeXML *all_info_widgets;
  *
  *  @todo  We need to set the battery and UPS information here.
  */
-void
+gboolean
 refresh_info_page (void)
 {
 	gchar *returnstring;
@@ -98,10 +98,8 @@ refresh_info_page (void)
 	gpm_gtk_set_visibility (all_info_widgets, "frame_info_batteries", FALSE);
 	gpm_gtk_set_visibility (all_info_widgets, "frame_info_ups", FALSE);
 
-	gint i;
 	gchar **device_names = NULL;
-	gchar *battery_type;
-	gchar *name;
+
 	/* devices of type battery */
 	hal_find_device_capability ("battery", &device_names);
 	if (!device_names) {
@@ -109,7 +107,11 @@ refresh_info_page (void)
 		return FALSE;
 	}
 #if 0
+	int i;
+
 	for (i = 0; device_names[i]; i++) {
+		gchar *battery_type, *name;
+
 		hal_device_get_string (device_names[i], "battery.type", &battery_type);
 		if (strcmp (battery_type, "primary") == 0) {
 			if (i == 0)
