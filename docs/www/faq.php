@@ -10,6 +10,8 @@
 
 <ul>
 <li>
+  <a href="#whynobattery" class="faqtable">GNOME Power Manager doesn't spin down my hard-drive!</a>
+</li><li>
   <a href="#hald_selinux" class="faqtable">SELinux doesn't let HAL write to /proc/acpi!</a>
 </li><li>
   <a href="#pmu_less_than_acpi" class="faqtable">Why doesn't PMU have the same functionality as ACPI?</a>
@@ -41,6 +43,63 @@
 </ul>
 <br/>
 <br/>
+
+<a name="whynobattery"></a><hr/>
+<p class="faqquestion">
+GNOME Power Manager doesn't spin down my hard-drive!
+</p>
+<p class="faqanswer">
+After numerous debates, the consensus was that is was not a good idea to add 
+this functionality to HAL.
+It's was decided user-configurable powermanagement was not really required when 
+modern harddisks have really intelligent powermanagment.
+</p>
+<p class="faqanswer">
+Here the power consumption data for a typical notebook harddisk (ide/sata):
+</p>
+<pre>
+Startup (peak, max.)		5.5W 	NC	
+Seek				2.3W	2.7W	
+Read (avg.)			2.0W	2.3W	
+Write (avg.)			2.0W	2.3W	
+Active idle (avg.)		1.1W	1.2W	
+Low power idle (avg.)		0.85W	0.9W	
+Standby (avg.)			0.2W	0.25W	
+Sleep				0.1W	NC
+</pre>
+<p class="faqanswer">
+The conclusions you can take from this are:
+</p>
+<ul>
+<li>
+A disk on Low Power idle need less than 1 Watt per hour. For a normal battery 
+with 50000mWh you could run the harddisk for over 50 hours.
+</li>
+<li>
+If you do not read/write from/to the harddisk the disk regulates power, 
+but never shuts down the device. The reason is easy: you lost more power with 
+each startup than to leave the harddisk online somewhere between 'Active idle' and 
+'Low power idle' (depends on the model/manufacturer). 
+</li>
+<li>
+The other reason to leave this to the internal powermanagement of the 
+disk is: the time needed to reactivate the device. You lose more performance 
+than you lose power between 'Active idle' and 'Low power idle'.
+</li>
+<li>
+If you use a journaling file system you normally need to flush 
+periodically. This could run in a race between shut down device and restart 
+device by system to flush. This means more power consumption as you change 
+nothing.
+</li>
+<li>
+You can't set powermanagement for exteral USB harddisks, because you can't
+send the needed commands over the USB link to the disk.
+</li>
+</ul>
+<p class="faqanswer">
+Thanks to Danny Kukawka for his knowledge and for explaining this to me.
+</p>
 
 <a name="hald_selinux"></a><hr/>
 <p class="faqquestion">
@@ -109,6 +168,9 @@ org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave call failed (1)
 HAL does not yet do anything with this function call, it is a stub, and returns false.
 Future HAL versions will use SetPowerSave to set a lowpower mode.
 You can safely ignore this message.
+</p>
+<p class="faqanswer">
+For Fedora Core 4 systems (and Rawhide) you can see this <a href="https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169054">bugzilla link</a> for progress.
 </p>
 
 <a name="dbus_session_error"></a><hr/>
