@@ -56,6 +56,8 @@ gnome_power_info_SOURCES =				\
 	gpm-gtk-utils.c					\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-info.c

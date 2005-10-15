@@ -157,75 +157,6 @@ static gboolean
 dbus_action (gint action)
 {
 	gpm_emit_about_to_happen (action);
-#if 0
-	RegProgram *regprog = NULL;
-	gint a;
-	const gint maxwait = 5;
-	gboolean retval;
-
-	gboolean allACK = FALSE;
-	gboolean anyNACK = FALSE;
-
-	if (registered->len == 0) {
-		g_debug ("No connected clients");
-		retval = TRUE;
-		goto unref;
-	}
-	g_debug ("Registered clients = %i", registered->len);
-
-	GTimer* gt = g_timer_new ();
-	do {
-
-		g_main_context_iteration (NULL, TRUE);
-		if (!g_main_context_pending (NULL))
-			g_usleep (100*1000);
-
-		allACK = TRUE;
-		for (a=0;a<registered->len;a++) {
-			regprog = (RegProgram *) g_ptr_array_index (registered, a);
-			if (!regprog->isACK && !regprog->isNACK) {
-				allACK = FALSE;
-				break;
-			}
-			if (regprog->isACK)
-				g_debug ("ACK!");
-			if (regprog->isNACK) {
-				g_debug ("NACK!");
-				anyNACK = TRUE;
-				break;
-			}
-		}
-		if (allACK || anyNACK)
-			break;
-	} while (g_timer_elapsed (gt, NULL) < maxwait);
-
-	regprog->isACK = FALSE;
-	regprog->isNACK = FALSE;
-
-	if (anyNACK) {
-		GString *gs = g_string_new ("");
-		gchar *actionstr = convert_dbus_enum_to_string (action);
-		g_string_printf (gs, _("The program '%s' is preventing the %s "
-				       "from occurring.\n\n"
-				       "The explanation given is: %s"),
-				     regprog->appName->str, actionstr, regprog->reason->str);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
-		g_string_free (gs, TRUE);
-		retval = FALSE;
-		goto unref;
-	}
-	if (!allACK) {
-		GString *gs = g_string_new ("");
-		gchar *actionstr = convert_policy_to_string (action);
-		g_string_printf (gs, _("The program '%s' has not returned data that "
-				     "is preventing the %s from occurring."),
-				     regprog->appName->str, actionstr);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
-		g_string_free (gs, TRUE);
-		retval = FALSE;
-		goto unref;
-	}
-#endif
 	gpm_emit_performing_action (action);
 	return TRUE;
 }
@@ -984,6 +915,30 @@ idle_callback (gint timeout)
 	g_string_free (gs, TRUE);
 }
 
+/** Callback for the DBUS NameOwnerChanged function.
+ *
+ *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
+ *  @param	connected	Time in minutes that computer has been idle
+ */
+static void
+signalhandler_noc (const char *name, gboolean connected)
+{
+	/* ignore that don't all apply */
+	if (strcmp (name, "org.freedesktop.Hal") != 0)
+		return;
+
+	if (!connected) {
+		libnotify_event (_("HAL has been disconnected!\n"
+			"GNOME Power Manager will now quit."),
+			LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		/* for now, quit */
+		gpm_exit ();
+		return;
+	}
+	/** @todo: handle reconnection to the HAL bus */
+	g_warning ("hal re-connected\n");
+}
+
 /** Main entry point
  *
  *  @param	argc		Number of arguments given to program
@@ -1097,6 +1052,8 @@ main (int argc, char *argv[])
 	glibhal_method_device_new_capability (hal_device_new_capability);
 	glibhal_method_device_property_modified (hal_device_property_modified);
 	glibhal_method_device_condition (hal_device_condition);
+	/* sets up NameOwnerChanged notification */
+	glibhal_method_noc (signalhandler_noc);
 
 	objectData = g_ptr_array_new ();
 	registered = g_ptr_array_new ();

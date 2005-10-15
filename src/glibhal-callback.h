@@ -34,6 +34,8 @@ typedef void (*HalDeviceLostCapability) (const gchar *udi, const gchar *capabili
 typedef void (*HalDevicePropertyModified) (const gchar *udi, const gchar *key, gboolean removed, gboolean added);
 typedef void (*HalDeviceCondition) (const gchar *udi, const gchar *name, const gchar *detail);
 
+typedef void (*HalNameOwnerChanged) (const gchar *name, gboolean connected);
+
 /** The stored callback functions */
 typedef struct {
 	HalDeviceAdded			device_added;
@@ -42,6 +44,7 @@ typedef struct {
 	HalDeviceLostCapability		device_lost_capability;
 	HalDevicePropertyModified	device_property_modified;
 	HalDeviceCondition		device_condition;
+	HalNameOwnerChanged		device_noc;
 } HalFunctions;
 
 /** If the watch has been registered */
@@ -51,6 +54,7 @@ typedef struct {
 	gboolean			device_new_capability;
 	gboolean			device_lost_capability;
 	gboolean			device_condition;
+	gboolean			device_noc;
 } HalRegistered;
 
 /** The DBUS connections used by each watch */
@@ -59,6 +63,7 @@ typedef struct {
 	DBusGProxy			*device_removed;
 	DBusGProxy			*device_new_capability;
 	DBusGProxy			*device_lost_capability;
+	DBusGProxy			*device_noc;
 	GPtrArray 			*device_condition;
 	GPtrArray 			*device_property_modified;
 } HalConnections;
@@ -78,6 +83,7 @@ gboolean glibhal_method_device_new_capability (HalDeviceNewCapability callback);
 gboolean glibhal_method_device_lost_capability (HalDeviceLostCapability callback);
 gboolean glibhal_method_device_property_modified (HalDevicePropertyModified callback);
 gboolean glibhal_method_device_condition (HalDeviceCondition callback);
+gboolean glibhal_method_noc (HalNameOwnerChanged callback);
 
 gboolean glibhal_watch_add_device_property_modified (const gchar *udi);
 gboolean glibhal_watch_add_device_condition (const gchar *udi);
@@ -86,6 +92,7 @@ gboolean glibhal_watch_remove_device_removed ();
 gboolean glibhal_watch_remove_device_added ();
 gboolean glibhal_watch_remove_device_new_capability ();
 gboolean glibhal_watch_remove_device_lost_capability ();
+gboolean glibhal_watch_remove_noc ();
 gboolean glibhal_watch_remove_device_property_modified (const gchar *udi);
 gboolean glibhal_watch_remove_device_condition (const gchar *udi);
 

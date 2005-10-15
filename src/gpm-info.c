@@ -30,6 +30,7 @@
 #include <gnome.h>
 
 #include "gpm-common.h"
+#include "gpm-screensaver.h"
 #include "gpm-gtk-utils.h"
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
@@ -124,6 +125,23 @@ refresh_info_page (void)
 	}
 #endif
 	hal_free_capability (device_names);
+
+	/* for the moment, just see if we are running */
+	/*  @todo	Need to check if we can set states, etc. */
+	if (gscreensaver_is_running ())
+		gpm_gtk_set_label (all_info_widgets, "label_gnome_screensaver",
+			"GNOME Screesaver is running successfully in your user session.");
+	else
+		gpm_gtk_set_label (all_info_widgets, "label_gnome_screensaver",
+			"GNOME Screesaver is is not running successfully in your user session.\n"
+			"It may be that you have to install gnome-screensaver, or make sure "
+			"that it is activated on session setup.");
+
+	/* @todo	explain DMPS bit */
+	gpm_gtk_set_label (all_info_widgets, "label_other_problems",
+		"CPU frequency scaling has not been integrated with HAL.\n"
+		"If you feel you can help, then please contact richard@hughsie.com");
+
 	return TRUE;
 }
 
