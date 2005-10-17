@@ -21,6 +21,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	main
+ * @{
+ */
 
 #ifndef _GPM_H
 #define _GPM_H
@@ -28,3 +32,4 @@
 void action_policy_do (gint policy_number);
 
 #endif	/* _GPM_H */
+/** @} */

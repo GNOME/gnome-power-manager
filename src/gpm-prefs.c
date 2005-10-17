@@ -28,7 +28,7 @@
  * 02110-1301, USA.
  */
 /**
- * @addtogroup	prefs		Preferences setting
+ * @addtogroup	prefs		GNOME Power Preferences
  * @brief			Sets policy for GNOME Power Manager
  *
  * @{
@@ -96,10 +96,6 @@ recalc (void)
 				("button", "button.type", "sleep") > 0);
 	hasButtonLid =   (hal_num_devices_of_capability_with_value
 				("button", "button.type", "lid") > 0);
-#if 0
-	hasHardDrive =   (hal_num_devices_of_capability_with_value
-				("storage", "storage.bus", "ide") > 0);
-#endif
 	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
 
 	if (gscreensaver_is_running ()) {

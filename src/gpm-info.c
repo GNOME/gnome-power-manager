@@ -24,6 +24,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	info		GNOME Power Info
+ * @brief			This provides more information about battery
+ *				and UPS hardware.
+ *
+ * @{
+ */
 
 #include <gtk/gtk.h>
 #include <glade/glade.h>
@@ -195,3 +202,4 @@ main (int argc, char **argv)
 	gtk_main ();
 	return 0;
 }
+/** @} */

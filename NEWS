@@ -2,17 +2,18 @@
 GNOME Power Manager 0.2.8
 ==========
 
-Released October xx, 2005
+Released October 17, 2005
 
-- All source files are now documented with Doxygen.
-  http://gnome-power.sourceforge.net/code/html/
-- Fixes problems with displaying the AC Adapter icon.
+- All source files are now fully documented with Doxygen.
+  http://gnome-power.sourceforge.net/doxygen/
+- Fixed problems with displaying the just the AC Adapter icon.
   Thanks to Dumitru Ciobarcianu for reporting the problem.
 - Added desktop mode where icon is forced. Disabled by default.
+  The icon handling logic is to be simplified in 0.2.10
 - Fixed a fatal error where a NULL pointer was deferenced when removing
   AC Adaptor when icon was hidden.
 - Lots of cosmetic fixes thanks to Wouter Bolsterlee.
-- Add back the themed icons to gnome-power-preferences.
+- Add back the (now themed) icons to gnome-power-preferences.
 - Add a new tool, gnome-power-info to display the p-m capabilities or your
   machine, and report details of your power hardware. More to come...
 - Lots of cosmetic fixes from Wouter Bolsterlee.

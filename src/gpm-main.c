@@ -27,6 +27,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	main		GNOME Power Manager (session daemon)
+ * @brief			The session daemon run for each user
+ *
+ * @{
+ */
 /** @mainpage	GNOME Power Manager
  *
  *  @section	intro		Introduction
@@ -1099,3 +1105,4 @@ main (int argc, char *argv[])
 	gpm_exit ();
 	return 0;
 }
+/** @} */
