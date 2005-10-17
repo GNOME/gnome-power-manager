@@ -1,4 +1,4 @@
-/*! @file	gpm-idle.h
+/** @file	gpm-idle.h
  *  @brief	Idle calculation routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -20,6 +20,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	idle
+ * @{
  */
 
 #ifndef _GPMIDLE_H
@@ -53,3 +57,4 @@ gboolean gpm_idle_update (gpointer data);
 gboolean gpm_idle_set_timeout (gint timeout);
 
 #endif	/* _GPMIDLE_H */
+/** @} */

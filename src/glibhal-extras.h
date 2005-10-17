@@ -1,4 +1,4 @@
-/*! @file	glibhal-extras.h
+/** @file	glibhal-extras.h
  *  @brief	GLIB replacement for libhal, the extra stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -21,6 +21,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	glibhal
+ * @{
+ */
 
 #ifndef _GLIBHALEXTRAS_H
 #define _GLIBHALEXTRAS_H
@@ -34,3 +38,4 @@ gboolean hal_hibernate (void);
 gboolean hal_setlowpowermode (gboolean set);
 
 #endif	/* _GLIBHALEXTRAS_H */
+/** @} */

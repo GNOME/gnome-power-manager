@@ -1,4 +1,4 @@
-/*! @file	gpm-common.h
+/** @file	gpm-common.h
  *  @brief	Common functions shared between modules
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -93,7 +93,7 @@ typedef struct {
 typedef struct {
 	gboolean present;	/**< If the device is present		*/
 	gchar udi[128];		/**< The HAL UDI			*/
-	gint powerDevice;	/**< The device type from PowerDevice	*/
+	PowerDevice powerDevice;/**< The device type from PowerDevice	*/
 	gint isRechargeable;	/**< If device is rechargeable		*/
 	gint percentageCharge;	/**< The percentage charge remaining	*/
 	gint minutesRemaining;	/**< Minutes remaining until charged	*/
@@ -107,8 +107,8 @@ gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
 GString *convert_gpmdbus_to_string (gint value);
 gchar *convert_dbus_enum_to_string (gint value);
 
-gint convert_string_to_policy (const gchar *gconfstring);
-gint convert_haltype_to_powerdevice (const gchar *type);
+ActionType convert_string_to_policy (const gchar *gconfstring);
+PowerDevice convert_haltype_to_powerdevice (const gchar *type);
 gchar *convert_policy_to_string (gint value);
 
 GString *get_timestring_from_minutes (gint minutes);

@@ -1,4 +1,4 @@
-/*! @file	compiler.h
+/** @file	compiler.h
  *  @brief	Common compiler stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-04

@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-server.c
+/** @file	gpm-dbus-server.c
  *  @brief	DBUS listener and signal abstraction
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -26,6 +26,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	dbus
+ * @{
  */
 
 #include <glib.h>
@@ -551,3 +555,4 @@ dbus_create_error_reply (DBusMessage *message)
 }
 
 #endif
+/** @} */

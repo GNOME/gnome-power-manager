@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-client.c
+/** @file	gpm-dbus-client.c
  *  @brief	Common DBUS client stuff for g-p-m and g-p-p
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-04
@@ -23,6 +23,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	dbus
+ * @{
  */
 
 #include <glib.h>
@@ -97,3 +101,4 @@ gpm_is_on_mains (gboolean *value)
 	g_object_unref (G_OBJECT (gpm_proxy));
 	return retval;
 }
+/** @} */

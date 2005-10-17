@@ -1,4 +1,4 @@
-/*! @file	glibhal-main.c
+/** @file	glibhal-main.c
  *  @brief	GLIB replacement for libhal, the extra stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -23,6 +23,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	glibhal		GLIB based HAL methods
+ * @brief			This provides more sanitied and GNOME friendly
+ * 				interface to query and command HAL.
+ *
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -299,3 +306,4 @@ hal_num_devices_of_capability_with_value (const gchar *capability,
 		valid, capability, key, value);
 	return valid;
 }
+/** @} */

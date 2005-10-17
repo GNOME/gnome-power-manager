@@ -1,4 +1,4 @@
-/*! @file	gpm-info.c
+/** @file	gpm-info.c
  *  @brief	GNOME Power Information
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-04

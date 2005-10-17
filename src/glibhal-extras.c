@@ -1,4 +1,4 @@
-/*! @file	glibhal-extras.c
+/** @file	glibhal-extras.c
  *  @brief	GLIB replacement for libhal, the extra stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -23,6 +23,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	glibhal
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -369,3 +373,4 @@ hal_get_brightness_steps (gint *steps)
 	hal_free_capability (names);
 	return TRUE;
 }
+/** @} */

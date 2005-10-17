@@ -1,4 +1,4 @@
-/*! @file	gpm-gtk-utils.c
+/** @file	gpm-gtk-utils.c
  *  @brief	Simple wrapper functions for easy libglade stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-04

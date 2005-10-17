@@ -1,4 +1,4 @@
-/*! @file	gpm-libnotify.c
+/** @file	gpm-libnotify.c
  *  @brief	LibNotify shared code and fallback code
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -26,6 +26,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	libnotify	libnotify notification system
+ * @brief			Integrates with libnotity and
+ *				notification-daemon.
+ *
+ * @{
+ */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -50,7 +57,7 @@
  *		g_debug functions depending on the urgency.
  */
 gboolean
-libnotify_event (const gchar *content, const gint urgency, GtkWidget *point)
+libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
 #if HAVE_LIBNOTIFY
 	NotifyHandle *n = NULL;
@@ -130,3 +137,4 @@ libnotify_init (const gchar *nicename)
 #endif
 	return ret;
 }
+/** @} */

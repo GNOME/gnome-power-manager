@@ -1,4 +1,4 @@
-/*! @file	gpm-prefs.c
+/** @file	gpm-prefs.c
  *  @brief	GNOME Power Preferences
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -26,6 +26,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	prefs		Preferences setting
+ * @brief			Sets policy for GNOME Power Manager
+ *
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -539,7 +545,7 @@ format_value_callback_time (GtkScale *scale, gdouble value)
  *  @param  policytype		the policy type, e.g. POLICY_PERCENT
  */
 static void
-hscale_setup_action (const gchar *widgetname, const gchar *policypath, gint policytype)
+hscale_setup_action (const gchar *widgetname, const gchar *policypath, PolicyType policytype)
 {
 	GConfClient *client = NULL;
 	GtkWidget *widget = NULL;
@@ -917,3 +923,4 @@ main (int argc, char **argv)
 	g_ptr_array_free (ptrarr_sleep_type, TRUE);
 	return 0;
 }
+/** @} */

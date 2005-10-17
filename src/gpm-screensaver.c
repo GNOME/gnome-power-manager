@@ -1,4 +1,4 @@
-/*! @file	gpm-screensaver.c
+/** @file	gpm-screensaver.c
  *  @brief	Functions to query and control GNOME Screensaver
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -23,6 +23,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	gs		GnomeScreensaver integration
+ * @brief	gs		integration into GNOME Power Manager using DBUS
+ *
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -207,3 +213,4 @@ gscreensaver_get_idle (gint *time)
 	}
 	return TRUE;
 }
+/** @} */

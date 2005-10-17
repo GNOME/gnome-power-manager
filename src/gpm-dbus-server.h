@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-server.h
+/** @file	gpm-dbus-server.h
  *  @brief	DBUS listener and signal abstraction
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -21,6 +21,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	dbus
+ * @{
+ */
 
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
@@ -28,7 +32,6 @@
 #include "compiler.h"
 
 /** The dbus signal type
- *
  */
 enum
 {
@@ -44,7 +47,11 @@ typedef struct GPMObjectClass GPMObjectClass;
 /** The GObject type reference */
 GType gpm_object_get_type (void);
 
+/** The dbus GPM GObject type
+ */
 struct GPMObject {GObject parent;};
+/** The dbus GPM GObject class type
+ */
 struct GPMObjectClass {GObjectClass parent;};
 
 gboolean gpm_object_register (void) G_GNUC_WARNUNCHECKED;
@@ -75,3 +82,4 @@ typedef struct {
 #endif
 
 #endif	/* _GPMDBUSSERVER_H */
+/** @} */

@@ -1,4 +1,4 @@
-/*! @file	eggtrayicon.h
+/** @file	eggtrayicon.h
  *  @brief	EggTrayIcon low level hook header.
  *  @author	Anders Carlsson <andersca@gnu.org>
  *  @date	2002

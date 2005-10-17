@@ -1,4 +1,4 @@
-/*! @file	gpm-libnotify.h
+/** @file	gpm-libnotify.h
  *  @brief	LibNotify shared code and fallback code
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -23,6 +23,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	libnotify
+ * @{
+ */
 
 #ifndef _GPMLIBNOTIFY_H
 #define _GPMLIBNOTIFY_H
@@ -30,11 +34,16 @@
 /** Set the timeout of the libnotify notifications */
 #define NOTIFY_TIMEOUT			5
 
-#define LIBNOTIFY_URGENCY_CRITICAL	1
-#define LIBNOTIFY_URGENCY_NORMAL	2
-#define LIBNOTIFY_URGENCY_LOW		3
+
+/** The libnotify urgency type */
+typedef enum {
+	LIBNOTIFY_URGENCY_CRITICAL = 1,	/**< Critical warning!	*/
+	LIBNOTIFY_URGENCY_NORMAL = 2,	/**< Normal message	*/
+	LIBNOTIFY_URGENCY_LOW = 3	/**< Low urgency	*/
+} LibNotifyEventType;
 
 gboolean libnotify_init (const gchar *nicename);
-gboolean libnotify_event (const gchar *content, const gint urgency, GtkWidget *point);
+gboolean libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
 
 #endif	/* _GPMLIBNOTIFY_H */
+/** @} */

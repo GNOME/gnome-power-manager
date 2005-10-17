@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-common.c
+/** @file	gpm-dbus-common.c
  *  @brief	Common GLIB DBUS routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -25,6 +25,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	dbus		Integration with DBUS
+ * @brief			DBUS service and client funcionality.
+ *
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -153,3 +159,4 @@ dbus_get_system_connection (DBusGConnection **connection)
 	}
 	return TRUE;
 }
+/** @} */

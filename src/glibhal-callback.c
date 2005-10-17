@@ -1,4 +1,4 @@
-/*! @file	glibhal-callback.c
+/** @file	glibhal-callback.c
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -24,6 +24,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	glibhal
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -706,3 +710,4 @@ glibhal_callback_shutdown (void)
 
 	return TRUE;
 }
+/** @} */

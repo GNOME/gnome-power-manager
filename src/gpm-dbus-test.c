@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-test.c
+/** @file	gpm-dbus-test.c
  *  @brief	DBUS test program
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02

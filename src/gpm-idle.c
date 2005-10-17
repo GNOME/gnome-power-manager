@@ -1,4 +1,4 @@
-/*! @file	gpm-idle.c
+/** @file	gpm-idle.c
  *  @brief	Idle calculation routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -28,6 +28,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	idle		Idle checking for CPU load
+ * @brief			Uses the functionality of gnome-screensaver
+ *				and custom (quick) checking routines.
+ *
+ * @{
  */
 
 #ifdef HAVE_CONFIG_H
@@ -258,3 +265,4 @@ gpm_idle_update (gpointer data)
 	}
 	return TRUE;
 }
+/** @} */

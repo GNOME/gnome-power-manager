@@ -1,4 +1,4 @@
-/*! @file	gpm-main.c
+/** @file	gpm-main.c
  *  @brief	GNOME Power Manager session daemon
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -26,6 +26,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ */
+/** @mainpage	GNOME Power Manager
+ *
+ *  @section	intro		Introduction
+ *
+ *  GNOME Power Manager is a session daemon that takes care of power management.
+ *
+ *  GNOME Power Manager uses information provided by HAL to display icons and handle system and user actions in a GNOME session. Authorised users can set policy and change preferences.
+ *  GNOME Power Manager acts as a policy agent on top of the Project Utopia stack, which includes the kernel, hotplug, udev, and HAL. GNOME Power Manager listens for HAL events and responds with user-configurable reactions.
+ *  The main focus is the user interface; e.g. allowing configuration of power management from the desktop in a sane way (no need for root password, and no need to edit configuration files)
+ *  Most of the backend code is actually in HAL for abstracting various power aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the desktop parts are fairly lightweight and straightforward.
+ *
  */
 
 #ifdef HAVE_CONFIG_H

@@ -1,4 +1,4 @@
-/*! @file	gpm-common.c
+/** @file	gpm-common.c
  *  @brief	Common functions shared between modules
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -25,6 +25,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/** @todo factor these out into gpm-only modules */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -397,7 +398,7 @@ g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *me
  *  @param  gconfstring		The string name
  *  @return			The action ENUM
  */
-int
+ActionType
 convert_string_to_policy (const gchar *gconfstring)
 {
 	/* assertion checks */
@@ -445,7 +446,8 @@ convert_policy_to_string (gint value)
  *  @param  type		The HAL battery type
  *  @return			The powerDevice ENUM
  */
-gint convert_haltype_to_powerdevice (const gchar *type)
+PowerDevice
+convert_haltype_to_powerdevice (const gchar *type)
 {
 	/* assertion checks */
 	g_assert (type);

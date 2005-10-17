@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-common.h
+/** @file	gpm-dbus-common.h
  *  @brief	Common GLIB DBUS routines
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -21,6 +21,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	dbus
+ * @{
+ */
+
 #ifndef _DBUSCOMMON_H
 #define _DBUSCOMMON_H
 
@@ -33,3 +38,4 @@ gboolean dbus_get_session_connection (DBusGConnection **connection) G_GNUC_WARNU
 gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) G_GNUC_WARNUNCHECKED;
 
 #endif	/* _DBUSCOMMON_H */
+/** @} */

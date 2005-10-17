@@ -1,4 +1,4 @@
-/*! @file	gpm-screensaver.h
+/** @file	gpm-screensaver.h
  *  @brief	Functions to query and control GNOME Screensaver
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -21,6 +21,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	gs
+ * @{
+ */
 
 #ifndef _GPMSCREENSAVER_H
 #define _GPMSCREENSAVER_H
@@ -40,3 +44,4 @@ gboolean gscreensaver_get_idle (gint *time);
 gboolean gscreensaver_set_dpms_timeout (gint timeout);
 
 #endif	/* _GPMSCREENSAVER_H */
+/** @} */

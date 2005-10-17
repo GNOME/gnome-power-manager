@@ -1,4 +1,4 @@
-/*! @file	gpm-dbus-client.h
+/** @file	gpm-dbus-client.h
  *  @brief	Common DBUS client stuff for g-p-m and g-p-p
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-04
@@ -21,6 +21,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	dbus
+ * @{
+ */
+
 #ifndef _GPMDBUSCLIENT_H
 #define _GPMDBUSCLIENT_H
 
@@ -30,3 +35,4 @@ gboolean gpm_is_on_ac (gboolean *value);
 gboolean gpm_is_on_mains (gboolean *value);
 
 #endif	/* _GPMDBUSCLIENT_H */
+/** @} */

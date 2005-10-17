@@ -1,4 +1,4 @@
-/*! @file	gpm-main.h
+/** @file	gpm-main.h
  *  @brief	GNOME Power Manager session daemon
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02

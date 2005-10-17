@@ -1,4 +1,4 @@
-/*! @file	gpm-notification.h
+/** @file	gpm-notification.h
  *  @brief	GNOME Power Notification
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02

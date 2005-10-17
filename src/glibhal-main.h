@@ -1,4 +1,4 @@
-/*! @file	glibhal-main.h
+/** @file	glibhal-main.h
  *  @brief	GLIB replacement for libhal, the extra stuff
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -21,6 +21,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/**
+ * @addtogroup	glibhal
+ * @{
+ */
 
 #ifndef _GLIBHALMAIN_H
 #define _GLIBHALMAIN_H
@@ -38,3 +42,4 @@ gint hal_num_devices_of_capability_with_value (const gchar *capability, const gc
 void hal_free_capability (gchar **value);
 
 #endif	/* _GLIBHALMAIN_H */
+/** @} */
