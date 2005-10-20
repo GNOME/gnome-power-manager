@@ -521,6 +521,8 @@ get_chargestate_string (GenericObject *slotData)
  *
  *  @param  minutes		Minutes to convert to string
  *  @return			The timestring
+ *
+ *  @note	minutes == 0 is returned as "Unknown"
  */
 GString *
 get_timestring_from_minutes (gint minutes)
@@ -528,11 +530,10 @@ get_timestring_from_minutes (gint minutes)
 	GString* timestring = NULL;
 	gint hours;
 
-	if (minutes == 0)
-		return NULL;
-
 	timestring = g_string_new ("");
-	if (minutes == 1)
+	if (minutes == 0)
+		g_string_printf (timestring, _("Unknown"));
+	else if (minutes == 1)
 		g_string_printf (timestring, _("1 minute"));
 	else if (minutes < 60)
 		g_string_printf (timestring, _("%i minutes"), minutes);

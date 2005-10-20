@@ -1,3 +1,10 @@
+2005-10-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c, gpm-common.c: Fix a NULL pointer dereference where
+	the remaining_time isn't known, and the battery is low.
+	Also don't crash when we do not have gnome-dev-memory in out theme.
+	Reported by Andrey Tuev, thanks!
+
 2005-10-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/*.c: Lots of doxygen additions and cleanups.

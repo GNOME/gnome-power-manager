@@ -102,16 +102,16 @@ libtool: link: cannot find the library `/usr/lib/libgobject-2.0.la'
   <td valign="top"><img src="images/icon-gentoo.png" alt="[img]"/></td>
   <td>
    <p>
-    ebuild by Steev Klimaszewski for <a href="https://dev.cardoe.com/gentopia/">Gentoo Linux</a>
+    ebuild by Steev Klimaszewski for <a href="http://gentopia.gentooexperimental.org/">Gentoo Linux</a>
    </p>
 <pre>
 emerge subversion
 cd /usr/local/
-svn co https://dev.cardoe.com/gentopia/svn/overlay/ portage-gentopia
+svn co https://gentopia.gentooexperimental.org/svn/overlay/ gentopia
 edit /etc/make.conf
-set PORTDIR_OVERLAY="/usr/local/portage-gentopia"
+set PORTDIR_OVERLAY="/usr/local/gentopia"
 # If you already have an overlay then do this
-# PORTDIR_OVERLAY="/usr/local/portage /usr/local/portage-gentopia"
+PORTDIR_OVERLAY="/usr/local/portage /usr/local/gentopia"
 emerge -av dbus hal pmount gnome-power-manager udev
 </pre>
   </td>

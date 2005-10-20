@@ -442,9 +442,9 @@ menu_main_create (TrayData *trayicon)
 	gtk_widget_show (item);
 
 	/* add the actions */
-	menu_add_action_item (trayicon->popup_menu, "gnome-dev-memory",
+	menu_add_action_item (trayicon->popup_menu, "gnome-suspend",
 			      _("Suspend"), "suspend");
-	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
+	menu_add_action_item (eggtrayicon->popup_menu, "gnome-hibernate",
 			      _("Hibernate"), "hibernate");
 	return TRUE;
 }

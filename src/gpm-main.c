@@ -694,7 +694,8 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 		if (policy == ACTION_WARNING) {
 			device = convert_powerdevice_to_string (slotData->powerDevice);
-			remaining = get_time_string (slotData);;
+			remaining = get_time_string (slotData);
+			g_assert (remaining);
 			gs = g_string_new ("");
 			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b>\n(%s)"),
 				device, newCharge, remaining->str);
@@ -711,7 +712,8 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	if (newCharge < lowThreshold) {
 		g_debug ("battery is low!");
 		device = convert_powerdevice_to_string (slotData->powerDevice);
-		remaining = get_time_string (slotData);;
+		remaining = get_time_string (slotData);
+		g_assert (remaining);
 		gs = g_string_new ("");
 		g_string_printf (gs, _("The %s (%i%%) is <b>low</b>\n(%s)"),
 			device, newCharge, remaining->str);
