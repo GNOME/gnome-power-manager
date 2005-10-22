@@ -42,7 +42,7 @@
 #include <gnome.h>
 #include "gpm-common.h"
 #include "gpm-libnotify.h"
-#if HAVE_LIBNOTIFY
+#ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
 
@@ -59,7 +59,7 @@
 gboolean
 libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
-#if HAVE_LIBNOTIFY
+#ifdef HAVE_LIBNOTIFY
 	NotifyHandle *n = NULL;
 	NotifyIcon *icon = NULL;
 	NotifyHints *hints = NULL;
@@ -76,7 +76,7 @@ libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidg
 	}
 
 	/* echo to terminal too */
-	if (urgency == NOTIFY_URGENCY_CRITICAL)
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
 		g_warning ("libnotify: %s : %s", NICENAME, content);
 	else
 		g_debug ("libnotify: %s : %s", NICENAME, content);
@@ -99,17 +99,33 @@ libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidg
 	}
 	return TRUE;
 #else
-	GtkWidget *widget = NULL;
+	GtkWidget *dialog;
+	GtkMessageType msg_type;
 
 	/* assertion checks */
 	g_assert (content);
 
-	widget = gnome_message_box_new (content,
-			GNOME_MESSAGE_BOX_WARNING,
-			GNOME_STOCK_BUTTON_OK,
-			NULL);
-	gtk_window_set_title (GTK_WINDOW (widget), NICENAME);
-	gtk_widget_show (widget);
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
+		msg_type = GTK_MESSAGE_WARNING;
+	else
+		msg_type = GTK_MESSAGE_INFO;
+
+	dialog = gtk_message_dialog_new_with_markup (NULL,
+		GTK_DIALOG_DESTROY_WITH_PARENT,
+		msg_type,
+		GTK_BUTTONS_CLOSE,
+		"<span size='larger'><b>%s</b></span>",
+		NICENAME);
+
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
+
+	g_signal_connect_swapped (dialog,
+		"response",
+		G_CALLBACK (gtk_widget_destroy),
+		dialog);
+
+	gtk_window_present (GTK_WINDOW (dialog));
+
 	return TRUE;
 #endif
 }
@@ -132,7 +148,7 @@ libnotify_init (const gchar *nicename)
 
 	/* assertion checks */
 	g_assert (nicename);
-#if HAVE_LIBNOTIFY
+#ifdef HAVE_LIBNOTIFY
 	ret = notify_glib_init (nicename, NULL);
 #endif
 	return ret;

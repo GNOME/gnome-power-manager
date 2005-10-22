@@ -1,3 +1,9 @@
+2005-10-22  Christopher Aillon  <caillon@redhat.com>
+
+	* src/gpm-libnotify.c:
+	Use GtkMessageDialog instead of GnomeMessageBox since the former
+	supports PangoMarkup and the latter is deprecated.
+
 2005-10-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c, gpm-common.c: Fix a NULL pointer dereference where
