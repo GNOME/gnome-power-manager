@@ -1,4 +1,19 @@
 ==========
+GNOME Power Manager 0.2.8.1
+==========
+
+Released October 25, 2005
+
+- Fix a NULL pointer dereference where the remaining_time isn't known, and
+  the battery is low.
+- Don't crash when we do not have gnome-dev-memory in our theme.
+- We now register the name of the application with the session-manager.
+- Change HAL dep from 0.5.4 to 0.5.3 so we can build on Ubuntu Breezy.
+  NOTE: There are *lots* of bugs in HAL 0.5.3 fixed in later releases.
+- Now delete Makefile.in when doing maintainer-clean rather than distclean
+  so we can build on Ubuntu Breezy.
+
+==========
 GNOME Power Manager 0.2.8
 ==========
 

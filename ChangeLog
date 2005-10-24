@@ -1,3 +1,24 @@
+2005-10-24  Richard Hughes  <richard@hughsie.com>
+
+	* Makefile: Ship autogen.sh
+
+	* configure.in: Change hal dep from 0.5.4 to 0.5.3 so we can build on
+	ubuntu breezy. 0.5.3 will work with g-p-m, but there are lots of bugs
+	in 0.5.3 fixed in later releases.
+	Also bump to 0.2.8.1, and release.
+
+	* src/gpm-info.glade : Don't hide this window, make it "normal" like
+	the others.
+
+	* src/gpm-main.c (main) : Register the name of the application rather
+	than something random (to the session-manager).
+	Patch from Matthew Garrett <mjg59@srcf.ucam.org>
+
+	* src/debian/* : Add files required by dpkg-buildpackage.
+
+	* Makefile.am: Delete the Makefile.in's in MAINTAINERCLEAN rather
+	than DISTCLEAN so we can build on ubuntu.
+
 2005-10-22  Christopher Aillon  <caillon@redhat.com>
 
 	* src/gpm-libnotify.c:
@@ -8,7 +29,7 @@
 
 	* src/gpm-main.c, gpm-common.c: Fix a NULL pointer dereference where
 	the remaining_time isn't known, and the battery is low.
-	Also don't crash when we do not have gnome-dev-memory in out theme.
+	Also don't crash when we do not have gnome-dev-memory in our theme.
 	Reported by Andrey Tuev, thanks!
 
 2005-10-17  Richard Hughes  <richard@hughsie.com>
