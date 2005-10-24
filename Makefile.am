@@ -28,12 +28,23 @@ $(service_DATA): $(service_in_files) Makefile
 
 EXTRA_DIST =						\
 	HACKING						\
+	autogen.sh					\
 	gnome-power-manager.spec			\
 	gnome-power-manager.spec.in			\
 	gnome-power-manager.schemas.in			\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
 	$(service_in_files)				\
+	debian/changelog				\
+	debian/compat					\
+	debian/control					\
+	debian/copyright				\
+	debian/dirs					\
+	debian/docs					\
+	debian/postinst					\
+	debian/postrm					\
+	debian/rules					\
+	debian/watch					\
 	$(dbusconf_DATA)				\
 	intltool-extract.in				\
 	intltool-merge.in				\
@@ -65,7 +76,6 @@ DISTCLEANFILES =					\
 	intltool-merge					\
 	intltool-update					\
 	Makefile					\
-	Makefile.in					\
 	gnome-power-manager-*.tar.gz			\
 	gnome-power-preferences.desktop			\
 	gnome-power-manager.schemas			\

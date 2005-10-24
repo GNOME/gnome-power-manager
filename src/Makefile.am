@@ -159,5 +159,7 @@ clean-local:
 
 DISTCLEANFILES =					\
 	gnome-power-glue.h				\
-	Makefile					\
+	Makefile
+
+MAINTAINERCLEANFILES =					\
 	Makefile.in

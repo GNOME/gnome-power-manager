@@ -18,5 +18,7 @@ Data_DATA =					\
 	gnome-hibernate.png
 
 DISTCLEANFILES =					\
-	Makefile					\
+	Makefile
+
+MAINTAINERCLEANFILES =					\
 	Makefile.in
