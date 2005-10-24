@@ -2,6 +2,8 @@
 
 	* Makefile: Ship autogen.sh
 
+	* gnome-power-info.sgml: Add this file to keep the ubuntu build quiet.
+
 	* configure.in: Change hal dep from 0.5.4 to 0.5.3 so we can build on
 	ubuntu breezy. 0.5.3 will work with g-p-m, but there are lots of bugs
 	in 0.5.3 fixed in later releases.
@@ -13,8 +15,6 @@
 	* src/gpm-main.c (main) : Register the name of the application rather
 	than something random (to the session-manager).
 	Patch from Matthew Garrett <mjg59@srcf.ucam.org>
-
-	* src/debian/* : Add files required by dpkg-buildpackage.
 
 	* Makefile.am: Delete the Makefile.in's in MAINTAINERCLEAN rather
 	than DISTCLEAN so we can build on ubuntu.

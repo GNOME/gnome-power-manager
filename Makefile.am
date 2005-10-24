@@ -20,7 +20,8 @@ service_DATA     = $(service_in_files:.service.in=.service)
 if HAVE_DOCBOOK2MAN
 man_MANS =						\
 	gnome-power-manager.1				\
-	gnome-power-preferences.1
+	gnome-power-preferences.1			\
+	gnome-power-info.1
 endif
 
 $(service_DATA): $(service_in_files) Makefile
@@ -35,22 +36,13 @@ EXTRA_DIST =						\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
 	$(service_in_files)				\
-	debian/changelog				\
-	debian/compat					\
-	debian/control					\
-	debian/copyright				\
-	debian/dirs					\
-	debian/docs					\
-	debian/postinst					\
-	debian/postrm					\
-	debian/rules					\
-	debian/watch					\
 	$(dbusconf_DATA)				\
 	intltool-extract.in				\
 	intltool-merge.in				\
 	intltool-update.in				\
 	gnome-power-manager.sgml			\
 	gnome-power-preferences.sgml			\
+	gnome-power-info.sgml				\
 	mkinstalldirs
 
 install-data-local:
@@ -68,6 +60,9 @@ gnome-power-manager.1: gnome-power-manager.sgml
 	docbook2man $? > $@
 
 gnome-power-preferences.1: gnome-power-preferences.sgml
+	docbook2man $? > $@
+
+gnome-power-info.1: gnome-power-info.sgml
 	docbook2man $? > $@
 endif
 
