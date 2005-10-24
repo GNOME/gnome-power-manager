@@ -1024,7 +1024,7 @@ main (int argc, char *argv[])
 		exit (1);
 
 	/* initialise gnome */
-	gnome_program_init (NICENAME, VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
+	gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
