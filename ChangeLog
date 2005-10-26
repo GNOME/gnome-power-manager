@@ -3,6 +3,8 @@
 	* gpm-prefs.glade: Remove trailing dot from checkboxes to confirm to
 	GNOME HIG. Spotted by Mark Rosenstand <mark@borkware.net>, thanks.
 
+	* src/gpm-prefs.c (combo_setup_dynamic) : Don't leak policyoption.
+
 2005-10-24  Richard Hughes  <richard@hughsie.com>
 
 	* Makefile: Ship autogen.sh
