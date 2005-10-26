@@ -173,13 +173,13 @@ get_object_tooltip (GenericObject *slotData)
 	devicestr = convert_powerdevice_to_string (slotData->powerDevice);
 	if (slotData->powerDevice == POWER_PRIMARY_BATTERY ||
 	    slotData->powerDevice == POWER_UPS) {
-		tooltip = g_string_new ("bug?");
+		tooltip = g_string_new ("");
 		remaining = get_time_string (slotData);
 		chargestate = get_chargestate_string (slotData);
 		if (slotData->present) {
 			g_string_printf (tooltip, "%s %s (%i%%)", 
 					devicestr, chargestate, slotData->percentageCharge);
-			if (remaining) {
+			if (remaining && slotData->percentageCharge < 99) {
 				g_string_append_printf (tooltip, "\n%s", remaining->str);
 				g_string_free (remaining, TRUE);
 			}

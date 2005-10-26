@@ -39,18 +39,18 @@
  *
  *  GNOME Power Manager is a session daemon that takes care of power management.
  *
- *  GNOME Power Manager uses information provided by HAL to display icons and
+ *  GNOME Power Manager uses information provided by HAL to display icons and 
  *  handle system and user actions in a GNOME session. Authorised users can set
  *  policy and change preferences.
  *  GNOME Power Manager acts as a policy agent on top of the Project Utopia
- *  stack, which includes the kernel, hotplug, udev, and HAL.
- *  GNOME Power Manager listens for HAL events and responds with
+ *  stack, which includes the kernel, hotplug, udev, and HAL. 
+ *  GNOME Power Manager listens for HAL events and responds with 
  *  user-configurable reactions.
  *  The main focus is the user interface; e.g. allowing configuration of
  *  power management from the desktop in a sane way (no need for root password,
  *  and no need to edit configuration files)
  *  Most of the backend code is actually in HAL for abstracting various power
- *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the
+ *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the 
  *  desktop parts are fairly lightweight and straightforward.
  */
 
@@ -172,21 +172,6 @@ callback_gconf_key_changed (GConfClient *client,
 
 }
 
-/** A function to find out if we perform the action, and to emit signals.
- *
- * @param	action		The action ENUM
- * @return			Whether the action should go ahead
- *
- * @todo	This has to be converted to a new g-p-m API.
- */
-static gboolean
-dbus_action (gint action)
-{
-	gpm_emit_about_to_happen (action);
-	gpm_emit_performing_action (action);
-	return TRUE;
-}
-
 /** Do the action dictated by policy from gconf
  *
  *  @param	policy_number	The policy ENUM value
@@ -202,18 +187,18 @@ action_policy_do (gint policy_number)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
 		g_warning ("*ACTION* Send warning should be done locally!");
-	} else if (policy_number == ACTION_REBOOT && dbus_action (GPM_DBUS_SHUTDOWN)) {
+	} else if (policy_number == ACTION_REBOOT) {
 		g_debug ("*ACTION* Reboot");
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
-	} else if (policy_number == ACTION_SUSPEND && dbus_action (GPM_DBUS_SUSPEND)) {
+	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
 		gscreensaver_lock_check ();
 		hal_suspend (0);
-	} else if (policy_number == ACTION_HIBERNATE && dbus_action (GPM_DBUS_HIBERNATE)) {
+	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
 		gscreensaver_lock_check ();
 		hal_hibernate ();
-	} else if (policy_number == ACTION_SHUTDOWN && dbus_action (GPM_DBUS_SHUTDOWN)) {
+	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
@@ -1096,7 +1081,7 @@ main (int argc, char *argv[])
 
 	/* get idle value from gconf */
 	if (state_data.onBatteryPower) {
-		value = gconf_client_get_int (client,
+		value = gconf_client_get_int (client, 
 			GCONF_ROOT "policy/battery/sleep_computer", NULL);
 	} else {
 		value = gconf_client_get_int (client,
