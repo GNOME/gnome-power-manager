@@ -665,6 +665,7 @@ combo_setup_dynamic (const gchar *widgetname,
 
 	/* select the correct entry, i.e. map the policy to virtual mapping */
 	value = convert_string_to_policy (policyoption);
+	g_free (policyoption);
 	for (a=0;a < ptrarray->len;a++) {
 		pdata = (int*) g_ptr_array_index (ptrarray, a);
 		if (*pdata == value) {
