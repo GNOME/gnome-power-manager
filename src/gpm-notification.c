@@ -473,9 +473,48 @@ tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 	return TRUE;
 }
 
+/** private callback to position the popup menu of the tray icon
+ *
+ *  @param	menu		The menu to position		
+ *  @param	x		The x coordinate of where to put the menu
+ *  @param	y		The y coordinate of where to put the menu
+ *  @param	push_in		Always set to true. We always want to see the complete menu
+ *  @param	user_data	In this case the tray icon widget
+ */
+static void
+tray_popup_position_menu (GtkMenu *menu,
+			  int *x,
+			  int *y,
+			  gboolean *push_in,
+			  gpointer user_data)
+{
+	GtkWidget *widget;
+	GtkRequisition requisition;
+	gint menu_xpos;
+	gint menu_ypos;
+
+	widget = GTK_WIDGET (user_data);
+
+	gtk_widget_size_request (GTK_WIDGET (menu), &requisition);
+
+	gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
+
+	menu_xpos += widget->allocation.x;
+	menu_ypos += widget->allocation.y;
+
+	if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2)
+		menu_ypos -= (requisition.height + 1);
+	else
+		menu_ypos += widget->allocation.height + 1;
+
+	*x = menu_xpos;
+	*y = menu_ypos;
+	*push_in = TRUE;
+}
+
 /** private click press callback
  *
- *  @param	widget		Unused
+ *  @param	widget		The widget on which was clicked
  *  @param	event		The mouse button event
  *  @param	traydata	The TrayData object in use
  *  @return			If the popup-menu is already shown
@@ -493,7 +532,7 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 		return TRUE;
 	if (event->button == 3) {
 		gtk_menu_popup (GTK_MENU (traydata->popup_menu), NULL, NULL,
-			NULL, NULL, event->button, event->time);
+			tray_popup_position_menu, widget, event->button, event->time);
 		return TRUE;
 	}
 	return FALSE;
