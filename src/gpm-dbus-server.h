@@ -59,27 +59,9 @@ gboolean gpm_emit_about_to_happen (const gint value);
 gboolean gpm_emit_performing_action (const gint value);
 gboolean gpm_emit_mains_changed (const gboolean value);
 
-gboolean gpm_object_is_user_idle (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error);
-
-gboolean gpm_object_ack (GPMObject *obj, gint value, gboolean *ret, GError **error);
-gboolean gpm_object_nack (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
-gboolean gpm_object_action_register (GPMObject *obj, gint value, gchar *reason, gboolean *ret, GError **error);
-gboolean gpm_object_action_unregister (GPMObject *obj, gint value, gboolean *ret, GError **error);
-
-#if 0
-typedef struct {
-	GString *dbusName;
-	GString *appName;
-	GString *reason;
-	gint flags;
-	gint timeout;
-	gboolean isNACK;
-	gboolean isACK;
-} RegProgram;
-#endif
 
 #endif	/* _GPMDBUSSERVER_H */
 /** @} */

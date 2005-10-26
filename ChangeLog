@@ -1,7 +1,15 @@
+2005-10-26  Richard Hughes  <richard@hughsie.com>
+
+	* docs/www/dbus_interface.php, src/gpm-dbus-server.{c|h},
+	src/gnome-power-service.xml: Make the DBUS interface much simpler.
+
+	* src/gpm-dbus-test.c, src/Makefile.am: Remove gpm-dbus-test as part
+	of making the interface simpler.
+
 2005-10-25  Richard Hughes  <richard@hughsie.com>
 
-	* gpm-prefs.glade: Remove trailing dot from checkboxes to confirm to
-	GNOME HIG. Spotted by Mark Rosenstand <mark@borkware.net>, thanks.
+	* src/gpm-prefs.glade: Remove trailing dot from checkboxes to confirm
+	to GNOME HIG. Spotted by Mark Rosenstand <mark@borkware.net>, thanks.
 
 	* src/gpm-prefs.c (combo_setup_dynamic) : Don't leak policyoption.
 
