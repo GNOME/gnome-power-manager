@@ -474,8 +474,6 @@ glibhal_watch_remove_device_property_modified (const gchar *udi)
 	g_debug ("glibhal: watch remove property_modified on '%s'", udi);
 	g_object_unref (G_OBJECT (udiproxy->proxy));
 	g_ptr_array_remove_fast (proxy.device_property_modified, (gpointer) udiproxy);
-	/* have to be careful when using g_free */
-	g_assert (udiproxy);
 	g_free (udiproxy);
 
 	return TRUE;
@@ -508,8 +506,6 @@ glibhal_watch_remove_device_condition (const gchar *udi)
 	g_debug ("glibhal: watch remove condition on '%s'", udi);
 	g_object_unref (G_OBJECT (udiproxy->proxy));
 	g_ptr_array_remove_fast (proxy.device_condition, (gpointer) udiproxy);
-	/* have to be careful when using g_free */
-	g_assert (udiproxy);
 	g_free (udiproxy);
 
 	return TRUE;

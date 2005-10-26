@@ -110,9 +110,8 @@ get_policy_string (const gchar *gconfpath)
 	}
 	value = convert_string_to_policy (valuestr);
 
-	/* have to be careful when using g_free */
-	g_assert (valuestr);
 	g_free (valuestr);
+
 	return value;
 }
 
@@ -130,10 +129,6 @@ callback_gconf_key_changed (GConfClient *client,
 	gpointer user_data)
 {
 	gint value = 0;
-
-	/* assertion checks */
-	g_assert (client);
-	g_assert (entry);
 
 	g_debug ("callback_gconf_key_changed (%s)", entry->key);
 
@@ -353,19 +348,13 @@ gpm_exit (void)
 	g_debug ("Quitting!");
 
 	/* free objectData */
-	for (a=0;a<objectData->len;a++) {
-		/* have to be careful when using g_free */
-		g_assert (g_ptr_array_index (objectData, a));
+	for (a=0;a<objectData->len;a++)
 		g_free (g_ptr_array_index (objectData, a));
-	}
 	g_ptr_array_free (objectData, TRUE);
 
 	/* free registered */
-	for (a=0;a<registered->len;a++) {
-		/* have to be careful when using g_free */
-		g_assert (g_ptr_array_index (registered, a));
+	for (a=0;a<registered->len;a++)
 		g_free (g_ptr_array_index (registered, a));
-	}
 	g_ptr_array_free (registered, TRUE);
 
 	/* free glibhal callbacks */
@@ -509,8 +498,6 @@ add_battery (const gchar *udi)
 
 	slotData->powerDevice = convert_haltype_to_powerdevice (type);
 
-	/* have to be careful when using g_free */
-	g_assert (type);
 	g_free (type);
 
 	device = convert_powerdevice_to_string (slotData->powerDevice);
@@ -886,8 +873,6 @@ hal_device_condition (const gchar *udi,
 		} else
 			g_warning ("Button '%s' unrecognised", type);
 
-		/* have to be careful when using g_free */
-		g_assert (type);
 		g_free (type);
 	}
 }

@@ -1,3 +1,23 @@
+2005-10-26  JP Rosevear  <jpr@novell.com>
+
+	* src/gpm-main.c (callback_gconf_key_changed): don't assert for
+	things not related to our internal state
+
+	* src/gpm-notification.c (create_icon_pixbuf): do not assert
+	before freeing, g_free handles null pointers
+
+	* src/gpm-main.c (get_policy_string): ditto
+	(gpm_exit): ditto
+	(add_battery): ditto
+	(hal_device_condition): ditto
+
+	* src/glibhal-main.c (is_hald_running): ditto
+	(hal_free_capability): ditto
+	(hal_num_devices_of_capability_with_value): ditto
+
+	* src/glibhal-callback.c (glibhal_watch_remove_device_property_modified): ditto
+	(glibhal_watch_remove_device_condition): ditto
+
 2005-10-26  JP Rosevear  <jpr@jprosevear.org>
 
 	* src/pixmaps/Makefile.am: ditto
