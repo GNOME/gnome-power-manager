@@ -41,13 +41,6 @@
 /* help location */
 #define GPMURL	 			"http://gnome-power.sourceforge.net/"
 
-#define GPM_DBUS_SCREENSAVE		1
-#define GPM_DBUS_SHUTDOWN		2
-#define GPM_DBUS_SUSPEND		4
-#define GPM_DBUS_HIBERNATE		8
-#define GPM_DBUS_LOGOFF			16
-#define GPM_DBUS_ALL			255
-
 #define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
@@ -104,8 +97,6 @@ typedef struct {
 void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
 
 gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
-GString *convert_gpmdbus_to_string (gint value);
-gchar *convert_dbus_enum_to_string (gint value);
 
 ActionType convert_string_to_policy (const gchar *gconfstring);
 PowerDevice convert_haltype_to_powerdevice (const gchar *type);

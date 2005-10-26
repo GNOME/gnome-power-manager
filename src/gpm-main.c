@@ -39,11 +39,19 @@
  *
  *  GNOME Power Manager is a session daemon that takes care of power management.
  *
- *  GNOME Power Manager uses information provided by HAL to display icons and handle system and user actions in a GNOME session. Authorised users can set policy and change preferences.
- *  GNOME Power Manager acts as a policy agent on top of the Project Utopia stack, which includes the kernel, hotplug, udev, and HAL. GNOME Power Manager listens for HAL events and responds with user-configurable reactions.
- *  The main focus is the user interface; e.g. allowing configuration of power management from the desktop in a sane way (no need for root password, and no need to edit configuration files)
- *  Most of the backend code is actually in HAL for abstracting various power aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the desktop parts are fairly lightweight and straightforward.
- *
+ *  GNOME Power Manager uses information provided by HAL to display icons and
+ *  handle system and user actions in a GNOME session. Authorised users can set
+ *  policy and change preferences.
+ *  GNOME Power Manager acts as a policy agent on top of the Project Utopia
+ *  stack, which includes the kernel, hotplug, udev, and HAL.
+ *  GNOME Power Manager listens for HAL events and responds with
+ *  user-configurable reactions.
+ *  The main focus is the user interface; e.g. allowing configuration of
+ *  power management from the desktop in a sane way (no need for root password,
+ *  and no need to edit configuration files)
+ *  Most of the backend code is actually in HAL for abstracting various power
+ *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the
+ *  desktop parts are fairly lightweight and straightforward.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -1088,7 +1096,7 @@ main (int argc, char *argv[])
 
 	/* get idle value from gconf */
 	if (state_data.onBatteryPower) {
-		value = gconf_client_get_int (client, 
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/sleep_computer", NULL);
 	} else {
 		value = gconf_client_get_int (client,

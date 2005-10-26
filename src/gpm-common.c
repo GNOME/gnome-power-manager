@@ -38,7 +38,7 @@
 #include "gpm-common.h"
 #include "compiler.h"
 
-/** Sets a widget image to a themed 
+/** Sets a widget image to a themed
  *
  *  @param	widget		The widget to set
  *  @param	name		The icon name, e.g. gnome-dev-battery
@@ -59,7 +59,7 @@ gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size)
 	return TRUE;
 }
 
-/** Get a image (pixbuf) trying the theme first, falling back to locally 
+/** Get a image (pixbuf) trying the theme first, falling back to locally
  *  if not present. This means we do not have to check in configure.in for lots
  *  of obscure icons.
  *
@@ -75,7 +75,7 @@ gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size)
  *
  */
 gboolean G_GNUC_WARNUNCHECKED
-gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size) 
+gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size)
 {
 	GError *err = NULL;
 	GString *fallback = NULL;
@@ -84,7 +84,7 @@ gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size)
 	/* assertion checks */
 	g_assert (name);
 
-	iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
+	iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (),
 			name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
 	if (iinfo) {
 		g_debug ("Using stock icon for %s", name);
@@ -257,54 +257,6 @@ run_gconf_script (const char *path)
 	return ret;
 }
 
-/** Converts an dbus ENUM to it's string representation
- *
- *  @param	value		The dbus ENUM
- *  @return			action string, e.g. "Shutdown"
- */
-gchar *
-convert_dbus_enum_to_string (gint value)
-{
-	if (value == GPM_DBUS_SCREENSAVE)
-		return _("screensave");
-	else if (value == GPM_DBUS_SHUTDOWN)
-		return _("shutdown");
-	else if (value == GPM_DBUS_SUSPEND)
-		return _("software suspend");
-	else if (value == GPM_DBUS_HIBERNATE)
-		return _("hibernation");
-	else if (value == GPM_DBUS_LOGOFF)
-		return _("session log off");
-	g_warning ("value '%i' not converted", value);
-	return NULL;
-}
-
-/** Converts an dbus ENUMs to it's text representation
- * (only really useful for debugging)
- *
- *  @param	value		The dbus ENUM's
- *  @return			action string, e.g. "{GPM_DBUS_SCREENSAVE|GPM_DBUS_LOGOFF}"
- */
-GString *
-convert_gpmdbus_to_string (gint value)
-{
-	GString *retval = g_string_new ("{");
-	if (value & GPM_DBUS_SCREENSAVE)
-		g_string_append (retval, "GPM_DBUS_SCREENSAVE|");
-	if (value & GPM_DBUS_SHUTDOWN)
-		g_string_append (retval, "GPM_DBUS_SHUTDOWN|");
-	if (value & GPM_DBUS_SUSPEND)
-		g_string_append (retval, "GPM_DBUS_SUSPEND|");
-	if (value & GPM_DBUS_HIBERNATE)
-		g_string_append (retval, "GPM_DBUS_HIBERNATE|");
-	if (value & GPM_DBUS_LOGOFF)
-		g_string_append (retval, "GPM_DBUS_LOGOFF|");
-
-	/* replace the final | with } */
-	retval->str[retval->len-1] = '}';
-	return retval;
-}
-
 /** Gets the timestring from a slot object
  *
  *  @param	slotData	the GenericObject reference
@@ -384,13 +336,19 @@ create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gi
 	slotDataReturn->minutesRemaining = minutesRemaining / objectCount;
 }
 
+/** This is a dummy function that is called only when not set verbose
+ *  and we shouldn't spew all the debug stuff
+ *
+ *  @param  log_domain		Unused
+ *  @param  log_level		Unused
+ *  @param  message		Unused
+ *  @param  user_data		Unused
+ *
+ *  @todo			We need to have generic logging
+ */
 void
 g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {
-	/*
-	 * This is a dummy function that is called only when not set verbose
-	 * (and we shouldn't spew all the debug stuff)
-	 */
 }
 
 /** Converts an action string representation to it's ENUM
