@@ -137,8 +137,4 @@ clean-local:
 	rm -f gpm_marshal.c gpm_marshal.h
 
 DISTCLEANFILES =					\
-	gnome-power-glue.h				\
-	Makefile
-
-MAINTAINERCLEANFILES =					\
-	Makefile.in
+	gnome-power-glue.h

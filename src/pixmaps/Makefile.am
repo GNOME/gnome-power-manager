@@ -16,9 +16,3 @@ Data_DATA =					\
 	gnome-dev-ups.png			\
 	gnome-suspend.png			\
 	gnome-hibernate.png
-
-DISTCLEANFILES =					\
-	Makefile
-
-MAINTAINERCLEANFILES =					\
-	Makefile.in

@@ -1,3 +1,19 @@
+2005-10-26  JP Rosevear  <jpr@jprosevear.org>
+
+	* src/pixmaps/Makefile.am: ditto
+
+	* src/icons/Makefile.am: ditto
+
+	* src/Makefile.am: ditto
+
+	* docs/Makefile.am: don't explicitly clean Makefile and
+	Makefile.in
+
+	* Makefile.am: remove extraneous tab; don't dist autogen,
+	configure is all you need; don't dist mkinstalldirs, thats done
+	automatically; don't explicitly clean Makefile and Makefile.in and
+	other automatically handled files
+
 2005-10-26  Richard Hughes  <richard@hughsie.com>
 
 	* docs/www/dbus_interface.php, src/gpm-dbus-server.{c|h},
@@ -5,6 +21,8 @@
 
 	* src/gpm-dbus-test.c, src/Makefile.am: Remove gpm-dbus-test as part
 	of making the interface simpler.
+
+	* configure.in: Bump to 0.2.8.2
 
 2005-10-25  Richard Hughes  <richard@hughsie.com>
 

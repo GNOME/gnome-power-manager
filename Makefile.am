@@ -29,7 +29,6 @@ $(service_DATA): $(service_in_files) Makefile
 
 EXTRA_DIST =						\
 	HACKING						\
-	autogen.sh					\
 	gnome-power-manager.spec			\
 	gnome-power-manager.spec.in			\
 	gnome-power-manager.schemas.in			\
@@ -42,13 +41,11 @@ EXTRA_DIST =						\
 	intltool-update.in				\
 	gnome-power-manager.sgml			\
 	gnome-power-preferences.sgml			\
-	gnome-power-info.sgml				\
-	mkinstalldirs
+	gnome-power-info.sgml
 
 install-data-local:
 	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
 	$(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
-	
 
 clean-local :
 	rm -f *~
@@ -70,24 +67,7 @@ DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
-	Makefile					\
 	gnome-power-manager-*.tar.gz			\
 	gnome-power-preferences.desktop			\
 	gnome-power-manager.schemas			\
 	gnome-power-manager.service
-
-MAINTAINERCLEANFILES =					\
-	aclocal.m4					\
-	config.guess					\
-	config.h.in					\
-	config.sub					\
-	configure					\
-	depcomp						\
-	install-sh					\
-	libtool						\
-	ltmain.sh					\
-	missing						\
-	autom4te.cache/*				\
-	Makefile.in					\
-	po/$(GETTEXT_PACKAGE).pot			\
-	po/*.bak

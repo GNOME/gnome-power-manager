@@ -18,8 +18,4 @@ clean-local:
 	rm -f *~
 
 DISTCLEANFILES =					\
-	doxygen/*					\
-	Makefile
-
-MAINTAINERCLEANFILES =					\
-	Makefile.in
+	doxygen/*
