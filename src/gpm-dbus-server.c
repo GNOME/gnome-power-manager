@@ -87,7 +87,7 @@ gpm_object_register (void)
 	DBusGConnection *session_connection = NULL;
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
-	g_assert (session_connection);
+
 	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE))
 		return FALSE;
 	obj = g_object_new (gpm_object_get_type (), NULL);

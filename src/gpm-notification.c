@@ -324,9 +324,6 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 {
 	gchar *action = NULL;
 
-	/* assertion checks */
-	g_assert (menuitem);
-
 	action = g_object_get_data ((GObject*) menuitem, "action");
 	g_assert (action);
 
@@ -456,8 +453,6 @@ static gboolean
 tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
-	g_assert (widget);
-	g_assert (event);
 	g_assert (traydata);
 
 	if (!traydata || !traydata->popup_menu)
@@ -519,8 +514,6 @@ static gboolean
 tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
-	g_assert (widget);
-	g_assert (event);
 	g_assert (traydata);
 
 	g_debug ("button : %i", event->button);

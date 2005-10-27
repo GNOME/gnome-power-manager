@@ -3,8 +3,25 @@
 	* docs/www/report_bug.php, src/gpm-main.c (main): don't ask people to
 	report bugs directly to me, but use bugzilla.
 
-2005-10-26  JP Rosevear  <jpr@novell.com>
+2005-10-27  JP Rosevear  <jpr@novell.com>
 
+	* src/gpm-dbus-server.c (gpm_object_register): don't assert for
+	things not related to our internal state
+	
+	* src/gpm-prefs.c (callback_gconf_key_changed): ditto
+	(callback_combo_changed): ditto
+	(callback_hscale_changed): ditto
+	(callback_check_changed): ditto
+	(format_value_callback_percent): ditto
+	(format_value_callback_percent_lcd): ditto
+	(format_value_callback_time): ditto
+
+	* src/gpm-notification.c (callback_actions_activated): ditto
+	(tray_icon_release): ditto
+	(tray_icon_press): ditto
+
+2005-10-26  JP Rosevear  <jpr@novell.com>
+	
 	* src/gpm-main.c (callback_gconf_key_changed): don't assert for
 	things not related to our internal state
 

@@ -173,9 +173,6 @@ callback_gconf_key_changed (GConfClient *client,
 	GConfEntry *entry,
 	gpointer user_data)
 {
-	/* assertion checks */
-	g_assert (client);
-
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 }
@@ -196,9 +193,6 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 	gchar *policyoption = NULL;
 	GPtrArray *policydata = NULL;
 	gint *pdata = NULL;
-
-	/* assertion checks */
-	g_assert (widget);
 
 	client = gconf_client_get_default ();
 	value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
@@ -339,9 +333,6 @@ callback_hscale_changed (GtkWidget *widget, gpointer user_data)
 	gdouble divisions = -1;
 	gboolean onbattery;
 
-	/* assertion checks */
-	g_assert (widget);
-
 	client = gconf_client_get_default ();
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
 
@@ -437,9 +428,6 @@ callback_check_changed (GtkWidget *widget, gpointer user_data)
 	gchar *policypath = NULL;
 	const gchar *widgetname;
 
-	/* assertion checks */
-	g_assert (widget);
-
 	widgetname = gtk_widget_get_name (widget);
 	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
@@ -481,9 +469,6 @@ print_usage (void)
 static gchar*
 format_value_callback_percent (GtkScale *scale, gdouble value)
 {
-	/* assertion checks */
-	g_assert (scale);
-
 	return g_strdup_printf ("%i%%", (gint) value);
 }
 
@@ -499,9 +484,6 @@ static gchar*
 format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
 {
 	int *steps = NULL;
-
-	/* assertion checks */
-	g_assert (scale);
 
 	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
 	if (!steps)
@@ -520,9 +502,6 @@ format_value_callback_time (GtkScale *scale, gdouble value)
 {
 	gchar unitstring[32];
 	GString *strvalue = NULL;
-
-	/* assertion checks */
-	g_assert (scale);
 
 	if ((gint) value == 0)
 		return g_strdup_printf ("Never");
