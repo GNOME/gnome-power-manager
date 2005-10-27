@@ -1015,11 +1015,6 @@ main (int argc, char *argv[])
 	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
 
-	g_print ("%s %s - %s\n", NICENAME, VERSION, NICEDESC);
-	g_print (_("Report bugs to richard@hughsie.com\n"));
-	g_print (_("Please check the faq page before reporting bugs!\n"));
-	g_print ("  * http://gnome-power.sourceforge.net/faq.php *\n");
-
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
