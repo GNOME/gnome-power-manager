@@ -74,7 +74,7 @@ gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size)
  *  @note	You need to deallocate the pixbuf with g_object_unref ();
  *
  */
-gboolean G_GNUC_WARNUNCHECKED
+gboolean __must_check
 gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size)
 {
 	GError *err = NULL;

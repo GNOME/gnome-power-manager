@@ -3,21 +3,6 @@
 	include('./menu.php');
 ?>
 
-
-<h2>Can you help?</h2>
-<p>
-Please contact <a href="mailto:richard@hughsie.com">me</a> for any issues, or bugs you find with the GNOME Power Manager.
-</p>
-<p>
-There is also a <a href="https://lists.sourceforge.net/lists/listinfo/gnome-power-devel">gnome-power-devel mailing list</a>.
-</p>
-
-<h2>Submitting fixes / enhancements</h2>
-<p>
-Be sure to add an entry into the ChangeLog file telling me what the patch does and what files are changed.
-Also, break any patch files up into logical chunks that are easier to check and apply one-by-one.
-</p>
-
 <h2>Thanks</h2>
 <p>
 I've been getting lots of good feedback (and code!) from different people, with lots of new ideas and points for improvements.

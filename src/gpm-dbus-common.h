@@ -33,9 +33,9 @@
 #include "compiler.h"
 
 gboolean dbus_glib_error (GError *error);
-gboolean dbus_get_system_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
-gboolean dbus_get_session_connection (DBusGConnection **connection) G_GNUC_WARNUNCHECKED;
-gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) G_GNUC_WARNUNCHECKED;
+gboolean dbus_get_system_connection (DBusGConnection **connection) __must_check;
+gboolean dbus_get_session_connection (DBusGConnection **connection) __must_check;
+gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) __must_check;
 
 #endif	/* _DBUSCOMMON_H */
 /** @} */
