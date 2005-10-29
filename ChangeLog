@@ -1,3 +1,13 @@
+2005-10-29  Richard Hughes  <richard@hughsie.com>
+
+	* gpm-notification.c (get_object_tooltip): Do not display 
+	"Unknown remaining" for missing remaining time.
+	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=320135
+
+	* src/icons/gnome-power-keyboard.png, 
+	src/icons/gnome-power-mouse.png: New icons from Diana Fong to convey
+	a low power USB mouse and keyboard. Many thanks!
+
 2005-10-27  Richard Hughes  <richard@hughsie.com>
 
 	* docs/www/report_bug.php, src/gpm-main.c (main): don't ask people to
