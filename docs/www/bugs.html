@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<!-- header -->
+<head>
+ <title>GNOME Power Manager</title>
+ <link rel="stylesheet" type="text/css" href="http://www.gnome.org/default.css" />
+ <link rel="stylesheet" type="text/css" href="default.css" />
+ <link rel="icon" type="image/png" href="images/favicon.ico" />
+</head>
+<!---->
+
+<body>
+
+<!-- menu -->
+<div id="hdr">
+ <a href="http://www.gnome.org/">
+  <img id="logo" src="http://gnome.org/img/logo/text-64" alt="Gnome" />
+ </a>
+ <div id="hdrNav">
+ <a href="index.html"><b>Home</b></a> &middot;
+ <a href="hal.html">HAL</a> &middot;
+ <a href="gpm.html">Notification Icon</a> &middot;
+ <a href="gpp.html">Preferences</a> &middot;
+ <a href="packages.html">Precompiled Packages</a> &middot;
+ <a href="faq.html">FAQ</a> &middot;
+ <a href="bugs.html">Reporting Bugs</a> &middot;
+ <a href="http://live.gnome.org/GnomePowerManager">Wiki</a>
+ </div>
+</div>
+<!---->
+
+<div id="body">
+<h2>Reporting Bugs</h2>
+<p>
+ First, please find the 
+ <a href="http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager">
+ list of bugs</a> so that you are sure the bug you are reporting isn't a 
+ duplicate bug that someone else has fixed.
+</p>
+<p>
+ If not present, then please 
+ <a href="http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-power-manager">
+ create a new bug</a> attaching <b>all</b> the information to this new bug.
+</p>
+<p>
+ Please <b>do not</b> email me bug reorts, as the volume of email I get is
+ already huge. Bugzilla lets me keep it all the information in one place,
+ so I don't loose track!
+</p>
+<h2>
+<a name="general_bugs"></a>General Bugs
+</h2>
+<p>
+ When GNOME Power Manager doesn't work, there is lots that could be wrong.
+ To help me diagnose the problem, please supply the following information:
+</p>
+<ul>
+<li>The version of GNOME Power Manager installed.</li>
+<li>The version of DBUS installed.</li>
+<li>The version of HAL installed.</li>
+<li>The kernel version installed.</li>
+<li>The raw ACPI data supplied by ACPI (if applicable).</li>
+<li>The installation method you used (i.e. FC4 RPM, tarball).</li>
+<li>Your distribution and version.</li>
+<li>The verbose trace from gnome-power-manager</li>
+<li>The verbose trace from hald</li>
+<li>Any other information that may be relevant.</li>
+</ul>
+l the information to this new bug.
+
+Please do not email me bug reorts, as the volume of email I get is already huge. Bugzilla lets me keep it all the information in one place, so I don't loose track!
+
+<h3>Raw ACPI Information</h3>
+<p>Do this as the root user.</p>
+<pre>
+for i in /proc/acpi/battery/*/*; do echo $i; cat $i; done
+</pre>
+
+<h3>GNOME Power Manager Verbose Trace</h3>
+<p>This will turn on verbose debugging for GNOME Power Manager.</p>
+<pre>
+gnome-power-manager --no-daemon --verbose
+</pre>
+
+<h3>HAL Verbose Trace</h3>
+<pre>/usr/sbin/hald --daemon=no --verbose=yes --retain-privileges</pre>
+
+</div>
+
+<!-- sidebar -->
+<div id="sidebar">
+ <p class="section">Downloads</p>
+ <p>GNOME Power Manager should come bundled with most modern distributions.</p>
+ <p>
+  The latest source releases can always be found at the 
+  <a href="https://sourceforge.net/project/showfiles.php?group_id=133929">
+  SourceForge site</a>.
+ </p>
+ <p>
+  Make sure to get <a href="http://www.freedesktop.org/Software/hal">
+  latest release of HAL</a>, the service that GNOME Power Manager depends on.
+ </p>
+ <br />
+ <p class="section">Feedback</p>
+ <p>
+  Bugs should be reported to the <a href="http://bugzilla.gnome.org">
+  GNOME Bug Tracking System</a>.
+ </p>
+ <p>
+  Please read the <a href="faq.html">FAQ</a> and the 
+  <a href="bugs.html">bug reporting guidelines</a> before creating a new bug.
+ </p>
+ <p>
+  You can get in touch with developers and other users by
+  <a href="mailto:gnome-power-devel@lists.sourceforge.net">sending a mail</a>
+  to the Power Manager 
+  <a href="http://lists.sourceforge.net/lists/listinfo/gnome-power-devel">
+  mailing list</a>
+  [<a href="http://sourceforge.net/mailarchive/forum.php?forum=gnome-power-devel">Archives</a>].
+ </p>
+</div>
+<!---->
+
+<!-- copyright -->
+<div id="copyright">
+ Copyright &copy; 2005, Richard Hughes.
+ <br />
+ <a href="http://validator.w3.org/check/referer">Optimized</a>
+ for <a href="http://www.w3.org/">standards</a>.
+ <br /><br />
+ <a href="http://sourceforge.net">
+ <img src="http://sourceforge.net/sflogo.php?group_id=133929&amp;type=5" 
+      width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+</div>
+<!---->
+
+</body>
+</html>

@@ -1,9 +1,37 @@
-<?php
-	include('./header.php');
-	include('./menu.php');
-?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<!-- header -->
+<head>
+ <title>GNOME Power Manager</title>
+ <link rel="stylesheet" type="text/css" href="http://www.gnome.org/default.css" />
+ <link rel="stylesheet" type="text/css" href="default.css" />
+ <link rel="icon" type="image/png" href="images/favicon.ico" />
+</head>
+<!---->
 
-<h2>Precompiled Files</h2>
+<body>
+
+<!-- menu -->
+<div id="hdr">
+ <a href="http://www.gnome.org/">
+  <img id="logo" src="http://gnome.org/img/logo/text-64" alt="Gnome" />
+ </a>
+ <div id="hdrNav">
+ <a href="index.html"><b>Home</b></a> &middot;
+ <a href="hal.html">HAL</a> &middot;
+ <a href="gpm.html">Notification Icon</a> &middot;
+ <a href="gpp.html">Preferences</a> &middot;
+ <a href="packages.html">Precompiled Packages</a> &middot;
+ <a href="faq.html">FAQ</a> &middot;
+ <a href="bugs.html">Reporting Bugs</a> &middot;
+ <a href="http://live.gnome.org/GnomePowerManager">Wiki</a>
+ </div>
+</div>
+<!---->
+
+<div id="body">
+<h2>Precompiled Packages</h2>
 <p>
  It is advisable to try the pre-compiled package for your distribution before you try to make GNOME Power Manager from source.
  If you want to add a link to a new distro, please drop me an email with the link.
@@ -133,14 +161,6 @@ export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
 cvs -z3 checkout gnome-power-manager
 </pre>
 
-<h3>jhbuild</h3>
-<p>
-If you want to use GNOME CVS, jhbuild can now build GNOME Power Manager using:
-</p>
-<pre>
-jhbuild build gnome-power-manager
-</pre>
-
 <h2>Compiling The Code</h2>
 <p>
 To compile and make, I use the following procedure:
@@ -160,61 +180,54 @@ NB: Your command for restarting dbus maybe different to the above.
 It may be easier to reboot your computer instead of restarting messagebus.
 </p>
 
-<hr/>
-<h3>Fedora Core 4 &amp; GNOME Power Manager CVS HOWTO</h3>
-<p>
-<b>THESE NOTES ARE UNFINISHED AND MAY NOT WORK</b>
-</p>
-<p>
-Install DBUS and HAL from Rawhide, and install libnotify, libnotify-devel and notification-daemon as detailed at the top of the page.
-You will have to also install standard GNOME build tools (if not already installed), and the other GNU automake type stuff.
-Start by opening a terminal and doing (as root):
-</p>
-   <p>
-    You can also install the rawhide versions of DBUS and HAL to satisfy the build requirements.
-    To run the rawhide DBUS and HAL on a normal FC4 install <b>you will have to pull in lots of dependancies</b> and lots of stuff <b>may not work</b> normally.
-    <b>Big flashing red disclaimers apply. Do not do this on a production machine.</b>
-   </p>
-<pre>
-yum -y --enablerepo=development update hal dbus
-yum -y --enablerepo=development install pm-utils
-</pre>
-<pre>
-# yum -y groupinstall "GNOME Software Development"
-# yum -y groupinstall "Development Tools"
-# yum -y install libwnck-devel
-# yum -y install gtk+-devel
-# yum -y --enablerepo=development install hal-devel
-</pre>
-<p>
-Now we will build gnome power manager (as a user account).
-</p>
-<pre>
-$ cd gnome-power-manager
-$ ./autogen.sh --prefix=/usr/local \
---enable-libnotify=auto \
---with-gconf-source=xml::/etc/gconf/gconf.xml.defaults \
---with-dbus-sys=/etc/dbus-1/system.d \
---with-dbus-services=/usr/share/dbus-1/services
-$ make
-</pre>
-<p>
-We are installing two files locally, the DBUS services and system.d files.
-We have to install locally so that messagebus picks up our .conf file to allow connections.
-Now, as root, we will install the programs, pixmaps and manpages into the /usr/local root.
-</p>
-<pre>
-# make install
-# /sbin/service messagebus restart
-</pre>
-<p>
-You should not have seen any arrors in the install. If you do, mail me and I'll update this HOWTO.
-Now we can run the compiled program!
-</p>
-<pre>
-$ /usr/local/bin/gnome-power-manager --verbose
-</pre>
+</div>
 
-<?php
-	include('./footer.php');
-?>
+<!-- sidebar -->
+<div id="sidebar">
+ <p class="section">Downloads</p>
+ <p>GNOME Power Manager should come bundled with most modern distributions.</p>
+ <p>
+  The latest source releases can always be found at the 
+  <a href="https://sourceforge.net/project/showfiles.php?group_id=133929">
+  SourceForge site</a>.
+ </p>
+ <p>
+  Make sure to get <a href="http://www.freedesktop.org/Software/hal">
+  latest release of HAL</a>, the service that GNOME Power Manager depends on.
+ </p>
+ <br />
+ <p class="section">Feedback</p>
+ <p>
+  Bugs should be reported to the <a href="http://bugzilla.gnome.org">
+  GNOME Bug Tracking System</a>.
+ </p>
+ <p>
+  Please read the <a href="faq.html">FAQ</a> and the 
+  <a href="bugs.html">bug reporting guidelines</a> before creating a new bug.
+ </p>
+ <p>
+  You can get in touch with developers and other users by
+  <a href="mailto:gnome-power-devel@lists.sourceforge.net">sending a mail</a>
+  to the Power Manager 
+  <a href="http://lists.sourceforge.net/lists/listinfo/gnome-power-devel">
+  mailing list</a>
+  [<a href="http://sourceforge.net/mailarchive/forum.php?forum=gnome-power-devel">Archives</a>].
+ </p>
+</div>
+<!---->
+
+<!-- copyright -->
+<div id="copyright">
+ Copyright &copy; 2005, Richard Hughes.
+ <br />
+ <a href="http://validator.w3.org/check/referer">Optimized</a>
+ for <a href="http://www.w3.org/">standards</a>.
+ <br /><br />
+ <a href="http://sourceforge.net">
+ <img src="http://sourceforge.net/sflogo.php?group_id=133929&amp;type=5" 
+      width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+</div>
+<!---->
+
+</body>
+</html>
