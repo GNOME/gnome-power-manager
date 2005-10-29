@@ -48,7 +48,8 @@
 
 /** Convenience function to call libnotify
  *
- *  @param	content		The content text, e.g. "Battery low"
+ *  @param	subject		The subject text, e.g. "Battery Low"
+ *  @param	content		The content text, e.g. "The battery has 15 minutes remaining"
  *  @param	urgency		The urgency, e.g NOTIFY_URGENCY_CRITICAL
  *  @param	point		The GtkWidget to point to. NULL is valid.
  *  @return			Success, if a notification is displayed.
@@ -57,7 +58,7 @@
  *		g_debug functions depending on the urgency.
  */
 gboolean
-libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
+libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
 #ifdef HAVE_LIBNOTIFY
 	NotifyHandle *n = NULL;
@@ -86,7 +87,7 @@ libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidg
 	n = notify_send_notification (NULL, /* replaces nothing */
 			   NULL,
 			   urgency,
-			   NICENAME, content,
+			   subject, content,
 			   icon, /* icon */
 			   TRUE, NOTIFY_TIMEOUT,
 			   hints, /* hints */

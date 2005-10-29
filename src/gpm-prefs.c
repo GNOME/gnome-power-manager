@@ -729,10 +729,9 @@ main (int argc, char **argv)
 	/* check if we have GNOME Screensaver, but have disabled dpms */
 	if (gscreensaver_is_running ())
 		if (!gconf_client_get_bool (client, GS_GCONF_ROOT "dpms_enabled", NULL)) {
-			libnotify_event ("You have not got DPMS support enabled"
+			g_warning ("You have not got DPMS support enabled"
 					 "in gnome-screensaver.\n"
-					 "GNOME Power Manager will enable it now.",
-					 LIBNOTIFY_URGENCY_NORMAL, NULL);
+					 "GNOME Power Manager will enable it now.");
 			gconf_client_set_bool (client, 
 				GS_GCONF_ROOT "dpms_enabled", TRUE, NULL);
 		}
@@ -756,8 +755,8 @@ main (int argc, char **argv)
 	 */
 	has_gpm_connection = gpm_is_on_ac (&a);
 	if (!has_gpm_connection)
-		libnotify_event ("Cannot connect to GNOME Power Manager.\n"
-			"Make sure that it is running", LIBNOTIFY_URGENCY_NORMAL, NULL);
+		g_warning ("Cannot connect to GNOME Power Manager.\n"
+			"Make sure that it is running");
 
 	/* Set the button callbacks */
 	widget = glade_xml_get_widget (prefwidgets, "button_close");

@@ -43,7 +43,7 @@ typedef enum {
 } LibNotifyEventType;
 
 gboolean libnotify_init (const gchar *nicename);
-gboolean libnotify_event (const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
+gboolean libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
 
 #endif	/* _GPMLIBNOTIFY_H */
 /** @} */

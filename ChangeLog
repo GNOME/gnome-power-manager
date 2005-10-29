@@ -1,3 +1,15 @@
+2005-10-29  Christopher Aillon  <caillon@redhat.com>
+
+	* src/gpm-libnotify.c:
+	* src/gpm-libnotify.h:
+	(libnotify_event) Add a new argument for setting the
+	primary text of a notify event, and use it for calls to
+	libnotify and its GtkMessageDialog fallback.
+
+	* src/gpm-main.c:
+	* src/gpm-prefs.c:
+	Send descriptive primary text with libnotify_event () calls.
+
 2005-10-29  Richard Hughes  <richard@hughsie.com>
 
 	* gpm-notification.c (get_object_tooltip): Do not display 

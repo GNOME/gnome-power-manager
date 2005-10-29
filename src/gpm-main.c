@@ -322,7 +322,8 @@ update_state_logic (GPtrArray *parray, gboolean coldplug)
 			/* only do notification if not coldplug */
 			if (!coldplug) {
 				if (policy == ACTION_WARNING)
-					libnotify_event (_("AC Adapter has been removed"),
+					libnotify_event (_("AC Power Unplugged"),
+						_("The AC Power has been unplugged.  The system is now using battery power."),
 						LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
 				else
 					action_policy_do (policy);
@@ -441,10 +442,9 @@ read_battery_data (GenericObject *slotData)
 	is_present = hal_device_get_int (slotData->udi,
 			"battery.remaining_time", &seconds_remaining);
 	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
-		libnotify_event ("GNOME Power Manager could not read your batteries remaining time.\n"
-				 "Please report this as a bug, providing the information <a href=\""
-				 "http://gnome-power.sourceforge.net/report_bug.php\">here</a>.",
-				 LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
+		g_warning ("GNOME Power Manager could not read your battery's remaining time.  "
+				 "Please report this as a bug, providing the information to: "
+				 "http://gnome-power.sourceforge.net/report_bug.php");
 	} else if (seconds_remaining > 0) {
 		/* we have to scale this to minutes */
 		slotData->minutesRemaining = seconds_remaining / 60;
@@ -454,10 +454,9 @@ read_battery_data (GenericObject *slotData)
 	is_present = hal_device_get_int (slotData->udi,
 			"battery.charge_level.percentage", &slotData->percentageCharge);
 	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
-		libnotify_event ("GNOME Power Manager could not read your batteries percentage charge.\n"
-				 "Please report this as a bug, providing the information <a href=\""
-				 "http://gnome-power.sourceforge.net/report_bug.php\">here</a>.",
-				 LIBNOTIFY_URGENCY_CRITICAL, get_notification_icon ());
+		g_warning ("GNOME Power Manager could not read your battery's percentage charge.  "
+				 "Please report this as a bug, providing the information to: "
+				 "http://gnome-power.sourceforge.net/report_bug.php");
 	}
 	return TRUE;
 }
@@ -648,9 +647,8 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	GConfClient *client = NULL;
 	gint lowThreshold;
 	gint criticalThreshold;
-	GString *gs = NULL;
+	gchar *message = NULL;
 	GString *remaining = NULL;
-	gchar *device = NULL;
 
 	/* assertion checks */
 	g_assert (slotData);
@@ -673,15 +671,14 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		g_debug ("battery is critical!");
 		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 		if (policy == ACTION_WARNING) {
-			device = convert_powerdevice_to_string (slotData->powerDevice);
 			remaining = get_time_string (slotData);
 			g_assert (remaining);
-			gs = g_string_new ("");
-			g_string_printf (gs, _("The %s (%i%%) is <b>critically low</b>\n(%s)"),
-				device, newCharge, remaining->str);
-			libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL,
+			message = g_strdup_printf (
+				_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
+				remaining->str, newCharge);
+			libnotify_event (_("Battery Critically Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
 				get_notification_icon ());
-			g_string_free (gs, TRUE);
+			g_free (message);
 			g_string_free (remaining, TRUE);
 		} else
 			action_policy_do (policy);
@@ -691,15 +688,14 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	/* low warning */
 	if (newCharge < lowThreshold) {
 		g_debug ("battery is low!");
-		device = convert_powerdevice_to_string (slotData->powerDevice);
 		remaining = get_time_string (slotData);
 		g_assert (remaining);
-		gs = g_string_new ("");
-		g_string_printf (gs, _("The %s (%i%%) is <b>low</b>\n(%s)"),
-			device, newCharge, remaining->str);
-		libnotify_event (gs->str, LIBNOTIFY_URGENCY_CRITICAL,
+		message = g_strdup_printf (
+			_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
+			remaining->str, newCharge);
+		libnotify_event (_("Battery Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
 			get_notification_icon ());
-		g_string_free (gs, TRUE);
+		g_free (message);
 		g_string_free (remaining, TRUE);
 		return TRUE;
 	}
@@ -783,7 +779,7 @@ hal_device_property_modified (const gchar *udi,
 		hal_device_get_int (udi, key, &slotData->percentageCharge);
 		/* give notification @100% */
 		if (slotData->percentageCharge == 100) {
-			libnotify_event (_("Your battery is now fully charged"),
+			libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
 					 get_notification_icon ());
 		}
@@ -847,28 +843,16 @@ hal_device_condition (const gchar *udi,
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_power");
-			if (policy == ACTION_WARNING)
-				libnotify_event (_("Power button has been pressed"),
-					LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
-			else
-				action_policy_do (policy);
+			action_policy_do (policy);
 		} else if (strcmp (type, "sleep") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
-			if (policy == ACTION_WARNING)
-				libnotify_event (_("Sleep button has been pressed"),
-					LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
-			else
-				action_policy_do (policy);
+			action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
 			/* we only do a lid event when the lid is OPENED */
 			hal_device_get_bool (udi, "button.state.value", &value);
 			if (value) {
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
-				if (policy == ACTION_WARNING)
-					libnotify_event (_("Lid has been opened"),
-						LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
-				else
-					action_policy_do (policy);
+				action_policy_do (policy);
 			}
 		} else
 			g_warning ("Button '%s' unrecognised", type);
@@ -902,15 +886,11 @@ void
 idle_callback (gint timeout)
 {
 	gint policy;
-	GString *gs;
 
-	gs = g_string_new ("");
-	g_string_printf (gs, _("Computer has been idle for %i minutes"), timeout);
 	policy = get_policy_string (GCONF_ROOT "policy/ac_fail");
-	libnotify_event (gs->str, LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
+
 	/* can only be hibernate or suspend */
 	action_policy_do (policy);
-	g_string_free (gs, TRUE);
 }
 
 /** Callback for the DBUS NameOwnerChanged function.
@@ -926,9 +906,8 @@ signalhandler_noc (const char *name, gboolean connected)
 		return;
 
 	if (!connected) {
-		libnotify_event (_("HAL has been disconnected!\n"
-			"GNOME Power Manager will now quit."),
-			LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		g_critical ("HAL has been disconnected!  GNOME Power Manager will now quit.");
+
 		/* for now, quit */
 		gpm_exit ();
 		return;
@@ -1027,15 +1006,13 @@ main (int argc, char *argv[])
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */
 	if (!is_hald_running ()) {
-		libnotify_event (_("GNOME Power Manager cannot connect to HAL!"),
-			LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		g_critical ("GNOME Power Manager cannot connect to HAL!");
 		exit (1);
 	}
 
 	/* check we have PM capability */
 	if (!hal_pm_check ()) {
-		libnotify_event (_("HAL does not have PowerManagement capability"),
-			LIBNOTIFY_URGENCY_CRITICAL, NULL);
+		g_critical ("HAL does not have PowerManagement capability");
 		exit (1);
 	}
 
