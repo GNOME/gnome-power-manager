@@ -84,7 +84,6 @@
 /* no need for IPC with globals */
 StateData state_data;
 GPtrArray *objectData = NULL;
-GPtrArray *registered = NULL;
 gboolean isVerbose;
 
 /** Gets policy from gconf
@@ -348,20 +347,12 @@ gpm_exit (void)
 	gint a;
 	g_debug ("Quitting!");
 
-	/* free objectData */
 	for (a=0;a<objectData->len;a++)
 		g_free (g_ptr_array_index (objectData, a));
 	g_ptr_array_free (objectData, TRUE);
 
-	/* free registered */
-	for (a=0;a<registered->len;a++)
-		g_free (g_ptr_array_index (registered, a));
-	g_ptr_array_free (registered, TRUE);
-
-	/* free glibhal callbacks */
 	glibhal_callback_shutdown ();
 
-	/* free icon */
 	gpn_icon_destroy ();
 	exit (0);
 }
@@ -1026,7 +1017,6 @@ main (int argc, char *argv[])
 	glibhal_method_noc (signalhandler_noc);
 
 	objectData = g_ptr_array_new ();
-	registered = g_ptr_array_new ();
 
 	/* sets up these devices in the objectData and adds watches */
 	coldplug_batteries ();

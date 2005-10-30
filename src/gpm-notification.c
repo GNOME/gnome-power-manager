@@ -54,19 +54,15 @@ GPtrArray *objectData;
 static gint
 get_index_from_percent (gint percent)
 {
-	gint num;
-	/* invalid input */
-	if (percent < 0)
+	const gint NUM_INDEX = 8;
+	gint index;
+
+	index = ((percent + NUM_INDEX/2) * NUM_INDEX ) / 100;
+	if (index < 0)
 		return 0;
-	if (percent > 100)
-		return 8;
-	/* work out value */
-	num = ((percent + 4) * 8 ) / 100;
-	if (num < 0)
-		return 0;
-	else if (num > 8)
-		return 8;
-	return num;
+	else if (index > NUM_INDEX)
+		return NUM_INDEX;
+	return index;
 }
 
 /** Gets an icon (pixbuf) suitable for the object
@@ -339,12 +335,13 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		action_policy_do (ACTION_HIBERNATE);
 	} else if (strcmp (action, "about") == 0) {
 		callback_about_activated ();
-	} else if (strcmp (action, "system") == 0) {
-		/* launch info */
+	} else if (strcmp (action, "info") == 0) {
 		run_bin_program ("gnome-power-info");
 	} else if (strcmp (action, "preferences") == 0) {
-		/* launch preferences */
 		run_bin_program ("gnome-power-preferences");
+	} else if (strcmp (action, "help") == 0) {
+		/* for now, show website */
+		gnome_url_show (GPMURL, NULL);
 	} else
 		g_warning ("No handler for '%s'", action);
 }
@@ -393,7 +390,7 @@ menu_add_action_item (GtkWidget *menu,
 		g_error ("Cannot find menu pixmap %s", icon);
 	/* set image */
 	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-	item = gtk_image_menu_item_new_with_label (name);
+	item = gtk_image_menu_item_new_with_mnemonic (name);
 
 	/* set action data */
 	g_object_set_data ((GObject*) item, "action", (gpointer) type);
@@ -418,32 +415,29 @@ menu_main_create (TrayData *trayicon)
 {
 	GtkWidget *item = NULL;
 
-	/* assertion checks */
 	g_assert (trayicon);
 	g_assert (trayicon->popup_menu == NULL);
 
 	trayicon->popup_menu = gtk_menu_new ();
 
-	/* add Preferences */
-	/**  @bug	stock_preferences doesn't exist! */
-	menu_add_action_item (trayicon->popup_menu, "stock-properties",
-			      _("Preferences"), "preferences");
-	/* add About */
-	menu_add_action_item (trayicon->popup_menu, "stock_about",
-			      _("About"), "about");
-	/* add System */
-	menu_add_action_item (trayicon->popup_menu, "stock_notebook",
-			      _("System"), "system");
-	/* add seporator */
+	menu_add_action_item (trayicon->popup_menu, "gnome-dev-memory",
+			      _("_Suspend"), "suspend");
+	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
+			      _("Hi_bernate"), "hibernate");
+
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (trayicon->popup_menu), item);
+	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_DIALOG_INFO,
+			      _("Po_wer Info"), "info");
+
+	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_PREFERENCES,
+			      _("_Preferences"), "preferences");
+	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_HELP,
+			      _("_Help"), "help");
+	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_ABOUT,
+			      _("_About"), "about");
 	gtk_widget_show (item);
 
-	/* add the actions */
-	menu_add_action_item (trayicon->popup_menu, "gnome-suspend",
-			      _("Suspend"), "suspend");
-	menu_add_action_item (eggtrayicon->popup_menu, "gnome-hibernate",
-			      _("Hibernate"), "hibernate");
 	return TRUE;
 }
 
@@ -521,10 +515,15 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 	/* assertion checks */
 	g_assert (traydata);
 
-	g_debug ("button : %i", event->button);
 	if (!traydata || !(traydata->popup_menu))
 		return TRUE;
-	if (event->button == 3) {
+
+	if (event->type == GDK_2BUTTON_PRESS)
+	{
+		run_bin_program ("gnome-power-preferences");
+		return TRUE;
+	}
+	else if (event->button == 3) {
 		gtk_menu_popup (GTK_MENU (traydata->popup_menu), NULL, NULL,
 			tray_popup_position_menu, widget, event->button, event->time);
 		return TRUE;
@@ -540,7 +539,6 @@ icon_create (void)
 {
 	GtkWidget *evbox = NULL;
 
-	/* assertion checks */
 	g_assert (!eggtrayicon);
 
 	/* create new tray object */
