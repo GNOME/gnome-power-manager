@@ -884,9 +884,9 @@ main (int argc, char **argv)
 
 	/* set themed battery and ac_adapter icons */
 	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");
-	gpm_set_icon_with_theme (widget, "gnome-dev-battery", 48);
+	gtk_image_set_from_icon_name (GTK_IMAGE(widget), "gnome-dev-battery", GTK_ICON_SIZE_DIALOG);
 	widget = glade_xml_get_widget (prefwidgets, "image_side_acadapter");
-	gpm_set_icon_with_theme (widget, "gnome-fs-socket", 48);
+	gtk_image_set_from_icon_name (GTK_IMAGE(widget), "gnome-fs-socket", GTK_ICON_SIZE_DIALOG);
 
 	/* main loop */
 	gtk_main ();
