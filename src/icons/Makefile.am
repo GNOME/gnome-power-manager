@@ -5,7 +5,8 @@ Datadir = $(datadir)/gnome-power-manager/
 #Datadir = $(datadir)/icons/hicolor/22x22/apps ?
 
 Data_DATA =						\
-	desktop-force.png				\
+	gnome-dev-acadapter.png				\
+	gnome-power.png						\
 	gnome-power-bat-0-of-8.png			\
 	gnome-power-bat-1-of-8.png			\
 	gnome-power-bat-2-of-8.png			\
