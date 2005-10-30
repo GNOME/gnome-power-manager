@@ -363,8 +363,8 @@ get_notification_icon (void)
 /** Function to set callbacks, and to get icons.
  *
  *  @param	menu		The menu
- *  @param	icon		The stock id of the icon
- *  @param	name		The text title
+ *  @param	icon_name	The stock id of the icon
+ *  @param	menu_label	The text title
  *  @param	action		The action to perform, e.g. hibernate
  */
 static void

@@ -439,7 +439,7 @@ read_battery_data (GenericObject *slotData)
 	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's remaining time.  "
 				 "Please report this as a bug, providing the information to: "
-				 "http://gnome-power.sourceforge.net/report_bug.php");
+				 GPMURL);
 	} else if (seconds_remaining > 0) {
 		/* we have to scale this to minutes */
 		slotData->minutesRemaining = seconds_remaining / 60;
@@ -451,7 +451,7 @@ read_battery_data (GenericObject *slotData)
 	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's percentage charge.  "
 				 "Please report this as a bug, providing the information to: "
-				 "http://gnome-power.sourceforge.net/report_bug.php");
+				 GPMURL);
 	}
 	return TRUE;
 }
