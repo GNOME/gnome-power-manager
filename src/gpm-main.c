@@ -80,6 +80,8 @@
 #include "glibhal-callback.h"
 #include "glibhal-extras.h"
 #include "gnome-power-glue.h"
+#include "gpm-stock-icons.h"
+
 
 /* no need for IPC with globals */
 StateData state_data;
@@ -352,6 +354,8 @@ gpm_exit (void)
 	g_ptr_array_free (objectData, TRUE);
 
 	glibhal_callback_shutdown ();
+
+	gpm_stock_icons_shutdown ();
 
 	gpn_icon_destroy ();
 	exit (0);
@@ -984,6 +988,8 @@ main (int argc, char *argv[])
 	/* Initialise libnotify, if compiled in. */
 	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
+
+	gpm_stock_icons_init();
 
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));

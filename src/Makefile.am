@@ -1,4 +1,4 @@
-SUBDIRS = pixmaps icons
+SUBDIRS = icons
 
 pkgdata_DATA =						\
 	gpm-info.glade					\
@@ -102,7 +102,9 @@ gnome_power_manager_SOURCES =				\
 	gpm-notification.h				\
 	gpm-notification.c				\
 	gpm-main.h					\
-	gpm-main.c			
+	gpm-main.c					\
+	gpm-stock-icons.h				\
+	gpm-stock-icons.c
 
 if HAVE_LIBNOTIFY
 gnome_power_manager_LDADD =				\

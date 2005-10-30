@@ -39,6 +39,7 @@
 #include "gpm-main.h"
 #include "gpm-notification.h"
 #include "gpm-libnotify.h"
+#include "gpm-stock-icons.h"
 #include "compiler.h"
 
 /* shared with gpm-main.c */
@@ -362,38 +363,30 @@ get_notification_icon (void)
 /** Function to set callbacks, and to get icons.
  *
  *  @param	menu		The menu
- *  @param	icon		The icon filename (no .png)
+ *  @param	icon		The stock id of the icon
  *  @param	name		The text title
- *  @param	type		The type of menu item, e.g. hibernate
- *
- *  @todo	Need to work out why there is not stock_preferences
+ *  @param	action		The action to perform, e.g. hibernate
  */
 static void
 menu_add_action_item (GtkWidget *menu,
-	const gchar *icon,
-	const gchar *name,
-	const gchar *type)
+	const gchar *icon_name,
+	const gchar *menu_label,
+	const gchar *action)
 {
-	/* get image */
-	GtkWidget *item = NULL;
-	GtkWidget *image = NULL;
-	GdkPixbuf *pixbuf = NULL;
+	GtkWidget *item;
+	GtkWidget *image;
 
 	/* assertion checks */
 	g_assert (menu);
-	g_assert (icon);
-	g_assert (name);
-	g_assert (type);
+	g_assert (icon_name);
+	g_assert (menu_label);
+	g_assert (action);
 
-	image = gtk_image_new ();
-	if (!gpm_icon_theme_fallback (&pixbuf, icon, 16))
-		g_error ("Cannot find menu pixmap %s", icon);
-	/* set image */
-	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-	item = gtk_image_menu_item_new_with_mnemonic (name);
+	image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+	item = gtk_image_menu_item_new_with_mnemonic (menu_label);
 
 	/* set action data */
-	g_object_set_data ((GObject*) item, "action", (gpointer) type);
+	g_object_set_data ((GObject*) item, "action", (gpointer) action);
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
 
 	/* connect to the callback */
@@ -551,8 +544,7 @@ icon_create (void)
 	eggtrayicon->tray_icon_tooltip = gtk_tooltips_new ();
 	eggtrayicon->popup_menu = NULL;
 
-	/* will produce a broken image.. */
-	eggtrayicon->image = gtk_image_new_from_file ("");
+	eggtrayicon->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER, GTK_ICON_SIZE_SMALL_TOOLBAR);
 	g_signal_connect (G_OBJECT (evbox), "button_press_event", 
 			  G_CALLBACK (tray_icon_press), (gpointer) eggtrayicon);
 	g_signal_connect (G_OBJECT (evbox), "button_release_event", 

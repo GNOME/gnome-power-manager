@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gnome-power-manager, 0.2.8.2)
+AC_INIT(gnome-power-manager, 0.2.9)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -138,7 +138,6 @@ AM_CONDITIONAL(HAVE_DOCBOOK2MAN, [test "$DOCBOOK2MAN" != "no"])
 AC_OUTPUT([
 Makefile
 src/Makefile
-src/pixmaps/Makefile
 src/icons/Makefile
 docs/Makefile
 docs/Doxyfile

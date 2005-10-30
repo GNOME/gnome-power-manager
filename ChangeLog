@@ -2,11 +2,24 @@
 
 	* Configure.in: Default to off for doxygen documentation as most users
 	do not need these (and this saves us time for each compile).
+	Also bump to 0.2.9, as we are introducing new functionality.
 
-	* gpm-notification.c: Fix up the menu to be more in line with 
+	* src/gpm-notification.c: Fix up the menu to be more in line with 
 	GNOME HIG. Thanks to Jaap Haitsma <jaap@haitsma.org> for the patch.
 
-	* gpm-main.c: remove the last bits of the "registered" gslist.
+	* src/gpm-main.c: remove the last bits of the "registered" gslist.
+
+	* src/gpm-prefs.c: Use gtk_image_set_from_icon_name rather than
+	our inbuilt functions.
+
+	* src/gpm-stock-icons.{c|h}: This is the start for generic stock
+	icons functionality. At the moment it just adds the ac_adapter icon,
+	but it's expected to work for all the other icons too.
+	Initial patch by Jaap Haitsma.
+
+	* src/icons/: Move gnome-dev-acadapter.png and gnome-power.png here.
+
+	* src/pixmaps/: Remove this directory as it is now not required.
 
 2005-10-29  Christopher Aillon  <caillon@redhat.com>
 
