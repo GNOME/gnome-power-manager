@@ -8,6 +8,8 @@
 	GNOME HIG. Thanks to Jaap Haitsma <jaap@haitsma.org> for the patch.
 
 	* src/gpm-main.c: remove the last bits of the "registered" gslist.
+	Also invalidate the remaining time on battery.rechargeable.is_charging
+	as we need to wait for the next HAL update. This is a HAL bug I think.
 
 	* src/gpm-prefs.c: Use gtk_image_set_from_icon_name rather than
 	our inbuilt functions.

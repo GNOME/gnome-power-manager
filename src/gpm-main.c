@@ -766,9 +766,16 @@ hal_device_property_modified (const gchar *udi,
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_device_get_bool (udi, key, &slotData->isCharging);
+		/*
+		 * invalidate the remaining time, as we need to wait for
+		 * the next HAL update. This is a HAL bug I think.
+		 */
+		slotData->minutesRemaining = 0;
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		hal_device_get_bool (udi, key, &slotData->isDischarging);
+		/* invalidate the remaining time */
+		slotData->minutesRemaining = 0;
 		updateState = TRUE;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_device_get_int (udi, key, &slotData->percentageCharge);
