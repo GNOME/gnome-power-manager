@@ -33,7 +33,8 @@
 <div id="body">
 <h2>Precompiled Packages</h2>
 <p>
- It is advisable to try the pre-compiled package for your distribution before you try to make GNOME Power Manager from source.
+ It is advisable to try the pre-compiled package for your distribution before
+ you try to make GNOME Power Manager from source.
  If you want to add a link to a new distro, please drop me an email with the link.
 </p>
 <table>
@@ -44,7 +45,8 @@
     YUM Repo by me for <a href="data/utopia.repo">Fedora Core 4</a>
    </p>
    <p>
-    It is recommended that you use the new (and lightly tested) YUM repo - just copy <a href="data/utopia.repo">this file</a> to <b>/etc/yum.repos.d/</b>:
+    It is recommended that you use my yum repo - just copy 
+    <a href="data/utopia.repo">this file</a> to <b>/etc/yum.repos.d/</b>:
     And do:
    </p>
 <pre>
@@ -59,8 +61,10 @@ yum -y install gnome-power-manager
 yum -y upgrade evince
 </pre>
    <p>
-    The rawhide kernel is often more current than the FC4 updates kernel, and has many ACPI bugfixes not present in updates-released.
-    To run the rawhide kernel on a normal FC4 install <b>you will have to pull in *lots* of system dependancies</b> and these may break a standard FC4 install.
+    The rawhide kernel is often more current than the FC4 updates kernel, and
+    has many ACPI bugfixes not present in updates-released.
+    To run the rawhide kernel on a normal FC4 install <b>you will have to pull
+    in *lots* of system dependancies</b> and these may break a standard FC4 install.
     To do this, optionally do:
    </p>
 <pre>
@@ -68,7 +72,8 @@ yum -y --enablerepo=development update kernel
 </pre>
    <p>
     Also, the current FC4 updates-release kernel, 2.6.12-1.1447_FC4 is *really* broken for ACPI.
-    Either use an older kernel, or use the rawhide one. See the bugzilla <a href="https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=167281">here</a>.
+    Either use an older kernel, or use the rawhide one. See the bugzilla 
+    <a href="https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=167281">here</a>.
    </p>
   </td>
  </tr>
@@ -76,7 +81,8 @@ yum -y --enablerepo=development update kernel
   <td valign="top"><img src="images/icon-ubuntu.png" alt="[img]"/></td>
   <td>
    <p>
-    Packages by Oliver Grawert for <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a>
+    Packages by Oliver Grawert for 
+    <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a>
    </p>
    <pre>apt-get -y install gnome-power-manager libnotify notification-daemon</pre>
   </td>
@@ -85,7 +91,8 @@ yum -y --enablerepo=development update kernel
   <td valign="top"><img src="images/icon-forsight.png" alt="[img]"/></td>
   <td>
    <p>
-    Package by Ken Vandine for <a href="http://www.foresightlinux.com/downloads/">Forsight Linux</a>
+    Package by Ken Vandine for 
+    <a href="http://www.foresightlinux.com/downloads/">Forsight Linux</a>
    </p>
   </td>
  </tr>
@@ -96,8 +103,9 @@ yum -y --enablerepo=development update kernel
     Package by James Ogley for <a href="http://www.novell.com/linux/suse/">SUSE Linux</a>
    </p>
    <p>
-    To use this APT repo, please follow the instructions on the <a href="http://usr-local-bin.org/rpms/usr-local-bin.php">usr-local-bin.org</a> website.
-    Then you can use the following command:
+    To use this APT repo, please follow the instructions on the 
+    <a href="http://usr-local-bin.org/rpms/usr-local-bin.php">usr-local-bin.org</a>
+    website. Then you can use the following commands:
    </p>
 <pre>
 apt-get update
@@ -121,8 +129,8 @@ libtool: link: cannot find the library `/usr/lib/libgobject-2.0.la'
    <p>
     GNOME Power Manager uses pkgconfig (like most open-source projects, but Arch Linux has a bug
     where libnotify.la references other files.
-    The .la files are soon to be removed from Arch Linux, and if you manually delete the file libnotify.la,
-    the tarball will compile. Bug found by Eugenia Loli-Queru.
+    The .la files are soon to be removed from Arch Linux, and if you manually 
+    delete the file libnotify.la, the tarball will compile.
    </p>
   </td>
  </tr>
@@ -130,7 +138,8 @@ libtool: link: cannot find the library `/usr/lib/libgobject-2.0.la'
   <td valign="top"><img src="images/icon-gentoo.png" alt="[img]"/></td>
   <td>
    <p>
-    ebuild by Steev Klimaszewski for <a href="http://gentopia.gentooexperimental.org/">Gentoo Linux</a>
+    ebuild by Steev Klimaszewski for 
+    <a href="http://gentopia.gentooexperimental.org/">Gentoo Linux</a>
    </p>
 <pre>
 emerge subversion
@@ -154,7 +163,8 @@ The latest 'stable' tarballs can be found at <a href="https://sourceforge.net/pr
 
 <h3>CVS</h3>
 <p>
-You can check out the latest GNOME Power Manager code using CVS. You can use the <a href="http://cvs.gnome.org/viewcvs/gnome-power-manager/">viewcvs</a> interface too.
+ You can check out the latest GNOME Power Manager code using CVS. You can use the
+ <a href="http://cvs.gnome.org/viewcvs/gnome-power-manager/">viewcvs</a> interface too.
 </p>
 <pre>
 export CVSROOT=":pserver:anonymous@anoncvs.gnome.org:/cvs/gnome"
