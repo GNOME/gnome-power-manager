@@ -25,7 +25,7 @@ AC_SUBST(BINDIR, $bindir)
 AC_SUBST(SBINDIR, $sbindir)
 
 AC_ARG_ENABLE(libnotify,          [  --enable-libnotify      build with libnotify support],enable_libnotify=$enableval,enable_libnotify=auto)
-AC_ARG_ENABLE(doxygen-docs,       [  --enable-doxygen-docs   build DOXYGEN documentation (requires Doxygen)],enable_doxygen_docs=$enableval,enable_doxygen_docs=auto)
+AC_ARG_ENABLE(doxygen-docs,       [  --enable-doxygen-docs   build DOXYGEN documentation (requires Doxygen)],enable_doxygen_docs=$enableval,enable_doxygen_docs=no)
 AC_ARG_WITH(dbus-sys,             [  --with-dbus-sys=<dir>   where D-BUS system.d directory is])
 AC_ARG_WITH(dbus-services,        [  --with-dbus-services=<dir>   where D-BUS services directory is])
 
