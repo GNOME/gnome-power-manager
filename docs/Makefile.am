@@ -1,3 +1,5 @@
+SUBDIRS = man
+
 EXTRA_DIST = \
 	Doxyfile		\
 	Doxyfile.in		\

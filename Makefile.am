@@ -17,13 +17,6 @@ servicedir       = $(DBUS_SERVICES_DIR)
 service_in_files = gnome-power-manager.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
 
-if HAVE_DOCBOOK2MAN
-man_MANS =						\
-	gnome-power-manager.1				\
-	gnome-power-preferences.1			\
-	gnome-power-info.1
-endif
-
 $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
@@ -38,10 +31,7 @@ EXTRA_DIST =						\
 	$(dbusconf_DATA)				\
 	intltool-extract.in				\
 	intltool-merge.in				\
-	intltool-update.in				\
-	gnome-power-manager.sgml			\
-	gnome-power-preferences.sgml			\
-	gnome-power-info.sgml
+	intltool-update.in
 
 install-data-local:
 	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
@@ -49,19 +39,6 @@ install-data-local:
 
 clean-local :
 	rm -f *~
-	rm -f *.1
-	rm -f manpage.*
-
-if HAVE_DOCBOOK2MAN
-gnome-power-manager.1: gnome-power-manager.sgml
-	docbook2man $? > $@
-
-gnome-power-preferences.1: gnome-power-preferences.sgml
-	docbook2man $? > $@
-
-gnome-power-info.1: gnome-power-info.sgml
-	docbook2man $? > $@
-endif
 
 DISTCLEANFILES =					\
 	intltool-extract				\
