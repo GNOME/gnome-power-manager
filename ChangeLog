@@ -1,12 +1,18 @@
-2005-10-30  Dennis Cranston  <dennis_cranston@yahoo.com>
+2005-10-31  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Spring clean this file so it's readable.
+
+	* gnome-power-manager.spec.in: Use the dep values from autoconf.
+
+2005-10-31  Dennis Cranston  <dennis_cranston@yahoo.com>
 
 	* src/gpm-prefs.glade:  GNOME HIG fixes (spacing, mnemonics,
 	and capitalization)
 
 2005-10-31  Richard Hughes  <richard@hughsie.com>
 
-	* Disable GNOME_RESTART_IMMEDIATELY as a couple of users are getting
-	constant crashes that they can't kill.
+	* src/gpm-main.c (main): Disable GNOME_RESTART_IMMEDIATELY as a couple
+	of users are getting constant crashes that they can't kill.
 
 2005-10-30  Richard Hughes  <richard@hughsie.com>
 
