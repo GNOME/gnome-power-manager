@@ -987,7 +987,8 @@ main (int argc, char *argv[])
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
-		gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);
+		/* We'll disable this as users are getting constant crashes */
+		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
 		gnome_client_flush (master);
 	}
 	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
