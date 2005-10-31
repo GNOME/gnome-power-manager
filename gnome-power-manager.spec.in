@@ -6,18 +6,22 @@ License: GPL
 Group: Applications/System
 Source: gnome-power-manager-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-URL: http://gnome.org/projects/gnome-power-manager/
-BuildPrereq: libgnomeui-devel
-BuildPrereq: libglade2-devel
-BuildPrereq: libwnck-devel
-BuildPrereq: hal-devel >= 0.5.4
-BuildPrereq: dbus-devel >= 0.50
+URL: http://www.gnome.org/projects/gnome-power-manager/
+BuildPrereq: gtk2-devel >= @GTK_REQUIRED@
+BuildPrereq: libgnomeui-devel >= @LIBGNOMEUI_REQUIRED@
+BuildPrereq: libglade2-devel >= @LIBGLADE_REQUIRED@
+BuildPrereq: libwnck-devel >= @LIBWNCK_REQUIRED@
+BuildPrereq: hal-devel >= @HAL_REQUIRED@
+BuildPrereq: dbus-devel >= @DBUS_REQUIRED@
+Requires: gtk2 >= @GTK_REQUIRED@
 Requires: gnome-mime-data
 Requires: gnome-icon-theme
-Requires: libnotify >= 0.2.2
-Requires: notification-daemon >= 0.2.2
-Requires: hal >= 0.5.4
-Requires: dbus-glib >= 0.50
+Requires: libglade2 >= @LIBGLADE_REQUIRED@
+Requires: libwnck >= @LIBWNCK_REQUIRED@
+Requires: hal >= @HAL_REQUIRED@
+Requires: dbus-glib >= @DBUS_REQUIRED@
+Requires: libnotify >= @LIBNOTIFY_REQUIRED@
+Requires: notification-daemon >= @LIBNOTIFY_REQUIRED@
 
 %description
 GNOME Power Manager uses the information and facilities provided by HAL 
@@ -81,6 +85,9 @@ killall -HUP gconfd-2 || :
 %{_sysconfdir}/gconf/schemas/*.schemas
 
 %changelog
+* Fri Oct 31 2005 Richard Hughes <richard@hughsie.com> 0.2.9.1-1
+- New spec file with dep values got from autoconf.
+
 * Fri Sep 02 2005 David Zeuthen <davidz@redhat.com> 0.2.3.1-1
 - Initial import based on an SRPM from Richard Hughes
 
