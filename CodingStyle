@@ -1,1 +1,42 @@
-indent -kr -i8 -pcs -lps -psl *.c
+== Indent ==
+
+As with most GNOME projects, use "indent -kr -i8 -pcs -lps -psl *.c" to convert to "mostly correct" indenting levels.
+
+== Tabs ==
+
+Tabs are the size of 8 spaces, and should be used in preference to spaces.
+Overlong lines:
+
+Functions that are two long for one line are intented with tabs and then spaces to the start of the bracket:
+
+libnotify_event ("HAL does not have PowerManagement capability",
+		 LIBNOTIFY_URGENCY_CRITICAL, NULL);
+
+Or with a single tab (one deeper than 1st level) if not possible:
+
+iinfo = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), 
+		name, size, GTK_ICON_LOOKUP_USE_BUILTIN);
+
+== Braces ==
+
+Functions have curly brace on same line:
+
+if (!true) {
+	g_warning ("Cannot find icon");
+	return FALSE;
+}
+
+Braces ommitted for single line:
+
+if (!true)
+	g_warning ("Cannot find icon");
+
+== Doxygen ==
+
+Please use full Doxygen markup with the following tab structure:
+
+/** glib libhal replacement to get boolean type
+ *
+ *  @param	key		The key to query
+ *  @return			TRUE for success, FALSE for failure
+ */
