@@ -643,7 +643,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	gint lowThreshold;
 	gint criticalThreshold;
 	gchar *message = NULL;
-	GString *remaining = NULL;
+	gchar *remaining = NULL;
 
 	/* assertion checks */
 	g_assert (slotData);
@@ -670,11 +670,11 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 			g_assert (remaining);
 			message = g_strdup_printf (
 				_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
-				remaining->str, newCharge);
+				remaining, newCharge);
 			libnotify_event (_("Battery Critically Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
 				get_notification_icon ());
 			g_free (message);
-			g_string_free (remaining, TRUE);
+			g_free (remaining);
 		} else
 			action_policy_do (policy);
 		return TRUE;
@@ -687,11 +687,11 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		g_assert (remaining);
 		message = g_strdup_printf (
 			_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
-			remaining->str, newCharge);
+			remaining, newCharge);
 		libnotify_event (_("Battery Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
 			get_notification_icon ());
 		g_free (message);
-		g_string_free (remaining, TRUE);
+		g_free (remaining);
 		return TRUE;
 	}
 	return FALSE;

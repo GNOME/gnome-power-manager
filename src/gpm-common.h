@@ -102,11 +102,11 @@ ActionType convert_string_to_policy (const gchar *gconfstring);
 PowerDevice convert_haltype_to_powerdevice (const gchar *type);
 gchar *convert_policy_to_string (gint value);
 
-GString *get_timestring_from_minutes (gint minutes);
+gchar *get_timestring_from_minutes (gint minutes);
 gchar *convert_powerdevice_to_string (gint powerDevice);
 gchar *get_chargestate_string (GenericObject *slotData);
 void create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice);
-GString *get_time_string (GenericObject *slotData);
+gchar *get_time_string (GenericObject *slotData);
 gboolean run_gconf_script (const char *path);
 gboolean run_bin_program (const gchar *program);
 

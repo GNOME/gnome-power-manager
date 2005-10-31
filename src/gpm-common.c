@@ -262,10 +262,11 @@ run_gconf_script (const char *path)
  *  @param	slotData	the GenericObject reference
  *  @return			the timestring, e.g. "13 minutes until charged"
  */
-GString *
+gchar *
 get_time_string (GenericObject *slotData)
 {
-	GString* timestring = NULL;
+	gchar* timestring = NULL;
+	gchar* retval = NULL;
 
 	/* assertion checks */
 	g_assert (slotData);
@@ -274,11 +275,13 @@ get_time_string (GenericObject *slotData)
 	if (!timestring)
 		return NULL;
 	if (slotData->isCharging)
-		timestring = g_string_append (timestring, _(" until charged"));
+		retval = g_strdup_printf ("%s %s", timestring, _("until charged"));
 	else
-		timestring = g_string_append (timestring, _(" remaining"));
+		retval = g_strdup_printf ("%s %s", timestring, _("remaining"));
 
-	return timestring;
+	g_free (timestring);
+
+	return retval;
 }
 
 /** Returns a virtual device that takes into account having more than one device
@@ -482,37 +485,35 @@ get_chargestate_string (GenericObject *slotData)
  *
  *  @note	minutes == 0 is returned as "Unknown"
  */
-GString *
+gchar *
 get_timestring_from_minutes (gint minutes)
 {
-	GString* timestring = NULL;
+	gchar* timestring = NULL;
 	gint hours;
 
-	timestring = g_string_new ("");
 	if (minutes == 0)
-		g_string_printf (timestring, _("Unknown"));
+		timestring = g_strdup_printf (_("Unknown"));
 	else if (minutes == 1)
-		g_string_printf (timestring, _("1 minute"));
+		timestring = g_strdup_printf (_("1 minute"));
 	else if (minutes < 60)
-		g_string_printf (timestring, _("%i minutes"), minutes);
+		timestring = g_strdup_printf (_("%i minutes"), minutes);
 	else {
 		hours = minutes / 60;
-		minutes = minutes - (hours * 60);
+		minutes = minutes % 60;
 		if (minutes == 0) {
 			if (hours == 1)
-				g_string_printf (timestring, _("1 hour"));
+				timestring = g_strdup_printf (_("1 hour"));
 			else
-				g_string_printf (timestring, _("%i hours"), hours);
+				timestring = g_strdup_printf (_("%i hours"), hours);
+		} else if (minutes == 1) {
+			if (hours == 1)
+				timestring = g_strdup_printf (_("1 hour, 1 minute"));
+			else
+				timestring = g_strdup_printf (_("%i hours, 1 minute"), hours);
+		} else if (hours == 1) {
+			timestring = g_strdup_printf (_("1 hour, %i minutes"), minutes);
 		} else {
-			if (hours == 1) {
-				if (minutes == 1)
-					g_string_printf (timestring, _("1 hour 1 minute"));
-				else
-					g_string_printf (timestring,
-					_("1 hour %i minutes"), minutes);
-			} else
-				g_string_printf (timestring,
-					_("%i hours %i minutes"), hours, minutes);
+			timestring = g_strdup_printf (_("%i hours, %i minutes"), hours, minutes);
 		}
 	}
 	return timestring;

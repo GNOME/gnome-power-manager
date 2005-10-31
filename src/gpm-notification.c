@@ -155,8 +155,8 @@ gpn_icon_destroy (void)
 GString *
 get_object_tooltip (GenericObject *slotData)
 {
-	GString *remaining = NULL;
 	GString *tooltip = NULL;
+	gchar *remaining = NULL;
 	gchar *devicestr = NULL;
 	gchar *chargestate = NULL;
 
@@ -178,8 +178,8 @@ get_object_tooltip (GenericObject *slotData)
 			 */
 			if (slotData->minutesRemaining > 2 && slotData->percentageCharge < 99) {
 				remaining = get_time_string (slotData);
-				g_string_append_printf (tooltip, "\n%s", remaining->str);
-				g_string_free (remaining, TRUE);
+				g_string_append_printf (tooltip, "\n%s", remaining);
+				g_free (remaining);
 			}
 		} else {
 			g_string_printf (tooltip, "%s %s", 

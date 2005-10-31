@@ -253,18 +253,19 @@ get_battery_time_for_percentage (gint value)
 static void
 set_estimated_label_widget (GtkWidget *widget, gint value)
 {
-	GString *timestring;
+	gchar *timestring;
+	gchar *estimated;
 
 	/* assertion checks */
 	g_assert (widget);
 
 	if (value > 1) {
 		timestring = get_timestring_from_minutes (value);
-		g_string_prepend (timestring, "<i>Estimated ");
-		g_string_append (timestring, "</i>");
+		estimated = g_strdup_printf ("<i>Estimated %s</i>", timestring);
 		gtk_widget_show_all (GTK_WIDGET (widget));
-		gtk_label_set_markup (GTK_LABEL (widget), timestring->str);
-		g_string_free (timestring, TRUE);
+		gtk_label_set_markup (GTK_LABEL (widget), estimated);
+		g_free (timestring);
+		g_free (estimated);
 	} else {
 		/* hide if no valid number */
 		gtk_widget_hide_all (GTK_WIDGET (widget));
@@ -500,16 +501,10 @@ format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
 static gchar*
 format_value_callback_time (GtkScale *scale, gdouble value)
 {
-	gchar unitstring[32];
-	GString *strvalue = NULL;
-
 	if ((gint) value == 0)
-		return g_strdup_printf ("Never");
+		return g_strdup ("Never");
 
-	strvalue = get_timestring_from_minutes (value);
-	strcpy (unitstring, strvalue->str);
-	g_string_free (strvalue, TRUE);
-	return g_strdup_printf ("%s", unitstring);
+	return get_timestring_from_minutes (value);
 }
 
 /** Sets the hscales up to the gconf value, and sets up callbacks.
