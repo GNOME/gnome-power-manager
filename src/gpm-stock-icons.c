@@ -63,7 +63,7 @@ gpm_stock_icons_init (void)
 		GdkPixbuf *pixbuf;
 		char *file_name;
 
-		file_name = g_strconcat (GPM_DATA, items[i], ".svg", NULL);
+		file_name = g_strconcat (GPM_DATA, items[i], ".png", NULL);
 		pixbuf = gdk_pixbuf_new_from_file (file_name, NULL);
 		g_free (file_name);
 
