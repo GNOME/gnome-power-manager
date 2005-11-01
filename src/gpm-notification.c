@@ -66,54 +66,38 @@ get_index_from_percent (gint percent)
 	return index;
 }
 
-/** Gets an icon (pixbuf) suitable for the object
+/** Gets an icon name for the object
  *
  *  @param	slotData	A cached data object
- *  @return			A valid GdkPixbuf image
+ *  @return			An icon name
  */
-static GdkPixbuf *
-create_icon_pixbuf (GenericObject *slotData)
+static gchar *
+get_stock_id_for_slot_data (GenericObject *slotData)
 {
-	GdkPixbuf *pixbuf = NULL;
 	GenericObject slotDataVirt;
-	gint num;
-	gchar *computed_name = NULL;
+	gint index;
+	gchar *stock_id = NULL;
 
-	/* assertion checks */
-	g_assert (slotData);
-
-	if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
+	if (slotData == NULL) {
+		stock_id = g_strdup (GPM_STOCK_BAT_8_OF_8);
+	} else if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
 		/* have to work out for all objects for multibattery setups */
 		slotDataVirt.percentageCharge = 100;
 		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-		num = get_index_from_percent (slotDataVirt.percentageCharge);
-		computed_name = g_strdup_printf ("gnome-power-%s-%d-of-8", 
-					state_data.onBatteryPower ? "bat" : "ac", num);
-		if (!gpm_icon_theme_fallback (&pixbuf, computed_name, 22))
-			g_error ("Could not find %s!", computed_name);
-		g_debug ("computed_name = %s", computed_name);
-		g_assert (pixbuf != NULL);
-		g_free (computed_name);
+		index = get_index_from_percent (slotDataVirt.percentageCharge);
+		stock_id = g_strdup_printf ("gnome-power-%s-%d-of-8", 
+					     state_data.onBatteryPower ? "bat" : "ac", index);
 	} else if (slotData->powerDevice == POWER_UPS) {
-		num = get_index_from_percent (slotData->percentageCharge);
-		computed_name = g_strdup_printf ("gnome-power-ups-%d-of-8", num);
-		if (!gpm_icon_theme_fallback (&pixbuf, computed_name, 22))
-			g_error ("Could not find %s!", computed_name);
-		g_debug ("computed_name = %s", computed_name);
-		g_assert (pixbuf != NULL);
-		g_free (computed_name);
+		index = get_index_from_percent (slotData->percentageCharge);
+		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
-		if (!gpm_icon_theme_fallback (&pixbuf, "gnome-dev-acadapter", 22))
-			g_error ("Could not find gnome-dev-acadapter!");
+		stock_id = g_strdup (GPM_STOCK_AC_ADAPTER);
 	} else {
-		g_error ("create_icon_pixbuf called with unknown type %i!",
+		g_error ("get_stock_id_for_slot_data called with unknown type %i!",
 			slotData->powerDevice);
+		stock_id = g_strdup (GPM_STOCK_BAT_8_OF_8);
 	}
-	/* make sure we got something */
-	if (!pixbuf)
-		g_error ("Failed to get pixbuf.\n"
-			 "Maybe GNOME Power Manager is not installed correctly!");
-	return pixbuf;
+	return stock_id;
 }
 
 /** Frees resources and hides notification area icon
@@ -567,8 +551,8 @@ gpn_icon_update (void)
 	gboolean iconShowAlways;
 	gboolean use_notif_icon;
 	GenericObject *slotData = NULL;
-	GdkPixbuf *pixbuf = NULL;
 	GString *tooltip = NULL;
+	gchar* stock_id;
 
 	client = gconf_client_get_default ();
 	/* do we want to display the icon */
@@ -591,19 +575,11 @@ gpn_icon_update (void)
 			if (!(eggtrayicon->popup_menu))
 				menu_main_create (eggtrayicon);
 		}
-		/* get pixbuf for icon */
-		if (slotData) {
-			/* use object to form icon */
-			pixbuf = create_icon_pixbuf (slotData);
-		} else {
-			/* use standard fallback (the g-p-m icon) */
-			if (!gpm_icon_theme_fallback (&pixbuf, "desktop-force", 24))
-				g_error ("Cannot get iconShowAlways!");
-		}
-		if (!pixbuf)
-			g_error ("Failed to get pixbuf for icon");
-		gtk_image_set_from_pixbuf (GTK_IMAGE (eggtrayicon->image), pixbuf);
-		g_object_unref (pixbuf);
+
+		stock_id = get_stock_id_for_slot_data (slotData);
+		gtk_image_set_from_stock (GTK_IMAGE (eggtrayicon->image), 
+			stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
+		g_free (stock_id);
 
 		tooltip = get_full_tooltip ();
 		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,

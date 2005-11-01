@@ -113,7 +113,5 @@ gboolean run_bin_program (const gchar *program);
 gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
 GenericObject *genericobject_add (GPtrArray *parray, const gchar *udi);
-gboolean gpm_icon_theme_fallback (GdkPixbuf **pixbuf, const gchar *name, gint size);
-gboolean gpm_set_icon_with_theme (GtkWidget *widget, const gchar *name, gint size);
 
 #endif	/* _GPMCOMMON_H */

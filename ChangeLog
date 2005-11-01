@@ -1,3 +1,23 @@
+2005-11-01  Richard Hughes  <richard@hughsie.com>
+
+	* Configure.in: Bump to 0.2.9.2 as we have lots of new stuff to test.
+
+	* src/gpm-notification.c: Replace create_icon_pixbuf () with
+	get_stock_id_for_slot_data so we can use the new stock icons.
+
+	* src/gpm-stock-icons.{c|h}: Add the extra icons.
+
+	* src/gpm-common.{c|h}: Remove gpm_set_icon_with_theme () and
+	gpm_icon_theme_fallback () as Jaap has provided a proper framework for
+	us to use.
+
+	* src/icons/*.png: Refactor icons to 24x24 to keep the HIG people happy
+	and also so we can use the stock icons functionality.
+
+	* src/icons/Makefile.am: Add new files gnome-power-mouse.png and
+	gnome-power-keyboard.png as we will use these files soon for low
+	device warning.
+
 2005-10-31  Christopher Aillon  <caillon@redhat.com>
 
 	* src/gpm-common.c:

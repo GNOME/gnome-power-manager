@@ -1,21 +1,28 @@
+/** @file	gpm-screensaver.c
+ *  @brief	Functions to query and control GNOME Screensaver
+ *  @author	2002		Jorn Baayen
+ *		2003,2004	Colin Walters <walters@verbum.org>
+ *
+ * This file registers new custom stock icons so that we can use them in a
+ * generic way.
+ */
 /*
- *  Copyright (C) 2002 Jorn Baayen
- *  Copyright (C) 2003,2004 Colin Walters <walters@verbum.org>
+ * Licensed under the GNU General Public License Version 2
  *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2, or (at your option)
- *  any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
  */
 
 #include <gtk/gtk.h>
@@ -34,7 +41,16 @@ gpm_stock_icons_init (void)
 
 	static const char *items[] =
 	{
-		GPM_STOCK_AC_ADAPTER
+		GPM_STOCK_AC_0_OF_8, GPM_STOCK_AC_1_OF_8, GPM_STOCK_AC_2_OF_8,
+		GPM_STOCK_AC_3_OF_8, GPM_STOCK_AC_4_OF_8, GPM_STOCK_AC_5_OF_8,
+		GPM_STOCK_AC_6_OF_8, GPM_STOCK_AC_7_OF_8, GPM_STOCK_AC_8_OF_8,
+		GPM_STOCK_BAT_0_OF_8, GPM_STOCK_BAT_1_OF_8, GPM_STOCK_BAT_2_OF_8,
+		GPM_STOCK_BAT_3_OF_8, GPM_STOCK_BAT_4_OF_8, GPM_STOCK_BAT_5_OF_8,
+		GPM_STOCK_BAT_6_OF_8, GPM_STOCK_BAT_7_OF_8, GPM_STOCK_BAT_8_OF_8,
+		GPM_STOCK_UPS_0_OF_8, GPM_STOCK_UPS_1_OF_8, GPM_STOCK_UPS_2_OF_8,
+		GPM_STOCK_UPS_3_OF_8, GPM_STOCK_UPS_4_OF_8, GPM_STOCK_UPS_5_OF_8,
+		GPM_STOCK_UPS_6_OF_8, GPM_STOCK_UPS_7_OF_8, GPM_STOCK_UPS_8_OF_8,
+		GPM_STOCK_AC_ADAPTER, GPM_STOCK_MOUSE, GPM_STOCK_KEYBOARD
 	};
 
 	g_return_if_fail (factory == NULL);
@@ -47,7 +63,7 @@ gpm_stock_icons_init (void)
 		GdkPixbuf *pixbuf;
 		char *file_name;
 
-		file_name = g_strconcat ("/home/hughsie/gnome-power-manager-jaap/src/icons/svg/", items[i], ".svg", NULL);
+		file_name = g_strconcat (GPM_DATA, items[i], ".svg", NULL);
 		pixbuf = gdk_pixbuf_new_from_file (file_name, NULL);
 		g_free (file_name);
 
