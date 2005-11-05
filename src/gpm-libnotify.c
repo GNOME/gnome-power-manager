@@ -46,6 +46,8 @@
 #include <libnotify/notify.h>
 #endif
 
+static NotifyHandle *globalnotify = NULL;
+
 /** Convenience function to call libnotify
  *
  *  @param	subject		The subject text, e.g. "Battery Low"
@@ -61,7 +63,6 @@ gboolean
 libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
 #ifdef HAVE_LIBNOTIFY
-	NotifyHandle *n = NULL;
 	NotifyIcon *icon = NULL;
 	NotifyHints *hints = NULL;
 	gint x, y;
@@ -72,8 +73,8 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 	if (point) {
 		get_widget_position (point, &x, &y);
 		hints = notify_hints_new();
-		notify_hints_set_int (hints, "x", x);
-		notify_hints_set_int (hints, "y", y);
+		notify_hints_set_int (hints, "x", x+12);
+		notify_hints_set_int (hints, "y", y+24);
 	}
 
 	/* echo to terminal too */
@@ -84,7 +85,7 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 
 	/* use default g-p-m icon for now */
 	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
-	n = notify_send_notification (NULL, /* replaces nothing */
+	globalnotify = notify_send_notification (globalnotify, /* replaces all */
 			   NULL,
 			   urgency,
 			   subject, content,
@@ -94,7 +95,7 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 			   NULL, /* no user data */
 			   0);   /* no actions */
 	notify_icon_destroy(icon);
-	if (!n) {
+	if (!globalnotify) {
 		g_warning ("failed to send notification (%s)", content);
 		return FALSE;
 	}
@@ -146,6 +147,7 @@ gboolean
 libnotify_init (const gchar *nicename)
 {
 	gboolean ret = TRUE;
+	globalnotify = NULL;
 
 	/* assertion checks */
 	g_assert (nicename);
