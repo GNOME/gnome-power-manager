@@ -103,6 +103,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-notification.c				\
 	gpm-main.h					\
 	gpm-main.c					\
+	gpm-sysdev.h					\
+	gpm-sysdev.c					\
 	gpm-stock-icons.h				\
 	gpm-stock-icons.c
 
