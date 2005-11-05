@@ -44,7 +44,7 @@ G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
 guint signals[LAST_SIGNAL] = { 0 };
 
 GPMObject *obj;
-StateData state_data;
+gboolean onAcPower;
 
 static void
 gpm_object_init (GPMObject *obj) { }
@@ -142,7 +142,7 @@ gboolean
 gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
 {
 	g_debug ("gpm_object_is_on_mains ()");
-	*ret = state_data.onBatteryPower;
+	*ret = !onAcPower;
 	return TRUE;
 }
 
@@ -157,7 +157,7 @@ gboolean
 gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
 {
 	g_debug ("gpm_object_is_on_ac ()");
-	*ret = !state_data.onBatteryPower & !state_data.onUPSPower;
+	*ret = onAcPower;
 	return TRUE;
 }
 
@@ -171,8 +171,8 @@ gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
 gboolean
 gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error)
 {
-	g_debug ("gpm_object_is_on_ups ()");
-	*ret = state_data.onUPSPower;
+	g_warning ("gpm_object_is_on_ups ()");
+	*ret = FALSE;
 	return TRUE;
 }
 
