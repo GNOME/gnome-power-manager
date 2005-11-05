@@ -139,9 +139,6 @@ recalc (void)
 	gpm_gtk_set_visibility (prefwidgets, "combobox_button_suspend", hasButtonSleep);
 	gpm_gtk_set_visibility (prefwidgets, "label_button_suspend", hasButtonSleep);
 
-	gpm_gtk_set_visibility (prefwidgets, "combobox_ac_fail", hasAcAdapter);
-	gpm_gtk_set_visibility (prefwidgets, "label_ac_fail", hasAcAdapter);
-
 	/* variables */
 	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_brightness", hasLCD);
 	gpm_gtk_set_visibility (prefwidgets, "label_ac_brightness", hasLCD);
@@ -435,7 +432,6 @@ callback_check_changed (GtkWidget *widget, gpointer user_data)
 	if (strcmp (widgetname, "checkbutton_display_icon") == 0) {
 		/* makes no sense to have this enabled */
 		gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
-		gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_others", value);
 	}
 
 	client = gconf_client_get_default ();
@@ -673,7 +669,6 @@ main (int argc, char **argv)
 	GPtrArray *ptrarr_button_power = NULL;
 	GPtrArray *ptrarr_button_suspend = NULL;
 	GPtrArray *ptrarr_button_lid = NULL;
-	GPtrArray *ptrarr_ac_fail = NULL;
 	GPtrArray *ptrarr_battery_critical = NULL;
 	GPtrArray *ptrarr_sleep_type = NULL;
 
@@ -769,8 +764,6 @@ main (int argc, char **argv)
 		GCONF_ROOT "general/display_icon");
 	checkbox_setup_action ("checkbutton_display_icon_full",
 		GCONF_ROOT "general/display_icon_full");
-	checkbox_setup_action ("checkbutton_display_icon_others",
-		GCONF_ROOT "general/display_icon_others");
 	/*
 	 * Set up combo boxes with "ideal" values - if a enum is unavailable
 	 * e.g. hibernate has been disabled, then it will be filtered out
@@ -800,15 +793,6 @@ main (int argc, char **argv)
 	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pHibernate);
 	combo_setup_dynamic ("combobox_button_lid",
 		GCONF_ROOT "policy/button_lid", ptrarr_button_lid);
-
-	/* AC fail */
-	ptrarr_ac_fail = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pNothing);
-	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pWarning);
-	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pSuspend);
-	g_ptr_array_add (ptrarr_ac_fail, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_ac_fail",
-		GCONF_ROOT "policy/ac_fail", ptrarr_ac_fail);
 
 	/* battery critical */
 	ptrarr_battery_critical = g_ptr_array_new ();
@@ -875,7 +859,6 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (prefwidgets, "checkbutton_display_icon");
 	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
-	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_others", value);
 
 	/* set themed battery and ac_adapter icons */
 	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");
@@ -888,7 +871,6 @@ main (int argc, char **argv)
 	g_ptr_array_free (ptrarr_button_power, TRUE);
 	g_ptr_array_free (ptrarr_button_suspend, TRUE);
 	g_ptr_array_free (ptrarr_button_lid, TRUE);
-	g_ptr_array_free (ptrarr_ac_fail, TRUE);
 	g_ptr_array_free (ptrarr_battery_critical, TRUE);
 	g_ptr_array_free (ptrarr_sleep_type, TRUE);
 	return 0;
