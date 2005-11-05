@@ -25,7 +25,7 @@
 #define _COMPILER_H
 
 /** define GCC macros to let us do clever things */
-#if __GNUC__ >= 3
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
 # define inline		inline __attribute__ ((always_inline))
 # define __pure		__attribute__ ((pure))
 # define __noreturn	__attribute__ ((noreturn))
