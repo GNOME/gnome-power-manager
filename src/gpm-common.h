@@ -28,6 +28,7 @@
 #include <gnome.h>
 
 #include "eggtrayicon.h"
+#include "gpm-sysdev.h"
 #include "compiler.h"
 
 /* where our settings are stored in the gconf tree */
@@ -60,58 +61,17 @@ typedef enum {
 	ACTION_NOW_MAINSPOWERED	/**< We are now mains powered		*/
 } ActionType;
 
-/** The device type of the cached object */
-typedef enum {
-	POWER_NONE,		/**< The blank device			*/
-	POWER_UNKNOWN,		/**< An unknown device			*/
-	POWER_AC_ADAPTER,	/**< An AC Adapter			*/
-	POWER_PRIMARY_BATTERY,	/**< A laptop battery			*/
-	POWER_UPS,		/**< An Uninterruptible Power Supply	*/
-	POWER_MOUSE,		/**< A wireless, battery mouse		*/
-	POWER_KEYBOARD,		/**< A wireless, battery keyboard	*/
-	POWER_PDA		/**< A Personal Digital Assistant	*/
-} PowerDevice;
-
-/** The state object used to cache the state of the computer */
-typedef struct {
-	gboolean onBatteryPower;/**< Are we on battery power?		*/
-	gboolean onUPSPower;	/**< Are we on UPS power?		*/
-} StateData;
-
-/** The generic object used to cache the hal objects locally.
- *
- * This is used to minimise the number of lookups to make sure
- * that the DBUS traffic is kept to a minimum.
- */
-typedef struct {
-	gboolean present;	/**< If the device is present		*/
-	gchar udi[128];		/**< The HAL UDI			*/
-	PowerDevice powerDevice;/**< The device type from PowerDevice	*/
-	gint isRechargeable;	/**< If device is rechargeable		*/
-	gint percentageCharge;	/**< The percentage charge remaining	*/
-	gint minutesRemaining;	/**< Minutes remaining until charged	*/
-	gboolean isCharging;	/**< If device is charging		*/
-	gboolean isDischarging;	/**< If device is discharging		*/
-} GenericObject;
-
 void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
 
 gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
 
 ActionType convert_string_to_policy (const gchar *gconfstring);
-PowerDevice convert_haltype_to_powerdevice (const gchar *type);
+DeviceType convert_haltype_to_batttype (const gchar *type);
 gchar *convert_policy_to_string (gint value);
 
 gchar *get_timestring_from_minutes (gint minutes);
-gchar *convert_powerdevice_to_string (gint powerDevice);
-gchar *get_chargestate_string (GenericObject *slotData);
-void create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice);
-gchar *get_time_string (GenericObject *slotData);
+gchar *get_time_string (int minutesRemaining, gboolean isCharging);
 gboolean run_gconf_script (const char *path);
 gboolean run_bin_program (const gchar *program);
-
-gint find_udi_parray_index (GPtrArray *parray, const gchar *udi);
-GenericObject *genericobject_find (GPtrArray *parray, const gchar *udi);
-GenericObject *genericobject_add (GPtrArray *parray, const gchar *udi);
 
 #endif	/* _GPMCOMMON_H */

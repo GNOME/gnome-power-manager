@@ -1,7 +1,32 @@
 2005-11-05  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Change libwnck dep to 2.10.0. Not sure what happened
-	with that...
+	with that... Update version 0.2.10 as I have made MASSIVE changes
+	to the internals of g-p-m.
+
+	* src/gpm-sysdev.{c|h}: New files to abstract away the multiple device
+	problem. We are not using the shitty slotData and VirtualType system
+	anymore as it is not flexible and it not understandable.
+	Imagine ripping out the Ford Fiesta engine and replacing it with a
+	Ferrarri engine and you get the idea of the changes...
+	This will let us support multi-batteries *much* better.
+
+	* src/gpm-common.{c|h}: Rip out the old device structures and functions.
+	This makes hughsie happy.
+
+	* src/gpm-notification.c: Now we show the icons if low, or if we want
+	to overrride for the primary battery. Anything else is crack.
+
+	* src/gpm-libnotify.c: Now make all notifications replace the former,
+	to stop notifications from piling up the screen. Also point to the
+	bottom middle part of the icon, not the top left most point.
+
+	* src/gpm-dbus-server.c, gpm-main.c: Replace use of statedata 
+	with onAcPower.
+
+	* src/gpm-prefs.glade, gnome-power-manager.schemas.in, src/gpm-prefs.c:
+	Remove the configurable option for ac_adapter removal 
+	(warning hardcoded). Also remove the Always Display textbox.
 
 2005-11-01  Richard Hughes  <richard@hughsie.com>
 

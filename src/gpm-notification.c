@@ -41,11 +41,11 @@
 #include "gpm-libnotify.h"
 #include "gpm-stock-icons.h"
 #include "compiler.h"
+#include "gpm-sysdev.h"
 
 /* shared with gpm-main.c */
-StateData state_data;
 static TrayData *eggtrayicon = NULL;
-GPtrArray *objectData;
+gboolean onAcPower;
 
 /** Finds the icon index value for the percentage charge
  *
@@ -68,36 +68,66 @@ get_index_from_percent (gint percent)
 
 /** Gets an icon name for the object
  *
- *  @param	slotData	A cached data object
  *  @return			An icon name
  */
 static gchar *
-get_stock_id_for_slot_data (GenericObject *slotData)
+get_stock_id_for_slot_data (void)
 {
-	GenericObject slotDataVirt;
 	gint index;
 	gchar *stock_id = NULL;
+	sysDev *sd = NULL;
+	GConfClient *client = NULL;
+	gint lowThreshold;
+	gboolean displayFull;
 
-	if (slotData == NULL) {
-		stock_id = g_strdup (GPM_STOCK_BAT_8_OF_8);
-	} else if (slotData->powerDevice == POWER_PRIMARY_BATTERY) {
-		/* have to work out for all objects for multibattery setups */
-		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-		index = get_index_from_percent (slotDataVirt.percentageCharge);
-		stock_id = g_strdup_printf ("gnome-power-%s-%d-of-8", 
-					     state_data.onBatteryPower ? "bat" : "ac", index);
-	} else if (slotData->powerDevice == POWER_UPS) {
-		index = get_index_from_percent (slotData->percentageCharge);
-		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
-	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
-		stock_id = g_strdup (GPM_STOCK_AC_ADAPTER);
-	} else {
-		g_error ("get_stock_id_for_slot_data called with unknown type %i!",
-			slotData->powerDevice);
-		stock_id = g_strdup (GPM_STOCK_BAT_8_OF_8);
+	/* find out when the user considers the power "low" */
+	client = gconf_client_get_default ();
+	lowThreshold = gconf_client_get_int (client,
+				GCONF_ROOT "general/threshold_low", NULL);
+
+	/* list in order of priority */
+	sd = sysDevGet (BATT_PRIMARY);
+	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
+		index = get_index_from_percent (sd->percentageCharge);
+		if (onAcPower)
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
-	return stock_id;
+	sd = sysDevGet (BATT_UPS);
+	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
+		index = get_index_from_percent (sd->percentageCharge);
+		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+	}
+	sd = sysDevGet (BATT_MOUSE);
+	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold)
+		return g_strdup_printf ("gnome-power-mouse");
+	sd = sysDevGet (BATT_KEYBOARD);
+	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold)
+		return g_strdup_printf ("gnome-power-keyboard");
+
+	/*
+	 * Check if we should just show the charging / discharging icon 
+	 * even when not low or critical.
+	 */
+	client = gconf_client_get_default ();
+	displayFull = gconf_client_get_bool (client,
+				GCONF_ROOT "general/display_icon_full", NULL);
+	if (!displayFull)
+		return NULL;
+
+	/* Only display if not at 100% */
+	sd = sysDevGet (BATT_PRIMARY);
+	if (sd->percentageCharge == 100)
+		return NULL;
+
+	/* Do the rest of the battery icon states */
+	if (sd->numberDevices > 0) {
+		index = get_index_from_percent (sd->percentageCharge);
+		if (onAcPower)
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+	}
+	return NULL;
 }
 
 /** Frees resources and hides notification area icon
@@ -133,51 +163,105 @@ gpn_icon_destroy (void)
 
 /** Gets the tooltip for a specific device object
  *
- *  @param	slotData	A cached data object
+ *  @param	type		The device type
+ *  @param	sds		The device struct
  *  @return			Part of the tooltip
  */
 GString *
-get_object_tooltip (GenericObject *slotData)
+get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 {
 	GString *tooltip = NULL;
-	gchar *remaining = NULL;
 	gchar *devicestr = NULL;
 	gchar *chargestate = NULL;
 
-	/* assertion checks */
-	g_assert (slotData);
+	/* do not display for not present devices */
+	if (!sds->present)
+		return NULL;
 
-	devicestr = convert_powerdevice_to_string (slotData->powerDevice);
-	if (slotData->powerDevice == POWER_PRIMARY_BATTERY ||
-	    slotData->powerDevice == POWER_UPS) {
-		tooltip = g_string_new ("");
-		chargestate = get_chargestate_string (slotData);
-		if (slotData->present) {
-			g_string_printf (tooltip, "%s %s (%i%%)", 
-					devicestr, chargestate, slotData->percentageCharge);
-			/*
-			 * only display time remaining if minutesRemaining > 2
-			 * and percentageCharge < 99 to cope with some broken
-			 * batteries.
-			 */
-			if (slotData->minutesRemaining > 2 && slotData->percentageCharge < 99) {
-				remaining = get_time_string (slotData);
-				g_string_append_printf (tooltip, "\n%s", remaining);
-				g_free (remaining);
-			}
-		} else {
-			g_string_printf (tooltip, "%s %s", 
-					devicestr, chargestate);
+	tooltip = g_string_new ("");
+	devicestr = sysDevToString (type);
+
+	/* don't display all the extra stuff for keyboards and mice */
+	if (type == BATT_MOUSE ||
+	    type == BATT_KEYBOARD ||
+	    type == BATT_PDA) {
+		g_string_printf (tooltip, "%s (%i%%)",
+				 devicestr, sds->percentageCharge);
+		return tooltip;
+	}
+
+	/* work out chargestate */
+	if (sds->isCharging)
+		chargestate = _("charging");
+	else if (sds->isDischarging)
+		chargestate = _("discharging");
+	else if (!sds->isCharging &&
+		 !sds->isDischarging)
+		chargestate = _("charged");
+
+	g_string_printf (tooltip, "%s %s (%i%%)",
+			 devicestr, chargestate, sds->percentageCharge);
+	/*
+	 * only display time remaining if minutesRemaining > 2
+	 * and percentageCharge < 99 to cope with some broken
+	 * batteries.
+	 */
+	if (sds->minutesRemaining > 2 && sds->percentageCharge < 99) {
+		gchar *timestring;
+		timestring = get_timestring_from_minutes (sds->minutesRemaining);
+		if (timestring) {
+			if (sds->isCharging)
+				g_string_append_printf (tooltip, "\n%s %s",
+					timestring, _("until charged"));
+			else
+				g_string_append_printf (tooltip, "\n%s %s",
+					timestring, _("until empty"));
+		g_free (timestring);
 		}
-	} else if (slotData->powerDevice == POWER_KEYBOARD ||
-		   slotData->powerDevice == POWER_MOUSE) {
-		tooltip = g_string_new ("bug?");
-		g_string_printf (tooltip, "%s (%i%%)", 
-					devicestr, slotData->percentageCharge);
-	} else if (slotData->powerDevice == POWER_AC_ADAPTER) {
-		tooltip = g_string_new (devicestr);
+	}
+
+	return tooltip;
+}
+/** Gets the tooltip for a specific device object
+ *
+ *  @param	type		The device type
+ *  @param	sds		The device struct
+ *  @return			Part of the tooltip
+ */
+GString *
+get_tooltips_system_device (DeviceType type, sysDev *sd)
+{
+	//list each in this group, and call get_tooltip_system_struct for each one
+	int a;
+	sysDevStruct *sds;
+	GString *temptipdevice = NULL;
+	GString *tooltip = NULL;
+	tooltip = g_string_new ("");
+
+	for (a=0; a < sd->devices->len; a++) {
+		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		temptipdevice = get_tooltip_system_struct (type, sds);
+		g_string_append_printf (tooltip, "%s\n", temptipdevice->str);
+		g_string_free (temptipdevice, TRUE);
 	}
 	return tooltip;
+}
+
+/** Returns the tooltip for icon type
+ *
+ *  @return			The complete tooltip
+ */
+GString *
+get_tooltips_system_device_type (GString *tooltip, DeviceType type)
+{
+	sysDev *sd;
+	GString *temptip = NULL;
+	sd = sysDevGet (type);
+	if (sd->numberDevices > 0) {
+		temptip = get_tooltips_system_device (type, sd);
+		g_string_append (tooltip, temptip->str);
+		g_string_free (temptip, TRUE);
+	}
 }
 
 /** Returns the tooltip for the main icon. Text logic goes here :-)
@@ -187,81 +271,24 @@ get_object_tooltip (GenericObject *slotData)
 GString *
 get_full_tooltip (void)
 {
-	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
-	GString *temptip = NULL;
 	gint a;
 
-	if (state_data.onBatteryPower)
-		tooltip = g_string_new (_("Computer is running on battery power"));
-	else if (state_data.onUPSPower)
-		tooltip = g_string_new (_("Computer is running on UPS power"));
+	if (!onAcPower)
+		tooltip = g_string_new (_("Computer is running on battery power\n"));
 	else
-		tooltip = g_string_new (_("Computer is running on AC power"));
+		tooltip = g_string_new (_("Computer is running on AC power\n"));
 
-	for (a=0;a<objectData->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
-		temptip = get_object_tooltip (slotData);
-		if (temptip && slotData->powerDevice != POWER_AC_ADAPTER)
-			g_string_append_printf (tooltip, "\n%s", temptip->str);
-	}
+	/* do each device type we have  */
+	get_tooltips_system_device_type (tooltip, BATT_PRIMARY);
+	get_tooltips_system_device_type (tooltip, BATT_UPS);
+	get_tooltips_system_device_type (tooltip, BATT_MOUSE);
+	get_tooltips_system_device_type (tooltip, BATT_KEYBOARD);
+	get_tooltips_system_device_type (tooltip, BATT_PDA);
+
+	/* remove the last \n */
+	g_string_truncate (tooltip, tooltip->len-1);
 	return tooltip;
-}
-
-/** Gets an example icon for the taskbar
- *
- *  @param	powerDevice	The power type, e.g. POWER_UPS
- *  @param	displayFull	Should we display icons for full devices?
- *  @return			cached object pointer to the applicable data type
- */
-static GenericObject *
-get_object_of_powertype (int powerDevice, gboolean displayFull)
-{
-	GenericObject *slotData = NULL;
-	gint a;
-	/* return value only if not full, or iconDisplayFull set true*/
-	for (a=0;a<objectData->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
-		if (slotData->powerDevice == powerDevice && slotData->present) {
-			if (displayFull || slotData->percentageCharge != 100)
-				return slotData;
-		}
-	}
-	return NULL;
-}
-
-
-/** Finds the best selection for the icon in the notification area
- *
- *  @return  		The pointer to the main icon, or NULL if none needed
- *
- *  @note	Our preferred choice is:
- *	 	Battery, UPS, AC_ADAPTER
- *		PDA and others should never be a main icon.
- */
-GenericObject *
-get_main_icon_slot (void)
-{
-	GenericObject *slotData = NULL;
-	GConfClient *client = gconf_client_get_default ();
-	gboolean showIfFull = gconf_client_get_bool (client, 
-		GCONF_ROOT "general/display_icon_full", NULL);
-
-	slotData = get_object_of_powertype (POWER_PRIMARY_BATTERY, showIfFull);
-	if (slotData)
-		return slotData;
-
-	slotData = get_object_of_powertype (POWER_UPS, showIfFull);
-	if (slotData)
-		return slotData;
-
-	slotData = get_object_of_powertype (POWER_AC_ADAPTER, showIfFull);
-	if (slotData)
-		return slotData;
-
-	g_warning ("Cannot find preferred main device."
-		   "This may be because you are running on a desktop machine.");
-	return NULL;
 }
 
 /** Callback for "about" box
@@ -284,7 +311,7 @@ callback_about_activated (void)
 	GdkPixbuf *logo = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), "GNOME Power Manager");
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
-	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), 
+	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about),
 		"\xc2\xa9 2005 Richard Hughes <richard@hughsie.com>");
 	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about),
 		"Power Manager for GNOME Desktop");
@@ -374,7 +401,7 @@ menu_add_action_item (GtkWidget *menu,
 	gtk_image_menu_item_set_image ((GtkImageMenuItem*) item, GTK_WIDGET (image));
 
 	/* connect to the callback */
-	g_signal_connect (G_OBJECT (item), "activate", 
+	g_signal_connect (G_OBJECT (item), "activate",
 		G_CALLBACK (callback_actions_activated), (gpointer) menu);
 
 	/* append to the menu, and show */
@@ -529,9 +556,9 @@ icon_create (void)
 	eggtrayicon->popup_menu = NULL;
 
 	eggtrayicon->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER, GTK_ICON_SIZE_SMALL_TOOLBAR);
-	g_signal_connect (G_OBJECT (evbox), "button_press_event", 
+	g_signal_connect (G_OBJECT (evbox), "button_press_event",
 			  G_CALLBACK (tray_icon_press), (gpointer) eggtrayicon);
-	g_signal_connect (G_OBJECT (evbox), "button_release_event", 
+	g_signal_connect (G_OBJECT (evbox), "button_release_event",
 			  G_CALLBACK (tray_icon_release), (gpointer) eggtrayicon);
 
 	gtk_container_add (GTK_CONTAINER (evbox), eggtrayicon->image);
@@ -550,25 +577,17 @@ gpn_icon_update (void)
 	gboolean iconShow;
 	gboolean iconShowAlways;
 	gboolean use_notif_icon;
-	GenericObject *slotData = NULL;
 	GString *tooltip = NULL;
 	gchar* stock_id;
 
 	client = gconf_client_get_default ();
 	/* do we want to display the icon */
-	iconShow = gconf_client_get_bool (client, 
+	iconShow = gconf_client_get_bool (client,
 				GCONF_ROOT "general/display_icon", NULL);
-	/* do we need to force an icon? */
-	iconShowAlways = gconf_client_get_bool (client, 
-				GCONF_ROOT "general/display_icon_others", NULL);
 
-	/* we may return NULL (which is okay) if no pixmap is available */
-	slotData = get_main_icon_slot ();
+	stock_id = get_stock_id_for_slot_data ();
 
-	/* calculate logic */
-	use_notif_icon = (iconShow && slotData) || (iconShow && iconShowAlways);
-
-	if (use_notif_icon) {
+	if (iconShow && stock_id) {
 		if (!eggtrayicon) {
 			/* create icon */
 			icon_create ();
@@ -576,8 +595,7 @@ gpn_icon_update (void)
 				menu_main_create (eggtrayicon);
 		}
 
-		stock_id = get_stock_id_for_slot_data (slotData);
-		gtk_image_set_from_stock (GTK_IMAGE (eggtrayicon->image), 
+		gtk_image_set_from_stock (GTK_IMAGE (eggtrayicon->image),
 			stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		g_free (stock_id);
 
@@ -588,8 +606,8 @@ gpn_icon_update (void)
 		g_string_free (tooltip, TRUE);
 	} else {
 		/* remove icon */
-		g_warning ("The key " GCONF_ROOT "general/display_icon"
-			   "and " GCONF_ROOT "general/display_icon_others"
+		g_debug ("The key " GCONF_ROOT "general/display_icon"
+			   "and " GCONF_ROOT "general/display_icon_full "
 			   " are both set to false, so no icon will be displayed");
 		if (eggtrayicon) {
 			icon_destroy (eggtrayicon);

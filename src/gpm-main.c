@@ -39,18 +39,18 @@
  *
  *  GNOME Power Manager is a session daemon that takes care of power management.
  *
- *  GNOME Power Manager uses information provided by HAL to display icons and 
+ *  GNOME Power Manager uses information provided by HAL to display icons and
  *  handle system and user actions in a GNOME session. Authorised users can set
  *  policy and change preferences.
  *  GNOME Power Manager acts as a policy agent on top of the Project Utopia
- *  stack, which includes the kernel, hotplug, udev, and HAL. 
- *  GNOME Power Manager listens for HAL events and responds with 
+ *  stack, which includes the kernel, hotplug, udev, and HAL.
+ *  GNOME Power Manager listens for HAL events and responds with
  *  user-configurable reactions.
  *  The main focus is the user interface; e.g. allowing configuration of
  *  power management from the desktop in a sane way (no need for root password,
  *  and no need to edit configuration files)
  *  Most of the backend code is actually in HAL for abstracting various power
- *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the 
+ *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the
  *  desktop parts are fairly lightweight and straightforward.
  */
 
@@ -81,12 +81,12 @@
 #include "glibhal-extras.h"
 #include "gnome-power-glue.h"
 #include "gpm-stock-icons.h"
+#include "gpm-sysdev.h"
 
 
 /* no need for IPC with globals */
-StateData state_data;
-GPtrArray *objectData = NULL;
 gboolean isVerbose;
+gboolean onAcPower;
 
 /** Gets policy from gconf
  *
@@ -145,22 +145,22 @@ callback_gconf_key_changed (GConfClient *client,
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_computer") == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
-		if (state_data.onBatteryPower)
+		if (!onAcPower)
 			gpm_idle_set_timeout (value);
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_computer") == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
-		if (!state_data.onBatteryPower)
+		if (onAcPower)
 			gpm_idle_set_timeout (value);
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_display") == 0) {
 		/* set new suspend timeouts */
-		if (state_data.onBatteryPower) {
+		if (!onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
 			gscreensaver_set_dpms_timeout (value);
 		}
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_display") == 0) {
 		/* set new suspend timeouts */
-		if (!state_data.onBatteryPower) {
+		if (onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
 			gscreensaver_set_dpms_timeout (value);
 		}
@@ -261,85 +261,6 @@ action_policy_do (gint policy_number)
 			policy_number);
 }
 
-/** Recalculate logic of StateData, without any DBUS, all cached internally
- *
- *  @param	parray		The ObjectData array
- *  @param	coldplug	If set, send events even if they are the same
- */
-static void
-update_state_logic (GPtrArray *parray, gboolean coldplug)
-{
-	gint a;
-	GenericObject *slotData = NULL;
-	/* set up temp. state */
-	StateData state_datanew;
-	gboolean hasBatteries;
-	gboolean hasAcAdapter;
-	gint policy;
-
-	/* assertion checks */
-	g_assert (parray);
-
-	state_datanew.onBatteryPower = FALSE;
-	state_datanew.onUPSPower = FALSE;
-	hasBatteries = FALSE;
-	hasAcAdapter = FALSE;
-
-	for (a=0;a<parray->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		if (slotData->powerDevice == POWER_PRIMARY_BATTERY)
-			if (slotData->present)
-				hasBatteries = TRUE;
-			else
-				g_debug ("Battery '%s' missing?!?", slotData->udi);
-		else if (slotData->powerDevice == POWER_AC_ADAPTER)
-			hasAcAdapter = TRUE;
-		if (slotData->powerDevice == POWER_UPS && slotData->isDischarging)
-			state_datanew.onUPSPower = TRUE;
-	}
-
-	/* get old value */
-	if (hasBatteries) {
-		/* Reverse logic as only one ac_adapter is needed to be "on mains power" */
-		for (a=0;a<parray->len;a++) {
-			slotData = (GenericObject *) g_ptr_array_index (parray, a);
-			if (slotData->powerDevice == POWER_AC_ADAPTER && !slotData->present) {
-				g_debug ("onBatteryPower TRUE as ac_adapter not present");
-				state_datanew.onBatteryPower = TRUE;
-				break;
-				}
-		}
-	} else {
-		g_debug ("Cannot be on batteries if have none...");
-		state_datanew.onBatteryPower = FALSE;
-	}
-	g_debug ("onBatteryPower = %i (coldplug=%i)", state_datanew.onBatteryPower, coldplug);
-
-	if (coldplug || state_datanew.onBatteryPower != state_data.onBatteryPower) {
-		state_data.onBatteryPower = state_datanew.onBatteryPower;
-		if (state_data.onBatteryPower) {
-			action_policy_do (ACTION_NOW_BATTERYPOWERED);
-			policy = get_policy_string (GCONF_ROOT "policy/ac_fail");
-			/* only do notification if not coldplug */
-			if (!coldplug) {
-				if (policy == ACTION_WARNING)
-					libnotify_event (_("AC Power Unplugged"),
-						_("The AC Power has been unplugged.  The system is now using battery power."),
-						LIBNOTIFY_URGENCY_NORMAL, get_notification_icon ());
-				else
-					action_policy_do (policy);
-				}
-		} else {
-			action_policy_do (ACTION_NOW_MAINSPOWERED);
-		}
-	}
-
-	if (coldplug || state_datanew.onUPSPower != state_data.onUPSPower) {
-		state_data.onUPSPower = state_datanew.onUPSPower;
-		g_debug ("DBUS: %s = %i", "onUPSPower", state_data.onUPSPower);
-	}
-}
-
 /** Generic exit
  *
  */
@@ -349,106 +270,70 @@ gpm_exit (void)
 	gint a;
 	g_debug ("Quitting!");
 
-	for (a=0;a<objectData->len;a++)
-		g_free (g_ptr_array_index (objectData, a));
-	g_ptr_array_free (objectData, TRUE);
-
 	glibhal_callback_shutdown ();
-
 	gpm_stock_icons_shutdown ();
+
+	/* cleanup all system devices */
+	sysDevFreeAll ();
 
 	gpn_icon_destroy ();
 	exit (0);
 }
 
-/** Adds an ac_adapter device. Also sets up properties on cached object
- *
- *  @param	udi		The HAL UDI
- *  @return			If we added a valid AC Adapter
- */
-static gboolean
-add_ac_adapter (const gchar *udi)
-{
-	GenericObject *slotData = NULL;
-
-	/* assertion checks */
-	g_assert (udi);
-
-	slotData = genericobject_add (objectData, udi);
-	if (!slotData) {
-		g_warning ("Cannot add '%s' object to table!", udi);
-		return FALSE;
-	}
-
-	/* register this with HAL so we get PropertyModified events */
-	glibhal_watch_add_device_property_modified (udi);
-
-	slotData->powerDevice = POWER_AC_ADAPTER;
-	slotData->percentageCharge = 0;
-	g_debug ("Device '%s' added", udi);
-	/* ac_adapter batteries might be missing */
-	hal_device_get_bool (udi, "ac_adapter.present", &slotData->present);
-	slotData->isRechargeable = FALSE;
-	slotData->isCharging = FALSE;
-	slotData->isDischarging = FALSE;
-	slotData->isRechargeable = 0;
-	slotData->percentageCharge = 0;
-	slotData->minutesRemaining = 0;
-	return TRUE;
-}
-
 /** Adds an battery device. Also sets up properties on cached object
  *
- *  @param	slotData	The cached object
+ *  @param	sds		The cached object
  *  @return			If battery is present
  */
 static gboolean
-read_battery_data (GenericObject *slotData)
+read_battery_data (sysDevStruct *sds)
 {
 	gint seconds_remaining;
 	gboolean is_present;
 
+	g_debug ("reading battery data");
+
 	/* assertion checks */
-	g_assert (slotData);
+	g_assert (sds);
 
 	/* initialise to known defaults */
-	slotData->minutesRemaining = 0;
-	slotData->percentageCharge = 0;
-	slotData->isRechargeable = FALSE;
-	slotData->isCharging = FALSE;
-	slotData->isDischarging = FALSE;
+	sds->minutesRemaining = 0;
+	sds->percentageCharge = 0;
+	sds->isRechargeable = FALSE;
+	sds->isCharging = FALSE;
+	sds->isDischarging = FALSE;
 
-	if (!slotData->present) {
-		g_debug ("Battery %s not present!", slotData->udi);
+	if (!sds->present) {
+		g_debug ("Battery %s not present!", sds->udi);
 		return FALSE;
 	}
 
 	/* battery might not be rechargeable, have to check */
-	hal_device_get_bool (slotData->udi, "battery.is_rechargeable",
-		&slotData->isRechargeable);
-	if (slotData->isRechargeable) {
-		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_charging",
-			&slotData->isCharging);
-		hal_device_get_bool (slotData->udi, "battery.rechargeable.is_discharging",
-			&slotData->isDischarging);
+	hal_device_get_bool (sds->udi, "battery.is_rechargeable",
+			     &sds->isRechargeable);
+	if (sds->isRechargeable) {
+		hal_device_get_bool (sds->udi, "battery.rechargeable.is_charging",
+				     &sds->isCharging);
+		hal_device_get_bool (sds->udi, "battery.rechargeable.is_discharging",
+				     &sds->isDischarging);
 	}
 
 	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (slotData->udi,
+	is_present = hal_device_get_int (sds->udi,
 			"battery.remaining_time", &seconds_remaining);
-	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
+	if (!is_present && (sds->isDischarging || sds->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's remaining time.  "
 				 "Please report this as a bug, providing the information to: "
 				 GPMURL);
 	} else if (seconds_remaining > 0) {
 		/* we have to scale this to minutes */
-		slotData->minutesRemaining = seconds_remaining / 60;
+		sds->minutesRemaining = seconds_remaining / 60;
 	}
 
 	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (slotData->udi,
-			"battery.charge_level.percentage", &slotData->percentageCharge);
-	if (!is_present && (slotData->isDischarging || slotData->isCharging)) {
+	is_present = hal_device_get_int (sds->udi, "battery.charge_level.percentage",
+					 &sds->percentageCharge);
+	if (!is_present && (sds->isDischarging || sds->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's percentage charge.  "
 				 "Please report this as a bug, providing the information to: "
 				 GPMURL);
@@ -461,24 +346,46 @@ read_battery_data (GenericObject *slotData)
  *  @param  udi			UDI
  *  @return			If we added a valid battery
  */
+static DeviceType
+hal_to_device_type (const gchar *type)
+{
+	if (strcmp (type, "ups") == 0)
+		return BATT_UPS;
+	else if (strcmp (type, "mouse") == 0)
+		return BATT_MOUSE;
+	else if (strcmp (type, "keyboard") == 0)
+		return BATT_KEYBOARD;
+	else if (strcmp (type, "pda") == 0)
+		return BATT_PDA;
+	else if (strcmp (type, "primary") == 0)
+		return BATT_PRIMARY;
+	g_warning ("Unknown battery type '%s'", type);
+	return BATT_PRIMARY;
+}
+
+
+/** Adds a battery device, of any type. Also sets up properties on cached object
+ *
+ *  @param  udi			UDI
+ *  @return			If we added a valid battery
+ */
 static gboolean
 add_battery (const gchar *udi)
 {
 	gchar *type = NULL;
 	gchar *device = NULL;
-	GenericObject *slotData = NULL;
+	DeviceType dev;
+
+	g_debug ("adding %s", udi);
 
 	/* assertion checks */
 	g_assert (udi);
 
-	slotData = genericobject_add (objectData, udi);
-	if (!slotData) {
-		g_debug ("Cannot add '%s' object to table!", udi);
-		return FALSE;
-	}
+	sysDevStruct *sds = g_new (sysDevStruct, 1);
+	strncpy (sds->udi, udi, 128);
 
-	/* PMU/ACPI batteries might be missing */
-	hal_device_get_bool (udi, "battery.present", &slotData->present);
+	/* batteries might be missing */
+	hal_device_get_bool (udi, "battery.present", &sds->present);
 
 	/* battery is refined using the .type property */
 	hal_device_get_string (udi, "battery.type", &type);
@@ -487,18 +394,17 @@ add_battery (const gchar *udi)
 		return FALSE;
 	}
 
+	//get type
+	dev = hal_to_device_type (type);
+	g_debug ("Adding type %s", type);
+	g_free (type);
+	sysDevAdd (dev, sds);
+
 	/* register this with HAL so we get PropertyModified events */
 	glibhal_watch_add_device_property_modified (udi);
 
-	slotData->powerDevice = convert_haltype_to_powerdevice (type);
-
-	g_free (type);
-
-	device = convert_powerdevice_to_string (slotData->powerDevice);
-	g_debug ("%s added", device);
-
 	/* read in values */
-	read_battery_data (slotData);
+	read_battery_data (sds);
 	return TRUE;
 }
 
@@ -538,8 +444,12 @@ coldplug_acadapter (void)
 		g_debug ("Couldn't obtain list of ac_adapters");
 		return FALSE;
 	}
-	for (i = 0; device_names[i]; i++)
-		add_ac_adapter (device_names[i]);
+	for (i = 0; device_names[i]; i++) {
+		/* assume only one */
+		hal_device_get_bool (device_names[i], "ac_adapter.present", &onAcPower);
+		glibhal_watch_add_device_property_modified (device_names[i]);
+
+	}
 	hal_free_capability (device_names);
 	return TRUE;
 }
@@ -571,7 +481,7 @@ coldplug_buttons (void)
 }
 
 /** Invoked when a device is removed from the Global Device List.
- *  Removes any type of device from the objectData database and removes the
+ *  Removes any type of device from the state database and removes the
  *  watch on it's UDI.
  *
  *  @param	udi		The HAL UDI
@@ -589,17 +499,9 @@ hal_device_removed (const gchar *udi)
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just disappear from the device tree
 	 */
-	a = find_udi_parray_index (objectData, udi);
-	if (a == -1) {
-		g_debug ("Asked to remove '%s' when not present", udi);
-		return;
-	}
-	g_debug ("Removed '%s'", udi);
-	g_ptr_array_remove_index (objectData, a);
+	sysDevRemoveAll (udi);
 	/* remove watch */
 	glibhal_watch_remove_device_property_modified (udi);
-	/* our state has changed, update */
-	update_state_logic (objectData, FALSE);
 	gpn_icon_update ();
 }
 
@@ -623,21 +525,18 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 	 */
 	if (strcmp (capability, "battery") == 0) {
 		add_battery (udi);
-		/* our state has changed, update */
-		update_state_logic (objectData, FALSE);
 		gpn_icon_update ();
 	}
 }
 
-/** Invoked when device in the Global Device List acquires a new capability.
- *  Prints the name of the capability to stderr.
+/** Notifies user of a low battery
  *
- *  @param	slotData	Data structure
+ *  @param	sds		Data structure
  *  @param	newCharge	New charge value (%)
  *  @return			If a warning was sent
  */
 static gboolean
-notify_user_low_batt (GenericObject *slotData, gint newCharge)
+notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 {
 	GConfClient *client = NULL;
 	gint lowThreshold;
@@ -645,10 +544,7 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	gchar *message = NULL;
 	gchar *remaining = NULL;
 
-	/* assertion checks */
-	g_assert (slotData);
-
-	if (!slotData->isDischarging) {
+	if (!sds->isDischarging) {
 		g_debug ("battery is not discharging!");
 		return FALSE;
 	}
@@ -666,13 +562,16 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 		g_debug ("battery is critical!");
 		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 		if (policy == ACTION_WARNING) {
-			remaining = get_time_string (slotData);
+			remaining = get_time_string (sds->minutesRemaining, sds->isCharging);
 			g_assert (remaining);
 			message = g_strdup_printf (
-				_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
+				_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
+				  "Plug in your AC Adapter to avoid losing data."),
 				remaining, newCharge);
-			libnotify_event (_("Battery Critically Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
-				get_notification_icon ());
+			libnotify_event (_("Battery Critically Low"),
+					 message,
+					 LIBNOTIFY_URGENCY_CRITICAL,
+					 get_notification_icon ());
 			g_free (message);
 			g_free (remaining);
 		} else
@@ -683,12 +582,15 @@ notify_user_low_batt (GenericObject *slotData, gint newCharge)
 	/* low warning */
 	if (newCharge < lowThreshold) {
 		g_debug ("battery is low!");
-		remaining = get_time_string (slotData);
+		remaining = get_time_string (sds->minutesRemaining, sds->isCharging);
 		g_assert (remaining);
 		message = g_strdup_printf (
-			_("You have approximately <b>%s</b> of remaining battery life (%i%%).  Plug in your AC Adapter to avoid losing data."),
+			_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
+			  "Plug in your AC Adapter to avoid losing data."),
 			remaining, newCharge);
-		libnotify_event (_("Battery Low"), message, LIBNOTIFY_URGENCY_CRITICAL,
+		libnotify_event (_("Battery Low"),
+			message,
+			LIBNOTIFY_URGENCY_CRITICAL,
 			get_notification_icon ());
 		g_free (message);
 		g_free (remaining);
@@ -711,15 +613,12 @@ hal_device_property_modified (const gchar *udi,
 	gboolean is_added,
 	gboolean is_removed)
 {
-	GenericObject *slotData = NULL;
-	GenericObject slotDataVirt;
-	gboolean updateState;
+	sysDev *sd = NULL;
+	sysDevStruct *sds = NULL;
+	gchar *type;
+
 	gint oldCharge;
 	gint newCharge;
-
-	/* assertion checks */
-	g_assert (udi);
-	g_assert (key);
 
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
 		udi, key, is_added, is_removed);
@@ -728,59 +627,63 @@ hal_device_property_modified (const gchar *udi,
 	if (is_removed||is_added)
 		return;
 
+	if (strcmp (key, "ac_adapter.present") == 0) {
+		hal_device_get_bool (udi, key, &onAcPower);
+		if (!onAcPower) {
+			libnotify_event (_("AC Power Unplugged"),
+					_("The AC Power has been unplugged. "
+					"The system is now using battery power."),
+					LIBNOTIFY_URGENCY_NORMAL,
+					get_notification_icon ());
+			action_policy_do (ACTION_NOW_BATTERYPOWERED);
+		} else
+			action_policy_do (ACTION_NOW_MAINSPOWERED);
+		/* update icon */
+		gpn_icon_update ();
+	}
+
 	/* no point continuing any further if we are never going to match ...*/
-	if (strncmp (key, "battery", 7) != 0 && strncmp (key, "ac_adapter", 10) != 0)
+	if (strncmp (key, "battery", 7) != 0)
 		return;
 
-	slotData = genericobject_find (objectData, udi);
+	sds = sysDevFindAll (udi);
 	/*
 	 * if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
 	 */
-	if (!slotData) {
-		g_warning ("slotData is NULL! udi=%s\n"
+	if (!sds) {
+		g_warning ("sds is NULL! udi=%s\n"
 			   "This is probably a bug in HAL where we are getting "
 			   "is_removed=false, is_added=false before the capability "
 			   "had been added. In addon-hid-ups this is likely to happen."
 			   , udi);
 		return;
 	}
-	updateState = FALSE;
-
-	/* find old percentageCharge (taking into account multi-device machines) */
-	if (slotData->isRechargeable) {
-		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-		oldCharge = slotDataVirt.percentageCharge;
-	} else
-		oldCharge = slotData->percentageCharge;
+	
+	/* find old percentageCharge */
+	sd = sysDevGet (BATT_PRIMARY);
+	oldCharge = sd->percentageCharge;
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		hal_device_get_bool (udi, key, &slotData->present);
+		hal_device_get_bool (udi, key, &sds->present);
 		/* read in values */
-		read_battery_data (slotData);
-		updateState = TRUE;
-	} else if (strcmp (key, "ac_adapter.present") == 0) {
-		hal_device_get_bool (udi, key, &slotData->present);
-		updateState = TRUE;
+		read_battery_data (sds);
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		hal_device_get_bool (udi, key, &slotData->isCharging);
+		hal_device_get_bool (udi, key, &sds->isCharging);
 		/*
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
-		slotData->minutesRemaining = 0;
-		updateState = TRUE;
+		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		hal_device_get_bool (udi, key, &slotData->isDischarging);
+		hal_device_get_bool (udi, key, &sds->isDischarging);
 		/* invalidate the remaining time */
-		slotData->minutesRemaining = 0;
-		updateState = TRUE;
+		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		hal_device_get_int (udi, key, &slotData->percentageCharge);
+		hal_device_get_int (udi, key, &sds->percentageCharge);
 		/* give notification @100% */
-		if (slotData->percentageCharge == 100) {
+		if (sds->percentageCharge == 100) {
 			libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
 					 get_notification_icon ());
@@ -789,21 +692,29 @@ hal_device_property_modified (const gchar *udi,
 		gint tempval;
 		hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
-			slotData->minutesRemaining = tempval / 60;
+			sds->minutesRemaining = tempval / 60;
 	} else
 		/* ignore */
 		return;
 
-	if (updateState)
-		update_state_logic (objectData, FALSE);
 
-	/* find new percentageCharge (taking into account multi-device machines) */
-	if (slotData->isRechargeable) {
-		slotDataVirt.percentageCharge = 100;
-		create_virtual_of_type (objectData, &slotDataVirt, slotData->powerDevice);
-		newCharge = slotDataVirt.percentageCharge;
-	} else
-		newCharge = slotData->percentageCharge;
+	/* get battery type so we know what to refresh */
+	hal_device_get_string (udi, "battery.type", &type);
+	if (!type) {
+		g_warning ("Battery %s has no type!", udi);
+		return;
+	}
+	DeviceType dev = hal_to_device_type (type);
+	g_free (type);
+
+	/* update */
+	sysDevUpdate (dev);
+	if (isVerbose)
+		sysDevPrint (dev);
+
+	/* find new percentageCharge  */
+	newCharge = sd->percentageCharge;
+
 	g_debug ("newCharge = %i, oldCharge = %i", newCharge, oldCharge);
 
 	/* update icon */
@@ -812,7 +723,7 @@ hal_device_property_modified (const gchar *udi,
 	/* do we need to notify the user we are getting low ? */
 	if (oldCharge != newCharge) {
 		g_debug ("percentage change %i -> %i", oldCharge, newCharge);
-		notify_user_low_batt (slotData, newCharge);
+		notify_user_low_batt (sds, newCharge);
 	}
 }
 
@@ -889,7 +800,7 @@ idle_callback (gint timeout)
 {
 	gint policy;
 
-	policy = get_policy_string (GCONF_ROOT "policy/ac_fail");
+	policy = get_policy_string (GCONF_ROOT "policy/idle"); /* @todo! */
 
 	/* can only be hibernate or suspend */
 	action_policy_do (policy);
@@ -997,7 +908,11 @@ main (int argc, char *argv[])
 	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
 
+	/* initialise stock icons */
 	gpm_stock_icons_init();
+
+	/* initialise all system devices */
+	sysDevInitAll ();
 
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
@@ -1021,6 +936,7 @@ main (int argc, char *argv[])
 		exit (1);
 	}
 
+	g_debug ("initialising glibhal");
 	glibhal_callback_init ();
 	/* assign the callback functions */
 	glibhal_method_device_removed (hal_device_removed);
@@ -1030,19 +946,24 @@ main (int argc, char *argv[])
 	/* sets up NameOwnerChanged notification */
 	glibhal_method_noc (signalhandler_noc);
 
-	objectData = g_ptr_array_new ();
-
-	/* sets up these devices in the objectData and adds watches */
+	/* sets up these devices and adds watches */
+	g_debug ("starting batteries coldplug");
 	coldplug_batteries ();
+	g_debug ("starting acadapter coldplug");
 	coldplug_acadapter ();
+	g_debug ("starting buttons coldplug");
 	coldplug_buttons ();
 
-	update_state_logic (objectData, TRUE);
+	g_debug ("update devices");
+	sysDevUpdateAll ();
+	if (isVerbose)
+		sysDevPrintAll ();
+
 	gpn_icon_update ();
 
 	/* get idle value from gconf */
-	if (state_data.onBatteryPower) {
-		value = gconf_client_get_int (client, 
+	if (!onAcPower) {
+		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/sleep_computer", NULL);
 	} else {
 		value = gconf_client_get_int (client,

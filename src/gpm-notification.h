@@ -66,8 +66,6 @@ typedef struct {
 	GtkWidget *evbox;		/**< The event box (click)	*/
 } TrayData;
 
-GenericObject *get_main_icon_slot (void);
-GString *get_full_tooltip (void);
 GtkWidget *get_notification_icon (void);
 
 /* wrapper functions */

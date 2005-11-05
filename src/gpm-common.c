@@ -36,6 +36,7 @@
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 #include "gpm-common.h"
+#include "gpm-sysdev.h"
 #include "compiler.h"
 
 /** Gets the position to "point" to (i.e. center of the icon)
@@ -61,77 +62,6 @@ get_widget_position (GtkWidget *widget, gint *x, gint *y)
 	*y += gdk_pixbuf_get_height (pixbuf);
 	g_debug ("widget position x=%i, y=%i", *x, *y);
 	return TRUE;
-}
-
-/** Finds a device from the objectData table
- *
- *  @param	parray		pointer array to GenericObject
- *  @param	udi		HAL UDI
- */
-gint
-find_udi_parray_index (GPtrArray *parray, const gchar *udi)
-{
-	GenericObject *slotData = NULL;
-	gint a;
-
-	/* assertion checks */
-	g_assert (parray);
-	g_assert (udi);
-
-	for (a=0;a<parray->len;a++) {
-		slotData = (GenericObject *) g_ptr_array_index (parray, a);
-		g_return_val_if_fail (slotData, -1);
-		if (strcmp (slotData->udi, udi) == 0)
-			return a;
-	}
-	return -1;
-}
-
-/** Finds a device from the objectData table
- *
- *  @param	parray		pointer array to GenericObject
- *  @param	udi		HAL UDI
- */
-GenericObject *
-genericobject_find (GPtrArray *parray, const gchar *udi)
-{
-	gint a;
-
-	/* assertion checks */
-	g_assert (parray);
-	g_assert (udi);
-
-	a = find_udi_parray_index (parray, udi);
-	if (a != -1)
-		return (GenericObject *) g_ptr_array_index (parray, a);
-	return NULL;
-}
-
-/** Adds a device to the objectData table *IF DOES NOT EXIST*
- *
- *  @param	parray		pointer array to GenericObject
- *  @param	udi		HAL UDI
- *  @return			TRUE if we added to the table
- */
-GenericObject *
-genericobject_add (GPtrArray *parray, const gchar *udi)
-{
-	GenericObject *slotData = NULL;
-	gint a;
-
-	/* assertion checks */
-	g_assert (parray);
-	g_assert (udi);
-
-	a = find_udi_parray_index (parray, udi);
-	if (a != -1)
-		return NULL;
-
-	slotData = g_new (GenericObject, 1);
-	strcpy (slotData->udi, udi);
-	slotData->powerDevice = POWER_UNKNOWN;
-	g_ptr_array_add (parray, (gpointer) slotData);
-	return slotData;
 }
 
 /** Runs a tool in BINDIR
@@ -191,22 +121,20 @@ run_gconf_script (const char *path)
 
 /** Gets the timestring from a slot object
  *
- *  @param	slotData	the GenericObject reference
+ *  @param	remaining	Number of minutes remaining
+ *  @param	isCharging	If the battery is charging
  *  @return			the timestring, e.g. "13 minutes until charged"
  */
 gchar *
-get_time_string (GenericObject *slotData)
+get_time_string (int remaining, gboolean isCharging)
 {
 	gchar* timestring = NULL;
 	gchar* retval = NULL;
 
-	/* assertion checks */
-	g_assert (slotData);
-
-	timestring = get_timestring_from_minutes (slotData->minutesRemaining);
+	timestring = get_timestring_from_minutes (remaining);
 	if (!timestring)
 		return NULL;
-	if (slotData->isCharging)
+	if (isCharging)
 		retval = g_strdup_printf ("%s %s", timestring, _("until charged"));
 	else
 		retval = g_strdup_printf ("%s %s", timestring, _("remaining"));
@@ -214,61 +142,6 @@ get_time_string (GenericObject *slotData)
 	g_free (timestring);
 
 	return retval;
-}
-
-/** Returns a virtual device that takes into account having more than one device
- *  that needs to be averaged.
- *
- *  @note	Currently we are calculating percentageCharge and minutesRemaining only.
- *
- *  @param	objectData	the device database
- *  @param	slotDataReturn	the object returned. Must not be NULL
- *  @param	powerDevice	the object to be returned. Usually POWER_PRIMARY_BATTERY
- */
-void
-create_virtual_of_type (GPtrArray *objectData, GenericObject *slotDataReturn, gint powerDevice)
-{
-	GenericObject *slotData = NULL;
-	gint a;
-	gint objectCount = 0;
-	gint percentageCharge;
-	gint minutesRemaining;
-
-	GenericObject *slotDataTemp[5]; /* not going to get more than 5 objects */
-
-	/* assertion checks */
-	g_assert (slotDataReturn);
-
-	for (a=0; a < objectData->len; a++) {
-		slotData = (GenericObject *) g_ptr_array_index (objectData, a);
-		if (slotData->powerDevice == powerDevice && slotData->present) {
-			slotDataTemp[objectCount] = slotData;
-			objectCount++;
-		}
-	}
-	/* no objects */
-	if (objectCount == 0) {
-		g_warning ("create_virtual_of_type couldn't find device type %i", powerDevice);
-		slotDataReturn = NULL;
-		return;
-	}
-
-	/* short cut */
-	if (objectCount == 1) {
-		slotDataReturn->percentageCharge = slotDataTemp[0]->percentageCharge;
-		slotDataReturn->minutesRemaining = slotDataTemp[0]->minutesRemaining;
-		return;
-	}
-
-	/* work out average */
-	percentageCharge = 0;
-	minutesRemaining = 0;
-	for (a=0;a<objectCount;a++) {
-		percentageCharge += slotDataTemp[a]->percentageCharge;
-		minutesRemaining += slotDataTemp[a]->minutesRemaining;
-	}
-	slotDataReturn->percentageCharge = percentageCharge / objectCount;
-	slotDataReturn->minutesRemaining = minutesRemaining / objectCount;
 }
 
 /** This is a dummy function that is called only when not set verbose
@@ -337,77 +210,26 @@ convert_policy_to_string (gint value)
 /** Converts an HAL string representation to it's ENUM
  *
  *  @param  type		The HAL battery type
- *  @return			The powerDevice ENUM
+ *  @return			The DeviceType ENUM
  */
-PowerDevice
-convert_haltype_to_powerdevice (const gchar *type)
+DeviceType
+convert_haltype_to_batttype (const gchar *type)
 {
 	/* assertion checks */
 	g_assert (type);
 
-	if (strcmp (type, "ac_adapter") == 0)
-		return POWER_AC_ADAPTER;
-	else if (strcmp (type, "ups") == 0)
-		return POWER_UPS;
+	if (strcmp (type, "ups") == 0)
+		return BATT_UPS;
 	else if (strcmp (type, "mouse") == 0)
-		return POWER_MOUSE;
+		return BATT_MOUSE;
 	else if (strcmp (type, "keyboard") == 0)
-		return POWER_KEYBOARD;
+		return BATT_KEYBOARD;
 	else if (strcmp (type, "pda") == 0)
-		return POWER_PDA;
+		return BATT_PDA;
 	else if (strcmp (type, "primary") == 0)
-		return POWER_PRIMARY_BATTERY;
-	return POWER_UNKNOWN;
-}
-
-/** Converts a powerDevice to it's human readable form
- *
- *  @param  powerDevice		The powerDevice ENUM
- *  @return			Human string, e.g. "Laptop battery"
- */
-gchar *
-convert_powerdevice_to_string (gint powerDevice)
-{
-	if (powerDevice == POWER_UPS)
-		return _("UPS");
-	else if (powerDevice == POWER_AC_ADAPTER)
-		return _("AC Adapter");
-	else if (powerDevice == POWER_MOUSE)
-		return _("Logitech mouse");
-	else if (powerDevice == POWER_KEYBOARD)
-		return _("Logitech keyboard");
-	else if (powerDevice == POWER_PRIMARY_BATTERY)
-		return _("Laptop battery");
-	else if (powerDevice == POWER_PDA)
-		return _("PDA");
-	return _("Unknown device");
-}
-
-/** Gets the charge state string from a slot object
- *
- *  @param  slotData		the GenericObject reference
- *  @return			the charge string, e.g. "fully charged"
- */
-gchar *
-get_chargestate_string (GenericObject *slotData)
-{
-	/* assertion checks */
-	g_assert (slotData);
-
-	if (!slotData->present)
-		return _("missing");
-	else if (slotData->isCharging)
-		return _("charging");
-	else if (slotData->isDischarging)
-		return _("discharging");
-	else if (!slotData->isCharging &&
-		 !slotData->isDischarging &&
-		 slotData->percentageCharge > 99)
-		return _("fully charged");
-	else if (!slotData->isCharging &&
-		 !slotData->isDischarging)
-		return _("charged");
-	return _("unknown");
+		return BATT_PRIMARY;
+	g_warning ("convert_haltype_to_batttype got unknown type '%s'", type);
+	return BATT_PRIMARY;
 }
 
 /** Returns the time string, e.g. "2 hours 3 minutes"
