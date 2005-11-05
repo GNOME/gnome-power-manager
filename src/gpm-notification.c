@@ -71,7 +71,7 @@ get_index_from_percent (gint percent)
  *  @return			An icon name
  */
 static gchar *
-get_stock_id_for_slot_data (void)
+get_stock_id (void)
 {
 	gint index;
 	gchar *stock_id = NULL;
@@ -585,7 +585,7 @@ gpn_icon_update (void)
 	iconShow = gconf_client_get_bool (client,
 				GCONF_ROOT "general/display_icon", NULL);
 
-	stock_id = get_stock_id_for_slot_data ();
+	stock_id = get_stock_id ();
 
 	if (iconShow && stock_id) {
 		if (!eggtrayicon) {
