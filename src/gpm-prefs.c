@@ -220,7 +220,7 @@ callback_combo_changed (GtkWidget *widget, gpointer user_data)
 gint
 get_battery_time_for_percentage (gint value)
 {
-	/** /bug	Need to use HAL to get battery */
+	/**	@bug	Need to use HAL to get battery */
 	gchar *udi = "/org/freedesktop/Hal/devices/acpi_BAT1";
 	gint percentage;
 	gint time;
