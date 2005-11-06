@@ -1,5 +1,5 @@
-/** @file	gpm-screensaver.c
- *  @brief	Functions to query and control GNOME Screensaver
+/** @file	gpm-stock-icons.h
+ *  @brief	Register our custom icons as GNOME stock icons
  *  @author	2002		Jorn Baayen
  *		2003,2004	Colin Walters <walters@verbum.org>
  */

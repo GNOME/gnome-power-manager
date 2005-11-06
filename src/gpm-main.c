@@ -341,10 +341,10 @@ read_battery_data (sysDevStruct *sds)
 	return TRUE;
 }
 
-/** Adds a battery device, of any type. Also sets up properties on cached object
+/** Converts the HAL battery.type string to a DeviceType ENUM
  *
- *  @param  udi			UDI
- *  @return			If we added a valid battery
+ *  @param  type		The battery type, e.g. "primary"
+ *  @return			The DeviceType
  */
 static DeviceType
 hal_to_device_type (const gchar *type)

@@ -8,6 +8,12 @@
  * more than one laptop battery or UPS (or misc. wireless periperial).
  * This is required as we show the icons and do the events as averaged
  * over all battery devices of the same type.
+ *
+ * In code that incldes gpm-sysdev.h, you will see two types of devices:
+ *  - sd	These are system devices and are the overview of all
+ *		devices of the specific type.
+ *  - sds	These are device structs that contain the indervidual
+ *		cached data for each specific device.
  */
 /*
  * Licensed under the GNU General Public License Version 2
@@ -140,7 +146,7 @@ sysDevInitAll ()
 /** Frees all the system device objects
  */
 void
-sysDevFreeAll (DeviceType type)
+sysDevFreeAll (void)
 {
 	g_debug ("Freeing all device types");
 	sysDevFree (BATT_PRIMARY);
@@ -176,9 +182,6 @@ sysDevPrintAll (void)
 }
 
 /** Updates all the system device objects
- *
- *  @param	type		The device type
- *  @return			Success
  */
 void
 sysDevUpdateAll (void)
@@ -195,6 +198,7 @@ sysDevUpdateAll (void)
 /** Adds a system struct to a system device
  *
  *  @param	type		The device type
+ *  @param	sds		The valid device struct
  *  @return			Success
  */
 void
@@ -260,7 +264,6 @@ sysDevFind (DeviceType type, const gchar *udi)
 
 /** Finds all the system structs of any system device
  *
- *  @param	type		The device type
  *  @param	udi		The HAL UDI
  *  @return			A sysDevStruct
  */

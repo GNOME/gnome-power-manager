@@ -225,7 +225,7 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 /** Gets the tooltip for a specific device object
  *
  *  @param	type		The device type
- *  @param	sds		The device struct
+ *  @param	sd		The system device
  *  @return			Part of the tooltip
  */
 GString *
