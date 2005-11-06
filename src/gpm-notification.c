@@ -115,6 +115,7 @@ get_stock_id (void)
 		return NULL;
 
 	/* Only display if not at 100% */
+/** @todo need to check charging and discharging flags */
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->percentageCharge == 100)
 		return NULL;
@@ -584,15 +585,25 @@ gpn_icon_update (void)
 	GConfClient *client = NULL;
 	gboolean iconShow;
 	GString *tooltip = NULL;
-	gchar* stock_id;
+	gchar* stock_id = NULL;
 
 	client = gconf_client_get_default ();
 	/* do we want to display the icon */
 	iconShow = gconf_client_get_bool (client,
 				GCONF_ROOT "general/display_icon", NULL);
+	if (!iconShow) {
+		/* warn user */
+		g_warning ("The key " GCONF_ROOT "general/display_icon "
+			 "is set to false, so no icon will be displayed\n"
+			 "You can change this using gnome-power-preferences");
+	} else {
+		/* try to get stock image */
+		stock_id = get_stock_id ();
+		if (!stock_id)
+			g_debug ("no icon will be displayed\n");
+	}
 
-	stock_id = get_stock_id ();
-
+	/* only create if we have gconf set, and a valid filename */
 	if (iconShow && stock_id) {
 		if (!eggtrayicon) {
 			/* create icon */
@@ -605,7 +616,6 @@ gpn_icon_update (void)
 			stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		g_free (stock_id);
 
-		g_debug ("getting full tooltips");
 		tooltip = get_full_tooltip ();
 		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,
 			GTK_WIDGET (eggtrayicon->tray_icon),
@@ -613,9 +623,6 @@ gpn_icon_update (void)
 		g_string_free (tooltip, TRUE);
 	} else {
 		/* remove icon */
-		g_debug ("The key " GCONF_ROOT "general/display_icon"
-			   "and " GCONF_ROOT "general/display_icon_full "
-			   " are both set to false, so no icon will be displayed");
 		if (eggtrayicon) {
 			icon_destroy (eggtrayicon);
 			eggtrayicon = NULL;
