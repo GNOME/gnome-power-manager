@@ -1,5 +1,8 @@
 2005-11-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-notification.c: Do not segfault when battery bay is empty.
+	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=320658
+
 	* src/gpm-notification.c: Do not leak eggtrayicon by just hiding it,
 	but properly unrealize it. This fixes the bug where the icon "moved"
 	across the notification area when it was repeatedly shown/hidden.

@@ -242,8 +242,11 @@ get_tooltips_system_device (sysDev *sd)
 	for (a=0; a < sd->devices->len; a++) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
 		temptipdevice = get_tooltip_system_struct (sd->type, sds);
-		g_string_append_printf (tooltip, "%s\n", temptipdevice->str);
-		g_string_free (temptipdevice, TRUE);
+		/* can be NULL if the device is not present */
+		if (temptipdevice) {
+			g_string_append_printf (tooltip, "%s\n", temptipdevice->str);
+			g_string_free (temptipdevice, TRUE);
+		}
 	}
 	return tooltip;
 }
