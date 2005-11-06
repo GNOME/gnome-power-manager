@@ -80,11 +80,11 @@ get_stock_id (void)
 	gint lowThreshold;
 	gboolean displayFull;
 
+	g_debug ("getting stock icon");
 	/* find out when the user considers the power "low" */
 	client = gconf_client_get_default ();
 	lowThreshold = gconf_client_get_int (client,
 				GCONF_ROOT "general/threshold_low", NULL);
-
 	/* list in order of priority */
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
@@ -544,6 +544,7 @@ icon_create (void)
 	GtkWidget *evbox = NULL;
 
 	g_assert (!eggtrayicon);
+	g_debug ("icon_create!");
 
 	/* create new tray object */
 	eggtrayicon = g_new0 (TrayData, 1);

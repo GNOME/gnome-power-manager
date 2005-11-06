@@ -960,6 +960,7 @@ main (int argc, char *argv[])
 	if (isVerbose)
 		sysDevPrintAll ();
 
+	g_debug ("init'ing icon");
 	gpn_icon_update ();
 
 	/* get idle value from gconf */
@@ -970,6 +971,7 @@ main (int argc, char *argv[])
 		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/ac/sleep_computer", NULL);
 	}
+	g_debug ("setting timeout");
 	gpm_idle_set_timeout (value);
 	
 	/* set callback for the timout action */

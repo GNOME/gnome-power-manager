@@ -1,11 +1,12 @@
 TODO:
 
- * change api to include a "key" so we can use glib bindings?
-
  * Use the callbacks in libnotify to do a "What's this?" type help prompt.
 
  * Give user a choice to abort all actions.
 
- * update potfiles.in
+ * We have to recover when hald is restarted.
 
- * we have to recover when hald is restarted.
+ * We should really update the command line options.
+ -v --version
+ -c --console   (i.e. daemonise = no)
+ -d --debug     (i.e. verbose)
