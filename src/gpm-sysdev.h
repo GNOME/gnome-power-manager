@@ -63,6 +63,7 @@ typedef struct {
 	int minutesRemaining;	/**< Minutes remaining until charged	*/
 	int numberDevices;	/**< Number of devices of this type	*/
 	GPtrArray* devices;	/**< system struct array		*/
+	DeviceType type;	/**< The device type, e.g. BATT_UPS	*/
 } sysDev;
 
 gchar *sysDevToString (DeviceType type);

@@ -4,6 +4,10 @@
 	but properly unrealize it. This fixes the bug where the icon "moved"
 	across the notification area when it was repeatedly shown/hidden.
 
+	* src/gpm-sysdev.{c|h}, gpm-main.c (hal_device_property_modified):
+	Check that the battery is at 100%, AND of type "primary" before
+	notifying the user that their battery is charged :-)
+
 2005-11-05  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Change libwnck dep to 2.10.0. Not sure what happened

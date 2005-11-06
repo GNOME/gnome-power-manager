@@ -211,6 +211,7 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
 	g_assert (sd);
 	g_assert (sd->devices);
 	g_ptr_array_add (sd->devices, (gpointer) sds);
+	sd->type = type;
 	sd->numberDevices++;
 }
 
