@@ -332,20 +332,35 @@ void
 sysDevUpdate (DeviceType type)
 {
 	int a;
+	int numPresent = 0;
 	sysDev *sd = sysDevGet (type);
-	sysDevStruct *temp;
+	sysDevStruct *sds;
 
 	/* clear old values */
 	sd->minutesRemaining = 0;
 	sd->percentageCharge = 0;
 
+	/* find the number of batteries present */
+	for (a=0; a < sd->devices->len; a++) {
+		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		if (sds->present)
+			numPresent++;
+	}
+	/* no point working out average if no devices */
+	if (numPresent == 0) {
+		g_debug ("no devices of type %s", sysDevToString(type));
+		return;
+	}
+	g_debug ("%i devices of type %s", numPresent, sysDevToString(type));
 	/* iterate thru all the devices */
 	for (a=0; a < sd->devices->len; a++) {
-		temp = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
-		/* for now, just add */
-		sd->minutesRemaining += temp->minutesRemaining;
-		/* for now, just average */
-		sd->percentageCharge += (temp->percentageCharge/sd->numberDevices);
+		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		if (sds->present) {
+			/* for now, just add */
+			sd->minutesRemaining += sds->minutesRemaining;
+			/* for now, just average */
+			sd->percentageCharge += (sds->percentageCharge / numPresent);
+		}
 	}
 
 }

@@ -1,6 +1,8 @@
 2005-11-06  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-notification.c: Do not segfault when battery bay is empty.
+	* src/gpm-notification.c, src/gpm-sysdev.c: 
+	Do not segfault when battery bay is empty, and only add present
+	batteries to the calculations.
 	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=320658
 
 	* src/gpm-notification.c: Do not leak eggtrayicon by just hiding it,
