@@ -46,7 +46,9 @@
 #include <libnotify/notify.h>
 #endif
 
+#ifdef HAVE_LIBNOTIFY
 static NotifyHandle *globalnotify = NULL;
+#endif
 
 /** Convenience function to call libnotify
  *
@@ -147,11 +149,11 @@ gboolean
 libnotify_init (const gchar *nicename)
 {
 	gboolean ret = TRUE;
-	globalnotify = NULL;
 
 	/* assertion checks */
 	g_assert (nicename);
 #ifdef HAVE_LIBNOTIFY
+	globalnotify = NULL;
 	ret = notify_glib_init (nicename, NULL);
 #endif
 	return ret;
