@@ -83,6 +83,45 @@ gnome-power-manager --no-daemon --verbose
 <h3>HAL Verbose Trace</h3>
 <pre>/usr/sbin/hald --daemon=no --verbose=yes --retain-privileges</pre>
 
+<h2>Segfaults or random crashes</h2>
+
+<p>
+ I would really appreciate it if you could send me more information about the crash,
+ specifically a backtrace with gdb.
+</p>
+
+<p>
+ You have to compile GNOME Power Manager from CVS to do this.
+ Grab the latest from CVS, and open configure.in, and uncomment the line below "Debugging switches"
+ Run ./autogen.sh --prefix=/tmp as normal in the source directory.
+ Compile it with "make", and then use "make install".
+ After that in the same directory where you typed "make" run:
+</p>
+<pre>
+gdb ./gnome-power-manager
+</pre>
+<p>
+ The GNU debugger (gdb) will start and put you at a prompt:
+</p>
+<pre>
+(gdb) _
+</pre>
+<p>
+ Then type the following and crash the program / let it crash on it's own.
+</p>
+<pre>
+(gdb) run --no-daemon --verbose
+</pre>
+<p>
+ You will be back in the gdb shell.
+ Then type <b>bt</b> at the prompt and send me all the output that follows.
+ This will tell me exactly what the program was doing when it crashed.
+</p>
+<p>
+ <a href="http://www.cs.usfca.edu/benson/cs326/gdb/gdb.pdf">This link</a>
+ will give you more information.
+</p>
+
 </div>
 
 <!-- sidebar -->
