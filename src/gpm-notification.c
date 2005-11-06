@@ -145,7 +145,7 @@ icon_destroy (TrayData *eggtrayicon)
 		g_free (eggtrayicon->popup_menu);
 	if (eggtrayicon->tray_icon_tooltip)
 		g_free (eggtrayicon->tray_icon_tooltip);
-	gtk_widget_hide_all (GTK_WIDGET (eggtrayicon->tray_icon));
+	gtk_widget_unrealize ((GtkWidget *) eggtrayicon->tray_icon);
 	g_free (eggtrayicon);
 	eggtrayicon = NULL;
 }

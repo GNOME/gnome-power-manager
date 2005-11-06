@@ -34,7 +34,7 @@
 
 static GtkIconFactory *factory = NULL;
 
-void
+gboolean
 gpm_stock_icons_init (void)
 {
 	int i;
@@ -61,18 +61,25 @@ gpm_stock_icons_init (void)
 	for (i = 0; i < (int) G_N_ELEMENTS (items); i++) {
 		GtkIconSet *icon_set;
 		GdkPixbuf *pixbuf;
-		char *file_name;
+		char *filename;
 
-		file_name = g_strconcat (GPM_DATA, items[i], ".png", NULL);
-		pixbuf = gdk_pixbuf_new_from_file (file_name, NULL);
-		g_free (file_name);
-
+		filename = g_strconcat (GPM_DATA, items[i], ".png", NULL);
+		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+		if (!pixbuf) {
+			g_warning ("icon '%s' cannot be found. "
+				   "Make sure you installed g-p-m correctly",
+				   filename);
+			g_free (filename);
+			return FALSE;
+		}
+		g_free (filename);
 		icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
 		gtk_icon_factory_add (factory, items[i], icon_set);
 		gtk_icon_set_unref (icon_set);
 		
 		g_object_unref (G_OBJECT (pixbuf));
 	}
+	return TRUE;
 }
 
 

@@ -25,6 +25,8 @@
 #ifndef _GPMNOTIFICATION_H
 #define _GPMNOTIFICATION_H
 
+#include "eggtrayicon.h"
+
 #define GPLV2 \
 	"Licensed under the GNU General Public License Version 2\n\n" \
 	"This program is free software; you can redistribute it and/or\n" \

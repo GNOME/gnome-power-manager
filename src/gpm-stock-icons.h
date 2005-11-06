@@ -58,8 +58,8 @@ G_BEGIN_DECLS
 #define GPM_STOCK_UPS_7_OF_8	"gnome-power-ups-7-of-8"
 #define GPM_STOCK_UPS_8_OF_8	"gnome-power-ups-8-of-8"
 
-void	gpm_stock_icons_init	(void);
-void	gpm_stock_icons_shutdown (void);
+gboolean gpm_stock_icons_init (void);
+void gpm_stock_icons_shutdown (void);
 
 G_END_DECLS
 

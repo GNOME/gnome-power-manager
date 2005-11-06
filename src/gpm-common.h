@@ -27,7 +27,6 @@
 
 #include <gnome.h>
 
-#include "eggtrayicon.h"
 #include "gpm-sysdev.h"
 #include "compiler.h"
 

@@ -909,7 +909,8 @@ main (int argc, char *argv[])
 		g_error ("Cannot initialise libnotify!");
 
 	/* initialise stock icons */
-	gpm_stock_icons_init();
+	if (!gpm_stock_icons_init())
+		g_error ("Cannot continue without stock icons");
 
 	/* initialise all system devices */
 	sysDevInitAll ();
