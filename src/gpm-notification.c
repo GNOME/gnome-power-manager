@@ -173,6 +173,7 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 	GString *tooltip = NULL;
 	gchar *devicestr = NULL;
 	gchar *chargestate = NULL;
+	g_assert (sds);
 
 	/* do not display for not present devices */
 	if (!sds->present)
@@ -229,18 +230,19 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
  *  @return			Part of the tooltip
  */
 GString *
-get_tooltips_system_device (DeviceType type, sysDev *sd)
+get_tooltips_system_device (sysDev *sd)
 {
 	//list each in this group, and call get_tooltip_system_struct for each one
 	int a;
 	sysDevStruct *sds;
 	GString *temptipdevice = NULL;
 	GString *tooltip = NULL;
+	g_assert (sd);
 	tooltip = g_string_new ("");
 
 	for (a=0; a < sd->devices->len; a++) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
-		temptipdevice = get_tooltip_system_struct (type, sds);
+		temptipdevice = get_tooltip_system_struct (sd->type, sds);
 		g_string_append_printf (tooltip, "%s\n", temptipdevice->str);
 		g_string_free (temptipdevice, TRUE);
 	}
@@ -256,9 +258,10 @@ get_tooltips_system_device_type (GString *tooltip, DeviceType type)
 {
 	sysDev *sd;
 	GString *temptip = NULL;
+	g_assert (tooltip);
 	sd = sysDevGet (type);
 	if (sd->numberDevices > 0) {
-		temptip = get_tooltips_system_device (type, sd);
+		temptip = get_tooltips_system_device (sd);
 		g_string_append (tooltip, temptip->str);
 		g_string_free (temptip, TRUE);
 	}
@@ -274,6 +277,7 @@ get_full_tooltip (void)
 	GString *tooltip = NULL;
 	gint a;
 
+	g_debug ("get_full_tooltip");
 	if (!onAcPower)
 		tooltip = g_string_new (_("Computer is running on battery power\n"));
 	else
@@ -422,6 +426,8 @@ menu_main_create (TrayData *trayicon)
 	g_assert (trayicon);
 	g_assert (trayicon->popup_menu == NULL);
 
+	g_debug ("menu_main_create");
+
 	trayicon->popup_menu = gtk_menu_new ();
 
 	menu_add_action_item (trayicon->popup_menu, "gnome-dev-memory",
@@ -556,7 +562,7 @@ icon_create (void)
 	eggtrayicon->tray_icon_tooltip = gtk_tooltips_new ();
 	eggtrayicon->popup_menu = NULL;
 
-	eggtrayicon->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER, GTK_ICON_SIZE_SMALL_TOOLBAR);
+	eggtrayicon->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	g_signal_connect (G_OBJECT (evbox), "button_press_event",
 			  G_CALLBACK (tray_icon_press), (gpointer) eggtrayicon);
 	g_signal_connect (G_OBJECT (evbox), "button_release_event",
@@ -600,6 +606,7 @@ gpn_icon_update (void)
 			stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		g_free (stock_id);
 
+		g_debug ("getting full tooltips");
 		tooltip = get_full_tooltip ();
 		gtk_tooltips_set_tip (eggtrayicon->tray_icon_tooltip,
 			GTK_WIDGET (eggtrayicon->tray_icon),
