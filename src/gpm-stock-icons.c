@@ -53,7 +53,7 @@ gpm_stock_icons_init (void)
 		GPM_STOCK_AC_ADAPTER, GPM_STOCK_MOUSE, GPM_STOCK_KEYBOARD
 	};
 
-	g_return_if_fail (factory == NULL);
+	g_return_val_if_fail (factory == NULL, FALSE);
 
 	factory = gtk_icon_factory_new ();
 	gtk_icon_factory_add_default (factory);

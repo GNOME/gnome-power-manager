@@ -267,7 +267,6 @@ action_policy_do (gint policy_number)
 static void
 gpm_exit (void)
 {
-	gint a;
 	g_debug ("Quitting!");
 
 	glibhal_callback_shutdown ();
@@ -373,7 +372,6 @@ static gboolean
 add_battery (const gchar *udi)
 {
 	gchar *type = NULL;
-	gchar *device = NULL;
 	DeviceType dev;
 
 	g_debug ("adding %s", udi);
@@ -489,8 +487,6 @@ coldplug_buttons (void)
 static void
 hal_device_removed (const gchar *udi)
 {
-	int a;
-
 	/* assertion checks */
 	g_assert (udi);
 
@@ -683,7 +679,7 @@ hal_device_property_modified (const gchar *udi,
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_device_get_int (udi, key, &sds->percentageCharge);
 		/* give notification @100% */
-		if (sd->type = BATT_PRIMARY && sds->percentageCharge == 100) {
+		if (sd->type == BATT_PRIMARY && sds->percentageCharge == 100) {
 			libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
 					 get_notification_icon ());

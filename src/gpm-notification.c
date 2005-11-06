@@ -74,7 +74,6 @@ static gchar *
 get_stock_id (void)
 {
 	gint index;
-	gchar *stock_id = NULL;
 	sysDev *sd = NULL;
 	GConfClient *client = NULL;
 	gint lowThreshold;
@@ -253,7 +252,7 @@ get_tooltips_system_device (sysDev *sd)
  *
  *  @return			The complete tooltip
  */
-GString *
+static void
 get_tooltips_system_device_type (GString *tooltip, DeviceType type)
 {
 	sysDev *sd;
@@ -275,7 +274,6 @@ GString *
 get_full_tooltip (void)
 {
 	GString *tooltip = NULL;
-	gint a;
 
 	g_debug ("get_full_tooltip");
 	if (!onAcPower)
@@ -582,8 +580,6 @@ gpn_icon_update (void)
 {
 	GConfClient *client = NULL;
 	gboolean iconShow;
-	gboolean iconShowAlways;
-	gboolean use_notif_icon;
 	GString *tooltip = NULL;
 	gchar* stock_id;
 

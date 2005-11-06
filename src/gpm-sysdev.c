@@ -161,7 +161,7 @@ sysDevFreeAll (void)
 void
 sysDevPrintAll (void)
 {
-	sysDev *sd;
+	sysDev *sd = NULL;
 	g_debug ("Printing all device types");
 	/* only print if we have at least one device type */
 	sd = sysDevGet (BATT_PRIMARY);

@@ -677,7 +677,6 @@ main (int argc, char **argv)
 	int pShutdown 	= 	ACTION_SHUTDOWN;
 	int pHibernate 	= 	ACTION_HIBERNATE;
 	int pNothing 	= 	ACTION_NOTHING;
-	int pWarning 	= 	ACTION_WARNING;
 
 	gtk_init (&argc, &argv);
 	gconf_init (argc, argv, NULL);

@@ -26,8 +26,6 @@
 
 /** define GCC macros to let us do clever things */
 #if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
-# define inline		inline __attribute__ ((always_inline))
-# define __pure		__attribute__ ((pure))
 # define __noreturn	__attribute__ ((noreturn))
 # define __malloc	__attribute__ ((malloc))
 # define __must_check	__attribute__ ((warn_unused_result))
@@ -38,8 +36,6 @@
 # define likely(x)	__builtin_expect (!!(x), 1)
 # define unlikely(x)	__builtin_expect (!!(x), 0)
 #else
-# define inline		/* no inline */
-# define __pure		/* no pure */
 # define __noreturn	/* no noreturn */
 # define __malloc	/* no malloc */
 # define __must_check	/* no warn_unused_result */
