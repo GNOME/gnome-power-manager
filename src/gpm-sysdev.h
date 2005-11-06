@@ -45,6 +45,8 @@ typedef enum {
 typedef struct {
 	int percentageCharge;	/**< The percentage charge remaining	*/
 	int minutesRemaining;	/**< Minutes remaining until charged	*/
+	gboolean isCharging;	/**< If general device is charging	*/
+	gboolean isDischarging;	/**< If general device is discharging	*/
 	int numberDevices;	/**< Number of devices of this type	*/
 	GPtrArray* devices;	/**< system struct array		*/
 	DeviceType type;	/**< The device type, e.g. BATT_UPS	*/

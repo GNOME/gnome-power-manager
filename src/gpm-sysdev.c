@@ -346,13 +346,26 @@ sysDevUpdate (DeviceType type)
 	/* clear old values */
 	sd->minutesRemaining = 0;
 	sd->percentageCharge = 0;
+	sd->isCharging = FALSE;
+	sd->isDischarging = FALSE;
 
-	/* find the number of batteries present */
+	/* find the number of batteries present, and set charge states */
 	for (a=0; a < sd->devices->len; a++) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
 		if (sds->present)
 			numPresent++;
+		/*
+		 * Only one device has to be charging or discharging for the
+		 * general case to be valid
+		 */
+		if (sds->isCharging)
+			sd->isCharging = TRUE;
+		if (sds->isDischarging)
+			sd->isDischarging = TRUE;
 	}
+	/* sanity check */
+	if (sd->isDischarging && sd->isCharging)
+		sd->isCharging = FALSE;
 	/* no point working out average if no devices */
 	if (numPresent == 0) {
 		g_debug ("no devices of type %s", sysDevToString(type));

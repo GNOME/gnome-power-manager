@@ -79,7 +79,7 @@ get_stock_id (void)
 	gint lowThreshold;
 	gboolean displayFull;
 
-	g_debug ("getting stock icon");
+	g_debug ("get_stock_id: getting stock icon");
 	/* find out when the user considers the power "low" */
 	client = gconf_client_get_default ();
 	lowThreshold = gconf_client_get_int (client,
@@ -111,14 +111,19 @@ get_stock_id (void)
 	client = gconf_client_get_default ();
 	displayFull = gconf_client_get_bool (client,
 				GCONF_ROOT "general/display_icon_full", NULL);
-	if (!displayFull)
+	if (!displayFull) {
+		g_debug ("get_stock_id: device not critical, and "
+			 "general/display_icon_full not set.");
 		return NULL;
+	}
 
-	/* Only display if not at 100% */
-/** @todo need to check charging and discharging flags */
+	/* Only display if not charging or disharging */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->percentageCharge == 100)
+	if (!sd->isCharging && !sd->isDischarging) {
+		g_debug ("get_stock_id: not charging or discharging, "
+			 "no need to display icon.");
 		return NULL;
+	}
 
 	/* Do the rest of the battery icon states */
 	if (sd->numberDevices > 0) {
