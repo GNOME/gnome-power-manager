@@ -35,22 +35,6 @@ typedef enum {
 } DeviceType;
 
 /**
- * The 'system struct'
- *
- * Every laptop battery, mouse, ups keyboard has one of these
- * with a unique UDI
- */
-typedef struct {
-	gchar udi[128];		/**< The HAL UDI			*/
-	gboolean isRechargeable;/**< If device is rechargeable		*/
-	int percentageCharge;	/**< The percentage charge remaining	*/
-	int minutesRemaining;	/**< Minutes remaining until charged	*/
-	gboolean present;	/**< If the device is present		*/
-	gboolean isCharging;	/**< If device is charging		*/
-	gboolean isDischarging;	/**< If device is discharging		*/
-} sysDevStruct;
-
-/**
  * The 'system device'
  *
  * Multiple batteries percentages are averaged and times added
@@ -65,6 +49,23 @@ typedef struct {
 	GPtrArray* devices;	/**< system struct array		*/
 	DeviceType type;	/**< The device type, e.g. BATT_UPS	*/
 } sysDev;
+
+/**
+ * The 'system struct'
+ *
+ * Every laptop battery, mouse, ups keyboard has one of these
+ * with a unique UDI
+ */
+typedef struct {
+	gchar udi[128];		/**< The HAL UDI			*/
+	gboolean isRechargeable;/**< If device is rechargeable		*/
+	int percentageCharge;	/**< The percentage charge remaining	*/
+	int minutesRemaining;	/**< Minutes remaining until charged	*/
+	gboolean present;	/**< If the device is present		*/
+	gboolean isCharging;	/**< If device is charging		*/
+	gboolean isDischarging;	/**< If device is discharging		*/
+	sysDev *sd;		/**< Pointer to parent system device	*/
+} sysDevStruct;
 
 gchar *sysDevToString (DeviceType type);
 

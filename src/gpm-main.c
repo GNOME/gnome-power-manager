@@ -337,6 +337,7 @@ read_battery_data (sysDevStruct *sds)
 				 "Please report this as a bug, providing the information to: "
 				 GPMURL);
 	}
+	sysDevUpdate (sds->sd->type);
 	return TRUE;
 }
 
@@ -496,6 +497,7 @@ hal_device_removed (const gchar *udi)
 	 * they just disappear from the device tree
 	 */
 	sysDevRemoveAll (udi);
+	sysDevUpdateAll ();
 	/* remove watch */
 	glibhal_watch_remove_device_property_modified (udi);
 	gpn_icon_update ();
@@ -522,6 +524,7 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 	if (strcmp (capability, "battery") == 0) {
 		add_battery (udi);
 		gpn_icon_update ();
+		sysDevUpdateAll ();
 	}
 }
 
@@ -656,8 +659,17 @@ hal_device_property_modified (const gchar *udi,
 		return;
 	}
 	
+	/* get battery type so we know what to process */
+	hal_device_get_string (udi, "battery.type", &type);
+	if (!type) {
+		g_warning ("Battery %s has no type!", udi);
+		return;
+	}
+	DeviceType dev = hal_to_device_type (type);
+	g_free (type);
+
 	/* find old percentageCharge */
-	sd = sysDevGet (BATT_PRIMARY);
+	sd = sysDevGet (dev);
 	oldCharge = sd->percentageCharge;
 
 	/* update values in the struct */
@@ -692,16 +704,6 @@ hal_device_property_modified (const gchar *udi,
 	} else
 		/* ignore */
 		return;
-
-
-	/* get battery type so we know what to refresh */
-	hal_device_get_string (udi, "battery.type", &type);
-	if (!type) {
-		g_warning ("Battery %s has no type!", udi);
-		return;
-	}
-	DeviceType dev = hal_to_device_type (type);
-	g_free (type);
 
 	/* update */
 	sysDevUpdate (dev);

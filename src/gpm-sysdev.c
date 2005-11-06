@@ -210,8 +210,15 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
 	sysDev *sd = sysDevGet (type);
 	g_assert (sd);
 	g_assert (sd->devices);
+
+	/* provide link to parent */
+	sds->sd = sd;
+
+	/* add to array */
 	g_ptr_array_add (sd->devices, (gpointer) sds);
 	sd->type = type;
+
+	/* increment number of devices in this struct */
 	sd->numberDevices++;
 }
 

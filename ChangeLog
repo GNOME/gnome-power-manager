@@ -5,6 +5,10 @@
 	batteries to the calculations.
 	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=320658
 
+	* src/gpm-sysdev.{c|h}, src/gpm-main.c: Add sd link to parent so we 
+	can find our device type. Update the correct battery type, not just
+	BATT_PRIMARY on HAL event.
+
 	* src/gpm-notification.c: Do not leak eggtrayicon by just hiding it,
 	but properly unrealize it. This fixes the bug where the icon "moved"
 	across the notification area when it was repeatedly shown/hidden.
