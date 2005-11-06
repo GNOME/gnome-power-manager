@@ -35,7 +35,7 @@ EXTRA_DIST =						\
 
 install-data-local:
 	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
-	$(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
+	$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
 
 clean-local :
 	rm -f *~

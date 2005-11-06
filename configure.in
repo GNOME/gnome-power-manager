@@ -177,6 +177,8 @@ fi
 AM_CONDITIONAL(HAVE_LIBNOTIFY, test x$have_libnotify = xyes)
 if test x$have_libnotify = xyes ; then
     AC_DEFINE(HAVE_LIBNOTIFY,1,[libnotify support])
+    AC_SUBST(LIBNOTIFY_CFLAGS)
+    AC_SUBST(LIBNOTIFY_LIBS)
 fi
 
 dnl ---------------------------------------------------------------------------
