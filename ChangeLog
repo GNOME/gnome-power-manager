@@ -8,6 +8,10 @@
 	if one battery is discharging and others not. This assumes they have
 	the same capacity, and needs to be fixed properly.
 
+	* src/gpm-main.c: Don't use sysDevUpdateAll when we have the UDI and
+	can work out the system device to do a specific sysDevUpdate.
+	This should make g-p-m less processor hungry.
+
 2005-11-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-notification.c, src/gpm-sysdev.c:

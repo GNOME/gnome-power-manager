@@ -3,8 +3,8 @@
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
  *  @note	Taken in part from:
- *  @note	lshal   (C) 2003 David Zeuthen, <david@fubar.dk>
- *  @note	notibat (C) 2004 Benjamin Kahn, <xkahn@zoned.net>
+ *  @note	- lshal   (C) 2003 David Zeuthen, <david@fubar.dk>
+ *  @note	- notibat (C) 2004 Benjamin Kahn, <xkahn@zoned.net>
  *
  * This is the main daemon for g-p-m. It handles all the setup and
  * tear-down of all the dynamic arrays, mainloops and icons in g-p-m.
@@ -393,7 +393,7 @@ add_battery (const gchar *udi)
 		return FALSE;
 	}
 
-	//get type
+	/* get battery type */
 	dev = hal_to_device_type (type);
 	g_debug ("Adding type %s", type);
 	g_free (type);
@@ -488,6 +488,8 @@ coldplug_buttons (void)
 static void
 hal_device_removed (const gchar *udi)
 {
+	sysDevStruct *sds = NULL;
+
 	/* assertion checks */
 	g_assert (udi);
 
@@ -497,7 +499,10 @@ hal_device_removed (const gchar *udi)
 	 * they just disappear from the device tree
 	 */
 	sysDevRemoveAll (udi);
-	sysDevUpdateAll ();
+	/* only update the correct device class */
+	sds = sysDevFindAll (udi);
+	if (sds)
+		sysDevUpdate (sds->sd->type);
 	/* remove watch */
 	glibhal_watch_remove_device_property_modified (udi);
 	gpn_icon_update ();
@@ -512,6 +517,8 @@ hal_device_removed (const gchar *udi)
 static void
 hal_device_new_capability (const gchar *udi, const gchar *capability)
 {
+	sysDevStruct *sds = NULL;
+
 	/* assertion checks */
 	g_assert (udi);
 	g_assert (capability);
@@ -524,7 +531,10 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 	if (strcmp (capability, "battery") == 0) {
 		add_battery (udi);
 		gpn_icon_update ();
-		sysDevUpdateAll ();
+		/* only update the correct device class */
+		sds = sysDevFindAll (udi);
+		if (sds)
+			sysDevUpdate (sds->sd->type);
 	}
 }
 
