@@ -1,3 +1,13 @@
+2005-11-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-sysdev.c: Shortcut for the single battery case so we don't
+	average over 1 each time. Might save a few CPU cycles.
+	Also try to start to fix:
+	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
+	by multiplying the remainingTime by the number of devices present
+	if one battery is discharging and others not. This assumes they have
+	the same capacity, and needs to be fixed properly.
+
 2005-11-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-notification.c, src/gpm-sysdev.c:

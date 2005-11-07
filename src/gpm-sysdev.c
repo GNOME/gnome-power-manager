@@ -340,6 +340,7 @@ sysDevUpdate (DeviceType type)
 {
 	int a;
 	int numPresent = 0;
+	int numDischarging = 0;
 	sysDev *sd = sysDevGet (type);
 	sysDevStruct *sds;
 
@@ -360,8 +361,10 @@ sysDevUpdate (DeviceType type)
 		 */
 		if (sds->isCharging)
 			sd->isCharging = TRUE;
-		if (sds->isDischarging)
+		if (sds->isDischarging) {
 			sd->isDischarging = TRUE;
+			numDischarging++;
+		}
 	}
 	/* sanity check */
 	if (sd->isDischarging && sd->isCharging)
@@ -372,7 +375,14 @@ sysDevUpdate (DeviceType type)
 		return;
 	}
 	g_debug ("%i devices of type %s", numPresent, sysDevToString(type));
-	/* iterate thru all the devices */
+	/* do the shortcut for a single device, and return */
+	if (sd->numberDevices == 1) {
+		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, 0);
+		sd->minutesRemaining = sds->minutesRemaining;
+		sd->percentageCharge += sds->percentageCharge;
+		return;
+	}
+	/* iterate thru all the devices (multiple battery scenario) */
 	for (a=0; a < sd->devices->len; a++) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
 		if (sds->present) {
@@ -382,5 +392,17 @@ sysDevUpdate (DeviceType type)
 			sd->percentageCharge += (sds->percentageCharge / numPresent);
 		}
 	}
-
+	/*
+	 * if we are discharging, and the number or batteries 
+	 * discharging != the number present, then we have a case where the
+	 * batteries are discharging one at a time (i.e. not simultanously)
+	 * and we have to facto this into the time remaining calculations.
+	 * This should effect:
+	 *   https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
+	 */
+	if (sd->isDischarging && numDischarging != numPresent) {
+		g_warning ("doubling minutesRemaining as sequential");
+		/* for now, just double the result */
+		sd->minutesRemaining *= numPresent;
+	}
 }
