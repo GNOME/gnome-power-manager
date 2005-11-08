@@ -124,7 +124,7 @@ get_stock_id (IconPolicy iconopt)
 	}
 	/* Only display if charging or disharging */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->isCharging || sd->isDischarging) {
+	if (sd->numberDevices > 0 && (sd->isCharging || sd->isDischarging)) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
@@ -146,8 +146,8 @@ get_stock_id (IconPolicy iconopt)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
-	/* No icon possible, even tho we want one :-( */
-	return NULL;
+	/* We fallback to the ac_adapter icon -- do we want to do this? */
+	return g_strdup_printf ("gnome-dev-acadapter");
 }
 
 /** Frees resources and hides notification area icon
