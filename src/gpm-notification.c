@@ -252,7 +252,10 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 GString *
 get_tooltips_system_device (sysDev *sd)
 {
-	//list each in this group, and call get_tooltip_system_struct for each one
+	/*
+	 * List each in this group, and call get_tooltip_system_struct
+	 * for each one
+	 */
 	int a;
 	sysDevStruct *sds;
 	GString *temptipdevice = NULL;
