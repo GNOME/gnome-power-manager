@@ -641,8 +641,14 @@ hal_device_property_modified (const gchar *udi,
 					LIBNOTIFY_URGENCY_NORMAL,
 					get_notification_icon ());
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
-		} else
+		} else {
+			/*
+			 * for where we add back the ac_adapter before
+			 * the "AC Power unplugged" message times out.
+			 */
+			libnotify_clear ();
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
+		}
 		/* update all states */
 		sysDevUpdateAll ();
 		/* update icon */

@@ -42,6 +42,7 @@ typedef enum {
 	LIBNOTIFY_URGENCY_LOW = 3	/**< Low urgency	*/
 } LibNotifyEventType;
 
+gboolean libnotify_clear (void);
 gboolean libnotify_init (const gchar *nicename);
 gboolean libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
 

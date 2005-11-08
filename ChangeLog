@@ -1,5 +1,9 @@
 2005-11-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c, src/gpm-libnotify.{c|h}:
+	Clear the libnotify box for where we add back the ac_adapter before
+	the "AC Power unplugged" message times out.
+
 	* src/gpm-notification.c, src/gpm-main.c, src/gpm-prefs.glade,
 	gpm-common.{c|h}, gpm-prefs.c:
 	Make the notification icons into radio boxes and make the options sane.

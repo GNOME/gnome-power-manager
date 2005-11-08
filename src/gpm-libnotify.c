@@ -134,6 +134,21 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 #endif
 }
 
+/** Clear the libnotify message, for where we add back the ac_adapter before
+ *  the message times out.
+ *
+ *  @return			If we removed the message.
+ */
+gboolean
+libnotify_clear (void)
+{
+#ifdef HAVE_LIBNOTIFY
+	if (globalnotify)
+		notify_close (globalnotify);
+#endif
+	return TRUE;
+}
+
 /** Initialiser for libnotify
  *
  *  @param	nicename	The nicename, e.g. "GNOME Power Manager"
