@@ -71,17 +71,27 @@ get_index_from_percent (gint percent)
  *  @return			An icon name
  */
 static gchar *
-get_stock_id (void)
+get_stock_id (IconPolicy iconopt)
 {
 	gint index;
 	sysDev *sd = NULL;
 	GConfClient *client = NULL;
 	gint lowThreshold;
-	gboolean displayFull;
 
 	g_debug ("get_stock_id: getting stock icon");
-	/* find out when the user considers the power "low" */
+
+	if (iconopt == ICON_NEVER) {
+		/* warn user */
+		g_debug ("The key " GCONF_ROOT "general/display_icon_policy "
+			 "is set to never, so no icon will be displayed.\n"
+			 "You can change this using gnome-power-preferences");
+		return NULL;
+	}
+	/*
+	 * Okay, we'll try any devices that are critical next
+	 */
 	client = gconf_client_get_default ();
+	/* find out when the user considers the power "low" */
 	lowThreshold = gconf_client_get_int (client,
 				GCONF_ROOT "general/threshold_low", NULL);
 	/* list in order of priority */
@@ -103,35 +113,40 @@ get_stock_id (void)
 	sd = sysDevGet (BATT_KEYBOARD);
 	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold)
 		return g_strdup_printf ("gnome-power-keyboard");
-
 	/*
 	 * Check if we should just show the charging / discharging icon 
 	 * even when not low or critical.
 	 */
-	client = gconf_client_get_default ();
-	displayFull = gconf_client_get_bool (client,
-				GCONF_ROOT "general/display_icon_full", NULL);
-	if (!displayFull) {
-		g_debug ("get_stock_id: device not critical, and "
-			 "general/display_icon_full not set.");
+	if (iconopt == ICON_CRITICAL) {
+		g_debug ("get_stock_id: no devices critical, so "
+			 "no icon will be displayed.");
 		return NULL;
 	}
-
-	/* Only display if not charging or disharging */
+	/* Only display if charging or disharging */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (!sd->isCharging && !sd->isDischarging) {
-		g_debug ("get_stock_id: not charging or discharging, "
-			 "no need to display icon.");
+	if (sd->isCharging || sd->isDischarging) {
+		index = get_index_from_percent (sd->percentageCharge);
+		if (onAcPower)
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+	}
+	/*
+	 * Check if we should just show the icon all the time
+	 */
+	if (iconopt == ICON_CHARGE) {
+		g_debug ("get_stock_id: no devices (dis)charging, so "
+			 "no icon will be displayed.");
 		return NULL;
 	}
-
 	/* Do the rest of the battery icon states */
+	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->numberDevices > 0) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
+	/* No icon possible, even tho we want one :-( */
 	return NULL;
 }
 
@@ -588,28 +603,32 @@ void
 gpn_icon_update (void)
 {
 	GConfClient *client = NULL;
-	gboolean iconShow;
+	gchar *policy;
 	GString *tooltip = NULL;
 	gchar* stock_id = NULL;
+	IconPolicy iconopt;
 
 	client = gconf_client_get_default ();
 	/* do we want to display the icon */
-	iconShow = gconf_client_get_bool (client,
-				GCONF_ROOT "general/display_icon", NULL);
-	if (!iconShow) {
-		/* warn user */
-		g_warning ("The key " GCONF_ROOT "general/display_icon "
-			 "is set to false, so no icon will be displayed\n"
-			 "You can change this using gnome-power-preferences");
-	} else {
-		/* try to get stock image */
-		stock_id = get_stock_id ();
-		if (!stock_id)
-			g_debug ("no icon will be displayed\n");
+	policy = gconf_client_get_string (client,
+				GCONF_ROOT "general/display_icon_policy", NULL);
+	if (!policy) {
+		g_warning ("You have not set an icon policy! "
+			   "(Please run gnome-power-preferences) -- "
+			   "I'll assume you want an icon all the time...");
+		policy = "always";
 	}
+	/* convert to enum */
+	iconopt = convert_string_to_iconpolicy (policy);
+	g_free (policy);
 
-	/* only create if we have gconf set, and a valid filename */
-	if (iconShow && stock_id) {
+	/* try to get stock image */
+	stock_id = get_stock_id (iconopt);
+	if (!stock_id)
+		g_debug ("no icon will be displayed");
+
+	/* only create if we have a valid filename */
+	if (stock_id) {
 		if (!eggtrayicon) {
 			/* create icon */
 			icon_create ();
@@ -627,7 +646,7 @@ gpn_icon_update (void)
 			tooltip->str, NULL);
 		g_string_free (tooltip, TRUE);
 	} else {
-		/* remove icon */
+		/* else, try to remove icon */
 		if (eggtrayicon) {
 			icon_destroy (eggtrayicon);
 			eggtrayicon = NULL;

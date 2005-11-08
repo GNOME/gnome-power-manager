@@ -136,11 +136,7 @@ callback_gconf_key_changed (GConfClient *client,
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
-	if (strcmp (entry->key, GCONF_ROOT "general/display_icon") == 0) {
-		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_full") == 0) {
-		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "general/display_icon_others") == 0) {
+	if (strcmp (entry->key, GCONF_ROOT "general/display_icon_policy") == 0) {
 		gpn_icon_update ();
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_computer") == 0) {
 		/* set new suspend timeouts */
@@ -647,6 +643,8 @@ hal_device_property_modified (const gchar *udi,
 			action_policy_do (ACTION_NOW_BATTERYPOWERED);
 		} else
 			action_policy_do (ACTION_NOW_MAINSPOWERED);
+		/* update all states */
+		sysDevUpdateAll ();
 		/* update icon */
 		gpn_icon_update ();
 	}

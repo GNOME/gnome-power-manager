@@ -24,24 +24,14 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/general/display_icon</key>
-      <applyto>/apps/gnome-power-manager/general/display_icon</applyto>
+      <key>/schemas/apps/gnome-power-manager/general/display_icon_policy</key>
+      <applyto>/apps/gnome-power-manager/general/display_icon_policy</applyto>
       <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
+      <type>string</type>
+      <default>always</default>
       <locale name="C">
-        <short>Whether to display a notification area icon</short>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/general/display_icon_full</key>
-      <applyto>/apps/gnome-power-manager/general/display_icon_full</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Whether to display icons when devices are at full capacity</short>
+        <short>When to show the notification icon</short>
+        <long>Options are never, critical, charge, always</long>
       </locale>
     </schema>
 

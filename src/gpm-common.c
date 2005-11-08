@@ -207,6 +207,30 @@ convert_policy_to_string (gint value)
 	return NULL;
 }
 
+/** Converts an incon policy string representation to it's ENUM
+ *
+ *  @param  gconfstring		The string name
+ *  @return			The action ENUM
+ */
+IconPolicy
+convert_string_to_iconpolicy (const gchar *gconfstring)
+{
+	/* assertion checks */
+	g_assert (gconfstring);
+
+	if (strcmp (gconfstring, "never") == 0)
+		return ICON_NEVER;
+	else if (strcmp (gconfstring, "critical") == 0)
+		return ICON_CRITICAL;
+	else if (strcmp (gconfstring, "charge") == 0)
+		return ICON_CHARGE;
+	else if (strcmp (gconfstring, "always") == 0)
+		return ICON_ALWAYS;
+	g_warning ("gpn_icon_update: unknown icon gconfstring %s", gconfstring);
+	return ICON_ALWAYS;
+}
+
+
 /** Converts an HAL string representation to it's ENUM
  *
  *  @param  type		The HAL battery type

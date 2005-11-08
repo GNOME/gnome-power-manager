@@ -79,14 +79,29 @@ recalc (void)
 	gboolean hasButtonLid;
 	gboolean hasLCD;
 	gboolean hasDisplays;
+	gchar *policy;
+	IconPolicy iconopt;
 
-	/* checkboxes */
-	gboolean displayIcon = gconf_client_get_bool (client, 
-		GCONF_ROOT "general/display_icon", NULL);
-	gboolean displayIconFull = gconf_client_get_bool (client,
-		GCONF_ROOT "general/display_icon_full", NULL);
-	gpm_gtk_set_check (prefwidgets, "checkbutton_display_icon", displayIcon);
-	gpm_gtk_set_check (prefwidgets, "checkbutton_display_icon_full", displayIconFull);
+	/* radio options */
+	policy = gconf_client_get_string (client,
+		GCONF_ROOT "general/display_icon_policy", NULL);
+	if (!policy) {
+		g_warning ("You have not set an icon policy! "
+			   "I'll assume you want an icon all the time...");
+		policy = "always";
+	}
+	/* convert to enum */
+	iconopt = convert_string_to_iconpolicy (policy);
+	g_free (policy);
+
+	if (iconopt == ICON_NEVER)
+		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_never", TRUE);
+	else if (iconopt == ICON_CRITICAL)
+		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_critical", TRUE);
+	else if (iconopt == ICON_CHARGE)
+		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_charge", TRUE);
+	else if (iconopt == ICON_ALWAYS)
+		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_always", TRUE);
 
 	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
 	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
@@ -419,27 +434,28 @@ callback_screensave (GtkWidget *widget, gpointer user_data)
  * @note	We get the following data from widget: policypath
  */
 static void
-callback_check_changed (GtkWidget *widget, gpointer user_data)
+callback_radio_changed (GtkWidget *widget, gpointer user_data)
 {
 	GConfClient *client = NULL;
-	gboolean value;
-	gchar *policypath = NULL;
+	gchar *policy = NULL;
 	const gchar *widgetname;
 
 	widgetname = gtk_widget_get_name (widget);
-	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-	if (strcmp (widgetname, "checkbutton_display_icon") == 0) {
-		/* makes no sense to have this enabled */
-		gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
-	}
+	if (strcmp (widgetname, "radiobutton_icon_never") == 0)
+		policy = "never";
+	else if (strcmp (widgetname, "radiobutton_icon_critical") == 0)
+		policy = "critical";
+	else if (strcmp (widgetname, "radiobutton_icon_charge") == 0)
+		policy = "charge";
+	else if (strcmp (widgetname, "radiobutton_icon_always") == 0)
+		policy = "always";
+	else
+		g_error ("callback_radio_changed trucked up");
 
 	client = gconf_client_get_default ();
-	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_return_if_fail (policypath);
-
-	g_debug ("[%s] = (%i)", policypath, value);
-	gconf_client_set_bool (client, policypath, value, NULL);
+	gconf_client_set_string (client, 
+		GCONF_ROOT "general/display_icon_policy", policy, NULL);
 }
 
 /** Prints program usage.
@@ -551,25 +567,16 @@ hscale_setup_action (const gchar *widgetname, const gchar *policypath, PolicyTyp
  *				e.g. "/apps/g-p-m/policy/ac/brightness"
  */
 static void
-checkbox_setup_action (const gchar *widgetname, const gchar *policypath)
+checkbox_setup_action (const gchar *widgetname)
 {
-	GConfClient *client = NULL;
 	GtkWidget *widget = NULL;
-	gboolean value;
 
-	/* assertion checks */
-	g_assert (widgetname);
-	g_assert (policypath);
-
-	client = gconf_client_get_default ();
 	widget = glade_xml_get_widget (prefwidgets, widgetname);
 	g_signal_connect (G_OBJECT (widget), "clicked",
-		G_CALLBACK (callback_check_changed), NULL);
+		G_CALLBACK (callback_radio_changed), NULL);
+#if 0
 	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
-
-	value = gconf_client_get_bool (client, policypath, NULL);
-	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), value);
+#endif
 }
 
 /** Sets the comboboxes up to the gconf value, and sets up callbacks.
@@ -736,7 +743,6 @@ main (int argc, char **argv)
 		g_error ("Main window failed to load, aborting");
 	g_signal_connect (G_OBJECT (widget), "delete_event",
 		G_CALLBACK (gtk_main_quit), NULL);
-
 	/*
 	 * We should warn if g-p-m is not running - but still allow to continue
 	 * Note, that the query alone will be enough to lauch g-p-m using
@@ -758,11 +764,12 @@ main (int argc, char **argv)
 	/* set gtk enables/disables */
 	recalc ();
 
-	/* checkboxes */
-	checkbox_setup_action ("checkbutton_display_icon",
-		GCONF_ROOT "general/display_icon");
-	checkbox_setup_action ("checkbutton_display_icon_full",
-		GCONF_ROOT "general/display_icon_full");
+	/* radioboxes */
+	checkbox_setup_action ("radiobutton_icon_always");
+	checkbox_setup_action ("radiobutton_icon_charge");
+	checkbox_setup_action ("radiobutton_icon_critical");
+	checkbox_setup_action ("radiobutton_icon_never");
+
 	/*
 	 * Set up combo boxes with "ideal" values - if a enum is unavailable
 	 * e.g. hibernate has been disabled, then it will be filtered out
@@ -853,11 +860,6 @@ main (int argc, char **argv)
 	/* do all the clever widget stuff */
 	set_widget_extra_stuff ("hscale_battery_low");
 	set_widget_extra_stuff ("hscale_battery_critical");
-
-	/* makes sense to have disable the inactive checkboxes */
-	widget = glade_xml_get_widget (prefwidgets, "checkbutton_display_icon");
-	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gpm_gtk_set_sensitive (prefwidgets, "checkbutton_display_icon_full", value);
 
 	/* set themed battery and ac_adapter icons */
 	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");

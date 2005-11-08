@@ -47,6 +47,14 @@
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
+/** The icon policy */
+typedef enum {
+	ICON_NEVER,		/**< Never display an icon		*/
+	ICON_CRITICAL,		/**< Only display when critical		*/
+	ICON_CHARGE,		/**< Only display when (dis)charging	*/
+	ICON_ALWAYS		/**< Always display icon		*/
+} IconPolicy;
+
 /** The action type */
 typedef enum {
 	ACTION_NOTHING,		/**< Do nothing! Yes nothing.		*/
@@ -67,6 +75,7 @@ gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
 ActionType convert_string_to_policy (const gchar *gconfstring);
 DeviceType convert_haltype_to_batttype (const gchar *type);
 gchar *convert_policy_to_string (gint value);
+IconPolicy convert_string_to_iconpolicy (const gchar *gconfstring);
 
 gchar *get_timestring_from_minutes (gint minutes);
 gchar *get_time_string (int minutesRemaining, gboolean isCharging);

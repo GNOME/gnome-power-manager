@@ -44,6 +44,7 @@ DISTCLEANFILES =					\
 	intltool-extract				\
 	intltool-merge					\
 	intltool-update					\
+	gnome-doc-utils.make				\
 	gnome-power-manager-*.tar.gz			\
 	gnome-power-preferences.desktop			\
 	gnome-power-manager.schemas			\

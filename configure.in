@@ -13,11 +13,15 @@ AC_PROG_INTLTOOL([0.27.2])
 GNOME_COMPILE_WARNINGS
 GNOME_DOC_INIT
 
+dnl ---------------------------------------------------------------------------
+dnl - Extra verbose warning switches
+dnl ---------------------------------------------------------------------------
+CPPFLAGS="$CPPFLAGS -ansi -Wall"
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)
 dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -ansi -Wall -g"
+#CPPFLAGS="$CPPFLAGS -g"
 
 dnl ---------------------------------------------------------------------------
 dnl - Supported languages
