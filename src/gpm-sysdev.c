@@ -45,7 +45,6 @@
 #include "compiler.h"
 
 static sysDev mysystem[BATT_LAST];
-gboolean onAcPower;
 
 /** Converts a DeviceType to a string
  *
@@ -370,15 +369,6 @@ sysDevUpdate (DeviceType type)
 	/* sanity check */
 	if (sd->isDischarging && sd->isCharging)
 		sd->isCharging = FALSE;
-	/*
-	 * Make an assumption that the AC adapters presence means we are 
-	 * charging, and the oppose for discharging. Should give us "snappier"
-	 * answers (and icon shows)
-	 */
-	if (sd->type == BATT_PRIMARY) {
-		sd->isDischarging = !onAcPower;
-		sd->isCharging = onAcPower;
-	}
 	/* no point working out average if no devices */
 	if (numPresent == 0) {
 		g_debug ("no devices of type %s", sysDevToString(type));
