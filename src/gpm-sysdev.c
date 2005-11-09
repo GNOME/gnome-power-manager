@@ -353,22 +353,27 @@ sysDevUpdate (DeviceType type)
 	/* find the number of batteries present, and set charge states */
 	for (a=0; a < sd->devices->len; a++) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
-		if (sds->present)
+		if (sds->present) {
 			numPresent++;
-		/*
-		 * Only one device has to be charging or discharging for the
-		 * general case to be valid
-		 */
-		if (sds->isCharging)
-			sd->isCharging = TRUE;
-		if (sds->isDischarging) {
-			sd->isDischarging = TRUE;
-			numDischarging++;
+			/*
+			 * Only one device has to be charging or discharging
+			 * for the general case to be valid.
+			 */
+			if (sds->isCharging)
+				sd->isCharging = TRUE;
+			if (sds->isDischarging) {
+				sd->isDischarging = TRUE;
+				numDischarging++;
+			}
 		}
 	}
 	/* sanity check */
-	if (sd->isDischarging && sd->isCharging)
+	if (sd->isDischarging && sd->isCharging) {
+		g_warning ("Sanity check kicked in! "
+			   "Mutiple device object cannot be charging and "
+			   "discharging simultaneously!");
 		sd->isCharging = FALSE;
+	}
 	/* no point working out average if no devices */
 	if (numPresent == 0) {
 		g_debug ("no devices of type %s", sysDevToString(type));
