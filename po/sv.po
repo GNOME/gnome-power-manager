@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-screensaver\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-07-16 00:03+0200\n"
+"POT-Creation-Date: 2005-11-09 10:26+0000\n"
 "PO-Revision-Date: 2005-07-16 00:03+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -17,451 +17,577 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gnome-power-preferences.desktop.in.h:1
+#: ../gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
 msgstr "Konfigurera strömsparfunktioner"
 
-#: gnome-power-preferences.desktop.in.h:2 src/preferences.glade.h:13
+#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
 msgid "Power Preferences"
 msgstr "Energiinställningar"
 
-#: gnome-power.schemas.in.h:1
-msgid "If the machine has a LCD (brightness variable) attached."
+#: ../gnome-power-manager.schemas.in.h:1
+msgid "Options are never, critical, charge, always"
 msgstr ""
 
-#: gnome-power.schemas.in.h:2
-msgid "If the machine has a UPS attached"
+#: ../gnome-power-manager.schemas.in.h:2
+msgid "The action to take when the battery is critically low."
 msgstr ""
 
-#: gnome-power.schemas.in.h:3
-msgid "If the machine has a display (that can be blanked) attached."
+#: ../gnome-power-manager.schemas.in.h:3
+msgid "The brightness the display is set to on AC"
 msgstr ""
 
-#: gnome-power.schemas.in.h:4
-msgid "If the machine has a hard-drive (that can be spun-down) attached."
+#: ../gnome-power-manager.schemas.in.h:4
+msgid "The brightness the display is set to on battery"
 msgstr ""
 
-#: gnome-power.schemas.in.h:5
-msgid "If the machine has a wireless keyboard attached."
+#: ../gnome-power-manager.schemas.in.h:5
+msgid "The event for a laptop lid closing"
 msgstr ""
 
-#: gnome-power.schemas.in.h:6
-msgid "If the machine has a wireless mouse attached."
+#: ../gnome-power-manager.schemas.in.h:6
+#, fuzzy
+msgid "The event for a system power button press"
+msgstr "Stil på fönsterknappar"
+
+#: ../gnome-power-manager.schemas.in.h:7
+msgid "The event for a system suspend button press"
 msgstr ""
 
-#: gnome-power.schemas.in.h:7
-msgid ""
-"If the machine has an AC adapter (usually laptops) then this key should be "
-"set."
+#: ../gnome-power-manager.schemas.in.h:8
+msgid "The idle time in seconds before the computer tries to sleep"
 msgstr ""
 
-#: gnome-power.schemas.in.h:8
-msgid "If the machine has an ac_adapter"
+#: ../gnome-power-manager.schemas.in.h:9
+msgid "The idle time in seconds before the display tries to sleep"
 msgstr ""
 
-#: gnome-power.schemas.in.h:9
-msgid ""
-"If the machine has an power, sleep or lid buttons then this key should be "
-"set."
+#: ../gnome-power-manager.schemas.in.h:10
+msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 
-#: gnome-power.schemas.in.h:10
-msgid "If the machine has power buttons"
+#: ../gnome-power-manager.schemas.in.h:11
+msgid "The path to the reboot script"
 msgstr ""
 
-#: gnome-power.schemas.in.h:11
-msgid "If the machine have primary batteries"
+#: ../gnome-power-manager.schemas.in.h:12
+msgid "The path to the shutdown script"
 msgstr ""
 
-#: gnome-power.schemas.in.h:12
-msgid "Short description."
-msgstr "Kort beskrivning."
-
-#: gnome-power.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: gnome-power.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:14
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: gnome-power.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice action threshold."
 msgstr ""
 
-#: gnome-power.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The powerdevice warning threshold."
 msgstr ""
 
-#: gnome-power.schemas.in.h:17
-#, fuzzy
-msgid "User cannot hibernate the machine"
-msgstr "kan inte skapa tråd"
-
-#: gnome-power.schemas.in.h:18
-msgid "User cannot reboot the machine"
-msgstr "Användaren kan inte starta om datorn"
-
-#: gnome-power.schemas.in.h:19
-msgid "User cannot shutdown the machine"
-msgstr "Användaren kan inte stänga ner datorn"
-
-#: gnome-power.schemas.in.h:20
-#, fuzzy
-msgid "User cannot suspend the machine"
-msgstr "Är du säker på att du vill försätta datorn i viloläge?"
-
-#: gnome-power.schemas.in.h:21
-#, fuzzy
-msgid "Whether to display a permanent icon"
-msgstr "Misslyckades med att visa timeouter för displayströmsparfunktioner"
-
-#: gnome-power.schemas.in.h:22
-msgid "Whether to display icons when devices are at full capacity"
+#: ../gnome-power-manager.schemas.in.h:17
+msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: src/eggtrayicon.c:117
+#: ../gnome-power-manager.schemas.in.h:18
+#, fuzzy
+msgid "When to show the notification icon"
+msgstr "_Dubbelklick för att aktivera objekt"
+
+#: ../src/eggtrayicon.c:127
 msgid "Orientation"
 msgstr "Orientering"
 
-#: src/eggtrayicon.c:118
+#: ../src/eggtrayicon.c:128
 msgid "The orientation of the tray."
 msgstr "Orienteringen på lådan."
 
-#: src/gpm-common.c:49
-msgid " until charged"
+#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
+#, fuzzy
+msgid "until charged"
 msgstr " till uppladdad"
 
-#: src/gpm-common.c:51
-msgid " remaining"
+#: ../src/gpm-common.c:140
+#, fuzzy
+msgid "remaining"
 msgstr " återstående"
 
-#: src/gpm-common.c:215
-msgid "UPS"
-msgstr "UPS"
-
-#: src/gpm-common.c:217
-msgid "AC Adapter"
-msgstr "Nätadapter"
-
-#: src/gpm-common.c:219
-msgid "Logitech mouse"
-msgstr "Logitech-mus"
-
-#: src/gpm-common.c:221
-msgid "Logitech keyboard"
-msgstr "Logitech-tangentbord"
-
-#: src/gpm-common.c:223
-msgid "Laptop battery"
-msgstr "Batteri i bärbar dator"
-
-#: src/gpm-common.c:225
-msgid "PDA"
-msgstr "Handdator"
-
-#: src/gpm-common.c:226
-msgid "Unknown device"
-msgstr "Okänd enhet"
-
-#: src/gpm-common.c:285
-msgid "missing"
-msgstr "saknas"
-
-#: src/gpm-common.c:287
-msgid "charging"
-msgstr "laddar"
-
-#: src/gpm-common.c:289
-msgid "discharging"
-msgstr "laddar ur"
-
-#: src/gpm-common.c:293
-msgid "fully charged"
-msgstr "helt uppladdad"
-
-#: src/gpm-common.c:296
-msgid "charged"
-msgstr "laddad"
-
-#: src/gpm-common.c:297
-msgid "unknown"
+#: ../src/gpm-common.c:273
+#, fuzzy
+msgid "Unknown"
 msgstr "okänd"
 
-#: src/gpm-common.c:316
+#: ../src/gpm-common.c:275
 msgid "1 minute"
 msgstr "1 minut"
 
-#: src/gpm-common.c:318
+#: ../src/gpm-common.c:277
 #, c-format
 msgid "%i minutes"
 msgstr "%i minuter"
 
-#: src/gpm-common.c:324
+#: ../src/gpm-common.c:283
 msgid "1 hour"
 msgstr "1 timme"
 
-#: src/gpm-common.c:326
+#: ../src/gpm-common.c:285
 #, c-format
 msgid "%i hours"
 msgstr "%i timmar"
 
-#: src/gpm-common.c:330
+#: ../src/gpm-common.c:288
 #, fuzzy
-msgid "1 hour 1 minute"
+msgid "1 hour, 1 minute"
 msgstr "1 minut"
 
-#: src/gpm-common.c:333
+#: ../src/gpm-common.c:290
 #, fuzzy, c-format
-msgid "1 hour %i minutes"
+msgid "%i hours, 1 minute"
+msgstr "1 minut"
+
+#: ../src/gpm-common.c:292
+#, fuzzy, c-format
+msgid "1 hour, %i minutes"
 msgstr "15 minuter"
 
-#: src/gpm-common.c:336
-#, c-format
-msgid "%i hours %i minutes"
+#: ../src/gpm-common.c:294
+#, fuzzy, c-format
+msgid "%i hours, %i minutes"
+msgstr "15 minuter"
+
+#. common descriptions of this program
+#: ../src/gpm-common.h:38
+msgid "GNOME Power Manager"
 msgstr ""
 
-#: src/gpm-dbus-common.c:44
-msgid "screensave"
-msgstr "släck skärmen"
+#: ../src/gpm-common.h:39
+msgid "Power Manager for the GNOME desktop"
+msgstr ""
 
-#: src/gpm-dbus-common.c:46
-msgid "shutdown"
-msgstr "stäng ner"
+#. * @}
+#: ../src/gpm-info.glade.h:2
+#, no-c-format
+msgid "96% efficient"
+msgstr ""
 
-#: src/gpm-dbus-common.c:48
+#: ../src/gpm-info.glade.h:3
 #, fuzzy
-msgid "software suspend"
-msgstr "Master försätter sig i viloläge..."
+msgid "<b>Batteries</b>"
+msgstr "<b>Signaturer</b>"
 
-#: src/gpm-dbus-common.c:50
+#: ../src/gpm-info.glade.h:4
+msgid "<b>Capabilities</b>"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:5
 #, fuzzy
-msgid "hibernation"
+msgid "<b>GNOME Screensaver</b>"
+msgstr "<b>Allmänt</b>"
+
+#. * @}
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Allmänt</b>"
+
+#: ../src/gpm-info.glade.h:7
+#, fuzzy
+msgid "<b>Other problems</b>"
+msgstr "<b>Alternativ</b>"
+
+#: ../src/gpm-info.glade.h:8
+msgid "<b>UPS</b>"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:9
+msgid "APC UPS 100CS"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:10
+msgid "CPU Frequency Scaling"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:11
+msgid "Form-factor:"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:12
+msgid "Gnome Screensaver Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:13
+#, fuzzy
+msgid "Hibernation"
 msgstr "Orientering"
 
-#: src/gpm-dbus-common.c:52
-msgid "session log off"
+#: ../src/gpm-info.glade.h:14
+#, fuzzy
+msgid "Laptop"
+msgstr "Batteri i bärbar dator"
+
+#: ../src/gpm-info.glade.h:15
+msgid "LiION Battery"
 msgstr ""
 
-#: src/gpm-main.c:193
-#, c-format
-msgid ""
-"The program '%s' is preventing the %s from occurring.\n"
-"\n"
-"The explanation given is: %s"
+#: ../src/gpm-info.glade.h:16
+msgid "Low Power Mode"
 msgstr ""
 
-#: src/gpm-main.c:205
-#, c-format
-msgid ""
-"The program '%s' has not returned data that is preventing the %s from "
-"occurring."
+#: ../src/gpm-info.glade.h:17
+msgid "Manufacturer:"
 msgstr ""
 
-#: src/gpm-main.c:229
-#, c-format
-msgid ""
-"PowerManager service is not running.\n"
-"%s cannot perform a %s."
+#: ../src/gpm-info.glade.h:18
+msgid "Model:"
 msgstr ""
 
-#: src/gpm-main.c:253
-#, c-format
-msgid ""
-"PowerManager service is not running.\n"
-"%s cannot perform hard-drive timeout changes."
+#: ../src/gpm-info.glade.h:19
+msgid "NiMOH Battery"
 msgstr ""
 
-#: src/gpm-main.c:424
-msgid "AC Adapter has been removed"
-msgstr "Nätadaptern har tagits bort"
-
-#: src/gpm-main.c:730
-msgid "Couldn't obtain list of batteries"
-msgstr "Kunde inte få tag i lista med batterier"
-
-#: src/gpm-main.c:741
-msgid "Couldn't obtain list of ac_adapters"
-msgstr "Kunde inte få tag i lista med strömadaptrar"
-
-#: src/gpm-main.c:959
-#, c-format
-msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+#: ../src/gpm-info.glade.h:20
+msgid "Other problems"
 msgstr ""
 
-#: src/gpm-main.c:972
-#, c-format
-msgid "The %s (%i%%) is <b>low</b> (%s)"
+#: ../src/gpm-info.glade.h:21
+msgid "Satellite Pro A10"
 msgstr ""
 
-#: src/gpm-main.c:1008
-msgid "Power button has been pressed"
-msgstr "Strömknappen har tryckts"
-
-#: src/gpm-main.c:1014
-msgid "Sleep button has been pressed"
-msgstr ""
-
-#: src/gpm-main.c:1026
-msgid "Lid has been opened"
-msgstr "Locket har öppnats"
-
-#: src/gpm-main.c:1118
-msgid "Please report bugs to richard@hughsie.com\n"
-msgstr ""
-
-#: src/gpm-notification.c:227
-msgid "Computer is running on battery power"
-msgstr "Datorn körs på batterispänning"
-
-#: src/gpm-notification.c:229
-msgid "Computer is running on UPS power"
-msgstr "Datorn körs på UPS-spänning"
-
-#: src/gpm-notification.c:231
-msgid "Computer is running on AC power"
-msgstr "Datorn körs på nätspänning"
-
-#: src/gpm-notification.c:382
-msgid "Unknown Translator"
-msgstr "Okänd översättare"
-
-#: src/gpm-notification.c:520
-msgid "Reboot"
-msgstr "Starta om"
-
-#: src/gpm-notification.c:523 src/gpm-prefs.c:340
-msgid "Shutdown"
-msgstr "Stäng ner"
-
-#: src/gpm-notification.c:526 src/gpm-prefs.c:338
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
 msgid "Suspend"
 msgstr "Paus"
 
-#: src/gpm-notification.c:529 src/gpm-prefs.c:339 src/gpm-prefs.c:343
+#: ../src/gpm-info.glade.h:23
+msgid "System Power Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:24
+msgid "Toshiba"
+msgstr ""
+
+#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr ""
+
+#: ../src/gpm-main.c:576
+msgid "Battery Critically Low"
+msgstr ""
+
+#: ../src/gpm-main.c:596
+msgid "Battery Low"
+msgstr ""
+
+#: ../src/gpm-main.c:638
+msgid "AC Power Unplugged"
+msgstr ""
+
+#: ../src/gpm-main.c:639
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr ""
+
+#: ../src/gpm-main.c:709
+msgid "Battery Charged"
+msgstr ""
+
+#: ../src/gpm-main.c:709
+msgid "Your battery is now fully charged"
+msgstr ""
+
+#: ../src/gpm-notification.c:216
+msgid "charging"
+msgstr "laddar"
+
+#: ../src/gpm-notification.c:218
+msgid "discharging"
+msgstr "laddar ur"
+
+#: ../src/gpm-notification.c:221
+msgid "charged"
+msgstr "laddad"
+
+#: ../src/gpm-notification.c:239
+msgid "until empty"
+msgstr ""
+
+#: ../src/gpm-notification.c:306
+#, fuzzy
+msgid "Computer is running on battery power\n"
+msgstr "Datorn körs på batterispänning"
+
+#: ../src/gpm-notification.c:308
+#, fuzzy
+msgid "Computer is running on AC power\n"
+msgstr "Datorn körs på nätspänning"
+
+#: ../src/gpm-notification.c:458
+#, fuzzy
+msgid "_Suspend"
+msgstr "Paus"
+
+#: ../src/gpm-notification.c:460
+#, fuzzy
+msgid "Hi_bernate"
+msgstr "Riberalta"
+
+#: ../src/gpm-notification.c:465
+msgid "Po_wer Info"
+msgstr ""
+
+#: ../src/gpm-notification.c:468
+#, fuzzy
+msgid "_Preferences"
+msgstr "Energiinställningar"
+
+#: ../src/gpm-notification.c:470
+msgid "_Help"
+msgstr ""
+
+#: ../src/gpm-notification.c:472
+msgid "_About"
+msgstr ""
+
+#: ../src/gpm-prefs.c:613
+msgid "Shutdown"
+msgstr "Stäng ner"
+
+#: ../src/gpm-prefs.c:619
 #, fuzzy
 msgid "Hibernate"
 msgstr "Riberalta"
 
-#: src/gpm-prefs.c:336
-msgid "Do nothing"
-msgstr "Gör ingenting"
-
-#: src/gpm-prefs.c:337
+#: ../src/gpm-prefs.c:622
 msgid "Send warning"
 msgstr "Skicka varning"
 
-#: src/gpm-prefs.c:342
-#, fuzzy
-msgid "Quick sleep"
-msgstr "Snabbreferens"
+#: ../src/gpm-prefs.c:625
+msgid "Do nothing"
+msgstr "Gör ingenting"
 
-#: src/preferences.glade.h:1
-msgid "<b>General</b>"
-msgstr "<b>Allmänt</b>"
-
-#: src/preferences.glade.h:2
+#: ../src/gpm-prefs.glade.h:2
 #, fuzzy
-msgid "<b>Notification area</b>"
+msgid "<b>Notification Area</b>"
 msgstr "<b>Returnera avisering</b>"
 
-#: src/preferences.glade.h:3
+#: ../src/gpm-prefs.glade.h:3
 #, fuzzy
 msgid "<b>Other Options</b>"
 msgstr "<b>Alternativ</b>"
 
-#: src/preferences.glade.h:4
-msgid "<b>Running on AC adapter</b>"
-msgstr ""
-
-#: src/preferences.glade.h:5
+#: ../src/gpm-prefs.glade.h:4
 #, fuzzy
-msgid "<b>Running on batteries</b>"
+msgid "<b>Running on AC Adapter</b>"
 msgstr "<b>Signaturer</b>"
 
-#: src/preferences.glade.h:6
+#: ../src/gpm-prefs.glade.h:5
+#, fuzzy
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>Signaturer</b>"
+
+#: ../src/gpm-prefs.glade.h:6
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:8
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: src/preferences.glade.h:7
-msgid "Battery is critical when below:"
-msgstr ""
-
-#: src/preferences.glade.h:8
+#: ../src/gpm-prefs.glade.h:9
 #, fuzzy
-msgid "Battery is low when below:"
+msgid "Ba_ttery is critical when below:"
 msgstr "Låg batteriladdning"
 
-#: src/preferences.glade.h:9
-#, fuzzy
-msgid "Display devices that are fully charged"
-msgstr "_Visa filer när de klickas"
+#: ../src/gpm-prefs.glade.h:10
+msgid "C_omputer sleep type:"
+msgstr ""
 
-#: src/preferences.glade.h:10
+#: ../src/gpm-prefs.glade.h:11
 #, fuzzy
-msgid "Display main icon"
-msgstr "Visa varningsfönster"
+msgid "Only display when battery life is _critical"
+msgstr "Låg batteriladdning"
 
-#: src/preferences.glade.h:11
-#, fuzzy
-msgid "Double click notification icon:"
-msgstr "_Dubbelklick för att aktivera objekt"
+#: ../src/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr ""
 
-#: src/preferences.glade.h:12
+#: ../src/gpm-prefs.glade.h:13
 msgid "Options"
 msgstr "Alternativ"
 
-#: src/preferences.glade.h:14
-msgid "Put computer to sleep after:"
-msgstr ""
-
-#: src/preferences.glade.h:15
+#: ../src/gpm-prefs.glade.h:14
 #, fuzzy
-msgid "Put display to sleep after:"
+msgid "P_ut display to sleep after:"
 msgstr "X-display att använda"
 
-#: src/preferences.glade.h:16
-msgid "Put hard drive to sleep after:"
+#: ../src/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "Put c_omputer to sleep after:"
+msgstr "X-display att använda"
+
+#: ../src/gpm-prefs.glade.h:17
+#, fuzzy
+msgid "Put d_isplay to sleep after:"
+msgstr "X-display att använda"
+
+#: ../src/gpm-prefs.glade.h:18
+msgid "S_et display brightness:"
 msgstr ""
 
-#: src/preferences.glade.h:17
-msgid "Set display brightness:"
-msgstr ""
-
-#: src/preferences.glade.h:18
+#: ../src/gpm-prefs.glade.h:19
 msgid "Sleep"
 msgstr "Sov"
 
-#: src/preferences.glade.h:19
+#: ../src/gpm-prefs.glade.h:20
 #, fuzzy
-msgid "When AC power disconnected:"
-msgstr "Port som skrivaren är ansluten på."
-
-#: src/preferences.glade.h:20
-msgid "When UPS power critical:"
-msgstr ""
-
-#: src/preferences.glade.h:21
-#, fuzzy
-msgid "When battery power critical:"
-msgstr "Låg batteriladdning"
-
-#: src/preferences.glade.h:22
-msgid "When laptop lid is closed:"
-msgstr ""
-
-#: src/preferences.glade.h:23
-#, fuzzy
-msgid "When power button pressed:"
+msgid "Wh_en suspend button pressed:"
 msgstr "Stil på fönsterknappar"
 
-#: src/preferences.glade.h:24
-msgid "When suspend button pressed:"
+#: ../src/gpm-prefs.glade.h:21
+msgid "Whe_n laptop lid is closed:"
 msgstr ""
+
+#: ../src/gpm-prefs.glade.h:22
+#, fuzzy
+msgid "When _battery power critical:"
+msgstr "Låg batteriladdning"
+
+#: ../src/gpm-prefs.glade.h:23
+msgid "_Always display icon"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:24
+#, fuzzy
+msgid "_Battery is low when below:"
+msgstr "Låg batteriladdning"
+
+#: ../src/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "_Never display icon"
+msgstr "Visa varningsfönster"
+
+#: ../src/gpm-prefs.glade.h:26
+#, fuzzy
+msgid "_Put computer to sleep after:"
+msgstr "X-display att använda"
+
+#: ../src/gpm-prefs.glade.h:27
+#, fuzzy
+msgid "_Screensaver Preferences..."
+msgstr "Energiinställningar"
+
+#: ../src/gpm-prefs.glade.h:28
+msgid "_Set display brightness:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:29
+#, fuzzy
+msgid "_When power button pressed:"
+msgstr "Stil på fönsterknappar"
+
+#~ msgid "Short description."
+#~ msgstr "Kort beskrivning."
+
+#, fuzzy
+#~ msgid "User cannot hibernate the machine"
+#~ msgstr "kan inte skapa tråd"
+
+#~ msgid "User cannot reboot the machine"
+#~ msgstr "Användaren kan inte starta om datorn"
+
+#~ msgid "User cannot shutdown the machine"
+#~ msgstr "Användaren kan inte stänga ner datorn"
+
+#, fuzzy
+#~ msgid "User cannot suspend the machine"
+#~ msgstr "Är du säker på att du vill försätta datorn i viloläge?"
+
+#, fuzzy
+#~ msgid "Whether to display a permanent icon"
+#~ msgstr "Misslyckades med att visa timeouter för displayströmsparfunktioner"
+
+#~ msgid "UPS"
+#~ msgstr "UPS"
+
+#~ msgid "AC Adapter"
+#~ msgstr "Nätadapter"
+
+#~ msgid "Logitech mouse"
+#~ msgstr "Logitech-mus"
+
+#~ msgid "Logitech keyboard"
+#~ msgstr "Logitech-tangentbord"
+
+#~ msgid "PDA"
+#~ msgstr "Handdator"
+
+#~ msgid "Unknown device"
+#~ msgstr "Okänd enhet"
+
+#~ msgid "missing"
+#~ msgstr "saknas"
+
+#~ msgid "fully charged"
+#~ msgstr "helt uppladdad"
+
+#~ msgid "screensave"
+#~ msgstr "släck skärmen"
+
+#~ msgid "shutdown"
+#~ msgstr "stäng ner"
+
+#, fuzzy
+#~ msgid "software suspend"
+#~ msgstr "Master försätter sig i viloläge..."
+
+#~ msgid "AC Adapter has been removed"
+#~ msgstr "Nätadaptern har tagits bort"
+
+#~ msgid "Couldn't obtain list of batteries"
+#~ msgstr "Kunde inte få tag i lista med batterier"
+
+#~ msgid "Couldn't obtain list of ac_adapters"
+#~ msgstr "Kunde inte få tag i lista med strömadaptrar"
+
+#~ msgid "Power button has been pressed"
+#~ msgstr "Strömknappen har tryckts"
+
+#~ msgid "Lid has been opened"
+#~ msgstr "Locket har öppnats"
+
+#~ msgid "Computer is running on UPS power"
+#~ msgstr "Datorn körs på UPS-spänning"
+
+#~ msgid "Unknown Translator"
+#~ msgstr "Okänd översättare"
+
+#~ msgid "Reboot"
+#~ msgstr "Starta om"
+
+#, fuzzy
+#~ msgid "Quick sleep"
+#~ msgstr "Snabbreferens"
+
+#, fuzzy
+#~ msgid "Display devices that are fully charged"
+#~ msgstr "_Visa filer när de klickas"
+
+#, fuzzy
+#~ msgid "When AC power disconnected:"
+#~ msgstr "Port som skrivaren är ansluten på."
 
 #~ msgid "Short description"
 #~ msgstr "Kort beskrivning"

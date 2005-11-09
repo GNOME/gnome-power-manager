@@ -1,7 +1,7 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: 5
+Release: 0.14
 License: GPL
 Group: Applications/System
 Source: gnome-power-manager-%{version}.tar.gz
@@ -22,6 +22,9 @@ Requires: hal >= @HAL_REQUIRED@
 Requires: dbus-glib >= @DBUS_REQUIRED@
 Requires: libnotify >= @LIBNOTIFY_REQUIRED@
 Requires: notification-daemon >= @LIBNOTIFY_REQUIRED@
+Requires(pre): GConf2
+Requires(post): GConf2
+Requires(preun): GConf2
 
 %description
 GNOME Power Manager uses the information and facilities provided by HAL 
@@ -59,18 +62,30 @@ desktop-file-install --vendor gnome --delete-original                   \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+if [ "$1" -gt 1 ]; then
+    #uninstall the old schema when we upgrade
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+    gconftool-2 --makefile-uninstall-rule \
+      %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas >/dev/null || :
+    killall -HUP gconfd-2 || :
+fi
+
 %post
+#install new schema for a new package
 export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule \
-	%{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas &>/dev/null
+  %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas > /dev/null || :
 killall -HUP gconfd-2 || :
 
 %preun
-export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-gconftool-2 --makefile-uninstall-rule \
-        %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas &>/dev/null
-killall -HUP gconfd-2 || :
-
+if [ "$1" -eq 0 ]; then
+    #deleting the schema on package removal
+    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+    gconftool-2 --makefile-uninstall-rule \
+      %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas > /dev/null || :
+    killall -HUP gconfd-2 || :
+fi
 
 %files -f %{name}.lang
 %defattr(-,root,root)

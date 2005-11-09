@@ -563,20 +563,15 @@ hscale_setup_action (const gchar *widgetname, const gchar *policypath, PolicyTyp
 /** Sets the checkboxes up to the gconf value, and sets up callbacks.
  *
  *  @param  widgetname		the libglade widget name
- *  @param  policypath		the *full* GConf policy path,
- *				e.g. "/apps/g-p-m/policy/ac/brightness"
  */
 static void
-checkbox_setup_action (const gchar *widgetname)
+radiobutton_setup_action (const gchar *widgetname)
 {
 	GtkWidget *widget = NULL;
 
 	widget = glade_xml_get_widget (prefwidgets, widgetname);
 	g_signal_connect (G_OBJECT (widget), "clicked",
 		G_CALLBACK (callback_radio_changed), NULL);
-#if 0
-	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
-#endif
 }
 
 /** Sets the comboboxes up to the gconf value, and sets up callbacks.
@@ -765,10 +760,10 @@ main (int argc, char **argv)
 	recalc ();
 
 	/* radioboxes */
-	checkbox_setup_action ("radiobutton_icon_always");
-	checkbox_setup_action ("radiobutton_icon_charge");
-	checkbox_setup_action ("radiobutton_icon_critical");
-	checkbox_setup_action ("radiobutton_icon_never");
+	radiobutton_setup_action ("radiobutton_icon_always");
+	radiobutton_setup_action ("radiobutton_icon_charge");
+	radiobutton_setup_action ("radiobutton_icon_critical");
+	radiobutton_setup_action ("radiobutton_icon_never");
 
 	/*
 	 * Set up combo boxes with "ideal" values - if a enum is unavailable

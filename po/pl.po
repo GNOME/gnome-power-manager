@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-07 03:42+0000\n"
+"POT-Creation-Date: 2005-11-09 10:26+0000\n"
 "PO-Revision-Date: 2005-09-07 16:39+0530\n"
 "Last-Translator: Michał Kastelik <mkastelik@gmail.com>\n"
 "Language-Team: Polish Ubuntu\n"
@@ -20,404 +20,652 @@ msgstr ""
 msgid "Configure power management"
 msgstr "Konfiguruj zarządzanie energią"
 
-#: ../gnome-power-preferences.desktop.in.h:2
-msgid "GNOME Power Preferences"
-msgstr "GNOME Preferencje zasilania"
+#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
+msgid "Power Preferences"
+msgstr "Preferencje zasilania"
 
-#: ../gnome-power.schemas.in.h:1
-msgid "If the machine has a LCD (brightness variable) attached."
-msgstr "Jeśli komputer posiada ekran LCD (wartość jasność)"
+#: ../gnome-power-manager.schemas.in.h:1
+msgid "Options are never, critical, charge, always"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:2
-msgid "If the machine has a UPS attached"
-msgstr "Jeśli komputer posiada UPS"
+#: ../gnome-power-manager.schemas.in.h:2
+msgid "The action to take when the battery is critically low."
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:3
-msgid "If the machine has a display (that can be blanked) attached."
-msgstr "Jeśli komputer posiada wyświetlacz (który może być zaciemniony)."
+#: ../gnome-power-manager.schemas.in.h:3
+msgid "The brightness the display is set to on AC"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:4
-msgid "If the machine has a hard-drive (that can be spun-down) attached."
-msgstr "Jeśli komputer ma twardy dysk (który może być wyłączony) ਗੀ ਹੈ।"
+#: ../gnome-power-manager.schemas.in.h:4
+msgid "The brightness the display is set to on battery"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:5
-msgid "If the machine has a wireless keyboard attached."
-msgstr "Jeśli komputer posiada bezprzewodową klawiaturę."
+#: ../gnome-power-manager.schemas.in.h:5
+#, fuzzy
+msgid "The event for a laptop lid closing"
+msgstr "Kiedy pokrywa laptopa jest zamknięta:"
 
-#: ../gnome-power.schemas.in.h:6
-msgid "If the machine has a wireless mouse attached."
-msgstr "Jeśli komputer posiada bezprzewodową mysz."
+#: ../gnome-power-manager.schemas.in.h:6
+#, fuzzy
+msgid "The event for a system power button press"
+msgstr "Kiedy klawisz zasilania jest wciśnięty:"
 
-#: ../gnome-power.schemas.in.h:7
-msgid ""
-"If the machine has an AC adapter (usually laptops) then this key should be "
-"set."
-msgstr "Jeśli komputer posiada zasilacz sieciowy (zwykle laptopy) wtedy ten klawisz będzie "
-"określony."
+#: ../gnome-power-manager.schemas.in.h:7
+#, fuzzy
+msgid "The event for a system suspend button press"
+msgstr "Kiedy klawisz uśpienia jest wciśnięty:"
 
-#: ../gnome-power.schemas.in.h:8
-msgid "If the machine has an ac_adapter"
-msgstr "Jeśli komputer posiada zasilacz sieciowy"
+#: ../gnome-power-manager.schemas.in.h:8
+msgid "The idle time in seconds before the computer tries to sleep"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:9
-msgid ""
-"If the machine has an power, sleep or lid buttons then this key should be "
-"set."
-msgstr "Jeśli komputer posiada guzik zasilania, uśpienia lub inne guziki wtedy te klawisze będą "
-"określone."
+#: ../gnome-power-manager.schemas.in.h:9
+msgid "The idle time in seconds before the display tries to sleep"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:10
-msgid "If the machine has power buttons"
-msgstr "Jeśli komputer posiada guzik zasilania"
+#: ../gnome-power-manager.schemas.in.h:10
+msgid "The idle time in seconds before the hard disk drives try to sleep"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:11
-msgid "If the machine have primary batteries"
-msgstr "Jeśli komputer posiada główne baterie"
+#: ../gnome-power-manager.schemas.in.h:11
+msgid "The path to the reboot script"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:12
-msgid "Short description."
-msgstr "Krótki opis."
+#: ../gnome-power-manager.schemas.in.h:12
+msgid "The path to the shutdown script"
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:13
+#, fuzzy
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to display an icon."
-msgstr 
-"Procent które urządzenie ma być brane od uwagę \"wystarczająco niskie"
-"\" do wyświetlenia ikony."
+"\" to perform an action."
+msgstr ""
+"Procent które urządzenie ma być brane od uwagę \"wystarczająco niskie\" do "
+"wyświetlenia ikony."
 
-#: ../gnome-power.schemas.in.h:14
-msgid "The powerdevice low-icon threshold."
+#: ../gnome-power-manager.schemas.in.h:14
+#, fuzzy
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to warn the user."
+msgstr ""
+"Procent które urządzenie ma być brane od uwagę \"wystarczająco niskie\" do "
+"wyświetlenia ikony."
+
+#: ../gnome-power-manager.schemas.in.h:15
+#, fuzzy
+msgid "The powerdevice action threshold."
 msgstr "Próg niskiego naładowania urządzenia."
 
-#: ../gnome-power.schemas.in.h:15
-msgid "User cannot hibernate the machine"
-msgstr "Użytkownik nie może hibernować komputera"
+#: ../gnome-power-manager.schemas.in.h:16
+#, fuzzy
+msgid "The powerdevice warning threshold."
+msgstr "Próg niskiego naładowania urządzenia."
 
-#: ../gnome-power.schemas.in.h:16
-msgid "User cannot reboot the machine"
-msgstr "Użytownik nie może przeładować komputera"
+#: ../gnome-power-manager.schemas.in.h:17
+msgid "The type of sleep (hibernate/suspend) to use automatically."
+msgstr ""
 
-#: ../gnome-power.schemas.in.h:17
-msgid "User cannot shutdown the machine"
-msgstr "Użytkownik nie może wyłączyć komputera"
+#: ../gnome-power-manager.schemas.in.h:18
+#, fuzzy
+msgid "When to show the notification icon"
+msgstr "Podwójne kliknięcie na ikonę powiadamiania:"
 
-#: ../gnome-power.schemas.in.h:18
-msgid "User cannot suspend the machine"
-msgstr "Użytkownik nie może uśpić komputera"
-
-#: ../gnome-power.schemas.in.h:19
-msgid "Whether to display a permanent icon"
-msgstr "Czy ikona ma być wyświetlana"
-
-#: ../gnome-power.schemas.in.h:20
-msgid "Whether we display icons when they are full"
-msgstr "Czy wyświetlać ikony kiedy są pełne"
-
-#: ../src/eggtrayicon.c:117
+#: ../src/eggtrayicon.c:127
 msgid "Orientation"
 msgstr "Położenie"
 
-#: ../src/eggtrayicon.c:118
+#: ../src/eggtrayicon.c:128
 msgid "The orientation of the tray."
 msgstr "Położenie paska powiadamiania."
 
-#: ../src/gpm-common.c:142
-msgid "UPS"
-msgstr "UPS"
+#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
+#, fuzzy
+msgid "until charged"
+msgstr " do naładowania"
 
-#: ../src/gpm-common.c:144
-msgid "AC Adapter"
-msgstr "Zasilacz AC"
+#: ../src/gpm-common.c:140
+#, fuzzy
+msgid "remaining"
+msgstr " pozostało"
 
-#: ../src/gpm-common.c:146
-msgid "Logitech mouse"
-msgstr "Mysz Logitech"
-
-#: ../src/gpm-common.c:148
-msgid "Logitech keyboard"
-msgstr "Klawiatura Logitech"
-
-#: ../src/gpm-common.c:150
-msgid "Laptop battery"
-msgstr "Bateria laptopa"
-
-#: ../src/gpm-common.c:152
-msgid "PDA"
-msgstr "PDA"
-
-#: ../src/gpm-common.c:153
-msgid "Unknown device"
-msgstr "Nieznane urządzenie"
-
-#: ../src/gpm-common.c:212
-msgid "missing"
-msgstr "brakujący"
-
-#: ../src/gpm-common.c:214
-msgid "charging"
-msgstr "ładowanie"
-
-#: ../src/gpm-common.c:216
-msgid "discharging"
-msgstr "rozładowywanie"
-
-#: ../src/gpm-common.c:220
-msgid "fully charged"
-msgstr "pełne naładowanie"
-
-#: ../src/gpm-common.c:223
-msgid "charged"
-msgstr "naładowano"
-
-#: ../src/gpm-common.c:224
-msgid "unknown"
+#: ../src/gpm-common.c:273
+#, fuzzy
+msgid "Unknown"
 msgstr "nieznane"
 
-#: ../src/gpm-common.c:244
-#, c-format
-msgid "%i minute"
+#: ../src/gpm-common.c:275
+#, fuzzy
+msgid "1 minute"
 msgstr "%i minutę"
 
-#: ../src/gpm-common.c:246
+#: ../src/gpm-common.c:277
 #, c-format
 msgid "%i minutes"
 msgstr "%i minut"
 
-#: ../src/gpm-common.c:252
-#, c-format
-msgid "%i hour"
+#: ../src/gpm-common.c:283
+#, fuzzy
+msgid "1 hour"
 msgstr "%i godzinę"
 
-#: ../src/gpm-common.c:254
+#: ../src/gpm-common.c:285
 #, c-format
 msgid "%i hours"
 msgstr "%i godzin"
 
-#: ../src/gpm-common.c:259
-#, c-format
-msgid "%i hour %i minute"
+#: ../src/gpm-common.c:288
+#, fuzzy
+msgid "1 hour, 1 minute"
 msgstr "%i godzinę %i minut"
 
-#: ../src/gpm-common.c:262
-#, c-format
-msgid "%i hour %i minutes"
-msgstr "%i godzinę %i minut"
-
-#: ../src/gpm-common.c:265
-#, c-format
-msgid "%i hours %i minutes"
+#: ../src/gpm-common.c:290
+#, fuzzy, c-format
+msgid "%i hours, 1 minute"
 msgstr "%i godziny %i minut"
 
-#: ../src/gpm-dbus-common.c:44
-msgid "screensave"
-msgstr "wygaszacz ekranu"
+#: ../src/gpm-common.c:292
+#, fuzzy, c-format
+msgid "1 hour, %i minutes"
+msgstr "%i godzinę %i minut"
 
-#: ../src/gpm-dbus-common.c:46
-msgid "shutdown"
-msgstr "wyłącz"
+#: ../src/gpm-common.c:294
+#, fuzzy, c-format
+msgid "%i hours, %i minutes"
+msgstr "%i godziny %i minut"
 
-#: ../src/gpm-dbus-common.c:48
-msgid "software suspend"
-msgstr "uśpienie programowe"
+#. common descriptions of this program
+#: ../src/gpm-common.h:38
+#, fuzzy
+msgid "GNOME Power Manager"
+msgstr "GNOME Preferencje zasilania"
 
-#: ../src/gpm-dbus-common.c:50
-msgid "hibernation"
-msgstr "hibernacja"
-
-#: ../src/gpm-dbus-common.c:52
-msgid "session log off"
-msgstr "wyloguj"
-
-#: ../src/gpm-main.c:170
-#, c-format
-msgid ""
-"The program '%s' is preventing the %s from occurring.\n"
-"\n"
-"The explanation given is: %s"
+#: ../src/gpm-common.h:39
+msgid "Power Manager for the GNOME desktop"
 msgstr ""
-"Program '%s' nie dopuszcza %s do wystąpienia.\n"
-"\n"
-"Otrzymane wyjaśnienie: %s"
 
-#: ../src/gpm-main.c:182
-#, c-format
-msgid ""
-"The program '%s' has not returned data that is preventing the %s from "
-"occurring."
-msgstr "Program '%s' nie zwrócił danych, które są wymagane do wystąpienia z %s."
-
-#: ../src/gpm-main.c:206
-#, c-format
-msgid ""
-"PowerManager service is not running.\n"
-"%s cannot perform a %s."
+#. * @}
+#: ../src/gpm-info.glade.h:2
+#, no-c-format
+msgid "96% efficient"
 msgstr ""
-"Usługa PowerManager nie jest uruchomiona.\n"
-"%s nie może wykonać %s."
 
-#: ../src/gpm-main.c:230
-#, c-format
-msgid ""
-"PowerManager service is not running.\n"
-"%s cannot perform hard-drive timeout changes."
+#: ../src/gpm-info.glade.h:3
+#, fuzzy
+msgid "<b>Batteries</b>"
+msgstr "<b>Pracuje na bateriach</b>"
+
+#: ../src/gpm-info.glade.h:4
+msgid "<b>Capabilities</b>"
 msgstr ""
-"Usługa PowerManager nie jest uruchomiona.\n"
-"%s nie może ustalić czasu wyłączania dysku twardego."
 
-#: ../src/gpm-main.c:730
-msgid "Couldn't obtain list of batteries"
-msgstr "Nie można określić listy baterii"
+#: ../src/gpm-info.glade.h:5
+#, fuzzy
+msgid "<b>GNOME Screensaver</b>"
+msgstr "<b>Ogólne</b>"
 
-#: ../src/gpm-main.c:741
-msgid "Couldn't obtain list of ac_adapters"
-msgstr "Nie można określić listy zasilaczy sieciowych"
-
-#: ../src/gpm-main.c:1038
-msgid "Please report bugs to richard@hughsie.com\n"
-msgstr "Proszę wysłać raport o błędach na adres richard@hughsie.com\n"
-
-#: ../src/gpm-notification.c:321
-msgid " until charged"
-msgstr " do naładowania"
-
-#: ../src/gpm-notification.c:323
-msgid " remaining"
-msgstr " pozostało"
-
-#: ../src/gpm-notification.c:333
-msgid "Computer is running on battery power"
-msgstr "Komputer pracuje na bateriach"
-
-#: ../src/gpm-notification.c:335
-msgid "Computer is running on UPS power"
-msgstr "Komputer pracuje na zasilaniu UPS"
-
-#: ../src/gpm-notification.c:337
-msgid "Computer is running on AC power"
-msgstr "Komputer pracuje na zasilaniu AC"
-
-#: ../src/gpm-notification.c:621
-msgid "Reboot"
-msgstr "Przeładuj"
-
-#: ../src/gpm-notification.c:624 ../src/gpm-prefs.c:321
-msgid "Shutdown"
-msgstr "Wyłącz"
-
-#: ../src/gpm-notification.c:627 ../src/gpm-prefs.c:319
-msgid "Suspend"
-msgstr "Uśpij"
-
-#: ../src/gpm-notification.c:630 ../src/gpm-prefs.c:320 ../src/gpm-prefs.c:324
-msgid "Hibernate"
-msgstr "Hibernuj"
-
-#: ../src/gpm-prefs.c:317
-msgid "Do nothing"
-msgstr "Nic nie rób"
-
-#: ../src/gpm-prefs.c:318
-msgid "Send warning"
-msgstr "Wyślij ostrzeżenia"
-
-#: ../src/gpm-prefs.c:323
-msgid "Quick sleep"
-msgstr "Szybkie usypianie"
-
-#: ../src/preferences.glade.h:1
+#. * @}
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
 msgid "<b>General</b>"
 msgstr "<b>Ogólne</b>"
 
-#: ../src/preferences.glade.h:2
-msgid "<b>Notification area</b>"
+#: ../src/gpm-info.glade.h:7
+#, fuzzy
+msgid "<b>Other problems</b>"
+msgstr "<b>Inne opcje</b>"
+
+#: ../src/gpm-info.glade.h:8
+msgid "<b>UPS</b>"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:9
+msgid "APC UPS 100CS"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:10
+msgid "CPU Frequency Scaling"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:11
+msgid "Form-factor:"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:12
+msgid "Gnome Screensaver Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:13
+#, fuzzy
+msgid "Hibernation"
+msgstr "hibernacja"
+
+#: ../src/gpm-info.glade.h:14
+#, fuzzy
+msgid "Laptop"
+msgstr "Bateria laptopa"
+
+#: ../src/gpm-info.glade.h:15
+msgid "LiION Battery"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:16
+msgid "Low Power Mode"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:17
+msgid "Manufacturer:"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:18
+msgid "Model:"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:19
+msgid "NiMOH Battery"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:20
+msgid "Other problems"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:21
+msgid "Satellite Pro A10"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+msgid "Suspend"
+msgstr "Uśpij"
+
+#: ../src/gpm-info.glade.h:23
+msgid "System Power Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:24
+msgid "Toshiba"
+msgstr ""
+
+#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr ""
+
+#: ../src/gpm-main.c:576
+#, fuzzy
+msgid "Battery Critically Low"
+msgstr "Bateria ma stan krytyczny kiedy poniżej:"
+
+#: ../src/gpm-main.c:596
+msgid "Battery Low"
+msgstr ""
+
+#: ../src/gpm-main.c:638
+msgid "AC Power Unplugged"
+msgstr ""
+
+#: ../src/gpm-main.c:639
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr ""
+
+#: ../src/gpm-main.c:709
+msgid "Battery Charged"
+msgstr ""
+
+#: ../src/gpm-main.c:709
+msgid "Your battery is now fully charged"
+msgstr ""
+
+#: ../src/gpm-notification.c:216
+msgid "charging"
+msgstr "ładowanie"
+
+#: ../src/gpm-notification.c:218
+msgid "discharging"
+msgstr "rozładowywanie"
+
+#: ../src/gpm-notification.c:221
+msgid "charged"
+msgstr "naładowano"
+
+#: ../src/gpm-notification.c:239
+msgid "until empty"
+msgstr ""
+
+#: ../src/gpm-notification.c:306
+#, fuzzy
+msgid "Computer is running on battery power\n"
+msgstr "Komputer pracuje na bateriach"
+
+#: ../src/gpm-notification.c:308
+#, fuzzy
+msgid "Computer is running on AC power\n"
+msgstr "Komputer pracuje na zasilaniu AC"
+
+#: ../src/gpm-notification.c:458
+#, fuzzy
+msgid "_Suspend"
+msgstr "Uśpij"
+
+#: ../src/gpm-notification.c:460
+#, fuzzy
+msgid "Hi_bernate"
+msgstr "Hibernuj"
+
+#: ../src/gpm-notification.c:465
+msgid "Po_wer Info"
+msgstr ""
+
+#: ../src/gpm-notification.c:468
+#, fuzzy
+msgid "_Preferences"
+msgstr "Preferencje zasilania"
+
+#: ../src/gpm-notification.c:470
+msgid "_Help"
+msgstr ""
+
+#: ../src/gpm-notification.c:472
+msgid "_About"
+msgstr ""
+
+#: ../src/gpm-prefs.c:613
+msgid "Shutdown"
+msgstr "Wyłącz"
+
+#: ../src/gpm-prefs.c:619
+msgid "Hibernate"
+msgstr "Hibernuj"
+
+#: ../src/gpm-prefs.c:622
+msgid "Send warning"
+msgstr "Wyślij ostrzeżenia"
+
+#: ../src/gpm-prefs.c:625
+msgid "Do nothing"
+msgstr "Nic nie rób"
+
+#: ../src/gpm-prefs.glade.h:2
+#, fuzzy
+msgid "<b>Notification Area</b>"
 msgstr "<b>Okno powiadamiania</b>"
 
-#: ../src/preferences.glade.h:3
+#: ../src/gpm-prefs.glade.h:3
 msgid "<b>Other Options</b>"
 msgstr "<b>Inne opcje</b>"
 
-#: ../src/preferences.glade.h:4
-msgid "<b>Running on AC adapter</b>"
+#: ../src/gpm-prefs.glade.h:4
+#, fuzzy
+msgid "<b>Running on AC Adapter</b>"
 msgstr "<b>Pracuje na zasilaniu sieciowym</b>"
 
-#: ../src/preferences.glade.h:5
-msgid "<b>Running on batteries</b>"
+#: ../src/gpm-prefs.glade.h:5
+#, fuzzy
+msgid "<b>Running on Batteries</b>"
 msgstr "<b>Pracuje na bateriach</b>"
 
-#: ../src/preferences.glade.h:6
+#: ../src/gpm-prefs.glade.h:6
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:8
 msgid "Advanced"
 msgstr "Zaawansowane"
 
-#: ../src/preferences.glade.h:7
-msgid "Battery is critical when below:"
+#: ../src/gpm-prefs.glade.h:9
+#, fuzzy
+msgid "Ba_ttery is critical when below:"
 msgstr "Bateria ma stan krytyczny kiedy poniżej:"
 
-#: ../src/preferences.glade.h:8
-msgid "Computer sleep type:"
+#: ../src/gpm-prefs.glade.h:10
+#, fuzzy
+msgid "C_omputer sleep type:"
 msgstr "Typ usypiania komputera:"
 
-#: ../src/preferences.glade.h:9
-msgid "Display devices that are fully charged"
-msgstr "Wyświetl urządzenia, które są naładowane"
+#: ../src/gpm-prefs.glade.h:11
+#, fuzzy
+msgid "Only display when battery life is _critical"
+msgstr "Kiedy poziom baterii jest krytyczny:"
 
-#: ../src/preferences.glade.h:10
-msgid "Display main icon"
-msgstr "Wyświetl główną ikonę"
+#: ../src/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr ""
 
-#: ../src/preferences.glade.h:11
-msgid "Double click notification icon:"
-msgstr "Podwójne kliknięcie na ikonę powiadamiania:"
-
-#: ../src/preferences.glade.h:12
+#: ../src/gpm-prefs.glade.h:13
 msgid "Options"
 msgstr "Opcje"
 
-#: ../src/preferences.glade.h:13
-msgid "Power Preferences"
-msgstr "Preferencje zasilania"
-
-#: ../src/preferences.glade.h:14
-msgid "Put computer to sleep after:"
-msgstr "Przełącz komputer w tryb uśpienia po:"
-
-#: ../src/preferences.glade.h:15
-msgid "Put display to sleep after:"
+#: ../src/gpm-prefs.glade.h:14
+#, fuzzy
+msgid "P_ut display to sleep after:"
 msgstr "Przełącz ekran w tryb uśpienia po:"
 
-#: ../src/preferences.glade.h:16
-msgid "Put hard drive to sleep after:"
-msgstr "Przełącz twardy dysk w tryb uśpienia po:"
+#: ../src/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "Put c_omputer to sleep after:"
+msgstr "Przełącz komputer w tryb uśpienia po:"
 
-#: ../src/preferences.glade.h:17
-msgid "Set display brightness:"
+#: ../src/gpm-prefs.glade.h:17
+#, fuzzy
+msgid "Put d_isplay to sleep after:"
+msgstr "Przełącz ekran w tryb uśpienia po:"
+
+#: ../src/gpm-prefs.glade.h:18
+#, fuzzy
+msgid "S_et display brightness:"
 msgstr "Ustaw jasność ekranu:"
 
-#: ../src/preferences.glade.h:18
+#: ../src/gpm-prefs.glade.h:19
 msgid "Sleep"
 msgstr "Uśpij"
 
-#: ../src/preferences.glade.h:19
-msgid "When AC power disconnected:"
-msgstr "Kiedy zasilanie sieciowe jest odłączone:"
-
-#: ../src/preferences.glade.h:20
-msgid "When UPS power critical:"
-msgstr "Kiedy poziom baterii UPS jest krytyczny:"
-
-#: ../src/preferences.glade.h:21
-msgid "When battery power critical:"
-msgstr "Kiedy poziom baterii jest krytyczny:"
-
-#: ../src/preferences.glade.h:22
-msgid "When laptop lid is closed:"
-msgstr "Kiedy pokrywa laptopa jest zamknięta:"
-
-#: ../src/preferences.glade.h:23
-msgid "When power button pressed:"
-msgstr "Kiedy klawisz zasilania jest wciśnięty:"
-
-#: ../src/preferences.glade.h:24
-msgid "When suspend button pressed:"
+#: ../src/gpm-prefs.glade.h:20
+#, fuzzy
+msgid "Wh_en suspend button pressed:"
 msgstr "Kiedy klawisz uśpienia jest wciśnięty:"
 
+#: ../src/gpm-prefs.glade.h:21
+#, fuzzy
+msgid "Whe_n laptop lid is closed:"
+msgstr "Kiedy pokrywa laptopa jest zamknięta:"
+
+#: ../src/gpm-prefs.glade.h:22
+#, fuzzy
+msgid "When _battery power critical:"
+msgstr "Kiedy poziom baterii jest krytyczny:"
+
+#: ../src/gpm-prefs.glade.h:23
+msgid "_Always display icon"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:24
+#, fuzzy
+msgid "_Battery is low when below:"
+msgstr "Bateria ma stan krytyczny kiedy poniżej:"
+
+#: ../src/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "_Never display icon"
+msgstr "Wyświetl główną ikonę"
+
+#: ../src/gpm-prefs.glade.h:26
+#, fuzzy
+msgid "_Put computer to sleep after:"
+msgstr "Przełącz komputer w tryb uśpienia po:"
+
+#: ../src/gpm-prefs.glade.h:27
+#, fuzzy
+msgid "_Screensaver Preferences..."
+msgstr "Preferencje zasilania"
+
+#: ../src/gpm-prefs.glade.h:28
+#, fuzzy
+msgid "_Set display brightness:"
+msgstr "Ustaw jasność ekranu:"
+
+#: ../src/gpm-prefs.glade.h:29
+#, fuzzy
+msgid "_When power button pressed:"
+msgstr "Kiedy klawisz zasilania jest wciśnięty:"
+
+#~ msgid "If the machine has a LCD (brightness variable) attached."
+#~ msgstr "Jeśli komputer posiada ekran LCD (wartość jasność)"
+
+#~ msgid "If the machine has a UPS attached"
+#~ msgstr "Jeśli komputer posiada UPS"
+
+#~ msgid "If the machine has a display (that can be blanked) attached."
+#~ msgstr "Jeśli komputer posiada wyświetlacz (który może być zaciemniony)."
+
+#~ msgid "If the machine has a hard-drive (that can be spun-down) attached."
+#~ msgstr "Jeśli komputer ma twardy dysk (który może być wyłączony) ਗੀ ਹੈ।"
+
+#~ msgid "If the machine has a wireless keyboard attached."
+#~ msgstr "Jeśli komputer posiada bezprzewodową klawiaturę."
+
+#~ msgid "If the machine has a wireless mouse attached."
+#~ msgstr "Jeśli komputer posiada bezprzewodową mysz."
+
+#~ msgid ""
+#~ "If the machine has an AC adapter (usually laptops) then this key should "
+#~ "be set."
+#~ msgstr ""
+#~ "Jeśli komputer posiada zasilacz sieciowy (zwykle laptopy) wtedy ten "
+#~ "klawisz będzie określony."
+
+#~ msgid "If the machine has an ac_adapter"
+#~ msgstr "Jeśli komputer posiada zasilacz sieciowy"
+
+#~ msgid ""
+#~ "If the machine has an power, sleep or lid buttons then this key should be "
+#~ "set."
+#~ msgstr ""
+#~ "Jeśli komputer posiada guzik zasilania, uśpienia lub inne guziki wtedy te "
+#~ "klawisze będą określone."
+
+#~ msgid "If the machine has power buttons"
+#~ msgstr "Jeśli komputer posiada guzik zasilania"
+
+#~ msgid "If the machine have primary batteries"
+#~ msgstr "Jeśli komputer posiada główne baterie"
+
+#~ msgid "Short description."
+#~ msgstr "Krótki opis."
+
+#~ msgid "User cannot hibernate the machine"
+#~ msgstr "Użytkownik nie może hibernować komputera"
+
+#~ msgid "User cannot reboot the machine"
+#~ msgstr "Użytownik nie może przeładować komputera"
+
+#~ msgid "User cannot shutdown the machine"
+#~ msgstr "Użytkownik nie może wyłączyć komputera"
+
+#~ msgid "User cannot suspend the machine"
+#~ msgstr "Użytkownik nie może uśpić komputera"
+
+#~ msgid "Whether to display a permanent icon"
+#~ msgstr "Czy ikona ma być wyświetlana"
+
+#~ msgid "Whether we display icons when they are full"
+#~ msgstr "Czy wyświetlać ikony kiedy są pełne"
+
+#~ msgid "UPS"
+#~ msgstr "UPS"
+
+#~ msgid "AC Adapter"
+#~ msgstr "Zasilacz AC"
+
+#~ msgid "Logitech mouse"
+#~ msgstr "Mysz Logitech"
+
+#~ msgid "Logitech keyboard"
+#~ msgstr "Klawiatura Logitech"
+
+#~ msgid "PDA"
+#~ msgstr "PDA"
+
+#~ msgid "Unknown device"
+#~ msgstr "Nieznane urządzenie"
+
+#~ msgid "missing"
+#~ msgstr "brakujący"
+
+#~ msgid "fully charged"
+#~ msgstr "pełne naładowanie"
+
+#~ msgid "screensave"
+#~ msgstr "wygaszacz ekranu"
+
+#~ msgid "shutdown"
+#~ msgstr "wyłącz"
+
+#~ msgid "software suspend"
+#~ msgstr "uśpienie programowe"
+
+#~ msgid "session log off"
+#~ msgstr "wyloguj"
+
+#~ msgid ""
+#~ "The program '%s' is preventing the %s from occurring.\n"
+#~ "\n"
+#~ "The explanation given is: %s"
+#~ msgstr ""
+#~ "Program '%s' nie dopuszcza %s do wystąpienia.\n"
+#~ "\n"
+#~ "Otrzymane wyjaśnienie: %s"
+
+#~ msgid ""
+#~ "The program '%s' has not returned data that is preventing the %s from "
+#~ "occurring."
+#~ msgstr ""
+#~ "Program '%s' nie zwrócił danych, które są wymagane do wystąpienia z %s."
+
+#~ msgid ""
+#~ "PowerManager service is not running.\n"
+#~ "%s cannot perform a %s."
+#~ msgstr ""
+#~ "Usługa PowerManager nie jest uruchomiona.\n"
+#~ "%s nie może wykonać %s."
+
+#~ msgid ""
+#~ "PowerManager service is not running.\n"
+#~ "%s cannot perform hard-drive timeout changes."
+#~ msgstr ""
+#~ "Usługa PowerManager nie jest uruchomiona.\n"
+#~ "%s nie może ustalić czasu wyłączania dysku twardego."
+
+#~ msgid "Couldn't obtain list of batteries"
+#~ msgstr "Nie można określić listy baterii"
+
+#~ msgid "Couldn't obtain list of ac_adapters"
+#~ msgstr "Nie można określić listy zasilaczy sieciowych"
+
+#~ msgid "Please report bugs to richard@hughsie.com\n"
+#~ msgstr "Proszę wysłać raport o błędach na adres richard@hughsie.com\n"
+
+#~ msgid "Computer is running on UPS power"
+#~ msgstr "Komputer pracuje na zasilaniu UPS"
+
+#~ msgid "Reboot"
+#~ msgstr "Przeładuj"
+
+#~ msgid "Quick sleep"
+#~ msgstr "Szybkie usypianie"
+
+#~ msgid "Display devices that are fully charged"
+#~ msgstr "Wyświetl urządzenia, które są naładowane"
+
+#~ msgid "Put hard drive to sleep after:"
+#~ msgstr "Przełącz twardy dysk w tryb uśpienia po:"
+
+#~ msgid "When AC power disconnected:"
+#~ msgstr "Kiedy zasilanie sieciowe jest odłączone:"
+
+#~ msgid "When UPS power critical:"
+#~ msgstr "Kiedy poziom baterii UPS jest krytyczny:"
