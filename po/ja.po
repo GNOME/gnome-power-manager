@@ -1,0 +1,656 @@
+# Ja.po for gnome-power-manager.
+# Copyright (C) 2005 Richard Hughes <richard @ hughsie.com>
+# This file is distributed under the same license as the gnome-power-manager package.
+# Satoru SATOH <ss @ gnome.gr.jp>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager 0.0.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-11-10 11:12+0900\n"
+"PO-Revision-Date: 2005-11-10 12:54+0900\n"
+"Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
+"Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "電源管理設定"
+
+#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
+msgid "Power Preferences"
+msgstr "電源設定"
+
+#: ../gnome-power-manager.schemas.in.h:1
+msgid "Options are never, critical, charge, always"
+msgstr "選択肢は never, critical, charge, always のどれか"
+
+#: ../gnome-power-manager.schemas.in.h:2
+msgid "The action to take when the battery is critically low."
+msgstr "バッテリーが危険なほど少ない場合にとる処置"
+
+#: ../gnome-power-manager.schemas.in.h:3
+msgid "The brightness the display is set to on AC"
+msgstr "電源動作中の表示の明るさ"
+
+#: ../gnome-power-manager.schemas.in.h:4
+msgid "The brightness the display is set to on battery"
+msgstr "バッテリー動作中の表示の明るさ"
+
+#: ../gnome-power-manager.schemas.in.h:5
+msgid "The event for a laptop lid closing"
+msgstr "ノート PC の蓋を閉じるときのイベント"
+
+#: ../gnome-power-manager.schemas.in.h:6
+msgid "The event for a system power button press"
+msgstr "システムの電源ボタンを押したときのイベント"
+
+#: ../gnome-power-manager.schemas.in.h:7
+msgid "The event for a system suspend button press"
+msgstr "システムのサスペンドボタンを押したときのイベント"
+
+#: ../gnome-power-manager.schemas.in.h:8
+msgid "The idle time in seconds before the computer tries to sleep"
+msgstr "コンピュータをスリープさせるまでのアイドル時間(秒)"
+
+#: ../gnome-power-manager.schemas.in.h:9
+msgid "The idle time in seconds before the display tries to sleep"
+msgstr "画面をスリープさせるまでのアイドル時間(秒)"
+
+#: ../gnome-power-manager.schemas.in.h:10
+msgid "The idle time in seconds before the hard disk drives try to sleep"
+msgstr "ハードディスクをスリープさせるまでのアイドル時間(秒)"
+
+#: ../gnome-power-manager.schemas.in.h:11
+msgid "The path to the reboot script"
+msgstr "reboot スクリプトのパス"
+
+#: ../gnome-power-manager.schemas.in.h:12
+msgid "The path to the shutdown script"
+msgstr "shutdown スクリプトのパス"
+
+#: ../gnome-power-manager.schemas.in.h:13
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr "電源デバイスが \"電力低下\"とみなされ、アクションを起すときの閾値(割合: %)"
+
+#: ../gnome-power-manager.schemas.in.h:14
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to warn the user."
+msgstr "電源デバイスが \"電力低下\"とみなされ、ユーザーに警告するときの閾値(割合: %)"
+
+#: ../gnome-power-manager.schemas.in.h:15
+msgid "The powerdevice action threshold."
+msgstr "電源デバイスのアクション閾値"
+
+#: ../gnome-power-manager.schemas.in.h:16
+msgid "The powerdevice warning threshold."
+msgstr "電源デバイスの警告閾値"
+
+#: ../gnome-power-manager.schemas.in.h:17
+msgid "The type of sleep (hibernate/suspend) to use automatically."
+msgstr "自動的に使用するスリープの種類 (hibernate/suspend)"
+
+#: ../gnome-power-manager.schemas.in.h:18
+msgid "When to show the notification icon"
+msgstr "通知アイコンの表示"
+
+#: ../src/eggtrayicon.c:127
+msgid "Orientation"
+msgstr "向き"
+
+#: ../src/eggtrayicon.c:128
+msgid "The orientation of the tray."
+msgstr "トレイの向き"
+
+#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
+msgid "until charged"
+msgstr " 充電完了まで"
+
+#: ../src/gpm-common.c:140
+msgid "remaining"
+msgstr " 残り"
+
+#: ../src/gpm-common.c:273
+msgid "Unknown"
+msgstr "不明"
+
+#: ../src/gpm-common.c:275
+msgid "1 minute"
+msgstr "1 分"
+
+#: ../src/gpm-common.c:277
+#, c-format
+msgid "%i minutes"
+msgstr "%i 分"
+
+#: ../src/gpm-common.c:283
+msgid "1 hour"
+msgstr "1 時間"
+
+#: ../src/gpm-common.c:285
+#, c-format
+msgid "%i hours"
+msgstr "%i 時間"
+
+#: ../src/gpm-common.c:288
+msgid "1 hour, 1 minute"
+msgstr "1 時間 1 分"
+
+#: ../src/gpm-common.c:290
+#, c-format
+msgid "%i hours, 1 minute"
+msgstr "%i 時間 1 分"
+
+#: ../src/gpm-common.c:292
+#, c-format
+msgid "1 hour, %i minutes"
+msgstr "1 時間 %i 分"
+
+#: ../src/gpm-common.c:294
+#, c-format
+msgid "%i hours, %i minutes"
+msgstr "%i 時間 %i 分"
+
+#. common descriptions of this program
+#: ../src/gpm-common.h:38
+msgid "GNOME Power Manager"
+msgstr "GNOME 電源管理"
+
+#: ../src/gpm-common.h:39
+msgid "Power Manager for the GNOME desktop"
+msgstr "GNOME デスクトップ用の電源管理システム"
+
+#. * @}
+#: ../src/gpm-info.glade.h:2
+#, no-c-format
+msgid "96% efficient"
+msgstr "96% 効率"
+
+#: ../src/gpm-info.glade.h:3
+msgid "<b>Batteries</b>"
+msgstr "<b>バッテリー</b>"
+
+#: ../src/gpm-info.glade.h:4
+msgid "<b>Capabilities</b>"
+msgstr "<b>キャパシティ</b>"
+
+#: ../src/gpm-info.glade.h:5
+msgid "<b>GNOME Screensaver</b>"
+msgstr "<b>GNOME スクリーンセーバー</b>"
+
+#. * @}
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>一般</b>"
+
+#: ../src/gpm-info.glade.h:7
+msgid "<b>Other problems</b>"
+msgstr "<b>他の問題</b>"
+
+#: ../src/gpm-info.glade.h:8
+msgid "<b>UPS</b>"
+msgstr "<b>UPS</b>"
+
+#: ../src/gpm-info.glade.h:9
+msgid "APC UPS 100CS"
+msgstr "APC UPS 100CS"
+
+#: ../src/gpm-info.glade.h:10
+msgid "CPU Frequency Scaling"
+msgstr "CPU 動作周波数の調整"
+
+#: ../src/gpm-info.glade.h:11
+msgid "Form-factor:"
+msgstr "フォームファクタ:"
+
+#: ../src/gpm-info.glade.h:12
+msgid "Gnome Screensaver Info"
+msgstr "GNOME スクリーンセーバー情報"
+
+#: ../src/gpm-info.glade.h:13
+msgid "Hibernation"
+msgstr "ハイバーネーション"
+
+#: ../src/gpm-info.glade.h:14
+msgid "Laptop"
+msgstr "ノート PC"
+
+#: ../src/gpm-info.glade.h:15
+msgid "LiION Battery"
+msgstr "LiION バッテリー"
+
+#: ../src/gpm-info.glade.h:16
+msgid "Low Power Mode"
+msgstr "低電力モード"
+
+#: ../src/gpm-info.glade.h:17
+msgid "Manufacturer:"
+msgstr "製造会社:"
+
+#: ../src/gpm-info.glade.h:18
+msgid "Model:"
+msgstr "モデル:"
+
+#: ../src/gpm-info.glade.h:19
+msgid "NiMOH Battery"
+msgstr "NiMOH バッテリー"
+
+#: ../src/gpm-info.glade.h:20
+msgid "Other problems"
+msgstr "他の問題"
+
+#: ../src/gpm-info.glade.h:21
+msgid "Satellite Pro A10"
+msgstr "Satellite Pro A10"
+
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+msgid "Suspend"
+msgstr "サスペンド"
+
+#: ../src/gpm-info.glade.h:23
+msgid "System Power Info"
+msgstr "システム電源情報"
+
+#: ../src/gpm-info.glade.h:24
+msgid "Toshiba"
+msgstr "東芝"
+
+#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr "バッテリーの残りはおよそ <b>%s</b> (%i%%) です。データを失うのを"
+"避けるために AC アダプタを差して下さい"
+
+#: ../src/gpm-main.c:576
+msgid "Battery Critically Low"
+msgstr "バッテリーは非常に低くなっています"
+
+#: ../src/gpm-main.c:596
+msgid "Battery Low"
+msgstr "バッテリー低"
+
+#: ../src/gpm-main.c:638
+msgid "AC Power Unplugged"
+msgstr "AC 電源未使用"
+
+#: ../src/gpm-main.c:639
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "AC 電源を使用していません。システムはバッテリーで動作中です"
+
+#: ../src/gpm-main.c:709
+msgid "Battery Charged"
+msgstr "バッテリー充電完了"
+
+#: ../src/gpm-main.c:709
+msgid "Your battery is now fully charged"
+msgstr "バッテリーの充電が完了しました"
+
+#: ../src/gpm-notification.c:216
+msgid "charging"
+msgstr "充電中"
+
+#: ../src/gpm-notification.c:218
+msgid "discharging"
+msgstr "放電中"
+
+#: ../src/gpm-notification.c:221
+msgid "charged"
+msgstr "充電完了"
+
+#: ../src/gpm-notification.c:239
+msgid "until empty"
+msgstr "空になるまで"
+
+#: ../src/gpm-notification.c:306
+msgid "Computer is running on battery power\n"
+msgstr "コンピュータはバッテリー電源で動作中\n"
+
+#: ../src/gpm-notification.c:308
+msgid "Computer is running on AC power\n"
+msgstr "コンピュータは AC 電源で動作中\n"
+
+#: ../src/gpm-notification.c:458
+msgid "_Suspend"
+msgstr "サスペンド(_S)"
+
+#: ../src/gpm-notification.c:460
+msgid "Hi_bernate"
+msgstr "ハイバーネート(_B)"
+
+#: ../src/gpm-notification.c:465
+msgid "Po_wer Info"
+msgstr "電源情報(_W)"
+
+#: ../src/gpm-notification.c:468
+msgid "_Preferences"
+msgstr "設定(_P)"
+
+#: ../src/gpm-notification.c:470
+msgid "_Help"
+msgstr "ヘルプ(_H)"
+
+#: ../src/gpm-notification.c:472
+msgid "_About"
+msgstr "情報(_A)"
+
+#: ../src/gpm-prefs.c:613
+msgid "Shutdown"
+msgstr "停止"
+
+#: ../src/gpm-prefs.c:619
+msgid "Hibernate"
+msgstr "ハイバーネート"
+
+#: ../src/gpm-prefs.c:622
+msgid "Send warning"
+msgstr "警告を送る"
+
+#: ../src/gpm-prefs.c:625
+msgid "Do nothing"
+msgstr "何もしない"
+
+#: ../src/gpm-prefs.glade.h:2
+msgid "<b>Notification Area</b>"
+msgstr "<b>通知エリア</b>"
+
+#: ../src/gpm-prefs.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>他のオプション</b>"
+
+#: ../src/gpm-prefs.glade.h:4
+msgid "<b>Running on AC Adapter</b>"
+msgstr "<b>AC アダプタで動作中</b>"
+
+#: ../src/gpm-prefs.glade.h:5
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>バッテリーで動作中</b>"
+
+#: ../src/gpm-prefs.glade.h:6
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr "<i><small>16 分(予想)</small></i>"
+
+#: ../src/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr "<i><small>2 時間 6 分(予想)</small></i>"
+
+#: ../src/gpm-prefs.glade.h:8
+msgid "Advanced"
+msgstr "詳細"
+
+#: ../src/gpm-prefs.glade.h:9
+msgid "Ba_ttery is critical when below:"
+msgstr "バッテリーが切れかかっているとみなす閾値(_T):"
+
+#: ../src/gpm-prefs.glade.h:10
+msgid "C_omputer sleep type:"
+msgstr "コンピュータのスリープの種類(_O):"
+
+#: ../src/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr "バッテリーが切れそうなときにだけ表示(_C):"
+
+#: ../src/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr "バッテリーを充電中または放電中のときにだけ表示(_D):"
+
+#: ../src/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "オプション"
+
+#: ../src/gpm-prefs.glade.h:14
+msgid "P_ut display to sleep after:"
+msgstr "画面をスリープさせるまでの時間(_U):"
+
+#: ../src/gpm-prefs.glade.h:16
+msgid "Put c_omputer to sleep after:"
+msgstr "コンピュータをスリープさせるまでの時間(_O):"
+
+#: ../src/gpm-prefs.glade.h:17
+msgid "Put d_isplay to sleep after:"
+msgstr "画面をスリープさせるまでの時間(_I):"
+
+#: ../src/gpm-prefs.glade.h:18
+msgid "S_et display brightness:"
+msgstr "画面の明るさを設定(_E):"
+
+#: ../src/gpm-prefs.glade.h:19
+msgid "Sleep"
+msgstr "スリープ"
+
+#: ../src/gpm-prefs.glade.h:20
+msgid "Wh_en suspend button pressed:"
+msgstr "サスペンドボタンを押したとき(_E):"
+
+#: ../src/gpm-prefs.glade.h:21
+msgid "Whe_n laptop lid is closed:"
+msgstr "ラップトップの蓋を閉じたとき(_N):"
+
+#: ../src/gpm-prefs.glade.h:22
+msgid "When _battery power critical:"
+msgstr "バッテリー電力がなくなりそうなとき(_B):"
+
+#: ../src/gpm-prefs.glade.h:23
+msgid "_Always display icon"
+msgstr "常にアイコンを表示(_A)"
+
+#: ../src/gpm-prefs.glade.h:24
+msgid "_Battery is low when below:"
+msgstr "バッテリー電力を低いとみなす閾値(_B):"
+
+#: ../src/gpm-prefs.glade.h:25
+msgid "_Never display icon"
+msgstr "アイコンを表示しない(_N)"
+
+#: ../src/gpm-prefs.glade.h:26
+msgid "_Put computer to sleep after:"
+msgstr "コンピュータをスリープさせるまでの時間(_P):"
+
+#: ../src/gpm-prefs.glade.h:27
+msgid "_Screensaver Preferences..."
+msgstr "スクリーンセーバー設定(_S)..."
+
+#: ../src/gpm-prefs.glade.h:28
+msgid "_Set display brightness:"
+msgstr "画面の明るさを設定(_S):"
+
+#: ../src/gpm-prefs.glade.h:29
+msgid "_When power button pressed:"
+msgstr "電源ボタンを押したとき(_W):"
+
+#: ../src/gpm-sysdev.c:58
+msgid "Laptop battery"
+msgstr "ノート PC バッテリー"
+
+#: ../src/gpm-sysdev.c:60
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-sysdev.c:62
+msgid "Wireless mouse"
+msgstr "無線マウス"
+
+#: ../src/gpm-sysdev.c:64
+msgid "Wireless keyboard"
+msgstr "無線キーボード"
+
+#: ../src/gpm-sysdev.c:66
+msgid "Misc PDA"
+msgstr "様々な PDA"
+
+#~ msgid "If the machine has a LCD (brightness variable) attached."
+#~ msgstr "明るさ調整の可能な LCD (液晶ディスプレイ) がついている場合"
+
+#~ msgid "If the machine has a UPS attached"
+#~ msgstr "UPS に接続されている場合"
+
+#~ msgid "If the machine has a display (that can be blanked) attached."
+#~ msgstr "暗くできるディスプレイがついている場合"
+
+#~ msgid "If the machine has a hard-drive (that can be spun-down) attached."
+#~ msgstr "回転を停止できるハードディスクドライブがついている場合"
+
+#~ msgid "If the machine has a wireless keyboard attached."
+#~ msgstr "無線キーボードがついている場合"
+
+#~ msgid "If the machine has a wireless mouse attached."
+#~ msgstr "無線マウスがついている場合"
+
+#~ msgid ""
+#~ "If the machine has an AC adapter (usually laptops) then this key should "
+#~ "be set."
+#~ msgstr ""
+#~ "AC アダプタがある場合 (通常はラップトップ)、このキーをセットするべきでしょ"
+#~ "う"
+
+#~ msgid "If the machine has an ac_adapter"
+#~ msgstr "ac_adapter がある場合"
+
+#~ msgid ""
+#~ "If the machine has an power, sleep or lid buttons then this key should be "
+#~ "set."
+#~ msgstr ""
+#~ "電源、スリープ、LID ボタンがついている場合、このキーをセットするべきでしょ"
+#~ "う"
+
+#~ msgid "If the machine has power buttons"
+#~ msgstr "電源ボタンがついている場合"
+
+#~ msgid "If the machine have primary batteries"
+#~ msgstr "バッテリーがついている場合"
+
+#~ msgid "Short description."
+#~ msgstr "概要"
+
+#~ msgid "User cannot hibernate the machine"
+#~ msgstr "マシンをハイバーネートできません"
+
+#~ msgid "User cannot reboot the machine"
+#~ msgstr "マシンを再起動できません"
+
+#~ msgid "User cannot shutdown the machine"
+#~ msgstr "マシンを停止できません"
+
+#~ msgid "User cannot suspend the machine"
+#~ msgstr "マシンをサスペンドできません"
+
+#~ msgid "Whether to display a permanent icon"
+#~ msgstr "常駐アイコンを表示するかどうか"
+
+#~ msgid "Whether to display icons when devices are at full capacity"
+#~ msgstr "デバイスが完全状態のときにアイコンを表示するかどうか"
+
+#~ msgid "AC Adapter"
+#~ msgstr "AC アダプタ"
+
+#~ msgid "Logitech mouse"
+#~ msgstr "Logitech マウス"
+
+#~ msgid "PDA"
+#~ msgstr "PDA"
+
+#~ msgid "Unknown device"
+#~ msgstr "不明なデバイス"
+
+#~ msgid "missing"
+#~ msgstr "不明"
+
+#~ msgid "fully charged"
+#~ msgstr "充電完了"
+
+#~ msgid "screensave"
+#~ msgstr "スクリーンセーブ"
+
+#~ msgid "shutdown"
+#~ msgstr "停止"
+
+#~ msgid "software suspend"
+#~ msgstr "ソフトウェアサスペンド"
+
+#~ msgid "session log off"
+#~ msgstr "セッション記録オフ"
+
+#~ msgid ""
+#~ "The program '%s' is preventing the %s from occurring.\n"
+#~ "\n"
+#~ "The explaination given is: %s"
+#~ msgstr ""
+#~ "プログラム '%s' は %s が起るのを妨げています\n"
+#~ "\n"
+#~ "説明: %s"
+
+#~ msgid ""
+#~ "The program '%s' has not returned data that is preventing the %s from "
+#~ "occurring."
+#~ msgstr "プログラム '%s' は %s が起るのを妨げているデータを返しませんでした"
+
+#~ msgid ""
+#~ "PowerManager service is not running.\n"
+#~ "%s cannot perform a %s."
+#~ msgstr ""
+#~ "PowerManager サービスが起動していません\n"
+#~ "%s は %s を実行できません."
+
+#~ msgid ""
+#~ "PowerManager service is not running.\n"
+#~ "%s cannot perform hard-drive timout changes."
+#~ msgstr ""
+#~ "PowerManager サービスが起動していません\n"
+#~ "%s はハードディスクドライブのタイムアウト変更を実行できません"
+
+#~ msgid "AC Adapter has been removed"
+#~ msgstr "AC アダプタが取り外されています"
+
+#~ msgid "Couldn't obtain list of batteries"
+#~ msgstr "バッテリーリストを取得できませんでした"
+
+#~ msgid "Couldn't obtain list of ac_adapters"
+#~ msgstr "ac_adapters リストを取得できませんでした"
+
+#~ msgid "The %s (%i%%) is <b>critically low</b> (%s)"
+#~ msgstr "%s (%i%%) は <b>切れかかっています</b> (%s)"
+
+#~ msgid "The %s (%i%%) is <b>low</b> (%s)"
+#~ msgstr "%s (%i%%) は <b>電力が低くなっています</b> (%s)"
+
+#~ msgid "Power button has been pressed"
+#~ msgstr "電源ボタンが押されました"
+
+#~ msgid "Sleep button has been pressed"
+#~ msgstr "スリープボタンが押されました"
+
+#~ msgid "Lid has been opened"
+#~ msgstr "蓋が開いています"
+
+#~ msgid "Please report bugs to richard@hughsie.com\n"
+#~ msgstr "richard@hughsie.com までバグ報告を下さい\n"
+
+#~ msgid "Computer is running on UPS power"
+#~ msgstr "UPS 電源で動作中"
+
+#~ msgid "Unknown Translator"
+#~ msgstr "不明な翻訳者"
+
+#~ msgid "Reboot"
+#~ msgstr "再起動"
+
+#~ msgid "Quick sleep"
+#~ msgstr "高速スリープ"
+
+#~ msgid "Display devices that are fully charged"
+#~ msgstr "デバイスの充電完了時に表示"
+
+#~ msgid "Put hard drive to sleep after:"
+#~ msgstr "ハードディスクドライブスリープまでの時間:"
+
+#~ msgid "When AC power disconnected:"
+#~ msgstr "AC 電源が接続されていないとき:"
+
+#~ msgid "When UPS power critical:"
+#~ msgstr "UPS 電源がなくなりそうなとき:"
