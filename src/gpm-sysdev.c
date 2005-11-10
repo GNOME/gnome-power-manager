@@ -126,8 +126,12 @@ sysDevPrint (DeviceType type)
 	sysDev *sd = sysDevGet (type);
 	g_print ("Printing %s device parameters:\n", sysDevToString (type));
 	g_print ("percentageCharge = %i\n", sd->percentageCharge);
-	g_print ("minutesRemaining = %i\n", sd->minutesRemaining);
 	g_print ("numberDevices    = %i\n", sd->numberDevices);
+	if (type != BATT_MOUSE && type != BATT_KEYBOARD) {
+		g_print ("minutesRemaining = %i\n", sd->minutesRemaining);
+		g_print ("isCharging       = %i\n", sd->isCharging);
+		g_print ("isDischarging    = %i\n", sd->isDischarging);
+	}
 }
 
 /** Initialises all the system device objects
@@ -369,8 +373,8 @@ sysDevUpdate (DeviceType type)
 	}
 	/* sanity check */
 	if (sd->isDischarging && sd->isCharging) {
-		g_warning ("Sanity check kicked in! "
-			   "Mutiple device object cannot be charging and "
+		g_warning ("sysDevUpdate: Sanity check kicked in! "
+			   "Multiple device object cannot be charging and "
 			   "discharging simultaneously!");
 		sd->isCharging = FALSE;
 	}
@@ -384,7 +388,7 @@ sysDevUpdate (DeviceType type)
 	if (sd->numberDevices == 1) {
 		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, 0);
 		sd->minutesRemaining = sds->minutesRemaining;
-		sd->percentageCharge += sds->percentageCharge;
+		sd->percentageCharge = sds->percentageCharge;
 		return;
 	}
 	/* iterate thru all the devices (multiple battery scenario) */
@@ -401,7 +405,7 @@ sysDevUpdate (DeviceType type)
 	 * if we are discharging, and the number or batteries 
 	 * discharging != the number present, then we have a case where the
 	 * batteries are discharging one at a time (i.e. not simultanously)
-	 * and we have to facto this into the time remaining calculations.
+	 * and we have to factor this into the time remaining calculations.
 	 * This should effect:
 	 *   https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
 	 */

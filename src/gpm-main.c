@@ -526,11 +526,12 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 	 */
 	if (strcmp (capability, "battery") == 0) {
 		add_battery (udi);
-		gpn_icon_update ();
 		/* only update the correct device class */
 		sds = sysDevFindAll (udi);
 		if (sds)
 			sysDevUpdate (sds->sd->type);
+		/* update icon now */
+		gpn_icon_update ();
 	}
 }
 
@@ -653,6 +654,7 @@ hal_device_property_modified (const gchar *udi,
 		sysDevUpdateAll ();
 		/* update icon */
 		gpn_icon_update ();
+		return;
 	}
 
 	/* no point continuing any further if we are never going to match ...*/
@@ -715,9 +717,10 @@ hal_device_property_modified (const gchar *udi,
 		hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
 			sds->minutesRemaining = tempval / 60;
-	} else
+	} else {
 		/* ignore */
 		return;
+	}
 
 	/* update */
 	sysDevUpdate (dev);
