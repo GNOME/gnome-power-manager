@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #define GPM_STOCK_AC_6_OF_8	"gnome-power-ac-6-of-8"
 #define GPM_STOCK_AC_7_OF_8	"gnome-power-ac-7-of-8"
 #define GPM_STOCK_AC_8_OF_8	"gnome-power-ac-8-of-8"
+#define GPM_STOCK_AC_CHARGED	"gnome-power-ac-charged"
 #define GPM_STOCK_BAT_0_OF_8	"gnome-power-bat-0-of-8"
 #define GPM_STOCK_BAT_1_OF_8	"gnome-power-bat-1-of-8"
 #define GPM_STOCK_BAT_2_OF_8	"gnome-power-bat-2-of-8"

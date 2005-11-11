@@ -142,8 +142,11 @@ get_stock_id (IconPolicy iconopt)
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->numberDevices > 0) {
 		index = get_index_from_percent (sd->percentageCharge);
-		if (onAcPower)
+		if (onAcPower) {
+			if (sd->percentageCharge == 100)
+				return g_strdup_printf ("gnome-power-ac-charged", index);
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+		}
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
 	/* We fallback to the ac_adapter icon -- do we want to do this? */

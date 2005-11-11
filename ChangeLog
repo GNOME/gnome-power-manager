@@ -3,8 +3,9 @@
 	* src/gpm-sysdev.c: Create a helper function sysDevGetIndex so we don't
 	have to bounds check every request, and cast in every call.
 
-	* src/icons/gnome-power-ac-8-of-8.png: Remove the charging symbol that
-	crept in with the last SVG icon updates.
+	* src/icons/gnome-power-ac-charged.png,	src/gpm-notification.c,
+	src/gpm-stock-icons.{c|h}:
+	Remove the charging symbol when the battery is at 100% and not charging.
 	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=321034
 
 	* docs/www/packages.html: Add info about running HAL as root in breezy.

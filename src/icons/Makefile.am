@@ -27,6 +27,7 @@ Data_DATA =						\
 	gnome-power-ac-6-of-8.png			\
 	gnome-power-ac-7-of-8.png			\
 	gnome-power-ac-8-of-8.png			\
+	gnome-power-ac-charged.png			\
 	gnome-power-ups-0-of-8.png			\
 	gnome-power-ups-1-of-8.png			\
 	gnome-power-ups-2-of-8.png			\
