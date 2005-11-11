@@ -1,5 +1,16 @@
 2005-11-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-sysdev.c: Create a helper function sysDevGetIndex so we don't
+	have to bounds check every request, and cast in every call.
+
+	* src/icons/gnome-power-ac-8-of-8.png: Remove the charging symbol that
+	crept in with the last SVG icon updates.
+	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=321034
+
+	* docs/www/packages.html: Add info about running HAL as root in breezy.
+
+2005-11-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-notification.h: Give credit to the translators.
 
 	* src/gpm-main.c, gpm-sysdev.c: Rearrange the icon processing so it's
