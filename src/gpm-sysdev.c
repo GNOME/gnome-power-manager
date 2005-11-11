@@ -226,6 +226,23 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
 	sd->numberDevices++;
 }
 
+/** Gets the specified system device from the table by index
+ *
+ *  @param	type		The device type
+ *  @param	index		The number device in the table
+ *  @return			A sysDevStruct
+ */
+sysDevStruct *
+sysDevGetIndex (DeviceType type, int index)
+{
+	sysDev *sd = sysDevGet (type);
+	if (index < 0 || index > sd->devices->len) {
+		g_warning ("sysDevGetIndex: Invalid index %i", index);
+		return NULL;
+	}
+	return (sysDevStruct *) g_ptr_array_index (sd->devices, index);
+}
+
 /** Prints all the system structs of a specified system device
  *
  *  @param	type		The device type
@@ -240,7 +257,7 @@ sysDevList (DeviceType type)
 
 	g_print ("Printing %s device list:\n", sysDevToString (type));
 	for (a=0; a < sd->devices->len; a++) {
-		temp = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		temp = sysDevGetIndex (type, a);
 		g_print ("%s (%i)\n", temp->udi, a);
 		g_print (" percentageCharge : %i\n", temp->percentageCharge);
 		g_print (" minutesRemaining    : %i\n", temp->minutesRemaining);
@@ -262,12 +279,12 @@ sysDevFind (DeviceType type, const gchar *udi)
 	sysDevStruct *temp;
 
 	if (!udi) {
-		g_warning ("sysDevFind uni is NULL");
+		g_warning ("sysDevFind UDI is NULL");
 		return NULL;
 	}
 
 	for (a=0; a < sd->devices->len; a++) {
-		temp = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		temp = sysDevGetIndex (type, a);
 		if (strcmp(temp->udi, udi) == 0)
 			return temp;
 	}
@@ -356,7 +373,7 @@ sysDevUpdate (DeviceType type)
 
 	/* find the number of batteries present, and set charge states */
 	for (a=0; a < sd->devices->len; a++) {
-		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		sds = sysDevGetIndex (type, a);
 		if (sds->present) {
 			numPresent++;
 			/*
@@ -386,14 +403,14 @@ sysDevUpdate (DeviceType type)
 	g_debug ("%i devices of type %s", numPresent, sysDevToString(type));
 	/* do the shortcut for a single device, and return */
 	if (sd->numberDevices == 1) {
-		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, 0);
+		sds = sysDevGetIndex (type, 0);
 		sd->minutesRemaining = sds->minutesRemaining;
 		sd->percentageCharge = sds->percentageCharge;
 		return;
 	}
 	/* iterate thru all the devices (multiple battery scenario) */
 	for (a=0; a < sd->devices->len; a++) {
-		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
+		sds = sysDevGetIndex (type, a);
 		if (sds->present) {
 			/* for now, just add */
 			sd->minutesRemaining += sds->minutesRemaining;

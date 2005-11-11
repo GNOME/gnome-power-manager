@@ -317,9 +317,9 @@ read_battery_data (sysDevStruct *sds)
 	is_present = hal_device_get_int (sds->udi,
 			"battery.remaining_time", &seconds_remaining);
 	if (!is_present && (sds->isDischarging || sds->isCharging)) {
-		g_warning ("GNOME Power Manager could not read your battery's remaining time.  "
-				 "Please report this as a bug, providing the information to: "
-				 GPMURL);
+		g_warning ("GNOME Power Manager could not read your battery's "
+			   "remaining time. Please report this as a bug, "
+			   "providing the information to: " GPMURL);
 	} else if (seconds_remaining > 0) {
 		/* we have to scale this to minutes */
 		sds->minutesRemaining = seconds_remaining / 60;
@@ -329,9 +329,9 @@ read_battery_data (sysDevStruct *sds)
 	is_present = hal_device_get_int (sds->udi, "battery.charge_level.percentage",
 					 &sds->percentageCharge);
 	if (!is_present && (sds->isDischarging || sds->isCharging)) {
-		g_warning ("GNOME Power Manager could not read your battery's percentage charge.  "
-				 "Please report this as a bug, providing the information to: "
-				 GPMURL);
+		g_warning ("GNOME Power Manager could not read your battery's "
+			   "percentage charge. Please report this as a bug, "
+			   "providing the information to: " GPMURL);
 	}
 	sysDevUpdate (sds->sd->type);
 	return TRUE;
@@ -519,7 +519,7 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 	g_assert (udi);
 	g_assert (capability);
 	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
-		udi, capability);
+		 udi, capability);
 	/*
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just appear in the device tree
