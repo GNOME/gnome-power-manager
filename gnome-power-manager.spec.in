@@ -1,7 +1,7 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: 0.15
+Release: 0.16
 License: GPL
 Group: Applications/System
 Source: gnome-power-manager-%{version}.tar.gz
@@ -94,7 +94,7 @@ fi
 %{_datadir}/applications/*
 %{_datadir}/dbus-1/*
 %{_datadir}/gnome-power-manager
-%{_datadir}/man/*
+%{_datadir}/man/man1/*
 # TODO: remove system.d as g-p-m shouldn't be on the system bus
 %{_sysconfdir}/dbus-1/system.d/*
 %{_sysconfdir}/gconf/schemas/*.schemas
