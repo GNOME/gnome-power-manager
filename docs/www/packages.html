@@ -82,9 +82,33 @@ yum -y --enablerepo=development update kernel
   <td>
    <p>
     Packages by Oliver Grawert for 
-    <a href="http://packages.ubuntu.com/breezy/gnome/gnome-power-manager">Ubuntu Breezy</a>
+    <a href="http://packages.ubuntu.com/dapper/gnome/gnome-power-manager">Ubuntu Breezy/Dapper</a>
    </p>
    <pre>apt-get -y install gnome-power-manager libnotify notification-daemon</pre>
+   <p>
+    The standard HAL installed by Ubuntu runs as a standard user (i.e. not as root)
+    and as such cannot work with the newer functionality such as hibernation and
+    suspend. Most distros run hald as the root user.
+   </p>
+   <p>
+    To get GNOME Power Manager working with ubuntu you will need to edit the file
+    /etc/defaults/hal and change:
+   </p>
+<pre>
+# This will run the hal daemon as normal user 'hal'
+DAEMON_OPTS=
+# This will run the hal daemon as user root 
+#DAEMON_OPTS=--retain-privileges
+</pre>
+   <p>
+    to:
+   </p>
+<pre>
+# This will run the hal daemon as normal user 'hal'
+#DAEMON_OPTS=
+# This will run the hal daemon as user root 
+DAEMON_OPTS=--retain-privileges
+</pre>
   </td>
  </tr>
  <tr>
