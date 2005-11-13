@@ -776,12 +776,20 @@ hal_device_condition (const gchar *udi,
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			action_policy_do (policy);
 		} else if (strcmp (type, "lid") == 0) {
-			/* we only do a lid event when the lid is OPENED */
 			hal_device_get_bool (udi, "button.state.value", &value);
+			/*
+			 * We enable/disable DPMS because some laptops do
+			 * not turn off the LCD backlight when the lid
+			 * is closed. See
+			 * http://bugzilla.gnome.org/show_bug.cgi?id=321313
+			 */
 			if (value) {
+				/* we only do a policy event when the lid is CLOSED */
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				action_policy_do (policy);
-			}
+				gscreensaver_set_dpms (FALSE);
+			} else
+				gscreensaver_set_dpms (TRUE);
 		} else
 			g_warning ("Button '%s' unrecognised", type);
 

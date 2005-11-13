@@ -179,6 +179,69 @@ gscreensaver_lock (void)
 	return TRUE;
 }
 
+/** Set the DPMS monitor state using GNOME Screensaver
+ *
+ *  @param	state		The monitor state, true is enabled, false is OFF
+ *  @return			TRUE if gnome-screensaver was successful.
+ */
+gboolean
+gscreensaver_set_dpms (gboolean state)
+{
+/*	** This hack will be removed when DPMS DBUS support is added to g-s **/
+	gchar *command = NULL;
+	g_debug ("Setting the DPMS setting to %i", state);
+
+	if (state) {
+		/* force dpms on */
+		command = "xset dpms force on";
+		if (!g_spawn_command_line_async (command, NULL)) {
+			g_warning ("Couldn't execute xset command!");
+			return FALSE;
+		}
+		/* need to reset to not need to press a key */
+		command = "xset s reset";
+		if (!g_spawn_command_line_async (command, NULL)) {
+			g_warning ("Couldn't execute xset command!");
+			return FALSE;
+		}
+		return TRUE;
+	}
+	/* force dpms off */
+	command = "xset dpms force off";
+	if (!g_spawn_command_line_async (command, NULL)) {
+		g_warning ("Couldn't execute xset command!");
+		return FALSE;
+	}
+/*	** This code will be enabled when DPMS DBUS support is added to g-s **
+
+	GError *error = NULL;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
+	gboolean boolret;
+
+	g_debug ("gnome-screensaver lock");
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
+	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GS_LISTENER_SERVICE,
+			GS_LISTENER_PATH,
+			GS_LISTENER_INTERFACE);
+	if (!dbus_g_proxy_call (gs_proxy, "setDpms", &error,
+				G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_debug ("gnome-screensaver service is not running.");
+		boolret = FALSE;
+	}
+	g_object_unref (G_OBJECT (gs_proxy));
+	if (!boolret) {
+		g_debug ("gnome-screensaver lock failed");
+		return FALSE;
+	}
+*/
+	return TRUE;
+}
+
 /** Lock the screen using GNOME Screensaver
  *
  *  @param	time		The returned idle time, passed by ref.

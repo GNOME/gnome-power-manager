@@ -1,3 +1,15 @@
+2005-11-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-screensaver.{c|h}: Add gscreensaver_set_dpms() to solve the
+	case where the laptop backlight isn't being turned off when the
+	lid goes down. For the time being, we'll use the hack that is xset,
+	but when (if?) gnome-screensaver supports a DBUS method we'll switch
+	to that. Should solve http://bugzilla.gnome.org/show_bug.cgi?id=321313
+
+	* src/gpm-main.c: Use gscreensaver_set_dpms on the lid events.
+
+	* po/nl.po: Updated, thanks Theetjuh.
+
 2005-11-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-sysdev.c: Create a helper function sysDevGetIndex so we don't

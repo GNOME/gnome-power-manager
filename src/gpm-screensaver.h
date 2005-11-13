@@ -42,6 +42,7 @@ gboolean gscreensaver_set_throttle (gboolean throttle);
 gboolean gscreensaver_is_running (void);
 gboolean gscreensaver_get_idle (gint *time);
 gboolean gscreensaver_set_dpms_timeout (gint timeout);
+gboolean gscreensaver_set_dpms (gboolean state);
 
 #endif	/* _GPMSCREENSAVER_H */
 /** @} */
