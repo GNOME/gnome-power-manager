@@ -1,3 +1,12 @@
+2005-11-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c, src/gpm-prefs.c: Merge a patch by Jaap Haitsma 
+	<jaap@haitsma.org>, to make gpm use the standard gnome way to do
+	command line parsing (using popt).
+	Furthermore after a gnome_program_init there is no need to do a 
+	gtk_init, g_type_init etc. because gnome_program_init already does this.
+	Also, gpm-prefs did not have the standard calls to bindtextdomain etc.
+
 2005-11-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-screensaver.{c|h}: Add gscreensaver_set_dpms() to solve the
@@ -9,6 +18,8 @@
 	* src/gpm-main.c: Use gscreensaver_set_dpms on the lid events.
 
 	* po/nl.po: Updated, thanks Theetjuh.
+
+	* src/Makefile.am: Add the extra director defines.
 
 2005-11-10  Richard Hughes  <richard@hughsie.com>
 

@@ -18,6 +18,10 @@ INCLUDES =						\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
+	-DPREFIX=\""$(prefix)"\" 			\
+	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
+	-DLIBDIR=\""$(libdir)"\" 			\
+	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"
 
 bin_PROGRAMS =						\

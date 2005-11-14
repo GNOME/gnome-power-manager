@@ -63,9 +63,10 @@
 #include <dbus/dbus-glib-lowlevel.h>
 
 #include <gdk/gdkx.h>
-#include <gnome.h>
+#include <libgnome/libgnome.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <popt.h>
 
 #include "gpm-common.h"
 #include "gpm-main.h"
@@ -797,23 +798,6 @@ hal_device_condition (const gchar *udi,
 	}
 }
 
-/** Prints program usage.
- *
- */
-static void
-print_usage (void)
-{
-	g_print ("usage : gnome-power-manager [options]\n");
-	g_print (
-		"\n"
-		"    --disable        Do not perform the action, e.g. suspend\n"
-		"    --no-daemon      Do not daemonize.\n"
-		"    --verbose        Show extra debugging\n"
-		"    --version        Show the installed version and quit\n"
-		"    --help           Show this information and exit\n"
-		"\n");
-}
-
 /** Callback for the idle function.
  *
  *  @param	timeout		Time in minutes that computer has been idle
@@ -861,7 +845,7 @@ signalhandler_noc (const char *name, gboolean connected)
 int
 main (int argc, char *argv[])
 {
-	gint a;
+	gint i;
 	gint value;
 	GMainLoop *loop = NULL;
 	GConfClient *client = NULL;
@@ -869,16 +853,47 @@ main (int argc, char *argv[])
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection = NULL;
 	DBusGConnection *session_connection = NULL;
-	gboolean no_daemon = FALSE;
+	gboolean no_daemon;
 
-	g_type_init ();
+	struct poptOption options[] = {
+		{ "no-daemon", '\0', POPT_ARG_NONE, NULL, 0,
+		  N_("Do not daemonize"), NULL },
+		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
+		  N_("Show extra debugging information"), NULL },
+		{ NULL, '\0', 0, NULL, 0, NULL, NULL }
+	};
+
+	i = 0;
+	options[i++].arg = &no_daemon;
+	options[i++].arg = &isVerbose;
+
+	no_daemon = FALSE;
+	isVerbose = FALSE;
+
+	/* Initialise gnome and parse command line */
+	gnome_program_init (argv[0], VERSION, 
+			    LIBGNOMEUI_MODULE, argc, argv,
+			    GNOME_PROGRAM_STANDARD_PROPERTIES,
+			    GNOME_PARAM_POPT_TABLE, options,
+			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GNOME Power Manager"),
+			    NULL);
+	master = gnome_master_client ();
+	flags = gnome_client_get_flags (master);
+
+	if (flags & GNOME_CLIENT_IS_CONNECTED) {
+		/* We'll disable this as users are getting constant crashes */
+		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
+		gnome_client_flush (master);
+	}
+
+	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
+
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 	dbus_g_object_type_install_info (gpm_object_get_type (),
 		&dbus_glib_gpm_object_object_info);
 
-	gconf_init (argc, argv, NULL);
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH,
 		GCONF_CLIENT_PRELOAD_NONE, NULL);
@@ -888,22 +903,6 @@ main (int argc, char *argv[])
 	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-
-	isVerbose = FALSE;
-	for (a=1; a < argc; a++) {
-		if (strcmp (argv[a], "--verbose") == 0)
-			isVerbose = TRUE;
-		else if (strcmp (argv[a], "--version") == 0) {
-			g_print ("%s %s\n", NICENAME, VERSION);
-			return EXIT_SUCCESS;
-		}
-		else if (strcmp (argv[a], "--no-daemon") == 0)
-			no_daemon = TRUE;
-		else if (strcmp (argv[a], "--help") == 0) {
-			print_usage ();
-			return EXIT_SUCCESS;
-		}
-	}
 
 	/* set log level */
 	if (!isVerbose)
@@ -916,16 +915,6 @@ main (int argc, char *argv[])
 	if (!dbus_get_session_connection (&session_connection))
 		exit (1);
 
-	/* initialise gnome */
-	gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE, argc, argv, NULL);
-	master = gnome_master_client ();
-	flags = gnome_client_get_flags (master);
-	if (flags & GNOME_CLIENT_IS_CONNECTED) {
-		/* We'll disable this as users are getting constant crashes */
-		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
-		gnome_client_flush (master);
-	}
-	g_signal_connect (GTK_OBJECT (master), "die", G_CALLBACK (gpm_exit), NULL);
 
 	/* Initialise libnotify, if compiled in. */
 	if (!libnotify_init (NICENAME))

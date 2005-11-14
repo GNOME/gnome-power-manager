@@ -139,7 +139,6 @@ sysDevPrint (DeviceType type)
 void
 sysDevInitAll ()
 {
-	g_debug ("Initing all device types");
 	sysDevInit (BATT_PRIMARY);
 	sysDevInit (BATT_UPS);
 	sysDevInit (BATT_MOUSE);

@@ -45,6 +45,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <popt.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -458,20 +459,6 @@ callback_radio_changed (GtkWidget *widget, gpointer user_data)
 		GCONF_ROOT "general/display_icon_policy", policy, NULL);
 }
 
-/** Prints program usage.
- *
- */
-static void
-print_usage (void)
-{
-	g_print ("\nusage : gnome-power-preferences [--verbose] [--help]\n");
-	g_print (
-		"\n"
-		"        --verbose               Show extra debugging\n"
-		"        --help                  Show this information and exit\n"
-		"\n");
-}
-
 /** simple callback formatting a GtkScale to "XX%"
  *
  *
@@ -662,7 +649,7 @@ main (int argc, char **argv)
 {
 	GtkWidget *widget = NULL;
 	GConfClient *client = NULL;
-	gint a;
+	gint i;
 	gboolean has_gpm_connection;
 	gdouble value;
 	gint steps;
@@ -680,26 +667,33 @@ main (int argc, char **argv)
 	int pHibernate 	= 	ACTION_HIBERNATE;
 	int pNothing 	= 	ACTION_NOTHING;
 
-	gtk_init (&argc, &argv);
-	gconf_init (argc, argv, NULL);
+	struct poptOption options[] = {
+		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
+		  N_("Show extra debugging information"), NULL },
+		{ NULL, '\0', 0, NULL, 0, NULL, NULL }
+	};
+
+	i = 0;
+	options[i++].arg = &isVerbose;
 
 	isVerbose = FALSE;
-	for (a=1; a < argc; a++) {
-		if (strcmp (argv[a], "--verbose") == 0)
-			isVerbose = TRUE;
-		else if (strcmp (argv[a], "--help") == 0) {
-			print_usage ();
-			return EXIT_SUCCESS;
-		}
-	}
+
+	/* initialise gnome */
+	gnome_program_init (argv[0], VERSION,
+			    LIBGNOMEUI_MODULE, 
+			    argc, argv, 
+			    GNOME_PROGRAM_STANDARD_PROPERTIES,
+			    GNOME_PARAM_POPT_TABLE, options,
+			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GNOME Power Preferences"),
+			    NULL);
+
+	bindtextdomain (PACKAGE, GNOMELOCALEDIR);
+	bind_textdomain_codeset (PACKAGE, "UTF-8");
+	textdomain (PACKAGE);
 
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
 			g_log_ignore, NULL);
-
-	/* initialise gnome */
-	gnome_program_init ("Power Preferences", VERSION,
-		LIBGNOMEUI_MODULE, argc, argv, NULL);
 
 	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	client = gconf_client_get_default ();
@@ -743,7 +737,7 @@ main (int argc, char **argv)
 	 * Note, that the query alone will be enough to lauch g-p-m using
 	 * the service file.
 	 */
-	has_gpm_connection = gpm_is_on_ac (&a);
+	has_gpm_connection = gpm_is_on_ac (&i);
 	if (!has_gpm_connection)
 		g_warning ("Cannot connect to GNOME Power Manager.\n"
 			"Make sure that it is running");
