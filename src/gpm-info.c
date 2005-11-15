@@ -178,7 +178,7 @@ main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 
 	/* load the interface */
-	all_info_widgets = glade_xml_new (GPM_DATA "gpm-info.glade", NULL, NULL);
+	all_info_widgets = glade_xml_new (GPM_DATA G_DIR_SEPARATOR_S "gpm-info.glade", NULL, NULL);
 	if (!all_info_widgets)
 		g_error ("glade file failed to load, aborting");
 

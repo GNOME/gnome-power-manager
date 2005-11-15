@@ -64,7 +64,7 @@ gpm_stock_icons_init (void)
 		GdkPixbuf *pixbuf;
 		char *filename;
 
-		filename = g_strconcat (GPM_DATA, items[i], ".png", NULL);
+		filename = g_strconcat (GPM_DATA, G_DIR_SEPARATOR_S, items[i], ".png", NULL);
 		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 		if (!pixbuf) {
 			g_warning ("icon '%s' cannot be found. "

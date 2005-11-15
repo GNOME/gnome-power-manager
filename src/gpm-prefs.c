@@ -59,7 +59,8 @@
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
 
-
+/* If sleep time in a slider is set to 61 it is considered as never sleep */
+const int NEVER_TIME_ON_SLIDER = 61;
 static GladeXML *prefwidgets;
 static gboolean isVerbose;
 
@@ -285,51 +286,7 @@ set_estimated_label_widget (GtkWidget *widget, gint value)
 	}
 }
 
-/** Set the extra widget stuff, the cleverness of g-p-p
- *
- * @param	widgetname	The widgetname to effect
- */
-static void
-set_widget_extra_stuff (const gchar *widgetname)
-{
-	GtkWidget *widget = NULL;
-	GtkWidget *widget2 = NULL;
-	gint timepercentage;
-	gint value;
-
-	/* assertion checks */
-	g_assert (widgetname);
-
-	widget = glade_xml_get_widget (prefwidgets, widgetname);
-	value = gtk_range_get_value (GTK_RANGE (widget));
-
-	/*
-	 * if this is hscale for battery_low, then set upper range of hscale for
-	 * battery_critical maximum to value
-	 * (This stops criticalThreshold > lowThreshold)
-	 */
-	if (strcmp (widgetname, "hscale_battery_low") == 0) {
-		widget2 = glade_xml_get_widget (prefwidgets,
-			"hscale_battery_critical");
-		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
-	}
-
-	/*
-	 * Set the estimated time for these two sliders
-	 */
-	if (strcmp (widgetname, "hscale_battery_low") == 0) {
-		timepercentage = get_battery_time_for_percentage (value);
-		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_low_estimate");
-		set_estimated_label_widget (widget2, timepercentage);
-	}
-	if (strcmp (widgetname, "hscale_battery_critical") == 0) {
-		timepercentage = get_battery_time_for_percentage (value);
-		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_critical_estimate");
-		set_estimated_label_widget (widget2, timepercentage);
-	}
-}
-
-/** Callback for hscale_changed
+/** Callback when critical or low level are changed
  *
  * @param	widget		The combobox widget
  * @param	user_data	user_data pointer. No function.
@@ -337,69 +294,113 @@ set_widget_extra_stuff (const gchar *widgetname)
  * @note	We get the following data from widget: policypath
  */
 static void
-callback_hscale_changed (GtkWidget *widget, gpointer user_data)
+callback_hscale_low_critical_level_changed (GtkWidget *widget, gpointer user_data)
 {
 	GConfClient *client = NULL;
 	const gchar *widgetname = NULL;
 	gchar *policypath = NULL;
 	gdouble value;
-	gint oldgconfvalue;
-	gdouble divisions = -1;
-	gboolean onbattery;
+	gint timepercentage;
+	GtkWidget* widget2;
 
-	client = gconf_client_get_default ();
 	policypath = g_object_get_data ((GObject*) widget, "policypath");
+	g_return_if_fail (policypath);
 
 	value = gtk_range_get_value (GTK_RANGE (widget));
-	oldgconfvalue = gconf_client_get_int (client, policypath, NULL);
+	g_debug ("[%s] = (%f)", policypath, value);
 
-	/*
-	 * Code for divisions of 5 seconds
-	 */
+	timepercentage = get_battery_time_for_percentage (value);
+
 	widgetname = gtk_widget_get_name (widget);
-	if (strcmp (widgetname, "hscale_ac_computer") == 0)
-		divisions = 5;
-	else if (strcmp (widgetname, "hscale_batteries_computer") == 0)
-		divisions = 5;
-	else if (strcmp (widgetname, "hscale_batteries_display") == 0)
-		divisions = 5;
-	else if (strcmp (widgetname, "hscale_ac_display") == 0)
-		divisions = 5;
+	if (strcmp (widgetname, "hscale_battery_low") == 0) {
+		widget2 = glade_xml_get_widget (prefwidgets,
+			"hscale_battery_critical");
+		/* Make sure that critical level can never be below low level */
+		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
 
-	if (divisions > 0) {
-		double double_segment = ((gdouble) value / divisions);
-		double v2 = ceil(double_segment) * divisions;
-		gtk_range_set_value (GTK_RANGE (widget), v2);
-		/*
-		 * If not different, then we'll return, and wait for the 
-		 * proper event
-		 */
-		if ((int) v2 != (int) value)
-			return;
+		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_low_estimate");
+		set_estimated_label_widget (widget2, timepercentage);
+	}
+	else if (strcmp (widgetname, "hscale_battery_critical") == 0) {
+		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_critical_estimate");
+		set_estimated_label_widget (widget2, timepercentage);
+	}
+	else {
+		g_critical ("callback_hscale_low_critical_level_changed() widget: %s does not exist",
+			    widgetname);
 	}
 
-	/*
-	 * if calculated value not substantially different to existing
-	 * gconf value, then no point continuing
-	 */
-	if (fabs (oldgconfvalue - value) < 0.1)
-		return;
-
-	/* do all the clever widget stuff */
-	set_widget_extra_stuff (widgetname);
-
-	/* for AC and battery, change the brightness in real-time */
-	if (gpm_is_on_mains (&onbattery)) {
-		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) ||
-		    (onbattery && strcmp (widgetname, "hscale_batteries_brightness") == 0))
-			hal_set_brightness (value);
-	} else
-		g_warning (GPM_DBUS_SERVICE ".isOnBattery failed");
-
-	g_return_if_fail (policypath);
-	g_debug ("[%s] = (%f)", policypath, value);
+	client = gconf_client_get_default ();
 	gconf_client_set_int (client, policypath, (gint) value, NULL);
 }
+
+
+/** Callback when brightness is changed
+ *
+ * @param	widget		The combobox widget
+ * @param	user_data	user_data pointer. No function.
+ *
+ * @note	We get the following data from widget: policypath
+ */
+static void
+callback_hscale_brightness_changed (GtkWidget *widget, gpointer user_data)
+{
+	GConfClient *client = NULL;
+	const gchar *widgetname = NULL;
+	gchar *policypath = NULL;
+	gdouble value;
+	gboolean onbattery;
+
+	policypath = g_object_get_data ((GObject*) widget, "policypath");
+	g_return_if_fail (policypath);
+
+	value = gtk_range_get_value (GTK_RANGE (widget));
+	g_debug ("[%s] = (%f)", policypath, value);
+
+	widgetname = gtk_widget_get_name (widget);
+	/* Change the brightness in real-time */
+	if (gpm_is_on_mains (&onbattery)) {
+		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) ||
+		    (onbattery && strcmp (widgetname, "hscale_batteries_brightness") == 0)) {
+			hal_set_brightness (value);
+		}
+	} else {
+		g_warning (GPM_DBUS_SERVICE ".isOnBattery failed");
+	}
+
+	client = gconf_client_get_default ();
+	gconf_client_set_int (client, policypath, (gint) value, NULL);
+}
+
+
+/** Callback when sleep time sliders are changed
+ *
+ * @param	widget		The combobox widget
+ * @param	user_data	user_data pointer. No function.
+ *
+ * @note	We get the following data from widget: policypath
+ */
+
+static void
+callback_hscale_sleep_time_changed (GtkWidget *widget, gpointer user_data)
+{
+	GConfClient *client = NULL;
+	gchar *policypath = NULL;
+	gdouble value;
+
+	policypath = g_object_get_data ((GObject*) widget, "policypath");
+	g_return_if_fail (policypath);
+	
+	value = gtk_range_get_value (GTK_RANGE (widget));
+	g_debug ("[%s] = (%f)", policypath, value);
+	
+	if ( (gint)value == NEVER_TIME_ON_SLIDER) {
+		value = 0; /* gnome power manager interprets 0 as Never */
+	}
+	client = gconf_client_get_default ();
+	gconf_client_set_int (client, policypath, (gint) value, NULL);
+}
+
 
 /** Callback for button_help
  *
@@ -467,7 +468,7 @@ callback_radio_changed (GtkWidget *widget, gpointer user_data)
  * @return			The completed string, e.g. "10%"
  */
 static gchar*
-format_value_callback_percent (GtkScale *scale, gdouble value)
+format_value_callback_low_critical_level (GtkScale *scale, gdouble value)
 {
 	return g_strdup_printf ("%i%%", (gint) value);
 }
@@ -481,7 +482,7 @@ format_value_callback_percent (GtkScale *scale, gdouble value)
  * @note	We get the following data from widget: lcdsteps
  */
 static gchar*
-format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
+format_value_callback_brightness (GtkScale *scale, gdouble value)
 {
 	int *steps = NULL;
 
@@ -500,7 +501,7 @@ format_value_callback_percent_lcd (GtkScale *scale, gdouble value)
 static gchar*
 format_value_callback_time (GtkScale *scale, gdouble value)
 {
-	if ((gint) value == 0)
+	if ((gint) value == NEVER_TIME_ON_SLIDER)
 		return g_strdup ("Never");
 
 	return get_timestring_from_minutes (value);
@@ -533,18 +534,32 @@ hscale_setup_action (const gchar *widgetname, const gchar *policypath, PolicyTyp
 	value = gconf_client_get_int (client, policypath, NULL);
 	g_debug ("'%s' -> [%s] = (%i)", widgetname, policypath, value);
 
-	if (policytype == POLICY_LCD)
+	if (policytype == POLICY_LCD) {
 		g_signal_connect (G_OBJECT (widget), "format-value",
-			G_CALLBACK (format_value_callback_percent_lcd), NULL);
-	else if (policytype == POLICY_PERCENT)
+			G_CALLBACK (format_value_callback_brightness), NULL);
+		g_signal_connect (G_OBJECT (widget), "value-changed",
+			G_CALLBACK (callback_hscale_brightness_changed), NULL);
+	}
+	else if (policytype == POLICY_PERCENT) {
 		g_signal_connect (G_OBJECT (widget), "format-value",
-			G_CALLBACK (format_value_callback_percent), NULL);
-	else
+			G_CALLBACK (format_value_callback_low_critical_level), NULL);
+		g_signal_connect (G_OBJECT (widget), "value-changed",
+			G_CALLBACK (callback_hscale_low_critical_level_changed), NULL);
+	}
+	else if (policytype = POLICY_TIME) {
+		if (value == 0) {
+			value = NEVER_TIME_ON_SLIDER;
+		}
 		g_signal_connect (G_OBJECT (widget), "format-value",
 			G_CALLBACK (format_value_callback_time), NULL);
+		g_signal_connect (G_OBJECT (widget), "value-changed",
+			G_CALLBACK (callback_hscale_sleep_time_changed), NULL);
+	}
+	else {
+		g_assert (FALSE);
+	}
+	
 	gtk_range_set_value (GTK_RANGE (widget), (int) value);
-	g_signal_connect (G_OBJECT (widget), "value-changed",
-		G_CALLBACK (callback_hscale_changed), NULL);
 }
 
 /** Sets the checkboxes up to the gconf value, and sets up callbacks.
@@ -722,7 +737,7 @@ main (int argc, char **argv)
 		}
 
 	/* load the interface */
-	prefwidgets = glade_xml_new (GPM_DATA "gpm-prefs.glade", NULL, NULL);
+	prefwidgets = glade_xml_new (GPM_DATA G_DIR_SEPARATOR_S "gpm-prefs.glade", NULL, NULL);
 	if (!prefwidgets)
 		g_error ("glade file failed to load, aborting");
 
@@ -845,10 +860,6 @@ main (int argc, char **argv)
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 	}
-
-	/* do all the clever widget stuff */
-	set_widget_extra_stuff ("hscale_battery_low");
-	set_widget_extra_stuff ("hscale_battery_critical");
 
 	/* set themed battery and ac_adapter icons */
 	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");

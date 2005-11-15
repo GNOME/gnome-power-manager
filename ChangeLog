@@ -1,11 +1,28 @@
+2005-11-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c, src/gpm-info.c, src/gpm-prefs.c, src/gpm-prefs.glade,
+	src/icons/Makefile.am: 
+	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
+	- "Never" on the right of the sleep sliders
+	- Sleep sliders range from 1 to 60 minutes with steps of 1 minute
+	- In Makefiles GPM_DATA had a trailing slash. This is not common.
+	- Some code refactoring: There was now one callback handling all the 
+	different sliders. Since there are three types of sliders:
+	1. Setting sleep time
+	2. Setting disply brightness
+	3. The low and critical threshold
+	That callback became quite messy. So instead of 1 difficult to 
+	understand I made 3 of them which should be quite easy to understand.
+
 2005-11-14  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-main.c, src/gpm-prefs.c: Merge a patch by Jaap Haitsma 
-	<jaap@haitsma.org>, to make gpm use the standard gnome way to do
-	command line parsing (using popt).
-	Furthermore after a gnome_program_init there is no need to do a 
+	* src/gpm-main.c, src/gpm-prefs.c: 
+	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
+	- Make gpm use the standard gnome way to do command line parsing
+	(using popt).
+	- Furthermore after a gnome_program_init there is no need to do a 
 	gtk_init, g_type_init etc. because gnome_program_init already does this.
-	Also, gpm-prefs did not have the standard calls to bindtextdomain etc.
+	- Also, gpm-prefs did not have the standard calls to bindtextdomain etc.
 
 2005-11-13  Richard Hughes  <richard@hughsie.com>
 
