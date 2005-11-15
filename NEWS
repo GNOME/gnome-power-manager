@@ -11,9 +11,10 @@ Released November 09, 2005
   all the applets do.
 - Website is now hosted on gnome.org servers:
   http://www.gnome.org/projects/gnome-power-manager/
+- New WIKI with all the things in progress and TODO:
+  http://live.gnome.org/GnomePowerManager
 - Update the website to be more GNOMEy, copied from the nautilus template.
 - Lots of Makefile.am and configure tidy ups with thanks to JP Rosevear.
-- We now don't assert for things not related to our internal state
 - Removed gpm-dbus-test and made the DBUS interface *much* simpler
 - Multiple batteries and wireless device support massivly improved due
   to a new underlying calculation engine. Lots of cruft has been ripped out.
@@ -23,7 +24,6 @@ Released November 09, 2005
   when discharging and charging. The options have been turned to radio buttons
   to make options clearer. Also icons are now at 24x24 to conform to the
   GNOME HIG.
-- Notification area no longer "moves" across the panel when shown/unshown.
 - libnotify messages now replace one another, so the screen isn't littered
   with "battery is critically low" messages.
 - Replace our own "dumb" icon management with the GNOME stock icon functions,
