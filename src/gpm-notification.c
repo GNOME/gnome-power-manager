@@ -143,7 +143,7 @@ get_stock_id (IconPolicy iconopt)
 	if (sd->numberDevices > 0) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower) {
-			if (sd->percentageCharge == 100)
+			if (!isCharging && !isDischarging)
 				return g_strdup_printf ("gnome-power-ac-charged", index);
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		}

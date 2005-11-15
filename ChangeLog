@@ -14,6 +14,11 @@
 	That callback became quite messy. So instead of 1 difficult to 
 	understand I made 3 of them which should be quite easy to understand.
 
+	* src/gpm-notification.c: display the charged icon whenever we are
+	not discharging and not charging as opposed to when at 100% as some
+	batteries will never get to the maximum value.
+	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=321034
+
 2005-11-14  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c, src/gpm-prefs.c: 
@@ -46,7 +51,6 @@
 	* src/icons/gnome-power-ac-charged.png,	src/gpm-notification.c,
 	src/gpm-stock-icons.{c|h}:
 	Remove the charging symbol when the battery is at 100% and not charging.
-	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=321034
 
 	* docs/www/packages.html: Add info about running HAL as root in breezy.
 
