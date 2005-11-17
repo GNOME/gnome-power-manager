@@ -196,15 +196,35 @@ gboolean
 hal_set_brightness_dim (gint brightness)
 {
 	gint i, a;
-	gchar **names;
+	gchar **names = NULL;
 	gboolean retval;
-	int levels, old_level;
+	gint levels, old_level;
+	gchar *returnstring = NULL;
 
 	hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
 		g_debug ("No devices of capability laptop_panel");
 		return FALSE;
 	}
+
+	/* If the manufacturer is IBM, then assume we are a ThinkPad,
+	 * and don't do the new-fangled dimming routine. The ThinkPad dims
+	 * gently itself and the two dimming routines just get messy.
+	 * This should fix the bug:
+	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+	 */
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+			       "smbios.system.manufacturer",
+			       &returnstring);
+	if (returnstring) {
+		if (strcmp (returnstring, "IBM") == 0) {
+			retval = hal_set_brightness (brightness);
+			g_free (returnstring);
+			return retval;
+		}
+		g_free (returnstring);
+	}
+
 	retval = TRUE;
 	/* iterate to seteach laptop_panel object */
 	for (i = 0; names[i]; i++) {

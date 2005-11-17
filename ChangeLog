@@ -1,3 +1,16 @@
+2005-11-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-networkmanager.{c|h}:
+	Add methods to call NetworkManager to tell it to sleep or wake during
+	the suspend/resume calls. This isn't connected into the build yet
+	as we have to solve 3 sec timeout problem when NM isn't running.
+
+	* src/glibhal-extras.c:
+	If the manufacturer is IBM, then assume we are a ThinkPad,
+	and don't do the new-fangled dimming routine. The ThinkPad dims
+	gently itself. This fixes the bug:
+	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+
 2005-11-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c, src/gpm-info.c, src/gpm-prefs.c, src/gpm-prefs.glade,
