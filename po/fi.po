@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-10 07:32+0200\n"
-"PO-Revision-Date: 2005-11-10 07:10+0200\n"
+"POT-Creation-Date: 2005-11-17 09:46+0200\n"
+"PO-Revision-Date: 2005-11-17 09:55+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
-msgstr "Virranhallinnan asetukset"
+msgstr "Virta-asetusten hallinta"
 
 #: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
 msgid "Power Preferences"
@@ -26,7 +26,7 @@ msgstr "Virrankäytön asetukset"
 
 #: ../gnome-power-manager.schemas.in.h:1
 msgid "Options are never, critical, charge, always"
-msgstr "Vaihtoehdot ovat ei koskaan, kriittinen, ladattaessa tai aina"
+msgstr "Vaihtoehdot ovat never, critical, charge, always"
 
 #: ../gnome-power-manager.schemas.in.h:2
 msgid "The action to take when the battery is critically low."
@@ -42,7 +42,7 @@ msgstr "Näytön kirkkaus käytettäessä akkua"
 
 #: ../gnome-power-manager.schemas.in.h:5
 msgid "The event for a laptop lid closing"
-msgstr "Kannettavan kannen sulkemisesta aiheutuva tapahtuma"
+msgstr "Sylimikron kannen sulkemisesta aiheutuva tapahtuma"
 
 #: ../gnome-power-manager.schemas.in.h:6
 msgid "The event for a system power button press"
@@ -54,15 +54,15 @@ msgstr "Keskeytystilanapin painamisesta aiheutuva tapahtuma"
 
 #: ../gnome-power-manager.schemas.in.h:8
 msgid "The idle time in seconds before the computer tries to sleep"
-msgstr "Joutenolon aika sekunteina, ennen kuin tietokone siirtyy säästötilaan"
+msgstr "Aika sekunteina, jonka jouten oltuaan tietokone siirtyy säästötilaan"
 
 #: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the display tries to sleep"
-msgstr "Joutenolon aika sekunteina, ennen kuin näyttö siirtyy säästötilaan"
+msgstr "Aika sekunteina, jonka jouten oltuaan näyttö siirtyy säästötilaan"
 
 #: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the hard disk drives try to sleep"
-msgstr "Joutenolon aika sekunteina, ennen kuin kiintolevy siirtyy säästötilaan"
+msgstr "Aika sekunteina, jonka jouten oltuaan kiintolevy siirtyy säästötilaan"
 
 #: ../gnome-power-manager.schemas.in.h:11
 msgid "The path to the reboot script"
@@ -77,16 +77,16 @@ msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
-"Rajoitus virtalähteen lataustilan prosenttiosuudelle, jonka jälkeen se on "
-"\"tarpeeksi tyhjä\", jotta toiminto suoritetaan."
+"Virtalähteen lataustila prosentteina, jonka jälkeen se katsotaan tarpeeksi "
+"tyhjäksi, jotta toiminto suoritetaan."
 
 #: ../gnome-power-manager.schemas.in.h:14
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
-"Rajoitus virtalähteen lataustilan prosenttiosuudelle, jonka jälkeen se on "
-"\"tarpeeksi tyhjä\", jotta käyttäjää varoitetaan."
+"Virtalähteen lataustila prosentteina, jonka jälkeen se katsotaan tarpeeksi "
+"tyhjäksi, jotta käyttäjää varoitetaan."
 
 #: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice action threshold."
@@ -99,7 +99,7 @@ msgstr "Virtalähteen varoituksen raja."
 #: ../gnome-power-manager.schemas.in.h:17
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
-"Automaattisesti suoritetun virransäästön tyyppi (lepotila/keskeytystila)"
+"Automaattisesti suoritettavan virransäästön tyyppi (lepotila/keskeytystila)"
 
 #: ../gnome-power-manager.schemas.in.h:18
 msgid "When to show the notification icon"
@@ -113,7 +113,7 @@ msgstr "Suunta"
 msgid "The orientation of the tray."
 msgstr "Ilmoitusalueen suunta."
 
-#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
+#: ../src/gpm-common.c:138 ../src/gpm-notification.c:239
 msgid "until charged"
 msgstr "kunnes ladattu"
 
@@ -163,7 +163,7 @@ msgid "%i hours, %i minutes"
 msgstr "%i tuntia, %i minuuttia"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38
+#: ../src/gpm-common.h:38 ../src/gpm-main.c:878
 msgid "GNOME Power Manager"
 msgstr "Gnomen virrankäytön hallinta"
 
@@ -228,7 +228,7 @@ msgstr "Kannettava"
 
 #: ../src/gpm-info.glade.h:15
 msgid "LiION Battery"
-msgstr "LiION-akku"
+msgstr "Li-ion-akku"
 
 #: ../src/gpm-info.glade.h:16
 msgid "Low Power Mode"
@@ -244,7 +244,7 @@ msgstr "Malli:"
 
 #: ../src/gpm-info.glade.h:19
 msgid "NiMOH Battery"
-msgstr "NiMOH-akku"
+msgstr "NiMH-akku"
 
 #: ../src/gpm-info.glade.h:20
 msgid "Other problems"
@@ -254,7 +254,7 @@ msgstr "Muita ongelmia"
 msgid "Satellite Pro A10"
 msgstr "Satellite Pro A10"
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:618
 msgid "Suspend"
 msgstr "Keskeytystila"
 
@@ -266,102 +266,114 @@ msgstr "Tietoja virrankäytöstä"
 msgid "Toshiba"
 msgstr "Toshiba"
 
-#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#: ../src/gpm-main.c:575 ../src/gpm-main.c:595
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 "Akussa riittää sähkö arviolta vielä <b>%s</b> (%i%%). Kytke verkkovirta, "
-"jotta et menetä tietojasi akun loppuessa."
+"jotta et menetä tietojasi akun tyhjentyessä."
 
-#: ../src/gpm-main.c:576
+#: ../src/gpm-main.c:578
 msgid "Battery Critically Low"
 msgstr "Akun lataustila on kriittisen matala"
 
-#: ../src/gpm-main.c:596
+#: ../src/gpm-main.c:598
 msgid "Battery Low"
 msgstr "Akun lataustila matala"
 
-#: ../src/gpm-main.c:638
+#: ../src/gpm-main.c:640
 msgid "AC Power Unplugged"
 msgstr "Verkkovirta irroitettu"
 
-#: ../src/gpm-main.c:639
+#: ../src/gpm-main.c:641
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "Verkkovirta on irroitettu ja järjestelmä käyttää nyt akkua."
+msgstr "Verkkovirta on irroitettu, ja järjestelmä käyttää nyt akkua."
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:712
 msgid "Battery Charged"
 msgstr "Akku ladattu"
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:712
 msgid "Your battery is now fully charged"
 msgstr "Akkusi on nyt täysin ladattu"
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-main.c:860
+msgid "Do not daemonize"
+msgstr "Älä käynnistä taustaprosessina"
+
+#: ../src/gpm-main.c:862 ../src/gpm-prefs.c:687
+msgid "Show extra debugging information"
+msgstr "Näytä ylimääräisiä debug-tietoja"
+
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "latautuu"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "purkautuu"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "ladattu"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr "kunnes tyhjä"
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 msgid "Computer is running on battery power\n"
 msgstr "Järjestelmä käyttää akkua\n"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 msgid "Computer is running on AC power\n"
 msgstr "Järjestelmä käyttää verkkovirtaa\n"
 
-#: ../src/gpm-notification.c:458
+#: ../src/gpm-notification.c:461
 msgid "_Suspend"
 msgstr "_Keskeytystila"
 
-#: ../src/gpm-notification.c:460
+#: ../src/gpm-notification.c:463
 msgid "Hi_bernate"
 msgstr "_Lepotila"
 
-#: ../src/gpm-notification.c:465
+#: ../src/gpm-notification.c:468
 msgid "Po_wer Info"
 msgstr "Ti_etoja virrankäytöstä"
 
-#: ../src/gpm-notification.c:468
+#: ../src/gpm-notification.c:471
 msgid "_Preferences"
 msgstr "_Asetukset"
 
-#: ../src/gpm-notification.c:470
+#: ../src/gpm-notification.c:473
 msgid "_Help"
 msgstr "O_hje"
 
-#: ../src/gpm-notification.c:472
+#: ../src/gpm-notification.c:475
 msgid "_About"
 msgstr "_Tietoja"
 
-#: ../src/gpm-prefs.c:613
+#: ../src/gpm-prefs.c:615
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: ../src/gpm-prefs.c:619
+#: ../src/gpm-prefs.c:621
 msgid "Hibernate"
 msgstr "Lepotila"
 
-#: ../src/gpm-prefs.c:622
+#: ../src/gpm-prefs.c:624
 msgid "Send warning"
 msgstr "Lähetä varoitus"
 
-#: ../src/gpm-prefs.c:625
+#: ../src/gpm-prefs.c:627
 msgid "Do nothing"
 msgstr "Älä tee mitään"
+
+#: ../src/gpm-prefs.c:702
+msgid "GNOME Power Preferences"
+msgstr "Gnomen virta-asetukset"
 
 #: ../src/gpm-prefs.glade.h:2
 msgid "<b>Notification Area</b>"
@@ -389,7 +401,7 @@ msgstr "<i><small>Arvio 2 tuntia 6 minuuttia</small></i>"
 
 #: ../src/gpm-prefs.glade.h:8
 msgid "Advanced"
-msgstr "Edistyneet"
+msgstr "Lisäasetukset"
 
 #: ../src/gpm-prefs.glade.h:9
 msgid "Ba_ttery is critical when below:"
@@ -401,7 +413,7 @@ msgstr "Vi_rransäästötilan tyyppi:"
 
 #: ../src/gpm-prefs.glade.h:11
 msgid "Only display when battery life is _critical"
-msgstr "Näytä vain akun latauksen ollessa _kriittinen:"
+msgstr "Näytä vain akun latauksen ollessa _alhainen:"
 
 #: ../src/gpm-prefs.glade.h:12
 msgid "Only display when charging or _discharging"
