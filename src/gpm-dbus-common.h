@@ -36,6 +36,7 @@ gboolean dbus_glib_error (GError *error);
 gboolean dbus_get_system_connection (DBusGConnection **connection) __must_check;
 gboolean dbus_get_session_connection (DBusGConnection **connection) __must_check;
 gboolean dbus_get_service (DBusGConnection *connection, const gchar *service) __must_check;
+gboolean dbus_is_active_service (const gchar *service_name);
 
 #endif	/* _DBUSCOMMON_H */
 /** @} */

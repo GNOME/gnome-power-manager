@@ -159,4 +159,59 @@ dbus_get_system_connection (DBusGConnection **connection)
 	}
 	return TRUE;
 }
+
+/** Finds out if the service name is registered on the system bus
+ *
+ *  @param	service_name	The name of the dbus service to check
+ *				e.g. "org.freedesktop.NetworkManager"
+ *  @return			TRUE if the service is registed with the
+ *				system bus.
+ */
+gboolean
+dbus_is_active_service (const gchar *service_name)
+{
+	GError *error = NULL;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *dbus_proxy = NULL;
+	gboolean isOnBus = FALSE;
+	gchar **service_list;
+	gint i = 0;
+
+	g_debug ("dbus_is_active_service");
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	dbus_proxy = dbus_g_proxy_new_for_name (system_connection,
+			DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);
+	if (!dbus_proxy) {
+		g_warning ("Failed to get name owner");
+		return FALSE;
+	}
+
+	if (!dbus_g_proxy_call (dbus_proxy, "ListNames", &error,
+				G_TYPE_INVALID,
+				G_TYPE_STRV, &service_list,
+				G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("DBUS service is not running.");
+		return FALSE;
+	}
+
+	/* Print the results */
+ 	while (service_list[i]) {
+		if (strcmp (service_list[i], service_name) == 0) {
+			isOnBus = TRUE;
+			/* no point continuing to search */
+			break;
+		}
+		/* only print if named */
+		if (service_list[i][0] != ':')
+			g_debug ("found : %s", service_list[i]);
+		++i;
+	}
+	/* free list */
+	g_strfreev (service_list);
+	g_object_unref (G_OBJECT (dbus_proxy));
+	return isOnBus;
+}
+
 /** @} */
