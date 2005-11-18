@@ -42,9 +42,9 @@
 #include "glibhal-main.h"
 #include "gpm-networkmanager.h"
 
-/** Lock the screen using GNOME Screensaver
+/** Tell NetworkManager to put the network devices to sleep
  *
- *  @return			TRUE if gnome-screensaver locked the screen.
+ *  @return			TRUE if NetworkManager is now sleeping.
  */
 gboolean
 gpm_networkmanager_sleep (void)
@@ -52,57 +52,45 @@ gpm_networkmanager_sleep (void)
 	GError *error = NULL;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
-	gboolean boolret;
 
-	g_debug ("NetworkManager sleep");
 	if (!dbus_get_system_connection (&system_connection))
 		return FALSE;
 	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
 			NM_LISTENER_SERVICE,
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (nm_proxy, "sleep", &error,
-				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_debug ("NetworkManager service is not running.");
-		boolret = FALSE;
-	}
-	g_object_unref (G_OBJECT (nm_proxy));
-	if (!boolret) {
-		g_debug ("NetworkManager sleep failed");
+	if (!nm_proxy) {
+		g_warning ("Failed to get name owner");
 		return FALSE;
 	}
+	dbus_g_proxy_call_no_reply (nm_proxy, "sleep", G_TYPE_INVALID);
+	g_object_unref (G_OBJECT (nm_proxy));
 	return TRUE;
 }
 
+/** Tell NetworkManager to wake up all the network devices
+ *
+ *  @return			TRUE if NetworkManager is now awake.
+ */
 gboolean
 gpm_networkmanager_wake (void)
 {
 	GError *error = NULL;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
-	gboolean boolret;
 
-	g_debug ("NetworkManager wake");
 	if (!dbus_get_system_connection (&system_connection))
 		return FALSE;
 	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
 			NM_LISTENER_SERVICE,
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (nm_proxy, "wake", &error,
-				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_debug ("NetworkManager service is not running.");
-		boolret = FALSE;
-	}
-	g_object_unref (G_OBJECT (nm_proxy));
-	if (!boolret) {
-		g_debug ("NetworkManager wake failed");
+	if (!nm_proxy) {
+		g_warning ("Failed to get name owner");
 		return FALSE;
 	}
+	dbus_g_proxy_call_no_reply (nm_proxy, "wake", G_TYPE_INVALID);
+	g_object_unref (G_OBJECT (nm_proxy));
 	return TRUE;
 }
 
