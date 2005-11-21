@@ -27,6 +27,7 @@ INCLUDES =						\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
+	gnome-power-console				\
 	gnome-power-info
 
 gnome_power_info_SOURCES =				\
@@ -99,12 +100,16 @@ gnome_power_manager_SOURCES =				\
 	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
+	gpm-networkmanager.h				\
+	gpm-networkmanager.c				\
 	gpm-libnotify.h					\
 	gpm-libnotify.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-notification.h				\
 	gpm-notification.c				\
+	gpm-core.h					\
+	gpm-core.c					\
 	gpm-main.h					\
 	gpm-main.c					\
 	gpm-sysdev.h					\
@@ -119,6 +124,31 @@ else
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
+
+
+gnome_power_console_SOURCES =				\
+	gpm_marshal.h					\
+	gpm_marshal.c					\
+	glibhal-main.h					\
+	glibhal-main.c					\
+	glibhal-callback.h				\
+	glibhal-callback.c				\
+	glibhal-extras.h				\
+	glibhal-extras.c				\
+	gpm-dbus-common.h				\
+	gpm-dbus-common.c				\
+	gpm-dbus-server.h				\
+	gpm-dbus-server.c				\
+	gpm-common.h					\
+	gpm-common.c					\
+	gpm-core.h					\
+	gpm-core.c					\
+	gpm-console.c					\
+	gpm-sysdev.h					\
+	gpm-sysdev.c
+
+gnome_power_console_LDADD =				\
+	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 
 BUILT_SOURCES = \
 	gnome-power-glue.h				\

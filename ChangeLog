@@ -8,6 +8,15 @@
 	Also remove the gnome-screensaver button now g-p-m is less tied into
 	g-s with the DPMS settings.
 
+	* src/gpm-core.{c|h}:
+	Add the core, abstracted interfaces so we can use them with a console
+	program. Taken from gpm-main.c.
+
+	* src/gpm-console.c:
+	Add the beginning of a console g-p-m for GDM.
+
+	* src/gpm-idle.c, src/gpm-info.c, src/gpm-main.c, 
+
 2005-11-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-networkmanager.{c|h}:
