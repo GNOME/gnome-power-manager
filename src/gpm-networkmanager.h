@@ -31,10 +31,7 @@
 
 #define NM_LISTENER_SERVICE	"org.freedesktop.NetworkManager"
 #define NM_LISTENER_PATH	"/org/freedesktop/NetworkManager"
-#define NM_LISTENER_INTERFACE	"org.freedesktop.NetworkManager" //we need?
-
-#define NM_GCONF_ROOT		"/apps/gnome-screensaver/"
-#define NM_GCONF_ROOT_NO_SLASH	"/apps/gnome-screensaver"
+#define NM_LISTENER_INTERFACE	"org.freedesktop.NetworkManager"
 
 gboolean gpm_networkmanager_sleep (void);
 gboolean gpm_networkmanager_wake (void);
