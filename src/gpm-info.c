@@ -54,7 +54,7 @@ refresh_info_page (void)
 	gchar *returnstring;
 	GtkWidget *widget = NULL;
 
-	/* set vendor */
+	/* get vendor */
 	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
 				"smbios.system.manufacturer",
 				&returnstring)) {
@@ -72,7 +72,7 @@ refresh_info_page (void)
 	} else
 		gpm_gtk_set_visibility (all_info_widgets, "label_info_model", FALSE);
 
-	/* set formfactor */
+	/* get formfactor */
 	if (hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
 				"smbios.chassis.type",
 				&returnstring)) {
@@ -135,7 +135,7 @@ refresh_info_page (void)
 
 	/* for the moment, just see if we are running */
 	/*  @todo	Need to check if we can set states, etc. */
-	if (gscreensaver_is_running ())
+	if (gpm_screensaver_is_running ())
 		gpm_gtk_set_label (all_info_widgets, "label_gnome_screensaver",
 			"GNOME Screesaver is running successfully in your user session.");
 	else

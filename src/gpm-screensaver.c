@@ -49,7 +49,7 @@
  *  @return			TRUE if timeout was valid
  */
 gboolean
-gscreensaver_set_dpms_timeout (gint timeout)
+gpm_screensaver_set_dpms_timeout (gint timeout)
 {
 	GConfClient *client;
 
@@ -69,7 +69,7 @@ gscreensaver_set_dpms_timeout (gint timeout)
  *  @return			TRUE if we locked the screen
  */
 gboolean
-gscreensaver_lock_check (void)
+gpm_screensaver_lock_check (void)
 {
 	GConfClient *client = gconf_client_get_default ();
 	gboolean should_lock;
@@ -77,7 +77,7 @@ gscreensaver_lock_check (void)
 	should_lock = gconf_client_get_bool (client, GS_GCONF_ROOT "lock", NULL);
 	if (!should_lock)
 		return FALSE;
-	gscreensaver_lock ();
+	gpm_screensaver_lock ();
 	return TRUE;
 }
 
@@ -86,7 +86,7 @@ gscreensaver_lock_check (void)
  *  @return			TRUE if gnome-screensaver is running
  */
 gboolean
-gscreensaver_is_running (void)
+gpm_screensaver_is_running (void)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
@@ -116,7 +116,7 @@ gscreensaver_is_running (void)
  *  @return			TRUE if gnome-screensaver changed its status.
  */
 gboolean
-gscreensaver_set_throttle (gboolean throttle)
+gpm_screensaver_set_throttle (gboolean throttle)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
@@ -150,7 +150,7 @@ gscreensaver_set_throttle (gboolean throttle)
  *  @return			TRUE if gnome-screensaver locked the screen.
  */
 gboolean
-gscreensaver_lock (void)
+gpm_screensaver_lock (void)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
@@ -179,13 +179,48 @@ gscreensaver_lock (void)
 	return TRUE;
 }
 
+/** Pokes GNOME Screensaver (displays the unlock dialogue, so the user doesn't
+ *  have to move the mouse or press any key.
+ *
+ *  @return			TRUE if gnome-screensaver locked the screen.
+ */
+gboolean
+gpm_screensaver_poke (void)
+{
+	GError *error = NULL;
+	DBusGConnection *session_connection = NULL;
+	DBusGProxy *gs_proxy = NULL;
+	gboolean boolret;
+
+	g_debug ("gnome-screensaver poke");
+	if (!dbus_get_session_connection (&session_connection))
+		return FALSE;
+	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
+			GS_LISTENER_SERVICE,
+			GS_LISTENER_PATH,
+			GS_LISTENER_INTERFACE);
+	if (!dbus_g_proxy_call (gs_proxy, "poke", &error,
+				G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_debug ("gnome-screensaver service is not running.");
+		boolret = FALSE;
+	}
+	g_object_unref (G_OBJECT (gs_proxy));
+	if (!boolret) {
+		g_debug ("gnome-screensaver poke failed");
+		return FALSE;
+	}
+	return TRUE;
+}
+
 /** Set the DPMS monitor state using GNOME Screensaver
  *
  *  @param	state		The monitor state, true is enabled, false is OFF
  *  @return			TRUE if gnome-screensaver was successful.
  */
 gboolean
-gscreensaver_set_dpms (gboolean state)
+gpm_screensaver_set_dpms (gboolean state)
 {
 /*	** This hack will be removed when DPMS DBUS support is added to g-s **/
 	gchar *command = NULL;
@@ -248,7 +283,7 @@ gscreensaver_set_dpms (gboolean state)
  *  @return			TRUE if we got a valid idle time.
  */
 gboolean
-gscreensaver_get_idle (gint *time)
+gpm_screensaver_get_idle (gint *time)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
@@ -268,7 +303,7 @@ gscreensaver_get_idle (gint *time)
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
-	g_print ("gscreensaver_get_idle: %i\n", *time);
+	g_print ("gpm_screensaver_get_idle: %i\n", *time);
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
 		g_debug ("gnome-screensaver get idle failed");

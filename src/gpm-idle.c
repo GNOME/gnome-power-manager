@@ -252,7 +252,7 @@ gpm_idle_update (gpointer data)
 	load = cpu_update_data ();
 
 	/* get idle time from g-s */
-	if (!gscreensaver_get_idle (&gstime)) {
+	if (!gpm_screensaver_get_idle (&gstime)) {
 		g_warning ("getIdleTime polling disabled");
 		return FALSE; /* will stop polling */
 	}

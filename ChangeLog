@@ -15,7 +15,14 @@
 	* src/gpm-console.c:
 	Add the beginning of a console g-p-m for GDM.
 
-	* src/gpm-idle.c, src/gpm-info.c, src/gpm-main.c, 
+	* src/gpm-common.{c|h}:
+	Re-organise with the console muddle.
+
+	* src/gpm-idle.c, src/gpm-info.c, src/gpm-main.c,
+	src/gpm-screensaver.{c|h}:
+	s/gscreensaver_/gpm_screensaver/g for consistancy.
+	Also add gpm_screensaver_poke so we can interrupt the screensaver
+	instead of waiting for a keypress.
 
 2005-11-17  Richard Hughes  <richard@hughsie.com>
 

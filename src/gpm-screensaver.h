@@ -36,13 +36,14 @@
 #define GS_GCONF_ROOT		"/apps/gnome-screensaver/"
 #define GS_GCONF_ROOT_NO_SLASH	"/apps/gnome-screensaver"
 
-gboolean gscreensaver_lock (void);
-gboolean gscreensaver_lock_check (void);
-gboolean gscreensaver_set_throttle (gboolean throttle);
-gboolean gscreensaver_is_running (void);
-gboolean gscreensaver_get_idle (gint *time);
-gboolean gscreensaver_set_dpms_timeout (gint timeout);
-gboolean gscreensaver_set_dpms (gboolean state);
+gboolean gpm_screensaver_lock (void);
+gboolean gpm_screensaver_lock_check (void);
+gboolean gpm_screensaver_set_throttle (gboolean throttle);
+gboolean gpm_screensaver_is_running (void);
+gboolean gpm_screensaver_poke (void);
+gboolean gpm_screensaver_get_idle (gint *time);
+gboolean gpm_screensaver_set_dpms_timeout (gint timeout);
+gboolean gpm_screensaver_set_dpms (gboolean state);
 
 #endif	/* _GPMSCREENSAVER_H */
 /** @} */

@@ -69,10 +69,12 @@
 #include <popt.h>
 
 #include "gpm-common.h"
+#include "gpm-core.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
 #include "gpm-idle.h"
 #include "gpm-screensaver.h"
+#include "gpm-networkmanager.h"
 #include "gpm-libnotify.h"
 #include "gpm-dbus-server.h"
 #include "gpm-dbus-common.h"
@@ -153,13 +155,13 @@ callback_gconf_key_changed (GConfClient *client,
 		/* set new suspend timeouts */
 		if (!onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
-			gscreensaver_set_dpms_timeout (value);
+			gpm_screensaver_set_dpms_timeout (value);
 		}
 	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_display") == 0) {
 		/* set new suspend timeouts */
 		if (onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
-			gscreensaver_set_dpms_timeout (value);
+			gpm_screensaver_set_dpms_timeout (value);
 		}
 	}
 
@@ -185,12 +187,26 @@ action_policy_do (gint policy_number)
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
-		gscreensaver_lock_check ();
+		/* Lock, if we should */
+		gpm_screensaver_lock_check ();
+		/* Send NetworkManager to sleep */
+		gpm_networkmanager_sleep ();
 		hal_suspend (0);
+		/* Bring NetworkManager back to life */
+		gpm_networkmanager_wake ();
+		/* Poke GNOME ScreenSaver so the dialogue is displayed */
+		gpm_screensaver_poke ();
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
-		gscreensaver_lock_check ();
+		/* Lock, if we should */
+		gpm_screensaver_lock_check ();
+		/* Send NetworkManager to sleep */
+		gpm_networkmanager_sleep ();
 		hal_hibernate ();
+		/* Bring NetworkManager back to life */
+		gpm_networkmanager_wake ();
+		/* Poke GNOME ScreenSaver so the dialogue is displayed */
+		gpm_screensaver_poke ();
 	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
@@ -213,12 +229,12 @@ action_policy_do (gint policy_number)
 		/* set gnome screensaver dpms_suspend to our value */
 		value = gconf_client_get_int (client,
 				GCONF_ROOT "policy/battery/sleep_display", NULL);
-		gscreensaver_set_dpms_timeout (value);
+		gpm_screensaver_set_dpms_timeout (value);
 		/*
 		 * make sure gnome-screensaver disables screensaving,
 		 * and enables monitor shut-off instead
 		 */
-		gscreensaver_set_throttle (TRUE);
+		gpm_screensaver_set_throttle (TRUE);
 		/* set the new sleep (inactivity) value */
 		value = gconf_client_get_int (client,
 			GCONF_ROOT "policy/battery/sleep_computer", NULL);
@@ -244,9 +260,9 @@ action_policy_do (gint policy_number)
 		/* set dpms_suspend to our value */
 		value = gconf_client_get_int (client,
 				GCONF_ROOT "policy/ac/sleep_display", NULL);
-		gscreensaver_set_dpms_timeout (value);
+		gpm_screensaver_set_dpms_timeout (value);
 		/* make sure gnome-screensaver enables screensaving */
-		gscreensaver_set_throttle (FALSE);
+		gpm_screensaver_set_throttle (FALSE);
 		/* set the new sleep (inactivity) value */
 		value = gconf_client_get_int (client,
 				GCONF_ROOT "policy/ac/sleep_computer", NULL);
@@ -265,7 +281,6 @@ static void
 gpm_exit (void)
 {
 	g_debug ("Quitting!");
-
 	glibhal_callback_shutdown ();
 	gpm_stock_icons_shutdown ();
 
@@ -276,237 +291,18 @@ gpm_exit (void)
 	exit (0);
 }
 
-/** Adds an battery device. Also sets up properties on cached object
- *
- *  @param	sds		The cached object
- *  @return			If battery is present
- */
-static gboolean
-read_battery_data (sysDevStruct *sds)
-{
-	gint seconds_remaining;
-	gboolean is_present;
-
-	g_debug ("reading battery data");
-
-	/* assertion checks */
-	g_assert (sds);
-
-	/* initialise to known defaults */
-	sds->minutesRemaining = 0;
-	sds->percentageCharge = 0;
-	sds->isRechargeable = FALSE;
-	sds->isCharging = FALSE;
-	sds->isDischarging = FALSE;
-
-	if (!sds->present) {
-		g_debug ("Battery %s not present!", sds->udi);
-		return FALSE;
-	}
-
-	/* battery might not be rechargeable, have to check */
-	hal_device_get_bool (sds->udi, "battery.is_rechargeable",
-			     &sds->isRechargeable);
-	if (sds->isRechargeable) {
-		hal_device_get_bool (sds->udi, "battery.rechargeable.is_charging",
-				     &sds->isCharging);
-		hal_device_get_bool (sds->udi, "battery.rechargeable.is_discharging",
-				     &sds->isDischarging);
-	}
-
-	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (sds->udi,
-			"battery.remaining_time", &seconds_remaining);
-	if (!is_present && (sds->isDischarging || sds->isCharging)) {
-		g_warning ("GNOME Power Manager could not read your battery's "
-			   "remaining time. Please report this as a bug, "
-			   "providing the information to: " GPMURL);
-	} else if (seconds_remaining > 0) {
-		/* we have to scale this to minutes */
-		sds->minutesRemaining = seconds_remaining / 60;
-	}
-
-	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (sds->udi, "battery.charge_level.percentage",
-					 &sds->percentageCharge);
-	if (!is_present && (sds->isDischarging || sds->isCharging)) {
-		g_warning ("GNOME Power Manager could not read your battery's "
-			   "percentage charge. Please report this as a bug, "
-			   "providing the information to: " GPMURL);
-	}
-	sysDevUpdate (sds->sd->type);
-	return TRUE;
-}
-
-/** Converts the HAL battery.type string to a DeviceType ENUM
- *
- *  @param  type		The battery type, e.g. "primary"
- *  @return			The DeviceType
- */
-static DeviceType
-hal_to_device_type (const gchar *type)
-{
-	if (strcmp (type, "ups") == 0)
-		return BATT_UPS;
-	else if (strcmp (type, "mouse") == 0)
-		return BATT_MOUSE;
-	else if (strcmp (type, "keyboard") == 0)
-		return BATT_KEYBOARD;
-	else if (strcmp (type, "pda") == 0)
-		return BATT_PDA;
-	else if (strcmp (type, "primary") == 0)
-		return BATT_PRIMARY;
-	g_warning ("Unknown battery type '%s'", type);
-	return BATT_PRIMARY;
-}
-
-
-/** Adds a battery device, of any type. Also sets up properties on cached object
- *
- *  @param  udi			UDI
- *  @return			If we added a valid battery
- */
-static gboolean
-add_battery (const gchar *udi)
-{
-	gchar *type = NULL;
-	DeviceType dev;
-
-	g_debug ("adding %s", udi);
-
-	/* assertion checks */
-	g_assert (udi);
-
-	sysDevStruct *sds = g_new (sysDevStruct, 1);
-	strncpy (sds->udi, udi, 128);
-
-	/* batteries might be missing */
-	hal_device_get_bool (udi, "battery.present", &sds->present);
-
-	/* battery is refined using the .type property */
-	hal_device_get_string (udi, "battery.type", &type);
-	if (!type) {
-		g_warning ("Battery %s has no type!", udi);
-		return FALSE;
-	}
-
-	/* get battery type */
-	dev = hal_to_device_type (type);
-	g_debug ("Adding type %s", type);
-	g_free (type);
-	sysDevAdd (dev, sds);
-
-	/* register this with HAL so we get PropertyModified events */
-	glibhal_watch_add_device_property_modified (udi);
-
-	/* read in values */
-	read_battery_data (sds);
-	return TRUE;
-}
-
-/** Coldplugs devices of type battery & ups at startup
- *
- *  @return			If any devices of capability battery were found.
- */
-static gboolean
-coldplug_batteries (void)
-{
-	gint i;
-	gchar **device_names = NULL;
-	/* devices of type battery */
-	hal_find_device_capability ("battery", &device_names);
-	if (!device_names) {
-		g_debug ("Couldn't obtain list of batteries");
-		return FALSE;
-	}
-	for (i = 0; device_names[i]; i++)
-		add_battery (device_names[i]);
-	hal_free_capability (device_names);
-	return TRUE;
-}
-
-/** Coldplugs devices of type ac_adaptor at startup
- *
- *  @return			If any devices of capability ac_adapter were found.
- */
-static gboolean
-coldplug_acadapter (void)
-{
-	gint i;
-	gchar **device_names = NULL;
-	/* devices of type ac_adapter */
-	hal_find_device_capability ("ac_adapter", &device_names);
-	if (!device_names) {
-		g_debug ("Couldn't obtain list of ac_adapters");
-		return FALSE;
-	}
-	for (i = 0; device_names[i]; i++) {
-		/* assume only one */
-		hal_device_get_bool (device_names[i], "ac_adapter.present", &onAcPower);
-		glibhal_watch_add_device_property_modified (device_names[i]);
-
-	}
-	hal_free_capability (device_names);
-	return TRUE;
-}
-
-/** Coldplugs devices of type ac_adaptor at startup
- *
- *  @return			If any devices of capability button were found.
- */
-static gboolean
-coldplug_buttons (void)
-{
-	gint i;
-	gchar **device_names = NULL;
-	/* devices of type button */
-	hal_find_device_capability ("button", &device_names);
-	if (!device_names) {
-		g_debug ("Couldn't obtain list of buttons");
-		return FALSE;
-	}
-	for (i = 0; device_names[i]; i++) {
-		/*
-		 * We register this here, as buttons are not present
-		 * in object data, and do not need to be added manually.
-		*/
-		glibhal_watch_add_device_condition (device_names[i]);
-	}
-	hal_free_capability (device_names);
-	return TRUE;
-}
-
-/** Invoked when a device is removed from the Global Device List.
- *  Removes any type of device from the state database and removes the
- *  watch on it's UDI.
+/** When we have a device removed
  *
  *  @param	udi		The HAL UDI
  */
 static void
 hal_device_removed (const gchar *udi)
 {
-	sysDevStruct *sds = NULL;
-
-	/* assertion checks */
-	g_assert (udi);
-
-	g_debug ("hal_device_removed: udi=%s", udi);
-	/*
-	 * UPS's/mice/keyboards don't use battery.present
-	 * they just disappear from the device tree
-	 */
-	sysDevRemoveAll (udi);
-	/* only update the correct device class */
-	sds = sysDevFindAll (udi);
-	if (sds)
-		sysDevUpdate (sds->sd->type);
-	/* remove watch */
-	glibhal_watch_remove_device_property_modified (udi);
-	gpn_icon_update ();
+	if (gpm_device_removed (udi))
+		gpn_icon_update ();
 }
 
-/** Invoked when device in the Global Device List acquires a new capability.
- *  Prints the name of the capability to stderr.
+/** When we have a new device hot-plugged
  *
  *  @param	udi		UDI
  *  @param	capability	Name of capability
@@ -514,26 +310,8 @@ hal_device_removed (const gchar *udi)
 static void
 hal_device_new_capability (const gchar *udi, const gchar *capability)
 {
-	sysDevStruct *sds = NULL;
-
-	/* assertion checks */
-	g_assert (udi);
-	g_assert (capability);
-	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
-		 udi, capability);
-	/*
-	 * UPS's/mice/keyboards don't use battery.present
-	 * they just appear in the device tree
-	 */
-	if (strcmp (capability, "battery") == 0) {
-		add_battery (udi);
-		/* only update the correct device class */
-		sds = sysDevFindAll (udi);
-		if (sds)
-			sysDevUpdate (sds->sd->type);
-		/* update icon now */
+	if (gpm_device_new_capability (udi, capability))
 		gpn_icon_update ();
-	}
 }
 
 /** Notifies user of a low battery
@@ -693,7 +471,7 @@ hal_device_property_modified (const gchar *udi,
 	if (strcmp (key, "battery.present") == 0) {
 		hal_device_get_bool (udi, key, &sds->present);
 		/* read in values */
-		read_battery_data (sds);
+		gpm_read_battery_data (sds);
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_device_get_bool (udi, key, &sds->isCharging);
 		/*
@@ -788,9 +566,9 @@ hal_device_condition (const gchar *udi,
 				/* we only do a policy event when the lid is CLOSED */
 				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
 				action_policy_do (policy);
-				gscreensaver_set_dpms (FALSE);
+				gpm_screensaver_set_dpms (FALSE);
 			} else
-				gscreensaver_set_dpms (TRUE);
+				gpm_screensaver_set_dpms (TRUE);
 		} else
 			g_warning ("Button '%s' unrecognised", type);
 
@@ -940,16 +718,15 @@ main (int argc, char *argv[])
 	/* check HAL is running */
 	if (!is_hald_running ()) {
 		g_critical ("GNOME Power Manager cannot connect to HAL!");
-		exit (1);
+		return 0;
 	}
 
 	/* check we have PM capability */
 	if (!hal_pm_check ()) {
 		g_critical ("HAL does not have PowerManagement capability");
-		exit (1);
+		return 0;
 	}
 
-	g_debug ("initialising glibhal");
 	glibhal_callback_init ();
 	/* assign the callback functions */
 	glibhal_method_device_removed (hal_device_removed);
@@ -960,14 +737,10 @@ main (int argc, char *argv[])
 	glibhal_method_noc (signalhandler_noc);
 
 	/* sets up these devices and adds watches */
-	g_debug ("starting batteries coldplug");
-	coldplug_batteries ();
-	g_debug ("starting acadapter coldplug");
-	coldplug_acadapter ();
-	g_debug ("starting buttons coldplug");
-	coldplug_buttons ();
+	gpm_coldplug_batteries ();
+	gpm_coldplug_acadapter ();
+	gpm_coldplug_buttons ();
 
-	g_debug ("update devices");
 	sysDevUpdateAll ();
 	if (isVerbose)
 		sysDevPrintAll ();
