@@ -1,3 +1,13 @@
+2005-11-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c, src/gpm-prefs.glade:
+	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
+	Split the General section in the options Tab to two sections: 
+	General and Actions. Tweaked by me.
+	Furthermore it changes accesskeys of some labels to more sensible keys.
+	Also remove the gnome-screensaver button now g-p-m is less tied into
+	g-s with the DPMS settings.
+
 2005-11-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-networkmanager.{c|h}:
@@ -9,7 +19,17 @@
 	If the manufacturer is IBM, then assume we are a ThinkPad,
 	and don't do the new-fangled dimming routine. The ThinkPad dims
 	gently itself. This fixes the bug:
-	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+
+	* src/gpm-dbus-common.{c|h}:
+	Add dbus_is_active_service so we can print and search the services
+	on the system bus.
+
+	* src/gpm-screensaver.{c|h}, src/gpm-prefs.c, src/gpm-idle.c:
+	First, do s\gscreensaver_\gpm_screensaver_\g to be consistant.
+	Also add gpm_screensaver_poke() to allow us to "poke" g-s so we can
+	displays the unlock dialogue, so the user doesn't have to move the
+	mouse or press any key.
 
 2005-11-15  Richard Hughes  <richard@hughsie.com>
 

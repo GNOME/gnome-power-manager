@@ -115,14 +115,11 @@ recalc (void)
 				("button", "button.type", "lid") > 0);
 	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
 
-	if (gscreensaver_is_running ()) {
-		gpm_gtk_set_visibility (prefwidgets, "button_gnome_screensave", TRUE);
+	if (gpm_screensaver_is_running ()) {
 		hasDisplays = gconf_client_get_bool (client,
 				GS_GCONF_ROOT "dpms_enabled", NULL);
-	} else {
-		gpm_gtk_set_visibility (prefwidgets, "button_gnome_screensave", FALSE);
+	} else
 		hasDisplays = FALSE;
-	}
 
 	/* frame labels */
 	if (hasBatteries) {
@@ -414,20 +411,6 @@ callback_help (GtkWidget *widget, gpointer user_data)
 	gnome_url_show (GPMURL, NULL);
 }
 
-/** Callback for button_gnome_screensave
- *
- * @param	widget		Unused
- * @param	user_data	Unused
- */
-static void
-callback_screensave (GtkWidget *widget, gpointer user_data)
-{
-	gboolean retval;
-	retval = g_spawn_command_line_async ("gnome-screensaver-preferences", NULL);
-	if (!retval)
-		g_warning ("Couldn't execute gnome-screensaver-preferences");
-}
-
 /** Callback for checkbox_changed
  *
  * @param	widget		The checkbox widget
@@ -668,6 +651,7 @@ main (int argc, char **argv)
 	gboolean has_gpm_connection;
 	gdouble value;
 	gint steps;
+	GtkSizeGroup *size_group;
 
 	/* provide dynamic storage for comboboxes */
 	GPtrArray *ptrarr_button_power = NULL;
@@ -727,7 +711,7 @@ main (int argc, char **argv)
 		g_error ("Cannot initialise libnotify!");
 
 	/* check if we have GNOME Screensaver, but have disabled dpms */
-	if (gscreensaver_is_running ())
+	if (gpm_screensaver_is_running ())
 		if (!gconf_client_get_bool (client, GS_GCONF_ROOT "dpms_enabled", NULL)) {
 			g_warning ("You have not got DPMS support enabled"
 					 "in gnome-screensaver.\n"
@@ -762,8 +746,6 @@ main (int argc, char **argv)
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
 	widget = glade_xml_get_widget (prefwidgets, "button_help");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
-	widget = glade_xml_get_widget (prefwidgets, "button_gnome_screensave");
-	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_screensave), NULL);
 
 	/* set gtk enables/disables */
 	recalc ();
@@ -779,6 +761,24 @@ main (int argc, char **argv)
 	 * e.g. hibernate has been disabled, then it will be filtered out
 	 * automatically.
 	 */
+
+	/* Make sure that all comboboxes get the same size by adding their labels
+           to a GtkSizeGroup  */         
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);	
+	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_sleep_type")); 
+	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_button_power"));
+	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_button_suspend"));
+	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_button_lid"));
+	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_battery_critical"));
+	g_object_unref (G_OBJECT (size_group)); 
+
+	/* sleep type */
+	ptrarr_sleep_type = g_ptr_array_new ();
+	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pSuspend);
+	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pHibernate);
+	combo_setup_dynamic ("combobox_sleep_type",
+		GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
+
 	/* power button */
 	ptrarr_button_power = g_ptr_array_new ();
 	g_ptr_array_add (ptrarr_button_power, (gpointer) &pNothing);
@@ -813,12 +813,7 @@ main (int argc, char **argv)
 	combo_setup_dynamic ("combobox_battery_critical",
 		GCONF_ROOT "policy/battery_critical", ptrarr_battery_critical);
 
-	/* sleep type */
-	ptrarr_sleep_type = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pSuspend);
-	g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pHibernate);
-	combo_setup_dynamic ("combobox_sleep_type",
-		GCONF_ROOT "policy/sleep_type", ptrarr_sleep_type);
+
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer",
