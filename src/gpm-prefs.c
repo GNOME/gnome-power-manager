@@ -690,6 +690,8 @@ main (int argc, char **argv)
 	bind_textdomain_codeset (PACKAGE, "UTF-8");
 	textdomain (PACKAGE);
 
+	gtk_window_set_default_icon_name ("gnome-dev-battery");
+
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
 			g_log_ignore, NULL);
@@ -756,12 +758,6 @@ main (int argc, char **argv)
 	radiobutton_setup_action ("radiobutton_icon_critical");
 	radiobutton_setup_action ("radiobutton_icon_never");
 
-	/*
-	 * Set up combo boxes with "ideal" values - if a enum is unavailable
-	 * e.g. hibernate has been disabled, then it will be filtered out
-	 * automatically.
-	 */
-
 	/* Make sure that all comboboxes get the same size by adding their labels
            to a GtkSizeGroup  */         
 	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);	
@@ -771,6 +767,12 @@ main (int argc, char **argv)
 	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_button_lid"));
 	gtk_size_group_add_widget (size_group, glade_xml_get_widget (prefwidgets, "label_battery_critical"));
 	g_object_unref (G_OBJECT (size_group)); 
+
+	/*
+	 * Set up combo boxes with "ideal" values - if a enum is unavailable
+	 * e.g. hibernate has been disabled, then it will be filtered out
+	 * automatically.
+	 */
 
 	/* sleep type */
 	ptrarr_sleep_type = g_ptr_array_new ();

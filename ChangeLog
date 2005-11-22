@@ -2,6 +2,16 @@
 
 	* src/gpm-prefs.c, src/gpm-prefs.glade:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
+	- Changed vertical spacing between some items in dialog from 4 to 6 
+	pixels (HIG says it should be 6)
+	- All capplets have the dialog hint set for the window so they don't 
+	have a minimize button.
+	- Removed the setting from the icon from the glade file to the C file. 
+
+2005-11-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c, src/gpm-prefs.glade:
+	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
 	Split the General section in the options Tab to two sections: 
 	General and Actions. Tweaked by me.
 	Furthermore it changes accesskeys of some labels to more sensible keys.
