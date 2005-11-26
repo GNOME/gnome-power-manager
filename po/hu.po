@@ -1,0 +1,500 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-11-21 21:54+0100\n"
+"PO-Revision-Date: 2005-11-26 15:24+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
+"Language-Team: Hungarian <gnome@gnome.hu>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.10.2\n"
+"Plural-Forms:  nplurals=1; plural=0;\n"
+
+#: gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Energiakezelés beállítása"
+
+#: gnome-power-preferences.desktop.in.h:2 src/gpm-prefs.glade.h:15
+msgid "Power Preferences"
+msgstr "Energiakezelés tulajdonságai"
+
+#: gnome-power-manager.schemas.in.h:1
+msgid "Options are never, critical, charge, always"
+msgstr "A lehetőségek: never (soha), critical (kritikus), charge (töltés), always (mindig)"
+
+#: gnome-power-manager.schemas.in.h:2
+msgid "The action to take when the battery is critically low."
+msgstr "A telep kritikusan alacsony szintje esetén végrehajtandó művelet."
+
+#: gnome-power-manager.schemas.in.h:3
+msgid "The brightness the display is set to on AC"
+msgstr "A kijelző fényereje hálózati feszültségen"
+
+#: gnome-power-manager.schemas.in.h:4
+msgid "The brightness the display is set to on battery"
+msgstr "A kijelző fényereje telepen"
+
+#: gnome-power-manager.schemas.in.h:5
+msgid "The event for a laptop lid closing"
+msgstr "A laptop fedelének lezárásakor bekövetkező esemény"
+
+#: gnome-power-manager.schemas.in.h:6
+msgid "The event for a system power button press"
+msgstr "A rendszer kapcsológombjának megnyomásakor bekövetkező esemény"
+
+#: gnome-power-manager.schemas.in.h:7
+msgid "The event for a system suspend button press"
+msgstr "A rendszer felfüggesztés gombjának megnyomásakor bekövetkező esemény"
+
+#: gnome-power-manager.schemas.in.h:8
+msgid "The idle time in seconds before the computer tries to sleep"
+msgstr "Az üresjárati idő másodperceken, mielőtt a számítógép aludni próbál"
+
+#: gnome-power-manager.schemas.in.h:9
+msgid "The idle time in seconds before the display tries to sleep"
+msgstr "Az üresjárati idő másodperceken, mielőtt a képernyő aludni próbál"
+
+#: gnome-power-manager.schemas.in.h:10
+msgid "The idle time in seconds before the hard disk drives try to sleep"
+msgstr "Az üresjárati idő másodperceken, mielőtt a merevlemez aludni próbál"
+
+#: gnome-power-manager.schemas.in.h:11
+msgid "The path to the reboot script"
+msgstr "Az újraindítási parancsfájl útvonala"
+
+#: gnome-power-manager.schemas.in.h:12
+msgid "The path to the shutdown script"
+msgstr "A leállítási parancsfájl útvonala"
+
+#: gnome-power-manager.schemas.in.h:13
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr "Az a százalékérték, amelyet az energiaforrásnak el kell érnie, hogy a rendszer \"elég alacsonynak\" tekintse egy művelet végrehajtásához."
+
+#: gnome-power-manager.schemas.in.h:14
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to warn the user."
+msgstr "Az a százalékérték, amelyet az energiaforrásnak el kell érnie, hogy a rendszer \"elég alacsonynak\" tekintse a felhasználó figyelmeztetéséhez."
+
+#: gnome-power-manager.schemas.in.h:15
+msgid "The powerdevice action threshold."
+msgstr "Az energiaforrás művelet küszöbszintje."
+
+#: gnome-power-manager.schemas.in.h:16
+msgid "The powerdevice warning threshold."
+msgstr "Az energiaforrás figyelmeztetési küszöbszintje."
+
+#: gnome-power-manager.schemas.in.h:17
+msgid "The type of sleep (hibernate/suspend) to use automatically."
+msgstr "Az alvás automatikusan használandó típusa: hibernate (hibernálás) vagy suspend (felfüggesztés)."
+
+#: gnome-power-manager.schemas.in.h:18
+msgid "When to show the notification icon"
+msgstr "Mikor jelenítse meg a figyelmeztetési ikont"
+
+#: src/eggtrayicon.c:127
+msgid "Orientation"
+msgstr "Elhelyezkedés"
+
+#: src/eggtrayicon.c:128
+msgid "The orientation of the tray."
+msgstr "A tálca elhelyezkedése."
+
+#: src/gpm-common.c:138 src/gpm-notification.c:239
+msgid "until charged"
+msgstr "a feltöltésig"
+
+#: src/gpm-common.c:140
+msgid "remaining"
+msgstr "van hátra"
+
+#: src/gpm-common.c:273
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: src/gpm-common.c:275
+msgid "1 minute"
+msgstr "1 perc"
+
+#: src/gpm-common.c:277
+#, c-format
+msgid "%i minutes"
+msgstr "%i perc"
+
+#: src/gpm-common.c:283
+msgid "1 hour"
+msgstr "1 óra"
+
+#: src/gpm-common.c:285
+#, c-format
+msgid "%i hours"
+msgstr "%i óra"
+
+#: src/gpm-common.c:288
+msgid "1 hour, 1 minute"
+msgstr "1 óra, 1 perc"
+
+#: src/gpm-common.c:290
+#, c-format
+msgid "%i hours, 1 minute"
+msgstr "%i óra, 1 perc"
+
+#: src/gpm-common.c:292
+#, c-format
+msgid "1 hour, %i minutes"
+msgstr "1 óra, %i perc"
+
+#: src/gpm-common.c:294
+#, c-format
+msgid "%i hours, %i minutes"
+msgstr "%i óra, %i perc"
+
+#. common descriptions of this program
+#: src/gpm-common.h:38 src/gpm-main.c:878
+msgid "GNOME Power Manager"
+msgstr "GNOME Energiakezelő"
+
+#: src/gpm-common.h:39
+msgid "Power Manager for the GNOME desktop"
+msgstr "Energiakezelő a GNOME asztalhoz"
+
+#. * @}
+#: src/gpm-info.glade.h:2
+#, no-c-format
+msgid "96% efficient"
+msgstr "96% hatékonyságú"
+
+#: src/gpm-info.glade.h:3
+msgid "<b>Batteries</b>"
+msgstr "<b>Akkumulátorok</b>"
+
+#: src/gpm-info.glade.h:4
+msgid "<b>Capabilities</b>"
+msgstr "<b>Képességek</b>"
+
+#: src/gpm-info.glade.h:5
+msgid "<b>GNOME Screensaver</b>"
+msgstr "<b>GNOME Képernyővédő</b>"
+
+#. * @}
+#: src/gpm-info.glade.h:6 src/gpm-prefs.glade.h:1
+msgid "<b>General</b>"
+msgstr "<b>Általános</b>"
+
+#: src/gpm-info.glade.h:7
+msgid "<b>Other problems</b>"
+msgstr "<b>Egyéb problémák</b>"
+
+#: src/gpm-info.glade.h:8
+msgid "<b>UPS</b>"
+msgstr "<b>UPS</b>"
+
+#: src/gpm-info.glade.h:9
+msgid "APC UPS 100CS"
+msgstr "APC UPS 100CS"
+
+#: src/gpm-info.glade.h:10
+msgid "CPU Frequency Scaling"
+msgstr "CPU frekvenciaváltoztatás"
+
+#: src/gpm-info.glade.h:11
+msgid "Form-factor:"
+msgstr ""
+
+#: src/gpm-info.glade.h:12
+msgid "Gnome Screensaver Info"
+msgstr "Gnome Képernyővédő információk"
+
+#: src/gpm-info.glade.h:13
+msgid "Hibernation"
+msgstr "Hibernálás"
+
+#: src/gpm-info.glade.h:14
+msgid "Laptop"
+msgstr "Laptop"
+
+#: src/gpm-info.glade.h:15
+msgid "LiION Battery"
+msgstr "LiION akkumulátor"
+
+#: src/gpm-info.glade.h:16
+msgid "Low Power Mode"
+msgstr "Alacsony áramfelvételű állapot"
+
+#: src/gpm-info.glade.h:17
+msgid "Manufacturer:"
+msgstr "Gyártó:"
+
+#: src/gpm-info.glade.h:18
+msgid "Model:"
+msgstr "Modell:"
+
+#: src/gpm-info.glade.h:19
+msgid "NiMOH Battery"
+msgstr "NiMOH akkumulátor"
+
+#: src/gpm-info.glade.h:20
+msgid "Other problems"
+msgstr "Egyéb problémák"
+
+#: src/gpm-info.glade.h:21
+msgid "Satellite Pro A10"
+msgstr "Satellite Pro A10"
+
+#: src/gpm-info.glade.h:22 src/gpm-prefs.c:618
+msgid "Suspend"
+msgstr "Felfüggesztés"
+
+#: src/gpm-info.glade.h:23
+msgid "System Power Info"
+msgstr "Rendszer energiainformációi"
+
+#: src/gpm-info.glade.h:24
+msgid "Toshiba"
+msgstr "Toshiba"
+
+#: src/gpm-main.c:575 src/gpm-main.c:595
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr "Az akkumulátorok élettartamából még megközelítőleg <b>%s</b> van hátra (%i%%). Az adatvesztés elkerülése érdekében csatlakoztassa a hálózati csatlakozót."
+
+#: src/gpm-main.c:578
+msgid "Battery Critically Low"
+msgstr "Az akkumulátor kritikusan gyenge"
+
+#: src/gpm-main.c:598
+msgid "Battery Low"
+msgstr "Az akkumulátor gyenge"
+
+#: src/gpm-main.c:640
+msgid "AC Power Unplugged"
+msgstr "A hálózati feszültségről leválasztva"
+
+#: src/gpm-main.c:641
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "A hálózati feszültségről le lett választva. A rendszer mostantól akkumulátorról működik."
+
+#: src/gpm-main.c:712
+msgid "Battery Charged"
+msgstr "Az akkumulátor feltöltve"
+
+#: src/gpm-main.c:712
+msgid "Your battery is now fully charged"
+msgstr "Az akkumulátor teljesen fel lett töltve"
+
+#: src/gpm-main.c:860
+msgid "Do not daemonize"
+msgstr ""
+
+#: src/gpm-main.c:862 src/gpm-prefs.c:687
+msgid "Show extra debugging information"
+msgstr "Extra hibakeresési információk megjelenítése"
+
+#: src/gpm-notification.c:219
+msgid "charging"
+msgstr "töltés"
+
+#fixme
+#: src/gpm-notification.c:221
+msgid "discharging"
+msgstr "kisülés"
+
+#: src/gpm-notification.c:224
+msgid "charged"
+msgstr "feltöltve"
+
+#: src/gpm-notification.c:242
+msgid "until empty"
+msgstr "a lemerülésig"
+
+#: src/gpm-notification.c:309
+msgid "Computer is running on battery power\n"
+msgstr "A számítógép akkumulátorról működik\n"
+
+#: src/gpm-notification.c:311
+msgid "Computer is running on AC power\n"
+msgstr "A számítógép hálózati feszültségről működik\n"
+
+#: src/gpm-notification.c:461
+msgid "_Suspend"
+msgstr "_Felfüggesztés"
+
+#: src/gpm-notification.c:463
+msgid "Hi_bernate"
+msgstr "_Hibernálás"
+
+#: src/gpm-notification.c:468
+msgid "Po_wer Info"
+msgstr "E_nergiainformációk"
+
+#: src/gpm-notification.c:471
+msgid "_Preferences"
+msgstr "_Beállítások"
+
+#: src/gpm-notification.c:473
+msgid "_Help"
+msgstr "_Súgó"
+
+#: src/gpm-notification.c:475
+msgid "_About"
+msgstr "_Névjegy"
+
+#: src/gpm-prefs.c:615
+msgid "Shutdown"
+msgstr "Leállítás"
+
+#: src/gpm-prefs.c:621
+msgid "Hibernate"
+msgstr "Hibernálás"
+
+#: src/gpm-prefs.c:624
+msgid "Send warning"
+msgstr "Figyelmeztetés küldése"
+
+#: src/gpm-prefs.c:627
+msgid "Do nothing"
+msgstr "Ne tegyen semmit"
+
+#: src/gpm-prefs.c:702
+msgid "GNOME Power Preferences"
+msgstr "GNOME Energiabeállítások"
+
+#: src/gpm-prefs.glade.h:2
+msgid "<b>Notification Area</b>"
+msgstr "<b>Figyelmeztető terület</b>"
+
+#: src/gpm-prefs.glade.h:3
+msgid "<b>Other Options</b>"
+msgstr "<b>Egyéb beállítások</b>"
+
+#: src/gpm-prefs.glade.h:4
+msgid "<b>Running on AC Adapter</b>"
+msgstr "<b>Működés hálózati feszültségről</b>"
+
+#: src/gpm-prefs.glade.h:5
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>Működés akkumulátorról</b>"
+
+#: src/gpm-prefs.glade.h:6
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr "<i><small>Becsült 16 perc</small></i>"
+
+#: src/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr "<i><small>Becsült 2 óra 6 perc</small></i>"
+
+#: src/gpm-prefs.glade.h:8
+msgid "Advanced"
+msgstr "Haladó"
+
+#: src/gpm-prefs.glade.h:9
+msgid "Ba_ttery is critical when below:"
+msgstr "Az akkumulátor _kritikus ez alatt:"
+
+#: src/gpm-prefs.glade.h:10
+msgid "C_omputer sleep type:"
+msgstr "Számító_gép alvási típusa:"
+
+#: src/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr "Megjelenítés csak ha az _akkumulátor élettartama kritikus"
+
+#: src/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr "Megjelenítés _csak töltés vagy kisülés közben"
+
+#: src/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "Beállítások"
+
+#: src/gpm-prefs.glade.h:14
+msgid "P_ut display to sleep after:"
+msgstr "Ké_pernyő elalvása ennyi idő után:"
+
+#: src/gpm-prefs.glade.h:16
+msgid "Put c_omputer to sleep after:"
+msgstr "Számítógé_p elalvása ennyi idő után:"
+
+#: src/gpm-prefs.glade.h:17
+msgid "Put d_isplay to sleep after:"
+msgstr "Kép_ernyő elalvása ennyi idő után:"
+
+#: src/gpm-prefs.glade.h:18
+msgid "S_et display brightness:"
+msgstr "Képernyő fényerejé_nek beállítása:"
+
+#: src/gpm-prefs.glade.h:19
+msgid "Sleep"
+msgstr "Elalvás"
+
+#: src/gpm-prefs.glade.h:20
+msgid "Wh_en suspend button pressed:"
+msgstr "A felfüggesztés _gomb megnyomásakor:"
+
+#: src/gpm-prefs.glade.h:21
+msgid "Whe_n laptop lid is closed:"
+msgstr "A _laptop fedelének lezárásakor:"
+
+#: src/gpm-prefs.glade.h:22
+msgid "When _battery power critical:"
+msgstr "Ha az akkum_ulátor energiája kritikus:"
+
+#: src/gpm-prefs.glade.h:23
+msgid "_Always display icon"
+msgstr "_Mindig jelenítse meg az ikont"
+
+#: src/gpm-prefs.glade.h:24
+msgid "_Battery is low when below:"
+msgstr "Az akkumulátor _gyenge ez alatt:"
+
+#: src/gpm-prefs.glade.h:25
+msgid "_Never display icon"
+msgstr "So_ha ne jelenítse meg az ikont"
+
+#: src/gpm-prefs.glade.h:26
+msgid "_Put computer to sleep after:"
+msgstr "Számítógép elalvása ennyi _után:"
+
+#: src/gpm-prefs.glade.h:27
+msgid "_Screensaver Preferences..."
+msgstr "_Képernyővédő beállításai..."
+
+#: src/gpm-prefs.glade.h:28
+msgid "_Set display brightness:"
+msgstr "Képernyő fényerejé_nek beállítása:"
+
+#: src/gpm-prefs.glade.h:29
+msgid "_When power button pressed:"
+msgstr "A főkapcsoló _megnyomásakor:"
+
+#: src/gpm-sysdev.c:58
+msgid "Laptop battery"
+msgstr "Laptop akkumulátor"
+
+#: src/gpm-sysdev.c:60
+msgid "UPS"
+msgstr "UPS"
+
+#: src/gpm-sysdev.c:62
+msgid "Wireless mouse"
+msgstr "Vezeték nélküli egér"
+
+#: src/gpm-sysdev.c:64
+msgid "Wireless keyboard"
+msgstr "Vezeték nélküli billentyűzet"
+
+#: src/gpm-sysdev.c:66
+msgid "Misc PDA"
+msgstr "Egyéb PDA"
+
