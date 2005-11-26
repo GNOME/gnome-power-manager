@@ -378,8 +378,13 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		action_policy_do (ACTION_HIBERNATE);
 	} else if (strcmp (action, "about") == 0) {
 		callback_about_activated ();
+/*
+ * Disabled until there is more point..
+ */
+/*
 	} else if (strcmp (action, "info") == 0) {
 		run_bin_program ("gnome-power-info");
+*/
 	} else if (strcmp (action, "preferences") == 0) {
 		run_bin_program ("gnome-power-preferences");
 	} else if (strcmp (action, "help") == 0) {
@@ -464,9 +469,13 @@ menu_main_create (TrayData *trayicon)
 
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (trayicon->popup_menu), item);
+/*
+ * Disabled until there is more point..
+ */
+/*
 	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_DIALOG_INFO,
 			      _("Po_wer Info"), "info");
-
+*/
 	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_PREFERENCES,
 			      _("_Preferences"), "preferences");
 	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_HELP,

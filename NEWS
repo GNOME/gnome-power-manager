@@ -2,11 +2,18 @@
 GNOME Power Manager 0.3.1
 ==========
 
-Released December xx, 2005
+Released November xx, 2005
 
 - If we are an IBM Thinkpad, don't dim the screen gently, as the BIOS can do
   this on it's own.
 - Now we disconnect and reconnect NetworkManager when suspending and resuming.
+- Lots of HIG changes in g-p-p by Jaap Haitsma, thanks.
+- Add the beginning of a console g-p-m for GDM (prototype).
+- Add screensave 'Poke' so we can interrupt the screensaver instead of waiting
+  for a keypress after a suspend or hibernate resume.
+- Default is now to suspend on lid close. At least we should assume it will
+  succeed....
+- Build fixes so we can build with DBUS head (and 0.60 when released).
 
 ==========
 GNOME Power Manager 0.3.0
