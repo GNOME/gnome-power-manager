@@ -167,6 +167,62 @@ callback_gconf_key_changed (GConfClient *client,
 
 }
 
+
+/** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
+ *
+ *  @param	isOnAc		If we are on AC power
+ *
+ *  @note
+ *	- Sets the brightness level
+ *	- Sets HAL to be in LaptopMode if !AC
+ *	- Sets DPMS timeout to be our policy value
+ *	- Sets GNOME Screensaver to [not] run fancy screensavers
+ *	- Sets our inactivity sleep timeout to policy value
+ */
+void
+perform_power_policy (gboolean isOnAc)
+{
+	gchar *policyname = NULL;
+	gchar *gconfpath = NULL;
+	gint value;
+	GConfClient *client = gconf_client_get_default ();
+
+	if (isOnAc)
+		policyname = "ac";
+	else
+		policyname = "battery";
+
+	/* set brightness */
+	gconfpath = g_strdup_printf ("%s/policy/%s/brightness",
+				     GCONF_ROOT_SANS_SLASH, policyname);
+	value = gconf_client_get_int (client, gconfpath, NULL);
+	g_free (gconfpath);
+	hal_set_brightness_dim (value);
+
+	/* set lowpower mode */
+	hal_setlowpowermode (!isOnAc);
+
+	/* set gnome screensaver dpms_suspend to our value */
+	gconfpath = g_strdup_printf ("%s/policy/%s/sleep_display",
+				     GCONF_ROOT_SANS_SLASH, policyname);
+	value = gconf_client_get_int (client, gconfpath, NULL);
+	g_free (gconfpath);
+	gpm_screensaver_set_dpms_timeout (value);
+
+	/*
+	 * make sure gnome-screensaver disables screensaving,
+	 * and enables monitor shut-off instead
+	 */
+	gpm_screensaver_set_throttle (!isOnAc);
+
+	/* set the new sleep (inactivity) value */
+	gconfpath = g_strdup_printf ("%spolicy/%s/sleep_computer",
+				     GCONF_ROOT, policyname);
+	value = gconf_client_get_int (client, gconfpath, NULL);
+	g_free (gconfpath);
+	gpm_idle_set_timeout (value);
+}
+
 /** Do the action dictated by policy from gconf
  *
  *  @param	policy_number	The policy ENUM value
@@ -176,8 +232,6 @@ callback_gconf_key_changed (GConfClient *client,
 void
 action_policy_do (gint policy_number)
 {
-	gint value;
-	GConfClient *client = gconf_client_get_default ();
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
@@ -211,62 +265,15 @@ action_policy_do (gint policy_number)
 		g_debug ("*ACTION* Shutdown");
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
-		/*
-		 * This case does 5 things:
-		 *
-		 * 1. Sets the brightness level
-		 * 2. Sets HAL to be in LaptopMode (only if laptop)
-		 * 3. Sets DPMS timeout to be our batteries policy value
-		 * 4. Sets GNOME Screensaver to not run fancy screensavers
-		 * 5. Sets our inactivity sleep timeout to batteries policy
-		 */
 		g_debug ("*DBUS* Now battery powered");
-		/* set brightness and lowpower mode */
-		value = gconf_client_get_int (client,
-				GCONF_ROOT "policy/battery/brightness", NULL);
-		hal_set_brightness_dim (value);
-		hal_setlowpowermode (TRUE);
-		/* set gnome screensaver dpms_suspend to our value */
-		value = gconf_client_get_int (client,
-				GCONF_ROOT "policy/battery/sleep_display", NULL);
-		gpm_screensaver_set_dpms_timeout (value);
-		/*
-		 * make sure gnome-screensaver disables screensaving,
-		 * and enables monitor shut-off instead
-		 */
-		gpm_screensaver_set_throttle (TRUE);
-		/* set the new sleep (inactivity) value */
-		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/battery/sleep_computer", NULL);
-		gpm_idle_set_timeout (value);
-		/* emit siganal */
+		/* do all our powersaving stuff */
+		perform_power_policy (FALSE);
+		/* emit signal */
 		gpm_emit_mains_changed (FALSE);
 	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
-		/*
-		 * This case does 5 things:
-		 *
-		 * 1. Sets the brightness level
-		 * 2. Sets HAL to not be in LaptopMode
-		 * 3. Sets DPMS timeout to be our ac policy value
-		 * 4. Sets GNOME Screensaver to run fancy screensavers
-		 * 5. Sets our inactivity sleep timeout to ac policy
-		 */
 		g_debug ("*DBUS* Now mains powered");
-		/* set brightness and lowpower mode */
-		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/ac/brightness", NULL);
-		hal_set_brightness_dim (value);
-		hal_setlowpowermode (TRUE);
-		/* set dpms_suspend to our value */
-		value = gconf_client_get_int (client,
-				GCONF_ROOT "policy/ac/sleep_display", NULL);
-		gpm_screensaver_set_dpms_timeout (value);
-		/* make sure gnome-screensaver enables screensaving */
-		gpm_screensaver_set_throttle (FALSE);
-		/* set the new sleep (inactivity) value */
-		value = gconf_client_get_int (client,
-				GCONF_ROOT "policy/ac/sleep_computer", NULL);
-		gpm_idle_set_timeout (value);
+		/* do all our powersaving stuff */
+		perform_power_policy (TRUE);
 		/* emit siganal */
 		gpm_emit_mains_changed (TRUE);
 	} else
@@ -748,16 +755,8 @@ main (int argc, char *argv[])
 	g_debug ("init'ing icon");
 	gpn_icon_update ();
 
-	/* get idle value from gconf */
-	if (!onAcPower) {
-		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/battery/sleep_computer", NULL);
-	} else {
-		value = gconf_client_get_int (client,
-			GCONF_ROOT "policy/ac/sleep_computer", NULL);
-	}
-	g_debug ("setting timeout");
-	gpm_idle_set_timeout (value);
+	/* do all the actions as we have to set initial state */
+	perform_power_policy (onAcPower);
 	
 	/* set callback for the timout action */
 	gpm_idle_set_callback (idle_callback);

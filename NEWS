@@ -2,18 +2,23 @@
 GNOME Power Manager 0.3.1
 ==========
 
-Released November xx, 2005
+Released November 27, 2005
 
-- If we are an IBM Thinkpad, don't dim the screen gently, as the BIOS can do
-  this on it's own.
 - Now we disconnect and reconnect NetworkManager when suspending and resuming.
+- Default is now to suspend on lid close. At least we should assume it will
+  succeed, rather than assume it will fail.
 - Lots of HIG changes in g-p-p by Jaap Haitsma, thanks.
+- If we are an IBM Thinkpad, don't dim the screen gently, as the BIOS does
+  this automatically on it's own.
 - Add the beginning of a console g-p-m for GDM (prototype).
 - Add screensave 'Poke' so we can interrupt the screensaver instead of waiting
   for a keypress after a suspend or hibernate resume.
-- Default is now to suspend on lid close. At least we should assume it will
-  succeed....
 - Build fixes so we can build with DBUS head (and 0.60 when released).
+- Fixed a bug where the correct brightness wasn't being set on battery boot.
+- If you are having problems with crashes or missing settings, please uninstall
+  the gnome-power-manager 0.2.8 rpm, and install 0.3.1, rather than upgrading.
+  The old rpm post line in 0.2.8 causes the gconf schema to be uninstalled.
+- Lots of translation updates.
 
 ==========
 GNOME Power Manager 0.3.0

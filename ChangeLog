@@ -1,3 +1,11 @@
+2005-11-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c (perform_power_policy): Create this new function
+	so we can put all the common code together. This also lets us sets
+	all the settings in one place, so we can now do every power saving
+	action simply when we are booted from battery. This fixes the bug where
+	the brightness wasn't being set on boot.
+
 2005-11-26  Marcel Telka  <marcel@telka.sk>
 
 	* configure.in (ALL_LINGUAS): Added sk.

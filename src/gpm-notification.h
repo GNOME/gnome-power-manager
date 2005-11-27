@@ -63,7 +63,8 @@
 	"Ilkka Tuohela  <hile@iki.fi> (Finnish)\n" \
 	"Satoru SATOH <ss@gnome.gr.jp> (Japanese)\n" \
 	"Žygimantas Beručka <zygis@gnome.org> (Lithuanian)\n" \
-	"Theetjuh <theetjuh@gmail.com> (Dutch)\n"
+	"Theetjuh <theetjuh@gmail.com> (Dutch)\n" \
+	"Gabor Kelemen <kelemeng@gnome.hu> (Hungarian)\n"
 
 /** The TrayData struct holds all the global pointers to tray objects
  *
