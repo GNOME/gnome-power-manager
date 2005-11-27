@@ -27,45 +27,6 @@
 
 #include "eggtrayicon.h"
 
-#define GPLV2 \
-	"Licensed under the GNU General Public License Version 2\n\n" \
-	"This program is free software; you can redistribute it and/or\n" \
-	"modify it under the terms of the GNU General Public License\n" \
-	"as published by the Free Software Foundation; either version 2\n" \
-	"of the License, or (at your option) any later version.\n\n" \
-	"This program is distributed in the hope that it will be useful,\n" \
-	"but WITHOUT ANY WARRANTY; without even the implied warranty of\n" \
-	"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" \
-	"GNU General Public License for more details.\n\n" \
-	"You should have received a copy of the GNU General Public License\n" \
-	"along with this program; if not, write to the Free Software\n" \
-	"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n" \
-	"02110-1301, USA.\n"
-
-#define GPMTRANSLATORS \
-	"Michał Kastelik <mkastelik@gmail.com> (Polish)\n" \
-	"Daniele Medri <daniele@medri.org> (Italian)\n" \
-	"Fabio Marzocca <thesaltydog@gmail.com> (Italian)\n" \
-	"Yann Simon <yann.simon.fr@gmail.com> (French)\n" \
-	"Christophe Merlet <redfox@redfoxcenter.org> (French)\n" \
-	"Maxim Dziumanenko <mvd@mylinux.ua> (Ukrainian)\n" \
-	"Raphael Higino <raphaelh@cvs.gnome.org> (Brazilian Portuguese)\n" \
-	"Adam Weinberger <adamw@gnome.org> (Canadian English)\n" \
-	"Terance Sola <terance@lyse.net> (Norwegian bokmål)\n" \
-	"Kjartan Maraas <kmaraas@gnome.org> (Norwegian bokmål)\n" \
-	"Christian Rose <menthos@menthos.com> (Swedish)\n" \
-	"James Ogley <james@usr-local-bin.org> (British English)\n" \
-	"Francisco Javier F. Serrador <serrador@cvs.gnome.org> (Spanish)\n" \
-	"Amanpreet Singh Alam <amanpreetalam@yahoo.com> (Punjabi)\n" \
-	"Funda Wang <fundawang@linux.net.cn> (Simplified Chinese)\n" \
-	"Hendrik Brandt <heb@gnome-de.org> (German)\n" \
-	"Alexander Shopov <ash@contact.bg> (Bulgarian)\n" \
-	"Ilkka Tuohela  <hile@iki.fi> (Finnish)\n" \
-	"Satoru SATOH <ss@gnome.gr.jp> (Japanese)\n" \
-	"Žygimantas Beručka <zygis@gnome.org> (Lithuanian)\n" \
-	"Theetjuh <theetjuh@gmail.com> (Dutch)\n" \
-	"Gabor Kelemen <kelemeng@gnome.hu> (Hungarian)\n"
-
 /** The TrayData struct holds all the global pointers to tray objects
  *
  */

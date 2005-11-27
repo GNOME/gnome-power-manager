@@ -6,6 +6,11 @@
 	action simply when we are booted from battery. This fixes the bug where
 	the brightness wasn't being set on boot.
 
+	* src/gpm-notification.h, src/gpm-notification.c:
+	Fix the problem where the About window's content is not localizable.
+	Apply a patch from Gabor Kelemen that makes it localizable.
+	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=322547
+
 2005-11-26  Marcel Telka  <marcel@telka.sk>
 
 	* configure.in (ALL_LINGUAS): Added sk.

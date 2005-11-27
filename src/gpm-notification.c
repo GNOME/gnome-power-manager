@@ -337,22 +337,47 @@ callback_about_activated (void)
 	const gchar *artists[] = {
 		"Diana Fong <dfong@redhat.com>",
 		NULL};
+	const gchar *license[] = {
+		N_("Licensed under the GNU General Public License Version 2"), 
+		N_("GNOME Power Manager is free software; you can redistribute it and/or\n" 
+			"modify it under the terms of the GNU General Public License\n" 
+			"as published by the Free Software Foundation; either version 2\n" 
+			"of the License, or (at your option) any later version."), 
+		N_("GNOME Power Manager is distributed in the hope that it will be useful,\n" 
+			"but WITHOUT ANY WARRANTY; without even the implied warranty of\n" 
+			"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" 
+			"GNU General Public License for more details."), 
+		N_("You should have received a copy of the GNU General Public License\n" 
+			"along with this program; if not, write to the Free Software\n" 
+			"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n" 
+			"02110-1301, USA.")
+	};
+	
+	gchar *license_trans;
+	
+	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
+					     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
+	 
+	/* Translators comment: put your own name here to appear in the
+     * about dialog. */
+  	const gchar *translators = _("translator-credits");
 
+  	if (!strcmp (translators, "translator-credits"))
+    	translators = NULL;
+	
 	GtkWidget *about = gtk_about_dialog_new ();
 	GdkPixbuf *logo = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
-	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), "GNOME Power Manager");
+	gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), NICENAME);
 	gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
 	gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about),
 		"\xc2\xa9 2005 Richard Hughes <richard@hughsie.com>");
-	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about),
-		"Power Manager for GNOME Desktop");
-	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), GPLV2);
+	gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (about), NICEDESC);
+	gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), license_trans);
 	gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (about), GPMURL);
 	gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
 	gtk_about_dialog_set_artists (GTK_ABOUT_DIALOG (about), artists);
 	gtk_about_dialog_set_documenters (GTK_ABOUT_DIALOG (about), documenters);
-	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about),
-		GPMTRANSLATORS);
+	gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about),translators);
 	gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (about), logo);
 	gtk_widget_show (about);
 	g_object_unref (logo);
