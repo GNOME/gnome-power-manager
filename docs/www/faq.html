@@ -38,6 +38,8 @@
 
 <ul>
 <li>
+  <a href="#dpms" class="faqtable">Why doesn't DPMS work when I've enabled it in XScreenSaver?</a>
+</li><li>
   <a href="#whynobattery" class="faqtable">GNOME Power Manager doesn't spin down my hard-drive!</a>
 </li><li>
   <a href="#hald_selinux" class="faqtable">SELinux doesn't let HAL write to /proc/acpi!</a>
@@ -71,6 +73,22 @@
 </ul>
 <br/>
 <br/>
+
+<a name="dpms"></a><hr/>
+<p class="faqquestion">
+Why doesn't DPMS work when I've enabled it in XScreenSaver?
+</p>
+<p class="faqanswer">
+It's enabled for <b>xscreensaver</b>, not <b>gnome-screensaver</b>.
+XSS is the legacy system that will be replaced with gnome-screensaver very soon.
+You probably need to install this package, and then g-p-m will automatically
+work with gnome-screensaver to use the DPMS settings of your monitor.
+</p>
+<p class="faqanswer">
+It's also been decided that DPMS support should probably be merged into g-p-m,
+instead of g-s (over a release or two) as it belongs better in a power daemon,
+than a screensaver daemon. So long term, g-p-m will control DPMS itself.
+</p>
 
 <a name="whynobattery"></a><hr/>
 <p class="faqquestion">
@@ -294,7 +312,7 @@ Why do we need such an up-to-date HAL?
 </p>
 <p class="faqanswer">
 G-P-M uses advanced features of HAL that <b>did not exist</b> in past versions.
-You cannot patch G-P-M to support an older HAL, as it *will not* work.
+You cannot patch G-P-M to support an older HAL, as it <b>will not</b> work.
 Encourage your distro to update their version of HAL, and then G-P-M will work.
 </p>
 
