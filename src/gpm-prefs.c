@@ -411,7 +411,7 @@ callback_help (GtkWidget *widget, gpointer user_data)
 	gnome_url_show (GPMURL, NULL);
 }
 
-/** Callback for checkbox_changed
+/** Callback for the changed signls for the radio buttons
  *
  * @param	widget		The checkbox widget
  * @param	user_data	Unused

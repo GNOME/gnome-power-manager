@@ -167,7 +167,6 @@ callback_gconf_key_changed (GConfClient *client,
 
 }
 
-
 /** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
  *
  *  @param	isOnAc		If we are on AC power
@@ -223,6 +222,44 @@ perform_power_policy (gboolean isOnAc)
 	gpm_idle_set_timeout (value);
 }
 
+
+/** Do a hibernate or suspend with all the associated callbacks and methods.
+ *
+ *  @param	toDisk		If we hibernate, i.e. sleep to disk.
+ *
+ *  @note
+ *	- Locks the screen (if required)
+ *	- Sets NetworkManager to sleep
+ *	- Does the sleep...
+ *	- Sets NetworkManager to wake
+ *	- Pokes g-s so we get the unlock screen (if required)
+ */
+void
+perform_sleep_methods (gboolean toDisk)
+{
+	GConfClient *client = gconf_client_get_default ();
+	gboolean shouldLock = gconf_client_get_bool (client, 
+				GCONF_ROOT "general/require_password", NULL);
+	/* only lock if we should */
+	if (shouldLock)
+		gpm_screensaver_lock ();
+
+	/* Send NetworkManager to sleep */
+	gpm_networkmanager_sleep ();
+
+	/* do the sleep type */
+	if (toDisk)
+		hal_hibernate ();
+	else
+		hal_suspend (0);
+	/* Bring NetworkManager back to life */
+	gpm_networkmanager_wake ();
+
+	/* Poke GNOME ScreenSaver so the dialogue is displayed */
+	if (shouldLock)
+		gpm_screensaver_poke ();
+}
+
 /** Do the action dictated by policy from gconf
  *
  *  @param	policy_number	The policy ENUM value
@@ -241,26 +278,10 @@ action_policy_do (gint policy_number)
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
-		/* Lock, if we should */
-		gpm_screensaver_lock_check ();
-		/* Send NetworkManager to sleep */
-		gpm_networkmanager_sleep ();
-		hal_suspend (0);
-		/* Bring NetworkManager back to life */
-		gpm_networkmanager_wake ();
-		/* Poke GNOME ScreenSaver so the dialogue is displayed */
-		gpm_screensaver_poke ();
+		perform_sleep_methods (FALSE);
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
-		/* Lock, if we should */
-		gpm_screensaver_lock_check ();
-		/* Send NetworkManager to sleep */
-		gpm_networkmanager_sleep ();
-		hal_hibernate ();
-		/* Bring NetworkManager back to life */
-		gpm_networkmanager_wake ();
-		/* Poke GNOME ScreenSaver so the dialogue is displayed */
-		gpm_screensaver_poke ();
+		perform_sleep_methods (TRUE);
 	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");

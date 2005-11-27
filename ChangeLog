@@ -6,6 +6,18 @@
 	action simply when we are booted from battery. This fixes the bug where
 	the brightness wasn't being set on boot.
 
+	* src/gpm-main.c (perform_sleep_methods): Put all the common code in
+	one place so we can set the password resume policy in one place.
+
+	* gnome-power-manager.schemas.in: Add general/require_password to
+	signify if we require a password when resuming from suspend.
+
+	* configure.in: Bump HAL dep to 0.5.4 as using 0.5.3 doesn't work
+	correctly with Ubuntu breezy HAL, which is causing lots of bug reports.
+
+	* gnome-power-manager.spec.in: Remove the prefix line as it's not
+	correct, and the rpm builds fine without it.
+
 	* src/gpm-notification.h, src/gpm-notification.c:
 	Fix the problem where the About window's content is not localizable.
 	Apply a patch from Gabor Kelemen that makes it localizable.

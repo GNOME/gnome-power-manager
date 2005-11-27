@@ -39,7 +39,7 @@
 #define NICEDESC 			_("Power Manager for the GNOME desktop")
 
 /* help location */
-#define GPMURL	 			"http://gnome.org/projects/gnome-power-manager/"
+#define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
 
 #define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
