@@ -6,6 +6,7 @@
  *		http://www.gnome.org/~newren/tutorials/
  *		developing-with-gnome/html/apd.html
  *
+ *  @todo: checkbutton_require_password
  * This is the main g-p-m module, responsible for loading the glade file, 
  * populating and disabling widgets, and writing out configuration to gconf.
  */
@@ -81,6 +82,7 @@ recalc (void)
 	gboolean hasButtonLid;
 	gboolean hasLCD;
 	gboolean hasDisplays;
+	gboolean doPassword;
 	gchar *policy;
 	IconPolicy iconopt;
 
@@ -104,6 +106,11 @@ recalc (void)
 		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_charge", TRUE);
 	else if (iconopt == ICON_ALWAYS)
 		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_always", TRUE);
+
+	/* set the correct entries for the checkboxes */
+	doPassword = gconf_client_get_bool (client, 
+			GCONF_ROOT "general/require_password", NULL);
+	gpm_gtk_set_check (prefwidgets, "checkbutton_require_password", doPassword);
 
 	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
 	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
@@ -411,7 +418,28 @@ callback_help (GtkWidget *widget, gpointer user_data)
 	gnome_url_show (GPMURL, NULL);
 }
 
-/** Callback for the changed signls for the radio buttons
+/** Callback for the changed signals for the checkboxes
+ *
+ * @param	widget		The checkbox widget
+ * @param	user_data	Unused
+ *
+ * @note	We get the following data from widget: policypath
+ */
+static void
+callback_check_changed (GtkWidget *widget, gpointer user_data)
+{
+	const gchar *widgetname;
+	GConfClient *client = gconf_client_get_default ();
+	gboolean value;
+
+	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	widgetname = gtk_widget_get_name (widget);
+	if (strcmp (widgetname, "checkbutton_require_password") == 0)
+		gconf_client_set_bool (client, 
+			GCONF_ROOT "general/require_password", value, NULL);
+}
+
+/** Callback for the changed signals for the radio buttons
  *
  * @param	widget		The checkbox widget
  * @param	user_data	Unused
@@ -749,6 +777,11 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (prefwidgets, "button_help");
 	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (callback_help), NULL);
 
+	/* set up the checkboxes */
+	widget = glade_xml_get_widget (prefwidgets, "checkbutton_require_password");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+		G_CALLBACK (callback_check_changed), NULL);
+
 	/* set gtk enables/disables */
 	recalc ();
 
@@ -814,8 +847,6 @@ main (int argc, char **argv)
 	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pShutdown);
 	combo_setup_dynamic ("combobox_battery_critical",
 		GCONF_ROOT "policy/battery_critical", ptrarr_battery_critical);
-
-
 
 	/* sliders */
 	hscale_setup_action ("hscale_ac_computer",
