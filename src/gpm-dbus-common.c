@@ -82,7 +82,12 @@ dbus_get_service (DBusGConnection *connection, const gchar *service)
 		DBUS_SERVICE_DBUS,
 		DBUS_PATH_DBUS,
 		DBUS_INTERFACE_DBUS);
-
+/*
+ * Add this define hack until we depend on DBUS 0.60, as the
+ * define names (and meanings have changed)
+ * should fix bug: http://bugzilla.gnome.org/show_bug.cgi?id=322435
+ */
+#ifdef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, service,
 		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
@@ -92,6 +97,17 @@ dbus_get_service (DBusGConnection *connection, const gchar *service)
 		g_error ("Failed to acquire %s: %s", service, error->message);
 		ret = FALSE;
 	}
+#else
+	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
+		G_TYPE_STRING, service,
+		G_TYPE_UINT, 0,
+		G_TYPE_INVALID,
+		G_TYPE_UINT, &request_name_result,
+		G_TYPE_INVALID)) {
+		g_error ("Failed to acquire %s: %s", service, error->message);
+		ret = FALSE;
+	}
+#endif
 
 	if (ret && request_name_result != 1 /* NEED_TO_FIND_VALUE */)
 		ret = FALSE;
