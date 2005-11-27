@@ -7,6 +7,11 @@
 	* gnome-power-manager.schemas.in:
 	Default to suspend on lid close on advice of Havoc Pennington, to
 	address bug https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=174160
+	Also make /apps/gnome-power-manager/policy/sleep_type to type suspend
+	as nothing is no longer a valid option.
+
+	* configure.in:
+	Bump to 0.3.1
 
 	* src/gpm-notification.c:
 	Disable 'Power Info' from the menu until we show something interesting.
