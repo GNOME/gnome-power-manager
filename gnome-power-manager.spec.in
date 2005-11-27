@@ -37,12 +37,11 @@ change preferences.
 
 %build
 %configure \
-	--enable-libnotify					\
-	--enable-doxygen-docs=no				\
-	--prefix=%{buildroot}					\
-	--with-doc-dir=%{buildroot}/usr/share/doc		\
-	--with-dbus-sys=%{buildroot}/etc/dbus-1/system.d        \
-	--with-dbus-services=%{buildroot}/usr/share/dbus-1/services
+	--enable-libnotify \
+	--enable-doxygen-docs=no \
+	--with-doc-dir=%{buildroot}%{_datadir}/doc \
+	--with-dbus-sys=%{buildroot}/etc/dbus-1/system.d \
+	--with-dbus-services=%{buildroot}%{_datadir}/dbus-1/services
 make
 
 %install
@@ -89,7 +88,7 @@ fi
 
 %files -f %{name}.lang
 %defattr(-,root,root)
-%doc AUTHORS ChangeLog COPYING README
+%doc AUTHORS ChangeLog COPYING INSTALL NEWS README
 %{_bindir}/*
 %{_datadir}/applications/*
 %{_datadir}/dbus-1/*
@@ -100,6 +99,9 @@ fi
 %{_sysconfdir}/gconf/schemas/*.schemas
 
 %changelog
+* Sun Nov 27 2005 Richard Hughes <richard@hughsie.com> 0.3.1-1
+- 0.3.1 Release, minor tidyups.
+
 * Fri Oct 31 2005 Richard Hughes <richard@hughsie.com> 0.2.9.1-1
 - New spec file with dep values got from autoconf.
 
