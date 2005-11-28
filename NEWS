@@ -2,7 +2,7 @@
 GNOME Power Manager 0.3.1
 ==========
 
-Released November 27, 2005
+Released November 28, 2005
 
 - Now we disconnect and reconnect NetworkManager when suspending and resuming.
 - Default is now to suspend on lid close. At least we should assume it will
@@ -15,9 +15,12 @@ Released November 27, 2005
   for a keypress after a suspend or hibernate resume.
 - Build fixes so we can build with DBUS head (and 0.60 when released).
 - Fixed a bug where the correct brightness wasn't being set on battery boot.
+- Added an option in g-p-p so that password protected resume is an option.
 - If you are having problems with crashes or missing settings, please uninstall
   the gnome-power-manager 0.2.8 rpm, and install 0.3.1, rather than upgrading.
-  The old rpm post line in 0.2.8 causes the gconf schema to be uninstalled.
+  The old rpm post line in 0.2.8 causes the new gconf schema to be uninstalled.
+- Also fix a bug which makes the last bug doubly worse, by not crashing on
+  missing gconf schema, but handling it gracefully, and guessing some defaults.
 - Lots of translation updates.
 
 ==========

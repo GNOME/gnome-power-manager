@@ -655,7 +655,7 @@ gpn_icon_update (void)
 		g_warning ("You have not set an icon policy! "
 			   "(Please run gnome-power-preferences) -- "
 			   "I'll assume you want an icon all the time...");
-		policy = "always";
+		policy = g_strdup ("always");
 	}
 	/* convert to enum */
 	iconopt = convert_string_to_iconpolicy (policy);

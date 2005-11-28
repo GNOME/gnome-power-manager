@@ -1,3 +1,10 @@
+2005-11-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-notification.c (gpn_icon_update): Don't try to free a
+	constant, i.e. use g_strdup so we unconditionally free the string.
+	This bug only appears when the gconf schema isn't being applied,
+	which is probably a packaging bug.
+
 2005-11-28  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
 
 	* configure.in: Added 'gl' to ALL_LINGUAS.
