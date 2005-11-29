@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-11-10 10:01+0100\n"
-"PO-Revision-Date: 2005-11-10 10:18+0100\n"
+"PO-Revision-Date: 2005-11-29 16:28+0100\n"
 "Last-Translator: Richard Hughes <richard@hughsie.com>\n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
-msgstr "Configura la gestione dell'alimentazione"
+msgstr "Configura le sorgenti di alimentazione"
 
 #: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
 msgid "Power Preferences"
@@ -30,11 +30,11 @@ msgstr "Le opzioni sono mai, critica, carica, sempre"
 
 #: ../gnome-power-manager.schemas.in.h:2
 msgid "The action to take when the battery is critically low."
-msgstr "L'azione da intraprendere quando la batteria è criticamente bassa."
+msgstr "Azione da intraprendere con la batteria a livello critico."
 
 #: ../gnome-power-manager.schemas.in.h:3
 msgid "The brightness the display is set to on AC"
-msgstr "Luminosità del display quando connesso a rete"
+msgstr "Luminosità del display con alimentatore AC"
 
 #: ../gnome-power-manager.schemas.in.h:4
 msgid "The brightness the display is set to on battery"
@@ -42,35 +42,35 @@ msgstr "Luminosità del display selezionata su batteria"
 
 #: ../gnome-power-manager.schemas.in.h:5
 msgid "The event for a laptop lid closing"
-msgstr "Evento quando il portatile è chiuso:"
+msgstr "Evento con portatile chiuso:"
 
 #: ../gnome-power-manager.schemas.in.h:6
 msgid "The event for a system power button press"
-msgstr "Quando il pulsante di accensione è premuto:"
+msgstr "Evento con pulsante di accensione premuto:"
 
 #: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a system suspend button press"
-msgstr "Quando è premuto il pulsante di sospensione:"
+msgstr "Evento con pulsante di sospensione premuto:"
 
 #: ../gnome-power-manager.schemas.in.h:8
 msgid "The idle time in seconds before the computer tries to sleep"
-msgstr "Il tempo in secondi prima che il computer si spenga"
+msgstr "Secondi prima che il computer si spenga"
 
 #: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the display tries to sleep"
-msgstr "Il tempo in secondi prima che il display si spenga"
+msgstr "Secondi prima che il display si spenga"
 
 #: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the hard disk drives try to sleep"
-msgstr "Il tempo in secondi prima che l'hard disk si spenga"
+msgstr "Secondi prima che il disco si spenga"
 
 #: ../gnome-power-manager.schemas.in.h:11
 msgid "The path to the reboot script"
-msgstr "Il percorso per lo script di reboot"
+msgstr "Il percorso dello script di reboot"
 
 #: ../gnome-power-manager.schemas.in.h:12
 msgid "The path to the shutdown script"
-msgstr "Il percorso per lo script di shutdown"
+msgstr "Il percorso dello script di arresto"
 
 #: ../gnome-power-manager.schemas.in.h:13
 msgid ""
@@ -120,7 +120,7 @@ msgstr "rimangono"
 
 #: ../src/gpm-common.c:273
 msgid "Unknown"
-msgstr "sconosciuto"
+msgstr "Sconosciuto"
 
 #: ../src/gpm-common.c:275
 msgid "1 minute"
@@ -180,7 +180,7 @@ msgstr "<b>Batterie</b>"
 
 #: ../src/gpm-info.glade.h:4
 msgid "<b>Capabilities</b>"
-msgstr "<b>Capacità</b>"
+msgstr "<b>Possibilità</b>"
 
 #: ../src/gpm-info.glade.h:5
 msgid "<b>GNOME Screensaver</b>"
@@ -209,11 +209,11 @@ msgstr "Scalamento della frequenza della CPU"
 
 #: ../src/gpm-info.glade.h:11
 msgid "Form-factor:"
-msgstr "Fattore di forma:"
+msgstr "Form-factor:"
 
 #: ../src/gpm-info.glade.h:12
 msgid "Gnome Screensaver Info"
-msgstr "Informazioni Gnome·Screensaver·"
+msgstr "Informazioni Gnome·Screensaver"
 
 #: ../src/gpm-info.glade.h:13
 msgid "Hibernation"
@@ -233,7 +233,7 @@ msgstr "Modalità Bassa Potenza"
 
 #: ../src/gpm-info.glade.h:17
 msgid "Manufacturer:"
-msgstr "Costruttore:"
+msgstr "Produttore:"
 
 #: ../src/gpm-info.glade.h:18
 msgid "Model:"
@@ -257,7 +257,7 @@ msgstr "Arresta"
 
 #: ../src/gpm-info.glade.h:23
 msgid "System Power Info"
-msgstr "Informazioni energia di sistema"
+msgstr "Informazioni di sistema"
 
 #: ../src/gpm-info.glade.h:24
 msgid "Toshiba"
@@ -268,32 +268,31 @@ msgstr "Toshiba"
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
-msgstr "Hai approssimativamente·<b>%s</b>·di vita batteria residua·(%i%%).·Connetti l'alimentazione"
-"esterna per evitare perdita di dati."
+msgstr "Hai approssimativamente·<b>%s</b>·di vita batteria residua·(%i%%).·Attacca l'alimentatore AC per evitare perdita di dati."
 
 #: ../src/gpm-main.c:576
 msgid "Battery Critically Low"
-msgstr "Batteria criticamente bassa"
+msgstr "Batteria molto scarica"
 
 #: ../src/gpm-main.c:596
 msgid "Battery Low"
-msgstr "Batteria bassa"
+msgstr "Batteria scarica"
 
 #: ../src/gpm-main.c:638
 msgid "AC Power Unplugged"
-msgstr "Alimentatore non connesso"
+msgstr "Alimentatore AC staccato"
 
 #: ../src/gpm-main.c:639
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "L'alimentatore è stato disconnesso. Il sistema sta funzionando a batterie."
+msgstr "Alimentazione AC interrotta. Il sistema utilizza la batteria."
 
 #: ../src/gpm-main.c:709
 msgid "Battery Charged"
-msgstr "Battia carica"
+msgstr "Batteria carica"
 
 #: ../src/gpm-main.c:709
 msgid "Your battery is now fully charged"
-msgstr "La batteria è completamente carica"
+msgstr "Batteria completamente carica"
 
 #: ../src/gpm-notification.c:216
 msgid "charging"
@@ -313,11 +312,11 @@ msgstr "finchè vuota"
 
 #: ../src/gpm-notification.c:306
 msgid "Computer is running on battery power\n"
-msgstr "Il computer è acceso con le batterie\n"
+msgstr "Computer con batterie\n"
 
 #: ../src/gpm-notification.c:308
 msgid "Computer is running on AC power\n"
-msgstr "Il computer è acceso con energia AC\n"
+msgstr "Computer con alimentatore AC\n"
 
 #: ../src/gpm-notification.c:458
 msgid "_Suspend"
@@ -329,7 +328,7 @@ msgstr "_Iberna"
 
 #: ../src/gpm-notification.c:465
 msgid "Po_wer Info"
-msgstr "Informazioni _Energia"
+msgstr "I_nformazioni"
 
 #: ../src/gpm-notification.c:468
 msgid "_Preferences"
@@ -389,19 +388,19 @@ msgstr "Avanzate"
 
 #: ../src/gpm-prefs.glade.h:9
 msgid "Ba_ttery is critical when below:"
-msgstr "La _batteria diventa critica quando:"
+msgstr "Livello critico della _batteria con:"
 
 #: ../src/gpm-prefs.glade.h:10
 msgid "C_omputer sleep type:"
-msgstr "_Tipo di spegnimento del computer:"
+msgstr "Tip_o di spegnimento del computer:"
 
 #: ../src/gpm-prefs.glade.h:11
 msgid "Only display when battery life is _critical"
-msgstr "Visualizza solo quando la batteria è _critica"
+msgstr "Visualizza con batteria a livello _critico"
 
 #: ../src/gpm-prefs.glade.h:12
 msgid "Only display when charging or _discharging"
-msgstr "Visualizza solo quando è in carica o _scarica"
+msgstr "Visualizza in fase di carica"
 
 #: ../src/gpm-prefs.glade.h:13
 msgid "Options"
@@ -421,7 +420,7 @@ msgstr "Spegni il _display dopo:"
 
 #: ../src/gpm-prefs.glade.h:18
 msgid "S_et display brightness:"
-msgstr "Imposta la _luminosità del monitor:"
+msgstr "Imposta _luminosità del monitor:"
 
 #: ../src/gpm-prefs.glade.h:19
 msgid "Sleep"
@@ -429,15 +428,15 @@ msgstr "Spegni"
 
 #: ../src/gpm-prefs.glade.h:20
 msgid "Wh_en suspend button pressed:"
-msgstr "Quando è premuto il _pulsante di sospensione:"
+msgstr "Con pulsante di sospensione premuto:"
 
 #: ../src/gpm-prefs.glade.h:21
 msgid "Whe_n laptop lid is closed:"
-msgstr "Quando il portatile è _chiuso:"
+msgstr "Co_n portatile chiuso:"
 
 #: ../src/gpm-prefs.glade.h:22
 msgid "When _battery power critical:"
-msgstr "Quando la carica della batteria è _critica:"
+msgstr "Con livello critico della batteria:"
 
 #: ../src/gpm-prefs.glade.h:23
 msgid "_Always display icon"
@@ -445,7 +444,7 @@ msgstr "Visualizza sempre _icona"
 
 #: ../src/gpm-prefs.glade.h:24
 msgid "_Battery is low when below:"
-msgstr "La _batteria diventa critica quando:"
+msgstr "Livello _batteria critico con:"
 
 #: ../src/gpm-prefs.glade.h:25
 msgid "_Never display icon"
@@ -457,7 +456,7 @@ msgstr "Spegni il computer _dopo:"
 
 #: ../src/gpm-prefs.glade.h:27
 msgid "_Screensaver Preferences..."
-msgstr "Preferenze di _Screensaver..."
+msgstr "Preferenze del _salvaschermo..."
 
 #: ../src/gpm-prefs.glade.h:28
 msgid "_Set display brightness:"
@@ -485,7 +484,7 @@ msgstr "Tastiera senza fili"
 
 #: ../src/gpm-sysdev.c:66
 msgid "Misc PDA"
-msgstr "Misc·PDA"
+msgstr "Vari·PDA"
 
 #~ msgid "Do we show low devices?"
 #~ msgstr "Sono mostrati i seguenti dispositivi?"
