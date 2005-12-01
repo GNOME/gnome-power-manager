@@ -4,9 +4,16 @@
 
 	* glibhal-extras.{h|c}: Move hal_pm_check() here, and create the new
 	methods hal_pm_can_suspend() and hal_pm_can_hibernate().
+	Also add hal_set_brightness_up() and hal_set_brightness_down () so
+	we can start to play around with new HAL stuff.
 
 	* src/gpm-main.c: Warn if we attempt to hibernate or suspend when HAL
 	says we shouldn't.
+
+	* src/gpm-main.c: Add support for the HAL "virtual button" device.
+	NB. This is not yet in HAL CVS, and support is patched in only if you
+	use the RPM's in my utopia-experimental repo. The interface WILL change
+	before it is accepted upstream.
 
 	* src/gpm-notification.c: Don't add the menu items if we can't do the
 	actions. NOTE: just because HAL (i.e. the kernel) says it has

@@ -561,13 +561,11 @@ hal_device_property_modified (const gchar *udi,
  *  changed, and we have we have subscribed to changes for that device.
  *
  *  @param	udi			Univerisal Device Id
- *  @param	condition_name		Name of condition
- *  @param	condition_details	D-BUS message with parameters
+ *  @param	name		Name of condition
+ *  @param	details	D-BUS message with parameters
  */
 static void
-hal_device_condition (const gchar *udi,
-	const gchar *condition_name,
-	const gchar *condition_details)
+hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 {
 	gchar *type = NULL;
 	gint policy;
@@ -575,14 +573,18 @@ hal_device_condition (const gchar *udi,
 
 	/* assertion checks */
 	g_assert (udi);
-	g_assert (condition_name);
-	g_assert (condition_details);
+	g_assert (name);
+	g_assert (details);
 
-	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s",
-		udi, condition_name, condition_details);
+	g_debug ("hal_device_condition: udi=%s, name=%s, details=%s",
+		udi, name, details);
 
-	if (strcmp (condition_name, "ButtonPressed") == 0) {
+	if (strcmp (name, "ButtonPressed") == 0) {
 		hal_device_get_string (udi, "button.type", &type);
+		if (!type) {
+			g_warning ("You must have a button type for %s!", udi);
+			return;
+		}
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_power");
@@ -605,9 +607,18 @@ hal_device_condition (const gchar *udi,
 				gpm_screensaver_set_dpms (FALSE);
 			} else
 				gpm_screensaver_set_dpms (TRUE);
-		} else
+		} else if (strcmp (type, "virtual") == 0) {
+			if (!details) {
+				g_warning ("Virtual buttons must have details for %s!", udi);
+				return;
+			}
+			if (strcmp (details, "BrightnessUp") == 0)
+				hal_set_brightness_up ();
+			else if (strcmp (details, "BrightnessDown") == 0)
+				hal_set_brightness_down ();
+		} else {
 			g_warning ("Button '%s' unrecognised", type);
-
+		}
 		g_free (type);
 	}
 }
