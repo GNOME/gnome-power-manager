@@ -43,6 +43,8 @@
 
 #define DIM_INTERVAL		10
 
+typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
+
 /** Returns true if system.formfactor == "laptop"
  *
  *  @return			TRUE is computer is identified as a laptop
@@ -181,7 +183,7 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
  *  @return			Success
  */
 static gboolean
-hal_set_brightness_item (const gchar *udi, gint brightness)
+hal_set_brightness_item (const gchar *udi, const gint brightness)
 {
 	GError *error = NULL;
 	gint ret;
@@ -225,13 +227,14 @@ hal_set_brightness_item (const gchar *udi, gint brightness)
 	return retval;
 }
 
-/** Sets *all* the laptop_panel objects to the required brightness level
+/** Calls a function on all udi's of type laptop_panel (utility function)
  *
- *  @param	brightness	LCD Brightness to set to
- *  @return			Success, true if *all* adaptors changed
+ *  @param	function	The (char, int) funtion to call
+ *  @param	number		The parameter to pass to the funtion
+ *  @return			Success
  */
-gboolean
-hal_set_brightness (gint brightness)
+static gboolean
+for_each_lp (hal_lp_func function, const gint number)
 {
 	gint i;
 	gchar **names;
@@ -245,10 +248,66 @@ hal_set_brightness (gint brightness)
 	retval = TRUE;
 	/* iterate to seteach laptop_panel object */
 	for (i = 0; names[i]; i++)
-		if (!hal_set_brightness_item (names[i], brightness))
+		if (!function (names[i], number))
 			retval = FALSE;
 	hal_free_capability (names);
 	return retval;
+}
+
+/** Sets the LCD brightness a few steps upwards or downwards
+ *
+ *  @param	udi		A valid HAL UDI
+ *  @param	step		the number of steps to go up or down,
+ * 				e.g. -2 is two steps down.
+ *  @return			Success
+ */
+static gboolean
+hal_set_brightness_step_item (const gchar *udi, const gint step)
+{
+	gint brightness;
+
+	/* get current brightness */
+	hal_get_brightness_item (udi, &brightness);
+
+	/* make the screen brighter or dimmer */
+	brightness = brightness + step;
+
+	return hal_set_brightness_item (udi, brightness);
+}
+
+/** Sets the LCD brightness one step upwards
+ *
+ *  @return			Success
+ */
+gboolean
+hal_set_brightness_up (void)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) hal_set_brightness_step_item, 1);
+}
+
+/** Sets the LCD brightness one step downwards
+ *
+ *  @return			Success
+ */
+gboolean
+hal_set_brightness_down (void)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) hal_set_brightness_step_item, -1);
+}
+
+
+/** Sets *all* the laptop_panel objects to the required brightness level
+ *
+ *  @param	brightness	LCD Brightness to set to
+ *  @return			Success, true if *all* adaptors changed
+ */
+gboolean
+hal_set_brightness (gint brightness)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) hal_set_brightness_item, brightness);
 }
 
 /** Sets *all* the laptop_panel objects to the required brightness level
