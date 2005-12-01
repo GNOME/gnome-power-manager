@@ -487,11 +487,17 @@ menu_main_create (TrayData *trayicon)
 
 	trayicon->popup_menu = gtk_menu_new ();
 
-	menu_add_action_item (trayicon->popup_menu, "gnome-dev-memory",
-			      _("_Suspend"), "suspend");
-	menu_add_action_item (eggtrayicon->popup_menu, "gnome-dev-harddisk",
-			      _("Hi_bernate"), "hibernate");
-
+	/* only display the icons is we can do the action */
+	if (hal_pm_can_suspend ()) {
+		menu_add_action_item (trayicon->popup_menu,
+				      "gnome-dev-memory",
+				      _("_Suspend"), "suspend");
+	}
+	if (hal_pm_can_hibernate ()) {
+		menu_add_action_item (eggtrayicon->popup_menu,
+				      "gnome-dev-harddisk",
+				      _("Hi_bernate"), "hibernate");
+	}
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (trayicon->popup_menu), item);
 /*
