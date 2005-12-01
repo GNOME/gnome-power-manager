@@ -278,9 +278,17 @@ action_policy_do (gint policy_number)
 		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
+		if (!hal_pm_can_suspend ()) {
+			g_warning ("Cannot suspend as disabled in HAL");
+			return;
+		}
 		perform_sleep_methods (FALSE);
 	} else if (policy_number == ACTION_HIBERNATE) {
 		g_debug ("*ACTION* Hibernate");
+		if (!hal_pm_can_hibernate ()) {
+			g_warning ("Cannot hibernate as disabled in HAL");
+			return;
+		}
 		perform_sleep_methods (TRUE);
 	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
@@ -299,7 +307,7 @@ action_policy_do (gint policy_number)
 		gpm_emit_mains_changed (TRUE);
 	} else
 		g_warning ("action_policy_do called with unknown action %i",
-			policy_number);
+			   policy_number);
 }
 
 /** Generic exit
@@ -402,9 +410,9 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 			  "Plug in your AC Adapter to avoid losing data."),
 			remaining, newCharge);
 		libnotify_event (_("Battery Low"),
-			message,
-			LIBNOTIFY_URGENCY_CRITICAL,
-			get_notification_icon ());
+				 message,
+				 LIBNOTIFY_URGENCY_CRITICAL,
+				 get_notification_icon ());
 		g_free (message);
 		g_free (remaining);
 		return TRUE;
@@ -477,8 +485,8 @@ hal_device_property_modified (const gchar *udi,
 		g_warning ("sds is NULL! udi=%s\n"
 			   "This is probably a bug in HAL where we are getting "
 			   "is_removed=false, is_added=false before the capability "
-			   "had been added. In addon-hid-ups this is likely to happen."
-			   , udi);
+			   "had been added. In addon-hid-ups this is likely to happen.",
+			   udi);
 		return;
 	}
 	
