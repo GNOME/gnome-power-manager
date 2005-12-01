@@ -30,6 +30,9 @@
 #define _GLIBHALEXTRAS_H
 
 gboolean hal_get_brightness_steps (gint *steps);
+gboolean hal_pm_check (void);
+gboolean hal_pm_can_suspend (void);
+gboolean hal_pm_can_hibernate (void);
 gboolean hal_is_laptop (void);
 gboolean hal_set_brightness (gint brightness);
 gboolean hal_set_brightness_dim (gint brightness);

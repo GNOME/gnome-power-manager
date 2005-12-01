@@ -1,3 +1,24 @@
+2005-12-01  Richard Hughes  <richard@hughsie.com>
+
+	* src/configure.in: Bump to 0.3.2
+
+	* glibhal-extras.{h|c}: Move hal_pm_check() here, and create the new
+	methods hal_pm_can_suspend() and hal_pm_can_hibernate().
+
+	* src/gpm-main.c: Warn if we attempt to hibernate or suspend when HAL
+	says we shouldn't.
+
+	* src/gpm-notification.c: Don't add the menu items if we can't do the
+	actions. NOTE: just because HAL (i.e. the kernel) says it has
+	hibernation or suspend support compiled in, doesn't automatically
+	mean that it will *work*.
+
+	* src/gpm-prefs.c: Don't show the options if we can't do the action.
+	Also make the whitespace a bit more sane in this file.
+
+	* src/gpm-prefs.c: Don't try to free a constant if schema missing.
+	Fixes bug: https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=174196
+
 2005-11-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-notification.c (gpn_icon_update): Don't try to free a

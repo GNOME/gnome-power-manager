@@ -71,6 +71,72 @@ hal_is_laptop (void)
 	return ret;
 }
 
+/** Finds out if power management functions are running (only ACPI, PMU, APM)
+ *
+ *  @return		TRUE if haldaemon has power management capability
+ */
+gboolean
+hal_pm_check (void)
+{
+	gboolean pm;
+	hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.is_enabled", &pm);
+	return pm;
+}
+
+/** Finds out if HAL indicates that we can suspend
+ *
+ *  @return		TRUE if kernel suspend support is compiled in
+ */
+gboolean
+hal_pm_can_suspend (void)
+{
+	gboolean exists;
+	gboolean success;
+	gboolean has_pm_capability = hal_pm_check ();
+	if (!has_pm_capability) {
+		/* if we have no power management then we cannot suspend */
+		return FALSE;
+	}
+	exists = hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.can_suspend_to_ram", &success);
+	if (!exists) {
+		g_warning ("[harmless]: You are not running CVS HAL "
+			   "so we will assume it's okay to suspend");
+		return TRUE;
+	}
+	/* Seeing as HAL *knows* if we can suspend, return what it thinks */
+	return success;
+}
+
+/** Finds out if HAL indicates that we can hibernate
+ *
+ *  @return		TRUE if kernel hibernation support is compiled in
+ */
+gboolean
+hal_pm_can_hibernate (void)
+{
+	gboolean exists;
+	gboolean success;
+	gboolean has_pm_capability = hal_pm_check ();
+	if (!has_pm_capability) {
+		/* if we have no power management then we cannot hibernate */
+		return FALSE;
+	}
+	exists = hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.can_suspend_to_disk", &success);
+	if (!exists) {
+		g_warning ("[harmless]: You are not running CVS HAL "
+			   "so we will assume it's okay to hibernate");
+		return TRUE;
+	}
+	/* Seeing as HAL *knows* if we can hibernate, return what it thinks */
+	return success;
+}
+
 /** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
  *
  *  @param	brightness	LCD Brightness to set to

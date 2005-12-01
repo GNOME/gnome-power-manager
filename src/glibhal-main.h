@@ -32,7 +32,6 @@
 #include <dbus/dbus-glib.h>
 
 gboolean is_hald_running (void);
-gboolean hal_pm_check (void);
 gboolean hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value);
 gboolean hal_device_get_string (const gchar *udi, const gchar *key, gchar **value);
 gboolean hal_device_get_int (const gchar *udi, const gchar *key, gint *value);

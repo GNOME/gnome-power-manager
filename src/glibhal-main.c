@@ -59,20 +59,6 @@ is_hald_running (void)
 	return running;
 }
 
-/** Finds out if power management functions are running (only ACPI, PMU, APM)
- *
- *  @return		TRUE if haldaemon has power management capability
- */
-gboolean
-hal_pm_check (void)
-{
-	gboolean pm;
-	hal_device_get_bool (
-		"/org/freedesktop/Hal/devices/computer",
-		"power_management.is_enabled", &pm);
-	return pm;
-}
-
 /** glib libhal replacement to get boolean type
  *
  *  @param	udi		The UDI of the device
