@@ -256,8 +256,6 @@ gpm_idle_update (gpointer data)
 		g_warning ("getIdleTime polling disabled");
 		return FALSE; /* will stop polling */
 	}
-	g_debug ("gpm_idle_update: gstime = %i, load = %i", gstime, load);
-
 	/* check if "idle" enough */
 	if (gstime > time_idle_callback && load < IDLE_LIMIT) {
 		g_debug ("running callback function");

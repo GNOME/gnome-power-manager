@@ -155,8 +155,6 @@ gpm_screensaver_lock (void)
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
-	gboolean boolret;
-
 	g_debug ("gnome-screensaver lock");
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
@@ -164,18 +162,8 @@ gpm_screensaver_lock (void)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (gs_proxy, "lock", &error,
-				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_debug ("gnome-screensaver service is not running.");
-		boolret = FALSE;
-	}
+	dbus_g_proxy_call_no_reply (gs_proxy, "lock", G_TYPE_INVALID);
 	g_object_unref (G_OBJECT (gs_proxy));
-	if (!boolret) {
-		g_debug ("gnome-screensaver lock failed");
-		return FALSE;
-	}
 	return TRUE;
 }
 
@@ -190,8 +178,6 @@ gpm_screensaver_poke (void)
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
-	gboolean boolret;
-
 	g_debug ("gnome-screensaver poke");
 	if (!dbus_get_session_connection (&session_connection))
 		return FALSE;
@@ -199,18 +185,8 @@ gpm_screensaver_poke (void)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (gs_proxy, "poke", &error,
-				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &boolret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
-		g_debug ("gnome-screensaver service is not running.");
-		boolret = FALSE;
-	}
+	dbus_g_proxy_call_no_reply (gs_proxy, "poke", G_TYPE_INVALID);
 	g_object_unref (G_OBJECT (gs_proxy));
-	if (!boolret) {
-		g_debug ("gnome-screensaver poke failed");
-		return FALSE;
-	}
 	return TRUE;
 }
 
@@ -303,7 +279,6 @@ gpm_screensaver_get_idle (gint *time)
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
-	g_print ("gpm_screensaver_get_idle: %i\n", *time);
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
 		g_debug ("gnome-screensaver get idle failed");

@@ -11,6 +11,9 @@
 	* src/gpm-main.c: Add in the virtual buttons Hibernate, Suspend and
 	Lock.
 
+	* src/gpm-screenaver.c: Do not expect a DBUS answer when we lock or
+	poke as we have to wait for the dbus connection to time out.
+
 2005-12-01  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Bump to 0.3.2
