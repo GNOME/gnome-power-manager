@@ -1,8 +1,12 @@
-2005-12-01  Richard Hughes  <richard@hughsie.com>
+2005-12-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-extras.c: Now upstream HAL is using the new 
 	power_management.* keys, we should not be checking .is_enabled as this
 	has been removed in CVS.
+
+	* src/gpm-common.c (get_timestring_from_minutes): Use ngettext to get
+	plural form. Based on a patch from Gabor Kelemen, many thanks.
+	Fixes bug http://bugzilla.gnome.org/show_bug.cgi?id=322773
 
 2005-12-01  Richard Hughes  <richard@hughsie.com>
 

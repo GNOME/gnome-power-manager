@@ -292,30 +292,31 @@ get_timestring_from_minutes (gint minutes)
 	gchar* timestring = NULL;
 	gint hours;
 
-	if (minutes == 0)
+	if (minutes == 0) {
 		timestring = g_strdup_printf (_("Unknown"));
-	else if (minutes == 1)
-		timestring = g_strdup_printf (_("1 minute"));
-	else if (minutes < 60)
-		timestring = g_strdup_printf (_("%i minutes"), minutes);
-	else {
-		hours = minutes / 60;
-		minutes = minutes % 60;
-		if (minutes == 0) {
-			if (hours == 1)
-				timestring = g_strdup_printf (_("1 hour"));
-			else
-				timestring = g_strdup_printf (_("%i hours"), hours);
-		} else if (minutes == 1) {
-			if (hours == 1)
-				timestring = g_strdup_printf (_("1 hour, 1 minute"));
-			else
-				timestring = g_strdup_printf (_("%i hours, 1 minute"), hours);
-		} else if (hours == 1) {
-			timestring = g_strdup_printf (_("1 hour, %i minutes"), minutes);
-		} else {
-			timestring = g_strdup_printf (_("%i hours, %i minutes"), hours, minutes);
-		}
+		return timestring;
 	}
+	if (minutes < 60) {
+		timestring = g_strdup_printf (ngettext (
+				"%i minute",
+				"%i minutes",
+				minutes), minutes);
+		return timestring;
+	}
+
+	hours = minutes / 60;
+	minutes = minutes % 60;
+
+	if (minutes == 0) 
+		timestring = g_strdup_printf (ngettext (
+				"%i hour",
+				"%i hours",
+				hours), hours);
+	else
+		/* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+		 * Swap order with "%2$s %2$i %1$s %1$i if needed */
+		timestring = g_strdup_printf (_("%i %s, %i %s"),
+				hours, ngettext ("hour", "hours", hours),
+				minutes, ngettext ("minute", "minutes", minutes));
 	return timestring;
 }
