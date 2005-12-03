@@ -363,6 +363,7 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	gint lowThreshold;
 	gint criticalThreshold;
 	gchar *message = NULL;
+	gchar *remaining = NULL;
 
 	if (!sds->isDischarging) {
 		g_debug ("battery is not discharging!");
@@ -382,15 +383,18 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 		g_debug ("battery is critical!");
 		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
 		if (policy == ACTION_WARNING) {
+			remaining = get_timestring_from_minutes (sds->minutesRemaining);
+			g_assert (remaining);
 			message = g_strdup_printf (
-				_("You have approximately <b>%i</b> of remaining battery life (%i%%). "
+				_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
 				  "Plug in your AC Adapter to avoid losing data."),
-				sds->minutesRemaining, newCharge);
+				remaining, newCharge);
 			libnotify_event (_("Battery Critically Low"),
 					 message,
 					 LIBNOTIFY_URGENCY_CRITICAL,
 					 get_notification_icon ());
 			g_free (message);
+			g_free (remaining);
 		} else
 			action_policy_do (policy);
 		return TRUE;
@@ -399,15 +403,18 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	/* low warning */
 	if (newCharge < lowThreshold) {
 		g_debug ("battery is low!");
+		remaining = get_timestring_from_minutes (sds->minutesRemaining);
+		g_assert (remaining);
 		message = g_strdup_printf (
-			_("You have approximately <b>%i</b> of remaining battery life (%i%%). "
+			_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
 			  "Plug in your AC Adapter to avoid losing data."),
-			sds->minutesRemaining, newCharge);
+			remaining, newCharge);
 		libnotify_event (_("Battery Low"),
 				 message,
 				 LIBNOTIFY_URGENCY_CRITICAL,
 				 get_notification_icon ());
 		g_free (message);
+		g_free (remaining);
 		return TRUE;
 	}
 	return FALSE;
