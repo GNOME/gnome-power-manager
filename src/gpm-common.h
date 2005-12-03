@@ -79,7 +79,6 @@ IconPolicy convert_string_to_iconpolicy (const gchar *gconfstring);
 DeviceType hal_to_device_type (const gchar *type);
 
 gchar *get_timestring_from_minutes (gint minutes);
-gchar *get_time_string (int minutesRemaining, gboolean isCharging);
 gboolean run_gconf_script (const char *path);
 gboolean run_bin_program (const gchar *program);
 

@@ -142,31 +142,6 @@ run_gconf_script (const char *path)
 	return ret;
 }
 
-/** Gets the timestring from a slot object
- *
- *  @param	remaining	Number of minutes remaining
- *  @param	isCharging	If the battery is charging
- *  @return			the timestring, e.g. "13 minutes until charged"
- */
-gchar *
-get_time_string (int remaining, gboolean isCharging)
-{
-	gchar* timestring = NULL;
-	gchar* retval = NULL;
-
-	timestring = get_timestring_from_minutes (remaining);
-	if (!timestring)
-		return NULL;
-	if (isCharging)
-		retval = g_strdup_printf ("%s %s", timestring, _("until charged"));
-	else
-		retval = g_strdup_printf ("%s %s", timestring, _("remaining"));
-
-	g_free (timestring);
-
-	return retval;
-}
-
 /** This is a dummy function that is called only when not set verbose
  *  and we shouldn't spew all the debug stuff
  *

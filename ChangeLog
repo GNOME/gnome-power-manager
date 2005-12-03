@@ -14,6 +14,12 @@
 	* src/gpm-screenaver.c: Do not expect a DBUS answer when we lock or
 	poke as we have to wait for the dbus connection to time out.
 
+	* src/gpm-main.c: Replace use of get_time_string with the data itself.
+	Fixes bug: http://bugzilla.gnome.org/show_bug.cgi?id=323135
+
+	* src/gpm-common.c (get_time_string): Remove this function as it is
+	no longer in use.
+
 2005-12-01  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Bump to 0.3.2
