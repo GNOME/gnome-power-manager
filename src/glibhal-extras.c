@@ -80,11 +80,17 @@ hal_is_laptop (void)
 gboolean
 hal_pm_check (void)
 {
-	gboolean pm;
-	hal_device_get_bool (
-		"/org/freedesktop/Hal/devices/computer",
-		"power_management.is_enabled", &pm);
-	return pm;
+	gchar *ptype = NULL;
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+			       "power_management.type",
+			       &ptype);
+	/* this key only has to exist to be pm okay */
+	if (ptype) {
+		g_debug ("Power management type : %s", ptype);
+		g_free (ptype);
+		return TRUE;
+	}
+	return FALSE;
 }
 
 /** Finds out if HAL indicates that we can suspend
@@ -96,11 +102,6 @@ hal_pm_can_suspend (void)
 {
 	gboolean exists;
 	gboolean success;
-	gboolean has_pm_capability = hal_pm_check ();
-	if (!has_pm_capability) {
-		/* if we have no power management then we cannot suspend */
-		return FALSE;
-	}
 	exists = hal_device_get_bool (
 		"/org/freedesktop/Hal/devices/computer",
 		"power_management.can_suspend_to_ram", &success);
@@ -122,11 +123,6 @@ hal_pm_can_hibernate (void)
 {
 	gboolean exists;
 	gboolean success;
-	gboolean has_pm_capability = hal_pm_check ();
-	if (!has_pm_capability) {
-		/* if we have no power management then we cannot hibernate */
-		return FALSE;
-	}
 	exists = hal_device_get_bool (
 		"/org/freedesktop/Hal/devices/computer",
 		"power_management.can_suspend_to_disk", &success);

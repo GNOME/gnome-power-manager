@@ -1,9 +1,15 @@
 2005-12-01  Richard Hughes  <richard@hughsie.com>
 
-	* src/configure.in: Bump to 0.3.2
+	* src/glibhal-extras.c: Now upstream HAL is using the new 
+	power_management.* keys, we should not be checking .is_enabled as this
+	has been removed in CVS.
 
-	* glibhal-extras.{h|c}: Move hal_pm_check() here, and create the new
-	methods hal_pm_can_suspend() and hal_pm_can_hibernate().
+2005-12-01  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.3.2
+
+	* src/glibhal-extras.{h|c}: Move hal_pm_check() here, and create the
+	new methods hal_pm_can_suspend() and hal_pm_can_hibernate().
 	Also add hal_set_brightness_up() and hal_set_brightness_down () so
 	we can start to play around with new HAL stuff.
 
