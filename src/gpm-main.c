@@ -616,6 +616,12 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 				hal_set_brightness_up ();
 			else if (strcmp (details, "BrightnessDown") == 0)
 				hal_set_brightness_down ();
+			else if (strcmp (details, "Suspend") == 0)
+				action_policy_do (ACTION_SUSPEND);
+			else if (strcmp (details, "Hibernate") == 0)
+				action_policy_do (ACTION_HIBERNATE);
+			else if (strcmp (details, "Lock") == 0)
+				gpm_screensaver_lock ();
 		} else {
 			g_warning ("Button '%s' unrecognised", type);
 		}
