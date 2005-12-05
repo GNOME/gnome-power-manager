@@ -63,7 +63,6 @@ typedef enum {
 	ACTION_SUSPEND,		/**< Suspend please.			*/
 	ACTION_HIBERNATE,	/**< Hibernate please			*/
 	ACTION_SHUTDOWN,	/**< Shutdown please			*/
-	ACTION_REBOOT,		/**< Reboot please			*/
 	ACTION_NOW_BATTERYPOWERED,	/**< We are now battery powered	*/
 	ACTION_NOW_MAINSPOWERED	/**< We are now mains powered		*/
 } ActionType;

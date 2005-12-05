@@ -273,9 +273,6 @@ action_policy_do (gint policy_number)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (policy_number == ACTION_WARNING) {
 		g_warning ("*ACTION* Send warning should be done locally!");
-	} else if (policy_number == ACTION_REBOOT) {
-		g_debug ("*ACTION* Reboot");
-		run_gconf_script (GCONF_ROOT "general/cmd_reboot");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
 		if (!hal_pm_can_suspend ()) {
@@ -571,7 +568,6 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 	gint policy;
 	gboolean value;
 
-	/* assertion checks */
 	g_assert (udi);
 	g_assert (name);
 	g_assert (details);
