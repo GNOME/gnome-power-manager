@@ -1,3 +1,28 @@
+2005-12-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-common.{c|h}, src/gpm-main.c, src/gpm-prefs.c: 
+	Remove ACTION_WARNING as nothing uses it. Also make the critical
+	warning happen at the critical threshold, and any action performed when
+	it gets lower than that. This will stop the PC randomly shutting down
+	without giving a critical warning a few minutes before.
+
+	* src/gpm-main.c (gnome_shutdown): Create this function so we can
+	save the state interactivly for the case of a power button, or save
+	the state non-interactivly for the case of the power-critically-low
+	case. Inspired by a patch from Jaap Haitsma <jaap@haitsma.org>.
+
+	* src/gpm-prefs.c, gnome-power-manager.schema.in:
+	Remove the options for the power button, as we now display the menu
+	(which remembers our state, so we don't need a configurable).
+	Patch from Jaap Haitsma <jaap@haitsma.org>, many thanks.
+
+2005-12-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-common.h, src/gpm-main.c, gnome-power-manager.schemas.in: 
+	Remove the reboot command as it's not used, and probably shouldn't be
+	part of g-p-m anyway. Taken from a larger patch from 
+	Jaap Haitsma <jaap@haitsma.org>.
+
 2005-12-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-extras.c: Now upstream HAL is using the new 

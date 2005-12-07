@@ -77,7 +77,6 @@ recalculate_widgets (void)
 
 	gboolean hasBatteries;
 	gboolean hasAcAdapter;
-	gboolean hasButtonPower;
 	gboolean hasButtonSleep;
 	gboolean hasButtonLid;
 	gboolean hasLCD;
@@ -114,8 +113,6 @@ recalculate_widgets (void)
 
 	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
 	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
-	hasButtonPower = (hal_num_devices_of_capability_with_value
-				("button", "button.type", "power") > 0);
 	hasButtonSleep = (hal_num_devices_of_capability_with_value
 				("button", "button.type", "sleep") > 0);
 	hasButtonLid =   (hal_num_devices_of_capability_with_value
@@ -153,9 +150,6 @@ recalculate_widgets (void)
 	/* options */
 	gpm_gtk_set_visibility (prefwidgets, "combobox_button_lid", hasButtonLid);
 	gpm_gtk_set_visibility (prefwidgets, "label_button_lid", hasButtonLid);
-
-	gpm_gtk_set_visibility (prefwidgets, "combobox_button_power", hasButtonPower);
-	gpm_gtk_set_visibility (prefwidgets, "label_button_power", hasButtonPower);
 
 	gpm_gtk_set_visibility (prefwidgets, "combobox_button_suspend", hasButtonSleep);
 	gpm_gtk_set_visibility (prefwidgets, "label_button_suspend", hasButtonSleep);
@@ -629,9 +623,6 @@ combo_setup_dynamic (const gchar *widgetname,
 		else if (*pdata == ACTION_HIBERNATE)
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   _("Hibernate"));
-		else if (*pdata == ACTION_WARNING)
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   _("Send warning"));
 		else if (*pdata == ACTION_NOTHING)
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   _("Do nothing"));
@@ -682,7 +673,6 @@ main (int argc, char **argv)
 	GtkSizeGroup *size_group;
 
 	/* provide dynamic storage for comboboxes */
-	GPtrArray *ptrarr_button_power = NULL;
 	GPtrArray *ptrarr_button_suspend = NULL;
 	GPtrArray *ptrarr_button_lid = NULL;
 	GPtrArray *ptrarr_battery_critical = NULL;
@@ -800,8 +790,6 @@ main (int argc, char **argv)
 	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	widget = glade_xml_get_widget (prefwidgets, "label_sleep_type");
 	gtk_size_group_add_widget (size_group, widget); 
-	widget = glade_xml_get_widget (prefwidgets, "label_button_power");
-	gtk_size_group_add_widget (size_group, widget); 
 	widget = glade_xml_get_widget (prefwidgets, "label_button_suspend");
 	gtk_size_group_add_widget (size_group, widget); 
 	widget = glade_xml_get_widget (prefwidgets, "label_button_lid");
@@ -828,17 +816,6 @@ main (int argc, char **argv)
 			     GCONF_ROOT "policy/sleep_type",
 			     ptrarr_sleep_type);
 
-	/* power button */
-	ptrarr_button_power = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_button_power, (gpointer) &pNothing);
-	if (can_suspend)
-		g_ptr_array_add (ptrarr_button_power, (gpointer) &pSuspend);
-	if (can_hibernate)
-		g_ptr_array_add (ptrarr_button_power, (gpointer) &pHibernate);
-	g_ptr_array_add (ptrarr_button_power, (gpointer) &pShutdown);
-	combo_setup_dynamic ("combobox_button_power", 
-		GCONF_ROOT "policy/button_power", ptrarr_button_power);
-
 	/* sleep button */
 	ptrarr_button_suspend = g_ptr_array_new ();
 	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pNothing);
@@ -847,7 +824,7 @@ main (int argc, char **argv)
 	if (can_hibernate)
 		g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pHibernate);
 	combo_setup_dynamic ("combobox_button_suspend",
-		GCONF_ROOT "policy/button_suspend", ptrarr_button_power);
+		GCONF_ROOT "policy/button_suspend", ptrarr_button_suspend);
 
 	/* lid "button" */
 	ptrarr_button_lid = g_ptr_array_new ();
@@ -923,7 +900,6 @@ main (int argc, char **argv)
 
 	/* main loop */
 	gtk_main ();
-	g_ptr_array_free (ptrarr_button_power, TRUE);
 	g_ptr_array_free (ptrarr_button_suspend, TRUE);
 	g_ptr_array_free (ptrarr_button_lid, TRUE);
 	g_ptr_array_free (ptrarr_battery_critical, TRUE);

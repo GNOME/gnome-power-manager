@@ -8,7 +8,10 @@ Released December xx, 2005
   NOTE: just because HAL (i.e. the kernel) says it has hibernation or suspend
   support is compiled in, doesn't automatically mean that it will *work*.
 - Lots of translation updates.
-- Fix a bug where g-p-p was crashing on missing gconf schema.
+- We now try to save the GNOME application state before the critically-low
+  action is taken (default shutdown).
+- The power button is now an interactive shutdown, saving GNOME session state.
+- Fix a bug where the preferences program was crashing on missing gconf schema.
 - Fixed lots of other smaller bugs such as #322773, #323135, RH#174196, #322547
 
 ==========

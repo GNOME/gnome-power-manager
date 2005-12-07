@@ -260,6 +260,30 @@ perform_sleep_methods (gboolean toDisk)
 		gpm_screensaver_poke ();
 }
 
+/** Request that GNOME save the session in some way, and programs
+ *  should save data where possible.
+ *
+ *  @param	logout		If we want to logout of the session
+ *  @param	interactive	If the user can be prompted with questions
+ */
+static void
+gnome_shutdown (gboolean logout, gboolean interactive)
+{
+	gint interact = GNOME_INTERACT_ANY;
+	GnomeClient *client = gnome_master_client ();
+
+	if (!interactive)
+		interact = GNOME_INTERACT_NONE;
+
+	/* Show the logout screen of GNOME */
+	gnome_client_request_save (client,
+				   GNOME_SAVE_GLOBAL,
+				   logout,
+				   interact,
+				   FALSE,
+				   TRUE);
+}
+
 /** Do the action dictated by policy from gconf
  *
  *  @param	policy_number	The policy ENUM value
@@ -271,8 +295,6 @@ action_policy_do (gint policy_number)
 {
 	if (policy_number == ACTION_NOTHING) {
 		g_debug ("*ACTION* Doing nothing");
-	} else if (policy_number == ACTION_WARNING) {
-		g_warning ("*ACTION* Send warning should be done locally!");
 	} else if (policy_number == ACTION_SUSPEND) {
 		g_debug ("*ACTION* Suspend");
 		if (!hal_pm_can_suspend ()) {
@@ -289,6 +311,8 @@ action_policy_do (gint policy_number)
 		perform_sleep_methods (TRUE);
 	} else if (policy_number == ACTION_SHUTDOWN) {
 		g_debug ("*ACTION* Shutdown");
+		/* don't ask any questions, just do it */
+		gnome_shutdown (FALSE, FALSE);
 		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
 	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
 		g_debug ("*DBUS* Now battery powered");
@@ -373,27 +397,30 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	criticalThreshold = gconf_client_get_int (client,
 		GCONF_ROOT "general/threshold_critical", NULL);
 	g_debug ("lowThreshold = %i, criticalThreshold = %i",
-		lowThreshold, criticalThreshold);
+		 lowThreshold, criticalThreshold);
+
+	/* less than critical, do action */
+	if (newCharge < criticalThreshold) {
+		g_debug ("battery is below critical limit!");
+		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
+		action_policy_do (policy);
+		return TRUE;
+	}
 
 	/* critical warning */
-	if (newCharge < criticalThreshold) {
-		g_debug ("battery is critical!");
-		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
-		if (policy == ACTION_WARNING) {
-			remaining = get_timestring_from_minutes (sds->minutesRemaining);
-			g_assert (remaining);
-			message = g_strdup_printf (
-				_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
-				  "Plug in your AC Adapter to avoid losing data."),
-				remaining, newCharge);
-			libnotify_event (_("Battery Critically Low"),
-					 message,
-					 LIBNOTIFY_URGENCY_CRITICAL,
-					 get_notification_icon ());
-			g_free (message);
-			g_free (remaining);
-		} else
-			action_policy_do (policy);
+	if (newCharge == criticalThreshold) {
+		g_debug ("battery is critical limit!");
+		remaining = get_timestring_from_minutes (sds->minutesRemaining);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> "
+					   "of remaining battery life (%i%%). "
+			  		   "Plug in your AC Adapter to avoid losing data."),
+					   remaining, newCharge);
+		libnotify_event (_("Battery Critically Low"),
+				 message,
+				 LIBNOTIFY_URGENCY_CRITICAL,
+				 get_notification_icon ());
+		g_free (message);
+		g_free (remaining);
 		return TRUE;
 	}
 
@@ -583,8 +610,8 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 		}
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
-			policy = get_policy_string (GCONF_ROOT "policy/button_power");
-			action_policy_do (policy);
+			/* always assume they want to log out interactivly */
+			gnome_shutdown (TRUE, TRUE);
 		} else if (strcmp (type, "sleep") == 0) {
 			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
 			action_policy_do (policy);

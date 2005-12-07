@@ -176,8 +176,6 @@ convert_string_to_policy (const gchar *gconfstring)
 		return ACTION_SHUTDOWN;
 	if (strcmp (gconfstring, "hibernate") == 0)
 		return ACTION_HIBERNATE;
-	if (strcmp (gconfstring, "warning") == 0)
-		return ACTION_WARNING;
 
 	g_warning ("gconfstring '%s' not converted", gconfstring);
 	return ACTION_UNKNOWN;
@@ -199,8 +197,6 @@ convert_policy_to_string (gint value)
 		return "shutdown";
 	else if (value == ACTION_HIBERNATE)
 		return "hibernate";
-	else if (value == ACTION_WARNING)
-		return "warning";
 	g_warning ("value '%i' not converted", value);
 	return NULL;
 }

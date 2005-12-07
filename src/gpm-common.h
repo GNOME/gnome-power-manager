@@ -59,7 +59,6 @@ typedef enum {
 typedef enum {
 	ACTION_NOTHING,		/**< Do nothing! Yes nothing.		*/
 	ACTION_UNKNOWN,		/**< The action is unknown		*/
-	ACTION_WARNING,		/**< Use libnotify and send warning	*/
 	ACTION_SUSPEND,		/**< Suspend please.			*/
 	ACTION_HIBERNATE,	/**< Hibernate please			*/
 	ACTION_SHUTDOWN,	/**< Shutdown please			*/
