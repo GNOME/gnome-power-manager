@@ -680,8 +680,13 @@ signalhandler_noc (const char *name, gboolean connected)
 		return;
 
 	if (!connected) {
-		g_critical ("HAL has been disconnected!  GNOME Power Manager will now quit.");
+		g_warning ("HAL has been disconnected!  GNOME Power Manager will now quit.");
 
+		/* Wait for HAL to be running again */
+		while (!is_hald_running ()) {
+			g_warning ("GNOME Power Manager cannot connect to HAL!");
+			usleep (1000*500);
+		}
 		/* for now, quit */
 		gpm_exit ();
 		return;

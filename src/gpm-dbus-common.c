@@ -42,6 +42,9 @@
 #include "gpm_marshal.h"
 #include "gpm-dbus-common.h"
 
+static DBusGConnection *session_conn = NULL;
+static DBusGConnection *system_conn = NULL;
+
 /** Handle a glib error, freeing if needed.
  *  We echo to debug, as we don't want the typical user sending in bug reports.
  *  Use --verbose to view these warnings.
@@ -109,7 +112,7 @@ dbus_get_service (DBusGConnection *connection, const gchar *service)
 	}
 #endif
 
-	if (ret && request_name_result != 1 /* NEED_TO_FIND_VALUE */)
+	if (ret && request_name_result != 1)
 		ret = FALSE;
 
 	/* free the bus_proxy */
@@ -130,8 +133,16 @@ gboolean
 dbus_get_session_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
-	*connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (*connection == NULL) {
+
+	/* return cached result for speed */
+	if (session_conn) {
+		*connection = session_conn;
+		return TRUE;
+	}
+
+	/* else get from DBUS */
+	session_conn = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (!session_conn) {
 		g_warning ("Failed to open connection to dbus session bus: %s\n",
 			error->message);
 		dbus_glib_error (error);
@@ -146,6 +157,7 @@ dbus_get_session_connection (DBusGConnection **connection)
 			 "to ~/.xinitrc\n\n");
 		return FALSE;
 	}
+	*connection = session_conn;
 	return TRUE;
 }
 
@@ -160,8 +172,16 @@ gboolean
 dbus_get_system_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
-	*connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (*connection == NULL) {
+
+	/* return cached result for speed */
+	if (system_conn) {
+		*connection = system_conn;
+		return TRUE;
+	}
+
+	/* else get from DBUS */
+	system_conn = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (!system_conn) {
 		g_warning ("Failed to open connection to dbus system bus: %s\n",
 			error->message);
 		dbus_glib_error (error);
@@ -173,6 +193,7 @@ dbus_get_system_connection (DBusGConnection **connection)
 			 "after restarting messagebus\n\n");
 		return FALSE;
 	}
+	*connection = system_conn;
 	return TRUE;
 }
 

@@ -1,3 +1,9 @@
+2005-12-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-common.c: Cache the dbus connection in two private
+	pointers so we don't have to keep doing dbus_g_bus_get everytime we
+	want the bus address.
+
 2005-12-07  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-common.{c|h}, src/gpm-main.c, src/gpm-prefs.c: 
