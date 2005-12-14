@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-09 10:26+0000\n"
+"POT-Creation-Date: 2005-12-14 08:42+0000\n"
 "PO-Revision-Date: 2005-07-13 00:50+0200\n"
 "Last-Translator: Hendrik Brandt <heb@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 msgid "Configure power management"
 msgstr "Einstellung der Energieverwaltung"
 
-#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
-msgid "Power Preferences"
-msgstr "Energieverwaltung"
+#: ../gnome-power-preferences.desktop.in.h:2
+#, fuzzy
+msgid "Power Management"
+msgstr "GNOME Energieverwaltung"
 
 #: ../gnome-power-manager.schemas.in.h:1
-msgid "Options are never, critical, charge, always"
+msgid "If we require a password when resuming from suspend"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:2
-msgid "The action to take when the battery is critically low."
+msgid "Options are never, critical, charge, always"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:3
-msgid "The brightness the display is set to on AC"
+msgid "The action to take when the battery is critically low."
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:4
-msgid "The brightness the display is set to on battery"
+msgid "The brightness the display is set to on AC"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:5
-#, fuzzy
-msgid "The event for a laptop lid closing"
-msgstr "Wenn der Laptop geschlossen wird"
+msgid "The brightness the display is set to on battery"
+msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:6
 #, fuzzy
-msgid "The event for a system power button press"
-msgstr "Wenn der Einschaltknopf gedrückt wird:"
+msgid "The event for a laptop lid closing"
+msgstr "Wenn der Laptop geschlossen wird"
 
 #: ../gnome-power-manager.schemas.in.h:7
 #, fuzzy
@@ -68,14 +68,10 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the reboot script"
-msgstr ""
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid "The path to the shutdown script"
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 #, fuzzy
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
@@ -84,7 +80,7 @@ msgstr ""
 "Der Prozentsatz den die Stromzufuhr erreichen muss, um als »gering genug« "
 "erkannt zu werden und ein Symbol anzuzeigen."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 #, fuzzy
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
@@ -93,21 +89,21 @@ msgstr ""
 "Der Prozentsatz den die Stromzufuhr erreichen muss, um als »gering genug« "
 "erkannt zu werden und ein Symbol anzuzeigen."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 #, fuzzy
 msgid "The powerdevice action threshold."
 msgstr "Der Grenzwert der Stromzufuhr ab dem ein Symbol angezeigt wird."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 #, fuzzy
 msgid "The powerdevice warning threshold."
 msgstr "Der Grenzwert der Stromzufuhr ab dem ein Symbol angezeigt wird."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:18
+#: ../gnome-power-manager.schemas.in.h:17
 #, fuzzy
 msgid "When to show the notification icon"
 msgstr "Benachrichtigungssymbol bei Doppelklick:"
@@ -120,69 +116,62 @@ msgstr "Ausrichtung"
 msgid "The orientation of the tray."
 msgstr "Die Ausrichtung des Benachrichtigungfeldes"
 
-#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
-#, fuzzy
-msgid "until charged"
-msgstr "bis geladen"
-
-#: ../src/gpm-common.c:140
-#, fuzzy
-msgid "remaining"
-msgstr "verbleiben"
-
-#: ../src/gpm-common.c:273
+#: ../src/gpm-common.c:267
 #, fuzzy
 msgid "Unknown"
 msgstr "unbekannt"
 
-#: ../src/gpm-common.c:275
-#, fuzzy
-msgid "1 minute"
-msgstr "%i Minute"
-
-#: ../src/gpm-common.c:277
-#, c-format
-msgid "%i minutes"
-msgstr "%i Minuten"
+#: ../src/gpm-common.c:272
+#, fuzzy, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i Minuten"
+msgstr[1] "%i Minuten"
 
 #: ../src/gpm-common.c:283
-#, fuzzy
-msgid "1 hour"
-msgstr "%i Stunde"
+#, fuzzy, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i Stunden"
+msgstr[1] "%i Stunden"
 
-#: ../src/gpm-common.c:285
-#, c-format
-msgid "%i hours"
-msgstr "%i Stunden"
-
-#: ../src/gpm-common.c:288
-#, fuzzy
-msgid "1 hour, 1 minute"
-msgstr "%i Stunde und %i Minute"
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:289
+#, fuzzy, c-format
+msgid "%i %s, %i %s"
+msgstr "%i Stunden und %i Minuten"
 
 #: ../src/gpm-common.c:290
-#, fuzzy, c-format
-msgid "%i hours, 1 minute"
-msgstr "%i Stunden und %i Minuten"
+#, fuzzy
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "%i Stunde"
+msgstr[1] "%i Stunde"
 
-#: ../src/gpm-common.c:292
-#, fuzzy, c-format
-msgid "1 hour, %i minutes"
-msgstr "%i Stunde und %i Minuten"
-
-#: ../src/gpm-common.c:294
-#, fuzzy, c-format
-msgid "%i hours, %i minutes"
-msgstr "%i Stunden und %i Minuten"
+#: ../src/gpm-common.c:291
+#, fuzzy
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "%i Minute"
+msgstr[1] "%i Minute"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38
+#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
 #, fuzzy
 msgid "GNOME Power Manager"
 msgstr "GNOME Energieverwaltung"
 
 #: ../src/gpm-common.h:39
 msgid "Power Manager for the GNOME desktop"
+msgstr ""
+
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+msgid "Do not daemonize"
+msgstr ""
+
+#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+msgid "Show extra debugging information"
 msgstr ""
 
 #. * @}
@@ -205,8 +194,7 @@ msgstr ""
 msgid "<b>GNOME Screensaver</b>"
 msgstr "<b>Allgemein</b>"
 
-#. * @}
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
 msgid "<b>General</b>"
 msgstr "<b>Allgemein</b>"
 
@@ -273,7 +261,7 @@ msgstr ""
 msgid "Satellite Pro A10"
 msgstr ""
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
 msgid "Suspend"
 msgstr "Stromsparmodus"
 
@@ -285,147 +273,184 @@ msgstr ""
 msgid "Toshiba"
 msgstr ""
 
-#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-main.c:576
+#: ../src/gpm-main.c:418
 #, fuzzy
 msgid "Battery Critically Low"
 msgstr "Batteriestrom ist kritisch bei weniger als:"
 
-#: ../src/gpm-main.c:596
+#: ../src/gpm-main.c:436
 msgid "Battery Low"
 msgstr ""
 
-#: ../src/gpm-main.c:638
+#: ../src/gpm-main.c:478
 msgid "AC Power Unplugged"
 msgstr ""
 
-#: ../src/gpm-main.c:639
+#: ../src/gpm-main.c:479
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Your battery is now fully charged"
 msgstr ""
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "wird geladen"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "wird entladen"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "geladen"
 
 #: ../src/gpm-notification.c:239
+#, fuzzy
+msgid "until charged"
+msgstr "bis geladen"
+
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr ""
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 #, fuzzy
 msgid "Computer is running on battery power\n"
 msgstr "Der Rechner läuft mit Batteriestrom"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 #, fuzzy
 msgid "Computer is running on AC power\n"
 msgstr "Der Rechner läuft mit Netzstrom"
 
-#: ../src/gpm-notification.c:458
+#: ../src/gpm-notification.c:341
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr ""
+
+#: ../src/gpm-notification.c:342
+msgid ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+
+#: ../src/gpm-notification.c:346
+msgid ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+
+#: ../src/gpm-notification.c:350
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+
+#. Translators comment: put your own name here to appear in the
+#. * about dialog.
+#: ../src/gpm-notification.c:363
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/gpm-notification.c:494
 #, fuzzy
 msgid "_Suspend"
 msgstr "Stromsparmodus"
 
-#: ../src/gpm-notification.c:460
+#: ../src/gpm-notification.c:499
 #, fuzzy
 msgid "Hi_bernate"
 msgstr "Ruhemodus"
 
-#: ../src/gpm-notification.c:465
-msgid "Po_wer Info"
-msgstr ""
-
-#: ../src/gpm-notification.c:468
+#: ../src/gpm-notification.c:511
 #, fuzzy
 msgid "_Preferences"
 msgstr "Energieverwaltung"
 
-#: ../src/gpm-notification.c:470
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr ""
 
-#: ../src/gpm-notification.c:472
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr ""
 
-#: ../src/gpm-prefs.c:613
+#: ../src/gpm-prefs.c:689
 msgid "Shutdown"
 msgstr "Ausschalten"
 
-#: ../src/gpm-prefs.c:619
+#: ../src/gpm-prefs.c:695
 msgid "Hibernate"
 msgstr "Ruhemodus"
 
-#: ../src/gpm-prefs.c:622
-msgid "Send warning"
-msgstr "Warnung senden"
-
-#: ../src/gpm-prefs.c:625
+#: ../src/gpm-prefs.c:698
 msgid "Do nothing"
 msgstr "Nichts machen"
 
-#: ../src/gpm-prefs.glade.h:2
+#: ../src/gpm-prefs.c:775
+#, fuzzy
+msgid "GNOME Power Preferences"
+msgstr "Energieverwaltung"
+
+#. * @}
+#: ../src/gpm-prefs.glade.h:1
+#, fuzzy
+msgid "<b>Actions</b>"
+msgstr "<b>Weitere Optionen</b>"
+
+#: ../src/gpm-prefs.glade.h:3
 #, fuzzy
 msgid "<b>Notification Area</b>"
 msgstr "<b>Benachrichtigungsfeld</b>"
 
-#: ../src/gpm-prefs.glade.h:3
+#: ../src/gpm-prefs.glade.h:4
 msgid "<b>Other Options</b>"
 msgstr "<b>Weitere Optionen</b>"
 
-#: ../src/gpm-prefs.glade.h:4
+#: ../src/gpm-prefs.glade.h:5
 #, fuzzy
 msgid "<b>Running on AC Adapter</b>"
 msgstr "<b>Läuft mit Netzstrom</b>"
 
-#: ../src/gpm-prefs.glade.h:5
+#: ../src/gpm-prefs.glade.h:6
 #, fuzzy
 msgid "<b>Running on Batteries</b>"
 msgstr "<b>Läuft mit Batterie</b>"
 
-#: ../src/gpm-prefs.glade.h:6
+#: ../src/gpm-prefs.glade.h:7
 msgid "<i><small>Estimated 16 minutes</small></i>"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:7
+#: ../src/gpm-prefs.glade.h:8
 msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:8
+#: ../src/gpm-prefs.glade.h:9
 msgid "Advanced"
 msgstr "Erweitert"
 
-#: ../src/gpm-prefs.glade.h:9
+#: ../src/gpm-prefs.glade.h:10
 #, fuzzy
 msgid "Ba_ttery is critical when below:"
 msgstr "Batteriestrom ist kritisch bei weniger als:"
-
-#: ../src/gpm-prefs.glade.h:10
-#, fuzzy
-msgid "C_omputer sleep type:"
-msgstr "Ruhemodus des Rechners"
 
 #: ../src/gpm-prefs.glade.h:11
 #, fuzzy
@@ -441,77 +466,145 @@ msgid "Options"
 msgstr "Optionen"
 
 #: ../src/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "Energieverwaltung"
+
+#: ../src/gpm-prefs.glade.h:15
 #, fuzzy
-msgid "P_ut display to sleep after:"
-msgstr "Bildschirm in den Ruhemodus versetzen nach:"
+msgid "Put _computer to sleep after:"
+msgstr "Rechner in den Ruhemodus versetzen nach:"
 
 #: ../src/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "Put _display to sleep after:"
+msgstr "Bildschirm in den Ruhemodus versetzen nach:"
+
+#: ../src/gpm-prefs.glade.h:17
 #, fuzzy
 msgid "Put c_omputer to sleep after:"
 msgstr "Rechner in den Ruhemodus versetzen nach:"
 
-#: ../src/gpm-prefs.glade.h:17
-#, fuzzy
-msgid "Put d_isplay to sleep after:"
-msgstr "Bildschirm in den Ruhemodus versetzen nach:"
-
 #: ../src/gpm-prefs.glade.h:18
 #, fuzzy
-msgid "S_et display brightness:"
-msgstr "LCD-Display-Helligkeit setzen auf:"
+msgid "Put dis_play to sleep after:"
+msgstr "Bildschirm in den Ruhemodus versetzen nach:"
 
 #: ../src/gpm-prefs.glade.h:19
-msgid "Sleep"
-msgstr "Ruhemodus"
+msgid "Require password when returning from sleep"
+msgstr ""
 
 #: ../src/gpm-prefs.glade.h:20
 #, fuzzy
-msgid "Wh_en suspend button pressed:"
-msgstr "Wenn der Ruhemodusknopf gedrückt wird:"
+msgid "Set display _brightness:"
+msgstr "LCD-Display-Helligkeit setzen auf:"
 
 #: ../src/gpm-prefs.glade.h:21
 #, fuzzy
-msgid "Whe_n laptop lid is closed:"
-msgstr "Wenn der Laptop geschlossen wird"
+msgid "Set display b_rightness:"
+msgstr "LCD-Display-Helligkeit setzen auf:"
 
 #: ../src/gpm-prefs.glade.h:22
+msgid "Sleep"
+msgstr "Ruhemodus"
+
+#: ../src/gpm-prefs.glade.h:23
 #, fuzzy
 msgid "When _battery power critical:"
 msgstr "Wenn Batteriestrom kritisch wird:"
 
-#: ../src/gpm-prefs.glade.h:23
+#: ../src/gpm-prefs.glade.h:24
+#, fuzzy
+msgid "When _suspend button pressed:"
+msgstr "Wenn der Ruhemodusknopf gedrückt wird:"
+
+#: ../src/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "When laptop li_d is closed:"
+msgstr "Wenn der Laptop geschlossen wird"
+
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Always display icon"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:24
+#: ../src/gpm-prefs.glade.h:27
 #, fuzzy
 msgid "_Battery is low when below:"
 msgstr "Batteriestrom ist kritisch bei weniger als:"
 
-#: ../src/gpm-prefs.glade.h:25
+#: ../src/gpm-prefs.glade.h:28
+#, fuzzy
+msgid "_Computer sleep type:"
+msgstr "Ruhemodus des Rechners"
+
+#: ../src/gpm-prefs.glade.h:29
 #, fuzzy
 msgid "_Never display icon"
 msgstr "Hauptsymbol anzeigen"
 
-#: ../src/gpm-prefs.glade.h:26
+#: ../src/gpm-sysdev.c:58
 #, fuzzy
-msgid "_Put computer to sleep after:"
-msgstr "Rechner in den Ruhemodus versetzen nach:"
+msgid "Laptop battery"
+msgstr "Laptop-Batterie"
 
-#: ../src/gpm-prefs.glade.h:27
-#, fuzzy
-msgid "_Screensaver Preferences..."
-msgstr "Energieverwaltung"
+#: ../src/gpm-sysdev.c:60
+msgid "UPS"
+msgstr "USV"
 
-#: ../src/gpm-prefs.glade.h:28
-#, fuzzy
-msgid "_Set display brightness:"
-msgstr "LCD-Display-Helligkeit setzen auf:"
+#: ../src/gpm-sysdev.c:62
+msgid "Wireless mouse"
+msgstr ""
 
-#: ../src/gpm-prefs.glade.h:29
+#: ../src/gpm-sysdev.c:64
 #, fuzzy
-msgid "_When power button pressed:"
-msgstr "Wenn der Einschaltknopf gedrückt wird:"
+msgid "Wireless keyboard"
+msgstr "Logitech-Tastatur"
+
+#: ../src/gpm-sysdev.c:66
+msgid "Misc PDA"
+msgstr ""
+
+#, fuzzy
+#~ msgid "The event for a system power button press"
+#~ msgstr "Wenn der Einschaltknopf gedrückt wird:"
+
+#, fuzzy
+#~ msgid "remaining"
+#~ msgstr "verbleiben"
+
+#, fuzzy
+#~ msgid "1 hour, 1 minute"
+#~ msgstr "%i Stunde und %i Minute"
+
+#, fuzzy
+#~ msgid "%i hours, 1 minute"
+#~ msgstr "%i Stunden und %i Minuten"
+
+#, fuzzy
+#~ msgid "1 hour, %i minutes"
+#~ msgstr "%i Stunde und %i Minuten"
+
+#~ msgid "Send warning"
+#~ msgstr "Warnung senden"
+
+#, fuzzy
+#~ msgid "Put d_isplay to sleep after:"
+#~ msgstr "Bildschirm in den Ruhemodus versetzen nach:"
+
+#, fuzzy
+#~ msgid "_Put computer to sleep after:"
+#~ msgstr "Rechner in den Ruhemodus versetzen nach:"
+
+#, fuzzy
+#~ msgid "_Screensaver Preferences..."
+#~ msgstr "Energieverwaltung"
+
+#, fuzzy
+#~ msgid "_Set display brightness:"
+#~ msgstr "LCD-Display-Helligkeit setzen auf:"
+
+#, fuzzy
+#~ msgid "_When power button pressed:"
+#~ msgstr "Wenn der Einschaltknopf gedrückt wird:"
 
 #~ msgid "If the machine has a LCD (brightness variable) attached."
 #~ msgstr ""
@@ -577,17 +670,11 @@ msgstr "Wenn der Einschaltknopf gedrückt wird:"
 #~ msgid "Whether we display icons when they are full"
 #~ msgstr "Legt fest, ob Symbole angezeigt werden wenn diese voll sind"
 
-#~ msgid "UPS"
-#~ msgstr "USV"
-
 #~ msgid "AC Adapter"
 #~ msgstr "Netzstromadapter"
 
 #~ msgid "Logitech mouse"
 #~ msgstr "Logitech-Maus"
-
-#~ msgid "Logitech keyboard"
-#~ msgstr "Logitech-Tastatur"
 
 #~ msgid "PDA"
 #~ msgstr "PDA"

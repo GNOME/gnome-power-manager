@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-05 18:26+0800\n"
+"POT-Creation-Date: 2005-12-14 08:42+0000\n"
 "PO-Revision-Date: 2005-12-05 18:37+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -49,58 +49,50 @@ msgid "The event for a laptop lid closing"
 msgstr "笔记本上盖关闭的事件"
 
 #: ../gnome-power-manager.schemas.in.h:7
-msgid "The event for a system power button press"
-msgstr "按下系统电源按钮的事件"
-
-#: ../gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "按下系统待机按钮的事件"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../gnome-power-manager.schemas.in.h:8
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "计算机试图转入休眠时等待时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "显示器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "硬盘驱动器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:12
-msgid "The path to the reboot script"
-msgstr "重新启动脚本的路径"
-
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:11
 msgid "The path to the shutdown script"
 msgstr "关机脚本的路径"
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "电源设备动作阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "电源设备警告阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:18
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "自动使用休眠还是待机。"
 
-#: ../gnome-power-manager.schemas.in.h:19
+#: ../gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "是否显示通知图标"
 
@@ -112,17 +104,17 @@ msgstr "方向"
 msgid "The orientation of the tray."
 msgstr "托盘的方向。"
 
-#: ../src/gpm-common.c:271
+#: ../src/gpm-common.c:267
 msgid "Unknown"
 msgstr "未知"
 
-#: ../src/gpm-common.c:276
+#: ../src/gpm-common.c:272
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i 分钟"
 
-#: ../src/gpm-common.c:287
+#: ../src/gpm-common.c:283
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -130,23 +122,23 @@ msgstr[0] "%i 小时"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:293
+#: ../src/gpm-common.c:289
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:294
+#: ../src/gpm-common.c:290
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "小时"
 
-#: ../src/gpm-common.c:295
+#: ../src/gpm-common.c:291
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分钟"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:709
+#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
 msgid "GNOME Power Manager"
 msgstr "GNOME 电源管理器"
 
@@ -154,11 +146,11 @@ msgstr "GNOME 电源管理器"
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的电源管理器"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:691
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:693 ../src/gpm-prefs.c:699
+#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
@@ -244,7 +236,7 @@ msgstr "其它问题"
 msgid "Satellite Pro A10"
 msgstr "Satellite Pro A10"
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:628
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
 msgid "Suspend"
 msgstr "挂起"
 
@@ -256,7 +248,7 @@ msgstr "系统电源信息"
 msgid "Toshiba"
 msgstr "东芝"
 
-#: ../src/gpm-main.c:389 ../src/gpm-main.c:409
+#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -264,27 +256,27 @@ msgid ""
 msgstr ""
 "电量大约可维持 <b>%s</b>，为总电量的 %i%%。请接入交流电源以避免丢失数据。"
 
-#: ../src/gpm-main.c:392
+#: ../src/gpm-main.c:418
 msgid "Battery Critically Low"
 msgstr "电量即将用尽"
 
-#: ../src/gpm-main.c:412
+#: ../src/gpm-main.c:436
 msgid "Battery Low"
 msgstr "电量低"
 
-#: ../src/gpm-main.c:454
+#: ../src/gpm-main.c:478
 msgid "AC Power Unplugged"
 msgstr "交流电已拔出"
 
-#: ../src/gpm-main.c:455
+#: ../src/gpm-main.c:479
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "交流电已经拔出。系统现在将使用电池供电。"
 
-#: ../src/gpm-main.c:526
+#: ../src/gpm-main.c:550
 msgid "Battery Charged"
 msgstr "电池已充满"
 
-#: ../src/gpm-main.c:526
+#: ../src/gpm-main.c:550
 msgid "Your battery is now fully charged"
 msgstr "您的电池已经充满电"
 
@@ -370,23 +362,19 @@ msgstr "帮助(_H)"
 msgid "_About"
 msgstr "关于(_A)"
 
-#: ../src/gpm-prefs.c:625
+#: ../src/gpm-prefs.c:689
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../src/gpm-prefs.c:631
+#: ../src/gpm-prefs.c:695
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs.c:634
-msgid "Send warning"
-msgstr "发送警告"
-
-#: ../src/gpm-prefs.c:637
+#: ../src/gpm-prefs.c:698
 msgid "Do nothing"
 msgstr "无反应"
 
-#: ../src/gpm-prefs.c:715
+#: ../src/gpm-prefs.c:775
 msgid "GNOME Power Preferences"
 msgstr "GNOME 电源首选项"
 
@@ -480,30 +468,26 @@ msgid "When _battery power critical:"
 msgstr "电量将用尽时(_B)："
 
 #: ../src/gpm-prefs.glade.h:24
-msgid "When _power button pressed:"
-msgstr "按下电源按钮时(_P)："
-
-#: ../src/gpm-prefs.glade.h:25
 msgid "When _suspend button pressed:"
 msgstr "按下待机按钮时(_S)："
 
-#: ../src/gpm-prefs.glade.h:26
+#: ../src/gpm-prefs.glade.h:25
 msgid "When laptop li_d is closed:"
 msgstr "关闭笔记本电脑上盖时(_D)："
 
-#: ../src/gpm-prefs.glade.h:27
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Always display icon"
 msgstr "总是显示图标(_A)"
 
-#: ../src/gpm-prefs.glade.h:28
+#: ../src/gpm-prefs.glade.h:27
 msgid "_Battery is low when below:"
 msgstr "低电量标准(_B)："
 
-#: ../src/gpm-prefs.glade.h:29
+#: ../src/gpm-prefs.glade.h:28
 msgid "_Computer sleep type:"
 msgstr "计算机休眠类型(_C)："
 
-#: ../src/gpm-prefs.glade.h:30
+#: ../src/gpm-prefs.glade.h:29
 msgid "_Never display icon"
 msgstr "从不显示图标(_N)"
 
@@ -526,3 +510,15 @@ msgstr "无线键盘"
 #: ../src/gpm-sysdev.c:66
 msgid "Misc PDA"
 msgstr "各种 PDA"
+
+#~ msgid "The event for a system power button press"
+#~ msgstr "按下系统电源按钮的事件"
+
+#~ msgid "The path to the reboot script"
+#~ msgstr "重新启动脚本的路径"
+
+#~ msgid "Send warning"
+#~ msgstr "发送警告"
+
+#~ msgid "When _power button pressed:"
+#~ msgstr "按下电源按钮时(_P)："

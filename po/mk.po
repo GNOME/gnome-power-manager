@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-09 10:26+0000\n"
+"POT-Creation-Date: 2005-12-14 08:42+0000\n"
 "PO-Revision-Date: 2005-07-13 23:53+0200\n"
 "Last-Translator: Арангел Ангов <ufo@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -21,35 +21,35 @@ msgstr ""
 msgid "Configure power management"
 msgstr "Конфигурирајте менаџмент за енергија"
 
-#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
-msgid "Power Preferences"
-msgstr "Преференци за енергија"
+#: ../gnome-power-preferences.desktop.in.h:2
+#, fuzzy
+msgid "Power Management"
+msgstr "Преференци за енергија за Гном"
 
 #: ../gnome-power-manager.schemas.in.h:1
-msgid "Options are never, critical, charge, always"
+msgid "If we require a password when resuming from suspend"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:2
-msgid "The action to take when the battery is critically low."
+msgid "Options are never, critical, charge, always"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:3
-msgid "The brightness the display is set to on AC"
+msgid "The action to take when the battery is critically low."
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:4
-msgid "The brightness the display is set to on battery"
+msgid "The brightness the display is set to on AC"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:5
-#, fuzzy
-msgid "The event for a laptop lid closing"
-msgstr "Кога е затворен лаптопот:"
+msgid "The brightness the display is set to on battery"
+msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:6
 #, fuzzy
-msgid "The event for a system power button press"
-msgstr "Кога е притиснато копчето за вклучување:"
+msgid "The event for a laptop lid closing"
+msgstr "Кога е затворен лаптопот:"
 
 #: ../gnome-power-manager.schemas.in.h:7
 #, fuzzy
@@ -69,14 +69,10 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the reboot script"
-msgstr ""
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid "The path to the shutdown script"
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 #, fuzzy
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
@@ -85,7 +81,7 @@ msgstr ""
 "Процентот кој што треба да го постигне уредот за напојување за да се смета "
 "за „доволно ниско“ за прикажување на иконата."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 #, fuzzy
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
@@ -94,21 +90,21 @@ msgstr ""
 "Процентот кој што треба да го постигне уредот за напојување за да се смета "
 "за „доволно ниско“ за прикажување на иконата."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 #, fuzzy
 msgid "The powerdevice action threshold."
 msgstr "Иконата за низок процент на преостаната енергија."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 #, fuzzy
 msgid "The powerdevice warning threshold."
 msgstr "Иконата за низок процент на преостаната енергија."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:18
+#: ../gnome-power-manager.schemas.in.h:17
 #, fuzzy
 msgid "When to show the notification icon"
 msgstr "Двоен клик врз иконата за известување:"
@@ -121,67 +117,62 @@ msgstr "Ориентација"
 msgid "The orientation of the tray."
 msgstr "Ориентацијата на просторот за спуштени програми."
 
-#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
-#, fuzzy
-msgid "until charged"
-msgstr "додека да се наполни"
-
-#: ../src/gpm-common.c:140
-#, fuzzy
-msgid "remaining"
-msgstr "преостанато"
-
-#: ../src/gpm-common.c:273
+#: ../src/gpm-common.c:267
 #, fuzzy
 msgid "Unknown"
 msgstr "непознато"
 
-#: ../src/gpm-common.c:275
-msgid "1 minute"
-msgstr "1 минута"
-
-#: ../src/gpm-common.c:277
-#, c-format
-msgid "%i minutes"
-msgstr "%i минути"
+#: ../src/gpm-common.c:272
+#, fuzzy, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i минути"
+msgstr[1] "%i минути"
 
 #: ../src/gpm-common.c:283
-msgid "1 hour"
-msgstr "1 час"
+#, fuzzy, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i часови"
+msgstr[1] "%i часови"
 
-#: ../src/gpm-common.c:285
-#, c-format
-msgid "%i hours"
-msgstr "%i часови"
-
-#: ../src/gpm-common.c:288
-#, fuzzy
-msgid "1 hour, 1 minute"
-msgstr "1 час 1 минута"
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:289
+#, fuzzy, c-format
+msgid "%i %s, %i %s"
+msgstr "%i часови %i минути"
 
 #: ../src/gpm-common.c:290
-#, fuzzy, c-format
-msgid "%i hours, 1 minute"
-msgstr "%i часови %i минути"
+#, fuzzy
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "1 час"
+msgstr[1] "1 час"
 
-#: ../src/gpm-common.c:292
-#, fuzzy, c-format
-msgid "1 hour, %i minutes"
-msgstr "1 час %i минути"
-
-#: ../src/gpm-common.c:294
-#, fuzzy, c-format
-msgid "%i hours, %i minutes"
-msgstr "%i часови %i минути"
+#: ../src/gpm-common.c:291
+#, fuzzy
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "1 минута"
+msgstr[1] "1 минута"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38
+#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
 #, fuzzy
 msgid "GNOME Power Manager"
 msgstr "Преференци за енергија за Гном"
 
 #: ../src/gpm-common.h:39
 msgid "Power Manager for the GNOME desktop"
+msgstr ""
+
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+msgid "Do not daemonize"
+msgstr ""
+
+#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+msgid "Show extra debugging information"
 msgstr ""
 
 #. * @}
@@ -204,8 +195,7 @@ msgstr ""
 msgid "<b>GNOME Screensaver</b>"
 msgstr "<b>Општо</b>"
 
-#. * @}
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
 msgid "<b>General</b>"
 msgstr "<b>Општо</b>"
 
@@ -272,7 +262,7 @@ msgstr ""
 msgid "Satellite Pro A10"
 msgstr ""
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
 msgid "Suspend"
 msgstr "Суспендирај"
 
@@ -284,147 +274,184 @@ msgstr ""
 msgid "Toshiba"
 msgstr ""
 
-#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-main.c:576
+#: ../src/gpm-main.c:418
 #, fuzzy
 msgid "Battery Critically Low"
 msgstr "Батеријата е при крај кога е под:"
 
-#: ../src/gpm-main.c:596
+#: ../src/gpm-main.c:436
 msgid "Battery Low"
 msgstr ""
 
-#: ../src/gpm-main.c:638
+#: ../src/gpm-main.c:478
 msgid "AC Power Unplugged"
 msgstr ""
 
-#: ../src/gpm-main.c:639
+#: ../src/gpm-main.c:479
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Your battery is now fully charged"
 msgstr ""
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "се полни"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "се празни"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "наполнета"
 
 #: ../src/gpm-notification.c:239
+#, fuzzy
+msgid "until charged"
+msgstr "додека да се наполни"
+
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr ""
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 #, fuzzy
 msgid "Computer is running on battery power\n"
 msgstr "Компјутерот работи на батерии"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 #, fuzzy
 msgid "Computer is running on AC power\n"
 msgstr "Компјутерот работи на AC енергија"
 
-#: ../src/gpm-notification.c:458
+#: ../src/gpm-notification.c:341
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr ""
+
+#: ../src/gpm-notification.c:342
+msgid ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+
+#: ../src/gpm-notification.c:346
+msgid ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+
+#: ../src/gpm-notification.c:350
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+
+#. Translators comment: put your own name here to appear in the
+#. * about dialog.
+#: ../src/gpm-notification.c:363
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/gpm-notification.c:494
 #, fuzzy
 msgid "_Suspend"
 msgstr "Суспендирај"
 
-#: ../src/gpm-notification.c:460
+#: ../src/gpm-notification.c:499
 #, fuzzy
 msgid "Hi_bernate"
 msgstr "Хибернација"
 
-#: ../src/gpm-notification.c:465
-msgid "Po_wer Info"
-msgstr ""
-
-#: ../src/gpm-notification.c:468
+#: ../src/gpm-notification.c:511
 #, fuzzy
 msgid "_Preferences"
 msgstr "Преференци за енергија"
 
-#: ../src/gpm-notification.c:470
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr ""
 
-#: ../src/gpm-notification.c:472
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr ""
 
-#: ../src/gpm-prefs.c:613
+#: ../src/gpm-prefs.c:689
 msgid "Shutdown"
 msgstr "Исклучи"
 
-#: ../src/gpm-prefs.c:619
+#: ../src/gpm-prefs.c:695
 msgid "Hibernate"
 msgstr "Хибернација"
 
-#: ../src/gpm-prefs.c:622
-msgid "Send warning"
-msgstr "Испрати предупредување"
-
-#: ../src/gpm-prefs.c:625
+#: ../src/gpm-prefs.c:698
 msgid "Do nothing"
 msgstr "Не прави ништо"
 
-#: ../src/gpm-prefs.glade.h:2
+#: ../src/gpm-prefs.c:775
+#, fuzzy
+msgid "GNOME Power Preferences"
+msgstr "Преференци за енергија"
+
+#. * @}
+#: ../src/gpm-prefs.glade.h:1
+#, fuzzy
+msgid "<b>Actions</b>"
+msgstr "<b>Други опции</b>"
+
+#: ../src/gpm-prefs.glade.h:3
 #, fuzzy
 msgid "<b>Notification Area</b>"
 msgstr "<b>Област за известување</b>"
 
-#: ../src/gpm-prefs.glade.h:3
+#: ../src/gpm-prefs.glade.h:4
 msgid "<b>Other Options</b>"
 msgstr "<b>Други опции</b>"
 
-#: ../src/gpm-prefs.glade.h:4
+#: ../src/gpm-prefs.glade.h:5
 #, fuzzy
 msgid "<b>Running on AC Adapter</b>"
 msgstr "<b>Кога работи на AC адаптер</b>"
 
-#: ../src/gpm-prefs.glade.h:5
+#: ../src/gpm-prefs.glade.h:6
 #, fuzzy
 msgid "<b>Running on Batteries</b>"
 msgstr "<b>Кога работи на батерии</b>"
 
-#: ../src/gpm-prefs.glade.h:6
+#: ../src/gpm-prefs.glade.h:7
 msgid "<i><small>Estimated 16 minutes</small></i>"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:7
+#: ../src/gpm-prefs.glade.h:8
 msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:8
+#: ../src/gpm-prefs.glade.h:9
 msgid "Advanced"
 msgstr "Напредно"
 
-#: ../src/gpm-prefs.glade.h:9
+#: ../src/gpm-prefs.glade.h:10
 #, fuzzy
 msgid "Ba_ttery is critical when below:"
 msgstr "Батеријата е при крај кога е под:"
-
-#: ../src/gpm-prefs.glade.h:10
-#, fuzzy
-msgid "C_omputer sleep type:"
-msgstr "Тип на мирување:"
 
 #: ../src/gpm-prefs.glade.h:11
 #, fuzzy
@@ -440,77 +467,145 @@ msgid "Options"
 msgstr "Опции"
 
 #: ../src/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "Преференци за енергија"
+
+#: ../src/gpm-prefs.glade.h:15
 #, fuzzy
-msgid "P_ut display to sleep after:"
-msgstr "Стави го екранот во мирување по:"
+msgid "Put _computer to sleep after:"
+msgstr "Стави го компјутерот во мирување по:"
 
 #: ../src/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "Put _display to sleep after:"
+msgstr "Стави го екранот во мирување по:"
+
+#: ../src/gpm-prefs.glade.h:17
 #, fuzzy
 msgid "Put c_omputer to sleep after:"
 msgstr "Стави го компјутерот во мирување по:"
 
-#: ../src/gpm-prefs.glade.h:17
-#, fuzzy
-msgid "Put d_isplay to sleep after:"
-msgstr "Стави го екранот во мирување по:"
-
 #: ../src/gpm-prefs.glade.h:18
 #, fuzzy
-msgid "S_et display brightness:"
-msgstr "Постави светлина на екранот:"
+msgid "Put dis_play to sleep after:"
+msgstr "Стави го екранот во мирување по:"
 
 #: ../src/gpm-prefs.glade.h:19
-msgid "Sleep"
-msgstr "Мирувај"
+msgid "Require password when returning from sleep"
+msgstr ""
 
 #: ../src/gpm-prefs.glade.h:20
 #, fuzzy
-msgid "Wh_en suspend button pressed:"
-msgstr "Кога ќе биде притиснато копчето за суспензија:"
+msgid "Set display _brightness:"
+msgstr "Постави светлина на екранот:"
 
 #: ../src/gpm-prefs.glade.h:21
 #, fuzzy
-msgid "Whe_n laptop lid is closed:"
-msgstr "Кога е затворен лаптопот:"
+msgid "Set display b_rightness:"
+msgstr "Постави светлина на екранот:"
 
 #: ../src/gpm-prefs.glade.h:22
+msgid "Sleep"
+msgstr "Мирувај"
+
+#: ../src/gpm-prefs.glade.h:23
 #, fuzzy
 msgid "When _battery power critical:"
 msgstr "Кога батеријата е при крај:"
 
-#: ../src/gpm-prefs.glade.h:23
+#: ../src/gpm-prefs.glade.h:24
+#, fuzzy
+msgid "When _suspend button pressed:"
+msgstr "Кога ќе биде притиснато копчето за суспензија:"
+
+#: ../src/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "When laptop li_d is closed:"
+msgstr "Кога е затворен лаптопот:"
+
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Always display icon"
 msgstr ""
 
-#: ../src/gpm-prefs.glade.h:24
+#: ../src/gpm-prefs.glade.h:27
 #, fuzzy
 msgid "_Battery is low when below:"
 msgstr "Батеријата е при крај кога е под:"
 
-#: ../src/gpm-prefs.glade.h:25
+#: ../src/gpm-prefs.glade.h:28
+#, fuzzy
+msgid "_Computer sleep type:"
+msgstr "Тип на мирување:"
+
+#: ../src/gpm-prefs.glade.h:29
 #, fuzzy
 msgid "_Never display icon"
 msgstr "Прикажи главна икона"
 
-#: ../src/gpm-prefs.glade.h:26
+#: ../src/gpm-sysdev.c:58
 #, fuzzy
-msgid "_Put computer to sleep after:"
-msgstr "Стави го компјутерот во мирување по:"
+msgid "Laptop battery"
+msgstr "Батерија на лаптоп"
 
-#: ../src/gpm-prefs.glade.h:27
-#, fuzzy
-msgid "_Screensaver Preferences..."
-msgstr "Преференци за енергија"
+#: ../src/gpm-sysdev.c:60
+msgid "UPS"
+msgstr "UPS"
 
-#: ../src/gpm-prefs.glade.h:28
-#, fuzzy
-msgid "_Set display brightness:"
-msgstr "Постави светлина на екранот:"
+#: ../src/gpm-sysdev.c:62
+msgid "Wireless mouse"
+msgstr ""
 
-#: ../src/gpm-prefs.glade.h:29
+#: ../src/gpm-sysdev.c:64
 #, fuzzy
-msgid "_When power button pressed:"
-msgstr "Кога е притиснато копчето за вклучување:"
+msgid "Wireless keyboard"
+msgstr "Logitech тастатура"
+
+#: ../src/gpm-sysdev.c:66
+msgid "Misc PDA"
+msgstr ""
+
+#, fuzzy
+#~ msgid "The event for a system power button press"
+#~ msgstr "Кога е притиснато копчето за вклучување:"
+
+#, fuzzy
+#~ msgid "remaining"
+#~ msgstr "преостанато"
+
+#, fuzzy
+#~ msgid "1 hour, 1 minute"
+#~ msgstr "1 час 1 минута"
+
+#, fuzzy
+#~ msgid "%i hours, 1 minute"
+#~ msgstr "%i часови %i минути"
+
+#, fuzzy
+#~ msgid "1 hour, %i minutes"
+#~ msgstr "1 час %i минути"
+
+#~ msgid "Send warning"
+#~ msgstr "Испрати предупредување"
+
+#, fuzzy
+#~ msgid "Put d_isplay to sleep after:"
+#~ msgstr "Стави го екранот во мирување по:"
+
+#, fuzzy
+#~ msgid "_Put computer to sleep after:"
+#~ msgstr "Стави го компјутерот во мирување по:"
+
+#, fuzzy
+#~ msgid "_Screensaver Preferences..."
+#~ msgstr "Преференци за енергија"
+
+#, fuzzy
+#~ msgid "_Set display brightness:"
+#~ msgstr "Постави светлина на екранот:"
+
+#, fuzzy
+#~ msgid "_When power button pressed:"
+#~ msgstr "Кога е притиснато копчето за вклучување:"
 
 #~ msgid "If the machine has a LCD (brightness variable) attached."
 #~ msgstr "Ако машината користи LCD (променлива за светлина)."
@@ -574,17 +669,11 @@ msgstr "Кога е притиснато копчето за вклучувањ�
 #~ msgid "Whether to display icons when devices are at full capacity"
 #~ msgstr "Дали да прикажува икони кога уредите се целосно наполнети"
 
-#~ msgid "UPS"
-#~ msgstr "UPS"
-
 #~ msgid "AC Adapter"
 #~ msgstr "AC адаптер"
 
 #~ msgid "Logitech mouse"
 #~ msgstr "Logitech глувче"
-
-#~ msgid "Logitech keyboard"
-#~ msgstr "Logitech тастатура"
 
 #~ msgid "PDA"
 #~ msgstr "PDA"

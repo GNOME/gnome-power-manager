@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.0.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-10 11:12+0900\n"
+"POT-Creation-Date: 2005-12-14 08:42+0000\n"
 "PO-Revision-Date: 2005-11-10 12:54+0900\n"
 "Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -19,33 +19,34 @@ msgstr ""
 msgid "Configure power management"
 msgstr "電源管理設定"
 
-#: ../gnome-power-preferences.desktop.in.h:2 ../src/gpm-prefs.glade.h:15
-msgid "Power Preferences"
-msgstr "電源設定"
+#: ../gnome-power-preferences.desktop.in.h:2
+#, fuzzy
+msgid "Power Management"
+msgstr "GNOME 電源管理"
 
 #: ../gnome-power-manager.schemas.in.h:1
+msgid "If we require a password when resuming from suspend"
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:2
 msgid "Options are never, critical, charge, always"
 msgstr "選択肢は never, critical, charge, always のどれか"
 
-#: ../gnome-power-manager.schemas.in.h:2
+#: ../gnome-power-manager.schemas.in.h:3
 msgid "The action to take when the battery is critically low."
 msgstr "バッテリーが危険なほど少ない場合にとる処置"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../gnome-power-manager.schemas.in.h:4
 msgid "The brightness the display is set to on AC"
 msgstr "電源動作中の表示の明るさ"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on battery"
 msgstr "バッテリー動作中の表示の明るさ"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../gnome-power-manager.schemas.in.h:6
 msgid "The event for a laptop lid closing"
 msgstr "ノート PC の蓋を閉じるときのイベント"
-
-#: ../gnome-power-manager.schemas.in.h:6
-msgid "The event for a system power button press"
-msgstr "システムの電源ボタンを押したときのイベント"
 
 #: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a system suspend button press"
@@ -64,38 +65,36 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "ハードディスクをスリープさせるまでのアイドル時間(秒)"
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the reboot script"
-msgstr "reboot スクリプトのパス"
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid "The path to the shutdown script"
 msgstr "shutdown スクリプトのパス"
+
+#: ../gnome-power-manager.schemas.in.h:12
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr ""
+"電源デバイスが \"電力低下\"とみなされ、アクションを起すときの閾値(割合: %)"
 
 #: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to perform an action."
-msgstr "電源デバイスが \"電力低下\"とみなされ、アクションを起すときの閾値(割合: %)"
+"\" to warn the user."
+msgstr ""
+"電源デバイスが \"電力低下\"とみなされ、ユーザーに警告するときの閾値(割合: %)"
 
 #: ../gnome-power-manager.schemas.in.h:14
-msgid ""
-"The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to warn the user."
-msgstr "電源デバイスが \"電力低下\"とみなされ、ユーザーに警告するときの閾値(割合: %)"
-
-#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice action threshold."
 msgstr "電源デバイスのアクション閾値"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "電源デバイスの警告閾値"
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "自動的に使用するスリープの種類 (hibernate/suspend)"
 
-#: ../gnome-power-manager.schemas.in.h:18
+#: ../gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "通知アイコンの表示"
 
@@ -107,63 +106,61 @@ msgstr "向き"
 msgid "The orientation of the tray."
 msgstr "トレイの向き"
 
-#: ../src/gpm-common.c:138 ../src/gpm-notification.c:236
-msgid "until charged"
-msgstr " 充電完了まで"
-
-#: ../src/gpm-common.c:140
-msgid "remaining"
-msgstr " 残り"
-
-#: ../src/gpm-common.c:273
+#: ../src/gpm-common.c:267
 msgid "Unknown"
 msgstr "不明"
 
-#: ../src/gpm-common.c:275
-msgid "1 minute"
-msgstr "1 分"
-
-#: ../src/gpm-common.c:277
-#, c-format
-msgid "%i minutes"
-msgstr "%i 分"
+#: ../src/gpm-common.c:272
+#, fuzzy, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i 分"
+msgstr[1] "%i 分"
 
 #: ../src/gpm-common.c:283
-msgid "1 hour"
-msgstr "1 時間"
+#, fuzzy, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i 時間"
+msgstr[1] "%i 時間"
 
-#: ../src/gpm-common.c:285
-#, c-format
-msgid "%i hours"
-msgstr "%i 時間"
-
-#: ../src/gpm-common.c:288
-msgid "1 hour, 1 minute"
-msgstr "1 時間 1 分"
-
-#: ../src/gpm-common.c:290
-#, c-format
-msgid "%i hours, 1 minute"
-msgstr "%i 時間 1 分"
-
-#: ../src/gpm-common.c:292
-#, c-format
-msgid "1 hour, %i minutes"
-msgstr "1 時間 %i 分"
-
-#: ../src/gpm-common.c:294
-#, c-format
-msgid "%i hours, %i minutes"
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:289
+#, fuzzy, c-format
+msgid "%i %s, %i %s"
 msgstr "%i 時間 %i 分"
 
+#: ../src/gpm-common.c:290
+#, fuzzy
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "1 時間"
+msgstr[1] "1 時間"
+
+#: ../src/gpm-common.c:291
+#, fuzzy
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "1 分"
+msgstr[1] "1 分"
+
 #. common descriptions of this program
-#: ../src/gpm-common.h:38
+#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
 msgid "GNOME Power Manager"
 msgstr "GNOME 電源管理"
 
 #: ../src/gpm-common.h:39
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME デスクトップ用の電源管理システム"
+
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+msgid "Do not daemonize"
+msgstr ""
+
+#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+msgid "Show extra debugging information"
+msgstr ""
 
 #. * @}
 #: ../src/gpm-info.glade.h:2
@@ -183,8 +180,7 @@ msgstr "<b>キャパシティ</b>"
 msgid "<b>GNOME Screensaver</b>"
 msgstr "<b>GNOME スクリーンセーバー</b>"
 
-#. * @}
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:1
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
 msgid "<b>General</b>"
 msgstr "<b>一般</b>"
 
@@ -248,7 +244,7 @@ msgstr "他の問題"
 msgid "Satellite Pro A10"
 msgstr "Satellite Pro A10"
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:616
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
 msgid "Suspend"
 msgstr "サスペンド"
 
@@ -260,137 +256,175 @@ msgstr "システム電源情報"
 msgid "Toshiba"
 msgstr "東芝"
 
-#: ../src/gpm-main.c:573 ../src/gpm-main.c:593
+#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
-msgstr "バッテリーの残りはおよそ <b>%s</b> (%i%%) です。データを失うのを"
-"避けるために AC アダプタを差して下さい"
+msgstr ""
+"バッテリーの残りはおよそ <b>%s</b> (%i%%) です。データを失うのを避けるために "
+"AC アダプタを差して下さい"
 
-#: ../src/gpm-main.c:576
+#: ../src/gpm-main.c:418
 msgid "Battery Critically Low"
 msgstr "バッテリーは非常に低くなっています"
 
-#: ../src/gpm-main.c:596
+#: ../src/gpm-main.c:436
 msgid "Battery Low"
 msgstr "バッテリー低"
 
-#: ../src/gpm-main.c:638
+#: ../src/gpm-main.c:478
 msgid "AC Power Unplugged"
 msgstr "AC 電源未使用"
 
-#: ../src/gpm-main.c:639
+#: ../src/gpm-main.c:479
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "AC 電源を使用していません。システムはバッテリーで動作中です"
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Battery Charged"
 msgstr "バッテリー充電完了"
 
-#: ../src/gpm-main.c:709
+#: ../src/gpm-main.c:550
 msgid "Your battery is now fully charged"
 msgstr "バッテリーの充電が完了しました"
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "充電中"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "放電中"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "充電完了"
 
 #: ../src/gpm-notification.c:239
+msgid "until charged"
+msgstr " 充電完了まで"
+
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr "空になるまで"
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 msgid "Computer is running on battery power\n"
 msgstr "コンピュータはバッテリー電源で動作中\n"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 msgid "Computer is running on AC power\n"
 msgstr "コンピュータは AC 電源で動作中\n"
 
-#: ../src/gpm-notification.c:458
+#: ../src/gpm-notification.c:341
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr ""
+
+#: ../src/gpm-notification.c:342
+msgid ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+
+#: ../src/gpm-notification.c:346
+msgid ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+
+#: ../src/gpm-notification.c:350
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+
+#. Translators comment: put your own name here to appear in the
+#. * about dialog.
+#: ../src/gpm-notification.c:363
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/gpm-notification.c:494
 msgid "_Suspend"
 msgstr "サスペンド(_S)"
 
-#: ../src/gpm-notification.c:460
+#: ../src/gpm-notification.c:499
 msgid "Hi_bernate"
 msgstr "ハイバーネート(_B)"
 
-#: ../src/gpm-notification.c:465
-msgid "Po_wer Info"
-msgstr "電源情報(_W)"
-
-#: ../src/gpm-notification.c:468
+#: ../src/gpm-notification.c:511
 msgid "_Preferences"
 msgstr "設定(_P)"
 
-#: ../src/gpm-notification.c:470
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: ../src/gpm-notification.c:472
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr "情報(_A)"
 
-#: ../src/gpm-prefs.c:613
+#: ../src/gpm-prefs.c:689
 msgid "Shutdown"
 msgstr "停止"
 
-#: ../src/gpm-prefs.c:619
+#: ../src/gpm-prefs.c:695
 msgid "Hibernate"
 msgstr "ハイバーネート"
 
-#: ../src/gpm-prefs.c:622
-msgid "Send warning"
-msgstr "警告を送る"
-
-#: ../src/gpm-prefs.c:625
+#: ../src/gpm-prefs.c:698
 msgid "Do nothing"
 msgstr "何もしない"
 
-#: ../src/gpm-prefs.glade.h:2
+#: ../src/gpm-prefs.c:775
+#, fuzzy
+msgid "GNOME Power Preferences"
+msgstr "電源設定"
+
+#. * @}
+#: ../src/gpm-prefs.glade.h:1
+#, fuzzy
+msgid "<b>Actions</b>"
+msgstr "<b>他のオプション</b>"
+
+#: ../src/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
 msgstr "<b>通知エリア</b>"
 
-#: ../src/gpm-prefs.glade.h:3
+#: ../src/gpm-prefs.glade.h:4
 msgid "<b>Other Options</b>"
 msgstr "<b>他のオプション</b>"
 
-#: ../src/gpm-prefs.glade.h:4
+#: ../src/gpm-prefs.glade.h:5
 msgid "<b>Running on AC Adapter</b>"
 msgstr "<b>AC アダプタで動作中</b>"
 
-#: ../src/gpm-prefs.glade.h:5
+#: ../src/gpm-prefs.glade.h:6
 msgid "<b>Running on Batteries</b>"
 msgstr "<b>バッテリーで動作中</b>"
 
-#: ../src/gpm-prefs.glade.h:6
+#: ../src/gpm-prefs.glade.h:7
 msgid "<i><small>Estimated 16 minutes</small></i>"
 msgstr "<i><small>16 分(予想)</small></i>"
 
-#: ../src/gpm-prefs.glade.h:7
+#: ../src/gpm-prefs.glade.h:8
 msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
 msgstr "<i><small>2 時間 6 分(予想)</small></i>"
 
-#: ../src/gpm-prefs.glade.h:8
+#: ../src/gpm-prefs.glade.h:9
 msgid "Advanced"
 msgstr "詳細"
 
-#: ../src/gpm-prefs.glade.h:9
+#: ../src/gpm-prefs.glade.h:10
 msgid "Ba_ttery is critical when below:"
 msgstr "バッテリーが切れかかっているとみなす閾値(_T):"
-
-#: ../src/gpm-prefs.glade.h:10
-msgid "C_omputer sleep type:"
-msgstr "コンピュータのスリープの種類(_O):"
 
 #: ../src/gpm-prefs.glade.h:11
 msgid "Only display when battery life is _critical"
@@ -405,64 +439,76 @@ msgid "Options"
 msgstr "オプション"
 
 #: ../src/gpm-prefs.glade.h:14
-msgid "P_ut display to sleep after:"
-msgstr "画面をスリープさせるまでの時間(_U):"
+msgid "Power Preferences"
+msgstr "電源設定"
+
+#: ../src/gpm-prefs.glade.h:15
+#, fuzzy
+msgid "Put _computer to sleep after:"
+msgstr "コンピュータをスリープさせるまでの時間(_O):"
 
 #: ../src/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "Put _display to sleep after:"
+msgstr "画面をスリープさせるまでの時間(_U):"
+
+#: ../src/gpm-prefs.glade.h:17
 msgid "Put c_omputer to sleep after:"
 msgstr "コンピュータをスリープさせるまでの時間(_O):"
 
-#: ../src/gpm-prefs.glade.h:17
-msgid "Put d_isplay to sleep after:"
-msgstr "画面をスリープさせるまでの時間(_I):"
-
 #: ../src/gpm-prefs.glade.h:18
-msgid "S_et display brightness:"
-msgstr "画面の明るさを設定(_E):"
+#, fuzzy
+msgid "Put dis_play to sleep after:"
+msgstr "画面をスリープさせるまでの時間(_U):"
 
 #: ../src/gpm-prefs.glade.h:19
+msgid "Require password when returning from sleep"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:20
+#, fuzzy
+msgid "Set display _brightness:"
+msgstr "画面の明るさを設定(_E):"
+
+#: ../src/gpm-prefs.glade.h:21
+#, fuzzy
+msgid "Set display b_rightness:"
+msgstr "画面の明るさを設定(_E):"
+
+#: ../src/gpm-prefs.glade.h:22
 msgid "Sleep"
 msgstr "スリープ"
 
-#: ../src/gpm-prefs.glade.h:20
-msgid "Wh_en suspend button pressed:"
-msgstr "サスペンドボタンを押したとき(_E):"
-
-#: ../src/gpm-prefs.glade.h:21
-msgid "Whe_n laptop lid is closed:"
-msgstr "ラップトップの蓋を閉じたとき(_N):"
-
-#: ../src/gpm-prefs.glade.h:22
+#: ../src/gpm-prefs.glade.h:23
 msgid "When _battery power critical:"
 msgstr "バッテリー電力がなくなりそうなとき(_B):"
 
-#: ../src/gpm-prefs.glade.h:23
+#: ../src/gpm-prefs.glade.h:24
+#, fuzzy
+msgid "When _suspend button pressed:"
+msgstr "サスペンドボタンを押したとき(_E):"
+
+#: ../src/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "When laptop li_d is closed:"
+msgstr "ラップトップの蓋を閉じたとき(_N):"
+
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Always display icon"
 msgstr "常にアイコンを表示(_A)"
 
-#: ../src/gpm-prefs.glade.h:24
+#: ../src/gpm-prefs.glade.h:27
 msgid "_Battery is low when below:"
 msgstr "バッテリー電力を低いとみなす閾値(_B):"
 
-#: ../src/gpm-prefs.glade.h:25
-msgid "_Never display icon"
-msgstr "アイコンを表示しない(_N)"
-
-#: ../src/gpm-prefs.glade.h:26
-msgid "_Put computer to sleep after:"
-msgstr "コンピュータをスリープさせるまでの時間(_P):"
-
-#: ../src/gpm-prefs.glade.h:27
-msgid "_Screensaver Preferences..."
-msgstr "スクリーンセーバー設定(_S)..."
-
 #: ../src/gpm-prefs.glade.h:28
-msgid "_Set display brightness:"
-msgstr "画面の明るさを設定(_S):"
+#, fuzzy
+msgid "_Computer sleep type:"
+msgstr "コンピュータのスリープの種類(_O):"
 
 #: ../src/gpm-prefs.glade.h:29
-msgid "_When power button pressed:"
-msgstr "電源ボタンを押したとき(_W):"
+msgid "_Never display icon"
+msgstr "アイコンを表示しない(_N)"
 
 #: ../src/gpm-sysdev.c:58
 msgid "Laptop battery"
@@ -483,6 +529,45 @@ msgstr "無線キーボード"
 #: ../src/gpm-sysdev.c:66
 msgid "Misc PDA"
 msgstr "様々な PDA"
+
+#~ msgid "The event for a system power button press"
+#~ msgstr "システムの電源ボタンを押したときのイベント"
+
+#~ msgid "The path to the reboot script"
+#~ msgstr "reboot スクリプトのパス"
+
+#~ msgid "remaining"
+#~ msgstr " 残り"
+
+#~ msgid "1 hour, 1 minute"
+#~ msgstr "1 時間 1 分"
+
+#~ msgid "%i hours, 1 minute"
+#~ msgstr "%i 時間 1 分"
+
+#~ msgid "1 hour, %i minutes"
+#~ msgstr "1 時間 %i 分"
+
+#~ msgid "Po_wer Info"
+#~ msgstr "電源情報(_W)"
+
+#~ msgid "Send warning"
+#~ msgstr "警告を送る"
+
+#~ msgid "Put d_isplay to sleep after:"
+#~ msgstr "画面をスリープさせるまでの時間(_I):"
+
+#~ msgid "_Put computer to sleep after:"
+#~ msgstr "コンピュータをスリープさせるまでの時間(_P):"
+
+#~ msgid "_Screensaver Preferences..."
+#~ msgstr "スクリーンセーバー設定(_S)..."
+
+#~ msgid "_Set display brightness:"
+#~ msgstr "画面の明るさを設定(_S):"
+
+#~ msgid "_When power button pressed:"
+#~ msgstr "電源ボタンを押したとき(_W):"
 
 #~ msgid "If the machine has a LCD (brightness variable) attached."
 #~ msgstr "明るさ調整の可能な LCD (液晶ディスプレイ) がついている場合"
