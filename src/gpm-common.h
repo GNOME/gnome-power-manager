@@ -28,11 +28,6 @@
 #include <gnome.h>
 
 #include "gpm-sysdev.h"
-#include "compiler.h"
-
-/* where our settings are stored in the gconf tree */
-#define GCONF_ROOT_SANS_SLASH		"/apps/gnome-power-manager"
-#define GCONF_ROOT			GCONF_ROOT_SANS_SLASH "/"
 
 /* common descriptions of this program */
 #define NICENAME 			_("GNOME Power Manager")
@@ -47,37 +42,10 @@
 
 #define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
 
-/** The icon policy */
-typedef enum {
-	ICON_NEVER,		/**< Never display an icon		*/
-	ICON_CRITICAL,		/**< Only display when critical		*/
-	ICON_CHARGE,		/**< Only display when (dis)charging	*/
-	ICON_ALWAYS		/**< Always display icon		*/
-} IconPolicy;
-
-/** The action type */
-typedef enum {
-	ACTION_NOTHING,		/**< Do nothing! Yes nothing.		*/
-	ACTION_UNKNOWN,		/**< The action is unknown		*/
-	ACTION_SUSPEND,		/**< Suspend please.			*/
-	ACTION_HIBERNATE,	/**< Hibernate please			*/
-	ACTION_SHUTDOWN,	/**< Shutdown please			*/
-	ACTION_NOW_BATTERYPOWERED,	/**< We are now battery powered	*/
-	ACTION_NOW_MAINSPOWERED	/**< We are now mains powered		*/
-} ActionType;
-
-void g_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
-
-gboolean get_widget_position (GtkWidget *widget, gint *x, gint *y);
-
-ActionType convert_string_to_policy (const gchar *gconfstring);
 DeviceType convert_haltype_to_batttype (const gchar *type);
-gchar *convert_policy_to_string (gint value);
-IconPolicy convert_string_to_iconpolicy (const gchar *gconfstring);
 DeviceType hal_to_device_type (const gchar *type);
 
 gchar *get_timestring_from_minutes (gint minutes);
-gboolean run_gconf_script (const char *path);
 gboolean run_bin_program (const gchar *program);
 
 #endif	/* _GPMCOMMON_H */

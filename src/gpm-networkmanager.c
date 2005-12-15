@@ -49,7 +49,6 @@
 gboolean
 gpm_networkmanager_sleep (void)
 {
-	GError *error = NULL;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
 
@@ -75,7 +74,6 @@ gpm_networkmanager_sleep (void)
 gboolean
 gpm_networkmanager_wake (void)
 {
-	GError *error = NULL;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
 

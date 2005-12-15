@@ -35,11 +35,13 @@
 #include <gnome.h>
 #include <gconf/gconf-client.h>
 #include "gpm-common.h"
+#include "gpm-core.h"
 #include "gpm-sysdev.h"
-#include "compiler.h"
+#include "glibhal-extras.h"
+#include "glibhal-main.h"
+#include "glibhal-callback.h"
 
 /* no need for IPC with globals */
-gboolean isVerbose;
 gboolean onAcPower;
 
 /** Coldplugs devices of type ac_adaptor at startup
@@ -51,6 +53,7 @@ gpm_coldplug_acadapter (void)
 {
 	gint i;
 	gchar **device_names = NULL;
+
 	/* devices of type ac_adapter */
 	hal_find_device_capability ("ac_adapter", &device_names);
 	if (!device_names) {
@@ -230,8 +233,8 @@ gboolean
 gpm_device_removed (const gchar *udi)
 {
 	sysDevStruct *sds = NULL;
+	gboolean ret = FALSE;
 
-	/* assertion checks */
 	g_assert (udi);
 
 	g_debug ("hal_device_removed: udi=%s", udi);
@@ -242,10 +245,13 @@ gpm_device_removed (const gchar *udi)
 	sysDevRemoveAll (udi);
 	/* only update the correct device class */
 	sds = sysDevFindAll (udi);
-	if (sds)
+	if (sds) {
 		sysDevUpdate (sds->sd->type);
+		ret = TRUE;
+	}
 	/* remove watch */
 	glibhal_watch_remove_device_property_modified (udi);
+	return ret;
 }
 
 /** Invoked when device in the Global Device List acquires a new capability.

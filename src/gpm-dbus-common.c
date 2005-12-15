@@ -39,6 +39,7 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include <string.h>
 #include "gpm_marshal.h"
 #include "gpm-dbus-common.h"
 

@@ -1,3 +1,44 @@
+2005-12-15  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Bump to 0.3.3, and depend on HAL CVS (0.5.6) as we need
+	the new power_management keys and the Shutdown() method not present in
+	0.5.5.1.
+
+	* src/glibhal-extras.{c|h}, src/gpm-main.c, src/gpm-prefs.h: 
+	Create the function hal_shutdown () that lets us simplify the 
+	shutdown stuff, and take the magic string out of gconf.
+
+	MASSIVE Patch from Jaap Haitsma <jaap@haitsma.org> with tweaks from me:
+
+	* src/gpm-common.{c|h}: Move get_widget_position to gpm-libnotify.c
+	Remove the enumerated types, and conversion functions, and remove 
+	the function run_gconf_script()
+
+	* src/compiler.h: Remove as unused.
+
+	* src/gpm-console: Refactor some code, and remove compiler definition.
+
+	* src/gpm-core.c: Refactor some code, remove globals, fix up some
+	wrong return values.
+
+	* src/gpm-dbus-common.c: Include <string.h>
+
+	* src/gpm-notification.c: Remove the enumerated types, and conversion
+	functions. Other minor warnings fixed.
+
+	* src/gpm-main.{c|h}: Added the constants for gconf.
+	Make the policy change more centered. Remove helper functions.
+
+	* src/gpm-networkmanager.c: Removed some unused variables.
+
+	* src/gpm-prefs.glade: Step size update
+
+	* src/gpm-screensaver.{c|h}: Removed some unused variables.
+	Added the constants for gconf.
+
+	* src/gpm-sysdev.{h|c}: Mark the debug functions as such, and use the
+	debug functions.
+
 2005-12-11  Theppitak Karoonboonyanan  <thep@linux.thai.net>
 
 	* configure.in: Added 'th' (Thai) to ALL_LINGUAS.

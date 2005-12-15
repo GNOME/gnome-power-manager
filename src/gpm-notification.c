@@ -40,8 +40,9 @@
 #include "gpm-notification.h"
 #include "gpm-libnotify.h"
 #include "gpm-stock-icons.h"
-#include "compiler.h"
 #include "gpm-sysdev.h"
+#include "gpm-prefs.h"
+#include "glibhal-extras.h"
 
 /* shared with gpm-main.c */
 static TrayData *eggtrayicon = NULL;
@@ -71,7 +72,7 @@ get_index_from_percent (gint percent)
  *  @return			An icon name
  */
 static gchar *
-get_stock_id (IconPolicy iconopt)
+get_stock_id (gchar* iconopt)
 {
 	gint index;
 	sysDev *sd = NULL;
@@ -80,10 +81,10 @@ get_stock_id (IconPolicy iconopt)
 
 	g_debug ("get_stock_id: getting stock icon");
 
-	if (iconopt == ICON_NEVER) {
+	if (strcmp (iconopt, ICON_POLICY_NEVER) == 0) {
 		/* warn user */
-		g_debug ("The key " GCONF_ROOT "general/display_icon_policy "
-			 "is set to never, so no icon will be displayed.\n"
+		g_debug ("The key " GPM_PREF_ICON_POLICY
+			 " is set to never, so no icon will be displayed.\n"
 			 "You can change this using gnome-power-preferences");
 		return NULL;
 	}
@@ -92,8 +93,7 @@ get_stock_id (IconPolicy iconopt)
 	 */
 	client = gconf_client_get_default ();
 	/* find out when the user considers the power "low" */
-	lowThreshold = gconf_client_get_int (client,
-				GCONF_ROOT "general/threshold_low", NULL);
+	lowThreshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
 	/* list in order of priority */
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
@@ -117,7 +117,7 @@ get_stock_id (IconPolicy iconopt)
 	 * Check if we should just show the charging / discharging icon 
 	 * even when not low or critical.
 	 */
-	if (iconopt == ICON_CRITICAL) {
+	if ((strcmp (iconopt, ICON_POLICY_CRITICAL) == 0)) {
 		g_debug ("get_stock_id: no devices critical, so "
 			 "no icon will be displayed.");
 		return NULL;
@@ -133,7 +133,7 @@ get_stock_id (IconPolicy iconopt)
 	/*
 	 * Check if we should just show the icon all the time
 	 */
-	if (iconopt == ICON_CHARGE) {
+	if (strcmp (iconopt, ICON_POLICY_CHARGE) == 0) {
 		g_debug ("get_stock_id: no devices (dis)charging, so "
 			 "no icon will be displayed.");
 		return NULL;
@@ -144,7 +144,7 @@ get_stock_id (IconPolicy iconopt)
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower) {
 			if (!sd->isCharging && !sd->isDischarging)
-				return g_strdup_printf ("gnome-power-ac-charged", index);
+				return g_strdup ("gnome-power-ac-charged");
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		}
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
@@ -595,12 +595,10 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 	if (!traydata || !(traydata->popup_menu))
 		return TRUE;
 
-	if (event->type == GDK_2BUTTON_PRESS)
-	{
+	if (event->type == GDK_2BUTTON_PRESS) {
 		run_bin_program ("gnome-power-preferences");
 		return TRUE;
-	}
-	else if (event->button == 3) {
+	} else if (event->button == 3) {
 		gtk_menu_popup (GTK_MENU (traydata->popup_menu), NULL, NULL,
 			tray_popup_position_menu, widget, event->button, event->time);
 		return TRUE;
@@ -648,27 +646,23 @@ void
 gpn_icon_update (void)
 {
 	GConfClient *client = NULL;
-	gchar *policy;
 	GString *tooltip = NULL;
 	gchar* stock_id = NULL;
-	IconPolicy iconopt;
+	gchar* iconopt;
 
 	client = gconf_client_get_default ();
 	/* do we want to display the icon */
-	policy = gconf_client_get_string (client,
-				GCONF_ROOT "general/display_icon_policy", NULL);
-	if (!policy) {
+	iconopt = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
+	if (!iconopt) {
 		g_warning ("You have not set an icon policy! "
 			   "(Please run gnome-power-preferences) -- "
 			   "I'll assume you want an icon all the time...");
-		policy = g_strdup ("always");
+		iconopt = g_strdup (ICON_POLICY_ALWAYS);
 	}
-	/* convert to enum */
-	iconopt = convert_string_to_iconpolicy (policy);
-	g_free (policy);
 
 	/* try to get stock image */
 	stock_id = get_stock_id (iconopt);
+	g_free (iconopt);
 	if (!stock_id)
 		g_debug ("no icon will be displayed");
 

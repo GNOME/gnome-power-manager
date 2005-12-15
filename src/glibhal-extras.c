@@ -411,12 +411,14 @@ hal_suspend (gint wakeup)
 	return retval;
 }
 
-/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
+/** Do a method on org.freedesktop.Hal.Device.SystemPowerManagement.*
+ *  with no arguments.
  *
- *  @return			Success, true if we hibernated OK
+ *  @param	method		The method name, e.g. "Hibernate"
+ *  @return			Success, true if we did OK
  */
-gboolean
-hal_hibernate (void)
+static gboolean
+hal_pm_method_void (const gchar* method)
 {
 	gint ret;
 	DBusGConnection *system_connection = NULL;
@@ -431,21 +433,41 @@ hal_hibernate (void)
 		"/org/freedesktop/Hal/devices/computer",
 		"org.freedesktop.Hal.Device.SystemPowerManagement");
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "Hibernate", &error,
+	if (!dbus_g_proxy_call (hal_proxy, method, &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
-			   ".Hibernate failed (HAL error)");
+			   ".%s failed (HAL error)", method);
 		retval = FALSE;
 	}
 	if (ret != 0) {
 		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
-			   ".Hibernate call failed (%i)", ret);
+			   ".%s call failed (%i)", method, ret);
 		retval = FALSE;
 	}
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
+ *
+ *  @return			Success, true if we hibernated OK
+ */
+gboolean
+hal_hibernate (void)
+{
+	return hal_pm_method_void ("Hibernate");
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
+ *
+ *  @return			Success, true if we shutdown OK
+ */
+gboolean
+hal_shutdown (void)
+{
+	return hal_pm_method_void ("Shutdown");
 }
 
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
@@ -463,8 +485,10 @@ hal_setlowpowermode (gboolean set)
 	gboolean retval;
 
 	/* abort if we are not a "qualified" laptop */
-	if (!hal_is_laptop ())
+	if (!hal_is_laptop ()) {
+		g_debug ("We are not a laptop, so not even trying");
 		return FALSE;
+	}
 
 	if (!dbus_get_system_connection (&system_connection))
 		return FALSE;

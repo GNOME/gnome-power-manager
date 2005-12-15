@@ -40,6 +40,7 @@ gboolean hal_set_brightness_up (void);
 gboolean hal_set_brightness_down (void);
 gboolean hal_suspend (gint wakeup);
 gboolean hal_hibernate (void);
+gboolean hal_shutdown (void);
 gboolean hal_setlowpowermode (gboolean set);
 
 #endif	/* _GLIBHALEXTRAS_H */

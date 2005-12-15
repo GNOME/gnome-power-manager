@@ -57,7 +57,7 @@ gpm_screensaver_set_dpms_timeout (gint timeout)
 		return FALSE;
 	g_debug ("Adjusting gnome-screensaver dpms_suspend to %i.", timeout);
 	client = gconf_client_get_default ();
-	gconf_client_set_int (client, GS_GCONF_ROOT "dpms_suspend", timeout, NULL);
+	gconf_client_set_int (client, GS_PREF_DPMS_SUSPEND, timeout, NULL);
 	return TRUE;
 }
 
@@ -74,7 +74,7 @@ gpm_screensaver_lock_check (void)
 	GConfClient *client = gconf_client_get_default ();
 	gboolean should_lock;
 
-	should_lock = gconf_client_get_bool (client, GS_GCONF_ROOT "lock", NULL);
+	should_lock = gconf_client_get_bool (client, GS_PREF_LOCK, NULL);
 	if (!should_lock)
 		return FALSE;
 	gpm_screensaver_lock ();
@@ -152,7 +152,6 @@ gpm_screensaver_set_throttle (gboolean throttle)
 gboolean
 gpm_screensaver_lock (void)
 {
-	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	g_debug ("gnome-screensaver lock");
@@ -175,7 +174,6 @@ gpm_screensaver_lock (void)
 gboolean
 gpm_screensaver_poke (void)
 {
-	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	g_debug ("gnome-screensaver poke");

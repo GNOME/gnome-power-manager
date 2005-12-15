@@ -42,7 +42,6 @@
 #include <gnome.h>
 #include <string.h>
 #include "gpm-sysdev.h"
-#include "compiler.h"
 
 static sysDev mysystem[BATT_LAST];
 
@@ -121,16 +120,16 @@ sysDevFree (DeviceType type)
  *  @param	type		The device type
  */
 void
-sysDevPrint (DeviceType type)
+sysDevDebugPrint (DeviceType type)
 {
 	sysDev *sd = sysDevGet (type);
-	g_print ("Printing %s device parameters:\n", sysDevToString (type));
-	g_print ("percentageCharge = %i\n", sd->percentageCharge);
-	g_print ("numberDevices    = %i\n", sd->numberDevices);
+	g_debug ("Printing %s device parameters:", sysDevToString (type));
+	g_debug ("percentageCharge = %i", sd->percentageCharge);
+	g_debug ("numberDevices    = %i", sd->numberDevices);
 	if (type != BATT_MOUSE && type != BATT_KEYBOARD) {
-		g_print ("minutesRemaining = %i\n", sd->minutesRemaining);
-		g_print ("isCharging       = %i\n", sd->isCharging);
-		g_print ("isDischarging    = %i\n", sd->isDischarging);
+		g_debug ("minutesRemaining = %i", sd->minutesRemaining);
+		g_debug ("isCharging       = %i", sd->isCharging);
+		g_debug ("isDischarging    = %i", sd->isDischarging);
 	}
 }
 
@@ -162,26 +161,26 @@ sysDevFreeAll (void)
 /** Prints all the system device objects
  */
 void
-sysDevPrintAll (void)
+sysDevDebugPrintAll (void)
 {
 	sysDev *sd = NULL;
 	g_debug ("Printing all device types");
 	/* only print if we have at least one device type */
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->numberDevices > 0)
-		sysDevPrint (BATT_PRIMARY);
+		sysDevDebugPrint (BATT_PRIMARY);
 	sd = sysDevGet (BATT_UPS);
 	if (sd->numberDevices > 0)
-		sysDevPrint (BATT_UPS);
+		sysDevDebugPrint (BATT_UPS);
 	sd = sysDevGet (BATT_MOUSE);
 	if (sd->numberDevices > 0)
-		sysDevPrint (BATT_MOUSE);
+		sysDevDebugPrint (BATT_MOUSE);
 	sd = sysDevGet (BATT_KEYBOARD);
 	if (sd->numberDevices > 0)
-		sysDevPrint (BATT_KEYBOARD);
+		sysDevDebugPrint (BATT_KEYBOARD);
 	sd = sysDevGet (BATT_PDA);
 	if (sd->numberDevices > 0)
-		sysDevPrint (BATT_PDA);
+		sysDevDebugPrint (BATT_PDA);
 }
 
 /** Updates all the system device objects
@@ -418,7 +417,7 @@ sysDevUpdate (DeviceType type)
 		}
 	}
 	/*
-	 * if we are discharging, and the number or batteries 
+	 * if we are discharging, and the number or batteries
 	 * discharging != the number present, then we have a case where the
 	 * batteries are discharging one at a time (i.e. not simultanously)
 	 * and we have to factor this into the time remaining calculations.

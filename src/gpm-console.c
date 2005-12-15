@@ -47,6 +47,7 @@
 #include "glibhal-callback.h"
 #include "glibhal-extras.h"
 #include "gpm-sysdev.h"
+#include "gpm-dbus-common.h"
 
 
 /* no need for IPC with globals */
@@ -56,6 +57,11 @@ gboolean onAcPower;
 /** Generic exit
  *
  */
+
+static void
+gpm_console_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
+{
+}
 static void
 gpm_exit (void)
 {
@@ -99,8 +105,6 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 {
 	gint lowThreshold;
 	gint criticalThreshold;
-	gchar *message = NULL;
-	gchar *remaining = NULL;
 
 	if (!sds->isDischarging) {
 		g_debug ("battery is not discharging!");
@@ -223,8 +227,7 @@ hal_device_property_modified (const gchar *udi,
 
 	/* update */
 	sysDevUpdate (dev);
-	if (isVerbose)
-		sysDevPrint (dev);
+	sysDevDebugPrint (dev);
 
 	/* find new percentageCharge  */
 	newCharge = sd->percentageCharge;
@@ -250,8 +253,6 @@ hal_device_condition (const gchar *udi,
 	const gchar *condition_details)
 {
 	gchar *type = NULL;
-	gint policy;
-	gboolean value;
 
 	g_debug ("hal_device_condition: udi=%s, condition_name=%s, condition_details=%s",
 		udi, condition_name, condition_details);
@@ -344,7 +345,7 @@ main (int argc, char *argv[])
 	/* set log level */
 	if (!isVerbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
-			g_log_ignore, NULL);
+			gpm_console_debug_log_ignore, NULL);
 
 	/* check dbus connections, exit if not valid */
 	if (!dbus_get_system_connection (&system_connection))
@@ -381,8 +382,7 @@ main (int argc, char *argv[])
 	gpm_coldplug_buttons ();
 
 	sysDevUpdateAll ();
-	if (isVerbose)
-		sysDevPrintAll ();
+	sysDevDebugPrintAll ();
 
 	g_main_loop_run (loop);
 

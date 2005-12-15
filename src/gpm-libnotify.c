@@ -42,13 +42,53 @@
 #include <gnome.h>
 #include "gpm-common.h"
 #include "gpm-libnotify.h"
-#ifdef HAVE_LIBNOTIFY
+#include "gpm-stock-icons.h"
+
+#if defined(HAVE_LIBNOTIFY)
 #include <libnotify/notify.h>
 #endif
 
-#ifdef HAVE_LIBNOTIFY
-static NotifyHandle *globalnotify = NULL;
+#if defined(HAVE_LIBNOTIFY)
+  #define HAVE_OLD_LIBNOTIFY
 #endif
+/*
+ * We can only enable HAVE_NEW_LIBNOTIFY when we use libnotify > 0.3.0
+ * which depends on DBUS 0.60, and a whole lot of stuff
+ * won't build with the new DBUS -- We better wait for the
+ * distros to start carrying this before we dump this on the
+ * users / ISV's
+ */
+
+#if defined(HAVE_OLD_LIBNOTIFY)
+static NotifyHandle *globalnotify = NULL;
+#elif defined(HAVE_NEW_LIBNOTIFY)
+static NotifyNotification *globalnotify;
+#endif
+
+/** Gets the position to "point" to (i.e. center of the icon)
+ *
+ *  @param	widget		the GtkWidget
+ *  @param	x		X co-ordinate return
+ *  @param	y		Y co-ordinate return
+ *  @return			Success, return FALSE when no icon present
+ */
+static gboolean
+get_widget_position (GtkWidget *widget, gint *x, gint *y)
+{
+	GdkPixbuf* pixbuf = NULL;
+
+	/* assertion checks */
+	g_assert (widget);
+	g_assert (x);
+	g_assert (y);
+
+	gdk_window_get_origin (GDK_WINDOW (widget->window), x, y);
+	pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (widget));
+	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
+	*y += gdk_pixbuf_get_height (pixbuf);
+	g_debug ("widget position x=%i, y=%i", *x, *y);
+	return TRUE;
+}
 
 /** Convenience function to call libnotify
  *
@@ -64,7 +104,29 @@ static NotifyHandle *globalnotify = NULL;
 gboolean
 libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
-#ifdef HAVE_LIBNOTIFY
+#if defined(HAVE_NEW_LIBNOTIFY)
+	gint x, y;
+	globalnotify = notify_notification_new (subject, content, GPM_STOCK_AC_8_OF_8, NULL);
+
+        notify_notification_set_timeout (globalnotify, 3000);
+
+	if (point) {
+		get_widget_position (point, &x, &y);
+		notify_notification_set_hint_int32 (globalnotify, "x", x+12);
+		notify_notification_set_hint_int32 (globalnotify, "y", y+24);
+	}
+
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
+		g_warning ("libnotify: %s : %s", NICENAME, content);
+	else
+		g_debug ("libnotify: %s : %s", NICENAME, content);
+
+	if (!notify_notification_show_and_forget (globalnotify, NULL)) {
+		g_warning ("failed to send notification (%s)", content);
+		return FALSE;
+	}
+	return TRUE;
+#elif defined(HAVE_OLD_LIBNOTIFY)
 	NotifyIcon *icon = NULL;
 	NotifyHints *hints = NULL;
 	gint x, y;
@@ -142,9 +204,13 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 gboolean
 libnotify_clear (void)
 {
-#ifdef HAVE_LIBNOTIFY
+#if defined(HAVE_OLD_LIBNOTIFY)
 	if (globalnotify)
 		notify_close (globalnotify);
+#elif defined(HAVE_NEW_LIBNOTIFY)
+	GError *error;
+	if (globalnotify)
+		notify_notification_close (globalnotify, &error);
 #endif
 	return TRUE;
 }
@@ -156,20 +222,18 @@ libnotify_clear (void)
  *
  *  @note	This function must be called before any calls to
  *		libnotify_event are made.
- *
- *  @todo	When libnotify has settled down we will switch to runtime
- *		detection like we do for gnome-screensaver
  */
 gboolean
 libnotify_init (const gchar *nicename)
 {
 	gboolean ret = TRUE;
-
-	/* assertion checks */
 	g_assert (nicename);
-#ifdef HAVE_LIBNOTIFY
+#if defined(HAVE_OLD_LIBNOTIFY)
 	globalnotify = NULL;
 	ret = notify_glib_init (nicename, NULL);
+#elif defined(HAVE_NEW_LIBNOTIFY)
+	globalnotify = NULL;
+	ret = notify_init (nicename);
 #endif
 	return ret;
 }

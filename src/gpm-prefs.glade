@@ -19,6 +19,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -27,7 +28,7 @@
       <property name="spacing">2</property>
 
       <child>
-	<widget class="GtkNotebook" id="notebook1">
+	<widget class="GtkNotebook" id="gpm_notebook">
 	  <property name="border_width">5</property>
 	  <property name="visible">True</property>
 	  <property name="can_focus">True</property>
@@ -1172,7 +1173,7 @@
 			      <property name="digits">0</property>
 			      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			      <property name="inverted">False</property>
-			      <property name="adjustment">13 0 100 5 5 0</property>
+			      <property name="adjustment">13 0 25 1 5 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1192,7 +1193,7 @@
 			      <property name="digits">0</property>
 			      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
 			      <property name="inverted">False</property>
-			      <property name="adjustment">66 0 100 5 5 0</property>
+			      <property name="adjustment">5 0 25 1 5 0</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>

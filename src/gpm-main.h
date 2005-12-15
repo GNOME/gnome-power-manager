@@ -29,7 +29,7 @@
 #ifndef _GPM_H
 #define _GPM_H
 
-void action_policy_do (gint policy_number);
+void action_policy_do (gchar* policy);
 
 #endif	/* _GPM_H */
 /** @} */

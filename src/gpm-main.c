@@ -68,6 +68,7 @@
 #include <gconf/gconf-client.h>
 #include <popt.h>
 
+#include "gpm-prefs.h"
 #include "gpm-common.h"
 #include "gpm-core.h"
 #include "gpm-main.h"
@@ -86,37 +87,12 @@
 #include "gpm-stock-icons.h"
 #include "gpm-sysdev.h"
 
-
 /* no need for IPC with globals */
-gboolean isVerbose;
 gboolean onAcPower;
 
-/** Gets policy from gconf
- *
- *  @param	gconfpath	gconf policy name
- *  @return 			the int gconf value of the policy
- */
-gint
-get_policy_string (const gchar *gconfpath)
+static void
+gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {
-	GConfClient *client = NULL;
-	gchar *valuestr = NULL;
-	gint value;
-
-	/* assertion checks */
-	g_assert (gconfpath);
-
-	client = gconf_client_get_default ();
-	valuestr = gconf_client_get_string (client, gconfpath, NULL);
-	if (!valuestr) {
-		g_warning ("Cannot find %s, maybe a bug in the gconf schema!", gconfpath);
-		return 0;
-	}
-	value = convert_string_to_policy (valuestr);
-
-	g_free (valuestr);
-
-	return value;
 }
 
 /** Callback for gconf modified keys (that we are watching).
@@ -139,25 +115,25 @@ callback_gconf_key_changed (GConfClient *client,
 	if (gconf_entry_get_value (entry) == NULL)
 		return;
 
-	if (strcmp (entry->key, GCONF_ROOT "general/display_icon_policy") == 0) {
+	if (strcmp (entry->key, GPM_PREF_ICON_POLICY) == 0) {
 		gpn_icon_update ();
-	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_computer") == 0) {
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
 		if (!onAcPower)
 			gpm_idle_set_timeout (value);
-	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_computer") == 0) {
+	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
 		if (onAcPower)
 			gpm_idle_set_timeout (value);
-	} else if (strcmp (entry->key, GCONF_ROOT "policy/battery/sleep_display") == 0) {
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0) {
 		/* set new suspend timeouts */
 		if (!onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
 			gpm_screensaver_set_dpms_timeout (value);
 		}
-	} else if (strcmp (entry->key, GCONF_ROOT "policy/ac/sleep_display") == 0) {
+	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
 		/* set new suspend timeouts */
 		if (onAcPower) {
 			value = gconf_client_get_int (client, entry->key, NULL);
@@ -181,32 +157,23 @@ callback_gconf_key_changed (GConfClient *client,
 void
 perform_power_policy (gboolean isOnAc)
 {
-	gchar *policyname = NULL;
-	gchar *gconfpath = NULL;
-	gint value;
+	gint brightness, sleep_display, sleep_computer;
 	GConfClient *client = gconf_client_get_default ();
 
-	if (isOnAc)
-		policyname = "ac";
-	else
-		policyname = "battery";
+	if (isOnAc) {
+		brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
+		sleep_display = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_DISPLAY, NULL);
+		sleep_computer = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_COMPUTER, NULL);
+	} else {
+		brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
+		sleep_computer = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_COMPUTER, NULL);
+		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
+	}
 
-	/* set brightness */
-	gconfpath = g_strdup_printf ("%s/policy/%s/brightness",
-				     GCONF_ROOT_SANS_SLASH, policyname);
-	value = gconf_client_get_int (client, gconfpath, NULL);
-	g_free (gconfpath);
-	hal_set_brightness_dim (value);
-
-	/* set lowpower mode */
+	hal_set_brightness_dim (brightness);
 	hal_setlowpowermode (!isOnAc);
 
-	/* set gnome screensaver dpms_suspend to our value */
-	gconfpath = g_strdup_printf ("%s/policy/%s/sleep_display",
-				     GCONF_ROOT_SANS_SLASH, policyname);
-	value = gconf_client_get_int (client, gconfpath, NULL);
-	g_free (gconfpath);
-	gpm_screensaver_set_dpms_timeout (value);
+	gpm_screensaver_set_dpms_timeout (sleep_display);
 
 	/*
 	 * make sure gnome-screensaver disables screensaving,
@@ -215,11 +182,7 @@ perform_power_policy (gboolean isOnAc)
 	gpm_screensaver_set_throttle (!isOnAc);
 
 	/* set the new sleep (inactivity) value */
-	gconfpath = g_strdup_printf ("%spolicy/%s/sleep_computer",
-				     GCONF_ROOT, policyname);
-	value = gconf_client_get_int (client, gconfpath, NULL);
-	g_free (gconfpath);
-	gpm_idle_set_timeout (value);
+	gpm_idle_set_timeout (sleep_computer);
 }
 
 
@@ -235,20 +198,20 @@ perform_power_policy (gboolean isOnAc)
  *	- Pokes g-s so we get the unlock screen (if required)
  */
 void
-perform_sleep_methods (gboolean toDisk)
+perform_sleep_methods (gboolean to_disk)
 {
 	GConfClient *client = gconf_client_get_default ();
-	gboolean shouldLock = gconf_client_get_bool (client, 
-				GCONF_ROOT "general/require_password", NULL);
+	gboolean should_lock = gconf_client_get_bool (client,
+				GPM_PREF_REQUIRE_PASSWORD, NULL);
 	/* only lock if we should */
-	if (shouldLock)
+	if (should_lock)
 		gpm_screensaver_lock ();
 
 	/* Send NetworkManager to sleep */
 	gpm_networkmanager_sleep ();
 
 	/* do the sleep type */
-	if (toDisk)
+	if (to_disk)
 		hal_hibernate ();
 	else
 		hal_suspend (0);
@@ -256,79 +219,55 @@ perform_sleep_methods (gboolean toDisk)
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
-	if (shouldLock)
+	if (should_lock)
 		gpm_screensaver_poke ();
-}
-
-/** Request that GNOME save the session in some way, and programs
- *  should save data where possible.
- *
- *  @param	logout		If we want to logout of the session
- *  @param	interactive	If the user can be prompted with questions
- */
-static void
-gnome_shutdown (gboolean logout, gboolean interactive)
-{
-	gint interact = GNOME_INTERACT_ANY;
-	GnomeClient *client = gnome_master_client ();
-
-	if (!interactive)
-		interact = GNOME_INTERACT_NONE;
-
-	/* Show the logout screen of GNOME */
-	gnome_client_request_save (client,
-				   GNOME_SAVE_GLOBAL,
-				   logout,
-				   interact,
-				   FALSE,
-				   TRUE);
 }
 
 /** Do the action dictated by policy from gconf
  *
- *  @param	policy_number	The policy ENUM value
+ *  @param	action	string
  *
  *  @todo	Add the actions to doxygen.
  */
 void
-action_policy_do (gint policy_number)
+action_policy_do (gchar* action)
 {
-	if (policy_number == ACTION_NOTHING) {
+	if (!action)
+		return;
+
+	if (strcmp (action, ACTION_NOTHING) == 0) {
 		g_debug ("*ACTION* Doing nothing");
-	} else if (policy_number == ACTION_SUSPEND) {
+	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		g_debug ("*ACTION* Suspend");
 		if (!hal_pm_can_suspend ()) {
 			g_warning ("Cannot suspend as disabled in HAL");
 			return;
 		}
 		perform_sleep_methods (FALSE);
-	} else if (policy_number == ACTION_HIBERNATE) {
+	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		g_debug ("*ACTION* Hibernate");
 		if (!hal_pm_can_hibernate ()) {
 			g_warning ("Cannot hibernate as disabled in HAL");
 			return;
 		}
 		perform_sleep_methods (TRUE);
-	} else if (policy_number == ACTION_SHUTDOWN) {
+	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
 		g_debug ("*ACTION* Shutdown");
-		/* don't ask any questions, just do it */
-		gnome_shutdown (FALSE, FALSE);
-		run_gconf_script (GCONF_ROOT "general/cmd_shutdown");
-	} else if (policy_number == ACTION_NOW_BATTERYPOWERED) {
-		g_debug ("*DBUS* Now battery powered");
-		/* do all our powersaving stuff */
-		perform_power_policy (FALSE);
-		/* emit signal */
-		gpm_emit_mains_changed (FALSE);
-	} else if (policy_number == ACTION_NOW_MAINSPOWERED) {
-		g_debug ("*DBUS* Now mains powered");
-		/* do all our powersaving stuff */
-		perform_power_policy (TRUE);
-		/* emit siganal */
-		gpm_emit_mains_changed (TRUE);
-	} else
-		g_warning ("action_policy_do called with unknown action %i",
-			   policy_number);
+		/* Save current session */
+		gnome_client_request_save (gnome_master_client (), GNOME_SAVE_GLOBAL,
+					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+		hal_shutdown ();
+#if 0
+		gchar *cmd;
+		cmd = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_CMD_SHUTDOWN, NULL);
+		if (!g_spawn_command_line_async (cmd, NULL)) {
+			g_warning ("Couldn't execute command: %s", cmd);
+		}
+		g_free (cmd);
+#endif
+	} else {
+		g_warning ("action_policy_do called with unknown action %s", action);
+	}
 }
 
 /** Generic exit
@@ -374,17 +313,18 @@ hal_device_new_capability (const gchar *udi, const gchar *capability)
 /** Notifies user of a low battery
  *
  *  @param	sds		Data structure
- *  @param	newCharge	New charge value (%)
+ *  @param	new_charge	New charge value (%)
  *  @return			If a warning was sent
  */
 static gboolean
-notify_user_low_batt (sysDevStruct *sds, gint newCharge)
+notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 {
-	GConfClient *client = NULL;
-	gint lowThreshold;
-	gint criticalThreshold;
-	gchar *message = NULL;
-	gchar *remaining = NULL;
+	GConfClient *client;
+	gint low_threshold;
+	gint critical_threshold;
+	gchar *message;
+	gchar *remaining;
+	gchar *action;
 
 	if (!sds->isDischarging) {
 		g_debug ("battery is not discharging!");
@@ -392,29 +332,28 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	}
 
 	client = gconf_client_get_default ();
-	lowThreshold = gconf_client_get_int (client,
-		GCONF_ROOT "general/threshold_low", NULL);
-	criticalThreshold = gconf_client_get_int (client,
-		GCONF_ROOT "general/threshold_critical", NULL);
-	g_debug ("lowThreshold = %i, criticalThreshold = %i",
-		 lowThreshold, criticalThreshold);
+	low_threshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
+	critical_threshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_CRITICAL, NULL);
+	g_debug ("low_threshold = %i, critical_threshold = %i",
+		 low_threshold, critical_threshold);
 
 	/* less than critical, do action */
-	if (newCharge < criticalThreshold) {
+	if (new_charge < critical_threshold) {
 		g_debug ("battery is below critical limit!");
-		gint policy = get_policy_string (GCONF_ROOT "policy/battery_critical");
-		action_policy_do (policy);
+		action = gconf_client_get_string (client, GPM_PREF_BATTERY_CRITICAL, NULL);
+		action_policy_do (action);
+		g_free (action);
 		return TRUE;
 	}
 
 	/* critical warning */
-	if (newCharge == criticalThreshold) {
+	if (new_charge == critical_threshold) {
 		g_debug ("battery is critical limit!");
 		remaining = get_timestring_from_minutes (sds->minutesRemaining);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					   "of remaining battery life (%i%%). "
 			  		   "Plug in your AC Adapter to avoid losing data."),
-					   remaining, newCharge);
+					   remaining, new_charge);
 		libnotify_event (_("Battery Critically Low"),
 				 message,
 				 LIBNOTIFY_URGENCY_CRITICAL,
@@ -425,14 +364,14 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	}
 
 	/* low warning */
-	if (newCharge < lowThreshold) {
+	if (new_charge < low_threshold) {
 		g_debug ("battery is low!");
 		remaining = get_timestring_from_minutes (sds->minutesRemaining);
 		g_assert (remaining);
 		message = g_strdup_printf (
 			_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
 			  "Plug in your AC Adapter to avoid losing data."),
-			remaining, newCharge);
+			remaining, new_charge);
 		libnotify_event (_("Battery Low"),
 				 message,
 				 LIBNOTIFY_URGENCY_CRITICAL,
@@ -462,8 +401,8 @@ hal_device_property_modified (const gchar *udi,
 	sysDevStruct *sds = NULL;
 	gchar *type;
 
-	gint oldCharge;
-	gint newCharge;
+	gint old_charge;
+	gint new_charge;
 
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
 		udi, key, is_added, is_removed);
@@ -480,14 +419,19 @@ hal_device_property_modified (const gchar *udi,
 					"The system is now using battery power."),
 					LIBNOTIFY_URGENCY_NORMAL,
 					get_notification_icon ());
-			action_policy_do (ACTION_NOW_BATTERYPOWERED);
+
+			perform_power_policy (FALSE);
+			gpm_emit_mains_changed (FALSE);
+
 		} else {
 			/*
 			 * for where we add back the ac_adapter before
 			 * the "AC Power unplugged" message times out.
 			 */
 			libnotify_clear ();
-			action_policy_do (ACTION_NOW_MAINSPOWERED);
+			/* do all our powersaving stuff */
+			perform_power_policy (TRUE);
+			gpm_emit_mains_changed (TRUE);
 		}
 		/* update all states */
 		sysDevUpdateAll ();
@@ -525,7 +469,7 @@ hal_device_property_modified (const gchar *udi,
 
 	/* find old percentageCharge */
 	sd = sysDevGet (dev);
-	oldCharge = sd->percentageCharge;
+	old_charge = sd->percentageCharge;
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
@@ -563,21 +507,21 @@ hal_device_property_modified (const gchar *udi,
 
 	/* update */
 	sysDevUpdate (dev);
-	if (isVerbose)
-		sysDevPrint (dev);
+	
+	sysDevDebugPrint (dev);
 
 	/* find new percentageCharge  */
-	newCharge = sd->percentageCharge;
+	new_charge = sd->percentageCharge;
 
-	g_debug ("newCharge = %i, oldCharge = %i", newCharge, oldCharge);
+	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
 
 	/* update icon */
 	gpn_icon_update ();
 
 	/* do we need to notify the user we are getting low ? */
-	if (oldCharge != newCharge) {
-		g_debug ("percentage change %i -> %i", oldCharge, newCharge);
-		notify_user_low_batt (sds, newCharge);
+	if (old_charge != new_charge) {
+		g_debug ("percentage change %i -> %i", old_charge, new_charge);
+		notify_user_low_batt (sds, new_charge);
 	}
 }
 
@@ -592,8 +536,9 @@ static void
 hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 {
 	gchar *type = NULL;
-	gint policy;
+	gchar* action;
 	gboolean value;
+	GConfClient *client = gconf_client_get_default ();
 
 	g_assert (udi);
 	g_assert (name);
@@ -610,11 +555,13 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 		}
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
-			/* always assume they want to log out interactivly */
-			gnome_shutdown (TRUE, TRUE);
+			/* Log out interactively */
+			gnome_client_request_save (gnome_master_client (), GNOME_SAVE_GLOBAL,
+						   TRUE, GNOME_INTERACT_ANY, FALSE,  TRUE);
 		} else if (strcmp (type, "sleep") == 0) {
-			policy = get_policy_string (GCONF_ROOT "policy/button_suspend");
-			action_policy_do (policy);
+			action = gconf_client_get_string (client, GPM_PREF_BUTTON_SUSPEND, NULL);
+			action_policy_do (action);
+			g_free (action);
 		} else if (strcmp (type, "lid") == 0) {
 			hal_device_get_bool (udi, "button.state.value", &value);
 			/*
@@ -625,11 +572,13 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 			 */
 			if (value) {
 				/* we only do a policy event when the lid is CLOSED */
-				gint policy = get_policy_string (GCONF_ROOT "policy/button_lid");
-				action_policy_do (policy);
+				action = gconf_client_get_string (client, GPM_PREF_BUTTON_LID, NULL);
+				action_policy_do (action);
+				g_free (action);
 				gpm_screensaver_set_dpms (FALSE);
-			} else
+			} else {
 				gpm_screensaver_set_dpms (TRUE);
+			}
 		} else if (strcmp (type, "virtual") == 0) {
 			if (!details) {
 				g_warning ("Virtual buttons must have details for %s!", udi);
@@ -659,12 +608,12 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 void
 idle_callback (gint timeout)
 {
-	gint policy;
-
-	policy = get_policy_string (GCONF_ROOT "policy/idle"); /* @todo! */
+	gchar *action;
+	action = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_ICON_POLICY, NULL); /* @todo! */
 
 	/* can only be hibernate or suspend */
-	action_policy_do (policy);
+	action_policy_do (action);
+	g_free (action);
 }
 
 /** Callback for the DBUS NameOwnerChanged function.
@@ -680,12 +629,12 @@ signalhandler_noc (const char *name, gboolean connected)
 		return;
 
 	if (!connected) {
-		g_warning ("HAL has been disconnected!  GNOME Power Manager will now quit.");
+		g_warning ("HAL has been disconnected! GNOME Power Manager will now quit.");
 
 		/* Wait for HAL to be running again */
 		while (!is_hald_running ()) {
 			g_warning ("GNOME Power Manager cannot connect to HAL!");
-			usleep (1000*500);
+			g_usleep (1000*500);
 		}
 		/* for now, quit */
 		gpm_exit ();
@@ -705,13 +654,13 @@ int
 main (int argc, char *argv[])
 {
 	gint i;
-	gint value;
-	GMainLoop *loop = NULL;
-	GConfClient *client = NULL;
-	GnomeClient *master = NULL;
+	GMainLoop *loop;
+	GConfClient *client;
+	GnomeClient *master;
 	GnomeClientFlags flags;
-	DBusGConnection *system_connection = NULL;
-	DBusGConnection *session_connection = NULL;
+	DBusGConnection *system_connection;
+	DBusGConnection *session_connection;
+	gboolean verbose = FALSE;
 	gboolean no_daemon;
 
 	struct poptOption options[] = {
@@ -724,18 +673,22 @@ main (int argc, char *argv[])
 
 	i = 0;
 	options[i++].arg = &no_daemon;
-	options[i++].arg = &isVerbose;
+	options[i++].arg = &verbose;
 
 	no_daemon = FALSE;
-	isVerbose = FALSE;
 
 	/* Initialise gnome and parse command line */
-	gnome_program_init (argv[0], VERSION, 
+	gnome_program_init (argv[0], VERSION,
 			    LIBGNOMEUI_MODULE, argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_POPT_TABLE, options,
 			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GNOME Power Manager"),
 			    NULL);
+
+	/* set log level */
+	if (!verbose)
+		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_main_log_dummy, NULL);
+
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 
@@ -754,25 +707,18 @@ main (int argc, char *argv[])
 		&dbus_glib_gpm_object_object_info);
 
 	client = gconf_client_get_default ();
-	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH,
-		GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH,
-		callback_gconf_key_changed, NULL, NULL, NULL);
+	gconf_client_add_dir (client, GPM_PREF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
+	gconf_client_notify_add (client, GPM_PREF_DIR, callback_gconf_key_changed, NULL, NULL, NULL);
 
 	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	/* set log level */
-	if (!isVerbose)
-		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
-			g_log_ignore, NULL);
-
 	/* check dbus connections, exit if not valid */
 	if (!dbus_get_system_connection (&system_connection))
-		exit (1);
+		g_error ("Unable to get system dbus connection");
 	if (!dbus_get_session_connection (&session_connection))
-		exit (1);
+		g_error ("Unable to get session dbus connection");
 
 
 	/* Initialise libnotify, if compiled in. */
@@ -804,7 +750,7 @@ main (int argc, char *argv[])
 
 	/* check we have PM capability */
 	if (!hal_pm_check ()) {
-		g_critical ("HAL does not have PowerManagement capability");
+		g_warning ("HAL does not have modern PowerManagement capability");
 		return 0;
 	}
 
@@ -823,10 +769,8 @@ main (int argc, char *argv[])
 	gpm_coldplug_buttons ();
 
 	sysDevUpdateAll ();
-	if (isVerbose)
-		sysDevPrintAll ();
+	sysDevDebugPrintAll ();
 
-	g_debug ("init'ing icon");
 	gpn_icon_update ();
 
 	/* do all the actions as we have to set initial state */

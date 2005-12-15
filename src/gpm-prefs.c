@@ -1,16 +1,7 @@
-/** @file	gpm-prefs.c
- *  @brief	GNOME Power Preferences
- *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-10-02
- *  @note	Taken in part from: GNOME Tutorial, example 1
- *		http://www.gnome.org/~newren/tutorials/
- *		developing-with-gnome/html/apd.html
- *
- *  @todo: checkbutton_require_password
- * This is the main g-p-m module, responsible for loading the glade file, 
- * populating and disabling widgets, and writing out configuration to gconf.
- */
 /*
+ * Copyright (C) 2005 Richard Hughes <hughsient@gmail.com>
+ * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -28,12 +19,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-/**
- * @addtogroup	prefs		GNOME Power Preferences
- * @brief			Sets policy for GNOME Power Manager
- *
- * @{
- */
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -47,282 +32,28 @@
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
 #include <popt.h>
-
-#include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-libnotify.h"
-#include "gpm-main.h"
+#include "gpm-common.h"
 #include "gpm-screensaver.h"
 #include "gpm-dbus-client.h"
 #include "gpm-dbus-common.h"
-#include "gpm-gtk-utils.h"
-
 #include "glibhal-main.h"
 #include "glibhal-extras.h"
 
-/* move this into the header when finished */
-typedef struct {
-	/* Main window */
-	GtkWidget* window;
-
-	/* Buttons */
-	GtkWidget* button_close;
-	GtkWidget* button_help;
-
-	/* Checkboxes */
-	GtkWidget* check_requirepw;
-
-	/* Radio Buttons */
-	GtkWidget* radio_always;
-	GtkWidget* radio_charge;
-	GtkWidget* radio_critical;
-	GtkWidget* radio_never;
-
-	/* Labels */
-	GtkWidget* label_sleep_type;
-	GtkWidget* label_button_suspend;
-	GtkWidget* label_button_lid;
-	GtkWidget* label_battery_critical;
-
-	/* Comboboxes */
-	GtkWidget* combo_sleep_type;
-	GtkWidget* combo_button_suspend;
-	GtkWidget* combo_button_lid;
-	GtkWidget* combo_battery_critical;
-
-	/* Sliders */
-	GtkWidget* slider_ac_computer;
-	GtkWidget* slider_ac_display;
-	GtkWidget* slider_ac_brightness;
-	GtkWidget* slider_batteries_computer;
-	GtkWidget* slider_batteries_display;
-	GtkWidget* slider_batteries_brightness;
-	GtkWidget* slider_battery_low;
-	GtkWidget* slider_battery_critical;
-} _GPMPrefs;
+/* The text that should appear in the action combo boxes */
+#define ACTION_SUSPEND_TEXT		_("Suspend")
+#define ACTION_SHUTDOWN_TEXT		_("Shutdown")
+#define ACTION_HIBERNATE_TEXT		_("Hibernate")
+#define ACTION_NOTHING_TEXT		_("Do nothing")
 
 /* If sleep time in a slider is set to 61 it is considered as never sleep */
 const int NEVER_TIME_ON_SLIDER = 61;
-static GladeXML *prefwidgets;
-static gboolean isVerbose;
-static _GPMPrefs widgets;
 
-/* gets widget, checks it exists, then returns */
-GtkWidget *
-gpm_assign_widget (const gchar *widgetname)
-{
-	GtkWidget *widget;
-	widget = glade_xml_get_widget (prefwidgets, widgetname);
-	if (!widgetname)
-		g_error ("widget '%s' not found", widgetname);
-	return widget;
-}
-
-/* loads all xml into private struct for speed */
 static void
-load_widgets_from_xml (void)
+gpm_prefs_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {
-	/* load widgets into struct */
-	widgets.window = gpm_assign_widget ("window_preferences");
-
-	widgets.button_close = gpm_assign_widget ("button_close");
-	widgets.button_help = gpm_assign_widget ("button_help");
-
-	widgets.check_requirepw = gpm_assign_widget ("checkbutton_require_password");
-
-	widgets.radio_always = gpm_assign_widget ("radiobutton_icon_always");
-	widgets.radio_charge = gpm_assign_widget ("radiobutton_icon_charge");
-	widgets.radio_critical = gpm_assign_widget ("radiobutton_icon_critical");
-	widgets.radio_never = gpm_assign_widget ("radiobutton_icon_never");
-
-	widgets.label_sleep_type = gpm_assign_widget ("label_sleep_type");
-	widgets.label_button_suspend = gpm_assign_widget ("label_button_suspend");
-	widgets.label_button_lid = gpm_assign_widget ("label_button_lid");
-	widgets.label_battery_critical = gpm_assign_widget ("label_battery_critical");
-
-	widgets.combo_sleep_type = gpm_assign_widget ("combobox_sleep_type");
-	widgets.combo_button_suspend = gpm_assign_widget ("combobox_button_suspend");
-	widgets.combo_button_lid = gpm_assign_widget ("combobox_button_lid");
-	widgets.combo_battery_critical = gpm_assign_widget ("combobox_battery_critical");
-
-	widgets.slider_ac_computer = gpm_assign_widget ("hscale_ac_computer");
-	widgets.slider_ac_display = gpm_assign_widget ("hscale_ac_display");
-	widgets.slider_ac_brightness = gpm_assign_widget ("hscale_ac_brightness");
-	widgets.slider_batteries_computer = gpm_assign_widget ("hscale_batteries_computer");
-	widgets.slider_batteries_display = gpm_assign_widget ("hscale_batteries_display");
-	widgets.slider_batteries_brightness = gpm_assign_widget ("hscale_batteries_brightness");
-	widgets.slider_battery_low = gpm_assign_widget ("hscale_battery_low");
-	widgets.slider_battery_critical = gpm_assign_widget ("hscale_battery_critical");
 }
 
-/** Shows/hides/renames controls based on hasData
- *  i.e. what hardware is in the system.
- *
- */
-static void
-recalculate_widgets (void)
-{
-	GtkWidget *widget = NULL;
-	GConfClient *client = gconf_client_get_default ();
-
-	gboolean hasBatteries;
-	gboolean hasAcAdapter;
-	gboolean hasButtonSleep;
-	gboolean hasButtonLid;
-	gboolean hasLCD;
-	gboolean hasDisplays;
-	gboolean doPassword;
-	gchar *policy;
-	IconPolicy iconopt;
-
-	/* radio options */
-	policy = gconf_client_get_string (client,
-		GCONF_ROOT "general/display_icon_policy", NULL);
-	if (!policy) {
-		g_warning ("You have not set an icon policy! "
-			   "I'll assume you want an icon all the time...");
-		policy = g_strdup("always");
-	}
-	/* convert to enum */
-	iconopt = convert_string_to_iconpolicy (policy);
-	g_free (policy);
-
-	if (iconopt == ICON_NEVER)
-		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_never", TRUE);
-	else if (iconopt == ICON_CRITICAL)
-		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_critical", TRUE);
-	else if (iconopt == ICON_CHARGE)
-		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_charge", TRUE);
-	else if (iconopt == ICON_ALWAYS)
-		gpm_gtk_set_check (prefwidgets, "radiobutton_icon_always", TRUE);
-
-	/* set the correct entries for the checkboxes */
-	doPassword = gconf_client_get_bool (client, 
-			GCONF_ROOT "general/require_password", NULL);
-	gpm_gtk_set_check (prefwidgets, "checkbutton_require_password", doPassword);
-
-	hasBatteries =   (hal_num_devices_of_capability ("battery") > 0);
-	hasAcAdapter =   (hal_num_devices_of_capability ("ac_adapter") > 0);
-	hasButtonSleep = (hal_num_devices_of_capability_with_value
-				("button", "button.type", "sleep") > 0);
-	hasButtonLid =   (hal_num_devices_of_capability_with_value
-				("button", "button.type", "lid") > 0);
-	hasLCD = 	 (hal_num_devices_of_capability ("laptop_panel") > 0);
-
-	if (gpm_screensaver_is_running ()) {
-		hasDisplays = gconf_client_get_bool (client,
-				GS_GCONF_ROOT "dpms_enabled", NULL);
-	} else
-		hasDisplays = FALSE;
-
-	/* frame labels */
-	if (hasBatteries) {
-		widget = glade_xml_get_widget (prefwidgets, "label_frame_ac");
-		gtk_label_set_markup (GTK_LABEL (widget), "<b>Running on AC adapter</b>");
-		widget = glade_xml_get_widget (prefwidgets, "label_frame_batteries");
-		gtk_label_set_markup (GTK_LABEL (widget), "<b>Running on batteries</b>");
-	} else {
-		widget = glade_xml_get_widget (prefwidgets, "label_frame_ac");
-		gtk_label_set_markup (GTK_LABEL (widget), "<b>Configuration</b>");
-	}
-
-	/* top frame */
-	gpm_gtk_set_visibility (prefwidgets, "frame_batteries", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "combobox_battery_critical", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "label_battery_critical_action", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "label_battery_critical", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "label_battery_low", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "hscale_battery_low", hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "hscale_battery_critical", hasBatteries);
-	/* assumes only battery options are in this frame */
-	gpm_gtk_set_visibility (prefwidgets, "frame_other_options", hasBatteries);
-
-	/* options */
-	gpm_gtk_set_visibility (prefwidgets, "combobox_button_lid", hasButtonLid);
-	gpm_gtk_set_visibility (prefwidgets, "label_button_lid", hasButtonLid);
-
-	gpm_gtk_set_visibility (prefwidgets, "combobox_button_suspend", hasButtonSleep);
-	gpm_gtk_set_visibility (prefwidgets, "label_button_suspend", hasButtonSleep);
-
-	/* variables */
-	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_brightness", hasLCD);
-	gpm_gtk_set_visibility (prefwidgets, "label_ac_brightness", hasLCD);
-	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_brightness", hasLCD);
-	gpm_gtk_set_visibility (prefwidgets, "label_batteries_brightness", hasLCD);
-
-	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (prefwidgets, "label_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_display",
-				hasDisplays & hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "label_batteries_display",
-				hasDisplays & hasBatteries);
-
-	/* set the display stuff to set gnome-screensaver dpms timeout */
-	gpm_gtk_set_visibility (prefwidgets, "hscale_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (prefwidgets, "label_ac_display", hasDisplays);
-	gpm_gtk_set_visibility (prefwidgets, "hscale_batteries_display",
-				hasDisplays & hasBatteries);
-	gpm_gtk_set_visibility (prefwidgets, "label_batteries_display",
-				hasDisplays & hasBatteries);
-}
-
-/** Callback for gconf_key_changed
- *
- * @param	client		A valid GConfClient
- * @param	cnxn_id		Unknown
- * @param	entry		The key that was modified
- * @param	user_data	user_data pointer. No function.
- */
-static void
-callback_gconf_key_changed (GConfClient *client,
-	guint cnxn_id,
-	GConfEntry *entry,
-	gpointer user_data)
-{
-	if (gconf_entry_get_value (entry) == NULL)
-		return;
-}
-
-/** Callback for combo_changed
- *
- * @param	widget		The combobox widget
- * @param	user_data	user_data pointer. No function.
- *
- * @note	We get the following data from widget: policypath, policydata
- */
-static void
-callback_combo_changed (GtkWidget *widget, gpointer user_data)
-{
-	GConfClient *client = NULL;
-	gint value;
-	gchar *policypath = NULL;
-	gchar *policyoption = NULL;
-	GPtrArray *policydata = NULL;
-	gint *pdata = NULL;
-
-	client = gconf_client_get_default ();
-	value = gtk_combo_box_get_active(GTK_COMBO_BOX (widget));
-	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	policydata = g_object_get_data ((GObject*) widget, "policydata");
-
-	/* we have to convert from the virtual mapping to a policy mapping */
-	pdata = (gint*) g_ptr_array_index (policydata, value);
-
-	g_debug ("[%s] = (%i)", policypath, *pdata);
-
-	/* we have to convert to the gconf store string */
-	policyoption = convert_policy_to_string (*pdata);
-	gconf_client_set_string (client, policypath, policyoption, NULL);
-}
-
-/** Gets the battery percentage time for the number of minutes
- *
- * @param	value		The number of minutes we would last
- * @return			The time we would last (in minutes) for the
- *				percentage battery charge. 0 for invalid.
- *
- * @note	Only takes into accound first battery, as this is an estimate.
- */
 gint
 get_battery_time_for_percentage (gint value)
 {
@@ -349,21 +80,11 @@ get_battery_time_for_percentage (gint value)
 	return 0;
 }
 
-/** Set the "Estimated" battery string widget
- *
- * @param	widget		The widget we want to change
- * @param	value		The number of minutes we would last
- *
- * @note	Return value is "Estimated 6 minutes" in italic.
- */
 static void
 set_estimated_label_widget (GtkWidget *widget, gint value)
 {
 	gchar *timestring;
 	gchar *estimated;
-
-	/* assertion checks */
-	g_assert (widget);
 
 	if (value > 1) {
 		timestring = get_timestring_from_minutes (value);
@@ -378,381 +99,465 @@ set_estimated_label_widget (GtkWidget *widget, gint value)
 	}
 }
 
-/** Callback when critical or low level are changed
- *
- * @param	widget		The combobox widget
- * @param	user_data	user_data pointer. No function.
- *
- * @note	We get the following data from widget: policypath
- */
 static void
-callback_percentage_changed (GtkWidget *widget, gpointer user_data)
-{
-	GConfClient *client = NULL;
-	const gchar *widgetname = NULL;
-	gchar *policypath = NULL;
-	gdouble value;
-	gint timepercentage;
-	GtkWidget* widget2;
-
-	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_return_if_fail (policypath);
-
-	value = gtk_range_get_value (GTK_RANGE (widget));
-	g_debug ("[%s] = (%f)", policypath, value);
-
-	timepercentage = get_battery_time_for_percentage (value);
-
-	widgetname = gtk_widget_get_name (widget);
-	if (strcmp (widgetname, "hscale_battery_low") == 0) {
-		widget2 = glade_xml_get_widget (prefwidgets,
-						"hscale_battery_critical");
-		/* Make sure that critical level can never be below low level */
-		gtk_range_set_range (GTK_RANGE (widget2), 0, value);
-
-		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_low_estimate");
-		set_estimated_label_widget (widget2, timepercentage);
-	}
-	else if (strcmp (widgetname, "hscale_battery_critical") == 0) {
-		widget2 = glade_xml_get_widget (prefwidgets, "label_battery_critical_estimate");
-		set_estimated_label_widget (widget2, timepercentage);
-	}
-	else {
-		g_critical ("widget: %s does not exist", widgetname);
-	}
-
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client, policypath, (gint) value, NULL);
-}
-
-
-/** Callback when brightness is changed
- *
- * @param	widget		The combobox widget
- * @param	user_data	user_data pointer. No function.
- *
- * @note	We get the following data from widget: policypath
- */
-static void
-callback_brightness_changed (GtkWidget *widget, gpointer user_data)
-{
-	GConfClient *client = NULL;
-	const gchar *widgetname = NULL;
-	gchar *policypath = NULL;
-	gdouble value;
-	gboolean onbattery;
-
-	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_return_if_fail (policypath);
-
-	value = gtk_range_get_value (GTK_RANGE (widget));
-	g_debug ("[%s] = (%f)", policypath, value);
-
-	widgetname = gtk_widget_get_name (widget);
-	/* Change the brightness in real-time */
-	if (gpm_is_on_mains (&onbattery)) {
-		if ((!onbattery && strcmp (widgetname, "hscale_ac_brightness") == 0) ||
-		    (onbattery && strcmp (widgetname, "hscale_batteries_brightness") == 0)) {
-			hal_set_brightness (value);
-		}
-	} else {
-		g_warning (GPM_DBUS_SERVICE ".isOnBattery failed");
-	}
-
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client, policypath, (gint) value, NULL);
-}
-
-
-/** Callback when sleep time sliders are changed
- *
- * @param	widget		The combobox widget
- * @param	user_data	user_data pointer. No function.
- *
- * @note	We get the following data from widget: policypath
- */
-
-static void
-callback_time_changed (GtkWidget *widget, gpointer user_data)
-{
-	GConfClient *client = NULL;
-	gchar *policypath = NULL;
-	gdouble value;
-
-	policypath = g_object_get_data ((GObject*) widget, "policypath");
-	g_return_if_fail (policypath);
-	
-	value = gtk_range_get_value (GTK_RANGE (widget));
-	g_debug ("[%s] = (%f)", policypath, value);
-	
-	if ( (gint)value == NEVER_TIME_ON_SLIDER) {
-		value = 0; /* gnome power manager interprets 0 as Never */
-	}
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client, policypath, (gint) value, NULL);
-}
-
-
-/** Callback for button_help
- *
- * @param	widget		Unused
- * @param	user_data	Unused
- */
-static void
-callback_help (GtkWidget *widget, gpointer user_data)
+gpm_prefs_help_cb (GtkWidget *widget, gpointer user_data)
 {
 	/* for now, show website */
 	gnome_url_show (GPMURL, NULL);
 }
 
-/** Callback for the changed signals for the checkboxes
- *
- * @param	widget		The checkbox widget
- * @param	user_data	Unused
- *
- * @note	We get the following data from widget: policypath
- */
 static void
-callback_check_changed (GtkWidget *widget, gpointer user_data)
+gpm_prefs_icon_radio_cb (GtkWidget *widget, gchar *icon_visibility)
 {
-	const gchar *widgetname;
-	GConfClient *client = gconf_client_get_default ();
-	gboolean value;
-
-	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	widgetname = gtk_widget_get_name (widget);
-	if (strcmp (widgetname, "checkbutton_require_password") == 0)
-		gconf_client_set_bool (client, 
-			GCONF_ROOT "general/require_password", value, NULL);
+	gconf_client_set_string (gconf_client_get_default (), GPM_PREF_ICON_POLICY,
+				 icon_visibility, NULL);
 }
 
-/** Callback for the changed signals for the radio buttons
- *
- * @param	widget		The checkbox widget
- * @param	user_data	Unused
- *
- * @note	We get the following data from widget: policypath
- */
 static void
-callback_radio_changed (GtkWidget *widget, gpointer user_data)
+gpm_prefs_check_requirepw_cb (GtkWidget *widget, gpointer data)
 {
-	GConfClient *client = NULL;
-	gchar *policy = NULL;
-	const gchar *widgetname;
-
-	widgetname = gtk_widget_get_name (widget);
-
-	if (strcmp (widgetname, "radiobutton_icon_never") == 0)
-		policy = "never";
-	else if (strcmp (widgetname, "radiobutton_icon_critical") == 0)
-		policy = "critical";
-	else if (strcmp (widgetname, "radiobutton_icon_charge") == 0)
-		policy = "charge";
-	else if (strcmp (widgetname, "radiobutton_icon_always") == 0)
-		policy = "always";
-	else
-		g_error ("callback_radio_changed trucked up");
-
-	client = gconf_client_get_default ();
-	gconf_client_set_string (client, 
-		GCONF_ROOT "general/display_icon_policy", policy, NULL);
+	gconf_client_set_bool (gconf_client_get_default (), GPM_PREF_REQUIRE_PASSWORD,
+			       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)), NULL);
 }
 
-/** simple callback formatting a GtkScale to "XX%"
- *
- *
- * @param	scale		The GTK scale slider
- * @param	value		The value we want to format
- * @return			The completed string, e.g. "10%"
- */
 static gchar*
-format_percentage_changed (GtkScale *scale, gdouble value)
-{
-	return g_strdup_printf ("%i%%", (gint) value);
-}
-
-/** callback formatting a GtkScale to brightness levels
- *
- * @param	scale		The GTK scale slider
- * @param	value		The value we want to format
- * @return			The completed string, e.g. "10%"
- *
- * @note	We get the following data from widget: lcdsteps
- */
-static gchar*
-format_brightness_changed (GtkScale *scale, gdouble value)
+gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
 {
 	int *steps = NULL;
-
 	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
 	if (!steps)
 		return NULL;
 	return g_strdup_printf ("%i%%", (gint) value * 100 / (*steps - 1));
 }
 
-/** simple callback that converts minutes into pretty text
- *
- * @param	scale		The GTK scale slider
- * @param	value		The value we want to format
- * @return			The completed string, e.g. "10%"
- */
 static gchar*
-format_time_changed (GtkScale *scale, gdouble value)
+gpm_prefs_format_time_cb (GtkScale *scale, gdouble value)
 {
 	if ((gint) value == NEVER_TIME_ON_SLIDER)
-		return g_strdup ("Never");
+		return g_strdup (_("Never"));
 
 	return get_timestring_from_minutes (value);
 }
 
-/** Sets the hscales up to the gconf value, and sets up callbacks.
- *
- *  @param  widgetname		the libglade widget name
- *  @param  policypath		the *full* GConf policy path,
- *				e.g. "/apps/g-p-m/policy/ac/brightness"
- *  @param  policytype		the policy type, e.g. "percent"
- */
 static void
-hscale_setup_action (GtkWidget *widget, const gchar *policypath, const gchar *policytype)
+gpm_prefs_sleep_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 {
-	GConfClient *client = NULL;
+	gint value;
+	
+	value = (gint)gtk_range_get_value (range);
+	if (value == NEVER_TIME_ON_SLIDER) {
+		value = 0; /* gnome power manager interprets 0 as Never */
+	}
+
+	gconf_client_set_int (gconf_client_get_default (), gpm_pref_key, value, NULL);
+}
+
+static GtkWidget*
+gpm_prefs_setup_sleep_slider (GladeXML *dialog, gchar *widget_name, gchar *gpm_pref_key)
+{
+	GtkWidget *widget;
 	gint value;
 
-	/* assertion checks */
-	g_assert (widget);
-	g_assert (policypath);
+	widget = glade_xml_get_widget (dialog, widget_name);
+	g_signal_connect (G_OBJECT (widget), "format-value", 
+			  G_CALLBACK (gpm_prefs_format_time_cb), NULL);
+	g_signal_connect (G_OBJECT (widget), "value-changed", 
+			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb), gpm_pref_key);
+	value = gconf_client_get_int (gconf_client_get_default (), gpm_pref_key, NULL);
+	if (value == 0)
+		value = NEVER_TIME_ON_SLIDER;
+	gtk_range_set_value (GTK_RANGE (widget), value);
 
-	client = gconf_client_get_default ();
+	return widget;
+}
 
-	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
-	g_object_set_data ((GObject*) widget, "policytype", (gpointer) policytype);
+static void
+gpm_prefs_brightness_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
+{
+	gdouble value;
+	gint steps;
+	gboolean onbattery;
+	
+	value = gtk_range_get_value (range);
+	gconf_client_set_int (gconf_client_get_default (), gpm_pref_key, (gint) value, NULL);
 
-	value = gconf_client_get_int (client, policypath, NULL);
+	/* Change the brightness in real-time */
+	if (gpm_is_on_mains (&onbattery)) {
+		if ((!onbattery && strcmp (gpm_pref_key, GPM_PREF_AC_BRIGHTNESS) == 0) ||
+		    (onbattery && strcmp (gpm_pref_key, GPM_PREF_BATTERY_BRIGHTNESS) == 0)) {
+			hal_set_brightness (value);
+		}
+	} else {
+		g_warning ("gpm_is_on_mains failed");
+	}
+}
 
-	if (strcmp (policytype, "lcd") == 0) {
-		g_signal_connect (G_OBJECT (widget), "format-value",
-				  G_CALLBACK (format_brightness_changed), NULL);
-		g_signal_connect (G_OBJECT (widget), "value-changed",
-				  G_CALLBACK (callback_brightness_changed), NULL);
-	} else if (strcmp (policytype, "percent") == 0) {
-		g_signal_connect (G_OBJECT (widget), "format-value",
-				  G_CALLBACK (format_percentage_changed), NULL);
-		g_signal_connect (G_OBJECT (widget), "value-changed",
-				  G_CALLBACK (callback_percentage_changed), NULL);
-	} else if (strcmp (policytype, "time") == 0) {
-		if (value == 0)
-			value = NEVER_TIME_ON_SLIDER;
-		g_signal_connect (G_OBJECT (widget), "format-value",
-				  G_CALLBACK (format_time_changed), NULL);
-		g_signal_connect (G_OBJECT (widget), "value-changed",
-				  G_CALLBACK (callback_time_changed), NULL);
+static GtkWidget*
+gpm_prefs_setup_brightness_slider (GladeXML *dialog, gchar *widget_name, gchar *gpm_pref_key)
+{
+	GtkWidget *widget;
+	gint steps;
+	gint value;
+
+	widget = glade_xml_get_widget (dialog, widget_name);
+
+	/* set the value before the cb's, else the brightness is set */
+	value = gconf_client_get_int (gconf_client_get_default (), gpm_pref_key, NULL);
+	gtk_range_set_value (GTK_RANGE (widget), value);
+
+	g_signal_connect (G_OBJECT (widget), "format-value", 
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
+	g_signal_connect (G_OBJECT (widget), "value-changed", 
+			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
+
+	if (hal_get_brightness_steps (&steps)) {
+		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
+		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
+	}
+	return widget;
+}
+
+static void
+gpm_prefs_action_combo_changed_cb (GtkWidget *widget, gchar* gpm_pref_key)
+{
+	gchar *value;
+	gchar *action;
+
+	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+
+	if (strcmp (value, ACTION_SUSPEND_TEXT) == 0) {
+		action = ACTION_SUSPEND;
+	} else if (strcmp (value, ACTION_HIBERNATE_TEXT) == 0) {
+		action = ACTION_HIBERNATE;	
+	} else if (strcmp (value, ACTION_SHUTDOWN_TEXT) == 0) {
+		action = ACTION_SHUTDOWN;	
+	} else if (strcmp (value, ACTION_NOTHING_TEXT) == 0) {
+		action = ACTION_NOTHING;	
 	} else {
 		g_assert (FALSE);
 	}
-/* needs to be split up so this is called after window is created */
-	gtk_range_set_value (GTK_RANGE (widget), (int) value);
+	
+	g_free (value);
+	gconf_client_set_string (gconf_client_get_default (), gpm_pref_key, action, NULL);
 }
 
-/** Sets the comboboxes up to the gconf value, and sets up callbacks.
- *
- *  @param  widgetname		the libglade widget name
- *  @param  policypath		the GConf policy path,
- *				e.g. "policy/ac/brightness"
- *  @param  ptrarray		the policy data, in a pointer array
- */
-static void
-combo_setup_dynamic (const GtkWidget* widget,
-	const gchar *policypath,
-	GPtrArray *ptrarray)
+static GtkWidget*
+gpm_prefs_setup_action_combo (GladeXML *dialog, gchar *widget_name, gchar *gpm_pref_key, const gchar **actions)
 {
-	GConfClient *client = NULL;
-	gchar *policyoption = NULL;
-	gint value;
-	gint a;
-	gint *pdata = NULL;
+	GtkWidget *widget;
+	gchar *value;
+	gint i = 0;
+	gint n_added = 0;
+	gboolean can_suspend = hal_pm_can_suspend ();
+	gboolean can_hibernate = hal_pm_can_hibernate ();
 
-	/* assertion checks */
-	g_assert (widget);
-	g_assert (policypath);
-	g_assert (ptrarray);
+	widget = glade_xml_get_widget (dialog, widget_name);
+	value = gconf_client_get_string (gconf_client_get_default (), gpm_pref_key, NULL);
+
+	while (actions[i] != NULL) { 	
+		if (strcmp (actions[i], ACTION_SHUTDOWN) == 0) {
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+						   ACTION_SHUTDOWN_TEXT);
+			n_added++;
+		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && !can_suspend) {
+			g_debug ("Cannot add option, as cannot suspend.");
+		} else if ((strcmp (actions[i], ACTION_HIBERNATE) == 0) && !can_hibernate) {
+			g_debug ("Cannot add option, as cannot hibernate.");
+		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && can_suspend) {
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+						   ACTION_SUSPEND_TEXT);
+			n_added++;
+		} else if ((strcmp (actions[i], ACTION_HIBERNATE) == 0) && can_hibernate) {
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+						   ACTION_HIBERNATE_TEXT);
+			n_added++;
+		} else if (strcmp (actions[i], ACTION_NOTHING) == 0) {
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+						   ACTION_NOTHING_TEXT);
+			n_added++;
+		} else {
+			g_error ("Unknown action : %s", actions[i]);
+		}
+
+		if (strcmp (value, actions[i]) == 0)
+			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added - 1);
+		i++;
+	}
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), gpm_pref_key);
+
+	g_free (value);
+	return widget;
+}
+
+static void
+gpm_prefs_battery_low_slider_changed_cb (GtkWidget *widget, GladeXML *dialog)
+{
+	gdouble value;
+
+	value = gtk_range_get_value (GTK_RANGE (widget));
+	gconf_client_set_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_LOW, (gint) value, NULL);
+
+	gtk_range_set_range (GTK_RANGE (glade_xml_get_widget (dialog, "hscale_battery_critical")),
+		       	    0, value);
+
+	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_low_estimate"),
+				    get_battery_time_for_percentage (value));
+}
+
+static void
+gpm_prefs_battery_critical_slider_changed_cb (GtkWidget *widget, GladeXML *dialog)
+{
+	gdouble value;
+
+	value = gtk_range_get_value (GTK_RANGE (widget));
+	gconf_client_set_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_CRITICAL, (gint) value, NULL);
+
+	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_critical_estimate"),
+				    get_battery_time_for_percentage (value));
+}
+
+static void
+gpm_prefs_init ()
+{
+	GladeXML *dialog;
+	GtkWidget *widget;
+
+	GtkSizeGroup *size_group;
+	GConfClient *client;
+	gint value;
+
+	gtk_window_set_default_icon_name ("gnome-dev-battery");
 
 	client = gconf_client_get_default ();
 
-	g_object_set_data ((GObject*) widget, "policypath", (gpointer) policypath);
-	g_object_set_data ((GObject*) widget, "policydata", (gpointer) ptrarray);
+	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
-	/* add text to combo boxes in order of parray */
-	for (a=0;a < ptrarray->len;a++) {
-		pdata = (gint*) g_ptr_array_index (ptrarray, a);
-		if (*pdata == ACTION_SHUTDOWN)
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   _("Shutdown"));
-		else if (*pdata == ACTION_SUSPEND)
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   _("Suspend"));
-		else if (*pdata == ACTION_HIBERNATE)
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   _("Hibernate"));
-		else if (*pdata == ACTION_NOTHING)
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   _("Do nothing"));
-		else
-			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-						   "Unknown");
+	widget = glade_xml_get_widget (dialog, "window_preferences");
+	/* Get the main window quit */
+	g_signal_connect (G_OBJECT (widget), "delete_event",
+			  G_CALLBACK (gtk_main_quit), NULL);
+
+	widget = glade_xml_get_widget (dialog, "button_close");
+	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gtk_main_quit), NULL);
+
+	widget = glade_xml_get_widget (dialog, "button_help");
+	g_signal_connect (G_OBJECT (widget), "clicked", G_CALLBACK (gpm_prefs_help_cb), NULL);
+
+	/************************************************************************/
+	/* Sleep Tab 								*/
+	/************************************************************************/
+
+	/* AC icon */
+	widget = glade_xml_get_widget (dialog, "image_side_acadapter");
+	gtk_image_set_from_icon_name (GTK_IMAGE(widget), "gnome-fs-socket", GTK_ICON_SIZE_DIALOG);
+	
+	/* Sleep time on AC */
+	gpm_prefs_setup_sleep_slider (dialog, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
+
+	/* Sleep time for display on AC */	
+	GtkWidget *label_ac_display, *slider_ac_display;
+
+	label_ac_display = glade_xml_get_widget (dialog, "label_ac_display");
+	slider_ac_display = gpm_prefs_setup_sleep_slider (dialog, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
+
+	/* Display brightness when on AC */
+	GtkWidget *label_ac_brightness, *slider_ac_brightness;
+
+	label_ac_brightness = glade_xml_get_widget (dialog, "label_ac_brightness");
+	slider_ac_brightness = gpm_prefs_setup_brightness_slider (dialog, "hscale_ac_brightness",
+								  GPM_PREF_AC_BRIGHTNESS);
+
+	/* Battery icon */
+	widget = glade_xml_get_widget (dialog, "image_side_battery");
+	gtk_image_set_from_icon_name (GTK_IMAGE(widget), "gnome-dev-battery", GTK_ICON_SIZE_DIALOG);
+	
+	/* Sleep time on batteries */
+	gpm_prefs_setup_sleep_slider (dialog, "hscale_batteries_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
+
+	/* Sleep time for display when on batteries */
+	GtkWidget *label_batteries_display, *slider_batteries_display;
+
+	label_batteries_display = glade_xml_get_widget (dialog, "label_batteries_display");
+	slider_batteries_display = gpm_prefs_setup_sleep_slider (dialog, "hscale_batteries_display",
+								 GPM_PREF_BATTERY_SLEEP_DISPLAY);
+
+	/* Display brightness when on batteries */
+	GtkWidget *label_batteries_brightness, *slider_batteries_brightness;
+
+	label_batteries_brightness = glade_xml_get_widget (dialog, "label_batteries_brightness");
+	slider_batteries_brightness = gpm_prefs_setup_brightness_slider (dialog, "hscale_batteries_brightness",
+									 GPM_PREF_BATTERY_BRIGHTNESS);
+
+	/************************************************************************/
+	/* Options Tab 								*/
+	/************************************************************************/
+
+	/* Sleep Type Combo Box */
+	GtkWidget *label_sleep_type, *combo_sleep_type;
+	const gchar *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	label_sleep_type = glade_xml_get_widget (dialog, "label_sleep_type");
+	combo_sleep_type = gpm_prefs_setup_action_combo (dialog, "combobox_sleep_type",
+							 GPM_PREF_SLEEP_TYPE, sleep_type_actions);
+
+	/* Require password Check Button */
+	widget = glade_xml_get_widget (dialog, "checkbutton_require_password");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+			  G_CALLBACK (gpm_prefs_check_requirepw_cb), NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      gconf_client_get_bool (client, GPM_PREF_REQUIRE_PASSWORD, NULL));
+
+	/* Button Suspend Combo Box */
+	GtkWidget *label_button_suspend, *combo_button_suspend;
+	const gchar *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	label_button_suspend = glade_xml_get_widget (dialog, "label_button_suspend");
+	combo_button_suspend = gpm_prefs_setup_action_combo (dialog, "combobox_button_suspend",
+				      			     GPM_PREF_BUTTON_SUSPEND, button_suspend_actions);
+	/* Button Lid Combo Box */
+	GtkWidget *label_button_lid, *combo_button_lid;
+	const gchar *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	label_button_lid = glade_xml_get_widget (dialog, "label_button_lid");
+	combo_button_lid = gpm_prefs_setup_action_combo (dialog, "combobox_button_lid",
+				      			 GPM_PREF_BUTTON_LID, button_lid_actions);
+
+	/* Battery critical Combo Box */
+	GtkWidget *label_battery_critical, *combo_battery_critical;
+	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE,
+					     	   ACTION_SHUTDOWN, NULL};
+
+	label_battery_critical = glade_xml_get_widget (dialog, "label_battery_critical");
+	combo_battery_critical = gpm_prefs_setup_action_combo (dialog, "combobox_battery_critical",
+				      			 GPM_PREF_BATTERY_CRITICAL, battery_critical_actions);
+
+	/* Make sure that all comboboxes get the same size by adding their
+	 * labels to a GtkSizeGroup
+	 */
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_size_group_add_widget (size_group, label_sleep_type);
+	gtk_size_group_add_widget (size_group, label_button_suspend);
+	gtk_size_group_add_widget (size_group, label_button_lid);
+	gtk_size_group_add_widget (size_group, label_battery_critical);
+	g_object_unref (G_OBJECT (size_group));
+
+	/************************************************************************/
+	/* Advanced Tab 							*/
+	/************************************************************************/
+
+	/* Radio buttons icon policy */
+	gchar* icon_policy = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
+
+	widget = glade_xml_get_widget (dialog, "radiobutton_icon_always");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_ALWAYS);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      strcmp (icon_policy, ICON_POLICY_ALWAYS) == 0);
+
+	widget = glade_xml_get_widget (dialog, "radiobutton_icon_charge");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_CHARGE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      strcmp (icon_policy, ICON_POLICY_CHARGE) == 0);
+
+	widget = glade_xml_get_widget (dialog, "radiobutton_icon_critical");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_CRITICAL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      strcmp (icon_policy, ICON_POLICY_CRITICAL) == 0);
+
+	widget = glade_xml_get_widget (dialog, "radiobutton_icon_never");
+	g_signal_connect (G_OBJECT (widget), "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_NEVER);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+				      strcmp (icon_policy, ICON_POLICY_NEVER) == 0);
+	g_free (icon_policy);
+
+	/* Threshold low sliders */
+	GtkWidget *scale_battery_low;
+
+	scale_battery_low = glade_xml_get_widget (dialog, "hscale_battery_low");
+	g_signal_connect (G_OBJECT (scale_battery_low), "format-value", 
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
+	g_signal_connect (G_OBJECT (scale_battery_low), "value-changed", 
+			  G_CALLBACK (gpm_prefs_battery_low_slider_changed_cb), dialog);
+	value = gconf_client_get_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_LOW, NULL);
+	gtk_range_set_value (GTK_RANGE (scale_battery_low), value);
+
+	/* Threshold critical slider */
+	GtkWidget *scale_battery_critical;
+
+	scale_battery_critical = glade_xml_get_widget (dialog, "hscale_battery_critical");
+	gtk_range_set_range (GTK_RANGE (scale_battery_critical), 0, value);
+	g_signal_connect (G_OBJECT (scale_battery_critical), "format-value", 
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);	
+	g_signal_connect (G_OBJECT (scale_battery_critical), "value-changed", 
+			  G_CALLBACK (gpm_prefs_battery_critical_slider_changed_cb), dialog);
+
+	value = gconf_client_get_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_CRITICAL, NULL);
+	gtk_range_set_value (GTK_RANGE (scale_battery_critical), value);
+
+	gboolean has_batteries = hal_num_devices_of_capability ("battery") > 0;
+	if (!has_batteries) {
+		widget = glade_xml_get_widget (dialog, "label_frame_ac");
+		gtk_label_set_markup (GTK_LABEL (widget), _("<b>Configuration</b>"));
+
+		/* Sleep tab */
+		widget = glade_xml_get_widget (dialog, "frame_batteries");
+		gtk_widget_hide_all (widget);
+		/* Options tab */
+		gtk_widget_hide_all (label_battery_critical);
+		gtk_widget_hide_all (combo_battery_critical);
+		/* Advanced tab */
+		widget = glade_xml_get_widget (dialog, "gpm_notebook");
+		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
+		gconf_client_set_string (client, GPM_PREF_ICON_POLICY, ICON_POLICY_NEVER, NULL);
 	}
 
-	/* we have to get the gconf string, and convert it into a policy option */
-	policyoption = gconf_client_get_string (client, policypath, NULL);
-	if (!policyoption) {
-		g_warning ("Cannot find %s, maybe a bug in the gconf schema!",
-			   policyoption);
-		return;
+	gboolean has_suspend_button = hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
+	if (!has_suspend_button) {
+		gtk_widget_hide_all (label_button_suspend);
+		gtk_widget_hide_all (combo_button_suspend);
 	}
 
-	/* select the correct entry, i.e. map the policy to virtual mapping */
-	value = convert_string_to_policy (policyoption);
-	g_free (policyoption);
-	for (a=0;a < ptrarray->len;a++) {
-		pdata = (int*) g_ptr_array_index (ptrarray, a);
-		if (*pdata == value) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), a);
-			break;
-		}
+	gboolean has_lid_button =  hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
+	if (!has_lid_button) {
+		gtk_widget_hide_all (label_button_lid);
+		gtk_widget_hide_all (combo_button_lid);
 	}
 
-	/* connect this signal up to the genric changed box */
-	g_signal_connect (G_OBJECT (widget), "changed",
-		G_CALLBACK (callback_combo_changed), NULL);
+	gboolean can_display_sleep;
+	if (gpm_screensaver_is_running ()) {
+		can_display_sleep = gconf_client_get_bool (client, GS_PREF_DPMS_ENABLED, NULL);
+	} else {
+		can_display_sleep = FALSE;
+	}
+	if (!can_display_sleep) {
+		gtk_widget_hide_all (label_ac_display);
+		gtk_widget_hide_all (slider_ac_display);
+		gtk_widget_hide_all (label_batteries_display);
+		gtk_widget_hide_all (slider_batteries_display);
+	}
+
+
+	gboolean can_set_brightness = hal_num_devices_of_capability ("laptop_panel") > 0;
+	if (!can_set_brightness) {
+		gtk_widget_hide_all (label_ac_brightness);
+		gtk_widget_hide_all (slider_ac_brightness);
+		gtk_widget_hide_all (label_batteries_brightness);
+		gtk_widget_hide_all (slider_batteries_brightness);
+	}
+
 }
 
-/** Main entry point
- *
- *  @param	argc		Number of arguments given to program
- *  @param	argv		Arguments given to program
- *  @return			Return code
- */
 int
 main (int argc, char **argv)
 {
-	GtkWidget *widget = NULL;
-	GConfClient *client = NULL;
 	gint i;
 	gboolean has_gpm_connection;
-	gdouble value;
-	gint steps;
-	GtkSizeGroup *size_group;
-
-	/* provide dynamic storage for comboboxes */
-	GPtrArray *ptrarr_button_suspend = NULL;
-	GPtrArray *ptrarr_button_lid = NULL;
-	GPtrArray *ptrarr_battery_critical = NULL;
-	GPtrArray *ptrarr_sleep_type = NULL;
-
-	/* provide pointers to enums */
-	int pSuspend 	= 	ACTION_SUSPEND;
-	int pShutdown 	= 	ACTION_SHUTDOWN;
-	int pHibernate 	= 	ACTION_HIBERNATE;
-	int pNothing 	= 	ACTION_NOTHING;
+	gboolean verbose = FALSE;
+	GConfClient *client;
 
 	struct poptOption options[] = {
 		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
@@ -761,14 +566,11 @@ main (int argc, char **argv)
 	};
 
 	i = 0;
-	options[i++].arg = &isVerbose;
+	options[i++].arg = &verbose;
+	verbose = FALSE;
 
-	isVerbose = FALSE;
-
-	/* initialise gnome */
-	gnome_program_init (argv[0], VERSION,
-			    LIBGNOMEUI_MODULE, 
-			    argc, argv, 
+	gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
+			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_POPT_TABLE, options,
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
@@ -779,52 +581,20 @@ main (int argc, char **argv)
 	bind_textdomain_codeset (PACKAGE, "UTF-8");
 	textdomain (PACKAGE);
 
-	gtk_window_set_default_icon_name ("gnome-dev-battery");
+	if (!verbose)
+		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_prefs_debug_log_ignore, NULL);
 
-	if (!isVerbose)
-		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,
-				   g_log_ignore, NULL);
-
-	/* Get the GconfClient, tell it we want to monitor /apps/gnome-power */
 	client = gconf_client_get_default ();
-	gconf_client_add_dir (client, GCONF_ROOT_SANS_SLASH,
-			      GCONF_CLIENT_PRELOAD_NONE, NULL);
-	gconf_client_notify_add (client, GCONF_ROOT_SANS_SLASH, 
-		callback_gconf_key_changed, widget, NULL, NULL);
-	/*
-	 * we add this even if it doesn't exist as gnome-screensaver might be 
-	 * installed when g-p-m is running
-	 */
-	gconf_client_notify_add (client, GS_GCONF_ROOT_NO_SLASH,
-		callback_gconf_key_changed, widget, NULL, NULL);
-
-	/* Initialise libnotify, if compiled in. */
-	if (!libnotify_init (NICENAME))
-		g_error ("Cannot initialise libnotify!");
 
 	/* check if we have GNOME Screensaver, but have disabled dpms */
-	if (gpm_screensaver_is_running ())
-		if (!gconf_client_get_bool (client, GS_GCONF_ROOT "dpms_enabled", NULL)) {
+	if (gpm_screensaver_is_running ()) {
+		if (!gconf_client_get_bool (client, GS_PREF_DPMS_ENABLED, NULL)) {
 			g_warning ("You have not got DPMS support enabled"
 				   "in gnome-screensaver.\n"
 				   "GNOME Power Manager will enable it now.");
-			gconf_client_set_bool (client, 
-					       GS_GCONF_ROOT "dpms_enabled",
-					       TRUE, NULL);
+			gconf_client_set_bool (client, GS_PREF_DPMS_ENABLED, TRUE, NULL);
 		}
-
-	/* load the interface */
-	prefwidgets = glade_xml_new (GPM_DATA G_DIR_SEPARATOR_S "gpm-prefs.glade",
-				     NULL, NULL);
-	if (!prefwidgets)
-		g_error ("glade file failed to load, aborting");
-
-	/* load widgets from xml into struct for speed */
-	load_widgets_from_xml ();
-
-	/* Get the main_window quit */
-	g_signal_connect (G_OBJECT (widgets.window), "delete_event",
-			  G_CALLBACK (gtk_main_quit), NULL);
+	}
 	/*
 	 * We should warn if g-p-m is not running - but still allow to continue
 	 * Note, that the query alone will be enough to lauch g-p-m using
@@ -832,157 +602,10 @@ main (int argc, char **argv)
 	 */
 	has_gpm_connection = gpm_is_on_ac (&i);
 	if (!has_gpm_connection)
-		g_warning ("Cannot connect to GNOME Power Manager.\n"
-			   "Make sure that it is running");
+		g_warning ("Cannot connect to GNOME Power Manager.");
 
-	/* Set the button callbacks */
-	g_signal_connect (G_OBJECT (widgets.button_close), "clicked", G_CALLBACK (gtk_main_quit), NULL);
-	g_signal_connect (G_OBJECT (widgets.button_help), "clicked", G_CALLBACK (callback_help), NULL);
+	gpm_prefs_init ();
 
-	/* set up the checkboxes */
-	g_signal_connect (G_OBJECT (widgets.check_requirepw), "clicked",
-			  G_CALLBACK (callback_check_changed), NULL);
-
-	/* set gtk enables/disables */
-	recalculate_widgets ();
-
-	/* radioboxes */
-	g_signal_connect (G_OBJECT (widgets.radio_always), "clicked",
-			  G_CALLBACK (callback_radio_changed), NULL);
-	g_signal_connect (G_OBJECT (widgets.radio_charge), "clicked",
-			  G_CALLBACK (callback_radio_changed), NULL);
-	g_signal_connect (G_OBJECT (widgets.radio_critical), "clicked",
-			  G_CALLBACK (callback_radio_changed), NULL);
-	g_signal_connect (G_OBJECT (widgets.radio_never), "clicked",
-			  G_CALLBACK (callback_radio_changed), NULL);
-
-	/* Make sure that all comboboxes get the same size by adding their
-	 * labels to a GtkSizeGroup
-	 */ 
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	gtk_size_group_add_widget (size_group, widgets.label_sleep_type); 
-	gtk_size_group_add_widget (size_group, widgets.label_button_suspend); 
-	gtk_size_group_add_widget (size_group, widgets.label_button_lid); 
-	gtk_size_group_add_widget (size_group, widgets.label_battery_critical); 
-	g_object_unref (G_OBJECT (size_group)); 
-
-	/*
-	 * Set up combo boxes with "ideal" values - if a enum is unavailable
-	 * e.g. hibernate has been disabled, then it will be filtered out
-	 * automatically.
-	 */
-	gboolean can_suspend = hal_pm_can_suspend ();
-	gboolean can_hibernate = hal_pm_can_hibernate ();
-
-	/* sleep type */
-	ptrarr_sleep_type = g_ptr_array_new ();
-	if (can_suspend)
-		g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pSuspend);
-	if (can_hibernate)
-		g_ptr_array_add (ptrarr_sleep_type, (gpointer) &pHibernate);
-	combo_setup_dynamic (widgets.combo_sleep_type,
-			     GCONF_ROOT "policy/sleep_type",
-			     ptrarr_sleep_type);
-
-	/* sleep button */
-	ptrarr_button_suspend = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pNothing);
-	if (can_suspend)
-		g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pSuspend);
-	if (can_hibernate)
-		g_ptr_array_add (ptrarr_button_suspend, (gpointer) &pHibernate);
-	combo_setup_dynamic (widgets.combo_button_suspend,
-			     GCONF_ROOT "policy/button_suspend",
-			     ptrarr_button_suspend);
-
-	/* lid "button" */
-	ptrarr_button_lid = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_button_lid, (gpointer) &pNothing);
-	if (can_suspend)
-		g_ptr_array_add (ptrarr_button_lid, (gpointer) &pSuspend);
-	if (can_hibernate)
-		g_ptr_array_add (ptrarr_button_lid, (gpointer) &pHibernate);
-	combo_setup_dynamic (widgets.combo_button_lid,
-			     GCONF_ROOT "policy/button_lid",
-			     ptrarr_button_lid);
-
-	/* battery critical */
-	ptrarr_battery_critical = g_ptr_array_new ();
-	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pNothing);
-	if (can_suspend)
-		g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pSuspend);
-	if (can_hibernate)
-		g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pHibernate);
-	g_ptr_array_add (ptrarr_battery_critical, (gpointer) &pShutdown);
-	combo_setup_dynamic (widgets.combo_battery_critical,
-			     GCONF_ROOT "policy/battery_critical",
-			     ptrarr_battery_critical);
-
-	/* sliders */
-	hscale_setup_action (widgets.slider_ac_computer,
-			     GCONF_ROOT "policy/ac/sleep_computer",
-			     "time");
-	hscale_setup_action (widgets.slider_ac_display,
-			     GCONF_ROOT "policy/ac/sleep_display",
-			     "time");
-	hscale_setup_action (widgets.slider_ac_brightness,
-			     GCONF_ROOT "policy/ac/brightness",
-			     "lcd");
-	hscale_setup_action (widgets.slider_batteries_computer,
-			     GCONF_ROOT "policy/battery/sleep_computer",
-			     "time");
-	hscale_setup_action (widgets.slider_batteries_display,
-			     GCONF_ROOT "policy/battery/sleep_display",
-			     "time");
-	hscale_setup_action (widgets.slider_batteries_brightness,
-			     GCONF_ROOT "policy/battery/brightness",
-			     "lcd");
-	hscale_setup_action (widgets.slider_battery_low,
-			     GCONF_ROOT "general/threshold_low",
-			     "percent");
-	hscale_setup_action (widgets.slider_battery_critical,
-			     GCONF_ROOT "general/threshold_critical",
-			     "percent");
-
-	/* set up upper limit for battery_critical */
-	widget = glade_xml_get_widget (prefwidgets, "hscale_battery_low");
-	gtk_range_set_range (GTK_RANGE (widget), 0, 25);
-	value = gtk_range_get_value (GTK_RANGE (widget));
-
-	widget = glade_xml_get_widget (prefwidgets, "hscale_battery_critical");
-	if (value > 0)
-		gtk_range_set_range (GTK_RANGE (widget), 0, value);
-
-	/* set the top end for LCD sliders */
-	if (hal_get_brightness_steps (&steps)) {
-		/* only set steps if we have LCD device */
-		widget = glade_xml_get_widget (prefwidgets,
-					       "hscale_ac_brightness");
-		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
-		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
-
-		widget = glade_xml_get_widget (prefwidgets,
-					       "hscale_batteries_brightness");
-		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
-		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
-	}
-
-	/* set themed battery and ac_adapter icons */
-	widget = glade_xml_get_widget (prefwidgets, "image_side_battery");
-	gtk_image_set_from_icon_name (GTK_IMAGE(widget),
-				      "gnome-dev-battery",
-				      GTK_ICON_SIZE_DIALOG);
-	widget = glade_xml_get_widget (prefwidgets, "image_side_acadapter");
-	gtk_image_set_from_icon_name (GTK_IMAGE(widget),
-				      "gnome-fs-socket",
-				      GTK_ICON_SIZE_DIALOG);
-
-	/* main loop */
 	gtk_main ();
-	g_ptr_array_free (ptrarr_button_suspend, TRUE);
-	g_ptr_array_free (ptrarr_button_lid, TRUE);
-	g_ptr_array_free (ptrarr_battery_critical, TRUE);
-	g_ptr_array_free (ptrarr_sleep_type, TRUE);
 	return 0;
 }
-/** @} */

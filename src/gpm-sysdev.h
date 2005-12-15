@@ -77,12 +77,12 @@ sysDevStruct *sysDevFindAll (const gchar *udi);
 
 void sysDevInitAll ();
 void sysDevFreeAll ();
-void sysDevPrintAll (void);
+void sysDevDebugPrintAll (void);
 void sysDevUpdateAll ();
 
 void sysDevList (DeviceType type);
 void sysDevAdd (DeviceType type, sysDevStruct *sds);
-void sysDevPrint (DeviceType type);
+void sysDevDebugPrint (DeviceType type);
 void sysDevUpdate (DeviceType type);
 void sysDevRemove (DeviceType type, const char *udi);
 void sysDevRemoveAll (const char *udi);

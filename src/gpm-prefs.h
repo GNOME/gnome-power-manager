@@ -1,9 +1,7 @@
-/** @file	gpm-prefs.h
- *  @brief	GNOME Power Preferences
- *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-10-02
- */
 /*
+ * Copyright (C) 2005 Richard Hughes <hughsient@gmail.com>
+ * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -21,22 +19,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-/**
- * @addtogroup	prefs
- * @{
- */
 
-#ifndef _GPMPREFS_H
-#define _GPMPREFS_H
+#ifndef _GPM_PREFS_H
+#define _GPM_PREFS_H
 
-/** The policy type, required because the sliders all do different things
- *
- */
-typedef enum {
-	POLICY_PERCENT,	/**< Policy is of type percent 0->100	*/
-	POLICY_LCD,	/**< Policy is of type LCD 0->x		*/
-	POLICY_TIME	/**< Policy is of type time 0->120	*/
-} PolicyType;
+#define GPM_PREF_DIR 			"/apps/gnome-power-manager"
 
-#endif	/* _GPMPREFS_H */
-/** @} */
+#define GPM_PREF_AC_SLEEP_COMPUTER	GPM_PREF_DIR "/policy/ac/sleep_computer"
+#define GPM_PREF_AC_SLEEP_DISPLAY	GPM_PREF_DIR "/policy/ac/sleep_display"
+#define GPM_PREF_AC_BRIGHTNESS		GPM_PREF_DIR "/policy/ac/brightness"
+#define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/policy/battery/sleep_computer"
+#define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/policy/battery/sleep_display"
+#define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/policy/battery/brightness"
+#define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/policy/sleep_type"
+#define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/policy/button_suspend"
+#define GPM_PREF_BUTTON_LID		GPM_PREF_DIR "/policy/button_lid"
+#define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/policy/battery_critical"
+#define GPM_PREF_IDLE			GPM_PREF_DIR "/policy/idle"
+#define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/general/display_icon_policy"
+#define GPM_PREF_REQUIRE_PASSWORD	GPM_PREF_DIR "/general/require_password"
+#define GPM_PREF_THRESHOLD_LOW		GPM_PREF_DIR "/general/threshold_low"
+#define GPM_PREF_THRESHOLD_CRITICAL	GPM_PREF_DIR "/general/threshold_critical"
+
+
+#define ICON_POLICY_ALWAYS	"always"
+#define ICON_POLICY_CHARGE	"charge"
+#define ICON_POLICY_CRITICAL	"critical"
+#define ICON_POLICY_NEVER	"never"
+
+#define ACTION_SUSPEND		"suspend"
+#define ACTION_SHUTDOWN		"shutdown"
+#define ACTION_HIBERNATE	"hibernate"
+#define ACTION_NOTHING		"nothing"
+
+#endif	/* _GPM_PREFS_H */
+

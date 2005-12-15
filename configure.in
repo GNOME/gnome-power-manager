@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gnome-power-manager, 0.3.2)
+AC_INIT(gnome-power-manager, 0.3.3)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -16,7 +16,7 @@ GNOME_DOC_INIT
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -ansi -Wall"
+#CPPFLAGS="$CPPFLAGS -ansi -Wall -Werror"
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)
@@ -42,7 +42,7 @@ GLIB_REQUIRED=2.6.0
 GTK_REQUIRED=2.6.0
 LIBGNOME_REQUIRED=2.10.0
 LIBGNOMEUI_REQUIRED=2.10.0
-HAL_REQUIRED=0.5.4
+HAL_REQUIRED=0.5.6
 DBUS_REQUIRED=0.50
 LIBGLADE_REQUIRED=2.5.0
 LIBNOTIFY_REQUIRED=0.2.2

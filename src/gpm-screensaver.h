@@ -26,15 +26,17 @@
  * @{
  */
 
-#ifndef _GPMSCREENSAVER_H
-#define _GPMSCREENSAVER_H
+#ifndef _GPM_SCREENSAVER_H
+#define _GPM_SCREENSAVER_H
 
 #define GS_LISTENER_SERVICE	"org.gnome.screensaver"
 #define GS_LISTENER_PATH	"/org/gnome/screensaver"
 #define GS_LISTENER_INTERFACE	"org.gnome.screensaver"
 
-#define GS_GCONF_ROOT		"/apps/gnome-screensaver/"
-#define GS_GCONF_ROOT_NO_SLASH	"/apps/gnome-screensaver"
+#define GS_PREF_DIR		"/apps/gnome-screensaver"
+#define GS_PREF_DPMS_SUSPEND	GS_PREF_DIR "/dpms_suspend"
+#define GS_PREF_DPMS_ENABLED	GS_PREF_DIR "/dpms_enabled"
+#define GS_PREF_LOCK		GS_PREF_DIR "/lock"
 
 gboolean gpm_screensaver_lock (void);
 gboolean gpm_screensaver_lock_check (void);
