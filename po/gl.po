@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 08:42+0000\n"
-"PO-Revision-Date: 2005-12-06 20:11+0100\n"
+"POT-Creation-Date: 2005-12-16 00:11+0100\n"
+"PO-Revision-Date: 2005-12-16 00:11+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego\n"
 "MIME-Version: 1.0\n"
@@ -60,19 +60,13 @@ msgstr "O tempo de inactividade en segundos antes de que o equipo tente durmir"
 
 #: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the display tries to sleep"
-msgstr ""
-"O tempo de inactividade en segundos antes de que a pantalla tente durmir"
+msgstr "O tempo de inactividade en segundos antes de que a pantalla tente durmir"
 
 #: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the hard disk drives try to sleep"
-msgstr ""
-"O tempo de inactividade en segundos antes de que o disco duro tente durmir"
+msgstr "O tempo de inactividade en segundos antes de que o disco duro tente durmir"
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr "A ruta ata o script de apagado"
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -80,7 +74,7 @@ msgstr ""
 "A porcentaxe que o dispositivo de carga debe ter para ser considerado "
 "\"suficientemente baixo\" para realizar unha acción."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -88,21 +82,21 @@ msgstr ""
 "A porcentaxe que o dispositivo de carga debe ter para ser considerado "
 "\"suficientemente baixo\" para advertir ao usuario."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr "O umbral de acción do dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "O umbral de advertencia do dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "A forma de aforro de enerxía (hibernar/suspender) que se usará "
 "automaticamente."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "Cando amosar a icona na área de notificación"
 
@@ -114,18 +108,18 @@ msgstr "Orientación"
 msgid "The orientation of the tray."
 msgstr "A orientación da bandexa."
 
-#: ../src/gpm-common.c:267
+#: ../src/gpm-common.c:128
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: ../src/gpm-common.c:272
+#: ../src/gpm-common.c:133
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minuto"
 msgstr[1] "%i minutos"
 
-#: ../src/gpm-common.c:283
+#: ../src/gpm-common.c:144
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -134,37 +128,37 @@ msgstr[1] "%i horas"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:289
+#: ../src/gpm-common.c:150
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:290
+#: ../src/gpm-common.c:151
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "hora"
 msgstr[1] "horas"
 
-#: ../src/gpm-common.c:291
+#: ../src/gpm-common.c:152
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuto"
 msgstr[1] "minutos"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr "Xestor de enerxía de Gnome"
 
-#: ../src/gpm-common.h:39
+#: ../src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr "Xestión de enerxía para o escritorio Gnome"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+#: ../src/gpm-console.c:309 ../src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr "Non demonizar"
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+#: ../src/gpm-console.c:311 ../src/gpm-main.c:670 ../src/gpm-prefs.c:564
 msgid "Show extra debugging information"
 msgstr "Amosar información extra de depuración"
 
@@ -250,7 +244,8 @@ msgstr "Outros problemas"
 msgid "Satellite Pro A10"
 msgstr "Satellite Pro A10"
 
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:44
 msgid "Suspend"
 msgstr "Suspender"
 
@@ -262,7 +257,7 @@ msgstr "Información de enerxía do sistema"
 msgid "Toshiba"
 msgstr "Toshiba"
 
-#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -271,27 +266,27 @@ msgstr ""
 "Quédalle aproximadamente <b>%s</b> de batería (%i%%). Enchufe o seu "
 "adaptador de CA para evitar a perda de datos."
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr "A batería está criticamente baixa"
 
-#: ../src/gpm-main.c:436
+#: ../src/gpm-main.c:375
 msgid "Battery Low"
 msgstr "Batería baixa"
 
-#: ../src/gpm-main.c:478
+#: ../src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr "CA desenchufada"
 
-#: ../src/gpm-main.c:479
+#: ../src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "A CA desenchufouse. O sistema está usando enerxía da batería."
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr "Batería cargada"
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr "A súa batería está cargada completamente agora"
 
@@ -390,23 +385,30 @@ msgstr "A_xuda"
 msgid "_About"
 msgstr "_Acerca de"
 
-#: ../src/gpm-prefs.c:689
+#: ../src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "Apagar"
 
-#: ../src/gpm-prefs.c:695
+#: ../src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: ../src/gpm-prefs.c:698
+#: ../src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "Non facer nada"
 
-#: ../src/gpm-prefs.c:775
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr "Nunca"
+
+#: ../src/gpm-prefs.c:504
+msgid "<b>Configuration</b>"
+msgstr "<b>Configuración</b>"
+
+#: ../src/gpm-prefs.c:577
 msgid "GNOME Power Preferences"
 msgstr "Preferencias de enerxía de Gnome"
 
-#. * @}
 #: ../src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Accións</b>"
@@ -519,31 +521,23 @@ msgstr "Forma de durmir do _equipo:"
 msgid "_Never display icon"
 msgstr "_Nunca amosar a icona"
 
-#: ../src/gpm-sysdev.c:58
+#: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr "Batería de portátil"
 
-#: ../src/gpm-sysdev.c:60
+#: ../src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "SAI"
 
-#: ../src/gpm-sysdev.c:62
+#: ../src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "Rato inalámbrico"
 
-#: ../src/gpm-sysdev.c:64
+#: ../src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "Teclado inalámbrico"
 
-#: ../src/gpm-sysdev.c:66
+#: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "PDA misc"
 
-#~ msgid "The event for a system power button press"
-#~ msgstr "O evento para cando se prema o botón de encendido do sistema"
-
-#~ msgid "Send warning"
-#~ msgstr "Enviar aviso"
-
-#~ msgid "When _power button pressed:"
-#~ msgstr "Cando se preme o botón de _encendido:"
