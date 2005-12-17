@@ -1,0 +1,533 @@
+# Catalan translations for gnome-power-manager package
+# Traduccions al català del paquet «gnome-power-manager».
+# Copyright (C) 2005 The Free Software Foundation, Inc.
+# This file is distributed under the same license as the
+#   gnome-power-manager package.
+# Josep Puigdemont <josep.puigdemont@gmail.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-12-17 16:40+0100\n"
+"PO-Revision-Date: 2005-12-17 17:10+0100\n"
+"Last-Translator: Josep Puigdemont <josep.puigdemont@gmail.com>\n"
+"Language-Team: Catalan <tradgnome@softcatala.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+
+#: ../gnome-power-preferences.desktop.in.h:1
+msgid "Configure power management"
+msgstr "Confugureu el gestor d'energia"
+
+#: ../gnome-power-preferences.desktop.in.h:2
+msgid "Power Management"
+msgstr "Gestor d'energia"
+
+#: ../gnome-power-manager.schemas.in.h:1
+msgid "If we require a password when resuming from suspend"
+msgstr ""
+"Si s'ha de demanar una contrasenya quan es reprengui d'una aturada temporal"
+
+#: ../gnome-power-manager.schemas.in.h:2
+msgid "Options are never, critical, charge, always"
+msgstr ""
+"Les opcions són «never» (mai), «critical» (crític), «charge» (càrrega), "
+"«always» (sempre)"
+
+#: ../gnome-power-manager.schemas.in.h:3
+msgid "The action to take when the battery is critically low."
+msgstr "La acció a prendre quan la bateria estigui criticament baixa."
+
+#: ../gnome-power-manager.schemas.in.h:4
+msgid "The brightness the display is set to on AC"
+msgstr ""
+"La brillantor de la pantalla quan s'estigui connectat a la xarxa elèctrica"
+
+#: ../gnome-power-manager.schemas.in.h:5
+msgid "The brightness the display is set to on battery"
+msgstr "La brillantor de la pantalla quan s'utilitzi la bateria"
+
+#: ../gnome-power-manager.schemas.in.h:6
+msgid "The event for a laptop lid closing"
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:7
+msgid "The event for a system suspend button press"
+msgstr "La incidència quan es prem el botó d'aturada temporal del sistema"
+
+# FIXME: dormir? (josep)
+#: ../gnome-power-manager.schemas.in.h:8
+msgid "The idle time in seconds before the computer tries to sleep"
+msgstr "El temps d'inactivitat abans que l'ordinador intenti posar-se a dormir"
+
+# FIXME
+#: ../gnome-power-manager.schemas.in.h:9
+msgid "The idle time in seconds before the display tries to sleep"
+msgstr "El temps d'inactivitat abans que la pantalla intenti posar-se a dormir"
+
+# FIXME
+#: ../gnome-power-manager.schemas.in.h:10
+msgid "The idle time in seconds before the hard disk drives try to sleep"
+msgstr "El temps d'inactivitat abans que el disc dur intenti posar-se a dormir"
+
+#: ../gnome-power-manager.schemas.in.h:11
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr ""
+"El tant percent que el dispositiu d'energia ha d'obtenir per considerar-lo "
+"«prou baix» com per prendre alguna acció."
+
+#: ../gnome-power-manager.schemas.in.h:12
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to warn the user."
+msgstr ""
+"El tant percent que el dispositiu d'energia ha d'obtenir per considerar-lo "
+"«prou baix» com per avisar l'usuari."
+
+#: ../gnome-power-manager.schemas.in.h:13
+msgid "The powerdevice action threshold."
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:14
+msgid "The powerdevice warning threshold."
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:15
+msgid "The type of sleep (hibernate/suspend) to use automatically."
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:16
+msgid "When to show the notification icon"
+msgstr ""
+
+#: ../src/eggtrayicon.c:127
+msgid "Orientation"
+msgstr "Orientació"
+
+#: ../src/eggtrayicon.c:128
+msgid "The orientation of the tray."
+msgstr "La orientació al quadre de notificació."
+
+#: ../src/gpm-common.c:128
+msgid "Unknown"
+msgstr "Desconegut"
+
+#: ../src/gpm-common.c:133
+#, c-format
+msgid "%i minute"
+msgid_plural "%i minutes"
+msgstr[0] "%i minut"
+msgstr[1] "%i minuts"
+
+#: ../src/gpm-common.c:144
+#, c-format
+msgid "%i hour"
+msgid_plural "%i hours"
+msgstr[0] "%i hora"
+msgstr[1] "%i hores"
+
+#. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
+#. * Swap order with "%2$s %2$i %1$s %1$i if needed
+#: ../src/gpm-common.c:150
+#, c-format
+msgid "%i %s, %i %s"
+msgstr "%i %s, %i %s"
+
+#: ../src/gpm-common.c:151
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "hora"
+msgstr[1] "hores"
+
+#: ../src/gpm-common.c:152
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minut"
+msgstr[1] "minuts"
+
+#. common descriptions of this program
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
+msgid "GNOME Power Manager"
+msgstr "Gestor d'energia del GNOME"
+
+#: ../src/gpm-common.h:34
+msgid "Power Manager for the GNOME desktop"
+msgstr "Gestor d'energia per a l'escriptori GNOME"
+
+#: ../src/gpm-console.c:309 ../src/gpm-main.c:668
+msgid "Do not daemonize"
+msgstr ""
+
+#: ../src/gpm-console.c:311 ../src/gpm-main.c:670 ../src/gpm-prefs.c:564
+msgid "Show extra debugging information"
+msgstr ""
+
+#. * @}
+#: ../src/gpm-info.glade.h:2
+#, no-c-format
+msgid "96% efficient"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:3
+msgid "<b>Batteries</b>"
+msgstr "<b>Bateries</b>"
+
+#: ../src/gpm-info.glade.h:4
+msgid "<b>Capabilities</b>"
+msgstr "<b>Característiques</b>"
+
+#: ../src/gpm-info.glade.h:5
+msgid "<b>GNOME Screensaver</b>"
+msgstr "<b>Estalvi de pantalla del GNOME</b>"
+
+#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>General</b>"
+
+#: ../src/gpm-info.glade.h:7
+msgid "<b>Other problems</b>"
+msgstr "<b>Altres problemes</b>"
+
+#: ../src/gpm-info.glade.h:8
+msgid "<b>UPS</b>"
+msgstr "<b>UPS</b>"
+
+#: ../src/gpm-info.glade.h:9
+msgid "APC UPS 100CS"
+msgstr "APC UPS 100CS"
+
+#: ../src/gpm-info.glade.h:10
+msgid "CPU Frequency Scaling"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:11
+msgid "Form-factor:"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:12
+msgid "Gnome Screensaver Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:13
+msgid "Hibernation"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:14
+msgid "Laptop"
+msgstr "Portàtil"
+
+#: ../src/gpm-info.glade.h:15
+msgid "LiION Battery"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:16
+msgid "Low Power Mode"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:17
+msgid "Manufacturer:"
+msgstr "Fabricant"
+
+#: ../src/gpm-info.glade.h:18
+msgid "Model:"
+msgstr "Model:"
+
+#: ../src/gpm-info.glade.h:19
+msgid "NiMOH Battery"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:20
+msgid "Other problems"
+msgstr "Altres problemes"
+
+#: ../src/gpm-info.glade.h:21
+msgid "Satellite Pro A10"
+msgstr "Satellite Pro A10"
+
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:44
+msgid "Suspend"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:23
+msgid "System Power Info"
+msgstr ""
+
+#: ../src/gpm-info.glade.h:24
+msgid "Toshiba"
+msgstr "Toshiba"
+
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr ""
+
+#: ../src/gpm-main.c:357
+msgid "Battery Critically Low"
+msgstr ""
+
+#: ../src/gpm-main.c:375
+msgid "Battery Low"
+msgstr ""
+
+#: ../src/gpm-main.c:417
+msgid "AC Power Unplugged"
+msgstr ""
+
+#: ../src/gpm-main.c:418
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr ""
+
+#: ../src/gpm-main.c:494
+msgid "Battery Charged"
+msgstr ""
+
+#: ../src/gpm-main.c:494
+msgid "Your battery is now fully charged"
+msgstr ""
+
+#: ../src/gpm-notification.c:219
+msgid "charging"
+msgstr "carregant-se"
+
+#: ../src/gpm-notification.c:221
+msgid "discharging"
+msgstr "descarregant-se"
+
+# La bateria
+#: ../src/gpm-notification.c:224
+msgid "charged"
+msgstr "carregada"
+
+#: ../src/gpm-notification.c:239
+msgid "until charged"
+msgstr "fins que estigui carregada"
+
+#: ../src/gpm-notification.c:242
+msgid "until empty"
+msgstr "fins que estigui buida"
+
+#: ../src/gpm-notification.c:309
+msgid "Computer is running on battery power\n"
+msgstr "L'ordindor utilitza l'energia de la bateria\n"
+
+#: ../src/gpm-notification.c:311
+msgid "Computer is running on AC power\n"
+msgstr "L'ordinador utilitza l'energia de la xarxa elèctrica\n"
+
+#: ../src/gpm-notification.c:341
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr ""
+
+#: ../src/gpm-notification.c:342
+msgid ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+
+#: ../src/gpm-notification.c:346
+msgid ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+
+#: ../src/gpm-notification.c:350
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+
+#. Translators comment: put your own name here to appear in the
+#. * about dialog.
+#: ../src/gpm-notification.c:363
+msgid "translator-credits"
+msgstr "Josep Puigdemont i Casamajó <josep.puigdemont@gmail.com>"
+
+#: ../src/gpm-notification.c:494
+msgid "_Suspend"
+msgstr ""
+
+#: ../src/gpm-notification.c:499
+msgid "Hi_bernate"
+msgstr ""
+
+#: ../src/gpm-notification.c:511
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#: ../src/gpm-notification.c:513
+msgid "_Help"
+msgstr "A_juda"
+
+#: ../src/gpm-notification.c:515
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../src/gpm-prefs.c:45
+msgid "Shutdown"
+msgstr ""
+
+#: ../src/gpm-prefs.c:46
+msgid "Hibernate"
+msgstr ""
+
+#: ../src/gpm-prefs.c:47
+msgid "Do nothing"
+msgstr ""
+
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr "Mai"
+
+#: ../src/gpm-prefs.c:504
+msgid "<b>Configuration</b>"
+msgstr "<b>Configuració</b>"
+
+#: ../src/gpm-prefs.c:577
+msgid "GNOME Power Preferences"
+msgstr "Preferències de l'energia del GNOME"
+
+#: ../src/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Accions</b>"
+
+#: ../src/gpm-prefs.glade.h:3
+msgid "<b>Notification Area</b>"
+msgstr "<b>Àrea de notificació</b>"
+
+#: ../src/gpm-prefs.glade.h:4
+msgid "<b>Other Options</b>"
+msgstr "<b>Altres opcions</b>"
+
+#: ../src/gpm-prefs.glade.h:5
+msgid "<b>Running on AC Adapter</b>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:6
+msgid "<b>Running on Batteries</b>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:8
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:9
+msgid "Advanced"
+msgstr "Avançat"
+
+#: ../src/gpm-prefs.glade.h:10
+msgid "Ba_ttery is critical when below:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "Opcions"
+
+#: ../src/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "Preferències de l'energia"
+
+#: ../src/gpm-prefs.glade.h:15
+msgid "Put _computer to sleep after:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:16
+msgid "Put _display to sleep after:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:17
+msgid "Put c_omputer to sleep after:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:18
+msgid "Put dis_play to sleep after:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:19
+msgid "Require password when returning from sleep"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:20
+msgid "Set display _brightness:"
+msgstr "Estableix la _brillantor de la pantalla:"
+
+#: ../src/gpm-prefs.glade.h:21
+msgid "Set display b_rightness:"
+msgstr "Estableix la b_rillantor de la pantalla:"
+
+#: ../src/gpm-prefs.glade.h:22
+msgid "Sleep"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:23
+msgid "When _battery power critical:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:24
+msgid "When _suspend button pressed:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:25
+msgid "When laptop li_d is closed:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:26
+msgid "_Always display icon"
+msgstr "Mostr_a sempre la icona"
+
+#: ../src/gpm-prefs.glade.h:27
+msgid "_Battery is low when below:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:28
+msgid "_Computer sleep type:"
+msgstr ""
+
+#: ../src/gpm-prefs.glade.h:29
+msgid "_Never display icon"
+msgstr "_No mostris mai la icona"
+
+#: ../src/gpm-sysdev.c:57
+msgid "Laptop battery"
+msgstr ""
+
+#: ../src/gpm-sysdev.c:59
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-sysdev.c:61
+msgid "Wireless mouse"
+msgstr "Ratolí sense fil"
+
+#: ../src/gpm-sysdev.c:63
+msgid "Wireless keyboard"
+msgstr "Teclat sense fil"
+
+#: ../src/gpm-sysdev.c:65
+msgid "Misc PDA"
+msgstr "PDA divers"
