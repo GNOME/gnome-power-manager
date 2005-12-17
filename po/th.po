@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-11 21:13+0700\n"
-"PO-Revision-Date: 2005-12-11 22:23+0700\n"
+"POT-Creation-Date: 2005-12-17 15:51+0700\n"
+"PO-Revision-Date: 2005-12-17 15:54+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,36 +66,30 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "ช่วงเวลาเดินเครื่องเปล่าเป็นวินาที ก่อนที่ฮาร์ดดิสก์จะหลับ"
 
 #: gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr "พาธของสคริปต์สำหรับปิดเครื่อง"
+msgid ""
+"The percentage that the powerdevice has to get to be considered \"low enough"
+"\" to perform an action."
+msgstr "เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานจะเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเริ่มปฏิบัติการบางอย่าง"
 
 #: gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to perform an action."
-msgstr ""
-"เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานจะเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเริ่มปฏิบัติการบางอย่าง"
+"\" to warn the user."
+msgstr "เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเตือนผู้ใช้"
 
 #: gnome-power-manager.schemas.in.h:13
-msgid ""
-"The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to warn the user."
-msgstr ""
-"เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเตือนผู้ใช้"
-
-#: gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "ขีดเริ่มปฏิบัติการของอุปกรณ์จ่ายพลังงาน"
 
-#: gnome-power-manager.schemas.in.h:15
+#: gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "ขีดเริ่มเตือนของอุปกรณ์จ่ายพลังงาน"
 
-#: gnome-power-manager.schemas.in.h:16
+#: gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "ชนิดของการหลับ (hibernate/suspend) ที่จะใช้โดยอัตโนมัติ"
 
-#: gnome-power-manager.schemas.in.h:17
+#: gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "เมื่อไรจะแสดงไอคอนแจ้งเหตุ"
 
@@ -107,18 +101,18 @@ msgstr "แนววาง"
 msgid "The orientation of the tray."
 msgstr "แนววางของถาด"
 
-#: src/gpm-common.c:267
+#: src/gpm-common.c:128
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: src/gpm-common.c:272
+#: src/gpm-common.c:133
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i นาที"
 msgstr[1] "%i นาที"
 
-#: src/gpm-common.c:283
+#: src/gpm-common.c:144
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -127,37 +121,37 @@ msgstr[1] "%i ชั่วโมง"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: src/gpm-common.c:289
+#: src/gpm-common.c:150
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: src/gpm-common.c:290
+#: src/gpm-common.c:151
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ชั่วโมง"
 msgstr[1] "ชั่วโมง"
 
-#: src/gpm-common.c:291
+#: src/gpm-common.c:152
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
 msgstr[1] "นาที"
 
 #. common descriptions of this program
-#: src/gpm-common.h:38 src/gpm-main.c:732
+#: src/gpm-common.h:33 src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
-#: src/gpm-common.h:39
+#: src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr "โปรแกรมจัดการการใช้พลังงานสำหรับเดสก์ท็อป GNOME"
 
-#: src/gpm-console.c:308 src/gpm-main.c:714
+#: src/gpm-console.c:309 src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr "ไม่ต้องแปลงเป็นดีมอน"
 
-#: src/gpm-console.c:310 src/gpm-main.c:716 src/gpm-prefs.c:759
+#: src/gpm-console.c:311 src/gpm-main.c:670 src/gpm-prefs.c:564
 msgid "Show extra debugging information"
 msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติม"
 
@@ -243,7 +237,8 @@ msgstr "ปัญหาอื่นๆ"
 msgid "Satellite Pro A10"
 msgstr "Satellite Pro A10"
 
-#: src/gpm-info.glade.h:22 src/gpm-prefs.c:692
+#. The text that should appear in the action combo boxes
+#: src/gpm-info.glade.h:22 src/gpm-prefs.c:44
 msgid "Suspend"
 msgstr "พักเครื่อง"
 
@@ -255,36 +250,36 @@ msgstr "ข้อมูลระบบพลังงานของระบบ
 msgid "Toshiba"
 msgstr "โตชิบา"
 
-#: src/gpm-main.c:414 src/gpm-main.c:433
+#: src/gpm-main.c:353 src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
-"คุณเหลือพลังงานในแบตเตอรีอีกประมาณ <b>%s</b> (%i%%) "
-"กรุณาเสียบที่แปลงไฟ AC เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
+"คุณเหลือพลังงานในแบตเตอรีอีกประมาณ <b>%s</b> (%i%%) กรุณาเสียบที่แปลงไฟ AC "
+"เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: src/gpm-main.c:418
+#: src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr "แบตเตอรีต่ำถึงขั้นวิกฤต"
 
-#: src/gpm-main.c:436
+#: src/gpm-main.c:375
 msgid "Battery Low"
 msgstr "แบตเตอรีต่ำ"
 
-#: src/gpm-main.c:478
+#: src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr "ปลั๊กไฟ AC ถูกถอด"
 
-#: src/gpm-main.c:479
+#: src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี"
 
-#: src/gpm-main.c:550
+#: src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr "อัดแบตเตอรีเสร็จแล้ว"
 
-#: src/gpm-main.c:550
+#: src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr "แบตเตอรีของคุณอัดไฟเต็มแล้ว"
 
@@ -381,23 +376,30 @@ msgstr "_วิธีใช้"
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: src/gpm-prefs.c:689
+#: src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "ปิดเครื่อง"
 
-#: src/gpm-prefs.c:695
+#: src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr "จำศีลเครื่อง"
 
-#: src/gpm-prefs.c:698
+#: src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: src/gpm-prefs.c:775
+#: src/gpm-prefs.c:137
+msgid "Never"
+msgstr "ไม่ต้อง"
+
+#: src/gpm-prefs.c:504
+msgid "<b>Configuration</b>"
+msgstr "<b>การตั้งค่า</b>"
+
+#: src/gpm-prefs.c:577
 msgid "GNOME Power Preferences"
 msgstr "ปรับแต่งโปรแกรมจัดการพลังงานของ GNOME"
 
-#. * @}
 #: src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>ปฏิบัติการ</b>"
@@ -510,23 +512,25 @@ msgstr "_ชนิดการหลับของคอมพิวเตอ�
 msgid "_Never display icon"
 msgstr "ไ_ม่ต้องแสดงไอคอน"
 
-#: src/gpm-sysdev.c:58
+#: src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr "แบตเตอรีแล็ปท็อป"
 
-#: src/gpm-sysdev.c:60
+#: src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "UPS"
 
-#: src/gpm-sysdev.c:62
+#: src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "เมาส์ไร้สาย"
 
-#: src/gpm-sysdev.c:64
+#: src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "แป้นพิมพ์ไร้สาย"
 
-#: src/gpm-sysdev.c:66
+#: src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "PDA ทั่วไป"
 
+#~ msgid "The path to the shutdown script"
+#~ msgstr "พาธของสคริปต์สำหรับปิดเครื่อง"
