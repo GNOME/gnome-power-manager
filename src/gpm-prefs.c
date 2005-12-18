@@ -123,12 +123,14 @@ gpm_prefs_check_requirepw_cb (GtkWidget *widget, gpointer data)
 static gchar*
 gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
 {
-	int *steps = NULL;
-	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
-	if (!steps)
+	int steps;
+	int *psteps = NULL;
+	psteps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
+	if (!psteps)
 		return g_strdup_printf ("%i%%", (gint) value);
 
-	return g_strdup_printf ("%i%%", (gint) value * 100 / (*steps + 1));
+	steps = GPOINTER_TO_INT (psteps);
+	return g_strdup_printf ("%i%%", (gint) value * 100 / (steps - 1));
 }
 
 static gchar*
@@ -201,17 +203,18 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog, gchar *widget_name, gchar *
 
 	widget = glade_xml_get_widget (dialog, widget_name);
 
-	/* set the value before the cb's, else the brightness is set */
+	g_signal_connect (G_OBJECT (widget), "format-value", 
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
+
+	/* set the value before the changed cb, else the brightness is set */
 	value = gconf_client_get_int (gconf_client_get_default (), gpm_pref_key, NULL);
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
-	g_signal_connect (G_OBJECT (widget), "format-value", 
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
 	g_signal_connect (G_OBJECT (widget), "value-changed", 
 			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
 
 	if (gpm_hal_get_brightness_steps (&steps)) {
-		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
+		g_object_set_data ((GObject*) GTK_WIDGET (widget), "lcdsteps", GINT_TO_POINTER (steps));
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 	}
 	return widget;
@@ -541,7 +544,6 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (slider_batteries_display);
 	}
 
-
 	gboolean can_set_brightness = hal_num_devices_of_capability ("laptop_panel") > 0;
 	if (!can_set_brightness) {
 		gtk_widget_hide_all (label_ac_brightness);
@@ -549,7 +551,6 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (label_batteries_brightness);
 		gtk_widget_hide_all (slider_batteries_brightness);
 	}
-
 }
 
 int
