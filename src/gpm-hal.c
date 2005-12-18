@@ -45,6 +45,35 @@
 
 typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
 
+
+
+/** Returns true if running on ac
+ *
+ *  @return			TRUE is computer is running on AC
+ */
+gboolean
+gpm_hal_is_on_ac (void)
+{
+	gboolean is_on_ac;
+	gchar **device_names = NULL;
+
+	/* find ac_adapter */
+	hal_find_device_capability ("ac_adapter", &device_names);
+	if (!device_names && device_names[0]) {
+		g_debug ("Couldn't obtain list of ac_adapters");
+		/*
+		 * If we do not have an AC adapter, then assume we are a
+		 * desktop and return true
+		 */
+		return TRUE;
+	}
+	/* assume only one */
+	hal_device_get_bool (device_names[0], "ac_adapter.present", &is_on_ac);
+	hal_free_capability (device_names);
+	return is_on_ac;
+}
+
+
 /** Returns true if system.formfactor == "laptop"
  *
  *  @return			TRUE is computer is identified as a laptop
