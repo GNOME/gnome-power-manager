@@ -187,6 +187,25 @@ else
 fi
 AM_CONDITIONAL(HAVE_LIBNOTIFY, test x$have_libnotify = xyes)
 if test x$have_libnotify = xyes ; then
+    # Find out the version of LIBNOTIFY we're using
+    libnotify_version=`pkg-config --modversion libnotify`
+    LIBNOTIFY_VERSION_MAJOR=`echo $libnotify_version | awk -F. '{print $1}'`
+    LIBNOTIFY_VERSION_MINOR=`echo $libnotify_version | awk -F. '{print $2}'`
+    LIBNOTIFY_VERSION_MICRO=`echo $libnotify_version | awk -F. '{print $3}'`
+    if test "z$LIBNOTIFY_VERSION_MAJOR" = "z"; then
+        LIBNOTIFY_VERSION_MAJOR="0"
+    fi
+    if test "z$LIBNOTIFY_VERSION_MINOR" = "z"; then
+        LIBNOTIFY_VERSION_MINOR="0"
+    fi
+    if test "z$LIBNOTIFY_VERSION_MICRO" = "z"; then
+        LIBNOTIFY_VERSION_MICRO="0"
+    fi
+    echo "Your libnotify version is $LIBNOTIFY_VERSION_MAJOR,$LIBNOTIFY_VERSION_MINOR,$LIBNOTIFY_VERSION_MICRO."
+    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MAJOR=$LIBNOTIFY_VERSION_MAJOR"
+    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MINOR=$LIBNOTIFY_VERSION_MINOR"
+    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MICRO=$LIBNOTIFY_VERSION_MICRO"
+
     AC_DEFINE(HAVE_LIBNOTIFY,1,[libnotify support])
     AC_SUBST(LIBNOTIFY_CFLAGS)
     AC_SUBST(LIBNOTIFY_LIBS)

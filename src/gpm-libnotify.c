@@ -48,20 +48,10 @@
 #include <libnotify/notify.h>
 #endif
 
-#if defined(HAVE_LIBNOTIFY)
-  #define HAVE_OLD_LIBNOTIFY
-#endif
-/*
- * We can only enable HAVE_NEW_LIBNOTIFY when we use libnotify > 0.3.0
- * which depends on DBUS 0.60, and a whole lot of stuff
- * won't build with the new DBUS -- We better wait for the
- * distros to start carrying this before we dump this on the
- * users / ISV's
- */
 
-#if defined(HAVE_OLD_LIBNOTIFY)
+#if (LIBNOTIFY_VERSION_MINOR == 2)
 static NotifyHandle *globalnotify = NULL;
-#elif defined(HAVE_NEW_LIBNOTIFY)
+#elif (LIBNOTIFY_VERSION_MINOR >= 3)
 static NotifyNotification *globalnotify;
 #endif
 
@@ -104,7 +94,7 @@ get_widget_position (GtkWidget *widget, gint *x, gint *y)
 gboolean
 libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
-#if defined(HAVE_NEW_LIBNOTIFY)
+#if (LIBNOTIFY_VERSION_MINOR >= 3)
 	gint x, y;
 	globalnotify = notify_notification_new (subject, content, GPM_STOCK_AC_8_OF_8, NULL);
 
@@ -126,7 +116,7 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 		return FALSE;
 	}
 	return TRUE;
-#elif defined(HAVE_OLD_LIBNOTIFY)
+#elif (LIBNOTIFY_VERSION_MINOR == 2)
 	NotifyIcon *icon = NULL;
 	NotifyHints *hints = NULL;
 	gint x, y;
@@ -204,10 +194,10 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 gboolean
 libnotify_clear (void)
 {
-#if defined(HAVE_OLD_LIBNOTIFY)
+#if (LIBNOTIFY_VERSION_MINOR == 2)
 	if (globalnotify)
 		notify_close (globalnotify);
-#elif defined(HAVE_NEW_LIBNOTIFY)
+#elif (LIBNOTIFY_VERSION_MINOR >= 3)
 	GError *error;
 	if (globalnotify)
 		notify_notification_close (globalnotify, &error);
@@ -228,10 +218,10 @@ libnotify_init (const gchar *nicename)
 {
 	gboolean ret = TRUE;
 	g_assert (nicename);
-#if defined(HAVE_OLD_LIBNOTIFY)
+#if (LIBNOTIFY_VERSION_MINOR == 2)
 	globalnotify = NULL;
 	ret = notify_glib_init (nicename, NULL);
-#elif defined(HAVE_NEW_LIBNOTIFY)
+#elif (LIBNOTIFY_VERSION_MINOR >= 3)
 	globalnotify = NULL;
 	ret = notify_init (nicename);
 #endif

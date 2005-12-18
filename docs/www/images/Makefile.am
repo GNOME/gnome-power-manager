@@ -9,6 +9,8 @@ include $(top_srcdir)/rules.common
 misc_images=\
 	favicon.ico		\
 	gnome-session.png	\
+	gpm-about.png		\
+	logo32x32.png		\
 	gpm-low-batt.png	\
 	gpm-taskbar.png		\
 	gpm-tooltip.png		\

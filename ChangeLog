@@ -11,6 +11,15 @@
 
 	* configure.in: Make warnings stop build. Fix said warnings.
 
+	* src/gpm-prefs.c: Don't use a pointer like a global variable, else
+	it bites back. Use INT_TO_POINTER to wrap it up nicely.
+
+	* src/gpm-hal.c: Add gpm_hal_is_on_ac() so we can get rid of the gpm
+	dbus dependance on gpp.
+
+	* configure.in, src/gpm-libnotify.c: Automatically compile the correct
+	code for the new libnotify. Thanks again to Jaap.
+
 2005-12-17  Josep Puigdemont i Casamajó  <josep.puigdemont@gmail.com>
 
 	* configure.in: Added 'ca' to ALL_LINGUAS.
