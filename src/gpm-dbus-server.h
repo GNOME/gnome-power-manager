@@ -29,8 +29,6 @@
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
 
-#include "compiler.h"
-
 /** The dbus signal type
  */
 enum
@@ -54,7 +52,7 @@ struct GPMObject {GObject parent;};
  */
 struct GPMObjectClass {GObjectClass parent;};
 
-gboolean gpm_object_register (void) __must_check;
+gboolean gpm_object_register (void);
 gboolean gpm_emit_about_to_happen (const gint value);
 gboolean gpm_emit_performing_action (const gint value);
 gboolean gpm_emit_mains_changed (const gboolean value);

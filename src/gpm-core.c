@@ -37,7 +37,7 @@
 #include "gpm-common.h"
 #include "gpm-core.h"
 #include "gpm-sysdev.h"
-#include "glibhal-extras.h"
+#include "gpm-hal.h"
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
 

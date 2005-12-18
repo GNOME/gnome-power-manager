@@ -22,6 +22,10 @@
  * 02110-1301, USA.
  */
 
+
+#ifndef _GPMCORE_H
+#define _GPMCORE_H
+
 gboolean gpm_coldplug_acadapter (void);
 gboolean gpm_coldplug_buttons (void);
 gboolean gpm_coldplug_batteries (void);
@@ -29,3 +33,7 @@ gboolean gpm_add_battery (const gchar *udi);
 gboolean gpm_read_battery_data (sysDevStruct *sds);
 gboolean gpm_device_removed (const gchar *udi);
 gboolean gpm_device_new_capability (const gchar *udi, const gchar *capability);
+
+int daemon(int nochdir, int noclose);
+
+#endif	/* _GPMCORE_H */

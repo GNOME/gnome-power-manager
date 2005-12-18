@@ -79,13 +79,13 @@
 #include "gpm-libnotify.h"
 #include "gpm-dbus-server.h"
 #include "gpm-dbus-common.h"
+#include "gpm-hal.h"
+#include "gpm-stock-icons.h"
+#include "gpm-sysdev.h"
 
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
-#include "glibhal-extras.h"
 #include "gnome-power-glue.h"
-#include "gpm-stock-icons.h"
-#include "gpm-sysdev.h"
 
 /* no need for IPC with globals */
 gboolean onAcPower;
@@ -170,8 +170,8 @@ perform_power_policy (gboolean isOnAc)
 		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
 	}
 
-	hal_set_brightness_dim (brightness);
-	hal_setlowpowermode (!isOnAc);
+	gpm_hal_set_brightness_dim (brightness);
+	gpm_hal_setlowpowermode (!isOnAc);
 
 	gpm_screensaver_set_dpms_timeout (sleep_display);
 
@@ -212,9 +212,9 @@ perform_sleep_methods (gboolean to_disk)
 
 	/* do the sleep type */
 	if (to_disk)
-		hal_hibernate ();
+		gpm_hal_hibernate ();
 	else
-		hal_suspend (0);
+		gpm_hal_suspend (0);
 	/* Bring NetworkManager back to life */
 	gpm_networkmanager_wake ();
 
@@ -239,14 +239,14 @@ action_policy_do (gchar* action)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		g_debug ("*ACTION* Suspend");
-		if (!hal_pm_can_suspend ()) {
+		if (!gpm_hal_pm_can_suspend ()) {
 			g_warning ("Cannot suspend as disabled in HAL");
 			return;
 		}
 		perform_sleep_methods (FALSE);
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		g_debug ("*ACTION* Hibernate");
-		if (!hal_pm_can_hibernate ()) {
+		if (!gpm_hal_pm_can_hibernate ()) {
 			g_warning ("Cannot hibernate as disabled in HAL");
 			return;
 		}
@@ -256,7 +256,7 @@ action_policy_do (gchar* action)
 		/* Save current session */
 		gnome_client_request_save (gnome_master_client (), GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
-		hal_shutdown ();
+		gpm_hal_shutdown ();
 #if 0
 		gchar *cmd;
 		cmd = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_CMD_SHUTDOWN, NULL);
@@ -545,7 +545,7 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 	g_assert (details);
 
 	g_debug ("hal_device_condition: udi=%s, name=%s, details=%s",
-		udi, name, details);
+		 udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
 		hal_device_get_string (udi, "button.type", &type);
@@ -585,9 +585,9 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 				return;
 			}
 			if (strcmp (details, "BrightnessUp") == 0)
-				hal_set_brightness_up ();
+				gpm_hal_set_brightness_up ();
 			else if (strcmp (details, "BrightnessDown") == 0)
-				hal_set_brightness_down ();
+				gpm_hal_set_brightness_down ();
 			else if (strcmp (details, "Suspend") == 0)
 				action_policy_do (ACTION_SUSPEND);
 			else if (strcmp (details, "Hibernate") == 0)
@@ -749,7 +749,7 @@ main (int argc, char *argv[])
 	}
 
 	/* check we have PM capability */
-	if (!hal_pm_check ()) {
+	if (!gpm_hal_pm_check ()) {
 		g_warning ("HAL does not have modern PowerManagement capability");
 		return 0;
 	}

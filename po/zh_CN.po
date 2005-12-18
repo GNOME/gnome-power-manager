@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 08:42+0000\n"
+"POT-Creation-Date: 2005-12-18 18:18+0000\n"
 "PO-Revision-Date: 2005-12-05 18:37+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -65,34 +65,30 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "硬盘驱动器试图转入休眠时等待的时间秒数"
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr "关机脚本的路径"
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr "电源设备动作阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "电源设备警告阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "自动使用休眠还是待机。"
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "是否显示通知图标"
 
@@ -104,17 +100,17 @@ msgstr "方向"
 msgid "The orientation of the tray."
 msgstr "托盘的方向。"
 
-#: ../src/gpm-common.c:267
+#: ../src/gpm-common.c:128
 msgid "Unknown"
 msgstr "未知"
 
-#: ../src/gpm-common.c:272
+#: ../src/gpm-common.c:133
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i 分钟"
 
-#: ../src/gpm-common.c:283
+#: ../src/gpm-common.c:144
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -122,133 +118,39 @@ msgstr[0] "%i 小时"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:289
+#: ../src/gpm-common.c:150
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:290
+#: ../src/gpm-common.c:151
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "小时"
 
-#: ../src/gpm-common.c:291
+#: ../src/gpm-common.c:152
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分钟"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr "GNOME 电源管理器"
 
-#: ../src/gpm-common.h:39
+#: ../src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的电源管理器"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
-#. * @}
-#: ../src/gpm-info.glade.h:2
-#, no-c-format
-msgid "96% efficient"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:3
-msgid "<b>Batteries</b>"
-msgstr "<b>电池</b>"
-
-#: ../src/gpm-info.glade.h:4
-msgid "<b>Capabilities</b>"
-msgstr "<b>容量</b>"
-
-#: ../src/gpm-info.glade.h:5
-msgid "<b>GNOME Screensaver</b>"
-msgstr "<b>GNOME 屏幕保护程序</b>"
-
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>常规</b>"
-
-#: ../src/gpm-info.glade.h:7
-msgid "<b>Other problems</b>"
-msgstr "<b>其它问题</b>"
-
-#: ../src/gpm-info.glade.h:8
-msgid "<b>UPS</b>"
-msgstr "<b>UPS</b>"
-
-#: ../src/gpm-info.glade.h:9
-msgid "APC UPS 100CS"
-msgstr "APC UPS 100CS"
-
-#: ../src/gpm-info.glade.h:10
-msgid "CPU Frequency Scaling"
-msgstr "CPU 频率调节"
-
-#: ../src/gpm-info.glade.h:11
-msgid "Form-factor:"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:12
-msgid "Gnome Screensaver Info"
-msgstr "Gnome 屏幕保护程序信息"
-
-#: ../src/gpm-info.glade.h:13
-msgid "Hibernation"
-msgstr "休眠"
-
-#: ../src/gpm-info.glade.h:14
-msgid "Laptop"
-msgstr "笔记本"
-
-#: ../src/gpm-info.glade.h:15
-msgid "LiION Battery"
-msgstr "LiION 电池"
-
-#: ../src/gpm-info.glade.h:16
-msgid "Low Power Mode"
-msgstr "低电量模式"
-
-#: ../src/gpm-info.glade.h:17
-msgid "Manufacturer:"
-msgstr "制造商："
-
-#: ../src/gpm-info.glade.h:18
-msgid "Model:"
-msgstr "型号："
-
-#: ../src/gpm-info.glade.h:19
-msgid "NiMOH Battery"
-msgstr "NiMOH 电池"
-
-#: ../src/gpm-info.glade.h:20
-msgid "Other problems"
-msgstr "其它问题"
-
-#: ../src/gpm-info.glade.h:21
-msgid "Satellite Pro A10"
-msgstr "Satellite Pro A10"
-
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
-msgid "Suspend"
-msgstr "挂起"
-
-#: ../src/gpm-info.glade.h:23
-msgid "System Power Info"
-msgstr "系统电源信息"
-
-#: ../src/gpm-info.glade.h:24
-msgid "Toshiba"
-msgstr "东芝"
-
-#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -256,63 +158,63 @@ msgid ""
 msgstr ""
 "电量大约可维持 <b>%s</b>，为总电量的 %i%%。请接入交流电源以避免丢失数据。"
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr "电量即将用尽"
 
-#: ../src/gpm-main.c:436
+#: ../src/gpm-main.c:375
 msgid "Battery Low"
 msgstr "电量低"
 
-#: ../src/gpm-main.c:478
+#: ../src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr "交流电已拔出"
 
-#: ../src/gpm-main.c:479
+#: ../src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "交流电已经拔出。系统现在将使用电池供电。"
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr "电池已充满"
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr "您的电池已经充满电"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-notification.c:216
 msgid "charging"
 msgstr "正充电"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:218
 msgid "discharging"
 msgstr "正放电"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:221
 msgid "charged"
 msgstr "已充电"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:236
 msgid "until charged"
 msgstr "至充满"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:239
 msgid "until empty"
 msgstr "直到空"
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:306
 msgid "Computer is running on battery power\n"
 msgstr "计算机正在使用电池供电\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:308
 msgid "Computer is running on AC power\n"
 msgstr "计算机正在使用交流电源供电\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:338
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:339
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -320,7 +222,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:343
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -328,7 +230,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:347
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -338,50 +240,67 @@ msgstr ""
 
 #. Translators comment: put your own name here to appear in the
 #. * about dialog.
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-notification.c:360
 msgid "translator-credits"
 msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:484
 msgid "_Suspend"
 msgstr "挂起(_S)"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:489
 msgid "Hi_bernate"
 msgstr "休眠(_B)"
 
-#: ../src/gpm-notification.c:511
+#: ../src/gpm-notification.c:494
 msgid "_Preferences"
 msgstr "首选项(_P)"
 
-#: ../src/gpm-notification.c:513
+#: ../src/gpm-notification.c:496
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/gpm-notification.c:515
+#: ../src/gpm-notification.c:498
 msgid "_About"
 msgstr "关于(_A)"
 
-#: ../src/gpm-prefs.c:689
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:44
+msgid "Suspend"
+msgstr "挂起"
+
+#: ../src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../src/gpm-prefs.c:695
+#: ../src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs.c:698
+#: ../src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "无反应"
 
-#: ../src/gpm-prefs.c:775
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr ""
+
+#: ../src/gpm-prefs.c:503
+#, fuzzy
+msgid "<b>Configuration</b>"
+msgstr "<b>通知区域</b>"
+
+#: ../src/gpm-prefs.c:576
 msgid "GNOME Power Preferences"
 msgstr "GNOME 电源首选项"
 
-#. * @}
 #: ../src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>动作</b>"
+
+#: ../src/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>常规</b>"
 
 #: ../src/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -491,25 +410,85 @@ msgstr "计算机休眠类型(_C)："
 msgid "_Never display icon"
 msgstr "从不显示图标(_N)"
 
-#: ../src/gpm-sysdev.c:58
+#: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr "笔记本电池"
 
-#: ../src/gpm-sysdev.c:60
+#: ../src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-sysdev.c:62
+#: ../src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "无线鼠标"
 
-#: ../src/gpm-sysdev.c:64
+#: ../src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "无线键盘"
 
-#: ../src/gpm-sysdev.c:66
+#: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "各种 PDA"
+
+#~ msgid "The path to the shutdown script"
+#~ msgstr "关机脚本的路径"
+
+#~ msgid "<b>Batteries</b>"
+#~ msgstr "<b>电池</b>"
+
+#~ msgid "<b>Capabilities</b>"
+#~ msgstr "<b>容量</b>"
+
+#~ msgid "<b>GNOME Screensaver</b>"
+#~ msgstr "<b>GNOME 屏幕保护程序</b>"
+
+#~ msgid "<b>Other problems</b>"
+#~ msgstr "<b>其它问题</b>"
+
+#~ msgid "<b>UPS</b>"
+#~ msgstr "<b>UPS</b>"
+
+#~ msgid "APC UPS 100CS"
+#~ msgstr "APC UPS 100CS"
+
+#~ msgid "CPU Frequency Scaling"
+#~ msgstr "CPU 频率调节"
+
+#~ msgid "Gnome Screensaver Info"
+#~ msgstr "Gnome 屏幕保护程序信息"
+
+#~ msgid "Hibernation"
+#~ msgstr "休眠"
+
+#~ msgid "Laptop"
+#~ msgstr "笔记本"
+
+#~ msgid "LiION Battery"
+#~ msgstr "LiION 电池"
+
+#~ msgid "Low Power Mode"
+#~ msgstr "低电量模式"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "制造商："
+
+#~ msgid "Model:"
+#~ msgstr "型号："
+
+#~ msgid "NiMOH Battery"
+#~ msgstr "NiMOH 电池"
+
+#~ msgid "Other problems"
+#~ msgstr "其它问题"
+
+#~ msgid "Satellite Pro A10"
+#~ msgstr "Satellite Pro A10"
+
+#~ msgid "System Power Info"
+#~ msgstr "系统电源信息"
+
+#~ msgid "Toshiba"
+#~ msgstr "东芝"
 
 #~ msgid "The event for a system power button press"
 #~ msgstr "按下系统电源按钮的事件"

@@ -31,9 +31,6 @@
 
 #include <gconf/gconf-client.h>
 #include <gdk/gdk.h>
-#if defined(HAVE_LIBNOTIFY)
-#include <libnotify/notify.h>
-#endif
 
 #include "gpm-common.h"
 #include "gpm-main.h"
@@ -42,7 +39,7 @@
 #include "gpm-stock-icons.h"
 #include "gpm-sysdev.h"
 #include "gpm-prefs.h"
-#include "glibhal-extras.h"
+#include "gpm-hal.h"
 
 /* shared with gpm-main.c */
 static TrayData *eggtrayicon = NULL;
@@ -403,13 +400,6 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 		action_policy_do (ACTION_HIBERNATE);
 	} else if (strcmp (action, "about") == 0) {
 		callback_about_activated ();
-/*
- * Disabled until there is more point..
- */
-/*
-	} else if (strcmp (action, "info") == 0) {
-		run_bin_program ("gnome-power-info");
-*/
 	} else if (strcmp (action, "preferences") == 0) {
 		run_bin_program ("gnome-power-preferences");
 	} else if (strcmp (action, "help") == 0) {
@@ -488,25 +478,18 @@ menu_main_create (TrayData *trayicon)
 	trayicon->popup_menu = gtk_menu_new ();
 
 	/* only display the icons is we can do the action */
-	if (hal_pm_can_suspend ()) {
+	if (gpm_hal_pm_can_suspend ()) {
 		menu_add_action_item (trayicon->popup_menu,
 				      "gnome-dev-memory",
 				      _("_Suspend"), "suspend");
 	}
-	if (hal_pm_can_hibernate ()) {
+	if (gpm_hal_pm_can_hibernate ()) {
 		menu_add_action_item (eggtrayicon->popup_menu,
 				      "gnome-dev-harddisk",
 				      _("Hi_bernate"), "hibernate");
 	}
 	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (trayicon->popup_menu), item);
-/*
- * Disabled until there is more point..
- */
-/*
-	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_DIALOG_INFO,
-			      _("Po_wer Info"), "info");
-*/
 	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_PREFERENCES,
 			      _("_Preferences"), "preferences");
 	menu_add_action_item (trayicon->popup_menu, GTK_STOCK_HELP,

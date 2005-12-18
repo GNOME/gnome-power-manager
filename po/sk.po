@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 08:42+0000\n"
+"POT-Creation-Date: 2005-12-18 18:18+0000\n"
 "PO-Revision-Date: 2005-11-26 22:07+0100\n"
 "Last-Translator: Marcel Telka <marcel@telka.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -68,34 +68,30 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr "Cesta ku skriptu na vypnutie systému"
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr ""
 
@@ -107,18 +103,18 @@ msgstr "Orientácia"
 msgid "The orientation of the tray."
 msgstr ""
 
-#: ../src/gpm-common.c:267
+#: ../src/gpm-common.c:128
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: ../src/gpm-common.c:272
+#: ../src/gpm-common.c:133
 #, fuzzy, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minút"
 msgstr[1] "%i minút"
 
-#: ../src/gpm-common.c:283
+#: ../src/gpm-common.c:144
 #, fuzzy, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -127,19 +123,19 @@ msgstr[1] "%i hodín"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:289
+#: ../src/gpm-common.c:150
 #, fuzzy, c-format
 msgid "%i %s, %i %s"
 msgstr "%i hodín, %i minút"
 
-#: ../src/gpm-common.c:290
+#: ../src/gpm-common.c:151
 #, fuzzy
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "1 hodina"
 msgstr[1] "1 hodina"
 
-#: ../src/gpm-common.c:291
+#: ../src/gpm-common.c:152
 #, fuzzy
 msgid "minute"
 msgid_plural "minutes"
@@ -147,180 +143,86 @@ msgstr[0] "1 minúta"
 msgstr[1] "1 minúta"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr ""
 
-#: ../src/gpm-common.h:39
+#: ../src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr ""
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
 msgid "Show extra debugging information"
 msgstr ""
 
-#. * @}
-#: ../src/gpm-info.glade.h:2
-#, no-c-format
-msgid "96% efficient"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:3
-msgid "<b>Batteries</b>"
-msgstr "<b>Batérie</b>"
-
-#: ../src/gpm-info.glade.h:4
-msgid "<b>Capabilities</b>"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:5
-msgid "<b>GNOME Screensaver</b>"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>Všeobecné</b>"
-
-#: ../src/gpm-info.glade.h:7
-msgid "<b>Other problems</b>"
-msgstr "<b>Ostatné problémy</b>"
-
-#: ../src/gpm-info.glade.h:8
-msgid "<b>UPS</b>"
-msgstr "<b>UPS</b>"
-
-#: ../src/gpm-info.glade.h:9
-msgid "APC UPS 100CS"
-msgstr "APC UPS 100CS"
-
-#: ../src/gpm-info.glade.h:10
-msgid "CPU Frequency Scaling"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:11
-msgid "Form-factor:"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:12
-msgid "Gnome Screensaver Info"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:13
-msgid "Hibernation"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:14
-msgid "Laptop"
-msgstr "Laptop"
-
-#: ../src/gpm-info.glade.h:15
-msgid "LiION Battery"
-msgstr "LiION batéria"
-
-#: ../src/gpm-info.glade.h:16
-msgid "Low Power Mode"
-msgstr "Režim nízkej spotreby"
-
-#: ../src/gpm-info.glade.h:17
-msgid "Manufacturer:"
-msgstr "Výrobca:"
-
-#: ../src/gpm-info.glade.h:18
-msgid "Model:"
-msgstr "Model:"
-
-#: ../src/gpm-info.glade.h:19
-msgid "NiMOH Battery"
-msgstr "NiMOH batéria"
-
-#: ../src/gpm-info.glade.h:20
-msgid "Other problems"
-msgstr "Ostatné problémy"
-
-#: ../src/gpm-info.glade.h:21
-msgid "Satellite Pro A10"
-msgstr "Satellite Pro A10"
-
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
-msgid "Suspend"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:23
-msgid "System Power Info"
-msgstr ""
-
-#: ../src/gpm-info.glade.h:24
-msgid "Toshiba"
-msgstr "Toshiba"
-
-#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr ""
 
-#: ../src/gpm-main.c:436
+#: ../src/gpm-main.c:375
 msgid "Battery Low"
 msgstr ""
 
-#: ../src/gpm-main.c:478
+#: ../src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr ""
 
-#: ../src/gpm-main.c:479
+#: ../src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr ""
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-notification.c:216
 msgid "charging"
 msgstr "nabíjanie"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:218
 msgid "discharging"
 msgstr "vybíjanie"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:221
 msgid "charged"
 msgstr "nabité"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:236
 msgid "until charged"
 msgstr ""
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:239
 msgid "until empty"
 msgstr ""
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:306
 msgid "Computer is running on battery power\n"
 msgstr ""
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:308
 msgid "Computer is running on AC power\n"
 msgstr ""
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:338
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:339
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -328,7 +230,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:343
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -336,7 +238,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:347
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -346,50 +248,67 @@ msgstr ""
 
 #. Translators comment: put your own name here to appear in the
 #. * about dialog.
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-notification.c:360
 msgid "translator-credits"
 msgstr ""
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:484
 msgid "_Suspend"
 msgstr ""
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:489
 msgid "Hi_bernate"
 msgstr ""
 
-#: ../src/gpm-notification.c:511
+#: ../src/gpm-notification.c:494
 msgid "_Preferences"
 msgstr "_Predvoľby"
 
-#: ../src/gpm-notification.c:513
+#: ../src/gpm-notification.c:496
 msgid "_Help"
 msgstr "_Pomocník"
 
-#: ../src/gpm-notification.c:515
+#: ../src/gpm-notification.c:498
 msgid "_About"
 msgstr "_O programe"
 
-#: ../src/gpm-prefs.c:689
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:44
+msgid "Suspend"
+msgstr ""
+
+#: ../src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "Vypnúť"
 
-#: ../src/gpm-prefs.c:695
+#: ../src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr ""
 
-#: ../src/gpm-prefs.c:698
+#: ../src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "Nerobiť nič"
 
-#: ../src/gpm-prefs.c:775
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr ""
+
+#: ../src/gpm-prefs.c:503
+#, fuzzy
+msgid "<b>Configuration</b>"
+msgstr "<b>Oblasť upozornení</b>"
+
+#: ../src/gpm-prefs.c:576
 msgid "GNOME Power Preferences"
 msgstr ""
 
-#. * @}
 #: ../src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Akcie</b>"
+
+#: ../src/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>Všeobecné</b>"
 
 #: ../src/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -499,25 +418,67 @@ msgstr ""
 msgid "_Never display icon"
 msgstr "_Nikdy nezobraziť ikonu"
 
-#: ../src/gpm-sysdev.c:58
+#: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr ""
 
-#: ../src/gpm-sysdev.c:60
+#: ../src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-sysdev.c:62
+#: ../src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "Bezdrôtová klávesnica"
 
-#: ../src/gpm-sysdev.c:64
+#: ../src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "Bezdrôtová klávesnica"
 
-#: ../src/gpm-sysdev.c:66
+#: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr ""
+
+#~ msgid "The path to the shutdown script"
+#~ msgstr "Cesta ku skriptu na vypnutie systému"
+
+#~ msgid "<b>Batteries</b>"
+#~ msgstr "<b>Batérie</b>"
+
+#~ msgid "<b>Other problems</b>"
+#~ msgstr "<b>Ostatné problémy</b>"
+
+#~ msgid "<b>UPS</b>"
+#~ msgstr "<b>UPS</b>"
+
+#~ msgid "APC UPS 100CS"
+#~ msgstr "APC UPS 100CS"
+
+#~ msgid "Laptop"
+#~ msgstr "Laptop"
+
+#~ msgid "LiION Battery"
+#~ msgstr "LiION batéria"
+
+#~ msgid "Low Power Mode"
+#~ msgstr "Režim nízkej spotreby"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "Výrobca:"
+
+#~ msgid "Model:"
+#~ msgstr "Model:"
+
+#~ msgid "NiMOH Battery"
+#~ msgstr "NiMOH batéria"
+
+#~ msgid "Other problems"
+#~ msgstr "Ostatné problémy"
+
+#~ msgid "Satellite Pro A10"
+#~ msgstr "Satellite Pro A10"
+
+#~ msgid "Toshiba"
+#~ msgstr "Toshiba"
 
 #~ msgid "The event for a system power button press"
 #~ msgstr "Udalosť pre stlačenie napäťového vypínača systému"

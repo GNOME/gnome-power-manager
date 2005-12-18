@@ -36,18 +36,17 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
-
 #include <popt.h>
 
 #include "gpm-common.h"
 #include "gpm-core.h"
 #include "gpm-main.h"
+#include "gpm-hal.h"
+#include "gpm-sysdev.h"
+#include "gpm-dbus-common.h"
 
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
-#include "glibhal-extras.h"
-#include "gpm-sysdev.h"
-#include "gpm-dbus-common.h"
 
 
 /* no need for IPC with globals */
@@ -298,9 +297,7 @@ int
 main (int argc, char *argv[])
 {
 	gint i;
-	gint value;
 	GMainLoop *loop = NULL;
-	GnomeClientFlags flags;
 	DBusGConnection *system_connection = NULL;
 	gboolean no_daemon;
 
@@ -364,7 +361,7 @@ main (int argc, char *argv[])
 	}
 
 	/* check we have PM capability */
-	if (!hal_pm_check ()) {
+	if (!gpm_hal_pm_check ()) {
 		g_critical ("HAL does not have PowerManagement capability");
 		return 0;
 	}

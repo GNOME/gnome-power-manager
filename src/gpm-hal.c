@@ -1,0 +1,541 @@
+/** @file	gpm-hal.h
+ *  @brief	Common HAL functions used by GPM
+ *  @author	Richard Hughes <richard@hughsie.com>
+ *  @date	2005-12-18
+ *
+ * This module uses the functionality of glibhal-main to do some clever
+ * things to HAL objects, for example dimming the LCD screen.
+ */
+/*
+ * Licensed under the GNU General Public License Version 2
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+/**
+ * @addtogroup	gpmhal
+ * @{
+ */
+
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
+#include <string.h>
+#include <glib.h>
+#include <dbus/dbus-glib.h>
+
+#include "gpm-hal.h"
+#include "gpm-dbus-common.h"
+#include "glibhal-main.h"
+
+#define DIM_INTERVAL		10
+
+typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
+
+/** Returns true if system.formfactor == "laptop"
+ *
+ *  @return			TRUE is computer is identified as a laptop
+ */
+gboolean
+gpm_hal_is_laptop (void)
+{
+	gboolean ret = TRUE;
+	gchar *formfactor = NULL;
+
+	/* always present */
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+		"system.formfactor", &formfactor);
+	if (!formfactor) {
+		g_debug ("system.formfactor not set!"
+			 "If you have PMU, please update HAL to get the latest fixes.");
+		/* no need to free */
+		return FALSE;
+	}
+	if (strcmp (formfactor, "laptop") != 0) {
+		g_debug ("This machine is not identified as a laptop."
+			 "system.formfactor is %s.", formfactor);
+		ret = FALSE;
+	}
+	g_free (formfactor);
+	return ret;
+}
+
+/** Finds out if power management functions are running (only ACPI, PMU, APM)
+ *
+ *  @return		TRUE if haldaemon has power management capability
+ */
+gboolean
+gpm_hal_pm_check (void)
+{
+	gchar *ptype = NULL;
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+			       "power_management.type",
+			       &ptype);
+	/* this key only has to exist to be pm okay */
+	if (ptype) {
+		g_debug ("Power management type : %s", ptype);
+		g_free (ptype);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/** Finds out if HAL indicates that we can suspend
+ *
+ *  @return		TRUE if kernel suspend support is compiled in
+ */
+gboolean
+gpm_hal_pm_can_suspend (void)
+{
+	gboolean exists;
+	gboolean success;
+	exists = hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.can_suspend_to_ram", &success);
+	if (!exists) {
+		g_warning ("[harmless]: You are not running CVS HAL "
+			   "so we will assume it's okay to suspend");
+		return TRUE;
+	}
+	/* Seeing as HAL *knows* if we can suspend, return what it thinks */
+	return success;
+}
+
+/** Finds out if HAL indicates that we can hibernate
+ *
+ *  @return		TRUE if kernel hibernation support is compiled in
+ */
+gboolean
+gpm_hal_pm_can_hibernate (void)
+{
+	gboolean exists;
+	gboolean success;
+	exists = hal_device_get_bool (
+		"/org/freedesktop/Hal/devices/computer",
+		"power_management.can_suspend_to_disk", &success);
+	if (!exists) {
+		g_warning ("[harmless]: You are not running CVS HAL "
+			   "so we will assume it's okay to hibernate");
+		return TRUE;
+	}
+	/* Seeing as HAL *knows* if we can hibernate, return what it thinks */
+	return success;
+}
+
+/** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
+ *
+ *  @param	brightness	LCD Brightness to set to
+ *  @param	udi		A valid HAL UDI
+ *  @return			Success
+ */
+static gboolean
+hal_get_brightness_item (const gchar *udi, gint *brightness)
+{
+	GError *error = NULL;
+	gboolean retval;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+
+	/* assertion checks */
+	g_assert (brightness);
+	g_assert (udi);
+
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal",
+		udi,
+		"org.freedesktop.Hal.Device.LaptopPanel");
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "GetBrightness", &error,
+			G_TYPE_INVALID,
+			G_TYPE_UINT, brightness, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.GetBrightness"
+			   "failed (HAL error)");
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
+ *
+ *  @param	brightness	LCD Brightness to set to
+ *  @param	udi		A valid HAL UDI
+ *  @return			Success
+ */
+static gboolean
+gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
+{
+	GError *error = NULL;
+	gint ret;
+	gint levels;
+	gboolean retval;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+
+	/* assertion checks */
+	g_assert (udi);
+
+	hal_device_get_int (udi, "laptop_panel.num_levels", &levels);
+	if (brightness >= levels || brightness < 0 ) {
+		g_warning ("Tried to set brightness %i outside range (0..%i)",
+			brightness, levels - 1);
+		return FALSE;
+	}
+	g_debug ("Setting %s to brightness %i", udi, brightness);
+
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal",
+		udi,
+		"org.freedesktop.Hal.Device.LaptopPanel");
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error,
+			G_TYPE_INT, brightness, G_TYPE_INVALID,
+			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.SetBrightness"
+			   "failed (HAL error)");
+		retval = FALSE;
+	}
+	if (ret != 0) {
+		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.SetBrightness"
+			   "call failed (%i)", ret);
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** Calls a function on all udi's of type laptop_panel (utility function)
+ *
+ *  @param	function	The (char, int) funtion to call
+ *  @param	number		The parameter to pass to the funtion
+ *  @return			Success
+ */
+static gboolean
+for_each_lp (hal_lp_func function, const gint number)
+{
+	gint i;
+	gchar **names;
+	gboolean retval;
+
+	hal_find_device_capability ("laptop_panel", &names);
+	if (!names) {
+		g_debug ("No devices of capability laptop_panel");
+		return FALSE;
+	}
+	retval = TRUE;
+	/* iterate to seteach laptop_panel object */
+	for (i = 0; names[i]; i++)
+		if (!function (names[i], number))
+			retval = FALSE;
+	hal_free_capability (names);
+	return retval;
+}
+
+/** Sets the LCD brightness a few steps upwards or downwards
+ *
+ *  @param	udi		A valid HAL UDI
+ *  @param	step		the number of steps to go up or down,
+ * 				e.g. -2 is two steps down.
+ *  @return			Success
+ */
+static gboolean
+hal_set_brightness_step_item (const gchar *udi, const gint step)
+{
+	gint brightness;
+
+	/* get current brightness */
+	hal_get_brightness_item (udi, &brightness);
+
+	/* make the screen brighter or dimmer */
+	brightness = brightness + step;
+
+	return gpm_hal_set_brightness_item (udi, brightness);
+}
+
+/** Sets the LCD brightness one step upwards
+ *
+ *  @return			Success
+ */
+gboolean
+gpm_hal_set_brightness_up (void)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) hal_set_brightness_step_item, 1);
+}
+
+/** Sets the LCD brightness one step downwards
+ *
+ *  @return			Success
+ */
+gboolean
+gpm_hal_set_brightness_down (void)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) hal_set_brightness_step_item, -1);
+}
+
+
+/** Sets *all* the laptop_panel objects to the required brightness level
+ *
+ *  @param	brightness	LCD Brightness to set to
+ *  @return			Success, true if *all* adaptors changed
+ */
+gboolean
+gpm_hal_set_brightness (gint brightness)
+{
+	/* do for each panel */
+	return for_each_lp ((hal_lp_func) gpm_hal_set_brightness_item, brightness);
+}
+
+/** Sets *all* the laptop_panel objects to the required brightness level
+ *
+ * We also use the fancy new dimming functionality (going through all steps)
+ *
+ *  @param	brightness	LCD Brightness to set to
+ *  @return			Success, true if *all* adaptors changed
+ */
+gboolean
+gpm_hal_set_brightness_dim (gint brightness)
+{
+	gint i, a;
+	gchar **names = NULL;
+	gboolean retval;
+	gint levels, old_level;
+	gchar *returnstring = NULL;
+
+	hal_find_device_capability ("laptop_panel", &names);
+	if (!names) {
+		g_debug ("No devices of capability laptop_panel");
+		return FALSE;
+	}
+
+	/* If the manufacturer is IBM, then assume we are a ThinkPad,
+	 * and don't do the new-fangled dimming routine. The ThinkPad dims
+	 * gently itself and the two dimming routines just get messy.
+	 * This should fix the bug:
+	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+	 */
+	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
+			       "smbios.system.manufacturer",
+			       &returnstring);
+	if (returnstring) {
+		if (strcmp (returnstring, "IBM") == 0) {
+			retval = gpm_hal_set_brightness (brightness);
+			g_free (returnstring);
+			return retval;
+		}
+		g_free (returnstring);
+	}
+
+	retval = TRUE;
+	/* iterate to seteach laptop_panel object */
+	for (i = 0; names[i]; i++) {
+		/* get old values so we can dim */
+		hal_get_brightness_item (names[i], &old_level);
+		hal_device_get_int (names[i], "laptop_panel.num_levels", &levels);
+		g_debug ("old_level=%i, levels=%i, new=%i", old_level, levels, brightness);
+		/* do each step down to the new value */
+		if (brightness < old_level) {
+			for (a=old_level-1; a >= brightness; a--) {
+				if (!gpm_hal_set_brightness_item (names[i], a))
+					break;
+				g_usleep (1000 * DIM_INTERVAL);
+			}
+		} else {
+			for (a=old_level+1; a <= brightness; a++) {
+				if (!gpm_hal_set_brightness_item (names[i], a))
+					break;
+				g_usleep (1000 * DIM_INTERVAL);
+			}
+		}
+	}
+	hal_free_capability (names);
+	return retval;
+}
+
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
+ *
+ *  @param	wakeup		Seconds to wakeup, currently unsupported
+ *  @return			Success, true if we suspended OK
+ */
+gboolean
+gpm_hal_suspend (gint wakeup)
+{
+	gint ret;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal",
+		"/org/freedesktop/Hal/devices/computer",
+		"org.freedesktop.Hal.Device.SystemPowerManagement");
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
+			G_TYPE_INT, wakeup, G_TYPE_INVALID,
+			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".Suspend failed (HAL error)");
+		retval = FALSE;
+	}
+	if (ret != 0) {
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".Suspend call failed (%i)", ret);
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** Do a method on org.freedesktop.Hal.Device.SystemPowerManagement.*
+ *  with no arguments.
+ *
+ *  @param	method		The method name, e.g. "Hibernate"
+ *  @return			Success, true if we did OK
+ */
+static gboolean
+hal_pm_method_void (const gchar* method)
+{
+	gint ret;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal",
+		"/org/freedesktop/Hal/devices/computer",
+		"org.freedesktop.Hal.Device.SystemPowerManagement");
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, method, &error,
+			G_TYPE_INVALID,
+			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".%s failed (HAL error)", method);
+		retval = FALSE;
+	}
+	if (ret != 0) {
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".%s call failed (%i)", method, ret);
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
+ *
+ *  @return			Success, true if we hibernated OK
+ */
+gboolean
+gpm_hal_hibernate (void)
+{
+	return hal_pm_method_void ("Hibernate");
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
+ *
+ *  @return			Success, true if we shutdown OK
+ */
+gboolean
+gpm_hal_shutdown (void)
+{
+	return hal_pm_method_void ("Shutdown");
+}
+
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
+ *
+ *  @param	set		Set for low power mode
+ *  @return			Success, true if we set the mode
+ */
+gboolean
+gpm_hal_setlowpowermode (gboolean set)
+{
+	gint ret;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	/* abort if we are not a "qualified" laptop */
+	if (!gpm_hal_is_laptop ()) {
+		g_debug ("We are not a laptop, so not even trying");
+		return FALSE;
+	}
+
+	if (!dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+		"org.freedesktop.Hal",
+		"/org/freedesktop/Hal/devices/computer",
+		"org.freedesktop.Hal.Device.SystemPowerManagement");
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
+			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
+			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
+		dbus_glib_error (error);
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".SetPowerSave failed (HAL error)");
+		retval = FALSE;
+	}
+	if (ret != 0) {
+		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+			   ".SetPowerSave call failed (%i)", ret);
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** Gets the number of brightness steps the (first) LCD adaptor supports
+ *
+ *  @param	steps		The number of steps, returned by ref.
+ *  @return			Success, if we found laptop_panel hardware
+ */
+gboolean
+gpm_hal_get_brightness_steps (gint *steps)
+{
+	gchar **names = NULL;
+
+	/* assertion checks */
+	g_assert (steps);
+
+	hal_find_device_capability ("laptop_panel", &names);
+	if (!names || !names[0]) {
+		g_debug ("No devices of capability laptop_panel");
+		*steps = 0;
+		return FALSE;
+	}
+	/* only use the first one */
+	hal_device_get_int (names[0], "laptop_panel.num_levels", steps);
+	hal_free_capability (names);
+	return TRUE;
+}
+/** @} */

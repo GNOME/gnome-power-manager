@@ -33,12 +33,12 @@
 #include <gconf/gconf-client.h>
 #include <popt.h>
 #include "gpm-prefs.h"
+#include "gpm-hal.h"
 #include "gpm-common.h"
 #include "gpm-screensaver.h"
 #include "gpm-dbus-client.h"
 #include "gpm-dbus-common.h"
 #include "glibhal-main.h"
-#include "glibhal-extras.h"
 
 /* The text that should appear in the action combo boxes */
 #define ACTION_SUSPEND_TEXT		_("Suspend")
@@ -175,7 +175,6 @@ static void
 gpm_prefs_brightness_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 {
 	gdouble value;
-	gint steps;
 	gboolean onbattery;
 	
 	value = gtk_range_get_value (range);
@@ -185,7 +184,7 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 	if (gpm_is_on_mains (&onbattery)) {
 		if ((!onbattery && strcmp (gpm_pref_key, GPM_PREF_AC_BRIGHTNESS) == 0) ||
 		    (onbattery && strcmp (gpm_pref_key, GPM_PREF_BATTERY_BRIGHTNESS) == 0)) {
-			hal_set_brightness (value);
+			gpm_hal_set_brightness (value);
 		}
 	} else {
 		g_warning ("gpm_is_on_mains failed");
@@ -210,7 +209,7 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog, gchar *widget_name, gchar *
 	g_signal_connect (G_OBJECT (widget), "value-changed", 
 			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
 
-	if (hal_get_brightness_steps (&steps)) {
+	if (gpm_hal_get_brightness_steps (&steps)) {
 		g_object_set_data ((GObject*) widget, "lcdsteps", (gpointer) &steps);
 		gtk_range_set_range (GTK_RANGE (widget), 0, steps - 1);
 	}
@@ -248,8 +247,8 @@ gpm_prefs_setup_action_combo (GladeXML *dialog, gchar *widget_name, gchar *gpm_p
 	gchar *value;
 	gint i = 0;
 	gint n_added = 0;
-	gboolean can_suspend = hal_pm_can_suspend ();
-	gboolean can_hibernate = hal_pm_can_hibernate ();
+	gboolean can_suspend = gpm_hal_pm_can_suspend ();
+	gboolean can_hibernate = gpm_hal_pm_can_hibernate ();
 
 	widget = glade_xml_get_widget (dialog, widget_name);
 	value = gconf_client_get_string (gconf_client_get_default (), gpm_pref_key, NULL);

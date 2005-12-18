@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 08:42+0000\n"
+"POT-Creation-Date: 2005-12-18 18:18+0000\n"
 "PO-Revision-Date: 2005-12-06 01:55+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -71,10 +71,6 @@ msgstr ""
 "dormir"
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr "La ruta hasta el script de apagado"
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -82,7 +78,7 @@ msgstr ""
 "El porcentaje que el dispositivo de carga debe tener para ser considerado "
 "«suficientemente bajo» para realizar una acción."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -90,21 +86,21 @@ msgstr ""
 "El porcentaje que el dispositivo de carga debe tener para ser considerado "
 "«suficientemente bajo» para advertir al usuario."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr "El umbral de acción del dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "El umbral de advertencia del dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "La forma de ahorro de energía (hibernar/suspender) que se usará "
 "automáticamente."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "Cuando mostrar el icono en el área de notificación"
 
@@ -116,18 +112,18 @@ msgstr "Orientación"
 msgid "The orientation of the tray."
 msgstr "La orientación de la bandeja."
 
-#: ../src/gpm-common.c:267
+#: ../src/gpm-common.c:128
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/gpm-common.c:272
+#: ../src/gpm-common.c:133
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minuto"
 msgstr[1] "%i minutos"
 
-#: ../src/gpm-common.c:283
+#: ../src/gpm-common.c:144
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -136,135 +132,41 @@ msgstr[1] "%i horas"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:289
+#: ../src/gpm-common.c:150
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:290
+#: ../src/gpm-common.c:151
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "hora"
 msgstr[1] "horas"
 
-#: ../src/gpm-common.c:291
+#: ../src/gpm-common.c:152
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuto"
 msgstr[1] "minutos"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr "Gestor de energía de Gnome"
 
-#: ../src/gpm-common.h:39
+#: ../src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestión de energía para el escritorio Gnome"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr "No demonizar"
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
 msgid "Show extra debugging information"
 msgstr "Mostrar información adicional de depuración"
 
-#. * @}
-#: ../src/gpm-info.glade.h:2
-#, no-c-format
-msgid "96% efficient"
-msgstr "96% eficiencia"
-
-#: ../src/gpm-info.glade.h:3
-msgid "<b>Batteries</b>"
-msgstr "<b>Baterías</b>"
-
-#: ../src/gpm-info.glade.h:4
-msgid "<b>Capabilities</b>"
-msgstr "<b>Capacidades</b>"
-
-#: ../src/gpm-info.glade.h:5
-msgid "<b>GNOME Screensaver</b>"
-msgstr "<b>Salvapantallas de Gnome</b>"
-
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>General</b>"
-
-#: ../src/gpm-info.glade.h:7
-msgid "<b>Other problems</b>"
-msgstr "<b>Otros problemas</b>"
-
-#: ../src/gpm-info.glade.h:8
-msgid "<b>UPS</b>"
-msgstr "<b>SAI</b>"
-
-#: ../src/gpm-info.glade.h:9
-msgid "APC UPS 100CS"
-msgstr "APC UPS 100CS"
-
-#: ../src/gpm-info.glade.h:10
-msgid "CPU Frequency Scaling"
-msgstr "Escalado de frecuencia de CPU"
-
-#: ../src/gpm-info.glade.h:11
-msgid "Form-factor:"
-msgstr "Form-factor:"
-
-#: ../src/gpm-info.glade.h:12
-msgid "Gnome Screensaver Info"
-msgstr "Información del salvapantallas de Gnome"
-
-#: ../src/gpm-info.glade.h:13
-msgid "Hibernation"
-msgstr "Hibernación"
-
-#: ../src/gpm-info.glade.h:14
-msgid "Laptop"
-msgstr "Portátil"
-
-#: ../src/gpm-info.glade.h:15
-msgid "LiION Battery"
-msgstr "Batería de LiION"
-
-#: ../src/gpm-info.glade.h:16
-msgid "Low Power Mode"
-msgstr "Modo de bajo consumo"
-
-#: ../src/gpm-info.glade.h:17
-msgid "Manufacturer:"
-msgstr "Fabricante:"
-
-#: ../src/gpm-info.glade.h:18
-msgid "Model:"
-msgstr "Modelo:"
-
-#: ../src/gpm-info.glade.h:19
-msgid "NiMOH Battery"
-msgstr "Batería de NiMOH"
-
-#: ../src/gpm-info.glade.h:20
-msgid "Other problems"
-msgstr "Otros problemas"
-
-#: ../src/gpm-info.glade.h:21
-msgid "Satellite Pro A10"
-msgstr "Satellite Pro A10"
-
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
-msgid "Suspend"
-msgstr "Suspender"
-
-#: ../src/gpm-info.glade.h:23
-msgid "System Power Info"
-msgstr "Información de energía del sistema"
-
-#: ../src/gpm-info.glade.h:24
-msgid "Toshiba"
-msgstr "Toshiba"
-
-#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -273,64 +175,64 @@ msgstr ""
 "Le queda aproximadamente <b>%s</b> de batería (%i%%). Enchufe su adaptador "
 "de CA para evitar la pérdida de datos."
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr "La batería está críticamente baja"
 
-#: ../src/gpm-main.c:436
+#: ../src/gpm-main.c:375
 msgid "Battery Low"
 msgstr "Batería baja"
 
-#: ../src/gpm-main.c:478
+#: ../src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr "CA desenchufada"
 
-#: ../src/gpm-main.c:479
+#: ../src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "La CA se ha desenchufado. El sistema está usando energía de la batería."
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr "Batería cargada"
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr "Su batería está cargada completamente ahora"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-notification.c:216
 msgid "charging"
 msgstr "cargando"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:218
 msgid "discharging"
 msgstr "descargando"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:221
 msgid "charged"
 msgstr "cargado"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:236
 msgid "until charged"
 msgstr "hasta su carga"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:239
 msgid "until empty"
 msgstr "hasta que se vacíe"
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:306
 msgid "Computer is running on battery power\n"
 msgstr "El equipo está funcionando con baterías\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:308
 msgid "Computer is running on AC power\n"
 msgstr "El equipo está enchufado a CA\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:338
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:339
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -342,7 +244,7 @@ msgstr ""
 "tal como la publica la Free software foundation; ya sea en la versión 2\n"
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:343
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -354,7 +256,7 @@ msgstr ""
 "MERCANTIBILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la\n"
 "Licencia Pública General GNU para más detalles."
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:347
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -367,50 +269,67 @@ msgstr ""
 
 #. Translators comment: put your own name here to appear in the
 #. * about dialog.
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-notification.c:360
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:484
 msgid "_Suspend"
 msgstr "_Suspender"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:489
 msgid "Hi_bernate"
 msgstr "_Hibernar"
 
-#: ../src/gpm-notification.c:511
+#: ../src/gpm-notification.c:494
 msgid "_Preferences"
 msgstr "_Preferencias"
 
-#: ../src/gpm-notification.c:513
+#: ../src/gpm-notification.c:496
 msgid "_Help"
 msgstr "A_yuda"
 
-#: ../src/gpm-notification.c:515
+#: ../src/gpm-notification.c:498
 msgid "_About"
 msgstr "A_cerca de"
 
-#: ../src/gpm-prefs.c:689
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:44
+msgid "Suspend"
+msgstr "Suspender"
+
+#: ../src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "Apagar"
 
-#: ../src/gpm-prefs.c:695
+#: ../src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: ../src/gpm-prefs.c:698
+#: ../src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "No hacer nada"
 
-#: ../src/gpm-prefs.c:775
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr ""
+
+#: ../src/gpm-prefs.c:503
+#, fuzzy
+msgid "<b>Configuration</b>"
+msgstr "<b>Área de notificación</b>"
+
+#: ../src/gpm-prefs.c:576
 msgid "GNOME Power Preferences"
 msgstr "Preferencias de energía de Gnome"
 
-#. * @}
 #: ../src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Acciones</b>"
+
+#: ../src/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>General</b>"
 
 #: ../src/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -520,25 +439,91 @@ msgstr "Tipo de dormir del _equipo:"
 msgid "_Never display icon"
 msgstr "_Nunca mostrar el icono"
 
-#: ../src/gpm-sysdev.c:58
+#: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr "Batería de portátil"
 
-#: ../src/gpm-sysdev.c:60
+#: ../src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "SAI"
 
-#: ../src/gpm-sysdev.c:62
+#: ../src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "Ratón inalámbrico"
 
-#: ../src/gpm-sysdev.c:64
+#: ../src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "Teclado inalámbrico"
 
-#: ../src/gpm-sysdev.c:66
+#: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "PDA Misc"
+
+#~ msgid "The path to the shutdown script"
+#~ msgstr "La ruta hasta el script de apagado"
+
+#~ msgid "96% efficient"
+#~ msgstr "96% eficiencia"
+
+#~ msgid "<b>Batteries</b>"
+#~ msgstr "<b>Baterías</b>"
+
+#~ msgid "<b>Capabilities</b>"
+#~ msgstr "<b>Capacidades</b>"
+
+#~ msgid "<b>GNOME Screensaver</b>"
+#~ msgstr "<b>Salvapantallas de Gnome</b>"
+
+#~ msgid "<b>Other problems</b>"
+#~ msgstr "<b>Otros problemas</b>"
+
+#~ msgid "<b>UPS</b>"
+#~ msgstr "<b>SAI</b>"
+
+#~ msgid "APC UPS 100CS"
+#~ msgstr "APC UPS 100CS"
+
+#~ msgid "CPU Frequency Scaling"
+#~ msgstr "Escalado de frecuencia de CPU"
+
+#~ msgid "Form-factor:"
+#~ msgstr "Form-factor:"
+
+#~ msgid "Gnome Screensaver Info"
+#~ msgstr "Información del salvapantallas de Gnome"
+
+#~ msgid "Hibernation"
+#~ msgstr "Hibernación"
+
+#~ msgid "Laptop"
+#~ msgstr "Portátil"
+
+#~ msgid "LiION Battery"
+#~ msgstr "Batería de LiION"
+
+#~ msgid "Low Power Mode"
+#~ msgstr "Modo de bajo consumo"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "Fabricante:"
+
+#~ msgid "Model:"
+#~ msgstr "Modelo:"
+
+#~ msgid "NiMOH Battery"
+#~ msgstr "Batería de NiMOH"
+
+#~ msgid "Other problems"
+#~ msgstr "Otros problemas"
+
+#~ msgid "Satellite Pro A10"
+#~ msgstr "Satellite Pro A10"
+
+#~ msgid "System Power Info"
+#~ msgstr "Información de energía del sistema"
+
+#~ msgid "Toshiba"
+#~ msgstr "Toshiba"
 
 #~ msgid "The event for a system power button press"
 #~ msgstr "El evento para cuando se pulse el botón de encendido del sistema"

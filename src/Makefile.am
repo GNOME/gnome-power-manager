@@ -1,7 +1,6 @@
 SUBDIRS = icons
 
 pkgdata_DATA =						\
-	gpm-info.glade					\
 	gpm-prefs.glade
 
 EXTRA_DIST =						\
@@ -27,37 +26,13 @@ INCLUDES =						\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
-	gnome-power-console				\
-	gnome-power-info
-
-gnome_power_info_SOURCES =				\
-	compiler.h					\
-	glibhal-main.h					\
-	glibhal-main.c					\
-	glibhal-extras.h				\
-	glibhal-extras.c				\
-	gpm-gtk-utils.h					\
-	gpm-gtk-utils.c					\
-	gpm-dbus-common.h				\
-	gpm-dbus-common.c				\
-	gpm-screensaver.h				\
-	gpm-screensaver.c				\
-	gpm-common.h					\
-	gpm-common.c					\
-	gpm-info.c
-
-gnome_power_info_LDADD =				\
-	$(GLIB_LIBS)					\
-	$(GNOME_LIBS)					\
-	$(HAL_LIBS)					\
-	$(DBUS_LIBS)
+	gnome-power-console
 
 gnome_power_preferences_SOURCES =			\
-	compiler.h					\
 	glibhal-main.h					\
 	glibhal-main.c					\
-	glibhal-extras.h				\
-	glibhal-extras.c				\
+	gpm-hal.h					\
+	gpm-hal.c					\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
 	gpm-dbus-client.h				\
@@ -66,8 +41,6 @@ gnome_power_preferences_SOURCES =			\
 	gpm-screensaver.c				\
 	gpm-libnotify.h					\
 	gpm-libnotify.c					\
-	gpm-gtk-utils.h					\
-	gpm-gtk-utils.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
@@ -90,8 +63,8 @@ gnome_power_manager_SOURCES =				\
 	glibhal-main.c					\
 	glibhal-callback.h				\
 	glibhal-callback.c				\
-	glibhal-extras.h				\
-	glibhal-extras.c				\
+	gpm-hal.h					\
+	gpm-hal.c					\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\
@@ -125,7 +98,6 @@ gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
 
-
 gnome_power_console_SOURCES =				\
 	gpm_marshal.h					\
 	gpm_marshal.c					\
@@ -133,8 +105,8 @@ gnome_power_console_SOURCES =				\
 	glibhal-main.c					\
 	glibhal-callback.h				\
 	glibhal-callback.c				\
-	glibhal-extras.h				\
-	glibhal-extras.c				\
+	gpm-hal.h					\
+	gpm-hal.c					\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\

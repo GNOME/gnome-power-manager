@@ -1,7 +1,7 @@
-/** @file	gpm-dbus-common.h
- *  @brief	Common GLIB DBUS routines
+/** @file	gpm-hal.h
+ *  @brief	Common HAL functions used by GPM
  *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-10-02
+ *  @date	2005-12-18
  */
 /*
  * Licensed under the GNU General Public License Version 2
@@ -22,20 +22,26 @@
  * 02110-1301, USA.
  */
 /**
- * @addtogroup	dbus
+ * @addtogroup	gpmhal
  * @{
  */
 
-#ifndef _DBUSCOMMON_H
-#define _DBUSCOMMON_H
+#ifndef _GPMHAL_H
+#define _GPMHAL_H
 
-#include <dbus/dbus-glib.h>
+gboolean gpm_hal_pm_check (void);
+gboolean gpm_hal_pm_can_suspend (void);
+gboolean gpm_hal_pm_can_hibernate (void);
+gboolean gpm_hal_is_laptop (void);
+gboolean gpm_hal_get_brightness_steps (gint *steps);
+gboolean gpm_hal_set_brightness (gint brightness);
+gboolean gpm_hal_set_brightness_dim (gint brightness);
+gboolean gpm_hal_set_brightness_up (void);
+gboolean gpm_hal_set_brightness_down (void);
+gboolean gpm_hal_suspend (gint wakeup);
+gboolean gpm_hal_hibernate (void);
+gboolean gpm_hal_shutdown (void);
+gboolean gpm_hal_setlowpowermode (gboolean set);
 
-gboolean dbus_glib_error (GError *error);
-gboolean dbus_get_system_connection (DBusGConnection **connection);
-gboolean dbus_get_session_connection (DBusGConnection **connection);
-gboolean dbus_get_service (DBusGConnection *connection, const gchar *service);
-gboolean dbus_is_active_service (const gchar *service_name);
-
-#endif	/* _DBUSCOMMON_H */
+#endif	/* _GPMHAL_H */
 /** @} */

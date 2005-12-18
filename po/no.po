@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-14 08:42+0000\n"
+"POT-Creation-Date: 2005-12-18 18:18+0000\n"
 "PO-Revision-Date: 2005-12-08 05:16+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -66,10 +66,6 @@ msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:11
-msgid "The path to the shutdown script"
-msgstr ""
-
-#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -77,7 +73,7 @@ msgstr ""
 "Prosenten som strømenheten må nå for å bli regnet som «lav nok» til å utføre "
 "en handling."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -85,19 +81,19 @@ msgstr ""
 "Prosenten som strømenheten må nå for å bli regnet som «lav nok» til å advare "
 "brukeren."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr "Strømenheten sin handlingsterskel."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "Strømenheten sin advarselterskel."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "Når skal ikonet skal vises i varslingsområdet"
 
@@ -109,18 +105,18 @@ msgstr "Orientering"
 msgid "The orientation of the tray."
 msgstr "Orientering for trauet."
 
-#: ../src/gpm-common.c:267
+#: ../src/gpm-common.c:128
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../src/gpm-common.c:272
+#: ../src/gpm-common.c:133
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minutt"
 msgstr[1] "%i minutter"
 
-#: ../src/gpm-common.c:283
+#: ../src/gpm-common.c:144
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -129,135 +125,41 @@ msgstr[1] "%i timer"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:289
+#: ../src/gpm-common.c:150
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:290
+#: ../src/gpm-common.c:151
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "time"
 msgstr[1] "timer"
 
-#: ../src/gpm-common.c:291
+#: ../src/gpm-common.c:152
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minutt"
 msgstr[1] "minutter"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:38 ../src/gpm-main.c:737
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
 msgid "GNOME Power Manager"
 msgstr "GNOME strømhåndterer"
 
-#: ../src/gpm-common.h:39
+#: ../src/gpm-common.h:34
 msgid "Power Manager for the GNOME desktop"
 msgstr "Strømhånderer for GNOME skrivebordet"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:719
+#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
 msgid "Do not daemonize"
 msgstr "Ikke kjør som tjeneste"
 
-#: ../src/gpm-console.c:310 ../src/gpm-main.c:721 ../src/gpm-prefs.c:759
+#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
-#. * @}
-#: ../src/gpm-info.glade.h:2
-#, no-c-format
-msgid "96% efficient"
-msgstr "96% effektivt"
-
-#: ../src/gpm-info.glade.h:3
-msgid "<b>Batteries</b>"
-msgstr "<b>Batterier</b>"
-
-#: ../src/gpm-info.glade.h:4
-msgid "<b>Capabilities</b>"
-msgstr "<b>Funksjoner</b>"
-
-#: ../src/gpm-info.glade.h:5
-msgid "<b>GNOME Screensaver</b>"
-msgstr "<b>GNOME skjermsparer</b>"
-
-#: ../src/gpm-info.glade.h:6 ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>Generelt</b>"
-
-#: ../src/gpm-info.glade.h:7
-msgid "<b>Other problems</b>"
-msgstr "<b>Andre problemer</b>"
-
-#: ../src/gpm-info.glade.h:8
-msgid "<b>UPS</b>"
-msgstr "<b>UPS</b>"
-
-#: ../src/gpm-info.glade.h:9
-msgid "APC UPS 100CS"
-msgstr "APC UPS 100CS"
-
-#: ../src/gpm-info.glade.h:10
-msgid "CPU Frequency Scaling"
-msgstr "Frekvensskalering for CPU"
-
-#: ../src/gpm-info.glade.h:11
-msgid "Form-factor:"
-msgstr "Formfaktor"
-
-#: ../src/gpm-info.glade.h:12
-msgid "Gnome Screensaver Info"
-msgstr "Informasjon om GNOME skjermsparer"
-
-#: ../src/gpm-info.glade.h:13
-msgid "Hibernation"
-msgstr "Dvalemodus"
-
-#: ../src/gpm-info.glade.h:14
-msgid "Laptop"
-msgstr "Bærbar"
-
-#: ../src/gpm-info.glade.h:15
-msgid "LiION Battery"
-msgstr "LiION-batteri"
-
-#: ../src/gpm-info.glade.h:16
-msgid "Low Power Mode"
-msgstr "Modus for lav strømstyrke"
-
-#: ../src/gpm-info.glade.h:17
-msgid "Manufacturer:"
-msgstr "Produsent:"
-
-#: ../src/gpm-info.glade.h:18
-msgid "Model:"
-msgstr "Modell:"
-
-#: ../src/gpm-info.glade.h:19
-msgid "NiMOH Battery"
-msgstr "NiMOH-batteri"
-
-#: ../src/gpm-info.glade.h:20
-msgid "Other problems"
-msgstr "Andre problemer"
-
-#: ../src/gpm-info.glade.h:21
-msgid "Satellite Pro A10"
-msgstr "Satelite Pro A10"
-
-#: ../src/gpm-info.glade.h:22 ../src/gpm-prefs.c:692
-msgid "Suspend"
-msgstr "Hvilemodus"
-
-#: ../src/gpm-info.glade.h:23
-msgid "System Power Info"
-msgstr "Informasjon om strømstatus for systemet"
-
-#: ../src/gpm-info.glade.h:24
-msgid "Toshiba"
-msgstr "Toshiba"
-
-#: ../src/gpm-main.c:414 ../src/gpm-main.c:433
+#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -266,63 +168,63 @@ msgstr ""
 "Du har omtrent <b>%s</b> batteritid igjen (%i%%). Sett inn strømkabelen for "
 "å unngå å tape data."
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:357
 msgid "Battery Critically Low"
 msgstr "Batterikapasitet kritisk lav"
 
-#: ../src/gpm-main.c:436
+#: ../src/gpm-main.c:375
 msgid "Battery Low"
 msgstr "Batterikapasitet lav"
 
-#: ../src/gpm-main.c:478
+#: ../src/gpm-main.c:417
 msgid "AC Power Unplugged"
 msgstr "Strømkabelen er ikke plugget inn"
 
-#: ../src/gpm-main.c:479
+#: ../src/gpm-main.c:418
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Strømkabelen er ikke plugget inn. Systemet bruker nå batteristrøm."
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Battery Charged"
 msgstr "Batteriet er ladet"
 
-#: ../src/gpm-main.c:550
+#: ../src/gpm-main.c:494
 msgid "Your battery is now fully charged"
 msgstr "Batteriet er nå ladet helt opp"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-notification.c:216
 msgid "charging"
 msgstr "lader"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:218
 msgid "discharging"
 msgstr "lader ut"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:221
 msgid "charged"
 msgstr "ladet"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:236
 msgid "until charged"
 msgstr " til batteriet er ferdig ladet"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:239
 msgid "until empty"
 msgstr "til batteriet er tomt"
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:306
 msgid "Computer is running on battery power\n"
 msgstr "Datamaskinen kjører på batteristrøm\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:308
 msgid "Computer is running on AC power\n"
 msgstr "Datamaskinen kjører på nettstrøm\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:338
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lisensiert under GNU General Public License versjon 2"
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:339
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -330,7 +232,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:343
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -338,7 +240,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:347
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -348,50 +250,67 @@ msgstr ""
 
 #. Translators comment: put your own name here to appear in the
 #. * about dialog.
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-notification.c:360
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:484
 msgid "_Suspend"
 msgstr "_Hvilemodus"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:489
 msgid "Hi_bernate"
 msgstr "_Dvalemodus"
 
-#: ../src/gpm-notification.c:511
+#: ../src/gpm-notification.c:494
 msgid "_Preferences"
 msgstr "_Brukervalg"
 
-#: ../src/gpm-notification.c:513
+#: ../src/gpm-notification.c:496
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: ../src/gpm-notification.c:515
+#: ../src/gpm-notification.c:498
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/gpm-prefs.c:689
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:44
+msgid "Suspend"
+msgstr "Hvilemodus"
+
+#: ../src/gpm-prefs.c:45
 msgid "Shutdown"
 msgstr "Slå av"
 
-#: ../src/gpm-prefs.c:695
+#: ../src/gpm-prefs.c:46
 msgid "Hibernate"
 msgstr "Dvalemodus"
 
-#: ../src/gpm-prefs.c:698
+#: ../src/gpm-prefs.c:47
 msgid "Do nothing"
 msgstr "Ikke gjør noe"
 
-#: ../src/gpm-prefs.c:775
+#: ../src/gpm-prefs.c:137
+msgid "Never"
+msgstr ""
+
+#: ../src/gpm-prefs.c:503
+#, fuzzy
+msgid "<b>Configuration</b>"
+msgstr "<b>Varslingsområde</b>"
+
+#: ../src/gpm-prefs.c:576
 msgid "GNOME Power Preferences"
 msgstr "Brukervalg for strøm"
 
-#. * @}
 #: ../src/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
 msgstr "<b>Handlinger</b>"
+
+#: ../src/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>Generelt</b>"
 
 #: ../src/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -501,22 +420,85 @@ msgstr "_Type hvilemodus:"
 msgid "_Never display icon"
 msgstr "_Aldri vis ikon"
 
-#: ../src/gpm-sysdev.c:58
+#: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
 msgstr "Batteri på bærbar datamaskin"
 
-#: ../src/gpm-sysdev.c:60
+#: ../src/gpm-sysdev.c:59
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-sysdev.c:62
+#: ../src/gpm-sysdev.c:61
 msgid "Wireless mouse"
 msgstr "Trådløs mus"
 
-#: ../src/gpm-sysdev.c:64
+#: ../src/gpm-sysdev.c:63
 msgid "Wireless keyboard"
 msgstr "Trådløst tastatur"
 
-#: ../src/gpm-sysdev.c:66
+#: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "Forskjellig PDA"
+
+#~ msgid "96% efficient"
+#~ msgstr "96% effektivt"
+
+#~ msgid "<b>Batteries</b>"
+#~ msgstr "<b>Batterier</b>"
+
+#~ msgid "<b>Capabilities</b>"
+#~ msgstr "<b>Funksjoner</b>"
+
+#~ msgid "<b>GNOME Screensaver</b>"
+#~ msgstr "<b>GNOME skjermsparer</b>"
+
+#~ msgid "<b>Other problems</b>"
+#~ msgstr "<b>Andre problemer</b>"
+
+#~ msgid "<b>UPS</b>"
+#~ msgstr "<b>UPS</b>"
+
+#~ msgid "APC UPS 100CS"
+#~ msgstr "APC UPS 100CS"
+
+#~ msgid "CPU Frequency Scaling"
+#~ msgstr "Frekvensskalering for CPU"
+
+#~ msgid "Form-factor:"
+#~ msgstr "Formfaktor"
+
+#~ msgid "Gnome Screensaver Info"
+#~ msgstr "Informasjon om GNOME skjermsparer"
+
+#~ msgid "Hibernation"
+#~ msgstr "Dvalemodus"
+
+#~ msgid "Laptop"
+#~ msgstr "Bærbar"
+
+#~ msgid "LiION Battery"
+#~ msgstr "LiION-batteri"
+
+#~ msgid "Low Power Mode"
+#~ msgstr "Modus for lav strømstyrke"
+
+#~ msgid "Manufacturer:"
+#~ msgstr "Produsent:"
+
+#~ msgid "Model:"
+#~ msgstr "Modell:"
+
+#~ msgid "NiMOH Battery"
+#~ msgstr "NiMOH-batteri"
+
+#~ msgid "Other problems"
+#~ msgstr "Andre problemer"
+
+#~ msgid "Satellite Pro A10"
+#~ msgstr "Satelite Pro A10"
+
+#~ msgid "System Power Info"
+#~ msgstr "Informasjon om strømstatus for systemet"
+
+#~ msgid "Toshiba"
+#~ msgstr "Toshiba"
