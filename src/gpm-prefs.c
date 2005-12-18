@@ -126,8 +126,9 @@ gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
 	int *steps = NULL;
 	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
 	if (!steps)
-		return NULL;
-	return g_strdup_printf ("%i%%", (gint) value * 100 / (*steps - 1));
+		return g_strdup_printf ("%i%%", (gint) value);
+
+	return g_strdup_printf ("%i%%", (gint) value * 100 / (*steps + 1));
 }
 
 static gchar*
@@ -298,7 +299,7 @@ gpm_prefs_battery_low_slider_changed_cb (GtkWidget *widget, GladeXML *dialog)
 	gconf_client_set_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_LOW, (gint) value, NULL);
 
 	gtk_range_set_range (GTK_RANGE (glade_xml_get_widget (dialog, "hscale_battery_critical")),
-		       	    0, value);
+		       	     0, value);
 
 	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_low_estimate"),
 				    get_battery_time_for_percentage (value));
@@ -477,6 +478,7 @@ gpm_prefs_init ()
 	GtkWidget *scale_battery_low;
 
 	scale_battery_low = glade_xml_get_widget (dialog, "hscale_battery_low");
+	gtk_range_set_range (GTK_RANGE (scale_battery_low), 5, 25);
 	g_signal_connect (G_OBJECT (scale_battery_low), "format-value", 
 			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
 	g_signal_connect (G_OBJECT (scale_battery_low), "value-changed", 
