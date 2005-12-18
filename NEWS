@@ -1,9 +1,11 @@
 ==========
-GNOME Power Manager 0.3.2
+GNOME Power Manager 0.3.3
 ==========
 
-Released December xx, 2005
+Released December 20, 2005
 
+- We now depend on CVS HAL for the new suspend, hibernate and shutdown
+  functionality.
 - We now only show Suspend and Hibernate options when HAL says we should.
   NOTE: just because HAL (i.e. the kernel) says it has hibernation or suspend
   support is compiled in, doesn't automatically mean that it will *work*.
@@ -13,6 +15,8 @@ Released December xx, 2005
 - The power button is now an interactive shutdown, saving GNOME session state.
 - Fix a bug where the preferences program was crashing on missing gconf schema.
 - Fixed lots of other smaller bugs such as #322773, #323135, RH#174196, #322547
+- Lots of source file re-organisation, also big refactoring and fixing lots
+  of warnings.
 
 ==========
 GNOME Power Manager 0.3.1

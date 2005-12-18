@@ -69,9 +69,11 @@ IdleCallback	callbackfunction;
 static gboolean
 cpudata_get_values (cpudata *data)
 {
+	int len;
 	char tmp[5];
 	char str[80];
 	FILE *fd;
+	char *suc;
 
 	/* assertion checks */
 	g_assert (data);
@@ -79,9 +81,10 @@ cpudata_get_values (cpudata *data)
 	fd = fopen("/proc/stat", "r");
 	if (!fd)
 		return FALSE;
-	fgets(str, 80, fd);
-	sscanf(str, "%s %lu %lu %lu %lu", tmp, &data->user, &data->nice, &data->system, &data->idle);
-	fclose(fd);
+	suc = fgets (str, 80, fd);
+	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
+		      &data->user, &data->nice, &data->system, &data->idle);
+	fclose (fd);
 	/* 
 	 * Summing up all these times gives you the system uptime in jiffies.
 	 * This is what the uptime command does.
