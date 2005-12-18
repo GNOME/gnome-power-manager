@@ -178,19 +178,16 @@ static void
 gpm_prefs_brightness_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 {
 	gdouble value;
-	gboolean onbattery;
+	gboolean is_on_ac;
 	
 	value = gtk_range_get_value (range);
 	gconf_client_set_int (gconf_client_get_default (), gpm_pref_key, (gint) value, NULL);
 
 	/* Change the brightness in real-time */
-	if (gpm_is_on_mains (&onbattery)) {
-		if ((!onbattery && strcmp (gpm_pref_key, GPM_PREF_AC_BRIGHTNESS) == 0) ||
-		    (onbattery && strcmp (gpm_pref_key, GPM_PREF_BATTERY_BRIGHTNESS) == 0)) {
-			gpm_hal_set_brightness (value);
-		}
-	} else {
-		g_warning ("gpm_is_on_mains failed");
+	is_on_ac = gpm_hal_is_on_ac ();
+	if ((is_on_ac && strcmp (gpm_pref_key, GPM_PREF_AC_BRIGHTNESS) == 0) ||
+	    (!is_on_ac && strcmp (gpm_pref_key, GPM_PREF_BATTERY_BRIGHTNESS) == 0)) {
+		gpm_hal_set_brightness (value);
 	}
 }
 
@@ -557,7 +554,6 @@ int
 main (int argc, char **argv)
 {
 	gint i;
-	gboolean has_gpm_connection;
 	gboolean verbose = FALSE;
 	GConfClient *client;
 
@@ -597,15 +593,6 @@ main (int argc, char **argv)
 			gconf_client_set_bool (client, GS_PREF_DPMS_ENABLED, TRUE, NULL);
 		}
 	}
-	/*
-	 * We should warn if g-p-m is not running - but still allow to continue
-	 * Note, that the query alone will be enough to lauch g-p-m using
-	 * the service file.
-	 */
-	has_gpm_connection = gpm_is_on_ac (&i);
-	if (!has_gpm_connection)
-		g_warning ("Cannot connect to GNOME Power Manager.");
-
 	gpm_prefs_init ();
 
 	gtk_main ();
