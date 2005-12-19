@@ -94,22 +94,22 @@ get_stock_id (gchar* iconopt)
 	lowThreshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
 	/* list in order of priority */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
+	if (sd->isPresent && sd->percentageCharge < lowThreshold) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
 	sd = sysDevGet (BATT_UPS);
-	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold) {
+	if (sd->isPresent && sd->percentageCharge < lowThreshold) {
 		index = get_index_from_percent (sd->percentageCharge);
 		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
 	sd = sysDevGet (BATT_MOUSE);
-	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold)
+	if (sd->isPresent && sd->percentageCharge < lowThreshold)
 		return g_strdup_printf ("gnome-power-mouse");
 	sd = sysDevGet (BATT_KEYBOARD);
-	if (sd->numberDevices > 0 && sd->percentageCharge < lowThreshold)
+	if (sd->isPresent && sd->percentageCharge < lowThreshold)
 		return g_strdup_printf ("gnome-power-keyboard");
 	/*
 	 * Check if we should just show the charging / discharging icon 
@@ -122,7 +122,7 @@ get_stock_id (gchar* iconopt)
 	}
 	/* Only display if charging or disharging */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->numberDevices > 0 && (sd->isCharging || sd->isDischarging)) {
+	if (sd->isPresent && (sd->isCharging || sd->isDischarging)) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
@@ -138,7 +138,7 @@ get_stock_id (gchar* iconopt)
 	}
 	/* Do the rest of the battery icon states */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->numberDevices > 0) {
+	if (sd->isPresent) {
 		index = get_index_from_percent (sd->percentageCharge);
 		if (onAcPower) {
 			if (!sd->isCharging && !sd->isDischarging)
@@ -197,7 +197,7 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 	g_assert (sds);
 
 	/* do not display for not present devices */
-	if (!sds->present)
+	if (!sds->isPresent)
 		return NULL;
 
 	tooltip = g_string_new ("");
@@ -286,7 +286,7 @@ get_tooltips_system_device_type (GString *tooltip, DeviceType type)
 	GString *temptip = NULL;
 	g_assert (tooltip);
 	sd = sysDevGet (type);
-	if (sd->numberDevices > 0) {
+	if (sd->isPresent) {
 		temptip = get_tooltips_system_device (sd);
 		g_string_append (tooltip, temptip->str);
 		g_string_free (temptip, TRUE);

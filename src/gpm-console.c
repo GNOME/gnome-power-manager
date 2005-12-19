@@ -197,7 +197,7 @@ hal_device_property_modified (const gchar *udi,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		hal_device_get_bool (udi, key, &sds->present);
+		hal_device_get_bool (udi, key, &sds->isPresent);
 		/* read in values */
 		gpm_read_battery_data (sds);
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {

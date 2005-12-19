@@ -97,6 +97,7 @@ sysDevInit (DeviceType type)
 {
 	sysDev *sd = sysDevGet (type);
 	sd->devices = g_ptr_array_new ();
+	sd->isPresent = FALSE;
 	sd->percentageCharge = 0;
 	sd->minutesRemaining = 0;
 }
@@ -111,6 +112,7 @@ sysDevFree (DeviceType type)
 	sysDev *sd = sysDevGet (type);
 	g_ptr_array_free (sd->devices, TRUE);
 	sd->devices = NULL;
+	sd->isPresent = FALSE;
 	sd->percentageCharge = 0;
 	sd->minutesRemaining = 0;
 }
@@ -127,6 +129,7 @@ sysDevDebugPrint (DeviceType type)
 	g_debug ("percentageCharge = %i", sd->percentageCharge);
 	g_debug ("numberDevices    = %i", sd->numberDevices);
 	if (type != BATT_MOUSE && type != BATT_KEYBOARD) {
+		g_debug ("isPresent        = %i", sd->isPresent);
 		g_debug ("minutesRemaining = %i", sd->minutesRemaining);
 		g_debug ("isCharging       = %i", sd->isCharging);
 		g_debug ("isDischarging    = %i", sd->isDischarging);
@@ -208,6 +211,9 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
 {
 	g_assert (sds);
 
+	if (!sds->isPresent)
+		g_warning ("Adding missing device, may bug");
+
 	/* need to check if already exists */
 	sysDev *sd = sysDevGet (type);
 	g_assert (sd);
@@ -258,8 +264,8 @@ sysDevList (DeviceType type)
 		temp = sysDevGetIndex (type, a);
 		g_print ("%s (%i)\n", temp->udi, a);
 		g_print (" percentageCharge : %i\n", temp->percentageCharge);
-		g_print (" minutesRemaining    : %i\n", temp->minutesRemaining);
-		g_print (" present        : %i\n", temp->present);
+		g_print (" minutesRemaining : %i\n", temp->minutesRemaining);
+		g_print (" isPresent        : %i\n", temp->isPresent);
 	}
 }
 
@@ -368,15 +374,22 @@ sysDevUpdate (DeviceType type)
 	sd->percentageCharge = 0;
 	sd->isCharging = FALSE;
 	sd->isDischarging = FALSE;
+	sd->isPresent = FALSE;
 
-	/* find the number of batteries present, and set charge states */
+	/* find the number of devices present, and set charge states */
 	for (a=0; a < sd->devices->len; a++) {
 		sds = sysDevGetIndex (type, a);
-		if (sds->present) {
+		if (sds->isPresent) {
 			numPresent++;
 			/*
+			 * Only one device has to be present for the class
+			 * to be present.
+			 */
+			if (sds->isPresent)
+				sd->isPresent = TRUE;
+			/*
 			 * Only one device has to be charging or discharging
-			 * for the general case to be valid.
+			 * for the class to be valid.
 			 */
 			if (sds->isCharging)
 				sd->isCharging = TRUE;
@@ -409,7 +422,7 @@ sysDevUpdate (DeviceType type)
 	/* iterate thru all the devices (multiple battery scenario) */
 	for (a=0; a < sd->devices->len; a++) {
 		sds = sysDevGetIndex (type, a);
-		if (sds->present) {
+		if (sds->isPresent) {
 			/* for now, just add */
 			sd->minutesRemaining += sds->minutesRemaining;
 			/* for now, just average */

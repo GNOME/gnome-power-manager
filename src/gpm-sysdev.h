@@ -47,7 +47,10 @@ typedef struct {
 	int minutesRemaining;	/**< Minutes remaining until charged	*/
 	gboolean isCharging;	/**< If general device is charging	*/
 	gboolean isDischarging;	/**< If general device is discharging	*/
-	int numberDevices;	/**< Number of devices of this type	*/
+	gboolean isPresent;	/**< If any device are present		*/
+	int numberDevices;	/**< Number of devices of this type	*
+				 **  N.B. not present batteries are	*
+				 **  still counted here			*/
 	GPtrArray* devices;	/**< system struct array		*/
 	DeviceType type;	/**< The device type, e.g. BATT_UPS	*/
 } sysDev;
@@ -63,7 +66,7 @@ typedef struct {
 	gboolean isRechargeable;/**< If device is rechargeable		*/
 	int percentageCharge;	/**< The percentage charge remaining	*/
 	int minutesRemaining;	/**< Minutes remaining until charged	*/
-	gboolean present;	/**< If the device is present		*/
+	gboolean isPresent;	/**< If the device is present		*/
 	gboolean isCharging;	/**< If device is charging		*/
 	gboolean isDischarging;	/**< If device is discharging		*/
 	sysDev *sd;		/**< Pointer to parent system device	*/

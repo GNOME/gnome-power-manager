@@ -137,7 +137,7 @@ gpm_add_battery (const gchar *udi)
 	strncpy (sds->udi, udi, 128);
 
 	/* batteries might be missing */
-	hal_device_get_bool (udi, "battery.present", &sds->present);
+	hal_device_get_bool (udi, "battery.present", &sds->isPresent);
 
 	/* battery is refined using the .type property */
 	hal_device_get_string (udi, "battery.type", &type);
@@ -183,8 +183,10 @@ gpm_read_battery_data (sysDevStruct *sds)
 	sds->isCharging = FALSE;
 	sds->isDischarging = FALSE;
 
-	if (!sds->present) {
+	if (!sds->isPresent) {
 		g_debug ("Battery %s not present!", sds->udi);
+		/* refresh to set missing state */
+		sysDevUpdate (sds->sd->type);
 		return FALSE;
 	}
 

@@ -4,6 +4,10 @@
 	disappears we just re-instantiate the icon without crashing.
 	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=324446
 
+	* src/gpm-sysdec.{c|h}, gpm-notification.c: Add the sd->isPresent
+	flag so we can detect when an sd has no present sds members.
+	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=323563
+
 2005-12-19  Nikos Charonitakis  <nikosx@gmail.com>
 
 	* configure.in: Added 'el' to ALL_LINGUAS.
