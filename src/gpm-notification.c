@@ -43,6 +43,7 @@
 
 /* shared with gpm-main.c */
 static TrayData *eggtrayicon = NULL;
+static void icon_create (void);
 gboolean onAcPower;
 
 /** Finds the icon index value for the percentage charge
@@ -509,7 +510,7 @@ menu_main_create (TrayData *trayicon)
  *  @return			If the popup-menu is already shown
  */
 static gboolean
-tray_icon_release (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
+tray_button_release_cb (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
 	g_assert (traydata);
@@ -570,7 +571,7 @@ tray_popup_position_menu (GtkMenu *menu,
  *  @return			If the popup-menu is already shown
  */
 static gboolean
-tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
+tray_button_press_cb (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 {
 	/* assertion checks */
 	g_assert (traydata);
@@ -589,10 +590,26 @@ tray_icon_press (GtkWidget *widget, GdkEventButton *event, TrayData *traydata)
 	return FALSE;
 }
 
+static gboolean
+tray_destroy_cb (GtkWidget *widget, gpointer user_data)
+{
+	gtk_widget_destroy (GTK_WIDGET (eggtrayicon->tray_icon));
+
+	eggtrayicon->tray_icon = NULL;
+	eggtrayicon->tray_icon_tooltip = NULL;
+	eggtrayicon->evbox = NULL;
+	eggtrayicon->image = NULL;
+	eggtrayicon = NULL;
+
+	icon_create ();
+
+	return TRUE;
+}
+
 /** Creates icon in the notification area
  *
  */
-void
+static void
 icon_create (void)
 {
 	GtkWidget *evbox = NULL;
@@ -612,12 +629,18 @@ icon_create (void)
 
 	eggtrayicon->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 	g_signal_connect (G_OBJECT (evbox), "button_press_event",
-			  G_CALLBACK (tray_icon_press), (gpointer) eggtrayicon);
+			  G_CALLBACK (tray_button_press_cb), (gpointer) eggtrayicon);
 	g_signal_connect (G_OBJECT (evbox), "button_release_event",
-			  G_CALLBACK (tray_icon_release), (gpointer) eggtrayicon);
+			  G_CALLBACK (tray_button_release_cb), (gpointer) eggtrayicon);
+	/* Handles when the area is removed from the panel. */
+	g_signal_connect (G_OBJECT (evbox), "destroy",
+			  G_CALLBACK (tray_destroy_cb), (gpointer) eggtrayicon);
 
 	gtk_container_add (GTK_CONTAINER (evbox), eggtrayicon->image);
 	gtk_container_add (GTK_CONTAINER (eggtrayicon->tray_icon), evbox);
+
+	/* update to get correct icon */
+	gpn_icon_update ();
 
 	gtk_widget_show_all (GTK_WIDGET (eggtrayicon->tray_icon));
 }

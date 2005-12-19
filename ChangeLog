@@ -1,3 +1,9 @@
+2005-12-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/eggtrayicon.c, src/gpm-prefs.c: Update so that if gnome-panel
+	disappears we just re-instantiate the icon without crashing.
+	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=324446
+
 2005-12-19  Nikos Charonitakis  <nikosx@gmail.com>
 
 	* configure.in: Added 'el' to ALL_LINGUAS.
