@@ -318,9 +318,8 @@ gpm_prefs_battery_critical_slider_changed_cb (GtkWidget *widget, GladeXML *dialo
 }
 
 static void
-gpm_prefs_init ()
+gpm_prefs_init (GladeXML *dialog)
 {
-	GladeXML *dialog;
 	GtkWidget *widget;
 
 	GtkSizeGroup *size_group;
@@ -330,8 +329,6 @@ gpm_prefs_init ()
 	gtk_window_set_default_icon_name ("gnome-dev-battery");
 
 	client = gconf_client_get_default ();
-
-	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
 	widget = glade_xml_get_widget (dialog, "window_preferences");
 	/* Get the main window quit */
@@ -556,6 +553,8 @@ main (int argc, char **argv)
 	gint i;
 	gboolean verbose = FALSE;
 	GConfClient *client;
+	GtkWidget *widget;
+	GladeXML *dialog;
 
 	struct poptOption options[] = {
 		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
@@ -593,7 +592,16 @@ main (int argc, char **argv)
 			gconf_client_set_bool (client, GS_PREF_DPMS_ENABLED, TRUE, NULL);
 		}
 	}
-	gpm_prefs_init ();
+
+	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
+	/*
+	 * Hide, process, then show the top window so that the dialogue
+	 * resizes itself without redrawing.
+	 */
+	widget = glade_xml_get_widget (dialog, "window_preferences");
+	gtk_widget_hide (widget);
+	gpm_prefs_init (dialog);
+	gtk_widget_show (widget);
 
 	gtk_main ();
 	return 0;

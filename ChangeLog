@@ -1,12 +1,18 @@
+2005-12-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c: Hide, process, then show the top window so that
+	the dialogue resizes itself without redrawing.
+	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=323562
+
 2005-12-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/eggtrayicon.c, src/gpm-prefs.c: Update so that if gnome-panel
 	disappears we just re-instantiate the icon without crashing.
-	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=324446
+	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=324446
 
 	* src/gpm-sysdec.{c|h}, gpm-notification.c: Add the sd->isPresent
 	flag so we can detect when an sd has no present sds members.
-	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=323563
+	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=323563
 
 2005-12-19  Nikos Charonitakis  <nikosx@gmail.com>
 
