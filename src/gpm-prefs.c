@@ -326,11 +326,11 @@ gpm_prefs_init (GladeXML *dialog)
 	GConfClient *client;
 	gint value;
 
-	gtk_window_set_default_icon_name ("gnome-dev-battery");
-
 	client = gconf_client_get_default ();
 
 	widget = glade_xml_get_widget (dialog, "window_preferences");
+	gtk_window_set_icon_name (GTK_WINDOW (widget), "gnome-dev-battery");
+
 	/* Get the main window quit */
 	g_signal_connect (G_OBJECT (widget), "delete_event",
 			  G_CALLBACK (gtk_main_quit), NULL);
