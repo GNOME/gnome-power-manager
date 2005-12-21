@@ -722,7 +722,6 @@ main (int argc, char *argv[])
 	if (!dbus_get_session_connection (&session_connection))
 		g_error ("Unable to get session dbus connection");
 
-
 	/* Initialise libnotify, if compiled in. */
 	if (!libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
@@ -730,6 +729,9 @@ main (int argc, char *argv[])
 	/* initialise stock icons */
 	if (!gpm_stock_icons_init())
 		g_error ("Cannot continue without stock icons");
+
+	/* Assume we are a desktop unless we have a battery */
+	onAcPower = TRUE;
 
 	/* initialise all system devices */
 	sysDevInitAll ();
