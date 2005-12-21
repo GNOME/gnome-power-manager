@@ -1,18 +1,19 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: cvs20051218build1
+Release: cvs20051221build1
 License: GPL
 Group: Applications/System
-Source: gnome-power-manager-%{version}.tar.gz
+Source: http://ftp.gnome.org/pub/GNOME/sources/gnome-power-manager/0.3/gnome-power-manager-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 URL: http://www.gnome.org/projects/gnome-power-manager/
-BuildPrereq: gtk2-devel >= @GTK_REQUIRED@
-BuildPrereq: libgnomeui-devel >= @LIBGNOMEUI_REQUIRED@
-BuildPrereq: libglade2-devel >= @LIBGLADE_REQUIRED@
-BuildPrereq: libwnck-devel >= @LIBWNCK_REQUIRED@
-BuildPrereq: hal-devel >= @HAL_REQUIRED@
-BuildPrereq: dbus-devel >= @DBUS_REQUIRED@
+BuildRequires: gtk2-devel >= @GTK_REQUIRED@
+BuildRequires: libgnomeui-devel >= @LIBGNOMEUI_REQUIRED@
+BuildRequires: libglade2-devel >= @LIBGLADE_REQUIRED@
+BuildRequires: libwnck-devel >= @LIBWNCK_REQUIRED@
+BuildRequires: hal-devel >= @HAL_REQUIRED@
+BuildRequires: dbus-devel >= @DBUS_REQUIRED@
+BuildRequires: docbook-utils >= 0.6
 Requires: gtk2 >= @GTK_REQUIRED@
 Requires: gnome-mime-data
 Requires: gnome-icon-theme
@@ -27,9 +28,9 @@ Requires(post): GConf2
 Requires(preun): GConf2
 
 %description
-GNOME Power Manager uses the information and facilities provided by HAL 
-displaying icons and handling user callbacks in an interactive GNOME session. 
-GNOME Power Preferences allows authorised users to set policy and 
+GNOME Power Manager uses the information and facilities provided by HAL
+displaying icons and handling user callbacks in an interactive GNOME session.
+GNOME Power Preferences allows authorised users to set policy and
 change preferences.
 
 %prep
@@ -42,7 +43,7 @@ change preferences.
 	--with-doc-dir=%{buildroot}%{_datadir}/doc \
 	--with-dbus-sys=%{buildroot}/etc/dbus-1/system.d \
 	--with-dbus-services=%{buildroot}%{_datadir}/dbus-1/services
-make
+make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -50,25 +51,16 @@ export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 %makeinstall
 unset GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL
 
-desktop-file-install --vendor gnome --delete-original                   \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications                         \
-  --add-only-show-in GNOME                                              \
-  --add-category X-Red-Hat-Base                                         \
+desktop-file-install --vendor gnome --delete-original \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications       \
+  --add-only-show-in GNOME                            \
+  --add-category X-Red-Hat-Base                       \
   $RPM_BUILD_ROOT%{_datadir}/applications/*
 
-%find_lang %name
+%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-
-%pre
-if [ "$1" -gt 1 ]; then
-    #uninstall the old schema when we upgrade
-    export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
-    gconftool-2 --makefile-uninstall-rule \
-      %{_sysconfdir}/gconf/schemas/gnome-power-manager.schemas >/dev/null || :
-    killall -HUP gconfd-2 || :
-fi
 
 %post
 #install new schema for a new package
@@ -78,7 +70,7 @@ gconftool-2 --makefile-install-rule \
 killall -HUP gconfd-2 || :
 
 %preun
-if [ "$1" -eq 0 ]; then
+if [ $1 -eq 0 ]; then
     #deleting the schema on package removal
     export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
     gconftool-2 --makefile-uninstall-rule \
@@ -87,12 +79,12 @@ if [ "$1" -eq 0 ]; then
 fi
 
 %files -f %{name}.lang
-%defattr(-,root,root)
-%doc AUTHORS ChangeLog COPYING INSTALL NEWS README
+%defattr(-,root,root,0755)
+%doc AUTHORS ChangeLog COPYING NEWS README
 %{_bindir}/*
 %{_datadir}/applications/*
 %{_datadir}/dbus-1/*
-%{_datadir}/gnome-power-manager
+%{_datadir}/gnome-power-manager/
 %{_datadir}/man/man1/*
 # TODO: remove system.d as g-p-m shouldn't be on the system bus
 %{_sysconfdir}/dbus-1/system.d/*
@@ -117,8 +109,5 @@ fi
 * Mon Jun 18 2005 Richard Hughes <richard@hughsie.com> 0.0.5-1
 - New RPM version 0.0.5
 
-%changelog
 * Mon Apr 04 2005 Richard Hughes <richard@hughsie.com> 0.0.3-1
 - initial packaging of 0.0.3
-
-
