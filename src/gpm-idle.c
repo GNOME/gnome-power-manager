@@ -242,8 +242,12 @@ gpm_idle_update (gpointer data)
 	}
 
 	if (time_idle_callback == 0) {
-		g_debug ("gpm_idle_set_timeout has not been called with a valid "
-			 "timeout so no idle processing done");
+		static gboolean has_warned = FALSE;
+		if (!has_warned) {
+			g_debug ("gpm_idle_set_timeout has not been called with "
+				 "a valid timeout so no idle processing done");
+			has_warned = TRUE;
+		}
 		/*
 		 * Will not stop polling, as user could increase value by
 		 * changing g-conf value using g-p-p
