@@ -55,7 +55,7 @@ static NotifyHandle *globalnotify = NULL;
 static NotifyNotification *globalnotify;
 #endif
 
-/** Gets the position to "point" to (i.e. center of the icon)
+/** Gets the position to "point" to (i.e. bottom middle of the icon)
  *
  *  @param	widget		the GtkWidget
  *  @param	x		X co-ordinate return
@@ -65,17 +65,18 @@ static NotifyNotification *globalnotify;
 static gboolean
 get_widget_position (GtkWidget *widget, gint *x, gint *y)
 {
-	GdkPixbuf* pixbuf = NULL;
-
 	/* assertion checks */
 	g_assert (widget);
 	g_assert (x);
 	g_assert (y);
 
 	gdk_window_get_origin (GDK_WINDOW (widget->window), x, y);
-	pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (widget));
-	*x += (gdk_pixbuf_get_width (pixbuf) / 2);
-	*y += gdk_pixbuf_get_height (pixbuf);
+
+	*x += widget->allocation.x;
+	*y += widget->allocation.y;
+	*x += widget->allocation.width / 2;
+	*y += widget->allocation.height;
+
 	g_debug ("widget position x=%i, y=%i", *x, *y);
 	return TRUE;
 }
@@ -96,14 +97,14 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 {
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 	gint x, y;
-	globalnotify = notify_notification_new (subject, content, GPM_STOCK_AC_8_OF_8, NULL);
+	globalnotify = notify_notification_new (subject, content, "gnome-dev-battery", NULL);
 
-        notify_notification_set_timeout (globalnotify, 3000);
+        notify_notification_set_timeout (globalnotify, 5000);
 
 	if (point) {
 		get_widget_position (point, &x, &y);
-		notify_notification_set_hint_int32 (globalnotify, "x", x+12);
-		notify_notification_set_hint_int32 (globalnotify, "y", y+24);
+		notify_notification_set_hint_int32 (globalnotify, "x", x);
+		notify_notification_set_hint_int32 (globalnotify, "y", y);
 	}
 
 	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
@@ -127,8 +128,8 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
 	if (point) {
 		get_widget_position (point, &x, &y);
 		hints = notify_hints_new();
-		notify_hints_set_int (hints, "x", x+12);
-		notify_hints_set_int (hints, "y", y+24);
+		notify_hints_set_int (hints, "x", x);
+		notify_hints_set_int (hints, "y", y);
 	}
 
 	/* echo to terminal too */
