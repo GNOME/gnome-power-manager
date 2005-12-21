@@ -162,10 +162,13 @@ icon_destroy (TrayData *eggtrayicon)
 	g_assert (eggtrayicon);
 
 	g_debug ("icon_destroy");
+#if 0
+	/* do we destroy a popup_menu or icon_tooltip ? */
 	if (eggtrayicon->popup_menu)
 		g_free (eggtrayicon->popup_menu);
 	if (eggtrayicon->tray_icon_tooltip)
-		g_free (eggtrayicon->tray_icon_tooltip);
+		g_object_unref (eggtrayicon->tray_icon_tooltip);
+#endif
 	gtk_widget_unrealize ((GtkWidget *) eggtrayicon->tray_icon);
 	g_free (eggtrayicon);
 	eggtrayicon = NULL;
@@ -356,12 +359,12 @@ callback_about_activated (void)
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 					     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 	 
-	/* Translators comment: put your own name here to appear in the
-     * about dialog. */
+	/*
+	 * Translators comment: put your own name here to appear in the about dialog.
+	 */
   	const gchar *translators = _("translator-credits");
-
   	if (!strcmp (translators, "translator-credits"))
-    	translators = NULL;
+		translators = NULL;
 	
 	GtkWidget *about = gtk_about_dialog_new ();
 	GdkPixbuf *logo = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
@@ -418,8 +421,10 @@ GtkWidget *
 get_notification_icon (void)
 {
 	/* no asserts required, as we are allowed to be called when no icon */
-	if (!eggtrayicon)
+	if (!eggtrayicon) {
+		g_debug ("No icon, so returning NULL");
 		return NULL;
+	}
 	return GTK_WIDGET (eggtrayicon->image);
 }
 
