@@ -425,7 +425,7 @@ gpm_prefs_init (GladeXML *dialog)
 	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE,
 					     	   ACTION_SHUTDOWN, NULL};
 
-	label_battery_critical = glade_xml_get_widget (dialog, "label_battery_critical");
+	label_battery_critical = glade_xml_get_widget (dialog, "label_battery_critical_action");
 	combo_battery_critical = gpm_prefs_setup_action_combo (dialog, "combobox_battery_critical",
 				      			 GPM_PREF_BATTERY_CRITICAL, battery_critical_actions);
 
@@ -492,9 +492,11 @@ gpm_prefs_init (GladeXML *dialog)
 			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);	
 	g_signal_connect (G_OBJECT (scale_battery_critical), "value-changed", 
 			  G_CALLBACK (gpm_prefs_battery_critical_slider_changed_cb), dialog);
-
 	value = gconf_client_get_int (gconf_client_get_default (), GPM_PREF_THRESHOLD_CRITICAL, NULL);
 	gtk_range_set_value (GTK_RANGE (scale_battery_critical), value);
+	/* set estimated label in case the value is the same */
+	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_critical_estimate"),
+				    get_battery_time_for_percentage (value));
 
 	gboolean has_batteries = hal_num_devices_of_capability ("battery") > 0;
 	if (!has_batteries) {
@@ -504,13 +506,12 @@ gpm_prefs_init (GladeXML *dialog)
 		/* Sleep tab */
 		widget = glade_xml_get_widget (dialog, "frame_batteries");
 		gtk_widget_hide_all (widget);
-		/* Options tab */
+		/* Hide battery options in options tab */
 		gtk_widget_hide_all (label_battery_critical);
 		gtk_widget_hide_all (combo_battery_critical);
-		/* Advanced tab */
-		widget = glade_xml_get_widget (dialog, "gpm_notebook");
-		gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 2);
-		gconf_client_set_string (client, GPM_PREF_ICON_POLICY, ICON_POLICY_NEVER, NULL);
+		/* Hide battery options in advanced tab */
+		widget = glade_xml_get_widget (dialog, "frame_other_options");
+		gtk_widget_hide_all (widget);
 	}
 
 	gboolean has_suspend_button = hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
