@@ -6,22 +6,25 @@ Released December 20, 2005
 
 - We now depend on CVS HAL for the new suspend, hibernate and shutdown
   functionality.
+- Source releases are now done on the GNOME ftp servers:
+  ftp://ftp.gnome.org/pub/GNOME/sources/gnome-power-manager/
 - We now only show Suspend and Hibernate options when HAL says we should.
   NOTE: just because HAL (i.e. the kernel) says it has hibernation or suspend
   support is compiled in, doesn't automatically mean that it will *work*.
 - Lots of new translations: Greek (Nikos Charonitakis), Gujarati (Ankit Patel),
   Vietnamese (Clytie Siddall), Catalan (Josep Puigdemont i Casamajó),
-  Thai (Theppitak Karoonboonyanan) -- Many thanks to you all.
+  Thai (Theppitak Karoonboonyanan) - Many thanks.
 - Lots of updated translations: Galician (Ignacio Casal Quinteiro), 
   Hungarian (Gabor Kelemen), Bulgarian (Alexander Shopov), 
   Norwegian (Kjartan Maraas), Spanish (Francisco Javier F. Serrador), 
   Simplified Chinese (Funda Wang), Lithuanian (Žygimantas Beručka), 
-  Italian (Daniele Medri) -- Many thanks to you all.
+  Italian (Daniele Medri), French (Christophe Merlet) - Many thanks.
 - We now try to save the GNOME application state before the critically-low
   action is taken (default shutdown).
 - The power button is now an interactive shutdown, saving GNOME session state.
 - Fix a bug where the preferences program was crashing on missing gconf schema.
-- Fixed lots of other smaller bugs such as #322773, #323135, RH#174196, #322547
+- Fixed lots of other smaller bugs such as #322773, #323135, RH#174196,
+  #322547, RH#172963
 - Lots of source file re-organisation, also big refactoring and fixing all the
   source file warnings.
 - Fix problem where preferences window is redrawn and then resized (#323562)

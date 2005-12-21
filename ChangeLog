@@ -1,8 +1,29 @@
+2005-12-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c: Only hide the battery stuff in the advanced
+	tab, and fix to actually hide the correct label in Options.
+
+	* src/gpm-notification.c: Don't g_free eggtrayicon->popup_menu
+	or eggtrayicon->tray_icon_tooltip else we segfault on rawhide.
+
+	* src/gpm-main.c: Assume we are on AC power (desktop) if we have
+	no batteries or ac_adapters detected. Fixes a problem with g-p-m
+	running on a VMWware host thinking we are on batteries.
+
+	* src/gpm-libnotify.c: Use widget->allocation to get size to avoid
+	having to ref the pixbuf. Also make lots of libnotify 0.3.x
+	fixes. I think notify-daemon has a positioning bug...
+
+	* src/gpm-idle.c: Only print debug messages once.
+
 2005-12-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: Hide, process, then show the top window so that
 	the dialogue resizes itself without redrawing.
 	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=323562
+
+	* gnome-power-manager.spec.in: Apply a patch from Matthias Saou to
+	fix http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=172963
 
 2005-12-19  Richard Hughes  <richard@hughsie.com>
 
