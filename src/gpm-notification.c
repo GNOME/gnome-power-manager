@@ -35,7 +35,6 @@
 #include "gpm-common.h"
 #include "gpm-main.h"
 #include "gpm-notification.h"
-#include "gpm-libnotify.h"
 #include "gpm-stock-icons.h"
 #include "gpm-sysdev.h"
 #include "gpm-prefs.h"

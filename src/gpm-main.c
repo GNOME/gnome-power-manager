@@ -354,10 +354,10 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 					   "of remaining battery life (%i%%). "
 			  		   "Plug in your AC Adapter to avoid losing data."),
 					   remaining, new_charge);
-		libnotify_event (_("Battery Critically Low"),
-				 message,
-				 LIBNOTIFY_URGENCY_CRITICAL,
-				 get_notification_icon ());
+		gpm_libnotify_event (_("Battery Critically Low"),
+				     message,
+				     LIBNOTIFY_URGENCY_CRITICAL,
+				     get_notification_icon ());
 		g_free (message);
 		g_free (remaining);
 		return TRUE;
@@ -372,10 +372,10 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 			_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
 			  "Plug in your AC Adapter to avoid losing data."),
 			remaining, new_charge);
-		libnotify_event (_("Battery Low"),
-				 message,
-				 LIBNOTIFY_URGENCY_CRITICAL,
-				 get_notification_icon ());
+		gpm_libnotify_event (_("Battery Low"),
+				     message,
+				     LIBNOTIFY_URGENCY_CRITICAL,
+				     get_notification_icon ());
 		g_free (message);
 		g_free (remaining);
 		return TRUE;
@@ -418,11 +418,11 @@ hal_device_property_modified (const gchar *udi,
 			show_notify = gconf_client_get_bool (gconf_client_get_default (),
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 			if (show_notify) {
-				libnotify_event (_("AC Power Unplugged"),
-						 _("The AC Power has been unplugged. "
-						   "The system is now using battery power."),
-						 LIBNOTIFY_URGENCY_NORMAL,
-						 get_notification_icon ());
+				gpm_libnotify_event (_("AC Power Unplugged"),
+						     _("The AC Power has been unplugged. "
+						     "The system is now using battery power."),
+						     LIBNOTIFY_URGENCY_NORMAL,
+						     get_notification_icon ());
 			}
 			perform_power_policy (FALSE);
 			gpm_emit_mains_changed (FALSE);
@@ -432,7 +432,7 @@ hal_device_property_modified (const gchar *udi,
 			 * for where we add back the ac_adapter before
 			 * the "AC Power unplugged" message times out.
 			 */
-			libnotify_clear ();
+			gpm_libnotify_clear ();
 			/* do all our powersaving stuff */
 			perform_power_policy (TRUE);
 			gpm_emit_mains_changed (TRUE);
@@ -497,7 +497,7 @@ hal_device_property_modified (const gchar *udi,
 		hal_device_get_int (udi, key, &sds->percentageCharge);
 		/* give notification @100% */
 		if (sd->type == BATT_PRIMARY && sds->percentageCharge == 100) {
-			libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
+			gpm_libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
 					 get_notification_icon ());
 		}
@@ -727,7 +727,7 @@ main (int argc, char *argv[])
 		g_error ("Unable to get session dbus connection");
 
 	/* Initialise libnotify, if compiled in. */
-	if (!libnotify_init (NICENAME))
+	if (!gpm_libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
 
 	/* initialise stock icons */

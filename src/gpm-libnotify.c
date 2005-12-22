@@ -93,7 +93,7 @@ get_widget_position (GtkWidget *widget, gint *x, gint *y)
  *		g_debug functions depending on the urgency.
  */
 gboolean
-libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
+gpm_libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point)
 {
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 	gint x, y;
@@ -193,7 +193,7 @@ libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEven
  *  @return			If we removed the message.
  */
 gboolean
-libnotify_clear (void)
+gpm_libnotify_clear (void)
 {
 #if (LIBNOTIFY_VERSION_MINOR == 2)
 	if (globalnotify)
@@ -215,7 +215,7 @@ libnotify_clear (void)
  *		libnotify_event are made.
  */
 gboolean
-libnotify_init (const gchar *nicename)
+gpm_libnotify_init (const gchar *nicename)
 {
 	gboolean ret = TRUE;
 	g_assert (nicename);

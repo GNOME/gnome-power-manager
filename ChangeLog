@@ -8,6 +8,10 @@
 	disable this message if we want to. Fixes the bug:
 	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=176433
 
+	* src/gpm-libnotify.{c|h}, src/gpm-notification.c, src/gpm-main.c:
+	Rename the local libnotify_* wrappers gpm_libnotify_* to make sure
+	it's obvious that they are local functions and not the direct API.
+
 2005-12-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: Only hide the battery stuff in the advanced

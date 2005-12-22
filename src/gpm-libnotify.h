@@ -34,7 +34,6 @@
 /** Set the timeout of the libnotify notifications */
 #define NOTIFY_TIMEOUT			5
 
-
 /** The libnotify urgency type */
 typedef enum {
 	LIBNOTIFY_URGENCY_CRITICAL = 1,	/**< Critical warning!	*/
@@ -42,9 +41,9 @@ typedef enum {
 	LIBNOTIFY_URGENCY_LOW = 3	/**< Low urgency	*/
 } LibNotifyEventType;
 
-gboolean libnotify_clear (void);
-gboolean libnotify_init (const gchar *nicename);
-gboolean libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
+gboolean gpm_libnotify_clear (void);
+gboolean gpm_libnotify_init (const gchar *nicename);
+gboolean gpm_libnotify_event (const gchar *subject, const gchar *content, const LibNotifyEventType urgency, GtkWidget *point);
 
 #endif	/* _GPMLIBNOTIFY_H */
 /** @} */
