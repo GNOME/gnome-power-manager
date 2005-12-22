@@ -2,6 +2,17 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/ac_adapter</key>
+      <applyto>/apps/gnome-power-manager/notify/ac_adapter</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If we should notify the user that the ac_adapter is removed</short>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/general/require_password</key>
       <applyto>/apps/gnome-power-manager/general/require_password</applyto>
       <owner>gnome-power-manager</owner>

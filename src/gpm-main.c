@@ -414,12 +414,16 @@ hal_device_property_modified (const gchar *udi,
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		hal_device_get_bool (udi, key, &onAcPower);
 		if (!onAcPower) {
-			libnotify_event (_("AC Power Unplugged"),
-					_("The AC Power has been unplugged. "
-					"The system is now using battery power."),
-					LIBNOTIFY_URGENCY_NORMAL,
-					get_notification_icon ());
-
+			gboolean show_notify;
+			show_notify = gconf_client_get_bool (gconf_client_get_default (),
+							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
+			if (show_notify) {
+				libnotify_event (_("AC Power Unplugged"),
+						 _("The AC Power has been unplugged. "
+						   "The system is now using battery power."),
+						 LIBNOTIFY_URGENCY_NORMAL,
+						 get_notification_icon ());
+			}
 			perform_power_policy (FALSE);
 			gpm_emit_mains_changed (FALSE);
 

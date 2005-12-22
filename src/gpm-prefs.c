@@ -526,6 +526,12 @@ gpm_prefs_init (GladeXML *dialog)
 		gtk_widget_hide_all (combo_button_lid);
 	}
 
+	/* if no options then disable frame as it will be empty */
+	if (!has_batteries && !has_suspend_button && !has_lid_button) {
+		widget = glade_xml_get_widget (dialog, "frame_actions");
+		gtk_widget_hide_all (widget);
+	}
+
 	gboolean can_display_sleep;
 	if (gpm_screensaver_is_running ()) {
 		can_display_sleep = gconf_client_get_bool (client, GS_PREF_DPMS_ENABLED, NULL);

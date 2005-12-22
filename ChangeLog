@@ -1,3 +1,13 @@
+2005-12-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c: If no valid options are available then disable
+	the "Actions" frame as it will be empty.
+
+	* src/gpm-prefs.h, src/gpm-main.c, gnome-power-manager.schemas.in:
+	Implement /apps/gnome-power-manager/notify/ac_adapter so we can
+	disable this message if we want to. Fixes the bug:
+	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=176433
+
 2005-12-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: Only hide the battery stuff in the advanced

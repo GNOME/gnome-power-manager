@@ -40,7 +40,7 @@
 #define GPM_PREF_REQUIRE_PASSWORD	GPM_PREF_DIR "/general/require_password"
 #define GPM_PREF_THRESHOLD_LOW		GPM_PREF_DIR "/general/threshold_low"
 #define GPM_PREF_THRESHOLD_CRITICAL	GPM_PREF_DIR "/general/threshold_critical"
-
+#define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify/ac_adapter"
 
 #define ICON_POLICY_ALWAYS	"always"
 #define ICON_POLICY_CHARGE	"charge"
