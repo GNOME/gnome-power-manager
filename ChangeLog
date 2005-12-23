@@ -3,6 +3,9 @@
 	* src/*: Rename the local dbus_* wrappers gpm_dbus_* to make sure
 	it's obvious that they are local functions and not the direct API.
 
+	* gnome-power-manager.conf: Add root to the allowed users. Required
+	for replacement without a GUI running.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable
