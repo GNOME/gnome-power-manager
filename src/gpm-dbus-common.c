@@ -126,7 +126,7 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 	if (request_name_result == DBUS_REQUEST_NAME_REPLY_EXISTS)
 		g_debug ("DBUS_REQUEST_NAME_REPLY_EXISTS");
 
- 	if (!ret && request_name_result != 1)
+ 	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 		ret = FALSE;
 
 	/* free the bus_proxy */

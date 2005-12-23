@@ -281,9 +281,7 @@ gpm_exit (void)
 	glibhal_callback_shutdown ();
 	gpm_stock_icons_shutdown ();
 	gpm_dbus_remove_noc ();
-#if 0
 	gpm_dbus_remove_nlost ();
-#endif
 
 	/* cleanup all system devices */
 	sysDevFreeAll ();
@@ -662,7 +660,6 @@ signalhandler_noc (const char *name, const gboolean connected)
  *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
  *  @param	connected	Always true.
  */
-#if 0
 static void
 signalhandler_nlost (const char *name, const gboolean connected)
 {
@@ -670,7 +667,6 @@ signalhandler_nlost (const char *name, const gboolean connected)
 		return;
 	gpm_exit ();
 }
-#endif
 
 /** Main entry point
  *
@@ -773,9 +769,7 @@ main (int argc, char *argv[])
 
 	/* initialise NameOwnerChanged and NameLost */
 	gpm_dbus_init_noc (system_connection, signalhandler_noc);
-#if 0
 	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
-#endif
 
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */

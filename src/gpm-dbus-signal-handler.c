@@ -41,7 +41,7 @@ static GpmDbusSignalHandler gpm_sig_handler_nlost;
 /** NameOwnerChanged signal handler
  *
  *  @param	proxy		A valid DBUS Proxy
- *  @param	name		The Condition name, e.g. ButtonPressed
+ *  @param	name		The session name, e.g. org.gnome.test
  *  @param	prev		The previous name
  *  @param	new		The new name
  *  @param	user_data	Unused
@@ -64,13 +64,11 @@ gpm_signal_handler_noc (DBusGProxy *proxy,
 /** NameLost signal handler
  *
  *  @param	proxy		A valid DBUS Proxy
- *  @param	name		The Condition name, e.g. ButtonPressed
+ *  @param	name		The Condition name, e.g. org.gnome.test
  *  @param	user_data	Unused
  */
 static void
-gpm_signal_handler_nlost (DBusGProxy *proxy, 
-	const char *name,
-	gpointer user_data)
+gpm_signal_handler_nlost (DBusGProxy *proxy, const char *name, gpointer user_data)
 {
 	g_debug ("gpm_signal_handler_nlost name=%s", name);
 	gpm_sig_handler_nlost (name, TRUE);
@@ -97,9 +95,10 @@ gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback)
 						         DBUS_INTERFACE_DBUS,
 						         &error);
 	dbus_g_proxy_add_signal (proxy_bus_noc, "NameOwnerChanged",
-		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy_bus_noc, "NameOwnerChanged",
-		G_CALLBACK (gpm_signal_handler_noc), NULL, NULL);
+				     G_CALLBACK (gpm_signal_handler_noc),
+				     NULL, NULL);
 	return TRUE;
 }
 
@@ -123,9 +122,10 @@ gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback)
 							   DBUS_INTERFACE_DBUS,
 							   &error);
 	dbus_g_proxy_add_signal (proxy_bus_nlost, "NameLost",
-		G_TYPE_STRING, G_TYPE_INVALID);
+				 G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy_bus_nlost, "NameLost",
-		G_CALLBACK (gpm_signal_handler_nlost), NULL, NULL);
+				     G_CALLBACK (gpm_signal_handler_nlost),
+				     NULL, NULL);
 	return TRUE;
 }
 
