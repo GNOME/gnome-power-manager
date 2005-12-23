@@ -43,6 +43,9 @@
 #include "gpm_marshal.h"
 #include "gpm-dbus-common.h"
 
+/* if we should cache connections */
+#define USECACHE 	TRUE
+
 static DBusGConnection *session_conn = NULL;
 static DBusGConnection *system_conn = NULL;
 
@@ -92,9 +95,10 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
  * should fix bug: http://bugzilla.gnome.org/show_bug.cgi?id=322435
  */
 #ifdef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
+	/* add the legacy stuff for FC4 */
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, service,
-#if 0
+#if GPM_SYSTEM_BUS
 		G_TYPE_UINT, DBUS_NAME_FLAG_REPLACE_EXISTING,
 #else
 		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
@@ -108,7 +112,7 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 #else
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, service,
-#if 0
+#if GPM_SYSTEM_BUS
 		G_TYPE_UINT, DBUS_NAME_FLAG_ALLOW_REPLACEMENT | DBUS_NAME_FLAG_REPLACE_EXISTING,
 #else
 		G_TYPE_UINT, 0,
@@ -126,8 +130,10 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 	if (request_name_result == DBUS_REQUEST_NAME_REPLY_EXISTS)
 		g_debug ("DBUS_REQUEST_NAME_REPLY_EXISTS");
 
+#if !GPM_SYSTEM_BUS
  	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 		ret = FALSE;
+#endif
 
 	/* free the bus_proxy */
 	g_object_unref (G_OBJECT (bus_proxy));
@@ -148,11 +154,13 @@ gpm_dbus_get_session_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
 
+#if USECACHE
 	/* return cached result for speed */
 	if (session_conn) {
 		*connection = session_conn;
 		return TRUE;
 	}
+#endif
 
 	/* else get from DBUS */
 	session_conn = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
@@ -183,11 +191,13 @@ gpm_dbus_get_system_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
 
+#if USECACHE
 	/* return cached result for speed */
 	if (system_conn) {
 		*connection = system_conn;
 		return TRUE;
 	}
+#endif
 
 	/* else get from DBUS */
 	system_conn = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);

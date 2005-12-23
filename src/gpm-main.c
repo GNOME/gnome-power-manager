@@ -727,8 +727,6 @@ main (int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
-	dbus_g_object_type_install_info (gpm_object_get_type (),
-		&dbus_glib_gpm_object_object_info);
 
 	client = gconf_client_get_default ();
 	gconf_client_add_dir (client, GPM_PREF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
@@ -761,11 +759,23 @@ main (int argc, char *argv[])
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
+	/* install gpm object */
+	dbus_g_object_type_install_info (gpm_object_get_type (),
+					 &dbus_glib_gpm_object_object_info);
+
+#if GPM_SYSTEM_BUS
+	/* register dbus service */
+	if (!gpm_object_register (system_connection)) {
+		g_warning ("Failed to register.");
+		return 0;
+	}
+#else
 	/* register dbus service */
 	if (!gpm_object_register (session_connection)) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
+#endif
 
 	/* initialise NameOwnerChanged and NameLost */
 	gpm_dbus_init_noc (system_connection, signalhandler_noc);

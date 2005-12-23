@@ -20,6 +20,12 @@
 	* src/gpm-hal.c: Move gpm_hal_is_running here, and delete the copy in
 	glibhal-main.
 
+	* src/gpm-dbus-common.{c|h}, src/gpm-main.c, src/gpm-dbus-server.c: 
+	Make USECACHE an ifdef to try and profile. 
+	Also add GPM_SYSTEM_BUS so we can put g-p-m on the system bus if 
+	we want, so it can be shared between users. This cannot be turned on 
+	until https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable

@@ -31,6 +31,13 @@
 
 #include <dbus/dbus-glib.h>
 
+/*
+ * Enable this for GPM to use the system bus and share it.
+ * This cannot be turned on until 
+ * https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
+ */
+#define GPM_SYSTEM_BUS 		FALSE
+
 gboolean gpm_dbus_glib_error (GError *error);
 gboolean gpm_dbus_get_system_connection (DBusGConnection **connection);
 gboolean gpm_dbus_get_session_connection (DBusGConnection **connection);
