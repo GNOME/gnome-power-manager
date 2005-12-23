@@ -395,7 +395,7 @@ main (int argc, char *argv[])
 
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */
-	if (!is_hald_running ()) {
+	if (!gpm_hal_is_running ()) {
 		g_critical ("GNOME Power Manager cannot connect to HAL!");
 		return 0;
 	}

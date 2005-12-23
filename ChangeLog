@@ -17,6 +17,9 @@
 	NameLost functionality for a shared bus. Also pass more connections
 	by reference, rather than assuming then are system or session.
 
+	* src/gpm-hal.c: Move gpm_hal_is_running here, and delete the copy in
+	glibhal-main.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable

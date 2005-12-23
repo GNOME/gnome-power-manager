@@ -46,6 +46,21 @@
 typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
 
 
+/** Finds out if hal is running
+ *
+ *  @return		TRUE if haldaemon is running
+ */
+gboolean
+gpm_hal_is_running (void)
+{
+	gchar *udi = NULL;
+	gboolean running;
+	running = hal_device_get_string (
+		"/org/freedesktop/Hal/devices/computer",
+		"info.udi", &udi);
+	g_free (udi);
+	return running;
+}
 
 /** Returns true if running on ac
  *

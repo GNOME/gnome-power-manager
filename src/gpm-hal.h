@@ -32,6 +32,7 @@
 gboolean gpm_hal_pm_check (void);
 gboolean gpm_hal_pm_can_suspend (void);
 gboolean gpm_hal_pm_can_hibernate (void);
+gboolean gpm_hal_is_running (void);
 gboolean gpm_hal_is_laptop (void);
 gboolean gpm_hal_is_on_ac (void);
 gboolean gpm_hal_get_brightness_steps (gint *steps);

@@ -43,22 +43,6 @@
 #include "gpm-dbus-common.h"
 #include "glibhal-main.h"
 
-/** Finds out if hal is running
- *
- *  @return		TRUE if haldaemon is running
- */
-gboolean
-is_hald_running (void)
-{
-	gchar *udi = NULL;
-	gboolean running;
-	running = hal_device_get_string (
-		"/org/freedesktop/Hal/devices/computer",
-		"info.udi", &udi);
-	g_free (udi);
-	return running;
-}
-
 /** glib libhal replacement to get boolean type
  *
  *  @param	udi		The UDI of the device

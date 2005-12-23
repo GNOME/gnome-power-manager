@@ -642,7 +642,7 @@ signalhandler_noc (const char *name, const gboolean connected)
 		g_warning ("HAL has been disconnected! GNOME Power Manager will now quit.");
 
 		/* Wait for HAL to be running again */
-		while (!is_hald_running ()) {
+		while (!gpm_hal_is_running ()) {
 			g_warning ("GNOME Power Manager cannot connect to HAL!");
 			g_usleep (1000*500);
 		}
@@ -773,7 +773,7 @@ main (int argc, char *argv[])
 
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */
-	if (!is_hald_running ()) {
+	if (!gpm_hal_is_running ()) {
 		g_critical ("GNOME Power Manager cannot connect to HAL!");
 		return 0;
 	}
