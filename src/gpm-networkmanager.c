@@ -52,7 +52,7 @@ gpm_networkmanager_sleep (void)
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
 			NM_LISTENER_SERVICE,
@@ -77,7 +77,7 @@ gpm_networkmanager_wake (void)
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
 			NM_LISTENER_SERVICE,

@@ -345,7 +345,7 @@ main (int argc, char *argv[])
 			gpm_console_debug_log_ignore, NULL);
 
 	/* check dbus connections, exit if not valid */
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		exit (1);
 	/* initialise all system devices */
 	sysDevInitAll ();

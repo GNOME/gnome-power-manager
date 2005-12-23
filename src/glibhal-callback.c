@@ -200,7 +200,7 @@ glibhal_watch_add_device_removed (void)
 
 	g_debug ("glibhal: DeviceRemoved: Registered");
 	reg.device_removed = TRUE;
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 
 	proxy.device_removed = dbus_g_proxy_new_for_name_owner (system_connection,
@@ -230,7 +230,7 @@ glibhal_watch_add_device_new_capability (void)
 
 	g_debug ("glibhal: NewCapability: Registered");
 	reg.device_new_capability = TRUE;
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
 		"org.freedesktop.Hal",
@@ -274,7 +274,7 @@ glibhal_watch_add_device_condition (const gchar *udi)
 
 	g_debug ("glibhal: Condition: Registered UDI '%s'", udi);
 	reg.device_condition = TRUE;
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		"org.freedesktop.Hal",
@@ -324,7 +324,7 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
 		}
 	}
 	g_debug ("glibhal: PropertyModified: Registered UDI '%s'", udi);
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		"org.freedesktop.Hal",
@@ -364,7 +364,7 @@ glibhal_watch_add_noc (void)
 
 	g_debug ("glibhal: NameOwnerChanged: Registered");
 	reg.device_noc = TRUE;
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 
 	proxy.device_noc = dbus_g_proxy_new_for_name_owner (system_connection,

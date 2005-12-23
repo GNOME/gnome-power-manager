@@ -51,7 +51,7 @@ static DBusGConnection *system_conn = NULL;
  *  Use --verbose to view these warnings.
  */
 gboolean
-dbus_glib_error (GError *error)
+gpm_dbus_glib_error (GError *error)
 {
 	g_return_val_if_fail (error, FALSE);
 	if (error->domain == DBUS_GERROR && error->code == DBUS_GERROR_REMOTE_EXCEPTION)
@@ -71,7 +71,7 @@ dbus_glib_error (GError *error)
  *  @return			Success value.
  */
 gboolean
-dbus_get_service (DBusGConnection *connection, const gchar *service)
+gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 {
 	DBusGProxy *bus_proxy = NULL;
 	GError *error = NULL;
@@ -131,7 +131,7 @@ dbus_get_service (DBusGConnection *connection, const gchar *service)
  *  @return			Success value.
  */
 gboolean
-dbus_get_session_connection (DBusGConnection **connection)
+gpm_dbus_get_session_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
 
@@ -146,7 +146,7 @@ dbus_get_session_connection (DBusGConnection **connection)
 	if (!session_conn) {
 		g_warning ("Failed to open connection to dbus session bus: %s\n",
 			error->message);
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_print ("This program cannot start until you start the dbus"
 			 "session daemon\n"
 			 "This is usually started in X or gnome startup "
@@ -170,7 +170,7 @@ dbus_get_session_connection (DBusGConnection **connection)
  *  @return			Success value.
  */
 gboolean
-dbus_get_system_connection (DBusGConnection **connection)
+gpm_dbus_get_system_connection (DBusGConnection **connection)
 {
 	GError *error = NULL;
 
@@ -185,7 +185,7 @@ dbus_get_system_connection (DBusGConnection **connection)
 	if (!system_conn) {
 		g_warning ("Failed to open connection to dbus system bus: %s\n",
 			error->message);
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_print ("This program cannot start until you start the dbus"
 			 "system daemon\n"
 			 "This is usually started in initscripts, and is "
@@ -206,7 +206,7 @@ dbus_get_system_connection (DBusGConnection **connection)
  *				system bus.
  */
 gboolean
-dbus_is_active_service (const gchar *service_name)
+gpm_dbus_is_active_service (const gchar *service_name)
 {
 	GError *error = NULL;
 	DBusGConnection *system_connection = NULL;
@@ -216,7 +216,7 @@ dbus_is_active_service (const gchar *service_name)
 	gint i = 0;
 
 	g_debug ("dbus_is_active_service");
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	dbus_proxy = dbus_g_proxy_new_for_name (system_connection,
 			DBUS_SERVICE_DBUS, DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);
@@ -229,7 +229,7 @@ dbus_is_active_service (const gchar *service_name)
 				G_TYPE_INVALID,
 				G_TYPE_STRV, &service_list,
 				G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("DBUS service is not running.");
 		return FALSE;
 	}

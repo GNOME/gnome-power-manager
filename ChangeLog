@@ -1,3 +1,8 @@
+2005-12-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/*: Rename the local dbus_* wrappers gpm_dbus_* to make sure
+	it's obvious that they are local functions and not the direct API.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable

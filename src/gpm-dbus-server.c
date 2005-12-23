@@ -85,10 +85,10 @@ gboolean
 gpm_object_register (void)
 {
 	DBusGConnection *session_connection = NULL;
-	if (!dbus_get_session_connection (&session_connection))
+	if (!gpm_dbus_get_session_connection (&session_connection))
 		return FALSE;
 
-	if (!dbus_get_service (session_connection, GPM_DBUS_SERVICE))
+	if (!gpm_dbus_get_service (session_connection, GPM_DBUS_SERVICE))
 		return FALSE;
 	obj = g_object_new (gpm_object_get_type (), NULL);
 	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));

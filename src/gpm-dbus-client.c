@@ -52,7 +52,7 @@ gpm_is_on_ac (gboolean *value)
 	/* assertion checks */
 	g_assert (value);
 
-	if (!dbus_get_session_connection (&session_connection))
+	if (!gpm_dbus_get_session_connection (&session_connection))
 		return FALSE;
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GPM_DBUS_SERVICE,
@@ -61,7 +61,7 @@ gpm_is_on_ac (gboolean *value)
 	if (!dbus_g_proxy_call (gpm_proxy, "isOnAc", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = FALSE;
 		retval = FALSE;
 	}
@@ -85,7 +85,7 @@ gpm_is_on_mains (gboolean *value)
 	/* assertion checks */
 	g_assert (value);
 
-	if (!dbus_get_session_connection (&session_connection))
+	if (!gpm_dbus_get_session_connection (&session_connection))
 		return FALSE;
 
 	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -94,7 +94,7 @@ gpm_is_on_mains (gboolean *value)
 	if (!dbus_g_proxy_call (gpm_proxy, "isOnBattery", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = FALSE;
 		retval = FALSE;
 	}

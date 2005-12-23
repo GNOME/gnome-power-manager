@@ -721,9 +721,9 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 
 	/* check dbus connections, exit if not valid */
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		g_error ("Unable to get system dbus connection");
-	if (!dbus_get_session_connection (&session_connection))
+	if (!gpm_dbus_get_session_connection (&session_connection))
 		g_error ("Unable to get session dbus connection");
 
 	/* Initialise libnotify, if compiled in. */

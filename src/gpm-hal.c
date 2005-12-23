@@ -182,7 +182,7 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	g_assert (brightness);
 	g_assert (udi);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
@@ -192,7 +192,7 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	if (!dbus_g_proxy_call (hal_proxy, "GetBrightness", &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, brightness, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.GetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
@@ -228,7 +228,7 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	}
 	g_debug ("Setting %s to brightness %i", udi, brightness);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
@@ -238,7 +238,7 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error,
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.SetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
@@ -416,7 +416,7 @@ gpm_hal_suspend (gint wakeup)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
@@ -426,7 +426,7 @@ gpm_hal_suspend (gint wakeup)
 	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
 			   ".Suspend failed (HAL error)");
 		retval = FALSE;
@@ -455,7 +455,7 @@ hal_pm_method_void (const gchar* method)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
@@ -465,7 +465,7 @@ hal_pm_method_void (const gchar* method)
 	if (!dbus_g_proxy_call (hal_proxy, method, &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
 			   ".%s failed (HAL error)", method);
 		retval = FALSE;
@@ -519,7 +519,7 @@ gpm_hal_setlowpowermode (gboolean set)
 		return FALSE;
 	}
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal",
@@ -529,7 +529,7 @@ gpm_hal_setlowpowermode (gboolean set)
 	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
 			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
 			   ".SetPowerSave failed (HAL error)");
 		retval = FALSE;

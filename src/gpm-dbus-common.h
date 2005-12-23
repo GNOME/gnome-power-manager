@@ -31,11 +31,11 @@
 
 #include <dbus/dbus-glib.h>
 
-gboolean dbus_glib_error (GError *error);
-gboolean dbus_get_system_connection (DBusGConnection **connection);
-gboolean dbus_get_session_connection (DBusGConnection **connection);
-gboolean dbus_get_service (DBusGConnection *connection, const gchar *service);
-gboolean dbus_is_active_service (const gchar *service_name);
+gboolean gpm_dbus_glib_error (GError *error);
+gboolean gpm_dbus_get_system_connection (DBusGConnection **connection);
+gboolean gpm_dbus_get_session_connection (DBusGConnection **connection);
+gboolean gpm_dbus_get_service (DBusGConnection *connection, const gchar *service);
+gboolean gpm_dbus_is_active_service (const gchar *service_name);
 
 #endif	/* _DBUSCOMMON_H */
 /** @} */

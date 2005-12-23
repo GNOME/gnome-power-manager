@@ -79,7 +79,7 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	g_assert (key);
 	g_assert (value);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
@@ -87,7 +87,7 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = FALSE;
 		retval = FALSE;
 	}
@@ -117,7 +117,7 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	g_assert (key);
 	g_assert (value);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
@@ -125,7 +125,7 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_STRING, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = NULL;
 		retval = FALSE;
 	}
@@ -153,7 +153,7 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	g_assert (key);
 	g_assert (value);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
@@ -161,7 +161,7 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
 			G_TYPE_INT, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = 0;
 		retval = FALSE;
 	}
@@ -187,7 +187,7 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 	g_assert (capability);
 	g_assert (value);
 
-	if (!dbus_get_system_connection (&system_connection))
+	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		"org.freedesktop.Hal", 
@@ -197,7 +197,7 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
 			G_TYPE_STRING, capability, G_TYPE_INVALID,
 			G_TYPE_STRV, value, G_TYPE_INVALID)) {
-		dbus_glib_error (error);
+		gpm_dbus_glib_error (error);
 		*value = NULL;
 		retval = FALSE;
 	}
