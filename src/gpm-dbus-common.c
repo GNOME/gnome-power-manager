@@ -83,18 +83,22 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 	g_assert (service);
 
 	bus_proxy = dbus_g_proxy_new_for_name (connection, 
-		DBUS_SERVICE_DBUS,
-		DBUS_PATH_DBUS,
-		DBUS_INTERFACE_DBUS);
+					       DBUS_SERVICE_DBUS,
+					       DBUS_PATH_DBUS,
+					       DBUS_INTERFACE_DBUS);
 /*
  * Add this define hack until we depend on DBUS 0.60, as the
- * define names (and meanings have changed)
+ * define names have changed.
  * should fix bug: http://bugzilla.gnome.org/show_bug.cgi?id=322435
  */
 #ifdef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, service,
+#if 0
+		G_TYPE_UINT, DBUS_NAME_FLAG_REPLACE_EXISTING,
+#else
 		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+#endif
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
@@ -104,7 +108,11 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 #else
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, service,
+#if 0
+		G_TYPE_UINT, DBUS_NAME_FLAG_ALLOW_REPLACEMENT | DBUS_NAME_FLAG_REPLACE_EXISTING,
+#else
 		G_TYPE_UINT, 0,
+#endif
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
@@ -113,7 +121,12 @@ gpm_dbus_get_service (DBusGConnection *connection, const gchar *service)
 	}
 #endif
 
-	if (ret && request_name_result != 1)
+	if (request_name_result == DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+		g_debug ("DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER");
+	if (request_name_result == DBUS_REQUEST_NAME_REPLY_EXISTS)
+		g_debug ("DBUS_REQUEST_NAME_REPLY_EXISTS");
+
+ 	if (!ret && request_name_result != 1)
 		ret = FALSE;
 
 	/* free the bus_proxy */
@@ -147,15 +160,11 @@ gpm_dbus_get_session_connection (DBusGConnection **connection)
 		g_warning ("Failed to open connection to dbus session bus: %s\n",
 			error->message);
 		gpm_dbus_glib_error (error);
-		g_print ("This program cannot start until you start the dbus"
-			 "session daemon\n"
+		g_print ("This program cannot start until you start the dbus session daemon\n"
 			 "This is usually started in X or gnome startup "
 			 "(depending on distro)\n"
-			 "You can launch the session dbus-daemon manually with"
-			 "this command:\n"
-			 "eval `dbus-launch --auto-syntax`\n\n"
-			 "If this works, add \"dbus-lauch --auto-syntax\" "
-			 "to ~/.xinitrc\n\n");
+			 "You can launch the session dbus-daemon manually with this command:\n"
+			 "eval `dbus-launch --auto-syntax`\n");
 		return FALSE;
 	}
 	*connection = session_conn;

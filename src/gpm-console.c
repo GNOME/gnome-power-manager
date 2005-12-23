@@ -44,6 +44,8 @@
 #include "gpm-hal.h"
 #include "gpm-sysdev.h"
 #include "gpm-dbus-common.h"
+#include "gpm-dbus-server.h"
+#include "gpm-dbus-signal-handler.h"
 
 #include "glibhal-main.h"
 #include "glibhal-callback.h"
@@ -67,6 +69,10 @@ gpm_exit (void)
 	g_debug ("Quitting!");
 	glibhal_callback_shutdown ();
 
+	gpm_dbus_remove_noc ();
+#if 0
+	gpm_dbus_remove_nlost ();
+#endif
 	/* cleanup all system devices */
 	sysDevFreeAll ();
 	exit (0);
@@ -287,6 +293,39 @@ print_usage (void)
 		 "\n");
 }
 
+/** Callback for the DBUS NameOwnerChanged function.
+ *
+ *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
+ *  @param	connected	Time in minutes that computer has been idle
+ */
+static void
+signalhandler_noc (const char *name, const gboolean connected)
+{
+	g_debug ("signalhandler_noc: (%i) %s", connected, name);
+	/* ignore that don't all apply */
+	if (strcmp (name, "org.freedesktop.Hal") != 0)
+		return;
+
+	/** @todo: handle reconnection to the HAL bus */
+	g_warning ("hal re-connected\n");
+}
+
+
+#if 0
+/** Callback for the DBUS NameLost function.
+ *
+ *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
+ *  @param	connected	Always true.
+ */
+static void
+signalhandler_nlost (const char *name, const gboolean connected)
+{
+	if (strcmp (name, "org.gnome.GnomePowerManager") != 0)
+		return;
+	gpm_exit ();
+}
+#endif
+
 /** Main entry point
  *
  *  @param	argc		Number of arguments given to program
@@ -347,6 +386,7 @@ main (int argc, char *argv[])
 	/* check dbus connections, exit if not valid */
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		exit (1);
+
 	/* initialise all system devices */
 	sysDevInitAll ();
 
@@ -366,6 +406,17 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
+	/* register dbus service */
+	if (!gpm_object_register ()) {
+		g_warning ("GNOME Power Manager is already running in this session.");
+		return 0;
+	}
+
+	/* initialise NameOwnerChanged and NameLost */
+	gpm_dbus_init_noc (signalhandler_noc);
+#if 0
+	gpm_dbus_init_nlost (signalhandler_nlost);
+#endif
 	glibhal_callback_init ();
 	/* assign the callback functions */
 	glibhal_method_device_removed (hal_device_removed);

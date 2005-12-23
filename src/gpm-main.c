@@ -79,6 +79,7 @@
 #include "gpm-libnotify.h"
 #include "gpm-dbus-server.h"
 #include "gpm-dbus-common.h"
+#include "gpm-dbus-signal-handler.h"
 #include "gpm-hal.h"
 #include "gpm-stock-icons.h"
 #include "gpm-sysdev.h"
@@ -279,6 +280,10 @@ gpm_exit (void)
 	g_debug ("Quitting!");
 	glibhal_callback_shutdown ();
 	gpm_stock_icons_shutdown ();
+	gpm_dbus_remove_noc ();
+#if 0
+	gpm_dbus_remove_nlost ();
+#endif
 
 	/* cleanup all system devices */
 	sysDevFreeAll ();
@@ -612,7 +617,7 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
  *  @param	timeout		Time in minutes that computer has been idle
  */
 void
-idle_callback (gint timeout)
+gpm_idle_callback (gint timeout)
 {
 	gchar *action;
 	action = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_ICON_POLICY, NULL); /* @todo! */
@@ -628,8 +633,9 @@ idle_callback (gint timeout)
  *  @param	connected	Time in minutes that computer has been idle
  */
 static void
-signalhandler_noc (const char *name, gboolean connected)
+signalhandler_noc (const char *name, const gboolean connected)
 {
+	g_debug ("signalhandler_noc: (%i) %s", connected, name);
 	/* ignore that don't all apply */
 	if (strcmp (name, "org.freedesktop.Hal") != 0)
 		return;
@@ -649,6 +655,22 @@ signalhandler_noc (const char *name, gboolean connected)
 	/** @todo: handle reconnection to the HAL bus */
 	g_warning ("hal re-connected\n");
 }
+
+
+/** Callback for the DBUS NameLost function.
+ *
+ *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
+ *  @param	connected	Always true.
+ */
+#if 0
+static void
+signalhandler_nlost (const char *name, const gboolean connected)
+{
+	if (strcmp (name, "org.gnome.GnomePowerManager") != 0)
+		return;
+	gpm_exit ();
+}
+#endif
 
 /** Main entry point
  *
@@ -749,6 +771,12 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
+	/* initialise NameOwnerChanged and NameLost */
+	gpm_dbus_init_noc (signalhandler_noc);
+#if 0
+	gpm_dbus_init_nlost (signalhandler_nlost);
+#endif
+
 	loop = g_main_loop_new (NULL, FALSE);
 	/* check HAL is running */
 	if (!is_hald_running ()) {
@@ -768,8 +796,6 @@ main (int argc, char *argv[])
 	glibhal_method_device_new_capability (hal_device_new_capability);
 	glibhal_method_device_property_modified (hal_device_property_modified);
 	glibhal_method_device_condition (hal_device_condition);
-	/* sets up NameOwnerChanged notification */
-	glibhal_method_noc (signalhandler_noc);
 
 	/* sets up these devices and adds watches */
 	gpm_coldplug_batteries ();
@@ -785,7 +811,7 @@ main (int argc, char *argv[])
 	perform_power_policy (onAcPower);
 	
 	/* set callback for the timout action */
-	gpm_idle_set_callback (idle_callback);
+	gpm_idle_set_callback (gpm_idle_callback);
 
 	/* set up idle calculation function */
 	g_timeout_add (POLL_FREQUENCY * 1000, gpm_idle_update, NULL);

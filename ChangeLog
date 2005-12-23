@@ -12,6 +12,10 @@
 	* src/glibhal-callback.{c|h}: Remove the NameOwnerChanged bodged
 	support from these files. It never belonged here..
 
+	* src/Makefile.am, src/gpm-console.c, src/gpm-dbus-common.c,
+	src/gpm-main.c: Use gpm-dbus-signal-handler and start to implement
+	NameLost functionality for a shared bus.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable
