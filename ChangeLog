@@ -6,6 +6,9 @@
 	* gnome-power-manager.conf: Add root to the allowed users. Required
 	for replacement without a GUI running.
 
+	* src/gpm-dbus-signal-handler.{c|h}: Add these files to abstract the
+	DBUS NameOwnerChanged and NameLost glib functionality.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable
