@@ -36,12 +36,6 @@
 /* help location */
 #define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
 
-#define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
-
-#define	DBUS_NO_SERVICE_ERROR		"org.freedesktop.DBus.Error.ServiceDoesNotExist"
-
 DeviceType convert_haltype_to_batttype (const gchar *type);
 DeviceType hal_to_device_type (const gchar *type);
 

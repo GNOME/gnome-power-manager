@@ -45,7 +45,6 @@
 
 typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
 
-
 /** Finds out if hal is running
  *
  *  @return		TRUE if haldaemon is running
@@ -56,7 +55,7 @@ gpm_hal_is_running (void)
 	gchar *udi = NULL;
 	gboolean running;
 	running = hal_device_get_string (
-		"/org/freedesktop/Hal/devices/computer",
+		HAL_ROOT_COMPUTER,
 		"info.udi", &udi);
 	g_free (udi);
 	return running;
@@ -100,8 +99,7 @@ gpm_hal_is_laptop (void)
 	gchar *formfactor = NULL;
 
 	/* always present */
-	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-		"system.formfactor", &formfactor);
+	hal_device_get_string (HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
 	if (!formfactor) {
 		g_debug ("system.formfactor not set!"
 			 "If you have PMU, please update HAL to get the latest fixes.");
@@ -125,9 +123,7 @@ gboolean
 gpm_hal_pm_check (void)
 {
 	gchar *ptype = NULL;
-	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-			       "power_management.type",
-			       &ptype);
+	hal_device_get_string (HAL_ROOT_COMPUTER, "power_management.type", &ptype);
 	/* this key only has to exist to be pm okay */
 	if (ptype) {
 		g_debug ("Power management type : %s", ptype);
@@ -146,8 +142,7 @@ gpm_hal_pm_can_suspend (void)
 {
 	gboolean exists;
 	gboolean success;
-	exists = hal_device_get_bool (
-		"/org/freedesktop/Hal/devices/computer",
+	exists = hal_device_get_bool (HAL_ROOT_COMPUTER,
 		"power_management.can_suspend_to_ram", &success);
 	if (!exists) {
 		g_warning ("[harmless]: You are not running CVS HAL "
@@ -167,9 +162,9 @@ gpm_hal_pm_can_hibernate (void)
 {
 	gboolean exists;
 	gboolean success;
-	exists = hal_device_get_bool (
-		"/org/freedesktop/Hal/devices/computer",
-		"power_management.can_suspend_to_disk", &success);
+	exists = hal_device_get_bool (HAL_ROOT_COMPUTER,
+				      "power_management.can_suspend_to_disk",
+				      &success);
 	if (!exists) {
 		g_warning ("[harmless]: You are not running CVS HAL "
 			   "so we will assume it's okay to hibernate");
@@ -200,15 +195,15 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal",
+		HAL_DBUS_SERVICE,
 		udi,
-		"org.freedesktop.Hal.Device.LaptopPanel");
+		HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetBrightness", &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, brightness, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
-		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.GetBrightness"
+		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".GetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
 	}
@@ -246,20 +241,20 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal",
+		HAL_DBUS_SERVICE,
 		udi,
-		"org.freedesktop.Hal.Device.LaptopPanel");
+		HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error,
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
-		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.SetBrightness"
+		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".SetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning ("org.freedesktop.Hal.Device.LaptopPanel.SetBrightness"
+		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".SetBrightness"
 			   "call failed (%i)", ret);
 		retval = FALSE;
 	}
@@ -378,8 +373,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 	 * This should fix the bug:
 	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
 	 */
-	hal_device_get_string ("/org/freedesktop/Hal/devices/computer",
-			       "smbios.system.manufacturer",
+	hal_device_get_string (HAL_ROOT_COMPUTER, "smbios.system.manufacturer",
 			       &returnstring);
 	if (returnstring) {
 		if (strcmp (returnstring, "IBM") == 0) {
@@ -425,7 +419,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 gboolean
 gpm_hal_suspend (gint wakeup)
 {
-	gint ret;
+	gint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -434,20 +428,19 @@ gpm_hal_suspend (gint wakeup)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/devices/computer",
-		"org.freedesktop.Hal.Device.SystemPowerManagement");
+					       HAL_DBUS_SERVICE,
+					       HAL_ROOT_COMPUTER,
+					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
-			   ".Suspend failed (HAL error)");
+		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+		g_warning (HAL_DBUS_INTERFACE_POWER
 			   ".Suspend call failed (%i)", ret);
 		retval = FALSE;
 	}
@@ -464,7 +457,7 @@ gpm_hal_suspend (gint wakeup)
 static gboolean
 hal_pm_method_void (const gchar* method)
 {
-	gint ret;
+	gint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -473,20 +466,20 @@ hal_pm_method_void (const gchar* method)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/devices/computer",
-		"org.freedesktop.Hal.Device.SystemPowerManagement");
+					       HAL_DBUS_SERVICE,
+					       HAL_ROOT_COMPUTER,
+					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, method, &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+		g_warning (HAL_DBUS_INTERFACE_POWER
 			   ".%s failed (HAL error)", method);
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
+		g_warning (HAL_DBUS_INTERFACE_POWER
 			   ".%s call failed (%i)", method, ret);
 		retval = FALSE;
 	}
@@ -522,7 +515,7 @@ gpm_hal_shutdown (void)
 gboolean
 gpm_hal_setlowpowermode (gboolean set)
 {
-	gint ret;
+	gint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -537,21 +530,19 @@ gpm_hal_setlowpowermode (gboolean set)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/devices/computer",
-		"org.freedesktop.Hal.Device.SystemPowerManagement");
+					       HAL_DBUS_SERVICE,
+					       HAL_ROOT_COMPUTER,
+					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
 			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
-			   ".SetPowerSave failed (HAL error)");
+		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning ("org.freedesktop.Hal.Device.SystemPowerManagement"
-			   ".SetPowerSave call failed (%i)", ret);
+		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave call failed (%i)", ret);
 		retval = FALSE;
 	}
 	g_object_unref (G_OBJECT (hal_proxy));

@@ -635,7 +635,7 @@ signalhandler_noc (const char *name, const gboolean connected)
 {
 	g_debug ("signalhandler_noc: (%i) %s", connected, name);
 	/* ignore that don't all apply */
-	if (strcmp (name, "org.freedesktop.Hal") != 0)
+	if (strcmp (name, HAL_DBUS_SERVICE) != 0)
 		return;
 
 	if (!connected) {
@@ -663,7 +663,7 @@ signalhandler_noc (const char *name, const gboolean connected)
 static void
 signalhandler_nlost (const char *name, const gboolean connected)
 {
-	if (strcmp (name, "org.gnome.GnomePowerManager") != 0)
+	if (strcmp (name, GPM_DBUS_SERVICE) != 0)
 		return;
 	gpm_exit ();
 }

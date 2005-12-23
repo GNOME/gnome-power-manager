@@ -36,7 +36,20 @@
  * This cannot be turned on until 
  * https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
  */
-#define GPM_SYSTEM_BUS 		FALSE
+#define GPM_SYSTEM_BUS 			FALSE
+
+#define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
+#define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
+#define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
+
+#define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
+#define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
+#define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
+#define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
+#define	HAL_DBUS_INTERFACE_LAPTOP_PANEL	"org.freedesktop.Hal.Device.LaptopPanel"
+#define	HAL_DBUS_INTERFACE_POWER	"org.freedesktop.Hal.Device.SystemPowerManagement"
+
+#define HAL_ROOT_COMPUTER		"/org/freedesktop/Hal/devices/computer"
 
 gboolean gpm_dbus_glib_error (GError *error);
 gboolean gpm_dbus_get_system_connection (DBusGConnection **connection);

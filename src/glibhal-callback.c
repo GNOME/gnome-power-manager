@@ -63,10 +63,6 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 	gboolean added;
 	gboolean removed;
 
-	/* assertion checks */
-	g_assert (proxy);
-	g_assert (properties);
-
 	if (!function.device_property_modified) {
 		g_warning ("glibhal: signal_handler_PropertyModified when no function!");
 		return;
@@ -95,10 +91,6 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 static void
 signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 {
-	/* assertion checks */
-	g_assert (proxy);
-	g_assert (udi);
-
 	if (!function.device_removed) {
 		g_warning ("glibhal: signal_handler_DeviceRemoved when no function!");
 		return;
@@ -137,10 +129,7 @@ signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
  */
 static void
 signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
-{
-	/* assertion checks */
-	g_assert (proxy);
-	g_assert (name);
+{	g_assert (name);
 	g_assert (details);
 
 	const gchar *udi;
@@ -173,9 +162,9 @@ glibhal_watch_add_device_removed (void)
 		return FALSE;
 
 	proxy.device_removed = dbus_g_proxy_new_for_name_owner (system_connection,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/Manager",
-		"org.freedesktop.Hal.Manager", &error);
+		HAL_DBUS_SERVICE,
+		HAL_DBUS_PATH_MANAGER,
+		HAL_DBUS_INTERFACE_MANAGER, &error);
 	dbus_g_proxy_add_signal (proxy.device_removed, "DeviceRemoved",
 		G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy.device_removed, "DeviceRemoved",
@@ -202,9 +191,9 @@ glibhal_watch_add_device_new_capability (void)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
-		"org.freedesktop.Hal",
-		"/org/freedesktop/Hal/Manager",
-		"org.freedesktop.Hal.Manager", &error);
+		HAL_DBUS_SERVICE,
+		HAL_DBUS_PATH_MANAGER,
+		HAL_DBUS_INTERFACE_MANAGER, &error);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
 		G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
@@ -228,10 +217,6 @@ glibhal_watch_add_device_condition (const gchar *udi)
 	GError *error = NULL;
 	int a;
 	UdiProxy *udiproxy;
-
-	/* assertion checks */
-	g_assert (udi);
-
 	/* need to check for previous add */
 	for (a=0;a < proxy.device_condition->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_condition, a);
@@ -246,9 +231,9 @@ glibhal_watch_add_device_condition (const gchar *udi)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
-		"org.freedesktop.Hal",
+		HAL_DBUS_SERVICE,
 		udi,
-		"org.freedesktop.Hal.Device", &error);
+		HAL_DBUS_INTERFACE_DEVICE, &error);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
 		G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
@@ -280,10 +265,6 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
 	GError *error = NULL;
 	int a;
 	UdiProxy *udiproxy;
-
-	/* assertion checks */
-	g_assert (udi);
-
 	/* need to check for previous add */
 	for (a=0;a < proxy.device_property_modified->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
@@ -296,9 +277,9 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
-		"org.freedesktop.Hal",
+		HAL_DBUS_SERVICE,
 		udi,
-		"org.freedesktop.Hal.Device", &error);
+		HAL_DBUS_INTERFACE_DEVICE, &error);
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED,
@@ -394,10 +375,6 @@ gboolean
 glibhal_watch_remove_device_property_modified (const gchar *udi)
 {
 	int a;
-
-	/* assertion checks */
-	g_assert (udi);
-
 	UdiProxy *udiproxy = NULL;
 	for (a=0;a < proxy.device_property_modified->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
@@ -426,10 +403,6 @@ gboolean
 glibhal_watch_remove_device_condition (const gchar *udi)
 {
 	int a;
-
-	/* assertion checks */
-	g_assert (udi);
-
 	UdiProxy *udiproxy = NULL;
 	for (a=0;a < proxy.device_condition->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_condition, a);
@@ -456,9 +429,6 @@ glibhal_watch_remove_device_condition (const gchar *udi)
 gboolean
 glibhal_method_device_removed (HalDeviceRemoved callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	if (!reg.device_removed)
 		glibhal_watch_add_device_removed ();
 	function.device_removed = callback;
@@ -472,9 +442,6 @@ glibhal_method_device_removed (HalDeviceRemoved callback)
 gboolean
 glibhal_method_device_added (HalDeviceAdded callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	function.device_added = callback;
 	return TRUE;
 }
@@ -486,9 +453,6 @@ glibhal_method_device_added (HalDeviceAdded callback)
 gboolean
 glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	if (!reg.device_new_capability)
 		glibhal_watch_add_device_new_capability ();
 	function.device_new_capability = callback;
@@ -502,9 +466,6 @@ glibhal_method_device_new_capability (HalDeviceNewCapability callback)
 gboolean
 glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	function.device_lost_capability = callback;
 	return TRUE;
 }
@@ -516,9 +477,6 @@ glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
 gboolean
 glibhal_method_device_property_modified (HalDevicePropertyModified callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	g_debug ("glibhal: PropertyModified: Registered");
 	function.device_property_modified = callback;
 	return TRUE;
@@ -531,9 +489,6 @@ glibhal_method_device_property_modified (HalDevicePropertyModified callback)
 gboolean
 glibhal_method_device_condition (HalDeviceCondition callback)
 {
-	/* assertion checks */
-	g_assert (callback);
-
 	g_debug ("glibhal: Condition: Registered");
 	function.device_condition = callback;
 	return TRUE;

@@ -26,6 +26,13 @@
 	we want, so it can be shared between users. This cannot be turned on 
 	until https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
 
+	* src/gpm-hal.c: Fix valgrinds "Conditional jump or move depends on 
+	uninitialised value(s)" by initialising the return value to 0.
+
+	* src/gpm-dbus-common.h, src/glibhal.c, src/glibhal-callback.c,
+	src/gpm-hal.c, src/gpm-main.c: Define the HAL_DBUS_* constants and
+	use them in preference to hardcoding each name.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable

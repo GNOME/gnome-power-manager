@@ -66,7 +66,9 @@ hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
@@ -104,7 +106,9 @@ hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
@@ -140,7 +144,9 @@ hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", udi, "org.freedesktop.Hal.Device");
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 			G_TYPE_STRING, key, G_TYPE_INVALID,
@@ -174,9 +180,9 @@ hal_find_device_capability (const gchar *capability, gchar ***value)
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-		"org.freedesktop.Hal", 
-		"/org/freedesktop/Hal/Manager", 
-		"org.freedesktop.Hal.Manager");
+		HAL_DBUS_SERVICE, 
+		HAL_DBUS_PATH_MANAGER, 
+		HAL_DBUS_INTERFACE_MANAGER);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
 			G_TYPE_STRING, capability, G_TYPE_INVALID,
