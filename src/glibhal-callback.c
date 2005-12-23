@@ -153,37 +153,6 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 	function.device_condition (udi, name, details);
 }
 
-/** NameOwnerChanged signal handler
- *
- *  @param	proxy		A valid DBUS Proxy
- *  @param	name		The Condition name, e.g. ButtonPressed
- *  @param	prev		The previous name
- *  @param	new		The new name
- *  @param	user_data	Unused
- */
-static void
-signal_handler_NameOwnerChanged (DBusGProxy *proxy, 
-	const char *name,
-	const char *prev,
-	const char *new,
-	gpointer user_data)
-{
-	/* assertion checks */
-	g_assert (proxy);
-	g_assert (name);
-	g_assert (prev);
-	g_assert (new);
-
-	if (!function.device_condition) {
-		g_warning ("glibhal: signal_handler_Condition when no function!");
-		return;
-	}
-	if (strlen (new) == 0)
-		function.device_noc (name, FALSE);
-	else if (strlen (prev) == 0)
-		function.device_noc (name, TRUE);
-}
-
 /** Removed watch removal 
  *
  *  @return			If we removed the watch successfully
@@ -348,37 +317,6 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
 	return TRUE;
 }
 
-/** NameOwnerChanged watch removal 
- *
- *  @return			If we removed the watch successfully
- */
-static gboolean
-glibhal_watch_add_noc (void)
-{
-	DBusGConnection *system_connection;
-	GError *error = NULL;
-
-	/* assertion checks */
-	g_assert (!function.device_noc);
-	g_assert (!reg.device_noc);
-
-	g_debug ("glibhal: NameOwnerChanged: Registered");
-	reg.device_noc = TRUE;
-	if (!gpm_dbus_get_system_connection (&system_connection))
-		return FALSE;
-
-	proxy.device_noc = dbus_g_proxy_new_for_name_owner (system_connection,
-		DBUS_SERVICE_DBUS,
-		DBUS_PATH_DBUS,
-		DBUS_INTERFACE_DBUS, &error);
-	dbus_g_proxy_add_signal (proxy.device_noc, "NameOwnerChanged",
-		G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (proxy.device_noc, "NameOwnerChanged",
-		G_CALLBACK (signal_handler_NameOwnerChanged), NULL, NULL);
-	return TRUE;
-}
-
-
 /** DeviceRemoved watch callback handler
  *
  *  @return			If we handled the watch callback okay
@@ -511,23 +449,6 @@ glibhal_watch_remove_device_condition (const gchar *udi)
 	return TRUE;
 }
 
-/** NameOwnerChanged watch callback handler
- *
- *  @return			If we handled the watch callback okay
- */
-gboolean
-glibhal_watch_remove_noc (void)
-{
-	if (!proxy.device_noc) {
-		g_warning ("glibhal: glibhal_watch_remove_noc when no watch!");
-		return FALSE;
-	}
-	g_debug ("glibhal: watch NameOwnerChanged removed");
-	g_object_unref (G_OBJECT (proxy.device_noc));
-	proxy.device_noc = NULL;
-	return TRUE;
-}
-
 /** DeviceRemoved callback assignment
  *
  *  @return			If we assigned the callback okay
@@ -618,22 +539,6 @@ glibhal_method_device_condition (HalDeviceCondition callback)
 	return TRUE;
 }
 
-/** NameOwnerChanged callback assignment
- *
- *  @return			If we assigned the callback okay
- */
-gboolean
-glibhal_method_noc (HalNameOwnerChanged callback)
-{
-	/* assertion checks */
-	g_assert (callback);
-
-	if (!reg.device_noc)
-		glibhal_watch_add_noc ();
-	function.device_noc = callback;
-	return TRUE;
-}
-
 /** Initialise glibhal callback support
  *
  *  @return			If we initialised glibhal callbacks okay
@@ -648,20 +553,17 @@ glibhal_callback_init (void)
 	function.device_lost_capability = NULL;
 	function.device_property_modified = NULL;
 	function.device_condition = NULL;
-	function.device_noc = NULL;
 
 	reg.device_added = FALSE;
 	reg.device_removed = FALSE;
 	reg.device_new_capability = FALSE;
 	reg.device_lost_capability = FALSE;
 	reg.device_condition = FALSE;
-	reg.device_noc = FALSE;
 
 	proxy.device_added = NULL;
 	proxy.device_removed = NULL;
 	proxy.device_new_capability = NULL;
 	proxy.device_lost_capability = NULL;
-	proxy.device_noc = NULL;
 
 	/* array types */
 	proxy.device_condition = g_ptr_array_new ();
@@ -689,8 +591,6 @@ glibhal_callback_shutdown (void)
 		glibhal_watch_remove_device_new_capability ();
 	if (proxy.device_lost_capability)
 		glibhal_watch_remove_device_lost_capability ();
-	if (proxy.device_noc)
-		glibhal_watch_remove_noc ();
 
 	/* array types */
 	for (a=0;a < proxy.device_condition->len;a++) {

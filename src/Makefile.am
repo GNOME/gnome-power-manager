@@ -69,6 +69,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\
 	gpm-dbus-server.c				\
+	gpm-dbus-signal-handler.h			\
+	gpm-dbus-signal-handler.c			\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -111,6 +113,8 @@ gnome_power_console_SOURCES =				\
 	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\
 	gpm-dbus-server.c				\
+	gpm-dbus-signal-handler.h			\
+	gpm-dbus-signal-handler.c			\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-core.h					\

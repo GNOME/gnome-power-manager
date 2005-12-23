@@ -9,6 +9,9 @@
 	* src/gpm-dbus-signal-handler.{c|h}: Add these files to abstract the
 	DBUS NameOwnerChanged and NameLost glib functionality.
 
+	* src/glibhal-callback.{c|h}: Remove the NameOwnerChanged bodged
+	support from these files. It never belonged here..
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable
