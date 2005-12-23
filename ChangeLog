@@ -14,7 +14,8 @@
 
 	* src/Makefile.am, src/gpm-console.c, src/gpm-dbus-common.c,
 	src/gpm-main.c: Use gpm-dbus-signal-handler and start to implement
-	NameLost functionality for a shared bus.
+	NameLost functionality for a shared bus. Also pass more connections
+	by reference, rather than assuming then are system or session.
 
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 

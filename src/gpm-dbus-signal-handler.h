@@ -31,8 +31,8 @@
 
 typedef void (*GpmDbusSignalHandler) (const gchar *name, const gboolean connected);
 
-gboolean gpm_dbus_init_noc (GpmDbusSignalHandler callback);
-gboolean gpm_dbus_init_nlost (GpmDbusSignalHandler callback);
+gboolean gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback);
+gboolean gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback);
 
 gboolean gpm_dbus_remove_noc ();
 gboolean gpm_dbus_remove_nlost ();

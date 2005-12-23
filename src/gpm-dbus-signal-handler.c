@@ -82,20 +82,16 @@ gpm_signal_handler_nlost (DBusGProxy *proxy,
  *  @return			If we assigned the callback okay
  */
 gboolean
-gpm_dbus_init_noc (GpmDbusSignalHandler callback)
+gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback)
 {
-	DBusGConnection *system_connection;
 	GError *error = NULL;
 	g_assert (!proxy_bus_noc);
-
-	if (!gpm_dbus_get_system_connection (&system_connection))
-		return FALSE;
 
 	/* assign callback */
 	gpm_sig_handler_noc = callback;
 
 	/* get NameOwnerChanged proxy */
-	proxy_bus_noc = dbus_g_proxy_new_for_name_owner (system_connection,
+	proxy_bus_noc = dbus_g_proxy_new_for_name_owner (connection,
 						         DBUS_SERVICE_DBUS,
 						         DBUS_PATH_DBUS,
 						         DBUS_INTERFACE_DBUS,
@@ -113,19 +109,15 @@ gpm_dbus_init_noc (GpmDbusSignalHandler callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-gpm_dbus_init_nlost (GpmDbusSignalHandler callback)
+gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback)
 {
-	DBusGConnection *system_connection;
 	GError *error = NULL;
 	g_assert (!proxy_bus_nlost);
-
-	if (!gpm_dbus_get_system_connection (&system_connection))
-		return FALSE;
 
 	/* assign callback */
 	gpm_sig_handler_nlost = callback;
 
-	proxy_bus_nlost = dbus_g_proxy_new_for_name_owner (system_connection,
+	proxy_bus_nlost = dbus_g_proxy_new_for_name_owner (connection,
 							   DBUS_SERVICE_DBUS,
 							   DBUS_PATH_DBUS,
 							   DBUS_INTERFACE_DBUS,

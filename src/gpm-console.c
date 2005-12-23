@@ -407,15 +407,15 @@ main (int argc, char *argv[])
 	}
 
 	/* register dbus service */
-	if (!gpm_object_register ()) {
+	if (!gpm_object_register (system_connection)) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
 
 	/* initialise NameOwnerChanged and NameLost */
-	gpm_dbus_init_noc (signalhandler_noc);
+	gpm_dbus_init_noc (system_connection, signalhandler_noc);
 #if 0
-	gpm_dbus_init_nlost (signalhandler_nlost);
+	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
 #endif
 	glibhal_callback_init ();
 	/* assign the callback functions */

@@ -766,15 +766,15 @@ main (int argc, char *argv[])
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
 	/* register dbus service */
-	if (!gpm_object_register ()) {
+	if (!gpm_object_register (session_connection)) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
 
 	/* initialise NameOwnerChanged and NameLost */
-	gpm_dbus_init_noc (signalhandler_noc);
+	gpm_dbus_init_noc (system_connection, signalhandler_noc);
 #if 0
-	gpm_dbus_init_nlost (signalhandler_nlost);
+	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
 #endif
 
 	loop = g_main_loop_new (NULL, FALSE);

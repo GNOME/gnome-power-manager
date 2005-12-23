@@ -52,7 +52,7 @@ struct GPMObject {GObject parent;};
  */
 struct GPMObjectClass {GObjectClass parent;};
 
-gboolean gpm_object_register (void);
+gboolean gpm_object_register (DBusGConnection *connection);
 gboolean gpm_emit_about_to_happen (const gint value);
 gboolean gpm_emit_performing_action (const gint value);
 gboolean gpm_emit_mains_changed (const gboolean value);

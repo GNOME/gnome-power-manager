@@ -75,23 +75,19 @@ gpm_object_class_init (GPMObjectClass *klass)
 			G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
-/** registers org.gnome.GnomePowerManager
+/** registers org.gnome.GnomePowerManager on a connection
  *
  *  @return			If we successfully registered the object
  *
  *  @note	This function MUST be called before DBUS service will work.
  */
 gboolean
-gpm_object_register (void)
+gpm_object_register (DBusGConnection *connection)
 {
-	DBusGConnection *session_connection = NULL;
-	if (!gpm_dbus_get_session_connection (&session_connection))
-		return FALSE;
-
-	if (!gpm_dbus_get_service (session_connection, GPM_DBUS_SERVICE))
+	if (!gpm_dbus_get_service (connection, GPM_DBUS_SERVICE))
 		return FALSE;
 	obj = g_object_new (gpm_object_get_type (), NULL);
-	dbus_g_connection_register_g_object (session_connection, GPM_DBUS_PATH, G_OBJECT (obj));
+	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, G_OBJECT (obj));
 	return TRUE;
 }
 
