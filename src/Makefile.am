@@ -25,12 +25,14 @@ INCLUDES =						\
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
-	gnome-power-preferences				\
+	gnome-power-preferences
+
+#if 0
+noinst_PROGRAMS =					\
 	gnome-power-console
+#endif
 
 gnome_power_preferences_SOURCES =			\
-	glibhal-main.h					\
-	glibhal-main.c					\
 	gpm-hal.h					\
 	gpm-hal.c					\
 	gpm-dbus-common.h				\
@@ -59,12 +61,10 @@ gnome_power_manager_SOURCES =				\
 	eggtrayicon.c					\
 	gpm_marshal.h					\
 	gpm_marshal.c					\
-	glibhal-main.h					\
-	glibhal-main.c					\
-	glibhal-callback.h				\
-	glibhal-callback.c				\
 	gpm-hal.h					\
 	gpm-hal.c					\
+	gpm-hal-callback.h				\
+	gpm-hal-callback.c				\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
 	gpm-dbus-server.h				\
@@ -100,13 +100,12 @@ gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
 
+#if 0
 gnome_power_console_SOURCES =				\
 	gpm_marshal.h					\
 	gpm_marshal.c					\
-	glibhal-main.h					\
-	glibhal-main.c					\
-	glibhal-callback.h				\
-	glibhal-callback.c				\
+	gpm-hal-callback.h				\
+	gpm-hal-callback.c				\
 	gpm-hal.h					\
 	gpm-hal.c					\
 	gpm-dbus-common.h				\
@@ -125,6 +124,7 @@ gnome_power_console_SOURCES =				\
 
 gnome_power_console_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
+#endif
 
 BUILT_SOURCES = \
 	gnome-power-glue.h				\

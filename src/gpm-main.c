@@ -81,11 +81,10 @@
 #include "gpm-dbus-common.h"
 #include "gpm-dbus-signal-handler.h"
 #include "gpm-hal.h"
+#include "gpm-hal-callback.h"
 #include "gpm-stock-icons.h"
 #include "gpm-sysdev.h"
 
-#include "glibhal-main.h"
-#include "glibhal-callback.h"
 #include "gnome-power-glue.h"
 
 /* no need for IPC with globals */
@@ -278,7 +277,7 @@ static void
 gpm_exit (void)
 {
 	g_debug ("Quitting!");
-	glibhal_callback_shutdown ();
+	gpm_hal_callback_shutdown ();
 	gpm_stock_icons_shutdown ();
 	gpm_dbus_remove_noc ();
 	gpm_dbus_remove_nlost ();
@@ -415,7 +414,7 @@ hal_device_property_modified (const gchar *udi,
 		return;
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		hal_device_get_bool (udi, key, &onAcPower);
+		gpm_hal_device_get_bool (udi, key, &onAcPower);
 		if (!onAcPower) {
 			gboolean show_notify;
 			show_notify = gconf_client_get_bool (gconf_client_get_default (),
@@ -466,7 +465,7 @@ hal_device_property_modified (const gchar *udi,
 	}
 	
 	/* get battery type so we know what to process */
-	hal_device_get_string (udi, "battery.type", &type);
+	gpm_hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
 		return;
@@ -480,24 +479,24 @@ hal_device_property_modified (const gchar *udi,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		hal_device_get_bool (udi, key, &sds->isPresent);
+		gpm_hal_device_get_bool (udi, key, &sds->isPresent);
 		/* read in values */
 		gpm_read_battery_data (sds);
 		/* update icon if required */
 		gpn_icon_update ();
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		hal_device_get_bool (udi, key, &sds->isCharging);
+		gpm_hal_device_get_bool (udi, key, &sds->isCharging);
 		/*
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
 		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		hal_device_get_bool (udi, key, &sds->isDischarging);
+		gpm_hal_device_get_bool (udi, key, &sds->isDischarging);
 		/* invalidate the remaining time */
 		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		hal_device_get_int (udi, key, &sds->percentageCharge);
+		gpm_hal_device_get_int (udi, key, &sds->percentageCharge);
 		/* give notification @100% */
 		if (sd->type == BATT_PRIMARY && sds->percentageCharge == 100) {
 			gpm_libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
@@ -506,7 +505,7 @@ hal_device_property_modified (const gchar *udi,
 		}
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
-		hal_device_get_int (udi, key, &tempval);
+		gpm_hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
 			sds->minutesRemaining = tempval / 60;
 	} else {
@@ -557,7 +556,7 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 		 udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
-		hal_device_get_string (udi, "button.type", &type);
+		gpm_hal_device_get_string (udi, "button.type", &type);
 		if (!type) {
 			g_warning ("You must have a button type for %s!", udi);
 			return;
@@ -572,7 +571,7 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 			action_policy_do (action);
 			g_free (action);
 		} else if (strcmp (type, "lid") == 0) {
-			hal_device_get_bool (udi, "button.state.value", &value);
+			gpm_hal_device_get_bool (udi, "button.state.value", &value);
 			/*
 			 * We enable/disable DPMS because some laptops do
 			 * not turn off the LCD backlight when the lid
@@ -794,12 +793,12 @@ main (int argc, char *argv[])
 		return 0;
 	}
 
-	glibhal_callback_init ();
+	gpm_hal_callback_init ();
 	/* assign the callback functions */
-	glibhal_method_device_removed (hal_device_removed);
-	glibhal_method_device_new_capability (hal_device_new_capability);
-	glibhal_method_device_property_modified (hal_device_property_modified);
-	glibhal_method_device_condition (hal_device_condition);
+	gpm_hal_method_device_removed (hal_device_removed);
+	gpm_hal_method_device_new_capability (hal_device_new_capability);
+	gpm_hal_method_device_property_modified (hal_device_property_modified);
+	gpm_hal_method_device_condition (hal_device_condition);
 
 	/* sets up these devices and adds watches */
 	gpm_coldplug_batteries ();

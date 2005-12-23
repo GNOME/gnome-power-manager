@@ -39,7 +39,6 @@
 #include <gconf/gconf-client.h>
 
 #include "gpm-dbus-common.h"
-#include "glibhal-main.h"
 #include "gpm-networkmanager.h"
 
 /** Tell NetworkManager to put the network devices to sleep

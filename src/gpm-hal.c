@@ -3,7 +3,7 @@
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-12-18
  *
- * This module uses the functionality of glibhal-main to do some clever
+ * This module uses the functionality of HAL to do some clever
  * things to HAL objects, for example dimming the LCD screen.
  */
 /*
@@ -39,7 +39,6 @@
 
 #include "gpm-hal.h"
 #include "gpm-dbus-common.h"
-#include "glibhal-main.h"
 
 #define DIM_INTERVAL		10
 
@@ -54,7 +53,7 @@ gpm_hal_is_running (void)
 {
 	gchar *udi = NULL;
 	gboolean running;
-	running = hal_device_get_string (
+	running = gpm_hal_device_get_string (
 		HAL_ROOT_COMPUTER,
 		"info.udi", &udi);
 	g_free (udi);
@@ -72,7 +71,7 @@ gpm_hal_is_on_ac (void)
 	gchar **device_names = NULL;
 
 	/* find ac_adapter */
-	hal_find_device_capability ("ac_adapter", &device_names);
+	gpm_hal_find_device_capability ("ac_adapter", &device_names);
 	if (!device_names && device_names[0]) {
 		g_debug ("Couldn't obtain list of ac_adapters");
 		/*
@@ -82,8 +81,8 @@ gpm_hal_is_on_ac (void)
 		return TRUE;
 	}
 	/* assume only one */
-	hal_device_get_bool (device_names[0], "ac_adapter.present", &is_on_ac);
-	hal_free_capability (device_names);
+	gpm_hal_device_get_bool (device_names[0], "ac_adapter.present", &is_on_ac);
+	gpm_hal_free_capability (device_names);
 	return is_on_ac;
 }
 
@@ -99,7 +98,7 @@ gpm_hal_is_laptop (void)
 	gchar *formfactor = NULL;
 
 	/* always present */
-	hal_device_get_string (HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
+	gpm_hal_device_get_string (HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
 	if (!formfactor) {
 		g_debug ("system.formfactor not set!"
 			 "If you have PMU, please update HAL to get the latest fixes.");
@@ -123,7 +122,7 @@ gboolean
 gpm_hal_pm_check (void)
 {
 	gchar *ptype = NULL;
-	hal_device_get_string (HAL_ROOT_COMPUTER, "power_management.type", &ptype);
+	gpm_hal_device_get_string (HAL_ROOT_COMPUTER, "power_management.type", &ptype);
 	/* this key only has to exist to be pm okay */
 	if (ptype) {
 		g_debug ("Power management type : %s", ptype);
@@ -142,7 +141,7 @@ gpm_hal_pm_can_suspend (void)
 {
 	gboolean exists;
 	gboolean success;
-	exists = hal_device_get_bool (HAL_ROOT_COMPUTER,
+	exists = gpm_hal_device_get_bool (HAL_ROOT_COMPUTER,
 		"power_management.can_suspend_to_ram", &success);
 	if (!exists) {
 		g_warning ("[harmless]: You are not running CVS HAL "
@@ -162,7 +161,7 @@ gpm_hal_pm_can_hibernate (void)
 {
 	gboolean exists;
 	gboolean success;
-	exists = hal_device_get_bool (HAL_ROOT_COMPUTER,
+	exists = gpm_hal_device_get_bool (HAL_ROOT_COMPUTER,
 				      "power_management.can_suspend_to_disk",
 				      &success);
 	if (!exists) {
@@ -230,7 +229,7 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	/* assertion checks */
 	g_assert (udi);
 
-	hal_device_get_int (udi, "laptop_panel.num_levels", &levels);
+	gpm_hal_device_get_int (udi, "laptop_panel.num_levels", &levels);
 	if (brightness >= levels || brightness < 0 ) {
 		g_warning ("Tried to set brightness %i outside range (0..%i)",
 			brightness, levels - 1);
@@ -275,7 +274,7 @@ for_each_lp (hal_lp_func function, const gint number)
 	gchar **names;
 	gboolean retval;
 
-	hal_find_device_capability ("laptop_panel", &names);
+	gpm_hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
 		g_debug ("No devices of capability laptop_panel");
 		return FALSE;
@@ -285,7 +284,7 @@ for_each_lp (hal_lp_func function, const gint number)
 	for (i = 0; names[i]; i++)
 		if (!function (names[i], number))
 			retval = FALSE;
-	hal_free_capability (names);
+	gpm_hal_free_capability (names);
 	return retval;
 }
 
@@ -361,7 +360,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 	gint levels, old_level;
 	gchar *returnstring = NULL;
 
-	hal_find_device_capability ("laptop_panel", &names);
+	gpm_hal_find_device_capability ("laptop_panel", &names);
 	if (!names) {
 		g_debug ("No devices of capability laptop_panel");
 		return FALSE;
@@ -373,7 +372,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 	 * This should fix the bug:
 	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
 	 */
-	hal_device_get_string (HAL_ROOT_COMPUTER, "smbios.system.manufacturer",
+	gpm_hal_device_get_string (HAL_ROOT_COMPUTER, "smbios.system.manufacturer",
 			       &returnstring);
 	if (returnstring) {
 		if (strcmp (returnstring, "IBM") == 0) {
@@ -389,7 +388,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 	for (i = 0; names[i]; i++) {
 		/* get old values so we can dim */
 		hal_get_brightness_item (names[i], &old_level);
-		hal_device_get_int (names[i], "laptop_panel.num_levels", &levels);
+		gpm_hal_device_get_int (names[i], "laptop_panel.num_levels", &levels);
 		g_debug ("old_level=%i, levels=%i, new=%i", old_level, levels, brightness);
 		/* do each step down to the new value */
 		if (brightness < old_level) {
@@ -406,7 +405,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 			}
 		}
 	}
-	hal_free_capability (names);
+	gpm_hal_free_capability (names);
 	return retval;
 }
 
@@ -562,15 +561,218 @@ gpm_hal_get_brightness_steps (gint *steps)
 	/* assertion checks */
 	g_assert (steps);
 
-	hal_find_device_capability ("laptop_panel", &names);
+	gpm_hal_find_device_capability ("laptop_panel", &names);
 	if (!names || !names[0]) {
 		g_debug ("No devices of capability laptop_panel");
 		*steps = 0;
 		return FALSE;
 	}
 	/* only use the first one */
-	hal_device_get_int (names[0], "laptop_panel.num_levels", steps);
-	hal_free_capability (names);
+	gpm_hal_device_get_int (names[0], "laptop_panel.num_levels", steps);
+	gpm_hal_free_capability (names);
 	return TRUE;
 }
+
+/** HAL: get boolean type
+ *
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
+ */
+gboolean
+gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
+{
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!gpm_dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+				G_TYPE_STRING, key, G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
+		gpm_dbus_glib_error (error);
+		*value = FALSE;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** HAL: get string type
+
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
+ *
+ *  @note	You must g_free () the return value.
+ */
+gboolean
+gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
+{
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!gpm_dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+				G_TYPE_STRING, key, G_TYPE_INVALID,
+				G_TYPE_STRING, value, G_TYPE_INVALID)) {
+		gpm_dbus_glib_error (error);
+		*value = NULL;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** HAL: get integer type
+ *
+ *  @param	udi		The UDI of the device
+ *  @param	key		The key to query
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
+ */
+gboolean
+gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
+{
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!gpm_dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+				G_TYPE_STRING, key, G_TYPE_INVALID,
+				G_TYPE_INT, value, G_TYPE_INVALID)) {
+		gpm_dbus_glib_error (error);
+		*value = 0;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** HAL: get devices with capability
+ *
+ *  @param	capability	The capability, e.g. "battery"
+ *  @param	value		return value, passed by ref
+ *  @return			TRUE for success, FALSE for failure
+ */
+gboolean
+gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
+{
+	DBusGConnection *system_connection;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!gpm_dbus_get_system_connection (&system_connection))
+		return FALSE;
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+					       HAL_DBUS_SERVICE, 
+					       HAL_DBUS_PATH_MANAGER, 
+					       HAL_DBUS_INTERFACE_MANAGER);
+	retval = TRUE;
+	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
+				G_TYPE_STRING, capability, G_TYPE_INVALID,
+				G_TYPE_STRV, value, G_TYPE_INVALID)) {
+		gpm_dbus_glib_error (error);
+		*value = NULL;
+		retval = FALSE;
+	}
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+}
+
+/** frees value result of gpm_hal_find_device_capability
+ *
+ *  @param	value		The list of strings to free
+ */
+void
+gpm_hal_free_capability (gchar **value)
+{
+	gint i;
+	for (i=0; value[i]; i++)
+		g_free (value[i]);
+	g_free (value);
+}
+
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param	capability	The capability, e.g. "battery"
+ *  @return			Number of devices of that capability
+ */
+gint
+gpm_hal_num_devices_of_capability (const gchar *capability)
+{
+	gint i;
+	gchar **names;
+
+	gpm_hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	/* iterate to find number of items */
+	for (i = 0; names[i]; i++) {};
+	gpm_hal_free_capability (names);
+	g_debug ("%i devices of capability %s", i, capability);
+	return i;
+}
+
+/** Get the number of devices on system with a specific capability
+ *
+ *  @param	capability	The capability, e.g. "battery"
+ *  @param	key		The key to match, e.g. "button.type"
+ *  @param	value		The key match, e.g. "power"
+ *  @return			Number of devices of that capability
+ */
+gint
+gpm_hal_num_devices_of_capability_with_value (const gchar *capability, 
+	const gchar *key, const gchar *value)
+{
+	gint i;
+	gint valid = 0;
+	gchar **names;
+
+	gpm_hal_find_device_capability (capability, &names);
+	if (!names) {
+		g_debug ("No devices of capability %s", capability);
+		return 0;
+	}
+	for (i = 0; names[i]; i++) {
+		gchar *type = NULL;
+		gpm_hal_device_get_string (names[i], key, &type);
+		if (strcmp (type, value) == 0)
+			valid++;
+		g_free (type);
+	};
+	gpm_hal_free_capability (names);
+	g_debug ("%i devices of capability %s where %s is %s", 
+		valid, capability, key, value);
+	return valid;
+}
+
 /** @} */

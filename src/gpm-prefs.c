@@ -38,7 +38,6 @@
 #include "gpm-screensaver.h"
 #include "gpm-dbus-client.h"
 #include "gpm-dbus-common.h"
-#include "glibhal-main.h"
 
 /* The text that should appear in the action combo boxes */
 #define ACTION_SUSPEND_TEXT		_("Suspend")
@@ -63,15 +62,15 @@ get_battery_time_for_percentage (gint value)
 	gint time;
 	gboolean discharging;
 
-	hal_device_get_bool (udi, "battery.rechargeable.is_discharging", &discharging);
+	gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging", &discharging);
 
 	/* rate information is useless when charging */
 	if (!discharging)
 		return 0;
 
 	/* get values. if they are wrong, return 0 */
-	hal_device_get_int (udi, "battery.charge_level.percentage", &percentage);
-	hal_device_get_int (udi, "battery.remaining_time", &time);
+	gpm_hal_device_get_int (udi, "battery.charge_level.percentage", &percentage);
+	gpm_hal_device_get_int (udi, "battery.remaining_time", &time);
 
 	if (time > 0 && percentage > 0) {
 		time = time / 60;
@@ -498,7 +497,7 @@ gpm_prefs_init (GladeXML *dialog)
 	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_critical_estimate"),
 				    get_battery_time_for_percentage (value));
 
-	gboolean has_batteries = hal_num_devices_of_capability ("battery") > 0;
+	gboolean has_batteries = gpm_hal_num_devices_of_capability ("battery") > 0;
 	if (!has_batteries) {
 		widget = glade_xml_get_widget (dialog, "label_frame_ac");
 		gtk_label_set_markup (GTK_LABEL (widget), _("<b>Configuration</b>"));
@@ -514,13 +513,13 @@ gpm_prefs_init (GladeXML *dialog)
 		gtk_widget_hide_all (widget);
 	}
 
-	gboolean has_suspend_button = hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
+	gboolean has_suspend_button = gpm_hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
 	if (!has_suspend_button) {
 		gtk_widget_hide_all (label_button_suspend);
 		gtk_widget_hide_all (combo_button_suspend);
 	}
 
-	gboolean has_lid_button =  hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
+	gboolean has_lid_button =  gpm_hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
 	if (!has_lid_button) {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
@@ -545,7 +544,7 @@ gpm_prefs_init (GladeXML *dialog)
 		gtk_widget_hide_all (slider_batteries_display);
 	}
 
-	gboolean can_set_brightness = hal_num_devices_of_capability ("laptop_panel") > 0;
+	gboolean can_set_brightness = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
 	if (!can_set_brightness) {
 		gtk_widget_hide_all (label_ac_brightness);
 		gtk_widget_hide_all (slider_ac_brightness);

@@ -42,14 +42,11 @@
 #include "gpm-core.h"
 #include "gpm-main.h"
 #include "gpm-hal.h"
+#include "gpm-hal-callback.h"
 #include "gpm-sysdev.h"
 #include "gpm-dbus-common.h"
 #include "gpm-dbus-server.h"
 #include "gpm-dbus-signal-handler.h"
-
-#include "glibhal-main.h"
-#include "glibhal-callback.h"
-
 
 /* no need for IPC with globals */
 gboolean isVerbose;
@@ -67,7 +64,7 @@ static void
 gpm_exit (void)
 {
 	g_debug ("Quitting!");
-	glibhal_callback_shutdown ();
+	gpm_hal_callback_shutdown ();
 
 	gpm_dbus_remove_noc ();
 #if 0
@@ -164,7 +161,7 @@ hal_device_property_modified (const gchar *udi,
 		return;
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		hal_device_get_bool (udi, key, &onAcPower);
+		gpm_hal_device_get_bool (udi, key, &onAcPower);
 		/* update all states */
 		sysDevUpdateAll ();
 		return;
@@ -189,7 +186,7 @@ hal_device_property_modified (const gchar *udi,
 	}
 	
 	/* get battery type so we know what to process */
-	hal_device_get_string (udi, "battery.type", &type);
+	gpm_hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
 		return;
@@ -203,26 +200,26 @@ hal_device_property_modified (const gchar *udi,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		hal_device_get_bool (udi, key, &sds->isPresent);
+		gpm_hal_device_get_bool (udi, key, &sds->isPresent);
 		/* read in values */
 		gpm_read_battery_data (sds);
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		hal_device_get_bool (udi, key, &sds->isCharging);
+		gpm_hal_device_get_bool (udi, key, &sds->isCharging);
 		/*
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
 		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		hal_device_get_bool (udi, key, &sds->isDischarging);
+		gpm_hal_device_get_bool (udi, key, &sds->isDischarging);
 		/* invalidate the remaining time */
 		sds->minutesRemaining = 0;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		hal_device_get_int (udi, key, &sds->percentageCharge);
+		gpm_hal_device_get_int (udi, key, &sds->percentageCharge);
 		/* give notification @100% */
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
-		hal_device_get_int (udi, key, &tempval);
+		gpm_hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
 			sds->minutesRemaining = tempval / 60;
 	} else {
@@ -263,7 +260,7 @@ hal_device_condition (const gchar *udi,
 		udi, condition_name, condition_details);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
-		hal_device_get_string (udi, "button.type", &type);
+		gpm_hal_device_get_string (udi, "button.type", &type);
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
 			g_warning ("power!");
@@ -417,12 +414,12 @@ main (int argc, char *argv[])
 #if 0
 	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
 #endif
-	glibhal_callback_init ();
+	gpm_hal_callback_init ();
 	/* assign the callback functions */
-	glibhal_method_device_removed (hal_device_removed);
-	glibhal_method_device_new_capability (hal_device_new_capability);
-	glibhal_method_device_property_modified (hal_device_property_modified);
-	glibhal_method_device_condition (hal_device_condition);
+	gpm_hal_method_device_removed (hal_device_removed);
+	gpm_hal_method_device_new_capability (hal_device_new_capability);
+	gpm_hal_method_device_property_modified (hal_device_property_modified);
+	gpm_hal_method_device_condition (hal_device_condition);
 
 	/* sets up these devices and adds watches */
 	gpm_coldplug_batteries ();

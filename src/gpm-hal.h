@@ -45,5 +45,14 @@ gboolean gpm_hal_hibernate (void);
 gboolean gpm_hal_shutdown (void);
 gboolean gpm_hal_setlowpowermode (gboolean set);
 
+gboolean gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value);
+gboolean gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value);
+gboolean gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value);
+gboolean gpm_hal_find_device_capability (const gchar *capability, gchar ***value);
+
+gint gpm_hal_num_devices_of_capability (const gchar *capability);
+gint gpm_hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value);
+void gpm_hal_free_capability (gchar **value);
+
 #endif	/* _GPMHAL_H */
 /** @} */

@@ -1,4 +1,4 @@
-/** @file	glibhal-callback.c
+/** @file	gpm-hal-callback.c
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -26,7 +26,7 @@
  * 02110-1301, USA.
  */
 /**
- * @addtogroup	glibhal
+ * @addtogroup	hal
  * @{
  */
 
@@ -39,8 +39,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-dbus-common.h"
-#include "glibhal-main.h"
-#include "glibhal-callback.h"
+#include "gpm-hal-callback.h"
 #include "gpm_marshal.h"
 
 HalFunctions function;
@@ -64,12 +63,12 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 	gboolean removed;
 
 	if (!function.device_property_modified) {
-		g_warning ("glibhal: signal_handler_PropertyModified when no function!");
+		g_warning ("gpm_hal: signal_handler_PropertyModified when no function!");
 		return;
 	}
 
 	udi = dbus_g_proxy_get_path (proxy);
-	g_debug ("glibhal: property modified '%s'", udi);
+	g_debug ("gpm_hal: property modified '%s'", udi);
 	for (i = 0; i < properties->len; i++) {
 		array = g_ptr_array_index (properties, i);
 		if (array->n_values != 3) {
@@ -92,10 +91,10 @@ static void
 signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 {
 	if (!function.device_removed) {
-		g_warning ("glibhal: signal_handler_DeviceRemoved when no function!");
+		g_warning ("gpm_hal: signal_handler_DeviceRemoved when no function!");
 		return;
 	}
-	g_debug ("glibhal: device removed '%s'", udi);
+	g_debug ("gpm_hal: device removed '%s'", udi);
 	function.device_removed (udi);
 }
 
@@ -108,16 +107,11 @@ signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 static void
 signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
 {
-	/* assertion checks */
-	g_assert (capability);
-	g_assert (proxy);
-	g_assert (udi);
-
 	if (!function.device_new_capability) {
-		g_warning ("glibhal: signal_handler_NewCapability when no function!");
+		g_warning ("gpm_hal: signal_handler_NewCapability when no function!");
 		return;
 	}
-	g_debug ("glibhal: new capability '%s'", udi);
+	g_debug ("gpm_hal: new capability '%s'", udi);
 	function.device_new_capability (udi, capability);
 }
 
@@ -129,16 +123,14 @@ signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
  */
 static void
 signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
-{	g_assert (name);
-	g_assert (details);
-
+{
 	const gchar *udi;
 	if (!function.device_condition) {
-		g_warning ("glibhal: signal_handler_Condition when no function!");
+		g_warning ("gpm_hal: signal_handler_Condition when no function!");
 		return;
 	}
 	udi = dbus_g_proxy_get_path (proxy);
-	g_debug ("glibhal: condition '%s'", udi);
+	g_debug ("gpm_hal: condition '%s'", udi);
 	function.device_condition (udi, name, details);
 }
 
@@ -147,16 +139,15 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
  *  @return			If we removed the watch successfully
  */
 static gboolean
-glibhal_watch_add_device_removed (void)
+gpm_hal_watch_add_device_removed (void)
 {
 	DBusGConnection *system_connection;
 	GError *error = NULL;
 
-	/* assertion checks */
 	g_assert (!function.device_removed);
 	g_assert (!reg.device_removed);
 
-	g_debug ("glibhal: DeviceRemoved: Registered");
+	g_debug ("gpm_hal: DeviceRemoved: Registered");
 	reg.device_removed = TRUE;
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
@@ -177,16 +168,15 @@ glibhal_watch_add_device_removed (void)
  *  @return			If we added the watch successfully
  */
 static gboolean
-glibhal_watch_add_device_new_capability (void)
+gpm_hal_watch_add_device_new_capability (void)
 {
 	DBusGConnection *system_connection;
 	GError *error = NULL;
 
-	/* assertion checks */
 	g_assert (!function.device_new_capability);
 	g_assert (!reg.device_new_capability);
 
-	g_debug ("glibhal: NewCapability: Registered");
+	g_debug ("gpm_hal: NewCapability: Registered");
 	reg.device_new_capability = TRUE;
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
@@ -210,7 +200,7 @@ glibhal_watch_add_device_new_capability (void)
  *  @return			If we added the watch successfully
  */
 gboolean
-glibhal_watch_add_device_condition (const gchar *udi)
+gpm_hal_watch_add_device_condition (const gchar *udi)
 {
 	DBusGConnection *system_connection;
 	DBusGProxy *hal_proxy = NULL;
@@ -221,12 +211,12 @@ glibhal_watch_add_device_condition (const gchar *udi)
 	for (a=0;a < proxy.device_condition->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_condition, a);
 		if (strcmp (udi, udiproxy->udi) == 0) {
-			g_warning ("glibhal: Condition: Already registered UDI '%s'!", udi);
+			g_warning ("gpm_hal: Condition: Already registered UDI '%s'!", udi);
 			return FALSE;
 		}
 	}
 
-	g_debug ("glibhal: Condition: Registered UDI '%s'", udi);
+	g_debug ("gpm_hal: Condition: Registered UDI '%s'", udi);
 	reg.device_condition = TRUE;
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
@@ -257,7 +247,7 @@ glibhal_watch_add_device_condition (const gchar *udi)
  *  @return			If we added the watch successfully
  */
 gboolean
-glibhal_watch_add_device_property_modified (const gchar *udi)
+gpm_hal_watch_add_device_property_modified (const gchar *udi)
 {
 	DBusGConnection *system_connection;
 	DBusGProxy *hal_proxy = NULL;
@@ -269,11 +259,11 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
 	for (a=0;a < proxy.device_property_modified->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
 		if (strcmp (udi, udiproxy->udi) == 0) {
-			g_warning ("glibhal: PropertyModified: Already registered UDI '%s'!", udi);
+			g_warning ("gpm_hal: PropertyModified: Already registered UDI '%s'!", udi);
 			return FALSE;
 		}
 	}
-	g_debug ("glibhal: PropertyModified: Registered UDI '%s'", udi);
+	g_debug ("gpm_hal: PropertyModified: Registered UDI '%s'", udi);
 	if (!gpm_dbus_get_system_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
@@ -303,13 +293,13 @@ glibhal_watch_add_device_property_modified (const gchar *udi)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_removed (void)
+gpm_hal_watch_remove_device_removed (void)
 {
 	if (!proxy.device_removed) {
-		g_warning ("glibhal: glibhal_watch_remove_removed when no watch!");
+		g_warning ("gpm_hal: gpm_hal_watch_remove_removed when no watch!");
 		return FALSE;
 	}
-	g_debug ("glibhal: watch remove removed");
+	g_debug ("gpm_hal: watch remove removed");
 	g_object_unref (G_OBJECT (proxy.device_removed));
 	proxy.device_removed = NULL;
 	return TRUE;
@@ -320,13 +310,13 @@ glibhal_watch_remove_device_removed (void)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_added (void)
+gpm_hal_watch_remove_device_added (void)
 {
 	if (!proxy.device_added) {
-		g_warning ("glibhal: glibhal_watch_remove_added when no watch!");
+		g_warning ("gpm_hal: gpm_hal_watch_remove_added when no watch!");
 		return FALSE;
 	}
-	g_debug ("glibhal: watch remove added");
+	g_debug ("gpm_hal: watch remove added");
 	g_object_unref (G_OBJECT (proxy.device_added));
 	proxy.device_added = NULL;
 	return TRUE;
@@ -337,13 +327,13 @@ glibhal_watch_remove_device_added (void)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_new_capability (void)
+gpm_hal_watch_remove_device_new_capability (void)
 {
 	if (!proxy.device_new_capability) {
-		g_warning ("glibhal: glibhal_watch_remove_new_capability when no watch!");
+		g_warning ("gpm_hal: gpm_hal_watch_remove_new_capability when no watch!");
 		return FALSE;
 	}
-	g_debug ("glibhal: watch remove new_capability");
+	g_debug ("gpm_hal: watch remove new_capability");
 	g_object_unref (G_OBJECT (proxy.device_new_capability));
 	proxy.device_new_capability = NULL;
 	return TRUE;
@@ -354,13 +344,13 @@ glibhal_watch_remove_device_new_capability (void)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_lost_capability (void)
+gpm_hal_watch_remove_device_lost_capability (void)
 {
 	if (!proxy.device_lost_capability) {
-		g_warning ("glibhal: glibhal_watch_remove_lost_capability when no watch!");
+		g_warning ("gpm_hal: gpm_hal_watch_remove_lost_capability when no watch!");
 		return FALSE;
 	}
-	g_debug ("glibhal: watch remove lost_capability");
+	g_debug ("gpm_hal: watch remove lost_capability");
 	g_object_unref (G_OBJECT (proxy.device_lost_capability));
 	proxy.device_lost_capability = NULL;
 	return TRUE;
@@ -372,7 +362,7 @@ glibhal_watch_remove_device_lost_capability (void)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_property_modified (const gchar *udi)
+gpm_hal_watch_remove_device_property_modified (const gchar *udi)
 {
 	int a;
 	UdiProxy *udiproxy = NULL;
@@ -382,11 +372,11 @@ glibhal_watch_remove_device_property_modified (const gchar *udi)
 			break;
 	}
 	if (a == proxy.device_property_modified->len || !udiproxy) {
-		g_warning ("glibhal: glibhal_watch_remove_property_modified when no watch on '%s'!", udi);
+		g_warning ("gpm_hal: gpm_hal_watch_remove_property_modified when no watch on '%s'!", udi);
 		return FALSE;
 	}
 
-	g_debug ("glibhal: watch remove property_modified on '%s'", udi);
+	g_debug ("gpm_hal: watch remove property_modified on '%s'", udi);
 	g_object_unref (G_OBJECT (udiproxy->proxy));
 	g_ptr_array_remove_fast (proxy.device_property_modified, (gpointer) udiproxy);
 	g_free (udiproxy);
@@ -400,7 +390,7 @@ glibhal_watch_remove_device_property_modified (const gchar *udi)
  *  @return			If we handled the watch callback okay
  */
 gboolean
-glibhal_watch_remove_device_condition (const gchar *udi)
+gpm_hal_watch_remove_device_condition (const gchar *udi)
 {
 	int a;
 	UdiProxy *udiproxy = NULL;
@@ -410,11 +400,11 @@ glibhal_watch_remove_device_condition (const gchar *udi)
 			break;
 	}
 	if (a == proxy.device_condition->len || !udiproxy) {
-		g_warning ("glibhal: glibhal_watch_remove_condition when no watch on '%s'!", udi);
+		g_warning ("gpm_hal: gpm_hal_watch_remove_condition when no watch on '%s'!", udi);
 		return FALSE;
 	}
 
-	g_debug ("glibhal: watch remove condition on '%s'", udi);
+	g_debug ("gpm_hal: watch remove condition on '%s'", udi);
 	g_object_unref (G_OBJECT (udiproxy->proxy));
 	g_ptr_array_remove_fast (proxy.device_condition, (gpointer) udiproxy);
 	g_free (udiproxy);
@@ -427,10 +417,10 @@ glibhal_watch_remove_device_condition (const gchar *udi)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_removed (HalDeviceRemoved callback)
+gpm_hal_method_device_removed (HalDeviceRemoved callback)
 {
 	if (!reg.device_removed)
-		glibhal_watch_add_device_removed ();
+		gpm_hal_watch_add_device_removed ();
 	function.device_removed = callback;
 	return TRUE;
 }
@@ -440,7 +430,7 @@ glibhal_method_device_removed (HalDeviceRemoved callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_added (HalDeviceAdded callback)
+gpm_hal_method_device_added (HalDeviceAdded callback)
 {
 	function.device_added = callback;
 	return TRUE;
@@ -451,10 +441,10 @@ glibhal_method_device_added (HalDeviceAdded callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_new_capability (HalDeviceNewCapability callback)
+gpm_hal_method_device_new_capability (HalDeviceNewCapability callback)
 {
 	if (!reg.device_new_capability)
-		glibhal_watch_add_device_new_capability ();
+		gpm_hal_watch_add_device_new_capability ();
 	function.device_new_capability = callback;
 	return TRUE;
 }
@@ -464,7 +454,7 @@ glibhal_method_device_new_capability (HalDeviceNewCapability callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
+gpm_hal_method_device_lost_capability (HalDeviceLostCapability callback)
 {
 	function.device_lost_capability = callback;
 	return TRUE;
@@ -475,9 +465,9 @@ glibhal_method_device_lost_capability (HalDeviceLostCapability callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_property_modified (HalDevicePropertyModified callback)
+gpm_hal_method_device_property_modified (HalDevicePropertyModified callback)
 {
-	g_debug ("glibhal: PropertyModified: Registered");
+	g_debug ("gpm_hal: PropertyModified: Registered");
 	function.device_property_modified = callback;
 	return TRUE;
 }
@@ -487,21 +477,21 @@ glibhal_method_device_property_modified (HalDevicePropertyModified callback)
  *  @return			If we assigned the callback okay
  */
 gboolean
-glibhal_method_device_condition (HalDeviceCondition callback)
+gpm_hal_method_device_condition (HalDeviceCondition callback)
 {
-	g_debug ("glibhal: Condition: Registered");
+	g_debug ("gpm_hal: Condition: Registered");
 	function.device_condition = callback;
 	return TRUE;
 }
 
-/** Initialise glibhal callback support
+/** Initialise callback support
  *
- *  @return			If we initialised glibhal callbacks okay
+ *  @return			If we initialised callbacks okay
  */
 gboolean
-glibhal_callback_init (void)
+gpm_hal_callback_init (void)
 {
-	g_debug ("glibhal_callback: init");
+	g_debug ("gpm_hal_callback: init");
 	function.device_added = NULL;
 	function.device_removed = NULL;
 	function.device_new_capability = NULL;
@@ -527,34 +517,34 @@ glibhal_callback_init (void)
 	return TRUE;
 }
 
-/** Shutdown glibhal callback support, freeing memory
+/** Shutdown callback support, freeing memory
  *
- *  @return			If we shutdown glibhal callbacks okay
+ *  @return			If we shutdown callbacks okay
  */
 gboolean
-glibhal_callback_shutdown (void)
+gpm_hal_callback_shutdown (void)
 {
 	int a;
 	UdiProxy *udiproxy;
 
-	g_debug ("glibhal: shutdown");
+	g_debug ("gpm_hal: shutdown");
 	if (proxy.device_added)
-		glibhal_watch_remove_device_added ();
+		gpm_hal_watch_remove_device_added ();
 	if (proxy.device_removed)
-		glibhal_watch_remove_device_removed ();
+		gpm_hal_watch_remove_device_removed ();
 	if (proxy.device_new_capability)
-		glibhal_watch_remove_device_new_capability ();
+		gpm_hal_watch_remove_device_new_capability ();
 	if (proxy.device_lost_capability)
-		glibhal_watch_remove_device_lost_capability ();
+		gpm_hal_watch_remove_device_lost_capability ();
 
 	/* array types */
 	for (a=0;a < proxy.device_condition->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_condition, a);
-		glibhal_watch_remove_device_condition (udiproxy->udi);
+		gpm_hal_watch_remove_device_condition (udiproxy->udi);
 	}
 	for (a=0;a < proxy.device_property_modified->len;a++) {
 		udiproxy = g_ptr_array_index (proxy.device_property_modified, a);
-		glibhal_watch_remove_device_property_modified (udiproxy->udi);
+		gpm_hal_watch_remove_device_property_modified (udiproxy->udi);
 	}
 	g_ptr_array_free (proxy.device_condition, TRUE);
 	g_ptr_array_free (proxy.device_property_modified, TRUE);

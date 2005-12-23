@@ -33,6 +33,12 @@
 	src/gpm-hal.c, src/gpm-main.c: Define the HAL_DBUS_* constants and
 	use them in preference to hardcoding each name.
 
+	* src/glibhal-main.{c|h}: Merge the remainder of these functions into
+	gpm-hal.{c|h} and prefix the functions with gpm_ for clarity.
+
+	* src/glibhal-callback.{c|h}: Move these functions into
+	gpm-hal-callback.{c|h} and prefix the functions with gpm_ for clarity.
+
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable

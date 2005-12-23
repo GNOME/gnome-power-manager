@@ -40,7 +40,6 @@
 #include <gconf/gconf-client.h>
 
 #include "gpm-dbus-common.h"
-#include "glibhal-main.h"
 #include "gpm-screensaver.h"
 
 /** Sets the DPMS timeout to a known value

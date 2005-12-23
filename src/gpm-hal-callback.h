@@ -1,4 +1,4 @@
-/** @file	glibhal-callback.h
+/** @file	gpm-hal-callback.h
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -22,12 +22,12 @@
  * 02110-1301, USA.
  */
 /**
- * @addtogroup	glibhal
+ * @addtogroup	hal
  * @{
  */
 
-#ifndef _GLIBHALCALLBACK_H
-#define _GLIBHALCALLBACK_H
+#ifndef _GPMHALCALLBACK_H
+#define _GPMHALCALLBACK_H
 
 #include <dbus/dbus-glib.h>
 
@@ -75,25 +75,25 @@ typedef struct {
 	DBusGProxy			*proxy;
 } UdiProxy;
 
-gboolean glibhal_callback_init (void);
-gboolean glibhal_callback_shutdown (void);
+gboolean gpm_hal_callback_init (void);
+gboolean gpm_hal_callback_shutdown (void);
 
-gboolean glibhal_method_device_removed (HalDeviceRemoved callback);
-gboolean glibhal_method_device_added (HalDeviceAdded callback);
-gboolean glibhal_method_device_new_capability (HalDeviceNewCapability callback);
-gboolean glibhal_method_device_lost_capability (HalDeviceLostCapability callback);
-gboolean glibhal_method_device_property_modified (HalDevicePropertyModified callback);
-gboolean glibhal_method_device_condition (HalDeviceCondition callback);
+gboolean gpm_hal_method_device_removed (HalDeviceRemoved callback);
+gboolean gpm_hal_method_device_added (HalDeviceAdded callback);
+gboolean gpm_hal_method_device_new_capability (HalDeviceNewCapability callback);
+gboolean gpm_hal_method_device_lost_capability (HalDeviceLostCapability callback);
+gboolean gpm_hal_method_device_property_modified (HalDevicePropertyModified callback);
+gboolean gpm_hal_method_device_condition (HalDeviceCondition callback);
 
-gboolean glibhal_watch_add_device_property_modified (const gchar *udi);
-gboolean glibhal_watch_add_device_condition (const gchar *udi);
+gboolean gpm_hal_watch_add_device_property_modified (const gchar *udi);
+gboolean gpm_hal_watch_add_device_condition (const gchar *udi);
 
-gboolean glibhal_watch_remove_device_removed ();
-gboolean glibhal_watch_remove_device_added ();
-gboolean glibhal_watch_remove_device_new_capability ();
-gboolean glibhal_watch_remove_device_lost_capability ();
-gboolean glibhal_watch_remove_device_property_modified (const gchar *udi);
-gboolean glibhal_watch_remove_device_condition (const gchar *udi);
+gboolean gpm_hal_watch_remove_device_removed ();
+gboolean gpm_hal_watch_remove_device_added ();
+gboolean gpm_hal_watch_remove_device_new_capability ();
+gboolean gpm_hal_watch_remove_device_lost_capability ();
+gboolean gpm_hal_watch_remove_device_property_modified (const gchar *udi);
+gboolean gpm_hal_watch_remove_device_condition (const gchar *udi);
 
-#endif	/* _GLIBHALCALLBACK_H */
+#endif	/* _GPMHALCALLBACK_H */
 /** @} */

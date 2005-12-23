@@ -38,8 +38,7 @@
 #include "gpm-core.h"
 #include "gpm-sysdev.h"
 #include "gpm-hal.h"
-#include "glibhal-main.h"
-#include "glibhal-callback.h"
+#include "gpm-hal-callback.h"
 
 /* no need for IPC with globals */
 gboolean onAcPower;
@@ -55,18 +54,18 @@ gpm_coldplug_acadapter (void)
 	gchar **device_names = NULL;
 
 	/* devices of type ac_adapter */
-	hal_find_device_capability ("ac_adapter", &device_names);
+	gpm_hal_find_device_capability ("ac_adapter", &device_names);
 	if (!device_names) {
 		g_debug ("Couldn't obtain list of ac_adapters");
 		return FALSE;
 	}
 	for (i = 0; device_names[i]; i++) {
 		/* assume only one */
-		hal_device_get_bool (device_names[i], "ac_adapter.present", &onAcPower);
-		glibhal_watch_add_device_property_modified (device_names[i]);
+		gpm_hal_device_get_bool (device_names[i], "ac_adapter.present", &onAcPower);
+		gpm_hal_watch_add_device_property_modified (device_names[i]);
 
 	}
-	hal_free_capability (device_names);
+	gpm_hal_free_capability (device_names);
 	return TRUE;
 }
 
@@ -80,7 +79,7 @@ gpm_coldplug_buttons (void)
 	gint i;
 	gchar **device_names = NULL;
 	/* devices of type button */
-	hal_find_device_capability ("button", &device_names);
+	gpm_hal_find_device_capability ("button", &device_names);
 	if (!device_names) {
 		g_debug ("Couldn't obtain list of buttons");
 		return FALSE;
@@ -90,9 +89,9 @@ gpm_coldplug_buttons (void)
 		 * We register this here, as buttons are not present
 		 * in object data, and do not need to be added manually.
 		*/
-		glibhal_watch_add_device_condition (device_names[i]);
+		gpm_hal_watch_add_device_condition (device_names[i]);
 	}
-	hal_free_capability (device_names);
+	gpm_hal_free_capability (device_names);
 	return TRUE;
 }
 
@@ -106,14 +105,14 @@ gpm_coldplug_batteries (void)
 	gint i;
 	gchar **device_names = NULL;
 	/* devices of type battery */
-	hal_find_device_capability ("battery", &device_names);
+	gpm_hal_find_device_capability ("battery", &device_names);
 	if (!device_names) {
 		g_debug ("Couldn't obtain list of batteries");
 		return FALSE;
 	}
 	for (i = 0; device_names[i]; i++)
 		gpm_add_battery (device_names[i]);
-	hal_free_capability (device_names);
+	gpm_hal_free_capability (device_names);
 	return TRUE;
 }
 
@@ -137,10 +136,10 @@ gpm_add_battery (const gchar *udi)
 	strncpy (sds->udi, udi, 128);
 
 	/* batteries might be missing */
-	hal_device_get_bool (udi, "battery.present", &sds->isPresent);
+	gpm_hal_device_get_bool (udi, "battery.present", &sds->isPresent);
 
 	/* battery is refined using the .type property */
-	hal_device_get_string (udi, "battery.type", &type);
+	gpm_hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
 		g_warning ("Battery %s has no type!", udi);
 		return FALSE;
@@ -153,7 +152,7 @@ gpm_add_battery (const gchar *udi)
 	sysDevAdd (dev, sds);
 
 	/* register this with HAL so we get PropertyModified events */
-	glibhal_watch_add_device_property_modified (udi);
+	gpm_hal_watch_add_device_property_modified (udi);
 
 	/* read in values */
 	gpm_read_battery_data (sds);
@@ -191,17 +190,17 @@ gpm_read_battery_data (sysDevStruct *sds)
 	}
 
 	/* battery might not be rechargeable, have to check */
-	hal_device_get_bool (sds->udi, "battery.is_rechargeable",
+	gpm_hal_device_get_bool (sds->udi, "battery.is_rechargeable",
 			     &sds->isRechargeable);
 	if (sds->isRechargeable) {
-		hal_device_get_bool (sds->udi, "battery.rechargeable.is_charging",
+		gpm_hal_device_get_bool (sds->udi, "battery.rechargeable.is_charging",
 				     &sds->isCharging);
-		hal_device_get_bool (sds->udi, "battery.rechargeable.is_discharging",
+		gpm_hal_device_get_bool (sds->udi, "battery.rechargeable.is_discharging",
 				     &sds->isDischarging);
 	}
 
 	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (sds->udi,
+	is_present = gpm_hal_device_get_int (sds->udi,
 			"battery.remaining_time", &seconds_remaining);
 	if (!is_present && (sds->isDischarging || sds->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's "
@@ -213,7 +212,7 @@ gpm_read_battery_data (sysDevStruct *sds)
 	}
 
 	/* sanity check that remaining time exists (if it should) */
-	is_present = hal_device_get_int (sds->udi, "battery.charge_level.percentage",
+	is_present = gpm_hal_device_get_int (sds->udi, "battery.charge_level.percentage",
 					 &sds->percentageCharge);
 	if (!is_present && (sds->isDischarging || sds->isCharging)) {
 		g_warning ("GNOME Power Manager could not read your battery's "
@@ -252,7 +251,7 @@ gpm_device_removed (const gchar *udi)
 		ret = TRUE;
 	}
 	/* remove watch */
-	glibhal_watch_remove_device_property_modified (udi);
+	gpm_hal_watch_remove_device_property_modified (udi);
 	return ret;
 }
 
