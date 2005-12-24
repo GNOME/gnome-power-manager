@@ -29,23 +29,19 @@
 #ifndef _GPM_SCREENSAVER_H
 #define _GPM_SCREENSAVER_H
 
-#define GS_LISTENER_SERVICE	"org.gnome.screensaver"
-#define GS_LISTENER_PATH	"/org/gnome/screensaver"
-#define GS_LISTENER_INTERFACE	"org.gnome.screensaver"
-
 #define GS_PREF_DIR		"/apps/gnome-screensaver"
 #define GS_PREF_DPMS_SUSPEND	GS_PREF_DIR "/dpms_suspend"
 #define GS_PREF_DPMS_ENABLED	GS_PREF_DIR "/dpms_enabled"
-#define GS_PREF_LOCK		GS_PREF_DIR "/lock"
+#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
 
 gboolean gpm_screensaver_lock (void);
-gboolean gpm_screensaver_lock_check (void);
-gboolean gpm_screensaver_set_throttle (gboolean throttle);
+gboolean gpm_screensaver_lock_enabled (void);
+gboolean gpm_screensaver_enable_throttle (gboolean enable);
 gboolean gpm_screensaver_is_running (void);
 gboolean gpm_screensaver_poke (void);
 gboolean gpm_screensaver_get_idle (gint *time);
 gboolean gpm_screensaver_set_dpms_timeout (gint timeout);
-gboolean gpm_screensaver_set_dpms (gboolean state);
+gboolean gpm_screensaver_enable_dpms (gboolean enable);
 
 #endif	/* _GPMSCREENSAVER_H */
 /** @} */

@@ -42,6 +42,10 @@
 #include "gpm-dbus-common.h"
 #include "gpm-screensaver.h"
 
+#define GS_LISTENER_SERVICE	"org.gnome.screensaver"
+#define GS_LISTENER_PATH	"/org/gnome/screensaver"
+#define GS_LISTENER_INTERFACE	"org.gnome.screensaver"
+
 /** Sets the DPMS timeout to a known value
  *
  *  @param	timeout		Timeout in minutes
@@ -73,7 +77,7 @@ gpm_screensaver_lock_check (void)
 	GConfClient *client = gconf_client_get_default ();
 	gboolean should_lock;
 
-	should_lock = gconf_client_get_bool (client, GS_PREF_LOCK, NULL);
+	should_lock = gconf_client_get_bool (client, GS_PREF_LOCK_ENABLED, NULL);
 	if (!should_lock)
 		return FALSE;
 	gpm_screensaver_lock ();
@@ -111,18 +115,18 @@ gpm_screensaver_is_running (void)
 
 /** Sets the throttle for gnome-screensaver
  *
- *  @param	throttle	If we should disable CPU hungry screensavers
+ *  @param	enable		If we should disable CPU hungry screensavers
  *  @return			TRUE if gnome-screensaver changed its status.
  */
 gboolean
-gpm_screensaver_set_throttle (gboolean throttle)
+gpm_screensaver_enable_throttle (gboolean enable)
 {
 	GError *error = NULL;
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
 
-	g_debug ("gnome-screensaver setThrottleEnabled : %i", throttle);
+	g_debug ("gnome-screensaver setThrottleEnabled : %i", enable);
 	if (!gpm_dbus_get_session_connection (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -130,7 +134,7 @@ gpm_screensaver_set_throttle (gboolean throttle)
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
 	if (!dbus_g_proxy_call (gs_proxy, "setThrottleEnabled", &error,
-				G_TYPE_BOOLEAN, throttle, G_TYPE_INVALID,
+				G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 				G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
 		g_debug ("gnome-screensaver service is not running.");
@@ -193,13 +197,13 @@ gpm_screensaver_poke (void)
  *  @return			TRUE if gnome-screensaver was successful.
  */
 gboolean
-gpm_screensaver_set_dpms (gboolean state)
+gpm_screensaver_enable_dpms (gboolean enable)
 {
 /*	** This hack will be removed when DPMS DBUS support is added to g-s **/
 	gchar *command = NULL;
-	g_debug ("Setting the DPMS setting to %i", state);
+	g_debug ("Setting the DPMS setting to %i", enable);
 
-	if (state) {
+	if (enable) {
 		/* force dpms on */
 		command = "xset dpms force on";
 		if (!g_spawn_command_line_async (command, NULL)) {
