@@ -56,27 +56,49 @@ gpm_prefs_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, c
 gint
 get_battery_time_for_percentage (gint value)
 {
-	/**	@bug	Need to use HAL to get battery name */
-	gchar *udi = "/org/freedesktop/Hal/devices/acpi_BAT1";
+	/**	@bug	This is inherently buggy. Multibattery laptops break. */
+	gchar **device_names = NULL;
+	gchar *udi = NULL;
+	gint i;
 	gint percentage;
 	gint time;
 	gboolean discharging;
+	gint ret = 0;
 
-	gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging", &discharging);
-
-	/* rate information is useless when charging */
-	if (!discharging)
+	gpm_hal_find_device_capability ("battery", &device_names);
+	if (!device_names) {
+		g_debug ("Couldn't obtain list of batteries");
 		return 0;
+	}
+	for (i = 0; device_names[i]; i++) {
+		/* assume only one */
+		gchar *type;
+		gpm_hal_device_get_string (device_names[i], "battery.type", &type);
+		if (type && strcmp (type, "primary") == 0) {
+			udi = device_names[i];
+			break;
+		}
+		g_free (type);
+	}
 
-	/* get values. if they are wrong, return 0 */
+	/* no battery found */
+	if (!udi)
+		return 0;
+	g_debug ("Using battery %s for estimate.", udi);
+	/*
+	 * if no device then cannot compute and also rate information
+	 * is useless when charging
+	 */
+	gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging", &discharging);
 	gpm_hal_device_get_int (udi, "battery.charge_level.percentage", &percentage);
 	gpm_hal_device_get_int (udi, "battery.remaining_time", &time);
-
-	if (time > 0 && percentage > 0) {
+	if (discharging && time > 0 && percentage > 0) {
 		time = time / 60;
-		return (value * ((double) time / (double) percentage));
+		ret = value * ((double) time / (double) percentage);
 	}
-	return 0;
+
+	gpm_hal_free_capability (device_names);
+	return ret;
 }
 
 static void
