@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-18 18:18+0000\n"
+"POT-Creation-Date: 2005-12-24 00:30+0000\n"
 "PO-Revision-Date: 2005-12-05 18:37+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -29,74 +29,78 @@ msgid "If we require a password when resuming from suspend"
 msgstr "从挂起状态恢复时是否需要密码"
 
 #: ../gnome-power-manager.schemas.in.h:2
+msgid "If we should notify the user that the ac_adapter is removed"
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "选项为 never、critical、charge、always"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
 msgstr "当电池电量即将用尽时执行的动作。"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "接入交流电源时设定的显示亮度"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
 msgstr "使用电池时设定的显示亮度"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "笔记本上盖关闭的事件"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "按下系统待机按钮的事件"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "计算机试图转入休眠时等待时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "显示器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "硬盘驱动器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "电源设备动作阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "电源设备警告阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "自动使用休眠还是待机。"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "是否显示通知图标"
 
-#: ../src/eggtrayicon.c:127
+#: ../src/eggtrayicon.c:132
 msgid "Orientation"
 msgstr "方向"
 
-#: ../src/eggtrayicon.c:128
+#: ../src/eggtrayicon.c:133
 msgid "The orientation of the tray."
 msgstr "托盘的方向。"
 
@@ -134,7 +138,7 @@ msgid_plural "minutes"
 msgstr[0] "分钟"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:708
 msgid "GNOME Power Manager"
 msgstr "GNOME 电源管理器"
 
@@ -142,15 +146,15 @@ msgstr "GNOME 电源管理器"
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的电源管理器"
 
-#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
+#: ../src/gpm-console.c:342 ../src/gpm-main.c:691
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
+#: ../src/gpm-console.c:344 ../src/gpm-main.c:693 ../src/gpm-prefs.c:567
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
-#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
+#: ../src/gpm-main.c:355 ../src/gpm-main.c:374
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -158,63 +162,63 @@ msgid ""
 msgstr ""
 "电量大约可维持 <b>%s</b>，为总电量的 %i%%。请接入交流电源以避免丢失数据。"
 
-#: ../src/gpm-main.c:357
+#: ../src/gpm-main.c:359
 msgid "Battery Critically Low"
 msgstr "电量即将用尽"
 
-#: ../src/gpm-main.c:375
+#: ../src/gpm-main.c:377
 msgid "Battery Low"
 msgstr "电量低"
 
-#: ../src/gpm-main.c:417
+#: ../src/gpm-main.c:423
 msgid "AC Power Unplugged"
 msgstr "交流电已拔出"
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:424
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "交流电已经拔出。系统现在将使用电池供电。"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Battery Charged"
 msgstr "电池已充满"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Your battery is now fully charged"
 msgstr "您的电池已经充满电"
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "正充电"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "正放电"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "已充电"
 
-#: ../src/gpm-notification.c:236
+#: ../src/gpm-notification.c:239
 msgid "until charged"
 msgstr "至充满"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr "直到空"
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 msgid "Computer is running on battery power\n"
 msgstr "计算机正在使用电池供电\n"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 msgid "Computer is running on AC power\n"
 msgstr "计算机正在使用交流电源供电\n"
 
-#: ../src/gpm-notification.c:338
+#: ../src/gpm-notification.c:341
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-notification.c:339
+#: ../src/gpm-notification.c:342
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -222,7 +226,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:343
+#: ../src/gpm-notification.c:346
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -230,7 +234,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:347
+#: ../src/gpm-notification.c:350
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -238,50 +242,51 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#. Translators comment: put your own name here to appear in the
-#. * about dialog.
-#: ../src/gpm-notification.c:360
+#.
+#. * Translators comment: put your own name here to appear in the about dialog.
+#.
+#: ../src/gpm-notification.c:364
 msgid "translator-credits"
 msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
 
-#: ../src/gpm-notification.c:484
+#: ../src/gpm-notification.c:489
 msgid "_Suspend"
 msgstr "挂起(_S)"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:494
 msgid "Hi_bernate"
 msgstr "休眠(_B)"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:499
 msgid "_Preferences"
 msgstr "首选项(_P)"
 
-#: ../src/gpm-notification.c:496
+#: ../src/gpm-notification.c:501
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/gpm-notification.c:498
+#: ../src/gpm-notification.c:503
 msgid "_About"
 msgstr "关于(_A)"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:43
 msgid "Suspend"
 msgstr "挂起"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:44
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:45
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:46
 msgid "Do nothing"
 msgstr "无反应"
 
-#: ../src/gpm-prefs.c:137
+#: ../src/gpm-prefs.c:139
 msgid "Never"
 msgstr ""
 
@@ -290,7 +295,7 @@ msgstr ""
 msgid "<b>Configuration</b>"
 msgstr "<b>通知区域</b>"
 
-#: ../src/gpm-prefs.c:576
+#: ../src/gpm-prefs.c:580
 msgid "GNOME Power Preferences"
 msgstr "GNOME 电源首选项"
 

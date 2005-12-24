@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-18 18:18+0000\n"
+"POT-Creation-Date: 2005-12-24 00:30+0000\n"
 "PO-Revision-Date: 2005-12-17 15:54+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
@@ -30,74 +30,78 @@ msgid "If we require a password when resuming from suspend"
 msgstr "กำหนดว่าต้องการรหัสผ่านเมื่อกลับจากการพักเครื่องหรือไม่"
 
 #: ../gnome-power-manager.schemas.in.h:2
+msgid "If we should notify the user that the ac_adapter is removed"
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "ตัวเลือกคือ never, critical, charge, always"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
 msgstr "ปฏิบัติการเมื่อแบตเตอรีต่ำถึงขีดวิกฤต"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "ความสว่างของจอภาพขณะใช้ไฟ AC"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
 msgstr "ความสว่างของจอภาพขณะใช้แบตเตอรี"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "เหตุการณ์เพื่อพับเก็บโน้ตบุ๊ก"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "เหตุการณ์เมื่อกดปุ่มพักเครื่อง"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "ช่วงเวลาเดินเครื่องเปล่าเป็นวินาที ก่อนที่คอมพิวเตอร์จะหลับ"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "ช่วงเวลาเดินเครื่องเปล่าเป็นวินาที ก่อนที่จอภาพจะหลับ"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "ช่วงเวลาเดินเครื่องเปล่าเป็นวินาที ก่อนที่ฮาร์ดดิสก์จะหลับ"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr "เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานจะเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเริ่มปฏิบัติการบางอย่าง"
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr "เปอร์เซ็นต์พลังงานที่อุปกรณ์จ่ายพลังงานเริ่มถือว่า \"ต่ำแล้ว\" เพื่อเตือนผู้ใช้"
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "ขีดเริ่มปฏิบัติการของอุปกรณ์จ่ายพลังงาน"
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "ขีดเริ่มเตือนของอุปกรณ์จ่ายพลังงาน"
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "ชนิดของการหลับ (hibernate/suspend) ที่จะใช้โดยอัตโนมัติ"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "เมื่อไรจะแสดงไอคอนแจ้งเหตุ"
 
-#: ../src/eggtrayicon.c:127
+#: ../src/eggtrayicon.c:132
 msgid "Orientation"
 msgstr "แนววาง"
 
-#: ../src/eggtrayicon.c:128
+#: ../src/eggtrayicon.c:133
 msgid "The orientation of the tray."
 msgstr "แนววางของถาด"
 
@@ -139,7 +143,7 @@ msgstr[0] "นาที"
 msgstr[1] "นาที"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:708
 msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
@@ -147,15 +151,15 @@ msgstr "โปรแกรมจัดการการใช้พลังง
 msgid "Power Manager for the GNOME desktop"
 msgstr "โปรแกรมจัดการการใช้พลังงานสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
+#: ../src/gpm-console.c:342 ../src/gpm-main.c:691
 msgid "Do not daemonize"
 msgstr "ไม่ต้องแปลงเป็นดีมอน"
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
+#: ../src/gpm-console.c:344 ../src/gpm-main.c:693 ../src/gpm-prefs.c:567
 msgid "Show extra debugging information"
 msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติม"
 
-#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
+#: ../src/gpm-main.c:355 ../src/gpm-main.c:374
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -164,63 +168,63 @@ msgstr ""
 "คุณเหลือพลังงานในแบตเตอรีอีกประมาณ <b>%s</b> (%i%%) กรุณาเสียบที่แปลงไฟ AC "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-main.c:357
+#: ../src/gpm-main.c:359
 msgid "Battery Critically Low"
 msgstr "แบตเตอรีต่ำถึงขั้นวิกฤต"
 
-#: ../src/gpm-main.c:375
+#: ../src/gpm-main.c:377
 msgid "Battery Low"
 msgstr "แบตเตอรีต่ำ"
 
-#: ../src/gpm-main.c:417
+#: ../src/gpm-main.c:423
 msgid "AC Power Unplugged"
 msgstr "ปลั๊กไฟ AC ถูกถอด"
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:424
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Battery Charged"
 msgstr "อัดแบตเตอรีเสร็จแล้ว"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Your battery is now fully charged"
 msgstr "แบตเตอรีของคุณอัดไฟเต็มแล้ว"
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "กำลังอัดไฟ"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "กำลังจ่ายไฟ"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "อัดไฟเต็ม"
 
-#: ../src/gpm-notification.c:236
+#: ../src/gpm-notification.c:239
 msgid "until charged"
 msgstr "จะอัดเต็ม"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr "จะหมด"
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 msgid "Computer is running on battery power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากแบตเตอรี\n"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 msgid "Computer is running on AC power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากปลั๊กไฟ AC\n"
 
-#: ../src/gpm-notification.c:338
+#: ../src/gpm-notification.c:341
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "อนุญาตภายใต้เงื่อนไข GNU General Public License รุ่นที่ 2"
 
-#: ../src/gpm-notification.c:339
+#: ../src/gpm-notification.c:342
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -232,7 +236,7 @@ msgstr ""
 "ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา\n"
 "(ตามแต่คุณจะเลือก)"
 
-#: ../src/gpm-notification.c:343
+#: ../src/gpm-notification.c:346
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -244,7 +248,7 @@ msgstr ""
 "***อรรถประโยชน์เชิงพาณิชย์*** หรือ ***ความเหมาะสมสำหรับวัตถุประสงค์\n"
 "เฉพาะกิจใดๆ*** กรุณาอ่าน GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: ../src/gpm-notification.c:347
+#: ../src/gpm-notification.c:350
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -255,50 +259,51 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc.,\n"
 "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#. Translators comment: put your own name here to appear in the
-#. * about dialog.
-#: ../src/gpm-notification.c:360
+#.
+#. * Translators comment: put your own name here to appear in the about dialog.
+#.
+#: ../src/gpm-notification.c:364
 msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
-#: ../src/gpm-notification.c:484
+#: ../src/gpm-notification.c:489
 msgid "_Suspend"
 msgstr "_พักเครื่อง"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:494
 msgid "Hi_bernate"
 msgstr "_จำศีลเครื่อง"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:499
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
-#: ../src/gpm-notification.c:496
+#: ../src/gpm-notification.c:501
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/gpm-notification.c:498
+#: ../src/gpm-notification.c:503
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:43
 msgid "Suspend"
 msgstr "พักเครื่อง"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:44
 msgid "Shutdown"
 msgstr "ปิดเครื่อง"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:45
 msgid "Hibernate"
 msgstr "จำศีลเครื่อง"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:46
 msgid "Do nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: ../src/gpm-prefs.c:137
+#: ../src/gpm-prefs.c:139
 msgid "Never"
 msgstr "ไม่ต้อง"
 
@@ -306,7 +311,7 @@ msgstr "ไม่ต้อง"
 msgid "<b>Configuration</b>"
 msgstr "<b>การตั้งค่า</b>"
 
-#: ../src/gpm-prefs.c:576
+#: ../src/gpm-prefs.c:580
 msgid "GNOME Power Preferences"
 msgstr "ปรับแต่งโปรแกรมจัดการพลังงานของ GNOME"
 

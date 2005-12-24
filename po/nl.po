@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-18 18:18+0000\n"
+"POT-Creation-Date: 2005-12-24 00:30+0000\n"
 "PO-Revision-Date: 2005-07-15 10:24+0100\n"
 "Last-Translator: Theetjuh <theetjuh@gmail.com>\n"
 "Language-Team: Dutch\n"
@@ -30,42 +30,46 @@ msgid "If we require a password when resuming from suspend"
 msgstr ""
 
 #: ../gnome-power-manager.schemas.in.h:2
+msgid "If we should notify the user that the ac_adapter is removed"
+msgstr ""
+
+#: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "Opties zijn nooit, kritisch, opladen, altijd"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
 msgstr "De actie om te nemen wanneer de batterij kritisch laag is."
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "De helderheid het scherm krijgt wanneer er netspanning is"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
 msgstr "De helderheid het scherm krijgt wanneer de batterij wordt gebruikt"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "De gebeurtenis voor een laptopscherm sluiting"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "De gebeurtenis voor het indrukken van de suspend knop"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "De nutteloze tijd in seconden vóór de computer probeert te slapen"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "De nutteloze tijd in seconden vóór het scherm probeert te slapen"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "De nutteloze tijd in seconden vóór de hardeschijf probeert te slapen"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -73,7 +77,7 @@ msgstr ""
 "Het percentage dat het stroom apparaat moet krijgen om overwogen \"laag "
 "genoeg\" te worden een pictogram te laten zien."
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -81,29 +85,29 @@ msgstr ""
 "Het percentage dat het stroom apparaat moet krijgen om overwogen \"laag "
 "genoeg\" te worden een pictogram te laten zien."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "De drempel van de stroomapparaat aktie."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "De drempel van de stroomapparaat waarschuwing."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "Het slaap type (slaapstand/opschorten) dat automatisch gebruikt dient te "
 "worden"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "Wanneer het berichten pictogram te laten zien"
 
-#: ../src/eggtrayicon.c:127
+#: ../src/eggtrayicon.c:132
 msgid "Orientation"
 msgstr "Richtlijn"
 
-#: ../src/eggtrayicon.c:128
+#: ../src/eggtrayicon.c:133
 msgid "The orientation of the tray."
 msgstr "De richtlijn van de taakbalk."
 
@@ -147,7 +151,7 @@ msgstr[0] "1 minuut"
 msgstr[1] "1 minuut"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:685
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:708
 msgid "GNOME Power Manager"
 msgstr "GNOME Power Manager"
 
@@ -155,15 +159,15 @@ msgstr "GNOME Power Manager"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Stroombeheer voor de GNOME desktop"
 
-#: ../src/gpm-console.c:306 ../src/gpm-main.c:668
+#: ../src/gpm-console.c:342 ../src/gpm-main.c:691
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-console.c:308 ../src/gpm-main.c:670 ../src/gpm-prefs.c:563
+#: ../src/gpm-console.c:344 ../src/gpm-main.c:693 ../src/gpm-prefs.c:567
 msgid "Show extra debugging information"
 msgstr ""
 
-#: ../src/gpm-main.c:353 ../src/gpm-main.c:372
+#: ../src/gpm-main.c:355 ../src/gpm-main.c:374
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -172,64 +176,64 @@ msgstr ""
 "U heeft ongeveer <b>%s</b> resterende batterijleven (%i%%). Sluit u "
 "netspanning adapter aan om data verlies te vermijden."
 
-#: ../src/gpm-main.c:357
+#: ../src/gpm-main.c:359
 #, fuzzy
 msgid "Battery Critically Low"
 msgstr "Batterij Kritisch Laag"
 
-#: ../src/gpm-main.c:375
+#: ../src/gpm-main.c:377
 msgid "Battery Low"
 msgstr "Batterij Laag"
 
-#: ../src/gpm-main.c:417
+#: ../src/gpm-main.c:423
 msgid "AC Power Unplugged"
 msgstr "Netspanning afgesloten"
 
-#: ../src/gpm-main.c:418
+#: ../src/gpm-main.c:424
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "De netspanning is afgesloten. Het systeem gebruikt nu batterij stroom."
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Battery Charged"
 msgstr "Batterij Opgeladen"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:502
 msgid "Your battery is now fully charged"
 msgstr "Uw batterij is nu volledig opgeladen"
 
-#: ../src/gpm-notification.c:216
+#: ../src/gpm-notification.c:219
 msgid "charging"
 msgstr "opladen"
 
-#: ../src/gpm-notification.c:218
+#: ../src/gpm-notification.c:221
 msgid "discharging"
 msgstr "ontladen"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:224
 msgid "charged"
 msgstr "opgeladen"
 
-#: ../src/gpm-notification.c:236
+#: ../src/gpm-notification.c:239
 msgid "until charged"
 msgstr "tot opgeladen"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:242
 msgid "until empty"
 msgstr "tot leeg"
 
-#: ../src/gpm-notification.c:306
+#: ../src/gpm-notification.c:309
 msgid "Computer is running on battery power\n"
 msgstr "Computer draait op batterij stroom\n"
 
-#: ../src/gpm-notification.c:308
+#: ../src/gpm-notification.c:311
 msgid "Computer is running on AC power\n"
 msgstr "Computer draait op netspanning\n"
 
-#: ../src/gpm-notification.c:338
+#: ../src/gpm-notification.c:341
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-notification.c:339
+#: ../src/gpm-notification.c:342
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -237,7 +241,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:343
+#: ../src/gpm-notification.c:346
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -245,7 +249,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:347
+#: ../src/gpm-notification.c:350
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -253,50 +257,51 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#. Translators comment: put your own name here to appear in the
-#. * about dialog.
-#: ../src/gpm-notification.c:360
+#.
+#. * Translators comment: put your own name here to appear in the about dialog.
+#.
+#: ../src/gpm-notification.c:364
 msgid "translator-credits"
 msgstr ""
 
-#: ../src/gpm-notification.c:484
+#: ../src/gpm-notification.c:489
 msgid "_Suspend"
 msgstr "_Opschorten"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:494
 msgid "Hi_bernate"
 msgstr "Sl_aapstand"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:499
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: ../src/gpm-notification.c:496
+#: ../src/gpm-notification.c:501
 msgid "_Help"
 msgstr "_Help"
 
-#: ../src/gpm-notification.c:498
+#: ../src/gpm-notification.c:503
 msgid "_About"
 msgstr "_Over"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:43
 msgid "Suspend"
 msgstr "Opschorten"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:44
 msgid "Shutdown"
 msgstr "Afsluiten"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:45
 msgid "Hibernate"
 msgstr "Slaapstand"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:46
 msgid "Do nothing"
 msgstr "Doe niets"
 
-#: ../src/gpm-prefs.c:137
+#: ../src/gpm-prefs.c:139
 msgid "Never"
 msgstr ""
 
@@ -305,7 +310,7 @@ msgstr ""
 msgid "<b>Configuration</b>"
 msgstr "<b>Berichten Gebied</b>"
 
-#: ../src/gpm-prefs.c:576
+#: ../src/gpm-prefs.c:580
 #, fuzzy
 msgid "GNOME Power Preferences"
 msgstr "Stroom voorkeuren"
