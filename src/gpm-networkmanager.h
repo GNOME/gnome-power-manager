@@ -26,15 +26,11 @@
  * @{
  */
 
-#ifndef _GPMNETWORKMANAGER_H
-#define _GPMNETWORKMANAGER_H
-
-#define NM_LISTENER_SERVICE	"org.freedesktop.NetworkManager"
-#define NM_LISTENER_PATH	"/org/freedesktop/NetworkManager"
-#define NM_LISTENER_INTERFACE	"org.freedesktop.NetworkManager"
+#ifndef _GPM_NETWORKMANAGER_H
+#define _GPM_NETWORKMANAGER_H
 
 gboolean gpm_networkmanager_sleep (void);
 gboolean gpm_networkmanager_wake (void);
 
-#endif	/* _GPMNETWORKMANAGER_H */
+#endif	/* _GPM_NETWORKMANAGER_H */
 /** @} */

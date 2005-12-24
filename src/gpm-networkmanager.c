@@ -41,6 +41,10 @@
 #include "gpm-dbus-common.h"
 #include "gpm-networkmanager.h"
 
+#define NM_LISTENER_SERVICE	"org.freedesktop.NetworkManager"
+#define NM_LISTENER_PATH	"/org/freedesktop/NetworkManager"
+#define NM_LISTENER_INTERFACE	"org.freedesktop.NetworkManager"
+
 /** Tell NetworkManager to put the network devices to sleep
  *
  *  @return			TRUE if NetworkManager is now sleeping.
