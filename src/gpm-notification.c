@@ -39,10 +39,23 @@
 #include "gpm-sysdev.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
+#include "eggtrayicon.h"
+
+/** The TrayData struct holds all the global pointers to tray objects
+ *
+ */
+typedef struct {
+	EggTrayIcon *tray_icon;		/**< The tray icon		*/
+	GtkTooltips *tray_icon_tooltip;	/**< The tooltip		*/
+	GtkWidget *popup_menu;		/**< The pop-down menu		*/
+	GtkWidget *image;		/**< The image shown in the tray*/
+	GtkWidget *evbox;		/**< The event box (click)	*/
+} TrayData;
+
+static TrayData *eggtrayicon = NULL;
+static void gpm_notification_icon_create (void);
 
 /* shared with gpm-main.c */
-static TrayData *eggtrayicon = NULL;
-static void icon_create (void);
 gboolean onAcPower;
 
 /** Finds the icon index value for the percentage charge
@@ -154,8 +167,8 @@ get_stock_id (gchar* iconopt)
  *
  *  @param	eggtrayicon	A valid TrayIcon
  */
-void
-icon_destroy (TrayData *eggtrayicon)
+static void
+gpm_notification_icon_destroy_internal (TrayData *eggtrayicon)
 {
 	/* assertion checks */
 	g_assert (eggtrayicon);
@@ -177,10 +190,10 @@ icon_destroy (TrayData *eggtrayicon)
  *
  */
 void
-gpn_icon_destroy (void)
+gpm_notification_icon_destroy (void)
 {
 	if (eggtrayicon)
-		icon_destroy (eggtrayicon);
+		gpm_notification_icon_destroy_internal (eggtrayicon);
 	eggtrayicon = NULL;
 }
 
@@ -417,7 +430,7 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
  *  @return			Success, return FALSE when no icon present
  */
 GtkWidget *
-get_notification_icon (void)
+gpm_notification_get_icon (void)
 {
 	/* no asserts required, as we are allowed to be called when no icon */
 	if (!eggtrayicon) {
@@ -483,12 +496,12 @@ menu_main_create (TrayData *trayicon)
 	trayicon->popup_menu = gtk_menu_new ();
 
 	/* only display the icons is we can do the action */
-	if (gpm_hal_pm_can_suspend ()) {
+	if (gpm_hal_can_suspend ()) {
 		menu_add_action_item (trayicon->popup_menu,
 				      "gnome-dev-memory",
 				      _("_Suspend"), "suspend");
 	}
-	if (gpm_hal_pm_can_hibernate ()) {
+	if (gpm_hal_can_hibernate ()) {
 		menu_add_action_item (eggtrayicon->popup_menu,
 				      "gnome-dev-harddisk",
 				      _("Hi_bernate"), "hibernate");
@@ -605,7 +618,7 @@ tray_destroy_cb (GtkWidget *widget, gpointer user_data)
 	eggtrayicon->image = NULL;
 	eggtrayicon = NULL;
 
-	icon_create ();
+	gpm_notification_icon_create ();
 
 	return TRUE;
 }
@@ -614,7 +627,7 @@ tray_destroy_cb (GtkWidget *widget, gpointer user_data)
  *
  */
 static void
-icon_create (void)
+gpm_notification_icon_create (void)
 {
 	GtkWidget *evbox = NULL;
 
@@ -643,8 +656,7 @@ icon_create (void)
 	gtk_container_add (GTK_CONTAINER (evbox), eggtrayicon->image);
 	gtk_container_add (GTK_CONTAINER (eggtrayicon->tray_icon), evbox);
 
-	/* update to get correct icon */
-	gpn_icon_update ();
+	gpm_notification_icon_update ();
 
 	gtk_widget_show_all (GTK_WIDGET (eggtrayicon->tray_icon));
 }
@@ -653,7 +665,7 @@ icon_create (void)
  *
  */
 void
-gpn_icon_update (void)
+gpm_notification_icon_update (void)
 {
 	GConfClient *client = NULL;
 	GString *tooltip = NULL;
@@ -680,7 +692,7 @@ gpn_icon_update (void)
 	if (stock_id) {
 		if (!eggtrayicon) {
 			/* create icon */
-			icon_create ();
+			gpm_notification_icon_create ();
 			if (!(eggtrayicon->popup_menu))
 				menu_main_create (eggtrayicon);
 		}
@@ -697,7 +709,7 @@ gpn_icon_update (void)
 	} else {
 		/* else, try to remove icon */
 		if (eggtrayicon) {
-			icon_destroy (eggtrayicon);
+			gpm_notification_icon_destroy_internal (eggtrayicon);
 			eggtrayicon = NULL;
 		}
 	}

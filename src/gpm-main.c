@@ -116,7 +116,7 @@ callback_gconf_key_changed (GConfClient *client,
 		return;
 
 	if (strcmp (entry->key, GPM_PREF_ICON_POLICY) == 0) {
-		gpn_icon_update ();
+		gpm_notification_icon_update ();
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
@@ -171,15 +171,15 @@ perform_power_policy (gboolean isOnAc)
 	}
 
 	gpm_hal_set_brightness_dim (brightness);
-	gpm_hal_setlowpowermode (!isOnAc);
+	gpm_hal_enable_power_save (!isOnAc);
 
 	gpm_screensaver_set_dpms_timeout (sleep_display);
 
 	/*
 	 * make sure gnome-screensaver disables screensaving,
-	 * and enables monitor shut-off instead
+	 * and enables monitor shut-off instead when on batteries
 	 */
-	gpm_screensaver_set_throttle (!isOnAc);
+	gpm_screensaver_enable_throttle (!isOnAc);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_timeout (sleep_computer);
@@ -239,14 +239,14 @@ action_policy_do (gchar* action)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		g_debug ("*ACTION* Suspend");
-		if (!gpm_hal_pm_can_suspend ()) {
+		if (!gpm_hal_can_suspend ()) {
 			g_warning ("Cannot suspend as disabled in HAL");
 			return;
 		}
 		perform_sleep_methods (FALSE);
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		g_debug ("*ACTION* Hibernate");
-		if (!gpm_hal_pm_can_hibernate ()) {
+		if (!gpm_hal_can_hibernate ()) {
 			g_warning ("Cannot hibernate as disabled in HAL");
 			return;
 		}
@@ -257,14 +257,6 @@ action_policy_do (gchar* action)
 		gnome_client_request_save (gnome_master_client (), GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 		gpm_hal_shutdown ();
-#if 0
-		gchar *cmd;
-		cmd = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_CMD_SHUTDOWN, NULL);
-		if (!g_spawn_command_line_async (cmd, NULL)) {
-			g_warning ("Couldn't execute command: %s", cmd);
-		}
-		g_free (cmd);
-#endif
 	} else {
 		g_warning ("action_policy_do called with unknown action %s", action);
 	}
@@ -285,7 +277,7 @@ gpm_exit (void)
 	/* cleanup all system devices */
 	sysDevFreeAll ();
 
-	gpn_icon_destroy ();
+	gpm_notification_icon_destroy ();
 	exit (0);
 }
 
@@ -297,7 +289,7 @@ static void
 hal_device_removed (const gchar *udi)
 {
 	if (gpm_device_removed (udi))
-		gpn_icon_update ();
+		gpm_notification_icon_update ();
 }
 
 /** When we have a new device hot-plugged
@@ -309,7 +301,7 @@ static void
 hal_device_new_capability (const gchar *udi, const gchar *capability)
 {
 	if (gpm_device_new_capability (udi, capability))
-		gpn_icon_update ();
+		gpm_notification_icon_update ();
 }
 
 /** Notifies user of a low battery
@@ -359,7 +351,7 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 		gpm_libnotify_event (_("Battery Critically Low"),
 				     message,
 				     LIBNOTIFY_URGENCY_CRITICAL,
-				     get_notification_icon ());
+				     gpm_notification_get_icon ());
 		g_free (message);
 		g_free (remaining);
 		return TRUE;
@@ -377,7 +369,7 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 		gpm_libnotify_event (_("Battery Low"),
 				     message,
 				     LIBNOTIFY_URGENCY_CRITICAL,
-				     get_notification_icon ());
+				     gpm_notification_get_icon ());
 		g_free (message);
 		g_free (remaining);
 		return TRUE;
@@ -424,7 +416,7 @@ hal_device_property_modified (const gchar *udi,
 						     _("The AC Power has been unplugged. "
 						     "The system is now using battery power."),
 						     LIBNOTIFY_URGENCY_NORMAL,
-						     get_notification_icon ());
+						     gpm_notification_get_icon ());
 			}
 			perform_power_policy (FALSE);
 			gpm_emit_mains_changed (FALSE);
@@ -442,7 +434,7 @@ hal_device_property_modified (const gchar *udi,
 		/* update all states */
 		sysDevUpdateAll ();
 		/* update icon */
-		gpn_icon_update ();
+		gpm_notification_icon_update ();
 		return;
 	}
 
@@ -483,7 +475,7 @@ hal_device_property_modified (const gchar *udi,
 		/* read in values */
 		gpm_read_battery_data (sds);
 		/* update icon if required */
-		gpn_icon_update ();
+		gpm_notification_icon_update ();
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &sds->isCharging);
 		/*
@@ -501,7 +493,7 @@ hal_device_property_modified (const gchar *udi,
 		if (sd->type == BATT_PRIMARY && sds->percentageCharge == 100) {
 			gpm_libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
-					 get_notification_icon ());
+					 gpm_notification_get_icon ());
 		}
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
@@ -513,9 +505,7 @@ hal_device_property_modified (const gchar *udi,
 		return;
 	}
 
-	/* update */
 	sysDevUpdate (dev);
-	
 	sysDevDebugPrint (dev);
 
 	/* find new percentageCharge  */
@@ -523,8 +513,7 @@ hal_device_property_modified (const gchar *udi,
 
 	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
 
-	/* update icon */
-	gpn_icon_update ();
+	gpm_notification_icon_update ();
 
 	/* do we need to notify the user we are getting low ? */
 	if (old_charge != new_charge) {
@@ -583,9 +572,9 @@ hal_device_condition (const gchar *udi, const gchar *name, const gchar *details)
 				action = gconf_client_get_string (client, GPM_PREF_BUTTON_LID, NULL);
 				action_policy_do (action);
 				g_free (action);
-				gpm_screensaver_set_dpms (FALSE);
+				gpm_screensaver_enable_dpms (FALSE);
 			} else {
-				gpm_screensaver_set_dpms (TRUE);
+				gpm_screensaver_enable_dpms (TRUE);
 			}
 		} else if (strcmp (type, "virtual") == 0) {
 			if (!details) {
@@ -617,7 +606,7 @@ void
 gpm_idle_callback (gint timeout)
 {
 	gchar *action;
-	action = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_ICON_POLICY, NULL); /* @todo! */
+	action = gconf_client_get_string (gconf_client_get_default (), GPM_PREF_BATTERY_CRITICAL, NULL); /* @todo! */
 
 	/* can only be hibernate or suspend */
 	action_policy_do (action);
@@ -700,7 +689,6 @@ main (int argc, char *argv[])
 
 	no_daemon = FALSE;
 
-	/* Initialise gnome and parse command line */
 	gnome_program_init (argv[0], VERSION,
 			    LIBGNOMEUI_MODULE, argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
@@ -708,7 +696,6 @@ main (int argc, char *argv[])
 			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GNOME Power Manager"),
 			    NULL);
 
-	/* set log level */
 	if (!verbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_main_log_dummy, NULL);
 
@@ -741,11 +728,9 @@ main (int argc, char *argv[])
 	if (!gpm_dbus_get_session_connection (&session_connection))
 		g_error ("Unable to get session dbus connection");
 
-	/* Initialise libnotify, if compiled in. */
 	if (!gpm_libnotify_init (NICENAME))
 		g_error ("Cannot initialise libnotify!");
 
-	/* initialise stock icons */
 	if (!gpm_stock_icons_init())
 		g_error ("Cannot continue without stock icons");
 
@@ -763,13 +748,11 @@ main (int argc, char *argv[])
 					 &dbus_glib_gpm_object_object_info);
 
 #if GPM_SYSTEM_BUS
-	/* register dbus service */
 	if (!gpm_object_register (system_connection)) {
 		g_warning ("Failed to register.");
 		return 0;
 	}
 #else
-	/* register dbus service */
 	if (!gpm_object_register (session_connection)) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
@@ -781,14 +764,12 @@ main (int argc, char *argv[])
 	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
 
 	loop = g_main_loop_new (NULL, FALSE);
-	/* check HAL is running */
 	if (!gpm_hal_is_running ()) {
 		g_critical ("GNOME Power Manager cannot connect to HAL!");
 		return 0;
 	}
 
-	/* check we have PM capability */
-	if (!gpm_hal_pm_check ()) {
+	if (!gpm_hal_has_power_management ()) {
 		g_warning ("HAL does not have modern PowerManagement capability");
 		return 0;
 	}
@@ -808,12 +789,11 @@ main (int argc, char *argv[])
 	sysDevUpdateAll ();
 	sysDevDebugPrintAll ();
 
-	gpn_icon_update ();
+	gpm_notification_icon_update ();
 
 	/* do all the actions as we have to set initial state */
 	perform_power_policy (onAcPower);
 	
-	/* set callback for the timout action */
 	gpm_idle_set_callback (gpm_idle_callback);
 
 	/* set up idle calculation function */

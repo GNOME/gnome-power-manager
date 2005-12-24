@@ -56,7 +56,7 @@ gpm_prefs_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, c
 gint
 get_battery_time_for_percentage (gint value)
 {
-	/**	@bug	Need to use HAL to get battery */
+	/**	@bug	Need to use HAL to get battery name */
 	gchar *udi = "/org/freedesktop/Hal/devices/acpi_BAT1";
 	gint percentage;
 	gint time;
@@ -247,8 +247,8 @@ gpm_prefs_setup_action_combo (GladeXML *dialog, gchar *widget_name, gchar *gpm_p
 	gchar *value;
 	gint i = 0;
 	gint n_added = 0;
-	gboolean can_suspend = gpm_hal_pm_can_suspend ();
-	gboolean can_hibernate = gpm_hal_pm_can_hibernate ();
+	gboolean can_suspend = gpm_hal_can_suspend ();
+	gboolean can_hibernate = gpm_hal_can_hibernate ();
 
 	widget = glade_xml_get_widget (dialog, widget_name);
 	value = gconf_client_get_string (gconf_client_get_default (), gpm_pref_key, NULL);
@@ -317,21 +317,26 @@ gpm_prefs_battery_critical_slider_changed_cb (GtkWidget *widget, GladeXML *dialo
 }
 
 static void
-gpm_prefs_init (GladeXML *dialog)
+gpm_prefs_init ()
 {
-	GtkWidget *widget;
-
+	GtkWidget *widget, *main_window;
+	GladeXML *dialog;
 	GtkSizeGroup *size_group;
 	GConfClient *client;
 	gint value;
 
 	client = gconf_client_get_default ();
+	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
-	widget = glade_xml_get_widget (dialog, "window_preferences");
-	gtk_window_set_icon_name (GTK_WINDOW (widget), "gnome-dev-battery");
+	main_window = glade_xml_get_widget (dialog, "window_preferences");
+
+	/* Hide window first so that the dialogue resizes itself without redrawing */
+	gtk_widget_hide (main_window);
+
+	gtk_window_set_icon_name (GTK_WINDOW (main_window), "gnome-dev-battery");
 
 	/* Get the main window quit */
-	g_signal_connect (G_OBJECT (widget), "delete_event",
+	g_signal_connect (G_OBJECT (main_window), "delete_event",
 			  G_CALLBACK (gtk_main_quit), NULL);
 
 	widget = glade_xml_get_widget (dialog, "button_close");
@@ -551,6 +556,9 @@ gpm_prefs_init (GladeXML *dialog)
 		gtk_widget_hide_all (label_batteries_brightness);
 		gtk_widget_hide_all (slider_batteries_brightness);
 	}
+
+	/* Now we are ready to show the main window */
+	gtk_widget_show (main_window);
 }
 
 int
@@ -559,8 +567,6 @@ main (int argc, char **argv)
 	gint i;
 	gboolean verbose = FALSE;
 	GConfClient *client;
-	GtkWidget *widget;
-	GladeXML *dialog;
 
 	struct poptOption options[] = {
 		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
@@ -599,15 +605,7 @@ main (int argc, char **argv)
 		}
 	}
 
-	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
-	/*
-	 * Hide, process, then show the top window so that the dialogue
-	 * resizes itself without redrawing.
-	 */
-	widget = glade_xml_get_widget (dialog, "window_preferences");
-	gtk_widget_hide (widget);
-	gpm_prefs_init (dialog);
-	gtk_widget_show (widget);
+	gpm_prefs_init ();
 
 	gtk_main ();
 	return 0;

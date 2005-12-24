@@ -1,3 +1,19 @@
+2005-12-24  Richard Hughes  <richard@hughsie.com>
+
+	Another mega patch from Jaap. I've merged the obvious bit for now,
+	and when I've reviewed the rest I'll commit that too.
+
+	* Renamed some function like gpm_screensaver_set_dpms to 
+	gpm_screensaver_enable_dpms. This way it's immediately clear what the 
+	argurment TRUE or FALSE does.
+
+	* Some other renames which should make the code clearer.
+
+	* Fixes a couple of minor bugs
+
+	* Moved some definition from *.h to *.c. It's good practice to export
+	as little as possible.
+
 2005-12-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/*: Rename the local dbus_* wrappers gpm_dbus_* to make sure

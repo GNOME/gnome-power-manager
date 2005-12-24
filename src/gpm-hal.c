@@ -119,7 +119,7 @@ gpm_hal_is_laptop (void)
  *  @return		TRUE if haldaemon has power management capability
  */
 gboolean
-gpm_hal_pm_check (void)
+gpm_hal_has_power_management (void)
 {
 	gchar *ptype = NULL;
 	gpm_hal_device_get_string (HAL_ROOT_COMPUTER, "power_management.type", &ptype);
@@ -137,7 +137,7 @@ gpm_hal_pm_check (void)
  *  @return		TRUE if kernel suspend support is compiled in
  */
 gboolean
-gpm_hal_pm_can_suspend (void)
+gpm_hal_can_suspend (void)
 {
 	gboolean exists;
 	gboolean success;
@@ -157,7 +157,7 @@ gpm_hal_pm_can_suspend (void)
  *  @return		TRUE if kernel hibernation support is compiled in
  */
 gboolean
-gpm_hal_pm_can_hibernate (void)
+gpm_hal_can_hibernate (void)
 {
 	gboolean exists;
 	gboolean success;
@@ -409,7 +409,6 @@ gpm_hal_set_brightness_dim (gint brightness)
 	return retval;
 }
 
-
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
  *
  *  @param	wakeup		Seconds to wakeup, currently unsupported
@@ -418,7 +417,7 @@ gpm_hal_set_brightness_dim (gint brightness)
 gboolean
 gpm_hal_suspend (gint wakeup)
 {
-	gint ret = 0;
+	gint ret;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -439,8 +438,7 @@ gpm_hal_suspend (gint wakeup)
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_POWER
-			   ".Suspend call failed (%i)", ret);
+		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend call failed (%i)", ret);
 		retval = FALSE;
 	}
 	g_object_unref (G_OBJECT (hal_proxy));
@@ -456,7 +454,7 @@ gpm_hal_suspend (gint wakeup)
 static gboolean
 hal_pm_method_void (const gchar* method)
 {
-	gint ret = 0;
+	gint ret;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -478,8 +476,7 @@ hal_pm_method_void (const gchar* method)
 		retval = FALSE;
 	}
 	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_POWER
-			   ".%s call failed (%i)", method, ret);
+		g_warning (HAL_DBUS_INTERFACE_POWER ".%s call failed (%i)", method, ret);
 		retval = FALSE;
 	}
 	g_object_unref (G_OBJECT (hal_proxy));
@@ -508,13 +505,13 @@ gpm_hal_shutdown (void)
 
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
  *
- *  @param	set		Set for low power mode
+ *  @param	enable		True to enable low power mode
  *  @return			Success, true if we set the mode
  */
 gboolean
-gpm_hal_setlowpowermode (gboolean set)
+gpm_hal_enable_power_save (gboolean enable)
 {
-	gint ret = 0;
+	gint ret;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -534,7 +531,7 @@ gpm_hal_setlowpowermode (gboolean set)
 					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
-			G_TYPE_BOOLEAN, set, G_TYPE_INVALID,
+			G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
 		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");

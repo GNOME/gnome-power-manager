@@ -391,14 +391,13 @@ main (int argc, char *argv[])
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
 	loop = g_main_loop_new (NULL, FALSE);
-	/* check HAL is running */
+
 	if (!gpm_hal_is_running ()) {
 		g_critical ("GNOME Power Manager cannot connect to HAL!");
 		return 0;
 	}
 
-	/* check we have PM capability */
-	if (!gpm_hal_pm_check ()) {
+	if (!gpm_hal_has_power_management ()) {
 		g_critical ("HAL does not have PowerManagement capability");
 		return 0;
 	}

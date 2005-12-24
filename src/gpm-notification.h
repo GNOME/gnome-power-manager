@@ -22,26 +22,12 @@
  * 02110-1301, USA.
  */
 
-#ifndef _GPMNOTIFICATION_H
-#define _GPMNOTIFICATION_H
+#ifndef _GPM_NOTIFICATION_H
+#define _GPM_NOTIFICATION_H
 
-#include "eggtrayicon.h"
+GtkWidget *gpm_notification_get_icon (void);
 
-/** The TrayData struct holds all the global pointers to tray objects
- *
- */
-typedef struct {
-	EggTrayIcon *tray_icon;		/**< The tray icon		*/
-	GtkTooltips *tray_icon_tooltip;	/**< The tooltip		*/
-	GtkWidget *popup_menu;		/**< The pop-down menu		*/
-	GtkWidget *image;		/**< The image shown in the tray*/
-	GtkWidget *evbox;		/**< The event box (click)	*/
-} TrayData;
+void gpm_notification_icon_destroy (void);
+void gpm_notification_icon_update (void);
 
-GtkWidget *get_notification_icon (void);
-
-/* wrapper functions */
-void gpn_icon_destroy (void);
-void gpn_icon_update (void);
-
-#endif	/* _GPMNOTIFICATION_H */
+#endif	/* _GPM_NOTIFICATION_H */

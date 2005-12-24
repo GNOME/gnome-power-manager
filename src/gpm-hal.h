@@ -29,21 +29,25 @@
 #ifndef _GPMHAL_H
 #define _GPMHAL_H
 
-gboolean gpm_hal_pm_check (void);
-gboolean gpm_hal_pm_can_suspend (void);
-gboolean gpm_hal_pm_can_hibernate (void);
+gboolean gpm_hal_has_power_management (void);
+
 gboolean gpm_hal_is_running (void);
 gboolean gpm_hal_is_laptop (void);
 gboolean gpm_hal_is_on_ac (void);
+
 gboolean gpm_hal_get_brightness_steps (gint *steps);
 gboolean gpm_hal_set_brightness (gint brightness);
 gboolean gpm_hal_set_brightness_dim (gint brightness);
 gboolean gpm_hal_set_brightness_up (void);
 gboolean gpm_hal_set_brightness_down (void);
+
+gboolean gpm_hal_can_suspend (void);
 gboolean gpm_hal_suspend (gint wakeup);
+gboolean gpm_hal_can_hibernate (void);
 gboolean gpm_hal_hibernate (void);
 gboolean gpm_hal_shutdown (void);
-gboolean gpm_hal_setlowpowermode (gboolean set);
+
+gboolean gpm_hal_enable_power_save (gboolean enable);
 
 gboolean gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value);
 gboolean gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value);
