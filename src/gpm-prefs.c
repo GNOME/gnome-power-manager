@@ -448,8 +448,7 @@ gpm_prefs_init ()
 
 	/* Battery critical Combo Box */
 	GtkWidget *label_battery_critical, *combo_battery_critical;
-	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE,
-					     	   ACTION_SHUTDOWN, NULL};
+	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 
 	label_battery_critical = glade_xml_get_widget (dialog, "label_battery_critical_action");
 	combo_battery_critical = gpm_prefs_setup_action_combo (dialog, "combobox_battery_critical",
