@@ -67,6 +67,7 @@
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
 #include <popt.h>
+#include <unistd.h>
 
 #include "gpm-prefs.h"
 #include "gpm-common.h"
@@ -89,6 +90,8 @@
 
 /* no need for IPC with globals */
 gboolean onAcPower;
+
+int daemon (int nochdir, int noclose);
 
 static void
 gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)

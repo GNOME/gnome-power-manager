@@ -52,6 +52,8 @@
 gboolean isVerbose;
 gboolean onAcPower;
 
+int daemon (int nochdir, int noclose);
+
 /** Generic exit
  *
  */

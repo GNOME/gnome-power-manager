@@ -34,6 +34,4 @@ gboolean gpm_read_battery_data (sysDevStruct *sds);
 gboolean gpm_device_removed (const gchar *udi);
 gboolean gpm_device_new_capability (const gchar *udi, const gchar *capability);
 
-int daemon(int nochdir, int noclose);
-
 #endif	/* _GPMCORE_H */
