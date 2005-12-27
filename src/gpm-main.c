@@ -88,8 +88,6 @@
 
 #include "gnome-power-glue.h"
 
-/* no need for IPC with globals */
-gboolean onAcPower;
 
 int daemon (int nochdir, int noclose);
 
@@ -112,6 +110,7 @@ callback_gconf_key_changed (GConfClient *client,
 	gpointer user_data)
 {
 	gint value = 0;
+	gboolean on_ac = gpm_hal_is_on_ac ();
 
 	g_debug ("callback_gconf_key_changed (%s)", entry->key);
 
@@ -123,22 +122,22 @@ callback_gconf_key_changed (GConfClient *client,
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
-		if (!onAcPower)
+		if (!on_ac)
 			gpm_idle_set_timeout (value);
 	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
-		if (onAcPower)
+		if (on_ac)
 			gpm_idle_set_timeout (value);
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0) {
 		/* set new suspend timeouts */
-		if (!onAcPower) {
+		if (!on_ac) {
 			value = gconf_client_get_int (client, entry->key, NULL);
 			gpm_screensaver_set_dpms_timeout (value);
 		}
 	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
 		/* set new suspend timeouts */
-		if (onAcPower) {
+		if (on_ac) {
 			value = gconf_client_get_int (client, entry->key, NULL);
 			gpm_screensaver_set_dpms_timeout (value);
 		}
@@ -148,7 +147,7 @@ callback_gconf_key_changed (GConfClient *client,
 
 /** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
  *
- *  @param	isOnAc		If we are on AC power
+ *  @param	on_ac		If we are on AC power
  *
  *  @note
  *	- Sets the brightness level
@@ -158,12 +157,12 @@ callback_gconf_key_changed (GConfClient *client,
  *	- Sets our inactivity sleep timeout to policy value
  */
 void
-perform_power_policy (gboolean isOnAc)
+perform_power_policy (gboolean on_ac)
 {
 	gint brightness, sleep_display, sleep_computer;
 	GConfClient *client = gconf_client_get_default ();
 
-	if (isOnAc) {
+	if (on_ac) {
 		brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
 		sleep_display = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_DISPLAY, NULL);
 		sleep_computer = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_COMPUTER, NULL);
@@ -174,7 +173,7 @@ perform_power_policy (gboolean isOnAc)
 	}
 
 	gpm_hal_set_brightness_dim (brightness);
-	gpm_hal_enable_power_save (!isOnAc);
+	gpm_hal_enable_power_save (!on_ac);
 
 	gpm_screensaver_set_dpms_timeout (sleep_display);
 
@@ -182,7 +181,7 @@ perform_power_policy (gboolean isOnAc)
 	 * make sure gnome-screensaver disables screensaving,
 	 * and enables monitor shut-off instead when on batteries
 	 */
-	gpm_screensaver_enable_throttle (!isOnAc);
+	gpm_screensaver_enable_throttle (!on_ac);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_timeout (sleep_computer);
@@ -409,8 +408,7 @@ hal_device_property_modified (const gchar *udi,
 		return;
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &onAcPower);
-		if (!onAcPower) {
+		if (!gpm_hal_is_on_ac ()) {
 			gboolean show_notify;
 			show_notify = gconf_client_get_bool (gconf_client_get_default (),
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
@@ -737,9 +735,6 @@ main (int argc, char *argv[])
 	if (!gpm_stock_icons_init())
 		g_error ("Cannot continue without stock icons");
 
-	/* Assume we are a desktop unless we have a battery */
-	onAcPower = TRUE;
-
 	/* initialise all system devices */
 	sysDevInitAll ();
 
@@ -795,7 +790,7 @@ main (int argc, char *argv[])
 	gpm_notification_icon_update ();
 
 	/* do all the actions as we have to set initial state */
-	perform_power_policy (onAcPower);
+	perform_power_policy (gpm_hal_is_on_ac ());
 	
 	gpm_idle_set_callback (gpm_idle_callback);
 

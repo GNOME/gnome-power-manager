@@ -50,7 +50,7 @@
 
 /* no need for IPC with globals */
 gboolean isVerbose;
-gboolean onAcPower;
+
 
 int daemon (int nochdir, int noclose);
 
@@ -163,7 +163,6 @@ hal_device_property_modified (const gchar *udi,
 		return;
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &onAcPower);
 		/* update all states */
 		sysDevUpdateAll ();
 		return;

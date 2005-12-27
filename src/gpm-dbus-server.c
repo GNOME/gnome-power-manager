@@ -38,13 +38,13 @@
 #include "gpm-dbus-server.h"
 #include "gpm-common.h"
 #include "gpm-dbus-common.h"
+#include "gpm-hal.h"
 
 G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
 
 guint signals[LAST_SIGNAL] = { 0 };
 
 GPMObject *obj;
-gboolean onAcPower;
 
 static void
 gpm_object_init (GPMObject *obj) { }
@@ -138,7 +138,7 @@ gboolean
 gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error)
 {
 	g_debug ("gpm_object_is_on_mains ()");
-	*ret = !onAcPower;
+	*ret = !gpm_hal_is_on_ac();
 	return TRUE;
 }
 
@@ -153,7 +153,7 @@ gboolean
 gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error)
 {
 	g_debug ("gpm_object_is_on_ac ()");
-	*ret = onAcPower;
+	*ret = gpm_hal_is_on_ac ();
 	return TRUE;
 }
 

@@ -40,8 +40,6 @@
 #include "gpm-hal.h"
 #include "gpm-hal-callback.h"
 
-/* no need for IPC with globals */
-gboolean onAcPower;
 
 /** Coldplugs devices of type ac_adaptor at startup
  *
@@ -61,7 +59,6 @@ gpm_coldplug_acadapter (void)
 	}
 	for (i = 0; device_names[i]; i++) {
 		/* assume only one */
-		gpm_hal_device_get_bool (device_names[i], "ac_adapter.present", &onAcPower);
 		gpm_hal_watch_add_device_property_modified (device_names[i]);
 
 	}

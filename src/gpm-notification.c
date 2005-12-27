@@ -55,8 +55,6 @@ typedef struct {
 static TrayData *eggtrayicon = NULL;
 static void gpm_notification_icon_create (void);
 
-/* shared with gpm-main.c */
-gboolean onAcPower;
 
 /** Finds the icon index value for the percentage charge
  *
@@ -87,7 +85,8 @@ get_stock_id (gchar* iconopt)
 	gint index;
 	sysDev *sd = NULL;
 	GConfClient *client = NULL;
-	gint lowThreshold;
+	gint low_threshold;
+	gboolean on_ac = gpm_hal_is_on_ac ();
 
 	g_debug ("get_stock_id: getting stock icon");
 
@@ -103,25 +102,25 @@ get_stock_id (gchar* iconopt)
 	 */
 	client = gconf_client_get_default ();
 	/* find out when the user considers the power "low" */
-	lowThreshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
+	low_threshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
 	/* list in order of priority */
 	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->isPresent && sd->percentageCharge < lowThreshold) {
+	if (sd->isPresent && sd->percentageCharge < low_threshold) {
 		index = get_index_from_percent (sd->percentageCharge);
-		if (onAcPower)
+		if (on_ac)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
 	sd = sysDevGet (BATT_UPS);
-	if (sd->isPresent && sd->percentageCharge < lowThreshold) {
+	if (sd->isPresent && sd->percentageCharge < low_threshold) {
 		index = get_index_from_percent (sd->percentageCharge);
 		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
 	sd = sysDevGet (BATT_MOUSE);
-	if (sd->isPresent && sd->percentageCharge < lowThreshold)
+	if (sd->isPresent && sd->percentageCharge < low_threshold)
 		return g_strdup_printf ("gnome-power-mouse");
 	sd = sysDevGet (BATT_KEYBOARD);
-	if (sd->isPresent && sd->percentageCharge < lowThreshold)
+	if (sd->isPresent && sd->percentageCharge < low_threshold)
 		return g_strdup_printf ("gnome-power-keyboard");
 	/*
 	 * Check if we should just show the charging / discharging icon 
@@ -136,7 +135,7 @@ get_stock_id (gchar* iconopt)
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->isPresent && (sd->isCharging || sd->isDischarging)) {
 		index = get_index_from_percent (sd->percentageCharge);
-		if (onAcPower)
+		if (on_ac)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
@@ -152,7 +151,7 @@ get_stock_id (gchar* iconopt)
 	sd = sysDevGet (BATT_PRIMARY);
 	if (sd->isPresent) {
 		index = get_index_from_percent (sd->percentageCharge);
-		if (onAcPower) {
+		if (on_ac) {
 			if (!sd->isCharging && !sd->isDischarging)
 				return g_strdup ("gnome-power-ac-charged");
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
@@ -318,7 +317,7 @@ get_full_tooltip (void)
 	GString *tooltip = NULL;
 
 	g_debug ("get_full_tooltip");
-	if (!onAcPower)
+	if (!gpm_hal_is_on_ac ())
 		tooltip = g_string_new (_("Computer is running on battery power\n"));
 	else
 		tooltip = g_string_new (_("Computer is running on AC power\n"));
