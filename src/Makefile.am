@@ -6,7 +6,7 @@ pkgdata_DATA =						\
 EXTRA_DIST =						\
 	$(pkgdata_DATA)					\
 	gnome-power-service.xml				\
-	gpm_marshal.list
+	gpm-marshal.list
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
@@ -59,8 +59,8 @@ endif
 gnome_power_manager_SOURCES =				\
 	eggtrayicon.h					\
 	eggtrayicon.c					\
-	gpm_marshal.h					\
-	gpm_marshal.c					\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
 	gpm-hal.h					\
 	gpm-hal.c					\
 	gpm-hal-callback.h				\
@@ -102,8 +102,8 @@ endif
 
 #if 0
 gnome_power_console_SOURCES =				\
-	gpm_marshal.h					\
-	gpm_marshal.c					\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
 	gpm-hal-callback.h				\
 	gpm-hal-callback.c				\
 	gpm-hal.h					\
@@ -128,19 +128,19 @@ gnome_power_console_LDADD =				\
 
 BUILT_SOURCES = \
 	gnome-power-glue.h				\
-	gpm_marshal.c					\
-	gpm_marshal.h
+	gpm-marshal.c					\
+	gpm-marshal.h
 
-gpm_marshal.h: gpm_marshal.list
+gpm-marshal.h: gpm-marshal.list
 	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gpm_marshal gpm_marshal.list --header >> xgen-gmh \
-	&& (cmp -s xgen-gmh gpm_marshal.h || cp xgen-gmh gpm_marshal.h) \
+	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --header >> xgen-gmh \
+	&& (cmp -s xgen-gmh gpm-marshal.h || cp xgen-gmh gpm-marshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~
 
-gpm_marshal.c: gpm_marshal.list
+gpm-marshal.c: gpm-marshal.list
 	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gpm_marshal gpm_marshal.list --body >> xgen-gmc \
-	&& (cmp -s xgen-gmc gpm_marshal.c || cp xgen-gmc gpm_marshal.c) \
+	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --body >> xgen-gmc \
+	&& (cmp -s xgen-gmc gpm-marshal.c || cp xgen-gmc gpm-marshal.c) \
 	&& rm -f xgen-gmc xgen-gmc~
 
 gnome-power-glue.h: gnome-power-service.xml
@@ -148,7 +148,7 @@ gnome-power-glue.h: gnome-power-service.xml
 
 clean-local:
 	rm -f *~
-	rm -f gpm_marshal.c gpm_marshal.h
+	rm -f gpm-marshal.c gpm-marshal.h
 
 DISTCLEANFILES =					\
 	gnome-power-glue.h

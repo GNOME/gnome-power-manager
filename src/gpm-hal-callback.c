@@ -40,7 +40,7 @@
 
 #include "gpm-dbus-common.h"
 #include "gpm-hal-callback.h"
-#include "gpm_marshal.h"
+#include "gpm-marshal.h"
 
 HalFunctions function;
 HalRegistered reg;
