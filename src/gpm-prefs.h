@@ -37,7 +37,6 @@
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/policy/battery_critical"
 #define GPM_PREF_IDLE			GPM_PREF_DIR "/policy/idle"
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/general/display_icon_policy"
-#define GPM_PREF_REQUIRE_PASSWORD	GPM_PREF_DIR "/general/require_password"
 #define GPM_PREF_THRESHOLD_LOW		GPM_PREF_DIR "/general/threshold_low"
 #define GPM_PREF_THRESHOLD_CRITICAL	GPM_PREF_DIR "/general/threshold_critical"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify/ac_adapter"

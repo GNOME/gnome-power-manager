@@ -137,8 +137,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget, gchar *icon_visibility)
 static void
 gpm_prefs_check_requirepw_cb (GtkWidget *widget, gpointer data)
 {
-	gconf_client_set_bool (gconf_client_get_default (), GPM_PREF_REQUIRE_PASSWORD,
-			       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)), NULL);
+	gpm_screensaver_lock_set (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 }
 
 static gchar*
@@ -429,7 +428,7 @@ gpm_prefs_init ()
 	g_signal_connect (G_OBJECT (widget), "clicked",
 			  G_CALLBACK (gpm_prefs_check_requirepw_cb), NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-				      gconf_client_get_bool (client, GPM_PREF_REQUIRE_PASSWORD, NULL));
+				      gpm_screensaver_lock_enabled ());
 
 	/* Button Suspend Combo Box */
 	GtkWidget *label_button_suspend, *combo_button_suspend;

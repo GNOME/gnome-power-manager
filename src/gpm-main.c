@@ -88,7 +88,6 @@
 
 #include "gnome-power-glue.h"
 
-
 int daemon (int nochdir, int noclose);
 
 static void
@@ -187,37 +186,61 @@ perform_power_policy (gboolean on_ac)
 	gpm_idle_set_timeout (sleep_computer);
 }
 
-
-/** Do a hibernate or suspend with all the associated callbacks and methods.
- *
- *  @param	toDisk		If we hibernate, i.e. sleep to disk.
+/** Do a hibernate with all the associated callbacks and methods.
  *
  *  @note
  *	- Locks the screen (if required)
  *	- Sets NetworkManager to sleep
- *	- Does the sleep...
+ *	- Does the hibernate...
  *	- Sets NetworkManager to wake
  *	- Pokes g-s so we get the unlock screen (if required)
  */
-void
-perform_sleep_methods (gboolean to_disk)
+static void
+gpm_hibernate (void)
 {
-	GConfClient *client = gconf_client_get_default ();
-	gboolean should_lock = gconf_client_get_bool (client,
-				GPM_PREF_REQUIRE_PASSWORD, NULL);
-	/* only lock if we should */
+	gboolean should_lock = gpm_screensaver_lock_enabled ();
+
+	if (!gpm_hal_can_hibernate ()) {
+		g_warning ("Cannot hibernate as disabled in HAL");
+		return;
+	}
+
 	if (should_lock)
 		gpm_screensaver_lock ();
 
-	/* Send NetworkManager to sleep */
 	gpm_networkmanager_sleep ();
+	gpm_hal_hibernate ();
+	gpm_networkmanager_wake ();
 
-	/* do the sleep type */
-	if (to_disk)
-		gpm_hal_hibernate ();
-	else
-		gpm_hal_suspend (0);
-	/* Bring NetworkManager back to life */
+	/* Poke GNOME ScreenSaver so the dialogue is displayed */
+	if (should_lock)
+		gpm_screensaver_poke ();
+}
+
+/** Do a suspend with all the associated callbacks and methods.
+ *
+ *  @note
+ *	- Locks the screen (if required)
+ *	- Sets NetworkManager to sleep
+ *	- Does the suspend...
+ *	- Sets NetworkManager to wake
+ *	- Pokes g-s so we get the unlock screen (if required)
+ */
+static void
+gpm_suspend (void)
+{
+	gboolean should_lock = gpm_screensaver_lock_enabled ();
+
+	if (!gpm_hal_can_suspend ()) {
+		g_warning ("Cannot suspend as disabled in HAL");
+		return;
+	}
+
+	if (should_lock)
+		gpm_screensaver_lock ();
+
+	gpm_networkmanager_sleep ();
+	gpm_hal_suspend (0);
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
@@ -241,18 +264,10 @@ action_policy_do (gchar* action)
 		g_debug ("*ACTION* Doing nothing");
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		g_debug ("*ACTION* Suspend");
-		if (!gpm_hal_can_suspend ()) {
-			g_warning ("Cannot suspend as disabled in HAL");
-			return;
-		}
-		perform_sleep_methods (FALSE);
+		gpm_suspend ();
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		g_debug ("*ACTION* Hibernate");
-		if (!gpm_hal_can_hibernate ()) {
-			g_warning ("Cannot hibernate as disabled in HAL");
-			return;
-		}
-		perform_sleep_methods (TRUE);
+		gpm_hibernate ();
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
 		g_debug ("*ACTION* Shutdown");
 		/* Save current session */
@@ -456,7 +471,7 @@ hal_device_property_modified (const gchar *udi,
 			   udi);
 		return;
 	}
-	
+
 	/* get battery type so we know what to process */
 	gpm_hal_device_get_string (udi, "battery.type", &type);
 	if (!type) {
@@ -643,7 +658,6 @@ signalhandler_noc (const char *name, const gboolean connected)
 	g_warning ("hal re-connected\n");
 }
 
-
 /** Callback for the DBUS NameLost function.
  *
  *  @param	name		The DBUS name, e.g. org.freedesktop.Hal
@@ -791,7 +805,7 @@ main (int argc, char *argv[])
 
 	/* do all the actions as we have to set initial state */
 	perform_power_policy (gpm_hal_is_on_ac ());
-	
+
 	gpm_idle_set_callback (gpm_idle_callback);
 
 	/* set up idle calculation function */

@@ -35,6 +35,7 @@
 #define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
 
 gboolean gpm_screensaver_lock (void);
+gboolean gpm_screensaver_lock_set (gboolean lock);
 gboolean gpm_screensaver_lock_enabled (void);
 gboolean gpm_screensaver_enable_throttle (gboolean enable);
 gboolean gpm_screensaver_is_running (void);

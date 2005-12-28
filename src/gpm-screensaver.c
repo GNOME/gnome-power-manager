@@ -64,24 +64,24 @@ gpm_screensaver_set_dpms_timeout (gint timeout)
 	return TRUE;
 }
 
-/** If set to lock on screensave, do so.
+/** Should we lock the the screen
  *
- * Instruct gnome-screensaver to lock screen if set gconf, if not to lock,
- * then do nothing, and return FALSE.
- *
- *  @return			TRUE if we locked the screen
+ *  @return			TRUE if we should lock the screen
  */
 gboolean
-gpm_screensaver_lock_check (void)
+gpm_screensaver_lock_enabled (void)
 {
-	GConfClient *client = gconf_client_get_default ();
-	gboolean should_lock;
+	return gconf_client_get_bool (gconf_client_get_default (), GS_PREF_LOCK_ENABLED, NULL);
+}
 
-	should_lock = gconf_client_get_bool (client, GS_PREF_LOCK_ENABLED, NULL);
-	if (!should_lock)
-		return FALSE;
-	gpm_screensaver_lock ();
-	return TRUE;
+/** Set the lock for the screensave
+ *
+ *  @param	lock		The lock value to set
+ */
+gboolean
+gpm_screensaver_lock_set (gboolean lock)
+{
+	return gconf_client_set_bool (gconf_client_get_default (), GS_PREF_LOCK_ENABLED, lock, NULL);
 }
 
 /** Finds out if gnome-screensaver is running
