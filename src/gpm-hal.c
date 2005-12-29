@@ -72,7 +72,7 @@ gpm_hal_is_on_ac (void)
 
 	/* find ac_adapter */
 	gpm_hal_find_device_capability ("ac_adapter", &device_names);
-	if (!device_names && device_names[0]) {
+	if (!device_names || !device_names[0]) {
 		g_debug ("Couldn't obtain list of ac_adapters");
 		/*
 		 * If we do not have an AC adapter, then assume we are a
