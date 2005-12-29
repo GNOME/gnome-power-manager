@@ -1,5 +1,10 @@
 2005-12-28  Richard Hughes  <richard@hughsie.com>
 
+	* gnome-power-manager.spec.in: Add "Requires: dbus-x11" to fix
+	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=176656
+
+2005-12-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.c, src/gpm-main.c, src/gpm-screensaver.{c|h}:
 	Much modified patch from Jaap to use the gnome-screensaver
 	screensave enable gconf key, rather than our own complete replacement.

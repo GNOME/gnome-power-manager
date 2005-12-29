@@ -1,7 +1,7 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: cvs20051222build1
+Release: cvs20051229build1
 License: GPL
 Group: Applications/System
 Source: http://ftp.gnome.org/pub/GNOME/sources/gnome-power-manager/0.3/gnome-power-manager-%{version}.tar.gz
@@ -21,6 +21,7 @@ Requires: libglade2 >= @LIBGLADE_REQUIRED@
 Requires: libwnck >= @LIBWNCK_REQUIRED@
 Requires: hal >= @HAL_REQUIRED@
 Requires: dbus-glib >= @DBUS_REQUIRED@
+Requires: dbus-x11 >= @DBUS_REQUIRED@
 Requires: libnotify >= @LIBNOTIFY_REQUIRED@
 Requires: notification-daemon >= @LIBNOTIFY_REQUIRED@
 Requires(pre): GConf2

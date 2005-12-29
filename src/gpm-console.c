@@ -54,10 +54,6 @@ gboolean isVerbose;
 
 int daemon (int nochdir, int noclose);
 
-/** Generic exit
- *
- */
-
 static void
 gpm_console_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {
