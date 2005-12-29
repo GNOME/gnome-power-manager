@@ -11,6 +11,9 @@
 	* src/gpm-hal.c (gpm_hal_is_on_ac): Fix for the case of a desktop,
 	where there is no ac_adapter.
 
+	* src/gpm-screensaver (gpm_screensaver_get_idle): Do a
+	s/getIdleTime/getActiveTime to update to the new API.
+
 2005-12-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c, src/gpm-main.c, src/gpm-screensaver.{c|h}:

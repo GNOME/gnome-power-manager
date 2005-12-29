@@ -273,7 +273,7 @@ gpm_screensaver_get_idle (gint *time)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	if (!dbus_g_proxy_call (gs_proxy, "getIdleTime", &error,
+	if (!dbus_g_proxy_call (gs_proxy, "getActiveTime", &error,
 				G_TYPE_INVALID,
 				G_TYPE_UINT, time, G_TYPE_INVALID)) {
 		gpm_dbus_glib_error (error);
