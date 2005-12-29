@@ -133,7 +133,7 @@ gpm_add_battery (const gchar *udi)
 	strncpy (sds->udi, udi, 128);
 
 	/* batteries might be missing */
-	gpm_hal_device_get_bool (udi, "battery.present", &sds->isPresent);
+	gpm_hal_device_get_bool (udi, "battery.present", &sds->is_present);
 
 	/* battery is refined using the .type property */
 	gpm_hal_device_get_string (udi, "battery.type", &type);
@@ -146,7 +146,7 @@ gpm_add_battery (const gchar *udi)
 	dev = hal_to_device_type (type);
 	g_debug ("Adding type %s", type);
 	g_free (type);
-	sysDevAdd (dev, sds);
+	gpm_sysdev_add (dev, sds);
 
 	/* register this with HAL so we get PropertyModified events */
 	gpm_hal_watch_add_device_property_modified (udi);
@@ -173,50 +173,50 @@ gpm_read_battery_data (sysDevStruct *sds)
 	g_assert (sds);
 
 	/* initialise to known defaults */
-	sds->minutesRemaining = 0;
-	sds->percentageCharge = 0;
-	sds->isRechargeable = FALSE;
-	sds->isCharging = FALSE;
-	sds->isDischarging = FALSE;
+	sds->minutes_remaining = 0;
+	sds->percentage_charge = 0;
+	sds->is_rechargeable = FALSE;
+	sds->is_charging = FALSE;
+	sds->is_discharging = FALSE;
 
-	if (!sds->isPresent) {
+	if (!sds->is_present) {
 		g_debug ("Battery %s not present!", sds->udi);
 		/* refresh to set missing state */
-		sysDevUpdate (sds->sd->type);
+		gpm_sysdev_update (sds->sd->type);
 		return FALSE;
 	}
 
 	/* battery might not be rechargeable, have to check */
 	gpm_hal_device_get_bool (sds->udi, "battery.is_rechargeable",
-			     &sds->isRechargeable);
-	if (sds->isRechargeable) {
+			     &sds->is_rechargeable);
+	if (sds->is_rechargeable) {
 		gpm_hal_device_get_bool (sds->udi, "battery.rechargeable.is_charging",
-				     &sds->isCharging);
+				     &sds->is_charging);
 		gpm_hal_device_get_bool (sds->udi, "battery.rechargeable.is_discharging",
-				     &sds->isDischarging);
+				     &sds->is_discharging);
 	}
 
 	/* sanity check that remaining time exists (if it should) */
 	is_present = gpm_hal_device_get_int (sds->udi,
 			"battery.remaining_time", &seconds_remaining);
-	if (!is_present && (sds->isDischarging || sds->isCharging)) {
+	if (!is_present && (sds->is_discharging || sds->is_charging)) {
 		g_warning ("GNOME Power Manager could not read your battery's "
 			   "remaining time. Please report this as a bug, "
 			   "providing the information to: " GPMURL);
 	} else if (seconds_remaining > 0) {
 		/* we have to scale this to minutes */
-		sds->minutesRemaining = seconds_remaining / 60;
+		sds->minutes_remaining = seconds_remaining / 60;
 	}
 
 	/* sanity check that remaining time exists (if it should) */
 	is_present = gpm_hal_device_get_int (sds->udi, "battery.charge_level.percentage",
-					 &sds->percentageCharge);
-	if (!is_present && (sds->isDischarging || sds->isCharging)) {
+					 &sds->percentage_charge);
+	if (!is_present && (sds->is_discharging || sds->is_charging)) {
 		g_warning ("GNOME Power Manager could not read your battery's "
 			   "percentage charge. Please report this as a bug, "
 			   "providing the information to: " GPMURL);
 	}
-	sysDevUpdate (sds->sd->type);
+	gpm_sysdev_update (sds->sd->type);
 	return TRUE;
 }
 
@@ -240,11 +240,11 @@ gpm_device_removed (const gchar *udi)
 	 * UPS's/mice/keyboards don't use battery.present
 	 * they just disappear from the device tree
 	 */
-	sysDevRemoveAll (udi);
+	gpm_sysdev_remove_all (udi);
 	/* only update the correct device class */
-	sds = sysDevFindAll (udi);
+	sds = gpm_sysdev_find_all (udi);
 	if (sds) {
-		sysDevUpdate (sds->sd->type);
+		gpm_sysdev_update (sds->sd->type);
 		ret = TRUE;
 	}
 	/* remove watch */
@@ -275,9 +275,9 @@ gpm_device_new_capability (const gchar *udi, const gchar *capability)
 	if (strcmp (capability, "battery") == 0) {
 		gpm_add_battery (udi);
 		/* only update the correct device class */
-		sds = sysDevFindAll (udi);
+		sds = gpm_sysdev_find_all (udi);
 		if (sds)
-			sysDevUpdate (sds->sd->type);
+			gpm_sysdev_update (sds->sd->type);
 	}
 	return TRUE;
 }

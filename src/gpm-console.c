@@ -69,7 +69,7 @@ gpm_exit (void)
 	gpm_dbus_remove_nlost ();
 #endif
 	/* cleanup all system devices */
-	sysDevFreeAll ();
+	gpm_sysdev_free_all ();
 	exit (0);
 }
 
@@ -106,7 +106,7 @@ notify_user_low_batt (sysDevStruct *sds, gint newCharge)
 	gint lowThreshold;
 	gint criticalThreshold;
 
-	if (!sds->isDischarging) {
+	if (!sds->is_discharging) {
 		g_debug ("battery is not discharging!");
 		return FALSE;
 	}
@@ -160,7 +160,7 @@ hal_device_property_modified (const gchar *udi,
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		/* update all states */
-		sysDevUpdateAll ();
+		gpm_sysdev_update_all ();
 		return;
 	}
 
@@ -168,7 +168,7 @@ hal_device_property_modified (const gchar *udi,
 	if (strncmp (key, "battery", 7) != 0)
 		return;
 
-	sds = sysDevFindAll (udi);
+	sds = gpm_sysdev_find_all (udi);
 	/*
 	 * if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
@@ -191,45 +191,45 @@ hal_device_property_modified (const gchar *udi,
 	DeviceType dev = hal_to_device_type (type);
 	g_free (type);
 
-	/* find old percentageCharge */
-	sd = sysDevGet (dev);
-	oldCharge = sd->percentageCharge;
+	/* find old percentage_charge */
+	sd = gpm_sysdev_get (dev);
+	oldCharge = sd->percentage_charge;
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isPresent);
+		gpm_hal_device_get_bool (udi, key, &sds->is_present);
 		/* read in values */
 		gpm_read_battery_data (sds);
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isCharging);
+		gpm_hal_device_get_bool (udi, key, &sds->is_charging);
 		/*
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
-		sds->minutesRemaining = 0;
+		sds->minutes_remaining = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isDischarging);
+		gpm_hal_device_get_bool (udi, key, &sds->is_discharging);
 		/* invalidate the remaining time */
-		sds->minutesRemaining = 0;
+		sds->minutes_remaining = 0;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_int (udi, key, &sds->percentageCharge);
+		gpm_hal_device_get_int (udi, key, &sds->percentage_charge);
 		/* give notification @100% */
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
 		gpm_hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
-			sds->minutesRemaining = tempval / 60;
+			sds->minutes_remaining = tempval / 60;
 	} else {
 		/* ignore */
 		return;
 	}
 
 	/* update */
-	sysDevUpdate (dev);
-	sysDevDebugPrint (dev);
+	gpm_sysdev_update (dev);
+	gpm_sysdev_debug_print (dev);
 
-	/* find new percentageCharge  */
-	newCharge = sd->percentageCharge;
+	/* find new percentage_charge  */
+	newCharge = sd->percentage_charge;
 
 	g_debug ("newCharge = %i, oldCharge = %i", newCharge, oldCharge);
 
@@ -382,7 +382,7 @@ main (int argc, char *argv[])
 		exit (1);
 
 	/* initialise all system devices */
-	sysDevInitAll ();
+	gpm_sysdev_init_all ();
 
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
@@ -422,8 +422,8 @@ main (int argc, char *argv[])
 	gpm_coldplug_acadapter ();
 	gpm_coldplug_buttons ();
 
-	sysDevUpdateAll ();
-	sysDevDebugPrintAll ();
+	gpm_sysdev_update_all ();
+	gpm_sysdev_debug_print_all ();
 
 	g_main_loop_run (loop);
 

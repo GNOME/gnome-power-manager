@@ -51,7 +51,7 @@ static sysDev mysystem[BATT_LAST];
  *  @return			The string, e.g. "battery"
  */
 gchar *
-sysDevToString (DeviceType type)
+gpm_sysdev_to_string (DeviceType type)
 {
 	if (type == BATT_PRIMARY)
 		return _("Laptop battery");
@@ -76,7 +76,7 @@ sysDevToString (DeviceType type)
  *		the mysystem[type] store be accessed.
  */
 sysDev *
-sysDevGet (DeviceType type)
+gpm_sysdev_get (DeviceType type)
 {
 	if (type == BATT_PRIMARY ||
 	    type == BATT_MOUSE ||
@@ -84,7 +84,7 @@ sysDevGet (DeviceType type)
 	    type == BATT_PDA ||
 	    type == BATT_UPS)
 		return &mysystem[type];
-	g_error ("sysDevGet!");
+	g_error ("gpm_sysdev_get!");
 	return NULL;
 }
 
@@ -93,28 +93,28 @@ sysDevGet (DeviceType type)
  *  @param	type		The device type
  */
 void
-sysDevInit (DeviceType type)
+gpm_sysdev_init (DeviceType type)
 {
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	sd->devices = g_ptr_array_new ();
-	sd->isPresent = FALSE;
-	sd->percentageCharge = 0;
-	sd->minutesRemaining = 0;
+	sd->is_present = FALSE;
+	sd->percentage_charge = 0;
+	sd->minutes_remaining = 0;
 }
 
 /** Frees the system device object of a specified type
  *
  *  @param	type		The device type
  */
-void
-sysDevFree (DeviceType type)
+static void
+gpm_sysdev_free (DeviceType type)
 {
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	g_ptr_array_free (sd->devices, TRUE);
 	sd->devices = NULL;
-	sd->isPresent = FALSE;
-	sd->percentageCharge = 0;
-	sd->minutesRemaining = 0;
+	sd->is_present = FALSE;
+	sd->percentage_charge = 0;
+	sd->minutes_remaining = 0;
 }
 
 /** Prints the system device object of a specified type
@@ -122,81 +122,81 @@ sysDevFree (DeviceType type)
  *  @param	type		The device type
  */
 void
-sysDevDebugPrint (DeviceType type)
+gpm_sysdev_debug_print (DeviceType type)
 {
-	sysDev *sd = sysDevGet (type);
-	g_debug ("Printing %s device parameters:", sysDevToString (type));
-	g_debug ("percentageCharge = %i", sd->percentageCharge);
-	g_debug ("numberDevices    = %i", sd->numberDevices);
+	sysDev *sd = gpm_sysdev_get (type);
+	g_debug ("Printing %s device parameters:", gpm_sysdev_to_string (type));
+	g_debug ("percentage_charge = %i", sd->percentage_charge);
+	g_debug ("number_devices    = %i", sd->number_devices);
 	if (type != BATT_MOUSE && type != BATT_KEYBOARD) {
-		g_debug ("isPresent        = %i", sd->isPresent);
-		g_debug ("minutesRemaining = %i", sd->minutesRemaining);
-		g_debug ("isCharging       = %i", sd->isCharging);
-		g_debug ("isDischarging    = %i", sd->isDischarging);
+		g_debug ("is_present        = %i", sd->is_present);
+		g_debug ("minutes_remaining = %i", sd->minutes_remaining);
+		g_debug ("is_charging       = %i", sd->is_charging);
+		g_debug ("is_discharging    = %i", sd->is_discharging);
 	}
 }
 
 /** Initialises all the system device objects
  */
 void
-sysDevInitAll ()
+gpm_sysdev_init_all ()
 {
-	sysDevInit (BATT_PRIMARY);
-	sysDevInit (BATT_UPS);
-	sysDevInit (BATT_MOUSE);
-	sysDevInit (BATT_KEYBOARD);
-	sysDevInit (BATT_PDA);
+	gpm_sysdev_init (BATT_PRIMARY);
+	gpm_sysdev_init (BATT_UPS);
+	gpm_sysdev_init (BATT_MOUSE);
+	gpm_sysdev_init (BATT_KEYBOARD);
+	gpm_sysdev_init (BATT_PDA);
 }
 
 /** Frees all the system device objects
  */
 void
-sysDevFreeAll (void)
+gpm_sysdev_free_all (void)
 {
 	g_debug ("Freeing all device types");
-	sysDevFree (BATT_PRIMARY);
-	sysDevFree (BATT_UPS);
-	sysDevFree (BATT_MOUSE);
-	sysDevFree (BATT_KEYBOARD);
-	sysDevFree (BATT_PDA);
+	gpm_sysdev_free (BATT_PRIMARY);
+	gpm_sysdev_free (BATT_UPS);
+	gpm_sysdev_free (BATT_MOUSE);
+	gpm_sysdev_free (BATT_KEYBOARD);
+	gpm_sysdev_free (BATT_PDA);
 }
 
 /** Prints all the system device objects
  */
 void
-sysDevDebugPrintAll (void)
+gpm_sysdev_debug_print_all (void)
 {
 	sysDev *sd = NULL;
 	g_debug ("Printing all device types");
 	/* only print if we have at least one device type */
-	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->numberDevices > 0)
-		sysDevDebugPrint (BATT_PRIMARY);
-	sd = sysDevGet (BATT_UPS);
-	if (sd->numberDevices > 0)
-		sysDevDebugPrint (BATT_UPS);
-	sd = sysDevGet (BATT_MOUSE);
-	if (sd->numberDevices > 0)
-		sysDevDebugPrint (BATT_MOUSE);
-	sd = sysDevGet (BATT_KEYBOARD);
-	if (sd->numberDevices > 0)
-		sysDevDebugPrint (BATT_KEYBOARD);
-	sd = sysDevGet (BATT_PDA);
-	if (sd->numberDevices > 0)
-		sysDevDebugPrint (BATT_PDA);
+	sd = gpm_sysdev_get (BATT_PRIMARY);
+	if (sd->number_devices > 0)
+		gpm_sysdev_debug_print (BATT_PRIMARY);
+	sd = gpm_sysdev_get (BATT_UPS);
+	if (sd->number_devices > 0)
+		gpm_sysdev_debug_print (BATT_UPS);
+	sd = gpm_sysdev_get (BATT_MOUSE);
+	if (sd->number_devices > 0)
+		gpm_sysdev_debug_print (BATT_MOUSE);
+	sd = gpm_sysdev_get (BATT_KEYBOARD);
+	if (sd->number_devices > 0)
+		gpm_sysdev_debug_print (BATT_KEYBOARD);
+	sd = gpm_sysdev_get (BATT_PDA);
+	if (sd->number_devices > 0)
+		gpm_sysdev_debug_print (BATT_PDA);
 }
 
 /** Updates all the system device objects
  */
 void
-sysDevUpdateAll (void)
+gpm_sysdev_update_all (void)
 {
 	g_debug ("Updating all device types");
-	sysDevUpdate (BATT_PRIMARY);
-	sysDevUpdate (BATT_UPS);
-	sysDevUpdate (BATT_MOUSE);
-	sysDevUpdate (BATT_KEYBOARD);
-	sysDevUpdate (BATT_PDA);
+	gpm_sysdev_update (BATT_PRIMARY);
+	gpm_sysdev_update (BATT_UPS);
+	gpm_sysdev_update (BATT_MOUSE);
+	gpm_sysdev_update (BATT_KEYBOARD);
+	gpm_sysdev_update (BATT_PDA);
 }
 
 
@@ -207,15 +207,15 @@ sysDevUpdateAll (void)
  *  @return			Success
  */
 void
-sysDevAdd (DeviceType type, sysDevStruct *sds)
+gpm_sysdev_add (DeviceType type, sysDevStruct *sds)
 {
 	g_assert (sds);
 
-	if (!sds->isPresent)
+	if (!sds->is_present)
 		g_warning ("Adding missing device, may bug");
 
 	/* need to check if already exists */
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	g_assert (sd);
 	g_assert (sd->devices);
 
@@ -227,7 +227,7 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
 	sd->type = type;
 
 	/* increment number of devices in this struct */
-	sd->numberDevices++;
+	sd->number_devices++;
 }
 
 /** Gets the specified system device from the table by index
@@ -236,12 +236,12 @@ sysDevAdd (DeviceType type, sysDevStruct *sds)
  *  @param	index		The number device in the table
  *  @return			A sysDevStruct
  */
-sysDevStruct *
-sysDevGetIndex (DeviceType type, int index)
+static sysDevStruct *
+gpm_sysdev_get_index (DeviceType type, int index)
 {
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	if (index < 0 || index > sd->devices->len) {
-		g_warning ("sysDevGetIndex: Invalid index %i", index);
+		g_warning ("gpm_sysdev_get_index: Invalid index %i", index);
 		return NULL;
 	}
 	return (sysDevStruct *) g_ptr_array_index (sd->devices, index);
@@ -253,19 +253,19 @@ sysDevGetIndex (DeviceType type, int index)
  *  @return			Success
  */
 void
-sysDevList (DeviceType type)
+gpm_sysdev_list (DeviceType type)
 {
 	int a;
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	sysDevStruct *temp;
 
-	g_print ("Printing %s device list:\n", sysDevToString (type));
+	g_print ("Printing %s device list:\n", gpm_sysdev_to_string (type));
 	for (a=0; a < sd->devices->len; a++) {
-		temp = sysDevGetIndex (type, a);
+		temp = gpm_sysdev_get_index (type, a);
 		g_print ("%s (%i)\n", temp->udi, a);
-		g_print (" percentageCharge : %i\n", temp->percentageCharge);
-		g_print (" minutesRemaining : %i\n", temp->minutesRemaining);
-		g_print (" isPresent        : %i\n", temp->isPresent);
+		g_print (" percentage_charge : %i\n", temp->percentage_charge);
+		g_print (" minutes_remaining : %i\n", temp->minutes_remaining);
+		g_print (" is_present        : %i\n", temp->is_present);
 	}
 }
 
@@ -276,19 +276,19 @@ sysDevList (DeviceType type)
  *  @return			A sysDevStruct
  */
 sysDevStruct *
-sysDevFind (DeviceType type, const gchar *udi)
+gpm_sysdev_find (DeviceType type, const gchar *udi)
 {
 	int a;
-	sysDev *sd = sysDevGet (type);
+	sysDev *sd = gpm_sysdev_get (type);
 	sysDevStruct *temp;
 
 	if (!udi) {
-		g_warning ("sysDevFind UDI is NULL");
+		g_warning ("gpm_sysdev_find UDI is NULL");
 		return NULL;
 	}
 
 	for (a=0; a < sd->devices->len; a++) {
-		temp = sysDevGetIndex (type, a);
+		temp = gpm_sysdev_get_index (type, a);
 		if (strcmp(temp->udi, udi) == 0)
 			return temp;
 	}
@@ -301,23 +301,23 @@ sysDevFind (DeviceType type, const gchar *udi)
  *  @return			A sysDevStruct
  */
 sysDevStruct *
-sysDevFindAll (const gchar *udi)
+gpm_sysdev_find_all (const gchar *udi)
 {
 	sysDevStruct *temp;
 	/* ordered in order of likeliness */
-	temp = sysDevFind (BATT_PRIMARY, udi);
+	temp = gpm_sysdev_find (BATT_PRIMARY, udi);
 	if (temp)
 		return temp;
-	temp = sysDevFind (BATT_MOUSE, udi);
+	temp = gpm_sysdev_find (BATT_MOUSE, udi);
 	if (temp)
 		return temp;
-	temp = sysDevFind (BATT_KEYBOARD, udi);
+	temp = gpm_sysdev_find (BATT_KEYBOARD, udi);
 	if (temp)
 		return temp;
-	temp = sysDevFind (BATT_UPS, udi);
+	temp = gpm_sysdev_find (BATT_UPS, udi);
 	if (temp)
 		return temp;
-	temp = sysDevFind (BATT_PDA, udi);
+	temp = gpm_sysdev_find (BATT_PDA, udi);
 	if (temp)
 		return temp;
 	return NULL;
@@ -329,15 +329,15 @@ sysDevFindAll (const gchar *udi)
  *  @param	udi		The HAL UDI
  */
 void
-sysDevRemove (DeviceType type, const char *udi)
+gpm_sysdev_remove (DeviceType type, const char *udi)
 {
-	sysDev *sd = sysDevGet (type);
-	sysDevStruct *device = sysDevFind (type, udi);
+	sysDev *sd = gpm_sysdev_get (type);
+	sysDevStruct *device = gpm_sysdev_find (type, udi);
 	if (!device) {
 		g_warning ("'%s' not found!", udi);
 		return;
 	}
-	sd->numberDevices--;
+	sd->number_devices--;
 	g_ptr_array_remove (sd->devices, device);
 	g_free (device);
 }
@@ -347,13 +347,13 @@ sysDevRemove (DeviceType type, const char *udi)
  *  @param	udi		The HAL UDI
  */
 void
-sysDevRemoveAll (const char *udi)
+gpm_sysdev_remove_all (const char *udi)
 {
-	sysDevRemove (BATT_PRIMARY, udi);
-	sysDevRemove (BATT_UPS, udi);
-	sysDevRemove (BATT_MOUSE, udi);
-	sysDevRemove (BATT_KEYBOARD, udi);
-	sysDevRemove (BATT_PDA, udi);
+	gpm_sysdev_remove (BATT_PRIMARY, udi);
+	gpm_sysdev_remove (BATT_UPS, udi);
+	gpm_sysdev_remove (BATT_MOUSE, udi);
+	gpm_sysdev_remove (BATT_KEYBOARD, udi);
+	gpm_sysdev_remove (BATT_PDA, udi);
 }
 
 /** Updates the system device object of a specified type
@@ -361,72 +361,72 @@ sysDevRemoveAll (const char *udi)
  *  @param	type		The device type
  */
 void
-sysDevUpdate (DeviceType type)
+gpm_sysdev_update (DeviceType type)
 {
 	int a;
-	int numPresent = 0;
-	int numDischarging = 0;
-	sysDev *sd = sysDevGet (type);
+	int num_present = 0;
+	int num_discharging = 0;
+	sysDev *sd = gpm_sysdev_get (type);
 	sysDevStruct *sds;
 
 	/* clear old values */
-	sd->minutesRemaining = 0;
-	sd->percentageCharge = 0;
-	sd->isCharging = FALSE;
-	sd->isDischarging = FALSE;
-	sd->isPresent = FALSE;
+	sd->minutes_remaining = 0;
+	sd->percentage_charge = 0;
+	sd->is_charging = FALSE;
+	sd->is_discharging = FALSE;
+	sd->is_present = FALSE;
 
 	/* find the number of devices present, and set charge states */
 	for (a=0; a < sd->devices->len; a++) {
-		sds = sysDevGetIndex (type, a);
-		if (sds->isPresent) {
-			numPresent++;
+		sds = gpm_sysdev_get_index (type, a);
+		if (sds->is_present) {
+			num_present++;
 			/*
 			 * Only one device has to be present for the class
 			 * to be present.
 			 */
-			if (sds->isPresent)
-				sd->isPresent = TRUE;
+			if (sds->is_present)
+				sd->is_present = TRUE;
 			/*
 			 * Only one device has to be charging or discharging
 			 * for the class to be valid.
 			 */
-			if (sds->isCharging)
-				sd->isCharging = TRUE;
-			if (sds->isDischarging) {
-				sd->isDischarging = TRUE;
-				numDischarging++;
+			if (sds->is_charging)
+				sd->is_charging = TRUE;
+			if (sds->is_discharging) {
+				sd->is_discharging = TRUE;
+				num_discharging++;
 			}
 		}
 	}
 	/* sanity check */
-	if (sd->isDischarging && sd->isCharging) {
-		g_warning ("sysDevUpdate: Sanity check kicked in! "
+	if (sd->is_discharging && sd->is_charging) {
+		g_warning ("gpm_sysdev_update: Sanity check kicked in! "
 			   "Multiple device object cannot be charging and "
 			   "discharging simultaneously!");
-		sd->isCharging = FALSE;
+		sd->is_charging = FALSE;
 	}
 	/* no point working out average if no devices */
-	if (numPresent == 0) {
-		g_debug ("no devices of type %s", sysDevToString(type));
+	if (num_present == 0) {
+		g_debug ("no devices of type %s", gpm_sysdev_to_string(type));
 		return;
 	}
-	g_debug ("%i devices of type %s", numPresent, sysDevToString(type));
+	g_debug ("%i devices of type %s", num_present, gpm_sysdev_to_string(type));
 	/* do the shortcut for a single device, and return */
-	if (sd->numberDevices == 1) {
-		sds = sysDevGetIndex (type, 0);
-		sd->minutesRemaining = sds->minutesRemaining;
-		sd->percentageCharge = sds->percentageCharge;
+	if (sd->number_devices == 1) {
+		sds = gpm_sysdev_get_index (type, 0);
+		sd->minutes_remaining = sds->minutes_remaining;
+		sd->percentage_charge = sds->percentage_charge;
 		return;
 	}
 	/* iterate thru all the devices (multiple battery scenario) */
 	for (a=0; a < sd->devices->len; a++) {
-		sds = sysDevGetIndex (type, a);
-		if (sds->isPresent) {
+		sds = gpm_sysdev_get_index (type, a);
+		if (sds->is_present) {
 			/* for now, just add */
-			sd->minutesRemaining += sds->minutesRemaining;
+			sd->minutes_remaining += sds->minutes_remaining;
 			/* for now, just average */
-			sd->percentageCharge += (sds->percentageCharge / numPresent);
+			sd->percentage_charge += (sds->percentage_charge / num_present);
 		}
 	}
 	/*
@@ -437,9 +437,9 @@ sysDevUpdate (DeviceType type)
 	 * This should effect:
 	 *   https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
 	 */
-	if (sd->isDischarging && numDischarging != numPresent) {
-		g_warning ("doubling minutesRemaining as sequential");
+	if (sd->is_discharging && num_discharging != num_present) {
+		g_warning ("doubling minutes_remaining as sequential");
 		/* for now, just double the result */
-		sd->minutesRemaining *= numPresent;
+		sd->minutes_remaining *= num_present;
 	}
 }

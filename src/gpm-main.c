@@ -292,7 +292,7 @@ gpm_exit (void)
 	gpm_dbus_remove_nlost ();
 
 	/* cleanup all system devices */
-	sysDevFreeAll ();
+	gpm_sysdev_free_all ();
 
 	gpm_notification_icon_destroy ();
 	exit (0);
@@ -337,7 +337,7 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 	gchar *remaining;
 	gchar *action;
 
-	if (!sds->isDischarging) {
+	if (!sds->is_discharging) {
 		g_debug ("battery is not discharging!");
 		return FALSE;
 	}
@@ -360,7 +360,7 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 	/* critical warning */
 	if (new_charge == critical_threshold) {
 		g_debug ("battery is critical limit!");
-		remaining = get_timestring_from_minutes (sds->minutesRemaining);
+		remaining = get_timestring_from_minutes (sds->minutes_remaining);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					   "of remaining battery life (%i%%). "
 			  		   "Plug in your AC Adapter to avoid losing data."),
@@ -377,7 +377,7 @@ notify_user_low_batt (sysDevStruct *sds, gint new_charge)
 	/* low warning */
 	if (new_charge < low_threshold) {
 		g_debug ("battery is low!");
-		remaining = get_timestring_from_minutes (sds->minutesRemaining);
+		remaining = get_timestring_from_minutes (sds->minutes_remaining);
 		g_assert (remaining);
 		message = g_strdup_printf (
 			_("You have approximately <b>%s</b> of remaining battery life (%i%%). "
@@ -448,7 +448,7 @@ hal_device_property_modified (const gchar *udi,
 			gpm_emit_mains_changed (TRUE);
 		}
 		/* update all states */
-		sysDevUpdateAll ();
+		gpm_sysdev_update_all ();
 		/* update icon */
 		gpm_notification_icon_update ();
 		return;
@@ -458,7 +458,7 @@ hal_device_property_modified (const gchar *udi,
 	if (strncmp (key, "battery", 7) != 0)
 		return;
 
-	sds = sysDevFindAll (udi);
+	sds = gpm_sysdev_find_all (udi);
 	/*
 	 * if we BUG here then *HAL* has a problem where key modification is
 	 * done before capability is present
@@ -481,32 +481,32 @@ hal_device_property_modified (const gchar *udi,
 	DeviceType dev = hal_to_device_type (type);
 	g_free (type);
 
-	/* find old percentageCharge */
-	sd = sysDevGet (dev);
-	old_charge = sd->percentageCharge;
+	/* find old percentage_charge */
+	sd = gpm_sysdev_get (dev);
+	old_charge = sd->percentage_charge;
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isPresent);
+		gpm_hal_device_get_bool (udi, key, &sds->is_present);
 		/* read in values */
 		gpm_read_battery_data (sds);
 		/* update icon if required */
 		gpm_notification_icon_update ();
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isCharging);
+		gpm_hal_device_get_bool (udi, key, &sds->is_charging);
 		/*
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
-		sds->minutesRemaining = 0;
+		sds->minutes_remaining = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->isDischarging);
+		gpm_hal_device_get_bool (udi, key, &sds->is_discharging);
 		/* invalidate the remaining time */
-		sds->minutesRemaining = 0;
+		sds->minutes_remaining = 0;
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_int (udi, key, &sds->percentageCharge);
+		gpm_hal_device_get_int (udi, key, &sds->percentage_charge);
 		/* give notification @100% */
-		if (sd->type == BATT_PRIMARY && sds->percentageCharge == 100) {
+		if (sd->type == BATT_PRIMARY && sds->percentage_charge == 100) {
 			gpm_libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
 					 LIBNOTIFY_URGENCY_LOW,
 					 gpm_notification_get_icon ());
@@ -515,17 +515,17 @@ hal_device_property_modified (const gchar *udi,
 		gint tempval;
 		gpm_hal_device_get_int (udi, key, &tempval);
 		if (tempval > 0)
-			sds->minutesRemaining = tempval / 60;
+			sds->minutes_remaining = tempval / 60;
 	} else {
 		/* ignore */
 		return;
 	}
 
-	sysDevUpdate (dev);
-	sysDevDebugPrint (dev);
+	gpm_sysdev_update (dev);
+	gpm_sysdev_debug_print (dev);
 
-	/* find new percentageCharge  */
-	new_charge = sd->percentageCharge;
+	/* find new percentage_charge  */
+	new_charge = sd->percentage_charge;
 
 	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
 
@@ -750,7 +750,7 @@ main (int argc, char *argv[])
 		g_error ("Cannot continue without stock icons");
 
 	/* initialise all system devices */
-	sysDevInitAll ();
+	gpm_sysdev_init_all ();
 
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
@@ -798,8 +798,8 @@ main (int argc, char *argv[])
 	gpm_coldplug_acadapter ();
 	gpm_coldplug_buttons ();
 
-	sysDevUpdateAll ();
-	sysDevDebugPrintAll ();
+	gpm_sysdev_update_all ();
+	gpm_sysdev_debug_print_all ();
 
 	gpm_notification_icon_update ();
 

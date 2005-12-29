@@ -43,12 +43,12 @@ typedef enum {
  * over all battery devices of the same type.
  */
 typedef struct {
-	int percentageCharge;	/**< The percentage charge remaining	*/
-	int minutesRemaining;	/**< Minutes remaining until charged	*/
-	gboolean isCharging;	/**< If general device is charging	*/
-	gboolean isDischarging;	/**< If general device is discharging	*/
-	gboolean isPresent;	/**< If any device are present		*/
-	int numberDevices;	/**< Number of devices of this type	*
+	int percentage_charge;	/**< The percentage charge remaining	*/
+	int minutes_remaining;	/**< Minutes remaining until charged	*/
+	gboolean is_charging;	/**< If general device is charging	*/
+	gboolean is_discharging;	/**< If general device is discharging	*/
+	gboolean is_present;	/**< If any device are present		*/
+	int number_devices;	/**< Number of devices of this type	*
 				 **  N.B. not present batteries are	*
 				 **  still counted here			*/
 	GPtrArray* devices;	/**< system struct array		*/
@@ -63,31 +63,31 @@ typedef struct {
  */
 typedef struct {
 	gchar udi[128];		/**< The HAL UDI			*/
-	gboolean isRechargeable;/**< If device is rechargeable		*/
-	int percentageCharge;	/**< The percentage charge remaining	*/
-	int minutesRemaining;	/**< Minutes remaining until charged	*/
-	gboolean isPresent;	/**< If the device is present		*/
-	gboolean isCharging;	/**< If device is charging		*/
-	gboolean isDischarging;	/**< If device is discharging		*/
+	int percentage_charge;	/**< The percentage charge remaining	*/
+	int minutes_remaining;	/**< Minutes remaining until charged	*/
+	gboolean is_rechargeable;/**< If device is rechargeable		*/
+	gboolean is_present;	/**< If the device is present		*/
+	gboolean is_charging;	/**< If device is charging		*/
+	gboolean is_discharging;	/**< If device is discharging		*/
 	sysDev *sd;		/**< Pointer to parent system device	*/
 } sysDevStruct;
 
-gchar *sysDevToString (DeviceType type);
+gchar *gpm_sysdev_to_string (DeviceType type);
 
-sysDev *sysDevGet (DeviceType type);
-sysDevStruct *sysDevFind (DeviceType type, const gchar *udi);
-sysDevStruct *sysDevFindAll (const gchar *udi);
+sysDev *gpm_sysdev_get (DeviceType type);
+sysDevStruct *gpm_sysdev_find (DeviceType type, const gchar *udi);
+sysDevStruct *gpm_sysdev_find_all (const gchar *udi);
 
-void sysDevInitAll ();
-void sysDevFreeAll ();
-void sysDevDebugPrintAll (void);
-void sysDevUpdateAll ();
+void gpm_sysdev_init_all ();
+void gpm_sysdev_free_all ();
+void gpm_sysdev_debug_print_all (void);
+void gpm_sysdev_update_all ();
 
-void sysDevList (DeviceType type);
-void sysDevAdd (DeviceType type, sysDevStruct *sds);
-void sysDevDebugPrint (DeviceType type);
-void sysDevUpdate (DeviceType type);
-void sysDevRemove (DeviceType type, const char *udi);
-void sysDevRemoveAll (const char *udi);
+void gpm_sysdev_list (DeviceType type);
+void gpm_sysdev_add (DeviceType type, sysDevStruct *sds);
+void gpm_sysdev_debug_print (DeviceType type);
+void gpm_sysdev_update (DeviceType type);
+void gpm_sysdev_remove (DeviceType type, const char *udi);
+void gpm_sysdev_remove_all (const char *udi);
 
 #endif	/* _GPMSYSDEV_H */

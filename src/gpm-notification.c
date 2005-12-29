@@ -104,23 +104,23 @@ get_stock_id (gchar* iconopt)
 	/* find out when the user considers the power "low" */
 	low_threshold = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
 	/* list in order of priority */
-	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->isPresent && sd->percentageCharge < low_threshold) {
-		index = get_index_from_percent (sd->percentageCharge);
+	sd = gpm_sysdev_get (BATT_PRIMARY);
+	if (sd->is_present && sd->percentage_charge < low_threshold) {
+		index = get_index_from_percent (sd->percentage_charge);
 		if (on_ac)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
-	sd = sysDevGet (BATT_UPS);
-	if (sd->isPresent && sd->percentageCharge < low_threshold) {
-		index = get_index_from_percent (sd->percentageCharge);
+	sd = gpm_sysdev_get (BATT_UPS);
+	if (sd->is_present && sd->percentage_charge < low_threshold) {
+		index = get_index_from_percent (sd->percentage_charge);
 		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
-	sd = sysDevGet (BATT_MOUSE);
-	if (sd->isPresent && sd->percentageCharge < low_threshold)
+	sd = gpm_sysdev_get (BATT_MOUSE);
+	if (sd->is_present && sd->percentage_charge < low_threshold)
 		return g_strdup_printf ("gnome-power-mouse");
-	sd = sysDevGet (BATT_KEYBOARD);
-	if (sd->isPresent && sd->percentageCharge < low_threshold)
+	sd = gpm_sysdev_get (BATT_KEYBOARD);
+	if (sd->is_present && sd->percentage_charge < low_threshold)
 		return g_strdup_printf ("gnome-power-keyboard");
 	/*
 	 * Check if we should just show the charging / discharging icon 
@@ -132,9 +132,9 @@ get_stock_id (gchar* iconopt)
 		return NULL;
 	}
 	/* Only display if charging or disharging */
-	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->isPresent && (sd->isCharging || sd->isDischarging)) {
-		index = get_index_from_percent (sd->percentageCharge);
+	sd = gpm_sysdev_get (BATT_PRIMARY);
+	if (sd->is_present && (sd->is_charging || sd->is_discharging)) {
+		index = get_index_from_percent (sd->percentage_charge);
 		if (on_ac)
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
@@ -148,11 +148,11 @@ get_stock_id (gchar* iconopt)
 		return NULL;
 	}
 	/* Do the rest of the battery icon states */
-	sd = sysDevGet (BATT_PRIMARY);
-	if (sd->isPresent) {
-		index = get_index_from_percent (sd->percentageCharge);
+	sd = gpm_sysdev_get (BATT_PRIMARY);
+	if (sd->is_present) {
+		index = get_index_from_percent (sd->percentage_charge);
 		if (on_ac) {
-			if (!sd->isCharging && !sd->isDischarging)
+			if (!sd->is_charging && !sd->is_discharging)
 				return g_strdup ("gnome-power-ac-charged");
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		}
@@ -211,42 +211,42 @@ get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
 	g_assert (sds);
 
 	/* do not display for not present devices */
-	if (!sds->isPresent)
+	if (!sds->is_present)
 		return NULL;
 
 	tooltip = g_string_new ("");
-	devicestr = sysDevToString (type);
+	devicestr = gpm_sysdev_to_string (type);
 
 	/* don't display all the extra stuff for keyboards and mice */
 	if (type == BATT_MOUSE ||
 	    type == BATT_KEYBOARD ||
 	    type == BATT_PDA) {
 		g_string_printf (tooltip, "%s (%i%%)",
-				 devicestr, sds->percentageCharge);
+				 devicestr, sds->percentage_charge);
 		return tooltip;
 	}
 
 	/* work out chargestate */
-	if (sds->isCharging)
+	if (sds->is_charging)
 		chargestate = _("charging");
-	else if (sds->isDischarging)
+	else if (sds->is_discharging)
 		chargestate = _("discharging");
-	else if (!sds->isCharging &&
-		 !sds->isDischarging)
+	else if (!sds->is_charging &&
+		 !sds->is_discharging)
 		chargestate = _("charged");
 
 	g_string_printf (tooltip, "%s %s (%i%%)",
-			 devicestr, chargestate, sds->percentageCharge);
+			 devicestr, chargestate, sds->percentage_charge);
 	/*
-	 * only display time remaining if minutesRemaining > 2
-	 * and percentageCharge < 99 to cope with some broken
+	 * only display time remaining if minutes_remaining > 2
+	 * and percentage_charge < 99 to cope with some broken
 	 * batteries.
 	 */
-	if (sds->minutesRemaining > 2 && sds->percentageCharge < 99) {
+	if (sds->minutes_remaining > 2 && sds->percentage_charge < 99) {
 		gchar *timestring;
-		timestring = get_timestring_from_minutes (sds->minutesRemaining);
+		timestring = get_timestring_from_minutes (sds->minutes_remaining);
 		if (timestring) {
-			if (sds->isCharging)
+			if (sds->is_charging)
 				g_string_append_printf (tooltip, "\n%s %s",
 					timestring, _("until charged"));
 			else
@@ -299,8 +299,8 @@ get_tooltips_system_device_type (GString *tooltip, DeviceType type)
 	sysDev *sd;
 	GString *temptip = NULL;
 	g_assert (tooltip);
-	sd = sysDevGet (type);
-	if (sd->isPresent) {
+	sd = gpm_sysdev_get (type);
+	if (sd->is_present) {
 		temptip = get_tooltips_system_device (sd);
 		g_string_append (tooltip, temptip->str);
 		g_string_free (temptip, TRUE);
