@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-24 00:30+0000\n"
-"PO-Revision-Date: 2005-12-06 01:55+0100\n"
+"POT-Creation-Date: 2005-12-30 19:23+0100\n"
+"PO-Revision-Date: 2005-12-30 19:24+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,54 +27,50 @@ msgid "Power Management"
 msgstr "Gestión de energía"
 
 #: ../gnome-power-manager.schemas.in.h:1
-msgid "If we require a password when resuming from suspend"
-msgstr "Si se requiere una contraseña al restornar de una suspensión"
+msgid "If we should notify the user that the ac_adapter is removed"
+msgstr "Si debemos notificar al usuario de que el adaptador de corriente está quitado"
 
 #: ../gnome-power-manager.schemas.in.h:2
-msgid "If we should notify the user that the ac_adapter is removed"
-msgstr ""
-
-#: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "Las opciones son nunca, crítico, carga, siempre"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../gnome-power-manager.schemas.in.h:3
 msgid "The action to take when the battery is critically low."
 msgstr "La acción que se realizará cuando la batería esté críticamente baja."
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../gnome-power-manager.schemas.in.h:4
 msgid "The brightness the display is set to on AC"
 msgstr "El brillo al que se pone la pantalla cuando se está en CA"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on battery"
 msgstr "El brillo al que se pone la pantalla cuando se está con batería"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../gnome-power-manager.schemas.in.h:6
 msgid "The event for a laptop lid closing"
 msgstr "El evento para cuando la tapa del portátil se cierre"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../gnome-power-manager.schemas.in.h:7
 msgid "The event for a system suspend button press"
 msgstr "El evento para cuando se pulse el botón de suspensión del sistema"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../gnome-power-manager.schemas.in.h:8
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr ""
 "El tiempo de inactividad en segundos antes de que el equipo intente dormir"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr ""
 "El tiempo de inactividad en segundos antes de que la pantalla intente dormir"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr ""
 "El tiempo de inactividad en segundos antes de que el disco duro intente "
 "dormir"
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../gnome-power-manager.schemas.in.h:11
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -82,7 +78,7 @@ msgstr ""
 "El porcentaje que el dispositivo de carga debe tener para ser considerado "
 "«suficientemente bajo» para realizar una acción."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -90,21 +86,21 @@ msgstr ""
 "El porcentaje que el dispositivo de carga debe tener para ser considerado "
 "«suficientemente bajo» para advertir al usuario."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../gnome-power-manager.schemas.in.h:13
 msgid "The powerdevice action threshold."
 msgstr "El umbral de acción del dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice warning threshold."
 msgstr "El umbral de advertencia del dispositivo de carga."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../gnome-power-manager.schemas.in.h:15
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "La forma de ahorro de energía (hibernar/suspender) que se usará "
 "automáticamente."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../gnome-power-manager.schemas.in.h:16
 msgid "When to show the notification icon"
 msgstr "Cuando mostrar el icono en el área de notificación"
 
@@ -154,7 +150,7 @@ msgstr[0] "minuto"
 msgstr[1] "minutos"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:708
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:709
 msgid "GNOME Power Manager"
 msgstr "Gestor de energía de Gnome"
 
@@ -162,15 +158,15 @@ msgstr "Gestor de energía de Gnome"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestión de energía para el escritorio Gnome"
 
-#: ../src/gpm-console.c:342 ../src/gpm-main.c:691
+#: ../src/gpm-console.c:336 ../src/gpm-main.c:693
 msgid "Do not daemonize"
 msgstr "No demonizar"
 
-#: ../src/gpm-console.c:344 ../src/gpm-main.c:693 ../src/gpm-prefs.c:567
+#: ../src/gpm-console.c:338 ../src/gpm-main.c:695 ../src/gpm-prefs.c:593
 msgid "Show extra debugging information"
 msgstr "Mostrar información adicional de depuración"
 
-#: ../src/gpm-main.c:355 ../src/gpm-main.c:374
+#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -179,64 +175,64 @@ msgstr ""
 "Le queda aproximadamente <b>%s</b> de batería (%i%%). Enchufe su adaptador "
 "de CA para evitar la pérdida de datos."
 
-#: ../src/gpm-main.c:359
+#: ../src/gpm-main.c:366
 msgid "Battery Critically Low"
 msgstr "La batería está críticamente baja"
 
-#: ../src/gpm-main.c:377
+#: ../src/gpm-main.c:384
 msgid "Battery Low"
 msgstr "Batería baja"
 
-#: ../src/gpm-main.c:423
+#: ../src/gpm-main.c:429
 msgid "AC Power Unplugged"
 msgstr "CA desenchufada"
 
-#: ../src/gpm-main.c:424
+#: ../src/gpm-main.c:430
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "La CA se ha desenchufado. El sistema está usando energía de la batería."
 
-#: ../src/gpm-main.c:502
+#: ../src/gpm-main.c:508
 msgid "Battery Charged"
 msgstr "Batería cargada"
 
-#: ../src/gpm-main.c:502
+#: ../src/gpm-main.c:508
 msgid "Your battery is now fully charged"
 msgstr "Su batería está cargada completamente ahora"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-notification.c:231
 msgid "charging"
 msgstr "cargando"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:233
 msgid "discharging"
 msgstr "descargando"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:236
 msgid "charged"
 msgstr "cargado"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:251
 msgid "until charged"
 msgstr "hasta su carga"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:254
 msgid "until empty"
 msgstr "hasta que se vacíe"
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:321
 msgid "Computer is running on battery power\n"
 msgstr "El equipo está funcionando con baterías\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:323
 msgid "Computer is running on AC power\n"
 msgstr "El equipo está enchufado a CA\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:353
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:354
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -248,7 +244,7 @@ msgstr ""
 "tal como la publica la Free software foundation; ya sea en la versión 2\n"
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:358
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -260,7 +256,7 @@ msgstr ""
 "MERCANTIBILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la\n"
 "Licencia Pública General GNU para más detalles."
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:362
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -274,27 +270,27 @@ msgstr ""
 #.
 #. * Translators comment: put your own name here to appear in the about dialog.
 #.
-#: ../src/gpm-notification.c:364
+#: ../src/gpm-notification.c:376
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:501
 msgid "_Suspend"
 msgstr "_Suspender"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:506
 msgid "Hi_bernate"
 msgstr "_Hibernar"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:511
 msgid "_Preferences"
 msgstr "_Preferencias"
 
-#: ../src/gpm-notification.c:501
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr "A_yuda"
 
-#: ../src/gpm-notification.c:503
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr "A_cerca de"
 
@@ -315,16 +311,15 @@ msgstr "Hibernar"
 msgid "Do nothing"
 msgstr "No hacer nada"
 
-#: ../src/gpm-prefs.c:139
+#: ../src/gpm-prefs.c:160
 msgid "Never"
-msgstr ""
+msgstr "Nunca"
 
-#: ../src/gpm-prefs.c:503
-#, fuzzy
+#: ../src/gpm-prefs.c:528
 msgid "<b>Configuration</b>"
-msgstr "<b>Área de notificación</b>"
+msgstr "<b>Configuración</b>"
 
-#: ../src/gpm-prefs.c:580
+#: ../src/gpm-prefs.c:606
 msgid "GNOME Power Preferences"
 msgstr "Preferencias de energía de Gnome"
 
@@ -463,6 +458,9 @@ msgstr "Teclado inalámbrico"
 #: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "PDA Misc"
+
+#~ msgid "If we require a password when resuming from suspend"
+#~ msgstr "Si se requiere una contraseña al restornar de una suspensión"
 
 #~ msgid "The path to the shutdown script"
 #~ msgstr "La ruta hasta el script de apagado"
