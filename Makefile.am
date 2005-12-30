@@ -1,4 +1,4 @@
-SUBDIRS = src po docs
+SUBDIRS = src po docs man help
 
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = gnome-power-manager.schemas.in

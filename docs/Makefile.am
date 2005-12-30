@@ -1,6 +1,3 @@
-SUBDIRS = man
-# yelp
-
 EXTRA_DIST = \
 	Doxyfile		\
 	Doxyfile.in		\
