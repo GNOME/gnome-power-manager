@@ -137,12 +137,6 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget, gchar *icon_visibility)
 				 icon_visibility, NULL);
 }
 
-static void
-gpm_prefs_check_requirepw_cb (GtkWidget *widget, gpointer data)
-{
-	gpm_screensaver_lock_set (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
-}
-
 static gchar*
 gpm_prefs_format_brightness_cb (GtkScale *scale, gdouble value)
 {
@@ -426,13 +420,6 @@ gpm_prefs_init ()
 	label_sleep_type = glade_xml_get_widget (dialog, "label_sleep_type");
 	combo_sleep_type = gpm_prefs_setup_action_combo (dialog, "combobox_sleep_type",
 							 GPM_PREF_SLEEP_TYPE, sleep_type_actions);
-
-	/* Require password Check Button */
-	widget = glade_xml_get_widget (dialog, "checkbutton_require_password");
-	g_signal_connect (G_OBJECT (widget), "clicked",
-			  G_CALLBACK (gpm_prefs_check_requirepw_cb), NULL);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-				      gpm_screensaver_lock_enabled ());
 
 	/* Button Suspend Combo Box */
 	GtkWidget *label_button_suspend, *combo_button_suspend;
