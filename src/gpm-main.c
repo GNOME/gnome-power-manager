@@ -88,8 +88,6 @@
 
 #include "gnome-power-glue.h"
 
-int daemon (int nochdir, int noclose);
-
 static void
 gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {

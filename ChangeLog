@@ -1,3 +1,11 @@
+2005-12-30  Jaap Haitsma  <jaap@haitsma.org>
+
+	* configure.in : remove -ansi compiler option to fix daemon warning
+
+	* src/gpm-main.c: remove daemon prototype
+
+	* src/gpm-console.c: remove daemon prototype
+
 2005-12-30  Richard Hughes  <richard@hughsie.com>
 
 	* man/: Move manual files here.
@@ -37,6 +45,7 @@
 	* src/gpm-dbus-common.c: change gpm_marshal.h to gpm-marshal.h
 
 	* src/gpm-hal-callback.c: change gpm_marshal.h to gpm-marshal.h
+
 
 2005-12-26  Richard Hughes  <richard@hughsie.com>
 
