@@ -18,6 +18,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
+ *
+ * Authors: Richard Hughes <hughsient@gmail.com>
+ *          Jaap Haitsma <jaap@haitsma.org>
  */
 
 #ifdef HAVE_CONFIG_H
@@ -141,16 +144,17 @@ gpm_prefs_check_requirepw_cb (GtkWidget *widget, gpointer data)
 }
 
 static gchar*
+gpm_prefs_format_brightness_cb (GtkScale *scale, gdouble value)
+{
+	int *steps;
+	steps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
+	return g_strdup_printf ("%i%%", (gint) value * 100 / (GPOINTER_TO_INT (steps) - 1));
+}
+ 
+static gchar*
 gpm_prefs_format_percentage_cb (GtkScale *scale, gdouble value)
 {
-	int steps;
-	int *psteps = NULL;
-	psteps = g_object_get_data ((GObject*) GTK_WIDGET (scale), "lcdsteps");
-	if (!psteps)
-		return g_strdup_printf ("%i%%", (gint) value);
-
-	steps = GPOINTER_TO_INT (psteps);
-	return g_strdup_printf ("%i%%", (gint) value * 100 / (steps - 1));
+	return g_strdup_printf ("%i%%", (gint) value);
 }
 
 static gchar*
@@ -221,7 +225,7 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog, gchar *widget_name, gchar *
 	widget = glade_xml_get_widget (dialog, widget_name);
 
 	g_signal_connect (G_OBJECT (widget), "format-value", 
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
+			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
 
 	/* set the value before the changed cb, else the brightness is set */
 	value = gconf_client_get_int (gconf_client_get_default (), gpm_pref_key, NULL);
