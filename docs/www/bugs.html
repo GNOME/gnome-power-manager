@@ -121,6 +121,19 @@ gdb ./gnome-power-manager
  <a href="http://www.cs.usfca.edu/benson/cs326/gdb/gdb.pdf">This link</a>
  will give you more information.
 </p>
+<p>
+ You can also try calling the HAL methods from the command line:
+</p>
+<pre>
+dbus-send --system --print-reply --dest=org.freedesktop.Hal \
+/org/freedesktop/Hal/devices/acpi_lcd \
+org.freedesktop.Hal.Device.LaptopPanel.SetBrightness \
+int32:2
+dbus-send --system --print-reply --dest=org.freedesktop.Hal \
+/org/freedesktop/Hal/devices/computer \
+org.freedesktop.Hal.Device.SystemPowerManagement.Suspend \
+int32:0
+</pre>
 
 </div>
 

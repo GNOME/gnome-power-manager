@@ -501,7 +501,7 @@ menu_main_create (TrayData *trayicon)
 				      _("_Suspend"), "suspend");
 	}
 	if (gpm_hal_can_hibernate ()) {
-		menu_add_action_item (eggtrayicon->popup_menu,
+		menu_add_action_item (trayicon->popup_menu,
 				      "gnome-dev-harddisk",
 				      _("Hi_bernate"), "hibernate");
 	}
