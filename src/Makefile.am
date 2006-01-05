@@ -26,11 +26,7 @@ INCLUDES =						\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences
-
-#if 0
-noinst_PROGRAMS =					\
-	gnome-power-console
-#endif
+#	gnome-power-console
 
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
@@ -100,48 +96,52 @@ gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 endif
 
-#if 0
-gnome_power_console_SOURCES =				\
-	gpm-marshal.h					\
-	gpm-marshal.c					\
-	gpm-hal-callback.h				\
-	gpm-hal-callback.c				\
-	gpm-hal.h					\
-	gpm-hal.c					\
-	gpm-dbus-common.h				\
-	gpm-dbus-common.c				\
-	gpm-dbus-server.h				\
-	gpm-dbus-server.c				\
-	gpm-dbus-signal-handler.h			\
-	gpm-dbus-signal-handler.c			\
-	gpm-common.h					\
-	gpm-common.c					\
-	gpm-core.h					\
-	gpm-core.c					\
-	gpm-console.c					\
-	gpm-sysdev.h					\
-	gpm-sysdev.c
-
-gnome_power_console_LDADD =				\
-	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
-#endif
+#gnome_power_console_SOURCES =				\
+#	gpm-marshal.h					\
+#	gpm-marshal.c					\
+#	gpm-hal-callback.h				\
+#	gpm-hal-callback.c				\
+#	gpm-hal.h					\
+#	gpm-hal.c					\
+#	gpm-dbus-common.h				\
+#	gpm-dbus-common.c				\
+#	gpm-dbus-server.h				\
+#	gpm-dbus-server.c				\
+#	gpm-dbus-signal-handler.h			\
+#	gpm-dbus-signal-handler.c			\
+#	gpm-common.h					\
+#	gpm-common.c					\
+#	gpm-core.h					\
+#	gpm-core.c					\
+#	gpm-console.c					\
+#	gpm-sysdev.h					\
+#	gpm-sysdev.c
+#
+#gnome_power_console_LDADD =				\
+#	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 
 BUILT_SOURCES = \
 	gnome-power-glue.h				\
 	gpm-marshal.c					\
 	gpm-marshal.h
 
+#gpm-marshal.h: gpm-marshal.list
+#	cd $(srcdir) \
+#	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --header >> xgen-gmh \
+#	&& (cmp -s xgen-gmh gpm-marshal.h || cp xgen-gmh gpm-marshal.h) \
+#	&& rm -f xgen-gmh xgen-gmh~
+#
+#gpm-marshal.c: gpm-marshal.list
+#	cd $(srcdir) \
+#	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --body >> xgen-gmc \
+#	&& (cmp -s xgen-gmc gpm-marshal.c || cp xgen-gmc gpm-marshal.c) \
+#	&& rm -f xgen-gmc xgen-gmc~
+
 gpm-marshal.h: gpm-marshal.list
-	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --header >> xgen-gmh \
-	&& (cmp -s xgen-gmh gpm-marshal.h || cp xgen-gmh gpm-marshal.h) \
-	&& rm -f xgen-gmh xgen-gmh~
+	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --header > $(srcdir)/gpm-marshal.h
 
 gpm-marshal.c: gpm-marshal.list
-	cd $(srcdir) \
-	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --body >> xgen-gmc \
-	&& (cmp -s xgen-gmc gpm-marshal.c || cp xgen-gmc gpm-marshal.c) \
-	&& rm -f xgen-gmc xgen-gmc~
+	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --body > $(srcdir)/gpm-marshal.c
 
 gnome-power-glue.h: gnome-power-service.xml
 	libtool --mode=execute dbus-binding-tool --prefix=gpm_object --mode=glib-server --output=gnome-power-glue.h $(srcdir)/gnome-power-service.xml
