@@ -1,3 +1,20 @@
+2005-01-05  Richard Hughes  <richard@hughsie.com>
+
+	* gnome-power-manager.schemas.in, src/gpm-main.c, src/gpm-prefs.h:
+	Add /notify/fully_charged to fix bug:
+	http://bugzilla.gnome.org/show_bug.cgi?id=325876
+
+	* src/Makefile.am: Build the generated files a slightly easier way, as
+	suggested by BJörn Lindqvist.
+	Also comment out the gnome-power-console stuff until the DBUS bug is
+	fixed -- as now it's pretty useless.
+
+	* configure.in: Fix the ALL_LINGUAS to be all on one line, else
+	autogen.sh fails.
+
+	*configure.in, Makefile.am: Don't build help/ yet as 
+	"make distcheck" fails (which means no rpm's)
+
 2006-01-03  Slobodan D. Sredojevic  <ssl@uns.ns.ac.yu>
 
 	* configure.in: Added 'sr' and 'sr@Latn' to ALL_LINGUAS

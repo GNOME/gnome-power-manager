@@ -1,7 +1,7 @@
 Summary: GNOME Power Manager
 Name: gnome-power-manager
 Version: @VERSION@
-Release: cvs20060102build1
+Release: cvs20060105build1
 License: GPL
 Group: Applications/System
 Source: http://ftp.gnome.org/pub/GNOME/sources/gnome-power-manager/0.3/gnome-power-manager-%{version}.tar.gz
@@ -91,8 +91,8 @@ fi
 # TODO: remove system.d as g-p-m shouldn't be on the system bus
 %{_sysconfdir}/dbus-1/system.d/*
 %{_sysconfdir}/gconf/schemas/*.schemas
-%{_datadir}/gnome/help/gnome-power-manager/C/*
-%{_datadir}/omf/gnome-power-manager/*
+#%{_datadir}/gnome/help/gnome-power-manager/C/*
+#%{_datadir}/omf/gnome-power-manager/*
 
 %changelog
 * Sun Nov 27 2005 Richard Hughes <richard@hughsie.com> 0.3.1-1

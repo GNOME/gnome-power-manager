@@ -505,9 +505,14 @@ hal_device_property_modified (const gchar *udi,
 		gpm_hal_device_get_int (udi, key, &sds->percentage_charge);
 		/* give notification @100% */
 		if (sd->type == BATT_PRIMARY && sds->percentage_charge == 100) {
-			gpm_libnotify_event (_("Battery Charged"), _("Your battery is now fully charged"),
-					 LIBNOTIFY_URGENCY_LOW,
-					 gpm_notification_get_icon ());
+			gboolean show_notify;
+			show_notify = gconf_client_get_bool (gconf_client_get_default (),
+							     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
+			if (show_notify)
+				gpm_libnotify_event (_("Battery Charged"),
+						     _("Your battery is now fully charged"),
+						     LIBNOTIFY_URGENCY_LOW,
+					             gpm_notification_get_icon ());
 		}
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gint tempval;
