@@ -1,6 +1,5 @@
-SUBDIRS = src po docs man help
-
-distuninstallcheck_listfiles = find . -type f -print | grep -v scrollkeeper
+SUBDIRS = src po docs man
+# help
 
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = gnome-power-manager.schemas.in
