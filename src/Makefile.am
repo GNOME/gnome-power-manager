@@ -1,10 +1,6 @@
 SUBDIRS = icons
 
-pkgdata_DATA =						\
-	gpm-prefs.glade
-
 EXTRA_DIST =						\
-	$(pkgdata_DATA)					\
 	gnome-power-service.xml				\
 	gpm-marshal.list
 
