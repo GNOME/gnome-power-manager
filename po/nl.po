@@ -2,14 +2,18 @@
 # Copyright (C) 2005 Free Software Foundation, Inc.
 # Richard Hughes <richard@hughsie.com>, 2005.
 # Theetjuh <theetjuh@gmail.com>, 2005.
-# Tino Meinen <a.t.meinen@chello.nl>, 2005.
+# Tino Meinen <a.t.meinen@chello.nl>, 2005, 2006.
+# ----
+# suspend - pauzestand
+# hibernate - slaapstand
+# battery - accu
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-23 22:44+0100\n"
-"PO-Revision-Date: 2005-12-25 03:29+0100\n"
+"POT-Creation-Date: 2006-01-06 14:14+0100\n"
+"PO-Revision-Date: 2006-01-06 18:09+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -17,91 +21,212 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
 msgstr "Configureer energiebeheer"
 
-#: ../gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.h:2
 msgid "Power Management"
 msgstr "Energiebeheer"
 
-#: ../gnome-power-manager.schemas.in.h:1
-msgid "If we require a password when resuming from suspend"
-msgstr "Of we een wachtwoord nodig hebben bij het ontwaken uit de slaapstand"
-
 # van het vaste stroomnetwerk af is
-#: ../gnome-power-manager.schemas.in.h:2
+#: ../data/gnome-power-manager.schemas.in.h:1
 msgid "If we should notify the user that the ac_adapter is removed"
 msgstr "Of we de gebruiker attenderen wanneer de ac-adapter is verwijderd."
 
+# van het vaste stroomnetwerk af is
+#: ../data/gnome-power-manager.schemas.in.h:2
+msgid "If we should notify the user that the battery is fully charged"
+msgstr "Of we de gebruiker attenderen wanneer de accu volledig is opgeladen"
+
 # mogen deze wel vertaald worden?
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "Opties zijn nooit, kritiek, opladen, altijd"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
-msgstr "De te nemen actie wanneer de batterij bijna leeg is."
+msgstr "De te nemen actie wanneer de accu bijna leeg is."
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "De helderheid van het scherm wanneer er netspanning is"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
-msgstr "De helderheid van het scherm wanneer de batterij wordt gebruikt"
+msgstr "De helderheid van het scherm wanneer de accu wordt gebruikt"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "De gebeurtenis wanneer de laptop wordt dichtgedaan"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
-msgstr "De gebeurtenis wanneer de suspend-knop wordt ingedrukt"
+msgstr "De gebeurtenis wanneer de pauzestand-knop wordt ingedrukt"
 
-# TINO
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "De nutteloze tijd in seconden vóór de computer probeert te slapen"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "De nutteloze tijd in seconden vóór het scherm probeert uit te gaan"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "De nutteloze tijd in seconden vóór de harde schijf probeert te slapen"
 
 # waarbij/waaronder
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
-msgstr "Het percentage waarbij de batterijspanning zo laag wordt bevonden dat actie moet wordt ondernomen."
+msgstr "Het percentage waarbij de accuspanning dermate laag wordt bevonden dat actie moet wordt ondernomen."
 
 # vrij vertaald
 # Het percentage waarbij de batterijspanning zo laag wordt bevonden dat de gebruiker moet worden gewaarschuwd
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
-msgstr "Het percentage waarbij de gebruiker wordt gewaarschuwd dat de batterij bijna leeg is."
+msgstr "Het percentage waarbij de gebruiker wordt gewaarschuwd dat de accu bijna leeg is."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "De energieactiedrempel voor het apparaat."
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "De energiewaarschuwingsdrempel voor het apparaat."
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
-msgstr "Het slaaptype (slaapstand/diepslaap) dat automatisch gebruikt wordt."
+msgstr "Het slaaptype (slaapstand/pauzestand) dat automatisch gebruikt wordt."
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "Wanneer het berichten pictogram te laten zien"
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Acties</b>"
+
+#: ../data/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>Algemeen</b>"
+
+# wat gebruikten we hiervoor?
+#: ../data/gpm-prefs.glade.h:3
+msgid "<b>Notification Area</b>"
+msgstr "<b>Berichtengebied</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+msgid "<b>Other Options</b>"
+msgstr "<b>Andere opties</b>"
+
+#: ../data/gpm-prefs.glade.h:5
+msgid "<b>Running on AC Adapter</b>"
+msgstr "<b>Loopt op netstroom</b>"
+
+# loopt/draait
+#: ../data/gpm-prefs.glade.h:6
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>Loopt op accustroom</b>"
+
+#: ../data/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr "<i><small>Geschat 16 minuten</small></i>"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr "<i><small>Geschat 2 uren 6 minuten</small></i>"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "Advanced"
+msgstr "Extra"
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "Ba_ttery is critical when below:"
+msgstr "_Accu is bijna leeg bij minder dan:"
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr "_Alleen weergeven wanneer de accu bijna leeg is"
+
+#: ../data/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr "Alleen weergeven tijdens laden of _ontladen"
+
+#: ../data/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "Opties"
+
+#: ../data/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "Energiebeheer voorkeuren"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Put _computer to sleep after:"
+msgstr "_Computer in slaapstand zetten na:"
+
+# beeldscherm in slaapstand is onzinnig, het beeldscherm wordt
+# gewoon zwart en staat dus 'uit'
+# Beelscherm op zwart zetten (zwartmaken is dubbelzinnig)
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put _display to sleep after:"
+msgstr "B_eeldscherm uitzetten na:"
+
+# wat voor soort slaap? hibernate of suspend?
+#: ../data/gpm-prefs.glade.h:17
+msgid "Put c_omputer to sleep after:"
+msgstr "C_omputer in slaapstand zetten na:"
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Put dis_play to sleep after:"
+msgstr "_Beeldscherm uitzetten na:"
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "Set display _brightness:"
+msgstr "H_elderheid beeldscherm instellen:"
+
+#: ../data/gpm-prefs.glade.h:20
+msgid "Set display b_rightness:"
+msgstr "_Helderheid beeldscherm instellen:"
+
+# slapen/slaap
+#: ../data/gpm-prefs.glade.h:21
+msgid "Sleep"
+msgstr "Slapen"
+
+# kritiek laag/laag
+# wanneer accu bijna leeg is
+#: ../data/gpm-prefs.glade.h:22
+msgid "When _battery power critical:"
+msgstr "Wanneer _accu bijna leeg is:"
+
+#: ../data/gpm-prefs.glade.h:23
+msgid "When _suspend button pressed:"
+msgstr "Wanneer _suspend-knop is ingedrukt:"
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "When laptop li_d is closed:"
+msgstr "Wanneer laptop _dicht is:"
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "_Always display icon"
+msgstr "_Altijd pictogram weergeven"
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "_Battery is low when below:"
+msgstr "_Accu is laag wanneer minder dan:"
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "_Computer sleep type:"
+msgstr "_Computer slaaptype:"
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "_Never display icon"
+msgstr "_Nooit pictogram weergeven"
 
 # richtlijn/richting
 #: ../src/eggtrayicon.c:132
@@ -151,7 +276,7 @@ msgstr[0] "minuut"
 msgstr[1] "minuten"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:709
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:714
 msgid "GNOME Power Manager"
 msgstr "GNOME energiebeheer"
 
@@ -159,81 +284,81 @@ msgstr "GNOME energiebeheer"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Energiebeheer voor de GNOME-desktop"
 
-#: ../src/gpm-console.c:345 ../src/gpm-main.c:692
-msgid "Do not daemonize"
-msgstr "Niet als daemon uitvoeren"
-
-#: ../src/gpm-console.c:347 ../src/gpm-main.c:694 ../src/gpm-prefs.c:568
-msgid "Show extra debugging information"
-msgstr "Extra debuginformatie tonen"
-
-#: ../src/gpm-main.c:356 ../src/gpm-main.c:375
+#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
 "your AC Adapter to avoid losing data."
-msgstr "U heeft ongeveer <b>%s</b> resterende batterijtijd (%i%%). Sluit uw netspanningsadapter aan om dataverlies te voorkomen."
+msgstr "U heeft ongeveer <b>%s</b> resterende accutijd (%i%%). Sluit uw netspanningsadapter aan om dataverlies te voorkomen."
 
 # vrij vertaald
-#: ../src/gpm-main.c:360
+#: ../src/gpm-main.c:366
 msgid "Battery Critically Low"
-msgstr "Batterij bijna leeg"
+msgstr "Accu is bijna leeg"
 
-#: ../src/gpm-main.c:378
+#: ../src/gpm-main.c:384
 msgid "Battery Low"
-msgstr "Batterij laag"
+msgstr "Accu laag"
 
-#: ../src/gpm-main.c:424
+#: ../src/gpm-main.c:429
 msgid "AC Power Unplugged"
 msgstr "Netspanning afgesloten"
 
 # loopt nu op batterijen
-#: ../src/gpm-main.c:425
+#: ../src/gpm-main.c:430
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "De netspanning is afgesloten. Het systeem gebruikt nu batterijstroom."
+msgstr "De netspanning is afgesloten. Het systeem gebruikt nu accustroom."
 
-#: ../src/gpm-main.c:503
+#: ../src/gpm-main.c:512
 msgid "Battery Charged"
-msgstr "Batterij opgeladen"
+msgstr "Accu opgeladen"
 
-#: ../src/gpm-main.c:503
+#: ../src/gpm-main.c:513
 msgid "Your battery is now fully charged"
-msgstr "Uw batterij is nu volledig opgeladen"
+msgstr "Uw accu is nu volledig opgeladen"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-main.c:698
+msgid "Do not daemonize"
+msgstr "Niet als daemon uitvoeren"
+
+#: ../src/gpm-main.c:700 ../src/gpm-prefs.c:584
+msgid "Show extra debugging information"
+msgstr "Extra debuginformatie tonen"
+
+#: ../src/gpm-notification.c:231
 msgid "charging"
 msgstr "opladen"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:233
 msgid "discharging"
 msgstr "ontladen"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:236
 msgid "charged"
 msgstr "opgeladen"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:251
 msgid "until charged"
 msgstr "tot opgeladen"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:254
 msgid "until empty"
 msgstr "tot leeg"
 
 # draait/loopt op batterijen/gebruikt batterijen/batterijstroom
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:321
 msgid "Computer is running on battery power\n"
-msgstr "Computer gebruikt batterijstroom\n"
+msgstr "Computer gebruikt nu accustroom\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:323
 msgid "Computer is running on AC power\n"
 msgstr "Computer gebruikt netspanning\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:353
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Uitgebracht onder de GNU General Public License Versie 2"
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:354
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -245,7 +370,7 @@ msgstr ""
 "gepubliceerd door de Free Software Foundation; ofwel versie 2 van de\n"
 "licentie, of (naar uw beliven) een latere versie."
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:358
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -257,7 +382,7 @@ msgstr ""
 "VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General\n"
 "Public License voor meer informatie."
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:362
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -272,7 +397,7 @@ msgstr ""
 #.
 #. * Translators comment: put your own name here to appear in the about dialog.
 #.
-#: ../src/gpm-notification.c:364
+#: ../src/gpm-notification.c:376
 msgid "translator-credits"
 msgstr ""
 "Tino Meinen\n"
@@ -281,23 +406,23 @@ msgstr ""
 "\n"
 "Zie voor meer informatie: http://nl.gnome.org"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:501
 msgid "_Suspend"
 msgstr "_Slaapstand"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:506
 msgid "Hi_bernate"
 msgstr "_Diepslaap"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:511
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: ../src/gpm-notification.c:501
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr "_Hulp"
 
-#: ../src/gpm-notification.c:503
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr "I_nfo"
 
@@ -305,162 +430,38 @@ msgstr "I_nfo"
 # letterl. schorsen, maar dat heeft hier geen betekenis.
 # vaag: wat is het verschil tussen Suspend en Hibernate?
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:46
 msgid "Suspend"
-msgstr "Slaapstand"
+msgstr "Pauzestand"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:47
 msgid "Shutdown"
 msgstr "Afsluiten"
 
-# diepslaap
-#: ../src/gpm-prefs.c:46
+# diepslaap/slaapstand
+#: ../src/gpm-prefs.c:48
 msgid "Hibernate"
-msgstr "Diepslaap"
+msgstr "Slaapstand"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:49
 msgid "Do nothing"
 msgstr "Doe niets"
 
-#: ../src/gpm-prefs.c:140
+#: ../src/gpm-prefs.c:158
 msgid "Never"
 msgstr "Nooit"
 
-#: ../src/gpm-prefs.c:504
+#: ../src/gpm-prefs.c:519
 msgid "<b>Configuration</b>"
 msgstr "<b>Configuratie</b>"
 
-#: ../src/gpm-prefs.c:581
+#: ../src/gpm-prefs.c:597
 msgid "GNOME Power Preferences"
 msgstr "GNOME energiebeheer"
 
-#: ../src/gpm-prefs.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Acties</b>"
-
-#: ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>Algemeen</b>"
-
-# wat gebruikten we hiervoor?
-#: ../src/gpm-prefs.glade.h:3
-msgid "<b>Notification Area</b>"
-msgstr "<b>Berichtengebied</b>"
-
-#: ../src/gpm-prefs.glade.h:4
-msgid "<b>Other Options</b>"
-msgstr "<b>Andere opties</b>"
-
-#: ../src/gpm-prefs.glade.h:5
-msgid "<b>Running on AC Adapter</b>"
-msgstr "<b>Loopt op netstroom</b>"
-
-# loopt/draait
-#: ../src/gpm-prefs.glade.h:6
-msgid "<b>Running on Batteries</b>"
-msgstr "<b>Loopt op batterijen</b>"
-
-#: ../src/gpm-prefs.glade.h:7
-msgid "<i><small>Estimated 16 minutes</small></i>"
-msgstr "<i><small>Geschat 16 minuten</small></i>"
-
-#: ../src/gpm-prefs.glade.h:8
-msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
-msgstr "<i><small>Geschat 2 uren 6 minuten</small></i>"
-
-#: ../src/gpm-prefs.glade.h:9
-msgid "Advanced"
-msgstr "Geavanceerd"
-
-#: ../src/gpm-prefs.glade.h:10
-msgid "Ba_ttery is critical when below:"
-msgstr "Ba_tterij is bijna leeg bij minder dan:"
-
-#: ../src/gpm-prefs.glade.h:11
-msgid "Only display when battery life is _critical"
-msgstr "_Alleen weergeven wanneer batterij bijna leeg is:"
-
-#: ../src/gpm-prefs.glade.h:12
-msgid "Only display when charging or _discharging"
-msgstr "Alleen weergeven tijdens laden of _ontladen"
-
-#: ../src/gpm-prefs.glade.h:13
-msgid "Options"
-msgstr "Opties"
-
-#: ../src/gpm-prefs.glade.h:14
-msgid "Power Preferences"
-msgstr "Energiebeheer voorkeuren"
-
-#: ../src/gpm-prefs.glade.h:15
-msgid "Put _computer to sleep after:"
-msgstr "_Computer in slaapstand zetten na:"
-
-# beeldscherm in slaapstand is onzinnig, het beeldscherm wordt
-# gewoon zwart en staat dus 'uit'
-# Beelscherm op zwart zetten (zwartmaken is dubbelzinnig)
-#: ../src/gpm-prefs.glade.h:16
-msgid "Put _display to sleep after:"
-msgstr "B_eeldscherm uitzetten na:"
-
-#: ../src/gpm-prefs.glade.h:17
-msgid "Put c_omputer to sleep after:"
-msgstr "C_omputer in slaapstand zetten na:"
-
-#: ../src/gpm-prefs.glade.h:18
-msgid "Put dis_play to sleep after:"
-msgstr "_Beeldscherm uitzetten na:"
-
-# vraag om wachtwoord/om wachtwoord vragen
-#: ../src/gpm-prefs.glade.h:19
-msgid "Require password when returning from sleep"
-msgstr "Wachtwoord vragen bij ontwaken uit slaapstand"
-
-#: ../src/gpm-prefs.glade.h:20
-msgid "Set display _brightness:"
-msgstr "H_elderheid beeldscherm instellen:"
-
-#: ../src/gpm-prefs.glade.h:21
-msgid "Set display b_rightness:"
-msgstr "_Helderheid beeldscherm instellen:"
-
-#: ../src/gpm-prefs.glade.h:22
-msgid "Sleep"
-msgstr "Slaap"
-
-# kritiek laag/laag
-# wanneer batterijen bijna leeg zijn
-#: ../src/gpm-prefs.glade.h:23
-msgid "When _battery power critical:"
-msgstr "Wanneer _batterij bijna leeg is:"
-
-#: ../src/gpm-prefs.glade.h:24
-msgid "When _suspend button pressed:"
-msgstr "Wanneer _suspend-knop is ingedrukt:"
-
-#: ../src/gpm-prefs.glade.h:25
-msgid "When laptop li_d is closed:"
-msgstr "Wanneer laptop _dicht is:"
-
-#: ../src/gpm-prefs.glade.h:26
-msgid "_Always display icon"
-msgstr "_Altijd pictogram weergeven"
-
-#: ../src/gpm-prefs.glade.h:27
-msgid "_Battery is low when below:"
-msgstr "_Batterij is laag wanneer minder dan:"
-
-#: ../src/gpm-prefs.glade.h:28
-msgid "_Computer sleep type:"
-msgstr "_Computer slaaptype:"
-
-#: ../src/gpm-prefs.glade.h:29
-msgid "_Never display icon"
-msgstr "_Nooit pictogram weergeven"
-
 #: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
-msgstr "Laptopbatterij"
+msgstr "Laptop-accu"
 
 #: ../src/gpm-sysdev.c:59
 msgid "UPS"
@@ -478,14 +479,19 @@ msgstr "Draadloos toetsenbord"
 msgid "Misc PDA"
 msgstr "Overige PDA"
 
+#~ msgid "If we require a password when resuming from suspend"
+#~ msgstr ""
+#~ "Of we een wachtwoord nodig hebben bij het ontwaken uit de slaapstand"
+
+# vraag om wachtwoord/om wachtwoord vragen
+#~ msgid "Require password when returning from sleep"
+#~ msgstr "Wachtwoord vragen bij ontwaken uit slaapstand"
+
 #~ msgid "The path to the shutdown script"
 #~ msgstr "Het pad naar het afsluit script"
 
 #~ msgid "96% efficient"
 #~ msgstr "96% efficiënt"
-
-#~ msgid "<b>Batteries</b>"
-#~ msgstr "<b>Batterijen</b>"
 
 #~ msgid "<b>Capabilities</b>"
 #~ msgstr "<b>Mogelijkheden</b>"
@@ -511,14 +517,11 @@ msgstr "Overige PDA"
 #~ msgid "Gnome Screensaver Info"
 #~ msgstr "Gnome Screensaver Informatie"
 
-#~ msgid "Hibernation"
-#~ msgstr "Slaapstand"
-
 #~ msgid "Laptop"
 #~ msgstr "Laptop"
 
 #~ msgid "LiION Battery"
-#~ msgstr "LiION Batterij"
+#~ msgstr "LiION-accu"
 
 #~ msgid "Low Power Mode"
 #~ msgstr "Lage Stroom Stand"
@@ -530,7 +533,7 @@ msgstr "Overige PDA"
 #~ msgstr "Model:"
 
 #~ msgid "NiMOH Battery"
-#~ msgstr "NiMOH Batterij"
+#~ msgstr "NiMOH-accu"
 
 #~ msgid "Other problems"
 #~ msgstr "Andere problemen"
@@ -625,14 +628,8 @@ msgstr "Overige PDA"
 #~ msgid "If the machine has power buttons"
 #~ msgstr "Of de machine power knoppen heeft"
 
-#~ msgid "If the machine have primary batteries"
-#~ msgstr "Of de machine primaire batterijen heeft"
-
 #~ msgid "Short description."
 #~ msgstr "Korte beschrijving."
-
-#~ msgid "User cannot hibernate the machine"
-#~ msgstr "De gebruiker kan de machine niet in slaapstand zetten"
 
 #~ msgid "User cannot reboot the machine"
 #~ msgstr "De gebruiker kan de machine niet herstarten"
@@ -675,9 +672,6 @@ msgstr "Overige PDA"
 #~ msgid "shutdown"
 #~ msgstr "afsluiten"
 
-#~ msgid "software suspend"
-#~ msgstr "softwarematig op schorten"
-
 #~ msgid "session log off"
 #~ msgstr "session log uit"
 
@@ -713,9 +707,6 @@ msgstr "Overige PDA"
 
 #~ msgid "AC Adapter has been removed"
 #~ msgstr "Netstroom adapter is verwijderd"
-
-#~ msgid "Couldn't obtain list of batteries"
-#~ msgstr "Kon geen lijst van batterijen verkrijgen"
 
 #~ msgid "Couldn't obtain list of ac_adapters"
 #~ msgstr "Kon geen lijst van netstroom adapters verkrijgen"
@@ -759,17 +750,8 @@ msgstr "Overige PDA"
 #~ msgid "Do we show low devices?"
 #~ msgstr "Do we show low devices?"
 
-#~ msgid "Hibernatation script location"
-#~ msgstr "Hibernatation script location"
-
 #~ msgid "Reboot script location"
 #~ msgstr "Reboot script location"
 
 #~ msgid "Shutdown script location"
 #~ msgstr "Shutdown script location"
-
-#~ msgid "Suspend script location"
-#~ msgstr "Suspend script location"
-
-#~ msgid "Display low battery icons"
-#~ msgstr "Display low battery icons"
