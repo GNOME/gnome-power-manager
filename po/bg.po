@@ -1,15 +1,15 @@
-# Bulgarian translation for GDM2.
-# Copyright (C) 2005 Free Software Foundation, Inc.
+# Bulgarian translation for gnome-power-manager po file.
+# Copyright (C) 2005, 2006 Free Software Foundation, Inc.
 # This file is distributed under the same license as the
 # gnome-power-manager package.
-# Alexander Shopov <ash@contact.bg>, 2005.
+# Alexander Shopov <ash@contact.bg>, 2005, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-24 00:30+0000\n"
-"PO-Revision-Date: 2005-12-09 11:36+0200\n"
+"POT-Creation-Date: 2006-01-06 09:13+0200\n"
+"PO-Revision-Date: 2006-01-05 22:58+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,12 +26,12 @@ msgid "Power Management"
 msgstr "Управление на захранването"
 
 #: ../gnome-power-manager.schemas.in.h:1
-msgid "If we require a password when resuming from suspend"
-msgstr "Дали е необходима парола при събуждането"
+msgid "If we should notify the user that the ac_adapter is removed"
+msgstr "Дали да се предупреждава при махането на адаптера за променлив ток"
 
 #: ../gnome-power-manager.schemas.in.h:2
-msgid "If we should notify the user that the ac_adapter is removed"
-msgstr ""
+msgid "If we should notify the user that the battery is fully charged"
+msgstr "Дали да се предупреждава при пълното зареждане на батерията"
 
 #: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
@@ -150,7 +150,7 @@ msgstr[0] "минута"
 msgstr[1] "минути"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:708
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:714
 msgid "GNOME Power Manager"
 msgstr "Управление на захранването в GNOME"
 
@@ -158,15 +158,7 @@ msgstr "Управление на захранването в GNOME"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Мениджър на захранването за GNOME"
 
-#: ../src/gpm-console.c:342 ../src/gpm-main.c:691
-msgid "Do not daemonize"
-msgstr "Да не се минава в режим на демон"
-
-#: ../src/gpm-console.c:344 ../src/gpm-main.c:693 ../src/gpm-prefs.c:567
-msgid "Show extra debugging information"
-msgstr "Допълнителна информация за изчистване на грешки"
-
-#: ../src/gpm-main.c:355 ../src/gpm-main.c:374
+#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -175,92 +167,113 @@ msgstr ""
 "Остава Ви приблизително <b>%s</b> живот на батерията (%i%%). Включете се към "
 "захранването от електрическата мрежа или рискувате да загубите данни."
 
-#: ../src/gpm-main.c:359
+#: ../src/gpm-main.c:366
 msgid "Battery Critically Low"
 msgstr "Критично ниско ниво на батерията"
 
-#: ../src/gpm-main.c:377
+#: ../src/gpm-main.c:384
 msgid "Battery Low"
 msgstr "Ниско ниво на батерията"
 
-#: ../src/gpm-main.c:423
+#: ../src/gpm-main.c:429
 msgid "AC Power Unplugged"
 msgstr "Изключено захранване от мрежата"
 
-#: ../src/gpm-main.c:424
+#: ../src/gpm-main.c:430
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Захранването от електрическата мрежа е изключено. Системата работи на "
 "батерии."
 
-#: ../src/gpm-main.c:502
+#: ../src/gpm-main.c:512
 msgid "Battery Charged"
 msgstr "Батериите са заредени"
 
-#: ../src/gpm-main.c:502
+#: ../src/gpm-main.c:513
 msgid "Your battery is now fully charged"
 msgstr "Батериите са напълно заредени"
 
-#: ../src/gpm-notification.c:219
+#: ../src/gpm-main.c:698
+msgid "Do not daemonize"
+msgstr "Да не се минава в режим на демон"
+
+#: ../src/gpm-main.c:700 ../src/gpm-prefs.c:584
+msgid "Show extra debugging information"
+msgstr "Допълнителна информация за изчистване на грешки"
+
+#: ../src/gpm-notification.c:231
 msgid "charging"
 msgstr "зареждане"
 
-#: ../src/gpm-notification.c:221
+#: ../src/gpm-notification.c:233
 msgid "discharging"
 msgstr "разреждане"
 
-#: ../src/gpm-notification.c:224
+#: ../src/gpm-notification.c:236
 msgid "charged"
 msgstr "заредени"
 
-#: ../src/gpm-notification.c:239
+#: ../src/gpm-notification.c:251
 msgid "until charged"
 msgstr "до зареждане"
 
-#: ../src/gpm-notification.c:242
+#: ../src/gpm-notification.c:254
 msgid "until empty"
 msgstr "до пълно разреждане"
 
-#: ../src/gpm-notification.c:309
+#: ../src/gpm-notification.c:321
 msgid "Computer is running on battery power\n"
 msgstr "Компютърът работи на батерии\n"
 
-#: ../src/gpm-notification.c:311
+#: ../src/gpm-notification.c:323
 msgid "Computer is running on AC power\n"
 msgstr "Компютърът работи на захранване от ел. мрежа\n"
 
-#: ../src/gpm-notification.c:341
+#: ../src/gpm-notification.c:353
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лиценз - ОПЛ на GNU, версия 2"
 
-#: ../src/gpm-notification.c:342
+#: ../src/gpm-notification.c:354
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 msgstr ""
+"Програмата за управлението на захранването на GNOME е свободен\n"
+"софтуер. Можете да я разпространявате според условията на версия\n"
+"2 или по-висока (по Ваш избор) на Общия публичен лиценз на GNU,\n"
+"който е публикуван от Фондацията за свободен софтуер,"
 
-#: ../src/gpm-notification.c:346
+#: ../src/gpm-notification.c:358
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
 msgstr ""
+"Програмата за управление на захранването на GNOME се разпространява с\n"
+"надеждата да е полезна, но БЕЗ НИКАКВА ГАРАНЦИЯ, дори и подразбиращата\n"
+"се ПРИГОДНОСТ или ГОДНОСТ ЗА КОНКРЕТНА УПОТРЕБА. За подробности\n"
+"прегледайте Общия публичен лиценз на GNU."
 
-#: ../src/gpm-notification.c:350
+#: ../src/gpm-notification.c:362
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 msgstr ""
+"Трябва да сте получили копие на Общия публичен лиценз на GNU\n"
+"заедно с тази програма. Ако се сте - пишете на Фондацията за\n"
+"свободен софтуер на адрес:\n"
+"Free Software Foundation, Inc., 51 Franklin Street, \n"
+"Fifth Floor, Boston, MA 02110-1301, USA."
 
 #.
 #. * Translators comment: put your own name here to appear in the about dialog.
 #.
-#: ../src/gpm-notification.c:364
+#: ../src/gpm-notification.c:376
 msgid "translator-credits"
 msgstr ""
 "Александър Шопов <ash@contact.bg>\n"
@@ -269,53 +282,52 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: ../src/gpm-notification.c:489
+#: ../src/gpm-notification.c:501
 msgid "_Suspend"
 msgstr "_Приспиване"
 
-#: ../src/gpm-notification.c:494
+#: ../src/gpm-notification.c:506
 msgid "Hi_bernate"
 msgstr "_Дълбоко приспиване"
 
-#: ../src/gpm-notification.c:499
+#: ../src/gpm-notification.c:511
 msgid "_Preferences"
 msgstr "_Настройки"
 
-#: ../src/gpm-notification.c:501
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr "_Помощ"
 
-#: ../src/gpm-notification.c:503
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr "_Относно"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:43
+#: ../src/gpm-prefs.c:46
 msgid "Suspend"
 msgstr "Приспиване"
 
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:47
 msgid "Shutdown"
 msgstr "Изключване"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:48
 msgid "Hibernate"
 msgstr "Дълбоко приспиване"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:49
 msgid "Do nothing"
 msgstr "Да не се прави нищо"
 
-#: ../src/gpm-prefs.c:139
+#: ../src/gpm-prefs.c:158
 msgid "Never"
-msgstr ""
+msgstr "Никога"
 
-#: ../src/gpm-prefs.c:503
-#, fuzzy
+#: ../src/gpm-prefs.c:519
 msgid "<b>Configuration</b>"
-msgstr "<b>Област за уведомяване</b>"
+msgstr "<b>Настройки</b>"
 
-#: ../src/gpm-prefs.c:580
+#: ../src/gpm-prefs.c:597
 msgid "GNOME Power Preferences"
 msgstr "Настройки на захранването"
 
@@ -392,46 +404,42 @@ msgid "Put dis_play to sleep after:"
 msgstr "Приспиване на _екрана след:"
 
 #: ../src/gpm-prefs.glade.h:19
-msgid "Require password when returning from sleep"
-msgstr "Да се изисква парола при събуждане"
-
-#: ../src/gpm-prefs.glade.h:20
 msgid "Set display _brightness:"
 msgstr "_Задаване на яркост на екрана:"
 
-#: ../src/gpm-prefs.glade.h:21
+#: ../src/gpm-prefs.glade.h:20
 msgid "Set display b_rightness:"
 msgstr "_Задаване на яркост на екрана:"
 
-#: ../src/gpm-prefs.glade.h:22
+#: ../src/gpm-prefs.glade.h:21
 msgid "Sleep"
 msgstr "Приспиване"
 
-#: ../src/gpm-prefs.glade.h:23
+#: ../src/gpm-prefs.glade.h:22
 msgid "When _battery power critical:"
 msgstr "При _критично ниско ниво на батериите:"
 
-#: ../src/gpm-prefs.glade.h:24
+#: ../src/gpm-prefs.glade.h:23
 msgid "When _suspend button pressed:"
 msgstr "При натискане на _бутона за приспиване:"
 
-#: ../src/gpm-prefs.glade.h:25
+#: ../src/gpm-prefs.glade.h:24
 msgid "When laptop li_d is closed:"
 msgstr "При _затваряне на екрана:"
 
-#: ../src/gpm-prefs.glade.h:26
+#: ../src/gpm-prefs.glade.h:25
 msgid "_Always display icon"
 msgstr "_Винаги да се показва икона"
 
-#: ../src/gpm-prefs.glade.h:27
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Battery is low when below:"
 msgstr "_Батерията е изчерпана, когато е под:"
 
-#: ../src/gpm-prefs.glade.h:28
+#: ../src/gpm-prefs.glade.h:27
 msgid "_Computer sleep type:"
 msgstr "_Вид приспиване:"
 
-#: ../src/gpm-prefs.glade.h:29
+#: ../src/gpm-prefs.glade.h:28
 msgid "_Never display icon"
 msgstr "_Никога да не се показва икона"
 
@@ -454,69 +462,3 @@ msgstr "Безжична клавиатура"
 #: ../src/gpm-sysdev.c:65
 msgid "Misc PDA"
 msgstr "Цифров помощник"
-
-#~ msgid "The path to the shutdown script"
-#~ msgstr "Пътят към командата за спиране"
-
-#~ msgid "96% efficient"
-#~ msgstr "ефикасност 96%"
-
-#~ msgid "<b>Batteries</b>"
-#~ msgstr "<b>Батерии</b>"
-
-#~ msgid "<b>Capabilities</b>"
-#~ msgstr "<b>Възможности</b>"
-
-#~ msgid "<b>GNOME Screensaver</b>"
-#~ msgstr "<b>Предпазител на екрана за GNOME</b>"
-
-#~ msgid "<b>Other problems</b>"
-#~ msgstr "<b>Други проблеми</b>"
-
-#~ msgid "<b>UPS</b>"
-#~ msgstr "<b>Резервно захранване</b>"
-
-#~ msgid "APC UPS 100CS"
-#~ msgstr "APC UPS 100CS"
-
-#~ msgid "CPU Frequency Scaling"
-#~ msgstr "Управление на скоростта на процесора"
-
-#~ msgid "Form-factor:"
-#~ msgstr "Формат:"
-
-#~ msgid "Gnome Screensaver Info"
-#~ msgstr "Информация за предпазителя на екрана"
-
-#~ msgid "Hibernation"
-#~ msgstr "Дълбоко приспиване"
-
-#~ msgid "Laptop"
-#~ msgstr "Мобилен компютър"
-
-#~ msgid "LiION Battery"
-#~ msgstr "Литиево-йонна батерия"
-
-#~ msgid "Low Power Mode"
-#~ msgstr "Енергоспестяващ режим"
-
-#~ msgid "Manufacturer:"
-#~ msgstr "Производител:"
-
-#~ msgid "Model:"
-#~ msgstr "Модел:"
-
-#~ msgid "NiMOH Battery"
-#~ msgstr "Батерия никел-метал-хидрид"
-
-#~ msgid "Other problems"
-#~ msgstr "Други проблеми"
-
-#~ msgid "Satellite Pro A10"
-#~ msgstr "Satellite Pro A10"
-
-#~ msgid "System Power Info"
-#~ msgstr "Информация за захранването"
-
-#~ msgid "Toshiba"
-#~ msgstr "Toshiba"
