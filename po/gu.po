@@ -2,20 +2,21 @@
 # translation of gnome-power-manager.HEAD.po to Gujarati
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-# Ankit Patel <ankit644@yahoo.com>, 2005.
+# Ankit Patel <ankit644@yahoo.com>, 2005, 2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-26 06:19+0100\n"
-"PO-Revision-Date: 2005-12-26 17:25+0530\n"
+"POT-Creation-Date: 2006-01-06 06:38+0100\n"
+"PO-Revision-Date: 2006-01-06 13:04+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "X-Generator: KBabel 1.9.1\n"
 
@@ -28,12 +29,12 @@ msgid "Power Management"
 msgstr "પાવર મેનેજમેન્ટ"
 
 #: ../gnome-power-manager.schemas.in.h:1
-msgid "If we require a password when resuming from suspend"
-msgstr "જ્યારે અટકાવાયેલ સ્થિતિમાંથી પાછા આવી રહ્યા હોય ત્યારે જો અમને પાસવર્ડની જરૂરીયાત રહે"
-
-#: ../gnome-power-manager.schemas.in.h:2
 msgid "If we should notify the user that the ac_adapter is removed"
 msgstr "શું આપણે વપરાશકર્તાને સૂચવવું જોઈએ કે ac એડેપ્ટર દૂર કરાયેલ છે (_a)"
+
+#: ../gnome-power-manager.schemas.in.h:2
+msgid "If we should notify the user that the battery is fully charged"
+msgstr "શું આપણે વપરાશકર્તાને સૂચવવું જોઈએ કે બેટરી સંપૂર્ણપણે વીજભારિત થઈ ગયેલ છે"
 
 #: ../gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
@@ -145,7 +146,7 @@ msgstr[0] "મિનિટ"
 msgstr[1] "મિનિટો"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:696
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:714
 msgid "GNOME Power Manager"
 msgstr "જીનોમ પાવર મેનેજર"
 
@@ -153,15 +154,7 @@ msgstr "જીનોમ પાવર મેનેજર"
 msgid "Power Manager for the GNOME desktop"
 msgstr "જીનોમ ડેસ્કટોપ માટે પાવર મેનેજર"
 
-#: ../src/gpm-console.c:342 ../src/gpm-main.c:680
-msgid "Do not daemonize"
-msgstr "ડિમનાઈઝ કરશો નહિં"
-
-#: ../src/gpm-console.c:344 ../src/gpm-main.c:682 ../src/gpm-prefs.c:595
-msgid "Show extra debugging information"
-msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
-
-#: ../src/gpm-main.c:347 ../src/gpm-main.c:366
+#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
@@ -170,63 +163,71 @@ msgstr ""
 "તમારી પાસે આશરે <b>%s</b> જેટલું  બેટરી જીવનનું (%i%%) બાકી છે. માહિતી ગુમ થઈ જવાનું "
 "ટાળવા માટે તમારું AC પ્લગઈન કરો."
 
-#: ../src/gpm-main.c:351
+#: ../src/gpm-main.c:366
 msgid "Battery Critically Low"
 msgstr "બેટરી ખૂબ નીચી છે"
 
-#: ../src/gpm-main.c:369
+#: ../src/gpm-main.c:384
 msgid "Battery Low"
 msgstr "બેટરી નીચી"
 
-#: ../src/gpm-main.c:415
+#: ../src/gpm-main.c:429
 msgid "AC Power Unplugged"
 msgstr "AC પાવર કાઢી નંખાયેલ"
 
-#: ../src/gpm-main.c:416
+#: ../src/gpm-main.c:430
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "AC પાવર કાઢી નંખાયેલ છે. સિસ્ટમ હવે બેટરી પાવર વાપરી રહી છે."
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:512
 msgid "Battery Charged"
 msgstr "બેટરી ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-main.c:494
+#: ../src/gpm-main.c:513
 msgid "Your battery is now fully charged"
 msgstr "તમારી બેટરી હવે સંપૂર્ણપણે ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-notification.c:232
+#: ../src/gpm-main.c:698
+msgid "Do not daemonize"
+msgstr "ડિમનાઈઝ કરશો નહિં"
+
+#: ../src/gpm-main.c:700 ../src/gpm-prefs.c:584
+msgid "Show extra debugging information"
+msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
+
+#: ../src/gpm-notification.c:231
 msgid "charging"
 msgstr "ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-notification.c:234
+#: ../src/gpm-notification.c:233
 msgid "discharging"
 msgstr "ડિસ્ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-notification.c:237
+#: ../src/gpm-notification.c:236
 msgid "charged"
 msgstr "ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-notification.c:252
+#: ../src/gpm-notification.c:251
 msgid "until charged"
 msgstr "જ્યાં સુધી ચાર્જ નહિં થાય"
 
-#: ../src/gpm-notification.c:255
+#: ../src/gpm-notification.c:254
 msgid "until empty"
 msgstr "જ્યાં સુધી ખાલી નહિં થાય"
 
-#: ../src/gpm-notification.c:322
+#: ../src/gpm-notification.c:321
 msgid "Computer is running on battery power\n"
 msgstr "કમ્પ્યૂટર એ બેટરી પાવર પર ચાલી રહ્યું છે\n"
 
-#: ../src/gpm-notification.c:324
+#: ../src/gpm-notification.c:323
 msgid "Computer is running on AC power\n"
 msgstr "કમ્પ્યૂટર એ AC પાવર પર ચાલી રહ્યું છે\n"
 
-#: ../src/gpm-notification.c:354
+#: ../src/gpm-notification.c:353
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "GNU General Public License Version 2 હેઠળ લાઈસન્સ થયેલ છે"
 
-#: ../src/gpm-notification.c:355
+#: ../src/gpm-notification.c:354
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -238,7 +239,7 @@ msgstr ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 
-#: ../src/gpm-notification.c:359
+#: ../src/gpm-notification.c:358
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -250,7 +251,7 @@ msgstr ""
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
 
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-notification.c:362
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -265,56 +266,56 @@ msgstr ""
 #.
 #. * Translators comment: put your own name here to appear in the about dialog.
 #.
-#: ../src/gpm-notification.c:377
+#: ../src/gpm-notification.c:376
 msgid "translator-credits"
 msgstr "અંકિત પટેલ <ankit644@yahoo.com>"
 
-#: ../src/gpm-notification.c:502
+#: ../src/gpm-notification.c:501
 msgid "_Suspend"
 msgstr "અટકાવો (_S)"
 
-#: ../src/gpm-notification.c:507
+#: ../src/gpm-notification.c:506
 msgid "Hi_bernate"
 msgstr "હાયબરનેટ (_b)"
 
-#: ../src/gpm-notification.c:512
+#: ../src/gpm-notification.c:511
 msgid "_Preferences"
 msgstr "પસંદગીઓ (_P)"
 
-#: ../src/gpm-notification.c:514
+#: ../src/gpm-notification.c:513
 msgid "_Help"
 msgstr "મદદ (_H)"
 
-#: ../src/gpm-notification.c:516
+#: ../src/gpm-notification.c:515
 msgid "_About"
 msgstr "વિશે (_A)"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:43
+#: ../src/gpm-prefs.c:46
 msgid "Suspend"
 msgstr "અટકાવો"
 
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:47
 msgid "Shutdown"
 msgstr "બંધકરો"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:48
 msgid "Hibernate"
 msgstr "હાયબરનેટ"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:49
 msgid "Do nothing"
 msgstr "કંઈ નહિં કરો"
 
-#: ../src/gpm-prefs.c:161
+#: ../src/gpm-prefs.c:158
 msgid "Never"
 msgstr "ક્યારેય નહિં"
 
-#: ../src/gpm-prefs.c:530
+#: ../src/gpm-prefs.c:519
 msgid "<b>Configuration</b>"
 msgstr "<b>રૂપરેખાંકન</b>"
 
-#: ../src/gpm-prefs.c:608
+#: ../src/gpm-prefs.c:597
 msgid "GNOME Power Preferences"
 msgstr "જીનોમ પાવર પસંદગીઓ"
 
@@ -391,46 +392,42 @@ msgid "Put dis_play to sleep after:"
 msgstr "આના પછી ડિસ્પ્લે ઉંઘ માટે મૂકો (_p):"
 
 #: ../src/gpm-prefs.glade.h:19
-msgid "Require password when returning from sleep"
-msgstr "જ્યારે ઉંઘમાંથી પાછા આવી રહ્યા હોય ત્યારે પાસવર્ડ જરૂરી"
-
-#: ../src/gpm-prefs.glade.h:20
 msgid "Set display _brightness:"
 msgstr "ડિસ્પ્લે તેજસ્વીતા સુયોજિત કરો (_b):"
 
-#: ../src/gpm-prefs.glade.h:21
+#: ../src/gpm-prefs.glade.h:20
 msgid "Set display b_rightness:"
 msgstr "ડિસ્પ્લે તેજસ્વીતા સુયોજિત કરો (_r):"
 
-#: ../src/gpm-prefs.glade.h:22
+#: ../src/gpm-prefs.glade.h:21
 msgid "Sleep"
 msgstr "ઉંઘ"
 
-#: ../src/gpm-prefs.glade.h:23
+#: ../src/gpm-prefs.glade.h:22
 msgid "When _battery power critical:"
 msgstr "જ્યારે બેટરી પાવર જટિલ હોય (_b):"
 
-#: ../src/gpm-prefs.glade.h:24
+#: ../src/gpm-prefs.glade.h:23
 msgid "When _suspend button pressed:"
 msgstr "જ્યારે અટકાવો બટન દબાવાયેલ હોય (_s):"
 
-#: ../src/gpm-prefs.glade.h:25
+#: ../src/gpm-prefs.glade.h:24
 msgid "When laptop li_d is closed:"
 msgstr "જ્યારે લેપટોપ lid બંધ કરેલ હોય (_d):"
 
-#: ../src/gpm-prefs.glade.h:26
+#: ../src/gpm-prefs.glade.h:25
 msgid "_Always display icon"
 msgstr "હંમેશા ચિહ્ન દર્શાવો (_A)"
 
-#: ../src/gpm-prefs.glade.h:27
+#: ../src/gpm-prefs.glade.h:26
 msgid "_Battery is low when below:"
 msgstr "જ્યારે નીચે હોય ત્યારે બેટરી નીચી હોય છે (_B):"
 
-#: ../src/gpm-prefs.glade.h:28
+#: ../src/gpm-prefs.glade.h:27
 msgid "_Computer sleep type:"
 msgstr "કમ્પ્યૂટર ઉંઘ પ્રકાર (_C):"
 
-#: ../src/gpm-prefs.glade.h:29
+#: ../src/gpm-prefs.glade.h:28
 msgid "_Never display icon"
 msgstr "ક્યારેય ચિહ્ન દર્શાવો નહિં (_N)"
 
