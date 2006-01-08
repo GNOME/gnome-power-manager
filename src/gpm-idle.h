@@ -1,15 +1,11 @@
-/** @file	gpm-idle.h
- *  @brief	Idle calculation routines
- *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-10-02
- */
-/*
- * Licensed under the GNU General Public License Version 2
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*-
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,43 +14,62 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-/**
- * @addtogroup	idle
- * @{
- */
-
-#ifndef _GPMIDLE_H
-#define _GPMIDLE_H
-
-/*
- * How many seconds between polling?
- */
-#define POLL_FREQUENCY	5
-/*
- * Sets the idle percent limit, i.e. how hard the computer can work 
- * while considered "at idle"
- */
-#define IDLE_LIMIT	5
-
-/** The cached cpu statistics used to work out the difference
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * Authors: William Jon McCann <mccann@jhu.edu>
  *
  */
-typedef struct {
-	long unsigned user;	/**< The CPU user time			*/
-	long unsigned nice;	/**< The CPU nice time			*/
-	long unsigned system;	/**< The CPU system time		*/
-	long unsigned idle;	/**< The CPU idle time			*/
-	long unsigned total;	/**< The CPU total time (uptime)	*/
-} cpudata;
 
-typedef void (*IdleCallback) (const gint timeout);
+#ifndef __GPM_IDLE_H
+#define __GPM_IDLE_H
 
-gboolean gpm_idle_set_callback (IdleCallback callback);
-gboolean gpm_idle_update (gpointer data);
-gboolean gpm_idle_set_timeout (gint timeout);
+#include <glib-object.h>
 
-#endif	/* _GPMIDLE_H */
-/** @} */
+G_BEGIN_DECLS
+
+#define GPM_TYPE_IDLE          (gpm_idle_get_type ())
+#define GPM_IDLE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_IDLE, GpmIdle))
+#define GPM_IDLE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_IDLE, GpmIdleClass))
+#define GPM_IS_IDLE(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_IDLE))
+#define GPM_IS_IDLE_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_IDLE))
+#define GPM_IDLE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_IDLE, GpmIdleClass))
+
+typedef enum {
+        GPM_IDLE_MODE_NORMAL,
+        GPM_IDLE_MODE_SESSION,
+        GPM_IDLE_MODE_SYSTEM
+} GpmIdleMode;
+
+typedef struct GpmIdlePrivate GpmIdlePrivate;
+
+typedef struct
+{
+        GObject         parent;
+        GpmIdlePrivate *priv;
+} GpmIdle;
+
+typedef struct
+{
+        GObjectClass      parent_class;
+
+        void              (* changed)        (GpmIdle    *idle,
+                                              GpmIdleMode mode);
+} GpmIdleClass;
+
+GType       gpm_idle_get_type         (void);
+
+GpmIdle   * gpm_idle_new                 (void);
+
+void        gpm_idle_reset               (GpmIdle    *idle);
+GpmIdleMode gpm_idle_get_mode            (GpmIdle    *idle);
+void        gpm_idle_set_mode            (GpmIdle    *idle,
+                                          GpmIdleMode mode);
+
+void        gpm_idle_set_session_timeout (GpmIdle    *idle,
+                                          guint       timeout);
+void        gpm_idle_set_system_timeout  (GpmIdle    *idle,
+                                          guint       timeout);
+
+G_END_DECLS
+
+#endif /* __GPM_IDLE_H */

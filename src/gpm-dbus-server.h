@@ -29,15 +29,11 @@
 #ifndef _GPMDBUSSERVER_H
 #define _GPMDBUSSERVER_H
 
-/** The dbus signal type
- */
-enum
-{
-	MAINS_CHANGED,		/**< Signal mainsStatusChanged		*/
-	ACTION_ABOUT_TO_HAPPEN,	/**< Signal actionAboutToHappen		*/
-	PERFORMING_ACTION,	/**< Signal performingAction		*/
-	LAST_SIGNAL		/**< The last signal...			*/
-};
+#include <glib-object.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
+
+G_BEGIN_DECLS
 
 typedef struct GPMObject GPMObject;
 typedef struct GPMObjectClass GPMObjectClass;
@@ -47,10 +43,15 @@ GType gpm_object_get_type (void);
 
 /** The dbus GPM GObject type
  */
-struct GPMObject {GObject parent;};
+struct GPMObject {
+  GObject parent;
+};
+
 /** The dbus GPM GObject class type
  */
-struct GPMObjectClass {GObjectClass parent;};
+struct GPMObjectClass {
+  GObjectClass parent;
+};
 
 gboolean gpm_object_register (DBusGConnection *connection);
 gboolean gpm_emit_about_to_happen (const gint value);
@@ -60,6 +61,8 @@ gboolean gpm_emit_mains_changed (const gboolean value);
 gboolean gpm_object_is_on_battery (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_is_on_ups (GPMObject *obj, gboolean *ret, GError **error);
 gboolean gpm_object_is_on_ac (GPMObject *obj, gboolean *ret, GError **error);
+
+G_END_DECLS
 
 #endif	/* _GPMDBUSSERVER_H */
 /** @} */

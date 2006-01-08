@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*- */
 /** @file	gpm-notification.c
  *  @brief	GNOME Power Notification
  *  @author	Richard Hughes <richard@hughsie.com>
@@ -410,9 +411,15 @@ callback_actions_activated (GtkMenuItem *menuitem, gpointer user_data)
 
 	g_debug ("action = '%s'", action);
 	if (strcmp (action, "suspend") == 0) {
-		action_policy_do (ACTION_SUSPEND);
+
+                /* FIXME: Emit a signal instead */
+		/* action_policy_do (ACTION_SUSPEND); */
+
 	} else if (strcmp (action, "hibernate") == 0) {
-		action_policy_do (ACTION_HIBERNATE);
+
+                /* FIXME: Emit a signal instead */
+		/*action_policy_do (ACTION_HIBERNATE);*/
+
 	} else if (strcmp (action, "about") == 0) {
 		callback_about_activated ();
 	} else if (strcmp (action, "preferences") == 0) {

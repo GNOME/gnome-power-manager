@@ -73,6 +73,10 @@ gnome_power_manager_SOURCES =				\
 	gpm-libnotify.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-hal-monitor.h				\
+	gpm-hal-monitor.c				\
+	gpm-manager.h					\
+	gpm-manager.c					\
 	gpm-notification.h				\
 	gpm-notification.c				\
 	gpm-core.h					\

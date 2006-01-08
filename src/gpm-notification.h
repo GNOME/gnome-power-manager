@@ -25,9 +25,15 @@
 #ifndef _GPM_NOTIFICATION_H
 #define _GPM_NOTIFICATION_H
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
 GtkWidget *gpm_notification_get_icon (void);
 
 void gpm_notification_icon_destroy (void);
 void gpm_notification_icon_update (void);
+
+G_END_DECLS
 
 #endif	/* _GPM_NOTIFICATION_H */

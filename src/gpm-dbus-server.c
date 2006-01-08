@@ -33,14 +33,24 @@
  */
 
 #include <glib.h>
-#include <gnome.h>
 #include <dbus/dbus-glib.h>
+
 #include "gpm-dbus-server.h"
 #include "gpm-common.h"
 #include "gpm-dbus-common.h"
 #include "gpm-hal.h"
 
-G_DEFINE_TYPE(GPMObject, gpm_object, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GPMObject, gpm_object, G_TYPE_OBJECT)
+
+/** The dbus signal type
+ */
+enum
+{
+	MAINS_CHANGED,		/**< Signal mainsStatusChanged		*/
+	ACTION_ABOUT_TO_HAPPEN,	/**< Signal actionAboutToHappen		*/
+	PERFORMING_ACTION,	/**< Signal performingAction		*/
+	LAST_SIGNAL		/**< The last signal...			*/
+};
 
 guint signals[LAST_SIGNAL] = { 0 };
 

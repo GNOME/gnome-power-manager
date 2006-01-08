@@ -1,3 +1,4 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /** @file	gpm-hal-callback.c
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
@@ -45,6 +46,7 @@
 HalFunctions function;
 HalRegistered reg;
 HalConnections proxy;
+gpointer cb_user_data;
 
 /** PropertyModified signal handler
  *
@@ -78,7 +80,7 @@ signal_handler_PropertyModified (DBusGProxy *proxy, gint type, GPtrArray *proper
 		key = g_value_get_string (g_value_array_get_nth (array, 0));
 		removed = g_value_get_boolean (g_value_array_get_nth (array, 1));
 		added = g_value_get_boolean (g_value_array_get_nth (array, 2));
-		function.device_property_modified (udi, key, removed, added);
+		function.device_property_modified (udi, key, removed, added, cb_user_data);
 	}
 }
 
@@ -95,7 +97,7 @@ signal_handler_DeviceRemoved (DBusGProxy *proxy, gchar *udi)
 		return;
 	}
 	g_debug ("gpm_hal: device removed '%s'", udi);
-	function.device_removed (udi);
+	function.device_removed (udi, cb_user_data);
 }
 
 /** NewCapability signal handler
@@ -112,7 +114,7 @@ signal_handler_NewCapability (DBusGProxy *proxy, gchar *udi, gchar *capability)
 		return;
 	}
 	g_debug ("gpm_hal: new capability '%s'", udi);
-	function.device_new_capability (udi, capability);
+	function.device_new_capability (udi, capability, cb_user_data);
 }
 
 /** Condition signal handler
@@ -131,7 +133,7 @@ signal_handler_Condition (DBusGProxy *proxy, gchar *name, gchar *details)
 	}
 	udi = dbus_g_proxy_get_path (proxy);
 	g_debug ("gpm_hal: condition '%s'", udi);
-	function.device_condition (udi, name, details);
+	function.device_condition (udi, name, details, cb_user_data);
 }
 
 /** Removed watch removal 
@@ -489,7 +491,7 @@ gpm_hal_method_device_condition (HalDeviceCondition callback)
  *  @return			If we initialised callbacks okay
  */
 gboolean
-gpm_hal_callback_init (void)
+gpm_hal_callback_init (gpointer data)
 {
 	g_debug ("gpm_hal_callback: init");
 	function.device_added = NULL;
@@ -513,6 +515,8 @@ gpm_hal_callback_init (void)
 	/* array types */
 	proxy.device_condition = g_ptr_array_new ();
 	proxy.device_property_modified = g_ptr_array_new ();
+
+	cb_user_data = data;
 
 	return TRUE;
 }

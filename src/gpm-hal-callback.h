@@ -31,12 +31,12 @@
 
 #include <dbus/dbus-glib.h>
 
-typedef void (*HalDeviceAdded) (const gchar *udi);
-typedef void (*HalDeviceRemoved) (const gchar *udi);
-typedef void (*HalDeviceNewCapability) (const gchar *udi, const gchar *capability);
-typedef void (*HalDeviceLostCapability) (const gchar *udi, const gchar *capability);
-typedef void (*HalDevicePropertyModified) (const gchar *udi, const gchar *key, gboolean removed, gboolean added);
-typedef void (*HalDeviceCondition) (const gchar *udi, const gchar *name, const gchar *detail);
+typedef void (*HalDeviceAdded) (const gchar *udi, gpointer user_data);
+typedef void (*HalDeviceRemoved) (const gchar *udi, gpointer user_data);
+typedef void (*HalDeviceNewCapability) (const gchar *udi, const gchar *capability, gpointer user_data);
+typedef void (*HalDeviceLostCapability) (const gchar *udi, const gchar *capability, gpointer user_data);
+typedef void (*HalDevicePropertyModified) (const gchar *udi, const gchar *key, gboolean removed, gboolean added, gpointer user_data);
+typedef void (*HalDeviceCondition) (const gchar *udi, const gchar *name, const gchar *detail, gpointer user_data);
 
 typedef void (*HalNameOwnerChanged) (const gchar *name, gboolean connected);
 
@@ -75,7 +75,7 @@ typedef struct {
 	DBusGProxy			*proxy;
 } UdiProxy;
 
-gboolean gpm_hal_callback_init (void);
+gboolean gpm_hal_callback_init (gpointer user_data);
 gboolean gpm_hal_callback_shutdown (void);
 
 gboolean gpm_hal_method_device_removed (HalDeviceRemoved callback);

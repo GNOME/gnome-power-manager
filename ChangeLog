@@ -1,3 +1,42 @@
+2006-01-08  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.[ch]: New class to act as a management
+	shell.
+
+	* src/gpm-hal-monitor.[ch]: New class to encapsulate all
+	the HAL monitoring.
+
+	* src/gpm-screensaver.h: Add G_BEGIN_DECLS and glib includes.
+
+	* src/gpm-notification.c (callback_actions_activated):
+	Disable the actions temporarily until we can use signals
+	to do this cleanly.
+
+	* src/gpm-marshal.list: Add new signal for battery
+	status changed.
+
+	* src/gpm-main.c: Move functionality out of here and
+	split into GpmManager and GpmHalMonitor.
+
+	* src/gpm-idle.[ch]: Turn into a class for monitoring
+	the session and system idle.
+
+	* src/gpm-hal.h: Add G_BEGIN_DECLS and glib includes.
+
+	* src/gpm-hal-callback.[ch] (signal_handler_PropertyModified) 
+	(signal_handler_DeviceRemoved, signal_handler_NewCapability) 
+	(signal_handler_Condition, gpm_hal_callback_init):
+	Add user data to be returned to callbacks.
+
+	* src/gpm-dbus-server.[ch]: Don't use gnome.h.  Don't
+	export signal enum.
+	* src/Makefile.am: Add new files.
+	* AUTHORS: Updated.
+
+	Refactored to support handling signals from gnome-screensaver,
+	laying groundwork for DPMS management, and making HAL
+	optional. Fixes #325911.
+
 2005-01-06  Richard Hughes  <richard@hughsie.com>
 
 	* data/: src/gnome-power-preferences.glade,

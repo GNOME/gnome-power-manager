@@ -29,6 +29,10 @@
 #ifndef _GPMHAL_H
 #define _GPMHAL_H
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 gboolean gpm_hal_has_power_management (void);
 
 gboolean gpm_hal_is_running (void);
@@ -57,6 +61,8 @@ gboolean gpm_hal_find_device_capability (const gchar *capability, gchar ***value
 gint gpm_hal_num_devices_of_capability (const gchar *capability);
 gint gpm_hal_num_devices_of_capability_with_value (const gchar *capability, const gchar *key, const gchar *value);
 void gpm_hal_free_capability (gchar **value);
+
+G_END_DECLS
 
 #endif	/* _GPMHAL_H */
 /** @} */
