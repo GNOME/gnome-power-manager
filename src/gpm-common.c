@@ -60,57 +60,6 @@ hal_to_device_type (const gchar *type)
 	return BATT_PRIMARY;
 }
 
-/** Runs a tool in BINDIR
- *
- *  @param	program		The program name
- *  @return			Success
- *
- *  @note	This will append a prefix of BINDIR to the path
- *		It is mainly used to run g-p-p and g-p-i
- */
-gboolean
-run_bin_program (const gchar *program)
-{
-	gchar *path = NULL;
-	gboolean ret = TRUE;
-
-	/* assertion checks */
-	g_assert (program);
-
-	path = g_strconcat (BINDIR, "/", program, NULL);
-	if (!g_spawn_command_line_async (path, NULL)) {
-		g_warning ("Couldn't execute command: %s", path);
-		ret = FALSE;
-	}
-	g_free (path);
-	return ret;
-}
-
-/** Converts an HAL string representation to it's ENUM
- *
- *  @param  type		The HAL battery type
- *  @return			The DeviceType ENUM
- */
-DeviceType
-convert_haltype_to_batttype (const gchar *type)
-{
-	/* assertion checks */
-	g_assert (type);
-
-	if (strcmp (type, "ups") == 0)
-		return BATT_UPS;
-	else if (strcmp (type, "mouse") == 0)
-		return BATT_MOUSE;
-	else if (strcmp (type, "keyboard") == 0)
-		return BATT_KEYBOARD;
-	else if (strcmp (type, "pda") == 0)
-		return BATT_PDA;
-	else if (strcmp (type, "primary") == 0)
-		return BATT_PRIMARY;
-	g_warning ("convert_haltype_to_batttype got unknown type '%s'", type);
-	return BATT_PRIMARY;
-}
-
 /** Returns the time string, e.g. "2 hours 3 minutes"
  *
  *  @param  minutes		Minutes to convert to string

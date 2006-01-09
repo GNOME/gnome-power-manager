@@ -36,10 +36,9 @@
 /* help location */
 #define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
 
-DeviceType convert_haltype_to_batttype (const gchar *type);
 DeviceType hal_to_device_type (const gchar *type);
 
 gchar *get_timestring_from_minutes (gint minutes);
-gboolean run_bin_program (const gchar *program);
+
 
 #endif	/* _GPMCOMMON_H */
