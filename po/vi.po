@@ -6,8 +6,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: gnome-power-manager Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-07 06:38+0100\n"
-"PO-Revision-Date: 2006-01-07 22:15+1030\n"
+"POT-Creation-Date: 2006-01-08 22:49+0100\n"
+"PO-Revision-Date: 2006-01-09 14:58+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -253,7 +253,7 @@ msgid_plural "minutes"
 msgstr[0] "phút"
 
 #.common descriptions of this program
-#:../src/gpm-common.h:33 ../src/gpm-main.c:714
+#:../src/gpm-common.h:33 ../src/gpm-main.c:182
 msgid "GNOME Power Manager"
 msgstr "Bộ Quản lý Điện năng GNOME"
 
@@ -261,81 +261,81 @@ msgstr "Bộ Quản lý Điện năng GNOME"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Ứng dụng quản lý điện năng cho môi trường Gnome"
 
-#:../src/gpm-main.c:362 ../src/gpm-main.c:381
-#,c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
-"your AC Adapter to avoid losing data."
-msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%i%%). Hãy cầm phít bộ tiếp "
-"hợp AC để tránh mất dữ liệu."
-
-#:../src/gpm-main.c:366
-msgid "Battery Critically Low"
-msgstr "Pin yếu tới hạn"
-
-#:../src/gpm-main.c:384
-msgid "Battery Low"
-msgstr "Pin yếu"
-
-#:../src/gpm-main.c:429
-msgid "AC Power Unplugged"
-msgstr "Điện năng AC chưa kết nối"
-
-#:../src/gpm-main.c:430
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "Điện năng AC bị tháo nút ra. Hệ thống đang chạy bằng pin."
-
-#:../src/gpm-main.c:512
-msgid "Battery Charged"
-msgstr "Pin đầy"
-
-#:../src/gpm-main.c:513
-msgid "Your battery is now fully charged"
-msgstr "Pin đã được tái sạc đầy."
-
 # Type: select
 # Choices
-#:../src/gpm-main.c:698
+#:../src/gpm-main.c:166
 msgid "Do not daemonize"
 msgstr "Đừng chạy trong nền"
 
-#:../src/gpm-main.c:700 ../src/gpm-prefs.c:584
+#:../src/gpm-main.c:168 ../src/gpm-prefs.c:584
 msgid "Show extra debugging information"
 msgstr "Hiển thị thông tin gỡ lỗi thêm"
 
-#:../src/gpm-notification.c:231
+#:../src/gpm-manager.c:142
+msgid "AC Power Unplugged"
+msgstr "Điện năng AC chưa kết nối"
+
+#:../src/gpm-manager.c:143
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "Điện năng AC bị tháo nút ra. Hệ thống đang chạy bằng pin."
+
+#:../src/gpm-manager.c:225
+msgid "Battery Charged"
+msgstr "Pin đầy"
+
+#:../src/gpm-manager.c:226
+msgid "Your battery is now fully charged"
+msgstr "Pin đã được tái sạc đầy."
+
+#:../src/gpm-manager.c:258 ../src/gpm-manager.c:278
+#,c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%). Hãy cầm phít bộ tiếp "
+"hợp AC để tránh mất dữ liệu."
+
+#:../src/gpm-manager.c:262
+msgid "Battery Critically Low"
+msgstr "Pin yếu tới hạn"
+
+#:../src/gpm-manager.c:282
+msgid "Battery Low"
+msgstr "Pin yếu"
+
+#:../src/gpm-notification.c:232
 msgid "charging"
 msgstr "đang sạc"
 
-#:../src/gpm-notification.c:233
+#:../src/gpm-notification.c:234
 msgid "discharging"
 msgstr "đang phóng ra"
 
-#:../src/gpm-notification.c:236
+#:../src/gpm-notification.c:237
 msgid "charged"
 msgstr "được sạc"
 
-#:../src/gpm-notification.c:251
+#:../src/gpm-notification.c:252
 msgid "until charged"
 msgstr "đến khi được sạc"
 
-#:../src/gpm-notification.c:254
+#:../src/gpm-notification.c:255
 msgid "until empty"
 msgstr "đến khi rỗng"
 
-#:../src/gpm-notification.c:321
+#:../src/gpm-notification.c:322
 msgid "Computer is running on battery power\n"
 msgstr "Hệ thống đang chạy bằng pin\n"
 
-#:../src/gpm-notification.c:323
+#:../src/gpm-notification.c:324
 msgid "Computer is running on AC power\n"
 msgstr "Hệ thống đang chạy bằng năng lượng xoay chiều (AC)\n"
 
-#:../src/gpm-notification.c:353
+#:../src/gpm-notification.c:354
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Được phát hành với điều kiện của Quyền Công Chung GNU (GPL) phiên bản 2"
 
-#:../src/gpm-notification.c:354
+#:../src/gpm-notification.c:355
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -346,7 +346,7 @@ msgstr "Chương trình này là phần mềm tự do nên bạn có thể phân
 "Tự do sản xuất, hoặc phiên bản 2 của Quyền hoặc (tùy chọn) bất cứ phiên bản "
 "sau nào."
 
-#:../src/gpm-notification.c:358
+#:../src/gpm-notification.c:359
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -357,7 +357,7 @@ msgstr "Bộ Quản lý Điện năng Gnome được phân phối vì mong muố
 "TÍNH THƯƠNG MẠI hay CHO MỘT MỤC ĐÍCH ĐẶC BIỆT NÀO CẢ.\n"
 "Hãy xem Quyền Công Chung GNU để tìm chi tiết."
 
-#:../src/gpm-notification.c:362
+#:../src/gpm-notification.c:363
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -373,27 +373,27 @@ msgstr "Bện nên đã nhận một bản sao của Quyền Công Chung GNU\n"
 #.
 #.* Translators comment: put your own name here to appear in the about dialog.
 #.
-#:../src/gpm-notification.c:376
+#:../src/gpm-notification.c:377
 msgid "translator-credits"
 msgstr "Nhóm Việt hóa Gnome <gnomevi-list@lists.sourceforge.net>"
 
-#:../src/gpm-notification.c:501
+#:../src/gpm-notification.c:508
 msgid "_Suspend"
 msgstr "_Ngưng"
 
-#:../src/gpm-notification.c:506
+#:../src/gpm-notification.c:513
 msgid "Hi_bernate"
 msgstr "Ngủ _đông"
 
-#:../src/gpm-notification.c:511
+#:../src/gpm-notification.c:518
 msgid "_Preferences"
 msgstr "Tù_y thích"
 
-#:../src/gpm-notification.c:513
+#:../src/gpm-notification.c:520
 msgid "_Help"
 msgstr "Trợ _giúp"
 
-#:../src/gpm-notification.c:515
+#:../src/gpm-notification.c:522
 msgid "_About"
 msgstr "G_iới thiệu"
 
