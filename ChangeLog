@@ -1,3 +1,12 @@
+2005-01-09  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.c (gpm_prefs_create): hide radiobutton_icon_charge
+	and radiobutton_icon_critical when we do not have any batteries (as
+	these states make no sense).
+
+	* src/gpm-tray-icon.c (libnotify_event): Fix a small typo that
+	prevented building with the old libnotify.
+
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-tray-icon.c (libnotify_event) 

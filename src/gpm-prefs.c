@@ -357,6 +357,11 @@ gpm_prefs_create ()
 	GtkWidget *label_batteries_brightness;
 	GtkWidget *slider_batteries_brightness;
 
+	GtkWidget *radiobutton_icon_always;
+	GtkWidget *radiobutton_icon_charge;
+	GtkWidget *radiobutton_icon_critical;
+	GtkWidget *radiobutton_icon_never;
+
 	GtkWidget *label_sleep_type;
 	GtkWidget *combo_sleep_type;
 	const gchar *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
@@ -490,28 +495,28 @@ gpm_prefs_create ()
 
 	icon_policy = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
 
-	widget = glade_xml_get_widget (dialog, "radiobutton_icon_always");
-	g_signal_connect (G_OBJECT (widget), "clicked",
+	radiobutton_icon_always = glade_xml_get_widget (dialog, "radiobutton_icon_always");
+	g_signal_connect (G_OBJECT (radiobutton_icon_always), "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_ALWAYS);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
 				      strcmp (icon_policy, ICON_POLICY_ALWAYS) == 0);
 
-	widget = glade_xml_get_widget (dialog, "radiobutton_icon_charge");
-	g_signal_connect (G_OBJECT (widget), "clicked",
+	radiobutton_icon_charge = glade_xml_get_widget (dialog, "radiobutton_icon_charge");
+	g_signal_connect (G_OBJECT (radiobutton_icon_charge), "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_CHARGE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
 				      strcmp (icon_policy, ICON_POLICY_CHARGE) == 0);
 
-	widget = glade_xml_get_widget (dialog, "radiobutton_icon_critical");
-	g_signal_connect (G_OBJECT (widget), "clicked",
+	radiobutton_icon_critical = glade_xml_get_widget (dialog, "radiobutton_icon_critical");
+	g_signal_connect (G_OBJECT (radiobutton_icon_critical), "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_CRITICAL);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
 				      strcmp (icon_policy, ICON_POLICY_CRITICAL) == 0);
 
-	widget = glade_xml_get_widget (dialog, "radiobutton_icon_never");
-	g_signal_connect (G_OBJECT (widget), "clicked",
+	radiobutton_icon_never = glade_xml_get_widget (dialog, "radiobutton_icon_never");
+	g_signal_connect (G_OBJECT (radiobutton_icon_never), "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb), ICON_POLICY_NEVER);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
 				      strcmp (icon_policy, ICON_POLICY_NEVER) == 0);
 	g_free (icon_policy);
 
@@ -554,6 +559,9 @@ gpm_prefs_create ()
 		/* Hide battery options in advanced tab */
 		widget = glade_xml_get_widget (dialog, "frame_other_options");
 		gtk_widget_hide_all (widget);
+		/* Hide battery radio options in advanced tab */
+		gtk_widget_hide_all (radiobutton_icon_charge);
+		gtk_widget_hide_all (radiobutton_icon_critical);
 	}
 
 	has_suspend_button = gpm_hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
