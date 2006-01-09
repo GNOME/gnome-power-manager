@@ -1,0 +1,68 @@
+The GNOME Power Manager DBUS API
+------------------------------
+
+This API is currently unstable and is likely to change in the future.
+
+GNOME Power Manager exposes a DBUS API for programs to obtain
+information about the DPMS state and to change it if required.
+
+The following constants are used to uniquely refer to the
+PowerManager object when making DBUS method calls:
+
+DBUS Service:		"org.gnome.PowerManager"
+DBUS Object Path:	"/org/gnome/PowerManager"
+DBUS Interface:		"org.gnome.PowerManager"
+
+Methods
+=======
+
+	Name:		setDpmsMode
+	Args:		DBUS_TYPE_STRING
+			value:	on		100%
+				standby		<80%
+				suspend		<30W
+				off		<8W
+	Returns:	(nothing)
+	Description:	DPMS is a standard from the VESA consortium for
+			managing the power supply of monitors.
+			This call requests a change in the state of DPMS for
+			the current screen.
+
+	Name:		getDpmsMode
+	Args:		(none)
+	Returns:	DBUS_TYPE_STRING
+	Descriptions:	Returns the DPMS mode state.
+			See setDpmsMode().
+
+Signals
+=======
+
+	Name:		DpmsModeChanged
+	Args:		DBUS_TYPE_BOOLEAN state
+	Returns:	Returns the value of the current state of activity.
+	Description:	See method setDpmsMode().
+
+Examples
+========
+
+You can get the DPMS mode by running the following:
+
+dbus-send --session \
+	  --dest=org.gnome.PowerManager \
+	  --type=method_call \
+	  --print-reply \
+	  --reply-timeout=2000 \
+	  /org/gnome/PowerManager \
+	  org.gnome.PowerManager.getDpmsMode
+
+You can set the DPMS mode by running the following:
+
+dbus-send --session \
+	  --dest=org.gnome.PowerManager \
+	  --type=method_call \
+	  --print-reply \
+	  --reply-timeout=2000 \
+	  /org/gnome/PowerManager \
+	  org.gnome.PowerManager.setDpmsMode \
+	  string:suspend
+
