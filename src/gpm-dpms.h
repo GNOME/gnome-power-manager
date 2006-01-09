@@ -36,7 +36,8 @@ typedef enum {
         GPM_DPMS_MODE_ON,
         GPM_DPMS_MODE_STANDBY,
         GPM_DPMS_MODE_SUSPEND,
-        GPM_DPMS_MODE_OFF
+        GPM_DPMS_MODE_OFF,
+        GPM_DPMS_MODE_UNKNOWN
 } GpmDpmsMode;
 
 typedef struct GpmDpmsPrivate GpmDpmsPrivate;
@@ -74,6 +75,10 @@ void        gpm_dpms_set_timeouts     (GpmDpms    *dpms,
 GpmDpmsMode gpm_dpms_get_mode         (GpmDpms    *dpms);
 void        gpm_dpms_set_mode         (GpmDpms    *dpms,
                                        GpmDpmsMode mode);
+
+const char *gpm_dpms_mode_to_string   (GpmDpmsMode mode);
+GpmDpmsMode gpm_dpms_mode_from_string (const char *mode);
+
 G_END_DECLS
 
 #endif /* __GPM_DPMS_H */

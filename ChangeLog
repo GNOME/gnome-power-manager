@@ -1,3 +1,25 @@
+2006-01-09  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.c (gpm_manager_set_on_ac): Emit a
+	signal when on-ac changes.
+	(gpm_manager_set_dpms_mode, gpm_manager_get_dpms_mode):
+	Add API for DPMS mode.
+	(dpms_changed_cb): Emit a signal when DPMS mode changes.
+	(gpm_manager_class_init): Add signals.
+
+	* src/gpm-main.c (gpm_object_register): Move here
+	from gpm-dbus-server.
+	(main): Connect manager to bus.
+
+	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string) 
+	(gpm_dpms_mode_to_string, gpm_dpms_set_mode):
+	Add method to translate from enum to string and back.
+
+	* src/Makefile.am: Remove gpm-dbus-server.*
+	Rename gnome-power-service.xml to gpm-manager.xml.
+
+	Fixes #326307
+
 2006-01-09  Jaap Haitsma  <jaap@haitsma.org>
 
 	* src/gpm-common.[ch]: Remove unused functions

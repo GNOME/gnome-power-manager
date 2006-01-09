@@ -1,5 +1,6 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
-/** @file	gpm-main.c
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ *  @file	gpm-main.c
  *  @brief	GNOME Power Manager session daemon
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -9,8 +10,7 @@
  *
  * This is the main daemon for g-p-m. It handles all the setup and
  * tear-down of all the dynamic arrays, mainloops and icons in g-p-m.
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -28,32 +28,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-/**
- * @addtogroup	main		GNOME Power Manager (session daemon)
- * @brief			The session daemon run for each user
- *
- * @{
- */
-/** @mainpage	GNOME Power Manager
- *
- *  @section	intro		Introduction
- *
- *  GNOME Power Manager is a session daemon that takes care of power management.
- *
- *  GNOME Power Manager uses information provided by HAL to display icons and
- *  handle system and user actions in a GNOME session. Authorised users can set
- *  policy and change preferences.
- *  GNOME Power Manager acts as a policy agent on top of the Project Utopia
- *  stack, which includes the kernel, hotplug, udev, and HAL.
- *  GNOME Power Manager listens for HAL events and responds with
- *  user-configurable reactions.
- *  The main focus is the user interface; e.g. allowing configuration of
- *  power management from the desktop in a sane way (no need for root password,
- *  and no need to edit configuration files)
- *  Most of the backend code is actually in HAL for abstracting various power
- *  aware devices (UPS's) and frameworks (ACPI, PMU, APM etc.) - so the
- *  desktop parts are fairly lightweight and straightforward.
- */
 
 #include "config.h"
 
@@ -69,15 +43,13 @@
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
 
-#include "gpm-dbus-server.h"
 #include "gpm-dbus-common.h"
 #include "gpm-dbus-signal-handler.h"
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
 
-#include "gnome-power-glue.h"
-
 #include "gpm-manager.h"
+#include "gpm-manager-glue.h"
 #include "gpm-main.h"
 
 static void
@@ -142,6 +114,26 @@ signalhandler_nlost (const char *name, const gboolean connected)
 	gpm_exit ();
 }
 
+/** registers org.gnome.GnomePowerManager on a connection
+ *
+ *  @return			If we successfully registered the object
+ *
+ *  @note	This function MUST be called before DBUS service will work.
+ */
+gboolean
+gpm_object_register (DBusGConnection *connection,
+		     GObject         *object)
+{
+	if (!gpm_dbus_get_service (connection, GPM_DBUS_SERVICE)) {
+		return FALSE;
+	}
+
+	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
+	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);
+
+	return TRUE;
+}
+
 /** Main entry point
  *
  *  @param	argc		Number of arguments given to program
@@ -151,15 +143,15 @@ signalhandler_nlost (const char *name, const gboolean connected)
 int
 main (int argc, char *argv[])
 {
-	gint i;
-	GMainLoop *loop;
-	GnomeClient *master;
+	gint             i;
+	GMainLoop       *loop;
+	GnomeClient     *master;
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
-	gboolean verbose = FALSE;
-	gboolean no_daemon;
-	GpmManager *manager;
+	gboolean         verbose = FALSE;
+	gboolean         no_daemon;
+	GpmManager      *manager;
 
 	struct poptOption options[] = {
 		{ "no-daemon", '\0', POPT_ARG_NONE, NULL, 0,
@@ -216,29 +208,27 @@ main (int argc, char *argv[])
 	if (!no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
-	/* install gpm object */
-	dbus_g_object_type_install_info (gpm_object_get_type (),
-					 &dbus_glib_gpm_object_object_info);
+	manager = gpm_manager_new ();
 
 #if GPM_SYSTEM_BUS
-	if (!gpm_object_register (system_connection)) {
+	if (!gpm_object_register (system_connection, G_OBJECT (manager))) {
 		g_warning ("Failed to register.");
 		return 0;
 	}
 #else
-	if (!gpm_object_register (session_connection)) {
+	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
 		g_warning ("GNOME Power Manager is already running in this session.");
 		return 0;
 	}
 #endif
+
+	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 
 	/* initialise NameOwnerChanged and NameLost */
 	gpm_dbus_init_noc (system_connection, signalhandler_noc);
 	gpm_dbus_init_nlost (system_connection, signalhandler_nlost);
 
 	loop = g_main_loop_new (NULL, FALSE);
-
-	manager = gpm_manager_new ();
 
 	g_main_loop_run (loop);
 

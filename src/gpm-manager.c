@@ -45,8 +45,6 @@
 #include "gpm-screensaver.h"
 #include "gpm-networkmanager.h"
 
-#include "gpm-dbus-server.h"
-
 /* FIXME: we should abstract the HAL stuff */
 #include "gpm-hal.h"
 
@@ -82,7 +80,14 @@ enum {
 	PROP_ON_AC
 };
 
+enum {
+	ON_AC_CHANGED,
+	DPMS_MODE_CHANGED,
+	LAST_SIGNAL
+};
+
 static GObjectClass *parent_class = NULL;
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
@@ -670,8 +675,9 @@ gpm_manager_set_on_ac (GpmManager *manager,
 		g_debug ("Setting on-ac: %d", on_ac);
 
 		maybe_notify_on_ac_changed (manager, on_ac);
-		gpm_emit_mains_changed (on_ac);
 		change_power_policy (manager, on_ac);
+
+		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 	}
 }
 
@@ -685,6 +691,29 @@ gpm_manager_get_on_ac (GpmManager *manager)
 	on_ac = manager->priv->on_ac;
 
 	return on_ac;
+}
+
+void
+gpm_manager_set_dpms_mode (GpmManager *manager,
+			   const char *mode)
+{
+	g_return_if_fail (GS_IS_MANAGER (manager));
+
+	/* just proxy this */
+	gpm_dpms_set_mode (manager->priv->dpms,
+			   gpm_dpms_mode_from_string (mode));
+}
+
+char *
+gpm_manager_get_dpms_mode (GpmManager *manager)
+{
+	GpmDpmsMode mode;
+
+	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
+
+	mode = gpm_dpms_get_mode (manager->priv->dpms);
+
+	return g_strdup (gpm_dpms_mode_to_string (mode));
 }
 
 void
@@ -822,7 +851,10 @@ dpms_changed_cb (GpmDpms    *dpms,
 		gpm_screensaver_enable_throttle (TRUE);
 	}
 
-	/* do a DBus signal ? */
+	g_signal_emit (manager,
+		       signals [DPMS_MODE_CHANGED],
+		       0,
+		       gpm_dpms_mode_to_string (mode));
 }
 
 static void
@@ -966,6 +998,29 @@ gpm_manager_class_init (GpmManagerClass *klass)
 							       NULL,
 							       TRUE,
 							       G_PARAM_READWRITE));
+
+	signals [ON_AC_CHANGED] =
+		g_signal_new ("on-ac-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, on_ac_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_BOOLEAN);
+	signals [DPMS_MODE_CHANGED] =
+		g_signal_new ("dpms-mode-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, dpms_mode_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmManagerPrivate));
 }

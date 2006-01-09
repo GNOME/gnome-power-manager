@@ -388,6 +388,52 @@ gpm_dpms_set_timeouts (GpmDpms	 *power,
 	sync_settings (power);
 }
 
+GpmDpmsMode
+gpm_dpms_mode_from_string (const char *str)
+{
+	if (str == NULL) {
+		return GPM_DPMS_MODE_UNKNOWN;
+	}
+
+	if (strcmp (str, "on") == 0) {
+		return GPM_DPMS_MODE_OFF;
+	} else if (strcmp (str, "standby") == 0) {
+		return GPM_DPMS_MODE_STANDBY;
+	} else if (strcmp (str, "suspend") == 0) {
+		return GPM_DPMS_MODE_SUSPEND;
+	} else if (strcmp (str, "off") == 0) {
+		return GPM_DPMS_MODE_OFF;
+	} else {
+		return GPM_DPMS_MODE_UNKNOWN;
+	}
+}
+
+const char *
+gpm_dpms_mode_to_string (GpmDpmsMode mode)
+{
+	const char *str = NULL;
+
+	switch (mode) {
+	case GPM_DPMS_MODE_ON:
+		str = "on";
+		break;
+	case GPM_DPMS_MODE_STANDBY:
+		str = "standby";
+		break;
+	case GPM_DPMS_MODE_SUSPEND:
+		str = "suspend";
+		break;
+	case GPM_DPMS_MODE_OFF:
+		str = "off";
+		break;
+	default:
+		str = NULL;
+		break;
+	}
+
+	return str;
+}
+
 void
 gpm_dpms_set_mode (GpmDpms    *power,
 		   GpmDpmsMode mode)
@@ -399,6 +445,10 @@ gpm_dpms_set_mode (GpmDpms    *power,
 	}
 
 	if (! power->priv->active) {
+		return;
+	}
+
+	if (mode == GPM_DPMS_MODE_UNKNOWN) {
 		return;
 	}
 

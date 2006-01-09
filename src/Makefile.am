@@ -1,7 +1,7 @@
 SUBDIRS = icons
 
 EXTRA_DIST =						\
-	gnome-power-service.xml				\
+	gpm-manager.xml					\
 	gpm-marshal.list
 
 INCLUDES =						\
@@ -62,8 +62,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal-callback.c				\
 	gpm-dbus-common.h				\
 	gpm-dbus-common.c				\
-	gpm-dbus-server.h				\
-	gpm-dbus-server.c				\
 	gpm-dbus-signal-handler.h			\
 	gpm-dbus-signal-handler.c			\
 	gpm-common.h					\
@@ -98,8 +96,6 @@ endif
 #	gpm-hal.c					\
 #	gpm-dbus-common.h				\
 #	gpm-dbus-common.c				\
-#	gpm-dbus-server.h				\
-#	gpm-dbus-server.c				\
 #	gpm-dbus-signal-handler.h			\
 #	gpm-dbus-signal-handler.c			\
 #	gpm-common.h					\
@@ -114,7 +110,7 @@ endif
 #	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 
 BUILT_SOURCES = \
-	gnome-power-glue.h				\
+	gpm-manager-glue.h				\
 	gpm-marshal.c					\
 	gpm-marshal.h
 
@@ -136,12 +132,12 @@ gpm-marshal.h: gpm-marshal.list
 gpm-marshal.c: gpm-marshal.list
 	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --body > $(srcdir)/gpm-marshal.c
 
-gnome-power-glue.h: gnome-power-service.xml
-	libtool --mode=execute dbus-binding-tool --prefix=gpm_object --mode=glib-server --output=gnome-power-glue.h $(srcdir)/gnome-power-service.xml
+gpm-manager-glue.h: gpm-manager.xml
+	libtool --mode=execute dbus-binding-tool --prefix=gpm_manager --mode=glib-server --output=gpm-manager-glue.h $(srcdir)/gpm-manager.xml
 
 clean-local:
 	rm -f *~
 	rm -f gpm-marshal.c gpm-marshal.h
 
 DISTCLEANFILES =					\
-	gnome-power-glue.h
+	gpm-manager-glue.h

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/">
+  <interface name="org.gnome.GnomePowerManager">
+
+    <method name="getOnAc">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_on_ac"/>
+      <arg type="b" name="on_ac" direction="out"/>
+    </method>
+    <method name="setOnAc">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_on_ac"/>
+      <arg type="b" name="on_ac" direction="in"/>
+    </method>
+    <method name="getDpmsMode">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
+      <arg type="s" name="mode" direction="out"/>
+    </method>
+    <method name="setDpmsMode">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_dpms_mode"/>
+      <arg type="s" name="mode" direction="in"/>
+    </method>
+
+    <signal name="OnAcChanged"/>
+    <signal name="DpmsModeChanged"/>
+
+  </interface>
+</node>
