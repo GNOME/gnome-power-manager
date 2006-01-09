@@ -1,0 +1,79 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*-
+ *
+ * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * Authors: William Jon McCann <mccann@jhu.edu>
+ *
+ */
+
+#ifndef __GPM_TRAY_ICON_H
+#define __GPM_TRAY_ICON_H
+
+#include <glib-object.h>
+#include "eggtrayicon.h"
+
+G_BEGIN_DECLS
+
+#define GPM_TYPE_TRAY_ICON          (gpm_tray_icon_get_type ())
+#define GPM_TRAY_ICON(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_TRAY_ICON, GpmTrayIcon))
+#define GPM_TRAY_ICON_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
+#define GPM_IS_TRAY_ICON(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_TRAY_ICON))
+#define GPM_IS_TRAY_ICON_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_TRAY_ICON))
+#define GPM_TRAY_ICON_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
+
+typedef struct GpmTrayIconPrivate GpmTrayIconPrivate;
+
+typedef struct
+{
+        EggTrayIcon         parent;
+        GpmTrayIconPrivate *priv;
+} GpmTrayIcon;
+
+typedef struct
+{
+        EggTrayIconClass    parent_class;
+
+        void                (* suspend)       (GpmTrayIcon *tray_icon);
+        void                (* hibernate)     (GpmTrayIcon *tray_icon);
+
+} GpmTrayIconClass;
+
+GType           gpm_tray_icon_get_type             (void);
+
+GpmTrayIcon   * gpm_tray_icon_new                  (void);
+
+void            gpm_tray_icon_notify               (GpmTrayIcon *icon,
+                                                    guint        timeout,
+                                                    const char  *primary,
+                                                    GtkWidget   *msgicon,
+                                                    const char  *secondary);
+void            gpm_tray_icon_cancel_notify        (GpmTrayIcon *icon);
+
+void            gpm_tray_icon_set_tooltip          (GpmTrayIcon *icon,
+                                                    const char  *tooltip);
+void            gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
+                                                    const char  *stock_id);
+
+void            gpm_tray_icon_enable_suspend       (GpmTrayIcon *icon,
+                                                    gboolean     enabled);
+void            gpm_tray_icon_enable_hibernate     (GpmTrayIcon *icon,
+                                                    gboolean     enabled);
+
+
+G_END_DECLS
+
+#endif /* __GPM_TRAY_ICON_H */

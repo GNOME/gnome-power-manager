@@ -1,5 +1,29 @@
 2006-01-08  William Jon McCann  <mccann@jhu.edu>
 
+	* src/gpm-tray-icon.[ch]: New class to encapsulate
+	tray icon and notification handling.
+
+	* src/gpm-manager.c (get_index_from_percent, get_stock_id) 
+	(get_tooltip_system_struct, get_tooltips_system_device) 
+	(get_tooltips_system_device_type, get_full_tooltip) 
+	(tray_icon_update): Moved here from gpm-notification.c.
+	Fix to support GpmTrayIcon.
+	(maybe_notify_on_ac_changed, maybe_notify_battery_power_changed):
+	Move all notification stuff to tray icon.
+	(callback_gconf_key_changed): Update the tray icon.
+	(gpm_manager_tray_icon_hibernate, gpm_manager_tray_icon_suspend):
+	Add signal handlers.
+	(gpm_manager_setup_tray_icon): Create the tray icon.
+	(gpm_manager_init): Update/create the tray icon.
+	(gpm_manager_finalize): Destroy the tray icon.
+
+	* src/Makefile.am: Remove gpm-libnotify.{c,h} and
+	gpm-notification.{c,h}. Add gpm-tray-icon.{c,h}.
+
+	Fixes #326241
+
+2006-01-08  William Jon McCann  <mccann@jhu.edu>
+
 	* src/gpm-manager.[ch]: New class to act as a management
 	shell.
 

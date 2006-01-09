@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 8 -*-
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
  *
@@ -54,172 +54,172 @@ static void     gpm_hal_monitor_finalize   (GObject      *object);
 
 struct GpmHalMonitorPrivate
 {
-        gboolean enabled;
-        gboolean has_power_management;
+	gboolean enabled;
+	gboolean has_power_management;
 
 };
 
 enum {
-        POWER_BUTTON,
-        SUSPEND_BUTTON,
-        LID_BUTTON,
-        HIBERNATE,
-        SUSPEND,
-        LOCK,
-        AC_POWER_CHANGED,
-        BATTERY_POWER_CHANGED,
-        DEVICE_ADDED,
-        DEVICE_REMOVED,
-        LAST_SIGNAL
+	POWER_BUTTON,
+	SUSPEND_BUTTON,
+	LID_BUTTON,
+	HIBERNATE,
+	SUSPEND,
+	LOCK,
+	AC_POWER_CHANGED,
+	BATTERY_POWER_CHANGED,
+	DEVICE_ADDED,
+	DEVICE_REMOVED,
+	LAST_SIGNAL
 };
 
 enum {
-        PROP_0,
-        PROP_MODE
+	PROP_0,
+	PROP_MODE
 };
 
 static GObjectClass *parent_class = NULL;
-static guint         signals [LAST_SIGNAL] = { 0, };
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmHalMonitor, gpm_hal_monitor, G_TYPE_OBJECT)
 
 static void
-gpm_hal_monitor_set_property (GObject            *object,
-                              guint               prop_id,
-                              const GValue       *value,
-                              GParamSpec         *pspec)
+gpm_hal_monitor_set_property (GObject		 *object,
+			      guint		  prop_id,
+			      const GValue	 *value,
+			      GParamSpec	 *pspec)
 {
-        switch (prop_id) {
-        default:
-                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-                break;
-        }
+	switch (prop_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 }
 
 static void
-gpm_hal_monitor_get_property (GObject            *object,
-                              guint               prop_id,
-                              GValue             *value,
-                              GParamSpec         *pspec)
+gpm_hal_monitor_get_property (GObject		 *object,
+			      guint		  prop_id,
+			      GValue		 *value,
+			      GParamSpec	 *pspec)
 {
-        switch (prop_id) {
-        default:
-                G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-                break;
-        }
+	switch (prop_id) {
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
 }
 
 static void
 gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 {
-        GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-        parent_class = g_type_class_peek_parent (klass);
+	parent_class = g_type_class_peek_parent (klass);
 
-        object_class->finalize     = gpm_hal_monitor_finalize;
-        object_class->get_property = gpm_hal_monitor_get_property;
-        object_class->set_property = gpm_hal_monitor_set_property;
+	object_class->finalize	   = gpm_hal_monitor_finalize;
+	object_class->get_property = gpm_hal_monitor_get_property;
+	object_class->set_property = gpm_hal_monitor_set_property;
 
-        g_type_class_add_private (klass, sizeof (GpmHalMonitorPrivate));
+	g_type_class_add_private (klass, sizeof (GpmHalMonitorPrivate));
 
-        signals [DEVICE_ADDED] =
-                g_signal_new ("device-added",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, device_added),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [DEVICE_REMOVED] =
-                g_signal_new ("device-removed",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, device_removed),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [SUSPEND_BUTTON] =
-                g_signal_new ("suspend-button",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, suspend_button),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__BOOLEAN,
-                              G_TYPE_NONE,
-                              1, G_TYPE_BOOLEAN);
-        signals [POWER_BUTTON] =
-                g_signal_new ("power-button",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, power_button),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__BOOLEAN,
-                              G_TYPE_NONE,
-                              1, G_TYPE_BOOLEAN);
-        signals [LID_BUTTON] =
-                g_signal_new ("lid-button",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, lid_button),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__BOOLEAN,
-                              G_TYPE_NONE,
-                              1, G_TYPE_BOOLEAN);
-        signals [HIBERNATE] =
-                g_signal_new ("hibernate",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, hibernate),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [LOCK] =
-                g_signal_new ("lock",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, lock),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [SUSPEND] =
-                g_signal_new ("suspend",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, suspend),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [AC_POWER_CHANGED] =
-                g_signal_new ("ac-power-changed",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmHalMonitorClass, ac_power_changed),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__BOOLEAN,
-                              G_TYPE_NONE,
-                              1,
-                              G_TYPE_BOOLEAN);
+	signals [DEVICE_ADDED] =
+		g_signal_new ("device-added",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, device_added),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+	signals [DEVICE_REMOVED] =
+		g_signal_new ("device-removed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, device_removed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+	signals [SUSPEND_BUTTON] =
+		g_signal_new ("suspend-button",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, suspend_button),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1, G_TYPE_BOOLEAN);
+	signals [POWER_BUTTON] =
+		g_signal_new ("power-button",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, power_button),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1, G_TYPE_BOOLEAN);
+	signals [LID_BUTTON] =
+		g_signal_new ("lid-button",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, lid_button),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1, G_TYPE_BOOLEAN);
+	signals [HIBERNATE] =
+		g_signal_new ("hibernate",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, hibernate),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+	signals [LOCK] =
+		g_signal_new ("lock",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, lock),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+	signals [SUSPEND] =
+		g_signal_new ("suspend",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, suspend),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+	signals [AC_POWER_CHANGED] =
+		g_signal_new ("ac-power-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, ac_power_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_BOOLEAN);
 	signals [BATTERY_POWER_CHANGED] =
 		g_signal_new ("battery-power-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_power_changed),
 			      NULL,
-                              NULL,
+			      NULL,
 			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN,
 			      G_TYPE_NONE, 4, G_TYPE_INT, G_TYPE_LONG, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 
@@ -233,15 +233,15 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
  */
 static void
 hal_device_removed (const gchar *udi,
-                    gpointer     user_data)
+		    gpointer	 user_data)
 {
-        GpmHalMonitor *monitor;
+	GpmHalMonitor *monitor;
 
-        monitor = GPM_HAL_MONITOR (user_data);
+	monitor = GPM_HAL_MONITOR (user_data);
 
 	if (gpm_device_removed (udi)) {
-                g_signal_emit (monitor, signals [DEVICE_REMOVED], 0);
-        }
+		g_signal_emit (monitor, signals [DEVICE_REMOVED], 0);
+	}
 }
 
 /** When we have a new device hot-plugged
@@ -251,23 +251,23 @@ hal_device_removed (const gchar *udi,
  */
 static void
 hal_device_new_capability (const gchar *udi,
-                           const gchar *capability,
-                           gpointer     user_data)
+			   const gchar *capability,
+			   gpointer	user_data)
 {
-        GpmHalMonitor *monitor;
+	GpmHalMonitor *monitor;
 
-        monitor = GPM_HAL_MONITOR (user_data);
+	monitor = GPM_HAL_MONITOR (user_data);
 
 	if (gpm_device_new_capability (udi, capability)) {
-                g_signal_emit (monitor, signals [DEVICE_ADDED], 0);
-        }
+		g_signal_emit (monitor, signals [DEVICE_ADDED], 0);
+	}
 }
 
 static void
 monitor_change_on_ac (GpmHalMonitor *monitor,
-                      gboolean       on_ac)
+		      gboolean	     on_ac)
 {
-        g_signal_emit (monitor, signals [AC_POWER_CHANGED], 0, on_ac);
+	g_signal_emit (monitor, signals [AC_POWER_CHANGED], 0, on_ac);
 }
 
 /** Invoked when a property of a device in the Global Device List is
@@ -280,32 +280,32 @@ monitor_change_on_ac (GpmHalMonitor *monitor,
  */
 static void
 hal_device_property_modified (const gchar *udi,
-                              const gchar *key,
-                              gboolean     is_added,
-                              gboolean     is_removed,
-                              gpointer     user_data)
+			      const gchar *key,
+			      gboolean	   is_added,
+			      gboolean	   is_removed,
+			      gpointer	   user_data)
 {
 	sysDev *sd = NULL;
 	sysDevStruct *sds = NULL;
 	gchar *type;
 	gint old_charge;
 	gint new_charge;
-        GpmHalMonitor *monitor;
-        DeviceType dev;
+	GpmHalMonitor *monitor;
+	DeviceType dev;
 
-        monitor = GPM_HAL_MONITOR (user_data);
+	monitor = GPM_HAL_MONITOR (user_data);
 
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
-                 udi, key, is_added, is_removed);
+		 udi, key, is_added, is_removed);
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed || is_added)
 		return;
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-                gboolean on_ac = gpm_hal_is_on_ac ();
+		gboolean on_ac = gpm_hal_is_on_ac ();
 
-                monitor_change_on_ac (monitor, on_ac);
+		monitor_change_on_ac (monitor, on_ac);
 
 		/* update all states */
 		gpm_sysdev_update_all ();
@@ -385,17 +385,17 @@ hal_device_property_modified (const gchar *udi,
 
 	/* do we need to notify the user we are getting low ? */
 	if (old_charge != new_charge) {
-                gboolean is_primary;
+		gboolean is_primary;
 
 		g_debug ("percentage change %i -> %i", old_charge, new_charge);
 
-                is_primary = (sd->type == BATT_PRIMARY);
-                g_signal_emit (monitor,
-                               signals [BATTERY_POWER_CHANGED], 0,
-                               sd->percentage_charge,
-                               sds->minutes_remaining,
-                               sds->is_discharging,
-                               is_primary);
+		is_primary = (sd->type == BATT_PRIMARY);
+		g_signal_emit (monitor,
+			       signals [BATTERY_POWER_CHANGED], 0,
+			       sd->percentage_charge,
+			       sds->minutes_remaining,
+			       sds->is_discharging,
+			       is_primary);
 	}
 }
 
@@ -408,15 +408,15 @@ hal_device_property_modified (const gchar *udi,
  */
 static void
 hal_device_condition (const gchar *udi,
-                      const gchar *name,
-                      const gchar *details,
-                      gpointer     user_data)
+		      const gchar *name,
+		      const gchar *details,
+		      gpointer	   user_data)
 {
-	gchar   *type = NULL;
+	gchar	*type = NULL;
 	gboolean value;
-        GpmHalMonitor *monitor;
+	GpmHalMonitor *monitor;
 
-        monitor = GPM_HAL_MONITOR (user_data);
+	monitor = GPM_HAL_MONITOR (user_data);
 
 	g_assert (udi);
 	g_assert (name);
@@ -435,18 +435,18 @@ hal_device_condition (const gchar *udi,
 
 		g_debug ("ButtonPressed : %s", type);
 		if (strcmp (type, "power") == 0) {
-                        gboolean state = TRUE;
+			gboolean state = TRUE;
 
-                        g_signal_emit (monitor, signals [POWER_BUTTON], 0, state);
+			g_signal_emit (monitor, signals [POWER_BUTTON], 0, state);
 
 		} else if (strcmp (type, "sleep") == 0) {
-                        gboolean state = TRUE;
-                        g_signal_emit (monitor, signals [SUSPEND_BUTTON], 0, state);
+			gboolean state = TRUE;
+			g_signal_emit (monitor, signals [SUSPEND_BUTTON], 0, state);
 
 		} else if (strcmp (type, "lid") == 0) {
 			gpm_hal_device_get_bool (udi, "button.state.value", &value);
 
-                        g_signal_emit (monitor, signals [LID_BUTTON], 0, value);
+			g_signal_emit (monitor, signals [LID_BUTTON], 0, value);
 
 		} else if (strcmp (type, "virtual") == 0) {
 
@@ -459,23 +459,23 @@ hal_device_condition (const gchar *udi,
 
 				gpm_hal_set_brightness_up ();
 
-                        } else if (strcmp (details, "BrightnessDown") == 0) {
+			} else if (strcmp (details, "BrightnessDown") == 0) {
 
 				gpm_hal_set_brightness_down ();
 
-                        } else if (strcmp (details, "Suspend") == 0) {
+			} else if (strcmp (details, "Suspend") == 0) {
 
-                                g_signal_emit (monitor, signals [SUSPEND], 0);
+				g_signal_emit (monitor, signals [SUSPEND], 0);
 
-                        } else if (strcmp (details, "Hibernate") == 0) {
+			} else if (strcmp (details, "Hibernate") == 0) {
 
-                                g_signal_emit (monitor, signals [HIBERNATE], 0);
+				g_signal_emit (monitor, signals [HIBERNATE], 0);
 
-                        } else if (strcmp (details, "Lock") == 0) {
+			} else if (strcmp (details, "Lock") == 0) {
 
-                                g_signal_emit (monitor, signals [LOCK], 0);
+				g_signal_emit (monitor, signals [LOCK], 0);
 
-                        }
+			}
 
 		} else {
 			g_warning ("Button '%s' unrecognised", type);
@@ -518,62 +518,62 @@ hal_monitor_stop (GpmHalMonitor *monitor)
 gboolean
 gpm_hal_monitor_get_on_ac (GpmHalMonitor *monitor)
 {
-        gboolean on_ac;
+	gboolean on_ac;
 
-        g_return_val_if_fail (GS_IS_HAL_MONITOR (monitor), FALSE);
+	g_return_val_if_fail (GS_IS_HAL_MONITOR (monitor), FALSE);
 
-        on_ac = gpm_hal_is_on_ac ();
+	on_ac = gpm_hal_is_on_ac ();
 
-        return on_ac;
+	return on_ac;
 }
 
 
 static void
 gpm_hal_monitor_init (GpmHalMonitor *monitor)
 {
-        monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
+	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
 
-        monitor->priv->enabled = gpm_hal_is_running ();
+	monitor->priv->enabled = gpm_hal_is_running ();
 
 	if (! monitor->priv->enabled) {
 		g_warning ("GNOME Power Manager cannot connect to HAL!");
 	}
 
-        monitor->priv->has_power_management = gpm_hal_has_power_management ();
+	monitor->priv->has_power_management = gpm_hal_has_power_management ();
 
 	if (! monitor->priv->has_power_management) {
-                g_warning ("HAL does not have modern PowerManagement capability");
+		g_warning ("HAL does not have modern PowerManagement capability");
 	}
 
-        if (monitor->priv->enabled
-            && monitor->priv->has_power_management) {
-                hal_monitor_start (monitor);
-        }
+	if (monitor->priv->enabled
+	    && monitor->priv->has_power_management) {
+		hal_monitor_start (monitor);
+	}
 }
 
 static void
 gpm_hal_monitor_finalize (GObject *object)
 {
-        GpmHalMonitor *monitor;
+	GpmHalMonitor *monitor;
 
-        g_return_if_fail (object != NULL);
-        g_return_if_fail (GS_IS_HAL_MONITOR (object));
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GS_IS_HAL_MONITOR (object));
 
-        monitor = GPM_HAL_MONITOR (object);
+	monitor = GPM_HAL_MONITOR (object);
 
-        g_return_if_fail (monitor->priv != NULL);
+	g_return_if_fail (monitor->priv != NULL);
 
-        hal_monitor_stop (monitor);
+	hal_monitor_stop (monitor);
 
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 GpmHalMonitor *
 gpm_hal_monitor_new (void)
 {
-        GpmHalMonitor *monitor;
+	GpmHalMonitor *monitor;
 
-        monitor = g_object_new (GPM_TYPE_HAL_MONITOR, NULL);
+	monitor = g_object_new (GPM_TYPE_HAL_MONITOR, NULL);
 
-        return GPM_HAL_MONITOR (monitor);
+	return GPM_HAL_MONITOR (monitor);
 }

@@ -33,20 +33,13 @@ gnome_power_preferences_SOURCES =			\
 	gpm-dbus-client.c				\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
-	gpm-libnotify.h					\
-	gpm-libnotify.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
 	gpm-common.c
 
-if HAVE_LIBNOTIFY
-gnome_power_preferences_LDADD =				\
-	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
-else
 gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
-endif
 
 gnome_power_manager_SOURCES =				\
 	eggtrayicon.h					\
@@ -69,16 +62,14 @@ gnome_power_manager_SOURCES =				\
 	gpm-screensaver.c				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
-	gpm-libnotify.h					\
-	gpm-libnotify.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
 	gpm-manager.h					\
 	gpm-manager.c					\
-	gpm-notification.h				\
-	gpm-notification.c				\
+	gpm-tray-icon.h					\
+	gpm-tray-icon.c					\
 	gpm-core.h					\
 	gpm-core.c					\
 	gpm-main.h					\
