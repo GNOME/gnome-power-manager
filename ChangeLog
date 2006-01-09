@@ -1,3 +1,11 @@
+2005-01-09  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in, Makefile.am, help/Makefile.am: Still process the
+	help directory, just disable the scrollkeeper update for now.
+
+	* data/gnome-power-manager.spec.in: Don't use this for cvs building
+	anymore, so make it generic.
+
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-manager.c (gpm_manager_set_on_ac): Emit a

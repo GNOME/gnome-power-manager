@@ -1,5 +1,4 @@
-SUBDIRS = src po docs man data
-# help
+SUBDIRS = src po docs man data help
 
 EXTRA_DIST =						\
 	HACKING						\
