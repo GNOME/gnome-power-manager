@@ -50,6 +50,7 @@
 /* FIXME: we should abstract the HAL stuff */
 #include "gpm-hal.h"
 
+#include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-hal-monitor.h"
 #include "gpm-tray-icon.h"
@@ -70,6 +71,7 @@ struct GpmManagerPrivate
 
 	GConfClient	*gconf_client;
 
+	GpmDpms		*dpms;
 	GpmIdle		*idle;
 	GpmHalMonitor	*hal_monitor;
 	GpmTrayIcon	*tray_icon;
@@ -391,6 +393,43 @@ tray_icon_update (GpmManager *manager)
 	}
 }
 
+static void
+sync_dpms_policy (GpmManager *manager)
+{
+	GError *error;
+	guint   standby;
+	guint   suspend;
+	guint   off;
+
+	error = NULL;
+
+	if (manager->priv->on_ac) {
+		standby = gconf_client_get_int (manager->priv->gconf_client,
+						GPM_PREF_AC_SLEEP_DISPLAY,
+						&error);
+	} else {
+		standby = gconf_client_get_int (manager->priv->gconf_client,
+						GPM_PREF_BATTERY_SLEEP_DISPLAY,
+						&error);
+	}
+
+	/* convert minutes to secs */
+	standby *= 60;
+
+	if (error) {
+		g_warning ("Unable to get DPMS timeouts: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	/* try to make up some reasonable numbers */
+	suspend = standby;
+	off     = standby * 2;
+
+	gpm_dpms_set_enabled (manager->priv->dpms, TRUE);
+	gpm_dpms_set_timeouts (manager->priv->dpms, standby, suspend, off);
+}
+
 /** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
  *
  *  @param	on_ac		If we are on AC power
@@ -433,8 +472,8 @@ change_power_policy (GpmManager *manager,
 	gpm_screensaver_enable_throttle (!on_ac);
 
 	/* set the new sleep (inactivity) value */
-	gpm_idle_set_session_timeout (manager->priv->idle, sleep_display);
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
+	sync_dpms_policy (manager);
 }
 
 static void
@@ -632,7 +671,6 @@ gpm_manager_set_on_ac (GpmManager *manager,
 
 		maybe_notify_on_ac_changed (manager, on_ac);
 		gpm_emit_mains_changed (on_ac);
-
 		change_power_policy (manager, on_ac);
 	}
 }
@@ -743,13 +781,21 @@ idle_changed_cb (GpmIdle    *idle,
 
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
-		/* FIXME: Disable DPMS */
 		g_debug ("Idle state changed: NORMAL");
+
+		/* deactivate display power management */
+		gpm_dpms_set_active (manager->priv->dpms, FALSE);
+		sync_dpms_policy (manager);
 
 		break;
 	case GPM_IDLE_MODE_SESSION:
-		/* FIXME: Enable DPMS */
+		
 		g_debug ("Idle state changed: SESSION");
+
+		/* activate display power management */
+		gpm_dpms_set_active (manager->priv->dpms, TRUE);
+		/* sync timeouts */
+		sync_dpms_policy (manager);
 
 		break;
 	case GPM_IDLE_MODE_SYSTEM:
@@ -764,6 +810,19 @@ idle_changed_cb (GpmIdle    *idle,
 		break;
 	}
 
+}
+
+static void
+dpms_changed_cb (GpmDpms    *dpms,
+		 GpmDpmsMode mode,
+		 GpmManager *manager)
+{
+	g_debug ("DPMS state changed: %d", mode);
+	if (mode != GPM_DPMS_MODE_ON) {
+		gpm_screensaver_enable_throttle (TRUE);
+	}
+
+	/* do a DBus signal ? */
 }
 
 static void
@@ -782,6 +841,8 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 		   gboolean	  state,
 		   GpmManager	 *manager)
 {
+	GpmDpmsMode mode;
+	
 	/*
 	 * We enable/disable DPMS because some laptops do
 	 * not turn off the LCD backlight when the lid
@@ -791,10 +852,12 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 	if (state) {
 		/* we only do a policy event when the lid is CLOSED */
 		manager_policy_do (manager, GPM_PREF_BUTTON_LID);
+		mode = GPM_DPMS_MODE_OFF;
+	} else {
+		mode = GPM_DPMS_MODE_ON;
 	}
 
-	gpm_screensaver_enable_dpms (! state);
-
+	gpm_dpms_set_mode (manager->priv->dpms, mode);
 }
 
 static void
@@ -955,21 +1018,13 @@ callback_gconf_key_changed (GConfClient *client,
 		}
 
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0) {
-		/* set new suspend timeouts */
-		value = gconf_client_get_int (client, entry->key, NULL);
 
-		if (! on_ac) {
-			/*gpm_dpms_set_timeout (manager->priv->dpms, value); */
-			gpm_screensaver_set_dpms_timeout (value);
-		}
+		sync_dpms_policy (manager);
+
 	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
-		/* set new suspend timeouts */
-		value = gconf_client_get_int (client, entry->key, NULL);
 
-		if (on_ac) {
-			/*gpm_dpms_set_timeout (manager->priv->idle, value); */
-			gpm_screensaver_set_dpms_timeout (value);
-		}
+		sync_dpms_policy (manager);
+
 	}
 }
 
@@ -1057,6 +1112,11 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->idle, "changed",
 			  G_CALLBACK (idle_changed_cb), manager);
 
+	manager->priv->dpms = gpm_dpms_new ();
+	sync_dpms_policy (manager);
+	g_signal_connect (manager->priv->dpms, "changed",
+			  G_CALLBACK (dpms_changed_cb), manager);
+
 	manager->priv->hal_monitor = gpm_hal_monitor_new ();
 	g_signal_connect (manager->priv->hal_monitor, "ac-power-changed",
 			  G_CALLBACK (hal_on_ac_changed_cb), manager);
@@ -1096,6 +1156,10 @@ gpm_manager_finalize (GObject *object)
 
 	if (manager->priv->gconf_client != NULL) {
 		g_object_unref (manager->priv->gconf_client);
+	}
+
+	if (manager->priv->dpms != NULL) {
+		g_object_unref (manager->priv->dpms);
 	}
 
 	if (manager->priv->idle != NULL) {

@@ -42,6 +42,16 @@ gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
 
 gnome_power_manager_SOURCES =				\
+	gpm-dpms.h					\
+	gpm-dpms-x11.c					\
+	gpm-hal-monitor.h				\
+	gpm-hal-monitor.c				\
+	gpm-idle.h					\
+	gpm-idle.c					\
+	gpm-manager.h					\
+	gpm-manager.c					\
+	gpm-tray-icon.h					\
+	gpm-tray-icon.c					\
 	eggtrayicon.h					\
 	eggtrayicon.c					\
 	gpm-marshal.h					\
@@ -62,14 +72,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-screensaver.c				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
-	gpm-idle.h					\
-	gpm-idle.c					\
-	gpm-hal-monitor.h				\
-	gpm-hal-monitor.c				\
-	gpm-manager.h					\
-	gpm-manager.c					\
-	gpm-tray-icon.h					\
-	gpm-tray-icon.c					\
 	gpm-core.h					\
 	gpm-core.c					\
 	gpm-main.h					\

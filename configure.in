@@ -90,6 +90,10 @@ AC_SUBST(GNOME_LIBS)
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 
+AC_PATH_XTRA
+
+ALL_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
+
 dnl ---------------------------------------------------------------------------
 dnl - Make paths available for source files
 dnl ---------------------------------------------------------------------------
@@ -212,6 +216,160 @@ if test x$have_libnotify = xyes ; then
 fi
 
 dnl ---------------------------------------------------------------------------
+dnl - Some utility functions to make checking for X things easier.
+dnl ---------------------------------------------------------------------------
+
+# Like AC_CHECK_HEADER, but it uses the already-computed -I directories.
+#
+AC_DEFUN(AC_CHECK_X_HEADER, [
+  ac_save_CPPFLAGS="$CPPFLAGS"
+  if test \! -z "$includedir" ; then 
+    CPPFLAGS="$CPPFLAGS -I$includedir"
+  fi
+  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+  AC_CHECK_HEADER([$1],[$2],[$3],[$4])
+  CPPFLAGS="$ac_save_CPPFLAGS"])
+
+# Like AC_TRY_COMPILE, but it uses the already-computed -I directories.
+#
+AC_DEFUN(AC_TRY_X_COMPILE, [
+  ac_save_CPPFLAGS="$CPPFLAGS"
+  if test \! -z "$includedir" ; then 
+    CPPFLAGS="$CPPFLAGS -I$includedir"
+  fi
+  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+  AC_TRY_COMPILE([$1], [$2], [$3], [$4])
+  CPPFLAGS="$ac_save_CPPFLAGS"])
+
+
+# Like AC_CHECK_LIB, but it uses the already-computed -I and -L directories.
+# Use this sparingly; it probably doesn't work very well on X programs.
+#
+AC_DEFUN(AC_CHECK_X_LIB, [
+  ac_save_CPPFLAGS="$CPPFLAGS"
+  ac_save_LDFLAGS="$LDFLAGS"
+#  ac_save_LIBS="$LIBS"
+
+  if test \! -z "$includedir" ; then 
+    CPPFLAGS="$CPPFLAGS -I$includedir"
+  fi
+  # note: $X_CFLAGS includes $x_includes
+  CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+
+  if test \! -z "$libdir" ; then
+    LDFLAGS="$LDFLAGS -L$libdir"
+  fi
+  # note: $X_LIBS includes $x_libraries
+  LDFLAGS="$LDFLAGS $ALL_X_LIBS"
+
+  AC_CHECK_LIB([$1], [$2], [$3], [$4], [$5])
+  CPPFLAGS="$ac_save_CPPFLAGS"
+  LDFLAGS="$ac_save_LDFLAGS"
+#  LIBS="$ac_save_LIBS"
+  ])
+
+
+# Usage: HANDLE_X_PATH_ARG([variable_name],
+#                          [--command-line-option],
+#                          [descriptive string])
+#
+# All of the --with options take three forms:
+#
+#   --with-foo (or --with-foo=yes)
+#   --without-foo (or --with-foo=no)
+#   --with-foo=/DIR
+#
+# This function, HANDLE_X_PATH_ARG, deals with the /DIR case.  When it sees
+# a directory (string beginning with a slash) it checks to see whether
+# /DIR/include and /DIR/lib exist, and adds them to $X_CFLAGS and $X_LIBS
+# as appropriate.
+#
+AC_DEFUN(HANDLE_X_PATH_ARG, [
+   case "$[$1]" in
+    yes) ;;
+    no)  ;;
+
+    /*)
+     AC_MSG_CHECKING([for [$3] headers])
+     d=$[$1]/include
+     if test -d $d; then
+       X_CFLAGS="-I$d $X_CFLAGS"
+       AC_MSG_RESULT($d)
+     else
+       AC_MSG_RESULT(not found ($d: no such directory))
+     fi
+
+     AC_MSG_CHECKING([for [$3] libs])
+     d=$[$1]/lib
+     if test -d $d; then
+       X_LIBS="-L$d $X_LIBS"
+       AC_MSG_RESULT($d)
+     else
+       AC_MSG_RESULT(not found ($d: no such directory))
+     fi
+
+     # replace the directory string with "yes".
+     [$1]_req="yes"
+     [$1]=$[$1]_req
+     ;;
+
+    *)
+     echo ""
+     echo "error: argument to [$2] must be \"yes\", \"no\", or a directory."
+     echo "       If it is a directory, then \`DIR/include' will be added to"
+     echo "       the -I list, and \`DIR/lib' will be added to the -L list."
+     exit 1
+     ;;
+   esac
+  ])
+
+
+dnl ---------------------------------------------------------------------------
+dnl - Check for the DPMS server extension.
+dnl ---------------------------------------------------------------------------
+
+have_dpms=no
+with_dpms_req=unspecified
+AC_ARG_WITH(dpms-ext,
+[  --with-dpms-ext         Include support for the DPMS extension.],
+  [with_dpms="$withval"; with_dpms_req="$withval"],[with_dpms=yes])
+
+HANDLE_X_PATH_ARG(with_dpms, --with-dpms-ext, DPMS)
+
+if test "$with_dpms" = yes; then
+
+  # first check for dpms.h
+  AC_CHECK_X_HEADER(X11/extensions/dpms.h, [have_dpms=yes],,
+                    [#include <X11/Xlib.h>
+		     #include <X11/Xmd.h>])
+
+  # if that succeeded, then check for the DPMS code in the libraries
+  if test "$have_dpms" = yes; then
+
+    # first look in -lXext (this is where it is with XFree86 4.0)
+    have_dpms=no
+    AC_CHECK_X_LIB(Xext, DPMSInfo, [have_dpms=yes], [true], -lXext -lX11)
+
+    # if that failed, look in -lXdpms (this is where it was in XFree86 3.x)
+    if test "$have_dpms" = no; then
+      AC_CHECK_X_LIB(Xdpms, DPMSInfo,
+                    [have_dpms=yes; XDPMS_LIBS="-lXdpms"], [true],
+                    -lXext -lX11)
+    fi
+  fi
+
+
+  # if that succeeded, then we've really got it.
+  if test "$have_dpms" = yes; then
+    AC_DEFINE(HAVE_DPMS_EXTENSION, 1, [Define if the DPMS extension is available])
+  fi
+
+elif test "$with_dpms" != no; then
+  echo "error: must be yes or no: --with-dpms-ext=$with_dpms"
+  exit 1
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl - Is docbook2man available?
 dnl ---------------------------------------------------------------------------
 AC_PATH_PROG(DOCBOOK2MAN, docbook2man, no)
@@ -246,6 +404,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
+        DPMS support:              ${have_dpms}
         building Doxygen docs:     ${enable_doxygen_docs}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR

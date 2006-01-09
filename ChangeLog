@@ -1,3 +1,39 @@
+2006-01-09  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-dpms.h: 
+	* src/gpm-dpms-x11.c: New class to control DPMS.
+
+	* src/gpm-screensaver.[ch]: Remove DPMS stuff.
+
+	* src/gpm-prefs.c (gpm_prefs_create): Don't use
+	C99 declarations that aren't at the top of a block since
+	it breaks under non-C99 compliant compilers.  Always
+	enable DPMS.
+	(main): Rename function in case we want to turn it into
+	a class later.
+
+	* src/gpm-manager.c (change_power_policy): Don't
+	set session timeout.  Sync DPMS settings.
+	(sync_dpms_policy): Sync all DPMS settings.
+	(idle_changed_cb): Activate/deactivate DPMS.
+	(dpms_changed_cb): Throttle screensaver when screen not on.
+	(hal_lid_button_cb): Turn monitor power on/off when lid changed.
+	(callback_gconf_key_changed): Sync DPMS settings.
+	(gpm_manager_init): Add DPMS object.
+	(gpm_manager_finalize): Unref DPMS object.
+
+	* src/gpm-idle.c (remove_all_timers, gpm_idle_set_mode) 
+	(gpm_idle_set_property, gpm_idle_get_property) 
+	(gpm_idle_class_init): Remove session timeout since
+	it isn't used and is broken.
+	(acquire_screensaver, gpm_idle_init): Break out function.
+
+	* src/Makefile.am: Add gpm-dpms.
+
+	* configure.in: Check for DPMS ext.
+
+	Fixes #326276
+
 2006-01-08  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-tray-icon.[ch]: New class to encapsulate

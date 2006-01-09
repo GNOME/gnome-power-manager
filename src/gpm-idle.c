@@ -77,12 +77,8 @@ struct GpmIdlePrivate
 
 	GpmIdleMode	 mode;
 
-	guint		 session_timeout;
 	guint		 system_timeout;
-
-	guint		 session_timer_id;
 	guint		 system_timer_id;
-
 	guint		 system_idle_timer_id;
 
 	gboolean	 init;
@@ -97,7 +93,6 @@ enum {
 enum {
 	PROP_0,
 	PROP_MODE,
-	PROP_SESSION_TIMEOUT,
 	PROP_SYSTEM_TIMEOUT
 };
 
@@ -165,16 +160,6 @@ system_timer (GpmIdle *idle)
 	return FALSE;
 }
 
-static gboolean
-session_timer (GpmIdle *idle)
-{
-	g_debug ("Session idle timeout");
-
-	gpm_idle_set_mode (idle, GPM_IDLE_MODE_SESSION);
-	idle->priv->session_timer_id = 0;
-	return FALSE;
-}
-
 static void
 remove_system_timer (GpmIdle *idle)
 {
@@ -185,19 +170,9 @@ remove_system_timer (GpmIdle *idle)
 }
 
 static void
-remove_session_timer (GpmIdle *idle)
-{
-	if (idle->priv->session_timer_id != 0) {
-		g_source_remove (idle->priv->session_timer_id);
-		idle->priv->session_timer_id = 0;
-	}
-}
-
-static void
 remove_all_timers (GpmIdle *idle)
 {
 	remove_poll_system_timer (idle); 
-	remove_session_timer (idle);
 	remove_system_timer (idle);
 }
 
@@ -213,21 +188,6 @@ add_system_timer (GpmIdle *idle)
 							     (GSourceFunc)system_timer, idle);
 	} else {
 		g_debug ("System idle disabled");
-	}
-}
-
-static void
-add_session_timer (GpmIdle *idle)
-{
-	guint64 msecs;
-
-	msecs = idle->priv->session_timeout * 60000;
-
-	if (idle->priv->session_timeout > 0) {
-		idle->priv->session_timer_id = g_timeout_add (msecs,
-							      (GSourceFunc)session_timer, idle);
-	} else {
-		g_debug ("Session idle disabled");
 	}
 }
 
@@ -270,8 +230,6 @@ gpm_idle_reset (GpmIdle *idle)
 
 	switch (idle->priv->mode) {
 	case GPM_IDLE_MODE_NORMAL:
-		/* restart session idle timer */
-		add_session_timer (idle);
 
 		break;
 	case GPM_IDLE_MODE_SESSION:
@@ -285,23 +243,6 @@ gpm_idle_reset (GpmIdle *idle)
 	default:
 		g_assert_not_reached ();
 		break;
-	}
-}
-
-/* session idle timeout is ignored when using gnome-screensaver */
-void
-gpm_idle_set_session_timeout (GpmIdle	 *idle,
-			      guint	  timeout)
-{
-	g_return_if_fail (GPM_IS_IDLE (idle));
-
-	g_debug ("Setting session idle timeout: %d", timeout);
-
-	if (idle->priv->session_timeout != timeout) {
-		idle->priv->session_timeout = timeout;
-
-		/* restart the timers if necessary */
-		gpm_idle_reset (idle);
 	}
 }
 
@@ -332,9 +273,6 @@ gpm_idle_set_property (GObject		  *object,
 	idle = GPM_IDLE (object);
 
 	switch (prop_id) {
-	case PROP_SESSION_TIMEOUT:
-		gpm_idle_set_session_timeout (idle, g_value_get_uint (value));
-		break;
 	case PROP_SYSTEM_TIMEOUT:
 		gpm_idle_set_system_timeout (idle, g_value_get_uint (value));
 		break;
@@ -355,9 +293,6 @@ gpm_idle_get_property (GObject		  *object,
 	idle = GPM_IDLE (object);
 
 	switch (prop_id) {
-	case PROP_SESSION_TIMEOUT:
-		g_value_set_uint (value, idle->priv->session_timeout);
-		break;
 	case PROP_SYSTEM_TIMEOUT:
 		g_value_set_uint (value, idle->priv->system_timeout);
 		break;
@@ -399,15 +334,6 @@ gpm_idle_class_init (GpmIdleClass *klass)
 							    GPM_IDLE_MODE_NORMAL,
 							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
-					 PROP_SESSION_TIMEOUT,
-					 g_param_spec_uint ("session-timeout",
-							    NULL,
-							    NULL,
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
 					 PROP_SYSTEM_TIMEOUT,
 					 g_param_spec_uint ("system-timeout",
 							    NULL,
@@ -438,6 +364,30 @@ session_idle_changed_handler (DBusGProxy *proxy,
 	gpm_idle_set_mode (idle, mode);
 }
 
+static gboolean
+acquire_screensaver (GpmIdle *idle)
+{
+	idle->priv->screensaver_object = dbus_g_proxy_new_for_name (idle->priv->connection,
+								    GS_DBUS_SERVICE,
+								    GS_DBUS_PATH,
+								    GS_DBUS_INTERFACE);
+	if (! idle->priv->screensaver_object) {
+		g_warning ("Could not connect to screensaver");
+		return FALSE;
+	}
+
+	dbus_g_proxy_add_signal (idle->priv->screensaver_object,
+				 "SessionIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (idle->priv->screensaver_object,
+				     "SessionIdleChanged",
+				     G_CALLBACK (session_idle_changed_handler),
+				     idle,
+				     NULL);
+
+	return TRUE;
+}
+
+
 static void
 gpm_idle_init (GpmIdle *idle)
 {
@@ -445,21 +395,7 @@ gpm_idle_init (GpmIdle *idle)
 
 	gpm_dbus_get_session_connection (&idle->priv->connection);
 
-	idle->priv->screensaver_object = dbus_g_proxy_new_for_name (idle->priv->connection,
-								    GS_DBUS_SERVICE,
-								    GS_DBUS_PATH,
-								    GS_DBUS_INTERFACE);
-	if (! idle->priv->screensaver_object) {
-		g_warning ("Could not connect to screensaver");
-	} else {
-		dbus_g_proxy_add_signal (idle->priv->screensaver_object,
-					 "SessionIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
-		dbus_g_proxy_connect_signal (idle->priv->screensaver_object,
-					     "SessionIdleChanged",
-					     G_CALLBACK (session_idle_changed_handler),
-					     idle,
-					     NULL);
-	}
+	acquire_screensaver (idle);
 }
 
 static void

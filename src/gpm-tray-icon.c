@@ -612,7 +612,7 @@ libnotify_event (GpmTrayIcon             *tray,
 	/* assertion checks */
 	g_assert (content);
 
-	get_widget_position (point, &x, &y);
+	get_widget_position (GTK_WIDGET (tray),, &x, &y);
 	hints = notify_hints_new();
 	notify_hints_set_int (hints, "x", x);
 	notify_hints_set_int (hints, "y", y);

@@ -34,8 +34,6 @@
 G_BEGIN_DECLS
 
 #define GS_PREF_DIR		"/apps/gnome-screensaver"
-#define GS_PREF_DPMS_SUSPEND	GS_PREF_DIR "/dpms_suspend"
-#define GS_PREF_DPMS_ENABLED	GS_PREF_DIR "/dpms_enabled"
 #define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
 
 gboolean gpm_screensaver_lock (void);
@@ -45,8 +43,6 @@ gboolean gpm_screensaver_enable_throttle (gboolean enable);
 gboolean gpm_screensaver_is_running (void);
 gboolean gpm_screensaver_poke (void);
 gboolean gpm_screensaver_get_idle (gint *time);
-gboolean gpm_screensaver_set_dpms_timeout (gint timeout);
-gboolean gpm_screensaver_enable_dpms (gboolean enable);
 
 G_END_DECLS
 

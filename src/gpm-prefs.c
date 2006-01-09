@@ -1,4 +1,5 @@
-/*
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
  * Copyright (C) 2005 Richard Hughes <hughsient@gmail.com>
  * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
  *
@@ -30,11 +31,13 @@
 #include <string.h>
 #include <glib.h>
 #include <math.h>
+
+#include <popt.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
-#include <popt.h>
+
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
 #include "gpm-common.h"
@@ -335,16 +338,52 @@ gpm_prefs_battery_critical_slider_changed_cb (GtkWidget *widget, GladeXML *dialo
 				    get_battery_time_for_percentage (value));
 }
 
-static void
-gpm_prefs_init ()
+static GtkWidget *
+gpm_prefs_create ()
 {
-	GtkWidget *widget, *main_window;
-	GladeXML *dialog;
+	GtkWidget    *widget;
+	GtkWidget    *main_window;
+	GladeXML     *dialog;
 	GtkSizeGroup *size_group;
-	GConfClient *client;
-	gint value;
+	GConfClient  *client;
+	gint          value;
 
-	client = gconf_client_get_default ();
+	GtkWidget *label_ac_display;
+	GtkWidget *slider_ac_display;
+	GtkWidget *label_ac_brightness;
+	GtkWidget *slider_ac_brightness;
+	GtkWidget *label_batteries_display;
+	GtkWidget *slider_batteries_display;
+	GtkWidget *label_batteries_brightness;
+	GtkWidget *slider_batteries_brightness;
+
+	GtkWidget *label_sleep_type;
+	GtkWidget *combo_sleep_type;
+	const gchar *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	GtkWidget *label_button_suspend;
+	GtkWidget *combo_button_suspend;
+	const gchar *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	GtkWidget *label_button_lid;
+	GtkWidget *combo_button_lid;
+	const gchar *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	GtkWidget *label_battery_critical;
+	GtkWidget *combo_battery_critical;
+	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+
+	GtkWidget *scale_battery_low;
+	GtkWidget *scale_battery_critical;
+
+	char *icon_policy;
+
+	gboolean      has_suspend_button;
+	gboolean      has_lid_button;
+	gboolean      has_batteries;
+	gboolean      can_display_sleep;
+	gboolean      can_set_brightness;
+
 	dialog = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
 	main_window = glade_xml_get_widget (dialog, "window_preferences");
@@ -376,13 +415,11 @@ gpm_prefs_init ()
 	gpm_prefs_setup_sleep_slider (dialog, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
 
 	/* Sleep time for display on AC */	
-	GtkWidget *label_ac_display, *slider_ac_display;
 
 	label_ac_display = glade_xml_get_widget (dialog, "label_ac_display");
 	slider_ac_display = gpm_prefs_setup_sleep_slider (dialog, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
 
 	/* Display brightness when on AC */
-	GtkWidget *label_ac_brightness, *slider_ac_brightness;
 
 	label_ac_brightness = glade_xml_get_widget (dialog, "label_ac_brightness");
 	slider_ac_brightness = gpm_prefs_setup_brightness_slider (dialog, "hscale_ac_brightness",
@@ -396,14 +433,12 @@ gpm_prefs_init ()
 	gpm_prefs_setup_sleep_slider (dialog, "hscale_batteries_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
 
 	/* Sleep time for display when on batteries */
-	GtkWidget *label_batteries_display, *slider_batteries_display;
 
 	label_batteries_display = glade_xml_get_widget (dialog, "label_batteries_display");
 	slider_batteries_display = gpm_prefs_setup_sleep_slider (dialog, "hscale_batteries_display",
 								 GPM_PREF_BATTERY_SLEEP_DISPLAY);
 
 	/* Display brightness when on batteries */
-	GtkWidget *label_batteries_brightness, *slider_batteries_brightness;
 
 	label_batteries_brightness = glade_xml_get_widget (dialog, "label_batteries_brightness");
 	slider_batteries_brightness = gpm_prefs_setup_brightness_slider (dialog, "hscale_batteries_brightness",
@@ -414,31 +449,23 @@ gpm_prefs_init ()
 	/************************************************************************/
 
 	/* Sleep Type Combo Box */
-	GtkWidget *label_sleep_type, *combo_sleep_type;
-	const gchar *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_sleep_type = glade_xml_get_widget (dialog, "label_sleep_type");
 	combo_sleep_type = gpm_prefs_setup_action_combo (dialog, "combobox_sleep_type",
 							 GPM_PREF_SLEEP_TYPE, sleep_type_actions);
 
 	/* Button Suspend Combo Box */
-	GtkWidget *label_button_suspend, *combo_button_suspend;
-	const gchar *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_button_suspend = glade_xml_get_widget (dialog, "label_button_suspend");
 	combo_button_suspend = gpm_prefs_setup_action_combo (dialog, "combobox_button_suspend",
 				      			     GPM_PREF_BUTTON_SUSPEND, button_suspend_actions);
 	/* Button Lid Combo Box */
-	GtkWidget *label_button_lid, *combo_button_lid;
-	const gchar *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_button_lid = glade_xml_get_widget (dialog, "label_button_lid");
 	combo_button_lid = gpm_prefs_setup_action_combo (dialog, "combobox_button_lid",
 				      			 GPM_PREF_BUTTON_LID, button_lid_actions);
 
 	/* Battery critical Combo Box */
-	GtkWidget *label_battery_critical, *combo_battery_critical;
-	const gchar *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 
 	label_battery_critical = glade_xml_get_widget (dialog, "label_battery_critical_action");
 	combo_battery_critical = gpm_prefs_setup_action_combo (dialog, "combobox_battery_critical",
@@ -459,7 +486,9 @@ gpm_prefs_init ()
 	/************************************************************************/
 
 	/* Radio buttons icon policy */
-	gchar* icon_policy = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
+	client = gconf_client_get_default ();
+
+	icon_policy = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
 
 	widget = glade_xml_get_widget (dialog, "radiobutton_icon_always");
 	g_signal_connect (G_OBJECT (widget), "clicked",
@@ -487,7 +516,6 @@ gpm_prefs_init ()
 	g_free (icon_policy);
 
 	/* Threshold low sliders */
-	GtkWidget *scale_battery_low;
 
 	scale_battery_low = glade_xml_get_widget (dialog, "hscale_battery_low");
 	gtk_range_set_range (GTK_RANGE (scale_battery_low), 5, 25);
@@ -499,7 +527,6 @@ gpm_prefs_init ()
 	gtk_range_set_value (GTK_RANGE (scale_battery_low), value);
 
 	/* Threshold critical slider */
-	GtkWidget *scale_battery_critical;
 
 	scale_battery_critical = glade_xml_get_widget (dialog, "hscale_battery_critical");
 	gtk_range_set_range (GTK_RANGE (scale_battery_critical), 0, value);
@@ -513,7 +540,7 @@ gpm_prefs_init ()
 	set_estimated_label_widget (glade_xml_get_widget (dialog, "label_battery_critical_estimate"),
 				    get_battery_time_for_percentage (value));
 
-	gboolean has_batteries = gpm_hal_num_devices_of_capability ("battery") > 0;
+	has_batteries = gpm_hal_num_devices_of_capability ("battery") > 0;
 	if (!has_batteries) {
 		widget = glade_xml_get_widget (dialog, "label_frame_ac");
 		gtk_label_set_markup (GTK_LABEL (widget), _("<b>Configuration</b>"));
@@ -529,13 +556,13 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (widget);
 	}
 
-	gboolean has_suspend_button = gpm_hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
+	has_suspend_button = gpm_hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
 	if (!has_suspend_button) {
 		gtk_widget_hide_all (label_button_suspend);
 		gtk_widget_hide_all (combo_button_suspend);
 	}
 
-	gboolean has_lid_button =  gpm_hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
+	has_lid_button =  gpm_hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
 	if (!has_lid_button) {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
@@ -547,12 +574,7 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (widget);
 	}
 
-	gboolean can_display_sleep;
-	if (gpm_screensaver_is_running ()) {
-		can_display_sleep = gconf_client_get_bool (client, GS_PREF_DPMS_ENABLED, NULL);
-	} else {
-		can_display_sleep = FALSE;
-	}
+	can_display_sleep = TRUE;
 	if (!can_display_sleep) {
 		gtk_widget_hide_all (label_ac_display);
 		gtk_widget_hide_all (slider_ac_display);
@@ -560,7 +582,7 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (slider_batteries_display);
 	}
 
-	gboolean can_set_brightness = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
+	can_set_brightness = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
 	if (!can_set_brightness) {
 		gtk_widget_hide_all (label_ac_brightness);
 		gtk_widget_hide_all (slider_ac_brightness);
@@ -568,16 +590,15 @@ gpm_prefs_init ()
 		gtk_widget_hide_all (slider_batteries_brightness);
 	}
 
-	/* Now we are ready to show the main window */
-	gtk_widget_show (main_window);
+        return main_window;
 }
 
 int
 main (int argc, char **argv)
 {
-	gint i;
-	gboolean verbose = FALSE;
-	GConfClient *client;
+	GtkWidget *dialog;
+	gboolean   verbose = FALSE;
+	gint       i;
 
 	struct poptOption options[] = {
 		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
@@ -604,20 +625,10 @@ main (int argc, char **argv)
 	if (!verbose)
 		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_prefs_debug_log_ignore, NULL);
 
-	client = gconf_client_get_default ();
-
-	/* check if we have GNOME Screensaver, but have disabled dpms */
-	if (gpm_screensaver_is_running ()) {
-		if (!gconf_client_get_bool (client, GS_PREF_DPMS_ENABLED, NULL)) {
-			g_warning ("You have not got DPMS support enabled"
-				   "in gnome-screensaver.\n"
-				   "GNOME Power Manager will enable it now.");
-			gconf_client_set_bool (client, GS_PREF_DPMS_ENABLED, TRUE, NULL);
-		}
-	}
-
-	gpm_prefs_init ();
+	dialog = gpm_prefs_create ();
+	gtk_widget_show (dialog);
 
 	gtk_main ();
+
 	return 0;
 }
