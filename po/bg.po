@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-06 09:13+0200\n"
-"PO-Revision-Date: 2006-01-05 22:58+0200\n"
+"POT-Creation-Date: 2006-01-09 18:46+0200\n"
+"PO-Revision-Date: 2006-01-09 18:46+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,61 +17,61 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
 msgstr "Настройки на управлението на захранването"
 
-#: ../gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.h:2
 msgid "Power Management"
 msgstr "Управление на захранването"
 
-#: ../gnome-power-manager.schemas.in.h:1
+#: ../data/gnome-power-manager.schemas.in.h:1
 msgid "If we should notify the user that the ac_adapter is removed"
 msgstr "Дали да се предупреждава при махането на адаптера за променлив ток"
 
-#: ../gnome-power-manager.schemas.in.h:2
+#: ../data/gnome-power-manager.schemas.in.h:2
 msgid "If we should notify the user that the battery is fully charged"
 msgstr "Дали да се предупреждава при пълното зареждане на батерията"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr ""
 "Възможностите са „never“ (никога), „critical“ (критично ниско ниво), "
 "„charge“ (зареждане), „always“ (винаги)"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
 msgstr "Действие при критично ниско ниво на батериите"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "Яркост на екрана при захранване от ел. мрежа"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
 msgstr "Яркост на екрана при захранване от батерии"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "Действие при затваряне на капака на мобилния компютър"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "Действие при натискане на бутона за приспиване"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "Колко секунди да се изчакат преди опит за приспиване на компютъра"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "Колко секунди да се изчакат преди опит за приспиване на екрана"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "Колко секунди да се изчакат преди опит за приспиване на твърдия диск"
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
@@ -79,7 +79,7 @@ msgstr ""
 "Процентът, до който трябва да спадне заряда на това устройство, за да се "
 "счете достатъчно нисък, за да се изпълни действие."
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
@@ -87,22 +87,134 @@ msgstr ""
 "Процентът, до който трябва да спадне заряда на това устройство, за да се "
 "счете достатъчно нисък, за да се предупреди потребителя."
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "Праг за действие на устройството"
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "Праг за предупреждение на устройството"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "Видът на автоматичното приспиване - нормално/дълбоко (suspend/hibernate)"
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "Кога да се показва иконата за уведомяване"
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Действия</b>"
+
+#: ../data/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>Общи</b>"
+
+#: ../data/gpm-prefs.glade.h:3
+msgid "<b>Notification Area</b>"
+msgstr "<b>Област за уведомяване</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+msgid "<b>Other Options</b>"
+msgstr "<b>Други настройки</b>"
+
+#: ../data/gpm-prefs.glade.h:5
+msgid "<b>Running on AC Adapter</b>"
+msgstr "<b>Захранване от ел. мрежа</b>"
+
+#: ../data/gpm-prefs.glade.h:6
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>Захранване от батерии</b>"
+
+#: ../data/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr "<i><small>Около 16 минути</small></i>"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr "<i><small>Около 2 часа и 6 минути</small></i>"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "Advanced"
+msgstr "Допълнителни"
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "Ba_ttery is critical when below:"
+msgstr "Нивото на батерията е _критично ниско под:"
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr "Показване само при критично _ниско ниво на батериите"
+
+#: ../data/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr "Показване само при _зареждане или разреждане"
+
+#: ../data/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "Настройки"
+
+#: ../data/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "Настройки на захранването"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Put _computer to sleep after:"
+msgstr "Приспиване на _компютъра след:"
+
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put _display to sleep after:"
+msgstr "Приспиване на _екрана след:"
+
+#: ../data/gpm-prefs.glade.h:17
+msgid "Put c_omputer to sleep after:"
+msgstr "Приспиване на _компютъра след:"
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Put dis_play to sleep after:"
+msgstr "Приспиване на _екрана след:"
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "Set display _brightness:"
+msgstr "_Задаване на яркост на екрана:"
+
+#: ../data/gpm-prefs.glade.h:20
+msgid "Set display b_rightness:"
+msgstr "_Задаване на яркост на екрана:"
+
+#: ../data/gpm-prefs.glade.h:21
+msgid "Sleep"
+msgstr "Приспиване"
+
+#: ../data/gpm-prefs.glade.h:22
+msgid "When _battery power critical:"
+msgstr "При _критично ниско ниво на батериите:"
+
+#: ../data/gpm-prefs.glade.h:23
+msgid "When _suspend button pressed:"
+msgstr "При натискане на _бутона за приспиване:"
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "When laptop li_d is closed:"
+msgstr "При _затваряне на екрана:"
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "_Always display icon"
+msgstr "_Винаги да се показва икона"
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "_Battery is low when below:"
+msgstr "_Батерията е изчерпана, когато е под:"
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "_Computer sleep type:"
+msgstr "_Вид приспиване:"
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "_Never display icon"
+msgstr "_Никога да не се показва икона"
 
 #: ../src/eggtrayicon.c:132
 msgid "Orientation"
@@ -150,7 +262,7 @@ msgstr[0] "минута"
 msgstr[1] "минути"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:714
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:182
 msgid "GNOME Power Manager"
 msgstr "Управление на захранването в GNOME"
 
@@ -158,82 +270,110 @@ msgstr "Управление на захранването в GNOME"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Мениджър на захранването за GNOME"
 
-#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
-#, c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
-"your AC Adapter to avoid losing data."
-msgstr ""
-"Остава Ви приблизително <b>%s</b> живот на батерията (%i%%). Включете се към "
-"захранването от електрическата мрежа или рискувате да загубите данни."
+#: ../src/gpm-main.c:166
+msgid "Do not daemonize"
+msgstr "Да не се минава в режим на демон"
 
-#: ../src/gpm-main.c:366
-msgid "Battery Critically Low"
-msgstr "Критично ниско ниво на батерията"
+#: ../src/gpm-main.c:168 ../src/gpm-prefs.c:605
+msgid "Show extra debugging information"
+msgstr "Допълнителна информация за изчистване на грешки"
 
-#: ../src/gpm-main.c:384
-msgid "Battery Low"
-msgstr "Ниско ниво на батерията"
+#: ../src/gpm-manager.c:235
+msgid "charging"
+msgstr "зареждане"
 
-#: ../src/gpm-main.c:429
+#: ../src/gpm-manager.c:237
+msgid "discharging"
+msgstr "разреждане"
+
+#: ../src/gpm-manager.c:240
+msgid "charged"
+msgstr "заредени"
+
+#: ../src/gpm-manager.c:255
+msgid "until charged"
+msgstr "до зареждане"
+
+#: ../src/gpm-manager.c:258
+msgid "until empty"
+msgstr "до пълно разреждане"
+
+#: ../src/gpm-manager.c:328
+msgid "Computer is running on battery power\n"
+msgstr "Компютърът работи на батерии\n"
+
+#: ../src/gpm-manager.c:330
+msgid "Computer is running on AC power\n"
+msgstr "Компютърът работи на захранване от ел. мрежа\n"
+
+#: ../src/gpm-manager.c:496
 msgid "AC Power Unplugged"
 msgstr "Изключено захранване от мрежата"
 
-#: ../src/gpm-main.c:430
+#: ../src/gpm-manager.c:498
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Захранването от електрическата мрежа е изключено. Системата работи на "
 "батерии."
 
-#: ../src/gpm-main.c:512
+#: ../src/gpm-manager.c:585
 msgid "Battery Charged"
 msgstr "Батериите са заредени"
 
-#: ../src/gpm-main.c:513
+#: ../src/gpm-manager.c:587
 msgid "Your battery is now fully charged"
 msgstr "Батериите са напълно заредени"
 
-#: ../src/gpm-main.c:698
-msgid "Do not daemonize"
-msgstr "Да не се минава в режим на демон"
+#: ../src/gpm-manager.c:619 ../src/gpm-manager.c:641
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
+"your AC Adapter to avoid losing data."
+msgstr ""
+"Остава Ви приблизително <b>%s</b> живот на батерията (%d%%). Включете се към "
+"захранването от електрическата мрежа, за да не загубите данни."
 
-#: ../src/gpm-main.c:700 ../src/gpm-prefs.c:584
-msgid "Show extra debugging information"
-msgstr "Допълнителна информация за изчистване на грешки"
+#: ../src/gpm-manager.c:626
+msgid "Battery Critically Low"
+msgstr "Критично ниско ниво на батерията"
 
-#: ../src/gpm-notification.c:231
-msgid "charging"
-msgstr "зареждане"
+#: ../src/gpm-manager.c:647
+msgid "Battery Low"
+msgstr "Ниско ниво на батерията"
 
-#: ../src/gpm-notification.c:233
-msgid "discharging"
-msgstr "разреждане"
+#: ../src/gpm-tray-icon.c:103
+msgid "_Suspend"
+msgstr "_Приспиване"
 
-#: ../src/gpm-notification.c:236
-msgid "charged"
-msgstr "заредени"
+#: ../src/gpm-tray-icon.c:104
+msgid "Suspend the computer"
+msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-notification.c:251
-msgid "until charged"
-msgstr "до зареждане"
+#: ../src/gpm-tray-icon.c:105
+msgid "Hi_bernate"
+msgstr "_Дълбоко приспиване"
 
-#: ../src/gpm-notification.c:254
-msgid "until empty"
-msgstr "до пълно разреждане"
+#: ../src/gpm-tray-icon.c:106
+msgid "Make the computer go to sleep"
+msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-notification.c:321
-msgid "Computer is running on battery power\n"
-msgstr "Компютърът работи на батерии\n"
+#: ../src/gpm-tray-icon.c:107
+msgid "_Preferences"
+msgstr "_Настройки"
 
-#: ../src/gpm-notification.c:323
-msgid "Computer is running on AC power\n"
-msgstr "Компютърът работи на захранване от ел. мрежа\n"
+#: ../src/gpm-tray-icon.c:109
+msgid "_Help"
+msgstr "_Помощ"
 
-#: ../src/gpm-notification.c:353
+#: ../src/gpm-tray-icon.c:111
+msgid "_About"
+msgstr "_Относно"
+
+#: ../src/gpm-tray-icon.c:230
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лиценз - ОПЛ на GNU, версия 2"
 
-#: ../src/gpm-notification.c:354
+#: ../src/gpm-tray-icon.c:231
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -245,7 +385,7 @@ msgstr ""
 "2 или по-висока (по Ваш избор) на Общия публичен лиценз на GNU,\n"
 "който е публикуван от Фондацията за свободен софтуер,"
 
-#: ../src/gpm-notification.c:358
+#: ../src/gpm-tray-icon.c:235
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -257,7 +397,7 @@ msgstr ""
 "се ПРИГОДНОСТ или ГОДНОСТ ЗА КОНКРЕТНА УПОТРЕБА. За подробности\n"
 "прегледайте Общия публичен лиценз на GNU."
 
-#: ../src/gpm-notification.c:362
+#: ../src/gpm-tray-icon.c:239
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -270,10 +410,7 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, \n"
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#.
-#. * Translators comment: put your own name here to appear in the about dialog.
-#.
-#: ../src/gpm-notification.c:376
+#: ../src/gpm-tray-icon.c:244
 msgid "translator-credits"
 msgstr ""
 "Александър Шопов <ash@contact.bg>\n"
@@ -282,166 +419,34 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#: ../src/gpm-notification.c:501
-msgid "_Suspend"
-msgstr "_Приспиване"
-
-#: ../src/gpm-notification.c:506
-msgid "Hi_bernate"
-msgstr "_Дълбоко приспиване"
-
-#: ../src/gpm-notification.c:511
-msgid "_Preferences"
-msgstr "_Настройки"
-
-#: ../src/gpm-notification.c:513
-msgid "_Help"
-msgstr "_Помощ"
-
-#: ../src/gpm-notification.c:515
-msgid "_About"
-msgstr "_Относно"
-
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:49
 msgid "Suspend"
 msgstr "Приспиване"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:50
 msgid "Shutdown"
 msgstr "Изключване"
 
-#: ../src/gpm-prefs.c:48
+#: ../src/gpm-prefs.c:51
 msgid "Hibernate"
 msgstr "Дълбоко приспиване"
 
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:52
 msgid "Do nothing"
 msgstr "Да не се прави нищо"
 
-#: ../src/gpm-prefs.c:158
+#: ../src/gpm-prefs.c:161
 msgid "Never"
 msgstr "Никога"
 
-#: ../src/gpm-prefs.c:519
+#: ../src/gpm-prefs.c:546
 msgid "<b>Configuration</b>"
 msgstr "<b>Настройки</b>"
 
-#: ../src/gpm-prefs.c:597
+#: ../src/gpm-prefs.c:618
 msgid "GNOME Power Preferences"
 msgstr "Настройки на захранването"
-
-#: ../src/gpm-prefs.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Действия</b>"
-
-#: ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>Общи</b>"
-
-#: ../src/gpm-prefs.glade.h:3
-msgid "<b>Notification Area</b>"
-msgstr "<b>Област за уведомяване</b>"
-
-#: ../src/gpm-prefs.glade.h:4
-msgid "<b>Other Options</b>"
-msgstr "<b>Други настройки</b>"
-
-#: ../src/gpm-prefs.glade.h:5
-msgid "<b>Running on AC Adapter</b>"
-msgstr "<b>Захранване от ел. мрежа</b>"
-
-#: ../src/gpm-prefs.glade.h:6
-msgid "<b>Running on Batteries</b>"
-msgstr "<b>Захранване от батерии</b>"
-
-#: ../src/gpm-prefs.glade.h:7
-msgid "<i><small>Estimated 16 minutes</small></i>"
-msgstr "<i><small>Около 16 минути</small></i>"
-
-#: ../src/gpm-prefs.glade.h:8
-msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
-msgstr "<i><small>Около 2 часа и 6 минути</small></i>"
-
-#: ../src/gpm-prefs.glade.h:9
-msgid "Advanced"
-msgstr "Допълнителни"
-
-#: ../src/gpm-prefs.glade.h:10
-msgid "Ba_ttery is critical when below:"
-msgstr "Нивото на батерията е _критично ниско под:"
-
-#: ../src/gpm-prefs.glade.h:11
-msgid "Only display when battery life is _critical"
-msgstr "Показване само при критично _ниско ниво на батериите"
-
-#: ../src/gpm-prefs.glade.h:12
-msgid "Only display when charging or _discharging"
-msgstr "Показване само при _зареждане или разреждане"
-
-#: ../src/gpm-prefs.glade.h:13
-msgid "Options"
-msgstr "Настройки"
-
-#: ../src/gpm-prefs.glade.h:14
-msgid "Power Preferences"
-msgstr "Настройки на захранването"
-
-#: ../src/gpm-prefs.glade.h:15
-msgid "Put _computer to sleep after:"
-msgstr "Приспиване на _компютъра след:"
-
-#: ../src/gpm-prefs.glade.h:16
-msgid "Put _display to sleep after:"
-msgstr "Приспиване на _екрана след:"
-
-#: ../src/gpm-prefs.glade.h:17
-msgid "Put c_omputer to sleep after:"
-msgstr "Приспиване на _компютъра след:"
-
-#: ../src/gpm-prefs.glade.h:18
-msgid "Put dis_play to sleep after:"
-msgstr "Приспиване на _екрана след:"
-
-#: ../src/gpm-prefs.glade.h:19
-msgid "Set display _brightness:"
-msgstr "_Задаване на яркост на екрана:"
-
-#: ../src/gpm-prefs.glade.h:20
-msgid "Set display b_rightness:"
-msgstr "_Задаване на яркост на екрана:"
-
-#: ../src/gpm-prefs.glade.h:21
-msgid "Sleep"
-msgstr "Приспиване"
-
-#: ../src/gpm-prefs.glade.h:22
-msgid "When _battery power critical:"
-msgstr "При _критично ниско ниво на батериите:"
-
-#: ../src/gpm-prefs.glade.h:23
-msgid "When _suspend button pressed:"
-msgstr "При натискане на _бутона за приспиване:"
-
-#: ../src/gpm-prefs.glade.h:24
-msgid "When laptop li_d is closed:"
-msgstr "При _затваряне на екрана:"
-
-#: ../src/gpm-prefs.glade.h:25
-msgid "_Always display icon"
-msgstr "_Винаги да се показва икона"
-
-#: ../src/gpm-prefs.glade.h:26
-msgid "_Battery is low when below:"
-msgstr "_Батерията е изчерпана, когато е под:"
-
-#: ../src/gpm-prefs.glade.h:27
-msgid "_Computer sleep type:"
-msgstr "_Вид приспиване:"
-
-#: ../src/gpm-prefs.glade.h:28
-msgid "_Never display icon"
-msgstr "_Никога да не се показва икона"
 
 #: ../src/gpm-sysdev.c:57
 msgid "Laptop battery"
