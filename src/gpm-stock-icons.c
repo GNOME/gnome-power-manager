@@ -1,12 +1,13 @@
-/** @file	gpm-stock-icons.c
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ *  @file	gpm-stock-icons.c
  *  @brief	Register our custom icons as GNOME stock icons
  *  @author	2002		Jorn Baayen
  *		2003,2004	Colin Walters <walters@verbum.org>
  *
  * This file registers new custom stock icons so that we can use them in a
  * generic way.
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -25,33 +26,65 @@
  * 02110-1301, USA.
  */
 
-#include <gtk/gtk.h>
-#include <glib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <glib.h>
+#include <gtk/gtk.h>
 
 #include "gpm-stock-icons.h"
 
 static GtkIconFactory *factory = NULL;
 
+typedef struct {
+	const char *name;
+	gboolean    custom;
+} GpmStockIcon;
+
 gboolean
 gpm_stock_icons_init (void)
 {
-	int i;
+	GtkIconTheme *theme = gtk_icon_theme_get_default ();
+	int           i;
 
-	static const char *items[] =
-	{
-		GPM_STOCK_AC_0_OF_8, GPM_STOCK_AC_1_OF_8, GPM_STOCK_AC_2_OF_8,
-		GPM_STOCK_AC_3_OF_8, GPM_STOCK_AC_4_OF_8, GPM_STOCK_AC_5_OF_8,
-		GPM_STOCK_AC_6_OF_8, GPM_STOCK_AC_7_OF_8, GPM_STOCK_AC_8_OF_8,
-		GPM_STOCK_BAT_0_OF_8, GPM_STOCK_BAT_1_OF_8, GPM_STOCK_BAT_2_OF_8,
-		GPM_STOCK_BAT_3_OF_8, GPM_STOCK_BAT_4_OF_8, GPM_STOCK_BAT_5_OF_8,
-		GPM_STOCK_BAT_6_OF_8, GPM_STOCK_BAT_7_OF_8, GPM_STOCK_BAT_8_OF_8,
-		GPM_STOCK_UPS_0_OF_8, GPM_STOCK_UPS_1_OF_8, GPM_STOCK_UPS_2_OF_8,
-		GPM_STOCK_UPS_3_OF_8, GPM_STOCK_UPS_4_OF_8, GPM_STOCK_UPS_5_OF_8,
-		GPM_STOCK_UPS_6_OF_8, GPM_STOCK_UPS_7_OF_8, GPM_STOCK_UPS_8_OF_8,
-		GPM_STOCK_AC_ADAPTER, GPM_STOCK_MOUSE, GPM_STOCK_KEYBOARD,
-		GPM_STOCK_AC_CHARGED
+	static const GpmStockIcon items [] = {
+		/* GPM custom icons */
+		{ GPM_STOCK_AC_0_OF_8, TRUE },
+		{ GPM_STOCK_AC_1_OF_8, TRUE },
+		{ GPM_STOCK_AC_2_OF_8, TRUE },
+		{ GPM_STOCK_AC_3_OF_8, TRUE },
+		{ GPM_STOCK_AC_4_OF_8, TRUE },
+		{ GPM_STOCK_AC_5_OF_8, TRUE },
+		{ GPM_STOCK_AC_6_OF_8, TRUE },
+		{ GPM_STOCK_AC_7_OF_8, TRUE },
+		{ GPM_STOCK_AC_8_OF_8, TRUE },
+		{ GPM_STOCK_BAT_0_OF_8, TRUE },
+		{ GPM_STOCK_BAT_1_OF_8, TRUE },
+		{ GPM_STOCK_BAT_2_OF_8, TRUE },
+		{ GPM_STOCK_BAT_3_OF_8, TRUE },
+		{ GPM_STOCK_BAT_4_OF_8, TRUE },
+		{ GPM_STOCK_BAT_5_OF_8, TRUE },
+		{ GPM_STOCK_BAT_6_OF_8, TRUE },
+		{ GPM_STOCK_BAT_7_OF_8, TRUE },
+		{ GPM_STOCK_BAT_8_OF_8, TRUE },
+		{ GPM_STOCK_UPS_0_OF_8, TRUE },
+		{ GPM_STOCK_UPS_1_OF_8, TRUE },
+		{ GPM_STOCK_UPS_2_OF_8, TRUE },
+		{ GPM_STOCK_UPS_3_OF_8, TRUE },
+		{ GPM_STOCK_UPS_4_OF_8, TRUE },
+		{ GPM_STOCK_UPS_5_OF_8, TRUE },
+		{ GPM_STOCK_UPS_6_OF_8, TRUE },
+		{ GPM_STOCK_UPS_7_OF_8, TRUE },
+		{ GPM_STOCK_UPS_8_OF_8, TRUE },
+		{ GPM_STOCK_AC_ADAPTER, TRUE },
+		{ GPM_STOCK_MOUSE, TRUE },
+		{ GPM_STOCK_KEYBOARD, TRUE },
+		{ GPM_STOCK_AC_CHARGED, TRUE },
+
+		/* gnome-icon-theme icons */
+		{ GNOME_DEV_MEMORY, FALSE },
+		{ GNOME_DEV_HARDDISK, FALSE },
+
 	};
 
 	g_return_val_if_fail (factory == NULL, FALSE);
@@ -61,25 +94,37 @@ gpm_stock_icons_init (void)
 
 	for (i = 0; i < (int) G_N_ELEMENTS (items); i++) {
 		GtkIconSet *icon_set;
-		GdkPixbuf *pixbuf;
-		char *filename;
+		GdkPixbuf  *pixbuf;
 
-		filename = g_strconcat (GPM_DATA, G_DIR_SEPARATOR_S, items[i], ".png", NULL);
-		pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-		if (!pixbuf) {
-			g_warning ("icon '%s' cannot be found. "
-				   "Make sure you installed g-p-m correctly",
-				   filename);
+		if (items[i].custom) {
+			char *filename;
+
+			filename = g_strconcat (GPM_DATA, G_DIR_SEPARATOR_S, items[i].name, ".png", NULL);
+			pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 			g_free (filename);
-			return FALSE;
+		} else {
+			/* we should really add all the sizes */
+			int size;
+
+			gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE_TOOLBAR, &size, NULL);
+			pixbuf = gtk_icon_theme_load_icon (theme,
+							   items[i].name,
+							   size,
+							   0,
+							   NULL);
 		}
-		g_free (filename);
-		icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
-		gtk_icon_factory_add (factory, items[i], icon_set);
-		gtk_icon_set_unref (icon_set);
-		
-		g_object_unref (G_OBJECT (pixbuf));
+
+		if (pixbuf) {
+			icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
+			gtk_icon_factory_add (factory, items[i].name, icon_set);
+			gtk_icon_set_unref (icon_set);
+			
+			g_object_unref (G_OBJECT (pixbuf));
+		} else {
+			g_warning ("Unable to load icon %s", items[i].name);
+		}
 	}
+
 	return TRUE;
 }
 

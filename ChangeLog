@@ -1,5 +1,14 @@
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
+	* src/gpm-tray-icon.c (libnotify_event) 
+	(gpm_tray_icon_action_entries): Use #defined icon names.
+
+	* src/gpm-stock-icons.c (gpm_stock_icons_init):
+	Add gnome-icon-theme icons to factory.  Add #defines for
+	icon names.
+
+2006-01-09  William Jon McCann  <mccann@jhu.edu>
+
 	* src/gpm-dpms.h: 
 	* src/gpm-dpms-x11.c: New class to control DPMS.
 

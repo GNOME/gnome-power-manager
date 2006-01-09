@@ -100,9 +100,9 @@ static void gpm_tray_icon_show_about_cb       (GtkAction *action, GpmTrayIcon *i
 
 static GtkActionEntry gpm_tray_icon_action_entries [] =
 {
-	{ "TraySuspend", "gnome-dev-memory", N_("_Suspend"),
+	{ "TraySuspend", GNOME_DEV_MEMORY, N_("_Suspend"),
 	  NULL, N_("Suspend the computer"), G_CALLBACK (gpm_tray_icon_suspend_cb) },
-	{ "TrayHibernate", "gnome-dev-harddisk", N_("Hi_bernate"),
+	{ "TrayHibernate", GNOME_DEV_HARDDISK, N_("Hi_bernate"),
 	  NULL, N_("Make the computer go to sleep"), G_CALLBACK (gpm_tray_icon_hibernate_cb) },
 	{ "TrayPreferences", GTK_STOCK_PREFERENCES, N_("_Preferences"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
@@ -572,7 +572,7 @@ libnotify_event (GpmTrayIcon             *tray,
 		notify_notification_close (tray->priv->notify, NULL);
 	}
 
-	tray->priv->notify = notify_notification_new (subject, content, "gnome-dev-battery", NULL);
+	tray->priv->notify = notify_notification_new (subject, content, GNOME_DEV_BATTERY, NULL);
 
         notify_notification_set_timeout (tray->priv->notify, timeout);
 

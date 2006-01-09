@@ -1,9 +1,10 @@
-/** @file	gpm-stock-icons.h
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ *  @file	gpm-stock-icons.h
  *  @brief	Register our custom icons as GNOME stock icons
  *  @author	2002		Jorn Baayen
  *		2003,2004	Colin Walters <walters@verbum.org>
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -59,8 +60,12 @@ G_BEGIN_DECLS
 #define GPM_STOCK_UPS_7_OF_8	"gnome-power-ups-7-of-8"
 #define GPM_STOCK_UPS_8_OF_8	"gnome-power-ups-8-of-8"
 
-gboolean gpm_stock_icons_init (void);
-void gpm_stock_icons_shutdown (void);
+#define GNOME_DEV_BATTERY       "gnome-dev-battery"
+#define GNOME_DEV_HARDDISK      "gnome-dev-harddisk"
+#define GNOME_DEV_MEMORY        "gnome-dev-memory"
+
+gboolean gpm_stock_icons_init     (void);
+void     gpm_stock_icons_shutdown (void);
 
 G_END_DECLS
 
