@@ -56,13 +56,19 @@ GType          gpm_manager_get_type         (void);
 
 GpmManager   * gpm_manager_new              (void);
 
-gboolean       gpm_manager_get_on_ac        (GpmManager    *manager);
-void           gpm_manager_set_on_ac        (GpmManager    *manager,
-                                             gboolean       on_ac);
+gboolean       gpm_manager_get_on_ac        (GpmManager    *manager,
+                                             gboolean      *on_ac,
+                                             GError       **error);
+gboolean       gpm_manager_set_on_ac        (GpmManager    *manager,
+                                             gboolean       on_ac,
+                                             GError       **error);
 
-char         * gpm_manager_get_dpms_mode    (GpmManager    *manager);
-void           gpm_manager_set_dpms_mode    (GpmManager    *manager,
-                                             const char    *mode);
+gboolean       gpm_manager_get_dpms_mode    (GpmManager    *manager,
+                                             const char   **mode,
+                                             GError       **error);
+gboolean       gpm_manager_set_dpms_mode    (GpmManager    *manager,
+                                             const char    *mode,
+                                             GError       **error);
 
 void           gpm_manager_suspend          (GpmManager    *manager);
 void           gpm_manager_hibernate        (GpmManager    *manager);

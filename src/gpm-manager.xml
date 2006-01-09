@@ -12,7 +12,9 @@
     </method>
     <method name="getDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
-      <arg type="s" name="mode" direction="out"/>
+      <arg type="s" name="mode" direction="out">
+        <annotation name="org.freedesktop.DBus.GLib.Const" value=""/>
+      </arg>
     </method>
     <method name="setDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_dpms_mode"/>

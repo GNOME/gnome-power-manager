@@ -663,11 +663,12 @@ maybe_notify_battery_power_changed (GpmManager *manager,
 	tray_icon_update (manager);
 }
 
-void
+gboolean
 gpm_manager_set_on_ac (GpmManager *manager,
-		       gboolean	   on_ac)
+		       gboolean	   on_ac,
+		       GError    **error)
 {
-	g_return_if_fail (GS_IS_MANAGER (manager));
+	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
 	if (on_ac != manager->priv->on_ac) {
 		manager->priv->on_ac = on_ac;
@@ -679,41 +680,53 @@ gpm_manager_set_on_ac (GpmManager *manager,
 
 		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 	}
+
+	return TRUE;
 }
 
 gboolean
-gpm_manager_get_on_ac (GpmManager *manager)
+gpm_manager_get_on_ac (GpmManager *manager,
+		       gboolean	  *on_ac,
+		       GError    **error)
 {
-	gboolean on_ac;
-
 	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
-	on_ac = manager->priv->on_ac;
+	if (on_ac) {
+		*on_ac = manager->priv->on_ac;
+	}
 
-	return on_ac;
+	return TRUE;
 }
 
-void
+gboolean
 gpm_manager_set_dpms_mode (GpmManager *manager,
-			   const char *mode)
+			   const char *mode,
+			   GError    **error)
 {
-	g_return_if_fail (GS_IS_MANAGER (manager));
+	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
 	/* just proxy this */
 	gpm_dpms_set_mode (manager->priv->dpms,
 			   gpm_dpms_mode_from_string (mode));
+
+	return TRUE;
 }
 
-char *
-gpm_manager_get_dpms_mode (GpmManager *manager)
+gboolean
+gpm_manager_get_dpms_mode (GpmManager  *manager,
+			   const char **mode,
+			   GError     **error)
 {
-	GpmDpmsMode mode;
+	GpmDpmsMode m;
 
 	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
-	mode = gpm_dpms_get_mode (manager->priv->dpms);
+	m = gpm_dpms_get_mode (manager->priv->dpms);
+	if (mode) {
+		*mode = gpm_dpms_mode_to_string (m);
+	}
 
-	return g_strdup (gpm_dpms_mode_to_string (mode));
+	return TRUE;
 }
 
 void
@@ -926,7 +939,7 @@ hal_on_ac_changed_cb (GpmHalMonitor *monitor,
 		      gboolean	     on_ac,
 		      GpmManager    *manager)
 {
-	gpm_manager_set_on_ac (manager, on_ac);
+	gpm_manager_set_on_ac (manager, on_ac, NULL);
 }
 
 static void
@@ -954,7 +967,7 @@ gpm_manager_set_property (GObject	     *object,
 
 	switch (prop_id) {
 	case PROP_ON_AC:
-		gpm_manager_set_on_ac (manager, g_value_get_boolean (value));
+		gpm_manager_set_on_ac (manager, g_value_get_boolean (value), NULL);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1192,7 +1205,8 @@ gpm_manager_init (GpmManager *manager)
 
 	/* do all the actions as we have to set initial state */
 	gpm_manager_set_on_ac (manager,
-			       gpm_hal_monitor_get_on_ac (manager->priv->hal_monitor));
+			       gpm_hal_monitor_get_on_ac (manager->priv->hal_monitor),
+			       NULL);
 
 	tray_icon_update (manager);
 }

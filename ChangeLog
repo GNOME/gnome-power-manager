@@ -1,3 +1,13 @@
+2006-01-09  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.xml: Mark return string as constant.
+
+	* src/gpm-manager.[ch] (gpm_manager_set_on_ac) 
+	(gpm_manager_get_on_ac, gpm_manager_set_dpms_mode) 
+	(gpm_manager_get_dpms_mode, hal_on_ac_changed_cb) 
+	(gpm_manager_set_property, gpm_manager_init):
+	Change functions to actually work with the DBus bindings.
+
 2005-01-09  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in, Makefile.am, help/Makefile.am: Still process the
