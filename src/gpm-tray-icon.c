@@ -210,6 +210,21 @@ gpm_tray_icon_show_help_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
 {
 	gnome_url_show (GPMURL, NULL);
+#if 0
+	/*
+	 * we need to install the gnome-power-manager.xml file using
+	 * scrollkeeper before this will work -- this requires fixing
+	 * make distcheck
+	 */
+        GError *error = NULL;
+
+        gnome_help_display ("gnome-power-manager.xml", NULL, &error);
+
+        if(error != NULL) {
+                g_warning (error->message);
+                g_error_free (error);
+        }
+#endif
 }
 
 static void

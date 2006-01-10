@@ -1,3 +1,10 @@
+2005-01-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: Add some debug text so we know the state.
+
+	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string): Fix typo where
+	"on" should be GPM_DPMS_MODE_ON rather than GPM_DPMS_MODE_OFF.
+
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-manager.xml: Mark return string as constant.

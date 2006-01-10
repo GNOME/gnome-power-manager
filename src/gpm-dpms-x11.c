@@ -396,7 +396,7 @@ gpm_dpms_mode_from_string (const char *str)
 	}
 
 	if (strcmp (str, "on") == 0) {
-		return GPM_DPMS_MODE_OFF;
+		return GPM_DPMS_MODE_ON;
 	} else if (strcmp (str, "standby") == 0) {
 		return GPM_DPMS_MODE_STANDBY;
 	} else if (strcmp (str, "suspend") == 0) {
@@ -441,14 +441,17 @@ gpm_dpms_set_mode (GpmDpms    *power,
 	g_return_if_fail (GPM_IS_DPMS (power));
 
 	if (! power->priv->enabled) {
+		g_debug ("gpm_dpms_set_mode: disabled");
 		return;
 	}
 
 	if (! power->priv->active) {
+		g_debug ("gpm_dpms_set_mode: not active");
 		return;
 	}
 
 	if (mode == GPM_DPMS_MODE_UNKNOWN) {
+		g_debug ("gpm_dpms_set_mode: mode unknown");
 		return;
 	}
 

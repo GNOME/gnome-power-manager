@@ -705,6 +705,8 @@ gpm_manager_set_dpms_mode (GpmManager *manager,
 {
 	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
+	g_debug ("Setting DPMS to %s", mode);
+
 	/* just proxy this */
 	gpm_dpms_set_mode (manager->priv->dpms,
 			   gpm_dpms_mode_from_string (mode));
