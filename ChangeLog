@@ -5,6 +5,23 @@
 	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string): Fix typo where
 	"on" should be GPM_DPMS_MODE_ON rather than GPM_DPMS_MODE_OFF.
 
+	* Makefile.am: Use DISTCHECK_CONFIGURE_FLAGS (copied from evince)
+	so make diskcheck doesn't try to run scrollkeeper.
+
+	* help/Makefile.am: Enable yelp file build.
+
+	* data/gnome-power-manager.spec.in: Add the two files to the file list.
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_show_help_cb): Now use yelp
+	help-pages rather than just displaying the webpage -- note these 
+	need serious love.
+
+	* src/gpm-stock-icons.c (gpm_stock_icons_init): Replace 
+	GTK_ICON_SIZE_LARGE_TOOLBAR with GTK_ICON_SIZE_MENU as we want the
+	smaller icons used in the tray.
+
+	* man/gnome-power-info.sgml: remove as unused.
+
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-manager.xml: Mark return string as constant.

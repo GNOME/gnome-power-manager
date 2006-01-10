@@ -15,3 +15,5 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	gnome-doc-utils.make				\
 	gnome-power-manager-*.tar.gz
+
+DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper

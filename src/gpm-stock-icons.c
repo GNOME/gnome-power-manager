@@ -106,7 +106,7 @@ gpm_stock_icons_init (void)
 			/* we should really add all the sizes */
 			int size;
 
-			gtk_icon_size_lookup (GTK_ICON_SIZE_LARGE_TOOLBAR, &size, NULL);
+			gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &size, NULL);
 			pixbuf = gtk_icon_theme_load_icon (theme,
 							   items[i].name,
 							   size,
