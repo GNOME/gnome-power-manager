@@ -38,9 +38,9 @@
  */
 #define GPM_SYSTEM_BUS 			FALSE
 
-#define	GPM_DBUS_SERVICE		"org.gnome.GnomePowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/GnomePowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.GnomePowerManager"
+#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
+#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
+#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
 #define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
 #define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"

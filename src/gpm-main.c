@@ -114,7 +114,7 @@ signalhandler_nlost (const char *name, const gboolean connected)
 	gpm_exit ();
 }
 
-/** registers org.gnome.GnomePowerManager on a connection
+/** registers org.gnome.PowerManager on a connection
  *
  *  @return			If we successfully registered the object
  *

@@ -69,7 +69,7 @@ gpm_is_on_ac (gboolean *value)
 	return retval;
 }
 
-/** Queries org.gnome.GnomePowerManager.isOnBattery
+/** Queries org.gnome.PowerManager.isOnBattery
  *
  *  @param	value		return value, passed by ref
  *  @return			TRUE for success, FALSE for failure

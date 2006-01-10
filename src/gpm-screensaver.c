@@ -42,9 +42,9 @@
 #include "gpm-dbus-common.h"
 #include "gpm-screensaver.h"
 
-#define GS_LISTENER_SERVICE	"org.gnome.screensaver"
-#define GS_LISTENER_PATH	"/org/gnome/screensaver"
-#define GS_LISTENER_INTERFACE	"org.gnome.screensaver"
+#define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
+#define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
+#define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
 
 /** Should we lock the the screen
  *

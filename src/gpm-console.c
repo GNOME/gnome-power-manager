@@ -311,7 +311,7 @@ signalhandler_noc (const char *name, const gboolean connected)
 static void
 signalhandler_nlost (const char *name, const gboolean connected)
 {
-	if (strcmp (name, "org.gnome.GnomePowerManager") != 0)
+	if (strcmp (name, "org.gnome.PowerManager") != 0)
 		return;
 	gpm_exit ();
 }

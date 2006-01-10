@@ -96,9 +96,9 @@ enum {
 	PROP_SYSTEM_TIMEOUT
 };
 
-#define GS_DBUS_SERVICE	  "org.gnome.screensaver"
-#define GS_DBUS_PATH	  "/org/gnome/screensaver"
-#define GS_DBUS_INTERFACE "org.gnome.screensaver"
+#define GS_DBUS_SERVICE	  "org.gnome.ScreenSaver"
+#define GS_DBUS_PATH	  "/org/gnome/ScreenSaver"
+#define GS_DBUS_INTERFACE "org.gnome.ScreenSaver"
 
 static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };

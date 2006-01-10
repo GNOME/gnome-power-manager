@@ -1,3 +1,18 @@
+2006-01-10  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-screensaver.c:
+	* src/gpm-manager.xml:
+	* src/gpm-main.c:
+	* src/gpm-idle.c:
+	* src/gpm-dbus-common.h:
+	* src/gpm-dbus-client.c:
+	* src/gpm-console.c (signalhandler_nlost): 
+	* docs/www/faq.html: 
+	* data/gnome-power-manager.service.in:
+	* data/gnome-power-manager.conf:
+	Rename DBUS services.  GnomePowerManger -> PowerManager
+	and screensaver -> ScreenSaver.  Fixes #326492
+
 2005-01-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: Add some debug text so we know the state.
