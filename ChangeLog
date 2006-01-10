@@ -1,3 +1,34 @@
+2006-01-10  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.c (sync_dpms_policy):
+	Check errors.
+	(gpm_manager_set_dpms_mode, gpm_manager_get_dpms_mode) 
+	(idle_changed_cb, dpms_mode_changed_cb, hal_lid_button_cb):
+	Report errors back to DBUS.
+	(gpm_manager_init): Rename signal.
+
+	* src/gpm-dpms-x11.c (gpm_dpms_error_quark): Add errors.
+	(x11_sync_server_dpms_settings): Set errors.
+	Also allow zero timeouts as this is how we'll disable
+	DPMS now that we enable it by default.
+	(x11_get_mode, x11_set_mode): Use a more DBUSy
+	design.
+	(sync_settings): Use zero for timeouts instead of
+	our configured ones when DPMS isn't active.
+	(gpm_dpms_get_enabled, gpm_dpms_set_enabled, gpm_dpms_get_active) 
+	(gpm_dpms_set_active, gpm_dpms_set_timeouts):
+	Use DBUSy design.
+	(gpm_dpms_set_mode): Allow mode to be set even
+	if DPMS is not active.
+	(gpm_dpms_get_mode): DBUSy design.
+	(gpm_dpms_set_standby_timeout, gpm_dpms_set_suspend_timeout) 
+	(gpm_dpms_set_off_timeout): Setters for properties.
+	(gpm_dpms_set_property, gpm_dpms_get_property) 
+	(gpm_dpms_class_init): Add properties and rename signal.
+
+	Changes to allow setting DPMS mode while DPMS is not active
+	and to report errors back to DBUS.
+
 2005-01-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/icons/*: Move to data/icons/24x24

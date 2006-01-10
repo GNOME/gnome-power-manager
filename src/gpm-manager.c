@@ -401,10 +401,11 @@ tray_icon_update (GpmManager *manager)
 static void
 sync_dpms_policy (GpmManager *manager)
 {
-	GError *error;
-	guint   standby;
-	guint   suspend;
-	guint   off;
+	GError  *error;
+	gboolean res;
+	guint    standby;
+	guint    suspend;
+	guint    off;
 
 	error = NULL;
 
@@ -431,8 +432,21 @@ sync_dpms_policy (GpmManager *manager)
 	suspend = standby;
 	off     = standby * 2;
 
-	gpm_dpms_set_enabled (manager->priv->dpms, TRUE);
-	gpm_dpms_set_timeouts (manager->priv->dpms, standby, suspend, off);
+	error = NULL;
+	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);
+	if (error) {
+		g_warning ("Unable to enable DPMS: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	error = NULL;
+	res = gpm_dpms_set_timeouts (manager->priv->dpms, standby, suspend, off, &error);
+	if (error) {
+		g_warning ("Unable to get DPMS timeouts: %s", error->message);
+		g_error_free (error);
+		return;
+	}
 }
 
 /** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
@@ -703,15 +717,18 @@ gpm_manager_set_dpms_mode (GpmManager *manager,
 			   const char *mode,
 			   GError    **error)
 {
+	gboolean ret;
+
 	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
 	g_debug ("Setting DPMS to %s", mode);
 
 	/* just proxy this */
-	gpm_dpms_set_mode (manager->priv->dpms,
-			   gpm_dpms_mode_from_string (mode));
+	ret = gpm_dpms_set_mode (manager->priv->dpms,
+				 gpm_dpms_mode_from_string (mode),
+				 error);
 
-	return TRUE;
+	return ret;
 }
 
 gboolean
@@ -719,16 +736,20 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 			   const char **mode,
 			   GError     **error)
 {
+	gboolean    ret;
 	GpmDpmsMode m;
 
 	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
 
-	m = gpm_dpms_get_mode (manager->priv->dpms);
-	if (mode) {
+	ret = gpm_dpms_get_mode (manager->priv->dpms,
+				 &m,
+				 error);
+	g_debug ("Got DPMS mode result=%d mode=%d", ret, m);
+	if (ret && mode) {
 		*mode = gpm_dpms_mode_to_string (m);
 	}
 
-	return TRUE;
+	return ret;
 }
 
 void
@@ -822,13 +843,20 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
 		 GpmManager *manager)
 {
+	GError  *error;
+	gboolean res;
 
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
 		g_debug ("Idle state changed: NORMAL");
 
 		/* deactivate display power management */
-		gpm_dpms_set_active (manager->priv->dpms, FALSE);
+		error = NULL;
+		res = gpm_dpms_set_active (manager->priv->dpms, FALSE, &error);
+		if (error) {
+			g_debug ("Unable to set DPMS active: %s", error->message);
+		}
+		
 		sync_dpms_policy (manager);
 
 		break;
@@ -837,7 +865,12 @@ idle_changed_cb (GpmIdle    *idle,
 		g_debug ("Idle state changed: SESSION");
 
 		/* activate display power management */
-		gpm_dpms_set_active (manager->priv->dpms, TRUE);
+		error = NULL;
+		res = gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
+		if (error) {
+			g_debug ("Unable to set DPMS active: %s", error->message);
+		}
+
 		/* sync timeouts */
 		sync_dpms_policy (manager);
 
@@ -857,12 +890,17 @@ idle_changed_cb (GpmIdle    *idle,
 }
 
 static void
-dpms_changed_cb (GpmDpms    *dpms,
-		 GpmDpmsMode mode,
-		 GpmManager *manager)
+dpms_mode_changed_cb (GpmDpms    *dpms,
+		      GpmDpmsMode mode,
+		      GpmManager *manager)
 {
-	g_debug ("DPMS state changed: %d", mode);
-	if (mode != GPM_DPMS_MODE_ON) {
+	g_debug ("DPMS mode changed: %d", mode);
+	if (mode == GPM_DPMS_MODE_ON) {
+		/* only unthrottle if on ac power */
+		if (manager->priv->on_ac) {
+			gpm_screensaver_enable_throttle (FALSE);
+		}
+	} else {
 		gpm_screensaver_enable_throttle (TRUE);
 	}
 
@@ -889,7 +927,9 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 		   GpmManager	 *manager)
 {
 	GpmDpmsMode mode;
-	
+	GError     *error;
+	gboolean    res;
+
 	/*
 	 * We enable/disable DPMS because some laptops do
 	 * not turn off the LCD backlight when the lid
@@ -904,7 +944,12 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 		mode = GPM_DPMS_MODE_ON;
 	}
 
-	gpm_dpms_set_mode (manager->priv->dpms, mode);
+	error = NULL;
+	res = gpm_dpms_set_mode (manager->priv->dpms, mode, &error);
+	if (error) {
+		g_debug ("Unable to set DPMS mode: %s", error->message);
+		g_error_free (error);
+	}
 }
 
 static void
@@ -1184,8 +1229,8 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->dpms = gpm_dpms_new ();
 	sync_dpms_policy (manager);
-	g_signal_connect (manager->priv->dpms, "changed",
-			  G_CALLBACK (dpms_changed_cb), manager);
+	g_signal_connect (manager->priv->dpms, "mode-changed",
+			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
 	manager->priv->hal_monitor = gpm_hal_monitor_new ();
 	g_signal_connect (manager->priv->hal_monitor, "ac-power-changed",

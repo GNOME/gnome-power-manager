@@ -52,29 +52,50 @@ typedef struct
 {
         GObjectClass      parent_class;
 
-        void              (* changed) (GpmDpms    *dpms,
-                                       GpmDpmsMode mode);
+        void              (* mode_changed) (GpmDpms    *dpms,
+                                            GpmDpmsMode mode);
 } GpmDpmsClass;
+
+typedef enum
+{
+        GPM_DPMS_ERROR_GENERAL
+} GpmDpmsError;
+
+#define GPM_DPMS_ERROR gpm_dpms_error_quark ()
+
+GQuark      gs_listener_error_quark             (void);
 
 GType       gpm_dpms_get_type         (void);
 
 GpmDpms   * gpm_dpms_new              (void);
 
-gboolean    gpm_dpms_get_active       (GpmDpms    *dpms);
+gboolean    gpm_dpms_get_active       (GpmDpms    *dpms,
+                                       gboolean   *active,
+                                       GError    **error);
 gboolean    gpm_dpms_set_active       (GpmDpms    *dpms,
-                                       gboolean    active);
-gboolean    gpm_dpms_get_enabled      (GpmDpms    *dpms);
-void        gpm_dpms_set_enabled      (GpmDpms    *dpms,
-                                       gboolean    enabled);
-void        gpm_dpms_set_timeouts     (GpmDpms    *dpms,
+                                       gboolean    active,
+                                       GError    **error);
+
+gboolean    gpm_dpms_get_enabled      (GpmDpms    *dpms,
+                                       gboolean   *enabled,
+                                       GError    **error);
+gboolean    gpm_dpms_set_enabled      (GpmDpms    *dpms,
+                                       gboolean    enabled,
+                                       GError    **error);
+
+gboolean    gpm_dpms_set_timeouts     (GpmDpms    *dpms,
                                        guint       standby,
                                        guint       suspend,
-                                       guint       off);
+                                       guint       off,
+                                       GError    **error);
 
 /* Direct manipulation */
-GpmDpmsMode gpm_dpms_get_mode         (GpmDpms    *dpms);
-void        gpm_dpms_set_mode         (GpmDpms    *dpms,
-                                       GpmDpmsMode mode);
+gboolean    gpm_dpms_get_mode         (GpmDpms     *dpms,
+                                       GpmDpmsMode *mode,
+                                       GError     **error);
+gboolean    gpm_dpms_set_mode         (GpmDpms    *dpms,
+                                       GpmDpmsMode mode,
+                                       GError    **error);
 
 const char *gpm_dpms_mode_to_string   (GpmDpmsMode mode);
 GpmDpmsMode gpm_dpms_mode_from_string (const char *mode);
