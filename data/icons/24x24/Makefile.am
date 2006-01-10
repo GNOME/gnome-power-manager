@@ -2,10 +2,8 @@ EXTRA_DIST =						\
 	$(Data_DATA)
 
 Datadir = $(datadir)/gnome-power-manager
-#Datadir = $(datadir)/icons/hicolor/22x22/apps ?
 
 Data_DATA =						\
-	gnome-power.png					\
 	gnome-dev-acadapter.png				\
 	gnome-power-mouse.png				\
 	gnome-power-keyboard.png			\

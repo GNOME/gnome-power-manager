@@ -1,3 +1,5 @@
+SUBDIRS = icons
+
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = gnome-power-manager.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)

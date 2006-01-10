@@ -1,5 +1,3 @@
-SUBDIRS = icons
-
 EXTRA_DIST =						\
 	gpm-manager.xml					\
 	gpm-marshal.list
