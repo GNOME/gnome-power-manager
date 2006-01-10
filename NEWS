@@ -1,16 +1,23 @@
 ==========
-GNOME Power Manager 0.3.3
+GNOME Power Manager 0.3.4
 ==========
 
-Released December xx, 2005
+Released January xx, 2006
 
-- We now depend on HAL 0.5.6 (CVS) for the new suspend, hibernate and shutdown
+- We now depend on HAL CVS for the new suspend, hibernate and shutdown
   functionality. CVS HAL is available in my repo for FC4.
 - Source releases are now done on the GNOME ftp servers:
   ftp://ftp.gnome.org/pub/GNOME/sources/gnome-power-manager/
 - We now only show Suspend and Hibernate options when HAL says we should.
   NOTE: just because HAL (i.e. the kernel) says it has hibernation or suspend
   support is compiled in, doesn't automatically mean that it will *work*.
+- DPMS has moved into gnome-power-manager from gnome-screensaver, thanks
+  to the work from William Jon McCann. There now is a DBUS interface to
+  control this new functionality (#326276)
+- org.gnome.GnomePowerManager -> org.gnome.PowerManager (#326492)
+- GNOME Power Manager now listens for the new idle signals from g-s.
+- There now is a yelp help file used instead of just opening the website.
+  This fixes #324977, thanks to Jaap Haitsma for the help.
 - Lots of new translations: Greek (Nikos Charonitakis), Gujarati (Ankit Patel),
   Vietnamese (Clytie Siddall), Catalan (Josep Puigdemont i Casamajó),
   Thai (Theppitak Karoonboonyanan), Serbian (Slobodan D. Sredojevic)
@@ -26,8 +33,7 @@ Released December xx, 2005
 - Fix a bug where the preferences program was crashing on missing gconf schema.
 - Fixed lots of other smaller bugs such as #322773, #323135, RH#174196,
   #322547, RH#172963, RH#176656
-- Lots of source file re-organisation, also big refactoring and fixing all the
-  source file warnings.
+- Lots of source file re-organisation, also a large refactoring.
 - Fix problem where preferences window is redrawn and then resized (#323562)
 - Don't crash if gnome-panel is restarted, but display the icon again (#324446)
 - Fix problem where battery is removed, and icon does not change (#323563)
