@@ -43,7 +43,6 @@
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
 
-#include "gpm-dbus-common.h"
 #include "gpm-dbus-signal-handler.h"
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
@@ -124,9 +123,57 @@ gboolean
 gpm_object_register (DBusGConnection *connection,
 		     GObject         *object)
 {
-	if (!gpm_dbus_get_service (connection, GPM_DBUS_SERVICE)) {
+	DBusGProxy *bus_proxy = NULL;
+	GError *error = NULL;
+	guint request_name_result;
+
+	bus_proxy = dbus_g_proxy_new_for_name (connection, 
+					       DBUS_SERVICE_DBUS,
+					       DBUS_PATH_DBUS,
+					       DBUS_INTERFACE_DBUS);
+/*
+ * Add this define hack until we depend on DBUS 0.60, as the
+ * define names have changed.
+ * should fix bug: http://bugzilla.gnome.org/show_bug.cgi?id=322435
+ */
+#ifdef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
+	/* add the legacy stuff for FC4 */
+	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
+		G_TYPE_STRING, GPM_DBUS_SERVICE,
+#if GPM_SYSTEM_BUS
+		G_TYPE_UINT, DBUS_NAME_FLAG_REPLACE_EXISTING,
+#else
+		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
+#endif
+		G_TYPE_INVALID,
+		G_TYPE_UINT, &request_name_result,
+		G_TYPE_INVALID)) {
+		g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
 		return FALSE;
 	}
+#else
+	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
+		G_TYPE_STRING, GPM_DBUS_SERVICE,
+#if GPM_SYSTEM_BUS
+		G_TYPE_UINT, DBUS_NAME_FLAG_ALLOW_REPLACEMENT | DBUS_NAME_FLAG_REPLACE_EXISTING,
+#else
+		G_TYPE_UINT, 0,
+#endif
+		G_TYPE_INVALID,
+		G_TYPE_UINT, &request_name_result,
+		G_TYPE_INVALID)) {
+		g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
+		return FALSE;
+	}
+#endif
+
+#if !GPM_SYSTEM_BUS
+ 	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+		return FALSE;
+#endif
+
+	/* free the bus_proxy */
+	g_object_unref (G_OBJECT (bus_proxy));
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);
@@ -152,6 +199,7 @@ main (int argc, char *argv[])
 	gboolean         verbose = FALSE;
 	gboolean         no_daemon;
 	GpmManager      *manager;
+	GError          *error = NULL;
 
 	struct poptOption options[] = {
 		{ "no-daemon", '\0', POPT_ARG_NONE, NULL, 0,
@@ -197,10 +245,30 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 
 	/* check dbus connections, exit if not valid */
-	if (!gpm_dbus_get_system_connection (&system_connection))
-		g_error ("Unable to get system dbus connection");
-	if (!gpm_dbus_get_session_connection (&session_connection))
-		g_error ("Unable to get session dbus connection");
+	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error) {
+		g_warning ("main: %s", error->message);
+		g_error_free (error);
+		/* abort at this point */
+		g_error ("This program cannot start until you start the dbus"
+			 "system daemon\n"
+			 "This is usually started in initscripts, and is "
+			 "usually called messagebus\n"
+			 "It is STRONGLY recommended you reboot your compter"
+			 "after restarting messagebus\n\n");
+	}
+
+	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_warning ("main: %s", error->message);
+		g_error_free (error);
+		/* abort at this point */
+		g_error ("This program cannot start until you start the dbus session daemon\n"
+			 "This is usually started in X or gnome startup "
+			 "(depending on distro)\n"
+			 "You can launch the session dbus-daemon manually with this command:\n"
+			 "eval `dbus-launch --auto-syntax`\n");
+	}
 
 	if (!gpm_stock_icons_init())
 		g_error ("Cannot continue without stock icons");

@@ -30,7 +30,6 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-common.h"
-#include "gpm-dbus-common.h"
 #include "gpm-dbus-signal-handler.h"
 
 static DBusGProxy *proxy_bus_nlost = NULL;

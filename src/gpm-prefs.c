@@ -43,7 +43,6 @@
 #include "gpm-common.h"
 #include "gpm-screensaver.h"
 #include "gpm-dbus-client.h"
-#include "gpm-dbus-common.h"
 
 /* The text that should appear in the action combo boxes */
 #define ACTION_SUSPEND_TEXT		_("Suspend")

@@ -40,8 +40,6 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
-#include "gpm-dbus-common.h"
-
 #include "gpm-idle.h"
 
 static void     gpm_idle_class_init (GpmIdleClass *klass);
@@ -391,9 +389,15 @@ acquire_screensaver (GpmIdle *idle)
 static void
 gpm_idle_init (GpmIdle *idle)
 {
+	GError *error = NULL;
+
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
-	gpm_dbus_get_session_connection (&idle->priv->connection);
+	idle->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_warning ("gpm_idle_init: %s", error->message);
+		g_error_free (error);
+	}
 
 	acquire_screensaver (idle);
 }

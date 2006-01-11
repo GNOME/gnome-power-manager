@@ -25,8 +25,6 @@ bin_PROGRAMS =						\
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
 	gpm-hal.c					\
-	gpm-dbus-common.h				\
-	gpm-dbus-common.c				\
 	gpm-dbus-client.h				\
 	gpm-dbus-client.c				\
 	gpm-screensaver.h				\
@@ -58,8 +56,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal.c					\
 	gpm-hal-callback.h				\
 	gpm-hal-callback.c				\
-	gpm-dbus-common.h				\
-	gpm-dbus-common.c				\
 	gpm-dbus-signal-handler.h			\
 	gpm-dbus-signal-handler.c			\
 	gpm-common.h					\
@@ -92,8 +88,6 @@ endif
 #	gpm-hal-callback.c				\
 #	gpm-hal.h					\
 #	gpm-hal.c					\
-#	gpm-dbus-common.h				\
-#	gpm-dbus-common.c				\
 #	gpm-dbus-signal-handler.h			\
 #	gpm-dbus-signal-handler.c			\
 #	gpm-common.h					\

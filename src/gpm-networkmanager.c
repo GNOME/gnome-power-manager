@@ -38,7 +38,6 @@
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
 
-#include "gpm-dbus-common.h"
 #include "gpm-networkmanager.h"
 
 #define NM_LISTENER_SERVICE	"org.freedesktop.NetworkManager"
@@ -52,12 +51,18 @@
 gboolean
 gpm_networkmanager_sleep (void)
 {
-	DBusGConnection *system_connection = NULL;
+	DBusGConnection *connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
+	GError *error = NULL;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error) {
+		g_debug ("gpm_networkmanager_sleep: %s", error->message);
+		g_error_free (error);
 		return FALSE;
-	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
+	}
+
+	nm_proxy = dbus_g_proxy_new_for_name (connection,
 			NM_LISTENER_SERVICE,
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);
@@ -77,12 +82,18 @@ gpm_networkmanager_sleep (void)
 gboolean
 gpm_networkmanager_wake (void)
 {
-	DBusGConnection *system_connection = NULL;
+	DBusGConnection *connection = NULL;
 	DBusGProxy *nm_proxy = NULL;
+	GError *error = NULL;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error) {
+		g_debug ("gpm_networkmanager_wake: %s", error->message);
+		g_error_free (error);
 		return FALSE;
-	nm_proxy = dbus_g_proxy_new_for_name (system_connection,
+	}
+
+	nm_proxy = dbus_g_proxy_new_for_name (connection,
 			NM_LISTENER_SERVICE,
 			NM_LISTENER_PATH,
 			NM_LISTENER_INTERFACE);

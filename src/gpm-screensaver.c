@@ -39,12 +39,30 @@
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
 
-#include "gpm-dbus-common.h"
 #include "gpm-screensaver.h"
 
 #define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
 #define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
 #define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
+
+static gboolean
+gpm_screensaver_get_session_conn (DBusGConnection **connection)
+{
+	GError *error = NULL;
+	DBusGConnection *session_conn = NULL;
+
+	/* else get from DBUS */
+	session_conn = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (!session_conn) {
+		if (error) {
+			g_debug ("gpm_screensaver_get_session_conn: %s", error->message);
+			g_error_free (error);
+		}
+		return FALSE;
+	}
+	*connection = session_conn;
+	return TRUE;
+}
 
 /** Should we lock the the screen
  *
@@ -79,7 +97,7 @@ gpm_screensaver_is_running (void)
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
 
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
@@ -88,7 +106,10 @@ gpm_screensaver_is_running (void)
 	if (!dbus_g_proxy_call (gs_proxy, "getActive", &error,
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_screensaver_is_running: %s", error->message);
+			g_error_free (error);
+		}
 		boolret = FALSE;
 	}
 	g_object_unref (G_OBJECT (gs_proxy));
@@ -109,7 +130,7 @@ gpm_screensaver_enable_throttle (gboolean enable)
 	gboolean boolret = TRUE;
 
 	g_debug ("gnome-screensaver setThrottleEnabled : %i", enable);
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
@@ -118,7 +139,10 @@ gpm_screensaver_enable_throttle (gboolean enable)
 	if (!dbus_g_proxy_call (gs_proxy, "setThrottleEnabled", &error,
 				G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 				G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_screensaver_enable_throttle: %s", error->message);
+			g_error_free (error);
+		}
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
@@ -140,7 +164,7 @@ gpm_screensaver_lock (void)
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	g_debug ("gnome-screensaver lock");
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
@@ -162,7 +186,7 @@ gpm_screensaver_poke (void)
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
 	g_debug ("gnome-screensaver poke");
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
@@ -186,7 +210,7 @@ gpm_screensaver_get_idle (gint *time)
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
 
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 			GS_LISTENER_SERVICE,
@@ -195,7 +219,10 @@ gpm_screensaver_get_idle (gint *time)
 	if (!dbus_g_proxy_call (gs_proxy, "getActiveTime", &error,
 				G_TYPE_INVALID,
 				G_TYPE_UINT, time, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_screensaver_get_idle: %s", error->message);
+			g_error_free (error);
+		}
 		g_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}

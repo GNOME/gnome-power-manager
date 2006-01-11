@@ -30,8 +30,19 @@
 #define _GPMHAL_H
 
 #include <glib.h>
+#include <dbus/dbus-glib.h>
+
+#define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
+#define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
+#define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
+#define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
+#define	HAL_DBUS_INTERFACE_LAPTOP_PANEL	"org.freedesktop.Hal.Device.LaptopPanel"
+#define	HAL_DBUS_INTERFACE_POWER	"org.freedesktop.Hal.Device.SystemPowerManagement"
+#define HAL_ROOT_COMPUTER		"/org/freedesktop/Hal/devices/computer"
 
 G_BEGIN_DECLS
+
+gboolean gpm_hal_get_dbus_connection (DBusGConnection **connection);
 
 gboolean gpm_hal_has_power_management (void);
 

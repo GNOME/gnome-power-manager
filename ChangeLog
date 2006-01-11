@@ -1,3 +1,13 @@
+2005-01-11  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am, src/gpm-dbus-client.c, src/gpm-idle.c, 
+	src/gpm-hal.c, src/gpm-hal-callback.c, src/gpm-idle.c,
+	src/gpm-manager.c, src/gpm-screensaver.c, src/gpm-prefs.c:
+	Remove gpm-dbus-common from all the files. This file was originally
+	used when the DBUS API was churning so all the changes could be done
+	in one place. Now the glib DBUS api is stable, hardcode these simple
+	functions in the respective places.
+
 2006-01-10  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-manager.c (hal_power_button_cb, hal_lid_button_cb):

@@ -39,7 +39,7 @@
 #include <string.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-dbus-common.h"
+#include "gpm-hal.h"
 #include "gpm-hal-callback.h"
 #include "gpm-marshal.h"
 
@@ -151,7 +151,7 @@ gpm_hal_watch_add_device_removed (void)
 
 	g_debug ("gpm_hal: DeviceRemoved: Registered");
 	reg.device_removed = TRUE;
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 
 	proxy.device_removed = dbus_g_proxy_new_for_name_owner (system_connection,
@@ -180,7 +180,7 @@ gpm_hal_watch_add_device_new_capability (void)
 
 	g_debug ("gpm_hal: NewCapability: Registered");
 	reg.device_new_capability = TRUE;
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	proxy.device_new_capability = dbus_g_proxy_new_for_name_owner (system_connection,
 		HAL_DBUS_SERVICE,
@@ -220,7 +220,7 @@ gpm_hal_watch_add_device_condition (const gchar *udi)
 
 	g_debug ("gpm_hal: Condition: Registered UDI '%s'", udi);
 	reg.device_condition = TRUE;
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		HAL_DBUS_SERVICE,
@@ -266,7 +266,7 @@ gpm_hal_watch_add_device_property_modified (const gchar *udi)
 		}
 	}
 	g_debug ("gpm_hal: PropertyModified: Registered UDI '%s'", udi);
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name_owner  (system_connection,
 		HAL_DBUS_SERVICE,

@@ -38,11 +38,26 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-hal.h"
-#include "gpm-dbus-common.h"
 
 #define DIM_INTERVAL		10
 
 typedef gboolean (*hal_lp_func) (const gchar *udi, const gint number);
+
+gboolean
+gpm_hal_get_dbus_connection (DBusGConnection **connection)
+{
+	GError *error = NULL;
+	DBusGConnection *systemconnection = NULL;
+
+	systemconnection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error) {
+		g_debug ("gpm_hal_get_dbus_connection: %s", error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+	*connection = systemconnection;
+	return TRUE;
+}
 
 /** Finds out if hal is running
  *
@@ -191,7 +206,7 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	g_assert (brightness);
 	g_assert (udi);
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE,
@@ -201,7 +216,10 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 	if (!dbus_g_proxy_call (hal_proxy, "GetBrightness", &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, brightness, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("hal_get_brightness_item: %s", error->message);
+			g_error_free (error);
+		}
 		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".GetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
@@ -237,7 +255,7 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	}
 	g_debug ("Setting %s to brightness %i", udi, brightness);
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 		HAL_DBUS_SERVICE,
@@ -247,7 +265,10 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 	if (!dbus_g_proxy_call (hal_proxy, "SetBrightness", &error,
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_set_brightness_item: %s", error->message);
+			g_error_free (error);
+		}
 		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".SetBrightness"
 			   "failed (HAL error)");
 		retval = FALSE;
@@ -423,7 +444,7 @@ gpm_hal_suspend (gint wakeup)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
@@ -433,7 +454,10 @@ gpm_hal_suspend (gint wakeup)
 	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_suspend: %s", error->message);
+			g_error_free (error);
+		}
 		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
 		retval = FALSE;
 	}
@@ -460,7 +484,7 @@ hal_pm_method_void (const gchar* method)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
@@ -470,7 +494,10 @@ hal_pm_method_void (const gchar* method)
 	if (!dbus_g_proxy_call (hal_proxy, method, &error,
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("hal_pm_method_void: %s", error->message);
+			g_error_free (error);
+		}
 		g_warning (HAL_DBUS_INTERFACE_POWER
 			   ".%s failed (HAL error)", method);
 		retval = FALSE;
@@ -523,8 +550,9 @@ gpm_hal_enable_power_save (gboolean enable)
 		return FALSE;
 	}
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
+
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_ROOT_COMPUTER,
@@ -533,7 +561,10 @@ gpm_hal_enable_power_save (gboolean enable)
 	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
 			G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_enable_power_save: %s", error->message);
+			g_error_free (error);
+		}
 		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");
 		retval = FALSE;
 	}
@@ -585,7 +616,7 @@ gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
@@ -595,7 +626,10 @@ gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_device_get_bool: %s", error->message);
+			g_error_free (error);
+		}
 		*value = FALSE;
 		retval = FALSE;
 	}
@@ -620,7 +654,7 @@ gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
@@ -630,7 +664,10 @@ gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_STRING, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_device_get_string: %s", error->message);
+			g_error_free (error);
+		}
 		*value = NULL;
 		retval = FALSE;
 	}
@@ -653,7 +690,7 @@ gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
@@ -663,7 +700,10 @@ gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_INT, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_device_get_int: %s", error->message);
+			g_error_free (error);
+		}
 		*value = 0;
 		retval = FALSE;
 	}
@@ -685,7 +725,7 @@ gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_dbus_get_system_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE, 
@@ -695,7 +735,10 @@ gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
 	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
 				G_TYPE_STRING, capability, G_TYPE_INVALID,
 				G_TYPE_STRV, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_hal_find_device_capability: %s", error->message);
+			g_error_free (error);
+		}
 		*value = NULL;
 		retval = FALSE;
 	}

@@ -33,7 +33,7 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-common.h"
-#include "gpm-dbus-common.h"
+#include "gpm-manager.h"
 #include "gpm-dbus-client.h"
 
 /** Finds out if we are running on AC
@@ -44,24 +44,29 @@
 gboolean
 gpm_is_on_ac (gboolean *value)
 {
-	DBusGConnection *session_connection = NULL;
+	DBusGConnection *connection = NULL;
 	DBusGProxy *gpm_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval = TRUE;
 
-	/* assertion checks */
-	g_assert (value);
-
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_debug ("gpm_is_on_ac: %s", error->message);
+		g_error_free (error);
 		return FALSE;
-	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
+	}
+
+	gpm_proxy = dbus_g_proxy_new_for_name (connection,
 			GPM_DBUS_SERVICE,
 			GPM_DBUS_PATH,
 			GPM_DBUS_INTERFACE);
 	if (!dbus_g_proxy_call (gpm_proxy, "isOnAc", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_is_on_ac: %s", error->message);
+			g_error_free (error);
+		}
 		*value = FALSE;
 		retval = FALSE;
 	}
@@ -77,24 +82,28 @@ gpm_is_on_ac (gboolean *value)
 gboolean
 gpm_is_on_mains (gboolean *value)
 {
-	DBusGConnection *session_connection = NULL;
+	DBusGConnection *connection = NULL;
 	DBusGProxy *gpm_proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
-	/* assertion checks */
-	g_assert (value);
-
-	if (!gpm_dbus_get_session_connection (&session_connection))
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_debug ("gpm_is_on_mains: %s", error->message);
+		g_error_free (error);
 		return FALSE;
+	}
 
-	gpm_proxy = dbus_g_proxy_new_for_name (session_connection,
+	gpm_proxy = dbus_g_proxy_new_for_name (connection,
 			GPM_DBUS_SERVICE, GPM_DBUS_PATH, GPM_DBUS_INTERFACE);
 	retval = TRUE;
 	if (!dbus_g_proxy_call (gpm_proxy, "isOnBattery", &error,
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
-		gpm_dbus_glib_error (error);
+		if (error) {
+			g_debug ("gpm_is_on_mains: %s", error->message);
+			g_error_free (error);
+		}
 		*value = FALSE;
 		retval = FALSE;
 	}
