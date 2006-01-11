@@ -917,6 +917,8 @@ hal_power_button_cb (GpmHalMonitor *monitor,
 		     gboolean	    state,
 		     GpmManager	   *manager)
 {
+	g_debug ("power button changed: %d", state);
+
 	/* Log out interactively */
 	gnome_client_request_save (gnome_master_client (),
 				   GNOME_SAVE_GLOBAL,
@@ -931,6 +933,8 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 	GpmDpmsMode mode;
 	GError     *error;
 	gboolean    res;
+
+	g_debug ("lid button changed: %d", state);
 
 	/*
 	 * We enable/disable DPMS because some laptops do
