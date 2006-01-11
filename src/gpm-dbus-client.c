@@ -51,7 +51,7 @@ gpm_is_on_ac (gboolean *value)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
-		g_debug ("gpm_is_on_ac: %s", error->message);
+		g_warning ("gpm_is_on_ac: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -64,7 +64,7 @@ gpm_is_on_ac (gboolean *value)
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("gpm_is_on_ac: %s", error->message);
+			g_warning ("gpm_is_on_ac: %s", error->message);
 			g_error_free (error);
 		}
 		*value = FALSE;
@@ -89,7 +89,7 @@ gpm_is_on_mains (gboolean *value)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
-		g_debug ("gpm_is_on_mains: %s", error->message);
+		g_warning ("gpm_is_on_mains: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -101,7 +101,7 @@ gpm_is_on_mains (gboolean *value)
 			G_TYPE_INVALID,
 			G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("gpm_is_on_mains: %s", error->message);
+			g_warning ("gpm_is_on_mains: %s", error->message);
 			g_error_free (error);
 		}
 		*value = FALSE;

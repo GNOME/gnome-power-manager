@@ -57,7 +57,7 @@ gpm_networkmanager_sleep (void)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_debug ("gpm_networkmanager_sleep: %s", error->message);
+		g_warning ("gpm_networkmanager_sleep: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -88,7 +88,7 @@ gpm_networkmanager_wake (void)
 
 	connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_debug ("gpm_networkmanager_wake: %s", error->message);
+		g_warning ("gpm_networkmanager_wake: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}

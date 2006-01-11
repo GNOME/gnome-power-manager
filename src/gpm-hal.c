@@ -51,7 +51,7 @@ gpm_hal_get_dbus_connection (DBusGConnection **connection)
 
 	systemconnection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_debug ("gpm_hal_get_dbus_connection: %s", error->message);
+		g_warning ("gpm_hal_get_dbus_connection: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -217,7 +217,7 @@ hal_get_brightness_item (const gchar *udi, gint *brightness)
 			G_TYPE_INVALID,
 			G_TYPE_UINT, brightness, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("hal_get_brightness_item: %s", error->message);
+			g_warning ("hal_get_brightness_item: %s", error->message);
 			g_error_free (error);
 		}
 		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".GetBrightness"
@@ -266,7 +266,7 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 			G_TYPE_INT, brightness, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("gpm_hal_set_brightness_item: %s", error->message);
+			g_warning ("gpm_hal_set_brightness_item: %s", error->message);
 			g_error_free (error);
 		}
 		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".SetBrightness"
@@ -455,7 +455,7 @@ gpm_hal_suspend (gint wakeup)
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("gpm_hal_suspend: %s", error->message);
+			g_warning ("gpm_hal_suspend: %s", error->message);
 			g_error_free (error);
 		}
 		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
@@ -495,7 +495,7 @@ hal_pm_method_void (const gchar* method)
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("hal_pm_method_void: %s", error->message);
+			g_warning ("hal_pm_method_void: %s", error->message);
 			g_error_free (error);
 		}
 		g_warning (HAL_DBUS_INTERFACE_POWER
@@ -562,16 +562,14 @@ gpm_hal_enable_power_save (gboolean enable)
 			G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_debug ("gpm_hal_enable_power_save: %s", error->message);
+			g_warning ("gpm_hal_enable_power_save: %s", error->message);
 			g_error_free (error);
 		}
-		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");
+		g_debug (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");
 		retval = FALSE;
 	}
-	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_POWER ".SetPowerSave call failed (%i)", ret);
+	if (ret != 0)
 		retval = FALSE;
-	}
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
