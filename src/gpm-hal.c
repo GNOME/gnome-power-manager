@@ -273,11 +273,8 @@ gpm_hal_set_brightness_item (const gchar *udi, const gint brightness)
 			   "failed (HAL error)");
 		retval = FALSE;
 	}
-	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_LAPTOP_PANEL ".SetBrightness"
-			   "call failed (%i)", ret);
+	if (ret != 0)
 		retval = FALSE;
-	}
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
@@ -461,10 +458,8 @@ gpm_hal_suspend (gint wakeup)
 		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
 		retval = FALSE;
 	}
-	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend call failed (%i)", ret);
+	if (ret != 0)
 		retval = FALSE;
-	}
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
@@ -502,10 +497,8 @@ hal_pm_method_void (const gchar* method)
 			   ".%s failed (HAL error)", method);
 		retval = FALSE;
 	}
-	if (ret != 0) {
-		g_warning (HAL_DBUS_INTERFACE_POWER ".%s call failed (%i)", method, ret);
+	if (ret != 0)
 		retval = FALSE;
-	}
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
