@@ -45,6 +45,28 @@
 
 static sysDev mysystem[BATT_LAST];
 
+/** Converts the HAL battery.type string to a DeviceType ENUM
+ *
+ *  @param  type		The battery type, e.g. "primary"
+ *  @return			The DeviceType
+ */
+DeviceType
+hal_to_device_type (const gchar *type)
+{
+	if (strcmp (type, "ups") == 0)
+		return BATT_UPS;
+	else if (strcmp (type, "mouse") == 0)
+		return BATT_MOUSE;
+	else if (strcmp (type, "keyboard") == 0)
+		return BATT_KEYBOARD;
+	else if (strcmp (type, "pda") == 0)
+		return BATT_PDA;
+	else if (strcmp (type, "primary") == 0)
+		return BATT_PRIMARY;
+	g_warning ("Unknown battery type '%s'", type);
+	return BATT_PRIMARY;
+}
+
 /** Converts a DeviceType to a string
  *
  *  @param	type		The device type

@@ -72,6 +72,8 @@ typedef struct {
 	sysDev *sd;		/**< Pointer to parent system device	*/
 } sysDevStruct;
 
+DeviceType hal_to_device_type (const char *type);
+
 gchar *gpm_sysdev_to_string (DeviceType type);
 
 sysDev *gpm_sysdev_get (DeviceType type);

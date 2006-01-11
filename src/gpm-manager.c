@@ -40,6 +40,8 @@
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 
+#include <libgnomeui/gnome-client.h> /* for gnome_client_request_save */
+
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
@@ -47,6 +49,9 @@
 
 /* FIXME: we should abstract the HAL stuff */
 #include "gpm-hal.h"
+
+/* FIXME: we should abstract the sysdev stuff */
+#include "gpm-sysdev.h"
 
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
@@ -94,6 +99,58 @@ G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
 
+static gboolean
+_gpm_manager_can_suspend (GpmManager *manager)
+{
+	gboolean can;
+
+#ifdef DISABLE_ACTIONS_FOR_TESTING
+	g_debug ("Suspend disabled for testing");
+	return FALSE;
+#endif
+
+	/* FIXME: check other stuff */
+
+	can = gpm_hal_can_suspend ();
+
+	return can;
+}
+
+static gboolean
+_gpm_manager_can_hibernate (GpmManager *manager)
+{
+	gboolean can;
+
+#ifdef DISABLE_ACTIONS_FOR_TESTING
+	g_debug ("Hibernate disabled for testing");
+	return FALSE;
+#endif
+
+	/* FIXME: check other stuff */
+
+	can = gpm_hal_can_hibernate ();
+
+	return can;
+}
+
+static gboolean
+_gpm_manager_can_shutdown (GpmManager *manager)
+{
+	gboolean can;
+
+#ifdef DISABLE_ACTIONS_FOR_TESTING
+	g_debug ("Shutdown disabled for testing");
+	return FALSE;
+#endif
+
+	/* FIXME: check other stuff */
+
+	can = TRUE;
+
+	return can;
+}
+
+
 /** Finds the icon index value for the percentage charge
  *
  *  @param	percent		The percentage value
@@ -127,7 +184,7 @@ get_stock_id (GpmManager *manager,
 	gint	 low_threshold;
 	gboolean on_ac;
 	
-	on_ac = gpm_hal_is_on_ac ();
+	on_ac = manager->priv->on_ac;
 
 	g_debug ("get_stock_id: getting stock icon");
 
@@ -138,10 +195,6 @@ get_stock_id (GpmManager *manager,
 			 "You can change this using gnome-power-preferences");
 		return NULL;
 	}
-
-	/*
-	 * Okay, we'll try any devices that are critical next
-	 */
 
 	/* find out when the user considers the power "low" */
 	low_threshold = gconf_client_get_int (manager->priv->gconf_client, GPM_PREF_THRESHOLD_LOW, NULL);
@@ -329,10 +382,12 @@ get_full_tooltip (GpmManager *manager)
 	GString *tooltip = NULL;
 
 	g_debug ("get_full_tooltip");
-	if (!gpm_hal_is_on_ac ())
-		tooltip = g_string_new (_("Computer is running on battery power\n"));
-	else
+
+	if (manager->priv->on_ac) {
 		tooltip = g_string_new (_("Computer is running on AC power\n"));
+	} else {
+		tooltip = g_string_new (_("Computer is running on battery power\n"));
+	}
 
 	/* do each device type we have	*/
 	get_tooltips_system_device_type (tooltip, BATT_PRIMARY);
@@ -757,14 +812,16 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 void
 gpm_manager_shutdown (GpmManager *manager)
 {
-#ifndef DISABLE_ACTIONS_FOR_TESTING
+	if (! _gpm_manager_can_shutdown (manager)) {
+		g_warning ("Cannot shutdown");
+		return;
+	}
+
 	gnome_client_request_save (gnome_master_client (),
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+
 	gpm_hal_shutdown ();
-#else
-	g_debug ("Shutdown disabled for testing");
-#endif
 }
 
 /** Do a hibernate with all the associated callbacks and methods.
@@ -779,11 +836,10 @@ gpm_manager_shutdown (GpmManager *manager)
 void
 gpm_manager_hibernate (GpmManager *manager)
 {
-#ifndef DISABLE_ACTIONS_FOR_TESTING
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
 
-	if (!gpm_hal_can_hibernate ()) {
-		g_warning ("Cannot hibernate as disabled in HAL");
+	if (! _gpm_manager_can_hibernate (manager)) {
+		g_warning ("Cannot hibernate");
 		return;
 	}
 
@@ -797,10 +853,6 @@ gpm_manager_hibernate (GpmManager *manager)
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
 	if (should_lock)
 		gpm_screensaver_poke ();
-
-#else
-	g_debug ("Hibernate disabled for testing");
-#endif
 }
 
 /** Do a suspend with all the associated callbacks and methods.
@@ -815,11 +867,10 @@ gpm_manager_hibernate (GpmManager *manager)
 void
 gpm_manager_suspend (GpmManager *manager)
 {
-#ifndef DISABLE_ACTIONS_FOR_TESTING
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
 
-	if (! gpm_hal_can_suspend ()) {
-		g_warning ("Cannot suspend as disabled in HAL");
+	if (! _gpm_manager_can_suspend (manager)) {
+		g_warning ("Cannot suspend");
 		return;
 	}
 
@@ -833,9 +884,6 @@ gpm_manager_suspend (GpmManager *manager)
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
 	if (should_lock)
 		gpm_screensaver_poke ();
-#else
-	g_debug ("Suspend disabled for testing");
-#endif
 }
 
 /** Callback for the idle function.
@@ -1182,10 +1230,10 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 	g_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
-	enabled = gpm_hal_can_suspend ();
+	enabled = _gpm_manager_can_suspend (manager);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 
-	enabled = gpm_hal_can_hibernate ();
+	enabled = _gpm_manager_can_hibernate (manager);
 	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),

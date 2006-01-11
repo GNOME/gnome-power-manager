@@ -37,7 +37,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libgnomeui/gnome-url.h> /* for gnome_url_open */
+#include <libgnomeui/gnome-help.h> /* for gnome_help_display */
 
 #if defined(HAVE_LIBNOTIFY)
 #include <libnotify/notify.h>

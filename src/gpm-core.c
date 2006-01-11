@@ -26,14 +26,11 @@
  */
 /** @todo factor these out into gpm-only modules */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include "config.h"
 
+#include <string.h>
 #include <glib.h>
-#include <gdk/gdkx.h>
-#include <gnome.h>
-#include <gconf/gconf-client.h>
+
 #include "gpm-common.h"
 #include "gpm-core.h"
 #include "gpm-sysdev.h"

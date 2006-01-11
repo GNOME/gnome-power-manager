@@ -1,3 +1,31 @@
+2006-01-11  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-tray-icon.c: Add missing includes.
+
+	* src/gpm-sysdev.c (hal_to_device_type): Moved here from gpm-common.
+
+	* src/gpm-prefs.c: Add missing includes.
+
+	* src/gpm-manager.c: Add include for gnome-client.h and sysdev.
+	(_gpm_manager_can_suspend, _gpm_manager_can_hibernate) 
+	(_gpm_manager_can_shutdown): Add functions to use instead of
+	calling HAL directly.
+	(get_stock_id): Use our own on_ac property instead of calling HAL.
+	(get_full_tooltip): Ditto.
+	(gpm_manager_shutdown, gpm_manager_hibernate) 
+	(gpm_manager_suspend): Call our own _can_ functions.
+	(gpm_manager_setup_tray_icon): Ditto.
+
+	* src/gpm-main.c
+	* src/gpm-dbus-signal-handler.c: Moved functionality to gpm-main.
+
+	* src/gpm-core.c: Include sysdev here.
+
+	* src/gpm-common.[ch]: Don't depend on sysdev.  Don't use gnome.h
+	and gconf.
+
+	* src/Makefile.am: Remove gpm-console and gpm-dbus-signal-handler
+
 2005-01-11  Richard Hughes  <richard@hughsie.com>
 
 	* src/Makefile.am, src/gpm-dbus-client.c, src/gpm-idle.c, 

@@ -1,9 +1,10 @@
-/** @file	gpm-common.h
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ *  @file	gpm-common.h
  *  @brief	Common functions shared between modules
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -25,9 +26,7 @@
 #ifndef _GPMCOMMON_H
 #define _GPMCOMMON_H
 
-#include <gnome.h>
-
-#include "gpm-sysdev.h"
+#include <glib.h>
 
 /* common descriptions of this program */
 #define NICENAME 			_("GNOME Power Manager")
@@ -36,9 +35,7 @@
 /* help location */
 #define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
 
-DeviceType hal_to_device_type (const gchar *type);
-
-gchar *get_timestring_from_minutes (gint minutes);
+gchar *get_timestring_from_minutes (int minutes);
 
 
 #endif	/* _GPMCOMMON_H */

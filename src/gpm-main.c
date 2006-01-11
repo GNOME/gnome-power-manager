@@ -36,14 +36,13 @@
 #include <popt.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 
-#include <libgnome/libgnome.h>
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
 
-#include "gpm-dbus-signal-handler.h"
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
 
@@ -51,24 +50,17 @@
 #include "gpm-manager-glue.h"
 #include "gpm-main.h"
 
+typedef void (*GpmDbusSignalHandler) (const gchar *name, const gboolean connected);
+static DBusGProxy *proxy_bus_nlost = NULL;
+static DBusGProxy *proxy_bus_noc = NULL;
+static GpmDbusSignalHandler gpm_sig_handler_noc;
+static GpmDbusSignalHandler gpm_sig_handler_nlost;
+
+static void gpm_exit (void);
+
 static void
 gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
 {
-}
-
-/** Generic exit
- *
- */
-static void
-gpm_exit (void)
-{
-	g_debug ("Quitting!");
-
-	gpm_stock_icons_shutdown ();
-	gpm_dbus_remove_noc ();
-	gpm_dbus_remove_nlost ();
-
-	exit (0);
 }
 
 /** Callback for the DBUS NameOwnerChanged function.
@@ -111,6 +103,123 @@ signalhandler_nlost (const char *name, const gboolean connected)
 	if (strcmp (name, GPM_DBUS_SERVICE) != 0)
 		return;
 	gpm_exit ();
+}
+
+/** NameOwnerChanged signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	name		The session name, e.g. org.gnome.test
+ *  @param	prev		The previous name
+ *  @param	new		The new name
+ *  @param	user_data	Unused
+ */
+static void
+gpm_signal_handler_noc (DBusGProxy *proxy, 
+	const char *name,
+	const char *prev,
+	const char *new,
+	gpointer user_data)
+{
+	g_debug ("gpm_signal_handler_noc name=%s, prev=%s, new=%s", name, prev, new);
+
+	if (strlen (new) == 0)
+		gpm_sig_handler_noc (name, FALSE);
+	else if (strlen (prev) == 0)
+		gpm_sig_handler_noc (name, TRUE);
+}
+
+/** NameLost signal handler
+ *
+ *  @param	proxy		A valid DBUS Proxy
+ *  @param	name		The Condition name, e.g. org.gnome.test
+ *  @param	user_data	Unused
+ */
+static void
+gpm_signal_handler_nlost (DBusGProxy *proxy, const char *name, gpointer user_data)
+{
+	g_debug ("gpm_signal_handler_nlost name=%s", name);
+	gpm_sig_handler_nlost (name, TRUE);
+}
+
+/** NameOwnerChanged callback assignment
+ *
+ *  @param	callback	The callback
+ *  @return			If we assigned the callback okay
+ */
+gboolean
+gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback)
+{
+	GError *error = NULL;
+	g_assert (!proxy_bus_noc);
+
+	/* assign callback */
+	gpm_sig_handler_noc = callback;
+
+	/* get NameOwnerChanged proxy */
+	proxy_bus_noc = dbus_g_proxy_new_for_name_owner (connection,
+						         DBUS_SERVICE_DBUS,
+						         DBUS_PATH_DBUS,
+						         DBUS_INTERFACE_DBUS,
+						         &error);
+	dbus_g_proxy_add_signal (proxy_bus_noc, "NameOwnerChanged",
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy_bus_noc, "NameOwnerChanged",
+				     G_CALLBACK (gpm_signal_handler_noc),
+				     NULL, NULL);
+	return TRUE;
+}
+
+/** NameLost callback assignment
+ *
+ *  @param	callback	The callback
+ *  @return			If we assigned the callback okay
+ */
+gboolean
+gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback)
+{
+	GError *error = NULL;
+	g_assert (!proxy_bus_nlost);
+
+	/* assign callback */
+	gpm_sig_handler_nlost = callback;
+
+	proxy_bus_nlost = dbus_g_proxy_new_for_name_owner (connection,
+							   DBUS_SERVICE_DBUS,
+							   DBUS_PATH_DBUS,
+							   DBUS_INTERFACE_DBUS,
+							   &error);
+	dbus_g_proxy_add_signal (proxy_bus_nlost, "NameLost",
+				 G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy_bus_nlost, "NameLost",
+				     G_CALLBACK (gpm_signal_handler_nlost),
+				     NULL, NULL);
+	return TRUE;
+}
+
+/** NameOwnerChanged callback removal
+ *
+ *  @return			Success
+ */
+gboolean
+gpm_dbus_remove_noc (void)
+{
+	g_assert (proxy_bus_noc);
+	g_object_unref (G_OBJECT (proxy_bus_noc));
+	proxy_bus_noc = NULL;
+	return TRUE;
+}
+
+/** NameLost callback removal
+ *
+ *  @return			Success
+ */
+gboolean
+gpm_dbus_remove_nlost (void)
+{
+	g_assert (proxy_bus_nlost);
+	g_object_unref (G_OBJECT (proxy_bus_nlost));
+	proxy_bus_nlost = NULL;
+	return TRUE;
 }
 
 /** registers org.gnome.PowerManager on a connection
@@ -179,6 +288,18 @@ gpm_object_register (DBusGConnection *connection,
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);
 
 	return TRUE;
+}
+
+static void
+gpm_exit (void)
+{
+	g_debug ("Quitting!");
+
+	gpm_stock_icons_shutdown ();
+	gpm_dbus_remove_noc ();
+	gpm_dbus_remove_nlost ();
+
+	exit (0);
 }
 
 /** Main entry point

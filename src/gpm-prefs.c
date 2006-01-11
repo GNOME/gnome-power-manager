@@ -24,19 +24,22 @@
  *          Jaap Haitsma <jaap@haitsma.org>
  */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include "config.h"
 
 #include <string.h>
-#include <glib.h>
 #include <math.h>
 
 #include <popt.h>
+
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+
+#include <libgnomeui/gnome-url.h> /* for gnome_url_show */
+#include <libgnomeui/gnome-ui-init.h> /* for gnome_program_init */
 
 #include "gpm-prefs.h"
 #include "gpm-hal.h"

@@ -1,6 +1,9 @@
+NULL =
+
 EXTRA_DIST =						\
 	gpm-manager.xml					\
-	gpm-marshal.list
+	gpm-marshal.list				\
+	$(NULL)
 
 INCLUDES =						\
 	$(GLIB_CFLAGS)					\
@@ -15,12 +18,13 @@ INCLUDES =						\
 	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
-	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"
+	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
+	$(NULL)
 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
-	gnome-power-preferences
-#	gnome-power-console
+	gnome-power-preferences				\
+	$(NULL)
 
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
@@ -32,10 +36,15 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
-	gpm-common.c
+	gpm-common.c					\
+	$(NULL)
 
 gnome_power_preferences_LDADD =				\
-	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(HAL_LIBS)					\
+	$(DBUS_LIBS)					\
+	$(NULL)
 
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
@@ -56,8 +65,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal.c					\
 	gpm-hal-callback.h				\
 	gpm-hal-callback.c				\
-	gpm-dbus-signal-handler.h			\
-	gpm-dbus-signal-handler.c			\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -71,52 +78,27 @@ gnome_power_manager_SOURCES =				\
 	gpm-sysdev.h					\
 	gpm-sysdev.c					\
 	gpm-stock-icons.h				\
-	gpm-stock-icons.c
+	gpm-stock-icons.c				\
+	$(NULL)
+
+gnome_power_manager_LDADD =				\
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(HAL_LIBS)					\
+	$(DBUS_LIBS)					\
+	$(NULL)
 
 if HAVE_LIBNOTIFY
-gnome_power_manager_LDADD =				\
-	$(LIBNOTIFY_LIBS) $(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
-else
-gnome_power_manager_LDADD =				\
-	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
+gnome_power_manager_LDADD +=				\
+	$(LIBNOTIFY_LIBS)				\
+	$(NULL)
 endif
 
-#gnome_power_console_SOURCES =				\
-#	gpm-marshal.h					\
-#	gpm-marshal.c					\
-#	gpm-hal-callback.h				\
-#	gpm-hal-callback.c				\
-#	gpm-hal.h					\
-#	gpm-hal.c					\
-#	gpm-dbus-signal-handler.h			\
-#	gpm-dbus-signal-handler.c			\
-#	gpm-common.h					\
-#	gpm-common.c					\
-#	gpm-core.h					\
-#	gpm-core.c					\
-#	gpm-console.c					\
-#	gpm-sysdev.h					\
-#	gpm-sysdev.c
-#
-#gnome_power_console_LDADD =				\
-#	$(GLIB_LIBS) $(GNOME_LIBS) $(HAL_LIBS) $(DBUS_LIBS)
-
-BUILT_SOURCES = \
+BUILT_SOURCES = 					\
 	gpm-manager-glue.h				\
 	gpm-marshal.c					\
-	gpm-marshal.h
-
-#gpm-marshal.h: gpm-marshal.list
-#	cd $(srcdir) \
-#	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --header >> xgen-gmh \
-#	&& (cmp -s xgen-gmh gpm-marshal.h || cp xgen-gmh gpm-marshal.h) \
-#	&& rm -f xgen-gmh xgen-gmh~
-#
-#gpm-marshal.c: gpm-marshal.list
-#	cd $(srcdir) \
-#	&& glib-genmarshal --prefix=gpm_marshal gpm-marshal.list --body >> xgen-gmc \
-#	&& (cmp -s xgen-gmc gpm-marshal.c || cp xgen-gmc gpm-marshal.c) \
-#	&& rm -f xgen-gmc xgen-gmc~
+	gpm-marshal.h					\
+	$(NULL)
 
 gpm-marshal.h: gpm-marshal.list
 	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --header > $(srcdir)/gpm-marshal.h
@@ -131,5 +113,10 @@ clean-local:
 	rm -f *~
 	rm -f gpm-marshal.c gpm-marshal.h
 
-DISTCLEANFILES =					\
-	gpm-manager-glue.h
+CLEANFILES = $(BUILT_SOURCES)
+
+MAINTAINERCLEANFILES =					\
+	*~                              		\
+	Makefile.in					\
+	$(NULL)
+

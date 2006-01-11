@@ -26,6 +26,8 @@
 #ifndef _GPMCORE_H
 #define _GPMCORE_H
 
+#include "gpm-sysdev.h"
+
 gboolean gpm_coldplug_acadapter (void);
 gboolean gpm_coldplug_buttons (void);
 gboolean gpm_coldplug_batteries (void);
