@@ -1,20 +1,20 @@
 # Vietnamese translation for Gnome Power Manager.
-# Copyright © 2005 Gnome i18n Project for Vietnamese.
-# Clytie Siddall <clytie@riverland.net.au>, 2005.
+# Copyright © 2005-2006 Gnome i18n Project for Vietnamese.
+# Clytie Siddall <clytie@riverland.net.au>, 2005-2006.
 # 
 msgid ""
 ""
 msgstr "Project-Id-Version: gnome-power-manager Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-08 22:49+0100\n"
-"PO-Revision-Date: 2006-01-09 14:58+1030\n"
+"POT-Creation-Date: 2006-01-10 23:11+0100\n"
+"PO-Revision-Date: 2006-01-11 15:51+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.5.1b\n"
+"X-Generator: LocFactoryEditor 1.6b23\n"
 
 #:../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -218,17 +218,17 @@ msgstr "Hướng"
 msgid "The orientation of the tray."
 msgstr "Hướng của khay."
 
-#:../src/gpm-common.c:128
+#:../src/gpm-common.c:77
 msgid "Unknown"
 msgstr "Không biết"
 
-#:../src/gpm-common.c:133
+#:../src/gpm-common.c:82
 #,c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i phút"
 
-#:../src/gpm-common.c:144
+#:../src/gpm-common.c:93
 #,c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -237,23 +237,23 @@ msgstr[0] "%i giờ"
 # Variable: don't translate / Biến: đừng dịch
 #.TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #.* Swap order with "%2$s %2$i %1$s %1$i if needed
-#:../src/gpm-common.c:150
+#:../src/gpm-common.c:99
 #,c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#:../src/gpm-common.c:151
+#:../src/gpm-common.c:100
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "giờ"
 
-#:../src/gpm-common.c:152
+#:../src/gpm-common.c:101
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "phút"
 
 #.common descriptions of this program
-#:../src/gpm-common.h:33 ../src/gpm-main.c:182
+#:../src/gpm-common.h:33 ../src/gpm-main.c:174
 msgid "GNOME Power Manager"
 msgstr "Bộ Quản lý Điện năng GNOME"
 
@@ -263,31 +263,59 @@ msgstr "Ứng dụng quản lý điện năng cho môi trường Gnome"
 
 # Type: select
 # Choices
-#:../src/gpm-main.c:166
+#:../src/gpm-main.c:158
 msgid "Do not daemonize"
 msgstr "Đừng chạy trong nền"
 
-#:../src/gpm-main.c:168 ../src/gpm-prefs.c:584
+#:../src/gpm-main.c:160 ../src/gpm-prefs.c:613
 msgid "Show extra debugging information"
 msgstr "Hiển thị thông tin gỡ lỗi thêm"
 
-#:../src/gpm-manager.c:142
+#:../src/gpm-manager.c:240
+msgid "charging"
+msgstr "đang sạc"
+
+#:../src/gpm-manager.c:242
+msgid "discharging"
+msgstr "đang phóng ra"
+
+#:../src/gpm-manager.c:245
+msgid "charged"
+msgstr "được sạc"
+
+#:../src/gpm-manager.c:260
+msgid "until charged"
+msgstr "đến khi được sạc"
+
+#:../src/gpm-manager.c:263
+msgid "until empty"
+msgstr "đến khi rỗng"
+
+#:../src/gpm-manager.c:333
+msgid "Computer is running on battery power\n"
+msgstr "Hệ thống đang chạy bằng pin\n"
+
+#:../src/gpm-manager.c:335
+msgid "Computer is running on AC power\n"
+msgstr "Hệ thống đang chạy bằng năng lượng xoay chiều (AC)\n"
+
+#:../src/gpm-manager.c:501
 msgid "AC Power Unplugged"
 msgstr "Điện năng AC chưa kết nối"
 
-#:../src/gpm-manager.c:143
+#:../src/gpm-manager.c:503
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Điện năng AC bị tháo nút ra. Hệ thống đang chạy bằng pin."
 
-#:../src/gpm-manager.c:225
+#:../src/gpm-manager.c:590
 msgid "Battery Charged"
 msgstr "Pin đầy"
 
-#:../src/gpm-manager.c:226
+#:../src/gpm-manager.c:592
 msgid "Your battery is now fully charged"
 msgstr "Pin đã được tái sạc đầy."
 
-#:../src/gpm-manager.c:258 ../src/gpm-manager.c:278
+#:../src/gpm-manager.c:624 ../src/gpm-manager.c:646
 #,c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -295,47 +323,47 @@ msgid ""
 msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%). Hãy cầm phít bộ tiếp "
 "hợp AC để tránh mất dữ liệu."
 
-#:../src/gpm-manager.c:262
+#:../src/gpm-manager.c:631
 msgid "Battery Critically Low"
 msgstr "Pin yếu tới hạn"
 
-#:../src/gpm-manager.c:282
+#:../src/gpm-manager.c:652
 msgid "Battery Low"
 msgstr "Pin yếu"
 
-#:../src/gpm-notification.c:232
-msgid "charging"
-msgstr "đang sạc"
+#:../src/gpm-tray-icon.c:103
+msgid "_Suspend"
+msgstr "_Ngưng"
 
-#:../src/gpm-notification.c:234
-msgid "discharging"
-msgstr "đang phóng ra"
+#:../src/gpm-tray-icon.c:104
+msgid "Suspend the computer"
+msgstr "Tạm dừng máy tính"
 
-#:../src/gpm-notification.c:237
-msgid "charged"
-msgstr "được sạc"
+#:../src/gpm-tray-icon.c:105
+msgid "Hi_bernate"
+msgstr "Ngủ _đông"
 
-#:../src/gpm-notification.c:252
-msgid "until charged"
-msgstr "đến khi được sạc"
+#:../src/gpm-tray-icon.c:106
+msgid "Make the computer go to sleep"
+msgstr "Làm cho máy tính ngủ"
 
-#:../src/gpm-notification.c:255
-msgid "until empty"
-msgstr "đến khi rỗng"
+#:../src/gpm-tray-icon.c:107
+msgid "_Preferences"
+msgstr "Tù_y thích"
 
-#:../src/gpm-notification.c:322
-msgid "Computer is running on battery power\n"
-msgstr "Hệ thống đang chạy bằng pin\n"
+#:../src/gpm-tray-icon.c:109
+msgid "_Help"
+msgstr "Trợ _giúp"
 
-#:../src/gpm-notification.c:324
-msgid "Computer is running on AC power\n"
-msgstr "Hệ thống đang chạy bằng năng lượng xoay chiều (AC)\n"
+#:../src/gpm-tray-icon.c:111
+msgid "_About"
+msgstr "G_iới thiệu"
 
-#:../src/gpm-notification.c:354
+#:../src/gpm-tray-icon.c:237
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Được phát hành với điều kiện của Quyền Công Chung GNU (GPL) phiên bản 2"
 
-#:../src/gpm-notification.c:355
+#:../src/gpm-tray-icon.c:238
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -346,7 +374,7 @@ msgstr "Chương trình này là phần mềm tự do nên bạn có thể phân
 "Tự do sản xuất, hoặc phiên bản 2 của Quyền hoặc (tùy chọn) bất cứ phiên bản "
 "sau nào."
 
-#:../src/gpm-notification.c:359
+#:../src/gpm-tray-icon.c:242
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -357,7 +385,7 @@ msgstr "Bộ Quản lý Điện năng Gnome được phân phối vì mong muố
 "TÍNH THƯƠNG MẠI hay CHO MỘT MỤC ĐÍCH ĐẶC BIỆT NÀO CẢ.\n"
 "Hãy xem Quyền Công Chung GNU để tìm chi tiết."
 
-#:../src/gpm-notification.c:363
+#:../src/gpm-tray-icon.c:246
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -370,59 +398,36 @@ msgstr "Bện nên đã nhận một bản sao của Quyền Công Chung GNU\n"
 "51 Franklin Street, Fifth Floor,\n"
 "Boston, MA  02110-1301, USA. (Mỹ)"
 
-#.
-#.* Translators comment: put your own name here to appear in the about dialog.
-#.
-#:../src/gpm-notification.c:377
+#:../src/gpm-tray-icon.c:251
 msgid "translator-credits"
 msgstr "Nhóm Việt hóa Gnome <gnomevi-list@lists.sourceforge.net>"
 
-#:../src/gpm-notification.c:508
-msgid "_Suspend"
-msgstr "_Ngưng"
-
-#:../src/gpm-notification.c:513
-msgid "Hi_bernate"
-msgstr "Ngủ _đông"
-
-#:../src/gpm-notification.c:518
-msgid "_Preferences"
-msgstr "Tù_y thích"
-
-#:../src/gpm-notification.c:520
-msgid "_Help"
-msgstr "Trợ _giúp"
-
-#:../src/gpm-notification.c:522
-msgid "_About"
-msgstr "G_iới thiệu"
-
 #.The text that should appear in the action combo boxes
-#:../src/gpm-prefs.c:46
+#:../src/gpm-prefs.c:49
 msgid "Suspend"
 msgstr "Ngưng"
 
-#:../src/gpm-prefs.c:47
+#:../src/gpm-prefs.c:50
 msgid "Shutdown"
 msgstr "Tắt máy"
 
-#:../src/gpm-prefs.c:48
+#:../src/gpm-prefs.c:51
 msgid "Hibernate"
 msgstr "Ngủ đông"
 
-#:../src/gpm-prefs.c:49
+#:../src/gpm-prefs.c:52
 msgid "Do nothing"
 msgstr "Đừng làm gì"
 
-#:../src/gpm-prefs.c:158
+#:../src/gpm-prefs.c:161
 msgid "Never"
 msgstr "Không bao giờ"
 
-#:../src/gpm-prefs.c:519
+#:../src/gpm-prefs.c:551
 msgid "<b>Configuration</b>"
 msgstr "<b>Cấu hình</b>"
 
-#:../src/gpm-prefs.c:597
+#:../src/gpm-prefs.c:626
 msgid "GNOME Power Preferences"
 msgstr "Tùy thích cho ĐIện năng Gnome"
 
