@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-08 22:49+0100\n"
-"PO-Revision-Date: 2006-01-09 10:38+0530\n"
+"POT-Creation-Date: 2006-01-11 06:38+0100\n"
+"PO-Revision-Date: 2006-01-11 11:52+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -221,18 +222,18 @@ msgstr "દિશા"
 msgid "The orientation of the tray."
 msgstr "ટ્રેની દિશા."
 
-#: ../src/gpm-common.c:128
+#: ../src/gpm-common.c:77
 msgid "Unknown"
 msgstr "અજ્ઞાત"
 
-#: ../src/gpm-common.c:133
+#: ../src/gpm-common.c:82
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i મિનિટ"
 msgstr[1] "%i મિનિટો"
 
-#: ../src/gpm-common.c:144
+#: ../src/gpm-common.c:93
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -241,25 +242,25 @@ msgstr[1] "%i કલાકો"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:150
+#: ../src/gpm-common.c:99
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:151
+#: ../src/gpm-common.c:100
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "કલાક"
 msgstr[1] "કલાકો"
 
-#: ../src/gpm-common.c:152
+#: ../src/gpm-common.c:101
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "મિનિટ"
 msgstr[1] "મિનિટો"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:182
+#: ../src/gpm-common.h:33 ../src/gpm-main.c:174
 msgid "GNOME Power Manager"
 msgstr "જીનોમ પાવર મેનેજર"
 
@@ -267,166 +268,173 @@ msgstr "જીનોમ પાવર મેનેજર"
 msgid "Power Manager for the GNOME desktop"
 msgstr "જીનોમ ડેસ્કટોપ માટે પાવર મેનેજર"
 
-#: ../src/gpm-main.c:166
+#: ../src/gpm-main.c:158
 msgid "Do not daemonize"
 msgstr "ડિમનાઈઝ કરશો નહિં"
 
-#: ../src/gpm-main.c:168 ../src/gpm-prefs.c:584
+#: ../src/gpm-main.c:160 ../src/gpm-prefs.c:613
 msgid "Show extra debugging information"
 msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
 
-#: ../src/gpm-manager.c:142
+#: ../src/gpm-manager.c:240
+msgid "charging"
+msgstr "ચાર્જ કરી રહ્યા છીએ"
+
+#: ../src/gpm-manager.c:242
+msgid "discharging"
+msgstr "ડિસ્ચાર્જ કરી રહ્યા છીએ"
+
+#: ../src/gpm-manager.c:245
+msgid "charged"
+msgstr "ચાર્જ થઈ ગઈ"
+
+#: ../src/gpm-manager.c:260
+msgid "until charged"
+msgstr "જ્યાં સુધી ચાર્જ નહિં થાય"
+
+#: ../src/gpm-manager.c:263
+msgid "until empty"
+msgstr "જ્યાં સુધી ખાલી નહિં થાય"
+
+#: ../src/gpm-manager.c:333
+msgid "Computer is running on battery power\n"
+msgstr "કમ્પ્યૂટર એ બેટરી પાવર પર ચાલી રહ્યું છે\n"
+
+#: ../src/gpm-manager.c:335
+msgid "Computer is running on AC power\n"
+msgstr "કમ્પ્યૂટર એ AC પાવર પર ચાલી રહ્યું છે\n"
+
+#: ../src/gpm-manager.c:515
 msgid "AC Power Unplugged"
 msgstr "AC પાવર કાઢી નંખાયેલ"
 
-#: ../src/gpm-manager.c:143
+#: ../src/gpm-manager.c:517
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "AC પાવર કાઢી નંખાયેલ છે. સિસ્ટમ હવે બેટરી પાવર વાપરી રહી છે."
 
-#: ../src/gpm-manager.c:225
+#: ../src/gpm-manager.c:606
 msgid "Battery Charged"
 msgstr "બેટરી ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-manager.c:226
+#: ../src/gpm-manager.c:608
 msgid "Your battery is now fully charged"
 msgstr "તમારી બેટરી હવે સંપૂર્ણપણે ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-manager.c:258 ../src/gpm-manager.c:278
+#: ../src/gpm-manager.c:640 ../src/gpm-manager.c:662
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
-msgstr "તમારી પાસે આશરે <b>%s</b> જેટલું બાકી રહેલ બેટરી જીવનનું (%d%%) બાકી છે. માહિતી ગુમ થઈ જવાનું ટાળવા માટે તમારું AC એડેપ્ટર પ્લગઈન કરો."
+msgstr ""
+"તમારી પાસે આશરે <b>%s</b> જેટલું બાકી રહેલ બેટરી જીવનનું (%d%%) બાકી છે. માહિતી ગુમ થઈ "
+"જવાનું ટાળવા માટે તમારું AC એડેપ્ટર પ્લગઈન કરો."
 
-#: ../src/gpm-manager.c:262
+#: ../src/gpm-manager.c:647
 msgid "Battery Critically Low"
 msgstr "બેટરી ખૂબ નીચી છે"
 
-#: ../src/gpm-manager.c:282
+#: ../src/gpm-manager.c:668
 msgid "Battery Low"
 msgstr "બેટરી નીચી"
 
-#: ../src/gpm-notification.c:232
-msgid "charging"
-msgstr "ચાર્જ કરી રહ્યા છીએ"
-
-#: ../src/gpm-notification.c:234
-msgid "discharging"
-msgstr "ડિસ્ચાર્જ કરી રહ્યા છીએ"
-
-#: ../src/gpm-notification.c:237
-msgid "charged"
-msgstr "ચાર્જ થઈ ગઈ"
-
-#: ../src/gpm-notification.c:252
-msgid "until charged"
-msgstr "જ્યાં સુધી ચાર્જ નહિં થાય"
-
-#: ../src/gpm-notification.c:255
-msgid "until empty"
-msgstr "જ્યાં સુધી ખાલી નહિં થાય"
-
-#: ../src/gpm-notification.c:322
-msgid "Computer is running on battery power\n"
-msgstr "કમ્પ્યૂટર એ બેટરી પાવર પર ચાલી રહ્યું છે\n"
-
-#: ../src/gpm-notification.c:324
-msgid "Computer is running on AC power\n"
-msgstr "કમ્પ્યૂટર એ AC પાવર પર ચાલી રહ્યું છે\n"
-
-#: ../src/gpm-notification.c:354
-msgid "Licensed under the GNU General Public License Version 2"
-msgstr "GNU General Public License Version 2 હેઠળ લાઈસન્સ થયેલ છે"
-
-#: ../src/gpm-notification.c:355
-msgid ""
-"GNOME Power Manager is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version."
-msgstr ""
-"GNOME Power Manager is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version."
-
-#: ../src/gpm-notification.c:359
-msgid ""
-"GNOME Power Manager is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-"GNU General Public License for more details."
-msgstr ""
-"GNOME Power Manager is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-"GNU General Public License for more details."
-
-#: ../src/gpm-notification.c:363
-msgid ""
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software\n"
-"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
-"02110-1301, USA."
-msgstr ""
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software\n"
-"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
-"02110-1301, USA."
-
-#.
-#. * Translators comment: put your own name here to appear in the about dialog.
-#.
-#: ../src/gpm-notification.c:377
-msgid "translator-credits"
-msgstr "અંકિત પટેલ <ankit644@yahoo.com>"
-
-#: ../src/gpm-notification.c:508
+#: ../src/gpm-tray-icon.c:103
 msgid "_Suspend"
 msgstr "અટકાવો (_S)"
 
-#: ../src/gpm-notification.c:513
+#: ../src/gpm-tray-icon.c:104
+msgid "Suspend the computer"
+msgstr "કમ્પ્યૂટર અટકાવો"
+
+#: ../src/gpm-tray-icon.c:105
 msgid "Hi_bernate"
 msgstr "હાયબરનેટ (_b)"
 
-#: ../src/gpm-notification.c:518
+#: ../src/gpm-tray-icon.c:106
+msgid "Make the computer go to sleep"
+msgstr "કમ્પ્યૂટરને સૂઈ જતું કરો"
+
+#: ../src/gpm-tray-icon.c:107
 msgid "_Preferences"
 msgstr "પસંદગીઓ (_P)"
 
-#: ../src/gpm-notification.c:520
+#: ../src/gpm-tray-icon.c:109
 msgid "_Help"
 msgstr "મદદ (_H)"
 
-#: ../src/gpm-notification.c:522
+#: ../src/gpm-tray-icon.c:111
 msgid "_About"
 msgstr "વિશે (_A)"
 
+#: ../src/gpm-tray-icon.c:237
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr "GNU General Public License Version 2 હેઠળ લાઈસન્સ થયેલ છે"
+
+#: ../src/gpm-tray-icon.c:238
+msgid ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+
+#: ../src/gpm-tray-icon.c:242
+msgid ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+
+#: ../src/gpm-tray-icon.c:246
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+
+#: ../src/gpm-tray-icon.c:251
+msgid "translator-credits"
+msgstr "અંકિત પટેલ <ankit644@yahoo.com>"
+
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:49
 msgid "Suspend"
 msgstr "અટકાવો"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:50
 msgid "Shutdown"
 msgstr "બંધકરો"
 
-#: ../src/gpm-prefs.c:48
+#: ../src/gpm-prefs.c:51
 msgid "Hibernate"
 msgstr "હાયબરનેટ"
 
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:52
 msgid "Do nothing"
 msgstr "કંઈ નહિં કરો"
 
-#: ../src/gpm-prefs.c:158
+#: ../src/gpm-prefs.c:161
 msgid "Never"
 msgstr "ક્યારેય નહિં"
 
-#: ../src/gpm-prefs.c:519
+#: ../src/gpm-prefs.c:551
 msgid "<b>Configuration</b>"
 msgstr "<b>રૂપરેખાંકન</b>"
 
-#: ../src/gpm-prefs.c:597
+#: ../src/gpm-prefs.c:626
 msgid "GNOME Power Preferences"
 msgstr "જીનોમ પાવર પસંદગીઓ"
 
