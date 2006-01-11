@@ -542,6 +542,8 @@ manager_policy_do (GpmManager *manager,
 {
 	char *action;
 
+	g_debug ("manager_policy_do: %s", policy);
+
 	action = gconf_client_get_string (manager->priv->gconf_client, policy, NULL);
 
 	if (! action)
@@ -1147,14 +1149,16 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	manager_policy_do (manager, ACTION_HIBERNATE);
+	g_debug ("Received hibernate signal from tray icon");
+	gpm_manager_hibernate (manager);
 }
 
 static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	manager_policy_do (manager, ACTION_SUSPEND);
+	g_debug ("Received supend signal from tray icon");
+	gpm_manager_suspend (manager);
 }
 
 static gboolean

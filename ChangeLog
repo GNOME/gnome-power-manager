@@ -1,5 +1,12 @@
 2006-01-10  William Jon McCann  <mccann@jhu.edu>
 
+	* src/gpm-manager.c (manager_policy_do) 
+	(gpm_manager_tray_icon_hibernate, gpm_manager_tray_icon_suspend):
+	Actually do the action.  Forgot to fix this after Richard
+	asked me to the other day.
+
+2006-01-10  William Jon McCann  <mccann@jhu.edu>
+
 	* src/gpm-manager.c (sync_dpms_policy):
 	Check errors.
 	(gpm_manager_set_dpms_mode, gpm_manager_get_dpms_mode) 
