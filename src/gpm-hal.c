@@ -68,9 +68,7 @@ gpm_hal_is_running (void)
 {
 	gchar *udi = NULL;
 	gboolean running;
-	running = gpm_hal_device_get_string (
-		HAL_ROOT_COMPUTER,
-		"info.udi", &udi);
+	running = gpm_hal_device_get_string (HAL_ROOT_COMPUTER, "info.udi", &udi);
 	g_free (udi);
 	return running;
 }
@@ -155,16 +153,15 @@ gboolean
 gpm_hal_can_suspend (void)
 {
 	gboolean exists;
-	gboolean success;
+	gboolean can_suspend;
 	exists = gpm_hal_device_get_bool (HAL_ROOT_COMPUTER,
-		"power_management.can_suspend_to_ram", &success);
+					  "power_management.can_suspend_to_ram",
+					  &can_suspend);
 	if (!exists) {
-		g_warning ("[harmless]: You are not running CVS HAL "
-			   "so we will assume it's okay to suspend");
-		return TRUE;
+		g_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
+		return FALSE;
 	}
-	/* Seeing as HAL *knows* if we can suspend, return what it thinks */
-	return success;
+	return can_suspend;
 }
 
 /** Finds out if HAL indicates that we can hibernate
@@ -175,17 +172,15 @@ gboolean
 gpm_hal_can_hibernate (void)
 {
 	gboolean exists;
-	gboolean success;
+	gboolean can_hibernate;
 	exists = gpm_hal_device_get_bool (HAL_ROOT_COMPUTER,
-				      "power_management.can_suspend_to_disk",
-				      &success);
+					  "power_management.can_suspend_to_disk",
+					  &can_hibernate);
 	if (!exists) {
-		g_warning ("[harmless]: You are not running CVS HAL "
-			   "so we will assume it's okay to hibernate");
-		return TRUE;
+		g_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
+		return FALSE;
 	}
-	/* Seeing as HAL *knows* if we can hibernate, return what it thinks */
-	return success;
+	return can_hibernate;
 }
 
 /** Uses org.freedesktop.Hal.Device.LaptopPanel.SetBrightness ()
