@@ -61,7 +61,7 @@ gpm_prefs_debug_log_ignore (const gchar *log_domain, GLogLevelFlags log_level, c
 {
 }
 
-gint
+static gint
 get_battery_time_for_percentage (gint value)
 {
 	/**	@bug	This is inherently buggy. Multibattery laptops break. */

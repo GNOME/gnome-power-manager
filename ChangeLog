@@ -1,3 +1,43 @@
+2006-01-12  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-power.[ch]: New powered device handling.
+
+	* src/gpm-prefs.c: Fix compiler warning.
+
+	* src/gpm-marshal.list: Add new one.
+
+	* src/gpm-manager.xml: Remove set_on_ac from API.
+
+	* src/gpm-manager.[ch]: Don't manage on-ac state.
+	(get_stock_id): Remove all sysdev stuff.  Use gpm-power.
+	(tray_icon_update): Get summary from gpm-power.
+	(sync_dpms_policy): Use gpm-power for on-ac.
+	(maybe_notify_battery_power_changed): Update for gpm-power.
+	(gpm_manager_get_on_ac, dpms_mode_changed_cb) 
+	(power_button_pressed, suspend_button_pressed) 
+	(lid_button_pressed, power_button_pressed_cb) 
+	(power_battery_power_changed_cb, gpm_manager_set_property) 
+	(gpm_manager_get_property, callback_gconf_key_changed) 
+	(gpm_manager_init, gpm_manager_finalize): Updates for gpm-power
+
+	* src/gpm-main.c: Fix compiler warnings.
+
+	* src/gpm-hal-monitor.c: Remove core and sysdev.  Make
+	into a singleton.  Make signals a bit more generic.
+	Primarily serve as a HAL proxy.
+
+	* src/gpm-hal-callback.h: Fix prototypes.
+
+	* src/gpm-dpms.h: Fix typo.
+
+	* src/Makefile.am: Remove gpm-core and gpm-sysdev.
+	Use found glib-genmarshal.
+
+	* configure.in: Look for glib-genmarshal. Add
+	extra warnings when building from CVS.
+
+	Fixes #326515
+
 2005-01-12  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.in: Remove gpm-dbus-signal-handler.{c|h} to fix

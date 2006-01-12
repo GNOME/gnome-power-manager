@@ -50,12 +50,9 @@
 /* FIXME: we should abstract the HAL stuff */
 #include "gpm-hal.h"
 
-/* FIXME: we should abstract the sysdev stuff */
-#include "gpm-sysdev.h"
-
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#include "gpm-hal-monitor.h"
+#include "gpm-power.h"
 #include "gpm-tray-icon.h"
 #include "gpm-manager.h"
 
@@ -70,19 +67,17 @@ static gboolean gpm_manager_setup_tray_icon (GpmManager *manager,
 
 struct GpmManagerPrivate
 {
-        gboolean         on_ac;
-
 	GConfClient	*gconf_client;
 
 	GpmDpms		*dpms;
 	GpmIdle		*idle;
-	GpmHalMonitor	*hal_monitor;
+	GpmPower	*power;
+
 	GpmTrayIcon	*tray_icon;
 };
 
 enum {
-	PROP_0,
-	PROP_ON_AC
+	PROP_0
 };
 
 enum {
@@ -157,7 +152,7 @@ _gpm_manager_can_shutdown (GpmManager *manager)
  *  @return			A scale 0..8
  */
 static gint
-get_index_from_percent (gint percent)
+get_icon_index_from_percent (gint percent)
 {
 	const gint NUM_INDEX = 8;
 	gint	   index;
@@ -179,17 +174,21 @@ static char *
 get_stock_id (GpmManager *manager,
 	      char	 *icon_policy)
 {
-	gint	 index;
-	sysDev	*sd = NULL;
-	gint	 low_threshold;
+	gboolean res;
+	gboolean has_primary;
+	int	 index;
+	int	 low_threshold;
+	int      primary_percentage;
+	int      percentage;
+	gboolean primary_charging;
+	gboolean primary_discharging;
 	gboolean on_ac;
-	
-	on_ac = manager->priv->on_ac;
 
-	g_debug ("get_stock_id: getting stock icon");
+	g_return_val_if_fail (icon_policy != NULL, NULL);
+
+	g_debug ("Getting stock icon for tray");
 
 	if (strcmp (icon_policy, ICON_POLICY_NEVER) == 0) {
-		/* warn user */
 		g_debug ("The key " GPM_PREF_ICON_POLICY
 			 " is set to never, so no icon will be displayed.\n"
 			 "You can change this using gnome-power-preferences");
@@ -199,25 +198,48 @@ get_stock_id (GpmManager *manager,
 	/* find out when the user considers the power "low" */
 	low_threshold = gconf_client_get_int (manager->priv->gconf_client, GPM_PREF_THRESHOLD_LOW, NULL);
 
-	/* list in order of priority */
-	sd = gpm_sysdev_get (BATT_PRIMARY);
-	if (sd->is_present && sd->percentage_charge < low_threshold) {
-		index = get_index_from_percent (sd->percentage_charge);
-		if (on_ac)
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+	has_primary = gpm_power_get_battery_percentage (manager->priv->power,
+							"primary",
+							&primary_percentage,
+							NULL);
+	if (has_primary && primary_percentage < low_threshold) {
+		index = get_icon_index_from_percent (primary_percentage);
+
+		if (on_ac) {
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+		} else {
+			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+		}
 	}
-	sd = gpm_sysdev_get (BATT_UPS);
-	if (sd->is_present && sd->percentage_charge < low_threshold) {
-		index = get_index_from_percent (sd->percentage_charge);
+
+	res = gpm_power_get_battery_percentage (manager->priv->power,
+						"ups",
+						&percentage,
+						NULL);
+	if (res && percentage < low_threshold) {
+		index = get_icon_index_from_percent (percentage);
+
 		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
-	sd = gpm_sysdev_get (BATT_MOUSE);
-	if (sd->is_present && sd->percentage_charge < low_threshold)
+
+	res = gpm_power_get_battery_percentage (manager->priv->power,
+						"mouse",
+						&percentage,
+						NULL);
+	if (res && percentage < low_threshold) {
 		return g_strdup_printf ("gnome-power-mouse");
-	sd = gpm_sysdev_get (BATT_KEYBOARD);
-	if (sd->is_present && sd->percentage_charge < low_threshold)
+	}
+
+	res = gpm_power_get_battery_percentage (manager->priv->power,
+						"keyboard",
+						&percentage,
+						NULL);
+	if (res && percentage < low_threshold) {
 		return g_strdup_printf ("gnome-power-keyboard");
+	}
+
 	/*
 	 * Check if we should just show the charging / discharging icon 
 	 * even when not low or critical.
@@ -227,179 +249,50 @@ get_stock_id (GpmManager *manager,
 			 "no icon will be displayed.");
 		return NULL;
 	}
+
 	/* Only display if charging or disharging */
-	sd = gpm_sysdev_get (BATT_PRIMARY);
-	if (sd->is_present && (sd->is_charging || sd->is_discharging)) {
-		index = get_index_from_percent (sd->percentage_charge);
-		if (on_ac)
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+	primary_charging = FALSE;
+	primary_discharging = FALSE;
+	if (has_primary) {
+		res = gpm_power_get_battery_charging (manager->priv->power,
+						      "primary",
+						      &primary_charging,
+						      &primary_discharging,
+						      NULL);
+		if (primary_charging || primary_discharging) {
+			index = get_icon_index_from_percent (primary_percentage);
+			if (on_ac) {
+				return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+			} else {
+				return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+			}
+		}
 	}
-	/*
-	 * Check if we should just show the icon all the time
-	 */
+
+	/* Check if we should just show the icon all the time */
 	if (strcmp (icon_policy, ICON_POLICY_CHARGE) == 0) {
 		g_debug ("get_stock_id: no devices (dis)charging, so "
 			 "no icon will be displayed.");
 		return NULL;
 	}
+
 	/* Do the rest of the battery icon states */
-	sd = gpm_sysdev_get (BATT_PRIMARY);
-	if (sd->is_present) {
-		index = get_index_from_percent (sd->percentage_charge);
+	if (has_primary) {
+		index = get_icon_index_from_percent (primary_percentage);
+
 		if (on_ac) {
-			if (!sd->is_charging && !sd->is_discharging)
+			if (!primary_charging && !primary_discharging) {
 				return g_strdup ("gnome-power-ac-charged");
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+			} else {
+				return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+			}
+		} else {
+			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 		}
-		return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 	}
+
 	/* We fallback to the ac_adapter icon -- do we want to do this? */
 	return g_strdup_printf ("gnome-dev-acadapter");
-}
-
-/** Gets the tooltip for a specific device object
- *
- *  @param	type		The device type
- *  @param	sds		The device struct
- *  @return			Part of the tooltip
- */
-static GString *
-get_tooltip_system_struct (DeviceType type, sysDevStruct *sds)
-{
-	GString *tooltip = NULL;
-	gchar *devicestr = NULL;
-	gchar *chargestate = NULL;
-	g_assert (sds);
-
-	/* do not display for not present devices */
-	if (!sds->is_present)
-		return NULL;
-
-	tooltip = g_string_new ("");
-	devicestr = gpm_sysdev_to_string (type);
-
-	/* don't display all the extra stuff for keyboards and mice */
-	if (type == BATT_MOUSE ||
-	    type == BATT_KEYBOARD ||
-	    type == BATT_PDA) {
-		g_string_printf (tooltip, "%s (%i%%)",
-				 devicestr, sds->percentage_charge);
-		return tooltip;
-	}
-
-	/* work out chargestate */
-	if (sds->is_charging)
-		chargestate = _("charging");
-	else if (sds->is_discharging)
-		chargestate = _("discharging");
-	else if (!sds->is_charging &&
-		 !sds->is_discharging)
-		chargestate = _("charged");
-
-	g_string_printf (tooltip, "%s %s (%i%%)",
-			 devicestr, chargestate, sds->percentage_charge);
-	/*
-	 * only display time remaining if minutes_remaining > 2
-	 * and percentage_charge < 99 to cope with some broken
-	 * batteries.
-	 */
-	if (sds->minutes_remaining > 2 && sds->percentage_charge < 99) {
-		gchar *timestring;
-		timestring = get_timestring_from_minutes (sds->minutes_remaining);
-		if (timestring) {
-			if (sds->is_charging)
-				g_string_append_printf (tooltip, "\n%s %s",
-					timestring, _("until charged"));
-			else
-				g_string_append_printf (tooltip, "\n%s %s",
-					timestring, _("until empty"));
-		g_free (timestring);
-		}
-	}
-
-	return tooltip;
-}
-
-/** Gets the tooltip for a specific device object
- *
- *  @param	sd		The system device
- *  @return			Part of the tooltip
- */
-static GString *
-get_tooltips_system_device (sysDev *sd)
-{
-	/*
-	 * List each in this group, and call get_tooltip_system_struct
-	 * for each one
-	 */
-	int a;
-	sysDevStruct *sds;
-	GString *temptipdevice = NULL;
-	GString *tooltip = NULL;
-	g_assert (sd);
-	tooltip = g_string_new ("");
-
-	for (a=0; a < sd->devices->len; a++) {
-		sds = (sysDevStruct *) g_ptr_array_index (sd->devices, a);
-		temptipdevice = get_tooltip_system_struct (sd->type, sds);
-		/* can be NULL if the device is not present */
-		if (temptipdevice) {
-			g_string_append_printf (tooltip, "%s\n", temptipdevice->str);
-			g_string_free (temptipdevice, TRUE);
-		}
-	}
-
-	return tooltip;
-}
-
-/** Returns the tooltip for icon type
- *
- *  @return			The complete tooltip
- */
-static void
-get_tooltips_system_device_type (GString *tooltip,
-				 DeviceType type)
-{
-	sysDev *sd;
-	GString *temptip = NULL;
-	g_assert (tooltip);
-	sd = gpm_sysdev_get (type);
-	if (sd->is_present) {
-		temptip = get_tooltips_system_device (sd);
-		g_string_append (tooltip, temptip->str);
-		g_string_free (temptip, TRUE);
-	}
-}
-
-/** Returns the tooltip for the main icon. Text logic goes here :-)
- *
- *  @return			The complete tooltip
- */
-static GString *
-get_full_tooltip (GpmManager *manager)
-{
-	GString *tooltip = NULL;
-
-	g_debug ("get_full_tooltip");
-
-	if (manager->priv->on_ac) {
-		tooltip = g_string_new (_("Computer is running on AC power\n"));
-	} else {
-		tooltip = g_string_new (_("Computer is running on battery power\n"));
-	}
-
-	/* do each device type we have	*/
-	get_tooltips_system_device_type (tooltip, BATT_PRIMARY);
-	get_tooltips_system_device_type (tooltip, BATT_UPS);
-	get_tooltips_system_device_type (tooltip, BATT_MOUSE);
-	get_tooltips_system_device_type (tooltip, BATT_KEYBOARD);
-	get_tooltips_system_device_type (tooltip, BATT_PDA);
-
-	/* remove the last \n */
-	g_string_truncate (tooltip, tooltip->len-1);
-
-	return tooltip;
 }
 
 static void
@@ -424,7 +317,7 @@ tray_icon_update (GpmManager *manager)
 
 	/* only create if we have a valid filename */
 	if (stock_id) {
-		GString *tooltip = NULL;
+		char *tooltip = NULL;
 
 		if (! manager->priv->tray_icon) {
 			gpm_manager_setup_tray_icon (manager, NULL);
@@ -434,10 +327,11 @@ tray_icon_update (GpmManager *manager)
 						    stock_id);
 		g_free (stock_id);
 
-		tooltip = get_full_tooltip (manager);
+		gpm_power_get_status_summary (manager->priv->power, &tooltip, NULL);
+
 		gpm_tray_icon_set_tooltip (GPM_TRAY_ICON (manager->priv->tray_icon),
-					   tooltip->str);
-		g_string_free (tooltip, TRUE);
+					   tooltip);
+		g_free (tooltip);
 	} else {
 		/* remove icon */
 		g_debug ("no icon will be displayed");
@@ -458,13 +352,16 @@ sync_dpms_policy (GpmManager *manager)
 {
 	GError  *error;
 	gboolean res;
+	gboolean on_ac;
 	guint    standby;
 	guint    suspend;
 	guint    off;
 
 	error = NULL;
 
-	if (manager->priv->on_ac) {
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+	if (on_ac) {
 		standby = gconf_client_get_int (manager->priv->gconf_client,
 						GPM_PREF_AC_SLEEP_DISPLAY,
 						&error);
@@ -631,17 +528,20 @@ manager_policy_do (GpmManager *manager,
 }
 
 static void
-maybe_notify_battery_power_changed (GpmManager *manager,
-				    int		percentage,
-				    glong	minutes,
-				    gboolean	discharging,
-				    gboolean	primary)
+maybe_notify_battery_power_changed (GpmManager         *manager,
+				    const char         *kind,
+				    int		        percentage,
+				    glong	        minutes,
+				    gboolean	        discharging)
 {
 	gboolean show_notify;
+	gboolean primary;
 	gint	 low_threshold;
 	gint	 critical_threshold;
 	gchar	*message;
 	gchar	*remaining;
+
+	primary = (strcmp (kind, "primary") == 0);
 
 	g_debug ("percentage = %d, minutes = %ld, discharging = %d, primary = %d",
 		 percentage, minutes, discharging, primary);
@@ -649,6 +549,9 @@ maybe_notify_battery_power_changed (GpmManager *manager,
 	if (manager->priv->tray_icon == NULL) {
 		return;
 	}
+
+	/* update icon */
+	tray_icon_update (manager);
 
 	/* give notification @100% */
 	if (primary && percentage >= 100) {
@@ -729,30 +632,6 @@ maybe_notify_battery_power_changed (GpmManager *manager,
 
 		return;
 	}
-
-	/* update icon */
-	tray_icon_update (manager);
-}
-
-gboolean
-gpm_manager_set_on_ac (GpmManager *manager,
-		       gboolean	   on_ac,
-		       GError    **error)
-{
-	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
-
-	if (on_ac != manager->priv->on_ac) {
-		manager->priv->on_ac = on_ac;
-
-		g_debug ("Setting on-ac: %d", on_ac);
-
-		maybe_notify_on_ac_changed (manager, on_ac);
-		change_power_policy (manager, on_ac);
-
-		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
-	}
-
-	return TRUE;
 }
 
 gboolean
@@ -760,10 +639,10 @@ gpm_manager_get_on_ac (GpmManager *manager,
 		       gboolean	  *on_ac,
 		       GError    **error)
 {
-	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	if (on_ac) {
-		*on_ac = manager->priv->on_ac;
+		gpm_power_get_on_ac (manager->priv->power, on_ac, error);
 	}
 
 	return TRUE;
@@ -776,7 +655,7 @@ gpm_manager_set_dpms_mode (GpmManager *manager,
 {
 	gboolean ret;
 
-	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	g_debug ("Setting DPMS to %s", mode);
 
@@ -796,7 +675,7 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	gboolean    ret;
 	GpmDpmsMode m;
 
-	g_return_val_if_fail (GS_IS_MANAGER (manager), FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	ret = gpm_dpms_get_mode (manager->priv->dpms,
 				 &m,
@@ -946,8 +825,12 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 {
 	g_debug ("DPMS mode changed: %d", mode);
 	if (mode == GPM_DPMS_MODE_ON) {
+		gboolean on_ac;
+
 		/* only unthrottle if on ac power */
-		if (manager->priv->on_ac) {
+		gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+		if (on_ac) {
 			gpm_screensaver_enable_throttle (FALSE);
 		}
 	} else {
@@ -961,9 +844,8 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 static void
-hal_power_button_cb (GpmHalMonitor *monitor,
-		     gboolean	    state,
-		     GpmManager	   *manager)
+power_button_pressed (GpmManager   *manager,
+		      gboolean	    state)
 {
 	g_debug ("power button changed: %d", state);
 
@@ -974,9 +856,15 @@ hal_power_button_cb (GpmHalMonitor *monitor,
 }
 
 static void
-hal_lid_button_cb (GpmHalMonitor *monitor,
-		   gboolean	  state,
-		   GpmManager	 *manager)
+suspend_button_pressed (GpmManager   *manager,
+			gboolean      state)
+{
+	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
+}
+
+static void
+lid_button_pressed (GpmManager	 *manager,
+		    gboolean	  state)
 {
 	GpmDpmsMode mode;
 	GError     *error;
@@ -1007,55 +895,66 @@ hal_lid_button_cb (GpmHalMonitor *monitor,
 }
 
 static void
-hal_suspend_button_cb (GpmHalMonitor *monitor,
-		       gboolean	      state,
-		       GpmManager    *manager)
+power_button_pressed_cb (GpmPower   *power,
+			 const char *type,
+			 const char *details,
+			 gboolean    state,
+			 GpmManager *manager)
 {
-	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
+	g_debug ("Received a button press event type=%s details=%s state=%d",
+		 type, details, state);
+
+	if (strcmp (type, "power") == 0) {
+		power_button_pressed (manager, state);
+	} else if (strcmp (type, "sleep") == 0) {
+		suspend_button_pressed (manager, state);
+	} else if (strcmp (type, "lid") == 0) {
+		lid_button_pressed (manager, state);
+	} else if (strcmp (type, "virtual") == 0) {
+		if (details == NULL) {
+			return;
+		}
+
+		if (strcmp (details, "BrightnessUp") == 0) {
+			gpm_hal_set_brightness_up ();
+		} else if (strcmp (details, "BrightnessDown") == 0) {
+			gpm_hal_set_brightness_down ();
+		} else if (strcmp (details, "Suspend") == 0) {
+			gpm_manager_suspend (manager);
+		} else if (strcmp (details, "Hibernate") == 0) {
+			gpm_manager_hibernate (manager);
+		} else if (strcmp (details, "Lock") == 0) {
+			gpm_screensaver_lock ();
+		}
+	}
 }
 
 static void
-hal_suspend_cb (GpmHalMonitor *monitor,
-		GpmManager    *manager)
+power_on_ac_changed_cb (GpmPower   *power,
+			gboolean    on_ac,
+			GpmManager *manager)
 {
-	gpm_manager_suspend (manager);
+	g_debug ("Setting on-ac: %d", on_ac);
+
+	maybe_notify_on_ac_changed (manager, on_ac);
+	change_power_policy (manager, on_ac);
+
+	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 }
 
 static void
-hal_hibernate_cb (GpmHalMonitor *monitor,
-		  GpmManager	*manager)
-{
-	gpm_manager_hibernate (manager);
-}
-
-static void
-hal_lock_cb (GpmHalMonitor *monitor,
-	     GpmManager	   *manager)
-{
-	gpm_screensaver_lock ();
-}
-
-static void
-hal_on_ac_changed_cb (GpmHalMonitor *monitor,
-		      gboolean	     on_ac,
-		      GpmManager    *manager)
-{
-	gpm_manager_set_on_ac (manager, on_ac, NULL);
-}
-
-static void
-hal_battery_power_changed_cb (GpmHalMonitor *monitor,
-			      int	     percentage,
-			      glong	     minutes,
-			      gboolean	     discharging,
-			      gboolean	     primary,
-			      GpmManager    *manager)
+power_battery_power_changed_cb (GpmPower           *power,
+				const char         *kind,
+				int	            percentage,
+				glong	            minutes,
+				gboolean            discharging,
+				GpmManager         *manager)
 {
 	maybe_notify_battery_power_changed (manager,
+					    kind,
 					    percentage,
 					    minutes,
-					    discharging,
-					    primary);
+					    discharging);
 }
 
 static void
@@ -1064,12 +963,7 @@ gpm_manager_set_property (GObject	     *object,
 			  const GValue	     *value,
 			  GParamSpec	     *pspec)
 {
-	GpmManager *manager = GPM_MANAGER (object);
-
 	switch (prop_id) {
-	case PROP_ON_AC:
-		gpm_manager_set_on_ac (manager, g_value_get_boolean (value), NULL);
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1082,12 +976,7 @@ gpm_manager_get_property (GObject	     *object,
 			  GValue	     *value,
 			  GParamSpec	     *pspec)
 {
-	GpmManager *manager = GPM_MANAGER (object);
-
 	switch (prop_id) {
-	case PROP_ON_AC:
-		g_value_set_boolean (value, manager->priv->on_ac);
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -1104,14 +993,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 	object_class->finalize	   = gpm_manager_finalize;
 	object_class->get_property = gpm_manager_get_property;
 	object_class->set_property = gpm_manager_set_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_ON_AC,
-					 g_param_spec_boolean ("on_ac",
-							       NULL,
-							       NULL,
-							       TRUE,
-							       G_PARAM_READWRITE));
 
 	signals [ON_AC_CHANGED] =
 		g_signal_new ("on-ac-changed",
@@ -1156,7 +1037,7 @@ callback_gconf_key_changed (GConfClient *client,
 	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
 
-	on_ac = manager->priv->on_ac;
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	g_debug ("callback_gconf_key_changed (%s)", entry->key);
 
@@ -1267,6 +1148,14 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->gconf_client = gconf_client_get_default ();
 
+	manager->priv->power = gpm_power_new ();
+	g_signal_connect (manager->priv->power, "button-pressed",
+			  G_CALLBACK (power_button_pressed_cb), manager);
+	g_signal_connect (manager->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), manager);
+	g_signal_connect (manager->priv->power, "battery-power-changed",
+			  G_CALLBACK (power_battery_power_changed_cb), manager);
+
 	gconf_client_add_dir (manager->priv->gconf_client,
 			      GPM_PREF_DIR,
 			      GCONF_CLIENT_PRELOAD_NONE,
@@ -1288,29 +1177,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	manager->priv->hal_monitor = gpm_hal_monitor_new ();
-	g_signal_connect (manager->priv->hal_monitor, "ac-power-changed",
-			  G_CALLBACK (hal_on_ac_changed_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "battery-power-changed",
-			  G_CALLBACK (hal_battery_power_changed_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "power-button",
-			  G_CALLBACK (hal_power_button_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "suspend-button",
-			  G_CALLBACK (hal_suspend_button_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "lid-button",
-			  G_CALLBACK (hal_lid_button_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "suspend",
-			  G_CALLBACK (hal_suspend_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "hibernate",
-			  G_CALLBACK (hal_hibernate_cb), manager);
-	g_signal_connect (manager->priv->hal_monitor, "lock",
-			  G_CALLBACK (hal_lock_cb), manager);
-
-	/* do all the actions as we have to set initial state */
-	gpm_manager_set_on_ac (manager,
-			       gpm_hal_monitor_get_on_ac (manager->priv->hal_monitor),
-			       NULL);
-
 	tray_icon_update (manager);
 }
 
@@ -1320,7 +1186,7 @@ gpm_manager_finalize (GObject *object)
 	GpmManager *manager;
 
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GS_IS_MANAGER (object));
+	g_return_if_fail (GPM_IS_MANAGER (object));
 
 	manager = GPM_MANAGER (object);
 
@@ -1338,8 +1204,8 @@ gpm_manager_finalize (GObject *object)
 		g_object_unref (manager->priv->idle);
 	}
 
-	if (manager->priv->hal_monitor != NULL) {
-		g_object_unref (manager->priv->hal_monitor);
+	if (manager->priv->power != NULL) {
+		g_object_unref (manager->priv->power);
 	}
 
 	if (manager->priv->tray_icon != NULL) {

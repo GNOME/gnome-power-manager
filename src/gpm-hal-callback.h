@@ -2,8 +2,7 @@
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -20,10 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
- */
-/**
- * @addtogroup	hal
- * @{
  */
 
 #ifndef _GPMHALCALLBACK_H
@@ -88,10 +83,10 @@ gboolean gpm_hal_method_device_condition (HalDeviceCondition callback);
 gboolean gpm_hal_watch_add_device_property_modified (const gchar *udi);
 gboolean gpm_hal_watch_add_device_condition (const gchar *udi);
 
-gboolean gpm_hal_watch_remove_device_removed ();
-gboolean gpm_hal_watch_remove_device_added ();
-gboolean gpm_hal_watch_remove_device_new_capability ();
-gboolean gpm_hal_watch_remove_device_lost_capability ();
+gboolean gpm_hal_watch_remove_device_removed (void);
+gboolean gpm_hal_watch_remove_device_added (void);
+gboolean gpm_hal_watch_remove_device_new_capability (void);
+gboolean gpm_hal_watch_remove_device_lost_capability (void);
 gboolean gpm_hal_watch_remove_device_property_modified (const gchar *udi);
 gboolean gpm_hal_watch_remove_device_condition (const gchar *udi);
 

@@ -63,7 +63,7 @@ typedef enum
 
 #define GPM_DPMS_ERROR gpm_dpms_error_quark ()
 
-GQuark      gs_listener_error_quark             (void);
+GQuark      gpm_dpms_error_quark      (void);
 
 GType       gpm_dpms_get_type         (void);
 

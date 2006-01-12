@@ -41,8 +41,8 @@ G_BEGIN_DECLS
 #define GPM_TYPE_MANAGER         (gpm_manager_get_type ())
 #define GPM_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_MANAGER, GpmManager))
 #define GPM_MANAGER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_MANAGER, GpmManagerClass))
-#define GS_IS_MANAGER(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_MANAGER))
-#define GS_IS_MANAGER_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_MANAGER))
+#define GPM_IS_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_MANAGER))
+#define GPM_IS_MANAGER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_MANAGER))
 #define GPM_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_MANAGER, GpmManagerClass))
 
 typedef struct GpmManagerPrivate GpmManagerPrivate;
@@ -69,9 +69,6 @@ GpmManager   * gpm_manager_new              (void);
 
 gboolean       gpm_manager_get_on_ac        (GpmManager    *manager,
                                              gboolean      *on_ac,
-                                             GError       **error);
-gboolean       gpm_manager_set_on_ac        (GpmManager    *manager,
-                                             gboolean       on_ac,
                                              GError       **error);
 
 gboolean       gpm_manager_get_dpms_mode    (GpmManager    *manager,

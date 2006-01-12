@@ -37,18 +37,16 @@
 #endif /* HAVE_UNISTD_H */
 
 #include "gpm-common.h"
-#include "gpm-core.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
 #include "gpm-hal-callback.h"
-#include "gpm-sysdev.h"
 #include "gpm-marshal.h"
 
 #include "gpm-hal-monitor.h"
 
 static void     gpm_hal_monitor_class_init (GpmHalMonitorClass *klass);
 static void     gpm_hal_monitor_init       (GpmHalMonitor      *hal_monitor);
-static void     gpm_hal_monitor_finalize   (GObject      *object);
+static void     gpm_hal_monitor_finalize   (GObject            *object);
 
 #define GPM_HAL_MONITOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitorPrivate))
 
@@ -56,20 +54,14 @@ struct GpmHalMonitorPrivate
 {
 	gboolean enabled;
 	gboolean has_power_management;
-
 };
 
 enum {
-	POWER_BUTTON,
-	SUSPEND_BUTTON,
-	LID_BUTTON,
-	HIBERNATE,
-	SUSPEND,
-	LOCK,
+	BUTTON_PRESSED,
 	AC_POWER_CHANGED,
-	BATTERY_POWER_CHANGED,
-	DEVICE_ADDED,
-	DEVICE_REMOVED,
+	BATTERY_PROPERTY_MODIFIED,
+	BATTERY_ADDED,
+	BATTERY_REMOVED,
 	LAST_SIGNAL
 };
 
@@ -80,6 +72,8 @@ enum {
 
 static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
+
+static gpointer      monitor_object = NULL;
 
 G_DEFINE_TYPE (GpmHalMonitor, gpm_hal_monitor, G_TYPE_OBJECT)
 
@@ -122,86 +116,16 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 
 	g_type_class_add_private (klass, sizeof (GpmHalMonitorPrivate));
 
-	signals [DEVICE_ADDED] =
-		g_signal_new ("device-added",
+	signals [BUTTON_PRESSED] =
+		g_signal_new ("button-pressed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, device_added),
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, button_pressed),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
+			      gpm_marshal_VOID__STRING_STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      0);
-	signals [DEVICE_REMOVED] =
-		g_signal_new ("device-removed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, device_removed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	signals [SUSPEND_BUTTON] =
-		g_signal_new ("suspend-button",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, suspend_button),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
-	signals [POWER_BUTTON] =
-		g_signal_new ("power-button",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, power_button),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
-	signals [LID_BUTTON] =
-		g_signal_new ("lid-button",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, lid_button),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
-	signals [HIBERNATE] =
-		g_signal_new ("hibernate",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, hibernate),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	signals [LOCK] =
-		g_signal_new ("lock",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, lock),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-	signals [SUSPEND] =
-		g_signal_new ("suspend",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, suspend),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
+			      3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [AC_POWER_CHANGED] =
 		g_signal_new ("ac-power-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -213,17 +137,34 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_BOOLEAN);
-	signals [BATTERY_POWER_CHANGED] =
-		g_signal_new ("battery-power-changed",
+	signals [BATTERY_PROPERTY_MODIFIED] =
+		g_signal_new ("battery-property-modified",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_power_changed),
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_property_modified),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 4, G_TYPE_INT, G_TYPE_LONG, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
-
-
+			      gpm_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+	signals [BATTERY_ADDED] =
+		g_signal_new ("battery-added",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_added),
+			      NULL,
+			      NULL,
+			      gpm_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+	signals [BATTERY_REMOVED] =
+		g_signal_new ("battery-removed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_removed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1, G_TYPE_STRING);
 }
 
 
@@ -239,9 +180,13 @@ hal_device_removed (const gchar *udi,
 
 	monitor = GPM_HAL_MONITOR (user_data);
 
-	if (gpm_device_removed (udi)) {
-		g_signal_emit (monitor, signals [DEVICE_REMOVED], 0);
-	}
+	g_debug ("hal_device_removed: udi=%s", udi);
+
+	/* these may not all be batteries but oh well */
+	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
+
+	/* remove watch */
+	gpm_hal_watch_remove_device_property_modified (udi);
 }
 
 /** When we have a new device hot-plugged
@@ -250,16 +195,19 @@ hal_device_removed (const gchar *udi,
  *  @param	capability	Name of capability
  */
 static void
-hal_device_new_capability (const gchar *udi,
-			   const gchar *capability,
-			   gpointer	user_data)
+hal_device_new_capability (const char *udi,
+			   const char *capability,
+			   gpointer    user_data)
 {
 	GpmHalMonitor *monitor;
 
 	monitor = GPM_HAL_MONITOR (user_data);
 
-	if (gpm_device_new_capability (udi, capability)) {
-		g_signal_emit (monitor, signals [DEVICE_ADDED], 0);
+	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
+		 udi, capability);
+
+	if (strcmp (capability, "battery") == 0) {
+		g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
 	}
 }
 
@@ -285,15 +233,7 @@ hal_device_property_modified (const gchar *udi,
 			      gboolean	   is_removed,
 			      gpointer	   user_data)
 {
-	sysDev *sd = NULL;
-	sysDevStruct *sds = NULL;
-	gchar *type;
-	gint old_charge;
-	gint new_charge;
 	GpmHalMonitor *monitor;
-	DeviceType dev;
-
-	monitor = GPM_HAL_MONITOR (user_data);
 
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
 		 udi, key, is_added, is_removed);
@@ -302,13 +242,12 @@ hal_device_property_modified (const gchar *udi,
 	if (is_removed || is_added)
 		return;
 
+	monitor = GPM_HAL_MONITOR (user_data);
+
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		gboolean on_ac = gpm_hal_is_on_ac ();
 
 		monitor_change_on_ac (monitor, on_ac);
-
-		/* update all states */
-		gpm_sysdev_update_all ();
 
 		return;
 	}
@@ -317,86 +256,7 @@ hal_device_property_modified (const gchar *udi,
 	if (strncmp (key, "battery", 7) != 0)
 		return;
 
-	sds = gpm_sysdev_find_all (udi);
-	/*
-	 * if we BUG here then *HAL* has a problem where key modification is
-	 * done before capability is present
-	 */
-	if (!sds) {
-		g_warning ("sds is NULL! udi=%s\n"
-			   "This is probably a bug in HAL where we are getting "
-			   "is_removed=false, is_added=false before the capability "
-			   "had been added. In addon-hid-ups this is likely to happen.",
-			   udi);
-		return;
-	}
-
-	/* get battery type so we know what to process */
-	gpm_hal_device_get_string (udi, "battery.type", &type);
-	if (!type) {
-		g_warning ("Battery %s has no type!", udi);
-		return;
-	}
-
-	dev = hal_to_device_type (type);
-	g_free (type);
-
-	/* find old percentage_charge */
-	sd = gpm_sysdev_get (dev);
-	old_charge = sd->percentage_charge;
-
-	/* update values in the struct */
-	if (strcmp (key, "battery.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->is_present);
-		/* read in values */
-		gpm_read_battery_data (sds);
-
-	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->is_charging);
-		/*
-		 * invalidate the remaining time, as we need to wait for
-		 * the next HAL update. This is a HAL bug I think.
-		 */
-		sds->minutes_remaining = 0;
-	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &sds->is_discharging);
-		/* invalidate the remaining time */
-		sds->minutes_remaining = 0;
-	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_int (udi, key, &sds->percentage_charge);
-
-	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		gint tempval;
-		gpm_hal_device_get_int (udi, key, &tempval);
-		if (tempval > 0)
-			sds->minutes_remaining = tempval / 60;
-	} else {
-		/* ignore */
-		return;
-	}
-
-	gpm_sysdev_update (dev);
-	gpm_sysdev_debug_print (dev);
-
-	/* find new percentage_charge  */
-	new_charge = sd->percentage_charge;
-
-	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
-
-	/* do we need to notify the user we are getting low ? */
-	if (old_charge != new_charge) {
-		gboolean is_primary;
-
-		g_debug ("percentage change %i -> %i", old_charge, new_charge);
-
-		is_primary = (sd->type == BATT_PRIMARY);
-		g_signal_emit (monitor,
-			       signals [BATTERY_POWER_CHANGED], 0,
-			       sd->percentage_charge,
-			       sds->minutes_remaining,
-			       sds->is_discharging,
-			       is_primary);
-	}
+	g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
 }
 
 /** Invoked when a property of a device in the Global Device List is
@@ -407,13 +267,11 @@ hal_device_property_modified (const gchar *udi,
  *  @param	details	D-BUS message with parameters
  */
 static void
-hal_device_condition (const gchar *udi,
-		      const gchar *name,
-		      const gchar *details,
-		      gpointer	   user_data)
+hal_device_condition (const char *udi,
+		      const char *name,
+		      const char *details,
+		      gpointer	  user_data)
 {
-	gchar	*type = NULL;
-	gboolean value;
 	GpmHalMonitor *monitor;
 
 	monitor = GPM_HAL_MONITOR (user_data);
@@ -426,6 +284,9 @@ hal_device_condition (const gchar *udi,
 		 udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
+		char	 *type = NULL;
+		gboolean  value;
+
 		gpm_hal_device_get_string (udi, "button.type", &type);
 
 		if (!type) {
@@ -434,85 +295,133 @@ hal_device_condition (const gchar *udi,
 		}
 
 		g_debug ("ButtonPressed : %s", type);
+
 		if (strcmp (type, "power") == 0) {
-			gboolean state = TRUE;
-
-			g_signal_emit (monitor, signals [POWER_BUTTON], 0, state);
-
+			value = TRUE;
 		} else if (strcmp (type, "sleep") == 0) {
-			gboolean state = TRUE;
-			g_signal_emit (monitor, signals [SUSPEND_BUTTON], 0, state);
-
+			value = TRUE;
 		} else if (strcmp (type, "lid") == 0) {
 			gpm_hal_device_get_bool (udi, "button.state.value", &value);
-
-			g_signal_emit (monitor, signals [LID_BUTTON], 0, value);
-
 		} else if (strcmp (type, "virtual") == 0) {
+			value = TRUE;
 
 			if (!details) {
 				g_warning ("Virtual buttons must have details for %s!", udi);
 				return;
 			}
-
-			if (strcmp (details, "BrightnessUp") == 0) {
-
-				gpm_hal_set_brightness_up ();
-
-			} else if (strcmp (details, "BrightnessDown") == 0) {
-
-				gpm_hal_set_brightness_down ();
-
-			} else if (strcmp (details, "Suspend") == 0) {
-
-				g_signal_emit (monitor, signals [SUSPEND], 0);
-
-			} else if (strcmp (details, "Hibernate") == 0) {
-
-				g_signal_emit (monitor, signals [HIBERNATE], 0);
-
-			} else if (strcmp (details, "Lock") == 0) {
-
-				g_signal_emit (monitor, signals [LOCK], 0);
-
-			}
-
 		} else {
 			g_warning ("Button '%s' unrecognised", type);
+			g_free (type);
+			return;
 		}
+
+		g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, type, details, value);
 
 		g_free (type);
 	}
 }
 
+static gboolean
+gpm_coldplug_acadapter (GpmHalMonitor *monitor)
+{
+	gint    i;
+	gchar **device_names = NULL;
+
+	/* devices of type ac_adapter */
+	gpm_hal_find_device_capability ("ac_adapter", &device_names);
+	if (!device_names) {
+		g_debug ("Couldn't obtain list of ac_adapters");
+		return FALSE;
+	}
+
+	for (i = 0; device_names[i]; i++) {
+		/* assume only one */
+		gpm_hal_watch_add_device_property_modified (device_names[i]);
+
+	}
+
+	gpm_hal_free_capability (device_names);
+
+	return TRUE;
+}
+
+static gboolean
+gpm_coldplug_buttons (GpmHalMonitor *monitor)
+{
+	gint    i;
+	gchar **device_names = NULL;
+
+	/* devices of type button */
+	gpm_hal_find_device_capability ("button", &device_names);
+	if (!device_names) {
+		g_debug ("Couldn't obtain list of buttons");
+		return FALSE;
+	}
+
+	for (i = 0; device_names[i]; i++) {
+		/*
+		 * We register this here, as buttons are not present
+		 * in object data, and do not need to be added manually.
+		*/
+		gpm_hal_watch_add_device_condition (device_names[i]);
+	}
+
+	gpm_hal_free_capability (device_names);
+
+	return TRUE;
+}
+
+/** Coldplugs devices of type battery & ups at startup
+ *
+ *  @return			If any devices of capability battery were found.
+ */
+static gboolean
+gpm_coldplug_batteries (GpmHalMonitor *monitor)
+{
+	gint    i;
+	gchar **device_names = NULL;
+
+	/* devices of type battery */
+	gpm_hal_find_device_capability ("battery", &device_names);
+	if (!device_names) {
+		g_debug ("Couldn't obtain list of batteries");
+		return FALSE;
+	}
+
+	for (i = 0; device_names[i]; i++) {
+		g_debug ("signalling battery-added: %s", device_names[i]);
+
+		g_signal_emit (monitor, signals [BATTERY_ADDED], 0, device_names[i]);
+
+		/* register this with HAL so we get PropertyModified events */
+		gpm_hal_watch_add_device_property_modified (device_names[i]);
+	}
+
+	gpm_hal_free_capability (device_names);
+
+	return TRUE;
+}
+
 static void
 hal_monitor_start (GpmHalMonitor *monitor)
 {
-	/* initialise all system devices */
-	gpm_sysdev_init_all ();
-
-	gpm_hal_callback_init (monitor);
 	/* assign the callback functions */
+	gpm_hal_callback_init (monitor);
 	gpm_hal_method_device_removed (hal_device_removed);
 	gpm_hal_method_device_new_capability (hal_device_new_capability);
 	gpm_hal_method_device_property_modified (hal_device_property_modified);
 	gpm_hal_method_device_condition (hal_device_condition);
 
 	/* sets up these devices and adds watches */
-	gpm_coldplug_batteries ();
-	gpm_coldplug_acadapter ();
-	gpm_coldplug_buttons ();
-
-	gpm_sysdev_update_all ();
-	gpm_sysdev_debug_print_all ();
+	gpm_coldplug_batteries (monitor);
+	gpm_coldplug_acadapter (monitor);
+	gpm_coldplug_buttons (monitor);
 }
 
 static void
 hal_monitor_stop (GpmHalMonitor *monitor)
 {
 	gpm_hal_callback_shutdown ();
-	/* cleanup all system devices */
-	gpm_sysdev_free_all ();
 }
 
 gboolean
@@ -520,13 +429,19 @@ gpm_hal_monitor_get_on_ac (GpmHalMonitor *monitor)
 {
 	gboolean on_ac;
 
-	g_return_val_if_fail (GS_IS_HAL_MONITOR (monitor), FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_MONITOR (monitor), FALSE);
 
 	on_ac = gpm_hal_is_on_ac ();
 
 	return on_ac;
 }
 
+static gboolean
+start_idle (GpmHalMonitor *monitor)
+{
+	hal_monitor_start (monitor);
+	return FALSE;
+}
 
 static void
 gpm_hal_monitor_init (GpmHalMonitor *monitor)
@@ -547,7 +462,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 
 	if (monitor->priv->enabled
 	    && monitor->priv->has_power_management) {
-		hal_monitor_start (monitor);
+		g_idle_add ((GSourceFunc)start_idle, monitor);
 	}
 }
 
@@ -557,7 +472,7 @@ gpm_hal_monitor_finalize (GObject *object)
 	GpmHalMonitor *monitor;
 
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GS_IS_HAL_MONITOR (object));
+	g_return_if_fail (GPM_IS_HAL_MONITOR (object));
 
 	monitor = GPM_HAL_MONITOR (object);
 
@@ -571,9 +486,13 @@ gpm_hal_monitor_finalize (GObject *object)
 GpmHalMonitor *
 gpm_hal_monitor_new (void)
 {
-	GpmHalMonitor *monitor;
+        if (monitor_object) {
+                g_object_ref (monitor_object);
+        } else {
+                monitor_object = g_object_new (GPM_TYPE_HAL_MONITOR, NULL);
+                g_object_add_weak_pointer (monitor_object,
+                                           (gpointer *) &monitor_object);
+        }
 
-	monitor = g_object_new (GPM_TYPE_HAL_MONITOR, NULL);
-
-	return GPM_HAL_MONITOR (monitor);
+	return GPM_HAL_MONITOR (monitor_object);
 }

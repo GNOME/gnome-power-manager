@@ -8,9 +8,6 @@
  *  @note	- lshal   (C) 2003 David Zeuthen, <david@fubar.dk>
  *  @note	- notibat (C) 2004 Benjamin Kahn, <xkahn@zoned.net>
  *
- * This is the main daemon for g-p-m. It handles all the setup and
- * tear-down of all the dynamic arrays, mainloops and icons in g-p-m.
- *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -146,7 +143,7 @@ gpm_signal_handler_nlost (DBusGProxy *proxy, const char *name, gpointer user_dat
  *  @param	callback	The callback
  *  @return			If we assigned the callback okay
  */
-gboolean
+static gboolean
 gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback)
 {
 	GError *error = NULL;
@@ -174,7 +171,7 @@ gpm_dbus_init_noc (DBusGConnection *connection, GpmDbusSignalHandler callback)
  *  @param	callback	The callback
  *  @return			If we assigned the callback okay
  */
-gboolean
+static gboolean
 gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback)
 {
 	GError *error = NULL;
@@ -200,7 +197,7 @@ gpm_dbus_init_nlost (DBusGConnection *connection, GpmDbusSignalHandler callback)
  *
  *  @return			Success
  */
-gboolean
+static gboolean
 gpm_dbus_remove_noc (void)
 {
 	g_assert (proxy_bus_noc);
@@ -213,7 +210,7 @@ gpm_dbus_remove_noc (void)
  *
  *  @return			Success
  */
-gboolean
+static gboolean
 gpm_dbus_remove_nlost (void)
 {
 	g_assert (proxy_bus_nlost);
@@ -228,7 +225,7 @@ gpm_dbus_remove_nlost (void)
  *
  *  @note	This function MUST be called before DBUS service will work.
  */
-gboolean
+static gboolean
 gpm_object_register (DBusGConnection *connection,
 		     GObject         *object)
 {

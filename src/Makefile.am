@@ -1,3 +1,6 @@
+## We require new-style dependency handling.
+AUTOMAKE_OPTIONS = 1.7
+
 NULL =
 
 EXTRA_DIST =						\
@@ -53,8 +56,12 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal-monitor.c				\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-main.h					\
+	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
+	gpm-power.h					\
+	gpm-power.c					\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
 	eggtrayicon.h					\
@@ -71,12 +78,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-screensaver.c				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
-	gpm-core.h					\
-	gpm-core.c					\
-	gpm-main.h					\
-	gpm-main.c					\
-	gpm-sysdev.h					\
-	gpm-sysdev.c					\
 	gpm-stock-icons.h				\
 	gpm-stock-icons.c				\
 	$(NULL)
@@ -100,11 +101,12 @@ BUILT_SOURCES = 					\
 	gpm-marshal.h					\
 	$(NULL)
 
-gpm-marshal.h: gpm-marshal.list
-	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --header > $(srcdir)/gpm-marshal.h
-
 gpm-marshal.c: gpm-marshal.list
-	glib-genmarshal --prefix=gpm_marshal $(srcdir)/gpm-marshal.list --body > $(srcdir)/gpm-marshal.c
+	echo "#include \"gpm-marshal.h\"" > $@ && \
+	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --body >> $@
+
+gpm-marshal.h: gpm-marshal.list
+	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
 
 gpm-manager-glue.h: gpm-manager.xml
 	libtool --mode=execute dbus-binding-tool --prefix=gpm_manager --mode=glib-server --output=gpm-manager-glue.h $(srcdir)/gpm-manager.xml

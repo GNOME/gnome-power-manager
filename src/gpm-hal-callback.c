@@ -1,5 +1,6 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
-/** @file	gpm-hal-callback.c
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ *  @file	gpm-hal-callback.c
  *  @brief	GLIB replacement for libhal, providing callbacks
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
@@ -7,8 +8,7 @@
  * This module handles the callbacks for HAL, and lets a program register
  * a hook, and assign a callback. It is designed as a more robust framework
  * than using libhal.
- */
-/*
+ *
  * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or
@@ -26,14 +26,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-/**
- * @addtogroup	hal
- * @{
- */
 
-#ifdef HAVE_CONFIG_H
-#  include <config.h>
-#endif
+#include <config.h>
 
 #include <glib.h>
 #include <string.h>
