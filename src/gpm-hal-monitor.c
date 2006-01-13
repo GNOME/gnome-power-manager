@@ -235,8 +235,10 @@ hal_device_property_modified (const gchar *udi,
 {
 	GpmHalMonitor *monitor;
 
+#if 0
 	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
 		 udi, key, is_added, is_removed);
+#endif
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed || is_added)

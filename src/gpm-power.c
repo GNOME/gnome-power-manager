@@ -406,7 +406,16 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* no point working out average if no devices */
 	if (num_present == 0) {
-		g_debug ("no devices of type %s", entry->kind);
+		g_debug ("no devices of type %s", kind_for_display (entry->kind));
+		/* send a signal, as devices have disappeared */
+		g_signal_emit (power,
+			       signals [BATTERY_POWER_CHANGED], 0,
+			       entry->kind,
+			       0,
+			       0,
+			       FALSE,
+			       FALSE,
+			       TRUE);
 		return;
 	}
 
@@ -709,6 +718,13 @@ gpm_power_get_battery_percentage (GpmPower   *power,
 
 	entry = battery_kind_cache_find (power, kind);
 	if (entry == NULL) {
+		return FALSE;
+	}
+	/*
+	 * Batteries can exist in the system without being "present"
+	 * as the battery bay remains in HAL when they are removed.
+	 */
+	if (! entry->is_present) {
 		return FALSE;
 	}
 

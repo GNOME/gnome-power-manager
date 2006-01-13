@@ -16,6 +16,14 @@
 
 	* CodingStyle: Update with suggestions from (#326515)
 
+	* src/gpm-power.c (battery_kind_cache_update): Always send a
+	BATTERY_POWER_CHANGED signal when devices disappear.
+
+	* src/gpm-power.c (gpm_power_get_battery_percentage): Return false
+	when a BatteryKindCacheEntry is marked as not present, as ACPI
+	batteries are not removed from HAL when they are removed.
+	This fixes (#326865)
+
 2006-01-12  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-power.[ch]: New powered device handling.
