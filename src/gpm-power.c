@@ -449,26 +449,29 @@ battery_kind_cache_update (GpmPower              *power,
 
 	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
 
-	/* do we need to notify the user we are getting low ? */
-	if (old_charge != new_charge) {
-		/*
-		 * old_charge is initialised to zero, and we don't want to
-		 * send a signal for the coldplug sequence
-		 */
-		gboolean coldplug = FALSE;
-		if (old_charge == 0)
-			coldplug = TRUE;
+	gboolean percentagechanged = FALSE;
+	/* only do some actions when the value changes */
+	if (old_charge != new_charge)
+		percentagechanged = TRUE;
+	/*
+	 * old_charge is initialised to zero, and we don't want to
+	 * send a signal for the percentagechanged sequence
+	 */
+	if (old_charge == 0)
+		percentagechanged = FALSE;
 
+	if (percentagechanged)
 		g_debug ("percentage change %i -> %i", old_charge, new_charge);
-		g_signal_emit (power,
-			       signals [BATTERY_POWER_CHANGED], 0,
-			       entry->kind,
-			       entry->percentage_charge,
-			       entry->minutes_remaining,
-			       entry->is_discharging,
-			       coldplug);
-	}
 
+	/* always send a signal, as we needto setup the icon */
+	g_signal_emit (power,
+		       signals [BATTERY_POWER_CHANGED], 0,
+		       entry->kind,
+		       entry->percentage_charge,
+		       entry->minutes_remaining,
+		       entry->is_discharging,
+		       entry->is_charging,
+		       percentagechanged);
 }
 
 static void
@@ -651,7 +654,6 @@ power_get_summary_for_kind (GpmPower   *power,
 	for (l = entry->devices; l; l = l->next) {
 		const char *udi = (const char *)l->data;
 		power_get_summary_for_udi (power, udi, summary);
-		g_debug ("tooltip for %s: %s", udi, summary->str);
 	}
 }
 
@@ -897,9 +899,9 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      G_STRUCT_OFFSET (GpmPowerClass, battery_power_changed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 5, G_TYPE_INT, G_TYPE_LONG,
-			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 6, G_TYPE_INT, G_TYPE_LONG,
+			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }

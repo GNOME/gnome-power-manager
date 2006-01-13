@@ -16,12 +16,10 @@ Released January xx, 2006
   control this new functionality (#326276)
 - org.gnome.GnomePowerManager -> org.gnome.PowerManager (#326492)
 - GNOME Power Manager now listens for the new idle signals from g-s.
-- There now is a yelp help file used instead of just opening the website.
-  This fixes #324977, thanks to Jaap Haitsma for the help.
+- There now is a yelp help file used (#324977), thanks to Jaap Haitsma.
 - Lots of new translations: Greek (Nikos Charonitakis), Gujarati (Ankit Patel),
   Vietnamese (Clytie Siddall), Catalan (Josep Puigdemont i Casamajó),
-  Thai (Theppitak Karoonboonyanan), Serbian (Slobodan D. Sredojevic)
-   - Many thanks.
+  Thai (Theppitak Karoonboonyanan), Serbian (Slobodan D. Sredojevic).
 - Lots of updated translations: Galician (Ignacio Casal Quinteiro), 
   Hungarian (Gabor Kelemen), Bulgarian (Alexander Shopov), 
   Norwegian (Kjartan Maraas), Spanish (Francisco Javier F. Serrador), 
@@ -32,8 +30,9 @@ Released January xx, 2006
 - The power button is now an interactive shutdown, saving GNOME session state.
 - Fix a bug where the preferences program was crashing on missing gconf schema.
 - Fixed lots of other smaller bugs such as #322773, #323135, RH#174196,
-  #322547, RH#172963, RH#176656
-- Lots of source file re-organisation, also a large refactoring.
+  #322547, RH#172963, RH#176656.
+- Lots of source file re-organisation, also a large refactoring. Thanks to 
+  William Jon McCann for the large amount of code cleanup done.
 - Fix problem where preferences window is redrawn and then resized (#323562)
 - Don't crash if gnome-panel is restarted, but display the icon again (#324446)
 - Fix problem where battery is removed, and icon does not change (#323563)

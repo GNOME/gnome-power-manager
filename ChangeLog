@@ -1,12 +1,20 @@
 2005-01-13  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-power.c: Fix newline logic to be the same as before.
+	* src/gpm-power.c: Fix newline logic to be the same as before (so it 
+	doesn't truncate the last bracket in some cases).
 	Also replace spaces-for-tabs in this file with actual tabs.
 
 	* src/gpm-marshal.list, src/gpm-manager.c, src/gpm-power.c:
-	Add a parameter "gboolean coldplug" which lets us veto some actions
-	when doing coldplug. This stops the message
+	Add a parameter "charging" and "percentagechanged" which lets us veto
+	some actions when doing the initial startup. This stops the message
 	"Your battery is fully charged"	when starting g-p-m with a full battery.
+	Also unconditionally send a signal battery-power-changed when *any*
+	battery property changes, so that the icon changes when !charging
+	as this was not being done.
+
+	* MAINTAINERS: I have a name, I am not an email address.
+
+	* CodingStyle: Update with suggestions from (#326515)
 
 2006-01-12  William Jon McCann  <mccann@jhu.edu>
 

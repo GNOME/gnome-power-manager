@@ -401,7 +401,7 @@ sync_dpms_policy (GpmManager *manager)
 	}
 }
 
-/** Do all the action when we go from batt to ac, or ac to batt (or coldplug)
+/** Do all the action when we go from batt to ac, or ac to batt (or percentagechanged)
  *
  *  @param	on_ac		If we are on AC power
  *
@@ -533,7 +533,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 				    int		        percentage,
 				    glong	        minutes,
 				    gboolean	        discharging,
-				    gboolean	        coldplug)
+				    gboolean	        charging,
+				    gboolean	        percentagechanged)
 {
 	gboolean show_notify;
 	gboolean primary;
@@ -544,8 +545,9 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 
 	primary = (strcmp (kind, "primary") == 0);
 
-	g_debug ("percentage = %d, minutes = %ld, discharging = %d, primary = %d, coldplug=%i",
-		 percentage, minutes, discharging, primary, coldplug);
+	g_debug ("percentage = %d, minutes = %ld, discharging = %d, "
+		 "charging = %d, primary = %d, percentagechanged=%i",
+		 percentage, minutes, discharging, charging, primary, percentagechanged);
 
 	if (manager->priv->tray_icon == NULL) {
 		return;
@@ -554,8 +556,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* update icon */
 	tray_icon_update (manager);
 
-	/* give notification @100%, not on coldplug */
-	if (!coldplug && primary && percentage >= 100) {
+	/* give notification @100%, on percentagechanged */
+	if (percentagechanged && primary && percentage >= 100) {
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 
@@ -949,7 +951,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 				int	            percentage,
 				glong	            minutes,
 				gboolean            discharging,
-				gboolean            coldplug,
+				gboolean            charging,
+				gboolean            percentagechanged,
 				GpmManager         *manager)
 {
 	maybe_notify_battery_power_changed (manager,
@@ -957,7 +960,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 					    percentage,
 					    minutes,
 					    discharging,
-					    coldplug);
+					    charging,
+					    percentagechanged);
 }
 
 static void
