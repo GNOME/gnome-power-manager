@@ -6,8 +6,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: gnome-power-manager Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-10 23:11+0100\n"
-"PO-Revision-Date: 2006-01-11 15:51+1030\n"
+"POT-Creation-Date: 2006-01-13 06:41+0100\n"
+"PO-Revision-Date: 2006-01-13 23:45+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -218,17 +218,17 @@ msgstr "Hướng"
 msgid "The orientation of the tray."
 msgstr "Hướng của khay."
 
-#:../src/gpm-common.c:77
+#:../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "Không biết"
 
-#:../src/gpm-common.c:82
+#:../src/gpm-common.c:56
 #,c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i phút"
 
-#:../src/gpm-common.c:93
+#:../src/gpm-common.c:67
 #,c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -237,85 +237,57 @@ msgstr[0] "%i giờ"
 # Variable: don't translate / Biến: đừng dịch
 #.TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #.* Swap order with "%2$s %2$i %1$s %1$i if needed
-#:../src/gpm-common.c:99
+#:../src/gpm-common.c:73
 #,c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#:../src/gpm-common.c:100
+#:../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "giờ"
 
-#:../src/gpm-common.c:101
+#:../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "phút"
 
 #.common descriptions of this program
-#:../src/gpm-common.h:33 ../src/gpm-main.c:174
+#:../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "Bộ Quản lý Điện năng GNOME"
 
-#:../src/gpm-common.h:34
+#:../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Ứng dụng quản lý điện năng cho môi trường Gnome"
 
 # Type: select
 # Choices
-#:../src/gpm-main.c:158
+#:../src/gpm-main.c:324
 msgid "Do not daemonize"
 msgstr "Đừng chạy trong nền"
 
-#:../src/gpm-main.c:160 ../src/gpm-prefs.c:613
+#:../src/gpm-main.c:326 ../src/gpm-prefs.c:615
 msgid "Show extra debugging information"
 msgstr "Hiển thị thông tin gỡ lỗi thêm"
 
-#:../src/gpm-manager.c:240
-msgid "charging"
-msgstr "đang sạc"
-
-#:../src/gpm-manager.c:242
-msgid "discharging"
-msgstr "đang phóng ra"
-
-#:../src/gpm-manager.c:245
-msgid "charged"
-msgstr "được sạc"
-
-#:../src/gpm-manager.c:260
-msgid "until charged"
-msgstr "đến khi được sạc"
-
-#:../src/gpm-manager.c:263
-msgid "until empty"
-msgstr "đến khi rỗng"
-
-#:../src/gpm-manager.c:333
-msgid "Computer is running on battery power\n"
-msgstr "Hệ thống đang chạy bằng pin\n"
-
-#:../src/gpm-manager.c:335
-msgid "Computer is running on AC power\n"
-msgstr "Hệ thống đang chạy bằng năng lượng xoay chiều (AC)\n"
-
-#:../src/gpm-manager.c:501
+#:../src/gpm-manager.c:467
 msgid "AC Power Unplugged"
 msgstr "Điện năng AC chưa kết nối"
 
-#:../src/gpm-manager.c:503
+#:../src/gpm-manager.c:469
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Điện năng AC bị tháo nút ra. Hệ thống đang chạy bằng pin."
 
-#:../src/gpm-manager.c:590
+#:../src/gpm-manager.c:564
 msgid "Battery Charged"
 msgstr "Pin đầy"
 
-#:../src/gpm-manager.c:592
+#:../src/gpm-manager.c:566
 msgid "Your battery is now fully charged"
 msgstr "Pin đã được tái sạc đầy."
 
-#:../src/gpm-manager.c:624 ../src/gpm-manager.c:646
+#:../src/gpm-manager.c:598 ../src/gpm-manager.c:620
 #,c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -323,13 +295,61 @@ msgid ""
 msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%). Hãy cầm phít bộ tiếp "
 "hợp AC để tránh mất dữ liệu."
 
-#:../src/gpm-manager.c:631
+#:../src/gpm-manager.c:605
 msgid "Battery Critically Low"
 msgstr "Pin yếu tới hạn"
 
-#:../src/gpm-manager.c:652
+#:../src/gpm-manager.c:626
 msgid "Battery Low"
 msgstr "Pin yếu"
+
+#:../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "Pin máy tính xách tây"
+
+#:../src/gpm-power.c:254
+msgid "UPS"
+msgstr "UPS"
+
+#:../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "Chuột vô tuyến"
+
+#:../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "Bàn phím vô tuyến"
+
+#:../src/gpm-power.c:260
+msgid "PDA"
+msgstr "PDA"
+
+#:../src/gpm-power.c:586
+msgid "charging"
+msgstr "đang sạc"
+
+#:../src/gpm-power.c:588
+msgid "discharging"
+msgstr "đang phóng ra"
+
+#:../src/gpm-power.c:590
+msgid "charged"
+msgstr "được sạc"
+
+#:../src/gpm-power.c:613
+msgid "until charged"
+msgstr "đến khi được sạc"
+
+#:../src/gpm-power.c:618
+msgid "until empty"
+msgstr "đến khi rỗng"
+
+#:../src/gpm-power.c:664
+msgid "Computer is running on AC power\n"
+msgstr "Hệ thống đang chạy bằng năng lượng xoay chiều (AC)\n"
+
+#:../src/gpm-power.c:666
+msgid "Computer is running on battery power\n"
+msgstr "Hệ thống đang chạy bằng pin\n"
 
 #:../src/gpm-tray-icon.c:103
 msgid "_Suspend"
@@ -403,50 +423,30 @@ msgid "translator-credits"
 msgstr "Nhóm Việt hóa Gnome <gnomevi-list@lists.sourceforge.net>"
 
 #.The text that should appear in the action combo boxes
-#:../src/gpm-prefs.c:49
+#:../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "Ngưng"
 
-#:../src/gpm-prefs.c:50
+#:../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "Tắt máy"
 
-#:../src/gpm-prefs.c:51
+#:../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "Ngủ đông"
 
-#:../src/gpm-prefs.c:52
+#:../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "Đừng làm gì"
 
-#:../src/gpm-prefs.c:161
+#:../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "Không bao giờ"
 
-#:../src/gpm-prefs.c:551
+#:../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>Cấu hình</b>"
 
-#:../src/gpm-prefs.c:626
+#:../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "Tùy thích cho ĐIện năng Gnome"
-
-#:../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "Pin máy tính xách tây"
-
-#:../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "UPS"
-
-#:../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "Chuột vô tuyến"
-
-#:../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "Bàn phím vô tuyến"
-
-#:../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "Máy tính cầm tây lặt vặt"
