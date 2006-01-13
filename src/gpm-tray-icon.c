@@ -209,14 +209,13 @@ static void
 gpm_tray_icon_show_help_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
 {
-        GError *error = NULL;
+	GError *error = NULL;
 
-        gnome_help_display ("gnome-power-manager.xml", NULL, &error);
-
-        if (error != NULL) {
-                g_warning (error->message);
-                g_error_free (error);
-        }
+	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
+	if (error != NULL) {
+		g_warning (error->message);
+		g_error_free (error);
+	}
 }
 
 static void
