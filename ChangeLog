@@ -3,6 +3,11 @@
 	* src/gpm-power.c: Fix newline logic to be the same as before.
 	Also replace spaces-for-tabs in this file with actual tabs.
 
+	* src/gpm-marshal.list, src/gpm-manager.c, src/gpm-power.c:
+	Add a parameter "gboolean coldplug" which lets us veto some actions
+	when doing coldplug. This stops the message
+	"Your battery is fully charged"	when starting g-p-m with a full battery.
+
 2006-01-12  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-power.[ch]: New powered device handling.

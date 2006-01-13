@@ -291,7 +291,7 @@ get_stock_id (GpmManager *manager,
 		}
 	}
 
-	/* We fallback to the ac_adapter icon -- do we want to do this? */
+	/* We fallback to the ac_adapter icon */
 	return g_strdup_printf ("gnome-dev-acadapter");
 }
 
@@ -532,7 +532,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 				    const char         *kind,
 				    int		        percentage,
 				    glong	        minutes,
-				    gboolean	        discharging)
+				    gboolean	        discharging,
+				    gboolean	        coldplug)
 {
 	gboolean show_notify;
 	gboolean primary;
@@ -543,8 +544,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 
 	primary = (strcmp (kind, "primary") == 0);
 
-	g_debug ("percentage = %d, minutes = %ld, discharging = %d, primary = %d",
-		 percentage, minutes, discharging, primary);
+	g_debug ("percentage = %d, minutes = %ld, discharging = %d, primary = %d, coldplug=%i",
+		 percentage, minutes, discharging, primary, coldplug);
 
 	if (manager->priv->tray_icon == NULL) {
 		return;
@@ -553,8 +554,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* update icon */
 	tray_icon_update (manager);
 
-	/* give notification @100% */
-	if (primary && percentage >= 100) {
+	/* give notification @100%, not on coldplug */
+	if (!coldplug && primary && percentage >= 100) {
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 
@@ -948,13 +949,15 @@ power_battery_power_changed_cb (GpmPower           *power,
 				int	            percentage,
 				glong	            minutes,
 				gboolean            discharging,
+				gboolean            coldplug,
 				GpmManager         *manager)
 {
 	maybe_notify_battery_power_changed (manager,
 					    kind,
 					    percentage,
 					    minutes,
-					    discharging);
+					    discharging,
+					    coldplug);
 }
 
 static void

@@ -451,15 +451,22 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* do we need to notify the user we are getting low ? */
 	if (old_charge != new_charge) {
+		/*
+		 * old_charge is initialised to zero, and we don't want to
+		 * send a signal for the coldplug sequence
+		 */
+		gboolean coldplug = FALSE;
+		if (old_charge == 0)
+			coldplug = TRUE;
 
 		g_debug ("percentage change %i -> %i", old_charge, new_charge);
-
 		g_signal_emit (power,
 			       signals [BATTERY_POWER_CHANGED], 0,
 			       entry->kind,
 			       entry->percentage_charge,
 			       entry->minutes_remaining,
-			       entry->is_discharging);
+			       entry->is_discharging,
+			       coldplug);
 	}
 
 }
@@ -890,8 +897,9 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      G_STRUCT_OFFSET (GpmPowerClass, battery_power_changed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 4, G_TYPE_INT, G_TYPE_LONG, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 5, G_TYPE_INT, G_TYPE_LONG,
+			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }
