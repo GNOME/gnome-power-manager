@@ -40,16 +40,16 @@
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
-static void     gpm_power_finalize   (GObject           *object);
+static void     gpm_power_finalize   (GObject       *object);
 
 #define GPM_POWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_POWER, GpmPowerPrivate))
 
 struct GpmPowerPrivate
 {
-        gboolean       on_ac;
+	gboolean       on_ac;
 
-        GHashTable    *kind_cache;
-        GHashTable    *device_cache;
+	GHashTable    *kind_cache;
+	GHashTable    *device_cache;
 
 	GpmHalMonitor *hal_monitor;
 };
@@ -368,8 +368,8 @@ battery_kind_cache_update (GpmPower              *power,
 
 
 	/* Count the number present */
-        for (l = entry->devices; l; l = l->next) {
-		const char            *udi;
+	for (l = entry->devices; l; l = l->next) {
+		const char              *udi;
 		BatteryDeviceCacheEntry *device;
 
 		udi = (const char *)l->data;
@@ -413,8 +413,8 @@ battery_kind_cache_update (GpmPower              *power,
 	g_debug ("%i devices of type %s", num_present, entry->kind);
 
 	/* iterate thru all the devices (multiple battery scenario) */
-        for (l = entry->devices; l; l = l->next) {
-		const char            *udi;
+	for (l = entry->devices; l; l = l->next) {
+		const char              *udi;
 		BatteryDeviceCacheEntry *device;
 
 		udi = (const char *)l->data;
@@ -575,7 +575,7 @@ power_get_summary_for_udi (GpmPower   *power,
 	    || strcmp (entry->kind, "pda") == 0) {
 
 		g_string_append_printf (summary,
-					"%s (%i%%)",
+					"%s (%i%%)\n",
 					kind_desc,
 					entry->percentage_charge);
 		return;
@@ -619,9 +619,8 @@ power_get_summary_for_udi (GpmPower   *power,
 			}
 			g_free (timestring);
 		}
-	} else {
-		g_string_append_printf (summary, "\n");
 	}
+	g_string_append (summary, "\n");
 }
 
 static void
@@ -642,8 +641,10 @@ power_get_summary_for_kind (GpmPower   *power,
 		return;
 	}
 
-        for (l = entry->devices; l; l = l->next) {
-		power_get_summary_for_udi (power, (const char *)l->data, summary);
+	for (l = entry->devices; l; l = l->next) {
+		const char *udi = (const char *)l->data;
+		power_get_summary_for_udi (power, udi, summary);
+		g_debug ("tooltip for %s: %s", udi, summary->str);
 	}
 }
 
@@ -652,32 +653,34 @@ gpm_power_get_status_summary (GpmPower *power,
 			      char    **string,
 			      GError  **error)
 {
-       GString *summary = NULL;
-       char    *list [] = { "primary", "ups", "mouse", "keyboard", "pda", NULL };
-       int      i;
+	GString *summary = NULL;
+	char    *list [] = { "primary", "ups", "mouse", "keyboard", "pda", NULL };
+	int      i;
 
-       if (! string) {
-	       return FALSE;
-       }
+	if (! string) {
+		return FALSE;
+	}
 
-       if (power->priv->on_ac) {
-               summary = g_string_new (_("Computer is running on AC power\n"));
-       } else {
-               summary = g_string_new (_("Computer is running on battery power\n"));
-       }
+	if (power->priv->on_ac) {
+		summary = g_string_new (_("Computer is running on AC power\n"));
+	} else {
+		summary = g_string_new (_("Computer is running on battery power\n"));
+	}
 
-       /* do each device type we know about */
-       /* FIXME: maybe don't hard code these ? */
-       for (i = 0; list [i] != NULL; i++) {
-	       power_get_summary_for_kind (power, list [i], summary);
-       }
+	/* do each device type we know about */
+	/* FIXME: maybe don't hard code these ? */
+	for (i = 0; list [i] != NULL; i++) {
+		power_get_summary_for_kind (power, list [i], summary);
+	}
 
-       /* remove the last \n */
-       g_string_truncate (summary, summary->len-1);
+	/* remove the last \n */
+	g_string_truncate (summary, summary->len-1);
 
-       *string = g_string_free (summary, FALSE);
+	g_debug ("tooltip: %s", summary->str);
 
-       return TRUE;
+	*string = g_string_free (summary, FALSE);
+
+	return TRUE;
 }
 
 gboolean
@@ -773,17 +776,17 @@ gpm_power_set_on_ac (GpmPower *power,
 		     gboolean  on_ac,
 		     GError  **error)
 {
-       g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
-       if (on_ac != power->priv->on_ac) {
-               power->priv->on_ac = on_ac;
+	if (on_ac != power->priv->on_ac) {
+		power->priv->on_ac = on_ac;
 
-               g_debug ("Setting on-ac: %d", on_ac);
+		g_debug ("Setting on-ac: %d", on_ac);
 
-               g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
-       }
+		g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
+	}
 
-       return TRUE;
+	return TRUE;
 }
 
 gboolean
@@ -793,11 +796,11 @@ gpm_power_get_on_ac (GpmPower *power,
 {
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
-        if (on_ac) {
+	if (on_ac) {
 		*on_ac = power->priv->on_ac;
-        }
+	}
 
-        return TRUE;
+	return TRUE;
 }
 
 static void
@@ -1071,11 +1074,11 @@ gpm_power_finalize (GObject *object)
 		g_object_unref (power->priv->hal_monitor);
 	}
 
-        if (power->priv->kind_cache != NULL) {
+	if (power->priv->kind_cache != NULL) {
 		g_hash_table_destroy (power->priv->kind_cache);
 	}
 
-        if (power->priv->device_cache != NULL) {
+	if (power->priv->device_cache != NULL) {
 		g_hash_table_destroy (power->priv->device_cache);
 	}
 
