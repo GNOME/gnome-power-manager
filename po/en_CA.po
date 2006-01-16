@@ -1,14 +1,14 @@
 # Canadian English translation for gnome-power-manager
-# Copyright (C) 2005 Adam Weinberger <adamw@gnome.org>
+# Copyright (C) 2005-2006 Adam Weinberger <adamw@gnome.org>
 # This file is distributed under the same licence as the gnome-power-manager package.
-# Adam Weinberger <adamw@gnome.org>, 2005.
+# Adam Weinberger <adamw@gnome.org>, 2005, 2006.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-09 21:55-0500\n"
+"POT-Creation-Date: 2006-01-15 23:25-0500\n"
 "PO-Revision-Date: 2005-07-18 04:45-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -221,18 +221,18 @@ msgstr "Orientation"
 msgid "The orientation of the tray."
 msgstr "The orientation of the tray."
 
-#: ../src/gpm-common.c:77
+#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "Unknown"
 
-#: ../src/gpm-common.c:82
+#: ../src/gpm-common.c:56
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minute"
 msgstr[1] "%i minutes"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:67
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -241,86 +241,58 @@ msgstr[1] "%i hours"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:99
+#: ../src/gpm-common.c:73
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:100
+#: ../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "hour"
 msgstr[1] "hours"
 
-#: ../src/gpm-common.c:101
+#: ../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minute"
 msgstr[1] "minutes"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:174
+#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "GNOME Power Manager"
 
-#: ../src/gpm-common.h:34
+#: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Power Manager for the GNOME desktop"
 
-#: ../src/gpm-main.c:158
+#: ../src/gpm-main.c:324
 msgid "Do not daemonize"
 msgstr "Do not daemonize"
 
-#: ../src/gpm-main.c:160 ../src/gpm-prefs.c:613
+#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
 msgid "Show extra debugging information"
 msgstr "Show extra debugging information"
 
-#: ../src/gpm-manager.c:240
-msgid "charging"
-msgstr "charging"
-
-#: ../src/gpm-manager.c:242
-msgid "discharging"
-msgstr "discharging"
-
-#: ../src/gpm-manager.c:245
-msgid "charged"
-msgstr "charged"
-
-#: ../src/gpm-manager.c:260
-msgid "until charged"
-msgstr "until charged"
-
-#: ../src/gpm-manager.c:263
-msgid "until empty"
-msgstr "until empty"
-
-#: ../src/gpm-manager.c:333
-msgid "Computer is running on battery power\n"
-msgstr "Computer is running on battery power\n"
-
-#: ../src/gpm-manager.c:335
-msgid "Computer is running on AC power\n"
-msgstr "Computer is running on AC power\n"
-
-#: ../src/gpm-manager.c:501
+#: ../src/gpm-manager.c:467
 msgid "AC Power Unplugged"
 msgstr "AC Power Unplugged"
 
-#: ../src/gpm-manager.c:503
+#: ../src/gpm-manager.c:469
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "The AC Power has been unplugged. The system is now using battery power."
 
-#: ../src/gpm-manager.c:590
+#: ../src/gpm-manager.c:567
 msgid "Battery Charged"
 msgstr "Battery Charged"
 
-#: ../src/gpm-manager.c:592
+#: ../src/gpm-manager.c:569
 msgid "Your battery is now fully charged"
 msgstr "Your battery is now fully charged"
 
-#: ../src/gpm-manager.c:624 ../src/gpm-manager.c:646
+#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -329,13 +301,61 @@ msgstr ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 
-#: ../src/gpm-manager.c:631
+#: ../src/gpm-manager.c:608
 msgid "Battery Critically Low"
 msgstr "Battery Critically Low"
 
-#: ../src/gpm-manager.c:652
+#: ../src/gpm-manager.c:629
 msgid "Battery Low"
 msgstr "Battery Low"
+
+#: ../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "Laptop battery"
+
+#: ../src/gpm-power.c:254
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "Wireless mouse"
+
+#: ../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "Wireless keyboard"
+
+#: ../src/gpm-power.c:260
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-power.c:605
+msgid "charging"
+msgstr "charging"
+
+#: ../src/gpm-power.c:607
+msgid "discharging"
+msgstr "discharging"
+
+#: ../src/gpm-power.c:609
+msgid "charged"
+msgstr "charged"
+
+#: ../src/gpm-power.c:632
+msgid "until charged"
+msgstr "until charged"
+
+#: ../src/gpm-power.c:637
+msgid "until empty"
+msgstr "until empty"
+
+#: ../src/gpm-power.c:683
+msgid "Computer is running on AC power\n"
+msgstr "Computer is running on AC power\n"
+
+#: ../src/gpm-power.c:685
+msgid "Computer is running on battery power\n"
+msgstr "Computer is running on battery power\n"
 
 #: ../src/gpm-tray-icon.c:103
 msgid "_Suspend"
@@ -365,11 +385,11 @@ msgstr "_Help"
 msgid "_About"
 msgstr "_About"
 
-#: ../src/gpm-tray-icon.c:230
+#: ../src/gpm-tray-icon.c:236
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licensed under the GNU General Public Licence Version 2"
 
-#: ../src/gpm-tray-icon.c:231
+#: ../src/gpm-tray-icon.c:237
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -381,7 +401,7 @@ msgstr ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the Licence, or (at your option) any later version."
 
-#: ../src/gpm-tray-icon.c:235
+#: ../src/gpm-tray-icon.c:241
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -393,7 +413,7 @@ msgstr ""
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public Licence for more details."
 
-#: ../src/gpm-tray-icon.c:239
+#: ../src/gpm-tray-icon.c:245
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -405,55 +425,35 @@ msgstr ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../src/gpm-tray-icon.c:244
+#: ../src/gpm-tray-icon.c:250
 msgid "translator-credits"
 msgstr "Adam Weinberger <adamw@gnome.org>"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "Suspend"
 
-#: ../src/gpm-prefs.c:50
+#: ../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "Shutdown"
 
-#: ../src/gpm-prefs.c:51
+#: ../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "Hibernate"
 
-#: ../src/gpm-prefs.c:52
+#: ../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "Do nothing"
 
-#: ../src/gpm-prefs.c:161
+#: ../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "Never"
 
-#: ../src/gpm-prefs.c:551
+#: ../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>Configuration</b>"
 
-#: ../src/gpm-prefs.c:626
+#: ../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "GNOME Power Preferences"
-
-#: ../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "Laptop battery"
-
-#: ../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "UPS"
-
-#: ../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "Wireless mouse"
-
-#: ../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "Wireless keyboard"
-
-#: ../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "Misc PDA"
