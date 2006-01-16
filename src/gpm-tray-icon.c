@@ -503,7 +503,8 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 #elif (LIBNOTIFY_VERSION_MINOR == 2)
 	ret = notify_glib_init (NICENAME, NULL);
 #endif
-
+	if (!ret)
+		g_warning ("gpm_tray_icon_init failed");
 }
 
 static void
@@ -533,6 +534,7 @@ gpm_tray_icon_new (void)
 	return GPM_TRAY_ICON (tray_icon);
 }
 
+#if defined(HAVE_LIBNOTIFY)
 static gboolean
 get_widget_position (GtkWidget *widget,
 		     int       *x,
@@ -554,6 +556,7 @@ get_widget_position (GtkWidget *widget,
 
 	return TRUE;
 }
+#endif
 
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 
