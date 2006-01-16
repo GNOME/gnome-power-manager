@@ -15,6 +15,14 @@
 	* src/gpm-dbus-client.{h|c}, src/Makefile.am, po/POTFILES.in:
 	Remove these non-required files. (#327236)
 
+	* data/gnome-power-manager.schemas.in:
+	Update the descriptions, and add a few more <short> and <long> tags.
+	Remove the hard-drive spindown keys also, we don't use them anymore.
+	Also make all the time values in seconds.
+
+	* src/gpm-idle, src/gpm-manager.c, src/gpm-prefs.c: Update, as now all
+	the gconf values are in seconds. (#327007)
+
 2006-01-14  William Jon McCann  <mccann@jhu.edu>
 
 	* data/gpm-prefs.glade: A few HIG spacing fixes.  This makes

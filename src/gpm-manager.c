@@ -371,12 +371,15 @@ sync_dpms_policy (GpmManager *manager)
 						&error);
 	}
 
-	/* convert minutes to secs */
-	standby *= 60;
-
 	if (error) {
 		g_warning ("Unable to get DPMS timeouts: %s", error->message);
 		g_error_free (error);
+		return;
+	}
+
+	/* old policy was in seconds, warn the user if too small */
+	if (standby < 60) {
+		g_warning ("standby timeout is invalid, please re-configure");
 		return;
 	}
 

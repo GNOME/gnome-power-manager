@@ -171,9 +171,12 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 	
 	value = (gint)gtk_range_get_value (range);
 	if (value == NEVER_TIME_ON_SLIDER) {
-		value = 0; /* gnome power manager interprets 0 as Never */
+		/* gnome power manager interprets 0 as Never */
+		value = 0;
+	} else {
+		/* policy is in seconds, slider is in minutes */
+		value *= 60;
 	}
-
 	gconf_client_set_int (gconf_client_get_default (), gpm_pref_key, value, NULL);
 }
 
@@ -189,8 +192,12 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog, gchar *widget_name, gchar *gpm_p
 	g_signal_connect (G_OBJECT (widget), "value-changed", 
 			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb), gpm_pref_key);
 	value = gconf_client_get_int (gconf_client_get_default (), gpm_pref_key, NULL);
-	if (value == 0)
+	if (value == 0) {
 		value = NEVER_TIME_ON_SLIDER;
+	} else {
+		/* policy is in seconds, slider is in minutes */
+		value /= 60;
+	}
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
 	return widget;

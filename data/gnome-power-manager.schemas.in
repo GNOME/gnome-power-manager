@@ -8,7 +8,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If we should notify the user that the ac_adapter is removed</short>
+        <short>Notify on AC loss</short>
+        <long>If we should notify the user that the AC adapter has been is removed</long>
       </locale>
     </schema>
 
@@ -19,7 +20,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If we should notify the user that the battery is fully charged</short>
+        <short>Notify on fully charged</short>
+        <long>If we should notify the user that the battery is fully charged</long>
       </locale>
     </schema>
 
@@ -31,7 +33,7 @@
       <default>always</default>
       <locale name="C">
         <short>When to show the notification icon</short>
-        <long>Options are never, critical, charge, always</long>
+        <long>The display icon policy can be never, critical, charge, always</long>
       </locale>
     </schema>
 
@@ -42,8 +44,8 @@
       <type>int</type>
       <default>20</default>
       <locale name="C">
-        <short>The powerdevice warning threshold.</short>
-        <long>The percentage that the powerdevice has to get to be considered "low enough" to warn the user.</long>
+        <short>The battery warning threshold.</short>
+        <long>The percentage that the battery has to get to be considered "low enough" to warn the user.</long>
       </locale>
     </schema>
 
@@ -54,8 +56,8 @@
       <type>int</type>
       <default>5</default>
       <locale name="C">
-        <short>The powerdevice action threshold.</short>
-        <long>The percentage that the powerdevice has to get to be considered "low enough" to perform an action.</long>
+        <short>The battery critical action threshold.</short>
+        <long>The percentage that the battery has to get to be considered "low enough" to perform an action.</long>
       </locale>
     </schema>
 
@@ -63,9 +65,10 @@
       <key>/schemas/apps/gnome-power-manager/policy/ac/brightness</key>
       <applyto>/apps/gnome-power-manager/policy/ac/brightness</applyto>
       <type>int</type>
-      <default>90</default>
+      <default>7</default>
       <locale name="C">
-        <short>The brightness the display is set to on AC</short>
+        <short>AC LCD brightness hardware value</short>
+        <long>The hardware brightness the display is set to whilst on AC power</long>
       </locale>
    </schema>
 
@@ -75,7 +78,8 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>The idle time in seconds before the computer tries to sleep</short>
+        <short>Computer AC idle timeout value</short>
+        <long>The idle time in seconds before the computer tries to sleep whilst on AC power</long>
       </locale>
    </schema>
 
@@ -83,19 +87,10 @@
       <key>/schemas/apps/gnome-power-manager/policy/ac/sleep_display</key>
       <applyto>/apps/gnome-power-manager/policy/ac/sleep_display</applyto>
       <type>int</type>
-      <default>60</default>
+      <default>1800</default>
       <locale name="C">
-        <short>The idle time in seconds before the display tries to sleep</short>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/ac/sleep_hdd</key>
-      <applyto>/apps/gnome-power-manager/policy/ac/sleep_hdd</applyto>
-      <type>int</type>
-      <default>0</default>
-      <locale name="C">
-        <short>The idle time in seconds before the hard disk drives try to sleep</short>
+        <short>Display AC idle timeout value</short>
+        <long>The idle time in seconds before the display tries to sleep whilst on AC power</long>
       </locale>
    </schema>
 
@@ -103,9 +98,10 @@
       <key>/schemas/apps/gnome-power-manager/policy/battery/brightness</key>
       <applyto>/apps/gnome-power-manager/policy/battery/brightness</applyto>
       <type>int</type>
-      <default>50</default>
+      <default>3</default>
       <locale name="C">
-        <short>The brightness the display is set to on battery</short>
+        <short>Battery LCD brightness hardware value</short>
+        <long>The hardware brightness the display is set to whilst on battery power</long>
       </locale>
    </schema>
 
@@ -113,9 +109,10 @@
       <key>/schemas/apps/gnome-power-manager/policy/battery/sleep_computer</key>
       <applyto>/apps/gnome-power-manager/policy/battery/sleep_computer</applyto>
       <type>int</type>
-      <default>50</default>
+      <default>1200</default>
       <locale name="C">
-        <short>The idle time in seconds before the computer tries to sleep</short>
+        <short>Computer battery idle timeout value</short>
+        <long>The idle time in seconds before the computer tries to sleep whilst on battery power</long>
       </locale>
    </schema>
 
@@ -123,19 +120,10 @@
       <key>/schemas/apps/gnome-power-manager/policy/battery/sleep_display</key>
       <applyto>/apps/gnome-power-manager/policy/battery/sleep_display</applyto>
       <type>int</type>
-      <default>10</default>
+      <default>300</default>
       <locale name="C">
-        <short>The idle time in seconds before the display tries to sleep</short>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/battery/sleep_hdd</key>
-      <applyto>/apps/gnome-power-manager/policy/battery/sleep_hdd</applyto>
-      <type>int</type>
-      <default>5</default>
-      <locale name="C">
-        <short>The idle time in seconds before the hard disk drives try to sleep</short>
+        <short>Display battery idle timeout value</short>
+        <long>The idle time in seconds before the display tries to sleep whilst on battery power</long>
       </locale>
    </schema>
    
@@ -145,7 +133,8 @@
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
-        <short>The event for a system suspend button press</short>
+        <short>Suspend button action</short>
+        <long>The action to take when the system suspend button is presses</long>
       </locale>
    </schema>
 
@@ -155,7 +144,8 @@
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
-         <short>The event for a laptop lid closing</short>
+        <short>Laptop lid close action</short>
+        <long>The action to take when the laptop lid is closed</long>
      </locale>
    </schema>
 
@@ -165,7 +155,8 @@
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
-        <short>The type of sleep (hibernate/suspend) to use automatically.</short>
+        <short>Default sleep type</short>
+        <long>The type of sleep (hibernate/suspend) to use automatically.</long>
       </locale>
    </schema>
 
@@ -175,7 +166,8 @@
       <type>string</type>
       <default>shutdown</default>
       <locale name="C">
-        <short>The action to take when the battery is critically low.</short>
+        <short>Battery critical low action</short>
+        <long>The action to take when the battery is critically low.</long>
       </locale>
    </schema>
 

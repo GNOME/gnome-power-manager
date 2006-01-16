@@ -75,7 +75,7 @@ struct GpmIdlePrivate
 
 	GpmIdleMode	 mode;
 
-	guint		 system_timeout;
+	guint		 system_timeout;	/* in seconds */
 	guint		 system_timer_id;
 	guint		 system_idle_timer_id;
 
@@ -179,7 +179,7 @@ add_system_timer (GpmIdle *idle)
 {
 	guint64 msecs;
 
-	msecs = idle->priv->system_timeout * 60000;
+	msecs = idle->priv->system_timeout * 1000;
 
 	if (idle->priv->system_timeout > 0) {
 		idle->priv->system_timer_id = g_timeout_add (msecs,
