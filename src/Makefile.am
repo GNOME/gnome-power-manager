@@ -32,8 +32,6 @@ bin_PROGRAMS =						\
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
 	gpm-hal.c					\
-	gpm-dbus-client.h				\
-	gpm-dbus-client.c				\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	gpm-prefs.h					\
