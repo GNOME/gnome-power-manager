@@ -4,6 +4,8 @@
 	gnome-common that we are using USE_COMMON_DOC_BUILD.
 
 	* src/gpm-tray-icon.c: Fix the !libnotify build.
+	Also switch HAVE_LIBNOTIFY to LIBNOTIFY_VERSION_MINOR >=2 so we can
+	easily build with scons.
 
 	* src/gpm-stock-icons.c: Fix the scons build by including config.h
 

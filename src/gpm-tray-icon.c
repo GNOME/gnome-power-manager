@@ -41,13 +41,12 @@
 
 #include <libgnomeui/gnome-help.h> /* for gnome_help_display */
 
-#if defined(HAVE_LIBNOTIFY)
+#if LIBNOTIFY_VERSION_MINOR >= 2
 #include <libnotify/notify.h>
 #endif
 
 #include "gpm-common.h" /* For GPMURL, etc */
 #include "gpm-stock-icons.h"
-
 #include "gpm-tray-icon.h"
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
@@ -534,7 +533,7 @@ gpm_tray_icon_new (void)
 	return GPM_TRAY_ICON (tray_icon);
 }
 
-#if defined(HAVE_LIBNOTIFY)
+#if LIBNOTIFY_VERSION_MINOR >= 2
 static gboolean
 get_widget_position (GtkWidget *widget,
 		     int       *x,
@@ -735,7 +734,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 
 	error = NULL;
 
-#if defined(HAVE_LIBNOTIFY)
+#if LIBNOTIFY_VERSION_MINOR >= 2
 	if (icon->priv->notify != NULL) {
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 		notify_notification_close (icon->priv->notify, &error);	
