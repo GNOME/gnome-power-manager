@@ -730,6 +730,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 
 	error = NULL;
 
+#if defined(HAVE_LIBNOTIFY)
 	if (icon->priv->notify != NULL) {
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 		notify_notification_close (icon->priv->notify, &error);	
@@ -738,8 +739,8 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 		icon->priv->notify = NULL;
 #endif
 	}
-
 	if (error != NULL) {
 		g_error_free (error);
 	}
+#endif
 }
