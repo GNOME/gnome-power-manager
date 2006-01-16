@@ -950,6 +950,27 @@ add_battery (GpmPower   *power,
 	battery_device_cache_add_device (power, entry);
 	battery_kind_cache_add_device (power, entry);
 
+	/*
+	 * We should notify the user if the battery has a low capacity,
+	 * where capacity is the ratio of the last_full capacity with that of
+	 * the design capacity. (#326740)
+	 */
+	if (strcmp (entry->kind, "primary") == 0) {
+	        gint design, lastfull;
+	        gpm_hal_device_get_int (udi, "battery.charge_level.design", &design);
+	        gpm_hal_device_get_int (udi, "battery.charge_level.last_full", &lastfull);
+	        if (design > 0 && lastfull > 0) {
+	                float capacity;
+	                capacity = design / lastfull;
+	                g_error ("Primary battery capacity: %f", capacity);
+	                if (capacity < 0.5f) {
+	                        g_warning ("Your battery has a very low capacity, "
+	                                   "meaning that it may be old or broken. "
+	                                   "Battery life will be sub-optimal, "
+	                                   "and the time remaining may be incorrect.");
+	                }
+	        }
+	}
 	return TRUE;
 }
 

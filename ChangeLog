@@ -23,6 +23,9 @@
 	* src/gpm-idle, src/gpm-manager.c, src/gpm-prefs.c: Update, as now all
 	the gconf values are in seconds. (#327007)
 
+	* src/gpm-power.c (add_battery): Add a warning for a low capacity
+	battery, to start to fix (#326740) -- yet more work required.
+
 2006-01-14  William Jon McCann  <mccann@jhu.edu>
 
 	* data/gpm-prefs.glade: A few HIG spacing fixes.  This makes
