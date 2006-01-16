@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-24 22:39+0100\n"
+"POT-Creation-Date: 2006-01-16 15:25+0000\n"
 "PO-Revision-Date: 2005-12-25 11:16+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -16,85 +16,198 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../gnome-power-preferences.desktop.in.h:1
+#: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
 msgstr "配置电源管理"
 
-#: ../gnome-power-preferences.desktop.in.h:2
+#: ../data/gnome-power-preferences.desktop.in.h:2
 msgid "Power Management"
 msgstr "电源首选项"
 
-#: ../gnome-power-manager.schemas.in.h:1
-msgid "If we require a password when resuming from suspend"
-msgstr "从挂起状态恢复时是否需要密码"
-
-#: ../gnome-power-manager.schemas.in.h:2
+#: ../data/gnome-power-manager.schemas.in.h:1
 msgid "If we should notify the user that the ac_adapter is removed"
 msgstr "移除 ac_adapter 时是否应通知用户"
 
-#: ../gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:2
+#, fuzzy
+msgid "If we should notify the user that the battery is fully charged"
+msgstr "移除 ac_adapter 时是否应通知用户"
+
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
 msgstr "选项为 never、critical、charge、always"
 
-#: ../gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "The action to take when the battery is critically low."
 msgstr "当电池电量即将用尽时执行的动作。"
 
-#: ../gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "The brightness the display is set to on AC"
 msgstr "接入交流电源时设定的显示亮度"
 
-#: ../gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "The brightness the display is set to on battery"
 msgstr "使用电池时设定的显示亮度"
 
-#: ../gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:7
 msgid "The event for a laptop lid closing"
 msgstr "笔记本上盖关闭的事件"
 
-#: ../gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid "The event for a system suspend button press"
 msgstr "按下系统待机按钮的事件"
 
-#: ../gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "The idle time in seconds before the computer tries to sleep"
 msgstr "计算机试图转入休眠时等待时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "The idle time in seconds before the display tries to sleep"
 msgstr "显示器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:11
 msgid "The idle time in seconds before the hard disk drives try to sleep"
 msgstr "硬盘驱动器试图转入休眠时等待的时间秒数"
 
-#: ../gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to perform an action."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
 "The percentage that the powerdevice has to get to be considered \"low enough"
 "\" to warn the user."
 msgstr ""
 
-#: ../gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "The powerdevice action threshold."
 msgstr "电源设备动作阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "The powerdevice warning threshold."
 msgstr "电源设备警告阀值。"
 
-#: ../gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "自动使用休眠还是待机。"
 
-#: ../gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "When to show the notification icon"
 msgstr "是否显示通知图标"
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>动作</b>"
+
+#: ../data/gpm-prefs.glade.h:2
+msgid "<b>General</b>"
+msgstr "<b>常规</b>"
+
+#: ../data/gpm-prefs.glade.h:3
+msgid "<b>Notification Area</b>"
+msgstr "<b>通知区域</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+msgid "<b>Other Options</b>"
+msgstr "<b>其它选项</b>"
+
+#: ../data/gpm-prefs.glade.h:5
+msgid "<b>Running on AC Adapter</b>"
+msgstr "<b>交流供电时运行</b>"
+
+#: ../data/gpm-prefs.glade.h:6
+msgid "<b>Running on Batteries</b>"
+msgstr "<b>电池供电时运行</b>"
+
+#: ../data/gpm-prefs.glade.h:7
+msgid "<i><small>Estimated 16 minutes</small></i>"
+msgstr "<i><small>约 16 分钟</small></i>"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+msgstr "<i><small>约 2 小时 6 分钟</small></i>"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "Advanced"
+msgstr "高级"
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "Ba_ttery is critical when below:"
+msgstr "电量即将用尽的标准为还剩(_T)："
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "Only display when battery life is _critical"
+msgstr "仅当电量即将用尽时显示(_C)"
+
+#: ../data/gpm-prefs.glade.h:12
+msgid "Only display when charging or _discharging"
+msgstr "仅在充电或放电时显示(_D)"
+
+#: ../data/gpm-prefs.glade.h:13
+msgid "Options"
+msgstr "选项"
+
+#: ../data/gpm-prefs.glade.h:14
+msgid "Power Preferences"
+msgstr "电源首选项"
+
+#: ../data/gpm-prefs.glade.h:15
+msgid "Put _computer to sleep after:"
+msgstr "指定时间后将计算机转入休眠(_C)："
+
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put _display to sleep after:"
+msgstr "指定时间后将显示器转入休眠(_D)："
+
+#: ../data/gpm-prefs.glade.h:17
+msgid "Put c_omputer to sleep after:"
+msgstr "指定时间后将计算机转入休眠(_O)："
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Put dis_play to sleep after:"
+msgstr "指定时间后将显示器转入休眠(_P)："
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "Set display _brightness:"
+msgstr "设定显示亮度(_B)："
+
+#: ../data/gpm-prefs.glade.h:20
+msgid "Set display b_rightness:"
+msgstr "设定显示亮度(_R)："
+
+#: ../data/gpm-prefs.glade.h:21
+msgid "Sleep"
+msgstr "休眠"
+
+#: ../data/gpm-prefs.glade.h:22
+msgid "When _battery power critical:"
+msgstr "电量将用尽时(_B)："
+
+#: ../data/gpm-prefs.glade.h:23
+msgid "When _suspend button pressed:"
+msgstr "按下待机按钮时(_S)："
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "When laptop li_d is closed:"
+msgstr "关闭笔记本电脑上盖时(_D)："
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "_Always display icon"
+msgstr "总是显示图标(_A)"
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "_Battery is low when below:"
+msgstr "低电量标准(_B)："
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "_Computer sleep type:"
+msgstr "计算机休眠类型(_C)："
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "_Never display icon"
+msgstr "从不显示图标(_N)"
 
 #: ../src/eggtrayicon.c:132
 msgid "Orientation"
@@ -104,17 +217,17 @@ msgstr "方向"
 msgid "The orientation of the tray."
 msgstr "托盘的方向。"
 
-#: ../src/gpm-common.c:128
+#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "未知"
 
-#: ../src/gpm-common.c:133
+#: ../src/gpm-common.c:56
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i 分钟"
 
-#: ../src/gpm-common.c:144
+#: ../src/gpm-common.c:67
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -122,103 +235,152 @@ msgstr[0] "%i 小时"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:150
+#: ../src/gpm-common.c:73
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:151
+#: ../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "小时"
 
-#: ../src/gpm-common.c:152
+#: ../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分钟"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:696
+#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "GNOME 电源管理器"
 
-#: ../src/gpm-common.h:34
+#: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的电源管理器"
 
-#: ../src/gpm-console.c:342 ../src/gpm-main.c:680
+#: ../src/gpm-main.c:324
 msgid "Do not daemonize"
 msgstr "不运行守护程序"
 
-#: ../src/gpm-console.c:344 ../src/gpm-main.c:682 ../src/gpm-prefs.c:595
+#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
-#: ../src/gpm-main.c:347 ../src/gpm-main.c:366
-#, c-format
+#: ../src/gpm-manager.c:467
+msgid "AC Power Unplugged"
+msgstr "交流电已拔出"
+
+#: ../src/gpm-manager.c:469
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "交流电已经拔出。系统现在将使用电池供电。"
+
+#: ../src/gpm-manager.c:567
+msgid "Battery Charged"
+msgstr "电池已充满"
+
+#: ../src/gpm-manager.c:569
+msgid "Your battery is now fully charged"
+msgstr "您的电池已经充满电"
+
+#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
+#, fuzzy, c-format
 msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 "电量大约可维持 <b>%s</b>，为总电量的 %i%%。请接入交流电源以避免丢失数据。"
 
-#: ../src/gpm-main.c:351
+#: ../src/gpm-manager.c:608
 msgid "Battery Critically Low"
 msgstr "电量即将用尽"
 
-#: ../src/gpm-main.c:369
+#: ../src/gpm-manager.c:629
 msgid "Battery Low"
 msgstr "电量低"
 
-#: ../src/gpm-main.c:415
-msgid "AC Power Unplugged"
-msgstr "交流电已拔出"
+#: ../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "笔记本电池"
 
-#: ../src/gpm-main.c:416
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "交流电已经拔出。系统现在将使用电池供电。"
+#: ../src/gpm-power.c:254
+msgid "UPS"
+msgstr "UPS"
 
-#: ../src/gpm-main.c:494
-msgid "Battery Charged"
-msgstr "电池已充满"
+#: ../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "无线鼠标"
 
-#: ../src/gpm-main.c:494
-msgid "Your battery is now fully charged"
-msgstr "您的电池已经充满电"
+#: ../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "无线键盘"
 
-#: ../src/gpm-notification.c:232
+#: ../src/gpm-power.c:260
+msgid "PDA"
+msgstr ""
+
+#: ../src/gpm-power.c:605
 msgid "charging"
 msgstr "正充电"
 
-#: ../src/gpm-notification.c:234
+#: ../src/gpm-power.c:607
 msgid "discharging"
 msgstr "正放电"
 
-#: ../src/gpm-notification.c:237
+#: ../src/gpm-power.c:609
 msgid "charged"
 msgstr "已充电"
 
-#: ../src/gpm-notification.c:252
+#: ../src/gpm-power.c:632
 msgid "until charged"
 msgstr "至充满"
 
-#: ../src/gpm-notification.c:255
+#: ../src/gpm-power.c:637
 msgid "until empty"
 msgstr "直到空"
 
-#: ../src/gpm-notification.c:322
-msgid "Computer is running on battery power\n"
-msgstr "计算机正在使用电池供电\n"
-
-#: ../src/gpm-notification.c:324
+#: ../src/gpm-power.c:683
 msgid "Computer is running on AC power\n"
 msgstr "计算机正在使用交流电源供电\n"
 
-#: ../src/gpm-notification.c:354
+#: ../src/gpm-power.c:685
+msgid "Computer is running on battery power\n"
+msgstr "计算机正在使用电池供电\n"
+
+#: ../src/gpm-tray-icon.c:104
+msgid "_Suspend"
+msgstr "挂起(_S)"
+
+#: ../src/gpm-tray-icon.c:105
+msgid "Suspend the computer"
+msgstr ""
+
+#: ../src/gpm-tray-icon.c:106
+msgid "Hi_bernate"
+msgstr "休眠(_B)"
+
+#: ../src/gpm-tray-icon.c:107
+#, fuzzy
+msgid "Make the computer go to sleep"
+msgstr "指定时间后将计算机转入休眠(_O)："
+
+#: ../src/gpm-tray-icon.c:108
+msgid "_Preferences"
+msgstr "首选项(_P)"
+
+#: ../src/gpm-tray-icon.c:110
+msgid "_Help"
+msgstr "帮助(_H)"
+
+#: ../src/gpm-tray-icon.c:112
+msgid "_About"
+msgstr "关于(_A)"
+
+#: ../src/gpm-tray-icon.c:237
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-notification.c:355
+#: ../src/gpm-tray-icon.c:238
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -226,7 +388,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-notification.c:359
+#: ../src/gpm-tray-icon.c:242
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -234,7 +396,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-notification.c:363
+#: ../src/gpm-tray-icon.c:246
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -242,195 +404,44 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#.
-#. * Translators comment: put your own name here to appear in the about dialog.
-#.
-#: ../src/gpm-notification.c:377
+#: ../src/gpm-tray-icon.c:251
 msgid "translator-credits"
 msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
 
-#: ../src/gpm-notification.c:502
-msgid "_Suspend"
-msgstr "挂起(_S)"
-
-#: ../src/gpm-notification.c:507
-msgid "Hi_bernate"
-msgstr "休眠(_B)"
-
-#: ../src/gpm-notification.c:512
-msgid "_Preferences"
-msgstr "首选项(_P)"
-
-#: ../src/gpm-notification.c:514
-msgid "_Help"
-msgstr "帮助(_H)"
-
-#: ../src/gpm-notification.c:516
-msgid "_About"
-msgstr "关于(_A)"
-
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:43
+#: ../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "挂起"
 
-#: ../src/gpm-prefs.c:44
+#: ../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../src/gpm-prefs.c:45
+#: ../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "无反应"
 
-#: ../src/gpm-prefs.c:161
+#: ../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "从不"
 
-#: ../src/gpm-prefs.c:530
+#: ../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>配置</b>"
 
-#: ../src/gpm-prefs.c:608
+#: ../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "GNOME 电源首选项"
 
-#: ../src/gpm-prefs.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>动作</b>"
+#~ msgid "If we require a password when resuming from suspend"
+#~ msgstr "从挂起状态恢复时是否需要密码"
 
-#: ../src/gpm-prefs.glade.h:2
-msgid "<b>General</b>"
-msgstr "<b>常规</b>"
+#~ msgid "Require password when returning from sleep"
+#~ msgstr "从休眠返回时需要密码"
 
-#: ../src/gpm-prefs.glade.h:3
-msgid "<b>Notification Area</b>"
-msgstr "<b>通知区域</b>"
-
-#: ../src/gpm-prefs.glade.h:4
-msgid "<b>Other Options</b>"
-msgstr "<b>其它选项</b>"
-
-#: ../src/gpm-prefs.glade.h:5
-msgid "<b>Running on AC Adapter</b>"
-msgstr "<b>交流供电时运行</b>"
-
-#: ../src/gpm-prefs.glade.h:6
-msgid "<b>Running on Batteries</b>"
-msgstr "<b>电池供电时运行</b>"
-
-#: ../src/gpm-prefs.glade.h:7
-msgid "<i><small>Estimated 16 minutes</small></i>"
-msgstr "<i><small>约 16 分钟</small></i>"
-
-#: ../src/gpm-prefs.glade.h:8
-msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
-msgstr "<i><small>约 2 小时 6 分钟</small></i>"
-
-#: ../src/gpm-prefs.glade.h:9
-msgid "Advanced"
-msgstr "高级"
-
-#: ../src/gpm-prefs.glade.h:10
-msgid "Ba_ttery is critical when below:"
-msgstr "电量即将用尽的标准为还剩(_T)："
-
-#: ../src/gpm-prefs.glade.h:11
-msgid "Only display when battery life is _critical"
-msgstr "仅当电量即将用尽时显示(_C)"
-
-#: ../src/gpm-prefs.glade.h:12
-msgid "Only display when charging or _discharging"
-msgstr "仅在充电或放电时显示(_D)"
-
-#: ../src/gpm-prefs.glade.h:13
-msgid "Options"
-msgstr "选项"
-
-#: ../src/gpm-prefs.glade.h:14
-msgid "Power Preferences"
-msgstr "电源首选项"
-
-#: ../src/gpm-prefs.glade.h:15
-msgid "Put _computer to sleep after:"
-msgstr "指定时间后将计算机转入休眠(_C)："
-
-#: ../src/gpm-prefs.glade.h:16
-msgid "Put _display to sleep after:"
-msgstr "指定时间后将显示器转入休眠(_D)："
-
-#: ../src/gpm-prefs.glade.h:17
-msgid "Put c_omputer to sleep after:"
-msgstr "指定时间后将计算机转入休眠(_O)："
-
-#: ../src/gpm-prefs.glade.h:18
-msgid "Put dis_play to sleep after:"
-msgstr "指定时间后将显示器转入休眠(_P)："
-
-#: ../src/gpm-prefs.glade.h:19
-msgid "Require password when returning from sleep"
-msgstr "从休眠返回时需要密码"
-
-#: ../src/gpm-prefs.glade.h:20
-msgid "Set display _brightness:"
-msgstr "设定显示亮度(_B)："
-
-#: ../src/gpm-prefs.glade.h:21
-msgid "Set display b_rightness:"
-msgstr "设定显示亮度(_R)："
-
-#: ../src/gpm-prefs.glade.h:22
-msgid "Sleep"
-msgstr "休眠"
-
-#: ../src/gpm-prefs.glade.h:23
-msgid "When _battery power critical:"
-msgstr "电量将用尽时(_B)："
-
-#: ../src/gpm-prefs.glade.h:24
-msgid "When _suspend button pressed:"
-msgstr "按下待机按钮时(_S)："
-
-#: ../src/gpm-prefs.glade.h:25
-msgid "When laptop li_d is closed:"
-msgstr "关闭笔记本电脑上盖时(_D)："
-
-#: ../src/gpm-prefs.glade.h:26
-msgid "_Always display icon"
-msgstr "总是显示图标(_A)"
-
-#: ../src/gpm-prefs.glade.h:27
-msgid "_Battery is low when below:"
-msgstr "低电量标准(_B)："
-
-#: ../src/gpm-prefs.glade.h:28
-msgid "_Computer sleep type:"
-msgstr "计算机休眠类型(_C)："
-
-#: ../src/gpm-prefs.glade.h:29
-msgid "_Never display icon"
-msgstr "从不显示图标(_N)"
-
-#: ../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "笔记本电池"
-
-#: ../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "UPS"
-
-#: ../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "无线鼠标"
-
-#: ../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "无线键盘"
-
-#: ../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "各种 PDA"
-
+#~ msgid "Misc PDA"
+#~ msgstr "各种 PDA"

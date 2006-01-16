@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-10 23:11+0100\n"
+"POT-Creation-Date: 2006-01-16 15:25+0000\n"
 "PO-Revision-Date: 2006-01-11 06:34+0100\n"
 "Last-Translator: Slobodan D. Sredojević <slobo@akrep.be>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -227,11 +227,11 @@ msgstr "Usmerenje"
 msgid "The orientation of the tray."
 msgstr "Usmerenje fioke"
 
-#: ../src/gpm-common.c:77
+#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "Nepoznat"
 
-#: ../src/gpm-common.c:82
+#: ../src/gpm-common.c:56
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -239,7 +239,7 @@ msgstr[0] "%i minut"
 msgstr[1] "%i minuta"
 msgstr[2] "%i minuta"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:67
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -249,19 +249,19 @@ msgstr[2] "%i sati"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:99
+#: ../src/gpm-common.c:73
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:100
+#: ../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "sat"
 msgstr[1] "sata"
 msgstr[2] "sati"
 
-#: ../src/gpm-common.c:101
+#: ../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuta"
@@ -269,68 +269,41 @@ msgstr[1] "minuta"
 msgstr[2] "minuta"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:174
+#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "Gnomov upravnik potrošnje struje"
 
-#: ../src/gpm-common.h:34
+#: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Upravnik potrošnje struje za Gnomovu radnu površinu"
 
-#: ../src/gpm-main.c:158
+#: ../src/gpm-main.c:324
 msgid "Do not daemonize"
 msgstr "Nemoj postati pozadinski proces"
 
-#: ../src/gpm-main.c:160 ../src/gpm-prefs.c:613
+#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
 msgid "Show extra debugging information"
 msgstr "Prikaži dodatne informacije za traženje grešaka"
 
-#: ../src/gpm-manager.c:240
-msgid "charging"
-msgstr "punjenje"
-
-#: ../src/gpm-manager.c:242
-msgid "discharging"
-msgstr "pražnjenje"
-
-#: ../src/gpm-manager.c:245
-msgid "charged"
-msgstr "napunjena"
-
-#: ../src/gpm-manager.c:260
-msgid "until charged"
-msgstr "dok se ne napuni"
-
-#: ../src/gpm-manager.c:263
-msgid "until empty"
-msgstr "dok se ne isprazni"
-
-#: ../src/gpm-manager.c:333
-msgid "Computer is running on battery power\n"
-msgstr "Računara se napaja iz baterija\n"
-
-#: ../src/gpm-manager.c:335
-msgid "Computer is running on AC power\n"
-msgstr "Računar se napaja iz električne mreže\n"
-
-#: ../src/gpm-manager.c:501
+#: ../src/gpm-manager.c:467
 msgid "AC Power Unplugged"
 msgstr "Napajanje iz električne mreže je prekinuto"
 
-#: ../src/gpm-manager.c:503
+#: ../src/gpm-manager.c:469
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Napajanje iz električne mreže je prekinuto. Sistem sada koristi bateriju."
 
-#: ../src/gpm-manager.c:590
+#: ../src/gpm-manager.c:567
 msgid "Battery Charged"
 msgstr "Baterija je napunjena"
 
-#: ../src/gpm-manager.c:592
+#: ../src/gpm-manager.c:569
 msgid "Your battery is now fully charged"
 msgstr "Baterija je sada napunjena do kraja"
 
-#: ../src/gpm-manager.c:624 ../src/gpm-manager.c:646
+#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
@@ -338,39 +311,87 @@ msgstr ""
 "Imate približno još <b>%s</b> preostalog vremena trajanja baterije (%d%%). "
 "Uključite kabel za napajanje iz električne mreže kako ne bi izgubili podatke."
 
-#: ../src/gpm-manager.c:631
+#: ../src/gpm-manager.c:608
 msgid "Battery Critically Low"
 msgstr "Baterija je vrlo istrošena"
 
-#: ../src/gpm-manager.c:652
+#: ../src/gpm-manager.c:629
 msgid "Battery Low"
 msgstr "Baterija je istrošena"
 
-#: ../src/gpm-tray-icon.c:103
+#: ../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "Baterija prenosnog računara"
+
+#: ../src/gpm-power.c:254
+msgid "UPS"
+msgstr "Izvor neprekidnog napajanja"
+
+#: ../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "Bežični miš"
+
+#: ../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "Bežična tastatura"
+
+#: ../src/gpm-power.c:260
+msgid "PDA"
+msgstr ""
+
+#: ../src/gpm-power.c:605
+msgid "charging"
+msgstr "punjenje"
+
+#: ../src/gpm-power.c:607
+msgid "discharging"
+msgstr "pražnjenje"
+
+#: ../src/gpm-power.c:609
+msgid "charged"
+msgstr "napunjena"
+
+#: ../src/gpm-power.c:632
+msgid "until charged"
+msgstr "dok se ne napuni"
+
+#: ../src/gpm-power.c:637
+msgid "until empty"
+msgstr "dok se ne isprazni"
+
+#: ../src/gpm-power.c:683
+msgid "Computer is running on AC power\n"
+msgstr "Računar se napaja iz električne mreže\n"
+
+#: ../src/gpm-power.c:685
+msgid "Computer is running on battery power\n"
+msgstr "Računara se napaja iz baterija\n"
+
+#: ../src/gpm-tray-icon.c:104
 msgid "_Suspend"
 msgstr "_Zaustavi"
 
-#: ../src/gpm-tray-icon.c:104
+#: ../src/gpm-tray-icon.c:105
 msgid "Suspend the computer"
 msgstr "Privremeno zaustavi računar"
 
-#: ../src/gpm-tray-icon.c:105
+#: ../src/gpm-tray-icon.c:106
 msgid "Hi_bernate"
 msgstr "Za_mrzni"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:107
 msgid "Make the computer go to sleep"
 msgstr "Uspavaj računar"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:108
 msgid "_Preferences"
 msgstr "Po_dešavanja"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:110
 msgid "_Help"
 msgstr "_Pomoć"
 
-#: ../src/gpm-tray-icon.c:111
+#: ../src/gpm-tray-icon.c:112
 msgid "_About"
 msgstr "_O programu"
 
@@ -386,9 +407,9 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 "Gnomov upravnik potrošnje struje je slobodan softver; Dozvoljeno je njegovo "
-"širenje(rasturanje), vršenje(unošenje) izmena pod uslovima Gnu-ove Opšte Javne "
-"Licence (OJL), verzije 2 ili bilo koje naknadne verzije a koju je objavila "
-"Zadužbina Slobodnog Softvera."
+"širenje(rasturanje), vršenje(unošenje) izmena pod uslovima Gnu-ove Opšte "
+"Javne Licence (OJL), verzije 2 ili bilo koje naknadne verzije a koju je "
+"objavila Zadužbina Slobodnog Softvera."
 
 #: ../src/gpm-tray-icon.c:242
 msgid ""
@@ -400,7 +421,8 @@ msgstr ""
 "Gnomov upravnik potrošnje struje se raspodeljuje u nameri da će biti "
 "koristan,\n"
 "bez ikakvog jamstva; uključujuću bez ograničenja, jamstvo da je bez \n"
-"nedostataka, spreman za tržište ili svrsishodan. Za više detalja pročitajte \n"
+"nedostataka, spreman za tržište ili svrsishodan. Za više detalja "
+"pročitajte \n"
 "Opštu Javnu Licencu."
 
 #: ../src/gpm-tray-icon.c:246
@@ -423,50 +445,33 @@ msgstr ""
 "http://prevod.org — prevodi na srpski jezik"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "Privremeno zaustavi"
 
-#: ../src/gpm-prefs.c:50
+#: ../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "Ugasi"
 
-#: ../src/gpm-prefs.c:51
+#: ../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "Zamrzni"
 
-#: ../src/gpm-prefs.c:52
+#: ../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "Ništa ne radi"
 
-#: ../src/gpm-prefs.c:161
+#: ../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "Nikad"
 
-#: ../src/gpm-prefs.c:551
+#: ../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>Podešavanje</b>"
 
-#: ../src/gpm-prefs.c:626
+#: ../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "Postavke potrošnje struje"
 
-#: ../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "Baterija prenosnog računara"
-
-#: ../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "Izvor neprekidnog napajanja"
-
-#: ../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "Bežični miš"
-
-#: ../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "Bežična tastatura"
-
-#: ../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "Razni ručni lični pomoćnici"
+#~ msgid "Misc PDA"
+#~ msgstr "Razni ručni lični pomoćnici"

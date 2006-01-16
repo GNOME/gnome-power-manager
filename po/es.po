@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-07 01:25+0100\n"
+"POT-Creation-Date: 2006-01-16 15:25+0000\n"
 "PO-Revision-Date: 2006-01-07 01:25+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -33,7 +33,8 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "If we should notify the user that the battery is fully charged"
-msgstr "Si debemos notificar al usuario de que la batería está completamente cargada"
+msgstr ""
+"Si debemos notificar al usuario de que la batería está completamente cargada"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Options are never, critical, charge, always"
@@ -229,18 +230,18 @@ msgstr "Orientación"
 msgid "The orientation of the tray."
 msgstr "La orientación de la bandeja."
 
-#: ../src/gpm-common.c:128
+#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../src/gpm-common.c:133
+#: ../src/gpm-common.c:56
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minuto"
 msgstr[1] "%i minutos"
 
-#: ../src/gpm-common.c:144
+#: ../src/gpm-common.c:67
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -249,107 +250,156 @@ msgstr[1] "%i horas"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:150
+#: ../src/gpm-common.c:73
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:151
+#: ../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "hora"
 msgstr[1] "horas"
 
-#: ../src/gpm-common.c:152
+#: ../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuto"
 msgstr[1] "minutos"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:714
+#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "Gestor de energía de Gnome"
 
-#: ../src/gpm-common.h:34
+#: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestión de energía para el escritorio Gnome"
 
-#: ../src/gpm-main.c:362 ../src/gpm-main.c:381
-#, c-format
+#: ../src/gpm-main.c:324
+msgid "Do not daemonize"
+msgstr "No demonizar"
+
+#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
+msgid "Show extra debugging information"
+msgstr "Mostrar información adicional de depuración"
+
+#: ../src/gpm-manager.c:467
+msgid "AC Power Unplugged"
+msgstr "CA desenchufada"
+
+#: ../src/gpm-manager.c:469
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr ""
+"La CA se ha desenchufado. El sistema está usando energía de la batería."
+
+#: ../src/gpm-manager.c:567
+msgid "Battery Charged"
+msgstr "Batería cargada"
+
+#: ../src/gpm-manager.c:569
+msgid "Your battery is now fully charged"
+msgstr "Su batería está cargada completamente ahora"
+
+#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
+#, fuzzy, c-format
 msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%i%%). Plug in "
+"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 "Le queda aproximadamente <b>%s</b> de batería (%i%%). Enchufe su adaptador "
 "de CA para evitar la pérdida de datos."
 
-#: ../src/gpm-main.c:366
+#: ../src/gpm-manager.c:608
 msgid "Battery Critically Low"
 msgstr "La batería está críticamente baja"
 
-#: ../src/gpm-main.c:384
+#: ../src/gpm-manager.c:629
 msgid "Battery Low"
 msgstr "Batería baja"
 
-#: ../src/gpm-main.c:429
-msgid "AC Power Unplugged"
-msgstr "CA desenchufada"
+#: ../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "Batería de portátil"
 
-#: ../src/gpm-main.c:430
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr ""
-"La CA se ha desenchufado. El sistema está usando energía de la batería."
+#: ../src/gpm-power.c:254
+msgid "UPS"
+msgstr "SAI"
 
-#: ../src/gpm-main.c:512
-msgid "Battery Charged"
-msgstr "Batería cargada"
+#: ../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "Ratón inalámbrico"
 
-#: ../src/gpm-main.c:513
-msgid "Your battery is now fully charged"
-msgstr "Su batería está cargada completamente ahora"
+#: ../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "Teclado inalámbrico"
 
-#: ../src/gpm-main.c:698
-msgid "Do not daemonize"
-msgstr "No demonizar"
+#: ../src/gpm-power.c:260
+msgid "PDA"
+msgstr "PDA"
 
-#: ../src/gpm-main.c:700 ../src/gpm-prefs.c:584
-msgid "Show extra debugging information"
-msgstr "Mostrar información adicional de depuración"
-
-#: ../src/gpm-notification.c:231
+#: ../src/gpm-power.c:605
 msgid "charging"
 msgstr "cargando"
 
-#: ../src/gpm-notification.c:233
+#: ../src/gpm-power.c:607
 msgid "discharging"
 msgstr "descargando"
 
-#: ../src/gpm-notification.c:236
+#: ../src/gpm-power.c:609
 msgid "charged"
 msgstr "cargado"
 
-#: ../src/gpm-notification.c:251
+#: ../src/gpm-power.c:632
 msgid "until charged"
 msgstr "hasta su carga"
 
-#: ../src/gpm-notification.c:254
+#: ../src/gpm-power.c:637
 msgid "until empty"
 msgstr "hasta que se vacíe"
 
-#: ../src/gpm-notification.c:321
-msgid "Computer is running on battery power\n"
-msgstr "El equipo está funcionando con baterías\n"
-
-#: ../src/gpm-notification.c:323
+#: ../src/gpm-power.c:683
 msgid "Computer is running on AC power\n"
 msgstr "El equipo está enchufado a CA\n"
 
-#: ../src/gpm-notification.c:353
+#: ../src/gpm-power.c:685
+msgid "Computer is running on battery power\n"
+msgstr "El equipo está funcionando con baterías\n"
+
+#: ../src/gpm-tray-icon.c:104
+msgid "_Suspend"
+msgstr "_Suspender"
+
+#: ../src/gpm-tray-icon.c:105
+msgid "Suspend the computer"
+msgstr ""
+
+#: ../src/gpm-tray-icon.c:106
+msgid "Hi_bernate"
+msgstr "_Hibernar"
+
+#: ../src/gpm-tray-icon.c:107
+#, fuzzy
+msgid "Make the computer go to sleep"
+msgstr "_Poner el equipo a dormir después de:"
+
+#: ../src/gpm-tray-icon.c:108
+msgid "_Preferences"
+msgstr "_Preferencias"
+
+#: ../src/gpm-tray-icon.c:110
+msgid "_Help"
+msgstr "A_yuda"
+
+#: ../src/gpm-tray-icon.c:112
+msgid "_About"
+msgstr "A_cerca de"
+
+#: ../src/gpm-tray-icon.c:237
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
-#: ../src/gpm-notification.c:354
+#: ../src/gpm-tray-icon.c:238
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -361,7 +411,7 @@ msgstr ""
 "tal como la publica la Free software foundation; ya sea en la versión 2\n"
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
-#: ../src/gpm-notification.c:358
+#: ../src/gpm-tray-icon.c:242
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -373,7 +423,7 @@ msgstr ""
 "MERCANTIBILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Vea la\n"
 "Licencia Pública General GNU para más detalles."
 
-#: ../src/gpm-notification.c:362
+#: ../src/gpm-tray-icon.c:246
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -384,81 +434,41 @@ msgstr ""
 "junto con este programa; si no, escriba a la Free Software Foundation,\n"
 "Inc., 51 Franklin Street, Fith Floor, boston,MA, 02110-1301, USA"
 
-#.
-#. * Translators comment: put your own name here to appear in the about dialog.
-#.
-#: ../src/gpm-notification.c:376
+#: ../src/gpm-tray-icon.c:251
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#: ../src/gpm-notification.c:501
-msgid "_Suspend"
-msgstr "_Suspender"
-
-#: ../src/gpm-notification.c:506
-msgid "Hi_bernate"
-msgstr "_Hibernar"
-
-#: ../src/gpm-notification.c:511
-msgid "_Preferences"
-msgstr "_Preferencias"
-
-#: ../src/gpm-notification.c:513
-msgid "_Help"
-msgstr "A_yuda"
-
-#: ../src/gpm-notification.c:515
-msgid "_About"
-msgstr "A_cerca de"
-
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:46
+#: ../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "Suspender"
 
-#: ../src/gpm-prefs.c:47
+#: ../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "Apagar"
 
-#: ../src/gpm-prefs.c:48
+#: ../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "No hacer nada"
 
-#: ../src/gpm-prefs.c:158
+#: ../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "Nunca"
 
-#: ../src/gpm-prefs.c:519
+#: ../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>Configuración</b>"
 
-#: ../src/gpm-prefs.c:597
+#: ../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "Preferencias de energía de Gnome"
 
-#: ../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "Batería de portátil"
-
-#: ../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "SAI"
-
-#: ../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "Ratón inalámbrico"
-
-#: ../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "Teclado inalámbrico"
-
-#: ../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "PDA Misc"
+#~ msgid "Misc PDA"
+#~ msgstr "PDA Misc"
 
 #~ msgid "Require password when returning from sleep"
 #~ msgstr "Pedir una contraseña al volver de dormir"
@@ -562,9 +572,6 @@ msgstr "PDA Misc"
 #~ msgid "Put d_isplay to sleep after:"
 #~ msgstr "Poner la _pantalla a dormir después de:"
 
-#~ msgid "_Put computer to sleep after:"
-#~ msgstr "_Poner el equipo a dormir después de:"
-
 #~ msgid "_Screensaver Preferences..."
 #~ msgstr "Propiedades del salvapantallas..."
 
@@ -604,9 +611,6 @@ msgstr "PDA Misc"
 
 #~ msgid "Logitech mouse"
 #~ msgstr "Ratón Logitech"
-
-#~ msgid "PDA"
-#~ msgstr "PDA"
 
 #~ msgid "Unknown device"
 #~ msgstr "Dispositivo desconocido"

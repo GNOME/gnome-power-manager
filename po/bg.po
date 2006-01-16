@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-09 18:46+0200\n"
+"POT-Creation-Date: 2006-01-16 15:25+0000\n"
 "PO-Revision-Date: 2006-01-09 18:46+0200\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -224,18 +224,18 @@ msgstr "Ориентация"
 msgid "The orientation of the tray."
 msgstr "Ориентацията на тавата."
 
-#: ../src/gpm-common.c:128
+#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
 msgid "Unknown"
 msgstr "неизвестно"
 
-#: ../src/gpm-common.c:133
+#: ../src/gpm-common.c:56
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i минута"
 msgstr[1] "%i минути"
 
-#: ../src/gpm-common.c:144
+#: ../src/gpm-common.c:67
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -244,87 +244,59 @@ msgstr[1] "%i часа"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:150
+#: ../src/gpm-common.c:73
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s и %i %s"
 
-#: ../src/gpm-common.c:151
+#: ../src/gpm-common.c:74
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "час"
 msgstr[1] "часа"
 
-#: ../src/gpm-common.c:152
+#: ../src/gpm-common.c:75
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "минута"
 msgstr[1] "минути"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:33 ../src/gpm-main.c:182
+#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
 msgid "GNOME Power Manager"
 msgstr "Управление на захранването в GNOME"
 
-#: ../src/gpm-common.h:34
+#: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Мениджър на захранването за GNOME"
 
-#: ../src/gpm-main.c:166
+#: ../src/gpm-main.c:324
 msgid "Do not daemonize"
 msgstr "Да не се минава в режим на демон"
 
-#: ../src/gpm-main.c:168 ../src/gpm-prefs.c:605
+#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
 msgid "Show extra debugging information"
 msgstr "Допълнителна информация за изчистване на грешки"
 
-#: ../src/gpm-manager.c:235
-msgid "charging"
-msgstr "зареждане"
-
-#: ../src/gpm-manager.c:237
-msgid "discharging"
-msgstr "разреждане"
-
-#: ../src/gpm-manager.c:240
-msgid "charged"
-msgstr "заредени"
-
-#: ../src/gpm-manager.c:255
-msgid "until charged"
-msgstr "до зареждане"
-
-#: ../src/gpm-manager.c:258
-msgid "until empty"
-msgstr "до пълно разреждане"
-
-#: ../src/gpm-manager.c:328
-msgid "Computer is running on battery power\n"
-msgstr "Компютърът работи на батерии\n"
-
-#: ../src/gpm-manager.c:330
-msgid "Computer is running on AC power\n"
-msgstr "Компютърът работи на захранване от ел. мрежа\n"
-
-#: ../src/gpm-manager.c:496
+#: ../src/gpm-manager.c:467
 msgid "AC Power Unplugged"
 msgstr "Изключено захранване от мрежата"
 
-#: ../src/gpm-manager.c:498
+#: ../src/gpm-manager.c:469
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Захранването от електрическата мрежа е изключено. Системата работи на "
 "батерии."
 
-#: ../src/gpm-manager.c:585
+#: ../src/gpm-manager.c:567
 msgid "Battery Charged"
 msgstr "Батериите са заредени"
 
-#: ../src/gpm-manager.c:587
+#: ../src/gpm-manager.c:569
 msgid "Your battery is now fully charged"
 msgstr "Батериите са напълно заредени"
 
-#: ../src/gpm-manager.c:619 ../src/gpm-manager.c:641
+#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -333,47 +305,95 @@ msgstr ""
 "Остава Ви приблизително <b>%s</b> живот на батерията (%d%%). Включете се към "
 "захранването от електрическата мрежа, за да не загубите данни."
 
-#: ../src/gpm-manager.c:626
+#: ../src/gpm-manager.c:608
 msgid "Battery Critically Low"
 msgstr "Критично ниско ниво на батерията"
 
-#: ../src/gpm-manager.c:647
+#: ../src/gpm-manager.c:629
 msgid "Battery Low"
 msgstr "Ниско ниво на батерията"
 
-#: ../src/gpm-tray-icon.c:103
+#: ../src/gpm-power.c:252
+msgid "Laptop battery"
+msgstr "Батерия на мобилен компютър"
+
+#: ../src/gpm-power.c:254
+msgid "UPS"
+msgstr "Резервно захранване (UPS)"
+
+#: ../src/gpm-power.c:256
+msgid "Wireless mouse"
+msgstr "Безжична мишка"
+
+#: ../src/gpm-power.c:258
+msgid "Wireless keyboard"
+msgstr "Безжична клавиатура"
+
+#: ../src/gpm-power.c:260
+msgid "PDA"
+msgstr ""
+
+#: ../src/gpm-power.c:605
+msgid "charging"
+msgstr "зареждане"
+
+#: ../src/gpm-power.c:607
+msgid "discharging"
+msgstr "разреждане"
+
+#: ../src/gpm-power.c:609
+msgid "charged"
+msgstr "заредени"
+
+#: ../src/gpm-power.c:632
+msgid "until charged"
+msgstr "до зареждане"
+
+#: ../src/gpm-power.c:637
+msgid "until empty"
+msgstr "до пълно разреждане"
+
+#: ../src/gpm-power.c:683
+msgid "Computer is running on AC power\n"
+msgstr "Компютърът работи на захранване от ел. мрежа\n"
+
+#: ../src/gpm-power.c:685
+msgid "Computer is running on battery power\n"
+msgstr "Компютърът работи на батерии\n"
+
+#: ../src/gpm-tray-icon.c:104
 msgid "_Suspend"
 msgstr "_Приспиване"
 
-#: ../src/gpm-tray-icon.c:104
+#: ../src/gpm-tray-icon.c:105
 msgid "Suspend the computer"
 msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-tray-icon.c:105
+#: ../src/gpm-tray-icon.c:106
 msgid "Hi_bernate"
 msgstr "_Дълбоко приспиване"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:107
 msgid "Make the computer go to sleep"
 msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:108
 msgid "_Preferences"
 msgstr "_Настройки"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:110
 msgid "_Help"
 msgstr "_Помощ"
 
-#: ../src/gpm-tray-icon.c:111
+#: ../src/gpm-tray-icon.c:112
 msgid "_About"
 msgstr "_Относно"
 
-#: ../src/gpm-tray-icon.c:230
+#: ../src/gpm-tray-icon.c:237
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лиценз - ОПЛ на GNU, версия 2"
 
-#: ../src/gpm-tray-icon.c:231
+#: ../src/gpm-tray-icon.c:238
 msgid ""
 "GNOME Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -385,7 +405,7 @@ msgstr ""
 "2 или по-висока (по Ваш избор) на Общия публичен лиценз на GNU,\n"
 "който е публикуван от Фондацията за свободен софтуер,"
 
-#: ../src/gpm-tray-icon.c:235
+#: ../src/gpm-tray-icon.c:242
 msgid ""
 "GNOME Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -397,7 +417,7 @@ msgstr ""
 "се ПРИГОДНОСТ или ГОДНОСТ ЗА КОНКРЕТНА УПОТРЕБА. За подробности\n"
 "прегледайте Общия публичен лиценз на GNU."
 
-#: ../src/gpm-tray-icon.c:239
+#: ../src/gpm-tray-icon.c:246
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -410,7 +430,7 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, \n"
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/gpm-tray-icon.c:244
+#: ../src/gpm-tray-icon.c:251
 msgid "translator-credits"
 msgstr ""
 "Александър Шопов <ash@contact.bg>\n"
@@ -420,50 +440,33 @@ msgstr ""
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:49
+#: ../src/gpm-prefs.c:51
 msgid "Suspend"
 msgstr "Приспиване"
 
-#: ../src/gpm-prefs.c:50
+#: ../src/gpm-prefs.c:52
 msgid "Shutdown"
 msgstr "Изключване"
 
-#: ../src/gpm-prefs.c:51
+#: ../src/gpm-prefs.c:53
 msgid "Hibernate"
 msgstr "Дълбоко приспиване"
 
-#: ../src/gpm-prefs.c:52
+#: ../src/gpm-prefs.c:54
 msgid "Do nothing"
 msgstr "Да не се прави нищо"
 
-#: ../src/gpm-prefs.c:161
+#: ../src/gpm-prefs.c:163
 msgid "Never"
 msgstr "Никога"
 
-#: ../src/gpm-prefs.c:546
+#: ../src/gpm-prefs.c:553
 msgid "<b>Configuration</b>"
 msgstr "<b>Настройки</b>"
 
-#: ../src/gpm-prefs.c:618
+#: ../src/gpm-prefs.c:628
 msgid "GNOME Power Preferences"
 msgstr "Настройки на захранването"
 
-#: ../src/gpm-sysdev.c:57
-msgid "Laptop battery"
-msgstr "Батерия на мобилен компютър"
-
-#: ../src/gpm-sysdev.c:59
-msgid "UPS"
-msgstr "Резервно захранване (UPS)"
-
-#: ../src/gpm-sysdev.c:61
-msgid "Wireless mouse"
-msgstr "Безжична мишка"
-
-#: ../src/gpm-sysdev.c:63
-msgid "Wireless keyboard"
-msgstr "Безжична клавиатура"
-
-#: ../src/gpm-sysdev.c:65
-msgid "Misc PDA"
-msgstr "Цифров помощник"
+#~ msgid "Misc PDA"
+#~ msgstr "Цифров помощник"
