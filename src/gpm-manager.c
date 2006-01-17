@@ -534,7 +534,7 @@ static void
 maybe_notify_battery_power_changed (GpmManager         *manager,
 				    const char         *kind,
 				    int		        percentage,
-				    glong	        minutes,
+				    int	        		remaining_time,
 				    gboolean	        discharging,
 				    gboolean	        charging,
 				    gboolean	        percentagechanged)
@@ -548,9 +548,9 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 
 	primary = (strcmp (kind, "primary") == 0);
 
-	g_debug ("percentage = %d, minutes = %ld, discharging = %d, "
+	g_debug ("percentage = %d, remaining_time = %d, discharging = %d, "
 		 "charging = %d, primary = %d, percentagechanged=%i",
-		 percentage, minutes, discharging, charging, primary, percentagechanged);
+		 percentage, remaining_time, discharging, charging, primary, percentagechanged);
 
 	if (manager->priv->tray_icon == NULL) {
 		return;
@@ -599,7 +599,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* critical warning */
 	if (percentage == critical_threshold) {
 		g_debug ("battery is critical limit!");
-		remaining = get_timestring_from_minutes (minutes);
+		remaining = get_timestring_from_minutes (remaining_time/60);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
@@ -620,7 +620,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* low warning */
 	if (percentage < low_threshold) {
 		g_debug ("battery is low!");
-		remaining = get_timestring_from_minutes (minutes);
+		remaining = get_timestring_from_minutes (remaining_time/60);
 		g_assert (remaining);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
@@ -952,7 +952,7 @@ static void
 power_battery_power_changed_cb (GpmPower           *power,
 				const char         *kind,
 				int	            percentage,
-				glong	            minutes,
+				int	            remaining_time,
 				gboolean            discharging,
 				gboolean            charging,
 				gboolean            percentagechanged,
@@ -961,7 +961,7 @@ power_battery_power_changed_cb (GpmPower           *power,
 	maybe_notify_battery_power_changed (manager,
 					    kind,
 					    percentage,
-					    minutes,
+					    remaining_time,
 					    discharging,
 					    charging,
 					    percentagechanged);

@@ -226,6 +226,7 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 	const char *authors[] = {
 		"Richard Hughes <richard@hughsie.com>",
 		"William Jon McCann <mccann@jhu.edu>",
+		"Jaap A. Haitsma <jaap@haitsma.org>",
 		NULL};
 	const char *documenters[] = {
 		"Richard Hughes <richard@hughsie.com>",

@@ -80,8 +80,12 @@ G_DEFINE_TYPE (GpmPower, gpm_power, G_TYPE_OBJECT)
 typedef struct {
 	char    *kind;
 
+	int      design_charge;
+	int      last_full_charge;
+	int      current_charge;
+	int      charge_rate;
 	int      percentage_charge;
-	int      minutes_remaining;
+	int      remaining_time;
 	gboolean is_charging;
 	gboolean is_discharging;
 	gboolean is_present;
@@ -95,8 +99,12 @@ typedef struct {
 	char    *udi;
 	char    *kind;
 
+	int      design_charge;
+	int      last_full_charge;
+	int      current_charge;
+	int      charge_rate;
 	int      percentage_charge;
-	int      minutes_remaining;
+	int      remaining_time;
 	gboolean is_rechargeable;
 	gboolean is_present;
 	gboolean is_charging;
@@ -107,19 +115,38 @@ static void
 battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 {
 	gboolean is_present;
-	int      seconds_remaining;
-
-	/* batteries might be missing */
-	gpm_hal_device_get_bool (entry->udi, "battery.present", &entry->is_present);
-
-	gpm_hal_device_get_string (entry->udi, "battery.type", &entry->kind);
 
 	/* initialise to known defaults */
-	entry->minutes_remaining = 0;
+	entry->design_charge = 0;
+	entry->last_full_charge = 0;
+	entry->current_charge = 0;
+	entry->charge_rate = 0;
 	entry->percentage_charge = 0;
+	entry->remaining_time = 0;
 	entry->is_rechargeable = FALSE;
 	entry->is_charging = FALSE;
 	entry->is_discharging = FALSE;
+
+	gpm_hal_device_get_string (entry->udi, "battery.type", &entry->kind);
+
+	/* batteries might be missing */
+	gpm_hal_device_get_bool (entry->udi, "battery.present", &entry->is_present);
+	if (!entry->is_present) {
+		return;
+	}
+
+	gpm_hal_device_get_int (entry->udi,
+				"battery.charge_level.design",
+				 &entry->design_charge);
+
+	gpm_hal_device_get_int (entry->udi,
+				"battery.charge_level.last_full",
+				 &entry->last_full_charge);
+
+	gpm_hal_device_get_int (entry->udi,
+				"battery.charge_level.current",
+				 &entry->current_charge);
+
 
 	/* battery might not be rechargeable, have to check */
 	gpm_hal_device_get_bool (entry->udi,
@@ -134,22 +161,28 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 					 &entry->is_discharging);
 	}
 
-	/* sanity check that remaining time exists (if it should) */
+	/* sanity check that charge_level.percentage exists (if it should) */
 	is_present = gpm_hal_device_get_int (entry->udi,
-					     "battery.remaining_time",
-					     &seconds_remaining);
-	if (! is_present && (entry->is_discharging || entry->is_charging)) {
-		g_warning ("could not read your battery's remaining time");
-	} else if (seconds_remaining > 0) {
-		entry->minutes_remaining = seconds_remaining / 60;
+					     "battery.charge_level.rate",
+					     &entry->charge_rate);
+	if (!is_present && (entry->is_discharging || entry->is_charging)) {
+		g_warning ("could not read your battery's charge rate");
 	}
 
-	/* sanity check that remaining time exists (if it should) */
+	/* sanity check that charge_level.percentage exists (if it should) */
 	is_present = gpm_hal_device_get_int (entry->udi,
 					     "battery.charge_level.percentage",
 					     &entry->percentage_charge);
 	if (!is_present && (entry->is_discharging || entry->is_charging)) {
 		g_warning ("could not read your battery's percentage charge.");
+	}
+
+	/* sanity check that remaining time exists (if it should) */
+	is_present = gpm_hal_device_get_int (entry->udi,
+					     "battery.remaining_time",
+					     &entry->remaining_time);
+	if (! is_present && (entry->is_discharging || entry->is_charging)) {
+		g_warning ("could not read your battery's remaining time");
 	}
 }
 
@@ -174,21 +207,29 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 		 * invalidate the remaining time, as we need to wait for
 		 * the next HAL update. This is a HAL bug I think.
 		 */
-		entry->minutes_remaining = 0;
+		entry->remaining_time = 0;
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		gpm_hal_device_get_bool (entry->udi, key, &entry->is_discharging);
 
 		/* invalidate the remaining time */
-		entry->minutes_remaining = 0;
+		entry->remaining_time = 0;
+	} else if (strcmp (key, "battery.charge_level.design") == 0) {
+		gpm_hal_device_get_int (entry->udi, key, &entry->design_charge);
+
+	} else if (strcmp (key, "battery.charge_level.last_full") == 0) {
+		gpm_hal_device_get_int (entry->udi, key, &entry->last_full_charge);
+
+	} else if (strcmp (key, "battery.charge_level.current") == 0) {
+		gpm_hal_device_get_int (entry->udi, key, &entry->current_charge);
+
+	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
+		gpm_hal_device_get_int (entry->udi, key, &entry->charge_rate);
+
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		gpm_hal_device_get_int (entry->udi, key, &entry->percentage_charge);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		int tempval;
-
-		gpm_hal_device_get_int (entry->udi, key, &tempval);
-		if (tempval > 0)
-			entry->minutes_remaining = tempval / 60;
+		gpm_hal_device_get_int (entry->udi, key, &entry->remaining_time);
 	} else {
 		/* ignore */
 		return;
@@ -277,16 +318,17 @@ battery_kind_cache_debug_print (GpmPower              *power,
 {
 	g_debug ("Printing %s device parameters:", kind_for_display (kind));
 
-	g_debug ("percentage_charge = %i", entry->percentage_charge);
 	g_debug ("number_devices    = %i", g_slist_length (entry->devices));
 
-	if (strcmp (kind, "mouse") != 0
-	    && strcmp (kind, "keyboard") != 0) {
-		g_debug ("is_present        = %i", entry->is_present);
-		g_debug ("minutes_remaining = %i", entry->minutes_remaining);
-		g_debug ("is_charging       = %i", entry->is_charging);
-		g_debug ("is_discharging    = %i", entry->is_discharging);
-	}
+	g_debug ("is_present        = %i", entry->is_present);
+	g_debug ("design_charge     = %i", entry->design_charge);
+	g_debug ("last_full_charge  = %i", entry->last_full_charge);
+	g_debug ("current_charge	    = %i", entry->current_charge);
+	g_debug ("charge_rate       = %i", entry->charge_rate);
+	g_debug ("percentage_charge = %i", entry->percentage_charge);
+	g_debug ("remaining_time    = %i", entry->remaining_time);
+	g_debug ("is_charging       = %i", entry->is_charging);
+	g_debug ("is_discharging    = %i", entry->is_discharging);
 }
 
 static void
@@ -360,7 +402,11 @@ battery_kind_cache_update (GpmPower              *power,
 	old_charge = entry->percentage_charge;
 
 	/* clear old values */
-	entry->minutes_remaining = 0;
+	entry->design_charge = 0;
+	entry->last_full_charge = 0;
+	entry->current_charge = 0;
+	entry->charge_rate = 0;
+	entry->remaining_time = 0;
 	entry->percentage_charge = 0;
 	entry->is_charging = FALSE;
 	entry->is_discharging = FALSE;
@@ -431,25 +477,20 @@ battery_kind_cache_update (GpmPower              *power,
 		device = battery_device_cache_find (power, udi);
 
 		if (device->is_present) {
-			/* for now, just add */
-			entry->minutes_remaining += device->minutes_remaining;
-			/* for now, just average */
-			entry->percentage_charge += (device->percentage_charge / num_present);
+			entry->design_charge += device->design_charge;
+			entry->last_full_charge += device->last_full_charge;
+			entry->current_charge += device->current_charge;			
+			entry->charge_rate += device->charge_rate;
 		}
 	}
 
-	/*
-	 * if we are discharging, and the number or batteries
-	 * discharging != the number present, then we have a case where the
-	 * batteries are discharging one at a time (i.e. not simultanously)
-	 * and we have to factor this into the time remaining calculations.
-	 * This should effect:
-	 *   https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
-	 */
-	if (entry->is_discharging && num_discharging != num_present) {
-		g_warning ("doubling minutes_remaining as sequential");
-		/* for now, just double the result */
-		entry->minutes_remaining *= num_present;
+	entry->percentage_charge = 100*entry->current_charge / entry->last_full_charge;
+
+	if ((entry->is_discharging) && (entry->charge_rate != 0)) {
+		entry->remaining_time = 3600*entry->current_charge / entry->charge_rate;
+	} else if ((entry->is_charging) && (entry->charge_rate != 0)){
+		entry->remaining_time = 3600*(entry->last_full_charge - entry->current_charge) 
+					/ entry->charge_rate;		
 	}
 
 
@@ -477,7 +518,7 @@ battery_kind_cache_update (GpmPower              *power,
 		       signals [BATTERY_POWER_CHANGED], 0,
 		       entry->kind,
 		       entry->percentage_charge,
-		       entry->minutes_remaining,
+		       entry->remaining_time,
 		       entry->is_discharging,
 		       entry->is_charging,
 		       percentagechanged);
@@ -569,15 +610,16 @@ battery_kind_cache_remove_device (GpmPower                *power,
 }
 
 static void
-power_get_summary_for_udi (GpmPower   *power,
-			   const char *udi,
-			   GString    *summary)
+power_get_summary_for_kind (GpmPower   *power,
+			    const char *kind,
+			    GString    *summary)
 {
-	BatteryDeviceCacheEntry *entry;
-	const char              *kind_desc = NULL;
-	const char              *chargestate = NULL;
+	BatteryKindCacheEntry *entry;
+	const char            *kind_desc = NULL;
+	const char            *charge_state = NULL;
 
-	entry = battery_device_cache_find (power, udi);
+	entry = battery_kind_cache_find (power, kind);
+
 	if (entry == NULL) {
 		return;
 	}
@@ -602,27 +644,28 @@ power_get_summary_for_udi (GpmPower   *power,
 
 	/* work out chargestate */
 	if (entry->is_charging)
-		chargestate = _("charging");
+		charge_state = _("charging");
 	else if (entry->is_discharging)
-		chargestate = _("discharging");
+		charge_state = _("discharging");
 	else if (! entry->is_charging && !entry->is_discharging)
-		chargestate = _("charged");
+		charge_state = _("charged");
 
 	g_string_append_printf (summary,
 				"%s %s (%i%%)",
 				kind_desc,
-				chargestate,
+				charge_state,
 				entry->percentage_charge);
 
 	/*
-	 * only display time remaining if minutes_remaining > 2
+	 * only display time remaining if remaining_time > 120
 	 * and percentage_charge < 99 to cope with some broken
 	 * batteries.
 	 */
-	if (entry->minutes_remaining > 2 && entry->percentage_charge < 99) {
+	if (entry->remaining_time > 120 && entry->percentage_charge < 99) {
 		char *timestring;
 
-		timestring = get_timestring_from_minutes (entry->minutes_remaining);
+		/* why add 0.5 ? */
+		timestring = get_timestring_from_minutes ((int)((entry->remaining_time/60)+0.5));
 
 		if (timestring) {
 			if (entry->is_charging) {
@@ -640,30 +683,7 @@ power_get_summary_for_udi (GpmPower   *power,
 		}
 	}
 	g_string_append (summary, "\n");
-}
 
-static void
-power_get_summary_for_kind (GpmPower   *power,
-			    const char *kind,
-			    GString    *summary)
-{
-	GSList                *l;
-	BatteryKindCacheEntry *entry;
-
-	entry = battery_kind_cache_find (power, kind);
-
-	if (entry == NULL) {
-		return;
-	}
-
-	if (! entry->is_present) {
-		return;
-	}
-
-	for (l = entry->devices; l; l = l->next) {
-		const char *udi = (const char *)l->data;
-		power_get_summary_for_udi (power, udi, summary);
-	}
 }
 
 gboolean
@@ -736,15 +756,15 @@ gpm_power_get_battery_percentage (GpmPower   *power,
 }
 
 gboolean
-gpm_power_get_battery_minutes (GpmPower   *power,
+gpm_power_get_battery_seconds (GpmPower   *power,
 			       const char *kind,
-			       gint64     *minutes,
+			       gint      *seconds,
 			       GError    **error)
 {
 	BatteryKindCacheEntry *entry;
 
-	if (minutes) {
-		*minutes = 0;
+	if (seconds) {
+		*seconds = 0;
 	}
 
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
@@ -755,8 +775,8 @@ gpm_power_get_battery_minutes (GpmPower   *power,
 		return FALSE;
 	}
 
-	if (minutes) {
-		*minutes = entry->minutes_remaining;
+	if (seconds) {
+		*seconds = entry->remaining_time;
 	}
 
 	return TRUE;

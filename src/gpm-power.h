@@ -70,9 +70,9 @@ gboolean         gpm_power_get_battery_percentage  (GpmPower           *power,
 						    const char         *kind,
 						    gint               *percentage,
 						    GError            **error);
-gboolean         gpm_power_get_battery_minutes     (GpmPower           *power,
+gboolean         gpm_power_get_battery_seconds     (GpmPower           *power,
 						    const char         *kind,
-						    gint64             *minutes,
+						    gint              *seconds,
 						    GError            **error);
 gboolean         gpm_power_get_battery_charging    (GpmPower           *power,
 						    const char         *kind,
