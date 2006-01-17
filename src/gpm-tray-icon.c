@@ -490,9 +490,8 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
                                  G_CALLBACK (gpm_tray_icon_button_press_cb),
                                  icon, 0);
 
+	icon->priv->image = gtk_image_new ();
 
-	icon->priv->image = gtk_image_new_from_stock (GPM_STOCK_AC_ADAPTER,
-						      GTK_ICON_SIZE_LARGE_TOOLBAR);
         gtk_container_add (GTK_CONTAINER (icon->priv->ebox), icon->priv->image);
 
         gtk_container_add (GTK_CONTAINER (icon), icon->priv->ebox);

@@ -456,10 +456,6 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 {
 	gboolean show_notify;
 
-	if (manager->priv->tray_icon == NULL) {
-		return;
-	}
-
 	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 					     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 
@@ -534,7 +530,7 @@ static void
 maybe_notify_battery_power_changed (GpmManager         *manager,
 				    const char         *kind,
 				    int		        percentage,
-				    int	        		remaining_time,
+				    int	        	remaining_time,
 				    gboolean	        discharging,
 				    gboolean	        charging,
 				    gboolean	        percentagechanged)
@@ -551,10 +547,6 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	g_debug ("percentage = %d, remaining_time = %d, discharging = %d, "
 		 "charging = %d, primary = %d, percentagechanged=%i",
 		 percentage, remaining_time, discharging, charging, primary, percentagechanged);
-
-	if (manager->priv->tray_icon == NULL) {
-		return;
-	}
 
 	/* update icon */
 	tray_icon_update (manager);
@@ -1186,8 +1178,6 @@ gpm_manager_init (GpmManager *manager)
 	sync_dpms_policy (manager);
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
-
-	tray_icon_update (manager);
 }
 
 static void
