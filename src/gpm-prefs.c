@@ -171,7 +171,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range, gchar* gpm_pref_key)
 	
 	value = (gint)gtk_range_get_value (range);
 	if (value == NEVER_TIME_ON_SLIDER) {
-		/* gnome power manager interprets 0 as Never */
+		/* power manager interprets 0 as Never */
 		value = 0;
 	} else {
 		/* policy is in seconds, slider is in minutes */
@@ -631,7 +631,7 @@ main (int argc, char **argv)
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_POPT_TABLE, options,
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    _("GNOME Power Preferences"),
+			    _("Power Preferences"),
 			    NULL);
 
 	bindtextdomain (PACKAGE, GNOMELOCALEDIR);

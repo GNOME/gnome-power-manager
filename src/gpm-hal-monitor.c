@@ -36,6 +36,8 @@
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 
+#include <glib/gi18n.h>
+
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
@@ -453,7 +455,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv->enabled = gpm_hal_is_running ();
 
 	if (! monitor->priv->enabled) {
-		g_warning ("GNOME Power Manager cannot connect to HAL!");
+		g_warning ("%s cannot connect to HAL!", NICENAME);
 	}
 
 	monitor->priv->has_power_management = gpm_hal_has_power_management ();

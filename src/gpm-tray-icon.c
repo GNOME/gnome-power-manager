@@ -235,11 +235,11 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 		NULL};
 	const char *license[] = {
 		N_("Licensed under the GNU General Public License Version 2"), 
-		N_("GNOME Power Manager is free software; you can redistribute it and/or\n" 
+		N_("Power Manager is free software; you can redistribute it and/or\n" 
 		   "modify it under the terms of the GNU General Public License\n" 
 		   "as published by the Free Software Foundation; either version 2\n" 
 		   "of the License, or (at your option) any later version."), 
-		N_("GNOME Power Manager is distributed in the hope that it will be useful,\n" 
+		N_("Power Manager is distributed in the hope that it will be useful,\n" 
 		   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" 
 		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" 
 		   "GNU General Public License for more details."), 

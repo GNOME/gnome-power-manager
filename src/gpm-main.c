@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  *  @file	gpm-main.c
- *  @brief	GNOME Power Manager session daemon
+ *  @brief	Power Manager session daemon
  *  @author	Richard Hughes <richard@hughsie.com>
  *  @date	2005-10-02
  *  @note	Taken in part from:
@@ -42,10 +42,10 @@
 
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
+#include "gpm-common.h"
 
 #include "gpm-manager.h"
 #include "gpm-manager-glue.h"
-#include "gpm-main.h"
 
 typedef void (*GpmDbusSignalHandler) (const gchar *name, const gboolean connected);
 static DBusGProxy *proxy_bus_nlost = NULL;
@@ -74,11 +74,11 @@ signalhandler_noc (const char *name, const gboolean connected)
 		return;
 
 	if (!connected) {
-		g_warning ("HAL has been disconnected! GNOME Power Manager will now quit.");
+		g_warning ("HAL has been disconnected! %s will now quit.", NICENAME);
 
 		/* Wait for HAL to be running again */
 		while (!gpm_hal_is_running ()) {
-			g_warning ("GNOME Power Manager cannot connect to HAL!");
+			g_warning ("%s cannot connect to HAL!", NICENAME);
 			g_usleep (1000*500);
 		}
 		/* for now, quit */
@@ -337,7 +337,7 @@ main (int argc, char *argv[])
 			    LIBGNOMEUI_MODULE, argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_POPT_TABLE, options,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, _("GNOME Power Manager"),
+			    GNOME_PARAM_HUMAN_READABLE_NAME, NICENAME,
 			    NULL);
 
 	if (!verbose)
@@ -403,7 +403,7 @@ main (int argc, char *argv[])
 	}
 #else
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
-		g_warning ("GNOME Power Manager is already running in this session.");
+		g_warning ("%s is already running in this session.", NICENAME);
 		return 0;
 	}
 #endif

@@ -1,3 +1,13 @@
+2005-01-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.h, src/Makefile.am, po/POTFILES.in:
+	Remove this non-required file.
+
+	* src/gpm-prefs.c, src/gpm-common.h, src/gpm-tray-icon.c,
+	src/gpm-main.c, src/gpm-hal-monitor.c: Fix so that our name is 
+	"Power Manager" rather than "GNOME Power Manager" in the warnings
+	and menus so that we adhere to the GNOME HIG (#327277)
+
 2005-01-16  Richard Hughes  <richard@hughsie.com>
 
 	* autogen.sh: Now that omf.make has been removed, we should really tell

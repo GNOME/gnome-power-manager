@@ -4,7 +4,7 @@
  *  @date	2005-10-02
  *
  * This module deals with communicating through DBUS and gconf to 
- * GNOME Screensaver.
+ * gnome-screensaver.
  */
 /*
  * Licensed under the GNU General Public License Version 2
@@ -26,7 +26,7 @@
  */
 /**
  * @addtogroup	gs		GnomeScreensaver integration
- * @brief	gs		integration into GNOME Power Manager using DBUS
+ * @brief	gs		integration into gnome-screensaver using DBUS
  *
  * @{
  */

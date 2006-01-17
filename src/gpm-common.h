@@ -29,7 +29,7 @@
 #include <glib.h>
 
 /* common descriptions of this program */
-#define NICENAME 			_("GNOME Power Manager")
+#define NICENAME 			_("Power Manager")
 #define NICEDESC 			_("Power Manager for the GNOME desktop")
 
 /* help location */

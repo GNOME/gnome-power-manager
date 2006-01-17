@@ -54,7 +54,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal-monitor.c				\
 	gpm-idle.h					\
 	gpm-idle.c					\
-	gpm-main.h					\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
