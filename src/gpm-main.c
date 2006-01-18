@@ -68,19 +68,12 @@ gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gch
 static void
 signalhandler_noc (const char *name, const gboolean connected)
 {
-	g_debug ("signalhandler_noc: (%i) %s", connected, name);
 	/* ignore that don't all apply */
 	if (strcmp (name, HAL_DBUS_SERVICE) != 0)
 		return;
 
 	if (!connected) {
 		g_warning ("HAL has been disconnected! %s will now quit.", NICENAME);
-
-		/* Wait for HAL to be running again */
-		while (!gpm_hal_is_running ()) {
-			g_warning ("%s cannot connect to HAL!", NICENAME);
-			g_usleep (1000*500);
-		}
 		/* for now, quit */
 		gpm_exit ();
 		return;
@@ -117,8 +110,6 @@ gpm_signal_handler_noc (DBusGProxy *proxy,
 	const char *new,
 	gpointer user_data)
 {
-	g_debug ("gpm_signal_handler_noc name=%s, prev=%s, new=%s", name, prev, new);
-
 	if (strlen (new) == 0)
 		gpm_sig_handler_noc (name, FALSE);
 	else if (strlen (prev) == 0)

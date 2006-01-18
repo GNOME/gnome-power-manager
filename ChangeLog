@@ -1,3 +1,9 @@
+2005-01-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c (gpm_signal_handler_noc, signalhandler_noc):
+	Be less vocal about changes in the bus -- we only want to know about
+	g-p-m and hal, not everything else.
+
 2006-01-17  Adam Weinberger  <adamw@gnome.org>
 
 	* data/gnome-power-manager.schemas.in: Correct two typos.
