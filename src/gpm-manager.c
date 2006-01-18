@@ -611,7 +611,13 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 
 	/* low warning */
 	if (percentage < low_threshold) {
-		g_debug ("battery is low!");
+		/* we should only warn the user at 20, 10, 5 and 2 minutes */
+		if (remaining_time != 20*60 && remaining_time != 10*60 &&
+		    remaining_time != 5*60  && remaining_time != 2*60) {
+			g_debug ("battery is low (%i), but no warning", remaining_time);
+			return;
+		}
+		g_debug ("battery is low (%i), show warning", remaining_time);
 		remaining = get_timestring_from_minutes (remaining_time/60);
 		g_assert (remaining);
 

@@ -571,7 +571,7 @@ battery_kind_cache_add_device (GpmPower                *power,
 	BatteryKindCacheEntry *kind_entry;
 
 	if (! entry->is_present) {
-		g_warning ("Adding missing device, may bug");
+		g_debug ("Adding missing device");
 	}
 
 	kind_entry = battery_kind_cache_find (power,

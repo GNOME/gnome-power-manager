@@ -1,5 +1,15 @@
 2006-01-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c (battery_kind_cache_add_device): Turn the warning
+	about "Adding missing device, may bug" into a debug statement, as this
+	is now well tested.
+
+	* src/gpm-manager.c (maybe_notify_battery_power_changed):
+	Only notify the user of low battery on the 20, 10, 5, and 2 
+	minute intervals. Probably needs more work.
+
+2006-01-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade: Make the combo bokes in options expand so that
 	we don't get comboboxes of different sizes.
 
