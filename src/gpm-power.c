@@ -398,6 +398,7 @@ battery_kind_cache_update (GpmPower              *power,
 	int     num_discharging = 0;
 	int     old_charge;
 	int     new_charge;
+	gboolean percentagechanged = FALSE;
 
 	old_charge = entry->percentage_charge;
 
@@ -484,34 +485,36 @@ battery_kind_cache_update (GpmPower              *power,
 		}
 	}
 
-	entry->percentage_charge = 100*entry->current_charge / entry->last_full_charge;
+	/* use floating division here */
+	entry->percentage_charge = 100 * ((float)entry->current_charge / (float)entry->last_full_charge);
 
 	if ((entry->is_discharging) && (entry->charge_rate != 0)) {
-		entry->remaining_time = 3600*entry->current_charge / entry->charge_rate;
+		entry->remaining_time = 3600 * ((float)entry->current_charge / (float)entry->charge_rate);
 	} else if ((entry->is_charging) && (entry->charge_rate != 0)){
-		entry->remaining_time = 3600*(entry->last_full_charge - entry->current_charge) 
-					/ entry->charge_rate;		
+		entry->remaining_time = 3600 * ((float)(entry->last_full_charge - entry->current_charge) / (float)entry->charge_rate);
 	}
-
 
 	/* find new percentage_charge  */
 	new_charge = entry->percentage_charge;
 
 	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
 
-	gboolean percentagechanged = FALSE;
 	/* only do some actions when the value changes */
-	if (old_charge != new_charge)
+	if (old_charge != new_charge) {
 		percentagechanged = TRUE;
+	}
+
 	/*
 	 * old_charge is initialised to zero, and we don't want to
 	 * send a signal for the percentagechanged sequence
 	 */
-	if (old_charge == 0)
+	if (old_charge == 0) {
 		percentagechanged = FALSE;
+	}
 
-	if (percentagechanged)
+	if (percentagechanged) {
 		g_debug ("percentage change %i -> %i", old_charge, new_charge);
+	}
 
 	/* always send a signal, as we needto setup the icon */
 	g_signal_emit (power,
@@ -643,12 +646,19 @@ power_get_summary_for_kind (GpmPower   *power,
 	}
 
 	/* work out chargestate */
-	if (entry->is_charging)
+	if (entry->is_charging) {
 		charge_state = _("charging");
-	else if (entry->is_discharging)
+	} else if (entry->is_discharging) {
 		charge_state = _("discharging");
-	else if (! entry->is_charging && !entry->is_discharging)
+	} else if (entry->percentage_charge > 99) {
 		charge_state = _("charged");
+	} else if (power->priv->on_ac) {
+		/* intermediate state: assume charging if on-ac */
+		charge_state = _("charging");
+	} else {
+		/* intermediate state: assume discharging if not on-ac */
+		charge_state = _("discharging");
+	}
 
 	g_string_append_printf (summary,
 				"%s %s (%i%%)",
@@ -665,7 +675,7 @@ power_get_summary_for_kind (GpmPower   *power,
 		char *timestring;
 
 		/* why add 0.5 ? */
-		timestring = get_timestring_from_minutes ((int)((entry->remaining_time/60)+0.5));
+		timestring = get_timestring_from_minutes ((int)((entry->remaining_time / 60) + 0.5));
 
 		if (timestring) {
 			if (entry->is_charging) {

@@ -1,3 +1,13 @@
+2006-01-18  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-power.c (battery_kind_cache_update): Use floating
+	point division to get a fraction.  Don't declare a variable
+	in the middle of a block.  Use spaces around all operators.
+	Use braces around blocks.
+	(power_get_summary_for_kind): Use spaces around operators.
+	Fix case where !is-charging && !is-discharging.
+	Fixes #327471
+
 2005-01-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c (gpm_signal_handler_noc, signalhandler_noc):
