@@ -19,7 +19,6 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -787,24 +786,6 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkComboBox" id="combobox_button_lid">
-			      <property name="visible">True</property>
-			      <property name="items" translatable="yes"></property>
-			      <property name="add_tearoffs">False</property>
-			      <property name="focus_on_click">True</property>
-			    </widget>
-			    <packing>
-			      <property name="left_attach">1</property>
-			      <property name="right_attach">2</property>
-			      <property name="top_attach">1</property>
-			      <property name="bottom_attach">2</property>
-			      <property name="y_padding">3</property>
-			      <property name="x_options">fill</property>
-			      <property name="y_options">fill</property>
-			    </packing>
-			  </child>
-
-			  <child>
 			    <widget class="GtkLabel" id="label_battery_critical_action">
 			      <property name="visible">True</property>
 			      <property name="label" translatable="yes">When _battery power critical:</property>
@@ -834,6 +815,23 @@
 			  </child>
 
 			  <child>
+			    <widget class="GtkComboBox" id="combobox_button_suspend">
+			      <property name="visible">True</property>
+			      <property name="items" translatable="yes"></property>
+			      <property name="add_tearoffs">False</property>
+			      <property name="focus_on_click">True</property>
+			    </widget>
+			    <packing>
+			      <property name="left_attach">1</property>
+			      <property name="right_attach">2</property>
+			      <property name="top_attach">0</property>
+			      <property name="bottom_attach">1</property>
+			      <property name="y_padding">3</property>
+			      <property name="y_options">fill</property>
+			    </packing>
+			  </child>
+
+			  <child>
 			    <widget class="GtkComboBox" id="combobox_battery_critical">
 			      <property name="visible">True</property>
 			      <property name="items" translatable="yes"></property>
@@ -846,13 +844,12 @@
 			      <property name="top_attach">2</property>
 			      <property name="bottom_attach">3</property>
 			      <property name="y_padding">3</property>
-			      <property name="x_options">fill</property>
 			      <property name="y_options">fill</property>
 			    </packing>
 			  </child>
 
 			  <child>
-			    <widget class="GtkComboBox" id="combobox_button_suspend">
+			    <widget class="GtkComboBox" id="combobox_button_lid">
 			      <property name="visible">True</property>
 			      <property name="items" translatable="yes"></property>
 			      <property name="add_tearoffs">False</property>
@@ -861,8 +858,8 @@
 			    <packing>
 			      <property name="left_attach">1</property>
 			      <property name="right_attach">2</property>
-			      <property name="top_attach">0</property>
-			      <property name="bottom_attach">1</property>
+			      <property name="top_attach">1</property>
+			      <property name="bottom_attach">2</property>
 			      <property name="y_padding">3</property>
 			      <property name="y_options">fill</property>
 			    </packing>

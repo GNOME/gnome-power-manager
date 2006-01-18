@@ -1,3 +1,8 @@
+2006-01-18  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-prefs.glade: Make the combo bokes in options expand so that
+	we don't get comboboxes of different sizes.
+
 2006-01-18  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-power.c (battery_kind_cache_update): Use floating
@@ -8,7 +13,7 @@
 	Fix case where !is-charging && !is-discharging.
 	Fixes #327471
 
-2005-01-18  Richard Hughes  <richard@hughsie.com>
+2006-01-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c (gpm_signal_handler_noc, signalhandler_noc):
 	Be less vocal about changes in the bus -- we only want to know about
@@ -19,7 +24,7 @@
 	* data/gnome-power-manager.schemas.in: Correct two typos.
 	  Fixes bug #327396.
 
-2005-01-17  Richard Hughes  <richard@hughsie.com>
+2006-01-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (gpm_manager_init):
 	Do not do tray_icon_update () in the initialization, else
@@ -44,7 +49,7 @@
 
 	* src/gpm-manager.c: Use seconds instead of minutes
 
-2005-01-17  Richard Hughes  <richard@hughsie.com>
+2006-01-17  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in, NEWS: Update version to 2.13.5 so we match the GNOME
 	version numbers. I know I missed the tarball deadline.
@@ -55,7 +60,7 @@
 	doc/www/images/pref-main.png, doc/www/images/pref-advanced.png:
 	Update to something more modern -- I've synced gnomeweb-wml too.
 
-2005-01-17  Richard Hughes  <richard@hughsie.com>
+2006-01-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.h, src/Makefile.am, po/POTFILES.in:
 	Remove this non-required file.
@@ -65,7 +70,7 @@
 	"Power Manager" rather than "GNOME Power Manager" in the warnings
 	and menus so that we adhere to the GNOME HIG (#327277)
 
-2005-01-16  Richard Hughes  <richard@hughsie.com>
+2006-01-16  Richard Hughes  <richard@hughsie.com>
 
 	* autogen.sh: Now that omf.make has been removed, we should really tell
 	gnome-common that we are using USE_COMMON_DOC_BUILD.
@@ -98,7 +103,7 @@
 	* data/gpm-prefs.glade: A few HIG spacing fixes.  This makes
 	it look the same as g-v-m.
 
-2005-01-13  Richard Hughes  <richard@hughsie.com>
+2006-01-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: Fix newline logic to be the same as before (so it 
 	doesn't truncate the last bracket in some cases).
@@ -170,7 +175,7 @@
 
 	Fixes #326515
 
-2005-01-12  Richard Hughes  <richard@hughsie.com>
+2006-01-12  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.in: Remove gpm-dbus-signal-handler.{c|h} to fix
 	make diskcheck.
