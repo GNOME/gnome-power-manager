@@ -41,7 +41,6 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
-#include "gpm-hal-callback.h"
 #include "gpm-marshal.h"
 
 #include "gpm-hal-monitor.h"
@@ -54,8 +53,13 @@ static void     gpm_hal_monitor_finalize   (GObject            *object);
 
 struct GpmHalMonitorPrivate
 {
-	gboolean enabled;
-	gboolean has_power_management;
+	DBusGConnection *connection;
+	DBusGProxy	*proxy;
+
+	GHashTable      *devices;
+
+	gboolean         enabled;
+	gboolean         has_power_management;
 };
 
 enum {
@@ -169,50 +173,6 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      1, G_TYPE_STRING);
 }
 
-
-/** When we have a device removed
- *
- *  @param	udi		The HAL UDI
- */
-static void
-hal_device_removed (const gchar *udi,
-		    gpointer	 user_data)
-{
-	GpmHalMonitor *monitor;
-
-	monitor = GPM_HAL_MONITOR (user_data);
-
-	g_debug ("hal_device_removed: udi=%s", udi);
-
-	/* these may not all be batteries but oh well */
-	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
-
-	/* remove watch */
-	gpm_hal_watch_remove_device_property_modified (udi);
-}
-
-/** When we have a new device hot-plugged
- *
- *  @param	udi		UDI
- *  @param	capability	Name of capability
- */
-static void
-hal_device_new_capability (const char *udi,
-			   const char *capability,
-			   gpointer    user_data)
-{
-	GpmHalMonitor *monitor;
-
-	monitor = GPM_HAL_MONITOR (user_data);
-
-	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
-		 udi, capability);
-
-	if (strcmp (capability, "battery") == 0) {
-		g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
-	}
-}
-
 static void
 monitor_change_on_ac (GpmHalMonitor *monitor,
 		      gboolean	     on_ac)
@@ -229,24 +189,23 @@ monitor_change_on_ac (GpmHalMonitor *monitor,
  *  @param	is_removed	If the key was removed
  */
 static void
-hal_device_property_modified (const gchar *udi,
-			      const gchar *key,
-			      gboolean	   is_added,
-			      gboolean	   is_removed,
-			      gpointer	   user_data)
+watch_device_property_modified (DBusGProxy    *proxy,
+				const char    *udi,
+				const char    *key,
+				gboolean       is_added,
+				gboolean       is_removed,
+				GpmHalMonitor *monitor)
 {
-	GpmHalMonitor *monitor;
 
-#if 0
-	g_debug ("hal_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
+#if 1
+	g_debug ("watch_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
 		 udi, key, is_added, is_removed);
 #endif
 
 	/* only process modified entries, not added or removed keys */
-	if (is_removed || is_added)
+	if (is_removed || is_added) {
 		return;
-
-	monitor = GPM_HAL_MONITOR (user_data);
+	}
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		gboolean on_ac = gpm_hal_is_on_ac ();
@@ -263,6 +222,39 @@ hal_device_property_modified (const gchar *udi,
 	g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
 }
 
+static void
+watch_device_properties_modified (DBusGProxy    *proxy,
+				  gint           type,
+				  GPtrArray     *properties,
+				  GpmHalMonitor *monitor)
+{
+	GValueArray *array;
+	const char  *udi;
+	const char  *key;
+	gboolean     added;
+	gboolean     removed;
+	guint        i;
+
+	udi = dbus_g_proxy_get_path (proxy);
+	g_debug ("property modified '%s'", udi);
+
+	array = NULL;
+
+	for (i = 0; i < properties->len; i++) {
+		array = g_ptr_array_index (properties, i);
+		if (array->n_values != 3) {
+			g_warning ("array->n_values invalid (!3)");
+			return;
+		}
+
+		key = g_value_get_string (g_value_array_get_nth (array, 0));
+		removed = g_value_get_boolean (g_value_array_get_nth (array, 1));
+		added = g_value_get_boolean (g_value_array_get_nth (array, 2));
+
+		watch_device_property_modified (proxy, udi, key, removed, added, monitor);
+	}
+}
+
 /** Invoked when a property of a device in the Global Device List is
  *  changed, and we have we have subscribed to changes for that device.
  *
@@ -271,20 +263,17 @@ hal_device_property_modified (const gchar *udi,
  *  @param	details	D-BUS message with parameters
  */
 static void
-hal_device_condition (const char *udi,
-		      const char *name,
-		      const char *details,
-		      gpointer	  user_data)
+watch_device_condition (DBusGProxy    *proxy,
+			const char    *udi,
+			const char    *name,
+			const char    *details,
+			GpmHalMonitor *monitor)
 {
-	GpmHalMonitor *monitor;
-
-	monitor = GPM_HAL_MONITOR (user_data);
-
 	g_assert (udi);
 	g_assert (name);
 	g_assert (details);
 
-	g_debug ("hal_device_condition: udi=%s, name=%s, details=%s",
+	g_debug ("watch_device_condition: udi=%s, name=%s, details=%s",
 		 udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
@@ -325,23 +314,240 @@ hal_device_condition (const char *udi,
 	}
 }
 
-static gboolean
-gpm_coldplug_acadapter (GpmHalMonitor *monitor)
+static void
+watch_device_connect_condition (GpmHalMonitor *monitor,
+				const char    *udi)
 {
-	gint    i;
-	gchar **device_names = NULL;
+	DBusGProxy *proxy;
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy == NULL) {
+		g_warning ("Device is not being watched: %s", udi);
+		return;
+	}
+
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
+					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (proxy, "Condition",
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy, "Condition",
+				     G_CALLBACK (watch_device_condition), monitor, NULL);
+}
+
+static void
+watch_device_connect_property_modified (GpmHalMonitor *monitor,
+					const char    *udi)
+{
+	DBusGProxy *proxy;
+	GType       struct_array_type;
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy == NULL) {
+		g_warning ("Device is not being watched: %s", udi);
+		return;
+	}
+
+	struct_array_type = dbus_g_type_get_collection ("GPtrArray", G_TYPE_VALUE_ARRAY);
+
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED,
+					   G_TYPE_NONE, G_TYPE_INT,
+					   struct_array_type, G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (proxy, "PropertyModified",
+				 G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy, "PropertyModified",
+				     G_CALLBACK (watch_device_properties_modified), monitor, NULL);
+
+}
+
+static void
+watch_device_disconnect_condition (GpmHalMonitor *monitor,
+				   const char    *udi)
+{
+	DBusGProxy *proxy;
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy == NULL) {
+		g_warning ("Device is not being watched: %s", udi);
+		return;
+	}
+
+	dbus_g_proxy_connect_signal (proxy, "Condition",
+				     G_CALLBACK (watch_device_condition), monitor, NULL);
+
+}
+
+static void
+watch_device_disconnect_property_modified (GpmHalMonitor *monitor,
+					   const char    *udi)
+{
+	DBusGProxy *proxy;
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy == NULL) {
+		g_warning ("Device is not being watched: %s", udi);
+		return;
+	}
+
+	dbus_g_proxy_connect_signal (proxy, "PropertyModified",
+				     G_CALLBACK (watch_device_properties_modified), monitor, NULL);
+}
+
+static gboolean
+watch_device_add (GpmHalMonitor *monitor,
+		  const char    *udi)
+{
+	DBusGProxy *proxy;
+	GError     *error;
+
+	g_debug ("Adding new device to watch: %s", udi);
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy != NULL) {
+		g_warning ("Device is already being watched: %s", udi);
+		return FALSE;
+	}
+
+	g_debug ("Creating proxy for: %s", udi);
+	error = NULL;
+	proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
+						 HAL_DBUS_SERVICE,
+						 udi,
+						 HAL_DBUS_INTERFACE_DEVICE,
+						 &error);
+	if (proxy == NULL) {
+		g_warning ("Could not create proxy for UDI: %s: %s", udi, error->message);
+		g_error_free (error);
+		return FALSE;
+	}
+
+	g_hash_table_insert (monitor->priv->devices,
+			     g_strdup (udi),
+			     proxy);
+
+	return TRUE;
+}
+
+static gboolean
+watch_device_remove (GpmHalMonitor *monitor,
+		     const char    *udi)
+{
+	DBusGProxy *proxy;
+
+	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
+	if (proxy == NULL) {
+		g_warning ("Device is not being watched");
+		return FALSE;
+	}
+
+	g_hash_table_remove (monitor->priv->devices, udi);
+
+	return TRUE;
+}
+
+static void
+watch_add_battery (GpmHalMonitor *monitor,
+		   const char    *udi)
+{
+	watch_device_add (monitor, udi);
+	watch_device_connect_property_modified (monitor, udi);
+
+	g_debug ("Emitting battery-added signal for: %s", udi);
+	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
+}
+
+static void
+watch_remove_battery (GpmHalMonitor *monitor,
+		      const char    *udi)
+{
+	watch_device_disconnect_condition (monitor, udi);
+	watch_device_disconnect_property_modified (monitor, udi);
+	watch_device_remove (monitor, udi);
+
+	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
+}
+
+static void
+watch_add_button (GpmHalMonitor *monitor,
+		  const char    *udi)
+{
+	watch_device_add (monitor, udi);
+	watch_device_connect_condition (monitor, udi);
+}
+
+static void
+watch_add_ac_adapter (GpmHalMonitor *monitor,
+		      const char    *udi)
+{
+	watch_device_add (monitor, udi);
+	watch_device_connect_property_modified (monitor, udi);
+}
+
+static void
+hal_device_removed (DBusGProxy    *proxy,
+		    const char    *udi,
+		    GpmHalMonitor *monitor)
+{
+	g_debug ("hal_device_removed: udi=%s", udi);
+
+	/* these may not all be batteries but oh well */
+	watch_remove_battery (monitor, udi);
+}
+
+static void
+hal_new_capability (DBusGProxy    *proxy,
+		    const char    *udi,
+		    const char    *capability,
+		    GpmHalMonitor *monitor)
+{
+	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
+		 udi, capability);
+
+	if (strcmp (capability, "battery") == 0) {
+		watch_add_battery (monitor, udi);
+	}
+}
+
+static void
+hal_disconnect_signals (GpmHalMonitor *monitor)
+{
+	dbus_g_proxy_disconnect_signal (monitor->priv->proxy, "DeviceRemoved",
+					G_CALLBACK (hal_device_removed), monitor);
+	dbus_g_proxy_disconnect_signal (monitor->priv->proxy, "NewCapability",
+					G_CALLBACK (hal_new_capability), monitor);
+}
+
+static void
+hal_connect_signals (GpmHalMonitor *monitor)
+{
+	dbus_g_proxy_add_signal (monitor->priv->proxy, "DeviceRemoved",
+				 G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (monitor->priv->proxy, "DeviceRemoved",
+				     G_CALLBACK (hal_device_removed), monitor, NULL);
+
+	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
+					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (monitor->priv->proxy, "NewCapability",
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (monitor->priv->proxy, "NewCapability",
+				     G_CALLBACK (hal_new_capability), monitor, NULL);
+
+}
+
+static gboolean
+coldplug_acadapter (GpmHalMonitor *monitor)
+{
+	int    i;
+	char **device_names = NULL;
 
 	/* devices of type ac_adapter */
 	gpm_hal_find_device_capability ("ac_adapter", &device_names);
-	if (!device_names) {
+	if (! device_names) {
 		g_debug ("Couldn't obtain list of ac_adapters");
 		return FALSE;
 	}
 
 	for (i = 0; device_names[i]; i++) {
-		/* assume only one */
-		gpm_hal_watch_add_device_property_modified (device_names[i]);
-
+		watch_add_ac_adapter (monitor, device_names [i]);
 	}
 
 	gpm_hal_free_capability (device_names);
@@ -350,24 +556,20 @@ gpm_coldplug_acadapter (GpmHalMonitor *monitor)
 }
 
 static gboolean
-gpm_coldplug_buttons (GpmHalMonitor *monitor)
+coldplug_buttons (GpmHalMonitor *monitor)
 {
-	gint    i;
-	gchar **device_names = NULL;
+	int    i;
+	char **device_names = NULL;
 
 	/* devices of type button */
 	gpm_hal_find_device_capability ("button", &device_names);
-	if (!device_names) {
+	if (! device_names) {
 		g_debug ("Couldn't obtain list of buttons");
 		return FALSE;
 	}
 
 	for (i = 0; device_names[i]; i++) {
-		/*
-		 * We register this here, as buttons are not present
-		 * in object data, and do not need to be added manually.
-		*/
-		gpm_hal_watch_add_device_condition (device_names[i]);
+		watch_add_button (monitor, device_names [i]);
 	}
 
 	gpm_hal_free_capability (device_names);
@@ -380,25 +582,20 @@ gpm_coldplug_buttons (GpmHalMonitor *monitor)
  *  @return			If any devices of capability battery were found.
  */
 static gboolean
-gpm_coldplug_batteries (GpmHalMonitor *monitor)
+coldplug_batteries (GpmHalMonitor *monitor)
 {
-	gint    i;
-	gchar **device_names = NULL;
+	int    i;
+	char **device_names = NULL;
 
 	/* devices of type battery */
 	gpm_hal_find_device_capability ("battery", &device_names);
-	if (!device_names) {
+	if (! device_names) {
 		g_debug ("Couldn't obtain list of batteries");
 		return FALSE;
 	}
 
-	for (i = 0; device_names[i]; i++) {
-		g_debug ("signalling battery-added: %s", device_names[i]);
-
-		g_signal_emit (monitor, signals [BATTERY_ADDED], 0, device_names[i]);
-
-		/* register this with HAL so we get PropertyModified events */
-		gpm_hal_watch_add_device_property_modified (device_names[i]);
+	for (i = 0; device_names [i]; i++) {
+		watch_add_battery (monitor, device_names [i]);
 	}
 
 	gpm_hal_free_capability (device_names);
@@ -409,23 +606,36 @@ gpm_coldplug_batteries (GpmHalMonitor *monitor)
 static void
 hal_monitor_start (GpmHalMonitor *monitor)
 {
-	/* assign the callback functions */
-	gpm_hal_callback_init (monitor);
-	gpm_hal_method_device_removed (hal_device_removed);
-	gpm_hal_method_device_new_capability (hal_device_new_capability);
-	gpm_hal_method_device_property_modified (hal_device_property_modified);
-	gpm_hal_method_device_condition (hal_device_condition);
+	GError *error;
+
+	if (monitor->priv->proxy) {
+		g_warning ("Monitor already started");
+		return;
+	}
+
+	error = NULL;
+	monitor->priv->proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
+								HAL_DBUS_SERVICE,
+								HAL_DBUS_PATH_MANAGER,
+								HAL_DBUS_INTERFACE_MANAGER,
+								&error);
+	hal_connect_signals (monitor);
 
 	/* sets up these devices and adds watches */
-	gpm_coldplug_batteries (monitor);
-	gpm_coldplug_acadapter (monitor);
-	gpm_coldplug_buttons (monitor);
+	coldplug_batteries (monitor);
+	coldplug_acadapter (monitor);
+	coldplug_buttons (monitor);
 }
 
 static void
 hal_monitor_stop (GpmHalMonitor *monitor)
 {
-	gpm_hal_callback_shutdown ();
+	hal_disconnect_signals (monitor);
+
+	if (monitor->priv->proxy) {
+		g_object_unref (monitor->priv->proxy);
+		monitor->priv->proxy = NULL;
+	}
 }
 
 gboolean
@@ -450,6 +660,8 @@ start_idle (GpmHalMonitor *monitor)
 static void
 gpm_hal_monitor_init (GpmHalMonitor *monitor)
 {
+	GError *error;
+
 	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
 
 	monitor->priv->enabled = gpm_hal_is_running ();
@@ -457,6 +669,16 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	if (! monitor->priv->enabled) {
 		g_warning ("%s cannot connect to HAL!", NICENAME);
 	}
+
+	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
+							g_str_equal,
+							g_free,
+							(GDestroyNotify)g_object_unref);
+
+	error = NULL;
+	monitor->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+
+	/* FIXME: check error */
 
 	monitor->priv->has_power_management = gpm_hal_has_power_management ();
 
@@ -483,6 +705,10 @@ gpm_hal_monitor_finalize (GObject *object)
 	g_return_if_fail (monitor->priv != NULL);
 
 	hal_monitor_stop (monitor);
+
+	if (monitor->priv->devices != NULL) {
+		g_hash_table_destroy (monitor->priv->devices);
+	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

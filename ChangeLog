@@ -1,5 +1,15 @@
 2006-01-19  William Jon McCann  <mccann@jhu.edu>
 
+	* src/Makefile.am:
+	* src/gpm-hal-callback.[ch]: Remove hal-callback.
+
+	* src/gpm-hal-monitor.c: Don't use hal-callback
+	to get HAL signals.  Do it here.
+
+	Fixes #327235
+
+2006-01-19  William Jon McCann  <mccann@jhu.edu>
+
 	* src/gpm-prefs.c (gpm_prefs_help_cb): Use gnome_help.
 	Fixes #326890
 

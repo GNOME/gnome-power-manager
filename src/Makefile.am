@@ -67,8 +67,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-marshal.c					\
 	gpm-hal.h					\
 	gpm-hal.c					\
-	gpm-hal-callback.h				\
-	gpm-hal-callback.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
