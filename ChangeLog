@@ -1,5 +1,11 @@
 2006-01-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (maybe_notify_battery_power_changed):
+	Revert the 20, 10, 5, and 2 checks. Definatly needs more work.
+	Apologies, brain was not in gear.
+
+2006-01-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c (battery_kind_cache_add_device): Turn the warning
 	about "Adding missing device, may bug" into a debug statement, as this
 	is now well tested.
