@@ -38,8 +38,8 @@
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
 
-#include <libgnomeui/gnome-url.h> /* for gnome_url_show */
 #include <libgnomeui/gnome-ui-init.h> /* for gnome_program_init */
+#include <libgnomeui/gnome-help.h> /* for gnome_help_display */
 
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
@@ -130,8 +130,14 @@ set_estimated_label_widget (GtkWidget *widget, gint value)
 static void
 gpm_prefs_help_cb (GtkWidget *widget, gpointer user_data)
 {
-	/* for now, show website */
-	gnome_url_show (GPMURL, NULL);
+	GError *error = NULL;
+
+	gnome_help_display_with_doc_id (NULL, "gnome-power-manager",
+					"gnome-power-manager.xml", NULL, &error);
+	if (error != NULL) {
+		g_warning (error->message);
+		g_error_free (error);
+	}
 }
 
 static void
