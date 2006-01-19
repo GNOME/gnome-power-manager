@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 23:22+0100\n"
-"PO-Revision-Date: 2006-01-18 12:44+0530\n"
+"POT-Creation-Date: 2006-01-19 06:56+0100\n"
+"PO-Revision-Date: 2006-01-19 11:50+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -64,8 +65,8 @@ msgid "Display battery idle timeout value"
 msgstr "બેટરી ફાજલ સમયસમાપ્તિ કિંમત દર્શાવો"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-msgid "If we should notify the user that the AC adapter has been is removed"
-msgstr "શું અમારે વપરાશકર્તાને સૂચવવું જોઈએ કે AC એડેપ્ટર દૂર કરાયેલ છે"
+msgid "If we should notify the user that the AC adapter has been removed"
+msgstr "શું આપણે વપરાશકર્તાને સૂચવવું જોઈએ કે AC એડેપ્ટર દૂર કરી દેવાયેલ છે"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "If we should notify the user that the battery is fully charged"
@@ -96,8 +97,8 @@ msgid "The action to take when the laptop lid is closed"
 msgstr "જ્યારે લેપટોપ લીડ બંધ થયેલ હોય ત્યારે કરવાની ક્રિયા"
 
 #: ../data/gnome-power-manager.schemas.in.h:17
-msgid "The action to take when the system suspend button is presses"
-msgstr "જ્યારે સિસ્ટમ અટકાવો બટન દબાયેલ હોય ત્યારે કરવાની ક્રિયા"
+msgid "The action to take when the system suspend button is pressed"
+msgstr "જ્યારે સિસ્ટમ અટકાવો બટન દબાયેલ હોય ત્યારે લેવાની ક્રિયા"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid "The battery critical action threshold."
@@ -327,11 +328,11 @@ msgstr "પાવર મેનેજર"
 msgid "Power Manager for the GNOME desktop"
 msgstr "જીનોમ ડેસ્કટોપ માટે પાવર મેનેજર"
 
-#: ../src/gpm-main.c:324
+#: ../src/gpm-main.c:315
 msgid "Do not daemonize"
 msgstr "ડિમનાઈઝ કરશો નહિં"
 
-#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:621
+#: ../src/gpm-main.c:317 ../src/gpm-prefs.c:621
 msgid "Show extra debugging information"
 msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
 
@@ -388,31 +389,33 @@ msgstr "વાયરલેસ કીબોર્ડ"
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:647
+#. intermediate state: assume charging if on-ac
+#: ../src/gpm-power.c:650 ../src/gpm-power.c:657
 msgid "charging"
 msgstr "ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-power.c:649
+#. intermediate state: assume discharging if not on-ac
+#: ../src/gpm-power.c:652 ../src/gpm-power.c:660
 msgid "discharging"
 msgstr "ડિસ્ચાર્જ કરી રહ્યા છીએ"
 
-#: ../src/gpm-power.c:651
+#: ../src/gpm-power.c:654
 msgid "charged"
 msgstr "ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-power.c:675
+#: ../src/gpm-power.c:685
 msgid "until charged"
 msgstr "જ્યાં સુધી ચાર્જ નહિં થાય"
 
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:690
 msgid "until empty"
 msgstr "જ્યાં સુધી ખાલી નહિં થાય"
 
-#: ../src/gpm-power.c:703
+#: ../src/gpm-power.c:713
 msgid "Computer is running on AC power\n"
 msgstr "કમ્પ્યૂટર એ AC પાવર પર ચાલી રહ્યું છે\n"
 
-#: ../src/gpm-power.c:705
+#: ../src/gpm-power.c:715
 msgid "Computer is running on battery power\n"
 msgstr "કમ્પ્યૂટર એ બેટરી પાવર પર ચાલી રહ્યું છે\n"
 
