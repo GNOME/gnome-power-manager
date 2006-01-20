@@ -69,6 +69,8 @@ struct GpmTrayIconPrivate
 	gboolean        can_suspend;
 	gboolean        can_hibernate;
 
+	gboolean        embedded;
+
 #if (LIBNOTIFY_VERSION_MINOR == 2)
 	NotifyHandle   *notify;
 #elif (LIBNOTIFY_VERSION_MINOR >= 3)
@@ -174,11 +176,17 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 			
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	g_return_if_fail (stock_id != NULL);
 
-	gtk_image_set_from_stock (GTK_IMAGE (icon->priv->image),
-				  stock_id,
-				  GTK_ICON_SIZE_LARGE_TOOLBAR);
+	if (stock_id) {
+		gtk_image_set_from_stock (GTK_IMAGE (icon->priv->image),
+					  stock_id,
+					  GTK_ICON_SIZE_LARGE_TOOLBAR);
+	} else {
+		gtk_image_clear (GTK_IMAGE (icon->priv->image));
+		if (GTK_WIDGET_VISIBLE (icon->priv->image)) {
+			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
+		}
+	}
 }
 
 static void
@@ -435,9 +443,23 @@ gpm_tray_icon_constructor (GType                  type,
 }
 
 static void
+gpm_tray_icon_embedded (GtkPlug *plug)
+{
+	GpmTrayIcon *tray;
+
+	tray = GPM_TRAY_ICON (plug);
+
+	tray->priv->embedded = TRUE;
+
+	if (GTK_PLUG_CLASS (parent_class)->embedded)
+		GTK_PLUG_CLASS (parent_class)->embedded (plug);
+}
+
+static void
 gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GtkPlugClass   *plug_class = GTK_PLUG_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
@@ -445,6 +467,8 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 	object_class->get_property = gpm_tray_icon_get_property;
 	object_class->set_property = gpm_tray_icon_set_property;
         object_class->constructor  = gpm_tray_icon_constructor;
+
+	plug_class->embedded       = gpm_tray_icon_embedded;
 
 	g_type_class_add_private (klass, sizeof (GpmTrayIconPrivate));
 
@@ -715,7 +739,12 @@ gpm_tray_icon_notify (GpmTrayIcon *icon,
 		g_debug ("ignoring notification: %s", primary);
 		return;
 	}
-	
+
+	if (! icon->priv->embedded) {
+		g_debug ("Not embedded in a tray - ignoring notification");
+		return;
+	}
+
 	g_debug ("doing notify: %s", primary);
 
 	libnotify_event (icon,

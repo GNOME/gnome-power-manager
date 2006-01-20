@@ -210,6 +210,9 @@ get_stock_id (GpmManager *manager,
 	gboolean primary_charging;
 	gboolean primary_discharging;
 	gboolean on_ac;
+	char    *stock_id;
+
+	stock_id = NULL;
 
 	g_debug ("Getting stock icon for tray");
 
@@ -217,7 +220,7 @@ get_stock_id (GpmManager *manager,
 		g_debug ("The key " GPM_PREF_ICON_POLICY
 			 " is set to never, so no icon will be displayed.\n"
 			 "You can change this using gnome-power-preferences");
-		return NULL;
+		goto done;
 	}
 
 	/* find out when the user considers the power "low" */
@@ -233,10 +236,12 @@ get_stock_id (GpmManager *manager,
 		index = get_icon_index_from_percent (primary_percentage);
 
 		if (on_ac) {
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+			stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		} else {
-			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+			stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 		}
+
+		goto done;
 	}
 
 	res = gpm_power_get_battery_percentage (manager->priv->power,
@@ -246,7 +251,8 @@ get_stock_id (GpmManager *manager,
 	if (res && percentage < low_threshold) {
 		index = get_icon_index_from_percent (percentage);
 
-		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+		goto done;
 	}
 
 	res = gpm_power_get_battery_percentage (manager->priv->power,
@@ -254,7 +260,8 @@ get_stock_id (GpmManager *manager,
 						&percentage,
 						NULL);
 	if (res && percentage < low_threshold) {
-		return g_strdup_printf ("gnome-power-mouse");
+		stock_id = g_strdup_printf ("gnome-power-mouse");
+		goto done;
 	}
 
 	res = gpm_power_get_battery_percentage (manager->priv->power,
@@ -262,7 +269,8 @@ get_stock_id (GpmManager *manager,
 						&percentage,
 						NULL);
 	if (res && percentage < low_threshold) {
-		return g_strdup_printf ("gnome-power-keyboard");
+		stock_id = g_strdup_printf ("gnome-power-keyboard");
+		goto done;
 	}
 
 	/*
@@ -272,10 +280,11 @@ get_stock_id (GpmManager *manager,
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
 		g_debug ("get_stock_id: no devices critical, so "
 			 "no icon will be displayed.");
-		return NULL;
+		stock_id = NULL;
+		goto done;
 	}
 
-	/* Only display if charging or disharging */
+	/* Only display if charging or discharging */
 	primary_charging = FALSE;
 	primary_discharging = FALSE;
 	if (has_primary) {
@@ -284,13 +293,15 @@ get_stock_id (GpmManager *manager,
 						      &primary_charging,
 						      &primary_discharging,
 						      NULL);
+
 		if (primary_charging || primary_discharging) {
 			index = get_icon_index_from_percent (primary_percentage);
 			if (on_ac) {
-				return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 			} else {
-				return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+				stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 			}
+			goto done;
 		}
 	}
 
@@ -298,7 +309,8 @@ get_stock_id (GpmManager *manager,
 	if (icon_policy == GPM_ICON_POLICY_CHARGE) {
 		g_debug ("get_stock_id: no devices (dis)charging, so "
 			 "no icon will be displayed.");
-		return NULL;
+		stock_id = NULL;
+		goto done;
 	}
 
 	/* Do the rest of the battery icon states */
@@ -307,17 +319,25 @@ get_stock_id (GpmManager *manager,
 
 		if (on_ac) {
 			if (!primary_charging && !primary_discharging) {
-				return g_strdup ("gnome-power-ac-charged");
+				stock_id = g_strdup ("gnome-power-ac-charged");
 			} else {
-				return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 			}
+
+			goto done;
 		} else {
-			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+			stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+			goto done;
 		}
 	}
 
 	/* We fallback to the ac_adapter icon */
-	return g_strdup_printf ("gnome-dev-acadapter");
+	stock_id = g_strdup_printf ("gnome-dev-acadapter");
+
+ done:
+	g_debug ("Going to use stock id: %s", stock_id);
+
+	return stock_id;
 }
 
 static void
@@ -340,6 +360,7 @@ tray_icon_update (GpmManager *manager)
 	if (stock_id) {
 		char *tooltip = NULL;
 
+		/* make sure that we have a valid object */
 		if (! manager->priv->tray_icon) {
 			gpm_manager_setup_tray_icon (manager, NULL);
 		}
@@ -480,6 +501,14 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 					     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 
+	/* update icon */
+	tray_icon_update (manager);
+
+	/* If no tray icon then don't notify */
+	if (! manager->priv->tray_icon) {
+		return;
+	}
+
 	if (! on_ac) {
 		if (show_notify) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -497,9 +526,6 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 		 */
 		gpm_tray_icon_cancel_notify (GPM_TRAY_ICON (manager->priv->tray_icon));
 	}
-
-	/* update icon */
-	tray_icon_update (manager);
 }
 
 /** Do the action dictated by policy from gconf
@@ -569,8 +595,10 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		 "charging = %d, primary = %d, percentagechanged=%i",
 		 percentage, remaining_time, discharging, charging, primary, percentagechanged);
 
-	/* update icon */
-	tray_icon_update (manager);
+	/* If no tray icon then don't notify */
+	if (! manager->priv->tray_icon) {
+		goto done;
+	}
 
 	/* give notification @100%, on percentagechanged */
 	if (percentagechanged && primary && percentage >= 100) {
@@ -585,12 +613,12 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 					      _("Your battery is now fully charged"));
 		}
 
-		return;
+		goto done;
 	}
 
 	if (! discharging) {
 		g_debug ("battery is not discharging!");
-		return;
+		goto done;
 	}
 
 	low_threshold = gconf_client_get_int (manager->priv->gconf_client,
@@ -601,16 +629,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	g_debug ("percentage = %d, low_threshold = %i, critical_threshold = %i",
 		 percentage, low_threshold, critical_threshold);
 
-	/* less than critical, do action */
-	if (percentage < critical_threshold) {
-		g_debug ("battery is below critical limit!");
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
-
-		return;
-	}
-
 	/* critical warning */
-	if (percentage == critical_threshold) {
+	if (percentage <= critical_threshold) {
 		g_debug ("battery is critical limit!");
 		remaining = get_timestring_from_minutes (remaining_time/60);
 
@@ -627,7 +647,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		g_free (message);
 		g_free (remaining);
 
-		return;
+		goto done;
 	}
 
 	/* low warning */
@@ -649,8 +669,12 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		g_free (message);
 		g_free (remaining);
 
-		return;
+		goto done;
 	}
+
+ done:
+	/* update icon */
+	tray_icon_update (manager);
 }
 
 gboolean
@@ -984,6 +1008,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 				gboolean            percentagechanged,
 				GpmManager         *manager)
 {
+	int critical_threshold;
+
 	maybe_notify_battery_power_changed (manager,
 					    kind,
 					    percentage,
@@ -991,6 +1017,17 @@ power_battery_power_changed_cb (GpmPower           *power,
 					    discharging,
 					    charging,
 					    percentagechanged);
+
+	critical_threshold = gconf_client_get_int (manager->priv->gconf_client,
+						   GPM_PREF_THRESHOLD_CRITICAL, NULL);
+
+	/* less than critical, do action */
+	if (percentage < critical_threshold) {
+		g_debug ("battery is below critical limit!");
+		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+
+		return;
+	}
 }
 
 static void

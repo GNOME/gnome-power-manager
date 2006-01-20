@@ -1,4 +1,23 @@
 2006-01-20  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock):
+	Interpret a NULL stock id as no icon.
+	(gpm_tray_icon_embedded): Set a flag when embedded in
+	a socket.
+	(gpm_tray_icon_class_init, gpm_tray_icon_notify): If
+	not embedded don't do notifications.
+
+	* src/gpm-manager.c (get_stock_id): Return in one place.
+	(tray_icon_update, maybe_notify_on_ac_changed) 
+	(maybe_notify_battery_power_changed): Don't try to
+	send notifications if we don't have a tray icon.  Move
+	policy do out of here.
+	(power_battery_power_changed_cb): Do the policy action
+	here.
+
+	Fixes #327799.
+
+2006-01-20  William Jon McCann  <mccann@jhu.edu>
 	
 	* src/gpm-power.c: (power_get_summary_for_kind) Make tooltip more
 	concise. Make some comments clearer or remove them.
