@@ -70,6 +70,15 @@ GpmManager   * gpm_manager_new              (void);
 gboolean       gpm_manager_get_on_ac        (GpmManager    *manager,
                                              gboolean      *on_ac,
                                              GError       **error);
+gboolean       gpm_manager_can_shutdown     (GpmManager    *manager,
+                                             gboolean      *allowed,
+                                             GError       **error);
+gboolean       gpm_manager_can_suspend      (GpmManager    *manager,
+                                             gboolean      *allowed,
+                                             GError       **error);
+gboolean       gpm_manager_can_hibernate    (GpmManager    *manager,
+                                             gboolean      *allowed,
+                                             GError       **error);
 
 gboolean       gpm_manager_get_dpms_mode    (GpmManager    *manager,
                                              const char   **mode,

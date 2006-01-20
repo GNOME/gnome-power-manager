@@ -6,6 +6,14 @@
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_on_ac"/>
       <arg type="b" name="on_ac" direction="out"/>
     </method>
+    <method name="CanSuspend">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_can_suspend"/>
+      <arg type="b" name="can" direction="out"/>
+    </method>
+    <method name="CanHibernate">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_can_hibernate"/>
+      <arg type="b" name="can" direction="out"/>
+    </method>
     <method name="getDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
       <arg type="s" name="mode" direction="out">

@@ -1,4 +1,5 @@
-/*
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
  * Copyright (C) 2005 Richard Hughes <hughsient@gmail.com>
  * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
  *
@@ -42,10 +43,12 @@
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify/ac_adapter"
 #define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify/fully_charged"
 
-#define ICON_POLICY_ALWAYS	"always"
-#define ICON_POLICY_CHARGE	"charge"
-#define ICON_POLICY_CRITICAL	"critical"
-#define ICON_POLICY_NEVER	"never"
+typedef enum {
+	GPM_ICON_POLICY_ALWAYS,
+	GPM_ICON_POLICY_CHARGE,
+	GPM_ICON_POLICY_CRITICAL,
+	GPM_ICON_POLICY_NEVER
+} GpmIconPolicy;
 
 #define ACTION_SUSPEND		"suspend"
 #define ACTION_SHUTDOWN		"shutdown"

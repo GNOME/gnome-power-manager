@@ -1,3 +1,55 @@
+2006-01-20  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-prefs.h: Use enum for icon policy.
+
+	* src/gpm-prefs.c (gpm_dbus_method_bool, gpm_can_suspend) 
+	(gpm_can_hibernate): Check with the daemon to see if
+	we are capable and allowed to do these things.
+	(gpm_has_batteries, gpm_has_lcd, gpm_has_button_sleep) 
+	(gpm_has_button_lid): Make functions to check these
+	things.
+	(gpm_prefs_icon_radio_cb): Don't leak gconf client.
+	(gpm_prefs_format_brightness_cb): Don't use
+	device dependent lcdsteps.
+	(gpm_prefs_format_percentage_cb): Don't cast to int
+	to guard against overflow.
+	(gpm_prefs_format_time_cb): Use one return.
+	(gpm_prefs_sleep_slider_changed_cb): Don't leak client.
+	(gpm_prefs_setup_sleep_slider): ditto.
+	(gpm_prefs_brightness_slider_changed_cb): Don't leak
+	client.  Don't try to change brightness of devices here.
+	(gpm_prefs_setup_brightness_slider): Don't leak client.
+	Don't use device dependent lcdsteps.
+	(gpm_prefs_action_combo_changed_cb): Don't leak.
+	(gpm_prefs_setup_action_combo): Don't leak.  Use
+	local _can_ functions instead of checking HAL directly
+	so that we can also check gconf policy.
+	(gpm_prefs_battery_low_slider_changed_cb): Don't leak.
+	(setup_page_one, setup_page_two, setup_page_three) 
+	(gpm_prefs_create): Break up the creation and setup
+	of each notebook tab to make it less monolithic.
+
+	* src/gpm-manager.xml: Add CanSuspend, CanHibernate,
+	and CanShutdown.
+
+	* src/gpm-manager.[ch] (gpm_manager_can_suspend) 
+	(gpm_manager_can_hibernate, gpm_manager_can_shutdown):
+	Make these methods public and expose to the bus.
+	(get_stock_id): Make icon_policy an enum so
+	we don't have to parse and compare strings.
+	(tray_icon_update): Convert gconf icon-policy
+	string to an enum for internal use.
+	(gpm_manager_shutdown, gpm_manager_hibernate) 
+	(gpm_manager_suspend, gpm_manager_setup_tray_icon):
+	Use new API for _can_ functions.
+
+	* src/Makefile.am: Don't need gpm-screensaver
+	for prefs.
+
+	* data/gpm-prefs.glade: Remove time estimates
+	for low and critical battery since this is
+	device and system dependent.
+
 2006-01-19  William Jon McCann  <mccann@jhu.edu>
 
 	* src/Makefile.am:

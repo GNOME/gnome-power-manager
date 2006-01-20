@@ -89,60 +89,87 @@ enum {
 static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
+static GConfEnumStringPair icon_policy_enum_map [] = {
+       { GPM_ICON_POLICY_ALWAYS,       "always"   },
+       { GPM_ICON_POLICY_CHARGE,       "charge"   },
+       { GPM_ICON_POLICY_CRITICAL,     "critical" },
+       { GPM_ICON_POLICY_NEVER,        "never"    },
+       { 0, NULL }
+};
+
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
+
 
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
 
-static gboolean
-_gpm_manager_can_suspend (GpmManager *manager)
+gboolean
+gpm_manager_can_suspend (GpmManager *manager,
+			 gboolean   *can,
+			 GError    **error)
 {
-	gboolean can;
+	if (can) {
+		*can = FALSE;
+	}
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
 	g_debug ("Suspend disabled for testing");
-	return FALSE;
+	return TRUE;
 #endif
 
 	/* FIXME: check other stuff */
 
-	can = gpm_hal_can_suspend ();
+	if (can) {
+		*can = gpm_hal_can_suspend ();
+	}
 
-	return can;
+	return TRUE;
 }
 
-static gboolean
-_gpm_manager_can_hibernate (GpmManager *manager)
+gboolean
+gpm_manager_can_hibernate (GpmManager *manager,
+			   gboolean   *can,
+			   GError    **error)
 {
-	gboolean can;
+	if (can) {
+		*can = FALSE;
+	}
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
 	g_debug ("Hibernate disabled for testing");
-	return FALSE;
+	return TRUE;
 #endif
 
 	/* FIXME: check other stuff */
 
-	can = gpm_hal_can_hibernate ();
+	if (can) {
+		*can = gpm_hal_can_hibernate ();
+	}
 
-	return can;
+	return TRUE;
 }
 
-static gboolean
-_gpm_manager_can_shutdown (GpmManager *manager)
+gboolean
+gpm_manager_can_shutdown (GpmManager *manager,
+			  gboolean   *can,
+			  GError    **error)
 {
-	gboolean can;
+	if (can) {
+		*can = FALSE;
+	}
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
 	g_debug ("Shutdown disabled for testing");
-	return FALSE;
+	return TRUE;
 #endif
 
 	/* FIXME: check other stuff */
 
-	can = TRUE;
+	if (can) {
+		*can = TRUE;
+	}
 
-	return can;
+	return TRUE;
 }
 
 
@@ -172,7 +199,7 @@ get_icon_index_from_percent (gint percent)
  */
 static char *
 get_stock_id (GpmManager *manager,
-	      char	 *icon_policy)
+	      int         icon_policy)
 {
 	gboolean res;
 	gboolean has_primary;
@@ -184,11 +211,9 @@ get_stock_id (GpmManager *manager,
 	gboolean primary_discharging;
 	gboolean on_ac;
 
-	g_return_val_if_fail (icon_policy != NULL, NULL);
-
 	g_debug ("Getting stock icon for tray");
 
-	if (strcmp (icon_policy, ICON_POLICY_NEVER) == 0) {
+	if (icon_policy == GPM_ICON_POLICY_NEVER) {
 		g_debug ("The key " GPM_PREF_ICON_POLICY
 			 " is set to never, so no icon will be displayed.\n"
 			 "You can change this using gnome-power-preferences");
@@ -244,7 +269,7 @@ get_stock_id (GpmManager *manager,
 	 * Check if we should just show the charging / discharging icon 
 	 * even when not low or critical.
 	 */
-	if ((strcmp (icon_policy, ICON_POLICY_CRITICAL) == 0)) {
+	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
 		g_debug ("get_stock_id: no devices critical, so "
 			 "no icon will be displayed.");
 		return NULL;
@@ -270,7 +295,7 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* Check if we should just show the icon all the time */
-	if (strcmp (icon_policy, ICON_POLICY_CHARGE) == 0) {
+	if (icon_policy == GPM_ICON_POLICY_CHARGE) {
 		g_debug ("get_stock_id: no devices (dis)charging, so "
 			 "no icon will be displayed.");
 		return NULL;
@@ -299,21 +324,17 @@ static void
 tray_icon_update (GpmManager *manager)
 {
 	char *stock_id = NULL;
-	char *icon_policy;
+	char *icon_policy_str;
+	int   icon_policy;
 
 	/* do we want to display the icon */
-	icon_policy = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_ICON_POLICY, NULL);
-
-	if (! icon_policy) {
-		g_warning ("You have not set an icon policy! "
-			   "(Please run gnome-power-preferences) -- "
-			   "I'll assume you want an icon all the time...");
-		icon_policy = g_strdup (ICON_POLICY_ALWAYS);
-	}
+	icon_policy_str = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_ICON_POLICY, NULL);
+	icon_policy = GPM_ICON_POLICY_ALWAYS;
+	gconf_string_to_enum (icon_policy_enum_map, icon_policy_str, &icon_policy);
+	g_free (icon_policy_str);
 
 	/* try to get stock image */
 	stock_id = get_stock_id (manager, icon_policy);
-	g_free (icon_policy);
 
 	/* only create if we have a valid filename */
 	if (stock_id) {
@@ -689,7 +710,10 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 void
 gpm_manager_shutdown (GpmManager *manager)
 {
-	if (! _gpm_manager_can_shutdown (manager)) {
+	gboolean allowed;
+
+	gpm_manager_can_shutdown (manager, &allowed, NULL);
+	if (! allowed) {
 		g_warning ("Cannot shutdown");
 		return;
 	}
@@ -714,22 +738,27 @@ void
 gpm_manager_hibernate (GpmManager *manager)
 {
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
+	gboolean allowed;
 
-	if (! _gpm_manager_can_hibernate (manager)) {
+	gpm_manager_can_hibernate (manager, &allowed, NULL);
+
+	if (! allowed) {
 		g_warning ("Cannot hibernate");
 		return;
 	}
 
-	if (should_lock)
+	if (should_lock) {
 		gpm_screensaver_lock ();
+	}
 
 	gpm_networkmanager_sleep ();
 	gpm_hal_hibernate ();
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
-	if (should_lock)
+	if (should_lock) {
 		gpm_screensaver_poke ();
+	}
 }
 
 /** Do a suspend with all the associated callbacks and methods.
@@ -745,22 +774,27 @@ void
 gpm_manager_suspend (GpmManager *manager)
 {
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
+	gboolean allowed;
 
-	if (! _gpm_manager_can_suspend (manager)) {
+	gpm_manager_can_suspend (manager, &allowed, NULL);
+
+	if (! allowed) {
 		g_warning ("Cannot suspend");
 		return;
 	}
 
-	if (should_lock)
+	if (should_lock) {
 		gpm_screensaver_lock ();
+	}
 
 	gpm_networkmanager_sleep ();
 	gpm_hal_suspend (0);
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
-	if (should_lock)
+	if (should_lock) {
 		gpm_screensaver_poke ();
+	}
 }
 
 /** Callback for the idle function.
@@ -1113,10 +1147,10 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 	g_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
-	enabled = _gpm_manager_can_suspend (manager);
+	gpm_manager_can_suspend (manager, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 
-	enabled = _gpm_manager_can_hibernate (manager);
+	gpm_manager_can_hibernate (manager, &enabled, NULL);
 	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
