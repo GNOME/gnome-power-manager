@@ -485,7 +485,10 @@ battery_kind_cache_update (GpmPower              *power,
 		}
 	}
 
-	/* use floating division here */
+	/* Perform following calculations with floating point otherwise we might
+	 * get an with batteries which have a very small charge unit and consequently
+	 * a very high charge. Solves bug #327471 
+	 */
 	entry->percentage_charge = 100 * ((float)entry->current_charge / (float)entry->last_full_charge);
 
 	if ((entry->is_discharging) && (entry->charge_rate != 0)) {
@@ -494,7 +497,6 @@ battery_kind_cache_update (GpmPower              *power,
 		entry->remaining_time = 3600 * ((float)(entry->last_full_charge - entry->current_charge) / (float)entry->charge_rate);
 	}
 
-	/* find new percentage_charge  */
 	new_charge = entry->percentage_charge;
 
 	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
@@ -619,7 +621,7 @@ power_get_summary_for_kind (GpmPower   *power,
 {
 	BatteryKindCacheEntry *entry;
 	const char            *kind_desc = NULL;
-	const char            *charge_state = NULL;
+	char                  *timestring;
 
 	entry = battery_kind_cache_find (power, kind);
 
@@ -645,55 +647,42 @@ power_get_summary_for_kind (GpmPower   *power,
 		return;
 	}
 
-	/* work out chargestate */
+	/* Add 0.5 to do rounding */
+	timestring = get_timestring_from_minutes ((int)((entry->remaining_time / 60.0) + 0.5));
+
 	if (entry->is_charging) {
-		charge_state = _("charging");
+		g_string_append_printf (summary,
+					"%s %s (%i%%)\n",
+					timestring,
+					_("until charged"),
+					entry->percentage_charge);
 	} else if (entry->is_discharging) {
-		charge_state = _("discharging");
-	} else if (entry->percentage_charge > 99) {
-		charge_state = _("charged");
+		g_string_append_printf (summary,
+					"%s (%i%%) %s\n",
+					timestring,
+					entry->percentage_charge,
+					_("remaining"));
+	} else if (entry->percentage_charge == 100){
+		g_string_append_printf (summary,
+					"%s %s\n",
+					kind_desc,
+					_("fully charged"));
 	} else if (power->priv->on_ac) {
-		/* intermediate state: assume charging if on-ac */
-		charge_state = _("charging");
+		/* sometimes there is a state between charging and discharging
+		   when not fully charged.  This can happen sometimes
+		   when the AC is just plugged in.  Assume that if this
+		   happens and we are on-ac that we are charging. */
+		g_string_append_printf (summary,
+					"%s %s (%i%%)\n",
+					timestring,
+					_("until charged"),
+					entry->percentage_charge);
 	} else {
-		/* intermediate state: assume discharging if not on-ac */
-		charge_state = _("discharging");
+		g_warning ("power_get_summary_for_kind (): in an undefined state we are not charging or "
+			   "discharging and the batteries are also not fully loaded");
 	}
 
-	g_string_append_printf (summary,
-				"%s %s (%i%%)",
-				kind_desc,
-				charge_state,
-				entry->percentage_charge);
-
-	/*
-	 * only display time remaining if remaining_time > 120
-	 * and percentage_charge < 99 to cope with some broken
-	 * batteries.
-	 */
-	if (entry->remaining_time > 120 && entry->percentage_charge < 99) {
-		char *timestring;
-
-		/* why add 0.5 ? */
-		timestring = get_timestring_from_minutes ((int)((entry->remaining_time / 60) + 0.5));
-
-		if (timestring) {
-			if (entry->is_charging) {
-				g_string_append_printf (summary,
-							"\n%s %s",
-							timestring,
-							_("until charged"));
-			} else {
-				g_string_append_printf (summary,
-							"\n%s %s",
-							timestring,
-							_("until empty"));
-			}
-			g_free (timestring);
-		}
-	}
-	g_string_append (summary, "\n");
-
+	g_free (timestring);
 }
 
 gboolean
@@ -1078,7 +1067,6 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 
 	battery_device_cache_entry_update_key (entry, key);
 
-	/* find old percentage_charge */
 	kind_entry = battery_kind_cache_find (power, entry->kind);
 
 	if (kind_entry == NULL) {

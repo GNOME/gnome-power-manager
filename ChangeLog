@@ -1,4 +1,14 @@
 2006-01-20  William Jon McCann  <mccann@jhu.edu>
+	
+	* src/gpm-power.c: (power_get_summary_for_kind) Make tooltip more
+	concise. Make some comments clearer or remove them.
+	* src/gpm-common.c: return "Unknown time" if minutes <=0 for
+ 	get_timestring_from_minutes ()
+
+	Patch from Jaap Haitsma  <jaap@haitsma.org>
+	Fixes #327443
+	
+2006-01-20  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-prefs.h: Use enum for icon policy.
 

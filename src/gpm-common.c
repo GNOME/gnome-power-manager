@@ -48,7 +48,7 @@ get_timestring_from_minutes (int minutes)
 	gint   hours;
 
 	if (minutes == 0) {
-		timestring = g_strdup_printf (_("Unknown"));
+		timestring = g_strdup_printf (_("Unknown time"));
 		return timestring;
 	}
 
