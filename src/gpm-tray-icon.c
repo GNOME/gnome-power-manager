@@ -182,7 +182,10 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 					  stock_id,
 					  GTK_ICON_SIZE_LARGE_TOOLBAR);
 	} else {
-		gtk_image_clear (GTK_IMAGE (icon->priv->image));
+		/* FIXME: gtk_image_clear requires gtk 2.8, so until we
+		 * depend on more then 2.6 (required for FC4) we have to
+		 * comment it out
+		gtk_image_clear (GTK_IMAGE (icon->priv->image));*/
 		if (GTK_WIDGET_VISIBLE (icon->priv->image)) {
 			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
 		}

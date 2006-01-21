@@ -1,3 +1,9 @@
+2006-01-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock): Comment out
+	gtk_image_clear() as it requires gtk 2.8. For FC4 we can't depend on
+	more then 2.6. No visual change.
+
 2006-01-20  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock):
