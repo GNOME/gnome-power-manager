@@ -1247,6 +1247,7 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->dpms = gpm_dpms_new ();
 	sync_dpms_policy (manager);
+	tray_icon_update (manager);
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 }
