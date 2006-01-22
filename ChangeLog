@@ -1,5 +1,22 @@
 2006-01-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.{c|h}: Add these files which abstract out the
+	lcd brightness interface nicely. The new class internally deals with
+	the hardware values (0..x) and externally deals with percentages
+	so that the changes recently in g-p-p to store percentage now work.
+
+	* src/Makefile.am: Add gpm-brightness.{c|h} to g-p-m.
+
+	* src/gpm-hal.{h|c}: Remove all the LCD brightness code. This was
+	always a bodge putting it in this file, and now it's faster and
+	cleaner in the new class.
+
+	* src/gpm-manager.c: Adapt for the new lcd brightness function names.
+	Also add the code to change the brightness when we change the
+	gconf key in g-p-p. This fixes (327895).
+
+2006-01-22  Richard Hughes  <richard@hughsie.com>
+
 	* docs/release-plan.txt: Add this file, so I can follow a tick sheet
 	for a formal release :-)
 

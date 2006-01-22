@@ -57,6 +57,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-manager.c					\
 	gpm-power.h					\
 	gpm-power.c					\
+	gpm-brightness.h				\
+	gpm-brightness.c				\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
 	eggtrayicon.h					\

@@ -53,6 +53,7 @@
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-power.h"
+#include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
 #include "gpm-manager.h"
 
@@ -72,6 +73,7 @@ struct GpmManagerPrivate
 	GpmDpms		*dpms;
 	GpmIdle		*idle;
 	GpmPower	*power;
+	GpmBrightness   *brightness;
 
 	GpmTrayIcon	*tray_icon;
 };
@@ -478,7 +480,7 @@ change_power_policy (GpmManager *manager,
 		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
 	}
 
-	gpm_hal_set_brightness_dim (brightness);
+	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (!on_ac);
 
 	/*
@@ -972,9 +974,9 @@ power_button_pressed_cb (GpmPower   *power,
 		}
 
 		if (strcmp (details, "BrightnessUp") == 0) {
-			gpm_hal_set_brightness_up ();
+			gpm_brightness_level_up (manager->priv->brightness);
 		} else if (strcmp (details, "BrightnessDown") == 0) {
-			gpm_hal_set_brightness_down ();
+			gpm_brightness_level_down (manager->priv->brightness);
 		} else if (strcmp (details, "Suspend") == 0) {
 			gpm_manager_suspend (manager);
 		} else if (strcmp (details, "Hibernate") == 0) {
@@ -1107,6 +1109,7 @@ callback_gconf_key_changed (GConfClient *client,
 			    gpointer	 user_data)
 {
 	gint	    value = 0;
+	gint	    brightness;
 	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
 
@@ -1147,6 +1150,20 @@ callback_gconf_key_changed (GConfClient *client,
 	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
 
 		sync_dpms_policy (manager);
+
+	} else if (strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS) == 0) {
+
+		if (on_ac) {
+			brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
+			gpm_brightness_level_set (manager->priv->brightness, brightness);
+		}
+
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS) == 0) {
+
+		if (! on_ac) {
+			brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
+			gpm_brightness_level_set (manager->priv->brightness, brightness);
+		}
 
 	}
 }
@@ -1241,6 +1258,8 @@ gpm_manager_init (GpmManager *manager)
 				 NULL,
 				 NULL);
 
+	manager->priv->brightness = gpm_brightness_new ();
+
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "changed",
 			  G_CALLBACK (idle_changed_cb), manager);
@@ -1278,6 +1297,10 @@ gpm_manager_finalize (GObject *object)
 
 	if (manager->priv->power != NULL) {
 		g_object_unref (manager->priv->power);
+	}
+
+	if (manager->priv->brightness != NULL) {
+		g_object_unref (manager->priv->brightness);
 	}
 
 	if (manager->priv->tray_icon != NULL) {

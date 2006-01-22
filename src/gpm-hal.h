@@ -50,12 +50,6 @@ gboolean gpm_hal_is_running (void);
 gboolean gpm_hal_is_laptop (void);
 gboolean gpm_hal_is_on_ac (void);
 
-gboolean gpm_hal_get_brightness_steps (gint *steps);
-gboolean gpm_hal_set_brightness (gint brightness);
-gboolean gpm_hal_set_brightness_dim (gint brightness);
-gboolean gpm_hal_set_brightness_up (void);
-gboolean gpm_hal_set_brightness_down (void);
-
 gboolean gpm_hal_can_suspend (void);
 gboolean gpm_hal_suspend (gint wakeup);
 gboolean gpm_hal_can_hibernate (void);
