@@ -16,6 +16,18 @@ DBUS Interface:		"org.gnome.PowerManager"
 Methods
 =======
 
+	Name:		CanSuspend
+	Args:		(none)
+	Returns:	DBUS_TYPE_BOOL
+	Description:	This call Finds if the current user in the session
+			is able to suspend, and has permission to do so.
+
+	Name:		CanHibernate
+	Args:		(none)
+	Returns:	DBUS_TYPE_BOOL
+	Description:	This call Finds if the current user in the session
+			is able to hibernate, and has permission to do so.
+
 	Name:		setDpmsMode
 	Args:		DBUS_TYPE_STRING
 			value:	on		100%
