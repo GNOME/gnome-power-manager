@@ -2,6 +2,7 @@ SUBDIRS = src po docs man data help
 
 EXTRA_DIST =						\
 	HACKING						\
+	MAINTAINERS					\
 	intltool-extract.in				\
 	intltool-merge.in				\
 	intltool-update.in
