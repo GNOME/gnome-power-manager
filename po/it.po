@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.3.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-16 15:25+0000\n"
+"POT-Creation-Date: 2006-01-22 14:20+0000\n"
 "PO-Revision-Date: 2006-01-17 19:44+0100\n"
 "Last-Translator: Daniele Medri <dmedri@gmail.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -26,79 +26,160 @@ msgid "Power Management"
 msgstr "Gestione energetica"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
-msgid "If we should notify the user that the ac_adapter is removed"
-msgstr "se si vuole notificare l'utente che l'alimentatore di corrente è stato rimosso"
+msgid "AC LCD brightness hardware value"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
+msgid "Battery LCD brightness hardware value"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:3
+#, fuzzy
+msgid "Battery critical low action"
+msgstr "Batteria molto scarica"
+
+#: ../data/gnome-power-manager.schemas.in.h:4
+msgid "Computer AC idle timeout value"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:5
+msgid "Computer battery idle timeout value"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:6
+#, fuzzy
+msgid "Default sleep type"
+msgstr "Tipo di riposo del _computer:"
+
+#: ../data/gnome-power-manager.schemas.in.h:7
+msgid "Display AC idle timeout value"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:8
+#, fuzzy
+msgid "Display battery idle timeout value"
+msgstr "Mostra icone della batteria"
+
+#: ../data/gnome-power-manager.schemas.in.h:9
+#, fuzzy
+msgid "If we should notify the user that the AC adapter has been removed"
+msgstr ""
+"se si vuole notificare l'utente che l'alimentatore di corrente è stato "
+"rimosso"
+
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "If we should notify the user that the battery is fully charged"
 msgstr "se si vuole notificare l'utente che la batteria è completamente carica"
 
-#: ../data/gnome-power-manager.schemas.in.h:3
-msgid "Options are never, critical, charge, always"
-msgstr "Le opzioni sono mai, critica, carica, sempre"
+#: ../data/gnome-power-manager.schemas.in.h:11
+#, fuzzy
+msgid "Laptop lid close action"
+msgstr "Quan_do il portatile viene chiuso:"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "Notify on AC loss"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:13
+#, fuzzy
+msgid "Notify on fully charged"
+msgstr "completamente carico"
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+#, fuzzy
+msgid "Suspend button action"
+msgstr "Posizione dello script di arresto"
+
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "The action to take when the battery is critically low."
 msgstr "Azione da intraprendere con la batteria a livello critico."
 
-#: ../data/gnome-power-manager.schemas.in.h:5
-msgid "The brightness the display is set to on AC"
-msgstr "Luminosità del display con alimentatore di corrente"
+#: ../data/gnome-power-manager.schemas.in.h:16
+#, fuzzy
+msgid "The action to take when the laptop lid is closed"
+msgstr "Azione da intraprendere con la batteria a livello critico."
 
-#: ../data/gnome-power-manager.schemas.in.h:6
-msgid "The brightness the display is set to on battery"
-msgstr "Luminosità del display selezionata su batteria"
-
-#: ../data/gnome-power-manager.schemas.in.h:7
-msgid "The event for a laptop lid closing"
-msgstr "Evento con portatile chiuso:"
-
-#: ../data/gnome-power-manager.schemas.in.h:8
-msgid "The event for a system suspend button press"
+#: ../data/gnome-power-manager.schemas.in.h:17
+#, fuzzy
+msgid "The action to take when the system suspend button is pressed"
 msgstr "Evento con pulsante di sospensione premuto:"
 
-#: ../data/gnome-power-manager.schemas.in.h:9
-msgid "The idle time in seconds before the computer tries to sleep"
+#: ../data/gnome-power-manager.schemas.in.h:18
+#, fuzzy
+msgid "The battery critical action threshold."
+msgstr "Soglia di intervento del dispositivo di alimentazione."
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+#, fuzzy
+msgid "The battery warning threshold."
+msgstr "Soglia di avviso del dispositivo di alimentazione."
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+#, fuzzy
+msgid "The display icon policy can be never, critical, charge, always"
+msgstr "Le opzioni sono mai, critica, carica, sempre"
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+#, fuzzy
+msgid "The hardware brightness the display is set to whilst on AC power"
+msgstr "Luminosità del display con alimentatore di corrente"
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+#, fuzzy
+msgid "The hardware brightness the display is set to whilst on battery power"
+msgstr "Luminosità del display selezionata su batteria"
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+#, fuzzy
+msgid ""
+"The idle time in seconds before the computer tries to sleep whilst on AC "
+"power"
 msgstr "Secondi prima che il computer si spenga"
 
-#: ../data/gnome-power-manager.schemas.in.h:10
-msgid "The idle time in seconds before the display tries to sleep"
+#: ../data/gnome-power-manager.schemas.in.h:24
+#, fuzzy
+msgid ""
+"The idle time in seconds before the computer tries to sleep whilst on "
+"battery power"
+msgstr "Secondi prima che il computer si spenga"
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+#, fuzzy
+msgid ""
+"The idle time in seconds before the display tries to sleep whilst on AC power"
 msgstr "Secondi prima che il display si spenga"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
-msgid "The idle time in seconds before the hard disk drives try to sleep"
-msgstr "Secondi prima che il disco si spenga"
-
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:26
+#, fuzzy
 msgid ""
-"The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to perform an action."
+"The idle time in seconds before the display tries to sleep whilst on battery "
+"power"
+msgstr "Secondi prima che il display si spenga"
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+#, fuzzy
+msgid ""
+"The percentage that the battery has to get to be considered \"low enough\" "
+"to perform an action."
 msgstr ""
 "La percentuale di potenza che il dispositivo deve avere per essere "
 "considerato \"abbastanza\"basso per eseguire un'azione\""
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:28
+#, fuzzy
 msgid ""
-"The percentage that the powerdevice has to get to be considered \"low enough"
-"\" to warn the user."
+"The percentage that the battery has to get to be considered \"low enough\" "
+"to warn the user."
 msgstr ""
 "La percentuale che il dispositivo di potenza deve avere per essere "
 "considerato \"sufficiente\"per avvisare l'utente."
 
-#: ../data/gnome-power-manager.schemas.in.h:14
-msgid "The powerdevice action threshold."
-msgstr "Soglia di intervento del dispositivo di alimentazione."
-
-#: ../data/gnome-power-manager.schemas.in.h:15
-msgid "The powerdevice warning threshold."
-msgstr "Soglia di avviso del dispositivo di alimentazione."
-
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 "Il tipo di spegnimento (ibarnazione/sospensione) da usare automaticamente."
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "When to show the notification icon"
 msgstr "Quando mostrare l'icona di notifica"
 
@@ -127,90 +208,82 @@ msgid "<b>Running on Batteries</b>"
 msgstr "<b>Acceso con batterie</b>"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "<i><small>Estimated 16 minutes</small></i>"
-msgstr "<i><small>Stimati 16·minuti</small></i>"
-
-#: ../data/gpm-prefs.glade.h:8
-msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
-msgstr "<i><small>Stimate2·ore·6·minuti</small></i>"
-
-#: ../data/gpm-prefs.glade.h:9
 msgid "Advanced"
 msgstr "Avanzate"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:8
 msgid "Ba_ttery is critical when below:"
 msgstr "Livello critico della ba_tteria con:"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:9
 msgid "Only display when battery life is _critical"
 msgstr "Visualizza solo con batteria a livello _critico"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:10
 msgid "Only display when charging or _discharging"
 msgstr "Visualizza solo in fase di carica o scarica"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:11
 msgid "Options"
 msgstr "Opzioni"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:12 ../src/gpm-prefs.c:750
 msgid "Power Preferences"
 msgstr "Preferenze di alimentazione"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.glade.h:13
 msgid "Put _computer to sleep after:"
 msgstr "Metti il _computer a riposo dopo:"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:14
 msgid "Put _display to sleep after:"
 msgstr "Metti il _monitor a riposo dopo:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:15
 msgid "Put c_omputer to sleep after:"
 msgstr "Metti a riposo il c_omputer dopo:"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:16
 msgid "Put dis_play to sleep after:"
 msgstr "Metti il monitor a ri_poso dopo:"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:17
 msgid "Set display _brightness:"
 msgstr "Imposta _luminosità del monitor:"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:18
 msgid "Set display b_rightness:"
 msgstr "Imposta _luminosità del monitor:"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:19
 msgid "Sleep"
 msgstr "A riposo"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:20
 msgid "When _battery power critical:"
 msgstr "Con livello critico della _batteria:"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:21
 msgid "When _suspend button pressed:"
 msgstr "Se è premuto il pulsante di _sospensione:"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:22
 msgid "When laptop li_d is closed:"
 msgstr "Quan_do il portatile viene chiuso:"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.glade.h:23
 msgid "_Always display icon"
 msgstr "Visualizz_a sempre icona"
 
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.glade.h:24
 msgid "_Battery is low when below:"
 msgstr "Livello basso della _batteria sotto il:"
 
-#: ../data/gpm-prefs.glade.h:27
+#: ../data/gpm-prefs.glade.h:25
 msgid "_Computer sleep type:"
 msgstr "Tipo di riposo del _computer:"
 
-#: ../data/gpm-prefs.glade.h:28
+#: ../data/gpm-prefs.glade.h:26
 msgid "_Never display icon"
 msgstr "_Non visualizzare icona"
 
@@ -222,9 +295,10 @@ msgstr "Orientamento"
 msgid "The orientation of the tray."
 msgstr "Orientamento del tray."
 
-#: ../src/gpm-common.c:51 ../src/gpm-power.c:248 ../src/gpm-power.c:262
-msgid "Unknown"
-msgstr "Sconosciuto"
+#: ../src/gpm-common.c:51
+#, fuzzy
+msgid "Unknown time"
+msgstr "Dispositivo sconosciuto"
 
 #: ../src/gpm-common.c:56
 #, c-format
@@ -260,200 +334,230 @@ msgstr[0] "minuto"
 msgstr[1] "1 minuto"
 
 #. common descriptions of this program
-#: ../src/gpm-common.h:32 ../src/gpm-main.c:340
-msgid "GNOME Power Manager"
-msgstr "GNOME Power Manager"
+#: ../src/gpm-common.h:32
+#, fuzzy
+msgid "Power Manager"
+msgstr "Gestione energetica"
 
 #: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "Gestione energetica per il desktop GNOME."
 
-#: ../src/gpm-main.c:324
+#: ../src/gpm-main.c:315
 msgid "Do not daemonize"
 msgstr "Non renderlo come demone di sistema"
 
-#: ../src/gpm-main.c:326 ../src/gpm-prefs.c:615
+#: ../src/gpm-main.c:317 ../src/gpm-prefs.c:737
 msgid "Show extra debugging information"
 msgstr "Mostra informazioni aggiuntive di controllo"
 
-#: ../src/gpm-manager.c:467
+#: ../src/gpm-manager.c:516
 msgid "AC Power Unplugged"
 msgstr "Alimentatore di corrente staccato"
 
-#: ../src/gpm-manager.c:469
+#: ../src/gpm-manager.c:518
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "Alimentazione di corrente staccato. Il sistema sta utilizzando la batteria."
+msgstr ""
+"Alimentazione di corrente staccato. Il sistema sta utilizzando la batteria."
 
-#: ../src/gpm-manager.c:567
+#: ../src/gpm-manager.c:611
 msgid "Battery Charged"
 msgstr "Batteria carica"
 
-#: ../src/gpm-manager.c:569
+#: ../src/gpm-manager.c:613
 msgid "Your battery is now fully charged"
 msgstr "Batteria completamente carica"
 
-#: ../src/gpm-manager.c:601 ../src/gpm-manager.c:623
+#: ../src/gpm-manager.c:637 ../src/gpm-manager.c:659
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
-"E' disponibile il·<b>%s</b>·della batteria residua·(%d%%).·Attacca"
-"l'alimentatore di corrente per evitare perdita di dati."
+"E' disponibile il·<b>%s</b>·della batteria residua·(%d%%)."
+"·Attaccal'alimentatore di corrente per evitare perdita di dati."
 
-#: ../src/gpm-manager.c:608
+#: ../src/gpm-manager.c:644
 msgid "Battery Critically Low"
 msgstr "Batteria molto scarica"
 
-#: ../src/gpm-manager.c:629
+#: ../src/gpm-manager.c:665
 msgid "Battery Low"
 msgstr "Batteria scarica"
 
-#: ../src/gpm-power.c:252
+#: ../src/gpm-power.c:289 ../src/gpm-power.c:303
+msgid "Unknown"
+msgstr "Sconosciuto"
+
+#: ../src/gpm-power.c:293
 msgid "Laptop battery"
 msgstr "Batteria per portatile"
 
-#: ../src/gpm-power.c:254
+#: ../src/gpm-power.c:295
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:256
+#: ../src/gpm-power.c:297
 msgid "Wireless mouse"
 msgstr "Mouse senza fili"
 
-#: ../src/gpm-power.c:258
+#: ../src/gpm-power.c:299
 msgid "Wireless keyboard"
 msgstr "Tastiera senza fili"
 
-#: ../src/gpm-power.c:260
+#: ../src/gpm-power.c:301
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:605
-msgid "charging"
-msgstr "in carica"
-
-#: ../src/gpm-power.c:607
-msgid "discharging"
-msgstr "in scaricamento"
-
-#: ../src/gpm-power.c:609
-msgid "charged"
-msgstr "carica"
-
-#: ../src/gpm-power.c:632
+#: ../src/gpm-power.c:657 ../src/gpm-power.c:678
 msgid "until charged"
 msgstr "finchè non è totalmente carica"
 
-#: ../src/gpm-power.c:637
-msgid "until empty"
-msgstr "finchè non è totalmente scarica"
+#: ../src/gpm-power.c:664
+msgid "remaining"
+msgstr "rimangono"
 
-#: ../src/gpm-power.c:683
+#: ../src/gpm-power.c:669
+msgid "fully charged"
+msgstr "completamente carico"
+
+#: ../src/gpm-power.c:702
 msgid "Computer is running on AC power\n"
 msgstr "Computer acceso con alimentatore di corrente\n"
 
-#: ../src/gpm-power.c:685
+#: ../src/gpm-power.c:704
 msgid "Computer is running on battery power\n"
 msgstr "Computer acceso con con batterie\n"
 
-#: ../src/gpm-tray-icon.c:104
+#: ../src/gpm-tray-icon.c:106
 msgid "_Suspend"
 msgstr "_Sospendi"
 
-#: ../src/gpm-tray-icon.c:105
+#: ../src/gpm-tray-icon.c:107
 msgid "Suspend the computer"
 msgstr "Sospendi il computer"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:108
 msgid "Hi_bernate"
 msgstr "I_berna"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:109
 msgid "Make the computer go to sleep"
 msgstr "Metti a risposo il computer"
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:110
 msgid "_Preferences"
 msgstr "_Preferenze"
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:112
 msgid "_Help"
 msgstr "_Aiuto"
 
-#: ../src/gpm-tray-icon.c:112
+#: ../src/gpm-tray-icon.c:114
 msgid "_About"
 msgstr "_Informazioni"
 
-#: ../src/gpm-tray-icon.c:237
+#: ../src/gpm-tray-icon.c:249
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenziato sotto la GNU General Public License Versione 2"
 
-#: ../src/gpm-tray-icon.c:238
+#: ../src/gpm-tray-icon.c:250
+#, fuzzy
 msgid ""
-"GNOME Power Manager is free software; you can redistribute it and/or\n"
+"Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
-msgstr "GNOME Power Manager è un software libero; puoi ridistribuirlo e/o\n"
+msgstr ""
+"GNOME Power Manager è un software libero; puoi ridistribuirlo e/o\n"
 "modificarlo nei termini della GNU General Public License\n"
 "pubblicata dalla Free Software Foundation; per la versione 2\n"
 "della licenza, o (a scelta) qualsiasi altra versione successiva."
 
-#: ../src/gpm-tray-icon.c:242
+#: ../src/gpm-tray-icon.c:254
+#, fuzzy
 msgid ""
-"GNOME Power Manager is distributed in the hope that it will be useful,\n"
+"Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
-msgstr "GNOME Power Manager è distribuito con la speranza di risultare utile,\n"
+msgstr ""
+"GNOME Power Manager è distribuito con la speranza di risultare utile,\n"
 "ma SENZA ALCUNA GARANZIA; senza alcune forma di tutela di\n"
 "COMMERCIABILITA' o PERSONALIZZAZIONI PER CASI PARTICOLARI. Leggi\n"
 "la GNU General Public License per maggiori dettagli."
 
-#: ../src/gpm-tray-icon.c:246
+#: ../src/gpm-tray-icon.c:258
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
-msgstr "Dovresti aver ricevuto una copia della·GNU·General·Public·License\n"
+msgstr ""
+"Dovresti aver ricevuto una copia della·GNU·General·Public·License\n"
 "con questo programma;·in caso contrario, scrivi alla·Free·Software\n"
 "Foundation,·Inc.,·51·Franklin·Street,·Fifth·Floor,·Boston,·MA\n"
 "02110-1301,·USA."
 
-#: ../src/gpm-tray-icon.c:251
+#: ../src/gpm-tray-icon.c:263
 msgid "translator-credits"
 msgstr "ringraziamenti-traduttori"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:51
+#: ../src/gpm-prefs.c:57
 msgid "Suspend"
 msgstr "Sospendi"
 
-#: ../src/gpm-prefs.c:52
+#: ../src/gpm-prefs.c:58
 msgid "Shutdown"
 msgstr "Arresta"
 
-#: ../src/gpm-prefs.c:53
+#: ../src/gpm-prefs.c:59
 msgid "Hibernate"
 msgstr "Iberna"
 
-#: ../src/gpm-prefs.c:54
+#: ../src/gpm-prefs.c:60
 msgid "Do nothing"
 msgstr "Non fare nulla"
 
-#: ../src/gpm-prefs.c:163
+#: ../src/gpm-prefs.c:224
 msgid "Never"
 msgstr "Mai"
 
-#: ../src/gpm-prefs.c:553
-msgid "<b>Configuration</b>"
+#: ../src/gpm-prefs.c:502
+#, fuzzy
+msgid "Configuration"
 msgstr "<b>Configurazione</b>"
 
-#: ../src/gpm-prefs.c:628
-msgid "GNOME Power Preferences"
-msgstr "Preferenze di alimentazione di GNOME"
+#~ msgid "The event for a laptop lid closing"
+#~ msgstr "Evento con portatile chiuso:"
+
+#~ msgid "The idle time in seconds before the hard disk drives try to sleep"
+#~ msgstr "Secondi prima che il disco si spenga"
+
+#~ msgid "<i><small>Estimated 16 minutes</small></i>"
+#~ msgstr "<i><small>Stimati 16·minuti</small></i>"
+
+#~ msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
+#~ msgstr "<i><small>Stimate2·ore·6·minuti</small></i>"
+
+#~ msgid "GNOME Power Manager"
+#~ msgstr "GNOME Power Manager"
+
+#~ msgid "charging"
+#~ msgstr "in carica"
+
+#~ msgid "discharging"
+#~ msgstr "in scaricamento"
+
+#~ msgid "charged"
+#~ msgstr "carica"
+
+#~ msgid "until empty"
+#~ msgstr "finchè non è totalmente scarica"
+
+#~ msgid "GNOME Power Preferences"
+#~ msgstr "Preferenze di alimentazione di GNOME"
 
 #~ msgid "Misc PDA"
 #~ msgstr "VariÂ·PDA"
@@ -530,9 +634,6 @@ msgstr "Preferenze di alimentazione di GNOME"
 #~ msgid "The path to the reboot script"
 #~ msgstr "Il percorso dello script di reboot"
 
-#~ msgid "remaining"
-#~ msgstr "rimangono"
-
 #~ msgid "1 hour, 1 minute"
 #~ msgstr "1 ora, 1 minuto"
 
@@ -599,9 +700,6 @@ msgstr "Preferenze di alimentazione di GNOME"
 #~ msgid "Shutdown script location"
 #~ msgstr "Posizione dello script di arresto"
 
-#~ msgid "Suspend script location"
-#~ msgstr "Posizione dello script di arresto"
-
 #~ msgid "User cannot hibernate the machine"
 #~ msgstr "L'utente non puÃ² ibernare la macchina"
 
@@ -616,9 +714,6 @@ msgstr "Preferenze di alimentazione di GNOME"
 
 #~ msgid "Display devices that are fully charged"
 #~ msgstr "Mostra i dispositivi completamente carichi"
-
-#~ msgid "Display low battery icons"
-#~ msgstr "Mostra icone della batteria"
 
 #~ msgid "Put hard drive to sleep after:"
 #~ msgstr "Metti il disco fisso in pausa dopo:"
@@ -638,14 +733,8 @@ msgstr "Preferenze di alimentazione di GNOME"
 #~ msgid "Logitech mouse"
 #~ msgstr "Logitech mouse"
 
-#~ msgid "Unknown device"
-#~ msgstr "Dispositivo sconosciuto"
-
 #~ msgid "missing"
 #~ msgstr "assente"
-
-#~ msgid "fully charged"
-#~ msgstr "completamente carico"
 
 #~ msgid "Couldn't obtain list of batteries"
 #~ msgstr "Non Ãš possibile ottenere la lista delle batterie"
