@@ -1,5 +1,10 @@
 2006-01-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.c (watch_device_condition): Find the UDI from
+	the proxy path, as before we were just reading random data...
+
+2006-01-22  Richard Hughes  <richard@hughsie.com>
+
 	* docs/dbus-interface.txt: Document CanSuspend and CanHibernate.
 
 2006-01-21  Richard Hughes  <richard@hughsie.com>

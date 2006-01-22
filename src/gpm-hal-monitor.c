@@ -264,11 +264,14 @@ watch_device_properties_modified (DBusGProxy    *proxy,
  */
 static void
 watch_device_condition (DBusGProxy    *proxy,
-			const char    *udi,
 			const char    *name,
 			const char    *details,
 			GpmHalMonitor *monitor)
 {
+	const char *udi = NULL;
+
+	udi = dbus_g_proxy_get_path (proxy);
+
 	g_assert (udi);
 	g_assert (name);
 	g_assert (details);
