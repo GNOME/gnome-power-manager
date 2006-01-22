@@ -1,5 +1,12 @@
 2006-01-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gpm_manager_init): Add a call to 
+	change_power_policy () so we set the correct lcd brightness on
+	startup. This meant that the lcd brightness was not being set on
+	the first cold boot of g-p-m.
+
+2006-01-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.{c|h}: Add these files which abstract out the
 	lcd brightness interface nicely. The new class internally deals with
 	the hardware values (0..x) and externally deals with percentages

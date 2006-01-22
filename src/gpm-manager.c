@@ -1234,6 +1234,7 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 static void
 gpm_manager_init (GpmManager *manager)
 {
+	gboolean on_ac;
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->gconf_client = gconf_client_get_default ();
@@ -1265,8 +1266,13 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (idle_changed_cb), manager);
 
 	manager->priv->dpms = gpm_dpms_new ();
+
+	/* coldplug so we are in the correct state at startup */
 	sync_dpms_policy (manager);
 	tray_icon_update (manager);
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+	change_power_policy (manager, on_ac);
+
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 }
