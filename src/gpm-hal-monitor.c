@@ -159,8 +159,8 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_added),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__STRING_STRING,
-			      G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+			      gpm_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
 	signals [BATTERY_REMOVED] =
 		g_signal_new ("battery-removed",
 			      G_TYPE_FROM_CLASS (object_class),

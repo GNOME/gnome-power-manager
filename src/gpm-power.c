@@ -1018,7 +1018,6 @@ remove_battery (GpmPower   *power,
 static void
 hal_battery_added_cb (GpmHalMonitor *monitor,
 		      const char    *udi,
-		      const char    *reserved,
 		      GpmPower      *power)
 {
 	g_debug ("Battery Added: %s", udi);

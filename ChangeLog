@@ -1,5 +1,20 @@
 2006-01-23  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Add fexceptions to the configure line as it makes
+	g-p-m blow up while testing if the signals are wrong (good thing).
+
+	* src/gpm-hal-monitor.c (gpm_hal_monitor_class_init): Change
+	gpm_marshal_VOID__STRING_STRING to gpm_marshal_VOID__STRING as we
+	only send one argument.
+
+	* src/gpm-power.c (hal_battery_added_cb): Remove the reserved parameter
+	as it's not used anywhere and only confuses us. This should fix the bug
+	where the g-p-m crashes and "gdb bt" intermittently gives:
+	hal_monitor_start->gpm_coldplug_batteries->g_signal_emit->
+	g_signal_emit_valist->g_value_array_copy->g_strdup->strlen
+
+2006-01-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c (gpm_brightness_init): Actually check for the
 	hardware so we don't get errors on desktop systems.
 
@@ -15,7 +30,7 @@
 	* src/gpm-brightness.{c|h}: Add these files which abstract out the
 	lcd brightness interface nicely. The new class internally deals with
 	the hardware values (0..x) and externally deals with percentages
-	so that the changes recently in g-p-p to store percentage now work.
+	so that the changes recently in g-g_signal_emitp-p to store percentage now work.
 
 	* src/Makefile.am: Add gpm-brightness.{c|h} to g-p-m.
 
