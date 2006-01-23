@@ -8,6 +8,10 @@ schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 desktopdir = $(datadir)/applications
 desktop_in_files = gnome-power-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+
+autostartdir = $(datadir)/autostart
+autostart_in_files = gnome-power-manager.desktop.in
+autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 dbusconfdir = $(DBUS_SYS_DIR)
