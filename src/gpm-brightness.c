@@ -53,6 +53,7 @@ static void     gpm_brightness_finalize   (GObject	      *object);
 
 struct GpmBrightnessPrivate
 {
+	gboolean	    has_hardware;
 	int	    current_hw;
 	int	    levels;
 	char	   *udi;
@@ -127,10 +128,13 @@ gpm_brightness_init (GpmBrightness *brightness)
 
 	/* save udi of lcd adapter */
 	gpm_hal_find_device_capability ("laptop_panel", &names);
-	if (!names) {
+	if (names == NULL || names[0] == NULL) {
+		brightness->priv->has_hardware = FALSE;
 		g_debug ("No devices of capability laptop_panel");
 		return;
 	}
+
+	brightness->priv->has_hardware = TRUE;
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
 	gpm_hal_free_capability (names);
@@ -239,7 +243,9 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 void
 gpm_brightness_level_up (GpmBrightness *brightness)
 {
-	g_debug ("gpm_brightness_level_up");
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
 	int current_hw = brightness->priv->current_hw;
 	gpm_brightness_level_set_hw (brightness, current_hw + 1);
 }
@@ -247,7 +253,9 @@ gpm_brightness_level_up (GpmBrightness *brightness)
 void
 gpm_brightness_level_down (GpmBrightness *brightness)
 {
-	g_debug ("gpm_brightness_level_down");
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
 	int current_hw = brightness->priv->current_hw;
 	gpm_brightness_level_set_hw (brightness, current_hw - 1);
 }
@@ -260,6 +268,9 @@ gpm_brightness_level_set (GpmBrightness *brightness,
 	int brightness_level_hw;
 	int levels;
 
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
 	levels = brightness->priv->levels;
 	brightness_level_hw = ( (float) brightness_level * (float) (levels - 1)) / 100.0f;
 	/* only set if different */
@@ -279,6 +290,9 @@ gpm_brightness_level_dim (GpmBrightness *brightness,
 	int   levels;
 	int   a;
 
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
 	/* If the manufacturer is IBM, then assume we are a ThinkPad,
 	 * and don't do the new-fangled dimming routine. The ThinkPad dims
 	 * gently itself and the two dimming routines just get messy.
