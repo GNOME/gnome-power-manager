@@ -8,11 +8,11 @@ schema_DATA = $(schema_in_files:.schemas.in=.schemas)
 desktopdir = $(datadir)/applications
 desktop_in_files = gnome-power-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 autostartdir = $(datadir)/autostart
 autostart_in_files = gnome-power-manager.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
 
 dbusconfdir = $(DBUS_SYS_DIR)
 dbusconf_DATA = gnome-power-manager.conf
@@ -33,6 +33,7 @@ EXTRA_DIST =						\
 	gnome-power-manager.schemas.in			\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
+	$(autostart_in_files)				\
 	$(service_in_files)				\
 	$(pkgdata_DATA)					\
 	$(dbusconf_DATA)
@@ -45,6 +46,7 @@ clean-local :
 	rm -f *~
 
 DISTCLEANFILES =					\
+	gnome-power-manager.desktop			\
 	gnome-power-preferences.desktop			\
 	gnome-power-manager.schemas			\
 	gnome-power-manager.service

@@ -1,5 +1,9 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
+	* data/Makefile.am: Fix up Rodrigo's commit so "make distcheck" works
+
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c (power_get_summary_for_kind),
 	src/gpm-prefs.c (gpm_prefs_format_time_cb),
 	src/gpm-manager.c (maybe_notify_battery_power_changed),
@@ -33,7 +37,7 @@
 
 	* configure.in	Added vi in ALL_LINGUAS line.
 	
-	2006-01-23  Rodrigo Moya <rodrigo@novell.com>
+2006-01-23  Rodrigo Moya <rodrigo@novell.com>
 
 	* data/gnome-power-manager.desktop.in:
 	* data/Makefile.am: added .desktop file for gnome-session's
