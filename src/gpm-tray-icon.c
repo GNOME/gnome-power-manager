@@ -330,23 +330,15 @@ gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 {
 	GtkWidget *popup;
 
-	if (event->type == GDK_2BUTTON_PRESS) {
-		gpm_tray_icon_show_preferences_cb (NULL, icon);
-
-		return TRUE;
-	} else if (event->button == 3) {
-		popup = gtk_ui_manager_get_widget (GTK_UI_MANAGER (icon->priv->ui_manager),
-						   "/GpmTrayPopup");
-		gtk_menu_set_screen (GTK_MENU (popup),
-				     gtk_widget_get_screen (GTK_WIDGET (icon)));
-		gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
-				tray_popup_position_menu, widget,
-				2,
-				gtk_get_current_event_time ());
-		return TRUE;
-	}
-
-	return FALSE;
+	popup = gtk_ui_manager_get_widget (GTK_UI_MANAGER (icon->priv->ui_manager),
+					   "/GpmTrayPopup");
+	gtk_menu_set_screen (GTK_MENU (popup),
+			     gtk_widget_get_screen (GTK_WIDGET (icon)));
+	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
+			tray_popup_position_menu, widget,
+			2,
+			gtk_get_current_event_time ());
+	return TRUE;
 }
 
 static void
