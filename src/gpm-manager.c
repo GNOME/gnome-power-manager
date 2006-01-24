@@ -76,6 +76,9 @@ struct GpmManagerPrivate
 	GpmBrightness   *brightness;
 
 	GpmTrayIcon	*tray_icon;
+
+	int		 prev_primary_remaining_time;
+	gboolean	 use_time_to_notify;
 };
 
 enum {
@@ -102,9 +105,12 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
 /* FIXME */
-#define		BATTERY_LOW_PERCENTAGE			(10) /* 10 percent */
-#define		BATTERY_CRITICAL_PERCENTAGE		(2)  /* 2 percent */
-
+#define		BATTERY_LOW_PERCENTAGE			(10)	  /* 10 percent */
+#define		BATTERY_VERY_LOW_PERCENTAGE		(5)	  /* 5 percent  */
+#define		BATTERY_CRITICAL_PERCENTAGE		(2)	  /* 2 percent  */
+#define		BATTERY_LOW_REMAINING_TIME		(20 * 60) /* 20 minutes */
+#define		BATTERY_VERY_LOW_REMAINING_TIME		(10 * 60) /* 10 minutes */
+#define		BATTERY_CRITICAL_REMAINING_TIME		(5 * 60)  /* 5 minutes  */
 
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
@@ -590,6 +596,10 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	gboolean primary;
 	gchar	*message;
 	gchar	*remaining;
+	gboolean warning_low = FALSE;
+	gboolean warning_very_low = FALSE;
+	gboolean warning_critical = FALSE;
+	gint	 prev_remaining_time = manager->priv->prev_primary_remaining_time;
 
 	primary = (strcmp (kind, "primary") == 0);
 
@@ -618,23 +628,43 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		goto done;
 	}
 
-	if (! discharging) {
+	if (! discharging && ! primary) {
 		g_debug ("battery is not discharging!");
 		goto done;
 	}
 
-	g_debug ("percentage = %d", percentage);
+	g_debug ("percentage = %d, remaining_time = %i", percentage, remaining_time);
+
+	/* this is for compatability. If the time stuff doesn't work out then
+	 * we can easily add back support like it was */
+	if (! manager->priv->use_time_to_notify) {
+		if (percentage <= BATTERY_CRITICAL_PERCENTAGE) {
+			warning_critical = TRUE;
+		} else if (percentage <= BATTERY_VERY_LOW_PERCENTAGE) {
+			warning_very_low = TRUE;
+		} else if (percentage <= BATTERY_LOW_PERCENTAGE) {
+			warning_low = TRUE;
+		}
+	} else {
+		if ((remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) &&
+		    (prev_remaining_time > BATTERY_CRITICAL_REMAINING_TIME)) {
+			warning_critical = TRUE;
+		} else if ((percentage <= BATTERY_VERY_LOW_REMAINING_TIME) &&
+			   (prev_remaining_time > BATTERY_VERY_LOW_REMAINING_TIME)) {
+			warning_very_low = TRUE;
+		} else if ((percentage <= BATTERY_LOW_REMAINING_TIME) &&
+			   (prev_remaining_time > BATTERY_LOW_REMAINING_TIME))  {
+			warning_low = TRUE;
+		}
+	}
 
 	/* critical warning */
-	if (percentage <= BATTERY_CRITICAL_PERCENTAGE) {
-		g_debug ("battery is critical limit!");
+	if (warning_critical) {
 		remaining = gpm_get_timestring (remaining_time);
-
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
 					     "Plug in your AC Adapter to avoid losing data."),
 					   remaining, percentage);
-
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000,
 				      _("Battery Critically Low"),
@@ -642,33 +672,44 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 				      message);
 		g_free (message);
 		g_free (remaining);
-
 		goto done;
 	}
 
-	/* low warning */
-	if (percentage < BATTERY_LOW_PERCENTAGE) {
-		g_debug ("battery is low (%i), show warning", remaining_time);
+	/* critical warning */
+	if (warning_very_low) {
 		remaining = gpm_get_timestring (remaining_time);
-		g_assert (remaining);
-
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+		message = g_strdup_printf (_("You have approximately <b>%s</b> "
+					     "of remaining battery life (%d%%). "
 					     "Plug in your AC Adapter to avoid losing data."),
 					   remaining, percentage);
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      5000,
+				      _("Battery Very Low"),
+				      NULL,
+				      message);
+		g_free (message);
+		g_free (remaining);
+		goto done;
+	}
 
+	/* critical warning */
+	if (warning_low) {
+		remaining = gpm_get_timestring (remaining_time);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> "
+					     "of remaining battery life (%d%%). "
+					     "Plug in your AC Adapter to avoid losing data."),
+					   remaining, percentage);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000,
 				      _("Battery Low"),
 				      NULL,
 				      message);
-
 		g_free (message);
 		g_free (remaining);
-
 		goto done;
 	}
 
- done:
+done:
 	/* update icon */
 	tray_icon_update (manager);
 }
@@ -1004,6 +1045,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 				gboolean            percentagechanged,
 				GpmManager         *manager)
 {
+	gboolean primary;
+
 	maybe_notify_battery_power_changed (manager,
 					    kind,
 					    percentage,
@@ -1012,13 +1055,16 @@ power_battery_power_changed_cb (GpmPower           *power,
 					    charging,
 					    percentagechanged);
 
-	/* less than critical, do action */
-	if (percentage < BATTERY_CRITICAL_PERCENTAGE) {
-		g_debug ("battery is below critical limit!");
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+	primary = (strcmp (kind, "primary") == 0);
 
-		return;
+	/* less than critical, do action */
+	/* FIXME, we should probably give the user a chance to cancel */
+	if (primary && (percentage < BATTERY_CRITICAL_PERCENTAGE)) {
+		g_warning ("Battery is below critical limit!");
+		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}
+	/* invalidate last warning */
+	manager->priv->prev_primary_remaining_time = -1;
 }
 
 static void
@@ -1264,6 +1310,12 @@ gpm_manager_init (GpmManager *manager)
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
+
+	manager->priv->prev_primary_remaining_time = -1;
+
+	/* We can change this easily if	this doesn't work in real-world
+	 * conditions, or perhaps make this a gconf configurable. */
+	manager->priv->use_time_to_notify = TRUE;
 }
 
 static void

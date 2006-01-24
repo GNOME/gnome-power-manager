@@ -1,5 +1,27 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c:
+	Define the BATTERY_*_REMAINING_TIME constants.
+
+	(maybe_notify_battery_power_changed): Only warn on primary battery,
+	and also provide two methods for working out the notifications, to try
+	to keep the peace for bug (#326743). This is based on a patch from
+	Jaap, to change the notifications to time-remaining values rather than
+	percentage charge.
+
+	(power_battery_power_changed_cb): Invalidate the prior warning level
+	as the power state has changed.
+
+	(gpm_manager_init): Invalidate the warning level, and set the default
+	to per-time rather than per-percentage. We can change this easily if
+	this doesn't work in real world conditions, or perhaps make this a
+	gconf configurable.
+
+	(power_battery_power_changed_cb): Only do critical action on primary
+	battery, fixing bug (#328228). Patch originally from Jaap.
+
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h:
 	Flattern the gconf schema so that we don't have lots of subfolders
 	for very few keys.
