@@ -36,16 +36,20 @@
 
 /** Returns the time string, e.g. "2 hours 3 minutes"
  *
- *  @param  minutes		Minutes to convert to string
+ *  @param  time		Time to convert to string (in seconds)
  *  @return			The timestring
  *
- *  @note	minutes == 0 is returned as "Unknown"
+ *  @note	time == 0 is returned as "Unknown"
  */
 char *
-get_timestring_from_minutes (int minutes)
+gpm_get_timestring (int time)
 {
 	char* timestring = NULL;
-	gint   hours;
+	gint  hours;
+	gint  minutes;
+
+	/* Add 0.5 to do rounding */
+	minutes = (int) ( ( time / 60.0 ) + 0.5 );
 
 	if (minutes == 0) {
 		timestring = g_strdup_printf (_("Unknown time"));

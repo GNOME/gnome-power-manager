@@ -1,7 +1,17 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c (power_get_summary_for_kind),
+	src/gpm-prefs.c (gpm_prefs_format_time_cb),
+	src/gpm-manager.c (maybe_notify_battery_power_changed),
+	src/gpm-common.{h|c},
+
+	Convert s\get_timestring_from_minutes\gpm_get_timestring so we now take
+	seconds as the argument. This fixes bug (#328289).
+
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
 	* docs/www/images/*, docs/www/*: Remove as this is already in 
-	gnomeweb-wml CVS. Fixes bug (#328280)
+	gnomeweb-wml CVS. Fixes bug (#328280).
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 

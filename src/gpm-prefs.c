@@ -215,7 +215,7 @@ gpm_prefs_format_time_cb (GtkScale *scale,
 	if ((gint) value == NEVER_TIME_ON_SLIDER) {
 		str = g_strdup (_("Never"));
 	} else {
-		str = get_timestring_from_minutes (value);
+		str = gpm_get_timestring (value * 60);
 	}
 
 	return str;

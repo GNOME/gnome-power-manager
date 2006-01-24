@@ -647,8 +647,7 @@ power_get_summary_for_kind (GpmPower   *power,
 		return;
 	}
 
-	/* Add 0.5 to do rounding */
-	timestring = get_timestring_from_minutes ((int)((entry->remaining_time / 60.0) + 0.5));
+	timestring = gpm_get_timestring (entry->remaining_time);
 
 	if (entry->is_charging) {
 		g_string_append_printf (summary,

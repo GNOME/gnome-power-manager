@@ -35,7 +35,7 @@
 /* help location */
 #define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
 
-char *get_timestring_from_minutes (int minutes);
+char *gpm_get_timestring (int time);
 
 
 #endif	/* _GPMCOMMON_H */

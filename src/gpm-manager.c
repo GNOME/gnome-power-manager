@@ -626,7 +626,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* critical warning */
 	if (percentage <= BATTERY_CRITICAL_PERCENTAGE) {
 		g_debug ("battery is critical limit!");
-		remaining = get_timestring_from_minutes (remaining_time/60);
+		remaining = gpm_get_timestring (remaining_time);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
@@ -647,7 +647,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	/* low warning */
 	if (percentage < BATTERY_LOW_PERCENTAGE) {
 		g_debug ("battery is low (%i), show warning", remaining_time);
-		remaining = get_timestring_from_minutes (remaining_time/60);
+		remaining = gpm_get_timestring (remaining_time);
 		g_assert (remaining);
 
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
