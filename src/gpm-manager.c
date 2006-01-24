@@ -114,19 +114,20 @@ gpm_manager_can_suspend (GpmManager *manager,
 			 gboolean   *can,
 			 GError    **error)
 {
-	if (can) {
-		*can = FALSE;
-	}
+	gboolean gconf_policy;
+	g_return_val_if_fail (can, FALSE);
+
+	*can = FALSE;
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
 	g_debug ("Suspend disabled for testing");
 	return TRUE;
 #endif
 
-	/* FIXME: check other stuff */
-
-	if (can) {
-		*can = gpm_hal_can_suspend ();
+	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
+					      GPM_PREF_CAN_SUSPEND, NULL);
+	if ( gconf_policy && gpm_hal_can_suspend () ) {
+		*can = TRUE;
 	}
 
 	return TRUE;
@@ -137,19 +138,20 @@ gpm_manager_can_hibernate (GpmManager *manager,
 			   gboolean   *can,
 			   GError    **error)
 {
-	if (can) {
-		*can = FALSE;
-	}
+	gboolean gconf_policy;
+	g_return_val_if_fail (can, FALSE);
+
+	*can = FALSE;
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
 	g_debug ("Hibernate disabled for testing");
 	return TRUE;
 #endif
 
-	/* FIXME: check other stuff */
-
-	if (can) {
-		*can = gpm_hal_can_hibernate ();
+	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
+					      GPM_PREF_CAN_HIBERNATE, NULL);
+	if ( gconf_policy && gpm_hal_can_hibernate () ) {
+		*can = TRUE;
 	}
 
 	return TRUE;

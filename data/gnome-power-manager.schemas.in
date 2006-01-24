@@ -2,8 +2,32 @@
   <schemalist>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/notify/ac_adapter</key>
-      <applyto>/apps/gnome-power-manager/notify/ac_adapter</applyto>
+      <key>/schemas/apps/gnome-power-manager/can_suspend</key>
+      <applyto>/apps/gnome-power-manager/can_suspend</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If the user can suspend</short>
+        <long>If this particular user should have suspend on the drop-down menu and in the prefs</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/can_hibernate</key>
+      <applyto>/apps/gnome-power-manager/can_hibernate</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If the user can hibernate</short>
+        <long>If this particular user should have hibernate on the drop-down menu and in the prefs</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/notify_ac_adapter</key>
+      <applyto>/apps/gnome-power-manager/notify_ac_adapter</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -14,8 +38,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/notify/fully_charged</key>
-      <applyto>/apps/gnome-power-manager/notify/fully_charged</applyto>
+      <key>/schemas/apps/gnome-power-manager/notify_fully_charged</key>
+      <applyto>/apps/gnome-power-manager/notify_fully_charged</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -26,8 +50,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/general/display_icon_policy</key>
-      <applyto>/apps/gnome-power-manager/general/display_icon_policy</applyto>
+      <key>/schemas/apps/gnome-power-manager/display_icon_policy</key>
+      <applyto>/apps/gnome-power-manager/display_icon_policy</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
       <default>always</default>
@@ -38,8 +62,8 @@
     </schema>
 j
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/ac/brightness</key>
-      <applyto>/apps/gnome-power-manager/policy/ac/brightness</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac_brightness</key>
+      <applyto>/apps/gnome-power-manager/ac_brightness</applyto>
       <type>int</type>
       <default>7</default>
       <locale name="C">
@@ -49,8 +73,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/ac/sleep_computer</key>
-      <applyto>/apps/gnome-power-manager/policy/ac/sleep_computer</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac_sleep_computer</key>
+      <applyto>/apps/gnome-power-manager/ac_sleep_computer</applyto>
       <type>int</type>
       <default>0</default>
       <locale name="C">
@@ -60,8 +84,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/ac/sleep_display</key>
-      <applyto>/apps/gnome-power-manager/policy/ac/sleep_display</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac_sleep_display</key>
+      <applyto>/apps/gnome-power-manager/ac_sleep_display</applyto>
       <type>int</type>
       <default>1800</default>
       <locale name="C">
@@ -71,8 +95,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/battery/brightness</key>
-      <applyto>/apps/gnome-power-manager/policy/battery/brightness</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery_brightness</key>
+      <applyto>/apps/gnome-power-manager/battery_brightness</applyto>
       <type>int</type>
       <default>3</default>
       <locale name="C">
@@ -82,8 +106,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/battery/sleep_computer</key>
-      <applyto>/apps/gnome-power-manager/policy/battery/sleep_computer</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery_sleep_computer</key>
+      <applyto>/apps/gnome-power-manager/battery_sleep_computer</applyto>
       <type>int</type>
       <default>1200</default>
       <locale name="C">
@@ -93,8 +117,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/battery/sleep_display</key>
-      <applyto>/apps/gnome-power-manager/policy/battery/sleep_display</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery_sleep_display</key>
+      <applyto>/apps/gnome-power-manager/battery_sleep_display</applyto>
       <type>int</type>
       <default>300</default>
       <locale name="C">
@@ -104,8 +128,8 @@ j
    </schema>
    
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/button_suspend</key>
-      <applyto>/apps/gnome-power-manager/policy/button_suspend</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_button_suspend</key>
+      <applyto>/apps/gnome-power-manager/action_button_suspend</applyto>
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
@@ -115,8 +139,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/button_lid</key>
-      <applyto>/apps/gnome-power-manager/policy/button_lid</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_button_lid</key>
+      <applyto>/apps/gnome-power-manager/action_button_lid</applyto>
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
@@ -126,8 +150,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/sleep_type</key>
-      <applyto>/apps/gnome-power-manager/policy/sleep_type</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_sleep_type</key>
+      <applyto>/apps/gnome-power-manager/action_sleep_type</applyto>
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
@@ -137,8 +161,8 @@ j
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/policy/battery_critical</key>
-      <applyto>/apps/gnome-power-manager/policy/battery_critical</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_battery_critical</key>
+      <applyto>/apps/gnome-power-manager/action_battery_critical</applyto>
       <type>string</type>
       <default>shutdown</default>
       <locale name="C">

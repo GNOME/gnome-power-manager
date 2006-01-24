@@ -1,5 +1,15 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h:
+	Flattern the gconf schema so that we don't have lots of subfolders
+	for very few keys.
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h,
+	gpm-manager.c (gpm_manager_can_suspend, gpm_manager_can_hibernate):
+	Query the can_suspend and can_hibernate keys to fix bug (#327894)
+
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade: Do a 
 	s/"Power Preferences"/"Power Management Preferences" to fix the
 	bug (#328397)

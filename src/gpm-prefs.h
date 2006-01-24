@@ -26,20 +26,21 @@
 
 #define GPM_PREF_DIR 			"/apps/gnome-power-manager"
 
-#define GPM_PREF_AC_SLEEP_COMPUTER	GPM_PREF_DIR "/policy/ac/sleep_computer"
-#define GPM_PREF_AC_SLEEP_DISPLAY	GPM_PREF_DIR "/policy/ac/sleep_display"
-#define GPM_PREF_AC_BRIGHTNESS		GPM_PREF_DIR "/policy/ac/brightness"
-#define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/policy/battery/sleep_computer"
-#define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/policy/battery/sleep_display"
-#define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/policy/battery/brightness"
-#define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/policy/sleep_type"
-#define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/policy/button_suspend"
-#define GPM_PREF_BUTTON_LID		GPM_PREF_DIR "/policy/button_lid"
-#define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/policy/battery_critical"
-#define GPM_PREF_IDLE			GPM_PREF_DIR "/policy/idle"
-#define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/general/display_icon_policy"
-#define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify/ac_adapter"
-#define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify/fully_charged"
+#define GPM_PREF_AC_SLEEP_COMPUTER	GPM_PREF_DIR "/ac_sleep_computer"
+#define GPM_PREF_AC_SLEEP_DISPLAY	GPM_PREF_DIR "/ac_sleep_display"
+#define GPM_PREF_AC_BRIGHTNESS		GPM_PREF_DIR "/ac_brightness"
+#define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/battery_sleep_computer"
+#define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/battery_sleep_display"
+#define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/battery_brightness"
+#define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
+#define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
+#define GPM_PREF_BUTTON_LID		GPM_PREF_DIR "/action_button_lid"
+#define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"
+#define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/display_icon_policy"
+#define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify_ac_adapter"
+#define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify_fully_charged"
+#define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/policy_can_suspend"
+#define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/policy_can_hibernate"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
@@ -48,10 +49,10 @@ typedef enum {
 	GPM_ICON_POLICY_NEVER
 } GpmIconPolicy;
 
-#define ACTION_SUSPEND		"suspend"
-#define ACTION_SHUTDOWN		"shutdown"
+#define ACTION_SUSPEND			"suspend"
+#define ACTION_SHUTDOWN			"shutdown"
 #define ACTION_HIBERNATE		"hibernate"
-#define ACTION_NOTHING		"nothing"
+#define ACTION_NOTHING			"nothing"
 
 #endif	/* _GPM_PREFS_H */
 
