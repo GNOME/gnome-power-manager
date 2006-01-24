@@ -101,6 +101,10 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
+/* FIXME */
+#define		BATTERY_LOW_PERCENTAGE			(10) /* 10 percent */
+#define		BATTERY_CRITICAL_PERCENTAGE		(2)  /* 2 percent */
+
 
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
@@ -206,7 +210,6 @@ get_stock_id (GpmManager *manager,
 	gboolean res;
 	gboolean has_primary;
 	int	 index;
-	int	 low_threshold;
 	int      primary_percentage;
 	int      percentage;
 	gboolean primary_charging;
@@ -225,16 +228,13 @@ get_stock_id (GpmManager *manager,
 		goto done;
 	}
 
-	/* find out when the user considers the power "low" */
-	low_threshold = gconf_client_get_int (manager->priv->gconf_client, GPM_PREF_THRESHOLD_LOW, NULL);
-
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	has_primary = gpm_power_get_battery_percentage (manager->priv->power,
 							"primary",
 							&primary_percentage,
 							NULL);
-	if (has_primary && primary_percentage < low_threshold) {
+	if (has_primary && primary_percentage < BATTERY_LOW_PERCENTAGE) {
 		index = get_icon_index_from_percent (primary_percentage);
 
 		if (on_ac) {
@@ -250,7 +250,7 @@ get_stock_id (GpmManager *manager,
 						"ups",
 						&percentage,
 						NULL);
-	if (res && percentage < low_threshold) {
+	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
 		index = get_icon_index_from_percent (percentage);
 
 		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
@@ -261,7 +261,7 @@ get_stock_id (GpmManager *manager,
 						"mouse",
 						&percentage,
 						NULL);
-	if (res && percentage < low_threshold) {
+	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
 		stock_id = g_strdup_printf ("gnome-power-mouse");
 		goto done;
 	}
@@ -270,7 +270,7 @@ get_stock_id (GpmManager *manager,
 						"keyboard",
 						&percentage,
 						NULL);
-	if (res && percentage < low_threshold) {
+	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
 		stock_id = g_strdup_printf ("gnome-power-keyboard");
 		goto done;
 	}
@@ -586,8 +586,6 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 {
 	gboolean show_notify;
 	gboolean primary;
-	gint	 low_threshold;
-	gint	 critical_threshold;
 	gchar	*message;
 	gchar	*remaining;
 
@@ -623,16 +621,10 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		goto done;
 	}
 
-	low_threshold = gconf_client_get_int (manager->priv->gconf_client,
-					      GPM_PREF_THRESHOLD_LOW, NULL);
-	critical_threshold = gconf_client_get_int (manager->priv->gconf_client,
-						   GPM_PREF_THRESHOLD_CRITICAL, NULL);
-
-	g_debug ("percentage = %d, low_threshold = %i, critical_threshold = %i",
-		 percentage, low_threshold, critical_threshold);
+	g_debug ("percentage = %d", percentage);
 
 	/* critical warning */
-	if (percentage <= critical_threshold) {
+	if (percentage <= BATTERY_CRITICAL_PERCENTAGE) {
 		g_debug ("battery is critical limit!");
 		remaining = get_timestring_from_minutes (remaining_time/60);
 
@@ -653,7 +645,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	}
 
 	/* low warning */
-	if (percentage < low_threshold) {
+	if (percentage < BATTERY_LOW_PERCENTAGE) {
 		g_debug ("battery is low (%i), show warning", remaining_time);
 		remaining = get_timestring_from_minutes (remaining_time/60);
 		g_assert (remaining);
@@ -1010,8 +1002,6 @@ power_battery_power_changed_cb (GpmPower           *power,
 				gboolean            percentagechanged,
 				GpmManager         *manager)
 {
-	int critical_threshold;
-
 	maybe_notify_battery_power_changed (manager,
 					    kind,
 					    percentage,
@@ -1020,11 +1010,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 					    charging,
 					    percentagechanged);
 
-	critical_threshold = gconf_client_get_int (manager->priv->gconf_client,
-						   GPM_PREF_THRESHOLD_CRITICAL, NULL);
-
 	/* less than critical, do action */
-	if (percentage < critical_threshold) {
+	if (percentage < BATTERY_CRITICAL_PERCENTAGE) {
 		g_debug ("battery is below critical limit!");
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 

@@ -1,3 +1,19 @@
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: Add the FIXME constants BATTERY_LOW_PERCENTAGE
+	and BATTERY_CRITICAL_PERCENTAGE so we can get 99% of the patch of
+	http://bugzilla.gnome.org/show_bug.cgi?id=326743 in CVS.
+
+2006-01-24  Jaap Haitsma  <jaap@haitsma.org>
+
+	* data/gnome-power-manager.schemas.in: Remove threshold_low, 
+	threshold_critical
+
+	* data/gpm-prefs.glade: Remove threshold_low, threshold_critical sliders
+
+	* src/gpm-prefs.{c|h}: Remove threshold_low, threshold_critical sliders
+	and preferences
+
 2006-01-24  Clytie Siddall <clytie@riverland.net.au>
 
 	* configure.in	Added vi in ALL_LINGUAS line.

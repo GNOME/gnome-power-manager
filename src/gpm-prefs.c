@@ -59,14 +59,13 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 #define ACTION_HIBERNATE_TEXT		_("Hibernate")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
+#define	GPM_DBUS_SERVICE			"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_INTERFACE	        "org.gnome.PowerManager"
 
 /* If sleep time in a slider is set to 61 it is considered as never sleep */
 const int NEVER_TIME_ON_SLIDER = 61;
 
-static GladeXML *glade_xml;
 
 static gboolean
 gpm_dbus_method_bool (const char *method)
@@ -202,13 +201,6 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 
 static char *
 gpm_prefs_format_brightness_cb (GtkScale *scale,
-				gdouble value)
-{
-	return g_strdup_printf ("%.0f%%", value);
-}
- 
-static char *
-gpm_prefs_format_percentage_cb (GtkScale *scale,
 				gdouble value)
 {
 	return g_strdup_printf ("%.0f%%", value);
@@ -410,40 +402,6 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 	return widget;
 }
 
-static void
-gpm_prefs_battery_low_slider_changed_cb (GtkWidget *widget,
-					 GladeXML *dialog)
-{
-	gdouble value;
-	GConfClient *client;
-
-	value = gtk_range_get_value (GTK_RANGE (widget));
-
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client,
-			      GPM_PREF_THRESHOLD_LOW,
-			      (int) value, NULL);
-	g_object_unref (client);
-
-	gtk_range_set_range (GTK_RANGE (glade_xml_get_widget (dialog, "hscale_battery_critical")),
-		       	     0, value);
-}
-
-static void
-gpm_prefs_battery_critical_slider_changed_cb (GtkWidget *widget,
-					      GladeXML *dialog)
-{
-	gdouble value;
-	GConfClient *client;
-
-	value = gtk_range_get_value (GTK_RANGE (widget));
-
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client,
-			      GPM_PREF_THRESHOLD_CRITICAL,
-			      (int) value, NULL);
-	g_object_unref (client);
-}
 
 static void
 setup_page_one (GladeXML *xml)
@@ -609,18 +567,14 @@ setup_page_two (GladeXML *xml)
 static void
 setup_page_three (GladeXML *xml)
 {
-	GtkWidget   *widget;
 	GConfClient *client;
 	gboolean     has_batteries;
 	char        *icon_policy_str;
 	int          icon_policy;
-	int          value;
 	GtkWidget   *radiobutton_icon_always;
 	GtkWidget   *radiobutton_icon_charge;
 	GtkWidget   *radiobutton_icon_critical;
 	GtkWidget   *radiobutton_icon_never;
-	GtkWidget   *scale_battery_low;
-	GtkWidget   *scale_battery_critical;
 
 	client = gconf_client_get_default ();
 
@@ -656,33 +610,8 @@ setup_page_three (GladeXML *xml)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
 				      icon_policy == GPM_ICON_POLICY_NEVER);
 
-	/* Threshold low sliders */
-
-	scale_battery_low = glade_xml_get_widget (xml, "hscale_battery_low");
-	gtk_range_set_range (GTK_RANGE (scale_battery_low), 5, 25);
-	g_signal_connect (G_OBJECT (scale_battery_low), "format-value", 
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
-	g_signal_connect (G_OBJECT (scale_battery_low), "value-changed", 
-			  G_CALLBACK (gpm_prefs_battery_low_slider_changed_cb), xml);
-	value = gconf_client_get_int (client, GPM_PREF_THRESHOLD_LOW, NULL);
-	gtk_range_set_value (GTK_RANGE (scale_battery_low), value);
-
-	/* Threshold critical slider */
-
-	scale_battery_critical = glade_xml_get_widget (xml, "hscale_battery_critical");
-	gtk_range_set_range (GTK_RANGE (scale_battery_critical), 0, value);
-	g_signal_connect (G_OBJECT (scale_battery_critical), "format-value", 
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);	
-	g_signal_connect (G_OBJECT (scale_battery_critical), "value-changed", 
-			  G_CALLBACK (gpm_prefs_battery_critical_slider_changed_cb), xml);
-	value = gconf_client_get_int (client, GPM_PREF_THRESHOLD_CRITICAL, NULL);
-	gtk_range_set_value (GTK_RANGE (scale_battery_critical), value);
-
 	has_batteries = gpm_has_batteries ();
 	if (! has_batteries) {
-		/* Hide battery options in advanced tab */
-		widget = glade_xml_get_widget (xml, "frame_other_options");
-		gtk_widget_hide_all (widget);
 		/* Hide battery radio options in advanced tab */
 		gtk_widget_hide_all (radiobutton_icon_charge);
 		gtk_widget_hide_all (radiobutton_icon_critical);
@@ -696,6 +625,7 @@ gpm_prefs_create (void)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
+	GladeXML *glade_xml;
 
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 

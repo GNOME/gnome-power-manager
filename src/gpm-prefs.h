@@ -38,8 +38,6 @@
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/policy/battery_critical"
 #define GPM_PREF_IDLE			GPM_PREF_DIR "/policy/idle"
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/general/display_icon_policy"
-#define GPM_PREF_THRESHOLD_LOW		GPM_PREF_DIR "/general/threshold_low"
-#define GPM_PREF_THRESHOLD_CRITICAL	GPM_PREF_DIR "/general/threshold_critical"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify/ac_adapter"
 #define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify/fully_charged"
 
@@ -52,7 +50,7 @@ typedef enum {
 
 #define ACTION_SUSPEND		"suspend"
 #define ACTION_SHUTDOWN		"shutdown"
-#define ACTION_HIBERNATE	"hibernate"
+#define ACTION_HIBERNATE		"hibernate"
 #define ACTION_NOTHING		"nothing"
 
 #endif	/* _GPM_PREFS_H */
