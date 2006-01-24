@@ -365,6 +365,11 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 	value = gconf_client_get_string (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
+	if (! value) {
+		g_warning ("gpm_prefs_setup_action_combo: invalid schema, please re-install");
+		return NULL;
+	}
+
 	while (actions[i] != NULL) { 	
 		if (strcmp (actions[i], ACTION_SHUTDOWN) == 0) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),

@@ -1,5 +1,13 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.c (gpm_prefs_setup_action_combo): Don't segfault if
+	gconf value is missing, just issue warning.
+
+	* data/gnome-power-manager.schemas.in: Remove the elusive "j"
+	Also change the default brightnesses for AC to be 100, and battery 50.
+
+2006-01-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c:
 	Define the BATTERY_*_REMAINING_TIME constants.
 

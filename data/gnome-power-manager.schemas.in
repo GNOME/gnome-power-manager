@@ -60,12 +60,12 @@
         <long>The display icon policy can be never, critical, charge, always</long>
       </locale>
     </schema>
-j
+
     <schema>
       <key>/schemas/apps/gnome-power-manager/ac_brightness</key>
       <applyto>/apps/gnome-power-manager/ac_brightness</applyto>
       <type>int</type>
-      <default>7</default>
+      <default>100</default>
       <locale name="C">
         <short>AC LCD brightness hardware value</short>
         <long>The hardware brightness the display is set to whilst on AC power</long>
@@ -98,7 +98,7 @@ j
       <key>/schemas/apps/gnome-power-manager/battery_brightness</key>
       <applyto>/apps/gnome-power-manager/battery_brightness</applyto>
       <type>int</type>
-      <default>3</default>
+      <default>50</default>
       <locale name="C">
         <short>Battery LCD brightness hardware value</short>
         <long>The hardware brightness the display is set to whilst on battery power</long>
