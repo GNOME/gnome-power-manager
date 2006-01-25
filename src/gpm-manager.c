@@ -77,7 +77,10 @@ struct GpmManagerPrivate
 
 	GpmTrayIcon	*tray_icon;
 
-	int		 prev_primary_remaining_time;
+	gboolean	 done_warning_critical;
+	gboolean	 done_warning_very_low;
+	gboolean	 done_warning_low;
+
 	gboolean	 use_time_to_notify;
 };
 
@@ -529,7 +532,6 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 					       "The system is now using battery power."));
 		}
 	} else {
-
 		/*
 		 * for where we add back the ac_adapter before
 		 * the "AC Power unplugged" message times out.
@@ -576,7 +578,7 @@ manager_policy_do (GpmManager *manager,
 		gpm_manager_shutdown (manager);
 
 	} else {
-		g_warning ("manager_policy_do called with unknown action %s", action);
+		g_warning ("manager_policy_do: called with unknown action %s", action);
 	}
 
 	g_free (action);
@@ -599,7 +601,6 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	gboolean warning_low = FALSE;
 	gboolean warning_very_low = FALSE;
 	gboolean warning_critical = FALSE;
-	gint	 prev_remaining_time = manager->priv->prev_primary_remaining_time;
 
 	primary = (strcmp (kind, "primary") == 0);
 
@@ -628,8 +629,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		goto done;
 	}
 
-	if (! discharging && ! primary) {
-		g_debug ("battery is not discharging!");
+	if (! discharging || ! primary) {
+		g_debug ("maybe_notify_battery_power_changed: Primary battery is not discharging!");
 		goto done;
 	}
 
@@ -646,20 +647,33 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 			warning_low = TRUE;
 		}
 	} else {
-		if ((remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) &&
-		    (prev_remaining_time > BATTERY_CRITICAL_REMAINING_TIME)) {
+		if (remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) {
 			warning_critical = TRUE;
-		} else if ((percentage <= BATTERY_VERY_LOW_REMAINING_TIME) &&
-			   (prev_remaining_time > BATTERY_VERY_LOW_REMAINING_TIME)) {
+		} else if (remaining_time <= BATTERY_VERY_LOW_REMAINING_TIME) {
 			warning_very_low = TRUE;
-		} else if ((percentage <= BATTERY_LOW_REMAINING_TIME) &&
-			   (prev_remaining_time > BATTERY_LOW_REMAINING_TIME))  {
+		} else if (remaining_time <= BATTERY_LOW_REMAINING_TIME) {
 			warning_low = TRUE;
 		}
 	}
 
+	/* we only do the notifications once, and we don't want lots of
+	 * notifications on startup if battery is very low */
+	if (manager->priv->done_warning_critical) {
+		warning_critical = FALSE;
+		warning_very_low = FALSE;
+		warning_low = FALSE;
+	}
+	if (manager->priv->done_warning_very_low) {
+		warning_very_low = FALSE;
+		warning_low = FALSE;
+	}
+	if (manager->priv->done_warning_low) {
+		warning_low = FALSE;
+	}
+
 	/* critical warning */
 	if (warning_critical) {
+		manager->priv->done_warning_critical = TRUE;
 		remaining = gpm_get_timestring (remaining_time);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
@@ -675,8 +689,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		goto done;
 	}
 
-	/* critical warning */
 	if (warning_very_low) {
+		manager->priv->done_warning_very_low = TRUE;
 		remaining = gpm_get_timestring (remaining_time);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
@@ -692,8 +706,8 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		goto done;
 	}
 
-	/* critical warning */
 	if (warning_low) {
+		manager->priv->done_warning_low = TRUE;
 		remaining = gpm_get_timestring (remaining_time);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> "
 					     "of remaining battery life (%d%%). "
@@ -1023,6 +1037,15 @@ power_button_pressed_cb (GpmPower   *power,
 }
 
 static void
+invalidate_notification_warnings (GpmManager *manager)
+{
+	g_debug ("invalidate_notification_warnings: Done");
+	manager->priv->done_warning_critical = FALSE;
+	manager->priv->done_warning_very_low = FALSE;
+	manager->priv->done_warning_low = FALSE;
+}
+
+static void
 power_on_ac_changed_cb (GpmPower   *power,
 			gboolean    on_ac,
 			GpmManager *manager)
@@ -1031,6 +1054,9 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	maybe_notify_on_ac_changed (manager, on_ac);
 	change_power_policy (manager, on_ac);
+
+	/* invalidate last warnings */
+	invalidate_notification_warnings (manager);
 
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 }
@@ -1061,10 +1087,15 @@ power_battery_power_changed_cb (GpmPower           *power,
 	/* FIXME, we should probably give the user a chance to cancel */
 	if (discharging && primary && (percentage < BATTERY_CRITICAL_PERCENTAGE)) {
 		g_warning ("Battery is below critical limit!");
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      5000,
+				      _("Critical action"),
+				      NULL,
+				      _("The battery is below the critical level and "
+					"this computer is about to shutdown."));
+		g_usleep (1000 * 1000 * 5);
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}
-	/* invalidate last warning */
-	manager->priv->prev_primary_remaining_time = -1;
 }
 
 static void
@@ -1311,7 +1342,7 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	manager->priv->prev_primary_remaining_time = -1;
+	invalidate_notification_warnings (manager);
 
 	/* We can change this easily if	this doesn't work in real-world
 	 * conditions, or perhaps make this a gconf configurable. */

@@ -1,5 +1,24 @@
 2006-01-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: Add the done_warning_critical,
+	done_warning_very_low, done_warning_low bools to the struct so we can
+	keep knowledge of previous notifications.
+
+	(maybe_notify_battery_power_changed): Change to NOT primary OR 
+	NOT discharging as the logic was wrong. Should fix bug (#328228)
+	Also only do the notifications once, and don't do lots of 
+	notifications on startup if battery is very low. (#327963)
+
+	(invalidate_notification_warnings): Add this function so we can
+	reset the notification accounting, which we want to do if we go from
+	battery -> AC -> battery.
+
+	(power_battery_power_changed_cb): Do a libnotify warning stating the
+	action 5 seconds before we do the critical action. We should always
+	explain the action we are going to do.
+
+2006-01-25  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in: Add the dim_on_idle gconf key
 	so we can work on this functionality after the string freeze.
 
