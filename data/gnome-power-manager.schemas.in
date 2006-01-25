@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/dim_on_idle</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If to dim the screen after a period of inactivity</short>
+        <long>If we should dim the screen to save power when the computer is marked as idle.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/can_suspend</key>
       <applyto>/apps/gnome-power-manager/can_suspend</applyto>
       <owner>gnome-power-manager</owner>
