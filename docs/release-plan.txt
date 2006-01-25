@@ -23,7 +23,7 @@ install-module gnome-power-manager-*.tar.gz
 
 - run "cvs tag <name of tag>".  You can check the past tags by running a
 cvs log on the ChangeLog, for example:
-env CVS_RSH=ssh
+export CVS_RSH=ssh
 cvs tag GNOME_POWER_MANAGER_2_13_5
 
 - Do a post-release version bump by updating configure.in
