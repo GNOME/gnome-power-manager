@@ -2,15 +2,50 @@
 Version 2.13.5
 ==============
 
-Released February x, 2006
-
-Power Manager
-
-Power Preferences
+Released January 25, 2006
 
 General
 
+ - Bump version to a more suitable GNOME release version.
+ - Remove the website source from CVS as already in gnomeweb. #328280
+ - Flattern the gconf schema so that we don't have lots of subfolders
+   for very few keys. #327894
+
+Power Manager
+
+ - Lots of smaller bugfixes such as #327471, #327799
+ - Only notify the user of low battery on the 20, 10, 5, and 2 minute intervals.
+ - Add CanSuspend and CanHibernate DBUS methods
+ - Make tooltip more concise. #327443
+ - If icon not embedded don't do notifications. #327799
+ - Manager now changes brightness, not g-p-p. #327895
+ - Set the correct lcd brightness on startup.
+ - Fix the bug where g-p-m crashes after emitting a signal
+ - Added .desktop file for gnome-session's autostart mechanism.
+ - All time now internally stored as seconds. #328289
+ - Show the tray menu for any button press. #327959.
+ - Only do critical action for primary battery. #328228, #328228
+ - Don't do lots of notifications on startup if battery is very low. #327963
+
+Power Preferences
+
+ - Make the combo boxes in options expand so that we don't get different sizes.
+ - Remove time estimates for low and critical battery since this is device
+   and system dependent.
+ - Brightness now dealt with as a percentage, so gconf portable. #327895
+ - Now called "Power Management Preferences". #328397
+
 Translators
+
+ - Ankit Patel (Gujarati)
+ - Clytie Siddall (Vietnamese)
+ - Ilkka Tuohela (Finnish)
+ - Kjartan Maraas (Norwegian bokmål)
+ - Ignacio Casal Quinteiro (Galician)
+ - Tino Meinen (Netherlands)
+ - Francisco Javier F. Serrador (Spanish)
+ - Funda Wang (Simplified Chinese)
+ - Slobodan D. Sredojevic (Serbian)
 
 =============
 Version 0.3.4

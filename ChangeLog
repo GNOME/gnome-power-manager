@@ -1,5 +1,9 @@
 2006-01-25  Richard Hughes  <richard@hughsie.com>
 
+	==== Version 2.13.5 ====
+
+2006-01-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Add the done_warning_critical,
 	done_warning_very_low, done_warning_low bools to the struct so we can
 	keep knowledge of previous notifications.
@@ -174,7 +178,7 @@
 
 	* src/gpm-manager.c: Adapt for the new lcd brightness function names.
 	Also add the code to change the brightness when we change the
-	gconf key in g-p-p. This fixes (327895).
+	gconf key in g-p-p. This fixes (#327895).
 
 2006-01-22  Richard Hughes  <richard@hughsie.com>
 
