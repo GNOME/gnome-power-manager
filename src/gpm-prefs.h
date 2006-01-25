@@ -39,8 +39,8 @@
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/display_icon_policy"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify_ac_adapter"
 #define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify_fully_charged"
-#define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/policy_can_suspend"
-#define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/policy_can_hibernate"
+#define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/can_suspend"
+#define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/can_hibernate"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
