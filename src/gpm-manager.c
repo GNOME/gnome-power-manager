@@ -1059,7 +1059,7 @@ power_battery_power_changed_cb (GpmPower           *power,
 
 	/* less than critical, do action */
 	/* FIXME, we should probably give the user a chance to cancel */
-	if (primary && (percentage < BATTERY_CRITICAL_PERCENTAGE)) {
+	if (discharging && primary && (percentage < BATTERY_CRITICAL_PERCENTAGE)) {
 		g_warning ("Battery is below critical limit!");
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}

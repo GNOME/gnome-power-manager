@@ -1,5 +1,10 @@
 2006-01-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (power_battery_power_changed_cb): Only do action
+	when discharging, trying to fix bug (#328228)
+
+2006-01-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.h: "policy_can_hibernate" -> "can_hibernate" Dohh.
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
