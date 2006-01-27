@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-25 07:06+0100\n"
-"PO-Revision-Date: 2006-01-25 13:34+0530\n"
+"POT-Creation-Date: 2006-01-26 23:11+0100\n"
+"PO-Revision-Date: 2006-01-27 09:53+0530\n"
 "Last-Translator: Ankit Patel <ankit644@yahoo.com>\n"
 "Language-Team: Gujarati <indianoss-gujarati@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -33,6 +34,15 @@ msgstr "પાવર મેનેજમેન્ટ રૂપરેખાંક�
 #: ../data/gnome-power-preferences.desktop.in.h:2
 msgid "Power Management"
 msgstr "પાવર મેનેજમેન્ટ"
+
+#. common descriptions of this program
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:32
+msgid "Power Manager"
+msgstr "પાવર મેનેજર"
+
+#: ../data/gnome-power-manager.desktop.in.h:2
+msgid "Power management daemon"
+msgstr "પાવર મેનેજમેન્ટ ડિમન"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
 msgid "AC LCD brightness hardware value"
@@ -87,80 +97,90 @@ msgid ""
 msgstr "જો આ વ્યક્તિગત વપરાશકર્તાને નીચે-આવતા મેનુ અને પસંદગીઓમાં અટકાવો હોય"
 
 #: ../data/gnome-power-manager.schemas.in.h:13
+msgid "If to dim the screen after a period of inactivity"
+msgstr "અમુક સમયની નિષ્ક્રિયતા પછી જો સ્ક્રીનને ઝાંખી કરવી હોય"
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+msgid ""
+"If we should dim the screen to save power when the computer is marked as "
+"idle."
+msgstr "જ્યારે કમ્પ્યૂટર ફાજલ તરીકે ચિહ્નિત થયું હોય ત્યારે શું આપણે સ્ક્રીનને પાવર બચાવવા માટે ઝાંખી કરવી જોઈએ"
+
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If we should notify the user that the AC adapter has been removed"
 msgstr "શું આપણે વપરાશકર્તાને સૂચવવું જોઈએ કે AC એડેપ્ટર દૂર કરી દેવાયેલ છે"
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If we should notify the user that the battery is fully charged"
 msgstr "શું આપણે વપરાશકર્તાને સૂચવવું જોઈએ કે બેટરી સંપૂર્ણપણે વીજભારિત થઈ ગયેલ છે"
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "Laptop lid close action"
 msgstr "લેપટોપ લીડ બંધ ક્રિયા"
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid "Notify on AC loss"
 msgstr "AC નષ્ટ પર સૂચવો"
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid "Notify on fully charged"
 msgstr "સંપૂર્ણપણે વીજભારિત થયા પર સૂચવો"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid "Suspend button action"
 msgstr "અટકાવો બટન ક્રિયા"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "The action to take when the battery is critically low."
 msgstr "જ્યારે બેટરી ખૂબ જટિલ રીતે નીચી જાય ત્યારે લેવાની ક્રિયા."
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "The action to take when the laptop lid is closed"
 msgstr "જ્યારે લેપટોપ લીડ બંધ થયેલ હોય ત્યારે કરવાની ક્રિયા"
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "The action to take when the system suspend button is pressed"
 msgstr "જ્યારે સિસ્ટમ અટકાવો બટન દબાયેલ હોય ત્યારે લેવાની ક્રિયા"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "The display icon policy can be never, critical, charge, always"
 msgstr "ડિસ્પ્લે ચિહ્ન પોલિસી એ ક્યારે નહિં, જટિલ, વીજભારિત, હંમેશા હોઈ શકે"
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "The hardware brightness the display is set to whilst on AC power"
 msgstr "AC પાવર પર હાર્ડવેર તેજસ્વીતા દર્શાવવા માટે સુયોજિત છે"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid "The hardware brightness the display is set to whilst on battery power"
 msgstr "બેટરી પાવર પર હાર્ડવેર તેજસ્વીતા દર્શાવવા માટે સુયોજિત કરો"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "The idle time in seconds before the computer tries to sleep whilst on AC "
 "power"
 msgstr "AC પાવર પર કમ્પ્યૂટર ઉંઘવાનો પ્રયાસ કરે તે પહેલાંનો ફાજલ સમય સેકન્ડોમાં"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
 "The idle time in seconds before the computer tries to sleep whilst on "
 "battery power"
 msgstr "બેટરી પાવર પર કમ્પ્યૂટર ઉંઘવાનો પ્રયાસ કરે તે પહેલાંનો ફાજલ સમય સેકન્ડોમાં"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "The idle time in seconds before the display tries to sleep whilst on AC power"
 msgstr "AC પાવર પર ડિસ્પ્લે ઉંઘવાનો પ્રયાસ કરે તે પહેલાંનો ફાજલ સમય સેકન્ડોમાં"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid ""
 "The idle time in seconds before the display tries to sleep whilst on battery "
 "power"
 msgstr "બેટરી પાવર પર ડિસ્પ્લે ઉંઘવાનો પ્રયાસ કરે તે પહેલાંનો ફાજલ સમય સેકન્ડોમાં"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr "આપોઆપ વાપરવા માટે ઉંઘનો પ્રકાર (હાયબરનેટ/અટકેલ)."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "When to show the notification icon"
 msgstr "ક્યારે ચેતવણી ચિહ્નને બતાવવું"
 
@@ -301,11 +321,6 @@ msgid_plural "minutes"
 msgstr[0] "મિનિટ"
 msgstr[1] "મિનિટો"
 
-#. common descriptions of this program
-#: ../src/gpm-common.h:32
-msgid "Power Manager"
-msgstr "પાવર મેનેજર"
-
 #: ../src/gpm-common.h:33
 msgid "Power Manager for the GNOME desktop"
 msgstr "જીનોમ ડેસ્કટોપ માટે પાવર મેનેજર"
@@ -318,23 +333,23 @@ msgstr "ડિમનાઈઝ કરશો નહિં"
 msgid "Show extra debugging information"
 msgstr "વધારાની ડિબગીંગ જાણકારી બતાવો"
 
-#: ../src/gpm-manager.c:526
+#: ../src/gpm-manager.c:529
 msgid "AC Power Unplugged"
 msgstr "AC પાવર કાઢી નંખાયેલ"
 
-#: ../src/gpm-manager.c:528
+#: ../src/gpm-manager.c:531
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "AC પાવર કાઢી નંખાયેલ છે. સિસ્ટમ હવે બેટરી પાવર વાપરી રહી છે."
 
-#: ../src/gpm-manager.c:623
+#: ../src/gpm-manager.c:624
 msgid "Battery Charged"
 msgstr "બેટરી ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-manager.c:625
+#: ../src/gpm-manager.c:626
 msgid "Your battery is now fully charged"
 msgstr "તમારી બેટરી હવે સંપૂર્ણપણે ચાર્જ થઈ ગઈ"
 
-#: ../src/gpm-manager.c:664 ../src/gpm-manager.c:681 ../src/gpm-manager.c:698
+#: ../src/gpm-manager.c:678 ../src/gpm-manager.c:695 ../src/gpm-manager.c:712
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -343,17 +358,27 @@ msgstr ""
 "તમારી પાસે આશરે <b>%s</b> જેટલું બાકી રહેલ બેટરી જીવનનું (%d%%) બાકી છે. માહિતી ગુમ થઈ "
 "જવાનું ટાળવા માટે તમારું AC એડેપ્ટર પ્લગઈન કરો."
 
-#: ../src/gpm-manager.c:670
+#: ../src/gpm-manager.c:684
 msgid "Battery Critically Low"
 msgstr "બેટરી ખૂબ નીચી છે"
 
-#: ../src/gpm-manager.c:687
+#: ../src/gpm-manager.c:701
 msgid "Battery Very Low"
 msgstr "બેટરી ખૂબ નીચી છે"
 
-#: ../src/gpm-manager.c:704
+#: ../src/gpm-manager.c:718
 msgid "Battery Low"
 msgstr "બેટરી નીચી"
+
+#: ../src/gpm-manager.c:1092
+msgid "Critical action"
+msgstr "જટિલ ક્રિયા"
+
+#: ../src/gpm-manager.c:1094
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr "બેટરી જટિલ સ્તરની નીચે છે અને આ કમ્પ્યૂટર એ બંધ થવા જઈ રહ્યું છે."
 
 #: ../src/gpm-power.c:289 ../src/gpm-power.c:303
 msgid "Unknown"
