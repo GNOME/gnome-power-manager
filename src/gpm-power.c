@@ -396,11 +396,6 @@ battery_kind_cache_update (GpmPower              *power,
 	GSList *l;
 	int     num_present = 0;
 	int     num_discharging = 0;
-	int     old_charge;
-	int     new_charge;
-	gboolean percentagechanged = FALSE;
-
-	old_charge = entry->percentage_charge;
 
 	/* clear old values */
 	entry->design_charge = 0;
@@ -414,7 +409,7 @@ battery_kind_cache_update (GpmPower              *power,
 	entry->is_present = FALSE;
 
 
-	/* Count the number present */
+	/* iterate thru all the devices to handle multiple batteries */
 	for (l = entry->devices; l; l = l->next) {
 		const char              *udi;
 		BatteryDeviceCacheEntry *device;
@@ -441,6 +436,11 @@ battery_kind_cache_update (GpmPower              *power,
 			entry->is_discharging = TRUE;
 			num_discharging++;
 		}
+
+		entry->design_charge += device->design_charge;
+		entry->last_full_charge += device->last_full_charge;
+		entry->current_charge += device->current_charge;			
+		entry->charge_rate += device->charge_rate;
 	}
 
 	/* sanity check */
@@ -451,39 +451,8 @@ battery_kind_cache_update (GpmPower              *power,
 		entry->is_charging = FALSE;
 	}
 
-	/* no point working out average if no devices */
-	if (num_present == 0) {
-		g_debug ("no devices of type %s", kind_for_display (entry->kind));
-		/* send a signal, as devices have disappeared */
-		g_signal_emit (power,
-			       signals [BATTERY_POWER_CHANGED], 0,
-			       entry->kind,
-			       0,
-			       0,
-			       FALSE,
-			       FALSE,
-			       TRUE);
-		return;
-	}
 
 	g_debug ("%i devices of type %s", num_present, entry->kind);
-
-	/* iterate thru all the devices (multiple battery scenario) */
-	for (l = entry->devices; l; l = l->next) {
-		const char              *udi;
-		BatteryDeviceCacheEntry *device;
-
-		udi = (const char *)l->data;
-
-		device = battery_device_cache_find (power, udi);
-
-		if (device->is_present) {
-			entry->design_charge += device->design_charge;
-			entry->last_full_charge += device->last_full_charge;
-			entry->current_charge += device->current_charge;			
-			entry->charge_rate += device->charge_rate;
-		}
-	}
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
@@ -491,42 +460,19 @@ battery_kind_cache_update (GpmPower              *power,
 	 */
 	entry->percentage_charge = 100 * ((float)entry->current_charge / (float)entry->last_full_charge);
 
-	if ((entry->is_discharging) && (entry->charge_rate != 0)) {
+	if ((entry->is_discharging) && (entry->charge_rate > 0)) {
 		entry->remaining_time = 3600 * ((float)entry->current_charge / (float)entry->charge_rate);
-	} else if ((entry->is_charging) && (entry->charge_rate != 0)){
+	} else if ((entry->is_charging) && (entry->charge_rate > 0)){
 		entry->remaining_time = 3600 * ((float)(entry->last_full_charge - entry->current_charge) / (float)entry->charge_rate);
 	}
 
-	new_charge = entry->percentage_charge;
-
-	g_debug ("new_charge = %i, old_charge = %i", new_charge, old_charge);
-
-	/* only do some actions when the value changes */
-	if (old_charge != new_charge) {
-		percentagechanged = TRUE;
-	}
-
-	/*
-	 * old_charge is initialised to zero, and we don't want to
-	 * send a signal for the percentagechanged sequence
-	 */
-	if (old_charge == 0) {
-		percentagechanged = FALSE;
-	}
-
-	if (percentagechanged) {
-		g_debug ("percentage change %i -> %i", old_charge, new_charge);
-	}
-
-	/* always send a signal, as we needto setup the icon */
 	g_signal_emit (power,
 		       signals [BATTERY_POWER_CHANGED], 0,
 		       entry->kind,
 		       entry->percentage_charge,
 		       entry->remaining_time,
 		       entry->is_discharging,
-		       entry->is_charging,
-		       percentagechanged);
+		       entry->is_charging);
 }
 
 static void
@@ -933,9 +879,9 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      G_STRUCT_OFFSET (GpmPowerClass, battery_power_changed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN_BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 6, G_TYPE_INT, G_TYPE_LONG,
-			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+			      gpm_marshal_VOID__INT_LONG_BOOLEAN_BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 5, G_TYPE_INT, G_TYPE_LONG,
+			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }

@@ -1,3 +1,18 @@
+2006-01-28 Jaap Haitsma  <jaap@haitsma.org>
+
+	* gpm-power.c: (battery_kind_cache_update) refactor.
+	
+	Move percentagecharged to gpm-manager.c. gpm-power.c should just give
+	current status. gpm-manager.c should monitor this
+	
+	* gpm-marshal.list: take into account that percentagechanged is not
+	anymore in the signal of power changed
+
+	* gpm-manager.c: Add private variable done_notification_fully_charged to
+	prevent fully charged being shown multiple times
+	
+	Fixes bug #328958
+
 2006-01-28  Christopher Aillon  <caillon@redhat.com>
 
 	* data/Makefile.am:

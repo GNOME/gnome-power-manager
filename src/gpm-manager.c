@@ -77,11 +77,13 @@ struct GpmManagerPrivate
 
 	GpmTrayIcon	*tray_icon;
 
-	gboolean	 done_warning_critical;
-	gboolean	 done_warning_very_low;
-	gboolean	 done_warning_low;
+	gboolean	 	done_warning_critical;
+	gboolean	 	done_warning_very_low;
+	gboolean	 	done_warning_low;
+	gboolean		done_notification_fully_charged;
+	
+	gboolean	 	use_time_to_notify;
 
-	gboolean	 use_time_to_notify;
 };
 
 enum {
@@ -562,8 +564,7 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 				    int		        percentage,
 				    int	        	remaining_time,
 				    gboolean	        discharging,
-				    gboolean	        charging,
-				    gboolean	        percentagechanged)
+				    gboolean	        charging)
 {
 	gboolean show_notify;
 	gboolean primary;
@@ -576,15 +577,16 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	primary = (strcmp (kind, "primary") == 0);
 
 	g_debug ("percentage = %d, remaining_time = %d, discharging = %d, "
-		 "charging = %d, primary = %d, percentagechanged=%i",
-		 percentage, remaining_time, discharging, charging, primary, percentagechanged);
+		 "charging = %d, primary = %d",
+		 percentage, remaining_time, discharging, charging, primary);
 
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
 		return;
 	}
 
-	if (percentagechanged && primary && percentage >= 100) {
+	if (percentage >= 100 && primary && ! manager->priv->done_notification_fully_charged) {
+		manager->priv->done_notification_fully_charged = TRUE;
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 
@@ -599,10 +601,14 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	}
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
-	if (primary && charging ) {
+	if (primary && charging) {
 		manager->priv->done_warning_critical = FALSE;
 		manager->priv->done_warning_very_low = FALSE;
 		manager->priv->done_warning_low = FALSE;
+	}
+
+	if (primary && discharging) {
+		manager->priv->done_notification_fully_charged = FALSE;
 	}
 
 	if (! discharging || ! primary) {
@@ -1002,7 +1008,6 @@ power_battery_power_changed_cb (GpmPower           *power,
 				int	            remaining_time,
 				gboolean            discharging,
 				gboolean            charging,
-				gboolean            percentagechanged,
 				GpmManager         *manager)
 {
 	gboolean primary;
@@ -1014,8 +1019,7 @@ power_battery_power_changed_cb (GpmPower           *power,
 					    percentage,
 					    remaining_time,
 					    discharging,
-					    charging,
-					    percentagechanged);
+					    charging);
 
 	primary = (strcmp (kind, "primary") == 0);
 
@@ -1032,6 +1036,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 		g_usleep (1000 * 1000 * 5);
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}
+
+	manager->priv->prev_primary_percentage = percentage;
 }
 
 static void
@@ -1274,10 +1280,14 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->done_warning_critical = FALSE;
 	manager->priv->done_warning_very_low = FALSE;
 	manager->priv->done_warning_low = FALSE;
+	/* At startup we do not want a notification of a fully loaded battery */
+	manager->priv->done_notification_fully_charged = TRUE;
 
 	/* We can change this easily if	this doesn't work in real-world
 	 * conditions, or perhaps make this a gconf configurable. */
 	manager->priv->use_time_to_notify = TRUE;
+
+	manager->priv->prev_primary_percentage = 0;
 }
 
 static void
