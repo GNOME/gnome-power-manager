@@ -1036,8 +1036,6 @@ power_battery_power_changed_cb (GpmPower           *power,
 		g_usleep (1000 * 1000 * 5);
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}
-
-	manager->priv->prev_primary_percentage = percentage;
 }
 
 static void
@@ -1286,8 +1284,6 @@ gpm_manager_init (GpmManager *manager)
 	/* We can change this easily if	this doesn't work in real-world
 	 * conditions, or perhaps make this a gconf configurable. */
 	manager->priv->use_time_to_notify = TRUE;
-
-	manager->priv->prev_primary_percentage = 0;
 }
 
 static void
