@@ -1,3 +1,18 @@
+2006-01-28 Jaap Haitsma  <jaap@haitsma.org>
+
+	* gpm-manager.c: Remove doxygen comments for functions
+
+	(maybe_notify_battery_power_changed): simplify logic to make sure that
+	notifications are shown only once. Move tray_icon_update to 
+	power_battery_power_changed_cb
+
+	(maybe_notify_on_ac_changed) move tray_icon_update call to 
+	power_on_ac_changed_cb
+
+	(invalidate_notification_warnings) Remove this function
+	
+	Fixes bug #328759
+
 2006-01-25  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.13.90

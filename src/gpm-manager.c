@@ -189,12 +189,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
 	return TRUE;
 }
 
-
-/** Finds the icon index value for the percentage charge
- *
- *  @param	percent		The percentage value
- *  @return			A scale 0..8
- */
+/* Return 0..8 dependending on percent */
 static gint
 get_icon_index_from_percent (gint percent)
 {
@@ -210,10 +205,6 @@ get_icon_index_from_percent (gint percent)
 	return index;
 }
 
-/** Gets an icon name for the object
- *
- *  @return			An icon name
- */
 static char *
 get_stock_id (GpmManager *manager,
 	      int         icon_policy)
@@ -459,17 +450,6 @@ sync_dpms_policy (GpmManager *manager)
 	}
 }
 
-/** Do all the action when we go from batt to ac, or ac to batt (or percentagechanged)
- *
- *  @param	on_ac		If we are on AC power
- *
- *  @note
- *	- Sets the brightness level
- *	- Sets HAL to be in LaptopMode if !AC
- *	- Sets DPMS timeout to be our policy value
- *	- Sets GNOME Screensaver to [not] run fancy screensavers
- *	- Sets our inactivity sleep timeout to policy value
- */
 static void
 change_power_policy (GpmManager *manager,
 		     gboolean	 on_ac)
@@ -514,9 +494,6 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 					     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 
-	/* update icon */
-	tray_icon_update (manager);
-
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
 		return;
@@ -540,12 +517,6 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 	}
 }
 
-/** Do the action dictated by policy from gconf
- *
- *  @param	action	string
- *
- *  @todo	Add the actions to doxygen.
- */
 static void
 manager_policy_do (GpmManager *manager,
 		   const char *policy)
@@ -610,10 +581,9 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
-		goto done;
+		return;
 	}
 
-	/* give notification @100%, on percentagechanged */
 	if (percentagechanged && primary && percentage >= 100) {
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
@@ -625,13 +595,19 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 					      NULL,
 					      _("Your battery is now fully charged"));
 		}
+		return;
+	}
 
-		goto done;
+	/* If we are charging we should show warnings again as soon as we discharge again */
+	if (primary && charging ) {
+		manager->priv->done_warning_critical = FALSE;
+		manager->priv->done_warning_very_low = FALSE;
+		manager->priv->done_warning_low = FALSE;
 	}
 
 	if (! discharging || ! primary) {
 		g_debug ("maybe_notify_battery_power_changed: Primary battery is not discharging!");
-		goto done;
+		return;
 	}
 
 	g_debug ("percentage = %d, remaining_time = %i", percentage, remaining_time);
@@ -656,76 +632,64 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		}
 	}
 
-	/* we only do the notifications once, and we don't want lots of
-	 * notifications on startup if battery is very low */
-	if (manager->priv->done_warning_critical) {
-		warning_critical = FALSE;
-		warning_very_low = FALSE;
-		warning_low = FALSE;
-	}
-	if (manager->priv->done_warning_very_low) {
-		warning_very_low = FALSE;
-		warning_low = FALSE;
-	}
-	if (manager->priv->done_warning_low) {
-		warning_low = FALSE;
-	}
+	if (warning_critical) {		
+		/* Always check if we already notified the user */
+		if (! manager->priv->done_warning_critical) {			
+			manager->priv->done_warning_critical = TRUE;
+			/* Prevent that lower priority warnings popup after a critical 
+			   warning occurred. Without this in theory a very_low warning
+			   could occur after a critical warning, because remaining_time
+			   does not always decrease monotonically */
+			manager->priv->done_warning_very_low = TRUE;
+			manager->priv->done_warning_low = TRUE;
 
-	/* critical warning */
-	if (warning_critical) {
-		manager->priv->done_warning_critical = TRUE;
-		remaining = gpm_get_timestring (remaining_time);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining battery life (%d%%). "
-					     "Plug in your AC Adapter to avoid losing data."),
-					   remaining, percentage);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Battery Critically Low"),
-				      NULL,
-				      message);
-		g_free (message);
-		g_free (remaining);
-		goto done;
+			remaining = gpm_get_timestring (remaining_time);
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining battery life (%d%%). "
+						     "Plug in your AC Adapter to avoid losing data."),
+						   remaining, percentage);
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Battery Critically Low"),
+					      NULL,
+					      message);
+			g_free (message);
+			g_free (remaining);
+		}
+	} else if (warning_very_low) {
+		if (! manager->priv->done_warning_very_low) {
+			manager->priv->done_warning_very_low = TRUE;
+			manager->priv->done_warning_low = TRUE;
+			remaining = gpm_get_timestring (remaining_time);
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining battery life (%d%%). "
+						     "Plug in your AC Adapter to avoid losing data."),
+						   remaining, percentage);
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Battery Very Low"),
+					      NULL,
+					      message);
+			g_free (message);
+			g_free (remaining);
+		}
+	} else if (warning_low) {
+		if (! manager->priv->done_warning_low) {
+			manager->priv->done_warning_low = TRUE;
+			remaining = gpm_get_timestring (remaining_time);
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining battery life (%d%%). "
+						     "Plug in your AC Adapter to avoid losing data."),
+						   remaining, percentage);
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Battery Low"),
+					      NULL,
+					      message);
+			g_free (message);
+			g_free (remaining);
+		}
 	}
-
-	if (warning_very_low) {
-		manager->priv->done_warning_very_low = TRUE;
-		remaining = gpm_get_timestring (remaining_time);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining battery life (%d%%). "
-					     "Plug in your AC Adapter to avoid losing data."),
-					   remaining, percentage);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Battery Very Low"),
-				      NULL,
-				      message);
-		g_free (message);
-		g_free (remaining);
-		goto done;
-	}
-
-	if (warning_low) {
-		manager->priv->done_warning_low = TRUE;
-		remaining = gpm_get_timestring (remaining_time);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining battery life (%d%%). "
-					     "Plug in your AC Adapter to avoid losing data."),
-					   remaining, percentage);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Battery Low"),
-				      NULL,
-				      message);
-		g_free (message);
-		g_free (remaining);
-		goto done;
-	}
-
-done:
-	/* update icon */
-	tray_icon_update (manager);
 }
 
 gboolean
@@ -800,15 +764,6 @@ gpm_manager_shutdown (GpmManager *manager)
 	gpm_hal_shutdown ();
 }
 
-/** Do a hibernate with all the associated callbacks and methods.
- *
- *  @note
- *	- Locks the screen (if required)
- *	- Sets NetworkManager to sleep
- *	- Does the hibernate...
- *	- Sets NetworkManager to wake
- *	- Pokes g-s so we get the unlock screen (if required)
- */
 void
 gpm_manager_hibernate (GpmManager *manager)
 {
@@ -836,15 +791,6 @@ gpm_manager_hibernate (GpmManager *manager)
 	}
 }
 
-/** Do a suspend with all the associated callbacks and methods.
- *
- *  @note
- *	- Locks the screen (if required)
- *	- Sets NetworkManager to sleep
- *	- Does the suspend...
- *	- Sets NetworkManager to wake
- *	- Pokes g-s so we get the unlock screen (if required)
- */
 void
 gpm_manager_suspend (GpmManager *manager)
 {
@@ -872,8 +818,6 @@ gpm_manager_suspend (GpmManager *manager)
 	}
 }
 
-/** Callback for the idle function.
- */
 static void
 idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
@@ -1037,26 +981,16 @@ power_button_pressed_cb (GpmPower   *power,
 }
 
 static void
-invalidate_notification_warnings (GpmManager *manager)
-{
-	g_debug ("invalidate_notification_warnings: Done");
-	manager->priv->done_warning_critical = FALSE;
-	manager->priv->done_warning_very_low = FALSE;
-	manager->priv->done_warning_low = FALSE;
-}
-
-static void
 power_on_ac_changed_cb (GpmPower   *power,
 			gboolean    on_ac,
 			GpmManager *manager)
 {
 	g_debug ("Setting on-ac: %d", on_ac);
 
+	tray_icon_update (manager);
+
 	maybe_notify_on_ac_changed (manager, on_ac);
 	change_power_policy (manager, on_ac);
-
-	/* invalidate last warnings */
-	invalidate_notification_warnings (manager);
 
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 }
@@ -1072,6 +1006,8 @@ power_battery_power_changed_cb (GpmPower           *power,
 				GpmManager         *manager)
 {
 	gboolean primary;
+
+	tray_icon_update (manager);
 
 	maybe_notify_battery_power_changed (manager,
 					    kind,
@@ -1161,13 +1097,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmManagerPrivate));
 }
 
-/** Callback for gconf modified keys (that we are watching).
- *
- * @param	client		A valid GConfClient
- * @param	cnxn_id		Unknown
- * @param	entry		The key that was modified
- * @param	user_data	user_data pointer. No function.
- */
 static void
 callback_gconf_key_changed (GConfClient *client,
 			    guint	 cnxn_id,
@@ -1342,7 +1271,9 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	invalidate_notification_warnings (manager);
+	manager->priv->done_warning_critical = FALSE;
+	manager->priv->done_warning_very_low = FALSE;
+	manager->priv->done_warning_low = FALSE;
 
 	/* We can change this easily if	this doesn't work in real-world
 	 * conditions, or perhaps make this a gconf configurable. */
