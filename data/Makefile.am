@@ -10,7 +10,7 @@ desktop_in_files = gnome-power-preferences.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-autostartdir = $(datadir)/autostart
+autostartdir = $(sysconfdir)/xdg/autostart
 autostart_in_files = gnome-power-manager.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 
