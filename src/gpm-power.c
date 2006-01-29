@@ -161,14 +161,21 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 					 &entry->is_discharging);
 	}
 
-	/* sanity check that charge_level.percentage exists (if it should) */
+	/* sanity check that charge_level.rate exists (if it should) */
 	is_present = gpm_hal_device_get_int (entry->udi,
 					     "battery.charge_level.rate",
 					     &entry->charge_rate);
 	if (!is_present && (entry->is_discharging || entry->is_charging)) {
 		g_warning ("could not read your battery's charge rate");
 	}
-
+	/* FIXME: following can be removed if bug #5752 of hal on freedesktop 
+	   gets fixed and is part of a new release of HAL and we depend on that 
+	   version*/
+	if (is_present && entry->charge_rate == 0) {
+		entry->is_discharging = FALSE;
+		entry->is_charging = FALSE;
+	}
+	
 	/* sanity check that charge_level.percentage exists (if it should) */
 	is_present = gpm_hal_device_get_int (entry->udi,
 					     "battery.charge_level.percentage",
@@ -224,7 +231,13 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		gpm_hal_device_get_int (entry->udi, key, &entry->charge_rate);
-
+		/* FIXME: following can be removed if bug #5752 of hal on freedesktop 
+		   gets fixed and is part of a new release of HAL and we depend on that 
+		   version*/
+		if (entry->charge_rate == 0) {
+			entry->is_discharging = FALSE;
+			entry->is_charging = FALSE;
+		}
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		gpm_hal_device_get_int (entry->udi, key, &entry->percentage_charge);
 
@@ -595,23 +608,24 @@ power_get_summary_for_kind (GpmPower   *power,
 
 	timestring = gpm_get_timestring (entry->remaining_time);
 
-	if (entry->is_charging) {
-		g_string_append_printf (summary,
-					"%s %s (%i%%)\n",
-					timestring,
-					_("until charged"),
-					entry->percentage_charge);
-	} else if (entry->is_discharging) {
+	if (entry->is_discharging) {
 		g_string_append_printf (summary,
 					"%s (%i%%) %s\n",
 					timestring,
 					entry->percentage_charge,
 					_("remaining"));
-	} else if (entry->percentage_charge == 100){
+	} else if (entry->percentage_charge >= 100){
 		g_string_append_printf (summary,
 					"%s %s\n",
 					kind_desc,
 					_("fully charged"));
+	} else if (entry->is_charging) {
+		g_string_append_printf (summary,
+					"%s %s (%i%%)\n",
+					timestring,
+					_("until charged"),
+					entry->percentage_charge);
+
 	} else if (power->priv->on_ac) {
 		/* sometimes there is a state between charging and discharging
 		   when not fully charged.  This can happen sometimes
