@@ -1,3 +1,25 @@
+2006-01-30 Jaap Haitsma  <jaap@haitsma.org>
+
+	* gpm-power.{c|h}: Rename *kind* to *type*. BatteryType is clearer
+	than BatteryKind
+
+	Introduce an enum BatteryType to denote the type of battery i.s.o. a
+	string
+
+	Introduce a struct BatteryStatus that holds all the battery data.
+	This will make future inclusion of extra data that we can process in
+	GpmManager trivial
+
+	BATTERY_POWER_CHANGED signal now only indicates battery_type. User
+	can obtain BatteryStatus by calling gpm_power_get_battery_status.
+
+	Change the other code to reflect these changes
+
+	* gpm-manager.c gpm-marshal.list: Use the new data types of gpm-power
+
+	(power_battery_power_changed_cb)
+	Critical action now can also be time based
+
 2006-01-29 Jaap Haitsma  <jaap@haitsma.org>
 
 	* gpm-power.c: (power_get_summary_for_kind) fully charged is more
