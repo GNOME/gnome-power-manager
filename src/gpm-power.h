@@ -27,28 +27,6 @@
 
 G_BEGIN_DECLS
 
-typedef enum {
-	BATT_TYPE_PRIMARY,
-	BATT_TYPE_UPS,
-	BATT_TYPE_MOUSE,
-	BATT_TYPE_KEYBOARD,
-	BATT_TYPE_PDA,
-	BATT_TYPE_LAST
-} BatteryType;
-
-typedef struct {
-	int      design_charge;
-	int      last_full_charge;
-	int      current_charge;
-	int      charge_rate;
-	int      percentage_charge;
-	int      remaining_time;
-	gboolean is_rechargeable;
-	gboolean is_present;
-	gboolean is_charging;
-	gboolean is_discharging;
-} BatteryStatus;
-
 #define GPM_TYPE_POWER         (gpm_power_get_type ())
 #define GPM_POWER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_POWER, GpmPower))
 #define GPM_POWER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_POWER, GpmPowerClass))
@@ -74,7 +52,7 @@ typedef struct
         void              (* ac_state_changed)      (GpmPower           *power,
 						     gboolean            on_ac);
         void              (* battery_power_changed) (GpmPower           *power,
-						     BatteryType         battery_type,
+						     const char         *kind,
 						     int                 percentage,
 						     int                 minutes,
 						     gboolean            discharging);
@@ -88,9 +66,19 @@ gboolean         gpm_power_get_on_ac               (GpmPower           *power,
 						    gboolean           *on_ac,
 						    GError            **error);
 
-gboolean         gpm_power_get_battery_status      (GpmPower           *power,
-						    BatteryType         battery_type,
-						    BatteryStatus      *battery_status);
+gboolean         gpm_power_get_battery_percentage  (GpmPower           *power,
+						    const char         *kind,
+						    gint               *percentage,
+						    GError            **error);
+gboolean         gpm_power_get_battery_seconds     (GpmPower           *power,
+						    const char         *kind,
+						    gint              *seconds,
+						    GError            **error);
+gboolean         gpm_power_get_battery_charging    (GpmPower           *power,
+						    const char         *kind,
+						    gboolean           *charging,
+						    gboolean           *discharging,
+						    GError            **error);
 
 gboolean         gpm_power_get_status_summary      (GpmPower           *power,
 						    char              **summary,
