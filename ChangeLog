@@ -1,3 +1,27 @@
+2006-01-31 Jaap Haitsma  <jaap@haitsma.org>
+
+	* gpm-power.{c|h}: Introduce an enum GpmPowerBatteryType to denote the 
+	type of battery i.s.o. a string
+
+	Introduce a struct GpmPowerBatteryStatus that holds all the battery 
+	data.
+	This will make future inclusion of extra data that we can process in
+	GpmManager trivial
+
+	BATTERY_POWER_CHANGED signal changed to BATTERY_STATUS_CHANGED and now 
+	only indicates battery_type. User can obtain battery status by calling 
+	gpm_power_get_battery_status.
+
+	Change the other code to reflect these changes
+
+	* gpm-manager.c gpm-marshal.list: Use the new data types of gpm-power
+
+	* gpm-manager.c (power_battery_status_changed_cb)
+	Critical action now can also be time based
+
+	(maybe_notify_battery_status_changed) make sure we only notify if
+	remaining_time > 0
+
 2006-02-02 Leonid Kanter <leon@asplinux.ru>
 
 	* * configure.in: Added ru to ALL_LINGUAS

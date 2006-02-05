@@ -27,6 +27,27 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+	GPM_POWER_BATTERY_KIND_PRIMARY,
+	GPM_POWER_BATTERY_KIND_UPS,
+	GPM_POWER_BATTERY_KIND_MOUSE,
+	GPM_POWER_BATTERY_KIND_KEYBOARD,
+	GPM_POWER_BATTERY_KIND_PDA,
+} GpmPowerBatteryKind;
+
+typedef struct {
+	int      design_charge;
+	int      last_full_charge;
+	int      current_charge;
+	int      charge_rate;
+	int      percentage_charge;
+	int      remaining_time;
+	gboolean is_rechargeable;
+	gboolean is_present;
+	gboolean is_charging;
+	gboolean is_discharging;
+} GpmPowerBatteryStatus;
+
 #define GPM_TYPE_POWER         (gpm_power_get_type ())
 #define GPM_POWER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_POWER, GpmPower))
 #define GPM_POWER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_POWER, GpmPowerClass))
@@ -51,11 +72,8 @@ typedef struct
                                                      gboolean            state);
         void              (* ac_state_changed)      (GpmPower           *power,
 						     gboolean            on_ac);
-        void              (* battery_power_changed) (GpmPower           *power,
-						     const char         *kind,
-						     int                 percentage,
-						     int                 minutes,
-						     gboolean            discharging);
+        void              (* battery_status_changed) (GpmPower           *power,
+						     GpmPowerBatteryKind         battery_kind);
 } GpmPowerClass;
 
 GType            gpm_power_get_type           (void);
@@ -66,19 +84,9 @@ gboolean         gpm_power_get_on_ac               (GpmPower           *power,
 						    gboolean           *on_ac,
 						    GError            **error);
 
-gboolean         gpm_power_get_battery_percentage  (GpmPower           *power,
-						    const char         *kind,
-						    gint               *percentage,
-						    GError            **error);
-gboolean         gpm_power_get_battery_seconds     (GpmPower           *power,
-						    const char         *kind,
-						    gint              *seconds,
-						    GError            **error);
-gboolean         gpm_power_get_battery_charging    (GpmPower           *power,
-						    const char         *kind,
-						    gboolean           *charging,
-						    gboolean           *discharging,
-						    GError            **error);
+gboolean         gpm_power_get_battery_status      (GpmPower           	       *power,
+						    GpmPowerBatteryKind         battery_kind,
+						    GpmPowerBatteryStatus      *battery_status);
 
 gboolean         gpm_power_get_status_summary      (GpmPower           *power,
 						    char              **summary,

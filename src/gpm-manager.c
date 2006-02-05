@@ -211,13 +211,11 @@ static char *
 get_stock_id (GpmManager *manager,
 	      int         icon_policy)
 {
-	gboolean res;
-	gboolean has_primary;
+	gboolean primary_present;
+	GpmPowerBatteryStatus primary_status;
+	gboolean present;
+	GpmPowerBatteryStatus status;
 	int	 index;
-	int      primary_percentage;
-	int      percentage;
-	gboolean primary_charging;
-	gboolean primary_discharging;
 	gboolean on_ac;
 	char    *stock_id;
 
@@ -234,12 +232,13 @@ get_stock_id (GpmManager *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	has_primary = gpm_power_get_battery_percentage (manager->priv->power,
-							"primary",
-							&primary_percentage,
-							NULL);
-	if (has_primary && primary_percentage < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (primary_percentage);
+	primary_present = gpm_power_get_battery_status (manager->priv->power,
+						        GPM_POWER_BATTERY_KIND_PRIMARY,
+						        &primary_status);
+	primary_present &= primary_status.is_present;
+
+	if (primary_present && primary_status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		index = get_icon_index_from_percent (primary_status.percentage_charge);
 
 		if (on_ac) {
 			stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
@@ -250,31 +249,28 @@ get_stock_id (GpmManager *manager,
 		goto done;
 	}
 
-	res = gpm_power_get_battery_percentage (manager->priv->power,
-						"ups",
-						&percentage,
-						NULL);
-	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (percentage);
+	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_UPS, &status);
+	present &= status.is_present;
+
+	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		index = get_icon_index_from_percent (status.percentage_charge);
 
 		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 		goto done;
 	}
 
-	res = gpm_power_get_battery_percentage (manager->priv->power,
-						"mouse",
-						&percentage,
-						NULL);
-	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
+	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_MOUSE, &status);
+	present &= status.is_present;
+
+	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		stock_id = g_strdup_printf ("gnome-power-mouse");
 		goto done;
 	}
 
-	res = gpm_power_get_battery_percentage (manager->priv->power,
-						"keyboard",
-						&percentage,
-						NULL);
-	if (res && percentage < BATTERY_LOW_PERCENTAGE) {
+	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_KEYBOARD, &status);
+	present &= status.is_present;
+
+	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		stock_id = g_strdup_printf ("gnome-power-keyboard");
 		goto done;
 	}
@@ -290,18 +286,9 @@ get_stock_id (GpmManager *manager,
 		goto done;
 	}
 
-	/* Only display if charging or discharging */
-	primary_charging = FALSE;
-	primary_discharging = FALSE;
-	if (has_primary) {
-		res = gpm_power_get_battery_charging (manager->priv->power,
-						      "primary",
-						      &primary_charging,
-						      &primary_discharging,
-						      NULL);
-
-		if (primary_charging || primary_discharging) {
-			index = get_icon_index_from_percent (primary_percentage);
+	if (primary_present) {
+		if (primary_status.is_charging || primary_status.is_discharging) {
+			index = get_icon_index_from_percent (primary_status.percentage_charge);
 			if (on_ac) {
 				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 			} else {
@@ -320,11 +307,11 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* Do the rest of the battery icon states */
-	if (has_primary) {
-		index = get_icon_index_from_percent (primary_percentage);
+	if (primary_present) {
+		index = get_icon_index_from_percent (primary_status.percentage_charge);
 
 		if (on_ac) {
-			if (!primary_charging && !primary_discharging) {
+			if (!primary_status.is_charging && !primary_status.is_discharging) {
 				stock_id = g_strdup ("gnome-power-ac-charged");
 			} else {
 				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
@@ -559,33 +546,30 @@ manager_policy_do (GpmManager *manager,
 }
 
 static void
-maybe_notify_battery_power_changed (GpmManager         *manager,
-				    const char         *kind,
-				    int		        percentage,
-				    int	        	remaining_time,
-				    gboolean	        discharging,
-				    gboolean	        charging)
+maybe_notify_battery_status_changed (GpmManager         *manager,
+				    GpmPowerBatteryKind         battery_kind,
+				    GpmPowerBatteryStatus      *battery_status)
 {
 	gboolean show_notify;
-	gboolean primary;
 	gchar	*message;
 	gchar	*remaining;
 	gboolean warning_low = FALSE;
 	gboolean warning_very_low = FALSE;
 	gboolean warning_critical = FALSE;
 
-	primary = (strcmp (kind, "primary") == 0);
-
 	g_debug ("percentage = %d, remaining_time = %d, discharging = %d, "
-		 "charging = %d, primary = %d",
-		 percentage, remaining_time, discharging, charging, primary);
+		 "charging = %d, battery_kind = %d",
+		 battery_status->percentage_charge, battery_status->remaining_time, 
+		 battery_status->is_discharging, battery_status->is_charging, 
+		 battery_kind);
 
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
 		return;
 	}
 
-	if (percentage >= 100 && primary && ! manager->priv->done_notification_fully_charged) {
+	if (battery_status->percentage_charge >= 100 && battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY 
+	    && ! manager->priv->done_notification_fully_charged) {
 		manager->priv->done_notification_fully_charged = TRUE;
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
@@ -601,40 +585,40 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	}
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
-	if (primary && charging) {
+	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && battery_status->is_charging) {
 		manager->priv->done_warning_critical = FALSE;
 		manager->priv->done_warning_very_low = FALSE;
 		manager->priv->done_warning_low = FALSE;
 	}
 
-	if (primary && discharging) {
+	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && battery_status->is_discharging) {
 		manager->priv->done_notification_fully_charged = FALSE;
 	}
 
-	if (! discharging || ! primary) {
-		g_debug ("maybe_notify_battery_power_changed: Primary battery is not discharging!");
+	if (! battery_status->is_discharging || battery_kind != GPM_POWER_BATTERY_KIND_PRIMARY) {
+		g_debug ("maybe_notify_battery_status_changed: Primary battery is not discharging!");
 		return;
 	}
-
-	g_debug ("percentage = %d, remaining_time = %i", percentage, remaining_time);
 
 	/* this is for compatability. If the time stuff doesn't work out then
 	 * we can easily add back support like it was */
 	if (! manager->priv->use_time_to_notify) {
-		if (percentage <= BATTERY_CRITICAL_PERCENTAGE) {
+		if (battery_status->percentage_charge <= BATTERY_CRITICAL_PERCENTAGE) {
 			warning_critical = TRUE;
-		} else if (percentage <= BATTERY_VERY_LOW_PERCENTAGE) {
+		} else if (battery_status->percentage_charge <= BATTERY_VERY_LOW_PERCENTAGE) {
 			warning_very_low = TRUE;
-		} else if (percentage <= BATTERY_LOW_PERCENTAGE) {
+		} else if (battery_status->percentage_charge <= BATTERY_LOW_PERCENTAGE) {
 			warning_low = TRUE;
 		}
 	} else {
-		if (remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) {
-			warning_critical = TRUE;
-		} else if (remaining_time <= BATTERY_VERY_LOW_REMAINING_TIME) {
-			warning_very_low = TRUE;
-		} else if (remaining_time <= BATTERY_LOW_REMAINING_TIME) {
-			warning_low = TRUE;
+		if (battery_status->remaining_time > 0) {
+			if (battery_status->remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) {
+				warning_critical = TRUE;
+			} else if (battery_status->remaining_time <= BATTERY_VERY_LOW_REMAINING_TIME) {
+				warning_very_low = TRUE;
+			} else if (battery_status->remaining_time <= BATTERY_LOW_REMAINING_TIME) {
+				warning_low = TRUE;
+			}
 		}
 	}
 
@@ -649,11 +633,11 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 			manager->priv->done_warning_very_low = TRUE;
 			manager->priv->done_warning_low = TRUE;
 
-			remaining = gpm_get_timestring (remaining_time);
+			remaining = gpm_get_timestring (battery_status->remaining_time);
 			message = g_strdup_printf (_("You have approximately <b>%s</b> "
 						     "of remaining battery life (%d%%). "
 						     "Plug in your AC Adapter to avoid losing data."),
-						   remaining, percentage);
+						   remaining, battery_status->percentage_charge);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      5000,
 					      _("Battery Critically Low"),
@@ -666,11 +650,11 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 		if (! manager->priv->done_warning_very_low) {
 			manager->priv->done_warning_very_low = TRUE;
 			manager->priv->done_warning_low = TRUE;
-			remaining = gpm_get_timestring (remaining_time);
+			remaining = gpm_get_timestring (battery_status->remaining_time);
 			message = g_strdup_printf (_("You have approximately <b>%s</b> "
 						     "of remaining battery life (%d%%). "
 						     "Plug in your AC Adapter to avoid losing data."),
-						   remaining, percentage);
+						   remaining, battery_status->percentage_charge);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      5000,
 					      _("Battery Very Low"),
@@ -682,11 +666,11 @@ maybe_notify_battery_power_changed (GpmManager         *manager,
 	} else if (warning_low) {
 		if (! manager->priv->done_warning_low) {
 			manager->priv->done_warning_low = TRUE;
-			remaining = gpm_get_timestring (remaining_time);
+			remaining = gpm_get_timestring (battery_status->remaining_time);
 			message = g_strdup_printf (_("You have approximately <b>%s</b> "
 						     "of remaining battery life (%d%%). "
 						     "Plug in your AC Adapter to avoid losing data."),
-						   remaining, percentage);
+						   remaining, battery_status->percentage_charge);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      5000,
 					      _("Battery Low"),
@@ -1002,39 +986,44 @@ power_on_ac_changed_cb (GpmPower   *power,
 }
 
 static void
-power_battery_power_changed_cb (GpmPower           *power,
-				const char         *kind,
-				int	            percentage,
-				int	            remaining_time,
-				gboolean            discharging,
-				gboolean            charging,
-				GpmManager         *manager)
+power_battery_status_changed_cb (GpmPower	       *power,
+				 GpmPowerBatteryKind	battery_kind,
+				 GpmManager	       *manager)
 {
-	gboolean primary;
+	GpmPowerBatteryStatus battery_status;
+	gboolean critical = FALSE;
 
 	tray_icon_update (manager);
 
-	maybe_notify_battery_power_changed (manager,
-					    kind,
-					    percentage,
-					    remaining_time,
-					    discharging,
-					    charging);
+	gpm_power_get_battery_status (manager->priv->power, battery_kind, &battery_status);
 
-	primary = (strcmp (kind, "primary") == 0);
+	maybe_notify_battery_status_changed (manager, battery_kind, &battery_status);
 
 	/* less than critical, do action */
 	/* FIXME, we should probably give the user a chance to cancel */
-	if (discharging && primary && (percentage < BATTERY_CRITICAL_PERCENTAGE)) {
-		g_warning ("Battery is below critical limit!");
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Critical action"),
-				      NULL,
-				      _("The battery is below the critical level and "
-					"this computer is about to shutdown."));
-		g_usleep (1000 * 1000 * 5);
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+	if (battery_status.is_discharging && battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
+
+		if (! manager->priv->use_time_to_notify) {
+			if (battery_status.percentage_charge <= BATTERY_CRITICAL_PERCENTAGE) {
+				critical = TRUE;
+			}
+		} else {
+			if (battery_status.remaining_time <= BATTERY_CRITICAL_REMAINING_TIME
+			    && battery_status.remaining_time > 0) {
+				critical = TRUE;
+			}
+		}
+		if (critical) {
+			g_warning ("Battery is below critical limit!");
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Critical action"),
+					      NULL,
+					      _("The battery is below the critical level and "
+						"this computer is about to shutdown."));
+			g_usleep (1000 * 1000 * 5);
+			manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+		}
 	}
 }
 
@@ -1243,8 +1232,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_button_pressed_cb), manager);
 	g_signal_connect (manager->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
-	g_signal_connect (manager->priv->power, "battery-power-changed",
-			  G_CALLBACK (power_battery_power_changed_cb), manager);
+	g_signal_connect (manager->priv->power, "battery-status-changed",
+			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
 	gconf_client_add_dir (manager->priv->gconf_client,
 			      GPM_PREF_DIR,
