@@ -16,7 +16,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- * Authors: 
+ * Authors:
  *          William Jon McCann <mccann@jhu.edu>
  *          Richard Hughes <richard@hughsie.com>
  *
@@ -77,12 +77,12 @@ struct GpmManagerPrivate
 
 	GpmTrayIcon	*tray_icon;
 
-	gboolean	 	done_warning_critical;
-	gboolean	 	done_warning_very_low;
-	gboolean	 	done_warning_low;
-	gboolean		done_notification_fully_charged;
-	
-	gboolean	 	use_time_to_notify;
+	gboolean	 done_warning_critical;
+	gboolean	 done_warning_very_low;
+	gboolean	 done_warning_low;
+	gint		 last_percentage_change;
+
+	gboolean	 use_time_to_notify;
 
 };
 
@@ -276,7 +276,7 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/*
-	 * Check if we should just show the charging / discharging icon 
+	 * Check if we should just show the charging / discharging icon
 	 * even when not low or critical.
 	 */
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
@@ -559,8 +559,8 @@ maybe_notify_battery_status_changed (GpmManager         *manager,
 
 	g_debug ("percentage = %d, remaining_time = %d, discharging = %d, "
 		 "charging = %d, battery_kind = %d",
-		 battery_status->percentage_charge, battery_status->remaining_time, 
-		 battery_status->is_discharging, battery_status->is_charging, 
+		 battery_status->percentage_charge, battery_status->remaining_time,
+		 battery_status->is_discharging, battery_status->is_charging,
 		 battery_kind);
 
 	/* If no tray icon then don't notify */
@@ -568,9 +568,12 @@ maybe_notify_battery_status_changed (GpmManager         *manager,
 		return;
 	}
 
-	if (battery_status->percentage_charge >= 100 && battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY 
-	    && ! manager->priv->done_notification_fully_charged) {
-		manager->priv->done_notification_fully_charged = TRUE;
+	/* We have to track the last percentage, as when we do the transition
+	 * 99 to 100 some laptops report this as charging, some as not-charging.
+	 * This is probably a race. This method should work for both cases. */
+	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY &&
+	    manager->priv->last_percentage_change == 99 &&
+	    battery_status->percentage_charge == 100) {
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 
@@ -584,15 +587,16 @@ maybe_notify_battery_status_changed (GpmManager         *manager,
 		return;
 	}
 
+	if (battery_status->percentage_charge != manager->priv->last_percentage_change) {
+		/* should we fire an event or something? */
+		manager->priv->last_percentage_change = battery_status->percentage_charge;
+	}
+
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && battery_status->is_charging) {
 		manager->priv->done_warning_critical = FALSE;
 		manager->priv->done_warning_very_low = FALSE;
 		manager->priv->done_warning_low = FALSE;
-	}
-
-	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && battery_status->is_discharging) {
-		manager->priv->done_notification_fully_charged = FALSE;
 	}
 
 	if (! battery_status->is_discharging || battery_kind != GPM_POWER_BATTERY_KIND_PRIMARY) {
@@ -621,12 +625,12 @@ maybe_notify_battery_status_changed (GpmManager         *manager,
 			}
 		}
 	}
-
-	if (warning_critical) {		
+/*FIXME: We should only warn if discharging */
+	if (warning_critical) {
 		/* Always check if we already notified the user */
-		if (! manager->priv->done_warning_critical) {			
+		if (! manager->priv->done_warning_critical) {
 			manager->priv->done_warning_critical = TRUE;
-			/* Prevent that lower priority warnings popup after a critical 
+			/* Prevent that lower priority warnings popup after a critical
 			   warning occurred. Without this in theory a very_low warning
 			   could occur after a critical warning, because remaining_time
 			   does not always decrease monotonically */
@@ -826,12 +830,12 @@ idle_changed_cb (GpmIdle    *idle,
 		if (error) {
 			g_debug ("Unable to set DPMS active: %s", error->message);
 		}
-		
+
 		sync_dpms_policy (manager);
 
 		break;
 	case GPM_IDLE_MODE_SESSION:
-		
+
 		g_debug ("Idle state changed: SESSION");
 
 		/* activate display power management */
@@ -1116,7 +1120,7 @@ callback_gconf_key_changed (GConfClient *client,
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0) {
 		/* set new suspend timeouts */
 		value = gconf_client_get_int (client, entry->key, NULL);
-		
+
 		if (! on_ac) {
 			gpm_idle_set_system_timeout (manager->priv->idle, value);
 		}
@@ -1267,8 +1271,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->done_warning_critical = FALSE;
 	manager->priv->done_warning_very_low = FALSE;
 	manager->priv->done_warning_low = FALSE;
-	/* At startup we do not want a notification of a fully loaded battery */
-	manager->priv->done_notification_fully_charged = TRUE;
+	manager->priv->last_percentage_change = 0;
 
 	/* We can change this easily if	this doesn't work in real-world
 	 * conditions, or perhaps make this a gconf configurable. */

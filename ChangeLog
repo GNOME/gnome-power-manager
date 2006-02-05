@@ -1,3 +1,17 @@
+2006-02-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (maybe_notify_battery_power_changed): 
+	We need to add the check for charging for the 100% charge 
+	notification else we get a 100% charged notifications (plural) a few
+	times when on battery power (as the flag is cleared) and we are at
+	state 100%.
+
+	This is not possible as the is_charging state changes before the
+	percentage change goes 99->100. This works this way intermittently on
+	my Toshiba, and never works on my iBook. This new code seems to work
+	for me in all cases. Plus we don't have to faff around and invalidate
+	the "show notification" flag as we are testing the change up always.
+
 2006-01-31 Jaap Haitsma  <jaap@haitsma.org>
 
 	* gpm-power.{c|h}: Introduce an enum GpmPowerBatteryType to denote the 
