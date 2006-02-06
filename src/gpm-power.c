@@ -1,6 +1,10 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2006 Jaap Haitsma <jaap@haitsma.org>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * Authors:
- *          William Jon McCann <mccann@jhu.edu>
- *          Richard Hughes <richard@hughsie.com>
- *
  */
 
 #include "config.h"
@@ -104,7 +103,7 @@ gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 	status->is_rechargeable = FALSE;
 	status->is_present = FALSE;
 	status->is_charging = FALSE;
-	status->is_discharging = FALSE;	
+	status->is_discharging = FALSE;
 }
 
 static void
@@ -153,36 +152,36 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 				&status->design_charge);
 	gpm_hal_device_get_int (udi, "battery.charge_level.last_full",
 				&status->last_full_charge);
-	gpm_hal_device_get_int (udi, "battery.charge_level.current",  
+	gpm_hal_device_get_int (udi, "battery.charge_level.current",
 				&status->current_charge);
 
 	/* battery might not be rechargeable, have to check */
-	gpm_hal_device_get_bool (udi, "battery.is_rechargeable", 
+	gpm_hal_device_get_bool (udi, "battery.is_rechargeable",
 				&status->is_rechargeable);
 	if (status->is_rechargeable) {
-		gpm_hal_device_get_bool (udi, "battery.rechargeable.is_charging", 
+		gpm_hal_device_get_bool (udi, "battery.rechargeable.is_charging",
 					&status->is_charging);
 		gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging",
 					&status->is_discharging);
 	}
 
 	/* sanity check that charge_level.rate exists (if it should) */
-	exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate", 
+	exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
 					     &status->charge_rate);
 	if (!exists && (status->is_discharging || status->is_charging)) {
 		g_warning ("could not read your battery's charge rate");
 	}
 
-	/* FIXME: following can be removed if bug #5752 of hal on freedesktop 
-	   gets fixed and is part of a new release of HAL and we depend on that 
+	/* FIXME: following can be removed if bug #5752 of hal on freedesktop
+	   gets fixed and is part of a new release of HAL and we depend on that
 	   version*/
 	if (exists && status->charge_rate == 0) {
 		status->is_discharging = FALSE;
 		status->is_charging = FALSE;
 	}
-	
+
 	/* sanity check that charge_level.percentage exists (if it should) */
-	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage", 
+	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage",
 					     &status->percentage_charge);
 	if (!exists && (status->is_discharging || status->is_charging)) {
 		g_warning ("could not read your battery's percentage charge.");
@@ -235,8 +234,8 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		gpm_hal_device_get_int (udi, key, &status->charge_rate);
-		/* FIXME: following can be removed if bug #5752 of hal on freedesktop 
-		   gets fixed and is part of a new release of HAL and we depend on that 
+		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
+		   gets fixed and is part of a new release of HAL and we depend on that
 		   version*/
 		if (status->charge_rate == 0) {
 			status->is_discharging = FALSE;
@@ -311,7 +310,7 @@ battery_kind_to_string (GpmPowerBatteryKind battery_kind)
 	} else if (battery_kind == GPM_POWER_BATTERY_KIND_PDA) {
  		str = _("PDA");
  	} else {
- 		str = _("Unknown");	
+ 		str = _("Unknown");
 	}
 	return str;
 }
@@ -432,7 +431,7 @@ battery_kind_cache_update (GpmPower              *power,
 
 		type_status->design_charge += device_status->design_charge;
 		type_status->last_full_charge += device_status->last_full_charge;
-		type_status->current_charge += device_status->current_charge;			
+		type_status->current_charge += device_status->current_charge;
 		type_status->charge_rate += device_status->charge_rate;
 	}
 
@@ -448,17 +447,17 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
-	 * a very high charge. Solves bug #327471 
+	 * a very high charge. Solves bug #327471
 	 */
 	type_status->percentage_charge = 100 * ((float)type_status->current_charge /
 						(float)type_status->last_full_charge);
 
 	if ((type_status->is_discharging) && (type_status->charge_rate > 0)) {
-		type_status->remaining_time = 3600 * ((float)type_status->current_charge / 
+		type_status->remaining_time = 3600 * ((float)type_status->current_charge /
 						      (float)type_status->charge_rate);
 	} else if ((type_status->is_charging) && (type_status->charge_rate > 0)){
-		type_status->remaining_time = 3600 * 
-					      ((float)(type_status->last_full_charge - type_status->current_charge) / 
+		type_status->remaining_time = 3600 *
+					      ((float)(type_status->last_full_charge - type_status->current_charge) /
 					      (float)type_status->charge_rate);
 	}
 
@@ -791,7 +790,7 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE, 
+			      G_TYPE_NONE,
 			      1, G_TYPE_INT);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));

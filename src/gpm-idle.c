@@ -1,6 +1,9 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,11 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * Authors:
- *          William Jon McCann <mccann@jhu.edu>
- *          Richard Hughes <richard@hughsie.com>
- *
  */
 
 #include "config.h"
@@ -54,7 +52,7 @@ static gdouble  cpu_update_data     (GpmIdle      *idle);
 #define POLL_FREQUENCY	5
 
 /*
- * Sets the idle percent limit, i.e. how hard the computer can work 
+ * Sets the idle percent limit, i.e. how hard the computer can work
  * while considered "at idle"
  */
 #define IDLE_LIMIT	5
@@ -170,7 +168,7 @@ remove_system_timer (GpmIdle *idle)
 static void
 remove_all_timers (GpmIdle *idle)
 {
-	remove_poll_system_timer (idle); 
+	remove_poll_system_timer (idle);
 	remove_system_timer (idle);
 }
 
@@ -436,10 +434,10 @@ gpm_idle_new (void)
  *  @return			If we can read the /proc/stat file
  *
  * @note	- user		Time spent in user space (for all processes)
- *		- nice		Time spent in niced tasks 
+ *		- nice		Time spent in niced tasks
 				(tasks with positive nice value)
  *		- system	Time spent in Kernel space
- *		- idle		Time the processor was not busy. 
+ *		- idle		Time the processor was not busy.
  */
 static gboolean
 cpudata_get_values (cpudata *data)
@@ -460,7 +458,7 @@ cpudata_get_values (cpudata *data)
 	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
 		      &data->user, &data->nice, &data->system, &data->idle);
 	fclose (fd);
-	/* 
+	/*
 	 * Summing up all these times gives you the system uptime in jiffies.
 	 * This is what the uptime command does.
 	 */

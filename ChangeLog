@@ -1,5 +1,12 @@
 2006-02-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/*.c, src/*.h: Fix the headers so that they are all the same,
+	removing the file doxygen markup, and adding authors to some files.
+	Also remove trailing whitespace from *lots* of files.
+	Starting to address #327743
+
+2006-02-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (lid_button_pressed): Only do lid sleep action
 	when on battery power. Fixes bug #329512
 

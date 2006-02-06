@@ -1,18 +1,13 @@
-/** @file	gpm-hal.h
- *  @brief	Common HAL functions used by GPM
- *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-12-18
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * This module uses the functionality of HAL to do some clever
- * things to HAL objects, for example dimming the LCD screen.
- */
-/*
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ *
  * Licensed under the GNU General Public License Version 2
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,12 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-/**
- * @addtogroup	gpmhal
- * @{
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -345,7 +335,7 @@ gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		if (error) {
@@ -383,7 +373,7 @@ gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_STRING, value, G_TYPE_INVALID)) {
 		if (error) {
@@ -419,7 +409,7 @@ gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_INT, value, G_TYPE_INVALID)) {
 		if (error) {
@@ -450,11 +440,11 @@ gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
 	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
-					       HAL_DBUS_SERVICE, 
-					       HAL_DBUS_PATH_MANAGER, 
+					       HAL_DBUS_SERVICE,
+					       HAL_DBUS_PATH_MANAGER,
 					       HAL_DBUS_INTERFACE_MANAGER);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error, 
+	if (!dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error,
 				G_TYPE_STRING, capability, G_TYPE_INVALID,
 				G_TYPE_STRV, value, G_TYPE_INVALID)) {
 		if (error) {
@@ -512,7 +502,7 @@ gpm_hal_num_devices_of_capability (const gchar *capability)
  *  @return			Number of devices of that capability
  */
 gint
-gpm_hal_num_devices_of_capability_with_value (const gchar *capability, 
+gpm_hal_num_devices_of_capability_with_value (const gchar *capability,
 	const gchar *key, const gchar *value)
 {
 	gint i;
@@ -532,9 +522,7 @@ gpm_hal_num_devices_of_capability_with_value (const gchar *capability,
 		g_free (type);
 	};
 	gpm_hal_free_capability (names);
-	g_debug ("%i devices of capability %s where %s is %s", 
+	g_debug ("%i devices of capability %s where %s is %s",
 		valid, capability, key, value);
 	return valid;
 }
-
-/** @} */

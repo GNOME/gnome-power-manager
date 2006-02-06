@@ -1,15 +1,13 @@
-/** @file	gpm-hal.h
- *  @brief	Common HAL functions used by GPM
- *  @author	Richard Hughes <richard@hughsie.com>
- *  @date	2005-12-18
- */
-/*
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ *
  * Licensed under the GNU General Public License Version 2
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,19 +16,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
-/**
- * @addtogroup	gpmhal
- * @{
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _GPMHAL_H
-#define _GPMHAL_H
+#ifndef __GPMHAL_H
+#define __GPMHAL_H
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+
+G_BEGIN_DECLS
 
 #define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
 #define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
@@ -69,5 +64,4 @@ void gpm_hal_free_capability (gchar **value);
 
 G_END_DECLS
 
-#endif	/* _GPMHAL_H */
-/** @} */
+#endif	/* __GPMHAL_H */

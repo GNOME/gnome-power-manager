@@ -1,6 +1,9 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * Authors: William Jon McCann <mccann@jhu.edu>
- *
  */
 
 #ifdef HAVE_CONFIG_H
@@ -173,7 +173,6 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
 void
 gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 				    const char  *stock_id)
-			
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
@@ -246,18 +245,18 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 		"Diana Fong <dfong@redhat.com>",
 		NULL};
 	const char *license[] = {
-		N_("Licensed under the GNU General Public License Version 2"), 
-		N_("Power Manager is free software; you can redistribute it and/or\n" 
-		   "modify it under the terms of the GNU General Public License\n" 
-		   "as published by the Free Software Foundation; either version 2\n" 
-		   "of the License, or (at your option) any later version."), 
-		N_("Power Manager is distributed in the hope that it will be useful,\n" 
-		   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" 
-		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" 
-		   "GNU General Public License for more details."), 
-		N_("You should have received a copy of the GNU General Public License\n" 
-		   "along with this program; if not, write to the Free Software\n" 
-		   "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n" 
+		N_("Licensed under the GNU General Public License Version 2"),
+		N_("Power Manager is free software; you can redistribute it and/or\n"
+		   "modify it under the terms of the GNU General Public License\n"
+		   "as published by the Free Software Foundation; either version 2\n"
+		   "of the License, or (at your option) any later version."),
+		N_("Power Manager is distributed in the hope that it will be useful,\n"
+		   "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+		   "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+		   "GNU General Public License for more details."),
+		N_("You should have received a copy of the GNU General Public License\n"
+		   "along with this program; if not, write to the Free Software\n"
+		   "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 		   "02110-1301, USA.")
 	};
   	const char  *translators = _("translator-credits");
@@ -396,7 +395,7 @@ gpm_tray_icon_constructor (GType                  type,
 
 	klass = GPM_TRAY_ICON_CLASS (g_type_class_peek (GPM_TYPE_TRAY_ICON));
 
-	tray = GPM_TRAY_ICON (G_OBJECT_CLASS (gpm_tray_icon_parent_class)->constructor 
+	tray = GPM_TRAY_ICON (G_OBJECT_CLASS (gpm_tray_icon_parent_class)->constructor
 			      (type, n_construct_properties,
 			       construct_properties));
 
@@ -761,7 +760,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 #if LIBNOTIFY_VERSION_MINOR >= 2
 	if (icon->priv->notify != NULL) {
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
-		notify_notification_close (icon->priv->notify, &error);	
+		notify_notification_close (icon->priv->notify, &error);
 #elif (LIBNOTIFY_VERSION_MINOR == 2)
 		notify_close (icon->priv->notify);
 		icon->priv->notify = NULL;

@@ -1,14 +1,15 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2005 Richard Hughes <hughsient@gmail.com>
  * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
+ * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,11 +18,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- *
- * Authors: Richard Hughes <hughsient@gmail.com>
- *          Jaap Haitsma <jaap@haitsma.org>
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "config.h"
@@ -227,7 +224,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 {
 	int value;
 	GConfClient *client;
-	
+
 	value = (int)gtk_range_get_value (range);
 
 	if (value == NEVER_TIME_ON_SLIDER) {
@@ -253,9 +250,9 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 	GConfClient *client;
 
 	widget = glade_xml_get_widget (dialog, widget_name);
-	g_signal_connect (G_OBJECT (widget), "format-value", 
+	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), NULL);
-	g_signal_connect (G_OBJECT (widget), "value-changed", 
+	g_signal_connect (G_OBJECT (widget), "value-changed",
 			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb), gpm_pref_key);
 
 	client = gconf_client_get_default ();
@@ -299,9 +296,9 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog,
 
 	widget = glade_xml_get_widget (dialog, widget_name);
 
-	g_signal_connect (G_OBJECT (widget), "format-value", 
+	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
-	g_signal_connect (G_OBJECT (widget), "value-changed", 
+	g_signal_connect (G_OBJECT (widget), "value-changed",
 			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
 
 	client = gconf_client_get_default ();
@@ -326,15 +323,15 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	if (strcmp (value, ACTION_SUSPEND_TEXT) == 0) {
 		action = ACTION_SUSPEND;
 	} else if (strcmp (value, ACTION_HIBERNATE_TEXT) == 0) {
-		action = ACTION_HIBERNATE;	
+		action = ACTION_HIBERNATE;
 	} else if (strcmp (value, ACTION_SHUTDOWN_TEXT) == 0) {
-		action = ACTION_SHUTDOWN;	
+		action = ACTION_SHUTDOWN;
 	} else if (strcmp (value, ACTION_NOTHING_TEXT) == 0) {
-		action = ACTION_NOTHING;	
+		action = ACTION_NOTHING;
 	} else {
 		g_assert (FALSE);
 	}
-	
+
 	g_free (value);
 
 	client = gconf_client_get_default ();
@@ -370,7 +367,7 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 		return NULL;
 	}
 
-	while (actions[i] != NULL) { 	
+	while (actions[i] != NULL) {
 		if (strcmp (actions[i], ACTION_SHUTDOWN) == 0) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_SHUTDOWN_TEXT);
@@ -427,11 +424,11 @@ setup_page_one (GladeXML *xml)
 	/* AC icon */
 	widget = glade_xml_get_widget (xml, "image_side_acadapter");
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), "gnome-fs-socket", GTK_ICON_SIZE_DIALOG);
-	
+
 	/* Sleep time on AC */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
 
-	/* Sleep time for display on AC */	
+	/* Sleep time for display on AC */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
 
 	/* Display brightness when on AC */
@@ -442,7 +439,7 @@ setup_page_one (GladeXML *xml)
 	/* Battery icon */
 	widget = glade_xml_get_widget (xml, "image_side_battery");
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), "gnome-dev-battery", GTK_ICON_SIZE_DIALOG);
-	
+
 	/* Sleep time on batteries */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_batteries_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
 
