@@ -914,8 +914,11 @@ lid_button_pressed (GpmManager	 *manager,
 	GpmDpmsMode mode;
 	GError     *error;
 	gboolean    res;
+	gboolean    on_ac;
 
-	g_debug ("lid button changed: %d", state);
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+	g_debug ("lid_button_pressed: button changed: %d", state);
 
 	/*
 	 * We enable/disable DPMS because some laptops do
@@ -924,8 +927,17 @@ lid_button_pressed (GpmManager	 *manager,
 	 * http://bugzilla.gnome.org/show_bug.cgi?id=321313
 	 */
 	if (state) {
-		/* we only do a policy event when the lid is CLOSED */
-		manager_policy_do (manager, GPM_PREF_BUTTON_LID);
+		/*
+		 * We only do a policy event when the lid is CLOSED
+		 * and we are on battery power. See
+		 * http://bugzilla.gnome.org/show_bug.cgi?id=329512
+		 */
+		if (on_ac) {
+			g_debug ("lid_button_pressed: Ignoring policy as on AC");
+		} else {
+			g_debug ("lid_button_pressed: Performing policy as on battery");
+			manager_policy_do (manager, GPM_PREF_BUTTON_LID);
+		}
 		mode = GPM_DPMS_MODE_OFF;
 	} else {
 		mode = GPM_DPMS_MODE_ON;

@@ -1,3 +1,8 @@
+2006-02-06  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (lid_button_pressed): Only do lid sleep action
+	when on battery power. Fixes bug #329512
+
 2006-02-05  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (maybe_notify_battery_power_changed): 
