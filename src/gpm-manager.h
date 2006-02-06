@@ -62,6 +62,15 @@ typedef struct
                                                      const char *mode);
 } GpmManagerClass;
 
+typedef enum
+{
+        GPM_MANAGER_ERROR_GENERAL
+} GpmManagerError;
+
+#define GPM_MANAGER_ERROR gpm_manager_error_quark ()
+
+GQuark         gpm_manager_error_quark      (void);
+
 GType          gpm_manager_get_type         (void);
 
 GpmManager   * gpm_manager_new              (void);
@@ -86,9 +95,12 @@ gboolean       gpm_manager_set_dpms_mode    (GpmManager    *manager,
                                              const char    *mode,
                                              GError       **error);
 
-void           gpm_manager_suspend          (GpmManager    *manager);
-void           gpm_manager_hibernate        (GpmManager    *manager);
-void           gpm_manager_shutdown         (GpmManager    *manager);
+gboolean       gpm_manager_suspend          (GpmManager    *manager,
+                                             GError       **error);
+gboolean       gpm_manager_hibernate        (GpmManager    *manager,
+                                             GError       **error);
+gboolean       gpm_manager_shutdown         (GpmManager    *manager,
+                                             GError       **error);
 
 G_END_DECLS
 

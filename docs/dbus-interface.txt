@@ -16,6 +16,21 @@ DBUS Interface:		"org.gnome.PowerManager"
 Methods
 =======
 
+	Name:		Suspend
+	Args:		(none)
+	Returns:	DBUS_TYPE_BOOL
+	Description:	This call will attempt to suspend the system.
+
+	Name:		Hibernate
+	Args:		(none)
+	Returns:	DBUS_TYPE_BOOL
+	Description:	This call will attempt to hibernate the system.
+
+	Name:		Shutdown
+	Args:		(none)
+	Returns:	DBUS_TYPE_BOOL
+	Description:	This call will attempt to shutdown the system.
+
 	Name:		CanSuspend
 	Args:		(none)
 	Returns:	DBUS_TYPE_BOOL
@@ -78,3 +93,12 @@ dbus-send --session \
 	  org.gnome.PowerManager.setDpmsMode \
 	  string:suspend
 
+You can put the system into hibernation using the following:
+
+dbus-send --session \
+	  --dest=org.gnome.PowerManager \
+	  --type=method_call \
+	  --print-reply \
+	  --reply-timeout=2000 \
+	  /org/gnome/PowerManager \
+	  org.gnome.PowerManager.Hibernate

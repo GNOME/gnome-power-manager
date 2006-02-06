@@ -1,3 +1,17 @@
+2006-02-06  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.xml: Expose actions API.
+
+	* src/gpm-manager.c (gpm_manager_error_quark, manager_policy_do) 
+	(gpm_manager_shutdown, gpm_manager_hibernate) 
+	(gpm_manager_suspend, power_button_pressed_cb) 
+	(gpm_manager_tray_icon_hibernate, gpm_manager_tray_icon_suspend):
+	Add GError to public actions.
+
+	* docs/dbus-interface.txt: Added new actions API.
+
+	Fixes #330189.
+
 2006-02-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/*.c, src/*.h: Fix the headers so that they are all the same,

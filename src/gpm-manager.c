@@ -118,6 +118,18 @@ G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
 
+GQuark
+gpm_manager_error_quark (void)
+{
+	static GQuark quark = 0;
+
+	if (!quark) {
+		quark = g_quark_from_static_string ("gpm_manager_error");
+	}
+
+	return quark;
+}
+
 gboolean
 gpm_manager_can_suspend (GpmManager *manager,
 			 gboolean   *can,
@@ -523,17 +535,17 @@ manager_policy_do (GpmManager *manager,
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		g_debug ("*ACTION* Suspend");
 
-		gpm_manager_suspend (manager);
+		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		g_debug ("*ACTION* Hibernate");
 
-		gpm_manager_hibernate (manager);
+		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
 		g_debug ("*ACTION* Shutdown");
 
-		gpm_manager_shutdown (manager);
+		gpm_manager_shutdown (manager, NULL);
 
 	} else {
 		g_warning ("manager_policy_do: called with unknown action %s", action);
@@ -738,35 +750,52 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	return ret;
 }
 
-void
-gpm_manager_shutdown (GpmManager *manager)
+gboolean
+gpm_manager_shutdown (GpmManager *manager,
+		      GError    **error)
 {
 	gboolean allowed;
+	gboolean ret;
 
 	gpm_manager_can_shutdown (manager, &allowed, NULL);
 	if (! allowed) {
 		g_warning ("Cannot shutdown");
-		return;
+		g_set_error (error,
+			     GPM_MANAGER_ERROR,
+			     GPM_MANAGER_ERROR_GENERAL,
+			     "Cannot shutdown");
+		return FALSE;
 	}
 
 	gnome_client_request_save (gnome_master_client (),
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
+	/* FIXME: make this return success/fail */
+	/* FIXME: make this async? */
 	gpm_hal_shutdown ();
+	ret = TRUE;
+
+	return ret;
 }
 
-void
-gpm_manager_hibernate (GpmManager *manager)
+gboolean
+gpm_manager_hibernate (GpmManager *manager,
+		       GError    **error)
 {
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
 	gboolean allowed;
+	gboolean ret;
 
 	gpm_manager_can_hibernate (manager, &allowed, NULL);
 
 	if (! allowed) {
 		g_warning ("Cannot hibernate");
-		return;
+		g_set_error (error,
+			     GPM_MANAGER_ERROR,
+			     GPM_MANAGER_ERROR_GENERAL,
+			     "Cannot hibernate");
+		return FALSE;
 	}
 
 	if (should_lock) {
@@ -774,26 +803,39 @@ gpm_manager_hibernate (GpmManager *manager)
 	}
 
 	gpm_networkmanager_sleep ();
+
+	/* FIXME: make this return success/fail */
+	/* FIXME: make this async? */
 	gpm_hal_hibernate ();
+	ret = TRUE;
+
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
 	if (should_lock) {
 		gpm_screensaver_poke ();
 	}
+
+	return ret;
 }
 
-void
-gpm_manager_suspend (GpmManager *manager)
+gboolean
+gpm_manager_suspend (GpmManager *manager,
+		     GError    **error)
 {
 	gboolean should_lock = gpm_screensaver_lock_enabled ();
 	gboolean allowed;
+	gboolean ret;
 
 	gpm_manager_can_suspend (manager, &allowed, NULL);
 
 	if (! allowed) {
 		g_warning ("Cannot suspend");
-		return;
+		g_set_error (error,
+			     GPM_MANAGER_ERROR,
+			     GPM_MANAGER_ERROR_GENERAL,
+			     "Cannot suspend");
+		return FALSE;
 	}
 
 	if (should_lock) {
@@ -801,13 +843,20 @@ gpm_manager_suspend (GpmManager *manager)
 	}
 
 	gpm_networkmanager_sleep ();
+
+	/* FIXME: make this return success/fail */
+	/* FIXME: make this async? */
 	gpm_hal_suspend (0);
+	ret = TRUE;
+
 	gpm_networkmanager_wake ();
 
 	/* Poke GNOME ScreenSaver so the dialogue is displayed */
 	if (should_lock) {
 		gpm_screensaver_poke ();
 	}
+
+	return ret;
 }
 
 static void
@@ -975,9 +1024,9 @@ power_button_pressed_cb (GpmPower   *power,
 		} else if (strcmp (details, "BrightnessDown") == 0) {
 			gpm_brightness_level_down (manager->priv->brightness);
 		} else if (strcmp (details, "Suspend") == 0) {
-			gpm_manager_suspend (manager);
+			gpm_manager_suspend (manager, NULL);
 		} else if (strcmp (details, "Hibernate") == 0) {
-			gpm_manager_hibernate (manager);
+			gpm_manager_hibernate (manager, NULL);
 		} else if (strcmp (details, "Lock") == 0) {
 			gpm_screensaver_lock ();
 		}
@@ -1175,7 +1224,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
 	g_debug ("Received hibernate signal from tray icon");
-	gpm_manager_hibernate (manager);
+	gpm_manager_hibernate (manager, NULL);
 }
 
 static void
@@ -1183,7 +1232,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
 	g_debug ("Received supend signal from tray icon");
-	gpm_manager_suspend (manager);
+	gpm_manager_suspend (manager, NULL);
 }
 
 static gboolean
