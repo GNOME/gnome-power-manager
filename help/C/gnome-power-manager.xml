@@ -2,9 +2,9 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY appversion "2.0">
-  <!ENTITY manrevision "2.0">
-  <!ENTITY date "October 2005">
+  <!ENTITY appversion "2.13.5">
+  <!ENTITY manrevision "3.0">
+  <!ENTITY date "February 2006">
   <!ENTITY app "<application>GNOME Power Manager</application>">
   <!-- Information about the entities
        The legal.xml file contains legal information, there is no need to edit the file. 
@@ -31,7 +31,7 @@
     <title>&app; Manual V&manrevision;</title>       
 
     <copyright> 
-      <year>2003</year> 
+      <year>2004-2006</year> 
       <holder>Richard Hughes</holder> 
     </copyright> 
 
@@ -48,7 +48,7 @@
      not specified, the publisher/author is the same for all versions of the 
      document.  -->
     <publisher> 
-      <publishername> Richard Hughes </publishername> 
+      <publishername>Richard Hughes</publishername> 
     </publisher> 
 
    &legal;
@@ -155,7 +155,7 @@
     	<varlistentry>
     		<term>Command line</term>
     		<listitem>
-    		<para>Type <command>gnome-power-manager</command>,
+    		<para>Type <command>gnome-power-manager --verbose --no-daemon</command>,
                 then press <keycap>Return</keycap>:</para>
     		</listitem>
     	</varlistentry>
@@ -164,15 +164,14 @@
 
     <sect2 id="gnome-power-manager-when-start">
     <title>When You Start &app;</title>
-    <para>When you start <application>&app;</application>, the following window is displayed.</para>
+    <para>When you start <application>&app;</application>, the following window may be displayed.</para>
 
     <!-- ==== Figure ==== -->
-      <figure id="mainwindow-fig"> 
-	<title>&app; Start Up Window</title> 
+      <figure id="gpm-unplugged"> 
+	<title>&app; Tooltip when AC adapter is removed</title> 
 	<screenshot> 
 	  <mediaobject> 
-	    <imageobject><imagedata
-		fileref="figures/pref-main.png" format="PNG"/> 
+	    <imageobject><imagedata fileref="figures/gpm-unplugged.png" format="PNG"/> 
 	    </imageobject>
 	  </mediaobject> 
 	</screenshot> 
@@ -182,21 +181,6 @@
 
     <!-- Include any descriptions of the GUI immediately after the screenshot of the main UI, -->
     <!-- for example, the items on the menubar and on the toolbar. This section is optional. -->
-  </sect1>
-
-<!-- ================ Usage ================================ -->
-<!-- Use this section to describe how to use the application to perform the tasks for 
-  which the application is designed. -->
-  <sect1 id="gnome-power-manager-usage"> 
-    <title>Usage</title> 
-
-<!-- ============= To create a new file ============================= -->
-    <sect2 id="gnome-power-manager-open-new"> 
-      <title>To Change the preferences...</title>
-      <para>
-       Write me!
-      </para>
-    </sect2>
   </sect1>
 
   <!-- ============= Customization ============================= -->
@@ -210,6 +194,39 @@
       </menuchoice>. The 
       <guilabel>Preferences</guilabel> dialog contains the following tabbed
       sections:</para> 
+    <!-- ==== Figure ==== -->
+      <figure id="prefs-main"> 
+	<title>&app; Main Power Tab</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/pref-main.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
+    <!-- ==== Figure ==== -->
+      <figure id="prefs-options"> 
+	<title>&app; Options Tab</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/pref-options.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
+    <!-- ==== Figure ==== -->
+      <figure id="prefs-advanced"> 
+	<title>&app; Advanced Tab</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/pref-advanced.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
   </sect1>
 
 <!-- ============= Bugs ================================== -->
@@ -218,13 +235,14 @@
 	  program if there are any - please be frank and list all
      problems you know of. -->
   
-  <sect1 id="mayapp-bugs">
+<!-- 
+ <sect1 id="mayapp-bugs">
   <title>Known Bugs and Limitations</title>
    <para>
     PMU LCD Brightness functionality isn't supported. HAL.
    </para>
  </sect1>
-
+-->
 <!-- ============= About ================================== -->
 <!-- This section contains info about the program (not docs), such as
       author's name(s), web page, license, feedback address. This
