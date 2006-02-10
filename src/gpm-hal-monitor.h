@@ -54,8 +54,7 @@ typedef struct
                                                      gboolean          on_ac);
 
         void              (* battery_added)         (GpmHalMonitor    *monitor,
-                                                     const char       *udi,
-                                                     const char       *reserved);
+                                                     const char       *udi);
         void              (* battery_removed)       (GpmHalMonitor    *monitor,
                                                      const char       *udi);
 
