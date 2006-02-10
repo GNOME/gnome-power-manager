@@ -1,3 +1,20 @@
+2006-02-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-debug.{c|h}: Add these files to allow us to use debugging
+	that is easy to read. I spend *hours* looking at these traces.
+	Copied from gnome-screensaver, (C) 2005 William Jon McCann.
+
+	* SConstruct, src/Makefile.am: Add gpm-debug.c to be built for g-p-m
+	and g-p-p.
+
+	* src/gpm-brightness.c, src/gpm-dpms-x11.c, src/gpm-hal-monitor.c,
+	src/gpm-hal.c,src/gpm-idle.c, src/gpm-main.c,src/gpm-manager.c,
+	src/gpm-power.c, src/gpm-prefs.c, src/gpm-screensaver.c,
+	src/gpm-tray-icon.c: Switch to the superior gpm_debug functionality.
+
+	* src/gpm-power.c (battery_kind_cache_debug_print): Reformat so the
+	debug information is more compact.
+
 2006-02-10  Lukas Novotny  <lukasnov@cvs.gnome.org>
 
 	* configure.in: Added cs to ALL_LINGUAS.

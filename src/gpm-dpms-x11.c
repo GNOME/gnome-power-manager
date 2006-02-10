@@ -42,6 +42,7 @@
 #include <X11/extensions/dpmsstr.h>
 #endif
 
+#include "gpm-debug.h"
 #include "gpm-dpms.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
@@ -112,11 +113,11 @@ x11_sync_server_dpms_settings (Display *dpy,
 	CARD16   o_suspend = 0;
 	CARD16   o_off = 0;
 
-	g_debug ("Syncing DPMS settings enabled=%d timeouts=%d %d %d",
-		 enabled, standby_secs, suspend_secs, off_secs);
+	gpm_debug ("Syncing DPMS settings enabled=%d timeouts=%d %d %d",
+		   enabled, standby_secs, suspend_secs, off_secs);
 
 	if (! DPMSQueryExtension (dpy, &event, &err)) {
-		g_debug ("XDPMS extension not supported");
+		gpm_debug ("XDPMS extension not supported");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -125,7 +126,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 	}
 
 	if (! DPMSCapable (dpy)) {
-		g_debug ("Display is not DPMS capable");
+		gpm_debug ("Display is not DPMS capable");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -135,7 +136,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 	}
 
 	if (! DPMSInfo (dpy, &o_power, &o_enabled)) {
-		g_debug ("unable to get DPMS state.");
+		gpm_debug ("unable to get DPMS state.");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -154,7 +155,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 		}
 
 		if (! res) {
-			g_debug ("unable to set DPMS state.");
+			gpm_debug ("unable to set DPMS state.");
 			g_set_error (error,
 				     GPM_DPMS_ERROR,
 				     GPM_DPMS_ERROR_GENERAL,
@@ -162,12 +163,12 @@ x11_sync_server_dpms_settings (Display *dpy,
 
 			return FALSE;
 		} else {
-			g_debug ("turned DPMS %s", enabled ? "ON" : "OFF");
+			gpm_debug ("turned DPMS %s", enabled ? "ON" : "OFF");
 		}
 	}
 
 	if (! DPMSGetTimeouts (dpy, &o_standby, &o_suspend, &o_off)) {
-		g_debug ("unable to get DPMS timeouts.");
+		gpm_debug ("unable to get DPMS timeouts.");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -180,7 +181,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 	    o_suspend != suspend_secs ||
 	    o_off != off_secs) {
 		if (! DPMSSetTimeouts (dpy, standby_secs, suspend_secs, off_secs)) {
-			g_debug ("unable to set DPMS timeouts.");
+			gpm_debug ("unable to set DPMS timeouts.");
 			g_set_error (error,
 				     GPM_DPMS_ERROR,
 				     GPM_DPMS_ERROR_GENERAL,
@@ -188,7 +189,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 
 			return FALSE;
 		} else {
-			g_debug ("set DPMS timeouts: %d %d %d.",
+			gpm_debug ("set DPMS timeouts: %d %d %d.",
 				  standby_secs, suspend_secs, off_secs);
 		}
 	}
@@ -196,7 +197,7 @@ x11_sync_server_dpms_settings (Display *dpy,
 	return TRUE;
 # else	/* !HAVE_DPMS_EXTENSION */
 
-	g_debug ("DPMS support not compiled in.");
+	gpm_debug ("DPMS support not compiled in.");
 	return FALSE;
 # endif /* HAVE_DPMS_EXTENSION */
 }
@@ -268,7 +269,7 @@ x11_set_mode (GpmDpms	 *dpms,
 	int	    error_number;
 
 	if (! DPMSQueryExtension (GDK_DISPLAY (), &event_number, &error_number)) {
-		g_debug ("unable to query DPMS extention");
+		gpm_debug ("unable to query DPMS extention");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -277,7 +278,7 @@ x11_set_mode (GpmDpms	 *dpms,
 	}
 
 	if (! DPMSCapable (GDK_DISPLAY ())) {
-		g_debug ("not DPMS capable");
+		gpm_debug ("not DPMS capable");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -286,7 +287,7 @@ x11_set_mode (GpmDpms	 *dpms,
 	}
 
 	if (! DPMSInfo (GDK_DISPLAY (), &current_state, &current_enabled)) {
-		g_debug ("couldn't get DPMS info");
+		gpm_debug ("couldn't get DPMS info");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -295,7 +296,7 @@ x11_set_mode (GpmDpms	 *dpms,
 	}
 
 	if (! current_enabled) {
-		g_debug ("DPMS not enabled");
+		gpm_debug ("DPMS not enabled");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,
@@ -418,7 +419,7 @@ gpm_dpms_set_enabled (GpmDpms *dpms,
 
 	ret = FALSE;
 	if (dpms->priv->enabled != enabled) {
-		g_debug ("setting DPMS enabled: %d", enabled);
+		gpm_debug ("setting DPMS enabled: %d", enabled);
 
 		dpms->priv->enabled = enabled;
 
@@ -453,7 +454,7 @@ gpm_dpms_set_active (GpmDpms *dpms,
 
 	ret = FALSE;
 	if (dpms->priv->active != active) {
-		g_debug ("setting DPMS active: %d", active);
+		gpm_debug ("setting DPMS active: %d", active);
 
 		dpms->priv->active = active;
 
@@ -540,7 +541,7 @@ gpm_dpms_set_mode (GpmDpms    *dpms,
 	g_return_val_if_fail (GPM_IS_DPMS (dpms), FALSE);
 
 	if (mode == GPM_DPMS_MODE_UNKNOWN) {
-		g_debug ("gpm_dpms_set_mode: mode unknown");
+		gpm_debug ("mode unknown");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
 			     GPM_DPMS_ERROR_GENERAL,

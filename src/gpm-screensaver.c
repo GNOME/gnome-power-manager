@@ -30,6 +30,7 @@
 #include <gconf/gconf-client.h>
 
 #include "gpm-screensaver.h"
+#include "gpm-debug.h"
 
 #define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
 #define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
@@ -119,7 +120,7 @@ gpm_screensaver_enable_throttle (gboolean enable)
 	DBusGProxy *gs_proxy = NULL;
 	gboolean boolret = TRUE;
 
-	g_debug ("gnome-screensaver setThrottleEnabled : %i", enable);
+	gpm_debug ("setThrottleEnabled : %i", enable);
 	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -133,12 +134,12 @@ gpm_screensaver_enable_throttle (gboolean enable)
 			g_warning ("gpm_screensaver_enable_throttle: %s", error->message);
 			g_error_free (error);
 		}
-		g_debug ("gnome-screensaver service is not running.");
+		gpm_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
-		g_debug ("gnome-screensaver setThrottleEnabled failed");
+		gpm_debug ("setThrottleEnabled failed");
 		return FALSE;
 	}
 	return TRUE;
@@ -153,7 +154,7 @@ gpm_screensaver_lock (void)
 {
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
-	g_debug ("gnome-screensaver lock");
+	gpm_debug ("lock");
 	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -175,7 +176,7 @@ gpm_screensaver_poke (void)
 {
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
-	g_debug ("gnome-screensaver poke");
+	gpm_debug ("poke");
 	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -213,12 +214,12 @@ gpm_screensaver_get_idle (gint *time)
 			g_warning ("gpm_screensaver_get_idle: %s", error->message);
 			g_error_free (error);
 		}
-		g_debug ("gnome-screensaver service is not running.");
+		gpm_debug ("gnome-screensaver service is not running.");
 		boolret = FALSE;
 	}
 	g_object_unref (G_OBJECT (gs_proxy));
 	if (!boolret) {
-		g_debug ("gnome-screensaver get idle failed");
+		gpm_debug ("get idle failed");
 		return FALSE;
 	}
 	return TRUE;

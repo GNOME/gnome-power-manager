@@ -48,6 +48,7 @@
 /* FIXME: we should abstract the HAL stuff */
 #include "gpm-hal.h"
 
+#include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-power.h"
@@ -154,7 +155,7 @@ gpm_manager_can_suspend (GpmManager *manager,
 	*can = FALSE;
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
-	g_debug ("Suspend disabled for testing");
+	gpm_debug ("Suspend disabled for testing");
 	return TRUE;
 #endif
 
@@ -178,7 +179,7 @@ gpm_manager_can_hibernate (GpmManager *manager,
 	*can = FALSE;
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
-	g_debug ("Hibernate disabled for testing");
+	gpm_debug ("Hibernate disabled for testing");
 	return TRUE;
 #endif
 
@@ -201,7 +202,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
 	}
 
 #ifdef DISABLE_ACTIONS_FOR_TESTING
-	g_debug ("Shutdown disabled for testing");
+	gpm_debug ("Shutdown disabled for testing");
 	return TRUE;
 #endif
 
@@ -244,12 +245,12 @@ get_stock_id (GpmManager *manager,
 
 	stock_id = NULL;
 
-	g_debug ("Getting stock icon for tray");
+	gpm_debug ("Getting stock icon for tray");
 
 	if (icon_policy == GPM_ICON_POLICY_NEVER) {
-		g_debug ("The key " GPM_PREF_ICON_POLICY
-			 " is set to never, so no icon will be displayed.\n"
-			 "You can change this using gnome-power-preferences");
+		gpm_debug ("The key " GPM_PREF_ICON_POLICY
+			   " is set to never, so no icon will be displayed.\n"
+			   "You can change this using gnome-power-preferences");
 		goto done;
 	}
 
@@ -303,8 +304,7 @@ get_stock_id (GpmManager *manager,
 	 * even when not low or critical.
 	 */
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
-		g_debug ("get_stock_id: no devices critical, so "
-			 "no icon will be displayed.");
+		gpm_debug ("no devices critical, so no icon will be displayed.");
 		stock_id = NULL;
 		goto done;
 	}
@@ -323,8 +323,7 @@ get_stock_id (GpmManager *manager,
 
 	/* Check if we should just show the icon all the time */
 	if (icon_policy == GPM_ICON_POLICY_CHARGE) {
-		g_debug ("get_stock_id: no devices (dis)charging, so "
-			 "no icon will be displayed.");
+		gpm_debug ("no devices (dis)charging, so no icon will be displayed.");
 		stock_id = NULL;
 		goto done;
 	}
@@ -351,7 +350,7 @@ get_stock_id (GpmManager *manager,
 	stock_id = g_strdup_printf ("gnome-dev-acadapter");
 
  done:
-	g_debug ("Going to use stock id: %s", stock_id);
+	gpm_debug ("Going to use stock id: %s", stock_id);
 
 	return stock_id;
 }
@@ -392,7 +391,7 @@ tray_icon_update (GpmManager *manager)
 		g_free (tooltip);
 	} else {
 		/* remove icon */
-		g_debug ("no icon will be displayed");
+		gpm_debug ("no icon will be displayed");
 
 		if (manager->priv->tray_icon) {
 			/* disconnect the signal so we don't restart */
@@ -535,7 +534,7 @@ manager_policy_do (GpmManager *manager,
 {
 	char *action;
 
-	g_debug ("manager_policy_do: %s", policy);
+	gpm_debug ("policy: %s", policy);
 
 	action = gconf_client_get_string (manager->priv->gconf_client, policy, NULL);
 
@@ -543,20 +542,20 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 	if (strcmp (action, ACTION_NOTHING) == 0) {
-		g_debug ("*ACTION* Doing nothing");
+		gpm_debug ("*ACTION* Doing nothing");
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-		g_debug ("*ACTION* Suspend");
+		gpm_debug ("*ACTION* Suspend");
 
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-		g_debug ("*ACTION* Hibernate");
+		gpm_debug ("*ACTION* Hibernate");
 
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-		g_debug ("*ACTION* Shutdown");
+		gpm_debug ("*ACTION* Shutdown");
 
 		gpm_manager_shutdown (manager, NULL);
 
@@ -591,7 +590,7 @@ gpm_manager_set_dpms_mode (GpmManager *manager,
 
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
-	g_debug ("Setting DPMS to %s", mode);
+	gpm_debug ("Setting DPMS to %s", mode);
 
 	/* just proxy this */
 	ret = gpm_dpms_set_mode (manager->priv->dpms,
@@ -614,7 +613,7 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	ret = gpm_dpms_get_mode (manager->priv->dpms,
 				 &m,
 				 error);
-	g_debug ("Got DPMS mode result=%d mode=%d", ret, m);
+	gpm_debug ("Got DPMS mode result=%d mode=%d", ret, m);
 	if (ret && mode) {
 		*mode = gpm_dpms_mode_to_string (m);
 	}
@@ -741,13 +740,13 @@ idle_changed_cb (GpmIdle    *idle,
 
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
-		g_debug ("Idle state changed: NORMAL");
+		gpm_debug ("Idle state changed: NORMAL");
 
 		/* deactivate display power management */
 		error = NULL;
 		res = gpm_dpms_set_active (manager->priv->dpms, FALSE, &error);
 		if (error) {
-			g_debug ("Unable to set DPMS active: %s", error->message);
+			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
 		sync_dpms_policy (manager);
@@ -755,13 +754,13 @@ idle_changed_cb (GpmIdle    *idle,
 		break;
 	case GPM_IDLE_MODE_SESSION:
 
-		g_debug ("Idle state changed: SESSION");
+		gpm_debug ("Idle state changed: SESSION");
 
 		/* activate display power management */
 		error = NULL;
 		res = gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
 		if (error) {
-			g_debug ("Unable to set DPMS active: %s", error->message);
+			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
 		/* sync timeouts */
@@ -769,7 +768,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		break;
 	case GPM_IDLE_MODE_SYSTEM:
-		g_debug ("Idle state changed: SYSTEM");
+		gpm_debug ("Idle state changed: SYSTEM");
 
 		/* can only be hibernate or suspend */
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
@@ -787,7 +786,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		      GpmDpmsMode mode,
 		      GpmManager *manager)
 {
-	g_debug ("DPMS mode changed: %d", mode);
+	gpm_debug ("DPMS mode changed: %d", mode);
 	if (mode == GPM_DPMS_MODE_ON) {
 		gboolean on_ac;
 
@@ -811,7 +810,7 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
-	g_debug ("power button changed: %d", state);
+	gpm_debug ("power button changed: %d", state);
 
 	/* Log out interactively */
 	gnome_client_request_save (gnome_master_client (),
@@ -837,7 +836,7 @@ lid_button_pressed (GpmManager	 *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	g_debug ("lid_button_pressed: button changed: %d", state);
+	gpm_debug ("button changed: %d", state);
 
 	/*
 	 * We enable/disable DPMS because some laptops do
@@ -852,9 +851,9 @@ lid_button_pressed (GpmManager	 *manager,
 		 * http://bugzilla.gnome.org/show_bug.cgi?id=329512
 		 */
 		if (on_ac) {
-			g_debug ("lid_button_pressed: Ignoring policy as on AC");
+			gpm_debug ("Ignoring policy as on AC");
 		} else {
-			g_debug ("lid_button_pressed: Performing policy as on battery");
+			gpm_debug ("Performing policy as on battery");
 			manager_policy_do (manager, GPM_PREF_BUTTON_LID);
 		}
 		mode = GPM_DPMS_MODE_OFF;
@@ -865,7 +864,7 @@ lid_button_pressed (GpmManager	 *manager,
 	error = NULL;
 	res = gpm_dpms_set_mode (manager->priv->dpms, mode, &error);
 	if (error) {
-		g_debug ("Unable to set DPMS mode: %s", error->message);
+		gpm_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
 	}
 }
@@ -877,7 +876,7 @@ power_button_pressed_cb (GpmPower   *power,
 			 gboolean    state,
 			 GpmManager *manager)
 {
-	g_debug ("Received a button press event type=%s details=%s state=%d",
+	gpm_debug ("Received a button press event type=%s details=%s state=%d",
 		 type, details, state);
 
 	if (strcmp (type, "power") == 0) {
@@ -910,7 +909,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 			gboolean    on_ac,
 			GpmManager *manager)
 {
-	g_debug ("Setting on-ac: %d", on_ac);
+	gpm_debug ("Setting on-ac: %d", on_ac);
 
 	tray_icon_update (manager);
 
@@ -1030,18 +1029,18 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
-		g_debug ("battery_status_changed_primary: No tray icon, so no notifications");
+		gpm_debug ("No tray icon, so no notifications");
 		return;
 	}
 
 	if (! battery_status->is_discharging) {
-		g_debug ("battery_status_changed_primary: Primary battery is not discharging");
+		gpm_debug ("Primary battery is not discharging");
 		return;
 	}
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
-		g_debug ("battery_status_changed_primary: No warning");
+		gpm_debug ("No warning");
 		return;
 	}
 
@@ -1063,7 +1062,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		g_free (remaining);
 		g_free (message);
 	} else {
-		g_debug ("battery_status_changed_primary: Already notified %i", warning_type);
+		gpm_debug ("Already notified %i", warning_type);
 	}
 }
 
@@ -1088,7 +1087,7 @@ battery_status_changed_ups (GpmManager	          *manager,
 
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
-		g_debug ("battery_status_changed_ups: No tray icon, so no notifications");
+		gpm_debug ("No tray icon, so no notifications");
 		return;
 	}
 
@@ -1096,7 +1095,7 @@ battery_status_changed_ups (GpmManager	          *manager,
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
-		g_debug ("battery_status_changed_ups: No warning");
+		gpm_debug ("No warning");
 		return;
 	}
 
@@ -1134,7 +1133,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	/* mouse, keyboard and PDA do not cause low power events */
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
-		g_debug ("battery_status_changed_misc: no tray icon, so no notifications");
+		gpm_debug ("no tray icon, so no notifications");
 		return;
 	}
 
@@ -1143,7 +1142,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
-		g_debug ("battery_status_changed_misc: No warning");
+		gpm_debug ("No warning");
 		return;
 	}
 
@@ -1170,7 +1169,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
-		g_debug ("battery_status_changed_misc: No warning of type");
+		gpm_debug ("No warning of type");
 		return;
 	}
 
@@ -1293,7 +1292,7 @@ callback_gconf_key_changed (GConfClient *client,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	g_debug ("callback_gconf_key_changed (%s)", entry->key);
+	gpm_debug ("Key changed %s", entry->key);
 
 	if (gconf_entry_get_value (entry) == NULL) {
 		return;
@@ -1350,7 +1349,7 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	g_debug ("Received hibernate signal from tray icon");
+	gpm_debug ("Received hibernate signal from tray icon");
 	gpm_manager_hibernate (manager, NULL);
 }
 
@@ -1358,7 +1357,7 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	g_debug ("Received supend signal from tray icon");
+	gpm_debug ("Received supend signal from tray icon");
 	gpm_manager_suspend (manager, NULL);
 }
 
@@ -1369,14 +1368,14 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 	gboolean enabled;
 
 	if (manager->priv->tray_icon) {
-		g_debug ("caught destroy event for tray icon %p",
+		gpm_debug ("caught destroy event for tray icon %p",
 			 manager->priv->tray_icon);
 		gtk_object_sink (GTK_OBJECT (manager->priv->tray_icon));
 		manager->priv->tray_icon = NULL;
-		g_debug ("finished sinking tray");
+		gpm_debug ("finished sinking tray");
 	}
 
-	g_debug ("creating new tray icon");
+	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
 	gpm_manager_can_suspend (manager, &enabled, NULL);
@@ -1404,7 +1403,7 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 
 	gtk_widget_show_all (GTK_WIDGET (manager->priv->tray_icon));
 
-	g_debug ("done creating new tray icon %p", manager->priv->tray_icon);
+	gpm_debug ("done creating new tray icon %p", manager->priv->tray_icon);
 
 	return TRUE;
 }

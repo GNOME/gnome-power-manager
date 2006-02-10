@@ -40,6 +40,7 @@
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
 #include "gpm-common.h"
+#include "gpm-debug.h"
 
 #include "gpm-manager.h"
 #include "gpm-manager-glue.h"
@@ -51,11 +52,6 @@ static GpmDbusSignalHandler gpm_sig_handler_noc;
 static GpmDbusSignalHandler gpm_sig_handler_nlost;
 
 static void gpm_exit (void);
-
-static void
-gpm_main_log_dummy (const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
-{
-}
 
 /** Callback for the DBUS NameOwnerChanged function.
  *
@@ -122,7 +118,7 @@ gpm_signal_handler_noc (DBusGProxy *proxy,
 static void
 gpm_signal_handler_nlost (DBusGProxy *proxy, const char *name, gpointer user_data)
 {
-	g_debug ("gpm_signal_handler_nlost name=%s", name);
+	gpm_debug ("name=%s", name);
 	gpm_sig_handler_nlost (name, TRUE);
 }
 
@@ -278,11 +274,11 @@ gpm_object_register (DBusGConnection *connection,
 static void
 gpm_exit (void)
 {
-	g_debug ("Quitting!");
-
 	gpm_stock_icons_shutdown ();
 	gpm_dbus_remove_noc ();
 	gpm_dbus_remove_nlost ();
+
+	gpm_debug_shutdown ();
 
 	exit (0);
 }
@@ -327,9 +323,6 @@ main (int argc, char *argv[])
 			    GNOME_PARAM_POPT_TABLE, options,
 			    GNOME_PARAM_HUMAN_READABLE_NAME, NICENAME,
 			    NULL);
-
-	if (!verbose)
-		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_main_log_dummy, NULL);
 
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
@@ -376,10 +369,10 @@ main (int argc, char *argv[])
 			 "eval `dbus-launch --auto-syntax`\n");
 	}
 
-	if (!gpm_stock_icons_init())
+	if (! gpm_stock_icons_init())
 		g_error ("Cannot continue without stock icons");
 
-	if (!no_daemon && daemon (0, 0))
+	if (! no_daemon && daemon (0, 0))
 		g_error ("Could not daemonize: %s", g_strerror (errno));
 
 	manager = gpm_manager_new ();
@@ -395,6 +388,8 @@ main (int argc, char *argv[])
 		return 0;
 	}
 #endif
+
+	gpm_debug_init (verbose, ! no_daemon);
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 

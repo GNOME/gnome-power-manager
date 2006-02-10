@@ -40,6 +40,7 @@
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
 #include "gpm-marshal.h"
+#include "gpm-debug.h"
 
 #include "gpm-hal-monitor.h"
 
@@ -194,11 +195,7 @@ watch_device_property_modified (DBusGProxy    *proxy,
 				gboolean       is_removed,
 				GpmHalMonitor *monitor)
 {
-
-#if 1
-	g_debug ("watch_device_property_modified: udi=%s, key=%s, added=%i, removed=%i",
-		 udi, key, is_added, is_removed);
-#endif
+	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i", udi, key, is_added, is_removed);
 
 	/* only process modified entries, not added or removed keys */
 	if (is_removed || is_added) {
@@ -234,7 +231,7 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 	guint        i;
 
 	udi = dbus_g_proxy_get_path (proxy);
-	g_debug ("property modified '%s'", udi);
+	gpm_debug ("property modified '%s'", udi);
 
 	array = NULL;
 
@@ -274,8 +271,7 @@ watch_device_condition (DBusGProxy    *proxy,
 	g_assert (name);
 	g_assert (details);
 
-	g_debug ("watch_device_condition: udi=%s, name=%s, details=%s",
-		 udi, name, details);
+	gpm_debug ("udi=%s, name=%s, details=%s", udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
 		char	 *type = NULL;
@@ -288,7 +284,7 @@ watch_device_condition (DBusGProxy    *proxy,
 			return;
 		}
 
-		g_debug ("ButtonPressed : %s", type);
+		gpm_debug ("ButtonPressed : %s", type);
 
 		if (strcmp (type, "power") == 0) {
 			value = TRUE;
@@ -400,7 +396,7 @@ watch_device_add (GpmHalMonitor *monitor,
 	DBusGProxy *proxy;
 	GError     *error;
 
-	g_debug ("Adding new device to watch: %s", udi);
+	gpm_debug ("Adding new device to watch: %s", udi);
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy != NULL) {
@@ -408,7 +404,7 @@ watch_device_add (GpmHalMonitor *monitor,
 		return FALSE;
 	}
 
-	g_debug ("Creating proxy for: %s", udi);
+	gpm_debug ("Creating proxy for: %s", udi);
 	error = NULL;
 	proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
 						 HAL_DBUS_SERVICE,
@@ -452,7 +448,7 @@ watch_add_battery (GpmHalMonitor *monitor,
 	watch_device_add (monitor, udi);
 	watch_device_connect_property_modified (monitor, udi);
 
-	g_debug ("Emitting battery-added signal for: %s", udi);
+	gpm_debug ("Emitting battery-added signal for: %s", udi);
 	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
 }
 
@@ -488,7 +484,7 @@ hal_device_removed (DBusGProxy    *proxy,
 		    const char    *udi,
 		    GpmHalMonitor *monitor)
 {
-	g_debug ("hal_device_removed: udi=%s", udi);
+	gpm_debug ("udi=%s", udi);
 
 	/* these may not all be batteries but oh well */
 	watch_remove_battery (monitor, udi);
@@ -500,8 +496,7 @@ hal_new_capability (DBusGProxy    *proxy,
 		    const char    *capability,
 		    GpmHalMonitor *monitor)
 {
-	g_debug ("hal_device_new_capability: udi=%s, capability=%s",
-		 udi, capability);
+	gpm_debug ("udi=%s, capability=%s", udi, capability);
 
 	if (strcmp (capability, "battery") == 0) {
 		watch_add_battery (monitor, udi);
@@ -543,7 +538,7 @@ coldplug_acadapter (GpmHalMonitor *monitor)
 	/* devices of type ac_adapter */
 	gpm_hal_find_device_capability ("ac_adapter", &device_names);
 	if (! device_names) {
-		g_debug ("Couldn't obtain list of ac_adapters");
+		gpm_debug ("Couldn't obtain list of ac_adapters");
 		return FALSE;
 	}
 
@@ -565,7 +560,7 @@ coldplug_buttons (GpmHalMonitor *monitor)
 	/* devices of type button */
 	gpm_hal_find_device_capability ("button", &device_names);
 	if (! device_names) {
-		g_debug ("Couldn't obtain list of buttons");
+		gpm_debug ("Couldn't obtain list of buttons");
 		return FALSE;
 	}
 
@@ -591,7 +586,7 @@ coldplug_batteries (GpmHalMonitor *monitor)
 	/* devices of type battery */
 	gpm_hal_find_device_capability ("battery", &device_names);
 	if (! device_names) {
-		g_debug ("Couldn't obtain list of batteries");
+		gpm_debug ("Couldn't obtain list of batteries");
 		return FALSE;
 	}
 

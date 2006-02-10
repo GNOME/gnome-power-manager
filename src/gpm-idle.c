@@ -39,6 +39,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 
 #include "gpm-idle.h"
+#include "gpm-debug.h"
 
 static void     gpm_idle_class_init (GpmIdleClass *klass);
 static void     gpm_idle_init       (GpmIdle      *idle);
@@ -115,7 +116,7 @@ poll_system_timer (GpmIdle *idle)
 	/* FIXME: check that we are on console? */
 
 	if (load < IDLE_LIMIT) {
-		g_debug ("Detected that the CPU is quiet");
+		gpm_debug ("Detected that the CPU is quiet");
 
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_SYSTEM);
 
@@ -145,7 +146,7 @@ remove_poll_system_timer (GpmIdle *idle)
 static gboolean
 system_timer (GpmIdle *idle)
 {
-	g_debug ("System idle timeout");
+	gpm_debug ("System idle timeout");
 
 	/* instead of doing the state transition directly
 	 * we wait until the system is quiet */
@@ -183,7 +184,7 @@ add_system_timer (GpmIdle *idle)
 		idle->priv->system_timer_id = g_timeout_add (msecs,
 							     (GSourceFunc)system_timer, idle);
 	} else {
-		g_debug ("System idle disabled");
+		gpm_debug ("System idle disabled");
 	}
 }
 
@@ -198,7 +199,7 @@ gpm_idle_set_mode (GpmIdle    *idle,
 
 		gpm_idle_reset (idle);
 
-		g_debug ("Doing a state transition: %d", mode);
+		gpm_debug ("Doing a state transition: %d", mode);
 
 		g_signal_emit (idle,
 			       signals [CHANGED],
@@ -248,7 +249,7 @@ gpm_idle_set_system_timeout (GpmIdle	*idle,
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
 
-	g_debug ("Setting system idle timeout: %d", timeout);
+	gpm_debug ("Setting system idle timeout: %d", timeout);
 
 	if (idle->priv->system_timeout != timeout) {
 		idle->priv->system_timeout = timeout;
@@ -349,7 +350,7 @@ session_idle_changed_handler (DBusGProxy *proxy,
 {
 	GpmIdleMode mode;
 
-	g_debug ("Received GS idle changed: %d", is_idle);
+	gpm_debug ("Received GS idle changed: %d", is_idle);
 
 	if (is_idle) {
 		mode = GPM_IDLE_MODE_SESSION;

@@ -41,6 +41,7 @@
 #include "gpm-common.h"
 #include "gpm-hal.h"
 #include "gpm-prefs.h"
+#include "gpm-debug.h"
 
 static GConfEnumStringPair icon_policy_enum_map [] = {
        { GPM_ICON_POLICY_ALWAYS,       "always"   },
@@ -155,14 +156,6 @@ gpm_has_button_lid (void)
 	value =  gpm_hal_num_devices_of_capability_with_value ("button", "button.type", "lid") > 0;
 
 	return value;
-}
-
-static void
-gpm_prefs_debug_log_ignore (const char *log_domain,
-			    GLogLevelFlags log_level,
-			    const char *message,
-			    gpointer user_data)
-{
 }
 
 static void
@@ -373,9 +366,9 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 						   ACTION_SHUTDOWN_TEXT);
 			n_added++;
 		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && !can_suspend) {
-			g_debug ("Cannot add option, as cannot suspend.");
+			gpm_debug ("Cannot add option, as cannot suspend.");
 		} else if ((strcmp (actions[i], ACTION_HIBERNATE) == 0) && !can_hibernate) {
-			g_debug ("Cannot add option, as cannot hibernate.");
+			gpm_debug ("Cannot add option, as cannot hibernate.");
 		} else if ((strcmp (actions[i], ACTION_SUSPEND) == 0) && can_suspend) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_SUSPEND_TEXT);
@@ -686,14 +679,14 @@ main (int argc, char **argv)
 	bind_textdomain_codeset (PACKAGE, "UTF-8");
 	textdomain (PACKAGE);
 
-	if (! verbose) {
-		g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, gpm_prefs_debug_log_ignore, NULL);
-	}
+	gpm_debug_init (verbose, FALSE);
 
 	dialog = gpm_prefs_create ();
 	gtk_widget_show (dialog);
 
 	gtk_main ();
+
+	gpm_debug_shutdown ();
 
 	return 0;
 }

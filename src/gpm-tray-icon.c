@@ -48,6 +48,7 @@
 #include "gpm-common.h" /* For GPMURL, etc */
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
+#include "gpm-debug.h"
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
 static void     gpm_tray_icon_init       (GpmTrayIcon      *tray_icon);
@@ -569,7 +570,7 @@ get_widget_position (GtkWidget *widget,
 	*x += widget->allocation.width / 2;
 	*y += widget->allocation.height;
 
-	g_debug ("widget position x=%i, y=%i", *x, *y);
+	gpm_debug ("widget position x=%i, y=%i", *x, *y);
 
 	return TRUE;
 }
@@ -582,7 +583,7 @@ notification_closed_cb (NotifyNotification *notify,
 			GpmTrayIcon        *tray)
 {
 	/* just invalidate the pointer */
-	g_debug ("caught notification closed signal");
+	gpm_debug ("caught notification closed signal");
 	tray->priv->notify = NULL;
 }
 
@@ -611,7 +612,7 @@ libnotify_event (GpmTrayIcon             *tray,
 	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
 		g_warning ("libnotify: %s : %s", NICENAME, content);
 	else
-		g_debug ("libnotify: %s : %s", NICENAME, content);
+		gpm_debug ("libnotify: %s : %s", NICENAME, content);
 
 	g_signal_connect (tray->priv->notify, "closed", G_CALLBACK (notification_closed_cb), tray);
 
@@ -649,7 +650,7 @@ libnotify_event (GpmTrayIcon             *tray,
 	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
 		g_warning ("libnotify: %s : %s", NICENAME, content);
 	else
-		g_debug ("libnotify: %s : %s", NICENAME, content);
+		gpm_debug ("libnotify: %s : %s", NICENAME, content);
 
 	/* use default g-p-m icon for now */
 	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
@@ -730,16 +731,16 @@ gpm_tray_icon_notify (GpmTrayIcon *icon,
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
 	if (!icon->priv->show_notifications) {
-		g_debug ("ignoring notification: %s", primary);
+		gpm_debug ("ignoring notification: %s", primary);
 		return;
 	}
 
 	if (! icon->priv->embedded) {
-		g_debug ("Not embedded in a tray - ignoring notification");
+		gpm_debug ("Not embedded in a tray - ignoring notification");
 		return;
 	}
 
-	g_debug ("doing notify: %s", primary);
+	gpm_debug ("doing notify: %s", primary);
 
 	libnotify_event (icon,
 			 timeout,

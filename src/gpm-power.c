@@ -36,6 +36,7 @@
 
 #include "gpm-power.h"
 #include "gpm-marshal.h"
+#include "gpm-debug.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
@@ -321,17 +322,16 @@ battery_kind_cache_debug_print (	BatteryKindCacheEntry *entry)
 {
 	GpmPowerBatteryStatus *status = &entry->battery_status;
 
-	g_debug ("Printing %s device parameters:", battery_kind_to_string (entry->battery_kind));
-	g_debug ("number_devices    = %i", g_slist_length (entry->devices));
-	g_debug ("is_present        = %i", status->is_present);
-	g_debug ("design_charge     = %i", status->design_charge);
-	g_debug ("last_full_charge  = %i", status->last_full_charge);
-	g_debug ("current_charge    = %i", status->current_charge);
-	g_debug ("charge_rate       = %i", status->charge_rate);
-	g_debug ("percentage_charge = %i", status->percentage_charge);
-	g_debug ("remaining_time    = %i", status->remaining_time);
-	g_debug ("is_charging       = %i", status->is_charging);
-	g_debug ("is_discharging    = %i", status->is_discharging);
+	gpm_debug ("number    = %i\tdesign    = %i",
+		   g_slist_length (entry->devices), status->design_charge);
+	gpm_debug ("present   = %i\tlast_full = %i",
+		   status->is_present, status->last_full_charge);
+	gpm_debug ("percent   = %i\tcurrent   = %i",
+		   status->percentage_charge, status->current_charge);
+	gpm_debug ("charge    = %i\trate      = %i", 
+		   status->is_charging, status->charge_rate);
+	gpm_debug ("discharge = %i\tremaining = %i", 
+		   status->is_discharging, status->remaining_time);
 }
 
 static void
@@ -443,7 +443,7 @@ battery_kind_cache_update (GpmPower              *power,
 		type_status->is_charging = FALSE;
 	}
 
-	g_debug ("%i devices of type %s", num_present, battery_kind_to_string (entry->battery_kind));
+	gpm_debug ("%i devices of type %s", num_present, battery_kind_to_string (entry->battery_kind));
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
@@ -475,7 +475,7 @@ battery_kind_update_cache_iter (const char            *key,
 static void
 battery_kind_cache_update_all (GpmPower *power)
 {
-	g_debug ("Updating all device types");
+	gpm_debug ("Updating all device types");
 
 	if (power->priv->battery_kind_cache != NULL) {
 		g_hash_table_foreach (power->priv->battery_kind_cache,
@@ -508,7 +508,7 @@ battery_kind_cache_add_device (GpmPower                *power,
 	BatteryKindCacheEntry *type_entry;
 
 	if (! device_entry->battery_status.is_present) {
-		g_debug ("Adding missing device");
+		gpm_debug ("Adding missing device");
 	}
 
 	type_entry = battery_kind_cache_find (power,
@@ -643,7 +643,7 @@ gpm_power_get_status_summary (GpmPower *power,
 	/* remove the last \n */
 	g_string_truncate (summary, summary->len-1);
 
-	g_debug ("tooltip: %s", summary->str);
+	gpm_debug ("tooltip: %s", summary->str);
 
 	*string = g_string_free (summary, FALSE);
 
@@ -681,7 +681,7 @@ gpm_power_set_on_ac (GpmPower *power,
 	if (on_ac != power->priv->on_ac) {
 		power->priv->on_ac = on_ac;
 
-		g_debug ("Setting on-ac: %d", on_ac);
+		gpm_debug ("Setting on-ac: %d", on_ac);
 
 		g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
 	}
@@ -814,7 +814,7 @@ add_battery (GpmPower   *power,
 {
 	BatteryDeviceCacheEntry *entry;
 
-	g_debug ("adding %s", udi);
+	gpm_debug ("adding %s", udi);
 
 	g_assert (udi);
 
@@ -835,7 +835,7 @@ add_battery (GpmPower   *power,
 	        if (design > 0 && lastfull > 0) {
 	                float capacity;
 	                capacity = design / lastfull;
-	                g_debug ("Primary battery capacity: %f", capacity);
+	                gpm_debug ("Primary battery capacity: %f", capacity);
 	                if (capacity < 0.5f) {
 	                        g_warning ("Your battery has a very low capacity, "
 	                                   "meaning that it may be old or broken. "
@@ -853,7 +853,7 @@ remove_battery (GpmPower   *power,
 {
 	BatteryDeviceCacheEntry *entry;
 
-	g_debug ("removing %s", udi);
+	gpm_debug ("removing %s", udi);
 
 	g_assert (udi);
 
@@ -874,7 +874,7 @@ hal_battery_added_cb (GpmHalMonitor *monitor,
 		      const char    *udi,
 		      GpmPower      *power)
 {
-	g_debug ("hal_battery_added_cb(...) Battery Added: %s", udi);
+	gpm_debug ("Battery Added: %s", udi);
 	add_battery (power, udi);
 
 	battery_kind_cache_debug_print_all (power);
@@ -885,7 +885,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 			const char    *udi,
 			GpmPower      *power)
 {
-	g_debug ("hal_battery_removed_cb(...) Battery Removed: %s", udi);
+	gpm_debug ("Battery Removed: %s", udi);
 
 	remove_battery (power, udi);
 
@@ -901,7 +901,7 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 	BatteryDeviceCacheEntry *device_entry;
 	BatteryKindCacheEntry   *type_entry;
 
-	g_debug ("hal_battery_property_modified_cb (...) Battery Property Modified: %s", udi);
+	gpm_debug ("Battery Property Modified: %s", udi);
 
 	device_entry = battery_device_cache_find (power, udi);
 

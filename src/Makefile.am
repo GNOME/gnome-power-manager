@@ -32,6 +32,8 @@ bin_PROGRAMS =						\
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
 	gpm-hal.c					\
+	gpm-debug.h					\
+	gpm-debug.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-common.h					\
@@ -50,6 +52,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms-x11.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
+	gpm-debug.h					\
+	gpm-debug.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-main.c					\

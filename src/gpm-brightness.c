@@ -39,6 +39,7 @@
 #include <gtk/gtk.h>
 
 #include "gpm-common.h"
+#include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-brightness.h"
 #include "gpm-hal.h"
@@ -130,7 +131,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 	gpm_hal_find_device_capability ("laptop_panel", &names);
 	if (names == NULL || names[0] == NULL) {
 		brightness->priv->has_hardware = FALSE;
-		g_debug ("No devices of capability laptop_panel");
+		gpm_debug ("No devices of capability laptop_panel");
 		return;
 	}
 
@@ -153,8 +154,8 @@ gpm_brightness_init (GpmBrightness *brightness)
 	/* this changes under our feet */
 	gpm_brightness_level_update_hw (brightness);
 
-	g_debug ("gpm_brightness_init: (%i of %i)", brightness->priv->current_hw,
-		 brightness->priv->levels - 1);
+	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
+		   brightness->priv->levels - 1);
 }
 
 static void
@@ -219,8 +220,7 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 		return FALSE;
 	}
 
-	g_debug ("gpm_brightness_level_set_hw: Setting %i of %i",
-		 brightness_level_hw, brightness->priv->levels - 1);
+	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	retval = TRUE;
 	if (!dbus_g_proxy_call (brightness->priv->proxy, "SetBrightness", &error,
