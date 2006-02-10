@@ -1,3 +1,31 @@
+2006-02-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: Add GpmWarning struct so we can track the warning
+	states of all the devices indervidually. Also add 
+	BATTERY_ACTION_PERCENTAGE and BATTERY_ACTION_REMAINING_TIME so we
+	do the policy action some time after the last critical warning.
+
+	(maybe_notify_battery_status_changed) Removed, as functionality was
+	muddled. We need to split this per-batterytype, as we do very different
+	things for each device, e.g. warn for mouse low, but policy and
+	warnings for the primary battery.
+
+	(gpm_manager_get_warning_type, battery_low_get_title): Abstract out
+	the warning type and title generation from the background logic -- so
+	we can start to split up the functions per-device.
+
+	(battery_status_changed_primary, battery_status_changed_ups,
+	battery_status_changed_misc): Add these different handlers that it's
+	clear that these types have different actions and logic.
+	These functions are a bit bodged w.r.t message strings, as we are in
+	string freeze, and I can't add lots of new strings yet.
+
+	(power_battery_status_changed_cb): Dont do policy here, leave it to the
+	indervidual handlers for the type (e.g. battery_status_changed_primary)
+	to do the actions. Makes logic lots clearer.
+
+	Begins to fix #329027
+
 2006-02-06  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-manager.xml: Expose actions API.

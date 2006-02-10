@@ -294,7 +294,7 @@ battery_kind_cache_entry_free (BatteryKindCacheEntry *entry)
 	entry = NULL;
 }
 
-static const char *
+const char *
 battery_kind_to_string (GpmPowerBatteryKind battery_kind)
 {
 	const char *str;

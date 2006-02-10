@@ -92,6 +92,8 @@ gboolean         gpm_power_get_status_summary      (GpmPower           *power,
 						    char              **summary,
 						    GError            **error);
 
+const char *     battery_kind_to_string		   (GpmPowerBatteryKind battery_kind);
+
 G_END_DECLS
 
 #endif /* __GPM_POWER_H */
