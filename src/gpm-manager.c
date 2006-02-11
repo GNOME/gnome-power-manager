@@ -959,15 +959,16 @@ battery_low_get_title (GpmWarning warning_type)
 
 	if (warning_type == GPM_WARNING_CRITICAL) {
 
-		title = _("Battery Critically Low");
+		title = _("Power Critically Low");
 
 	} else if (warning_type == GPM_WARNING_VERY_LOW) {
 
-		title = _("Battery Very Low");
+		title = _("Power Very Low");
 
 	} else if (warning_type == GPM_WARNING_LOW) {
 
-		title = _("Battery Low");
+		title = _("Power Low");
+
 	}
 
 	return title;
@@ -1106,10 +1107,12 @@ battery_status_changed_ups (GpmManager	          *manager,
 
 		title = battery_low_get_title (warning_type);
 		remaining = gpm_get_timestring (battery_status->remaining_time);
-	
-		/* FIXME: do different warnings for each GPM_WARNING_ */
-		message = g_strdup_printf ("%s : %s (%s)", name, title, remaining);
-		/* FIXME: BODGE so we don't add new strings */
+
+		message = g_strdup_printf (_("You have approximately <b>%s</b> "
+					     "of remaining UPS power (%d%%). "
+					     "Restore power to your computer to"
+					     "avoid losing data."),
+					   remaining, battery_status->percentage_charge);
 
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000, title, NULL, message);
@@ -1173,12 +1176,16 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 		return;
 	}
 
+	manager->priv->last_ups_warning = warning_type;
 	name = battery_kind_to_string (battery_kind);
 
 	title = battery_low_get_title (warning_type);
-	
-	message = g_strdup_printf ("%s : %s", name, title);
-	/* FIXME: BODGE so we don't add new strings */
+
+	message = g_strdup_printf (_("The %s device attached to this computer "
+				     "is low in power (%d%%). "
+				     "This device will soon stop functioning"
+				     "if not charged."),
+				   name, battery_status->percentage_charge);
 
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 			      5000, title, NULL, message);
