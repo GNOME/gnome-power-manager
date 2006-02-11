@@ -164,14 +164,47 @@
 
     <sect2 id="gnome-power-manager-when-start">
     <title>When You Start &app;</title>
-    <para>When you start <application>&app;</application>, the following window may be displayed.</para>
+    <para>When you start <application>&app;</application>, the following notifications may be displayed.</para>
 
     <!-- ==== Figure ==== -->
       <figure id="gpm-unplugged"> 
-	<title>&app; Tooltip when AC adapter is removed</title> 
+	<title>&app; Notification when AC adapter is removed</title> 
 	<screenshot> 
 	  <mediaobject> 
 	    <imageobject><imagedata fileref="figures/gpm-unplugged.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
+    <!-- ==== Figure ==== -->
+      <figure id="gpm-charged"> 
+	<title>&app; Notification when laptop primary button is fully charged</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/gpm-charged.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
+    <!-- ==== Figure ==== -->
+      <figure id="gpm-critical"> 
+	<title>&app; Notification when the system power is critically low</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/> 
+	    </imageobject>
+	  </mediaobject> 
+	</screenshot> 
+      </figure>
+    <!-- ==== End of Figure ==== -->
+    <!-- ==== Figure ==== -->
+      <figure id="gpm-low"> 
+	<title>&app; Notification when battery power is low</title> 
+	<screenshot> 
+	  <mediaobject> 
+	    <imageobject><imagedata fileref="figures/gpm-low.png" format="PNG"/> 
 	    </imageobject>
 	  </mediaobject> 
 	</screenshot> 

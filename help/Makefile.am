@@ -8,6 +8,9 @@ DOC_FIGURES = \
 	figures/pref-main.png \
 	figures/pref-options.png \
 	figures/pref-advanced.png \
+	figures/gpm-charged.png \
+	figures/gpm-critical.png \
+	figures/gpm-low.png \
 	figures/gpm-unplugged.png
 
 #DOC_LINGUAS = uk 
