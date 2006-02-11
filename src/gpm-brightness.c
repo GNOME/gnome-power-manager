@@ -194,7 +194,7 @@ gpm_brightness_level_update_hw (GpmBrightness *brightness)
 				G_TYPE_INVALID,
 				G_TYPE_UINT, &brightness_hw, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_brightness_level_update_hw: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		retval = FALSE;
@@ -215,8 +215,8 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 
 	if (brightness_level_hw < 0 ||
 	    brightness_level_hw > brightness->priv->levels - 1) {
-		g_warning ("gpm_brightness_level_set_hw: set outside range (%i of %i)",
-			   brightness_level_hw, brightness->priv->levels - 1);
+		gpm_warning ("set outside range (%i of %i)",
+			     brightness_level_hw, brightness->priv->levels - 1);
 		return FALSE;
 	}
 
@@ -227,7 +227,7 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 				G_TYPE_INT, brightness_level_hw, G_TYPE_INVALID,
 				G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_brightness_level_set_hw: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		retval = FALSE;

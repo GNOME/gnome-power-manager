@@ -238,7 +238,7 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 	for (i = 0; i < properties->len; i++) {
 		array = g_ptr_array_index (properties, i);
 		if (array->n_values != 3) {
-			g_warning ("array->n_values invalid (!3)");
+			gpm_warning ("array->n_values invalid (!3)");
 			return;
 		}
 
@@ -280,7 +280,7 @@ watch_device_condition (DBusGProxy    *proxy,
 		gpm_hal_device_get_string (udi, "button.type", &type);
 
 		if (!type) {
-			g_warning ("You must have a button type for %s!", udi);
+			gpm_warning ("You must have a button type for %s!", udi);
 			return;
 		}
 
@@ -296,11 +296,11 @@ watch_device_condition (DBusGProxy    *proxy,
 			value = TRUE;
 
 			if (!details) {
-				g_warning ("Virtual buttons must have details for %s!", udi);
+				gpm_warning ("Virtual buttons must have details for %s!", udi);
 				return;
 			}
 		} else {
-			g_warning ("Button '%s' unrecognised", type);
+			gpm_warning ("Button '%s' unrecognised", type);
 			g_free (type);
 			return;
 		}
@@ -319,7 +319,7 @@ watch_device_connect_condition (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		g_warning ("Device is not being watched: %s", udi);
+		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
 
@@ -340,7 +340,7 @@ watch_device_connect_property_modified (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		g_warning ("Device is not being watched: %s", udi);
+		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
 
@@ -364,7 +364,7 @@ watch_device_disconnect_condition (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		g_warning ("Device is not being watched: %s", udi);
+		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
 
@@ -381,7 +381,7 @@ watch_device_disconnect_property_modified (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		g_warning ("Device is not being watched: %s", udi);
+		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
 
@@ -400,7 +400,7 @@ watch_device_add (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy != NULL) {
-		g_warning ("Device is already being watched: %s", udi);
+		gpm_warning ("Device is already being watched: %s", udi);
 		return FALSE;
 	}
 
@@ -412,7 +412,7 @@ watch_device_add (GpmHalMonitor *monitor,
 						 HAL_DBUS_INTERFACE_DEVICE,
 						 &error);
 	if (proxy == NULL) {
-		g_warning ("Could not create proxy for UDI: %s: %s", udi, error->message);
+		gpm_warning ("Could not create proxy for UDI: %s: %s", udi, error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -432,7 +432,7 @@ watch_device_remove (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		g_warning ("Device is not being watched");
+		gpm_warning ("Device is not being watched");
 		return FALSE;
 	}
 
@@ -605,7 +605,7 @@ hal_monitor_start (GpmHalMonitor *monitor)
 	GError *error;
 
 	if (monitor->priv->proxy) {
-		g_warning ("Monitor already started");
+		gpm_warning ("Monitor already started");
 		return;
 	}
 
@@ -663,7 +663,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv->enabled = gpm_hal_is_running ();
 
 	if (! monitor->priv->enabled) {
-		g_warning ("%s cannot connect to HAL!", NICENAME);
+		gpm_warning ("%s cannot connect to HAL!", GPM_NAME);
 	}
 
 	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
@@ -679,7 +679,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv->has_power_management = gpm_hal_has_power_management ();
 
 	if (! monitor->priv->has_power_management) {
-		g_warning ("HAL does not have modern PowerManagement capability");
+		gpm_warning ("HAL does not have modern PowerManagement capability");
 	}
 
 	if (monitor->priv->enabled

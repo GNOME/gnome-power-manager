@@ -32,6 +32,7 @@
 #include <gtk/gtk.h>
 
 #include "gpm-stock-icons.h"
+#include "gpm-debug.h"
 
 static GtkIconFactory *factory = NULL;
 
@@ -120,7 +121,7 @@ gpm_stock_icons_init (void)
 
 			g_object_unref (G_OBJECT (pixbuf));
 		} else {
-			g_warning ("Unable to load icon %s", items[i].name);
+			gpm_warning ("Unable to load icon %s", items[i].name);
 		}
 	}
 

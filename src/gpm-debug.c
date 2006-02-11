@@ -28,85 +28,106 @@
 #include <time.h>
 
 #include "gpm-debug.h"
+#include "gpm-common.h"
 
 static gboolean debugging = FALSE;
+static gboolean done_warning = FALSE;
 static FILE    *debug_out = NULL;
 
 /* Based on rhythmbox/lib/rb-debug.c */
-/* Our own funky debugging function, should only be used when something
- * is not going wrong, if something *is* wrong use g_warning.
- */
 void
-gpm_debug_real (const char *func,
-               const char *file,
-               const int   line,
-               const char *format, ...)
+gpm_debug_real (gboolean warning,
+		const char *func,
+		const char *file,
+		const int   line,
+		const char *format, ...)
 {
-        va_list args;
-        char    buffer [1025];
-        char   *str_time;
-        time_t  the_time;
+	va_list args;
+	char    buffer [1025];
+	char   *str_time;
+	time_t  the_time;
+	FILE   *output_file;
 
-        if (debugging == FALSE)
-                return;
+	if (!warning && debugging == FALSE) {
+		return;
+	}
 
-        va_start (args, format);
+	va_start (args, format);
+	g_vsnprintf (buffer, 1024, format, args);
+	va_end (args);
 
-        g_vsnprintf (buffer, 1024, format, args);
-        
-        va_end (args);
+	time (&the_time);
+	str_time = g_new0 (char, 255);
+	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
 
-        time (&the_time);
-        str_time = g_new0 (char, 255);
-        strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
+	if (debug_out) {
+		output_file = debug_out;
+	} else {
+		output_file = stderr;
+	}
 
-        fprintf ((debug_out ? debug_out : stderr),
-                 "[%s] %s:%d (%s):\t %s\n",
-                 func, file, line, str_time, buffer);
+	if (warning) {
+		/* do extra stuff for a warning */
+		fprintf (output_file, "*** WARNING ***\n");
+		fprintf (output_file, "[%s] %s:%d (%s):\t %s\n",
+			 func, file, line, str_time, buffer);
+		if (! done_warning) {
+			fprintf (output_file, "%s has encountered a non-critical warning.\n"
+				 "Consult %s for any known issues or a possible fix.\n"
+				 "Please file a bug with this complete message if not present\n",
+				 "GNOME Power Manager", GPM_BUGZILLA_URL);
+			done_warning = TRUE;
+		}
+		fprintf (output_file, "*** WARNING ***\n");
+	} else {
+		/* just do debug */
+		fprintf (output_file, "[%s] %s:%d (%s):\t %s\n",
+			 func, file, line, str_time, buffer);
+	}
 
-        if (debug_out)
-                fflush (debug_out);
-
-        g_free (str_time);
+	if (debug_out) {
+		fflush (output_file);
+	}
+	g_free (str_time);
 }
 
 void
 gpm_debug_init (gboolean debug,
-               gboolean to_file)
+		gboolean to_file)
 {
-        /* return if already initialized */
-        if (debugging == TRUE) {
-                return;
-        }
+	/* return if already initialized */
+	if (debugging == TRUE) {
+		return;
+	}
 
-        debugging = debug;
+	debugging = debug;
 
-        if (debug && to_file) {
-                const char path [50] = "gnome_power_manager_debug_XXXXXX";
-                int        fd;
+	if (debug && to_file) {
+		const char path [50] = "gnome_power_manager_debug_XXXXXX";
+		int fd;
 
-                fd = g_file_open_tmp (path, NULL, NULL);
+		fd = g_file_open_tmp (path, NULL, NULL);
 
-                if (fd >= 0) {
-                        debug_out = fdopen (fd, "a");
-                }
-        }
+		if (fd >= 0) {
+			debug_out = fdopen (fd, "a");
+		}
+	}
 
-        gpm_debug ("Debugging %s", (debug) ? "enabled" : "disabled");
+	gpm_debug ("Debugging %s", (debug) ? "enabled" : "disabled");
 }
 
 void
 gpm_debug_shutdown (void)
 {
-        if (! debugging)
-                return;
+	if (! debugging)
+		return;
 
-        gpm_debug ("Shutting down debugging");
+	gpm_debug ("Shutting down debugging");
 
-        debugging = FALSE;
+	debugging = FALSE;
 
-        if (debug_out != NULL) {
-                fclose (debug_out);
-                debug_out = NULL;
-        }
+	if (debug_out != NULL) {
+		fclose (debug_out);
+		debug_out = NULL;
+	}
 }

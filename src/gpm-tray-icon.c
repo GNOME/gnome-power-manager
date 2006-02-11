@@ -45,7 +45,7 @@
 #include <libnotify/notify.h>
 #endif
 
-#include "gpm-common.h" /* For GPMURL, etc */
+#include "gpm-common.h" /* For GPM_HOMEPAGE_URL, etc */
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 #include "gpm-debug.h"
@@ -213,7 +213,7 @@ gpm_tray_icon_show_preferences_cb (GtkAction   *action,
 	const char *command = "gnome-power-preferences";
 
         if (! g_spawn_command_line_async (command, NULL)) {
-                g_warning ("Couldn't execute command: %s", command);
+                gpm_warning ("Couldn't execute command: %s", command);
         }
 }
 
@@ -225,7 +225,7 @@ gpm_tray_icon_show_help_cb (GtkAction   *action,
 
 	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
 	if (error != NULL) {
-		g_warning (error->message);
+		gpm_warning (error->message);
 		g_error_free (error);
 	}
 }
@@ -276,12 +276,12 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 
 	gtk_show_about_dialog (NULL,
-                               "name", NICENAME,
+                               "name", GPM_NAME,
                                "version", VERSION,
                                "copyright", "Copyright \xc2\xa9 2005 Richard Hughes",
                                "license", license_trans,
-                               "website", GPMURL,
-                               "comments", NICEDESC,
+                               "website", GPM_HOMEPAGE_URL,
+                               "comments", GPM_DESCRIPTION,
                                "authors", authors,
                                "documenters", documenters,
                                "artists", artists,
@@ -426,7 +426,7 @@ gpm_tray_icon_constructor (GType                  type,
 					   "</ui>",
 					   -1, &error);
 	if (error != NULL) {
-		g_warning ("Couldn't merge user interface for popup: %s", error->message);
+		gpm_warning ("Couldn't merge user interface for popup: %s", error->message);
 		g_clear_error (&error);
 	}
 
@@ -517,12 +517,12 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
         gtk_widget_show_all (GTK_WIDGET (icon->priv->ebox));
 
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
-	ret = notify_init (NICENAME);
+	ret = notify_init (GPM_NAME);
 #elif (LIBNOTIFY_VERSION_MINOR == 2)
-	ret = notify_glib_init (NICENAME, NULL);
+	ret = notify_glib_init (GPM_NAME, NULL);
 #endif
 	if (!ret)
-		g_warning ("gpm_tray_icon_init failed");
+		gpm_warning ("gpm_tray_icon_init failed");
 }
 
 static void
@@ -610,14 +610,14 @@ libnotify_event (GpmTrayIcon             *tray,
 	notify_notification_set_hint_int32 (tray->priv->notify, "y", y);
 
 	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
-		g_warning ("libnotify: %s : %s", NICENAME, content);
+		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
 	else
-		gpm_debug ("libnotify: %s : %s", NICENAME, content);
+		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
 
 	g_signal_connect (tray->priv->notify, "closed", G_CALLBACK (notification_closed_cb), tray);
 
 	if (! notify_notification_show (tray->priv->notify, NULL)) {
-		g_warning ("failed to send notification (%s)", content);
+		gpm_warning ("failed to send notification (%s)", content);
 		return FALSE;
 	}
 
@@ -648,9 +648,9 @@ libnotify_event (GpmTrayIcon             *tray,
 
 	/* echo to terminal too */
 	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
-		g_warning ("libnotify: %s : %s", NICENAME, content);
+		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
 	else
-		gpm_debug ("libnotify: %s : %s", NICENAME, content);
+		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
 
 	/* use default g-p-m icon for now */
 	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
@@ -673,7 +673,7 @@ libnotify_event (GpmTrayIcon             *tray,
 	notify_icon_destroy (icon);
 
 	if (! tray->priv->notify) {
-		g_warning ("failed to send notification (%s)", content);
+		gpm_warning ("failed to send notification (%s)", content);
 		return FALSE;
 	}
 
@@ -706,7 +706,7 @@ libnotify_event (GpmTrayIcon             *tray,
 						     msg_type,
 						     GTK_BUTTONS_CLOSE,
 						     "<span size='larger'><b>%s</b></span>",
-						     NICENAME);
+						     GPM_NAME);
 
 	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
 

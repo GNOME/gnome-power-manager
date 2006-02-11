@@ -1,5 +1,15 @@
 2006-02-11  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c, src/gpm-common.h, src/gpm-debug.c, src/debug.h,
+	src/gpm-hal-monitor.c, src/gpm-hal.c, src/gpm-idle.c, src/gpm-main.c,
+	src/gpm-manager.c, src/gpm-networkmanager.c, src/gpm-power.c,
+	src/gpm-prefs.c, src/gpm-screensaver.c, src/gpm-stock-icons.c,
+	src/gpm-tray-icon.c: Create gpm-warning so we can also log g_warnings
+	in the same way as gpm_debug. Also make a few more #defines better
+	named, e.g. GPMURL -> GPM_HOMEPAGE_URL.
+
+2006-02-11  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (battery_low_get_title, battery_status_changed_ups,
 	battery_status_changed_misc): gnome-power-manager didn't get into 2.14.
 	Celebrate by adding lots of new translatable strings. These can be

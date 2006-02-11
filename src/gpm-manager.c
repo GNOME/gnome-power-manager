@@ -429,14 +429,14 @@ sync_dpms_policy (GpmManager *manager)
 	}
 
 	if (error) {
-		g_warning ("Unable to get DPMS timeouts: %s", error->message);
+		gpm_warning ("Unable to get DPMS timeouts: %s", error->message);
 		g_error_free (error);
 		return;
 	}
 
 	/* old policy was in seconds, warn the user if too small */
 	if (standby < 60) {
-		g_warning ("standby timeout is invalid, please re-configure");
+		gpm_warning ("standby timeout is invalid, please re-configure");
 		return;
 	}
 
@@ -447,7 +447,7 @@ sync_dpms_policy (GpmManager *manager)
 	error = NULL;
 	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);
 	if (error) {
-		g_warning ("Unable to enable DPMS: %s", error->message);
+		gpm_warning ("Unable to enable DPMS: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -455,7 +455,7 @@ sync_dpms_policy (GpmManager *manager)
 	error = NULL;
 	res = gpm_dpms_set_timeouts (manager->priv->dpms, standby, suspend, off, &error);
 	if (error) {
-		g_warning ("Unable to get DPMS timeouts: %s", error->message);
+		gpm_warning ("Unable to get DPMS timeouts: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -560,7 +560,7 @@ manager_policy_do (GpmManager *manager,
 		gpm_manager_shutdown (manager, NULL);
 
 	} else {
-		g_warning ("manager_policy_do: called with unknown action %s", action);
+		gpm_warning ("unknown action %s", action);
 	}
 
 	g_free (action);
@@ -630,7 +630,7 @@ gpm_manager_shutdown (GpmManager *manager,
 
 	gpm_manager_can_shutdown (manager, &allowed, NULL);
 	if (! allowed) {
-		g_warning ("Cannot shutdown");
+		gpm_warning ("Cannot shutdown");
 		g_set_error (error,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
@@ -661,7 +661,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gpm_manager_can_hibernate (manager, &allowed, NULL);
 
 	if (! allowed) {
-		g_warning ("Cannot hibernate");
+		gpm_warning ("Cannot hibernate");
 		g_set_error (error,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
@@ -701,7 +701,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_manager_can_suspend (manager, &allowed, NULL);
 
 	if (! allowed) {
-		g_warning ("Cannot suspend");
+		gpm_warning ("Cannot suspend");
 		g_set_error (error,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,

@@ -27,11 +27,12 @@
 G_BEGIN_DECLS
 
 /* common descriptions of this program */
-#define NICENAME 			_("Power Manager")
-#define NICEDESC 			_("Power Manager for the GNOME desktop")
+#define GPM_NAME 			_("Power Manager")
+#define GPM_DESCRIPTION 		_("Power Manager for the GNOME desktop")
 
 /* help location */
-#define GPMURL	 			"http://www.gnome.org/projects/gnome-power-manager/"
+#define GPM_HOMEPAGE_URL	 	"http://www.gnome.org/projects/gnome-power-manager/"
+#define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
 
 char *gpm_get_timestring (int time);
 

@@ -66,13 +66,13 @@ signalhandler_noc (const char *name, const gboolean connected)
 		return;
 
 	if (!connected) {
-		g_warning ("HAL has been disconnected! %s will now quit.", NICENAME);
+		gpm_warning ("HAL has been disconnected! %s will now quit.", GPM_NAME);
 		/* for now, quit */
 		gpm_exit ();
 		return;
 	}
 	/** @todo: handle reconnection to the HAL bus */
-	g_warning ("hal re-connected\n");
+	gpm_warning ("hal re-connected\n");
 }
 
 /** Callback for the DBUS NameLost function.
@@ -321,7 +321,7 @@ main (int argc, char *argv[])
 			    LIBGNOMEUI_MODULE, argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_POPT_TABLE, options,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, NICENAME,
+			    GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
 			    NULL);
 
 	master = gnome_master_client ();
@@ -346,7 +346,7 @@ main (int argc, char *argv[])
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_warning ("main: %s", error->message);
+		gpm_warning ("%s", error->message);
 		g_error_free (error);
 		/* abort at this point */
 		g_error ("This program cannot start until you start the dbus"
@@ -359,7 +359,7 @@ main (int argc, char *argv[])
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
-		g_warning ("main: %s", error->message);
+		gpm_warning ("%s", error->message);
 		g_error_free (error);
 		/* abort at this point */
 		g_error ("This program cannot start until you start the dbus session daemon\n"
@@ -379,12 +379,12 @@ main (int argc, char *argv[])
 
 #if GPM_SYSTEM_BUS
 	if (!gpm_object_register (system_connection, G_OBJECT (manager))) {
-		g_warning ("Failed to register.");
+		gpm_warning ("Failed to register.");
 		return 0;
 	}
 #else
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
-		g_warning ("%s is already running in this session.", NICENAME);
+		gpm_warning ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
 #endif

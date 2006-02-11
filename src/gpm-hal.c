@@ -42,7 +42,7 @@ gpm_hal_get_dbus_connection (DBusGConnection **connection)
 
 	systemconnection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		g_warning ("gpm_hal_get_dbus_connection: %s", error->message);
+		gpm_warning ("gpm_hal_get_dbus_connection: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
@@ -149,7 +149,7 @@ gpm_hal_can_suspend (void)
 					  "power_management.can_suspend_to_ram",
 					  &can_suspend);
 	if (!exists) {
-		g_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
+		gpm_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
 		return FALSE;
 	}
 	return can_suspend;
@@ -168,7 +168,7 @@ gpm_hal_can_hibernate (void)
 					  "power_management.can_suspend_to_disk",
 					  &can_hibernate);
 	if (!exists) {
-		g_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
+		gpm_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
 		return FALSE;
 	}
 	return can_hibernate;
@@ -199,10 +199,10 @@ gpm_hal_suspend (gint wakeup)
 			G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_hal_suspend: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
-		g_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
+		gpm_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
 		retval = FALSE;
 	}
 	if (ret != 0)
@@ -237,10 +237,10 @@ hal_pm_method_void (const gchar* method)
 			G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("hal_pm_method_void: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
-		g_warning (HAL_DBUS_INTERFACE_POWER
+		gpm_warning (HAL_DBUS_INTERFACE_POWER
 			   ".%s failed (HAL error)", method);
 		retval = FALSE;
 	}
@@ -302,7 +302,7 @@ gpm_hal_enable_power_save (gboolean enable)
 			G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_hal_enable_power_save: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		gpm_debug (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");

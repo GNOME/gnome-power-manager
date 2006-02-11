@@ -369,7 +369,7 @@ acquire_screensaver (GpmIdle *idle)
 								    GS_DBUS_PATH,
 								    GS_DBUS_INTERFACE);
 	if (! idle->priv->screensaver_object) {
-		g_warning ("Could not connect to screensaver");
+		gpm_warning ("Could not connect to screensaver");
 		return FALSE;
 	}
 
@@ -394,7 +394,7 @@ gpm_idle_init (GpmIdle *idle)
 
 	idle->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
-		g_warning ("gpm_idle_init: %s", error->message);
+		gpm_warning ("%s", error->message);
 		g_error_free (error);
 	}
 

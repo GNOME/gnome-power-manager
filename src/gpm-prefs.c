@@ -78,7 +78,7 @@ gpm_dbus_method_bool (const char *method)
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
-			g_warning ("Couldn't connect to PowerManager %s", error->message);
+			gpm_warning ("Couldn't connect to PowerManager %s", error->message);
 			g_error_free (error);
 		}
 		return FALSE;
@@ -95,7 +95,7 @@ gpm_dbus_method_bool (const char *method)
 				 G_TYPE_BOOLEAN, &value,
 				 G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("Couldn't connect to PowerManager %s", error->message);
+			gpm_warning ("Couldn't connect to PowerManager %s", error->message);
 			g_error_free (error);
 		}
 		value = FALSE;
@@ -167,7 +167,7 @@ gpm_prefs_help_cb (GtkWidget *widget,
 	gnome_help_display_with_doc_id (NULL, "gnome-power-manager",
 					"gnome-power-manager.xml", NULL, &error);
 	if (error != NULL) {
-		g_warning (error->message);
+		gpm_warning (error->message);
 		g_error_free (error);
 	}
 }
@@ -356,7 +356,7 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 	g_object_unref (client);
 
 	if (! value) {
-		g_warning ("gpm_prefs_setup_action_combo: invalid schema, please re-install");
+		gpm_warning ("invalid schema, please re-install");
 		return NULL;
 	}
 

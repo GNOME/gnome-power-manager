@@ -46,7 +46,7 @@ gpm_screensaver_get_session_conn (DBusGConnection **connection)
 	session_conn = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (!session_conn) {
 		if (error) {
-			g_warning ("gpm_screensaver_get_session_conn: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		return FALSE;
@@ -98,7 +98,7 @@ gpm_screensaver_is_running (void)
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_screensaver_is_running: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		boolret = FALSE;
@@ -131,7 +131,7 @@ gpm_screensaver_enable_throttle (gboolean enable)
 				G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
 				G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_screensaver_enable_throttle: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		gpm_debug ("gnome-screensaver service is not running.");
@@ -211,7 +211,7 @@ gpm_screensaver_get_idle (gint *time)
 				G_TYPE_INVALID,
 				G_TYPE_UINT, time, G_TYPE_INVALID)) {
 		if (error) {
-			g_warning ("gpm_screensaver_get_idle: %s", error->message);
+			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		gpm_debug ("gnome-screensaver service is not running.");

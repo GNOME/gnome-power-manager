@@ -122,7 +122,7 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	gpm_hal_device_get_string (udi, "battery.type", &battery_kind_str);
 
 	if (!battery_kind_str) {
-		g_warning ("battery_device_cache_entry_update_all(): cannot obtain battery type");
+		gpm_warning ("cannot obtain battery type");
 		return;
 	}
 	if (strcmp (battery_kind_str, "primary") == 0) {
@@ -136,7 +136,7 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	} else if (strcmp (battery_kind_str, "pda") == 0) {
 		entry->battery_kind = GPM_POWER_BATTERY_KIND_PDA;
 	} else {
-		g_warning ("battery_device_cache_entry_update_all(): HAL is returning a battery type : %s which gpm does not know",
+		gpm_warning ("battery type %s unknown",
 			   battery_kind_str);
 		g_free (battery_kind_str);
 		return;
@@ -170,7 +170,7 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
 					     &status->charge_rate);
 	if (!exists && (status->is_discharging || status->is_charging)) {
-		g_warning ("could not read your battery's charge rate");
+		gpm_warning ("could not read your battery's charge rate");
 	}
 
 	/* FIXME: following can be removed if bug #5752 of hal on freedesktop
@@ -185,14 +185,14 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage",
 					     &status->percentage_charge);
 	if (!exists && (status->is_discharging || status->is_charging)) {
-		g_warning ("could not read your battery's percentage charge.");
+		gpm_warning ("could not read your battery's percentage charge.");
 	}
 
 	/* sanity check that remaining time exists (if it should) */
 	exists = gpm_hal_device_get_int (udi,"battery.remaining_time",
 					     &status->remaining_time);
 	if (! exists && (status->is_discharging || status->is_charging)) {
-		g_warning ("could not read your battery's remaining time");
+		gpm_warning ("could not read your battery's remaining time");
 	}
 }
 
@@ -317,20 +317,20 @@ battery_kind_to_string (GpmPowerBatteryKind battery_kind)
 }
 
 static void
-battery_kind_cache_debug_print (	BatteryKindCacheEntry *entry)
+battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 
 {
 	GpmPowerBatteryStatus *status = &entry->battery_status;
-
-	gpm_debug ("number    = %i\tdesign    = %i",
+	gpm_debug ("Device : %s", battery_kind_to_string (entry->battery_kind));
+	gpm_debug ("number     %i\tdesign     %i",
 		   g_slist_length (entry->devices), status->design_charge);
-	gpm_debug ("present   = %i\tlast_full = %i",
+	gpm_debug ("present    %i\tlast_full  %i",
 		   status->is_present, status->last_full_charge);
-	gpm_debug ("percent   = %i\tcurrent   = %i",
+	gpm_debug ("percent    %i\tcurrent    %i",
 		   status->percentage_charge, status->current_charge);
-	gpm_debug ("charge    = %i\trate      = %i", 
+	gpm_debug ("charge     %i\trate       %i", 
 		   status->is_charging, status->charge_rate);
-	gpm_debug ("discharge = %i\tremaining = %i", 
+	gpm_debug ("discharge  %i\tremaining  %i", 
 		   status->is_discharging, status->remaining_time);
 }
 
@@ -359,7 +359,7 @@ battery_device_cache_find (GpmPower   *power,
 	BatteryDeviceCacheEntry *entry;
 
 	if (! udi) {
-		g_warning ("UDI is NULL");
+		gpm_warning ("UDI is NULL");
 		return NULL;
 	}
 
@@ -437,7 +437,7 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* sanity check */
 	if (type_status->is_discharging && type_status->is_charging) {
-		g_warning ("battery_kind_cache_update: Sanity check kicked in! "
+		gpm_warning ("Sanity check kicked in! "
 			   "Multiple device object cannot be charging and "
 			   "discharging simultaneously!");
 		type_status->is_charging = FALSE;
@@ -602,8 +602,8 @@ power_get_summary_for_battery_kind (GpmPower   *power,
 		g_string_append_printf (summary, "%s %s (%i%%)\n", timestring,
 					_("until charged"), status->percentage_charge);
 	} else {
-		g_warning ("power_get_summary_for_battery_kind (): in an undefined state we are not charging or "
-			   "discharging and the batteries are also not fully loaded");
+		gpm_warning ("in an undefined state we are not charging or "
+			     "discharging and the batteries are also not fully loaded");
 	}
 
 	g_free (timestring);
@@ -837,10 +837,10 @@ add_battery (GpmPower   *power,
 	                capacity = design / lastfull;
 	                gpm_debug ("Primary battery capacity: %f", capacity);
 	                if (capacity < 0.5f) {
-	                        g_warning ("Your battery has a very low capacity, "
-	                                   "meaning that it may be old or broken. "
-	                                   "Battery life will be sub-optimal, "
-	                                   "and the time remaining may be incorrect.");
+	                        gpm_warning ("Your battery has a very low capacity, "
+	                                     "meaning that it may be old or broken. "
+	                                     "Battery life will be sub-optimal, "
+	                                     "and the time remaining may be incorrect.");
 	                }
 	        }
 	}
@@ -910,11 +910,11 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 	 * done before capability is present
 	 */
 	if (device_entry == NULL) {
-		g_warning ("device cache entry is NULL! udi=%s\n"
-			   "This is probably a bug in HAL where we are getting "
-			   "is_removed=false, is_added=false before the capability "
-			   "had been added. In addon-hid-ups this is likely to happen.",
-			   udi);
+		gpm_warning ("device cache entry is NULL! udi=%s\n"
+			     "This is probably a bug in HAL where we are getting "
+			     "is_removed=false, is_added=false before the capability "
+			     "had been added.",
+			     udi);
 		return;
 	}
 
@@ -923,7 +923,7 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 	type_entry = battery_kind_cache_find (power, device_entry->battery_kind);
 
 	if (type_entry == NULL) {
-		g_warning ("battery type cache entry not found for modified device");
+		gpm_warning ("battery type cache entry not found for modified device");
 		return;
 	}
 
