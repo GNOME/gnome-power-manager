@@ -247,6 +247,7 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gpm_hal_device_get_int (udi, key, &status->remaining_time);
+
 	} else {
 		/* ignore */
 		return;
@@ -433,6 +434,9 @@ battery_kind_cache_update (GpmPower              *power,
 		type_status->last_full_charge += device_status->last_full_charge;
 		type_status->current_charge += device_status->current_charge;
 		type_status->charge_rate += device_status->charge_rate;
+		/* we have to sum this here, in case the device has no rate
+		   data, and we can't compute it further down */
+		type_status->remaining_time += device_status->remaining_time;
 	}
 
 	/* sanity check */
@@ -447,18 +451,21 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
-	 * a very high charge. Solves bug #327471
-	 */
+	 * a very high charge. Solves bug #327471 */
 	type_status->percentage_charge = 100 * ((float)type_status->current_charge /
 						(float)type_status->last_full_charge);
 
-	if ((type_status->is_discharging) && (type_status->charge_rate > 0)) {
-		type_status->remaining_time = 3600 * ((float)type_status->current_charge /
-						      (float)type_status->charge_rate);
-	} else if ((type_status->is_charging) && (type_status->charge_rate > 0)){
-		type_status->remaining_time = 3600 *
-					      ((float)(type_status->last_full_charge - type_status->current_charge) /
-					      (float)type_status->charge_rate);
+	/* We only do the "better" remaining time algorithm if the battery has rate,
+	   i.e not a UPS, which gives it's own battery.remaining_time but has no rate */
+	if (type_status->charge_rate > 0) {
+		if (type_status->is_discharging) {
+			type_status->remaining_time = 3600 * ((float)type_status->current_charge /
+							      (float)type_status->charge_rate);
+		} else if (type_status->is_charging) {
+			type_status->remaining_time = 3600 *
+				((float)(type_status->last_full_charge - type_status->current_charge) /
+				(float)type_status->charge_rate);
+		}
 	}
 
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, entry->battery_kind);
@@ -550,20 +557,28 @@ battery_kind_cache_remove_device (GpmPower                *power,
 }
 
 static void
-power_get_summary_for_battery_kind (GpmPower   *power,
-			    	    GpmPowerBatteryKind battery_kind,
-			    	    GString    *summary)
+power_get_summary_for_battery_kind (GpmPower		*power,
+			    	    GpmPowerBatteryKind  battery_kind,
+			    	    GString		*summary)
 {
 	BatteryKindCacheEntry *entry;
+	GpmPowerBatteryStatus *status;
+	GpmPowerBatteryStatus  ups_status;
+	gboolean	       ups_present;
 	const char            *type_desc = NULL;
 	char                  *timestring;
-	GpmPowerBatteryStatus	       *status;
 
 	entry = battery_kind_cache_find (power, battery_kind);
 
 	if (entry == NULL) {
 		return;
 	}
+
+	/* Find out if a UPS is present as this effects our tooltip */
+	ups_present = gpm_power_get_battery_status (power,
+						    GPM_POWER_BATTERY_KIND_UPS,
+						    &ups_status);
+
 	status = &entry->battery_status;
 
 	if (! status->is_present) {
@@ -584,27 +599,45 @@ power_get_summary_for_battery_kind (GpmPower   *power,
 
 	timestring = gpm_get_timestring (status->remaining_time);
 
+	/* We don't display "Laptop Battery 16 minutes remaining" unless 
+	   there is a UPS present, where we then need to clarify what device
+	   we are refering to. For details see :
+	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
+	if (ups_present || entry->battery_kind != GPM_POWER_BATTERY_KIND_PRIMARY) {
+		g_string_append_printf (summary, "%s ", type_desc);
+	}
+
 	if (status->is_discharging) {
-		g_string_append_printf (summary, "%s (%i%%) %s\n", timestring,
-					status->percentage_charge, _("remaining"));
 
-	} else if (status->percentage_charge >= 100){
-		g_string_append_printf (summary, "%s %s\n", type_desc, _("fully charged"));
+		if (status->remaining_time > 60) {
+			g_string_append_printf (summary, "%s %s",
+						timestring, _("remaining"));
+		} else {
+			/* don't display "Unknown remaining" */
+			g_string_append_printf (summary, "%s", _("discharging"));
+		}
 
-	} else if (status->is_charging) {
-		g_string_append_printf (summary, "%s %s (%i%%)\n", timestring,
-					_("until charged"), status->percentage_charge);
-	} else if (power->priv->on_ac) {
-		/* sometimes there is a state between charging and discharging
-		   when not fully charged.  This can happen sometimes
-		   when the AC is just plugged in.  Assume that if this
-		   happens and we are on-ac that we are charging. */
-		g_string_append_printf (summary, "%s %s (%i%%)\n", timestring,
-					_("until charged"), status->percentage_charge);
+	} else if (status->percentage_charge >= 100) {
+
+		g_string_append_printf (summary, "%s", _("fully charged"));
+
+	} else if (status->is_charging || power->priv->on_ac) {
+
+		if (status->remaining_time > 60) {
+			g_string_append_printf (summary, "%s %s",
+						timestring, _("until charged"));
+		} else {
+			/* don't display "Unknown remaining" */
+			g_string_append_printf (summary, "%s", _("charging"));
+		}
+
 	} else {
 		gpm_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not fully loaded");
 	}
+	
+	/* append percentage to all devices */
+	g_string_append_printf (summary, " (%i%%)\n", status->percentage_charge);
 
 	g_free (timestring);
 }
@@ -615,30 +648,35 @@ gpm_power_get_status_summary (GpmPower *power,
 			      GError  **error)
 {
 	GString *summary = NULL;
-	int      i;
-	static const GpmPowerBatteryKind battery_kinds[] = {
-		GPM_POWER_BATTERY_KIND_PRIMARY,
-		GPM_POWER_BATTERY_KIND_UPS,
-		GPM_POWER_BATTERY_KIND_MOUSE,
-		GPM_POWER_BATTERY_KIND_KEYBOARD,
-		GPM_POWER_BATTERY_KIND_PDA
-	};
+	gboolean ups_present;
+	GpmPowerBatteryStatus status;
 
 	if (! string) {
 		return FALSE;
 	}
 
-	if (power->priv->on_ac) {
+	ups_present = gpm_power_get_battery_status (power,
+						    GPM_POWER_BATTERY_KIND_UPS,
+						    &status);
+
+	if (ups_present && status.is_discharging) {
+		/* only enable this if discharging on UPS, for details see:
+		   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
+		summary = g_string_new (_("Computer is running on backup power\n"));
+
+	} else if (power->priv->on_ac) {
 		summary = g_string_new (_("Computer is running on AC power\n"));
+
 	} else {
 		summary = g_string_new (_("Computer is running on battery power\n"));
 	}
 
-	/* do each device type we know about */
-	/* FIXME: maybe don't hard code these ? */
-	for (i = 0; i < G_N_ELEMENTS (battery_kinds); i++) {
-		power_get_summary_for_battery_kind (power, battery_kinds[i], summary);
-	}
+	/* do each device type we know about, in the correct visual order */
+	power_get_summary_for_battery_kind (power, GPM_POWER_BATTERY_KIND_PRIMARY, summary);
+	power_get_summary_for_battery_kind (power, GPM_POWER_BATTERY_KIND_UPS, summary);
+	power_get_summary_for_battery_kind (power, GPM_POWER_BATTERY_KIND_MOUSE, summary);
+	power_get_summary_for_battery_kind (power, GPM_POWER_BATTERY_KIND_KEYBOARD, summary);
+	power_get_summary_for_battery_kind (power, GPM_POWER_BATTERY_KIND_PDA, summary);
 
 	/* remove the last \n */
 	g_string_truncate (summary, summary->len-1);
@@ -650,8 +688,9 @@ gpm_power_get_status_summary (GpmPower *power,
 	return TRUE;
 }
 
+/* returns if the device was found in the cache */
 gboolean
-gpm_power_get_battery_status (GpmPower           *power,
+gpm_power_get_battery_status (GpmPower			 *power,
 			      GpmPowerBatteryKind         battery_kind,
 			      GpmPowerBatteryStatus      *battery_status)
 {

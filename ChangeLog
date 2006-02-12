@@ -1,3 +1,26 @@
+2006-02-12  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (get_stock_id): Refactor the code, leaving the
+	logic mostly the same as before. Now it's obvious what's happening
+	in the selection, and also allows a UPS icon to be chosen.
+	(battery_status_changed_primary): Slight rearrangement for logic
+	optimisation.
+	(battery_status_changed_ups): Add a check for discharging.
+
+	* src/gpm-power.c (battery_kind_cache_update): Make work with UPS's
+	as they do not provide rate information, but do provide time
+	information.
+	(power_get_summary_for_battery_kind): Simplify the logic, and make
+	"Unknown time remaining until changed" a thing of the past.
+	Also show the primary battery type, if we have a UPS installed in the
+	system so we know what the remaining time is refering to.
+	(gpm_power_get_status_summary): If we are using a discharging UPS, then
+	set our state to "Computer is running on backup power".
+	Also remove the enum structure thing as it's only used once, and it's
+	easier just to use the defines directly.
+
+	This is all to begin to fix bug : #329027
+
 2006-02-11  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness.c, src/gpm-common.h, src/gpm-debug.c, src/debug.h,

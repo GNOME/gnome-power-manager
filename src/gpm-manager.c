@@ -235,15 +235,13 @@ static char *
 get_stock_id (GpmManager *manager,
 	      int         icon_policy)
 {
-	gboolean primary_present;
-	GpmPowerBatteryStatus primary_status;
-	gboolean present;
-	GpmPowerBatteryStatus status;
-	int	 index;
+	GpmPowerBatteryStatus status_primary;
+	GpmPowerBatteryStatus status_ups;
+	GpmPowerBatteryStatus status_mouse;
+	GpmPowerBatteryStatus status_keyboard;
 	gboolean on_ac;
-	char    *stock_id;
-
-	stock_id = NULL;
+	gboolean present;
+	int index;
 
 	gpm_debug ("Getting stock icon for tray");
 
@@ -251,108 +249,91 @@ get_stock_id (GpmManager *manager,
 		gpm_debug ("The key " GPM_PREF_ICON_POLICY
 			   " is set to never, so no icon will be displayed.\n"
 			   "You can change this using gnome-power-preferences");
-		goto done;
+		return NULL;
 	}
+
+	/* Finds if a device was found in the cache AND that it is present */
+	present = gpm_power_get_battery_status (manager->priv->power,
+						GPM_POWER_BATTERY_KIND_PRIMARY,
+						&status_primary);
+	status_primary.is_present &= present;
+	present = gpm_power_get_battery_status (manager->priv->power,
+						GPM_POWER_BATTERY_KIND_UPS,
+						&status_ups);
+	status_ups.is_present &= present;
+	present = gpm_power_get_battery_status (manager->priv->power,
+						GPM_POWER_BATTERY_KIND_MOUSE,
+						&status_mouse);
+	status_mouse.is_present &= present;
+	present = gpm_power_get_battery_status (manager->priv->power,
+						GPM_POWER_BATTERY_KIND_KEYBOARD,
+						&status_keyboard);
+	status_keyboard.is_present &= present;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	primary_present = gpm_power_get_battery_status (manager->priv->power,
-						        GPM_POWER_BATTERY_KIND_PRIMARY,
-						        &primary_status);
-	primary_present &= primary_status.is_present;
-
-	if (primary_present && primary_status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (primary_status.percentage_charge);
-
+	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
+	if (status_primary.is_present &&
+	    status_primary.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		index = get_icon_index_from_percent (status_primary.percentage_charge);
 		if (on_ac) {
-			stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		} else {
-			stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
+			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 		}
-
-		goto done;
+	} else if (status_ups.is_present &&
+		   status_ups.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		index = get_icon_index_from_percent (status_ups.percentage_charge);
+		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+	} else if (status_mouse.is_present &&
+		   status_mouse.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		return g_strdup_printf ("gnome-power-mouse");
+	} else if (status_keyboard.is_present &&
+		   status_keyboard.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		return g_strdup_printf ("gnome-power-keyboard");
 	}
 
-	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_UPS, &status);
-	present &= status.is_present;
-
-	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (status.percentage_charge);
-
-		stock_id = g_strdup_printf ("gnome-power-ups-%d-of-8", index);
-		goto done;
-	}
-
-	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_MOUSE, &status);
-	present &= status.is_present;
-
-	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		stock_id = g_strdup_printf ("gnome-power-mouse");
-		goto done;
-	}
-
-	present = gpm_power_get_battery_status (manager->priv->power, GPM_POWER_BATTERY_KIND_KEYBOARD, &status);
-	present &= status.is_present;
-
-	if (present && status.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		stock_id = g_strdup_printf ("gnome-power-keyboard");
-		goto done;
-	}
-
-	/*
-	 * Check if we should just show the charging / discharging icon
-	 * even when not low or critical.
-	 */
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
 		gpm_debug ("no devices critical, so no icon will be displayed.");
-		stock_id = NULL;
-		goto done;
+		return NULL;
 	}
 
-	if (primary_present) {
-		if (primary_status.is_charging || primary_status.is_discharging) {
-			index = get_icon_index_from_percent (primary_status.percentage_charge);
-			if (on_ac) {
-				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-			} else {
-				stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
-			}
-			goto done;
+	/* we try (DIS)CHARGING: PRIMARY, UPS */
+	if (status_primary.is_present &&
+	    (status_primary.is_charging || status_primary.is_charging)) {
+		index = get_icon_index_from_percent (status_primary.percentage_charge);
+		if (on_ac) {
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
+		} else {
+			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 		}
+	} else if (status_ups.is_present &&
+		   (status_ups.is_charging || status_ups.is_charging)) {
+		index = get_icon_index_from_percent (status_ups.percentage_charge);
+		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
 
 	/* Check if we should just show the icon all the time */
 	if (icon_policy == GPM_ICON_POLICY_CHARGE) {
 		gpm_debug ("no devices (dis)charging, so no icon will be displayed.");
-		stock_id = NULL;
-		goto done;
+		return NULL;
 	}
 
-	/* Do the rest of the battery icon states */
-	if (primary_present) {
-		index = get_icon_index_from_percent (primary_status.percentage_charge);
-
+	/* we try PRESENT: PRIMARY, UPS */
+	if (status_primary.is_present) {
+		index = get_icon_index_from_percent (status_primary.percentage_charge);
 		if (on_ac) {
-			if (!primary_status.is_charging && !primary_status.is_discharging) {
-				stock_id = g_strdup ("gnome-power-ac-charged");
-			} else {
-				stock_id = g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-			}
-
-			goto done;
+			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		} else {
-			stock_id = g_strdup_printf ("gnome-power-bat-%d-of-8", index);
-			goto done;
+			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
 		}
+	} else if (status_ups.is_present) {
+		index = get_icon_index_from_percent (status_ups.percentage_charge);
+		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
 	}
 
-	/* We fallback to the ac_adapter icon */
-	stock_id = g_strdup_printf ("gnome-dev-acadapter");
-
- done:
-	gpm_debug ("Going to use stock id: %s", stock_id);
-
-	return stock_id;
+	/* we fallback to the ac_adapter icon */
+	return g_strdup_printf ("gnome-dev-acadapter");
 }
 
 static void
@@ -370,6 +351,8 @@ tray_icon_update (GpmManager *manager)
 
 	/* try to get stock image */
 	stock_id = get_stock_id (manager, icon_policy);
+
+	gpm_debug ("Going to use stock id: %s", stock_id);
 
 	/* only create if we have a valid filename */
 	if (stock_id) {
@@ -1014,9 +997,20 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
+	if (! battery_status->is_discharging) {
+		gpm_debug ("%s is not discharging", battery_kind_to_string (battery_kind));
+		return;
+	}
+
 	warning_type = gpm_manager_get_warning_type (battery_status, manager->priv->use_time_to_notify);
 
-	if (battery_status->is_discharging && warning_type == GPM_WARNING_ACTION) {
+	/* no point continuing, we are not going to match */
+	if (warning_type == GPM_WARNING_NONE) {
+		gpm_debug ("No warning");
+		return;
+	}
+
+	if (warning_type == GPM_WARNING_ACTION) {
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000,
 				      _("Critical action"),
@@ -1031,17 +1025,6 @@ battery_status_changed_primary (GpmManager	      *manager,
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
 		gpm_debug ("No tray icon, so no notifications");
-		return;
-	}
-
-	if (! battery_status->is_discharging) {
-		gpm_debug ("Primary battery is not discharging");
-		return;
-	}
-
-	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE) {
-		gpm_debug ("No warning");
 		return;
 	}
 
@@ -1079,7 +1062,8 @@ battery_status_changed_ups (GpmManager	          *manager,
 	const char *title = NULL;
 	const char *name;
 
-	/* FIXME: UPS should probably do a low power event */
+	/* FIXME: UPS should probably do a low power event to save the system */
+	/* FIXME: UPS should warn when energised "Your system is running on backup power!" */
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
@@ -1089,6 +1073,11 @@ battery_status_changed_ups (GpmManager	          *manager,
 	/* If no tray icon then don't notify */
 	if (! manager->priv->tray_icon) {
 		gpm_debug ("No tray icon, so no notifications");
+		return;
+	}
+
+	if (! battery_status->is_discharging) {
+		gpm_debug ("%s is not discharging", battery_kind_to_string(battery_kind));
 		return;
 	}
 
