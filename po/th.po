@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-29 20:55+0700\n"
-"PO-Revision-Date: 2006-01-29 21:38+0700\n"
+"POT-Creation-Date: 2006-02-12 18:39+0700\n"
+"PO-Revision-Date: 2006-02-12 18:49+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgid "Power Management"
 msgstr "การใช้พลังงาน"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:32
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
 msgid "Power Manager"
 msgstr "เครื่องมือจัดการการใช้พลังงาน"
 
@@ -78,15 +78,13 @@ msgstr "ผู้ใช้สามารถพักคอมพิวเตอ
 msgid ""
 "If this particular user should have hibernate on the drop-down menu and in "
 "the prefs"
-msgstr ""
-"กำหนดว่าผู้ใช้นี้ควรมีรายการจำศีลเครื่องในเมนูและการปรับแต่งหรือไม่"
+msgstr "กำหนดว่าผู้ใช้นี้ควรมีรายการจำศีลเครื่องในเมนูและการปรับแต่งหรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "If this particular user should have suspend on the drop-down menu and in the "
 "prefs"
-msgstr ""
-"กำหนดว่าผู้ใช้นี้ควรมีรายการพักเครื่องในเมนูและการปรับแต่งหรือไม่"
+msgstr "กำหนดว่าผู้ใช้นี้ควรมีรายการพักเครื่องในเมนูและการปรับแต่งหรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If to dim the screen after a period of inactivity"
@@ -96,8 +94,7 @@ msgstr "จะหรี่จอหลังไม่มีความเคล
 msgid ""
 "If we should dim the screen to save power when the computer is marked as "
 "idle."
-msgstr ""
-"กำหนดว่าจะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่คอมพิวเตอร์เริ่มเดินเครื่องเปล่าหรือไม่"
+msgstr "กำหนดว่าจะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่คอมพิวเตอร์เริ่มเดินเครื่องเปล่าหรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If we should notify the user that the AC adapter has been removed"
@@ -270,26 +267,26 @@ msgstr "_ชนิดการหลับของคอมพิวเตอ�
 msgid "_Never display icon"
 msgstr "ไ_ม่ต้องแสดงไอคอน"
 
-#: ../src/eggtrayicon.c:132
+#: ../src/eggtrayicon.c:125
 msgid "Orientation"
 msgstr "แนววาง"
 
-#: ../src/eggtrayicon.c:133
+#: ../src/eggtrayicon.c:126
 msgid "The orientation of the tray."
 msgstr "แนววางของถาด"
 
-#: ../src/gpm-common.c:55
+#: ../src/gpm-common.c:47
 msgid "Unknown time"
 msgstr "ไม่ทราบกำหนดเวลา"
 
-#: ../src/gpm-common.c:60
+#: ../src/gpm-common.c:52
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i นาที"
 msgstr[1] "%i นาที"
 
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:63
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -298,52 +295,75 @@ msgstr[1] "%i ชั่วโมง"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:77
+#: ../src/gpm-common.c:69
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:78
+#: ../src/gpm-common.c:70
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ชั่วโมง"
 msgstr[1] "ชั่วโมง"
 
-#: ../src/gpm-common.c:79
+#: ../src/gpm-common.c:71
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
 msgstr[1] "นาที"
 
-#: ../src/gpm-common.h:33
+#: ../src/gpm-common.h:31
 msgid "Power Manager for the GNOME desktop"
 msgstr "โปรแกรมจัดการการใช้พลังงานสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/gpm-main.c:315
+#: ../src/gpm-main.c:308
 msgid "Do not daemonize"
 msgstr "ไม่ต้องแปลงเป็นดีมอน"
 
-#: ../src/gpm-main.c:317 ../src/gpm-prefs.c:672
+#: ../src/gpm-main.c:310 ../src/gpm-prefs.c:662
 msgid "Show extra debugging information"
 msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติม"
 
-#: ../src/gpm-manager.c:508
+#: ../src/gpm-manager.c:500
 msgid "AC Power Unplugged"
 msgstr "ปลั๊กไฟ AC ถูกถอด"
 
-#: ../src/gpm-manager.c:510
+#: ../src/gpm-manager.c:502
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี"
 
-#: ../src/gpm-manager.c:596
+#: ../src/gpm-manager.c:945
+msgid "Power Critically Low"
+msgstr "พลังงานต่ำถึงขั้นวิกฤต"
+
+#: ../src/gpm-manager.c:949
+msgid "Power Very Low"
+msgstr "พลังงานต่ำมาก"
+
+#: ../src/gpm-manager.c:953
+msgid "Power Low"
+msgstr "พลังงานต่ำ"
+
+#: ../src/gpm-manager.c:993
 msgid "Battery Charged"
 msgstr "อัดแบตเตอรีเสร็จแล้ว"
 
-#: ../src/gpm-manager.c:598
+#: ../src/gpm-manager.c:995
 msgid "Your battery is now fully charged"
 msgstr "แบตเตอรีของคุณอัดไฟเต็มแล้ว"
 
-#: ../src/gpm-manager.c:653 ../src/gpm-manager.c:670 ../src/gpm-manager.c:686
+#: ../src/gpm-manager.c:1016
+msgid "Critical action"
+msgstr "ปฏิบัติการขั้นวิกฤต"
+
+#: ../src/gpm-manager.c:1018
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr "ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤตแล้ว และเครื่องนี้กำลังจะปิด"
+
+#. FIXME: do different warnings for each GPM_WARNING_
+#: ../src/gpm-manager.c:1038
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -352,98 +372,109 @@ msgstr ""
 "คุณเหลือพลังงานในแบตเตอรีอีกประมาณ <b>%s</b> (%d%%) กรุณาเสียบที่แปลงไฟ AC "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-manager.c:659
-msgid "Battery Critically Low"
-msgstr "แบตเตอรีต่ำถึงขั้นวิกฤต"
-
-#: ../src/gpm-manager.c:676
-msgid "Battery Very Low"
-msgstr "แบตเตอรีต่ำมาก"
-
-#: ../src/gpm-manager.c:692
-msgid "Battery Low"
-msgstr "แบตเตอรีต่ำ"
-
-#: ../src/gpm-manager.c:1032
-msgid "Critical action"
-msgstr "ปฏิบัติการขั้นวิกฤต"
-
-#: ../src/gpm-manager.c:1034
+#: ../src/gpm-manager.c:1100
+#, c-format
 msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
+"power to your computer toavoid losing data."
 msgstr ""
-"ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤตแล้ว และเครื่องนี้กำลังจะปิด"
+"คุณเหลือพลังงานใน UPS อีกประมาณ <b>%s</b> (%d%%) กรุณาต่อแหล่งจ่ายไฟ "
+"เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-power.c:289 ../src/gpm-power.c:303
-msgid "Unknown"
-msgstr "ไม่ทราบ"
+#: ../src/gpm-manager.c:1173
+#, c-format
+msgid ""
+"The %s device attached to this computer is low in power (%d%%). This device "
+"will soon stop functioningif not charged."
+msgstr ""
+"อุปกรณ์ %s ที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%d%%) อุปกรณ์นี้จะหยุดทำงานในไม่ช้า "
+"ถ้าไม่ประจุไฟเพิ่ม"
 
-#: ../src/gpm-power.c:293
+#: ../src/gpm-power.c:305
 msgid "Laptop battery"
 msgstr "แบตเตอรีแล็ปท็อป"
 
-#: ../src/gpm-power.c:295
+#: ../src/gpm-power.c:307
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:297
+#: ../src/gpm-power.c:309
 msgid "Wireless mouse"
 msgstr "เมาส์ไร้สาย"
 
-#: ../src/gpm-power.c:299
+#: ../src/gpm-power.c:311
 msgid "Wireless keyboard"
 msgstr "แป้นพิมพ์ไร้สาย"
 
-#: ../src/gpm-power.c:301
+#: ../src/gpm-power.c:313
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:602 ../src/gpm-power.c:623
-msgid "until charged"
-msgstr "จะอัดเต็ม"
+#: ../src/gpm-power.c:315
+msgid "Unknown"
+msgstr "ไม่ทราบ"
 
-#: ../src/gpm-power.c:609
+#: ../src/gpm-power.c:614
 msgid "remaining"
 msgstr "จะหมด"
 
-#: ../src/gpm-power.c:614
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:617
+msgid "discharging"
+msgstr "กำลังจ่ายไฟ"
+
+#: ../src/gpm-power.c:622
 msgid "fully charged"
 msgstr "อัดเต็มแล้ว"
 
-#: ../src/gpm-power.c:647
+#: ../src/gpm-power.c:628
+msgid "until charged"
+msgstr "จะอัดเต็ม"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:631
+msgid "charging"
+msgstr "กำลังอัดไฟ"
+
+#. only enable this if discharging on UPS, for details see:
+#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
+#: ../src/gpm-power.c:665
+msgid "Computer is running on backup power\n"
+msgstr "คอมพิวเตอร์กำลังใช้ไฟจากแหล่งจ่ายไฟสำรอง\n"
+
+#: ../src/gpm-power.c:668
 msgid "Computer is running on AC power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากปลั๊กไฟ AC\n"
 
-#: ../src/gpm-power.c:649
+#: ../src/gpm-power.c:671
 msgid "Computer is running on battery power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากแบตเตอรี\n"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:107
 msgid "_Suspend"
 msgstr "_พักเครื่อง"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:108
 msgid "Suspend the computer"
 msgstr "พักการทำงานของคอมพิวเตอร์"
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:109
 msgid "Hi_bernate"
 msgstr "_จำศีลเครื่อง"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:110
 msgid "Make the computer go to sleep"
 msgstr "ให้คอมพิวเตอร์หลับ"
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:111
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
-#: ../src/gpm-tray-icon.c:112
+#: ../src/gpm-tray-icon.c:113
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/gpm-tray-icon.c:114
+#: ../src/gpm-tray-icon.c:115
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
@@ -491,33 +522,36 @@ msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:57
+#: ../src/gpm-prefs.c:55
 msgid "Suspend"
 msgstr "พักเครื่อง"
 
-#: ../src/gpm-prefs.c:58
+#: ../src/gpm-prefs.c:56
 msgid "Shutdown"
 msgstr "ปิดเครื่อง"
 
-#: ../src/gpm-prefs.c:59
+#: ../src/gpm-prefs.c:57
 msgid "Hibernate"
 msgstr "จำศีลเครื่อง"
 
-#: ../src/gpm-prefs.c:60
+#: ../src/gpm-prefs.c:58
 msgid "Do nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: ../src/gpm-prefs.c:216
+#: ../src/gpm-prefs.c:206
 msgid "Never"
 msgstr "ไม่ต้อง"
 
-#: ../src/gpm-prefs.c:465
+#: ../src/gpm-prefs.c:455
 msgid "Configuration"
 msgstr "<b>การตั้งค่า</b>"
 
-#: ../src/gpm-prefs.c:685
+#: ../src/gpm-prefs.c:675
 msgid "Power Preferences"
 msgstr "ปรับแต่งการใช้พลังงาน"
+
+#~ msgid "Battery Low"
+#~ msgstr "แบตเตอรีต่ำ"
 
 #, fuzzy
 #~ msgid "The battery critical action threshold."
@@ -563,12 +597,6 @@ msgstr "ปรับแต่งการใช้พลังงาน"
 
 #~ msgid "GNOME Power Manager"
 #~ msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
-
-#~ msgid "charging"
-#~ msgstr "กำลังอัดไฟ"
-
-#~ msgid "discharging"
-#~ msgstr "กำลังจ่ายไฟ"
 
 #~ msgid "charged"
 #~ msgstr "อัดไฟเต็ม"
@@ -626,9 +654,6 @@ msgstr "ปรับแต่งการใช้พลังงาน"
 
 #~ msgid "LiION Battery"
 #~ msgstr "แบตเตอรี LiION"
-
-#~ msgid "Low Power Mode"
-#~ msgstr "โหมดแบตเตอรีต่ำ"
 
 #~ msgid "Manufacturer:"
 #~ msgstr "ผู้ผลิต:"
