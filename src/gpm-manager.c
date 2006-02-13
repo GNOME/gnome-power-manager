@@ -61,9 +61,6 @@ static void     gpm_manager_class_init (GpmManagerClass *klass);
 static void     gpm_manager_init       (GpmManager      *manager);
 static void     gpm_manager_finalize   (GObject         *object);
 
-static gboolean gpm_manager_setup_tray_icon (GpmManager *manager,
-                                             GtkObject  *object);
-
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
 
 typedef enum {
@@ -360,13 +357,12 @@ tray_icon_update (GpmManager *manager)
 	if (stock_id) {
 		char *tooltip = NULL;
 
-		/* make sure that we have a valid object */
-		if (! manager->priv->tray_icon) {
-			gpm_manager_setup_tray_icon (manager, NULL);
-		}
-
 		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
 						    stock_id);
+						    
+		/* make sure that we are visible */
+		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), TRUE);
+
 		g_free (stock_id);
 
 		gpm_power_get_status_summary (manager->priv->power, &tooltip, NULL);
@@ -378,14 +374,8 @@ tray_icon_update (GpmManager *manager)
 		/* remove icon */
 		gpm_debug ("no icon will be displayed");
 
-		if (manager->priv->tray_icon) {
-			/* disconnect the signal so we don't restart */
-			g_signal_handlers_disconnect_by_func (manager->priv->tray_icon,
-							      G_CALLBACK (gpm_manager_setup_tray_icon),
-							      manager);
-			gtk_widget_destroy (GTK_WIDGET (manager->priv->tray_icon));
-			manager->priv->tray_icon = NULL;
-		}
+		/* make sure that we are hidden */
+		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), FALSE);
 	}
 }
 
@@ -696,7 +686,8 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
-	ret = gpm_hal_suspend (0);
+	//ret = gpm_hal_suspend (0);
+	ret = FALSE;
 	if (! ret) {
 		char *message;
 		message = g_strdup_printf (_("Your computer failed to %s.\n"
@@ -1005,6 +996,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
+		gpm_debug ("Resetting last_primary_warning to NONE");
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
@@ -1049,12 +1041,6 @@ battery_status_changed_primary (GpmManager	      *manager,
 		/* wait 10 seconds for user-panic */
 		g_usleep (1000 * 1000 * 10);
 		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
-	}
-
-	/* If no tray icon then don't notify */
-	if (! manager->priv->tray_icon) {
-		gpm_debug ("No tray icon, so no notifications");
-		return;
 	}
 
 	/* Always check if we already notified the user */
@@ -1108,12 +1094,6 @@ battery_status_changed_ups (GpmManager	          *manager,
 		manager->priv->last_ups_warning = GPM_WARNING_NONE;
 	}
 
-	/* If no tray icon then don't notify */
-	if (! manager->priv->tray_icon) {
-		gpm_debug ("No tray icon, so no notifications");
-		return;
-	}
-
 	if (! battery_status->is_discharging) {
 		gpm_debug ("%s is not discharging", battery_kind_to_string(battery_kind));
 		return;
@@ -1164,13 +1144,6 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	char *message = NULL;
 	const char *title = NULL;
 	const char *name;
-
-	/* mouse, keyboard and PDA do not cause low power events */
-	/* If no tray icon then don't notify */
-	if (! manager->priv->tray_icon) {
-		gpm_debug ("no tray icon, so no notifications");
-		return;
-	}
 
 	/* mouse, keyboard and PDA have no time, just percentage */
 	warning_type = gpm_manager_get_warning_type (battery_status, FALSE);
@@ -1401,53 +1374,6 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 	gpm_manager_suspend (manager, NULL);
 }
 
-static gboolean
-gpm_manager_setup_tray_icon (GpmManager *manager,
-			     GtkObject	*object)
-{
-	gboolean enabled;
-
-	if (manager->priv->tray_icon) {
-		gpm_debug ("caught destroy event for tray icon %p",
-			 manager->priv->tray_icon);
-		gtk_object_sink (GTK_OBJECT (manager->priv->tray_icon));
-		manager->priv->tray_icon = NULL;
-		gpm_debug ("finished sinking tray");
-	}
-
-	gpm_debug ("creating new tray icon");
-	manager->priv->tray_icon = gpm_tray_icon_new ();
-
-	gpm_manager_can_suspend (manager, &enabled, NULL);
-	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
-
-	gpm_manager_can_hibernate (manager, &enabled, NULL);
-	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
-
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "destroy",
-				 G_CALLBACK (gpm_manager_setup_tray_icon),
-				 manager,
-				 G_CONNECT_SWAPPED);
-
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "suspend",
-				 G_CALLBACK (gpm_manager_tray_icon_suspend),
-				 manager,
-				 G_CONNECT_SWAPPED);
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "hibernate",
-				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
-				 manager,
-				 G_CONNECT_SWAPPED);
-
-	gtk_widget_show_all (GTK_WIDGET (manager->priv->tray_icon));
-
-	gpm_debug ("done creating new tray icon %p", manager->priv->tray_icon);
-
-	return TRUE;
-}
-
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
 			const char    *udi,
@@ -1462,6 +1388,8 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
+	gboolean enabled;
+
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->gconf_client = gconf_client_get_default ();
@@ -1497,6 +1425,25 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (idle_changed_cb), manager);
 
 	manager->priv->dpms = gpm_dpms_new ();
+
+	gpm_debug ("creating new tray icon");
+	manager->priv->tray_icon = gpm_tray_icon_new ();
+
+	gpm_manager_can_suspend (manager, &enabled, NULL);
+	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+	gpm_manager_can_hibernate (manager, &enabled, NULL);
+	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+
+	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
+				 "suspend",
+				 G_CALLBACK (gpm_manager_tray_icon_suspend),
+				 manager,
+				 G_CONNECT_SWAPPED);
+	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
+				 "hibernate",
+				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
+				 manager,
+				 G_CONNECT_SWAPPED);
 
 	/* coldplug so we are in the correct state at startup */
 	sync_dpms_policy (manager);
@@ -1554,7 +1501,7 @@ gpm_manager_finalize (GObject *object)
 	}
 
 	if (manager->priv->tray_icon != NULL) {
-		gtk_widget_destroy (GTK_WIDGET (manager->priv->tray_icon));
+		g_object_unref (manager->priv->tray_icon);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);

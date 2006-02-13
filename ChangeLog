@@ -1,5 +1,33 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (tray_icon_update): This function is not now
+	responsible for creating and destroying the icon, it is done
+	unconditionally at init, and then just hidden and shown as required.
+	Rationale: we are showing notifications for lots of power stuff, and
+	these break when you choose any other state than "Always Show".
+	It also fixes the bug (#331002) as we are not relying on a complex
+	chain of events to do the notifications. Most of this stuff is async,
+	so it needs to be kept simple.
+
+	(battery_status_changed_primary, battery_status_changed_ups,
+	battery_status_changed_misc): Allow notifications without an icon
+	showing in the tray.
+
+	(gpm_manager_init): Set up the icon callbacks here, rather than in
+	gpm_manager_setup_tray_icon() as this makes it *way* simpler.
+
+	src/gpm-tray-icon.c: Add the is_visible flag so we can have quick
+	safe access to the visible property. Bit of a bodge.
+	Also convert a metric tonne of spaces to tabs in this file.
+	Add the function gpm_tray_icon_show() so we can set the visiblity of
+	the icon easily.
+
+	(libnotify_event)'s: Allow notifications to be sent without the icon
+	image, where we just use the system default if there is no widget
+	present. This is what other program using libnotify do.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.h: Add location of FAQ page as GPM_FAQ_URL.
 
 	* src/gpm-manager.c (gpm_manager_suspend, gpm_manager_hibernate):

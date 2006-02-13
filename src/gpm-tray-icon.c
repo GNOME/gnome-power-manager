@@ -66,11 +66,10 @@ struct GpmTrayIconPrivate
 	GtkWidget      *ebox;
 
 	gboolean        show_notifications;
+	gboolean        is_visible;
 
 	gboolean        can_suspend;
 	gboolean        can_hibernate;
-
-	gboolean        embedded;
 
 #if (LIBNOTIFY_VERSION_MINOR == 2)
 	NotifyHandle   *notify;
@@ -80,14 +79,14 @@ struct GpmTrayIconPrivate
 };
 
 enum {
-        SUSPEND,
-        HIBERNATE,
-        LAST_SIGNAL
+	SUSPEND,
+	HIBERNATE,
+	LAST_SIGNAL
 };
 
 enum {
-        PROP_0,
-        PROP_MODE
+	PROP_0,
+	PROP_MODE
 };
 
 typedef enum {
@@ -176,6 +175,7 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 				    const char  *stock_id)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+	gpm_debug ("Setting icon to %s", stock_id);
 
 	if (stock_id) {
 		gtk_image_set_from_stock (GTK_IMAGE (icon->priv->image),
@@ -214,9 +214,9 @@ gpm_tray_icon_show_preferences_cb (GtkAction   *action,
 {
 	const char *command = "gnome-power-preferences";
 
-        if (! g_spawn_command_line_async (command, NULL)) {
-                gpm_warning ("Couldn't execute command: %s", command);
-        }
+	if (! g_spawn_command_line_async (command, NULL)) {
+		gpm_warning ("Couldn't execute command: %s", command);
+	}
 }
 
 static void
@@ -269,8 +269,9 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 	/*
 	 * Translators comment: put your own name here to appear in the about dialog.
 	 */
-  	if (!strcmp (translators, "translator-credits"))
+  	if (!strcmp (translators, "translator-credits")) {
 		translators = NULL;
+	}
 
 	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
 
@@ -278,18 +279,18 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 
 	gtk_show_about_dialog (NULL,
-                               "name", GPM_NAME,
-                               "version", VERSION,
-                               "copyright", "Copyright \xc2\xa9 2005 Richard Hughes",
-                               "license", license_trans,
-                               "website", GPM_HOMEPAGE_URL,
-                               "comments", GPM_DESCRIPTION,
-                               "authors", authors,
-                               "documenters", documenters,
-                               "artists", artists,
-                               "translator-credits", translators,
-                               "logo", pixbuf,
-                               NULL);
+		               "name", GPM_NAME,
+		               "version", VERSION,
+		               "copyright", "Copyright \xc2\xa9 2005 Richard Hughes",
+		               "license", license_trans,
+		               "website", GPM_HOMEPAGE_URL,
+		               "comments", GPM_DESCRIPTION,
+		               "authors", authors,
+		               "documenters", documenters,
+		               "artists", artists,
+		               "translator-credits", translators,
+		               "logo", pixbuf,
+		               NULL);
 
 	g_object_unref (pixbuf);
 }
@@ -315,10 +316,11 @@ tray_popup_position_menu (GtkMenu  *menu,
 	menu_xpos += widget->allocation.x;
 	menu_ypos += widget->allocation.y;
 
-	if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2)
+	if (menu_ypos > gdk_screen_get_height (gtk_widget_get_screen (widget)) / 2) {
 		menu_ypos -= (requisition.height + 1);
-	else
+	} else {
 		menu_ypos += widget->allocation.height + 1;
+	}
 
 	*x = menu_xpos;
 	*y = menu_ypos;
@@ -440,56 +442,53 @@ gpm_tray_icon_constructor (GType                  type,
 }
 
 static void
-gpm_tray_icon_embedded (GtkPlug *plug)
-{
-	GpmTrayIcon *tray;
-
-	tray = GPM_TRAY_ICON (plug);
-
-	tray->priv->embedded = TRUE;
-
-	if (GTK_PLUG_CLASS (parent_class)->embedded)
-		GTK_PLUG_CLASS (parent_class)->embedded (plug);
-}
-
-static void
 gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-	GtkPlugClass   *plug_class = GTK_PLUG_CLASS (klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize	   = gpm_tray_icon_finalize;
 	object_class->get_property = gpm_tray_icon_get_property;
 	object_class->set_property = gpm_tray_icon_set_property;
-        object_class->constructor  = gpm_tray_icon_constructor;
-
-	plug_class->embedded       = gpm_tray_icon_embedded;
+	object_class->constructor  = gpm_tray_icon_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmTrayIconPrivate));
 
-        signals [SUSPEND] =
-                g_signal_new ("suspend",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmTrayIconClass, suspend),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
-        signals [HIBERNATE] =
-                g_signal_new ("hibernate",
-                              G_TYPE_FROM_CLASS (object_class),
-                              G_SIGNAL_RUN_LAST,
-                              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-                              NULL,
-                              NULL,
-                              g_cclosure_marshal_VOID__VOID,
-                              G_TYPE_NONE,
-                              0);
+	signals [SUSPEND] =
+		g_signal_new ("suspend",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GpmTrayIconClass, suspend),
+		              NULL,
+		              NULL,
+		              g_cclosure_marshal_VOID__VOID,
+		              G_TYPE_NONE,
+		              0);
+	signals [HIBERNATE] =
+		g_signal_new ("hibernate",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
+		              NULL,
+		              NULL,
+		              g_cclosure_marshal_VOID__VOID,
+		              G_TYPE_NONE,
+		              0);
 
+}
+
+void
+gpm_tray_icon_show (GpmTrayIcon *icon,
+		    gboolean     enabled)
+{
+	if (enabled) {
+		gtk_widget_show_all (GTK_WIDGET (icon));
+		icon->priv->is_visible = TRUE;
+	} else {
+		gtk_widget_hide_all (GTK_WIDGET (icon));
+		icon->priv->is_visible = FALSE;
+	}
 }
 
 static void
@@ -502,29 +501,30 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	/* FIXME: make this a property */
 	icon->priv->show_notifications = TRUE;
 
-        icon->priv->tooltips = gtk_tooltips_new ();
+	icon->priv->tooltips = gtk_tooltips_new ();
 	icon->priv->ui_manager = gtk_ui_manager_new ();
 
-        icon->priv->ebox = gtk_event_box_new ();
-        g_signal_connect_object (G_OBJECT (icon->priv->ebox),
-                                 "button_press_event",
-                                 G_CALLBACK (gpm_tray_icon_button_press_cb),
-                                 icon, 0);
+	icon->priv->ebox = gtk_event_box_new ();
+	g_signal_connect_object (G_OBJECT (icon->priv->ebox),
+		                 "button_press_event",
+		                 G_CALLBACK (gpm_tray_icon_button_press_cb),
+		                 icon, 0);
 
 	icon->priv->image = gtk_image_new ();
 
-        gtk_container_add (GTK_CONTAINER (icon->priv->ebox), icon->priv->image);
+	gtk_container_add (GTK_CONTAINER (icon->priv->ebox), icon->priv->image);
 
-        gtk_container_add (GTK_CONTAINER (icon), icon->priv->ebox);
-        gtk_widget_show_all (GTK_WIDGET (icon->priv->ebox));
+	gtk_container_add (GTK_CONTAINER (icon), icon->priv->ebox);
+	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 
 #if (LIBNOTIFY_VERSION_MINOR >= 3)
 	ret = notify_init (GPM_NAME);
 #elif (LIBNOTIFY_VERSION_MINOR == 2)
 	ret = notify_glib_init (GPM_NAME, NULL);
 #endif
-	if (!ret)
+	if (!ret) {
 		gpm_warning ("gpm_tray_icon_init failed");
+	}
 }
 
 static void
@@ -539,7 +539,7 @@ gpm_tray_icon_finalize (GObject *object)
 
 	g_return_if_fail (tray_icon->priv != NULL);
 
-        gtk_object_destroy (GTK_OBJECT (tray_icon->priv->tooltips));
+	gtk_object_destroy (GTK_OBJECT (tray_icon->priv->tooltips));
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -560,10 +560,7 @@ get_widget_position (GtkWidget *widget,
 		     int       *x,
 		     int       *y)
 {
-	/* assertion checks */
 	g_assert (widget);
-	g_assert (x);
-	g_assert (y);
 
 	gdk_window_get_origin (GDK_WINDOW (widget->window), x, y);
 
@@ -605,16 +602,19 @@ libnotify_event (GpmTrayIcon             *tray,
 
 	tray->priv->notify = notify_notification_new (subject, content, GNOME_DEV_BATTERY, NULL);
 
-        notify_notification_set_timeout (tray->priv->notify, timeout);
+	notify_notification_set_timeout (tray->priv->notify, timeout);
 
-	get_widget_position (GTK_WIDGET (tray), &x, &y);
-	notify_notification_set_hint_int32 (tray->priv->notify, "x", x);
-	notify_notification_set_hint_int32 (tray->priv->notify, "y", y);
+	if (tray->priv->is_visible) {
+		get_widget_position (GTK_WIDGET (tray), &x, &y);
+		notify_notification_set_hint_int32 (tray->priv->notify, "x", x);
+		notify_notification_set_hint_int32 (tray->priv->notify, "y", y);
+	}
 
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
 		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
-	else
+	} else {
 		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
+	}
 
 	g_signal_connect (tray->priv->notify, "closed", G_CALLBACK (notification_closed_cb), tray);
 
@@ -643,16 +643,18 @@ libnotify_event (GpmTrayIcon             *tray,
 	/* assertion checks */
 	g_assert (content);
 
-	get_widget_position (GTK_WIDGET (tray), &x, &y);
-	hints = notify_hints_new();
-	notify_hints_set_int (hints, "x", x);
-	notify_hints_set_int (hints, "y", y);
-
+	hints = notify_hints_new ();
+	if (tray->priv->is_visible) {
+		get_widget_position (GTK_WIDGET (tray), &x, &y);
+		notify_hints_set_int (hints, "x", x);
+		notify_hints_set_int (hints, "y", y);
+	}
 	/* echo to terminal too */
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
 		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
-	else
+	} else {
 		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
+	}
 
 	/* use default g-p-m icon for now */
 	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
@@ -698,10 +700,11 @@ libnotify_event (GpmTrayIcon             *tray,
 	/* assertion checks */
 	g_assert (content);
 
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL)
+	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
 		msg_type = GTK_MESSAGE_WARNING;
-	else
+	} else {
 		msg_type = GTK_MESSAGE_INFO;
+	}
 
 	dialog = gtk_message_dialog_new_with_markup (NULL,
 						     GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -732,13 +735,8 @@ gpm_tray_icon_notify (GpmTrayIcon *icon,
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
-	if (!icon->priv->show_notifications) {
+	if (! icon->priv->show_notifications) {
 		gpm_debug ("ignoring notification: %s", primary);
-		return;
-	}
-
-	if (! icon->priv->embedded) {
-		gpm_debug ("Not embedded in a tray - ignoring notification");
 		return;
 	}
 

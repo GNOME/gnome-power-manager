@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -71,7 +72,8 @@ void            gpm_tray_icon_enable_suspend       (GpmTrayIcon *icon,
                                                     gboolean     enabled);
 void            gpm_tray_icon_enable_hibernate     (GpmTrayIcon *icon,
                                                     gboolean     enabled);
-
+void		gpm_tray_icon_show		   (GpmTrayIcon *icon,
+                                                    gboolean     enabled);
 
 G_END_DECLS
 
