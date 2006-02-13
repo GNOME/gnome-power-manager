@@ -230,11 +230,7 @@ gpm_object_register (DBusGConnection *connection,
 	/* add the legacy stuff for FC4 */
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
-#if GPM_SYSTEM_BUS
-		G_TYPE_UINT, DBUS_NAME_FLAG_REPLACE_EXISTING,
-#else
 		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
-#endif
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
@@ -244,11 +240,7 @@ gpm_object_register (DBusGConnection *connection,
 #else
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
-#if GPM_SYSTEM_BUS
-		G_TYPE_UINT, DBUS_NAME_FLAG_ALLOW_REPLACEMENT | DBUS_NAME_FLAG_REPLACE_EXISTING,
-#else
 		G_TYPE_UINT, 0,
-#endif
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
@@ -257,10 +249,8 @@ gpm_object_register (DBusGConnection *connection,
 	}
 #endif
 
-#if !GPM_SYSTEM_BUS
  	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 		return FALSE;
-#endif
 
 	/* free the bus_proxy */
 	g_object_unref (G_OBJECT (bus_proxy));
@@ -379,17 +369,10 @@ main (int argc, char *argv[])
 
 	manager = gpm_manager_new ();
 
-#if GPM_SYSTEM_BUS
-	if (!gpm_object_register (system_connection, G_OBJECT (manager))) {
-		gpm_warning ("Failed to register.");
-		return 0;
-	}
-#else
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
 		gpm_warning ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
-#endif
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 

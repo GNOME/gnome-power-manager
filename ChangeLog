@@ -1,5 +1,10 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c, src/gpm-manager.h: Remove GPM_SYSTEM_BUS as we are
+	always going to use the session bus.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (tray_icon_update): This function is not now
 	responsible for creating and destroying the icon, it is done
 	unconditionally at init, and then just hidden and shown as required.

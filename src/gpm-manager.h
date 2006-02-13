@@ -25,12 +25,6 @@
 #include <glib-object.h>
 #include <dbus/dbus-glib.h>
 
-/*
- * Enable this for GPM to use the system bus and share it.
- * This cannot be turned on until
- * https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
- */
-#define GPM_SYSTEM_BUS 			FALSE
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
