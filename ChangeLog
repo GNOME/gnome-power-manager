@@ -1,3 +1,12 @@
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-power.c (battery_device_cache_entry_update_key): Do a
+	exponentially weighted average for the rate so that high frequency
+	changes are smoothed. This should mean the time_remaining does not
+	change drastically between updates.
+	(battery_kind_cache_update) Also limit the time_remaining to 100 hours.
+	Fixes bug #328927.
+
 2006-02-12  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (get_stock_id): Refactor the code, leaving the

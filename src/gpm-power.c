@@ -87,9 +87,14 @@ typedef struct {
 
 typedef struct {
 	char		       *udi;
+	int			charge_rate_previous;
 	GpmPowerBatteryKind	battery_kind;
 	GpmPowerBatteryStatus	battery_status;
 } BatteryDeviceCacheEntry;
+
+/* Increasing this value will increase the damping effect
+ * of the rate calculations, 0.8 seems a good default. */
+#define		RATE_EXP_AVERAGE_FACTOR			(0.80f)
 
 static void
 gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
@@ -115,6 +120,8 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	char *udi = entry->udi;
 	char *battery_kind_str;
 
+	/* invalidate last rate */
+	entry->charge_rate_previous = 0;
 
 	/* Initialize battery_status to reasonable defaults */
 	gpm_power_battery_status_set_defaults (status);
@@ -234,10 +241,24 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 		gpm_hal_device_get_int (udi, key, &status->current_charge);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->charge_rate);
+		int charge_rate_new;
+		gpm_hal_device_get_int (udi, key, &charge_rate_new);
+		/* Do an exponentially weighted average for the rate so
+		   that high frequency changes are smoothed. This should mean
+		   the remaining_time does not change drastically between updates.
+		   Fixes bug #328927 */
+		if (entry->charge_rate_previous == 0) {
+			/* startup, or re-initialization - we have no data */
+			status->charge_rate = charge_rate_new;
+		} else {
+			status->charge_rate = ((1.0f - RATE_EXP_AVERAGE_FACTOR) * charge_rate_new) +
+					       (RATE_EXP_AVERAGE_FACTOR * entry->charge_rate_previous);
+		}
+		entry->charge_rate_previous = charge_rate_new;
+
 		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
 		   gets fixed and is part of a new release of HAL and we depend on that
-		   version*/
+		   version */
 		if (status->charge_rate == 0) {
 			status->is_discharging = FALSE;
 			status->is_charging = FALSE;
@@ -442,8 +463,8 @@ battery_kind_cache_update (GpmPower              *power,
 	/* sanity check */
 	if (type_status->is_discharging && type_status->is_charging) {
 		gpm_warning ("Sanity check kicked in! "
-			   "Multiple device object cannot be charging and "
-			   "discharging simultaneously!");
+			     "Multiple device object cannot be charging and "
+			     "discharging simultaneously!");
 		type_status->is_charging = FALSE;
 	}
 
@@ -451,7 +472,7 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
-	 * a very high charge. Solves bug #327471 */
+	 * a very high charge. Fixes bug #327471 */
 	type_status->percentage_charge = 100 * ((float)type_status->current_charge /
 						(float)type_status->last_full_charge);
 
@@ -467,7 +488,13 @@ battery_kind_cache_update (GpmPower              *power,
 				(float)type_status->charge_rate);
 		}
 	}
-
+	/* Check the remaining time is under a set limit, to deal with broken
+	   primary batteries. Fixes bug #328927 */
+	if (type_status->remaining_time > (100 * 60 * 60)) {
+		gpm_warning ("Another sanity check kicked in! "
+			     "Remaining time cannot be > 100 hours!");
+		type_status->remaining_time = 0;
+	}
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, entry->battery_kind);
 }
 
