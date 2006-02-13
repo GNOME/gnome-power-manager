@@ -644,10 +644,21 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	gpm_networkmanager_sleep ();
 
-	/* FIXME: make this return success/fail */
 	/* FIXME: make this async? */
-	gpm_hal_hibernate ();
-	ret = TRUE;
+	ret = gpm_hal_hibernate ();
+	if (! ret) {
+		char *message;
+		message = g_strdup_printf (_("HAL failed to %s."
+					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
+					     _("hibernate"), GPM_FAQ_URL);
+
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      5000,
+				      _("Hibernate Problem"),
+				      NULL,
+				      message);
+		g_free (message);
+	}
 
 	gpm_networkmanager_wake ();
 
@@ -684,10 +695,21 @@ gpm_manager_suspend (GpmManager *manager,
 
 	gpm_networkmanager_sleep ();
 
-	/* FIXME: make this return success/fail */
 	/* FIXME: make this async? */
-	gpm_hal_suspend (0);
-	ret = TRUE;
+	ret = gpm_hal_suspend (0);
+	if (! ret) {
+		char *message;
+		message = g_strdup_printf (_("Your computer failed to %s.\n"
+					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
+					     _("suspend"), GPM_FAQ_URL);
+
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      5000,
+				      _("Suspend Problem"),
+				      NULL,
+				      message);
+		g_free (message);
+	}
 
 	gpm_networkmanager_wake ();
 

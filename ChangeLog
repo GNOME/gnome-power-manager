@@ -1,5 +1,13 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.h: Add location of FAQ page as GPM_FAQ_URL.
+
+	* src/gpm-manager.c (gpm_manager_suspend, gpm_manager_hibernate):
+	Inform the user if the HAL command failed, and point them in the
+	direction of the online FAQ page. Fixes bug #330889.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (gpm_manager_init): Don't do tray_icon_update here
 	anymore as we havn't got the device list in order yet. This fixes the
 	bug where the ac_adapter icon was being shown for a split second,
