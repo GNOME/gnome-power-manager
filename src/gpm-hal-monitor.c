@@ -176,6 +176,7 @@ static void
 monitor_change_on_ac (GpmHalMonitor *monitor,
 		      gboolean	     on_ac)
 {
+	gpm_debug ("emitting ac-power-changed : %i", on_ac);
 	g_signal_emit (monitor, signals [AC_POWER_CHANGED], 0, on_ac);
 }
 
@@ -214,6 +215,7 @@ watch_device_property_modified (DBusGProxy    *proxy,
 	if (strncmp (key, "battery", 7) != 0)
 		return;
 
+	gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
 	g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
 }
 
@@ -305,6 +307,7 @@ watch_device_condition (DBusGProxy    *proxy,
 			return;
 		}
 
+		gpm_debug ("emitting button-pressed : %s, %s (%i)", type, details, value);
 		g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, type, details, value);
 
 		g_free (type);
@@ -448,7 +451,7 @@ watch_add_battery (GpmHalMonitor *monitor,
 	watch_device_add (monitor, udi);
 	watch_device_connect_property_modified (monitor, udi);
 
-	gpm_debug ("Emitting battery-added signal for: %s", udi);
+	gpm_debug ("emitting battery-added : %s", udi);
 	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
 }
 
@@ -460,6 +463,7 @@ watch_remove_battery (GpmHalMonitor *monitor,
 	watch_device_disconnect_property_modified (monitor, udi);
 	watch_device_remove (monitor, udi);
 
+	gpm_debug ("emitting battery-removed : %s", udi);
 	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
 }
 

@@ -769,6 +769,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		gpm_screensaver_enable_throttle (TRUE);
 	}
 
+	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (manager,
 		       signals [DPMS_MODE_CHANGED],
 		       0,
@@ -892,6 +893,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 	maybe_notify_on_ac_changed (manager, on_ac);
 	change_power_policy (manager, on_ac);
 
+	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 }
 

@@ -1,5 +1,14 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.c, src/gpm-manager.c, src/gpm-power.c,
+	src/gpm-tray-icon.c: Add gpm_debug statements before the signal emit
+	so we can trace, and see what's going on internally.
+
+	* src/gpm-main.c (main): Do the gpm_debug_init earlier in the sequence
+	else we loose the new signal messages on initialization.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.h, src/gpm-power.c (gpm_power_class_init): Add 
 	battery removed proxy signal so we can use it in manager.
 

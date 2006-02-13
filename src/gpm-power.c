@@ -508,6 +508,9 @@ battery_kind_cache_update (GpmPower              *power,
 			     "Remaining time cannot be > 100 hours!");
 		type_status->remaining_time = 0;
 	}
+
+	gpm_debug ("emitting battery-status-changed : %s",
+		   battery_kind_to_string (entry->battery_kind));
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, entry->battery_kind);
 }
 
@@ -750,8 +753,7 @@ gpm_power_set_on_ac (GpmPower *power,
 	if (on_ac != power->priv->on_ac) {
 		power->priv->on_ac = on_ac;
 
-		gpm_debug ("Setting on-ac: %d", on_ac);
-
+		gpm_debug ("emitting ac-state-changed : %i", on_ac);
 		g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
 	}
 
@@ -970,6 +972,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 	battery_kind_cache_debug_print_all (power);
 
 	/* proxy it */
+	gpm_debug ("emitting battery-removed : %s", udi);
 	g_signal_emit (power, signals [BATTERY_REMOVED], 0, udi);
 }
 
@@ -1021,6 +1024,7 @@ hal_button_pressed_cb (GpmHalMonitor *monitor,
 		       GpmPower      *power)
 {
 	/* just proxy it */
+	gpm_debug ("emitting button-pressed : %s, %s (%i)", type, details, state);
 	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, details, state);
 }
 

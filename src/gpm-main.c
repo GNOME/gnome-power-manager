@@ -343,6 +343,8 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+	gpm_debug_init (verbose, ! no_daemon);
+
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
@@ -388,8 +390,6 @@ main (int argc, char *argv[])
 		return 0;
 	}
 #endif
-
-	gpm_debug_init (verbose, ! no_daemon);
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 

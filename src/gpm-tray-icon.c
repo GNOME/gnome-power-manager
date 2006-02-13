@@ -196,6 +196,7 @@ static void
 gpm_tray_icon_hibernate_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
 {
+	gpm_debug ("emitting hibernate");
 	g_signal_emit (icon, signals [HIBERNATE], 0);
 }
 
@@ -203,6 +204,7 @@ static void
 gpm_tray_icon_suspend_cb (GtkAction   *action,
 			  GpmTrayIcon *icon)
 {
+	gpm_debug ("emitting suspend");
 	g_signal_emit (icon, signals [SUSPEND], 0);
 }
 
