@@ -915,7 +915,10 @@ add_battery (GpmPower   *power,
 	        if (status->design_charge > 0 && status->last_full_charge > 0) {
 	                float capacity;
 	                capacity = status->design_charge / status->last_full_charge;
-	                gpm_debug ("Primary battery capacity: %f", capacity);
+	                gpm_debug ("Design: %i, Last full: %i, Capacity: %f",
+	                	   status->design_charge,
+	                	   status->last_full_charge,
+	                	   capacity);
 	                if (capacity < 0.5f) {
 	                        gpm_warning ("Your battery has a very low capacity, "
 	                                     "meaning that it may be old or broken. "

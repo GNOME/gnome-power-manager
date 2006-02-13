@@ -1478,7 +1478,6 @@ gpm_manager_init (GpmManager *manager)
 
 	/* coldplug so we are in the correct state at startup */
 	sync_dpms_policy (manager);
-	tray_icon_update (manager);
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 	change_power_policy (manager, on_ac);
 

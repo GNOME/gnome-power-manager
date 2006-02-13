@@ -1,5 +1,21 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gpm_manager_init): Don't do tray_icon_update here
+	anymore as we havn't got the device list in order yet. This fixes the
+	bug where the ac_adapter icon was being shown for a split second,
+	and then changing to the required icon.
+
+	* src/gpm-power.c (add_battery): Add in another debug statement.
+
+	* src/gpm-prefs.c (gpm_prefs_setup_sleep_slider,
+	gpm_prefs_setup_brightness_slider, setup_page_three): Only connect up
+	the value-changed signal once the initial value has been set.
+	This prevents the gconf keys from getting written to (if only for a
+	split second), so that the icon no longer flickers when somebody
+	clicks preferences or loads it from the Desktop menu.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal-monitor.c, src/gpm-manager.c, src/gpm-power.c,
 	src/gpm-tray-icon.c: Add gpm_debug statements before the signal emit
 	so we can trace, and see what's going on internally.

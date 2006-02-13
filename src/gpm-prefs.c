@@ -245,8 +245,6 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 	widget = glade_xml_get_widget (dialog, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), NULL);
-	g_signal_connect (G_OBJECT (widget), "value-changed",
-			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb), gpm_pref_key);
 
 	client = gconf_client_get_default ();
 	value = gconf_client_get_int (client, gpm_pref_key, NULL);
@@ -260,6 +258,10 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 	}
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
+
+	/* don't connect the callback until we have set the slider */
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb), gpm_pref_key);
 
 	return widget;
 }
@@ -291,14 +293,16 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog,
 
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
-	g_signal_connect (G_OBJECT (widget), "value-changed",
-			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
 
 	client = gconf_client_get_default ();
 	value = gconf_client_get_int (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
+
+	/* don't connect the callback until we have set the slider */
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb), gpm_pref_key);
 
 	return widget;
 }
@@ -583,6 +587,17 @@ setup_page_three (GladeXML *xml)
 	radiobutton_icon_critical = glade_xml_get_widget (xml, "radiobutton_icon_critical");
 	radiobutton_icon_never = glade_xml_get_widget (xml, "radiobutton_icon_never");
 
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
+				      icon_policy == GPM_ICON_POLICY_ALWAYS);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
+				      icon_policy == GPM_ICON_POLICY_CHARGE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
+				      icon_policy == GPM_ICON_POLICY_CRITICAL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
+				      icon_policy == GPM_ICON_POLICY_NEVER);
+
+	/* only connect the callbacks after we set the value, else the gconf
+	   keys gets written to (for a split second), and the icon flickers. */
 	g_signal_connect (radiobutton_icon_always, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb),
 			  (gpointer)GPM_ICON_POLICY_ALWAYS);
@@ -595,15 +610,6 @@ setup_page_three (GladeXML *xml)
 	g_signal_connect (radiobutton_icon_never, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb),
 			  (gpointer)GPM_ICON_POLICY_NEVER);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
-				      icon_policy == GPM_ICON_POLICY_ALWAYS);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
-				      icon_policy == GPM_ICON_POLICY_CHARGE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
-				      icon_policy == GPM_ICON_POLICY_CRITICAL);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
-				      icon_policy == GPM_ICON_POLICY_NEVER);
 
 	has_batteries = gpm_has_batteries ();
 	if (! has_batteries) {
