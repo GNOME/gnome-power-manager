@@ -322,6 +322,10 @@ get_stock_id (GpmManager *manager,
 	if (status_primary.is_present) {
 		index = get_icon_index_from_percent (status_primary.percentage_charge);
 		if (on_ac) {
+			if (!status_primary.is_charging && !status_primary.is_discharging) {
+				/* if we are not charging, then don't display the 'flash' */
+				return g_strdup ("gnome-power-ac-charged");
+			}
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
 		} else {
 			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);

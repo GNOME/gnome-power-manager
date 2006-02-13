@@ -1,5 +1,10 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (get_stock_id): Use the fully charged, not charging
+	icon like we used to do.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c: Remove gpm_dbus_init_nlost, signalhandler_noc and
 	all the accompanying n-o-c and name-lost stuff as it's not being used,
 	and does not belong here. And it was rubbish code.
