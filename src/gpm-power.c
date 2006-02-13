@@ -58,6 +58,7 @@ enum {
 	BUTTON_PRESSED,
 	AC_STATE_CHANGED,
 	BATTERY_STATUS_CHANGED,
+	BATTERY_REMOVED,
 	LAST_SIGNAL
 };
 
@@ -152,7 +153,8 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 
 	/* batteries might be missing */
 	gpm_hal_device_get_bool (udi, "battery.present", &status->is_present);
-	if (!status->is_present) {
+	if (! status->is_present) {
+		gpm_debug ("Battery not present, so not filling up values");
 		return;
 	}
 
@@ -166,27 +168,34 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	/* battery might not be rechargeable, have to check */
 	gpm_hal_device_get_bool (udi, "battery.is_rechargeable",
 				&status->is_rechargeable);
-	if (status->is_rechargeable) {
-		gpm_hal_device_get_bool (udi, "battery.rechargeable.is_charging",
-					&status->is_charging);
-		gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging",
-					&status->is_discharging);
+
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY ||
+	    entry->battery_kind == GPM_POWER_BATTERY_KIND_UPS) {
+		if (status->is_rechargeable) {
+			gpm_hal_device_get_bool (udi, "battery.rechargeable.is_charging",
+						&status->is_charging);
+			gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging",
+						&status->is_discharging);
+		}
 	}
 
 	/* sanity check that charge_level.rate exists (if it should) */
-	exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
-					     &status->charge_rate);
-	if (!exists && (status->is_discharging || status->is_charging)) {
-		gpm_warning ("could not read your battery's charge rate");
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
+		exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
+						 &status->charge_rate);
+		if (!exists && (status->is_discharging || status->is_charging)) {
+			gpm_warning ("could not read your battery's charge rate");
+		}
+
+		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
+		   gets fixed and is part of a new release of HAL and we depend on that
+		   version*/
+		if (exists && status->charge_rate == 0) {
+			status->is_discharging = FALSE;
+			status->is_charging = FALSE;
+		}
 	}
 
-	/* FIXME: following can be removed if bug #5752 of hal on freedesktop
-	   gets fixed and is part of a new release of HAL and we depend on that
-	   version*/
-	if (exists && status->charge_rate == 0) {
-		status->is_discharging = FALSE;
-		status->is_charging = FALSE;
-	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
 	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage",
@@ -196,10 +205,13 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	}
 
 	/* sanity check that remaining time exists (if it should) */
-	exists = gpm_hal_device_get_int (udi,"battery.remaining_time",
-					     &status->remaining_time);
-	if (! exists && (status->is_discharging || status->is_charging)) {
-		gpm_warning ("could not read your battery's remaining time");
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY ||
+	    entry->battery_kind == GPM_POWER_BATTERY_KIND_UPS) {
+		exists = gpm_hal_device_get_int (udi,"battery.remaining_time",
+						 &status->remaining_time);
+		if (! exists && (status->is_discharging || status->is_charging)) {
+			gpm_warning ("could not read your battery's remaining time");
+		}
 	}
 }
 
@@ -473,9 +485,10 @@ battery_kind_cache_update (GpmPower              *power,
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
 	 * a very high charge. Fixes bug #327471 */
-	type_status->percentage_charge = 100 * ((float)type_status->current_charge /
-						(float)type_status->last_full_charge);
-
+	if (type_status->is_present) {
+		type_status->percentage_charge = 100 * ((float)type_status->current_charge /
+							(float)type_status->last_full_charge);
+	}
 	/* We only do the "better" remaining time algorithm if the battery has rate,
 	   i.e not a UPS, which gives it's own battery.remaining_time but has no rate */
 	if (type_status->charge_rate > 0) {
@@ -590,8 +603,6 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 {
 	BatteryKindCacheEntry *entry;
 	GpmPowerBatteryStatus *status;
-	GpmPowerBatteryStatus  ups_status;
-	gboolean	       ups_present;
 	const char            *type_desc = NULL;
 	char                  *timestring;
 
@@ -600,11 +611,6 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 	if (entry == NULL) {
 		return;
 	}
-
-	/* Find out if a UPS is present as this effects our tooltip */
-	ups_present = gpm_power_get_battery_status (power,
-						    GPM_POWER_BATTERY_KIND_UPS,
-						    &ups_status);
 
 	status = &entry->battery_status;
 
@@ -626,13 +632,10 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 
 	timestring = gpm_get_timestring (status->remaining_time);
 
-	/* We don't display "Laptop Battery 16 minutes remaining" unless 
-	   there is a UPS present, where we then need to clarify what device
-	   we are refering to. For details see :
+	/* We always display "Laptop Battery 16 minutes remaining" as we need
+	   to clarify what device we are refering to. For details see :
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
-	if (ups_present || entry->battery_kind != GPM_POWER_BATTERY_KIND_PRIMARY) {
-		g_string_append_printf (summary, "%s ", type_desc);
-	}
+	g_string_append_printf (summary, "%s ", type_desc);
 
 	if (status->is_discharging) {
 
@@ -646,7 +649,7 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 
 	} else if (status->percentage_charge >= 100) {
 
-		g_string_append_printf (summary, "%s", _("fully charged"));
+			g_string_append_printf (summary, "%s", _("fully charged"));
 
 	} else if (status->is_charging || power->priv->on_ac) {
 
@@ -858,6 +861,16 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE,
 			      1, G_TYPE_INT);
+	signals [BATTERY_REMOVED] =
+		g_signal_new ("battery-removed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmPowerClass, battery_removed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1, G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }
@@ -879,6 +892,7 @@ add_battery (GpmPower   *power,
 	     const char *udi)
 {
 	BatteryDeviceCacheEntry *entry;
+	GpmPowerBatteryStatus *status;
 
 	gpm_debug ("adding %s", udi);
 
@@ -889,18 +903,16 @@ add_battery (GpmPower   *power,
 	battery_device_cache_add_device (power, entry);
 	battery_kind_cache_add_device (power, entry);
 
+	status = &entry->battery_status;
 	/*
 	 * We should notify the user if the battery has a low capacity,
 	 * where capacity is the ratio of the last_full capacity with that of
 	 * the design capacity. (#326740)
 	 */
-	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
-	        gint design, lastfull;
-	        gpm_hal_device_get_int (udi, "battery.charge_level.design", &design);
-	        gpm_hal_device_get_int (udi, "battery.charge_level.last_full", &lastfull);
-	        if (design > 0 && lastfull > 0) {
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && status->is_present) {
+	        if (status->design_charge > 0 && status->last_full_charge > 0) {
 	                float capacity;
-	                capacity = design / lastfull;
+	                capacity = status->design_charge / status->last_full_charge;
 	                gpm_debug ("Primary battery capacity: %f", capacity);
 	                if (capacity < 0.5f) {
 	                        gpm_warning ("Your battery has a very low capacity, "
@@ -956,6 +968,9 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 	remove_battery (power, udi);
 
 	battery_kind_cache_debug_print_all (power);
+
+	/* proxy it */
+	g_signal_emit (power, signals [BATTERY_REMOVED], 0, udi);
 }
 
 static void

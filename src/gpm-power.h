@@ -72,8 +72,10 @@ typedef struct
                                                      gboolean            state);
         void              (* ac_state_changed)      (GpmPower           *power,
 						     gboolean            on_ac);
-        void              (* battery_status_changed) (GpmPower           *power,
-						     GpmPowerBatteryKind         battery_kind);
+        void              (* battery_status_changed) (GpmPower          *power,
+						     GpmPowerBatteryKind battery_kind);
+        void              (* battery_removed)       (GpmPower           *power,
+						     const char         *udi);
 } GpmPowerClass;
 
 GType            gpm_power_get_type           (void);

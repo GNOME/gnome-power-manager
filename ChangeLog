@@ -1,5 +1,26 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.h, src/gpm-power.c (gpm_power_class_init): Add 
+	battery removed proxy signal so we can use it in manager.
+
+	(add_battery): Do not query hal again, use the cached values for 
+	the capacity check. Also, only do this check if the battery is marked
+	as present.
+
+	(power_get_summary_for_battery_kind): Remove the complicated check
+	for UPS's, as it's fragile and seems to break.
+	Unconditionally display the battery type as a prefix for now, we can
+	argue about the tooltip logic in a new bugzilla.
+
+	(battery_device_cache_entry_update_all): Do more careful checking,
+	(e.g. don't ask a mouse device for time_remaining) so we don't spew
+	so many warnings.
+
+	* src/gpm-manager.c (gpm_manager_init): Add hal_battery_removed_cb so
+	we can update the icon and tooltip to fix #329027.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (get_stock_id): Fix a typo where 
 	(charging || charging) should be (charging || discharging) so that we
 	get the correct icon on discharging battery with UPS attached.

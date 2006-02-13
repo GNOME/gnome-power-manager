@@ -52,6 +52,7 @@
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-power.h"
+#include "gpm-hal-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
 #include "gpm-manager.h"
@@ -1424,6 +1425,16 @@ gpm_manager_setup_tray_icon (GpmManager *manager,
 }
 
 static void
+hal_battery_removed_cb (GpmHalMonitor *monitor,
+			const char    *udi,
+			GpmManager    *manager)
+{
+	gpm_debug ("Battery Removed: %s", udi);
+
+	tray_icon_update (manager);
+}
+
+static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
@@ -1438,6 +1449,10 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
+
+	/* we need these to refresh the tooltip and icon */
+	g_signal_connect (manager->priv->power, "battery-removed",
+			  G_CALLBACK (hal_battery_removed_cb), manager);
 
 	gconf_client_add_dir (manager->priv->gconf_client,
 			      GPM_PREF_DIR,
