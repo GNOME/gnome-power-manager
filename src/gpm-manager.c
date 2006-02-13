@@ -301,7 +301,7 @@ get_stock_id (GpmManager *manager,
 
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
 	if (status_primary.is_present &&
-	    (status_primary.is_charging || status_primary.is_charging)) {
+	    (status_primary.is_charging || status_primary.is_discharging)) {
 		index = get_icon_index_from_percent (status_primary.percentage_charge);
 		if (on_ac) {
 			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);

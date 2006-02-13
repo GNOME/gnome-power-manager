@@ -1,5 +1,11 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (get_stock_id): Fix a typo where 
+	(charging || charging) should be (charging || discharging) so that we
+	get the correct icon on discharging battery with UPS attached.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Add an extra state GPM_WARNING_DISCHARGING so we
 	can make the UPS and primary battery stuff common in the existing
 	warning framework.
