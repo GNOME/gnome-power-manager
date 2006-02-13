@@ -1,9 +1,34 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: Add an extra state GPM_WARNING_DISCHARGING so we
+	can make the UPS and primary battery stuff common in the existing
+	warning framework.
+
+	(maybe_notify_on_ac_changed): Only clear the notification now, as we
+	rely on the trueness of battery.is_discharging to do the warning.
+
+	(gpm_manager_get_warning_type): Add the check for a now-discharging
+	battery_status object. Man, this generic code is easy to change.
+
+	(battery_low_get_title): Add a string for GPM_WARNING_DISCHARGING.
+
+	(battery_status_changed_primary): Do the warning 
+	"The AC Power has been unplugged." here, for GPM_WARNING_DISCHARGING.
+	(battery_status_changed_ups): Do the warning 
+	"Your system is running on backup power!" for GPM_WARNING_DISCHARGING.
+	(battery_status_changed_misc): Ignore GPM_WARNING_DISCHARGING as this
+	is not relevant for pda, mouse or keyboard devices.
+
+	(gpm_manager_init): Set last primary warning to GPM_WARNING_DISCHARGING
+	as we don't want to be notified on coldplug if we are on battery power.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c (battery_device_cache_entry_update_key): Do a
 	exponentially weighted average for the rate so that high frequency
 	changes are smoothed. This should mean the time_remaining does not
 	change drastically between updates.
+
 	(battery_kind_cache_update) Also limit the time_remaining to 100 hours.
 	Fixes bug #328927.
 

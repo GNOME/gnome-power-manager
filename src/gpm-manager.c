@@ -67,10 +67,11 @@ static gboolean gpm_manager_setup_tray_icon (GpmManager *manager,
 
 typedef enum {
 	GPM_WARNING_NONE = 0,
-	GPM_WARNING_LOW = 1,
-	GPM_WARNING_VERY_LOW = 2,
-	GPM_WARNING_CRITICAL = 3,
-	GPM_WARNING_ACTION = 4
+	GPM_WARNING_DISCHARGING = 1,
+	GPM_WARNING_LOW = 2,
+	GPM_WARNING_VERY_LOW = 3,
+	GPM_WARNING_CRITICAL = 4,
+	GPM_WARNING_ACTION = 5
 } GpmWarning;
 
 struct GpmManagerPrivate
@@ -483,30 +484,14 @@ static void
 maybe_notify_on_ac_changed (GpmManager *manager,
 			    gboolean	on_ac)
 {
-	gboolean show_notify;
-
-	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-					     GPM_PREF_NOTIFY_ACADAPTER, NULL);
-
-	/* If no tray icon then don't notify */
+	/* If no tray icon then don't clear */
 	if (! manager->priv->tray_icon) {
 		return;
 	}
 
-	if (! on_ac) {
-		if (show_notify) {
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000,
-					      _("AC Power Unplugged"),
-					      NULL,
-					     _("The AC Power has been unplugged. "
-					       "The system is now using battery power."));
-		}
-	} else {
-		/*
-		 * for where we add back the ac_adapter before
-		 * the "AC Power unplugged" message times out.
-		 */
+	if (on_ac) {
+		/* for where we add back the ac_adapter before
+		 * the "AC Power unplugged" message times out. */
 		gpm_tray_icon_cancel_notify (GPM_TRAY_ICON (manager->priv->tray_icon));
 	}
 }
@@ -864,10 +849,13 @@ power_button_pressed_cb (GpmPower   *power,
 
 	if (strcmp (type, "power") == 0) {
 		power_button_pressed (manager, state);
+
 	} else if (strcmp (type, "sleep") == 0) {
 		suspend_button_pressed (manager, state);
+
 	} else if (strcmp (type, "lid") == 0) {
 		lid_button_pressed (manager, state);
+
 	} else if (strcmp (type, "virtual") == 0) {
 		if (details == NULL) {
 			return;
@@ -875,12 +863,16 @@ power_button_pressed_cb (GpmPower   *power,
 
 		if (strcmp (details, "BrightnessUp") == 0) {
 			gpm_brightness_level_up (manager->priv->brightness);
+
 		} else if (strcmp (details, "BrightnessDown") == 0) {
 			gpm_brightness_level_down (manager->priv->brightness);
+
 		} else if (strcmp (details, "Suspend") == 0) {
 			gpm_manager_suspend (manager, NULL);
+
 		} else if (strcmp (details, "Hibernate") == 0) {
 			gpm_manager_hibernate (manager, NULL);
+
 		} else if (strcmp (details, "Lock") == 0) {
 			gpm_screensaver_lock ();
 		}
@@ -908,6 +900,7 @@ gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
 			      gboolean		     use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
+
 	/* some devices (e.g. mice) do not have time, and we have to measure using percent */
 	if (use_time) {
 		if (battery_status->remaining_time <= 0) {
@@ -932,6 +925,13 @@ gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
 			type = GPM_WARNING_LOW;
 		}
 	}
+
+	/* If we have no important warnings, we should test for discharging */
+	if (type == GPM_WARNING_NONE) {
+		if (battery_status->is_discharging) {
+			type = GPM_WARNING_DISCHARGING;
+		}
+	}
 	return type;
 }
 
@@ -951,6 +951,10 @@ battery_low_get_title (GpmWarning warning_type)
 	} else if (warning_type == GPM_WARNING_LOW) {
 
 		title = _("Power Low");
+
+	} else if (warning_type == GPM_WARNING_DISCHARGING) {
+
+		title = _("Power Warning");
 
 	}
 
@@ -1034,12 +1038,21 @@ battery_status_changed_primary (GpmManager	      *manager,
 		title = battery_low_get_title (warning_type);
 		remaining = gpm_get_timestring (battery_status->remaining_time);
 
-		/* FIXME: do different warnings for each GPM_WARNING_ */
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining battery life (%d%%). "
-					     "Plug in your AC Adapter to avoid losing data."),
-					   remaining, battery_status->percentage_charge);
-
+		/* Do different warnings for each GPM_WARNING */
+		if (warning_type == GPM_WARNING_DISCHARGING) {
+			gboolean show_notify;
+			show_notify = gconf_client_get_bool (manager->priv->gconf_client,
+							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
+			if (show_notify) {
+				message = g_strdup_printf (_("The AC Power has been unplugged. "
+						             "The system is now using battery power."));
+			}
+		} else {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining battery life (%d%%). "
+						     "Plug in your AC Adapter to avoid losing data."),
+						   remaining, battery_status->percentage_charge);
+		}
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000, title, NULL, message);
 
@@ -1097,12 +1110,17 @@ battery_status_changed_ups (GpmManager	          *manager,
 		title = battery_low_get_title (warning_type);
 		remaining = gpm_get_timestring (battery_status->remaining_time);
 
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining UPS power (%d%%). "
-					     "Restore power to your computer to"
-					     "avoid losing data."),
-					   remaining, battery_status->percentage_charge);
+		/* Do different warnings for each GPM_WARNING */
+		if (warning_type == GPM_WARNING_DISCHARGING) {
+			message = g_strdup_printf (_("Your system is running on backup power!"));
 
+		} else {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining UPS power (%d%%). "
+						     "Restore power to your computer to "
+						     "avoid losing data."),
+						   remaining, battery_status->percentage_charge);
+		}
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      5000, title, NULL, message);
 
@@ -1133,7 +1151,8 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	warning_type = gpm_manager_get_warning_type (battery_status, FALSE);
 
 	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE) {
+	if (warning_type == GPM_WARNING_NONE ||
+	    warning_type == GPM_WARNING_DISCHARGING) {
 		gpm_debug ("No warning");
 		return;
 	}
@@ -1449,7 +1468,10 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	manager->priv->last_primary_warning = GPM_WARNING_NONE;
+	/* we don't want to be notified on coldplug if we are on battery power */
+	manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
+	
+	/* we want all notifications */
 	manager->priv->last_ups_warning = GPM_WARNING_NONE;
 	manager->priv->last_mouse_warning = GPM_WARNING_NONE;
 	manager->priv->last_keyboard_warning = GPM_WARNING_NONE;
