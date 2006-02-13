@@ -1,5 +1,35 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: Remove gpm_dbus_init_nlost, signalhandler_noc and
+	all the accompanying n-o-c and name-lost stuff as it's not being used,
+	and does not belong here. And it was rubbish code.
+	This is all to begin to fix #327234, so we can restart hald without
+	killing g-p-m.
+
+	* src/gpm-hal-monitor.c: Rename proxy to proxy_hal. Add a second proxy
+	called proxy_dbus that will let us get n-o-c signals.
+
+	(gpm_hal_monitor_class_init): Add hal-connected and hal-disconnected
+	signal types and descriptions.
+
+	(hal_disconnect_signals): Free the proxy also here, as it's useless.
+
+	(hal_connect_signals): Create the proxy, and reconnect the signals to
+	the new proxy.
+
+	(coldplug_all, un_coldplug_all): Begin to do the reconnection
+	infrastructure so that devices get the signals from the new proxy.
+	THIS IS WORK IN PROGRESS. Restarting hald will appear to work then
+	segfault g-p-m.
+
+	(hal_name_owner_changed): Add new callback for name-owner-changed
+	signals from the new proxy_dbus objects.
+
+	(hal_monitor_stop): call un_coldplug (), as currently we are just
+	loosing memory. un_coldplug is TOFIX.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c, src/gpm-manager.h: Remove GPM_SYSTEM_BUS as we are
 	always going to use the session bus.
 

@@ -53,7 +53,8 @@ static void     gpm_hal_monitor_finalize   (GObject            *object);
 struct GpmHalMonitorPrivate
 {
 	DBusGConnection *connection;
-	DBusGProxy	*proxy;
+	DBusGProxy	*proxy_hal;
+	DBusGProxy	*proxy_dbus;
 
 	GHashTable      *devices;
 
@@ -67,6 +68,8 @@ enum {
 	BATTERY_PROPERTY_MODIFIED,
 	BATTERY_ADDED,
 	BATTERY_REMOVED,
+	HAL_CONNECTED,
+	HAL_DISCONNECTED,
 	LAST_SIGNAL
 };
 
@@ -168,8 +171,25 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1, G_TYPE_STRING);
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
+	signals [HAL_CONNECTED] =
+		g_signal_new ("hal-connected",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, hal_connected),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
+	signals [HAL_DISCONNECTED] =
+		g_signal_new ("hal-disconnected",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmHalMonitorClass, hal_disconnected),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 }
 
 static void
@@ -490,7 +510,7 @@ hal_device_removed (DBusGProxy    *proxy,
 {
 	gpm_debug ("udi=%s", udi);
 
-	/* these may not all be batteries but oh well */
+	/* FIXME: these may not all be batteries */
 	watch_remove_battery (monitor, udi);
 }
 
@@ -510,27 +530,53 @@ hal_new_capability (DBusGProxy    *proxy,
 static void
 hal_disconnect_signals (GpmHalMonitor *monitor)
 {
-	dbus_g_proxy_disconnect_signal (monitor->priv->proxy, "DeviceRemoved",
-					G_CALLBACK (hal_device_removed), monitor);
-	dbus_g_proxy_disconnect_signal (monitor->priv->proxy, "NewCapability",
-					G_CALLBACK (hal_new_capability), monitor);
+	gpm_debug ("Disconnecting signals from HAL");
+
+	if (monitor->priv->proxy_hal) {
+		/* it looks like we leak memory, but I'm pretty sure dbus
+		   cleans up the proxy for us */
+		dbus_g_proxy_disconnect_signal (monitor->priv->proxy_hal, "DeviceRemoved",
+						G_CALLBACK (hal_device_removed), monitor);
+		dbus_g_proxy_disconnect_signal (monitor->priv->proxy_hal, "NewCapability",
+						G_CALLBACK (hal_new_capability), monitor);
+		g_object_unref (monitor->priv->proxy_hal);
+		monitor->priv->proxy_hal = NULL;
+	}
+	/* we are now not using HAL */
+	monitor->priv->enabled = FALSE;
+
+	gpm_debug ("emitting hal-disconnected");
+	g_signal_emit (monitor, signals [HAL_DISCONNECTED], 0);
 }
 
 static void
 hal_connect_signals (GpmHalMonitor *monitor)
 {
-	dbus_g_proxy_add_signal (monitor->priv->proxy, "DeviceRemoved",
+	GError *error;
+
+	gpm_debug ("Connecting signals to HAL");
+	monitor->priv->proxy_hal = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
+								    HAL_DBUS_SERVICE,
+								    HAL_DBUS_PATH_MANAGER,
+								    HAL_DBUS_INTERFACE_MANAGER,
+								    &error);
+
+	dbus_g_proxy_add_signal (monitor->priv->proxy_hal, "DeviceRemoved",
 				 G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (monitor->priv->proxy, "DeviceRemoved",
+	dbus_g_proxy_connect_signal (monitor->priv->proxy_hal, "DeviceRemoved",
 				     G_CALLBACK (hal_device_removed), monitor, NULL);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_add_signal (monitor->priv->proxy, "NewCapability",
+	dbus_g_proxy_add_signal (monitor->priv->proxy_hal, "NewCapability",
 				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (monitor->priv->proxy, "NewCapability",
+	dbus_g_proxy_connect_signal (monitor->priv->proxy_hal, "NewCapability",
 				     G_CALLBACK (hal_new_capability), monitor, NULL);
+	/* we are now using HAL */
+	monitor->priv->enabled = TRUE;
 
+	gpm_debug ("emitting hal-connected");
+	g_signal_emit (monitor, signals [HAL_CONNECTED], 0);
 }
 
 static gboolean
@@ -604,37 +650,99 @@ coldplug_batteries (GpmHalMonitor *monitor)
 }
 
 static void
-hal_monitor_start (GpmHalMonitor *monitor)
+coldplug_all (GpmHalMonitor *monitor)
 {
-	GError *error;
-
-	if (monitor->priv->proxy) {
-		gpm_warning ("Monitor already started");
-		return;
-	}
-
-	error = NULL;
-	monitor->priv->proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
-								HAL_DBUS_SERVICE,
-								HAL_DBUS_PATH_MANAGER,
-								HAL_DBUS_INTERFACE_MANAGER,
-								&error);
-	hal_connect_signals (monitor);
-
 	/* sets up these devices and adds watches */
+	gpm_debug ("coldplugging all devices");
 	coldplug_batteries (monitor);
 	coldplug_acadapter (monitor);
 	coldplug_buttons (monitor);
 }
 
 static void
+un_coldplug_all (GpmHalMonitor *monitor)
+{
+
+	gpm_debug ("uncoldplugging (i.e removing) all devices");
+	gpm_warning ("IMPLEMENT un_coldplug_all (i.e. no hashtable, "
+		     "but something we can iter through; "
+		     "we're loosing memory HERE and probably will segfault");
+
+	g_hash_table_destroy (monitor->priv->devices);
+	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
+							g_str_equal,
+							g_free,
+							(GDestroyNotify)g_object_unref);
+}
+
+static void
+hal_name_owner_changed (DBusGProxy *proxy,
+			const char *name,
+			const char *prev,
+			const char *new,
+			GpmHalMonitor *monitor)
+{
+	if (strcmp (name, HAL_DBUS_SERVICE) != 0) {
+		return;
+	}
+
+	gpm_debug ("prev=%s, new=%s", prev, new);
+	if (strlen (prev) != 0 && strlen (new) == 0 ) {
+		if (monitor->priv->enabled) {
+			/* We are already connected to HAL. A bug in DBUS can
+			   sometimes trigger a double n-o-c signal */
+			hal_disconnect_signals (monitor);
+			un_coldplug_all (monitor);
+		}
+	}
+	if (strlen (prev) == 0 && strlen (new) != 0 ) {
+		if (! monitor->priv->enabled) {
+			/* We are already connected to HAL. A bug in DBUS can
+			   sometimes trigger a double n-o-c signal */
+			hal_connect_signals (monitor);
+			coldplug_all (monitor);
+		}
+	}
+}
+
+static void
+hal_monitor_start (GpmHalMonitor *monitor)
+{
+	GError *error;
+
+	if (monitor->priv->proxy_hal) {
+		gpm_warning ("Monitor already started");
+		return;
+	}
+
+	error = NULL;
+	monitor->priv->proxy_dbus = dbus_g_proxy_new_for_name_owner (monitor->priv->connection,
+								     DBUS_SERVICE_DBUS,
+								     DBUS_PATH_DBUS,
+						 		     DBUS_INTERFACE_DBUS,
+								     &error);
+
+	dbus_g_proxy_add_signal (monitor->priv->proxy_dbus, "NameOwnerChanged",
+				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (monitor->priv->proxy_dbus, "NameOwnerChanged",
+				     G_CALLBACK (hal_name_owner_changed),
+				     monitor, NULL);
+
+	if (monitor->priv->enabled) {
+		hal_connect_signals (monitor);
+		coldplug_all (monitor);
+	}
+}
+
+static void
 hal_monitor_stop (GpmHalMonitor *monitor)
 {
 	hal_disconnect_signals (monitor);
+	un_coldplug_all (monitor);
 
-	if (monitor->priv->proxy) {
-		g_object_unref (monitor->priv->proxy);
-		monitor->priv->proxy = NULL;
+	if (monitor->priv->proxy_dbus) {
+		g_object_unref (monitor->priv->proxy_dbus);
+		monitor->priv->proxy_dbus = NULL;
 	}
 }
 
@@ -665,6 +773,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
 
 	monitor->priv->enabled = gpm_hal_is_running ();
+	monitor->priv->proxy_hal = NULL;
 
 	if (! monitor->priv->enabled) {
 		gpm_warning ("%s cannot connect to HAL!", GPM_NAME);

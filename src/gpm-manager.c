@@ -686,8 +686,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
-	//ret = gpm_hal_suspend (0);
-	ret = FALSE;
+	ret = gpm_hal_suspend (0);
 	if (! ret) {
 		char *message;
 		message = g_strdup_printf (_("Your computer failed to %s.\n"

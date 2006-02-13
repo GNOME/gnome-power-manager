@@ -37,30 +37,34 @@ typedef struct GpmHalMonitorPrivate GpmHalMonitorPrivate;
 
 typedef struct
 {
-        GObject               parent;
-        GpmHalMonitorPrivate *priv;
+	GObject               parent;
+	GpmHalMonitorPrivate *priv;
 } GpmHalMonitor;
 
 typedef struct
 {
-        GObjectClass      parent_class;
+	GObjectClass      parent_class;
 
-        void              (* button_pressed)        (GpmHalMonitor    *monitor,
-                                                     const char       *type,
-                                                     const char       *detail,
-                                                     gboolean          state);
+	void              (* button_pressed)        (GpmHalMonitor    *monitor,
+						     const char       *type,
+						     const char       *detail,
+						     gboolean          state);
 
-        void              (* ac_power_changed)      (GpmHalMonitor    *monitor,
-                                                     gboolean          on_ac);
+	void              (* ac_power_changed)      (GpmHalMonitor    *monitor,
+						     gboolean          on_ac);
 
-        void              (* battery_added)         (GpmHalMonitor    *monitor,
-                                                     const char       *udi);
-        void              (* battery_removed)       (GpmHalMonitor    *monitor,
-                                                     const char       *udi);
+	void              (* battery_added)         (GpmHalMonitor    *monitor,
+						     const char       *udi);
+	void              (* battery_removed)       (GpmHalMonitor    *monitor,
+						     const char       *udi);
 
-        void              (* battery_property_modified) (GpmHalMonitor    *monitor,
-                                                         const char       *udi,
-                                                         const char       *key);
+	void              (* battery_property_modified) (GpmHalMonitor    *monitor,
+							 const char       *udi,
+							 const char       *key);
+
+	void              (* hal_connected)	    (GpmHalMonitor    *monitor);
+	void              (* hal_disconnected)	    (GpmHalMonitor    *monitor);
+
 } GpmHalMonitorClass;
 
 GType             gpm_hal_monitor_get_type         (void);
