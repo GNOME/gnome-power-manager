@@ -642,7 +642,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	ret = gpm_hal_hibernate ();
 	if (! ret) {
 		char *message;
-		message = g_strdup_printf (_("HAL failed to %s."
+		message = g_strdup_printf (_("HAL failed to %s. "
 					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 					     _("hibernate"), GPM_FAQ_URL);
 
@@ -1192,7 +1192,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 
 	message = g_strdup_printf (_("The %s device attached to this computer "
 				     "is low in power (%d%%). "
-				     "This device will soon stop functioning"
+				     "This device will soon stop functioning "
 				     "if not charged."),
 				   name, battery_status->percentage_charge);
 
