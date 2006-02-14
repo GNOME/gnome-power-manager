@@ -278,7 +278,7 @@ gpm_hal_shutdown (void)
 gboolean
 gpm_hal_enable_power_save (gboolean enable)
 {
-	gint ret;
+	gint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;

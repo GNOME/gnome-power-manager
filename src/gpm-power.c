@@ -300,14 +300,6 @@ battery_device_cache_entry_new_from_udi (const char *udi)
 	return entry;
 }
 
-static void
-battery_device_cache_entry_free (BatteryDeviceCacheEntry *entry)
-{
-	g_free (entry->udi);
-	g_free (entry);
-	entry = NULL;
-}
-
 static BatteryKindCacheEntry *
 battery_kind_cache_entry_new_from_battery_kind (GpmPowerBatteryKind battery_kind)
 {
@@ -1031,6 +1023,79 @@ hal_button_pressed_cb (GpmHalMonitor *monitor,
 	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, details, state);
 }
 
+/* FIXME: there must be a better way to do this */
+static gboolean
+gpm_hash_remove_return (gpointer key,
+			gpointer value,
+			gpointer user_data)
+{
+	return TRUE;
+}
+
+static void
+gpm_hash_new_kind_cache (GpmPower *power)
+{
+	if (power->priv->battery_kind_cache) {
+		return;
+	}
+	gpm_debug ("creating cache");
+	power->priv->battery_kind_cache = g_hash_table_new_full (g_int_hash,
+							 	 g_int_equal,
+							 	 NULL,
+							 	 (GDestroyNotify)battery_kind_cache_entry_free);
+}
+
+static void
+gpm_hash_free_kind_cache (GpmPower *power)
+{
+	if (! power->priv->battery_kind_cache) {
+		return;
+	}
+	gpm_debug ("freeing cache");
+	g_hash_table_foreach_remove (power->priv->battery_kind_cache,
+				     gpm_hash_remove_return, NULL);
+	g_hash_table_destroy (power->priv->battery_kind_cache);
+	power->priv->battery_kind_cache = NULL;
+}
+
+static void
+gpm_hash_new_device_cache (GpmPower *power)
+{
+	if (power->priv->battery_device_cache) {
+		return;
+	}
+	gpm_debug ("creating cache");
+	power->priv->battery_device_cache = g_hash_table_new_full (g_str_hash,
+							   	   g_str_equal,
+							           g_free,
+							           NULL);
+}
+
+static void
+gpm_hash_free_device_cache (GpmPower *power)
+{
+	if (! power->priv->battery_device_cache) {
+		return;
+	}
+	gpm_debug ("freeing cache");
+	g_hash_table_foreach_remove (power->priv->battery_device_cache,
+				     gpm_hash_remove_return, NULL);
+	g_hash_table_destroy (power->priv->battery_device_cache);
+	power->priv->battery_device_cache = NULL;
+}
+
+static void
+hal_disconnected_cb (GpmHalMonitor *monitor,
+		     GpmPower      *power)
+{
+	/* We have to clear the caches, else the devices think they are
+	   initialised, and we segfault in various places. */
+	gpm_hash_free_kind_cache (power);
+	gpm_hash_new_kind_cache (power);
+	gpm_hash_free_device_cache (power);
+	gpm_hash_new_device_cache (power);
+}
+
 static void
 gpm_power_init (GpmPower *power)
 {
@@ -1049,16 +1114,14 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (hal_battery_added_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
+	g_signal_connect (power->priv->hal_monitor, "hal-disconnected",
+			  G_CALLBACK (hal_disconnected_cb), power);
 
-	power->priv->battery_kind_cache = g_hash_table_new_full (g_int_hash,
-							 	 g_int_equal,
-							 	 NULL,
-							 	 (GDestroyNotify)battery_kind_cache_entry_free);
+	power->priv->battery_kind_cache = NULL;
+	power->priv->battery_device_cache = NULL;
 
-	power->priv->battery_device_cache = g_hash_table_new_full (g_str_hash,
-							   	   g_str_equal,
-							           g_free,
-							           (GDestroyNotify)battery_device_cache_entry_free);
+	gpm_hash_new_kind_cache (power);
+	gpm_hash_new_device_cache (power);
 
 	on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);
 	gpm_power_set_on_ac (power, on_ac, NULL);
@@ -1080,13 +1143,8 @@ gpm_power_finalize (GObject *object)
 		g_object_unref (power->priv->hal_monitor);
 	}
 
-	if (power->priv->battery_kind_cache != NULL) {
-		g_hash_table_destroy (power->priv->battery_kind_cache);
-	}
-
-	if (power->priv->battery_device_cache != NULL) {
-		g_hash_table_destroy (power->priv->battery_device_cache);
-	}
+	gpm_hash_free_kind_cache (power);
+	gpm_hash_free_device_cache (power);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }

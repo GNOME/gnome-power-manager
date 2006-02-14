@@ -1,5 +1,28 @@
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.c (gpm_hash_new_devices_cache,
+	gpm_hash_free_devices_cache): Add these so we can simplify our memory
+	management. We need to be more careful that what we were, as hal could
+	be restarted many times and we could loose lots of memory.
+
+	(hal_monitor_stop): Inline into _finalize, as not called elsewhere.
+
+	* src/gpm-hal.c (gpm_hal_enable_power_save): valgrind (quite rightly)
+	warns of use before set. Just initialise ret to zero.
+
+	* src/gpm-power.c (battery_device_cache_entry_free) remove, as broken.
+
+	(gpm_hash_new_kind_cache, gpm_hash_free_kind_cache,
+	gpm_hash_new_device_cache, gpm_hash_free_device_cache): Add these so
+	we can simplify our memory management, and not forget to free.
+
+	(gpm_power_init): Listen for the hal-disconnected signal so we can
+	clear the caches, else the devices think they are initialised.
+
+	Fixes bug #327234.
+
+2006-02-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (get_stock_id): Use the fully charged, not charging
 	icon like we used to do.
 

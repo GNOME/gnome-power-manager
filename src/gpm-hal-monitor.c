@@ -275,9 +275,9 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 /** Invoked when a property of a device in the Global Device List is
  *  changed, and we have we have subscribed to changes for that device.
  *
- *  @param	udi			Univerisal Device Id
+ *  @param	udi		Univerisal Device Id
  *  @param	name		Name of condition
- *  @param	details	D-BUS message with parameters
+ *  @param	details		D-BUS message with parameters
  */
 static void
 watch_device_condition (DBusGProxy    *proxy,
@@ -455,7 +455,7 @@ watch_device_remove (GpmHalMonitor *monitor,
 
 	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
 	if (proxy == NULL) {
-		gpm_warning ("Device is not being watched");
+		gpm_warning ("Device is not being watched: %s", udi);
 		return FALSE;
 	}
 
@@ -659,16 +659,34 @@ coldplug_all (GpmHalMonitor *monitor)
 	coldplug_buttons (monitor);
 }
 
+
 static void
-un_coldplug_all (GpmHalMonitor *monitor)
+remove_batteries_in_hash (const char *udi, gpointer value, GpmHalMonitor *monitor)
 {
+	watch_remove_battery (monitor, udi);
+}
 
-	gpm_debug ("uncoldplugging (i.e removing) all devices");
-	gpm_warning ("IMPLEMENT un_coldplug_all (i.e. no hashtable, "
-		     "but something we can iter through; "
-		     "we're loosing memory HERE and probably will segfault");
-
+static void
+gpm_hash_free_devices_cache (GpmHalMonitor *monitor)
+{
+	if (! monitor->priv->devices) {
+		return;
+	}
+	gpm_debug ("freeing cache");
+	g_hash_table_foreach (monitor->priv->devices,
+			      (GHFunc) remove_batteries_in_hash,
+			      monitor);
 	g_hash_table_destroy (monitor->priv->devices);
+	monitor->priv->devices = NULL;
+}
+
+static void
+gpm_hash_new_devices_cache (GpmHalMonitor *monitor)
+{
+	if (monitor->priv->devices) {
+		return;
+	}
+	gpm_debug ("creating cache");
 	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
 							g_str_equal,
 							g_free,
@@ -683,6 +701,7 @@ hal_name_owner_changed (DBusGProxy *proxy,
 			GpmHalMonitor *monitor)
 {
 	if (strcmp (name, HAL_DBUS_SERVICE) != 0) {
+		gpm_debug ("ignoring name change: %s", name);
 		return;
 	}
 
@@ -692,7 +711,10 @@ hal_name_owner_changed (DBusGProxy *proxy,
 			/* We are already connected to HAL. A bug in DBUS can
 			   sometimes trigger a double n-o-c signal */
 			hal_disconnect_signals (monitor);
-			un_coldplug_all (monitor);
+
+			/* we have to rebuild the cache */
+			gpm_hash_free_devices_cache (monitor);
+			gpm_hash_new_devices_cache (monitor);
 		}
 	}
 	if (strlen (prev) == 0 && strlen (new) != 0 ) {
@@ -734,18 +756,6 @@ hal_monitor_start (GpmHalMonitor *monitor)
 	}
 }
 
-static void
-hal_monitor_stop (GpmHalMonitor *monitor)
-{
-	hal_disconnect_signals (monitor);
-	un_coldplug_all (monitor);
-
-	if (monitor->priv->proxy_dbus) {
-		g_object_unref (monitor->priv->proxy_dbus);
-		monitor->priv->proxy_dbus = NULL;
-	}
-}
-
 gboolean
 gpm_hal_monitor_get_on_ac (GpmHalMonitor *monitor)
 {
@@ -774,19 +784,16 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 
 	monitor->priv->enabled = gpm_hal_is_running ();
 	monitor->priv->proxy_hal = NULL;
+	monitor->priv->devices = NULL;
 
 	if (! monitor->priv->enabled) {
 		gpm_warning ("%s cannot connect to HAL!", GPM_NAME);
 	}
 
-	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
-							g_str_equal,
-							g_free,
-							(GDestroyNotify)g_object_unref);
+	gpm_hash_new_devices_cache (monitor);
 
 	error = NULL;
 	monitor->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-
 	/* FIXME: check error */
 
 	monitor->priv->has_power_management = gpm_hal_has_power_management ();
@@ -813,10 +820,13 @@ gpm_hal_monitor_finalize (GObject *object)
 
 	g_return_if_fail (monitor->priv != NULL);
 
-	hal_monitor_stop (monitor);
+	hal_disconnect_signals (monitor);
 
-	if (monitor->priv->devices != NULL) {
-		g_hash_table_destroy (monitor->priv->devices);
+	gpm_hash_free_devices_cache (monitor);
+
+	if (monitor->priv->proxy_dbus) {
+		g_object_unref (monitor->priv->proxy_dbus);
+		monitor->priv->proxy_dbus = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
