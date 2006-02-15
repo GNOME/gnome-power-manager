@@ -1,3 +1,62 @@
+===============
+Version 2.13.90
+===============
+
+Released February 15, 2006
+
+General
+
+ - Add a scons build framework. #328708
+ - Add debugging framework so traces are more manageable.
+ - Vastly updated yelp file with lots more information. #324977
+
+Power Manager
+
+ - Fix the icon and tooltip for UPS's. #329027
+ - Do an exponentially weighted average for the rate so that high frequency
+   changes are smoothed. This should mean the time_remaining does not
+   change drastically between updates. #328927.
+ - Inform the user if the HAL command failed, and point them in the direction
+   of the on-line FAQ page. #330889
+ - We can restart hald without killing g-p-m. #327234
+ - Expose the Suspend and Hibernate actions interface. #330189
+ - Fix signal-related crash on 64bit systems.
+ - Add an autostart file so we start automatically. #328801
+ - Prevent the notifications from being wrongly shown multiple times. #328958
+ - Clear charge status when rate zero. #328964
+ - Only do lid sleep action when on battery power. #329512
+
+Power Preferences
+
+ - Only connect up the value-changed signal once the initial value has been set.
+   This prevents the gconf keys from getting written to (if only for a
+   split second), so that the icon no longer flickers when preferences is
+   clicked. RH #179797
+
+Translators
+
+ - Ilkka Tuohela (Finnish)
+ - Clytie Siddall (Vietnamese)
+ - Theppitak Karoonboonyanan (Thai)
+ - Alexander Shopov (Bulgarian)
+ - Kostas Papadimas (Greek)
+ - Raphael Higino (Brazilian Portuguese)
+ - Žygimantas Beručka (Lithuanian)
+ - Leonid Kanter (Russian)
+ - Ilkka Tuohela (Finnish)
+ - Hendrik Brandt (German)
+ - Theppitak Karoonboonyanan (Thai)
+ - Raphael Higino (Brazilian Portuguese)
+ - Slobodan D Sredojevic (Serbian)
+ - Chao-Hsiung Liao (Traditional Chinese)
+ - Øivind Hoel (Norwegian bokmål)
+ - Vincent van Adrighem (Tino Meinen)
+ - Ignacio Casal Quinteiro (Galician)
+ - Francisco Javier F Serrador (Spanish)
+ - Ankit Patel (Gujarati)
+ - Josep Puigdemont i Casamajó (Catalan)
+ - Lukas Novotny (Czech)
+
 ==============
 Version 2.13.5
 ==============
