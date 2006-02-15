@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-01 18:52+0200\n"
-"PO-Revision-Date: 2006-02-01 18:59+0200\n"
+"POT-Creation-Date: 2006-02-15 05:37+0200\n"
+"PO-Revision-Date: 2006-02-15 05:40+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgid "Power Management"
 msgstr "Virransäästö"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:32
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
 msgid "Power Manager"
 msgstr "Virranhallinta"
 
@@ -89,7 +89,6 @@ msgstr ""
 "Näytetäänkö tälle käyttäjälle keskeytystilan komento pudotusvalikossa ja "
 "asetuksissa"
 
-
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If to dim the screen after a period of inactivity"
 msgstr "Himmennetäänkö näyttöä, kun tietokone on jouten"
@@ -98,8 +97,7 @@ msgstr "Himmennetäänkö näyttöä, kun tietokone on jouten"
 msgid ""
 "If we should dim the screen to save power when the computer is marked as "
 "idle."
-msgstr ""
-"Himmennetäänkö näyttö virran säästämiseksi, kun tietokone on jouten."
+msgstr "Himmennetäänkö näyttö virran säästämiseksi, kun tietokone on jouten."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If we should notify the user that the AC adapter has been removed"
@@ -281,26 +279,26 @@ msgstr "Vi_rransäästötilan tyyppi:"
 msgid "_Never display icon"
 msgstr "Älä koskaan näytä kuvaketta"
 
-#: ../src/eggtrayicon.c:132
+#: ../src/eggtrayicon.c:125
 msgid "Orientation"
 msgstr "Suunta"
 
-#: ../src/eggtrayicon.c:133
+#: ../src/eggtrayicon.c:126
 msgid "The orientation of the tray."
 msgstr "Ilmoitusalueen suunta."
 
-#: ../src/gpm-common.c:55
+#: ../src/gpm-common.c:47
 msgid "Unknown time"
 msgstr "Tuntematon aika"
 
-#: ../src/gpm-common.c:60
+#: ../src/gpm-common.c:52
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minuutti"
 msgstr[1] "%i minuuttia"
 
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:63
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -309,124 +307,194 @@ msgstr[1] "%i tuntia"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:77
+#: ../src/gpm-common.c:69
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:78
+#: ../src/gpm-common.c:70
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "tunti"
 msgstr[1] "tuntia"
 
-#: ../src/gpm-common.c:79
+#: ../src/gpm-common.c:71
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuutti"
 msgstr[1] "minuuttia"
 
-#: ../src/gpm-common.h:33
+#: ../src/gpm-common.h:31
 msgid "Power Manager for the GNOME desktop"
 msgstr "Virransäästön hallinta Gnome-työpöydälle"
 
-#: ../src/gpm-main.c:315
+#: ../src/gpm-main.c:140
 msgid "Do not daemonize"
 msgstr "Älä käynnistä taustaprosessina"
 
-#: ../src/gpm-main.c:317 ../src/gpm-prefs.c:672
+#: ../src/gpm-main.c:142 ../src/gpm-prefs.c:668
 msgid "Show extra debugging information"
 msgstr "Näytä ylimääräisiä debug-tietoja"
 
-#: ../src/gpm-manager.c:508
-msgid "AC Power Unplugged"
-msgstr "Verkkovirta irroitettu"
+#: ../src/gpm-manager.c:645
+#, c-format
+msgid ""
+"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgstr ""
+"HAL-komento %s epäonnistui. Lue <a href=\"%s\">FAQ-sivulta</a> tietoja "
+"yleisistä ongelmista."
 
-#: ../src/gpm-manager.c:510
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "Verkkovirta on irroitettu, ja järjestelmä käyttää nyt akkua."
+#: ../src/gpm-manager.c:647
+msgid "hibernate"
+msgstr "lepotila"
 
-#: ../src/gpm-manager.c:596
+#: ../src/gpm-manager.c:651
+msgid "Hibernate Problem"
+msgstr "Ongelma lepotilan kanssa"
+
+#: ../src/gpm-manager.c:696
+#, c-format
+msgid ""
+"Your computer failed to %s.\n"
+"Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgstr ""
+"Tietokone ei voinut suorittaa toimintoa %s.\n"
+"Lue <a href=\"%s\">FAQ-sivulta</a> tietoja yleisistä ongelmista."
+
+#: ../src/gpm-manager.c:698
+msgid "suspend"
+msgstr "keskeytystila"
+
+#: ../src/gpm-manager.c:702
+msgid "Suspend Problem"
+msgstr "Ongelma keskeytystilan kanssa"
+
+#: ../src/gpm-manager.c:964
+msgid "Power Critically Low"
+msgstr "Lataustila on kriittisen matala"
+
+#: ../src/gpm-manager.c:968
+msgid "Power Very Low"
+msgstr "Lataustila hyvin matala"
+
+#: ../src/gpm-manager.c:972
+msgid "Power Low"
+msgstr "Matala lataustila"
+
+#: ../src/gpm-manager.c:976
+msgid "Power Warning"
+msgstr "Varoitus lataustilasta"
+
+#: ../src/gpm-manager.c:1017
 msgid "Battery Charged"
 msgstr "Akku ladattu"
 
-#: ../src/gpm-manager.c:598
+#: ../src/gpm-manager.c:1019
 msgid "Your battery is now fully charged"
 msgstr "Akkusi on nyt täysin ladattu"
 
-#: ../src/gpm-manager.c:653 ../src/gpm-manager.c:670 ../src/gpm-manager.c:686
+#: ../src/gpm-manager.c:1040
+msgid "Critical action"
+msgstr "Kriittisen latauksen toiminto"
+
+#: ../src/gpm-manager.c:1042
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr "Akun lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
+
+#: ../src/gpm-manager.c:1061
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "Verkkovirta on irroitettu, ja järjestelmä käyttää nyt akkua."
+
+#: ../src/gpm-manager.c:1065
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
-"Akussa riittää sähkö arviolta vielä <b>%s</b> (%d%%). Kytke verkkovirta, "
-"jotta et menetä tietojasi akun tyhjentyessä."
+"Akussa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Kytke verkkovirta, "
+"jotta et menetä tietojasi."
 
-#: ../src/gpm-manager.c:659
-msgid "Battery Critically Low"
-msgstr "Akun lataustila on kriittisen matala"
+#: ../src/gpm-manager.c:1123
+msgid "Your system is running on backup power!"
+msgstr "Järjestelmä käyttää varavirtaa!"
 
-#: ../src/gpm-manager.c:676
-msgid "Battery Very Low"
-msgstr "Akun lataustila hyvin matala"
-
-#: ../src/gpm-manager.c:692
-msgid "Battery Low"
-msgstr "Akun lataustila matala"
-
-#: ../src/gpm-manager.c:1032
-msgid "Critical action"
-msgstr "Kriittisen latauksen toiminto"
-
-#: ../src/gpm-manager.c:1034
+#: ../src/gpm-manager.c:1126
+#, c-format
 msgid ""
-"The battery is below the critical level and this computer is about to "
-"shutdown."
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
+"power to your computer to avoid losing data."
 msgstr ""
-"Akun lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
+"UPSissa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Palauta verkkovirta, "
+"jotta et menetä tietojasi."
 
-#: ../src/gpm-power.c:302 ../src/gpm-power.c:316
-msgid "Unknown"
-msgstr "Tuntematon"
+#: ../src/gpm-manager.c:1193
+#, c-format
+msgid ""
+"The %s device attached to this computer is low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"Tietokoneeseen liitetyn laitteen %s lataus on vähissä (%d %%). Tämä laite "
+"lopettaa pian toiminaan jollei sitä ladata."
 
-#: ../src/gpm-power.c:306
+#: ../src/gpm-power.c:330
 msgid "Laptop battery"
 msgstr "Kannettavan akku"
 
-#: ../src/gpm-power.c:308
+#: ../src/gpm-power.c:332
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:310
+#: ../src/gpm-power.c:334
 msgid "Wireless mouse"
 msgstr "Langaton hiiri"
 
-#: ../src/gpm-power.c:312
+#: ../src/gpm-power.c:336
 msgid "Wireless keyboard"
 msgstr "Langaton näppäimistö"
 
-#: ../src/gpm-power.c:314
+#: ../src/gpm-power.c:338
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:616
+#: ../src/gpm-power.c:340
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: ../src/gpm-power.c:639
 msgid "remaining"
 msgstr "jäljellä"
 
-#: ../src/gpm-power.c:621
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:642
+msgid "discharging"
+msgstr "purkautuu"
+
+#: ../src/gpm-power.c:647
 msgid "fully charged"
 msgstr "täysin ladattu"
 
-#: ../src/gpm-power.c:626 ../src/gpm-power.c:637
+#: ../src/gpm-power.c:653
 msgid "until charged"
 msgstr "kunnes ladattu"
 
-#: ../src/gpm-power.c:661
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:656
+msgid "charging"
+msgstr "latautuu"
+
+#. only enable this if discharging on UPS, for details see:
+#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
+#: ../src/gpm-power.c:690
+msgid "Computer is running on backup power\n"
+msgstr "Järjestelmä käyttää varavirtaa\n"
+
+#: ../src/gpm-power.c:693
 msgid "Computer is running on AC power\n"
 msgstr "Järjestelmä käyttää verkkovirtaa\n"
 
-#: ../src/gpm-power.c:663
+#: ../src/gpm-power.c:696
 msgid "Computer is running on battery power\n"
 msgstr "Järjestelmä käyttää akkua\n"
 
@@ -458,11 +526,11 @@ msgstr "O_hje"
 msgid "_About"
 msgstr "_Tietoja"
 
-#: ../src/gpm-tray-icon.c:249
+#: ../src/gpm-tray-icon.c:251
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lisensoitu GNU General Public Licensen versiolla 2"
 
-#: ../src/gpm-tray-icon.c:250
+#: ../src/gpm-tray-icon.c:252
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -475,7 +543,7 @@ msgstr ""
 "julkaissut; joko Lisenssin version 2, tai (valinnan mukaan) minkä\n"
 "tahansa myöhemmän version mukaisesti."
 
-#: ../src/gpm-tray-icon.c:254
+#: ../src/gpm-tray-icon.c:256
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -487,7 +555,7 @@ msgstr ""
 "takuuta kaupallisesti hyväksyttävästä laadusta tai soveltuvuudesta\n"
 " tiettyyn tarkoitukseen.  Katso GPL lisenssistä lisää yksityiskohtia."
 
-#: ../src/gpm-tray-icon.c:258
+#: ../src/gpm-tray-icon.c:260
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -498,7 +566,7 @@ msgstr ""
 "ei ole, kirjoita osoitteeseen Free Software Foundation Inc., 59 Temple\n"
 "Place – Suite 330, Boston, MA 02111-1307, USA."
 
-#: ../src/gpm-tray-icon.c:263
+#: ../src/gpm-tray-icon.c:265
 msgid "translator-credits"
 msgstr ""
 "Ilkka Tuohela, 2005.\n"
@@ -506,33 +574,39 @@ msgstr ""
 "http://gnome.fi/"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:57
+#: ../src/gpm-prefs.c:55
 msgid "Suspend"
 msgstr "Keskeytystila"
 
-#: ../src/gpm-prefs.c:58
+#: ../src/gpm-prefs.c:56
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: ../src/gpm-prefs.c:59
+#: ../src/gpm-prefs.c:57
 msgid "Hibernate"
 msgstr "Lepotila"
 
-#: ../src/gpm-prefs.c:60
+#: ../src/gpm-prefs.c:58
 msgid "Do nothing"
 msgstr "Älä tee mitään"
 
-#: ../src/gpm-prefs.c:216
+#: ../src/gpm-prefs.c:206
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: ../src/gpm-prefs.c:465
+#: ../src/gpm-prefs.c:459
 msgid "Configuration"
 msgstr "Asetukset"
 
-#: ../src/gpm-prefs.c:685
+#: ../src/gpm-prefs.c:681
 msgid "Power Preferences"
 msgstr "Virrankäytön asetukset"
+
+#~ msgid "AC Power Unplugged"
+#~ msgstr "Verkkovirta irroitettu"
+
+#~ msgid "Battery Low"
+#~ msgstr "Akun lataustila matala"
 
 #~ msgid "The battery critical action threshold."
 #~ msgstr "Akun kriittisen lataustilan toiminnon raja."
@@ -581,12 +655,6 @@ msgstr "Virrankäytön asetukset"
 
 #~ msgid "GNOME Power Manager"
 #~ msgstr "Gnomen virransäästö"
-
-#~ msgid "charging"
-#~ msgstr "latautuu"
-
-#~ msgid "discharging"
-#~ msgstr "purkautuu"
 
 #~ msgid "charged"
 #~ msgstr "ladattu"
@@ -686,9 +754,6 @@ msgstr "Virrankäytön asetukset"
 
 #~ msgid "1 hour, %i minutes"
 #~ msgstr "1 tunti, %i minuuttia"
-
-#~ msgid "Po_wer Info"
-#~ msgstr "Ti_etoja virrankäytöstä"
 
 #~ msgid "Send warning"
 #~ msgstr "Lähetä varoitus"
