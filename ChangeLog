@@ -1,3 +1,11 @@
+2006-02-16  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in: Add --enable-actions-menu=foo so we can disable the
+	menu at compile time. Fixes bug #331446
+
+	* src/gpm-manager.c (gpm_manager_init): Only add actions to the tray
+	icon if ACTIONS_MENU_ENABLED is enabled.
+
 2006-02-15  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.13.91

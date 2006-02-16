@@ -1361,6 +1361,7 @@ callback_gconf_key_changed (GConfClient *client,
 	}
 }
 
+#if ACTIONS_MENU_ENABLED
 static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
@@ -1376,6 +1377,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 	gpm_debug ("Received supend signal from tray icon");
 	gpm_manager_suspend (manager, NULL);
 }
+#endif
 
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
@@ -1391,8 +1393,9 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
+#if ACTIONS_MENU_ENABLED
 	gboolean enabled;
-
+#endif
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->gconf_client = gconf_client_get_default ();
@@ -1432,6 +1435,7 @@ gpm_manager_init (GpmManager *manager)
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
+#if ACTIONS_MENU_ENABLED
 	gpm_manager_can_suspend (manager, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 	gpm_manager_can_hibernate (manager, &enabled, NULL);
@@ -1447,6 +1451,7 @@ gpm_manager_init (GpmManager *manager)
 				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
 				 manager,
 				 G_CONNECT_SWAPPED);
+#endif
 
 	/* coldplug so we are in the correct state at startup */
 	sync_dpms_policy (manager);
