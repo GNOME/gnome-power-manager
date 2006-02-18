@@ -336,13 +336,11 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	g_object_unref (client);
 }
 
-static GtkWidget *
-gpm_prefs_setup_action_combo (GladeXML *dialog,
-			      char *widget_name,
+static void
+gpm_prefs_setup_action_combo (GtkWidget *widget,
 			      char *gpm_pref_key,
 			      const char **actions)
 {
-	GtkWidget *widget;
 	char *value;
 	int i = 0;
 	int n_added = 0;
@@ -353,15 +351,13 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 	can_suspend = gpm_can_suspend ();
 	can_hibernate = gpm_can_hibernate ();
 
-	widget = glade_xml_get_widget (dialog, widget_name);
-
 	client = gconf_client_get_default ();
 	value = gconf_client_get_string (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
 	if (! value) {
 		gpm_warning ("invalid schema, please re-install");
-		return NULL;
+		return;
 	}
 
 	while (actions[i] != NULL) {
@@ -397,45 +393,21 @@ gpm_prefs_setup_action_combo (GladeXML *dialog,
 			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), gpm_pref_key);
 
 	g_free (value);
-
-	return widget;
 }
 
-
 static void
-setup_page_one (GladeXML *xml)
+setup_battery_sliders (GladeXML *xml, gboolean has_batteries)
 {
-	GtkWidget   *widget;
-	GConfClient *client;
-	GtkWidget   *label_ac_brightness;
-	GtkWidget   *slider_ac_brightness;
 	GtkWidget   *label_batteries_display;
 	GtkWidget   *slider_batteries_display;
 	GtkWidget   *label_batteries_brightness;
 	GtkWidget   *slider_batteries_brightness;
-	gboolean     has_batteries;
 	gboolean     can_set_brightness;
 
-	client = gconf_client_get_default ();
-
-	/* AC icon */
-	widget = glade_xml_get_widget (xml, "image_side_acadapter");
-	gtk_image_set_from_icon_name (GTK_IMAGE (widget), "gnome-fs-socket", GTK_ICON_SIZE_DIALOG);
-
-	/* Sleep time on AC */
-	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
-
-	/* Sleep time for display on AC */
-	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
-
-	/* Display brightness when on AC */
-	label_ac_brightness = glade_xml_get_widget (xml, "label_ac_brightness");
-	slider_ac_brightness = gpm_prefs_setup_brightness_slider (xml, "hscale_ac_brightness",
-								  GPM_PREF_AC_BRIGHTNESS);
-
-	/* Battery icon */
-	widget = glade_xml_get_widget (xml, "image_side_battery");
-	gtk_image_set_from_icon_name (GTK_IMAGE (widget), "gnome-dev-battery", GTK_ICON_SIZE_DIALOG);
+	if (! has_batteries) {
+		/* no point */
+		return;
+	}
 
 	/* Sleep time on batteries */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_batteries_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
@@ -451,123 +423,162 @@ setup_page_one (GladeXML *xml)
 	label_batteries_brightness = glade_xml_get_widget (xml, "label_batteries_brightness");
 	slider_batteries_brightness = gpm_prefs_setup_brightness_slider (xml, "hscale_batteries_brightness",
 									 GPM_PREF_BATTERY_BRIGHTNESS);
+	can_set_brightness = gpm_has_lcd ();
+	if (! can_set_brightness) {
+		gtk_widget_hide_all (label_batteries_brightness);
+		gtk_widget_hide_all (slider_batteries_brightness);
+	}
 
-	has_batteries = gpm_has_batteries ();
+}
+
+static void
+setup_ac_sliders (GladeXML *xml, gboolean has_batteries)
+{
+	GtkWidget   *widget;
+	GtkWidget   *label_ac_brightness;
+	GtkWidget   *slider_ac_brightness;
+	gboolean     can_set_brightness;
+
+	/* Sleep time on AC */
+	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
+
+	/* Sleep time for display on AC */
+	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
+
+	/* Display brightness when on AC */
+	label_ac_brightness = glade_xml_get_widget (xml, "label_ac_brightness");
+	slider_ac_brightness = gpm_prefs_setup_brightness_slider (xml, "hscale_ac_brightness",
+								  GPM_PREF_AC_BRIGHTNESS);
+
+	can_set_brightness = gpm_has_lcd ();
+	if (! can_set_brightness) {
+		gtk_widget_hide_all (label_ac_brightness);
+		gtk_widget_hide_all (slider_ac_brightness);
+	}
+
+	/* when we have no batteries, we just want the title to be "Configuration" */
 	if (! has_batteries) {
 		char *str;
 		widget = glade_xml_get_widget (xml, "label_frame_ac");
 		str = g_strdup_printf ("<b>%s</b>", _("Configuration"));
 		gtk_label_set_markup (GTK_LABEL (widget), str);
 		g_free (str);
-
-		/* Sleep tab */
-		widget = glade_xml_get_widget (xml, "frame_batteries");
-		gtk_widget_hide_all (widget);
 	}
-
-	can_set_brightness = gpm_has_lcd ();
-	if (! can_set_brightness) {
-		gtk_widget_hide_all (label_ac_brightness);
-		gtk_widget_hide_all (slider_ac_brightness);
-		gtk_widget_hide_all (label_batteries_brightness);
-		gtk_widget_hide_all (slider_batteries_brightness);
-	}
-
-	g_object_unref (client);
 }
 
 static void
-setup_page_two (GladeXML *xml)
+setup_suspend_button (GladeXML *xml, gboolean has_suspend_button)
 {
-	GtkWidget    *widget;
-	GConfClient  *client;
-	GtkSizeGroup *size_group;
-	const char   *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	GtkWidget    *label_button_suspend;
+	GtkWidget    *combo_button_suspend;
+	GtkWidget    *frame_options_actions;
 	const char   *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
-	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
-	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+
+	/* Button Suspend Combo Box */
+	label_button_suspend = glade_xml_get_widget (xml, "label_button_suspend");
+	combo_button_suspend = glade_xml_get_widget (xml, "combobox_button_suspend");
+	frame_options_actions = glade_xml_get_widget (xml, "frame_options_actions");
+
+	if (has_suspend_button) {
+		gpm_prefs_setup_action_combo (combo_button_suspend,
+					      GPM_PREF_BUTTON_SUSPEND,
+					      button_suspend_actions);
+	} else {
+		gtk_widget_hide_all (label_button_suspend);
+		gtk_widget_hide_all (combo_button_suspend);
+		/* as the suspend button is the only think in the
+		   action frame, remove if empty */
+		gtk_widget_hide_all (frame_options_actions);
+	}
+}
+
+static void
+setup_sleep_type (GladeXML *xml)
+{
 	GtkWidget    *label_sleep_type;
 	GtkWidget    *combo_sleep_type;
+	const char   *sleep_type_actions[] = {ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	/* Sleep Type Combo Box */
+	label_sleep_type = glade_xml_get_widget (xml, "label_sleep_type");
+	combo_sleep_type = glade_xml_get_widget (xml, "combobox_sleep_type");
+
+	gpm_prefs_setup_action_combo (combo_sleep_type,
+				      GPM_PREF_SLEEP_TYPE,
+				      sleep_type_actions);
+	/* FIXME, if only one option, then do not show the combobox */
+}
+
+static void
+setup_ac_actions (GladeXML *xml)
+{
+	GtkWidget    *label_button_lid;
+	GtkWidget    *combo_button_lid;
+	gboolean      has_lid_button;
+	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+
+	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
+	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
+
+	has_lid_button = gpm_has_button_lid ();
+
+	if (has_lid_button) {
+		gpm_prefs_setup_action_combo (combo_button_lid,
+/* FIXME: need new gconf */
+					      GPM_PREF_BUTTON_LID,
+					      button_lid_actions);
+	} else {
+		gtk_widget_hide_all (label_button_lid);
+		gtk_widget_hide_all (combo_button_lid);
+	}
+	/* FIXME: also need lid lock */
+}
+
+static void
+setup_battery_actions (GladeXML *xml, gboolean has_batteries)
+{
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *label_battery_critical;
 	GtkWidget    *combo_battery_critical;
-	GtkWidget    *label_button_suspend;
-	GtkWidget    *combo_button_suspend;
-	gboolean      has_batteries;
-	gboolean      has_suspend_button;
+	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
 
-	client = gconf_client_get_default ();
-
-	/* Sleep Type Combo Box */
-
-	label_sleep_type = glade_xml_get_widget (xml, "label_sleep_type");
-	combo_sleep_type = gpm_prefs_setup_action_combo (xml, "combobox_sleep_type",
-							 GPM_PREF_SLEEP_TYPE, sleep_type_actions);
-
-	/* Button Suspend Combo Box */
-
-	label_button_suspend = glade_xml_get_widget (xml, "label_button_suspend");
-	combo_button_suspend = gpm_prefs_setup_action_combo (xml, "combobox_button_suspend",
-				      			     GPM_PREF_BUTTON_SUSPEND, button_suspend_actions);
-	/* Button Lid Combo Box */
-
-	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
-	combo_button_lid = gpm_prefs_setup_action_combo (xml, "combobox_button_lid",
-				      			 GPM_PREF_BUTTON_LID, button_lid_actions);
-
-	/* Battery critical Combo Box */
-
-	label_battery_critical = glade_xml_get_widget (xml, "label_battery_critical_action");
-	combo_battery_critical = gpm_prefs_setup_action_combo (xml, "combobox_battery_critical",
-							       GPM_PREF_BATTERY_CRITICAL, battery_critical_actions);
-
-	/* Make sure that all comboboxes get the same size by adding their
-	 * labels to a GtkSizeGroup
-	 */
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	gtk_size_group_add_widget (size_group, label_sleep_type);
-	gtk_size_group_add_widget (size_group, label_button_suspend);
-	gtk_size_group_add_widget (size_group, label_button_lid);
-	gtk_size_group_add_widget (size_group, label_battery_critical);
-	g_object_unref (G_OBJECT (size_group));
-
-
-	has_suspend_button = gpm_has_button_sleep ();
-	if (! has_suspend_button) {
-		gtk_widget_hide_all (label_button_suspend);
-		gtk_widget_hide_all (combo_button_suspend);
+	if (! has_batteries) {
+		/* no point */
+		return;
 	}
 
+	/* Button Lid Combo Box */
+	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
+	combo_button_lid = glade_xml_get_widget (xml, "combobox_battery_lid_close");
+
 	has_lid_button = gpm_has_button_lid ();
-	if (! has_lid_button) {
+
+	if (has_lid_button) {
+		gpm_prefs_setup_action_combo (combo_button_lid,
+/* FIXME: need new gconf */
+					      GPM_PREF_BUTTON_LID,
+					      button_lid_actions);
+	} else {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
 	}
+	/* FIXME: also need lid lock */
 
-	has_batteries = gpm_has_batteries ();
+	label_battery_critical = glade_xml_get_widget (xml, "label_battery_critical_action");
+	combo_battery_critical = glade_xml_get_widget (xml, "combobox_battery_critical");
 
-	/* if no options then disable frame as it will be empty */
-	if (! has_batteries && ! has_suspend_button && ! has_lid_button) {
-		widget = glade_xml_get_widget (xml, "frame_actions");
-		gtk_widget_hide_all (widget);
-	}
-
-	if (! has_batteries) {
-		/* Hide battery options in options tab */
-		gtk_widget_hide_all (label_battery_critical);
-		gtk_widget_hide_all (combo_battery_critical);
-	}
-
-	g_object_unref (client);
+	gpm_prefs_setup_action_combo (combo_battery_critical,
+				      GPM_PREF_BATTERY_CRITICAL,
+				      battery_critical_actions);
 }
 
 static void
-setup_page_three (GladeXML *xml)
+setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 {
 	GConfClient *client;
-	gboolean     has_batteries;
 	char        *icon_policy_str;
 	int          icon_policy;
 	GtkWidget   *radiobutton_icon_always;
@@ -611,9 +622,8 @@ setup_page_three (GladeXML *xml)
 			  G_CALLBACK (gpm_prefs_icon_radio_cb),
 			  (gpointer)GPM_ICON_POLICY_NEVER);
 
-	has_batteries = gpm_has_batteries ();
 	if (! has_batteries) {
-		/* Hide battery radio options in advanced tab */
+		/* Hide battery radio options if we have no batteries */
 		gtk_widget_hide_all (radiobutton_icon_charge);
 		gtk_widget_hide_all (radiobutton_icon_critical);
 	}
@@ -649,10 +659,41 @@ gpm_prefs_create (void)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), NULL);
 
-	setup_page_one (glade_xml);
-	setup_page_two (glade_xml);
-	setup_page_three (glade_xml);
 
+	gboolean      has_batteries;
+	gboolean      has_suspend_button;
+
+	has_suspend_button = gpm_has_button_sleep ();
+	has_batteries = gpm_has_batteries ();
+
+	GtkWidget    *label_sleep_type;
+	GtkWidget    *label_button_suspend;
+	GtkSizeGroup *size_group;
+
+	setup_icon_policy (glade_xml, has_batteries);
+	setup_ac_actions (glade_xml);
+	setup_ac_sliders (glade_xml, has_batteries);
+	setup_battery_actions (glade_xml, has_batteries);
+	setup_battery_sliders (glade_xml, has_batteries);
+	setup_sleep_type (glade_xml);
+	setup_suspend_button (glade_xml, has_suspend_button);
+
+	/* Make sure that all comboboxes get the same size by adding their
+	 * labels to a GtkSizeGroup
+	 */
+	label_sleep_type = glade_xml_get_widget (glade_xml, "label_sleep_type");
+	label_button_suspend = glade_xml_get_widget (glade_xml, "label_button_suspend");
+
+	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	gtk_size_group_add_widget (size_group, label_sleep_type);
+	gtk_size_group_add_widget (size_group, label_button_suspend);
+	g_object_unref (G_OBJECT (size_group));
+
+	/* if no options then disable frame as it will be empty */
+	if (! has_batteries) {
+		widget = glade_xml_get_widget (glade_xml, "gpm_notebook");
+		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 1);
+	}
 	return main_window;
 }
 

@@ -1,5 +1,18 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade: Minor combobox id renames.
+	
+	* src/gpm-prefs.c (gpm_prefs_setup_action_combo): Pass this a widget.
+	(setup_page_one, setup_page_two, setup_page_three): replace with
+	setup_battery_sliders, setup_ac_sliders, setup_suspend_button,
+	setup_sleep_type, setup_ac_actions, setup_battery_actions, and
+	setup_icon_policy so that each function is specific to function, not
+	location in the glade file.
+	Also connect up the new widgets, so that it works like before. The new
+	stuff I'm working on now.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade: Redesign interface. This is going to break
 	g-p-p for a little while, so please bear with me.
 	Also change duplicate accesskeys (#331538) and remove pointless icons

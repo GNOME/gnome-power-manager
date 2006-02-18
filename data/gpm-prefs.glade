@@ -77,6 +77,7 @@
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox12">
+		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">6</property>
@@ -479,6 +480,7 @@
 
 		  <child>
 		    <widget class="GtkVBox" id="vbox15">
+		      <property name="border_width">6</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">6</property>
@@ -777,7 +779,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkComboBox" id="combobox5">
+			    <widget class="GtkComboBox" id="combobox_battery_critical">
 			      <property name="visible">True</property>
 			      <property name="items" translatable="yes"></property>
 			      <property name="add_tearoffs">False</property>
@@ -1050,7 +1052,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkVBox" id="frame_actions">
+		<widget class="GtkVBox" id="frame_options_actions">
 		  <property name="visible">True</property>
 		  <property name="homogeneous">False</property>
 		  <property name="spacing">6</property>
