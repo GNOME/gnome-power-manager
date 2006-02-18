@@ -306,6 +306,11 @@ watch_device_condition (DBusGProxy    *proxy,
 			return;
 		}
 
+		if (strcmp (type, "") == 0) {
+			if (details != NULL)
+				type = g_strdup (details);
+		}
+
 		gpm_debug ("ButtonPressed : %s", type);
 
 		if (strcmp (type, "power") == 0) {

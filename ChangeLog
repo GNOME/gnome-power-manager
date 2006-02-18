@@ -1,3 +1,10 @@
+2006-02-18  David Zeuthen  <davidz@redhat.com>
+
+	* src/gpm-hal-monitor.c (watch_device_condition): Use details if
+	the button type is the empty string. Makes g-p-m do the right
+	thing if I'm pressing the Sleep button on my keyboard (thanks to
+	the hal patch from Matthew Garrett).
+
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in: Make action_button_lid different
