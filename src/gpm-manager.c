@@ -493,7 +493,8 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 
 static void
 manager_policy_do (GpmManager *manager,
-		   const char *policy)
+		   const char *policy,
+		   gboolean do_lock)
 {
 	char *action;
 
@@ -504,6 +505,11 @@ manager_policy_do (GpmManager *manager,
 	if (! action) {
 		return;
 	}
+
+	if (do_lock) {
+		gpm_screensaver_lock ();
+	}
+
 	if (strcmp (action, ACTION_NOTHING) == 0) {
 		gpm_debug ("*ACTION* Doing nothing");
 
@@ -526,8 +532,11 @@ manager_policy_do (GpmManager *manager,
 		gpm_warning ("unknown action %s", action);
 	}
 
-	g_free (action);
+	if (do_lock) {
+		gpm_screensaver_poke ();
+	}
 
+	g_free (action);
 }
 
 gboolean
@@ -617,7 +626,6 @@ gboolean
 gpm_manager_hibernate (GpmManager *manager,
 		       GError    **error)
 {
-	gboolean should_lock = gpm_screensaver_lock_enabled ();
 	gboolean allowed;
 	gboolean ret;
 
@@ -630,10 +638,6 @@ gpm_manager_hibernate (GpmManager *manager,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot hibernate");
 		return FALSE;
-	}
-
-	if (should_lock) {
-		gpm_screensaver_lock ();
 	}
 
 	gpm_networkmanager_sleep ();
@@ -656,11 +660,6 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	gpm_networkmanager_wake ();
 
-	/* Poke GNOME ScreenSaver so the dialogue is displayed */
-	if (should_lock) {
-		gpm_screensaver_poke ();
-	}
-
 	return ret;
 }
 
@@ -668,7 +667,6 @@ gboolean
 gpm_manager_suspend (GpmManager *manager,
 		     GError    **error)
 {
-	gboolean should_lock = gpm_screensaver_lock_enabled ();
 	gboolean allowed;
 	gboolean ret;
 
@@ -681,10 +679,6 @@ gpm_manager_suspend (GpmManager *manager,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot suspend");
 		return FALSE;
-	}
-
-	if (should_lock) {
-		gpm_screensaver_lock ();
 	}
 
 	gpm_networkmanager_sleep ();
@@ -706,11 +700,6 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	gpm_networkmanager_wake ();
-
-	/* Poke GNOME ScreenSaver so the dialogue is displayed */
-	if (should_lock) {
-		gpm_screensaver_poke ();
-	}
 
 	return ret;
 }
@@ -756,7 +745,10 @@ idle_changed_cb (GpmIdle    *idle,
 		gpm_debug ("Idle state changed: SYSTEM");
 
 		/* can only be hibernate or suspend */
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+		gboolean lock_screen;
+		lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
+						     GPM_PREF_LOCK_SLEEP_IDLE, NULL);
+		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE, lock_screen);
 
 		break;
 	default:
@@ -808,7 +800,10 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
+	gboolean lock_screen;
+	lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
+					     GPM_PREF_LOCK_BUTTON_SUSPEND, NULL);
+	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND, lock_screen);
 }
 
 static void
@@ -831,17 +826,17 @@ lid_button_pressed (GpmManager	 *manager,
 	 * http://bugzilla.gnome.org/show_bug.cgi?id=321313
 	 */
 	if (state) {
-		/*
-		 * We only do a policy event when the lid is CLOSED
-		 * and we are on battery power. See
-		 * http://bugzilla.gnome.org/show_bug.cgi?id=329512
-		 */
+		gboolean lock_screen;
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
-			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID);
+			lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
+							     GPM_PREF_LOCK_AC_LID, NULL);
+			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID, lock_screen);
 		} else {
 			gpm_debug ("Performing battery policy");
-			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
+			lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
+							     GPM_PREF_LOCK_BATTERY_LID, NULL);
+			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID, lock_screen);
 		}
 		mode = GPM_DPMS_MODE_OFF;
 	} else {
@@ -1052,7 +1047,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					"this computer is about to shutdown."));
 		/* wait 10 seconds for user-panic */
 		g_usleep (1000 * 1000 * 10);
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL, FALSE);
 	}
 
 	/* Always check if we already notified the user */

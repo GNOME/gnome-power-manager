@@ -1,5 +1,20 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (manager_policy_do): Add a do_lock argument to this
+	function so we can now specificy the lock policy according to the
+	event that caused the policy to be performed. Do the locking here
+	rather than gpm_manager_suspend and gpm_manager_hibernate.
+
+	* src/gpm-manager.c (idle_changed_cb): BUGFIX: Do the idle action
+	-not- the critical action. Not sure how nobody has triggered this yet.
+
+	* src/gpm-manager.c (suspend_button_pressed, lid_button_pressed):
+	Query and use the new lock gconf arguments.
+	We probably need to add more arguments for stuff like DBUS calls
+	and tray clicks, but I don't think these have to be in the UI.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
 	lock_ac_lid, lock_battery_lid, lock_button_suspend, and
 	lock_sleep_idle.
