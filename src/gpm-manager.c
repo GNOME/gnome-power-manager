@@ -497,6 +497,7 @@ manager_policy_do (GpmManager *manager,
 		   gboolean do_lock)
 {
 	char *action;
+	gboolean use_ss_setting;
 
 	gpm_debug ("policy: %s", policy);
 
@@ -504,6 +505,19 @@ manager_policy_do (GpmManager *manager,
 
 	if (! action) {
 		return;
+	}
+
+	/* This allows us to over-ride the custom lock settings set in gconf
+	   with a system default set in gnome-screensaver.
+	   See bug #331164 for all the juicy details. :-) */
+	use_ss_setting = gconf_client_get_bool (manager->priv->gconf_client,
+						GPM_PREF_LOCK_USE_SCREENSAVER,
+						NULL);
+	if (use_ss_setting) {
+		do_lock = gpm_screensaver_lock_enabled ();
+		gpm_debug ("Using ScreenSaver settings, policy (%i)", do_lock);
+	} else {
+		gpm_debug ("Using custom settings, policy (%i)", do_lock);
 	}
 
 	if (do_lock) {

@@ -1,5 +1,18 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade, src/gpm-prefs.c (gpm_prefs_setup_checkbox,
+	gpm_prefs_checkbox_lock_cb): Remove the lock checkboxes. :-)
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
+	lock_use_screensaver_settings to *finally* fix bug (#331164)
+
+	* src/gpm-manager.c (manager_policy_do): Allow over-ride with
+	settings from gnome-screensaver. Default to using gnome-screensaver
+	settings as it's most obvious. Sabayon can be used to tweak these
+	settings per domain if required.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.c (setup_ac_actions): Hide the ac "Actions" box if
 	there is no lib button, as it's now empty.
 	(setup_battery_actions): Use the right glade name for the labels.

@@ -195,6 +195,18 @@
    </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/lock_use_screensaver_settings</key>
+      <applyto>/apps/gnome-power-manager/lock_use_screensaver_settings</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Use gnome-screensaver lock setting</short>
+        <long>If we should use the gnome-screensaver setting for lock, or our own custom rules</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/lock_ac_lid</key>
       <applyto>/apps/gnome-power-manager/lock_ac_lid</applyto>
       <owner>gnome-power-manager</owner>
@@ -202,7 +214,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen for lid on AC power</short>
-        <long>If we should lock the screen when the lid is closed on AC power</long>
+        <long>If we should lock the screen when the lid is closed on AC power (using custom rules)</long>
       </locale>
     </schema>
 
@@ -214,7 +226,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen for lid on battery power</short>
-        <long>If we should lock the screen when the lid is closed on battery power</long>
+        <long>If we should lock the screen when the lid is closed on battery power (using custom rules)</long>
       </locale>
     </schema>
 
@@ -226,7 +238,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen for suspend button</short>
-        <long>If we should lock the screen when the suspend button is pressed</long>
+        <long>If we should lock the screen when the suspend button is pressed (using custom rules)</long>
       </locale>
     </schema>
 
@@ -238,7 +250,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen for idle sleep</short>
-        <long>If we should lock the screen when the idle sleep is executed</long>
+        <long>If we should lock the screen when the idle sleep is executed (using custom rules)</long>
       </locale>
     </schema>
 

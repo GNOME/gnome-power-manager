@@ -47,6 +47,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/can_suspend"
 #define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/can_hibernate"
 
+#define GPM_PREF_LOCK_USE_SCREENSAVER	GPM_PREF_DIR "/lock_use_screensaver_settings"
+/* These are only effective if the system default is turned off. See bug #331164 */
 #define GPM_PREF_LOCK_AC_LID		GPM_PREF_DIR "/lock_ac_lid"
 #define GPM_PREF_LOCK_BATTERY_LID	GPM_PREF_DIR "/lock_battery_lid"
 #define GPM_PREF_LOCK_BUTTON_SUSPEND	GPM_PREF_DIR "/lock_button_suspend"

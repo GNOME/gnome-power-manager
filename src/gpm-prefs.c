@@ -403,48 +403,6 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 }
 
 static void
-gpm_prefs_checkbox_lock_cb (GtkWidget  *widget,
-			    const char *gpm_pref_key)
-{
-	GConfClient *client;
-	gboolean checked;
-
-	client = gconf_client_get_default ();
-
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-
-	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
-
-	gconf_client_set_bool (client,
-			       gpm_pref_key,
-			       checked, NULL);
-
-	g_object_unref (client);
-}
-
-static void
-gpm_prefs_setup_checkbox (GtkWidget *widget,
-			  char	    *gpm_pref_key)
-{
-
-	GConfClient *client;
-	gboolean checked;
-
-	gpm_debug ("Setting up %s", gpm_pref_key);
-	client = gconf_client_get_default ();
-
-	checked = gconf_client_get_bool (client, gpm_pref_key, NULL);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_prefs_checkbox_lock_cb),
-			  (gpointer) gpm_pref_key);
-
-	g_object_unref (client);
-}
-
-static void
 setup_battery_sliders (GladeXML *xml, gboolean has_batteries)
 {
 	GtkWidget   *label_batteries_display;
@@ -521,25 +479,20 @@ setup_power_buttons (GladeXML *xml, gboolean has_suspend_button)
 	GtkWidget    *label_button_suspend;
 	GtkWidget    *combo_button_suspend;
 	GtkWidget    *frame_options_actions;
-	GtkWidget    *checkbutton_button_suspend_lock;
 	const char   *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	/* Button Suspend Combo Box */
 	label_button_suspend = glade_xml_get_widget (xml, "label_button_suspend");
 	combo_button_suspend = glade_xml_get_widget (xml, "combobox_button_suspend");
 	frame_options_actions = glade_xml_get_widget (xml, "frame_options_actions");
-	checkbutton_button_suspend_lock = glade_xml_get_widget (xml, "checkbutton_button_suspend_lock");
 
 	if (has_suspend_button) {
 		gpm_prefs_setup_action_combo (combo_button_suspend,
 					      GPM_PREF_BUTTON_SUSPEND,
 					      button_suspend_actions);
-		gpm_prefs_setup_checkbox (checkbutton_button_suspend_lock,
-					  GPM_PREF_LOCK_BATTERY_LID);
 	} else {
 		gtk_widget_hide_all (label_button_suspend);
 		gtk_widget_hide_all (combo_button_suspend);
-		gtk_widget_hide_all (checkbutton_button_suspend_lock);
 		/* as the suspend button is the only think in the
 		   action frame, remove if empty */
 		gtk_widget_hide_all (frame_options_actions);
@@ -551,19 +504,15 @@ setup_sleep_type (GladeXML *xml)
 {
 	GtkWidget    *label_sleep_type;
 	GtkWidget    *combo_sleep_type;
-	GtkWidget    *checkbutton_sleep_type_lock;
 	const char   *sleep_type_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	/* Sleep Type Combo Box */
 	label_sleep_type = glade_xml_get_widget (xml, "label_sleep_type");
 	combo_sleep_type = glade_xml_get_widget (xml, "combobox_sleep_type");
-	checkbutton_sleep_type_lock = glade_xml_get_widget (xml, "checkbutton_sleep_type_lock");
 
 	gpm_prefs_setup_action_combo (combo_sleep_type,
 				      GPM_PREF_SLEEP_TYPE,
 				      sleep_type_actions);
-
-	gpm_prefs_setup_checkbox (checkbutton_sleep_type_lock, GPM_PREF_LOCK_BATTERY_LID);
 }
 
 static void
@@ -571,14 +520,12 @@ setup_ac_actions (GladeXML *xml)
 {
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
-	GtkWidget    *checkbutton_ac_lid_lock;
 	GtkWidget    *vbox_ac_actions;
 	gboolean      has_lid_button;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_button_lid = glade_xml_get_widget (xml, "label_ac_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
-	checkbutton_ac_lid_lock = glade_xml_get_widget (xml, "checkbutton_ac_lid_lock");
 	vbox_ac_actions = glade_xml_get_widget (xml, "vbox_ac_actions");
 
 	has_lid_button = gpm_has_button_lid ();
@@ -587,11 +534,9 @@ setup_ac_actions (GladeXML *xml)
 		gpm_prefs_setup_action_combo (combo_button_lid,
 					      GPM_PREF_AC_BUTTON_LID,
 					      button_lid_actions);
-		gpm_prefs_setup_checkbox (checkbutton_ac_lid_lock, GPM_PREF_LOCK_AC_LID);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
-		gtk_widget_hide_all (checkbutton_ac_lid_lock);
 		/* there is nothing else in this action box apart from
 		   lid event, so hide the whole box */
 		gtk_widget_hide_all (vbox_ac_actions);
@@ -605,7 +550,6 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *label_battery_critical;
 	GtkWidget    *combo_battery_critical;
-	GtkWidget    *checkbutton_battery_lid_lock;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
@@ -618,7 +562,6 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	/* Button Lid Combo Box */
 	label_button_lid = glade_xml_get_widget (xml, "label_battery_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_battery_lid_close");
-	checkbutton_battery_lid_lock = glade_xml_get_widget (xml, "checkbutton_battery_lid_lock");
 
 	has_lid_button = gpm_has_button_lid ();
 
@@ -626,12 +569,9 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 		gpm_prefs_setup_action_combo (combo_button_lid,
 					      GPM_PREF_BATTERY_BUTTON_LID,
 					      button_lid_actions);
-		gpm_prefs_setup_checkbox (checkbutton_battery_lid_lock,
-					  GPM_PREF_LOCK_BATTERY_LID);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
-		gtk_widget_hide_all (checkbutton_battery_lid_lock);
 	}
 	/* FIXME: also need lid lock */
 
