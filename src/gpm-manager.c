@@ -837,10 +837,11 @@ lid_button_pressed (GpmManager	 *manager,
 		 * http://bugzilla.gnome.org/show_bug.cgi?id=329512
 		 */
 		if (on_ac) {
-			gpm_debug ("Ignoring policy as on AC");
+			gpm_debug ("Performing AC policy");
+			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID);
 		} else {
-			gpm_debug ("Performing policy as on battery");
-			manager_policy_do (manager, GPM_PREF_BUTTON_LID);
+			gpm_debug ("Performing battery policy");
+			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 		mode = GPM_DPMS_MODE_OFF;
 	} else {

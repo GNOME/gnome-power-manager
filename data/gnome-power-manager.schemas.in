@@ -151,13 +151,24 @@
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/action_button_lid</key>
-      <applyto>/apps/gnome-power-manager/action_button_lid</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_ac_button_lid</key>
+      <applyto>/apps/gnome-power-manager/action_ac_button_lid</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>Laptop lid close action on AC</short>
+        <long>The action to take when the laptop lid is closed and not on battery power</long>
+     </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/action_battery_button_lid</key>
+      <applyto>/apps/gnome-power-manager/action_battery_button_lid</applyto>
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
-        <short>Laptop lid close action</short>
-        <long>The action to take when the laptop lid is closed</long>
+        <short>Laptop lid close action on battery</short>
+        <long>The action to take when the laptop lid is closed and on battery power</long>
      </locale>
    </schema>
 

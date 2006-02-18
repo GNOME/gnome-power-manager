@@ -35,12 +35,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/battery_brightness"
 #define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
 #define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
-
-/* FIXME: REMOVE */
-#define GPM_PREF_BUTTON_LID		GPM_PREF_DIR "/action_button_lid"
 #define GPM_PREF_AC_BUTTON_LID		GPM_PREF_DIR "/action_ac_button_lid"
 #define GPM_PREF_BATTERY_BUTTON_LID	GPM_PREF_DIR "/action_battery_button_lid"
-
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/display_icon_policy"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify_ac_adapter"

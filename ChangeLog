@@ -1,7 +1,25 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in: Make action_button_lid different
+	policy values for AC and battery. Default to suspend for on battery
+	and nothing for on AC.
+
+	* src/gpm-prefs.h,
+	src/gpm-prefs.c (setup_battery_actions, setup_ac_actions): Set the new
+	policy keys individually.
+
+	* src/gpm-prefs.c (gpm_prefs_setup_action_combo): Add the default
+	action of nothing if gconf is missing. Stops a blank combobox, and
+	makes it easier for us to debug without installing new schema each
+	time.
+
+	* src/gpm-manager.c (lid_button_pressed): do the new action when lid
+	is closed and on AC power. Fixes (#331448)
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade: Minor combobox id renames.
-	
+
 	* src/gpm-prefs.c (gpm_prefs_setup_action_combo): Pass this a widget.
 	(setup_page_one, setup_page_two, setup_page_three): replace with
 	setup_battery_sliders, setup_ac_sliders, setup_suspend_button,

@@ -357,7 +357,7 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 
 	if (! value) {
 		gpm_warning ("invalid schema, please re-install");
-		return;
+		value = g_strdup ("nothing");
 	}
 
 	while (actions[i] != NULL) {
@@ -524,8 +524,7 @@ setup_ac_actions (GladeXML *xml)
 
 	if (has_lid_button) {
 		gpm_prefs_setup_action_combo (combo_button_lid,
-/* FIXME: need new gconf */
-					      GPM_PREF_BUTTON_LID,
+					      GPM_PREF_AC_BUTTON_LID,
 					      button_lid_actions);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
@@ -558,8 +557,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 
 	if (has_lid_button) {
 		gpm_prefs_setup_action_combo (combo_button_lid,
-/* FIXME: need new gconf */
-					      GPM_PREF_BUTTON_LID,
+					      GPM_PREF_BATTERY_BUTTON_LID,
 					      button_lid_actions);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
