@@ -1,5 +1,19 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (manager_policy_do): Add action BLANK to trigger
+	a DPMS monitor off state.
+	(lid_button_pressed): Don't do DPMS state unless we have blank as
+	our option.
+
+	* src/gpm-prefs.c: allow blank as an option for lid close events.
+	This stops the problem of having "No action", "Also lock screen" in
+	the GUI.
+
+	* data/gnome-power-manager.schemas.in: Change the default action of
+	action_ac_button_lid to blank.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (manager_policy_do): Add a do_lock argument to this
 	function so we can now specificy the lock policy according to the
 	event that caused the policy to be performed. Do the locking here

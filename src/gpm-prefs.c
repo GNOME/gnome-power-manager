@@ -55,9 +55,10 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 #define ACTION_SUSPEND_TEXT		_("Suspend")
 #define ACTION_SHUTDOWN_TEXT		_("Shutdown")
 #define ACTION_HIBERNATE_TEXT		_("Hibernate")
+#define ACTION_BLANK_TEXT		_("Blank screen")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
 
-#define	GPM_DBUS_SERVICE			"org.gnome.PowerManager"
+#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_INTERFACE	        "org.gnome.PowerManager"
 
@@ -323,6 +324,8 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 		action = ACTION_HIBERNATE;
 	} else if (strcmp (value, ACTION_SHUTDOWN_TEXT) == 0) {
 		action = ACTION_SHUTDOWN;
+	} else if (strcmp (value, ACTION_BLANK_TEXT) == 0) {
+		action = ACTION_BLANK;
 	} else if (strcmp (value, ACTION_NOTHING_TEXT) == 0) {
 		action = ACTION_NOTHING;
 	} else {
@@ -376,6 +379,10 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 		} else if ((strcmp (actions[i], ACTION_HIBERNATE) == 0) && can_hibernate) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 						   ACTION_HIBERNATE_TEXT);
+			n_added++;
+		} else if (strcmp (actions[i], ACTION_BLANK) == 0) {
+			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+						   ACTION_BLANK_TEXT);
 			n_added++;
 		} else if (strcmp (actions[i], ACTION_NOTHING) == 0) {
 			gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
@@ -566,7 +573,7 @@ setup_ac_actions (GladeXML *xml)
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *checkbutton_ac_lid_lock;
 	gboolean      has_lid_button;
-	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
@@ -594,7 +601,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	GtkWidget    *label_battery_critical;
 	GtkWidget    *combo_battery_critical;
 	GtkWidget    *checkbutton_battery_lid_lock;
-	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
 

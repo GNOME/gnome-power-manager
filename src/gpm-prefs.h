@@ -62,6 +62,7 @@ typedef enum {
 #define ACTION_SUSPEND			"suspend"
 #define ACTION_SHUTDOWN			"shutdown"
 #define ACTION_HIBERNATE		"hibernate"
+#define ACTION_BLANK			"blank"
 #define ACTION_NOTHING			"nothing"
 
 G_END_DECLS

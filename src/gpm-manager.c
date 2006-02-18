@@ -523,6 +523,20 @@ manager_policy_do (GpmManager *manager,
 
 		gpm_manager_hibernate (manager, NULL);
 
+	} else if (strcmp (action, ACTION_BLANK) == 0) {
+		gpm_debug ("*ACTION* Blank");
+
+		/* We give the options to enable DPMS because some laptops do
+		 * not turn off the LCD backlight when the lid is closed. 
+		 * See http://bugzilla.gnome.org/show_bug.cgi?id=321313 */
+		GError     *error;
+		error = NULL;
+		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
+		if (error) {
+			gpm_debug ("Unable to set DPMS mode: %s", error->message);
+			g_error_free (error);
+		}
+
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
 		gpm_debug ("*ACTION* Shutdown");
 
@@ -710,7 +724,6 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmManager *manager)
 {
 	GError  *error;
-	gboolean res;
 
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
@@ -718,7 +731,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		/* deactivate display power management */
 		error = NULL;
-		res = gpm_dpms_set_active (manager->priv->dpms, FALSE, &error);
+		gpm_dpms_set_active (manager->priv->dpms, FALSE, &error);
 		if (error) {
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
@@ -732,7 +745,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		/* activate display power management */
 		error = NULL;
-		res = gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
+		gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
 		if (error) {
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
@@ -810,23 +823,15 @@ static void
 lid_button_pressed (GpmManager	 *manager,
 		    gboolean	  state)
 {
-	GpmDpmsMode mode;
-	GError     *error;
-	gboolean    res;
-	gboolean    on_ac;
+	gboolean on_ac;
+	gboolean lock_screen;
+	GError  *error;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	gpm_debug ("button changed: %d", state);
 
-	/*
-	 * We enable/disable DPMS because some laptops do
-	 * not turn off the LCD backlight when the lid
-	 * is closed. See
-	 * http://bugzilla.gnome.org/show_bug.cgi?id=321313
-	 */
 	if (state) {
-		gboolean lock_screen;
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
@@ -838,16 +843,14 @@ lid_button_pressed (GpmManager	 *manager,
 							     GPM_PREF_LOCK_BATTERY_LID, NULL);
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID, lock_screen);
 		}
-		mode = GPM_DPMS_MODE_OFF;
 	} else {
-		mode = GPM_DPMS_MODE_ON;
-	}
-
-	error = NULL;
-	res = gpm_dpms_set_mode (manager->priv->dpms, mode, &error);
-	if (error) {
-		gpm_debug ("Unable to set DPMS mode: %s", error->message);
-		g_error_free (error);
+		/* we turn the lid dpms back on unconditionally */
+		error = NULL;
+		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		if (error) {
+			gpm_debug ("Unable to set DPMS mode: %s", error->message);
+			g_error_free (error);
+		}
 	}
 }
 
