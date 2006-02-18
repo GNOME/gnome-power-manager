@@ -1,3 +1,10 @@
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (battery_status_changed_primary): Check the on_ac
+	property before we do the action. This should ensure we don't warn, or
+	do actions when removing the power lead at a short time to charge, on
+	machines that lag updating the battery device. Fixes #331401.
+
 2006-02-16  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Add --enable-actions-menu=foo so we can disable the

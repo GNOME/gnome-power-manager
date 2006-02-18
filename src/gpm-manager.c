@@ -986,11 +986,14 @@ battery_status_changed_primary (GpmManager	      *manager,
 			        GpmPowerBatteryKind    battery_kind,
 				GpmPowerBatteryStatus *battery_status)
 {
-	GpmWarning warning_type;
-	gboolean show_notify;
-	char *message = NULL;
-	char *remaining = NULL;
+	GpmWarning  warning_type;
+	gboolean    show_notify;
+	char       *message = NULL;
+	char       *remaining = NULL;
 	const char *title = NULL;
+	gboolean    on_ac;
+
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (battery_status->percentage_charge != manager->priv->last_primary_percentage_change) {
 		/* should we fire an event or something? */
@@ -1023,6 +1026,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	if (! battery_status->is_discharging) {
 		gpm_debug ("%s is not discharging", battery_kind_to_string (battery_kind));
+		return;
+	}
+
+	if (! on_ac) {
+		gpm_debug ("Computer marked as on_ac.");
 		return;
 	}
 
