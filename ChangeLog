@@ -1,5 +1,16 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade: Redesign interface. This is going to break
+	g-p-p for a little while, so please bear with me.
+	Also change duplicate accesskeys (#331538) and remove pointless icons
+	in general tab (#331530).
+	Add lots of lock checkboxes to solve (#331164) but these are disabled
+	for now. We can argue about the defaults later, but I think this is
+	an emotional argument with lots of different use-cases, that cannot
+	be solved with just minimising the UI and making assumptions.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (battery_status_changed_primary): Check the on_ac
 	property before we do the action. This should ensure we don't warn, or
 	do actions when removing the power lead at a short time to charge, on
