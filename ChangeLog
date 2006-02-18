@@ -1,3 +1,19 @@
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
+	lock_ac_lid, lock_battery_lid, lock_button_suspend, and
+	lock_sleep_idle.
+
+	* data/gpm-prefs.glade: Enable the new lock checkboxes.
+
+	* src/gpm-prefs.c (gpm_prefs_checkbox_lock_cb,
+	gpm_prefs_setup_checkbox): Add infrastructure so checkboxes can be tied
+	to gconf keys.
+	(setup_power_buttons, setup_sleep_type, setup_ac_actions,
+	setup_battery_actions): Add the checkboxes into these handlers.
+	NOTE, these keys get set correctly, but are not handled by the manager
+	yet.
+
 2006-02-18  David Zeuthen  <davidz@redhat.com>
 
 	* src/gpm-hal-monitor.c (watch_device_condition): Use details if

@@ -33,16 +33,24 @@ G_BEGIN_DECLS
 #define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/battery_sleep_computer"
 #define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/battery_sleep_display"
 #define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/battery_brightness"
+
 #define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
 #define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
 #define GPM_PREF_AC_BUTTON_LID		GPM_PREF_DIR "/action_ac_button_lid"
 #define GPM_PREF_BATTERY_BUTTON_LID	GPM_PREF_DIR "/action_battery_button_lid"
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"
+
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/display_icon_policy"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify_ac_adapter"
 #define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify_fully_charged"
+
 #define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/can_suspend"
 #define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/can_hibernate"
+
+#define GPM_PREF_LOCK_AC_LID		GPM_PREF_DIR "/lock_ac_lid"
+#define GPM_PREF_LOCK_BATTERY_LID	GPM_PREF_DIR "/lock_battery_lid"
+#define GPM_PREF_LOCK_BUTTON_SUSPEND	GPM_PREF_DIR "/lock_button_suspend"
+#define GPM_PREF_LOCK_SLEEP_IDLE	GPM_PREF_DIR "/lock_sleep_idle"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,

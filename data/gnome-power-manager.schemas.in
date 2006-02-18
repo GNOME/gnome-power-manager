@@ -194,5 +194,53 @@
       </locale>
    </schema>
 
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock_ac_lid</key>
+      <applyto>/apps/gnome-power-manager/lock_ac_lid</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen for lid on AC power</short>
+        <long>If we should lock the screen when the lid is closed on AC power</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock_battery_lid</key>
+      <applyto>/apps/gnome-power-manager/lock_battery_lid</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen for lid on battery power</short>
+        <long>If we should lock the screen when the lid is closed on battery power</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock_button_suspend</key>
+      <applyto>/apps/gnome-power-manager/lock_button_suspend</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen for suspend button</short>
+        <long>If we should lock the screen when the suspend button is pressed</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock_sleep_idle</key>
+      <applyto>/apps/gnome-power-manager/lock_sleep_idle</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen for idle sleep</short>
+        <long>If we should lock the screen when the idle sleep is executed</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>
