@@ -1,5 +1,11 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.c (setup_ac_actions): Hide the ac "Actions" box if
+	there is no lib button, as it's now empty.
+	(setup_battery_actions): Use the right glade name for the labels.
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (manager_policy_do): Add action BLANK to trigger
 	a DPMS monitor off state.
 	(lid_button_pressed): Don't do DPMS state unless we have blank as

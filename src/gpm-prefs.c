@@ -572,12 +572,14 @@ setup_ac_actions (GladeXML *xml)
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *checkbutton_ac_lid_lock;
+	GtkWidget    *vbox_ac_actions;
 	gboolean      has_lid_button;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
-	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
+	label_button_lid = glade_xml_get_widget (xml, "label_ac_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
 	checkbutton_ac_lid_lock = glade_xml_get_widget (xml, "checkbutton_ac_lid_lock");
+	vbox_ac_actions = glade_xml_get_widget (xml, "vbox_ac_actions");
 
 	has_lid_button = gpm_has_button_lid ();
 
@@ -585,12 +587,15 @@ setup_ac_actions (GladeXML *xml)
 		gpm_prefs_setup_action_combo (combo_button_lid,
 					      GPM_PREF_AC_BUTTON_LID,
 					      button_lid_actions);
+		gpm_prefs_setup_checkbox (checkbutton_ac_lid_lock, GPM_PREF_LOCK_AC_LID);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
+		gtk_widget_hide_all (checkbutton_ac_lid_lock);
+		/* there is nothing else in this action box apart from
+		   lid event, so hide the whole box */
+		gtk_widget_hide_all (vbox_ac_actions);
 	}
-
-	gpm_prefs_setup_checkbox (checkbutton_ac_lid_lock, GPM_PREF_LOCK_AC_LID);
 }
 
 static void
@@ -611,7 +616,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	}
 
 	/* Button Lid Combo Box */
-	label_button_lid = glade_xml_get_widget (xml, "label_button_lid");
+	label_button_lid = glade_xml_get_widget (xml, "label_battery_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_battery_lid_close");
 	checkbutton_battery_lid_lock = glade_xml_get_widget (xml, "checkbutton_battery_lid_lock");
 
@@ -621,9 +626,12 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 		gpm_prefs_setup_action_combo (combo_button_lid,
 					      GPM_PREF_BATTERY_BUTTON_LID,
 					      button_lid_actions);
+		gpm_prefs_setup_checkbox (checkbutton_battery_lid_lock,
+					  GPM_PREF_LOCK_BATTERY_LID);
 	} else {
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
+		gtk_widget_hide_all (checkbutton_battery_lid_lock);
 	}
 	/* FIXME: also need lid lock */
 
@@ -633,8 +641,6 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	gpm_prefs_setup_action_combo (combo_battery_critical,
 				      GPM_PREF_BATTERY_CRITICAL,
 				      battery_critical_actions);
-
-	gpm_prefs_setup_checkbox (checkbutton_battery_lid_lock, GPM_PREF_LOCK_BATTERY_LID);
 }
 
 static void
