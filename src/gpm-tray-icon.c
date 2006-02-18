@@ -327,6 +327,14 @@ tray_popup_position_menu (GtkMenu  *menu,
 	*push_in = TRUE;
 }
 
+static void
+gpm_tray_icon_popup_cleared_cd (GtkWidget   *mo,
+				GpmTrayIcon *icon)
+{
+	/* we enable the tooltip as the menu has gone */
+	gtk_tooltips_enable (icon->priv->tooltips);
+}
+
 static gboolean
 gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 			       GdkEventButton *event,
@@ -338,6 +346,10 @@ gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 					   "/GpmTrayPopup");
 	gtk_menu_set_screen (GTK_MENU (popup),
 			     gtk_widget_get_screen (GTK_WIDGET (icon)));
+
+	/* we disable the tooltip so it doesn't clash with the menu. See #331075 */
+	gtk_tooltips_disable (icon->priv->tooltips);
+
 	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
 			tray_popup_position_menu, widget,
 			2,
@@ -397,6 +409,7 @@ gpm_tray_icon_constructor (GType                  type,
 	GpmTrayIcon      *tray;
 	GpmTrayIconClass *klass;
 	GError           *error = NULL;
+	GtkWidget	 *widget;
 
 	klass = GPM_TRAY_ICON_CLASS (g_type_class_peek (GPM_TYPE_TRAY_ICON));
 
@@ -435,6 +448,10 @@ gpm_tray_icon_constructor (GType                  type,
 	}
 
 	gtk_ui_manager_ensure_update (tray->priv->ui_manager);
+
+	/* Get notified of when the menu goes, as we have to re-enable the tooltip */
+	widget = gtk_ui_manager_get_widget (tray->priv->ui_manager, "/GpmTrayPopup");
+	g_signal_connect (GTK_WIDGET (widget), "hide", G_CALLBACK (gpm_tray_icon_popup_cleared_cd), tray);
 
 	g_object_unref (tray->priv->actiongroup);
 

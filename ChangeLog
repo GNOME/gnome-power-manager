@@ -1,5 +1,14 @@
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c (gpm_tray_icon_popup_cleared_cd): Add this
+	function so we re-enable the tooltip.
+	(gpm_tray_icon_button_press_cb): Disable the tooltip.
+	(gpm_tray_icon_constructor): Set up the callback for the tray hide
+	event. This means that the tooltip will not show when the popup menu
+	is on the screen. This fixes bug (#331075).
+
+2006-02-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade, src/gpm-prefs.c (gpm_prefs_setup_checkbox,
 	gpm_prefs_checkbox_lock_cb): Remove the lock checkboxes. :-)
 
