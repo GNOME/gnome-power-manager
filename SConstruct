@@ -95,7 +95,6 @@ env = Environment(ENV = os.environ,
                   toolpath = ["sconstools"],
                   tools = ["default", "gnomebuild"])
 
-env.features.register(doxygen())
 env.features.register(notifycheck())
 
 # Whether to use a config.h file or not is specified on the command

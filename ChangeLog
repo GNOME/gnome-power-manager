@@ -1,5 +1,16 @@
 2006-02-19  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in, SConstruct, docs/Makefile.am: Remove doxygen build
+	support as hardly any files now build. Fixes #327743.
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h,
+	src/gpm-manager.c: Only use lock_on_blank_screen, lock_on_suspend,
+	lock_on_hibernate as this should give us enough power for custom users
+	and also simplicity so we don't have a dozen keys. We default to
+	gnome-screensaver settings.
+
+2006-02-19  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (battery_status_changed_primary): Ahh! Merged a
 	previous version of the (! on_ac) -> (! on_ac) patch. Fixed now.
 

@@ -207,50 +207,38 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_ac_lid</key>
-      <applyto>/apps/gnome-power-manager/lock_ac_lid</applyto>
+      <key>/schemas/apps/gnome-power-manager/lock_on_blank_screen</key>
+      <applyto>/apps/gnome-power-manager/lock_on_blank_screen</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen for lid on AC power</short>
-        <long>If we should lock the screen when the lid is closed on AC power (using custom rules)</long>
+        <short>Lock screen when we blank it</short>
+        <long>If we should lock the screen when the screen is turned off with DPMS (using custom rules)</long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_battery_lid</key>
-      <applyto>/apps/gnome-power-manager/lock_battery_lid</applyto>
+      <key>/schemas/apps/gnome-power-manager/lock_on_suspend</key>
+      <applyto>/apps/gnome-power-manager/lock_on_suspend</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen for lid on battery power</short>
-        <long>If we should lock the screen when the lid is closed on battery power (using custom rules)</long>
+        <short>Lock screen when we suspend</short>
+        <long>If we should lock the screen when we are set to suspend (using custom rules)</long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_button_suspend</key>
-      <applyto>/apps/gnome-power-manager/lock_button_suspend</applyto>
+      <key>/schemas/apps/gnome-power-manager/lock_on_hibernate</key>
+      <applyto>/apps/gnome-power-manager/lock_on_hibernate</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen for suspend button</short>
-        <long>If we should lock the screen when the suspend button is pressed (using custom rules)</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_sleep_idle</key>
-      <applyto>/apps/gnome-power-manager/lock_sleep_idle</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Lock screen for idle sleep</short>
-        <long>If we should lock the screen when the idle sleep is executed (using custom rules)</long>
+        <short>Lock screen when we hibernate</short>
+        <long>If we should lock the screen when we are set to hibernate (using custom rules)</long>
       </locale>
     </schema>
 
