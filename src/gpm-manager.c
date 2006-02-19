@@ -1042,7 +1042,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
-	if (! on_ac) {
+	if (on_ac) {
 		gpm_debug ("Computer marked as on_ac.");
 		return;
 	}
