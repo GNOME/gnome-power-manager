@@ -140,16 +140,6 @@ gpm_has_lcd (void)
 }
 
 static gboolean
-gpm_has_button_sleep (void)
-{
-	gboolean value;
-
-	value = gpm_hal_num_devices_of_capability_with_value  ("button", "button.type", "sleep") > 0;
-
-	return value;
-}
-
-static gboolean
 gpm_has_button_lid (void)
 {
 	gboolean value;
@@ -474,32 +464,6 @@ setup_ac_sliders (GladeXML *xml, gboolean has_batteries)
 }
 
 static void
-setup_power_buttons (GladeXML *xml, gboolean has_suspend_button)
-{
-	GtkWidget    *label_button_suspend;
-	GtkWidget    *combo_button_suspend;
-	GtkWidget    *frame_options_actions;
-	const char   *button_suspend_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
-
-	/* Button Suspend Combo Box */
-	label_button_suspend = glade_xml_get_widget (xml, "label_button_suspend");
-	combo_button_suspend = glade_xml_get_widget (xml, "combobox_button_suspend");
-	frame_options_actions = glade_xml_get_widget (xml, "frame_options_actions");
-
-	if (has_suspend_button) {
-		gpm_prefs_setup_action_combo (combo_button_suspend,
-					      GPM_PREF_BUTTON_SUSPEND,
-					      button_suspend_actions);
-	} else {
-		gtk_widget_hide_all (label_button_suspend);
-		gtk_widget_hide_all (combo_button_suspend);
-		/* as the suspend button is the only think in the
-		   action frame, remove if empty */
-		gtk_widget_hide_all (frame_options_actions);
-	}
-}
-
-static void
 setup_sleep_type (GladeXML *xml)
 {
 	GtkWidget    *label_sleep_type;
@@ -642,9 +606,10 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 static GtkWidget *
 gpm_prefs_create (void)
 {
-	GtkWidget *main_window;
-	GtkWidget *widget;
-	GladeXML *glade_xml;
+	GtkWidget    *main_window;
+	GtkWidget    *widget;
+	GladeXML     *glade_xml;
+	gboolean      has_batteries;
 
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
@@ -667,16 +632,7 @@ gpm_prefs_create (void)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), NULL);
 
-
-	gboolean      has_batteries;
-	gboolean      has_suspend_button;
-
-	has_suspend_button = gpm_has_button_sleep ();
 	has_batteries = gpm_has_batteries ();
-
-	GtkWidget    *label_sleep_type;
-	GtkWidget    *label_button_suspend;
-	GtkSizeGroup *size_group;
 
 	setup_icon_policy (glade_xml, has_batteries);
 	setup_ac_actions (glade_xml);
@@ -684,18 +640,6 @@ gpm_prefs_create (void)
 	setup_battery_actions (glade_xml, has_batteries);
 	setup_battery_sliders (glade_xml, has_batteries);
 	setup_sleep_type (glade_xml);
-	setup_power_buttons (glade_xml, has_suspend_button);
-
-	/* Make sure that all comboboxes get the same size by adding their
-	 * labels to a GtkSizeGroup
-	 */
-	label_sleep_type = glade_xml_get_widget (glade_xml, "label_sleep_type");
-	label_button_suspend = glade_xml_get_widget (glade_xml, "label_button_suspend");
-
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	gtk_size_group_add_widget (size_group, label_sleep_type);
-	gtk_size_group_add_widget (size_group, label_button_suspend);
-	g_object_unref (G_OBJECT (size_group));
 
 	/* if no options then disable frame as it will be empty */
 	if (! has_batteries) {
