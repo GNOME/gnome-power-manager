@@ -49,10 +49,9 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_LOCK_USE_SCREENSAVER	GPM_PREF_DIR "/lock_use_screensaver_settings"
 /* These are only effective if the system default is turned off. See bug #331164 */
-#define GPM_PREF_LOCK_AC_LID		GPM_PREF_DIR "/lock_ac_lid"
-#define GPM_PREF_LOCK_BATTERY_LID	GPM_PREF_DIR "/lock_battery_lid"
-#define GPM_PREF_LOCK_BUTTON_SUSPEND	GPM_PREF_DIR "/lock_button_suspend"
-#define GPM_PREF_LOCK_SLEEP_IDLE	GPM_PREF_DIR "/lock_sleep_idle"
+#define GPM_PREF_LOCK_ON_BLANK_SCREEN	GPM_PREF_DIR "/lock_on_blank_screen"
+#define GPM_PREF_LOCK_ON_SUSPEND	GPM_PREF_DIR "/lock_on_suspend"
+#define GPM_PREF_LOCK_ON_HIBERNATE	GPM_PREF_DIR "/lock_on_hibernate"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,

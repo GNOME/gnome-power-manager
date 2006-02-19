@@ -491,13 +491,83 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 	}
 }
 
+static gboolean
+manager_do_we_screensave (GpmManager *manager,
+			  const char *policy)
+{
+	gboolean do_lock;
+	gboolean use_ss_setting;
+	/* This allows us to over-ride the custom lock settings set in gconf
+	   with a system default set in gnome-screensaver.
+	   See bug #331164 for all the juicy details. :-) */
+	use_ss_setting = gconf_client_get_bool (manager->priv->gconf_client,
+						GPM_PREF_LOCK_USE_SCREENSAVER,
+						NULL);
+	if (use_ss_setting) {
+		do_lock = gpm_screensaver_lock_enabled ();
+		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
+	} else {
+		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
+						 policy, NULL);
+		gpm_debug ("Using constom locking settings (%i)", do_lock);
+	}
+	return do_lock;
+}
+
+static gboolean
+gpm_manager_blank_screen (GpmManager *manager,
+			  GError    **noerror)
+{
+	gboolean do_lock;
+	gboolean ret = TRUE;
+
+	do_lock = manager_do_we_screensave (manager,
+					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
+	if (do_lock) {
+		gpm_screensaver_lock ();
+	}
+	/* We give the options to enable DPMS because some laptops do
+	 * not turn off the LCD backlight when the lid is closed. 
+	 * See http://bugzilla.gnome.org/show_bug.cgi?id=321313 */
+	GError     *error = NULL;
+	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
+	if (error) {
+		gpm_debug ("Unable to set DPMS mode: %s", error->message);
+		g_error_free (error);
+		ret = FALSE;
+	}
+	return ret;
+}
+
+static gboolean
+gpm_manager_unblank_screen (GpmManager *manager,
+			    GError    **noerror)
+{
+	gboolean  do_lock;
+	gboolean  ret = TRUE;
+	GError   *error;
+
+	error = NULL;
+	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	if (error) {
+		gpm_debug ("Unable to set DPMS mode: %s", error->message);
+		g_error_free (error);
+		ret = FALSE;
+	}
+
+	do_lock = manager_do_we_screensave (manager,
+					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
+	if (do_lock) {
+		gpm_screensaver_poke ();
+	}
+	return ret;
+}
+
 static void
 manager_policy_do (GpmManager *manager,
-		   const char *policy,
-		   gboolean do_lock)
+		   const char *policy)
 {
-	char *action;
-	gboolean use_ss_setting;
+	char     *action;
 
 	gpm_debug ("policy: %s", policy);
 
@@ -507,61 +577,32 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 
-	/* This allows us to over-ride the custom lock settings set in gconf
-	   with a system default set in gnome-screensaver.
-	   See bug #331164 for all the juicy details. :-) */
-	use_ss_setting = gconf_client_get_bool (manager->priv->gconf_client,
-						GPM_PREF_LOCK_USE_SCREENSAVER,
-						NULL);
-	if (use_ss_setting) {
-		do_lock = gpm_screensaver_lock_enabled ();
-		gpm_debug ("Using ScreenSaver settings, policy (%i)", do_lock);
-	} else {
-		gpm_debug ("Using custom settings, policy (%i)", do_lock);
-	}
-
-	if (do_lock) {
-		gpm_screensaver_lock ();
-	}
-
 	if (strcmp (action, ACTION_NOTHING) == 0) {
+
 		gpm_debug ("*ACTION* Doing nothing");
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-		gpm_debug ("*ACTION* Suspend");
 
+		gpm_debug ("*ACTION* Suspend");
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-		gpm_debug ("*ACTION* Hibernate");
 
+		gpm_debug ("*ACTION* Hibernate");
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
-		gpm_debug ("*ACTION* Blank");
 
-		/* We give the options to enable DPMS because some laptops do
-		 * not turn off the LCD backlight when the lid is closed. 
-		 * See http://bugzilla.gnome.org/show_bug.cgi?id=321313 */
-		GError     *error;
-		error = NULL;
-		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS mode: %s", error->message);
-			g_error_free (error);
-		}
+		gpm_debug ("*ACTION* Blank");
+		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-		gpm_debug ("*ACTION* Shutdown");
 
+		gpm_debug ("*ACTION* Shutdown");
 		gpm_manager_shutdown (manager, NULL);
 
 	} else {
 		gpm_warning ("unknown action %s", action);
-	}
-
-	if (do_lock) {
-		gpm_screensaver_poke ();
 	}
 
 	g_free (action);
@@ -656,6 +697,7 @@ gpm_manager_hibernate (GpmManager *manager,
 {
 	gboolean allowed;
 	gboolean ret;
+	gboolean do_lock;
 
 	gpm_manager_can_hibernate (manager, &allowed, NULL);
 
@@ -666,6 +708,12 @@ gpm_manager_hibernate (GpmManager *manager,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot hibernate");
 		return FALSE;
+	}
+
+	do_lock = manager_do_we_screensave (manager,
+					    GPM_PREF_LOCK_ON_HIBERNATE);
+	if (do_lock) {
+		gpm_screensaver_lock ();
 	}
 
 	gpm_networkmanager_sleep ();
@@ -686,6 +734,9 @@ gpm_manager_hibernate (GpmManager *manager,
 		g_free (message);
 	}
 
+	if (do_lock) {
+		gpm_screensaver_poke ();
+	}
 	gpm_networkmanager_wake ();
 
 	return ret;
@@ -697,6 +748,7 @@ gpm_manager_suspend (GpmManager *manager,
 {
 	gboolean allowed;
 	gboolean ret;
+	gboolean do_lock;
 
 	gpm_manager_can_suspend (manager, &allowed, NULL);
 
@@ -707,6 +759,12 @@ gpm_manager_suspend (GpmManager *manager,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot suspend");
 		return FALSE;
+	}
+
+	do_lock = manager_do_we_screensave (manager,
+					    GPM_PREF_LOCK_ON_SUSPEND);
+	if (do_lock) {
+		gpm_screensaver_lock ();
 	}
 
 	gpm_networkmanager_sleep ();
@@ -727,6 +785,9 @@ gpm_manager_suspend (GpmManager *manager,
 		g_free (message);
 	}
 
+	if (do_lock) {
+		gpm_screensaver_poke ();
+	}
 	gpm_networkmanager_wake ();
 
 	return ret;
@@ -772,10 +833,7 @@ idle_changed_cb (GpmIdle    *idle,
 		gpm_debug ("Idle state changed: SYSTEM");
 
 		/* can only be hibernate or suspend */
-		gboolean lock_screen;
-		lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
-						     GPM_PREF_LOCK_SLEEP_IDLE, NULL);
-		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE, lock_screen);
+		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE);
 
 		break;
 	default:
@@ -827,19 +885,14 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	gboolean lock_screen;
-	lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
-					     GPM_PREF_LOCK_BUTTON_SUSPEND, NULL);
-	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND, lock_screen);
+	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
 }
 
 static void
 lid_button_pressed (GpmManager	 *manager,
 		    gboolean	  state)
 {
-	gboolean on_ac;
-	gboolean lock_screen;
-	GError  *error;
+	gboolean  on_ac;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -848,23 +901,14 @@ lid_button_pressed (GpmManager	 *manager,
 	if (state) {
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
-			lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
-							     GPM_PREF_LOCK_AC_LID, NULL);
-			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID, lock_screen);
+			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID);
 		} else {
 			gpm_debug ("Performing battery policy");
-			lock_screen = gconf_client_get_bool (manager->priv->gconf_client,
-							     GPM_PREF_LOCK_BATTERY_LID, NULL);
-			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID, lock_screen);
+			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
 		/* we turn the lid dpms back on unconditionally */
-		error = NULL;
-		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS mode: %s", error->message);
-			g_error_free (error);
-		}
+		gpm_manager_unblank_screen (manager, NULL);
 	}
 }
 
@@ -1064,7 +1108,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					"this computer is about to shutdown."));
 		/* wait 10 seconds for user-panic */
 		g_usleep (1000 * 1000 * 10);
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL, FALSE);
+		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
 	}
 
 	/* Always check if we already notified the user */
