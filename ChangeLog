@@ -1,5 +1,15 @@
 2006-02-20  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.c (gpm_prefs_setup_sleep_slider,
+	gpm_prefs_setup_brightness_slider, gpm_prefs_setup_action_combo,
+	setup_icon_policy): Make the widgets disabled if the gconf key is
+	not writeable. Fixes bug (#327893)
+
+	* help/C/gnome-power-manager.xml: document why the widgets might be
+	disabled.
+
+2006-02-20  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml: document the problems with
 	Suspend on low power in a new known-bugs section.
 
