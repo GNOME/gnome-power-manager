@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-22 14:20+0000\n"
+"POT-Creation-Date: 2006-02-20 17:05+0000\n"
 "PO-Revision-Date: 2005-12-15 14:40+0530\n"
 "Last-Translator: Amanpreet Singh Alam <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -24,6 +24,17 @@ msgstr "ਊਰਜਾ ਪਰਬੰਧ ਸੰਰਚਨਾ"
 
 #: ../data/gnome-power-preferences.desktop.in.h:2
 msgid "Power Management"
+msgstr "ਊਰਜਾ ਪਰਬੰਧ"
+
+#. common descriptions of this program
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
+#, fuzzy
+msgid "Power Manager"
+msgstr "ਊਰਜਾ ਪਰਬੰਧ"
+
+#: ../data/gnome-power-manager.desktop.in.h:2
+#, fuzzy
+msgid "Power management daemon"
 msgstr "ਊਰਜਾ ਪਰਬੰਧ"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
@@ -61,110 +72,165 @@ msgid "Display battery idle timeout value"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-msgid "If we should notify the user that the AC adapter has been removed"
+msgid "If the user can hibernate"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:10
-msgid "If we should notify the user that the battery is fully charged"
+msgid "If the user can suspend"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:11
-#, fuzzy
-msgid "Laptop lid close action"
-msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
+msgid ""
+"If this particular user should have hibernate on the drop-down menu and in "
+"the prefs"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:12
-msgid "Notify on AC loss"
+msgid ""
+"If this particular user should have suspend on the drop-down menu and in the "
+"prefs"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:13
+msgid "If to dim the screen after a period of inactivity"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+msgid ""
+"If we should dim the screen to save power when the computer is marked as "
+"idle."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If we should lock the screen when the screen is turned off with DPMS (using "
+"custom rules)"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid ""
+"If we should lock the screen when we are set to hibernate (using custom "
+"rules)"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If we should lock the screen when we are set to suspend (using custom rules)"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If we should notify the user that the AC adapter has been removed"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid "If we should notify the user that the battery is fully charged"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+msgid ""
+"If we should use the gnome-screensaver setting for lock, or our own custom "
+"rules"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+#, fuzzy
+msgid "Laptop lid close action on AC"
+msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+#, fuzzy
+msgid "Laptop lid close action on battery"
+msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+msgid "Lock screen when we blank it"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+msgid "Lock screen when we hibernate"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid "Lock screen when we suspend"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+msgid "Notify on AC loss"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:27
 #, fuzzy
 msgid "Notify on fully charged"
 msgstr "ਜਦੋਂ ਤੱਕ ਚਾਰਜ ਨਹੀਂ ਹੁੰਦੀ"
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "Suspend button action"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "The action to take when the battery is critically low."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
-msgid "The action to take when the laptop lid is closed"
+msgid ""
+"The action to take when the laptop lid is closed and not on battery power"
 msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:31
+#, fuzzy
+msgid "The action to take when the laptop lid is closed and on battery power"
+msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
+
+#: ../data/gnome-power-manager.schemas.in.h:32
 #, fuzzy
 msgid "The action to take when the system suspend button is pressed"
 msgstr "ਮੁਅੱਤਲ ਬਟਨ ਦਬਾਉਣ ਲਈ ਘਟਨਾ"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
-#, fuzzy
-msgid "The battery critical action threshold."
-msgstr "ਊਰਜਾ-ਜੰਤਰ ਕਾਰਵਾਈ ਥਰੈਸ਼ਹੋਲਡ ਹੈ।"
-
-#: ../data/gnome-power-manager.schemas.in.h:19
-#, fuzzy
-msgid "The battery warning threshold."
-msgstr "ਊਰਜਾ-ਜੰਤਰ ਚੇਤਾਵਨੀ ਥਰੈਸ਼ਹੋਲਡ ਹੈ।"
-
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid "The display icon policy can be never, critical, charge, always"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "The hardware brightness the display is set to whilst on AC power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid "The hardware brightness the display is set to whilst on battery power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "The idle time in seconds before the computer tries to sleep whilst on AC "
 "power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "The idle time in seconds before the computer tries to sleep whilst on "
 "battery power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid ""
 "The idle time in seconds before the display tries to sleep whilst on AC power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "The idle time in seconds before the display tries to sleep whilst on battery "
 "power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
-msgid ""
-"The percentage that the battery has to get to be considered \"low enough\" "
-"to perform an action."
-msgstr "ਫ਼ੀ-ਸਦੀ, ਜਿਸ ਉੱਤੇ ਊਰਜਾ-ਜੰਤਰ ਨੂੰ ਇੱਕ ਘਟਨਾ ਲਈ \"ਕਾਫ਼ੀ ਘੱਟ\" ਮੰਨਿਆ ਜਾਵੇ।"
-
-#: ../data/gnome-power-manager.schemas.in.h:28
-#, fuzzy
-msgid ""
-"The percentage that the battery has to get to be considered \"low enough\" "
-"to warn the user."
-msgstr ""
-"ਫ਼ੀ-ਸਦੀ, ਜਿਸ ਉੱਤੇ ਊਰਜਾ-ਜੰਤਰ ਨੂੰ ਉਪਭੋਗੀ ਨੂੰ \"ਕਾਫ਼ੀ ਘੱਟ\" ਦੀ ਚੇਤਾਵਨੀ ਦੇਣ ਲਈ ਮੰਨਿਆ ਜਾਵੇ।"
-
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "The type of sleep (hibernate/suspend) to use automatically."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:41
+msgid "Use gnome-screensaver lock setting"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "When to show the notification icon"
 msgstr "ਜਦੋਂ ਸੂਚੀ ਆਈਕਾਨ ਨੂੰ ਦੋ ਵਾਰ ਦਬਾਇਆ ਜਾਵੇ"
 
@@ -181,118 +247,99 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>ਸੂਚਨਾ ਖੇਤਰ</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-msgid "<b>Other Options</b>"
-msgstr "<b>ਹੋਰ ਚੋਣਾਂ</b>"
-
-#: ../data/gpm-prefs.glade.h:5
-msgid "<b>Running on AC Adapter</b>"
+#, fuzzy
+msgid "<b>Running on AC</b>"
 msgstr "<b>AC ਐਡਪਟਰ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ</b>"
 
-#: ../data/gpm-prefs.glade.h:6
+#: ../data/gpm-prefs.glade.h:5
 msgid "<b>Running on Batteries</b>"
 msgstr "<b>ਬੈਟਰੀ 'ਤੇ ਚੱਲ ਰਿਹਾ ਹੈ</b>"
 
-#: ../data/gpm-prefs.glade.h:7
-msgid "Advanced"
-msgstr "ਤਕਨੀਕੀ"
-
-#: ../data/gpm-prefs.glade.h:8
-msgid "Ba_ttery is critical when below:"
-msgstr "ਬੈਟਰੀ ਨਾਜ਼ੁਕ ਹੈ, ਜਦੋਂ ਘੱਟੋ ਹੋਵੇ(_T):"
-
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:6
 msgid "Only display when battery life is _critical"
 msgstr "ਉਦੋਂ ਹੀ ਵੇਖਾਓ, ਜਦੋਂ ਬੈਟਰੀ ਊਰਜਾ ਨਾਜ਼ੁਕ ਹੋਵੇ(_C)"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:7
 msgid "Only display when charging or _discharging"
 msgstr "ਜਦੋਂ ਚਾਰਜ ਜਾਂ ਡਿਸਚਾਰਜ ਹੋਵੇ ਤਾਂ ਹੀ ਵੇਖਾਓ(_D)"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:8
 msgid "Options"
 msgstr "ਚੋਣ"
 
-#: ../data/gpm-prefs.glade.h:12 ../src/gpm-prefs.c:750
-msgid "Power Preferences"
+#: ../data/gpm-prefs.glade.h:9
+#, fuzzy
+msgid "Power Management Preferences"
 msgstr "ਊਰਜਾ ਪਸੰਦ"
 
-#: ../data/gpm-prefs.glade.h:13
-msgid "Put _computer to sleep after:"
+#: ../data/gpm-prefs.glade.h:10
+#, fuzzy
+msgid "Put _computer to sleep when it is inactive for:"
 msgstr "ਕੰਪਿਊਟਰ ਨੂੰ ਸਲੀਪ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_C):"
 
-#: ../data/gpm-prefs.glade.h:14
-msgid "Put _display to sleep after:"
+#: ../data/gpm-prefs.glade.h:11
+#, fuzzy
+msgid "Put _display to sleep when computer is inactive for:"
 msgstr "ਦਰਿਸ਼ ਨੂੰ ਸਲੀਪ ਦੇ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_D):"
 
-#: ../data/gpm-prefs.glade.h:15
-msgid "Put c_omputer to sleep after:"
-msgstr "ਕੰਪਿਊਟਰ ਨੂੰ ਸਲੀਪ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_O):"
+#: ../data/gpm-prefs.glade.h:12
+#, fuzzy
+msgid "Running on AC"
+msgstr "<b>AC ਐਡਪਟਰ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ</b>"
 
-#: ../data/gpm-prefs.glade.h:16
-msgid "Put dis_play to sleep after:"
-msgstr "ਦਰਿਸ਼ ਨੂੰ ਸਲੀਪ ਦੇ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_P):"
+#: ../data/gpm-prefs.glade.h:13
+#, fuzzy
+msgid "Running on Battery"
+msgstr "<b>ਬੈਟਰੀ 'ਤੇ ਚੱਲ ਰਿਹਾ ਹੈ</b>"
 
-#: ../data/gpm-prefs.glade.h:17
-msgid "Set display _brightness:"
+#: ../data/gpm-prefs.glade.h:14
+#, fuzzy
+msgid "Set display _brightness to:"
 msgstr "ਦਰਿਸ਼ ਚਮਕ ਸੈੱਟ ਕਰੋ(_B):"
 
-#: ../data/gpm-prefs.glade.h:18
-msgid "Set display b_rightness:"
-msgstr "ਦਰਿਸ਼ ਚਮਕ ਸੈੱਟ ਕਰੋ(_R):"
+#: ../data/gpm-prefs.glade.h:15
+msgid "Sleep _type when inactive:"
+msgstr ""
 
-#: ../data/gpm-prefs.glade.h:19
-msgid "Sleep"
-msgstr "ਸਲੀਪ"
-
-#: ../data/gpm-prefs.glade.h:20
-msgid "When _battery power critical:"
+#: ../data/gpm-prefs.glade.h:16
+#, fuzzy
+msgid "When battery _power critical:"
 msgstr "ਜਦੋਂ ਬੈਟਰੀ ਊਰਜਾ ਨਾਜ਼ੁਕ ਹੋਵੇ(_B):"
 
-#: ../data/gpm-prefs.glade.h:21
-msgid "When _suspend button pressed:"
-msgstr "ਜਦੋਂ ਮੁਅੱਤਲ ਬਟਨ ਦਬਾਇਆ ਜਾਵੇ(_S):"
-
-#: ../data/gpm-prefs.glade.h:22
-msgid "When laptop li_d is closed:"
+#: ../data/gpm-prefs.glade.h:17
+#, fuzzy
+msgid "When l_aptop lid is closed:"
 msgstr "ਜਦੋਂ ਲੈਪਟਾਪ li_d ਬੰਦ ਹੋਵੇ:"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:18
 msgid "_Always display icon"
 msgstr "ਆਈਕਾਨ ਹਮੇਸ਼ਾ ਵੇਖਾਓ(_A)"
 
-#: ../data/gpm-prefs.glade.h:24
-msgid "_Battery is low when below:"
-msgstr "ਬੈਟਰੀ ਘੱਟ ਹੈ, ਜਦੋਂ ਘੱਟੋ ਹੋਵੇ(_B):"
-
-#: ../data/gpm-prefs.glade.h:25
-msgid "_Computer sleep type:"
-msgstr "ਕੰਪਿਊਟਰ ਸਲੀਪ ਕਿਸਮ(_C):"
-
-#: ../data/gpm-prefs.glade.h:26
+#: ../data/gpm-prefs.glade.h:19
 msgid "_Never display icon"
 msgstr "ਆਈਕਾਨ ਕਦੇ ਨਾ ਵੇਖਾਓ(_N)"
 
-#: ../src/eggtrayicon.c:132
+#: ../src/eggtrayicon.c:125
 msgid "Orientation"
 msgstr "ਸਥਿਤੀ"
 
-#: ../src/eggtrayicon.c:133
+#: ../src/eggtrayicon.c:126
 msgid "The orientation of the tray."
 msgstr "ਟਰੇ ਦੀ ਸਥਿਤੀ ਹੈ।"
 
-#: ../src/gpm-common.c:51
+#: ../src/gpm-common.c:47
 #, fuzzy
 msgid "Unknown time"
 msgstr "ਅਣਜਾਣ"
 
-#: ../src/gpm-common.c:56
+#: ../src/gpm-common.c:52
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i ਮਿੰਟ"
 msgstr[1] "%i ਮਿੰਟ"
 
-#: ../src/gpm-common.c:67
+#: ../src/gpm-common.c:63
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -301,114 +348,194 @@ msgstr[1] "%i ਘੰਟਾ"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:73
+#: ../src/gpm-common.c:69
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:74
+#: ../src/gpm-common.c:70
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ਘੰਟਾ"
 msgstr[1] "ਘੰਟੇ"
 
-#: ../src/gpm-common.c:75
+#: ../src/gpm-common.c:71
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "ਮਿੰਟ"
 msgstr[1] "ਮਿੰਟ"
 
-#. common descriptions of this program
-#: ../src/gpm-common.h:32
-#, fuzzy
-msgid "Power Manager"
-msgstr "ਊਰਜਾ ਪਰਬੰਧ"
-
-#: ../src/gpm-common.h:33
+#: ../src/gpm-common.h:31
 msgid "Power Manager for the GNOME desktop"
 msgstr ""
 
-#: ../src/gpm-main.c:315
+#: ../src/gpm-main.c:140
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-main.c:317 ../src/gpm-prefs.c:737
+#: ../src/gpm-main.c:142 ../src/gpm-prefs.c:692
 msgid "Show extra debugging information"
 msgstr ""
 
-#: ../src/gpm-manager.c:516
-msgid "AC Power Unplugged"
+#: ../src/gpm-manager.c:726
+#, c-format
+msgid ""
+"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:518
-msgid "The AC Power has been unplugged. The system is now using battery power."
+#: ../src/gpm-manager.c:728
+#, fuzzy
+msgid "hibernate"
+msgstr "ਹਾਈਬਰਨੇਟ"
+
+#: ../src/gpm-manager.c:732
+#, fuzzy
+msgid "Hibernate Problem"
+msgstr "ਹਾਈਬਰਨੇਟ"
+
+#: ../src/gpm-manager.c:777
+#, c-format
+msgid ""
+"Your computer failed to %s.\n"
+"Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:611
+#: ../src/gpm-manager.c:779
+#, fuzzy
+msgid "suspend"
+msgstr "ਮੁਅੱਤਲ"
+
+#: ../src/gpm-manager.c:783
+#, fuzzy
+msgid "Suspend Problem"
+msgstr "ਮੁਅੱਤਲ"
+
+#: ../src/gpm-manager.c:1033
+#, fuzzy
+msgid "Power Critically Low"
+msgstr "ਬੈਟਰੀ ਨਾਜ਼ੁਕ ਰੂਪ ਵਿੱਚ ਘੱਟ"
+
+#: ../src/gpm-manager.c:1037
+msgid "Power Very Low"
+msgstr ""
+
+#: ../src/gpm-manager.c:1041
+msgid "Power Low"
+msgstr ""
+
+#: ../src/gpm-manager.c:1045
+#, fuzzy
+msgid "Power Information"
+msgstr "<b>ਸੂਚਨਾ ਖੇਤਰ</b>"
+
+#: ../src/gpm-manager.c:1089
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-manager.c:613
+#: ../src/gpm-manager.c:1091
 msgid "Your battery is now fully charged"
 msgstr ""
 
-#: ../src/gpm-manager.c:637 ../src/gpm-manager.c:659
+#: ../src/gpm-manager.c:1117
+#, fuzzy
+msgid "Critical action"
+msgstr "ਬੈਟਰੀ ਨਾਜ਼ੁਕ ਰੂਪ ਵਿੱਚ ਘੱਟ"
+
+#: ../src/gpm-manager.c:1119
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
+msgstr ""
+
+#: ../src/gpm-manager.c:1138
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr ""
+
+#: ../src/gpm-manager.c:1142
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-manager.c:644
-msgid "Battery Critically Low"
-msgstr "ਬੈਟਰੀ ਨਾਜ਼ੁਕ ਰੂਪ ਵਿੱਚ ਘੱਟ"
+#: ../src/gpm-manager.c:1200
+#, fuzzy
+msgid "Your system is running on backup power!"
+msgstr "ਕੰਪਿਊਟਰ ਬੈਟਰੀ ਊਰਜਾ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ\n"
 
-#: ../src/gpm-manager.c:665
-msgid "Battery Low"
+#: ../src/gpm-manager.c:1203
+#, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
+"power to your computer to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-power.c:289 ../src/gpm-power.c:303
-msgid "Unknown"
-msgstr "ਅਣਜਾਣ"
+#: ../src/gpm-manager.c:1270
+#, c-format
+msgid ""
+"The %s device attached to this computer is low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
 
-#: ../src/gpm-power.c:293
+#: ../src/gpm-power.c:330
 msgid "Laptop battery"
 msgstr "ਲੈਪਟਾਪ ਬੈਟਰੀ"
 
-#: ../src/gpm-power.c:295
+#: ../src/gpm-power.c:332
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:297
+#: ../src/gpm-power.c:334
 msgid "Wireless mouse"
 msgstr "ਬੇਤਾਰ ਮਾਊਸ"
 
-#: ../src/gpm-power.c:299
+#: ../src/gpm-power.c:336
 msgid "Wireless keyboard"
 msgstr "ਬੇਤਾਰ ਕੀ-ਬੋਰਡ"
 
-#: ../src/gpm-power.c:301
+#: ../src/gpm-power.c:338
 msgid "PDA"
 msgstr ""
 
-#: ../src/gpm-power.c:657 ../src/gpm-power.c:678
-msgid "until charged"
-msgstr "ਜਦੋਂ ਤੱਕ ਚਾਰਜ ਨਹੀਂ ਹੁੰਦੀ"
+#: ../src/gpm-power.c:340
+msgid "Unknown"
+msgstr "ਅਣਜਾਣ"
 
-#: ../src/gpm-power.c:664
+#: ../src/gpm-power.c:639
 msgid "remaining"
 msgstr ""
 
-#: ../src/gpm-power.c:669
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:642
+msgid "discharging"
+msgstr "ਡਿਸਚਾਰਜ ਹੋ ਰਿਹਾ ਹੈ"
+
+#: ../src/gpm-power.c:647
 #, fuzzy
 msgid "fully charged"
 msgstr "ਜਦੋਂ ਤੱਕ ਚਾਰਜ ਨਹੀਂ ਹੁੰਦੀ"
 
-#: ../src/gpm-power.c:702
+#: ../src/gpm-power.c:653
+msgid "until charged"
+msgstr "ਜਦੋਂ ਤੱਕ ਚਾਰਜ ਨਹੀਂ ਹੁੰਦੀ"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:656
+msgid "charging"
+msgstr "ਚਾਰਜ ਹੋ ਰਿਹਾ ਹੈ"
+
+#. only enable this if discharging on UPS, for details see:
+#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
+#: ../src/gpm-power.c:690
+#, fuzzy
+msgid "Computer is running on backup power\n"
+msgstr "ਕੰਪਿਊਟਰ AC ਊਰਜਾ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ\n"
+
+#: ../src/gpm-power.c:693
 msgid "Computer is running on AC power\n"
 msgstr "ਕੰਪਿਊਟਰ AC ਊਰਜਾ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ\n"
 
-#: ../src/gpm-power.c:704
+#: ../src/gpm-power.c:696
 msgid "Computer is running on battery power\n"
 msgstr "ਕੰਪਿਊਟਰ ਬੈਟਰੀ ਊਰਜਾ ਉੱਤੇ ਚੱਲ ਰਿਹਾ ਹੈ\n"
 
@@ -441,11 +568,11 @@ msgstr ""
 msgid "_About"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:249
+#: ../src/gpm-tray-icon.c:251
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:250
+#: ../src/gpm-tray-icon.c:252
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -453,7 +580,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:254
+#: ../src/gpm-tray-icon.c:256
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -461,7 +588,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:258
+#: ../src/gpm-tray-icon.c:260
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -469,47 +596,100 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:263
+#: ../src/gpm-tray-icon.c:265
 msgid "translator-credits"
 msgstr ""
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:57
+#: ../src/gpm-prefs.c:55
 msgid "Suspend"
 msgstr "ਮੁਅੱਤਲ"
 
-#: ../src/gpm-prefs.c:58
+#: ../src/gpm-prefs.c:56
 msgid "Shutdown"
 msgstr "ਬੰਦ ਕਰੋ"
 
-#: ../src/gpm-prefs.c:59
+#: ../src/gpm-prefs.c:57
 msgid "Hibernate"
 msgstr "ਹਾਈਬਰਨੇਟ"
 
-#: ../src/gpm-prefs.c:60
+#: ../src/gpm-prefs.c:58
+msgid "Blank screen"
+msgstr ""
+
+#: ../src/gpm-prefs.c:59
 msgid "Do nothing"
 msgstr "ਕੁਝ ਨਾ ਕਰੋ"
 
-#: ../src/gpm-prefs.c:224
+#: ../src/gpm-prefs.c:197
 msgid "Never"
 msgstr ""
 
-#: ../src/gpm-prefs.c:502
+#: ../src/gpm-prefs.c:482
 #, fuzzy
 msgid "Configuration"
 msgstr "<b>ਸੂਚਨਾ ਖੇਤਰ</b>"
+
+#: ../src/gpm-prefs.c:705
+msgid "Power Preferences"
+msgstr "ਊਰਜਾ ਪਸੰਦ"
+
+#, fuzzy
+#~ msgid "The battery critical action threshold."
+#~ msgstr "ਊਰਜਾ-ਜੰਤਰ ਕਾਰਵਾਈ ਥਰੈਸ਼ਹੋਲਡ ਹੈ।"
+
+#, fuzzy
+#~ msgid "The battery warning threshold."
+#~ msgstr "ਊਰਜਾ-ਜੰਤਰ ਚੇਤਾਵਨੀ ਥਰੈਸ਼ਹੋਲਡ ਹੈ।"
+
+#, fuzzy
+#~ msgid ""
+#~ "The percentage that the battery has to get to be considered \"low enough"
+#~ "\" to perform an action."
+#~ msgstr "ਫ਼ੀ-ਸਦੀ, ਜਿਸ ਉੱਤੇ ਊਰਜਾ-ਜੰਤਰ ਨੂੰ ਇੱਕ ਘਟਨਾ ਲਈ \"ਕਾਫ਼ੀ ਘੱਟ\" ਮੰਨਿਆ ਜਾਵੇ।"
+
+#, fuzzy
+#~ msgid ""
+#~ "The percentage that the battery has to get to be considered \"low enough"
+#~ "\" to warn the user."
+#~ msgstr ""
+#~ "ਫ਼ੀ-ਸਦੀ, ਜਿਸ ਉੱਤੇ ਊਰਜਾ-ਜੰਤਰ ਨੂੰ ਉਪਭੋਗੀ ਨੂੰ \"ਕਾਫ਼ੀ ਘੱਟ\" ਦੀ ਚੇਤਾਵਨੀ ਦੇਣ ਲਈ ਮੰਨਿਆ ਜਾਵੇ।"
+
+#~ msgid "<b>Other Options</b>"
+#~ msgstr "<b>ਹੋਰ ਚੋਣਾਂ</b>"
+
+#~ msgid "Advanced"
+#~ msgstr "ਤਕਨੀਕੀ"
+
+#~ msgid "Ba_ttery is critical when below:"
+#~ msgstr "ਬੈਟਰੀ ਨਾਜ਼ੁਕ ਹੈ, ਜਦੋਂ ਘੱਟੋ ਹੋਵੇ(_T):"
+
+#~ msgid "Put c_omputer to sleep after:"
+#~ msgstr "ਕੰਪਿਊਟਰ ਨੂੰ ਸਲੀਪ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_O):"
+
+#~ msgid "Put dis_play to sleep after:"
+#~ msgstr "ਦਰਿਸ਼ ਨੂੰ ਸਲੀਪ ਦੇ ਢੰਗ 'ਚ ਰੱਖੋ, ਇਸ ਦੇ ਬਾਅਦ(_P):"
+
+#~ msgid "Set display b_rightness:"
+#~ msgstr "ਦਰਿਸ਼ ਚਮਕ ਸੈੱਟ ਕਰੋ(_R):"
+
+#~ msgid "Sleep"
+#~ msgstr "ਸਲੀਪ"
+
+#~ msgid "When _suspend button pressed:"
+#~ msgstr "ਜਦੋਂ ਮੁਅੱਤਲ ਬਟਨ ਦਬਾਇਆ ਜਾਵੇ(_S):"
+
+#~ msgid "_Battery is low when below:"
+#~ msgstr "ਬੈਟਰੀ ਘੱਟ ਹੈ, ਜਦੋਂ ਘੱਟੋ ਹੋਵੇ(_B):"
+
+#~ msgid "_Computer sleep type:"
+#~ msgstr "ਕੰਪਿਊਟਰ ਸਲੀਪ ਕਿਸਮ(_C):"
 
 #~ msgid "The event for a laptop lid closing"
 #~ msgstr "ਲੈਪਟਾਪ lid ਬੰਦ ਕਰਨ ਲਈ ਘਟਨਾ:"
 
 #~ msgid "GNOME Power Manager"
 #~ msgstr "ਗਨੋਮ ਊਰਜਾ ਮੈਨੇਜਰ"
-
-#~ msgid "charging"
-#~ msgstr "ਚਾਰਜ ਹੋ ਰਿਹਾ ਹੈ"
-
-#~ msgid "discharging"
-#~ msgstr "ਡਿਸਚਾਰਜ ਹੋ ਰਿਹਾ ਹੈ"
 
 #~ msgid "charged"
 #~ msgstr "ਚਾਰਜ ਹੋਇਆ"
