@@ -92,6 +92,7 @@ struct GpmManagerPrivate
 	gint		 last_primary_percentage_change;
 
 	gboolean	 use_time_to_notify;
+	gboolean	 lid_is_closed;
 
 };
 
@@ -898,6 +899,11 @@ lid_button_pressed (GpmManager	 *manager,
 
 	gpm_debug ("button changed: %d", state);
 
+	/* We keep track of the lid state so we can do the 
+	   lid close on battery action if the ac_adapter is removed when the laptop
+	   is closed. Fixes #331655 */
+	manager->priv->lid_is_closed = state;
+
 	if (state) {
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
@@ -968,8 +974,14 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
-}
 
+	/* We do the lid close on battery action if the ac_adapter is removed
+	   when the laptop is closed and on battery. Fixes #331655 */
+	if (! on_ac && manager->priv->lid_is_closed) {
+		gpm_debug ("Doing battery policy when lid closed and power removed");
+		manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
+	}
+}
 
 static GpmWarning
 gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
@@ -1030,7 +1042,7 @@ battery_low_get_title (GpmWarning warning_type)
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 
-		title = _("Power Warning");
+		title = _("Power Information");
 
 	}
 
@@ -1472,6 +1484,9 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
+
+	/* FIXME: We shouldn't assume the lid is open at startup */
+	manager->priv->lid_is_closed = FALSE;
 
 	/* we need these to refresh the tooltip and icon */
 	g_signal_connect (manager->priv->power, "battery-removed",

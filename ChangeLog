@@ -1,5 +1,17 @@
 2006-02-20  Richard Hughes  <richard@hughsie.com>
 
+	src/gpm-manager.c (lid_button_pressed): Keep track of the lid state
+	internally in the manager state.
+
+	(power_on_ac_changed_cb): We do the lid close on battery action if
+	the ac_adapter is removed when the laptop is closed and on battery.
+	This should fix (#331655).
+
+	(battery_low_get_title): Changed "Power Warning" to "Power Information"
+	for the title when the ac_adapter is removed. Fixes (#331865).
+
+2006-02-20  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.c (gpm_prefs_setup_sleep_slider,
 	gpm_prefs_setup_brightness_slider, gpm_prefs_setup_action_combo,
 	setup_icon_policy): Make the widgets disabled if the gconf key is
