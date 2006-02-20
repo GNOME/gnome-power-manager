@@ -307,6 +307,26 @@
   </section>
 </section>
 
+<!-- ============= Bugs ================================== -->
+<!-- You can use it to describe known bugs and limitations of the 
+     program. -->
+<section id="known-bugs">
+  <title>Known Bugs and Limitations</title>
+    <para>
+    This section lists known bugs and limitations using &app;.
+    </para>
+    <section id="critical-suspend-action">
+      <title>Power consumption when suspended</title>
+      <para>
+      Your computer still uses a small amount of charge even whilst suspended.
+      If "Suspend" is chosen as the policy option for the battery critical low,
+      and the power completely runs out when sleeping, your work may be lost.
+      See bug <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=330267" type="http">#330267</ulink> 
+      or more details.
+      </para>
+   </section>
+</section>
+
 <section id="about">
   <title>About &app;</title> 
   <para>

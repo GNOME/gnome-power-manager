@@ -515,7 +515,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	GtkWidget    *label_battery_critical;
 	GtkWidget    *combo_battery_critical;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
-	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
 
 	if (! has_batteries) {
