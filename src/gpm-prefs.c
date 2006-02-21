@@ -243,6 +243,8 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 	is_writable = gconf_client_key_is_writable (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
+	gtk_widget_set_sensitive (widget, is_writable);
+
 	if (value == 0) {
 		value = NEVER_TIME_ON_SLIDER;
 	} else {
@@ -252,14 +254,9 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
-	/* don't connect the callback until we have set the slider */
-	if (is_writable) {
-		g_signal_connect (G_OBJECT (widget), "value-changed",
-				  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb),
-				  gpm_pref_key);
-	} else {
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb),
+			  gpm_pref_key);
 
 	return widget;
 }
@@ -298,17 +295,13 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog,
 	is_writable = gconf_client_key_is_writable (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
+	gtk_widget_set_sensitive (widget, is_writable);
+
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
-	if (is_writable) {
-		/* don't connect the callback until we have set the slider */
-		g_signal_connect (G_OBJECT (widget), "value-changed",
-				  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb),
-				  gpm_pref_key);
-	} else {
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
-
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb),
+			  gpm_pref_key);
 	return widget;
 }
 
@@ -364,6 +357,8 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 	is_writable = gconf_client_key_is_writable (client, gpm_pref_key, NULL);
 	g_object_unref (client);
 
+	gtk_widget_set_sensitive (widget, is_writable);
+
 	if (! value) {
 		gpm_warning ("invalid schema, please re-install");
 		value = g_strdup ("nothing");
@@ -402,14 +397,9 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added - 1);
 		i++;
 	}
-	if (is_writable) {
-		/* don't connect the callback until we have set the slider */
-		g_signal_connect (G_OBJECT (widget), "changed",
-				  G_CALLBACK (gpm_prefs_action_combo_changed_cb),
-				  gpm_pref_key);
-	} else {
-		gtk_widget_set_sensitive (widget, FALSE);
-	}
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_prefs_action_combo_changed_cb),
+			  gpm_pref_key);
 
 	g_free (value);
 }
@@ -583,7 +573,6 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 
 	client = gconf_client_get_default ();
 
-	is_writable = gconf_client_key_is_writable (client, GPM_PREF_ICON_POLICY, NULL);
 	icon_policy_str = gconf_client_get_string (client, GPM_PREF_ICON_POLICY, NULL);
 	icon_policy = GPM_ICON_POLICY_ALWAYS;
 	gconf_string_to_enum (icon_policy_enum_map, icon_policy_str, &icon_policy);
@@ -593,6 +582,12 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 	radiobutton_icon_charge = glade_xml_get_widget (xml, "radiobutton_icon_charge");
 	radiobutton_icon_critical = glade_xml_get_widget (xml, "radiobutton_icon_critical");
 	radiobutton_icon_never = glade_xml_get_widget (xml, "radiobutton_icon_never");
+
+	is_writable = gconf_client_key_is_writable (client, GPM_PREF_ICON_POLICY, NULL);
+	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_critical, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
 				      icon_policy == GPM_ICON_POLICY_ALWAYS);
@@ -605,25 +600,18 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 
 	/* only connect the callbacks after we set the value, else the gconf
 	   keys gets written to (for a split second), and the icon flickers. */
-	if (is_writable) {
-		g_signal_connect (radiobutton_icon_always, "clicked",
-				  G_CALLBACK (gpm_prefs_icon_radio_cb),
-				  (gpointer)GPM_ICON_POLICY_ALWAYS);
-		g_signal_connect (radiobutton_icon_charge, "clicked",
-				  G_CALLBACK (gpm_prefs_icon_radio_cb),
-				  (gpointer)GPM_ICON_POLICY_CHARGE);
-		g_signal_connect (radiobutton_icon_critical, "clicked",
-				  G_CALLBACK (gpm_prefs_icon_radio_cb),
-				  (gpointer)GPM_ICON_POLICY_CRITICAL);
-		g_signal_connect (radiobutton_icon_never, "clicked",
-				  G_CALLBACK (gpm_prefs_icon_radio_cb),
-				  (gpointer)GPM_ICON_POLICY_NEVER);
-	} else {
-		gtk_widget_set_sensitive (radiobutton_icon_always, FALSE);
-		gtk_widget_set_sensitive (radiobutton_icon_charge, FALSE);
-		gtk_widget_set_sensitive (radiobutton_icon_critical, FALSE);
-		gtk_widget_set_sensitive (radiobutton_icon_never, FALSE);
-	}
+	g_signal_connect (radiobutton_icon_always, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb),
+			  (gpointer)GPM_ICON_POLICY_ALWAYS);
+	g_signal_connect (radiobutton_icon_charge, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb),
+			  (gpointer)GPM_ICON_POLICY_CHARGE);
+	g_signal_connect (radiobutton_icon_critical, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb),
+			  (gpointer)GPM_ICON_POLICY_CRITICAL);
+	g_signal_connect (radiobutton_icon_never, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb),
+			  (gpointer)GPM_ICON_POLICY_NEVER);
 
 	if (! has_batteries) {
 		/* Hide battery radio options if we have no batteries */
