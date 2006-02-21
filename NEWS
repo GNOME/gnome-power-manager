@@ -1,4 +1,46 @@
 ===============
+Version 2.13.91
+===============
+
+Released February 20, 2006
+
+General
+
+ - Add --enable-actions-menu=foo so we can disable the menu at compile time.
+   Fixes bug #331446
+ - Remove doxygen build support as hardly any files now use doxygen. #327743.
+
+Power Manager
+
+ - Check the on_ac property before we do the action. #331401.
+ - Make g-p-m do the right thing for the Sleep keyboard button (David Zeuthen).
+ - Add a simple and complex locking modes (for power users) to fix #331164
+ - Document the complex locking policy. #331717
+ - Do not show the tooltip when popup menu is on the screen. #331075
+ - Changed "Power Warning" to "Power Information" for the title when the
+   ac_adapter is removed. #331865
+ - We do the lid close on battery action if the ac_adapter is removed when the
+   laptop is closed and on battery. #331655
+
+Power Preferences
+
+ - Use a new UI separating the AC and battery policy cleanly.
+ - Change duplicate accesskeys #331538
+ - Remove pointless icons in general tab #331530.
+ - Remove suspend button action from the GUI (defaults to suspend) but can be
+   changed by power users in gconf. #331757 (Jaap Haitsma)
+ - Add back option "Suspend" for low power action by popular request, and
+   explain in the docs why it might be a bad idea. #330267
+ - Make the widgets disabled if the gconf key is not writable. #327893
+
+Translators
+
+ - Francisco Javier F. Serrador (Spanish)
+ - Kjartan Maraas (Norwegian)
+ - Satoru SATOH (Japanese)
+ - Clytie Siddall (Japanese)
+
+===============
 Version 2.13.90
 ===============
 
