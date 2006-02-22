@@ -286,29 +286,28 @@ watch_device_condition (DBusGProxy    *proxy,
 			GpmHalMonitor *monitor)
 {
 	const char *udi = NULL;
+	char	   *type = NULL;
+	gboolean    value;
 
 	udi = dbus_g_proxy_get_path (proxy);
-
-	g_assert (udi);
-	g_assert (name);
-	g_assert (details);
 
 	gpm_debug ("udi=%s, name=%s, details=%s", udi, name, details);
 
 	if (strcmp (name, "ButtonPressed") == 0) {
-		char	 *type = NULL;
-		gboolean  value;
-
-		gpm_hal_device_get_string (udi, "button.type", &type);
-
-		if (!type) {
-			gpm_warning ("You must have a button type for %s!", udi);
-			return;
-		}
-
-		if (strcmp (type, "") == 0) {
-			if (details != NULL)
-				type = g_strdup (details);
+		/* We can get two different types of ButtonPressed condition
+		   1. The old acpi hardware buttons
+		      udi="acpi_foo", details="";
+		      button.type="power"
+		   2. The new keyboard buttons
+		      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
+		      button.type=""
+		 */
+		if (strcmp (details, "") == 0) {
+			/* no details about the event, so we get more info
+			   for type 1 buttons */
+			gpm_hal_device_get_string (udi, "button.type", &type);
+		} else {
+			type = g_strdup (details);
 		}
 
 		gpm_debug ("ButtonPressed : %s", type);
@@ -319,15 +318,8 @@ watch_device_condition (DBusGProxy    *proxy,
 			value = TRUE;
 		} else if (strcmp (type, "lid") == 0) {
 			gpm_hal_device_get_bool (udi, "button.state.value", &value);
-		} else if (strcmp (type, "virtual") == 0) {
-			value = TRUE;
-
-			if (!details) {
-				gpm_warning ("Virtual buttons must have details for %s!", udi);
-				return;
-			}
 		} else {
-			gpm_warning ("Button '%s' unrecognised", type);
+			gpm_warning ("Button type '%s' unrecognised", type);
 			g_free (type);
 			return;
 		}
