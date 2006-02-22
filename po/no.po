@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-20 17:05+0000\n"
-"PO-Revision-Date: 2006-02-18 11:11+0100\n"
+"POT-Creation-Date: 2006-02-23 00:26+0100\n"
+"PO-Revision-Date: 2006-02-23 00:35+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -131,26 +131,24 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:21
-#, fuzzy
 msgid "Laptop lid close action on AC"
-msgstr "Handling når lokket på datamaskinen lukkes"
+msgstr "Handling når lokket på datamaskinen lukkes med strøm tilkoblet"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
-#, fuzzy
 msgid "Laptop lid close action on battery"
-msgstr "Handling når lokket på datamaskinen lukkes"
+msgstr "Handling når lokket på datamaskinen lukkes og den kjører på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:23
 msgid "Lock screen when we blank it"
-msgstr ""
+msgstr "Lås skjermen når den blankes"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
 msgid "Lock screen when we hibernate"
-msgstr ""
+msgstr "Lås skjermen når datamaskinen går i dvalemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid "Lock screen when we suspend"
-msgstr ""
+msgstr "Lås skjermen når datamaskinen går i hvilemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:26
 msgid "Notify on AC loss"
@@ -241,80 +239,72 @@ msgid "<b>General</b>"
 msgstr "<b>Generelt</b>"
 
 #: ../data/gpm-prefs.glade.h:3
-msgid "<b>Notification Area</b>"
+msgid "<b>Notification area</b>"
 msgstr "<b>Varslingsområde</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-#, fuzzy
 msgid "<b>Running on AC</b>"
 msgstr "<b>Kjører på nettstrøm</b>"
 
 #: ../data/gpm-prefs.glade.h:5
-msgid "<b>Running on Batteries</b>"
-msgstr "<b>Kjører på batterier</b>"
+msgid "<b>Running on battery</b>"
+msgstr "<b>Kjører på batteri</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-msgid "Only display when battery life is _critical"
-msgstr "Kun når strømstyrken når _kritisk nivå:"
-
-#: ../data/gpm-prefs.glade.h:7
 msgid "Only display when charging or _discharging"
 msgstr "Vis kun når batteriet lades eller la_des ut"
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:7
 msgid "Options"
 msgstr "Alternativer"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:8
 msgid "Power Management Preferences"
 msgstr "Brukervalg for strøm"
 
+#: ../data/gpm-prefs.glade.h:9
+msgid "Put _display to sleep when computer is inactive for:"
+msgstr "Sett _skjermen i hvilemodus når den har vært inaktiv i:"
+
 #: ../data/gpm-prefs.glade.h:10
-#, fuzzy
-msgid "Put _computer to sleep when it is inactive for:"
-msgstr "Sett _datamaskinen i dvalemodus etter:"
+msgid "Put computer to _sleep when it is inactive for:"
+msgstr "_Sett datamaskinen i hvilemodus når den har vært inaktiv i:"
 
 #: ../data/gpm-prefs.glade.h:11
-#, fuzzy
-msgid "Put _display to sleep when computer is inactive for:"
-msgstr "Sett _skjerm i dvalemodus etter:"
+msgid "Running on AC"
+msgstr "Kjører på nettstrøm"
 
 #: ../data/gpm-prefs.glade.h:12
-#, fuzzy
-msgid "Running on AC"
-msgstr "<b>Kjører på nettstrøm</b>"
+msgid "Running on Battery"
+msgstr "Kjører på batterier"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
-msgid "Running on Battery"
-msgstr "<b>Kjører på batterier</b>"
+msgid "Set display _brightness to:"
+msgstr "Sett lysstyrke for skjerm til:"
 
 #: ../data/gpm-prefs.glade.h:14
-#, fuzzy
-msgid "Set display _brightness to:"
-msgstr "Sett _lysstyrke for skjerm:"
+msgid "Sleep _type when inactive:"
+msgstr "_Type hvilemodus ved inaktivitet:"
 
 #: ../data/gpm-prefs.glade.h:15
-msgid "Sleep _type when inactive:"
-msgstr ""
+msgid "When battery _power critical:"
+msgstr "Når batterika_pasiteten når kritisk nivå:"
 
 #: ../data/gpm-prefs.glade.h:16
-#, fuzzy
-msgid "When battery _power critical:"
-msgstr "Når _batterikapasiteten når kritisk nivå:"
+msgid "When l_aptop lid is closed:"
+msgstr "Når lokket på d_atamaskinen lukkes:"
 
 #: ../data/gpm-prefs.glade.h:17
-#, fuzzy
-msgid "When l_aptop lid is closed:"
-msgstr "Når lokket på _datamaskinen lukkes:"
-
-#: ../data/gpm-prefs.glade.h:18
 msgid "_Always display icon"
 msgstr "_Alltid vis ikon"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:18
 msgid "_Never display icon"
 msgstr "_Aldri vis ikon"
+
+#: ../data/gpm-prefs.glade.h:19
+msgid "_Only display when battery life is critical"
+msgstr "K_un når levetiden for batteriet er kritisk"
 
 #: ../src/eggtrayicon.c:125
 msgid "Orientation"
@@ -369,7 +359,7 @@ msgstr "Strømhånderer for GNOME skrivebordet"
 msgid "Do not daemonize"
 msgstr "Ikke kjør som tjeneste"
 
-#: ../src/gpm-main.c:142 ../src/gpm-prefs.c:692
+#: ../src/gpm-main.c:142 ../src/gpm-prefs.c:680
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
@@ -419,9 +409,8 @@ msgid "Power Low"
 msgstr "Batterikapasitet lav"
 
 #: ../src/gpm-manager.c:1045
-#, fuzzy
 msgid "Power Information"
-msgstr "Vis ekstra feilsøkingsinformasjon"
+msgstr "Informasjon om strøm"
 
 #: ../src/gpm-manager.c:1089
 msgid "Battery Charged"
@@ -615,7 +604,7 @@ msgstr "Dvalemodus"
 
 #: ../src/gpm-prefs.c:58
 msgid "Blank screen"
-msgstr ""
+msgstr "Blank skjerm"
 
 #: ../src/gpm-prefs.c:59
 msgid "Do nothing"
@@ -625,34 +614,10 @@ msgstr "Ikke gjør noe"
 msgid "Never"
 msgstr "Aldri"
 
-#: ../src/gpm-prefs.c:482
+#: ../src/gpm-prefs.c:472
 msgid "Configuration"
 msgstr "Konfigurasjon"
 
-#: ../src/gpm-prefs.c:705
+#: ../src/gpm-prefs.c:693
 msgid "Power Preferences"
 msgstr "Brukervalg for strøm"
-
-#~ msgid "Advanced"
-#~ msgstr "Avansert"
-
-#~ msgid "Put c_omputer to sleep after:"
-#~ msgstr "Sett da_tamaskinen i dvalemodus etter:"
-
-#~ msgid "Put dis_play to sleep after:"
-#~ msgstr "Sett s_kjermen i hvilemodus etter:"
-
-#~ msgid "Set display b_rightness:"
-#~ msgstr "Sett l_ysstyrke på skjerm:"
-
-#~ msgid "Sleep"
-#~ msgstr "Dvalemodus"
-
-#~ msgid "When _suspend button pressed:"
-#~ msgstr "Når _hvileknappen trykkes:"
-
-#~ msgid "_Computer sleep type:"
-#~ msgstr "_Type hvilemodus:"
-
-#~ msgid "Power Warning"
-#~ msgstr "Advarsel om strømstyrke"
