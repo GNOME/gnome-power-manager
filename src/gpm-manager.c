@@ -1049,6 +1049,13 @@ battery_low_get_title (GpmWarning warning_type)
 	return title;
 }
 
+static gboolean
+manager_critical_action_do (GpmManager *manager)
+{
+	manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+	return FALSE;
+}
+
 /* performs critical action is required, and displays notifications */
 static void
 battery_status_changed_primary (GpmManager	      *manager,
@@ -1112,15 +1119,39 @@ battery_status_changed_primary (GpmManager	      *manager,
 	}
 
 	if (warning_type == GPM_WARNING_ACTION) {
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Critical action"),
-				      NULL,
-				      _("The battery is below the critical level and "
-					"this computer is about to shutdown."));
+		const char *warning = NULL;
+		const char *action;
+
+		/* we have to do different warnings depending on the policy */
+		action = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_BATTERY_CRITICAL, NULL);
+
+		/* FIXME: we should probably convert to an ENUM type, and use that */
+		if (strcmp (action, ACTION_NOTHING) == 0) {
+			warning = _("The battery is below the critical level and "
+				    "this computer will <b>power-off</b> when the "
+				    "battery becomes completely empty.");
+		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+			warning = _("The battery is below the critical level and "
+				    "this computer is about to suspend.<br>"
+				    "<b>NOTE:</b> A small amount of power is required "
+				    "to keep your computer in a suspended state.");
+		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+			warning = _("The battery is below the critical level and "
+				    "this computer is about to hibernate.");
+		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+			warning = _("The battery is below the critical level and "
+				    "this computer is about to shutdown.");
+		}
+
+		if (warning) {
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Critical action"),
+					      NULL,
+					      warning);
+		}
 		/* wait 10 seconds for user-panic */
-		g_usleep (1000 * 1000 * 10);
-		manager_policy_do (manager, GPM_PREF_BATTERY_CRITICAL);
+		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 	}
 
 	/* Always check if we already notified the user */

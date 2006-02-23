@@ -1,3 +1,13 @@
+2006-02-23  Richard Hughes  <richard@hughsie.com>
+
+	src/gpm-manager.c (manager_critical_action_do): Do the critical action
+	as part of a g_timeout, rather than a just a delay so we don't lock
+	the GUI. Fixes #332150
+
+	src/gpm-manager.c (battery_status_changed_primary): Describe what we
+	are going to do better, so we don't say we are going to shutdown when
+	we just are going to hibernate.
+
 2006-02-22  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.spec.in: Remove notification-daemon as a req
