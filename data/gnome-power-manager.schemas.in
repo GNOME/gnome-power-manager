@@ -8,8 +8,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If to dim the screen after a period of inactivity</short>
-        <long>If we should dim the screen to save power when the computer is marked as idle.</long>
+        <short>Dim the screen after a period of inactivity</short>
+        <long>Whether or not to dim the screen to save power when the computer is idle.</long>
       </locale>
     </schema>
 
@@ -20,8 +20,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If the user can suspend</short>
-        <long>If this particular user should have suspend on the drop-down menu and in the prefs</long>
+        <short>Suspend enabled</short>
+        <long>Whether or not the user can suspend the computer</long>
       </locale>
     </schema>
 
@@ -32,8 +32,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If the user can hibernate</short>
-        <long>If this particular user should have hibernate on the drop-down menu and in the prefs</long>
+        <short>Hibernate enabled</short>
+        <long>Whether or not the user can hibernate the computer</long>
       </locale>
     </schema>
 
@@ -44,8 +44,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Notify on AC loss</short>
-        <long>If we should notify the user that the AC adapter has been removed</long>
+        <short>Notify when AC adapter is removed</short>
+        <long>Whether or not the user is notified when the AC adapter is removed</long>
       </locale>
     </schema>
 
@@ -57,7 +57,7 @@
       <default>true</default>
       <locale name="C">
         <short>Notify on fully charged</short>
-        <long>If we should notify the user that the battery is fully charged</long>
+        <long>Whether or not a notification message is displayed when the battery is fully charged</long>
       </locale>
     </schema>
 
@@ -69,7 +69,7 @@
       <default>always</default>
       <locale name="C">
         <short>When to show the notification icon</short>
-        <long>The display icon policy can be never, critical, charge, always</long>
+        <long>Option when to show the notification icon. Valid options are "never", "critical", "charge" and "always"</long>
       </locale>
     </schema>
 
@@ -79,8 +79,8 @@
       <type>int</type>
       <default>100</default>
       <locale name="C">
-        <short>AC LCD brightness hardware value</short>
-        <long>The hardware brightness the display is set to whilst on AC power</long>
+        <short>LCD brightness when on AC</short>
+        <long>The brightness of the display when on AC power. Valid values are between 0 and 100.</long>
       </locale>
    </schema>
 
@@ -90,8 +90,8 @@
       <type>int</type>
       <default>0</default>
       <locale name="C">
-        <short>Computer AC idle timeout value</short>
-        <long>The idle time in seconds before the computer tries to sleep whilst on AC power</long>
+        <short>Sleep timeout computer when on AC</short>
+        <long>The number of seconds the computer on AC power needs to be inactive before it goes to sleep.</long>
       </locale>
    </schema>
 
@@ -101,8 +101,8 @@
       <type>int</type>
       <default>1800</default>
       <locale name="C">
-        <short>Display AC idle timeout value</short>
-        <long>The idle time in seconds before the display tries to sleep whilst on AC power</long>
+        <short>Sleep timeout display when on AC</short>
+        <long>The number of seconds before the display goes to sleep when the computer is on AC power.</long>
       </locale>
    </schema>
 
@@ -112,8 +112,8 @@
       <type>int</type>
       <default>50</default>
       <locale name="C">
-        <short>Battery LCD brightness hardware value</short>
-        <long>The hardware brightness the display is set to whilst on battery power</long>
+        <short>LCD brightness when on battery</short>
+        <long>The brightness of the display when on battery power. Valid values are between 0 and 100.</long>
       </locale>
    </schema>
 
@@ -123,8 +123,8 @@
       <type>int</type>
       <default>1200</default>
       <locale name="C">
-        <short>Computer battery idle timeout value</short>
-        <long>The idle time in seconds before the computer tries to sleep whilst on battery power</long>
+        <short>Sleep timeout computer when on battery</short>
+        <long>The number of seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
       </locale>
    </schema>
 
@@ -134,8 +134,8 @@
       <type>int</type>
       <default>300</default>
       <locale name="C">
-        <short>Display battery idle timeout value</short>
-        <long>The idle time in seconds before the display tries to sleep whilst on battery power</long>
+        <short>Sleep timeout display when on battery</short>
+        <long>The number of seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
       </locale>
    </schema>
    
@@ -146,7 +146,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Suspend button action</short>
-        <long>The action to take when the system suspend button is pressed</long>
+        <long>The action to take when the system suspend button is pressed. Valid values are "suspend", "hibernate" and "nothing".</long>
       </locale>
    </schema>
 
@@ -156,8 +156,8 @@
       <type>string</type>
       <default>blank</default>
       <locale name="C">
-        <short>Laptop lid close action on AC</short>
-        <long>The action to take when the laptop lid is closed and not on battery power</long>
+        <short>Laptop lid close action when on AC</short>
+        <long>The action to take when the laptop lid is closed and the laptop is on AC power. Valid values are "suspend", "hibernate" and "blank".</long>
      </locale>
    </schema>
 
@@ -168,7 +168,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Laptop lid close action on battery</short>
-        <long>The action to take when the laptop lid is closed and on battery power</long>
+        <long>The action to take when the laptop lid is closed and the laptop is on battery power. Valid values are "suspend", "hibernate" and "blank".</long>
      </locale>
    </schema>
 
@@ -178,8 +178,8 @@
       <type>string</type>
       <default>suspend</default>
       <locale name="C">
-        <short>Default sleep type</short>
-        <long>The type of sleep (hibernate/suspend) to use automatically.</long>
+        <short>Whether to hibernate, suspend or do nothing when inactive</short>
+        <long>The type of sleeping that should be performed when the computer is inactive. Valid values are "hibernate", "suspend" and "nothing".</long>
       </locale>
    </schema>
 
@@ -190,7 +190,7 @@
       <default>shutdown</default>
       <locale name="C">
         <short>Battery critical low action</short>
-        <long>The action to take when the battery is critically low.</long>
+        <long>The action to take when the battery is critically low. Valid values are "hibernate", "suspend", "shutdown" and "nothing"</long>
       </locale>
    </schema>
 
@@ -202,7 +202,7 @@
       <default>true</default>
       <locale name="C">
         <short>Use gnome-screensaver lock setting</short>
-        <long>If we should use the gnome-screensaver setting for lock, or our own custom rules</long>
+        <long>Whether or not to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
       </locale>
     </schema>
 
@@ -213,8 +213,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen when we blank it</short>
-        <long>If we should lock the screen when the screen is turned off with DPMS (using custom rules)</long>
+        <short>Lock screen when it is blanked</short>
+        <long>Whether or not the screen is locked when the screen is turned off. NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
       </locale>
     </schema>
 
@@ -225,8 +225,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen when we suspend</short>
-        <long>If we should lock the screen when we are set to suspend (using custom rules)</long>
+        <short>Lock screen on suspend</short>
+        <long>Whether or not to lock the screen when the computer wakes up from a suspend. NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
       </locale>
     </schema>
 
@@ -237,8 +237,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen when we hibernate</short>
-        <long>If we should lock the screen when we are set to hibernate (using custom rules)</long>
+        <short>Lock screen on hibernate</short>
+        <long>Whether or not to lock the screen when the computer wakes up from a hibernate.  NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
       </locale>
     </schema>
 
