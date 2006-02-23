@@ -1,5 +1,12 @@
 2006-02-23  Richard Hughes  <richard@hughsie.com>
 
+	help/C/gnome-power-manager.xml, help/Makefile.am,
+	help/figures/gpm-prefs-ac.png, help/figures/gpm-prefs-battery.png,
+	help/figures/gpm-prefs-options.png:
+	Update the screenshots now we have updated the UI.
+
+2006-02-23  Richard Hughes  <richard@hughsie.com>
+
 	src/gpm-manager.c (manager_critical_action_do): Do the critical action
 	as part of a g_timeout, rather than a just a delay so we don't lock
 	the GUI. Fixes #332150
