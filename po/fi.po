@@ -1,7 +1,7 @@
 # Finnish messages for gnome-power-manager
 # Copyright (C) Ilkka Tuohela 
 # This file is distributed under the same license as the gnome-power-manager package.
-# Ilkka Tuohela <hile@iki.fi>, 2005.
+# Ilkka Tuohela <hile@iki.fi>, 2005-2006.
 #
 msgid ""
 msgstr ""
@@ -308,19 +308,19 @@ msgstr "Virranhallinnan asetukset"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Put _display to sleep when computer is inactive for:"
-msgstr "Aseta _näyttö virransäästötilaan viiveellä:"
+msgstr "_Näytön virransäästötilan aktivointiviive:"
 
 #: ../data/gpm-prefs.glade.h:10
 msgid "Put computer to _sleep when it is inactive for:"
-msgstr "Aseta _tietokone virransäästötilaan viiveellä:"
+msgstr "_Tietokoneen virransäästötilan aktivointiviive:"
 
 #: ../data/gpm-prefs.glade.h:11
 msgid "Running on AC"
-msgstr "Käytettäessä verkkovirtaa"
+msgstr "Verkkovirta"
 
 #: ../data/gpm-prefs.glade.h:12
 msgid "Running on Battery"
-msgstr "Käytettäessä akkua"
+msgstr "Akkukäyttö"
 
 #: ../data/gpm-prefs.glade.h:13
 msgid "Set display _brightness to:"
@@ -501,7 +501,7 @@ msgstr "Kriittisen latauksen toiminto"
 
 #: ../src/gpm-manager.c:1169
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "Verkkovirta on irroitettu, ja järjestelmä käyttää nyt akkua."
+msgstr "Verkkovirta on irroitettu ja tietokone käyttää nyt akkua."
 
 #: ../src/gpm-manager.c:1173
 #, c-format
@@ -514,7 +514,7 @@ msgstr ""
 
 #: ../src/gpm-manager.c:1231
 msgid "Your system is running on backup power!"
-msgstr "Järjestelmä käyttää varavirtaa!"
+msgstr "Tietokone käyttää varavirtaa!"
 
 #: ../src/gpm-manager.c:1234
 #, c-format
@@ -584,15 +584,15 @@ msgstr "latautuu"
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
 #: ../src/gpm-power.c:690
 msgid "Computer is running on backup power\n"
-msgstr "Järjestelmä käyttää varavirtaa\n"
+msgstr "Tietokone käyttää varavirtaa\n"
 
 #: ../src/gpm-power.c:693
 msgid "Computer is running on AC power\n"
-msgstr "Järjestelmä käyttää verkkovirtaa\n"
+msgstr "Tietokone käyttää verkkovirtaa\n"
 
 #: ../src/gpm-power.c:696
 msgid "Computer is running on battery power\n"
-msgstr "Järjestelmä käyttää akkua\n"
+msgstr "Tietokone käyttää akkua\n"
 
 #: ../src/gpm-tray-icon.c:106
 msgid "_Suspend"
@@ -665,7 +665,7 @@ msgstr ""
 #: ../src/gpm-tray-icon.c:265
 msgid "translator-credits"
 msgstr ""
-"Ilkka Tuohela, 2005.\n"
+"Ilkka Tuohela, 2005-2006.\n"
 "\n"
 "http://gnome.fi/"
 
@@ -702,352 +702,4 @@ msgstr "Asetukset"
 msgid "Power Preferences"
 msgstr "Virrankäytön asetukset"
 
-#~ msgid "Battery LCD brightness hardware value"
-#~ msgstr "LCD-näytön kirkkauden arvo käytettäessä akkua"
 
-#~ msgid "Computer AC idle timeout value"
-#~ msgstr "Aikaviive joutenololle käytettäessä verkkovirtaa"
-
-#~ msgid "Computer battery idle timeout value"
-#~ msgstr "Aikaviive joutenololle käytettäessä akkua"
-
-#~ msgid "Default sleep type"
-#~ msgstr "Virransäästötilan oletustyyppi"
-
-#~ msgid "Display AC idle timeout value"
-#~ msgstr "Näytä joutenolon aikaviive verkkovirtaa käytettäessä"
-
-#~ msgid "Display battery idle timeout value"
-#~ msgstr "Näytä joutenolon aikaviive akkua käytettäessä"
-
-#~ msgid "If the user can suspend"
-#~ msgstr "Voiko käyttäjä asettaa keskeytystilan"
-
-#~ msgid ""
-#~ "If this particular user should have hibernate on the drop-down menu and "
-#~ "in the prefs"
-#~ msgstr ""
-#~ "Näytetäänkö tälle käyttäjälle lepotilan komento pudotusvalikossa ja "
-#~ "asetuksissa"
-
-#~ msgid ""
-#~ "If this particular user should have suspend on the drop-down menu and in "
-#~ "the prefs"
-#~ msgstr ""
-#~ "Näytetäänkö tälle käyttäjälle keskeytystilan komento pudotusvalikossa ja "
-#~ "asetuksissa"
-
-#~ msgid "Notify on AC loss"
-#~ msgstr "Huomautetaanko kun verkkovirta katkeaa"
-
-#, fuzzy
-#~ msgid ""
-#~ "The action to take when the laptop lid is closed and on battery power"
-#~ msgstr "Suoritettava toiminto, kun kannettavan kansi suljetaan"
-
-#~ msgid "The display icon policy can be never, critical, charge, always"
-#~ msgstr "Kuvakkeen näytön vaihtehdot ovat never, critical, charge, always"
-
-#~ msgid "The hardware brightness the display is set to whilst on AC power"
-#~ msgstr "Näytön kirkkaus, kun verkkovirta on kytketty"
-
-#~ msgid ""
-#~ "The hardware brightness the display is set to whilst on battery power"
-#~ msgstr "Näytön kirkkaus,kun verkkovirta ei ole kytketty"
-
-#~ msgid ""
-#~ "The idle time in seconds before the computer tries to sleep whilst on AC "
-#~ "power"
-#~ msgstr ""
-#~ "Aika sekunteina, jonka jälkeen yritetään siirtyä lepotilaan verkkovirran "
-#~ "ollessa kytkettynä"
-
-#~ msgid ""
-#~ "The idle time in seconds before the computer tries to sleep whilst on "
-#~ "battery power"
-#~ msgstr ""
-#~ "Aika sekunteina, jonka jälkeen yritetään siirtyä lepotilaan käytettäessä "
-#~ "akkua"
-
-#~ msgid ""
-#~ "The idle time in seconds before the display tries to sleep whilst on "
-#~ "battery power"
-#~ msgstr ""
-#~ "Aika sekunteina, jonka jälkeen yritetään siirtyä lepotilaan käytettäessä "
-#~ "akkua"
-
-#~ msgid "The type of sleep (hibernate/suspend) to use automatically."
-#~ msgstr ""
-#~ "Automaattisesti suoritettavan virransäästön tyyppi (lepotila/"
-#~ "keskeytystila)"
-
-#~ msgid "Advanced"
-#~ msgstr "Lisäasetukset"
-
-#~ msgid "Put c_omputer to sleep after:"
-#~ msgstr "Aseta _tietokone virransäästötilaan:"
-
-#~ msgid "Put dis_play to sleep after:"
-#~ msgstr "Aseta _näyttö virransäästötilaan viiveellä:"
-
-#~ msgid "Set display b_rightness:"
-#~ msgstr "Aseta näytön _kirkkaus:"
-
-#~ msgid "Sleep"
-#~ msgstr "Virransäästö"
-
-#~ msgid "When _suspend button pressed:"
-#~ msgstr "Pain_ettaessa keskeytystilanappia:"
-
-#~ msgid "_Computer sleep type:"
-#~ msgstr "Vi_rransäästötilan tyyppi:"
-
-#~ msgid "Power Warning"
-#~ msgstr "Varoitus lataustilasta"
-
-#~ msgid "AC Power Unplugged"
-#~ msgstr "Verkkovirta irroitettu"
-
-#~ msgid "Battery Low"
-#~ msgstr "Akun lataustila matala"
-
-#~ msgid "The battery critical action threshold."
-#~ msgstr "Akun kriittisen lataustilan toiminnon raja."
-
-#~ msgid "The battery warning threshold."
-#~ msgstr "Akun varoituksen raja."
-
-#~ msgid ""
-#~ "The percentage that the battery has to get to be considered \"low enough"
-#~ "\" to perform an action."
-#~ msgstr ""
-#~ "Akun lataustilan prosenttiluku, joka katsotaan \"tarpeeksi matalaksi\" "
-#~ "toiminnon suorittamseksi."
-
-#~ msgid ""
-#~ "The percentage that the battery has to get to be considered \"low enough"
-#~ "\" to warn the user."
-#~ msgstr ""
-#~ "Akun lataustilan prosenttiluku, joka katsotaan \"tarpeeksi matalaksi\" "
-#~ "jotta käyttäjälle annetaan huomautus."
-
-#~ msgid "<b>Other Options</b>"
-#~ msgstr "<b>Muut asetukset</b>"
-
-#~ msgid "Ba_ttery is critical when below:"
-#~ msgstr "Akun _lataustila on kriittinen ollessaan alle:"
-
-#~ msgid "_Battery is low when below:"
-#~ msgstr "Akun _lataustila on matala ollessaan alle:"
-
-#~ msgid "The event for a laptop lid closing"
-#~ msgstr "Sylimikron kannen sulkemisesta aiheutuva tapahtuma"
-
-#~ msgid "The event for a system suspend button press"
-#~ msgstr "Keskeytystilanapin painamisesta aiheutuva tapahtuma"
-
-#~ msgid "The idle time in seconds before the hard disk drives try to sleep"
-#~ msgstr ""
-#~ "Aika sekunteina, jonka jouten oltuaan kiintolevy siirtyy säästötilaan"
-
-#~ msgid "<i><small>Estimated 16 minutes</small></i>"
-#~ msgstr "<i><small>Arvio 16 minuuttia</small></i>"
-
-#~ msgid "<i><small>Estimated 2 hours 6 minutes</small></i>"
-#~ msgstr "<i><small>Arvio 2 tuntia 6 minuuttia</small></i>"
-
-#~ msgid "GNOME Power Manager"
-#~ msgstr "Gnomen virransäästö"
-
-#~ msgid "charged"
-#~ msgstr "ladattu"
-
-#~ msgid "until empty"
-#~ msgstr "kunnes tyhjä"
-
-#~ msgid "GNOME Power Preferences"
-#~ msgstr "Gnomen virta-asetukset"
-
-#~ msgid "Misc PDA"
-#~ msgstr "Yleinen PDA"
-
-#~ msgid "Require password when returning from sleep"
-#~ msgstr "Vaadi salasana palattaessa keskeytystilasta"
-
-#~ msgid "If we require a password when resuming from suspend"
-#~ msgstr "Vaaditaanko salasanaa palattaessa keskeytystilasta"
-
-#~ msgid "The path to the shutdown script"
-#~ msgstr "Polku järjestelmän sammutus-skriptiin"
-
-#~ msgid "96% efficient"
-#~ msgstr "96% tehollinen"
-
-#~ msgid "<b>Batteries</b>"
-#~ msgstr "<b>Akut</b>"
-
-#~ msgid "<b>Capabilities</b>"
-#~ msgstr "<b>Kapasiteetit</b>"
-
-#~ msgid "<b>GNOME Screensaver</b>"
-#~ msgstr "<b>Gnomen näytönsäästäjä</b>"
-
-#~ msgid "<b>Other problems</b>"
-#~ msgstr "<b>Muut ongelmat</b>"
-
-#~ msgid "<b>UPS</b>"
-#~ msgstr "<b>UPS</b>"
-
-#~ msgid "APC UPS 100CS"
-#~ msgstr "APC UPS 100CS"
-
-#~ msgid "CPU Frequency Scaling"
-#~ msgstr "Prosessorin nopeudensäätö"
-
-#~ msgid "Form-factor:"
-#~ msgstr "Muoto:"
-
-#~ msgid "Gnome Screensaver Info"
-#~ msgstr "Gnomen näytönsäästäjän tietoja"
-
-#~ msgid "Hibernation"
-#~ msgstr "Lepotila"
-
-#~ msgid "Laptop"
-#~ msgstr "Kannettava"
-
-#~ msgid "LiION Battery"
-#~ msgstr "Li-ion-akku"
-
-#~ msgid "Low Power Mode"
-#~ msgstr "Matalan virrankäytön tila"
-
-#~ msgid "Manufacturer:"
-#~ msgstr "Valmistaja:"
-
-#~ msgid "Model:"
-#~ msgstr "Malli:"
-
-#~ msgid "NiMOH Battery"
-#~ msgstr "NiMH-akku"
-
-#~ msgid "Other problems"
-#~ msgstr "Muita ongelmia"
-
-#~ msgid "Satellite Pro A10"
-#~ msgstr "Satellite Pro A10"
-
-#~ msgid "System Power Info"
-#~ msgstr "Tietoja virrankäytöstä"
-
-#~ msgid "Toshiba"
-#~ msgstr "Toshiba"
-
-#~ msgid "The event for a system power button press"
-#~ msgstr "Virtanapin painamisesta aiheutuva tapahtuma"
-
-#~ msgid "The path to the reboot script"
-#~ msgstr "Polku uudelleenkäynnistys-skriptiin"
-
-#~ msgid "1 hour, 1 minute"
-#~ msgstr "1 tunti, 1 minuutti"
-
-#~ msgid "%i hours, 1 minute"
-#~ msgstr "%i tuntia, 1 minuutti"
-
-#~ msgid "1 hour, %i minutes"
-#~ msgstr "1 tunti, %i minuuttia"
-
-#~ msgid "Send warning"
-#~ msgstr "Lähetä varoitus"
-
-#~ msgid "Put d_isplay to sleep after:"
-#~ msgstr "Aseta _näyttö virransäästötilaan:"
-
-#~ msgid "_Screensaver Preferences..."
-#~ msgstr "Näytönsäästäjän asetukset..."
-
-#~ msgid "_Set display brightness:"
-#~ msgstr "_Aseta näytön kirkkaus:"
-
-#~ msgid "_When power button pressed:"
-#~ msgstr "_Painettaessa virtanappia:"
-
-#~ msgid "Whether to display icons when devices are at full capacity"
-#~ msgstr "Näytetäänkö kuvakkeita, kun laitteet ovat täysin ladattuja"
-
-#~ msgid "screensave"
-#~ msgstr "näytönsäästäjä"
-
-#~ msgid "shutdown"
-#~ msgstr "sammuta"
-
-#~ msgid "software suspend"
-#~ msgstr "keskeytystila"
-
-#~ msgid "session log off"
-#~ msgstr "uloskirjautuminen"
-
-#~ msgid "AC Adapter"
-#~ msgstr "Verkkovirta"
-
-#~ msgid "Logitech mouse"
-#~ msgstr "Logitech-hiiri"
-
-#~ msgid "missing"
-#~ msgstr "puuttuu"
-
-#~ msgid ""
-#~ "The program '%s' is preventing the %s from occurring.\n"
-#~ "\n"
-#~ "The explanation given is: %s"
-#~ msgstr ""
-#~ "Ohjelma '%s' estää toiminnon %s tapahtumisen.\n"
-#~ "\n"
-#~ "Annettu selitys: %s"
-
-#~ msgid ""
-#~ "The program '%s' has not returned data that is preventing the %s from "
-#~ "occurring."
-#~ msgstr ""
-#~ "Ohjelma '%s' ei palauttanut tietoa, joka estäisi toiminnon %s "
-#~ "tapahtumisen."
-
-#~ msgid "Couldn't obtain list of batteries"
-#~ msgstr "Listaa akuista ei voitu saada"
-
-#~ msgid "Couldn't obtain list of ac_adapters"
-#~ msgstr "Listaa verkkovirtalähteistä ei voitu saada"
-
-#~ msgid "The %s (%i%%) is <b>critically low</b> (%s)"
-#~ msgstr "Akku %s (%i%%) on <b>lähes tyhjä</b> (%s)"
-
-#~ msgid "The %s (%i%%) is <b>low</b> (%s)"
-#~ msgstr "Akku %s (%i%%) on <b>melko tyhjä</b> (%s)"
-
-#~ msgid "Power button has been pressed"
-#~ msgstr "Virtanappia on painettu"
-
-#~ msgid "Sleep button has been pressed"
-#~ msgstr "Sleep-nappia on painettu"
-
-#~ msgid "Lid has been opened"
-#~ msgstr "Kansi on avattu"
-
-#~ msgid "Please report bugs to richard@hughsie.com\n"
-#~ msgstr "Kerro ongelmista englanniksi osoitteella richard@hughsie.com\n"
-
-#~ msgid "Computer is running on UPS power"
-#~ msgstr "Järjestelmä käyttää UPS:ia"
-
-#~ msgid "Unknown Translator"
-#~ msgstr ""
-#~ "Ilkka Tuohela, 2005\n"
-#~ "\n"
-#~ "http://gnome.fi/"
-
-#~ msgid "Display devices that are fully charged"
-#~ msgstr "Näytä täysin ladatut laitteet"
-
-#~ msgid "When AC power disconnected:"
-#~ msgstr "Irroitettaessa verkkovirta:"
