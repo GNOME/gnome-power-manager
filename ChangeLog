@@ -1,3 +1,15 @@
+2006-02-24  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in: Add the new key:
+	/apps/gnome-power-manager/notify_hal_error to set the policy for HAL
+	failure notifications. Default true to display.
+
+	* src/gpm-prefs.h: Add GPM_PREF_NOTIFY_HAL_ERROR
+
+	* src/gpm-manager.c (gpm_manager_hibernate, gpm_manager_suspend):
+	Only display the "HAL failed to {action}" if set in gconf.
+	Fixes #332440.
+
 2006-02-23 Jaap Haitsma  <jaap@haitsma.org>
 
 	* data/gnome-power-manager.schemas.in: Make the descriptions of the

@@ -62,6 +62,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/notify_hal_error</key>
+      <applyto>/apps/gnome-power-manager/notify_hal_error</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify on a HAL suspend or hibernate error.</short>
+        <long>Whether or not a notification message is displayed if the HAL action (suspend or hibernate) fails</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/display_icon_policy</key>
       <applyto>/apps/gnome-power-manager/display_icon_policy</applyto>
       <owner>gnome-power-manager</owner>

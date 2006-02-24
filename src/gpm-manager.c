@@ -723,16 +723,21 @@ gpm_manager_hibernate (GpmManager *manager,
 	ret = gpm_hal_hibernate ();
 	if (! ret) {
 		char *message;
-		message = g_strdup_printf (_("HAL failed to %s. "
-					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
-					     _("hibernate"), GPM_FAQ_URL);
-
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Hibernate Problem"),
-				      NULL,
-				      message);
-		g_free (message);
+		gboolean show_notify;
+		/* We only show the HAL failed notification if set in gconf */
+		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
+						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
+		if (show_notify) {
+			message = g_strdup_printf (_("HAL failed to %s. "
+						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
+						     _("hibernate"), GPM_FAQ_URL);
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Hibernate Problem"),
+					      NULL,
+					      message);
+			g_free (message);
+		}
 	}
 
 	if (do_lock) {
@@ -774,16 +779,21 @@ gpm_manager_suspend (GpmManager *manager,
 	ret = gpm_hal_suspend (0);
 	if (! ret) {
 		char *message;
-		message = g_strdup_printf (_("Your computer failed to %s.\n"
-					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
-					     _("suspend"), GPM_FAQ_URL);
-
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000,
-				      _("Suspend Problem"),
-				      NULL,
-				      message);
-		g_free (message);
+		gboolean show_notify;
+		/* We only show the HAL failed notification if set in gconf */
+		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
+						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
+		if (show_notify) {
+			message = g_strdup_printf (_("Your computer failed to %s.\n"
+						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
+						     _("suspend"), GPM_FAQ_URL);
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000,
+					      _("Suspend Problem"),
+					      NULL,
+					      message);
+			g_free (message);
+		}
 	}
 
 	if (do_lock) {
