@@ -1,5 +1,25 @@
 2006-02-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (power_on_ac_changed_cb): Invalidate the warning
+	levels for primary battery when the AC is removed. NOTE: we still rely
+	on the battery to begin discharging before we issue the warning in
+	case our power source is UPS.
+	Should fix #332322.
+
+2006-02-24  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in: Add the new key:
+	/apps/gnome-power-manager/use_time_for_policy to set the policy for
+	per-time or per-percentage critical and low power actions.
+
+	* src/gpm-prefs.h: Add GPM_PREF_USE_TIME_POLICY
+
+	* src/gpm-manager.c (gpm_manager_init): set the per-time policy type
+	from GPM_PREF_USE_TIME_POLICY. This still needs to be documented.
+	Fixes #332055.
+
+2006-02-24  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in: Add the new key:
 	/apps/gnome-power-manager/notify_hal_error to set the policy for HAL
 	failure notifications. Default true to display.

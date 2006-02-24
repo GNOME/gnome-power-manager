@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 #define GPM_PREF_BATTERY_BUTTON_LID	GPM_PREF_DIR "/action_battery_button_lid"
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"
 
+#define GPM_PREF_USE_TIME_POLICY	GPM_PREF_DIR "/use_time_for_policy"
 #define GPM_PREF_ICON_POLICY		GPM_PREF_DIR "/display_icon_policy"
 #define GPM_PREF_NOTIFY_ACADAPTER	GPM_PREF_DIR "/notify_ac_adapter"
 #define GPM_PREF_NOTIFY_BATTCHARGED	GPM_PREF_DIR "/notify_fully_charged"

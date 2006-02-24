@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/use_time_for_policy</key>
+      <applyto>/apps/gnome-power-manager/use_time_for_policy</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether to use time-based notifications</short>
+        <long>Whether or not to use time based notifications. If set to false, then the percentage change is used instead, which may fix some broken ACPI BIOS's.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/dim_on_idle</key>
       <applyto>/apps/gnome-power-manager/dim_on_idle</applyto>
       <owner>gnome-power-manager</owner>

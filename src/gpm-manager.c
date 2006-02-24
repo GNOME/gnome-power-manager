@@ -977,6 +977,12 @@ power_on_ac_changed_cb (GpmPower   *power,
 {
 	gpm_debug ("Setting on-ac: %d", on_ac);
 
+	/* If we are on AC power we should show warnings again */
+	if (on_ac) {
+		gpm_debug ("Resetting last_primary_warning to NONE");
+		manager->priv->last_primary_warning = GPM_WARNING_NONE;
+	}
+
 	tray_icon_update (manager);
 
 	maybe_notify_on_ac_changed (manager, on_ac);
@@ -1511,6 +1517,7 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
+	gboolean use_time;
 #if ACTIONS_MENU_ENABLED
 	gboolean enabled;
 #endif
@@ -1592,9 +1599,16 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->last_pda_warning = GPM_WARNING_NONE;
 	manager->priv->last_primary_percentage_change = 0;
 
-	/* We can change this easily if	this doesn't work in real-world
-	 * conditions, or perhaps make this a gconf configurable. */
-	manager->priv->use_time_to_notify = TRUE;
+	/* We can disable this if the ACPI BIOS is fucked, and the
+	   time_remaining is therefore inaccurate or just plain wrong. */
+	use_time = gconf_client_get_bool (manager->priv->gconf_client,
+					  GPM_PREF_USE_TIME_POLICY, NULL);
+	if (use_time) {
+		gpm_debug ("Using per-time notification policy");
+	} else {
+		gpm_debug ("Using percentage notification policy");
+	}
+	manager->priv->use_time_to_notify = use_time;
 }
 
 static void
