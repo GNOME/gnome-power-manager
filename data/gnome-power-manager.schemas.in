@@ -14,6 +14,30 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/check_type_cpu</key>
+      <applyto>/apps/gnome-power-manager/check_type_cpu</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Check CPU load before sleeping</short>
+        <long>Whether we should check the CPU load before doing the idle action.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/check_type_net</key>
+      <applyto>/apps/gnome-power-manager/check_type_net</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Check network utilization before sleeping</short>
+        <long>Whether we should check network utilization before doing the idle action.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/dim_on_idle</key>
       <applyto>/apps/gnome-power-manager/dim_on_idle</applyto>
       <owner>gnome-power-manager</owner>

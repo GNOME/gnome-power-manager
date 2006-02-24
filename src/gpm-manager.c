@@ -1518,6 +1518,7 @@ gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
 	gboolean use_time;
+	gboolean check_type_cpu;
 #if ACTIONS_MENU_ENABLED
 	gboolean enabled;
 #endif
@@ -1557,6 +1558,12 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "changed",
 			  G_CALLBACK (idle_changed_cb), manager);
+
+	/* set up the check_type_cpu, so we can disable the CPU load check */
+	check_type_cpu = gconf_client_get_bool (manager->priv->gconf_client,
+						GPM_PREF_IDLE_CHECK_CPU,
+						NULL);
+	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
 

@@ -78,6 +78,8 @@ struct GpmIdlePrivate
 	guint		 system_timer_id;
 	guint		 system_idle_timer_id;
 
+	gboolean	 check_type_cpu;
+
 	gboolean	 init;
 	cpudata		 cpu_old;
 };
@@ -105,19 +107,26 @@ G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 static gboolean
 poll_system_timer (GpmIdle *idle)
 {
-	gdouble load;
+	gdouble  load;
+	gboolean do_action = TRUE;
 
 	/* get our computed load value */
-	load = cpu_update_data (idle);
+	if (idle->priv->check_type_cpu) {
 
-	/* check if system is "idle" enough */
+		load = cpu_update_data (idle);
 
-	/* FIXME: should this stay below this level for a certain time? */
-	/* FIXME: check that we are on console? */
+		/* FIXME: should this stay below this level for a certain time? */
+		/* FIXME: check that we are on console? */
 
-	if (load < IDLE_LIMIT) {
-		gpm_debug ("Detected that the CPU is quiet");
+		if (load > IDLE_LIMIT) {
+			/* check if system is "idle" enough */
+			gpm_debug ("Detected that the CPU is busy");
+			do_action = FALSE;
+		}
+		
+	}
 
+	if (do_action) {
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_SYSTEM);
 
 		idle->priv->system_idle_timer_id = 0;
@@ -186,6 +195,17 @@ add_system_timer (GpmIdle *idle)
 	} else {
 		gpm_debug ("System idle disabled");
 	}
+}
+
+void
+gpm_idle_set_check_cpu (GpmIdle    *idle,
+			gboolean    check_type_cpu)
+{
+	g_return_if_fail (GPM_IS_IDLE (idle));
+
+	gpm_debug ("Setting the CPU load check to %i", check_type_cpu);
+
+	idle->priv->check_type_cpu = check_type_cpu;
 }
 
 void

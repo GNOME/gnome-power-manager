@@ -55,6 +55,9 @@ G_BEGIN_DECLS
 #define GPM_PREF_LOCK_ON_SUSPEND	GPM_PREF_DIR "/lock_on_suspend"
 #define GPM_PREF_LOCK_ON_HIBERNATE	GPM_PREF_DIR "/lock_on_hibernate"
 
+#define GPM_PREF_IDLE_CHECK_CPU		GPM_PREF_DIR "/check_type_cpu"
+#define GPM_PREF_IDLE_CHECK_NET		GPM_PREF_DIR "/check_type_net"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_CHARGE,

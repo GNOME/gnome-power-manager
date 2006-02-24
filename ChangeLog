@@ -1,3 +1,21 @@
+2006-02-24  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in: Add the new keys:
+	/apps/gnome-power-manager/check_type_cpu and
+	/apps/gnome-power-manager/check_type_net to set the system policy for
+	idle check action on CPU load. Defaults to true.
+
+	* src/gpm-prefs.h: Add GPM_PREF_IDLE_CHECK_CPU and
+	GPM_PREF_IDLE_CHECK_NET.
+
+	* src/gpm-manager.c (gpm_manager_init): set the idle cpu load policy
+	at init time. These policy keys should probably be updated while
+	running, but this isn't important for now.
+
+	* src/gpm-idle.c (poll_system_timer): only inhibit if we are set to
+	check the CPU load. Networking to come.
+	Fixes #332149
+
 2006-02-24  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-screensaver.c (gpm_screensaver_lock) 
