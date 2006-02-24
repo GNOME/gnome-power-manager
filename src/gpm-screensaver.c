@@ -161,7 +161,7 @@ gpm_screensaver_lock (void)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	dbus_g_proxy_call_no_reply (gs_proxy, "lock", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (gs_proxy, "Lock", G_TYPE_INVALID);
 	g_object_unref (G_OBJECT (gs_proxy));
 	return TRUE;
 }
@@ -183,7 +183,7 @@ gpm_screensaver_poke (void)
 			GS_LISTENER_SERVICE,
 			GS_LISTENER_PATH,
 			GS_LISTENER_INTERFACE);
-	dbus_g_proxy_call_no_reply (gs_proxy, "poke", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (gs_proxy, "Poke", G_TYPE_INVALID);
 	g_object_unref (G_OBJECT (gs_proxy));
 	return TRUE;
 }
