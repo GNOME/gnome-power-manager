@@ -617,7 +617,9 @@ libnotify_event (GpmTrayIcon             *tray,
 		notify_notification_close (tray->priv->notify, NULL);
 	}
 
-	tray->priv->notify = notify_notification_new (subject, content, GNOME_DEV_BATTERY, NULL);
+	tray->priv->notify = notify_notification_new (subject, content,
+						      GPM_STOCK_BATTERY_DISCHARGING_100,
+						      NULL);
 
 	notify_notification_set_timeout (tray->priv->notify, timeout);
 
