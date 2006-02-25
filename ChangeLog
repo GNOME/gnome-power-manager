@@ -1,5 +1,12 @@
 2006-02-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gpm_manager_init): Fix the not on AC logic as
+	we don't want to be notified on coldplug, but do want to be notified
+	when we remove the ac_adpter for the first time.
+	This should fix #332322
+
+2006-02-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.h: Add GPM_PREF_IDLE_DIM_SCREEN.
 
 	* src/gpm-brightness.c (gpm_brightness_percent_to_hw): Factor out the

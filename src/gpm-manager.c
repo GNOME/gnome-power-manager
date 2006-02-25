@@ -1618,15 +1618,19 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
-	/* we don't want to be notified on coldplug if we are on battery power */
-	manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
-	
 	/* we want all notifications */
 	manager->priv->last_ups_warning = GPM_WARNING_NONE;
 	manager->priv->last_mouse_warning = GPM_WARNING_NONE;
 	manager->priv->last_keyboard_warning = GPM_WARNING_NONE;
 	manager->priv->last_pda_warning = GPM_WARNING_NONE;
+	manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	manager->priv->last_primary_percentage_change = 0;
+
+	/* We don't want to be notified on coldplug if we are on battery power
+	   this should fix #332322 */
+	if (! on_ac) {
+		manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
+	}
 
 	/* We can disable this if the ACPI BIOS is fucked, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
