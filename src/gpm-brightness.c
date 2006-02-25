@@ -56,6 +56,7 @@ struct GpmBrightnessPrivate
 {
 	gboolean	    has_hardware;
 	int	    current_hw;
+	int	    saved_value_hw;
 	int	    levels;
 	char	   *udi;
 	DBusGProxy *proxy;
@@ -153,6 +154,9 @@ gpm_brightness_init (GpmBrightness *brightness)
 
 	/* this changes under our feet */
 	gpm_brightness_level_update_hw (brightness);
+
+	/* set to known value */
+	brightness->priv->saved_value_hw = -1;
 
 	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
@@ -260,6 +264,19 @@ gpm_brightness_level_down (GpmBrightness *brightness)
 	gpm_brightness_level_set_hw (brightness, current_hw - 1);
 }
 
+static int
+gpm_brightness_percent_to_hw (int percentage,
+			      int levels)
+{
+	/* check we are in range */
+	if (percentage < 0) {
+		return 0;
+	} else if (percentage > 100) {
+		return levels;
+	}
+	return ( (float) percentage * (float) (levels - 1)) / 100.0f;
+}
+
 /* brightness_level is a percentage */
 void
 gpm_brightness_level_set (GpmBrightness *brightness,
@@ -272,10 +289,39 @@ gpm_brightness_level_set (GpmBrightness *brightness,
 		return;
 	}
 	levels = brightness->priv->levels;
-	brightness_level_hw = ( (float) brightness_level * (float) (levels - 1)) / 100.0f;
+	brightness_level_hw = gpm_brightness_percent_to_hw (brightness_level, levels);
 	/* only set if different */
 	if (brightness_level_hw != brightness->priv->current_hw) {
 		gpm_brightness_level_set_hw (brightness, brightness_level_hw);
+	}
+}
+
+/* new_level_hw is raw value */
+static void
+gpm_brightness_level_dim_hw (GpmBrightness *brightness,
+			     int            new_level_hw)
+{
+	int   current_hw;
+	int   a;
+
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
+
+	current_hw = brightness->priv->current_hw;
+
+	if (new_level_hw > current_hw) {
+		/* going up */
+		for (a=current_hw; a <= new_level_hw; a++) {
+			gpm_brightness_level_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
+	} else {
+		/* going down */
+		for (a=current_hw; a >= new_level_hw; a--) {
+			gpm_brightness_level_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
 	}
 }
 
@@ -286,13 +332,7 @@ gpm_brightness_level_dim (GpmBrightness *brightness,
 {
 	char *manufacturer_string = NULL;
 	int   new_level_hw;
-	int   current_hw;
-	int   levels;
-	int   a;
 
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
 	/* If the manufacturer is IBM, then assume we are a ThinkPad,
 	 * and don't do the new-fangled dimming routine. The ThinkPad dims
 	 * gently itself and the two dimming routines just get messy.
@@ -310,21 +350,33 @@ gpm_brightness_level_dim (GpmBrightness *brightness,
 		g_free (manufacturer_string);
 	}
 
-	levels = brightness->priv->levels;
-	new_level_hw = ( (float) brightness_level * (float) (levels - 1)) / 100.0f;
-	current_hw = brightness->priv->current_hw;
+	new_level_hw = gpm_brightness_percent_to_hw (brightness_level,
+						     brightness->priv->levels);
+	gpm_brightness_level_dim_hw (brightness, new_level_hw);
+}
 
-	if (new_level_hw > current_hw) {
-		/* going up */
-		for (a=current_hw; a <= new_level_hw; a++) {
-			gpm_brightness_level_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
-	} else {
-		/* going down */
-		for (a=current_hw; a >= new_level_hw; a--) {
-			gpm_brightness_level_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
+/* same as gpm_brightness_level_dim, but saves value for resume */
+void
+gpm_brightness_level_save (GpmBrightness *brightness,
+			   int            brightness_level)
+{
+	int   new_level_hw;
+	
+	gpm_debug ("Saving and setting brightness to %i%%", brightness_level);
+	brightness->priv->saved_value_hw = brightness->priv->current_hw;
+
+	new_level_hw = gpm_brightness_percent_to_hw (brightness_level,
+						     brightness->priv->levels);
+	gpm_brightness_level_dim_hw (brightness, new_level_hw);
+}
+
+void
+gpm_brightness_level_resume (GpmBrightness *brightness)
+{
+	if (brightness->priv->saved_value_hw == -1) {
+		gpm_warning ("You have to call gpm_brightness_level_save first!");
+		return;
 	}
+	gpm_debug ("Resuming to previous brightness");
+	gpm_brightness_level_set_hw (brightness, brightness->priv->saved_value_hw);
 }

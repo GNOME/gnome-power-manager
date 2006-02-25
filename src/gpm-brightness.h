@@ -64,6 +64,11 @@ gpm_brightness_level_set (GpmBrightness *lcdbrightness,
 void
 gpm_brightness_level_dim (GpmBrightness *lcdbrightness,
 			  int            brightness_level);
+void
+gpm_brightness_level_save (GpmBrightness *brightness,
+			   int            brightness_level);
+void
+gpm_brightness_level_resume (GpmBrightness *brightness);
 
 G_END_DECLS
 

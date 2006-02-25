@@ -129,6 +129,8 @@ G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 #define		BATTERY_CRITICAL_REMAINING_TIME		(5 * 60)  /* 5 minutes  */
 #define		BATTERY_ACTION_REMAINING_TIME		(2 * 60)  /* 2 minutes  */
 
+#define		LAPTOP_PANEL_DIM_BRIGHTNESS		30 /* % */
+
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
 
@@ -810,6 +812,7 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmManager *manager)
 {
 	GError  *error;
+	gboolean do_laptop_dim;
 
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
@@ -822,6 +825,15 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
+		/* Should we dim the screen? */
+		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+		if (do_laptop_dim) {
+			/* resume to the previous brightness */
+			gpm_brightness_level_resume (manager->priv->brightness);
+		}
+
+		/* sync timeouts */
 		sync_dpms_policy (manager);
 
 		break;
@@ -834,6 +846,15 @@ idle_changed_cb (GpmIdle    *idle,
 		gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
 		if (error) {
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
+		}
+
+		/* Should we resume the screen? */
+		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+		if (do_laptop_dim) {
+			/* save this brightness and dim the screen, fixes #328564 */
+			gpm_brightness_level_save (manager->priv->brightness,
+						   LAPTOP_PANEL_DIM_BRIGHTNESS);
 		}
 
 		/* sync timeouts */
@@ -1139,7 +1160,8 @@ battery_status_changed_primary (GpmManager	      *manager,
 		const char *action;
 
 		/* we have to do different warnings depending on the policy */
-		action = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_BATTERY_CRITICAL, NULL);
+		action = gconf_client_get_string (manager->priv->gconf_client,
+						  GPM_PREF_BATTERY_CRITICAL, NULL);
 
 		/* FIXME: we should probably convert to an ENUM type, and use that */
 		if (strcmp (action, ACTION_NOTHING) == 0) {

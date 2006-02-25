@@ -57,6 +57,7 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_IDLE_CHECK_CPU		GPM_PREF_DIR "/check_type_cpu"
 #define GPM_PREF_IDLE_CHECK_NET		GPM_PREF_DIR "/check_type_net"
+#define GPM_PREF_IDLE_DIM_SCREEN	GPM_PREF_DIR "/dim_on_idle"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,

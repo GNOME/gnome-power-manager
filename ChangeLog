@@ -1,3 +1,21 @@
+2006-02-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.h: Add GPM_PREF_IDLE_DIM_SCREEN.
+
+	* src/gpm-brightness.c (gpm_brightness_percent_to_hw): Factor out the
+	percent to hardware value calculation so we can do the error checking
+	in one place.
+
+	(gpm_brightness_level_dim_hw): Factor out the step dimming
+	functionality so we can use it from other places.
+
+	* src/gpm-brightness.{h|c} (gpm_brightness_level_save,
+	gpm_brightness_level_resume): Add functionality so we can save the
+	lcd brightness state and resume it from the manager.
+
+	* src/gpm-manager.c (idle_changed_cb): Add in functionality so that we
+	dim the screen to 30% when the SESSION is idle. Fixes #328564
+
 2006-02-24  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in: Add the new keys:
