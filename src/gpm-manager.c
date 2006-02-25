@@ -229,6 +229,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
 static char *
 get_icon_index_from_percent (gint percent)
 {
+	gpm_debug ("percent = %i", percent);
 	if (percent < 10) {
 		return "000";
 	} else if (percent < 30) {
@@ -251,8 +252,12 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 	char *index;
 	char *filename = NULL;
 
-	if (!device_status->is_charging && !device_status->is_discharging) {
+	if (!device_status->is_charging &&
+	    !device_status->is_discharging &&
+	    device_status->percentage_charge > 90) {
 
+		/* We have to do the additional check for 90% as
+		   some batteries are broken */
 		filename = g_strdup ("battery-charged");
 
 	} else if (device_status->is_charging) {
@@ -264,7 +269,13 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 
 		index = get_icon_index_from_percent (device_status->percentage_charge);
 		filename = g_strdup_printf ("%s-discharging-%s", prefix, index);
+	} else {
+
+		/* We have a broken battery, not sure what to display here */
+		gpm_debug ("BROKEN BATTERY... Not sure what to do");
+		filename = g_strdup_printf ("%s-charging-000", prefix);
 	}
+	gpm_debug ("filename = %s", filename);
 	return filename;
 }
 
