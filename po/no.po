@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-23 00:26+0100\n"
+"POT-Creation-Date: 2006-02-25 20:21+0000\n"
 "PO-Revision-Date: 2006-02-23 00:35+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
@@ -36,199 +36,264 @@ msgid "Power management daemon"
 msgstr "Strømstyring"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
-msgid "AC LCD brightness hardware value"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:2
-msgid "Battery LCD brightness hardware value"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
 msgstr "Handling ved kritisk lav batterikapasitet"
 
+#: ../data/gnome-power-manager.schemas.in.h:2
+msgid "Check CPU load before sleeping"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Check network utilization before sleeping"
+msgstr ""
+
 #: ../data/gnome-power-manager.schemas.in.h:4
-msgid "Computer AC idle timeout value"
+msgid "Dim the screen after a period of inactivity"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Computer battery idle timeout value"
-msgstr ""
+#, fuzzy
+msgid "Hibernate enabled"
+msgstr "Problem med dvalemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
-msgid "Default sleep type"
-msgstr "Forvalgt type hvilemodus"
+msgid "LCD brightness when on AC"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-msgid "Display AC idle timeout value"
+msgid "LCD brightness when on battery"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-msgid "Display battery idle timeout value"
-msgstr ""
+msgid "Laptop lid close action on battery"
+msgstr "Handling når lokket på datamaskinen lukkes og den kjører på batteri"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-msgid "If the user can hibernate"
-msgstr "Om brukeren kan velge dvalemodus"
+#, fuzzy
+msgid "Laptop lid close action when on AC"
+msgstr "Handling når lokket på datamaskinen lukkes med strøm tilkoblet"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
-msgid "If the user can suspend"
-msgstr "Om brukeren kan velge hvilemodus"
+#, fuzzy
+msgid "Lock screen on hibernate"
+msgstr "Lås skjermen når datamaskinen går i dvalemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
-msgid ""
-"If this particular user should have hibernate on the drop-down menu and in "
-"the prefs"
-msgstr "Hvorvidt denne brukeren skal ha dvalemodus tilgjengelig i menyen"
+#, fuzzy
+msgid "Lock screen on suspend"
+msgstr "Lås skjermen når datamaskinen går i hvilemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
-msgid ""
-"If this particular user should have suspend on the drop-down menu and in the "
-"prefs"
-msgstr "Hvorvidt denne brukeren skal ha hvilemodus tilgjengelig i menyen"
+#, fuzzy
+msgid "Lock screen when it is blanked"
+msgstr "Lås skjermen når den blankes"
 
 #: ../data/gnome-power-manager.schemas.in.h:13
-msgid "If to dim the screen after a period of inactivity"
+msgid "Notify on a HAL suspend or hibernate error."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:14
-msgid ""
-"If we should dim the screen to save power when the computer is marked as "
-"idle."
-msgstr ""
-"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i "
-"bruk."
+msgid "Notify on fully charged"
+msgstr "Varsle når batteriet er ladet helt opp"
 
 #: ../data/gnome-power-manager.schemas.in.h:15
-msgid ""
-"If we should lock the screen when the screen is turned off with DPMS (using "
-"custom rules)"
+msgid "Notify when AC adapter is removed"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid ""
-"If we should lock the screen when we are set to hibernate (using custom "
-"rules)"
+"Option when to show the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\" and \"always\""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:17
-msgid ""
-"If we should lock the screen when we are set to suspend (using custom rules)"
+msgid "Sleep timeout computer when on AC"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:18
-msgid "If we should notify the user that the AC adapter has been removed"
-msgstr "Om brukeren skal varsles ved frakobling av nettstrøm"
+msgid "Sleep timeout computer when on battery"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:19
-msgid "If we should notify the user that the battery is fully charged"
-msgstr "Om vi skal varsle brukeren når batteriet er fulladet"
+msgid "Sleep timeout display when on AC"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:20
-msgid ""
-"If we should use the gnome-screensaver setting for lock, or our own custom "
-"rules"
+msgid "Sleep timeout display when on battery"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:21
-msgid "Laptop lid close action on AC"
-msgstr "Handling når lokket på datamaskinen lukkes med strøm tilkoblet"
-
-#: ../data/gnome-power-manager.schemas.in.h:22
-msgid "Laptop lid close action on battery"
-msgstr "Handling når lokket på datamaskinen lukkes og den kjører på batteri"
-
-#: ../data/gnome-power-manager.schemas.in.h:23
-msgid "Lock screen when we blank it"
-msgstr "Lås skjermen når den blankes"
-
-#: ../data/gnome-power-manager.schemas.in.h:24
-msgid "Lock screen when we hibernate"
-msgstr "Lås skjermen når datamaskinen går i dvalemodus"
-
-#: ../data/gnome-power-manager.schemas.in.h:25
-msgid "Lock screen when we suspend"
-msgstr "Lås skjermen når datamaskinen går i hvilemodus"
-
-#: ../data/gnome-power-manager.schemas.in.h:26
-msgid "Notify on AC loss"
-msgstr "Gjør bruker oppmerksom på frakobling av nettstrøm"
-
-#: ../data/gnome-power-manager.schemas.in.h:27
-msgid "Notify on fully charged"
-msgstr "Varsle når batteriet er ladet helt opp"
-
-#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "Suspend button action"
 msgstr "Handling for hvilemodusknapp"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
-msgid "The action to take when the battery is critically low."
+#: ../data/gnome-power-manager.schemas.in.h:22
+#, fuzzy
+msgid "Suspend enabled"
+msgstr "Problem med hvilemodus"
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+#, fuzzy
+msgid ""
+"The action to take when the battery is critically low. Valid values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
 msgstr "Handling som skal utføres ved kritisk lavt batterinivå"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:24
 #, fuzzy
 msgid ""
-"The action to take when the laptop lid is closed and not on battery power"
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "Handling som skal utføres ved lukking av datamaskinen"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:25
 #, fuzzy
-msgid "The action to take when the laptop lid is closed and on battery power"
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "Handling som skal utføres ved lukking av datamaskinen"
 
-#: ../data/gnome-power-manager.schemas.in.h:32
-msgid "The action to take when the system suspend button is pressed"
+#: ../data/gnome-power-manager.schemas.in.h:26
+#, fuzzy
+msgid ""
+"The action to take when the system suspend button is pressed. Valid values "
+"are \"suspend\", \"hibernate\" and \"nothing\"."
 msgstr "Handling ved bruk av dvalemodus-knapp"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
-msgid "The display icon policy can be never, critical, charge, always"
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid ""
+"The brightness of the display when on AC power. Valid values are between 0 "
+"and 100."
 msgstr ""
-"Alternativer for visning av ikon er «never», «critical», «charge», «always»"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
-msgid "The hardware brightness the display is set to whilst on AC power"
-msgstr "Lysstyrken for skjerm når tilkoblet nettstrøm"
-
-#: ../data/gnome-power-manager.schemas.in.h:35
-msgid "The hardware brightness the display is set to whilst on battery power"
-msgstr "Lysstyrken for skjerm ved bruk av batteri"
-
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
-"The idle time in seconds before the computer tries to sleep whilst on AC "
-"power"
+"The brightness of the display when on battery power. Valid values are "
+"between 0 and 100."
 msgstr ""
-"Inaktiv tid i sekunder før datamaskinen går i dvalemodus (på nettstrøm)"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:29
+#, fuzzy
 msgid ""
-"The idle time in seconds before the computer tries to sleep whilst on "
-"battery power"
-msgstr "Inaktiv tid i sekunder før datamaskinen går i dvalemodus (på batteri)"
-
-#: ../data/gnome-power-manager.schemas.in.h:38
-msgid ""
-"The idle time in seconds before the display tries to sleep whilst on AC power"
+"The number of seconds before the display goes to sleep when the computer is "
+"on AC power."
 msgstr "Inaktiv tid i sekunder før skjermen går i dvalemodus (på nettstrøm)"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid ""
-"The idle time in seconds before the display tries to sleep whilst on battery "
-"power"
-msgstr "Inaktiv tid i sekunder før skjermen går i dvalemodus (på batteri)"
+"The number of seconds the computer on AC power needs to be inactive before "
+"it goes to sleep."
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:40
-msgid "The type of sleep (hibernate/suspend) to use automatically."
-msgstr "Type hvilemodus som skal brukes automatisk."
+#: ../data/gnome-power-manager.schemas.in.h:31
+msgid ""
+"The number of seconds the computer on battery power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:32
+msgid ""
+"The number of seconds the computer on battery power needs to be inactive "
+"before the display goes to sleep."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Valid values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "Use gnome-screensaver lock setting"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid "When to show the notification icon"
 msgstr "Når skal ikonet skal vises i varslingsområdet"
+
+#: ../data/gnome-power-manager.schemas.in.h:36
+msgid ""
+"Whether or not a notification message is displayed if the HAL action "
+"(suspend or hibernate) fails"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:37
+#, fuzzy
+msgid ""
+"Whether or not a notification message is displayed when the battery is fully "
+"charged"
+msgstr "Om vi skal varsle brukeren når batteriet er fulladet"
+
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid ""
+"Whether or not the screen is locked when the screen is turned off. NOTE this "
+"option is only used if lock_use_screensaver_settings is set to false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:39
+#, fuzzy
+msgid "Whether or not the user can hibernate the computer"
+msgstr "Om brukeren kan velge dvalemodus"
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+msgid "Whether or not the user can suspend the computer"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:41
+#, fuzzy
+msgid "Whether or not the user is notified when the AC adapter is removed"
+msgstr "Om brukeren skal varsles ved frakobling av nettstrøm"
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+#, fuzzy
+msgid ""
+"Whether or not to dim the screen to save power when the computer is idle."
+msgstr ""
+"Hvorvidt skjermen skal dempes for å spare strøm når datamaskinen ikke er i "
+"bruk."
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid ""
+"Whether or not to lock the screen when the computer wakes up from a "
+"hibernate. NOTE this option is only used if lock_use_screensaver_settings is "
+"set to false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid ""
+"Whether or not to lock the screen when the computer wakes up from a suspend. "
+"NOTE this option is only used if lock_use_screensaver_settings is set to "
+"false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid ""
+"Whether or not to use the screen lock setting of gnome-screensaver to decide "
+"to lock the screen after a hibernate, suspend or blank screen."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid ""
+"Whether or not to use time based notifications. If set to false, then the "
+"percentage change is used instead, which may fix some broken ACPI BIOS's."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+msgid "Whether to hibernate, suspend or do nothing when inactive"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+#, fuzzy
+msgid "Whether to use time-based notifications"
+msgstr "Når skal ikonet skal vises i varslingsområdet"
+
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid ""
+"Whether we should check network utilization before doing the idle action."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:50
+msgid "Whether we should check the CPU load before doing the idle action."
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -363,7 +428,7 @@ msgstr "Ikke kjør som tjeneste"
 msgid "Show extra debugging information"
 msgstr "Vis ekstra feilsøkingsinformasjon"
 
-#: ../src/gpm-manager.c:726
+#: ../src/gpm-manager.c:733
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
@@ -371,15 +436,15 @@ msgstr ""
 "HAL klarte ikke å %s. Sjekk <a href=\"%s\">FAQ-siden</a> for vanlige "
 "problemer."
 
-#: ../src/gpm-manager.c:728
+#: ../src/gpm-manager.c:735
 msgid "hibernate"
 msgstr "gå i dvalemodus"
 
-#: ../src/gpm-manager.c:732
+#: ../src/gpm-manager.c:738
 msgid "Hibernate Problem"
 msgstr "Problem med dvalemodus"
 
-#: ../src/gpm-manager.c:777
+#: ../src/gpm-manager.c:789
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -388,53 +453,75 @@ msgstr ""
 "Din datamaskin har problemer med %s.\n"
 "Sjekk <a href=\"%s\">FAQ-siden</a> for vanlige problemer."
 
-#: ../src/gpm-manager.c:779
+#: ../src/gpm-manager.c:791
 msgid "suspend"
 msgstr "gå i hvilemodus"
 
-#: ../src/gpm-manager.c:783
+#: ../src/gpm-manager.c:794
 msgid "Suspend Problem"
 msgstr "Problem med hvilemodus"
 
-#: ../src/gpm-manager.c:1033
+#: ../src/gpm-manager.c:1070
 msgid "Power Critically Low"
 msgstr "Batterikapasitet kritisk lav"
 
-#: ../src/gpm-manager.c:1037
+#: ../src/gpm-manager.c:1074
 msgid "Power Very Low"
 msgstr "Batterikapasitet meget lav"
 
-#: ../src/gpm-manager.c:1041
+#: ../src/gpm-manager.c:1078
 msgid "Power Low"
 msgstr "Batterikapasitet lav"
 
-#: ../src/gpm-manager.c:1045
+#: ../src/gpm-manager.c:1082
 msgid "Power Information"
 msgstr "Informasjon om strøm"
 
-#: ../src/gpm-manager.c:1089
+#: ../src/gpm-manager.c:1133
 msgid "Battery Charged"
 msgstr "Batteriet er ladet"
 
-#: ../src/gpm-manager.c:1091
+#: ../src/gpm-manager.c:1135
 msgid "Your battery is now fully charged"
 msgstr "Batteriet er nå ladet helt opp"
 
-#: ../src/gpm-manager.c:1117
-msgid "Critical action"
-msgstr "Handling for kritisk nivå"
+#: ../src/gpm-manager.c:1168
+#, fuzzy
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
 
-#: ../src/gpm-manager.c:1119
+#: ../src/gpm-manager.c:1172
+#, fuzzy
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
+
+#: ../src/gpm-manager.c:1177
+#, fuzzy
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
+
+#: ../src/gpm-manager.c:1180
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
 
-#: ../src/gpm-manager.c:1138
+#: ../src/gpm-manager.c:1187
+msgid "Critical action"
+msgstr "Handling for kritisk nivå"
+
+#: ../src/gpm-manager.c:1207
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Strømkabelen er ikke plugget inn. Systemet bruker nå batteristrøm."
 
-#: ../src/gpm-manager.c:1142
+#: ../src/gpm-manager.c:1211
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -443,11 +530,11 @@ msgstr ""
 "Du har omtrent <b>%s</b> batteritid igjen (%d%%). Sett inn strømkabelen for "
 "å unngå å tape data."
 
-#: ../src/gpm-manager.c:1200
+#: ../src/gpm-manager.c:1269
 msgid "Your system is running on backup power!"
 msgstr "Datamaskinen kjører på reservestrøm!"
 
-#: ../src/gpm-manager.c:1203
+#: ../src/gpm-manager.c:1272
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -456,7 +543,7 @@ msgstr ""
 "Du har omtrent <b>%s</b> batteritid igjen på UPS-strlm (%d%%). Gjenopprett "
 "strømtilførsel for datamaskinen for å unngå å tape data."
 
-#: ../src/gpm-manager.c:1270
+#: ../src/gpm-manager.c:1339
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -621,3 +708,59 @@ msgstr "Konfigurasjon"
 #: ../src/gpm-prefs.c:693
 msgid "Power Preferences"
 msgstr "Brukervalg for strøm"
+
+#~ msgid "Default sleep type"
+#~ msgstr "Forvalgt type hvilemodus"
+
+#~ msgid "If the user can suspend"
+#~ msgstr "Om brukeren kan velge hvilemodus"
+
+#~ msgid ""
+#~ "If this particular user should have hibernate on the drop-down menu and "
+#~ "in the prefs"
+#~ msgstr "Hvorvidt denne brukeren skal ha dvalemodus tilgjengelig i menyen"
+
+#~ msgid ""
+#~ "If this particular user should have suspend on the drop-down menu and in "
+#~ "the prefs"
+#~ msgstr "Hvorvidt denne brukeren skal ha hvilemodus tilgjengelig i menyen"
+
+#~ msgid "Notify on AC loss"
+#~ msgstr "Gjør bruker oppmerksom på frakobling av nettstrøm"
+
+#, fuzzy
+#~ msgid ""
+#~ "The action to take when the laptop lid is closed and on battery power"
+#~ msgstr "Handling som skal utføres ved lukking av datamaskinen"
+
+#~ msgid "The display icon policy can be never, critical, charge, always"
+#~ msgstr ""
+#~ "Alternativer for visning av ikon er «never», «critical», «charge», "
+#~ "«always»"
+
+#~ msgid "The hardware brightness the display is set to whilst on AC power"
+#~ msgstr "Lysstyrken for skjerm når tilkoblet nettstrøm"
+
+#~ msgid ""
+#~ "The hardware brightness the display is set to whilst on battery power"
+#~ msgstr "Lysstyrken for skjerm ved bruk av batteri"
+
+#~ msgid ""
+#~ "The idle time in seconds before the computer tries to sleep whilst on AC "
+#~ "power"
+#~ msgstr ""
+#~ "Inaktiv tid i sekunder før datamaskinen går i dvalemodus (på nettstrøm)"
+
+#~ msgid ""
+#~ "The idle time in seconds before the computer tries to sleep whilst on "
+#~ "battery power"
+#~ msgstr ""
+#~ "Inaktiv tid i sekunder før datamaskinen går i dvalemodus (på batteri)"
+
+#~ msgid ""
+#~ "The idle time in seconds before the display tries to sleep whilst on "
+#~ "battery power"
+#~ msgstr "Inaktiv tid i sekunder før skjermen går i dvalemodus (på batteri)"
+
+#~ msgid "The type of sleep (hibernate/suspend) to use automatically."
+#~ msgstr "Type hvilemodus som skal brukes automatisk."
