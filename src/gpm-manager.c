@@ -55,6 +55,7 @@
 #include "gpm-hal-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
+#include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 
 static void     gpm_manager_class_init (GpmManagerClass *klass);
@@ -217,22 +218,57 @@ gpm_manager_can_shutdown (GpmManager *manager,
 	return TRUE;
 }
 
-/* Return 0..8 dependending on percent */
-static gint
+/* Return index value dependending on percent
+	00-10  = 000
+	10-30  = 020
+	30-50  = 040
+	50-70  = 060
+	70-90  = 080
+	90-100 = 100
+*/
+static char *
 get_icon_index_from_percent (gint percent)
 {
-	const gint NUM_INDEX = 8;
-	gint	   index;
-
-	index = ((percent + NUM_INDEX / 2) * NUM_INDEX ) / 100;
-	if (index < 0) {
-		return 0;
-	} else if (index > NUM_INDEX) {
-		return NUM_INDEX;
+	if (percent < 10) {
+		return "000";
+	} else if (percent < 30) {
+		return "020";
+	} else if (percent < 50) {
+		return "040";
+	} else if (percent < 70) {
+		return "060";
+	} else if (percent < 90) {
+		return "080";
 	}
-	return index;
+	return "100";
 }
 
+/* required, as UPS and primary icons have charged, charging and discharging icons.
+   must free retval */
+static char *
+get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
+{
+	char *index;
+	char *filename = NULL;
+
+	if (!device_status->is_charging && !device_status->is_discharging) {
+
+		filename = g_strdup ("battery-charged");
+
+	} else if (device_status->is_charging) {
+
+		index = get_icon_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("%s-charging-%s", prefix, index);
+
+	} else if (device_status->is_discharging) {
+
+		index = get_icon_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("%s-discharging-%s", prefix, index);
+	}
+	return filename;
+}
+
+/* must free retval */
 static char *
 get_stock_id (GpmManager *manager,
 	      int         icon_policy)
@@ -243,7 +279,6 @@ get_stock_id (GpmManager *manager,
 	GpmPowerBatteryStatus status_keyboard;
 	gboolean on_ac;
 	gboolean present;
-	int index;
 
 	gpm_debug ("Getting stock icon for tray");
 
@@ -275,24 +310,22 @@ get_stock_id (GpmManager *manager,
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
+	gpm_debug ("Trying CRITICAL: primary, ups, mouse, keyboard");
 	if (status_primary.is_present &&
 	    status_primary.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (status_primary.percentage_charge);
-		if (on_ac) {
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-		} else {
-			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
-		}
+		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+
 	} else if (status_ups.is_present &&
 		   status_ups.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		index = get_icon_index_from_percent (status_ups.percentage_charge);
-		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
+
 	} else if (status_mouse.is_present &&
 		   status_mouse.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		return g_strdup_printf ("gnome-power-mouse");
+		return g_strdup_printf (GPM_STOCK_MOUSE_LOW);
+
 	} else if (status_keyboard.is_present &&
 		   status_keyboard.percentage_charge < BATTERY_LOW_PERCENTAGE) {
-		return g_strdup_printf ("gnome-power-keyboard");
+		return g_strdup_printf (GPM_STOCK_KEYBOARD_LOW);
 	}
 
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
@@ -301,18 +334,14 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
+	gpm_debug ("Trying CHARGING: primary, ups");
 	if (status_primary.is_present &&
-	    (status_primary.is_charging || status_primary.is_discharging)) {
-		index = get_icon_index_from_percent (status_primary.percentage_charge);
-		if (on_ac) {
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-		} else {
-			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
-		}
+	    (status_primary.is_charging || status_primary.is_discharging) ) {
+		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+
 	} else if (status_ups.is_present &&
-		   (status_ups.is_charging || status_ups.is_charging)) {
-		index = get_icon_index_from_percent (status_ups.percentage_charge);
-		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+		   (status_ups.is_charging || status_ups.is_discharging) ) {
+		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 	}
 
 	/* Check if we should just show the icon all the time */
@@ -322,24 +351,17 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* we try PRESENT: PRIMARY, UPS */
+	gpm_debug ("Trying PRESENT: primary, ups");
 	if (status_primary.is_present) {
-		index = get_icon_index_from_percent (status_primary.percentage_charge);
-		if (on_ac) {
-			if (!status_primary.is_charging && !status_primary.is_discharging) {
-				/* if we are not charging, then don't display the 'flash' */
-				return g_strdup ("gnome-power-ac-charged");
-			}
-			return g_strdup_printf ("gnome-power-ac-%d-of-8", index);
-		} else {
-			return g_strdup_printf ("gnome-power-bat-%d-of-8", index);
-		}
+		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+
 	} else if (status_ups.is_present) {
-		index = get_icon_index_from_percent (status_ups.percentage_charge);
-		return g_strdup_printf ("gnome-power-ups-%d-of-8", index);
+		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 	}
 
 	/* we fallback to the ac_adapter icon */
-	return g_strdup_printf ("gnome-dev-acadapter");
+	gpm_debug ("Using fallback");
+	return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
 }
 
 static void

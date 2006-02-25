@@ -1,5 +1,31 @@
 2006-02-25  Richard Hughes  <richard@hughsie.com>
 
+	* data/icons/24x24/*.png, data/icons/svg/*.png,
+	src/gpm-stock-icons.{c|h}, src/gpm-tray-icon.c, src/gpm-manager.c:
+	Add the following icons:
+
+	ac-adapter, keyboard-power-low, mouse-power-low
+	suspend-to-disk, suspend-to-ram
+
+	battery-charged, battery-charging-xxx, battery-discharging-xxx
+	ups-charged, ups-charging-xxx, ups-discharging-xxx
+
+	Where:
+	00-10%  = 000
+	10-30%  = 020
+	30-50%  = 040
+	50-70%  = 060
+	70-90%  = 080
+	90-100% = 100
+
+	To rationise our icon naming and make the icon selection *much easier*.
+	This is to address bug #331117 to add new UPS discharging and charging
+	icons, and also to start to fix #331761 so we can theme the icons
+	someday soon. I wanted to do this before the release so we can start
+	working on a default theme.
+
+2006-02-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (gpm_manager_init): Fix the not on AC logic as
 	we don't want to be notified on coldplug, but do want to be notified
 	when we remove the ac_adpter for the first time.
