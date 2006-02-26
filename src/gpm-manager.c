@@ -1152,11 +1152,6 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	if (battery_status->percentage_charge != manager->priv->last_primary_percentage_change) {
-		/* should we fire an event or something? */
-		manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
-	}
-
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
 		gpm_debug ("Resetting last_primary_warning to NONE");
@@ -1179,6 +1174,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      _("Your battery is now fully charged"));
 		}
 		return;
+	}
+
+	if (battery_status->percentage_charge != manager->priv->last_primary_percentage_change) {
+		/* should we fire an event or something? */
+		manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
 	}
 
 	if (! battery_status->is_discharging) {
