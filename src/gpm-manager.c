@@ -290,6 +290,7 @@ get_stock_id (GpmManager *manager,
 	GpmPowerBatteryStatus status_keyboard;
 	gboolean on_ac;
 	gboolean present;
+	gboolean use_fallback;
 
 	gpm_debug ("Getting stock icon for tray");
 
@@ -370,9 +371,19 @@ get_stock_id (GpmManager *manager,
 		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 	}
 
-	/* we fallback to the ac_adapter icon */
-	gpm_debug ("Using fallback");
-	return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
+	/* we have a falback here, so that desktops by default do not have
+	   the icon, but it can be "forced" */
+	use_fallback = gconf_client_get_bool (manager->priv->gconf_client,
+					      GPM_PREF_USE_ICON_DESKTOPS,
+					      NULL);
+	if (use_fallback) {
+		/* we fallback to the ac_adapter icon */
+		gpm_debug ("Using fallback");
+		return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
+	}
+	/* no icon! */
+	gpm_debug ("No devices present, and no fallback, so no icon displayed.");
+	return NULL;
 }
 
 static void

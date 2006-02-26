@@ -1,5 +1,16 @@
 2006-02-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.h: Add GPM_PREF_USE_ICON_DESKTOPS
+
+	* data/gnome-power-manager.schemas.in: Add the new key:
+	/apps/gnome-power-manager/use_icon_for_desktops so we can set the icon
+	policy when no hardware is present. Defaults to false.
+
+	* src/gpm-manager.c (get_stock_id): Only use the ac_adapter fallback on
+	desktops if GPM_PREF_USE_ICON_DESKTOPS is set. Fixes #332407
+
+2006-02-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (get_stock_id_helper): Fix another broken laptop.
 
 2006-02-25  Richard Hughes  <richard@hughsie.com>
