@@ -1,4 +1,51 @@
 ===============
+Version 2.13.92
+===============
+
+Released February 26, 2006
+
+General
+
+ - Update the yelp screenshots and text.
+ - Update the gnome-screensaver DBUS methods for new names. Fixes #332481
+ - Rationalise the icon naming scheme so that we can start to theme g-p-m.
+ - Add the new UPS charging and discharging icons. Fixes #331117
+
+Power Manager
+
+ - Fix detection of button objects. Fixes lp:32447
+ - Do the critical action as part of a g_timeout, rather than a just a
+   delay so we don't lock the GUI. Fixes #332150
+ - Describe what we are going to do better, so we don't say we are going to
+   shutdown when we just are going to hibernate.
+ - Add the new key notify_hal_error to set the policy for HAL failure
+   notifications. Default true to display. Fixes #332440
+ - Add the new key use_time_for_policy to set the policy for per-time or
+   per-percentage critical and low power actions. Fixes #332055
+ - Fix the notification for battery when the AC is removed. Fixes #332322
+ - Only inhibit sleep if we are set to check the CPU load. Fixes #332149
+ - Add in functionality so that we dim the screen to 30% when the SESSION
+   is idle. Fixes #328564
+ - Only use the ac_adapter fallback on desktops if use_icon_for_desktops is
+   set. Defaults to false. Fixes #332407
+
+Power Preferences
+
+ - Disable widgets if gconf key is marked not writable
+ - Various HIG fixes (Jaap Haitsma, Crispin Flowerday)
+
+Translators
+
+ - Julien Valroff (French)
+ - Žygimantas Beručka (Lithuanian)
+ - Ilkka Tuohela (Finnish)
+ - Clytie Siddall (Vietnamese)
+ - Takeshi AIHANA (Japanese)
+ - Vladimer SIchinava (Georgian)
+ - Kjartan Maraas (Norwegian bokmål)
+ - Kostas Papadimas (Greek)
+
+===============
 Version 2.13.91
 ===============
 
