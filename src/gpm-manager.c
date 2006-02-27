@@ -258,7 +258,7 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 
 		/* We have to do the additional check for 90% as
 		   some batteries are broken */
-		filename = g_strdup ("battery-charged");
+		filename = g_strdup_printf ("%s-charged", prefix);
 
 	} else if (device_status->is_charging) {
 

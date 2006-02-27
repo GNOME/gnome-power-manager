@@ -1,3 +1,8 @@
+2006-02-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (get_stock_id_helper): use the prefix, rather than
+	hardcoding "battery" for the charged icon. Fixes #332761.
+
 2006-02-27  Rodrigo Moya <rodrigo@novell.com>
 
 	* data/Makefile.am: install autostart files to new (definitive) place.
