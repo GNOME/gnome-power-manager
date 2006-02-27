@@ -1,3 +1,9 @@
+2006-02-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (battery_low_get_title): Include GPM_WARNING_ACTION
+	to fix a crash when a very low power (0%) mouse is inserted. This
+	should fix RH#183127.
+
 2006-02-26  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.13.93

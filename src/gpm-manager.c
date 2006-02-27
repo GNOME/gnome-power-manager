@@ -1109,7 +1109,8 @@ battery_low_get_title (GpmWarning warning_type)
 {
 	char *title = NULL;
 
-	if (warning_type == GPM_WARNING_CRITICAL) {
+	if (warning_type == GPM_WARNING_ACTION ||
+	    warning_type == GPM_WARNING_CRITICAL) {
 
 		title = _("Power Critically Low");
 
