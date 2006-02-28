@@ -89,11 +89,11 @@ gboolean       gpm_manager_set_dpms_mode    (GpmManager    *manager,
                                              const char    *mode,
                                              GError       **error);
 
-gboolean       gpm_manager_suspend          (GpmManager    *manager,
+gboolean       gpm_manager_suspend_dbus_method (GpmManager *manager,
                                              GError       **error);
-gboolean       gpm_manager_hibernate        (GpmManager    *manager,
+gboolean       gpm_manager_hibernate_dbus_method (GpmManager *manager,
                                              GError       **error);
-gboolean       gpm_manager_shutdown         (GpmManager    *manager,
+gboolean       gpm_manager_shutdown_dbus_method (GpmManager *manager,
                                              GError       **error);
 
 G_END_DECLS

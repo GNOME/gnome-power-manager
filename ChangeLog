@@ -1,5 +1,15 @@
 2006-02-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: Make the logging interface a whole lot more sane
+	without just poking around in the manager->priv struct.
+
+	* src/gpm-manager.h, src/gpm-manager.h: Change the dbus method names to
+	include xxxx_dbus_method so we know (for logging purposes) whether a
+	suspend was triggered from the external method, or if we did it
+	internally from one of the handlers.
+
+2006-02-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-debug.{c|h}: Get rid of the to_file stuff, nobody ever used
 	it, me included. Add functionality to log to syslog, to try and start
 	to fix #332760. Also reformat file and make more structured.

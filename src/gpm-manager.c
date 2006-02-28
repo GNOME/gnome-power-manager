@@ -106,7 +106,7 @@ struct GpmManagerPrivate
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
 
-	char		*reason;
+	const char	*reason;
 
 };
 
@@ -147,6 +147,11 @@ G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
+
+/* prototypes */
+static gboolean gpm_manager_suspend (GpmManager *manager, GError **error);
+static gboolean gpm_manager_hibernate (GpmManager *manager, GError **error);
+static gboolean gpm_manager_shutdown (GpmManager *manager, GError **error);
 
 GQuark
 gpm_manager_error_quark (void)
@@ -722,7 +727,23 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	return ret;
 }
 
-gboolean
+/* we set the reason to be WHY. e.g. "user pressed hibernate button" */
+static void
+gpm_manager_set_reason (GpmManager *manager,
+			const char *reason)
+{
+	manager->priv->reason = reason;
+}
+
+/* we set the reason to be WHAT. e.g. "Hibernate system" */
+static void
+gpm_manager_log_reason (GpmManager *manager,
+			const char *action)
+{
+	gpm_syslog ("%s because %s", action, manager->priv->reason);
+}
+
+static gboolean
 gpm_manager_shutdown (GpmManager *manager,
 		      GError    **error)
 {
@@ -744,14 +765,14 @@ gpm_manager_shutdown (GpmManager *manager,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
 	/* FIXME: make this async? */
-	gpm_syslog ("Shutting down system because of %s", manager->priv->reason);
+	gpm_manager_log_reason (manager, "Shutting down computer");
 	gpm_hal_shutdown ();
 	ret = TRUE;
 
 	return ret;
 }
 
-gboolean
+static gboolean
 gpm_manager_hibernate (GpmManager *manager,
 		       GError    **error)
 {
@@ -779,7 +800,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
-	gpm_syslog ("Hibernating system because of %s", manager->priv->reason);
+	gpm_manager_log_reason (manager, "Hibernating computer");
 	ret = gpm_hal_hibernate ();
 	if (! ret) {
 		char *message;
@@ -808,7 +829,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	return ret;
 }
 
-gboolean
+static gboolean
 gpm_manager_suspend (GpmManager *manager,
 		     GError    **error)
 {
@@ -836,7 +857,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
-	gpm_syslog ("Suspending system because of %s", manager->priv->reason);
+	gpm_manager_log_reason (manager, "Suspending computer");
 	ret = gpm_hal_suspend (0);
 	if (! ret) {
 		char *message;
@@ -863,6 +884,33 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_networkmanager_wake ();
 
 	return ret;
+}
+
+gboolean
+gpm_manager_suspend_dbus_method (GpmManager *manager,
+				 GError    **error)
+{
+	/* FIXME: From where? */
+	gpm_manager_set_reason (manager, "the DBUS method Suspend() was invoked");
+	return gpm_manager_suspend (manager, error);
+}
+
+gboolean
+gpm_manager_hibernate_dbus_method (GpmManager *manager,
+				   GError    **error)
+{
+	/* FIXME: From where? */
+	gpm_manager_set_reason (manager, "the DBUS method Hibernate() was invoked");
+	return gpm_manager_hibernate (manager, error);
+}
+
+gboolean
+gpm_manager_shutdown_dbus_method (GpmManager *manager,
+				  GError    **error)
+{
+	/* FIXME: From where? */
+	gpm_manager_set_reason (manager, "the DBUS method Shutdown() was invoked");
+	return gpm_manager_shutdown (manager, error);
 }
 
 static void
@@ -924,7 +972,7 @@ idle_changed_cb (GpmIdle    *idle,
 		gpm_debug ("Idle state changed: SYSTEM");
 
 		/* can only be hibernate or suspend */
-		manager->priv->reason = "system idle";
+		gpm_manager_set_reason (manager, "the system state is idle");
 		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE);
 
 		break;
@@ -992,7 +1040,7 @@ suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
 	gpm_debug ("suspend button pressed");
-	manager->priv->reason = "suspend button pressed";
+	gpm_manager_set_reason (manager, "the suspend button has been pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
 }
 
@@ -1001,7 +1049,7 @@ hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
 	gpm_debug ("hibernate button pressed");
-	manager->priv->reason = "hibernate button pressed";
+	gpm_manager_set_reason (manager, "the hibernate button has been pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_HIBERNATE);
 }
 
@@ -1023,11 +1071,11 @@ lid_button_pressed (GpmManager	 *manager,
 	if (state) {
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
-			manager->priv->reason = "lid closed on ac";
+			gpm_manager_set_reason (manager, "the lid has been closed on ac power");
 			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID);
 		} else {
 			gpm_debug ("Performing battery policy");
-			manager->priv->reason = "lid closed on battery";
+			gpm_manager_set_reason (manager, "the lid has been closed on battery power");
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
@@ -1098,7 +1146,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 	   when the laptop is closed and on battery. Fixes #331655 */
 	if (! on_ac && manager->priv->lid_is_closed) {
 		gpm_debug ("Doing battery policy when lid closed and power removed");
-		manager->priv->reason = "lid closed, ac adapter removed";
+		gpm_manager_set_reason (manager, "the lid has been closed, and the ac adapter removed");
 		manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 	}
 }
@@ -1272,7 +1320,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      NULL,
 					      warning);
 		}
-		manager->priv->reason = "critically low primary battery";
+		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 	}
@@ -1607,7 +1655,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received hibernate signal from tray icon");
-	manager->priv->reason = "user clicked hibernate";
+	gpm_manager_set_reason (manager, "user clicked hibernate from tray menu");
 	gpm_manager_hibernate (manager, NULL);
 }
 
@@ -1616,7 +1664,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received supend signal from tray icon");
-	manager->priv->reason = "user clicked suspend from tray menu";
+	gpm_manager_set_reason (manager, "user clicked suspend from tray menu");
 	gpm_manager_suspend (manager, NULL);
 }
 #endif
@@ -1729,7 +1777,7 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	/* we set the reason to be unknown */
-	manager->priv->reason = "Unknown";
+	gpm_manager_set_reason (manager, "of an unknown reason");
 
 	/* We can disable this if the ACPI BIOS is fucked, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */

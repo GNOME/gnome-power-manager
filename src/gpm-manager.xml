@@ -15,13 +15,13 @@
       <arg type="b" name="can" direction="out"/>
     </method>
     <method name="Hibernate">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_hibernate"/>
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_hibernate_dbus_method"/>
     </method>
     <method name="Suspend">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_suspend"/>
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_suspend_dbus_method"/>
     </method>
     <method name="Shutdown">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_shutdown"/>
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_shutdown_dbus_method"/>
     </method>
     <method name="getDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
