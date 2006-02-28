@@ -832,9 +832,9 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      G_STRUCT_OFFSET (GpmPowerClass, button_pressed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__STRING_STRING_BOOLEAN,
+			      gpm_marshal_VOID__STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [AC_STATE_CHANGED] =
 		g_signal_new ("ac-power-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -1014,13 +1014,12 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 static void
 hal_button_pressed_cb (GpmHalMonitor *monitor,
 		       const char    *type,
-		       const char    *details,
 		       gboolean       state,
 		       GpmPower      *power)
 {
 	/* just proxy it */
-	gpm_debug ("emitting button-pressed : %s, %s (%i)", type, details, state);
-	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, details, state);
+	gpm_debug ("emitting button-pressed : %s (%i)", type, state);
+	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, state);
 }
 
 /* FIXME: there must be a better way to do this */

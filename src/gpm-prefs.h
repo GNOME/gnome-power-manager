@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
 #define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
+#define GPM_PREF_BUTTON_HIBERNATE	GPM_PREF_DIR "/action_button_hibernate"
 #define GPM_PREF_AC_BUTTON_LID		GPM_PREF_DIR "/action_ac_button_lid"
 #define GPM_PREF_BATTERY_BUTTON_LID	GPM_PREF_DIR "/action_battery_button_lid"
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"

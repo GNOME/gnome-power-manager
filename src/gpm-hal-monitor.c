@@ -131,9 +131,9 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      G_STRUCT_OFFSET (GpmHalMonitorClass, button_pressed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__STRING_STRING_BOOLEAN,
+			      gpm_marshal_VOID__STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
+			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [AC_POWER_CHANGED] =
 		g_signal_new ("ac-power-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -281,19 +281,19 @@ watch_device_properties_modified (DBusGProxy    *proxy,
  */
 static void
 watch_device_condition (DBusGProxy    *proxy,
-			const char    *name,
+			const char    *condition_name,
 			const char    *details,
 			GpmHalMonitor *monitor)
 {
 	const char *udi = NULL;
-	char	   *type = NULL;
+	char	   *button_name = NULL;
 	gboolean    value;
 
 	udi = dbus_g_proxy_get_path (proxy);
 
-	gpm_debug ("udi=%s, name=%s, details=%s", udi, name, details);
+	gpm_debug ("udi=%s, condition_name=%s", udi, condition_name);
 
-	if (strcmp (name, "ButtonPressed") == 0) {
+	if (strcmp (condition_name, "ButtonPressed") == 0) {
 		/* We can get two different types of ButtonPressed condition
 		   1. The old acpi hardware buttons
 		      udi="acpi_foo", details="";
@@ -305,29 +305,23 @@ watch_device_condition (DBusGProxy    *proxy,
 		if (strcmp (details, "") == 0) {
 			/* no details about the event, so we get more info
 			   for type 1 buttons */
-			gpm_hal_device_get_string (udi, "button.type", &type);
+			gpm_hal_device_get_string (udi, "button.type", &button_name);
 		} else {
-			type = g_strdup (details);
+			button_name = g_strdup (details);
 		}
 
-		gpm_debug ("ButtonPressed : %s", type);
-
-		if (strcmp (type, "power") == 0) {
-			value = TRUE;
-		} else if (strcmp (type, "sleep") == 0) {
-			value = TRUE;
-		} else if (strcmp (type, "lid") == 0) {
+		/* buttons without state should default to true, although this shouldn't matter */
+		value = TRUE;
+		/* we need to get the button state for lid buttons */
+		if (strcmp (button_name, "lid") == 0) {
 			gpm_hal_device_get_bool (udi, "button.state.value", &value);
-		} else {
-			gpm_warning ("Button type '%s' unrecognised", type);
-			g_free (type);
-			return;
 		}
 
-		gpm_debug ("emitting button-pressed : %s, %s (%i)", type, details, value);
-		g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, type, details, value);
+		/* we now emit all buttons, even the ones we don't know */
+		gpm_debug ("emitting button-pressed : %s (%i)", button_name, value);
+		g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, button_name, value);
 
-		g_free (type);
+		g_free (button_name);
 	}
 }
 

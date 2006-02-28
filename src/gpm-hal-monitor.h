@@ -47,7 +47,6 @@ typedef struct
 
 	void              (* button_pressed)        (GpmHalMonitor    *monitor,
 						     const char       *type,
-						     const char       *detail,
 						     gboolean          state);
 
 	void              (* ac_power_changed)      (GpmHalMonitor    *monitor,

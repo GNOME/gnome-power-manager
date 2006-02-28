@@ -518,10 +518,12 @@ gpm_hal_num_devices_of_capability_with_value (const gchar *capability,
 	for (i = 0; names[i]; i++) {
 		gchar *type = NULL;
 		gpm_hal_device_get_string (names[i], key, &type);
-		if (strcmp (type, value) == 0)
-			valid++;
-		g_free (type);
-	};
+		if (type != NULL) {
+			if (strcmp (type, value) == 0)
+				valid++;
+			g_free (type);
+		}
+	}
 	gpm_hal_free_capability (names);
 	gpm_debug ("%i devices of capability %s where %s is %s",
 		   valid, capability, key, value);

@@ -1,3 +1,35 @@
+2006-02-26  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.h: Add GPM_PREF_BUTTON_HIBERNATE
+
+	* data/gnome-power-manager.schemas.in: Add the new key:
+	/apps/gnome-power-manager/action_button_hibernate so we can set the
+	policy when the hibernate button is pressed. Defaults to hibernate.
+	From the ubuntu mega-patch.
+
+	* src/gpm-manager.c (callback_gconf_key_changed): Do instant apply for
+	CAN_SUSPEND and CAN_HIBERNATE. From the ubuntu mega-patch.
+
+	* src/gpm-hal-monitor.{c|h}, src/gpm-marshal.list, src/gpm-power.{c|h}
+	The battery name, details mess should not be emitted internally, as we
+	should do all this processing in the hal-monitor. Get rid of the
+	details field, and make this from VOID__STRING_STRING_BOOLEAN to
+	VOID__STRING_BOOLEAN.
+
+	* src/gpm-manager.c (power_button_pressed_cb): get rid of the "virtual"
+	mess as the only thing to use it is my toshiba addon, which now does
+	the button events a standard way.
+
+	* src/gpm-hal-monitor.c (watch_device_condition): Do not filter the
+	allowed buttons here, as we are currently doing it in two places.
+	It make more sense for the manager to do it.
+
+	* src/gpm-manager.c (battery_status_changed_primary): Don't do the
+	notification if the message is blank. From the ubuntu mega-patch.
+
+	* src/gpm-hal.c (gpm_hal_num_devices_of_capability_with_value): Fix
+	theoretical NULL dereference. From the ubuntu mega-patch.
+
 2006-02-27  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (get_stock_id_helper): use the prefix, rather than

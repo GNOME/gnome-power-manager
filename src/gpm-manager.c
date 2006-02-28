@@ -949,8 +949,7 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
-	gpm_debug ("power button changed: %d", state);
-
+	gpm_debug ("power button pressed");
 	/* Log out interactively */
 	gnome_client_request_save (gnome_master_client (),
 				   GNOME_SAVE_GLOBAL,
@@ -961,7 +960,16 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
+	gpm_debug ("suspend button pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
+}
+
+static void
+hibernate_button_pressed (GpmManager   *manager,
+			gboolean      state)
+{
+	gpm_debug ("hibernate button pressed");
+	manager_policy_do (manager, GPM_PREF_BUTTON_HIBERNATE);
 }
 
 static void
@@ -972,7 +980,7 @@ lid_button_pressed (GpmManager	 *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	gpm_debug ("button changed: %d", state);
+	gpm_debug ("lid button changed: %d", state);
 
 	/* We keep track of the lid state so we can do the 
 	   lid close on battery action if the ac_adapter is removed when the laptop
@@ -996,12 +1004,10 @@ lid_button_pressed (GpmManager	 *manager,
 static void
 power_button_pressed_cb (GpmPower   *power,
 			 const char *type,
-			 const char *details,
 			 gboolean    state,
 			 GpmManager *manager)
 {
-	gpm_debug ("Received a button press event type=%s details=%s state=%d",
-		 type, details, state);
+	gpm_debug ("Button press event type=%s state=%d", type, state);
 
 	if (strcmp (type, "power") == 0) {
 		power_button_pressed (manager, state);
@@ -1009,29 +1015,23 @@ power_button_pressed_cb (GpmPower   *power,
 	} else if (strcmp (type, "sleep") == 0) {
 		suspend_button_pressed (manager, state);
 
+	} else if (strcmp (type, "suspend") == 0) {
+		suspend_button_pressed (manager, state);
+
+	} else if (strcmp (type, "hibernate") == 0) {
+		hibernate_button_pressed (manager, state);
+
 	} else if (strcmp (type, "lid") == 0) {
 		lid_button_pressed (manager, state);
 
-	} else if (strcmp (type, "virtual") == 0) {
-		if (details == NULL) {
-			return;
-		}
+	} else if (strcmp (type, "brightness_up") == 0) {
+		gpm_brightness_level_up (manager->priv->brightness);
 
-		if (strcmp (details, "BrightnessUp") == 0) {
-			gpm_brightness_level_up (manager->priv->brightness);
+	} else if (strcmp (type, "brightness_down") == 0) {
+		gpm_brightness_level_down (manager->priv->brightness);
 
-		} else if (strcmp (details, "BrightnessDown") == 0) {
-			gpm_brightness_level_down (manager->priv->brightness);
-
-		} else if (strcmp (details, "Suspend") == 0) {
-			gpm_manager_suspend (manager, NULL);
-
-		} else if (strcmp (details, "Hibernate") == 0) {
-			gpm_manager_hibernate (manager, NULL);
-
-		} else if (strcmp (details, "Lock") == 0) {
-			gpm_screensaver_lock ();
-		}
+	} else if (strcmp (type, "lock") == 0) {
+		gpm_screensaver_lock ();
 	}
 }
 
@@ -1258,8 +1258,9 @@ battery_status_changed_primary (GpmManager	      *manager,
 						     "Plug in your AC Adapter to avoid losing data."),
 						   remaining, battery_status->percentage_charge);
 		}
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000, title, NULL, message);
+		if (message != NULL)
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      5000, title, NULL, message);
 
 		g_free (remaining);
 		g_free (message);
@@ -1496,6 +1497,7 @@ callback_gconf_key_changed (GConfClient *client,
 	gint	    brightness;
 	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
+	gboolean enabled;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -1549,6 +1551,13 @@ callback_gconf_key_changed (GConfClient *client,
 			gpm_brightness_level_set (manager->priv->brightness, brightness);
 		}
 
+	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
+		gpm_manager_can_suspend (manager, &enabled, NULL);
+		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+
+	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
+		gpm_manager_can_hibernate (manager, &enabled, NULL);
+		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
 	}
 }
 

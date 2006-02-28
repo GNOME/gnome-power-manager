@@ -211,6 +211,17 @@
    </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/action_button_hibernate</key>
+      <applyto>/apps/gnome-power-manager/action_button_hibernate</applyto>
+      <type>string</type>
+      <default>hibernate</default>
+      <locale name="C">
+        <short>Hibernate button action</short>
+        <long>The action to take when the system hibernate button (if available) is pressed</long>
+      </locale>
+   </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/action_ac_button_lid</key>
       <applyto>/apps/gnome-power-manager/action_ac_button_lid</applyto>
       <type>string</type>
