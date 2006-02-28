@@ -1,5 +1,27 @@
 2006-02-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-debug.{c|h}: Get rid of the to_file stuff, nobody ever used
+	it, me included. Add functionality to log to syslog, to try and start
+	to fix #332760. Also reformat file and make more structured.
+
+	* src/gpm-manager.c: Use define names to hold the key names, in case
+	they ever change in HAL. Which they might do, when we start adding
+	a few more.
+
+	* src/gpm-manager.c: Start to add a logging interface so that we can
+	log *why* a specific action was taken, to also try to fix #332760.
+	This needs to be expanded, giving values and more precise reasons.
+	Log to syslog, so that we get messages such as:
+	"Feb 28 19:19:07 localhost gnome-power-manager: Suspending system
+	because user clicked suspend in tray menu" in /var/log/messages.
+	This should help debugging all those weird bugzillas.
+
+	* src/gpm-manager.c (battery_button_pressed): Display a libnotify
+	window containing all the device charges when the user presses the
+	battery status key. From the ubuntu mega-patch.
+
+2006-02-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.h: Add GPM_PREF_BUTTON_HIBERNATE
 
 	* data/gnome-power-manager.schemas.in: Add the new key:

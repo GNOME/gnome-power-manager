@@ -29,24 +29,27 @@
 G_BEGIN_DECLS
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
-#define gpm_debug(...) gpm_debug_real (FALSE, __func__, __FILE__, __LINE__, __VA_ARGS__)
-#define gpm_warning(...) gpm_debug_real (TRUE, __func__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_debug(...) gpm_debug_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_warning(...) gpm_warning_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
 #elif defined(__GNUC__) && __GNUC__ >= 3
-#define gpm_debug(...) gpm_debug_real (FALSE, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
-#define gpm_warning(...) gpm_debug_real (TRUE, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_debug(...) gpm_debug_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_warning(...) gpm_warning_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #else
 #define gpm_debug
 #define gpm_warning
 #endif
 
-void gpm_debug_init		(gboolean debug,
-				 gboolean to_file);
+void gpm_debug_init		(gboolean debug);
 void gpm_debug_shutdown		(void);
-void gpm_debug_real		(gboolean warning,
-				 const char *func,
+void gpm_debug_real		(const char *func,
 				 const char *file,
 				 int	 line,
 				 const char *format, ...);
+void gpm_warning_real		(const char *func,
+				 const char *file,
+				 int	 line,
+				 const char *format, ...);
+void gpm_syslog			(const char *format, ...);
 
 G_END_DECLS
 

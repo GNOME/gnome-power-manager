@@ -73,6 +73,17 @@ typedef enum {
 	GPM_WARNING_ACTION = 5
 } GpmWarning;
 
+#define GPM_BUTTON_POWER		"power"
+#define GPM_BUTTON_SLEEP		"sleep"
+#define GPM_BUTTON_SUSPEND		"suspend"
+#define GPM_BUTTON_HIBERNATE		"hibernate"
+#define GPM_BUTTON_LID			"lid"
+#define GPM_BUTTON_BRIGHT_UP		"brightness_up"
+#define GPM_BUTTON_BRIGHT_DOWN		"brightness_down"
+#define GPM_BUTTON_LOCK			"lock"
+/* Using www until we get a better one defined for us by the kernel */
+#define GPM_BUTTON_BATTERY		"www"
+
 struct GpmManagerPrivate
 {
 	GConfClient	*gconf_client;
@@ -94,6 +105,8 @@ struct GpmManagerPrivate
 
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
+
+	char		*reason;
 
 };
 
@@ -730,8 +743,8 @@ gpm_manager_shutdown (GpmManager *manager,
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
-	/* FIXME: make this return success/fail */
 	/* FIXME: make this async? */
+	gpm_syslog ("Shutting down system because of %s", manager->priv->reason);
 	gpm_hal_shutdown ();
 	ret = TRUE;
 
@@ -766,6 +779,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
+	gpm_syslog ("Hibernating system because of %s", manager->priv->reason);
 	ret = gpm_hal_hibernate ();
 	if (! ret) {
 		char *message;
@@ -822,6 +836,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_networkmanager_sleep ();
 
 	/* FIXME: make this async? */
+	gpm_syslog ("Suspending system because of %s", manager->priv->reason);
 	ret = gpm_hal_suspend (0);
 	if (! ret) {
 		char *message;
@@ -909,6 +924,7 @@ idle_changed_cb (GpmIdle    *idle,
 		gpm_debug ("Idle state changed: SYSTEM");
 
 		/* can only be hibernate or suspend */
+		manager->priv->reason = "system idle";
 		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE);
 
 		break;
@@ -946,6 +962,21 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 static void
+battery_button_pressed (GpmManager *manager)
+{
+	char *message;
+
+	gpm_power_get_status_summary (manager->priv->power, &message, NULL);
+
+	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+			      5000,
+			      _("Power Information"),
+			      NULL,
+			      message);
+	g_free (message);
+}
+
+static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
@@ -961,6 +992,7 @@ suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
 	gpm_debug ("suspend button pressed");
+	manager->priv->reason = "suspend button pressed";
 	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
 }
 
@@ -969,6 +1001,7 @@ hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
 	gpm_debug ("hibernate button pressed");
+	manager->priv->reason = "hibernate button pressed";
 	manager_policy_do (manager, GPM_PREF_BUTTON_HIBERNATE);
 }
 
@@ -990,9 +1023,11 @@ lid_button_pressed (GpmManager	 *manager,
 	if (state) {
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
+			manager->priv->reason = "lid closed on ac";
 			manager_policy_do (manager, GPM_PREF_AC_BUTTON_LID);
 		} else {
 			gpm_debug ("Performing battery policy");
+			manager->priv->reason = "lid closed on battery";
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
@@ -1009,29 +1044,32 @@ power_button_pressed_cb (GpmPower   *power,
 {
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
-	if (strcmp (type, "power") == 0) {
+	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager, state);
 
-	} else if (strcmp (type, "sleep") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_SLEEP) == 0) {
 		suspend_button_pressed (manager, state);
 
-	} else if (strcmp (type, "suspend") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_SUSPEND) == 0) {
 		suspend_button_pressed (manager, state);
 
-	} else if (strcmp (type, "hibernate") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0) {
 		hibernate_button_pressed (manager, state);
 
-	} else if (strcmp (type, "lid") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LID) == 0) {
 		lid_button_pressed (manager, state);
 
-	} else if (strcmp (type, "brightness_up") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 		gpm_brightness_level_up (manager->priv->brightness);
 
-	} else if (strcmp (type, "brightness_down") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 		gpm_brightness_level_down (manager->priv->brightness);
 
-	} else if (strcmp (type, "lock") == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
 		gpm_screensaver_lock ();
+
+	} else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
+		battery_button_pressed (manager);
 	}
 }
 
@@ -1060,6 +1098,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 	   when the laptop is closed and on battery. Fixes #331655 */
 	if (! on_ac && manager->priv->lid_is_closed) {
 		gpm_debug ("Doing battery policy when lid closed and power removed");
+		manager->priv->reason = "lid closed, ac adapter removed";
 		manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 	}
 }
@@ -1233,6 +1272,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      NULL,
 					      warning);
 		}
+		manager->priv->reason = "critically low primary battery";
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 	}
@@ -1567,6 +1607,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received hibernate signal from tray icon");
+	manager->priv->reason = "user clicked hibernate";
 	gpm_manager_hibernate (manager, NULL);
 }
 
@@ -1575,6 +1616,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received supend signal from tray icon");
+	manager->priv->reason = "user clicked suspend from tray menu";
 	gpm_manager_suspend (manager, NULL);
 }
 #endif
@@ -1685,6 +1727,9 @@ gpm_manager_init (GpmManager *manager)
 	if (! on_ac) {
 		manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
 	}
+
+	/* we set the reason to be unknown */
+	manager->priv->reason = "Unknown";
 
 	/* We can disable this if the ACPI BIOS is fucked, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */

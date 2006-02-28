@@ -697,7 +697,7 @@ main (int argc, char **argv)
 	bind_textdomain_codeset (PACKAGE, "UTF-8");
 	textdomain (PACKAGE);
 
-	gpm_debug_init (verbose, FALSE);
+	gpm_debug_init (verbose);
 
 	dialog = gpm_prefs_create ();
 	gtk_widget_show (dialog);

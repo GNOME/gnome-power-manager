@@ -26,29 +26,45 @@
 #include <stdarg.h>
 #include <signal.h>
 #include <time.h>
+#include <syslog.h>
 
 #include "gpm-debug.h"
 #include "gpm-common.h"
 
-static gboolean debugging = FALSE;
-static gboolean done_warning = FALSE;
-static FILE    *debug_out = NULL;
+static gboolean is_init = FALSE;	/* if we are initialised */
+static gboolean do_verbose = FALSE;	/* if we should print out debugging */
+static gboolean done_warning = FALSE;	/* if we've done the bugzilla warning */
 
 /* Based on rhythmbox/lib/rb-debug.c */
+
+static void
+gpm_print_line (const char *func,
+		const char *file,
+		const int   line,
+		const char *buffer)
+{
+	char   *str_time;
+	time_t  the_time;
+
+	time (&the_time);
+	str_time = g_new0 (char, 255);
+	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
+
+	fprintf (stderr, "[%s] %s:%d (%s):\t %s\n",
+		 func, file, line, str_time, buffer);
+	g_free (str_time);
+}
+
 void
-gpm_debug_real (gboolean warning,
-		const char *func,
+gpm_debug_real (const char *func,
 		const char *file,
 		const int   line,
 		const char *format, ...)
 {
 	va_list args;
 	char    buffer [1025];
-	char   *str_time;
-	time_t  the_time;
-	FILE   *output_file;
 
-	if (!warning && debugging == FALSE) {
+	if (! do_verbose) {
 		return;
 	}
 
@@ -56,78 +72,76 @@ gpm_debug_real (gboolean warning,
 	g_vsnprintf (buffer, 1024, format, args);
 	va_end (args);
 
-	time (&the_time);
-	str_time = g_new0 (char, 255);
-	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
-
-	if (debug_out) {
-		output_file = debug_out;
-	} else {
-		output_file = stderr;
-	}
-
-	if (warning) {
-		/* do extra stuff for a warning */
-		fprintf (output_file, "*** WARNING ***\n");
-		fprintf (output_file, "[%s] %s:%d (%s):\t %s\n",
-			 func, file, line, str_time, buffer);
-		if (! done_warning) {
-			fprintf (output_file, "%s has encountered a non-critical warning.\n"
-				 "Consult %s for any known issues or a possible fix.\n"
-				 "Please file a bug with this complete message if not present\n",
-				 "GNOME Power Manager", GPM_BUGZILLA_URL);
-			done_warning = TRUE;
-		}
-		fprintf (output_file, "*** WARNING ***\n");
-	} else {
-		/* just do debug */
-		fprintf (output_file, "[%s] %s:%d (%s):\t %s\n",
-			 func, file, line, str_time, buffer);
-	}
-
-	if (debug_out) {
-		fflush (output_file);
-	}
-	g_free (str_time);
+	gpm_print_line (func, file, line, buffer);
 }
 
 void
-gpm_debug_init (gboolean debug,
-		gboolean to_file)
+gpm_warning_real (const char *func,
+		  const char *file,
+		  const int   line,
+		  const char *format, ...)
 {
-	/* return if already initialized */
-	if (debugging == TRUE) {
+	va_list args;
+	char    buffer [1025];
+
+	if (! do_verbose) {
 		return;
 	}
 
-	debugging = debug;
+	va_start (args, format);
+	g_vsnprintf (buffer, 1024, format, args);
+	va_end (args);
 
-	if (debug && to_file) {
-		const char path [50] = "gnome_power_manager_debug_XXXXXX";
-		int fd;
+	/* do extra stuff for a warning */
+	fprintf (stderr, "*** WARNING ***\n");
+	gpm_print_line (func, file, line, buffer);
+	if (! done_warning) {
+		fprintf (stderr, "%s has encountered a non-critical warning.\n"
+			 "Consult %s for any known issues or a possible fix.\n"
+			 "Please file a bug with this complete message if not present\n",
+			 "GNOME Power Manager", GPM_BUGZILLA_URL);
+		done_warning = TRUE;
+	}
+}
 
-		fd = g_file_open_tmp (path, NULL, NULL);
+void
+gpm_syslog (const char *format, ...)
+{
+	va_list args;
+	char    buffer [1025];
 
-		if (fd >= 0) {
-			debug_out = fdopen (fd, "a");
-		}
+	va_start (args, format);
+	g_vsnprintf (buffer, 1024, format, args);
+	va_end (args);
+
+	gpm_debug ("Saving to syslog: %s", buffer);
+	syslog (LOG_ALERT, "%s", buffer);
+}
+
+void
+gpm_debug_init (gboolean debug)
+{
+	/* return if already initialized */
+	if (is_init) {
+		return;
 	}
 
-	gpm_debug ("Debugging %s", (debug) ? "enabled" : "disabled");
+	do_verbose = debug;
+	gpm_debug ("Verbose debugging %s", (do_verbose) ? "enabled" : "disabled");
+
+	/* open syslog */
+	openlog ("gnome-power-manager", LOG_NDELAY, LOG_USER);
 }
 
 void
 gpm_debug_shutdown (void)
 {
-	if (! debugging)
+	if (! is_init)
 		return;
 
 	gpm_debug ("Shutting down debugging");
+	is_init = FALSE;
 
-	debugging = FALSE;
-
-	if (debug_out != NULL) {
-		fclose (debug_out);
-		debug_out = NULL;
-	}
+	/* shut down syslog */
+	closelog ();
 }
