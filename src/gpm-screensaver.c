@@ -154,7 +154,10 @@ gpm_screensaver_lock (void)
 {
 	DBusGConnection *session_connection = NULL;
 	DBusGProxy *gs_proxy = NULL;
+	int sleepcount = 0;
+
 	gpm_debug ("lock");
+
 	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
@@ -163,6 +166,23 @@ gpm_screensaver_lock (void)
 			GS_LISTENER_INTERFACE);
 	dbus_g_proxy_call_no_reply (gs_proxy, "Lock", G_TYPE_INVALID);
 	g_object_unref (G_OBJECT (gs_proxy));
+
+	/* When we send the Lock signal to g-ss it takes maybe a second
+	   or so to fade the screen and lock. If we suspend mid fade then on
+	   resume the X display is still present for a split second
+	   (since fade is gamma) and as such it can leak information.
+	   Instead we wait until g-ss reports running and thus blanked
+	   solidly before we continue from the screensaver_lock action.
+	   The interior of g-ss is async, so we cannot get the dbus method
+	   to block until lock is complete. */
+	while (! gpm_screensaver_is_running ()) {
+		/* Sleep for 1/10s */
+		g_usleep (1000 * 100);
+		if (sleepcount++ > 50) {
+			break;
+		}
+	}
+
 	return TRUE;
 }
 
