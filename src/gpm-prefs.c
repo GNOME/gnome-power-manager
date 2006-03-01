@@ -405,6 +405,48 @@ gpm_prefs_setup_action_combo (GtkWidget *widget,
 }
 
 static void
+gpm_prefs_checkbox_lock_cb (GtkWidget  *widget,
+			    const char *gpm_pref_key)
+{
+	GConfClient *client;
+	gboolean checked;
+
+	client = gconf_client_get_default ();
+
+	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
+
+	gconf_client_set_bool (client,
+			       gpm_pref_key,
+			       checked, NULL);
+
+	g_object_unref (client);
+}
+
+static void
+gpm_prefs_setup_checkbox (GtkWidget *widget,
+			  char	    *gpm_pref_key)
+{
+
+	GConfClient *client;
+	gboolean checked;
+
+	gpm_debug ("Setting up %s", gpm_pref_key);
+	client = gconf_client_get_default ();
+
+	checked = gconf_client_get_bool (client, gpm_pref_key, NULL);
+
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_prefs_checkbox_lock_cb),
+			  (gpointer) gpm_pref_key);
+
+	g_object_unref (client);
+}
+
+static void
 setup_battery_sliders (GladeXML *xml, gboolean has_batteries)
 {
 	GtkWidget   *label_batteries_display;
@@ -480,6 +522,8 @@ setup_sleep_type (GladeXML *xml)
 {
 	GtkWidget    *label_sleep_type;
 	GtkWidget    *combo_sleep_type;
+	GtkWidget    *checkbutton_dim_idle;
+	gboolean      can_set_brightness;
 	const char   *sleep_type_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	/* Sleep Type Combo Box */
@@ -489,6 +533,16 @@ setup_sleep_type (GladeXML *xml)
 	gpm_prefs_setup_action_combo (combo_sleep_type,
 				      GPM_PREF_SLEEP_TYPE,
 				      sleep_type_actions);
+
+	/* set up the "do we dim screen on idle checkbox */
+	checkbutton_dim_idle = glade_xml_get_widget (xml, "checkbutton_dim_idle");
+	can_set_brightness = gpm_has_lcd ();
+	if (can_set_brightness) {
+		gpm_prefs_setup_checkbox (checkbutton_dim_idle,
+					  GPM_PREF_IDLE_DIM_SCREEN);
+	} else {
+		gtk_widget_hide_all (checkbutton_dim_idle);
+	}
 }
 
 static void

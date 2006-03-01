@@ -1,5 +1,14 @@
 2006-02-28  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade: Add an option to disable the dim on idle as I
+	needed to change this during a demo today, and I had to grapple with
+	gconf. Also change the always icon option to "Always display icon when
+	battery present" as this represents better what it does.
+
+	* help/C/gnome-power-manager.xml: remove duplicate lock option.
+
+2006-02-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Make the logging interface a whole lot more sane
 	without just poking around in the manager->priv struct.
 
