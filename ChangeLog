@@ -1,5 +1,13 @@
 2006-03-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c (gpm_critical_error): Create this function and use it
+	in main to deal with critical warnings for missing dbus. I probably get
+	one bug report a week of g-p-m "crashing" on startup where the dbus
+	system or session server is missing. Display a BIG FAT warning in a
+	message box with all the details and exit nicely with error code 1.
+
+006-03-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.c (gpm_screensaver_lock): When we send the Lock
 	signal to g-ss it takes maybe a second or so to fade the screen and
 	lock. If we suspend mid fade then on resume the X display is still

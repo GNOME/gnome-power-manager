@@ -78,7 +78,7 @@ gpm_object_register (DBusGConnection *connection,
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
-		g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
+		g_warning ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
 		return FALSE;
 	}
 #else
@@ -88,7 +88,7 @@ gpm_object_register (DBusGConnection *connection,
 		G_TYPE_INVALID,
 		G_TYPE_UINT, &request_name_result,
 		G_TYPE_INVALID)) {
-		g_error ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
+		g_warning ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
 		return FALSE;
 	}
 #endif
@@ -113,6 +113,28 @@ gpm_exit (GpmManager *manager)
 	gpm_debug_shutdown ();
 	g_object_unref (manager);
 	exit (0);
+}
+
+static void
+gpm_critical_error (const char *content)
+{
+	GtkWidget *dialog;
+	dialog = gtk_message_dialog_new_with_markup (NULL,
+						     GTK_DIALOG_MODAL,
+						     GTK_MESSAGE_WARNING,
+						     GTK_BUTTONS_CLOSE,
+						     "<span size='larger'><b>%s</b></span>",
+						     GPM_NAME);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
+						    content);
+	/* we close the gtk lopp when the user clicks close */
+	g_signal_connect_swapped (dialog,
+				  "response",
+				  G_CALLBACK (gtk_main_quit),
+				  NULL);
+	gtk_window_present (GTK_WINDOW (dialog));
+	/* we wait here for user to click close */
+	gtk_main();
 }
 
 /** Main entry point
@@ -182,32 +204,38 @@ main (int argc, char *argv[])
 	if (error) {
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
+		gpm_critical_error ("This program cannot start until you start the dbus "
+				    "<i>system</i> service.\n\n"
+				    "This is usually started by your operating system by "
+				    "default, and is normally called messagebus.\n\n"
+				    "It is <b>strongly recommended</b> you reboot your compter "
+				    "after starting messagebus.");
 		/* abort at this point */
-		g_error ("This program cannot start until you start the dbus"
-			 "system daemon\n"
-			 "This is usually started in initscripts, and is "
-			 "usually called messagebus\n"
-			 "It is STRONGLY recommended you reboot your compter"
-			 "after restarting messagebus\n\n");
+		exit (1);
 	}
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
+		gpm_critical_error ("This program cannot start until you start the "
+				    "dbus <i>session</i> service.\n\n"
+				    "This is usually started automatically in X "
+				    "or gnome startup when you start a new session.\n\n"
+				    "You can launch the session dbus-daemon manually "
+				    "with this command:\n\n"
+				    "<b>eval `dbus-launch --auto-syntax`</b>");
 		/* abort at this point */
-		g_error ("This program cannot start until you start the dbus session daemon\n"
-			 "This is usually started in X or gnome startup "
-			 "(depending on distro)\n"
-			 "You can launch the session dbus-daemon manually with this command:\n"
-			 "eval `dbus-launch --auto-syntax`\n");
+		exit (1);
 	}
 
-	if (! gpm_stock_icons_init())
+	if (! gpm_stock_icons_init()) {
 		g_error ("Cannot continue without stock icons");
+	}
 
-	if (! no_daemon && daemon (0, 0))
+	if (! no_daemon && daemon (0, 0)) {
 		g_error ("Could not daemonize: %s", g_strerror (errno));
+	}
 
 	manager = gpm_manager_new ();
 
