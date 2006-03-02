@@ -1,3 +1,16 @@
+2006-03-02  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in, icons/Makefile.am, icons/16x16/*: Move the
+	suspend-to-disk and suspend-to-ram icons to a proper place, considering
+	they are not 24x24. Also update with the new bluecurve icons from
+	Diana Fong, to match the theme, many thanks. Fixes #332631.
+
+	* src/gpm-manager.c: Ignore timeout events when the lid is closed,
+	as the DPMS is already off, and we don't want to perform policy actions
+	or re-enable the screen when the user moves the mouse on systems that
+	do not support hardware blanking.
+	Details are here: https://launchpad.net/malone/bugs/22522
+
 2006-03-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c (gpm_critical_error): Create this function and use it

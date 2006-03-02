@@ -32,6 +32,4 @@ Data_DATA =				\
 	ups-discharging-040.png		\
 	ups-discharging-060.png		\
 	ups-discharging-080.png		\
-	ups-discharging-100.png		\
-	suspend-to-disk.png		\
-	suspend-to-ram.png
+	ups-discharging-100.png

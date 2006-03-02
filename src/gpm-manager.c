@@ -921,6 +921,15 @@ idle_changed_cb (GpmIdle    *idle,
 	GError  *error;
 	gboolean do_laptop_dim;
 
+	/* Ignore timeout events when the lid is closed, as the DPMS is
+	   already off, and we don't want to perform policy actions or re-enable
+	   the screen when the user moves the mouse on systems that do not
+	   support hardware blanking.
+	   Details are here: https://launchpad.net/malone/bugs/22522 */
+	if (manager->priv->lid_is_closed) {
+		gpm_debug ("lid is closed, so we are ignoring idle state changes");
+	}
+
 	switch (mode) {
 	case GPM_IDLE_MODE_NORMAL:
 		gpm_debug ("Idle state changed: NORMAL");

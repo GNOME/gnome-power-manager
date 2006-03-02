@@ -1,4 +1,4 @@
-SUBDIRS = 24x24
+SUBDIRS = 24x24 16x16
 
 EXTRA_DIST =						\
 	$(Data_DATA)
