@@ -1,5 +1,16 @@
 2006-03-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-screensaver.{c|h}: Add the functions:
+	gpm_screensaver_inhibit_activation() and
+	gpm_screensaver_allow_activation ().
+
+	* src/gpm-manager.c (lid_button_pressed): Inhibit activation of the
+	screensaver when the lid is closed, and allow activation when the
+	lid is opened. This prevents the screensaver starting when the panel
+	is closed, and the action is to turn off the screen or do nothing.
+
+2006-03-02  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in, icons/Makefile.am, icons/16x16/*: Move the
 	suspend-to-disk and suspend-to-ram icons to a proper place, considering
 	they are not 24x24. Also update with the new bluecurve icons from

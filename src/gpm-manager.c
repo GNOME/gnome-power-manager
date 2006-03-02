@@ -1078,6 +1078,10 @@ lid_button_pressed (GpmManager	 *manager,
 	manager->priv->lid_is_closed = state;
 
 	if (state) {
+		/* Disable the screensaver, as we don't want this starting
+		   when the lid is shut */
+		gpm_screensaver_inhibit_activation ("gnome-power-manager has "
+						    "detected that the lid is closed");
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			gpm_manager_set_reason (manager, "the lid has been closed on ac power");
@@ -1088,6 +1092,9 @@ lid_button_pressed (GpmManager	 *manager,
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
+		/* re-enable the screensaver */
+		gpm_screensaver_allow_activation ();
+
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
 	}
