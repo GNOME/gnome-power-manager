@@ -478,8 +478,16 @@ battery_kind_cache_update (GpmPower              *power,
 	 * get an with batteries which have a very small charge unit and consequently
 	 * a very high charge. Fixes bug #327471 */
 	if (type_status->is_present) {
-		type_status->percentage_charge = 100 * ((float)type_status->current_charge /
-							(float)type_status->last_full_charge);
+		int pc = 100 * ((float)type_status->current_charge /
+				(float)type_status->last_full_charge);
+		if (pc < 0) {
+			gpm_warning ("Corrected percentage charge (%i) and set to minimum", pc);
+			pc = 0;
+		} else if (pc > 100) {
+			gpm_warning ("Corrected percentage charge (%i) and set to maximum", pc);
+			pc = 100;
+		}
+		type_status->percentage_charge = pc;
 	}
 	/* We only do the "better" remaining time algorithm if the battery has rate,
 	   i.e not a UPS, which gives it's own battery.remaining_time but has no rate */

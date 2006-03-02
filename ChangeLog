@@ -1,5 +1,11 @@
 2006-03-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c (battery_kind_cache_update): clamp the percentage
+	charge to between 0..100 as sometimes we get the internally averaged
+	and computed value wrong. I blame HAL, but this fixes the problem. :-)
+
+2006-03-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.{c|h}: Add the functions:
 	gpm_screensaver_inhibit_activation() and
 	gpm_screensaver_allow_activation ().
