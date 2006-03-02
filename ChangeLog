@@ -1,5 +1,19 @@
 2006-03-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.{c|h} (gpm_power_battery_is_charged): Create this new
+	function so we can put all the logic to determine if the battery is
+	charged in one place, as now sometimes the icon and the tooltip
+	disagree. Should fix bug #333169
+
+	* src/gpm-power.c (power_get_summary_for_battery_kind): Use the new
+	gpm_power_battery_is_charged functionality so that we match the logic
+	used for the icon.
+
+	* src/gpm-manager.c (get_stock_id_helper): Use the new
+	gpm_power_battery_is_charged functionality that we have abstracted out.
+
+2006-03-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c (battery_kind_cache_update): clamp the percentage
 	charge to between 0..100 as sometimes we get the internally averaged
 	and computed value wrong. I blame HAL, but this fixes the problem. :-)

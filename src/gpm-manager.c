@@ -270,12 +270,8 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 	char *index;
 	char *filename = NULL;
 
-	if (!device_status->is_charging &&
-	    !device_status->is_discharging &&
-	    device_status->percentage_charge > 90) {
+	if (gpm_power_battery_is_charged (device_status)) {
 
-		/* We have to do the additional check for 90% as
-		   some batteries are broken */
 		filename = g_strdup_printf ("%s-charged", prefix);
 
 	} else if (device_status->is_charging) {
@@ -287,6 +283,7 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 
 		index = get_icon_index_from_percent (device_status->percentage_charge);
 		filename = g_strdup_printf ("%s-discharging-%s", prefix, index);
+
 	} else {
 
 		/* We have a broken battery, not sure what to display here */

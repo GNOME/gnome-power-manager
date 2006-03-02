@@ -113,6 +113,22 @@ gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 	status->is_discharging = FALSE;
 }
 
+/* we have to be clever here, as there are lots of broken batteries */
+gboolean
+gpm_power_battery_is_charged (GpmPowerBatteryStatus *status)
+{
+	/* We have to do the additional check for 90% as
+	   some batteries have a reduced charge capacity and cannot
+	   charge to 100% anymore (although they *should* update
+	   thier own last_full tags, it appears most do not...) */
+	if (! status->is_charging &&
+	    ! status->is_discharging &&
+	    status->percentage_charge > 90) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
 static void
 battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 {
@@ -640,7 +656,11 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
 	g_string_append_printf (summary, "%s ", type_desc);
 
-	if (status->is_discharging) {
+	if (gpm_power_battery_is_charged (status)) {
+
+			g_string_append_printf (summary, "%s", _("fully charged"));
+
+	} else if (status->is_discharging) {
 
 		if (status->remaining_time > 60) {
 			g_string_append_printf (summary, "%s %s",
@@ -649,10 +669,6 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 			/* don't display "Unknown remaining" */
 			g_string_append_printf (summary, "%s", _("discharging"));
 		}
-
-	} else if (status->percentage_charge >= 100) {
-
-			g_string_append_printf (summary, "%s", _("fully charged"));
 
 	} else if (status->is_charging || power->priv->on_ac) {
 
@@ -666,7 +682,7 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 
 	} else {
 		gpm_warning ("in an undefined state we are not charging or "
-			     "discharging and the batteries are also not fully loaded");
+			     "discharging and the batteries are also not charged");
 	}
 	
 	/* append percentage to all devices */
