@@ -1,5 +1,12 @@
 2006-03-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (battery_status_changed_primary): Remove the extra
+	return that sneaked in to the notification path. This caused people to
+	get repeated "battery is fully charged" messages if thier hardware was
+	a little wonky.	Should fix lp:32650 and rh:183612
+
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c (libnotify_event, gpm_tray_icon_notify): set
 	the timeout parameter unit to be seconds, so we can still work with
 	the old (ms) and new (s) libnotify versions.

@@ -1283,7 +1283,6 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      NULL,
 					      _("Your battery is now fully charged"));
 		}
-		return;
 	}
 
 	if (battery_status->percentage_charge != manager->priv->last_primary_percentage_change) {
