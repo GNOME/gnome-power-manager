@@ -605,7 +605,7 @@ notification_closed_cb (NotifyNotification *notify,
 
 static gboolean
 libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,
+		 guint                    timeout,	/* in seconds */
 		 const char              *subject,
 		 const char              *content,
 		 const LibNotifyEventType urgency)
@@ -621,7 +621,7 @@ libnotify_event (GpmTrayIcon             *tray,
 						      GPM_STOCK_BATTERY_DISCHARGING_100,
 						      NULL);
 
-	notify_notification_set_timeout (tray->priv->notify, timeout);
+	notify_notification_set_timeout (tray->priv->notify, timeout * 1000);
 
 	if (tray->priv->is_visible) {
 		get_widget_position (GTK_WIDGET (tray), &x, &y);
@@ -649,7 +649,7 @@ libnotify_event (GpmTrayIcon             *tray,
 
 static gboolean
 libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,
+		 guint                    timeout,	/* in seconds */
 		 const char              *subject,
 		 const char              *content,
 		 const LibNotifyEventType urgency)
@@ -689,7 +689,7 @@ libnotify_event (GpmTrayIcon             *tray,
 						       content,
 						       icon, /* icon */
 						       TRUE,
-						       timeout / 1000,
+						       timeout,
 						       hints, /* hints */
 						       NULL, /* no user data */
 						       0);   /* no actions */
@@ -707,7 +707,7 @@ libnotify_event (GpmTrayIcon             *tray,
 
 static gboolean
 libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,
+		 guint                    timeout,	/* in seconds */
 		 const char              *subject,
 		 const char              *content,
 		 const LibNotifyEventType urgency)
@@ -747,7 +747,7 @@ libnotify_event (GpmTrayIcon             *tray,
 
 void
 gpm_tray_icon_notify (GpmTrayIcon *icon,
-		      guint        timeout,
+		      guint        timeout,	/* in seconds */
 		      const char  *primary,
 		      GtkWidget   *msgicon,
 		      const char  *secondary)

@@ -1,5 +1,17 @@
 2006-03-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c (libnotify_event, gpm_tray_icon_notify): set
+	the timeout parameter unit to be seconds, so we can still work with
+	the old (ms) and new (s) libnotify versions.
+
+	* src/gpm-manager.c: convert all the users of gpm_tray_icon_notify
+	to send timeouts in seconds, and also define the defines
+	GPM_NOTIFY_TIMEOUT_LONG (20 seconds) and GPM_NOTIFY_TIMEOUT_SHORT
+	(5 seconds) so we can change the values to a sensible default in one
+	place only. Should start to fix lp:33411.
+
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.h: Add ACTION_INTERACTIVE and GPM_PREF_BUTTON_POWER.
 
 	* src/gpm-manager.c (manager_policy_do): Add a ACTION_INTERACTIVE

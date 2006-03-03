@@ -84,6 +84,9 @@ typedef enum {
 /* Using www until we get a better one defined for us by the kernel */
 #define GPM_BUTTON_BATTERY		"www"
 
+#define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
+#define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
+
 struct GpmManagerPrivate
 {
 	GConfClient	*gconf_client;
@@ -818,7 +821,7 @@ gpm_manager_hibernate (GpmManager *manager,
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("hibernate"), GPM_FAQ_URL);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Hibernate Problem"),
 					      NULL,
 					      message);
@@ -875,7 +878,7 @@ gpm_manager_suspend (GpmManager *manager,
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("suspend"), GPM_FAQ_URL);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Suspend Problem"),
 					      NULL,
 					      message);
@@ -1031,7 +1034,7 @@ battery_button_pressed (GpmManager *manager)
 	gpm_power_get_status_summary (manager->priv->power, &message, NULL);
 
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      5000,
+			      GPM_NOTIFY_TIMEOUT_LONG,
 			      _("Power Information"),
 			      NULL,
 			      message);
@@ -1275,7 +1278,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		if (show_notify) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000,
+					      GPM_NOTIFY_TIMEOUT_SHORT,
 					      _("Battery Charged"),
 					      NULL,
 					      _("Your battery is now fully charged"));
@@ -1334,7 +1337,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		if (warning) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Critical action"),
 					      NULL,
 					      warning);
@@ -1346,8 +1349,9 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* Always check if we already notified the user */
 	if (warning_type > manager->priv->last_primary_warning) {
+		int timeout;
+
 		manager->priv->last_primary_warning = warning_type;
-		title = battery_low_get_title (warning_type);
 		remaining = gpm_get_timestring (battery_status->remaining_time);
 
 		/* Do different warnings for each GPM_WARNING */
@@ -1358,19 +1362,25 @@ battery_status_changed_primary (GpmManager	      *manager,
 			if (show_notify) {
 				message = g_strdup_printf (_("The AC Power has been unplugged. "
 						             "The system is now using battery power."));
+				timeout = GPM_NOTIFY_TIMEOUT_SHORT;
 			}
 		} else {
 			message = g_strdup_printf (_("You have approximately <b>%s</b> "
 						     "of remaining battery life (%d%%). "
 						     "Plug in your AC Adapter to avoid losing data."),
 						   remaining, battery_status->percentage_charge);
+				timeout = GPM_NOTIFY_TIMEOUT_LONG;
 		}
-		if (message != NULL)
+		if (message) {
+			title = battery_low_get_title (warning_type);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      5000, title, NULL, message);
-
+					      timeout,
+					      title,
+					      NULL,
+					      message);
+			g_free (message);
+		}
 		g_free (remaining);
-		g_free (message);
 	} else {
 		gpm_debug ("Already notified %i", warning_type);
 	}
@@ -1429,7 +1439,10 @@ battery_status_changed_ups (GpmManager	          *manager,
 						   remaining, battery_status->percentage_charge);
 		}
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      5000, title, NULL, message);
+				      GPM_NOTIFY_TIMEOUT_LONG,
+				      title,
+				      NULL,
+				      message);
 
 		g_free (remaining);
 		g_free (message);
@@ -1496,7 +1509,10 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 				   name, battery_status->percentage_charge);
 
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      5000, title, NULL, message);
+			      GPM_NOTIFY_TIMEOUT_LONG,
+			      title,
+			      NULL,
+			      message);
 
 	g_free (message);
 }
