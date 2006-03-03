@@ -1,3 +1,18 @@
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs.h: Add ACTION_INTERACTIVE and GPM_PREF_BUTTON_POWER.
+
+	* src/gpm-manager.c (manager_policy_do): Add a ACTION_INTERACTIVE
+	handler so we can show the logout box by doing an interactive logout.
+
+	* data/gnome-power-manager.schemas.in: Add
+	/apps/gnome-power-manager/action_button_power so we can reconfigure
+	the power button. This was a requested function by email, and makes
+	sense, as it allows me to reconfigure my powerbook power button to
+	suspend, as I only have the one button. Defaults to interactive, which
+	is what we have now. Also add the extended description to the other
+	/apps/gnome-power-manager/action_button_* keys.
+
 2006-03-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.{c|h} (gpm_power_battery_is_charged): Create this new

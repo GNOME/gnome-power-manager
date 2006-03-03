@@ -206,7 +206,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Suspend button action</short>
-        <long>The action to take when the system suspend button is pressed. Valid values are "suspend", "hibernate" and "nothing".</long>
+        <long>The action to take when the system suspend button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -217,7 +217,18 @@
       <default>hibernate</default>
       <locale name="C">
         <short>Hibernate button action</short>
-        <long>The action to take when the system hibernate button (if available) is pressed</long>
+        <long>The action to take when the system hibernate button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/action_button_power</key>
+      <applyto>/apps/gnome-power-manager/action_button_power</applyto>
+      <type>string</type>
+      <default>interactive</default>
+      <locale name="C">
+        <short>Power button action</short>
+        <long>The action to take when the system power button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 

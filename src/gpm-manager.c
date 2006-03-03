@@ -663,6 +663,14 @@ manager_policy_do (GpmManager *manager,
 		gpm_debug ("*ACTION* Shutdown");
 		gpm_manager_shutdown (manager, NULL);
 
+	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
+
+		gpm_debug ("*ACTION* Interactive");
+		/* Log out interactively */
+		gnome_client_request_save (gnome_master_client (),
+					   GNOME_SAVE_GLOBAL,
+					   TRUE, GNOME_INTERACT_ANY, FALSE, TRUE);
+
 	} else {
 		gpm_warning ("unknown action %s", action);
 	}
@@ -1035,10 +1043,8 @@ power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
 	gpm_debug ("power button pressed");
-	/* Log out interactively */
-	gnome_client_request_save (gnome_master_client (),
-				   GNOME_SAVE_GLOBAL,
-				   TRUE, GNOME_INTERACT_ANY, FALSE,  TRUE);
+	gpm_manager_set_reason (manager, "the power button has been pressed");
+	manager_policy_do (manager, GPM_PREF_BUTTON_POWER);
 }
 
 static void
