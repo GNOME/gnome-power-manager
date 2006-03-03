@@ -1,4 +1,48 @@
 ===============
+Version 2.13.93
+===============
+
+Released March 03, 2006
+
+General
+
+ - Install autostart files to new (definitive) place (Rodrigo Moya)
+ - Add a logging interface so that we can log *why* a specific action was
+   taken, logged in /var/log/messages. #332760.
+ - We have to handle the PropertyModified events differently depending on
+   whether we are using dbus 0.60 or dbus 0.61.	(Sjoerd Simons)
+   NOTE: You should use 2.13.93 if you are using dbus 0.61.
+
+Power Manager
+
+ - Fix a crash when a very low power mouse is inserted. rh:183127.
+ - Fix the UPS "charged" icon. #332761
+ - Add a configurable action for the hibernate button and the power button.
+ - Wait for gnome-screensaver to lock before we suspend (Daniel Silverstone)
+ - Display a BIG FAT warning in the event of DBUS not being present instead of
+   just aborting like we do now.
+ - Update with new bluecurve suspend and hibernate icons. (Diana Fong)
+ - Ignore timeout events when the lid is closed, as we don't want to re-enable
+   the screen when the user moves the mouse (on systems that do not support
+   hardware blanking). lp:22522
+ - Inhibit activation of the screensaver when the lid is closed.
+ - Use a better way to work out if the battery is not charging. #333169
+ - Standardise on longer timeouts for the libnotify boxes. lp:33411
+ - Fix the repeated "battery is fully charged" messages if hardware is
+   a little wonky. lp:32650, rh:183612
+
+Power Preferences
+
+ - Add an option to disable the dim on idle.
+
+Translators
+
+ - Ilkka Tuohela (Finnish)
+ - Clytie Siddall (Vietnamese)
+ - Takeshi AIHANA (Japanese)
+ - Francisco Javier F. Serrador (Spanish)
+
+===============
 Version 2.13.92
 ===============
 
