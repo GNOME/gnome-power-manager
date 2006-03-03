@@ -1,5 +1,20 @@
 2006-03-03  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Get the DBUS version, as now we have do stuff
+	differently depending on whether we are using dbus 0.60 or dbus 0.61.
+	Yay. I love API breakages. Sjoerd Simons found the bug, did the
+	research, found the solution, and wrote a patch to fix, for which I
+	thank him greatly:
+
+	In dbus <= 0.60 dbus struct weren't really typed from dbus-glib's pov.
+	In dbus >= 0.61 they are, so when defining a signal you need to be
+	more precise then before.
+
+	* src/gpm-hal-monitor.c (watch_device_connect_property_modified):
+	get the correct struct type if we are using >= DBUS 0.61.
+
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (battery_status_changed_primary): Remove the extra
 	return that sneaked in to the notification path. This caused people to
 	get repeated "battery is fully charged" messages if thier hardware was
