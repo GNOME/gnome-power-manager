@@ -78,8 +78,10 @@ typedef enum {
 #define GPM_BUTTON_SUSPEND		"suspend"
 #define GPM_BUTTON_HIBERNATE		"hibernate"
 #define GPM_BUTTON_LID			"lid"
-#define GPM_BUTTON_BRIGHT_UP		"brightness_up"
-#define GPM_BUTTON_BRIGHT_DOWN		"brightness_down"
+#define GPM_BUTTON_BRIGHT_UP		"brightness-up"
+#define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
+#define GPM_BUTTON_BRIGHT_UP_DEP	"brightness_up"		/* Remove when we depend on HAL 0.5.8 */
+#define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightness_down"	/* as these are the old names */
 #define GPM_BUTTON_LOCK			"lock"
 /* Using www until we get a better one defined for us by the kernel */
 #define GPM_BUTTON_BATTERY		"www"
@@ -936,6 +938,7 @@ idle_changed_cb (GpmIdle    *idle,
 	   Details are here: https://launchpad.net/malone/bugs/22522 */
 	if (manager->priv->lid_is_closed) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
+		return;
 	}
 
 	switch (mode) {
@@ -1129,10 +1132,12 @@ power_button_pressed_cb (GpmPower   *power,
 	} else if (strcmp (type, GPM_BUTTON_LID) == 0) {
 		lid_button_pressed (manager, state);
 
-	} else if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
+	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) ||
+		   (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0)) {
 		gpm_brightness_level_up (manager->priv->brightness);
 
-	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
+	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) ||
+		   (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0)) {
 		gpm_brightness_level_down (manager->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {

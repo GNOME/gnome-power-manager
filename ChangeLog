@@ -1,5 +1,17 @@
 2006-03-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (idle_changed_cb): Really ignore idle state changes
+	when the lid is shut, so we don't turn on the display.
+
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (power_button_pressed_cb): Support the new names
+	for brightness up and brightness down as the HAL API has changed.
+	NOTE: we also support the old names, and should remove the *_DUP
+	defines when we depend on HAL 0.5.8.
+
+2006-03-03  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in: Get the DBUS version, as now we have do stuff
 	differently depending on whether we are using dbus 0.60 or dbus 0.61.
 	Yay. I love API breakages. Sjoerd Simons found the bug, did the
