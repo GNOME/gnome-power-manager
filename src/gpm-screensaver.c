@@ -156,7 +156,12 @@ gpm_screensaver_lock (void)
 	DBusGProxy *gs_proxy = NULL;
 	int sleepcount = 0;
 
-	gpm_debug ("lock");
+	if (! gpm_screensaver_is_running ()) {
+		gpm_debug ("Not locking, as gnome-screensaver not running");
+		return FALSE;
+	}
+
+	gpm_debug ("doing gnome-screensaver lock");
 
 	if (!gpm_screensaver_get_session_conn (&session_connection))
 		return FALSE;

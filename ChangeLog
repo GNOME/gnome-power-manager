@@ -1,3 +1,9 @@
+2006-03-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-screensaver.c (gpm_screensaver_lock): Don't try to lock if
+	gnome-screensaver is not running or not installed as we not retry
+	50 times, which delays the suspend.
+
 2006-03-03  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.13.94
