@@ -1,5 +1,20 @@
 2006-03-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-idle.{c|h}: Whitespace fixes.
+
+	* src/gpm-info.{c|h}, src/Makefile.am: Add the beginnings of a
+	logging and statistics module.
+
+	* src/gpm-manager.c: Initialise and finalise the info module.
+
+	* data/gpm-info.glade, data/Makefile.am: Add the outline information UI,
+	showing batteries status, UPS's status, and the various charging graphs.
+	This does not work correctly yet. And you can only activate this new UI
+	with the experimental compile option as it's buggy, and nothing really
+	works how it should yet.
+
+2006-03-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: Add the information icon if
 	experimental-features is enabled in configure. Currently it just
 	sends a signal to the manager.

@@ -123,7 +123,7 @@ poll_system_timer (GpmIdle *idle)
 			gpm_debug ("Detected that the CPU is busy");
 			do_action = FALSE;
 		}
-		
+	
 	}
 
 	if (do_action) {

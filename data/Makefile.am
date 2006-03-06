@@ -25,6 +25,7 @@ $(service_DATA): $(service_in_files) Makefile
 	@sed -e "s|\@servicedir\@|$(bindir)|" $< > $@
 
 pkgdata_DATA =						\
+	gpm-info.glade					\
 	gpm-prefs.glade
 
 EXTRA_DIST =						\

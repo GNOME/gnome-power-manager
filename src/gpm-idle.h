@@ -26,50 +26,50 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_IDLE          (gpm_idle_get_type ())
-#define GPM_IDLE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_IDLE, GpmIdle))
-#define GPM_IDLE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_IDLE, GpmIdleClass))
-#define GPM_IS_IDLE(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_IDLE))
-#define GPM_IS_IDLE_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_IDLE))
-#define GPM_IDLE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_IDLE, GpmIdleClass))
+#define GPM_TYPE_IDLE		(gpm_idle_get_type ())
+#define GPM_IDLE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_IDLE, GpmIdle))
+#define GPM_IDLE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_IDLE, GpmIdleClass))
+#define GPM_IS_IDLE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_IDLE))
+#define GPM_IS_IDLE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_IDLE))
+#define GPM_IDLE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_IDLE, GpmIdleClass))
 
 typedef enum {
-        GPM_IDLE_MODE_NORMAL,
-        GPM_IDLE_MODE_SESSION,
-        GPM_IDLE_MODE_SYSTEM
+	GPM_IDLE_MODE_NORMAL,
+	GPM_IDLE_MODE_SESSION,
+	GPM_IDLE_MODE_SYSTEM
 } GpmIdleMode;
 
 typedef struct GpmIdlePrivate GpmIdlePrivate;
 
 typedef struct
 {
-        GObject         parent;
-        GpmIdlePrivate *priv;
+	GObject		parent;
+	GpmIdlePrivate *priv;
 } GpmIdle;
 
 typedef struct
 {
-        GObjectClass      parent_class;
+	GObjectClass	parent_class;
 
-        void              (* changed)        (GpmIdle    *idle,
-                                              GpmIdleMode mode);
+	void	      (* changed)	(GpmIdle    *idle,
+					 GpmIdleMode mode);
 } GpmIdleClass;
 
-GType       gpm_idle_get_type         (void);
+GType	    gpm_idle_get_type		(void);
 
-GpmIdle   * gpm_idle_new                 (void);
+GpmIdle   * gpm_idle_new		(void);
+GpmIdleMode gpm_idle_get_mode		(GpmIdle    *idle);
 
-void        gpm_idle_reset               (GpmIdle    *idle);
-GpmIdleMode gpm_idle_get_mode            (GpmIdle    *idle);
-void        gpm_idle_set_mode            (GpmIdle    *idle,
-                                          GpmIdleMode mode);
-void	    gpm_idle_set_check_cpu	 (GpmIdle    *idle,
-					  gboolean    check_type_cpu);
+void	gpm_idle_reset			(GpmIdle    *idle);
+void	gpm_idle_set_mode		(GpmIdle    *idle,
+					 GpmIdleMode mode);
+void	gpm_idle_set_check_cpu		(GpmIdle    *idle,
+					 gboolean    check_type_cpu);
 
-void        gpm_idle_set_session_timeout (GpmIdle    *idle,
-                                          guint       timeout);
-void        gpm_idle_set_system_timeout  (GpmIdle    *idle,
-                                          guint       timeout);
+void	gpm_idle_set_session_timeout	(GpmIdle    *idle,
+					 guint       timeout);
+void	gpm_idle_set_system_timeout	(GpmIdle    *idle,
+					 guint       timeout);
 
 G_END_DECLS
 
