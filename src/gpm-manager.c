@@ -1117,6 +1117,9 @@ power_button_pressed_cb (GpmPower   *power,
 {
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
+	/* simulate user input */
+	gpm_screensaver_poke ();
+
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager, state);
 
@@ -1154,6 +1157,9 @@ power_on_ac_changed_cb (GpmPower   *power,
 			GpmManager *manager)
 {
 	gpm_debug ("Setting on-ac: %d", on_ac);
+
+	/* simulate user input, to fix #333525 */
+	gpm_screensaver_poke ();
 
 	/* If we are on AC power we should show warnings again */
 	if (on_ac) {
