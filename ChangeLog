@@ -1,5 +1,11 @@
 2006-03-06  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Add the --enable-experimental-features flag so that
+	I can start putting cool new (unfinished) stuff into CVS, such as
+	#326741 and #333146
+
+2006-03-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal.c (gpm_hal_handle_error): Create this function, and use
 	it for all the HAL error handling. This lets us do clever things like
 	ignoring DBUS timeouts. Original patch from Ray Strode, many thanks.

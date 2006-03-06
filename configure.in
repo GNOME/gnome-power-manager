@@ -173,8 +173,20 @@ AC_MSG_CHECKING([whether to show the Suspend/Hibernate menu options])
 if test x$enable_actions_menu = xyes ; then
     AC_DEFINE(ACTIONS_MENU_ENABLED, 1, [icon actions menu])
 fi
-#AM_CONDITIONAL(ACTIONS_MENU_ENABLED, test x$enable_actions_menu = xyes)
 AC_MSG_RESULT(yes)
+
+dnl ---------------------------------------------------------------------------
+dnl - Should we build the experimental stuff ?
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(experimental-features,
+              [AC_HELP_STRING([--enable-experimental-features],
+                              [if we should we build the experimental features [default=no]])],,
+              [enable_experimental_features=no])
+AC_MSG_CHECKING([whether to build the experimental features])
+if test x$enable_experimental_features = xyes ; then
+    AC_DEFINE(EXPERIMENTAL_FEATURES_ENABLED, 1, [experimental features])
+fi
+AC_MSG_RESULT(no)
 
 dnl ---------------------------------------------------------------------------
 dnl - Is libnotify available?
@@ -458,6 +470,7 @@ echo "
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
         Notification actions menu: ${enable_actions_menu}
+        Use experimental features: ${enable_experimental_features}
         DPMS support:              ${have_dpms}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR
