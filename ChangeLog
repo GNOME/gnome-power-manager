@@ -1,5 +1,12 @@
 2006-03-05  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c (gpm_tray_icon_show): gtk_widget_unrealize the
+	icon when we hide it, else it leaves a 1px line on the notification
+	tray. Fixes uses gnome-power-manager when using a transparent panel.
+	Fixes #333515.
+
+2006-03-05  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.c (gpm_screensaver_lock): Don't try to lock if
 	gnome-screensaver is not running or not installed as we not retry
 	50 times, which delays the suspend.

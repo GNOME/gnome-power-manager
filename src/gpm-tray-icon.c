@@ -504,6 +504,7 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
 		icon->priv->is_visible = TRUE;
 	} else {
 		gtk_widget_hide_all (GTK_WIDGET (icon));
+		gtk_widget_unrealize (GTK_WIDGET (icon));
 		icon->priv->is_visible = FALSE;
 	}
 }
