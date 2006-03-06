@@ -58,6 +58,7 @@ G_BEGIN_DECLS
 #define GPM_STOCK_UPS_DISCHARGING_060		"ups-discharging-060"
 #define GPM_STOCK_UPS_DISCHARGING_080		"ups-discharging-080"
 #define GPM_STOCK_UPS_DISCHARGING_100		"ups-discharging-100"
+#define GPM_STOCK_POWER_INFORMATION		"power-information"
 #define GPM_STOCK_SUSPEND_TO_DISK		"suspend-to-disk"
 #define GPM_STOCK_SUSPEND_TO_RAM		"suspend-to-ram"
 

@@ -1,5 +1,14 @@
 2006-03-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c: Add the information icon if
+	experimental-features is enabled in configure. Currently it just
+	sends a signal to the manager.
+
+	* data/icons/16x16/power-information.png, data/icons/16x16/Makefile.am,
+	src/gpm-stock-icons.{c|h}: Add this icon for the power information item.
+
+2006-03-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (power_button_pressed_cb, power_on_ac_changed_cb):
 	Poke the screensaver to simulate user input. This is what Windows XP
 	does, and should solve the problems with the timer event happening
