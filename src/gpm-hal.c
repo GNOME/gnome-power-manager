@@ -174,6 +174,33 @@ gpm_hal_can_hibernate (void)
 	return can_hibernate;
 }
 
+/* we have to be clever, as hal can pass back two types of errors, and we have
+   to ignore dbus timeouts */
+static gboolean
+gpm_hal_handle_error (guint ret, GError *error, const char *method)
+{
+	gboolean retval = TRUE;
+	if (error) {
+		/* DBUS might time out, which is okay. We can remove this code
+		   when the dbus glib bindings are fixed. See #332888 */
+		if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
+			gpm_debug ("DBUS timed out, but recovering");
+			retval = TRUE;
+		} else {
+			gpm_warning ("%s failed\n(%s)",
+				     method,
+				     error->message);
+			retval = FALSE;
+		}
+		g_error_free (error);
+	} else if (ret != 0) {
+		/* we might not get an error set */
+		gpm_warning ("%s failed (Unknown error)", method);
+		retval = FALSE;
+	}
+	return retval;
+}
+
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
  *
  *  @param	wakeup		Seconds to wakeup, currently unsupported
@@ -182,7 +209,7 @@ gpm_hal_can_hibernate (void)
 gboolean
 gpm_hal_suspend (gint wakeup)
 {
-	gint ret;
+	guint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -195,18 +222,11 @@ gpm_hal_suspend (gint wakeup)
 					       HAL_ROOT_COMPUTER,
 					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "Suspend", &error,
-			G_TYPE_INT, wakeup, G_TYPE_INVALID,
-			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_warning (HAL_DBUS_INTERFACE_POWER ".Suspend failed (HAL error)");
-		retval = FALSE;
-	}
-	if (ret != 0)
-		retval = FALSE;
+	dbus_g_proxy_call (hal_proxy, "Suspend", &error,
+			   G_TYPE_INT, wakeup, G_TYPE_INVALID,
+			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
+	retval = gpm_hal_handle_error (ret, error, "suspend");
+
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
@@ -220,7 +240,7 @@ gpm_hal_suspend (gint wakeup)
 static gboolean
 hal_pm_method_void (const gchar* method)
 {
-	gint ret;
+	guint ret = 0;
 	DBusGConnection *system_connection = NULL;
 	DBusGProxy *hal_proxy = NULL;
 	GError *error = NULL;
@@ -233,19 +253,11 @@ hal_pm_method_void (const gchar* method)
 					       HAL_ROOT_COMPUTER,
 					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, method, &error,
-			G_TYPE_INVALID,
-			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_warning (HAL_DBUS_INTERFACE_POWER
-			   ".%s failed (HAL error)", method);
-		retval = FALSE;
-	}
-	if (ret != 0)
-		retval = FALSE;
+	dbus_g_proxy_call (hal_proxy, method, &error,
+			   G_TYPE_INVALID,
+			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
+	retval = gpm_hal_handle_error (ret, error, method);
+
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }
@@ -298,18 +310,11 @@ gpm_hal_enable_power_save (gboolean enable)
 					       HAL_ROOT_COMPUTER,
 					       HAL_DBUS_INTERFACE_POWER);
 	retval = TRUE;
-	if (!dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
-			G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
-			G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_debug (HAL_DBUS_INTERFACE_POWER ".SetPowerSave failed (HAL error)");
-		retval = FALSE;
-	}
-	if (ret != 0)
-		retval = FALSE;
+	dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
+			   G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
+			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
+	retval = gpm_hal_handle_error (ret, error, "power save");
+
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
 }

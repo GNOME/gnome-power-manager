@@ -1,3 +1,9 @@
+2006-03-06  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal.c (gpm_hal_handle_error): Create this function, and use
+	it for all the HAL error handling. This lets us do clever things like
+	ignoring DBUS timeouts. Original patch from Ray Strode, many thanks.
+
 2006-03-05  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-tray-icon.c (gpm_tray_icon_show): gtk_widget_unrealize the
