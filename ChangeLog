@@ -1,3 +1,14 @@
+2006-03-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.{c|h}, src/Makefile.am: Add a simple graph
+	widget drawn using cairo. Disabled by default so we can build on FC4.
+	This is for #333146 so we can draw cool graphs of power stuff. It's all
+	very simple now, but the framework is very easy to expand.
+
+	* src/gpm-info.c: Load the custom widget.
+
+	* data/gpm-info.glade: Use the correct creation function name.
+
 2006-03-06  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade: s/Options/General for the third tab option.

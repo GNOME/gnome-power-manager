@@ -26,9 +26,11 @@
 #include <glade/glade.h>
 #include <libgnomeui/gnome-help.h>
 #include <gtk/gtk.h>
+#include <string.h>
 #include "gpm-info.h"
 #include "gpm-debug.h"
 #include "gpm-power.h"
+#include "gpm-graph-widget.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);
@@ -62,18 +64,32 @@ enum {
 static GObjectClass *parent_class = NULL;
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
-/* only temporary, will use the custom widget when finished */
-typedef struct
+/** handler for libglade to provide interface with a pointer */
+static GtkWidget *
+gpm_graph_custom_handler (GladeXML *xml,
+			  gchar *func_name, gchar *name,
+			  gchar *string1, gchar *string2,
+			  gint int1, gint int2,
+			  gpointer user_data)
 {
-	int	x;
-	int	y;
-} GpmDataPoint;
+	GpmInfo *info;
+	GtkWidget *widget = NULL;
+
+	info = (GpmInfo *) user_data;
+
+	if (strcmp ("gpm_simple_graph_new", func_name) == 0) {
+		widget = gpm_simple_graph_new ();
+		return widget;
+	}
+
+	return NULL;
+}
 
 static void
 gpm_stat_add_data_point (GList *list, int x, int y)
 {
-	GpmDataPoint *data_point;
-	data_point = g_new (GpmDataPoint, 1);
+	GpmSimpleDataPoint *data_point;
+	data_point = g_new (GpmSimpleDataPoint, 1);
 	data_point->x = x;
 	data_point->y = y;
 	list = g_list_append (list, (gpointer) data_point);
@@ -148,6 +164,7 @@ gpm_info_show_window (GpmInfo *info)
 		return;
 	}
 
+	glade_set_custom_handler (gpm_graph_custom_handler, info);
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-info.glade", NULL, NULL);
 	/* don't segfault on missing glade file */
 	if (! glade_xml) {
@@ -171,7 +188,7 @@ gpm_info_show_window (GpmInfo *info)
 	gtk_widget_show (info->priv->main_window);
 
 	int a;
-	GpmDataPoint *d_point;
+	GpmSimpleDataPoint *d_point;
 
 	GList *values = NULL;
 
@@ -182,13 +199,13 @@ gpm_info_show_window (GpmInfo *info)
 	/* print graph data */
 	gpm_debug ("GRAPH DATA");
 	for (a=0; a<g_list_length (values); a++) {
-		d_point = (GpmDataPoint*) g_list_nth_data (values, a);
+		d_point = (GpmSimpleDataPoint*) g_list_nth_data (values, a);
 		gpm_debug ("data %i = (%i, %i)", a, d_point->x, d_point->y);
 	}
 
 	/* free elements */
 	for (a=0; a<g_list_length (values); a++) {
-		d_point = (GpmDataPoint*) g_list_nth_data (values, a);
+		d_point = (GpmSimpleDataPoint*) g_list_nth_data (values, a);
 		g_free (d_point);
 	}
 	g_list_free (values);
