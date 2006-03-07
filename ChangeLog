@@ -1,5 +1,26 @@
 2006-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Check for cairo. This is an optional dependency if you
+	want to build the experimental graph support.
+
+	* data/gpm-info.glade: Don't set the size of the graph in the glade
+	file, instead use the source.
+
+	* src/gpm-graph-widget.c: Add the patch from Alexander Larsson so we
+	don't antialias the gridlines. Also do lots of misc fixes to make this
+	grid-thing work as it should.
+
+	* src/gpm-info.c: Make some more stuff generic, and make the graph
+	update every hardware interval. Also free our dynamically allocated
+	memory when the [x] is clicked.
+
+	This means that is you compile with --enable-experimental-features
+	then you will get the graph. Do not do this on production systems as
+	it's crashed once or twice, probably has spelling errors, and certainly
+	the glade file could do with some HIG love. But it looks way cool.
+
+2006-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.{c|h}, src/Makefile.am: Add a simple graph
 	widget drawn using cairo. Disabled by default so we can build on FC4.
 	This is for #333146 so we can draw cool graphs of power stuff. It's all

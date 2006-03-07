@@ -189,6 +189,19 @@ fi
 AC_MSG_RESULT(no)
 
 dnl ---------------------------------------------------------------------------
+dnl - Is cairo available?
+dnl ---------------------------------------------------------------------------
+PKG_CHECK_MODULES(CAIRO, cairo, have_cairo=yes, have_cairo=no)
+AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo = xyes)
+if test x$have_cairo = xyes ; then
+    AC_DEFINE(HAVE_CAIRO,1,[cairo support])
+    AC_SUBST(CAIRO_CFLAGS)
+    AC_SUBST(CAIRO_LIBS)
+else
+    AC_MSG_WARN([Cairo not found])
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl - Is libnotify available?
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(libnotify,
@@ -472,6 +485,7 @@ echo "
         Notification actions menu: ${enable_actions_menu}
         Use experimental features: ${enable_experimental_features}
         DPMS support:              ${have_dpms}
+        Cairo support:             ${have_cairo}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR
         dbus-1 services dir:       $DBUS_SERVICES_DIR

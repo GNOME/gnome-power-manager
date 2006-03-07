@@ -18,6 +18,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox3">
@@ -420,8 +421,6 @@ Type: BackUPS 120</property>
 
 	      <child>
 		<widget class="Custom" id="graph_percentage">
-		  <property name="width_request">300</property>
-		  <property name="height_request">200</property>
 		  <property name="visible">True</property>
 		  <property name="creation_function">gpm_simple_graph_new</property>
 		  <property name="int1">0</property>
@@ -430,8 +429,8 @@ Type: BackUPS 120</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
+		  <property name="expand">True</property>
+		  <property name="fill">True</property>
 		</packing>
 	      </child>
 
