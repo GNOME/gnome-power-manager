@@ -42,15 +42,22 @@ static void     gpm_info_finalize   (GObject      *object);
 #define GPM_INFO_DATA_RES_X		40 /* x resolution, greater burns the cpu */
 //#define DO_TESTING			TRUE
 
+typedef struct
+{
+	GList		*log_data;
+	GList		*graph_data;
+	GtkWidget	*widget;
+} GpmInfoGraphData;
+
 struct GpmInfoPrivate
 {
-	GpmPower	*power;
+	GpmPower		*power;
 
-	GList		*log_percentage_charge;
-	GList		*graph_percentage_charge;
+	GpmInfoGraphData	*rate;
+	GpmInfoGraphData	*percentage;
+	GpmInfoGraphData	*time;
 
-	GtkWidget	*main_window;
-	GtkWidget	*graph_percentage;
+	GtkWidget		*main_window;
 };
 
 enum {
@@ -84,9 +91,11 @@ gpm_graph_custom_handler (GladeXML *xml,
 	return NULL;
 }
 
+/** add an x-y point to a list */
 static void
 gpm_info_data_point_add (GList **list, int x, int y)
 {
+	g_return_if_fail (list);
 	GpmSimpleDataPoint *data_point;
 	data_point = g_new (GpmSimpleDataPoint, 1);
 	data_point->x = x;
@@ -94,10 +103,12 @@ gpm_info_data_point_add (GList **list, int x, int y)
 	*list = g_list_append (*list, (gpointer) data_point);
 }
 
-/* normalise 0..100 */
+/** normalise both axes to 0..100 */
 static void
 gpm_stat_calculate_percentage (GList *source, GList **destination, int num_points)
 {
+	g_return_if_fail (source);
+	g_return_if_fail (destination);
 	int count = 0;		/* what number of max_count we are at */
 	int max_count;		/* how many data values do we want */
 	int this_count = 0;	/* what data point we are working on */
@@ -127,6 +138,7 @@ gpm_stat_calculate_percentage (GList *source, GList **destination, int num_point
 	   not be equal, and thus not representative of the final value */
 }
 
+/** help callback */
 static void
 gpm_info_help_cb (GtkWidget	*widget,
 		  GpmInfo	*info)
@@ -140,6 +152,7 @@ gpm_info_help_cb (GtkWidget	*widget,
 	}
 }
 
+/* close callback */
 static void
 gpm_info_close_cb (GtkWidget	*widget,
 		   GpmInfo	*info)
@@ -148,27 +161,29 @@ gpm_info_close_cb (GtkWidget	*widget,
 	info->priv->main_window = NULL;
 }
 
+/** free a list of x-y points */
 static void
-gpm_info_data_point_free (GList **list)
+gpm_info_data_point_free (GList *list)
 {
-	if (list == NULL || *list == NULL) {
-		return;
-	}
+	g_return_if_fail (list);
+
 	int a;
 	GpmSimpleDataPoint *d_point;
 
 	/* free elements */
-	for (a=0; a<g_list_length (*list); a++) {
-		d_point = (GpmSimpleDataPoint*) g_list_nth_data (*list, a);
+	for (a=0; a<g_list_length (list); a++) {
+		d_point = (GpmSimpleDataPoint*) g_list_nth_data (list, a);
 		g_free (d_point);
 	}
-	g_list_free (*list);
-	*list = NULL;
+	g_list_free (list);
 }
 
+#if 0
+/** print a list of x-y points */
 static void
 gpm_info_data_point_print (GList *list)
 {
+	g_return_if_fail (list);
 	int a;
 	GpmSimpleDataPoint *d_point;
 	/* print graph data */
@@ -178,36 +193,86 @@ gpm_info_data_point_print (GList *list)
 		gpm_debug ("data %i = (%i, %i)", a, d_point->x, d_point->y);
 	}
 }
+#endif
 
+/** find the largest and smallest integer values in a list */
 static void
-gpm_info_update_graph (GpmInfo *info)
+gpm_info_log_find_range (GList *list, int *smallest, int *biggest)
 {
-	GtkWidget *widget = info->priv->graph_percentage;
+	g_return_if_fail (list);
+	int *data;
+	int a;
+	*smallest = 100000;
+	*biggest = 0;
+	for (a=0; a < g_list_length (list) - 1; a++) {
+		data = (int*) g_list_nth_data (list, a);
+		if (*data > *biggest) {
+			*biggest = *data;
+		}
+		if (*data < *smallest) {
+			*smallest = *data;
+		}
+	}
+}
+
+/** free a scalar log */
+static void
+gpm_info_log_free (GList *list)
+{
+	g_return_if_fail (list);
+	int *data;
+	int a;
+	for (a=0; a<g_list_length (list); a++) {
+		data = (int*) g_list_nth_data (list, a);
+		g_free (data);
+	}
+	g_list_free (list);
+}
+
+/** update this graph */
+static void
+gpm_info_graph_update (GpmInfoGraphData *graph_data)
+{
 	int max_time;
+	int smallest = 0;
+	int biggest = 0;
 
 	/* free existing data if exists */
-	gpm_info_data_point_free (&(info->priv->graph_percentage_charge));
+	if (graph_data->graph_data) {
+		gpm_info_data_point_free (graph_data->graph_data);
+		graph_data->graph_data = NULL;
+	}
 
-	if (info->priv->log_percentage_charge) {
-		gpm_stat_calculate_percentage (info->priv->log_percentage_charge,
-					       &(info->priv->graph_percentage_charge),
+	if (graph_data->log_data) {
+		gpm_stat_calculate_percentage (graph_data->log_data,
+					       &(graph_data->graph_data),
 					       GPM_INFO_DATA_RES_X + 1);
-		gpm_simple_graph_set_data (GPM_SIMPLE_GRAPH (widget), info->priv->graph_percentage_charge);
-		max_time = (GPM_INFO_HARDWARE_POLL * g_list_length (info->priv->log_percentage_charge)) / 60;
-		if (max_time == 0) {
+		gpm_simple_graph_set_data (GPM_SIMPLE_GRAPH (graph_data->widget), graph_data->graph_data);
+
+		/* set the x-axis to the time that we have been sampling for */
+		max_time = (GPM_INFO_HARDWARE_POLL * g_list_length (graph_data->log_data)) / 60;
+		if (max_time < 10) {
 			max_time = 10;
 		}
-		gpm_simple_graph_set_stop_x (GPM_SIMPLE_GRAPH (widget), max_time);
+		gpm_simple_graph_set_stop_x (GPM_SIMPLE_GRAPH (graph_data->widget), max_time);
+
+		/* get the biggest and smallest value of the data */
+		gpm_info_log_find_range (graph_data->log_data, &smallest, &biggest);
+		//gpm_debug ("smallest=%i, biggest=%i", smallest, biggest);
+		if (biggest < 10) {
+			biggest = 10;
+		}
+		gpm_simple_graph_set_stop_y (GPM_SIMPLE_GRAPH (graph_data->widget), biggest);
 	} else {
 		gpm_debug ("no log data");
 	}
 
-	gtk_widget_set_size_request (widget, 600, 300);
-
-	gtk_widget_hide (widget);
-	gtk_widget_show (widget);
+	/* FIXME: There's got to be a better way than this */
+	gtk_widget_hide (graph_data->widget);
+	gtk_widget_show (graph_data->widget);
 }
 
+/** setup the information window */
 void
 gpm_info_show_window (GpmInfo *info)
 {
@@ -230,7 +295,8 @@ gpm_info_show_window (GpmInfo *info)
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (info->priv->main_window);
-	gtk_window_set_icon_name (GTK_WINDOW (info->priv->main_window), "gnome-dev-battery");
+	gtk_window_set_icon_from_file (GTK_WINDOW (info->priv->main_window),
+				       GPM_DATA "gnome-power-manager.png", NULL);
 
 	g_signal_connect (info->priv->main_window, "delete_event",
 			  G_CALLBACK (gpm_info_close_cb), info);
@@ -243,28 +309,35 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_help_cb), info);
 
-	info->priv->graph_percentage = glade_xml_get_widget (glade_xml, "graph_percentage");
+	widget = glade_xml_get_widget (glade_xml, "graph_percentage");
+	gtk_widget_set_size_request (widget, 600, 300);
+	info->priv->percentage->widget = widget;
+	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
 
-	gpm_info_update_graph (info);
-	gpm_info_data_point_print (info->priv->graph_percentage_charge);
+	widget = glade_xml_get_widget (glade_xml, "graph_rate");
+	gtk_widget_set_size_request (widget, 600, 300);
+	info->priv->rate->widget = widget;
+	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
+
+	widget = glade_xml_get_widget (glade_xml, "graph_time");
+	gtk_widget_set_size_request (widget, 600, 300);
+	info->priv->time->widget = widget;
+	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
+
+	gpm_info_graph_update (info->priv->rate);
+	gpm_info_graph_update (info->priv->percentage);
+	gpm_info_graph_update (info->priv->time);
 
 	gtk_widget_show (info->priv->main_window);
 }
 
-/* log data every minute */
-static gboolean
-log_do_poll (gpointer data)
+/** add a scalar point to the graph log */
+static void
+gpm_info_graph_add (GpmInfoGraphData *graph_data, int value)
 {
-	GpmInfo *info = (GpmInfo*) data;
 	int *point;
-
-	GpmPowerBatteryStatus battery_status;
-	gpm_power_get_battery_status (info->priv->power,
-				      GPM_POWER_BATTERY_KIND_PRIMARY,
-				      &battery_status);
 	point = g_new (int, 1);
-	*point = battery_status.percentage_charge;
-
+	*point = value;
 #ifdef DO_TESTING
 	static int auto_inc_val = 0;
 	auto_inc_val++;
@@ -273,23 +346,51 @@ log_do_poll (gpointer data)
 	}
 	*point += auto_inc_val;
 #endif
+	graph_data->log_data = g_list_append (graph_data->log_data,
+					      (gpointer) point);
+}
 
-	info->priv->log_percentage_charge = g_list_append (info->priv->log_percentage_charge,
-							   (gpointer) point);
+/** init log and graph data elements */
+static void
+gpm_info_graph_init (GpmInfoGraphData *graph_data)
+{
+	graph_data->log_data = NULL;
+	graph_data->graph_data = NULL;
+	graph_data->widget = NULL;
+}
+
+/** callback to get the log data every minute */
+static gboolean
+log_do_poll (gpointer data)
+{
+	GpmInfo *info = (GpmInfo*) data;
+
+	GpmPowerBatteryStatus battery_status;
+	gpm_power_get_battery_status (info->priv->power,
+				      GPM_POWER_BATTERY_KIND_PRIMARY,
+				      &battery_status);
+
+	gpm_info_graph_add (info->priv->rate, battery_status.percentage_charge);
+	gpm_info_graph_add (info->priv->percentage, battery_status.charge_rate / 1000);
+	gpm_info_graph_add (info->priv->time, battery_status.remaining_time);
+
 	if (info->priv->main_window) {
-		gpm_info_update_graph (info);
-		gpm_info_data_point_print (info->priv->graph_percentage_charge);
+		gpm_info_graph_update (info->priv->rate);
+		gpm_info_graph_update (info->priv->percentage);
+		gpm_info_graph_update (info->priv->time);
+		//gpm_info_data_point_print (info->priv->rate.graph_data);
 	}
 	return TRUE;
 }
 
-/* logging system needs access to the power stuff */
+/** logging system needs access to the power stuff */
 void
 gpm_info_set_power (GpmInfo *info, GpmPower *power)
 {
 	info->priv->power = power;
 }
 
+/** intialise the class */
 static void
 gpm_info_class_init (GpmInfoClass *klass)
 {
@@ -299,35 +400,36 @@ gpm_info_class_init (GpmInfoClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
 }
 
+/** intialise the object */
 static void
 gpm_info_init (GpmInfo *info)
 {
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
 	info->priv->main_window = NULL;
+
+	info->priv->rate = g_new (GpmInfoGraphData, 1);
+	info->priv->percentage = g_new (GpmInfoGraphData, 1);
+	info->priv->time = g_new (GpmInfoGraphData, 1);
+
+	gpm_info_graph_init (info->priv->rate);
+	gpm_info_graph_init (info->priv->percentage);
+	gpm_info_graph_init (info->priv->time);
+
 	/* set up the timer callback so we can log data every minute */
-	info->priv->log_percentage_charge = NULL;
-	info->priv->graph_percentage_charge = NULL;
 	g_timeout_add (GPM_INFO_HARDWARE_POLL * 1000, log_do_poll, info);
 }
 
+/* free the scalar and x-y elements of a graph */
 static void
-gpm_info_log_free (GList **list)
+gpm_info_graph_free (GpmInfoGraphData *graph_data)
 {
-	if (list == NULL || *list == NULL) {
-		return;
-	}
-	int *data;
-	int a;
-	for (a=0; a<g_list_length (*list); a++) {
-		data = (int*) g_list_nth_data (*list, a);
-		g_free (data);
-	}
-	g_list_free (*list);
-	*list = NULL;
-
+	gpm_info_log_free (graph_data->log_data);
+	gpm_info_data_point_free (graph_data->graph_data);
+	g_free (graph_data);
 }
 
+/** finalise the object */
 static void
 gpm_info_finalize (GObject *object)
 {
@@ -338,13 +440,14 @@ gpm_info_finalize (GObject *object)
 	info = GPM_INFO (object);
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
-	/* free log_percentage_charge elements */
-	gpm_info_log_free (&(info->priv->log_percentage_charge));
-	gpm_info_data_point_free (&(info->priv->graph_percentage_charge));
+	gpm_info_graph_free (info->priv->rate);
+	gpm_info_graph_free (info->priv->percentage);
+	gpm_info_graph_free (info->priv->time);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/** create the object */
 GpmInfo *
 gpm_info_new (void)
 {

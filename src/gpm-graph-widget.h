@@ -30,6 +30,13 @@ typedef struct {
 	int y; //0..100
 } GpmSimpleDataPoint;
 
+typedef enum {
+	GPM_GRAPH_TYPE_PERCENTAGE,
+	GPM_GRAPH_TYPE_TIME,
+	GPM_GRAPH_TYPE_RATE,
+	GPM_GRAPH_TYPE_LAST
+} GpmSimpleGraphAxisType;
+
 struct GpmSimpleGraph
 {
 	GtkDrawingArea		 parent;
@@ -49,6 +56,8 @@ void		 gpm_simple_graph_set_invert_y	(GpmSimpleGraph *graph, gboolean inv);
 void		 gpm_simple_graph_set_stop_x	(GpmSimpleGraph *graph, gint stop);
 void		 gpm_simple_graph_set_stop_y	(GpmSimpleGraph *graph, gint stop);
 void		 gpm_simple_graph_set_data	(GpmSimpleGraph *graph, GList *list);
+void		 gpm_simple_graph_set_axis_x	(GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis);
+void		 gpm_simple_graph_set_axis_y	(GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis);
 
 G_END_DECLS
 

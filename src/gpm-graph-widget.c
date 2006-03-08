@@ -31,11 +31,26 @@ struct GpmSimpleGraphPrivate
 	gint		box_y;
 	gint		box_width;
 	gint		box_height;
-	
+
+	GpmSimpleGraphAxisType axis_x;
+	GpmSimpleGraphAxisType axis_y;
+
 	GList		*list;
 };
 
 static gboolean gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event);
+
+void
+gpm_simple_graph_set_axis_x (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
+{
+	graph->priv->axis_x = axis;
+}
+
+void
+gpm_simple_graph_set_axis_y (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
+{
+	graph->priv->axis_y = axis;
+}
 
 static void
 gpm_simple_graph_class_init (GpmSimpleGraphClass *class)
@@ -59,6 +74,8 @@ gpm_simple_graph_init (GpmSimpleGraph *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->list = NULL;
+	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
+	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
 }
 
 /** Sets the inverse policy for the X axis, i.e. to count from 0..Y or Y..0 */
@@ -99,13 +116,24 @@ gpm_simple_graph_set_data (GpmSimpleGraph *graph, GList *list)
 
 #ifdef HAVE_CAIRO
 static char *
-get_hour (int totalminutes)
+gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 {
-	int hours = totalminutes / 60;
-	int minutes =  totalminutes - (hours * 60);
-	char *text = g_strdup_printf ("%iH%02i", hours, minutes);
+	char *text = NULL;
+	if (axis == GPM_GRAPH_TYPE_TIME) {
+		int hours = value / 60;
+		int minutes =  value - (hours * 60);
+		text = g_strdup_printf ("%iH%02i", hours, minutes);
+	} else if (axis == GPM_GRAPH_TYPE_PERCENTAGE) {
+		text = g_strdup_printf ("%i%%", value);
+	} else if (axis == GPM_GRAPH_TYPE_RATE) {
+		text = g_strdup_printf ("%iWh", value);
+	} else {
+		text = g_strdup_printf ("%i??", value);
+	}		
 	return text;
 }
+
+
 
 static void
 draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
@@ -149,6 +177,7 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	double divwidth  = graph->priv->box_width / 10;
 	double divheight = graph->priv->box_height / 10;
 	gint length_x = graph->priv->stop_x - 0;
+	gint length_y = graph->priv->stop_y - 0;
 
 	cairo_save (cr); /* push stack */
 
@@ -157,7 +186,7 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	options = cairo_font_options_create ();
 	cairo_set_font_options (cr, options);
 
-	/* do time text */
+	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);	
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_x + (a * divwidth);
@@ -167,21 +196,21 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 		} else {
 			value = (length_x / 10) * a;
 		}
-		text = get_hour (value);
+		text = gpm_get_axis_label (graph->priv->axis_x, value);
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
 	
-	/* do percentage text */
+	/* do y text */
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
-		cairo_move_to (cr, graph->priv->box_x - 35, b + 5);
+		cairo_move_to (cr, graph->priv->box_x - 40, b + 5);
 		if (graph->priv->invert_y) {
-			value = a * 10;
+			value = (length_y / 10) * a;
 		} else {
-			value = (10 - a) * 10;
+			value = (length_y / 10) * (10 - a);
 		}
-		text = g_strdup_printf ("%i%%", value);
+		text = gpm_get_axis_label (graph->priv->axis_y, value);
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
@@ -195,8 +224,9 @@ static void
 draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 {
 	int a;
-	double unitx = graph->priv->box_width / 100.f;
-	double unity = graph->priv->box_height / 100.f;
+	/* -2 is so we can keep the lines inside the box at both extremes */
+	double unitx = (graph->priv->box_width - 2)/ 100.f;
+	double unity = (graph->priv->box_height - 2)/ 100.f;
 
 	if (! graph->priv->list) {
 		gpm_debug ("no data");
@@ -236,7 +266,6 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 	cairo_restore (cr); /* pop stack */	
 }
 
-
 static void
 draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
@@ -245,9 +274,9 @@ draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	cairo_save (cr); /* push stack */
 
-	graph->priv->box_x = graph_widget->allocation.x + 40;
+	graph->priv->box_x = graph_widget->allocation.x + 45;
 	graph->priv->box_y = graph_widget->allocation.y + 5;
-	graph->priv->box_width = graph_widget->allocation.width - (5 + 40);
+	graph->priv->box_width = graph_widget->allocation.width - (5 + 45);
 	graph->priv->box_height = graph_widget->allocation.height - (5 + 20);
 
 	/* background */

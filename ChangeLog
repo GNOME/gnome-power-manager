@@ -1,5 +1,20 @@
 2006-03-08  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade: Add the rate and time remaining tabs that use
+	the new graphs. These maybe too much in the UI, but seeing as we get
+	them for free I guess they can't hurt. And they'll be usefull for
+	debugging odd machines.
+
+	* src/gpm-graph-widget.{c|h}: Allow the axes to be changed, and expose
+	these as part of the public API. Also make sure that lines stay within
+	the bounding box.
+
+	* src/gpm-info.c: Add in infrastructure so we can monitor more than one
+	data source, and display on multiple graphs. Loads of fixes, additional
+	comments and cleanups. Also use the new window 16x16 icon.
+
+2006-03-08  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/16x16/gnome-power-manager.png: Add this small icon so we
 	can use it for the window icon for the g-p-p and "About" windows.
 
