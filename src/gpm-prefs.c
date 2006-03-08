@@ -691,7 +691,8 @@ gpm_prefs_create (void)
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
 
-	gtk_window_set_icon_name (GTK_WINDOW (main_window), "gnome-dev-battery");
+	gtk_window_set_icon_from_file (GTK_WINDOW (main_window),
+				       GPM_DATA "gnome-power-manager.png", NULL);
 
 	/* Get the main window quit */
 	g_signal_connect (main_window, "delete_event",

@@ -290,6 +290,8 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 
+	gtk_window_set_default_icon_from_file (GPM_DATA "gnome-power-manager.png", NULL);
+
 	gtk_show_about_dialog (NULL,
 		               "name", GPM_NAME,
 		               "version", VERSION,

@@ -274,7 +274,6 @@ log_do_poll (gpointer data)
 	*point += auto_inc_val;
 #endif
 
-	gpm_debug ("logging percentage_charge: %i", *point);
 	info->priv->log_percentage_charge = g_list_append (info->priv->log_percentage_charge,
 							   (gpointer) point);
 	if (info->priv->main_window) {
