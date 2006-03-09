@@ -83,7 +83,6 @@ typedef struct {
 	GpmPowerBatteryStatus	battery_status;
 	/* List of device udis */
 	GSList  *devices;
-
 } BatteryKindCacheEntry;
 
 typedef struct {
@@ -415,8 +414,8 @@ battery_device_cache_find (GpmPower   *power,
 }
 
 static BatteryKindCacheEntry *
-battery_kind_cache_find (GpmPower   *power,
-			 GpmPowerBatteryKind battery_kind)
+battery_kind_cache_find (GpmPower		*power,
+			 GpmPowerBatteryKind	 battery_kind)
 {
 	BatteryKindCacheEntry *entry;
 
@@ -427,6 +426,120 @@ battery_kind_cache_find (GpmPower   *power,
 	entry = g_hash_table_lookup (power->priv->battery_kind_cache, &battery_kind);
 
 	return entry;
+}
+
+/** returns the number of devices of a specific kind */
+gint
+gpm_power_get_num_devices_of_kind (GpmPower		*power,
+				   GpmPowerBatteryKind	 battery_kind)
+{
+	BatteryKindCacheEntry *entry;
+	if (power->priv->battery_kind_cache == NULL) {
+		return 0;
+	}
+	entry = g_hash_table_lookup (power->priv->battery_kind_cache, &battery_kind);
+	if (entry == NULL) {
+		return 0;
+	}
+	return (g_slist_length (entry->devices));
+}
+
+/** frees the custom array type */
+void
+gpm_power_free_description_array (GArray *array)
+{
+	int a;
+	GpmPowerDescriptionItem *di;
+	for (a=0; a<array->len; a++) {
+		di = &g_array_index (array, GpmPowerDescriptionItem, a);
+		g_free (di->title);
+		g_free (di->value);
+	}
+	g_array_free (array, TRUE);
+}
+
+/** returns in a custom array the device parameters */
+GArray *
+gpm_power_get_description_array (GpmPower		*power,
+				 GpmPowerBatteryKind	 battery_kind,
+				 gint			 device_num)
+{
+	const char              *udi;
+	BatteryDeviceCacheEntry *device;
+	GpmPowerBatteryStatus	*status;
+	GpmPowerDescriptionItem  di;
+
+	GArray *array = g_array_new (FALSE, FALSE, sizeof (GpmPowerDescriptionItem));
+	BatteryKindCacheEntry *entry;
+	if (power->priv->battery_kind_cache == NULL) {
+		return NULL;
+	}
+	entry = g_hash_table_lookup (power->priv->battery_kind_cache, &battery_kind);
+	if (entry == NULL) {
+		return NULL;
+	}
+	if (device_num > g_slist_length (entry->devices) - 1) {
+		return NULL;
+	}
+
+	/* get the udi of the battery we are interested in */
+	udi = (const char *) g_slist_nth_data (entry->devices, device_num);
+
+	/* find the udi in the device cache */
+	device = battery_device_cache_find (power, udi);
+	status = &device->battery_status;
+
+	if (status->is_present == FALSE) {
+		di.title = g_strdup ("Status");
+		di.value = g_strdup ("Missing");
+		g_array_append_vals (array, &di, 1);
+		return array;
+	}
+	if (gpm_power_battery_is_charged (status)) {
+		di.title = g_strdup ("Status:");
+		di.value = g_strdup ("Charged");
+		g_array_append_vals (array, &di, 1);
+	} else if (status->is_charging) {
+		di.title = g_strdup ("Status:");
+		di.value = g_strdup ("Charging");
+		g_array_append_vals (array, &di, 1);
+	} else if (status->is_discharging) {
+		di.title = g_strdup ("Status:");
+		di.value = g_strdup ("Discharging");
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->remaining_time > 0) {
+		di.title = g_strdup ("Remaining time:");
+		di.value = gpm_get_timestring (status->remaining_time);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->percentage_charge > 0) {
+		di.title = g_strdup ("Percentage charge:");
+		di.value = g_strdup_printf ("%i%%", status->percentage_charge);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->current_charge > 0) {
+		di.title = g_strdup ("Current charge:");
+		di.value = g_strdup_printf ("%imW", status->current_charge);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->last_full_charge > 0) {
+		di.title = g_strdup ("Last full charge:");
+		di.value = g_strdup_printf ("%imW", status->last_full_charge);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->design_charge > 0) {
+		di.title = g_strdup ("Design charge:");
+		di.value = g_strdup_printf ("%imW", status->design_charge);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (status->charge_rate > 0) {
+		di.title = g_strdup ("Charge rate:");
+		di.value = g_strdup_printf ("%imWh", status->charge_rate);
+		g_array_append_vals (array, &di, 1);
+	}
+
+	return array;
 }
 
 static void
@@ -445,7 +558,7 @@ battery_kind_cache_update (GpmPower              *power,
 	for (l = entry->devices; l; l = l->next) {
 		const char              *udi;
 		BatteryDeviceCacheEntry *device;
-		GpmPowerBatteryStatus		*device_status;
+		GpmPowerBatteryStatus	*device_status;
 
 		udi = (const char *)l->data;
 

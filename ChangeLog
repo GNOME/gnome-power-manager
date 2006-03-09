@@ -1,3 +1,16 @@
+2006-03-09  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-info.glade: Add some information treeviews.
+
+	* src/gpm-info.c: Create a treeview for each device type so we can
+	display detailed information for each device instance. They need some
+	fixing and love, but I can do that later. They also don't autoupdate.
+
+	* src/gpm-power.{c|h}: Add gpm_power_get_num_devices_of_kind,
+	gpm_power_free_description_array, gpm_power_get_description_array
+	so we can get the detailed information for each device, rather than
+	per class.
+
 2006-03-08  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-info.glade: Add the rate and time remaining tabs that use

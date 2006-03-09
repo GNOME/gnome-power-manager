@@ -57,6 +57,7 @@ struct GpmInfoPrivate
 	GpmInfoGraphData	*percentage;
 	GpmInfoGraphData	*time;
 
+	GladeXML		*glade_xml;
 	GtkWidget		*main_window;
 };
 
@@ -258,7 +259,6 @@ gpm_info_graph_update (GpmInfoGraphData *graph_data)
 
 		/* get the biggest and smallest value of the data */
 		gpm_info_log_find_range (graph_data->log_data, &smallest, &biggest);
-		//gpm_debug ("smallest=%i, biggest=%i", smallest, biggest);
 		if (biggest < 10) {
 			biggest = 10;
 		}
@@ -270,6 +270,111 @@ gpm_info_graph_update (GpmInfoGraphData *graph_data)
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (graph_data->widget);
 	gtk_widget_show (graph_data->widget);
+}
+
+/* pahh, wrong on so many levels. This needs to be fixed */
+static GtkTreeModel *
+create_tree_model (GArray *array)
+{
+	int a;
+	GtkListStore *store;
+	GtkTreeIter iter;
+
+	/* create list store */
+	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+	GpmPowerDescriptionItem *di;
+	/* add data to the list store */
+	for (a=0; a<array->len; a++) {
+		di = &g_array_index (array, GpmPowerDescriptionItem, a);
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    0, di->title,
+				    1, di->value,
+				    -1);
+	}
+	return GTK_TREE_MODEL (store);
+}
+
+/* pahh, wrong on so many levels. This needs to be fixed */
+static void
+create_tree_widget (GtkWidget *widget, GArray *array)
+{
+	GtkTreeModel *model;
+
+	/* create tree model */
+	model = create_tree_model (array);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), model);                             
+	g_object_unref (model);
+
+	/* add columns to the tree view */
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes ("Name", renderer, "text", 0, NULL);
+	gtk_tree_view_column_set_sort_column_id (column, 0);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	renderer = gtk_cell_renderer_text_new ();
+	column = gtk_tree_view_column_new_with_attributes ("Value", renderer, "text", 1, NULL);
+	gtk_tree_view_column_set_sort_column_id (column, 1);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	
+	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
+}
+
+static void
+populate_device_information (GpmInfo *info)
+{
+	int		 number;
+	GtkWidget	*widget;
+	GArray		*array;
+
+	number = gpm_power_get_num_devices_of_kind (info->priv->power,
+						    GPM_POWER_BATTERY_KIND_PRIMARY);
+	gpm_debug ("primary has %i", number);
+	if (number > 0) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
+		array = gpm_power_get_description_array (info->priv->power,
+							 GPM_POWER_BATTERY_KIND_PRIMARY, 0);
+		create_tree_widget (widget, array);
+		gpm_power_free_description_array (array);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary0");
+		gtk_widget_show_all (widget);
+	}
+	if (number > 1) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary1");
+		array = gpm_power_get_description_array (info->priv->power,
+							 GPM_POWER_BATTERY_KIND_PRIMARY, 1);
+		create_tree_widget (widget, array);
+		gpm_power_free_description_array (array);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary1");
+		gtk_widget_show_all (widget);
+	}
+	number = gpm_power_get_num_devices_of_kind (info->priv->power,
+						    GPM_POWER_BATTERY_KIND_UPS);
+	gpm_debug ("ups has %i", number);
+	if (number > 0) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_ups");
+		array = gpm_power_get_description_array (info->priv->power,
+							 GPM_POWER_BATTERY_KIND_UPS, 0);
+		create_tree_widget (widget, array);
+		gpm_power_free_description_array (array);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_ups");
+		gtk_widget_show_all (widget);
+	}
+	number = gpm_power_get_num_devices_of_kind (info->priv->power,
+						    GPM_POWER_BATTERY_KIND_MOUSE);
+	gpm_debug ("mouse has %i", number);
+	if (number > 0) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_mouse");
+		array = gpm_power_get_description_array (info->priv->power,
+							 GPM_POWER_BATTERY_KIND_MOUSE, 0);
+		create_tree_widget (widget, array);
+		gpm_power_free_description_array (array);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
+		gtk_widget_show_all (widget);
+	}
 }
 
 /** setup the information window */
@@ -286,6 +391,7 @@ gpm_info_show_window (GpmInfo *info)
 
 	glade_set_custom_handler (gpm_graph_custom_handler, info);
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-info.glade", NULL, NULL);
+	info->priv->glade_xml = glade_xml;
 	/* don't segfault on missing glade file */
 	if (! glade_xml) {
 		gpm_warning ("gpm-info.glade not found");
@@ -323,6 +429,8 @@ gpm_info_show_window (GpmInfo *info)
 	gtk_widget_set_size_request (widget, 600, 300);
 	info->priv->time->widget = widget;
 	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
+
+	populate_device_information (info);
 
 	gpm_info_graph_update (info->priv->rate);
 	gpm_info_graph_update (info->priv->percentage);
@@ -380,6 +488,9 @@ log_do_poll (gpointer data)
 		gpm_info_graph_update (info->priv->time);
 		//gpm_info_data_point_print (info->priv->rate.graph_data);
 	}
+	
+	/* also update the first tab */
+	//populate_device_information (info);
 	return TRUE;
 }
 

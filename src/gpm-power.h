@@ -49,6 +49,12 @@ typedef struct {
 	gboolean	is_discharging;
 } GpmPowerBatteryStatus;
 
+typedef struct
+{
+	char	*title;
+	char	*value;
+} GpmPowerDescriptionItem;
+
 #define GPM_TYPE_POWER	 	(gpm_power_get_type ())
 #define GPM_POWER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_POWER, GpmPower))
 #define GPM_POWER_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_POWER, GpmPowerClass))
@@ -89,6 +95,13 @@ gboolean	 gpm_power_get_battery_status	(GpmPower		*power,
 gboolean	 gpm_power_get_status_summary	(GpmPower		*power,
 						 char			**summary,
 						 GError			**error);
+gint		 gpm_power_get_num_devices_of_kind (GpmPower		*power,
+						    GpmPowerBatteryKind	 battery_kind);
+GArray		*gpm_power_get_description_array (GpmPower		*power,
+						  GpmPowerBatteryKind	 battery_kind,
+						  gint		 device_num);
+void		 gpm_power_free_description_array (GArray *array);
+
 gboolean	 gpm_power_battery_is_charged	(GpmPowerBatteryStatus	*status);
 const char 	*battery_kind_to_string		(GpmPowerBatteryKind	 battery_kind);
 
