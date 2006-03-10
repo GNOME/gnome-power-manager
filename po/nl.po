@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-07 00:05+0100\n"
-"PO-Revision-Date: 2006-03-07 00:08+0100\n"
+"POT-Creation-Date: 2006-03-10 10:07+0100\n"
+"PO-Revision-Date: 2006-03-10 10:08+0100\n"
 "Last-Translator: Wouter Bolsterlee <uws+gnome@xs4all.nl>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -405,12 +405,12 @@ msgid "Dim the laptop panel when idle"
 msgstr "Het laptopscherm dimmen bij inactiviteit"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "Only display when charging or _discharging"
-msgstr "Alleen weergeven tijdens laden of _ontladen"
+msgid "General"
+msgstr "Algemeen"
 
 #: ../data/gpm-prefs.glade.h:8
-msgid "Options"
-msgstr "Opties"
+msgid "Only display when charging or _discharging"
+msgstr "Alleen weergeven tijdens laden of _ontladen"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Power Management Preferences"
@@ -521,11 +521,11 @@ msgstr "Energiebeheer voor de GNOME-desktop"
 msgid "Do not daemonize"
 msgstr "Niet als daemon uitvoeren"
 
-#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:734
+#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:735
 msgid "Show extra debugging information"
 msgstr "Extra debuginformatie tonen"
 
-#: ../src/gpm-manager.c:822
+#: ../src/gpm-manager.c:824
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
@@ -534,16 +534,16 @@ msgstr ""
 "a> voor veelvoorkomende problemen."
 
 # diepslaap/slaapstand
-#: ../src/gpm-manager.c:824
+#: ../src/gpm-manager.c:826
 msgid "hibernate"
 msgstr "slaapstand"
 
 # diepslaap/slaapstand
-#: ../src/gpm-manager.c:827
+#: ../src/gpm-manager.c:829
 msgid "Hibernate Problem"
 msgstr "Probleem met slaapstand"
 
-#: ../src/gpm-manager.c:879
+#: ../src/gpm-manager.c:881
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -552,15 +552,15 @@ msgstr ""
 "Computer kon niet in de %s worden gezet.\n"
 "Kijk op de <a href=\"%s\">VVV-pagina</a> voor veelvoorkomende problemen."
 
-#: ../src/gpm-manager.c:881
+#: ../src/gpm-manager.c:883
 msgid "suspend"
 msgstr "pauzestand"
 
-#: ../src/gpm-manager.c:884
+#: ../src/gpm-manager.c:886
 msgid "Suspend Problem"
 msgstr "Probleem met pauzestand"
 
-#: ../src/gpm-manager.c:1041 ../src/gpm-manager.c:1247
+#: ../src/gpm-manager.c:1043 ../src/gpm-manager.c:1249
 msgid "Power Information"
 msgstr "Stroom-informatie"
 
@@ -569,28 +569,28 @@ msgstr "Stroom-informatie"
 #
 # bijna lege accu/accu is bijna leeg
 # accu is leeg (oeps, dan wil je snel wat gaan doen...)
-#: ../src/gpm-manager.c:1235
+#: ../src/gpm-manager.c:1237
 msgid "Power Critically Low"
 msgstr "Accu is leeg"
 
-#: ../src/gpm-manager.c:1239
+#: ../src/gpm-manager.c:1241
 msgid "Power Very Low"
 msgstr "Zeer lage accustroom"
 
-#: ../src/gpm-manager.c:1243
+#: ../src/gpm-manager.c:1245
 msgid "Power Low"
 msgstr "Lage accustroom"
 
-#: ../src/gpm-manager.c:1293
+#: ../src/gpm-manager.c:1295
 msgid "Battery Charged"
 msgstr "Accu opgeladen"
 
-#: ../src/gpm-manager.c:1295
+#: ../src/gpm-manager.c:1297
 msgid "Your battery is now fully charged"
 msgstr "De accu is nu volledig opgeladen"
 
 # onder het kritieke niveau/bijna leeg
-#: ../src/gpm-manager.c:1332
+#: ../src/gpm-manager.c:1334
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -599,7 +599,7 @@ msgstr ""
 "<b>afgesloten</b> als de accu leeg is."
 
 # onder het kritieke niveau/bijna leeg
-#: ../src/gpm-manager.c:1336
+#: ../src/gpm-manager.c:1338
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -610,7 +610,7 @@ msgstr ""
 "de computer in de pauzestand te houden."
 
 # onder het kritieke niveau/bijna leeg
-#: ../src/gpm-manager.c:1341
+#: ../src/gpm-manager.c:1343
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -619,7 +619,7 @@ msgstr ""
 "slaapstand worden gezet."
 
 # onder het kritieke niveau/bijna leeg
-#: ../src/gpm-manager.c:1344
+#: ../src/gpm-manager.c:1346
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -628,17 +628,17 @@ msgstr ""
 
 # vrij vertaald
 # onder het kritieke niveau/bijna leeg
-#: ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1353
 msgid "Critical action"
 msgstr "Actie wanneer accu onder het kritieke niveau is"
 
 # loopt nu op batterijen/gebruikt nu accustroom
 # computer ipv systeem
-#: ../src/gpm-manager.c:1373
+#: ../src/gpm-manager.c:1375
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Er is geen netstroom meer. De computer gebruikt nu de accu."
 
-#: ../src/gpm-manager.c:1378
+#: ../src/gpm-manager.c:1380
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -648,11 +648,11 @@ msgstr ""
 "netstroomsadapter aan om dataverlies te voorkomen."
 
 # draait/loopt op batterijen/gebruikt batterijen/batterijstroom
-#: ../src/gpm-manager.c:1442
+#: ../src/gpm-manager.c:1444
 msgid "Your system is running on backup power!"
 msgstr "Uw computer gebruikt nu reservestroom!"
 
-#: ../src/gpm-manager.c:1445
+#: ../src/gpm-manager.c:1447
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -661,7 +661,7 @@ msgstr ""
 "U heeft ongeveer <b>%s</b> resterende UPS (%d%%). De netstroom moet hersteld "
 "worden om dataverlies te voorkomen."
 
-#: ../src/gpm-manager.c:1515
+#: ../src/gpm-manager.c:1517
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -670,64 +670,64 @@ msgstr ""
 "Het %s apparaat aan deze computer heeft weinig stroom meer (%d%%) en zal "
 "stoppen met werken als het niet opgeladen wordt."
 
-#: ../src/gpm-power.c:346
+#: ../src/gpm-power.c:345
 msgid "Laptop battery"
 msgstr "Laptop-accu"
 
-#: ../src/gpm-power.c:348
+#: ../src/gpm-power.c:347
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:350
+#: ../src/gpm-power.c:349
 msgid "Wireless mouse"
 msgstr "Draadloze muis"
 
-#: ../src/gpm-power.c:352
+#: ../src/gpm-power.c:351
 msgid "Wireless keyboard"
 msgstr "Draadloos toetsenbord"
 
-#: ../src/gpm-power.c:354
+#: ../src/gpm-power.c:353
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:356
+#: ../src/gpm-power.c:355
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: ../src/gpm-power.c:661
+#: ../src/gpm-power.c:774
 msgid "fully charged"
 msgstr "volledig opgeladen"
 
-#: ../src/gpm-power.c:667
+#: ../src/gpm-power.c:780
 msgid "remaining"
 msgstr "resterend"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:670
+#: ../src/gpm-power.c:783
 msgid "discharging"
 msgstr "ontladen"
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:790
 msgid "until charged"
 msgstr "tot opgeladen"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:793
 msgid "charging"
 msgstr "opladen"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:714
+#: ../src/gpm-power.c:827
 msgid "Computer is running on backup power\n"
 msgstr "De computer gebruikt nu reservestroom\n"
 
-#: ../src/gpm-power.c:717
+#: ../src/gpm-power.c:830
 msgid "Computer is running on AC power\n"
 msgstr "De computer gebruikt nu netstroom\n"
 
 # draait/loopt op batterijen/gebruikt batterijen/batterijstroom
-#: ../src/gpm-power.c:720
+#: ../src/gpm-power.c:833
 msgid "Computer is running on battery power\n"
 msgstr "De computer gebruikt nu accustroom\n"
 
@@ -844,9 +844,12 @@ msgstr "Nooit"
 msgid "Configuration"
 msgstr "Configuratie"
 
-#: ../src/gpm-prefs.c:747
+#: ../src/gpm-prefs.c:748
 msgid "Power Preferences"
 msgstr "Energiebeheer-voorkeuren"
+
+#~ msgid "Options"
+#~ msgstr "Opties"
 
 #~ msgid "_Always display icon"
 #~ msgstr "_Altijd pictogram weergeven"
