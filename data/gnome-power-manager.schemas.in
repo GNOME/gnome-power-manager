@@ -2,18 +2,6 @@
   <schemalist>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/use_icon_for_desktops</key>
-      <applyto>/apps/gnome-power-manager/use_icon_for_desktops</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>Whether to use an icon for desktop systems</short>
-        <long>Whether or not to use an icon on desktop or systems with no batteries detected</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/use_time_for_policy</key>
       <applyto>/apps/gnome-power-manager/use_time_for_policy</applyto>
       <owner>gnome-power-manager</owner>
@@ -129,7 +117,7 @@
       <default>always</default>
       <locale name="C">
         <short>When to show the notification icon</short>
-        <long>Option when to show the notification icon. Valid options are "never", "critical", "charge" and "always"</long>
+        <long>Option when to show the notification icon. Valid options are "never", "critical", "charge", "present" and "always"</long>
       </locale>
     </schema>
 

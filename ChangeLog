@@ -1,6 +1,21 @@
 2006-03-10  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-info.c, src/gpm-power.c: Add capacity, vendor, model,
+	* data/gnome-power-manager.schemas.in: Remove policy for desktops key,
+	it was just working round missing preferences and nobody knew how to
+	change the value to do what it should do.
+
+	* src/gpm-prefs.(h|c) (setup_icon_policy): Use a key radio button,
+	"Display when battery present" and connect to GUI.
+	Restore the old text for always as it better reflects what the icon
+	policy is. I know we have lots of options now, but people all want
+	different things, and distros keep changing the defaults :-)
+
+	* src/gpm-manager.c (get_stock_id): make logic more sane by using the
+	new "present" key value. Fixes lp:33388
+
+2006-03-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c, src/gpm-power.{c|h}: Add capacity, vendor, model,
 	serial number, technology and product into the device information
 	fields. We get this from HAL when the device is added or coldplugged.
 

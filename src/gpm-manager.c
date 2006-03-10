@@ -60,8 +60,8 @@
 #include "gpm-manager.h"
 
 static void     gpm_manager_class_init (GpmManagerClass *klass);
-static void     gpm_manager_init       (GpmManager      *manager);
-static void     gpm_manager_finalize   (GObject         *object);
+static void     gpm_manager_init	(GpmManager      *manager);
+static void     gpm_manager_finalize   (GObject	  *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
 
@@ -131,11 +131,12 @@ static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 static GConfEnumStringPair icon_policy_enum_map [] = {
-       { GPM_ICON_POLICY_ALWAYS,       "always"   },
-       { GPM_ICON_POLICY_CHARGE,       "charge"   },
-       { GPM_ICON_POLICY_CRITICAL,     "critical" },
-       { GPM_ICON_POLICY_NEVER,        "never"    },
-       { 0, NULL }
+	{ GPM_ICON_POLICY_ALWAYS,	"always"   },
+	{ GPM_ICON_POLICY_PRESENT,	"present"  },
+	{ GPM_ICON_POLICY_CHARGE,	"charge"   },
+	{ GPM_ICON_POLICY_CRITICAL,     "critical" },
+	{ GPM_ICON_POLICY_NEVER,	"never"    },
+	{ 0, NULL }
 };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
@@ -304,7 +305,7 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 /* must free retval */
 static char *
 get_stock_id (GpmManager *manager,
-	      int         icon_policy)
+	      int	  icon_policy)
 {
 	GpmPowerBatteryStatus status_primary;
 	GpmPowerBatteryStatus status_ups;
@@ -312,7 +313,6 @@ get_stock_id (GpmManager *manager,
 	GpmPowerBatteryStatus status_keyboard;
 	gboolean on_ac;
 	gboolean present;
-	gboolean use_fallback;
 
 	gpm_debug ("Getting stock icon for tray");
 
@@ -393,19 +393,15 @@ get_stock_id (GpmManager *manager,
 		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 	}
 
-	/* we have a falback here, so that desktops by default do not have
-	   the icon, but it can be "forced" */
-	use_fallback = gconf_client_get_bool (manager->priv->gconf_client,
-					      GPM_PREF_USE_ICON_DESKTOPS,
-					      NULL);
-	if (use_fallback) {
-		/* we fallback to the ac_adapter icon */
-		gpm_debug ("Using fallback");
-		return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
+	/* Check if we should just fallback to the ac icon */
+	if (icon_policy == GPM_ICON_POLICY_PRESENT) {
+		gpm_debug ("no devices present, so no icon will be displayed.");
+		return NULL;
 	}
-	/* no icon! */
-	gpm_debug ("No devices present, and no fallback, so no icon displayed.");
-	return NULL;
+
+	/* we fallback to the ac_adapter icon */
+	gpm_debug ("Using fallback");
+	return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
 }
 
 static void
@@ -687,8 +683,8 @@ manager_policy_do (GpmManager *manager,
 
 gboolean
 gpm_manager_get_on_ac (GpmManager *manager,
-		       gboolean	  *on_ac,
-		       GError    **error)
+			gboolean	  *on_ac,
+			GError    **error)
 {
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
@@ -786,7 +782,7 @@ gpm_manager_shutdown (GpmManager *manager,
 
 static gboolean
 gpm_manager_hibernate (GpmManager *manager,
-		       GError    **error)
+			GError    **error)
 {
 	gboolean allowed;
 	gboolean ret;
@@ -956,7 +952,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		/* Should we dim the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+							GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* resume to the previous brightness */
 			gpm_brightness_level_resume (manager->priv->brightness);
@@ -979,7 +975,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		/* Should we resume the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+							GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
 			gpm_brightness_level_save (manager->priv->brightness,
@@ -1026,9 +1022,9 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 
 	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (manager,
-		       signals [DPMS_MODE_CHANGED],
-		       0,
-		       gpm_dpms_mode_to_string (mode));
+			signals [DPMS_MODE_CHANGED],
+			0,
+			gpm_dpms_mode_to_string (mode));
 }
 
 static void
@@ -1263,13 +1259,13 @@ manager_critical_action_do (GpmManager *manager)
 /* performs critical action is required, and displays notifications */
 static void
 battery_status_changed_primary (GpmManager	      *manager,
-			        GpmPowerBatteryKind    battery_kind,
+				 GpmPowerBatteryKind    battery_kind,
 				GpmPowerBatteryStatus *battery_status)
 {
 	GpmWarning  warning_type;
 	gboolean    show_notify;
-	char       *message = NULL;
-	char       *remaining = NULL;
+	char	*message = NULL;
+	char	*remaining = NULL;
 	const char *title = NULL;
 	gboolean    on_ac;
 
@@ -1373,7 +1369,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 			if (show_notify) {
 				message = g_strdup_printf (_("The AC Power has been unplugged. "
-						             "The system is now using battery power."));
+							      "The system is now using battery power."));
 				timeout = GPM_NOTIFY_TIMEOUT_SHORT;
 			}
 		} else {
@@ -1400,7 +1396,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 /* displays notifications */
 static void
-battery_status_changed_ups (GpmManager	          *manager,
+battery_status_changed_ups (GpmManager		   *manager,
 			    GpmPowerBatteryKind	   battery_kind,
 			    GpmPowerBatteryStatus *battery_status)
 {
@@ -1530,9 +1526,9 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 }
 
 static void
-power_battery_status_changed_cb (GpmPower	       *power,
+power_battery_status_changed_cb (GpmPower		*power,
 				 GpmPowerBatteryKind	battery_kind,
-				 GpmManager	       *manager)
+				 GpmManager		*manager)
 {
 	GpmPowerBatteryStatus battery_status;
 
@@ -1708,7 +1704,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 
 static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
-			       GpmTrayIcon  *tray)
+				GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received supend signal from tray icon");
 	gpm_manager_set_reason (manager, "user clicked suspend from tray menu");
@@ -1728,7 +1724,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 
 static void
 gpm_manager_tray_icon_show_info (GpmManager   *manager,
-			         GpmTrayIcon  *tray)
+				  GpmTrayIcon  *tray)
 {
 	gpm_debug ("Received show-info signal from tray icon");
 	gpm_info_show_window (manager->priv->info);

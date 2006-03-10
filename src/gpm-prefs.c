@@ -44,11 +44,12 @@
 #include "gpm-debug.h"
 
 static GConfEnumStringPair icon_policy_enum_map [] = {
-       { GPM_ICON_POLICY_ALWAYS,       "always"   },
-       { GPM_ICON_POLICY_CHARGE,       "charge"   },
-       { GPM_ICON_POLICY_CRITICAL,     "critical" },
-       { GPM_ICON_POLICY_NEVER,        "never"    },
-       { 0, NULL }
+	{ GPM_ICON_POLICY_ALWAYS,	"always"   },
+	{ GPM_ICON_POLICY_PRESENT,	"present"  },
+	{ GPM_ICON_POLICY_CHARGE,	"charge"   },
+	{ GPM_ICON_POLICY_CRITICAL,	"critical" },
+	{ GPM_ICON_POLICY_NEVER,	"never"    },
+	{ 0, NULL }
 };
 
 /* The text that should appear in the action combo boxes */
@@ -60,19 +61,18 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
-#define	GPM_DBUS_INTERFACE	        "org.gnome.PowerManager"
+#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
 /* If sleep time in a slider is set to 61 it is considered as never sleep */
 const int NEVER_TIME_ON_SLIDER = 61;
-
 
 static gboolean
 gpm_dbus_method_bool (const char *method)
 {
 	DBusGConnection *connection;
 	DBusGProxy      *proxy;
-	GError          *error;
-	gboolean         value;
+	GError	   *error;
+	gboolean	  value;
 
 	value = FALSE;
 	error = NULL;
@@ -165,7 +165,7 @@ gpm_prefs_help_cb (GtkWidget *widget,
 
 static void
 gpm_prefs_icon_radio_cb (GtkWidget *widget,
-			 int        icon_policy)
+			 int	    icon_policy)
 {
 	GConfClient *client;
 	const char  *str;
@@ -182,7 +182,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 
 static char *
 gpm_prefs_format_brightness_cb (GtkScale *scale,
-				gdouble value)
+				gdouble   value)
 {
 	return g_strdup_printf ("%.0f%%", value);
 }
@@ -204,7 +204,7 @@ gpm_prefs_format_time_cb (GtkScale *scale,
 
 static void
 gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
-				   char *gpm_pref_key)
+				   char     *gpm_pref_key)
 {
 	int value;
 	GConfClient *client;
@@ -225,9 +225,9 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 }
 
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GladeXML *dialog,
-			      char *widget_name,
-			      char *gpm_pref_key)
+gpm_prefs_setup_sleep_slider (GladeXML  *dialog,
+			      char	*widget_name,
+			      char	*gpm_pref_key)
 {
 	GtkWidget *widget;
 	gint value;
@@ -263,7 +263,7 @@ gpm_prefs_setup_sleep_slider (GladeXML *dialog,
 
 static void
 gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
-					char *gpm_pref_key)
+					char	 *gpm_pref_key)
 {
 	gdouble value;
 	GConfClient *client;
@@ -277,8 +277,8 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
 
 static GtkWidget *
 gpm_prefs_setup_brightness_slider (GladeXML *dialog,
-				   char *widget_name,
-				   char *gpm_pref_key)
+				   char     *widget_name,
+				   char     *gpm_pref_key)
 {
 	GtkWidget *widget;
 	int value;
@@ -307,7 +307,7 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog,
 
 static void
 gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
-				   char *gpm_pref_key)
+				   char      *gpm_pref_key)
 {
 	char *value;
 	char *action;
@@ -337,8 +337,8 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 }
 
 static void
-gpm_prefs_setup_action_combo (GtkWidget *widget,
-			      char *gpm_pref_key,
+gpm_prefs_setup_action_combo (GtkWidget   *widget,
+			      char        *gpm_pref_key,
 			      const char **actions)
 {
 	char *value;
@@ -418,8 +418,8 @@ gpm_prefs_checkbox_lock_cb (GtkWidget  *widget,
 	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
 
 	gconf_client_set_bool (client,
-			       gpm_pref_key,
-			       checked, NULL);
+				gpm_pref_key,
+				checked, NULL);
 
 	g_object_unref (client);
 }
@@ -617,9 +617,10 @@ static void
 setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 {
 	GConfClient *client;
-	char        *icon_policy_str;
-	int          icon_policy;
+	char	 *icon_policy_str;
+	int	   icon_policy;
 	GtkWidget   *radiobutton_icon_always;
+	GtkWidget   *radiobutton_icon_present;
 	GtkWidget   *radiobutton_icon_charge;
 	GtkWidget   *radiobutton_icon_critical;
 	GtkWidget   *radiobutton_icon_never;
@@ -633,18 +634,22 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 	g_free (icon_policy_str);
 
 	radiobutton_icon_always = glade_xml_get_widget (xml, "radiobutton_icon_always");
+	radiobutton_icon_present = glade_xml_get_widget (xml, "radiobutton_icon_present");
 	radiobutton_icon_charge = glade_xml_get_widget (xml, "radiobutton_icon_charge");
 	radiobutton_icon_critical = glade_xml_get_widget (xml, "radiobutton_icon_critical");
 	radiobutton_icon_never = glade_xml_get_widget (xml, "radiobutton_icon_never");
 
 	is_writable = gconf_client_key_is_writable (client, GPM_PREF_ICON_POLICY, NULL);
 	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_critical, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
 				      icon_policy == GPM_ICON_POLICY_ALWAYS);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_present),
+				      icon_policy == GPM_ICON_POLICY_PRESENT);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
 				      icon_policy == GPM_ICON_POLICY_CHARGE);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
@@ -657,6 +662,9 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 	g_signal_connect (radiobutton_icon_always, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb),
 			  (gpointer)GPM_ICON_POLICY_ALWAYS);
+	g_signal_connect (radiobutton_icon_present, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb),
+			  (gpointer)GPM_ICON_POLICY_PRESENT);
 	g_signal_connect (radiobutton_icon_charge, "clicked",
 			  G_CALLBACK (gpm_prefs_icon_radio_cb),
 			  (gpointer)GPM_ICON_POLICY_CHARGE);
@@ -692,7 +700,7 @@ gpm_prefs_create (void)
 	gtk_widget_hide (main_window);
 
 	gtk_window_set_icon_from_file (GTK_WINDOW (main_window),
-				       GPM_DATA "gnome-power-manager.png", NULL);
+					GPM_DATA "gnome-power-manager.png", NULL);
 
 	/* Get the main window quit */
 	g_signal_connect (main_window, "delete_event",
@@ -728,7 +736,7 @@ main (int argc, char **argv)
 {
 	GtkWidget *dialog;
 	gboolean   verbose = FALSE;
-	gint       i;
+	gint	i;
 
 	struct poptOption options[] = {
 		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
