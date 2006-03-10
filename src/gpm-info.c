@@ -272,18 +272,17 @@ gpm_info_graph_update (GpmInfoGraphData *graph_data)
 	gtk_widget_show (graph_data->widget);
 }
 
-/* pahh, wrong on so many levels. This needs to be fixed */
-static GtkTreeModel *
-create_tree_model (GArray *array)
+/** update the tree widget with new data */
+static void
+update_tree_widget (GtkWidget *widget, GArray *array)
 {
 	int a;
 	GtkListStore *store;
-	GtkTreeIter iter;
+	GtkTreeIter   iter;
+	GpmPowerDescriptionItem *di;
 
-	/* create list store */
 	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-	GpmPowerDescriptionItem *di;
 	/* add data to the list store */
 	for (a=0; a<array->len; a++) {
 		di = &g_array_index (array, GpmPowerDescriptionItem, a);
@@ -293,19 +292,14 @@ create_tree_model (GArray *array)
 				    1, di->value,
 				    -1);
 	}
-	return GTK_TREE_MODEL (store);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));                             
+	g_object_unref (store);
 }
 
-/* pahh, wrong on so many levels. This needs to be fixed */
+/** create the tree widget */
 static void
-create_tree_widget (GtkWidget *widget, GArray *array)
+create_tree_widget (GtkWidget *widget)
 {
-	GtkTreeModel *model;
-
-	/* create tree model */
-	model = create_tree_model (array);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), model);                             
-	g_object_unref (model);
 
 	/* add columns to the tree view */
 	GtkCellRenderer *renderer;
@@ -332,12 +326,11 @@ populate_device_information (GpmInfo *info)
 
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
 						    GPM_POWER_BATTERY_KIND_PRIMARY);
-	gpm_debug ("primary has %i", number);
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
 		array = gpm_power_get_description_array (info->priv->power,
 							 GPM_POWER_BATTERY_KIND_PRIMARY, 0);
-		create_tree_widget (widget, array);
+		update_tree_widget (widget, array);
 		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary0");
 		gtk_widget_show_all (widget);
@@ -346,31 +339,29 @@ populate_device_information (GpmInfo *info)
 		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary1");
 		array = gpm_power_get_description_array (info->priv->power,
 							 GPM_POWER_BATTERY_KIND_PRIMARY, 1);
-		create_tree_widget (widget, array);
+		update_tree_widget (widget, array);
 		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary1");
 		gtk_widget_show_all (widget);
 	}
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
 						    GPM_POWER_BATTERY_KIND_UPS);
-	gpm_debug ("ups has %i", number);
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_ups");
 		array = gpm_power_get_description_array (info->priv->power,
 							 GPM_POWER_BATTERY_KIND_UPS, 0);
-		create_tree_widget (widget, array);
+		update_tree_widget (widget, array);
 		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_ups");
 		gtk_widget_show_all (widget);
 	}
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
 						    GPM_POWER_BATTERY_KIND_MOUSE);
-	gpm_debug ("mouse has %i", number);
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_mouse");
 		array = gpm_power_get_description_array (info->priv->power,
 							 GPM_POWER_BATTERY_KIND_MOUSE, 0);
-		create_tree_widget (widget, array);
+		update_tree_widget (widget, array);
 		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
 		gtk_widget_show_all (widget);
@@ -430,6 +421,15 @@ gpm_info_show_window (GpmInfo *info)
 	info->priv->time->widget = widget;
 	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
 
+	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
+	create_tree_widget (widget);
+	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary1");
+	create_tree_widget (widget);
+	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_ups");
+	create_tree_widget (widget);
+	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_mouse");
+	create_tree_widget (widget);
+
 	populate_device_information (info);
 
 	gpm_info_graph_update (info->priv->rate);
@@ -487,10 +487,10 @@ log_do_poll (gpointer data)
 		gpm_info_graph_update (info->priv->percentage);
 		gpm_info_graph_update (info->priv->time);
 		//gpm_info_data_point_print (info->priv->rate.graph_data);
+		/* also update the first tab */
+		populate_device_information (info);
 	}
 	
-	/* also update the first tab */
-	//populate_device_information (info);
 	return TRUE;
 }
 
