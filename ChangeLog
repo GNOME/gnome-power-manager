@@ -1,5 +1,13 @@
 2006-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c, src/gpm-power.c: Add capacity, vendor, model,
+	serial number, technology and product into the device information
+	fields. We get this from HAL when the device is added or coldplugged.
+
+	* src/gpm-hal.c: Make the missing keys warning a bit quieter.
+
+2006-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: Do some fixing, and make autoupdate.
 
 2006-03-09  Richard Hughes  <richard@hughsie.com>

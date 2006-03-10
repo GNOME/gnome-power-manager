@@ -345,7 +345,7 @@ gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, value, G_TYPE_INVALID)) {
 		if (error) {
-			gpm_debug ("Error: %s", error->message);
+			gpm_debug ("%s", error->message);
 			g_error_free (error);
 		}
 		*value = FALSE;
@@ -383,7 +383,7 @@ gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_STRING, value, G_TYPE_INVALID)) {
 		if (error) {
-			gpm_debug ("Error: %s", error->message);
+			gpm_debug ("%s", error->message);
 			g_error_free (error);
 		}
 		*value = NULL;
@@ -419,7 +419,7 @@ gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_INT, value, G_TYPE_INVALID)) {
 		if (error) {
-			gpm_debug ("Error: %s", error->message);
+			gpm_debug ("%s", error->message);
 			g_error_free (error);
 		}
 		*value = 0;
@@ -454,7 +454,7 @@ gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
 				G_TYPE_STRING, capability, G_TYPE_INVALID,
 				G_TYPE_STRV, value, G_TYPE_INVALID)) {
 		if (error) {
-			gpm_debug ("Error: %s", error->message);
+			gpm_debug ("%s", error->message);
 			g_error_free (error);
 		}
 		*value = NULL;

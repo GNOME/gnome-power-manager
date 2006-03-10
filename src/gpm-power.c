@@ -90,6 +90,11 @@ typedef struct {
 	int			charge_rate_previous;
 	GpmPowerBatteryKind	battery_kind;
 	GpmPowerBatteryStatus	battery_status;
+	char		       *product;
+	char		       *vendor;
+	char		       *technology;
+	char		       *serial;
+	char		       *model;
 } BatteryDeviceCacheEntry;
 
 /* Increasing this value will increase the damping effect
@@ -106,6 +111,7 @@ gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 	status->charge_rate = 0;
 	status->percentage_charge = 0;
 	status->remaining_time = 0;
+	status->capacity = 0;
 	status->is_rechargeable = FALSE;
 	status->is_present = FALSE;
 	status->is_charging = FALSE;
@@ -228,11 +234,27 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 			gpm_warning ("could not read your battery's remaining time");
 		}
 	}
+
+	/* calculate the batteries capacity if it is primary and present */
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && status->is_present) {
+		if (status->design_charge > 0 && status->last_full_charge > 0) {
+			float capacity;
+			capacity = status->design_charge / status->last_full_charge;
+			status->capacity = capacity * 100;
+		}
+	}
+
+	/* get other stuff we might need to know */
+	gpm_hal_device_get_string (udi, "info.product", &entry->product);
+	gpm_hal_device_get_string (udi, "info.vendor", &entry->vendor);
+	gpm_hal_device_get_string (udi, "battery.technology", &entry->technology);
+	gpm_hal_device_get_string (udi, "battery.serial", &entry->serial);
+	gpm_hal_device_get_string (udi, "battery.model", &entry->model);
 }
 
 static void
 battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
-				       const char              *key)
+				       const char	      *key)
 {
 	GpmPowerBatteryStatus *status = &entry->battery_status;
 	char *udi = entry->udi;
@@ -310,6 +332,13 @@ battery_device_cache_entry_new_from_udi (const char *udi)
 	entry = g_new0 (BatteryDeviceCacheEntry, 1);
 
 	entry->udi = g_strdup (udi);
+
+	entry->product = NULL;
+	entry->vendor = NULL;
+	entry->technology = NULL;
+	entry->serial = NULL;
+	entry->model = NULL;
+
 	battery_device_cache_entry_update_all (entry);
 
 	return entry;
@@ -373,12 +402,14 @@ battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 		   status->is_charging, status->charge_rate);
 	gpm_debug ("discharge  %i\tremaining  %i", 
 		   status->is_discharging, status->remaining_time);
+	gpm_debug ("capacity   %i", 
+		   status->capacity);
 }
 
 static void
-debug_print_type_cache_iter (gpointer               key,
+debug_print_type_cache_iter (gpointer	       key,
 			     BatteryKindCacheEntry *entry,
-			     gpointer              *user_data)
+			     gpointer	      *user_data)
 {
 	battery_kind_cache_debug_print (entry);
 }
@@ -464,7 +495,7 @@ gpm_power_get_description_array (GpmPower		*power,
 				 GpmPowerBatteryKind	 battery_kind,
 				 gint			 device_num)
 {
-	const char              *udi;
+	const char	        *udi;
 	BatteryDeviceCacheEntry *device;
 	GpmPowerBatteryStatus	*status;
 	GpmPowerDescriptionItem  di;
@@ -487,6 +518,9 @@ gpm_power_get_description_array (GpmPower		*power,
 
 	/* find the udi in the device cache */
 	device = battery_device_cache_find (power, udi);
+	if (device == NULL) {
+		return NULL;
+	}
 	status = &device->battery_status;
 
 	if (status->is_present == FALSE) {
@@ -508,6 +542,31 @@ gpm_power_get_description_array (GpmPower		*power,
 		di.value = g_strdup ("Discharging");
 		g_array_append_vals (array, &di, 1);
 	}
+	if (device->product) {
+		di.title = g_strdup ("Product:");
+		di.value = g_strdup (device->product);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (device->vendor) {
+		di.title = g_strdup ("Vendor:");
+		di.value = g_strdup (device->vendor);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (device->technology) {
+		di.title = g_strdup ("Technology:");
+		di.value = g_strdup (device->technology);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (device->serial) {
+		di.title = g_strdup ("Serial number:");
+		di.value = g_strdup (device->serial);
+		g_array_append_vals (array, &di, 1);
+	}
+	if (device->model) {
+		di.title = g_strdup ("Model:");
+		di.value = g_strdup (device->model);
+		g_array_append_vals (array, &di, 1);
+	}
 	if (status->remaining_time > 0) {
 		di.title = g_strdup ("Remaining time:");
 		di.value = gpm_get_timestring (status->remaining_time);
@@ -518,19 +577,42 @@ gpm_power_get_description_array (GpmPower		*power,
 		di.value = g_strdup_printf ("%i%%", status->percentage_charge);
 		g_array_append_vals (array, &di, 1);
 	}
+	if (status->capacity > 0) {
+		di.title = g_strdup ("Capacity:");
+		di.value = g_strdup_printf ("%i%%", status->capacity);
+		g_array_append_vals (array, &di, 1);
+	}
 	if (status->current_charge > 0) {
 		di.title = g_strdup ("Current charge:");
-		di.value = g_strdup_printf ("%imW", status->current_charge);
+		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
+			/* csr has 7 states always */
+			di.value = g_strdup_printf ("%i/7", status->current_charge);
+		} else {
+			/* assume mWh */
+			di.value = g_strdup_printf ("%imW", status->current_charge);
+		}
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->last_full_charge > 0) {
 		di.title = g_strdup ("Last full charge:");
-		di.value = g_strdup_printf ("%imW", status->last_full_charge);
+		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
+			/* csr has 7 states always */
+			di.value = g_strdup_printf ("%i/7", status->last_full_charge);
+		} else {
+			/* assume mWh */
+			di.value = g_strdup_printf ("%imW", status->last_full_charge);
+		}
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->design_charge > 0) {
 		di.title = g_strdup ("Design charge:");
-		di.value = g_strdup_printf ("%imW", status->design_charge);
+		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
+			/* csr has 7 states always */
+			di.value = g_strdup_printf ("%i/7", status->design_charge);
+		} else {
+			/* assume mWh */
+			di.value = g_strdup_printf ("%imW", status->design_charge);
+		}
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->charge_rate > 0) {
@@ -543,7 +625,7 @@ gpm_power_get_description_array (GpmPower		*power,
 }
 
 static void
-battery_kind_cache_update (GpmPower              *power,
+battery_kind_cache_update (GpmPower	         *power,
 			   BatteryKindCacheEntry *entry)
 {
 	GSList *l;
@@ -556,7 +638,7 @@ battery_kind_cache_update (GpmPower              *power,
 
 	/* iterate thru all the devices to handle multiple batteries */
 	for (l = entry->devices; l; l = l->next) {
-		const char              *udi;
+		const char	      *udi;
 		BatteryDeviceCacheEntry *device;
 		GpmPowerBatteryStatus	*device_status;
 
@@ -644,9 +726,9 @@ battery_kind_cache_update (GpmPower              *power,
 }
 
 static void
-battery_kind_update_cache_iter (const char            *key,
+battery_kind_update_cache_iter (const char	      *key,
 				BatteryKindCacheEntry *entry,
-				GpmPower              *power)
+				GpmPower	      *power)
 {
 	battery_kind_cache_update (power, entry);
 }
@@ -664,7 +746,7 @@ battery_kind_cache_update_all (GpmPower *power)
 }
 
 static void
-battery_device_cache_add_device (GpmPower                *power,
+battery_device_cache_add_device (GpmPower		 *power,
 				 BatteryDeviceCacheEntry *entry)
 {
 	g_hash_table_insert (power->priv->battery_device_cache,
@@ -673,16 +755,22 @@ battery_device_cache_add_device (GpmPower                *power,
 }
 
 static void
-battery_device_cache_remove_device (GpmPower                *power,
+battery_device_cache_remove_device (GpmPower		    *power,
 				    BatteryDeviceCacheEntry *entry)
 {
 	g_hash_table_remove (power->priv->battery_device_cache,
 			     entry->udi);
+	g_free (entry->udi);
+	g_free (entry->product);
+	g_free (entry->vendor);
+	g_free (entry->technology);
+	g_free (entry->serial);
+	g_free (entry->model);
 }
 
 static void
-battery_kind_cache_add_device (GpmPower                *power,
-			       BatteryDeviceCacheEntry *device_entry)
+battery_kind_cache_add_device (GpmPower			*power,
+			       BatteryDeviceCacheEntry	*device_entry)
 {
 	BatteryKindCacheEntry *type_entry;
 
@@ -706,7 +794,7 @@ battery_kind_cache_add_device (GpmPower                *power,
 }
 
 static void
-battery_kind_cache_remove_device (GpmPower                *power,
+battery_kind_cache_remove_device (GpmPower		  *power,
 				  BatteryDeviceCacheEntry *entry)
 {
 	BatteryKindCacheEntry *type_entry;
@@ -735,8 +823,8 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 {
 	BatteryKindCacheEntry *entry;
 	GpmPowerBatteryStatus *status;
-	const char            *type_desc = NULL;
-	char                  *timestring;
+	const char	    *type_desc = NULL;
+	char		  *timestring;
 
 	entry = battery_kind_cache_find (power, battery_kind);
 
@@ -853,7 +941,7 @@ gpm_power_get_status_summary (GpmPower *power,
 /* returns if the device was found in the cache */
 gboolean
 gpm_power_get_battery_status (GpmPower			 *power,
-			      GpmPowerBatteryKind         battery_kind,
+			      GpmPowerBatteryKind	 battery_kind,
 			      GpmPowerBatteryStatus      *battery_status)
 {
 	BatteryKindCacheEntry *entry;
@@ -1040,21 +1128,13 @@ add_battery (GpmPower   *power,
 	 * where capacity is the ratio of the last_full capacity with that of
 	 * the design capacity. (#326740)
 	 */
-	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && status->is_present) {
-	        if (status->design_charge > 0 && status->last_full_charge > 0) {
-	                float capacity;
-	                capacity = status->design_charge / status->last_full_charge;
-	                gpm_debug ("Design: %i, Last full: %i, Capacity: %f",
-	                	   status->design_charge,
-	                	   status->last_full_charge,
-	                	   capacity);
-	                if (capacity < 0.5f) {
-	                        gpm_warning ("Your battery has a very low capacity, "
-	                                     "meaning that it may be old or broken. "
-	                                     "Battery life will be sub-optimal, "
-	                                     "and the time remaining may be incorrect.");
-	                }
-	        }
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
+		if (status->capacity > 0 && status->capacity < 0.5f) {
+			gpm_warning ("Your battery has a very low capacity, "
+				     "meaning that it may be old or broken. "
+				     "Battery life will be sub-optimal, "
+				     "and the time remaining may be incorrect.");
+		}
 	}
 	return TRUE;
 }
@@ -1203,8 +1283,8 @@ gpm_hash_new_device_cache (GpmPower *power)
 	gpm_debug ("creating cache");
 	power->priv->battery_device_cache = g_hash_table_new_full (g_str_hash,
 							   	   g_str_equal,
-							           g_free,
-							           NULL);
+								   g_free,
+								   NULL);
 }
 
 static void

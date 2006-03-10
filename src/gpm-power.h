@@ -43,6 +43,7 @@ typedef struct {
 	int		charge_rate;
 	int		percentage_charge;
 	int		remaining_time;
+	int		capacity;
 	gboolean	is_rechargeable;
 	gboolean	is_present;
 	gboolean	is_charging;
