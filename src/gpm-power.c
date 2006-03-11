@@ -524,66 +524,74 @@ gpm_power_get_description_array (GpmPower		*power,
 	status = &device->battery_status;
 
 	if (status->is_present == FALSE) {
-		di.title = g_strdup ("Status");
-		di.value = g_strdup ("Missing");
+		di.title = g_strdup (_("Status:"));
+		di.value = g_strdup (_("Missing"));
 		g_array_append_vals (array, &di, 1);
 		return array;
 	}
 	if (gpm_power_battery_is_charged (status)) {
-		di.title = g_strdup ("Status:");
-		di.value = g_strdup ("Charged");
+		di.title = g_strdup (_("Status:"));
+		di.value = g_strdup (_("Charged"));
 		g_array_append_vals (array, &di, 1);
 	} else if (status->is_charging) {
-		di.title = g_strdup ("Status:");
-		di.value = g_strdup ("Charging");
+		di.title = g_strdup (_("Status:"));
+		di.value = g_strdup (_("Charging"));
 		g_array_append_vals (array, &di, 1);
 	} else if (status->is_discharging) {
-		di.title = g_strdup ("Status:");
-		di.value = g_strdup ("Discharging");
+		di.title = g_strdup (_("Status:"));
+		di.value = g_strdup (_("Discharging"));
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->product) {
-		di.title = g_strdup ("Product:");
+		di.title = g_strdup (_("Product:"));
 		di.value = g_strdup (device->product);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->vendor) {
-		di.title = g_strdup ("Vendor:");
+		di.title = g_strdup (_("Vendor:"));
 		di.value = g_strdup (device->vendor);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->technology) {
-		di.title = g_strdup ("Technology:");
+		di.title = g_strdup (_("Technology:"));
 		di.value = g_strdup (device->technology);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->serial) {
-		di.title = g_strdup ("Serial number:");
+		di.title = g_strdup (_("Serial number:"));
 		di.value = g_strdup (device->serial);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->model) {
-		di.title = g_strdup ("Model:");
+		di.title = g_strdup (_("Model:"));
 		di.value = g_strdup (device->model);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->remaining_time > 0) {
-		di.title = g_strdup ("Remaining time:");
+		di.title = g_strdup (_("Remaining time:"));
 		di.value = gpm_get_timestring (status->remaining_time);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->percentage_charge > 0) {
-		di.title = g_strdup ("Percentage charge:");
+		di.title = g_strdup (_("Percentage charge:"));
 		di.value = g_strdup_printf ("%i%%", status->percentage_charge);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->capacity > 0) {
-		di.title = g_strdup ("Capacity:");
-		di.value = g_strdup_printf ("%i%%", status->capacity);
+		const char *condition;
+		di.title = g_strdup (_("Capacity:"));
+		if (status->capacity > 99) {
+			condition = _("Very good condition");
+		} else if (status->capacity > 90) {
+			condition = _("Good condition");
+		} else {
+			condition = _("Poor condition");
+		}
+		di.value = g_strdup_printf ("%i%% (%s)", status->capacity, condition);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->current_charge > 0) {
-		di.title = g_strdup ("Current charge:");
+		di.title = g_strdup (_("Current charge:"));
 		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
 			/* csr has 7 states always */
 			di.value = g_strdup_printf ("%i/7", status->current_charge);
@@ -594,7 +602,7 @@ gpm_power_get_description_array (GpmPower		*power,
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->last_full_charge > 0) {
-		di.title = g_strdup ("Last full charge:");
+		di.title = g_strdup (_("Last full charge:"));
 		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
 			/* csr has 7 states always */
 			di.value = g_strdup_printf ("%i/7", status->last_full_charge);
@@ -605,7 +613,7 @@ gpm_power_get_description_array (GpmPower		*power,
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->design_charge > 0) {
-		di.title = g_strdup ("Design charge:");
+		di.title = g_strdup (_("Design charge:"));
 		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
 			/* csr has 7 states always */
 			di.value = g_strdup_printf ("%i/7", status->design_charge);
@@ -616,7 +624,7 @@ gpm_power_get_description_array (GpmPower		*power,
 		g_array_append_vals (array, &di, 1);
 	}
 	if (status->charge_rate > 0) {
-		di.title = g_strdup ("Charge rate:");
+		di.title = g_strdup (_("Charge rate:"));
 		di.value = g_strdup_printf ("%imWh", status->charge_rate);
 		g_array_append_vals (array, &di, 1);
 	}
