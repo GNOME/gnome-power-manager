@@ -18,6 +18,7 @@
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="focus_on_map">True</property>
+  <property name="urgency_hint">False</property>
 
   <child>
     <widget class="GtkVBox" id="vbox3">
@@ -226,7 +227,7 @@
 		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkFrame" id="frame_ups0">
+			<widget class="GtkFrame" id="frame_ups">
 			  <property name="label_xalign">0</property>
 			  <property name="label_yalign">0.5</property>
 			  <property name="shadow_type">GTK_SHADOW_NONE</property>

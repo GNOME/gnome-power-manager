@@ -62,6 +62,13 @@ enum {
 	LAST_SIGNAL
 };
 
+typedef enum {
+	GPM_POWER_UNIT_MWH,
+	GPM_POWER_UNIT_CSR,
+	GPM_POWER_UNIT_PERCENT,
+	GPM_POWER_UNIT_UNKNOWN,
+} GpmPowerBatteryUnit;
+
 enum {
 	PROP_0,
 	PROP_ON_AC
@@ -93,6 +100,7 @@ typedef struct {
 	char		       *product;
 	char		       *vendor;
 	char		       *technology;
+	GpmPowerBatteryUnit	unit;
 	char		       *serial;
 	char		       *model;
 } BatteryDeviceCacheEntry;
@@ -238,9 +246,11 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	/* calculate the batteries capacity if it is primary and present */
 	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY && status->is_present) {
 		if (status->design_charge > 0 && status->last_full_charge > 0) {
-			float capacity;
-			capacity = status->design_charge / status->last_full_charge;
-			status->capacity = capacity * 100;
+			if (status->design_charge != status->last_full_charge) {
+				float capacity;
+				capacity = status->design_charge / status->last_full_charge;
+				status->capacity = capacity * 100;
+			}
 		}
 	}
 
@@ -250,6 +260,17 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	gpm_hal_device_get_string (udi, "battery.technology", &entry->technology);
 	gpm_hal_device_get_string (udi, "battery.serial", &entry->serial);
 	gpm_hal_device_get_string (udi, "battery.model", &entry->model);
+
+	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
+		/* true as not reporting, but charge_level */
+		entry->unit = GPM_POWER_UNIT_MWH;
+	} else if (entry->battery_kind == GPM_POWER_BATTERY_KIND_UPS) {
+		/* is this always correct? */
+		entry->unit = GPM_POWER_UNIT_PERCENT;
+	} else if (entry->battery_kind == GPM_POWER_BATTERY_KIND_MOUSE ||
+		   entry->battery_kind == GPM_POWER_BATTERY_KIND_KEYBOARD) {
+		entry->unit = GPM_POWER_UNIT_CSR;
+	}
 }
 
 static void
@@ -338,6 +359,7 @@ battery_device_cache_entry_new_from_udi (const char *udi)
 	entry->technology = NULL;
 	entry->serial = NULL;
 	entry->model = NULL;
+	entry->unit = GPM_POWER_UNIT_UNKNOWN;
 
 	battery_device_cache_entry_update_all (entry);
 
@@ -489,6 +511,22 @@ gpm_power_free_description_array (GArray *array)
 	g_array_free (array, TRUE);
 }
 
+static const char *
+get_power_unit_suffix (GpmPowerBatteryUnit unit)
+{
+	const char *suffix;
+	if (unit == GPM_POWER_UNIT_MWH) {
+		suffix = "mWh";
+	} else if (unit == GPM_POWER_UNIT_PERCENT) {
+		suffix = "%";
+	} else if (unit == GPM_POWER_UNIT_CSR) {
+		suffix = "/7";
+	} else {
+		suffix = "?";
+	}
+	return suffix;
+}
+
 /** returns in a custom array the device parameters */
 GArray *
 gpm_power_get_description_array (GpmPower		*power,
@@ -496,6 +534,7 @@ gpm_power_get_description_array (GpmPower		*power,
 				 gint			 device_num)
 {
 	const char	        *udi;
+	const char		*suffix;
 	BatteryDeviceCacheEntry *device;
 	GpmPowerBatteryStatus	*status;
 	GpmPowerDescriptionItem  di;
@@ -554,7 +593,17 @@ gpm_power_get_description_array (GpmPower		*power,
 	}
 	if (device->technology) {
 		di.title = g_strdup (_("Technology:"));
-		di.value = g_strdup (device->technology);
+		const char *technology;
+		if (g_ascii_strcasecmp (device->technology, "li-ion") == 0) {
+			technology = _("Lithium ion");
+		} else if (g_ascii_strcasecmp (device->technology, "pbac") == 0) {
+			technology = _("Lead acid");
+		} else {
+			gpm_warning ("Battery type %s not translated, please report!",
+				     device->technology);
+			technology = device->technology;
+		}
+		di.value = g_strdup (technology);
 		g_array_append_vals (array, &di, 1);
 	}
 	if (device->serial) {
@@ -590,43 +639,30 @@ gpm_power_get_description_array (GpmPower		*power,
 		di.value = g_strdup_printf ("%i%% (%s)", status->capacity, condition);
 		g_array_append_vals (array, &di, 1);
 	}
-	if (status->current_charge > 0) {
-		di.title = g_strdup (_("Current charge:"));
-		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
-			/* csr has 7 states always */
-			di.value = g_strdup_printf ("%i/7", status->current_charge);
-		} else {
-			/* assume mWh */
-			di.value = g_strdup_printf ("%imW", status->current_charge);
+	if (device->unit != GPM_POWER_UNIT_PERCENT) {
+		/* no point displaying these if we are measuring in percent */
+		suffix = get_power_unit_suffix (device->unit);
+		if (status->current_charge > 0) {
+			di.title = g_strdup (_("Current charge:"));
+			di.value = g_strdup_printf ("%i%s", status->current_charge, suffix);
+			g_array_append_vals (array, &di, 1);
 		}
-		g_array_append_vals (array, &di, 1);
-	}
-	if (status->last_full_charge > 0) {
-		di.title = g_strdup (_("Last full charge:"));
-		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
-			/* csr has 7 states always */
-			di.value = g_strdup_printf ("%i/7", status->last_full_charge);
-		} else {
-			/* assume mWh */
-			di.value = g_strdup_printf ("%imW", status->last_full_charge);
+		if (status->last_full_charge > 0 &&
+		    status->design_charge != status->last_full_charge) {
+			di.title = g_strdup (_("Last full charge:"));
+			di.value = g_strdup_printf ("%i%s", status->last_full_charge, suffix);
+			g_array_append_vals (array, &di, 1);
 		}
-		g_array_append_vals (array, &di, 1);
-	}
-	if (status->design_charge > 0) {
-		di.title = g_strdup (_("Design charge:"));
-		if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
-			/* csr has 7 states always */
-			di.value = g_strdup_printf ("%i/7", status->design_charge);
-		} else {
-			/* assume mWh */
-			di.value = g_strdup_printf ("%imW", status->design_charge);
+		if (status->design_charge > 0) {
+			di.title = g_strdup (_("Design charge:"));
+			di.value = g_strdup_printf ("%i%s", status->design_charge, suffix);
+			g_array_append_vals (array, &di, 1);
 		}
-		g_array_append_vals (array, &di, 1);
-	}
-	if (status->charge_rate > 0) {
-		di.title = g_strdup (_("Charge rate:"));
-		di.value = g_strdup_printf ("%imWh", status->charge_rate);
-		g_array_append_vals (array, &di, 1);
+		if (status->charge_rate > 0) {
+			di.title = g_strdup (_("Charge rate:"));
+			di.value = g_strdup_printf ("%imWh", status->charge_rate);
+			g_array_append_vals (array, &di, 1);
+		}
 	}
 
 	return array;

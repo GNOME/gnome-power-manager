@@ -1,6 +1,23 @@
 2006-03-11  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-info.c: Better describe capacity, and mark new strings as
+	* data/gpm-info.glade: Fix ups frame name.
+
+	* src/gpm-power.c: Add an enumeration for the unit for each device,
+	as it makes sense to show some values for each unit type and not others
+
+	* src/gpm-power.c: Begin the translate the technology field into known
+	parameters.
+	Ultimately we can feed this information back to HAL, so that hal has a
+	fixed list of types (e.g. "fuel-cell", "lithium", "lead", or "nickel")
+	that it can report as part of the spec. At the moment it's just
+	displaying the internal ACPI name which is varied between manufacturers.
+
+	* src/gpm-power.c: Don't calculate capacity when the last_full is equal
+	to the design value as this just computes useless information.
+
+2006-03-11  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-power.c: Better describe capacity, and mark new strings as
 	translatable.
 
 2006-03-10  Richard Hughes  <richard@hughsie.com>
