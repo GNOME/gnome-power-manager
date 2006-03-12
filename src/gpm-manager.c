@@ -1294,10 +1294,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		}
 	}
 
-	if (battery_status->percentage_charge != manager->priv->last_primary_percentage_change) {
-		/* should we fire an event or something? */
-		manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
-	}
+	manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
 
 	if (! battery_status->is_discharging) {
 		gpm_debug ("%s is not discharging", battery_kind_to_string (battery_kind));
