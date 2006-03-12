@@ -1,3 +1,15 @@
+2006-03-12  Richard Hughes  <richard@hughsie.com>
+
+	* help/C/gnome-power-manager.xml: Remove trailing whitespace throughout
+	the file.
+	Also add a description of suspend and hibernate. Fixes lp:34153.
+
+	* po/POTFILES.in: Add gpm-info.{c|h} and gpm-info.glade.
+	Thanks to Marcel Telka for the email.
+
+	* src/gpm-power.c (gpm_power_get_description_array): Add another
+	description "lion" to the translation table. Thanks to Fabian Zeindl.
+
 2006-03-11  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-info.glade: Fix ups frame name.

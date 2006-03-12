@@ -5,8 +5,8 @@
   <!ENTITY GFDL  SYSTEM "fdl-appendix.xml">
   <!ENTITY app "GNOME Power Manager">
   <!ENTITY application "<application>&app;</application>">
-  <!ENTITY appversion "2.13.91">
-  <!ENTITY manrevision "2.13.91">
+  <!ENTITY appversion "2.13.94">
+  <!ENTITY manrevision "2.13.94">
 ]>
 <!--
       (Do not remove this comment block.)
@@ -15,20 +15,6 @@
   Template version: 2.0 beta
   Template last modified Feb 12, 2002
 -->
-
-
-<!--
-      (Do not remove this comment block.)
-  Version: 0.0.1
-  Last modified: March 23, 2002
-  Maintainers:
-               Laszlo Kovacs  <laszlo.kovacs@sun.com>
-               Dan Mueth      <muet@alumni.uchicago.edu>
-  Translators:
-               (translators put your name and email here)
--->
-
-
 
 <!-- =============Document Header ============================= -->
 <article id="index" lang="en">
@@ -50,7 +36,7 @@
   </copyright>
 
   -->
-  
+
 <!-- An address can be added to the publisher information.  If a role is
      not specified, the publisher/author is the same for all versions of the
      document.  -->
@@ -110,21 +96,21 @@
       </revision>
     </revhistory>
 
-    <legalnotice> 
-      <title>Feedback</title> 
+    <legalnotice>
+      <title>Feedback</title>
       <para>To report a bug or make a suggestion regarding the &app; application or
       this manual, follow the directions in the <ulink url="http://www.gnome.org/projects/gnome-power-manager/"
-	  type="http">GNOME Power Manager Contact Page</ulink>. 
+	  type="http">GNOME Power Manager Contact Page</ulink>.
       </para>
 <!-- Translators may also add here feedback address for translations -->
-    </legalnotice> 
+    </legalnotice>
   </articleinfo>
 
-  <indexterm zone="index"> 
-    <primary>GNOME Power Manager</primary> 
-  </indexterm> 
-  <indexterm zone="index"> 
-    <primary>gnome-power-manager</primary> 
+  <indexterm zone="index">
+    <primary>GNOME Power Manager</primary>
+  </indexterm>
+  <indexterm zone="index">
+    <primary>gnome-power-manager</primary>
   </indexterm>
 
 <!-- ============= Document Body ============================= -->
@@ -141,9 +127,36 @@
   </indexterm>
 
   <para>
-  The &app; session daemon is a power management daemon 
+  The &app; session daemon is a power management daemon
   for the <systemitem>GNOME desktop</systemitem>
   </para>
+
+  <section id="suspend-hibernate-differences">
+    <title>Differences between suspend and hibernate</title>
+    <para>
+      The Suspend state is a power saving feature which is the lowest level of
+      power consumption that preserves program data in the computers memory.
+      When your computer is in the Suspended state, computation will not be
+      performed until normal activity is resumed.
+      It will not resume until signaled by an external event such as a keyboard
+      button press.
+      WARNING: You still use a small amount of battery power whilst suspended,
+      so is not recommended for the low power action.
+      If you remove AC power on a desktop, or run out of battery power on a
+      laptop then you will loose your work.
+      It generally takes a few seconds to suspend and then resume your computer.
+    </para>
+    <para>
+      The Hibernation state saves the complete state of the computer to hard
+      disk and turns off the power, so that the computer appears to be off.
+      It will not resume until signaled by an external event such as a
+      keyboard button press.
+      This is the lowest power sleeping state available.
+      If you remove AC power on a desktop, or run out of battery power on a
+      laptop then work will not be lost.
+      It can take up to a minute or more to hibernate and wake your computer.
+    </para>
+  </section>
 
 </section>
 
@@ -151,7 +164,7 @@
   <title>Using &application;</title>
 
   <para>You can start <application>&app;</application> by doing:
-  </para> 
+  </para>
   <variablelist>
     <varlistentry>
       <term>Command line</term>
@@ -166,41 +179,41 @@
   When you start &application;, the following notifications may be displayed.
   </para>
 
-  <figure> 
-    <title>&app; Notification when AC adapter is removed</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-unplugged.png" format="PNG"/> 
+  <figure>
+    <title>&app; Notification when AC adapter is removed</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-unplugged.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
-  <figure> 
-    <title>&app; Notification when laptop primary button is fully charged</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-charged.png" format="PNG"/> 
+  <figure>
+    <title>&app; Notification when laptop primary button is fully charged</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-charged.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
-  <figure> 
-    <title>&app; Notification when the system power is critically low</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/> 
+  <figure>
+    <title>&app; Notification when the system power is critically low</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
-  <figure> 
-    <title>&app; Notification when battery power is low</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-low.png" format="PNG"/> 
+  <figure>
+    <title>&app; Notification when battery power is low</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-low.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
   <figure>
     <title>&application; on Startup</title>
@@ -235,32 +248,32 @@
   This allows admins to lock-down the actions that a user can select.
   </para>
 
-  <figure id="prefs-main"> 
-    <title>&app; AC Power Tab</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-prefs-ac.png" format="PNG"/> 
+  <figure id="prefs-main">
+    <title>&app; AC Power Tab</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-prefs-ac.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
-  <figure id="prefs-options"> 
-    <title>&app; Battery Power Tab</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-prefs-battery.png" format="PNG"/> 
+  <figure id="prefs-options">
+    <title>&app; Battery Power Tab</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-prefs-battery.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
-  <figure id="prefs-advanced"> 
-    <title>&app; Options Tab</title> 
-    <screenshot> 
-      <mediaobject> 
-        <imageobject><imagedata fileref="figures/gpm-prefs-options.png" format="PNG"/> 
+  <figure id="prefs-advanced">
+    <title>&app; Options Tab</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-prefs-options.png" format="PNG"/>
         </imageobject>
-      </mediaobject> 
-    </screenshot> 
+      </mediaobject>
+    </screenshot>
   </figure>
 </section>
 
@@ -312,7 +325,7 @@
 </section>
 
 <!-- ============= Bugs ================================== -->
-<!-- You can use it to describe known bugs and limitations of the 
+<!-- You can use it to describe known bugs and limitations of the
      program. -->
 <section id="known-bugs">
   <title>Known Bugs and Limitations</title>
@@ -325,14 +338,14 @@
       Your computer still uses a small amount of charge even whilst suspended.
       If "Suspend" is chosen as the policy option for the battery critical low,
       and the power completely runs out when sleeping, your work may be lost.
-      See bug <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=330267" type="http">#330267</ulink> 
+      See bug <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=330267" type="http">#330267</ulink>
       or more details.
       </para>
    </section>
 </section>
 
 <section id="about">
-  <title>About &app;</title> 
+  <title>About &app;</title>
   <para>
   &app; was written by Richard Hughes (<email>richard@hughsie.com</email>).
   To find more information about &app;, please visit the

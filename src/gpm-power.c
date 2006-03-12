@@ -594,9 +594,10 @@ gpm_power_get_description_array (GpmPower		*power,
 	if (device->technology) {
 		di.title = g_strdup (_("Technology:"));
 		const char *technology;
-		if (g_ascii_strcasecmp (device->technology, "li-ion") == 0) {
+		if (strcasecmp (device->technology, "li-ion") == 0 ||
+		    strcasecmp (device->technology, "lion") == 0) {
 			technology = _("Lithium ion");
-		} else if (g_ascii_strcasecmp (device->technology, "pbac") == 0) {
+		} else if (strcasecmp (device->technology, "pbac") == 0) {
 			technology = _("Lead acid");
 		} else {
 			gpm_warning ("Battery type %s not translated, please report!",
