@@ -113,8 +113,10 @@ struct GpmManagerPrivate
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
 
-	const char	*reason;
+	time_t           last_resume_event;
+	int		 suppress_policy_timeout;
 
+	const char	*reason;
 };
 
 enum {
@@ -171,6 +173,19 @@ gpm_manager_error_quark (void)
 	}
 
 	return quark;
+}
+
+/* Returns if an action is valid, i.e. if the difference in time between this
+   request for an action, and the last action completing is larger than the
+   timeout set in gconf. This should fix lots of ACPI bugs we are having. */
+static gboolean
+gpm_manager_is_policy_timout_valid (GpmManager *manager)
+{
+	if ((time (NULL) - manager->priv->last_resume_event) <=
+	    manager->priv->suppress_policy_timeout) {
+		return FALSE;
+	}
+	return TRUE;
 }
 
 gboolean
@@ -642,6 +657,11 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed policy event");
+		return;
+	}
+
 	if (strcmp (action, ACTION_NOTHING) == 0) {
 
 		gpm_debug ("*ACTION* Doing nothing");
@@ -834,6 +854,9 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 	gpm_networkmanager_wake ();
 
+	/* save the time that we resumed */
+	manager->priv->last_resume_event = time (NULL);
+
 	return ret;
 }
 
@@ -890,6 +913,9 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_screensaver_poke ();
 	}
 	gpm_networkmanager_wake ();
+
+	/* save the time that we resumed */
+	manager->priv->last_resume_event = time (NULL);
 
 	return ret;
 }
@@ -989,6 +1015,10 @@ idle_changed_cb (GpmIdle    *idle,
 	case GPM_IDLE_MODE_SYSTEM:
 		gpm_debug ("Idle state changed: SYSTEM");
 
+		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+			gpm_debug ("Skipping suppressed timeout action");
+			return;
+		}
 		/* can only be hibernate or suspend */
 		gpm_manager_set_reason (manager, "the system state is idle");
 		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE);
@@ -1046,6 +1076,10 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed power button press");
+		return;
+	}
 	gpm_debug ("power button pressed");
 	gpm_manager_set_reason (manager, "the power button has been pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_POWER);
@@ -1055,6 +1089,10 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed suspend button press");
+		return;
+	}
 	gpm_debug ("suspend button pressed");
 	gpm_manager_set_reason (manager, "the suspend button has been pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND);
@@ -1064,6 +1102,10 @@ static void
 hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed hibernate button press");
+		return;
+	}
 	gpm_debug ("hibernate button pressed");
 	gpm_manager_set_reason (manager, "the hibernate button has been pressed");
 	manager_policy_do (manager, GPM_PREF_BUTTON_HIBERNATE);
@@ -1317,6 +1359,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 	if (warning_type == GPM_WARNING_ACTION) {
 		const char *warning = NULL;
 		const char *action;
+
+		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+			gpm_debug ("Skipping suppressed critical action");
+			return;
+		}
 
 		/* we have to do different warnings depending on the policy */
 		action = gconf_client_get_string (manager->priv->gconf_client,
@@ -1686,6 +1733,11 @@ callback_gconf_key_changed (GConfClient *client,
 	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
 		gpm_manager_can_hibernate (manager, &enabled, NULL);
 		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+
+	} else if (strcmp (entry->key, GPM_PREF_POLICY_TIMEOUT) == 0) {
+		manager->priv->suppress_policy_timeout =
+			gconf_client_get_int (manager->priv->gconf_client,
+				  	      GPM_PREF_POLICY_TIMEOUT, NULL);
 	}
 }
 
@@ -1694,6 +1746,10 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed hibernate signal");
+		return;
+	}
 	gpm_debug ("Received hibernate signal from tray icon");
 	gpm_manager_set_reason (manager, "user clicked hibernate from tray menu");
 	gpm_manager_hibernate (manager, NULL);
@@ -1703,6 +1759,10 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 				GpmTrayIcon  *tray)
 {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed suspend signal");
+		return;
+	}
 	gpm_debug ("Received supend signal from tray icon");
 	gpm_manager_set_reason (manager, "user clicked suspend from tray menu");
 	gpm_manager_suspend (manager, NULL);
@@ -1841,12 +1901,18 @@ gpm_manager_init (GpmManager *manager)
 	   time_remaining is therefore inaccurate or just plain wrong. */
 	use_time = gconf_client_get_bool (manager->priv->gconf_client,
 					  GPM_PREF_USE_TIME_POLICY, NULL);
+	manager->priv->use_time_to_notify = use_time;
 	if (use_time) {
 		gpm_debug ("Using per-time notification policy");
 	} else {
 		gpm_debug ("Using percentage notification policy");
 	}
-	manager->priv->use_time_to_notify = use_time;
+	
+	manager->priv->suppress_policy_timeout =
+		gconf_client_get_int (manager->priv->gconf_client,
+				      GPM_PREF_POLICY_TIMEOUT, NULL);
+	gpm_debug ("Using a supressed policy timeout of %i seconds",
+		   manager->priv->suppress_policy_timeout);
 }
 
 static void

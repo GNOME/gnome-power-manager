@@ -1,3 +1,17 @@
+2006-03-13  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
+	/apps/gnome-power-manager/policy_suppression_timeout so we can start to
+	ignore events after we have returned from suspend/hibernate.
+
+	* src/gpm-manager.c (gpm_manager_is_policy_timout_valid): Add
+	functionality so we can ignore events from resume.
+	This is adapted from the ubuntu mega-patch by Daniel Silverstone.
+	This should fix rh:185273.
+
+	* src/gpm-prefs.c (gpm_has_batteries): Only match primary batteries.
+	This is to fix the battery tab appearing when a CSR mouse is inserted.
+
 2006-03-12  Dennis Cranston  <dennis_cranston@yahoo.com>
 
 	* data/gpm-prefs.glade:  HIG fixes:  spacing and capitalization

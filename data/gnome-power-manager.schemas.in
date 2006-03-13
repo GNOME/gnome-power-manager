@@ -2,6 +2,16 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/policy_suppression_timeout</key>
+      <applyto>/apps/gnome-power-manager/policy_suppression_timeout</applyto>
+      <type>int</type>
+      <default>5</default>
+      <locale name="C">
+        <short>Number of seconds to suppress policy after resume</short>
+        <long>After resume, gnome-power-manager will suppress policy actions for a number of seconds to allow messages to settle and HAL to refresh. Commonly five seconds is enough while not being so long that the user gets confused.</long>
+      </locale>
+    </schema>
+    <schema>
       <key>/schemas/apps/gnome-power-manager/use_time_for_policy</key>
       <applyto>/apps/gnome-power-manager/use_time_for_policy</applyto>
       <owner>gnome-power-manager</owner>

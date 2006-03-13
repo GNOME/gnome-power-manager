@@ -123,9 +123,9 @@ static gboolean
 gpm_has_batteries (void)
 {
 	gboolean value;
-
-	value = gpm_hal_num_devices_of_capability ("battery") > 0;
-
+	value = gpm_hal_num_devices_of_capability_with_value ("battery",
+							      "battery.type",
+							      "primary");
 	return value;
 }
 
@@ -447,13 +447,14 @@ gpm_prefs_setup_checkbox (GtkWidget *widget,
 }
 
 static void
-setup_battery_sliders (GladeXML *xml, gboolean has_batteries)
+setup_battery_sliders (GladeXML *xml)
 {
 	GtkWidget   *label_batteries_display;
 	GtkWidget   *slider_batteries_display;
 	GtkWidget   *label_batteries_brightness;
 	GtkWidget   *slider_batteries_brightness;
 	gboolean     can_set_brightness;
+	gboolean     has_batteries = gpm_has_batteries ();
 
 	if (! has_batteries) {
 		/* no point */
@@ -483,12 +484,13 @@ setup_battery_sliders (GladeXML *xml, gboolean has_batteries)
 }
 
 static void
-setup_ac_sliders (GladeXML *xml, gboolean has_batteries)
+setup_ac_sliders (GladeXML *xml)
 {
 	GtkWidget   *widget;
 	GtkWidget   *label_ac_brightness;
 	GtkWidget   *slider_ac_brightness;
 	gboolean     can_set_brightness;
+	gboolean     has_batteries = gpm_has_batteries ();
 
 	/* Sleep time on AC */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
@@ -574,7 +576,7 @@ setup_ac_actions (GladeXML *xml)
 }
 
 static void
-setup_battery_actions (GladeXML *xml, gboolean has_batteries)
+setup_battery_actions (GladeXML *xml)
 {
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
@@ -583,6 +585,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
+	gboolean      has_batteries = gpm_has_batteries ();
 
 	if (! has_batteries) {
 		/* no point */
@@ -614,7 +617,7 @@ setup_battery_actions (GladeXML *xml, gboolean has_batteries)
 }
 
 static void
-setup_icon_policy (GladeXML *xml, gboolean has_batteries)
+setup_icon_policy (GladeXML *xml)
 {
 	GConfClient *client;
 	char	 *icon_policy_str;
@@ -625,6 +628,7 @@ setup_icon_policy (GladeXML *xml, gboolean has_batteries)
 	GtkWidget   *radiobutton_icon_critical;
 	GtkWidget   *radiobutton_icon_never;
 	gboolean     is_writable;
+	gboolean     has_batteries = gpm_has_batteries ();
 
 	client = gconf_client_get_default ();
 
@@ -714,16 +718,15 @@ gpm_prefs_create (void)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), NULL);
 
-	has_batteries = gpm_has_batteries ();
-
-	setup_icon_policy (glade_xml, has_batteries);
+	setup_icon_policy (glade_xml);
 	setup_ac_actions (glade_xml);
-	setup_ac_sliders (glade_xml, has_batteries);
-	setup_battery_actions (glade_xml, has_batteries);
-	setup_battery_sliders (glade_xml, has_batteries);
+	setup_ac_sliders (glade_xml);
+	setup_battery_actions (glade_xml);
+	setup_battery_sliders (glade_xml);
 	setup_sleep_type (glade_xml);
 
 	/* if no options then disable frame as it will be empty */
+	has_batteries = gpm_has_batteries ();
 	if (! has_batteries) {
 		widget = glade_xml_get_widget (glade_xml, "gpm_notebook");
 		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 1);

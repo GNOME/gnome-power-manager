@@ -62,6 +62,9 @@ G_BEGIN_DECLS
 #define GPM_PREF_IDLE_CHECK_NET		GPM_PREF_DIR "/check_type_net"
 #define GPM_PREF_IDLE_DIM_SCREEN	GPM_PREF_DIR "/dim_on_idle"
 
+/* This allows us to ignore policy on resume for a bit */
+#define GPM_PREF_POLICY_TIMEOUT         GPM_PREF_DIR "/policy_suppression_timeout"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,
