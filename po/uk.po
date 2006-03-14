@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-05 16:08+0000\n"
+"POT-Creation-Date: 2006-03-14 08:43+0000\n"
 "PO-Revision-Date: 2005-08-09 18:18+0300\n"
 "Last-Translator: Maxim V. Dziumanenko <mvd@mylinux.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -36,133 +36,144 @@ msgid "Power management daemon"
 msgstr "Налаштовування керування живленням"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:2
 #, fuzzy
 msgid "Battery critical low action"
 msgstr "Рівень заряду батареї критичний нижче:"
 
-#: ../data/gnome-power-manager.schemas.in.h:2
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Check CPU load before sleeping"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check network utilization before sleeping"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Dim the screen after a period of inactivity"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:6
 #, fuzzy
 msgid "Hibernate button action"
 msgstr "засипання"
 
-#: ../data/gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:7
 #, fuzzy
 msgid "Hibernate enabled"
 msgstr "Заснути"
 
-#: ../data/gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid "LCD brightness when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "LCD brightness when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:10
 #, fuzzy
 msgid "Laptop lid close action on battery"
 msgstr "При закриванні екрану ноутбука:"
 
-#: ../data/gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:11
 #, fuzzy
 msgid "Laptop lid close action when on AC"
 msgstr "При закриванні екрану ноутбука:"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid "Lock screen on hibernate"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid "Lock screen on suspend"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "Lock screen when it is blanked"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "Notify on a HAL suspend or hibernate error."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:16
 #, fuzzy
 msgid "Notify on fully charged"
 msgstr "повністю перезаряджено"
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:17
 #, fuzzy
 msgid "Notify when AC adapter is removed"
 msgstr "Адаптер живлення від змінного струму видалено"
 
-#: ../data/gnome-power-manager.schemas.in.h:17
-msgid ""
-"Option when to show the notification icon. Valid options are \"never\", "
-"\"critical\", \"charge\" and \"always\""
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"Option when to show the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\""
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:20
 #, fuzzy
 msgid "Power button action"
 msgstr "<b>Область сповіщення</b>"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "Sleep timeout computer when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "Sleep timeout computer when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "Sleep timeout display when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "Sleep timeout display when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "Suspend button action"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:26
 #, fuzzy
 msgid "Suspend enabled"
 msgstr "Призупинити"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid ""
 "The action to take when the battery is critically low. Valid values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:28
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "При закриванні екрану ноутбука:"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:29
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "При закриванні екрану ноутбука:"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
 msgid ""
 "The action to take when the system hibernate button is pressed. Valid values "
@@ -170,14 +181,14 @@ msgid ""
 "\"."
 msgstr "При натисканні кнопки засипання:"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:31
 #, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Valid values are "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 msgstr "При натисканні кнопки засипання:"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:32
 #, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Valid values "
@@ -185,130 +196,120 @@ msgid ""
 "\"."
 msgstr "При натисканні кнопки засипання:"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "The brightness of the display when on AC power. Valid values are between 0 "
 "and 100."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "The brightness of the display when on battery power. Valid values are "
 "between 0 and 100."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "The number of seconds before the display goes to sleep when the computer is "
 "on AC power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "The number of seconds the computer on AC power needs to be inactive before "
 "it goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "The number of seconds the computer on battery power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid ""
 "The number of seconds the computer on battery power needs to be inactive "
 "before the display goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Valid values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Use gnome-screensaver lock setting"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:41
 #, fuzzy
 msgid "When to show the notification icon"
 msgstr "Подвійне клацання на значку області сповіщення:"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid ""
 "Whether or not a notification message is displayed if the HAL action "
 "(suspend or hibernate) fails"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid ""
 "Whether or not a notification message is displayed when the battery is fully "
 "charged"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid ""
 "Whether or not the screen is locked when the screen is turned off. NOTE this "
 "option is only used if lock_use_screensaver_settings is set to false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Whether or not the user can hibernate the computer"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Whether or not the user can suspend the computer"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Whether or not the user is notified when the AC adapter is removed"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid ""
 "Whether or not to dim the screen to save power when the computer is idle."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "Whether or not to lock the screen when the computer wakes up from a "
 "hibernate. NOTE this option is only used if lock_use_screensaver_settings is "
 "set to false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid ""
 "Whether or not to lock the screen when the computer wakes up from a suspend. "
 "NOTE this option is only used if lock_use_screensaver_settings is set to "
 "false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid ""
-"Whether or not to use an icon on desktop or systems with no batteries "
-"detected"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "Whether or not to use the screen lock setting of gnome-screensaver to decide "
 "to lock the screen after a hibernate, suspend or blank screen."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid ""
 "Whether or not to use time based notifications. If set to false, then the "
 "percentage change is used instead, which may fix some broken ACPI BIOS's."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:52
-msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr ""
-
 #: ../data/gnome-power-manager.schemas.in.h:53
-msgid "Whether to use an icon for desktop systems"
+msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:54
@@ -336,7 +337,7 @@ msgstr "<b>Загальне</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 #, fuzzy
-msgid "<b>Notification area</b>"
+msgid "<b>Notification Area</b>"
 msgstr "<b>Область сповіщення</b>"
 
 #: ../data/gpm-prefs.glade.h:4
@@ -346,20 +347,22 @@ msgstr "<b>Система живиться від мережі змінного 
 
 #: ../data/gpm-prefs.glade.h:5
 #, fuzzy
-msgid "<b>Running on battery</b>"
+msgid "<b>Running on Battery</b>"
 msgstr "<b>Система живиться від батарей</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-msgid "Dim the laptop panel when idle"
-msgstr ""
+#, fuzzy
+msgid "General"
+msgstr "<b>Загальне</b>"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "Only display when charging or _discharging"
-msgstr ""
+#, fuzzy
+msgid "Only display when battery _present"
+msgstr "При критичному заряді батареї:"
 
 #: ../data/gpm-prefs.glade.h:8
-msgid "Options"
-msgstr "Параметри"
+msgid "Only display when charging or _discharging"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:9
 #, fuzzy
@@ -407,18 +410,83 @@ msgstr "При закриванні екрану ноутбука:"
 
 #: ../data/gpm-prefs.glade.h:18
 #, fuzzy
-msgid "_Always display icon when battery present"
-msgstr "При критичному заряді батареї:"
+msgid "_Always display icon"
+msgstr "Відображати головний значок"
 
 #: ../data/gpm-prefs.glade.h:19
+msgid "_Dim the laptop panel when idle"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:20
 #, fuzzy
 msgid "_Never display icon"
 msgstr "Відображати головний значок"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:21
 #, fuzzy
 msgid "_Only display when battery life is critical"
 msgstr "При критичному заряді батареї:"
+
+#: ../data/gpm-info.glade.h:1
+#, fuzzy
+msgid "<b>Laptop Battery Bay (2)</b>"
+msgstr "Батарея портативного комп'ютера"
+
+#: ../data/gpm-info.glade.h:2
+#, fuzzy
+msgid "<b>Laptop Battery Bay</b>"
+msgstr "Батарея портативного комп'ютера"
+
+#: ../data/gpm-info.glade.h:3
+msgid "<b>UPS</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:4
+msgid "<b>Wireless Mouse</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:5
+msgid "Charge History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:6
+#, fuzzy
+msgid "Device Information"
+msgstr "<b>Область сповіщення</b>"
+
+#: ../data/gpm-info.glade.h:7
+msgid "Estimated Time History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:8 ../src/gpm-manager.c:1069
+#: ../src/gpm-manager.c:1287
+#, fuzzy
+msgid "Power Information"
+msgstr "<b>Область сповіщення</b>"
+
+#: ../data/gpm-info.glade.h:9
+msgid "Rate History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:10
+msgid "This shows how the battery charge and discharge rate varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:11
+msgid "This shows how the battery percentage charge varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:12
+msgid ""
+"This shows how the remaining time until charged or discharged varies over "
+"time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:13
+msgid ""
+"This shows you detailed information about all the batteries you have "
+"installed in your system."
+msgstr ""
 
 #: ../src/eggtrayicon.c:125
 msgid "Orientation"
@@ -480,234 +548,331 @@ msgstr ""
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:734
+#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:746
 msgid "Show extra debugging information"
 msgstr ""
 
-#: ../src/gpm-manager.c:822
+#: ../src/gpm-manager.c:840
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:824
+#: ../src/gpm-manager.c:842
 #, fuzzy
 msgid "hibernate"
 msgstr "Заснути"
 
-#: ../src/gpm-manager.c:827
+#: ../src/gpm-manager.c:845
 #, fuzzy
 msgid "Hibernate Problem"
 msgstr "Заснути"
 
-#: ../src/gpm-manager.c:879
+#: ../src/gpm-manager.c:900
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:881
+#: ../src/gpm-manager.c:902
 #, fuzzy
 msgid "suspend"
 msgstr "Призупинити"
 
-#: ../src/gpm-manager.c:884
+#: ../src/gpm-manager.c:905
 #, fuzzy
 msgid "Suspend Problem"
 msgstr "Призупинити"
 
-#: ../src/gpm-manager.c:1041 ../src/gpm-manager.c:1241
-#, fuzzy
-msgid "Power Information"
-msgstr "<b>Область сповіщення</b>"
-
-#: ../src/gpm-manager.c:1229
+#: ../src/gpm-manager.c:1275
 #, fuzzy
 msgid "Power Critically Low"
 msgstr "Рівень заряду батареї критичний нижче:"
 
-#: ../src/gpm-manager.c:1233
+#: ../src/gpm-manager.c:1279
 msgid "Power Very Low"
 msgstr ""
 
-#: ../src/gpm-manager.c:1237
+#: ../src/gpm-manager.c:1283
 msgid "Power Low"
 msgstr ""
 
-#: ../src/gpm-manager.c:1287
+#: ../src/gpm-manager.c:1333
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1335
 msgid "Your battery is now fully charged"
 msgstr ""
 
-#: ../src/gpm-manager.c:1326
+#: ../src/gpm-manager.c:1374
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
 
-#: ../src/gpm-manager.c:1330
+#: ../src/gpm-manager.c:1378
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
 
-#: ../src/gpm-manager.c:1335
+#: ../src/gpm-manager.c:1383
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr ""
 
-#: ../src/gpm-manager.c:1338
+#: ../src/gpm-manager.c:1386
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
 
-#: ../src/gpm-manager.c:1345
+#: ../src/gpm-manager.c:1393
 #, fuzzy
 msgid "Critical action"
 msgstr "Рівень заряду батареї критичний нижче:"
 
-#: ../src/gpm-manager.c:1367
+#: ../src/gpm-manager.c:1415
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 
-#: ../src/gpm-manager.c:1372
+#: ../src/gpm-manager.c:1420
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-manager.c:1436
+#: ../src/gpm-manager.c:1484
 #, fuzzy
 msgid "Your system is running on backup power!"
 msgstr "Система живиться від батареї"
 
-#: ../src/gpm-manager.c:1439
+#: ../src/gpm-manager.c:1487
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
 "power to your computer to avoid losing data."
 msgstr ""
 
-#: ../src/gpm-manager.c:1509
+#: ../src/gpm-manager.c:1557
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-power.c:346
+#: ../src/gpm-power.c:396
 #, fuzzy
 msgid "Laptop battery"
 msgstr "Батарея портативного комп'ютера"
 
-#: ../src/gpm-power.c:348
+#: ../src/gpm-power.c:398
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:350
+#: ../src/gpm-power.c:400
 msgid "Wireless mouse"
 msgstr ""
 
-#: ../src/gpm-power.c:352
+#: ../src/gpm-power.c:402
 #, fuzzy
 msgid "Wireless keyboard"
 msgstr "Клавіатура Logitech"
 
-#: ../src/gpm-power.c:354
+#: ../src/gpm-power.c:404
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:356
+#: ../src/gpm-power.c:406
 #, fuzzy
 msgid "Unknown"
 msgstr "невідомо"
 
-#: ../src/gpm-power.c:661
+#: ../src/gpm-power.c:566 ../src/gpm-power.c:572 ../src/gpm-power.c:576
+#: ../src/gpm-power.c:580
+msgid "Status:"
+msgstr ""
+
+#: ../src/gpm-power.c:567
+#, fuzzy
+msgid "Missing"
+msgstr "відсутній"
+
+#: ../src/gpm-power.c:573
+#, fuzzy
+msgid "Charged"
+msgstr "заряджено"
+
+#: ../src/gpm-power.c:577
+#, fuzzy
+msgid "Charging"
+msgstr "заряджається"
+
+#: ../src/gpm-power.c:581
+#, fuzzy
+msgid "Discharging"
+msgstr "розряджається"
+
+#: ../src/gpm-power.c:585
+msgid "Product:"
+msgstr ""
+
+#: ../src/gpm-power.c:590
+msgid "Vendor:"
+msgstr ""
+
+#: ../src/gpm-power.c:595
+msgid "Technology:"
+msgstr ""
+
+#: ../src/gpm-power.c:599
+msgid "Lithium ion"
+msgstr ""
+
+#: ../src/gpm-power.c:601
+msgid "Lead acid"
+msgstr ""
+
+#: ../src/gpm-power.c:611
+msgid "Serial number:"
+msgstr ""
+
+#: ../src/gpm-power.c:616
+msgid "Model:"
+msgstr ""
+
+#: ../src/gpm-power.c:621
+#, fuzzy
+msgid "Remaining time:"
+msgstr " лилось"
+
+#: ../src/gpm-power.c:626
+msgid "Percentage charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:632
+msgid "Capacity:"
+msgstr ""
+
+#: ../src/gpm-power.c:634
+msgid "Very good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:636
+msgid "Good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:638
+#, fuzzy
+msgid "Poor condition"
+msgstr "<b>Область сповіщення</b>"
+
+#: ../src/gpm-power.c:647
+#, fuzzy
+msgid "Current charge:"
+msgstr " до заряду"
+
+#: ../src/gpm-power.c:653
+#, fuzzy
+msgid "Last full charge:"
+msgstr "повністю перезаряджено"
+
+#: ../src/gpm-power.c:658
+msgid "Design charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:663
+msgid "Charge rate:"
+msgstr ""
+
+#: ../src/gpm-power.c:907
 msgid "fully charged"
 msgstr "повністю перезаряджено"
 
-#: ../src/gpm-power.c:667
+#: ../src/gpm-power.c:913
 #, fuzzy
 msgid "remaining"
 msgstr " лилось"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:670
+#: ../src/gpm-power.c:916
 msgid "discharging"
 msgstr "розряджається"
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:923
 #, fuzzy
 msgid "until charged"
 msgstr " до заряду"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:926
 msgid "charging"
 msgstr "заряджається"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:714
+#: ../src/gpm-power.c:960
 #, fuzzy
 msgid "Computer is running on backup power\n"
 msgstr "Система живиться від мережі змінного струму"
 
-#: ../src/gpm-power.c:717
+#: ../src/gpm-power.c:963
 #, fuzzy
 msgid "Computer is running on AC power\n"
 msgstr "Система живиться від мережі змінного струму"
 
-#: ../src/gpm-power.c:720
+#: ../src/gpm-power.c:966
 #, fuzzy
 msgid "Computer is running on battery power\n"
 msgstr "Система живиться від батареї"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:108
 #, fuzzy
 msgid "_Suspend"
 msgstr "Призупинити"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:109
 msgid "Suspend the computer"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:110
 #, fuzzy
 msgid "Hi_bernate"
 msgstr "Заснути"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:111
 #, fuzzy
 msgid "Make the computer go to sleep"
 msgstr "Переводити комп'ютер у режим сну після:"
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:112
 #, fuzzy
 msgid "_Preferences"
 msgstr "параметри живлення"
 
-#: ../src/gpm-tray-icon.c:112
+#: ../src/gpm-tray-icon.c:114
+#, fuzzy
+msgid "_Information"
+msgstr "<b>Область сповіщення</b>"
+
+#: ../src/gpm-tray-icon.c:116
 msgid "_Help"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:114
+#: ../src/gpm-tray-icon.c:118
 msgid "_About"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:251
+#: ../src/gpm-tray-icon.c:263
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:252
+#: ../src/gpm-tray-icon.c:264
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -715,7 +880,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:256
+#: ../src/gpm-tray-icon.c:268
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -723,7 +888,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:260
+#: ../src/gpm-tray-icon.c:272
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -731,28 +896,28 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:265
+#: ../src/gpm-tray-icon.c:277
 msgid "translator-credits"
 msgstr ""
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:55
+#: ../src/gpm-prefs.c:56
 msgid "Suspend"
 msgstr "Призупинити"
 
-#: ../src/gpm-prefs.c:56
+#: ../src/gpm-prefs.c:57
 msgid "Shutdown"
 msgstr "Вимкнути"
 
-#: ../src/gpm-prefs.c:57
+#: ../src/gpm-prefs.c:58
 msgid "Hibernate"
 msgstr "Заснути"
 
-#: ../src/gpm-prefs.c:58
+#: ../src/gpm-prefs.c:59
 msgid "Blank screen"
 msgstr ""
 
-#: ../src/gpm-prefs.c:59
+#: ../src/gpm-prefs.c:60
 msgid "Do nothing"
 msgstr "Нічого не робити"
 
@@ -760,14 +925,17 @@ msgstr "Нічого не робити"
 msgid "Never"
 msgstr ""
 
-#: ../src/gpm-prefs.c:514
+#: ../src/gpm-prefs.c:516
 #, fuzzy
 msgid "Configuration"
 msgstr "<b>Область сповіщення</b>"
 
-#: ../src/gpm-prefs.c:747
+#: ../src/gpm-prefs.c:759
 msgid "Power Preferences"
 msgstr "параметри живлення"
+
+#~ msgid "Options"
+#~ msgstr "Параметри"
 
 #, fuzzy
 #~ msgid "Default sleep type"
@@ -842,9 +1010,6 @@ msgstr "параметри живлення"
 #, fuzzy
 #~ msgid "The event for a laptop lid closing"
 #~ msgstr "При закриванні екрану ноутбука:"
-
-#~ msgid "charged"
-#~ msgstr "заряджено"
 
 #, fuzzy
 #~ msgid "GNOME Power Preferences"
@@ -968,9 +1133,6 @@ msgstr "параметри живлення"
 
 #~ msgid "Logitech mouse"
 #~ msgstr "Миша Logitech"
-
-#~ msgid "missing"
-#~ msgstr "відсутній"
 
 #~ msgid "screensave"
 #~ msgstr "збереження екрану"

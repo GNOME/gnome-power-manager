@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.13.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-05 16:08+0000\n"
+"POT-Creation-Date: 2006-03-14 08:43+0000\n"
 "PO-Revision-Date: 2006-01-28 11:06+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (traditional) <community@linuxhall.org>\n"
@@ -32,135 +32,146 @@ msgid "Power management daemon"
 msgstr "電源管理伺服程式"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Battery critical low action"
 msgstr "電量極低時的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:2
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Check CPU load before sleeping"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check network utilization before sleeping"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:5
 #, fuzzy
 msgid "Dim the screen after a period of inactivity"
 msgstr "一段時間不使用後是否把螢幕調暗"
 
-#: ../data/gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:6
 #, fuzzy
 msgid "Hibernate button action"
 msgstr "暫停按鈕動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:6
+#: ../data/gnome-power-manager.schemas.in.h:7
 #, fuzzy
 msgid "Hibernate enabled"
 msgstr "休眠"
 
-#: ../data/gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:8
 #, fuzzy
 msgid "LCD brightness when on AC"
 msgstr "AC LCD 硬件亮度數值"
 
-#: ../data/gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:9
 #, fuzzy
 msgid "LCD brightness when on battery"
 msgstr "AC LCD 硬件亮度數值"
 
-#: ../data/gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:10
 #, fuzzy
 msgid "Laptop lid close action on battery"
 msgstr "手提電腦上蓋關閉時動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:11
 #, fuzzy
 msgid "Laptop lid close action when on AC"
 msgstr "手提電腦上蓋關閉時動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:12
 #, fuzzy
 msgid "Lock screen on hibernate"
 msgstr "如果使用者可以休眠"
 
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid "Lock screen on suspend"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "Lock screen when it is blanked"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "Notify on a HAL suspend or hibernate error."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "Notify on fully charged"
 msgstr "電池充飽電時通知"
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "Notify when AC adapter is removed"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:17
-msgid ""
-"Option when to show the notification icon. Valid options are \"never\", "
-"\"critical\", \"charge\" and \"always\""
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"Option when to show the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\""
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:20
 #, fuzzy
 msgid "Power button action"
 msgstr "暫停按鈕動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "Sleep timeout computer when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "Sleep timeout computer when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "Sleep timeout display when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "Sleep timeout display when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "Suspend button action"
 msgstr "暫停按鈕動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:26
 #, fuzzy
 msgid "Suspend enabled"
 msgstr "暫停"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:27
 #, fuzzy
 msgid ""
 "The action to take when the battery is critically low. Valid values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
 msgstr "當電池電量極低時要採取的動作。"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:28
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "當手提電腦上蓋關閉時要採取的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:29
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr "當手提電腦上蓋關閉時要採取的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
 msgid ""
 "The action to take when the system hibernate button is pressed. Valid values "
@@ -168,14 +179,14 @@ msgid ""
 "\"."
 msgstr "當系統暫停按鈕被按下時要採取的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:31
 #, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Valid values are "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 msgstr "當系統暫停按鈕被按下時要採取的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:32
 #, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Valid values "
@@ -183,134 +194,124 @@ msgid ""
 "\"."
 msgstr "當系統暫停按鈕被按下時要採取的動作"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "The brightness of the display when on AC power. Valid values are between 0 "
 "and 100."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "The brightness of the display when on battery power. Valid values are "
 "between 0 and 100."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:35
 #, fuzzy
 msgid ""
 "The number of seconds before the display goes to sleep when the computer is "
 "on AC power."
 msgstr "在 AC 電源下顯示器嘗試睡眠之前閒置的時間(以秒計)"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "The number of seconds the computer on AC power needs to be inactive before "
 "it goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "The number of seconds the computer on battery power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid ""
 "The number of seconds the computer on battery power needs to be inactive "
 "before the display goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Valid values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Use gnome-screensaver lock setting"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "When to show the notification icon"
 msgstr "何時顯示通知圖示"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid ""
 "Whether or not a notification message is displayed if the HAL action "
 "(suspend or hibernate) fails"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:43
 #, fuzzy
 msgid ""
 "Whether or not a notification message is displayed when the battery is fully "
 "charged"
 msgstr "當電池充飽電時是否應通知使用者"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid ""
 "Whether or not the screen is locked when the screen is turned off. NOTE this "
 "option is only used if lock_use_screensaver_settings is set to false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:45
 #, fuzzy
 msgid "Whether or not the user can hibernate the computer"
 msgstr "如果使用者可以休眠"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Whether or not the user can suspend the computer"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:47
 #, fuzzy
 msgid "Whether or not the user is notified when the AC adapter is removed"
 msgstr "當使用者拔除 AC 變壓器時是否應通知使用者"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:48
 #, fuzzy
 msgid ""
 "Whether or not to dim the screen to save power when the computer is idle."
 msgstr "當電腦進入閒置狀態時是否應調暗螢幕以節約能源"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "Whether or not to lock the screen when the computer wakes up from a "
 "hibernate. NOTE this option is only used if lock_use_screensaver_settings is "
 "set to false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid ""
 "Whether or not to lock the screen when the computer wakes up from a suspend. "
 "NOTE this option is only used if lock_use_screensaver_settings is set to "
 "false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid ""
-"Whether or not to use an icon on desktop or systems with no batteries "
-"detected"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid ""
 "Whether or not to use the screen lock setting of gnome-screensaver to decide "
 "to lock the screen after a hibernate, suspend or blank screen."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid ""
 "Whether or not to use time based notifications. If set to false, then the "
 "percentage change is used instead, which may fix some broken ACPI BIOS's."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:52
-msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr ""
-
 #: ../data/gnome-power-manager.schemas.in.h:53
-msgid "Whether to use an icon for desktop systems"
+msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:54
@@ -337,7 +338,7 @@ msgstr "<b>一般</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 #, fuzzy
-msgid "<b>Notification area</b>"
+msgid "<b>Notification Area</b>"
 msgstr "<b>通知區</b>"
 
 #: ../data/gpm-prefs.glade.h:4
@@ -347,20 +348,22 @@ msgstr "<b>使用 AC 變壓器執行</b>"
 
 #: ../data/gpm-prefs.glade.h:5
 #, fuzzy
-msgid "<b>Running on battery</b>"
+msgid "<b>Running on Battery</b>"
 msgstr "<b>使用電池執行</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-msgid "Dim the laptop panel when idle"
-msgstr ""
+#, fuzzy
+msgid "General"
+msgstr "<b>一般</b>"
 
 #: ../data/gpm-prefs.glade.h:7
-msgid "Only display when charging or _discharging"
-msgstr "只在充電中或放電時顯示(_D)"
+#, fuzzy
+msgid "Only display when battery _present"
+msgstr "只在電池電量極低時顯示(_C)"
 
 #: ../data/gpm-prefs.glade.h:8
-msgid "Options"
-msgstr "選項"
+msgid "Only display when charging or _discharging"
+msgstr "只在充電中或放電時顯示(_D)"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Power Management Preferences"
@@ -406,18 +409,83 @@ msgid "When l_aptop lid is closed:"
 msgstr "當手提電腦上蓋關閉時(_D):"
 
 #: ../data/gpm-prefs.glade.h:18
-#, fuzzy
-msgid "_Always display icon when battery present"
-msgstr "只在電池電量極低時顯示(_C)"
+msgid "_Always display icon"
+msgstr "永遠顯示圖示(_A)"
 
 #: ../data/gpm-prefs.glade.h:19
+msgid "_Dim the laptop panel when idle"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:20
 msgid "_Never display icon"
 msgstr "永遠不顯示圖示(_N)"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:21
 #, fuzzy
 msgid "_Only display when battery life is critical"
 msgstr "只在電池電量極低時顯示(_C)"
+
+#: ../data/gpm-info.glade.h:1
+#, fuzzy
+msgid "<b>Laptop Battery Bay (2)</b>"
+msgstr "手提電腦電池"
+
+#: ../data/gpm-info.glade.h:2
+#, fuzzy
+msgid "<b>Laptop Battery Bay</b>"
+msgstr "手提電腦電池"
+
+#: ../data/gpm-info.glade.h:3
+msgid "<b>UPS</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:4
+#, fuzzy
+msgid "<b>Wireless Mouse</b>"
+msgstr "無線滑鼠"
+
+#: ../data/gpm-info.glade.h:5
+msgid "Charge History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:6
+#, fuzzy
+msgid "Device Information"
+msgstr "顯示額外的除錯資訊"
+
+#: ../data/gpm-info.glade.h:7
+msgid "Estimated Time History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:8 ../src/gpm-manager.c:1069
+#: ../src/gpm-manager.c:1287
+#, fuzzy
+msgid "Power Information"
+msgstr "顯示額外的除錯資訊"
+
+#: ../data/gpm-info.glade.h:9
+msgid "Rate History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:10
+msgid "This shows how the battery charge and discharge rate varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:11
+msgid "This shows how the battery percentage charge varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:12
+msgid ""
+"This shows how the remaining time until charged or discharged varies over "
+"time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:13
+msgid ""
+"This shows you detailed information about all the batteries you have "
+"installed in your system."
+msgstr ""
 
 #: ../src/eggtrayicon.c:125
 msgid "Orientation"
@@ -469,79 +537,74 @@ msgstr "GNOME 桌面的電源管理程式"
 msgid "Do not daemonize"
 msgstr "不要使用伺服程式"
 
-#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:734
+#: ../src/gpm-main.c:164 ../src/gpm-prefs.c:746
 msgid "Show extra debugging information"
 msgstr "顯示額外的除錯資訊"
 
-#: ../src/gpm-manager.c:822
+#: ../src/gpm-manager.c:840
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:824
+#: ../src/gpm-manager.c:842
 #, fuzzy
 msgid "hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-manager.c:827
+#: ../src/gpm-manager.c:845
 #, fuzzy
 msgid "Hibernate Problem"
 msgstr "休眠"
 
-#: ../src/gpm-manager.c:879
+#: ../src/gpm-manager.c:900
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:881
+#: ../src/gpm-manager.c:902
 #, fuzzy
 msgid "suspend"
 msgstr "暫停"
 
-#: ../src/gpm-manager.c:884
+#: ../src/gpm-manager.c:905
 #, fuzzy
 msgid "Suspend Problem"
 msgstr "暫停"
 
-#: ../src/gpm-manager.c:1041 ../src/gpm-manager.c:1241
-#, fuzzy
-msgid "Power Information"
-msgstr "顯示額外的除錯資訊"
-
-#: ../src/gpm-manager.c:1229
+#: ../src/gpm-manager.c:1275
 #, fuzzy
 msgid "Power Critically Low"
 msgstr "電池電量極低"
 
-#: ../src/gpm-manager.c:1233
+#: ../src/gpm-manager.c:1279
 #, fuzzy
 msgid "Power Very Low"
 msgstr "電池電量非常低"
 
-#: ../src/gpm-manager.c:1237
+#: ../src/gpm-manager.c:1283
 #, fuzzy
 msgid "Power Low"
 msgstr "電池低電量"
 
-#: ../src/gpm-manager.c:1287
+#: ../src/gpm-manager.c:1333
 msgid "Battery Charged"
 msgstr "電池已充飽"
 
-#: ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1335
 msgid "Your battery is now fully charged"
 msgstr "你的電池現在已經充飽了"
 
-#: ../src/gpm-manager.c:1326
+#: ../src/gpm-manager.c:1374
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr "電池電量已在極低的程度之下，這台電腦即將關機。"
 
-#: ../src/gpm-manager.c:1330
+#: ../src/gpm-manager.c:1378
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer is about to "
@@ -549,28 +612,28 @@ msgid ""
 "computer in a suspended state."
 msgstr "電池電量已在極低的程度之下，這台電腦即將關機。"
 
-#: ../src/gpm-manager.c:1335
+#: ../src/gpm-manager.c:1383
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "電池電量已在極低的程度之下，這台電腦即將關機。"
 
-#: ../src/gpm-manager.c:1338
+#: ../src/gpm-manager.c:1386
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "電池電量已在極低的程度之下，這台電腦即將關機。"
 
-#: ../src/gpm-manager.c:1345
+#: ../src/gpm-manager.c:1393
 msgid "Critical action"
 msgstr "電量極低動作"
 
-#: ../src/gpm-manager.c:1367
+#: ../src/gpm-manager.c:1415
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "AC 電源已經被拔除。系統現在使用電池電源。"
 
-#: ../src/gpm-manager.c:1372
+#: ../src/gpm-manager.c:1420
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -578,12 +641,12 @@ msgid ""
 msgstr ""
 "你大約剩下 <b>%s</b> 的電池使用時間(%d%%)。請插上 AC 變壓器以避免遺失資料。"
 
-#: ../src/gpm-manager.c:1436
+#: ../src/gpm-manager.c:1484
 #, fuzzy
 msgid "Your system is running on backup power!"
 msgstr "電腦在電池電源下執行\n"
 
-#: ../src/gpm-manager.c:1439
+#: ../src/gpm-manager.c:1487
 #, fuzzy, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -591,107 +654,206 @@ msgid ""
 msgstr ""
 "你大約剩下 <b>%s</b> 的電池使用時間(%d%%)。請插上 AC 變壓器以避免遺失資料。"
 
-#: ../src/gpm-manager.c:1509
+#: ../src/gpm-manager.c:1557
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-power.c:346
+#: ../src/gpm-power.c:396
 msgid "Laptop battery"
 msgstr "手提電腦電池"
 
-#: ../src/gpm-power.c:348
+#: ../src/gpm-power.c:398
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:350
+#: ../src/gpm-power.c:400
 msgid "Wireless mouse"
 msgstr "無線滑鼠"
 
-#: ../src/gpm-power.c:352
+#: ../src/gpm-power.c:402
 msgid "Wireless keyboard"
 msgstr "無線鍵盤"
 
-#: ../src/gpm-power.c:354
+#: ../src/gpm-power.c:404
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:356
+#: ../src/gpm-power.c:406
 msgid "Unknown"
 msgstr "不明"
 
-#: ../src/gpm-power.c:661
+#: ../src/gpm-power.c:566 ../src/gpm-power.c:572 ../src/gpm-power.c:576
+#: ../src/gpm-power.c:580
+msgid "Status:"
+msgstr ""
+
+#: ../src/gpm-power.c:567
+msgid "Missing"
+msgstr ""
+
+#: ../src/gpm-power.c:573
+#, fuzzy
+msgid "Charged"
+msgstr "電池已充飽"
+
+#: ../src/gpm-power.c:577
+msgid "Charging"
+msgstr ""
+
+#: ../src/gpm-power.c:581
+msgid "Discharging"
+msgstr ""
+
+#: ../src/gpm-power.c:585
+msgid "Product:"
+msgstr ""
+
+#: ../src/gpm-power.c:590
+msgid "Vendor:"
+msgstr ""
+
+#: ../src/gpm-power.c:595
+msgid "Technology:"
+msgstr ""
+
+#: ../src/gpm-power.c:599
+msgid "Lithium ion"
+msgstr ""
+
+#: ../src/gpm-power.c:601
+msgid "Lead acid"
+msgstr ""
+
+#: ../src/gpm-power.c:611
+msgid "Serial number:"
+msgstr ""
+
+#: ../src/gpm-power.c:616
+msgid "Model:"
+msgstr ""
+
+#: ../src/gpm-power.c:621
+#, fuzzy
+msgid "Remaining time:"
+msgstr "還剩"
+
+#: ../src/gpm-power.c:626
+msgid "Percentage charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:632
+msgid "Capacity:"
+msgstr ""
+
+#: ../src/gpm-power.c:634
+msgid "Very good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:636
+msgid "Good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:638
+#, fuzzy
+msgid "Poor condition"
+msgstr "暫停按鈕動作"
+
+#: ../src/gpm-power.c:647
+#, fuzzy
+msgid "Current charge:"
+msgstr "直到已充飽"
+
+#: ../src/gpm-power.c:653
+#, fuzzy
+msgid "Last full charge:"
+msgstr "已充飽"
+
+#: ../src/gpm-power.c:658
+msgid "Design charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:663
+msgid "Charge rate:"
+msgstr ""
+
+#: ../src/gpm-power.c:907
 msgid "fully charged"
 msgstr "已充飽"
 
-#: ../src/gpm-power.c:667
+#: ../src/gpm-power.c:913
 msgid "remaining"
 msgstr "還剩"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:670
+#: ../src/gpm-power.c:916
 msgid "discharging"
 msgstr ""
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:923
 msgid "until charged"
 msgstr "直到已充飽"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:926
 msgid "charging"
 msgstr ""
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:714
+#: ../src/gpm-power.c:960
 #, fuzzy
 msgid "Computer is running on backup power\n"
 msgstr "電腦在 AC 電源下執行\n"
 
-#: ../src/gpm-power.c:717
+#: ../src/gpm-power.c:963
 msgid "Computer is running on AC power\n"
 msgstr "電腦在 AC 電源下執行\n"
 
-#: ../src/gpm-power.c:720
+#: ../src/gpm-power.c:966
 msgid "Computer is running on battery power\n"
 msgstr "電腦在電池電源下執行\n"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:108
 msgid "_Suspend"
 msgstr "暫停(_S)"
 
-#: ../src/gpm-tray-icon.c:107
+#: ../src/gpm-tray-icon.c:109
 msgid "Suspend the computer"
 msgstr "暫停此電腦"
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:110
 msgid "Hi_bernate"
 msgstr "休眠(_B)"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:111
 msgid "Make the computer go to sleep"
 msgstr "讓電腦進入睡眠"
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:112
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: ../src/gpm-tray-icon.c:112
+#: ../src/gpm-tray-icon.c:114
+#, fuzzy
+msgid "_Information"
+msgstr "顯示額外的除錯資訊"
+
+#: ../src/gpm-tray-icon.c:116
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/gpm-tray-icon.c:114
+#: ../src/gpm-tray-icon.c:118
 msgid "_About"
 msgstr "關於(_A)"
 
-#: ../src/gpm-tray-icon.c:251
+#: ../src/gpm-tray-icon.c:263
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "依 GNU General Public License Version 2 授權"
 
-#: ../src/gpm-tray-icon.c:252
+#: ../src/gpm-tray-icon.c:264
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -703,7 +865,7 @@ msgstr ""
 "(GNU General Public License) 第二版來修改和重新發佈\n"
 "這一程式，或者自由選擇使用任何更新的版本。"
 
-#: ../src/gpm-tray-icon.c:256
+#: ../src/gpm-tray-icon.c:268
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -715,7 +877,7 @@ msgstr ""
 "而隱含的擔保。更詳細的情況請參閱\n"
 " GNU 通用公共許可證。"
 
-#: ../src/gpm-tray-icon.c:260
+#: ../src/gpm-tray-icon.c:272
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -727,7 +889,7 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 
-#: ../src/gpm-tray-icon.c:265
+#: ../src/gpm-tray-icon.c:277
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電郵給\n"
@@ -737,23 +899,23 @@ msgstr ""
 "Chao-Hsiung Liao <pesder.liao@msa.hinet.net>, 2006"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:55
+#: ../src/gpm-prefs.c:56
 msgid "Suspend"
 msgstr "暫停"
 
-#: ../src/gpm-prefs.c:56
+#: ../src/gpm-prefs.c:57
 msgid "Shutdown"
 msgstr "關機"
 
-#: ../src/gpm-prefs.c:57
+#: ../src/gpm-prefs.c:58
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs.c:58
+#: ../src/gpm-prefs.c:59
 msgid "Blank screen"
 msgstr ""
 
-#: ../src/gpm-prefs.c:59
+#: ../src/gpm-prefs.c:60
 msgid "Do nothing"
 msgstr "不做任何事"
 
@@ -761,16 +923,16 @@ msgstr "不做任何事"
 msgid "Never"
 msgstr "永遠不"
 
-#: ../src/gpm-prefs.c:514
+#: ../src/gpm-prefs.c:516
 msgid "Configuration"
 msgstr "組態"
 
-#: ../src/gpm-prefs.c:747
+#: ../src/gpm-prefs.c:759
 msgid "Power Preferences"
 msgstr "電源偏好設定"
 
-#~ msgid "_Always display icon"
-#~ msgstr "永遠顯示圖示(_A)"
+#~ msgid "Options"
+#~ msgstr "選項"
 
 #~ msgid "Battery LCD brightness hardware value"
 #~ msgstr "電池 LCD 硬件亮度數值"
