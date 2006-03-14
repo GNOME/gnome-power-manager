@@ -1,3 +1,47 @@
+==============
+Version 2.14.0
+==============
+
+Released March 14, 2006
+
+General
+
+ - Add the --enable-experimental-features flag so that cool new stuff that is
+   not really polished can be added. #326741, #333146
+   - Add simple charge, rate and time graph widgets drawn using Cairo.
+     This is for #333146 so we can draw cool graphs of power stuff.
+   - Create a treeview for each device type so we can display detailed
+     information for each device instance.
+
+Power Manager
+
+ - Ignore DBUS timeouts so long suspends do not "fail". (Ray Strode)
+ - Add functionality so we can ignore events just after from resume.
+   This is adapted from the Ubuntu patch by Daniel Silverstone. rh:185273
+ - Make UI logic more sane by using the new "present" key value. lp:33388
+ - Poke the screensaver to simulate user input. This is what Windows does, and
+   should solve the problems with the timer event happening shortly after the
+   ac_adapter is removed. #333525
+ - Unrealize the icon when we hide it, else it leaves a 1px line on the
+   notification tray. Fixes a transparent panel. #333515
+ - Don't try to lock if gnome-screensaver is not running.
+
+Power Preferences
+
+ - Only match primary batteries when showing the battery tab.
+ - HIG fixes: spacing and capitalization (Dennis Cranston)
+
+Translators
+
+ - Hendrik Richter (German)
+ - Theppitak Karoonboonyanan (Thai)
+ - Clytie Siddall (Vietnamese)
+ - Ilkka Tuohela (Finnish)
+ - Kostas Papadimas (Greek)
+ - Wouter Bolsterlee (Netherlands)
+ - Takeshi AIHANA (Japanese)
+ - Žygimantas Beručka (Lithuanian)
+
 ===============
 Version 2.13.93
 ===============
