@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-14 08:43+0000\n"
-"PO-Revision-Date: 2006-02-27 23:01+0100\n"
+"POT-Creation-Date: 2006-03-16 17:03+0100\n"
+"PO-Revision-Date: 2006-03-16 17:21+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgid ""
 "After resume, gnome-power-manager will suppress policy actions for a number "
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
-msgstr ""
+msgstr "Después de continuar, gnome-power-manager suprimirá las normas de acciones durante un número de segundos para permitir que los mensajes se asienten y HAL se refresque. Comúnmente cinco segundos es suficiente mientras que no es tan grande como para confundir al usuario."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Battery critical low action"
@@ -60,9 +60,8 @@ msgid "Dim the screen after a period of inactivity"
 msgstr "Apagar la pantalla tras un periodo de inactividad"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
-#, fuzzy
 msgid "Hibernate button action"
-msgstr "Acción del botón suspender"
+msgstr "Acción del botón hibernar"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
 msgid "Hibernate enabled"
@@ -111,10 +110,9 @@ msgstr "Notificar cuando el adaptador de CA se desconecte"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid "Number of seconds to suppress policy after resume"
-msgstr ""
+msgstr "Número de segundos para suprimir la norma después de retornar"
 
 #: ../data/gnome-power-manager.schemas.in.h:19
-#, fuzzy
 msgid ""
 "Option when to show the notification icon. Valid options are \"never\", "
 "\"critical\", \"charge\", \"present\" and \"always\""
@@ -124,31 +122,24 @@ msgstr ""
 "\"always\" (siempre)"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
-#, fuzzy
 msgid "Power button action"
-msgstr "Acción del botón suspender"
+msgstr "Acción del botón de encendido"
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "Sleep timeout computer when on AC"
-msgstr ""
-"Tiempo de espera para poner el equipo en bajo consumo cuando se está con CA"
+msgstr "Tiempo para equipo en bajo consumo en CA"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid "Sleep timeout computer when on battery"
-msgstr ""
-"Tiempo de espera para poner el equipo en bajo consumo cuando se está con "
-"batería"
+msgstr "Tiempo para equipo en bajo consumo en batería"
 
 #: ../data/gnome-power-manager.schemas.in.h:23
 msgid "Sleep timeout display when on AC"
-msgstr ""
-"Tiempo de espera para poner la pantalla en bajo consumo cuando se está con CA"
+msgstr "Tiempo para pantalla en bajo consumo con CA"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
 msgid "Sleep timeout display when on battery"
-msgstr ""
-"Tiempo de espera para poner la pantalla en bajo consumo cuando se está con "
-"batería"
+msgstr "Tiempo para pantalla en bajo consumo con batería"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid "Suspend button action"
@@ -186,36 +177,24 @@ msgstr ""
 "\"hibernate\" (hibernar), y \"blank\" (pantalla en negro)."
 
 #: ../data/gnome-power-manager.schemas.in.h:30
-#, fuzzy
 msgid ""
 "The action to take when the system hibernate button is pressed. Valid values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr ""
-"La acción que se realizará cuando se pulsa el botón de suspensión. Los "
-"valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), y "
-"\"nothing\" (nada)."
+msgstr "La acción que se realizará cuando se pulsa el botón de hibernación. Los valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), \"interactive\" (interactivo), \"shutdown\" (apagar) y \"nothing\" (nada)."
 
 #: ../data/gnome-power-manager.schemas.in.h:31
-#, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Valid values are "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr ""
-"La acción que se realizará cuando se pulsa el botón de suspensión. Los "
-"valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), y "
-"\"nothing\" (nada)."
+msgstr "La acción que se realizará cuando se pulsa el botón de apagado del sistema. Los valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), \"interactive\" (interactivo), \"shutdown\" (apagar) y \"nothing\" (nada)."
 
 #: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Valid values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr ""
-"La acción que se realizará cuando se pulsa el botón de suspensión. Los "
-"valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), y "
-"\"nothing\" (nada)."
+msgstr "La acción que se realizará cuando se pulsa el botón de suspensión. Los valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), \"interactive\" (interactivo) y \"shutdown\" (apagar) y \"nothing\" (nada)."
 
 #: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
@@ -396,7 +375,6 @@ msgid "<b>General</b>"
 msgstr "<b>General</b>"
 
 #: ../data/gpm-prefs.glade.h:3
-#, fuzzy
 msgid "<b>Notification Area</b>"
 msgstr "<b>Área de notificación</b>"
 
@@ -405,19 +383,16 @@ msgid "<b>Running on AC</b>"
 msgstr "<b>Funcionando con CA</b>"
 
 #: ../data/gpm-prefs.glade.h:5
-#, fuzzy
 msgid "<b>Running on Battery</b>"
 msgstr "<b>Funcionando con baterías</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-#, fuzzy
 msgid "General"
-msgstr "<b>General</b>"
+msgstr "General"
 
 #: ../data/gpm-prefs.glade.h:7
-#, fuzzy
 msgid "Only display when battery _present"
-msgstr "_Sólo mostrar cuando la vida de la batería sea crítica"
+msgstr "Sólo mostrar cuando la batería esté _presente"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Only display when charging or _discharging"
@@ -466,7 +441,7 @@ msgstr "_Siempre mostrar el icono"
 
 #: ../data/gpm-prefs.glade.h:19
 msgid "_Dim the laptop panel when idle"
-msgstr ""
+msgstr "_Apagar el panel del portátil al ausentarse"
 
 #: ../data/gpm-prefs.glade.h:20
 msgid "_Never display icon"
@@ -477,36 +452,32 @@ msgid "_Only display when battery life is critical"
 msgstr "_Sólo mostrar cuando la vida de la batería sea crítica"
 
 #: ../data/gpm-info.glade.h:1
-#, fuzzy
 msgid "<b>Laptop Battery Bay (2)</b>"
-msgstr "Batería de portátil"
+msgstr "<b>Bahía de baterías del portátil (2)</b>"
 
 #: ../data/gpm-info.glade.h:2
-#, fuzzy
 msgid "<b>Laptop Battery Bay</b>"
-msgstr "Batería de portátil"
+msgstr "<b>Bahía de baterías del portátil</b>"
 
 #: ../data/gpm-info.glade.h:3
 msgid "<b>UPS</b>"
-msgstr ""
+msgstr "<b>SAI (UPS)</b>"
 
 #: ../data/gpm-info.glade.h:4
-#, fuzzy
 msgid "<b>Wireless Mouse</b>"
-msgstr "Ratón inalámbrico"
+msgstr "<b>Ratón inalámbrico</b>"
 
 #: ../data/gpm-info.glade.h:5
 msgid "Charge History"
-msgstr ""
+msgstr "Historia de carga"
 
 #: ../data/gpm-info.glade.h:6
-#, fuzzy
 msgid "Device Information"
-msgstr "Información de energía"
+msgstr "Información del dispositivo"
 
 #: ../data/gpm-info.glade.h:7
 msgid "Estimated Time History"
-msgstr ""
+msgstr "Historia del tiempo estimado"
 
 #: ../data/gpm-info.glade.h:8 ../src/gpm-manager.c:1069
 #: ../src/gpm-manager.c:1287
@@ -515,27 +486,27 @@ msgstr "Información de energía"
 
 #: ../data/gpm-info.glade.h:9
 msgid "Rate History"
-msgstr ""
+msgstr "Histórico de tasa"
 
 #: ../data/gpm-info.glade.h:10
 msgid "This shows how the battery charge and discharge rate varies over time."
-msgstr ""
+msgstr "Esto muestra cómo varía la tasa de carga y descarga de la batería varía en el tiempo."
 
 #: ../data/gpm-info.glade.h:11
 msgid "This shows how the battery percentage charge varies over time."
-msgstr ""
+msgstr "Esto muestra cómo varía el porcentaje de carga en el tiempo."
 
 #: ../data/gpm-info.glade.h:12
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
-msgstr ""
+msgstr "Esto muestra cómo el varía el tiempo restante hasta la carga o descarga en el tiempo."
 
 #: ../data/gpm-info.glade.h:13
 msgid ""
 "This shows you detailed information about all the batteries you have "
 "installed in your system."
-msgstr ""
+msgstr "Esto muestra información detallada acerca de todas las baterías que tenga instalado en su sistema."
 
 #: ../src/eggtrayicon.c:125
 msgid "Orientation"
@@ -749,98 +720,91 @@ msgstr "Desconocido"
 #: ../src/gpm-power.c:566 ../src/gpm-power.c:572 ../src/gpm-power.c:576
 #: ../src/gpm-power.c:580
 msgid "Status:"
-msgstr ""
+msgstr "Estado:"
 
 #: ../src/gpm-power.c:567
 msgid "Missing"
-msgstr ""
+msgstr "Falta"
 
 #: ../src/gpm-power.c:573
-#, fuzzy
 msgid "Charged"
-msgstr "Batería cargada"
+msgstr "Cargada"
 
 #: ../src/gpm-power.c:577
-#, fuzzy
 msgid "Charging"
-msgstr "cargando"
+msgstr "Cargando"
 
 #: ../src/gpm-power.c:581
-#, fuzzy
 msgid "Discharging"
-msgstr "descargando"
+msgstr "Descargando"
 
 #: ../src/gpm-power.c:585
 msgid "Product:"
-msgstr ""
+msgstr "Producto:"
 
 #: ../src/gpm-power.c:590
 msgid "Vendor:"
-msgstr ""
+msgstr "Fabricante:"
 
 #: ../src/gpm-power.c:595
 msgid "Technology:"
-msgstr ""
+msgstr "Tecnología:"
 
 #: ../src/gpm-power.c:599
 msgid "Lithium ion"
-msgstr ""
+msgstr "Ion litio"
 
 #: ../src/gpm-power.c:601
 msgid "Lead acid"
-msgstr ""
+msgstr "Plomo y ácido"
 
 #: ../src/gpm-power.c:611
 msgid "Serial number:"
-msgstr ""
+msgstr "Número de serie:"
 
 #: ../src/gpm-power.c:616
 msgid "Model:"
-msgstr ""
+msgstr "Modelo:"
 
 #: ../src/gpm-power.c:621
-#, fuzzy
 msgid "Remaining time:"
-msgstr "restante"
+msgstr "Tiempo restante:"
 
 #: ../src/gpm-power.c:626
 msgid "Percentage charge:"
-msgstr ""
+msgstr "Porcentaje de carga:"
 
 #: ../src/gpm-power.c:632
 msgid "Capacity:"
-msgstr ""
+msgstr "Capacidad:"
 
 #: ../src/gpm-power.c:634
 msgid "Very good condition"
-msgstr ""
+msgstr "Muy buenas condiciones"
 
 #: ../src/gpm-power.c:636
 msgid "Good condition"
-msgstr ""
+msgstr "Buenas condiciones"
 
 #: ../src/gpm-power.c:638
-#, fuzzy
 msgid "Poor condition"
-msgstr "Acción del botón suspender"
+msgstr "Pobres condiciones"
 
 #: ../src/gpm-power.c:647
-#, fuzzy
 msgid "Current charge:"
-msgstr "hasta su carga"
+msgstr "Carga actual:"
 
 #: ../src/gpm-power.c:653
-#, fuzzy
 msgid "Last full charge:"
-msgstr "totalmente cargado"
+msgstr "Última carga total:"
 
 #: ../src/gpm-power.c:658
 msgid "Design charge:"
-msgstr ""
+msgstr "Carga de diseño:"
 
 #: ../src/gpm-power.c:663
 msgid "Charge rate:"
-msgstr ""
+msgstr "Tasa de carga:"
 
 #: ../src/gpm-power.c:907
 msgid "fully charged"
@@ -899,9 +863,8 @@ msgid "_Preferences"
 msgstr "_Preferencias"
 
 #: ../src/gpm-tray-icon.c:114
-#, fuzzy
 msgid "_Information"
-msgstr "Información de energía"
+msgstr "_Información"
 
 #: ../src/gpm-tray-icon.c:116
 msgid "_Help"
