@@ -61,6 +61,20 @@ Methods
 	Descriptions:	Returns the DPMS mode state.
 			See setDpmsMode().
 
+	Name:		InhibitInactiveSleep
+	Args:		DBUS_TYPE_STRING "reason to inhibit"
+	Returns:	(none)
+	Descriptions:	Inhibits the computer from performing the idle sleep
+			action. Useful if you want to do an operation of long 
+			duration without the computer suspending.
+
+	Name:		AllowInactiveSleep
+	Args:		(none)
+	Returns:	(none)
+	Descriptions:	Allows the computer to perform the idle sleep action.
+			Applications that quit without calling this method will
+			be automatically unregistered.
+
 Signals
 =======
 

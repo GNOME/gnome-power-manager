@@ -37,6 +37,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 
 #include <libgnomeui/gnome-client.h> /* for gnome_client_request_save */
 
@@ -753,6 +755,35 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	}
 
 	return ret;
+}
+/***************************************************************/
+gboolean
+gpm_manager_inhibit_inactive_sleep (GpmManager *manager,
+				    const char *reason,
+				   DBusGMethodInvocation *context, GError    **error)
+{
+#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
+	const char* sender = "demo";
+#else
+	const char* sender = dbus_g_method_get_sender (context);
+#endif
+	gpm_debug ("FIXME: sender is %s", sender);
+	dbus_g_method_return (context);
+	return TRUE;
+}
+
+gboolean
+gpm_manager_allow_inactive_sleep (GpmManager *manager,
+				   DBusGMethodInvocation *context, GError    **error)
+{
+#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
+	const char* sender = "demo";
+#else
+	const char* sender = dbus_g_method_get_sender (context);
+#endif
+	gpm_debug ("FIXME: sender is %s", sender);
+	dbus_g_method_return (context);
+	return TRUE;
 }
 
 /* we set the reason to be WHY. e.g. "user pressed hibernate button" */

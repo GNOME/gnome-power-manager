@@ -34,6 +34,17 @@
       <arg type="s" name="mode" direction="in"/>
     </method>
 
+    <method name="InhibitInactiveSleep">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_inhibit_inactive_sleep"/>
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <arg type="s" name="reason" direction="in"/>
+    </method>
+    
+    <method name="AllowInactiveSleep">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allow_inactive_sleep"/>
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+    </method>
+
     <signal name="OnAcChanged"/>
     <signal name="DpmsModeChanged"/>
 
