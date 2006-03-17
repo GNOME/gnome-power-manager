@@ -1,5 +1,15 @@
 2006-03-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.{c|h}, docs/dbus-interface.txt, src/gpm-manager.xml,
+	src/Makefile.am: Update with the new code for the inhibit action.
+
+	* src/gpm-inhibit.{c|h}, docs/dbus-test-inhibit.py: Add these new files
+	so we can start to write the inhibit framework further described in
+	#334809. InhibitInactiveSleep and AllowInactiveSleep work, but don't
+	do anything in the current setup. More to come...
+
+2006-03-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.{c|h}, docs/dbus-interface.txt, src/gpm-manager.xml:
 	Add templates of InhibitInactiveSleep and AllowInactiveSleep to begin
 	to add support for #334809. At the moment they don't do much.

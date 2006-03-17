@@ -58,6 +58,7 @@
 #include "gpm-hal-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
+#include "gpm-inhibit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 
@@ -101,6 +102,7 @@ struct GpmManagerPrivate
 	GpmInfo		*info;
 	GpmPower	*power;
 	GpmBrightness   *brightness;
+	GpmInhibit	*inhibit;
 
 	GpmTrayIcon	*tray_icon;
 
@@ -757,33 +759,37 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	return ret;
 }
 /***************************************************************/
-gboolean
-gpm_manager_inhibit_inactive_sleep (GpmManager *manager,
-				    const char *reason,
-				   DBusGMethodInvocation *context, GError    **error)
+
+void
+gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
+				    const char	*application,
+				    const char	*reason,
+				    DBusGMethodInvocation *context,
+				    GError    **error)
 {
 #if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* sender = "demo";
+	const char* connection = ":demo";
 #else
-	const char* sender = dbus_g_method_get_sender (context);
+	const char* connection = dbus_g_method_get_sender (context);
 #endif
-	gpm_debug ("FIXME: sender is %s", sender);
-	dbus_g_method_return (context);
-	return TRUE;
+	int cookie;
+	cookie = gpm_inhibit_add (manager->priv->inhibit, connection, application, reason);
+	dbus_g_method_return (context, cookie);
 }
 
-gboolean
-gpm_manager_allow_inactive_sleep (GpmManager *manager,
-				   DBusGMethodInvocation *context, GError    **error)
+void
+gpm_manager_allow_inactive_sleep (GpmManager	*manager,
+				  int		 cookie,
+				  DBusGMethodInvocation *context,
+				  GError	**error)
 {
 #if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* sender = "demo";
+	const char* connection = ":demo";
 #else
-	const char* sender = dbus_g_method_get_sender (context);
+	const char* connection = dbus_g_method_get_sender (context);
 #endif
-	gpm_debug ("FIXME: sender is %s", sender);
+	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie, FALSE);
 	dbus_g_method_return (context);
-	return TRUE;
 }
 
 /* we set the reason to be WHY. e.g. "user pressed hibernate button" */
@@ -1872,6 +1878,9 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->dpms = gpm_dpms_new ();
 
+	/* use a class to handle the complex stuff */
+	manager->priv->inhibit = gpm_inhibit_new ();
+
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
@@ -1984,6 +1993,10 @@ gpm_manager_finalize (GObject *object)
 
 	if (manager->priv->tray_icon != NULL) {
 		g_object_unref (manager->priv->tray_icon);
+	}
+
+	if (manager->priv->inhibit != NULL) {
+		g_object_unref (manager->priv->inhibit);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);

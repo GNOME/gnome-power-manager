@@ -94,12 +94,15 @@ gboolean	 gpm_manager_hibernate_dbus_method (GpmManager	 *manager,
 						   GError	**error);
 gboolean	 gpm_manager_shutdown_dbus_method (GpmManager	 *manager,
 						   GError	**error);
-gboolean	 gpm_manager_inhibit_inactive_sleep (GpmManager  *manager,
+
+void		 gpm_manager_inhibit_inactive_sleep (GpmManager  *manager,
+						     const char  *application,
 						     const char  *reason,
 						     DBusGMethodInvocation *context,
 						     GError	**error);
 
-gboolean	 gpm_manager_allow_inactive_sleep (GpmManager	*manager,
+void		 gpm_manager_allow_inactive_sleep (GpmManager	*manager,
+						   int		 cookie,
 				   		   DBusGMethodInvocation *context,
 				   		   GError	**error);
 
