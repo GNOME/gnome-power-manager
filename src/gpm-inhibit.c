@@ -160,6 +160,58 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
 	}
 }
 
+/**
+ * gpm_inhibit_check:
+ * 
+ * Checks to see if we are being stopped from performing an action.
+ *
+ * Return value: TRUE if the action is OK, i.e. we have *not* been inhibited
+ **/
+gboolean
+gpm_inhibit_check (GpmInhibit *inhibit)
+{
+	if (g_slist_length (inhibit->priv->list) == 0) {
+		return TRUE;
+	}
+	/* we have at least one application blocking the action */
+	return FALSE;
+}
+
+/**
+ * gpm_inhibit_get_message:
+ *
+ * @message:	Description string, e.g. "Nautilus because 'copying files'"
+ * @action:	Action we wanted to do, e.g. "suspend"
+ *
+ * Returns a localised message text describing what application has inhibited
+ * the action, and why.
+ *
+ **/
+void
+gpm_inhibit_get_message (GpmInhibit *inhibit,
+			 GString *message,
+			 const char *action)
+{
+	int a;
+	GpmInhibitData *data;
+
+	if (g_slist_length (inhibit->priv->list) == 1) {
+		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
+		g_string_append_printf (message, "<b>%s</b> has stopped the "
+				        "%s from taking place because <i>%s</i>.",
+				        data->application, action, data->reason);
+	} else {
+		g_string_append_printf (message, "Multiple applications have stopped the "
+					"%s from taking place:", action);
+		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
+			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
+			g_string_append_printf (message,
+						"\n<b>%s</b> because <i>%s</i>",
+						data->application, data->reason);
+		}
+	}
+}
+
 /** intialise the class */
 static void
 gpm_inhibit_class_init (GpmInhibitClass *klass)

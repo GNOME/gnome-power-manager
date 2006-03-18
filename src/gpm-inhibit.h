@@ -61,6 +61,12 @@ void		 gpm_inhibit_remove		(GpmInhibit	*inhibit,
 						 int		 cookie,
 						 gboolean	 forced);
 
+gboolean	 gpm_inhibit_check		(GpmInhibit	*inhibit);
+
+void		 gpm_inhibit_get_message	(GpmInhibit	*inhibit,
+						 GString	*message,
+						 const char	*action);
+
 GpmInhibit	*gpm_inhibit_new		(void);
 
 G_END_DECLS

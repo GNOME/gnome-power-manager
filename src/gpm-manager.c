@@ -183,13 +183,40 @@ gpm_manager_error_quark (void)
    request for an action, and the last action completing is larger than the
    timeout set in gconf. This should fix lots of ACPI bugs we are having. */
 static gboolean
-gpm_manager_is_policy_timout_valid (GpmManager *manager)
+gpm_manager_is_policy_timout_valid (GpmManager *manager,
+				    const char *action)
 {
 	if ((time (NULL) - manager->priv->last_resume_event) <=
 	    manager->priv->suppress_policy_timeout) {
+		gpm_debug ("Skipping suppressed %s", action);
 		return FALSE;
 	}
 	return TRUE;
+}
+
+/** returns if inhibited, and also does a nice libnotify warning if inhibited
+ *  todo:	do a "I REALLY WANT THIS" click link */
+static gboolean
+gpm_manager_is_inhibit_valid (GpmManager   *manager,
+			      const char   *action)
+{
+	gboolean action_ok;
+	char *title;
+
+	action_ok = gpm_inhibit_check (manager->priv->inhibit);
+	if (! action_ok) {
+		title = g_strdup_printf ("Request to %s", action);
+		GString *message = g_string_new ("");
+		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      GPM_NOTIFY_TIMEOUT_LONG,
+				      title,
+				      NULL,
+				      message->str);
+		g_string_free (message, TRUE);
+		g_free (title);
+	}
+	return action_ok;
 }
 
 gboolean
@@ -593,7 +620,7 @@ manager_do_we_screensave (GpmManager *manager,
 	} else {
 		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
 						 policy, NULL);
-		gpm_debug ("Using constom locking settings (%i)", do_lock);
+		gpm_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
 }
@@ -661,8 +688,7 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed policy event");
+	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
 		return;
 	}
 
@@ -1052,8 +1078,10 @@ idle_changed_cb (GpmIdle    *idle,
 	case GPM_IDLE_MODE_SYSTEM:
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-			gpm_debug ("Skipping suppressed timeout action");
+		if (! gpm_manager_is_policy_timout_valid (manager, "timeout action")) {
+			return;
+		}
+		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
 			return;
 		}
 		/* can only be hibernate or suspend */
@@ -1113,8 +1141,10 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed power button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "power button press")) {
+		return;
+	}
+	if (! gpm_manager_is_inhibit_valid (manager, "power button press")) {
 		return;
 	}
 	gpm_debug ("power button pressed");
@@ -1126,8 +1156,10 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed suspend button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "suspend button press")) {
+		return;
+	}
+	if (! gpm_manager_is_inhibit_valid (manager, "suspend button press")) {
 		return;
 	}
 	gpm_debug ("suspend button pressed");
@@ -1139,8 +1171,10 @@ static void
 hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed hibernate button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate button press")) {
+		return;
+	}
+	if (! gpm_manager_is_inhibit_valid (manager, "hibernate button press")) {
 		return;
 	}
 	gpm_debug ("hibernate button pressed");
@@ -1397,8 +1431,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		const char *warning = NULL;
 		const char *action;
 
-		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-			gpm_debug ("Skipping suppressed critical action");
+		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
 			return;
 		}
 
@@ -1783,8 +1816,10 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed hibernate signal");
+	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate signal")) {
+		return;
+	}
+	if (! gpm_manager_is_inhibit_valid (manager, "hibernate")) {
 		return;
 	}
 	gpm_debug ("Received hibernate signal from tray icon");
@@ -1794,10 +1829,12 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 
 static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
-				GpmTrayIcon  *tray)
+			       GpmTrayIcon  *tray)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed suspend signal");
+	if (! gpm_manager_is_policy_timout_valid (manager, "suspend signal")) {
+		return;
+	}
+	if (! gpm_manager_is_inhibit_valid (manager, "suspend")) {
 		return;
 	}
 	gpm_debug ("Received supend signal from tray icon");

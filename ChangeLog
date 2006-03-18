@@ -1,3 +1,15 @@
+2006-03-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-inhibit.{c|h}: Add gpm_inhibit_check() so we can see if it's
+	okay to do the action. Also add gpm_inhibit_get_message() to get a
+	full description of why the action was inhibited.
+
+	* src/gpm-manager.c: Add a helper function,
+	gpm_manager_is_inhibit_valid () that checks validity, and shows a
+	libnotify type window explaining the problem. Add this helper where we
+	currently use gpm_manager_is_policy_timout_valid(), except the low
+	power battery condition which must be done regardless of any veto.
+
 2006-03-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.{c|h}, docs/dbus-interface.txt, src/gpm-manager.xml,
