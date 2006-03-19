@@ -120,6 +120,18 @@ struct GpmManagerPrivate
 	time_t           last_resume_event;
 	int		 suppress_policy_timeout;
 
+	int		 low_percentage;
+	int		 very_low_percentage;
+	int		 critical_percentage;
+	int		 action_percentage;
+
+	int		 low_time;
+	int		 very_low_time;
+	int		 critical_time;
+	int		 action_time;
+
+	int		 lcd_dim_brightness;
+
 	const char	*reason;
 };
 
@@ -146,18 +158,6 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
-
-#define		BATTERY_LOW_PERCENTAGE			(10)	  /* 10 percent */
-#define		BATTERY_VERY_LOW_PERCENTAGE		(5)	  /* 5 percent  */
-#define		BATTERY_CRITICAL_PERCENTAGE		(2)	  /* 2 percent  */
-#define		BATTERY_ACTION_PERCENTAGE		(1)	  /* 1 percent  */
-
-#define		BATTERY_LOW_REMAINING_TIME		(20 * 60) /* 20 minutes */
-#define		BATTERY_VERY_LOW_REMAINING_TIME		(10 * 60) /* 10 minutes */
-#define		BATTERY_CRITICAL_REMAINING_TIME		(5 * 60)  /* 5 minutes  */
-#define		BATTERY_ACTION_REMAINING_TIME		(2 * 60)  /* 2 minutes  */
-
-#define		LAPTOP_PANEL_DIM_BRIGHTNESS		30 /* % */
 
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
@@ -392,19 +392,19 @@ get_stock_id (GpmManager *manager,
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL: primary, ups, mouse, keyboard");
 	if (status_primary.is_present &&
-	    status_primary.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+	    status_primary.percentage_charge < manager->priv->low_percentage) {
 		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
 
 	} else if (status_ups.is_present &&
-		   status_ups.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		   status_ups.percentage_charge < manager->priv->low_percentage) {
 		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 
 	} else if (status_mouse.is_present &&
-		   status_mouse.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		   status_mouse.percentage_charge < manager->priv->low_percentage) {
 		return g_strdup_printf (GPM_STOCK_MOUSE_LOW);
 
 	} else if (status_keyboard.is_present &&
-		   status_keyboard.percentage_charge < BATTERY_LOW_PERCENTAGE) {
+		   status_keyboard.percentage_charge < manager->priv->low_percentage) {
 		return g_strdup_printf (GPM_STOCK_KEYBOARD_LOW);
 	}
 
@@ -1068,7 +1068,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
 			gpm_brightness_level_save (manager->priv->brightness,
-						   LAPTOP_PANEL_DIM_BRIGHTNESS);
+						   manager->priv->lcd_dim_brightness);
 		}
 
 		/* sync timeouts */
@@ -1296,7 +1296,8 @@ power_on_ac_changed_cb (GpmPower   *power,
 }
 
 static GpmWarning
-gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
+gpm_manager_get_warning_type (GpmManager	    *manager,
+			      GpmPowerBatteryStatus *battery_status,
 			      gboolean		     use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
@@ -1305,23 +1306,23 @@ gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
 	if (use_time) {
 		if (battery_status->remaining_time <= 0) {
 			type = GPM_WARNING_NONE;
-		} else if (battery_status->remaining_time <= BATTERY_ACTION_REMAINING_TIME) {
+		} else if (battery_status->remaining_time <= manager->priv->action_time) {
 			type = GPM_WARNING_ACTION;
-		} else if (battery_status->remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) {
+		} else if (battery_status->remaining_time <= manager->priv->critical_time) {
 			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->remaining_time <= BATTERY_VERY_LOW_REMAINING_TIME) {
+		} else if (battery_status->remaining_time <= manager->priv->very_low_time) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->remaining_time <= BATTERY_LOW_REMAINING_TIME) {
+		} else if (battery_status->remaining_time <= manager->priv->low_time) {
 			type = GPM_WARNING_LOW;
 		}
 	} else {
-		if (battery_status->percentage_charge <= BATTERY_ACTION_PERCENTAGE) {
+		if (battery_status->percentage_charge <= manager->priv->action_percentage) {
 			type = GPM_WARNING_ACTION;
-		} else if (battery_status->percentage_charge <= BATTERY_CRITICAL_PERCENTAGE) {
+		} else if (battery_status->percentage_charge <= manager->priv->critical_percentage) {
 			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->percentage_charge <= BATTERY_VERY_LOW_PERCENTAGE) {
+		} else if (battery_status->percentage_charge <= manager->priv->very_low_percentage) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->percentage_charge <= BATTERY_LOW_PERCENTAGE) {
+		} else if (battery_status->percentage_charge <= manager->priv->low_percentage) {
 			type = GPM_WARNING_LOW;
 		}
 	}
@@ -1419,7 +1420,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1533,7 +1534,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1583,7 +1584,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	const char *name;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
-	warning_type = gpm_manager_get_warning_type (battery_status, FALSE);
+	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE ||
@@ -1984,12 +1985,42 @@ gpm_manager_init (GpmManager *manager)
 	} else {
 		gpm_debug ("Using percentage notification policy");
 	}
-	
+
 	manager->priv->suppress_policy_timeout =
 		gconf_client_get_int (manager->priv->gconf_client,
 				      GPM_PREF_POLICY_TIMEOUT, NULL);
 	gpm_debug ("Using a supressed policy timeout of %i seconds",
 		   manager->priv->suppress_policy_timeout);
+
+	/* get percentage policy */
+	manager->priv->low_percentage = gconf_client_get_int (manager->priv->gconf_client,
+							      GPM_PREF_LOW_PERCENTAGE, NULL);
+	manager->priv->very_low_percentage = gconf_client_get_int (manager->priv->gconf_client,
+								   GPM_PREF_VERY_LOW_PERCENTAGE, NULL);
+	manager->priv->critical_percentage = gconf_client_get_int (manager->priv->gconf_client,
+								   GPM_PREF_CRITICAL_PERCENTAGE, NULL);
+	manager->priv->action_percentage = gconf_client_get_int (manager->priv->gconf_client,
+								 GPM_PREF_ACTION_PERCENTAGE, NULL);
+
+	/* can remove when we next release, until then, assume we are morons */
+	if (manager->priv->low_percentage == 0) {
+		g_error ("You need to install the new gconf schema properly, "
+			 "battery_low_percentage cannot be zero");
+	}
+
+	/* get time policy */
+	manager->priv->low_time = gconf_client_get_int (manager->priv->gconf_client, 
+							GPM_PREF_LOW_TIME, NULL);
+	manager->priv->very_low_time = gconf_client_get_int (manager->priv->gconf_client,
+							     GPM_PREF_VERY_LOW_TIME, NULL);
+	manager->priv->critical_time = gconf_client_get_int (manager->priv->gconf_client,
+							     GPM_PREF_CRITICAL_TIME, NULL);
+	manager->priv->action_time = gconf_client_get_int (manager->priv->gconf_client,
+							   GPM_PREF_ACTION_TIME, NULL);
+
+	/* Get dim settings */
+	manager->priv->lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
+								  GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 }
 
 static void
@@ -2007,31 +2038,24 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->gconf_client != NULL) {
 		g_object_unref (manager->priv->gconf_client);
 	}
-
 	if (manager->priv->dpms != NULL) {
 		g_object_unref (manager->priv->dpms);
 	}
-
 	if (manager->priv->idle != NULL) {
 		g_object_unref (manager->priv->idle);
 	}
-
 	if (manager->priv->info != NULL) {
 		g_object_unref (manager->priv->info);
 	}
-
 	if (manager->priv->power != NULL) {
 		g_object_unref (manager->priv->power);
 	}
-
 	if (manager->priv->brightness != NULL) {
 		g_object_unref (manager->priv->brightness);
 	}
-
 	if (manager->priv->tray_icon != NULL) {
 		g_object_unref (manager->priv->tray_icon);
 	}
-
 	if (manager->priv->inhibit != NULL) {
 		g_object_unref (manager->priv->inhibit);
 	}

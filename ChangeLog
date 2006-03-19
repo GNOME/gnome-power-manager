@@ -1,3 +1,22 @@
+2006-03-19  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add:
+	/apps/gnome-power-manager/battery_low_percentage
+	/apps/gnome-power-manager/battery_very_low_percentage
+	/apps/gnome-power-manager/battery_critical_percentage
+	/apps/gnome-power-manager/battery_action_percentage
+	/apps/gnome-power-manager/battery_low_time
+	/apps/gnome-power-manager/battery_very_low_time
+	/apps/gnome-power-manager/battery_critical_time
+	/apps/gnome-power-manager/battery_action_time
+	/apps/gnome-power-manager/laptop_panel_dim_brightness
+
+	* src/gpm-manager.c (gpm_manager_init): Read in the values set in gconf
+	so that we can change the hardcoded values if required. Fixes a problem
+	reported by Ralf Mörler, where the battery critical was set impossibly
+	low. Also get the LCD brightness on idle from gconf, as we are in the
+	area, and might want to be tweaked by distros/users.
+
 2006-03-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-inhibit.{c|h}: Add gpm_inhibit_check() so we can see if it's

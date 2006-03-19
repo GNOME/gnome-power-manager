@@ -65,6 +65,20 @@ G_BEGIN_DECLS
 /* This allows us to ignore policy on resume for a bit */
 #define GPM_PREF_POLICY_TIMEOUT         GPM_PREF_DIR "/policy_suppression_timeout"
 
+/* only valid when use_time_for_policy FALSE */
+#define GPM_PREF_LOW_PERCENTAGE		GPM_PREF_DIR "/battery_low_percentage"
+#define GPM_PREF_VERY_LOW_PERCENTAGE	GPM_PREF_DIR "/battery_very_low_percentage"
+#define GPM_PREF_CRITICAL_PERCENTAGE	GPM_PREF_DIR "/battery_critical_percentage"
+#define GPM_PREF_ACTION_PERCENTAGE	GPM_PREF_DIR "/battery_action_percentage"
+
+/* only valid when use_time_for_policy TRUE */
+#define GPM_PREF_LOW_TIME		GPM_PREF_DIR "/battery_low_time"
+#define GPM_PREF_VERY_LOW_TIME		GPM_PREF_DIR "/battery_very_low_time"
+#define GPM_PREF_CRITICAL_TIME		GPM_PREF_DIR "/battery_critical_time"
+#define GPM_PREF_ACTION_TIME		GPM_PREF_DIR "/battery_action_time"
+
+#define GPM_PREF_PANEL_DIM_BRIGHTNESS	GPM_PREF_DIR "/laptop_panel_dim_brightness"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,
