@@ -1,5 +1,25 @@
 2006-03-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.{c|h}: Remove the DBUS n-o-c functionality.
+
+	* src/gpm-dbus-monitor.{c|h}, src/Makefile.am, src/gpm-marshall.list:
+	Add these files as this functionality has been refactored from
+	gpm-hal-monitor.
+	Add the facility to monitor session name-owner-change as well as
+	system, as we need this for the auto-remove inhibits when the caller
+	crashes or forgets to remove the inhibit request.
+
+	* src/gpm-inhibit.{c|h}: Add gpm_inhibit_remove_dbus which does a
+	forced removal if already existing in the inhibit database.
+
+	* src/gpm-manager.c: Watch the session dbus, and call
+	gpm_inhibit_remove_dbus when a application quits from the session bus.
+
+	* src/gpm-power.{c|h}: Proxy the dbus n-o-c, so we can deal with hal's
+	disappearance from the system bus like we used to.
+
+2006-03-19  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Rework the key
 	names a little, so they are in the same area in gconf.
 

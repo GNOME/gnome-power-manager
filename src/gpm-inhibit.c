@@ -110,34 +110,17 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
  * @connection:		Connection name
  * @application:	Application name
  * @cookie:		The cookie that we used to register
- * @forced:		If we fell off the dbus by crashing...
  * 
- * Removes a cookie and asscosiated data from the GpmInhibitData struct.
+ * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
 void
 gpm_inhibit_remove (GpmInhibit *inhibit,
 		    const char *connection,
-		    int		cookie,
-		    gboolean	forced)
+		    int		cookie)
 {
 	int a;
 	GpmInhibitData *data;
 	gboolean found = FALSE;
-
-	if (forced) {
-		/* Remove *any* connections that match the connection */
-		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
-			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
-			if (strcmp (data->connection, connection) == 0) {
-				gpm_debug ("Auto-revoked idle inhibit on '%s'.",
-					   data->application);
-				gpm_inhibit_free_data_object (data);
-				inhibit->priv->list = g_slist_remove (inhibit->priv->list,
-								      (gconstpointer) data);
-			}
-		}
-		return;
-	}
 
 	/* Only remove the correct cookie */
 	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
@@ -158,6 +141,35 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
 		gpm_warning ("Cannot find registered program for #%i, so "
 			     "cannot do AllowInactiveSleep", cookie);
 	}
+}
+
+/**
+ * gpm_inhibit_remove_dbus:
+ * @connection:		Connection name
+ * @application:	Application name
+ * @cookie:		The cookie that we used to register
+ * 
+ * Checks to see if the dbus closed session is registered, in which case
+ * unregister it.
+ **/
+void
+gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
+			 const char *connection)
+{
+	int a;
+	GpmInhibitData *data;
+	/* Remove *any* connections that match the connection */
+	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
+		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
+		if (strcmp (data->connection, connection) == 0) {
+			gpm_debug ("Auto-revoked idle inhibit on '%s'.",
+				   data->application);
+			gpm_inhibit_free_data_object (data);
+			inhibit->priv->list = g_slist_remove (inhibit->priv->list,
+							      (gconstpointer) data);
+		}
+	}
+	return;
 }
 
 /**

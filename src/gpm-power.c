@@ -1345,16 +1345,28 @@ gpm_hash_free_device_cache (GpmPower *power)
 	power->priv->battery_device_cache = NULL;
 }
 
-static void
-hal_disconnected_cb (GpmHalMonitor *monitor,
-		     GpmPower      *power)
+void
+gpm_power_dbus_name_owner_changed (GpmPower	*power,
+				   const char	*name,
+				   const char	*prev,
+				   const char	*new)
 {
-	/* We have to clear the caches, else the devices think they are
-	   initialised, and we segfault in various places. */
-	gpm_hash_free_kind_cache (power);
-	gpm_hash_new_kind_cache (power);
-	gpm_hash_free_device_cache (power);
-	gpm_hash_new_device_cache (power);
+	if (strcmp (name, HAL_DBUS_SERVICE) == 0) {
+		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+			hal_stop_monitor (power->priv->hal_monitor);
+			/* We have to clear the caches, else the devices think they are
+			   initialised, and we segfault in various places. */
+			gpm_hash_free_kind_cache (power);
+			gpm_hash_free_device_cache (power);
+		}
+		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+			/* Re-create the caches */
+			gpm_hash_new_kind_cache (power);
+			gpm_hash_new_device_cache (power);
+			hal_start_monitor (power->priv->hal_monitor);
+			battery_kind_cache_update_all (power);
+		}
+	}
 }
 
 static void
@@ -1375,8 +1387,6 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (hal_battery_added_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
-	g_signal_connect (power->priv->hal_monitor, "hal-disconnected",
-			  G_CALLBACK (hal_disconnected_cb), power);
 
 	power->priv->battery_kind_cache = NULL;
 	power->priv->battery_device_cache = NULL;

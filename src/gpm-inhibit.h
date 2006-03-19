@@ -58,9 +58,9 @@ int		 gpm_inhibit_add		(GpmInhibit	*inhibit,
 
 void		 gpm_inhibit_remove		(GpmInhibit	*inhibit,
 						 const char	*connection,
-						 int		 cookie,
-						 gboolean	 forced);
-
+						 int		 cookie);
+void		 gpm_inhibit_remove_dbus	(GpmInhibit	*inhibit,
+						 const char	*connection);
 gboolean	 gpm_inhibit_check		(GpmInhibit	*inhibit);
 
 void		 gpm_inhibit_get_message	(GpmInhibit	*inhibit,

@@ -56,6 +56,7 @@
 #include "gpm-info.h"
 #include "gpm-power.h"
 #include "gpm-hal-monitor.h"
+#include "gpm-dbus-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
 #include "gpm-inhibit.h"
@@ -101,6 +102,7 @@ struct GpmManagerPrivate
 	GpmIdle		*idle;
 	GpmInfo		*info;
 	GpmPower	*power;
+	GpmDbusMonitor	*dbus;
 	GpmBrightness   *brightness;
 	GpmInhibit	*inhibit;
 
@@ -784,7 +786,6 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 
 	return ret;
 }
-/***************************************************************/
 
 void
 gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
@@ -814,7 +815,7 @@ gpm_manager_allow_inactive_sleep (GpmManager	*manager,
 #else
 	const char* connection = dbus_g_method_get_sender (context);
 #endif
-	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie, FALSE);
+	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
 	dbus_g_method_return (context);
 }
 
@@ -1217,6 +1218,34 @@ lid_button_pressed (GpmManager	 *manager,
 
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
+	}
+}
+
+static void
+dbus_name_owner_changed_system_cb (GpmDbusMonitor *power,
+				   const char	  *name,
+				   const char	  *prev,
+				   const char	  *new,
+				   GpmManager	  *manager)
+{
+	/* we need to proxy this */
+	gpm_power_dbus_name_owner_changed (manager->priv->power, name, prev, new);
+}
+
+static void
+dbus_name_owner_changed_session_cb (GpmDbusMonitor *power,
+				    const char	   *name,
+				    const char     *prev,
+				    const char     *new,
+				    GpmManager	   *manager)
+{
+	if (strlen (new) == 0) {
+#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
+		gpm_warning ("As DBUS is less than 0.60, we *cannot* "
+			     "auto-clean-up connections!");
+#else
+		gpm_inhibit_remove_dbus (manager->priv->inhibit, name);
+#endif
 	}
 }
 
@@ -1875,6 +1904,12 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->gconf_client = gconf_client_get_default ();
 
+	manager->priv->dbus = gpm_dbus_monitor_new ();
+	g_signal_connect (manager->priv->dbus, "name-owner-changed-system",
+			  G_CALLBACK (dbus_name_owner_changed_system_cb), manager);
+	g_signal_connect (manager->priv->dbus, "name-owner-changed-session",
+			  G_CALLBACK (dbus_name_owner_changed_session_cb), manager);
+
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "button-pressed",
 			  G_CALLBACK (power_button_pressed_cb), manager);
@@ -2058,6 +2093,9 @@ gpm_manager_finalize (GObject *object)
 	}
 	if (manager->priv->inhibit != NULL) {
 		g_object_unref (manager->priv->inhibit);
+	}
+	if (manager->priv->dbus != NULL) {
+		g_object_unref (manager->priv->dbus);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
