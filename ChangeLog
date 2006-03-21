@@ -1,3 +1,11 @@
+2006-03-20  JP Rosevear <jpr@novell.com>
+
+	* src/gpm-hal-monitor.c: fixed response to HAL stops/restarts.
+	(watch_device_disconnect_condition,
+	watch_device_disconnect_proxy_modified, watch_device_remove): removed.
+	(watch_remove_battery): disconnect from signals and free removed
+	data from the hash table.
+
 2006-03-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-monitor.{c|h}: Remove the DBUS n-o-c functionality.

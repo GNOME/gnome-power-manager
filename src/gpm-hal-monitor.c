@@ -329,39 +329,6 @@ watch_device_connect_property_modified (GpmHalMonitor *monitor,
 
 }
 
-static void
-watch_device_disconnect_condition (GpmHalMonitor *monitor,
-				   const char    *udi)
-{
-	DBusGProxy *proxy;
-
-	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
-	if (proxy == NULL) {
-		gpm_warning ("Device is not being watched: %s", udi);
-		return;
-	}
-
-	dbus_g_proxy_connect_signal (proxy, "Condition",
-				     G_CALLBACK (watch_device_condition), monitor, NULL);
-
-}
-
-static void
-watch_device_disconnect_property_modified (GpmHalMonitor *monitor,
-					   const char    *udi)
-{
-	DBusGProxy *proxy;
-
-	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
-	if (proxy == NULL) {
-		gpm_warning ("Device is not being watched: %s", udi);
-		return;
-	}
-
-	dbus_g_proxy_connect_signal (proxy, "PropertyModified",
-				     G_CALLBACK (watch_device_properties_modified), monitor, NULL);
-}
-
 static gboolean
 watch_device_add (GpmHalMonitor *monitor,
 		  const char    *udi)
@@ -397,23 +364,6 @@ watch_device_add (GpmHalMonitor *monitor,
 	return TRUE;
 }
 
-static gboolean
-watch_device_remove (GpmHalMonitor *monitor,
-		     const char    *udi)
-{
-	DBusGProxy *proxy;
-
-	proxy = g_hash_table_lookup (monitor->priv->devices, udi);
-	if (proxy == NULL) {
-		gpm_warning ("Device is not being watched: %s", udi);
-		return FALSE;
-	}
-
-	g_hash_table_remove (monitor->priv->devices, udi);
-
-	return TRUE;
-}
-
 static void
 watch_add_battery (GpmHalMonitor *monitor,
 		   const char    *udi)
@@ -429,12 +379,31 @@ static void
 watch_remove_battery (GpmHalMonitor *monitor,
 		      const char    *udi)
 {
-	watch_device_disconnect_condition (monitor, udi);
-	watch_device_disconnect_property_modified (monitor, udi);
-	watch_device_remove (monitor, udi);
+	gpointer key, value;
+	char *udi_key;
+	DBusGProxy *proxy = NULL;
+
+	if (!g_hash_table_lookup_extended (monitor->priv->devices, udi, &key, &value)) {
+		gpm_warning ("Device is not being watched: %s", udi);
+		return;
+	}
+
+	udi_key = key;
+	proxy = value;
+
+	dbus_g_proxy_disconnect_signal (proxy, "Condition",
+					G_CALLBACK (watch_device_condition), monitor);
+
+	dbus_g_proxy_disconnect_signal (proxy, "PropertyModified",
+				     G_CALLBACK (watch_device_properties_modified), monitor);
+
+	g_hash_table_remove (monitor->priv->devices, udi);
 
 	gpm_debug ("emitting battery-removed : %s", udi);
-	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
+	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi_key);
+
+	g_object_unref (proxy);
+	g_free (udi_key);
 }
 
 static void
@@ -605,21 +574,31 @@ coldplug_all (GpmHalMonitor *monitor)
 
 
 static void
-remove_batteries_in_hash (const char *udi, gpointer value, GpmHalMonitor *monitor)
+remove_batteries_in_hash (const char *udi, gpointer value, GList **udis)
 {
-	watch_remove_battery (monitor, udi);
+	*udis = g_list_prepend (*udis, (char *) udi);
 }
 
 static void
 gpm_hash_free_devices_cache (GpmHalMonitor *monitor)
 {
+	GList *udis = NULL, *l;
+	
 	if (! monitor->priv->devices) {
 		return;
 	}
+
 	gpm_debug ("freeing cache");
+	/* Build a list of udis so we can cleanly remove the items
+	 * with signals */
 	g_hash_table_foreach (monitor->priv->devices,
 			      (GHFunc) remove_batteries_in_hash,
-			      monitor);
+			      &udis);
+
+	for (l = udis; l; l = l->next)
+		watch_remove_battery (monitor, l->data);
+	g_list_free (udis);
+	
 	g_hash_table_destroy (monitor->priv->devices);
 	monitor->priv->devices = NULL;
 }
@@ -631,10 +610,7 @@ gpm_hash_new_devices_cache (GpmHalMonitor *monitor)
 		return;
 	}
 	gpm_debug ("creating cache");
-	monitor->priv->devices = g_hash_table_new_full (g_str_hash,
-							g_str_equal,
-							g_free,
-							(GDestroyNotify)g_object_unref);
+	monitor->priv->devices = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 void
