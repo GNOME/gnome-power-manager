@@ -637,7 +637,8 @@ gpm_manager_blank_screen (GpmManager *manager,
 	do_lock = manager_do_we_screensave (manager,
 					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
-		gpm_screensaver_lock ();
+		if (!gpm_screensaver_lock ())
+			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
 	/* We give the options to enable DPMS because some laptops do
 	 * not turn off the LCD backlight when the lid is closed. 

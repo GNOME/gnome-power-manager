@@ -163,8 +163,10 @@ gpm_screensaver_lock (void)
 
 	gpm_debug ("doing gnome-screensaver lock");
 
-	if (!gpm_screensaver_get_session_conn (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection)) {
+		gpm_debug ("Not locking, no session connection for screensaver");
 		return FALSE;
+	}
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 					      GS_LISTENER_SERVICE,
 					      GS_LISTENER_PATH,
