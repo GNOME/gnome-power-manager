@@ -88,8 +88,7 @@ typedef enum {
 #define GPM_BUTTON_BRIGHT_UP_DEP	"brightness_up"		/* Remove when we depend on HAL 0.5.8 */
 #define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightness_down"	/* as these are the old names */
 #define GPM_BUTTON_LOCK			"lock"
-/* Using www until we get a better one defined for us by the kernel */
-#define GPM_BUTTON_BATTERY		"www"
+#define GPM_BUTTON_BATTERY		"battery"
 
 #define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
 #define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
