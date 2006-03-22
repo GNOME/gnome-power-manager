@@ -28,7 +28,7 @@ typedef struct GpmSimpleGraphPrivate	GpmSimpleGraphPrivate;
 typedef struct {
 	int x; //0..100
 	int y; //0..100
-} GpmSimpleDataPoint;
+} GpmDataPoint;
 
 typedef enum {
 	GPM_GRAPH_TYPE_PERCENTAGE,
@@ -53,8 +53,6 @@ GtkWidget	*gpm_simple_graph_new		(void);
 
 void		 gpm_simple_graph_set_invert_x	(GpmSimpleGraph *graph, gboolean inv);
 void		 gpm_simple_graph_set_invert_y	(GpmSimpleGraph *graph, gboolean inv);
-void		 gpm_simple_graph_set_stop_x	(GpmSimpleGraph *graph, gint stop);
-void		 gpm_simple_graph_set_stop_y	(GpmSimpleGraph *graph, gint stop);
 void		 gpm_simple_graph_set_data	(GpmSimpleGraph *graph, GList *list);
 void		 gpm_simple_graph_set_axis_x	(GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis);
 void		 gpm_simple_graph_set_axis_y	(GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis);

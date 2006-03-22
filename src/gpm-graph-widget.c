@@ -27,18 +27,23 @@ struct GpmSimpleGraphPrivate
 	gint		stop_x;
 	gint		stop_y;
 
+	gint		start_x;
+	gint		start_y;
+
 	gint		box_x; /* size of the white box, not the widget */
 	gint		box_y;
 	gint		box_width;
 	gint		box_height;
 
-	GpmSimpleGraphAxisType axis_x;
-	GpmSimpleGraphAxisType axis_y;
+	GpmSimpleGraphAxisType	 axis_x;
+	GpmSimpleGraphAxisType	 axis_y;
+	cairo_font_options_t	*options;
 
 	GList		*list;
 };
 
 static gboolean gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event);
+static void	gpm_simple_graph_finalize (GObject *object);
 
 void
 gpm_simple_graph_set_axis_x (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
@@ -55,11 +60,11 @@ gpm_simple_graph_set_axis_y (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
 static void
 gpm_simple_graph_class_init (GpmSimpleGraphClass *class)
 {
-	GtkWidgetClass *widget_class;
-
-	widget_class = GTK_WIDGET_CLASS (class);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
 	widget_class->expose_event = gpm_simple_graph_expose;
+	object_class->finalize = gpm_simple_graph_finalize;
 
 	g_type_class_add_private (class, sizeof (GpmSimpleGraphPrivate));
 }
@@ -72,10 +77,23 @@ gpm_simple_graph_init (GpmSimpleGraph *graph)
 	graph->priv->invert_y = FALSE;
 	graph->priv->stop_x = 60;
 	graph->priv->stop_y = 100;
+	graph->priv->start_x = 0;
+	graph->priv->start_y = 0;
 	graph->priv->use_grid = TRUE;
 	graph->priv->list = NULL;
 	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
 	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
+	/* setup font */
+	graph->priv->options = cairo_font_options_create ();
+}
+
+/** finalise the object */
+static void
+gpm_simple_graph_finalize (GObject *object)
+{
+	GpmSimpleGraph *graph = (GpmSimpleGraph*) object;
+
+	cairo_font_options_destroy (graph->priv->options);
 }
 
 /** Sets the inverse policy for the X axis, i.e. to count from 0..Y or Y..0 */
@@ -92,20 +110,6 @@ gpm_simple_graph_set_invert_y (GpmSimpleGraph *graph, gboolean inv)
 	graph->priv->invert_y = inv;
 }
 
-/** Sets the stop point for the X axis, i.e. the maximum number */
-void
-gpm_simple_graph_set_stop_x (GpmSimpleGraph *graph, gint stop)
-{
-	graph->priv->stop_x = stop;
-}
-
-/** Sets the stop point for the Y axis, i.e. the maximum number */
-void
-gpm_simple_graph_set_stop_y (GpmSimpleGraph *graph, gint stop)
-{
-	graph->priv->stop_y = stop;
-}
-
 /** Sets the data for the graph. This data has to be normalised on both
     axes to 0..100 and 0..100. You MUST NOT free the list before the widget. */
 void
@@ -114,19 +118,27 @@ gpm_simple_graph_set_data (GpmSimpleGraph *graph, GList *list)
 	graph->priv->list = list;
 }
 
-/* value is in minutes for time */
+/* value is in seconds for time, mWh for rate */
 static char *
 gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 {
 	char *text = NULL;
 	if (axis == GPM_GRAPH_TYPE_TIME) {
-		int hours = value / 60;
-		int minutes =  value - (hours * 60);
-		text = g_strdup_printf ("%iH%02i", hours, minutes);
+		int minutes = value / 60;
+		int seconds = value - (minutes * 60);
+		int hours = minutes / 60;
+		minutes =  minutes - (hours * 60);
+		if (hours > 0) {
+			text = g_strdup_printf ("%ih%02im", hours, minutes);
+		} else if (minutes > 0) {
+			text = g_strdup_printf ("%02im%02is", minutes, seconds);
+		} else {
+			text = g_strdup_printf ("%02is", seconds);
+		}
 	} else if (axis == GPM_GRAPH_TYPE_PERCENTAGE) {
 		text = g_strdup_printf ("%i%%", value);
 	} else if (axis == GPM_GRAPH_TYPE_RATE) {
-		text = g_strdup_printf ("%iWh", value);
+		text = g_strdup_printf ("%iWh", value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
 	}
@@ -136,7 +148,7 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 
 
 static void
-draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
+gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 {
 	int a, b;
 	double dotted[] = {1., 2.};
@@ -169,22 +181,19 @@ draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 }
 
 static void
-draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
+gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 {
 	int a, b;
 	gchar *text;
 	gint value;
 	double divwidth  = graph->priv->box_width / 10;
 	double divheight = graph->priv->box_height / 10;
-	gint length_x = graph->priv->stop_x - 0;
-	gint length_y = graph->priv->stop_y - 0;
+	gint length_x = graph->priv->stop_x - graph->priv->start_x;
+	gint length_y = graph->priv->stop_y - graph->priv->start_y;
 
 	cairo_save (cr); /* push stack */
 
-	/* setup font */
-	cairo_font_options_t *options;
-	options = cairo_font_options_create ();
-	cairo_set_font_options (cr, options);
+	cairo_set_font_options (cr, graph->priv->options);
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);
@@ -215,50 +224,151 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 		g_free (text);
 	}
 
-	cairo_font_options_destroy (options);
-
 	cairo_restore (cr); /* pop stack */
 }
 
+/* checks all points are displayable on the graph */
 static void
-draw_line (GpmSimpleGraph *graph, cairo_t *cr)
+gpm_simple_graph_check_range (GpmSimpleGraph *graph)
 {
-	int a;
-	/* -2 is so we can keep the lines inside the box at both extremes */
-	double unitx = (graph->priv->box_width - 3) / 100.f;
-	double unity = (graph->priv->box_height - 3) / 100.f;
+	if (! graph->priv->list) {
+		gpm_debug ("no data");
+		return;
+	}
+	GpmDataPoint *new = NULL;
+	GList *l;
+	for (l=graph->priv->list; l != NULL; l=l->next) {
+		new = (GpmDataPoint *) l->data;
+		if (new->x < graph->priv->start_x) {
+			gpm_warning ("point out of range (x=%i)", new->x);
+			new->x = 0;
+		}
+		if (new->x > graph->priv->stop_x) {
+			gpm_warning ("point out of range (x=%i)", new->x);
+			new->x = graph->priv->stop_x;
+		}
+		if (new->y < graph->priv->start_y) {
+			gpm_warning ("point out of range (y=%i)", new->y);
+			new->y = 0;
+		}
+		if (new->y > graph->priv->stop_y) {
+			gpm_warning ("point out of range (y=%i)", new->y);
+			new->y = graph->priv->stop_y;
+		}
+	}
+}
+
+static void
+gpm_simple_graph_auto_range (GpmSimpleGraph *graph)
+{
+	if (! graph->priv->list) {
+		gpm_debug ("no data");
+		return;
+	}
+
+	int smallest_x = 100000;
+	int biggest_x = 0;
+	int smallest_y = 100000;
+	int biggest_y = 0;
+	GpmDataPoint *new = NULL;
+	GList *l;
+	for (l=graph->priv->list; l != NULL; l=l->next) {
+		new = (GpmDataPoint *) l->data;
+		if (new->x > biggest_x) {
+			biggest_x = new->x;
+		}
+		if (new->x < smallest_x) {
+			smallest_x = new->x;
+		}
+		if (new->y > biggest_y) {
+			biggest_y = new->y;
+		}
+		if (new->y < smallest_y) {
+			smallest_y = new->y;
+		}
+	}
+
+	/* x */
+	if (graph->priv->axis_x == GPM_GRAPH_TYPE_PERCENTAGE) {
+		graph->priv->start_x = 0;
+		graph->priv->stop_x = 100;
+	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_TIME) {
+		graph->priv->start_x = 0;
+		graph->priv->stop_x = ((biggest_x/60)+1)*60;
+		if (graph->priv->stop_x > 60) {
+			graph->priv->stop_x = ((biggest_x/(10*60))+1)*(10*60);
+		}
+	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_RATE) {
+		graph->priv->start_x = 0;
+		graph->priv->stop_x = ((biggest_x/10000)+2)*10000;
+		if (graph->priv->stop_x < 10000) {
+			graph->priv->stop_x = 10000;
+		}
+	} else {
+		graph->priv->start_x = 0;
+		graph->priv->stop_x = ((biggest_x/10)+1)*10;
+	//	graph->priv->start_x = ((smallest_y/10)-1)*10;
+	}
+
+	/* y */
+	if (graph->priv->axis_y == GPM_GRAPH_TYPE_PERCENTAGE) {
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = 100;
+	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_TIME) {
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y/60)+2)*60;
+		if (graph->priv->stop_y > 60) {
+			graph->priv->stop_y = ((biggest_y/(10*60))+2)*(10*60);
+		}
+	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_RATE) {
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y/10000)+2)*10000;
+		if (graph->priv->stop_y < 10000) {
+			graph->priv->stop_y = 10000;
+		}
+	} else {
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y/10)+1)*10;
+	//	graph->priv->start_y = ((smallest_y/10)-1)*10;
+	}
+}
+
+static void
+gpm_simple_graph_draw_line (GpmSimpleGraph *graph, cairo_t *cr)
+{
+	int length_x = graph->priv->stop_x - graph->priv->start_x;
+	int length_y = graph->priv->stop_y - graph->priv->start_y;
+
+	/* -3 is so we can keep the lines inside the box at both extremes */
+	float unitx = (float)(graph->priv->box_width - 3) / (float)length_x;
+	float unity = (float)(graph->priv->box_height - 3) / (float)length_y;
 
 	if (! graph->priv->list) {
 		gpm_debug ("no data");
 		return;
 	}
 
+	gpm_simple_graph_check_range (graph);
+
 	cairo_save (cr); /* push stack */
 
 	cairo_set_line_width (cr, 2);
 
-	GpmSimpleDataPoint *new = NULL;
-	GpmSimpleDataPoint *old = (GpmSimpleDataPoint *) g_list_nth_data (graph->priv->list, 0);
+	GpmDataPoint *new = NULL;
+	GpmDataPoint *old = (GpmDataPoint *) g_list_nth_data (graph->priv->list, 0);
 
-	for (a=1; a<=g_list_length (graph->priv->list)-1; a++) {
-		new = (GpmSimpleDataPoint *) g_list_nth_data (graph->priv->list, a);
-		if (new->x < 0 || new->x > 100) {
-			new->x = 50;
-		}
-		if (new->y < 0 || new->y > 100) {
-			new->y = 50;
-		}
+	/* todo, allow line colour change */
+	cairo_set_source_rgb (cr, 0, 0.8, 0);
+
+	GList *l;
+	for (l=graph->priv->list; l != NULL; l=l->next) {
+		new = (GpmDataPoint *) l->data;
 		cairo_move_to (cr,
-			       graph->priv->box_x + (unitx * old->x),
-			       graph->priv->box_y + (unity * (100 - old->y)) + 1.5);
+			       graph->priv->box_x + (unitx * (float)old->x) + 1,
+			       graph->priv->box_y + (unity * (float)(graph->priv->stop_y - old->y)) + 1.5);
 		cairo_line_to (cr,
-			       graph->priv->box_x + (unitx * new->x),
-			       graph->priv->box_y + (unity * (100 - new->y)) + 1.5);
-		if (new->y < old->y) {
-			cairo_set_source_rgb (cr, 1, 0, 0);
-		} else {
-			cairo_set_source_rgb (cr, 0, 1, 0);
-		}
+			       graph->priv->box_x + (unitx * (float)new->x) + 1,
+			       graph->priv->box_y + (unity * (float)(graph->priv->stop_y - new->y)) + 1.5);
 		cairo_stroke (cr);
 		old = new;
 	}
@@ -267,7 +377,7 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 }
 
 static void
-draw_graph (GtkWidget *graph_widget, cairo_t *cr)
+gpm_simple_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
 
 	GpmSimpleGraph *graph = (GpmSimpleGraph*) graph_widget;
@@ -286,10 +396,13 @@ draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	cairo_fill (cr);
 
 	if (graph->priv->use_grid) {
-		draw_grid (graph, cr);
+		gpm_simple_graph_draw_grid (graph, cr);
 	}
-	draw_labels (graph, cr);
-	draw_line (graph, cr);
+
+	gpm_simple_graph_auto_range (graph);
+
+	gpm_simple_graph_draw_labels (graph, cr);
+	gpm_simple_graph_draw_line (graph, cr);
 
 	/* solid outline box */
 	cairo_rectangle (cr, graph->priv->box_x + 0.5, graph->priv->box_y + 0.5,
@@ -318,7 +431,7 @@ gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 	graph->allocation.x = event->area.x;
 	graph->allocation.y = event->area.y;
 
-	draw_graph (graph, cr);
+	gpm_simple_graph_draw_graph (graph, cr);
 
 	cairo_destroy (cr);
 	return FALSE;

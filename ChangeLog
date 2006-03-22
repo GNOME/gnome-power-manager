@@ -1,5 +1,11 @@
 2006-03-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.{c|h}, src/gpm-info.c: Spend another two hours
+	on these files, to get rid of the list-allocation, and make it work ok.
+	Still some funnies, but I'm working on those.
+
+2006-03-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal-monitor.c, src/gpm-manager.c, configure.in: Drop support
 	for < DBUS 0.61 as we need the new 0.61 API calls, and also we can
 	get rid of some compatability cruft.
