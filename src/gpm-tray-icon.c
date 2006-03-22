@@ -41,7 +41,7 @@
 
 #include <libgnomeui/gnome-help.h> /* for gnome_help_display */
 
-#if LIBNOTIFY_VERSION_MINOR >= 2
+#ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
 
@@ -71,9 +71,7 @@ struct GpmTrayIconPrivate
 	gboolean        can_suspend;
 	gboolean        can_hibernate;
 
-#if (LIBNOTIFY_VERSION_MINOR == 2)
-	NotifyHandle   *notify;
-#elif (LIBNOTIFY_VERSION_MINOR >= 3)
+#ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notify;
 #endif
 };
@@ -450,7 +448,7 @@ gpm_tray_icon_constructor (GType                  type,
 					   "    <menuitem action=\"TrayHibernate\" />"
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
-#if EXPERIMENTAL_FEATURES_ENABLED
+#ifdef EXPERIMENTAL_FEATURES_ENABLED
 					   "    <menuitem action=\"TrayInfo\" />"
 #endif
 					   "    <separator />"
@@ -561,10 +559,8 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	gtk_container_add (GTK_CONTAINER (icon), icon->priv->ebox);
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 
-#if (LIBNOTIFY_VERSION_MINOR >= 3)
+#ifdef HAVE_LIBNOTIFY
 	ret = notify_init (GPM_NAME);
-#elif (LIBNOTIFY_VERSION_MINOR == 2)
-	ret = notify_glib_init (GPM_NAME, NULL);
 #endif
 	if (!ret) {
 		gpm_warning ("gpm_tray_icon_init failed");
@@ -598,7 +594,7 @@ gpm_tray_icon_new (void)
 	return GPM_TRAY_ICON (tray_icon);
 }
 
-#if LIBNOTIFY_VERSION_MINOR >= 2
+#ifdef HAVE_LIBNOTIFY
 static gboolean
 get_widget_position (GtkWidget *widget,
 		     int       *x,
@@ -619,8 +615,7 @@ get_widget_position (GtkWidget *widget,
 }
 #endif
 
-#if (LIBNOTIFY_VERSION_MINOR >= 3)
-
+#ifdef HAVE_LIBNOTIFY
 static void
 notification_closed_cb (NotifyNotification *notify,
 			GpmTrayIcon        *tray)
@@ -665,64 +660,6 @@ libnotify_event (GpmTrayIcon             *tray,
 	g_signal_connect (tray->priv->notify, "closed", G_CALLBACK (notification_closed_cb), tray);
 
 	if (! notify_notification_show (tray->priv->notify, NULL)) {
-		gpm_warning ("failed to send notification (%s)", content);
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-#elif (LIBNOTIFY_VERSION_MINOR == 2)
-
-static gboolean
-libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,	/* in seconds */
-		 const char              *subject,
-		 const char              *content,
-		 const LibNotifyEventType urgency)
-{
-	NotifyIcon  *icon = NULL;
-	NotifyHints *hints = NULL;
-	int          x;
-	int          y;
-
-	/* assertion checks */
-	g_assert (content);
-
-	hints = notify_hints_new ();
-	if (tray->priv->is_visible) {
-		get_widget_position (GTK_WIDGET (tray), &x, &y);
-		notify_hints_set_int (hints, "x", x);
-		notify_hints_set_int (hints, "y", y);
-	}
-	/* echo to terminal too */
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
-		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
-	} else {
-		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
-	}
-
-	/* use default g-p-m icon for now */
-	icon = notify_icon_new_from_uri (GPM_DATA "gnome-power.png");
-
-	if (tray->priv->notify != NULL) {
-		notify_close (tray->priv->notify);
-	}
-
-	tray->priv->notify = notify_send_notification (tray->priv->notify,
-						       NULL,
-						       urgency,
-						       subject,
-						       content,
-						       icon, /* icon */
-						       TRUE,
-						       timeout,
-						       hints, /* hints */
-						       NULL, /* no user data */
-						       0);   /* no actions */
-	notify_icon_destroy (icon);
-
-	if (! tray->priv->notify) {
 		gpm_warning ("failed to send notification (%s)", content);
 		return FALSE;
 	}
@@ -804,14 +741,9 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 
 	error = NULL;
 
-#if LIBNOTIFY_VERSION_MINOR >= 2
+#ifdef HAVE_LIBNOTIFY
 	if (icon->priv->notify != NULL) {
-#if (LIBNOTIFY_VERSION_MINOR >= 3)
 		notify_notification_close (icon->priv->notify, &error);
-#elif (LIBNOTIFY_VERSION_MINOR == 2)
-		notify_close (icon->priv->notify);
-		icon->priv->notify = NULL;
-#endif
 	}
 	if (error != NULL) {
 		g_error_free (error);
