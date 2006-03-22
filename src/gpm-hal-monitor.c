@@ -308,15 +308,12 @@ watch_device_connect_property_modified (GpmHalMonitor *monitor,
 		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 61)
-	struct_type = G_TYPE_VALUE_ARRAY;
-#else
 	struct_type = dbus_g_type_get_struct ("GValueArray", 
 						G_TYPE_STRING, 
 						G_TYPE_BOOLEAN, 
 						G_TYPE_BOOLEAN, 
 						G_TYPE_INVALID);
-#endif
+
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", struct_type);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__INT_BOXED,

@@ -794,11 +794,7 @@ gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
 				    DBusGMethodInvocation *context,
 				    GError    **error)
 {
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* connection = ":demo";
-#else
 	const char* connection = dbus_g_method_get_sender (context);
-#endif
 	int cookie;
 	cookie = gpm_inhibit_add (manager->priv->inhibit, connection, application, reason);
 	dbus_g_method_return (context, cookie);
@@ -810,11 +806,7 @@ gpm_manager_allow_inactive_sleep (GpmManager	*manager,
 				  DBusGMethodInvocation *context,
 				  GError	**error)
 {
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* connection = ":demo";
-#else
 	const char* connection = dbus_g_method_get_sender (context);
-#endif
 	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
 	dbus_g_method_return (context);
 }
@@ -1239,12 +1231,7 @@ dbus_name_owner_changed_session_cb (GpmDbusMonitor *power,
 				    GpmManager	   *manager)
 {
 	if (strlen (new) == 0) {
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-		gpm_warning ("As DBUS is less than 0.60, we *cannot* "
-			     "auto-clean-up connections!");
-#else
 		gpm_inhibit_remove_dbus (manager->priv->inhibit, name);
-#endif
 	}
 }
 

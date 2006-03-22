@@ -1,5 +1,11 @@
 2006-03-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.c, src/gpm-manager.c, configure.in: Drop support
+	for < DBUS 0.61 as we need the new 0.61 API calls, and also we can
+	get rid of some compatability cruft.
+
+2006-03-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c, configure.in: Drop support for libnotify 0.2.x
 	and depend on version 0.3.0 -- to do cool stuff we need to use the new
 	glib api.
