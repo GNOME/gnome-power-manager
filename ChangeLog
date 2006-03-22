@@ -1,3 +1,16 @@
+2006-03-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: Make data go to the right graph.
+
+	* src/gpm-graph-widget.c: Make sure both 0% and 100% are within the
+	black outline box.
+
+	* src/gpm-stock-icons.{c|h}, src/gpm-manager,
+	data/icons/24x24/battery-broken.png, data/icons/24x24/ups-broken.png:
+	Add broken battery icons so we can easily get bug reports from broken
+	hardware. At the moment we just show 0% charging, which is interpreted
+	as "g-p-m gets the value wrong" rather than "the hardware is broken".
+
 2006-03-21  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-preferences.desktop.in: Apply patch from

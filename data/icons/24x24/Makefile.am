@@ -7,6 +7,7 @@ Data_DATA =				\
 	ac-adapter.png			\
 	keyboard-power-low.png		\
 	mouse-power-low.png		\
+	battery-broken.png		\
 	battery-charged.png		\
 	battery-charging-000.png	\
 	battery-charging-020.png	\
@@ -20,7 +21,8 @@ Data_DATA =				\
 	battery-discharging-060.png	\
 	battery-discharging-080.png	\
 	battery-discharging-100.png	\
-	ups-charged.png	\
+	ups-broken.png			\
+	ups-charged.png			\
 	ups-charging-000.png		\
 	ups-charging-020.png		\
 	ups-charging-040.png		\

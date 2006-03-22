@@ -60,7 +60,7 @@ gpm_simple_graph_class_init (GpmSimpleGraphClass *class)
 	widget_class = GTK_WIDGET_CLASS (class);
 
 	widget_class->expose_event = gpm_simple_graph_expose;
-	
+
 	g_type_class_add_private (class, sizeof (GpmSimpleGraphPrivate));
 }
 
@@ -115,6 +115,7 @@ gpm_simple_graph_set_data (GpmSimpleGraph *graph, GList *list)
 }
 
 #ifdef HAVE_CAIRO
+/* value is in minutes for time */
 static char *
 gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 {
@@ -129,7 +130,7 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 		text = g_strdup_printf ("%iWh", value);
 	} else {
 		text = g_strdup_printf ("%i??", value);
-	}		
+	}
 	return text;
 }
 
@@ -153,7 +154,7 @@ draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_x + (a * divwidth);
 		cairo_move_to (cr, b + 0.5, graph->priv->box_y);
-		cairo_line_to (cr, b + 0.5, graph->priv->box_y + graph->priv->box_height);		
+		cairo_line_to (cr, b + 0.5, graph->priv->box_y + graph->priv->box_height);
 		cairo_stroke (cr);
 	}
 
@@ -161,11 +162,11 @@ draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_y + (a * divheight);
 		cairo_move_to (cr, graph->priv->box_x, b + 0.5);
-		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, b + 0.5);		
+		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, b + 0.5);
 		cairo_stroke (cr);
 	}
 
-	cairo_restore (cr); /* pop stack */	
+	cairo_restore (cr); /* pop stack */
 }
 
 static void
@@ -187,7 +188,7 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	cairo_set_font_options (cr, options);
 
 	/* do x text */
-	cairo_set_source_rgb (cr, 0, 0, 0);	
+	cairo_set_source_rgb (cr, 0, 0, 0);
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_x + (a * divwidth);
 		cairo_move_to (cr, b - 18, graph->priv->box_y + graph->priv->box_height + 15);
@@ -200,7 +201,7 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
-	
+
 	/* do y text */
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
@@ -217,7 +218,7 @@ draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 
 	cairo_font_options_destroy (options);
 
-	cairo_restore (cr); /* pop stack */	
+	cairo_restore (cr); /* pop stack */
 }
 
 static void
@@ -225,8 +226,8 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 {
 	int a;
 	/* -2 is so we can keep the lines inside the box at both extremes */
-	double unitx = (graph->priv->box_width - 2)/ 100.f;
-	double unity = (graph->priv->box_height - 2)/ 100.f;
+	double unitx = (graph->priv->box_width - 3) / 100.f;
+	double unity = (graph->priv->box_height - 3) / 100.f;
 
 	if (! graph->priv->list) {
 		gpm_debug ("no data");
@@ -239,7 +240,7 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 
 	GpmSimpleDataPoint *new = NULL;
 	GpmSimpleDataPoint *old = (GpmSimpleDataPoint *) g_list_nth_data (graph->priv->list, 0);
-	
+
 	for (a=1; a<=g_list_length (graph->priv->list)-1; a++) {
 		new = (GpmSimpleDataPoint *) g_list_nth_data (graph->priv->list, a);
 		if (new->x < 0 || new->x > 100) {
@@ -250,10 +251,10 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 		}
 		cairo_move_to (cr,
 			       graph->priv->box_x + (unitx * old->x),
-			       graph->priv->box_y + (unity * (100 - old->y)));
+			       graph->priv->box_y + (unity * (100 - old->y)) + 1.5);
 		cairo_line_to (cr,
 			       graph->priv->box_x + (unitx * new->x),
-			       graph->priv->box_y + (unity * (100 - new->y)));		
+			       graph->priv->box_y + (unity * (100 - new->y)) + 1.5);
 		if (new->y < old->y) {
 			cairo_set_source_rgb (cr, 1, 0, 0);
 		} else {
@@ -263,7 +264,7 @@ draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 		old = new;
 	}
 
-	cairo_restore (cr); /* pop stack */	
+	cairo_restore (cr); /* pop stack */
 }
 
 static void
@@ -284,7 +285,7 @@ draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 			 graph->priv->box_width, graph->priv->box_height);
 	cairo_set_source_rgb (cr, 1, 1, 1);
 	cairo_fill (cr);
-	
+
 	if (graph->priv->use_grid) {
 		draw_grid (graph, cr);
 	}

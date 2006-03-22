@@ -38,8 +38,8 @@ static void     gpm_info_finalize   (GObject      *object);
 
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
-#define GPM_INFO_HARDWARE_POLL		10 /* seconds */
-#define GPM_INFO_DATA_RES_X		40 /* x resolution, greater burns the cpu */
+#define GPM_INFO_HARDWARE_POLL		3	/* seconds */
+#define GPM_INFO_DATA_RES_X		80	/* x resolution, greater burns the cpu */
 //#define DO_TESTING			TRUE
 
 typedef struct
@@ -478,9 +478,9 @@ log_do_poll (gpointer data)
 				      GPM_POWER_BATTERY_KIND_PRIMARY,
 				      &battery_status);
 
-	gpm_info_graph_add (info->priv->rate, battery_status.percentage_charge);
-	gpm_info_graph_add (info->priv->percentage, battery_status.charge_rate / 1000);
-	gpm_info_graph_add (info->priv->time, battery_status.remaining_time);
+	gpm_info_graph_add (info->priv->percentage, battery_status.percentage_charge);
+	gpm_info_graph_add (info->priv->rate, battery_status.charge_rate / 1000);
+	gpm_info_graph_add (info->priv->time, battery_status.remaining_time / 60);
 
 	if (info->priv->main_window) {
 		gpm_info_graph_update (info->priv->rate);

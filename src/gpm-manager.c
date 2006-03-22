@@ -343,8 +343,8 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status, const char *prefix)
 	} else {
 
 		/* We have a broken battery, not sure what to display here */
-		gpm_debug ("BROKEN BATTERY... Not sure what to do");
-		filename = g_strdup_printf ("%s-charging-000", prefix);
+		gpm_debug ("BROKEN BATTERY...");
+		filename = g_strdup_printf ("%s-broken", prefix);
 	}
 	gpm_debug ("filename = %s", filename);
 	return filename;
