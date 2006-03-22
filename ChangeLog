@@ -1,5 +1,15 @@
 2006-03-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c, configure.in: Make cairo required, rather
+	than an optional module.
+
+2006-03-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c, src/gpm-screensaver.{c|h}: Don't inhibit, just
+	throttle. Pointed out in #332576.
+
+2006-03-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Use the button "battery" rather than "www" to show
 	the battery status. This depends on mjg59's kernel addition and the
 	use of a HAL with the new button patched in.

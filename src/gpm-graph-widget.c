@@ -114,7 +114,6 @@ gpm_simple_graph_set_data (GpmSimpleGraph *graph, GList *list)
 	graph->priv->list = list;
 }
 
-#ifdef HAVE_CAIRO
 /* value is in minutes for time */
 static char *
 gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
@@ -301,12 +300,10 @@ draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	cairo_restore (cr); /* pop stack */
 }
-#endif
 
 static gboolean
 gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 {
-#ifdef HAVE_CAIRO
 	cairo_t *cr;
 
 	/* get a cairo_t */
@@ -324,7 +321,6 @@ gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 	draw_graph (graph, cr);
 
 	cairo_destroy (cr);
-#endif
 	return FALSE;
 }
 

@@ -280,16 +280,20 @@ update_tree_widget (GtkWidget *widget, GArray *array)
 	GtkListStore *store;
 	GtkTreeIter   iter;
 	GpmPowerDescriptionItem *di;
+	GpmPowerDescriptionItem *di2;
 
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	/* add data to the list store */
-	for (a=0; a<array->len; a++) {
+	for (a=0; a<array->len; a+=2) {
 		di = &g_array_index (array, GpmPowerDescriptionItem, a);
+		di2 = &g_array_index (array, GpmPowerDescriptionItem, a+1);
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
 				    0, di->title,
 				    1, di->value,
+				    2, di2->title,
+				    3, di2->value,
 				    -1);
 	}
 	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));                             
@@ -304,15 +308,29 @@ create_tree_widget (GtkWidget *widget)
 	/* add columns to the tree view */
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
+#define MOO	150
 
 	renderer = gtk_cell_renderer_text_new ();
 	column = gtk_tree_view_column_new_with_attributes ("Name", renderer, "text", 0, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, 0);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_set_min_width (column, MOO);
+
 	column = gtk_tree_view_column_new_with_attributes ("Value", renderer, "text", 1, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, 1);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	gtk_tree_view_column_set_min_width (column, MOO);
+
+	column = gtk_tree_view_column_new_with_attributes ("Name", renderer, "text", 2, NULL);
+	gtk_tree_view_column_set_sort_column_id (column, 2);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_set_min_width (column, MOO);
+
+	column = gtk_tree_view_column_new_with_attributes ("Value", renderer, "text", 3, NULL);
+	gtk_tree_view_column_set_sort_column_id (column, 3);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	gtk_tree_view_column_set_min_width (column, MOO);
 	
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
 }
