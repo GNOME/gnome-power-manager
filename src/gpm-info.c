@@ -173,6 +173,15 @@ gpm_info_graph_update (GpmInfoGraphData *graph)
 	gtk_widget_show (graph->widget);
 }
 
+static gboolean
+gpm_info_delete_event_cb (GtkWidget	*widget,
+			  GdkEvent	*event,
+			  GpmInfo	*info)
+{
+	gpm_info_close_cb (widget, info);
+	return FALSE;
+}
+
 /** update the tree widget with new data */
 static void
 gpm_info_update_tree (GtkWidget *widget, GArray *array)
@@ -322,8 +331,8 @@ gpm_info_show_window (GpmInfo *info)
 	gtk_window_set_icon_from_file (GTK_WINDOW (info->priv->main_window),
 				       GPM_DATA "gnome-power-manager.png", NULL);
 
-//	g_signal_connect (info->priv->main_window, "delete_event",
-//			  G_CALLBACK (gpm_info_close_cb), info);
+	g_signal_connect (info->priv->main_window, "delete_event",
+			  G_CALLBACK (gpm_info_delete_event_cb), info);
 
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
