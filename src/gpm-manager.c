@@ -37,8 +37,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-lowlevel.h>
 
 #include <libgnomeui/gnome-client.h> /* for gnome_client_request_save */
 
@@ -56,10 +54,8 @@
 #include "gpm-info.h"
 #include "gpm-power.h"
 #include "gpm-hal-monitor.h"
-#include "gpm-dbus-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
-#include "gpm-inhibit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 
@@ -102,9 +98,7 @@ struct GpmManagerPrivate
 	GpmIdle		*idle;
 	GpmInfo		*info;
 	GpmPower	*power;
-	GpmDbusMonitor	*dbus;
 	GpmBrightness   *brightness;
-	GpmInhibit	*inhibit;
 
 	GpmTrayIcon	*tray_icon;
 
@@ -121,18 +115,6 @@ struct GpmManagerPrivate
 
 	time_t           last_resume_event;
 	int		 suppress_policy_timeout;
-
-	int		 low_percentage;
-	int		 very_low_percentage;
-	int		 critical_percentage;
-	int		 action_percentage;
-
-	int		 low_time;
-	int		 very_low_time;
-	int		 critical_time;
-	int		 action_time;
-
-	int		 lcd_dim_brightness;
 
 	const char	*reason;
 };
@@ -161,6 +143,18 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
+#define		BATTERY_LOW_PERCENTAGE			(10)	  /* 10 percent */
+#define		BATTERY_VERY_LOW_PERCENTAGE		(5)	  /* 5 percent  */
+#define		BATTERY_CRITICAL_PERCENTAGE		(2)	  /* 2 percent  */
+#define		BATTERY_ACTION_PERCENTAGE		(1)	  /* 1 percent  */
+
+#define		BATTERY_LOW_REMAINING_TIME		(20 * 60) /* 20 minutes */
+#define		BATTERY_VERY_LOW_REMAINING_TIME		(10 * 60) /* 10 minutes */
+#define		BATTERY_CRITICAL_REMAINING_TIME		(5 * 60)  /* 5 minutes  */
+#define		BATTERY_ACTION_REMAINING_TIME		(2 * 60)  /* 2 minutes  */
+
+#define		LAPTOP_PANEL_DIM_BRIGHTNESS		30 /* % */
+
 #undef DISABLE_ACTIONS_FOR_TESTING
 /*#define DISABLE_ACTIONS_FOR_TESTING 1*/
 
@@ -185,40 +179,13 @@ gpm_manager_error_quark (void)
    request for an action, and the last action completing is larger than the
    timeout set in gconf. This should fix lots of ACPI bugs we are having. */
 static gboolean
-gpm_manager_is_policy_timout_valid (GpmManager *manager,
-				    const char *action)
+gpm_manager_is_policy_timout_valid (GpmManager *manager)
 {
 	if ((time (NULL) - manager->priv->last_resume_event) <=
 	    manager->priv->suppress_policy_timeout) {
-		gpm_debug ("Skipping suppressed %s", action);
 		return FALSE;
 	}
 	return TRUE;
-}
-
-/** returns if inhibited, and also does a nice libnotify warning if inhibited
- *  todo:	do a "I REALLY WANT THIS" click link */
-static gboolean
-gpm_manager_is_inhibit_valid (GpmManager   *manager,
-			      const char   *action)
-{
-	gboolean action_ok;
-	char *title;
-
-	action_ok = gpm_inhibit_check (manager->priv->inhibit);
-	if (! action_ok) {
-		title = g_strdup_printf ("Request to %s", action);
-		GString *message = g_string_new ("");
-		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      GPM_NOTIFY_TIMEOUT_LONG,
-				      title,
-				      NULL,
-				      message->str);
-		g_string_free (message, TRUE);
-		g_free (title);
-	}
-	return action_ok;
 }
 
 gboolean
@@ -394,19 +361,19 @@ get_stock_id (GpmManager *manager,
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL: primary, ups, mouse, keyboard");
 	if (status_primary.is_present &&
-	    status_primary.percentage_charge < manager->priv->low_percentage) {
+	    status_primary.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
 
 	} else if (status_ups.is_present &&
-		   status_ups.percentage_charge < manager->priv->low_percentage) {
+		   status_ups.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
 
 	} else if (status_mouse.is_present &&
-		   status_mouse.percentage_charge < manager->priv->low_percentage) {
+		   status_mouse.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		return g_strdup_printf (GPM_STOCK_MOUSE_LOW);
 
 	} else if (status_keyboard.is_present &&
-		   status_keyboard.percentage_charge < manager->priv->low_percentage) {
+		   status_keyboard.percentage_charge < BATTERY_LOW_PERCENTAGE) {
 		return g_strdup_printf (GPM_STOCK_KEYBOARD_LOW);
 	}
 
@@ -622,7 +589,7 @@ manager_do_we_screensave (GpmManager *manager,
 	} else {
 		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
 						 policy, NULL);
-		gpm_debug ("Using custom locking settings (%i)", do_lock);
+		gpm_debug ("Using constom locking settings (%i)", do_lock);
 	}
 	return do_lock;
 }
@@ -690,7 +657,8 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 
-	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed policy event");
 		return;
 	}
 
@@ -785,38 +753,6 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 	}
 
 	return ret;
-}
-
-void
-gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
-				    const char	*application,
-				    const char	*reason,
-				    DBusGMethodInvocation *context,
-				    GError    **error)
-{
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* connection = ":demo";
-#else
-	const char* connection = dbus_g_method_get_sender (context);
-#endif
-	int cookie;
-	cookie = gpm_inhibit_add (manager->priv->inhibit, connection, application, reason);
-	dbus_g_method_return (context, cookie);
-}
-
-void
-gpm_manager_allow_inactive_sleep (GpmManager	*manager,
-				  int		 cookie,
-				  DBusGMethodInvocation *context,
-				  GError	**error)
-{
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-	const char* connection = ":demo";
-#else
-	const char* connection = dbus_g_method_get_sender (context);
-#endif
-	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
-	dbus_g_method_return (context);
 }
 
 /* we set the reason to be WHY. e.g. "user pressed hibernate button" */
@@ -1069,7 +1005,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
 			gpm_brightness_level_save (manager->priv->brightness,
-						   manager->priv->lcd_dim_brightness);
+						   LAPTOP_PANEL_DIM_BRIGHTNESS);
 		}
 
 		/* sync timeouts */
@@ -1079,10 +1015,8 @@ idle_changed_cb (GpmIdle    *idle,
 	case GPM_IDLE_MODE_SYSTEM:
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (! gpm_manager_is_policy_timout_valid (manager, "timeout action")) {
-			return;
-		}
-		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
+		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+			gpm_debug ("Skipping suppressed timeout action");
 			return;
 		}
 		/* can only be hibernate or suspend */
@@ -1142,10 +1076,8 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "power button press")) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, "power button press")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed power button press");
 		return;
 	}
 	gpm_debug ("power button pressed");
@@ -1157,10 +1089,8 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "suspend button press")) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, "suspend button press")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed suspend button press");
 		return;
 	}
 	gpm_debug ("suspend button pressed");
@@ -1172,10 +1102,8 @@ static void
 hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate button press")) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, "hibernate button press")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed hibernate button press");
 		return;
 	}
 	gpm_debug ("hibernate button pressed");
@@ -1218,34 +1146,6 @@ lid_button_pressed (GpmManager	 *manager,
 
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
-	}
-}
-
-static void
-dbus_name_owner_changed_system_cb (GpmDbusMonitor *power,
-				   const char	  *name,
-				   const char	  *prev,
-				   const char	  *new,
-				   GpmManager	  *manager)
-{
-	/* we need to proxy this */
-	gpm_power_dbus_name_owner_changed (manager->priv->power, name, prev, new);
-}
-
-static void
-dbus_name_owner_changed_session_cb (GpmDbusMonitor *power,
-				    const char	   *name,
-				    const char     *prev,
-				    const char     *new,
-				    GpmManager	   *manager)
-{
-	if (strlen (new) == 0) {
-#if (DBUS_VERSION_MAJOR == 0) && (DBUS_VERSION_MINOR < 60)
-		gpm_warning ("As DBUS is less than 0.60, we *cannot* "
-			     "auto-clean-up connections!");
-#else
-		gpm_inhibit_remove_dbus (manager->priv->inhibit, name);
-#endif
 	}
 }
 
@@ -1325,8 +1225,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 }
 
 static GpmWarning
-gpm_manager_get_warning_type (GpmManager	    *manager,
-			      GpmPowerBatteryStatus *battery_status,
+gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
 			      gboolean		     use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
@@ -1335,23 +1234,23 @@ gpm_manager_get_warning_type (GpmManager	    *manager,
 	if (use_time) {
 		if (battery_status->remaining_time <= 0) {
 			type = GPM_WARNING_NONE;
-		} else if (battery_status->remaining_time <= manager->priv->action_time) {
+		} else if (battery_status->remaining_time <= BATTERY_ACTION_REMAINING_TIME) {
 			type = GPM_WARNING_ACTION;
-		} else if (battery_status->remaining_time <= manager->priv->critical_time) {
+		} else if (battery_status->remaining_time <= BATTERY_CRITICAL_REMAINING_TIME) {
 			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->remaining_time <= manager->priv->very_low_time) {
+		} else if (battery_status->remaining_time <= BATTERY_VERY_LOW_REMAINING_TIME) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->remaining_time <= manager->priv->low_time) {
+		} else if (battery_status->remaining_time <= BATTERY_LOW_REMAINING_TIME) {
 			type = GPM_WARNING_LOW;
 		}
 	} else {
-		if (battery_status->percentage_charge <= manager->priv->action_percentage) {
+		if (battery_status->percentage_charge <= BATTERY_ACTION_PERCENTAGE) {
 			type = GPM_WARNING_ACTION;
-		} else if (battery_status->percentage_charge <= manager->priv->critical_percentage) {
+		} else if (battery_status->percentage_charge <= BATTERY_CRITICAL_PERCENTAGE) {
 			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->percentage_charge <= manager->priv->very_low_percentage) {
+		} else if (battery_status->percentage_charge <= BATTERY_VERY_LOW_PERCENTAGE) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->percentage_charge <= manager->priv->low_percentage) {
+		} else if (battery_status->percentage_charge <= BATTERY_LOW_PERCENTAGE) {
 			type = GPM_WARNING_LOW;
 		}
 	}
@@ -1449,7 +1348,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (battery_status, manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1461,7 +1360,8 @@ battery_status_changed_primary (GpmManager	      *manager,
 		const char *warning = NULL;
 		const char *action;
 
-		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
+		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+			gpm_debug ("Skipping suppressed critical action");
 			return;
 		}
 
@@ -1563,7 +1463,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (battery_status, manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1613,7 +1513,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	const char *name;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
+	warning_type = gpm_manager_get_warning_type (battery_status, FALSE);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE ||
@@ -1846,10 +1746,8 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate signal")) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, "hibernate")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed hibernate signal");
 		return;
 	}
 	gpm_debug ("Received hibernate signal from tray icon");
@@ -1859,12 +1757,10 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 
 static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
-			       GpmTrayIcon  *tray)
+				GpmTrayIcon  *tray)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "suspend signal")) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, "suspend")) {
+	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
+		gpm_debug ("Skipping suppressed suspend signal");
 		return;
 	}
 	gpm_debug ("Received supend signal from tray icon");
@@ -1903,12 +1799,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->gconf_client = gconf_client_get_default ();
-
-	manager->priv->dbus = gpm_dbus_monitor_new ();
-	g_signal_connect (manager->priv->dbus, "name-owner-changed-system",
-			  G_CALLBACK (dbus_name_owner_changed_system_cb), manager);
-	g_signal_connect (manager->priv->dbus, "name-owner-changed-session",
-			  G_CALLBACK (dbus_name_owner_changed_session_cb), manager);
 
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "button-pressed",
@@ -1950,9 +1840,6 @@ gpm_manager_init (GpmManager *manager)
 	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
-
-	/* use a class to handle the complex stuff */
-	manager->priv->inhibit = gpm_inhibit_new ();
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
@@ -2020,42 +1907,12 @@ gpm_manager_init (GpmManager *manager)
 	} else {
 		gpm_debug ("Using percentage notification policy");
 	}
-
+	
 	manager->priv->suppress_policy_timeout =
 		gconf_client_get_int (manager->priv->gconf_client,
 				      GPM_PREF_POLICY_TIMEOUT, NULL);
 	gpm_debug ("Using a supressed policy timeout of %i seconds",
 		   manager->priv->suppress_policy_timeout);
-
-	/* get percentage policy */
-	manager->priv->low_percentage = gconf_client_get_int (manager->priv->gconf_client,
-							      GPM_PREF_LOW_PERCENTAGE, NULL);
-	manager->priv->very_low_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								   GPM_PREF_VERY_LOW_PERCENTAGE, NULL);
-	manager->priv->critical_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								   GPM_PREF_CRITICAL_PERCENTAGE, NULL);
-	manager->priv->action_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								 GPM_PREF_ACTION_PERCENTAGE, NULL);
-
-	/* can remove when we next release, until then, assume we are morons */
-	if (manager->priv->low_percentage == 0) {
-		g_error ("You need to install the new gconf schema properly, "
-			 "battery_low_percentage cannot be zero");
-	}
-
-	/* get time policy */
-	manager->priv->low_time = gconf_client_get_int (manager->priv->gconf_client, 
-							GPM_PREF_LOW_TIME, NULL);
-	manager->priv->very_low_time = gconf_client_get_int (manager->priv->gconf_client,
-							     GPM_PREF_VERY_LOW_TIME, NULL);
-	manager->priv->critical_time = gconf_client_get_int (manager->priv->gconf_client,
-							     GPM_PREF_CRITICAL_TIME, NULL);
-	manager->priv->action_time = gconf_client_get_int (manager->priv->gconf_client,
-							   GPM_PREF_ACTION_TIME, NULL);
-
-	/* Get dim settings */
-	manager->priv->lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
-								  GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 }
 
 static void
@@ -2073,29 +1930,29 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->gconf_client != NULL) {
 		g_object_unref (manager->priv->gconf_client);
 	}
+
 	if (manager->priv->dpms != NULL) {
 		g_object_unref (manager->priv->dpms);
 	}
+
 	if (manager->priv->idle != NULL) {
 		g_object_unref (manager->priv->idle);
 	}
+
 	if (manager->priv->info != NULL) {
 		g_object_unref (manager->priv->info);
 	}
+
 	if (manager->priv->power != NULL) {
 		g_object_unref (manager->priv->power);
 	}
+
 	if (manager->priv->brightness != NULL) {
 		g_object_unref (manager->priv->brightness);
 	}
+
 	if (manager->priv->tray_icon != NULL) {
 		g_object_unref (manager->priv->tray_icon);
-	}
-	if (manager->priv->inhibit != NULL) {
-		g_object_unref (manager->priv->inhibit);
-	}
-	if (manager->priv->dbus != NULL) {
-		g_object_unref (manager->priv->dbus);
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);

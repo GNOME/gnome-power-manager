@@ -18,33 +18,33 @@ Methods
 
 	Name:		Suspend
 	Args:		(none)
-	Returns:	BOOLEAN
+	Returns:	DBUS_TYPE_BOOL
 	Description:	This call will attempt to suspend the system.
 
 	Name:		Hibernate
 	Args:		(none)
-	Returns:	BOOLEAN
+	Returns:	DBUS_TYPE_BOOL
 	Description:	This call will attempt to hibernate the system.
 
 	Name:		Shutdown
 	Args:		(none)
-	Returns:	BOOLEAN
+	Returns:	DBUS_TYPE_BOOL
 	Description:	This call will attempt to shutdown the system.
 
 	Name:		CanSuspend
 	Args:		(none)
-	Returns:	BOOLEAN
+	Returns:	DBUS_TYPE_BOOL
 	Description:	This call Finds if the current user in the session
 			is able to suspend, and has permission to do so.
 
 	Name:		CanHibernate
 	Args:		(none)
-	Returns:	BOOLEAN
+	Returns:	DBUS_TYPE_BOOL
 	Description:	This call Finds if the current user in the session
 			is able to hibernate, and has permission to do so.
 
 	Name:		setDpmsMode
-	Args:		STRING
+	Args:		DBUS_TYPE_STRING
 			value:	on		100%
 				standby		<80%
 				suspend		<30W
@@ -57,32 +57,15 @@ Methods
 
 	Name:		getDpmsMode
 	Args:		(none)
-	Returns:	STRING
+	Returns:	DBUS_TYPE_STRING
 	Descriptions:	Returns the DPMS mode state.
 			See setDpmsMode().
-
-	Name:		InhibitInactiveSleep
-	Args:		STRING "application-name"
-			STRING "reason to inhibit"
-	Returns:	INT cookie
-			This is a random number used to identify the inhibit.
-	Descriptions:	Inhibits the computer from performing the idle sleep
-			action. Useful if you want to do an operation of long 
-			duration without the computer suspending.
-
-	Name:		AllowInactiveSleep
-	Args:		INT cookie
-	Returns:	(none)
-	Descriptions:	Allows the computer to perform the idle sleep action.
-			Applications that quit without calling this method will
-			be automatically unregistered, but this is not
-			recommended as the user will be warned.
 
 Signals
 =======
 
 	Name:		DpmsModeChanged
-	Args:		BOOLEAN state
+	Args:		DBUS_TYPE_BOOLEAN state
 	Returns:	Returns the value of the current state of activity.
 	Description:	See method setDpmsMode().
 

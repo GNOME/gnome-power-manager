@@ -52,8 +52,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms-x11.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
-	gpm-dbus-monitor.h				\
-	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-idle.h					\
@@ -83,8 +81,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-stock-icons.c				\
 	gpm-info.h					\
 	gpm-info.c					\
-	gpm-inhibit.h					\
-	gpm-inhibit.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
 	$(NULL)

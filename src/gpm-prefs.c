@@ -130,16 +130,6 @@ gpm_has_batteries (void)
 }
 
 static gboolean
-gpm_has_ups (void)
-{
-	gboolean value;
-	value = gpm_hal_num_devices_of_capability_with_value ("battery",
-							      "battery.type",
-							      "ups");
-	return value;
-}
-
-static gboolean
 gpm_has_lcd (void)
 {
 	gboolean value;
@@ -704,7 +694,7 @@ gpm_prefs_create (void)
 	GtkWidget    *main_window;
 	GtkWidget    *widget;
 	GladeXML     *glade_xml;
-	gboolean      present;
+	gboolean      has_batteries;
 
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
@@ -736,15 +726,10 @@ gpm_prefs_create (void)
 	setup_sleep_type (glade_xml);
 
 	/* if no options then disable frame as it will be empty */
-	present = gpm_has_batteries ();
-	if (! present) {
+	has_batteries = gpm_has_batteries ();
+	if (! has_batteries) {
 		widget = glade_xml_get_widget (glade_xml, "gpm_notebook");
 		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 1);
-	}
-	present = gpm_has_ups ();
-	if (! present) {
-		widget = glade_xml_get_widget (glade_xml, "gpm_notebook");
-		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 2);
 	}
 	return main_window;
 }

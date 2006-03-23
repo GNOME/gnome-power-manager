@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-15 17:05+0200\n"
-"PO-Revision-Date: 2006-03-15 17:28+0200\n"
+"POT-Creation-Date: 2006-03-14 08:43+0000\n"
+"PO-Revision-Date: 2006-03-04 09:14+0200\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -40,10 +41,6 @@ msgid ""
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
 msgstr ""
-"Po grąžinimo iš užmigdymo, gnome-power-manager sustabdys savo veiksmus keliom "
-"sekundėm, kad leistų nurimti pranešimams bei HAL atsinaujinti. Paprastai "
-"tam užtenka penkių sekundžių, esant ilgesniam laiko tarpui naudotojai "
-"susipainioja."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Battery critical low action"
@@ -114,15 +111,15 @@ msgstr "Pranešti, kai atjungiama nuo kintamos srovės šaltinio"
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid "Number of seconds to suppress policy after resume"
 msgstr ""
-"Laikas tarpas sekundėmis, kuriam sustabdyti elgseną po grąžinimo iš užmigdymo"
 
 #: ../data/gnome-power-manager.schemas.in.h:19
+#, fuzzy
 msgid ""
 "Option when to show the notification icon. Valid options are \"never\", "
 "\"critical\", \"charge\", \"present\" and \"always\""
 msgstr ""
 "Kada rodyti pranešimų piktogramą. Tinkami variantai yra „never“, „critical“, "
-"„charge“, „present“ ir „always“"
+"„charge“ ir „always“"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid "Power button action"
@@ -373,6 +370,7 @@ msgid "<b>General</b>"
 msgstr "<b>Bendri</b>"
 
 #: ../data/gpm-prefs.glade.h:3
+#, fuzzy
 msgid "<b>Notification Area</b>"
 msgstr "<b>Pranešimų vieta</b>"
 
@@ -381,16 +379,19 @@ msgid "<b>Running on AC</b>"
 msgstr "<b>Naudojant kintamą srovę</b>"
 
 #: ../data/gpm-prefs.glade.h:5
+#, fuzzy
 msgid "<b>Running on Battery</b>"
 msgstr "<b>Naudojant baterijas</b>"
 
 #: ../data/gpm-prefs.glade.h:6
+#, fuzzy
 msgid "General"
-msgstr "Bendri"
+msgstr "<b>Bendri</b>"
 
 #: ../data/gpm-prefs.glade.h:7
+#, fuzzy
 msgid "Only display when battery _present"
-msgstr "Rodyti tik, kai baterija _yra"
+msgstr "_Visada rodyti piktogramą, kai naudojama baterija"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Only display when charging or _discharging"
@@ -433,12 +434,14 @@ msgid "When l_aptop lid is closed:"
 msgstr "Kai užveriamas _neš. kompiuterio dangtis:"
 
 #: ../data/gpm-prefs.glade.h:18
+#, fuzzy
 msgid "_Always display icon"
-msgstr "_Visada rodyti piktogramą"
+msgstr "_Niekada nerodyti piktogramos"
 
 #: ../data/gpm-prefs.glade.h:19
+#, fuzzy
 msgid "_Dim the laptop panel when idle"
-msgstr "_Pritemdyti nešiojamojo kompiuterio skydelį, kai neveiklus"
+msgstr "Pritemdyti nešiojamojo kompiuterio skydelį, kai neveiklus"
 
 #: ../data/gpm-prefs.glade.h:20
 msgid "_Never display icon"
@@ -449,32 +452,36 @@ msgid "_Only display when battery life is critical"
 msgstr "Rodyti tik, kai baterijos energijos lygis _kritiškai mažas"
 
 #: ../data/gpm-info.glade.h:1
+#, fuzzy
 msgid "<b>Laptop Battery Bay (2)</b>"
-msgstr "<b>Nešiojamojo kompiuterio baterijos dėklas (2)</b>"
+msgstr "Nešiojamojo kompiuterio baterija"
 
 #: ../data/gpm-info.glade.h:2
+#, fuzzy
 msgid "<b>Laptop Battery Bay</b>"
-msgstr "<b>Nešiojamojo kompiuterio baterijos dėklas</b>"
+msgstr "Nešiojamojo kompiuterio baterija"
 
 #: ../data/gpm-info.glade.h:3
 msgid "<b>UPS</b>"
-msgstr "<b>UPS</b>"
+msgstr ""
 
 #: ../data/gpm-info.glade.h:4
+#, fuzzy
 msgid "<b>Wireless Mouse</b>"
-msgstr "<b>Belaidė pelė</b>"
+msgstr "Belaidė pelė"
 
 #: ../data/gpm-info.glade.h:5
 msgid "Charge History"
-msgstr "Įkrovimo įstorija"
+msgstr ""
 
 #: ../data/gpm-info.glade.h:6
+#, fuzzy
 msgid "Device Information"
-msgstr "Įrenginio informacija"
+msgstr "Energijos informacija"
 
 #: ../data/gpm-info.glade.h:7
 msgid "Estimated Time History"
-msgstr "Apskaičiuoto laiko istorija"
+msgstr ""
 
 #: ../data/gpm-info.glade.h:8 ../src/gpm-manager.c:1069
 #: ../src/gpm-manager.c:1287
@@ -483,30 +490,27 @@ msgstr "Energijos informacija"
 
 #: ../data/gpm-info.glade.h:9
 msgid "Rate History"
-msgstr "Greičio istorija"
+msgstr ""
 
 #: ../data/gpm-info.glade.h:10
 msgid "This shows how the battery charge and discharge rate varies over time."
 msgstr ""
-"Čia rodoma kaip ilgainiui kinta baterijos įkrovimo ir iškrovimo greitis."
 
 #: ../data/gpm-info.glade.h:11
 msgid "This shows how the battery percentage charge varies over time."
-msgstr "Čia rodoma kaip ilgainiui kinta baterijos įkrova procentais."
+msgstr ""
 
 #: ../data/gpm-info.glade.h:12
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
 msgstr ""
-"Čia rodoma kaip ilgainiui kinta likęs laikas iki įkrovimo ar išsikrovimo."
 
 #: ../data/gpm-info.glade.h:13
 msgid ""
 "This shows you detailed information about all the batteries you have "
 "installed in your system."
 msgstr ""
-"Čia rodoma išsami informacija apie visas Jūsų sistemoje įdiegtas baterijas."
 
 #: ../src/eggtrayicon.c:125
 msgid "Orientation"
@@ -724,83 +728,90 @@ msgstr "Nežinoma"
 #: ../src/gpm-power.c:566 ../src/gpm-power.c:572 ../src/gpm-power.c:576
 #: ../src/gpm-power.c:580
 msgid "Status:"
-msgstr "Būklė:"
+msgstr ""
 
 #: ../src/gpm-power.c:567
 msgid "Missing"
-msgstr "Nėra"
+msgstr ""
 
 #: ../src/gpm-power.c:573
+#, fuzzy
 msgid "Charged"
-msgstr "Įkrauta"
+msgstr "Baterija įkrauta"
 
 #: ../src/gpm-power.c:577
+#, fuzzy
 msgid "Charging"
-msgstr "Įkraunama"
+msgstr "įkraunama"
 
 #: ../src/gpm-power.c:581
+#, fuzzy
 msgid "Discharging"
-msgstr "Iškraunama"
+msgstr "iškraunama"
 
 #: ../src/gpm-power.c:585
 msgid "Product:"
-msgstr "Produktas:"
+msgstr ""
 
 #: ../src/gpm-power.c:590
 msgid "Vendor:"
-msgstr "Pardavėjas:"
+msgstr ""
 
 #: ../src/gpm-power.c:595
 msgid "Technology:"
-msgstr "Technologija:"
+msgstr ""
 
 #: ../src/gpm-power.c:599
 msgid "Lithium ion"
-msgstr "Ličio jonų"
+msgstr ""
 
 #: ../src/gpm-power.c:601
 msgid "Lead acid"
-msgstr "Švino rūgštis"
+msgstr ""
 
 #: ../src/gpm-power.c:611
 msgid "Serial number:"
-msgstr "Serijos numeris:"
+msgstr ""
 
 #: ../src/gpm-power.c:616
 msgid "Model:"
-msgstr "Modelis:"
+msgstr ""
 
 #: ../src/gpm-power.c:621
+#, fuzzy
 msgid "Remaining time:"
-msgstr "Likęs laikas:"
+msgstr "liko"
 
 #: ../src/gpm-power.c:626
 msgid "Percentage charge:"
-msgstr "Įkrova procentais:"
+msgstr ""
 
 #: ../src/gpm-power.c:632
 msgid "Capacity:"
-msgstr "Talpa:"
+msgstr ""
 
 #: ../src/gpm-power.c:634
 msgid "Very good condition"
-msgstr "Labai gera būklė"
+msgstr ""
 
 #: ../src/gpm-power.c:636
 msgid "Good condition"
-msgstr "Gera būklė"
+msgstr ""
 
 #: ../src/gpm-power.c:638
+#, fuzzy
 msgid "Poor condition"
-msgstr "Prasta būklė"
+msgstr "Išjungimo mygtuko veiksmas"
 
 #: ../src/gpm-power.c:647
+#, fuzzy
 msgid "Current charge:"
-msgstr "Esama įkrova:"
+msgstr "iki įkrovimo"
 
 #: ../src/gpm-power.c:653
+#, fuzzy
 msgid "Last full charge:"
-msgstr "Paskutinis pilnas įkrovimas:"
+msgstr "pilnai įkrauta"
 
 #: ../src/gpm-power.c:658
 msgid "Design charge:"
@@ -808,7 +819,7 @@ msgstr ""
 
 #: ../src/gpm-power.c:663
 msgid "Charge rate:"
-msgstr "Įkrovos greitis:"
+msgstr ""
 
 #: ../src/gpm-power.c:907
 msgid "fully charged"
@@ -867,8 +878,9 @@ msgid "_Preferences"
 msgstr "_Nustatymai"
 
 #: ../src/gpm-tray-icon.c:114
+#, fuzzy
 msgid "_Information"
-msgstr "_Informacija"
+msgstr "Energijos informacija"
 
 #: ../src/gpm-tray-icon.c:116
 msgid "_Help"
