@@ -448,9 +448,7 @@ gpm_tray_icon_constructor (GType                  type,
 					   "    <menuitem action=\"TrayHibernate\" />"
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
-#ifdef EXPERIMENTAL_FEATURES_ENABLED
 					   "    <menuitem action=\"TrayInfo\" />"
-#endif
 					   "    <separator />"
 					   "    <menuitem action=\"TrayHelp\" />"
 					   "    <menuitem action=\"TrayAbout\" />"
