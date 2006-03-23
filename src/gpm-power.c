@@ -74,7 +74,6 @@ enum {
 	PROP_ON_AC
 };
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmPower, gpm_power, G_TYPE_OBJECT)
@@ -1081,8 +1080,6 @@ gpm_power_class_init (GpmPowerClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize	   = gpm_power_finalize;
 	object_class->get_property = gpm_power_get_property;
 	object_class->set_property = gpm_power_set_property;
@@ -1417,7 +1414,7 @@ gpm_power_finalize (GObject *object)
 	gpm_hash_free_kind_cache (power);
 	gpm_hash_free_device_cache (power);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }
 
 GpmPower *

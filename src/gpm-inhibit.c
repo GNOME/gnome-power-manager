@@ -49,7 +49,6 @@ struct GpmInhibitPrivate
 	GSList		*list;
 };
 
-static GObjectClass *parent_class = NULL;
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
 
 /**
@@ -229,7 +228,6 @@ static void
 gpm_inhibit_class_init (GpmInhibitClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	parent_class = g_type_class_peek_parent (klass);
 	object_class->finalize = gpm_inhibit_finalize;
 	g_type_class_add_private (klass, sizeof (GpmInhibitPrivate));
 }
@@ -262,7 +260,7 @@ gpm_inhibit_finalize (GObject *object)
 	}
 	g_slist_free (inhibit->priv->list);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }
 
 /** create the object */

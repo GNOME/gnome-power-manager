@@ -146,7 +146,6 @@ enum {
 	LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 static GConfEnumStringPair icon_policy_enum_map [] = {
@@ -604,8 +603,8 @@ maybe_notify_on_ac_changed (GpmManager *manager,
 }
 
 static gboolean
-manager_do_we_screensave (GpmManager *manager,
-			  const char *policy)
+gpm_manager_do_we_screensave (GpmManager *manager,
+			      const char *policy)
 {
 	gboolean do_lock;
 	gboolean use_ss_setting;
@@ -633,8 +632,8 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gboolean do_lock;
 	gboolean ret = TRUE;
 
-	do_lock = manager_do_we_screensave (manager,
-					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
+	do_lock = gpm_manager_do_we_screensave (manager,
+					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		if (!gpm_screensaver_lock ())
 			gpm_debug ("Could not lock screen via gnome-screensaver");
@@ -668,8 +667,8 @@ gpm_manager_unblank_screen (GpmManager *manager,
 		ret = FALSE;
 	}
 
-	do_lock = manager_do_we_screensave (manager,
-					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
+	do_lock = gpm_manager_do_we_screensave (manager,
+					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		gpm_screensaver_poke ();
 	}
@@ -875,8 +874,8 @@ gpm_manager_hibernate (GpmManager *manager,
 		return FALSE;
 	}
 
-	do_lock = manager_do_we_screensave (manager,
-					    GPM_PREF_LOCK_ON_HIBERNATE);
+	do_lock = gpm_manager_do_we_screensave (manager,
+					        GPM_PREF_LOCK_ON_HIBERNATE);
 	if (do_lock) {
 		gpm_screensaver_lock ();
 	}
@@ -935,8 +934,8 @@ gpm_manager_suspend (GpmManager *manager,
 		return FALSE;
 	}
 
-	do_lock = manager_do_we_screensave (manager,
-					    GPM_PREF_LOCK_ON_SUSPEND);
+	do_lock = gpm_manager_do_we_screensave (manager,
+					        GPM_PREF_LOCK_ON_SUSPEND);
 	if (do_lock) {
 		gpm_screensaver_lock ();
 	}
@@ -1057,7 +1056,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		/* Should we resume the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							GPM_PREF_IDLE_DIM_SCREEN, NULL);
+						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
 			gpm_brightness_level_save (manager->priv->brightness,
@@ -1716,8 +1715,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize	   = gpm_manager_finalize;
 	object_class->get_property = gpm_manager_get_property;
 	object_class->set_property = gpm_manager_set_property;
@@ -2084,7 +2081,7 @@ gpm_manager_finalize (GObject *object)
 		g_object_unref (manager->priv->dbus);
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }
 
 GpmManager *

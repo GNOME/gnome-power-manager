@@ -62,8 +62,6 @@ struct GpmBrightnessPrivate
 	DBusGProxy *proxy;
 };
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE (GpmBrightness, gpm_brightness, G_TYPE_OBJECT)
 
 static gboolean
@@ -112,7 +110,6 @@ static void
 gpm_brightness_class_init (GpmBrightnessClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	parent_class = g_type_class_peek_parent (klass);
 	object_class->finalize	   = gpm_brightness_finalize;
 	object_class->get_property = gpm_brightness_get_property;
 	object_class->set_property = gpm_brightness_set_property;
@@ -174,7 +171,7 @@ gpm_brightness_finalize (GObject *object)
 	g_object_unref (G_OBJECT (brightness->priv->proxy));
 
 	g_return_if_fail (brightness->priv != NULL);
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
 }
 
 GpmBrightness *

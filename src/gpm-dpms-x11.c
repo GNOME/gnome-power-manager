@@ -77,7 +77,6 @@ enum {
 	PROP_OFF_TIMEOUT,
 };
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)
@@ -663,8 +662,6 @@ gpm_dpms_class_init (GpmDpmsClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize	   = gpm_dpms_finalize;
 	object_class->get_property = gpm_dpms_get_property;
 	object_class->set_property = gpm_dpms_set_property;
@@ -785,7 +782,7 @@ gpm_dpms_finalize (GObject *object)
 
 	remove_poll_timer (dpms);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_dpms_parent_class)->finalize (object);
 }
 
 GpmDpms *

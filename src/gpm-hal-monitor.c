@@ -75,7 +75,6 @@ enum {
 	PROP_MODE
 };
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 static gpointer      monitor_object = NULL;
@@ -86,8 +85,6 @@ static void
 gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize	   = gpm_hal_monitor_finalize;
 
@@ -718,7 +715,7 @@ gpm_hal_monitor_finalize (GObject *object)
 
 	gpm_hash_free_devices_cache (monitor);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_hal_monitor_parent_class)->finalize (object);
 }
 
 GpmHalMonitor *

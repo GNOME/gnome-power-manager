@@ -64,7 +64,6 @@ struct GpmInfoPrivate
 	time_t           	 start_time;
 };
 
-static GObjectClass *parent_class = NULL;
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
 /** handler for libglade to provide interface with a pointer */
@@ -416,7 +415,6 @@ static void
 gpm_info_class_init (GpmInfoClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	parent_class = g_type_class_peek_parent (klass);
 	object_class->finalize = gpm_info_finalize;
 	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
 }
@@ -471,7 +469,7 @@ gpm_info_finalize (GObject *object)
 	g_list_free (info->priv->time->data);
 	g_free (info->priv->time);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
 
 /** create the object */

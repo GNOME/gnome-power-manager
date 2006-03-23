@@ -57,7 +57,6 @@ enum {
 	LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmDbusMonitor, gpm_dbus_monitor, G_TYPE_OBJECT)
@@ -66,8 +65,6 @@ static void
 gpm_dbus_monitor_class_init (GpmDbusMonitorClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize	   = gpm_dbus_monitor_finalize;
 
@@ -173,7 +170,7 @@ gpm_dbus_monitor_finalize (GObject *object)
 		monitor->priv->session_proxy = NULL;
 	}
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_dbus_monitor_parent_class)->finalize (object);
 }
 
 GpmDbusMonitor *

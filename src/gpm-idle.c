@@ -99,7 +99,6 @@ enum {
 #define GS_DBUS_PATH	  "/org/gnome/ScreenSaver"
 #define GS_DBUS_INTERFACE "org.gnome.ScreenSaver"
 
-static GObjectClass *parent_class = NULL;
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
@@ -324,8 +323,6 @@ gpm_idle_class_init (GpmIdleClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize	   = gpm_idle_finalize;
 	object_class->get_property = gpm_idle_get_property;
 	object_class->set_property = gpm_idle_set_property;
@@ -435,7 +432,7 @@ gpm_idle_finalize (GObject *object)
 
 	remove_all_timers (idle);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_idle_parent_class)->finalize (object);
 }
 
 GpmIdle *

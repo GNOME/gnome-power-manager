@@ -118,7 +118,6 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 };
 static guint gpm_tray_icon_n_action_entries = G_N_ELEMENTS (gpm_tray_icon_action_entries);
 
-static GObjectClass *parent_class = NULL;
 static guint         signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, EGG_TYPE_TRAY_ICON)
@@ -476,8 +475,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	parent_class = g_type_class_peek_parent (klass);
-
 	object_class->finalize	   = gpm_tray_icon_finalize;
 	object_class->get_property = gpm_tray_icon_get_property;
 	object_class->set_property = gpm_tray_icon_set_property;
@@ -579,7 +576,7 @@ gpm_tray_icon_finalize (GObject *object)
 
 	gtk_object_destroy (GTK_OBJECT (tray_icon->priv->tooltips));
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_tray_icon_parent_class)->finalize (object);
 }
 
 GpmTrayIcon *
