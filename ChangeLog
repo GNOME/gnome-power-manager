@@ -1,5 +1,10 @@
 2006-03-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: Use the new g_slice functions to allocate and
+	deallocate the small chucks of memory.
+
+2006-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: As things are getting complicated now, comment
 	each function using gtkdoc format. I don't intend on generating gtkdoc
 	output, I want it for my own understanding.

@@ -97,7 +97,7 @@ gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
 			old->x = x;
 		} else {
 			/* we have to add a new data point */
-			new_point = g_new (GpmDataPoint, 1);
+			new_point = g_slice_new (GpmDataPoint);
 			new_point->x = x;
 			new_point->y = y;
 			list_data->data = g_list_prepend (list_data->data, (gpointer) new_point);
@@ -122,6 +122,7 @@ gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
 			if (count == 3) {
 				temp = l->prev;
 				list_data->data = g_list_delete_link (list_data->data, l);
+				/* FIXME: we need to free the data */
 				l = temp;
 				count = 0;
 			}
@@ -446,6 +447,17 @@ gpm_info_init (GpmInfo *info)
 	g_timeout_add (GPM_INFO_HARDWARE_POLL * 1000, gpm_info_log_do_poll, info);
 }
 
+static void
+gpm_info_free_graph_data (GpmInfoGraphData *graph_data)
+{
+	GList *l;
+	for (l = graph_data->data; l != NULL; l = l->next) {
+		g_slice_free (GpmDataPoint, l->data);
+	}
+	g_list_free (graph_data->data);
+	g_free (graph_data);
+}
+
 /** finalise the object */
 static void
 gpm_info_finalize (GObject *object)
@@ -457,17 +469,9 @@ gpm_info_finalize (GObject *object)
 	info = GPM_INFO (object);
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
-	g_list_foreach (info->priv->rate->data, (GFunc) g_free, NULL);
-	g_list_free (info->priv->rate->data);
-	g_free (info->priv->rate);
-
-	g_list_foreach (info->priv->percentage->data, (GFunc) g_free, NULL);
-	g_list_free (info->priv->percentage->data);
-	g_free (info->priv->percentage);
-
-	g_list_foreach (info->priv->time->data, (GFunc) g_free, NULL);
-	g_list_free (info->priv->time->data);
-	g_free (info->priv->time);
+	gpm_info_free_graph_data (info->priv->rate);
+	gpm_info_free_graph_data (info->priv->percentage);
+	gpm_info_free_graph_data (info->priv->time);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
