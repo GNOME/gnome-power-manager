@@ -79,10 +79,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
 	gpm-stock-icons.c				\
-	gpm-info.h					\
-	gpm-info.c					\
-	gpm-graph-widget.h				\
-	gpm-graph-widget.c				\
 	$(NULL)
 
 gnome_power_manager_LDADD =				\

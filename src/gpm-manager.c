@@ -51,7 +51,6 @@
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
-#include "gpm-info.h"
 #include "gpm-power.h"
 #include "gpm-hal-monitor.h"
 #include "gpm-brightness.h"
@@ -95,7 +94,6 @@ struct GpmManagerPrivate
 
 	GpmDpms		*dpms;
 	GpmIdle		*idle;
-	GpmInfo		*info;
 	GpmPower	*power;
 	GpmBrightness   *brightness;
 
@@ -1773,14 +1771,6 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 }
 
 static void
-gpm_manager_tray_icon_show_info (GpmManager   *manager,
-				  GpmTrayIcon  *tray)
-{
-	gpm_debug ("Received show-info signal from tray icon");
-	gpm_info_show_window (manager->priv->info);
-}
-
-static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
@@ -1837,11 +1827,6 @@ gpm_manager_init (GpmManager *manager)
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 
-	gpm_debug ("initialising info infrastructure");
-	manager->priv->info = gpm_info_new ();
-	/* logging system needs access to the power stuff... bit of a bodge */
-	gpm_info_set_power (manager->priv->info, manager->priv->power);
-
 #if ACTIONS_MENU_ENABLED
 	gpm_manager_can_suspend (manager, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
@@ -1859,11 +1844,6 @@ gpm_manager_init (GpmManager *manager)
 				 manager,
 				 G_CONNECT_SWAPPED);
 #endif
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "show-info",
-				 G_CALLBACK (gpm_manager_tray_icon_show_info),
-				 manager,
-				 G_CONNECT_SWAPPED);
 
 	/* coldplug so we are in the correct state at startup */
 	sync_dpms_policy (manager);
@@ -1928,9 +1908,6 @@ gpm_manager_finalize (GObject *object)
 	}
 	if (manager->priv->idle != NULL) {
 		g_object_unref (manager->priv->idle);
-	}
-	if (manager->priv->info != NULL) {
-		g_object_unref (manager->priv->info);
 	}
 	if (manager->priv->power != NULL) {
 		g_object_unref (manager->priv->power);

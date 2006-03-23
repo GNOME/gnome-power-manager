@@ -1,5 +1,12 @@
 2006-03-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.h, src/gpm-info.c, src/gpm-graph-widget.h,
+	src/gpm-graph-widget.c, configure.in, src/Makefile.am,
+	src/gpm-manager.am, src/gpm-tray-icon.c:
+	Remove the experimental features, these belong in 2.15.x
+
+2006-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Use the button "battery" rather than "www" to show
 	the battery status. This depends on mjg59's kernel addition and the
 	use of a HAL with the new button patched in.

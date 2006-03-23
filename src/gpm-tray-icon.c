@@ -81,7 +81,6 @@ struct GpmTrayIconPrivate
 enum {
 	SUSPEND,
 	HIBERNATE,
-	SHOW_INFO,
 	LAST_SIGNAL
 };
 
@@ -98,7 +97,6 @@ typedef enum {
 
 static void gpm_tray_icon_suspend_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_hibernate_cb		(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_info_cb	 	(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_preferences_cb	(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_help_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_about_cb		(GtkAction *action, GpmTrayIcon *icon);
@@ -111,8 +109,6 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 	  NULL, N_("Make the computer go to sleep"), G_CALLBACK (gpm_tray_icon_hibernate_cb) },
 	{ "TrayPreferences", GTK_STOCK_PREFERENCES, N_("_Preferences"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
-	{ "TrayInfo", GPM_STOCK_POWER_INFORMATION, N_("_Information"),
-	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_info_cb) },
 	{ "TrayHelp", GTK_STOCK_HELP, N_("_Help"), NULL,
 	  NULL, G_CALLBACK (gpm_tray_icon_show_help_cb) },
 	{ "TrayAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
@@ -194,14 +190,6 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
 		}
 	}
-}
-
-static void
-gpm_tray_icon_show_info_cb (GtkAction   *action,
-			    GpmTrayIcon *icon)
-{
-	gpm_debug ("emitting show_info");
-	g_signal_emit (icon, signals [SHOW_INFO], 0);
 }
 
 static void
@@ -450,9 +438,6 @@ gpm_tray_icon_constructor (GType                  type,
 					   "    <menuitem action=\"TrayHibernate\" />"
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
-#if EXPERIMENTAL_FEATURES_ENABLED
-					   "    <menuitem action=\"TrayInfo\" />"
-#endif
 					   "    <separator />"
 					   "    <menuitem action=\"TrayHelp\" />"
 					   "    <menuitem action=\"TrayAbout\" />"
@@ -501,16 +486,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 		              0);
 	signals [HIBERNATE] =
 		g_signal_new ("hibernate",
-		              G_TYPE_FROM_CLASS (object_class),
-		              G_SIGNAL_RUN_LAST,
-		              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-		              NULL,
-		              NULL,
-		              g_cclosure_marshal_VOID__VOID,
-		              G_TYPE_NONE,
-		              0);
-	signals [SHOW_INFO] =
-		g_signal_new ("show-info",
 		              G_TYPE_FROM_CLASS (object_class),
 		              G_SIGNAL_RUN_LAST,
 		              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
