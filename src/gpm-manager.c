@@ -84,8 +84,7 @@ typedef enum {
 #define GPM_BUTTON_BRIGHT_UP_DEP	"brightness_up"		/* Remove when we depend on HAL 0.5.8 */
 #define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightness_down"	/* as these are the old names */
 #define GPM_BUTTON_LOCK			"lock"
-/* Using www until we get a better one defined for us by the kernel */
-#define GPM_BUTTON_BATTERY		"www"
+#define GPM_BUTTON_BATTERY		"battery"
 
 #define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
 #define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
@@ -179,10 +178,12 @@ gpm_manager_error_quark (void)
    request for an action, and the last action completing is larger than the
    timeout set in gconf. This should fix lots of ACPI bugs we are having. */
 static gboolean
-gpm_manager_is_policy_timout_valid (GpmManager *manager)
+gpm_manager_is_policy_timout_valid (GpmManager *manager,
+				    const char *action)
 {
 	if ((time (NULL) - manager->priv->last_resume_event) <=
 	    manager->priv->suppress_policy_timeout) {
+		gpm_debug ("Skipping suppressed %s", action);
 		return FALSE;
 	}
 	return TRUE;
@@ -589,7 +590,7 @@ manager_do_we_screensave (GpmManager *manager,
 	} else {
 		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
 						 policy, NULL);
-		gpm_debug ("Using constom locking settings (%i)", do_lock);
+		gpm_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
 }
@@ -604,7 +605,8 @@ gpm_manager_blank_screen (GpmManager *manager,
 	do_lock = manager_do_we_screensave (manager,
 					    GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
-		gpm_screensaver_lock ();
+		if (!gpm_screensaver_lock ())
+			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
 	/* We give the options to enable DPMS because some laptops do
 	 * not turn off the LCD backlight when the lid is closed. 
@@ -657,8 +659,7 @@ manager_policy_do (GpmManager *manager,
 		return;
 	}
 
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed policy event");
+	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
 		return;
 	}
 
@@ -1015,8 +1016,7 @@ idle_changed_cb (GpmIdle    *idle,
 	case GPM_IDLE_MODE_SYSTEM:
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-			gpm_debug ("Skipping suppressed timeout action");
+		if (! gpm_manager_is_policy_timout_valid (manager, "timeout action")) {
 			return;
 		}
 		/* can only be hibernate or suspend */
@@ -1076,8 +1076,7 @@ static void
 power_button_pressed (GpmManager   *manager,
 		      gboolean	    state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed power button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "power button press")) {
 		return;
 	}
 	gpm_debug ("power button pressed");
@@ -1089,8 +1088,7 @@ static void
 suspend_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed suspend button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "suspend button press")) {
 		return;
 	}
 	gpm_debug ("suspend button pressed");
@@ -1102,8 +1100,7 @@ static void
 hibernate_button_pressed (GpmManager   *manager,
 			gboolean      state)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed hibernate button press");
+	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate button press")) {
 		return;
 	}
 	gpm_debug ("hibernate button pressed");
@@ -1127,10 +1124,9 @@ lid_button_pressed (GpmManager	 *manager,
 	manager->priv->lid_is_closed = state;
 
 	if (state) {
-		/* Disable the screensaver, as we don't want this starting
+		/* Disable the fancy screensaver, as we don't want this starting
 		   when the lid is shut */
-		gpm_screensaver_inhibit_activation ("gnome-power-manager has "
-						    "detected that the lid is closed");
+		gpm_screensaver_enable_throttle (TRUE);
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			gpm_manager_set_reason (manager, "the lid has been closed on ac power");
@@ -1141,8 +1137,8 @@ lid_button_pressed (GpmManager	 *manager,
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
-		/* re-enable the screensaver */
-		gpm_screensaver_allow_activation ();
+		/* Allow the fancy screensaver */
+		gpm_screensaver_enable_throttle (FALSE);
 
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
@@ -1360,8 +1356,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		const char *warning = NULL;
 		const char *action;
 
-		if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-			gpm_debug ("Skipping suppressed critical action");
+		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
 			return;
 		}
 
@@ -1746,8 +1741,7 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed hibernate signal");
+	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate signal")) {
 		return;
 	}
 	gpm_debug ("Received hibernate signal from tray icon");
@@ -1757,10 +1751,9 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 
 static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
-				GpmTrayIcon  *tray)
+			       GpmTrayIcon  *tray)
 {
-	if (gpm_manager_is_policy_timout_valid (manager) == FALSE) {
-		gpm_debug ("Skipping suppressed suspend signal");
+	if (! gpm_manager_is_policy_timout_valid (manager, "suspend signal")) {
 		return;
 	}
 	gpm_debug ("Received supend signal from tray icon");
@@ -1907,7 +1900,7 @@ gpm_manager_init (GpmManager *manager)
 	} else {
 		gpm_debug ("Using percentage notification policy");
 	}
-	
+
 	manager->priv->suppress_policy_timeout =
 		gconf_client_get_int (manager->priv->gconf_client,
 				      GPM_PREF_POLICY_TIMEOUT, NULL);
@@ -1930,27 +1923,21 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->gconf_client != NULL) {
 		g_object_unref (manager->priv->gconf_client);
 	}
-
 	if (manager->priv->dpms != NULL) {
 		g_object_unref (manager->priv->dpms);
 	}
-
 	if (manager->priv->idle != NULL) {
 		g_object_unref (manager->priv->idle);
 	}
-
 	if (manager->priv->info != NULL) {
 		g_object_unref (manager->priv->info);
 	}
-
 	if (manager->priv->power != NULL) {
 		g_object_unref (manager->priv->power);
 	}
-
 	if (manager->priv->brightness != NULL) {
 		g_object_unref (manager->priv->brightness);
 	}
-
 	if (manager->priv->tray_icon != NULL) {
 		g_object_unref (manager->priv->tray_icon);
 	}

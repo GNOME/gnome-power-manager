@@ -163,8 +163,10 @@ gpm_screensaver_lock (void)
 
 	gpm_debug ("doing gnome-screensaver lock");
 
-	if (!gpm_screensaver_get_session_conn (&session_connection))
+	if (!gpm_screensaver_get_session_conn (&session_connection)) {
+		gpm_debug ("Not locking, no session connection for screensaver");
 		return FALSE;
+	}
 	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
 					      GS_LISTENER_SERVICE,
 					      GS_LISTENER_PATH,
@@ -188,56 +190,6 @@ gpm_screensaver_lock (void)
 		}
 	}
 
-	return TRUE;
-}
-
-/** Prevent the screensaver from activating
- *
- *  @param			The reason, e.g. "because lid is closed"
- *  @return			TRUE if gnome-screensaver locked the screen.
- */
-gboolean
-gpm_screensaver_inhibit_activation (const char *reason)
-{
-	DBusGConnection *session_connection = NULL;
-	DBusGProxy *gs_proxy = NULL;
-
-	gpm_debug ("inhibit activation");
-
-	if (!gpm_screensaver_get_session_conn (&session_connection))
-		return FALSE;
-	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
-					      GS_LISTENER_SERVICE,
-					      GS_LISTENER_PATH,
-					      GS_LISTENER_INTERFACE);
-	dbus_g_proxy_call_no_reply (gs_proxy, "InhibitActivation",
-				    G_TYPE_STRING, reason,
-				    G_TYPE_INVALID);
-	g_object_unref (G_OBJECT (gs_proxy));
-	return TRUE;
-}
-
-/** Allow the screensaver to activate
- *
- *  @return			TRUE if gnome-screensaver locked the screen.
- */
-gboolean
-gpm_screensaver_allow_activation (void)
-{
-	DBusGConnection *session_connection = NULL;
-	DBusGProxy *gs_proxy = NULL;
-
-	gpm_debug ("allow activation");
-
-	if (!gpm_screensaver_get_session_conn (&session_connection))
-		return FALSE;
-	gs_proxy = dbus_g_proxy_new_for_name (session_connection,
-					      GS_LISTENER_SERVICE,
-					      GS_LISTENER_PATH,
-					      GS_LISTENER_INTERFACE);
-	dbus_g_proxy_call_no_reply (gs_proxy, "AllowActivation",
-				    G_TYPE_INVALID);
-	g_object_unref (G_OBJECT (gs_proxy));
 	return TRUE;
 }
 

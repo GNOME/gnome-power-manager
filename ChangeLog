@@ -1,5 +1,22 @@
 2006-03-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: Use the button "battery" rather than "www" to show
+	the battery status. This depends on mjg59's kernel addition and the
+	use of a HAL with the new button patched in.
+
+2006-03-23  Rodrigo Moya <rodrigo@novell.com>
+
+	* src/gpm-screensaver.c (gpm_screensaver_lock):
+	* src/gpm-manager.c (gpm_manager_blank_screen): added debug messages
+	for error conditions.
+
+2006-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c, src/gpm-screensaver.{c|h}: Don't inhibit, just
+	throttle. Pointed out in #332576.
+
+2006-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-preferences.desktop.in: Apply patch from
 	Vincent Fretin <vincent.fretin@gmail.com> to add X-GNOME-Bugzilla keys
 	for use with bug buddy.
