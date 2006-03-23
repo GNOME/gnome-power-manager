@@ -46,13 +46,10 @@ static void     gpm_dbus_monitor_finalize   (GObject	     *object);
 struct GpmDbusMonitorPrivate
 {
 	DBusGConnection *system_connection;
-	DBusGConnection *session_connection;
 	DBusGProxy	*system_proxy;
-	DBusGProxy	*session_proxy;
 };
 
 enum {
-	NAME_OWNER_CHANGED_SESSION,
 	NAME_OWNER_CHANGED_SYSTEM,
 	LAST_SIGNAL
 };
@@ -82,15 +79,6 @@ gpm_dbus_monitor_class_init (GpmDbusMonitorClass *klass)
 			      NULL,
 			      gpm_marshal_VOID__STRING_STRING_STRING,
 			      G_TYPE_NONE, 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-	signals [NAME_OWNER_CHANGED_SESSION] =
-		g_signal_new ("name-owner-changed-session",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmDbusMonitorClass, dbus_name_owner_changed_session),
-			      NULL,
-			      NULL,
-			      gpm_marshal_VOID__STRING_STRING_STRING,
-			      G_TYPE_NONE, 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 }
 
 static void
@@ -102,17 +90,6 @@ dbus_name_owner_changed_system (DBusGProxy	*system_proxy,
 {
 	gpm_debug ("emitting name-owner-changed-system : %s (%s->%s)", name, prev, new);
 	g_signal_emit (monitor, signals [NAME_OWNER_CHANGED_SYSTEM], 0, name, prev, new);
-}
-
-static void
-dbus_name_owner_changed_session (DBusGProxy	*session_proxy,
-				 const char	*name,
-				 const char	*prev,
-				 const char	*new,
-				 GpmDbusMonitor	*monitor)
-{
-	gpm_debug ("emitting name-owner-changed-session : %s (%s->%s)", name, prev, new);
-	g_signal_emit (monitor, signals [NAME_OWNER_CHANGED_SESSION], 0, name, prev, new);
 }
 
 static void
@@ -135,21 +112,6 @@ gpm_dbus_monitor_init (GpmDbusMonitor *monitor)
 	dbus_g_proxy_connect_signal (monitor->priv->system_proxy, "NameOwnerChanged",
 					    G_CALLBACK (dbus_name_owner_changed_system),
 					    monitor, NULL);
-
-	/* session connection */
-	monitor->priv->session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	/* FIXME: check errors */
-	monitor->priv->session_proxy = dbus_g_proxy_new_for_name_owner (monitor->priv->session_connection,
-								DBUS_SERVICE_DBUS,
-								DBUS_PATH_DBUS,
-						 		DBUS_INTERFACE_DBUS,
-								&error);
-	dbus_g_proxy_add_signal (monitor->priv->session_proxy, "NameOwnerChanged",
-					G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (monitor->priv->session_proxy, "NameOwnerChanged",
-					    G_CALLBACK (dbus_name_owner_changed_session),
-					    monitor, NULL);
-
 }
 
 static void
@@ -167,10 +129,6 @@ gpm_dbus_monitor_finalize (GObject *object)
 	if (monitor->priv->system_proxy) {
 		g_object_unref (monitor->priv->system_proxy);
 		monitor->priv->system_proxy = NULL;
-	}
-	if (monitor->priv->session_proxy) {
-		g_object_unref (monitor->priv->session_proxy);
-		monitor->priv->session_proxy = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);

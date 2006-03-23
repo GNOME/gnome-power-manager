@@ -44,10 +44,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* dbus_name_owner_changed_session)  (GpmDbusMonitor	*monitor,
-							      const char	*name,
-							      const char	*prev,
-							      const char	*new);
 	void		(* dbus_name_owner_changed_system)  (GpmDbusMonitor	*monitor,
 							     const char		*name,
 							     const char		*prev,

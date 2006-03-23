@@ -26,51 +26,46 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_HAL_MONITOR          (gpm_hal_monitor_get_type ())
-#define GPM_HAL_MONITOR(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitor))
-#define GPM_HAL_MONITOR_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
-#define GPM_IS_HAL_MONITOR(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_HAL_MONITOR))
-#define GPM_IS_HAL_MONITOR_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_HAL_MONITOR))
-#define GPM_HAL_MONITOR_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
+#define GPM_TYPE_HAL_MONITOR		(gpm_hal_monitor_get_type ())
+#define GPM_HAL_MONITOR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitor))
+#define GPM_HAL_MONITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
+#define GPM_IS_HAL_MONITOR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_HAL_MONITOR))
+#define GPM_IS_HAL_MONITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_HAL_MONITOR))
+#define GPM_HAL_MONITOR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
 
 typedef struct GpmHalMonitorPrivate GpmHalMonitorPrivate;
 
 typedef struct
 {
-	GObject               parent;
-	GpmHalMonitorPrivate *priv;
+	GObject			 parent;
+	GpmHalMonitorPrivate	*priv;
 } GpmHalMonitor;
 
 typedef struct
 {
-	GObjectClass      parent_class;
-
-	void              (* button_pressed)        (GpmHalMonitor    *monitor,
-						     const char       *type,
-						     gboolean          state);
-
-	void              (* ac_power_changed)      (GpmHalMonitor    *monitor,
-						     gboolean          on_ac);
-
-	void              (* battery_added)         (GpmHalMonitor    *monitor,
-						     const char       *udi);
-	void              (* battery_removed)       (GpmHalMonitor    *monitor,
-						     const char       *udi);
-
-	void              (* battery_property_modified) (GpmHalMonitor    *monitor,
-							 const char       *udi,
-							 const char       *key);
-
-	void              (* hal_connected)	    (GpmHalMonitor    *monitor);
-	void              (* hal_disconnected)	    (GpmHalMonitor    *monitor);
-
+	GObjectClass	parent_class;
+	void		(* button_pressed)	(GpmHalMonitor		*monitor,
+						 const char		*type,
+						 gboolean		 state);
+	void		(* ac_power_changed)	(GpmHalMonitor		*monitor,
+						 gboolean		 on_ac);
+	void		(* battery_added)	 (GpmHalMonitor		*monitor,
+						  const char		*udi);
+	void		(* battery_removed)	 (GpmHalMonitor		*monitor,
+						  const char		*udi);
+	void		(* battery_property_modified) (GpmHalMonitor	*monitor,
+						  const char		*udi,
+						  const char		*key);
 } GpmHalMonitorClass;
 
-GType             gpm_hal_monitor_get_type         (void);
+GType			 gpm_hal_monitor_get_type	(void);
 
-GpmHalMonitor   * gpm_hal_monitor_new              (void);
+GpmHalMonitor		*gpm_hal_monitor_new		(void);
 
-gboolean          gpm_hal_monitor_get_on_ac        (GpmHalMonitor *monitor);
+gboolean		 gpm_hal_monitor_get_on_ac	(GpmHalMonitor *monitor);
+
+void			 hal_start_monitor		(GpmHalMonitor *monitor);
+void			 hal_stop_monitor		(GpmHalMonitor *monitor);
 
 G_END_DECLS
 
