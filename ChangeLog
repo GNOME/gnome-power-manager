@@ -1,5 +1,11 @@
 2006-03-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-idle.{c|h}: Comment the file, and also get rid of the ugly
+	cpudata struct. Make things a bit more friendly so people understand
+	what's going on.
+
+2006-03-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: Comment the file, and also remember to g_slice_free
 	the elements when we strip the data when we have too many points.
 

@@ -66,8 +66,6 @@ void	gpm_idle_set_mode		(GpmIdle    *idle,
 void	gpm_idle_set_check_cpu		(GpmIdle    *idle,
 					 gboolean    check_type_cpu);
 
-void	gpm_idle_set_session_timeout	(GpmIdle    *idle,
-					 guint       timeout);
 void	gpm_idle_set_system_timeout	(GpmIdle    *idle,
 					 guint       timeout);
 

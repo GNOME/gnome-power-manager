@@ -41,31 +41,19 @@
 #include "gpm-idle.h"
 #include "gpm-debug.h"
 
-static void     gpm_idle_class_init (GpmIdleClass *klass);
-static void     gpm_idle_init       (GpmIdle      *idle);
-static void     gpm_idle_finalize   (GObject      *object);
-
-static gdouble  cpu_update_data     (GpmIdle      *idle);
+static void     gpm_idle_class_init 	(GpmIdleClass *klass);
+static void     gpm_idle_init       	(GpmIdle      *idle);
+static void     gpm_idle_finalize   	(GObject      *object);
+static gdouble  gpm_idle_compute_load	(GpmIdle      *idle);
 
 #define GPM_IDLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_IDLE, GpmIdlePrivate))
 
-/*  How many seconds between polling? */
+/* How many seconds between polling? */
 #define POLL_FREQUENCY	5
 
-/*
- * Sets the idle percent limit, i.e. how hard the computer can work
- * while considered "at idle"
- */
+/* Sets the idle percent limit, i.e. how hard the computer can work
+   while considered "at idle" */
 #define IDLE_LIMIT	5
-
-/* The cached cpu statistics used to work out the difference */
-typedef struct {
-	long unsigned user;	/**< The CPU user time			*/
-	long unsigned nice;	/**< The CPU nice time			*/
-	long unsigned system;	/**< The CPU system time		*/
-	long unsigned idle;	/**< The CPU idle time			*/
-	long unsigned total;	/**< The CPU total time (uptime)	*/
-} cpudata;
 
 struct GpmIdlePrivate
 {
@@ -81,7 +69,8 @@ struct GpmIdlePrivate
 	gboolean	 check_type_cpu;
 
 	gboolean	 init;
-	cpudata		 cpu_old;
+	long unsigned	 old_idle;
+	long unsigned	 old_total;
 };
 
 enum {
@@ -95,14 +84,19 @@ enum {
 	PROP_SYSTEM_TIMEOUT
 };
 
-#define GS_DBUS_SERVICE	  "org.gnome.ScreenSaver"
-#define GS_DBUS_PATH	  "/org/gnome/ScreenSaver"
-#define GS_DBUS_INTERFACE "org.gnome.ScreenSaver"
+#define GS_DBUS_SERVICE		"org.gnome.ScreenSaver"
+#define GS_DBUS_PATH		"/org/gnome/ScreenSaver"
+#define GS_DBUS_INTERFACE	"org.gnome.ScreenSaver"
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint	signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 
+/**
+ * poll_system_timer:
+ * @idle: This idle class instance
+ * Return value: If the current load is low enough for the transition to occur.
+ **/
 static gboolean
 poll_system_timer (GpmIdle *idle)
 {
@@ -112,22 +106,18 @@ poll_system_timer (GpmIdle *idle)
 	/* get our computed load value */
 	if (idle->priv->check_type_cpu) {
 
-		load = cpu_update_data (idle);
+		load = gpm_idle_compute_load (idle);
 
 		/* FIXME: should this stay below this level for a certain time? */
-		/* FIXME: check that we are on console? */
-
 		if (load > IDLE_LIMIT) {
 			/* check if system is "idle" enough */
 			gpm_debug ("Detected that the CPU is busy");
 			do_action = FALSE;
 		}
-	
 	}
 
 	if (do_action) {
 		gpm_idle_set_mode (idle, GPM_IDLE_MODE_SYSTEM);
-
 		idle->priv->system_idle_timer_id = 0;
 		return FALSE;
 	}
@@ -135,6 +125,9 @@ poll_system_timer (GpmIdle *idle)
 	return TRUE;
 }
 
+/**
+ * add_poll_system_timer:
+ **/
 static void
 add_poll_system_timer (GpmIdle *idle,
 		       glong	timeout)
@@ -142,6 +135,9 @@ add_poll_system_timer (GpmIdle *idle,
 	idle->priv->system_idle_timer_id = g_timeout_add (timeout, (GSourceFunc)poll_system_timer, idle);
 }
 
+/**
+ * remove_poll_system_timer:
+ **/
 static void
 remove_poll_system_timer (GpmIdle *idle)
 {
@@ -151,13 +147,18 @@ remove_poll_system_timer (GpmIdle *idle)
 	}
 }
 
+/**
+ * system_timer:
+ * @idle: This idle class instance
+ * 
+ * Instead of doing the state transition directly we wait until the
+ * system is quiet
+ **/
 static gboolean
 system_timer (GpmIdle *idle)
 {
 	gpm_debug ("System idle timeout");
 
-	/* instead of doing the state transition directly
-	 * we wait until the system is quiet */
 	remove_poll_system_timer (idle);
 	add_poll_system_timer (idle, POLL_FREQUENCY * 1000);
 
@@ -165,6 +166,10 @@ system_timer (GpmIdle *idle)
 	return FALSE;
 }
 
+/**
+ * remove_system_timer:
+ * @idle: This idle class instance
+ **/
 static void
 remove_system_timer (GpmIdle *idle)
 {
@@ -174,6 +179,10 @@ remove_system_timer (GpmIdle *idle)
 	}
 }
 
+/**
+ * remove_all_timers:
+ * @idle: This idle class instance
+ **/
 static void
 remove_all_timers (GpmIdle *idle)
 {
@@ -181,6 +190,12 @@ remove_all_timers (GpmIdle *idle)
 	remove_system_timer (idle);
 }
 
+/**
+ * add_system_timer:
+ * @idle: This idle class instance
+ * 
+ * Adds a idle timeout if the value is greater than zero
+ **/
 static void
 add_system_timer (GpmIdle *idle)
 {
@@ -196,17 +211,26 @@ add_system_timer (GpmIdle *idle)
 	}
 }
 
+/**
+ * gpm_idle_set_check_cpu:
+ * @idle: This idle class instance
+ * @check_type_cpu: If we should check the CPU before mode becomes 
+ *		    GPM_IDLE_MODE_SYSTEM and the event is done.
+ **/
 void
 gpm_idle_set_check_cpu (GpmIdle    *idle,
 			gboolean    check_type_cpu)
 {
 	g_return_if_fail (GPM_IS_IDLE (idle));
-
 	gpm_debug ("Setting the CPU load check to %i", check_type_cpu);
-
 	idle->priv->check_type_cpu = check_type_cpu;
 }
 
+/**
+ * gpm_idle_set_mode:
+ * @idle: This idle class instance
+ * @mode: The new mode, e.g. GPM_IDLE_MODE_SYSTEM
+ **/
 void
 gpm_idle_set_mode (GpmIdle    *idle,
 		   GpmIdleMode mode)
@@ -219,7 +243,6 @@ gpm_idle_set_mode (GpmIdle    *idle,
 		gpm_idle_reset (idle);
 
 		gpm_debug ("Doing a state transition: %d", mode);
-
 		g_signal_emit (idle,
 			       signals [CHANGED],
 			       0,
@@ -227,16 +250,25 @@ gpm_idle_set_mode (GpmIdle    *idle,
 	}
 }
 
+/**
+ * gpm_idle_get_mode:
+ * @idle: This idle class instance
+ * Return value: The current mode, e.g. GPM_IDLE_MODE_SYSTEM
+ **/
 GpmIdleMode
 gpm_idle_get_mode (GpmIdle *idle)
 {
 	GpmIdleMode mode;
-
 	mode = idle->priv->mode;
-
 	return mode;
 }
 
+/**
+ * gpm_idle_reset:
+ * @idle: This idle class instance
+ * 
+ * Reset the idle timer.
+ **/
 void
 gpm_idle_reset (GpmIdle *idle)
 {
@@ -262,6 +294,11 @@ gpm_idle_reset (GpmIdle *idle)
 	}
 }
 
+/**
+ * gpm_idle_set_system_timeout:
+ * @idle: This idle class instance
+ * @timeout: The new timeout we want to set, in seconds
+ **/
 void
 gpm_idle_set_system_timeout (GpmIdle	*idle,
 			     guint	 timeout)
@@ -278,6 +315,9 @@ gpm_idle_set_system_timeout (GpmIdle	*idle,
 	}
 }
 
+/**
+ * gpm_idle_set_property:
+ **/
 static void
 gpm_idle_set_property (GObject		  *object,
 		       guint		   prop_id,
@@ -298,6 +338,9 @@ gpm_idle_set_property (GObject		  *object,
 	}
 }
 
+/**
+ * gpm_idle_get_property:
+ **/
 static void
 gpm_idle_get_property (GObject		  *object,
 		       guint		   prop_id,
@@ -318,6 +361,10 @@ gpm_idle_get_property (GObject		  *object,
 	}
 }
 
+/**
+ * gpm_idle_class_init:
+ * @klass: This idle class instance
+ **/
 static void
 gpm_idle_class_init (GpmIdleClass *klass)
 {
@@ -360,6 +407,13 @@ gpm_idle_class_init (GpmIdleClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmIdlePrivate));
 }
 
+/**
+ * session_idle_changed_handler:
+ * @is_idle: If the session is idle
+ * @idle: This idle class instance
+ * 
+ * The SessionIdleChanged callback from gnome-screensaver.
+ **/
 static void
 session_idle_changed_handler (DBusGProxy *proxy,
 			      gboolean	  is_idle,
@@ -378,6 +432,15 @@ session_idle_changed_handler (DBusGProxy *proxy,
 	gpm_idle_set_mode (idle, mode);
 }
 
+/**
+ * acquire_screensaver:
+ * @idle: This idle class instance
+ * 
+ * Aquires a connection to gnome-screensaver so we can get SessionIdleChanged
+ * dubs events.
+ * 
+ * Return value: If we could connect to gnome-screensaver.
+ **/
 static gboolean
 acquire_screensaver (GpmIdle *idle)
 {
@@ -402,6 +465,14 @@ acquire_screensaver (GpmIdle *idle)
 }
 
 
+/**
+ * gpm_idle_init:
+ * @idle: This idle class instance
+ * 
+ * Gets a DBUS connection, and aquires the screensaver connection so we can
+ * get session changed events.
+ * 
+ **/
 static void
 gpm_idle_init (GpmIdle *idle)
 {
@@ -418,6 +489,10 @@ gpm_idle_init (GpmIdle *idle)
 	acquire_screensaver (idle);
 }
 
+/**
+ * gpm_idle_finalize:
+ * @object: This idle class instance
+ **/
 static void
 gpm_idle_finalize (GObject *object)
 {
@@ -435,149 +510,87 @@ gpm_idle_finalize (GObject *object)
 	G_OBJECT_CLASS (gpm_idle_parent_class)->finalize (object);
 }
 
+/**
+ * gpm_idle_new:
+ * Return value: A new GpmIdle instance.
+ **/
 GpmIdle *
 gpm_idle_new (void)
 {
 	GpmIdle *idle;
-
 	idle = g_object_new (GPM_TYPE_IDLE, NULL);
-
 	return GPM_IDLE (idle);
 }
 
-
-/** Gets the raw CPU values from /proc/stat
- *
- *  @param	data		An empty, pre-allocated CPU object
- *  @return			If we can read the /proc/stat file
- *
- * @note	- user		Time spent in user space (for all processes)
- *		- nice		Time spent in niced tasks
-				(tasks with positive nice value)
- *		- system	Time spent in Kernel space
- *		- idle		Time the processor was not busy.
- */
+/**
+ * gpm_idle_get_cpu_values:
+ * @cpu_idle: The idle time reported by the CPU
+ * @cpu_total: The total time reported by the CPU
+ * Return value: Success of reading /proc/stat.
+ **/
 static gboolean
-cpudata_get_values (cpudata *data)
+gpm_idle_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 {
+	long unsigned user;
+	long unsigned nice;
+	long unsigned system;
 	int len;
 	char tmp[5];
 	char str[80];
 	FILE *fd;
 	char *suc;
 
-	/* assertion checks */
-	g_assert (data);
-
 	fd = fopen("/proc/stat", "r");
-	if (!fd)
+	if (! fd) {
 		return FALSE;
+	}
 	suc = fgets (str, 80, fd);
 	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
-		      &data->user, &data->nice, &data->system, &data->idle);
+		      &user, &nice, &system, cpu_idle);
 	fclose (fd);
 	/*
 	 * Summing up all these times gives you the system uptime in jiffies.
 	 * This is what the uptime command does.
 	 */
-	data->total = data->user + data->nice + data->system + data->idle;
+	*cpu_total = user + nice + system + *cpu_idle;
 	return TRUE;
 }
 
-/** Diff two CPU structures
- *
- *  @param	data1		The newer CPU data struct
- *  @param	data2		The older CPU data struct
- *  @param	diff		The difference CPU data struct
- */
-static void
-cpudata_diff (cpudata *data2, cpudata *data1, cpudata *diff)
-{
-	/* assertion checks */
-	g_assert (data1);
-	g_assert (data2);
-	g_assert (diff);
-
-	diff->user = data1->user - data2->user;
-	diff->nice = data1->nice - data2->nice;
-	diff->system = data1->system - data2->system;
-	diff->idle = data1->idle - data2->idle;
-	diff->total = data1->total - data2->total;
-}
-
-/** Diff two CPU structures
- *
- *  @param	to		The new CPU data struct
- *  @param	from		The old CPU data struct
- */
-static void
-cpudata_copy (cpudata *to, cpudata *from)
-{
-	/* assertion checks */
-	g_assert (to);
-	g_assert (from);
-
-	to->user = from->user;
-	to->nice = from->nice;
-	to->system = from->system;
-	to->idle = from->idle;
-	to->total = from->total;
-}
-
-#if 0
-/** Normalise a cpudata structure to Hz.
- *
- *  @param	data		The CPU data struct
- *
- *  @note	This precision is required because 100 / POLL_FREQUENCY may
- *		be non-integer.
- *		Also, we cannot assume 100 / POLL_FREQUENCY == total, as we
- *		may have taken longer to do the read than we had planned.
- */
-static void
-cpudata_normalize (cpudata *data)
-{
-	/* assertion checks */
-	g_assert (data);
-
-	double factor = 100.0 / (double) data->total;
-	data->user = (double) data->user * factor;
-	data->nice = (double) data->nice * factor;
-	data->system = (double) data->system * factor;
-	data->idle = (double) data->idle * factor;
-}
-#endif
-
-/** Returns the CPU's load
- *
- *  @return			The CPU load
- */
+/**
+ * gpm_idle_compute_load:
+ * @idle: This idle class instance
+ * Return value: The CPU idle load
+ **/
 static gdouble
-cpu_update_data (GpmIdle *idle)
+gpm_idle_compute_load (GpmIdle *idle)
 {
-	cpudata new;
-	cpudata diff;
-	double	loadpercentage;
+	double	      percentage_load;
+	long unsigned cpu_idle;
+	long unsigned cpu_total;
+	long unsigned diff_idle;
+	long unsigned diff_total;
 
 	/* fill "old" value manually */
 	if (! idle->priv->init) {
 		idle->priv->init = TRUE;
-		cpudata_get_values (&idle->priv->cpu_old);
+		gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total);
 		return 0;
 	}
 
 	/* work out the differences */
-	cpudata_get_values (&new);
-	cpudata_diff (&idle->priv->cpu_old, &new, &diff);
-
-	/* Copy into old */
-	cpudata_copy (&idle->priv->cpu_old, &new);
+	gpm_idle_get_cpu_values (&cpu_idle, &cpu_total);
+	diff_idle = cpu_idle - idle->priv->old_idle;
+	diff_total = cpu_total - idle->priv->old_total;
 
 	/* If we divide the total time by idle time we get the load. */
-	if (diff.idle > 0)
-		loadpercentage = (double) diff.total / (double) diff.idle;
-	else
-		loadpercentage = 100;
+	if (diff_idle > 0) {
+		percentage_load = (double) diff_total / (double) diff_idle;
+	} else {
+		percentage_load = 100;
+	}
 
-	return loadpercentage;
+	idle->priv->old_idle = cpu_idle;
+	idle->priv->old_total = cpu_total;
+
+	return percentage_load;
 }
