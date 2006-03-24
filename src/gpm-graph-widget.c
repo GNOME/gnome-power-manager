@@ -1,10 +1,22 @@
-/**
- * graph.c
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Test GpmSimpleGraph in a GtkWindow
+ * Copyright (C) 2006 Richard Hughes <richard@hughsie.com>
  *
- * (c) 2006, Richard Hughes <richard@hughsie.com>
+ * Licensed under the GNU General Public License Version 2
  *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "config.h"
@@ -45,18 +57,32 @@ struct GpmSimpleGraphPrivate
 static gboolean gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event);
 static void	gpm_simple_graph_finalize (GObject *object);
 
+/**
+ * gpm_simple_graph_set_axis_x:
+ * @graph: This simple graph class instance
+ * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ **/
 void
 gpm_simple_graph_set_axis_x (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
 {
 	graph->priv->axis_x = axis;
 }
 
+/**
+ * gpm_simple_graph_set_axis_y:
+ * @graph: This simple graph class instance
+ * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ **/
 void
 gpm_simple_graph_set_axis_y (GpmSimpleGraph *graph, GpmSimpleGraphAxisType axis)
 {
 	graph->priv->axis_y = axis;
 }
 
+/**
+ * gpm_simple_graph_class_init:
+ * @class: This simple graph class instance
+ **/
 static void
 gpm_simple_graph_class_init (GpmSimpleGraphClass *class)
 {
@@ -69,6 +95,10 @@ gpm_simple_graph_class_init (GpmSimpleGraphClass *class)
 	g_type_class_add_private (class, sizeof (GpmSimpleGraphPrivate));
 }
 
+/**
+ * gpm_simple_graph_init:
+ * @graph: This simple graph class instance
+ **/
 static void
 gpm_simple_graph_init (GpmSimpleGraph *graph)
 {
@@ -87,38 +117,68 @@ gpm_simple_graph_init (GpmSimpleGraph *graph)
 	graph->priv->options = cairo_font_options_create ();
 }
 
-/** finalise the object */
+/**
+ * gpm_simple_graph_finalize:
+ * @object: This simple graph class instance
+ **/
 static void
 gpm_simple_graph_finalize (GObject *object)
 {
 	GpmSimpleGraph *graph = (GpmSimpleGraph*) object;
-
 	cairo_font_options_destroy (graph->priv->options);
 }
 
-/** Sets the inverse policy for the X axis, i.e. to count from 0..Y or Y..0 */
+/**
+ * gpm_simple_graph_set_invert_x:
+ * @graph: This simple graph class instance
+ * @inv: If we should invert the axis
+ *
+ * Sets the inverse policy for the X axis, i.e. to count from 0..X or X..0
+ **/
 void
 gpm_simple_graph_set_invert_x (GpmSimpleGraph *graph, gboolean inv)
 {
 	graph->priv->invert_x = inv;
 }
 
-/** Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0 */
+/**
+ * gpm_simple_graph_set_invert_y:
+ * @graph: This simple graph class instance
+ * @inv: If we should invert the axis
+ *
+ * Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0
+ **/
 void
 gpm_simple_graph_set_invert_y (GpmSimpleGraph *graph, gboolean inv)
 {
 	graph->priv->invert_y = inv;
 }
 
-/** Sets the data for the graph. This data has to be normalised on both
-    axes to 0..100 and 0..100. You MUST NOT free the list before the widget. */
+/**
+ * gpm_simple_graph_set_data:
+ * @graph: This simple graph class instance
+ * @list: The GList values to be plotted on the graph
+ *
+ * Sets the data for the graph. You MUST NOT free the list before the widget.
+ **/
 void
 gpm_simple_graph_set_data (GpmSimpleGraph *graph, GList *list)
 {
 	graph->priv->list = list;
 }
 
-/* value is in seconds for time, mWh for rate */
+/**
+ * gpm_get_axis_label:
+ * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ * @value: The data value, e.g. 120
+ *
+ * Unit is:
+ * GPM_GRAPH_TYPE_TIME:		seconds
+ * GPM_GRAPH_TYPE_RATE: 	mWh (not mAh)
+ * GPM_GRAPH_TYPE_PERCENTAGE:	%
+ *
+ * Return value: a string value depending on the axis type and the value.
+ **/
 static char *
 gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 {
@@ -145,8 +205,13 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 	return text;
 }
 
-
-
+/**
+ * gpm_simple_graph_draw_grid:
+ * @graph: This simple graph class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the 10x10 dotted grid onto the graph.
+ **/
 static void
 gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 {
@@ -155,7 +220,7 @@ gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 	double divwidth  = graph->priv->box_width / 10;
 	double divheight = graph->priv->box_height / 10;
 
-	cairo_save (cr); /* push stack */
+	cairo_save (cr);
 
 	cairo_set_line_width (cr, 1);
 	cairo_set_dash (cr, dotted, 2, 0.0);
@@ -177,9 +242,16 @@ gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 		cairo_stroke (cr);
 	}
 
-	cairo_restore (cr); /* pop stack */
+	cairo_restore (cr);
 }
 
+/**
+ * gpm_simple_graph_draw_labels:
+ * @graph: This simple graph class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the X and the Y labels onto the graph.
+ **/
 static void
 gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 {
@@ -191,7 +263,7 @@ gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	gint length_x = graph->priv->stop_x - graph->priv->start_x;
 	gint length_y = graph->priv->stop_y - graph->priv->start_y;
 
-	cairo_save (cr); /* push stack */
+	cairo_save (cr);
 
 	cairo_set_font_options (cr, graph->priv->options);
 
@@ -224,10 +296,15 @@ gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 		g_free (text);
 	}
 
-	cairo_restore (cr); /* pop stack */
+	cairo_restore (cr);
 }
 
-/* checks all points are displayable on the graph */
+/**
+ * gpm_simple_graph_check_range:
+ * @graph: This simple graph class instance
+ *
+ * Checks all points are displayable on the graph, nobbling if required.
+ **/
 static void
 gpm_simple_graph_check_range (GpmSimpleGraph *graph)
 {
@@ -241,7 +318,7 @@ gpm_simple_graph_check_range (GpmSimpleGraph *graph)
 		new = (GpmDataPoint *) l->data;
 		if (new->x < graph->priv->start_x) {
 			gpm_warning ("point out of range (x=%i)", new->x);
-			new->x = 0;
+			new->x = graph->priv->start_x;
 		}
 		if (new->x > graph->priv->stop_x) {
 			gpm_warning ("point out of range (x=%i)", new->x);
@@ -249,7 +326,7 @@ gpm_simple_graph_check_range (GpmSimpleGraph *graph)
 		}
 		if (new->y < graph->priv->start_y) {
 			gpm_warning ("point out of range (y=%i)", new->y);
-			new->y = 0;
+			new->y = graph->priv->start_y;
 		}
 		if (new->y > graph->priv->stop_y) {
 			gpm_warning ("point out of range (y=%i)", new->y);
@@ -258,6 +335,14 @@ gpm_simple_graph_check_range (GpmSimpleGraph *graph)
 	}
 }
 
+/**
+ * gpm_simple_graph_auto_range:
+ * @graph: This simple graph class instance
+ *
+ * Autoranges the graph axis depending on the axis type, and the maximum
+ * value of the data. We have to be careful to choose a number that gives good
+ * resolution but also a number that scales "well" to a 10x10 grid.
+ **/
 static void
 gpm_simple_graph_auto_range (GpmSimpleGraph *graph)
 {
@@ -333,6 +418,14 @@ gpm_simple_graph_auto_range (GpmSimpleGraph *graph)
 	}
 }
 
+/**
+ * gpm_simple_graph_draw_line:
+ * @graph: This simple graph class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the data line onto the graph with a big green line. We should already
+ * limit the data to < 100 values, so this shouldn't take too long.
+ **/
 static void
 gpm_simple_graph_draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 {
@@ -350,7 +443,7 @@ gpm_simple_graph_draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 
 	gpm_simple_graph_check_range (graph);
 
-	cairo_save (cr); /* push stack */
+	cairo_save (cr);
 
 	cairo_set_line_width (cr, 2);
 
@@ -358,7 +451,7 @@ gpm_simple_graph_draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 	GpmDataPoint *old = (GpmDataPoint *) g_list_nth_data (graph->priv->list, 0);
 
 	/* todo, allow line colour change */
-	cairo_set_source_rgb (cr, 0, 0.8, 0);
+	cairo_set_source_rgb (cr, 0, 0.7, 0);
 
 	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
@@ -373,19 +466,26 @@ gpm_simple_graph_draw_line (GpmSimpleGraph *graph, cairo_t *cr)
 		old = new;
 	}
 
-	cairo_restore (cr); /* pop stack */
+	cairo_restore (cr);
 }
 
+/**
+ * gpm_simple_graph_draw_graph:
+ * @graph: This simple graph class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the complete graph, with the box, the grid, the labels and the line.
+ **/
 static void
 gpm_simple_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
 
 	GpmSimpleGraph *graph = (GpmSimpleGraph*) graph_widget;
 
-	cairo_save (cr); /* push stack */
+	cairo_save (cr);
 
-	graph->priv->box_x = graph_widget->allocation.x + 45;
-	graph->priv->box_y = graph_widget->allocation.y + 5;
+	graph->priv->box_x = 45;
+	graph->priv->box_y = 5;
 	graph->priv->box_width = graph_widget->allocation.width - (5 + 45);
 	graph->priv->box_height = graph_widget->allocation.height - (5 + 20);
 
@@ -405,15 +505,24 @@ gpm_simple_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_simple_graph_draw_line (graph, cr);
 
 	/* solid outline box */
-	cairo_rectangle (cr, graph->priv->box_x + 0.5, graph->priv->box_y + 0.5,
-			 graph->priv->box_width - 1 , graph->priv->box_height - 1);
+	cairo_rectangle (cr, graph->priv->box_x + 0.5,
+			 graph->priv->box_y + 0.5,
+			 graph->priv->box_width - 1,
+			 graph->priv->box_height - 1);
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
 
-	cairo_restore (cr); /* pop stack */
+	cairo_restore (cr);
 }
 
+/**
+ * gpm_simple_graph_expose:
+ * @graph: This simple graph class instance
+ * @event: The expose event
+ *
+ * Just repaint the entire graph widget on expose.
+ **/
 static gboolean
 gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 {
@@ -427,16 +536,16 @@ gpm_simple_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 			 event->area.width, event->area.height);
 	cairo_clip (cr);
 
-	/* not sure why, maybe bug in gtk? */
-	graph->allocation.x = event->area.x;
-	graph->allocation.y = event->area.y;
-
 	gpm_simple_graph_draw_graph (graph, cr);
 
 	cairo_destroy (cr);
 	return FALSE;
 }
 
+/**
+ * gpm_simple_graph_new:
+ * Return value: A new GpmSimpleGraph object.
+ **/
 GtkWidget *
 gpm_simple_graph_new (void)
 {

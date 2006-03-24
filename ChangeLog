@@ -1,3 +1,15 @@
+2006-03-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: Comment the file, and also remember to g_slice_free
+	the elements when we strip the data when we have too many points.
+
+	* src/gpm-graph-widget.{c|h}: Apply a patch from Crispin Flowerday
+	<crispin@gnome.org> to fix the expose event handling. Many thanks.
+	Add correct licensing and copyright header to file.
+	Also add comments to the functions, so I know what's happening where.
+
+	* src/gpm-manager.c: Remove oodles of trailing whitespace.
+
 2006-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c: Use the new g_slice functions to allocate and

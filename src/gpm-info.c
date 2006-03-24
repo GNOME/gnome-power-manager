@@ -40,7 +40,7 @@ static void     gpm_info_finalize   (GObject      *object);
 
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
-#define GPM_INFO_HARDWARE_POLL		10	/* seconds */
+#define GPM_INFO_DATA_POLL		10	/* seconds */
 #define GPM_INFO_DATA_RES_X		80	/* x resolution, greater burns the cpu */
 #define GPM_INFO_MAX_POINTS		100	/* when we should simplify data */
 
@@ -66,7 +66,15 @@ struct GpmInfoPrivate
 
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
-/** handler for libglade to provide interface with a pointer */
+/**
+ * gpm_graph_custom_handler:
+ * @xml: The glade file we are reading.
+ * @func_name: The function name to create the object
+ *
+ * Handler for libglade to provide interface with a pointer
+ *
+ * Return value: The custom widget.
+ **/
 static GtkWidget *
 gpm_graph_custom_handler (GladeXML *xml,
 			  gchar *func_name, gchar *name,
@@ -82,15 +90,24 @@ gpm_graph_custom_handler (GladeXML *xml,
 	return NULL;
 }
 
-/** add an x-y point to a list */
+/**
+ * gpm_info_data_point_add:
+ * @graph_data: The data we have for a specific graph
+ * @x: The X data point
+ * @y: The Y data point
+ *
+ * Adds an x-y point to a list. We have to save the X value as an integer, as
+ * when we prune the values (when we have over 100) the X and Y values are
+ * lost, and the data-points becomes non-uniform.
+ **/
 static void
-gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
+gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 {
 	GpmDataPoint *new_point;
-	int length = g_list_length (list_data->data);
+	int length = g_list_length (graph_data->data);
 	if (length > 2) {
-		GList		*first = g_list_first (list_data->data);
-		GpmDataPoint	*old = (GpmDataPoint *) first->data;
+		GList *first = g_list_first (graph_data->data);
+		GpmDataPoint *old = (GpmDataPoint *) first->data;
 		if (old->y == y) {
 			/* we are the same as we were before and not the first or
 			   second point, just side the data time across */
@@ -100,14 +117,14 @@ gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
 			new_point = g_slice_new (GpmDataPoint);
 			new_point->x = x;
 			new_point->y = y;
-			list_data->data = g_list_prepend (list_data->data, (gpointer) new_point);
+			graph_data->data = g_list_prepend (graph_data->data, (gpointer) new_point);
 		}
 	} else {
 		/* a new list requires a data point */
 		new_point = g_new (GpmDataPoint, 1);
 		new_point->x = x;
 		new_point->y = y;
-		list_data->data = g_list_prepend (list_data->data, (gpointer) new_point);
+		graph_data->data = g_list_prepend (graph_data->data, (gpointer) new_point);
 	}
 	gpm_debug ("Drawing %i lines", length);
 	if (length > GPM_INFO_MAX_POINTS) {
@@ -116,13 +133,14 @@ gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
 		GList *l;
 		GList *temp;
 		int count = 0;
-		for (l=list_data->data; l != NULL; l=l->next) {
+		for (l=graph_data->data; l != NULL; l=l->next) {
 			new_point = (GpmDataPoint *) l->data;
 			count++;
 			if (count == 3) {
 				temp = l->prev;
-				list_data->data = g_list_delete_link (list_data->data, l);
-				/* FIXME: we need to free the data */
+				/* we need to free the data */
+				g_slice_free (GpmDataPoint, l->data);
+				graph_data->data = g_list_delete_link (graph_data->data, l);
 				l = temp;
 				count = 0;
 			}
@@ -130,7 +148,11 @@ gpm_info_data_point_add (GpmInfoGraphData *list_data, int x, int y)
 	}
 }
 
-/** help callback */
+/**
+ * gpm_info_help_cb:
+ * @widget: The GtkWidget object
+ * @info: This info class instance
+ **/
 static void
 gpm_info_help_cb (GtkWidget	*widget,
 		  GpmInfo	*info)
@@ -144,7 +166,11 @@ gpm_info_help_cb (GtkWidget	*widget,
 	}
 }
 
-/* close callback */
+/**
+ * gpm_info_close_cb:
+ * @widget: The GtkWidget object
+ * @info: This info class instance
+ **/
 static void
 gpm_info_close_cb (GtkWidget	*widget,
 		   GpmInfo	*info)
@@ -155,24 +181,33 @@ gpm_info_close_cb (GtkWidget	*widget,
 	}
 }
 
-/** update this graph */
+/**
+ * gpm_info_graph_update:
+ * @graph_data: The data we have for a specific graph
+ *
+ * Update this graph
+ **/
 static void
-gpm_info_graph_update (GpmInfoGraphData *graph)
+gpm_info_graph_update (GpmInfoGraphData *graph_data)
 {
-	/* free existing data if exists */
-
-
-	if (graph->data) {
-		gpm_simple_graph_set_data (GPM_SIMPLE_GRAPH (graph->widget), graph->data);
+	if (graph_data->data) {
+		gpm_simple_graph_set_data (GPM_SIMPLE_GRAPH (graph_data->widget),
+					   graph_data->data);
 	} else {
 		gpm_debug ("no log data");
 	}
 
 	/* FIXME: There's got to be a better way than this */
-	gtk_widget_hide (graph->widget);
-	gtk_widget_show (graph->widget);
+	gtk_widget_hide (graph_data->widget);
+	gtk_widget_show (graph_data->widget);
 }
 
+/**
+ * gpm_info_delete_event_cb:
+ * @widget: The GtkWidget object
+ * @event: The event type, unused.
+ * @info: This info class instance
+ **/
 static gboolean
 gpm_info_delete_event_cb (GtkWidget	*widget,
 			  GdkEvent	*event,
@@ -182,7 +217,13 @@ gpm_info_delete_event_cb (GtkWidget	*widget,
 	return FALSE;
 }
 
-/** update the tree widget with new data */
+/**
+ * gpm_info_update_tree:
+ * @widget: The GtkWidget object
+ * @array: The array of GpmPowerDescriptionItem obtained about the hardware
+ *
+ * Update the tree widget with new data that we obtained from power.
+ **/
 static void
 gpm_info_update_tree (GtkWidget *widget, GArray *array)
 {
@@ -214,11 +255,16 @@ gpm_info_update_tree (GtkWidget *widget, GArray *array)
 					    -1);
 		}
 	}
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));                             
+	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));                          
 	g_object_unref (store);
 }
 
-/** create the tree widget */
+/**
+ * gpm_info_create_tree:
+ * @widget: The GtkWidget object
+ *
+ * Create the tree widget, setting up the columns
+ **/
 static void
 gpm_info_create_tree (GtkWidget *widget)
 {
@@ -249,10 +295,17 @@ gpm_info_create_tree (GtkWidget *widget)
 	gtk_tree_view_column_set_sort_column_id (column, 3);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
 	gtk_tree_view_column_set_min_width (column, MIN_SIZE);
-	
+
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
 }
 
+/**
+ * gpm_info_populate_device_information:
+ * @info: This info class instance
+ *
+ * Populate the 4 possible treeviews, depending on the hardware we have
+ * available on our system.
+ **/
 static void
 gpm_info_populate_device_information (GpmInfo *info)
 {
@@ -304,7 +357,13 @@ gpm_info_populate_device_information (GpmInfo *info)
 	}
 }
 
-/** setup the information window */
+/**
+ * gpm_info_show_window:
+ * @info: This info class instance
+ *
+ * Show the information window, setting up callbacks and initialising widgets
+ * when required.
+ **/
 void
 gpm_info_show_window (GpmInfo *info)
 {
@@ -375,7 +434,13 @@ gpm_info_show_window (GpmInfo *info)
 	gtk_widget_show (info->priv->main_window);
 }
 
-/** callback to get the log data every minute */
+/**
+ * gpm_info_log_do_poll:
+ * @data: gpointer to this info class instance
+ *
+ * This is the callback to get the log data every timeout period, where we have
+ * to add points to the database and also update the graphs.
+ **/
 static gboolean
 gpm_info_log_do_poll (gpointer data)
 {
@@ -388,11 +453,11 @@ gpm_info_log_do_poll (gpointer data)
 				      &battery_status);
 
 	/* work out seconds elapsed */
-	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_HARDWARE_POLL);
+	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
 	gpm_info_data_point_add (info->priv->percentage, value_x, battery_status.percentage_charge);
 	gpm_info_data_point_add (info->priv->rate, value_x, battery_status.charge_rate);
 	gpm_info_data_point_add (info->priv->time, value_x, battery_status.remaining_time);
-	
+
 	if (info->priv->main_window) {
 		gpm_info_graph_update (info->priv->rate);
 		gpm_info_graph_update (info->priv->percentage);
@@ -400,18 +465,28 @@ gpm_info_log_do_poll (gpointer data)
 		/* also update the first tab */
 		gpm_info_populate_device_information (info);
 	}
-
 	return TRUE;
 }
 
-/** logging system needs access to the power stuff */
+/**  */
+/**
+ * gpm_info_set_power:
+ * @info: This info class instance
+ * @power: The power class instance
+ *
+ * The logging system needs access to the power stuff for the device
+ * information and also the values to log for the graphs.
+ **/
 void
 gpm_info_set_power (GpmInfo *info, GpmPower *power)
 {
 	info->priv->power = power;
 }
 
-/** intialise the class */
+/**
+ * gpm_info_class_init:
+ * @klass: This info class instance
+ **/
 static void
 gpm_info_class_init (GpmInfoClass *klass)
 {
@@ -420,7 +495,10 @@ gpm_info_class_init (GpmInfoClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
 }
 
-/** intialise the object */
+/**
+ * gpm_info_init:
+ * @info: This info class instance
+ **/
 static void
 gpm_info_init (GpmInfo *info)
 {
@@ -444,9 +522,15 @@ gpm_info_init (GpmInfo *info)
 	info->priv->start_time = time (NULL);
 
 	/* set up the timer callback so we can log data */
-	g_timeout_add (GPM_INFO_HARDWARE_POLL * 1000, gpm_info_log_do_poll, info);
+	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
 }
 
+/**
+ * gpm_info_free_graph_data:
+ * @graph_data: The data we have for a specific graph
+ *
+ * Free the graph data elements, the list, and also the graph data object.
+ **/
 static void
 gpm_info_free_graph_data (GpmInfoGraphData *graph_data)
 {
@@ -458,7 +542,10 @@ gpm_info_free_graph_data (GpmInfoGraphData *graph_data)
 	g_free (graph_data);
 }
 
-/** finalise the object */
+/**
+ * gpm_info_finalize:
+ * @object: This info class instance
+ **/
 static void
 gpm_info_finalize (GObject *object)
 {
@@ -476,13 +563,14 @@ gpm_info_finalize (GObject *object)
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
 
-/** create the object */
+/**
+ * gpm_info_new:
+ * Return value: new GpmInfo instance.
+ **/
 GpmInfo *
 gpm_info_new (void)
 {
 	GpmInfo *info;
-
 	info = g_object_new (GPM_TYPE_INFO, NULL);
-
 	return GPM_INFO (info);
 }

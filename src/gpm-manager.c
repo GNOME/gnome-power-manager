@@ -181,7 +181,7 @@ gpm_manager_error_quark (void)
  *
  * Checks if the difference in time between this request for an action, and
  * the last action completing is larger than the timeout set in gconf.
- * 
+ *
  * Return value: TRUE if we can perform the action.
  **/
 static gboolean
@@ -204,7 +204,7 @@ gpm_manager_is_policy_timout_valid (GpmManager *manager,
  * Checks to see if the specific action has been inhibited by a program.
  * If so, displays a warning libnotify dialogue for the user explaining
  * the situation.
- * 
+ *
  * Return value: TRUE if we can perform the action.
  **/
 static gboolean
@@ -234,7 +234,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
  * gpm_manager_can_suspend:
  * @manager: This manager class instance
  * @can: If we can suspend
- * 
+ *
  * Checks the HAL key power_management.can_suspend_to_ram and also
  * checks gconf to see if we are allowed to suspend this computer.
  **/
@@ -261,7 +261,7 @@ gpm_manager_can_suspend (GpmManager *manager,
  * gpm_manager_can_hibernate:
  * @manager: This manager class instance
  * @can: If we can hibernate
- * 
+ *
  * Checks the HAL key power_management.can_suspend_to_disk and also
  * checks gconf to see if we are allowed to hibernate this computer.
  **/
@@ -287,8 +287,8 @@ gpm_manager_can_hibernate (GpmManager *manager,
 /**
  * gpm_manager_can_shutdown:
  * @manager: This manager class instance
- * @can: If we can shutdown 
- * 
+ * @can: If we can shutdown
+ *
  * Stub function -- TODO.
  **/
 gboolean
@@ -312,7 +312,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
 /**
  * get_icon_index_from_percent:
  * @percent: The charge of the device
- * 
+ *
  * The index value depends on the percentage charge:
  *	00-10  = 000
  *	10-30  = 020
@@ -320,7 +320,7 @@ gpm_manager_can_shutdown (GpmManager *manager,
  *	50-70  = 060
  *	70-90  = 080
  *	90-100 = 100
- * 
+ *
  * Return value: The character string for the filename suffix.
  **/
 static char *
@@ -345,10 +345,10 @@ get_icon_index_from_percent (gint percent)
  * get_stock_id_helper:
  * @device_status: The device status struct with the information
  * @prefix: The prefix for the iconset, e.g. "primary" or "ups"
- * 
+ *
  * Because UPS and primary icons have charged, charging and discharging icons
  * we need to abstract out the logic for the filenames.
- * 
+ *
  * Return value: The complete filename, must free using g_free.
  **/
 static char *
@@ -386,10 +386,10 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status,
  * get_stock_id:
  * @manager: This manager class instance
  * @icon_policy: The policy set from gconf
- * 
+ *
  * Get the stock filename id after analysing the state of all the devices
  * attached to the computer, and applying policy from gconf.
- * 
+ *
  * Return value: The icon filename, must free using g_free.
  **/
 static char *
@@ -496,7 +496,7 @@ get_stock_id (GpmManager *manager,
 /**
  * tray_icon_update:
  * @manager: This manager class instance
- * 
+ *
  * Update the tray icon and set the correct tooltip when required, or remove
  * (hide) the icon when no longer required by policy.
  **/
@@ -524,7 +524,7 @@ tray_icon_update (GpmManager *manager)
 
 		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
 						    stock_id);
-						    
+						
 		/* make sure that we are visible */
 		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), TRUE);
 
@@ -547,7 +547,7 @@ tray_icon_update (GpmManager *manager)
 /**
  * sync_dpms_policy:
  * @manager: This manager class instance
- * 
+ *
  * Sync the DPMS policy with what we have set in gconf.
  **/
 static void
@@ -611,7 +611,7 @@ sync_dpms_policy (GpmManager *manager)
  * change_power_policy:
  * @manager: This manager class instance
  * @on_ac: If we are on AC power
- * 
+ *
  * Changes the policy if required, setting brightness, display and computer
  * timeouts.
  * We have to make sure gnome-screensaver disables screensaving, and enables
@@ -652,11 +652,11 @@ change_power_policy (GpmManager *manager,
  * gpm_manager_get_lock_policy:
  * @manager: This manager class instance
  * @policy: The policy gconf string.
- * 
+ *
  * This function finds out if we should lock the screen when we do an
  * action. It is required as we can either use the gnome-screensaver policy
  * or the custom policy. See the yelp file for more information.
- * 
+ *
  * Return value: TRUE if we should lock.
  **/
 static gboolean
@@ -685,12 +685,12 @@ gpm_manager_get_lock_policy (GpmManager *manager,
 /**
  * gpm_manager_blank_screen:
  * @manager: This manager class instance
- * 
+ *
  * Turn off the backlight of the LCD when we shut the lid, and lock
  * if required. This is required because some laptops do not turn off the
  * LCD backlight when the lid is closed.
  * See http://bugzilla.gnome.org/show_bug.cgi?id=321313
- * 
+ *
  * Return value: Success.
  **/
 static gboolean
@@ -719,9 +719,9 @@ gpm_manager_blank_screen (GpmManager *manager,
 /**
  * gpm_manager_unblank_screen:
  * @manager: This manager class instance
- * 
+ *
  * Unblank the screen after we have opened the lid of the laptop
- * 
+ *
  * Return value: Success.
  **/
 static gboolean
@@ -752,7 +752,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
  * manager_policy_do:
  * @manager: This manager class instance
  * @policy: The policy that we should do, e.g. "suspend"
- * 
+ *
  * Does one of the policy actions specified in gconf.
  **/
 static void
@@ -889,7 +889,7 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
  * @application: The application that sent the request, e.g. "Nautilus"
  * @reason: The reason given to inhibit, e.g. "Copying files"
  * @context: The context we are talking to
- * 
+ *
  * Processes an inhibit request from an application that want to stop the
  * idle action suspend from happening.
  **/
@@ -911,7 +911,7 @@ gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
  * @manager: This manager class instance
  * @cookie: The application cookie, e.g. 17534
  * @context: The context we are talking to
- * 
+ *
  * Processes an allow request from an application that want to allow the
  * idle action suspend to happen.
  **/
@@ -943,7 +943,7 @@ gpm_manager_set_reason (GpmManager *manager,
  * gpm_manager_log_reason:
  * @manager: This manager class instance
  * @action: The action, e.g. "hibernating system"
- * 
+ *
  * Saves an action and reason to the syslog so we can trace why g-p-m did an
  * action. This information is available in /var/log/messages.
  **/
@@ -957,7 +957,7 @@ gpm_manager_log_reason (GpmManager *manager,
 /**
  * gpm_manager_shutdown:
  * @manager: This manager class instance
- * 
+ *
  * Shuts down the computer, saving the session if possible.
  **/
 static gboolean
@@ -992,11 +992,11 @@ gpm_manager_shutdown (GpmManager *manager,
 /**
  * gpm_manager_hibernate:
  * @manager: This manager class instance
- * 
+ *
  * We want to hibernate the computer. This function deals with the "fluff" -
  * like disconnecting the networks and locking the screen, then does the
  * hibernate using HAL, then handles all the resume actions.
- * 
+ *
  * Return value: If the hibernate was successful.
  **/
 static gboolean
@@ -1062,11 +1062,11 @@ gpm_manager_hibernate (GpmManager *manager,
 /**
  * gpm_manager_suspend:
  * @manager: This manager class instance
- * 
+ *
  * We want to suspend the computer. This function deals with the "fluff" -
  * like disconnecting the networks and locking the screen, then does the
  * suspend using HAL, then handles all the resume actions.
- * 
+ *
  * Return value: If the suspend was successful.
  **/
 static gboolean
@@ -1172,7 +1172,7 @@ gpm_manager_shutdown_dbus_method (GpmManager *manager,
  * @idle: The idle class instance
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
  * @manager: This manager class instance
- * 
+ *
  * This callback is called when gnome-screensaver detects that the idle state
  * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
  * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
@@ -1269,7 +1269,7 @@ idle_changed_cb (GpmIdle    *idle,
  * @dpms: dpmsdesc
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
  * @manager: This manager class instance
- * 
+ *
  * What happens when the DPMS mode is changed.
  **/
 static void
@@ -1301,7 +1301,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 /**
  * battery_button_pressed:
  * @manager: This manager class instance
- * 
+ *
  * What to do when the battery button is pressed. This used to be allocated to
  * "www", but now we watch for "battery" which has to go upstream to HAL and
  * the kernel.
@@ -1324,7 +1324,7 @@ battery_button_pressed (GpmManager *manager)
 /**
  * power_button_pressed:
  * @manager: This manager class instance
- * 
+ *
  * What to do when the power button is pressed.
  **/
 static void
@@ -1344,7 +1344,7 @@ power_button_pressed (GpmManager   *manager)
 /**
  * suspend_button_pressed:
  * @manager: This manager class instance
- * 
+ *
  * What to do when the suspend button is pressed.
  **/
 static void
@@ -1364,7 +1364,7 @@ suspend_button_pressed (GpmManager   *manager)
 /**
  * hibernate_button_pressed:
  * @manager: This manager class instance
- * 
+ *
  * What to do when the hibernate button is pressed.
  **/
 static void
@@ -1385,7 +1385,7 @@ hibernate_button_pressed (GpmManager   *manager)
  * lid_button_pressed:
  * @manager: This manager class instance
  * @state: TRUE for closed
- * 
+ *
  * Does actions when the lid is closed, depending on if we are on AC or
  * battery power.
  **/
@@ -1399,7 +1399,7 @@ lid_button_pressed (GpmManager	 *manager,
 
 	gpm_debug ("lid button changed: %d", state);
 
-	/* We keep track of the lid state so we can do the 
+	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
 	manager->priv->lid_is_closed = state;
@@ -1433,7 +1433,7 @@ lid_button_pressed (GpmManager	 *manager,
  * @prev: The previous name, e.g. :0.13
  * @new: The new name, e.g. :0.14
  * @manager: This manager class instance
- * 
+ *
  * The name-owner-changed system DBUS callback.
  **/
 static void
@@ -1454,7 +1454,7 @@ dbus_name_owner_changed_system_cb (GpmDbusMonitor *dbus_monitor,
  * @prev: The previous name, e.g. :0.13
  * @new: The new name, e.g. :0.14
  * @manager: This manager class instance
- * 
+ *
  * The name-owner-changed session DBUS callback.
  **/
 static void
@@ -1475,7 +1475,7 @@ dbus_name_owner_changed_session_cb (GpmDbusMonitor *dbus_monitor,
  * @type: The button type, e.g. "power"
  * @state: The state, where TRUE is depressed or closed
  * @manager: This manager class instance
- * 
+ *
  * description
  **/
 static void
@@ -1525,7 +1525,7 @@ power_button_pressed_cb (GpmPower   *power,
  * @power: The power class instance
  * @on_ac: if we are on AC power
  * @manager: This manager class instance
- * 
+ *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
@@ -1570,10 +1570,10 @@ power_on_ac_changed_cb (GpmPower   *power,
  * @manager: This manager class instance
  * @battery_status: The battery status information
  * @use_time: If we should use a per-time or per-percent policy
- * 
+ *
  * This gets the possible warning state for the device according to the
  * policy, which could be per-percent, or per-time.
- * 
+ *
  * Return value: A GpmWarning state, e.g. GPM_WARNING_VERY_LOW
  **/
 static GpmWarning
@@ -1652,10 +1652,10 @@ battery_low_get_title (GpmWarning warning_type)
 /**
  * manager_critical_action_do:
  * @manager: This manager class instance
- * 
+ *
  * This is the stub function when we have waited a few seconds for the user to
  * see the message, explaining what we are about to do.
- * 
+ *
  * Return value: FALSE, as we don't want to repeat this action on resume.
  **/
 static gboolean
@@ -1670,8 +1670,8 @@ manager_critical_action_do (GpmManager *manager)
  * @manager: This manager class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
  * @battery_status: The battery status information
- * 
- * Hander for the battery status changed event for primary devices 
+ *
+ * Hander for the battery status changed event for primary devices
  * (laptop batteries). We notify of increasing power notification levels,
  * and also do the critical actions here.
  **/
@@ -1818,7 +1818,7 @@ battery_status_changed_primary (GpmManager	      *manager,
  * @manager: This manager class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_UPS
  * @battery_status: The battery status information
- * 
+ *
  * Hander for the battery status changed event for UPS devices.
  * At the moment we only notify, but we should put some shutdown handlers in.
  **/
@@ -1886,7 +1886,7 @@ battery_status_changed_ups (GpmManager		   *manager,
  * @manager: This manager class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_MOUSE
  * @battery_status: The battery status information
- * 
+ *
  * Hander for the battery status changed event for misc devices such as MOUSE
  * KEYBOARD or PDA. We only do warning notifications here as the devices
  * are not critical to the system power state.
@@ -1963,7 +1963,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
  * @power: The power class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_MOUSE
  * @manager: This manager class instance
- * 
+ *
  * This function splits up the battery status changed callback, and calls
  * different functions for each of the device types.
  **/
@@ -2036,7 +2036,7 @@ gpm_manager_class_init (GpmManagerClass *klass)
 
 /**
  * callback_gconf_key_changed:
- * 
+ *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
@@ -2123,7 +2123,7 @@ callback_gconf_key_changed (GConfClient *client,
  * gpm_manager_tray_icon_hibernate:
  * @manager: This manager class instance
  * @tray: The tray object
- * 
+ *
  * The icon tray hibernate callback, which only should happen if both policy and
  * the inhibit states are valid.
  **/
@@ -2146,7 +2146,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
  * gpm_manager_tray_icon_suspend:
  * @manager: This manager class instance
  * @tray: The tray object
- * 
+ *
  * The icon tray suspend callback, which only should happen if both policy and
  * the inhibit states are valid.
  **/
@@ -2351,7 +2351,7 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	/* get time policy */
-	manager->priv->low_time = gconf_client_get_int (manager->priv->gconf_client, 
+	manager->priv->low_time = gconf_client_get_int (manager->priv->gconf_client,
 							GPM_PREF_LOW_TIME, NULL);
 	manager->priv->very_low_time = gconf_client_get_int (manager->priv->gconf_client,
 							     GPM_PREF_VERY_LOW_TIME, NULL);
@@ -2368,7 +2368,7 @@ gpm_manager_init (GpmManager *manager)
 /**
  * gpm_manager_finalize:
  * @object: The object to finalize
- * 
+ *
  * Finalise the manager, by unref'ing all the depending modules.
  **/
 static void
@@ -2416,7 +2416,7 @@ gpm_manager_finalize (GObject *object)
 
 /**
  * gpm_manager_new:
- * 
+ *
  * Return value: a new GpmManager object.
  **/
 GpmManager *
