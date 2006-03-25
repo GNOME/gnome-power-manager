@@ -2055,7 +2055,8 @@ callback_gconf_key_changed (GConfClient *client,
 	gint	    brightness;
 	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
-	gboolean enabled;
+	gboolean    enabled;
+	gboolean    allowed_in_menu;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -2111,11 +2112,23 @@ callback_gconf_key_changed (GConfClient *client,
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
 		gpm_manager_can_suspend (manager, &enabled, NULL);
-		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
+							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
 		gpm_manager_can_hibernate (manager, &enabled, NULL);
-		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
+							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+
+	} else if (strcmp (entry->key, GPM_PREF_SHOW_ACTIONS_IN_MENU) == 0) {
+		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
+							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+		gpm_manager_can_suspend (manager, &enabled, NULL);
+		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+		gpm_manager_can_hibernate (manager, &enabled, NULL);
+		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_POLICY_TIMEOUT) == 0) {
 		manager->priv->suppress_policy_timeout =
@@ -2124,7 +2137,6 @@ callback_gconf_key_changed (GConfClient *client,
 	}
 }
 
-#if ACTIONS_MENU_ENABLED
 /**
  * gpm_manager_tray_icon_hibernate:
  * @manager: This manager class instance
@@ -2170,7 +2182,6 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 	gpm_manager_set_reason (manager, "user clicked suspend from tray menu");
 	gpm_manager_suspend (manager, NULL);
 }
-#endif
 
 /**
  * hal_battery_removed_cb:
@@ -2210,9 +2221,9 @@ gpm_manager_init (GpmManager *manager)
 	gboolean on_ac;
 	gboolean use_time;
 	gboolean check_type_cpu;
-#if ACTIONS_MENU_ENABLED
 	gboolean enabled;
-#endif
+	gboolean allowed_in_menu;
+
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
 	manager->priv->gconf_client = gconf_client_get_default ();
@@ -2275,11 +2286,16 @@ gpm_manager_init (GpmManager *manager)
 	/* logging system needs access to the power stuff... bit of a bodge */
 	gpm_info_set_power (manager->priv->info, manager->priv->power);
 
-#if ACTIONS_MENU_ENABLED
+	/* only show the suspend and hibernate icons if we can do the action,
+	   and the policy allows the actions in the menu */
+	allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
+						 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
 	gpm_manager_can_suspend (manager, &enabled, NULL);
-	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      enabled && allowed_in_menu);
 	gpm_manager_can_hibernate (manager, &enabled, NULL);
-	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), enabled);
+	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      enabled && allowed_in_menu);
 
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
 				 "suspend",
@@ -2291,7 +2307,6 @@ gpm_manager_init (GpmManager *manager)
 				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
 				 manager,
 				 G_CONNECT_SWAPPED);
-#endif
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
 				 "show-info",
 				 G_CALLBACK (gpm_manager_tray_icon_show_info),

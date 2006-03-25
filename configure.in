@@ -166,19 +166,6 @@ DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MINOR=$DBUS_VERSION_MINOR"
 DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MICRO=$DBUS_VERSION_MICRO"
 
 dnl ---------------------------------------------------------------------------
-dnl - Should we should show the Suspend/Hibernate menu options?
-dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(actions-menu,
-              [AC_HELP_STRING([--enable-actions-menu],
-                              [if we should show the Suspend/Hibernate menu options [default=yes]])],,
-              [enable_actions_menu=yes])
-AC_MSG_CHECKING([whether to show the Suspend/Hibernate menu options])
-if test x$enable_actions_menu = xyes ; then
-    AC_DEFINE(ACTIONS_MENU_ENABLED, 1, [icon actions menu])
-fi
-AC_MSG_RESULT(yes)
-
-dnl ---------------------------------------------------------------------------
 dnl - Is libnotify available?
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(libnotify,
@@ -459,7 +446,6 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
-        Notification actions menu: ${enable_actions_menu}
         DPMS support:              ${have_dpms}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR

@@ -1,6 +1,15 @@
-2006-03-24  Richard Hughes  <richard@hughsie.com>
+2006-03-25  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-main.c (gpm_manager_get_warning_type): Don't return
+	* src/gpm-manager.c, configure.in, data/gnome-power-manager.schemas.in:
+	Remove the configure option ACTIONS_MENU_ENABLED and replace with the
+	gconf key /apps/gnome-power-manager/show_actions_in_menu so that we
+	can change the behaviour at runtime, rather than having to recompile.
+	This defaults to true, where the actions are listed in the menu.
+	Fixes #335415.
+
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (gpm_manager_get_warning_type): Don't return
 	GPM_WARNING_ACTION when the battery value is 0% as this *may* happen
 	with broken acpi laptops. Instead warn on the console.
 

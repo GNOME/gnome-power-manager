@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/show_actions_in_menu</key>
+      <applyto>/apps/gnome-power-manager/show_actions_in_menu</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether to allow the Suspend and Hibernate options in the menu</short>
+        <long>Whether or not to allow the Suspend and Hibernate options in the notification area drop down menu.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/policy_suppression_timeout</key>
       <applyto>/apps/gnome-power-manager/policy_suppression_timeout</applyto>
       <type>int</type>
@@ -11,6 +23,7 @@
         <long>After resume, gnome-power-manager will suppress policy actions for a number of seconds to allow messages to settle and HAL to refresh. Commonly five seconds is enough while not being so long that the user gets confused.</long>
       </locale>
     </schema>
+
     <schema>
       <key>/schemas/apps/gnome-power-manager/use_time_for_policy</key>
       <applyto>/apps/gnome-power-manager/use_time_for_policy</applyto>
