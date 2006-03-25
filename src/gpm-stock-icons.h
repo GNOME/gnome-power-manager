@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 #define ICON_PREFIX_PRIMARY			"battery"
 #define ICON_PREFIX_UPS				"ups"
 
+#define GPM_STOCK_APP_ICON			"gnome-power-manager"
 #define GPM_STOCK_AC_ADAPTER			"gpm-ac-adapter"
 #define GPM_STOCK_KEYBOARD_LOW			"gpm-keyboard-power-low"
 #define GPM_STOCK_MOUSE_LOW			"gpm-mouse-power-low"
@@ -64,7 +65,6 @@ G_BEGIN_DECLS
 #define GPM_STOCK_UPS_DISCHARGING_060		"gpm-ups-discharging-060"
 #define GPM_STOCK_UPS_DISCHARGING_080		"gpm-ups-discharging-080"
 #define GPM_STOCK_UPS_DISCHARGING_100		"gpm-ups-discharging-100"
-#define GPM_STOCK_POWER_INFORMATION		"power-information"
 #define GPM_STOCK_SUSPEND_TO_DISK		"gpm-suspend-to-disk"
 #define GPM_STOCK_SUSPEND_TO_RAM		"gpm-suspend-to-ram"
 

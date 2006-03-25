@@ -1,3 +1,39 @@
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/scalable/*: Add the svg icons.
+
+	* data/icons/48x48/*, configure.in, data/icons/Makefile.am: Add this
+	new directory with the few 24x24 icons we need.
+
+	* data/icons/16x16/Makefile.am, data/icons/24x24/Makefile.am:
+	Install these icons to /usr/share/icons/hicolor as we now need icons of
+	different sizes, that we also need to use external to the application
+	in libnotify. This also makes theming trivial as the current icons
+	will be used by redhat in the bluecurve theme when we switch to tango.
+	This means you have to install the icons to hicolor, and then do:
+	gtk-update-icon-cache -q /usr/share/icons/hicolor
+
+	* data/gnome-power-manager.spec.in: Update the icon cache so we can
+	get the new icons registered.
+
+	* data/icons/Makefile.am, src/gpm-stock-icons.h: Don't ship
+	gnome-power.png, but instead ship an application icon in each size.
+
+	* data/icons/16x16/gpm-power-information.png: Remove, as now we can
+	use GTK_STOCK_INFO which is pretty much the same icon.
+
+	* src/gpm-info.c, src/gpm-prefs.c, src/gpm-tray-icon.c: Set the window
+	icons with the new icon locations.
+
+	* src/gpm-manager.c: Use all the new 48x48 icons for the libnotify
+	dialogues.
+
+	* src/gpm-stock-icons.c: Trim down to just the two s-t-d and s-t-r
+	icons, as the others we can use as named icons.
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock): Open from
+	the theme, rather than the stock set.
+
 2006-03-25  Jaap Haitsma  <jaap@haitsma.org>
 
 	* data/gpm-prefs.glade: Change "Running on Battery" and "Running on AC"
@@ -808,7 +844,7 @@
 
 2006-02-24  William Jon McCann  <mccann@jhu.edu>
 
-	* src/gpm-screensaver.c (gpm_screensaver_lock) 
+	* src/gpm-screensaver.c (gpm_screensaver_lock)
 	(gpm_screensaver_poke): Update for revised
 	gnome-screensaver DBUS method capitalization.
 	Fixes #332481
@@ -876,7 +912,7 @@
 
 	* data/gpm-prefs.glade:
 
-	Alter some mnemonics to avoid conflicts with 
+	Alter some mnemonics to avoid conflicts with
 	Ctrl+C (fixes bug #332192)
 
 2006-02-22  Richard Hughes  <richard@hughsie.com>
@@ -890,7 +926,7 @@
 
 	* data/gpm-prefs.glade: "Running on Batteries" => "Running on battery"
 	So we are consistent with the name of the tab
-	"Notification Area" => "Notification area" 
+	"Notification Area" => "Notification area"
 	HIG recommends Sentence capitalization
 
 2006-02-21 Jaap Haitsma  <jaap@haitsma.org>
@@ -1239,10 +1275,10 @@
 
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-power.h, src/gpm-power.c (gpm_power_class_init): Add 
+	* src/gpm-power.h, src/gpm-power.c (gpm_power_class_init): Add
 	battery removed proxy signal so we can use it in manager.
 
-	(add_battery): Do not query hal again, use the cached values for 
+	(add_battery): Do not query hal again, use the cached values for
 	the capacity check. Also, only do this check if the battery is marked
 	as present.
 
@@ -1260,7 +1296,7 @@
 
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-manager.c (get_stock_id): Fix a typo where 
+	* src/gpm-manager.c (get_stock_id): Fix a typo where
 	(charging || charging) should be (charging || discharging) so that we
 	get the correct icon on discharging battery with UPS attached.
 
@@ -1278,9 +1314,9 @@
 
 	(battery_low_get_title): Add a string for GPM_WARNING_DISCHARGING.
 
-	(battery_status_changed_primary): Do the warning 
+	(battery_status_changed_primary): Do the warning
 	"The AC Power has been unplugged." here, for GPM_WARNING_DISCHARGING.
-	(battery_status_changed_ups): Do the warning 
+	(battery_status_changed_ups): Do the warning
 	"Your system is running on backup power!" for GPM_WARNING_DISCHARGING.
 	(battery_status_changed_misc): Ignore GPM_WARNING_DISCHARGING as this
 	is not relevant for pda, mouse or keyboard devices.
@@ -1385,7 +1421,7 @@
 2006-02-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: Add GpmWarning struct so we can track the warning
-	states of all the devices indervidually. Also add 
+	states of all the devices indervidually. Also add
 	BATTERY_ACTION_PERCENTAGE and BATTERY_ACTION_REMAINING_TIME so we
 	do the policy action some time after the last critical warning.
 
@@ -1414,9 +1450,9 @@
 
 	* src/gpm-manager.xml: Expose actions API.
 
-	* src/gpm-manager.c (gpm_manager_error_quark, manager_policy_do) 
-	(gpm_manager_shutdown, gpm_manager_hibernate) 
-	(gpm_manager_suspend, power_button_pressed_cb) 
+	* src/gpm-manager.c (gpm_manager_error_quark, manager_policy_do)
+	(gpm_manager_shutdown, gpm_manager_hibernate)
+	(gpm_manager_suspend, power_button_pressed_cb)
 	(gpm_manager_tray_icon_hibernate, gpm_manager_tray_icon_suspend):
 	Add GError to public actions.
 
@@ -1438,8 +1474,8 @@
 
 2006-02-05  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-manager.c (maybe_notify_battery_power_changed): 
-	We need to add the check for charging for the 100% charge 
+	* src/gpm-manager.c (maybe_notify_battery_power_changed):
+	We need to add the check for charging for the 100% charge
 	notification else we get a 100% charged notifications (plural) a few
 	times when on battery power (as the flag is cleared) and we are at
 	state 100%.
@@ -1452,16 +1488,16 @@
 
 2006-01-31 Jaap Haitsma  <jaap@haitsma.org>
 
-	* gpm-power.{c|h}: Introduce an enum GpmPowerBatteryType to denote the 
+	* gpm-power.{c|h}: Introduce an enum GpmPowerBatteryType to denote the
 	type of battery i.s.o. a string
 
-	Introduce a struct GpmPowerBatteryStatus that holds all the battery 
+	Introduce a struct GpmPowerBatteryStatus that holds all the battery
 	data.
 	This will make future inclusion of extra data that we can process in
 	GpmManager trivial
 
-	BATTERY_POWER_CHANGED signal changed to BATTERY_STATUS_CHANGED and now 
-	only indicates battery_type. User can obtain battery status by calling 
+	BATTERY_POWER_CHANGED signal changed to BATTERY_STATUS_CHANGED and now
+	only indicates battery_type. User can obtain battery status by calling
 	gpm_power_get_battery_status.
 
 	Change the other code to reflect these changes
@@ -1482,13 +1518,13 @@
 
 	* gpm-power.c: (power_get_summary_for_kind) fully charged is more
 	important than charging
-	
-	(battery_device_cache_entry_update_all) 
-	(battery_device_cache_entry_update_key) If charge_rate == 0, charging 
+
+	(battery_device_cache_entry_update_all)
+	(battery_device_cache_entry_update_key) If charge_rate == 0, charging
 	and discharging should be FALSE
-	
+
 	Bug is caused by HAL freedesktop bug #5752
-	
+
 	Fixes #328964
 
 2006-01-29  Raphael Higino  <raphaelh@cvs.gnome.org>
@@ -1506,16 +1542,16 @@
 2006-01-28 Jaap Haitsma  <jaap@haitsma.org>
 
 	* gpm-power.c: (battery_kind_cache_update) refactor.
-	
+
 	Move percentagecharged to gpm-manager.c. gpm-power.c should just give
 	current status. gpm-manager.c should monitor this
-	
+
 	* gpm-marshal.list: take into account that percentagechanged is not
 	anymore in the signal of power changed
 
 	* gpm-manager.c: Add private variable done_notification_fully_charged to
 	prevent fully charged being shown multiple times
-	
+
 	Fixes bug #328958
 
 2006-01-28  Christopher Aillon  <caillon@redhat.com>
@@ -1536,14 +1572,14 @@
 	* gpm-manager.c: Remove doxygen comments for functions
 
 	(maybe_notify_battery_power_changed): simplify logic to make sure that
-	notifications are shown only once. Move tray_icon_update to 
+	notifications are shown only once. Move tray_icon_update to
 	power_battery_power_changed_cb
 
-	(maybe_notify_on_ac_changed) move tray_icon_update call to 
+	(maybe_notify_on_ac_changed) move tray_icon_update call to
 	power_on_ac_changed_cb
 
 	(invalidate_notification_warnings) Remove this function
-	
+
 	Fixes bug #328759
 
 2006-01-25  Richard Hughes  <richard@hughsie.com>
@@ -1560,9 +1596,9 @@
 	done_warning_very_low, done_warning_low bools to the struct so we can
 	keep knowledge of previous notifications.
 
-	(maybe_notify_battery_power_changed): Change to NOT primary OR 
+	(maybe_notify_battery_power_changed): Change to NOT primary OR
 	NOT discharging as the logic was wrong. Should fix bug (#328228)
-	Also only do the notifications once, and don't do lots of 
+	Also only do the notifications once, and don't do lots of
 	notifications on startup if battery is very low. (#327963)
 
 	(invalidate_notification_warnings): Add this function so we can
@@ -1629,7 +1665,7 @@
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
-	* data/gpm-prefs.glade: Do a 
+	* data/gpm-prefs.glade: Do a
 	s/"Power Preferences"/"Power Management Preferences" to fix the
 	bug (#328397)
 
@@ -1659,7 +1695,7 @@
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
-	* docs/www/images/*, docs/www/*: Remove as this is already in 
+	* docs/www/images/*, docs/www/*: Remove as this is already in
 	gnomeweb-wml CVS. Fixes bug (#328280).
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
@@ -1670,7 +1706,7 @@
 
 2006-01-24  Jaap Haitsma  <jaap@haitsma.org>
 
-	* data/gnome-power-manager.schemas.in: Remove threshold_low, 
+	* data/gnome-power-manager.schemas.in: Remove threshold_low,
 	threshold_critical
 
 	* data/gpm-prefs.glade: Remove threshold_low, threshold_critical sliders
@@ -1681,7 +1717,7 @@
 2006-01-24  Clytie Siddall <clytie@riverland.net.au>
 
 	* configure.in	Added vi in ALL_LINGUAS line.
-	
+
 2006-01-23  Rodrigo Moya <rodrigo@novell.com>
 
 	* data/gnome-power-manager.desktop.in:
@@ -1710,7 +1746,7 @@
 
 2006-01-22  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-manager.c (gpm_manager_init): Add a call to 
+	* src/gpm-manager.c (gpm_manager_init): Add a call to
 	change_power_policy () so we set the correct lcd brightness on
 	startup. This meant that the lcd brightness was not being set on
 	the first cold boot of g-p-m.
@@ -1773,7 +1809,7 @@
 	not embedded don't do notifications.
 
 	* src/gpm-manager.c (get_stock_id): Return in one place.
-	(tray_icon_update, maybe_notify_on_ac_changed) 
+	(tray_icon_update, maybe_notify_on_ac_changed)
 	(maybe_notify_battery_power_changed): Don't try to
 	send notifications if we don't have a tray icon.  Move
 	policy do out of here.
@@ -1783,7 +1819,7 @@
 	Fixes #327799.
 
 2006-01-20  William Jon McCann  <mccann@jhu.edu>
-	
+
 	* src/gpm-power.c: (power_get_summary_for_kind) Make tooltip more
 	concise. Make some comments clearer or remove them.
 	* src/gpm-common.c: return "Unknown time" if minutes <=0 for
@@ -1791,15 +1827,15 @@
 
 	Patch from Jaap Haitsma  <jaap@haitsma.org>
 	Fixes #327443
-	
+
 2006-01-20  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-prefs.h: Use enum for icon policy.
 
-	* src/gpm-prefs.c (gpm_dbus_method_bool, gpm_can_suspend) 
+	* src/gpm-prefs.c (gpm_dbus_method_bool, gpm_can_suspend)
 	(gpm_can_hibernate): Check with the daemon to see if
 	we are capable and allowed to do these things.
-	(gpm_has_batteries, gpm_has_lcd, gpm_has_button_sleep) 
+	(gpm_has_batteries, gpm_has_lcd, gpm_has_button_sleep)
 	(gpm_has_button_lid): Make functions to check these
 	things.
 	(gpm_prefs_icon_radio_cb): Don't leak gconf client.
@@ -1819,21 +1855,21 @@
 	local _can_ functions instead of checking HAL directly
 	so that we can also check gconf policy.
 	(gpm_prefs_battery_low_slider_changed_cb): Don't leak.
-	(setup_page_one, setup_page_two, setup_page_three) 
+	(setup_page_one, setup_page_two, setup_page_three)
 	(gpm_prefs_create): Break up the creation and setup
 	of each notebook tab to make it less monolithic.
 
 	* src/gpm-manager.xml: Add CanSuspend, CanHibernate,
 	and CanShutdown.
 
-	* src/gpm-manager.[ch] (gpm_manager_can_suspend) 
+	* src/gpm-manager.[ch] (gpm_manager_can_suspend)
 	(gpm_manager_can_hibernate, gpm_manager_can_shutdown):
 	Make these methods public and expose to the bus.
 	(get_stock_id): Make icon_policy an enum so
 	we don't have to parse and compare strings.
 	(tray_icon_update): Convert gconf icon-policy
 	string to an enum for internal use.
-	(gpm_manager_shutdown, gpm_manager_hibernate) 
+	(gpm_manager_shutdown, gpm_manager_hibernate)
 	(gpm_manager_suspend, gpm_manager_setup_tray_icon):
 	Use new API for _can_ functions.
 
@@ -1872,7 +1908,7 @@
 	is now well tested.
 
 	* src/gpm-manager.c (maybe_notify_battery_power_changed):
-	Only notify the user of low battery on the 20, 10, 5, and 2 
+	Only notify the user of low battery on the 20, 10, 5, and 2
 	minute intervals. Probably needs more work.
 
 2006-01-18  Richard Hughes  <richard@hughsie.com>
@@ -1933,7 +1969,7 @@
 
 	doc/www/index.html: Update version requirements for HAL.
 
-	* doc/www/images/gpm-about.png, doc/www/images/pref-options.png, 
+	* doc/www/images/gpm-about.png, doc/www/images/pref-options.png,
 	doc/www/images/pref-main.png, doc/www/images/pref-advanced.png:
 	Update to something more modern -- I've synced gnomeweb-wml too.
 
@@ -1943,7 +1979,7 @@
 	Remove this non-required file.
 
 	* src/gpm-prefs.c, src/gpm-common.h, src/gpm-tray-icon.c,
-	src/gpm-main.c, src/gpm-hal-monitor.c: Fix so that our name is 
+	src/gpm-main.c, src/gpm-hal-monitor.c: Fix so that our name is
 	"Power Manager" rather than "GNOME Power Manager" in the warnings
 	and menus so that we adhere to the GNOME HIG (#327277)
 
@@ -1982,7 +2018,7 @@
 
 2006-01-13  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-power.c: Fix newline logic to be the same as before (so it 
+	* src/gpm-power.c: Fix newline logic to be the same as before (so it
 	doesn't truncate the last bracket in some cases).
 	Also replace spaces-for-tabs in this file with actual tabs.
 
@@ -2027,11 +2063,11 @@
 	(tray_icon_update): Get summary from gpm-power.
 	(sync_dpms_policy): Use gpm-power for on-ac.
 	(maybe_notify_battery_power_changed): Update for gpm-power.
-	(gpm_manager_get_on_ac, dpms_mode_changed_cb) 
-	(power_button_pressed, suspend_button_pressed) 
-	(lid_button_pressed, power_button_pressed_cb) 
-	(power_battery_power_changed_cb, gpm_manager_set_property) 
-	(gpm_manager_get_property, callback_gconf_key_changed) 
+	(gpm_manager_get_on_ac, dpms_mode_changed_cb)
+	(power_button_pressed, suspend_button_pressed)
+	(lid_button_pressed, power_button_pressed_cb)
+	(power_battery_power_changed_cb, gpm_manager_set_property)
+	(gpm_manager_get_property, callback_gconf_key_changed)
 	(gpm_manager_init, gpm_manager_finalize): Updates for gpm-power
 
 	* src/gpm-main.c: Fix compiler warnings.
@@ -2070,12 +2106,12 @@
 	* src/gpm-prefs.c: Add missing includes.
 
 	* src/gpm-manager.c: Add include for gnome-client.h and sysdev.
-	(_gpm_manager_can_suspend, _gpm_manager_can_hibernate) 
+	(_gpm_manager_can_suspend, _gpm_manager_can_hibernate)
 	(_gpm_manager_can_shutdown): Add functions to use instead of
 	calling HAL directly.
 	(get_stock_id): Use our own on_ac property instead of calling HAL.
 	(get_full_tooltip): Ditto.
-	(gpm_manager_shutdown, gpm_manager_hibernate) 
+	(gpm_manager_shutdown, gpm_manager_hibernate)
 	(gpm_manager_suspend): Call our own _can_ functions.
 	(gpm_manager_setup_tray_icon): Ditto.
 
@@ -2091,7 +2127,7 @@
 
 2005-01-11  Richard Hughes  <richard@hughsie.com>
 
-	* src/Makefile.am, src/gpm-dbus-client.c, src/gpm-idle.c, 
+	* src/Makefile.am, src/gpm-dbus-client.c, src/gpm-idle.c,
 	src/gpm-hal.c, src/gpm-hal-callback.c, src/gpm-idle.c,
 	src/gpm-manager.c, src/gpm-screensaver.c, src/gpm-prefs.c:
 	Remove gpm-dbus-common from all the files. This file was originally
@@ -2106,7 +2142,7 @@
 
 2006-01-10  William Jon McCann  <mccann@jhu.edu>
 
-	* src/gpm-manager.c (manager_policy_do) 
+	* src/gpm-manager.c (manager_policy_do)
 	(gpm_manager_tray_icon_hibernate, gpm_manager_tray_icon_suspend):
 	Actually do the action.  Forgot to fix this after Richard
 	asked me to the other day.
@@ -2115,7 +2151,7 @@
 
 	* src/gpm-manager.c (sync_dpms_policy):
 	Check errors.
-	(gpm_manager_set_dpms_mode, gpm_manager_get_dpms_mode) 
+	(gpm_manager_set_dpms_mode, gpm_manager_get_dpms_mode)
 	(idle_changed_cb, dpms_mode_changed_cb, hal_lid_button_cb):
 	Report errors back to DBUS.
 	(gpm_manager_init): Rename signal.
@@ -2128,15 +2164,15 @@
 	design.
 	(sync_settings): Use zero for timeouts instead of
 	our configured ones when DPMS isn't active.
-	(gpm_dpms_get_enabled, gpm_dpms_set_enabled, gpm_dpms_get_active) 
+	(gpm_dpms_get_enabled, gpm_dpms_set_enabled, gpm_dpms_get_active)
 	(gpm_dpms_set_active, gpm_dpms_set_timeouts):
 	Use DBUSy design.
 	(gpm_dpms_set_mode): Allow mode to be set even
 	if DPMS is not active.
 	(gpm_dpms_get_mode): DBUSy design.
-	(gpm_dpms_set_standby_timeout, gpm_dpms_set_suspend_timeout) 
+	(gpm_dpms_set_standby_timeout, gpm_dpms_set_suspend_timeout)
 	(gpm_dpms_set_off_timeout): Setters for properties.
-	(gpm_dpms_set_property, gpm_dpms_get_property) 
+	(gpm_dpms_set_property, gpm_dpms_get_property)
 	(gpm_dpms_class_init): Add properties and rename signal.
 
 	Changes to allow setting DPMS mode while DPMS is not active
@@ -2156,8 +2192,8 @@
 	* src/gpm-idle.c:
 	* src/gpm-dbus-common.h:
 	* src/gpm-dbus-client.c:
-	* src/gpm-console.c (signalhandler_nlost): 
-	* docs/www/faq.html: 
+	* src/gpm-console.c (signalhandler_nlost):
+	* docs/www/faq.html:
 	* data/gnome-power-manager.service.in:
 	* data/gnome-power-manager.conf:
 	Rename DBUS services.  GnomePowerManger -> PowerManager
@@ -2178,10 +2214,10 @@
 	* data/gnome-power-manager.spec.in: Add the two files to the file list.
 
 	* src/gpm-tray-icon.c (gpm_tray_icon_show_help_cb): Now use yelp
-	help-pages rather than just displaying the webpage -- note these 
+	help-pages rather than just displaying the webpage -- note these
 	need serious love.
 
-	* src/gpm-stock-icons.c (gpm_stock_icons_init): Replace 
+	* src/gpm-stock-icons.c (gpm_stock_icons_init): Replace
 	GTK_ICON_SIZE_LARGE_TOOLBAR with GTK_ICON_SIZE_MENU as we want the
 	smaller icons used in the tray.
 
@@ -2194,9 +2230,9 @@
 
 	* src/gpm-manager.xml: Mark return string as constant.
 
-	* src/gpm-manager.[ch] (gpm_manager_set_on_ac) 
-	(gpm_manager_get_on_ac, gpm_manager_set_dpms_mode) 
-	(gpm_manager_get_dpms_mode, hal_on_ac_changed_cb) 
+	* src/gpm-manager.[ch] (gpm_manager_set_on_ac)
+	(gpm_manager_get_on_ac, gpm_manager_set_dpms_mode)
+	(gpm_manager_get_dpms_mode, hal_on_ac_changed_cb)
 	(gpm_manager_set_property, gpm_manager_init):
 	Change functions to actually work with the DBus bindings.
 
@@ -2223,7 +2259,7 @@
 	from gpm-dbus-server.
 	(main): Connect manager to bus.
 
-	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string) 
+	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string)
 	(gpm_dpms_mode_to_string, gpm_dpms_set_mode):
 	Add method to translate from enum to string and back.
 
@@ -2247,7 +2283,7 @@
 
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
-	* src/gpm-tray-icon.c (libnotify_event) 
+	* src/gpm-tray-icon.c (libnotify_event)
 	(gpm_tray_icon_action_entries): Use #defined icon names.
 
 	* src/gpm-stock-icons.c (gpm_stock_icons_init):
@@ -2256,7 +2292,7 @@
 
 2006-01-09  William Jon McCann  <mccann@jhu.edu>
 
-	* src/gpm-dpms.h: 
+	* src/gpm-dpms.h:
 	* src/gpm-dpms-x11.c: New class to control DPMS.
 
 	* src/gpm-screensaver.[ch]: Remove DPMS stuff.
@@ -2278,8 +2314,8 @@
 	(gpm_manager_init): Add DPMS object.
 	(gpm_manager_finalize): Unref DPMS object.
 
-	* src/gpm-idle.c (remove_all_timers, gpm_idle_set_mode) 
-	(gpm_idle_set_property, gpm_idle_get_property) 
+	* src/gpm-idle.c (remove_all_timers, gpm_idle_set_mode)
+	(gpm_idle_set_property, gpm_idle_get_property)
 	(gpm_idle_class_init): Remove session timeout since
 	it isn't used and is broken.
 	(acquire_screensaver, gpm_idle_init): Break out function.
@@ -2295,9 +2331,9 @@
 	* src/gpm-tray-icon.[ch]: New class to encapsulate
 	tray icon and notification handling.
 
-	* src/gpm-manager.c (get_index_from_percent, get_stock_id) 
-	(get_tooltip_system_struct, get_tooltips_system_device) 
-	(get_tooltips_system_device_type, get_full_tooltip) 
+	* src/gpm-manager.c (get_index_from_percent, get_stock_id)
+	(get_tooltip_system_struct, get_tooltips_system_device)
+	(get_tooltips_system_device_type, get_full_tooltip)
 	(tray_icon_update): Moved here from gpm-notification.c.
 	Fix to support GpmTrayIcon.
 	(maybe_notify_on_ac_changed, maybe_notify_battery_power_changed):
@@ -2339,8 +2375,8 @@
 
 	* src/gpm-hal.h: Add G_BEGIN_DECLS and glib includes.
 
-	* src/gpm-hal-callback.[ch] (signal_handler_PropertyModified) 
-	(signal_handler_DeviceRemoved, signal_handler_NewCapability) 
+	* src/gpm-hal-callback.[ch] (signal_handler_PropertyModified)
+	(signal_handler_DeviceRemoved, signal_handler_NewCapability)
 	(signal_handler_Condition, gpm_hal_callback_init):
 	Add user data to be returned to callbacks.
 
@@ -2358,7 +2394,7 @@
 	* data/: src/gnome-power-preferences.glade,
 	gnome-power-manager.conf, gnome-power-manager.schemas.in,
 	gnome-power-manager.service.in, gnome-power-manager.spec.in,
-	gnome-power-preferences.desktop.in: Move these files to this new 
+	gnome-power-preferences.desktop.in: Move these files to this new
 	directory to match other gnome projects:
 
 2005-01-05  Richard Hughes  <richard@hughsie.com>
@@ -2375,7 +2411,7 @@
 	* configure.in: Fix the ALL_LINGUAS to be all on one line, else
 	autogen.sh fails.
 
-	*configure.in, Makefile.am: Don't build help/ yet as 
+	*configure.in, Makefile.am: Don't build help/ yet as
 	"make distcheck" fails (which means no rpm's)
 
 2006-01-03  Slobodan D. Sredojevic  <ssl@uns.ns.ac.yu>
@@ -2383,7 +2419,7 @@
 	* configure.in: Added 'sr' and 'sr@Latn' to ALL_LINGUAS
 
 2006-01-03  Anders Pedersen <anders@zredna.dk>
-	
+
 	* src/gpm-notification.c : fixed typo where global variable
 	where used instead of passed parametre
 
@@ -2440,7 +2476,7 @@
 2005-12-26  Jaap Haitsma  <jaap@haitsma.org>
 
 	* src/gpm_marshal.list: rename to gpm-marshal.list
-	
+
 	* src/Makefile.am : change gpm_marshal.{c|h} to gpm-marshal.{c|h}
 
 	* src/gpm-dbus-common.c: change gpm_marshal.h to gpm-marshal.h
@@ -2461,8 +2497,8 @@
 	Another mega patch from Jaap. I've merged the obvious bit for now,
 	and when I've reviewed the rest I'll commit that too.
 
-	* Renamed some function like gpm_screensaver_set_dpms to 
-	gpm_screensaver_enable_dpms. This way it's immediately clear what the 
+	* Renamed some function like gpm_screensaver_set_dpms to
+	gpm_screensaver_enable_dpms. This way it's immediately clear what the
 	argurment TRUE or FALSE does.
 
 	* Some other renames which should make the code clearer.
@@ -2494,13 +2530,13 @@
 	* src/gpm-hal.c: Move gpm_hal_is_running here, and delete the copy in
 	glibhal-main.
 
-	* src/gpm-dbus-common.{c|h}, src/gpm-main.c, src/gpm-dbus-server.c: 
-	Make USECACHE an ifdef to try and profile. 
-	Also add GPM_SYSTEM_BUS so we can put g-p-m on the system bus if 
-	we want, so it can be shared between users. This cannot be turned on 
+	* src/gpm-dbus-common.{c|h}, src/gpm-main.c, src/gpm-dbus-server.c:
+	Make USECACHE an ifdef to try and profile.
+	Also add GPM_SYSTEM_BUS so we can put g-p-m on the system bus if
+	we want, so it can be shared between users. This cannot be turned on
 	until https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
 
-	* src/gpm-hal.c: Fix valgrinds "Conditional jump or move depends on 
+	* src/gpm-hal.c: Fix valgrinds "Conditional jump or move depends on
 	uninitialised value(s)" by initialising the return value to 0.
 
 	* src/gpm-dbus-common.h, src/glibhal.c, src/glibhal-callback.c,
@@ -2604,14 +2640,14 @@
 	the new power_management keys and the Shutdown() method not present in
 	0.5.5.1.
 
-	* src/glibhal-extras.{c|h}, src/gpm-main.c, src/gpm-prefs.h: 
-	Create the function hal_shutdown () that lets us simplify the 
+	* src/glibhal-extras.{c|h}, src/gpm-main.c, src/gpm-prefs.h:
+	Create the function hal_shutdown () that lets us simplify the
 	shutdown stuff, and take the magic string out of gconf.
 
 	MASSIVE Patch from Jaap Haitsma <jaap@haitsma.org> with tweaks from me:
 
 	* src/gpm-common.{c|h}: Move get_widget_position to gpm-libnotify.c
-	Remove the enumerated types, and conversion functions, and remove 
+	Remove the enumerated types, and conversion functions, and remove
 	the function run_gconf_script()
 
 	* src/compiler.h: Remove as unused.
@@ -2651,7 +2687,7 @@
 
 2005-12-07  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-common.{c|h}, src/gpm-main.c, src/gpm-prefs.c: 
+	* src/gpm-common.{c|h}, src/gpm-main.c, src/gpm-prefs.c:
 	Remove ACTION_WARNING as nothing uses it. Also make the critical
 	warning happen at the critical threshold, and any action performed when
 	it gets lower than that. This will stop the PC randomly shutting down
@@ -2669,14 +2705,14 @@
 
 2005-12-03  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-common.h, src/gpm-main.c, gnome-power-manager.schemas.in: 
+	* src/gpm-common.h, src/gpm-main.c, gnome-power-manager.schemas.in:
 	Remove the reboot command as it's not used, and probably shouldn't be
-	part of g-p-m anyway. Taken from a larger patch from 
+	part of g-p-m anyway. Taken from a larger patch from
 	Jaap Haitsma <jaap@haitsma.org>.
 
 2005-12-03  Richard Hughes  <richard@hughsie.com>
 
-	* src/glibhal-extras.c: Now upstream HAL is using the new 
+	* src/glibhal-extras.c: Now upstream HAL is using the new
 	power_management.* keys, we should not be checking .is_enabled as this
 	has been removed in CVS.
 
@@ -2789,17 +2825,17 @@
 
 	* src/gpm-prefs.c, src/gpm-prefs.glade:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
-	- Changed vertical spacing between some items in dialog from 4 to 6 
+	- Changed vertical spacing between some items in dialog from 4 to 6
 	pixels (HIG says it should be 6)
-	- All capplets have the dialog hint set for the window so they don't 
+	- All capplets have the dialog hint set for the window so they don't
 	have a minimize button.
-	- Removed the setting from the icon from the glade file to the C file. 
+	- Removed the setting from the icon from the glade file to the C file.
 
 2005-11-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c, src/gpm-prefs.glade:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
-	Split the General section in the options Tab to two sections: 
+	Split the General section in the options Tab to two sections:
 	General and Actions. Tweaked by me.
 	Furthermore it changes accesskeys of some labels to more sensible keys.
 	Also remove the gnome-screensaver button now g-p-m is less tied into
@@ -2847,17 +2883,17 @@
 2005-11-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c, src/gpm-info.c, src/gpm-prefs.c, src/gpm-prefs.glade,
-	src/icons/Makefile.am: 
+	src/icons/Makefile.am:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
 	- "Never" on the right of the sleep sliders
 	- Sleep sliders range from 1 to 60 minutes with steps of 1 minute
 	- In Makefiles GPM_DATA had a trailing slash. This is not common.
-	- Some code refactoring: There was now one callback handling all the 
+	- Some code refactoring: There was now one callback handling all the
 	different sliders. Since there are three types of sliders:
 	1. Setting sleep time
 	2. Setting disply brightness
 	3. The low and critical threshold
-	That callback became quite messy. So instead of 1 difficult to 
+	That callback became quite messy. So instead of 1 difficult to
 	understand I made 3 of them which should be quite easy to understand.
 
 	* src/gpm-notification.c: display the charged icon whenever we are
@@ -2867,11 +2903,11 @@
 
 2005-11-14  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-main.c, src/gpm-prefs.c: 
+	* src/gpm-main.c, src/gpm-prefs.c:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
 	- Make gpm use the standard gnome way to do command line parsing
 	(using popt).
-	- Furthermore after a gnome_program_init there is no need to do a 
+	- Furthermore after a gnome_program_init there is no need to do a
 	gtk_init, g_type_init etc. because gnome_program_init already does this.
 	- Also, gpm-prefs did not have the standard calls to bindtextdomain etc.
 
@@ -3143,7 +3179,7 @@
 
 	* src/gpm-dbus-server.c (gpm_object_register): don't assert for
 	things not related to our internal state
-	
+
 	* src/gpm-prefs.c (callback_gconf_key_changed): ditto
 	(callback_combo_changed): ditto
 	(callback_hscale_changed): ditto
@@ -3157,7 +3193,7 @@
 	(tray_icon_press): ditto
 
 2005-10-26  JP Rosevear  <jpr@novell.com>
-	
+
 	* src/gpm-main.c (callback_gconf_key_changed): don't assert for
 	things not related to our internal state
 
@@ -3965,9 +4001,9 @@
 	we do not try to read in the gconf values and throw an error if this
 	program is not built. We still need to write the auto check for
 	gnome-screensaver in configure.in. Spotted by Steev Klimaszewski.
-	
 
-	
+
+
 	* src/gpm-main.c, src/gpm-main.c: Sprinkle with #if HAVE_GSCREENSAVER
 	so that we disable the un-needed parts.
 
@@ -4027,7 +4063,7 @@
 	* src/hal-glib.c, src/hal-glib.h: new files for the glib libhal functions
 
 	* src/Makefile.am: add hal-glib.{c|h} into the build.
-	
+
 	* src/gpm-main.c: use the glib libhal functions as it makes everything
 	easier to read and debug.
 

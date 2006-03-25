@@ -39,6 +39,7 @@
 #include "gpm-hal.h"
 #include "gpm-prefs.h"
 #include "gpm-debug.h"
+#include "gpm-stock-icons.h"
 
 static GConfEnumStringPair icon_policy_enum_map [] = {
 	{ GPM_ICON_POLICY_ALWAYS,	"always"   },
@@ -667,8 +668,7 @@ gpm_prefs_create (void)
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (main_window);
 
-	gtk_window_set_icon_from_file (GTK_WINDOW (main_window),
-					GPM_DATA "gnome-power-manager.png", NULL);
+	gtk_window_set_icon_name (GTK_WINDOW(main_window), GPM_STOCK_APP_ICON);
 
 	/* Get the main window quit */
 	g_signal_connect (main_window, "delete_event",

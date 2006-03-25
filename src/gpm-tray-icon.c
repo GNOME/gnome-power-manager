@@ -103,7 +103,7 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 	  NULL, N_("Make the computer go to sleep"), G_CALLBACK (gpm_tray_icon_hibernate_cb) },
 	{ "TrayPreferences", GTK_STOCK_PREFERENCES, N_("_Preferences"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
-	{ "TrayInfo", GPM_STOCK_POWER_INFORMATION, N_("_Information"),
+	{ "TrayInfo", GTK_STOCK_DIALOG_INFO, N_("_Information"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_info_cb) },
 	{ "TrayHelp", GTK_STOCK_HELP, N_("_Help"), NULL,
 	  NULL, G_CALLBACK (gpm_tray_icon_show_help_cb) },
@@ -173,9 +173,14 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 	gpm_debug ("Setting icon to %s", stock_id);
 
 	if (stock_id) {
-		gtk_image_set_from_stock (GTK_IMAGE (icon->priv->image),
-					  stock_id,
-					  GTK_ICON_SIZE_LARGE_TOOLBAR);
+		GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+		GdkPixbuf *pixbuf;
+		pixbuf = gtk_icon_theme_load_icon (icon_theme, stock_id, 24, 0, NULL);
+		if (! pixbuf) {
+			g_error ("no pixbuf %s", stock_id);
+		}
+		gtk_image_set_from_pixbuf (GTK_IMAGE (icon->priv->image), pixbuf );
+
 	} else {
 		/* FIXME: gtk_image_clear requires gtk 2.8, so until we
 		 * depend on more then 2.6 (required for FC4) we have to
@@ -276,12 +281,13 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 		translators = NULL;
 	}
 
-	pixbuf = gdk_pixbuf_new_from_file (GPM_DATA "gnome-power.png", NULL);
+	GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+	pixbuf = gtk_icon_theme_load_icon (icon_theme, GPM_STOCK_APP_ICON, 48, 0, NULL);
 
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 
-	gtk_window_set_default_icon_from_file (GPM_DATA "gnome-power-manager.png", NULL);
+	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 
 	gtk_show_about_dialog (NULL,
 		               "name", GPM_NAME,
@@ -627,11 +633,9 @@ libnotify_event (GpmTrayIcon    *tray,
 		notify_notification_close (tray->priv->notify, NULL);
 	}
 
-	/* For now, don't display a specific icon until we can register one */
-	const char *filename = "file://" GPM_DATA "gnome-power.png";
 	tray->priv->notify = notify_notification_new (title,
 						      content,
-						      filename,
+						      msgicon,
 						      NULL);
 
 	notify_notification_set_timeout (tray->priv->notify, timeout * 1000);
@@ -736,6 +740,12 @@ gpm_tray_icon_notify (GpmTrayIcon	*icon,
 			 urgency);
 }
 
+/**
+ * gpm_tray_icon_cancel_notify:
+ * @icon: This icon class instance
+ * 
+ * Cancels the notification, i.e. removes it from the screen.
+ **/
 void
 gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 {

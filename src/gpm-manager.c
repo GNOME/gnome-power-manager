@@ -223,7 +223,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 				      title,
 				      message->str,
 				      GPM_NOTIFY_TIMEOUT_LONG,
-				      NULL,
+				      GTK_STOCK_DIALOG_WARNING,
 				      GPM_NOTIFY_URGENCY_NORMAL);
 		g_string_free (message, TRUE);
 		g_free (title);
@@ -1044,7 +1044,7 @@ gpm_manager_hibernate (GpmManager *manager,
 					      _("Hibernate Problem"),
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
-					      NULL,
+					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
 			g_free (message);
 		}
@@ -1115,7 +1115,7 @@ gpm_manager_suspend (GpmManager *manager,
 					      _("Suspend Problem"),
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
-					      NULL,
+					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
 			g_free (message);
 		}
@@ -1320,7 +1320,7 @@ battery_button_pressed (GpmManager *manager)
 			      _("Power Information"),
 			      message,
 			      GPM_NOTIFY_TIMEOUT_LONG,
-			      NULL,
+			      GTK_STOCK_DIALOG_INFO,
 			      GPM_NOTIFY_URGENCY_NORMAL);
 	g_free (message);
 }
@@ -1718,7 +1718,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      _("Battery Charged"),
 					      _("Your battery is now fully charged"),
 					      GPM_NOTIFY_TIMEOUT_SHORT,
-					      NULL,
+					      GPM_STOCK_BATTERY_CHARGED,
 					      GPM_NOTIFY_URGENCY_LOW);
 		}
 	}
@@ -1778,7 +1778,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      _("Critical action"),
 					      warning,
 					      GPM_NOTIFY_TIMEOUT_LONG,
-					      NULL,
+					      GPM_STOCK_BATTERY_CRITICAL,
 					      GPM_NOTIFY_URGENCY_CRITICAL);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
@@ -1816,7 +1816,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      title,
 					      message,
 					      timeout,
-					      NULL,
+					      GTK_STOCK_DIALOG_INFO,
 					      GPM_NOTIFY_URGENCY_NORMAL);
 			g_free (message);
 		}
@@ -1887,7 +1887,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 				      title,
 				      message,
 				      GPM_NOTIFY_TIMEOUT_LONG,
-				      NULL,
+				      GPM_STOCK_UPS_CRITICAL,
 				      GPM_NOTIFY_URGENCY_CRITICAL);
 
 		g_free (remaining);
@@ -1967,7 +1967,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      title,
 			      message,
 			      GPM_NOTIFY_TIMEOUT_LONG,
-			      NULL,
+			      GPM_STOCK_MOUSE_LOW,
 			      GPM_NOTIFY_URGENCY_NORMAL);
 
 	g_free (message);

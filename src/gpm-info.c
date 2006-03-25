@@ -33,6 +33,7 @@
 #include "gpm-debug.h"
 #include "gpm-power.h"
 #include "gpm-graph-widget.h"
+#include "gpm-stock-icons.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);
@@ -387,8 +388,7 @@ gpm_info_show_window (GpmInfo *info)
 
 	/* Hide window first so that the dialogue resizes itself without redrawing */
 	gtk_widget_hide (info->priv->main_window);
-	gtk_window_set_icon_from_file (GTK_WINDOW (info->priv->main_window),
-				       GPM_DATA "gnome-power-manager.png", NULL);
+	gtk_window_set_icon_name (GTK_WINDOW(info->priv->main_window), GPM_STOCK_APP_ICON);
 
 	g_signal_connect (info->priv->main_window, "delete_event",
 			  G_CALLBACK (gpm_info_delete_event_cb), info);
