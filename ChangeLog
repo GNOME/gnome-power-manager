@@ -1,3 +1,13 @@
+2006-03-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c (gpm_manager_get_warning_type): Don't return
+	GPM_WARNING_ACTION when the battery value is 0% as this *may* happen
+	with broken acpi laptops. Instead warn on the console.
+
+	* src/gpm-power.c (battery_device_cache_entry_update_key):
+	Invalidate the rate when we are declared charging/discharging. This
+	was noticed with the new graphs were static at non zero when charged.
+
 2006-03-25  Jaap Haitsma  <jaap@haitsma.org>
 
 	* src/gpm-main.c, src/gpm-prefs.c: Use g_option i.s.o. popt
