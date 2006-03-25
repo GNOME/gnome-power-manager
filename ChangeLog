@@ -1,5 +1,12 @@
 2006-03-25  Richard Hughes  <richard@hughsie.com>
 
+	* data/icons/svg/*: Remove, as directory name is incorrect.
+
+	* data/icons/{16x16|24x24}/*, src/gpm-manager.c:
+	Make all icons prefix with gpm-*
+
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c, src/gpm-tray-icon.{c|h}:
 	Make the order of the arguments to the icon message sane, and
 	consistent thoughout g-p-m. Also add in the urgency field, and mark

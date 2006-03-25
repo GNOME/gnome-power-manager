@@ -361,23 +361,23 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status,
 
 	if (gpm_power_battery_is_charged (device_status)) {
 
-		filename = g_strdup_printf ("%s-charged", prefix);
+		filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
 	} else if (device_status->is_charging) {
 
 		index = get_icon_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("%s-charging-%s", prefix, index);
+		filename = g_strdup_printf ("gpm-%s-charging-%s", prefix, index);
 
 	} else if (device_status->is_discharging) {
 
 		index = get_icon_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("%s-discharging-%s", prefix, index);
+		filename = g_strdup_printf ("gpm-%s-discharging-%s", prefix, index);
 
 	} else {
 
 		/* We have a broken battery, not sure what to display here */
 		gpm_debug ("BROKEN BATTERY...");
-		filename = g_strdup_printf ("%s-broken", prefix);
+		filename = g_strdup_printf ("gpm-%s-broken", prefix);
 	}
 	gpm_debug ("filename = %s", filename);
 	return filename;
@@ -525,7 +525,7 @@ tray_icon_update (GpmManager *manager)
 
 		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
 						    stock_id);
-						
+
 		/* make sure that we are visible */
 		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), TRUE);
 

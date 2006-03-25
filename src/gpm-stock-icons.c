@@ -127,7 +127,6 @@ gpm_stock_icons_init (void)
 	return TRUE;
 }
 
-
 void
 gpm_stock_icons_shutdown (void)
 {
