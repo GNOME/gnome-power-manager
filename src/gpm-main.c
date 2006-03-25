@@ -27,13 +27,10 @@
 
 #include <string.h>
 #include <unistd.h>
-#include <popt.h>
-
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
-
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
 
@@ -47,12 +44,7 @@
 
 static void gpm_exit (GpmManager *manager);
 
-/** registers org.gnome.PowerManager on a connection
- *
- *  @return			If we successfully registered the object
- *
- *  @note	This function MUST be called before DBUS service will work.
- */
+/* This function MUST be called before DBUS service will work. */
 static gboolean
 gpm_object_register (DBusGConnection *connection,
 		     GObject         *object)
@@ -137,46 +129,44 @@ gpm_critical_error (const char *content)
 	gtk_main();
 }
 
-/** Main entry point
- *
- *  @param	argc		Number of arguments given to program
- *  @param	argv		Arguments given to program
- *  @return			Return code
- */
 int
 main (int argc, char *argv[])
 {
-	gint             i;
 	GMainLoop       *loop;
 	GnomeClient     *master;
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
 	gboolean         verbose = FALSE;
-	gboolean         no_daemon;
+	gboolean         no_daemon = FALSE;
 	GpmManager      *manager = NULL;
 	GError          *error = NULL;
+	GOptionContext  *context;
+ 	GnomeProgram    *program;
 
-	struct poptOption options[] = {
-		{ "no-daemon", '\0', POPT_ARG_NONE, NULL, 0,
+
+	const GOptionEntry options[] = {
+		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
 		  N_("Do not daemonize"), NULL },
-		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
+		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  N_("Show extra debugging information"), NULL },
-		{ NULL, '\0', 0, NULL, 0, NULL, NULL }
+		{ NULL}
 	};
 
-	i = 0;
-	options[i++].arg = &no_daemon;
-	options[i++].arg = &verbose;
+	context = g_option_context_new (_("GNOME Power Manager"));
 
-	no_daemon = FALSE;
+	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
 
-	gnome_program_init (argv[0], VERSION,
-			    LIBGNOMEUI_MODULE, argc, argv,
-			    GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    GNOME_PARAM_POPT_TABLE, options,
-			    GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
-			    NULL);
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+
+	program = gnome_program_init (argv[0], VERSION,
+			   	      LIBGNOMEUI_MODULE, argc, argv,
+			    	      GNOME_PROGRAM_STANDARD_PROPERTIES,
+			    	      GNOME_PARAM_GOPTION_CONTEXT, context,
+			    	      GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
+			    	      NULL);
 
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
@@ -193,9 +183,6 @@ main (int argc, char *argv[])
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
 
-	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
 
 	gpm_debug_init (verbose);
 
@@ -251,6 +238,8 @@ main (int argc, char *argv[])
 	g_main_loop_run (loop);
 
 	gpm_exit (manager);
-
+	
+	g_object_unref(program);
+	
 	return 0;
 }

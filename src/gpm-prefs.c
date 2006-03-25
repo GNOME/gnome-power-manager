@@ -25,9 +25,6 @@
 
 #include <string.h>
 #include <math.h>
-
-#include <popt.h>
-
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
@@ -754,29 +751,30 @@ main (int argc, char **argv)
 {
 	GtkWidget *dialog;
 	gboolean   verbose = FALSE;
-	gint	i;
+	GOptionContext *context;
+ 	GnomeProgram *program;
 
-	struct poptOption options[] = {
-		{ "verbose", '\0', POPT_ARG_NONE, NULL, 0,
+	const GOptionEntry options[] = {
+		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,  
 		  N_("Show extra debugging information"), NULL },
-		{ NULL, '\0', 0, NULL, 0, NULL, NULL }
+		{ NULL}
 	};
 
-	i = 0;
-	options[i++].arg = &verbose;
-	verbose = FALSE;
+	context = g_option_context_new (_("GNOME Power Preferences"));
 
-	gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
+	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+
+	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
 			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    GNOME_PARAM_POPT_TABLE, options,
+			    GNOME_PARAM_GOPTION_CONTEXT, context,
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
 			    _("Power Preferences"),
 			    NULL);
-
-	bindtextdomain (PACKAGE, GNOMELOCALEDIR);
-	bind_textdomain_codeset (PACKAGE, "UTF-8");
-	textdomain (PACKAGE);
 
 	gpm_debug_init (verbose);
 
@@ -786,6 +784,8 @@ main (int argc, char **argv)
 	gtk_main ();
 
 	gpm_debug_shutdown ();
+	
+	g_object_unref(program);
 
 	return 0;
 }
