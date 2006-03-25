@@ -232,7 +232,7 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 }
 
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GladeXML  *dialog,
+gpm_prefs_setup_sleep_slider (GladeXML  *xml,
 			      char	*widget_name,
 			      char	*gpm_pref_key)
 {
@@ -241,7 +241,7 @@ gpm_prefs_setup_sleep_slider (GladeXML  *dialog,
 	GConfClient *client;
 	gboolean is_writable;
 
-	widget = glade_xml_get_widget (dialog, widget_name);
+	widget = glade_xml_get_widget (xml, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), NULL);
 
@@ -283,7 +283,7 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
 }
 
 static GtkWidget *
-gpm_prefs_setup_brightness_slider (GladeXML *dialog,
+gpm_prefs_setup_brightness_slider (GladeXML *xml,
 				   char     *widget_name,
 				   char     *gpm_pref_key)
 {
@@ -292,7 +292,7 @@ gpm_prefs_setup_brightness_slider (GladeXML *dialog,
 	GConfClient *client;
 	gboolean is_writable;
 
-	widget = glade_xml_get_widget (dialog, widget_name);
+	widget = glade_xml_get_widget (xml, widget_name);
 
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
@@ -344,7 +344,8 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 }
 
 static void
-gpm_prefs_setup_action_combo (GtkWidget   *widget,
+gpm_prefs_setup_action_combo (GladeXML    *xml,
+			      char	  *widget_name,
 			      char        *gpm_pref_key,
 			      const char **actions)
 {
@@ -355,6 +356,9 @@ gpm_prefs_setup_action_combo (GtkWidget   *widget,
 	gboolean can_hibernate;
 	gboolean is_writable;
 	GConfClient *client;
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget (xml, widget_name);
 
 	can_suspend = gpm_can_suspend ();
 	can_hibernate = gpm_can_hibernate ();
@@ -431,15 +435,20 @@ gpm_prefs_checkbox_lock_cb (GtkWidget  *widget,
 	g_object_unref (client);
 }
 
-static void
-gpm_prefs_setup_checkbox (GtkWidget *widget,
+static GtkWidget*
+gpm_prefs_setup_checkbox (GladeXML  *xml,
+			  char	    *widget_name,
 			  char	    *gpm_pref_key)
 {
 
 	GConfClient *client;
 	gboolean checked;
+	GtkWidget *widget;
 
 	gpm_debug ("Setting up %s", gpm_pref_key);
+
+	widget = glade_xml_get_widget (xml, widget_name);
+
 	client = gconf_client_get_default ();
 
 	checked = gconf_client_get_bool (client, gpm_pref_key, NULL);
@@ -451,53 +460,37 @@ gpm_prefs_setup_checkbox (GtkWidget *widget,
 			  (gpointer) gpm_pref_key);
 
 	g_object_unref (client);
+	
+	return widget;
 }
 
 static void
 setup_battery_sliders (GladeXML *xml)
 {
-	GtkWidget   *label_batteries_display;
-	GtkWidget   *slider_batteries_display;
-	GtkWidget   *label_batteries_brightness;
-	GtkWidget   *slider_batteries_brightness;
+	GtkWidget   *vbox_battery_brightness;
 	gboolean     can_set_brightness;
-	gboolean     has_batteries = gpm_has_batteries ();
-
-	if (! has_batteries) {
-		/* no point */
-		return;
-	}
 
 	/* Sleep time on batteries */
-	gpm_prefs_setup_sleep_slider (xml, "hscale_batteries_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
+	gpm_prefs_setup_sleep_slider (xml, "hscale_battery_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
 
 	/* Sleep time for display when on batteries */
-
-	label_batteries_display = glade_xml_get_widget (xml, "label_batteries_display");
-	slider_batteries_display = gpm_prefs_setup_sleep_slider (xml, "hscale_batteries_display",
-								 GPM_PREF_BATTERY_SLEEP_DISPLAY);
+	gpm_prefs_setup_sleep_slider (xml, "hscale_battery_display", GPM_PREF_BATTERY_SLEEP_DISPLAY);
 
 	/* Display brightness when on batteries */
+	gpm_prefs_setup_brightness_slider (xml, "hscale_battery_brightness", GPM_PREF_BATTERY_BRIGHTNESS);
 
-	label_batteries_brightness = glade_xml_get_widget (xml, "label_batteries_brightness");
-	slider_batteries_brightness = gpm_prefs_setup_brightness_slider (xml, "hscale_batteries_brightness",
-									 GPM_PREF_BATTERY_BRIGHTNESS);
 	can_set_brightness = gpm_has_lcd ();
 	if (! can_set_brightness) {
-		gtk_widget_hide_all (label_batteries_brightness);
-		gtk_widget_hide_all (slider_batteries_brightness);
+		vbox_battery_brightness = glade_xml_get_widget (xml, "vbox_battery_brightness");
+		gtk_widget_hide_all (vbox_battery_brightness);
 	}
-
 }
 
 static void
 setup_ac_sliders (GladeXML *xml)
 {
-	GtkWidget   *widget;
-	GtkWidget   *label_ac_brightness;
-	GtkWidget   *slider_ac_brightness;
+	GtkWidget   *vbox_ac_brightness;
 	gboolean     can_set_brightness;
-	gboolean     has_batteries = gpm_has_batteries ();
 
 	/* Sleep time on AC */
 	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
@@ -506,50 +499,34 @@ setup_ac_sliders (GladeXML *xml)
 	gpm_prefs_setup_sleep_slider (xml, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
 
 	/* Display brightness when on AC */
-	label_ac_brightness = glade_xml_get_widget (xml, "label_ac_brightness");
-	slider_ac_brightness = gpm_prefs_setup_brightness_slider (xml, "hscale_ac_brightness",
-								  GPM_PREF_AC_BRIGHTNESS);
+	gpm_prefs_setup_brightness_slider (xml, "hscale_ac_brightness", GPM_PREF_AC_BRIGHTNESS);
 
 	can_set_brightness = gpm_has_lcd ();
 	if (! can_set_brightness) {
-		gtk_widget_hide_all (label_ac_brightness);
-		gtk_widget_hide_all (slider_ac_brightness);
-	}
-
-	/* when we have no batteries, we just want the title to be "Configuration" */
-	if (! has_batteries) {
-		char *str;
-		widget = glade_xml_get_widget (xml, "label_frame_ac");
-		str = g_strdup_printf ("<b>%s</b>", _("Configuration"));
-		gtk_label_set_markup (GTK_LABEL (widget), str);
-		g_free (str);
+		vbox_ac_brightness = glade_xml_get_widget (xml, "vbox_ac_brightness");
+		gtk_widget_hide_all (vbox_ac_brightness);
 	}
 }
 
 static void
 setup_sleep_type (GladeXML *xml)
 {
-	GtkWidget    *label_sleep_type;
-	GtkWidget    *combo_sleep_type;
 	GtkWidget    *checkbutton_dim_idle;
 	gboolean      can_set_brightness;
 	const char   *sleep_type_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	/* Sleep Type Combo Box */
-	label_sleep_type = glade_xml_get_widget (xml, "label_sleep_type");
-	combo_sleep_type = glade_xml_get_widget (xml, "combobox_sleep_type");
 
-	gpm_prefs_setup_action_combo (combo_sleep_type,
+	gpm_prefs_setup_action_combo (xml, "combobox_sleep_type",
 				      GPM_PREF_SLEEP_TYPE,
 				      sleep_type_actions);
 
 	/* set up the "do we dim screen on idle checkbox */
-	checkbutton_dim_idle = glade_xml_get_widget (xml, "checkbutton_dim_idle");
+	checkbutton_dim_idle = gpm_prefs_setup_checkbox (xml, "checkbutton_dim_idle", 
+				  			 GPM_PREF_IDLE_DIM_SCREEN);
+
 	can_set_brightness = gpm_has_lcd ();
-	if (can_set_brightness) {
-		gpm_prefs_setup_checkbox (checkbutton_dim_idle,
-					  GPM_PREF_IDLE_DIM_SCREEN);
-	} else {
+	if (! can_set_brightness) {
 		gtk_widget_hide_all (checkbutton_dim_idle);
 	}
 }
@@ -557,25 +534,18 @@ setup_sleep_type (GladeXML *xml)
 static void
 setup_ac_actions (GladeXML *xml)
 {
-	GtkWidget    *label_button_lid;
-	GtkWidget    *combo_button_lid;
 	GtkWidget    *vbox_ac_actions;
 	gboolean      has_lid_button;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
-	label_button_lid = glade_xml_get_widget (xml, "label_ac_button_lid");
-	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
-	vbox_ac_actions = glade_xml_get_widget (xml, "vbox_ac_actions");
+	gpm_prefs_setup_action_combo (xml, "combobox_ac_lid_close",
+				      GPM_PREF_AC_BUTTON_LID,
+				      button_lid_actions);
 
 	has_lid_button = gpm_has_button_lid ();
 
-	if (has_lid_button) {
-		gpm_prefs_setup_action_combo (combo_button_lid,
-					      GPM_PREF_AC_BUTTON_LID,
-					      button_lid_actions);
-	} else {
-		gtk_widget_hide_all (label_button_lid);
-		gtk_widget_hide_all (combo_button_lid);
+	if (! has_lid_button) {
+		vbox_ac_actions = glade_xml_get_widget (xml, "vbox_ac_actions");
 		/* there is nothing else in this action box apart from
 		   lid event, so hide the whole box */
 		gtk_widget_hide_all (vbox_ac_actions);
@@ -587,38 +557,25 @@ setup_battery_actions (GladeXML *xml)
 {
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
-	GtkWidget    *label_battery_critical;
-	GtkWidget    *combo_battery_critical;
 	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
-	gboolean      has_batteries = gpm_has_batteries ();
-
-	if (! has_batteries) {
-		/* no point */
-		return;
-	}
 
 	/* Button Lid Combo Box */
-	label_button_lid = glade_xml_get_widget (xml, "label_battery_button_lid");
-	combo_button_lid = glade_xml_get_widget (xml, "combobox_battery_lid_close");
+	gpm_prefs_setup_action_combo (xml, "combobox_battery_lid_close",
+				      GPM_PREF_BATTERY_BUTTON_LID,
+				      button_lid_actions);
 
 	has_lid_button = gpm_has_button_lid ();
-
-	if (has_lid_button) {
-		gpm_prefs_setup_action_combo (combo_button_lid,
-					      GPM_PREF_BATTERY_BUTTON_LID,
-					      button_lid_actions);
-	} else {
+	if (! has_lid_button) {
+		label_button_lid = glade_xml_get_widget (xml, "label_battery_button_lid");
+		combo_button_lid = glade_xml_get_widget (xml, "combobox_battery_lid_close");
 		gtk_widget_hide_all (label_button_lid);
 		gtk_widget_hide_all (combo_button_lid);
 	}
 	/* FIXME: also need lid lock */
 
-	label_battery_critical = glade_xml_get_widget (xml, "label_battery_critical_action");
-	combo_battery_critical = glade_xml_get_widget (xml, "combobox_battery_critical");
-
-	gpm_prefs_setup_action_combo (combo_battery_critical,
+	gpm_prefs_setup_action_combo (xml, "combobox_battery_critical",
 				      GPM_PREF_BATTERY_CRITICAL,
 				      battery_critical_actions);
 }

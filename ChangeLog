@@ -1,3 +1,12 @@
+2006-03-25  Jaap Haitsma  <jaap@haitsma.org>
+
+	* data/gpm-prefs.glade: Change "Running on Battery" and "Running on AC"
+	labels inside the tab to "Sleep" as they are already on the tabs. 
+	Add a Brightness label to the brightness sliders. Fixes bug #335991
+	Change all the widget names to *battery* i.s.o. *batteries*
+	* src/gpm-prefs.c: Update because of changes in gpm-prefs.glade and some
+	refactoring
+
 2006-03-25  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/svg/*: Remove, as directory name is incorrect.
