@@ -220,10 +220,11 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		GString *message = g_string_new ("");
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      GPM_NOTIFY_TIMEOUT_LONG,
 				      title,
+				      message->str,
+				      GPM_NOTIFY_TIMEOUT_LONG,
 				      NULL,
-				      message->str);
+				      GPM_NOTIFY_URGENCY_NORMAL);
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
@@ -1040,10 +1041,11 @@ gpm_manager_hibernate (GpmManager *manager,
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("hibernate"), GPM_FAQ_URL);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Hibernate Problem"),
+					      message,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      NULL,
-					      message);
+					      GPM_NOTIFY_URGENCY_LOW);
 			g_free (message);
 		}
 	}
@@ -1110,10 +1112,11 @@ gpm_manager_suspend (GpmManager *manager,
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("suspend"), GPM_FAQ_URL);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Suspend Problem"),
+					      message,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      NULL,
-					      message);
+					      GPM_NOTIFY_URGENCY_LOW);
 			g_free (message);
 		}
 	}
@@ -1314,10 +1317,11 @@ battery_button_pressed (GpmManager *manager)
 	gpm_power_get_status_summary (manager->priv->power, &message, NULL);
 
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      GPM_NOTIFY_TIMEOUT_LONG,
 			      _("Power Information"),
+			      message,
+			      GPM_NOTIFY_TIMEOUT_LONG,
 			      NULL,
-			      message);
+			      GPM_NOTIFY_URGENCY_NORMAL);
 	g_free (message);
 }
 
@@ -1711,10 +1715,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		if (show_notify) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      GPM_NOTIFY_TIMEOUT_SHORT,
 					      _("Battery Charged"),
+					      _("Your battery is now fully charged"),
+					      GPM_NOTIFY_TIMEOUT_SHORT,
 					      NULL,
-					      _("Your battery is now fully charged"));
+					      GPM_NOTIFY_URGENCY_LOW);
 		}
 	}
 
@@ -1770,10 +1775,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		if (warning) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      GPM_NOTIFY_TIMEOUT_LONG,
 					      _("Critical action"),
+					      warning,
+					      GPM_NOTIFY_TIMEOUT_LONG,
 					      NULL,
-					      warning);
+					      GPM_NOTIFY_URGENCY_CRITICAL);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
 		/* wait 10 seconds for user-panic */
@@ -1807,10 +1813,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 		if (message) {
 			title = battery_low_get_title (warning_type);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      timeout,
 					      title,
+					      message,
+					      timeout,
 					      NULL,
-					      message);
+					      GPM_NOTIFY_URGENCY_NORMAL);
 			g_free (message);
 		}
 		g_free (remaining);
@@ -1877,10 +1884,11 @@ battery_status_changed_ups (GpmManager		   *manager,
 						   remaining, battery_status->percentage_charge);
 		}
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      GPM_NOTIFY_TIMEOUT_LONG,
 				      title,
+				      message,
+				      GPM_NOTIFY_TIMEOUT_LONG,
 				      NULL,
-				      message);
+				      GPM_NOTIFY_URGENCY_CRITICAL);
 
 		g_free (remaining);
 		g_free (message);
@@ -1956,10 +1964,11 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 				   name, battery_status->percentage_charge);
 
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      GPM_NOTIFY_TIMEOUT_LONG,
 			      title,
+			      message,
+			      GPM_NOTIFY_TIMEOUT_LONG,
 			      NULL,
-			      message);
+			      GPM_NOTIFY_URGENCY_NORMAL);
 
 	g_free (message);
 }

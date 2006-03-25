@@ -28,52 +28,61 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_TRAY_ICON          (gpm_tray_icon_get_type ())
-#define GPM_TRAY_ICON(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_TRAY_ICON, GpmTrayIcon))
-#define GPM_TRAY_ICON_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
-#define GPM_IS_TRAY_ICON(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_TRAY_ICON))
-#define GPM_IS_TRAY_ICON_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_TRAY_ICON))
-#define GPM_TRAY_ICON_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
+#define GPM_TYPE_TRAY_ICON		(gpm_tray_icon_get_type ())
+#define GPM_TRAY_ICON(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_TRAY_ICON, GpmTrayIcon))
+#define GPM_TRAY_ICON_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
+#define GPM_IS_TRAY_ICON(o)	 	(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_TRAY_ICON))
+#define GPM_IS_TRAY_ICON_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_TRAY_ICON))
+#define GPM_TRAY_ICON_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconClass))
 
 typedef struct GpmTrayIconPrivate GpmTrayIconPrivate;
 
 typedef struct
 {
-        EggTrayIcon         parent;
-        GpmTrayIconPrivate *priv;
+	EggTrayIcon	    parent;
+	GpmTrayIconPrivate *priv;
 } GpmTrayIcon;
 
 typedef struct
 {
-        EggTrayIconClass    parent_class;
-
-        void                (* suspend)       (GpmTrayIcon *tray_icon);
-        void                (* hibernate)     (GpmTrayIcon *tray_icon);
-
+	EggTrayIconClass	parent_class;
+	void	(* suspend)	(GpmTrayIcon *tray_icon);
+	void	(* hibernate)	(GpmTrayIcon *tray_icon);
 } GpmTrayIconClass;
 
-GType           gpm_tray_icon_get_type             (void);
+typedef enum {
+	GPM_NOTIFY_URGENCY_CRITICAL = 1,
+	GPM_NOTIFY_URGENCY_NORMAL   = 2,
+	GPM_NOTIFY_URGENCY_LOW      = 3
+} GpmNotifyLevel;
 
-GpmTrayIcon   * gpm_tray_icon_new                  (void);
+GType		 gpm_tray_icon_get_type		(void);
 
-void            gpm_tray_icon_notify               (GpmTrayIcon *icon,
-                                                    guint        timeout,
-                                                    const char  *primary,
-                                                    GtkWidget   *msgicon,
-                                                    const char  *secondary);
-void            gpm_tray_icon_cancel_notify        (GpmTrayIcon *icon);
+GpmTrayIcon	*gpm_tray_icon_new		(void);
 
-void            gpm_tray_icon_set_tooltip          (GpmTrayIcon *icon,
-                                                    const char  *tooltip);
-void            gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
-                                                    const char  *stock_id);
+void		 gpm_tray_icon_notify		(GpmTrayIcon	*icon,
+						 const char	*title,
+						 const char	*content,
+						 guint		 timeout,
+						 const char	*msgicon,
+						 GpmNotifyLevel	 urgency);
 
-void            gpm_tray_icon_enable_suspend       (GpmTrayIcon *icon,
-                                                    gboolean     enabled);
-void            gpm_tray_icon_enable_hibernate     (GpmTrayIcon *icon,
-                                                    gboolean     enabled);
-void		gpm_tray_icon_show		   (GpmTrayIcon *icon,
-                                                    gboolean     enabled);
+void		 gpm_tray_icon_cancel_notify	(GpmTrayIcon	*icon);
+
+void		 gpm_tray_icon_set_tooltip	(GpmTrayIcon	*icon,
+						 const char	*tooltip);
+
+void		 gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
+						 const char	*stock_id);
+
+void		 gpm_tray_icon_enable_suspend	(GpmTrayIcon	*icon,
+						 gboolean	 enabled);
+
+void		 gpm_tray_icon_enable_hibernate	(GpmTrayIcon	*icon,
+						 gboolean	 enabled);
+
+void		 gpm_tray_icon_show		(GpmTrayIcon	*icon,
+						 gboolean	 enabled);
 
 G_END_DECLS
 

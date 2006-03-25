@@ -1,5 +1,16 @@
 2006-03-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c, src/gpm-tray-icon.{c|h}:
+	Make the order of the arguments to the icon message sane, and
+	consistent thoughout g-p-m. Also add in the urgency field, and mark
+	each notification with it's type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
+	for the critical action notification, as now libnotify changes it's
+	message side colour depending on the urgency level.
+	Also start adding in functionality so we change the icon in the
+	libnotify window, but for now default to our application icon.
+
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c, configure.in, data/gnome-power-manager.schemas.in:
 	Remove the configure option ACTIONS_MENU_ENABLED and replace with the
 	gconf key /apps/gnome-power-manager/show_actions_in_menu so that we

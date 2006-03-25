@@ -88,12 +88,6 @@ enum {
 	PROP_MODE
 };
 
-typedef enum {
-	LIBNOTIFY_URGENCY_CRITICAL = 1,
-	LIBNOTIFY_URGENCY_NORMAL   = 2,
-	LIBNOTIFY_URGENCY_LOW      = 3
-} LibNotifyEventType;
-
 static void gpm_tray_icon_suspend_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_hibernate_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_info_cb	 	(GtkAction *action, GpmTrayIcon *icon);
@@ -608,9 +602,7 @@ get_widget_position (GtkWidget *widget,
 
 	return TRUE;
 }
-#endif
 
-#ifdef HAVE_LIBNOTIFY
 static void
 notification_closed_cb (NotifyNotification *notify,
 			GpmTrayIcon        *tray)
@@ -621,11 +613,12 @@ notification_closed_cb (NotifyNotification *notify,
 }
 
 static gboolean
-libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,	/* in seconds */
-		 const char              *subject,
-		 const char              *content,
-		 const LibNotifyEventType urgency)
+libnotify_event (GpmTrayIcon    *tray,
+		 const char	*title,
+		 const char	*content,
+		 guint		 timeout,
+		 const char	*msgicon,
+		 GpmNotifyLevel	 urgency)
 {
 	int x;
 	int y;
@@ -634,8 +627,11 @@ libnotify_event (GpmTrayIcon             *tray,
 		notify_notification_close (tray->priv->notify, NULL);
 	}
 
-	tray->priv->notify = notify_notification_new (subject, content,
-						      GPM_STOCK_BATTERY_DISCHARGING_100,
+	/* For now, don't display a specific icon until we can register one */
+	const char *filename = "file://" GPM_DATA "gnome-power.png";
+	tray->priv->notify = notify_notification_new (title,
+						      content,
+						      filename,
 						      NULL);
 
 	notify_notification_set_timeout (tray->priv->notify, timeout * 1000);
@@ -646,7 +642,7 @@ libnotify_event (GpmTrayIcon             *tray,
 		notify_notification_set_hint_int32 (tray->priv->notify, "y", y);
 	}
 
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
+	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
 		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
 	} else {
 		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
@@ -665,12 +661,12 @@ libnotify_event (GpmTrayIcon             *tray,
 #else
 
 static gboolean
-libnotify_event (GpmTrayIcon             *tray,
-		 guint                    timeout,	/* in seconds */
-		 const char              *subject,
-		 const char              *content,
-		 const LibNotifyEventType urgency)
-
+libnotify_event (GpmTrayIcon    *tray,
+		 const char	*title,
+		 const char	*content,
+		 guint		 timeout,
+		 const char	*msgicon,
+		 GpmNotifyLevel	 urgency)
 {
 	GtkWidget     *dialog;
 	GtkMessageType msg_type;
@@ -678,7 +674,7 @@ libnotify_event (GpmTrayIcon             *tray,
 	/* assertion checks */
 	g_assert (content);
 
-	if (urgency == LIBNOTIFY_URGENCY_CRITICAL) {
+	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
 		msg_type = GTK_MESSAGE_WARNING;
 	} else {
 		msg_type = GTK_MESSAGE_INFO;
@@ -691,7 +687,7 @@ libnotify_event (GpmTrayIcon             *tray,
 						     "<span size='larger'><b>%s</b></span>",
 						     GPM_NAME);
 
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
+	gtk_message_dialog_format_content_markup (GTK_MESSAGE_DIALOG (dialog), content);
 
 	g_signal_connect_swapped (dialog,
 				  "response",
@@ -704,27 +700,40 @@ libnotify_event (GpmTrayIcon             *tray,
 }
 #endif
 
+/**
+ * gpm_tray_icon_notify:
+ * @icon: This icon class instance
+ * @title: The title, e.g. "Battery Low"
+ * @content: The contect, e.g. "17 minutes remaining"
+ * @timeout: The time we should remain on screen in seconds
+ * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
+ * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
+ * 
+ * Does a libnotify or gtk messagebox dialogue.
+ **/
 void
-gpm_tray_icon_notify (GpmTrayIcon *icon,
-		      guint        timeout,	/* in seconds */
-		      const char  *primary,
-		      GtkWidget   *msgicon,
-		      const char  *secondary)
+gpm_tray_icon_notify (GpmTrayIcon	*icon,
+		      const char	*title,
+		      const char	*content,
+		      guint		 timeout,
+		      const char	*msgicon,
+		      GpmNotifyLevel	 urgency)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
 	if (! icon->priv->show_notifications) {
-		gpm_debug ("ignoring notification: %s", primary);
+		gpm_debug ("ignoring notification: %s", title);
 		return;
 	}
 
-	gpm_debug ("doing notify: %s", primary);
+	gpm_debug ("doing notify: %s", title);
 
 	libnotify_event (icon,
+			 title,
+			 content,
 			 timeout,
-			 primary,
-			 secondary,
-			 LIBNOTIFY_URGENCY_CRITICAL);
+			 msgicon,
+			 urgency);
 }
 
 void
