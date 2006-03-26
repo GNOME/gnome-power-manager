@@ -22,6 +22,8 @@
  */
 
 #include <glib.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -29,6 +31,7 @@
 #include <time.h>
 #include <syslog.h>
 
+#include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-common.h"
 
@@ -149,6 +152,44 @@ gpm_debug_init (gboolean debug)
 
 	/* open syslog */
 	openlog ("gnome-power-manager", LOG_NDELAY, LOG_USER);
+}
+
+/**
+ * gpm_critical_error:
+ * @content: The content to show, e.g. "No icons detected"
+ *
+ * Shows a gtk critical error, logs to syslog and closes the program.
+ * NOTE: we will loose memory, but since this program is a critical error
+ * that is the least of our problems...
+ **/
+void
+gpm_critical_error (const char *format, ...)
+{
+	va_list args;
+	char    buffer [1025];
+
+	va_start (args, format);
+	g_vsnprintf (buffer, 1024, format, args);
+	va_end (args);
+
+	gpm_syslog ("Critical error: %s", buffer);
+	GtkWidget *dialog;
+	dialog = gtk_message_dialog_new_with_markup (NULL,
+						     GTK_DIALOG_MODAL,
+						     GTK_MESSAGE_WARNING,
+						     GTK_BUTTONS_CLOSE,
+						     "<span size='larger'><b>%s</b></span>",
+						     GPM_NAME);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
+						    buffer);
+	/* we close the gtk lopp when the user clicks close */
+	g_signal_connect_swapped (dialog,
+				  "response",
+				  G_CALLBACK (gtk_main_quit),
+				  NULL);
+	gtk_window_present (GTK_WINDOW (dialog));
+	/* we wait here for user to click close */
+	gtk_main();
 }
 
 /**

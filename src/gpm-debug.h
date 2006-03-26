@@ -39,17 +39,18 @@ G_BEGIN_DECLS
 #define gpm_warning
 #endif
 
-void gpm_debug_init		(gboolean debug);
-void gpm_debug_shutdown		(void);
-void gpm_debug_real		(const char *func,
+void	gpm_debug_init		(gboolean debug);
+void	gpm_debug_shutdown	(void);
+void	gpm_debug_real		(const char *func,
 				 const char *file,
 				 int	 line,
 				 const char *format, ...);
-void gpm_warning_real		(const char *func,
+void	gpm_warning_real	(const char *func,
 				 const char *file,
 				 int	 line,
 				 const char *format, ...);
-void gpm_syslog			(const char *format, ...);
+void	gpm_syslog		(const char *format, ...);
+void	gpm_critical_error	(const char *format, ...);
 
 G_END_DECLS
 
