@@ -2376,8 +2376,8 @@ gpm_manager_init (GpmManager *manager)
 
 	/* can remove when we next release, until then, assume we are morons */
 	if (manager->priv->low_percentage == 0) {
-		g_error ("You need to install the new gconf schema properly, "
-			 "battery_low_percentage cannot be zero");
+		gpm_critical_error ("GConf schema installer error, "
+				    "battery_low_percentage cannot be zero");
 	}
 
 	/* get time policy */

@@ -199,11 +199,13 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 		GdkPixbuf *pixbuf;
 		pixbuf = gtk_icon_theme_load_icon (icon_theme, stock_id, 24, 0, NULL);
 		if (! pixbuf) {
-			g_error ("no pixbuf %s", stock_id);
+			gpm_critical_error ("Cannot find the file %s.\n"
+					    "possibly there is a packaging bug in g-p-m.",
+					    stock_id);
 		}
 		gtk_image_set_from_pixbuf (GTK_IMAGE (icon->priv->image), pixbuf );
 		g_object_unref (pixbuf);
-		 
+
 	} else {
 		/* FIXME: gtk_image_clear requires gtk 2.8, so until we
 		 * depend on more then 2.6 (required for FC4) we have to

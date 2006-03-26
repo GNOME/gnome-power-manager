@@ -1,5 +1,13 @@
 2006-03-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock),
+	src/gpm-prefs.c (gpm_prefs_setup_action_combo),
+	src/gpm-manager.c (gpm_manager_init),
+	src/gpm-main.c (main):
+	Use gpm_critical_error with a descriptive report rather than g_error.
+
+2006-03-26  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c, src/gpm-debug.c, src/gpm-tray-icon.c: Add a few
 	comments to make things clearer for me.
 

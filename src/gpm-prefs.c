@@ -402,7 +402,8 @@ gpm_prefs_setup_action_combo (GladeXML    *xml,
 						   ACTION_NOTHING_TEXT);
 			n_added++;
 		} else {
-			g_error ("Unknown action : %s", actions[i]);
+			gpm_critical_error ("Unknown action read from gconf: %s",
+					    actions[i]);
 		}
 
 		if (strcmp (value, actions[i]) == 0)
@@ -461,7 +462,7 @@ gpm_prefs_setup_checkbox (GladeXML  *xml,
 			  (gpointer) gpm_pref_key);
 
 	g_object_unref (client);
-	
+
 	return widget;
 }
 
@@ -523,7 +524,7 @@ setup_sleep_type (GladeXML *xml)
 				      sleep_type_actions);
 
 	/* set up the "do we dim screen on idle checkbox */
-	checkbutton_dim_idle = gpm_prefs_setup_checkbox (xml, "checkbutton_dim_idle", 
+	checkbutton_dim_idle = gpm_prefs_setup_checkbox (xml, "checkbutton_dim_idle",
 				  			 GPM_PREF_IDLE_DIM_SCREEN);
 
 	can_set_brightness = gpm_has_lcd ();
@@ -712,7 +713,7 @@ main (int argc, char **argv)
  	GnomeProgram *program;
 
 	const GOptionEntry options[] = {
-		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,  
+		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  N_("Show extra debugging information"), NULL },
 		{ NULL}
 	};
@@ -741,7 +742,7 @@ main (int argc, char **argv)
 	gtk_main ();
 
 	gpm_debug_shutdown ();
-	
+
 	g_object_unref(program);
 
 	return 0;

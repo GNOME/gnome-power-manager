@@ -194,11 +194,11 @@ main (int argc, char *argv[])
 	}
 
 	if (! gpm_stock_icons_init()) {
-		g_error ("Cannot continue without stock icons");
+		gpm_critical_error ("Cannot continue without stock icons");
 	}
 
 	if (! no_daemon && daemon (0, 0)) {
-		g_error ("Could not daemonize: %s", g_strerror (errno));
+		gpm_critical_error ("Could not daemonize: %s", g_strerror (errno));
 	}
 
 	manager = gpm_manager_new ();
