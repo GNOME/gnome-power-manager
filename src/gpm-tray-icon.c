@@ -116,6 +116,11 @@ static guint         signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, EGG_TYPE_TRAY_ICON)
 
+/**
+ * gpm_tray_icon_enable_suspend:
+ * @icon: This TrayIcon class instance
+ * @enabled: If we should enable (i.e. show) the suspend icon
+ **/
 void
 gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 			      gboolean     enabled)
@@ -134,6 +139,11 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 	}
 }
 
+/**
+ * gpm_tray_icon_enable_hibernate:
+ * @icon: This TrayIcon class instance
+ * @enabled: If we should enable (i.e. show) the hibernate icon
+ **/
 void
 gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 				gboolean     enabled)
@@ -153,6 +163,11 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 	}
 }
 
+/**
+ * gpm_tray_icon_set_tooltip:
+ * @icon: This TrayIcon class instance
+ * @tooltip: The tooltip text, e.g. "Batteries fully charged"
+ **/
 void
 gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
 			   const char  *tooltip)
@@ -165,6 +180,13 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
 			      tooltip, NULL);
 }
 
+/**
+ * gpm_tray_icon_set_image_from_stock:
+ * @icon: This TrayIcon class instance
+ * @stock_id: The icon name, e.g. GPM_STOCK_APP_ICON
+ *
+ * Loads a pixmap from disk, and sets as the tooltip icon
+ **/
 void
 gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 				    const char  *stock_id)
@@ -180,7 +202,8 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 			g_error ("no pixbuf %s", stock_id);
 		}
 		gtk_image_set_from_pixbuf (GTK_IMAGE (icon->priv->image), pixbuf );
-
+		g_object_unref (pixbuf);
+		 
 	} else {
 		/* FIXME: gtk_image_clear requires gtk 2.8, so until we
 		 * depend on more then 2.6 (required for FC4) we have to
@@ -192,6 +215,11 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 	}
 }
 
+/**
+ * gpm_tray_icon_show_info_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_show_info_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
@@ -200,6 +228,11 @@ gpm_tray_icon_show_info_cb (GtkAction   *action,
 	g_signal_emit (icon, signals [SHOW_INFO], 0);
 }
 
+/**
+ * gpm_tray_icon_hibernate_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_hibernate_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
@@ -208,6 +241,11 @@ gpm_tray_icon_hibernate_cb (GtkAction   *action,
 	g_signal_emit (icon, signals [HIBERNATE], 0);
 }
 
+/**
+ * gpm_tray_icon_suspend_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_suspend_cb (GtkAction   *action,
 			  GpmTrayIcon *icon)
@@ -216,6 +254,11 @@ gpm_tray_icon_suspend_cb (GtkAction   *action,
 	g_signal_emit (icon, signals [SUSPEND], 0);
 }
 
+/**
+ * gpm_tray_icon_show_preferences_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_show_preferences_cb (GtkAction   *action,
 				   GpmTrayIcon *icon)
@@ -227,6 +270,11 @@ gpm_tray_icon_show_preferences_cb (GtkAction   *action,
 	}
 }
 
+/**
+ * gpm_tray_icon_show_help_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_show_help_cb (GtkAction   *action,
 			    GpmTrayIcon *icon)
@@ -240,8 +288,13 @@ gpm_tray_icon_show_help_cb (GtkAction   *action,
 	}
 }
 
+/**
+ * gpm_tray_icon_show_about_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
 static void
-gpm_tray_icon_show_about_cb (GtkAction  *action,
+gpm_tray_icon_show_about_cb (GtkAction   *action,
 			     GpmTrayIcon *icon)
 {
 	const char *authors[] = {
@@ -306,6 +359,11 @@ gpm_tray_icon_show_about_cb (GtkAction  *action,
 	g_object_unref (pixbuf);
 }
 
+/**
+ * tray_popup_position_menu:
+ *
+ * Popup the drop-down menu at the base of the icon
+ **/
 static void
 tray_popup_position_menu (GtkMenu  *menu,
 			  int      *x,
@@ -338,14 +396,29 @@ tray_popup_position_menu (GtkMenu  *menu,
 	*push_in = TRUE;
 }
 
+/**
+ * gpm_tray_icon_popup_cleared_cd:
+ * @widget: The popup Gtkwidget
+ * @icon: This TrayIcon class instance
+ *
+ * We have to re-enable the tooltip when the popup is removed
+ **/
 static void
-gpm_tray_icon_popup_cleared_cd (GtkWidget   *mo,
+gpm_tray_icon_popup_cleared_cd (GtkWidget   *widget,
 				GpmTrayIcon *icon)
 {
 	/* we enable the tooltip as the menu has gone */
 	gtk_tooltips_enable (icon->priv->tooltips);
 }
 
+/**
+ * gpm_tray_icon_button_press_cb:
+ * @widget: The tray icon widget
+ * @event: Valid event
+ * @icon: This TrayIcon class instance
+ *
+ * What do do when the button is left, right, middle clicked etc.
+ **/
 static gboolean
 gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 			       GdkEventButton *event,
@@ -368,50 +441,35 @@ gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 	return TRUE;
 }
 
+/**
+ * gpm_tray_icon_sync_actions:
+ * @icon: This TrayIcon class instance
+ *
+ * Syncs the private icon->priv->can_* variables with the icon states
+ **/
 static void
-gpm_tray_icon_set_property (GObject		  *object,
-			       guint		   prop_id,
-			       const GValue	  *value,
-			       GParamSpec	  *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-gpm_tray_icon_get_property (GObject		  *object,
-			       guint		   prop_id,
-			       GValue		  *value,
-			       GParamSpec	  *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-gpm_tray_icon_sync_actions (GpmTrayIcon *tray)
+gpm_tray_icon_sync_actions (GpmTrayIcon *icon)
 {
 	GtkAction *action;
 
-	if (tray->priv->actiongroup != NULL) {
-		action = gtk_action_group_get_action (tray->priv->actiongroup,
+	if (icon->priv->actiongroup != NULL) {
+		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TraySuspend");
 
-		gtk_action_set_visible (GTK_ACTION (action), tray->priv->can_suspend);
+		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_suspend);
 
-		action = gtk_action_group_get_action (tray->priv->actiongroup,
+		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TrayHibernate");
 
-		gtk_action_set_visible (GTK_ACTION (action), tray->priv->can_hibernate);
+		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_hibernate);
 	}
 }
 
+/**
+ * gpm_tray_icon_constructor:
+ *
+ * Connects the UI to the tray icon instance
+ **/
 static GObject *
 gpm_tray_icon_constructor (GType                  type,
 			   guint                  n_construct_properties,
@@ -470,14 +528,15 @@ gpm_tray_icon_constructor (GType                  type,
 	return G_OBJECT (tray);
 }
 
+/**
+ * gpm_tray_icon_class_init:
+ **/
 static void
 gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize	   = gpm_tray_icon_finalize;
-	object_class->get_property = gpm_tray_icon_get_property;
-	object_class->set_property = gpm_tray_icon_set_property;
 	object_class->constructor  = gpm_tray_icon_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmTrayIconPrivate));
@@ -514,6 +573,11 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 		              0);
 }
 
+/**
+ * gpm_tray_icon_show:
+ * @icon: This TrayIcon class instance
+ * @enabled: If we should show the tray
+ **/
 void
 gpm_tray_icon_show (GpmTrayIcon *icon,
 		    gboolean     enabled)
@@ -528,6 +592,12 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
 	}
 }
 
+/**
+ * gpm_tray_icon_init:
+ * @icon: This TrayIcon class instance
+ *
+ * Initialise the tray object, and set up libnotify
+ **/
 static void
 gpm_tray_icon_init (GpmTrayIcon *icon)
 {
@@ -562,6 +632,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	}
 }
 
+/**
+ * gpm_tray_icon_finalize:
+ * @object: This TrayIcon class instance
+ **/
 static void
 gpm_tray_icon_finalize (GObject *object)
 {
@@ -579,18 +653,29 @@ gpm_tray_icon_finalize (GObject *object)
 	G_OBJECT_CLASS (gpm_tray_icon_parent_class)->finalize (object);
 }
 
+/**
+ * gpm_tray_icon_new:
+ * Return value: A new TrayIcon object.
+ **/
 GpmTrayIcon *
 gpm_tray_icon_new (void)
 {
 	GpmTrayIcon *tray_icon;
-
 	tray_icon = g_object_new (GPM_TYPE_TRAY_ICON, NULL);
-
 	return GPM_TRAY_ICON (tray_icon);
 }
 
 #ifdef HAVE_LIBNOTIFY
-static gboolean
+/**
+ * get_widget_position:
+ * @widget: The icon widget
+ * @x: The returned X co-ordinate
+ * @y: The returned Y co-ordinate
+ *
+ * Gets the position where the libnotify arrow should "point"
+ * FIXME: Doesn't work on all orientations...
+ **/
+static void
 get_widget_position (GtkWidget *widget,
 		     int       *x,
 		     int       *y)
@@ -605,21 +690,36 @@ get_widget_position (GtkWidget *widget,
 	*y += widget->allocation.height;
 
 	gpm_debug ("widget position x=%i, y=%i", *x, *y);
-
-	return TRUE;
 }
 
+/**
+ * notification_closed_cb:
+ * @notify: our libnotify instance
+ * @icon: This TrayIcon class instance
+ **/
 static void
 notification_closed_cb (NotifyNotification *notify,
-			GpmTrayIcon        *tray)
+			GpmTrayIcon        *icon)
 {
 	/* just invalidate the pointer */
 	gpm_debug ("caught notification closed signal");
-	tray->priv->notify = NULL;
+	icon->priv->notify = NULL;
 }
 
+/**
+ * libnotify_event:
+ * @icon: This icon class instance
+ * @title: The title, e.g. "Battery Low"
+ * @content: The contect, e.g. "17 minutes remaining"
+ * @timeout: The time we should remain on screen in seconds
+ * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
+ * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
+ *
+ * Does a libnotify messagebox dialogue.
+ * Return value: success
+ **/
 static gboolean
-libnotify_event (GpmTrayIcon    *tray,
+libnotify_event (GpmTrayIcon    *icon,
 		 const char	*title,
 		 const char	*content,
 		 guint		 timeout,
@@ -629,21 +729,21 @@ libnotify_event (GpmTrayIcon    *tray,
 	int x;
 	int y;
 
-	if (tray->priv->notify != NULL) {
-		notify_notification_close (tray->priv->notify, NULL);
+	if (icon->priv->notify != NULL) {
+		notify_notification_close (icon->priv->notify, NULL);
 	}
 
-	tray->priv->notify = notify_notification_new (title,
+	icon->priv->notify = notify_notification_new (title,
 						      content,
 						      msgicon,
 						      NULL);
 
-	notify_notification_set_timeout (tray->priv->notify, timeout * 1000);
+	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
 
-	if (tray->priv->is_visible) {
-		get_widget_position (GTK_WIDGET (tray), &x, &y);
-		notify_notification_set_hint_int32 (tray->priv->notify, "x", x);
-		notify_notification_set_hint_int32 (tray->priv->notify, "y", y);
+	if (icon->priv->is_visible) {
+		get_widget_position (GTK_WIDGET (icon), &x, &y);
+		notify_notification_set_hint_int32 (icon->priv->notify, "x", x);
+		notify_notification_set_hint_int32 (icon->priv->notify, "y", y);
 	}
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
@@ -652,9 +752,9 @@ libnotify_event (GpmTrayIcon    *tray,
 		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
 	}
 
-	g_signal_connect (tray->priv->notify, "closed", G_CALLBACK (notification_closed_cb), tray);
+	g_signal_connect (icon->priv->notify, "closed", G_CALLBACK (notification_closed_cb), icon);
 
-	if (! notify_notification_show (tray->priv->notify, NULL)) {
+	if (! notify_notification_show (icon->priv->notify, NULL)) {
 		gpm_warning ("failed to send notification (%s)", content);
 		return FALSE;
 	}
@@ -664,8 +764,20 @@ libnotify_event (GpmTrayIcon    *tray,
 
 #else
 
+/**
+ * libnotify_event:
+ * @icon: This icon class instance
+ * @title: The title, e.g. "Battery Low"
+ * @content: The contect, e.g. "17 minutes remaining"
+ * @timeout: The time we should remain on screen in seconds
+ * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
+ * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
+ *
+ * Does a gtk messagebox dialogue.
+ * Return value: success
+ **/
 static gboolean
-libnotify_event (GpmTrayIcon    *tray,
+libnotify_event (GpmTrayIcon    *icon,
 		 const char	*title,
 		 const char	*content,
 		 guint		 timeout,
@@ -712,7 +824,7 @@ libnotify_event (GpmTrayIcon    *tray,
  * @timeout: The time we should remain on screen in seconds
  * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
  * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
- * 
+ *
  * Does a libnotify or gtk messagebox dialogue.
  **/
 void
@@ -743,16 +855,14 @@ gpm_tray_icon_notify (GpmTrayIcon	*icon,
 /**
  * gpm_tray_icon_cancel_notify:
  * @icon: This icon class instance
- * 
+ *
  * Cancels the notification, i.e. removes it from the screen.
  **/
 void
 gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 {
 	GError *error;
-
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
 	error = NULL;
 
 #ifdef HAVE_LIBNOTIFY

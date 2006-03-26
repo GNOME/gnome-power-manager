@@ -44,7 +44,16 @@
 
 static void gpm_exit (GpmManager *manager);
 
-/* This function MUST be called before DBUS service will work. */
+/**
+ * gpm_object_register:
+ * @connection: What we want to register to
+ * @object: The GObject we want to register
+ *
+ * Register org.gnome.PowerManager on the session bus.
+ * This function MUST be called before DBUS service will work.
+ *
+ * Return value: success
+ **/
 static gboolean
 gpm_object_register (DBusGConnection *connection,
 		     GObject         *object)
@@ -80,6 +89,10 @@ gpm_object_register (DBusGConnection *connection,
 	return TRUE;
 }
 
+/**
+ * gpm_exit:
+ * @manager: This manager class instance
+ **/
 static void
 gpm_exit (GpmManager *manager)
 {
@@ -90,6 +103,14 @@ gpm_exit (GpmManager *manager)
 	exit (0);
 }
 
+/**
+ * gpm_critical_error:
+ * @content: The content to show, e.g. "No icons detected"
+ *
+ * Shows a gtk critical error, and closes the program.
+ * NOTE: we will loose memory, but since this program is a critical error
+ * that is the least of our problems...
+ **/
 static void
 gpm_critical_error (const char *content)
 {
@@ -112,6 +133,9 @@ gpm_critical_error (const char *content)
 	gtk_main();
 }
 
+/**
+ * main:
+ **/
 int
 main (int argc, char *argv[])
 {
@@ -221,8 +245,8 @@ main (int argc, char *argv[])
 	g_main_loop_run (loop);
 
 	gpm_exit (manager);
-	
+
 	g_object_unref(program);
-	
+
 	return 0;
 }

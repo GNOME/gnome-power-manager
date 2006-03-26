@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
  * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ * Originally based on rhythmbox/lib/rb-debug.c
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -35,8 +36,9 @@ static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
 static gboolean done_warning = FALSE;	/* if we've done the bugzilla warning */
 
-/* Based on rhythmbox/lib/rb-debug.c */
-
+/**
+ * gpm_print_line:
+ **/
 static void
 gpm_print_line (const char *func,
 		const char *file,
@@ -55,6 +57,9 @@ gpm_print_line (const char *func,
 	g_free (str_time);
 }
 
+/**
+ * gpm_debug_real:
+ **/
 void
 gpm_debug_real (const char *func,
 		const char *file,
@@ -75,6 +80,9 @@ gpm_debug_real (const char *func,
 	gpm_print_line (func, file, line, buffer);
 }
 
+/**
+ * gpm_warning_real:
+ **/
 void
 gpm_warning_real (const char *func,
 		  const char *file,
@@ -104,6 +112,12 @@ gpm_warning_real (const char *func,
 	}
 }
 
+/**
+ * gpm_syslog:
+ * @format: This va format string, e.g. ("test %s", hello)
+ *
+ * Logs some text to the syslog, usually in /var/log/messages
+ **/
 void
 gpm_syslog (const char *format, ...)
 {
@@ -118,6 +132,10 @@ gpm_syslog (const char *format, ...)
 	syslog (LOG_ALERT, "%s", buffer);
 }
 
+/**
+ * gpm_debug_init:
+ * @debug: If we should print out verbose logging
+ **/
 void
 gpm_debug_init (gboolean debug)
 {
@@ -133,6 +151,9 @@ gpm_debug_init (gboolean debug)
 	openlog ("gnome-power-manager", LOG_NDELAY, LOG_USER);
 }
 
+/**
+ * gpm_debug_shutdown:
+ **/
 void
 gpm_debug_shutdown (void)
 {

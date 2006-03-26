@@ -1,5 +1,13 @@
 2006-03-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c, src/gpm-debug.c, src/gpm-tray-icon.c: Add a few
+	comments to make things clearer for me.
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock):
+	Unref the icon so we don't waste memory.
+
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-main.c (gpm_object_register): Remove DBUS < 0.61
 	compatibility ifdefs as we now require DBUS 0.61.
 
