@@ -1,5 +1,10 @@
 2006-03-25  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-main.c (gpm_object_register): Remove DBUS < 0.61
+	compatibility ifdefs as we now require DBUS 0.61.
+
+2006-03-25  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/scalable/*: Add the svg icons.
 
 	* data/icons/48x48/*, configure.in, data/icons/Makefile.am: Add this

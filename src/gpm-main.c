@@ -57,23 +57,7 @@ gpm_object_register (DBusGConnection *connection,
 					       DBUS_SERVICE_DBUS,
 					       DBUS_PATH_DBUS,
 					       DBUS_INTERFACE_DBUS);
-/*
- * Add this define hack until we depend on DBUS 0.60, as the
- * define names have changed.
- * should fix bug: http://bugzilla.gnome.org/show_bug.cgi?id=322435
- */
-#ifdef DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT
-	/* add the legacy stuff for FC4 */
-	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
-		G_TYPE_STRING, GPM_DBUS_SERVICE,
-		G_TYPE_UINT, DBUS_NAME_FLAG_PROHIBIT_REPLACEMENT,
-		G_TYPE_INVALID,
-		G_TYPE_UINT, &request_name_result,
-		G_TYPE_INVALID)) {
-		g_warning ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
-		return FALSE;
-	}
-#else
+
 	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
 		G_TYPE_STRING, GPM_DBUS_SERVICE,
 		G_TYPE_UINT, 0,
@@ -83,7 +67,6 @@ gpm_object_register (DBusGConnection *connection,
 		g_warning ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
 		return FALSE;
 	}
-#endif
 
  	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
 		return FALSE;
