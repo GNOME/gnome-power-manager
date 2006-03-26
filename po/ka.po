@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.13.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-12 08:36+0100\n"
+"POT-Creation-Date: 2006-03-27 00:16+0100\n"
 "PO-Revision-Date: 2006-02-20 11:40+0100\n"
 "Last-Translator: Vladimer SIchinava <alinux@siena.linux.it>\n"
 "Language-Team: Georgian <ka@li.org>\n"
@@ -34,172 +34,396 @@ msgid "Power management daemon"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:1
-#, fuzzy
-msgid "AC LCD brightness hardware value"
-msgstr "AC"
-
-#: ../data/gnome-power-manager.schemas.in.h:2
-msgid "Battery LCD brightness hardware value"
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:2
 #, fuzzy
 msgid "Battery critical low action"
 msgstr "დაბალი მოქმედება"
 
+#: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Check CPU load before sleeping"
+msgstr ""
+
 #: ../data/gnome-power-manager.schemas.in.h:4
-#, fuzzy
-msgid "Computer AC idle timeout value"
-msgstr "კომპიუტერი AC უქმი დაყოვნების დრო"
+msgid "Check network utilization before sleeping"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 #, fuzzy
-msgid "Computer battery idle timeout value"
-msgstr "კომპიუტერი უქმი დაყოვნების დრო"
+msgid "Dim the screen after a period of inactivity"
+msgstr "-სკენ a -"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 #, fuzzy
-msgid "Default sleep type"
-msgstr "ნაგულისხმევი ტიპი"
+msgid "Hibernate button action"
+msgstr "შეჩერება მოქმედება"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
-msgid "Display AC idle timeout value"
-msgstr "დისპლეი AC უქმი დაყოვნების დრო"
+msgid "Hibernate enabled"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 #, fuzzy
-msgid "Display battery idle timeout value"
-msgstr "დისპლეი უქმი დაყოვნების დრო"
+msgid "LCD brightness when on AC"
+msgstr "AC"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-msgid "If the user can hibernate"
-msgstr ""
+#, fuzzy
+msgid "LCD brightness when on battery"
+msgstr "AC"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
-msgid "If the user can suspend"
-msgstr ""
+#, fuzzy
+msgid "Laptop lid close action on battery"
+msgstr "მოქმედება"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 #, fuzzy
-msgid ""
-"If this particular user should have hibernate on the drop-down menu and in "
-"the prefs"
-msgstr "ჩართულია ქვემოთ მენიუ და -"
-
-#: ../data/gnome-power-manager.schemas.in.h:12
-#, fuzzy
-msgid ""
-"If this particular user should have suspend on the drop-down menu and in the "
-"prefs"
-msgstr "ჩართულია ქვემოთ მენიუ და -"
-
-#: ../data/gnome-power-manager.schemas.in.h:13
-#, fuzzy
-msgid "If to dim the screen after a period of inactivity"
-msgstr "-სკენ a -"
-
-#: ../data/gnome-power-manager.schemas.in.h:14
-#, fuzzy
-msgid ""
-"If we should dim the screen to save power when the computer is marked as "
-"idle."
-msgstr "-სკენ შენახვა უქმი."
-
-#: ../data/gnome-power-manager.schemas.in.h:15
-#, fuzzy
-msgid "If we should notify the user that the AC adapter has been removed"
-msgstr "AC"
-
-#: ../data/gnome-power-manager.schemas.in.h:16
-msgid "If we should notify the user that the battery is fully charged"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:17
-#, fuzzy
-msgid "Laptop lid close action"
+msgid "Laptop lid close action when on AC"
 msgstr "მოქმედება"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
-#, fuzzy
-msgid "Notify on AC loss"
-msgstr "ჩართულია AC"
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "Lock screen on hibernate"
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:13
+msgid "Lock screen on suspend"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+msgid "Lock screen when it is blanked"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid "Notify on a HAL suspend or hibernate error."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:16
 #, fuzzy
 msgid "Notify on fully charged"
 msgstr "ჩართულია"
 
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid "Notify when AC adapter is removed"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "Number of seconds to suppress policy after resume"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"Option when to show the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\""
+msgstr ""
+
 #: ../data/gnome-power-manager.schemas.in.h:20
+msgid "Percentage action is taken"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+msgid "Percentage is considered critical"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+msgid "Percentage is considered low"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+msgid "Percentage is considered very low"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+#, fuzzy
+msgid "Power button action"
+msgstr "შეჩერება მოქმედება"
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid "Sleep timeout computer when on AC"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+msgid "Sleep timeout computer when on battery"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid "Sleep timeout display when on AC"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:28
+msgid "Sleep timeout display when on battery"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:29
 #, fuzzy
 msgid "Suspend button action"
 msgstr "შეჩერება მოქმედება"
 
-#: ../data/gnome-power-manager.schemas.in.h:21
-#, fuzzy
-msgid "The action to take when the battery is critically low."
-msgstr "მოქმედება -სკენ დაბალი."
-
-#: ../data/gnome-power-manager.schemas.in.h:22
-#, fuzzy
-msgid "The action to take when the laptop lid is closed"
-msgstr "მოქმედება -სკენ"
-
-#: ../data/gnome-power-manager.schemas.in.h:23
-#, fuzzy
-msgid "The action to take when the system suspend button is pressed"
-msgstr "მოქმედება -სკენ"
-
-#: ../data/gnome-power-manager.schemas.in.h:24
-#, fuzzy
-msgid "The display icon policy can be never, critical, charge, always"
-msgstr "ხატულა"
-
-#: ../data/gnome-power-manager.schemas.in.h:25
-#, fuzzy
-msgid "The hardware brightness the display is set to whilst on AC power"
-msgstr "-სკენ ჩართულია AC"
-
-#: ../data/gnome-power-manager.schemas.in.h:26
-#, fuzzy
-msgid "The hardware brightness the display is set to whilst on battery power"
-msgstr "-სკენ ჩართულია"
-
-#: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
-msgid ""
-"The idle time in seconds before the computer tries to sleep whilst on AC "
-"power"
-msgstr "უქმი - წამები -სკენ ჩართულია AC"
-
-#: ../data/gnome-power-manager.schemas.in.h:28
-#, fuzzy
-msgid ""
-"The idle time in seconds before the computer tries to sleep whilst on "
-"battery power"
-msgstr "უქმი - წამები -სკენ ჩართულია"
-
-#: ../data/gnome-power-manager.schemas.in.h:29
-#, fuzzy
-msgid "The idle time in seconds before the display tries to sleep whilst on AC power"
-msgstr "უქმი - წამები -სკენ ჩართულია AC"
-
 #: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
-msgid ""
-"The idle time in seconds before the display tries to sleep whilst on battery "
-"power"
-msgstr "უქმი - წამები -სკენ ჩართულია"
+msgid "Suspend enabled"
+msgstr "შეჩერება"
 
 #: ../data/gnome-power-manager.schemas.in.h:31
 #, fuzzy
-msgid "The type of sleep (hibernate/suspend) to use automatically."
-msgstr "ტიპი - -სკენ."
+msgid ""
+"The action to take when the battery is critically low. Valid values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
+msgstr "მოქმედება -სკენ დაბალი."
 
 #: ../data/gnome-power-manager.schemas.in.h:32
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:34
+msgid ""
+"The action to take when the system hibernate button is pressed. Valid values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:35
+msgid ""
+"The action to take when the system power button is pressed. Valid values are "
+"\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:36
+msgid ""
+"The action to take when the system suspend button is pressed. Valid values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:37
+msgid ""
+"The brightness of the display when on AC power. Valid values are between 0 "
+"and 100."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:38
+msgid ""
+"The brightness of the display when on battery power. Valid values are "
+"between 0 and 100."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:39
+msgid "The brightness of the screen when session idle"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+#, fuzzy
+msgid ""
+"The number of seconds before the display goes to sleep when the computer is "
+"on AC power."
+msgstr "უქმი - წამები -სკენ ჩართულია AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:41
+msgid ""
+"The number of seconds the computer on AC power needs to be inactive before "
+"it goes to sleep."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+msgid ""
+"The number of seconds the computer on battery power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid ""
+"The number of seconds the computer on battery power needs to be inactive "
+"before the display goes to sleep."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid ""
+"The percentage of the battery when it is considered very low. Only valid "
+"when use_time_for_policy false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+msgid ""
+"The percentage of the battery when the critical action if performed. Only "
+"valid when use_time_for_policy false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy true."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy true."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:50
+msgid ""
+"The time remaining in seconds of the battery when it is considered low. Only "
+"valid when use_time_for_policy true."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:51
+msgid ""
+"The time remaining in seconds of the battery when it is considered very low. "
+"Only valid when use_time_for_policy true."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:52
+msgid "The time remaining when action is taken"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:53
+msgid "The time remaining when critical"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:54
+msgid "The time remaining when low"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:55
+msgid "The time remaining when very low"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:56
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Valid values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid ""
+"This is the laptop panel screen brightness used when the session is idle. "
+"Only valid when use_time_for_policy true."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Use gnome-screensaver lock setting"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:59
 #, fuzzy
 msgid "When to show the notification icon"
 msgstr "-სკენ ხატულა"
+
+#: ../data/gnome-power-manager.schemas.in.h:60
+msgid ""
+"Whether or not a notification message is displayed if the HAL action "
+"(suspend or hibernate) fails"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:61
+msgid ""
+"Whether or not a notification message is displayed when the battery is fully "
+"charged"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:62
+msgid ""
+"Whether or not the screen is locked when the screen is turned off. NOTE this "
+"option is only used if lock_use_screensaver_settings is set to false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:63
+msgid "Whether or not the user can hibernate the computer"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:64
+msgid "Whether or not the user can suspend the computer"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:65
+#, fuzzy
+msgid "Whether or not the user is notified when the AC adapter is removed"
+msgstr "AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:66
+msgid ""
+"Whether or not to allow the Suspend and Hibernate options in the "
+"notification area drop down menu."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:67
+#, fuzzy
+msgid ""
+"Whether or not to dim the screen to save power when the computer is idle."
+msgstr "-სკენ შენახვა უქმი."
+
+#: ../data/gnome-power-manager.schemas.in.h:68
+msgid ""
+"Whether or not to lock the screen when the computer wakes up from a "
+"hibernate. NOTE this option is only used if lock_use_screensaver_settings is "
+"set to false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:69
+msgid ""
+"Whether or not to lock the screen when the computer wakes up from a suspend. "
+"NOTE this option is only used if lock_use_screensaver_settings is set to "
+"false."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:70
+msgid ""
+"Whether or not to use the screen lock setting of gnome-screensaver to decide "
+"to lock the screen after a hibernate, suspend or blank screen."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:71
+msgid ""
+"Whether or not to use time based notifications. If set to false, then the "
+"percentage change is used instead, which may fix some broken ACPI BIOS's."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:72
+msgid "Whether to allow the Suspend and Hibernate options in the menu"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:73
+msgid "Whether to hibernate, suspend or do nothing when inactive"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:74
+#, fuzzy
+msgid "Whether to use time-based notifications"
+msgstr "-სკენ ხატულა"
+
+#: ../data/gnome-power-manager.schemas.in.h:75
+msgid ""
+"Whether we should check network utilization before doing the idle action."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:76
+msgid "Whether we should check the CPU load before doing the idle action."
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
 #, fuzzy
@@ -208,32 +432,32 @@ msgstr "<b> მოქმედებები</b>"
 
 #: ../data/gpm-prefs.glade.h:2
 #, fuzzy
+msgid "<b>Brightness</b>"
+msgstr "<b> მოქმედებები</b>"
+
+#: ../data/gpm-prefs.glade.h:3
+#, fuzzy
 msgid "<b>General</b>"
 msgstr "<b>ზოგადი</b>"
 
-#: ../data/gpm-prefs.glade.h:3
+#: ../data/gpm-prefs.glade.h:4
 #, fuzzy
 msgid "<b>Notification Area</b>"
 msgstr "<b> შეტყობინება არე</b>"
 
-#: ../data/gpm-prefs.glade.h:4
-#, fuzzy
-msgid "<b>Running on AC Adapter</b>"
-msgstr "<b> გაშვებულია ჩართულია AC</b>"
-
 #: ../data/gpm-prefs.glade.h:5
 #, fuzzy
-msgid "<b>Running on Batteries</b>"
-msgstr "<b> გაშვებულია ჩართულია</b>"
+msgid "<b>Sleep</b>"
+msgstr "<b>ზოგადი</b>"
 
 #: ../data/gpm-prefs.glade.h:6
 #, fuzzy
-msgid "Advanced"
-msgstr "გაფართოვებული"
+msgid "General"
+msgstr "<b>ზოგადი</b>"
 
 #: ../data/gpm-prefs.glade.h:7
 #, fuzzy
-msgid "Only display when battery life is _critical"
+msgid "Only display when battery _present"
 msgstr "მხოლოდ"
 
 #: ../data/gpm-prefs.glade.h:8
@@ -243,74 +467,133 @@ msgstr "მხოლოდ ან"
 
 #: ../data/gpm-prefs.glade.h:9
 #, fuzzy
-msgid "Options"
-msgstr "ოფციები"
-
-#: ../data/gpm-prefs.glade.h:10
-#, fuzzy
 msgid "Power Management Preferences"
 msgstr "პარამეტრები"
 
+#: ../data/gpm-prefs.glade.h:10
+#, fuzzy
+msgid "Put _display to sleep when computer is inactive for:"
+msgstr "-სკენ:"
+
 #: ../data/gpm-prefs.glade.h:11
 #, fuzzy
-msgid "Put _computer to sleep after:"
+msgid "Put computer to _sleep when it is inactive for:"
 msgstr "-სკენ:"
 
 #: ../data/gpm-prefs.glade.h:12
 #, fuzzy
-msgid "Put _display to sleep after:"
-msgstr "-სკენ:"
+msgid "Running on AC"
+msgstr "<b> გაშვებულია ჩართულია AC</b>"
 
 #: ../data/gpm-prefs.glade.h:13
 #, fuzzy
-msgid "Put c_omputer to sleep after:"
-msgstr "-სკენ:"
+msgid "Running on Battery"
+msgstr "<b> გაშვებულია ჩართულია</b>"
 
 #: ../data/gpm-prefs.glade.h:14
-#, fuzzy
-msgid "Put dis_play to sleep after:"
-msgstr "-სკენ:"
+msgid "Running on UPS"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:15
 #, fuzzy
-msgid "Set display _brightness:"
+msgid "Set display _brightness to:"
 msgstr "მითითება:"
 
 #: ../data/gpm-prefs.glade.h:16
-#, fuzzy
-msgid "Set display b_rightness:"
-msgstr "მითითება:"
+msgid "Sleep _type when inactive:"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:17
-msgid "Sleep"
+msgid "When UPS _power critical:"
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:18
-msgid "When _battery power critical:"
-msgstr ""
+#, fuzzy
+msgid "When battery _power critical:"
+msgstr "მხოლოდ"
 
 #: ../data/gpm-prefs.glade.h:19
-msgid "When _suspend button pressed:"
-msgstr ""
+#, fuzzy
+msgid "When l_aptop lid is closed:"
+msgstr "მოქმედება -სკენ"
 
 #: ../data/gpm-prefs.glade.h:20
-msgid "When laptop li_d is closed:"
-msgstr ""
-
-#: ../data/gpm-prefs.glade.h:21
 #, fuzzy
 msgid "_Always display icon"
 msgstr "ყოველთვის ხატულა"
 
-#: ../data/gpm-prefs.glade.h:22
-#, fuzzy
-msgid "_Computer sleep type:"
-msgstr "კომპიუტერი ტიპი:"
+#: ../data/gpm-prefs.glade.h:21
+msgid "_Dim the laptop panel when idle"
+msgstr ""
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:22
 #, fuzzy
 msgid "_Never display icon"
 msgstr "არასდროს ხატულა"
+
+#: ../data/gpm-prefs.glade.h:23
+#, fuzzy
+msgid "_Only display when battery life is critical"
+msgstr "მხოლოდ"
+
+#: ../data/gpm-info.glade.h:1
+msgid "<b>Laptop Battery Bay (2)</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:2
+msgid "<b>Laptop Battery Bay</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:3
+msgid "<b>UPS</b>"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:4
+#, fuzzy
+msgid "<b>Wireless Mouse</b>"
+msgstr "უკაბელო"
+
+#: ../data/gpm-info.glade.h:5
+msgid "Charge History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:6
+msgid "Device Information"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:7
+msgid "Estimated Time History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:8 ../src/gpm-manager.c:1320
+#: ../src/gpm-manager.c:1655
+#, fuzzy
+msgid "Power Information"
+msgstr "ჩვენება"
+
+#: ../data/gpm-info.glade.h:9
+msgid "Rate History"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:10
+msgid "This shows how the battery charge and discharge rate varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:11
+msgid "This shows how the battery percentage charge varies over time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:12
+msgid ""
+"This shows how the remaining time until charged or discharged varies over "
+"time."
+msgstr ""
+
+#: ../data/gpm-info.glade.h:13
+msgid ""
+"This shows you detailed information about all the batteries you have "
+"installed in your system."
+msgstr ""
 
 #: ../src/eggtrayicon.c:125
 #, fuzzy
@@ -328,16 +611,14 @@ msgid "Unknown time"
 msgstr "უცნობი"
 
 #: ../src/gpm-common.c:52
-#, c-format
-#, fuzzy
+#, fuzzy, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "i წუთი"
 msgstr[1] "i წუთი"
 
 #: ../src/gpm-common.c:63
-#, c-format
-#, fuzzy
+#, fuzzy, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
 msgstr[0] "i საათი"
@@ -346,8 +627,7 @@ msgstr[1] "i საათი"
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
 #: ../src/gpm-common.c:69
-#, c-format
-#, fuzzy
+#, fuzzy, c-format
 msgid "%i %s, %i %s"
 msgstr "i წმ i წმ"
 
@@ -370,201 +650,391 @@ msgstr[1] "წუთი"
 msgid "Power Manager for the GNOME desktop"
 msgstr "მმართველი GNOME"
 
-#: ../src/gpm-main.c:308
+#: ../src/gpm-main.c:127
 msgid "Do not daemonize"
 msgstr ""
 
-#: ../src/gpm-main.c:310 ../src/gpm-prefs.c:662
+#: ../src/gpm-main.c:129 ../src/gpm-prefs.c:717
 #, fuzzy
 msgid "Show extra debugging information"
 msgstr "ჩვენება"
 
-#: ../src/gpm-manager.c:500
+#: ../src/gpm-main.c:133
 #, fuzzy
-msgid "AC Power Unplugged"
-msgstr "AC"
+msgid "GNOME Power Manager"
+msgstr "დენის მმართველი"
 
-#: ../src/gpm-manager.c:502
+#: ../src/gpm-manager.c:1040
+#, c-format
+msgid ""
+"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgstr ""
+
+#: ../src/gpm-manager.c:1042
+msgid "hibernate"
+msgstr ""
+
+#: ../src/gpm-manager.c:1044
+msgid "Hibernate Problem"
+msgstr ""
+
+#: ../src/gpm-manager.c:1111
+#, c-format
+msgid ""
+"Your computer failed to %s.\n"
+"Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgstr ""
+
+#: ../src/gpm-manager.c:1113
 #, fuzzy
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "AC ახლა."
+msgid "suspend"
+msgstr "შეჩერება"
 
-#: ../src/gpm-manager.c:945
+#: ../src/gpm-manager.c:1115
+#, fuzzy
+msgid "Suspend Problem"
+msgstr "შეჩერება"
+
+#: ../src/gpm-manager.c:1643
 #, fuzzy
 msgid "Power Critically Low"
 msgstr "დაბალი"
 
-#: ../src/gpm-manager.c:949
+#: ../src/gpm-manager.c:1647
 #, fuzzy
 msgid "Power Very Low"
 msgstr "დაბალი"
 
-#: ../src/gpm-manager.c:953
+#: ../src/gpm-manager.c:1651
 #, fuzzy
 msgid "Power Low"
 msgstr "დაბალი"
 
-#: ../src/gpm-manager.c:993
+#: ../src/gpm-manager.c:1718
 msgid "Battery Charged"
 msgstr ""
 
-#: ../src/gpm-manager.c:995
+#: ../src/gpm-manager.c:1719
 #, fuzzy
 msgid "Your battery is now fully charged"
 msgstr "ახლა"
 
-#: ../src/gpm-manager.c:1016
+#: ../src/gpm-manager.c:1760
 #, fuzzy
-msgid "Critical action"
-msgstr "კრიტიკული მოქმედება"
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
+msgstr "და -სკენ."
 
-#: ../src/gpm-manager.c:1018
+#: ../src/gpm-manager.c:1764
+#, fuzzy
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr "და -სკენ."
+
+#: ../src/gpm-manager.c:1769
+#, fuzzy
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
+msgstr "და -სკენ."
+
+#: ../src/gpm-manager.c:1772
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "და -სკენ."
 
-#. FIXME: do different warnings for each GPM_WARNING_
-#: ../src/gpm-manager.c:1038
-#, c-format
+#: ../src/gpm-manager.c:1778
 #, fuzzy
+msgid "Critical action"
+msgstr "კრიტიკული მოქმედება"
+
+#: ../src/gpm-manager.c:1802
+#, fuzzy
+msgid "The AC Power has been unplugged. The system is now using battery power."
+msgstr "AC ახლა."
+
+#: ../src/gpm-manager.c:1807
+#, fuzzy, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr "თქვენ<b> წმ</b> - - AC -სკენ."
 
-#: ../src/gpm-manager.c:1100
-#, c-format
+#: ../src/gpm-manager.c:1877
 #, fuzzy
+msgid "Your system is running on backup power!"
+msgstr "კომპიუტერი ჩართულია n"
+
+#: ../src/gpm-manager.c:1880
+#, fuzzy, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
-"power to your computer toavoid losing data."
+"power to your computer to avoid losing data."
 msgstr "თქვენ<b> წმ</b> - აღდგენა -სკენ."
 
-#: ../src/gpm-manager.c:1173
-#, c-format
-#, fuzzy
+#: ../src/gpm-manager.c:1960
+#, fuzzy, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
-"will soon stop functioningif not charged."
+"will soon stop functioning if not charged."
 msgstr "წმ -სკენ დაბალი -."
 
-#: ../src/gpm-power.c:305
+#: ../src/gpm-power.c:397
 msgid "Laptop battery"
 msgstr ""
 
-#: ../src/gpm-power.c:307
+#: ../src/gpm-power.c:399
 msgid "UPS"
 msgstr ""
 
-#: ../src/gpm-power.c:309
+#: ../src/gpm-power.c:401
 #, fuzzy
 msgid "Wireless mouse"
 msgstr "უკაბელო"
 
-#: ../src/gpm-power.c:311
+#: ../src/gpm-power.c:403
 #, fuzzy
 msgid "Wireless keyboard"
 msgstr "უკაბელო"
 
-#: ../src/gpm-power.c:313
+#: ../src/gpm-power.c:405
 msgid "PDA"
 msgstr ""
 
-#: ../src/gpm-power.c:315
+#: ../src/gpm-power.c:407
 #, fuzzy
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: ../src/gpm-power.c:614
+#: ../src/gpm-power.c:567 ../src/gpm-power.c:573 ../src/gpm-power.c:577
+#: ../src/gpm-power.c:581
+msgid "Status:"
+msgstr ""
+
+#: ../src/gpm-power.c:568
+msgid "Missing"
+msgstr ""
+
+#: ../src/gpm-power.c:574
+msgid "Charged"
+msgstr ""
+
+#: ../src/gpm-power.c:578
+msgid "Charging"
+msgstr ""
+
+#: ../src/gpm-power.c:582
+msgid "Discharging"
+msgstr ""
+
+#: ../src/gpm-power.c:586
+msgid "Product:"
+msgstr ""
+
+#: ../src/gpm-power.c:591
+msgid "Vendor:"
+msgstr ""
+
+#: ../src/gpm-power.c:596
+msgid "Technology:"
+msgstr ""
+
+#: ../src/gpm-power.c:600
+msgid "Lithium ion"
+msgstr ""
+
+#: ../src/gpm-power.c:602
+msgid "Lead acid"
+msgstr ""
+
+#: ../src/gpm-power.c:612
+msgid "Serial number:"
+msgstr ""
+
+#: ../src/gpm-power.c:617
+msgid "Model:"
+msgstr ""
+
+#: ../src/gpm-power.c:622
+msgid "Remaining time:"
+msgstr ""
+
+#: ../src/gpm-power.c:627
+msgid "Percentage charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:633
+msgid "Capacity:"
+msgstr ""
+
+#: ../src/gpm-power.c:635
+msgid "Very good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:637
+msgid "Good condition"
+msgstr ""
+
+#: ../src/gpm-power.c:639
+msgid "Poor condition"
+msgstr ""
+
+#: ../src/gpm-power.c:648
+msgid "Current charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:654
+#, fuzzy
+msgid "Last full charge:"
+msgstr "ჩართულია"
+
+#: ../src/gpm-power.c:659
+msgid "Design charge:"
+msgstr ""
+
+#: ../src/gpm-power.c:664
+msgid "Charge rate:"
+msgstr ""
+
+#: ../src/gpm-power.c:908
+msgid "fully charged"
+msgstr ""
+
+#: ../src/gpm-power.c:914
 msgid "remaining"
 msgstr ""
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:617
+#: ../src/gpm-power.c:917
 msgid "discharging"
 msgstr ""
 
-#: ../src/gpm-power.c:622
-msgid "fully charged"
-msgstr ""
-
-#: ../src/gpm-power.c:628
+#: ../src/gpm-power.c:924
 msgid "until charged"
 msgstr ""
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:631
+#: ../src/gpm-power.c:927
 msgid "charging"
 msgstr ""
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:665
+#: ../src/gpm-power.c:961
 #, fuzzy
 msgid "Computer is running on backup power\n"
 msgstr "კომპიუტერი ჩართულია n"
 
-#: ../src/gpm-power.c:668
+#: ../src/gpm-power.c:964
 #, fuzzy
 msgid "Computer is running on AC power\n"
 msgstr "კომპიუტერი ჩართულია AC n"
 
-#: ../src/gpm-power.c:671
+#: ../src/gpm-power.c:967
 #, fuzzy
 msgid "Computer is running on battery power\n"
 msgstr "კომპიუტერი ჩართულია n"
 
-#: ../src/gpm-tray-icon.c:107
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:54
+#, fuzzy
+msgid "Suspend"
+msgstr "შეჩერება"
+
+#: ../src/gpm-prefs.c:55
+#, fuzzy
+msgid "Shutdown"
+msgstr "გამორთვა"
+
+#: ../src/gpm-prefs.c:56
+msgid "Hibernate"
+msgstr ""
+
+#: ../src/gpm-prefs.c:57
+msgid "Blank screen"
+msgstr ""
+
+#: ../src/gpm-prefs.c:58
+#, fuzzy
+msgid "Do nothing"
+msgstr "არაფერი"
+
+#: ../src/gpm-prefs.c:205
+#, fuzzy
+msgid "Never"
+msgstr "არასდროს"
+
+#: ../src/gpm-prefs.c:721
+#, fuzzy
+msgid "GNOME Power Preferences"
+msgstr "პარამეტრები"
+
+#: ../src/gpm-prefs.c:734
+#, fuzzy
+msgid "Power Preferences"
+msgstr "პარამეტრები"
+
+#: ../src/gpm-tray-icon.c:100
 #, fuzzy
 msgid "_Suspend"
 msgstr "_შეაყოვნე"
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:101
 #, fuzzy
 msgid "Suspend the computer"
 msgstr "შეჩერება"
 
-#: ../src/gpm-tray-icon.c:109
+#: ../src/gpm-tray-icon.c:102
 msgid "Hi_bernate"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:103
 #, fuzzy
 msgid "Make the computer go to sleep"
 msgstr "-სკენ"
 
-#: ../src/gpm-tray-icon.c:111
+#: ../src/gpm-tray-icon.c:104
 #, fuzzy
 msgid "_Preferences"
 msgstr "_პარამეტრები"
 
-#: ../src/gpm-tray-icon.c:113
+#: ../src/gpm-tray-icon.c:106
+#, fuzzy
+msgid "_Information"
+msgstr "გამართვა"
+
+#: ../src/gpm-tray-icon.c:108
 #, fuzzy
 msgid "_Help"
 msgstr "_დახმარება"
 
-#: ../src/gpm-tray-icon.c:115
+#: ../src/gpm-tray-icon.c:110
 #, fuzzy
 msgid "_About"
 msgstr "_შესახებ"
 
-#: ../src/gpm-tray-icon.c:249
+#: ../src/gpm-tray-icon.c:314
 #, fuzzy
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "საერთო საზოგადო ლიცენზია ვერსია 2"
 
-#: ../src/gpm-tray-icon.c:250
+#: ../src/gpm-tray-icon.c:315
 #, fuzzy
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
-msgstr "მმართველი და ან - საერთო საზოგადო ლიცენზია თავისუფალი პროგრამა ვერსია ლიცენზია ან ეთ ნებისმიერი ვერსია."
+msgstr ""
+"მმართველი და ან - საერთო საზოგადო ლიცენზია თავისუფალი პროგრამა ვერსია "
+"ლიცენზია ან ეთ ნებისმიერი ვერსია."
 
-#: ../src/gpm-tray-icon.c:254
+#: ../src/gpm-tray-icon.c:319
 #, fuzzy
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -573,52 +1043,121 @@ msgid ""
 "GNU General Public License for more details."
 msgstr "მმართველი - - ან ჩ/გ საერთო საზოგადო ლიცენზია მეტი."
 
-#: ../src/gpm-tray-icon.c:258
+#: ../src/gpm-tray-icon.c:323
 #, fuzzy
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
-msgstr "თქვენ a კოპია - საერთო საზოგადო ლიცენზია პროგრამა -სკენ თავისუფალი პროგრამა ქუჩა."
+msgstr ""
+"თქვენ a კოპია - საერთო საზოგადო ლიცენზია პროგრამა -სკენ თავისუფალი პროგრამა "
+"ქუჩა."
 
-#: ../src/gpm-tray-icon.c:263
+#: ../src/gpm-tray-icon.c:328
 #, fuzzy
 msgid "translator-credits"
 msgstr "თარგმანი-შესრულებულია"
 
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:55
 #, fuzzy
-msgid "Suspend"
-msgstr "შეჩერება"
+#~ msgid "Computer AC idle timeout value"
+#~ msgstr "კომპიუტერი AC უქმი დაყოვნების დრო"
 
-#: ../src/gpm-prefs.c:56
 #, fuzzy
-msgid "Shutdown"
-msgstr "გამორთვა"
+#~ msgid "Computer battery idle timeout value"
+#~ msgstr "კომპიუტერი უქმი დაყოვნების დრო"
 
-#: ../src/gpm-prefs.c:57
-msgid "Hibernate"
-msgstr ""
-
-#: ../src/gpm-prefs.c:58
 #, fuzzy
-msgid "Do nothing"
-msgstr "არაფერი"
+#~ msgid "Default sleep type"
+#~ msgstr "ნაგულისხმევი ტიპი"
 
-#: ../src/gpm-prefs.c:206
 #, fuzzy
-msgid "Never"
-msgstr "არასდროს"
+#~ msgid "Display AC idle timeout value"
+#~ msgstr "დისპლეი AC უქმი დაყოვნების დრო"
 
-#: ../src/gpm-prefs.c:455
 #, fuzzy
-msgid "Configuration"
-msgstr "გამართვა"
+#~ msgid "Display battery idle timeout value"
+#~ msgstr "დისპლეი უქმი დაყოვნების დრო"
 
-#: ../src/gpm-prefs.c:675
 #, fuzzy
-msgid "Power Preferences"
-msgstr "პარამეტრები"
+#~ msgid ""
+#~ "If this particular user should have hibernate on the drop-down menu and "
+#~ "in the prefs"
+#~ msgstr "ჩართულია ქვემოთ მენიუ და -"
 
+#, fuzzy
+#~ msgid ""
+#~ "If this particular user should have suspend on the drop-down menu and in "
+#~ "the prefs"
+#~ msgstr "ჩართულია ქვემოთ მენიუ და -"
+
+#, fuzzy
+#~ msgid "Notify on AC loss"
+#~ msgstr "ჩართულია AC"
+
+#, fuzzy
+#~ msgid "The action to take when the system suspend button is pressed"
+#~ msgstr "მოქმედება -სკენ"
+
+#, fuzzy
+#~ msgid "The display icon policy can be never, critical, charge, always"
+#~ msgstr "ხატულა"
+
+#, fuzzy
+#~ msgid "The hardware brightness the display is set to whilst on AC power"
+#~ msgstr "-სკენ ჩართულია AC"
+
+#, fuzzy
+#~ msgid ""
+#~ "The hardware brightness the display is set to whilst on battery power"
+#~ msgstr "-სკენ ჩართულია"
+
+#, fuzzy
+#~ msgid ""
+#~ "The idle time in seconds before the computer tries to sleep whilst on AC "
+#~ "power"
+#~ msgstr "უქმი - წამები -სკენ ჩართულია AC"
+
+#, fuzzy
+#~ msgid ""
+#~ "The idle time in seconds before the computer tries to sleep whilst on "
+#~ "battery power"
+#~ msgstr "უქმი - წამები -სკენ ჩართულია"
+
+#, fuzzy
+#~ msgid ""
+#~ "The idle time in seconds before the display tries to sleep whilst on "
+#~ "battery power"
+#~ msgstr "უქმი - წამები -სკენ ჩართულია"
+
+#, fuzzy
+#~ msgid "The type of sleep (hibernate/suspend) to use automatically."
+#~ msgstr "ტიპი - -სკენ."
+
+#, fuzzy
+#~ msgid "Advanced"
+#~ msgstr "გაფართოვებული"
+
+#, fuzzy
+#~ msgid "Options"
+#~ msgstr "ოფციები"
+
+#, fuzzy
+#~ msgid "Put _computer to sleep after:"
+#~ msgstr "-სკენ:"
+
+#, fuzzy
+#~ msgid "Put dis_play to sleep after:"
+#~ msgstr "-სკენ:"
+
+#, fuzzy
+#~ msgid "Set display b_rightness:"
+#~ msgstr "მითითება:"
+
+#, fuzzy
+#~ msgid "_Computer sleep type:"
+#~ msgstr "კომპიუტერი ტიპი:"
+
+#, fuzzy
+#~ msgid "AC Power Unplugged"
+#~ msgstr "AC"

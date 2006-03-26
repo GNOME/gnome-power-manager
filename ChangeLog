@@ -1,5 +1,14 @@
 2006-03-26  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in: Add el and ka that got missed from this file.
+
+	* po/POTFILES.in: Add missing files.
+
+	* po/*.po: Do a intltool-update --pot && make update-po to
+	freshen up the translations.
+
+2006-03-26  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock),
 	src/gpm-prefs.c (gpm_prefs_setup_action_combo),
 	src/gpm-manager.c (gpm_manager_init),

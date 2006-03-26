@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager 0.2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-26 13:26+0200\n"
+"POT-Creation-Date: 2006-03-27 00:16+0100\n"
 "PO-Revision-Date: 2006-03-26 13:27+0100\n"
 "Last-Translator: Wouter Bolsterlee <uws+gnome@xs4all.nl>\n"
 "Language-Team: Dutch\n"
@@ -394,8 +394,7 @@ msgid ""
 "Whether or not a notification message is displayed when the battery is fully "
 "charged"
 msgstr ""
-"Of de gebruiker geattendeerd wordt wanneer de accu volledig is "
-"opgeladen"
+"Of de gebruiker geattendeerd wordt wanneer de accu volledig is opgeladen"
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
@@ -716,15 +715,15 @@ msgstr[1] "minuten"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Energiebeheer voor de GNOME-desktop"
 
-#: ../src/gpm-main.c:150
+#: ../src/gpm-main.c:127
 msgid "Do not daemonize"
 msgstr "Niet als daemon uitvoeren"
 
-#: ../src/gpm-main.c:152 ../src/gpm-prefs.c:716
+#: ../src/gpm-main.c:129 ../src/gpm-prefs.c:717
 msgid "Show extra debugging information"
 msgstr "Extra debuginformatie tonen"
 
-#: ../src/gpm-main.c:156
+#: ../src/gpm-main.c:133
 msgid "GNOME Power Manager"
 msgstr "GNOME Energiebeheer"
 
@@ -1019,6 +1018,40 @@ msgstr "De computer gebruikt nu netstroom\n"
 msgid "Computer is running on battery power\n"
 msgstr "De computer gebruikt nu accustroom\n"
 
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs.c:54
+msgid "Suspend"
+msgstr "Pauzestand"
+
+#: ../src/gpm-prefs.c:55
+msgid "Shutdown"
+msgstr "Afsluiten"
+
+# diepslaap/slaapstand
+#: ../src/gpm-prefs.c:56
+msgid "Hibernate"
+msgstr "Slaapstand"
+
+#: ../src/gpm-prefs.c:57
+msgid "Blank screen"
+msgstr "Scherm op zwart zetten"
+
+#: ../src/gpm-prefs.c:58
+msgid "Do nothing"
+msgstr "Niets doen"
+
+#: ../src/gpm-prefs.c:205
+msgid "Never"
+msgstr "Nooit"
+
+#: ../src/gpm-prefs.c:721
+msgid "GNOME Power Preferences"
+msgstr "GNOME Energiebeheer-voorkeuren"
+
+#: ../src/gpm-prefs.c:734
+msgid "Power Preferences"
+msgstr "Energiebeheer-voorkeuren"
+
 #: ../src/gpm-tray-icon.c:100
 msgid "_Suspend"
 msgstr "_Pauzestand"
@@ -1052,11 +1085,11 @@ msgstr "_Hulp"
 msgid "_About"
 msgstr "I_nfo"
 
-#: ../src/gpm-tray-icon.c:259
+#: ../src/gpm-tray-icon.c:314
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Uitgebracht onder de GNU General Public License Versie 2"
 
-#: ../src/gpm-tray-icon.c:260
+#: ../src/gpm-tray-icon.c:315
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1068,7 +1101,7 @@ msgstr ""
 "gepubliceerd door de Free Software Foundation; ofwel versie 2 van de\n"
 "licentie, of (naar uw believen) een latere versie."
 
-#: ../src/gpm-tray-icon.c:264
+#: ../src/gpm-tray-icon.c:319
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1080,7 +1113,7 @@ msgstr ""
 "VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General\n"
 "Public License voor meer informatie."
 
-#: ../src/gpm-tray-icon.c:268
+#: ../src/gpm-tray-icon.c:323
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1092,7 +1125,7 @@ msgstr ""
 "schrijven naar de Free Software Foundation, Inc., 51 Franklin\n"
 "Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/gpm-tray-icon.c:273
+#: ../src/gpm-tray-icon.c:328
 msgid "translator-credits"
 msgstr ""
 "Tino Meinen\n"
@@ -1101,38 +1134,3 @@ msgstr ""
 "Wouter Bolsterlee\n"
 "\n"
 "Zie voor meer informatie: http://nl.gnome.org"
-
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs.c:54
-msgid "Suspend"
-msgstr "Pauzestand"
-
-#: ../src/gpm-prefs.c:55
-msgid "Shutdown"
-msgstr "Afsluiten"
-
-# diepslaap/slaapstand
-#: ../src/gpm-prefs.c:56
-msgid "Hibernate"
-msgstr "Slaapstand"
-
-#: ../src/gpm-prefs.c:57
-msgid "Blank screen"
-msgstr "Scherm op zwart zetten"
-
-#: ../src/gpm-prefs.c:58
-msgid "Do nothing"
-msgstr "Niets doen"
-
-#: ../src/gpm-prefs.c:205
-msgid "Never"
-msgstr "Nooit"
-
-#: ../src/gpm-prefs.c:720
-msgid "GNOME Power Preferences"
-msgstr "GNOME Energiebeheer-voorkeuren"
-
-#: ../src/gpm-prefs.c:733
-msgid "Power Preferences"
-msgstr "Energiebeheer-voorkeuren"
-
