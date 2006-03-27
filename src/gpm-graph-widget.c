@@ -198,7 +198,7 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 	} else if (axis == GPM_GRAPH_TYPE_PERCENTAGE) {
 		text = g_strdup_printf ("%i%%", value);
 	} else if (axis == GPM_GRAPH_TYPE_RATE) {
-		text = g_strdup_printf ("%iWh", value / 1000);
+		text = g_strdup_printf ("%iW", value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
 	}
