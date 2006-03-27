@@ -1238,7 +1238,13 @@ gpm_manager_get_warning_type (GpmPowerBatteryStatus *battery_status,
 			type = GPM_WARNING_LOW;
 		}
 	} else {
-		if (battery_status->percentage_charge <= BATTERY_ACTION_PERCENTAGE) {
+		if (battery_status->percentage_charge <= 0) {
+			type = GPM_WARNING_NONE;
+			gpm_warning ("Your hardware is reporting a percentage "
+				     "charge of %i, which is impossible. "
+				     "WARNING_ACTION will *not* be reported.",
+				     battery_status->percentage_charge);
+		} else if (battery_status->percentage_charge <= BATTERY_ACTION_PERCENTAGE) {
 			type = GPM_WARNING_ACTION;
 		} else if (battery_status->percentage_charge <= BATTERY_CRITICAL_PERCENTAGE) {
 			type = GPM_WARNING_CRITICAL;

@@ -1,3 +1,9 @@
+2006-03-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (gpm_manager_get_warning_type): Don't return
+	GPM_WARNING_ACTION when the battery value is 0% as this *may* happen
+	with broken acpi laptops. Instead warn on the console.
+
 2006-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-monitor.{c|h}: Remove the DBUS n-o-c functionality.
