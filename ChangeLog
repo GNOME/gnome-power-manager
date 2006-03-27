@@ -1,5 +1,12 @@
 2006-03-27  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gpm_manager_suspend, gpm_manager_hibernate):
+	Add a call to sync_dpms_policy () so we can recover the DPMS settings
+	after a suspend or hibernate.
+	Should fix #336081
+
+2006-03-27  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/Makefile.am: Add gtk-update-icon-cache when we install.
 	Should fix #336067
 

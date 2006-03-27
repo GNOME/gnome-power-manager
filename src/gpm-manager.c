@@ -1055,6 +1055,8 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 	gpm_networkmanager_wake ();
 
+	sync_dpms_policy (manager);
+
 	/* save the time that we resumed */
 	manager->priv->last_resume_event = time (NULL);
 
@@ -1125,6 +1127,8 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_screensaver_poke ();
 	}
 	gpm_networkmanager_wake ();
+
+	sync_dpms_policy (manager);
 
 	/* save the time that we resumed */
 	manager->priv->last_resume_event = time (NULL);
