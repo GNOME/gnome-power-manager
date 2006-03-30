@@ -17,7 +17,7 @@ manpage.1: manpage.sgml
   -->
 
   <!-- Please adjust the date whenever revising the manpage. -->
-  <!ENTITY date        "<date>11 July, 2005</date>">
+  <!ENTITY date        "<date>29 March,2006</date>">
   <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
        allowed: see man(7), man(1). -->
   <!ENTITY package     "gnome-power-manager">
@@ -62,7 +62,8 @@ manpage.1: manpage.sgml
     <para>This manual page documents briefly the
       <command>&package;</command> command.</para>
 
-    <para><command>&package;</command> is the backend program of the GNOME power management infrastructure</para>
+    <para><command>&package;</command> is the backend program of the GNOME power management infrastructure providing a complete and integrated solution to power management under the GNOME desktop environment.</para>
+	<para>It supports features such as suspend-to-disk, suspend-to-ram, screen blanking, cpu frequency switching and more in one small neat package.</para>
 
   </refsect1>
   <refsect1>
@@ -89,7 +90,16 @@ manpage.1: manpage.sgml
           <para>Show extra debugging.</para>
         </listitem>
       </varlistentry>
-    </variablelist>
+  	  <varlistentry>
+        <term>
+          <option>--no-daemon</option>
+        </term>
+        <listitem>
+          <para>Do not detach <command>&package;</command> into the background so that error messages will be displayed on console.</para>
+        </listitem>
+      </varlistentry>
+ 
+	</variablelist>
   </refsect1>
   <refsect1>
     <title>SEE ALSO</title>
@@ -103,7 +113,7 @@ manpage.1: manpage.sgml
     <title>AUTHOR</title>
 
     <para>This manual page was written by Oliver Grawert <email>ogra@ubuntu.com</email> for
-      the <productname>Debian</productname> system.
+      the <productname>Debian</productname> system and updated by Ow Mun Heng <email>nikeow@yahoo.com</email>
     </para>
 
   </refsect1>
