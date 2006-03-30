@@ -75,8 +75,8 @@ typedef struct
 {
 	GObjectClass parent_class;
 	void		(* button_pressed)	(GpmPower		*power,
-						  const char		*type,
-						  gboolean		 state);
+						 const char		*type,
+						 gboolean		 state);
 	void		(* ac_state_changed)	(GpmPower		*power,
 						 gboolean		 on_ac);
 	void		(* battery_status_changed) (GpmPower	 	*power,

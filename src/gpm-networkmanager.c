@@ -34,10 +34,13 @@
 #define NM_LISTENER_PATH	"/org/freedesktop/NetworkManager"
 #define NM_LISTENER_INTERFACE	"org.freedesktop.NetworkManager"
 
-/** Tell NetworkManager to put the network devices to sleep
+/**
+ * gpm_networkmanager_sleep:
  *
- *  @return			TRUE if NetworkManager is now sleeping.
- */
+ * Tell NetworkManager to put the network devices to sleep
+ *
+ * Return value: TRUE if NetworkManager is now sleeping.
+ **/
 gboolean
 gpm_networkmanager_sleep (void)
 {
@@ -65,10 +68,13 @@ gpm_networkmanager_sleep (void)
 	return TRUE;
 }
 
-/** Tell NetworkManager to wake up all the network devices
+/**
+ * gpm_networkmanager_wake:
  *
- *  @return			TRUE if NetworkManager is now awake.
- */
+ * Tell NetworkManager to wake up all the network devices
+ *
+ * Return value: TRUE if NetworkManager is now awake.
+ **/
 gboolean
 gpm_networkmanager_wake (void)
 {

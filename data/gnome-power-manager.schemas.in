@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/rate_exponential_average_factor</key>
+      <applyto>/apps/gnome-power-manager/rate_exponential_average_factor</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>80</default>
+      <locale name="C">
+        <short>The damping factor used when calculating the rate</short>
+        <long>The value of the damping factor used when calculating the exponentially weighted average of the rate. Increasing this value will increase the damping effect of the rate calculations, which makes the time remaining more accurate, but the graphs less responsive.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/show_actions_in_menu</key>
       <applyto>/apps/gnome-power-manager/show_actions_in_menu</applyto>
       <owner>gnome-power-manager</owner>
@@ -379,7 +391,7 @@
       <default>1</default>
       <locale name="C">
         <short>Percentage action is taken</short>
-        <long>The percentage of the battery when the critical action if performed. Only valid when use_time_for_policy false.</long>
+        <long>The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy false.</long>
       </locale>
     </schema>
 

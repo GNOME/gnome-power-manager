@@ -46,15 +46,16 @@
 
 #define DIM_INTERVAL		10 /* ms */
 
-static void     gpm_brightness_class_init (GpmBrightnessClass *klass);
-static void     gpm_brightness_init       (GpmBrightness      *brightness);
-static void     gpm_brightness_finalize   (GObject	      *object);
+static void	gpm_brightness_class_init (GpmBrightnessClass *klass);
+static void	gpm_brightness_init	  (GpmBrightness      *brightness);
+static void	gpm_brightness_finalize	  (GObject	      *object);
+static gboolean	gpm_brightness_level_update_hw (GpmBrightness *brightness);
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
 
 struct GpmBrightnessPrivate
 {
-	gboolean	    has_hardware;
+	gboolean    has_hardware;
 	int	    current_hw;
 	int	    saved_value_hw;
 	int	    levels;
@@ -64,38 +65,12 @@ struct GpmBrightnessPrivate
 
 G_DEFINE_TYPE (GpmBrightness, gpm_brightness, G_TYPE_OBJECT)
 
-static gboolean
-gpm_brightness_level_update_hw (GpmBrightness *brightness);
-
-static void
-gpm_brightness_set_property (GObject		  *object,
-			     guint		   prop_id,
-			     const GValue	  *value,
-			     GParamSpec		  *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-static void
-gpm_brightness_get_property (GObject		  *object,
-			     guint		   prop_id,
-			     GValue		  *value,
-			     GParamSpec		  *pspec)
-{
-	switch (prop_id) {
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
+/**
+ * gpm_brightness_constructor:
+ **/
 static GObject *
-gpm_brightness_constructor (GType                  type,
-			    guint                  n_construct_properties,
+gpm_brightness_constructor (GType		  type,
+			    guint		  n_construct_properties,
 			    GObjectConstructParam *construct_properties)
 {
 	GpmBrightness      *brightness;
@@ -106,22 +81,31 @@ gpm_brightness_constructor (GType                  type,
 	return G_OBJECT (brightness);
 }
 
+/**
+ * gpm_brightness_class_init:
+ **/
 static void
 gpm_brightness_class_init (GpmBrightnessClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_brightness_finalize;
-	object_class->get_property = gpm_brightness_get_property;
-	object_class->set_property = gpm_brightness_set_property;
 	object_class->constructor  = gpm_brightness_constructor;
 	g_type_class_add_private (klass, sizeof (GpmBrightnessPrivate));
 }
 
+/**
+ * gpm_brightness_init:
+ * @brightness: This brightness class instance
+ * 
+ * initialises the brightness class. NOTE: We expect laptop_panel objects
+ * to *NOT* be removed or added during the session.
+ * We only control the first laptop_panel object if there are more than one.
+ **/
 static void
 gpm_brightness_init (GpmBrightness *brightness)
 {
 	DBusGConnection *system_connection = NULL;
-	gchar          **names;
+	gchar	  **names;
 
 	brightness->priv = GPM_BRIGHTNESS_GET_PRIVATE (brightness);
 
@@ -134,6 +118,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 	}
 
 	brightness->priv->has_hardware = TRUE;
+
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
 	gpm_hal_free_capability (names);
@@ -159,6 +144,9 @@ gpm_brightness_init (GpmBrightness *brightness)
 		   brightness->priv->levels - 1);
 }
 
+/**
+ * gpm_brightness_finalize:
+ **/
 static void
 gpm_brightness_finalize (GObject *object)
 {
@@ -174,6 +162,10 @@ gpm_brightness_finalize (GObject *object)
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);
 }
 
+/**
+ * gpm_brightness_new:
+ * Return value: A new brightness class instance.
+ **/
 GpmBrightness *
 gpm_brightness_new (void)
 {
@@ -182,7 +174,14 @@ gpm_brightness_new (void)
 	return GPM_BRIGHTNESS (brightness);
 }
 
-/* updates the value of brightness_level_hw as it may have changed on some h/w */
+/**
+ * gpm_brightness_level_update_hw:
+ * @brightness: This brightness class instance
+ * 
+ * Updates the private local value of brightness_level_hw as it may have
+ * changed on some h/w
+ * Return value: Success.
+ **/
 static gboolean
 gpm_brightness_level_update_hw (GpmBrightness *brightness)
 {
@@ -205,7 +204,15 @@ gpm_brightness_level_update_hw (GpmBrightness *brightness)
 	return retval;
 }
 
-
+/**
+ * gpm_brightness_level_set_hw:
+ * @brightness: This brightness class instance
+ * @brightness_level_hw: The hardware level in raw units
+ * 
+ * Sets the hardware value to a new number.
+ * 
+ * Return value: Success.
+ **/
 static gboolean
 gpm_brightness_level_set_hw (GpmBrightness *brightness,
 			     int	    brightness_level_hw)
@@ -241,6 +248,12 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 	return retval;
 }
 
+/**
+ * gpm_brightness_level_up:
+ * @brightness: This brightness class instance
+ * 
+ * If possible, put the brightness of the LCD up one unit.
+ **/
 void
 gpm_brightness_level_up (GpmBrightness *brightness)
 {
@@ -251,6 +264,12 @@ gpm_brightness_level_up (GpmBrightness *brightness)
 	gpm_brightness_level_set_hw (brightness, current_hw + 1);
 }
 
+/**
+ * gpm_brightness_level_down:
+ * @brightness: This brightness class instance
+ * 
+ * If possible, put the brightness of the LCD down one unit.
+ **/
 void
 gpm_brightness_level_down (GpmBrightness *brightness)
 {
@@ -261,6 +280,16 @@ gpm_brightness_level_down (GpmBrightness *brightness)
 	gpm_brightness_level_set_hw (brightness, current_hw - 1);
 }
 
+/**
+ * gpm_brightness_percent_to_hw:
+ * @percentage: The percentage to convert
+ * @levels: The number of hardware levels for our hardware
+ * 
+ * We have to be carefull when converting from %->hw as precision is very
+ * important if we want the highest value.
+ * 
+ * Return value: The hardware value for this percentage.
+ **/
 static int
 gpm_brightness_percent_to_hw (int percentage,
 			      int levels)
@@ -274,10 +303,14 @@ gpm_brightness_percent_to_hw (int percentage,
 	return ( (float) percentage * (float) (levels - 1)) / 100.0f;
 }
 
-/* brightness_level is a percentage */
+/**
+ * gpm_brightness_level_set:
+ * @brightness: This brightness class instance
+ * @brightness_level: The percentage brightness
+ **/
 void
 gpm_brightness_level_set (GpmBrightness *brightness,
-			  int            brightness_level)
+			  int		 brightness_level)
 {
 	int brightness_level_hw;
 	int levels;
@@ -293,10 +326,14 @@ gpm_brightness_level_set (GpmBrightness *brightness,
 	}
 }
 
-/* new_level_hw is raw value */
+/**
+ * gpm_brightness_level_dim_hw:
+ * @brightness: This brightness class instance
+ * @new_level_hw: The new hardware level
+ **/
 static void
 gpm_brightness_level_dim_hw (GpmBrightness *brightness,
-			     int            new_level_hw)
+			     int	    new_level_hw)
 {
 	int   current_hw;
 	int   a;
@@ -322,10 +359,16 @@ gpm_brightness_level_dim_hw (GpmBrightness *brightness,
 	}
 }
 
-/* brightness_level is a percentage */
+/**
+ * gpm_brightness_level_dim:
+ * @brightness: This brightness class instance
+ * @brightness_level: The new percentage brightness
+ * 
+ * Dims the screen slowly to the new value, if we are not an IBM.
+ **/
 void
 gpm_brightness_level_dim (GpmBrightness *brightness,
-			  int            brightness_level)
+			  int		 brightness_level)
 {
 	char *manufacturer_string = NULL;
 	int   new_level_hw;
@@ -352,13 +395,20 @@ gpm_brightness_level_dim (GpmBrightness *brightness,
 	gpm_brightness_level_dim_hw (brightness, new_level_hw);
 }
 
-/* same as gpm_brightness_level_dim, but saves value for resume */
+/**
+ * gpm_brightness_level_save:
+ * @brightness: This brightness class instance
+ * @brightness_level: The new brightness level
+ * 
+ * Saves the current brightness, and then sets the new brightness to the value
+ * specified in brightness_level using the dimming function.
+ **/
 void
 gpm_brightness_level_save (GpmBrightness *brightness,
-			   int            brightness_level)
+			   int		  brightness_level)
 {
 	int   new_level_hw;
-	
+
 	gpm_debug ("Saving and setting brightness to %i%%", brightness_level);
 	brightness->priv->saved_value_hw = brightness->priv->current_hw;
 
@@ -367,6 +417,12 @@ gpm_brightness_level_save (GpmBrightness *brightness,
 	gpm_brightness_level_dim_hw (brightness, new_level_hw);
 }
 
+/**
+ * gpm_brightness_level_resume:
+ * @brightness: This brightness class instance
+ * 
+ * Restores the brightness to that saved by gpm_brightness_level_save()
+ **/
 void
 gpm_brightness_level_resume (GpmBrightness *brightness)
 {

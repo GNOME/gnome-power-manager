@@ -79,6 +79,7 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_PANEL_DIM_BRIGHTNESS	GPM_PREF_DIR "/laptop_panel_dim_brightness"
 #define GPM_PREF_SHOW_ACTIONS_IN_MENU	GPM_PREF_DIR "/show_actions_in_menu"
+#define GPM_PREF_RATE_EXP_AVE_FACTOR	GPM_PREF_DIR "/rate_exponential_average_factor"
 
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,

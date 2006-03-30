@@ -29,6 +29,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gconf/gconf-client.h>
 
 #include "gpm-common.h"
 #include "gpm-hal.h"
@@ -37,6 +38,7 @@
 #include "gpm-power.h"
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
+#include "gpm-prefs.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
@@ -46,12 +48,12 @@ static void     gpm_power_finalize   (GObject       *object);
 
 struct GpmPowerPrivate
 {
-	gboolean       on_ac;
+	gboolean	 on_ac;
+	int		 exp_ave_factor;
+	GHashTable	*battery_kind_cache;
+	GHashTable	*battery_device_cache;
 
-	GHashTable    *battery_kind_cache;
-	GHashTable    *battery_device_cache;
-
-	GpmHalMonitor *hal_monitor;
+	GpmHalMonitor	*hal_monitor;
 };
 
 enum {
@@ -93,21 +95,21 @@ typedef struct {
 
 typedef struct {
 	char		       *udi;
-	int			charge_rate_previous;
-	GpmPowerBatteryKind	battery_kind;
-	GpmPowerBatteryStatus	battery_status;
 	char		       *product;
 	char		       *vendor;
 	char		       *technology;
-	GpmPowerBatteryUnit	unit;
 	char		       *serial;
 	char		       *model;
+	int			charge_rate_previous;
+	GpmPowerBatteryKind	battery_kind;
+	GpmPowerBatteryStatus	battery_status;
+	GpmPowerBatteryUnit	unit;
 } BatteryDeviceCacheEntry;
 
-/* Increasing this value will increase the damping effect
- * of the rate calculations, 0.8 seems a good default. */
-#define		RATE_EXP_AVERAGE_FACTOR			(0.80f)
-
+/**
+ * gpm_power_battery_status_set_defaults:
+ * @status: A battery info structure
+ **/
 static void
 gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 {
@@ -125,14 +127,19 @@ gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 	status->is_discharging = FALSE;
 }
 
-/* we have to be clever here, as there are lots of broken batteries */
+/**
+ * gpm_power_battery_is_charged:
+ * @status: A battery info structure
+ *
+ * We have to be clever here, as there are lots of broken batteries.
+ * Some batteries have a reduced charge capacity and cannot charge to
+ * 100% anymore (although they *should* update thier own last_full
+ * values, it appears most do not...)
+ * Return value: If the battery is considered "charged".
+ **/
 gboolean
 gpm_power_battery_is_charged (GpmPowerBatteryStatus *status)
 {
-	/* We have to do the additional check for 90% as
-	   some batteries have a reduced charge capacity and cannot
-	   charge to 100% anymore (although they *should* update
-	   thier own last_full tags, it appears most do not...) */
 	if (! status->is_charging &&
 	    ! status->is_discharging &&
 	    status->percentage_charge > 90) {
@@ -141,6 +148,12 @@ gpm_power_battery_is_charged (GpmPowerBatteryStatus *status)
 	return FALSE;
 }
 
+/**
+ * battery_device_cache_entry_update_all:
+ * @entry: A device cache instance
+ *
+ * Updates all the information fields in a cache entry
+ **/
 static void
 battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 {
@@ -272,9 +285,18 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	}
 }
 
+/**
+ * battery_device_cache_entry_update_key:
+ * @power: This power class instance
+ * @entry: A device cache instance
+ * @key: the HAL key name, e.g. battery.rechargeable.is_charging
+ *
+ * Updates the device object with the new information given to us from HAL.
+ **/
 static void
-battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
-				       const char	      *key)
+battery_device_cache_entry_update_key (GpmPower		       *power,
+				       BatteryDeviceCacheEntry *entry,
+				       const char	       *key)
 {
 	GpmPowerBatteryStatus *status = &entry->battery_status;
 	char *udi = entry->udi;
@@ -286,22 +308,22 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_present);
-
 		battery_device_cache_entry_update_all (entry);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_charging);
-
 		 /* invalidate the remaining time, as we need to wait for
 		    the next HAL update. This is a HAL bug I think. */
 		status->remaining_time = 0;
 		status->charge_rate = 0;
+
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_discharging);
 
 		/* invalidate the remaining time */
 		status->remaining_time = 0;
 		status->charge_rate = 0;
+
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
 		gpm_hal_device_get_int (udi, key, &status->design_charge);
 
@@ -318,12 +340,15 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 		   that high frequency changes are smoothed. This should mean
 		   the remaining_time does not change drastically between updates.
 		   Fixes bug #328927 */
-		if (entry->charge_rate_previous == 0) {
+		if (entry->charge_rate_previous == 0 ||
+		    power->priv->exp_ave_factor == 0) {
 			/* startup, or re-initialization - we have no data */
 			status->charge_rate = charge_rate_new;
 		} else {
-			status->charge_rate = ((1.0f - RATE_EXP_AVERAGE_FACTOR) * charge_rate_new) +
-					       (RATE_EXP_AVERAGE_FACTOR * entry->charge_rate_previous);
+			float factor = (float) power->priv->exp_ave_factor / 100.0f;
+			float factor_inv = 1.0f - factor;
+			status->charge_rate = (factor_inv * charge_rate_new) +
+					      (factor * entry->charge_rate_previous);
 		}
 		entry->charge_rate_previous = charge_rate_new;
 
@@ -346,6 +371,13 @@ battery_device_cache_entry_update_key (BatteryDeviceCacheEntry *entry,
 	}
 }
 
+/**
+ * battery_device_cache_entry_new_from_udi:
+ * @udi: The HAL UDI for this device
+ *
+ * Creates a new device object and populates the values.
+ * Return value: The new device cache entry.
+ **/
 static BatteryDeviceCacheEntry *
 battery_device_cache_entry_new_from_udi (const char *udi)
 {
@@ -367,18 +399,24 @@ battery_device_cache_entry_new_from_udi (const char *udi)
 	return entry;
 }
 
+/**
+ * battery_kind_cache_entry_new_from_battery_kind:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ **/
 static BatteryKindCacheEntry *
 battery_kind_cache_entry_new_from_battery_kind (GpmPowerBatteryKind battery_kind)
 {
 	BatteryKindCacheEntry *entry;
-
 	entry = g_new0 (BatteryKindCacheEntry, 1);
-
 	entry->battery_kind = battery_kind;
-
 	return entry;
 }
 
+/**
+ * battery_kind_cache_entry_free:
+ * @entry: A device cache instance
+ **/
 static void
 battery_kind_cache_entry_free (BatteryKindCacheEntry *entry)
 {
@@ -388,6 +426,11 @@ battery_kind_cache_entry_free (BatteryKindCacheEntry *entry)
 	entry = NULL;
 }
 
+/**
+ * battery_kind_to_string:
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ * Return value: The localised battery kind. Do not free this string.
+ **/
 const char *
 battery_kind_to_string (GpmPowerBatteryKind battery_kind)
 {
@@ -409,6 +452,10 @@ battery_kind_to_string (GpmPowerBatteryKind battery_kind)
 	return str;
 }
 
+/**
+ * battery_kind_cache_debug_print:
+ * @entry: A device cache instance
+ **/
 static void
 battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 
@@ -421,14 +468,17 @@ battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 		   status->is_present, status->last_full_charge);
 	gpm_debug ("percent    %i\tcurrent    %i",
 		   status->percentage_charge, status->current_charge);
-	gpm_debug ("charge     %i\trate       %i", 
+	gpm_debug ("charge     %i\trate       %i",
 		   status->is_charging, status->charge_rate);
-	gpm_debug ("discharge  %i\tremaining  %i", 
+	gpm_debug ("discharge  %i\tremaining  %i",
 		   status->is_discharging, status->remaining_time);
-	gpm_debug ("capacity   %i", 
+	gpm_debug ("capacity   %i",
 		   status->capacity);
 }
 
+/**
+ * debug_print_type_cache_iter:
+ **/
 static void
 debug_print_type_cache_iter (gpointer	       key,
 			     BatteryKindCacheEntry *entry,
@@ -437,6 +487,10 @@ debug_print_type_cache_iter (gpointer	       key,
 	battery_kind_cache_debug_print (entry);
 }
 
+/**
+ * battery_kind_cache_debug_print_all:
+ * @power: This power class instance
+ **/
 static void
 battery_kind_cache_debug_print_all (GpmPower *power)
 {
@@ -447,6 +501,15 @@ battery_kind_cache_debug_print_all (GpmPower *power)
 	}
 }
 
+/**
+ * battery_device_cache_find:
+ * @power: This power class instance
+ * @udi: The HAL UDI for this device
+ *
+ * Finds the UDI in the device cache.
+ *
+ * Return value: The entry if found, or NULL if missing.
+ **/
 static BatteryDeviceCacheEntry *
 battery_device_cache_find (GpmPower   *power,
 			   const char *udi)
@@ -467,6 +530,15 @@ battery_device_cache_find (GpmPower   *power,
 	return entry;
 }
 
+/**
+ * battery_kind_cache_find:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ *
+ * Finds the battery kind in the kind cache.
+ *
+ * Return value: The entry if found, or NULL if missing.
+ **/
 static BatteryKindCacheEntry *
 battery_kind_cache_find (GpmPower		*power,
 			 GpmPowerBatteryKind	 battery_kind)
@@ -482,7 +554,13 @@ battery_kind_cache_find (GpmPower		*power,
 	return entry;
 }
 
-/** returns the number of devices of a specific kind */
+/**
+ * gpm_power_get_num_devices_of_kind:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ *
+ * Return value: the number of devices of a specific kind.
+ **/
 gint
 gpm_power_get_num_devices_of_kind (GpmPower		*power,
 				   GpmPowerBatteryKind	 battery_kind)
@@ -498,7 +576,12 @@ gpm_power_get_num_devices_of_kind (GpmPower		*power,
 	return (g_slist_length (entry->devices));
 }
 
-/** frees the custom array type */
+/**
+ * gpm_power_free_description_array:
+ * @array: This description array
+ *
+ * Frees the custom array type.
+ **/
 void
 gpm_power_free_description_array (GArray *array)
 {
@@ -512,6 +595,11 @@ gpm_power_free_description_array (GArray *array)
 	g_array_free (array, TRUE);
 }
 
+/**
+ * get_power_unit_suffix:
+ * @unit: The unit type, e.g. GPM_POWER_UNIT_MWH
+ * Return value: The localised device type. Do not free this.
+ **/
 static const char *
 get_power_unit_suffix (GpmPowerBatteryUnit unit)
 {
@@ -528,7 +616,16 @@ get_power_unit_suffix (GpmPowerBatteryUnit unit)
 	return suffix;
 }
 
-/** returns in a custom array the device parameters */
+/**
+ * gpm_power_get_description_array:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ * @device_num: The device number (e.g. 1 for the second primary battery)
+ *
+ * Returns in a custom array the device parameters
+ * You need to free the resulting array with gpm_power_free_description_array().
+ * Return value: A description array.
+ **/
 GArray *
 gpm_power_get_description_array (GpmPower		*power,
 				 GpmPowerBatteryKind	 battery_kind,
@@ -670,6 +767,17 @@ gpm_power_get_description_array (GpmPower		*power,
 	return array;
 }
 
+/**
+ * battery_kind_cache_update:
+ * @power: This power class instance
+ * @entry: A kind cache instance
+ *
+ * Updates the kind cache from the constituent device cache objects. This is
+ * needed on multibattery laptops where the time needs to be computed over
+ * two or more battereies. Some laptop batteries discharge one after the other,
+ * some discharge simultanously.
+ * This also does sanity checking on the values to make sure they are sane.
+ **/
 static void
 battery_kind_cache_update (GpmPower	         *power,
 			   BatteryKindCacheEntry *entry)
@@ -771,6 +879,9 @@ battery_kind_cache_update (GpmPower	         *power,
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, entry->battery_kind);
 }
 
+/**
+ * battery_kind_update_cache_iter:
+ **/
 static void
 battery_kind_update_cache_iter (const char	      *key,
 				BatteryKindCacheEntry *entry,
@@ -779,6 +890,12 @@ battery_kind_update_cache_iter (const char	      *key,
 	battery_kind_cache_update (power, entry);
 }
 
+/**
+ * battery_kind_cache_update_all:
+ * @power: This power class instance
+ *
+ * Updates every device of every type
+ **/
 static void
 battery_kind_cache_update_all (GpmPower *power)
 {
@@ -791,6 +908,11 @@ battery_kind_cache_update_all (GpmPower *power)
 	}
 }
 
+/**
+ * battery_device_cache_add_device:
+ * @power: This power class instance
+ * @entry: A device cache instance
+ **/
 static void
 battery_device_cache_add_device (GpmPower		 *power,
 				 BatteryDeviceCacheEntry *entry)
@@ -800,6 +922,11 @@ battery_device_cache_add_device (GpmPower		 *power,
 			     entry);
 }
 
+/**
+ * battery_device_cache_remove_device:
+ * @power: This power class instance
+ * @entry: A device cache instance
+ **/
 static void
 battery_device_cache_remove_device (GpmPower		    *power,
 				    BatteryDeviceCacheEntry *entry)
@@ -814,6 +941,13 @@ battery_device_cache_remove_device (GpmPower		    *power,
 	g_free (entry->model);
 }
 
+/**
+ * battery_kind_cache_add_device:
+ * @power: This power class instance
+ * @device_entry: A device cache instance
+ *
+ * Adds a device entry to the correct cache entry.
+ **/
 static void
 battery_kind_cache_add_device (GpmPower			*power,
 			       BatteryDeviceCacheEntry	*device_entry)
@@ -839,6 +973,13 @@ battery_kind_cache_add_device (GpmPower			*power,
 	battery_kind_cache_update (power, type_entry);
 }
 
+/**
+ * battery_kind_cache_remove_device:
+ * @power: This power class instance
+ * @entry: A device cache instance
+ *
+ * Removes a device entry from a cache entry.
+ **/
 static void
 battery_kind_cache_remove_device (GpmPower		  *power,
 				  BatteryDeviceCacheEntry *entry)
@@ -862,6 +1003,15 @@ battery_kind_cache_remove_device (GpmPower		  *power,
 	}
 }
 
+/**
+ * power_get_summary_for_battery_kind:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ * @summary: The returned string summary
+ *
+ * Gets a summary for a specific battery kind. This is used on the tooltip
+ * mainly.
+ **/
 static void
 power_get_summary_for_battery_kind (GpmPower		*power,
 			    	    GpmPowerBatteryKind  battery_kind,
@@ -931,13 +1081,20 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 		gpm_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
 	}
-	
+
 	/* append percentage to all devices */
 	g_string_append_printf (summary, " (%i%%)\n", status->percentage_charge);
 
 	g_free (timestring);
 }
 
+/**
+ * gpm_power_get_status_summary:
+ * @power: This power class instance
+ * @string: The returned string
+ *
+ * Returns the complete tooltip ready for display. Text logic is done here :-).
+ **/
 gboolean
 gpm_power_get_status_summary (GpmPower *power,
 			      char    **string,
@@ -984,10 +1141,17 @@ gpm_power_get_status_summary (GpmPower *power,
 	return TRUE;
 }
 
-/* returns if the device was found in the cache */
+/**
+ * gpm_power_get_battery_status:
+ * @power: This power class instance
+ * @battery_kind: The type of battery, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ * @battery_status: A battery info structure
+ *
+ * Return value: if the device was found in the cache.
+ **/
 gboolean
 gpm_power_get_battery_status (GpmPower			 *power,
-			      GpmPowerBatteryKind	 battery_kind,
+			      GpmPowerBatteryKind	  battery_kind,
 			      GpmPowerBatteryStatus      *battery_status)
 {
 	BatteryKindCacheEntry *entry;
@@ -1006,6 +1170,10 @@ gpm_power_get_battery_status (GpmPower			 *power,
 	return TRUE;
 }
 
+/**
+ * gpm_power_set_on_ac:
+ * @power: This power class instance
+ **/
 static gboolean
 gpm_power_set_on_ac (GpmPower *power,
 		     gboolean  on_ac,
@@ -1023,6 +1191,10 @@ gpm_power_set_on_ac (GpmPower *power,
 	return TRUE;
 }
 
+/**
+ * gpm_power_get_on_ac:
+ * @power: This power class instance
+ **/
 gboolean
 gpm_power_get_on_ac (GpmPower *power,
 		     gboolean *on_ac,
@@ -1037,6 +1209,9 @@ gpm_power_get_on_ac (GpmPower *power,
 	return TRUE;
 }
 
+/**
+ * gpm_power_set_property:
+ **/
 static void
 gpm_power_set_property (GObject	     *object,
 			guint	      prop_id,
@@ -1057,6 +1232,9 @@ gpm_power_set_property (GObject	     *object,
 	}
 }
 
+/**
+ * gpm_power_get_property:
+ **/
 static void
 gpm_power_get_property (GObject    *object,
 			guint       prop_id,
@@ -1077,6 +1255,9 @@ gpm_power_get_property (GObject    *object,
 	}
 }
 
+/**
+ * gpm_power_class_init:
+ **/
 static void
 gpm_power_class_init (GpmPowerClass *klass)
 {
@@ -1138,6 +1319,15 @@ gpm_power_class_init (GpmPowerClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }
 
+/**
+ * hal_on_ac_changed_cb:
+ * @monitor: The HAL monitor class instance
+ * @on_ac: If we are on AC power
+ * @power: This power class instance
+ *
+ * As the state of the AC Adapter has changed, we need to refresh our device
+ * and kind caches as they have likely changed.
+ **/
 static void
 hal_on_ac_changed_cb (GpmHalMonitor *monitor,
 		      gboolean       on_ac,
@@ -1150,6 +1340,14 @@ hal_on_ac_changed_cb (GpmHalMonitor *monitor,
 	}
 }
 
+/**
+ * add_battery:
+ * @power: This power class instance
+ * @udi: The HAL UDI for this device
+ *
+ * Add a battery to a device cache, and then add the device cache to the
+ * correct kind cache depending on type.
+ **/
 static gboolean
 add_battery (GpmPower   *power,
 	     const char *udi)
@@ -1183,6 +1381,15 @@ add_battery (GpmPower   *power,
 	return TRUE;
 }
 
+/**
+ * remove_battery:
+ * @udi: The HAL UDI for this device
+ * @power: This power class instance
+ *
+ * Removes a battery from the device and kind caches from a UDI value.
+ *
+ * Return value: if a battery was removed.
+ **/
 static gboolean
 remove_battery (GpmPower   *power,
 		const char *udi)
@@ -1205,6 +1412,13 @@ remove_battery (GpmPower   *power,
 	return TRUE;
 }
 
+/**
+ * hal_battery_added_cb:
+ * @monitor: The HAL monitor class instance
+ * @udi: The HAL UDI for this device
+ * @power: This power class instance
+ * Called from HAL...
+ **/
 static void
 hal_battery_added_cb (GpmHalMonitor *monitor,
 		      const char    *udi,
@@ -1216,6 +1430,13 @@ hal_battery_added_cb (GpmHalMonitor *monitor,
 	battery_kind_cache_debug_print_all (power);
 }
 
+/**
+ * hal_battery_removed_cb:
+ * @monitor: The HAL monitor class instance
+ * @udi: The HAL UDI for this device
+ * @power: This power class instance
+ * Called from HAL...
+ **/
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
 			const char    *udi,
@@ -1232,6 +1453,14 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 	g_signal_emit (power, signals [BATTERY_REMOVED], 0, udi);
 }
 
+/**
+ * hal_battery_property_modified_cb:
+ * @monitor: The HAL monitor class instance
+ * @udi: The HAL UDI for this device
+ * @key: The HAL key that is modified
+ * @power: This power class instance
+ * Called from HAL...
+ **/
 static void
 hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 				  const char    *udi,
@@ -1258,7 +1487,7 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 		return;
 	}
 
-	battery_device_cache_entry_update_key (device_entry, key);
+	battery_device_cache_entry_update_key (power, device_entry, key);
 
 	type_entry = battery_kind_cache_find (power, device_entry->battery_kind);
 
@@ -1272,6 +1501,13 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 	battery_kind_cache_debug_print (type_entry);
 }
 
+/**
+ * hal_button_pressed_cb:
+ * @monitor: The HAL monitor class instance
+ * @type: the button type, e.g. "power"
+ * @power: This power class instance
+ * @state: The lid state, where TRUE is open or pressed
+ **/
 static void
 hal_button_pressed_cb (GpmHalMonitor *monitor,
 		       const char    *type,
@@ -1283,7 +1519,10 @@ hal_button_pressed_cb (GpmHalMonitor *monitor,
 	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, state);
 }
 
-/* FIXME: there must be a better way to do this */
+/**
+ * gpm_hash_remove_return:
+ * FIXME: there must be a better way to do this
+ **/
 static gboolean
 gpm_hash_remove_return (gpointer key,
 			gpointer value,
@@ -1292,6 +1531,10 @@ gpm_hash_remove_return (gpointer key,
 	return TRUE;
 }
 
+/**
+ * gpm_hash_new_kind_cache:
+ * @power: This power class instance
+ **/
 static void
 gpm_hash_new_kind_cache (GpmPower *power)
 {
@@ -1305,6 +1548,10 @@ gpm_hash_new_kind_cache (GpmPower *power)
 							 	 (GDestroyNotify)battery_kind_cache_entry_free);
 }
 
+/**
+ * gpm_hash_free_kind_cache:
+ * @power: This power class instance
+ **/
 static void
 gpm_hash_free_kind_cache (GpmPower *power)
 {
@@ -1318,6 +1565,10 @@ gpm_hash_free_kind_cache (GpmPower *power)
 	power->priv->battery_kind_cache = NULL;
 }
 
+/**
+ * gpm_hash_new_device_cache:
+ * @power: This power class instance
+ **/
 static void
 gpm_hash_new_device_cache (GpmPower *power)
 {
@@ -1331,6 +1582,10 @@ gpm_hash_new_device_cache (GpmPower *power)
 								   NULL);
 }
 
+/**
+ * gpm_hash_free_device_cache:
+ * @power: This power class instance
+ **/
 static void
 gpm_hash_free_device_cache (GpmPower *power)
 {
@@ -1344,6 +1599,10 @@ gpm_hash_free_device_cache (GpmPower *power)
 	power->priv->battery_device_cache = NULL;
 }
 
+/**
+ * gpm_power_dbus_name_owner_changed:
+ * @power: This power class instance
+ **/
 void
 gpm_power_dbus_name_owner_changed (GpmPower	*power,
 				   const char	*name,
@@ -1368,6 +1627,10 @@ gpm_power_dbus_name_owner_changed (GpmPower	*power,
 	}
 }
 
+/**
+ * gpm_power_init:
+ * @power: This power class instance
+ **/
 static void
 gpm_power_init (GpmPower *power)
 {
@@ -1395,8 +1658,17 @@ gpm_power_init (GpmPower *power)
 
 	on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);
 	gpm_power_set_on_ac (power, on_ac, NULL);
+
+	GConfClient *client = gconf_client_get_default ();
+	power->priv->exp_ave_factor = gconf_client_get_int (client,
+							    GPM_PREF_RATE_EXP_AVE_FACTOR,
+							    NULL);
+	g_object_unref (client);
 }
 
+/**
+ * gpm_power_finalize:
+ **/
 static void
 gpm_power_finalize (GObject *object)
 {
@@ -1419,6 +1691,10 @@ gpm_power_finalize (GObject *object)
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }
 
+/**
+ * gpm_power_new:
+ * Return value: A new power class instance.
+ **/
 GpmPower *
 gpm_power_new (void)
 {

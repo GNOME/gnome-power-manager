@@ -1,3 +1,15 @@
+2006-03-30  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
+	/apps/gnome-power-manager/rate_exponential_average_factor so that we
+	can play with the rate smoothing code, and temporarily disable it when
+	we profile/play-with the battery.
+	Also fix a typo in the spec to fix #336603.
+
+	* src/gpm-power.{c|h}, src/gpm-brightness.{c|h},
+	src/gpm-networkmanager.{c|h}:Add a few comments to make things
+	clearer for me. I like comments.
+
 2006-03-27  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-info.glade: Make the 3rd tab "Power", not "Rate".
