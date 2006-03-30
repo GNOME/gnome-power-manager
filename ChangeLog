@@ -1,5 +1,13 @@
 2006-03-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: Make sure the labels are centered, and also
+	that the grid is even. Also make the text consistent and shorter.
+
+	* src/gpm-power.c: Factor out the exponential average so it's clearer
+	what we are trying to achieve.
+
+2006-03-30  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h: Add
 	/apps/gnome-power-manager/rate_exponential_average_factor so that we
 	can play with the rate smoothing code, and temporarily disable it when

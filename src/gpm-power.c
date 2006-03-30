@@ -286,6 +286,36 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 }
 
 /**
+ * gpm_power_exp_aver:
+ * @previous: The old value
+ * @new: The new value
+ * @factor_pc: The factor as a percentage
+ *
+ * We should do an exponentially weighted average so that high frequency
+ * changes are smoothed. This should mean the rate (and thus the remaining time)
+ * does not change drastically between updates.
+ **/
+static int
+gpm_power_exp_aver (int previous, int new, int factor_pc)
+{
+	int result = 0;
+	float factor = 0;
+	float factor_inv = 1;
+	if (previous == 0 || factor_pc == 0) {
+		/* startup, or re-initialization - we have no data */
+		gpm_debug ("Telling rate with no ave factor!");
+		result = new;
+	} else {
+		factor = (float) factor_pc / 100.0f;
+		factor_inv = 1.0f - factor;
+		result = (int) ((factor_inv * (float) new) + (factor * (float) previous));
+	}
+	gpm_debug ("factor = %f, previous = %i, new=%i, result = %i",
+		   factor, previous, new, result);
+	return result;
+}
+
+/**
  * battery_device_cache_entry_update_key:
  * @power: This power class instance
  * @entry: A device cache instance
@@ -336,21 +366,12 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		int charge_rate_new;
 		gpm_hal_device_get_int (udi, key, &charge_rate_new);
-		/* Do an exponentially weighted average for the rate so
-		   that high frequency changes are smoothed. This should mean
-		   the remaining_time does not change drastically between updates.
-		   Fixes bug #328927 */
-		if (entry->charge_rate_previous == 0 ||
-		    power->priv->exp_ave_factor == 0) {
-			/* startup, or re-initialization - we have no data */
-			status->charge_rate = charge_rate_new;
-		} else {
-			float factor = (float) power->priv->exp_ave_factor / 100.0f;
-			float factor_inv = 1.0f - factor;
-			status->charge_rate = (factor_inv * charge_rate_new) +
-					      (factor * entry->charge_rate_previous);
-		}
-		entry->charge_rate_previous = charge_rate_new;
+
+		/* Do an exponentially weighted average, fixes bug #328927 */
+		status->charge_rate = gpm_power_exp_aver (entry->charge_rate_previous,
+						      charge_rate_new,
+						      power->priv->exp_ave_factor);
+		entry->charge_rate_previous = status->charge_rate;
 
 		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
 		   gets fixed and is part of a new release of HAL and we depend on that

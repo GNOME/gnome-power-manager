@@ -189,11 +189,19 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 		int hours = minutes / 60;
 		minutes =  minutes - (hours * 60);
 		if (hours > 0) {
-			text = g_strdup_printf ("%ih%02im", hours, minutes);
+			if (minutes == 0) {
+				text = g_strdup_printf ("%ih", hours);
+			} else {
+				text = g_strdup_printf ("%ih%02im", hours, minutes);
+			}
 		} else if (minutes > 0) {
-			text = g_strdup_printf ("%02im%02is", minutes, seconds);
+			if (seconds == 0) {
+				text = g_strdup_printf ("%2im", minutes);
+			} else {
+				text = g_strdup_printf ("%2im%02is", minutes, seconds);
+			}
 		} else {
-			text = g_strdup_printf ("%02is", seconds);
+			text = g_strdup_printf ("%2is", seconds);
 		}
 	} else if (axis == GPM_GRAPH_TYPE_PERCENTAGE) {
 		text = g_strdup_printf ("%i%%", value);
@@ -215,10 +223,10 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 static void
 gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 {
-	int a, b;
+	float a, b;
 	double dotted[] = {1., 2.};
-	double divwidth  = graph->priv->box_width / 10;
-	double divheight = graph->priv->box_height / 10;
+	float divwidth  = (float)graph->priv->box_width / 10.0f;
+	float divheight = (float)graph->priv->box_height / 10.0f;
 
 	cairo_save (cr);
 
@@ -229,16 +237,16 @@ gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_x + (a * divwidth);
-		cairo_move_to (cr, b + 0.5, graph->priv->box_y);
-		cairo_line_to (cr, b + 0.5, graph->priv->box_y + graph->priv->box_height);
+		cairo_move_to (cr, (int)b + 0.5f, graph->priv->box_y);
+		cairo_line_to (cr, (int)b + 0.5f, graph->priv->box_y + graph->priv->box_height);
 		cairo_stroke (cr);
 	}
 
 	/* do horizontal lines */
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_y + (a * divheight);
-		cairo_move_to (cr, graph->priv->box_x, b + 0.5);
-		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, b + 0.5);
+		cairo_move_to (cr, graph->priv->box_x, (int)b + 0.5f);
+		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, (int)b + 0.5f);
 		cairo_stroke (cr);
 	}
 
@@ -255,13 +263,16 @@ gpm_simple_graph_draw_grid (GpmSimpleGraph *graph, cairo_t *cr)
 static void
 gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 {
-	int a, b;
+	float a, b;
 	gchar *text;
 	gint value;
-	double divwidth  = graph->priv->box_width / 10;
-	double divheight = graph->priv->box_height / 10;
+	float divwidth  = (float)graph->priv->box_width / 10.0f;
+	float divheight = (float)graph->priv->box_height / 10.0f;
 	gint length_x = graph->priv->stop_x - graph->priv->start_x;
 	gint length_y = graph->priv->stop_y - graph->priv->start_y;
+	cairo_text_extents_t extents;
+	float offsetx = 0;
+	float offsety = 0;
 
 	cairo_save (cr);
 
@@ -271,13 +282,26 @@ gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_x + (a * divwidth);
-		cairo_move_to (cr, b - 18, graph->priv->box_y + graph->priv->box_height + 15);
 		if (graph->priv->invert_x) {
 			value = (length_x / 10) * (10 - a);
 		} else {
 			value = (length_x / 10) * a;
 		}
 		text = gpm_get_axis_label (graph->priv->axis_x, value);
+
+		cairo_text_extents (cr, text, &extents);
+		/* have data points 0 and 10 bounded, but 1..9 centered */
+		if (a == 0) {
+			offsetx = 2;
+		} else if (a == 10) {
+			offsetx = extents.width;
+		} else {
+			offsetx = (extents.width / 2.0f);
+		}
+
+		cairo_move_to (cr, b - offsetx,
+			       graph->priv->box_y + graph->priv->box_height + 15);
+
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
@@ -285,13 +309,24 @@ gpm_simple_graph_draw_labels (GpmSimpleGraph *graph, cairo_t *cr)
 	/* do y text */
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
-		cairo_move_to (cr, graph->priv->box_x - 40, b + 5);
 		if (graph->priv->invert_y) {
 			value = (length_y / 10) * a;
 		} else {
 			value = (length_y / 10) * (10 - a);
 		}
 		text = gpm_get_axis_label (graph->priv->axis_y, value);
+
+		cairo_text_extents (cr, text, &extents);
+		/* have data points 0 and 10 bounded, but 1..9 centered */
+		if (a == 10) {
+			offsety = 0;
+		} else if (a == 0) {
+			offsety = extents.height;
+		} else {
+			offsety = (extents.height / 2.0f);
+		}
+		offsetx = extents.width + 5;
+		cairo_move_to (cr, graph->priv->box_x - offsetx, b + offsety);
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
@@ -484,10 +519,10 @@ gpm_simple_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	cairo_save (cr);
 
-	graph->priv->box_x = 45;
+	graph->priv->box_x = 40;
 	graph->priv->box_y = 5;
-	graph->priv->box_width = graph_widget->allocation.width - (5 + 45);
-	graph->priv->box_height = graph_widget->allocation.height - (5 + 20);
+	graph->priv->box_width = graph_widget->allocation.width - (5 + graph->priv->box_x);
+	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* background */
 	cairo_rectangle (cr, graph->priv->box_x, graph->priv->box_y,
