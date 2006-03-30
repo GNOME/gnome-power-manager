@@ -55,6 +55,7 @@
 #include "gpm-idle.h"
 #include "gpm-info.h"
 #include "gpm-power.h"
+#include "gpm-feedback-widget.h"
 #include "gpm-hal-monitor.h"
 #include "gpm-dbus-monitor.h"
 #include "gpm-brightness.h"
@@ -100,6 +101,7 @@ struct GpmManagerPrivate
 	GpmDpms		*dpms;
 	GpmIdle		*idle;
 	GpmInfo		*info;
+	GpmFeedback	*feedback;
 	GpmPower	*power;
 	GpmDbusMonitor	*dbus;
 	GpmBrightness   *brightness;
@@ -2220,6 +2222,7 @@ static void
 gpm_manager_tray_icon_show_info (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
+//	gpm_feedback_display_value (manager->priv->feedback, 0.25f);
 	gpm_debug ("Received show-info signal from tray icon");
 	gpm_info_show_window (manager->priv->info);
 }
@@ -2275,6 +2278,7 @@ gpm_manager_init (GpmManager *manager)
 				 NULL);
 
 	manager->priv->brightness = gpm_brightness_new ();
+	manager->priv->feedback = gpm_feedback_new ();
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "changed",
@@ -2437,6 +2441,9 @@ gpm_manager_finalize (GObject *object)
 	}
 	if (manager->priv->tray_icon != NULL) {
 		g_object_unref (manager->priv->tray_icon);
+	}
+	if (manager->priv->feedback != NULL) {
+		g_object_unref (manager->priv->feedback);
 	}
 	if (manager->priv->inhibit != NULL) {
 		g_object_unref (manager->priv->inhibit);

@@ -87,6 +87,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-inhibit.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
+	gpm-feedback-widget.h				\
+	gpm-feedback-widget.c				\
 	$(NULL)
 
 gnome_power_manager_LDADD =				\

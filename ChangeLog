@@ -1,5 +1,17 @@
 2006-03-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-feedback-widget.{c|h}, src/Makefile.am, src/gpm-manager.c:
+	Add new class for a feedback widget just like gnome-settings-daemon
+	used to do. This still needs to be tied up into the lcd events and
+	also needs to be made sane. Make no comment yet, it's all unfinished.
+
+	* data/gpm-feedback-widget.glade, data/Makefile.am: Add the UI, taken
+	from the acme part of gnome-settings-daemon.
+
+	* po/POTFILES.in: Add these new files to be translated.
+
+2006-03-30  Richard Hughes  <richard@hughsie.com>
+
 	* man/gnome-power-manager.sgml: Apply patch from Ow Mun Heng
 	<nikeow@yahoo.com> to add the --daemon option. Many thanks.
 
