@@ -1,5 +1,10 @@
 2006-03-31  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-feedback-widget.c: Change timeout to be one second so it
+	matches the volume widget.
+
+2006-03-31  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c, src/gpm-brightness.{c|h}, src/gpm-marshall.list:
 	Emit a signal when we are stepped up or down, catch this signal and
 	show the new feeback widget.

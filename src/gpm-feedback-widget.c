@@ -37,7 +37,7 @@ static void     gpm_feedback_finalize   (GObject	  *object);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
-#define GPM_FEEDBACK_TIMOUT		2	/* seconds */
+#define GPM_FEEDBACK_TIMOUT		1	/* seconds */
 
 struct GpmFeedbackPrivate
 {
