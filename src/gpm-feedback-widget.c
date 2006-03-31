@@ -37,13 +37,14 @@ static void     gpm_feedback_finalize   (GObject	  *object);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
-#define GPM_FEEDBACK_TIMOUT		5	/* seconds */
+#define GPM_FEEDBACK_TIMOUT		2	/* seconds */
 
 struct GpmFeedbackPrivate
 {
 	GladeXML		*xml;
 	GtkWidget		*main_window;
 	GtkWidget		*progress;
+	int			 refcount;
 };
 
 G_DEFINE_TYPE (GpmFeedback, gpm_feedback, G_TYPE_OBJECT)
@@ -70,9 +71,12 @@ gpm_feedback_class_init (GpmFeedbackClass *klass)
 static gboolean
 gpm_feedback_auto_close (gpointer data)
 {
-	gpm_debug ("Auto-closing feedback widget");
 	GpmFeedback *feedback = (GpmFeedback*) data;
-	gtk_widget_hide (feedback->priv->main_window);
+	feedback->priv->refcount--;
+	if (feedback->priv->refcount == 0) {
+		gpm_debug ("Auto-closing feedback widget");
+		gtk_widget_hide (feedback->priv->main_window);
+	}
 	return FALSE;
 }
 
@@ -83,7 +87,9 @@ gpm_feedback_display_value (GpmFeedback *feedback, float value)
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);
 	gtk_widget_show_all (feedback->priv->main_window);
 	/* set up the timer auto-close thing */
+	g_idle_remove_by_data (feedback);
 	g_timeout_add (GPM_FEEDBACK_TIMOUT * 1000, gpm_feedback_auto_close, feedback);
+	feedback->priv->refcount++;
 }
 
 /**
@@ -94,6 +100,7 @@ static void
 gpm_feedback_init (GpmFeedback *feedback)
 {
 	feedback->priv = GPM_FEEDBACK_GET_PRIVATE (feedback);
+	feedback->priv->refcount = 0;
 
 	/* initialise the window */
 	GtkWidget *image;
@@ -108,7 +115,7 @@ gpm_feedback_init (GpmFeedback *feedback)
 
 	GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
 	GdkPixbuf *pixbuf;
-	pixbuf = gtk_icon_theme_load_icon (icon_theme, GPM_STOCK_APP_ICON, 48, 0, NULL);
+	pixbuf = gtk_icon_theme_load_icon (icon_theme, GPM_STOCK_BRIGHTNESS, 48, 0, NULL);
 	if (! pixbuf) {
 		gpm_critical_error ("Cannot find the file %s.");
 	}

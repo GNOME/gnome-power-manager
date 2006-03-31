@@ -1458,6 +1458,23 @@ dbus_name_owner_changed_system_cb (GpmDbusMonitor *dbus_monitor,
 }
 
 /**
+ * brightness_step_changed_cb:
+ * @brightness: The power class instance
+ * @percentage: The new brightness setting
+ * @manager: This manager class instance
+ *
+ * The callback when the brightness is stepped up or stepped down
+ **/
+static void
+brightness_step_changed_cb (GpmBrightness *brightness,
+			    int		   percentage,
+			    GpmManager	  *manager)
+{
+	gpm_debug ("Need to diplay feedback value %i", percentage);
+	gpm_feedback_display_value (manager->priv->feedback, (float) percentage / 100.0f);
+}
+
+/**
  * dbus_name_owner_changed_session_cb:
  * @power: The power class instance
  * @name: The DBUS name, e.g. hal.freedesktop.org
@@ -2222,7 +2239,6 @@ static void
 gpm_manager_tray_icon_show_info (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-//	gpm_feedback_display_value (manager->priv->feedback, 0.25f);
 	gpm_debug ("Received show-info signal from tray icon");
 	gpm_info_show_window (manager->priv->info);
 }
@@ -2278,6 +2294,9 @@ gpm_manager_init (GpmManager *manager)
 				 NULL);
 
 	manager->priv->brightness = gpm_brightness_new ();
+	g_signal_connect (manager->priv->brightness, "brightness-step-changed",
+			  G_CALLBACK (brightness_step_changed_cb), manager);
+
 	manager->priv->feedback = gpm_feedback_new ();
 
 	manager->priv->idle = gpm_idle_new ();

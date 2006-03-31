@@ -43,6 +43,7 @@
 #include "gpm-stock-icons.h"
 #include "gpm-brightness.h"
 #include "gpm-hal.h"
+#include "gpm-marshal.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -50,6 +51,7 @@ static void	gpm_brightness_class_init (GpmBrightnessClass *klass);
 static void	gpm_brightness_init	  (GpmBrightness      *brightness);
 static void	gpm_brightness_finalize	  (GObject	      *object);
 static gboolean	gpm_brightness_level_update_hw (GpmBrightness *brightness);
+static int	gpm_brightness_hw_to_percent (int hw, int levels);
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
 
@@ -62,6 +64,13 @@ struct GpmBrightnessPrivate
 	char	   *udi;
 	DBusGProxy *proxy;
 };
+
+enum {
+	BRIGHTNESS_STEP_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmBrightness, gpm_brightness, G_TYPE_OBJECT)
 
@@ -90,7 +99,18 @@ gpm_brightness_class_init (GpmBrightnessClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_brightness_finalize;
 	object_class->constructor  = gpm_brightness_constructor;
+
 	g_type_class_add_private (klass, sizeof (GpmBrightnessPrivate));
+
+	signals [BRIGHTNESS_STEP_CHANGED] =
+		g_signal_new ("brightness-step-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmBrightnessClass, lcd_step_changed),
+			      NULL,
+			      NULL,
+			      gpm_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 }
 
 /**
@@ -260,8 +280,13 @@ gpm_brightness_level_up (GpmBrightness *brightness)
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
-	int current_hw = brightness->priv->current_hw;
-	gpm_brightness_level_set_hw (brightness, current_hw + 1);
+	gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw + 1);
+
+	int percentage;
+	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
+						   brightness->priv->levels);
+	gpm_debug ("emitting brightness-step-changed : %i", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
 }
 
 /**
@@ -276,8 +301,12 @@ gpm_brightness_level_down (GpmBrightness *brightness)
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
-	int current_hw = brightness->priv->current_hw;
-	gpm_brightness_level_set_hw (brightness, current_hw - 1);
+	gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw - 1);
+	int percentage;
+	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
+						   brightness->priv->levels);
+	gpm_debug ("emitting brightness-step-changed : %i", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
 }
 
 /**
@@ -301,6 +330,28 @@ gpm_brightness_percent_to_hw (int percentage,
 		return levels;
 	}
 	return ( (float) percentage * (float) (levels - 1)) / 100.0f;
+}
+
+/**
+ * gpm_brightness_hw_to_percent:
+ * @hw: The hardware level
+ * @levels: The number of hardware levels for our hardware
+ * 
+ * We have to be carefull when converting from hw->%.
+ * 
+ * Return value: The percentage for this hardware value.
+ **/
+static int
+gpm_brightness_hw_to_percent (int hw,
+			      int levels)
+{
+	/* check we are in range */
+	if (hw < 0) {
+		return 0;
+	} else if (hw > levels) {
+		return 100;
+	}
+	return (int) ((float) hw * (100.0f / (float) (levels - 1)));
 }
 
 /**

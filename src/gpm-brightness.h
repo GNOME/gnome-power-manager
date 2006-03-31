@@ -45,6 +45,8 @@ typedef struct
 typedef struct
 {
         GObjectClass	parent_class;
+	void		(* lcd_step_changed)  (GpmBrightness	*lcdbrightness,
+					       int		*brightness);
 } GpmBrightnessClass;
 
 GType		 gpm_brightness_get_type (void);

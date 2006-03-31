@@ -67,6 +67,7 @@ G_BEGIN_DECLS
 #define GPM_STOCK_UPS_DISCHARGING_100		"gpm-ups-discharging-100"
 #define GPM_STOCK_SUSPEND_TO_DISK		"gpm-suspend-to-disk"
 #define GPM_STOCK_SUSPEND_TO_RAM		"gpm-suspend-to-ram"
+#define GPM_STOCK_BRIGHTNESS			"gpm-brightness"
 
 gboolean gpm_stock_icons_init     (void);
 void     gpm_stock_icons_shutdown (void);
