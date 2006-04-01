@@ -192,13 +192,13 @@ gpm_get_axis_label (GpmSimpleGraphAxisType axis, int value)
 			if (minutes == 0) {
 				text = g_strdup_printf ("%ih", hours);
 			} else {
-				text = g_strdup_printf ("%ih%02im", hours, minutes);
+				text = g_strdup_printf ("%ih%02i", hours, minutes);
 			}
 		} else if (minutes > 0) {
 			if (seconds == 0) {
 				text = g_strdup_printf ("%2im", minutes);
 			} else {
-				text = g_strdup_printf ("%2im%02is", minutes, seconds);
+				text = g_strdup_printf ("%2im%02i", minutes, seconds);
 			}
 		} else {
 			text = g_strdup_printf ("%2is", seconds);

@@ -1,3 +1,13 @@
+2006-04-01  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-power.c (gpm_power_get_description_array): Shorten desc.
+
+	* src/gpm-graph-widget.c (gpm_get_axis_label): Don't display "m"
+	when we show hours.
+
+	* data/gpm-info.glade: Set HScroll to auto as sometimes the info doesn't
+	fit on my little iBook screen.
+
 2006-03-31  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in, docs/Doxyfile.in, docs/.cvsignore, docs/Makefile.am:

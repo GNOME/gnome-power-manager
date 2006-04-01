@@ -750,11 +750,11 @@ gpm_power_get_description_array (GpmPower		*power,
 		const char *condition;
 		di.title = g_strdup (_("Capacity:"));
 		if (status->capacity > 99) {
-			condition = _("Very good condition");
+			condition = _("Excellent");
 		} else if (status->capacity > 90) {
-			condition = _("Good condition");
+			condition = _("Good");
 		} else {
-			condition = _("Poor condition");
+			condition = _("Poor");
 		}
 		di.value = g_strdup_printf ("%i%% (%s)", status->capacity, condition);
 		g_array_append_vals (array, &di, 1);
