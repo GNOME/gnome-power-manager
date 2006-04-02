@@ -307,10 +307,13 @@ gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 	gboolean boolret = TRUE;
 
 	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Cannot throttlenow as gnome-screensaver not running - will cache");
+		gpm_debug ("Cannot throttle now as gnome-screensaver not running - will cache");
 		screensaver->priv->cached_throttle = TRUE;
 		return FALSE;
 	}
+
+	/* reset, so that we don't keep triggering */
+	screensaver->priv->cached_throttle = FALSE;
 
 	gpm_debug ("setThrottleEnabled : %i", enable);
 	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "setThrottleEnabled", &error,
