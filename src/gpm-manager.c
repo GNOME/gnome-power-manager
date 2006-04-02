@@ -2075,15 +2075,15 @@ gpm_manager_class_init (GpmManagerClass *klass)
 }
 
 /**
- * callback_gconf_key_changed:
+ * gconf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-callback_gconf_key_changed (GConfClient *client,
-			    guint	 cnxn_id,
-			    GConfEntry	*entry,
-			    gpointer	 user_data)
+gconf_key_changed_cb (GConfClient *client,
+		      guint	   cnxn_id,
+		      GConfEntry  *entry,
+		      gpointer	   user_data)
 {
 	gint	    value = 0;
 	gint	    brightness;
@@ -2292,7 +2292,7 @@ gpm_manager_init (GpmManager *manager)
 
 	gconf_client_notify_add (manager->priv->gconf_client,
 				 GPM_PREF_DIR,
-				 callback_gconf_key_changed,
+				 gconf_key_changed_cb,
 				 manager,
 				 NULL,
 				 NULL);

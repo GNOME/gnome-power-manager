@@ -1,5 +1,18 @@
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs-core.c, src/gpm-screensaver.{c|h}, src/gpm-manager.c,
+	src/Makefile.am: Use an instance of GpmScreensaver in g-p-p so we can
+	connect to the g-s-p idle delay settings.
+	Move the slider so that it starts at the g-s-p setting.
+	Should fix #336061
+
+	* src/gpm-screensaver.c (gpm_screensaver_connect,
+	gpm_screensaver_enable_throttle): Cache the "throttle" value.
+	This is needed if g-p-m is started before g-s; we apply the setting
+	when g-s is eventually started.
+
+2006-04-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.{c|h}, src/manager.c: Allow gnome-screensaver to
 	connect and disconnect from the messagebus at runtime. This fixes
 	the bug where gnome-screensaver is updated, and locking stops working.

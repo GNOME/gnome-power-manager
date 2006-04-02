@@ -40,6 +40,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs-core.c					\
 	gpm-common.h					\
 	gpm-common.c					\
+	gpm-screensaver.h					\
+	gpm-screensaver.c					\
 	$(NULL)
 
 gnome_power_preferences_LDADD =				\

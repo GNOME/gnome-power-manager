@@ -39,13 +39,26 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 #define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
 #define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
 
+#define GS_PREF_DIR		"/apps/gnome-screensaver"
+#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
+#define GS_PREF_IDLE_DELAY	GS_PREF_DIR "/idle_delay"
+
 struct GpmScreensaverPrivate
 {
 	DBusGConnection		*session_connection;
 	DBusGProxy		*gs_proxy;
 	GConfClient		*gconf_client;
-	gboolean		 is_connected; /* if we are connected to g-s */
+	gboolean		 is_connected;	/* if we are connected to g-s */
+	gboolean		 cached_throttle; /*if we need to throttle when we connect */
+	int			 idle_delay;	/* the setting in g-s-p, cached */
 };
+
+enum {
+	GS_DELAY_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
 
@@ -59,6 +72,16 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_screensaver_finalize;
 	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
+
+	signals [GS_DELAY_CHANGED] =
+		g_signal_new ("gs-delay-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, gs_delay_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 }
 
 /**
@@ -78,6 +101,12 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 							         GS_LISTENER_INTERFACE);
 	screensaver->priv->is_connected = TRUE;
 	gpm_debug ("gnome-screensaver connected to the session DBUS");
+
+	/* Do the throttle now if cached, as g-p-m may have started before g-s
+	   and we want the throttle value to be used. */
+	if (screensaver->priv->cached_throttle) {
+		gpm_screensaver_enable_throttle (screensaver, TRUE);
+	}
 }
 
 /**
@@ -97,6 +126,26 @@ gpm_screensaver_disconnect (GpmScreensaver *screensaver)
 	}
 	screensaver->priv->is_connected = FALSE;
 	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
+}
+
+/**
+ * gconf_key_changed_cb:
+ *
+ * Turn a gconf key change into a signal
+ **/
+static void
+gconf_key_changed_cb (GConfClient  *client,
+		      guint	    cnxn_id,
+		      GConfEntry   *entry,
+		      gpointer	    user_data)
+{
+	GpmScreensaver *screensaver = GPM_SCREENSAVER (user_data);
+
+	if (strcmp (entry->key, GS_PREF_IDLE_DELAY) == 0) {
+		screensaver->priv->idle_delay = gconf_client_get_int (client, entry->key, NULL);
+		gpm_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
+		g_signal_emit (screensaver, signals [GS_DELAY_CHANGED], 0, screensaver->priv->idle_delay);
+	}
 }
 
 /**
@@ -127,6 +176,19 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 		screensaver->priv->is_connected = FALSE;
 		gpm_warning ("gnome-screensaver has not been started yet");
 	}
+
+	/* get value of delay in g-s-p */
+	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->gconf_client,
+							      GS_PREF_IDLE_DELAY, NULL);
+
+	/* set up the monitoring for gnome-screensaver */
+	gconf_client_add_dir (screensaver->priv->gconf_client,
+			      GS_PREF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
+
+	gconf_client_notify_add (screensaver->priv->gconf_client,
+				 GS_PREF_DIR,
+				 gconf_key_changed_cb,
+				 screensaver, NULL, NULL);
 }
 
 /**
@@ -186,6 +248,17 @@ gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
 }
 
 /**
+ * gpm_screensaver_get_delay:
+ * @screensaver: This screensaver class instance
+ * Return value: The delay for the idle time set in gnome-screesaver-properties.
+ **/
+int
+gpm_screensaver_get_delay (GpmScreensaver *screensaver)
+{
+	return screensaver->priv->idle_delay;
+}
+
+/**
  * gpm_screensaver_lock
  * @screensaver: This screensaver class instance
  * Return value: Success value
@@ -234,7 +307,8 @@ gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 	gboolean boolret = TRUE;
 
 	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Not throttling, as gnome-screensaver not running");
+		gpm_debug ("Cannot throttlenow as gnome-screensaver not running - will cache");
+		screensaver->priv->cached_throttle = TRUE;
 		return FALSE;
 	}
 

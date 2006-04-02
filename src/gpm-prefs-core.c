@@ -33,12 +33,14 @@
 #include <math.h>
 #include <string.h>
 
+#include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
 #include "gpm-prefs-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
+#include "gpm-screensaver.h"
 
 static void     gpm_prefs_class_init (GpmPrefsClass *klass);
 static void     gpm_prefs_init       (GpmPrefs      *prefs);
@@ -56,7 +58,7 @@ struct GpmPrefsPrivate
 	gboolean		 has_button_lid;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
-	int			 gssidle;
+	GpmScreensaver		*screensaver;
 };
 
 enum {
@@ -184,23 +186,20 @@ gpm_prefs_help_cb (GtkWidget *widget,
 /**
  * gpm_prefs_icon_radio_cb:
  * @widget: The GtkWidget object
- * @icon_policy: The policy for displaying an icon, e.g. "always"
  **/
 static void
 gpm_prefs_icon_radio_cb (GtkWidget *widget,
-			 int	    icon_policy)
+			 GpmPrefs  *prefs)
 {
-	GConfClient *client;
 	const char  *str;
+	int	     policy;
 
-	client = gconf_client_get_default ();
-
-	str = gconf_enum_to_string (icon_policy_enum_map, icon_policy);
-	gconf_client_set_string (client,
+	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
+	str = gconf_enum_to_string (icon_policy_enum_map, policy);
+	gpm_debug ("Changing %s to %s", GPM_PREF_ICON_POLICY, str);
+	gconf_client_set_string (prefs->priv->gconf_client,
 				 GPM_PREF_ICON_POLICY,
 				 str, NULL);
-
-	g_object_unref (client);
 }
 
 /**
@@ -227,13 +226,12 @@ gpm_prefs_format_time_cb (GtkScale *scale,
 			  GpmPrefs *prefs)
 {
 	char *str;
-	gpm_debug ("gssidle time: %i mins", prefs->priv->gssidle);
 	if ((gint) value == NEVER_TIME_ON_SLIDER) {
 		str = g_strdup (_("Never"));
 	} else {
 		/* we auto-add the gss idle time to stop users getting
 		   confused. */
-		str = gpm_get_timestring ((value + prefs->priv->gssidle) * 60);
+		str = gpm_get_timestring (value * 60);
 	}
 
 	return str;
@@ -246,24 +244,31 @@ gpm_prefs_format_time_cb (GtkScale *scale,
  **/
 static void
 gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
-				   char     *gpm_pref_key)
+				   GpmPrefs *prefs)
 {
 	int value;
-	GConfClient *client;
+	int gs_idle_time;
+	char *gpm_pref_key;
 
-	value = (int)gtk_range_get_value (range);
+	value = (int) gtk_range_get_value (range);
 
 	if (value == NEVER_TIME_ON_SLIDER) {
 		/* power manager interprets 0 as Never */
 		value = 0;
 	} else {
+		/* We take away the g-s idle time as the slider represents
+		 * global time but we only do our timeout from when g-s
+		 * declares the session idle */
+		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+		value -= gs_idle_time;
+
 		/* policy is in seconds, slider is in minutes */
 		value *= 60;
 	}
 
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client, gpm_pref_key, value, NULL);
-	g_object_unref (client);
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
+	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
+	gconf_client_set_int (prefs->priv->gconf_client, gpm_pref_key, value, NULL);
 }
 
 /**
@@ -277,16 +282,16 @@ gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
 			      char	*widget_name,
 			      char	*gpm_pref_key)
 {
-	GladeXML    *xml = prefs->priv->glade_xml;
 	GtkWidget *widget;
 	gint value;
 	gboolean is_writable;
 
-	widget = glade_xml_get_widget (xml, widget_name);
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
 			  G_CALLBACK (gpm_prefs_format_time_cb), prefs);
 
 	value = gconf_client_get_int (prefs->priv->gconf_client, gpm_pref_key, NULL);
+
 	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client, gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
@@ -296,13 +301,17 @@ gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
 	} else {
 		/* policy is in seconds, slider is in minutes */
 		value /= 60;
+		int gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+		value += gs_idle_time;
 	}
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
+
 	g_signal_connect (G_OBJECT (widget), "value-changed",
 			  G_CALLBACK (gpm_prefs_sleep_slider_changed_cb),
-			  gpm_pref_key);
+			  prefs);
 
 	return widget;
 }
@@ -314,16 +323,17 @@ gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
  **/
 static void
 gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
-					char	 *gpm_pref_key)
+					GpmPrefs *prefs)
 {
 	gdouble value;
-	GConfClient *client;
+	char *gpm_pref_key;
 
 	value = gtk_range_get_value (range);
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
 
-	client = gconf_client_get_default ();
-	gconf_client_set_int (client, gpm_pref_key, (gint) value, NULL);
-	g_object_unref (client);
+	g_object_set_data (G_OBJECT (range), "gconf_key", (gpointer) gpm_pref_key);
+	gpm_debug ("Changing %s to %i", gpm_pref_key, (int) value);
+	gconf_client_set_int (prefs->priv->gconf_client, gpm_pref_key, (gint) value, NULL);
 }
 
 /**
@@ -354,9 +364,11 @@ gpm_prefs_setup_brightness_slider (GpmPrefs *prefs,
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
+
 	g_signal_connect (G_OBJECT (widget), "value-changed",
 			  G_CALLBACK (gpm_prefs_brightness_slider_changed_cb),
-			  gpm_pref_key);
+			  prefs);
 	return widget;
 }
 
@@ -367,11 +379,11 @@ gpm_prefs_setup_brightness_slider (GpmPrefs *prefs,
  **/
 static void
 gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
-				   char      *gpm_pref_key)
+				   GpmPrefs  *prefs)
 {
 	char *value;
 	char *action;
-	GConfClient *client;
+	char *gpm_pref_key;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 
@@ -390,10 +402,9 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	}
 
 	g_free (value);
-
-	client = gconf_client_get_default ();
-	gconf_client_set_string (client, gpm_pref_key, action, NULL);
-	g_object_unref (client);
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "gconf_key");
+	gpm_debug ("Changing %s to %s", gpm_pref_key, action);
+	gconf_client_set_string (prefs->priv->gconf_client, gpm_pref_key, action, NULL);
 }
 
 /**
@@ -462,9 +473,10 @@ gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added - 1);
 		i++;
 	}
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
 	g_signal_connect (G_OBJECT (widget), "changed",
 			  G_CALLBACK (gpm_prefs_action_combo_changed_cb),
-			  gpm_pref_key);
+			  prefs);
 
 	g_free (value);
 }
@@ -475,23 +487,17 @@ gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_prefs_checkbox_lock_cb (GtkWidget  *widget,
-			    const char *gpm_pref_key)
+gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
+			    GpmPrefs  *prefs)
 {
-	GConfClient *client;
 	gboolean checked;
-
-	client = gconf_client_get_default ();
+	char *gpm_pref_key;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "gconf_key");
 	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
-
-	gconf_client_set_bool (client,
-				gpm_pref_key,
-				checked, NULL);
-
-	g_object_unref (client);
+	gconf_client_set_bool (prefs->priv->gconf_client, gpm_pref_key, checked, NULL);
 }
 
 /**
@@ -517,9 +523,9 @@ gpm_prefs_setup_checkbox (GpmPrefs  *prefs,
 	checked = gconf_client_get_bool (prefs->priv->gconf_client, gpm_pref_key, NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_prefs_checkbox_lock_cb),
-			  (gpointer) gpm_pref_key);
+			  G_CALLBACK (gpm_prefs_checkbox_lock_cb), prefs);
 
 	return widget;
 }
@@ -706,23 +712,29 @@ setup_icon_policy (GpmPrefs *prefs)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
 				      icon_policy == GPM_ICON_POLICY_NEVER);
 
+	g_object_set_data (G_OBJECT (radiobutton_icon_always), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_ALWAYS));
+	g_object_set_data (G_OBJECT (radiobutton_icon_present), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
+	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_CHARGE));
+	g_object_set_data (G_OBJECT (radiobutton_icon_critical), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_CRITICAL));
+	g_object_set_data (G_OBJECT (radiobutton_icon_never), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_NEVER));
+
 	/* only connect the callbacks after we set the value, else the gconf
 	   keys gets written to (for a split second), and the icon flickers. */
 	g_signal_connect (radiobutton_icon_always, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb),
-			  (gpointer)GPM_ICON_POLICY_ALWAYS);
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_present, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb),
-			  (gpointer)GPM_ICON_POLICY_PRESENT);
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_charge, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb),
-			  (gpointer)GPM_ICON_POLICY_CHARGE);
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_critical, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb),
-			  (gpointer)GPM_ICON_POLICY_CRITICAL);
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 	g_signal_connect (radiobutton_icon_never, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb),
-			  (gpointer)GPM_ICON_POLICY_NEVER);
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
 
 	if (! prefs->priv->has_batteries) {
 		/* Hide battery radio options if we have no batteries */
@@ -760,18 +772,38 @@ gpm_prefs_delete_event_cb (GtkWidget	*widget,
 }
 
 /**
- * callback_gconf_key_changed:
+ * set_idle_hscale_stops:
+ * @prefs: This prefs class instance
+ * @widget_name: The widget name
  *
- * We might have to do things when the gconf keys change; do them here.
+ * Here we make sure that the start of the hscale is set to the
+ * gnome-screensaver idle time to avoid confusion.
  **/
 static void
-callback_gconf_key_changed (GConfClient *client,
-			    guint	 cnxn_id,
-			    GConfEntry	*entry,
-			    gpointer	 user_data)
+set_idle_hscale_stops (GpmPrefs   *prefs,
+		       const char *widget_name,
+		       int	   gs_idle_time)
 {
-	//GpmPrefs   *prefs = GPM_PREFS (user_data);
-	gpm_debug ("GConf key changed %s", entry->key);
+	GtkWidget *widget;
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, NEVER_TIME_ON_SLIDER);
+}
+
+/**
+ * gs_delay_changed_cb:
+ * @key: The gconf key
+ * @prefs: This prefs class instance
+ **/
+static void
+gs_delay_changed_cb (GpmScreensaver *screensaver,
+		    int		     delay,
+		    GpmPrefs        *prefs)
+{
+	/* update the start and stop points on the hscales */
+	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
+	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
 }
 
 /**
@@ -782,6 +814,11 @@ static void
 gpm_prefs_init (GpmPrefs *prefs)
 {
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
+
+	prefs->priv->screensaver = gpm_screensaver_new ();
+	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
+			  G_CALLBACK (gs_delay_changed_cb), prefs);
+
 	prefs->priv->gconf_client = gconf_client_get_default ();
 
 	GtkWidget    *main_window;
@@ -801,9 +838,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
-
-	/* todo */
-	prefs->priv->gssidle = 0;
 
 	main_window = glade_xml_get_widget (prefs->priv->glade_xml, "window_preferences");
 
@@ -831,6 +865,12 @@ gpm_prefs_init (GpmPrefs *prefs)
 	setup_battery_sliders (prefs);
 	setup_sleep_type (prefs);
 
+	int delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
+	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
+	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
+
 	/* if no options then disable frame as it will be empty */
 	if (! prefs->priv->has_batteries) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
@@ -840,21 +880,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
 		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 2);
 	}
-
-#define GS_PREF_DIR		"/apps/gnome-screensaver"
-
-	/* set up the monitoring for gnome-screensaver */
-	gconf_client_add_dir (prefs->priv->gconf_client,
-			      GS_PREF_DIR,
-			      GCONF_CLIENT_PRELOAD_NONE,
-			      NULL);
-
-	gconf_client_notify_add (prefs->priv->gconf_client,
-				 GS_PREF_DIR,
-				 callback_gconf_key_changed,
-				 prefs,
-				 NULL,
-				 NULL);
 
 	gtk_widget_show (main_window);
 }
@@ -874,6 +899,7 @@ gpm_prefs_finalize (GObject *object)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	g_object_unref (prefs->priv->gconf_client);
+	g_object_unref (prefs->priv->screensaver);
 	/* FIXME: we should unref some stuff */
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);

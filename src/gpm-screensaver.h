@@ -44,26 +44,25 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* gs_delay_changed)  (GpmScreensaver	*screensaver,
+					       int		 delay);
 } GpmScreensaverClass;
 
-#define GS_PREF_DIR		"/apps/gnome-screensaver"
-#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
-
 GType		 gpm_screensaver_get_type	(void);
-void		 gpm_screensaver_show_window	(GpmScreensaver *screensaver);
 
-gboolean	gpm_screensaver_lock		(GpmScreensaver *screensaver);
-gboolean	gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
-void		gpm_screensaver_lock_set	(GpmScreensaver *screensaver,
+int		 gpm_screensaver_get_delay	(GpmScreensaver *screensaver);
+gboolean	 gpm_screensaver_lock		(GpmScreensaver *screensaver);
+gboolean	 gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
+void		 gpm_screensaver_lock_set	(GpmScreensaver *screensaver,
 						 gboolean lock);
-gboolean	gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
-gboolean	gpm_screensaver_enable_throttle	(GpmScreensaver *screensaver,
+gboolean	 gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
+gboolean	 gpm_screensaver_enable_throttle	(GpmScreensaver *screensaver,
 						 gboolean enable);
-gboolean	gpm_screensaver_check_running	(GpmScreensaver *screensaver);
-void		gpm_screensaver_poke		(GpmScreensaver *screensaver);
-gboolean	gpm_screensaver_get_idle	(GpmScreensaver *screensaver,
+gboolean	 gpm_screensaver_check_running	(GpmScreensaver *screensaver);
+void		 gpm_screensaver_poke		(GpmScreensaver *screensaver);
+gboolean	 gpm_screensaver_get_idle	(GpmScreensaver *screensaver,
 						 gint *time);
-void		gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
+void		 gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
 						 const char	*name,
 						 const char	*prev,
 						 const char	*new);
