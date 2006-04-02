@@ -1,5 +1,14 @@
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-screensaver.{c|h}, src/manager.c: Allow gnome-screensaver to
+	connect and disconnect from the messagebus at runtime. This fixes
+	the bug where gnome-screensaver is updated, and locking stops working.
+	Using this method also stops us continually getting the GProxy and DBUS
+	session connection for every call to gnome-screensaver and is more
+	efficient.
+
+2006-04-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-screensaver.{c|h}, src/manager.c: make gpm-screensaver into
 	a module, so we can start to deal with the issues with restarting g-s
 	and g-s starting after g-p-m.

@@ -59,10 +59,14 @@ void		gpm_screensaver_lock_set	(GpmScreensaver *screensaver,
 gboolean	gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
 gboolean	gpm_screensaver_enable_throttle	(GpmScreensaver *screensaver,
 						 gboolean enable);
-gboolean	gpm_screensaver_is_running	(GpmScreensaver *screensaver);
+gboolean	gpm_screensaver_check_running	(GpmScreensaver *screensaver);
 void		gpm_screensaver_poke		(GpmScreensaver *screensaver);
 gboolean	gpm_screensaver_get_idle	(GpmScreensaver *screensaver,
 						 gint *time);
+void		gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
+						 const char	*name,
+						 const char	*prev,
+						 const char	*new);
 
 GpmScreensaver	*gpm_screensaver_new		(void);
 

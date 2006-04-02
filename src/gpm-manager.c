@@ -1495,6 +1495,7 @@ dbus_name_owner_changed_session_cb (GpmDbusMonitor *dbus_monitor,
 	if (strlen (new) == 0) {
 		gpm_inhibit_remove_dbus (manager->priv->inhibit, name);
 	}
+	gpm_screensaver_dbus_name_owner_changed (manager->priv->screensaver, name, prev, new);
 }
 
 /**

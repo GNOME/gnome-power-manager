@@ -21,6 +21,7 @@
 
 #include "config.h"
 
+#include <string.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
@@ -43,6 +44,7 @@ struct GpmScreensaverPrivate
 	DBusGConnection		*session_connection;
 	DBusGProxy		*gs_proxy;
 	GConfClient		*gconf_client;
+	gboolean		 is_connected; /* if we are connected to g-s */
 };
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
@@ -60,6 +62,44 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 }
 
 /**
+ * gpm_screensaver_connect:
+ * @screensaver: This screensaver class instance
+ **/
+static void
+gpm_screensaver_connect (GpmScreensaver *screensaver)
+{
+	if (screensaver->priv->is_connected) {
+		/* sometimes dbus goes crazy and we get two events */
+		return;
+	}
+	screensaver->priv->gs_proxy = dbus_g_proxy_new_for_name (screensaver->priv->session_connection,
+							         GS_LISTENER_SERVICE,
+							         GS_LISTENER_PATH,
+							         GS_LISTENER_INTERFACE);
+	screensaver->priv->is_connected = TRUE;
+	gpm_debug ("gnome-screensaver connected to the session DBUS");
+}
+
+/**
+ * gpm_screensaver_disconnect:
+ * @screensaver: This screensaver class instance
+ **/
+static void
+gpm_screensaver_disconnect (GpmScreensaver *screensaver)
+{
+	if (! screensaver->priv->is_connected) {
+		/* sometimes dbus goes crazy and we get two events */
+		return;
+	}
+	if (screensaver->priv->gs_proxy) {
+		g_object_unref (G_OBJECT (screensaver->priv->gs_proxy));
+		screensaver->priv->gs_proxy = NULL;
+	}
+	screensaver->priv->is_connected = FALSE;
+	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
+}
+
+/**
  * gpm_screensaver_init:
  * @screensaver: This screensaver class instance
  **/
@@ -69,6 +109,8 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 	GError *error = NULL;
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
+	screensaver->priv->is_connected = FALSE;
+	screensaver->priv->gs_proxy = NULL;
 	screensaver->priv->gconf_client = gconf_client_get_default ();
 
 	screensaver->priv->session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
@@ -79,12 +121,12 @@ gpm_screensaver_init (GpmScreensaver *screensaver)
 		}
 		gpm_critical_error ("Cannot connect to DBUS Session Daemon");
 	}
-
-	screensaver->priv->gs_proxy = dbus_g_proxy_new_for_name (screensaver->priv->session_connection,
-							         GS_LISTENER_SERVICE,
-							         GS_LISTENER_PATH,
-							         GS_LISTENER_INTERFACE);
-
+	/* blindly try to connect */
+	gpm_screensaver_connect (screensaver);
+	if (! gpm_screensaver_check_running (screensaver)) {
+		screensaver->priv->is_connected = FALSE;
+		gpm_warning ("gnome-screensaver has not been started yet");
+	}
 }
 
 /**
@@ -101,7 +143,7 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-	g_object_unref (G_OBJECT (screensaver->priv->gs_proxy));
+	gpm_screensaver_disconnect (screensaver);
 	g_object_unref (screensaver->priv->gconf_client);
 
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
@@ -152,7 +194,7 @@ gboolean
 gpm_screensaver_lock (GpmScreensaver *screensaver)
 {
 	int sleepcount = 0;
-	if (! gpm_screensaver_is_running (screensaver)) {
+	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Not locking, as gnome-screensaver not running");
 		return FALSE;
 	}
@@ -168,7 +210,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 	   solidly before we continue from the screensaver_lock action.
 	   The interior of g-ss is async, so we cannot get the dbus method
 	   to block until lock is complete. */
-	while (! gpm_screensaver_is_running (screensaver)) {
+	while (! gpm_screensaver_check_running (screensaver)) {
 		/* Sleep for 1/10s */
 		g_usleep (1000 * 100);
 		if (sleepcount++ > 50) {
@@ -191,6 +233,11 @@ gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 	GError *error = NULL;
 	gboolean boolret = TRUE;
 
+	if (! screensaver->priv->is_connected) {
+		gpm_debug ("Not throttling, as gnome-screensaver not running");
+		return FALSE;
+	}
+
 	gpm_debug ("setThrottleEnabled : %i", enable);
 	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "setThrottleEnabled", &error,
 				G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
@@ -210,12 +257,12 @@ gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 }
 
 /**
- * gpm_screensaver_is_running:
+ * gpm_screensaver_check_running:
  * @screensaver: This screensaver class instance
  * Return value: TRUE if gnome-screensaver is running
  **/
 gboolean
-gpm_screensaver_is_running (GpmScreensaver *screensaver)
+gpm_screensaver_check_running (GpmScreensaver *screensaver)
 {
 	GError *error = NULL;
 	gboolean boolret = TRUE;
@@ -225,7 +272,6 @@ gpm_screensaver_is_running (GpmScreensaver *screensaver)
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
 		if (error) {
-			gpm_warning ("%s", error->message);
 			g_error_free (error);
 		}
 		boolret = FALSE;
@@ -244,6 +290,10 @@ gpm_screensaver_is_running (GpmScreensaver *screensaver)
 void
 gpm_screensaver_poke (GpmScreensaver *screensaver)
 {
+	if (! screensaver->priv->is_connected) {
+		gpm_debug ("Not poke'ing, as gnome-screensaver not running");
+		return;
+	}
 	gpm_debug ("poke");
 	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "Poke", G_TYPE_INVALID);
 }
@@ -259,6 +309,11 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 {
 	GError *error = NULL;
 	gboolean boolret = TRUE;
+
+	if (! screensaver->priv->is_connected) {
+		gpm_debug ("Not getting idle, as gnome-screensaver not running");
+		return FALSE;
+	}
 
 	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "getActiveTime", &error,
 				G_TYPE_INVALID,
@@ -276,4 +331,24 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 		return FALSE;
 	}
 	return TRUE;
+}
+
+/**
+ * gpm_screensaver_dbus_name_owner_changed:
+ * @screensaver: This screensaver class instance
+ **/
+void
+gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
+					 const char	*name,
+					 const char	*prev,
+					 const char	*new)
+{
+	if (strcmp (name, GS_LISTENER_SERVICE) == 0) {
+		if (strlen (prev) != 0 && strlen (new) == 0 ) {
+			gpm_screensaver_disconnect (screensaver);
+		}
+		if (strlen (prev) == 0 && strlen (new) != 0 ) {
+			gpm_screensaver_connect (screensaver);
+		}
+	}
 }
