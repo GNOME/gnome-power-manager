@@ -19,24 +19,53 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPM_SCREENSAVER_H
-#define __GPM_SCREENSAVER_H
+#ifndef __GPMSCREENSAVER_H
+#define __GPMSCREENSAVER_H
 
-#include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
+
+#define GPM_TYPE_SCREENSAVER		(gpm_screensaver_get_type ())
+#define GPM_SCREENSAVER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_SCREENSAVER, GpmScreensaver))
+#define GPM_SCREENSAVER_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_SCREENSAVER, GpmScreensaverClass))
+#define GPM_IS_SCREENSAVER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_SCREENSAVER))
+#define GPM_IS_SCREENSAVER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_SCREENSAVER))
+#define GPM_SCREENSAVER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverClass))
+
+typedef struct GpmScreensaverPrivate GpmScreensaverPrivate;
+
+typedef struct
+{
+        GObject		       parent;
+        GpmScreensaverPrivate *priv;
+} GpmScreensaver;
+
+typedef struct
+{
+	GObjectClass	parent_class;
+} GpmScreensaverClass;
 
 #define GS_PREF_DIR		"/apps/gnome-screensaver"
 #define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
 
-gboolean gpm_screensaver_lock (void);
-gboolean gpm_screensaver_lock_set (gboolean lock);
-gboolean gpm_screensaver_lock_enabled (void);
-gboolean gpm_screensaver_enable_throttle (gboolean enable);
-gboolean gpm_screensaver_is_running (void);
-gboolean gpm_screensaver_poke (void);
-gboolean gpm_screensaver_get_idle (gint *time);
+GType		 gpm_screensaver_get_type	(void);
+void		 gpm_screensaver_show_window	(GpmScreensaver *screensaver);
+
+gboolean	gpm_screensaver_lock		(GpmScreensaver *screensaver);
+gboolean	gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
+void		gpm_screensaver_lock_set	(GpmScreensaver *screensaver,
+						 gboolean lock);
+gboolean	gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
+gboolean	gpm_screensaver_enable_throttle	(GpmScreensaver *screensaver,
+						 gboolean enable);
+gboolean	gpm_screensaver_is_running	(GpmScreensaver *screensaver);
+void		gpm_screensaver_poke		(GpmScreensaver *screensaver);
+gboolean	gpm_screensaver_get_idle	(GpmScreensaver *screensaver,
+						 gint *time);
+
+GpmScreensaver	*gpm_screensaver_new		(void);
 
 G_END_DECLS
 
-#endif	/* _GPMSCREENSAVER_H */
+#endif	/* __GPMSCREENSAVER_H */

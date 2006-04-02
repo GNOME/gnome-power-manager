@@ -105,6 +105,7 @@ struct GpmManagerPrivate
 	GpmPower	*power;
 	GpmDbusMonitor	*dbus;
 	GpmBrightness   *brightness;
+	GpmScreensaver  *screensaver;
 	GpmInhibit	*inhibit;
 
 	GpmTrayIcon	*tray_icon;
@@ -644,7 +645,7 @@ change_power_policy (GpmManager *manager,
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (!on_ac);
 
-	gpm_screensaver_enable_throttle (!on_ac);
+	gpm_screensaver_enable_throttle (manager->priv->screensaver, !on_ac);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
@@ -675,7 +676,7 @@ gpm_manager_get_lock_policy (GpmManager *manager,
 						GPM_PREF_LOCK_USE_SCREENSAVER,
 						NULL);
 	if (use_ss_setting) {
-		do_lock = gpm_screensaver_lock_enabled ();
+		do_lock = gpm_screensaver_lock_enabled (manager->priv->screensaver);
 		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
 		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
@@ -706,7 +707,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 	do_lock = gpm_manager_get_lock_policy (manager,
 					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
-		if (!gpm_screensaver_lock ())
+		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
 	GError     *error = NULL;
@@ -746,7 +747,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	do_lock = gpm_manager_get_lock_policy (manager,
 					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
-		gpm_screensaver_poke ();
+		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 	return ret;
 }
@@ -1024,7 +1025,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	do_lock = gpm_manager_get_lock_policy (manager,
 					        GPM_PREF_LOCK_ON_HIBERNATE);
 	if (do_lock) {
-		gpm_screensaver_lock ();
+		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
 	gpm_networkmanager_sleep ();
@@ -1053,7 +1054,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	if (do_lock) {
-		gpm_screensaver_poke ();
+		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 	gpm_networkmanager_wake ();
 
@@ -1097,7 +1098,7 @@ gpm_manager_suspend (GpmManager *manager,
 	do_lock = gpm_manager_get_lock_policy (manager,
 					        GPM_PREF_LOCK_ON_SUSPEND);
 	if (do_lock) {
-		gpm_screensaver_lock ();
+		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
 	gpm_networkmanager_sleep ();
@@ -1126,7 +1127,7 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	if (do_lock) {
-		gpm_screensaver_poke ();
+		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 	gpm_networkmanager_wake ();
 
@@ -1294,10 +1295,10 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 		if (on_ac) {
-			gpm_screensaver_enable_throttle (FALSE);
+			gpm_screensaver_enable_throttle (manager->priv->screensaver, FALSE);
 		}
 	} else {
-		gpm_screensaver_enable_throttle (TRUE);
+		gpm_screensaver_enable_throttle (manager->priv->screensaver, TRUE);
 	}
 
 	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
@@ -1417,7 +1418,7 @@ lid_button_pressed (GpmManager	 *manager,
 	if (state) {
 		/* Disable the fancy screensaver, as we don't want this starting
 		   when the lid is shut */
-		gpm_screensaver_enable_throttle (TRUE);
+		gpm_screensaver_enable_throttle (manager->priv->screensaver, TRUE);
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			gpm_manager_set_reason (manager, "the lid has been closed on ac power");
@@ -1429,7 +1430,7 @@ lid_button_pressed (GpmManager	 *manager,
 		}
 	} else {
 		/* Allow the fancy screensaver */
-		gpm_screensaver_enable_throttle (FALSE);
+		gpm_screensaver_enable_throttle (manager->priv->screensaver, FALSE);
 
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
@@ -1514,7 +1515,7 @@ power_button_pressed_cb (GpmPower   *power,
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
 	/* simulate user input */
-	gpm_screensaver_poke ();
+	gpm_screensaver_poke (manager->priv->screensaver);
 
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
@@ -1540,7 +1541,7 @@ power_button_pressed_cb (GpmPower   *power,
 		gpm_brightness_level_down (manager->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
-		gpm_screensaver_lock ();
+		gpm_screensaver_lock (manager->priv->screensaver);
 
 	} else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
 		battery_button_pressed (manager);
@@ -1563,7 +1564,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 	gpm_debug ("Setting on-ac: %d", on_ac);
 
 	/* simulate user input, to fix #333525 */
-	gpm_screensaver_poke ();
+	gpm_screensaver_poke (manager->priv->screensaver);
 
 	/* If we are on AC power we should show warnings again */
 	if (on_ac) {
@@ -2274,6 +2275,8 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
+	manager->priv->screensaver = gpm_screensaver_new ();
+
 	/* FIXME: We shouldn't assume the lid is open at startup */
 	manager->priv->lid_is_closed = FALSE;
 
@@ -2466,6 +2469,9 @@ gpm_manager_finalize (GObject *object)
 	}
 	if (manager->priv->inhibit != NULL) {
 		g_object_unref (manager->priv->inhibit);
+	}
+	if (manager->priv->screensaver != NULL) {
+		g_object_unref (manager->priv->screensaver);
 	}
 	if (manager->priv->dbus != NULL) {
 		g_object_unref (manager->priv->dbus);

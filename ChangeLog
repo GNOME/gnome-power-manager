@@ -1,5 +1,11 @@
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-screensaver.{c|h}, src/manager.c: make gpm-screensaver into
+	a module, so we can start to deal with the issues with restarting g-s
+	and g-s starting after g-p-m.
+
+2006-04-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.{c|h}, src/gpm-prefs.c, src/Makefile.am:
 	Modularize the key functionality into this new module, so we can
 	start connecting it to other modules.
