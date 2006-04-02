@@ -1033,6 +1033,10 @@ gpm_manager_hibernate (GpmManager *manager,
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Hibernating computer");
 	ret = gpm_hal_hibernate ();
+
+	/* we need to refresh all the power caches */
+	gpm_power_update_all (manager->priv->power);
+
 	if (! ret) {
 		char *message;
 		gboolean show_notify;
@@ -1106,6 +1110,10 @@ gpm_manager_suspend (GpmManager *manager,
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Suspending computer");
 	ret = gpm_hal_suspend (0);
+
+	/* we need to refresh all the power caches */
+	gpm_power_update_all (manager->priv->power);
+
 	if (! ret) {
 		char *message;
 		gboolean show_notify;

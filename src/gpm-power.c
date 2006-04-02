@@ -1621,6 +1621,18 @@ gpm_hash_free_device_cache (GpmPower *power)
 }
 
 /**
+ * gpm_power_update_all:
+ * @power: This power class instance
+ *
+ * We can call this anywhere to update all the device and kind caches
+ **/
+void
+gpm_power_update_all (GpmPower *power)
+{
+	battery_kind_cache_update_all (power);
+}
+
+/**
  * gpm_power_dbus_name_owner_changed:
  * @power: This power class instance
  **/

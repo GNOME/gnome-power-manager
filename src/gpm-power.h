@@ -105,6 +105,7 @@ gint		 gpm_power_get_num_devices_of_kind (GpmPower		*power,
 GArray		*gpm_power_get_description_array (GpmPower		*power,
 						  GpmPowerBatteryKind	 battery_kind,
 						  gint		 device_num);
+void		 gpm_power_update_all		(GpmPower *power);
 void		 gpm_power_free_description_array (GArray *array);
 
 gboolean	 gpm_power_battery_is_charged	(GpmPowerBatteryStatus	*status);

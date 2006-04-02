@@ -1,5 +1,10 @@
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c, src/gpm-power.{c|h}: Add gpm_power_update_all so
+	we update our caches when we resume from suspend or hibernate.
+
+2006-04-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c, src/gpm-screensaver.{c|h}, src/gpm-manager.c,
 	src/Makefile.am: Use an instance of GpmScreensaver in g-p-p so we can
 	connect to the g-s-p idle delay settings.
