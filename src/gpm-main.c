@@ -216,7 +216,7 @@ main (int argc, char *argv[])
 
 	gpm_exit (manager);
 
-	g_object_unref(program);
+	g_object_unref (program);
 
 	return 0;
 }

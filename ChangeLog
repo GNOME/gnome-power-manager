@@ -1,3 +1,12 @@
+2006-04-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs-core.{c|h}, src/gpm-prefs.c, src/Makefile.am:
+	Modularize the key functionality into this new module, so we can
+	start connecting it to other modules.
+	We need tighter links with g-s if we are going to do clever things with
+	the idle sliders.
+	Also comment, and do a massive tidy-up.
+
 2006-04-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c (gpm_power_get_description_array): Shorten desc.
@@ -5045,16 +5054,16 @@
 	state, then performs and notification actions. It obsoletes
 	most of do_action() and all of the hasBatteriesCheck type code.
 
-	* src/gpm.c, Misc, Hooks added to most of the update code to support
+	* src/gpm.c: Misc, Hooks added to most of the update code to support
 	updateLogic (where appropriate).
 
-	* src/common.h, make enums match CodingStyle, also added lots more
+	* src/common.h: make enums match CodingStyle, also added lots more
 	states to the StateData structure to support updateLogic().
 
-	* src/common.c, Made the percentage/mWh calculations more common, and more
+	* src/common.c: Made the percentage/mWh calculations more common, and more
 	resistant to errors.
 
-	* src/prefs.c, Made the PowerState ComboBox change the others according to
+	* src/prefs.c: Made the PowerState ComboBox change the others according to
 	policy. Also values now populated dynamically, not in the glade file.
 	Static policy in use, and documentation has been updated.
 

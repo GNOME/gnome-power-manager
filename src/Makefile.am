@@ -36,6 +36,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-debug.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
+	gpm-prefs-core.h					\
+	gpm-prefs-core.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	$(NULL)
