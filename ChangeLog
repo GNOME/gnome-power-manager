@@ -1,3 +1,9 @@
+2006-04-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-feedback-widget.c (gpm_feedback_init): Not everybody installs
+	the glade file to /home/hughsie.... so don't hardcode this. Ugh.
+	Found by Alejandro Vera, many thanks.
+
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c, src/gpm-power.{c|h}: Add gpm_power_update_all so
@@ -14,7 +20,7 @@
 	* src/gpm-screensaver.c (gpm_screensaver_connect,
 	gpm_screensaver_enable_throttle): Cache the "throttle" value.
 	This is needed if g-p-m is started before g-s; we apply the setting
-	when g-s is eventually started.
+	when g-s is eventually started. Fixes #332366
 
 2006-04-02  Richard Hughes  <richard@hughsie.com>
 
@@ -1874,7 +1880,7 @@
 
 	* src/gpm-manager.c: Add the FIXME constants BATTERY_LOW_PERCENTAGE
 	and BATTERY_CRITICAL_PERCENTAGE so we can get 99% of the patch of
-	http://bugzilla.gnome.org/show_bug.cgi?id=326743 in CVS.
+	#326743 in CVS.
 
 2006-01-24  Jaap Haitsma  <jaap@haitsma.org>
 
@@ -2267,7 +2273,7 @@
 
 	* src/gpm-hal.c (gpm_hal_can_suspend), (gpm_hal_can_hibernate):
 	Fix logic so that is key is missing we do not do the action.
-	Fixes bug http://bugzilla.gnome.org/show_bug.cgi?id=326552
+	Fixes bug #326552
 
 2006-01-11  William Jon McCann  <mccann@jhu.edu>
 
@@ -2573,7 +2579,7 @@
 
 	* gnome-power-manager.schemas.in, src/gpm-main.c, src/gpm-prefs.h:
 	Add /notify/fully_charged to fix bug:
-	http://bugzilla.gnome.org/show_bug.cgi?id=325876
+	#325876
 
 	* src/Makefile.am: Build the generated files a slightly easier way, as
 	suggested by BJörn Lindqvist.
@@ -2626,7 +2632,7 @@
 2005-12-29  Richard Hughes  <richard@hughsie.com>
 
 	* gnome-power-manager.spec.in: Add "Requires: dbus-x11" to fix
-	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=176656
+	rh:176656
 
 	* src/gpm-sysdev.{c|h}, src/gpm-console.c, src/gpm-core.c,
 	src/gpm-main.c, src/gpm-notification.c:
@@ -2654,7 +2660,6 @@
 	* src/gpm-dbus-common.c: change gpm_marshal.h to gpm-marshal.h
 
 	* src/gpm-hal-callback.c: change gpm_marshal.h to gpm-marshal.h
-
 
 2005-12-26  Richard Hughes  <richard@hughsie.com>
 
@@ -2729,7 +2734,7 @@
 	* src/gpm-prefs.h, src/gpm-main.c, gnome-power-manager.schemas.in:
 	Implement /apps/gnome-power-manager/notify/ac_adapter so we can
 	disable this message if we want to. Fixes the bug:
-	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=176433
+	rh:176433
 
 	* src/gpm-libnotify.{c|h}, src/gpm-notification.c, src/gpm-main.c:
 	Rename the local libnotify_* wrappers gpm_libnotify_* to make sure
@@ -2757,20 +2762,20 @@
 
 	* src/gpm-prefs.c: Hide, process, then show the top window so that
 	the dialogue resizes itself without redrawing.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=323562
+	Fixes #323562
 
 	* gnome-power-manager.spec.in: Apply a patch from Matthias Saou to
-	fix http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=172963
+	fix rh:172963
 
 2005-12-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/eggtrayicon.c, src/gpm-prefs.c: Update so that if gnome-panel
 	disappears we just re-instantiate the icon without crashing.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=324446
+	Fixes #324446
 
 	* src/gpm-sysdec.{c|h}, gpm-notification.c: Add the sd->isPresent
 	flag so we can detect when an sd has no present sds members.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=323563
+	Fixes #323563
 
 2005-12-19  Nikos Charonitakis  <nikosx@gmail.com>
 
@@ -2890,7 +2895,7 @@
 
 	* src/gpm-common.c (get_timestring_from_minutes): Use ngettext to get
 	plural form. Based on a patch from Gabor Kelemen, many thanks.
-	Fixes bug http://bugzilla.gnome.org/show_bug.cgi?id=322773
+	Fixes bug #322773
 
 	* src/gpm-main.c: Add in the virtual buttons Hibernate, Suspend and
 	Lock.
@@ -2899,7 +2904,7 @@
 	poke as we have to wait for the dbus connection to time out.
 
 	* src/gpm-main.c: Replace use of get_time_string with the data itself.
-	Fixes bug: http://bugzilla.gnome.org/show_bug.cgi?id=323135
+	Fixes bug: #323135
 
 	* src/gpm-common.c (get_time_string): Remove this function as it is
 	no longer in use.
@@ -2969,7 +2974,7 @@
 	* src/gpm-notification.h, src/gpm-notification.c:
 	Fix the problem where the About window's content is not localizable.
 	Apply a patch from Gabor Kelemen that makes it localizable.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=322547
+	Fixes #322547
 
 2005-11-26  Marcel Telka  <marcel@telka.sk>
 
@@ -3040,7 +3045,7 @@
 	If the manufacturer is IBM, then assume we are a ThinkPad,
 	and don't do the new-fangled dimming routine. The ThinkPad dims
 	gently itself. This fixes the bug:
-	http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
+	rh:173382
 
 	* src/gpm-dbus-common.{c|h}:
 	Add dbus_is_active_service so we can print and search the services
@@ -3071,7 +3076,7 @@
 	* src/gpm-notification.c: display the charged icon whenever we are
 	not discharging and not charging as opposed to when at 100% as some
 	batteries will never get to the maximum value.
-	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=321034
+	Should fix #321034
 
 2005-11-14  Richard Hughes  <richard@hughsie.com>
 
@@ -3089,7 +3094,7 @@
 	case where the laptop backlight isn't being turned off when the
 	lid goes down. For the time being, we'll use the hack that is xset,
 	but when (if?) gnome-screensaver supports a DBUS method we'll switch
-	to that. Should solve http://bugzilla.gnome.org/show_bug.cgi?id=321313
+	to that. Should solve #321313
 
 	* src/gpm-main.c: Use gscreensaver_set_dpms on the lid events.
 
@@ -3174,11 +3179,11 @@
 	* src/gpm-notification.c, src/gpm-sysdev.c:
 	Do not segfault when battery bay is empty, and only add present
 	batteries to the calculations.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=320658
+	Fixes #320658
 
 	* src/gpm-notification.c: Check for discharging and charging instead
 	of checking for 100%.
-	Should fix http://bugzilla.gnome.org/show_bug.cgi?id=320836
+	Should fix #320836
 
 	* src/gpm-sysdev.{c|h}, src/gpm-main.c: Add sd link to parent so we
 	can find our device type. Update the correct battery type, not just
@@ -3333,7 +3338,7 @@
 
 	* gpm-notification.c (get_object_tooltip): Do not display
 	"Unknown remaining" for missing remaining time.
-	Fixes http://bugzilla.gnome.org/show_bug.cgi?id=320135
+	Fixes #320135
 
 	* src/icons/gnome-power-keyboard.png,
 	src/icons/gnome-power-mouse.png: New icons from Diana Fong to convey
@@ -4173,8 +4178,6 @@
 	we do not try to read in the gconf values and throw an error if this
 	program is not built. We still need to write the auto check for
 	gnome-screensaver in configure.in. Spotted by Steev Klimaszewski.
-
-
 
 	* src/gpm-main.c, src/gpm-main.c: Sprinkle with #if HAVE_GSCREENSAVER
 	so that we disable the un-needed parts.

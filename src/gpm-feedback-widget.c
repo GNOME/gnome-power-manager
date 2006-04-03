@@ -105,9 +105,9 @@ gpm_feedback_init (GpmFeedback *feedback)
 	/* initialise the window */
 	GtkWidget *image;
 
-	feedback->priv->xml = glade_xml_new ("/home/hughsie/gnome-power-manager/data/gpm-feedback-widget.glade", NULL, NULL);
+	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
 	if (! feedback->priv->xml) {
-		gpm_critical_error ("Can't find the glade file");
+		gpm_critical_error ("Can't find the glade file gpm-feedback-widget.glade");
 	}
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
 
