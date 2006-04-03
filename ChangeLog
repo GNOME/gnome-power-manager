@@ -1,3 +1,15 @@
+2006-04-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal-monitor.c (watch_device_properties_modified):
+	Don't switch round the removed and added booleans, the order is
+	"added" then "removed".
+
+	* src/gpm-hal-monitor.c (watch_device_property_modified):
+	Emit the signal for modified *or* new keys, not just modified keys.
+	This fixes the problem where HAL is slow creating the keys, which can
+	happen with the CSR mouse and keyboard addon. This is a HAL bug, but
+	there's no reason we can't make the mice work after a little delay.
+
 2006-03-27  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (gpm_manager_suspend, gpm_manager_hibernate):

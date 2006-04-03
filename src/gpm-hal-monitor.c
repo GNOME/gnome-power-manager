@@ -169,20 +169,18 @@ watch_device_property_modified (DBusGProxy    *proxy,
 {
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i", udi, key, is_added, is_removed);
 
-	/* only process modified entries, not added or removed keys */
-	if (is_removed || is_added) {
+	/* do not process keys that have been removed */
+	if (is_removed) {
 		return;
 	}
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		gboolean on_ac = gpm_hal_is_on_ac ();
-
 		monitor_change_on_ac (monitor, on_ac);
-
 		return;
 	}
 
-	/* no point continuing any further if we are never going to match ...*/
+	/* only match battery* values */
 	if (strncmp (key, "battery", 7) != 0)
 		return;
 
@@ -219,7 +217,7 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 		removed = g_value_get_boolean (g_value_array_get_nth (array, 1));
 		added = g_value_get_boolean (g_value_array_get_nth (array, 2));
 
-		watch_device_property_modified (proxy, udi, key, removed, added, monitor);
+		watch_device_property_modified (proxy, udi, key, added, removed, monitor);
 	}
 }
 
