@@ -5,8 +5,8 @@
   <!ENTITY GFDL  SYSTEM "fdl-appendix.xml">
   <!ENTITY app "GNOME Power Manager">
   <!ENTITY application "<application>&app;</application>">
-  <!ENTITY appversion "2.14.0">
-  <!ENTITY manrevision "2.14.0">
+  <!ENTITY appversion "2.15.0">
+  <!ENTITY manrevision "2.15.0">
 ]>
 <!--
       (Do not remove this comment block.)
@@ -140,12 +140,16 @@
       performed until normal activity is resumed.
       It will not resume until signaled by an external event such as a keyboard
       button press.
-      WARNING: You still use a small amount of battery power whilst suspended,
-      so is not recommended for the low power action.
-      If you remove AC power on a desktop, or run out of battery power on a
-      laptop then you will loose your work.
       It generally takes a few seconds to suspend and then resume your computer.
     </para>
+    <caution>
+      <para>
+        You still use a small amount of battery power whilst suspended, so is
+        not recommended for the low power action.
+        If you remove AC power on a desktop, or run out of battery power on a
+        laptop then you will loose your work.
+      </para>
+    </caution>
     <para>
       The Hibernation state saves the complete state of the computer to hard
       disk and turns off the power, so that the computer appears to be off.
@@ -243,10 +247,13 @@
     <listitem><para>The notification area icon policy</para></listitem>
   </itemizedlist>
 
-  <para>
-  Some sliders or option boxes may be disabled if the gconf policy keys are not writable.
-  This allows admins to lock-down the actions that a user can select.
-  </para>
+  <note>
+    <para>
+      Some sliders or option boxes may be disabled if the gconf policy keys are
+      not writable.
+      This allows administrators to lock-down the actions that a user can select.
+    </para>
+  </note>
 
   <figure id="prefs-main">
     <title>&app; AC Power Tab</title>
@@ -275,30 +282,70 @@
       </mediaobject>
     </screenshot>
   </figure>
-</section>
+  <note>
+    <para>
+      You can change the idle laptop panel brightness by changing the gconf key
+      <command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>.
+    </para>
+  </note>
 
-<section id="advanced-preferences">
-  <title>Advanced Preferences</title>
+  <section id="preferences-idletimes">
+    <title>Session and system idle times</title>
 
-  <para>
-  There are many settings in gconf that are not expressed to the user.
-  These allow &app; to present a simple imterface to the user, but also
-  be flexible for power users.
-  </para>
+    <para>
+      <command>gnome-screensaver</command> is a session daemon that monitors user
+      input, and if the mouse has not been moved, or the keyboard been pressed then
+      it starts a timeout.
+      When the value of this timeout reaches the value set in
+      <command>gnome-screensaver-preferences</command>, then the login is marked
+      as 'session idle'.
+      This is when &application; performs all the session idle actions such as
+      enabling low-power mode and lowering the laptop panel brightness.
+    </para>
+
+    <figure>
+      <title>
+      Changing the session idle timout in <command>gnome-screensaver-preferences</command>
+      </title>
+      <screenshot>
+        <mediaobject>
+          <imageobject><imagedata fileref="figures/gs-prefs.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+
+    <para>
+      As soon as the session is marked at idle, &application; starts it's own
+      'system' timer.
+      When the timeout set in <command>gnome-power-preferences</command> is reached,
+      <emphasis>and</emphasis> the CPU load is idle, then the idle action is
+      performed, which is usually to turn off the screen, or to suspend or hibernate.
+    </para>
+
+    <para>
+      To make this clearer, the sliders in <command>gnome-power-preferences</command>
+      are set to start at the value of the session-timout + 1 minute, as we cannot
+      logically trigger before the session is marked as idle.
+      If you adjust the value of the 'session idle' timeout in
+      <command>gnome-screensaver-preferences</command> then the start of the sliders
+      in <command>gnome-power-preferences</command> will change accordingly.
+    </para>
+  </section>
 
   <section id="advanced-preferences-locking">
     <title>Screen Locking</title>
 
     <para>
-    By default, gnome-power-manager supports a simple locking scheme.
-    This means that the screen will lock if set to "Lock screen" in
-    gnome-screensaver when the lid is closed, or the system performs a suspend or
-    hibernate action.
+      By default, gnome-power-manager supports a simple locking scheme.
+      This means that the screen will lock if set to "Lock screen" in
+      gnome-screensaver when the lid is closed, or the system performs a suspend or
+      hibernate action.
     </para>
     <para>
-    There is a complex locking scheme available for power-users that allows locking
-    policy to change for the lid, suspend and hibernate actions.
-    To enable this complex mode, you will have to disable the gconf key:
+      There is a complex locking scheme available for power-users that allows locking
+      policy to change for the lid, suspend and hibernate actions.
+      To enable this complex mode, you will have to disable the gconf key:
     </para>
 
     <itemizedlist>
@@ -306,8 +353,8 @@
     </itemizedlist>
 
     <para>
-    Then the policy keys can be set to force a gnome-screensaver lock and unlock
-    when the action is performed:
+      Then the policy keys can be set to force a gnome-screensaver lock and unlock
+      when the action is performed:
     </para>
 
     <itemizedlist>
@@ -316,55 +363,37 @@
       <listitem><para><command>/apps/gnome-power-manager/lock_on_hibernate</command></para></listitem>
     </itemizedlist>
 
+  <note>
     <para>
-    <emphasis>NOTE:</emphasis> The lock policy for gnome-screensaver is ignored until the simple mode is
-    re-enabled.
+      The lock policy for gnome-screensaver is ignored until the simple mode is
+      re-enabled.
     </para>
+  </note>
 
   </section>
-</section>
-
-<!-- ============= Bugs ================================== -->
-<!-- You can use it to describe known bugs and limitations of the
-     program. -->
-<section id="known-bugs">
-  <title>Known Bugs and Limitations</title>
-    <para>
-    This section lists known bugs and limitations using &app;.
-    </para>
-    <section id="critical-suspend-action">
-      <title>Power consumption when suspended</title>
-      <para>
-      Your computer still uses a small amount of charge even whilst suspended.
-      If "Suspend" is chosen as the policy option for the battery critical low,
-      and the power completely runs out when sleeping, your work may be lost.
-      See bug <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=330267" type="http">#330267</ulink>
-      or more details.
-      </para>
-   </section>
 </section>
 
 <section id="about">
   <title>About &app;</title>
   <para>
-  &app; was written by Richard Hughes (<email>richard@hughsie.com</email>).
-  To find more information about &app;, please visit the
-  <ulink url="http://www.gnome.org/projects/gnome-power-manager" type="http">
-  GNOME Power Manager web page</ulink>.
+    &app; was written by Richard Hughes <email>richard@hughsie.com</email>.
+    To find more information about &app;, please visit the
+    <ulink url="http://www.gnome.org/projects/gnome-power-manager" type="http">
+    GNOME Power Manager web page</ulink>.
   </para>
   <para>
-  To report a bug or make a suggestion regarding this application or
-  this manual, follow the directions at the
-  <ulink url="http://www.gnome.org/projects/gnome-power-manager/bugs.html" type="http">
-  GNOME Power Manager Bug Page</ulink>.
+    To report a bug or make a suggestion regarding this application or
+    this manual, follow the directions at the
+    <ulink url="http://www.gnome.org/projects/gnome-power-manager/bugs.html" type="http">
+    GNOME Power Manager Bug Page</ulink>.
   </para>
 
   <para>This program is distributed under the terms of the GNU
-  General Public license as published by the Free Software
-  Foundation; either version 2 of the License, or (at your option)
-  any later version. A copy of this license can be found at this
-  <ulink url="gnome-power-manager:gpl" type="help">link</ulink>, or in the file
-  COPYING included with the source code of this program.
+    General Public license as published by the Free Software
+    Foundation; either version 2 of the License, or (at your option)
+    any later version. A copy of this license can be found at this
+    <ulink url="gnome-power-manager:gpl" type="help">link</ulink>, or in the file
+    COPYING included with the source code of this program.
   </para>
 </section>
 
