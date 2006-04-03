@@ -240,7 +240,6 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 		}
 	}
 
-
 	/* sanity check that charge_level.percentage exists (if it should) */
 	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage",
 					     &status->percentage_charge);

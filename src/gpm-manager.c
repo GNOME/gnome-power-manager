@@ -54,6 +54,7 @@
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
+#include "gpm-graph-widget.h"
 #include "gpm-power.h"
 #include "gpm-feedback-widget.h"
 #include "gpm-hal-monitor.h"
@@ -644,7 +645,9 @@ change_power_policy (GpmManager *manager,
 
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (!on_ac);
-
+	if (! on_ac) {
+		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_LOW_POWER);
+	}
 	gpm_screensaver_enable_throttle (manager->priv->screensaver, !on_ac);
 
 	/* set the new sleep (inactivity) value */
@@ -784,19 +787,19 @@ manager_policy_do (GpmManager *manager,
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 
 		gpm_debug ("*ACTION* Suspend");
-		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SUSPEND);
+		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_SUSPEND);
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 
 		gpm_debug ("*ACTION* Hibernate");
-		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SUSPEND);
+		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_HIBERNATE);
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
 
 		gpm_debug ("*ACTION* Blank");
-		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_DPMS_OFF);
+		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF);
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
@@ -1256,7 +1259,7 @@ idle_changed_cb (GpmIdle    *idle,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
-			gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SCREEN_DIM);
+			gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_SCREEN_DIM);
 			gpm_brightness_level_save (manager->priv->brightness,
 						   manager->priv->lcd_dim_brightness);
 		}
@@ -1832,7 +1835,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		/* Do different warnings for each GPM_WARNING */
 		if (warning_type == GPM_WARNING_DISCHARGING) {
-			gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_AC_REMOVED);
+			gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_AC_REMOVED);
 			gboolean show_notify;
 			show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);

@@ -502,26 +502,13 @@ gpm_info_log_do_poll (gpointer data)
  * TODO: Automatically make a legend.
  **/
 void
-gpm_info_interest_point	(GpmInfo *info, GpmInfoEvent event)
+gpm_info_interest_point	(GpmInfo *info, GpmGraphEvent event)
 {
-	int colour = 0;
+	GpmGraphColour colour = 0;
 	int value_x;
-	char *event_desc = "Unknown";
-	
-	if (event == GPM_INFO_EVENT_SUSPEND) {
-		event_desc = "Suspend";
-		colour = GPM_GRAPH_COLOUR_DARK_RED;
-	} else if (event == GPM_INFO_EVENT_AC_REMOVED) {
-		event_desc = "AC power";
-		colour = GPM_GRAPH_COLOUR_DARK_BLUE;
-	} else if (event == GPM_INFO_EVENT_SCREEN_DIM) {
-		event_desc = "Screen dim";
-		colour = GPM_GRAPH_COLOUR_DARK_PURPLE;
-	} else if (event == GPM_INFO_EVENT_DPMS_OFF) {
-		event_desc = "Screen off";
-		colour = GPM_GRAPH_COLOUR_DARK_YELLOW;
-	}
+	const char *event_desc;
 
+	event_desc = gpm_graph_event_description (event, &colour);
 	gpm_debug ("logging event %i: %s", event, event_desc);
 
 	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);

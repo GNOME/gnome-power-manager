@@ -39,13 +39,28 @@ typedef struct GpmGraphPrivate	GpmGraphPrivate;
 
 typedef enum {
 	GPM_GRAPH_COLOUR_DEFAULT,
+	GPM_GRAPH_COLOUR_WHITE,
+	GPM_GRAPH_COLOUR_BLACK,
+	GPM_GRAPH_COLOUR_BLUE,
+	GPM_GRAPH_COLOUR_RED,
+	GPM_GRAPH_COLOUR_PURPLE,
+	GPM_GRAPH_COLOUR_YELLOW,
 	GPM_GRAPH_COLOUR_DARK_BLUE,
 	GPM_GRAPH_COLOUR_DARK_RED,
 	GPM_GRAPH_COLOUR_DARK_PURPLE,
 	GPM_GRAPH_COLOUR_DARK_YELLOW,
-	GPM_GRAPH_COLOUR_BLACK,
 	GPM_GRAPH_COLOUR_LAST
 } GpmGraphColour;
+
+typedef enum {
+	GPM_GRAPH_EVENT_AC_REMOVED,
+	GPM_GRAPH_EVENT_LOW_POWER,
+	GPM_GRAPH_EVENT_SCREEN_DIM,
+	GPM_GRAPH_EVENT_DPMS_OFF,
+	GPM_GRAPH_EVENT_SUSPEND,
+	GPM_GRAPH_EVENT_HIBERNATE,
+	GPM_GRAPH_EVENT_LAST
+} GpmGraphEvent;
 
 typedef struct {
 	int		x;
@@ -75,11 +90,13 @@ struct GpmGraphClass
 GType		 gpm_graph_get_type	(void);
 GtkWidget	*gpm_graph_new		(void);
 
-void		 gpm_graph_set_invert_x	(GpmGraph *graph, gboolean inv);
-void		 gpm_graph_set_invert_y	(GpmGraph *graph, gboolean inv);
-void		 gpm_graph_set_data	(GpmGraph *graph, GList *list);
-void		 gpm_graph_set_axis_x	(GpmGraph *graph, GpmGraphAxisType axis);
-void		 gpm_graph_set_axis_y	(GpmGraph *graph, GpmGraphAxisType axis);
+void		 gpm_graph_set_invert_x		(GpmGraph *graph, gboolean inv);
+void		 gpm_graph_set_invert_y		(GpmGraph *graph, gboolean inv);
+void		 gpm_graph_set_data		(GpmGraph *graph, GList *list);
+void		 gpm_graph_set_axis_x		(GpmGraph *graph, GpmGraphAxisType axis);
+void		 gpm_graph_set_axis_y		(GpmGraph *graph, GpmGraphAxisType axis);
+const char *	 gpm_graph_event_description	(GpmGraphEvent    event,
+						 GpmGraphColour  *colour);
 
 G_END_DECLS
 

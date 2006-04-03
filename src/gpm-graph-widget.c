@@ -32,6 +32,7 @@ G_DEFINE_TYPE (GpmGraph, gpm_graph, GTK_TYPE_DRAWING_AREA);
 struct GpmGraphPrivate
 {
 	gboolean	use_grid;
+	gboolean	use_legend;
 
 	gboolean	invert_x;
 	gboolean	invert_y;
@@ -56,6 +57,42 @@ struct GpmGraphPrivate
 
 static gboolean gpm_graph_expose (GtkWidget *graph, GdkEventExpose *event);
 static void	gpm_graph_finalize (GObject *object);
+
+
+/**
+ * gpm_graph_event_description:
+ * @event: The event type, e.g. GPM_GRAPH_EVENT_SCREEN_DIM
+ * @colour: The colour enum, e.g. GPM_GRAPH_COLOUR_DARK_BLUE (returned)
+ **/
+const char *
+gpm_graph_event_description (GpmGraphEvent    event,
+			     GpmGraphColour  *colour)
+{
+	const char *event_desc;
+	if (event == GPM_GRAPH_EVENT_AC_REMOVED) {
+		event_desc = "AC power";
+		*colour = GPM_GRAPH_COLOUR_BLUE;
+	} else if (event == GPM_GRAPH_EVENT_LOW_POWER) {
+		event_desc = "Low Power";
+		*colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
+		event_desc = "Screen dim";
+		*colour = GPM_GRAPH_COLOUR_YELLOW;
+	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
+		event_desc = "Screen off";
+		*colour = GPM_GRAPH_COLOUR_DARK_YELLOW;
+	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
+		event_desc = "Suspend";
+		*colour = GPM_GRAPH_COLOUR_RED;
+	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
+		event_desc = "Hibernate";
+		*colour = GPM_GRAPH_COLOUR_DARK_RED;
+	} else {
+		event_desc = NULL;
+		*colour = 0;
+	}
+	return event_desc;
+}
 
 /**
  * gpm_graph_set_axis_x:
@@ -108,6 +145,7 @@ gpm_graph_init (GpmGraph *graph)
 	graph->priv->stop_x = 60;
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
+	graph->priv->use_legend = TRUE;
 	graph->priv->list = NULL;
 	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
 	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
@@ -443,16 +481,26 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 {
 	if (colour == GPM_GRAPH_COLOUR_DEFAULT) {
 		cairo_set_source_rgb (cr, 0, 0.7, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
-		cairo_set_source_rgb (cr, 0.7, 0, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
-		cairo_set_source_rgb (cr, 0, 0, 0.7);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_PURPLE) {
-		cairo_set_source_rgb (cr, 0.7, 0.7, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_YELLOW) {
-		cairo_set_source_rgb (cr, 0, 0.7, 0.7);
 	} else if (colour == GPM_GRAPH_COLOUR_BLACK) {
 		cairo_set_source_rgb (cr, 0, 0, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_WHITE) {
+		cairo_set_source_rgb (cr, 1, 1, 1);
+	} else if (colour == GPM_GRAPH_COLOUR_RED) {
+		cairo_set_source_rgb (cr, 1, 0, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_BLUE) {
+		cairo_set_source_rgb (cr, 0, 0, 1);
+	} else if (colour == GPM_GRAPH_COLOUR_PURPLE) {
+		cairo_set_source_rgb (cr, 1, 1, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_YELLOW) {
+		cairo_set_source_rgb (cr, 0, 1, 1);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
+		cairo_set_source_rgb (cr, 0.5, 0, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
+		cairo_set_source_rgb (cr, 0, 0, 0.5);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_PURPLE) {
+		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_YELLOW) {
+		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
 	} else {
 		gpm_critical_error ("Unknown colour!");
 	}
@@ -468,12 +516,12 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
  * Draw the dot on the graph of a specified colour
  **/
 static void
-gpm_graph_draw_dot (cairo_t *cr, int x, int y, GpmGraphColour colour)
+gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
 {
-	cairo_arc (cr, x, y, 4, 0, 2*M_PI);
+	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
 	gpm_graph_set_colour (cr, colour);
 	cairo_fill (cr);
-	cairo_arc (cr, x, y, 4, 0, 2*M_PI);
+	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
@@ -569,6 +617,55 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 }
 
 /**
+ * gpm_graph_draw_bounding_box:
+ * @cr: Cairo drawing context
+ * @x: The X-coordinate for the top-left
+ * @y: The Y-coordinate for the top-left
+ * @width: The item width
+ * @height: The item height
+ **/
+static void
+gpm_graph_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
+{
+	/* background */
+	cairo_rectangle (cr, x, y, width, height);
+	cairo_set_source_rgb (cr, 1, 1, 1);
+	cairo_fill (cr);
+	/* solid outline box */
+	cairo_rectangle (cr, x + 0.5f, y + 0.5f, width - 1, height - 1);
+	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	cairo_set_line_width (cr, 1);
+	cairo_stroke (cr);
+}
+
+/**
+ * gpm_graph_draw_legend:
+ * @cr: Cairo drawing context
+ * @x: The X-coordinate for the top-left
+ * @y: The Y-coordinate for the top-left
+ * @width: The item width
+ * @height: The item height
+ **/
+static void
+gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
+{
+	const char *desc;
+	int y_count;
+	int a;
+	GpmGraphColour colour;
+
+	gpm_graph_draw_bounding_box (cr, x, y, width, height);
+	y_count = y + 10;
+	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
+		desc = 	gpm_graph_event_description (a, &colour);
+		gpm_graph_draw_dot (cr, x + 8, y_count, colour);
+		cairo_move_to (cr, x + 8 + 10, y_count + 3);
+		cairo_show_text (cr, desc);
+		y_count = y_count + 20;
+	}
+}
+
+/**
  * gpm_graph_draw_graph:
  * @graph: This simple graph class instance
  * @cr: Cairo drawing context
@@ -578,21 +675,32 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 static void
 gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
+	int legend_x = 0;
+	int legend_y = 0;
+	int legend_height;
+	int legend_width;
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
 
 	cairo_save (cr);
 
-	graph->priv->box_x = 40;
+	graph->priv->box_x = 35;
 	graph->priv->box_y = 5;
-	graph->priv->box_width = graph_widget->allocation.width - (5 + graph->priv->box_x);
+
+	if (graph->priv->use_legend) {
+		legend_width = 77;
+		legend_height = GPM_GRAPH_EVENT_LAST * 20;
+		graph->priv->box_width = graph_widget->allocation.width - (3 + legend_width + 5 + graph->priv->box_x);
+		legend_x = graph->priv->box_x + graph->priv->box_width + 6;
+		legend_y = graph->priv->box_y;
+	} else {
+		graph->priv->box_width = graph_widget->allocation.width - (3 + graph->priv->box_x);
+	}
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
-	/* background */
-	cairo_rectangle (cr, graph->priv->box_x, graph->priv->box_y,
-			 graph->priv->box_width, graph->priv->box_height);
-	cairo_set_source_rgb (cr, 1, 1, 1);
-	cairo_fill (cr);
+	/* graph background */
+	gpm_graph_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
+				     graph->priv->box_width, graph->priv->box_height);
 
 	if (graph->priv->use_grid) {
 		gpm_graph_draw_grid (graph, cr);
@@ -603,14 +711,9 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_draw_labels (graph, cr);
 	gpm_graph_draw_line (graph, cr);
 
-	/* solid outline box */
-	cairo_rectangle (cr, graph->priv->box_x + 0.5,
-			 graph->priv->box_y + 0.5,
-			 graph->priv->box_width - 1,
-			 graph->priv->box_height - 1);
-	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
-	cairo_set_line_width (cr, 1);
-	cairo_stroke (cr);
+	if (graph->priv->use_legend) {
+		gpm_graph_draw_legend (cr, legend_x, legend_y, legend_width, legend_height);
+	}
 
 	cairo_restore (cr);
 }
