@@ -1,3 +1,10 @@
+2006-03-27  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (gpm_manager_suspend, gpm_manager_hibernate):
+	Add a call to sync_dpms_policy () so we can recover the DPMS settings
+	after a suspend or hibernate.
+	Should fix #336081
+
 2006-03-30  Richard Hughes  <richard@hughsie.com>
 
 	* man/gnome-power-manager.sgml: Apply patch from Ow Mun Heng
@@ -19,12 +26,6 @@
 	Add the facility to monitor session name-owner-change as well as
 	system, as we need this for the auto-remove inhibits when the caller
 	crashes or forgets to remove the inhibit request.
-
-	* src/gpm-inhibit.{c|h}: Add gpm_inhibit_remove_dbus which does a
-	forced removal if already existing in the inhibit database.
-
-	* src/gpm-manager.c: Watch the session dbus, and call
-	gpm_inhibit_remove_dbus when a application quits from the session bus.
 
 	* src/gpm-power.{c|h}: Proxy the dbus n-o-c, so we can deal with hal's
 	disappearance from the system bus like we used to.
