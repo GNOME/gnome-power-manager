@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <math.h>
 
 #include "gpm-graph-widget.h"
@@ -70,22 +71,22 @@ gpm_graph_event_description (GpmGraphEvent    event,
 {
 	const char *event_desc;
 	if (event == GPM_GRAPH_EVENT_AC_REMOVED) {
-		event_desc = "AC power";
+		event_desc = _("AC power");
 		*colour = GPM_GRAPH_COLOUR_BLUE;
 	} else if (event == GPM_GRAPH_EVENT_LOW_POWER) {
-		event_desc = "Low Power";
+		event_desc = _("Low Power");
 		*colour = GPM_GRAPH_COLOUR_DARK_BLUE;
 	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
-		event_desc = "Screen dim";
+		event_desc = _("Screen dim");
 		*colour = GPM_GRAPH_COLOUR_YELLOW;
 	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
-		event_desc = "Screen off";
+		event_desc = _("Screen off");
 		*colour = GPM_GRAPH_COLOUR_DARK_YELLOW;
 	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
-		event_desc = "Suspend";
+		event_desc = _("Suspend");
 		*colour = GPM_GRAPH_COLOUR_RED;
 	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
-		event_desc = "Hibernate";
+		event_desc = _("Hibernate");
 		*colour = GPM_GRAPH_COLOUR_DARK_RED;
 	} else {
 		event_desc = NULL;

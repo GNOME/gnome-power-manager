@@ -131,8 +131,8 @@ gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 {
 	int length = g_list_length (graph_data->data);
 	if (length > 2) {
-		GList *first = g_list_first (graph_data->data);
-		GpmDataPoint *old = (GpmDataPoint *) first->data;
+		GList *last = g_list_last (graph_data->data);
+		GpmDataPoint *old = (GpmDataPoint *) last->data;
 		if (old->y == y) {
 			/* we are the same as we were before and not the first or
 			   second point, just side the data time across */
@@ -143,7 +143,7 @@ gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 			if (y == 0) {
 				/* if the rate suddenly drops we want a line
 				   going down, then across, not a diagonal line.
-				   Add an extra point so that we entend it horiz. */
+				   Add an extra point so that we extend it horiz. */
 				gpm_info_data_point_add_to_data (graph_data, x, y, 0, FALSE);
 			}
 		}

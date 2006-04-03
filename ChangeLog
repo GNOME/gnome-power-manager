@@ -1,5 +1,13 @@
 2006-04-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c (gpm_info_data_point_add): Check the end of the list
+	not the start as the list is not appended to.
+
+	* src/gpm-graph-widget.c (gpm_graph_event_description): Mark the new
+	strings as translatable.
+
+2006-04-03  Richard Hughes  <richard@hughsie.com>
+
 	* data/48x48/gpm-brightness.png, data/scalable/gpm-brightness.svg:
 	Add the new icons from Diana Fong, many thanks.
 
