@@ -1,5 +1,19 @@
 2006-04-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c (gpm_info_data_point_add): change prev to next so that
+	we remove the same number of points form the start of the list as from
+	the end.
+
+	* src/gpm-power.{c|h}: Remove ->rate and replace with ->rate_raw and
+	->rate_smoothed as sometimes we want the exponentially averaged value
+	for the time remaining, and sometimes the raw value for the graphs and
+	info pages.
+
+	* src/gpm-info.c (gpm_info_log_do_poll): Log the raw rather than the
+	smoothed data points.
+
+2006-04-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal-monitor.c (watch_device_properties_modified):
 	Don't switch round the removed and added booleans, the order is
 	"added" then "removed".

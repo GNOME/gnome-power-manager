@@ -138,7 +138,7 @@ gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 			new_point = (GpmDataPoint *) l->data;
 			count++;
 			if (count == 3) {
-				temp = l->prev;
+				temp = l->next;
 				/* we need to free the data */
 				g_slice_free (GpmDataPoint, l->data);
 				graph_data->data = g_list_delete_link (graph_data->data, l);
@@ -455,7 +455,7 @@ gpm_info_log_do_poll (gpointer data)
 	/* work out seconds elapsed */
 	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
 	gpm_info_data_point_add (info->priv->percentage, value_x, battery_status.percentage_charge);
-	gpm_info_data_point_add (info->priv->rate, value_x, battery_status.charge_rate);
+	gpm_info_data_point_add (info->priv->rate, value_x, battery_status.charge_rate_raw);
 	gpm_info_data_point_add (info->priv->time, value_x, battery_status.remaining_time);
 
 	if (info->priv->main_window) {

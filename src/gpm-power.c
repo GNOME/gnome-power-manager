@@ -117,7 +117,8 @@ gpm_power_battery_status_set_defaults (GpmPowerBatteryStatus *status)
 	status->design_charge = 0;
 	status->last_full_charge = 0;
 	status->current_charge = 0;
-	status->charge_rate = 0;
+	status->charge_rate_smoothed = 0;
+	status->charge_rate_raw = 0;
 	status->percentage_charge = 0;
 	status->remaining_time = 0;
 	status->capacity = 0;
@@ -223,15 +224,17 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
 		exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
-						 &status->charge_rate);
+						 &status->charge_rate_raw);
 		if (!exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
-
+		if (exists) {
+			status->charge_rate_smoothed = status->charge_rate_raw;
+		}
 		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
 		   gets fixed and is part of a new release of HAL and we depend on that
 		   version*/
-		if (exists && status->charge_rate == 0) {
+		if (exists && status->charge_rate_raw == 0) {
 			status->is_discharging = FALSE;
 			status->is_charging = FALSE;
 		}
@@ -345,14 +348,14 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 		 /* invalidate the remaining time, as we need to wait for
 		    the next HAL update. This is a HAL bug I think. */
 		status->remaining_time = 0;
-		status->charge_rate = 0;
+		status->charge_rate_raw = 0;
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_discharging);
 
 		/* invalidate the remaining time */
 		status->remaining_time = 0;
-		status->charge_rate = 0;
+		status->charge_rate_raw = 0;
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
 		gpm_hal_device_get_int (udi, key, &status->design_charge);
@@ -364,19 +367,18 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 		gpm_hal_device_get_int (udi, key, &status->current_charge);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		int charge_rate_new;
-		gpm_hal_device_get_int (udi, key, &charge_rate_new);
+		gpm_hal_device_get_int (udi, key, &status->charge_rate_raw);
 
 		/* Do an exponentially weighted average, fixes bug #328927 */
-		status->charge_rate = gpm_power_exp_aver (entry->charge_rate_previous,
-						      charge_rate_new,
-						      power->priv->exp_ave_factor);
-		entry->charge_rate_previous = status->charge_rate;
+		status->charge_rate_smoothed = gpm_power_exp_aver (entry->charge_rate_previous,
+							status->charge_rate_raw,
+							power->priv->exp_ave_factor);
+		entry->charge_rate_previous = status->charge_rate_smoothed;
 
 		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
 		   gets fixed and is part of a new release of HAL and we depend on that
 		   version */
-		if (status->charge_rate == 0) {
+		if (status->charge_rate_raw == 0) {
 			status->is_discharging = FALSE;
 			status->is_charging = FALSE;
 		}
@@ -489,8 +491,8 @@ battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 		   status->is_present, status->last_full_charge);
 	gpm_debug ("percent    %i\tcurrent    %i",
 		   status->percentage_charge, status->current_charge);
-	gpm_debug ("charge     %i\trate       %i",
-		   status->is_charging, status->charge_rate);
+	gpm_debug ("charge     %i\trate (raw) %i",
+		   status->is_charging, status->charge_rate_raw);
 	gpm_debug ("discharge  %i\tremaining  %i",
 		   status->is_discharging, status->remaining_time);
 	gpm_debug ("capacity   %i",
@@ -778,9 +780,14 @@ gpm_power_get_description_array (GpmPower		*power,
 			di.value = g_strdup_printf ("%i%s", status->design_charge, suffix);
 			g_array_append_vals (array, &di, 1);
 		}
-		if (status->charge_rate > 0) {
-			di.title = g_strdup (_("Charge rate:"));
-			di.value = g_strdup_printf ("%imWh", status->charge_rate);
+		if (status->charge_rate_raw > 0) {
+			di.title = g_strdup (_("Charge rate (raw):"));
+			di.value = g_strdup_printf ("%imWh", status->charge_rate_raw);
+			g_array_append_vals (array, &di, 1);
+		}
+		if (status->charge_rate_smoothed > 0) {
+			di.title = g_strdup (_("Charge rate (smoothed):"));
+			di.value = g_strdup_printf ("%imWh", status->charge_rate_smoothed);
 			g_array_append_vals (array, &di, 1);
 		}
 	}
@@ -844,7 +851,8 @@ battery_kind_cache_update (GpmPower	         *power,
 		type_status->design_charge += device_status->design_charge;
 		type_status->last_full_charge += device_status->last_full_charge;
 		type_status->current_charge += device_status->current_charge;
-		type_status->charge_rate += device_status->charge_rate;
+		type_status->charge_rate_smoothed += device_status->charge_rate_smoothed;
+		type_status->charge_rate_raw += device_status->charge_rate_raw;
 		/* we have to sum this here, in case the device has no rate
 		   data, and we can't compute it further down */
 		type_status->remaining_time += device_status->remaining_time;
@@ -877,14 +885,14 @@ battery_kind_cache_update (GpmPower	         *power,
 	}
 	/* We only do the "better" remaining time algorithm if the battery has rate,
 	   i.e not a UPS, which gives it's own battery.remaining_time but has no rate */
-	if (type_status->charge_rate > 0) {
+	if (type_status->charge_rate_smoothed > 0) {
 		if (type_status->is_discharging) {
 			type_status->remaining_time = 3600 * ((float)type_status->current_charge /
-							      (float)type_status->charge_rate);
+							      (float)type_status->charge_rate_smoothed);
 		} else if (type_status->is_charging) {
 			type_status->remaining_time = 3600 *
 				((float)(type_status->last_full_charge - type_status->current_charge) /
-				(float)type_status->charge_rate);
+				(float)type_status->charge_rate_smoothed);
 		}
 	}
 	/* Check the remaining time is under a set limit, to deal with broken

@@ -40,7 +40,8 @@ typedef struct {
 	int		design_charge;
 	int		last_full_charge;
 	int		current_charge;
-	int		charge_rate;
+	int		charge_rate_smoothed;	/* exp ave smoothed */
+	int		charge_rate_raw;	/* no smoothing done */
 	int		percentage_charge;
 	int		remaining_time;
 	int		capacity;
