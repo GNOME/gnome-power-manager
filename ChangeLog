@@ -1,5 +1,21 @@
 2006-04-03  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade: Make shadow type "in" for the scrolled window.
+
+	* data/gpm-info.glade, src/gpm-graph-widget.{c|h}:
+	Rename the class to graph from simple_graph as it's not simple!
+
+	* src/gpm-graph-widget.h, src/gpm-info.{c|h}, src/gpm-manager.c:
+	Add the facility to add point in time of interest using the
+	gpm_info_interest_point () function. These appear on the graph and act
+	as a sort of visual indicator to how certain things save power.
+	Only a few types are supported, and a legend is required.
+
+	* src/gpm-power.c: (battery_device_cache_entry_update_key): Don't set
+	the remaining time zero when we change change states.
+
+2006-04-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c (gpm_info_data_point_add): change prev to next so that
 	we remove the same number of points form the start of the list as from
 	the end.

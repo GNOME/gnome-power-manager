@@ -84,11 +84,36 @@ gpm_graph_custom_handler (GladeXML *xml,
 			  gpointer user_data)
 {
 	GtkWidget *widget = NULL;
-	if (strcmp ("gpm_simple_graph_new", func_name) == 0) {
-		widget = gpm_simple_graph_new ();
+	if (strcmp ("gpm_graph_new", func_name) == 0) {
+		widget = gpm_graph_new ();
 		return widget;
 	}
 	return NULL;
+}
+
+/**
+ * gpm_info_data_point_add_to_data:
+ * @graph_data: The data we have for a specific graph
+ * @x: The X data point
+ * @y: The Y data point
+ *
+ * Allocates the memory and adds to the list.
+ **/
+static void
+gpm_info_data_point_add_to_data (GpmInfoGraphData *graph_data,
+				 int		   x,
+				 int		   y,
+				 GpmGraphColour	   colour,
+				 gboolean	   point)
+{
+	GpmDataPoint *new_point;
+	/* we have to add a new data point */
+	new_point = g_slice_new (GpmDataPoint);
+	new_point->x = x;
+	new_point->y = y;
+	new_point->colour = colour;
+	new_point->info_point = point;
+	graph_data->data = g_list_append (graph_data->data, (gpointer) new_point);
 }
 
 /**
@@ -104,7 +129,6 @@ gpm_graph_custom_handler (GladeXML *xml,
 static void
 gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 {
-	GpmDataPoint *new_point;
 	int length = g_list_length (graph_data->data);
 	if (length > 2) {
 		GList *first = g_list_first (graph_data->data);
@@ -115,22 +139,23 @@ gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 			old->x = x;
 		} else {
 			/* we have to add a new data point */
-			new_point = g_slice_new (GpmDataPoint);
-			new_point->x = x;
-			new_point->y = y;
-			graph_data->data = g_list_prepend (graph_data->data, (gpointer) new_point);
+			gpm_info_data_point_add_to_data (graph_data, x, y, 0, FALSE);
+			if (y == 0) {
+				/* if the rate suddenly drops we want a line
+				   going down, then across, not a diagonal line.
+				   Add an extra point so that we entend it horiz. */
+				gpm_info_data_point_add_to_data (graph_data, x, y, 0, FALSE);
+			}
 		}
 	} else {
 		/* a new list requires a data point */
-		new_point = g_new (GpmDataPoint, 1);
-		new_point->x = x;
-		new_point->y = y;
-		graph_data->data = g_list_prepend (graph_data->data, (gpointer) new_point);
+		gpm_info_data_point_add_to_data (graph_data, x, y, 0, FALSE);
 	}
 	gpm_debug ("Drawing %i lines", length);
 	if (length > GPM_INFO_MAX_POINTS) {
 		/* we have too much data, simplify by remove every 3rd link */
 		gpm_debug ("Too many points (%i)", length);
+		GpmDataPoint *new_point;
 		GList *l;
 		GList *temp;
 		int count = 0;
@@ -192,7 +217,7 @@ static void
 gpm_info_graph_update (GpmInfoGraphData *graph_data)
 {
 	if (graph_data->data) {
-		gpm_simple_graph_set_data (GPM_SIMPLE_GRAPH (graph_data->widget),
+		gpm_graph_set_data (GPM_GRAPH (graph_data->widget),
 					   graph_data->data);
 	} else {
 		gpm_debug ("no log data");
@@ -404,17 +429,17 @@ gpm_info_show_window (GpmInfo *info)
 	widget = glade_xml_get_widget (glade_xml, "graph_percentage");
 	gtk_widget_set_size_request (widget, 600, 300);
 	info->priv->percentage->widget = widget;
-	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
+	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
 
 	widget = glade_xml_get_widget (glade_xml, "graph_rate");
 	gtk_widget_set_size_request (widget, 600, 300);
 	info->priv->rate->widget = widget;
-	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
+	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
 
 	widget = glade_xml_get_widget (glade_xml, "graph_time");
 	gtk_widget_set_size_request (widget, 600, 300);
 	info->priv->time->widget = widget;
-	gpm_simple_graph_set_axis_y (GPM_SIMPLE_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
+	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
 
 	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
 	gpm_info_create_tree (widget);
@@ -466,6 +491,45 @@ gpm_info_log_do_poll (gpointer data)
 		gpm_info_populate_device_information (info);
 	}
 	return TRUE;
+}
+
+/**
+ * gpm_info_log_do_poll:
+ * @info: This info class instance
+ * @event: The event type 
+ *
+ * Adds an interesting point to the graph.
+ * TODO: Automatically make a legend.
+ **/
+void
+gpm_info_interest_point	(GpmInfo *info, GpmInfoEvent event)
+{
+	int colour = 0;
+	int value_x;
+	char *event_desc = "Unknown";
+	
+	if (event == GPM_INFO_EVENT_SUSPEND) {
+		event_desc = "Suspend";
+		colour = GPM_GRAPH_COLOUR_DARK_RED;
+	} else if (event == GPM_INFO_EVENT_AC_REMOVED) {
+		event_desc = "AC power";
+		colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+	} else if (event == GPM_INFO_EVENT_SCREEN_DIM) {
+		event_desc = "Screen dim";
+		colour = GPM_GRAPH_COLOUR_DARK_PURPLE;
+	} else if (event == GPM_INFO_EVENT_DPMS_OFF) {
+		event_desc = "Screen off";
+		colour = GPM_GRAPH_COLOUR_DARK_YELLOW;
+	}
+
+	gpm_debug ("logging event %i: %s", event, event_desc);
+
+	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
+	gpm_info_data_point_add_to_data (info->priv->rate, value_x, 0, colour, TRUE);
+	gpm_info_data_point_add_to_data (info->priv->time, value_x, 0, colour, TRUE);
+
+	gpm_info_graph_update (info->priv->rate);
+	gpm_info_graph_update (info->priv->time);
 }
 
 /**  */

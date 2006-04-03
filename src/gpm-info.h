@@ -47,12 +47,22 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmInfoClass;
 
-GType		 gpm_info_get_type	(void);
-void		 gpm_info_set_power	(GpmInfo *info,
-					 GpmPower *power);
-void		 gpm_info_show_window	(GpmInfo *info);
 
-GpmInfo		*gpm_info_new		(void);
+typedef enum {
+	GPM_INFO_EVENT_SUSPEND,
+	GPM_INFO_EVENT_DPMS_OFF,
+	GPM_INFO_EVENT_SCREEN_DIM,
+	GPM_INFO_EVENT_AC_REMOVED
+} GpmInfoEvent;
+
+GType		 gpm_info_get_type		(void);
+void		 gpm_info_set_power		(GpmInfo	*info,
+						 GpmPower	*power);
+void		 gpm_info_show_window		(GpmInfo	*info);
+void		 gpm_info_interest_point	(GpmInfo	*info,
+						 GpmInfoEvent	 event);
+
+GpmInfo		*gpm_info_new			(void);
 
 G_END_DECLS
 

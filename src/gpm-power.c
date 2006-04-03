@@ -345,17 +345,11 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_charging);
-		 /* invalidate the remaining time, as we need to wait for
-		    the next HAL update. This is a HAL bug I think. */
-		status->remaining_time = 0;
-		status->charge_rate_raw = 0;
+		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		gpm_hal_device_get_bool (udi, key, &status->is_discharging);
-
-		/* invalidate the remaining time */
-		status->remaining_time = 0;
-		status->charge_rate_raw = 0;
+		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
 		gpm_hal_device_get_int (udi, key, &status->design_charge);

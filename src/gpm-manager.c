@@ -784,16 +784,19 @@ manager_policy_do (GpmManager *manager,
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 
 		gpm_debug ("*ACTION* Suspend");
+		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SUSPEND);
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 
 		gpm_debug ("*ACTION* Hibernate");
+		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SUSPEND);
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
 
 		gpm_debug ("*ACTION* Blank");
+		gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_DPMS_OFF);
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
@@ -1253,6 +1256,7 @@ idle_changed_cb (GpmIdle    *idle,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
+			gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_SCREEN_DIM);
 			gpm_brightness_level_save (manager->priv->brightness,
 						   manager->priv->lcd_dim_brightness);
 		}
@@ -1828,6 +1832,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		/* Do different warnings for each GPM_WARNING */
 		if (warning_type == GPM_WARNING_DISCHARGING) {
+			gpm_info_interest_point	(manager->priv->info, GPM_INFO_EVENT_AC_REMOVED);
 			gboolean show_notify;
 			show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
