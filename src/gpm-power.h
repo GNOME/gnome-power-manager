@@ -91,10 +91,6 @@ GpmPower	*gpm_power_new			(void);
 gboolean	 gpm_power_get_on_ac		(GpmPower		*power,
 						 gboolean		*on_ac,
 						 GError			**error);
-void		 gpm_power_dbus_name_owner_changed (GpmPower		*power,
-						    const char		*name,
-						    const char		*prev,
-						    const char		*new);
 gboolean	 gpm_power_get_battery_status	(GpmPower		*power,
 						 GpmPowerBatteryKind	 battery_kind,
 						 GpmPowerBatteryStatus	*battery_status);

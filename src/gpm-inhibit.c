@@ -29,6 +29,7 @@
 #include <string.h>
 #include "gpm-inhibit.h"
 #include "gpm-debug.h"
+#include "gpm-dbus-session-monitor.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
 static void     gpm_inhibit_init       (GpmInhibit      *inhibit);
@@ -47,6 +48,7 @@ typedef struct
 struct GpmInhibitPrivate
 {
 	GSList		*list;
+	GpmDbusSessionMonitor	*dbus_session;
 };
 
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
@@ -151,7 +153,7 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
  * Checks to see if the dbus closed session is registered, in which case
  * unregister it.
  **/
-void
+static void
 gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
 			 const char *connection)
 {
@@ -169,6 +171,28 @@ gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
 		}
 	}
 	return;
+}
+
+/**
+ * dbus_name_owner_changed_session_cb:
+ * @power: The power class instance
+ * @name: The DBUS name, e.g. hal.freedesktop.org
+ * @prev: The previous name, e.g. :0.13
+ * @new: The new name, e.g. :0.14
+ * @inhibit: This inhibit class instance
+ *
+ * The name-owner-changed session DBUS callback.
+ **/
+static void
+dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
+				    const char	   *name,
+				    const char     *prev,
+				    const char     *new,
+				    GpmInhibit	   *inhibit)
+{
+	if (strlen (new) == 0) {
+		gpm_inhibit_remove_dbus (inhibit, name);
+	}
 }
 
 /**
@@ -238,6 +262,9 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 {
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 	inhibit->priv->list = NULL;
+	inhibit->priv->dbus_session = gpm_dbus_session_monitor_new ();
+	g_signal_connect (inhibit->priv->dbus_session, "name-owner-changed",
+			  G_CALLBACK (dbus_name_owner_changed_session_cb), inhibit);
 }
 
 /** finalise the object */
@@ -260,6 +287,7 @@ gpm_inhibit_finalize (GObject *object)
 	}
 	g_slist_free (inhibit->priv->list);
 
+	g_object_unref (inhibit->priv->dbus_session);
 	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }
 

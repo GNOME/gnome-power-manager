@@ -58,16 +58,17 @@
 #include "gpm-power.h"
 #include "gpm-feedback-widget.h"
 #include "gpm-hal-monitor.h"
-#include "gpm-dbus-monitor.h"
+#include "gpm-dbus-system-monitor.h"
+#include "gpm-dbus-session-monitor.h"
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
 #include "gpm-inhibit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 
-static void     gpm_manager_class_init (GpmManagerClass *klass);
+static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
-static void     gpm_manager_finalize   (GObject	  *object);
+static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
 
@@ -104,7 +105,6 @@ struct GpmManagerPrivate
 	GpmInfo		*info;
 	GpmFeedback	*feedback;
 	GpmPower	*power;
-	GpmDbusMonitor	*dbus;
 	GpmBrightness   *brightness;
 	GpmScreensaver  *screensaver;
 	GpmInhibit	*inhibit;
@@ -1453,27 +1453,6 @@ lid_button_pressed (GpmManager	 *manager,
 }
 
 /**
- * dbus_name_owner_changed_system_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @manager: This manager class instance
- *
- * The name-owner-changed system DBUS callback.
- **/
-static void
-dbus_name_owner_changed_system_cb (GpmDbusMonitor *dbus_monitor,
-				   const char	  *name,
-				   const char	  *prev,
-				   const char	  *new,
-				   GpmManager	  *manager)
-{
-	/* we need to proxy this */
-	gpm_power_dbus_name_owner_changed (manager->priv->power, name, prev, new);
-}
-
-/**
  * brightness_step_changed_cb:
  * @brightness: The power class instance
  * @percentage: The new brightness setting
@@ -1488,29 +1467,6 @@ brightness_step_changed_cb (GpmBrightness *brightness,
 {
 	gpm_debug ("Need to diplay feedback value %i", percentage);
 	gpm_feedback_display_value (manager->priv->feedback, (float) percentage / 100.0f);
-}
-
-/**
- * dbus_name_owner_changed_session_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @manager: This manager class instance
- *
- * The name-owner-changed session DBUS callback.
- **/
-static void
-dbus_name_owner_changed_session_cb (GpmDbusMonitor *dbus_monitor,
-				    const char	   *name,
-				    const char     *prev,
-				    const char     *new,
-				    GpmManager	   *manager)
-{
-	if (strlen (new) == 0) {
-		gpm_inhibit_remove_dbus (manager->priv->inhibit, name);
-	}
-	gpm_screensaver_dbus_name_owner_changed (manager->priv->screensaver, name, prev, new);
 }
 
 /**
@@ -2315,12 +2271,6 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->gconf_client = gconf_client_get_default ();
 
-	manager->priv->dbus = gpm_dbus_monitor_new ();
-	g_signal_connect (manager->priv->dbus, "name-owner-changed-system",
-			  G_CALLBACK (dbus_name_owner_changed_system_cb), manager);
-	g_signal_connect (manager->priv->dbus, "name-owner-changed-session",
-			  G_CALLBACK (dbus_name_owner_changed_session_cb), manager);
-
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "button-pressed",
 			  G_CALLBACK (power_button_pressed_cb), manager);
@@ -2500,39 +2450,16 @@ gpm_manager_finalize (GObject *object)
 
 	g_return_if_fail (manager->priv != NULL);
 
-	if (manager->priv->gconf_client != NULL) {
-		g_object_unref (manager->priv->gconf_client);
-	}
-	if (manager->priv->dpms != NULL) {
-		g_object_unref (manager->priv->dpms);
-	}
-	if (manager->priv->idle != NULL) {
-		g_object_unref (manager->priv->idle);
-	}
-	if (manager->priv->info != NULL) {
-		g_object_unref (manager->priv->info);
-	}
-	if (manager->priv->power != NULL) {
-		g_object_unref (manager->priv->power);
-	}
-	if (manager->priv->brightness != NULL) {
-		g_object_unref (manager->priv->brightness);
-	}
-	if (manager->priv->tray_icon != NULL) {
-		g_object_unref (manager->priv->tray_icon);
-	}
-	if (manager->priv->feedback != NULL) {
-		g_object_unref (manager->priv->feedback);
-	}
-	if (manager->priv->inhibit != NULL) {
-		g_object_unref (manager->priv->inhibit);
-	}
-	if (manager->priv->screensaver != NULL) {
-		g_object_unref (manager->priv->screensaver);
-	}
-	if (manager->priv->dbus != NULL) {
-		g_object_unref (manager->priv->dbus);
-	}
+	g_object_unref (manager->priv->gconf_client);
+	g_object_unref (manager->priv->dpms);
+	g_object_unref (manager->priv->idle);
+	g_object_unref (manager->priv->info);
+	g_object_unref (manager->priv->power);
+	g_object_unref (manager->priv->brightness);
+	g_object_unref (manager->priv->tray_icon);
+	g_object_unref (manager->priv->feedback);
+	g_object_unref (manager->priv->inhibit);
+	g_object_unref (manager->priv->screensaver);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }

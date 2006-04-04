@@ -36,12 +36,16 @@ gnome_power_preferences_SOURCES =			\
 	gpm-debug.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
-	gpm-prefs-core.h					\
-	gpm-prefs-core.c					\
+	gpm-prefs-core.h				\
+	gpm-prefs-core.c				\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
+	gpm-dbus-session-monitor.h			\
+	gpm-dbus-session-monitor.c			\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-screensaver.h					\
-	gpm-screensaver.c					\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
 	$(NULL)
 
 gnome_power_preferences_LDADD =				\
@@ -56,8 +60,10 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms-x11.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
-	gpm-dbus-monitor.h				\
-	gpm-dbus-monitor.c				\
+	gpm-dbus-system-monitor.h			\
+	gpm-dbus-system-monitor.c			\
+	gpm-dbus-session-monitor.h			\
+	gpm-dbus-session-monitor.c			\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-idle.h					\

@@ -118,6 +118,7 @@ main (int argc, char **argv)
 	gpm_debug_shutdown ();
 
 	g_object_unref (program);
+	g_option_context_free (context);
 
 	return 0;
 }

@@ -28,6 +28,7 @@
 
 #include "gpm-screensaver.h"
 #include "gpm-debug.h"
+#include "gpm-dbus-session-monitor.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
 static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
@@ -45,6 +46,7 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 
 struct GpmScreensaverPrivate
 {
+	GpmDbusSessionMonitor	*dbus_session;
 	DBusGConnection		*session_connection;
 	DBusGProxy		*gs_proxy;
 	GConfClient		*gconf_client;
@@ -61,28 +63,6 @@ enum {
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
-
-/**
- * gpm_screensaver_class_init:
- * @klass: This screensaver class instance
- **/
-static void
-gpm_screensaver_class_init (GpmScreensaverClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_screensaver_finalize;
-	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
-
-	signals [GS_DELAY_CHANGED] =
-		g_signal_new ("gs-delay-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, gs_delay_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE, 1, G_TYPE_INT);
-}
 
 /**
  * gpm_screensaver_connect:
@@ -146,81 +126,6 @@ gconf_key_changed_cb (GConfClient  *client,
 		gpm_debug ("emitting gs-delay-changed : %i", screensaver->priv->idle_delay);
 		g_signal_emit (screensaver, signals [GS_DELAY_CHANGED], 0, screensaver->priv->idle_delay);
 	}
-}
-
-/**
- * gpm_screensaver_init:
- * @screensaver: This screensaver class instance
- **/
-static void
-gpm_screensaver_init (GpmScreensaver *screensaver)
-{
-	GError *error = NULL;
-	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
-
-	screensaver->priv->is_connected = FALSE;
-	screensaver->priv->gs_proxy = NULL;
-	screensaver->priv->gconf_client = gconf_client_get_default ();
-
-	screensaver->priv->session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (! screensaver->priv->session_connection) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_critical_error ("Cannot connect to DBUS Session Daemon");
-	}
-	/* blindly try to connect */
-	gpm_screensaver_connect (screensaver);
-	if (! gpm_screensaver_check_running (screensaver)) {
-		screensaver->priv->is_connected = FALSE;
-		gpm_warning ("gnome-screensaver has not been started yet");
-	}
-
-	/* get value of delay in g-s-p */
-	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->gconf_client,
-							      GS_PREF_IDLE_DELAY, NULL);
-
-	/* set up the monitoring for gnome-screensaver */
-	gconf_client_add_dir (screensaver->priv->gconf_client,
-			      GS_PREF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
-
-	gconf_client_notify_add (screensaver->priv->gconf_client,
-				 GS_PREF_DIR,
-				 gconf_key_changed_cb,
-				 screensaver, NULL, NULL);
-}
-
-/**
- * gpm_screensaver_finalize:
- * @object: This screensaver class instance
- **/
-static void
-gpm_screensaver_finalize (GObject *object)
-{
-	GpmScreensaver *screensaver;
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_SCREENSAVER (object));
-
-	screensaver = GPM_SCREENSAVER (object);
-	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
-
-	gpm_screensaver_disconnect (screensaver);
-	g_object_unref (screensaver->priv->gconf_client);
-
-	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
-}
-
-/**
- * gpm_screensaver_new:
- * Return value: new GpmScreensaver instance.
- **/
-GpmScreensaver *
-gpm_screensaver_new (void)
-{
-	GpmScreensaver *screensaver;
-	screensaver = g_object_new (GPM_TYPE_SCREENSAVER, NULL);
-	return GPM_SCREENSAVER (screensaver);
 }
 
 /**
@@ -411,14 +316,21 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 }
 
 /**
- * gpm_screensaver_dbus_name_owner_changed:
- * @screensaver: This screensaver class instance
+ * dbus_name_owner_changed_session_cb:
+ * @power: The power class instance
+ * @name: The DBUS name, e.g. hal.freedesktop.org
+ * @prev: The previous name, e.g. :0.13
+ * @new: The new name, e.g. :0.14
+ * @manager: This manager class instance
+ *
+ * The name-owner-changed session DBUS callback.
  **/
-void
-gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
-					 const char	*name,
-					 const char	*prev,
-					 const char	*new)
+static void
+dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
+				    const char	   *name,
+				    const char     *prev,
+				    const char     *new,
+				    GpmScreensaver *screensaver)
 {
 	if (strcmp (name, GS_LISTENER_SERVICE) == 0) {
 		if (strlen (prev) != 0 && strlen (new) == 0 ) {
@@ -428,4 +340,105 @@ gpm_screensaver_dbus_name_owner_changed (GpmScreensaver	*screensaver,
 			gpm_screensaver_connect (screensaver);
 		}
 	}
+}
+
+/**
+ * gpm_screensaver_class_init:
+ * @klass: This screensaver class instance
+ **/
+static void
+gpm_screensaver_class_init (GpmScreensaverClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = gpm_screensaver_finalize;
+	g_type_class_add_private (klass, sizeof (GpmScreensaverPrivate));
+
+	signals [GS_DELAY_CHANGED] =
+		g_signal_new ("gs-delay-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, gs_delay_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
+}
+
+/**
+ * gpm_screensaver_init:
+ * @screensaver: This screensaver class instance
+ **/
+static void
+gpm_screensaver_init (GpmScreensaver *screensaver)
+{
+	GError *error = NULL;
+	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
+
+	screensaver->priv->dbus_session = gpm_dbus_session_monitor_new ();
+	g_signal_connect (screensaver->priv->dbus_session, "name-owner-changed",
+			  G_CALLBACK (dbus_name_owner_changed_session_cb), screensaver);
+
+	screensaver->priv->is_connected = FALSE;
+	screensaver->priv->gs_proxy = NULL;
+	screensaver->priv->gconf_client = gconf_client_get_default ();
+
+	screensaver->priv->session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (! screensaver->priv->session_connection) {
+		if (error) {
+			gpm_warning ("%s", error->message);
+			g_error_free (error);
+		}
+		gpm_critical_error ("Cannot connect to DBUS Session Daemon");
+	}
+	/* blindly try to connect */
+	gpm_screensaver_connect (screensaver);
+	if (! gpm_screensaver_check_running (screensaver)) {
+		screensaver->priv->is_connected = FALSE;
+		gpm_warning ("gnome-screensaver has not been started yet");
+	}
+
+	/* get value of delay in g-s-p */
+	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->gconf_client,
+							      GS_PREF_IDLE_DELAY, NULL);
+
+	/* set up the monitoring for gnome-screensaver */
+	gconf_client_add_dir (screensaver->priv->gconf_client,
+			      GS_PREF_DIR, GCONF_CLIENT_PRELOAD_NONE, NULL);
+
+	gconf_client_notify_add (screensaver->priv->gconf_client,
+				 GS_PREF_DIR,
+				 gconf_key_changed_cb,
+				 screensaver, NULL, NULL);
+}
+
+/**
+ * gpm_screensaver_finalize:
+ * @object: This screensaver class instance
+ **/
+static void
+gpm_screensaver_finalize (GObject *object)
+{
+	GpmScreensaver *screensaver;
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GPM_IS_SCREENSAVER (object));
+
+	screensaver = GPM_SCREENSAVER (object);
+	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
+
+	gpm_screensaver_disconnect (screensaver);
+	g_object_unref (screensaver->priv->gconf_client);
+	g_object_unref (screensaver->priv->dbus_session);
+	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
+}
+
+/**
+ * gpm_screensaver_new:
+ * Return value: new GpmScreensaver instance.
+ **/
+GpmScreensaver *
+gpm_screensaver_new (void)
+{
+	GpmScreensaver *screensaver;
+	screensaver = g_object_new (GPM_TYPE_SCREENSAVER, NULL);
+	return GPM_SCREENSAVER (screensaver);
 }

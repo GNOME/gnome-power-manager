@@ -39,6 +39,7 @@
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
 #include "gpm-prefs.h"
+#include "gpm-dbus-system-monitor.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
@@ -48,12 +49,12 @@ static void     gpm_power_finalize   (GObject       *object);
 
 struct GpmPowerPrivate
 {
-	gboolean	 on_ac;
-	int		 exp_ave_factor;
-	GHashTable	*battery_kind_cache;
-	GHashTable	*battery_device_cache;
-
-	GpmHalMonitor	*hal_monitor;
+	gboolean		 on_ac;
+	int			 exp_ave_factor;
+	GHashTable		*battery_kind_cache;
+	GHashTable		*battery_device_cache;
+	GpmDbusSystemMonitor	*dbus_system;
+	GpmHalMonitor		*hal_monitor;
 };
 
 enum {
@@ -1634,14 +1635,21 @@ gpm_power_update_all (GpmPower *power)
 }
 
 /**
- * gpm_power_dbus_name_owner_changed:
- * @power: This power class instance
+ * dbus_name_owner_changed_system_cb:
+ * @power: The power class instance
+ * @name: The DBUS name, e.g. hal.freedesktop.org
+ * @prev: The previous name, e.g. :0.13
+ * @new: The new name, e.g. :0.14
+ * @manager: This manager class instance
+ *
+ * The name-owner-changed system DBUS callback.
  **/
-void
-gpm_power_dbus_name_owner_changed (GpmPower	*power,
-				   const char	*name,
-				   const char	*prev,
-				   const char	*new)
+static void
+dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
+				   const char	  *name,
+				   const char	  *prev,
+				   const char	  *new,
+				   GpmPower	  *power)
 {
 	if (strcmp (name, HAL_DBUS_SERVICE) == 0) {
 		if (strlen (prev) != 0 && strlen (new) == 0 ) {
@@ -1660,6 +1668,7 @@ gpm_power_dbus_name_owner_changed (GpmPower	*power,
 		}
 	}
 }
+
 
 /**
  * gpm_power_init:
@@ -1683,6 +1692,10 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (hal_battery_added_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
+
+	power->priv->dbus_system = gpm_dbus_system_monitor_new ();
+	g_signal_connect (power->priv->dbus_system, "name-owner-changed",
+			  G_CALLBACK (dbus_name_owner_changed_system_cb), power);
 
 	power->priv->battery_kind_cache = NULL;
 	power->priv->battery_device_cache = NULL;
@@ -1715,12 +1728,11 @@ gpm_power_finalize (GObject *object)
 
 	g_return_if_fail (power->priv != NULL);
 
-	if (power->priv->hal_monitor != NULL) {
-		g_object_unref (power->priv->hal_monitor);
-	}
-
 	gpm_hash_free_kind_cache (power);
 	gpm_hash_free_device_cache (power);
+
+	g_object_unref (power->priv->hal_monitor);
+	g_object_unref (power->priv->dbus_system);
 
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }

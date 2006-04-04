@@ -1,5 +1,25 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-dbus-monitor.{c|h}: Remove these files.
+
+	* src/gpm-dbus-session-monitor.{c|h}, src/gpm-dbus-system-monitor.{c|h}:
+	Add these files, splitting the system and session functionality.
+
+	* po/POTFILES.in: Update.
+
+	* src/gpm-idle.{c|h}, src/gpm-screensaver.{c|h}, src/gpm-power.{c|h},
+	src/gpm-power.c, src/Makefile.am: Move the session/system dbus n-o-c
+	watchers into the correct modules so we don't have the confusing
+	'proxy'ing situation we used to have, where all the class encapsulation
+	rules were being broken.
+	I know this means we now have two session dbus n-o-c monitors for one
+	program, but the class is small, and the watch is cheap.
+
+	* src/gpm-prefs.c, src/gpm-main.c: Free the context so we don't leak
+	memory, so that valgrind stays that little bit happier.
+
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (gpm_manager_init): Pretend we just resumed when
 	we start to let actions settle. Taken from the Ubuntu patchset,
 	thanks to Daniel Silverstone.
