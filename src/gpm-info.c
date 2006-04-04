@@ -216,9 +216,12 @@ gpm_info_close_cb (GtkWidget	*widget,
 static void
 gpm_info_graph_update (GpmInfoGraphData *graph_data)
 {
+	if (! graph_data) {
+		return;
+	}
 	if (graph_data->data) {
 		gpm_graph_set_data (GPM_GRAPH (graph_data->widget),
-					   graph_data->data);
+				    graph_data->data);
 	} else {
 		gpm_debug ("no log data");
 	}
@@ -515,8 +518,10 @@ gpm_info_interest_point	(GpmInfo *info, GpmGraphEvent event)
 	gpm_info_data_point_add_to_data (info->priv->rate, value_x, 0, colour, TRUE);
 	gpm_info_data_point_add_to_data (info->priv->time, value_x, 0, colour, TRUE);
 
-	gpm_info_graph_update (info->priv->rate);
-	gpm_info_graph_update (info->priv->time);
+	if (info->priv->main_window) {
+		gpm_info_graph_update (info->priv->rate);
+		gpm_info_graph_update (info->priv->time);
+	}
 }
 
 /**  */

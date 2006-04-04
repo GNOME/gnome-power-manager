@@ -1,5 +1,11 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: (gpm_info_graph_update, gpm_info_interest_point):
+	Do more careful checks so we don't segfault on startup when we are on
+	battery power.
+
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml: Add lot more content.
 
 	* help/Makefile.am, help/C/figures/gs-prefs.png: Add this new file
