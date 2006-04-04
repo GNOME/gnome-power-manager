@@ -678,8 +678,8 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
 	int legend_x = 0;
 	int legend_y = 0;
-	int legend_height;
-	int legend_width;
+	int legend_height = GPM_GRAPH_EVENT_LAST * 20;
+	int legend_width = 77;
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
 
@@ -689,8 +689,6 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_y = 5;
 
 	if (graph->priv->use_legend) {
-		legend_width = 77;
-		legend_height = GPM_GRAPH_EVENT_LAST * 20;
 		graph->priv->box_width = graph_widget->allocation.width - (3 + legend_width + 5 + graph->priv->box_x);
 		legend_x = graph->priv->box_x + graph->priv->box_width + 6;
 		legend_y = graph->priv->box_y;

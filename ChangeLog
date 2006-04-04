@@ -1,5 +1,11 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Fix 
+	"legend_height may be used uninitialized in this function" -- this is
+	incorrect and probably a GCC bug, but initialising them won't hurt.
+
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-dbus-monitor.{c|h}: Remove these files.
 
 	* src/gpm-dbus-session-monitor.{c|h}, src/gpm-dbus-system-monitor.{c|h}:
