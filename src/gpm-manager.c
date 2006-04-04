@@ -2448,6 +2448,9 @@ gpm_manager_init (GpmManager *manager)
 	gpm_debug ("Using a supressed policy timeout of %i seconds",
 		   manager->priv->suppress_policy_timeout);
 
+	/* Pretend we just resumed when we start to let actions settle */
+	manager->priv->last_resume_event = time (NULL);
+
 	/* get percentage policy */
 	manager->priv->low_percentage = gconf_client_get_int (manager->priv->gconf_client,
 							      GPM_PREF_LOW_PERCENTAGE, NULL);

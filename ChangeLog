@@ -1,16 +1,22 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gpm_manager_init): Pretend we just resumed when
+	we start to let actions settle. Taken from the Ubuntu patchset,
+	thanks to Daniel Silverstone.
+
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade: Delete the brightness change for UPS, and make
 	the UPS widgets have sensible names.
 
 	* data/gnome-power-manager.schemas.in: Add a new GConf key
-	/apps/gnome-power-manager/action_battery_critical for the ups critical
+	/apps/gnome-power-manager/action_ups_critical for the ups critical
 	action. Default to shutdown, but allow hibernate and nothing.
 
 	* src/gpm-prefs.h: Add GPM_PREF_UPS_CRITICAL.
 
 	* src/gpm-manager.c: (battery_status_changed_ups): Do the action when
-	the UPS	is critical.
+	the UPS	is critical. Should fix #337116.
 
 	* src/gpm-prefs-core.c: (setup_ups_actions, gpm_prefs_init): Setup the
 	UPS action combobox.
