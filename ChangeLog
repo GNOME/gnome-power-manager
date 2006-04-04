@@ -1,3 +1,9 @@
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (gpm_manager_init): Pretend we just resumed when
+	we start to let actions settle. Taken from the Ubuntu patchset,
+	thanks to Daniel Silverstone.
+
 2006-04-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-monitor.c (watch_device_properties_modified):

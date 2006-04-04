@@ -1896,6 +1896,9 @@ gpm_manager_init (GpmManager *manager)
 				      GPM_PREF_POLICY_TIMEOUT, NULL);
 	gpm_debug ("Using a supressed policy timeout of %i seconds",
 		   manager->priv->suppress_policy_timeout);
+
+	/* Pretend we just resumed when we start to let actions settle */
+	manager->priv->last_resume_event = time (NULL);
 }
 
 static void
