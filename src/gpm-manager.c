@@ -1905,6 +1905,43 @@ battery_status_changed_ups (GpmManager		   *manager,
 		return;
 	}
 
+	if (warning_type == GPM_WARNING_ACTION) {
+		const char *warning = NULL;
+		const char *action;
+
+		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
+			return;
+		}
+
+		/* we have to do different warnings depending on the policy */
+		action = gconf_client_get_string (manager->priv->gconf_client,
+						  GPM_PREF_UPS_CRITICAL, NULL);
+
+		/* FIXME: we should probably convert to an ENUM type, and use that */
+		if (strcmp (action, ACTION_NOTHING) == 0) {
+			warning = _("The UPS is below the critical level and "
+				    "this computer will <b>power-off</b> when the "
+				    "UPS becomes completely empty.");
+		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+			warning = _("The UPS is below the critical level and "
+				    "this computer is about to hibernate.");
+		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+			warning = _("The UPS is below the critical level and "
+				    "this computer is about to shutdown.");
+		}
+
+		if (warning) {
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      _("Critical action"),
+					      warning,
+					      GPM_NOTIFY_TIMEOUT_LONG,
+					      GPM_STOCK_BATTERY_CRITICAL,
+					      GPM_NOTIFY_URGENCY_CRITICAL);
+		}
+		gpm_manager_set_reason (manager, "we are critically low for the UPS");
+		manager_policy_do (manager, GPM_PREF_UPS_CRITICAL);
+	}
+
 	/* Always check if we already notified the user */
 	if (warning_type > manager->priv->last_ups_warning) {
 		manager->priv->last_ups_warning = warning_type;

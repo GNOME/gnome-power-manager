@@ -660,6 +660,19 @@ setup_battery_actions (GpmPrefs *prefs)
 }
 
 /**
+ * setup_ups_actions:
+ * @prefs: This prefs class instance
+ **/
+static void
+setup_ups_actions (GpmPrefs *prefs)
+{
+	const char   *battery_ups_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
+				      GPM_PREF_UPS_CRITICAL,
+				      battery_ups_actions);
+}
+
+/**
  * setup_icon_policy:
  * @prefs: This prefs class instance
  **/
@@ -827,7 +840,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
 	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value ("battery",
 							"battery.type",
-							"primary") > 0;;
+							"primary") > 0;
 	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value ("battery",
 							"battery.type",
 							"ups") > 0;
@@ -863,6 +876,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	setup_ac_sliders (prefs);
 	setup_battery_actions (prefs);
 	setup_battery_sliders (prefs);
+	setup_ups_actions (prefs);
 	setup_sleep_type (prefs);
 
 	int delay = gpm_screensaver_get_delay (prefs->priv->screensaver);

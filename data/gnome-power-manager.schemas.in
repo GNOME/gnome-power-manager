@@ -300,6 +300,17 @@
    </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/action_ups_critical</key>
+      <applyto>/apps/gnome-power-manager/action_ups_critical</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>UPS critical low action</short>
+        <long>The action to take when the UPS is critically low. Valid values are "hibernate", "suspend", "shutdown" and "nothing"</long>
+      </locale>
+   </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/lock_use_screensaver_settings</key>
       <applyto>/apps/gnome-power-manager/lock_use_screensaver_settings</applyto>
       <owner>gnome-power-manager</owner>

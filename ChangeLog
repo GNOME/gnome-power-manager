@@ -1,5 +1,22 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade: Delete the brightness change for UPS, and make
+	the UPS widgets have sensible names.
+
+	* data/gnome-power-manager.schemas.in: Add a new GConf key
+	/apps/gnome-power-manager/action_battery_critical for the ups critical
+	action. Default to shutdown, but allow hibernate and nothing.
+
+	* src/gpm-prefs.h: Add GPM_PREF_UPS_CRITICAL.
+
+	* src/gpm-manager.c: (battery_status_changed_ups): Do the action when
+	the UPS	is critical.
+
+	* src/gpm-prefs-core.c: (setup_ups_actions, gpm_prefs_init): Setup the
+	UPS action combobox.
+
+2006-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_info_graph_update, gpm_info_interest_point):
 	Do more careful checks so we don't segfault on startup when we are on
 	battery power.

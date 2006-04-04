@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 #define GPM_PREF_AC_BUTTON_LID		GPM_PREF_DIR "/action_ac_button_lid"
 #define GPM_PREF_BATTERY_BUTTON_LID	GPM_PREF_DIR "/action_battery_button_lid"
 #define GPM_PREF_BATTERY_CRITICAL	GPM_PREF_DIR "/action_battery_critical"
+#define GPM_PREF_UPS_CRITICAL		GPM_PREF_DIR "/action_ups_critical"
 
 #define GPM_PREF_USE_TIME_POLICY	GPM_PREF_DIR "/use_time_for_policy"
 #define GPM_PREF_USE_ICON_DESKTOPS	GPM_PREF_DIR "/use_icon_for_desktops"
