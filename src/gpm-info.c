@@ -41,9 +41,9 @@ static void     gpm_info_finalize   (GObject      *object);
 
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
-#define GPM_INFO_DATA_POLL		10	/* seconds */
+#define GPM_INFO_DATA_POLL		5	/* seconds */
 #define GPM_INFO_DATA_RES_X		80	/* x resolution, greater burns the cpu */
-#define GPM_INFO_MAX_POINTS		100	/* when we should simplify data */
+#define GPM_INFO_MAX_POINTS		120	/* when we should simplify data */
 
 typedef struct
 {
@@ -119,6 +119,89 @@ gpm_info_data_point_add_to_data (GpmInfoGraphData *graph_data,
 /**
  * gpm_info_data_point_add:
  * @graph_data: The data we have for a specific graph
+ * @max_num: The max desired points
+ * @use_time: If we should use a per-time formula
+ *
+ * We need to reduce the number of data points else the graph will take a long
+ * time to plot accuracy we don't need at the larger scales.
+ **/
+static void
+gpm_info_data_point_limit (GpmInfoGraphData *graph_data,
+			   int		     max_num,
+			   gboolean	     use_time)
+{
+	GpmDataPoint *point;
+	GList *l;
+	GList *list;
+
+	gpm_debug ("Listing old points");
+	for (l=graph_data->data; l != NULL; l=l->next) {
+		point = (GpmDataPoint *) l->data;
+		gpm_debug ("x=%i, y=%i", point->x, point->y);
+	}
+
+	if (use_time) {
+		list = g_list_last (graph_data->data);
+		point = (GpmDataPoint *) list->data;
+		gpm_debug ("Last point: x=%i, y=%i", point->x, point->y);
+		float div = (float) point->x / (float) max_num;
+		gpm_debug ("Using a time division of %f", div);
+
+		GList *new = NULL;
+		/* Reduces the number of points to a pre-set level using a time
+		 * division algorithm so we don't keep diluting the previous
+		 * data with a conventional 1-in-x type algorithm. */
+		float a = 0;
+		gpm_debug ("Going thru points");
+		for (l=graph_data->data; l != NULL; l=l->next) {
+			point = (GpmDataPoint *) l->data;
+			if (point->info_point) {
+				/* adding info point */
+//				gpm_debug ("Adding info point : x=%i, y=%i", point->x, point->y);
+				new = g_list_append (new, (gpointer) point);
+			} else if (point->x >= a) {
+				/* adding valid point */
+//				gpm_debug ("Adding valid point: x=%i, y=%i", point->x, point->y);
+				new = g_list_append (new, (gpointer) point);
+				a = a + div;
+			} else {
+				/* removing point */
+//				gpm_debug ("Removing point    : x=%i, y=%i", point->x, point->y);
+				g_slice_free (GpmDataPoint, point);
+			}
+		}
+		/* freeing old list */
+		g_list_free (graph_data->data);
+		/* setting new data */
+		graph_data->data = new;
+
+	} else {
+		/* Do a conventional 1-in-x type algorithm */
+		int count = 0;
+		for (l=graph_data->data; l != NULL; l=l->next) {
+			point = (GpmDataPoint *) l->data;
+			count++;
+			if (count == 3) {
+				list = l->prev;
+				/* we need to free the data */
+				g_slice_free (GpmDataPoint, l->data);
+				graph_data->data = g_list_delete_link (graph_data->data, l);
+				l = list;
+				count = 0;
+			}
+		}
+	}
+
+	gpm_debug ("Listing new points");
+	for (l=graph_data->data; l != NULL; l=l->next) {
+		point = (GpmDataPoint *) l->data;
+		gpm_debug ("x=%i, y=%i", point->x, point->y);
+	}
+}
+
+/**
+ * gpm_info_data_point_add:
+ * @graph_data: The data we have for a specific graph
  * @x: The X data point
  * @y: The Y data point
  *
@@ -153,24 +236,9 @@ gpm_info_data_point_add (GpmInfoGraphData *graph_data, int x, int y)
 	}
 	gpm_debug ("Drawing %i lines", length);
 	if (length > GPM_INFO_MAX_POINTS) {
-		/* we have too much data, simplify by remove every 3rd link */
-		gpm_debug ("Too many points (%i)", length);
-		GpmDataPoint *new_point;
-		GList *l;
-		GList *temp;
-		int count = 0;
-		for (l=graph_data->data; l != NULL; l=l->next) {
-			new_point = (GpmDataPoint *) l->data;
-			count++;
-			if (count == 3) {
-				temp = l->next;
-				/* we need to free the data */
-				g_slice_free (GpmDataPoint, l->data);
-				graph_data->data = g_list_delete_link (graph_data->data, l);
-				l = temp;
-				count = 0;
-			}
-		}
+		/* We have too much data, simplify by removing every 2nd link */
+		gpm_debug ("Too many points (%i/%i)", length, GPM_INFO_MAX_POINTS);
+		gpm_info_data_point_limit (graph_data, GPM_INFO_MAX_POINTS / 2, TRUE);
 	}
 }
 

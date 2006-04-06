@@ -37,7 +37,6 @@
 
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
-static gboolean done_warning = FALSE;	/* if we've done the bugzilla warning */
 
 /**
  * gpm_print_line:
@@ -106,13 +105,20 @@ gpm_warning_real (const char *func,
 	/* do extra stuff for a warning */
 	fprintf (stderr, "*** WARNING ***\n");
 	gpm_print_line (func, file, line, buffer);
-	if (! done_warning) {
-		fprintf (stderr, "%s has encountered a non-critical warning.\n"
-			 "Consult %s for any known issues or a possible fix.\n"
-			 "Please file a bug with this complete message if not present\n",
-			 "GNOME Power Manager", GPM_BUGZILLA_URL);
-		done_warning = TRUE;
-	}
+}
+
+/**
+ * gpm_bugzilla:
+ *
+ * Asks the user to consult and add to bugzilla.
+ **/
+void
+gpm_bugzilla (void)
+{
+	fprintf (stderr, "%s has encountered a non-critical warning.\n"
+		 "Consult %s for any known issues or a possible fix.\n"
+		 "Please file a bug with this complete message if not present\n",
+		 "GNOME Power Manager", GPM_BUGZILLA_URL);
 }
 
 /**
@@ -146,6 +152,7 @@ gpm_debug_init (gboolean debug)
 	if (is_init) {
 		return;
 	}
+	is_init = TRUE;
 
 	do_verbose = debug;
 	gpm_debug ("Verbose debugging %s", (do_verbose) ? "enabled" : "disabled");

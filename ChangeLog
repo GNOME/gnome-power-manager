@@ -1,3 +1,17 @@
+2006-04-06  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-debug.{c|h}: Seporate bugzilla functonality, sometimes we
+	just want to give the user a warning.
+
+	* src/gpm-graph-widget.c: (gpm_graph_set_colour): Make the colours more
+	correct.
+
+	* src/gpm-info.c: (gpm_info_data_point_limit): Add this new
+	functionality so that we can reduce the number of points to a pre-set
+	level using a time division algorithm so we don't keep diluting the
+	previous data with a conventional 1-in-x type algorithm like we were
+	doing before.
+
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Fix 

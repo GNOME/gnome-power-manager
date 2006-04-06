@@ -491,17 +491,17 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 	} else if (colour == GPM_GRAPH_COLOUR_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 1);
 	} else if (colour == GPM_GRAPH_COLOUR_PURPLE) {
-		cairo_set_source_rgb (cr, 1, 1, 0);
+		cairo_set_source_rgb (cr, 1, 0, 1);
 	} else if (colour == GPM_GRAPH_COLOUR_YELLOW) {
-		cairo_set_source_rgb (cr, 0, 1, 1);
+		cairo_set_source_rgb (cr, 1, 1, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 0.5);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_PURPLE) {
-		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
+		cairo_set_source_rgb (cr, 0.5, 0, 0.5);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_YELLOW) {
-		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
+		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
 	} else {
 		gpm_critical_error ("Unknown colour!");
 	}
