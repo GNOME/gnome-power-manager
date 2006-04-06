@@ -586,6 +586,9 @@ gpm_info_interest_point	(GpmInfo *info, GpmGraphEvent event)
 	gpm_info_data_point_add_to_data (info->priv->rate, value_x, 0, colour, TRUE);
 	gpm_info_data_point_add_to_data (info->priv->time, value_x, 0, colour, TRUE);
 
+	gpm_graph_enable_legend (GPM_GRAPH (info->priv->rate->widget), TRUE);
+	gpm_graph_enable_legend (GPM_GRAPH (info->priv->time->widget), TRUE);
+
 	if (info->priv->main_window) {
 		gpm_info_graph_update (info->priv->rate);
 		gpm_info_graph_update (info->priv->time);

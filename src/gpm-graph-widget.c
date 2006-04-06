@@ -118,6 +118,17 @@ gpm_graph_set_axis_y (GpmGraph *graph, GpmGraphAxisType axis)
 }
 
 /**
+ * gpm_graph_enable_legend:
+ * @graph: This simple graph class instance
+ * @enable: If we should show the legend
+ **/
+void
+gpm_graph_enable_legend	(GpmGraph *graph, gboolean enable)
+{
+	graph->priv->use_legend = enable;
+}
+
+/**
  * gpm_graph_class_init:
  * @class: This simple graph class instance
  **/
@@ -146,7 +157,7 @@ gpm_graph_init (GpmGraph *graph)
 	graph->priv->stop_x = 60;
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
-	graph->priv->use_legend = TRUE;
+	graph->priv->use_legend = FALSE;
 	graph->priv->list = NULL;
 	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
 	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
