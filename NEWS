@@ -1,4 +1,64 @@
 ==============
+Version 2.15.0
+==============
+
+Released April 06, 2006
+
+General
+
+ - Drop support for obsolete versions of libnotify, DBUS and HAL.
+ - Code quality improvements (Paolo Borelli)
+ - More gtk-doc comments added to all the files.
+ - Remove the scons-based build system for now.
+ - Use g_option instead of popt (Jaap Haitsma)
+ - Install new icons to /usr/share/icons/hicolor and do gtk-update-icon-cache
+   when we install. #336067
+ - Add X-GNOME-Bugzilla keys for use with bug buddy (Vincent Fretin).
+ - Add the missing --daemon option to the man page (Ow Mun Heng).
+ - Updated Yelp help file with more useful information.
+
+Power Manager
+
+ - Don't do the critical action when the battery value is 0% as this happens
+   for a split second with some ACPI laptops on resume.
+ - Deal sanely with HAL and DBUS restarting.
+ - Enable all the experimental code, such as the info window and the graphs.
+   The graphs have had some serious Cairo lovin' and look pretty slick now,
+   and should display more accurate data that we were displaying before.
+   We also include a legend so that power events can be seen graphically.
+ - Use the button "battery" rather than "www" to show battery status. lp:35633
+ - Don't inhibit, but throttle when the lid is shut. #332576.
+ - Update caches when we resume. For the matching HAL patch see:
+   http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=187396#c10
+ - Add a brightness widget that matches the volume popup when we change the
+   brightness using the keyboard shortcuts.
+ - Rewrite the screensaver integration so that g-s and g-p-m can be restarted
+   independently and started in any order. #332366
+ - Fix the expose event handling (Crispin Flowerday)
+ - Use g_slice rather than g_new for the small data-points.
+ - Use /apps/gnome-power-manager/show_actions_in_menu rather than the compile
+   setting ACTIONS_MENU_ENABLED to disable the actions menu. #335415
+ - Add urgency states and the correct icons to libnotify windows.
+ - Synchronize DPMS policy after a suspend or hibernate. #336081
+ - Work around a HAL bug with CSR mice and keyboards so they display the
+   correct charge after a short delay.
+ - Set resume time at startup to let actions settle. (Daniel Silverstone)
+
+Power Preferences
+
+ - Layout improvements (Jaap Haitsma, William Jon McCann) #335991, #336207
+ - Move the time sliders so that they start at the g-s-p setting. #336061
+ - Add a Critical UPS action into the UI. #337116
+
+Translators
+
+ - Gabor Kelemen (Hungarian)
+ - Žygimantas Beručka (Lithuanian)
+ - Francisco Javier F. Serrador (Spanish)
+ - Takeshi AIHANA (Japanese)
+ - Clytie Siddall (Vietnamese)
+
+==============
 Version 2.14.0
 ==============
 
