@@ -263,8 +263,8 @@ battery_device_cache_entry_update_all (BatteryDeviceCacheEntry *entry)
 		if (status->design_charge > 0 && status->last_full_charge > 0) {
 			if (status->design_charge != status->last_full_charge) {
 				float capacity;
-				capacity = status->design_charge / status->last_full_charge;
-				status->capacity = capacity * 100;
+				capacity = 100.0f / (float) status->design_charge;
+				status->capacity = capacity * (float) status->last_full_charge;
 			}
 		}
 	}
@@ -749,6 +749,8 @@ gpm_power_get_description_array (GpmPower		*power,
 			condition = _("Excellent");
 		} else if (status->capacity > 90) {
 			condition = _("Good");
+		} else if (status->capacity > 70) {
+			condition = _("Fair");
 		} else {
 			condition = _("Poor");
 		}
@@ -1394,7 +1396,7 @@ add_battery (GpmPower   *power,
 	 * the design capacity. (#326740)
 	 */
 	if (entry->battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
-		if (status->capacity > 0 && status->capacity < 0.5f) {
+		if (status->capacity > 0 && status->capacity < 50) {
 			gpm_warning ("Your battery has a very low capacity, "
 				     "meaning that it may be old or broken. "
 				     "Battery life will be sub-optimal, "

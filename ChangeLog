@@ -1,5 +1,10 @@
 2006-04-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c (battery_device_cache_entry_update_all): Fix the
+	capacity calculation so that we don't always display 100%.
+
+2006-04-06  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-debug.{c|h}: Seporate bugzilla functonality, sometimes we
 	just want to give the user a warning.
 
