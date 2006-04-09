@@ -1,4 +1,29 @@
 ==============
+Version 2.14.1
+==============
+
+Released April 09, 2006
+
+Power Manager
+
+ - Add the missing --daemon option to the man page (Ow Mun Heng).
+ - Don't do the critical action when the battery value is 0% as this happens
+   for a split second with some acpi laptops on resume.
+ - Deal sanely with HAL and DBUS restarting.
+ - Remove the experimental code, this has moved to HEAD.
+ - Use the button "battery" rather than "www" to show battery status. lp:35633
+ - Don't inhibit, just throttle when the lid is shut. #332576.
+ - add X-GNOME-Bugzilla keys for use with bug buddy (Vincent Fretin).
+
+Translators
+
+ - Gabor Kelemen (Hungarian)
+ - Žygimantas Beručka (Lithuanian)
+ - Francisco Javier F. Serrador (Spanish)
+ - Takeshi AIHANA (Japanese)
+ - Clytie Siddall (Vietnamese)
+
+==============
 Version 2.14.0
 ==============
 
