@@ -1,3 +1,20 @@
+2006-04-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am, src/gpm-info.{c|h}: Added these files, abstracting
+	out the complex data structures in gpm-info.c
+
+	* data/gpm-info.glade: Added the event log tab.
+
+	* src/gpm-manager.c, src/gpm-info.{c|h}, src/gpm-graph-widget.{c|h}: 
+	Use the event data rather than adding fake points. This work is
+	on-going, so expect a little unstability while the new infrastructure
+	settles in. Seporating was done due to the graphing formulaes becoming
+	really complex, and also saving twice the information we needed to.
+	Also, we make the GpmInfoData unit the one-and-only as we have enough
+	confusion as there is. This should reduce the "random" crashes, and
+	sure makes things more stable for me. Plus this lets us create an
+	event-log in the GUI, to keep more people happy.
+
 2006-04-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.{c|h}: Add the new function

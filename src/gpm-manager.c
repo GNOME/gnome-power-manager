@@ -252,7 +252,6 @@ gpm_manager_can_suspend (GpmManager *manager,
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-
 	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_SUSPEND, NULL);
 	if ( gconf_policy && gpm_hal_can_suspend () ) {
@@ -279,7 +278,6 @@ gpm_manager_can_hibernate (GpmManager *manager,
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-
 	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_HIBERNATE, NULL);
 	if ( gconf_policy && gpm_hal_can_hibernate () ) {
@@ -304,13 +302,10 @@ gpm_manager_can_shutdown (GpmManager *manager,
 	if (can) {
 		*can = FALSE;
 	}
-
 	/* FIXME: check other stuff */
-
 	if (can) {
 		*can = TRUE;
 	}
-
 	return TRUE;
 }
 
@@ -645,9 +640,6 @@ change_power_policy (GpmManager *manager,
 
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (!on_ac);
-	if (! on_ac) {
-		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_LOW_POWER);
-	}
 	gpm_screensaver_enable_throttle (manager->priv->screensaver, !on_ac);
 
 	/* set the new sleep (inactivity) value */
@@ -707,6 +699,8 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gboolean do_lock;
 	gboolean ret = TRUE;
 
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF);
+
 	do_lock = gpm_manager_get_lock_policy (manager,
 					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
@@ -739,6 +733,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	gboolean  ret = TRUE;
 	GError   *error;
 
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_ON);
 	error = NULL;
 	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
@@ -769,52 +764,40 @@ manager_policy_do (GpmManager *manager,
 	char     *action;
 
 	gpm_debug ("policy: %s", policy);
-
 	action = gconf_client_get_string (manager->priv->gconf_client, policy, NULL);
 
 	if (! action) {
 		return;
 	}
-
 	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
 		return;
 	}
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
-
 		gpm_debug ("*ACTION* Doing nothing");
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-
 		gpm_debug ("*ACTION* Suspend");
-		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_SUSPEND);
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-
 		gpm_debug ("*ACTION* Hibernate");
-		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_HIBERNATE);
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
-
 		gpm_debug ("*ACTION* Blank");
-		gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF);
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-
 		gpm_debug ("*ACTION* Shutdown");
 		gpm_manager_shutdown (manager, NULL);
 
 	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
-
 		gpm_debug ("*ACTION* Interactive");
 		/* Log out interactively */
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   TRUE, GNOME_INTERACT_ANY, FALSE, TRUE);
-
 	} else {
 		gpm_warning ("unknown action %s", action);
 	}
@@ -1038,7 +1021,9 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Hibernating computer");
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_HIBERNATE);
 	ret = gpm_hal_hibernate ();
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME);
 
 	/* we need to refresh all the power caches */
 	gpm_power_update_all (manager->priv->power);
@@ -1115,7 +1100,9 @@ gpm_manager_suspend (GpmManager *manager,
 
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Suspending computer");
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SUSPEND);
 	ret = gpm_hal_suspend (0);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME);
 
 	/* we need to refresh all the power caches */
 	gpm_power_update_all (manager->priv->power);
@@ -1259,7 +1246,7 @@ idle_changed_cb (GpmIdle    *idle,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* save this brightness and dim the screen, fixes #328564 */
-			gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_SCREEN_DIM);
+			gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SCREEN_DIM);
 			gpm_brightness_level_save (manager->priv->brightness,
 						   manager->priv->lcd_dim_brightness);
 		}
@@ -1424,6 +1411,11 @@ lid_button_pressed (GpmManager	 *manager,
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	gpm_debug ("lid button changed: %d", state);
+	if (state) {
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_CLOSED);
+	} else {
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_OPENED);
+	}
 
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
@@ -1555,6 +1547,11 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
+	if (on_ac) {
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_ON_AC);
+	} else {
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_ON_BATTERY);
+	}
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
@@ -1731,7 +1728,9 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (manager,
+						     battery_status,
+						     manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1791,7 +1790,6 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		/* Do different warnings for each GPM_WARNING */
 		if (warning_type == GPM_WARNING_DISCHARGING) {
-			gpm_info_interest_point	(manager->priv->info, GPM_GRAPH_EVENT_AC_REMOVED);
 			gboolean show_notify;
 			show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 							     GPM_PREF_NOTIFY_ACADAPTER, NULL);

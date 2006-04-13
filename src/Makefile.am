@@ -93,6 +93,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-stock-icons.c				\
 	gpm-info.h					\
 	gpm-info.c					\
+	gpm-info-data.h					\
+	gpm-info-data.c					\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
 	gpm-graph-widget.h				\

@@ -25,6 +25,8 @@
 #include <math.h>
 
 #include "gpm-graph-widget.h"
+#include "gpm-info.h"
+#include "gpm-info-data.h"
 #include "gpm-debug.h"
 
 G_DEFINE_TYPE (GpmGraph, gpm_graph, GTK_TYPE_DRAWING_AREA);
@@ -32,105 +34,140 @@ G_DEFINE_TYPE (GpmGraph, gpm_graph, GTK_TYPE_DRAWING_AREA);
 
 struct GpmGraphPrivate
 {
-	gboolean	use_grid;
-	gboolean	use_legend;
+	gboolean		 use_grid;
+	gboolean		 use_legend;
+	gboolean		 invert_x;
+	gboolean		 invert_y;
 
-	gboolean	invert_x;
-	gboolean	invert_y;
+	gint			 stop_x;
+	gint			 stop_y;
+	gint			 box_x; /* size of the white box, not the widget */
+	gint			 box_y;
+	gint			 box_width;
+	gint			 box_height;
 
-	gint		stop_x;
-	gint		stop_y;
-
-	gint		box_x; /* size of the white box, not the widget */
-	gint		box_y;
-	gint		box_width;
-	gint		box_height;
-
-	float		unit_x; /* 10th width of graph */
-	float		unit_y; /* 10th width of graph */
+	float			 unit_x; /* 10th width of graph */
+	float			 unit_y; /* 10th width of graph */
 
 	GpmGraphAxisType	 axis_x;
 	GpmGraphAxisType	 axis_y;
 	cairo_font_options_t	*options;
 
-	GList		*list;
+	GList			*list;
+	GList			*events;
 };
 
 static gboolean gpm_graph_expose (GtkWidget *graph, GdkEventExpose *event);
 static void	gpm_graph_finalize (GObject *object);
 
-
 /**
  * gpm_graph_event_description:
- * @event: The event type, e.g. GPM_GRAPH_EVENT_SCREEN_DIM
- * @colour: The colour enum, e.g. GPM_GRAPH_COLOUR_DARK_BLUE (returned)
+ * @event: The event type, e.g. GPM_GRAPH_EVENT_SUSPEND
+ * Return value: a string value describing the event
  **/
 const char *
-gpm_graph_event_description (GpmGraphEvent    event,
-			     GpmGraphColour  *colour)
+gpm_graph_event_description (GpmGraphEvent event)
 {
-	const char *event_desc;
-	if (event == GPM_GRAPH_EVENT_AC_REMOVED) {
-		event_desc = _("AC power");
-		*colour = GPM_GRAPH_COLOUR_BLUE;
-	} else if (event == GPM_GRAPH_EVENT_LOW_POWER) {
-		event_desc = _("Low Power");
-		*colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+	if (event == GPM_GRAPH_EVENT_ON_AC) {
+		return _("On AC");
+	} else if (event == GPM_GRAPH_EVENT_ON_BATTERY) {
+		return _("On battery");
 	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
-		event_desc = _("Screen dim");
-		*colour = GPM_GRAPH_COLOUR_YELLOW;
+		return _("Screen dim");
 	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
-		event_desc = _("Screen off");
-		*colour = GPM_GRAPH_COLOUR_DARK_YELLOW;
+		return _("DPMS off");
+	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
+		return _("DPMS on");
 	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
-		event_desc = _("Suspend");
-		*colour = GPM_GRAPH_COLOUR_RED;
+		return _("Suspend");
+	} else if (event == GPM_GRAPH_EVENT_RESUME) {
+		return _("Resume");
 	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
-		event_desc = _("Hibernate");
-		*colour = GPM_GRAPH_COLOUR_DARK_RED;
+		return _("Hibernate");
+	} else if (event == GPM_GRAPH_EVENT_LID_CLOSED) {
+		return _("Lid closed");
+	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
+		return _("Lid opened");
 	} else {
-		event_desc = NULL;
-		*colour = 0;
+		return _("Unknown event!");
 	}
-	return event_desc;
+}
+
+/**
+ * gpm_graph_event_colour:
+ * @event: The event type, e.g. GPM_GRAPH_EVENT_SUSPEND
+ * Return value: a colout, e.g. GPM_GRAPH_COLOUR_DARK_BLUE
+ **/
+GpmGraphColour
+gpm_graph_event_colour (GpmGraphEvent event)
+{
+	if (event == GPM_GRAPH_EVENT_ON_AC) {
+		return GPM_GRAPH_COLOUR_BLUE;
+	} else if (event == GPM_GRAPH_EVENT_ON_BATTERY) {
+		return GPM_GRAPH_COLOUR_DARK_BLUE;
+	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
+		return GPM_GRAPH_COLOUR_CYAN;
+	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
+		return GPM_GRAPH_COLOUR_DARK_YELLOW;
+	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
+		return GPM_GRAPH_COLOUR_YELLOW;
+	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
+		return GPM_GRAPH_COLOUR_RED;
+	} else if (event == GPM_GRAPH_EVENT_RESUME) {
+		return GPM_GRAPH_COLOUR_DARK_RED;
+	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
+		return GPM_GRAPH_COLOUR_MAGENTA;
+	} else if (event == GPM_GRAPH_EVENT_LID_CLOSED) {
+		return GPM_GRAPH_COLOUR_GREEN;
+	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
+		return GPM_GRAPH_COLOUR_DARK_GREEN;
+	} else {
+		return GPM_GRAPH_COLOUR_DEFAULT;
+	}
 }
 
 /**
  * gpm_graph_set_axis_x:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
  **/
 void
 gpm_graph_set_axis_x (GpmGraph *graph, GpmGraphAxisType axis)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->axis_x = axis;
 }
 
 /**
  * gpm_graph_set_axis_y:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
  **/
 void
 gpm_graph_set_axis_y (GpmGraph *graph, GpmGraphAxisType axis)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->axis_y = axis;
 }
 
 /**
  * gpm_graph_enable_legend:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @enable: If we should show the legend
  **/
 void
 gpm_graph_enable_legend	(GpmGraph *graph, gboolean enable)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->use_legend = enable;
 }
 
 /**
  * gpm_graph_class_init:
- * @class: This simple graph class instance
+ * @class: This graph class instance
  **/
 static void
 gpm_graph_class_init (GpmGraphClass *class)
@@ -146,7 +183,7 @@ gpm_graph_class_init (GpmGraphClass *class)
 
 /**
  * gpm_graph_init:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  **/
 static void
 gpm_graph_init (GpmGraph *graph)
@@ -167,7 +204,7 @@ gpm_graph_init (GpmGraph *graph)
 
 /**
  * gpm_graph_finalize:
- * @object: This simple graph class instance
+ * @object: This graph class instance
  **/
 static void
 gpm_graph_finalize (GObject *object)
@@ -178,7 +215,7 @@ gpm_graph_finalize (GObject *object)
 
 /**
  * gpm_graph_set_invert_x:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the X axis, i.e. to count from 0..X or X..0
@@ -186,12 +223,14 @@ gpm_graph_finalize (GObject *object)
 void
 gpm_graph_set_invert_x (GpmGraph *graph, gboolean inv)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->invert_x = inv;
 }
 
 /**
  * gpm_graph_set_invert_y:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0
@@ -199,12 +238,14 @@ gpm_graph_set_invert_x (GpmGraph *graph, gboolean inv)
 void
 gpm_graph_set_invert_y (GpmGraph *graph, gboolean inv)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->invert_y = inv;
 }
 
 /**
  * gpm_graph_set_data:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @list: The GList values to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
@@ -212,7 +253,24 @@ gpm_graph_set_invert_y (GpmGraph *graph, gboolean inv)
 void
 gpm_graph_set_data (GpmGraph *graph, GList *list)
 {
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
 	graph->priv->list = list;
+}
+
+/**
+ * gpm_graph_set_events:
+ * @graph: This graph class instance
+ * @list: The GList events to be plotted on the graph
+ *
+ * Sets the data for the graph. You MUST NOT free the list before the widget.
+ **/
+void
+gpm_graph_set_events (GpmGraph *graph, GList *list)
+{
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
+	graph->priv->events = list;
 }
 
 /**
@@ -263,7 +321,7 @@ gpm_get_axis_label (GpmGraphAxisType axis, int value)
 
 /**
  * gpm_graph_draw_grid:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the 10x10 dotted grid onto the graph.
@@ -303,7 +361,7 @@ gpm_graph_draw_grid (GpmGraph *graph, cairo_t *cr)
 
 /**
  * gpm_graph_draw_labels:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the X and the Y labels onto the graph.
@@ -384,7 +442,7 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 
 /**
  * gpm_graph_check_range:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  *
  * Checks all points are displayable on the graph, nobbling if required.
  **/
@@ -395,32 +453,32 @@ gpm_graph_check_range (GpmGraph *graph)
 		gpm_debug ("no data");
 		return;
 	}
-	GpmDataPoint *new = NULL;
+	GpmInfoDataPoint *new = NULL;
 	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
-		new = (GpmDataPoint *) l->data;
-		if (new->x < 0) {
-			gpm_warning ("point out of range (x=%i)", new->x);
-			new->x = 0;
+		new = (GpmInfoDataPoint *) l->data;
+		if (new->time < 0) {
+			gpm_warning ("point out of range (x=%i)", new->time);
+			new->time = 0;
 		}
-		if (new->x > graph->priv->stop_x) {
-			gpm_warning ("point out of range (x=%i)", new->x);
-			new->x = graph->priv->stop_x;
+		if (new->time > graph->priv->stop_x) {
+			gpm_warning ("point out of range (x=%i)", new->time);
+			new->time = graph->priv->stop_x;
 		}
-		if (new->y < 0) {
-			gpm_warning ("point out of range (y=%i)", new->y);
-			new->y = 0;
+		if (new->value < 0) {
+			gpm_warning ("point out of range (y=%i)", new->value);
+			new->value = 0;
 		}
-		if (new->y > graph->priv->stop_y) {
-			gpm_warning ("point out of range (y=%i)", new->y);
-			new->y = graph->priv->stop_y;
+		if (new->value > graph->priv->stop_y) {
+			gpm_warning ("point out of range (y=%i)", new->value);
+			new->value = graph->priv->stop_y;
 		}
 	}
 }
 
 /**
  * gpm_graph_auto_range:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  *
  * Autoranges the graph axis depending on the axis type, and the maximum
  * value of the data. We have to be careful to choose a number that gives good
@@ -436,15 +494,15 @@ gpm_graph_auto_range (GpmGraph *graph)
 
 	int biggest_x = 0;
 	int biggest_y = 0;
-	GpmDataPoint *new = NULL;
+	GpmInfoDataPoint *new = NULL;
 	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
-		new = (GpmDataPoint *) l->data;
-		if (new->x > biggest_x) {
-			biggest_x = new->x;
+		new = (GpmInfoDataPoint *) l->data;
+		if (new->time > biggest_x) {
+			biggest_x = new->time;
 		}
-		if (new->y > biggest_y) {
-			biggest_y = new->y;
+		if (new->value > biggest_y) {
+			biggest_y = new->value;
 		}
 	}
 
@@ -501,18 +559,26 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 		cairo_set_source_rgb (cr, 1, 0, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 1);
-	} else if (colour == GPM_GRAPH_COLOUR_PURPLE) {
+	} else if (colour == GPM_GRAPH_COLOUR_GREEN) {
+		cairo_set_source_rgb (cr, 0, 1, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_MAGENTA) {
 		cairo_set_source_rgb (cr, 1, 0, 1);
 	} else if (colour == GPM_GRAPH_COLOUR_YELLOW) {
 		cairo_set_source_rgb (cr, 1, 1, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_CYAN) {
+		cairo_set_source_rgb (cr, 0, 1, 1);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 0.5);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_PURPLE) {
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_GREEN) {
+		cairo_set_source_rgb (cr, 0, 0.5, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_MAGENTA) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0.5);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_YELLOW) {
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_CYAN) {
+		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
 	} else {
 		gpm_critical_error ("Unknown colour!");
 	}
@@ -541,7 +607,7 @@ gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
 
 /**
  * gpm_graph_get_pos_on_graph:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @data_x: The data X-coordinate
  * @data_y: The data Y-coordinate
  * @x: The returned X position on the cairo surface
@@ -556,27 +622,19 @@ gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *
 
 /**
  * gpm_graph_draw_line:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the data line onto the graph with a big green line. We should already
- * limit the data to < 100 values, so this shouldn't take too long.
+ * limit the data to < ~100 values, so this shouldn't take too long.
  **/
 static void
 gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 {
 	float oldx, oldy;
 	float newx, newy;
-
-	int length_x = graph->priv->stop_x;
-	int length_y = graph->priv->stop_y;
-
-	GList *link;
-	GpmDataPoint *old;
-
-	/* -3 is so we can keep the lines inside the box at both extremes */
-	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) length_x;
-	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) length_y;
+	GpmInfoDataPoint *eventdata;
+	GList *l;
 
 	if (! graph->priv->list) {
 		gpm_debug ("no data");
@@ -587,42 +645,40 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 
 	cairo_save (cr);
 
-	/* do the line */
-	link = graph->priv->list;
-	old = link->data;
-	gpm_graph_get_pos_on_graph (graph, old->x, old->y, &oldx, &oldy);
-	while (link->next && link->next->data) {
-		GpmDataPoint *new = link->next->data;
-		if (! new->info_point) {
-			/* do line */
-			gpm_graph_get_pos_on_graph (graph, new->x, new->y, &newx, &newy);
-			cairo_move_to (cr, oldx, oldy);
-			cairo_line_to (cr, newx, newy);
-			cairo_set_line_width (cr, 2);
-			gpm_graph_set_colour (cr, new->colour);
-			cairo_stroke (cr);
-			/* save old */
-			oldx = newx;
-			oldy = newy;
-		}
-		link=link->next;
+	/* do the line on the graph */
+	GpmInfoDataPoint *new;
+	l=graph->priv->list;
+	new = (GpmInfoDataPoint *) l->data;
+	gpm_graph_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
+	for (l=l->next; l != NULL; l=l->next) {
+		new = (GpmInfoDataPoint *) l->data;
+		/* do line */
+		gpm_graph_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
+		cairo_move_to (cr, oldx, oldy);
+		cairo_line_to (cr, newx, newy);
+		cairo_set_line_width (cr, 2);
+		gpm_graph_set_colour (cr, new->colour);
+		cairo_stroke (cr);
+		/* save old */
+		oldx = newx;
+		oldy = newy;
 	}
 
 	/* do the events on the graph */
-	link = graph->priv->list;
-	old = link->data;
-	gpm_graph_get_pos_on_graph (graph, old->x, old->y, &oldx, &oldy);
-	while (link->next && link->next->data) {
-		GpmDataPoint *new = link->next->data;
-		if (new->info_point) {
-			gpm_graph_draw_dot (cr, oldx, oldy, new->colour);
+	int previous_point = 0;
+	int prevtime = -1;
+	for (l=graph->priv->events; l != NULL; l=l->next) {
+		eventdata = (GpmInfoDataPoint *) l->data;
+		/* don't overlay the points, stack vertically */
+		if (prevtime == eventdata->time) {
+			previous_point++;
 		} else {
-			/* save old */
-			gpm_graph_get_pos_on_graph (graph, new->x, new->y, &newx, &newy);
-			oldx = newx;
-			oldy = newy;
+			previous_point = 0;
 		}
-		link=link->next;
+		gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
+		newy -= (8 * previous_point);
+		gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
+		prevtime = eventdata->time;
 	}
 
 	cairo_restore (cr);
@@ -669,7 +725,8 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 	gpm_graph_draw_bounding_box (cr, x, y, width, height);
 	y_count = y + 10;
 	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
-		desc = 	gpm_graph_event_description (a, &colour);
+		desc = gpm_graph_event_description (a);
+		colour = gpm_graph_event_colour (a);
 		gpm_graph_draw_dot (cr, x + 8, y_count, colour);
 		cairo_move_to (cr, x + 8 + 10, y_count + 3);
 		cairo_show_text (cr, desc);
@@ -679,7 +736,7 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 
 /**
  * gpm_graph_draw_graph:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the complete graph, with the box, the grid, the labels and the line.
@@ -694,17 +751,22 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
 
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH (graph));
+
 	cairo_save (cr);
 
 	graph->priv->box_x = 35;
 	graph->priv->box_y = 5;
 
 	if (graph->priv->use_legend) {
-		graph->priv->box_width = graph_widget->allocation.width - (3 + legend_width + 5 + graph->priv->box_x);
+		graph->priv->box_width = graph_widget->allocation.width -
+					 (3 + legend_width + 5 + graph->priv->box_x);
 		legend_x = graph->priv->box_x + graph->priv->box_width + 6;
 		legend_y = graph->priv->box_y;
 	} else {
-		graph->priv->box_width = graph_widget->allocation.width - (3 + graph->priv->box_x);
+		graph->priv->box_width = graph_widget->allocation.width -
+					 (3 + graph->priv->box_x);
 	}
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
@@ -725,12 +787,16 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 		gpm_graph_draw_legend (cr, legend_x, legend_y, legend_width, legend_height);
 	}
 
+	/* -3 is so we can keep the lines inside the box at both extremes */
+	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) graph->priv->stop_x;
+	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) graph->priv->stop_y;
+
 	cairo_restore (cr);
 }
 
 /**
  * gpm_graph_expose:
- * @graph: This simple graph class instance
+ * @graph: This graph class instance
  * @event: The expose event
  *
  * Just repaint the entire graph widget on expose.
