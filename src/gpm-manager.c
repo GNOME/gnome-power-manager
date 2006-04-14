@@ -326,7 +326,6 @@ gpm_manager_can_shutdown (GpmManager *manager,
 static char *
 get_icon_index_from_percent (gint percent)
 {
-	gpm_debug ("percent = %i", percent);
 	if (percent < 10) {
 		return "000";
 	} else if (percent < 30) {
@@ -378,7 +377,6 @@ get_stock_id_helper (GpmPowerBatteryStatus *device_status,
 		gpm_debug ("BROKEN BATTERY...");
 		filename = g_strdup_printf ("gpm-%s-broken", prefix);
 	}
-	gpm_debug ("filename = %s", filename);
 	return filename;
 }
 
@@ -402,8 +400,6 @@ get_stock_id (GpmManager *manager,
 	GpmPowerBatteryStatus status_keyboard;
 	gboolean on_ac;
 	gboolean present;
-
-	gpm_debug ("Getting stock icon for tray");
 
 	if (icon_policy == GPM_ICON_POLICY_NEVER) {
 		gpm_debug ("The key " GPM_PREF_ICON_POLICY
@@ -433,7 +429,7 @@ get_stock_id (GpmManager *manager,
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
-	gpm_debug ("Trying CRITICAL: primary, ups, mouse, keyboard");
+	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
 	if (status_primary.is_present &&
 	    status_primary.percentage_charge < manager->priv->low_percentage) {
 		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
@@ -457,7 +453,7 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* we try (DIS)CHARGING: PRIMARY, UPS */
-	gpm_debug ("Trying CHARGING: primary, ups");
+	gpm_debug ("Trying CHARGING icon: primary, ups");
 	if (status_primary.is_present &&
 	    (status_primary.is_charging || status_primary.is_discharging) ) {
 		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
@@ -474,7 +470,7 @@ get_stock_id (GpmManager *manager,
 	}
 
 	/* we try PRESENT: PRIMARY, UPS */
-	gpm_debug ("Trying PRESENT: primary, ups");
+	gpm_debug ("Trying PRESENT icon: primary, ups");
 	if (status_primary.is_present) {
 		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
 
@@ -1532,7 +1528,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	/* If we are on AC power we should show warnings again */
 	if (on_ac) {
-		gpm_debug ("Resetting last_primary_warning to NONE");
+		gpm_debug ("Resetting warning to NONE as on AC power");
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
@@ -1694,7 +1690,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
-		gpm_debug ("Resetting last_primary_warning to NONE");
+		gpm_debug ("Resetting warning to NONE as charging");
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
@@ -1851,7 +1847,9 @@ battery_status_changed_ups (GpmManager		   *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, manager->priv->use_time_to_notify);
+	warning_type = gpm_manager_get_warning_type (manager,
+						     battery_status,
+						     manager->priv->use_time_to_notify);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
