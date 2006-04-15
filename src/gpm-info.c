@@ -97,37 +97,6 @@ gpm_graph_custom_handler (GladeXML *xml,
 }
 
 /**
- * gpm_info_help_cb:
- * @widget: The GtkWidget object
- * @info: This info class instance
- **/
-static void
-gpm_info_help_cb (GtkWidget *widget,
-		  GpmInfo   *info)
-{
-	GError *error = NULL;
-
-	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
-	if (error != NULL) {
-		gpm_warning (error->message);
-		g_error_free (error);
-	}
-}
-
-/**
- * gpm_info_close_cb:
- * @widget: The GtkWidget object
- * @info: This info class instance
- **/
-static void
-gpm_info_close_cb (GtkWidget	*widget,
-		   GpmInfo	*info)
-{
-	gtk_widget_hide_all (info->priv->main_window);
-	info->priv->is_showing = FALSE;
-}
-
-/**
  * gpm_info_graph_update:
  * @graph_data: The data we have for a specific graph
  *
@@ -149,21 +118,6 @@ gpm_info_graph_update (GList *data, GtkWidget *widget, GList *events)
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (widget);
 	gtk_widget_show (widget);
-}
-
-/**
- * gpm_info_delete_event_cb:
- * @widget: The GtkWidget object
- * @event: The event type, unused.
- * @info: This info class instance
- **/
-static gboolean
-gpm_info_delete_event_cb (GtkWidget	*widget,
-			  GdkEvent	*event,
-			  GpmInfo	*info)
-{
-	gpm_info_close_cb (widget, info);
-	return FALSE;
 }
 
 /**
@@ -416,11 +370,8 @@ gpm_info_show_window (GpmInfo *info)
 		return;
 	}
 
-
 	gpm_info_populate_device_information (info);
-
 	gpm_info_graph_update_all (info);
-
 	gpm_info_update_event_tree (info);
 
 	gtk_widget_show (info->priv->treeview_event_viewer);
@@ -523,6 +474,83 @@ gpm_info_class_init (GpmInfoClass *klass)
 }
 
 /**
+ * gpm_info_help_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ **/
+static void
+gpm_info_help_cb (GtkWidget *widget,
+		  GpmInfo   *info)
+{
+	GError *error = NULL;
+
+	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
+	if (error != NULL) {
+		gpm_warning (error->message);
+		g_error_free (error);
+	}
+}
+
+/**
+ * gpm_info_close_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ **/
+static void
+gpm_info_close_cb (GtkWidget *widget,
+		   GpmInfo   *info)
+{
+	gtk_widget_hide_all (info->priv->main_window);
+	info->priv->is_showing = FALSE;
+}
+
+/**
+ * gpm_info_delete_event_cb:
+ * @widget: The GtkWidget object
+ * @event: The event type, unused.
+ * @info: This info class instance
+ **/
+static gboolean
+gpm_info_delete_event_cb (GtkWidget *widget,
+			  GdkEvent  *event,
+			  GpmInfo   *info)
+{
+	gpm_info_close_cb (widget, info);
+	return FALSE;
+}
+
+/**
+ * gpm_info_clear_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ *
+ * Clears the data from memory, so that the event log and the reset graphs.
+ **/
+static void
+gpm_info_clear_cb (GtkWidget *widget,
+		   GpmInfo   *info)
+{
+	/* clear data */
+	g_object_unref (info->priv->rate_data);
+	g_object_unref (info->priv->percentage_data);
+	g_object_unref (info->priv->time_data);
+	g_object_unref (info->priv->events);
+
+	/* set to a blank list */
+	info->priv->events = gpm_info_data_new ();
+	info->priv->percentage_data = gpm_info_data_new ();
+	info->priv->rate_data = gpm_info_data_new ();
+	info->priv->time_data = gpm_info_data_new ();
+
+	/* update widgets */
+	gpm_info_update_event_tree (info);
+	gpm_info_graph_update_all (info);
+
+	/* re-record our start time */
+	info->priv->start_time = time (NULL);
+}
+
+/**
  * gpm_info_init:
  * @info: This info class instance
  **/
@@ -563,6 +591,10 @@ gpm_info_init (GpmInfo *info)
 
 	g_signal_connect (info->priv->main_window, "delete_event",
 			  G_CALLBACK (gpm_info_delete_event_cb), info);
+
+	widget = glade_xml_get_widget (glade_xml, "button_clear");
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_info_clear_cb), info);
 
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",

@@ -1,5 +1,17 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade: Make the button names sensible.
+
+	* src/gpm-graph-widget.c (gpm_graph_draw_line, gpm_graph_draw_graph):
+	Make the graphs instantly appear, rather than waiting for the first
+	update to trigger the expose event.
+
+	* src/gpm-info.c (gpm_info_show_window, gpm_info_clear_cb):
+	Add the "Clear" button to clear the data from memory, so that the
+	event log and the graphs reset. Should fix the second half of #338174.
+
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (battery_status_changed_primary): use the new
 	variable done_notify_fully_charged to track whether we have already
 	done the "Fully charged" notification.

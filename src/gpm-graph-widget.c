@@ -648,6 +648,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	/* do the line on the graph */
 	GpmInfoDataPoint *new;
 	l=graph->priv->list;
+	if (l->data == NULL) g_error ("odd");
 	new = (GpmInfoDataPoint *) l->data;
 	gpm_graph_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
 	for (l=l->next; l != NULL; l=l->next) {
@@ -780,16 +781,16 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	gpm_graph_auto_range (graph);
 
+	/* -3 is so we can keep the lines inside the box at both extremes */
+	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) graph->priv->stop_x;
+	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) graph->priv->stop_y;
+
 	gpm_graph_draw_labels (graph, cr);
 	gpm_graph_draw_line (graph, cr);
 
 	if (graph->priv->use_legend) {
 		gpm_graph_draw_legend (cr, legend_x, legend_y, legend_width, legend_height);
 	}
-
-	/* -3 is so we can keep the lines inside the box at both extremes */
-	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) graph->priv->stop_x;
-	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) graph->priv->stop_y;
 
 	cairo_restore (cr);
 }
