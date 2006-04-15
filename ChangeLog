@@ -1,5 +1,11 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (gconf_key_changed_cb): Monitor 
+	/apps/gnome-power-manager/laptop_panel_dim_brightness so we don't have
+	to restart to get the new setting. Should fix #338628
+
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c (gpm_info_get_time_string): Write the event log
 	text like "Sat Apr 15, 15:35:40" rather than just a random integer.
 

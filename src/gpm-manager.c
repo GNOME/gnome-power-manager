@@ -2161,27 +2161,39 @@ gconf_key_changed_cb (GConfClient *client,
 		gpm_manager_can_suspend (manager, &enabled, NULL);
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
-		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
 		gpm_manager_can_hibernate (manager, &enabled, NULL);
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
-		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
+						allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_SHOW_ACTIONS_IN_MENU) == 0) {
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
 		gpm_manager_can_suspend (manager, &enabled, NULL);
-		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      allowed_in_menu && enabled);
 		gpm_manager_can_hibernate (manager, &enabled, NULL);
-		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon), allowed_in_menu && enabled);
+		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
+						allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_POLICY_TIMEOUT) == 0) {
 		manager->priv->suppress_policy_timeout =
 			gconf_client_get_int (manager->priv->gconf_client,
 				  	      GPM_PREF_POLICY_TIMEOUT, NULL);
+
+	} else if (strcmp (entry->key, GPM_PREF_PANEL_DIM_BRIGHTNESS) == 0) {
+		manager->priv->lcd_dim_brightness =
+			gconf_client_get_int (manager->priv->gconf_client,
+					      GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+
 	}
+
+
 }
 
 /**
