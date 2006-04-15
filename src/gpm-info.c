@@ -301,16 +301,35 @@ gpm_info_create_event_viewer_tree (GtkWidget *widget)
 }
 
 /**
+ * gpm_info_get_time_string:
+ * @time: A time_t value
+ *
+ * Converts a time_t to a string description.
+ * The return value must be freed using g_free().
+ * Return value: The timestring, e.g. "Sat Apr 15, 15:35:40".
+ **/
+static char *
+gpm_info_get_time_string (time_t time)
+{
+	char outstr[256];
+	struct tm *tmp;
+	tmp = localtime (&time);
+	strftime (outstr, sizeof(outstr), "%a %b %d, %T", tmp);
+	return g_strdup (outstr);
+}
+
+/**
  * gpm_info_update_event_tree:
- * @widget: The GtkWidget object
- * MOOOOOOOOOOOOOOOOOOOOOOOO
+ * @info: This info class instance
+ *
+ * Updates the event log tree widget with the data we currently have.
  **/
 static void
 gpm_info_update_event_tree (GpmInfo *info)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
-	char timestring[128];
+	char *timestring;
 	const char *descstring;
 	GtkListStore *store;
 	GtkTreeIter   iter;
@@ -321,12 +340,13 @@ gpm_info_update_event_tree (GpmInfo *info)
 	GList *events = gpm_info_data_get_list (info->priv->events);
 	for (l=events; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
-		g_sprintf (timestring, "%i", new->time);
+		timestring = gpm_info_get_time_string (info->priv->start_time + new->time);
 		descstring = gpm_graph_event_description (new->value);
 		gpm_debug ("event log: %s: %s", timestring, descstring);
 		/* add data to the list store */
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, 0, timestring, 1, descstring, -1);
+		g_free (timestring);
 	}
 
 	gtk_tree_view_set_model (GTK_TREE_VIEW (info->priv->treeview_event_viewer),
