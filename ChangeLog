@@ -1,3 +1,9 @@
+2006-04-16  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c (libnotify_event): Point to the center of the
+	icon so we conform to the GNOME HIG and match the behaviour of
+	NetworkManager.	Fixes #338638.
+
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c, src/gpm-graph-widget.c: Start adding infrastructure

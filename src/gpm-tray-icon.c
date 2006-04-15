@@ -409,6 +409,8 @@ static void
 gpm_tray_icon_popup_cleared_cd (GtkWidget   *widget,
 				GpmTrayIcon *icon)
 {
+	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+
 	/* we enable the tooltip as the menu has gone */
 	gtk_tooltips_enable (icon->priv->tooltips);
 }
@@ -453,6 +455,8 @@ static void
 gpm_tray_icon_sync_actions (GpmTrayIcon *icon)
 {
 	GtkAction *action;
+
+	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
 	if (icon->priv->actiongroup != NULL) {
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
@@ -584,6 +588,8 @@ void
 gpm_tray_icon_show (GpmTrayIcon *icon,
 		    gboolean     enabled)
 {
+	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+
 	if (enabled) {
 		gtk_widget_show_all (GTK_WIDGET (icon));
 		icon->priv->is_visible = TRUE;
@@ -668,31 +674,6 @@ gpm_tray_icon_new (void)
 }
 
 #ifdef HAVE_LIBNOTIFY
-/**
- * get_widget_position:
- * @widget: The icon widget
- * @x: The returned X co-ordinate
- * @y: The returned Y co-ordinate
- *
- * Gets the position where the libnotify arrow should "point"
- * FIXME: Doesn't work on all orientations...
- **/
-static void
-get_widget_position (GtkWidget *widget,
-		     int       *x,
-		     int       *y)
-{
-	g_assert (widget);
-
-	gdk_window_get_origin (GDK_WINDOW (widget->window), x, y);
-
-	*x += widget->allocation.x;
-	*y += widget->allocation.y;
-	*x += widget->allocation.width / 2;
-	*y += widget->allocation.height;
-
-	gpm_debug ("widget position x=%i, y=%i", *x, *y);
-}
 
 /**
  * notification_closed_cb:
@@ -728,25 +709,21 @@ libnotify_event (GpmTrayIcon    *icon,
 		 const char	*msgicon,
 		 GpmNotifyLevel	 urgency)
 {
-	int x;
-	int y;
-
 	if (icon->priv->notify != NULL) {
 		notify_notification_close (icon->priv->notify, NULL);
 	}
 
+	/* Point to the center of the icon as per the GNOME HIG, #338638 */
+	GtkWidget *point = NULL;
+	if (icon->priv->is_visible) {
+		point = icon->priv->image;
+	}
 	icon->priv->notify = notify_notification_new (title,
 						      content,
 						      msgicon,
-						      NULL);
+						      point);
 
 	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
-
-	if (icon->priv->is_visible) {
-		get_widget_position (GTK_WIDGET (icon), &x, &y);
-		notify_notification_set_hint_int32 (icon->priv->notify, "x", x);
-		notify_notification_set_hint_int32 (icon->priv->notify, "y", y);
-	}
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
 		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
@@ -788,9 +765,6 @@ libnotify_event (GpmTrayIcon    *icon,
 {
 	GtkWidget     *dialog;
 	GtkMessageType msg_type;
-
-	/* assertion checks */
-	g_assert (content);
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
 		msg_type = GTK_MESSAGE_WARNING;
