@@ -65,7 +65,6 @@ struct GpmInfoPrivate
 	GpmInfoData		*percentage_data;
 
 	GladeXML		*glade_xml;
-	gboolean		 is_showing;
 
 	time_t           	 start_time;
 };
@@ -373,145 +372,6 @@ gpm_info_graph_update_all (GpmInfo *info)
 }
 
 /**
- * gpm_info_show_window:
- * @info: This info class instance
- *
- * Show the information window, setting up callbacks and initialising widgets
- * when required.
- **/
-void
-gpm_info_show_window (GpmInfo *info)
-{
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-
-	if (info->priv->is_showing) {
-		gpm_debug ("already showing info");
-		return;
-	}
-
-	gpm_info_populate_device_information (info);
-	gpm_info_graph_update_all (info);
-	gpm_info_update_event_tree (info);
-
-	gtk_widget_show (info->priv->treeview_event_viewer);
-	gtk_widget_show (info->priv->rate_widget);
-	gtk_widget_show (info->priv->time_widget);
-	gtk_widget_show (info->priv->percentage_widget);
-	gtk_widget_show (info->priv->main_window);
-	info->priv->is_showing = TRUE;
-}
-
-/**
- * gpm_info_event_log
- * @info: This info class instance
- * @event: The event description, e.g. "Application started"
- *
- * Adds an point to the event log
- **/
-void
-gpm_info_event_log (GpmInfo *info, GpmGraphEvent event)
-{
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-	gpm_debug ("Adding %i to the event log", event);
-
-	gpm_info_data_add_always (info->priv->events,
-				  time (NULL) - info->priv->start_time,
-				  event,
-				  gpm_graph_event_colour (event));
-	if (info->priv->is_showing) {
-		/* do this selectivly */
-		gpm_info_update_event_tree (info);
-	}
-}
-
-/**
- * gpm_info_log_do_poll:
- * @data: gpointer to this info class instance
- *
- * This is the callback to get the log data every timeout period, where we have
- * to add points to the database and also update the graphs.
- **/
-static gboolean
-gpm_info_log_do_poll (gpointer data)
-{
-	GpmInfo *info = (GpmInfo*) data;
-
-	int value_x;
-
-	GpmPowerBatteryStatus battery_status;
-	gpm_power_get_battery_status (info->priv->power,
-				      GPM_POWER_BATTERY_KIND_PRIMARY,
-				      &battery_status);
-
-	/* work out seconds elapsed */
-	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
-	gpm_info_data_add (info->priv->percentage_data,
-			   value_x,
-			   battery_status.percentage_charge, 0);
-	gpm_info_data_add (info->priv->rate_data,
-			   value_x,
-			   battery_status.charge_rate_raw, 0);
-	gpm_info_data_add (info->priv->time_data,
-			   value_x,
-			   battery_status.remaining_time, 0);
-
-	if (info->priv->is_showing) {
-		gpm_info_graph_update_all (info);
-		/* also update the first tab */
-		gpm_info_populate_device_information (info);
-	}
-	return TRUE;
-}
-
-/**
- * gpm_info_set_power:
- * @info: This info class instance
- * @power: The power class instance
- *
- * The logging system needs access to the power stuff for the device
- * information and also the values to log for the graphs.
- **/
-void
-gpm_info_set_power (GpmInfo *info, GpmPower *power)
-{
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-	info->priv->power = power;
-}
-
-/**
- * gpm_info_class_init:
- * @klass: This info class instance
- **/
-static void
-gpm_info_class_init (GpmInfoClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_info_finalize;
-	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
-}
-
-/**
- * gpm_info_help_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- **/
-static void
-gpm_info_help_cb (GtkWidget *widget,
-		  GpmInfo   *info)
-{
-	GError *error = NULL;
-
-	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
-	if (error != NULL) {
-		gpm_warning (error->message);
-		g_error_free (error);
-	}
-}
-
-/**
  * gpm_info_close_cb:
  * @widget: The GtkWidget button object
  * @info: This info class instance
@@ -520,8 +380,10 @@ static void
 gpm_info_close_cb (GtkWidget *widget,
 		   GpmInfo   *info)
 {
-	gtk_widget_hide_all (info->priv->main_window);
-	info->priv->is_showing = FALSE;
+	if (info->priv->main_window) {
+		gtk_widget_destroy (info->priv->main_window);
+		info->priv->main_window = NULL;
+	}
 }
 
 /**
@@ -571,32 +433,44 @@ gpm_info_clear_cb (GtkWidget *widget,
 }
 
 /**
- * gpm_info_init:
+ * gpm_info_help_cb:
+ * @widget: The GtkWidget button object
  * @info: This info class instance
  **/
 static void
-gpm_info_init (GpmInfo *info)
+gpm_info_help_cb (GtkWidget *widget,
+		  GpmInfo   *info)
+{
+	GError *error = NULL;
+
+	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
+	if (error != NULL) {
+		gpm_warning (error->message);
+		g_error_free (error);
+	}
+}
+
+/**
+ * gpm_info_show_window:
+ * @info: This info class instance
+ *
+ * Show the information window, setting up callbacks and initialising widgets
+ * when required.
+ **/
+void
+gpm_info_show_window (GpmInfo *info)
 {
 	GtkWidget    *widget;
 	GladeXML     *glade_xml;
 
-	info->priv = GPM_INFO_GET_PRIVATE (info);
+	g_return_if_fail (info != NULL);
+	g_return_if_fail (GPM_IS_INFO (info));
 
-	info->priv->is_showing = FALSE;
+	if (info->priv->main_window) {
+		gpm_debug ("already showing info");
+		return;
+	}
 
-	/* record our start time */
-	info->priv->start_time = time (NULL);
-
-	/* set up the timer callback so we can log data */
-	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
-
-	/* set to a blank list */
-	info->priv->events = gpm_info_data_new ();
-	info->priv->percentage_data = gpm_info_data_new ();
-	info->priv->rate_data = gpm_info_data_new ();
-	info->priv->time_data = gpm_info_data_new ();
-
-	glade_set_custom_handler (gpm_graph_custom_handler, info);
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-info.glade", NULL, NULL);
 	info->priv->glade_xml = glade_xml;
 	/* don't segfault on missing glade file */
@@ -654,6 +528,131 @@ gpm_info_init (GpmInfo *info)
 	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_event_log");
 	info->priv->treeview_event_viewer = widget;
 	gpm_info_create_event_viewer_tree (widget);
+
+	gpm_info_populate_device_information (info);
+	gpm_info_graph_update_all (info);
+	gpm_info_update_event_tree (info);
+
+	gtk_widget_show (info->priv->treeview_event_viewer);
+	gtk_widget_show (info->priv->rate_widget);
+	gtk_widget_show (info->priv->time_widget);
+	gtk_widget_show (info->priv->percentage_widget);
+	gtk_widget_show (info->priv->main_window);
+}
+
+/**
+ * gpm_info_event_log
+ * @info: This info class instance
+ * @event: The event description, e.g. "Application started"
+ *
+ * Adds an point to the event log
+ **/
+void
+gpm_info_event_log (GpmInfo *info, GpmGraphEvent event)
+{
+	g_return_if_fail (info != NULL);
+	g_return_if_fail (GPM_IS_INFO (info));
+	gpm_debug ("Adding %i to the event log", event);
+
+	gpm_info_data_add_always (info->priv->events,
+				  time (NULL) - info->priv->start_time,
+				  event,
+				  gpm_graph_event_colour (event));
+	if (info->priv->main_window) {
+		/* do this only if the main window is loaded */
+		gpm_info_update_event_tree (info);
+	}
+}
+
+/**
+ * gpm_info_log_do_poll:
+ * @data: gpointer to this info class instance
+ *
+ * This is the callback to get the log data every timeout period, where we have
+ * to add points to the database and also update the graphs.
+ **/
+static gboolean
+gpm_info_log_do_poll (gpointer data)
+{
+	GpmInfo *info = (GpmInfo*) data;
+
+	int value_x;
+
+	GpmPowerBatteryStatus battery_status;
+	gpm_power_get_battery_status (info->priv->power,
+				      GPM_POWER_BATTERY_KIND_PRIMARY,
+				      &battery_status);
+
+	/* work out seconds elapsed */
+	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
+	gpm_info_data_add (info->priv->percentage_data,
+			   value_x,
+			   battery_status.percentage_charge, 0);
+	gpm_info_data_add (info->priv->rate_data,
+			   value_x,
+			   battery_status.charge_rate_raw, 0);
+	gpm_info_data_add (info->priv->time_data,
+			   value_x,
+			   battery_status.remaining_time, 0);
+
+	if (info->priv->main_window) {
+		gpm_info_graph_update_all (info);
+		/* also update the first tab */
+		gpm_info_populate_device_information (info);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_info_set_power:
+ * @info: This info class instance
+ * @power: The power class instance
+ *
+ * The logging system needs access to the power stuff for the device
+ * information and also the values to log for the graphs.
+ **/
+void
+gpm_info_set_power (GpmInfo *info, GpmPower *power)
+{
+	g_return_if_fail (info != NULL);
+	g_return_if_fail (GPM_IS_INFO (info));
+	info->priv->power = power;
+}
+
+/**
+ * gpm_info_class_init:
+ * @klass: This info class instance
+ **/
+static void
+gpm_info_class_init (GpmInfoClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = gpm_info_finalize;
+	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
+}
+
+/**
+ * gpm_info_init:
+ * @info: This info class instance
+ **/
+static void
+gpm_info_init (GpmInfo *info)
+{
+	info->priv = GPM_INFO_GET_PRIVATE (info);
+
+	/* record our start time */
+	info->priv->start_time = time (NULL);
+
+	/* set up the timer callback so we can log data */
+	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
+
+	/* set to a blank list */
+	info->priv->events = gpm_info_data_new ();
+	info->priv->percentage_data = gpm_info_data_new ();
+	info->priv->rate_data = gpm_info_data_new ();
+	info->priv->time_data = gpm_info_data_new ();
+
+	glade_set_custom_handler (gpm_graph_custom_handler, info);
 }
 
 /**
