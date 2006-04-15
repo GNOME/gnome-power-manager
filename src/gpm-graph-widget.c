@@ -37,10 +37,13 @@ struct GpmGraphPrivate
 	gboolean		 use_grid;
 	gboolean		 use_legend;
 	gboolean		 invert_x;
+	gboolean		 autorange_x;
 	gboolean		 invert_y;
 
 	gint			 stop_x;
 	gint			 stop_y;
+	gint			 start_x;
+	gint			 start_y;
 	gint			 box_x; /* size of the white box, not the widget */
 	gint			 box_y;
 	gint			 box_width;
@@ -191,10 +194,13 @@ gpm_graph_init (GpmGraph *graph)
 	graph->priv = GPM_GRAPH_GET_PRIVATE (graph);
 	graph->priv->invert_x = FALSE;
 	graph->priv->invert_y = FALSE;
+	graph->priv->start_x = 0;
+	graph->priv->start_y = 0;
 	graph->priv->stop_x = 60;
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
+	graph->priv->autorange_x = TRUE;
 	graph->priv->list = NULL;
 	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
 	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
@@ -374,8 +380,8 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 	gint value;
 	float divwidth  = (float)graph->priv->box_width / 10.0f;
 	float divheight = (float)graph->priv->box_height / 10.0f;
-	gint length_x = graph->priv->stop_x;
-	gint length_y = graph->priv->stop_y;
+	int length_x = graph->priv->stop_x - graph->priv->start_x;
+	int length_y = graph->priv->stop_y - graph->priv->start_y;
 	cairo_text_extents_t extents;
 	float offsetx = 0;
 	float offsety = 0;
@@ -389,9 +395,9 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_x + (a * divwidth);
 		if (graph->priv->invert_x) {
-			value = (length_x / 10) * (10 - a);
+			value = (length_x / 10) * (10 - a) + graph->priv->start_x;
 		} else {
-			value = (length_x / 10) * a;
+			value = ((length_x / 10) * a) + graph->priv->start_x;
 		}
 		text = gpm_get_axis_label (graph->priv->axis_x, value);
 
@@ -416,9 +422,9 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
 		if (graph->priv->invert_y) {
-			value = (length_y / 10) * a;
+			value = (length_y / 10) * a - graph->priv->start_y;
 		} else {
-			value = (length_y / 10) * (10 - a);
+			value = (length_y / 10) * (10 - a) - graph->priv->start_y;
 		}
 		text = gpm_get_axis_label (graph->priv->axis_y, value);
 
@@ -457,17 +463,17 @@ gpm_graph_check_range (GpmGraph *graph)
 	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
-		if (new->time < 0) {
+		if (new->time < graph->priv->start_x) {
 			gpm_warning ("point out of range (x=%i)", new->time);
-			new->time = 0;
+			new->time = graph->priv->start_x;
 		}
 		if (new->time > graph->priv->stop_x) {
 			gpm_warning ("point out of range (x=%i)", new->time);
 			new->time = graph->priv->stop_x;
 		}
-		if (new->value < 0) {
+		if (new->value < graph->priv->start_y) {
 			gpm_warning ("point out of range (y=%i)", new->value);
-			new->value = 0;
+			new->value = graph->priv->start_y;
 		}
 		if (new->value > graph->priv->stop_y) {
 			gpm_warning ("point out of range (y=%i)", new->value);
@@ -489,11 +495,17 @@ gpm_graph_auto_range (GpmGraph *graph)
 {
 	if (! graph->priv->list) {
 		gpm_debug ("no data");
+		graph->priv->start_x = 0;
+		graph->priv->start_y = 0;
+		graph->priv->stop_x = 10;
+		graph->priv->stop_y = 10;
 		return;
 	}
 
 	int biggest_x = 0;
 	int biggest_y = 0;
+	int smallest_x = 999999;
+	int smallest_y = 999999;
 	GpmInfoDataPoint *new = NULL;
 	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
@@ -504,40 +516,68 @@ gpm_graph_auto_range (GpmGraph *graph)
 		if (new->value > biggest_y) {
 			biggest_y = new->value;
 		}
+		if (new->time < smallest_x) {
+			smallest_x = new->time;
+		}
+		if (new->value < smallest_y) {
+			smallest_y = new->value;
+		}
+	}
+
+	/* do we autorange the start (so it starts at non-zero)? */
+	if (graph->priv->autorange_x) {
+		/* x is always time and always autoranges to the minute scale */
+		smallest_x = (smallest_x / 60) * 60;
+		if (smallest_x < 60) {
+			smallest_x = 0;
+		}
+		graph->priv->start_x = smallest_x;
+	} else {
+		graph->priv->start_x = 0;
 	}
 
 	/* x */
 	if (graph->priv->axis_x == GPM_GRAPH_TYPE_PERCENTAGE) {
 		graph->priv->stop_x = 100;
 	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_TIME) {
-		graph->priv->stop_x = ((biggest_x/60)+1)*60;
+		graph->priv->stop_x = ((biggest_x / 60) + 1) * 60 + smallest_x;
 		if (graph->priv->stop_x > 60) {
-			graph->priv->stop_x = ((biggest_x/(10*60))+1)*(10*60);
+			graph->priv->stop_x = ((biggest_x / (10 * 60)) + 1) * (10 * 60) + smallest_x;
 		}
 	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_RATE) {
-		graph->priv->stop_x = ((biggest_x/10000)+2)*10000;
+		graph->priv->stop_x = ((biggest_x / 10000) + 2) * 10000 + smallest_x;
 		if (graph->priv->stop_x < 10000) {
-			graph->priv->stop_x = 10000;
+			graph->priv->stop_x = 10000 + smallest_x;
 		}
 	} else {
-		graph->priv->stop_x = ((biggest_x/10)+1)*10;
+		graph->priv->stop_x = ((biggest_x / 10) + 1) * 10 + smallest_x;
 	}
 
 	/* y */
 	if (graph->priv->axis_y == GPM_GRAPH_TYPE_PERCENTAGE) {
+		graph->priv->start_y = 0;
 		graph->priv->stop_y = 100;
 	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_TIME) {
-		graph->priv->stop_y = ((biggest_y/60)+2)*60;
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y / 60) + 2)* 60;
 		if (graph->priv->stop_y > 60) {
-			graph->priv->stop_y = ((biggest_y/(10*60))+2)*(10*60);
+			graph->priv->stop_y = ((biggest_y / (10 * 60)) + 2) * (10 * 60);
+		}
+		if (graph->priv->stop_y < 60) {
+			graph->priv->stop_y = 60;
 		}
 	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_RATE) {
-		graph->priv->stop_y = ((biggest_y/10000)+2)*10000;
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
 		if (graph->priv->stop_y < 10000) {
 			graph->priv->stop_y = 10000;
 		}
 	} else {
-		graph->priv->stop_y = ((biggest_y/10)+1)*10;
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y / 10) + 1) * 10;
+		if (graph->priv->stop_y < 10) {
+			graph->priv->stop_y = 10;
+		}
 	}
 }
 
@@ -616,8 +656,8 @@ gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
 static void
 gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *x, float *y)
 {
-	*x = graph->priv->box_x + (graph->priv->unit_x * data_x) + 1;
-	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - data_y)) + 1.5;
+	*x = graph->priv->box_x + (graph->priv->unit_x * data_x) + 1 - graph->priv->start_x;
+	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - data_y)) + 1.5 - graph->priv->start_y;
 }
 
 /**
@@ -782,8 +822,10 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_auto_range (graph);
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
-	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) graph->priv->stop_x;
-	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) graph->priv->stop_y;
+	int data_x = graph->priv->stop_x - graph->priv->start_x;
+	int data_y = graph->priv->stop_y - graph->priv->start_y;
+	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) data_x;
+	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) data_y;
 
 	gpm_graph_draw_labels (graph, cr);
 	gpm_graph_draw_line (graph, cr);

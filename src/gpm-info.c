@@ -66,7 +66,7 @@ struct GpmInfoPrivate
 
 	GladeXML		*glade_xml;
 
-	time_t           	 start_time;
+	time_t		 start_time;
 };
 
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
@@ -427,9 +427,6 @@ gpm_info_clear_cb (GtkWidget *widget,
 	/* update widgets */
 	gpm_info_update_event_tree (info);
 	gpm_info_graph_update_all (info);
-
-	/* re-record our start time */
-	info->priv->start_time = time (NULL);
 }
 
 /**

@@ -1,5 +1,13 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c, src/gpm-graph-widget.c: Start adding infrastructure
+	so that the graphs (and data) can start at non-zero. This means the
+	event log stays valid, and the graphs make more sense. This is required
+	so that we can limit the data to a maximum time period without
+	displaying the time "backwards".
+
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: Only load the glade file (and all the widgets) when
 	we want to show the window, rather that unconditionally at startup.
 	Also destroy the widget when we are finished as it saves memory.
