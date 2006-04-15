@@ -254,6 +254,7 @@ gpm_info_data_finalize (GObject *object)
 		g_slice_free (GpmInfoDataPoint, l->data);
 	}
 	g_list_free (info_data->priv->list);
+	info_data->priv->list = NULL;
 
 	G_OBJECT_CLASS (gpm_info_data_parent_class)->finalize (object);
 }

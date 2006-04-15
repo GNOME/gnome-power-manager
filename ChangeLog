@@ -1,5 +1,11 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info-data.c (gpm_info_data_finalize): set the list to NULL
+	on unref, so we go boom if we try to access a unref'd object (which I
+	suspect we might be doing once in a blue moon).
+
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.{c|h} (gpm_brightness_level_get): Add this new
 	function so we can get at the current percentage value.
 
