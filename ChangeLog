@@ -1,3 +1,12 @@
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (battery_status_changed_primary): use the new
+	variable done_notify_fully_charged to track whether we have already
+	done the "Fully charged" notification.
+	We only re-enable the fully charged notification when the battery
+	drops down to 95% as some batteries charge to 100% and then fluctuate
+	from ~98% to 100%. Should fix #338281.
+
 2006-04-14  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.h: Remove the obsolete GPM_PREF_USE_ICON_DESKTOPS

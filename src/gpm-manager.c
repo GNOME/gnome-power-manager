@@ -121,6 +121,7 @@ struct GpmManagerPrivate
 
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
+	gboolean	 done_notify_fully_charged;
 
 	time_t           last_resume_event;
 	int		 suppress_policy_timeout;
@@ -1698,10 +1699,10 @@ battery_status_changed_primary (GpmManager	      *manager,
 	 * 99 to 100 some laptops report this as charging, some as not-charging.
 	 * This is probably a race. This method should work for both cases. */
 	if (manager->priv->last_primary_percentage_change == 99 &&
-	    battery_status->percentage_charge == 100) {
+	    battery_status->percentage_charge == 100 &&
+	    ! manager->priv->done_notify_fully_charged) {
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
-
 		if (show_notify) {
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      _("Battery Charged"),
@@ -1710,6 +1711,13 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      GPM_STOCK_BATTERY_CHARGED,
 					      GPM_NOTIFY_URGENCY_LOW);
 		}
+		manager->priv->done_notify_fully_charged = TRUE;
+	}
+	/* We only re-enable the fully charged notification when the battery
+	   drops down to 95% as some batteries charge to 100% and then fluctuate
+	   from ~98% to 100%. See #338281 for details */
+	if (manager->priv->last_primary_percentage_change < 95) {
+		manager->priv->done_notify_fully_charged = FALSE;
 	}
 
 	manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
@@ -2367,6 +2375,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->last_pda_warning = GPM_WARNING_NONE;
 	manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	manager->priv->last_primary_percentage_change = 0;
+	manager->priv->done_notify_fully_charged = FALSE;
 
 	/* We don't want to be notified on coldplug if we are on battery power
 	   this should fix #332322 */
