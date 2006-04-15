@@ -378,6 +378,26 @@ gpm_brightness_level_set (GpmBrightness *brightness,
 }
 
 /**
+ * gpm_brightness_level_get:
+ * @brightness: This brightness class instance
+ * Return value: The percentage brightness, or -1 for no hardware
+ *
+ * Gets the current (or at least what this class thinks is current) percentage
+ * brightness. This is quick as no HAL inquiry is done. 
+ **/
+int
+gpm_brightness_level_get (GpmBrightness *brightness)
+{
+	int percentage;
+	if (! brightness->priv->has_hardware) {
+		return -1;
+	}
+	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
+						   brightness->priv->levels);
+	return percentage;
+}
+
+/**
  * gpm_brightness_level_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level

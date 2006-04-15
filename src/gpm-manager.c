@@ -1231,7 +1231,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		gpm_debug ("Idle state changed: SESSION");
 
-		/* activate display power management */
+		/* Activate display power management */
 		error = NULL;
 		gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
 		if (error) {
@@ -1242,10 +1242,22 @@ idle_changed_cb (GpmIdle    *idle,
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
-			/* save this brightness and dim the screen, fixes #328564 */
+			int dim_br;
+			int current_br;
+			dim_br = manager->priv->lcd_dim_brightness;
+			current_br = gpm_brightness_level_get (manager->priv->brightness);
+			if (current_br < dim_br) {
+				/* If the current brightness is less than the dim
+				 * brightness then just use the lowest brightness
+				 * so that we don't *increase* in brightness on idle.
+				 * See #338630 for more details */
+				gpm_warning ("Current brightness is %i, dim brightness is %i.",
+					     current_br, dim_br);
+				dim_br = current_br;
+			}
+			/* Save this brightness and dim the screen, fixes #328564 */
 			gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SCREEN_DIM);
-			gpm_brightness_level_save (manager->priv->brightness,
-						   manager->priv->lcd_dim_brightness);
+			gpm_brightness_level_save (manager->priv->brightness, dim_br);
 		}
 
 		/* sync timeouts */
