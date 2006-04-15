@@ -1,5 +1,12 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c (battery_kind_cache_add_device): Make sure we add
+	the new device to the *end*, not the *start* of the device list.
+	Should fix #338634, where the batteries are listed in the reverse order
+	to what ACPI and HAL reports.
+
+2006-04-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (gconf_key_changed_cb): Monitor 
 	/apps/gnome-power-manager/laptop_panel_dim_brightness so we don't have
 	to restart to get the new setting. Should fix #338628

@@ -993,7 +993,7 @@ battery_kind_cache_add_device (GpmPower			*power,
 	}
 
 	/* assume that it isn't in there already */
-	type_entry->devices = g_slist_prepend (type_entry->devices, device_entry->udi);
+	type_entry->devices = g_slist_append (type_entry->devices, device_entry->udi);
 
 	battery_kind_cache_update (power, type_entry);
 }
