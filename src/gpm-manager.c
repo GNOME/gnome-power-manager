@@ -123,7 +123,7 @@ struct GpmManagerPrivate
 	gboolean	 lid_is_closed;
 	gboolean	 done_notify_fully_charged;
 
-	time_t           last_resume_event;
+	time_t		 last_resume_event;
 	int		 suppress_policy_timeout;
 
 	int		 low_percentage;
@@ -699,7 +699,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF);
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
+					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
@@ -740,7 +740,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					        GPM_PREF_LOCK_ON_BLANK_SCREEN);
+					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
@@ -1009,7 +1009,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					        GPM_PREF_LOCK_ON_HIBERNATE);
+					       GPM_PREF_LOCK_ON_HIBERNATE);
 	if (do_lock) {
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
@@ -1088,7 +1088,7 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					        GPM_PREF_LOCK_ON_SUSPEND);
+					       GPM_PREF_LOCK_ON_SUSPEND);
 	if (do_lock) {
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
@@ -2204,8 +2204,6 @@ gconf_key_changed_cb (GConfClient *client,
 					      GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 
 	}
-
-
 }
 
 /**

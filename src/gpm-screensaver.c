@@ -76,9 +76,9 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 		return;
 	}
 	screensaver->priv->gs_proxy = dbus_g_proxy_new_for_name (screensaver->priv->session_connection,
-							         GS_LISTENER_SERVICE,
-							         GS_LISTENER_PATH,
-							         GS_LISTENER_INTERFACE);
+								 GS_LISTENER_SERVICE,
+								 GS_LISTENER_PATH,
+								 GS_LISTENER_INTERFACE);
 	screensaver->priv->is_connected = TRUE;
 	gpm_debug ("gnome-screensaver connected to the session DBUS");
 

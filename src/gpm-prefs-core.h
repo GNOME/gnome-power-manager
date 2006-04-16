@@ -37,20 +37,19 @@ typedef struct GpmPrefsPrivate GpmPrefsPrivate;
 
 typedef struct
 {
-        GObject		 parent;
-        GpmPrefsPrivate *priv;
+	GObject		 parent;
+	GpmPrefsPrivate *priv;
 } GpmPrefs;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* action_help)		(GpmPrefs	*prefs);
-	void		(* action_close)	(GpmPrefs	*prefs);
+	void		(* action_help)			(GpmPrefs	*prefs);
+	void		(* action_close)		(GpmPrefs	*prefs);
 } GpmPrefsClass;
 
-GType		 gpm_prefs_get_type		(void);
-
-GpmPrefs	*gpm_prefs_new			(void);
+GType		 gpm_prefs_get_type			(void);
+GpmPrefs	*gpm_prefs_new				(void);
 
 G_END_DECLS
 

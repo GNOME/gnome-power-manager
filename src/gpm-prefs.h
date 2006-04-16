@@ -63,7 +63,7 @@ G_BEGIN_DECLS
 #define GPM_PREF_IDLE_DIM_SCREEN	GPM_PREF_DIR "/dim_on_idle"
 
 /* This allows us to ignore policy on resume for a bit */
-#define GPM_PREF_POLICY_TIMEOUT         GPM_PREF_DIR "/policy_suppression_timeout"
+#define GPM_PREF_POLICY_TIMEOUT		GPM_PREF_DIR "/policy_suppression_timeout"
 
 /* only valid when use_time_for_policy FALSE */
 #define GPM_PREF_LOW_PERCENTAGE		GPM_PREF_DIR "/battery_percentage_low"

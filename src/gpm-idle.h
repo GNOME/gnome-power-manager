@@ -51,23 +51,21 @@ typedef struct
 {
 	GObjectClass	parent_class;
 
-	void	      (* changed)	(GpmIdle    *idle,
-					 GpmIdleMode mode);
+	void		(* changed)			(GpmIdle	*idle,
+							 GpmIdleMode	 mode);
 } GpmIdleClass;
 
-GType	    gpm_idle_get_type		(void);
+GType		 gpm_idle_get_type			(void);
+GpmIdle		*gpm_idle_new				(void);
 
-GpmIdle   * gpm_idle_new		(void);
-GpmIdleMode gpm_idle_get_mode		(GpmIdle    *idle);
-
-void	gpm_idle_reset			(GpmIdle    *idle);
-void	gpm_idle_set_mode		(GpmIdle    *idle,
-					 GpmIdleMode mode);
-void	gpm_idle_set_check_cpu		(GpmIdle    *idle,
-					 gboolean    check_type_cpu);
-
-void	gpm_idle_set_system_timeout	(GpmIdle    *idle,
-					 guint       timeout);
+GpmIdleMode	 gpm_idle_get_mode			(GpmIdle	*idle);
+void		 gpm_idle_reset				(GpmIdle	*idle);
+void		 gpm_idle_set_mode			(GpmIdle	*idle,
+							 GpmIdleMode	 mode);
+void		 gpm_idle_set_check_cpu			(GpmIdle	*idle,
+							 gboolean	 check_type_cpu);
+void		 gpm_idle_set_system_timeout		(GpmIdle	*idle,
+							 guint		 timeout);
 
 G_END_DECLS
 

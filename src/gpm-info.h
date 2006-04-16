@@ -39,8 +39,8 @@ typedef struct GpmInfoPrivate GpmInfoPrivate;
 
 typedef struct
 {
-        GObject         parent;
-        GpmInfoPrivate *priv;
+	GObject	 	parent;
+	GpmInfoPrivate *priv;
 } GpmInfo;
 
 typedef struct
@@ -48,14 +48,14 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmInfoClass;
 
-GType		 gpm_info_get_type		(void);
-void		 gpm_info_set_power		(GpmInfo	*info,
-						 GpmPower	*power);
-void		 gpm_info_show_window		(GpmInfo	*info);
-void		 gpm_info_event_log		(GpmInfo	*info,
-						 GpmGraphEvent	 event);
+GType		 gpm_info_get_type			(void);
+GpmInfo		*gpm_info_new				(void);
 
-GpmInfo		*gpm_info_new			(void);
+void		 gpm_info_set_power			(GpmInfo	*info,
+							 GpmPower	*power);
+void		 gpm_info_show_window			(GpmInfo	*info);
+void		 gpm_info_event_log			(GpmInfo	*info,
+							 GpmGraphEvent	 event);
 
 G_END_DECLS
 

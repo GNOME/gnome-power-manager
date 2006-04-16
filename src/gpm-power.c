@@ -648,7 +648,7 @@ gpm_power_get_description_array (GpmPower		*power,
 				 GpmPowerBatteryKind	 battery_kind,
 				 gint			 device_num)
 {
-	const char	        *udi;
+	const char		*udi;
 	const char		*suffix;
 	BatteryDeviceCacheEntry *device;
 	GpmPowerBatteryStatus	*status;
@@ -803,7 +803,7 @@ gpm_power_get_description_array (GpmPower		*power,
  * This also does sanity checking on the values to make sure they are sane.
  **/
 static void
-battery_kind_cache_update (GpmPower	         *power,
+battery_kind_cache_update (GpmPower		 *power,
 			   BatteryKindCacheEntry *entry)
 {
 	GSList *l;
@@ -1670,7 +1670,6 @@ dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
 		}
 	}
 }
-
 
 /**
  * gpm_power_init:

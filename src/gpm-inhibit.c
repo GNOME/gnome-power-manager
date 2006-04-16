@@ -58,12 +58,12 @@ G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
  * @connection:		Connection name, e.g. ":0.13"
  * @application:	Application name, e.g. "Nautilus"
  * @reason:		Reason for inhibiting, e.g. "Copying files"
- * 
+ *
  * Allocates a random cookie used to identify the connection, as multiple
  * inhibit requests can come from one caller sharing a dbus connection.
  * We need to refcount internally, and data is saved in the GpmInhibitData
  * struct.
- * 
+ *
  * Return value: a new random cookie.
  **/
 int
@@ -88,8 +88,8 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 	data->connection = g_strdup (connection);
 	data->reason = g_strdup (reason);
 
-	inhibit->priv->list = g_slist_append (inhibit->priv->list, 
-                                              (gpointer) data);
+	inhibit->priv->list = g_slist_append (inhibit->priv->list,
+					      (gpointer) data);
 
 	gpm_debug ("Recieved InhibitInactiveSleep from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
@@ -111,7 +111,7 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
  * @connection:		Connection name
  * @application:	Application name
  * @cookie:		The cookie that we used to register
- * 
+ *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
 void
@@ -149,7 +149,7 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
  * @connection:		Connection name
  * @application:	Application name
  * @cookie:		The cookie that we used to register
- * 
+ *
  * Checks to see if the dbus closed session is registered, in which case
  * unregister it.
  **/
@@ -197,7 +197,7 @@ dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
 
 /**
  * gpm_inhibit_check:
- * 
+ *
  * Checks to see if we are being stopped from performing an action.
  *
  * Return value: TRUE if the action is OK, i.e. we have *not* been inhibited
@@ -233,8 +233,8 @@ gpm_inhibit_get_message (GpmInhibit *inhibit,
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
 		g_string_append_printf (message, "<b>%s</b> has stopped the "
-				        "%s from taking place because <i>%s</i>.",
-				        data->application, action, data->reason);
+					"%s from taking place because <i>%s</i>.",
+					data->application, action, data->reason);
 	} else {
 		g_string_append_printf (message, "Multiple applications have stopped the "
 					"%s from taking place:", action);

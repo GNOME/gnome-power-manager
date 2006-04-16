@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-gboolean	gpm_networkmanager_sleep	(void);
-gboolean	gpm_networkmanager_wake		(void);
+gboolean	gpm_networkmanager_sleep		(void);
+gboolean	gpm_networkmanager_wake			(void);
 
 G_END_DECLS
 

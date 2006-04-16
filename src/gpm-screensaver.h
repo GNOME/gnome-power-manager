@@ -37,33 +37,32 @@ typedef struct GpmScreensaverPrivate GpmScreensaverPrivate;
 
 typedef struct
 {
-        GObject		       parent;
-        GpmScreensaverPrivate *priv;
+	GObject		       parent;
+	GpmScreensaverPrivate *priv;
 } GpmScreensaver;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* gs_delay_changed)  (GpmScreensaver	*screensaver,
-					       int		 delay);
+	void		(* gs_delay_changed)		(GpmScreensaver	*screensaver,
+					    		 int		 delay);
 } GpmScreensaverClass;
 
-GType		 gpm_screensaver_get_type	(void);
+GType		 gpm_screensaver_get_type		(void);
+GpmScreensaver	*gpm_screensaver_new			(void);
 
-int		 gpm_screensaver_get_delay	(GpmScreensaver *screensaver);
-gboolean	 gpm_screensaver_lock		(GpmScreensaver *screensaver);
-gboolean	 gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
-void		 gpm_screensaver_lock_set	(GpmScreensaver *screensaver,
-						 gboolean lock);
-gboolean	 gpm_screensaver_lock_enabled	(GpmScreensaver *screensaver);
-gboolean	 gpm_screensaver_enable_throttle(GpmScreensaver *screensaver,
-						 gboolean enable);
-gboolean	 gpm_screensaver_check_running	(GpmScreensaver *screensaver);
-void		 gpm_screensaver_poke		(GpmScreensaver *screensaver);
-gboolean	 gpm_screensaver_get_idle	(GpmScreensaver *screensaver,
-						 gint *time);
-
-GpmScreensaver	*gpm_screensaver_new		(void);
+int		 gpm_screensaver_get_delay		(GpmScreensaver	*screensaver);
+gboolean	 gpm_screensaver_lock			(GpmScreensaver	*screensaver);
+gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
+void		 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,
+							 gboolean	 lock);
+gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
+gboolean	 gpm_screensaver_enable_throttle	(GpmScreensaver	*screensaver,
+							 gboolean	 enable);
+gboolean	 gpm_screensaver_check_running		(GpmScreensaver	*screensaver);
+void		 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
+gboolean	 gpm_screensaver_get_idle		(GpmScreensaver	*screensaver,
+							 gint		*time);
 
 G_END_DECLS
 

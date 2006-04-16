@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
 #define GPM_FAQ_URL			GPM_HOMEPAGE_URL "faq.html"
 
-char *gpm_get_timestring (int time);
+char		*gpm_get_timestring		(int		time);
 
 G_END_DECLS
 

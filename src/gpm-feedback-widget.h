@@ -37,8 +37,8 @@ typedef struct GpmFeedbackPrivate GpmFeedbackPrivate;
 
 typedef struct
 {
-        GObject		    parent;
-        GpmFeedbackPrivate *priv;
+	GObject		    parent;
+	GpmFeedbackPrivate *priv;
 } GpmFeedback;
 
 typedef struct
@@ -46,11 +46,11 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmFeedbackClass;
 
-GType		 gpm_feedback_get_type		(void);
-void		 gpm_feedback_display_value	(GpmFeedback *feedback,
-						 float value);
+GType		 gpm_feedback_get_type			(void);
+GpmFeedback	*gpm_feedback_new			(void);
 
-GpmFeedback	*gpm_feedback_new		(void);
+void		 gpm_feedback_display_value		(GpmFeedback	*feedback,
+							 float		 value);
 
 G_END_DECLS
 

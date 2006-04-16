@@ -44,28 +44,26 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* button_pressed)	(GpmHalMonitor		*monitor,
-						 const char		*type,
-						 gboolean		 state);
-	void		(* ac_power_changed)	(GpmHalMonitor		*monitor,
-						 gboolean		 on_ac);
-	void		(* battery_added)	 (GpmHalMonitor		*monitor,
-						  const char		*udi);
-	void		(* battery_removed)	 (GpmHalMonitor		*monitor,
-						  const char		*udi);
-	void		(* battery_property_modified) (GpmHalMonitor	*monitor,
-						  const char		*udi,
-						  const char		*key);
+	void		(* button_pressed)		(GpmHalMonitor	*monitor,
+							 const char	*type,
+							 gboolean	 state);
+	void		(* ac_power_changed)		(GpmHalMonitor	*monitor,
+							 gboolean	 on_ac);
+	void		(* battery_added)		(GpmHalMonitor	*monitor,
+							 const char	*udi);
+	void		(* battery_removed)		(GpmHalMonitor	*monitor,
+							 const char	*udi);
+	void		(* battery_property_modified)	(GpmHalMonitor	*monitor,
+							 const char	*udi,
+							 const char	*key);
 } GpmHalMonitorClass;
 
 GType			 gpm_hal_monitor_get_type	(void);
-
 GpmHalMonitor		*gpm_hal_monitor_new		(void);
 
-gboolean		 gpm_hal_monitor_get_on_ac	(GpmHalMonitor *monitor);
-
-void			 hal_start_monitor		(GpmHalMonitor *monitor);
-void			 hal_stop_monitor		(GpmHalMonitor *monitor);
+gboolean		 gpm_hal_monitor_get_on_ac	(GpmHalMonitor	*monitor);
+void			 hal_start_monitor		(GpmHalMonitor	*monitor);
+void			 hal_stop_monitor		(GpmHalMonitor	*monitor);
 
 G_END_DECLS
 

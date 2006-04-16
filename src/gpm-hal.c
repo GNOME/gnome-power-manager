@@ -90,7 +90,6 @@ gpm_hal_is_on_ac (void)
 	return is_on_ac;
 }
 
-
 /** Returns true if system.formfactor == "laptop"
  *
  *  @return			TRUE is computer is identified as a laptop

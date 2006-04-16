@@ -45,7 +45,7 @@ gboolean
 gpm_stock_icons_init (void)
 {
 	GtkIconTheme *theme = gtk_icon_theme_get_default ();
-	int           i;
+	int	      i;
 
 	static const GpmStockIcon items [] = {
 		{ GPM_STOCK_SUSPEND_TO_DISK, FALSE },

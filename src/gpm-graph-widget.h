@@ -88,25 +88,25 @@ struct GpmGraphClass
 	GtkDrawingAreaClass parent_class;
 };
 
-GType		 gpm_graph_get_type		(void);
-GtkWidget	*gpm_graph_new			(void);
+GType		 gpm_graph_get_type			(void);
+GtkWidget	*gpm_graph_new				(void);
 
-void		 gpm_graph_set_invert_x		(GpmGraph	*graph,
-						 gboolean	 inv);
-void		 gpm_graph_enable_legend	(GpmGraph	*graph,
-						 gboolean	 enable);
-void		 gpm_graph_set_invert_y		(GpmGraph	*graph,
-						 gboolean	 inv);
-void		 gpm_graph_set_data		(GpmGraph	*graph,
-						 GList		*list);
-void		 gpm_graph_set_events		(GpmGraph	*graph,
-						 GList		*events);
-void		 gpm_graph_set_axis_x		(GpmGraph	*graph,
-						 GpmGraphAxisType axis);
-void		 gpm_graph_set_axis_y		(GpmGraph	*graph,
-						 GpmGraphAxisType axis);
-const char *	 gpm_graph_event_description	(GpmGraphEvent event);
-GpmGraphColour	 gpm_graph_event_colour		(GpmGraphEvent event);
+void		 gpm_graph_set_invert_x			(GpmGraph	*graph,
+							 gboolean	 inv);
+void		 gpm_graph_enable_legend		(GpmGraph	*graph,
+							 gboolean	 enable);
+void		 gpm_graph_set_invert_y			(GpmGraph	*graph,
+							 gboolean	 inv);
+void		 gpm_graph_set_data			(GpmGraph	*graph,
+							 GList		*list);
+void		 gpm_graph_set_events			(GpmGraph	*graph,
+							 GList		*events);
+void		 gpm_graph_set_axis_x			(GpmGraph	*graph,
+							 GpmGraphAxisType axis);
+void		 gpm_graph_set_axis_y			(GpmGraph	*graph,
+							 GpmGraphAxisType axis);
+const char *	 gpm_graph_event_description		(GpmGraphEvent	 event);
+GpmGraphColour	 gpm_graph_event_colour			(GpmGraphEvent	 event);
 
 G_END_DECLS
 

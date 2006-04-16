@@ -150,7 +150,7 @@ remove_poll_system_timer (GpmIdle *idle)
 /**
  * system_timer:
  * @idle: This idle class instance
- * 
+ *
  * Instead of doing the state transition directly we wait until the
  * system is quiet
  **/
@@ -193,7 +193,7 @@ remove_all_timers (GpmIdle *idle)
 /**
  * add_system_timer:
  * @idle: This idle class instance
- * 
+ *
  * Adds a idle timeout if the value is greater than zero
  **/
 static void
@@ -214,7 +214,7 @@ add_system_timer (GpmIdle *idle)
 /**
  * gpm_idle_set_check_cpu:
  * @idle: This idle class instance
- * @check_type_cpu: If we should check the CPU before mode becomes 
+ * @check_type_cpu: If we should check the CPU before mode becomes
  *		    GPM_IDLE_MODE_SYSTEM and the event is done.
  **/
 void
@@ -266,7 +266,7 @@ gpm_idle_get_mode (GpmIdle *idle)
 /**
  * gpm_idle_reset:
  * @idle: This idle class instance
- * 
+ *
  * Reset the idle timer.
  **/
 void
@@ -411,7 +411,7 @@ gpm_idle_class_init (GpmIdleClass *klass)
  * session_idle_changed_handler:
  * @is_idle: If the session is idle
  * @idle: This idle class instance
- * 
+ *
  * The SessionIdleChanged callback from gnome-screensaver.
  **/
 static void
@@ -435,10 +435,10 @@ session_idle_changed_handler (DBusGProxy *proxy,
 /**
  * acquire_screensaver:
  * @idle: This idle class instance
- * 
+ *
  * Aquires a connection to gnome-screensaver so we can get SessionIdleChanged
  * dubs events.
- * 
+ *
  * Return value: If we could connect to gnome-screensaver.
  **/
 static gboolean
@@ -464,14 +464,13 @@ acquire_screensaver (GpmIdle *idle)
 	return TRUE;
 }
 
-
 /**
  * gpm_idle_init:
  * @idle: This idle class instance
- * 
+ *
  * Gets a DBUS connection, and aquires the screensaver connection so we can
  * get session changed events.
- * 
+ *
  **/
 static void
 gpm_idle_init (GpmIdle *idle)

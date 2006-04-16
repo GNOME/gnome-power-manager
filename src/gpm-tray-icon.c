@@ -52,7 +52,7 @@
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
 static void     gpm_tray_icon_init       (GpmTrayIcon      *tray_icon);
-static void     gpm_tray_icon_finalize   (GObject          *object);
+static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 #define GPM_TRAY_ICON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconPrivate))
 
@@ -65,11 +65,11 @@ struct GpmTrayIconPrivate
 	GtkWidget      *image;
 	GtkWidget      *ebox;
 
-	gboolean        show_notifications;
-	gboolean        is_visible;
+	gboolean	show_notifications;
+	gboolean	is_visible;
 
-	gboolean        can_suspend;
-	gboolean        can_hibernate;
+	gboolean	can_suspend;
+	gboolean	can_hibernate;
 
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notify;
@@ -112,7 +112,7 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 };
 static guint gpm_tray_icon_n_action_entries = G_N_ELEMENTS (gpm_tray_icon_action_entries);
 
-static guint         signals [LAST_SIGNAL] = { 0, };
+static guint	 signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, EGG_TYPE_TRAY_ICON)
 
@@ -326,39 +326,30 @@ gpm_tray_icon_show_about_cb (GtkAction   *action,
 		   "02110-1301, USA.")
 	};
   	const char  *translators = _("translator-credits");
-	char        *license_trans;
-	GdkPixbuf   *pixbuf;
+	char	    *license_trans;
 
-	/*
-	 * Translators comment: put your own name here to appear in the about dialog.
-	 */
+	/* Translators comment: put your own name here to appear in the about dialog. */
   	if (!strcmp (translators, "translator-credits")) {
 		translators = NULL;
 	}
-
-	GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-	pixbuf = gtk_icon_theme_load_icon (icon_theme, GPM_STOCK_APP_ICON, 48, 0, NULL);
 
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 				     _(license[2]), "\n\n", _(license[3]), "\n",  NULL);
 
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
-
 	gtk_show_about_dialog (NULL,
-		               "name", GPM_NAME,
-		               "version", VERSION,
-		               "copyright", "Copyright \xc2\xa9 2005 Richard Hughes",
-		               "license", license_trans,
-		               "website", GPM_HOMEPAGE_URL,
-		               "comments", GPM_DESCRIPTION,
-		               "authors", authors,
-		               "documenters", documenters,
-		               "artists", artists,
-		               "translator-credits", translators,
-		               "logo", pixbuf,
-		               NULL);
-
-	g_object_unref (pixbuf);
+			       "name", GPM_NAME,
+			       "version", VERSION,
+			       "copyright", "Copyright \xc2\xa9 2005-2006 Richard Hughes",
+			       "license", license_trans,
+			       "website", GPM_HOMEPAGE_URL,
+			       "comments", GPM_DESCRIPTION,
+			       "authors", authors,
+			       "documenters", documenters,
+			       "artists", artists,
+			       "translator-credits", translators,
+			       "logo-icon-name", GPM_STOCK_APP_ICON,
+			       NULL);
 }
 
 /**
@@ -375,8 +366,8 @@ tray_popup_position_menu (GtkMenu  *menu,
 {
 	GtkWidget     *widget;
 	GtkRequisition requisition;
-	gint           menu_xpos;
-	gint           menu_ypos;
+	gint	       menu_xpos;
+	gint	       menu_ypos;
 
 	widget = GTK_WIDGET (user_data);
 
@@ -477,13 +468,13 @@ gpm_tray_icon_sync_actions (GpmTrayIcon *icon)
  * Connects the UI to the tray icon instance
  **/
 static GObject *
-gpm_tray_icon_constructor (GType                  type,
-			   guint                  n_construct_properties,
+gpm_tray_icon_constructor (GType		  type,
+			   guint		  n_construct_properties,
 			   GObjectConstructParam *construct_properties)
 {
 	GpmTrayIcon      *tray;
 	GpmTrayIconClass *klass;
-	GError           *error = NULL;
+	GError		 *error = NULL;
 	GtkWidget	 *widget;
 
 	klass = GPM_TRAY_ICON_CLASS (g_type_class_peek (GPM_TYPE_TRAY_ICON));
@@ -549,34 +540,34 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 
 	signals [SUSPEND] =
 		g_signal_new ("suspend",
-		              G_TYPE_FROM_CLASS (object_class),
-		              G_SIGNAL_RUN_LAST,
-		              G_STRUCT_OFFSET (GpmTrayIconClass, suspend),
-		              NULL,
-		              NULL,
-		              g_cclosure_marshal_VOID__VOID,
-		              G_TYPE_NONE,
-		              0);
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmTrayIconClass, suspend),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 	signals [HIBERNATE] =
 		g_signal_new ("hibernate",
-		              G_TYPE_FROM_CLASS (object_class),
-		              G_SIGNAL_RUN_LAST,
-		              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-		              NULL,
-		              NULL,
-		              g_cclosure_marshal_VOID__VOID,
-		              G_TYPE_NONE,
-		              0);
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 	signals [SHOW_INFO] =
 		g_signal_new ("show-info",
-		              G_TYPE_FROM_CLASS (object_class),
-		              G_SIGNAL_RUN_LAST,
-		              G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-		              NULL,
-		              NULL,
-		              g_cclosure_marshal_VOID__VOID,
-		              G_TYPE_NONE,
-		              0);
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 }
 
 /**
@@ -621,9 +612,9 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	icon->priv->ebox = gtk_event_box_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->ebox),
-		                 "button_press_event",
-		                 G_CALLBACK (gpm_tray_icon_button_press_cb),
-		                 icon, 0);
+				 "button_press_event",
+				 G_CALLBACK (gpm_tray_icon_button_press_cb),
+				 icon, 0);
 
 	icon->priv->image = gtk_image_new ();
 
@@ -682,7 +673,7 @@ gpm_tray_icon_new (void)
  **/
 static void
 notification_closed_cb (NotifyNotification *notify,
-			GpmTrayIcon        *icon)
+			GpmTrayIcon	*icon)
 {
 	/* just invalidate the pointer */
 	gpm_debug ("caught notification closed signal");

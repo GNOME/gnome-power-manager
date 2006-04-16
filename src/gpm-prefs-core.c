@@ -417,7 +417,7 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 static void
 gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
 			      char	  *widget_name,
-			      char        *gpm_pref_key,
+			      char	  *gpm_pref_key,
 			      const char **actions)
 {
 	GladeXML    *xml = prefs->priv->glade_xml;
@@ -810,7 +810,7 @@ set_idle_hscale_stops (GpmPrefs   *prefs,
 static void
 gs_delay_changed_cb (GpmScreensaver *screensaver,
 		    int		     delay,
-		    GpmPrefs        *prefs)
+		    GpmPrefs	    *prefs)
 {
 	/* update the start and stop points on the hscales */
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);

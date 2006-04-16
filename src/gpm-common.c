@@ -50,8 +50,8 @@ gpm_get_timestring (int time)
 
 	if (minutes < 60) {
 		timestring = g_strdup_printf (ngettext ("%i minute",
-                                                        "%i minutes",
-                                                        minutes), minutes);
+							"%i minutes",
+							minutes), minutes);
 		return timestring;
 	}
 

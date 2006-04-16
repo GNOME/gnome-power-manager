@@ -49,10 +49,10 @@ typedef struct
 typedef struct
 {
 	 GObjectClass	parent_class;
-	 void		(* on_ac_changed)	(GpmManager	*manager,
-						 gboolean	 on_ac);
-	 void		(* dpms_mode_changed)	(GpmManager	*manager,
-						 const char	*mode);
+	 void		(* on_ac_changed)		(GpmManager	*manager,
+							 gboolean	 on_ac);
+	 void		(* dpms_mode_changed)		(GpmManager	*manager,
+							 const char	*mode);
 } GpmManagerClass;
 
 typedef enum
@@ -62,49 +62,43 @@ typedef enum
 
 #define GPM_MANAGER_ERROR gpm_manager_error_quark ()
 
-GQuark		 gpm_manager_error_quark	(void);
+GQuark		 gpm_manager_error_quark		(void);
+GType		 gpm_manager_get_type		  	(void);
+GpmManager	*gpm_manager_new			(void);
 
-GType		 gpm_manager_get_type	  	(void);
-
-GpmManager	*gpm_manager_new		(void);
-
-gboolean	 gpm_manager_get_on_ac		(GpmManager	 *manager,
-						 gboolean	 *on_ac,
-						 GError		**error);
-gboolean	 gpm_manager_can_shutdown	(GpmManager	 *manager,
-						 gboolean	 *allowed,
-						 GError		**error);
-gboolean	 gpm_manager_can_suspend	(GpmManager	 *manager,
-						 gboolean	 *allowed,
-						 GError		**error);
-gboolean	 gpm_manager_can_hibernate	(GpmManager	 *manager,
-						 gboolean	 *allowed,
-						 GError		**error);
-
-gboolean	 gpm_manager_get_dpms_mode	(GpmManager	 *manager,
-						 const char	**mode,
-						 GError		**error);
-gboolean	 gpm_manager_set_dpms_mode	(GpmManager	 *manager,
-						 const char	 *mode,
-						 GError		**error);
-
-gboolean	 gpm_manager_suspend_dbus_method (GpmManager	 *manager,
-						  GError	**error);
-gboolean	 gpm_manager_hibernate_dbus_method (GpmManager	 *manager,
-						   GError	**error);
-gboolean	 gpm_manager_shutdown_dbus_method (GpmManager	 *manager,
-						   GError	**error);
-
-void		 gpm_manager_inhibit_inactive_sleep (GpmManager  *manager,
-						     const char  *application,
-						     const char  *reason,
-						     DBusGMethodInvocation *context,
-						     GError	**error);
-
-void		 gpm_manager_allow_inactive_sleep (GpmManager	*manager,
-						   int		 cookie,
-				   		   DBusGMethodInvocation *context,
-				   		   GError	**error);
+gboolean	 gpm_manager_get_on_ac			(GpmManager	*manager,
+							 gboolean	*on_ac,
+							 GError		**error);
+gboolean	 gpm_manager_can_shutdown		(GpmManager	*manager,
+							 gboolean	*allowed,
+							 GError		**error);
+gboolean	 gpm_manager_can_suspend		(GpmManager	*manager,
+							 gboolean	*allowed,
+							 GError		**error);
+gboolean	 gpm_manager_can_hibernate		(GpmManager	*manager,
+							 gboolean	*allowed,
+							 GError		**error);
+gboolean	 gpm_manager_get_dpms_mode		(GpmManager	*manager,
+							 const char	**mode,
+							 GError		**error);
+gboolean	 gpm_manager_set_dpms_mode		(GpmManager	*manager,
+							 const char	*mode,
+							 GError		**error);
+gboolean	 gpm_manager_suspend_dbus_method	(GpmManager	*manager,
+							 GError		**error);
+gboolean	 gpm_manager_hibernate_dbus_method	(GpmManager	*manager,
+							 GError		**error);
+gboolean	 gpm_manager_shutdown_dbus_method	(GpmManager	*manager,
+						 	 GError		**error);
+void		 gpm_manager_inhibit_inactive_sleep	(GpmManager	*manager,
+						   	 const char	*application,
+							 const char	*reason,
+							 DBusGMethodInvocation *context,
+							 GError		**error);
+void		 gpm_manager_allow_inactive_sleep	(GpmManager	*manager,
+						 	 int		 cookie,
+				   			 DBusGMethodInvocation *context,
+				   			 GError		**error);
 
 G_END_DECLS
 

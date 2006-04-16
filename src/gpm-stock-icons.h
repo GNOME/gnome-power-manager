@@ -69,8 +69,8 @@ G_BEGIN_DECLS
 #define GPM_STOCK_SUSPEND_TO_RAM		"gpm-suspend-to-ram"
 #define GPM_STOCK_BRIGHTNESS			"gpm-brightness"
 
-gboolean gpm_stock_icons_init     (void);
-void     gpm_stock_icons_shutdown (void);
+gboolean	gpm_stock_icons_init			(void);
+void		gpm_stock_icons_shutdown		(void);
 
 G_END_DECLS
 

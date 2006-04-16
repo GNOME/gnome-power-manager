@@ -116,7 +116,7 @@ gpm_brightness_class_init (GpmBrightnessClass *klass)
 /**
  * gpm_brightness_init:
  * @brightness: This brightness class instance
- * 
+ *
  * initialises the brightness class. NOTE: We expect laptop_panel objects
  * to *NOT* be removed or added during the session.
  * We only control the first laptop_panel object if there are more than one.
@@ -197,7 +197,7 @@ gpm_brightness_new (void)
 /**
  * gpm_brightness_level_update_hw:
  * @brightness: This brightness class instance
- * 
+ *
  * Updates the private local value of brightness_level_hw as it may have
  * changed on some h/w
  * Return value: Success.
@@ -228,9 +228,9 @@ gpm_brightness_level_update_hw (GpmBrightness *brightness)
  * gpm_brightness_level_set_hw:
  * @brightness: This brightness class instance
  * @brightness_level_hw: The hardware level in raw units
- * 
+ *
  * Sets the hardware value to a new number.
- * 
+ *
  * Return value: Success.
  **/
 static gboolean
@@ -271,7 +271,7 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 /**
  * gpm_brightness_level_up:
  * @brightness: This brightness class instance
- * 
+ *
  * If possible, put the brightness of the LCD up one unit.
  **/
 void
@@ -292,7 +292,7 @@ gpm_brightness_level_up (GpmBrightness *brightness)
 /**
  * gpm_brightness_level_down:
  * @brightness: This brightness class instance
- * 
+ *
  * If possible, put the brightness of the LCD down one unit.
  **/
 void
@@ -313,10 +313,10 @@ gpm_brightness_level_down (GpmBrightness *brightness)
  * gpm_brightness_percent_to_hw:
  * @percentage: The percentage to convert
  * @levels: The number of hardware levels for our hardware
- * 
+ *
  * We have to be carefull when converting from %->hw as precision is very
  * important if we want the highest value.
- * 
+ *
  * Return value: The hardware value for this percentage.
  **/
 static int
@@ -336,9 +336,9 @@ gpm_brightness_percent_to_hw (int percentage,
  * gpm_brightness_hw_to_percent:
  * @hw: The hardware level
  * @levels: The number of hardware levels for our hardware
- * 
+ *
  * We have to be carefull when converting from hw->%.
- * 
+ *
  * Return value: The percentage for this hardware value.
  **/
 static int
@@ -383,7 +383,7 @@ gpm_brightness_level_set (GpmBrightness *brightness,
  * Return value: The percentage brightness, or -1 for no hardware
  *
  * Gets the current (or at least what this class thinks is current) percentage
- * brightness. This is quick as no HAL inquiry is done. 
+ * brightness. This is quick as no HAL inquiry is done.
  **/
 int
 gpm_brightness_level_get (GpmBrightness *brightness)
@@ -434,7 +434,7 @@ gpm_brightness_level_dim_hw (GpmBrightness *brightness,
  * gpm_brightness_level_dim:
  * @brightness: This brightness class instance
  * @brightness_level: The new percentage brightness
- * 
+ *
  * Dims the screen slowly to the new value, if we are not an IBM.
  **/
 void
@@ -470,7 +470,7 @@ gpm_brightness_level_dim (GpmBrightness *brightness,
  * gpm_brightness_level_save:
  * @brightness: This brightness class instance
  * @brightness_level: The new brightness level
- * 
+ *
  * Saves the current brightness, and then sets the new brightness to the value
  * specified in brightness_level using the dimming function.
  **/
@@ -491,7 +491,7 @@ gpm_brightness_level_save (GpmBrightness *brightness,
 /**
  * gpm_brightness_level_resume:
  * @brightness: This brightness class instance
- * 
+ *
  * Restores the brightness to that saved by gpm_brightness_level_save()
  **/
 void

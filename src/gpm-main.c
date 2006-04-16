@@ -56,7 +56,7 @@ static void gpm_exit (GpmManager *manager);
  **/
 static gboolean
 gpm_object_register (DBusGConnection *connection,
-		     GObject         *object)
+		     GObject	     *object)
 {
 	DBusGProxy *bus_proxy = NULL;
 	GError *error = NULL;
@@ -114,13 +114,12 @@ main (int argc, char *argv[])
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
-	gboolean         verbose = FALSE;
-	gboolean         no_daemon = FALSE;
+	gboolean	 verbose = FALSE;
+	gboolean	 no_daemon = FALSE;
 	GpmManager      *manager = NULL;
-	GError          *error = NULL;
+	GError		*error = NULL;
 	GOptionContext  *context;
  	GnomeProgram    *program;
-
 
 	const GOptionEntry options[] = {
 		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
@@ -159,7 +158,6 @@ main (int argc, char *argv[])
 	if (!g_thread_supported ())
 		g_thread_init (NULL);
 	dbus_g_thread_init ();
-
 
 	gpm_debug_init (verbose);
 

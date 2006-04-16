@@ -55,6 +55,7 @@ typedef struct {
 
 GType			 gpm_info_data_get_type		(void);
 GpmInfoData		*gpm_info_data_new		(void);
+
 GList			*gpm_info_data_get_list		(GpmInfoData	*info_data);
 void			 gpm_info_data_add		(GpmInfoData	*info_data,
 							 int		 time,

@@ -45,9 +45,9 @@ typedef struct
 
 typedef struct
 {
-	EggTrayIconClass	parent_class;
-	void	(* suspend)	(GpmTrayIcon *tray_icon);
-	void	(* hibernate)	(GpmTrayIcon *tray_icon);
+	EggTrayIconClass			 parent_class;
+	void	(* suspend)			(GpmTrayIcon *tray_icon);
+	void	(* hibernate)			(GpmTrayIcon *tray_icon);
 } GpmTrayIconClass;
 
 typedef enum {
@@ -56,33 +56,26 @@ typedef enum {
 	GPM_NOTIFY_URGENCY_LOW      = 3
 } GpmNotifyLevel;
 
-GType		 gpm_tray_icon_get_type		(void);
+GType		 gpm_tray_icon_get_type			(void);
+GpmTrayIcon	*gpm_tray_icon_new			(void);
 
-GpmTrayIcon	*gpm_tray_icon_new		(void);
-
-void		 gpm_tray_icon_notify		(GpmTrayIcon	*icon,
-						 const char	*title,
-						 const char	*content,
-						 guint		 timeout,
-						 const char	*msgicon,
-						 GpmNotifyLevel	 urgency);
-
-void		 gpm_tray_icon_cancel_notify	(GpmTrayIcon	*icon);
-
-void		 gpm_tray_icon_set_tooltip	(GpmTrayIcon	*icon,
-						 const char	*tooltip);
-
-void		 gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
-						 const char	*stock_id);
-
-void		 gpm_tray_icon_enable_suspend	(GpmTrayIcon	*icon,
-						 gboolean	 enabled);
-
-void		 gpm_tray_icon_enable_hibernate	(GpmTrayIcon	*icon,
-						 gboolean	 enabled);
-
-void		 gpm_tray_icon_show		(GpmTrayIcon	*icon,
-						 gboolean	 enabled);
+void		 gpm_tray_icon_notify			(GpmTrayIcon	*icon,
+							 const char	*title,
+							 const char	*content,
+							 guint		 timeout,
+							 const char	*msgicon,
+							 GpmNotifyLevel	 urgency);
+void		 gpm_tray_icon_cancel_notify		(GpmTrayIcon	*icon);
+void		 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
+							 const char	*tooltip);
+void		 gpm_tray_icon_set_image_from_stock	(GpmTrayIcon	*icon,
+							 const char	*stock_id);
+void		 gpm_tray_icon_enable_suspend		(GpmTrayIcon	*icon,
+							 gboolean	 enabled);
+void		 gpm_tray_icon_enable_hibernate		(GpmTrayIcon	*icon,
+							 gboolean	 enabled);
+void		 gpm_tray_icon_show			(GpmTrayIcon	*icon,
+							 gboolean	 enabled);
 
 G_END_DECLS
 

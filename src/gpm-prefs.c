@@ -71,10 +71,10 @@ gpm_prefs_close_cb (GpmPrefs *prefs)
 int
 main (int argc, char **argv)
 {
-	gboolean         verbose = FALSE;
+	gboolean	 verbose = FALSE;
 	GOptionContext  *context;
  	GnomeProgram    *program;
-	GpmPrefs        *prefs = NULL;
+	GpmPrefs	*prefs = NULL;
 	GMainLoop       *loop;
 
 	const GOptionEntry options[] = {
@@ -107,7 +107,6 @@ main (int argc, char **argv)
 			  G_CALLBACK (gpm_prefs_help_cb), NULL);
 	g_signal_connect (prefs, "action-close",
 			  G_CALLBACK (gpm_prefs_close_cb), NULL);
-
 
 	loop = g_main_loop_new (NULL, FALSE);
 

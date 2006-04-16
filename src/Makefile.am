@@ -139,7 +139,7 @@ clean-local:
 CLEANFILES = $(BUILT_SOURCES)
 
 MAINTAINERCLEANFILES =					\
-	*~                              		\
+	*~			      			\
 	Makefile.in					\
 	$(NULL)
 

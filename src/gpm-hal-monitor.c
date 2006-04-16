@@ -303,10 +303,10 @@ watch_device_connect_property_modified (GpmHalMonitor *monitor,
 		gpm_warning ("Device is not being watched: %s", udi);
 		return;
 	}
-	struct_type = dbus_g_type_get_struct ("GValueArray", 
-						G_TYPE_STRING, 
-						G_TYPE_BOOLEAN, 
-						G_TYPE_BOOLEAN, 
+	struct_type = dbus_g_type_get_struct ("GValueArray",
+						G_TYPE_STRING,
+						G_TYPE_BOOLEAN,
+						G_TYPE_BOOLEAN,
 						G_TYPE_INVALID);
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", struct_type);
@@ -564,7 +564,6 @@ coldplug_all (GpmHalMonitor *monitor)
 	coldplug_buttons (monitor);
 }
 
-
 static void
 remove_batteries_in_hash (const char *udi, gpointer value, GList **udis)
 {
@@ -575,7 +574,7 @@ static void
 gpm_hash_free_devices_cache (GpmHalMonitor *monitor)
 {
 	GList *udis = NULL, *l;
-	
+
 	if (! monitor->priv->devices) {
 		return;
 	}
@@ -590,7 +589,7 @@ gpm_hash_free_devices_cache (GpmHalMonitor *monitor)
 	for (l = udis; l; l = l->next)
 		watch_remove_battery (monitor, l->data);
 	g_list_free (udis);
-	
+
 	g_hash_table_destroy (monitor->priv->devices);
 	monitor->priv->devices = NULL;
 }

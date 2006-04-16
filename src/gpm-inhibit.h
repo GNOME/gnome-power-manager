@@ -38,8 +38,8 @@ typedef struct GpmInhibitPrivate GpmInhibitPrivate;
 
 typedef struct
 {
-        GObject		   parent;
-        GpmInhibitPrivate *priv;
+	GObject		   parent;
+	GpmInhibitPrivate *priv;
 } GpmInhibit;
 
 typedef struct
@@ -47,27 +47,22 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmInhibitClass;
 
-GType		 gpm_inhibit_get_type		(void);
-void		 gpm_inhibit_set_power		(GpmInhibit	*inhibit,
-						 GpmPower	*power);
+GpmInhibit	*gpm_inhibit_new			(void);
+GType		 gpm_inhibit_get_type			(void);
 
-int		 gpm_inhibit_add		(GpmInhibit	*inhibit,
-						 const char	*connection,
-						 const char	*application,
-						 const char	*reason);
-
-void		 gpm_inhibit_remove		(GpmInhibit	*inhibit,
-						 const char	*connection,
-						 int		 cookie);
-
-gboolean	 gpm_inhibit_check		(GpmInhibit	*inhibit);
-
-void		 gpm_inhibit_get_message	(GpmInhibit	*inhibit,
-						 GString	*message,
-						 const char	*action);
-
-GpmInhibit	*gpm_inhibit_new		(void);
-
+void		 gpm_inhibit_set_power			(GpmInhibit	*inhibit,
+							 GpmPower	*power);
+int		 gpm_inhibit_add			(GpmInhibit	*inhibit,
+							 const char	*connection,
+							 const char	*application,
+							 const char	*reason);
+void		 gpm_inhibit_remove			(GpmInhibit	*inhibit,
+							 const char	*connection,
+							 int		 cookie);
+gboolean	 gpm_inhibit_check			(GpmInhibit	*inhibit);
+void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
+							 GString	*message,
+							 const char	*action);
 G_END_DECLS
 
 #endif	/* __GPMINHIBIT_H */

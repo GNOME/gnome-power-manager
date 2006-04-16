@@ -51,7 +51,7 @@ typedef struct
 } GpmDbusSessionMonitorClass;
 
 GType			 gpm_dbus_session_monitor_get_type	(void);
-GpmDbusSessionMonitor		*gpm_dbus_session_monitor_new		(void);
+GpmDbusSessionMonitor	*gpm_dbus_session_monitor_new		(void);
 gboolean		 gpm_dbus_session_monitor_get_on_ac	(GpmDbusSessionMonitor *monitor);
 
 G_END_DECLS

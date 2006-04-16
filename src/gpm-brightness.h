@@ -38,15 +38,15 @@ typedef struct GpmBrightnessPrivate GpmBrightnessPrivate;
 
 typedef struct
 {
-        GObject		      parent;
-        GpmBrightnessPrivate *priv;
+	GObject		      parent;
+	GpmBrightnessPrivate *priv;
 } GpmBrightness;
 
 typedef struct
 {
-        GObjectClass	parent_class;
-	void		(* lcd_step_changed)  (GpmBrightness	*lcdbrightness,
-					       int		*brightness);
+	GObjectClass	parent_class;
+	void		(* lcd_step_changed)	(GpmBrightness	*lcdbrightness,
+						 int		*brightness);
 } GpmBrightnessClass;
 
 GType		 gpm_brightness_get_type (void);
@@ -58,9 +58,9 @@ void		 gpm_brightness_level_set	(GpmBrightness *lcdbrightness,
 						 int		brightness_level);
 int		 gpm_brightness_level_get	(GpmBrightness *brightness);
 void		 gpm_brightness_level_dim	(GpmBrightness *lcdbrightness,
-						 int            brightness_level);
+						 int		brightness_level);
 void		 gpm_brightness_level_save	(GpmBrightness *brightness,
-						 int            brightness_level);
+						 int		brightness_level);
 void		 gpm_brightness_level_resume	(GpmBrightness *brightness);
 
 G_END_DECLS
