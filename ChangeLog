@@ -1,5 +1,11 @@
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in: Set the default for
+	/apps/gnome-power-manager/display_icon_policy to "present" so we don't
+	display by default on desktops. Fixes rh:187140.
+
+2006-04-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c (setup_ac_actions): Add the action "Do nothing"
 	so we don't do the DPMS action off for the external monitor.
 	Fixes #338689.
