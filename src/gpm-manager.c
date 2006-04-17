@@ -1220,6 +1220,7 @@ idle_changed_cb (GpmIdle    *idle,
 							GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* resume to the previous brightness */
+			gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SCREEN_RESUME);
 			gpm_brightness_level_resume (manager->priv->brightness);
 		}
 

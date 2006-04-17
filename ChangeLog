@@ -1,5 +1,11 @@
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.{c|h}, src/gpm-manager.c: Add an event for the
+	LCD brightness resume, so we can explain why the power consumption
+	has gone up.
+
+2006-04-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info-data.{c|h}: Add in the code to limit the data by time,
 	so we can set a maximum time period. Disabled for now as the code
 	crashes, but the idea is there. Working towards #338174.

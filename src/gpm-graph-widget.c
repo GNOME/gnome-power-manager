@@ -76,7 +76,9 @@ gpm_graph_event_description (GpmGraphEvent event)
 	} else if (event == GPM_GRAPH_EVENT_ON_BATTERY) {
 		return _("On battery");
 	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
-		return _("Screen dim");
+		return _("LCD dim");
+	} else if (event == GPM_GRAPH_EVENT_SCREEN_RESUME) {
+		return _("LCD resume");
 	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
 		return _("DPMS off");
 	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
@@ -110,6 +112,8 @@ gpm_graph_event_colour (GpmGraphEvent event)
 		return GPM_GRAPH_COLOUR_DARK_BLUE;
 	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
 		return GPM_GRAPH_COLOUR_CYAN;
+	} else if (event == GPM_GRAPH_EVENT_SCREEN_RESUME) {
+		return GPM_GRAPH_COLOUR_DARK_CYAN;
 	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
 		return GPM_GRAPH_COLOUR_DARK_YELLOW;
 	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
@@ -792,7 +796,7 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	int legend_x = 0;
 	int legend_y = 0;
 	int legend_height = GPM_GRAPH_EVENT_LAST * 20;
-	int legend_width = 77;
+	int legend_width = 78;
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
 
