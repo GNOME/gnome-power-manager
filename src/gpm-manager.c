@@ -1585,45 +1585,51 @@ power_on_ac_changed_cb (GpmPower   *power,
  **/
 static GpmWarning
 gpm_manager_get_warning_type (GpmManager	    *manager,
-			      GpmPowerBatteryStatus *battery_status,
+			      GpmPowerBatteryStatus *status,
 			      gboolean		     use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
 
-	/* some devices (e.g. mice) do not have time, and we have to measure using percent */
-	if (use_time) {
-		if (battery_status->remaining_time <= 0) {
-			type = GPM_WARNING_NONE;
-		} else if (battery_status->remaining_time <= manager->priv->action_time) {
-			type = GPM_WARNING_ACTION;
-		} else if (battery_status->remaining_time <= manager->priv->critical_time) {
-			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->remaining_time <= manager->priv->very_low_time) {
+	/* this is a CSR mouse */
+	if (status->design_charge == 7) {
+		if (status->current_charge == 2) {
+			type = GPM_WARNING_LOW;
+		} else if (status->current_charge == 1) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->remaining_time <= manager->priv->low_time) {
+		}
+	} else if (use_time) {
+		if (status->remaining_time <= 0) {
+			type = GPM_WARNING_NONE;
+		} else if (status->remaining_time <= manager->priv->action_time) {
+			type = GPM_WARNING_ACTION;
+		} else if (status->remaining_time <= manager->priv->critical_time) {
+			type = GPM_WARNING_CRITICAL;
+		} else if (status->remaining_time <= manager->priv->very_low_time) {
+			type = GPM_WARNING_VERY_LOW;
+		} else if (status->remaining_time <= manager->priv->low_time) {
 			type = GPM_WARNING_LOW;
 		}
 	} else {
-		if (battery_status->percentage_charge <= 0) {
+		if (status->percentage_charge <= 0) {
 			type = GPM_WARNING_NONE;
 			gpm_warning ("Your hardware is reporting a percentage "
 				     "charge of %i, which is impossible. "
 				     "WARNING_ACTION will *not* be reported.",
-				     battery_status->percentage_charge);
-		} else if (battery_status->percentage_charge <= manager->priv->action_percentage) {
+				     status->percentage_charge);
+		} else if (status->percentage_charge <= manager->priv->action_percentage) {
 			type = GPM_WARNING_ACTION;
-		} else if (battery_status->percentage_charge <= manager->priv->critical_percentage) {
+		} else if (status->percentage_charge <= manager->priv->critical_percentage) {
 			type = GPM_WARNING_CRITICAL;
-		} else if (battery_status->percentage_charge <= manager->priv->very_low_percentage) {
+		} else if (status->percentage_charge <= manager->priv->very_low_percentage) {
 			type = GPM_WARNING_VERY_LOW;
-		} else if (battery_status->percentage_charge <= manager->priv->low_percentage) {
+		} else if (status->percentage_charge <= manager->priv->low_percentage) {
 			type = GPM_WARNING_LOW;
 		}
 	}
 
 	/* If we have no important warnings, we should test for discharging */
 	if (type == GPM_WARNING_NONE) {
-		if (battery_status->is_discharging) {
+		if (status->is_discharging) {
 			type = GPM_WARNING_DISCHARGING;
 		}
 	}

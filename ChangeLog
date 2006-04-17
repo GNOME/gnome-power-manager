@@ -1,3 +1,8 @@
+2006-04-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (gpm_manager_get_warning_type): Add special case
+	for CSR mice, as 1/7 is still above our low warning.
+
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-feedback-widget.c (gpm_feedback_init): Use the named SVG icon
