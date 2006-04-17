@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 #define ICON_PREFIX_PRIMARY			"battery"
 #define ICON_PREFIX_UPS				"ups"
 
-#define GPM_STOCK_APP_ICON			"gnome-power-manager"
+#define GPM_STOCK_APP_ICON			"gpm-battery-charged"
 #define GPM_STOCK_AC_ADAPTER			"gpm-ac-adapter"
 #define GPM_STOCK_KEYBOARD_LOW			"gpm-keyboard-power-low"
 #define GPM_STOCK_MOUSE_LOW			"gpm-mouse-power-low"

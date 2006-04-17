@@ -4,6 +4,6 @@ EXTRA_DIST =				\
 Datadir = $(datadir)/icons/hicolor/16x16/apps
 
 Data_DATA =				\
-	gnome-power-manager.png		\
+	gpm-battery-charged.png		\
 	gpm-suspend-to-disk.png		\
 	gpm-suspend-to-ram.png
