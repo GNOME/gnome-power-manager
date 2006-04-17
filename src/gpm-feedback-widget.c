@@ -107,20 +107,14 @@ gpm_feedback_init (GpmFeedback *feedback)
 
 	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
 	if (! feedback->priv->xml) {
-		gpm_critical_error ("Can't find the glade file gpm-feedback-widget.glade");
+		gpm_critical_error ("Can't find gpm-feedback-widget.glade");
 	}
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
 
 	image = glade_xml_get_widget (feedback->priv->xml, "image");
-
-	GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-	GdkPixbuf *pixbuf;
-	pixbuf = gtk_icon_theme_load_icon (icon_theme, GPM_STOCK_BRIGHTNESS, 48, 0, NULL);
-	if (! pixbuf) {
-		gpm_critical_error ("Cannot find the file %s.");
-	}
-	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf );
-	g_object_unref (pixbuf);
+	gtk_image_set_from_icon_name  (GTK_IMAGE (image),
+  				       GPM_STOCK_BRIGHTNESS,
+				       GTK_ICON_SIZE_DIALOG);
 
 	feedback->priv->progress = glade_xml_get_widget (feedback->priv->xml, "progressbar");
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), 0.0f);

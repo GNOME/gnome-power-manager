@@ -1,5 +1,16 @@
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-feedback-widget.c (gpm_feedback_init): Use the named SVG icon
+	rather than getting the icon from a pixmap.
+
+	* data/gpm-feedback-widget.glade: Add in 5px spacing as the icon
+	displays correctly now.
+
+	* data/icons/scalable/Makefile.am: Put gpm-brightness.svg in the
+	tarball so we can use it above.
+
+2006-04-17  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in: Set the default for
 	/apps/gnome-power-manager/display_icon_policy to "present" so we don't
 	display by default on desktops. Fixes rh:187140.
@@ -101,7 +112,7 @@
 
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-manager.c (gconf_key_changed_cb): Monitor 
+	* src/gpm-manager.c (gconf_key_changed_cb): Monitor
 	/apps/gnome-power-manager/laptop_panel_dim_brightness so we don't have
 	to restart to get the new setting. Should fix #338628
 
@@ -153,7 +164,7 @@
 
 	* data/gpm-info.glade: Added the event log tab.
 
-	* src/gpm-manager.c, src/gpm-info.{c|h}, src/gpm-graph-widget.{c|h}: 
+	* src/gpm-manager.c, src/gpm-info.{c|h}, src/gpm-graph-widget.{c|h}:
 	Use the event data rather than adding fake points. This work is
 	on-going, so expect a little unstability while the new infrastructure
 	settles in. Seporating was done due to the graphing formulaes becoming
@@ -199,7 +210,7 @@
 
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Fix 
+	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Fix
 	"legend_height may be used uninitialized in this function" -- this is
 	incorrect and probably a GCC bug, but initialising them won't hurt.
 
@@ -400,7 +411,7 @@
 	* src/gpm-feedback-widget.c: Do some simple refcounting on the timeouts
 	so we only close the widget on the last timeout.
 
-	* data/icons/48x48/Makefile.am, data/icons/48x48/gpm-brightness.png, 
+	* data/icons/48x48/Makefile.am, data/icons/48x48/gpm-brightness.png,
 	src/gpm-stock-icons.h:
 	Add this new file as a logo for the brightness popup. Waiting for a new
 	SVG from Diana at the moment, so I've re-used the old g-s-d one.
@@ -540,7 +551,7 @@
 2006-03-25  Jaap Haitsma  <jaap@haitsma.org>
 
 	* data/gpm-prefs.glade: Change "Running on Battery" and "Running on AC"
-	labels inside the tab to "Sleep" as they are already on the tabs. 
+	labels inside the tab to "Sleep" as they are already on the tabs.
 	Add a Brightness label to the brightness sliders. Fixes bug #335991
 	Change all the widget names to *battery* i.s.o. *batteries*
 	* src/gpm-prefs.c: Update because of changes in gpm-prefs.glade and some

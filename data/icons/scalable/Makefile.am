@@ -5,6 +5,7 @@ Datadir = $(datadir)/icons/hicolor/scalable/apps
 
 Data_DATA =				\
 	gpm-ac-adapter.svg		\
+	gpm-brightness.svg		\
 	gpm-keyboard-power-low.svg	\
 	gpm-mouse-power-low.svg		\
 	gpm-battery-broken.svg		\
