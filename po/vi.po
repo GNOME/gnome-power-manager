@@ -6,8 +6,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: gnome-power-manager 2.15.0 Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-10 11:31+0200\n"
-"PO-Revision-Date: 2006-04-10 22:35+0930\n"
+"POT-Creation-Date: 2006-04-17 03:30+0200\n"
+"PO-Revision-Date: 2006-04-17 15:46+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -304,8 +304,8 @@ msgstr "Phần trăm độ sạc pin là « rất thấp ». Chỉ hợp lệ kh
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy false."
-msgstr "Phần trăm độ sạc pin khi hành động « tới hạn » được thực hiện. Chỉ hợp lệ khi "
-"biến « use_time_for_policy » (dùng thời gian cho chính sách) là sai."
+msgstr "Phần trăm độ sạc pin khi hành động « tới hạn » được thực hiện. Chỉ hợp lệ "
+"khi biến « use_time_for_policy » (dùng thời gian cho chính sách) là sai."
 
 #:../data/gnome-power-manager.schemas.in.h:50
 msgid ""
@@ -367,7 +367,9 @@ msgid ""
 "weighted average of the rate. Increasing this value will increase the "
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
-msgstr "Giá trị của hệ số suy giảm được dùng khi tính số trung bình lũy thừa của tỷ lệ. Việc tăng giá trị này sẽ cũng tăng hiệu ứng suy giảm của sự tính tỷ lệ, mà làm cho thời gian còn lại chính xác hơn, còn đồ thị đáp ứng ít hơn."
+msgstr "Giá trị của hệ số suy giảm được dùng khi tính số trung bình lũy thừa của tỷ "
+"lệ. Việc tăng giá trị này sẽ cũng tăng hiệu ứng suy giảm của sự tính tỷ lệ, "
+"mà làm cho thời gian còn lại chính xác hơn, còn đồ thị đáp ứng ít hơn."
 
 #:../data/gnome-power-manager.schemas.in.h:60
 msgid ""
@@ -502,58 +504,66 @@ msgid "Brightness"
 msgstr "Độ sáng"
 
 #:../data/gpm-info.glade.h:1
+msgid "<b>Event log</b>"
+msgstr "<b>Bản ghi sự kiện</b>"
+
+#:../data/gpm-info.glade.h:2
 msgid "<b>Laptop Battery Bay (2)</b>"
 msgstr "<b>Chỗ pin máy tính xách tây (2)</b>"
 
-#:../data/gpm-info.glade.h:2
+#:../data/gpm-info.glade.h:3
 msgid "<b>Laptop Battery Bay</b>"
 msgstr "<b>Chỗ pin máy tính xách tây</b>"
 
-#:../data/gpm-info.glade.h:3
+#:../data/gpm-info.glade.h:4
 msgid "<b>UPS</b>"
 msgstr "<b>UPS</b>"
 
-#:../data/gpm-info.glade.h:4
+#:../data/gpm-info.glade.h:5
 msgid "<b>Wireless Mouse</b>"
 msgstr "<b>Chuột vô tuyến</b>"
 
-#:../data/gpm-info.glade.h:5
+#:../data/gpm-info.glade.h:6
 msgid "Charge History"
 msgstr "Lược sử sạc pin"
 
-#:../data/gpm-info.glade.h:6
+#:../data/gpm-info.glade.h:7
 msgid "Device Information"
 msgstr "Thông tin thiết bị"
 
-#:../data/gpm-info.glade.h:7
+#:../data/gpm-info.glade.h:8
 msgid "Estimated Time History"
 msgstr "Lược sử thời gian xấp xỉ"
 
-#:../data/gpm-info.glade.h:8
+#:../data/gpm-info.glade.h:9
+msgid "Event Log"
+msgstr "Bản ghi sự kiện"
+
+#:../data/gpm-info.glade.h:10
 msgid "Power History"
 msgstr "Lược sử điện năng"
 
-#:../data/gpm-info.glade.h:9 ../src/gpm-manager.c:1342
-#:../src/gpm-manager.c:1651
+#:../data/gpm-info.glade.h:11 ../src/gpm-manager.c:1338
+#:../src/gpm-manager.c:1657
 msgid "Power Information"
 msgstr "Thông tin điện năng"
 
-#:../data/gpm-info.glade.h:10
+#:../data/gpm-info.glade.h:12
 msgid "This shows how the battery charge and discharge rate varies over time."
 msgstr "Điều này hiển thị cách thay đổi tỷ lệ sạc/bỏ sạc pin trong thời gian."
 
-#:../data/gpm-info.glade.h:11
+#:../data/gpm-info.glade.h:13
 msgid "This shows how the battery percentage charge varies over time."
 msgstr "Điều này hiển thị cách thay đổi nạp pin (theo phần trăm) trong thời gian."
 
-#:../data/gpm-info.glade.h:12
+#:../data/gpm-info.glade.h:14
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
 msgstr "Điều này hiển thị cách thay đổi thời gian còn lại cho đến được sạc đầy hoặc "
 "rỗng, trong thời gian."
 
-#:../data/gpm-info.glade.h:13
+#:../data/gpm-info.glade.h:15
 msgid ""
 "This shows you detailed information about all the batteries you have "
 "installed in your system."
@@ -698,61 +708,89 @@ msgstr[0] "phút"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Ứng dụng quản lý điện năng cho môi trường Gnome"
 
-#:../src/gpm-graph-widget.c:74
-msgid "AC power"
-msgstr "Điện chính"
+#:../src/gpm-graph-widget.c:75
+msgid "On AC"
+msgstr "Bằng điện chính"
 
 #:../src/gpm-graph-widget.c:77
-msgid "Low Power"
-msgstr "Điện yếu"
+msgid "On battery"
+msgstr "Bằng pin"
 
-#:../src/gpm-graph-widget.c:80
+#:../src/gpm-graph-widget.c:79
 msgid "Screen dim"
 msgstr "Màn hình mờ"
 
+#:../src/gpm-graph-widget.c:81
+msgid "DPMS off"
+msgstr "DPMS tắt"
+
 #:../src/gpm-graph-widget.c:83
-msgid "Screen off"
-msgstr "Màn hình tắt"
+msgid "DPMS on"
+msgstr "DPMS bật"
 
 #.The text that should appear in the action combo boxes
-#:../src/gpm-graph-widget.c:86 ../src/gpm-prefs-core.c:84
+#:../src/gpm-graph-widget.c:85 ../src/gpm-prefs-core.c:84
 msgid "Suspend"
 msgstr "Ngưng"
+
+#:../src/gpm-graph-widget.c:87
+msgid "Resume"
+msgstr "Tiếp tục lại"
 
 #:../src/gpm-graph-widget.c:89 ../src/gpm-prefs-core.c:86
 msgid "Hibernate"
 msgstr "Ngủ đông"
 
+#:../src/gpm-graph-widget.c:91
+msgid "Lid closed"
+msgstr "Nắp đóng"
+
+#:../src/gpm-graph-widget.c:93
+msgid "Lid opened"
+msgstr "Náp mở"
+
+#:../src/gpm-graph-widget.c:95
+msgid "Unknown event!"
+msgstr "Gặp sự kiện lạ !"
+
+#:../src/gpm-info.c:287
+msgid "Time"
+msgstr "Giờ"
+
+#:../src/gpm-info.c:292
+msgid "Event"
+msgstr "Sự kiện"
+
 # Type: select
 # Choices
-#:../src/gpm-main.c:127
+#:../src/gpm-main.c:126
 msgid "Do not daemonize"
 msgstr "Đừng chạy trong nền"
 
-#:../src/gpm-main.c:129 ../src/gpm-prefs.c:82
+#:../src/gpm-main.c:128 ../src/gpm-prefs.c:82
 msgid "Show extra debugging information"
 msgstr "Hiển thị thông tin gỡ lỗi thêm"
 
-#:../src/gpm-main.c:133
+#:../src/gpm-main.c:132
 msgid "GNOME Power Manager"
 msgstr "Bộ Quản lý Điện năng Gnome"
 
-#:../src/gpm-manager.c:1053
+#:../src/gpm-manager.c:1035
 #,c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr "HAL chưa %s. Hãy kiểm tra <a href=\"%s\">trạng Hỏi Đáp</a> tìm vấn đề thường "
 "gặp."
 
-#:../src/gpm-manager.c:1055
+#:../src/gpm-manager.c:1037
 msgid "hibernate"
 msgstr "ngủ đông"
 
-#:../src/gpm-manager.c:1057
+#:../src/gpm-manager.c:1039
 msgid "Hibernate Problem"
 msgstr "Lỗi ngủ đông"
 
-#:../src/gpm-manager.c:1130
+#:../src/gpm-manager.c:1114
 #,c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -760,41 +798,41 @@ msgid ""
 msgstr "Máy tính của bạn chưa %s.\n"
 "Hãy kiểm tra <a href=\"%s\">trạng Hỏi Đáp</a> tìm vấn đề thường gặp."
 
-#:../src/gpm-manager.c:1132
+#:../src/gpm-manager.c:1116
 msgid "suspend"
 msgstr "ngưng"
 
-#:../src/gpm-manager.c:1134
+#:../src/gpm-manager.c:1118
 msgid "Suspend Problem"
 msgstr "Lỗi ngưng"
 
-#:../src/gpm-manager.c:1639
+#:../src/gpm-manager.c:1645
 msgid "Power Critically Low"
 msgstr "Pin yếu tới hạn"
 
-#:../src/gpm-manager.c:1643
+#:../src/gpm-manager.c:1649
 msgid "Power Very Low"
 msgstr "Pin rất yếu"
 
-#:../src/gpm-manager.c:1647
+#:../src/gpm-manager.c:1653
 msgid "Power Low"
 msgstr "Pin yếu"
 
-#:../src/gpm-manager.c:1714
+#:../src/gpm-manager.c:1720
 msgid "Battery Charged"
 msgstr "Pin đầy"
 
-#:../src/gpm-manager.c:1715
+#:../src/gpm-manager.c:1721
 msgid "Your battery is now fully charged"
 msgstr "Pin đã được tái sạc đầy."
 
-#:../src/gpm-manager.c:1756
+#:../src/gpm-manager.c:1771
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr "Pin đã quá hạn nên máy tính này sắp <b>tắt</b> khi pin trống hoàn toàn."
 
-#:../src/gpm-manager.c:1760
+#:../src/gpm-manager.c:1775
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -802,27 +840,27 @@ msgid ""
 msgstr "Pin đã quá hạn nên máy tính này sắp tắt.<br><b>GHI CHÚ :</b> Cần thiết một "
 "ít điện năng để bảo trì tính trạng bị ngưng của máy tính."
 
-#:../src/gpm-manager.c:1765
+#:../src/gpm-manager.c:1780
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Pin đã quá hạn nên máy tính này sắp ngủ đông."
 
-#:../src/gpm-manager.c:1768
+#:../src/gpm-manager.c:1783
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Pin đã quá hạn nên máy tính này sắp tắt."
 
-#:../src/gpm-manager.c:1774 ../src/gpm-manager.c:1891
+#:../src/gpm-manager.c:1789 ../src/gpm-manager.c:1907
 msgid "Critical action"
 msgstr "Hành động tới hạn"
 
-#:../src/gpm-manager.c:1799
+#:../src/gpm-manager.c:1813
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Điện chính bị tháo nút ra. Hệ thống đang chạy bằng pin."
 
-#:../src/gpm-manager.c:1804
+#:../src/gpm-manager.c:1818
 #,c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -830,27 +868,27 @@ msgid ""
 msgstr "Bạn có xấp xỉ <b>%s</b> thời gian pin còn lại (%d%%). Hãy cầm phít bộ tiếp "
 "hợp điện chính để tránh mất dữ liệu."
 
-#:../src/gpm-manager.c:1878
+#:../src/gpm-manager.c:1894
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr "UPS đã quá hạn nên máy tính này sắp <b>tắt</b> khi UPS trống hoàn toàn."
 
-#:../src/gpm-manager.c:1882
+#:../src/gpm-manager.c:1898
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS đã quá hạn nên máy tính này sắp ngủ đông."
 
-#:../src/gpm-manager.c:1885
+#:../src/gpm-manager.c:1901
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS đã quá hạn nên máy tính này sắp tắt."
 
-#:../src/gpm-manager.c:1911
+#:../src/gpm-manager.c:1927
 msgid "Your system is running on backup power!"
 msgstr "• Hệ thống đang chạy bằng điện năng dữ trữ. •"
 
-#:../src/gpm-manager.c:1914
+#:../src/gpm-manager.c:1930
 #,c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -858,7 +896,7 @@ msgid ""
 msgstr "Bạn có xấp xỉ <b>%s</b> điện năng UPS còn lại (%d%%). Hãy phục hồi điện năng "
 "chính cho máy tính để tránh mất dữ liệu."
 
-#:../src/gpm-manager.c:1994
+#:../src/gpm-manager.c:2010
 #,c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
