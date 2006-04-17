@@ -309,6 +309,7 @@ gpm_tray_icon_show_about_cb (GtkAction   *action,
 		NULL};
 	const char *artists[] = {
 		"Diana Fong <dfong@redhat.com>",
+		"Jakub Steiner <jimmac@ximian.com>",
 		NULL};
 	const char *license[] = {
 		N_("Licensed under the GNU General Public License Version 2"),
