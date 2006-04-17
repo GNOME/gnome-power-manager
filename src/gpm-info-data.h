@@ -65,6 +65,13 @@ void			 gpm_info_data_add_always	(GpmInfoData	*info_data,
 							 int		 time,
 							 int		 value,
 							 int		 colour);
+void			 gpm_info_data_limit_time	(GpmInfoData	*info_data,
+							 int		 max_num);
+void			 gpm_info_data_limit_dilute	(GpmInfoData	*info_data,
+							 int		 max_num);
+void			 gpm_info_data_limit_truncate	(GpmInfoData	*info_data,
+							 int		 max_num);
+
 G_END_DECLS
 
 #endif /* __GPM_INFO_DATA_H */

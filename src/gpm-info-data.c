@@ -45,12 +45,15 @@ static void     gpm_info_data_finalize   (GObject		 	*object);
 struct GpmInfoDataPrivate
 {
 	GList			*list;
+	int			 length;	/* we track this to save time on add */
+	GpmInfoDataPoint	*last_point;	/* to avoid having to go thru the list */
 };
 
 G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
 
 /* this should be setable */
 #define GPM_INFO_DATA_MAX_POINTS		120	/* when we should simplify data */
+#define GPM_INFO_DATA_MAX_TIME			60	/* seconds, truncate after this */
 
 GList*
 gpm_info_data_get_list (GpmInfoData *info_data)
@@ -87,22 +90,22 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	new->value = value;
 	new->colour = colour;
 	info_data->priv->list = g_list_append (info_data->priv->list, (gpointer) new);
+	info_data->priv->length++;
+	info_data->priv->last_point = new;
 }
 
 /**
- * gpm_info_data_limit:
+ * gpm_info_data_limit_time:
  * @graph_data: The data we have for a specific graph
  * @max_num: The max desired points
- * @use_time: If we should use a per-time formula (better)
  *
  * We need to reduce the number of data points else the graph will take a long
  * time to plot accuracy we don't need at the larger scales.
  * This will not reduce the scale or range of the data.
  **/
-static void
-gpm_info_data_limit (GpmInfoData *info_data,
-		     int	  max_num,
-		     gboolean	  use_time)
+void
+gpm_info_data_limit_time (GpmInfoData  *info_data,
+			  int		max_num)
 {
 	GpmInfoDataPoint *point;
 	GList *l;
@@ -111,51 +114,119 @@ gpm_info_data_limit (GpmInfoData *info_data,
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
-	if (use_time) {
-		list = g_list_last (info_data->priv->list);
-		point = (GpmInfoDataPoint *) list->data;
-		gpm_debug ("Last point: x=%i, y=%i", point->time, point->value);
-		float div = (float) point->time / (float) max_num;
-		gpm_debug ("Using a time division of %f", div);
+	list = g_list_last (info_data->priv->list);
+	point = (GpmInfoDataPoint *) list->data;
+	gpm_debug ("Last point: x=%i, y=%i", point->time, point->value);
+	float div = (float) point->time / (float) max_num;
+	gpm_debug ("Using a time division of %f", div);
 
-		GList *new = NULL;
-		/* Reduces the number of points to a pre-set level using a time
-		 * division algorithm so we don't keep diluting the previous
-		 * data with a conventional 1-in-x type algorithm. */
-		float a = 0;
-		for (l=info_data->priv->list; l != NULL; l=l->next) {
-			point = (GpmInfoDataPoint *) l->data;
-			if (point->time >= a) {
-				/* adding valid point */
-				new = g_list_append (new, (gpointer) point);
-				a = a + div;
-			} else {
-				/* removing point */
-				g_slice_free (GpmInfoDataPoint, point);
-			}
-		}
-		/* freeing old list */
-		g_list_free (info_data->priv->list);
-		/* setting new data */
-		info_data->priv->list = new;
-
-	} else {
-		/* Do a conventional 1-in-x type algorithm */
-		int count = 0;
-		for (l=info_data->priv->list; l != NULL; l=l->next) {
-			point = (GpmInfoDataPoint *) l->data;
-			count++;
-			if (count == 3) {
-				list = l->prev;
-				/* we need to free the data */
-				g_slice_free (GpmInfoDataPoint, l->data);
-				info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
-				l = list;
-				count = 0;
-			}
+	GList *new = NULL;
+	/* Reduces the number of points to a pre-set level using a time
+	 * division algorithm so we don't keep diluting the previous
+	 * data with a conventional 1-in-x type algorithm. */
+	float a = 0;
+	for (l=info_data->priv->list; l != NULL; l=l->next) {
+		point = (GpmInfoDataPoint *) l->data;
+		if (point->time >= a) {
+			/* adding valid point */
+			new = g_list_append (new, (gpointer) point);
+			a = a + div;
+		} else {
+			/* removing point */
+			g_slice_free (GpmInfoDataPoint, point);
 		}
 	}
+	/* freeing old list */
+	g_list_free (info_data->priv->list);
+	/* setting new data */
+	info_data->priv->list = new;
+	info_data->priv->length = g_list_length (info_data->priv->list);
 }
+
+/**
+ * gpm_info_data_limit_dilute:
+ * @graph_data: The data we have for a specific graph
+ * @max_num: The max desired points
+ * @use_time: If we should use a per-time formula (better)
+ *
+ * Do a conventional 1-in-x type algorithm. This dilutes the data if run
+ * again and again.
+ **/
+void
+gpm_info_data_limit_dilute (GpmInfoData *info_data,
+			    int		 max_num)
+{
+	GpmInfoDataPoint *point;
+	GList *l;
+	GList *list;
+
+	g_return_if_fail (info_data != NULL);
+	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+
+	int count = 0;
+	for (l=info_data->priv->list; l != NULL; l=l->next) {
+		point = (GpmInfoDataPoint *) l->data;
+		count++;
+		if (count == 3) {
+			list = l->prev;
+			/* we need to free the data */
+			g_slice_free (GpmInfoDataPoint, l->data);
+			l->data = NULL;
+			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
+			l = list;
+			count = 0;
+		}
+	}
+	info_data->priv->length = g_list_length (info_data->priv->list);
+}
+
+/**
+ * gpm_info_data_limit_truncate:
+ * @graph_data: The data we have for a specific graph
+ * @max_num: The max desired time we truncate the start to
+ *
+ * Trims the start of the data so that we don't store more than
+ * the amount of time in the list. We have to be careful and not just remove
+ * the old points, so we truncate, then limit by time to get the initial points
+ * correct.
+ *
+ * DOES NOT WORK CORRECTLY YET.
+ **/
+void
+gpm_info_data_limit_truncate (GpmInfoData *info_data,
+			      int	   max_num)
+{
+	GpmInfoDataPoint *point;
+	GList *l;
+	GList *list;
+	GList *last;
+	int smallest;
+
+	g_return_if_fail (info_data != NULL);
+	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+
+	last = g_list_last (info_data->priv->list);
+	point = (GpmInfoDataPoint *)last->data;
+	smallest = point->time - max_num;
+
+	gpm_debug ("max=%i", max_num);
+	for (l=info_data->priv->list; l != NULL; l=l->next) {
+		point = (GpmInfoDataPoint *) l->data;
+		if (point->time > smallest) {
+			info_data->priv->list = l;
+			break;
+		} else {
+			list = l->prev;
+			/* remove link and point */
+			g_slice_free (GpmInfoDataPoint, l->data);
+			l->data = NULL;
+			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
+			l = list;
+		}
+	}
+	info_data->priv->length = g_list_length (info_data->priv->list);
+}
+
 
 /**
  * gpm_info_data_add:
@@ -174,23 +245,19 @@ gpm_info_data_add (GpmInfoData *info_data,
 		   int		value,
 		   int		colour)
 {
-	int length = g_list_length (info_data->priv->list);
-	GList *last = g_list_last (info_data->priv->list);
-	GpmInfoDataPoint *old;
-
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
 	gpm_debug ("gpm_info_data_add %ix%i (colour)", time, value, colour);
 
-	if (length > 2) {
-		old = (GpmInfoDataPoint *) last->data;
-		if (old->value == value) {
+	if (info_data->priv->length > 2) {
+		if (info_data->priv->last_point->value == value) {
 			/* we are the same as we were before and not the first or
-			   second point, just side the data time across */
-			old->time = time;
+			   second point, just side the data time across without
+			   making a new point */
+			info_data->priv->last_point->time = time;
 		} else {
-			/* we have to add a new data point */
+			/* we have to add a new data point as value is different */
 			gpm_info_data_add_always (info_data, time, value, colour);
 			if (value == 0) {
 				/* if the rate suddenly drops we want a line
@@ -203,12 +270,30 @@ gpm_info_data_add (GpmInfoData *info_data,
 		/* a new list requires a data point */
 		gpm_info_data_add_always (info_data, time, value, colour);
 	}
-	gpm_debug ("Drawing %i lines", length);
-	if (length > GPM_INFO_DATA_MAX_POINTS) {
+	if (info_data->priv->length > GPM_INFO_DATA_MAX_POINTS) {
 		/* We have too much data, simplify */
-		gpm_debug ("Too many points (%i/%i)", length, GPM_INFO_DATA_MAX_POINTS);
-		gpm_info_data_limit (info_data, GPM_INFO_DATA_MAX_POINTS / 2, TRUE);
+		gpm_debug ("Too many points (%i/%i)",
+			   info_data->priv->length,
+			   GPM_INFO_DATA_MAX_POINTS);
+		gpm_info_data_limit_time (info_data,
+					  GPM_INFO_DATA_MAX_POINTS / 2);
 	}
+	gpm_debug ("Using %i lines", info_data->priv->length);
+#if 0
+	GList *first = g_list_first (info_data->priv->list);
+	if (info_data->priv->length > 2) {
+		GpmInfoDataPoint *first_point = (GpmInfoDataPoint *)first->data;
+		int diff_time = info_data->priv->last_point->time - first_point->time;
+		gpm_debug ("diff time = %i", diff_time);
+		if (diff_time > GPM_INFO_DATA_MAX_TIME) {
+			gpm_debug ("Too much time (%i/%i)",
+				   diff_time,
+				   GPM_INFO_DATA_MAX_TIME);
+			gpm_info_data_limit_truncate (info_data,
+						      GPM_INFO_DATA_MAX_TIME / 2);
+		}
+	}
+#endif
 }
 
 /**
@@ -232,6 +317,8 @@ gpm_info_data_init (GpmInfoData *info_data)
 {
 	info_data->priv = GPM_INFO_DATA_GET_PRIVATE (info_data);
 	info_data->priv->list = NULL;
+	info_data->priv->last_point = NULL;
+	info_data->priv->length = 0;
 }
 
 /**
@@ -252,6 +339,7 @@ gpm_info_data_finalize (GObject *object)
 	GList *l;
 	for (l=info_data->priv->list; l != NULL; l=l->next) {
 		g_slice_free (GpmInfoDataPoint, l->data);
+		l->data = NULL;
 	}
 	g_list_free (info_data->priv->list);
 	info_data->priv->list = NULL;

@@ -1,3 +1,15 @@
+2006-04-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info-data.{c|h}: Add in the code to limit the data by time,
+	so we can set a maximum time period. Disabled for now as the code
+	crashes, but the idea is there. Working towards #338174.
+	Also make adding a point *loads* quicker by cacheing the length
+	and the last added point so we don't have to walk the complete GList
+	every time we add a point.
+
+	* src/gpm-graph-widget.c: Only show the events if the legend is enabled
+	for the specific graph.
+
 2006-04-16  Richard Hughes  <richard@hughsie.com>
 
 	* src/*.c, src/*.h: Lots of whitespace fixes in nearly every file.

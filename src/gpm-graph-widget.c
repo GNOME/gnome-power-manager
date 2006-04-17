@@ -455,7 +455,7 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 static void
 gpm_graph_check_range (GpmGraph *graph)
 {
-	if (! graph->priv->list) {
+	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
 		return;
 	}
@@ -493,7 +493,7 @@ gpm_graph_check_range (GpmGraph *graph)
 static void
 gpm_graph_auto_range (GpmGraph *graph)
 {
-	if (! graph->priv->list) {
+	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
 		graph->priv->start_x = 0;
 		graph->priv->start_y = 0;
@@ -656,8 +656,8 @@ gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
 static void
 gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *x, float *y)
 {
-	*x = graph->priv->box_x + (graph->priv->unit_x * data_x) + 1 - graph->priv->start_x;
-	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - data_y)) + 1.5 - graph->priv->start_y;
+	*x = graph->priv->box_x + (graph->priv->unit_x * (data_x - graph->priv->start_x)) + 1;
+	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - (data_y - graph->priv->start_y))) + 1.5;
 }
 
 /**
@@ -676,19 +676,21 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	GpmInfoDataPoint *eventdata;
 	GList *l;
 
-	if (! graph->priv->list) {
+	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
 		return;
 	}
 
-	gpm_graph_check_range (graph);
+	/* I don't think we need to do this anymore.... */
+	if (FALSE) {
+		gpm_graph_check_range (graph);
+	}
 
 	cairo_save (cr);
 
 	/* do the line on the graph */
 	GpmInfoDataPoint *new;
 	l=graph->priv->list;
-	if (l->data == NULL) g_error ("odd");
 	new = (GpmInfoDataPoint *) l->data;
 	gpm_graph_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
 	for (l=l->next; l != NULL; l=l->next) {
@@ -705,21 +707,23 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 		oldy = newy;
 	}
 
-	/* do the events on the graph */
-	int previous_point = 0;
-	int prevtime = -1;
-	for (l=graph->priv->events; l != NULL; l=l->next) {
-		eventdata = (GpmInfoDataPoint *) l->data;
-		/* don't overlay the points, stack vertically */
-		if (prevtime == eventdata->time) {
-			previous_point++;
-		} else {
-			previous_point = 0;
+	/* do the events on the graph if we enabled the legend */
+	if (graph->priv->use_legend) {
+		int previous_point = 0;
+		int prevtime = -1;
+		for (l=graph->priv->events; l != NULL; l=l->next) {
+			eventdata = (GpmInfoDataPoint *) l->data;
+			/* don't overlay the points, stack vertically */
+			if (prevtime == eventdata->time) {
+				previous_point++;
+			} else {
+				previous_point = 0;
+			}
+			gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
+			newy -= (8 * previous_point);
+			gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
+			prevtime = eventdata->time;
 		}
-		gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
-		newy -= (8 * previous_point);
-		gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
-		prevtime = eventdata->time;
 	}
 
 	cairo_restore (cr);
