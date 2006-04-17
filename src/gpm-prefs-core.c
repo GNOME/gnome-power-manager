@@ -142,7 +142,8 @@ gpm_dbus_method_bool (const char *method)
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
 		if (error) {
-			gpm_warning ("Couldn't connect to PowerManager %s", error->message);
+			gpm_warning ("Couldn't connect to PowerManager %s",
+				     error->message);
 			g_error_free (error);
 		}
 		return FALSE;
@@ -159,7 +160,8 @@ gpm_dbus_method_bool (const char *method)
 				 G_TYPE_BOOLEAN, &value,
 				 G_TYPE_INVALID)) {
 		if (error) {
-			gpm_warning ("Couldn't connect to PowerManager %s", error->message);
+			gpm_warning ("Couldn't connect to PowerManager %s",
+				     error->message);
 			g_error_free (error);
 		}
 		value = FALSE;
@@ -292,7 +294,8 @@ gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
 
 	value = gconf_client_get_int (prefs->priv->gconf_client, gpm_pref_key, NULL);
 
-	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client, gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -358,7 +361,8 @@ gpm_prefs_setup_brightness_slider (GpmPrefs *prefs,
 			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
 
 	value = gconf_client_get_int (prefs->priv->gconf_client, gpm_pref_key, NULL);
-	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client, gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -429,8 +433,10 @@ gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
 
 	widget = glade_xml_get_widget (xml, widget_name);
 
-	value = gconf_client_get_string (prefs->priv->gconf_client, gpm_pref_key, NULL);
-	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client, gpm_pref_key, NULL);
+	value = gconf_client_get_string (prefs->priv->gconf_client,
+					 gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
@@ -540,13 +546,16 @@ setup_battery_sliders (GpmPrefs *prefs)
 	GtkWidget   *vbox_battery_brightness;
 
 	/* Sleep time on batteries */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer", GPM_PREF_BATTERY_SLEEP_COMPUTER);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
+				      GPM_PREF_BATTERY_SLEEP_COMPUTER);
 
 	/* Sleep time for display when on batteries */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display", GPM_PREF_BATTERY_SLEEP_DISPLAY);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
+				      GPM_PREF_BATTERY_SLEEP_DISPLAY);
 
 	/* Display brightness when on batteries */
-	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness", GPM_PREF_BATTERY_BRIGHTNESS);
+	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
+					   GPM_PREF_BATTERY_BRIGHTNESS);
 
 	if (! prefs->priv->has_lcd) {
 		vbox_battery_brightness = glade_xml_get_widget (prefs->priv->glade_xml,
@@ -566,13 +575,16 @@ setup_ac_sliders (GpmPrefs *prefs)
 	GtkWidget   *vbox_ac_brightness;
 
 	/* Sleep time on AC */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer", GPM_PREF_AC_SLEEP_COMPUTER);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
+				      GPM_PREF_AC_SLEEP_COMPUTER);
 
 	/* Sleep time for display on AC */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display", GPM_PREF_AC_SLEEP_DISPLAY);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
+				      GPM_PREF_AC_SLEEP_DISPLAY);
 
 	/* Display brightness when on AC */
-	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness", GPM_PREF_AC_BRIGHTNESS);
+	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness",
+					   GPM_PREF_AC_BRIGHTNESS);
 
 	if (! prefs->priv->has_lcd) {
 		vbox_ac_brightness = glade_xml_get_widget (xml, "vbox_ac_brightness");
@@ -588,7 +600,10 @@ static void
 setup_sleep_type (GpmPrefs *prefs)
 {
 	GtkWidget    *checkbutton_dim_idle;
-	const char   *sleep_type_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *sleep_type_actions[] = {ACTION_NOTHING,
+					      ACTION_SUSPEND,
+					      ACTION_HIBERNATE,
+					      NULL};
 
 	/* Sleep Type Combo Box */
 
@@ -613,7 +628,11 @@ static void
 setup_ac_actions (GpmPrefs *prefs)
 {
 	GtkWidget    *vbox_ac_actions;
-	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *button_lid_actions[] = {ACTION_NOTHING,
+					      ACTION_BLANK,
+					      ACTION_SUSPEND,
+					      ACTION_HIBERNATE,
+					      NULL};
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid_close",
 				      GPM_PREF_AC_BUTTON_LID,
@@ -637,8 +656,16 @@ setup_battery_actions (GpmPrefs *prefs)
 {
 	GtkWidget    *label_button_lid;
 	GtkWidget    *combo_button_lid;
-	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
-	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+	const char   *button_lid_actions[] = {ACTION_NOTHING,
+					      ACTION_BLANK,
+					      ACTION_SUSPEND,
+					      ACTION_HIBERNATE,
+					      NULL};
+	const char   *battery_critical_actions[] = {ACTION_NOTHING,
+						    ACTION_SUSPEND,
+						    ACTION_HIBERNATE,
+						    ACTION_SHUTDOWN,
+						    NULL};
 
 	/* Button Lid Combo Box */
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_lid_close",
@@ -666,7 +693,10 @@ setup_battery_actions (GpmPrefs *prefs)
 static void
 setup_ups_actions (GpmPrefs *prefs)
 {
-	const char   *battery_ups_actions[] = {ACTION_NOTHING, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
+	const char   *battery_ups_actions[] = {ACTION_NOTHING,
+					       ACTION_HIBERNATE,
+					       ACTION_SHUTDOWN,
+					       NULL};
 	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
 				      GPM_PREF_UPS_CRITICAL,
 				      battery_ups_actions);

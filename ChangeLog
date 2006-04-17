@@ -1,5 +1,11 @@
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs-core.c (setup_ac_actions): Add the action "Do nothing"
+	so we don't do the DPMS action off for the external monitor.
+	Fixes #338689.
+
+2006-04-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c (gpm_tray_icon_show_about_cb): Add Jakub Steiner
 	to the artists list in the "About" box.
 
