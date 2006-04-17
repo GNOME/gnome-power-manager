@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "gpm-graph-widget.h"
 #include "gpm-info.h"
@@ -714,19 +715,19 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	/* do the events on the graph if we enabled the legend */
 	if (graph->priv->use_legend) {
 		int previous_point = 0;
-		int prevtime = -1;
+		int prevpos = -1;
 		for (l=graph->priv->events; l != NULL; l=l->next) {
 			eventdata = (GpmInfoDataPoint *) l->data;
+			gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
 			/* don't overlay the points, stack vertically */
-			if (prevtime == eventdata->time) {
+			if (abs(prevpos - newx) < 5) {
 				previous_point++;
 			} else {
 				previous_point = 0;
 			}
-			gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
 			newy -= (8 * previous_point);
 			gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
-			prevtime = eventdata->time;
+			prevpos = newx;
 		}
 	}
 
