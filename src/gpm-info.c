@@ -402,30 +402,66 @@ gpm_info_delete_event_cb (GtkWidget *widget,
 }
 
 /**
- * gpm_info_clear_cb:
+ * gpm_info_clear_events_cb:
  * @widget: The GtkWidget button object
  * @info: This info class instance
  *
- * Clears the data from memory, so that the event log and the reset graphs.
+ * Clears the events data from memory
  **/
 static void
-gpm_info_clear_cb (GtkWidget *widget,
-		   GpmInfo   *info)
+gpm_info_clear_events_cb (GtkWidget *widget,
+			  GpmInfo   *info)
 {
-	/* clear data */
-	g_object_unref (info->priv->rate_data);
-	g_object_unref (info->priv->percentage_data);
-	g_object_unref (info->priv->time_data);
 	g_object_unref (info->priv->events);
-
-	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
-	info->priv->percentage_data = gpm_info_data_new ();
-	info->priv->rate_data = gpm_info_data_new ();
-	info->priv->time_data = gpm_info_data_new ();
-
-	/* update widgets */
 	gpm_info_update_event_tree (info);
+}
+
+/**
+ * gpm_info_clear_rate_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ *
+ * Clears the rate data from memory
+ **/
+static void
+gpm_info_clear_rate_cb (GtkWidget *widget,
+			GpmInfo   *info)
+{
+	g_object_unref (info->priv->rate_data);
+	info->priv->rate_data = gpm_info_data_new ();
+	gpm_info_graph_update_all (info);
+}
+
+/**
+ * gpm_info_clear_percentage_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ *
+ * Clears the percentage data from memory
+ **/
+static void
+gpm_info_clear_percentage_cb (GtkWidget *widget,
+			      GpmInfo   *info)
+{
+	g_object_unref (info->priv->percentage_data);
+	info->priv->percentage_data = gpm_info_data_new ();
+	gpm_info_graph_update_all (info);
+}
+
+/**
+ * gpm_info_clear_time_cb:
+ * @widget: The GtkWidget button object
+ * @info: This info class instance
+ *
+ * Clears the time data from memory
+ **/
+static void
+gpm_info_clear_time_cb (GtkWidget *widget,
+			GpmInfo   *info)
+{
+	g_object_unref (info->priv->time_data);
+	info->priv->time_data = gpm_info_data_new ();
 	gpm_info_graph_update_all (info);
 }
 
@@ -483,9 +519,19 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (info->priv->main_window, "delete_event",
 			  G_CALLBACK (gpm_info_delete_event_cb), info);
 
-	widget = glade_xml_get_widget (glade_xml, "button_clear");
+	widget = glade_xml_get_widget (glade_xml, "button_clear_events");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_clear_cb), info);
+			  G_CALLBACK (gpm_info_clear_events_cb), info);
+	widget = glade_xml_get_widget (glade_xml, "button_clear_rate");
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_info_clear_rate_cb), info);
+	widget = glade_xml_get_widget (glade_xml, "button_clear_percentage");
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_info_clear_percentage_cb), info);
+	widget = glade_xml_get_widget (glade_xml, "button_clear_time");
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_info_clear_time_cb), info);
+
 
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",

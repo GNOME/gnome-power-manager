@@ -1,5 +1,11 @@
 2006-04-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade: Add a clear button for all graphs.
+
+	* src/gpm-info.c (gpm_info_show_window): Connect up the new buttons.
+
+2006-04-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c (main): Don't tell the user to use dbus-launch
 	as it's the wrong way to do this. rh:188972
 
