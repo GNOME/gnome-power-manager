@@ -183,7 +183,7 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
 /**
  * gpm_tray_icon_set_image_from_stock:
  * @icon: This TrayIcon class instance
- * @stock_id: The icon name, e.g. GPM_STOCK_APP_ICON
+ * @stock_id: The icon name, e.g. GPM_STOCK_APP_ICON, or NULL to remove.
  *
  * Loads a pixmap from disk, and sets as the tooltip icon
  **/
@@ -195,22 +195,11 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 	gpm_debug ("Setting icon to %s", stock_id);
 
 	if (stock_id) {
-		GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-		GdkPixbuf *pixbuf;
-		pixbuf = gtk_icon_theme_load_icon (icon_theme, stock_id, 24, 0, NULL);
-		if (! pixbuf) {
-			gpm_critical_error ("Cannot find the file %s.\n"
-					    "possibly there is a packaging bug in g-p-m.",
-					    stock_id);
-		}
-		gtk_image_set_from_pixbuf (GTK_IMAGE (icon->priv->image), pixbuf );
-		g_object_unref (pixbuf);
-
+		gtk_image_set_from_icon_name (GTK_IMAGE (icon->priv->image),
+					      stock_id,
+					      GTK_ICON_SIZE_LARGE_TOOLBAR);
 	} else {
-		/* FIXME: gtk_image_clear requires gtk 2.8, so until we
-		 * depend on more then 2.6 (required for FC4) we have to
-		 * comment it out
-		gtk_image_clear (GTK_IMAGE (icon->priv->image));*/
+		gtk_image_clear (GTK_IMAGE (icon->priv->image));
 		if (GTK_WIDGET_VISIBLE (icon->priv->image)) {
 			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
 		}

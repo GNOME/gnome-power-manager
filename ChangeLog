@@ -1,5 +1,10 @@
 2006-04-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-try-icon.c (gpm_tray_icon_set_image_from_stock): Use the
+	named SVG icon rather than getting the icon from a pixmap.
+
+2006-04-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c (gpm_manager_get_warning_type): Add special case
 	for CSR mice, as 1/7 is still above our low warning.
 
