@@ -1,5 +1,10 @@
 2006-04-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c (main): Don't tell the user to use dbus-launch
+	as it's the wrong way to do this. rh:188972
+
+2006-04-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-try-icon.c (gpm_tray_icon_set_image_from_stock): Use the
 	named SVG icon rather than getting the icon from a pixmap.
 

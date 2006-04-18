@@ -167,9 +167,7 @@ main (int argc, char *argv[])
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
 		gpm_critical_error ("This program cannot start until you start the dbus "
-				    "<i>system</i> service.\n\n"
-				    "This is usually started by your operating system by "
-				    "default, and is normally called messagebus.\n\n"
+				    "<i>system</i> service.\n"
 				    "It is <b>strongly recommended</b> you reboot your compter "
 				    "after starting messagebus.");
 		/* abort at this point */
@@ -183,10 +181,7 @@ main (int argc, char *argv[])
 		gpm_critical_error ("This program cannot start until you start the "
 				    "dbus <i>session</i> service.\n\n"
 				    "This is usually started automatically in X "
-				    "or gnome startup when you start a new session.\n\n"
-				    "You can launch the session dbus-daemon manually "
-				    "with this command:\n\n"
-				    "<b>eval `dbus-launch --auto-syntax`</b>");
+				    "or gnome startup when you start a new session.");
 		/* abort at this point */
 		exit (1);
 	}
