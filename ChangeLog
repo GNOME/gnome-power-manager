@@ -1,5 +1,11 @@
 2006-04-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs-core.c (setup_ac_actions, setup_battery_actions):
+	Add the action "Do nothing" so we don't do the DPMS action off for the
+	external monitor. Fixes #338689.
+
+2006-04-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c (main): Don't tell the user to use dbus-launch
 	as it's the wrong way to do this. rh:188972
 

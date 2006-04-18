@@ -554,7 +554,7 @@ setup_ac_actions (GladeXML *xml)
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *vbox_ac_actions;
 	gboolean      has_lid_button;
-	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 
 	label_button_lid = glade_xml_get_widget (xml, "label_ac_button_lid");
 	combo_button_lid = glade_xml_get_widget (xml, "combobox_ac_lid_close");
@@ -582,7 +582,7 @@ setup_battery_actions (GladeXML *xml)
 	GtkWidget    *combo_button_lid;
 	GtkWidget    *label_battery_critical;
 	GtkWidget    *combo_battery_critical;
-	const char   *button_lid_actions[] = {ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
+	const char   *button_lid_actions[] = {ACTION_NOTHING, ACTION_BLANK, ACTION_SUSPEND, ACTION_HIBERNATE, NULL};
 	const char   *battery_critical_actions[] = {ACTION_NOTHING, ACTION_SUSPEND, ACTION_HIBERNATE, ACTION_SHUTDOWN, NULL};
 	gboolean      has_lid_button;
 	gboolean      has_batteries = gpm_has_batteries ();
