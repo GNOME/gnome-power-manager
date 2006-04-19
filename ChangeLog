@@ -1,3 +1,13 @@
+2006-04-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-power.{c|h}, src/gpm-manager.c, src/gpm-info.c:
+	Make some of the GpmPower structure names shorter, and also expose
+	a device so we can easily get more that just the battery status.
+
+	* data/gpm-info.glade, src/gpm-info.glade, gpm-power.c: Get rid of all
+	that array and listview mess, and now have a pretty info page with
+	icons, labels and all that jazz.
+
 2006-04-18  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-info.glade: Add a clear button for all graphs.

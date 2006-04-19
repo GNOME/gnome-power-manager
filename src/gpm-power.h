@@ -29,12 +29,19 @@
 G_BEGIN_DECLS
 
 typedef enum {
-	GPM_POWER_BATTERY_KIND_PRIMARY,
-	GPM_POWER_BATTERY_KIND_UPS,
-	GPM_POWER_BATTERY_KIND_MOUSE,
-	GPM_POWER_BATTERY_KIND_KEYBOARD,
-	GPM_POWER_BATTERY_KIND_PDA,
-} GpmPowerBatteryKind;
+	GPM_POWER_KIND_PRIMARY,
+	GPM_POWER_KIND_UPS,
+	GPM_POWER_KIND_MOUSE,
+	GPM_POWER_KIND_KEYBOARD,
+	GPM_POWER_KIND_PDA,
+} GpmPowerKind;
+
+typedef enum {
+	GPM_POWER_UNIT_MWH,
+	GPM_POWER_UNIT_CSR,
+	GPM_POWER_UNIT_PERCENT,
+	GPM_POWER_UNIT_UNKNOWN,
+} GpmPowerUnit;
 
 typedef struct {
 	int		design_charge;
@@ -49,13 +56,20 @@ typedef struct {
 	gboolean	is_present;
 	gboolean	is_charging;
 	gboolean	is_discharging;
-} GpmPowerBatteryStatus;
+} GpmPowerStatus;
 
-typedef struct
-{
-	char		*title;
-	char		*value;
-} GpmPowerDescriptionItem;
+typedef struct {
+	char		*udi;
+	char		*product;
+	char		*vendor;
+	char		*technology;
+	char		*serial;
+	char		*model;
+	int		 charge_rate_previous;
+	GpmPowerKind	 battery_kind;
+	GpmPowerStatus	 battery_status;
+	GpmPowerUnit	 unit;
+} GpmPowerDevice;
 
 #define GPM_TYPE_POWER	 	(gpm_power_get_type ())
 #define GPM_POWER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_POWER, GpmPower))
@@ -81,7 +95,7 @@ typedef struct
 	void		(* ac_state_changed)		(GpmPower	*power,
 							 gboolean	 on_ac);
 	void		(* battery_status_changed)	(GpmPower	*power,
-							 GpmPowerBatteryKind  battery_kind);
+							 GpmPowerKind  battery_kind);
 	void		(* battery_removed)		(GpmPower	*power,
 							 const char	 *udi);
 } GpmPowerClass;
@@ -92,21 +106,23 @@ gboolean	 gpm_power_get_on_ac			(GpmPower	*power,
 							 gboolean	*on_ac,
 							 GError		**error);
 gboolean	 gpm_power_get_battery_status		(GpmPower	*power,
-							 GpmPowerBatteryKind battery_kind,
-							 GpmPowerBatteryStatus *battery_status);
+							 GpmPowerKind	 battery_kind,
+							 GpmPowerStatus *battery_status);
+GpmPowerDevice	*gpm_power_get_battery_device_entry	(GpmPower	*power,
+							 GpmPowerKind	 battery_kind,
+							 gint		 device_num);
 gboolean	 gpm_power_get_status_summary		(GpmPower	*power,
 							 char		**summary,
 							 GError		**error);
 gint		 gpm_power_get_num_devices_of_kind	(GpmPower	*power,
-							 GpmPowerBatteryKind battery_kind);
-GArray		*gpm_power_get_description_array	(GpmPower	*power,
-							 GpmPowerBatteryKind battery_kind,
-							 gint		 device_num);
+							 GpmPowerKind	 battery_kind);
+GString		*gpm_power_status_for_device		(GpmPowerDevice *device);
+GString		*gpm_power_status_for_device_more	(GpmPowerDevice *device);
 void		 gpm_power_update_all			(GpmPower	*power);
-void		 gpm_power_free_description_array	(GArray		*array);
-
-gboolean	 gpm_power_battery_is_charged		(GpmPowerBatteryStatus *status);
-const char 	*battery_kind_to_string			(GpmPowerBatteryKind battery_kind);
+gboolean	 gpm_power_battery_is_charged		(GpmPowerStatus *status);
+const char 	*battery_kind_to_string			(GpmPowerKind	 battery_kind);
+char		*gpm_power_get_icon_from_status		(GpmPowerStatus *device_status,
+							 GpmPowerKind    kind);
 
 G_END_DECLS
 

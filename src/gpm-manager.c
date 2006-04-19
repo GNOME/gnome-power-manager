@@ -311,77 +311,6 @@ gpm_manager_can_shutdown (GpmManager *manager,
 }
 
 /**
- * get_icon_index_from_percent:
- * @percent: The charge of the device
- *
- * The index value depends on the percentage charge:
- *	00-10  = 000
- *	10-30  = 020
- *	30-50  = 040
- *	50-70  = 060
- *	70-90  = 080
- *	90-100 = 100
- *
- * Return value: The character string for the filename suffix.
- **/
-static char *
-get_icon_index_from_percent (gint percent)
-{
-	if (percent < 10) {
-		return "000";
-	} else if (percent < 30) {
-		return "020";
-	} else if (percent < 50) {
-		return "040";
-	} else if (percent < 70) {
-		return "060";
-	} else if (percent < 90) {
-		return "080";
-	}
-	return "100";
-}
-
-/**
- * get_stock_id_helper:
- * @device_status: The device status struct with the information
- * @prefix: The prefix for the iconset, e.g. "primary" or "ups"
- *
- * Because UPS and primary icons have charged, charging and discharging icons
- * we need to abstract out the logic for the filenames.
- *
- * Return value: The complete filename, must free using g_free.
- **/
-static char *
-get_stock_id_helper (GpmPowerBatteryStatus *device_status,
-		     const char		   *prefix)
-{
-	char *index;
-	char *filename = NULL;
-
-	if (gpm_power_battery_is_charged (device_status)) {
-
-		filename = g_strdup_printf ("gpm-%s-charged", prefix);
-
-	} else if (device_status->is_charging) {
-
-		index = get_icon_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-charging-%s", prefix, index);
-
-	} else if (device_status->is_discharging) {
-
-		index = get_icon_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-discharging-%s", prefix, index);
-
-	} else {
-
-		/* We have a broken battery, not sure what to display here */
-		gpm_debug ("BROKEN BATTERY...");
-		filename = g_strdup_printf ("gpm-%s-broken", prefix);
-	}
-	return filename;
-}
-
-/**
  * get_stock_id:
  * @manager: This manager class instance
  * @icon_policy: The policy set from gconf
@@ -395,10 +324,10 @@ static char *
 get_stock_id (GpmManager *manager,
 	      int	  icon_policy)
 {
-	GpmPowerBatteryStatus status_primary;
-	GpmPowerBatteryStatus status_ups;
-	GpmPowerBatteryStatus status_mouse;
-	GpmPowerBatteryStatus status_keyboard;
+	GpmPowerStatus status_primary;
+	GpmPowerStatus status_ups;
+	GpmPowerStatus status_mouse;
+	GpmPowerStatus status_keyboard;
 	gboolean on_ac;
 	gboolean present;
 
@@ -411,19 +340,19 @@ get_stock_id (GpmManager *manager,
 
 	/* Finds if a device was found in the cache AND that it is present */
 	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_BATTERY_KIND_PRIMARY,
+						GPM_POWER_KIND_PRIMARY,
 						&status_primary);
 	status_primary.is_present &= present;
 	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_BATTERY_KIND_UPS,
+						GPM_POWER_KIND_UPS,
 						&status_ups);
 	status_ups.is_present &= present;
 	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_BATTERY_KIND_MOUSE,
+						GPM_POWER_KIND_MOUSE,
 						&status_mouse);
 	status_mouse.is_present &= present;
 	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_BATTERY_KIND_KEYBOARD,
+						GPM_POWER_KIND_KEYBOARD,
 						&status_keyboard);
 	status_keyboard.is_present &= present;
 
@@ -433,11 +362,11 @@ get_stock_id (GpmManager *manager,
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
 	if (status_primary.is_present &&
 	    status_primary.percentage_charge < manager->priv->low_percentage) {
-		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
 
 	} else if (status_ups.is_present &&
 		   status_ups.percentage_charge < manager->priv->low_percentage) {
-		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
+		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
 
 	} else if (status_mouse.is_present &&
 		   status_mouse.percentage_charge < manager->priv->low_percentage) {
@@ -457,11 +386,11 @@ get_stock_id (GpmManager *manager,
 	gpm_debug ("Trying CHARGING icon: primary, ups");
 	if (status_primary.is_present &&
 	    (status_primary.is_charging || status_primary.is_discharging) ) {
-		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
 
 	} else if (status_ups.is_present &&
 		   (status_ups.is_charging || status_ups.is_discharging) ) {
-		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
+		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
 	}
 
 	/* Check if we should just show the icon all the time */
@@ -473,10 +402,10 @@ get_stock_id (GpmManager *manager,
 	/* we try PRESENT: PRIMARY, UPS */
 	gpm_debug ("Trying PRESENT icon: primary, ups");
 	if (status_primary.is_present) {
-		return get_stock_id_helper (&status_primary, ICON_PREFIX_PRIMARY);
+		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
 
 	} else if (status_ups.is_present) {
-		return get_stock_id_helper (&status_ups, ICON_PREFIX_UPS);
+		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
 	}
 
 	/* Check if we should just fallback to the ac icon */
@@ -1585,7 +1514,7 @@ power_on_ac_changed_cb (GpmPower   *power,
  **/
 static GpmWarning
 gpm_manager_get_warning_type (GpmManager	    *manager,
-			      GpmPowerBatteryStatus *status,
+			      GpmPowerStatus *status,
 			      gboolean		     use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
@@ -1687,7 +1616,7 @@ manager_critical_action_do (GpmManager *manager)
 /**
  * battery_status_changed_primary:
  * @manager: This manager class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_PRIMARY
+ * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_PRIMARY
  * @battery_status: The battery status information
  *
  * Hander for the battery status changed event for primary devices
@@ -1696,8 +1625,8 @@ manager_critical_action_do (GpmManager *manager)
  **/
 static void
 battery_status_changed_primary (GpmManager	      *manager,
-				GpmPowerBatteryKind    battery_kind,
-				GpmPowerBatteryStatus *battery_status)
+				GpmPowerKind    battery_kind,
+				GpmPowerStatus *battery_status)
 {
 	GpmWarning  warning_type;
 	gboolean    show_notify;
@@ -1847,7 +1776,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 /**
  * battery_status_changed_ups:
  * @manager: This manager class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_UPS
+ * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_UPS
  * @battery_status: The battery status information
  *
  * Hander for the battery status changed event for UPS devices.
@@ -1855,8 +1784,8 @@ battery_status_changed_primary (GpmManager	      *manager,
  **/
 static void
 battery_status_changed_ups (GpmManager		   *manager,
-			    GpmPowerBatteryKind	    battery_kind,
-			    GpmPowerBatteryStatus  *battery_status)
+			    GpmPowerKind	    battery_kind,
+			    GpmPowerStatus  *battery_status)
 {
 	GpmWarning warning_type;
 	char *message = NULL;
@@ -1955,7 +1884,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 /**
  * battery_status_changed_misc:
  * @manager: This manager class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_MOUSE
+ * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
  * @battery_status: The battery status information
  *
  * Hander for the battery status changed event for misc devices such as MOUSE
@@ -1964,8 +1893,8 @@ battery_status_changed_ups (GpmManager		   *manager,
  **/
 static void
 battery_status_changed_misc (GpmManager	    	   *manager,
-			     GpmPowerBatteryKind    battery_kind,
-			     GpmPowerBatteryStatus *battery_status)
+			     GpmPowerKind    battery_kind,
+			     GpmPowerStatus *battery_status)
 {
 	GpmWarning warning_type;
 	char *message = NULL;
@@ -1983,19 +1912,19 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	}
 
 	/* Always check if we already notified the user */
-	if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE) {
+	if (battery_kind == GPM_POWER_KIND_MOUSE) {
 		if (warning_type > manager->priv->last_mouse_warning) {
 			manager->priv->last_mouse_warning = warning_type;
 		} else {
 			warning_type = GPM_WARNING_NONE;
 		}
-	} else if (battery_kind == GPM_POWER_BATTERY_KIND_KEYBOARD) {
+	} else if (battery_kind == GPM_POWER_KIND_KEYBOARD) {
 		if (warning_type > manager->priv->last_keyboard_warning) {
 			manager->priv->last_keyboard_warning = warning_type;
 		} else {
 			warning_type = GPM_WARNING_NONE;
 		}
-	} else if (battery_kind == GPM_POWER_BATTERY_KIND_PDA) {
+	} else if (battery_kind == GPM_POWER_KIND_PDA) {
 		if (warning_type > manager->priv->last_pda_warning) {
 			manager->priv->last_pda_warning = warning_type;
 		} else {
@@ -2033,7 +1962,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 /**
  * power_battery_status_changed_cb:
  * @power: The power class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_BATTERY_KIND_MOUSE
+ * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
  * @manager: This manager class instance
  *
  * This function splits up the battery status changed callback, and calls
@@ -2041,28 +1970,28 @@ battery_status_changed_misc (GpmManager	    	   *manager,
  **/
 static void
 power_battery_status_changed_cb (GpmPower		*power,
-				 GpmPowerBatteryKind	 battery_kind,
+				 GpmPowerKind	 battery_kind,
 				 GpmManager		*manager)
 {
-	GpmPowerBatteryStatus battery_status;
+	GpmPowerStatus battery_status;
 
 	tray_icon_update (manager);
 
 	gpm_power_get_battery_status (manager->priv->power, battery_kind, &battery_status);
 
-	if (battery_kind == GPM_POWER_BATTERY_KIND_PRIMARY) {
+	if (battery_kind == GPM_POWER_KIND_PRIMARY) {
 
 		/* PRIMARY is special as there is lots of twisted logic */
 		battery_status_changed_primary (manager, battery_kind, &battery_status);
 
-	} else if (battery_kind == GPM_POWER_BATTERY_KIND_UPS) {
+	} else if (battery_kind == GPM_POWER_KIND_UPS) {
 
 		/* UPS is special as it's being used on desktops */
 		battery_status_changed_ups (manager, battery_kind, &battery_status);
 
-	} else if (battery_kind == GPM_POWER_BATTERY_KIND_MOUSE ||
-		   battery_kind == GPM_POWER_BATTERY_KIND_KEYBOARD ||
-		   battery_kind == GPM_POWER_BATTERY_KIND_PDA) {
+	} else if (battery_kind == GPM_POWER_KIND_MOUSE ||
+		   battery_kind == GPM_POWER_KIND_KEYBOARD ||
+		   battery_kind == GPM_POWER_KIND_PDA) {
 
 		/* MOUSE, KEYBOARD, and PDA only do low power warnings */
 		battery_status_changed_misc (manager, battery_kind, &battery_status);

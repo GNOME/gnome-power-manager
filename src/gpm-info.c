@@ -116,99 +116,7 @@ gpm_info_graph_update (GList *data, GtkWidget *widget, GList *events)
 
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (widget);
-	gtk_widget_show (widget);
-}
-
-/**
- * gpm_info_update_tree:
- * @widget: The GtkWidget object
- * @array: The array of GpmPowerDescriptionItem obtained about the hardware
- *
- * Update the tree widget with new data that we obtained from power.
- **/
-static void
-gpm_info_update_tree (GtkWidget *widget, GArray *array)
-{
-	int a;
-	GtkListStore *store;
-	GtkTreeIter   iter;
-	GpmPowerDescriptionItem *di;
-
-	store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-
-	/* add data to the list store */
-	gpm_debug ("Printing %i items", array->len);
-#if 0
-	GpmPowerDescriptionItem *di2;
-	for (a=0; a<array->len; a+=2) {
-		gtk_list_store_append (store, &iter);
-		di = &g_array_index (array, GpmPowerDescriptionItem, a);
-		if (a+1 < array->len) {
-			di2 = &g_array_index (array, GpmPowerDescriptionItem, a+1);
-			gtk_list_store_set (store, &iter,
-					    0, di->title,
-					    1, di->value,
-					    2, di2->title,
-					    3, di2->value,
-					    -1);
-		} else {
-			gtk_list_store_set (store, &iter,
-					    0, di->title,
-					    1, di->value,
-					    -1);
-		}
-	}
-#else
-	for (a=0; a<array->len; a+=1) {
-		gtk_list_store_append (store, &iter);
-		di = &g_array_index (array, GpmPowerDescriptionItem, a);
-		gtk_list_store_set (store, &iter,
-				    0, di->title,
-				    1, di->value,
-				    -1);
-	}
-#endif
-	gtk_tree_view_set_model (GTK_TREE_VIEW (widget), GTK_TREE_MODEL (store));
-	g_object_unref (store);
-}
-
-/**
- * gpm_info_create_device_info_tree:
- * @widget: The GtkWidget object
- *
- * Create the tree widget, setting up the columns
- **/
-static void
-gpm_info_create_device_info_tree (GtkWidget *widget)
-{
-	/* add columns to the tree view */
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-	const int MIN_SIZE = 150;
-
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes ("Name", renderer, "text", 0, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 0);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, MIN_SIZE);
-
-	column = gtk_tree_view_column_new_with_attributes ("Value", renderer, "text", 1, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 1);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, MIN_SIZE);
-
-	column = gtk_tree_view_column_new_with_attributes ("Name", renderer, "text", 2, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 2);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_column_set_min_width (column, MIN_SIZE);
-
-	column = gtk_tree_view_column_new_with_attributes ("Value", renderer, "text", 3, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 3);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, MIN_SIZE);
-
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
+	gtk_widget_show (GTK_WIDGET (widget));
 }
 
 /**
@@ -223,51 +131,144 @@ gpm_info_populate_device_information (GpmInfo *info)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
-	int		 number;
-	GtkWidget	*widget;
-	GArray		*array;
 
+	int	   number;
+	GtkWidget *widget;
+	GString	  *desc;
+	GpmPowerDevice *device = NULL;
+	char	  *icon_name;
+
+	/* Laptop battery section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_BATTERY_KIND_PRIMARY);
+						    GPM_POWER_KIND_PRIMARY);
 	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
-		array = gpm_power_get_description_array (info->priv->power,
-							 GPM_POWER_BATTERY_KIND_PRIMARY, 0);
-		gpm_info_update_tree (widget, array);
-		gpm_power_free_description_array (array);
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary0");
-		gtk_widget_show_all (widget);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary");
+		gtk_widget_show (GTK_WIDGET (widget));
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_primary0");
+		gtk_widget_show (GTK_WIDGET (widget));
+		widget = glade_xml_get_widget (info->priv->glade_xml, "image_primary0");
+
+		/* set icon name */
+		device = gpm_power_get_battery_device_entry (info->priv->power,
+							     GPM_POWER_KIND_PRIMARY, 0);
+		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
+							    GPM_POWER_KIND_PRIMARY);
+		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
+					      icon_name,
+					      GTK_ICON_SIZE_DIALOG);
+		g_free (icon_name);
+		gtk_widget_show (GTK_WIDGET (widget));
+		
+		/* set info */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary0");
+		desc = gpm_power_status_for_device (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set more */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary0_more");
+		desc = gpm_power_status_for_device_more (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+	} else if (number > 1) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_primary1");
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set icon name */
+		device = gpm_power_get_battery_device_entry (info->priv->power,
+							     GPM_POWER_KIND_PRIMARY, 1);
+		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
+							    GPM_POWER_KIND_PRIMARY);
+		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
+					      icon_name,
+					      GTK_ICON_SIZE_DIALOG);
+		g_free (icon_name);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set info */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary1");
+		desc = gpm_power_status_for_device (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set more */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary1_more");
+		desc = gpm_power_status_for_device_more (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
 	}
-	if (number > 1) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary1");
-		array = gpm_power_get_description_array (info->priv->power,
-							 GPM_POWER_BATTERY_KIND_PRIMARY, 1);
-		gpm_info_update_tree (widget, array);
-		gpm_power_free_description_array (array);
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary1");
-		gtk_widget_show_all (widget);
-	}
+
+	/* UPS section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_BATTERY_KIND_UPS);
+						    GPM_POWER_KIND_UPS);
 	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_ups");
-		array = gpm_power_get_description_array (info->priv->power,
-							 GPM_POWER_BATTERY_KIND_UPS, 0);
-		gpm_info_update_tree (widget, array);
-		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_ups");
-		gtk_widget_show_all (widget);
+		gtk_widget_show (GTK_WIDGET (widget));
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_ups");
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set icon name */
+		device = gpm_power_get_battery_device_entry (info->priv->power,
+							     GPM_POWER_KIND_UPS, 0);
+		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
+							    GPM_POWER_KIND_UPS);
+		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
+					      icon_name,
+					      GTK_ICON_SIZE_DIALOG);
+		g_free (icon_name);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set info */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_ups");
+		desc = gpm_power_status_for_device (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set more */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_ups_more");
+		desc = gpm_power_status_for_device_more (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
 	}
+
+	/* Misc section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_BATTERY_KIND_MOUSE);
+						    GPM_POWER_KIND_MOUSE);
 	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_mouse");
-		array = gpm_power_get_description_array (info->priv->power,
-							 GPM_POWER_BATTERY_KIND_MOUSE, 0);
-		gpm_info_update_tree (widget, array);
-		gpm_power_free_description_array (array);
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
-		gtk_widget_show_all (widget);
+		gtk_widget_show (GTK_WIDGET (widget));
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_mouse");
+		gtk_widget_show (GTK_WIDGET (widget));
+		widget = glade_xml_get_widget (info->priv->glade_xml, "image_mouse");
+
+		/* set icon name */
+		device = gpm_power_get_battery_device_entry (info->priv->power,
+							     GPM_POWER_KIND_MOUSE, 0);
+		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
+					      "gpm-mouse-power-low",
+					      GTK_ICON_SIZE_DIALOG);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set info */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_mouse");
+		desc = gpm_power_status_for_device (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+
+		/* set more */
+		widget = glade_xml_get_widget (info->priv->glade_xml, "label_mouse_more");
+		desc = gpm_power_status_for_device_more (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
 	}
 }
 
@@ -558,15 +559,6 @@ gpm_info_show_window (GpmInfo *info)
 	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
 	gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
 
-	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary0");
-	gpm_info_create_device_info_tree (widget);
-	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_primary1");
-	gpm_info_create_device_info_tree (widget);
-	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_ups");
-	gpm_info_create_device_info_tree (widget);
-	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_mouse");
-	gpm_info_create_device_info_tree (widget);
-
 	/* set up the event viewer tree-view */
 	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_event_log");
 	info->priv->treeview_event_viewer = widget;
@@ -621,9 +613,9 @@ gpm_info_log_do_poll (gpointer data)
 
 	int value_x;
 
-	GpmPowerBatteryStatus battery_status;
+	GpmPowerStatus battery_status;
 	gpm_power_get_battery_status (info->priv->power,
-				      GPM_POWER_BATTERY_KIND_PRIMARY,
+				      GPM_POWER_KIND_PRIMARY,
 				      &battery_status);
 
 	/* work out seconds elapsed */
