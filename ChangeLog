@@ -1,5 +1,12 @@
 2006-04-20  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade, src/gpm-prefs-core.c (gpm_prefs_init): Make
+	sure we only remove the correct tabs from the notebook. This fixes
+	the problem where desktop systems were shown the UPS tab, but not the
+	General tab.
+
+2006-04-20  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/*/gpm-suspend-to-*.png: Tangoify these icons, thanks again
 	to Jakub Steiner.
 
@@ -11,8 +18,8 @@
 	Make some of the GpmPower structure names shorter, and also expose
 	a device so we can easily get more that just the battery status.
 
-	* data/gpm-info.glade, src/gpm-info.glade, gpm-power.c: Get rid of all
-	that array and listview mess, and now have a pretty info page with
+	* data/gpm-info.glade, src/gpm-info.glade, src/gpm-power.c: Get rid of
+	all that array and listview mess, and now have a pretty info page with
 	icons, labels and all that jazz.
 
 2006-04-18  Richard Hughes  <richard@hughsie.com>

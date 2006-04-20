@@ -915,14 +915,19 @@ gpm_prefs_init (GpmPrefs *prefs)
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
 	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
 
+	GtkWidget *notebook;
+	int page;
+	notebook = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
 	/* if no options then disable frame as it will be empty */
 	if (! prefs->priv->has_batteries) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
-		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 1);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_battery_power");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
 	}
 	if (! prefs->priv->has_ups) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
-		gtk_notebook_remove_page (GTK_NOTEBOOK(widget), 2);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_ups_power");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
 	}
 
 	gtk_widget_show (main_window);
