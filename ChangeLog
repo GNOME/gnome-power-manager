@@ -1,3 +1,13 @@
+2006-04-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c (gpm_graph_draw_line): Only print the event
+	dots if they are going to fit on the graph.
+
+	* src/gpm-graph-widget.c (gpm_graph_draw_line),
+	(gpm_graph_interpolate_value): Put the dots back on the line by popular
+	request. Doing the interpolation means the event and data are still
+	separate, but we can 'link' them on the graph.
+
 2006-04-20  Jakub Steiner <jimmac@ximian.com>
 
 	* gpm-suspend-to-ram.svg:

@@ -666,6 +666,40 @@ gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *
 }
 
 /**
+ * gpm_graph_interpolate_value:
+ * @this: The first data point
+ * @last: The other data point
+ * @xintersect: The x value (i.e. the x we provide)
+ * Return value: The interpolated value, or 0 if invalid
+ *
+ * Interpolates onto the graph in the y direction. If only supplied one point
+ * then don't interpolate.
+ **/
+static int
+gpm_graph_interpolate_value (GpmInfoDataPoint *this,
+			     GpmInfoDataPoint *last,
+			     int xintersect)
+{
+	int dy, dx;
+	/* we have no points */
+	if (! this) {
+		return 0;
+	}
+	/* we only have one point, don't interpolate */
+	if (! last) {
+		return this->value;
+	}
+	/* gradient */
+	dx = this->time - last->time;
+	dy = this->value - last->value;
+	float m = (float) dy / (float) dx;
+	/* y-intersect */
+	int c = (-m * (float) this->time) + this->value;
+	/* y = mx + c */
+	return (m * (float) xintersect) + c;
+}
+
+/**
  * gpm_graph_draw_line:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
@@ -716,17 +750,43 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	if (graph->priv->use_legend) {
 		int previous_point = 0;
 		int prevpos = -1;
+		GpmInfoDataPoint *point_this = NULL;
+		GpmInfoDataPoint *point_last = NULL;
+
+		/* we track the list so we can put the point on the line */
+		GList *l2 = graph->priv->list;
+		if (l2) {
+			point_this = (GpmInfoDataPoint *) l2->data;
+			l2 = l2->next;
+		}
 		for (l=graph->priv->events; l != NULL; l=l->next) {
 			eventdata = (GpmInfoDataPoint *) l->data;
-			gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
+			/* If we have valid list data, go through the list data
+			   until we get a data point time value greater than the
+			   event we have. */
+			while (l2 && eventdata->time > point_this->time) {
+				point_last = point_this;
+				point_this = (GpmInfoDataPoint *) l2->data;
+				l2 = l2->next;
+			}
+			/* Interpolate in the y direction with the two
+			   previous points. This should be 100% accurate */
+			int pos = gpm_graph_interpolate_value (point_this,
+							       point_last,
+							       eventdata->time);
+			gpm_graph_get_pos_on_graph (graph, eventdata->time,
+						    pos, &newx, &newy);
 			/* don't overlay the points, stack vertically */
-			if (abs(prevpos - newx) < 8) {
+			if (abs (prevpos - newx) < 8) {
 				previous_point++;
 			} else {
 				previous_point = 0;
 			}
 			newy -= (8 * previous_point);
-			gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
+			/* only do the event dot, if it's going to fit on the graph */
+			if (eventdata->time > graph->priv->start_x) {
+				gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
+			}
 			prevpos = newx;
 		}
 	}
