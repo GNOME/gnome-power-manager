@@ -720,7 +720,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 			eventdata = (GpmInfoDataPoint *) l->data;
 			gpm_graph_get_pos_on_graph (graph, eventdata->time, 0, &newx, &newy);
 			/* don't overlay the points, stack vertically */
-			if (abs(prevpos - newx) < 5) {
+			if (abs(prevpos - newx) < 8) {
 				previous_point++;
 			} else {
 				previous_point = 0;
