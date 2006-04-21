@@ -1,3 +1,12 @@
+2006-04-21  Rodrigo Moya <rodrigo@novell.com>
+
+	* src/gpm-manager.c (tray_icon_destroyed, gpm_manager_init): respond
+	correctly to systray crashing by readding the icon to the tray when
+	destroyed.
+
+	* src/gpm-tray-icon.c (gpm_tray_icon_show): no need to call _unrealize
+	on the icon.
+
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c (gpm_info_populate_device_information): Fix logic so

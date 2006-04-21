@@ -2221,6 +2221,14 @@ gpm_manager_tray_icon_show_info (GpmManager   *manager,
  * @manager: This manager class instance
  **/
 static void
+tray_icon_destroyed (GtkObject *object, gpointer user_data)
+{
+	GpmManager *manager = user_data;
+
+	manager->priv->tray_icon = gpm_tray_icon_new ();
+}
+
+static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
@@ -2285,6 +2293,8 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
+	g_signal_connect (G_OBJECT (manager->priv->tray_icon), "destroy",
+			  G_CALLBACK (tray_icon_destroyed), manager);
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
