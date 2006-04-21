@@ -1,5 +1,10 @@
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c (gpm_info_populate_device_information): Fix logic so
+	multi-battery code can trigger. Hopefully fixes #339262.
+
+2006-04-21  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.spec.in: Fix up the spec file (Paul Ionescu)
 	to fix bug #339263.
 

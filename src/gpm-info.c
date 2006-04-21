@@ -173,7 +173,8 @@ gpm_info_populate_device_information (GpmInfo *info)
 		g_string_free (desc, TRUE);
 		gtk_widget_show (GTK_WIDGET (widget));
 
-	} else if (number > 1) {
+	}
+	if (number > 1) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_primary1");
 		gtk_widget_show (GTK_WIDGET (widget));
 
