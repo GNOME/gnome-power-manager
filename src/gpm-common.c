@@ -26,13 +26,15 @@
 
 #include "gpm-common.h"
 
-/** Returns the time string, e.g. "2 hours 3 minutes"
+/**
+ * gpm_get_timestring:
+ * @time: The time value to convert in seconds
+ * @cookie: The cookie we are looking for
  *
- *  @param  time		Time to convert to string (in seconds)
- *  @return			The timestring
+ * Returns a localised timestring
  *
- *  @note	time == 0 is returned as "Unknown"
- */
+ * Return value: The time string, e.g. "2 hours 3 minutes"
+ **/
 char *
 gpm_get_timestring (int time)
 {

@@ -1,5 +1,16 @@
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-inhibit.{c|h} (gpm_inhibit_generate_cookie): Make sure the
+	cookie we generate is really unique. Fixes bug #339307.
+
+	(gpm_inhibit_find_cookie, gpm_inhibit_cookie_compare_func): Create
+	these functions so we can easily find data in the list from another
+	cookie.
+
+	* src/gpm-common.c: Convert to gtk-doc format comments.
+
+2006-04-21  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c (gpm_info_populate_device_information): Abstract out
 	the device blobs so that we can do each one in a nice way.
 

@@ -42,7 +42,7 @@ typedef struct
 	char		*application;
 	char		*reason;
 	char		*connection;
-	int		 cookie;
+	guint32		 cookie;
 } GpmInhibitData;
 
 struct GpmInhibitPrivate
@@ -54,10 +54,74 @@ struct GpmInhibitPrivate
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
 
 /**
+ * gpm_inhibit_cookie_compare_func
+ * @a: Pointer to the data to test
+ * @b: Pointer to a cookie to compare
+ *
+ * A GCompareFunc for comparing a cookie to a list.
+ *
+ * Return value: 0 if cookie matches
+ **/
+static gint
+gpm_inhibit_cookie_compare_func (gconstpointer a, gconstpointer b)
+{
+	GpmInhibitData *data;
+	guint32		cookie;
+	data = (GpmInhibitData*) a;
+	cookie = *((guint32*) b);
+	if (cookie == data->cookie)
+		return 0;
+	return 1;
+}
+
+/**
+ * gpm_inhibit_find_cookie:
+ * @inhibit: This inhibit instance
+ * @cookie: The cookie we are looking for
+ *
+ * Finds the data in the cookie list.
+ *
+ * Return value: The cookie data, or NULL if not found
+ **/
+static GpmInhibitData *
+gpm_inhibit_find_cookie (GpmInhibit *inhibit, guint32 cookie)
+{
+	GpmInhibitData *data;
+	GSList	       *ret;
+	ret = g_slist_find_custom (inhibit->priv->list, &cookie,
+				   gpm_inhibit_cookie_compare_func);
+	if (! ret) {
+		return NULL;
+	}
+	data = (GpmInhibitData *) ret->data;
+	return data;
+}
+
+/**
+ * gpm_inhibit_generate_cookie:
+ * @inhibit: This inhibit instance
+ *
+ * Returns a random cookie not already allocated.
+ *
+ * Return value: a new random cookie.
+ **/
+static guint32
+gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
+{
+	guint32		cookie;
+
+	/* Iterate until we have a unique cookie */
+	do {
+		cookie = (guint32) g_random_int_range (1, G_MAXINT32);
+	} while (gpm_inhibit_find_cookie (inhibit, cookie));
+	return cookie;
+}
+
+/**
  * gpm_inhibit_add:
- * @connection:		Connection name, e.g. ":0.13"
+ * @connection: Connection name, e.g. ":0.13"
  * @application:	Application name, e.g. "Nautilus"
- * @reason:		Reason for inhibiting, e.g. "Copying files"
+ * @reason: Reason for inhibiting, e.g. "Copying files"
  *
  * Allocates a random cookie used to identify the connection, as multiple
  * inhibit requests can come from one caller sharing a dbus connection.
@@ -66,7 +130,7 @@ G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
  *
  * Return value: a new random cookie.
  **/
-int
+guint32
 gpm_inhibit_add (GpmInhibit *inhibit,
 		 const char *connection,
 		 const char *application,
@@ -83,7 +147,7 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 
 	/* seems okay, add to list */
 	GpmInhibitData *data = g_new (GpmInhibitData, 1);
-	data->cookie = g_random_int_range (0, 10240);
+	data->cookie = gpm_inhibit_generate_cookie (inhibit);
 	data->application = g_strdup (application);
 	data->connection = g_strdup (connection);
 	data->reason = g_strdup (reason);
@@ -108,37 +172,28 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
 
 /**
  * gpm_inhibit_remove:
- * @connection:		Connection name
+ * @connection: Connection name
  * @application:	Application name
- * @cookie:		The cookie that we used to register
+ * @cookie: The cookie that we used to register
  *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
 void
 gpm_inhibit_remove (GpmInhibit *inhibit,
 		    const char *connection,
-		    int		cookie)
+		    guint32	cookie)
 {
-	int a;
 	GpmInhibitData *data;
-	gboolean found = FALSE;
 
 	/* Only remove the correct cookie */
-	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
-		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
-		if (data->cookie == cookie) {
-			found = TRUE;
-			gpm_debug ("AllowInactiveSleep okay on '%s' as #%i",
-				   connection, cookie);
-			gpm_inhibit_free_data_object (data);
-			inhibit->priv->list = g_slist_remove (inhibit->priv->list,
-							      (gconstpointer) data);
-		}
-	}
-
-	/* If not found, then the developer never used InhibitInactiveSleep, and
-	   so put a warning out on the console */
-	if (!found) {
+	data = gpm_inhibit_find_cookie (inhibit, cookie);
+	if (data) {
+		gpm_debug ("AllowInactiveSleep okay on '%s' as #%i",
+			   connection, cookie);
+		gpm_inhibit_free_data_object (data);
+		inhibit->priv->list = g_slist_remove (inhibit->priv->list,
+						      (gconstpointer) data);
+	} else {
 		gpm_warning ("Cannot find registered program for #%i, so "
 			     "cannot do AllowInactiveSleep", cookie);
 	}
@@ -146,9 +201,9 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
 
 /**
  * gpm_inhibit_remove_dbus:
- * @connection:		Connection name
+ * @connection: Connection name
  * @application:	Application name
- * @cookie:		The cookie that we used to register
+ * @cookie: The cookie that we used to register
  *
  * Checks to see if the dbus closed session is registered, in which case
  * unregister it.
@@ -224,7 +279,7 @@ gpm_inhibit_check (GpmInhibit *inhibit)
  **/
 void
 gpm_inhibit_get_message (GpmInhibit *inhibit,
-			 GString *message,
+			 GString    *message,
 			 const char *action)
 {
 	int a;
