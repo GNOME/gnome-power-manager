@@ -41,7 +41,6 @@ change preferences.
 %configure \
 	--enable-libnotify \
 	--disable-scrollkeeper \
-	--enable-doxygen-docs=no \
 	--with-doc-dir=%{buildroot}%{_datadir}/doc \
 	--with-dbus-sys=%{buildroot}/etc/dbus-1/system.d \
 	--with-dbus-services=%{buildroot}%{_datadir}/dbus-1/services
@@ -103,31 +102,19 @@ fi
 %{_datadir}/gnome/help/gnome-power-manager/C/*
 %{_datadir}/omf/gnome-power-manager/*
 %{_datadir}/gnome/autostart/*
-%{_datadir}/icons/hicolor/16x16/apps/*.png
-%{_datadir}/icons/hicolor/24x24/apps/*.png
-%{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/icon-theme.cache
+%{_datadir}/icons/hicolor/*/apps/*.png
+%{_datadir}/icons/hicolor/*/apps/*.svg
 
 %changelog
-* Sun Nov 27 2005 Richard Hughes <richard@hughsie.com> 0.3.1-1
-- 0.3.3 Release, Make this file generic example, not for debug builds.
+* Thu Apr 20 2006 Richard Hughes <richard@hughsie.com> 2.15.1-cvs20060420rhughes
+- Update from CVS, new info page
 
-* Sun Nov 27 2005 Richard Hughes <richard@hughsie.com> 0.3.1-1
-- 0.3.1 Release, minor tidyups.
+* Thu Apr 17 2006 Richard Hughes <richard@hughsie.com> 2.15.1-cvs20060417rhughes
+- Update from CVS, new tango icons
 
-* Fri Oct 31 2005 Richard Hughes <richard@hughsie.com> 0.2.9.1-1
-- New spec file with dep values got from autoconf.
+* Thu Apr 06 2006 Richard Hughes <richard@hughsie.com> 2.15.0-cvs20060406rhughes
+- Update from CVS, new graph widgets
 
-* Fri Sep 02 2005 David Zeuthen <davidz@redhat.com> 0.2.3.1-1
-- Initial import based on an SRPM from Richard Hughes
-
-* Mon Jun 19 2005 Richard Hughes <richard@hughsie.com> 0.1.1-1
-- New RPM version 0.1.1
-
-* Mon Jun 18 2005 Richard Hughes <richard@hughsie.com> 0.1.0-1
-- New RPM version 0.1.0
-
-* Mon Jun 18 2005 Richard Hughes <richard@hughsie.com> 0.0.5-1
-- New RPM version 0.0.5
-
-* Mon Apr 04 2005 Richard Hughes <richard@hughsie.com> 0.0.3-1
-- initial packaging of 0.0.3
+* Thu Apr 04 2006 Richard Hughes <richard@hughsie.com> 2.15.0-cvs20060404rhughes
+- 2.15.0 Release, First public build of this new branch
