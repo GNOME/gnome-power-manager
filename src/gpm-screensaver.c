@@ -23,6 +23,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gconf/gconf-client.h>
 
@@ -53,6 +54,7 @@ struct GpmScreensaverPrivate
 	gboolean		 is_connected;	/* if we are connected to g-s */
 	gboolean		 cached_throttle; /*if we need to throttle when we connect */
 	int			 idle_delay;	/* the setting in g-s-p, cached */
+	guint32                  cookie;
 };
 
 enum {
@@ -209,7 +211,7 @@ gboolean
 gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 {
 	GError *error = NULL;
-	gboolean boolret = TRUE;
+	gboolean res;
 
 	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Cannot throttle now as gnome-screensaver not running - will cache");
@@ -221,17 +223,58 @@ gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
 	screensaver->priv->cached_throttle = FALSE;
 
 	gpm_debug ("setThrottleEnabled : %i", enable);
-	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "setThrottleEnabled", &error,
-				G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
-				G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
+
+	if (enable) {
+		char   *application;
+		char   *reason;
+		guint32 cookie;
+
+		application = g_strdup ("Power Manager");
+		reason = g_strdup (_("Display power saving is activated"));
+
+		res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+					 "Throttle",
+					 &error,
+					 G_TYPE_STRING, application,
+					 G_TYPE_STRING, reason,
+					 G_TYPE_INVALID,
+					 G_TYPE_UINT, &cookie,
+					 G_TYPE_INVALID);
+		if (res) {
+			/* save the cookie */
+			screensaver->priv->cookie = cookie;
 		}
-		gpm_debug ("gnome-screensaver service is not running.");
-		boolret = FALSE;
+
+		g_free (reason);
+		g_free (application);
+	} else {
+		res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+					 "UnThrottle",
+					 &error,
+					 G_TYPE_UINT, screensaver->priv->cookie,
+					 G_TYPE_INVALID,
+					 G_TYPE_INVALID);
+		if (res) {
+			/* clear the cookie */
+			screensaver->priv->cookie = 0;
+		}
 	}
-	if (!boolret) {
+
+	if (! res) {
+		/* try the old API */
+		res = dbus_g_proxy_call (screensaver->priv->gs_proxy, "setThrottleEnabled", &error,
+					 G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
+					 G_TYPE_INVALID);
+		if (! res) {
+			if (error) {
+				gpm_warning ("%s", error->message);
+				g_error_free (error);
+			}
+			gpm_debug ("gnome-screensaver service is not running.");
+		}
+	}
+
+	if (! res) {
 		gpm_debug ("setThrottleEnabled failed");
 		return FALSE;
 	}
