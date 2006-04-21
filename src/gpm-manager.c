@@ -1789,6 +1789,14 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 }
 
 static void
+tray_icon_destroyed (GtkObject *object, gpointer user_data)
+{
+	GpmManager *manager = user_data;
+
+	manager->priv->tray_icon = gpm_tray_icon_new ();
+}
+
+static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
@@ -1844,6 +1852,8 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
+	g_signal_connect (G_OBJECT (manager->priv->tray_icon), "destroy",
+			  G_CALLBACK (tray_icon_destroyed), manager);
 
 #if ACTIONS_MENU_ENABLED
 	gpm_manager_can_suspend (manager, &enabled, NULL);
