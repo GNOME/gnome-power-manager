@@ -424,12 +424,12 @@ battery_kind_cache_entry_free (BatteryKindCacheEntry *entry)
 }
 
 /**
- * battery_kind_to_string:
+ * gpm_power_kind_to_localised_string:
  * @battery_kind: The type of battery, e.g. GPM_POWER_KIND_PRIMARY
  * Return value: The localised battery kind. Do not free this string.
  **/
 const char *
-battery_kind_to_string (GpmPowerKind battery_kind)
+gpm_power_kind_to_localised_string (GpmPowerKind battery_kind)
 {
 	const char *str;
 
@@ -450,6 +450,33 @@ battery_kind_to_string (GpmPowerKind battery_kind)
 }
 
 /**
+ * gpm_power_kind_to_string:
+ * @battery_kind: The type of battery, e.g. GPM_POWER_KIND_PRIMARY
+ * Return value: The raw battery kind, e.g. primary. Do not free this string.
+ **/
+const char *
+gpm_power_kind_to_string (GpmPowerKind battery_kind)
+{
+	const char *str;
+
+	if (battery_kind == GPM_POWER_KIND_PRIMARY) {
+ 		str = "primary";
+	} else if (battery_kind == GPM_POWER_KIND_UPS) {
+ 		str = _("ups");
+	} else if (battery_kind == GPM_POWER_KIND_MOUSE) {
+ 		str = _("mouse");
+	} else if (battery_kind == GPM_POWER_KIND_KEYBOARD) {
+ 		str = _("keyboard");
+	} else if (battery_kind == GPM_POWER_KIND_PDA) {
+ 		str = _("pda");
+ 	} else {
+ 		str = _("unknown");
+	}
+	return str;
+}
+
+
+/**
  * battery_kind_cache_debug_print:
  * @entry: A device cache instance
  **/
@@ -458,7 +485,7 @@ battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 
 {
 	GpmPowerStatus *status = &entry->battery_status;
-	gpm_debug ("Device : %s", battery_kind_to_string (entry->battery_kind));
+	gpm_debug ("Device : %s", gpm_power_kind_to_localised_string (entry->battery_kind));
 	gpm_debug ("number     %i\tdesign     %i",
 		   g_slist_length (entry->devices), status->design_charge);
 	gpm_debug ("present    %i\tlast_full  %i",
@@ -782,12 +809,76 @@ gpm_power_get_index_from_percent (gint percent)
 }
 
 /**
- * gpm_power_get_icon_from_status:
+ * gpm_power_get_icon_for_all:
  * @device_status: The device status struct with the information
- * @kind: The batteryy kind, e.g. GPM_POWER_KIND_PRIMARY
+ * @prefix: The battery prefix, e.g. "primary"
  *
  * Because UPS and primary icons have charged, charging and discharging icons
  * we need to abstract out the logic for the filenames.
+ *
+ * Return value: The complete filename, must free using g_free.
+ **/
+static char *
+gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
+			    const char     *prefix)
+{
+	char *filename = NULL;
+	char *index = NULL;
+
+	if (! device_status->is_present) {
+		/* battery missing, use the broken icon */
+		filename = g_strdup_printf ("gpm-%s-broken", prefix);
+
+	} else if (gpm_power_battery_is_charged (device_status)) {
+		filename = g_strdup_printf ("gpm-%s-charged", prefix);
+
+	} else if (device_status->is_charging) {
+		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("gpm-%s-charging-%s", prefix, index);
+
+	} else if (device_status->is_discharging) {
+		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("gpm-%s-discharging-%s", prefix, index);
+
+	} else {
+		/* We have a broken battery, not sure what to display here */
+		gpm_debug ("BROKEN BATTERY...");
+		filename = g_strdup_printf ("gpm-%s-broken", prefix);
+	}
+	return filename;
+}
+
+/**
+ * gpm_power_get_icon_for_csr:
+ * @device_status: The device status struct with the information
+ * @prefix: The battery prefix, e.g. "mouse"
+ *
+ * CSR has different icons to UPS and primary, work them out here.
+ *
+ * Return value: The complete filename, must free using g_free.
+ **/
+static char *
+gpm_power_get_icon_for_csr (GpmPowerStatus *device_status,
+			    const char     *prefix)
+{
+	char *filename = NULL;
+	char *index = NULL;
+	if (device_status->current_charge == 0) {
+		index = "000";
+	} else {
+		index = "moo";
+	}
+	/* TODO: we need more icons for CSR */
+	filename = g_strdup_printf ("gpm-%s-power-low", prefix);
+	return filename;
+}
+
+/**
+ * gpm_power_get_icon_from_status:
+ * @device_status: The device status struct with the information
+ * @kind: The battery kind, e.g. GPM_POWER_KIND_PRIMARY
+ *
+ * Get the correct icon for the device.
  *
  * Return value: The complete filename, must free using g_free.
  **/
@@ -795,39 +886,27 @@ char *
 gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 				GpmPowerKind    kind)
 {
-	char *index;
 	char *filename = NULL;
 	const char *prefix;
 
+	/* TODO: icons need to be renamed from -battery- to -primary- */
 	if (kind == GPM_POWER_KIND_PRIMARY) {
 		prefix = "battery";
-	} else if (kind == GPM_POWER_KIND_UPS) {
-		prefix = "ups";
 	} else {
-		/* todo, we need more icons */
-		return "gpm-ups-charged";
+		prefix = gpm_power_kind_to_string (kind);
 	}
 
-	if (gpm_power_battery_is_charged (device_status)) {
-
-		filename = g_strdup_printf ("gpm-%s-charged", prefix);
-
-	} else if (device_status->is_charging) {
-
-		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-charging-%s", prefix, index);
-
-	} else if (device_status->is_discharging) {
-
-		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-discharging-%s", prefix, index);
-
+	if (kind == GPM_POWER_KIND_PRIMARY ||
+	    kind == GPM_POWER_KIND_UPS) {
+		filename = gpm_power_get_icon_for_all (device_status, prefix);
+	} else if (kind == GPM_POWER_KIND_MOUSE ||
+		   kind == GPM_POWER_KIND_KEYBOARD) {
+		filename = gpm_power_get_icon_for_csr (device_status, prefix);
 	} else {
-
-		/* We have a broken battery, not sure what to display here */
-		gpm_debug ("BROKEN BATTERY...");
-		filename = g_strdup_printf ("gpm-%s-broken", prefix);
+		/* Ummm... what to display... */
+		filename = g_strdup ("gpm-ups-broken");
 	}
+	gpm_debug ("got filename: %s", filename);
 	return filename;
 }
 
@@ -902,7 +981,7 @@ battery_kind_cache_update (GpmPower		 *power,
 		type_status->is_charging = FALSE;
 	}
 
-	gpm_debug ("%i devices of type %s", num_present, battery_kind_to_string (entry->battery_kind));
+	gpm_debug ("%i devices of type %s", num_present, gpm_power_kind_to_localised_string (entry->battery_kind));
 
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
@@ -940,7 +1019,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	}
 
 	gpm_debug ("emitting battery-status-changed : %s",
-		   battery_kind_to_string (entry->battery_kind));
+		   gpm_power_kind_to_localised_string (entry->battery_kind));
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, entry->battery_kind);
 }
 
@@ -999,11 +1078,17 @@ battery_device_cache_remove_device (GpmPower		    *power,
 	g_hash_table_remove (power->priv->battery_device_cache,
 			     entry->udi);
 	g_free (entry->udi);
+	entry->udi = NULL;
 	g_free (entry->product);
+	entry->product = NULL;
 	g_free (entry->vendor);
+	entry->vendor = NULL;
 	g_free (entry->technology);
+	entry->technology = NULL;
 	g_free (entry->serial);
+	entry->serial = NULL;
 	g_free (entry->model);
+	entry->model = NULL;
 }
 
 /**
@@ -1099,7 +1184,7 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 		return;
 	}
 
-	type_desc = battery_kind_to_string (entry->battery_kind);
+	type_desc = gpm_power_kind_to_localised_string (entry->battery_kind);
 
 	/* don't display all the extra stuff for keyboards and mice */
 	if (entry->battery_kind == GPM_POWER_KIND_MOUSE
@@ -1468,6 +1553,7 @@ remove_battery (GpmPower   *power,
 	entry = battery_device_cache_find (power,
 					   udi);
 	if (entry == NULL) {
+		gpm_warning ("trying to remove battery that is not present in db");
 		return FALSE;
 	}
 

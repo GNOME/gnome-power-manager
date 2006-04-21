@@ -1,3 +1,17 @@
+2006-04-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c (gpm_info_populate_device_information): Abstract out
+	the device blobs so that we can do each one in a nice way.
+
+	* src/gpm-power.{c|h}: Rename gpm_power_kind_to_string() to
+	gpm_power_kind_to_localised_string() and create a proper
+	gpm_power_kind_to_string() function. N.B. The icons -battery- should
+	really be renamed to -primary- for consistancy with all the other
+	parts of g-p-m. I'll do this when Jakub is finished.
+
+	* data/gpm-info.glade: Put a proper grid round the elements, and add
+	the keyboard hardware blob. Should fix #339262.
+
 2006-04-21  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-screensaver.c: (gpm_screensaver_enable_throttle):
@@ -17,7 +31,7 @@
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c (gpm_info_populate_device_information): Fix logic so
-	multi-battery code can trigger. Hopefully fixes #339262.
+	multi-battery code can trigger. Nearly fixes #339262.
 
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 

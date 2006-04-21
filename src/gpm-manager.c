@@ -1671,7 +1671,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 	manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
 
 	if (! battery_status->is_discharging) {
-		gpm_debug ("%s is not discharging", battery_kind_to_string (battery_kind));
+		gpm_debug ("%s is not discharging", gpm_power_kind_to_localised_string (battery_kind));
 		return;
 	}
 
@@ -1799,7 +1799,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 	}
 
 	if (! battery_status->is_discharging) {
-		gpm_debug ("%s is not discharging", battery_kind_to_string(battery_kind));
+		gpm_debug ("%s is not discharging", gpm_power_kind_to_localised_string(battery_kind));
 		return;
 	}
 
@@ -1853,7 +1853,7 @@ battery_status_changed_ups (GpmManager		   *manager,
 	/* Always check if we already notified the user */
 	if (warning_type > manager->priv->last_ups_warning) {
 		manager->priv->last_ups_warning = warning_type;
-		name = battery_kind_to_string (battery_kind);
+		name = gpm_power_kind_to_localised_string (battery_kind);
 
 		title = battery_low_get_title (warning_type);
 		remaining = gpm_get_timestring (battery_status->remaining_time);
@@ -1939,7 +1939,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	}
 
 	manager->priv->last_ups_warning = warning_type;
-	name = battery_kind_to_string (battery_kind);
+	name = gpm_power_kind_to_localised_string (battery_kind);
 
 	title = battery_low_get_title (warning_type);
 

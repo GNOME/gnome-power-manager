@@ -120,7 +120,8 @@ GString		*gpm_power_status_for_device		(GpmPowerDevice *device);
 GString		*gpm_power_status_for_device_more	(GpmPowerDevice *device);
 void		 gpm_power_update_all			(GpmPower	*power);
 gboolean	 gpm_power_battery_is_charged		(GpmPowerStatus *status);
-const char 	*battery_kind_to_string			(GpmPowerKind	 battery_kind);
+const char 	*gpm_power_kind_to_localised_string	(GpmPowerKind	 battery_kind);
+const char 	*gpm_power_kind_to_string		(GpmPowerKind	 battery_kind);
 char		*gpm_power_get_icon_from_status		(GpmPowerStatus *device_status,
 							 GpmPowerKind    kind);
 

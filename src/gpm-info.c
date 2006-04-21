@@ -122,8 +122,63 @@ gpm_info_graph_update (GList *data, GtkWidget *widget, GList *events)
 /**
  * gpm_info_populate_device_information:
  * @info: This info class instance
+ * @kind: the hardware battery kind, e.g. GPM_POWER_KIND_PRIMARY
+ * @id: The number in the hardware database.
  *
- * Populate the 4 possible treeviews, depending on the hardware we have
+ * Populate the a specific device. Note, only 2 devices per class are supported
+ * for primary, and one for the others.
+ **/
+static void
+gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
+{
+	GtkWidget	*widget;
+	GString		*desc;
+	GpmPowerDevice	*device = NULL;
+	char		*icon_name;
+	const char	*prefix = NULL;
+	char		 widgetname[128];
+
+	prefix = gpm_power_kind_to_string (kind);
+
+	/* set icon name */
+	g_sprintf (widgetname, "image_%s%i", prefix, id);
+	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	device = gpm_power_get_battery_device_entry (info->priv->power, kind, id);
+	icon_name = gpm_power_get_icon_from_status (&device->battery_status, kind);
+	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_DIALOG);
+	g_free (icon_name);
+	gtk_widget_show (GTK_WIDGET (widget));
+
+	/* set info */
+	g_sprintf (widgetname, "label_%s%i", prefix, id);
+	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	desc = gpm_power_status_for_device (device);
+	gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+	g_string_free (desc, TRUE);
+	gtk_widget_show (GTK_WIDGET (widget));
+
+	/* set more */
+	g_sprintf (widgetname, "expander_%s%i", prefix, id);
+	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	if (device->battery_status.is_present) {
+		/* only show expander is battery is present */
+		gtk_widget_show (GTK_WIDGET (widget));
+		g_sprintf (widgetname, "label_%s%i_more", prefix, id);
+		widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+		desc = gpm_power_status_for_device_more (device);
+		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
+		g_string_free (desc, TRUE);
+		gtk_widget_show (GTK_WIDGET (widget));
+	} else {
+		gtk_widget_hide (GTK_WIDGET (widget));
+	}
+}
+
+/**
+ * gpm_info_populate_device_information:
+ * @info: This info class instance
+ *
+ * Populate the 4 possible devices, depending on the hardware we have
  * available on our system.
  **/
 static void
@@ -134,9 +189,6 @@ gpm_info_populate_device_information (GpmInfo *info)
 
 	int	   number;
 	GtkWidget *widget;
-	GString	  *desc;
-	GpmPowerDevice *device = NULL;
-	char	  *icon_name;
 
 	/* Laptop battery section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
@@ -144,64 +196,10 @@ gpm_info_populate_device_information (GpmInfo *info)
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary");
 		gtk_widget_show (GTK_WIDGET (widget));
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_primary0");
-		gtk_widget_show (GTK_WIDGET (widget));
-		widget = glade_xml_get_widget (info->priv->glade_xml, "image_primary0");
-
-		/* set icon name */
-		device = gpm_power_get_battery_device_entry (info->priv->power,
-							     GPM_POWER_KIND_PRIMARY, 0);
-		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
-							    GPM_POWER_KIND_PRIMARY);
-		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
-					      icon_name,
-					      GTK_ICON_SIZE_DIALOG);
-		g_free (icon_name);
-		gtk_widget_show (GTK_WIDGET (widget));
-		
-		/* set info */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary0");
-		desc = gpm_power_status_for_device (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set more */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary0_more");
-		desc = gpm_power_status_for_device_more (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-
+		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_PRIMARY, 0);
 	}
 	if (number > 1) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_primary1");
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set icon name */
-		device = gpm_power_get_battery_device_entry (info->priv->power,
-							     GPM_POWER_KIND_PRIMARY, 1);
-		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
-							    GPM_POWER_KIND_PRIMARY);
-		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
-					      icon_name,
-					      GTK_ICON_SIZE_DIALOG);
-		g_free (icon_name);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set info */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary1");
-		desc = gpm_power_status_for_device (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set more */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_primary1_more");
-		desc = gpm_power_status_for_device_more (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
+		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_PRIMARY, 1);
 	}
 
 	/* UPS section */
@@ -210,33 +208,7 @@ gpm_info_populate_device_information (GpmInfo *info)
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_ups");
 		gtk_widget_show (GTK_WIDGET (widget));
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_ups");
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set icon name */
-		device = gpm_power_get_battery_device_entry (info->priv->power,
-							     GPM_POWER_KIND_UPS, 0);
-		icon_name = gpm_power_get_icon_from_status (&device->battery_status,
-							    GPM_POWER_KIND_UPS);
-		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
-					      icon_name,
-					      GTK_ICON_SIZE_DIALOG);
-		g_free (icon_name);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set info */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_ups");
-		desc = gpm_power_status_for_device (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set more */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_ups_more");
-		desc = gpm_power_status_for_device_more (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
+		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_UPS, 0);
 	}
 
 	/* Misc section */
@@ -245,31 +217,14 @@ gpm_info_populate_device_information (GpmInfo *info)
 	if (number > 0) {
 		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
 		gtk_widget_show (GTK_WIDGET (widget));
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_mouse");
+		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_MOUSE, 0);
+	}
+	number = gpm_power_get_num_devices_of_kind (info->priv->power,
+						    GPM_POWER_KIND_KEYBOARD);
+	if (number > 0) {
+		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
 		gtk_widget_show (GTK_WIDGET (widget));
-		widget = glade_xml_get_widget (info->priv->glade_xml, "image_mouse");
-
-		/* set icon name */
-		device = gpm_power_get_battery_device_entry (info->priv->power,
-							     GPM_POWER_KIND_MOUSE, 0);
-		gtk_image_set_from_icon_name (GTK_IMAGE (widget),
-					      "gpm-mouse-power-low",
-					      GTK_ICON_SIZE_DIALOG);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set info */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_mouse");
-		desc = gpm_power_status_for_device (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-
-		/* set more */
-		widget = glade_xml_get_widget (info->priv->glade_xml, "label_mouse_more");
-		desc = gpm_power_status_for_device_more (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
+		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_KEYBOARD, 0);
 	}
 }
 
