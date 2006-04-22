@@ -8,7 +8,7 @@ AM_CONFIG_HEADER(config.h)
 AC_PROG_CC
 AC_PROG_INSTALL
 AM_PROG_LIBTOOL
-AC_PROG_INTLTOOL([0.27.2])
+IT_PROG_INTLTOOL([0.34.90])
 
 GNOME_COMPILE_WARNINGS
 GNOME_DOC_INIT
@@ -27,15 +27,12 @@ CPPFLAGS="$CPPFLAGS -g"
 CPPFLAGS="$CPPFLAGS -fexceptions"
 
 dnl ---------------------------------------------------------------------------
-dnl - Supported languages
+dnl - gettext stuff
 dnl ---------------------------------------------------------------------------
 GETTEXT_PACKAGE=AC_PACKAGE_NAME
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE(GETTEXT_PACKAGE, "AC_PACKAGE_NAME", [foo])
 
-dnl Add the languages here.
-ALL_LINGUAS="bg ca cs de el en_CA en_GB es fi fr gl gu hu it ja ka lt mk nb nl pa pl pt_BR ru sk sr sr@Latn sv th uk vi zh_CN zh_HK zh_TW"
-AC_SUBST(ALL_LINGUAS)
 AM_GLIB_GNU_GETTEXT
 
 dnl ---------------------------------------------------------------------------
