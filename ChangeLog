@@ -1,3 +1,17 @@
+2006-04-22  Richard Hughes  <richard@hughsie.com>
+
+	* docs/icon-scheme.txt: Add this file describing the logic an rationale
+	of the new icon naming scheme.
+
+	* data/icons/*/*: Rename the icons to the common syntax so we can get
+	rid of some of the bodges in the source, and make everything logical.
+	Also add the extra CSR icons, although they are still the low power
+	icon and need to be updated.
+
+	* src/gpm-tray-icon.c, src/gpm-stock-icons.h, src/gpm-manager.c,
+	src/gpm-power.c: Update the source and get rid of the nasty bodges and
+	hardcoded constants for the icons.
+
 2006-04-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-inhibit.{c|h} (gpm_inhibit_generate_cookie): Make sure the

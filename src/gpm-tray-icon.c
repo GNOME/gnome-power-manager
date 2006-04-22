@@ -131,7 +131,6 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 		GtkAction *action;
 
 		icon->priv->can_suspend = enabled;
-
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TraySuspend");
 		gtk_action_set_visible (GTK_ACTION (action),
@@ -154,7 +153,6 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 		GtkAction *action;
 
 		icon->priv->can_hibernate = enabled;
-
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TrayHibernate");
 		gtk_action_set_visible (GTK_ACTION (action),
@@ -436,18 +434,15 @@ static void
 gpm_tray_icon_sync_actions (GpmTrayIcon *icon)
 {
 	GtkAction *action;
-
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
 	if (icon->priv->actiongroup != NULL) {
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TraySuspend");
-
 		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_suspend);
 
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TrayHibernate");
-
 		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_hibernate);
 	}
 }
@@ -698,10 +693,8 @@ libnotify_event (GpmTrayIcon    *icon,
 	if (icon->priv->is_visible) {
 		point = icon->priv->image;
 	}
-	icon->priv->notify = notify_notification_new (title,
-						      content,
-						      msgicon,
-						      point);
+	icon->priv->notify = notify_notification_new (title, content,
+						      msgicon, point);
 
 	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
 
@@ -799,13 +792,7 @@ gpm_tray_icon_notify (GpmTrayIcon	*icon,
 	}
 
 	gpm_debug ("doing notify: %s", title);
-
-	libnotify_event (icon,
-			 title,
-			 content,
-			 timeout,
-			 msgicon,
-			 urgency);
+	libnotify_event (icon, title, content, timeout, msgicon, urgency);
 }
 
 /**

@@ -370,11 +370,11 @@ get_stock_id (GpmManager *manager,
 
 	} else if (status_mouse.is_present &&
 		   status_mouse.percentage_charge < manager->priv->low_percentage) {
-		return g_strdup_printf (GPM_STOCK_MOUSE_LOW);
+		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_MOUSE);
 
 	} else if (status_keyboard.is_present &&
 		   status_keyboard.percentage_charge < manager->priv->low_percentage) {
-		return g_strdup_printf (GPM_STOCK_KEYBOARD_LOW);
+		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_KEYBOARD);
 	}
 
 	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
@@ -1630,10 +1630,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 {
 	GpmWarning  warning_type;
 	gboolean    show_notify;
-	char	*message = NULL;
-	char	*remaining = NULL;
+	char	   *message = NULL;
+	char	   *remaining = NULL;
 	const char *title = NULL;
 	gboolean    on_ac;
+	const char *icon;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -1721,11 +1722,12 @@ battery_status_changed_primary (GpmManager	      *manager,
 		}
 
 		if (warning) {
+			icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      _("Critical action"),
 					      warning,
 					      GPM_NOTIFY_TIMEOUT_LONG,
-					      GPM_STOCK_BATTERY_CRITICAL,
+					      icon,
 					      GPM_NOTIFY_URGENCY_CRITICAL);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
@@ -1783,15 +1785,16 @@ battery_status_changed_primary (GpmManager	      *manager,
  * At the moment we only notify, but we should put some shutdown handlers in.
  **/
 static void
-battery_status_changed_ups (GpmManager		   *manager,
-			    GpmPowerKind	    battery_kind,
-			    GpmPowerStatus  *battery_status)
+battery_status_changed_ups (GpmManager	   *manager,
+			    GpmPowerKind    battery_kind,
+			    GpmPowerStatus *battery_status)
 {
 	GpmWarning warning_type;
 	char *message = NULL;
 	char *remaining = NULL;
 	const char *title = NULL;
 	const char *name;
+	const char *icon;
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
@@ -1839,11 +1842,12 @@ battery_status_changed_ups (GpmManager		   *manager,
 		}
 
 		if (warning) {
+			icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      _("Critical action"),
 					      warning,
 					      GPM_NOTIFY_TIMEOUT_LONG,
-					      GPM_STOCK_BATTERY_CRITICAL,
+					      icon,
 					      GPM_NOTIFY_URGENCY_CRITICAL);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the UPS");
@@ -1869,11 +1873,12 @@ battery_status_changed_ups (GpmManager		   *manager,
 						     "avoid losing data."),
 						   remaining, battery_status->percentage_charge);
 		}
+		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title,
 				      message,
 				      GPM_NOTIFY_TIMEOUT_LONG,
-				      GPM_STOCK_UPS_CRITICAL,
+				      icon,
 				      GPM_NOTIFY_URGENCY_CRITICAL);
 
 		g_free (remaining);
@@ -1900,6 +1905,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	char *message = NULL;
 	const char *title = NULL;
 	const char *name;
+	const char *icon;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
 	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
@@ -1949,11 +1955,12 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 				     "if not charged."),
 				   name, battery_status->percentage_charge);
 
+	icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 			      title,
 			      message,
 			      GPM_NOTIFY_TIMEOUT_LONG,
-			      GPM_STOCK_MOUSE_LOW,
+			      icon,
 			      GPM_NOTIFY_URGENCY_NORMAL);
 
 	g_free (message);

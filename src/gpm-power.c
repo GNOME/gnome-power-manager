@@ -811,7 +811,7 @@ gpm_power_get_index_from_percent (gint percent)
 /**
  * gpm_power_get_icon_for_all:
  * @device_status: The device status struct with the information
- * @prefix: The battery prefix, e.g. "primary"
+ * @prefix: The battery prefix, e.g. "primary" or "ups"
  *
  * Because UPS and primary icons have charged, charging and discharging icons
  * we need to abstract out the logic for the filenames.
@@ -834,16 +834,16 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 
 	} else if (device_status->is_charging) {
 		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-charging-%s", prefix, index);
+		filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index);
 
 	} else if (device_status->is_discharging) {
 		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-discharging-%s", prefix, index);
+		filename = g_strdup_printf ("gpm-%s-%s", prefix, index);
 
 	} else {
 		/* We have a broken battery, not sure what to display here */
-		gpm_debug ("BROKEN BATTERY...");
-		filename = g_strdup_printf ("gpm-%s-broken", prefix);
+		gpm_debug ("Broken or missing battery...");
+		filename = g_strdup_printf ("gpm-%s-missing", prefix);
 	}
 	return filename;
 }
@@ -851,7 +851,7 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 /**
  * gpm_power_get_icon_for_csr:
  * @device_status: The device status struct with the information
- * @prefix: The battery prefix, e.g. "mouse"
+ * @prefix: The battery prefix, e.g. "mouse" or "keyboard"
  *
  * CSR has different icons to UPS and primary, work them out here.
  *
@@ -861,15 +861,19 @@ static char *
 gpm_power_get_icon_for_csr (GpmPowerStatus *device_status,
 			    const char     *prefix)
 {
-	char *filename = NULL;
-	char *index = NULL;
-	if (device_status->current_charge == 0) {
+	char *filename;
+	char *index;
+
+	if (device_status->current_charge < 2) {
 		index = "000";
+	} else if (device_status->current_charge < 4) {
+		index = "030";
+	} else if (device_status->current_charge < 6) {
+		index = "060";
 	} else {
-		index = "moo";
+		index = "100";
 	}
-	/* TODO: we need more icons for CSR */
-	filename = g_strdup_printf ("gpm-%s-power-low", prefix);
+	filename = g_strdup_printf ("gpm-%s-%s", prefix, index);
 	return filename;
 }
 
@@ -886,15 +890,11 @@ char *
 gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 				GpmPowerKind    kind)
 {
-	char *filename = NULL;
+	char	   *filename = NULL;
 	const char *prefix;
 
 	/* TODO: icons need to be renamed from -battery- to -primary- */
-	if (kind == GPM_POWER_KIND_PRIMARY) {
-		prefix = "battery";
-	} else {
-		prefix = gpm_power_kind_to_string (kind);
-	}
+	prefix = gpm_power_kind_to_string (kind);
 
 	if (kind == GPM_POWER_KIND_PRIMARY ||
 	    kind == GPM_POWER_KIND_UPS) {
@@ -904,7 +904,7 @@ gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 		filename = gpm_power_get_icon_for_csr (device_status, prefix);
 	} else {
 		/* Ummm... what to display... */
-		filename = g_strdup ("gpm-ups-broken");
+		filename = g_strdup ("gpm-ups-missing");
 	}
 	gpm_debug ("got filename: %s", filename);
 	return filename;
