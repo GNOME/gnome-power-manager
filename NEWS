@@ -1,4 +1,63 @@
 ==============
+Version 2.15.1
+==============
+
+Released April 23, 2006
+
+General
+
+ - Update screenshots and add lots of documenation.
+ - Switch icons to using the Tango style (Jakub Steiner). #331761
+ - Update for new throttle API for gnome-screensaver. Also provide a fallback
+   to the old API for now. #339209 (William Jon McCann)
+ - Respond correctly to systray crashing by reloading the icon to the tray when
+   destroyed. (Rodrigo Moya)
+ - Fix up the spec file #339263 (Paul Ionescu)
+ - Gnome Goal #2 PoLinguas (Jaap Haitsma)
+
+Power Manager
+
+ - Enable the legend only when we get a power event.
+ - Only re-enable the fully charged notification when the battery drops down
+   to 95% as some batteries charge to 100% and then fluctuate from ~98% to
+   100%. #338281
+ - Error alerts should use an OK button. #336997
+ - Monitor some more gconf keys so we don't have to restart to get the new
+   settings. #338628
+ - Fix where the primary batteries are listed in the reverse order. #338634
+ - Check that we do not set a higher brightness when we try to lower the
+   brightness on idle. #338630.
+ - Set libnotify point to the center of the icon. #338638
+ - Set the default for the icon policy to only display if batteries are
+   present so we don't display by default on desktops. rh:187140.
+ - Make sure the inhibit cookie we generate is really unique. #339307.
+
+Power Preferences
+
+ - Add the action "Do nothing" so we don't have to do the DPMS action off for
+   the external monitor. #338689
+ - Fix the notebook tabs on desktop system, so we don't hide "General".
+
+Power Info
+
+ - Added an event log tab, and make the event code more robust.
+ - Adding code so that the graphs can start at non-zero.
+ - Use the new info page showing a simpler view of hardware.
+ - Put a proper grid round the elements. #339262
+
+Translators
+
+ - Žygimantas Beručka (Lithuanian)
+ - Wouter Bolsterlee (Netherlands)
+ - Daniel Nylander (Swedish)
+ - Funda Wang (Simplified Chinese)
+ - Ilkka Tuohela (Finnish)
+ - Francisco Javier F. Serrador (Spanish)
+ - Hendrik Richter (German)
+ - Clytie Siddall (Vietnamese)
+ - Kostas Papadimas (Greek)
+
+==============
 Version 2.15.0
 ==============
 
