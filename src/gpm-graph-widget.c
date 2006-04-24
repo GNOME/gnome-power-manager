@@ -94,6 +94,8 @@ gpm_graph_event_description (GpmGraphEvent event)
 		return _("Lid closed");
 	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
 		return _("Lid opened");
+	} else if (event == GPM_GRAPH_EVENT_NOTIFICATION) {
+		return _("Notification");
 	} else {
 		return _("Unknown event!");
 	}
@@ -129,6 +131,8 @@ gpm_graph_event_colour (GpmGraphEvent event)
 		return GPM_GRAPH_COLOUR_GREEN;
 	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
 		return GPM_GRAPH_COLOUR_DARK_GREEN;
+	} else if (event == GPM_GRAPH_EVENT_NOTIFICATION) {
+		return GPM_GRAPH_COLOUR_GREY;
 	} else {
 		return GPM_GRAPH_COLOUR_DEFAULT;
 	}
@@ -612,6 +616,8 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 		cairo_set_source_rgb (cr, 1, 1, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_CYAN) {
 		cairo_set_source_rgb (cr, 0, 1, 1);
+	} else if (colour == GPM_GRAPH_COLOUR_GREY) {
+		cairo_set_source_rgb (cr, 0.8, 0.8, 0.8);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
@@ -624,6 +630,8 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
 	} else if (colour == GPM_GRAPH_COLOUR_DARK_CYAN) {
 		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
+	} else if (colour == GPM_GRAPH_COLOUR_DARK_GREY) {
+		cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
 	} else {
 		gpm_critical_error ("Unknown colour!");
 	}

@@ -625,7 +625,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gboolean do_lock;
 	gboolean ret = TRUE;
 
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF, NULL);
 
 	do_lock = gpm_manager_get_lock_policy (manager,
 					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
@@ -659,7 +659,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	gboolean  ret = TRUE;
 	GError   *error;
 
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_ON);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_ON, NULL);
 	error = NULL;
 	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
@@ -947,9 +947,9 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Hibernating computer");
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_HIBERNATE);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_HIBERNATE, NULL);
 	ret = gpm_hal_hibernate ();
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME, NULL);
 
 	/* we need to refresh all the power caches */
 	gpm_power_update_all (manager->priv->power);
@@ -964,12 +964,15 @@ gpm_manager_hibernate (GpmManager *manager,
 			message = g_strdup_printf (_("HAL failed to %s. "
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("hibernate"), GPM_FAQ_URL);
+			const char *title = _("Hibernate Problem");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      _("Hibernate Problem"),
+					      title,
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
 					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION, title);
 			g_free (message);
 		}
 	}
@@ -1026,15 +1029,16 @@ gpm_manager_suspend (GpmManager *manager,
 
 	/* FIXME: make this async? */
 	gpm_manager_log_reason (manager, "Suspending computer");
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SUSPEND);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SUSPEND, NULL);
 	ret = gpm_hal_suspend (0);
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_RESUME, NULL);
 
 	/* we need to refresh all the power caches */
 	gpm_power_update_all (manager->priv->power);
 
 	if (! ret) {
 		char *message;
+		const char *title;
 		gboolean show_notify;
 		/* We only show the HAL failed notification if set in gconf */
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
@@ -1043,12 +1047,16 @@ gpm_manager_suspend (GpmManager *manager,
 			message = g_strdup_printf (_("Your computer failed to %s.\n"
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("suspend"), GPM_FAQ_URL);
+			title = _("Suspend Problem");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      _("Suspend Problem"),
+					      title,
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
 					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
 			g_free (message);
 		}
 	}
@@ -1149,7 +1157,9 @@ idle_changed_cb (GpmIdle    *idle,
 							GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* resume to the previous brightness */
-			gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SCREEN_RESUME);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_SCREEN_RESUME,
+					    _("Idle mode ended"));
 			gpm_brightness_level_resume (manager->priv->brightness);
 		}
 
@@ -1186,7 +1196,9 @@ idle_changed_cb (GpmIdle    *idle,
 				dim_br = current_br;
 			}
 			/* Save this brightness and dim the screen, fixes #328564 */
-			gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_SCREEN_DIM);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_SCREEN_DIM,
+					    _("Idle mode started"));
 			gpm_brightness_level_save (manager->priv->brightness, dim_br);
 		}
 
@@ -1351,9 +1363,9 @@ lid_button_pressed (GpmManager	 *manager,
 
 	gpm_debug ("lid button changed: %d", state);
 	if (state) {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_CLOSED);
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_CLOSED, NULL);
 	} else {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_OPENED);
+		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_OPENED, NULL);
 	}
 
 	/* We keep track of the lid state so we can do the
@@ -1487,14 +1499,18 @@ power_on_ac_changed_cb (GpmPower   *power,
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 	if (on_ac) {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_ON_AC);
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_ON_AC,
+				    "AC adapter inserted");
 	} else {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_ON_BATTERY);
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_ON_BATTERY,
+				    "AC adapter removed");
 	}
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	if (! on_ac && manager->priv->lid_is_closed) {
+	if ( (! on_ac) && manager->priv->lid_is_closed) {
 		gpm_debug ("Doing battery policy when lid closed and power removed");
 		gpm_manager_set_reason (manager, "the lid has been closed, and the ac adapter removed");
 		manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
@@ -1653,12 +1669,17 @@ battery_status_changed_primary (GpmManager	      *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 		if (show_notify) {
+			const char *message = _("Your battery is now fully charged");
+			const char *title = _("Battery Charged");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      _("Battery Charged"),
-					      _("Your battery is now fully charged"),
+					      title,
+					      message,
 					      GPM_NOTIFY_TIMEOUT_SHORT,
 					      GPM_STOCK_BATTERY_CHARGED,
 					      GPM_NOTIFY_URGENCY_LOW);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
 		}
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
@@ -1723,12 +1744,16 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		if (warning) {
 			icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
+			const char *title = _("Critical action");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      _("Critical action"),
+					      title,
 					      warning,
 					      GPM_NOTIFY_TIMEOUT_LONG,
 					      icon,
 					      GPM_NOTIFY_URGENCY_CRITICAL);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
 		/* wait 10 seconds for user-panic */
@@ -1767,6 +1792,9 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      timeout,
 					      GTK_STOCK_DIALOG_INFO,
 					      GPM_NOTIFY_URGENCY_NORMAL);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
 			g_free (message);
 		}
 		g_free (remaining);
@@ -1843,12 +1871,16 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 		if (warning) {
 			icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
+			const char *title = _("Critical action");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      _("Critical action"),
+					      title,
 					      warning,
 					      GPM_NOTIFY_TIMEOUT_LONG,
 					      icon,
 					      GPM_NOTIFY_URGENCY_CRITICAL);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
 		}
 		gpm_manager_set_reason (manager, "we are critically low for the UPS");
 		manager_policy_do (manager, GPM_PREF_UPS_CRITICAL);
@@ -1881,6 +1913,9 @@ battery_status_changed_ups (GpmManager	   *manager,
 				      icon,
 				      GPM_NOTIFY_URGENCY_CRITICAL);
 
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_NOTIFICATION,
+				    title);
 		g_free (remaining);
 		g_free (message);
 	}
@@ -1962,6 +1997,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      GPM_NOTIFY_TIMEOUT_LONG,
 			      icon,
 			      GPM_NOTIFY_URGENCY_NORMAL);
+	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_NOTIFICATION, title);
 
 	g_free (message);
 }

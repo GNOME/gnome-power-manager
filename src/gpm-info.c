@@ -249,6 +249,11 @@ gpm_info_create_event_viewer_tree (GtkWidget *widget)
 	column = gtk_tree_view_column_new_with_attributes (_("Event"), renderer, "text", 1, NULL);
 	gtk_tree_view_column_set_sort_column_id (column, 1);
 	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
+	gtk_tree_view_column_set_min_width (column, 100);
+
+	column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer, "text", 2, NULL);
+	gtk_tree_view_column_set_sort_column_id (column, 2);
+	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
 	gtk_tree_view_column_set_min_width (column, 200);
 
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
@@ -289,7 +294,7 @@ gpm_info_update_event_tree (GpmInfo *info)
 	const char *descstring;
 	GtkListStore *store;
 	GtkTreeIter   iter;
-	store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
 	GpmInfoDataPoint *new;
 	GList *l;
@@ -301,7 +306,10 @@ gpm_info_update_event_tree (GpmInfo *info)
 		gpm_debug ("event log: %s: %s", timestring, descstring);
 		/* add data to the list store */
 		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, 0, timestring, 1, descstring, -1);
+		gtk_list_store_set (store, &iter,
+				    0, timestring,
+				    1, descstring,
+				    2, new->desc, -1);
 		g_free (timestring);
 	}
 
@@ -535,11 +543,12 @@ gpm_info_show_window (GpmInfo *info)
  * gpm_info_event_log
  * @info: This info class instance
  * @event: The event description, e.g. "Application started"
+ * @desc: A more detailed description, or NULL is none required.
  *
  * Adds an point to the event log
  **/
 void
-gpm_info_event_log (GpmInfo *info, GpmGraphEvent event)
+gpm_info_event_log (GpmInfo *info, GpmGraphEvent event, const char *desc)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
@@ -548,7 +557,8 @@ gpm_info_event_log (GpmInfo *info, GpmGraphEvent event)
 	gpm_info_data_add_always (info->priv->events,
 				  time (NULL) - info->priv->start_time,
 				  event,
-				  gpm_graph_event_colour (event));
+				  gpm_graph_event_colour (event),
+				  desc);
 	if (info->priv->main_window) {
 		/* do this only if the main window is loaded */
 		gpm_info_update_event_tree (info);

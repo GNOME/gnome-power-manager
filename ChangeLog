@@ -1,3 +1,18 @@
+2006-04-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (power_on_ac_changed_cb): Fix an operator
+	precedence problem where the logic was all messed up.
+	This was triggering the not-on-ac lid-closed behavior and causing
+	seemingly random suspends. Big thanks to Koichi Takahashi for spotting
+	the problem.
+
+	* src/gpm-graph-widget.{c|h}: Add the new notification event type.
+
+	* src/gpm-info-data.{c|h}, src/gpm-info.{c|h}: Add descriptions to the
+	events so we can capture more data about events and key points.
+
+	* src/gpm-manager.c: Add the extra descriptions where required.
+
 2006-04-23  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.15.2

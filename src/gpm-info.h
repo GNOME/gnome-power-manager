@@ -55,7 +55,8 @@ void		 gpm_info_set_power			(GpmInfo	*info,
 							 GpmPower	*power);
 void		 gpm_info_show_window			(GpmInfo	*info);
 void		 gpm_info_event_log			(GpmInfo	*info,
-							 GpmGraphEvent	 event);
+							 GpmGraphEvent	 event,
+							 const char	*desc);
 
 G_END_DECLS
 

@@ -77,7 +77,8 @@ void
 gpm_info_data_add_always (GpmInfoData *info_data,
 			  int	       time,
 			  int	       value,
-			  int	       colour)
+			  int	       colour,
+			  const char  *desc)
 {
 	GpmInfoDataPoint *new;
 
@@ -89,9 +90,28 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	new->time = time;
 	new->value = value;
 	new->colour = colour;
+	if (desc) {
+		new->desc = g_strdup (desc);
+	} else {
+		new->desc = NULL;
+	}
 	info_data->priv->list = g_list_append (info_data->priv->list, (gpointer) new);
 	info_data->priv->length++;
 	info_data->priv->last_point = new;
+}
+
+/**
+ * gpm_info_data_free_point:
+ * @point: A data point we want to free
+ **/
+static void
+gpm_info_data_free_point (GpmInfoDataPoint *point)
+{
+	/* we need to free the desc data if non-NULL */
+	if (point->desc) {
+		g_free (point->desc);
+	}
+	g_slice_free (GpmInfoDataPoint, point);
 }
 
 /**
@@ -133,7 +153,7 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
 			a = a + div;
 		} else {
 			/* removing point */
-			g_slice_free (GpmInfoDataPoint, point);
+			gpm_info_data_free_point (point);
 		}
 	}
 	/* freeing old list */
@@ -170,7 +190,7 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
 		if (count == 3) {
 			list = l->prev;
 			/* we need to free the data */
-			g_slice_free (GpmInfoDataPoint, l->data);
+			gpm_info_data_free_point (l->data);
 			l->data = NULL;
 			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
 			l = list;
@@ -218,7 +238,7 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
 		} else {
 			list = l->prev;
 			/* remove link and point */
-			g_slice_free (GpmInfoDataPoint, l->data);
+			gpm_info_data_free_point (l->data);
 			l->data = NULL;
 			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
 			l = list;
@@ -258,17 +278,17 @@ gpm_info_data_add (GpmInfoData *info_data,
 			info_data->priv->last_point->time = time;
 		} else {
 			/* we have to add a new data point as value is different */
-			gpm_info_data_add_always (info_data, time, value, colour);
+			gpm_info_data_add_always (info_data, time, value, colour, NULL);
 			if (value == 0) {
 				/* if the rate suddenly drops we want a line
 				   going down, then across, not a diagonal line.
 				   Add an extra point so that we extend it horiz. */
-				gpm_info_data_add_always (info_data, time, value, colour);
+				gpm_info_data_add_always (info_data, time, value, colour, NULL);
 			}
 		}
 	} else {
 		/* a new list requires a data point */
-		gpm_info_data_add_always (info_data, time, value, colour);
+		gpm_info_data_add_always (info_data, time, value, colour, NULL);
 	}
 	if (info_data->priv->length > GPM_INFO_DATA_MAX_POINTS) {
 		/* We have too much data, simplify */
@@ -338,7 +358,7 @@ gpm_info_data_finalize (GObject *object)
 	/* Free the graph data elements, the list, and also the graph data object */
 	GList *l;
 	for (l=info_data->priv->list; l != NULL; l=l->next) {
-		g_slice_free (GpmInfoDataPoint, l->data);
+		gpm_info_data_free_point (l->data);
 		l->data = NULL;
 	}
 	g_list_free (info_data->priv->list);
