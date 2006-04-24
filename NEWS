@@ -1,4 +1,27 @@
 ==============
+Version 2.14.2
+==============
+
+Released April 24, 2006
+
+Power Manager
+
+ - Fix an operator precedence problem where the logic was all messed up.
+   This was triggering the not-on-ac lid-closed behavior and causing seemingly
+   random suspends. (Koichi Takahashi)
+ - Respond correctly to systray crashing by reloading the icon to the tray when
+   destroyed. (Rodrigo Moya)
+ - Only re-enable the fully charged notification when the battery drops down
+   to 95% as some batteries charge to 100% and then fluctuate from ~98% to
+   100%. #338281
+
+Translators
+
+ - Wouter Bolsterlee (Netherlands)
+ - Nikos Charonitakis (Greek)
+ - Hendrik Richter (German)
+
+==============
 Version 2.14.1
 ==============
 
