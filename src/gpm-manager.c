@@ -1117,11 +1117,20 @@ lid_button_pressed (GpmManager	 *manager,
 {
 	gboolean  on_ac;
 
+	if (manager->priv->lid_is_closed == state) {
+		gpm_debug ("duplicate lid change event");
+		return;
+	}
+
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	gpm_debug ("lid button changed: %d", state);
+	if (state) {
+		gpm_debug ("lid button CLOSED");
+	} else {
+		gpm_debug ("lid button OPENED");
+	}
 
-	/* We keep track of the lid state so we can do the 
+	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
 	manager->priv->lid_is_closed = state;

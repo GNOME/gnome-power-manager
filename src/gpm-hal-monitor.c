@@ -151,6 +151,51 @@ monitor_change_on_ac (GpmHalMonitor *monitor,
 	g_signal_emit (monitor, signals [AC_POWER_CHANGED], 0, on_ac);
 }
 
+/** Use when we want to emit a ButtonPressed event and we know the udi
+ *
+ *  @param	monitor		This monitor instance
+ *  @param	udi		The HAL UDI
+ *  @param	details		The event details, or "" for unknown or invalid
+ *				NOTE: details cannot be NULL
+ *
+ * We can get two different types of ButtonPressed condition
+ *   1. The old acpi hardware buttons
+ *      udi="acpi_foo", details="";
+ *      button.type="power"
+ *   2. The new keyboard buttons
+ *      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
+ *      button.type=""
+ */
+static void
+emit_button_pressed (GpmHalMonitor *monitor,
+		     const char	   *udi,
+		     const char	   *details)
+{
+	char	   *button_name = NULL;
+	gboolean    value;
+
+	if (strcmp (details, "") == 0) {
+		/* no details about the event, so we get more info
+		   for type 1 buttons */
+		gpm_hal_device_get_string (udi, "button.type", &button_name);
+	} else {
+		button_name = g_strdup (details);
+	}
+
+	/* Buttons without state should default to true. */
+	value = TRUE;
+	/* we need to get the button state for lid buttons */
+	if (strcmp (button_name, "lid") == 0) {
+		gpm_hal_device_get_bool (udi, "button.state.value", &value);
+	}
+
+	/* we now emit all buttons, even the ones we don't know */
+	gpm_debug ("emitting button-pressed : %s (%i)", button_name, value);
+	g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, button_name, value);
+
+	g_free (button_name);
+}
+
 /** Invoked when a property of a device in the Global Device List is
  *  changed, and we have we have subscribed to changes for that device.
  *
@@ -181,11 +226,15 @@ watch_device_property_modified (DBusGProxy    *proxy,
 	}
 
 	/* only match battery* values */
-	if (strncmp (key, "battery", 7) != 0)
-		return;
-
-	gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
-	g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
+	if (strncmp (key, "battery", 7) == 0) {
+		gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
+		g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
+	}
+	/* only match button* values */
+	if (strncmp (key, "button", 6) == 0) {
+		gpm_debug ("state of a button has changed : %s, %s", udi, key);
+		emit_button_pressed (monitor, udi, "");
+	}
 }
 
 static void
@@ -235,42 +284,12 @@ watch_device_condition (DBusGProxy    *proxy,
 			GpmHalMonitor *monitor)
 {
 	const char *udi = NULL;
-	char	   *button_name = NULL;
-	gboolean    value;
-
 	udi = dbus_g_proxy_get_path (proxy);
 
 	gpm_debug ("udi=%s, condition_name=%s", udi, condition_name);
 
 	if (strcmp (condition_name, "ButtonPressed") == 0) {
-		/* We can get two different types of ButtonPressed condition
-		   1. The old acpi hardware buttons
-		      udi="acpi_foo", details="";
-		      button.type="power"
-		   2. The new keyboard buttons
-		      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
-		      button.type=""
-		 */
-		if (strcmp (details, "") == 0) {
-			/* no details about the event, so we get more info
-			   for type 1 buttons */
-			gpm_hal_device_get_string (udi, "button.type", &button_name);
-		} else {
-			button_name = g_strdup (details);
-		}
-
-		/* buttons without state should default to true, although this shouldn't matter */
-		value = TRUE;
-		/* we need to get the button state for lid buttons */
-		if (strcmp (button_name, "lid") == 0) {
-			gpm_hal_device_get_bool (udi, "button.state.value", &value);
-		}
-
-		/* we now emit all buttons, even the ones we don't know */
-		gpm_debug ("emitting button-pressed : %s (%i)", button_name, value);
-		g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, button_name, value);
-
-		g_free (button_name);
+		emit_button_pressed (monitor, udi, details);
 	}
 }
 
@@ -410,6 +429,7 @@ watch_add_button (GpmHalMonitor *monitor,
 {
 	watch_device_add (monitor, udi);
 	watch_device_connect_condition (monitor, udi);
+	watch_device_connect_property_modified (monitor, udi);
 }
 
 static void
