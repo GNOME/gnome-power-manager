@@ -1,3 +1,24 @@
+2006-04-25  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.desktop.in:
+	Remove the --sm-disable from the .desktop file in autostart since the
+	gnome-power-manager daemon can cope with being run more than one in a
+	session and it breaks the logout dialog (e.g. on powerbutton) if it
+	is not run with session access. Fixes lp:31103 and #339168
+	
+	* data/gnome-power-manager.desktop.in:
+	* data/gnome-power-preferences.desktop.in:
+	Change the icon to be gpm-battery-charged
+
+	* src/gpm-hal-monitor.c: (emit_button_pressed):
+	Also watch the PropertyModified signal, as when HAL resumes and rescans
+	the lid value it does not send a button pressed signal.
+	This means the lid value can get confused *again* when we resume from
+	standby on some machines. Fixes rh:187396
+	
+	* src/gpm-manager.c: (lid_button_pressed): Ignore duplicated lid button
+	presses so we don't display them on the info graphs.
+
 2006-04-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (power_on_ac_changed_cb): Fix an operator

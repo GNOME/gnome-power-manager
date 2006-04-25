@@ -1359,13 +1359,23 @@ lid_button_pressed (GpmManager	 *manager,
 {
 	gboolean  on_ac;
 
+	if (manager->priv->lid_is_closed == state) {
+		gpm_debug ("duplicate lid change event");
+		return;
+	}
+
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	gpm_debug ("lid button changed: %d", state);
 	if (state) {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_CLOSED, NULL);
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_LID_CLOSED,
+				    "The laptop lid has been closed");
+		gpm_debug ("lid button CLOSED");
 	} else {
-		gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_LID_OPENED, NULL);
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_LID_OPENED,
+				    "The laptop lid has been re-opened");
+		gpm_debug ("lid button OPENED");
 	}
 
 	/* We keep track of the lid state so we can do the
