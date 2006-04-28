@@ -52,13 +52,12 @@ struct GpmScreensaverPrivate
 	DBusGProxy		*gs_proxy;
 	GConfClient		*gconf_client;
 	gboolean		 is_connected;	/* if we are connected to g-s */
-	gboolean		 cached_throttle; /*if we need to throttle when we connect */
 	int			 idle_delay;	/* the setting in g-s-p, cached */
-	guint32                  cookie;
 };
 
 enum {
 	GS_DELAY_CHANGED,
+	CONNECTION_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -84,11 +83,7 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 	screensaver->priv->is_connected = TRUE;
 	gpm_debug ("gnome-screensaver connected to the session DBUS");
 
-	/* Do the throttle now if cached, as g-p-m may have started before g-s
-	   and we want the throttle value to be used. */
-	if (screensaver->priv->cached_throttle) {
-		gpm_screensaver_enable_throttle (screensaver, TRUE);
-	}
+	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
 }
 
 /**
@@ -107,6 +102,8 @@ gpm_screensaver_disconnect (GpmScreensaver *screensaver)
 		screensaver->priv->gs_proxy = NULL;
 	}
 	screensaver->priv->is_connected = FALSE;
+
+	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
 	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
 }
 
@@ -202,83 +199,60 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 }
 
 /**
- * gpm_screensaver_enable_throttle:
+ * gpm_screensaver_add_throttle:
  * @screensaver: This screensaver class instance
- * @enable: If we should disable CPU hungry screensavers
+ * @reason:      The reason for throttling
  * Return value: Success value.
  **/
-gboolean
-gpm_screensaver_enable_throttle (GpmScreensaver *screensaver, gboolean enable)
+guint
+gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
+			      const char     *reason)
 {
-	GError *error = NULL;
+	GError  *error = NULL;
 	gboolean res;
+	guint32  cookie;
+	guint32  ret;
 
 	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Cannot throttle now as gnome-screensaver not running - will cache");
-		screensaver->priv->cached_throttle = TRUE;
-		return FALSE;
+		gpm_debug ("Cannot throttle now as gnome-screensaver not running");
+		return 0;
 	}
 
-	/* reset, so that we don't keep triggering */
-	screensaver->priv->cached_throttle = FALSE;
-
-	gpm_debug ("setThrottleEnabled : %i", enable);
-
-	if (enable) {
-		char   *application;
-		char   *reason;
-		guint32 cookie;
-
-		application = g_strdup ("Power Manager");
-		reason = g_strdup (_("Display power saving is activated"));
-
-		res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
-					 "Throttle",
-					 &error,
-					 G_TYPE_STRING, application,
-					 G_TYPE_STRING, reason,
-					 G_TYPE_INVALID,
-					 G_TYPE_UINT, &cookie,
-					 G_TYPE_INVALID);
-		if (res) {
-			/* save the cookie */
-			screensaver->priv->cookie = cookie;
-		}
-
-		g_free (reason);
-		g_free (application);
-	} else {
-		res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
-					 "UnThrottle",
-					 &error,
-					 G_TYPE_UINT, screensaver->priv->cookie,
-					 G_TYPE_INVALID,
-					 G_TYPE_INVALID);
-		if (res) {
-			/* clear the cookie */
-			screensaver->priv->cookie = 0;
-		}
+	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+				 "Throttle",
+				 &error,
+				 G_TYPE_STRING, "Power Manager",
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &cookie,
+				 G_TYPE_INVALID);
+	ret = 0;
+	if (res) {
+		ret = cookie;
 	}
 
-	if (! res) {
-		/* try the old API */
-		res = dbus_g_proxy_call (screensaver->priv->gs_proxy, "setThrottleEnabled", &error,
-					 G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
-					 G_TYPE_INVALID);
-		if (! res) {
-			if (error) {
-				gpm_warning ("%s", error->message);
-				g_error_free (error);
-			}
-			gpm_debug ("gnome-screensaver service is not running.");
-		}
-	}
+	gpm_debug ("adding throttle reason: '%s': id %u", reason, cookie);
 
-	if (! res) {
-		gpm_debug ("setThrottleEnabled failed");
-		return FALSE;
-	}
-	return TRUE;
+	return ret;
+}
+
+gboolean
+gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
+				 guint           cookie)
+{
+	gboolean res;
+	GError  *error;
+
+	gpm_debug ("removing throttle: id %u", cookie);
+
+	error = NULL;
+	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+				 "UnThrottle",
+				 &error,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	return res;
 }
 
 /**
@@ -405,6 +379,15 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE, 1, G_TYPE_INT);
+	signals [CONNECTION_CHANGED] =
+		g_signal_new ("connection-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, connection_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
 /**

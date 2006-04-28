@@ -1,3 +1,16 @@
+2006-04-28  William Jon McCann  <mccann@jhu.edu>
+
+	* src/gpm-manager.c: (update_ac_throttle), (update_dpms_throttle),
+	(update_lid_throttle), (change_power_policy),
+	(dpms_mode_changed_cb), (lid_button_pressed),
+	(screensaver_connection_changed_cb), (gpm_manager_init):
+	* src/gpm-screensaver.c: (gpm_screensaver_connect),
+	(gpm_screensaver_disconnect), (gpm_screensaver_add_throttle),
+	(gpm_screensaver_remove_throttle), (gpm_screensaver_class_init):
+	* src/gpm-screensaver.h:
+	Rework the way throttling is done so that it properly ref-counted.
+	Remove the compatibility with the old g-s API.  Fixes #340024
+
 2006-04-28  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/figures/gpm-suspend-problem.png:

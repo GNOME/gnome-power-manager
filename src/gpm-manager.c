@@ -109,6 +109,10 @@ struct GpmManagerPrivate
 	GpmScreensaver  *screensaver;
 	GpmInhibit	*inhibit;
 
+	guint32          ac_throttle_id;
+	guint32          dpms_throttle_id;
+	guint32          lid_throttle_id;
+
 	GpmTrayIcon	*tray_icon;
 
 	GpmWarning	 last_primary_warning;
@@ -533,6 +537,53 @@ sync_dpms_policy (GpmManager *manager)
 	}
 }
 
+static void
+update_ac_throttle (GpmManager *manager,
+		    gboolean    on_ac)
+{
+	/* Throttle the screensaver when we are not on AC power so we don't
+	   waste the battery */
+	if (on_ac) {
+		if (manager->priv->ac_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->ac_throttle_id);
+			manager->priv->ac_throttle_id = 0;
+		}
+	} else {
+		manager->priv->ac_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("On battery power"));
+	}
+}
+
+static void
+update_dpms_throttle (GpmManager *manager,
+		      GpmDpmsMode mode)
+{
+	/* Throttle the screensaver when DPMS is active since we can't see it anyway */
+	if (mode == GPM_DPMS_MODE_ON) {
+		if (manager->priv->dpms_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->dpms_throttle_id);
+			manager->priv->dpms_throttle_id = 0;
+		}
+	} else {
+		manager->priv->dpms_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Display power management activated"));
+	}
+}
+
+static void
+update_lid_throttle (GpmManager	*manager,
+		     gboolean    lid_is_closed)
+{
+	/* Throttle the screensaver when the lid is close since we can't see it anyway
+	   and it may overheat the laptop */
+	if (! lid_is_closed) {
+		if (manager->priv->lid_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->lid_throttle_id);
+			manager->priv->lid_throttle_id = 0;
+		}
+	} else {
+		manager->priv->lid_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Laptop lid is closed"));
+	}
+}
+
 /**
  * change_power_policy:
  * @manager: This manager class instance
@@ -566,7 +617,8 @@ change_power_policy (GpmManager *manager,
 
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (!on_ac);
-	gpm_screensaver_enable_throttle (manager->priv->screensaver, !on_ac);
+
+	update_ac_throttle (manager, on_ac);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
@@ -1241,18 +1293,8 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		      GpmManager *manager)
 {
 	gpm_debug ("DPMS mode changed: %d", mode);
-	if (mode == GPM_DPMS_MODE_ON) {
-		gboolean on_ac;
 
-		/* only unthrottle if on ac power */
-		gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-		if (on_ac) {
-			gpm_screensaver_enable_throttle (manager->priv->screensaver, FALSE);
-		}
-	} else {
-		gpm_screensaver_enable_throttle (manager->priv->screensaver, TRUE);
-	}
+	update_dpms_throttle (manager, mode);
 
 	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (manager,
@@ -1383,10 +1425,12 @@ lid_button_pressed (GpmManager	 *manager,
 	   is closed. Fixes #331655 */
 	manager->priv->lid_is_closed = state;
 
+	/* Disable or enable the fancy screensaver, as we don't want this starting
+	   when the lid is shut */
+	update_lid_throttle (manager, manager->priv->lid_is_closed);
+
 	if (state) {
-		/* Disable the fancy screensaver, as we don't want this starting
-		   when the lid is shut */
-		gpm_screensaver_enable_throttle (manager->priv->screensaver, TRUE);
+
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			gpm_manager_set_reason (manager, "the lid has been closed on ac power");
@@ -1397,9 +1441,6 @@ lid_button_pressed (GpmManager	 *manager,
 			manager_policy_do (manager, GPM_PREF_BATTERY_BUTTON_LID);
 		}
 	} else {
-		/* Allow the fancy screensaver */
-		gpm_screensaver_enable_throttle (manager->priv->screensaver, FALSE);
-
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
 	}
@@ -2282,6 +2323,25 @@ tray_icon_destroyed (GtkObject *object, gpointer user_data)
 }
 
 static void
+screensaver_connection_changed_cb (GpmScreensaver *screensaver,
+				   gboolean        connected,
+				   GpmManager     *manager)
+{
+	/* add throttlers when first connected */
+	if (connected) {
+		gboolean    on_ac;
+		GpmDpmsMode mode;
+
+		gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+		gpm_dpms_get_mode (manager->priv->dpms, &mode, NULL);
+
+		update_ac_throttle (manager, on_ac);
+		update_dpms_throttle (manager, mode);
+		update_lid_throttle (manager, manager->priv->lid_is_closed);
+	}
+}
+
+static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean on_ac;
@@ -2303,6 +2363,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
 	manager->priv->screensaver = gpm_screensaver_new ();
+	g_signal_connect (manager->priv->screensaver, "connection-changed",
+			  G_CALLBACK (screensaver_connection_changed_cb), manager);
 
 	/* FIXME: We shouldn't assume the lid is open at startup */
 	manager->priv->lid_is_closed = FALSE;

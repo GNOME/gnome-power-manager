@@ -46,6 +46,8 @@ typedef struct
 	GObjectClass	parent_class;
 	void		(* gs_delay_changed)		(GpmScreensaver	*screensaver,
 					    		 int		 delay);
+	void		(* connection_changed)		(GpmScreensaver	*screensaver,
+					    		 gboolean	 connected);
 } GpmScreensaverClass;
 
 GType		 gpm_screensaver_get_type		(void);
@@ -57,8 +59,10 @@ gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
 void		 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,
 							 gboolean	 lock);
 gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
-gboolean	 gpm_screensaver_enable_throttle	(GpmScreensaver	*screensaver,
-							 gboolean	 enable);
+guint32 	 gpm_screensaver_add_throttle    	(GpmScreensaver	*screensaver,
+							 const char	*reason);
+gboolean 	 gpm_screensaver_remove_throttle    	(GpmScreensaver	*screensaver,
+							 guint32         cookie);
 gboolean	 gpm_screensaver_check_running		(GpmScreensaver	*screensaver);
 void		 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_get_idle		(GpmScreensaver	*screensaver,
