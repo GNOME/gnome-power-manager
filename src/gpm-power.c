@@ -47,6 +47,8 @@ static void     gpm_power_finalize   (GObject       *object);
 
 #define GPM_POWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_POWER, GpmPowerPrivate))
 
+#define GPM_POWER_MIN_CHARGED_PERCENTAGE	90
+
 struct GpmPowerPrivate
 {
 	gboolean		 on_ac;
@@ -124,7 +126,7 @@ gpm_power_battery_is_charged (GpmPowerStatus *status)
 {
 	if (! status->is_charging &&
 	    ! status->is_discharging &&
-	    status->percentage_charge > 90) {
+	    status->percentage_charge > GPM_POWER_MIN_CHARGED_PERCENTAGE) {
 		return TRUE;
 	}
 	return FALSE;
@@ -622,9 +624,9 @@ get_power_unit_suffix (GpmPowerUnit unit)
 }
 
 GpmPowerDevice *
-gpm_power_get_battery_device_entry (GpmPower		*power,
+gpm_power_get_battery_device_entry (GpmPower	 *power,
 				    GpmPowerKind  battery_kind,
-				    gint		 device_num)
+				    gint	  device_num)
 {
 	const char		*udi;
 	GpmPowerDevice *device;
@@ -979,6 +981,21 @@ battery_kind_cache_update (GpmPower		 *power,
 			     "Multiple device object cannot be charging and "
 			     "discharging simultaneously!");
 		type_status->is_charging = FALSE;
+	}
+
+	/* If the primary battery is neither charging nor discharging, and
+	 * the charge is low the battery is most likely broken.
+	 * In this case, we'll use the ac_adaptor to determine whether it's
+	 * charging or not. */
+	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY &&
+	    (! type_status->is_charging) && (! type_status->is_discharging) &&
+	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
+		gboolean on_ac;
+		on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);
+		gpm_debug ("Battery is neither charging nor discharging, "
+			   "using ac_adaptor value %i", on_ac);
+		type_status->is_charging = on_ac;
+		type_status->is_discharging = !(on_ac);
 	}
 
 	gpm_debug ("%i devices of type %s", num_present, gpm_power_kind_to_localised_string (entry->battery_kind));

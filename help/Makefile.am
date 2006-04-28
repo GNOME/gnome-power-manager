@@ -12,6 +12,7 @@ DOC_FIGURES = \
 	figures/gpm-charged.png \
 	figures/gpm-critical.png \
 	figures/gpm-low.png \
-	figures/gpm-unplugged.png
+	figures/gpm-unplugged.png \
+	figures/gpm-suspend-problem.png
 
 #DOC_LINGUAS = uk 

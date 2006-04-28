@@ -1,3 +1,16 @@
+2006-04-28  Richard Hughes  <richard@hughsie.com>
+
+	* help/C/figures/gpm-suspend-problem.png:
+	* help/C/figures/gpm-unplugged.png:
+	* help/C/gnome-power-manager.xml:
+	* help/Makefile.am:
+	Add another figure and update the documenation.
+
+	* src/gpm-power.c (battery_kind_cache_update):
+	Slightly re-work a patch from Paul Betts <paul.betts@gmail.com>
+	To handle batteries that report they are neither charging or
+	discharging by using ac_adaptor value instead.
+
 2006-04-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-monitor.c: (watch_device_connect_property_modified):

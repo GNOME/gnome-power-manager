@@ -172,12 +172,14 @@
   <variablelist>
     <varlistentry>
       <term>Command line</term>
-        <listitem>
-    	  <para>Type <command>gnome-power-manager --verbose --no-daemon</command>,
-          then press <keycap>Return</keycap>:</para>
-        </listitem>
-      </varlistentry>
-    </variablelist>
+      <listitem>
+    	<para>
+    	  Type <command>gnome-power-manager --verbose --no-daemon</command>,
+          then press <keycap>Return</keycap>:
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 
   <para>
   When you start &application;, the following notifications may be displayed.
@@ -215,15 +217,10 @@
     </para>
   </note>
 
-  <figure>
-    <title>&app; Notification when the system power is critically low</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
+  <para>
+    When the battery is low, you will recieve the following notification.
+    You should consider switching to battery power really soon.
+  </para>
   <figure>
     <title>&app; Notification when battery power is low</title>
     <screenshot>
@@ -233,20 +230,35 @@
       </mediaobject>
     </screenshot>
   </figure>
+
+  <para>
+    When the computer has run out of power, it will show this notification
+    explaining what action is required.
+    You can change the critical low action using the preferences tool.
+  </para>
   <figure>
-    <title>&application; on Startup</title>
+    <title>&app; Notification when the system power is critically low</title>
     <screenshot>
       <mediaobject>
-        <imageobject>
-          <imagedata fileref="figures/startup" format="PNG"/>
+        <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/>
         </imageobject>
-        <textobject>
-          <phrase>&application; on startup</phrase>
-        </textobject>
       </mediaobject>
     </screenshot>
   </figure>
-
+  <para>
+    When a suspend failure occurs you may get this following warning.
+    The most common reason for this notification is that the current user does
+    not have permission to suspend or hibernate the computer.
+  </para>
+  <figure>
+    <title>&app; Notification when suspend failure occurs</title>
+    <screenshot>
+      <mediaobject>
+        <imageobject><imagedata fileref="figures/gpm-suspend-problem.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </screenshot>
+  </figure>
 </section>
 
 <section id="preferences">
