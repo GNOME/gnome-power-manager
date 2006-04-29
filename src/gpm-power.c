@@ -989,6 +989,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	 * charging or not. */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY &&
 	    (! type_status->is_charging) && (! type_status->is_discharging) &&
+	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
 		gboolean on_ac;
 		on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);

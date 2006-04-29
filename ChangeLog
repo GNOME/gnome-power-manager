@@ -1,3 +1,18 @@
+2006-04-30  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info-data.c: (gpm_info_data_add):
+	Use the correct format string so we don't crash on ppc platform.
+	I'm surprised GCC didn't warn me about that. Should fix #339974
+
+	* src/gpm-manager.c: Use the new manager_explain_reason() calls so we
+	don't have to play games with the reason and actions.
+	This should mean we get more description in the event log, for why we
+	do particular actions.
+
+	* src/gpm-power.c: (battery_kind_cache_update):
+	Don't fallback to broken battery support if we have 0% percentage
+	charge else we start on "charging" with a full battery.
+
 2006-04-29  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/figures/gpm-suspend-problem.png: Add missing file to CVS.
