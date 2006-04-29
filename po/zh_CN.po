@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-16 03:29+0200\n"
+"POT-Creation-Date: 2006-04-30 00:12+0100\n"
 "PO-Revision-Date: 2006-04-16 12:32+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -451,64 +451,73 @@ msgid "<b>Event log</b>"
 msgstr "<b>事件日志</b>"
 
 #: ../data/gpm-info.glade.h:2
-msgid "<b>Laptop Battery Bay (2)</b>"
-msgstr "<b>笔记本电池(2)</b>"
-
-#: ../data/gpm-info.glade.h:3
-msgid "<b>Laptop Battery Bay</b>"
+#, fuzzy
+msgid "<b>Laptop batteries</b>"
 msgstr "<b>笔记本电池</b>"
 
-#: ../data/gpm-info.glade.h:4
-msgid "<b>UPS</b>"
+#: ../data/gpm-info.glade.h:3
+#, fuzzy
+msgid "<b>UPS's</b>"
 msgstr "<b>UPS</b>"
 
-#: ../data/gpm-info.glade.h:5
-msgid "<b>Wireless Mouse</b>"
+#: ../data/gpm-info.glade.h:4
+#, fuzzy
+msgid "<b>Wireless devices</b>"
 msgstr "<b>无线鼠标</b>"
 
-#: ../data/gpm-info.glade.h:6
+#: ../data/gpm-info.glade.h:5
 msgid "Charge History"
 msgstr "充电历史"
 
-#: ../data/gpm-info.glade.h:7
+#: ../data/gpm-info.glade.h:6
 msgid "Device Information"
 msgstr "设备信息"
 
-#: ../data/gpm-info.glade.h:8
+#: ../data/gpm-info.glade.h:7
+msgid ""
+"Device type: Laptop battery (1)\n"
+"Technology: Lithium ION"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:9
 msgid "Estimated Time History"
 msgstr "预计时间历史"
 
-#: ../data/gpm-info.glade.h:9
+#: ../data/gpm-info.glade.h:10
 msgid "Event Log"
 msgstr "事件日志"
 
-#: ../data/gpm-info.glade.h:10
+#: ../data/gpm-info.glade.h:11
+#, fuzzy
+msgid "Last full: 22022mWh"
+msgstr "上次充满："
+
+#: ../data/gpm-info.glade.h:12
+#, fuzzy
+msgid "More"
+msgstr "型号："
+
+#: ../data/gpm-info.glade.h:13
 msgid "Power History"
 msgstr "电源历史"
 
-#: ../data/gpm-info.glade.h:11 ../src/gpm-manager.c:1338
-#: ../src/gpm-manager.c:1657
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1692
 msgid "Power Information"
 msgstr "电源信息"
 
-#: ../data/gpm-info.glade.h:12
+#: ../data/gpm-info.glade.h:15
 msgid "This shows how the battery charge and discharge rate varies over time."
 msgstr ""
 
-#: ../data/gpm-info.glade.h:13
+#: ../data/gpm-info.glade.h:16
 msgid "This shows how the battery percentage charge varies over time."
 msgstr ""
 
-#: ../data/gpm-info.glade.h:14
+#: ../data/gpm-info.glade.h:17
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
-msgstr ""
-
-#: ../data/gpm-info.glade.h:15
-msgid ""
-"This shows you detailed information about all the batteries you have "
-"installed in your system."
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
@@ -611,17 +620,17 @@ msgstr "方向"
 msgid "The orientation of the tray."
 msgstr "托盘的方向。"
 
-#: ../src/gpm-common.c:47
+#: ../src/gpm-common.c:49
 msgid "Unknown time"
 msgstr "未知时间"
 
-#: ../src/gpm-common.c:52
+#: ../src/gpm-common.c:54
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i 分钟"
 
-#: ../src/gpm-common.c:63
+#: ../src/gpm-common.c:65
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -629,17 +638,17 @@ msgstr[0] "%i 小时"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:69
+#: ../src/gpm-common.c:71
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:70
+#: ../src/gpm-common.c:72
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "小时"
 
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:73
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分钟"
@@ -648,154 +657,310 @@ msgstr[0] "分钟"
 msgid "Power Manager for the GNOME desktop"
 msgstr "GNOME 桌面的电源管理器"
 
-#: ../src/gpm-graph-widget.c:75
+#: ../src/gpm-graph-widget.c:76
 msgid "On AC"
 msgstr "交流电"
 
-#: ../src/gpm-graph-widget.c:77
+#: ../src/gpm-graph-widget.c:78
 msgid "On battery"
 msgstr "电池"
 
-#: ../src/gpm-graph-widget.c:79
-msgid "Screen dim"
+#: ../src/gpm-graph-widget.c:80
+msgid "LCD dim"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:81
+#: ../src/gpm-graph-widget.c:82
+#, fuzzy
+msgid "LCD resume"
+msgstr "唤醒"
+
+#: ../src/gpm-graph-widget.c:84
 msgid "DPMS off"
 msgstr "DPMS 关"
 
-#: ../src/gpm-graph-widget.c:83
+#: ../src/gpm-graph-widget.c:86
 msgid "DPMS on"
 msgstr "DPMS 开"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-graph-widget.c:85 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:84
 msgid "Suspend"
 msgstr "挂起"
 
-#: ../src/gpm-graph-widget.c:87
+#: ../src/gpm-graph-widget.c:90
 msgid "Resume"
 msgstr "唤醒"
 
-#: ../src/gpm-graph-widget.c:89 ../src/gpm-prefs-core.c:86
+#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:86
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-graph-widget.c:91
+#: ../src/gpm-graph-widget.c:94
 msgid "Lid closed"
 msgstr "上盖已合"
 
-#: ../src/gpm-graph-widget.c:93
+#: ../src/gpm-graph-widget.c:96
 msgid "Lid opened"
 msgstr "上盖已关"
 
-#: ../src/gpm-graph-widget.c:95
+#: ../src/gpm-graph-widget.c:98
+#, fuzzy
+msgid "Notification"
+msgstr "<b>通知区域</b>"
+
+#: ../src/gpm-graph-widget.c:100
 msgid "Unknown event!"
 msgstr "未知事件！"
 
-#: ../src/gpm-info.c:287
+#: ../src/gpm-info.c:244
 msgid "Time"
 msgstr "时间"
 
-#: ../src/gpm-info.c:292
+#: ../src/gpm-info.c:249
 msgid "Event"
 msgstr "事件"
 
-#: ../src/gpm-main.c:127
+#: ../src/gpm-info.c:254
+msgid "Description"
+msgstr ""
+
+#: ../src/gpm-main.c:126
 msgid "Do not daemonize"
 msgstr "不运行守护程序"
 
-#: ../src/gpm-main.c:129 ../src/gpm-prefs.c:82
+#: ../src/gpm-main.c:128 ../src/gpm-prefs.c:82
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
-#: ../src/gpm-main.c:133
+#: ../src/gpm-main.c:132
 msgid "GNOME Power Manager"
 msgstr "GNOME 电源管理器"
 
-#: ../src/gpm-manager.c:1035
+#: ../src/gpm-manager.c:550
+#, fuzzy
+msgid "On battery power"
+msgstr "电池"
+
+#: ../src/gpm-manager.c:565
+#, fuzzy
+msgid "Display power management activated"
+msgstr "电源管理守护程序"
+
+#: ../src/gpm-manager.c:581
+#, fuzzy
+msgid "Laptop lid is closed"
+msgstr "关闭笔记本电脑上盖时(_A)："
+
+#: ../src/gpm-manager.c:745
+#, c-format
+msgid "%s because %s"
+msgstr ""
+
+#: ../src/gpm-manager.c:781
+#, fuzzy
+msgid "Doing nothing"
+msgstr "无反应"
+
+#: ../src/gpm-manager.c:785 ../src/gpm-manager.c:1163
+#, fuzzy
+msgid "Suspending computer"
+msgstr "挂起计算机"
+
+#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:1177
+#: ../src/gpm-manager.c:2294
+#, fuzzy
+msgid "Hibernating computer"
+msgstr "休眠"
+
+#: ../src/gpm-manager.c:795
+#, fuzzy
+msgid "DPMS blanking screen"
+msgstr "黑屏"
+
+#: ../src/gpm-manager.c:800 ../src/gpm-manager.c:1192
+#, fuzzy
+msgid "Shutting down computer"
+msgstr "挂起计算机"
+
+#: ../src/gpm-manager.c:805
+msgid "GNOME interactive logout"
+msgstr ""
+
+#: ../src/gpm-manager.c:1004 ../src/gpm-manager.c:1094
+msgid "Resuming computer"
+msgstr ""
+
+#: ../src/gpm-manager.c:1016
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr "HAL 进行%s失败。请查阅<a href=\"%s\">常见问题解答</a>。"
 
-#: ../src/gpm-manager.c:1037
+#: ../src/gpm-manager.c:1018
 msgid "hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-manager.c:1039
+#: ../src/gpm-manager.c:1019
 msgid "Hibernate Problem"
 msgstr "休眠问题"
 
-#: ../src/gpm-manager.c:1114
+#: ../src/gpm-manager.c:1106
+#, c-format
+msgid "Battery charged %imWh during suspend"
+msgstr ""
+
+#: ../src/gpm-manager.c:1109
+#, c-format
+msgid "Battery discharged %imWh during suspend"
+msgstr ""
+
+#: ../src/gpm-manager.c:1124
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the <a href=\"%s\">FAQ page</a> for common problems."
-msgstr "您的计算机%s失败。\n请查阅<a href=\"%s\">常见问题解答</a>。"
+msgstr ""
+"您的计算机%s失败。\n"
+"请查阅<a href=\"%s\">常见问题解答</a>。"
 
-#: ../src/gpm-manager.c:1116
+#: ../src/gpm-manager.c:1126
 msgid "suspend"
 msgstr "挂起"
 
-#: ../src/gpm-manager.c:1118
+#: ../src/gpm-manager.c:1127
 msgid "Suspend Problem"
 msgstr "挂起问题"
 
-#: ../src/gpm-manager.c:1645
+#: ../src/gpm-manager.c:1164
+msgid "the DBUS method Suspend() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1178
+msgid "the DBUS method Hibernate() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1193
+msgid "the DBUS method Shutdown() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1243
+msgid "Screen resume"
+msgstr ""
+
+#: ../src/gpm-manager.c:1244
+#, fuzzy
+msgid "idle mode ended"
+msgstr "上盖已关"
+
+#: ../src/gpm-manager.c:1282
+msgid "Screen dim"
+msgstr ""
+
+#: ../src/gpm-manager.c:1283
+msgid "idle mode started"
+msgstr ""
+
+#. can only be hibernate or suspend
+#: ../src/gpm-manager.c:1301
+msgid "the system state is idle"
+msgstr ""
+
+#: ../src/gpm-manager.c:1375
+#, fuzzy
+msgid "the power button has been pressed"
+msgstr "按下待机按钮时(_S)："
+
+#: ../src/gpm-manager.c:1394
+#, fuzzy
+msgid "the suspend button has been pressed"
+msgstr "按下待机按钮时(_S)："
+
+#: ../src/gpm-manager.c:1414
+#, fuzzy
+msgid "the hibernate button has been pressed"
+msgstr "按下待机按钮时(_S)："
+
+#: ../src/gpm-manager.c:1465
+msgid "the lid has been closed on ac power"
+msgstr ""
+
+#: ../src/gpm-manager.c:1470
+#, fuzzy
+msgid "the lid has been closed on battery power"
+msgstr "计算机正在使用电池供电\n"
+
+#: ../src/gpm-manager.c:1475
+msgid "Turning LCD panel back on"
+msgstr ""
+
+#: ../src/gpm-manager.c:1476
+#, fuzzy
+msgid "laptop lid re-opened"
+msgstr "上盖已关"
+
+#: ../src/gpm-manager.c:1599
+msgid "the lid has been closed, and the ac adapter removed"
+msgstr ""
+
+#: ../src/gpm-manager.c:1680
 msgid "Power Critically Low"
 msgstr "电量即将用尽"
 
-#: ../src/gpm-manager.c:1649
+#: ../src/gpm-manager.c:1684
 msgid "Power Very Low"
 msgstr "电量非常低"
 
-#: ../src/gpm-manager.c:1653
+#: ../src/gpm-manager.c:1688
 msgid "Power Low"
 msgstr "电量低"
 
-#: ../src/gpm-manager.c:1720
-msgid "Battery Charged"
-msgstr "电池已充满"
+#: ../src/gpm-manager.c:1713
+#, fuzzy
+msgid "battery is critically low"
+msgstr "电量即将用尽的标准为还剩(_T)："
 
-#: ../src/gpm-manager.c:1721
+#: ../src/gpm-manager.c:1757
 msgid "Your battery is now fully charged"
 msgstr "您的电池已经充满电"
 
-#: ../src/gpm-manager.c:1771
+#: ../src/gpm-manager.c:1758
+msgid "Battery Charged"
+msgstr "电池已充满"
+
+#: ../src/gpm-manager.c:1814
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
 
-#: ../src/gpm-manager.c:1775
+#: ../src/gpm-manager.c:1818
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
 
-#: ../src/gpm-manager.c:1780
+#: ../src/gpm-manager.c:1823
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr ""
 
-#: ../src/gpm-manager.c:1783
+#: ../src/gpm-manager.c:1826
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
 
-#: ../src/gpm-manager.c:1789 ../src/gpm-manager.c:1907
+#: ../src/gpm-manager.c:1832 ../src/gpm-manager.c:1958
 msgid "Critical action"
 msgstr "关键动作"
 
-#: ../src/gpm-manager.c:1813
+#: ../src/gpm-manager.c:1860
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "交流电已经拔出。系统现在将使用电池供电。"
 
-#: ../src/gpm-manager.c:1818
+#: ../src/gpm-manager.c:1865
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -803,195 +968,165 @@ msgid ""
 msgstr ""
 "电量大约可维持 <b>%s</b>，为总电量的 %i%%。请接入交流电源以避免丢失数据。"
 
-#: ../src/gpm-manager.c:1894
+#: ../src/gpm-manager.c:1945
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr ""
 
-#: ../src/gpm-manager.c:1898
+#: ../src/gpm-manager.c:1949
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 
-#: ../src/gpm-manager.c:1901
+#: ../src/gpm-manager.c:1952
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 
-#: ../src/gpm-manager.c:1927
+#: ../src/gpm-manager.c:1971
+#, fuzzy
+msgid "UPS is critically low"
+msgstr "低电量动作"
+
+#: ../src/gpm-manager.c:1984
 msgid "Your system is running on backup power!"
 msgstr "您的系统正在使用备用电源供电！"
 
-#: ../src/gpm-manager.c:1930
+#: ../src/gpm-manager.c:1987
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
 "power to your computer to avoid losing data."
 msgstr ""
-"UPS 的剩余电量大约可维持 <b>%s</b>，为总电量的 %d%%。请接入交流电源以避免丢失数据。"
+"UPS 的剩余电量大约可维持 <b>%s</b>，为总电量的 %d%%。请接入交流电源以避免丢失"
+"数据。"
 
-#: ../src/gpm-manager.c:2010
+#: ../src/gpm-manager.c:2072
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
 "will soon stop functioning if not charged."
-msgstr "连接到此计算机的 %s 设备电量不足(仅剩 %d%%)。如果不充电的话，此设备即将停止工作。"
+msgstr ""
+"连接到此计算机的 %s 设备电量不足(仅剩 %d%%)。如果不充电的话，此设备即将停止工"
+"作。"
 
-#: ../src/gpm-power.c:457
+#: ../src/gpm-manager.c:2295
+msgid "user clicked hibernate from tray menu"
+msgstr ""
+
+#: ../src/gpm-manager.c:2319
+#, fuzzy
+msgid "Susspending computer"
+msgstr "挂起计算机"
+
+#: ../src/gpm-manager.c:2320
+msgid "user clicked suspend from tray menu"
+msgstr ""
+
+#: ../src/gpm-power.c:439
 msgid "Laptop battery"
 msgstr "笔记本电池"
 
-#: ../src/gpm-power.c:459
+#: ../src/gpm-power.c:441
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:461
+#: ../src/gpm-power.c:443
 msgid "Wireless mouse"
 msgstr "无线鼠标"
 
-#: ../src/gpm-power.c:463
+#: ../src/gpm-power.c:445
 msgid "Wireless keyboard"
 msgstr "无线键盘"
 
-#: ../src/gpm-power.c:465
+#: ../src/gpm-power.c:447
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:467
+#: ../src/gpm-power.c:449
 msgid "Unknown"
 msgstr "未知"
 
-#: ../src/gpm-power.c:681 ../src/gpm-power.c:687 ../src/gpm-power.c:691
-#: ../src/gpm-power.c:695
-msgid "Status:"
-msgstr "状态："
+#: ../src/gpm-power.c:467
+msgid "ups"
+msgstr ""
 
-#: ../src/gpm-power.c:682
-msgid "Missing"
-msgstr "缺少"
+#: ../src/gpm-power.c:469
+msgid "mouse"
+msgstr ""
 
-#: ../src/gpm-power.c:688
-msgid "Charged"
-msgstr "已充满"
+#: ../src/gpm-power.c:471
+#, fuzzy
+msgid "keyboard"
+msgstr "无线键盘"
 
-#: ../src/gpm-power.c:692
-msgid "Charging"
-msgstr "正充电"
+#: ../src/gpm-power.c:473
+msgid "pda"
+msgstr ""
 
-#: ../src/gpm-power.c:696
-msgid "Discharging"
-msgstr "正放电"
+#: ../src/gpm-power.c:475
+#, fuzzy
+msgid "unknown"
+msgstr "未知"
 
-#: ../src/gpm-power.c:700
-msgid "Product:"
-msgstr "产品："
-
-#: ../src/gpm-power.c:705
-msgid "Vendor:"
-msgstr "供应商："
-
-#: ../src/gpm-power.c:710
-msgid "Technology:"
-msgstr "技术："
-
-#: ../src/gpm-power.c:714
+#: ../src/gpm-power.c:717
 msgid "Lithium ion"
 msgstr ""
 
-#: ../src/gpm-power.c:716
+#: ../src/gpm-power.c:719
 msgid "Lead acid"
 msgstr ""
 
-#: ../src/gpm-power.c:726
-msgid "Serial number:"
-msgstr "序列号："
-
-#: ../src/gpm-power.c:731
-msgid "Model:"
-msgstr "型号："
-
-#: ../src/gpm-power.c:736
-msgid "Remaining time:"
-msgstr "剩余时间："
-
 #: ../src/gpm-power.c:741
-msgid "Percentage charge:"
-msgstr ""
-
-#: ../src/gpm-power.c:747
-msgid "Capacity:"
-msgstr ""
-
-#: ../src/gpm-power.c:749
 msgid "Excellent"
 msgstr ""
 
-#: ../src/gpm-power.c:751
+#: ../src/gpm-power.c:743
 msgid "Good"
 msgstr ""
 
-#: ../src/gpm-power.c:753
+#: ../src/gpm-power.c:745
 msgid "Fair"
 msgstr ""
 
-#: ../src/gpm-power.c:755
+#: ../src/gpm-power.c:747
 msgid "Poor"
 msgstr ""
 
-#: ../src/gpm-power.c:764
-msgid "Current charge:"
-msgstr "当前电量："
-
-#: ../src/gpm-power.c:770
-msgid "Last full charge:"
-msgstr "上次充满："
-
-#: ../src/gpm-power.c:775
-msgid "Design charge:"
-msgstr ""
-
-#: ../src/gpm-power.c:780
-msgid "Charge rate (raw):"
-msgstr ""
-
-#: ../src/gpm-power.c:785
-msgid "Charge rate (smoothed):"
-msgstr ""
-
-#: ../src/gpm-power.c:1083
+#: ../src/gpm-power.c:1226
 msgid "fully charged"
 msgstr "已充满"
 
-#: ../src/gpm-power.c:1089
+#: ../src/gpm-power.c:1232
 msgid "remaining"
 msgstr "剩余"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1092
+#: ../src/gpm-power.c:1235
 msgid "discharging"
 msgstr "正放电"
 
-#: ../src/gpm-power.c:1099
+#: ../src/gpm-power.c:1242
 msgid "until charged"
 msgstr "至充满"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1102
+#: ../src/gpm-power.c:1245
 msgid "charging"
 msgstr "正充电"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1143
+#: ../src/gpm-power.c:1286
 msgid "Computer is running on backup power\n"
 msgstr "计算机正在使用备用电源供电\n"
 
-#: ../src/gpm-power.c:1146
+#: ../src/gpm-power.c:1289
 msgid "Computer is running on AC power\n"
 msgstr "计算机正在使用交流电源供电\n"
 
-#: ../src/gpm-power.c:1149
+#: ../src/gpm-power.c:1292
 msgid "Computer is running on battery power\n"
 msgstr "计算机正在使用电池供电\n"
 
@@ -1015,7 +1150,7 @@ msgstr "黑屏"
 msgid "Do nothing"
 msgstr "无反应"
 
-#: ../src/gpm-prefs-core.c:230
+#: ../src/gpm-prefs-core.c:232
 msgid "Never"
 msgstr "从不"
 
@@ -1051,11 +1186,11 @@ msgstr "帮助(_H)"
 msgid "_About"
 msgstr "关于(_A)"
 
-#: ../src/gpm-tray-icon.c:314
+#: ../src/gpm-tray-icon.c:302
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:315
+#: ../src/gpm-tray-icon.c:303
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1063,7 +1198,7 @@ msgid ""
 "of the License, or (at your option) any later version."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:319
+#: ../src/gpm-tray-icon.c:307
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1071,7 +1206,7 @@ msgid ""
 "GNU General Public License for more details."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:323
+#: ../src/gpm-tray-icon.c:311
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1079,9 +1214,45 @@ msgid ""
 "02110-1301, USA."
 msgstr ""
 
-#: ../src/gpm-tray-icon.c:328
+#: ../src/gpm-tray-icon.c:316
 msgid "translator-credits"
 msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
+
+#~ msgid "<b>Laptop Battery Bay (2)</b>"
+#~ msgstr "<b>笔记本电池(2)</b>"
+
+#~ msgid "Status:"
+#~ msgstr "状态："
+
+#~ msgid "Missing"
+#~ msgstr "缺少"
+
+#~ msgid "Charged"
+#~ msgstr "已充满"
+
+#~ msgid "Charging"
+#~ msgstr "正充电"
+
+#~ msgid "Discharging"
+#~ msgstr "正放电"
+
+#~ msgid "Product:"
+#~ msgstr "产品："
+
+#~ msgid "Vendor:"
+#~ msgstr "供应商："
+
+#~ msgid "Technology:"
+#~ msgstr "技术："
+
+#~ msgid "Serial number:"
+#~ msgstr "序列号："
+
+#~ msgid "Remaining time:"
+#~ msgstr "剩余时间："
+
+#~ msgid "Current charge:"
+#~ msgstr "当前电量："
 
 #, fuzzy
 #~ msgid "Poor condition"
@@ -1156,9 +1327,6 @@ msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
 #~ msgid "Advanced"
 #~ msgstr "高级"
 
-#~ msgid "Ba_ttery is critical when below:"
-#~ msgstr "电量即将用尽的标准为还剩(_T)："
-
 #~ msgid "Put c_omputer to sleep after:"
 #~ msgstr "指定时间后将计算机转入休眠(_O)："
 
@@ -1170,9 +1338,6 @@ msgstr "Funda Wang <fundawang@linux.net.cn>, 2005"
 
 #~ msgid "Sleep"
 #~ msgstr "休眠"
-
-#~ msgid "When _suspend button pressed:"
-#~ msgstr "按下待机按钮时(_S)："
 
 #~ msgid "_Battery is low when below:"
 #~ msgstr "低电量标准(_B)："

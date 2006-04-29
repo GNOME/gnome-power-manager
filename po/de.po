@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-04-12 21:10+0200\n"
+"POT-Creation-Date: 2006-04-30 00:12+0100\n"
 "PO-Revision-Date: 2006-04-12 21:11+0200\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -471,20 +471,22 @@ msgstr "<b>Aktionen</b>"
 
 #: ../data/gpm-info.glade.h:1
 #, fuzzy
-msgid "<b>Laptop Battery Bay (2)</b>"
-msgstr "Laptop-Batterie"
+msgid "<b>Event log</b>"
+msgstr "<b>Allgemein</b>"
 
 #: ../data/gpm-info.glade.h:2
 #, fuzzy
-msgid "<b>Laptop Battery Bay</b>"
+msgid "<b>Laptop batteries</b>"
 msgstr "Laptop-Batterie"
 
 #: ../data/gpm-info.glade.h:3
-msgid "<b>UPS</b>"
-msgstr ""
+#, fuzzy
+msgid "<b>UPS's</b>"
+msgstr "<b>Allgemein</b>"
 
 #: ../data/gpm-info.glade.h:4
-msgid "<b>Wireless Mouse</b>"
+#, fuzzy
+msgid "<b>Wireless devices</b>"
 msgstr "<b>Drahtlose Maus</b>"
 
 #: ../data/gpm-info.glade.h:5
@@ -497,38 +499,51 @@ msgid "Device Information"
 msgstr "Zusätzliche Informationen zur Fehlererkennung anzeigen"
 
 #: ../data/gpm-info.glade.h:7
+msgid ""
+"Device type: Laptop battery (1)\n"
+"Technology: Lithium ION"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:9
 msgid "Estimated Time History"
 msgstr ""
 
-#: ../data/gpm-info.glade.h:8
+#: ../data/gpm-info.glade.h:10
+msgid "Event Log"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:11
+#, fuzzy
+msgid "Last full: 22022mWh"
+msgstr "voll geladen"
+
+#: ../data/gpm-info.glade.h:12
+msgid "More"
+msgstr ""
+
+#: ../data/gpm-info.glade.h:13
 #, fuzzy
 msgid "Power History"
 msgstr "Niedriger Batteriestrom"
 
-#: ../data/gpm-info.glade.h:9 ../src/gpm-manager.c:1342
-#: ../src/gpm-manager.c:1651
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1692
 #, fuzzy
 msgid "Power Information"
 msgstr "Zusätzliche Informationen zur Fehlererkennung anzeigen"
 
-#: ../data/gpm-info.glade.h:10
+#: ../data/gpm-info.glade.h:15
 msgid "This shows how the battery charge and discharge rate varies over time."
 msgstr ""
 
-#: ../data/gpm-info.glade.h:11
+#: ../data/gpm-info.glade.h:16
 msgid "This shows how the battery percentage charge varies over time."
 msgstr ""
 
-#: ../data/gpm-info.glade.h:12
+#: ../data/gpm-info.glade.h:17
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
-msgstr ""
-
-#: ../data/gpm-info.glade.h:13
-msgid ""
-"This shows you detailed information about all the batteries you have "
-"installed in your system."
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
@@ -644,18 +659,18 @@ msgstr "Ausrichtung"
 msgid "The orientation of the tray."
 msgstr "Die Ausrichtung des Benachrichtigungfeldes"
 
-#: ../src/gpm-common.c:47
+#: ../src/gpm-common.c:49
 msgid "Unknown time"
 msgstr "Unbekannte Zeit"
 
-#: ../src/gpm-common.c:52
+#: ../src/gpm-common.c:54
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i Minute"
 msgstr[1] "%i Minuten"
 
-#: ../src/gpm-common.c:63
+#: ../src/gpm-common.c:65
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -664,18 +679,18 @@ msgstr[1] "%i Stunden"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:69
+#: ../src/gpm-common.c:71
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s und %i %s"
 
-#: ../src/gpm-common.c:70
+#: ../src/gpm-common.c:72
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "Stunde"
 msgstr[1] "Stunden"
 
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:73
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "Minute"
@@ -685,101 +700,281 @@ msgstr[1] "Minuten"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Energieverwaltung für die GNOME-Desktop-Umgebung"
 
-#: ../src/gpm-graph-widget.c:74
-msgid "AC power"
+#: ../src/gpm-graph-widget.c:76
+msgid "On AC"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:77
-msgid "Low Power"
-msgstr ""
+#: ../src/gpm-graph-widget.c:78
+#, fuzzy
+msgid "On battery"
+msgstr "Laptop-Batterie"
 
 #: ../src/gpm-graph-widget.c:80
-msgid "Screen dim"
+msgid "LCD dim"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:83
-msgid "Screen off"
+#: ../src/gpm-graph-widget.c:82
+msgid "LCD resume"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:84
+msgid "DPMS off"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:86
+msgid "DPMS on"
 msgstr ""
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-graph-widget.c:86 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:84
 msgid "Suspend"
 msgstr "Stromsparmodus"
 
-#: ../src/gpm-graph-widget.c:89 ../src/gpm-prefs-core.c:86
+#: ../src/gpm-graph-widget.c:90
+msgid "Resume"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:86
 msgid "Hibernate"
 msgstr "Ruhemodus"
 
-#: ../src/gpm-main.c:127
+#: ../src/gpm-graph-widget.c:94
+msgid "Lid closed"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:96
+msgid "Lid opened"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:98
+#, fuzzy
+msgid "Notification"
+msgstr "<b>Benachrichtigungsfeld</b>"
+
+#: ../src/gpm-graph-widget.c:100
+#, fuzzy
+msgid "Unknown event!"
+msgstr "Unbekannte Zeit"
+
+#: ../src/gpm-info.c:244
+msgid "Time"
+msgstr ""
+
+#: ../src/gpm-info.c:249
+msgid "Event"
+msgstr ""
+
+#: ../src/gpm-info.c:254
+msgid "Description"
+msgstr ""
+
+#: ../src/gpm-main.c:126
 msgid "Do not daemonize"
 msgstr "Kein Hintergrundprozess"
 
-#: ../src/gpm-main.c:129 ../src/gpm-prefs.c:82
+#: ../src/gpm-main.c:128 ../src/gpm-prefs.c:82
 msgid "Show extra debugging information"
 msgstr "Zusätzliche Informationen zur Fehlererkennung anzeigen"
 
-#: ../src/gpm-main.c:133
+#: ../src/gpm-main.c:132
 #, fuzzy
 msgid "GNOME Power Manager"
 msgstr "Energieverwaltung"
 
-#: ../src/gpm-manager.c:1053
+#: ../src/gpm-manager.c:550
+#, fuzzy
+msgid "On battery power"
+msgstr "Wenn _Batteriestrom kritisch wird:"
+
+#: ../src/gpm-manager.c:565
+#, fuzzy
+msgid "Display power management activated"
+msgstr "Daemon der Energieverwaltung"
+
+#: ../src/gpm-manager.c:581
+#, fuzzy
+msgid "Laptop lid is closed"
+msgstr "Wenn der Laptop _geschlossen wird:"
+
+#: ../src/gpm-manager.c:745
+#, c-format
+msgid "%s because %s"
+msgstr ""
+
+#: ../src/gpm-manager.c:781
+#, fuzzy
+msgid "Doing nothing"
+msgstr "Nichts machen"
+
+#: ../src/gpm-manager.c:785 ../src/gpm-manager.c:1163
+#, fuzzy
+msgid "Suspending computer"
+msgstr "Rechner in den Ruhemodus versetzen"
+
+#: ../src/gpm-manager.c:790 ../src/gpm-manager.c:1177
+#: ../src/gpm-manager.c:2294
+#, fuzzy
+msgid "Hibernating computer"
+msgstr "Ruhemodus"
+
+#: ../src/gpm-manager.c:795
+msgid "DPMS blanking screen"
+msgstr ""
+
+#: ../src/gpm-manager.c:800 ../src/gpm-manager.c:1192
+#, fuzzy
+msgid "Shutting down computer"
+msgstr "Rechner in den Ruhemodus versetzen"
+
+#: ../src/gpm-manager.c:805
+msgid "GNOME interactive logout"
+msgstr ""
+
+#: ../src/gpm-manager.c:1004 ../src/gpm-manager.c:1094
+msgid "Resuming computer"
+msgstr ""
+
+#: ../src/gpm-manager.c:1016
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:1055
+#: ../src/gpm-manager.c:1018
 #, fuzzy
 msgid "hibernate"
 msgstr "Ruhemodus"
 
-#: ../src/gpm-manager.c:1057
+#: ../src/gpm-manager.c:1019
 #, fuzzy
 msgid "Hibernate Problem"
 msgstr "Ruhemodus"
 
-#: ../src/gpm-manager.c:1130
+#: ../src/gpm-manager.c:1106
+#, c-format
+msgid "Battery charged %imWh during suspend"
+msgstr ""
+
+#: ../src/gpm-manager.c:1109
+#, c-format
+msgid "Battery discharged %imWh during suspend"
+msgstr ""
+
+#: ../src/gpm-manager.c:1124
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 
-#: ../src/gpm-manager.c:1132
+#: ../src/gpm-manager.c:1126
 #, fuzzy
 msgid "suspend"
 msgstr "Stromsparmodus"
 
-#: ../src/gpm-manager.c:1134
+#: ../src/gpm-manager.c:1127
 #, fuzzy
 msgid "Suspend Problem"
 msgstr "Stromsparmodus"
 
-#: ../src/gpm-manager.c:1639
+#: ../src/gpm-manager.c:1164
+msgid "the DBUS method Suspend() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1178
+msgid "the DBUS method Hibernate() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1193
+msgid "the DBUS method Shutdown() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1243
+msgid "Screen resume"
+msgstr ""
+
+#: ../src/gpm-manager.c:1244
+msgid "idle mode ended"
+msgstr ""
+
+#: ../src/gpm-manager.c:1282
+msgid "Screen dim"
+msgstr ""
+
+#: ../src/gpm-manager.c:1283
+msgid "idle mode started"
+msgstr ""
+
+#. can only be hibernate or suspend
+#: ../src/gpm-manager.c:1301
+msgid "the system state is idle"
+msgstr ""
+
+#: ../src/gpm-manager.c:1375
+#, fuzzy
+msgid "the power button has been pressed"
+msgstr "Wenn der Ruhemodusknopf betätigt wird:"
+
+#: ../src/gpm-manager.c:1394
+#, fuzzy
+msgid "the suspend button has been pressed"
+msgstr "Wenn der Ruhemodusknopf betätigt wird:"
+
+#: ../src/gpm-manager.c:1414
+#, fuzzy
+msgid "the hibernate button has been pressed"
+msgstr "Wenn der Ruhemodusknopf betätigt wird:"
+
+#: ../src/gpm-manager.c:1465
+msgid "the lid has been closed on ac power"
+msgstr ""
+
+#: ../src/gpm-manager.c:1470
+#, fuzzy
+msgid "the lid has been closed on battery power"
+msgstr "Der Rechner läuft mit Batteriestrom\n"
+
+#: ../src/gpm-manager.c:1475
+msgid "Turning LCD panel back on"
+msgstr ""
+
+#: ../src/gpm-manager.c:1476
+msgid "laptop lid re-opened"
+msgstr ""
+
+#: ../src/gpm-manager.c:1599
+msgid "the lid has been closed, and the ac adapter removed"
+msgstr ""
+
+#: ../src/gpm-manager.c:1680
 #, fuzzy
 msgid "Power Critically Low"
 msgstr "Batteriestrom ist kritisch gering"
 
-#: ../src/gpm-manager.c:1643
+#: ../src/gpm-manager.c:1684
 #, fuzzy
 msgid "Power Very Low"
 msgstr "Batteriestrom ist sehr gering"
 
-#: ../src/gpm-manager.c:1647
+#: ../src/gpm-manager.c:1688
 #, fuzzy
 msgid "Power Low"
 msgstr "Niedriger Batteriestrom"
 
-#: ../src/gpm-manager.c:1714
-msgid "Battery Charged"
-msgstr "Batterie aufgeladen"
+#: ../src/gpm-manager.c:1713
+#, fuzzy
+msgid "battery is critically low"
+msgstr "Aktion beim kritischem Batteriestrom"
 
-#: ../src/gpm-manager.c:1715
+#: ../src/gpm-manager.c:1757
 msgid "Your battery is now fully charged"
 msgstr "Die Batterien sind nun voll aufgeladen"
 
-#: ../src/gpm-manager.c:1756
+#: ../src/gpm-manager.c:1758
+msgid "Battery Charged"
+msgstr "Batterie aufgeladen"
+
+#: ../src/gpm-manager.c:1814
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
@@ -788,7 +983,7 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1760
+#: ../src/gpm-manager.c:1818
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer is about to "
@@ -798,7 +993,7 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1765
+#: ../src/gpm-manager.c:1823
 #, fuzzy
 msgid ""
 "The battery is below the critical level and this computer is about to "
@@ -807,7 +1002,7 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1768
+#: ../src/gpm-manager.c:1826
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -815,17 +1010,17 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1774 ../src/gpm-manager.c:1891
+#: ../src/gpm-manager.c:1832 ../src/gpm-manager.c:1958
 msgid "Critical action"
 msgstr "Kritische Aktion"
 
-#: ../src/gpm-manager.c:1799
+#: ../src/gpm-manager.c:1860
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Der Rechner wurde vom Stromnetz abgetrennt. Das System läuft nun über "
 "Batteriestrom."
 
-#: ../src/gpm-manager.c:1804
+#: ../src/gpm-manager.c:1865
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -834,7 +1029,7 @@ msgstr ""
 "Es verbleiben noch etwa <b>%s</b> Batteriestrom (%d%%). Bitte verbinden Sie "
 "den Rechner mit dem Stromnetz, um Datenverlust vorzubeugen."
 
-#: ../src/gpm-manager.c:1878
+#: ../src/gpm-manager.c:1945
 #, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
@@ -843,7 +1038,7 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1882
+#: ../src/gpm-manager.c:1949
 #, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
@@ -851,7 +1046,7 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1885
+#: ../src/gpm-manager.c:1952
 #, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
@@ -859,12 +1054,17 @@ msgstr ""
 "Der Batteriestrom befindet sich unterhalb des kritischen Niveaus und wird "
 "nun ausgeschaltet."
 
-#: ../src/gpm-manager.c:1911
+#: ../src/gpm-manager.c:1971
+#, fuzzy
+msgid "UPS is critically low"
+msgstr "Aktion beim kritischem Batteriestrom"
+
+#: ../src/gpm-manager.c:1984
 #, fuzzy
 msgid "Your system is running on backup power!"
 msgstr "Der Rechner läuft mit Batteriestrom\n"
 
-#: ../src/gpm-manager.c:1914
+#: ../src/gpm-manager.c:1987
 #, fuzzy, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -873,172 +1073,130 @@ msgstr ""
 "Es verbleiben noch etwa <b>%s</b> Batteriestrom (%d%%). Bitte verbinden Sie "
 "den Rechner mit dem Stromnetz, um Datenverlust vorzubeugen."
 
-#: ../src/gpm-manager.c:1994
+#: ../src/gpm-manager.c:2072
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
 
-#: ../src/gpm-power.c:457
+#: ../src/gpm-manager.c:2295
+msgid "user clicked hibernate from tray menu"
+msgstr ""
+
+#: ../src/gpm-manager.c:2319
+#, fuzzy
+msgid "Susspending computer"
+msgstr "Rechner in den Ruhemodus versetzen"
+
+#: ../src/gpm-manager.c:2320
+msgid "user clicked suspend from tray menu"
+msgstr ""
+
+#: ../src/gpm-power.c:439
 msgid "Laptop battery"
 msgstr "Laptop-Batterie"
 
-#: ../src/gpm-power.c:459
+#: ../src/gpm-power.c:441
 msgid "UPS"
 msgstr "USV"
 
-#: ../src/gpm-power.c:461
+#: ../src/gpm-power.c:443
 msgid "Wireless mouse"
 msgstr "Drahtlose Maus"
 
-#: ../src/gpm-power.c:463
+#: ../src/gpm-power.c:445
 msgid "Wireless keyboard"
 msgstr "Drahtlose Tastatur"
 
-#: ../src/gpm-power.c:465
+#: ../src/gpm-power.c:447
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:467
+#: ../src/gpm-power.c:449
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../src/gpm-power.c:681 ../src/gpm-power.c:687 ../src/gpm-power.c:691
-#: ../src/gpm-power.c:695
-msgid "Status:"
+#: ../src/gpm-power.c:467
+msgid "ups"
 msgstr ""
 
-#: ../src/gpm-power.c:682
-msgid "Missing"
+#: ../src/gpm-power.c:469
+msgid "mouse"
 msgstr ""
 
-#: ../src/gpm-power.c:688
+#: ../src/gpm-power.c:471
 #, fuzzy
-msgid "Charged"
-msgstr "Batterie aufgeladen"
+msgid "keyboard"
+msgstr "Drahtlose Tastatur"
 
-#: ../src/gpm-power.c:692
-msgid "Charging"
+#: ../src/gpm-power.c:473
+msgid "pda"
 msgstr ""
 
-#: ../src/gpm-power.c:696
-msgid "Discharging"
-msgstr ""
+#: ../src/gpm-power.c:475
+#, fuzzy
+msgid "unknown"
+msgstr "Unbekannt"
 
-#: ../src/gpm-power.c:700
-msgid "Product:"
-msgstr ""
-
-#: ../src/gpm-power.c:705
-msgid "Vendor:"
-msgstr ""
-
-#: ../src/gpm-power.c:710
-msgid "Technology:"
-msgstr ""
-
-#: ../src/gpm-power.c:714
+#: ../src/gpm-power.c:717
 msgid "Lithium ion"
 msgstr ""
 
-#: ../src/gpm-power.c:716
+#: ../src/gpm-power.c:719
 msgid "Lead acid"
 msgstr ""
 
-#: ../src/gpm-power.c:726
-msgid "Serial number:"
-msgstr ""
-
-#: ../src/gpm-power.c:731
-msgid "Model:"
-msgstr ""
-
-#: ../src/gpm-power.c:736
-#, fuzzy
-msgid "Remaining time:"
-msgstr "verbleibend"
-
 #: ../src/gpm-power.c:741
-msgid "Percentage charge:"
-msgstr ""
-
-#: ../src/gpm-power.c:747
-msgid "Capacity:"
-msgstr ""
-
-#: ../src/gpm-power.c:749
 msgid "Excellent"
 msgstr ""
 
-#: ../src/gpm-power.c:751
+#: ../src/gpm-power.c:743
 msgid "Good"
 msgstr ""
 
-#: ../src/gpm-power.c:753
+#: ../src/gpm-power.c:745
 msgid "Fair"
 msgstr ""
 
-#: ../src/gpm-power.c:755
+#: ../src/gpm-power.c:747
 msgid "Poor"
 msgstr ""
 
-#: ../src/gpm-power.c:764
-#, fuzzy
-msgid "Current charge:"
-msgstr "bis geladen"
-
-#: ../src/gpm-power.c:770
-#, fuzzy
-msgid "Last full charge:"
-msgstr "voll geladen"
-
-#: ../src/gpm-power.c:775
-msgid "Design charge:"
-msgstr ""
-
-#: ../src/gpm-power.c:780
-msgid "Charge rate (raw):"
-msgstr ""
-
-#: ../src/gpm-power.c:785
-msgid "Charge rate (smoothed):"
-msgstr ""
-
-#: ../src/gpm-power.c:1083
+#: ../src/gpm-power.c:1226
 msgid "fully charged"
 msgstr "voll geladen"
 
-#: ../src/gpm-power.c:1089
+#: ../src/gpm-power.c:1232
 msgid "remaining"
 msgstr "verbleibend"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1092
+#: ../src/gpm-power.c:1235
 msgid "discharging"
 msgstr ""
 
-#: ../src/gpm-power.c:1099
+#: ../src/gpm-power.c:1242
 msgid "until charged"
 msgstr "bis geladen"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1102
+#: ../src/gpm-power.c:1245
 msgid "charging"
 msgstr ""
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1143
+#: ../src/gpm-power.c:1286
 #, fuzzy
 msgid "Computer is running on backup power\n"
 msgstr "Der Rechner läuft mit Netzstrom\n"
 
-#: ../src/gpm-power.c:1146
+#: ../src/gpm-power.c:1289
 msgid "Computer is running on AC power\n"
 msgstr "Der Rechner läuft mit Netzstrom\n"
 
-#: ../src/gpm-power.c:1149
+#: ../src/gpm-power.c:1292
 msgid "Computer is running on battery power\n"
 msgstr "Der Rechner läuft mit Batteriestrom\n"
 
@@ -1063,7 +1221,7 @@ msgstr ""
 msgid "Do nothing"
 msgstr "Nichts machen"
 
-#: ../src/gpm-prefs-core.c:230
+#: ../src/gpm-prefs-core.c:232
 msgid "Never"
 msgstr "Nie"
 
@@ -1100,11 +1258,11 @@ msgstr "_Hilfe"
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/gpm-tray-icon.c:314
+#: ../src/gpm-tray-icon.c:302
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Lizenziert unter der GNU General Public License Version 2"
 
-#: ../src/gpm-tray-icon.c:315
+#: ../src/gpm-tray-icon.c:303
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1117,7 +1275,7 @@ msgstr ""
 "2\n"
 "der Lizenz oder (nach Ihrem Gutdünken) in jeder späteren Version."
 
-#: ../src/gpm-tray-icon.c:319
+#: ../src/gpm-tray-icon.c:307
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1130,7 +1288,7 @@ msgstr ""
 "BEI FEHLERHAFTEM VERHALTEN DER SOFTWARE.\n"
 "Lesen Sie die GNU General Public License für weiterführende Informationen."
 
-#: ../src/gpm-tray-icon.c:323
+#: ../src/gpm-tray-icon.c:311
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1142,9 +1300,25 @@ msgstr ""
 "Sie bitte an die Free Software Foundation, Inc., 59 Temple Place,\n"
 "Suite 330, Boston, MA  02111-1307  USA"
 
-#: ../src/gpm-tray-icon.c:328
+#: ../src/gpm-tray-icon.c:316
 msgid "translator-credits"
 msgstr "Hendrik Brandt <heb@gnome-de.org>"
+
+#, fuzzy
+#~ msgid "<b>Laptop Battery Bay (2)</b>"
+#~ msgstr "Laptop-Batterie"
+
+#, fuzzy
+#~ msgid "Charged"
+#~ msgstr "Batterie aufgeladen"
+
+#, fuzzy
+#~ msgid "Remaining time:"
+#~ msgstr "verbleibend"
+
+#, fuzzy
+#~ msgid "Current charge:"
+#~ msgstr "bis geladen"
 
 #, fuzzy
 #~ msgid "Poor condition"
@@ -1259,9 +1433,6 @@ msgstr "Hendrik Brandt <heb@gnome-de.org>"
 
 #~ msgid "Sleep"
 #~ msgstr "Ruhemodus"
-
-#~ msgid "When _suspend button pressed:"
-#~ msgstr "Wenn der Ruhemodusknopf betätigt wird:"
 
 #~ msgid "_Computer sleep type:"
 #~ msgstr "_Ruhemodus des Rechners:"
