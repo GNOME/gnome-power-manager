@@ -88,8 +88,8 @@ typedef enum {
 #define GPM_BUTTON_LID			"lid"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
-#define GPM_BUTTON_BRIGHT_UP_DEP	"brightness_up"		/* Remove when we depend on HAL 0.5.8 */
-#define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightness_down"	/* as these are the old names */
+#define GPM_BUTTON_BRIGHT_UP_DEP	"brightnessup"	 /* Remove when we depend on HAL 0.5.8 */
+#define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightnessdown" /* as these are the old names */
 #define GPM_BUTTON_LOCK			"lock"
 #define GPM_BUTTON_BATTERY		"battery"
 
