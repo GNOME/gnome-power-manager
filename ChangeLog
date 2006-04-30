@@ -1,5 +1,11 @@
 2006-04-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Use the new function
+	gpm_graph_legend_calculate_width() so we compute the legend width
+	instead of hardcoding it. Fixes #340218.
+
+2006-04-30  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.h: Update GPM_FAQ_URL. #330889
 
 2006-04-30  Richard Hughes  <richard@hughsie.com>

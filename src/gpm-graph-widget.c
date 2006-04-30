@@ -853,6 +853,42 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 }
 
 /**
+ * gpm_graph_legend_calculate_width:
+ * @graph: This graph class instance
+ * @cr: Cairo drawing context
+ * Return value: The width of the legend, including borders.
+ *
+ * We have to find the maximum size of the text so we know the width of the
+ * legend box. We can't hardcode this as the dpi or font size might differ
+ * from machine to machine.
+ **/
+static float
+gpm_graph_legend_calculate_width (GpmGraph *graph, cairo_t *cr)
+{
+	g_return_val_if_fail (graph != NULL, 0.0f);
+	g_return_val_if_fail (GPM_IS_GRAPH (graph), 0.0f);
+
+	int a;
+	const char *desc;
+	cairo_text_extents_t extents;
+	float max_width = 0.0f;
+
+	cairo_set_font_options (cr, graph->priv->options);
+	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
+		desc = gpm_graph_event_description (a);
+		cairo_text_extents (cr, desc, &extents);
+		if (max_width < extents.width) {
+			max_width = extents.width;
+		}
+	}
+
+	/* add for borders */
+	max_width += 25;
+
+	return max_width;
+}
+
+/**
  * gpm_graph_draw_graph:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
@@ -864,13 +900,15 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
 	int legend_x = 0;
 	int legend_y = 0;
-	int legend_height = GPM_GRAPH_EVENT_LAST * 20;
-	int legend_width = 78;
+	int legend_height;
+	int legend_width;
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
-
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (graph));
+
+	legend_width = gpm_graph_legend_calculate_width (graph, cr);
+	legend_height = GPM_GRAPH_EVENT_LAST * 20;
 
 	cairo_save (cr);
 
