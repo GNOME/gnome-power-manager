@@ -549,10 +549,7 @@ gpm_graph_auto_range (GpmGraph *graph)
 	if (graph->priv->axis_x == GPM_GRAPH_TYPE_PERCENTAGE) {
 		graph->priv->stop_x = 100;
 	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_TIME) {
-		graph->priv->stop_x = ((biggest_x / 60) + 1) * 60 + smallest_x;
-		if (graph->priv->stop_x > 60) {
-			graph->priv->stop_x = ((biggest_x / (10 * 60)) + 1) * (10 * 60) + smallest_x;
-		}
+		graph->priv->stop_x = ((biggest_x / (10 * 60)) + 1) * (10 * 60) + smallest_x;
 	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_RATE) {
 		graph->priv->stop_x = ((biggest_x / 10000) + 2) * 10000 + smallest_x;
 		if (graph->priv->stop_x < 10000) {

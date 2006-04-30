@@ -1,5 +1,11 @@
 2006-04-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_auto_range): Make sure the
+	time scale cannot be less than 10 minutes as smaller values show the
+	errors in the event-logging code. Fixes #340217.
+
+2006-04-30  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: Fix the GPM_BUTTON_BRIGHT_UP_DEP and
 	GPM_BUTTON_BRIGHT_DOWN_DEP values to what were shipped in the HAL 0.5.7
 	tarball. This fixes the hardware brightness keys for Ubuntu Dapper.
