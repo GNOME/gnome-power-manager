@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 /* help location */
 #define GPM_HOMEPAGE_URL	 	"http://www.gnome.org/projects/gnome-power-manager/"
 #define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
-#define GPM_FAQ_URL			GPM_HOMEPAGE_URL "faq.html"
+#define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
 
 char *gpm_get_timestring (int time);
 
