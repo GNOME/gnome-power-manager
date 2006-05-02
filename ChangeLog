@@ -1,3 +1,9 @@
+2006-05-02  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness.c (gpm_brightness_level_{down|up}):
+	Add in initial functionality so we can support laptop panels that have
+	hardware step support. Hardcoded for now, awaiting HAL property.
+
 2006-04-30  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c: (gpm_graph_auto_range): Make sure the

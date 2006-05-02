@@ -58,6 +58,7 @@ static int	gpm_brightness_hw_to_percent (int hw, int levels);
 struct GpmBrightnessPrivate
 {
 	gboolean    has_hardware;
+	gboolean    does_own_updates; /* keys are hardwired */
 	int	    current_hw;
 	int	    saved_value_hw;
 	int	    levels;
@@ -138,6 +139,11 @@ gpm_brightness_init (GpmBrightness *brightness)
 	}
 
 	brightness->priv->has_hardware = TRUE;
+
+	/* We only want to change the brightness if the machine does not
+	   do it on it's own updates, as this can make the panel flash in a
+	   feedback loop. Required TRUE for IBM Thinkpad x31 and maybe more */
+	brightness->priv->does_own_updates = FALSE;
 
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
@@ -280,7 +286,13 @@ gpm_brightness_level_up (GpmBrightness *brightness)
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
-	gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw + 1);
+
+	/* Do we find the new value, or set the new value */
+	if (brightness->priv->does_own_updates) {
+		gpm_brightness_level_update_hw (brightness);
+	} else {
+		gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw + 1);
+	}
 
 	int percentage;
 	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
@@ -301,7 +313,14 @@ gpm_brightness_level_down (GpmBrightness *brightness)
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
-	gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw - 1);
+
+	/* Do we find the new value, or set the new value */
+	if (brightness->priv->does_own_updates) {
+		gpm_brightness_level_update_hw (brightness);
+	} else {
+		gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw - 1);
+	}
+
 	int percentage;
 	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
