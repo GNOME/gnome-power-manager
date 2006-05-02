@@ -81,6 +81,10 @@ G_BEGIN_DECLS
 #define GPM_PREF_SHOW_ACTIONS_IN_MENU	GPM_PREF_DIR "/show_actions_in_menu"
 #define GPM_PREF_RATE_EXP_AVE_FACTOR	GPM_PREF_DIR "/rate_exponential_average_factor"
 
+#define GPM_PREF_AC_LOWPOWER		GPM_PREF_DIR "/use_lowpower_ac"
+#define GPM_PREF_UPS_LOWPOWER		GPM_PREF_DIR "/use_lowpower_ups"
+#define GPM_PREF_BATTERY_LOWPOWER	GPM_PREF_DIR "/use_lowpower_battery"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,

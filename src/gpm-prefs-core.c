@@ -627,7 +627,6 @@ setup_sleep_type (GpmPrefs *prefs)
 static void
 setup_ac_actions (GpmPrefs *prefs)
 {
-	GtkWidget    *vbox_ac_actions;
 	const char   *button_lid_actions[] = {ACTION_NOTHING,
 					      ACTION_BLANK,
 					      ACTION_SUSPEND,
@@ -638,13 +637,8 @@ setup_ac_actions (GpmPrefs *prefs)
 				      GPM_PREF_AC_BUTTON_LID,
 				      button_lid_actions);
 
-	if (! prefs->priv->has_button_lid) {
-		vbox_ac_actions = glade_xml_get_widget (prefs->priv->glade_xml,
-							"vbox_ac_actions");
-		/* there is nothing else in this action box apart from
-		   lid event, so hide the whole box */
-		gtk_widget_hide_all (vbox_ac_actions);
-	}
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_powersave",
+	  			  GPM_PREF_AC_LOWPOWER);
 }
 
 /**
@@ -681,6 +675,9 @@ setup_battery_actions (GpmPrefs *prefs)
 		gtk_widget_hide_all (combo_button_lid);
 	}
 
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_powersave",
+	  			  GPM_PREF_BATTERY_LOWPOWER);
+
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
 				      GPM_PREF_BATTERY_CRITICAL,
 				      battery_critical_actions);
@@ -697,6 +694,9 @@ setup_ups_actions (GpmPrefs *prefs)
 					       ACTION_HIBERNATE,
 					       ACTION_SHUTDOWN,
 					       NULL};
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_ups_powersave",
+	  			  GPM_PREF_UPS_LOWPOWER);
+
 	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
 				      GPM_PREF_UPS_CRITICAL,
 				      battery_ups_actions);
@@ -850,12 +850,52 @@ gs_delay_changed_cb (GpmScreensaver *screensaver,
 }
 
 /**
+ * gconf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+gconf_key_changed_cb (GConfClient *client,
+		      guint	   cnxn_id,
+		      GConfEntry  *entry,
+		      gpointer	   user_data)
+{
+	GpmPrefs *prefs = GPM_PREFS (user_data);
+	gboolean  enabled;
+
+	gpm_debug ("Key changed %s", entry->key);
+
+	if (gconf_entry_get_value (entry) == NULL) {
+		return;
+	}
+
+	if (strcmp (entry->key, GPM_PREF_AC_LOWPOWER) == 0) {
+		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
+				  	         GPM_PREF_AC_LOWPOWER, NULL);
+		gpm_debug ("need to enable checkbox");
+
+	} else if (strcmp (entry->key, GPM_PREF_UPS_LOWPOWER) == 0) {
+		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
+				  	         GPM_PREF_UPS_LOWPOWER, NULL);
+		gpm_debug ("need to enable checkbox");
+
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_LOWPOWER) == 0) {
+		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
+				  	         GPM_PREF_BATTERY_LOWPOWER, NULL);
+		gpm_debug ("need to enable checkbox");
+	}
+}
+
+/**
  * gpm_prefs_init:
  * @prefs: This prefs class instance
  **/
 static void
 gpm_prefs_init (GpmPrefs *prefs)
 {
+	GtkWidget    *main_window;
+	GtkWidget    *widget;
+
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	prefs->priv->screensaver = gpm_screensaver_new ();
@@ -864,8 +904,12 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	prefs->priv->gconf_client = gconf_client_get_default ();
 
-	GtkWidget    *main_window;
-	GtkWidget    *widget;
+	gconf_client_notify_add (prefs->priv->gconf_client,
+				 GPM_PREF_DIR,
+				 gconf_key_changed_cb,
+				 prefs,
+				 NULL,
+				 NULL);
 
 	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
 	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value ("battery",

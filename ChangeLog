@@ -1,5 +1,21 @@
 2006-05-02  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h:
+	Add the /apps/gnome-power-manager/use_lowpower_{ac|ups|battery} keys.
+
+	* data/gpm-prefs.glade:
+	Add the checkboxes to enable the lowpower mode checkboxes.
+
+	* src/gpm-prefs-core.c (setup_ac_actions, setup_battery_actions,
+	setup_ups_actions): Support the new checkboxes and tie the values into
+	gconf keys. Starting to work towards a fix for #340355.
+	
+	* src/gpm-prefs-core.c (gpm_prefs_init): Use gconf_key_changed_cb()
+	to act on gconf keys changing outside of g-p-p. Should help out the
+	Ubuntu guys with their modifications also.
+
+2006-05-02  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c (gpm_brightness_level_{down|up}):
 	Add in initial functionality so we can support laptop panels that have
 	hardware step support. Hardcoded for now, awaiting HAL property.

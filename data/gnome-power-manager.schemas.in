@@ -2,6 +2,42 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/use_lowpower_ac</key>
+      <applyto>/apps/gnome-power-manager/use_lowpower_ac</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If we should use low power mode when on AC power</short>
+        <long>If we should enable the system low power mode when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/use_lowpower_ups</key>
+      <applyto>/apps/gnome-power-manager/use_lowpower_ups</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If we should use low power mode when on UPS power</short>
+        <long>If we should enable the system low power mode when on UPS power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/use_lowpower_battery</key>
+      <applyto>/apps/gnome-power-manager/use_lowpower_battery</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If we should use low power mode when on laptop battery power</short>
+        <long>If we should enable the system low power mode when on laptop battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/rate_exponential_average_factor</key>
       <applyto>/apps/gnome-power-manager/rate_exponential_average_factor</applyto>
       <owner>gnome-power-manager</owner>
