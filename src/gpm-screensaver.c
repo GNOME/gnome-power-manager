@@ -58,12 +58,37 @@ struct GpmScreensaverPrivate
 enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
+	AUTH_REQUEST,
 	LAST_SIGNAL
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
+
+/** Invoked when we get the AuthenticationRequestBegin from g-s when the user
+ *  has moved their mouse and we are showing the authentication box.
+ */
+static void
+gpm_screensaver_auth_begin (DBusGProxy     *proxy,
+			    GpmScreensaver *screensaver)
+{
+	const gboolean value = TRUE;
+	gpm_debug ("emitting auth-request : (%i)", value);
+	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+}
+
+/** Invoked when we get the AuthenticationRequestEnd from g-s when the user
+ *  has entered a valid password or re-authenticated.
+ */
+static void
+gpm_screensaver_auth_end (DBusGProxy     *proxy,
+			  GpmScreensaver *screensaver)
+{
+	const gboolean value = FALSE;
+	gpm_debug ("emitting auth-request : (%i)", value);
+	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+}
 
 /**
  * gpm_screensaver_connect:
@@ -84,6 +109,22 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 	gpm_debug ("gnome-screensaver connected to the session DBUS");
 
 	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
+
+	/* get AuthenticationRequestBegin */
+	dbus_g_proxy_add_signal (screensaver->priv->gs_proxy,
+				 "AuthenticationRequestBegin", G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (screensaver->priv->gs_proxy,
+				     "AuthenticationRequestBegin",
+				     G_CALLBACK (gpm_screensaver_auth_begin),
+				     screensaver, NULL);
+
+	/* get AuthenticationRequestEnd */
+	dbus_g_proxy_add_signal (screensaver->priv->gs_proxy,
+				 "AuthenticationRequestEnd", G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (screensaver->priv->gs_proxy,
+				     "AuthenticationRequestEnd",
+				     G_CALLBACK (gpm_screensaver_auth_end),
+				     screensaver, NULL);
 }
 
 /**
@@ -384,6 +425,15 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmScreensaverClass, connection_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [AUTH_REQUEST] =
+		g_signal_new ("auth-request",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, auth_request),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,

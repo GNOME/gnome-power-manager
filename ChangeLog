@@ -1,3 +1,12 @@
+2006-05-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-screensaver.{c|h}: Add gpm_screensaver_auth_begin() and
+	gpm_screensaver_auth_end() so that we can create a signal
+	"auth-request" when gnome-screensaver shows the password dialogue.
+	This is needed so we can undim the screen when we resume and show the
+	password box. Needed for #333290, but still need to connect this up to
+	the manager stuff to solve the problem.
+
 2006-05-02  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in, src/gpm-prefs.h:

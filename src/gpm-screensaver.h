@@ -48,6 +48,8 @@ typedef struct
 					    		 int		 delay);
 	void		(* connection_changed)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 connected);
+	void		(* auth_request)		(GpmScreensaver	*screensaver,
+					    		 gboolean	 auth);
 } GpmScreensaverClass;
 
 GType		 gpm_screensaver_get_type		(void);
