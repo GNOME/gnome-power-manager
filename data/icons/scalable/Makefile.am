@@ -6,8 +6,8 @@ Datadir = $(datadir)/icons/hicolor/scalable/apps
 Data_DATA =				\
 	gpm-ac-adapter.svg		\
 	gpm-brightness.svg		\
-	gpm-suspend-to-disk.svg		\
-	gpm-suspend-to-ram.svg		\
+	gpm-hibernate.svg		\
+	gpm-suspend.svg			\
 	gpm-keyboard-000.svg		\
 	gpm-keyboard-030.svg		\
 	gpm-keyboard-060.svg		\

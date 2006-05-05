@@ -97,9 +97,9 @@ static void gpm_tray_icon_show_about_cb		(GtkAction *action, GpmTrayIcon *icon);
 
 static GtkActionEntry gpm_tray_icon_action_entries [] =
 {
-	{ "TraySuspend", GPM_STOCK_SUSPEND_TO_RAM, N_("_Suspend"),
+	{ "TraySuspend", GPM_STOCK_SUSPEND, N_("_Suspend"),
 	  NULL, N_("Suspend the computer"), G_CALLBACK (gpm_tray_icon_suspend_cb) },
-	{ "TrayHibernate", GPM_STOCK_SUSPEND_TO_DISK, N_("Hi_bernate"),
+	{ "TrayHibernate", GPM_STOCK_HIBERNATE, N_("Hi_bernate"),
 	  NULL, N_("Make the computer go to sleep"), G_CALLBACK (gpm_tray_icon_hibernate_cb) },
 	{ "TrayPreferences", GTK_STOCK_PREFERENCES, N_("_Preferences"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },

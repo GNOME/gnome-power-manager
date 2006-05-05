@@ -1,5 +1,21 @@
 2006-05-05  Richard Hughes  <richard@hughsie.com>
 
+	* data/icons/16x16/Makefile.am:
+	* data/icons/22x22/Makefile.am:
+	* data/icons/scalable/Makefile.am:
+	* docs/icon-scheme.txt:
+	Rename the icons from gpm-suspend-to-{x} to gpm-suspend and
+	gpm-hibernate as per the new recommendations:
+	http://live.gnome.org/GnomePowerManager/SleepNames
+
+	* man/gnome-power-manager.sgml:
+	* src/gpm-stock-icons.c: (gpm_stock_icons_init):
+	* src/gpm-stock-icons.h:
+	* src/gpm-tray-icon.c:
+	Remove all suspend-to-{x} terminology in the code and documentation.
+
+2006-05-05  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal.c: (gpm_hal_enable_power_save):
 	Add debugging comment.
 

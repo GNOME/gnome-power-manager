@@ -48,8 +48,8 @@ gpm_stock_icons_init (void)
 	int	      i;
 
 	static const GpmStockIcon items [] = {
-		{ GPM_STOCK_SUSPEND_TO_DISK, FALSE },
-		{ GPM_STOCK_SUSPEND_TO_RAM, FALSE },
+		{ GPM_STOCK_HIBERNATE, FALSE },
+		{ GPM_STOCK_SUSPEND, FALSE },
 	};
 
 	g_return_val_if_fail (factory == NULL, FALSE);
