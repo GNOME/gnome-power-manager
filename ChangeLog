@@ -1,3 +1,14 @@
+2006-05-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal.c: (gpm_hal_enable_power_save):
+	Add debugging comment.
+
+	* src/gpm-manager.c: (change_power_policy): Respect the user policy
+	enabling low power mode when required.
+
+	* src/gpm-prefs-core.c: (setup_ac_actions): Hide the AC actions vbox
+	when it is empty like we used to do.
+
 2006-05-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-screensaver.{c|h}: Add gpm_screensaver_auth_begin() and

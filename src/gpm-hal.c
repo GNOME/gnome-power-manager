@@ -304,6 +304,7 @@ gpm_hal_enable_power_save (gboolean enable)
 	if (!gpm_hal_get_dbus_connection (&system_connection))
 		return FALSE;
 
+	gpm_debug ("Doing SetPowerSave (%i)", enable);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_ROOT_COMPUTER,

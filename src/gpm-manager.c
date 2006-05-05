@@ -599,6 +599,7 @@ change_power_policy (GpmManager *manager,
 	int	     brightness;
 	int	     sleep_display;
 	int	     sleep_computer;
+	gboolean     power_save;
 	GConfClient *client;
 
 	client = manager->priv->gconf_client;
@@ -607,14 +608,17 @@ change_power_policy (GpmManager *manager,
 		brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
 		sleep_computer = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_COMPUTER, NULL);
 		sleep_display = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_DISPLAY, NULL);
+		power_save = gconf_client_get_bool (client, GPM_PREF_AC_LOWPOWER, NULL);
 	} else {
 		brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
 		sleep_computer = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_COMPUTER, NULL);
 		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
+		/* todo: what about when on UPS? */
+		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
 	}
 
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
-	gpm_hal_enable_power_save (!on_ac);
+	gpm_hal_enable_power_save (power_save);
 
 	update_ac_throttle (manager, on_ac);
 

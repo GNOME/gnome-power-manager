@@ -627,6 +627,8 @@ setup_sleep_type (GpmPrefs *prefs)
 static void
 setup_ac_actions (GpmPrefs *prefs)
 {
+	GtkWidget    *checkbox_powersave;
+	GtkWidget    *vbox_ac_actions;
 	const char   *button_lid_actions[] = {ACTION_NOTHING,
 					      ACTION_BLANK,
 					      ACTION_SUSPEND,
@@ -637,8 +639,19 @@ setup_ac_actions (GpmPrefs *prefs)
 				      GPM_PREF_AC_BUTTON_LID,
 				      button_lid_actions);
 
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_powersave",
-	  			  GPM_PREF_AC_LOWPOWER);
+	checkbox_powersave = gpm_prefs_setup_checkbox (prefs,
+						       "checkbutton_ac_powersave",
+						       GPM_PREF_AC_LOWPOWER);
+	/* hide elements that do not apply */
+	if (! prefs->priv->has_batteries) {
+		gtk_widget_hide_all (checkbox_powersave);
+		if (!prefs->priv->has_button_lid) {
+			/* hide the whole vbox if we don't have a lid */
+			vbox_ac_actions = glade_xml_get_widget (prefs->priv->glade_xml,
+								"vbox_ac_actions");
+			gtk_widget_hide_all (vbox_ac_actions);
+		}
+	}
 }
 
 /**
