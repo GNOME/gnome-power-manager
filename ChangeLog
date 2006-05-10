@@ -1,3 +1,12 @@
+2006-05-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/eggtrayicon.c: (egg_tray_icon_class_init),
+	(transparent_expose_event), (make_transparent_again),
+	(make_transparent), (egg_tray_icon_realize), (egg_tray_icon_add):
+	Patch from Peter Grundström <pete@openfestis.org> to adds the ability
+	to handle a transparent background in the tray icon the version of
+	eggtrayicon in gnome-power-manager. Fixes #341227
+
 2006-05-02  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: Fix the GPM_BUTTON_BRIGHT_UP_DEP and
