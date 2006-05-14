@@ -24,6 +24,8 @@
 #  include <config.h>
 #endif
 
+#define USE_EGGTRAYICON		TRUE
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -38,6 +40,10 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+#if ! USE_EGGTRAYICON
+#include <gtk/gtkstatusicon.h>
+#endif
 
 #include <libgnomeui/gnome-help.h> /* for gnome_help_display */
 
@@ -60,10 +66,14 @@ struct GpmTrayIconPrivate
 {
 	GtkUIManager	*ui_manager;
 	GtkActionGroup	*actiongroup;
-	GtkTooltips	*tooltips;
 	GtkWidget	*popup_menu;
+#if USE_EGGTRAYICON
+	GtkTooltips	*tooltips;
 	GtkWidget	*image;
 	GtkWidget	*ebox;
+#else
+	GtkStatusIcon	*status_icon;
+#endif
 
 	gboolean	 show_notifications;
 	gboolean	 is_visible;
@@ -174,9 +184,14 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	g_return_if_fail (tooltip != NULL);
 
+#if USE_EGGTRAYICON
 	gtk_tooltips_set_tip (icon->priv->tooltips,
 			      GTK_WIDGET (icon),
 			      tooltip, NULL);
+#else
+	gtk_status_icon_set_tooltip (GTK_STATUS_ICON (icon->priv->status_icon),
+				     tooltip);
+#endif
 }
 
 /**
@@ -196,19 +211,28 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 		/* we only set a new icon if the name differs */
 		if (strcmp (icon->priv->stock_id, stock_id) != 0) {
 			gpm_debug ("Setting icon to %s", stock_id);
+#if USE_EGGTRAYICON
 			gtk_image_set_from_icon_name (GTK_IMAGE (icon->priv->image),
 						      stock_id,
 						      GTK_ICON_SIZE_LARGE_TOOLBAR);
+#else
+			gtk_status_icon_set_from_icon_name (GTK_STATUS_ICON (icon->priv->status_icon), stock_id);
+			gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), TRUE);
+#endif
 			/* don't keep trying to set the same icon */
 		        g_free (icon->priv->stock_id);
 			icon->priv->stock_id = g_strdup (stock_id);
 		}
 	} else {
 		/* get rid of the icon */
+#if USE_EGGTRAYICON
 		gtk_image_clear (GTK_IMAGE (icon->priv->image));
 		if (GTK_WIDGET_VISIBLE (icon->priv->image)) {
 			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
 		}
+#else
+		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), FALSE);
+#endif
 	}
 }
 
@@ -348,6 +372,7 @@ gpm_tray_icon_show_about_cb (GtkAction   *action,
 			       NULL);
 }
 
+#if USE_EGGTRAYICON
 /**
  * tray_popup_position_menu:
  *
@@ -384,6 +409,7 @@ tray_popup_position_menu (GtkMenu  *menu,
 	*y = menu_ypos;
 	*push_in = TRUE;
 }
+#endif
 
 /**
  * gpm_tray_icon_popup_cleared_cd:
@@ -398,10 +424,13 @@ gpm_tray_icon_popup_cleared_cd (GtkWidget   *widget,
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
+#if USE_EGGTRAYICON
 	/* we enable the tooltip as the menu has gone */
 	gtk_tooltips_enable (icon->priv->tooltips);
+#endif
 }
 
+#if USE_EGGTRAYICON
 /**
  * gpm_tray_icon_button_press_cb:
  * @widget: The tray icon widget
@@ -424,13 +453,13 @@ gpm_tray_icon_button_press_cb (GtkWidget      *widget,
 
 	/* we disable the tooltip so it doesn't clash with the menu. See #331075 */
 	gtk_tooltips_disable (icon->priv->tooltips);
-
 	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
 			tray_popup_position_menu, widget,
 			2,
 			gtk_get_current_event_time ());
 	return TRUE;
 }
+#endif
 
 /**
  * gpm_tray_icon_sync_actions:
@@ -575,13 +604,63 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
 	if (enabled) {
+#if USE_EGGTRAYICON
 		gtk_widget_show_all (GTK_WIDGET (icon));
+#else
+		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), TRUE);
+#endif
 		icon->priv->is_visible = TRUE;
 	} else {
+#if USE_EGGTRAYICON
 		gtk_widget_hide_all (GTK_WIDGET (icon));
+#else
+		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), FALSE);
+#endif
 		icon->priv->is_visible = FALSE;
 	}
 }
+
+#if !USE_EGGTRAYICON
+/**
+ * gpm_tray_icon_popup_menu_cb:
+ * @button: Which buttons are pressed
+ * @icon: This TrayIcon class instance
+ *
+ * Display the popup menu.
+ **/
+static void
+gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
+			     guint          button,
+			     guint32        activate_time,
+			     GpmTrayIcon    *icon)
+{
+	GtkWidget *popup;
+	popup = gtk_ui_manager_get_widget (GTK_UI_MANAGER (icon->priv->ui_manager),
+					   "/GpmTrayPopup");
+	gtk_menu_set_screen (GTK_MENU (popup),
+			     gtk_widget_get_screen (GTK_WIDGET (icon)));
+
+	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
+			gtk_status_icon_position_menu, status_icon,
+			button, activate_time);
+}
+
+/**
+ * gpm_tray_icon_activate_cb:
+ * @button: Which buttons are pressed
+ * @icon: This TrayIcon class instance
+ *
+ * Callback when the icon is clicked
+ **/
+static void
+gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
+			   guint          button,
+			   guint32        activate_time,
+			   GpmTrayIcon   *icon)
+{
+	g_debug ("icon activated (button:%i)", button);
+}
+#endif
 
 /**
  * gpm_tray_icon_init:
@@ -600,9 +679,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
 
-	icon->priv->tooltips = gtk_tooltips_new ();
 	icon->priv->ui_manager = gtk_ui_manager_new ();
 
+#if USE_EGGTRAYICON
+	icon->priv->tooltips = gtk_tooltips_new ();
 	icon->priv->ebox = gtk_event_box_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->ebox),
 				 "button_press_event",
@@ -610,10 +690,21 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 icon, 0);
 
 	icon->priv->image = gtk_image_new ();
-
 	gtk_container_add (GTK_CONTAINER (icon->priv->ebox), icon->priv->image);
 
 	gtk_container_add (GTK_CONTAINER (icon), icon->priv->ebox);
+#else
+	icon->priv->status_icon = gtk_status_icon_new ();
+	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
+				 "popup_menu",
+				 G_CALLBACK (gpm_tray_icon_popup_menu_cb),
+				 icon, 0);
+	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
+				 "activate",
+				 G_CALLBACK (gpm_tray_icon_activate_cb),
+				 icon, 0);
+#endif
+
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 
 #ifdef HAVE_LIBNOTIFY
@@ -640,7 +731,9 @@ gpm_tray_icon_finalize (GObject *object)
 
 	g_return_if_fail (tray_icon->priv != NULL);
 
+#if USE_EGGTRAYICON
 	gtk_object_destroy (GTK_OBJECT (tray_icon->priv->tooltips));
+#endif
 
 	G_OBJECT_CLASS (gpm_tray_icon_parent_class)->finalize (object);
 }
@@ -699,9 +792,11 @@ libnotify_event (GpmTrayIcon    *icon,
 
 	/* Point to the center of the icon as per the GNOME HIG, #338638 */
 	GtkWidget *point = NULL;
+#if USE_EGGTRAYICON
 	if (icon->priv->is_visible) {
 		point = icon->priv->image;
 	}
+#endif
 	icon->priv->notify = notify_notification_new (title, content,
 						      msgicon, point);
 
