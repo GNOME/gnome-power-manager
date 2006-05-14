@@ -268,8 +268,6 @@ gpm_info_data_add (GpmInfoData *info_data,
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
-	gpm_debug ("%ix%i (%i)", time, value, colour);
-
 	if (info_data->priv->length > 2) {
 		if (info_data->priv->last_point->value == value) {
 			/* we are the same as we were before and not the first or

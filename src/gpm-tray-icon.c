@@ -58,19 +58,20 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 struct GpmTrayIconPrivate
 {
-	GtkUIManager   *ui_manager;
-	GtkActionGroup *actiongroup;
-	GtkTooltips    *tooltips;
-	GtkWidget      *popup_menu;
-	GtkWidget      *image;
-	GtkWidget      *ebox;
+	GtkUIManager	*ui_manager;
+	GtkActionGroup	*actiongroup;
+	GtkTooltips	*tooltips;
+	GtkWidget	*popup_menu;
+	GtkWidget	*image;
+	GtkWidget	*ebox;
 
-	gboolean	show_notifications;
-	gboolean	is_visible;
+	gboolean	 show_notifications;
+	gboolean	 is_visible;
 
-	gboolean	can_suspend;
-	gboolean	can_hibernate;
+	gboolean	 can_suspend;
+	gboolean	 can_hibernate;
 
+	char		*stock_id;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notify;
 #endif
@@ -190,13 +191,20 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 				    const char  *stock_id)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	gpm_debug ("Setting icon to %s", stock_id);
 
 	if (stock_id) {
-		gtk_image_set_from_icon_name (GTK_IMAGE (icon->priv->image),
-					      stock_id,
-					      GTK_ICON_SIZE_LARGE_TOOLBAR);
+		/* we only set a new icon if the name differs */
+		if (strcmp (icon->priv->stock_id, stock_id) != 0) {
+			gpm_debug ("Setting icon to %s", stock_id);
+			gtk_image_set_from_icon_name (GTK_IMAGE (icon->priv->image),
+						      stock_id,
+						      GTK_ICON_SIZE_LARGE_TOOLBAR);
+			/* don't keep trying to set the same icon */
+		        g_free (icon->priv->stock_id);
+			icon->priv->stock_id = g_strdup (stock_id);
+		}
 	} else {
+		/* get rid of the icon */
 		gtk_image_clear (GTK_IMAGE (icon->priv->image));
 		if (GTK_WIDGET_VISIBLE (icon->priv->image)) {
 			gtk_widget_queue_resize (GTK_WIDGET (icon->priv->image));
@@ -590,6 +598,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* FIXME: make this a property */
 	icon->priv->show_notifications = TRUE;
+	icon->priv->stock_id = g_strdup ("about-blank");
 
 	icon->priv->tooltips = gtk_tooltips_new ();
 	icon->priv->ui_manager = gtk_ui_manager_new ();

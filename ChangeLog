@@ -1,5 +1,12 @@
 2006-05-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c (gpm_tray_icon_set_image_from_stock):
+	Make sure we only set the icon if it is different to the one already
+	displayed to fix the case where the icons get renamed on package
+	upgrade (and because it's a good idea). Should fix #340557.
+
+2006-05-14  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c (gpm_brightness_init):
 	Add support for laptop_panel.brightness_in_hardware if present. We can
 	trivially rename this if the HAL name is to change, but the checks
