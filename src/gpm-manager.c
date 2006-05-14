@@ -619,7 +619,6 @@ change_power_policy (GpmManager *manager,
 
 	gpm_brightness_level_dim (manager->priv->brightness, brightness);
 	gpm_hal_enable_power_save (power_save);
-
 	update_ac_throttle (manager, on_ac);
 
 	/* set the new sleep (inactivity) value */
@@ -2468,6 +2467,7 @@ gpm_manager_init (GpmManager *manager)
 	sync_dpms_policy (manager);
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 	change_power_policy (manager, on_ac);
+	tray_icon_update (manager);
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
