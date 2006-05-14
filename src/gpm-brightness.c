@@ -59,6 +59,7 @@ struct GpmBrightnessPrivate
 {
 	gboolean    has_hardware;
 	gboolean    does_own_updates; /* keys are hardwired */
+	gboolean    does_own_dimming; /* hardware auto-fades */
 	int	    current_hw;
 	int	    saved_value_hw;
 	int	    levels;
@@ -126,7 +127,9 @@ static void
 gpm_brightness_init (GpmBrightness *brightness)
 {
 	DBusGConnection *system_connection = NULL;
-	gchar	  **names;
+	gchar  **names;
+	char    *manufacturer_string = NULL;
+	gboolean res;
 
 	brightness->priv = GPM_BRIGHTNESS_GET_PRIVATE (brightness);
 
@@ -138,16 +141,38 @@ gpm_brightness_init (GpmBrightness *brightness)
 		return;
 	}
 
-	brightness->priv->has_hardware = TRUE;
-
-	/* We only want to change the brightness if the machine does not
-	   do it on it's own updates, as this can make the panel flash in a
-	   feedback loop. Required TRUE for IBM Thinkpad x31 and maybe more */
-	brightness->priv->does_own_updates = FALSE;
-
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
 	gpm_hal_free_capability (names);
+
+	brightness->priv->has_hardware = TRUE;
+	brightness->priv->does_own_dimming = FALSE;
+
+	/* If the manufacturer is IBM, then assume we are a ThinkPad,
+	 * and don't do the new-fangled dimming routine. The ThinkPad dims
+	 * gently itself and the two dimming routines just get messy.
+	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382 */
+	gpm_hal_device_get_string (HAL_ROOT_COMPUTER,
+				   "smbios.system.manufacturer",
+				   &manufacturer_string);
+	if (manufacturer_string) {
+		/* FIXME: This should be a HAL property */
+		if (strcmp (manufacturer_string, "IBM") == 0) {
+			brightness->priv->does_own_dimming = TRUE;
+		}
+		g_free (manufacturer_string);
+	}
+
+	/* We only want to change the brightness if the machine does not
+	   do it on it's own updates, as this can make the panel flash in a
+	   feedback loop. */
+	res = gpm_hal_device_get_bool (brightness->priv->udi,
+				       "laptop_panel.brightness_in_hardware",
+				       &brightness->priv->does_own_updates);
+	/* This key does not exist on normal machines */
+	if (!res) {
+		brightness->priv->does_own_updates = FALSE;
+	}
 
 	/* get proxy once and store */
 	gpm_hal_get_dbus_connection (&system_connection);
@@ -460,24 +485,10 @@ void
 gpm_brightness_level_dim (GpmBrightness *brightness,
 			  int		 brightness_level)
 {
-	char *manufacturer_string = NULL;
-	int   new_level_hw;
+	int new_level_hw;
 
-	/* If the manufacturer is IBM, then assume we are a ThinkPad,
-	 * and don't do the new-fangled dimming routine. The ThinkPad dims
-	 * gently itself and the two dimming routines just get messy.
-	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382
-	 */
-	gpm_hal_device_get_string (HAL_ROOT_COMPUTER,
-				   "smbios.system.manufacturer",
-				   &manufacturer_string);
-	if (manufacturer_string) {
-		if (strcmp (manufacturer_string, "IBM") == 0) {
-			gpm_brightness_level_set (brightness, brightness_level);
-			g_free (manufacturer_string);
-			return;
-		}
-		g_free (manufacturer_string);
+	if (brightness->priv->does_own_dimming) {
+		return;
 	}
 
 	new_level_hw = gpm_brightness_percent_to_hw (brightness_level,

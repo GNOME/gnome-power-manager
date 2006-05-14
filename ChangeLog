@@ -1,5 +1,12 @@
 2006-05-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c (gpm_brightness_init):
+	Add support for laptop_panel.brightness_in_hardware if present. We can
+	trivially rename this if the HAL name is to change, but the checks
+	are in place now. This starts to fix #340231.
+
+2006-05-14  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c: (power_get_summary_for_battery_kind):
 	Make strings printf's a bit more translation friendly. Fixes #341582.
 
