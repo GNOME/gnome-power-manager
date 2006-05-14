@@ -1,3 +1,10 @@
+2006-05-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (battery_status_changed_primary),
+	(battery_status_changed_ups):
+	Do not warn multiple times about the critical action by using the event
+	level system we use for the other notifications. Should fix #333622.
+
 2006-05-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/eggtrayicon.c: (egg_tray_icon_class_init),
