@@ -1223,26 +1223,26 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 
 	if (gpm_power_battery_is_charged (status)) {
 
-			g_string_append_printf (summary, "%s", _("fully charged"));
+			g_string_append (summary, _("fully charged"));
 
 	} else if (status->is_discharging) {
 
 		if (status->remaining_time > 60) {
-			g_string_append_printf (summary, "%s %s",
-						timestring, _("remaining"));
+			g_string_append_printf (summary, _("%s remaining"),
+						timestring);
 		} else {
 			/* don't display "Unknown remaining" */
-			g_string_append_printf (summary, "%s", _("discharging"));
+			g_string_append (summary, _("discharging"));
 		}
 
 	} else if (status->is_charging || power->priv->on_ac) {
 
 		if (status->remaining_time > 60) {
-			g_string_append_printf (summary, "%s %s",
-						timestring, _("until charged"));
+			g_string_append_printf (summary, _("%s until charged"),
+						timestring);
 		} else {
 			/* don't display "Unknown remaining" */
-			g_string_append_printf (summary, "%s", _("charging"));
+			g_string_append (summary, _("charging"));
 		}
 
 	} else {
