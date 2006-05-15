@@ -1,4 +1,58 @@
 ==============
+Version 2.15.2
+==============
+
+Released May 15, 2006
+
+General
+
+ - Remove all suspend-to-{x} terminology in the code and documentation in favour
+   of hibernate and suspend (http://live.gnome.org/GnomePowerManager/SleepNames).
+ - Update the FAQ URL. #330889
+
+Power Manager
+
+ - Allow the use of GtkStatusIcon as eggtrayicon is depreciated.
+ - Ensure we set the icon to visible for battery-less desktops, as before we
+   had to sometimes toggle the state in g-p-p to get it to show.
+ - Make sure we only set the icon if it is different to the one already
+   displayed to fix the case where the icons get renamed on package upgrade. #340557.
+ - Add support for the new HAL key laptop_panel.brightness_in_hardware to
+   properly support key brightness changing on IBM X31 laptops. #340231.
+ - Do not warn multiple times about the critical action. #333622.
+ - Add the ability to handle a transparent background in the tray icon.
+   #341227 (Peter Grundström)
+ - Fix the GPM_BUTTON_BRIGHT_UP_DEP and GPM_BUTTON_BRIGHT_DOWN_DEP values to
+   what were shipped in the HAL 0.5.7 tarball.
+ - Slightly re-work a patch from Paul Betts to handle broken batteries that
+   report they are neither charging or discharging by using ac_adaptor
+   value instead.
+ - Remove the --sm-disable from the .desktop file in autostart since it breaks
+   the logout dialog (e.g. on power button) if it is not run with session
+   access. lp:31103 and #339168
+ - Rework the way throttling is done so that it properly ref-counted and remove
+   the compatibility with the old g-s API. #340024 (William Jon McCann)
+
+Power Preferences
+
+ - Add the new checkboxes to set the low power mode policy. #340355
+
+Power Info
+
+ - Make sure the time scale cannot be less than 10 minutes as smaller values
+   show the approximation errors in the event-logging code. #340217.
+ - Compute the legend width using Cairo instead of hard-coding it. #340218.
+ - Correct a format string so we don't sometimes crash on ppc platform. #339974
+ - Add more description in the event log, for why we do particular actions.
+
+Translators
+
+ - Francisco Javier F. Serrador (Spanish)
+ - Ilkka Tuohela (Finnish)
+ - Daniel Nylander (Swedish)
+ - Raphael Higino (Brazilian Portuguese)
+
+==============
 Version 2.15.1
 ==============
 
