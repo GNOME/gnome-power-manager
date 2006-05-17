@@ -1886,6 +1886,7 @@ gpm_manager_init (GpmManager *manager)
 	sync_dpms_policy (manager);
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 	change_power_policy (manager, on_ac);
+	tray_icon_update (manager);
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);

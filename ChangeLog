@@ -1,3 +1,12 @@
+2006-05-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c (change_power_policy):
+	Ensure we set the icon to visible for desktops, as before we had to
+	toggle the state in g-p-p to get it to show.
+
+	* man/gnome-power-manager.sgml:
+	Remove all suspend-to-{x} terminology in the documentation.
+
 2006-05-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/eggtrayicon.c: (egg_tray_icon_class_init),
