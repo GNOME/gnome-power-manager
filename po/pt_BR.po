@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-11 19:23+0200\n"
-"PO-Revision-Date: 2006-05-11 17:29-0300\n"
+"POT-Creation-Date: 2006-05-18 03:24+0200\n"
+"PO-Revision-Date: 2006-05-19 21:28-0300\n"
 "Last-Translator: Leonardo Ferreira  Fontenelle <leo.fontenelle@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -214,7 +214,7 @@ msgstr "Brilho da tela quando a sessão estiver inativa."
 
 #: ../data/gnome-power-manager.schemas.in.h:47
 msgid "The damping factor used when calculating the rate"
-msgstr "O fator de redução de atividade usado ao calcular a taxa"
+msgstr "O fator de amortecimento usado ao calcular a taxa"
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "The number of seconds before the display goes to sleep when the computer is on AC power."
@@ -286,7 +286,7 @@ msgstr "Tipo de redução de energia a executar quando o computador está inativ
 
 #: ../data/gnome-power-manager.schemas.in.h:65
 msgid "The value of the damping factor used when calculating the exponentially weighted average of the rate. Increasing this value will increase the damping effect of the rate calculations, which makes the time remaining more accurate, but the graphs less responsive."
-msgstr "O fator de redução de atividade usado ao calcular a média da taxa com pesos exponenciais. Aumentar esse valor aumentará o efeito de redução de atividade dos cálculos, que deixa o tempo restante mais exato, mas os gráficos podem responder menos."
+msgstr "O fator de amortecimento usado ao calcular a média da taxa com pesos exponenciais. Aumentar esse valor aumentará o efeito de redução de atividade dos cálculos, que deixa o tempo restante mais exato, mas os gráficos podem responder menos."
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid "This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy true."
@@ -437,8 +437,8 @@ msgid "Power History"
 msgstr "Histório da energia"
 
 #: ../data/gpm-info.glade.h:14
-#: ../src/gpm-manager.c:1355
-#: ../src/gpm-manager.c:1696
+#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1695
 msgid "Power Information"
 msgstr "Informação da energia"
 
@@ -691,68 +691,68 @@ msgstr "Exibição do gerenciamento de energia ativada"
 msgid "Laptop lid is closed"
 msgstr "A tampa do <i>laptop</i> está fechada"
 
-#: ../src/gpm-manager.c:749
+#: ../src/gpm-manager.c:748
 #, c-format
 msgid "%s because %s"
 msgstr "%s porque %s"
 
-#: ../src/gpm-manager.c:785
+#: ../src/gpm-manager.c:784
 msgid "Doing nothing"
 msgstr "Fazendo nada"
 
-#: ../src/gpm-manager.c:789
-#: ../src/gpm-manager.c:1167
+#: ../src/gpm-manager.c:788
+#: ../src/gpm-manager.c:1166
 msgid "Suspending computer"
 msgstr "Suspender o computador"
 
-#: ../src/gpm-manager.c:794
-#: ../src/gpm-manager.c:1181
-#: ../src/gpm-manager.c:2298
+#: ../src/gpm-manager.c:793
+#: ../src/gpm-manager.c:1180
+#: ../src/gpm-manager.c:2275
 msgid "Hibernating computer"
 msgstr "Hibernar o computador"
 
-#: ../src/gpm-manager.c:799
+#: ../src/gpm-manager.c:798
 msgid "DPMS blanking screen"
 msgstr "DPMS apagando a tela"
 
-#: ../src/gpm-manager.c:804
-#: ../src/gpm-manager.c:1196
+#: ../src/gpm-manager.c:803
+#: ../src/gpm-manager.c:1195
 msgid "Shutting down computer"
 msgstr "Desligando o computador"
 
-#: ../src/gpm-manager.c:809
+#: ../src/gpm-manager.c:808
 msgid "GNOME interactive logout"
 msgstr "Sair interativo do GNOME"
 
-#: ../src/gpm-manager.c:1008
-#: ../src/gpm-manager.c:1098
+#: ../src/gpm-manager.c:1007
+#: ../src/gpm-manager.c:1097
 msgid "Resuming computer"
 msgstr "Retornando o computador"
 
-#: ../src/gpm-manager.c:1020
+#: ../src/gpm-manager.c:1019
 #, c-format
 msgid "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr "O HAL falhou em %s. Confira a página de <a href=\"%s\">perguntas freqüentes</a> para problemas comuns."
 
-#: ../src/gpm-manager.c:1022
+#: ../src/gpm-manager.c:1021
 msgid "hibernate"
 msgstr "hibernar"
 
-#: ../src/gpm-manager.c:1023
+#: ../src/gpm-manager.c:1022
 msgid "Hibernate Problem"
 msgstr "Problema ao hibernar"
 
-#: ../src/gpm-manager.c:1110
+#: ../src/gpm-manager.c:1109
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "Bateria carregou %imWh durante suspensão"
 
-#: ../src/gpm-manager.c:1113
+#: ../src/gpm-manager.c:1112
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "Bateria descarregou %imWh durante suspensão"
 
-#: ../src/gpm-manager.c:1128
+#: ../src/gpm-manager.c:1127
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -761,172 +761,167 @@ msgstr ""
 "Seu computador falhou em %s. \n"
 "Confira a página de <a href=\"%s\">perguntas freqüentes</a> para problemas comuns."
 
-#: ../src/gpm-manager.c:1130
+#: ../src/gpm-manager.c:1129
 msgid "suspend"
 msgstr "suspender"
 
-#: ../src/gpm-manager.c:1131
+#: ../src/gpm-manager.c:1130
 msgid "Suspend Problem"
 msgstr "Problema ao suspender"
 
-#: ../src/gpm-manager.c:1168
+#: ../src/gpm-manager.c:1167
 msgid "the DBUS method Suspend() was invoked"
 msgstr "o método DBUS Suspend() foi invocado"
 
-#: ../src/gpm-manager.c:1182
+#: ../src/gpm-manager.c:1181
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "o método DBUS Hibernate() foi invocado"
 
-#: ../src/gpm-manager.c:1197
+#: ../src/gpm-manager.c:1196
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "o método DBUS Shutdown() foi invocado"
 
-#: ../src/gpm-manager.c:1247
+#: ../src/gpm-manager.c:1246
 msgid "Screen resume"
 msgstr "Retornar monitor"
 
-#: ../src/gpm-manager.c:1248
+#: ../src/gpm-manager.c:1247
 msgid "idle mode ended"
 msgstr "modo inativo terminou"
 
-#: ../src/gpm-manager.c:1286
+#: ../src/gpm-manager.c:1285
 msgid "Screen dim"
 msgstr "Escurecer tela"
 
-#: ../src/gpm-manager.c:1287
+#: ../src/gpm-manager.c:1286
 msgid "idle mode started"
 msgstr "modo inativo iniciado"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1305
+#: ../src/gpm-manager.c:1304
 msgid "the system state is idle"
 msgstr "o estado do sistema é inativo"
 
-#: ../src/gpm-manager.c:1379
+#: ../src/gpm-manager.c:1378
 msgid "the power button has been pressed"
 msgstr "o botão liga-desliga foi pressionado"
 
-#: ../src/gpm-manager.c:1398
+#: ../src/gpm-manager.c:1397
 msgid "the suspend button has been pressed"
 msgstr "o botão suspender foi pressionado"
 
-#: ../src/gpm-manager.c:1418
+#: ../src/gpm-manager.c:1417
 msgid "the hibernate button has been pressed"
 msgstr "o botão hibernar foi pressionado"
 
-#: ../src/gpm-manager.c:1469
+#: ../src/gpm-manager.c:1468
 msgid "the lid has been closed on ac power"
 msgstr "a tampa foi fechada (usando a tomada)"
 
-#: ../src/gpm-manager.c:1474
+#: ../src/gpm-manager.c:1473
 msgid "the lid has been closed on battery power"
 msgstr "a tampa foi fechada com o computador usando bateria"
 
-#: ../src/gpm-manager.c:1479
+#: ../src/gpm-manager.c:1478
 msgid "Turning LCD panel back on"
 msgstr "Acendendo monitor de cristal líquido"
 
-#: ../src/gpm-manager.c:1480
+#: ../src/gpm-manager.c:1479
 msgid "laptop lid re-opened"
 msgstr "tamba do <i>laptop</i> reaberta"
 
-#: ../src/gpm-manager.c:1603
+#: ../src/gpm-manager.c:1602
 msgid "the lid has been closed, and the ac adapter removed"
 msgstr "a tampa foi fechada, e a tomada foi desconectada"
 
-#: ../src/gpm-manager.c:1684
+#: ../src/gpm-manager.c:1683
 msgid "Power Critically Low"
 msgstr "Energia criticamente baixa"
 
-#: ../src/gpm-manager.c:1688
+#: ../src/gpm-manager.c:1687
 msgid "Power Very Low"
 msgstr "Energia muito baixa"
 
-#: ../src/gpm-manager.c:1692
+#: ../src/gpm-manager.c:1691
 msgid "Power Low"
 msgstr "Energia baixa"
 
-#: ../src/gpm-manager.c:1717
+#: ../src/gpm-manager.c:1716
 msgid "battery is critically low"
 msgstr "nível da bateria criticamente baixo"
 
-#: ../src/gpm-manager.c:1761
+#: ../src/gpm-manager.c:1760
 msgid "Your battery is now fully charged"
 msgstr "Sua bateria está totalmente carregada"
 
-#: ../src/gpm-manager.c:1762
+#: ../src/gpm-manager.c:1761
 msgid "Battery Charged"
 msgstr "Bateria carregada"
 
-#: ../src/gpm-manager.c:1818
+#: ../src/gpm-manager.c:1827
 msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
 msgstr "A bateria está abaixo do nível crítico e o computador será <b>desligado<b> quando a bateria estiver completamente vazia."
 
-#: ../src/gpm-manager.c:1822
+#: ../src/gpm-manager.c:1832
 msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
 msgstr "A bateria está abaixo do nível crítico e o computador está a ponto de suspender.<br><b>Nota:</b> é necessário um pouco de energia para manter o computador no estado suspenso."
 
-#: ../src/gpm-manager.c:1827
+#: ../src/gpm-manager.c:1838
 msgid "The battery is below the critical level and this computer is about to hibernate."
 msgstr "A bateria está abaixo do nível crítico e o computador está a ponto de hibernar."
 
-#: ../src/gpm-manager.c:1830
+#: ../src/gpm-manager.c:1842
 msgid "The battery is below the critical level and this computer is about to shutdown."
 msgstr "A bateria está abaixo do nível crítico e o computador está a ponto de desligar."
 
-#: ../src/gpm-manager.c:1836
-#: ../src/gpm-manager.c:1962
-msgid "Critical action"
-msgstr "Ação crítica"
-
-#: ../src/gpm-manager.c:1864
+#: ../src/gpm-manager.c:1854
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "O computador foi desligado da tomada. Agora o sistema está usando a bateria."
 
-#: ../src/gpm-manager.c:1869
+#: ../src/gpm-manager.c:1861
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in your AC Adapter to avoid losing data."
 msgstr "Você tem aproximadamente <b>%s</b> de bateria sobrando (%i%%). Conecte na tomada para evitar perda de dados."
 
-#: ../src/gpm-manager.c:1949
+#: ../src/gpm-manager.c:1945
 msgid "The UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
 msgstr "O <i>no-break</i> está abaixo do nível crítico e o computador será <b>desligado<b> quando o <i>no-break</i> estiver completamente vazio."
 
-#: ../src/gpm-manager.c:1953
+#: ../src/gpm-manager.c:1950
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "O <i>no-break</i> está abaixo do nível crítico e o computador está a ponto de hibernar."
 
-#: ../src/gpm-manager.c:1956
+#: ../src/gpm-manager.c:1954
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "O <i>no-break</i> está abaixo do nível crítico e o computador está a ponto de hibernar."
 
-#: ../src/gpm-manager.c:1975
+#: ../src/gpm-manager.c:1960
 msgid "UPS is critically low"
 msgstr "Nível do <i>no-break</i> criticamente baixo"
 
-#: ../src/gpm-manager.c:1988
+#: ../src/gpm-manager.c:1963
 msgid "Your system is running on backup power!"
 msgstr "Seu computador está usando energia reserva!"
 
-#: ../src/gpm-manager.c:1991
+#: ../src/gpm-manager.c:1967
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore power to your computer to avoid losing data."
 msgstr "Você tem aproximadamente <b>%s</b> de energia do <i>no-break</i> sobrando (%i%%). Restaure a energia para evitar perda de dados."
 
-#: ../src/gpm-manager.c:2076
+#: ../src/gpm-manager.c:2053
 #, c-format
 msgid "The %s device attached to this computer is low in power (%d%%). This device will soon stop functioning if not charged."
 msgstr "O dispositivo %s conectado a esse computador está com pouca energia (%d%%). Esse dispositivo vai parar de funcionar logo se não for carregado."
 
-#: ../src/gpm-manager.c:2299
+#: ../src/gpm-manager.c:2276
 msgid "user clicked hibernate from tray menu"
 msgstr "usuário clicou hibernar na área de notificação"
 
-#: ../src/gpm-manager.c:2323
+#: ../src/gpm-manager.c:2300
 msgid "Susspending computer"
 msgstr "Suspendendo o computador"
 
-#: ../src/gpm-manager.c:2324
+#: ../src/gpm-manager.c:2301
 msgid "user clicked suspend from tray menu"
 msgstr "usuário clicou suspender na área de notificação"
 
@@ -1002,18 +997,20 @@ msgstr "Ruim"
 msgid "fully charged"
 msgstr "totalmente carregado"
 
-#: ../src/gpm-power.c:1232
-msgid "remaining"
-msgstr "restantes"
+#: ../src/gpm-power.c:1231
+#, c-format
+msgid "%s remaining"
+msgstr "%s restantes"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1235
 msgid "discharging"
 msgstr "descarregando"
 
-#: ../src/gpm-power.c:1242
-msgid "until charged"
-msgstr "até que carregado"
+#: ../src/gpm-power.c:1241
+#, c-format
+msgid "%s until charged"
+msgstr "%s até que carregado"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1245
@@ -1058,43 +1055,43 @@ msgstr "Não agir"
 msgid "Never"
 msgstr "Nunca"
 
-#: ../src/gpm-tray-icon.c:100
+#: ../src/gpm-tray-icon.c:111
 msgid "_Suspend"
 msgstr "_Suspender"
 
-#: ../src/gpm-tray-icon.c:101
+#: ../src/gpm-tray-icon.c:112
 msgid "Suspend the computer"
 msgstr "Suspende o computador"
 
-#: ../src/gpm-tray-icon.c:102
+#: ../src/gpm-tray-icon.c:113
 msgid "Hi_bernate"
 msgstr "Hi_bernar"
 
-#: ../src/gpm-tray-icon.c:103
+#: ../src/gpm-tray-icon.c:114
 msgid "Make the computer go to sleep"
 msgstr "Reduzir consumo do computador após:"
 
-#: ../src/gpm-tray-icon.c:104
+#: ../src/gpm-tray-icon.c:115
 msgid "_Preferences"
 msgstr "_Preferências"
 
-#: ../src/gpm-tray-icon.c:106
+#: ../src/gpm-tray-icon.c:117
 msgid "_Information"
 msgstr "_Informação"
 
-#: ../src/gpm-tray-icon.c:108
+#: ../src/gpm-tray-icon.c:119
 msgid "_Help"
 msgstr "_Ajuda"
 
-#: ../src/gpm-tray-icon.c:110
+#: ../src/gpm-tray-icon.c:121
 msgid "_About"
 msgstr "_Sobre"
 
-#: ../src/gpm-tray-icon.c:302
+#: ../src/gpm-tray-icon.c:334
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado sob a versão 2 da Licença Pública Geral GNU"
 
-#: ../src/gpm-tray-icon.c:303
+#: ../src/gpm-tray-icon.c:335
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1106,7 +1103,7 @@ msgstr ""
 "publicada pela Free Software Foundation (FSF); na versão 2 da\n"
 "Licença, ou (na sua opinião) qualquer versão."
 
-#: ../src/gpm-tray-icon.c:307
+#: ../src/gpm-tray-icon.c:339
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1118,7 +1115,7 @@ msgstr ""
 "ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR.\n"
 "Veja a Licença Pública Geral GNU para mais detalhes."
 
-#: ../src/gpm-tray-icon.c:311
+#: ../src/gpm-tray-icon.c:343
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1129,10 +1126,13 @@ msgstr ""
 "junto com este programa; se não, escreva para a Fundação do Software\n"
 "Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA."
 
-#: ../src/gpm-tray-icon.c:316
+#: ../src/gpm-tray-icon.c:348
 msgid "translator-credits"
 msgstr ""
 "Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
 "Licio Fernando <liciofernando@gmail.com>\n"
 "Raphael Higino <phhigino@gmail.com>"
+
+#~ msgid "Critical action"
+#~ msgstr "Ação crítica"
 
