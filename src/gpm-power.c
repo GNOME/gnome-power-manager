@@ -247,6 +247,11 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 				float capacity;
 				capacity = 100.0f / (float) status->design_charge;
 				status->capacity = capacity * (float) status->last_full_charge;
+				if (status->capacity > 100) {
+					gpm_debug ("rounding down capactity from "
+						   "%i to 100", status->capacity);
+					status->capacity = 100;
+				}
 			}
 		}
 	}
