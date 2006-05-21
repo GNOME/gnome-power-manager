@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/battery_event_when_closed</key>
+      <applyto>/apps/gnome-power-manager/battery_event_when_closed</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If we should use do the battery event when the lid is shut and the power removed</short>
+        <long>If we should do the battery lid close event (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power then removed at a later time. This may confuse new users but may be the correct action for power users who expect this to happen.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/use_lowpower_ac</key>
       <applyto>/apps/gnome-power-manager/use_lowpower_ac</applyto>
       <owner>gnome-power-manager</owner>

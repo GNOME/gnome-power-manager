@@ -1,4 +1,15 @@
-2006-05-21  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+2006-05-21  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c: (power_on_ac_changed_cb):
+	* src/gpm-prefs.h:
+	Add the /apps/gnome-power-manager/battery_event_when_closed gconf key
+	so we can disable per-machine the action for when the lid is previously
+	shut and the AC power then removed at a later time.
+	This is prompting lots of confusion for users and consequently lots of
+	bugzillas for me. This should let power users toggle this setting.
+
+2006-05-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info-data.c: (gpm_info_data_add_always):
 	Limit saved values to positive numbers. From Byeong-taek Lee.

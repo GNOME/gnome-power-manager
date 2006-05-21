@@ -1595,10 +1595,14 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	if ( (! on_ac) && manager->priv->lid_is_closed) {
+	gboolean event_when_closed;
+	event_when_closed = gconf_client_get_bool (manager->priv->gconf_client,
+						   GPM_PREF_BATT_EVENT_WHEN_CLOSED, NULL);
+	if (event_when_closed && (!on_ac) && manager->priv->lid_is_closed) {
 		manager_policy_do (manager,
 				   GPM_PREF_BATTERY_BUTTON_LID,
-				   _("the lid has been closed, and the ac adapter removed"));
+				   _("the lid has been closed, and the ac adapter "
+				     "removed (and gconf is okay)"));
 	}
 }
 
