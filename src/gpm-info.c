@@ -144,6 +144,10 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 	g_sprintf (widgetname, "image_%s%i", prefix, id);
 	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
 	device = gpm_power_get_battery_device_entry (info->priv->power, kind, id);
+	if (device == NULL) {
+		gpm_warning ("gpm_power_get_battery_device_entry returned NULL!");
+		return;
+	}
 	icon_name = gpm_power_get_icon_from_status (&device->battery_status, kind);
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_DIALOG);
 	g_free (icon_name);

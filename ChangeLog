@@ -1,3 +1,19 @@
+2006-05-21  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+
+	* src/gpm-info-data.c: (gpm_info_data_add_always):
+	Limit saved values to positive numbers. From Byeong-taek Lee.
+
+	* src/gpm-info.c: (gpm_info_specific_device_widgets):
+	Warn if device NULL so we don't segfault - NOTE: This is probably a bug
+	in g-p-m as we shouldn't get to this function if there is no device.
+	From Byeong-taek Lee.
+
+	* src/gpm-manager.c: (idle_changed_cb), (lid_button_pressed):
+	Formatting fixes.
+
+	* src/gpm-power.c: (gpm_power_exp_aver):
+	Make sure values cannot be negative. From Byeong-taek Lee.
+
 2006-05-17  Richard Hughes  richard@hughsie.com>
 
 	* configure.in: Depend on intltool 0.35.0 to build.

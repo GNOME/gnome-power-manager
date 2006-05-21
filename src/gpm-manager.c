@@ -1256,7 +1256,7 @@ idle_changed_cb (GpmIdle    *idle,
 
 		gpm_debug ("Idle state changed: SESSION");
 
-		/* Activate display power management */
+		/* activate display power management */
 		error = NULL;
 		gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
 		if (error) {
@@ -1460,7 +1460,6 @@ lid_button_pressed (GpmManager	 *manager,
 	update_lid_throttle (manager, manager->priv->lid_is_closed);
 
 	if (state) {
-
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			manager_policy_do (manager,
@@ -2331,8 +2330,7 @@ gpm_manager_tray_icon_show_info (GpmManager   *manager,
 }
 
 /**
- * gpm_manager_init:
- * @manager: This manager class instance
+ * tray_icon_destroyed:
  **/
 static void
 tray_icon_destroyed (GtkObject *object, gpointer user_data)
@@ -2342,6 +2340,10 @@ tray_icon_destroyed (GtkObject *object, gpointer user_data)
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 }
 
+/**
+ * screensaver_connection_changed_cb:
+ * @manager: This manager class instance
+ **/
 static void
 screensaver_connection_changed_cb (GpmScreensaver *screensaver,
 				   gboolean        connected,
@@ -2361,6 +2363,10 @@ screensaver_connection_changed_cb (GpmScreensaver *screensaver,
 	}
 }
 
+/**
+ * gpm_manager_init:
+ * @manager: This manager class instance
+ **/
 static void
 gpm_manager_init (GpmManager *manager)
 {

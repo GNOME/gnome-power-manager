@@ -288,7 +288,7 @@ gpm_power_exp_aver (int previous, int new, int factor_pc)
 	float factor_inv = 1;
 	if (previous == 0 || factor_pc == 0) {
 		/* startup, or re-initialization - we have no data */
-		gpm_debug ("Telling rate with no ave factor!");
+		gpm_debug ("Telling rate with no ave factor (okay once)");
 		result = new;
 	} else {
 		factor = (float) factor_pc / 100.0f;

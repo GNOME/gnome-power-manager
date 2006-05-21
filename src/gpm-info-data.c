@@ -88,7 +88,12 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	/* we have to add a new data point */
 	new = g_slice_new (GpmInfoDataPoint);
 	new->time = time;
-	new->value = value;
+	if (value > 0) {
+		new->value = value;
+	} else {
+		gpm_debug ("Not recording a negative value (%i)", value);
+		new->value = 0;
+	}
 	new->colour = colour;
 	if (desc) {
 		new->desc = g_strdup (desc);
