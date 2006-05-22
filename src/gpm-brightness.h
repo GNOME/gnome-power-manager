@@ -27,48 +27,40 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_BRIGHTNESS          (gpm_brightness_get_type ())
-#define GPM_BRIGHTNESS(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_BRIGHTNESS, GpmBrightness))
-#define GPM_BRIGHTNESS_CLASS(k)      (G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_BRIGHTNESS, GpmBrightnessClass))
-#define GPM_IS_BRIGHTNESS(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_BRIGHTNESS))
-#define GPM_IS_BRIGHTNESS_CLASS(k)   (G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_BRIGHTNESS))
-#define GPM_BRIGHTNESS_GET_CLASS(o)  (G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessClass))
+#define GPM_TYPE_BRIGHTNESS		(gpm_brightness_get_type ())
+#define GPM_BRIGHTNESS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_BRIGHTNESS, GpmBrightness))
+#define GPM_BRIGHTNESS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_BRIGHTNESS, GpmBrightnessClass))
+#define GPM_IS_BRIGHTNESS(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_BRIGHTNESS))
+#define GPM_IS_BRIGHTNESS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_BRIGHTNESS))
+#define GPM_BRIGHTNESS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessClass))
 
 typedef struct GpmBrightnessPrivate GpmBrightnessPrivate;
 
 typedef struct
 {
-        GObject               parent;
-        GpmBrightnessPrivate *priv;
+	GObject		      parent;
+	GpmBrightnessPrivate *priv;
 } GpmBrightness;
 
 typedef struct
 {
-        GObjectClass    parent_class;
+	GObjectClass	parent_class;
 
 } GpmBrightnessClass;
 
-GType
-gpm_brightness_get_type (void);
+GType		 gpm_brightness_get_type (void);
+GpmBrightness	*gpm_brightness_new (void);
 
-GpmBrightness*
-gpm_brightness_new (void);
-
-void
-gpm_brightness_level_up (GpmBrightness *lcdbrightness);
-void
-gpm_brightness_level_down (GpmBrightness *lcdbrightness);
-void
-gpm_brightness_level_set (GpmBrightness *lcdbrightness,
-			  int		 brightness_level);
-void
-gpm_brightness_level_dim (GpmBrightness *lcdbrightness,
-			  int            brightness_level);
-void
-gpm_brightness_level_save (GpmBrightness *brightness,
-			   int            brightness_level);
-void
-gpm_brightness_level_resume (GpmBrightness *brightness);
+void		 gpm_brightness_level_up	(GpmBrightness *lcdbrightness);
+void		 gpm_brightness_level_down	(GpmBrightness *lcdbrightness);
+void		 gpm_brightness_level_set	(GpmBrightness *lcdbrightness,
+						 int		brightness_level);
+int		 gpm_brightness_level_get	(GpmBrightness *brightness);
+void		 gpm_brightness_level_dim	(GpmBrightness *lcdbrightness,
+						 int		brightness_level);
+void		 gpm_brightness_level_save	(GpmBrightness *brightness,
+						 int		brightness_level);
+void		 gpm_brightness_level_resume	(GpmBrightness *brightness);
 
 G_END_DECLS
 
