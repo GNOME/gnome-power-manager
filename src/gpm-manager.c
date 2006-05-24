@@ -1237,9 +1237,9 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
-		/* Should we dim the screen? */
+		/* Should we resume the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							GPM_PREF_IDLE_DIM_SCREEN, NULL);
+						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_RESUME,
@@ -1263,7 +1263,7 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
-		/* Should we resume the screen? */
+		/* Should we dim the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
@@ -2345,6 +2345,25 @@ tray_icon_destroyed (GtkObject *object, gpointer user_data)
 }
 
 /**
+ * screensaver_auth_request_cb:
+ * @manager: This manager class instance
+ *
+ * Undim the screen when the login screen appears (see #333290)
+ **/
+static void
+screensaver_auth_request_cb (GpmScreensaver *screensaver,
+			     gboolean        auth,
+			     GpmManager     *manager)
+{
+	/* TODO: This may be a bid of a bodge, as we will have multiple
+		 resume requests -- maybe this need a logic cleanup */
+	if (auth) {
+		gpm_debug ("resuming due to auth begin");
+		gpm_brightness_level_resume (manager->priv->brightness);
+	}
+}
+
+/**
  * screensaver_connection_changed_cb:
  * @manager: This manager class instance
  **/
@@ -2395,6 +2414,8 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "connection-changed",
 			  G_CALLBACK (screensaver_connection_changed_cb), manager);
+	g_signal_connect (manager->priv->screensaver, "auth-request",
+			  G_CALLBACK (screensaver_auth_request_cb), manager);
 
 	/* FIXME: We shouldn't assume the lid is open at startup */
 	manager->priv->lid_is_closed = FALSE;

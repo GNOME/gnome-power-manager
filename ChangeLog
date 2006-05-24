@@ -1,5 +1,11 @@
 2006-05-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c (screensaver_auth_request_cb):
+	Undim the screen when we have to unlock returning from resume.
+	This should fix #333290.
+
+2006-05-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: (battery_status_changed_primary):
 	Make sure we duplicate the message string so we don't crash on
 	the action warning when we try to g_free it.
