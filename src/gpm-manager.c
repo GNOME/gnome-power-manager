@@ -1827,23 +1827,23 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 		/* TODO: we should probably convert to an ENUM type, and use that */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = _("The battery is below the critical level and "
-				    "this computer will <b>power-off</b> when the "
-				    "battery becomes completely empty.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer will <b>power-off</b> when the "
+					      "battery becomes completely empty."));
 
 		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-			message = _("The battery is below the critical level and "
-				    "this computer is about to suspend.<br>"
-				    "<b>NOTE:</b> A small amount of power is required "
-				    "to keep your computer in a suspended state.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to suspend.<br>"
+					      "<b>NOTE:</b> A small amount of power is required "
+					      "to keep your computer in a suspended state."));
 
 		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = _("The battery is below the critical level and "
-				    "this computer is about to hibernate.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to hibernate."));
 
 		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = _("The battery is below the critical level and "
-				    "this computer is about to shutdown.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to shutdown."));
 		}
 
 		/* wait 10 seconds for user-panic */
@@ -1854,8 +1854,8 @@ battery_status_changed_primary (GpmManager	      *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_ACADAPTER, NULL);
 		if (show_notify) {
-			message = g_strdup_printf (_("The AC Power has been unplugged. "
-						      "The system is now using battery power."));
+			message = g_strdup (_("The AC Power has been unplugged. "
+					      "The system is now using battery power."));
 			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
 		}
 
