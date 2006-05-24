@@ -1,3 +1,14 @@
+2006-05-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Make sure we duplicate the message string so we don't crash on
+	the action warning when we try to g_free it.
+
+	I've backported most of the code (no string changes) from HEAD
+        so we don't warn multiple times about the critical action by using the
+        event level system we use for the other notifications.
+        This should fix #333622.
+
 2006-05-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness.c:

@@ -1320,10 +1320,11 @@ battery_status_changed_primary (GpmManager	      *manager,
 {
 	GpmWarning  warning_type;
 	gboolean    show_notify;
-	char	*message = NULL;
-	char	*remaining = NULL;
+	char	   *message = NULL;
+	char	   *remaining = NULL;
 	const char *title = NULL;
 	gboolean    on_ac;
+	int	    timeout;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -1342,11 +1343,13 @@ battery_status_changed_primary (GpmManager	      *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 		if (show_notify) {
+			const char *message = _("Your battery is now fully charged");
+			const char *title = _("Battery Charged");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      GPM_NOTIFY_TIMEOUT_SHORT,
-					      _("Battery Charged"),
+					      title,
 					      NULL,
-					      _("Your battery is now fully charged"));
+					      message);
 		}
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
@@ -1377,9 +1380,19 @@ battery_status_changed_primary (GpmManager	      *manager,
 		return;
 	}
 
+	/* Always check if we already notified the user */
+	if (warning_type <= manager->priv->last_primary_warning) {
+		gpm_debug ("Already notified %i", warning_type);
+		return;
+	}
+
+	/* As the level is more critical than the last warning, save it */
+	manager->priv->last_primary_warning = warning_type;
+
+	/* Do different warnings for each GPM_WARNING_* */
 	if (warning_type == GPM_WARNING_ACTION) {
-		const char *warning = NULL;
 		const char *action;
+		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
 			return;
@@ -1389,72 +1402,60 @@ battery_status_changed_primary (GpmManager	      *manager,
 		action = gconf_client_get_string (manager->priv->gconf_client,
 						  GPM_PREF_BATTERY_CRITICAL, NULL);
 
-		/* FIXME: we should probably convert to an ENUM type, and use that */
+		/* TODO: we should probably convert to an ENUM type, and use that */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			warning = _("The battery is below the critical level and "
-				    "this computer will <b>power-off</b> when the "
-				    "battery becomes completely empty.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer will <b>power-off</b> when the "
+					      "battery becomes completely empty."));
+
 		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-			warning = _("The battery is below the critical level and "
-				    "this computer is about to suspend.<br>"
-				    "<b>NOTE:</b> A small amount of power is required "
-				    "to keep your computer in a suspended state.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to suspend.<br>"
+					      "<b>NOTE:</b> A small amount of power is required "
+					      "to keep your computer in a suspended state."));
+
 		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			warning = _("The battery is below the critical level and "
-				    "this computer is about to hibernate.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to hibernate."));
+
 		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			warning = _("The battery is below the critical level and "
-				    "this computer is about to shutdown.");
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to shutdown."));
 		}
 
-		if (warning) {
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      GPM_NOTIFY_TIMEOUT_LONG,
-					      _("Critical action"),
-					      NULL,
-					      warning);
-		}
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
+
+	} else if (warning_type == GPM_WARNING_DISCHARGING) {
+		gboolean show_notify;
+		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
+						     GPM_PREF_NOTIFY_ACADAPTER, NULL);
+		if (show_notify) {
+			message = g_strdup (_("The AC Power has been unplugged. "
+					      "The system is now using battery power."));
+			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
+		}
+
+	} else {
+		remaining = gpm_get_timestring (battery_status->remaining_time);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> "
+					     "of remaining battery life (%d%%). "
+					     "Plug in your AC Adapter to avoid losing data."),
+					   remaining, battery_status->percentage_charge);
+			timeout = GPM_NOTIFY_TIMEOUT_LONG;
+		g_free (remaining);
 	}
 
-	/* Always check if we already notified the user */
-	if (warning_type > manager->priv->last_primary_warning) {
-		int timeout;
-
-		manager->priv->last_primary_warning = warning_type;
-		remaining = gpm_get_timestring (battery_status->remaining_time);
-
-		/* Do different warnings for each GPM_WARNING */
-		if (warning_type == GPM_WARNING_DISCHARGING) {
-			gboolean show_notify;
-			show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-							     GPM_PREF_NOTIFY_ACADAPTER, NULL);
-			if (show_notify) {
-				message = g_strdup_printf (_("The AC Power has been unplugged. "
-							      "The system is now using battery power."));
-				timeout = GPM_NOTIFY_TIMEOUT_SHORT;
-			}
-		} else {
-			message = g_strdup_printf (_("You have approximately <b>%s</b> "
-						     "of remaining battery life (%d%%). "
-						     "Plug in your AC Adapter to avoid losing data."),
-						   remaining, battery_status->percentage_charge);
-				timeout = GPM_NOTIFY_TIMEOUT_LONG;
-		}
-		if (message) {
-			title = battery_low_get_title (warning_type);
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      timeout,
-					      title,
-					      NULL,
-					      message);
-			g_free (message);
-		}
-		g_free (remaining);
-	} else {
-		gpm_debug ("Already notified %i", warning_type);
+	/* If we had a message, print it as a notification */
+	if (message) {
+		title = battery_low_get_title (warning_type);
+		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+				      timeout,
+				      title,
+				      NULL,
+				      message);
+		g_free (message);
 	}
 }
 
