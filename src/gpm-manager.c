@@ -2300,7 +2300,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 	}
 	manager_explain_reason (manager,
 				GPM_GRAPH_EVENT_HIBERNATE,
-				_("Susspending computer"),
+				_("Suspending computer"),
 				_("user clicked suspend from tray menu"));
 	gpm_manager_suspend (manager, NULL);
 }
