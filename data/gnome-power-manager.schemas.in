@@ -8,8 +8,8 @@
       <type>bool</type>
       <default>false</default>
       <locale name="C">
-        <short>If we should use do the battery event when the lid is shut and the power removed</short>
-        <long>If we should do the battery lid close event (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power then removed at a later time. This may confuse new users but may be the correct action for power users who expect this to happen.</long>
+        <short>If the battery event should occur when the lid is shut and the power removed</short>
+        <long>If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time.</long>
       </locale>
     </schema>
 
@@ -20,8 +20,8 @@
       <type>bool</type>
       <default>false</default>
       <locale name="C">
-        <short>If we should use low power mode when on AC power</short>
-        <long>If we should enable the system low power mode when on AC power.</long>
+        <short>If the low-power mode should be enabled when on AC</short>
+        <long>If the system low-power mode should be enabled when on AC power.</long>
       </locale>
     </schema>
 
@@ -32,8 +32,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If we should use low power mode when on UPS power</short>
-        <long>If we should enable the system low power mode when on UPS power.</long>
+        <short>If the low-power mode should be enabled when on UPS</short>
+        <long>If the system low-power mode should be enabled when on UPS power.</long>
       </locale>
     </schema>
 
@@ -44,8 +44,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If we should use low power mode when on laptop battery power</short>
-        <long>If we should enable the system low power mode when on laptop battery power.</long>
+        <short>If the low-power mode should be enabled when on battery</short>
+        <long>If the system low-power mode should be enabled when on laptop battery power.</long>
       </locale>
     </schema>
 
@@ -56,7 +56,7 @@
       <type>int</type>
       <default>80</default>
       <locale name="C">
-        <short>The damping factor used when calculating the rate</short>
+        <short>The damping factor for the rate</short>
         <long>The value of the damping factor used when calculating the exponentially weighted average of the rate. Increasing this value will increase the damping effect of the rate calculations, which makes the time remaining more accurate, but the graphs less responsive.</long>
       </locale>
     </schema>
@@ -68,8 +68,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Whether to allow the Suspend and Hibernate options in the menu</short>
-        <long>Whether or not to allow the Suspend and Hibernate options in the notification area drop down menu.</long>
+        <short>Allow Suspend and Hibernate in the menu</short>
+        <long>If the Suspend and Hibernate options should be allowed in the notification area drop down menu.</long>
       </locale>
     </schema>
 
@@ -92,7 +92,7 @@
       <default>true</default>
       <locale name="C">
         <short>Whether to use time-based notifications</short>
-        <long>Whether or not to use time based notifications. If set to false, then the percentage change is used instead, which may fix some broken ACPI BIOS's.</long>
+        <long>If time based notifications should be used. If set to false, then the percentage change is used instead, which may fix a broken ACPI BIOS.</long>
       </locale>
     </schema>
 
@@ -104,7 +104,7 @@
       <default>true</default>
       <locale name="C">
         <short>Check CPU load before sleeping</short>
-        <long>Whether we should check the CPU load before doing the idle action.</long>
+        <long>If the CPU load should be checked before doing the idle action.</long>
       </locale>
     </schema>
 
@@ -116,7 +116,7 @@
       <default>true</default>
       <locale name="C">
         <short>Check network utilization before sleeping</short>
-        <long>Whether we should check network utilization before doing the idle action.</long>
+        <long>If network utilization should be checked before doing the idle action.</long>
       </locale>
     </schema>
 
@@ -128,7 +128,7 @@
       <default>true</default>
       <locale name="C">
         <short>Dim the screen after a period of inactivity</short>
-        <long>Whether or not to dim the screen to save power when the computer is idle.</long>
+        <long>If the screen should be dimmed to save power when the computer is idle.</long>
       </locale>
     </schema>
 
@@ -140,7 +140,7 @@
       <default>true</default>
       <locale name="C">
         <short>Suspend enabled</short>
-        <long>Whether or not the user can suspend the computer</long>
+        <long>If the user is authorized to suspend the computer.</long>
       </locale>
     </schema>
 
@@ -152,7 +152,7 @@
       <default>true</default>
       <locale name="C">
         <short>Hibernate enabled</short>
-        <long>Whether or not the user can hibernate the computer</long>
+        <long>If the user is authorized to hibernate the computer.</long>
       </locale>
     </schema>
 
@@ -163,8 +163,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Notify when AC adapter is removed</short>
-        <long>Whether or not the user is notified when the AC adapter is removed</long>
+        <short>Notify when AC adapter is disconnected</short>
+        <long>If the user should be notified when the AC adapter is disconnected.</long>
       </locale>
     </schema>
 
@@ -175,8 +175,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Notify on fully charged</short>
-        <long>Whether or not a notification message is displayed when the battery is fully charged</long>
+        <short>Notify when fully charged</short>
+        <long>If a notification message should be displayed when the battery is fully charged.</long>
       </locale>
     </schema>
 
@@ -187,8 +187,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Notify on a HAL suspend or hibernate error.</short>
-        <long>Whether or not a notification message is displayed if the HAL action (suspend or hibernate) fails</long>
+        <short>Notify on a HAL error</short>
+        <long>If a notification message should be displayed if the HAL action (suspend or hibernate) fails.</long>
       </locale>
     </schema>
 
@@ -200,7 +200,7 @@
       <default>present</default>
       <locale name="C">
         <short>When to show the notification icon</short>
-        <long>Option when to show the notification icon. Valid options are "never", "critical", "charge", "present" and "always"</long>
+        <long>Display options for the notification icon. Valid options are "never", "critical", "charge", "present" and "always".</long>
       </locale>
     </schema>
 
@@ -211,7 +211,7 @@
       <default>100</default>
       <locale name="C">
         <short>LCD brightness when on AC</short>
-        <long>The brightness of the display when on AC power. Valid values are between 0 and 100.</long>
+        <long>The brightness of the display when on AC power. Possible values are between 0 and 100.</long>
       </locale>
    </schema>
 
@@ -222,7 +222,7 @@
       <default>0</default>
       <locale name="C">
         <short>Sleep timeout computer when on AC</short>
-        <long>The number of seconds the computer on AC power needs to be inactive before it goes to sleep.</long>
+        <long>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep.</long>
       </locale>
    </schema>
 
@@ -233,7 +233,7 @@
       <default>1800</default>
       <locale name="C">
         <short>Sleep timeout display when on AC</short>
-        <long>The number of seconds before the display goes to sleep when the computer is on AC power.</long>
+        <long>The amount of time in seconds before the display goes to sleep when the computer is on AC power.</long>
       </locale>
    </schema>
 
@@ -244,7 +244,7 @@
       <default>50</default>
       <locale name="C">
         <short>LCD brightness when on battery</short>
-        <long>The brightness of the display when on battery power. Valid values are between 0 and 100.</long>
+        <long>The brightness of the display when on battery power. Possible values are between 0 and 100.</long>
       </locale>
    </schema>
 
@@ -255,7 +255,7 @@
       <default>1200</default>
       <locale name="C">
         <short>Sleep timeout computer when on battery</short>
-        <long>The number of seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
+        <long>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
       </locale>
    </schema>
 
@@ -266,7 +266,7 @@
       <default>300</default>
       <locale name="C">
         <short>Sleep timeout display when on battery</short>
-        <long>The number of seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
+        <long>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
       </locale>
    </schema>
    
@@ -277,7 +277,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Suspend button action</short>
-        <long>The action to take when the system suspend button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+        <long>The action to take when the system suspend button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -288,7 +288,7 @@
       <default>hibernate</default>
       <locale name="C">
         <short>Hibernate button action</short>
-        <long>The action to take when the system hibernate button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+        <long>The action to take when the system hibernate button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -299,7 +299,7 @@
       <default>interactive</default>
       <locale name="C">
         <short>Power button action</short>
-        <long>The action to take when the system power button is pressed. Valid values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+        <long>The action to take when the system power button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -310,7 +310,7 @@
       <default>blank</default>
       <locale name="C">
         <short>Laptop lid close action when on AC</short>
-        <long>The action to take when the laptop lid is closed and the laptop is on AC power. Valid values are "suspend", "hibernate" and "blank".</long>
+        <long>The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are "suspend", "hibernate" and "blank".</long>
      </locale>
    </schema>
 
@@ -321,7 +321,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Laptop lid close action on battery</short>
-        <long>The action to take when the laptop lid is closed and the laptop is on battery power. Valid values are "suspend", "hibernate" and "blank".</long>
+        <long>The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are "suspend", "hibernate" and "blank".</long>
      </locale>
    </schema>
 
@@ -332,7 +332,7 @@
       <default>suspend</default>
       <locale name="C">
         <short>Whether to hibernate, suspend or do nothing when inactive</short>
-        <long>The type of sleeping that should be performed when the computer is inactive. Valid values are "hibernate", "suspend" and "nothing".</long>
+        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
       </locale>
    </schema>
 
@@ -343,7 +343,7 @@
       <default>shutdown</default>
       <locale name="C">
         <short>Battery critical low action</short>
-        <long>The action to take when the battery is critically low. Valid values are "hibernate", "suspend", "shutdown" and "nothing"</long>
+        <long>The action to take when the battery is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -354,7 +354,7 @@
       <default>shutdown</default>
       <locale name="C">
         <short>UPS critical low action</short>
-        <long>The action to take when the UPS is critically low. Valid values are "hibernate", "suspend", "shutdown" and "nothing"</long>
+        <long>The action to take when the UPS is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
       </locale>
    </schema>
 
@@ -366,7 +366,7 @@
       <default>true</default>
       <locale name="C">
         <short>Use gnome-screensaver lock setting</short>
-        <long>Whether or not to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
+        <long>If to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
       </locale>
     </schema>
 
@@ -377,8 +377,8 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Lock screen when it is blanked</short>
-        <long>Whether or not the screen is locked when the screen is turned off. NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
+        <short>Lock screen when blanked</short>
+        <long>If the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -390,7 +390,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen on suspend</short>
-        <long>Whether or not to lock the screen when the computer wakes up from a suspend. NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
+        <long>If to lock the screen when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -402,7 +402,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen on hibernate</short>
-        <long>Whether or not to lock the screen when the computer wakes up from a hibernate.  NOTE this option is only used if lock_use_screensaver_settings is set to false.</long>
+        <long>If to lock the screen when the computer wakes up from a hibernate.  Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -413,8 +413,8 @@
       <type>int</type>
       <default>10</default>
       <locale name="C">
-        <short>Percentage is considered low</short>
-        <long>The percentage of the battery when it is considered low. Only valid when use_time_for_policy false.</long>
+        <short>Percentage considered low</short>
+        <long>The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false.</long>
       </locale>
     </schema>
 
@@ -425,8 +425,8 @@
       <type>int</type>
       <default>5</default>
       <locale name="C">
-        <short>Percentage is considered very low</short>
-        <long>The percentage of the battery when it is considered very low. Only valid when use_time_for_policy false.</long>
+        <short>Percentage considered very low</short>
+        <long>The percentage of the battery when it is considered very low. Only valid when use_time_for_policy is false.</long>
       </locale>
     </schema>
 
@@ -437,8 +437,8 @@
       <type>int</type>
       <default>2</default>
       <locale name="C">
-        <short>Percentage is considered critical</short>
-        <long>The percentage of the battery when it is considered critical. Only valid when use_time_for_policy false.</long>
+        <short>Percentage considered critical</short>
+        <long>The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false.</long>
       </locale>
     </schema>
 
@@ -450,7 +450,7 @@
       <default>1</default>
       <locale name="C">
         <short>Percentage action is taken</short>
-        <long>The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy false.</long>
+        <long>The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false.</long>
       </locale>
     </schema>
 
@@ -462,7 +462,7 @@
       <default>1200</default>
       <locale name="C">
         <short>The time remaining when low</short>
-        <long>The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy true.</long>
+        <long>The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true.</long>
       </locale>
     </schema>
 
@@ -474,7 +474,7 @@
       <default>600</default>
       <locale name="C">
         <short>The time remaining when very low</short>
-        <long>The time remaining in seconds of the battery when it is considered very low. Only valid when use_time_for_policy true.</long>
+        <long>The time remaining in seconds of the battery when it is considered very low. Only valid when use_time_for_policy is true.</long>
       </locale>
     </schema>
 
@@ -486,7 +486,7 @@
       <default>300</default>
       <locale name="C">
         <short>The time remaining when critical</short>
-        <long>The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy true.</long>
+        <long>The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true.</long>
       </locale>
     </schema>
 
@@ -498,7 +498,7 @@
       <default>120</default>
       <locale name="C">
         <short>The time remaining when action is taken</short>
-        <long>The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy true.</long>
+        <long>The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true.</long>
       </locale>
     </schema>
 
@@ -509,8 +509,8 @@
       <type>int</type>
       <default>30</default>
       <locale name="C">
-        <short>The brightness of the screen when session idle</short>
-        <long>This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy true.</long>
+        <short>The brightness of the screen when idle</short>
+        <long>This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy is true.</long>
       </locale>
     </schema>
 
