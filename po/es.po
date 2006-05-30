@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-23 03:29+0200\n"
+"POT-Creation-Date: 2006-05-30 12:07+0100\n"
 "PO-Revision-Date: 2006-05-23 03:34+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -41,385 +41,554 @@ msgstr ""
 "tan grande como para confundir al usuario."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
+#, fuzzy
+msgid "Allow Suspend and Hibernate in the menu"
+msgstr "Indica si se permiten las opciones Suspender e Hibernar en el menú"
+
+#: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
 msgstr "Acción para batería críticamente baja"
 
-#: ../data/gnome-power-manager.schemas.in.h:3
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
 msgstr "Comprobar la carga de la CPU antes de pasar a bajo consumo"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
+#: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Check network utilization before sleeping"
 msgstr "Comprobar la utilización de red antes de pasar a bajo consumo"
 
-#: ../data/gnome-power-manager.schemas.in.h:5
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Dim the screen after a period of inactivity"
 msgstr "Apagar la pantalla tras un período de inactividad"
 
-#: ../data/gnome-power-manager.schemas.in.h:6
-msgid "Hibernate button action"
-msgstr "Acción del botón hibernar"
-
 #: ../data/gnome-power-manager.schemas.in.h:7
-msgid "Hibernate enabled"
-msgstr "Hibernación activada"
-
-#: ../data/gnome-power-manager.schemas.in.h:8
+#, fuzzy
 msgid ""
-"If we should do the battery lid close event (for example 'Suspend when lid "
-"closed on battery') when the lid is previously shut and the AC power then "
-"removed at a later time. This may confuse new users but may be the correct "
-"action for power users who expect this to happen."
-msgstr "Indica si se debería hacer el evento de cierre de tapa con batería (por ejemplo «Suspender cuando la tapa se cierre con batería) cuando la tapa se cierre anteriormente y la CA se quite más tarde. Esto puede confundir a los usuarios nuevos pero podría ser la acción correcta para los usuarios avanzados que esperen que ocurra esto."
-
-#: ../data/gnome-power-manager.schemas.in.h:9
-msgid "If we should enable the system low power mode when on AC power."
-msgstr ""
-"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
-"CA."
-
-#: ../data/gnome-power-manager.schemas.in.h:10
-msgid "If we should enable the system low power mode when on UPS power."
-msgstr ""
-"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
-"un SAI."
-
-#: ../data/gnome-power-manager.schemas.in.h:11
-msgid "If we should enable the system low power mode when on laptop battery power."
-msgstr ""
-"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
-"baterías."
-
-#: ../data/gnome-power-manager.schemas.in.h:12
-msgid ""
-"If we should use do the battery event when the lid is shut and the power "
-"removed"
-msgstr "Indica si se debe usar el evento de batería cuando la tapa se cierre y el cable se quite."
-
-#: ../data/gnome-power-manager.schemas.in.h:13
-msgid "If we should use low power mode when on AC power"
-msgstr "Indica si se debe usar el modo de bajo consumo cuando se esté conectado a CA"
-
-#: ../data/gnome-power-manager.schemas.in.h:14
-msgid "If we should use low power mode when on UPS power"
-msgstr ""
-"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a un "
-"SAI"
-
-#: ../data/gnome-power-manager.schemas.in.h:15
-msgid "If we should use low power mode when on laptop battery power"
-msgstr ""
-"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a "
-"baterías"
-
-#: ../data/gnome-power-manager.schemas.in.h:16
-msgid "LCD brightness when on AC"
-msgstr "Brillo del LCD con CA"
-
-#: ../data/gnome-power-manager.schemas.in.h:17
-msgid "LCD brightness when on battery"
-msgstr "Brillo del LCD con batería"
-
-#: ../data/gnome-power-manager.schemas.in.h:18
-msgid "Laptop lid close action on battery"
-msgstr "Acción al cerrar la tapa cuando se está usando la batería"
-
-#: ../data/gnome-power-manager.schemas.in.h:19
-msgid "Laptop lid close action when on AC"
-msgstr "Acción al cerrar la tapa mientras se está conectado a CA"
-
-#: ../data/gnome-power-manager.schemas.in.h:20
-msgid "Lock screen on hibernate"
-msgstr "Bloquear pantalla al hibernar"
-
-#: ../data/gnome-power-manager.schemas.in.h:21
-msgid "Lock screen on suspend"
-msgstr "Bloquear pantalla al suspender"
-
-#: ../data/gnome-power-manager.schemas.in.h:22
-msgid "Lock screen when it is blanked"
-msgstr "Bloquear pantalla al oscurecer"
-
-#: ../data/gnome-power-manager.schemas.in.h:23
-msgid "Notify on a HAL suspend or hibernate error."
-msgstr "Notificar cuando se produzca un error al suspender o hibernar mediante HAL."
-
-#: ../data/gnome-power-manager.schemas.in.h:24
-msgid "Notify on fully charged"
-msgstr "Notificar al cargarse totalmente"
-
-#: ../data/gnome-power-manager.schemas.in.h:25
-msgid "Notify when AC adapter is removed"
-msgstr "Notificar cuando el adaptador de CA se desconecte"
-
-#: ../data/gnome-power-manager.schemas.in.h:26
-msgid "Number of seconds to suppress policy after resume"
-msgstr "Número de segundos para suprimir la norma después de retornar"
-
-#: ../data/gnome-power-manager.schemas.in.h:27
-msgid ""
-"Option when to show the notification icon. Valid options are \"never\", "
-"\"critical\", \"charge\", \"present\" and \"always\""
+"Display options for the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
 "Opción para indicar cuándo mostrar el icono de notificación. Las opciones "
 "válidas son \"never\" (nunca), \"critical\" (crítico), \"charge\" (carga) y "
 "\"always\" (siempre)"
 
+#: ../data/gnome-power-manager.schemas.in.h:8
+msgid "Hibernate button action"
+msgstr "Acción del botón hibernar"
+
+#: ../data/gnome-power-manager.schemas.in.h:9
+msgid "Hibernate enabled"
+msgstr "Hibernación activada"
+
+#: ../data/gnome-power-manager.schemas.in.h:10
+#, fuzzy
+msgid ""
+"If a notification message should be displayed if the HAL action (suspend or "
+"hibernate) fails."
+msgstr ""
+"Indica si se debe mostrar un mensaje de notificación si la acción HAL "
+"(suspender o hibernar) falla"
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+#, fuzzy
+msgid ""
+"If a notification message should be displayed when the battery is fully "
+"charged."
+msgstr ""
+"Indica si se debe mostrar un mensaje de notificación cuando la batería esté "
+"completamente cargada"
+
+#: ../data/gnome-power-manager.schemas.in.h:12
+#, fuzzy
+msgid "If network utilization should be checked before doing the idle action."
+msgstr ""
+"Indica si se debería comprobar la carga de la CPU antes de hacer la acción "
+"de inactividad."
+
+#: ../data/gnome-power-manager.schemas.in.h:13
+#, fuzzy
+msgid "If the CPU load should be checked before doing the idle action."
+msgstr ""
+"Indica si se debería comprobar la carga de la CPU antes de hacer la acción "
+"de inactividad."
+
+#: ../data/gnome-power-manager.schemas.in.h:14
+#, fuzzy
+msgid ""
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
+msgstr ""
+"Indica si se permiten o no las opciones Suspender e Hibernar en el menú "
+"desplegable del área de notificación."
+
+#: ../data/gnome-power-manager.schemas.in.h:15
+#, fuzzy
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
+msgstr ""
+"Indica si se debe usar el evento de batería cuando la tapa se cierre y el "
+"cable se quite."
+
+#: ../data/gnome-power-manager.schemas.in.h:16
+#, fuzzy
+msgid ""
+"If the battery lid close event should occur (for example 'Suspend when lid "
+"closed on battery') when the lid is previously shut and the AC power "
+"disconnected at a later time."
+msgstr ""
+"Indica si se debería hacer el evento de cierre de tapa con batería (por "
+"ejemplo «Suspender cuando la tapa se cierre con batería) cuando la tapa se "
+"cierre anteriormente y la CA se quite más tarde. Esto puede confundir a los "
+"usuarios nuevos pero podría ser la acción correcta para los usuarios "
+"avanzados que esperen que ocurra esto."
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+#, fuzzy
+msgid "If the low-power mode should be enabled when on AC"
+msgstr ""
+"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a CA"
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+#, fuzzy
+msgid "If the low-power mode should be enabled when on UPS"
+msgstr ""
+"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a un "
+"SAI"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+#, fuzzy
+msgid "If the low-power mode should be enabled when on battery"
+msgstr ""
+"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a "
+"baterías"
+
+#: ../data/gnome-power-manager.schemas.in.h:20
+#, fuzzy
+msgid ""
+"If the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si se debe bloquear o no la pantalla cuando ésta se apague. NOTE que "
+"esta opción se usa sólo si «lock_use_screensaver_settings» está puesto a "
+"«false»."
+
+#: ../data/gnome-power-manager.schemas.in.h:21
+#, fuzzy
+msgid "If the screen should be dimmed to save power when the computer is idle."
+msgstr ""
+"Indica si se debe apagar la pantalla para ahorrar energía cuando el equipo "
+"esté inactivo."
+
+#: ../data/gnome-power-manager.schemas.in.h:22
+#, fuzzy
+msgid "If the system low-power mode should be enabled when on AC power."
+msgstr ""
+"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
+"CA."
+
+#: ../data/gnome-power-manager.schemas.in.h:23
+#, fuzzy
+msgid "If the system low-power mode should be enabled when on UPS power."
+msgstr ""
+"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
+"un SAI."
+
+#: ../data/gnome-power-manager.schemas.in.h:24
+#, fuzzy
+msgid ""
+"If the system low-power mode should be enabled when on laptop battery power."
+msgstr ""
+"Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
+"baterías."
+
+#: ../data/gnome-power-manager.schemas.in.h:25
+#, fuzzy
+msgid "If the user is authorized to hibernate the computer."
+msgstr "Indica si el usuario puede hibernar o no el equipo"
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+#, fuzzy
+msgid "If the user is authorized to suspend the computer."
+msgstr "Indica si el usuario puede o no suspender el equipo"
+
+#: ../data/gnome-power-manager.schemas.in.h:27
+#, fuzzy
+msgid "If the user should be notified when the AC adapter is disconnected."
+msgstr ""
+"Indica si se debe notificar al usuario que el adaptador de CA se ha quitado"
+
 #: ../data/gnome-power-manager.schemas.in.h:28
+#, fuzzy
+msgid ""
+"If time based notifications should be used. If set to false, then the "
+"percentage change is used instead, which may fix a broken ACPI BIOS."
+msgstr ""
+"Indica si se debe usar o no las notificaciones basadas en tiempo. Si se "
+"establece a «false», entonces se usa el porcentaje de cambio, lo cual puede "
+"solucionar problemas con algunas BIOS ACPI defectuosas."
+
+#: ../data/gnome-power-manager.schemas.in.h:29
+#, fuzzy
+msgid ""
+"If to lock the screen when the computer wakes up from a hibernate. Only used "
+"if lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
+"una hibernación. NOTE que esta opción se usa sólo si "
+"«lock_use_screensaver_settings» está puesto a «false»"
+
+#: ../data/gnome-power-manager.schemas.in.h:30
+#, fuzzy
+msgid ""
+"If to lock the screen when the computer wakes up from a suspend. Only used "
+"if lock_use_screensaver_settings is false."
+msgstr ""
+"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
+"una suspensión. NOTE que esta opción se usa sólo si "
+"«lock_use_screensaver_settings» está puesto a «false»"
+
+#: ../data/gnome-power-manager.schemas.in.h:31
+#, fuzzy
+msgid ""
+"If to use the screen lock setting of gnome-screensaver to decide to lock the "
+"screen after a hibernate, suspend or blank screen."
+msgstr ""
+"Indica si se debe usar o no el ajuste de bloqueo de pantalla de gnome-"
+"screensaver para decidir si se debe bloquear la pantalla tras una "
+"hibernación, suspensión o ennegrecimiento de la pantalla."
+
+#: ../data/gnome-power-manager.schemas.in.h:32
+msgid "LCD brightness when on AC"
+msgstr "Brillo del LCD con CA"
+
+#: ../data/gnome-power-manager.schemas.in.h:33
+msgid "LCD brightness when on battery"
+msgstr "Brillo del LCD con batería"
+
+#: ../data/gnome-power-manager.schemas.in.h:34
+msgid "Laptop lid close action on battery"
+msgstr "Acción al cerrar la tapa cuando se está usando la batería"
+
+#: ../data/gnome-power-manager.schemas.in.h:35
+msgid "Laptop lid close action when on AC"
+msgstr "Acción al cerrar la tapa mientras se está conectado a CA"
+
+#: ../data/gnome-power-manager.schemas.in.h:36
+msgid "Lock screen on hibernate"
+msgstr "Bloquear pantalla al hibernar"
+
+#: ../data/gnome-power-manager.schemas.in.h:37
+msgid "Lock screen on suspend"
+msgstr "Bloquear pantalla al suspender"
+
+#: ../data/gnome-power-manager.schemas.in.h:38
+#, fuzzy
+msgid "Lock screen when blanked"
+msgstr "Bloquear pantalla al oscurecer"
+
+#: ../data/gnome-power-manager.schemas.in.h:39
+#, fuzzy
+msgid "Notify on a HAL error"
+msgstr ""
+"Notificar cuando se produzca un error al suspender o hibernar mediante HAL."
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+#, fuzzy
+msgid "Notify when AC adapter is disconnected"
+msgstr "Notificar cuando el adaptador de CA se desconecte"
+
+#: ../data/gnome-power-manager.schemas.in.h:41
+#, fuzzy
+msgid "Notify when fully charged"
+msgstr "Notificar al cargarse totalmente"
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+msgid "Number of seconds to suppress policy after resume"
+msgstr "Número de segundos para suprimir la norma después de retornar"
+
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Percentage action is taken"
 msgstr "Porcentaje cuando se toma la acción"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
-msgid "Percentage is considered critical"
+#: ../data/gnome-power-manager.schemas.in.h:44
+#, fuzzy
+msgid "Percentage considered critical"
 msgstr "Porcentaje considerado crítico"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
-msgid "Percentage is considered low"
+#: ../data/gnome-power-manager.schemas.in.h:45
+#, fuzzy
+msgid "Percentage considered low"
 msgstr "Porcentaje considerado bajo"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
-msgid "Percentage is considered very low"
+#: ../data/gnome-power-manager.schemas.in.h:46
+#, fuzzy
+msgid "Percentage considered very low"
 msgstr "Porcentaje considerado muy bajo"
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Power button action"
 msgstr "Acción del botón de encendido"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Sleep timeout computer when on AC"
 msgstr "Tiempo para equipo en bajo consumo en CA"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Sleep timeout computer when on battery"
 msgstr "Tiempo para equipo en bajo consumo en batería"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Sleep timeout display when on AC"
 msgstr "Tiempo para pantalla en bajo consumo con CA"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Sleep timeout display when on battery"
 msgstr "Tiempo para pantalla en bajo consumo con batería"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Suspend button action"
 msgstr "Acción del botón suspender"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Suspend enabled"
 msgstr "Suspensión activada"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:54
+#, fuzzy
 msgid ""
-"The action to take when the UPS is critically low. Valid values are "
-"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
+"The action to take when the UPS is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "La acción que se realizará cuando el SAI (UPS) esté críticamente bajo. Los "
 "valores válidos son \"hibernate\" (hibernar), \"suspend\" (suspender), "
 "\"shutdown\" (apagar) y \"nothing\" (nada)"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:55
+#, fuzzy
 msgid ""
-"The action to take when the battery is critically low. Valid values are "
-"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\""
+"The action to take when the battery is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "La acción que se realizará cuando la batería esté críticamente baja. Los "
 "valores válidos son \"hibernate\" (hibernar), \"suspend\" (suspender), "
 "\"shutdown\" (apagar) y \"nothing\" (nada)"
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:56
+#, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
-"power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
+"power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr ""
 "La acción que se realizará cuando se cierra la tapa del portátil y se esté "
 "conectado a CA. Los valores válidos son \"suspend\" (suspender), \"hibernate"
 "\" (hibernar), y \"blank\" (pantalla en negro)."
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:57
+#, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
-"battery power. Valid values are \"suspend\", \"hibernate\" and \"blank\"."
+"battery power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
 msgstr ""
 "La acción que se realizará cuando se cierra la tapa del portátil y se esté "
 "funcionando con baterías. Los valores válidos son \"suspend\" (suspender), "
 "\"hibernate\" (hibernar), y \"blank\" (pantalla en negro)."
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:58
+#, fuzzy
 msgid ""
-"The action to take when the system hibernate button is pressed. Valid values "
-"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
-"\"."
+"The action to take when the system hibernate button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
 msgstr ""
 "La acción que se realizará cuando se pulsa el botón de hibernación. Los "
 "valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), "
 "\"interactive\" (interactivo), \"shutdown\" (apagar) y \"nothing\" (nada)."
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:59
+#, fuzzy
 msgid ""
-"The action to take when the system power button is pressed. Valid values are "
-"\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
+"The action to take when the system power button is pressed. Possible values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
 msgstr ""
 "La acción que se realizará cuando se pulsa el botón de apagado del sistema. "
 "Los valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), "
 "\"interactive\" (interactivo), \"shutdown\" (apagar) y \"nothing\" (nada)."
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:60
+#, fuzzy
 msgid ""
-"The action to take when the system suspend button is pressed. Valid values "
-"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
-"\"."
+"The action to take when the system suspend button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
 msgstr ""
 "La acción que se realizará cuando se pulsa el botón de suspensión. Los "
 "valores válidos son \"suspend\" (suspender), \"hibernate\" (hibernar), "
 "\"interactive\" (interactivo) y \"shutdown\" (apagar) y \"nothing\" (nada)."
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:61
+#, fuzzy
 msgid ""
-"The brightness of the display when on AC power. Valid values are between 0 "
-"and 100."
+"The amount of time in seconds before the display goes to sleep when the "
+"computer is on AC power."
+msgstr ""
+"El número de segundos antes de que la pantalla se ponga en bajo consumo "
+"cuando el equipo esté funcionando con CA."
+
+#: ../data/gnome-power-manager.schemas.in.h:62
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on AC power needs to be inactive "
+"before it goes to sleep."
+msgstr ""
+"El número de segundos que el equipo necesita estar inactivo cuando se "
+"encuentra funcionando con CA para ponerse en bajo consumo."
+
+#: ../data/gnome-power-manager.schemas.in.h:63
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before it goes to sleep."
+msgstr ""
+"El número de segundos que el equipo necesita estar inactivo cuando se "
+"encuentra funcionando con baterías para ponerse bajo consumo."
+
+#: ../data/gnome-power-manager.schemas.in.h:64
+#, fuzzy
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before the display goes to sleep."
+msgstr ""
+"El número de segundos que el equipo necesita estar inactivo cuando se "
+"encuentra funcionando con baterías para poner la pantalla en bajo consumo."
+
+#: ../data/gnome-power-manager.schemas.in.h:65
+#, fuzzy
+msgid ""
+"The brightness of the display when on AC power. Possible values are between "
+"0 and 100."
 msgstr ""
 "El brillo de la pantalla cuando se está funcionando con CA. Los valores "
 "válidos están entre 0 y 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:66
+#, fuzzy
 msgid ""
-"The brightness of the display when on battery power. Valid values are "
+"The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "El brillo de la pantalla cuando se está funcionado con baterías. Los valores "
 "válidos están entre 0 y 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:48
-msgid "The brightness of the screen when session idle"
+#: ../data/gnome-power-manager.schemas.in.h:67
+#, fuzzy
+msgid "The brightness of the screen when idle"
 msgstr "El brillo de la pantalla cuando la sesión está inactiva"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid "The damping factor used when calculating the rate"
+#: ../data/gnome-power-manager.schemas.in.h:68
+#, fuzzy
+msgid "The damping factor for the rate"
 msgstr "El factor de amortiguación usado al calcular la tasa"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
-msgid ""
-"The number of seconds before the display goes to sleep when the computer is "
-"on AC power."
-msgstr ""
-"El número de segundos antes de que la pantalla se ponga en bajo consumo "
-"cuando el equipo esté funcionando con CA."
-
-#: ../data/gnome-power-manager.schemas.in.h:51
-msgid ""
-"The number of seconds the computer on AC power needs to be inactive before "
-"it goes to sleep."
-msgstr ""
-"El número de segundos que el equipo necesita estar inactivo cuando se "
-"encuentra funcionando con CA para ponerse en bajo consumo."
-
-#: ../data/gnome-power-manager.schemas.in.h:52
-msgid ""
-"The number of seconds the computer on battery power needs to be inactive "
-"before it goes to sleep."
-msgstr ""
-"El número de segundos que el equipo necesita estar inactivo cuando se "
-"encuentra funcionando con baterías para ponerse bajo consumo."
-
-#: ../data/gnome-power-manager.schemas.in.h:53
-msgid ""
-"The number of seconds the computer on battery power needs to be inactive "
-"before the display goes to sleep."
-msgstr ""
-"El número de segundos que el equipo necesita estar inactivo cuando se "
-"encuentra funcionando con baterías para poner la pantalla en bajo consumo."
-
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:69
+#, fuzzy
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
-"when use_time_for_policy false."
+"when use_time_for_policy is false."
 msgstr ""
 "El porcentaje de la batería cuando se considera crítico. Sólo válido cuando "
 "use_time_for_policy es «false»."
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:70
+#, fuzzy
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
-"use_time_for_policy false."
+"use_time_for_policy is false."
 msgstr ""
 "El porcentaje de la batería cuando se considera baja. Sólo válido cuando "
 "use_time_for_policy es «false»."
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:71
+#, fuzzy
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
-"when use_time_for_policy false."
+"when use_time_for_policy is false."
 msgstr ""
 "El porcentaje de la batería cuando se considera muy baja. Sólo válido cuando "
 "use_time_for_policy es «false»."
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:72
+#, fuzzy
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
-"valid when use_time_for_policy false."
+"valid when use_time_for_policy is false."
 msgstr ""
 "El porcentaje de la batería cuando se realiza la acción crítica. Sólo válido "
 "cuando use_time_for_policy es «false»."
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:73
+#, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use_time_for_policy true."
+"Only valid when use_time_for_policy is true."
 msgstr ""
 "El tiempo restante en segundos de la batería cuando se realiza la acción "
 "crítica. Sólo válido cuando use_time_for_policy es «true»."
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:74
+#, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use_time_for_policy true."
+"Only valid when use_time_for_policy is true."
 msgstr ""
 "El tiempo restante en segundos de la batería cuando se considera crítica. "
 "Sólo válido cuando use_time_for_policy es «true»."
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:75
+#, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
-"valid when use_time_for_policy true."
+"valid when use_time_for_policy is true."
 msgstr ""
 "El tiempo restante en segundos de la batería cuando se considera baja. Sólo "
 "válido cuando use_time_for_policy es «true»."
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:76
+#, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
-"Only valid when use_time_for_policy true."
+"Only valid when use_time_for_policy is true."
 msgstr ""
 "El tiempo restante en segundos de la batería cuando se considera muy baja. "
 "Sólo válido cuando use_time_for_policy es «true»."
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "The time remaining when action is taken"
 msgstr "El tiempo restante cuando se toma la acción"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "The time remaining when critical"
 msgstr "El tiempo restante cuando la carga es crítica"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid "The time remaining when low"
 msgstr "El tiempo restante cuando la carga es muy baja"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid "The time remaining when very low"
 msgstr "El tiempo restante cuando la carga es muy baja"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:81
+#, fuzzy
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
-"Valid values are \"hibernate\", \"suspend\" and \"nothing\"."
+"Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 "El tipo de estado de bajo consumo que debería realizarse cuando el equipo "
 "esté inactivo. Los valores válidos son \"hibernate\" (hibernar), \"suspend"
 "\"(suspender), y \"nothing\" (ninguno)."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
@@ -431,138 +600,35 @@ msgstr ""
 "amortiguación de los cálculos de la tasa, lo que hará el tiempo resultante "
 "más preciso, pero los gráficos menos exactos."
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:83
+#, fuzzy
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
-"Only valid when use_time_for_policy true."
+"Only valid when use_time_for_policy is true."
 msgstr ""
 "Este es el brillo del panel del portátil usado cuando la sesión está "
 "inactiva. Sólo válido cuando use_time_for_policy es «true»."
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid "UPS critical low action"
 msgstr "Acción para SAI críticamente bajo"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid "Use gnome-screensaver lock setting"
 msgstr "Usar la configuración de bloqueo de gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid "When to show the notification icon"
 msgstr "Cuando mostrar el icono de notificación"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
-msgid ""
-"Whether or not a notification message is displayed if the HAL action "
-"(suspend or hibernate) fails"
-msgstr ""
-"Indica si se debe mostrar un mensaje de notificación si la acción HAL "
-"(suspender o hibernar) falla"
-
-#: ../data/gnome-power-manager.schemas.in.h:73
-msgid ""
-"Whether or not a notification message is displayed when the battery is fully "
-"charged"
-msgstr ""
-"Indica si se debe mostrar un mensaje de notificación cuando la batería esté "
-"completamente cargada"
-
-#: ../data/gnome-power-manager.schemas.in.h:74
-msgid ""
-"Whether or not the screen is locked when the screen is turned off. NOTE this "
-"option is only used if lock_use_screensaver_settings is set to false."
-msgstr ""
-"Indica si se debe bloquear o no la pantalla cuando ésta se apague. NOTE que "
-"esta opción se usa sólo si «lock_use_screensaver_settings» está puesto a "
-"«false»."
-
-#: ../data/gnome-power-manager.schemas.in.h:75
-msgid "Whether or not the user can hibernate the computer"
-msgstr "Indica si el usuario puede hibernar o no el equipo"
-
-#: ../data/gnome-power-manager.schemas.in.h:76
-msgid "Whether or not the user can suspend the computer"
-msgstr "Indica si el usuario puede o no suspender el equipo"
-
-#: ../data/gnome-power-manager.schemas.in.h:77
-msgid "Whether or not the user is notified when the AC adapter is removed"
-msgstr "Indica si se debe notificar al usuario que el adaptador de CA se ha quitado"
-
-#: ../data/gnome-power-manager.schemas.in.h:78
-msgid ""
-"Whether or not to allow the Suspend and Hibernate options in the "
-"notification area drop down menu."
-msgstr ""
-"Indica si se permiten o no las opciones Suspender e Hibernar en el menú "
-"desplegable del área de notificación."
-
-#: ../data/gnome-power-manager.schemas.in.h:79
-msgid "Whether or not to dim the screen to save power when the computer is idle."
-msgstr ""
-"Indica si se debe apagar la pantalla para ahorrar energía cuando el equipo "
-"esté inactivo."
-
-#: ../data/gnome-power-manager.schemas.in.h:80
-msgid ""
-"Whether or not to lock the screen when the computer wakes up from a "
-"hibernate. NOTE this option is only used if lock_use_screensaver_settings is "
-"set to false."
-msgstr ""
-"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
-"una hibernación. NOTE que esta opción se usa sólo si "
-"«lock_use_screensaver_settings» está puesto a «false»"
-
-#: ../data/gnome-power-manager.schemas.in.h:81
-msgid ""
-"Whether or not to lock the screen when the computer wakes up from a suspend. "
-"NOTE this option is only used if lock_use_screensaver_settings is set to "
-"false."
-msgstr ""
-"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
-"una suspensión. NOTE que esta opción se usa sólo si "
-"«lock_use_screensaver_settings» está puesto a «false»"
-
-#: ../data/gnome-power-manager.schemas.in.h:82
-msgid ""
-"Whether or not to use the screen lock setting of gnome-screensaver to decide "
-"to lock the screen after a hibernate, suspend or blank screen."
-msgstr ""
-"Indica si se debe usar o no el ajuste de bloqueo de pantalla de gnome-"
-"screensaver para decidir si se debe bloquear la pantalla tras una "
-"hibernación, suspensión o ennegrecimiento de la pantalla."
-
-#: ../data/gnome-power-manager.schemas.in.h:83
-msgid ""
-"Whether or not to use time based notifications. If set to false, then the "
-"percentage change is used instead, which may fix some broken ACPI BIOS's."
-msgstr ""
-"Indica si se debe usar o no las notificaciones basadas en tiempo. Si se "
-"establece a «false», entonces se usa el porcentaje de cambio, lo cual puede "
-"solucionar problemas con algunas BIOS ACPI defectuosas."
-
-#: ../data/gnome-power-manager.schemas.in.h:84
-msgid "Whether to allow the Suspend and Hibernate options in the menu"
-msgstr "Indica si se permiten las opciones Suspender e Hibernar en el menú"
-
-#: ../data/gnome-power-manager.schemas.in.h:85
-msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "Indica si se debe hibernar, suspender o no hacer nada cuando se esté inactivo"
-
-#: ../data/gnome-power-manager.schemas.in.h:86
-msgid "Whether to use time-based notifications"
-msgstr "Indica si se deben usar notificaciones basadas en tiempo"
-
 #: ../data/gnome-power-manager.schemas.in.h:87
-msgid "Whether we should check network utilization before doing the idle action."
+msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
-"Indica si se debería comprobar la utilización de red antes de hacer la "
-"acción de inactividad."
+"Indica si se debe hibernar, suspender o no hacer nada cuando se esté inactivo"
 
 #: ../data/gnome-power-manager.schemas.in.h:88
-msgid "Whether we should check the CPU load before doing the idle action."
-msgstr ""
-"Indica si se debería comprobar la carga de la CPU antes de hacer la acción "
-"de inactividad."
+msgid "Whether to use time-based notifications"
+msgstr "Indica si se deben usar notificaciones basadas en tiempo"
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -585,7 +651,8 @@ msgid "<b>Laptop batteries</b>"
 msgstr "<b>Baterías del portátil</b>"
 
 #: ../data/gpm-info.glade.h:3
-msgid "<b>UPS's</b>"
+#, fuzzy
+msgid "<b>UPS</b>"
 msgstr "<b>SAI (UPS)</b>"
 
 #: ../data/gpm-info.glade.h:4
@@ -895,6 +962,7 @@ msgid "Doing nothing"
 msgstr "Sin hacer nada"
 
 #: ../src/gpm-manager.c:788 ../src/gpm-manager.c:1166
+#: ../src/gpm-manager.c:2303
 msgid "Suspending computer"
 msgstr "Suspender el equipo"
 
@@ -921,7 +989,8 @@ msgstr "Reactivar equipo"
 
 #: ../src/gpm-manager.c:1019
 #, c-format
-msgid "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgid ""
+"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 "HAL falló al %s. Consulte la <a href=\"%s\">página de PMF</a> para "
 "soluciones a problemas comunes."
@@ -1025,7 +1094,8 @@ msgstr "tapa del portátil re-abierta"
 
 #: ../src/gpm-manager.c:1604
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
-msgstr "la tapa se ha cerrado, y el adaptador de ca se ha quitado (y gconf está bien)"
+msgstr ""
+"la tapa se ha cerrado, y el adaptador de ca se ha quitado (y gconf está bien)"
 
 #: ../src/gpm-manager.c:1686
 msgid "Power Critically Low"
@@ -1081,7 +1151,8 @@ msgstr ""
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
-msgstr "La batería está por debajo de un nivel crítico y este equipo se apagará."
+msgstr ""
+"La batería está por debajo de un nivel crítico y este equipo se apagará."
 
 #: ../src/gpm-manager.c:1857
 msgid "The AC Power has been unplugged. The system is now using battery power."
@@ -1107,13 +1178,15 @@ msgstr ""
 "cuando el SAI esté completamente vacío."
 
 #: ../src/gpm-manager.c:1953
-msgid "The UPS is below the critical level and this computer is about to hibernate."
+msgid ""
+"The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "El SAI está por debajo del nivel crítico y este equipo se va a poner a "
 "hibernar."
 
 #: ../src/gpm-manager.c:1957
-msgid "The UPS is below the critical level and this computer is about to shutdown."
+msgid ""
+"The UPS is below the critical level and this computer is about to shutdown."
 msgstr "El SAI está por debajo de un nivel crítico y este equipo se apagará."
 
 #: ../src/gpm-manager.c:1963
@@ -1145,10 +1218,6 @@ msgstr ""
 #: ../src/gpm-manager.c:2279
 msgid "user clicked hibernate from tray menu"
 msgstr "El usuario pulsó hibernar desde el menú de la bandeja"
-
-#: ../src/gpm-manager.c:2303
-msgid "Susspending computer"
-msgstr "Suspender el equipo"
 
 #: ../src/gpm-manager.c:2304
 msgid "user clicked suspend from tray menu"
@@ -1359,3 +1428,11 @@ msgstr ""
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
+#~ msgid ""
+#~ "Whether we should check network utilization before doing the idle action."
+#~ msgstr ""
+#~ "Indica si se debería comprobar la utilización de red antes de hacer la "
+#~ "acción de inactividad."
+
+#~ msgid "Susspending computer"
+#~ msgstr "Suspender el equipo"
