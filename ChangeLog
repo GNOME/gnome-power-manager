@@ -1,5 +1,10 @@
 2006-05-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info-data.c: (gpm_info_data_limit_truncate):
+	Use the GSList in a sane way.
+
+2006-05-30  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_interpolate_value):
 	Limit the y intersect to the last height, so we don't extend the graph
 	into the unknown.

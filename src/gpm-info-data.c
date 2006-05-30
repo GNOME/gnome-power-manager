@@ -53,7 +53,7 @@ G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
 
 /* this should be setable */
 #define GPM_INFO_DATA_MAX_POINTS		120	/* when we should simplify data */
-#define GPM_INFO_DATA_MAX_TIME			60	/* seconds, truncate after this */
+#define GPM_INFO_DATA_MAX_TIME			10 * 60	/* seconds, truncate after this */
 
 GList*
 gpm_info_data_get_list (GpmInfoData *info_data)
@@ -208,7 +208,7 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
 /**
  * gpm_info_data_limit_truncate:
  * @graph_data: The data we have for a specific graph
- * @max_num: The max desired time we truncate the start to
+ * @max_time: The max desired time we truncate the start to
  *
  * Trims the start of the data so that we don't store more than
  * the amount of time in the list. We have to be careful and not just remove
@@ -219,29 +219,44 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
  **/
 void
 gpm_info_data_limit_truncate (GpmInfoData *info_data,
-			      int	   max_num)
+			      int	   max_time)
 {
 	GpmInfoDataPoint *point;
 	GList *l;
 	GList *list;
 	GList *last;
-	int smallest;
+	int difference;
+	gboolean first = TRUE;
 
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
 	last = g_list_last (info_data->priv->list);
+	/* first point */
 	point = (GpmInfoDataPoint *)last->data;
-	smallest = point->time - max_num;
 
-	gpm_debug ("max=%i", max_num);
-	for (l=info_data->priv->list; l != NULL; l=l->next) {
+	/* the time difference between the first and last point */
+	difference = point->time - max_time;
+
+	gpm_debug ("diff=%i, max=%i", difference, max_time);
+
+	l = info_data->priv->list;
+	while (l) {
 		point = (GpmInfoDataPoint *) l->data;
-		if (point->time > smallest) {
-			info_data->priv->list = l;
-			break;
+		if (point->time > difference) {
+			if (first) {
+				/* we have to move the first point to the new
+				   threshold else we start with no data */
+				first = FALSE;
+				GpmInfoDataPoint *new = (GpmInfoDataPoint *) l->data;
+				new->time = max_time;
+				list = l->next;
+			} else {
+				info_data->priv->list = l;
+				break;
+			}
 		} else {
-			list = l->prev;
+			list = l->next;
 			/* remove link and point */
 			gpm_info_data_free_point (l->data);
 			l->data = NULL;
