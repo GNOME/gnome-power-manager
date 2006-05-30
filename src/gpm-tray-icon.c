@@ -24,7 +24,7 @@
 #  include <config.h>
 #endif
 
-#define USE_EGGTRAYICON		TRUE
+#define USE_EGGTRAYICON		(GTK_MINOR_VERSION < 9)
 
 #include <stdlib.h>
 #include <stdio.h>
