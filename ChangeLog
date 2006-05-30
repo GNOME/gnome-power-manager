@@ -1,5 +1,15 @@
 2006-05-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_interpolate_value):
+	Limit the y intersect to the last height, so we don't extend the graph
+	into the unknown.
+ 
+	* src/gpm-info.c: (gpm_info_log_do_poll):
+	Set the correct colours of the line depending on discharging/charging
+	status. Fixes #338175.
+
+2006-05-30  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	One more grammar fix that I missed in #343017.
 

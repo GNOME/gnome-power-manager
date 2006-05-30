@@ -686,22 +686,37 @@ gpm_graph_interpolate_value (GpmInfoDataPoint *this,
 			     int xintersect)
 {
 	int dy, dx;
+	float m;
+	int c;
+	int y;
+
 	/* we have no points */
 	if (! this) {
 		return 0;
 	}
+
 	/* we only have one point, don't interpolate */
 	if (! last) {
 		return this->value;
 	}
+
 	/* gradient */
 	dx = this->time - last->time;
 	dy = this->value - last->value;
-	float m = (float) dy / (float) dx;
+	m = (float) dy / (float) dx;
+
 	/* y-intersect */
-	int c = (-m * (float) this->time) + this->value;
+	c = (-m * (float) this->time) + this->value;
+
 	/* y = mx + c */
-	return (m * (float) xintersect) + c;
+	y = (m * (float) xintersect) + c;
+
+	/* limit the y intersect to the last height, so we don't extend the
+	 * graph into the unknown */
+	if (y > this->value) {
+		y = this->value;
+	}
+	return y;
 }
 
 /**

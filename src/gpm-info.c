@@ -582,6 +582,7 @@ gpm_info_log_do_poll (gpointer data)
 	GpmInfo *info = (GpmInfo*) data;
 
 	int value_x;
+	int colour;
 
 	GpmPowerStatus battery_status;
 	gpm_power_get_battery_status (info->priv->power,
@@ -590,15 +591,25 @@ gpm_info_log_do_poll (gpointer data)
 
 	/* work out seconds elapsed */
 	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
+
+	/* set the correct colours */
+	if (battery_status.is_discharging) {
+		colour = GPM_GRAPH_COLOUR_DARK_RED;
+	} else if (battery_status.is_charging) {
+		colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+	} else {
+		colour = GPM_GRAPH_COLOUR_DEFAULT;
+	}
+
 	gpm_info_data_add (info->priv->percentage_data,
 			   value_x,
-			   battery_status.percentage_charge, 0);
+			   battery_status.percentage_charge, colour);
 	gpm_info_data_add (info->priv->rate_data,
 			   value_x,
-			   battery_status.charge_rate_raw, 0);
+			   battery_status.charge_rate_raw, colour);
 	gpm_info_data_add (info->priv->time_data,
 			   value_x,
-			   battery_status.remaining_time, 0);
+			   battery_status.remaining_time, colour);
 
 	if (info->priv->main_window) {
 		gpm_info_graph_update_all (info);
