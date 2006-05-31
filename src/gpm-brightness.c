@@ -50,7 +50,7 @@
 static void	gpm_brightness_class_init (GpmBrightnessClass *klass);
 static void	gpm_brightness_init	  (GpmBrightness      *brightness);
 static void	gpm_brightness_finalize	  (GObject	      *object);
-static gboolean	gpm_brightness_level_update_hw (GpmBrightness *brightness);
+static gboolean	gpm_brightness_update_hw (GpmBrightness *brightness);
 static int	gpm_brightness_hw_to_percent (int hw, int levels);
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
@@ -58,10 +58,11 @@ static int	gpm_brightness_hw_to_percent (int hw, int levels);
 struct GpmBrightnessPrivate
 {
 	gboolean    has_hardware;
-	gboolean    does_own_updates; /* keys are hardwired */
-	gboolean    does_own_dimming; /* hardware auto-fades */
-	int	    current_hw;
-	int	    saved_value_hw;
+	gboolean    does_own_updates;	/* keys are hardwired */
+	gboolean    does_own_dimming;	/* hardware auto-fades */
+	int	    current_hw;		/* hardware */
+	int	    level_dim_hw;
+	int	    level_std_hw;
 	int	    levels;
 	char	   *udi;
 	DBusGProxy *proxy;
@@ -186,10 +187,11 @@ gpm_brightness_init (GpmBrightness *brightness)
 				&brightness->priv->levels);
 
 	/* this changes under our feet */
-	gpm_brightness_level_update_hw (brightness);
+	gpm_brightness_update_hw (brightness);
 
 	/* set to known value */
-	brightness->priv->saved_value_hw = -1;
+	brightness->priv->level_dim_hw = 1;
+	brightness->priv->level_std_hw = 1;
 
 	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
@@ -226,7 +228,7 @@ gpm_brightness_new (void)
 }
 
 /**
- * gpm_brightness_level_update_hw:
+ * gpm_brightness_update_hw:
  * @brightness: This brightness class instance
  *
  * Updates the private local value of brightness_level_hw as it may have
@@ -234,7 +236,7 @@ gpm_brightness_new (void)
  * Return value: Success.
  **/
 static gboolean
-gpm_brightness_level_update_hw (GpmBrightness *brightness)
+gpm_brightness_update_hw (GpmBrightness *brightness)
 {
 	GError  *error = NULL;
 	gboolean retval;
@@ -256,7 +258,7 @@ gpm_brightness_level_update_hw (GpmBrightness *brightness)
 }
 
 /**
- * gpm_brightness_level_set_hw:
+ * gpm_brightness_set_hw:
  * @brightness: This brightness class instance
  * @brightness_level_hw: The hardware level in raw units
  *
@@ -265,7 +267,7 @@ gpm_brightness_level_update_hw (GpmBrightness *brightness)
  * Return value: Success.
  **/
 static gboolean
-gpm_brightness_level_set_hw (GpmBrightness *brightness,
+gpm_brightness_set_hw (GpmBrightness *brightness,
 			     int	    brightness_level_hw)
 {
 	GError  *error = NULL;
@@ -299,59 +301,6 @@ gpm_brightness_level_set_hw (GpmBrightness *brightness,
 	return retval;
 }
 
-/**
- * gpm_brightness_level_up:
- * @brightness: This brightness class instance
- *
- * If possible, put the brightness of the LCD up one unit.
- **/
-void
-gpm_brightness_level_up (GpmBrightness *brightness)
-{
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
-
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_brightness_level_update_hw (brightness);
-	} else {
-		gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw + 1);
-	}
-
-	int percentage;
-	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-	gpm_debug ("emitting brightness-step-changed : %i", percentage);
-	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
-}
-
-/**
- * gpm_brightness_level_down:
- * @brightness: This brightness class instance
- *
- * If possible, put the brightness of the LCD down one unit.
- **/
-void
-gpm_brightness_level_down (GpmBrightness *brightness)
-{
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
-
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_brightness_level_update_hw (brightness);
-	} else {
-		gpm_brightness_level_set_hw (brightness, brightness->priv->current_hw - 1);
-	}
-
-	int percentage;
-	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-	gpm_debug ("emitting brightness-step-changed : %i", percentage);
-	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
-}
 
 /**
  * gpm_brightness_percent_to_hw:
@@ -377,6 +326,39 @@ gpm_brightness_percent_to_hw (int percentage,
 }
 
 /**
+ * gpm_brightness_dim_hw:
+ * @brightness: This brightness class instance
+ * @new_level_hw: The new hardware level
+ **/
+static void
+gpm_brightness_dim_hw (GpmBrightness *brightness,
+			     int	    new_level_hw)
+{
+	int   current_hw;
+	int   a;
+
+	if (! brightness->priv->has_hardware) {
+		return;
+	}
+
+	current_hw = brightness->priv->current_hw;
+
+	if (new_level_hw > current_hw) {
+		/* going up */
+		for (a=current_hw; a <= new_level_hw; a++) {
+			gpm_brightness_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
+	} else {
+		/* going down */
+		for (a=current_hw; a >= new_level_hw; a--) {
+			gpm_brightness_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
+	}
+}
+
+/**
  * gpm_brightness_hw_to_percent:
  * @hw: The hardware level
  * @levels: The number of hardware levels for our hardware
@@ -399,30 +381,79 @@ gpm_brightness_hw_to_percent (int hw,
 }
 
 /**
- * gpm_brightness_level_set:
+ * gpm_brightness_set_level_dim:
  * @brightness: This brightness class instance
  * @brightness_level: The percentage brightness
  **/
 void
-gpm_brightness_level_set (GpmBrightness *brightness,
-			  int		 brightness_level)
+gpm_brightness_set_level_dim (GpmBrightness *brightness,
+			      int	     brightness_level)
 {
-	int brightness_level_hw;
-	int levels;
+	int level_hw;
+	level_hw = gpm_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
 
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
-	levels = brightness->priv->levels;
-	brightness_level_hw = gpm_brightness_percent_to_hw (brightness_level, levels);
-	/* only set if different */
-	if (brightness_level_hw != brightness->priv->current_hw) {
-		gpm_brightness_level_set_hw (brightness, brightness_level_hw);
+	/* If the current brightness is less than the dim brightness then just
+	 * use the current brightness so that we don't *increase* in brightness
+	 * on idle. See #338630 for more details */
+	if (brightness->priv->level_std_hw > level_hw) {
+		brightness->priv->level_dim_hw = level_hw;
+	} else {
+		gpm_warning ("Current brightness is %i, dim brightness is %i.",
+			     brightness->priv->level_std_hw, level_hw);
+		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
 	}
 }
 
 /**
- * gpm_brightness_level_get:
+ * gpm_brightness_set_level_dim:
+ * @brightness: This brightness class instance
+ * @brightness_level: The percentage brightness
+ **/
+void
+gpm_brightness_set_level_std (GpmBrightness *brightness,
+			      int	     brightness_level)
+{
+	int level_hw;
+	level_hw = gpm_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
+	brightness->priv->level_std_hw = level_hw;
+}
+
+/**
+ * gpm_brightness_dim:
+ * @brightness: This brightness class instance
+ *
+ * Sets the screen into dim mode, where the dim brightness is used.
+ **/
+void
+gpm_brightness_dim (GpmBrightness *brightness)
+{
+	gpm_brightness_dim_hw (brightness, brightness->priv->level_dim_hw);
+}
+
+/**
+ * gpm_brightness_undim:
+ * @brightness: This brightness class instance
+ *
+ * Sets the screen into normal mode, where the startdard brightness is used.
+ **/
+void
+gpm_brightness_undim (GpmBrightness *brightness)
+{
+	gpm_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
+}
+
+/**
+ * gpm_brightness_set:
+ * @brightness: This brightness class instance
+ **/
+void
+gpm_brightness_set (GpmBrightness *brightness)
+{
+	gpm_brightness_set_hw (brightness, brightness->priv->level_std_hw);
+}
+
+/**
+ * gpm_brightness_get:
  * @brightness: This brightness class instance
  * Return value: The percentage brightness, or -1 for no hardware
  *
@@ -430,7 +461,7 @@ gpm_brightness_level_set (GpmBrightness *brightness,
  * brightness. This is quick as no HAL inquiry is done.
  **/
 int
-gpm_brightness_level_get (GpmBrightness *brightness)
+gpm_brightness_get (GpmBrightness *brightness)
 {
 	int percentage;
 	if (! brightness->priv->has_hardware) {
@@ -442,95 +473,55 @@ gpm_brightness_level_get (GpmBrightness *brightness)
 }
 
 /**
- * gpm_brightness_level_dim_hw:
+ * gpm_brightness_up:
  * @brightness: This brightness class instance
- * @new_level_hw: The new hardware level
+ *
+ * If possible, put the brightness of the LCD up one unit.
  **/
-static void
-gpm_brightness_level_dim_hw (GpmBrightness *brightness,
-			     int	    new_level_hw)
+void
+gpm_brightness_up (GpmBrightness *brightness)
 {
-	int   current_hw;
-	int   a;
-
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
 
-	current_hw = brightness->priv->current_hw;
-
-	if (new_level_hw > current_hw) {
-		/* going up */
-		for (a=current_hw; a <= new_level_hw; a++) {
-			gpm_brightness_level_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
+	/* Do we find the new value, or set the new value */
+	if (brightness->priv->does_own_updates) {
+		gpm_brightness_update_hw (brightness);
 	} else {
-		/* going down */
-		for (a=current_hw; a >= new_level_hw; a--) {
-			gpm_brightness_level_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
+		gpm_brightness_set_hw (brightness, brightness->priv->current_hw + 1);
 	}
+
+	int percentage;
+	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
+						   brightness->priv->levels);
+	gpm_debug ("emitting brightness-step-changed : %i", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
 }
 
 /**
- * gpm_brightness_level_dim:
+ * gpm_brightness_down:
  * @brightness: This brightness class instance
- * @brightness_level: The new percentage brightness
  *
- * Dims the screen slowly to the new value, if we are not an IBM.
+ * If possible, put the brightness of the LCD down one unit.
  **/
 void
-gpm_brightness_level_dim (GpmBrightness *brightness,
-			  int		 brightness_level)
+gpm_brightness_down (GpmBrightness *brightness)
 {
-	int new_level_hw;
-
-	if (brightness->priv->does_own_dimming) {
+	if (! brightness->priv->has_hardware) {
 		return;
 	}
 
-	new_level_hw = gpm_brightness_percent_to_hw (brightness_level,
-						     brightness->priv->levels);
-	gpm_brightness_level_dim_hw (brightness, new_level_hw);
-}
-
-/**
- * gpm_brightness_level_save:
- * @brightness: This brightness class instance
- * @brightness_level: The new brightness level
- *
- * Saves the current brightness, and then sets the new brightness to the value
- * specified in brightness_level using the dimming function.
- **/
-void
-gpm_brightness_level_save (GpmBrightness *brightness,
-			   int		  brightness_level)
-{
-	int   new_level_hw;
-
-	gpm_debug ("Saving and setting brightness to %i%%", brightness_level);
-	brightness->priv->saved_value_hw = brightness->priv->current_hw;
-
-	new_level_hw = gpm_brightness_percent_to_hw (brightness_level,
-						     brightness->priv->levels);
-	gpm_brightness_level_dim_hw (brightness, new_level_hw);
-}
-
-/**
- * gpm_brightness_level_resume:
- * @brightness: This brightness class instance
- *
- * Restores the brightness to that saved by gpm_brightness_level_save()
- **/
-void
-gpm_brightness_level_resume (GpmBrightness *brightness)
-{
-	if (brightness->priv->saved_value_hw == -1) {
-		gpm_warning ("You have to call gpm_brightness_level_save first!");
-		return;
+	/* Do we find the new value, or set the new value */
+	if (brightness->priv->does_own_updates) {
+		gpm_brightness_update_hw (brightness);
+	} else {
+		gpm_brightness_set_hw (brightness, brightness->priv->current_hw - 1);
 	}
-	gpm_debug ("Resuming to previous brightness");
-	gpm_brightness_level_set_hw (brightness, brightness->priv->saved_value_hw);
+
+	int percentage;
+	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
+						   brightness->priv->levels);
+	gpm_debug ("emitting brightness-step-changed : %i", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
 }

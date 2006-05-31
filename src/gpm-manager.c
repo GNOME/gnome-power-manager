@@ -139,8 +139,6 @@ struct GpmManagerPrivate
 	int		 very_low_time;
 	int		 critical_time;
 	int		 action_time;
-
-	int		 lcd_dim_brightness;
 };
 
 enum {
@@ -617,7 +615,9 @@ change_power_policy (GpmManager *manager,
 		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
 	}
 
-	gpm_brightness_level_dim (manager->priv->brightness, brightness);
+	gpm_brightness_set_level_std (manager->priv->brightness, brightness);
+	gpm_brightness_set (manager->priv->brightness);
+
 	gpm_hal_enable_power_save (power_save);
 	update_ac_throttle (manager, on_ac);
 
@@ -1245,7 +1245,7 @@ idle_changed_cb (GpmIdle    *idle,
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_RESUME,
 						_("Screen resume"),
 						_("idle mode ended"));
-			gpm_brightness_level_resume (manager->priv->brightness);
+			gpm_brightness_undim (manager->priv->brightness);
 		}
 
 		/* sync timeouts */
@@ -1267,24 +1267,11 @@ idle_changed_cb (GpmIdle    *idle,
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
 		if (do_laptop_dim) {
-			int dim_br;
-			int current_br;
-			dim_br = manager->priv->lcd_dim_brightness;
-			current_br = gpm_brightness_level_get (manager->priv->brightness);
-			if (current_br < dim_br) {
-				/* If the current brightness is less than the dim
-				 * brightness then just use the lowest brightness
-				 * so that we don't *increase* in brightness on idle.
-				 * See #338630 for more details */
-				gpm_warning ("Current brightness is %i, dim brightness is %i.",
-					     current_br, dim_br);
-				dim_br = current_br;
-			}
-			/* Save this brightness and dim the screen, fixes #328564 */
+			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_DIM,
 						_("Screen dim"),
 						_("idle mode started"));
-			gpm_brightness_level_save (manager->priv->brightness, dim_br);
+			gpm_brightness_dim (manager->priv->brightness);
 		}
 
 		/* sync timeouts */
@@ -1534,11 +1521,11 @@ power_button_pressed_cb (GpmPower   *power,
 
 	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) ||
 		   (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0)) {
-		gpm_brightness_level_up (manager->priv->brightness);
+		gpm_brightness_up (manager->priv->brightness);
 
 	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) ||
 		   (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0)) {
-		gpm_brightness_level_down (manager->priv->brightness);
+		gpm_brightness_down (manager->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
 		gpm_screensaver_lock (manager->priv->screensaver);
@@ -2207,14 +2194,16 @@ gconf_key_changed_cb (GConfClient *client,
 
 		if (on_ac) {
 			brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
-			gpm_brightness_level_set (manager->priv->brightness, brightness);
+			gpm_brightness_set_level_std (manager->priv->brightness, brightness);
+			gpm_brightness_set (manager->priv->brightness);
 		}
 
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS) == 0) {
 
 		if (! on_ac) {
 			brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
-			gpm_brightness_level_set (manager->priv->brightness, brightness);
+			gpm_brightness_set_level_std (manager->priv->brightness, brightness);
+			gpm_brightness_set (manager->priv->brightness);
 		}
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
@@ -2247,9 +2236,9 @@ gconf_key_changed_cb (GConfClient *client,
 				  	      GPM_PREF_POLICY_TIMEOUT, NULL);
 
 	} else if (strcmp (entry->key, GPM_PREF_PANEL_DIM_BRIGHTNESS) == 0) {
-		manager->priv->lcd_dim_brightness =
-			gconf_client_get_int (manager->priv->gconf_client,
-					      GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+		brightness = gconf_client_get_int (manager->priv->gconf_client,
+						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+		gpm_brightness_set_level_dim (manager->priv->brightness, brightness);
 
 	}
 }
@@ -2359,7 +2348,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		 resume requests -- maybe this need a logic cleanup */
 	if (auth) {
 		gpm_debug ("resuming due to auth begin");
-		gpm_brightness_level_resume (manager->priv->brightness);
+		gpm_brightness_undim (manager->priv->brightness);
 	}
 }
 
@@ -2565,8 +2554,10 @@ gpm_manager_init (GpmManager *manager)
 							   GPM_PREF_ACTION_TIME, NULL);
 
 	/* Get dim settings */
-	manager->priv->lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
-								  GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+	int lcd_dim_brightness;
+	lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
+						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+	gpm_brightness_set_level_dim (manager->priv->brightness, lcd_dim_brightness);
 }
 
 /**
