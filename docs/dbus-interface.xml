@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- CVSID: $Id$ -->
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<chapter id="dbus-interface">
+  <title>DBUS Interface</title>
+  <para>
+    This API is currently unstable and is likely to change in the future.
+  </para>
+
+  <sect1 id="pm-intro">
+    <title>Introduction</title>
+    <para>
+      Power Manager exposes a DBUS API for programs to obtain information about
+      the DPMS state and to change it if required.
+    </para>
+    <para>
+      The following constants are used to uniquely refer to the PowerManager
+      object when making DBUS method calls:
+    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>DBUS Service:</entry>
+            <entry><literal>org.gnome.PowerManager</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Object Path:</entry>
+            <entry><literal>/org/gnome/PowerManager</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Interface:</entry>
+            <entry><literal>org.gnome.PowerManager</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </sect1>
+
+  <sect1 id="pm-methods">
+    <title>Methods</title>
+    <para>
+      These are the DBUS methods.
+    </para>
+    <sect2 id="pm-method-Suspend">
+      <title>
+        <literal>Suspend</literal>
+      </title>
+      <para>
+        This call will attempt to suspend the system.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>Success value</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+    <sect2 id="pm-method-Hibernate">
+      <title>
+        <literal>Hibernate</literal>
+      </title>
+      <para>
+        This call will attempt to hibernate the system.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>Success value</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+    <sect2 id="pm-method-Shutdown">
+      <title>
+        <literal>Shutdown</literal>
+      </title>
+      <para>
+        This call will attempt to shutdown the system.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>Success value</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+    <sect2 id="pm-method-CanSuspend">
+      <title>
+        <literal>CanSuspend</literal>
+      </title>
+      <para>
+        If the current user in the session is able to suspend, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to suspend</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-CanHibernate">
+      <title>
+        <literal>CanHibernate</literal>
+      </title>
+      <para>
+        If the current user in the session is able to hhibernate, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to hibernate</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-setDpmsMode">
+      <title>
+        <literal>setDpmsMode</literal>
+      </title>
+      <para>
+        DPMS is a standard from the VESA consortium for managing the power
+        supply of monitors.
+	This call requests a change in the state of DPMS for the current screen.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>on</entry>
+              <entry>100% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>standby</entry>
+              <entry>&lt;80% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>suspend</entry>
+              <entry>&lt;30W power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>off</entry>
+              <entry>&lt;8W power usage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-getDpmsMode">
+      <title>
+        <literal>getDpmsMode</literal>
+      </title>
+      <para>
+        Returns the DPMS mode state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>on</entry>
+              <entry>100% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>standby</entry>
+              <entry>&lt;80% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>suspend</entry>
+              <entry>&lt;30W power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>off</entry>
+              <entry>&lt;8W power usage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-InhibitInactiveSleep">
+      <title>
+        <literal>InhibitInactiveSleep</literal>
+      </title>
+      <para>
+        Inhibits the computer from performing the idle sleep action.
+        Useful if you want to do an operation of long duration without the
+        computer suspending.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>the application name, e.g. "nautilus"</entry>
+            </row>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>the localised reason to inhibit, e.g. "indexing files"</entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>integer</entry>
+              <entry>the cookie</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+      <para>
+        A cookie is a random UINT32 used to identify the inhibit.
+      </para>
+    </sect2>
+
+    <sect2 id="pm-method-AllowInactiveSleep">
+      <title>
+        <literal>AllowInactiveSleep</literal>
+      </title>
+      <para>
+        Allows the computer to perform the idle sleep action.
+        Applications that quit without calling this method will be
+        automatically unregistered, but this is not recommended as the user
+        may be warned.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>integer</entry>
+              <entry>the cookie</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-signals">
+    <title>Signals</title>
+    <para>
+      These are the DBUS signals.
+    </para>
+    <sect2 id="pm-signal-DpmsModeChanged">
+      <title>
+        <literal>DpmsModeChanged</literal>
+      </title>
+      <para>
+        Returns the value of the current state of activity.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry></entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>on</entry>
+              <entry>100% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>standby</entry>
+              <entry>&lt;80% power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>suspend</entry>
+              <entry>&lt;30W power usage</entry>
+            </row>
+            <row>
+              <entry></entry>
+              <entry>off</entry>
+              <entry>&lt;8W power usage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+</chapter>

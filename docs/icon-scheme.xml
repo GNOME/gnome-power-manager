@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- CVSID: $Id$ -->
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+
+<chapter id="icon-scheme">
+  <title>Icon naming scheme</title>
+  <para>
+    Icons need to be present in tango style and in 16x16, 22x22, and svg versions.
+  </para>
+
+  <sect1 id="icon-indexes">
+    <title>Icon indexes</title>
+    <para>
+      Indexes are ranges specified by the specification.
+      A percentage scale is divided into 6 index groups:
+    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Index</entry>
+            <entry>Range</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>000</literal></entry>
+            <entry>0%  - 10%</entry>
+          </row>
+          <row>
+            <entry><literal>020</literal></entry>
+            <entry>11% - 30%</entry>
+          </row>
+          <row>
+            <entry><literal>040</literal></entry>
+            <entry>31% - 50%</entry>
+          </row>
+          <row>
+            <entry><literal>060</literal></entry>
+            <entry>51% - 70%</entry>
+          </row>
+          <row>
+            <entry><literal>080</literal></entry>
+            <entry>71% - 90%</entry>
+          </row>
+          <row>
+            <entry><literal>100</literal></entry>
+            <entry>91% - 100%</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      A wireless device scale is divided into 4 csr groups:
+    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Index</entry>
+            <entry>Range</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>000</literal></entry>
+            <entry>CSR0,CSR1</entry>
+          </row>
+          <row>
+            <entry><literal>030</literal></entry>
+            <entry>CSR2,CSR3</entry>
+          </row>
+          <row>
+            <entry><literal>060</literal></entry>
+            <entry>CSR4,CSR5</entry>
+          </row>
+          <row>
+            <entry><literal>100</literal></entry>
+            <entry>CSR6,CSR7</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </sect1>
+
+  <sect1 id="icon-names">
+    <title>Icon Names</title>
+    <para>
+      These are the icon names.
+    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Name</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>gpm-ac-adapter</literal></entry>
+            <entry>AC adapter icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-primary-{index}</literal></entry>
+            <entry>Laptop battery icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-primary-{index}-charging</literal></entry>
+            <entry>Laptop battery icon, on AC power</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-primary-charged</literal></entry>
+            <entry>Laptop battery icon 100% fill, on AC power</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-primary-missing</literal></entry>
+            <entry>Laptop battery missing or state invalid</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-ups-{index}</literal></entry>
+            <entry>UPS battery icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-ups-{index}-charging</literal></entry>
+            <entry>UPS battery icon, charging</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-ups-charged</literal></entry>
+            <entry>UPS battery icon 100% fill, on AC power</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-ups-missing</literal></entry>
+            <entry>UPS battery missing or state invalid</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-mouse-{wireless}</literal></entry>
+            <entry>CSR mouse icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-keyboard-{wireless}</literal></entry>
+            <entry>CSR keyboard icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-hibernate</literal></entry>
+            <entry>Hibernate icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-suspend</literal></entry>
+            <entry>Suspend icon</entry>
+          </row>
+          <row>
+            <entry><literal>gpm-brightness</literal></entry>
+            <entry>Brightness icon</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </sect1>
+
+</chapter>
