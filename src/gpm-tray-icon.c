@@ -654,11 +654,9 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
  **/
 static void
 gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
-			   guint          button,
-			   guint32        activate_time,
 			   GpmTrayIcon   *icon)
 {
-	g_debug ("icon activated (button:%i)", button);
+	g_debug ("icon activated");
 }
 #endif
 
