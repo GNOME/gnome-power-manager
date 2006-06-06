@@ -49,6 +49,7 @@ gboolean	 gpm_hal_suspend			(gint		 wakeup);
 gboolean	 gpm_hal_can_hibernate			(void);
 gboolean	 gpm_hal_hibernate			(void);
 gboolean	 gpm_hal_shutdown			(void);
+gboolean	 gpm_hal_reboot				(void);
 gboolean	 gpm_hal_enable_power_save		(gboolean	 enable);
 gboolean	 gpm_hal_device_get_bool		(const gchar	*udi,
 							 const gchar	*key,

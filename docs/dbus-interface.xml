@@ -69,6 +69,7 @@
         </tgroup>
       </informaltable>
     </sect2>
+
     <sect2 id="pm-method-Hibernate">
       <title>
         <literal>Hibernate</literal>
@@ -95,6 +96,7 @@
         </tgroup>
       </informaltable>
     </sect2>
+
     <sect2 id="pm-method-Shutdown">
       <title>
         <literal>Shutdown</literal>
@@ -121,6 +123,34 @@
         </tgroup>
       </informaltable>
     </sect2>
+
+    <sect2 id="pm-method-Reboot">
+      <title>
+        <literal>Reboot</literal>
+      </title>
+      <para>
+        This call will attempt to reboot the system.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>Success value</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
     <sect2 id="pm-method-AllowedSuspend">
       <title>
         <literal>AllowedSuspend</literal>
@@ -173,6 +203,64 @@
               <entry>out</entry>
               <entry>boolean</entry>
               <entry>If we are able to hibernate</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-AllowedShutdown">
+      <title>
+        <literal>AllowedShutdown</literal>
+      </title>
+      <para>
+        If the current user in the session is able to shutdown, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to shutdown</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-method-AllowedReboot">
+      <title>
+        <literal>AllowedReboot</literal>
+      </title>
+      <para>
+        If the current user in the session is able to reboot, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to reboot</entry>
             </row>
           </tbody>
         </tgroup>

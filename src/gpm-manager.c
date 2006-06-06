@@ -246,8 +246,8 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
  **/
 gboolean
 gpm_manager_allowed_suspend (GpmManager *manager,
-			 gboolean   *can,
-			 GError    **error)
+			     gboolean   *can,
+			     GError    **error)
 {
 	gboolean gconf_policy;
 	g_return_val_if_fail (can, FALSE);
@@ -272,8 +272,8 @@ gpm_manager_allowed_suspend (GpmManager *manager,
  **/
 gboolean
 gpm_manager_allowed_hibernate (GpmManager *manager,
-			   gboolean   *can,
-			   GError    **error)
+			       gboolean   *can,
+			       GError    **error)
 {
 	gboolean gconf_policy;
 	g_return_val_if_fail (can, FALSE);
@@ -289,16 +289,38 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 }
 
 /**
- * gpm_manager_can_shutdown:
+ * gpm_manager_allowed_shutdown:
  * @manager: This manager class instance
  * @can: If we can shutdown
  *
  * Stub function -- TODO.
  **/
 gboolean
-gpm_manager_can_shutdown (GpmManager *manager,
-			  gboolean   *can,
-			  GError    **error)
+gpm_manager_allowed_shutdown (GpmManager *manager,
+			      gboolean   *can,
+			      GError    **error)
+{
+	if (can) {
+		*can = FALSE;
+	}
+	/* FIXME: check other stuff */
+	if (can) {
+		*can = TRUE;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_manager_allowed_reboot:
+ * @manager: This manager class instance
+ * @can: If we can reboot
+ *
+ * Stub function -- TODO.
+ **/
+gboolean
+gpm_manager_allowed_reboot (GpmManager *manager,
+			    gboolean   *can,
+			    GError    **error)
 {
 	if (can) {
 		*can = FALSE;
@@ -943,7 +965,7 @@ gpm_manager_shutdown (GpmManager *manager,
 	gboolean allowed;
 	gboolean ret;
 
-	gpm_manager_can_shutdown (manager, &allowed, NULL);
+	gpm_manager_allowed_shutdown (manager, &allowed, NULL);
 	if (! allowed) {
 		gpm_warning ("Cannot shutdown");
 		g_set_error (error,
@@ -957,8 +979,40 @@ gpm_manager_shutdown (GpmManager *manager,
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
-	/* FIXME: make this async? */
 	gpm_hal_shutdown ();
+	ret = TRUE;
+
+	return ret;
+}
+
+/**
+ * gpm_manager_reboot:
+ * @manager: This manager class instance
+ *
+ * Reboots the computer, saving the session if possible.
+ **/
+static gboolean
+gpm_manager_reboot (GpmManager *manager,
+		    GError    **error)
+{
+	gboolean allowed;
+	gboolean ret;
+
+	gpm_manager_allowed_reboot (manager, &allowed, NULL);
+	if (! allowed) {
+		gpm_warning ("Cannot reboot");
+		g_set_error (error,
+			     GPM_MANAGER_ERROR,
+			     GPM_MANAGER_ERROR_GENERAL,
+			     "Cannot reboot");
+		return FALSE;
+	}
+
+	gnome_client_request_save (gnome_master_client (),
+				   GNOME_SAVE_GLOBAL,
+				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+
+	gpm_hal_reboot ();
 	ret = TRUE;
 
 	return ret;
@@ -1001,7 +1055,6 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	gpm_networkmanager_sleep ();
 
-	/* FIXME: make this async? */
 	ret = gpm_hal_hibernate ();
 	manager_explain_reason (manager, GPM_GRAPH_EVENT_RESUME,
 				_("Resuming computer"), NULL);
@@ -1195,6 +1248,21 @@ gpm_manager_shutdown_dbus_method (GpmManager *manager,
 				_("Shutting down computer"),
 				_("the DBUS method Shutdown() was invoked"));
 	return gpm_manager_shutdown (manager, error);
+}
+
+/**
+ * gpm_manager_reboot_dbus_method:
+ * @manager: This manager class instance
+ **/
+gboolean
+gpm_manager_reboot_dbus_method (GpmManager *manager,
+				GError    **error)
+{
+	/* FIXME: From where? */
+	manager_explain_reason (manager, GPM_GRAPH_EVENT_NOTIFICATION,
+				_("Rebooting computer"),
+				_("the DBUS method Reboot() was invoked"));
+	return gpm_manager_reboot (manager, error);
 }
 
 /**

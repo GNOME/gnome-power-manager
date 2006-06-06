@@ -281,6 +281,16 @@ gpm_hal_shutdown (void)
 	return hal_pm_method_void ("Shutdown");
 }
 
+/** Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
+ *
+ *  @return			Success, true if we shutdown OK
+ */
+gboolean
+gpm_hal_reboot (void)
+{
+	return hal_pm_method_void ("Reboot");
+}
+
 /** Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
  *
  *  @param	enable		True to enable low power mode

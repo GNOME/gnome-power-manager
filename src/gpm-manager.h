@@ -69,7 +69,10 @@ GpmManager	*gpm_manager_new			(void);
 gboolean	 gpm_manager_get_on_ac			(GpmManager	*manager,
 							 gboolean	*on_ac,
 							 GError		**error);
-gboolean	 gpm_manager_can_shutdown		(GpmManager	*manager,
+gboolean	 gpm_manager_allowed_shutdown		(GpmManager	*manager,
+							 gboolean	*allowed,
+							 GError		**error);
+gboolean	 gpm_manager_allowed_reboot		(GpmManager	*manager,
 							 gboolean	*allowed,
 							 GError		**error);
 gboolean	 gpm_manager_allowed_suspend		(GpmManager	*manager,
@@ -89,6 +92,8 @@ gboolean	 gpm_manager_suspend_dbus_method	(GpmManager	*manager,
 gboolean	 gpm_manager_hibernate_dbus_method	(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_shutdown_dbus_method	(GpmManager	*manager,
+						 	 GError		**error);
+gboolean	 gpm_manager_reboot_dbus_method		(GpmManager	*manager,
 						 	 GError		**error);
 void		 gpm_manager_inhibit			(GpmManager	*manager,
 						   	 const char	*application,

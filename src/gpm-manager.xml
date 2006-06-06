@@ -13,6 +13,14 @@
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allowed_hibernate"/>
       <arg type="b" name="can" direction="out"/>
     </method>
+    <method name="AllowedShutdown">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allowed_shutdown"/>
+      <arg type="b" name="can" direction="out"/>
+    </method>
+    <method name="AllowedReboot">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allowed_reboot"/>
+      <arg type="b" name="can" direction="out"/>
+    </method>
     <method name="Hibernate">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_hibernate_dbus_method"/>
     </method>
@@ -21,6 +29,9 @@
     </method>
     <method name="Shutdown">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_shutdown_dbus_method"/>
+    </method>
+    <method name="Reboot">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_reboot_dbus_method"/>
     </method>
     <method name="getDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>

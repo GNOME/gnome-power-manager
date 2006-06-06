@@ -6,10 +6,16 @@
         <code class="literal">Hibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Shutdown">
         <code class="literal">Shutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-Reboot">
+        <code class="literal">Reboot</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedSuspend">
         <code class="literal">AllowedSuspend</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedHibernate">
         <code class="literal">AllowedHibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedShutdown">
+        <code class="literal">AllowedShutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedReboot">
+        <code class="literal">AllowedReboot</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
         <code class="literal">setDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
@@ -26,10 +32,16 @@
         <code class="literal">Hibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Shutdown">
         <code class="literal">Shutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-Reboot">
+        <code class="literal">Reboot</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedSuspend">
         <code class="literal">AllowedSuspend</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedHibernate">
         <code class="literal">AllowedHibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedShutdown">
+        <code class="literal">AllowedShutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedReboot">
+        <code class="literal">AllowedReboot</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
         <code class="literal">setDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
@@ -62,6 +74,10 @@
         <code class="literal">Shutdown</code>
       </h3></div></div></div><p>
         This call will attempt to shutdown the system.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Reboot"></a>
+        <code class="literal">Reboot</code>
+      </h3></div></div></div><p>
+        This call will attempt to reboot the system.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedSuspend"></a>
         <code class="literal">AllowedSuspend</code>
       </h3></div></div></div><p>
@@ -74,7 +90,19 @@
         If the current user in the session is able to hibernate, and has
         permission to do so.
         This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to hibernate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-setDpmsMode"></a>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to hibernate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedShutdown"></a>
+        <code class="literal">AllowedShutdown</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to shutdown, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to shutdown</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedReboot"></a>
+        <code class="literal">AllowedReboot</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to reboot, and has
+        permission to do so.
+        This may fail if the admin has locked down the session.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to reboot</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-setDpmsMode"></a>
         <code class="literal">setDpmsMode</code>
       </h3></div></div></div><p>
         DPMS is a standard from the VESA consortium for managing the power

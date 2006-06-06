@@ -1,5 +1,20 @@
 2006-06-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Add the new Reboot functionality (already present in HAL).
+
+	* docs/dbus-interface.xml:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-manager.xml:
+	Add the following DBUS methods and functionality for API completeness:
+	- Reboot()
+	- AllowedShutdown()
+	- AllowedReboot()
+
+2006-06-06  Richard Hughes  <richard@hughsie.com>
+
 	* docs/icon-scheme.txt:
 	Remove this file as we have an xml version now.
 
