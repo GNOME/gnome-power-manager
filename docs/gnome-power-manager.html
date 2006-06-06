@@ -6,18 +6,18 @@
         <code class="literal">Hibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Shutdown">
         <code class="literal">Shutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-CanSuspend">
-        <code class="literal">CanSuspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-CanHibernate">
-        <code class="literal">CanHibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedSuspend">
+        <code class="literal">AllowedSuspend</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedHibernate">
+        <code class="literal">AllowedHibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
         <code class="literal">setDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
         <code class="literal">getDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-InhibitInactiveSleep">
-        <code class="literal">InhibitInactiveSleep</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowInactiveSleep">
-        <code class="literal">AllowInactiveSleep</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-Inhibit">
+        <code class="literal">Inhibit</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-UnInhibit">
+        <code class="literal">UnInhibit</code>
       </a></span></dt></dl></dd><dt><span class="sect1"><a href="#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-signal-DpmsModeChanged">
         <code class="literal">DpmsModeChanged</code>
       </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#icon-scheme">2. Icon naming scheme</a></span></dt><dd><dl><dt><span class="sect1"><a href="#icon-indexes">Icon indexes</a></span></dt><dt><span class="sect1"><a href="#icon-names">Icon Names</a></span></dt></dl></dd></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="dbus-interface"></a>Chapter 1. DBUS Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-method-Suspend">
@@ -26,18 +26,18 @@
         <code class="literal">Hibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Shutdown">
         <code class="literal">Shutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-CanSuspend">
-        <code class="literal">CanSuspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-CanHibernate">
-        <code class="literal">CanHibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedSuspend">
+        <code class="literal">AllowedSuspend</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedHibernate">
+        <code class="literal">AllowedHibernate</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
         <code class="literal">setDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
         <code class="literal">getDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-InhibitInactiveSleep">
-        <code class="literal">InhibitInactiveSleep</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowInactiveSleep">
-        <code class="literal">AllowInactiveSleep</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-Inhibit">
+        <code class="literal">Inhibit</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-UnInhibit">
+        <code class="literal">UnInhibit</code>
       </a></span></dt></dl></dd><dt><span class="sect1"><a href="#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-signal-DpmsModeChanged">
         <code class="literal">DpmsModeChanged</code>
       </a></span></dt></dl></dd></dl></div><p>
@@ -62,16 +62,16 @@
         <code class="literal">Shutdown</code>
       </h3></div></div></div><p>
         This call will attempt to shutdown the system.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-CanSuspend"></a>
-        <code class="literal">CanSuspend</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedSuspend"></a>
+        <code class="literal">AllowedSuspend</code>
       </h3></div></div></div><p>
         If the current user in the session is able to suspend, and has
         permission to do so.
         This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to suspend</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-CanHibernate"></a>
-        <code class="literal">CanHibernate</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to suspend</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedHibernate"></a>
+        <code class="literal">AllowedHibernate</code>
       </h3></div></div></div><p>
-        If the current user in the session is able to hhibernate, and has
+        If the current user in the session is able to hibernate, and has
         permission to do so.
         This may fail if the admin has locked down the session.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to hibernate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-setDpmsMode"></a>
@@ -84,16 +84,16 @@
         <code class="literal">getDpmsMode</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-InhibitInactiveSleep"></a>
-        <code class="literal">InhibitInactiveSleep</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Inhibit"></a>
+        <code class="literal">Inhibit</code>
       </h3></div></div></div><p>
         Inhibits the computer from performing the idle sleep action.
         Useful if you want to do an operation of long duration without the
         computer suspending.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>integer</td><td>the cookie</td></tr></tbody></table></div><p>
         A cookie is a random UINT32 used to identify the inhibit.
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowInactiveSleep"></a>
-        <code class="literal">AllowInactiveSleep</code>
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-UnInhibit"></a>
+        <code class="literal">UnInhibit</code>
       </h3></div></div></div><p>
         Allows the computer to perform the idle sleep action.
         Applications that quit without calling this method will be

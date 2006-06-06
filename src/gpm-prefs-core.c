@@ -127,7 +127,7 @@ gpm_prefs_class_init (GpmPrefsClass *klass)
 
 /**
  * gpm_dbus_method_bool:
- * @method: The g-p-m DBUS method name, e.g. "CanSuspend"
+ * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
  **/
 static gboolean
 gpm_dbus_method_bool (const char *method)
@@ -934,8 +934,8 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value ("button",
 							"button.type",
 							"lid") > 0;
-	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
-	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
+	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
+	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 

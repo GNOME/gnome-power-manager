@@ -237,7 +237,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 }
 
 /**
- * gpm_manager_can_suspend:
+ * gpm_manager_allowed_suspend:
  * @manager: This manager class instance
  * @can: If we can suspend
  *
@@ -245,7 +245,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
  * checks gconf to see if we are allowed to suspend this computer.
  **/
 gboolean
-gpm_manager_can_suspend (GpmManager *manager,
+gpm_manager_allowed_suspend (GpmManager *manager,
 			 gboolean   *can,
 			 GError    **error)
 {
@@ -263,7 +263,7 @@ gpm_manager_can_suspend (GpmManager *manager,
 }
 
 /**
- * gpm_manager_can_hibernate:
+ * gpm_manager_allowed_hibernate:
  * @manager: This manager class instance
  * @can: If we can hibernate
  *
@@ -271,7 +271,7 @@ gpm_manager_can_suspend (GpmManager *manager,
  * checks gconf to see if we are allowed to hibernate this computer.
  **/
 gboolean
-gpm_manager_can_hibernate (GpmManager *manager,
+gpm_manager_allowed_hibernate (GpmManager *manager,
 			   gboolean   *can,
 			   GError    **error)
 {
@@ -888,7 +888,7 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
 }
 
 /**
- * gpm_manager_inhibit_inactive_sleep:
+ * gpm_manager_inhibit:
  * @manager: This manager class instance
  * @application: The application that sent the request, e.g. "Nautilus"
  * @reason: The reason given to inhibit, e.g. "Copying files"
@@ -898,11 +898,11 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
  * idle action suspend from happening.
  **/
 void
-gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
-				    const char	*application,
-				    const char	*reason,
-				    DBusGMethodInvocation *context,
-				    GError    **error)
+gpm_manager_inhibit (GpmManager	*manager,
+		     const char	*application,
+		     const char	*reason,
+		     DBusGMethodInvocation *context,
+		     GError    **error)
 {
 	const char* connection = dbus_g_method_get_sender (context);
 	int cookie;
@@ -911,7 +911,7 @@ gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
 }
 
 /**
- * gpm_manager_allow_inactive_sleep:
+ * gpm_manager_uninhibit:
  * @manager: This manager class instance
  * @cookie: The application cookie, e.g. 17534
  * @context: The context we are talking to
@@ -920,10 +920,10 @@ gpm_manager_inhibit_inactive_sleep (GpmManager	*manager,
  * idle action suspend to happen.
  **/
 void
-gpm_manager_allow_inactive_sleep (GpmManager	 *manager,
-				  int		  cookie,
-				  DBusGMethodInvocation *context,
-				  GError	**error)
+gpm_manager_uninhibit (GpmManager	 *manager,
+		       int		  cookie,
+		       DBusGMethodInvocation *context,
+		       GError		**error)
 {
 	const char* connection = dbus_g_method_get_sender (context);
 	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
@@ -982,7 +982,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gboolean ret;
 	gboolean do_lock;
 
-	gpm_manager_can_hibernate (manager, &allowed, NULL);
+	gpm_manager_allowed_hibernate (manager, &allowed, NULL);
 
 	if (! allowed) {
 		gpm_warning ("Cannot hibernate");
@@ -1065,7 +1065,7 @@ gpm_manager_suspend (GpmManager *manager,
 	GpmPowerStatus status;
 	char *message;
 
-	gpm_manager_can_suspend (manager, &allowed, NULL);
+	gpm_manager_allowed_suspend (manager, &allowed, NULL);
 
 	if (! allowed) {
 		gpm_warning ("Cannot suspend");
@@ -2207,14 +2207,14 @@ gconf_key_changed_cb (GConfClient *client,
 		}
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
-		gpm_manager_can_suspend (manager, &enabled, NULL);
+		gpm_manager_allowed_suspend (manager, &enabled, NULL);
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
 		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      allowed_in_menu && enabled);
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
-		gpm_manager_can_hibernate (manager, &enabled, NULL);
+		gpm_manager_allowed_hibernate (manager, &enabled, NULL);
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
 		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -2223,10 +2223,10 @@ gconf_key_changed_cb (GConfClient *client,
 	} else if (strcmp (entry->key, GPM_PREF_SHOW_ACTIONS_IN_MENU) == 0) {
 		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
-		gpm_manager_can_suspend (manager, &enabled, NULL);
+		gpm_manager_allowed_suspend (manager, &enabled, NULL);
 		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      allowed_in_menu && enabled);
-		gpm_manager_can_hibernate (manager, &enabled, NULL);
+		gpm_manager_allowed_hibernate (manager, &enabled, NULL);
 		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
 						allowed_in_menu && enabled);
 
@@ -2460,10 +2460,10 @@ gpm_manager_init (GpmManager *manager)
 	   and the policy allows the actions in the menu */
 	allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
 						 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
-	gpm_manager_can_suspend (manager, &enabled, NULL);
+	gpm_manager_allowed_suspend (manager, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      enabled && allowed_in_menu);
-	gpm_manager_can_hibernate (manager, &enabled, NULL);
+	gpm_manager_allowed_hibernate (manager, &enabled, NULL);
 	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      enabled && allowed_in_menu);
 

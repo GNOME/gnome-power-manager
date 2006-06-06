@@ -121,9 +121,9 @@
         </tgroup>
       </informaltable>
     </sect2>
-    <sect2 id="pm-method-CanSuspend">
+    <sect2 id="pm-method-AllowedSuspend">
       <title>
-        <literal>CanSuspend</literal>
+        <literal>AllowedSuspend</literal>
       </title>
       <para>
         If the current user in the session is able to suspend, and has
@@ -150,12 +150,12 @@
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-CanHibernate">
+    <sect2 id="pm-method-AllowedHibernate">
       <title>
-        <literal>CanHibernate</literal>
+        <literal>AllowedHibernate</literal>
       </title>
       <para>
-        If the current user in the session is able to hhibernate, and has
+        If the current user in the session is able to hibernate, and has
         permission to do so.
         This may fail if the admin has locked down the session.
       </para>
@@ -275,9 +275,9 @@
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-InhibitInactiveSleep">
+    <sect2 id="pm-method-Inhibit">
       <title>
-        <literal>InhibitInactiveSleep</literal>
+        <literal>Inhibit</literal>
       </title>
       <para>
         Inhibits the computer from performing the idle sleep action.
@@ -317,9 +317,9 @@
       </para>
     </sect2>
 
-    <sect2 id="pm-method-AllowInactiveSleep">
+    <sect2 id="pm-method-UnInhibit">
       <title>
-        <literal>AllowInactiveSleep</literal>
+        <literal>UnInhibit</literal>
       </title>
       <para>
         Allows the computer to perform the idle sleep action.

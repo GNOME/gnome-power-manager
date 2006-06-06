@@ -140,7 +140,7 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 	if (connection == NULL ||
 	    application == NULL ||
 	    reason == NULL) {
-		gpm_warning ("Recieved InhibitInactiveSleep, but application "
+		gpm_warning ("Recieved Inhibit, but application "
 			     "did not set the parameters correctly");
 		return -1;
 	}
@@ -155,7 +155,7 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 	inhibit->priv->list = g_slist_append (inhibit->priv->list,
 					      (gpointer) data);
 
-	gpm_debug ("Recieved InhibitInactiveSleep from '%s' (%s) because '%s' saving as #%i",
+	gpm_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
 	return data->cookie;
 }
@@ -188,14 +188,14 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
 	if (data) {
-		gpm_debug ("AllowInactiveSleep okay on '%s' as #%i",
+		gpm_debug ("UnInhibit okay on '%s' as #%i",
 			   connection, cookie);
 		gpm_inhibit_free_data_object (data);
 		inhibit->priv->list = g_slist_remove (inhibit->priv->list,
 						      (gconstpointer) data);
 	} else {
 		gpm_warning ("Cannot find registered program for #%i, so "
-			     "cannot do AllowInactiveSleep", cookie);
+			     "cannot do UnInhibit", cookie);
 	}
 }
 

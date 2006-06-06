@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.gnome.PowerManager">
-
     <method name="getOnAc">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_on_ac"/>
       <arg type="b" name="on_ac" direction="out"/>
     </method>
-    <method name="CanSuspend">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_can_suspend"/>
+    <method name="AllowedSuspend">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allowed_suspend"/>
       <arg type="b" name="can" direction="out"/>
     </method>
-    <method name="CanHibernate">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_can_hibernate"/>
+    <method name="AllowedHibernate">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allowed_hibernate"/>
       <arg type="b" name="can" direction="out"/>
     </method>
     <method name="Hibernate">
@@ -33,23 +32,19 @@
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_dpms_mode"/>
       <arg type="s" name="mode" direction="in"/>
     </method>
-
-    <method name="InhibitInactiveSleep">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_inhibit_inactive_sleep"/>
+    <method name="Inhibit">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_inhibit"/>
       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
       <arg type="s" name="application" direction="in"/>
       <arg type="s" name="reason" direction="in"/>
       <arg type="i" name="cookie" direction="out"/>
     </method>
-    
-    <method name="AllowInactiveSleep">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_allow_inactive_sleep"/>
+    <method name="UnInhibit">
+      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_uninhibit"/>
       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
       <arg type="i" name="cookie" direction="in"/>
     </method>
-
     <signal name="OnAcChanged"/>
     <signal name="DpmsModeChanged"/>
-
   </interface>
 </node>

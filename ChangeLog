@@ -1,3 +1,25 @@
+2006-06-06  Richard Hughes  <richard@hughsie.com>
+
+	* docs/icon-scheme.txt:
+	Remove this file as we have an xml version now.
+
+	* docs/release-plan.txt:
+	Remove as we can get the same info from the web.
+
+	* docs/dbus-interface.xml:
+	* docs/dbus-test-inhibit.py:
+	* docs/gnome-power-manager.html:
+	* src/gpm-inhibit.c:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-manager.xml:
+	* src/gpm-prefs-core.c:
+	Rename a few DBUS methods from feedback on XDG list:
+	CanSuspend		->	AllowedSuspend
+	CanHibernate		->	AllowedHibernate
+	InhibitInactiveSleep	->	Inhibit
+	UnInhibitInactiveSleep	->	UnInhibit
+
 2006-06-05  William Jon McCann  <mccann@jhu.edu>
 
 	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):

@@ -72,10 +72,10 @@ gboolean	 gpm_manager_get_on_ac			(GpmManager	*manager,
 gboolean	 gpm_manager_can_shutdown		(GpmManager	*manager,
 							 gboolean	*allowed,
 							 GError		**error);
-gboolean	 gpm_manager_can_suspend		(GpmManager	*manager,
+gboolean	 gpm_manager_allowed_suspend		(GpmManager	*manager,
 							 gboolean	*allowed,
 							 GError		**error);
-gboolean	 gpm_manager_can_hibernate		(GpmManager	*manager,
+gboolean	 gpm_manager_allowed_hibernate		(GpmManager	*manager,
 							 gboolean	*allowed,
 							 GError		**error);
 gboolean	 gpm_manager_get_dpms_mode		(GpmManager	*manager,
@@ -90,12 +90,12 @@ gboolean	 gpm_manager_hibernate_dbus_method	(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_shutdown_dbus_method	(GpmManager	*manager,
 						 	 GError		**error);
-void		 gpm_manager_inhibit_inactive_sleep	(GpmManager	*manager,
+void		 gpm_manager_inhibit			(GpmManager	*manager,
 						   	 const char	*application,
 							 const char	*reason,
 							 DBusGMethodInvocation *context,
 							 GError		**error);
-void		 gpm_manager_allow_inactive_sleep	(GpmManager	*manager,
+void		 gpm_manager_uninhibit			(GpmManager	*manager,
 						 	 int		 cookie,
 				   			 DBusGMethodInvocation *context,
 				   			 GError		**error);
