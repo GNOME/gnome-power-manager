@@ -1,3 +1,14 @@
+2006-06-07  Richard Hughes  <richard@hughsie.com>
+
+	* docs/dbus-interface.xml:
+	* docs/gnome-power-manager.html:
+	* src/gpm-manager.xml:
+	According to http://dbus.freedesktop.org/doc/dbus-specification.html
+	we should be using an uppercase first letter. Change the API like this:
+	getOnAc			->	GetOnAc
+	getDpmsMode		->	GetDpmsMode
+	setDpmsMode		->	SetDpmsMode
+
 2006-06-06  Richard Hughes  <richard@hughsie.com>
 
 	* docs/Makefile.am:

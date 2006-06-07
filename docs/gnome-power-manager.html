@@ -16,10 +16,10 @@
         <code class="literal">AllowedShutdown</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedReboot">
         <code class="literal">AllowedReboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
-        <code class="literal">setDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
-        <code class="literal">getDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-SetDpmsMode">
+        <code class="literal">SetDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetDpmsMode">
+        <code class="literal">GetDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Inhibit">
         <code class="literal">Inhibit</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-UnInhibit">
@@ -42,10 +42,10 @@
         <code class="literal">AllowedShutdown</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-AllowedReboot">
         <code class="literal">AllowedReboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-setDpmsMode">
-        <code class="literal">setDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="#pm-method-getDpmsMode">
-        <code class="literal">getDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-SetDpmsMode">
+        <code class="literal">SetDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetDpmsMode">
+        <code class="literal">GetDpmsMode</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Inhibit">
         <code class="literal">Inhibit</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-UnInhibit">
@@ -102,14 +102,14 @@
         If the current user in the session is able to reboot, and has
         permission to do so.
         This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to reboot</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-setDpmsMode"></a>
-        <code class="literal">setDpmsMode</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to reboot</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-SetDpmsMode"></a>
+        <code class="literal">SetDpmsMode</code>
       </h3></div></div></div><p>
         DPMS is a standard from the VESA consortium for managing the power
         supply of monitors.
 	This call requests a change in the state of DPMS for the current screen.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-getDpmsMode"></a>
-        <code class="literal">getDpmsMode</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetDpmsMode"></a>
+        <code class="literal">GetDpmsMode</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Inhibit"></a>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.gnome.PowerManager">
-    <method name="getOnAc">
+    <method name="GetOnAc">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_on_ac"/>
       <arg type="b" name="on_ac" direction="out"/>
     </method>
@@ -33,13 +33,13 @@
     <method name="Reboot">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_reboot_dbus_method"/>
     </method>
-    <method name="getDpmsMode">
+    <method name="GetDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
       <arg type="s" name="mode" direction="out">
         <annotation name="org.freedesktop.DBus.GLib.Const" value=""/>
       </arg>
     </method>
-    <method name="setDpmsMode">
+    <method name="SetDpmsMode">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_dpms_mode"/>
       <arg type="s" name="mode" direction="in"/>
     </method>
