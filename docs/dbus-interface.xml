@@ -38,6 +38,66 @@
     </informaltable>
   </sect1>
 
+  <sect1 id="pm-Compatibility">
+    <title>Compatibility</title>
+    <para>
+      Since gnome-power-manager version 2.14.x the API has changed in the
+      following way:
+    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>2.14.x method name</entry>
+            <entry>2.15.x method name</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><literal>CanSuspend</literal></entry>
+            <entry><literal>AllowedSuspend</literal></entry>
+          </row>
+          <row>
+            <entry><literal>CanHibernate</literal></entry>
+            <entry><literal>AllowedHibernate</literal></entry>
+          </row>
+          <row>
+            <entry><literal>InhibitInactiveSleep</literal></entry>
+            <entry><literal>Inhibit</literal></entry>
+          </row>
+          <row>
+            <entry><literal>AllowInactiveSleep</literal></entry>
+            <entry><literal>UnInhibit</literal></entry>
+          </row>
+          <row>
+            <entry><literal>getOnAc</literal></entry>
+            <entry><literal>GetOnAc</literal></entry>
+          </row>
+          <row>
+            <entry><literal>getDpmsMode</literal></entry>
+            <entry><literal>GetDpmsMode</literal></entry>
+          </row>
+          <row>
+            <entry><literal>setDpmsMode</literal></entry>
+            <entry><literal>SetDpmsMode</literal></entry>
+          </row>
+          <row>
+            <entry><literal>(none)</literal></entry>
+            <entry><literal>Reboot</literal></entry>
+          </row>
+          <row>
+            <entry><literal>(none)</literal></entry>
+            <entry><literal>AllowedShutdown</literal></entry>
+          </row>
+          <row>
+            <entry><literal>(none)</literal></entry>
+            <entry><literal>AllowedReboot</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+  </sect1>
+
   <sect1 id="pm-methods">
     <title>Methods</title>
     <para>
