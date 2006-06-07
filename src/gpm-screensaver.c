@@ -308,7 +308,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
 
-	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "getActive", &error,
+	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActive", &error,
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
 		if (error) {
@@ -335,7 +335,7 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 		return;
 	}
 	gpm_debug ("poke");
-	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "Poke", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "SimulateUserActivity", G_TYPE_INVALID);
 }
 
 /**
@@ -355,7 +355,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 		return FALSE;
 	}
 
-	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "getActiveTime", &error,
+	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActiveTime", &error,
 				G_TYPE_INVALID,
 				G_TYPE_UINT, time, G_TYPE_INVALID)) {
 		if (error) {
