@@ -494,6 +494,35 @@
         </tgroup>
       </informaltable>
     </sect2>
+
+    <sect2 id="pm-method-GetOnAc">
+      <title>
+        <literal>GetOnAc</literal>
+      </title>
+      <para>
+        Finds out if the computer is on AC power, i.e. is not running on primary
+        battery or UPS power.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are on AC power</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
   </sect1>
 
   <sect1 id="pm-signals">
@@ -506,7 +535,7 @@
         <literal>DpmsModeChanged</literal>
       </title>
       <para>
-        Returns the value of the current state of activity.
+        Signals the value of the current DPMS state.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -542,6 +571,33 @@
               <entry></entry>
               <entry>off</entry>
               <entry>&lt;8W power usage</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-signal-OnAcChanged">
+      <title>
+        <literal>OnAcChanged</literal>
+      </title>
+      <para>
+        Signals the new AC power state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>bool</entry>
+              <entry>The new AC power state</entry>
             </row>
           </tbody>
         </tgroup>
