@@ -1,5 +1,13 @@
 2006-06-08  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade:
+	* src/gpm-prefs-core.c:
+	Add the configurable action for power button press in the UI.
+	Saves me explaining to another person how to change it in gconf-editor.
+	Fixes #344325.
+
+2006-06-08  Richard Hughes  <richard@hughsie.com>
+
 	* docs/dbus-interface.xml:
 	* docs/gnome-power-manager.html:
 	Add to the spec the GetOnAc method and the OnAcChanged signal as it's
