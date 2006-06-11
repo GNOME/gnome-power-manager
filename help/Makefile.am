@@ -9,6 +9,7 @@ DOC_FIGURES = \
 	figures/gpm-prefs-ac.png \
 	figures/gpm-prefs-battery.png \
 	figures/gpm-prefs-options.png \
+	figures/gpm-info-devices.png \
 	figures/gpm-charged.png \
 	figures/gpm-critical.png \
 	figures/gpm-low.png \

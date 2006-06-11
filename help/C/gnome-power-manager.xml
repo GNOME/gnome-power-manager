@@ -5,8 +5,8 @@
   <!ENTITY GFDL  SYSTEM "fdl-appendix.xml">
   <!ENTITY app "GNOME Power Manager">
   <!ENTITY application "<application>&app;</application>">
-  <!ENTITY appversion "2.15.0">
-  <!ENTITY manrevision "2.15.0">
+  <!ENTITY appversion "2.15.4">
+  <!ENTITY manrevision "2.15.4">
 ]>
 <!--
       (Do not remove this comment block.)
@@ -68,20 +68,6 @@
       </othercredit>
 -->
     </authorgroup>
-
-<!-- According to GNU FDL, revision history is mandatory if you are -->
-<!-- modifying/reusing someone else's document.  If not, you can omit it. -->
-<!-- Remember to remove the &manrevision; entity from the revision entries other
--->
-<!-- than the current revision. -->
-<!-- The revision numbering system for GNOME manuals is as follows: -->
-<!-- * the revision number consists of two components -->
-<!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
-<!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
-<!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
-<!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
-<!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
-<!-- to V3.0, and so on. -->
 
     <revhistory>
       <revision>
@@ -389,14 +375,151 @@
       <listitem><para><command>/apps/gnome-power-manager/lock_on_hibernate</command></para></listitem>
     </itemizedlist>
 
+    <note>
+      <para>
+        The lock policy for gnome-screensaver is ignored until the simple mode
+        is re-enabled.
+      </para>
+    </note>
+
+  </section>
+</section>
+
+<section id="info">
+  <title>Information</title>
+
+  <para>The information window allows you to see:</para>
+
+  <itemizedlist>
+    <listitem><para>The power devices attached to your system</para></listitem>
+    <listitem><para>The percentage change graph of your primary device</para></listitem>
+    <listitem><para>The time remaining change graph of your primary device</para></listitem>
+    <listitem><para>The charging and discharge rate graph of your primary device</para></listitem>
+    <listitem><para>The event log of what's happened in the session</para></listitem>
+  </itemizedlist>
+
   <note>
     <para>
-      The lock policy for gnome-screensaver is ignored until the simple mode is
-      re-enabled.
+      You man not see some options or graphs if your computer does not have the
+      required hardware.
+      You may also see other hardware not shown here (for example UPS devices)
+      but these are treated the same way as other devices.
     </para>
   </note>
 
+  <section id="info-devices">
+    <title>Device Information</title>
+
+    <para>
+      The device information tab shows the power hardware attached to your system.
+      You can click on the "More" expanders for more detailed information about
+      your battery device, for instance the design voltage or the capacity
+      percentage for a battery.
+    </para>
+
+    <figure>
+      <title>
+        The devices shown on a typical laptop system with a wireless mouse attached
+      </title>
+      <screenshot>
+        <mediaobject>
+          <imageobject><imagedata fileref="figures/gpm-info-devices.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
   </section>
+
+  <section id="info-charge">
+    <title>Charge History</title>
+
+    <para>
+      This graph shows the percentage charge available for the composite primary
+      battery, so if you have a main laptop battery and an auxiliary battery
+      then only the averaged value will be shown.
+      A legend is not shown with this graph.
+    </para>
+
+    <para>
+      TODO: get figure.
+    </para>
+
+  </section>
+
+  <section id="info-power">
+    <title>Power History</title>
+
+    <para>
+      This graph shows the power history charge used by the composite
+      primary battery.
+      This line represents the amount of power that is either being used to
+      charge the batteries in the system, or the power being used by the system
+      from the batteries.
+      You should see the line go up when processor intensive tasks are
+      performed, and down when the system is at idle, or when the screen is
+      dimmed.
+      A legend is shown with this graph when data events have been received.
+    </para>
+
+    <note>
+      <para>
+        You do will not recieve rate data from your computer if it is not
+        charging or discharging, or if the computer is suspended.
+        This is due to hardware limitiations where the rate is only sent from
+        the battery management chip, rather than the power management chip on
+        the motherboard.
+      </para>
+    </note>
+
+    <para>
+      TODO: get figure.
+    </para>
+
+  </section>
+
+  <section id="info-time">
+    <title>Estimated Time History</title>
+
+    <para>
+      This graph shows the estimated charge history for the composite primary
+      battery.
+      This line represents the amount of time required until charged, or the
+      amount of time until discharge.
+      This line should go proportionally up when the power decreases and down
+      when the rate increases.
+      A legend is shown with this graph when data events have been received.
+    </para>
+
+    <para>
+      TODO: get figure.
+    </para>
+
+  </section>
+
+  <section id="info-eventlog">
+    <title>Event Log</title>
+
+    <para>
+      The event log is a record of all the actions that gnome-power-manager has
+      processed.
+      An event might be an dim of the screen, turning on DPMS, or suspending
+      due to system inactivity.
+    </para>
+
+    <para>
+      TODO: get figure.
+    </para>
+
+    <note>
+      <para>
+        You can clear the event log, or any of the graphs using the "Clear"
+        button.
+        This permanently removes the data from memory.
+      </para>
+    </note>
+
+  </section>
+
 </section>
 
 <section id="about">

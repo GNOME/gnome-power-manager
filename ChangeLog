@@ -1,3 +1,27 @@
+2006-06-11  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Add "nothing" to schema as it's set in the GUI: lp:48290
+
+	* data/gpm-info.glade:
+	Remove the save buttons as this is a bad idea.
+
+	* help/C/figures/gpm-info-devices.png:
+	* help/C/figures/gpm-prefs-ac.png:
+	* help/C/figures/gpm-prefs-battery.png:
+	* help/C/figures/gpm-prefs-options.png:
+	* help/Makefile.am:
+	Update, and add to the screenshots.
+
+	* help/C/gnome-power-manager.xml:
+	Update with more details on the information window.
+
+	* src/gpm-hal.c:
+	Check for NULL, although it shouldn't be...
+
+	* src/gpm-manager.c:
+	Make sure we free the gconf string as this is a little leak.
+
 2006-06-08  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade:

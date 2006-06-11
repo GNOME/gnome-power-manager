@@ -1869,7 +1869,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* Do different warnings for each GPM_WARNING_* */
 	if (warning_type == GPM_WARNING_ACTION) {
-		const char *action;
+		char *action;
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
@@ -1901,6 +1901,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 					      "this computer is about to shutdown."));
 		}
 
+		g_free (action);
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 
@@ -1988,7 +1989,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 	manager->priv->last_ups_warning = warning_type;
 
 	if (warning_type == GPM_WARNING_ACTION) {
-		const char *action;
+		char *action;
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
 			return;
@@ -2013,6 +2014,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 				    "this computer is about to shutdown.");
 		}
 
+		g_free (action);
 		/* TODO: need to add 10 second delay so we get notification */
 		manager_policy_do (manager, GPM_PREF_UPS_CRITICAL,
 				   _("UPS is critically low"));

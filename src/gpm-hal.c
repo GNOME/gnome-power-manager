@@ -482,8 +482,10 @@ void
 gpm_hal_free_capability (gchar **value)
 {
 	gint i;
-	for (i=0; value[i]; i++)
+	g_return_if_fail (value != NULL);
+	for (i=0; value[i]; i++) {
 		g_free (value[i]);
+	}
 	g_free (value);
 }
 
