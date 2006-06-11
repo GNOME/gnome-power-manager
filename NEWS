@@ -1,4 +1,49 @@
 ==============
+Version 2.15.3
+==============
+
+Released June 11, 2006
+
+General
+
+ - Depend on intltool 0.35.0 to build
+ - Grammar fixes in the schema and glade file (Clytie Siddall)
+ - Add in XFCE option so we display in the XFCE menu. lp:43077
+ - Use GtkStatusIcon when GTK version >= 2.9.0 (Jaap Haitsma)
+ - Add in new docbook documentation about the dbus interface.
+ - Rename and add a few DBUS methods from feedback on XDG list.
+
+Power Manager
+
+ - Actually show the correct levels in the pixmaps for the mouse and keyboard.
+ - Add a gconf key so we can disable the action for when the lid is previously
+   shut and the AC power removed at a later time as this was causing confusion.
+ - Limit the capacity to 100%
+ - Undim the screen when we have to unlock returning from resume. #333290
+ - Rework the brightness handling so that we only have one way of doing the
+   transitions. This simplifies things greatly. #341616
+ - Update for gnome-screensaver API changes.  #344103
+
+Power Preferences
+
+ - Add the configurable action for power button press in the UI. #344325.
+
+Power Info
+
+ - Set the correct colours of the line depending on discharging/charging
+   status. #338175.
+
+Translators
+
+ - Theppitak Karoonboonyanan & Roys Hengwatanakul (Thai)
+ - Wouter Bolsterlee (Netherlands)
+ - Clytie Siddall (Vietnamese)
+ - Funda Wang (Simplified Chinese)
+ - Øivind Hoel (Norwegian bokmål)
+ - Francisco Javier F. Serrador (Spanish)
+ - Raphael Higino (Brazilian Portuguese)
+
+==============
 Version 2.15.2
 ==============
 
