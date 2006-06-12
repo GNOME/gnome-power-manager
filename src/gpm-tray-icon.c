@@ -854,7 +854,7 @@ libnotify_event (GpmTrayIcon    *icon,
 						     "<span size='larger'><b>%s</b></span>",
 						     GPM_NAME);
 
-	gtk_message_dialog_format_content_markup (GTK_MESSAGE_DIALOG (dialog), content);
+	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
 
 	g_signal_connect_swapped (dialog,
 				  "response",

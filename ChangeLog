@@ -1,3 +1,26 @@
+2006-06-12  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (libnotify_event):
+	Fix a compile error when we are compiling the non-libnotify sections of
+	the code, which probably don't happen that often.
+	Noticed and reported by Elijah Newren, many thanks. #344674
+
+2006-06-12  Richard Hughes  <richard@hughsie.com>
+
+	* data/Makefile.am:
+	Apply a patch from Tomasz Kłoczko <kloczek@rudy.mif.pg.gda.pl>
+	In src/Makefile.am unconditionaly are registered GConf schemas.
+	In case installing GPM from non-root account (for example during
+	prepare rpm from non-root account) it produces tons warning.
+	In attachemt is simple patch wchich allow use --disable-schemas-install
+	on autoconf level for disable registering GConf schemas.
+
+2006-06-11  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-main.c:
+	Fix a typo in the spelling of computer, and remove italics.
+	Also remove references to messagebus. Fixes lp:46468
+
 2006-06-11  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.15.4
