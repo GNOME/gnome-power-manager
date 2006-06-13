@@ -193,9 +193,13 @@ static gboolean
 gpm_manager_is_policy_timout_valid (GpmManager *manager,
 				    const char *action)
 {
+	char *message;
 	if ((time (NULL) - manager->priv->last_resume_event) <=
 	    manager->priv->suppress_policy_timeout) {
-		gpm_debug ("Skipping suppressed %s", action);
+		message = g_strdup_printf ("Skipping suppressed %s", action);
+		gpm_info_event_log (manager->priv->info,
+				    GPM_GRAPH_EVENT_NOTIFICATION, message);
+		g_free (message);
 		return FALSE;
 	}
 	return TRUE;
