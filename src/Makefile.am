@@ -27,6 +27,17 @@ INCLUDES =						\
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
+	gnome-power-inhibit-test			\
+	$(NULL)
+
+gnome_power_inhibit_test_SOURCES =			\
+	gpm-inhibit-test.c				\
+	$(NULL)
+
+gnome_power_inhibit_test_LDADD =			\
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(DBUS_LIBS)					\
 	$(NULL)
 
 gnome_power_preferences_SOURCES =			\

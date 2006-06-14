@@ -1,6 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>GNOME Power Manager 2.15.3 Documentation</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>GNOME Power Manager 2.15.3 Documentation</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>GNOME Power Manager 2.15.4 Documentation</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>GNOME Power Manager 2.15.4 Documentation</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
             <code class="email">&lt;<a href="mailto:richard@hughsie.com">richard@hughsie.com</a>&gt;</code><br>
-          </p></div></div></div></div></div><div><p class="releaseinfo">Version 2.15.3</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#dbus-interface">1. DBUS Interface</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#pm-Compatibility">Compatibility</a></span></dt><dt><span class="sect1"><a href="#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-method-Suspend">
+          </p></div></div></div></div></div><div><p class="releaseinfo">Version 2.15.4</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#dbus-interface">1. DBUS Interface</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#pm-Compatibility">Compatibility</a></span></dt><dt><span class="sect1"><a href="#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-method-Suspend">
         <code class="literal">Suspend</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-Hibernate">
         <code class="literal">Hibernate</code>
@@ -129,7 +129,7 @@
         Inhibits the computer from performing the idle sleep action.
         Useful if you want to do an operation of long duration without the
         computer suspending.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>integer</td><td>the cookie</td></tr></tbody></table></div><p>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div><p>
         A cookie is a random UINT32 used to identify the inhibit.
       </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-UnInhibit"></a>
         <code class="literal">UnInhibit</code>
@@ -138,7 +138,7 @@
         Applications that quit without calling this method will be
         automatically unregistered, but this is not recommended as the user
         may be warned.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetOnAc"></a>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetOnAc"></a>
         <code class="literal">GetOnAc</code>
       </h3></div></div></div><p>
         Finds out if the computer is on AC power, i.e. is not running on primary

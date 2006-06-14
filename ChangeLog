@@ -1,3 +1,19 @@
+2006-06-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.xml:
+	* docs/dbus-interface.xml:
+	* docs/gnome-power-manager.html:
+	Change dbus Inhibit and UnInhibit methods to use a UINT32, as this is
+	already specified in the spec. Using a INT32 is wrong.
+
+	* data/Makefile.am:
+	* data/gpm-inhibit-test.glade:
+	* src/Makefile.am:
+	* src/gpm-inhibit-test.c:
+	Add a test program that allows us to test the multiple inhibit stuff,
+	and also to show people how easy it is adding Inhibit and UnInhibit
+	calls into an existing program.
+
 2006-06-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (gpm_manager_is_policy_timout_valid):
@@ -388,7 +404,7 @@
 	* src/gpm-prefs-core.c (setup_ac_actions, setup_battery_actions,
 	setup_ups_actions): Support the new checkboxes and tie the values into
 	gconf keys. Starting to work towards a fix for #340355.
-	
+
 	* src/gpm-prefs-core.c (gpm_prefs_init): Use gconf_key_changed_cb()
 	to act on gconf keys changing outside of g-p-p. Should help out the
 	Ubuntu guys with their modifications also.
@@ -479,7 +495,7 @@
 	gnome-power-manager daemon can cope with being run more than one in a
 	session and it breaks the logout dialog (e.g. on powerbutton) if it
 	is not run with session access. Fixes lp:31103 and #339168
-	
+
 	* data/gnome-power-manager.desktop.in:
 	* data/gnome-power-preferences.desktop.in:
 	Change the icon to be gpm-battery-charged
@@ -489,7 +505,7 @@
 	the lid value it does not send a button pressed signal.
 	This means the lid value can get confused *again* when we resume from
 	standby on some machines. Fixes rh:187396
-	
+
 	* src/gpm-manager.c: (lid_button_pressed): Ignore duplicated lid button
 	presses so we don't display them on the info graphs.
 

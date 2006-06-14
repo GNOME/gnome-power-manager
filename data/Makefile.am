@@ -27,6 +27,7 @@ $(service_DATA): $(service_in_files) Makefile
 pkgdata_DATA =						\
 	gpm-info.glade					\
 	gpm-feedback-widget.glade			\
+	gpm-inhibit-test.glade				\
 	gpm-prefs.glade
 
 EXTRA_DIST =						\
