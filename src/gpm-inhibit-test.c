@@ -28,25 +28,32 @@
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
+#define	GPM_DBUS_SERVICE	"org.gnome.PowerManager"
+#define	GPM_DBUS_PATH		"/org/gnome/PowerManager"
+#define	GPM_DBUS_INTERFACE	"org.gnome.PowerManager"
 
-/* I know global stuff is bad, just imagine this is in a GObject... */
-GladeXML	*glade_xml = NULL;
-guint 		 appcookie = -1;
-DBusGConnection *session_connection = NULL;
+/* imagine this in a GObject private struct... */
+guint appcookie = -1;
 
+/** cookie is returned as an unsigned integer */
 static guint
-dbus_inhibit (DBusGConnection *session_connection,
-	      const char      *appname,
-	      const char      *reason)
+dbus_inhibit_gpm (const char *appname, const char *reason)
 {
-	DBusGProxy *proxy;
-	gboolean    res;
-	guint	    cookie;
-	GError     *error = NULL;
+	gboolean         res;
+	guint	         cookie;
+	GError          *error = NULL;
+	DBusGProxy      *proxy = NULL;
+	DBusGConnection *session_connection = NULL;
 
+	/* get the DBUS session connection */
+	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_warning ("DBUS cannot connect : %s", error->message);
+		g_error_free (error);
+		return -1;
+	}
+
+	/* get the proxy with g-p-m */
 	proxy = dbus_g_proxy_new_for_name (session_connection,
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
@@ -68,13 +75,28 @@ dbus_inhibit (DBusGConnection *session_connection,
 }
 
 static void
-dbus_uninhibit (DBusGConnection *session_connection,
-		guint cookie)
+dbus_uninhibit_gpm (guint cookie)
 {
-	DBusGProxy *proxy;
-	gboolean    res;
-	GError     *error = NULL;
+	gboolean         res;
+	GError          *error = NULL;
+	DBusGProxy      *proxy = NULL;
+	DBusGConnection *session_connection = NULL;
 
+	/* cookies have to be positive as unsigned */
+	if (cookie < 0) {
+		g_warning ("Invalid cookie");
+		return;
+	}
+
+	/* get the DBUS session connection */
+	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error) {
+		g_warning ("DBUS cannot connect : %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	/* get the proxy with g-p-m */
 	proxy = dbus_g_proxy_new_for_name (session_connection,
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
@@ -92,7 +114,7 @@ dbus_uninhibit (DBusGConnection *session_connection,
 }
 
 static void
-inhibit_inhibit_cb (GtkWidget *iwidget)
+widget_inhibit_cb (GtkWidget *iwidget, GladeXML *glade_xml)
 {
 	GtkWidget *widget;
 	const char *appname;
@@ -105,22 +127,22 @@ inhibit_inhibit_cb (GtkWidget *iwidget)
 	reason = gtk_entry_get_text (GTK_ENTRY (widget));
 	
 	/* try to add the inhibit */
-	appcookie = dbus_inhibit (session_connection, appname, reason);
+	appcookie = dbus_inhibit_gpm (appname, reason);
 	g_debug ("adding inhibit: %u", appcookie);
 }
 
 static void
-inhibit_uninhibit_cb (GtkWidget *widget)
+widget_uninhibit_cb (GtkWidget *widget, GladeXML *glade_xml)
 {
 	/* try to remove the inhibit */
 	g_debug ("removing inhibit: %u", appcookie);
-	dbus_uninhibit (session_connection, appcookie);
+	dbus_uninhibit_gpm (appcookie);
 }
 
 static void
-inhibit_close_cb (GtkWidget *widget)
+window_close_cb (GtkWidget *widget)
 {
-	/* we don't have to UnInhibit as g-p-m notices we drop off the bus... */
+	/* we don't have to UnInhibit as g-p-m notices we exit... */
 	exit (0);
 }
 
@@ -129,9 +151,9 @@ main (int argc, char **argv)
 {
 	GOptionContext  *context;
  	GnomeProgram    *program;
-	GMainLoop       *loop;
-	GtkWidget	*widget;
-	GError		*error = NULL;
+	GMainLoop       *loop = NULL;
+	GtkWidget	*widget = NULL;
+	GladeXML	*glade_xml = NULL;
 
 	context = g_option_context_new (_("GNOME Power Preferences"));
 	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
@@ -142,20 +164,17 @@ main (int argc, char **argv)
 			    _("Power Inhibit Test"),
 			    NULL);
 
-	/* get the DBUS session connection */
-	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-
 	/* load the glade file, and setup the callbacks */
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-inhibit-test.glade", NULL, NULL);
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (inhibit_close_cb), NULL);
+			  G_CALLBACK (window_close_cb), glade_xml);
 	widget = glade_xml_get_widget (glade_xml, "button_inhibit");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (inhibit_inhibit_cb), NULL);
+			  G_CALLBACK (widget_inhibit_cb), glade_xml);
 	widget = glade_xml_get_widget (glade_xml, "button_uninhibit");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (inhibit_uninhibit_cb), NULL);
+			  G_CALLBACK (widget_uninhibit_cb), glade_xml);
 	widget = glade_xml_get_widget (glade_xml, "window_inhibit");
 	gtk_widget_show (widget);
 
