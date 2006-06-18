@@ -672,7 +672,7 @@ gpm_info_init (GpmInfo *info)
 	info->priv->time_data = gpm_info_data_new ();
 
 	GConfClient *client = gconf_client_get_default ();
-	int max_time = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
+	int max_time = gconf_client_get_int (client, GPM_PREF_GRAPH_DATA_MAX_TIME, NULL);
 	g_object_unref (client);
 
 	gpm_info_data_set_max_time (info->priv->events, max_time);
