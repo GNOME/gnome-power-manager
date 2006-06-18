@@ -1,5 +1,12 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c (gpm_brightness_dim_hw):
+	Make sure machines that do their own dimming get special cased and
+	just set the brightness once.
+	This really *ought* to be a HAL propery. Fixes #345258.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* docs/faq.html:
 	* docs/faq.xml:
 	* docs/index.html:

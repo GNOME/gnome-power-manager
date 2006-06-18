@@ -268,7 +268,7 @@ gpm_brightness_update_hw (GpmBrightness *brightness)
  **/
 static gboolean
 gpm_brightness_set_hw (GpmBrightness *brightness,
-			     int	    brightness_level_hw)
+		       int	      brightness_level_hw)
 {
 	GError  *error = NULL;
 	gint     ret;
@@ -332,12 +332,18 @@ gpm_brightness_percent_to_hw (int percentage,
  **/
 static void
 gpm_brightness_dim_hw (GpmBrightness *brightness,
-			     int	    new_level_hw)
+		       int	      new_level_hw)
 {
 	int   current_hw;
 	int   a;
 
 	if (! brightness->priv->has_hardware) {
+		return;
+	}
+
+	/* some machines don't take kindly to auto-dimming */
+	if (brightness->priv->does_own_dimming) {
+		gpm_brightness_set_hw (brightness, new_level_hw);
 		return;
 	}
 
@@ -414,7 +420,8 @@ gpm_brightness_set_level_std (GpmBrightness *brightness,
 			      int	     brightness_level)
 {
 	int level_hw;
-	level_hw = gpm_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
+	level_hw = gpm_brightness_percent_to_hw (brightness_level,
+						 brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 }
 
