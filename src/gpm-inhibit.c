@@ -26,6 +26,7 @@
 #include <glade/glade.h>
 #include <libgnomeui/gnome-help.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <string.h>
 #include "gpm-inhibit.h"
 #include "gpm-debug.h"
@@ -287,16 +288,16 @@ gpm_inhibit_get_message (GpmInhibit *inhibit,
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
-		g_string_append_printf (message, "<b>%s</b> has stopped the "
-					"%s from taking place because <i>%s</i>.",
+		g_string_append_printf (message, _("<b>%s</b> has stopped the "
+					"%s from taking place : <i>%s</i>."),
 					data->application, action, data->reason);
 	} else {
-		g_string_append_printf (message, "Multiple applications have stopped the "
-					"%s from taking place:", action);
+		g_string_append_printf (message, _("Multiple applications have stopped the "
+					"%s from taking place."), action);
 		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
 			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 			g_string_append_printf (message,
-						"\n<b>%s</b> because <i>%s</i>",
+						"\n<b>%s</b> : <i>%s</i>",
 						data->application, data->reason);
 		}
 	}
