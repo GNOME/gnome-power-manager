@@ -1,5 +1,18 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* docs/faq.html:
+	* docs/faq.xml:
+	* docs/index.html:
+	* docs/sleep-names.html:
+	Update a few xml things, and move the FAQ here from the wiki entries.
+
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	Patch from Paweł Marciniak <pmarciniak@lodz.home.pl> to fix missing _()
+	macros on some strings, so they can be translated.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* docs/gnome-power-manager.html:
 	Remove this as I've split up the documentation
 

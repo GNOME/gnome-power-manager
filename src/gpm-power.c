@@ -674,19 +674,19 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 	details = g_string_new ("");
 
 	if (device->product) {
-		g_string_append_printf (details, "<b>Product:</b> %s\n", device->product);
+		g_string_append_printf (details, _("<b>Product:</b> %s\n"), device->product);
 	}
 	if (status->is_present == FALSE) {
-		g_string_append (details, "<b>Status:</b> Missing\n");
+		g_string_append (details, _("<b>Status:</b> Missing\n"));
 	} else if (gpm_power_battery_is_charged (status)) {
-		g_string_append (details, "<b>Status:</b> Charged\n");
+		g_string_append (details, _("<b>Status:</b> Charged\n"));
 	} else if (status->is_charging) {
-		g_string_append (details, "<b>Status:</b> Charging\n");
+		g_string_append (details, _("<b>Status:</b> Charging\n"));
 	} else if (status->is_discharging) {
-		g_string_append (details, "<b>Status:</b> Discharging\n");
+		g_string_append (details, _("<b>Status:</b> Discharging\n"));
 	}
 	if (status->percentage_charge > 0) {
-		g_string_append_printf (details, "<b>Percentage charge:</b> %i%%\n",
+		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
 					status->percentage_charge);
 	}
 	/* remove the last \n */
@@ -713,7 +713,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	details = g_string_new ("");
 
 	if (device->vendor) {
-		g_string_append_printf (details, "<b>Vendor:</b> %s\n", device->vendor);
+		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), device->vendor);
 	}
 	if (device->technology) {
 		const char *technology;
@@ -727,18 +727,18 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 				     device->technology);
 			technology = device->technology;
 		}
-		g_string_append_printf (details, "<b>Technology:</b> %s\n", technology);
+		g_string_append_printf (details, _("<b>Technology:</b> %s\n"), technology);
 	}
 	if (device->serial) {
-		g_string_append_printf (details, "<b>Serial number:</b> %s\n", device->serial);
+		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), device->serial);
 	}
 	if (device->model) {
-		g_string_append_printf (details, "<b>Model:</b> %s\n", device->model);
+		g_string_append_printf (details, _("<b>Model:</b> %s\n"), device->model);
 	}
 	if (status->remaining_time > 0) {
 		const char *time;
 		time = gpm_get_timestring (status->remaining_time);
-		g_string_append_printf (details, "<b>Remaining time:</b> %s\n", time);
+		g_string_append_printf (details, _("<b>Remaining time:</b> %s\n"), time);
 	}
 	if (status->capacity > 0) {
 		const char *condition;
@@ -751,31 +751,31 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		} else {
 			condition = _("Poor");
 		}
-		g_string_append_printf (details, "<b>Capacity:</b> %i%% (%s)\n",
+		g_string_append_printf (details, _("<b>Capacity:</b> %i%% (%s)\n"),
 					status->capacity, condition);
 	}
 	if (device->unit != GPM_POWER_UNIT_PERCENT) {
 		/* no point displaying these if we are measuring in percent */
 		suffix = get_power_unit_suffix (device->unit);
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, "<b>Current charge:</b> %i%s\n",
+			g_string_append_printf (details, _("<b>Current charge:</b> %i%s\n"),
 						status->current_charge, suffix);
 		}
 		if (status->last_full_charge > 0 &&
 		    status->design_charge != status->last_full_charge) {
-			g_string_append_printf (details, "<b>Last full charge:</b> %i%s\n",
+			g_string_append_printf (details, _("<b>Last full charge:</b> %i%s\n"),
 						status->last_full_charge, suffix);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, "<b>Design charge:</b> %i%s\n",
+			g_string_append_printf (details, _("<b>Design charge:</b> %i%s\n"),
 						status->design_charge, suffix);
 		}
 		if (status->charge_rate_raw > 0) {
-			g_string_append_printf (details, "<b>Charge rate (raw):</b> %imWh\n",
+			g_string_append_printf (details, _("<b>Charge rate (raw):</b> %imWh\n"),
 						status->charge_rate_raw);
 		}
 		if (status->charge_rate_smoothed > 0) {
-			g_string_append_printf (details, "<b>Charge rate (smoothed):</b> %imWh\n",
+			g_string_append_printf (details, _("<b>Charge rate (smoothed):</b> %imWh\n"),
 						status->charge_rate_smoothed);
 		}
 	}

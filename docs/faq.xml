@@ -3,13 +3,637 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
 
 <chapter id="faq">
-  <title>FAQ</title>
+  <title>Frequently Asked Questions</title>
 
   <sect1 id="faq-intro">
-    <title>Introduction</title>
+    <title>Past entries</title>
     <para>
-      FAQ goes here.
+      Please read through these common questions and answers before emailing
+      the mailing list.
     </para>
+
+    <sect2 id="faq-longer-suspend">
+      <title>
+        I've set the computer inactive timeout to one minute and it still
+        takes longer than that to suspend.
+      </title>
+
+      <para>
+        gnome-screensaver is a session daemon that monitors user input, and if
+        the mouse has not been moved, or the keyboard been pressed then it
+        starts a timeout.
+        When the value of this timeout reaches the value set in
+        gnome-screensaver-preferences, then the login is marked as
+        'session idle'.
+        This is when GNOME Power Manager performs all the session idle actions
+        such as enabling low-power mode and lowering the laptop panel brightness.
+      </para>
+
+      <para>
+        As soon as the session is marked at idle, GNOME Power Manager starts
+        it's own 'system' timer. When the timeout set in gnome-power-preferences
+        is reached, and the CPU load <emphasis>is idle</emphasis>, then the idle
+        action is performed, which is usually to turn off the screen, or to
+        suspend or hibernate.
+      </para>
+
+      <para>
+        In gnome-power-manager 2-14 the timouts are not obviously linked to
+        gnome-screensaver, but the timeouts are linked in reality.
+        This is because the gnome-screensaver declares the session "idle" and
+        then gnome-power-manager starts.
+        Therefore the real time to suspend is actually the gnome-screensaver
+        timeout <emphasis>PLUS</emphasis> the gnome-power-manager time.
+      </para>
+
+      <para>
+        In the g-p-m 2-15 development branch, the sliders in
+        gnome-power-preferences are set to start at the value of the
+        session-timout + 1 minute, as we cannot logically trigger before the
+        session is marked as idle.
+        If you adjust the value of the 'session idle' timeout in
+        gnome-screensaver-preferences then the start of the sliders in
+        gnome-power-preferences will change accordingly.
+        This makes it more obvious for new users.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-discharge-time-wrong">
+      <title>
+        My time to discharge is always incorrect due to a faulty battery, what
+        can I do?
+      </title>
+
+      <para>
+        You might be able to use the percentage charge for g-p-m to use as the
+        policy data.
+        Open gconf-editor, and then change the key 
+        <literal>/apps/gnome-power-manager/use_time_for_policy</literal> to false.
+        You can do this easily by doing:
+      </para>
+
+      <programlisting>
+gconftool-2 --set --type bool /apps/gnome-power-manager/use_time_for_policy false
+      </programlisting>
+      <para>
+        This should get the policy actions working for you, but of course the time remaining will still be incorrect.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-ibm-brightness">
+      <title>
+        Why doesn't my IBM laptop have the brightness sliders in Power
+        Preferences?
+      </title>
+
+      <para>
+        You need to add to /etc/modprobe.conf the following text:
+      </para>
+      <programlisting>
+options ibm_acpi experimental=1
+      </programlisting>
+      <para>
+        This will enable the experimental features and make the LCD work.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-cool-screenshots">
+      <title>Have you got any screenshots of the cool new stuff?</title>
+
+      <para>
+        Well actually, yes.
+        They are hosted on my <ulink url="http://www.hughsie.com/applications/Coppermine/thumbnails.php?album=9">personal website</ulink>
+        so please don't link to them from other places.
+        They tend to change quite rapidly too, so you can see the current
+        development work.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-lid-state-confused">
+      <title>
+        Why does my lid state get confused after suspending or hibernating? (and)
+        My laptop suspended when I didn't expect it to when I removed the
+        power cord!
+      </title>
+
+      <para>
+        When you suspend and then resume, ACPI does not seem to send the
+        "lid open" event like it should, which I presume is because userspace
+        is not in a position to handle the kernel event when we start to thaw
+        userspace processes.
+      </para>
+
+      <para>
+        What we have to do it manually refresh the lid device using HAL when we
+        resume, so that the new "lid open" value is propagated to
+        gnome-power-manager.
+      </para>
+
+      <para>
+        We can do this in the <literal>hal-system-power-suspend</literal> and
+        <literal>hal-system-power-hibernate</literal> files,
+        which are usually located in <literal>/usr/share/hal/scripts/</literal>.
+      </para>
+
+      <para>
+        You have to edit this file, and change:
+      </para>
+
+      <programlisting>
+exit $RET
+      </programlisting>
+
+      <para>
+        to:
+      </para>
+
+      <programlisting>
+#Refresh devices as a resume can do funny things
+for type in button battery ac_adapter
+do
+	devices=`hal-find-by-capability --capability $type`
+	for device in $devices
+	do
+		dbus-send --system --print-reply --dest=org.freedesktop.Hal \
+			  $device org.freedesktop.Hal.Device.Rescan
+	done
+done
+exit $RET
+      </programlisting>
+
+      <para>
+        <emphasis>IMPORTANT:</emphasis> I may have told you to add these lines
+        already which probably won't have worked.
+        The "--print-reply" was the missing option - you 
+        <emphasis>must</emphasis> include this option for the Rescan() to work.
+      </para>
+
+      <para>
+        CVS HAL already has this fix upstream, but the next version may not be
+        released for a while, hence why I'm providing this fix here.
+      </para>
+
+      <para>
+        <emphasis>Update3</emphasis>: All the fixes are present in released 2.14.3.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-gpm-apm">
+      <title>Does GNOME Power Manager support APM?</title>
+
+      <para>
+        It supports whatever backends HAL supports!
+        At the moment this includes APM (Pre-2000 Intel computers),
+        ACPI (most modern Intel computers) and
+        PMU (Powerbook, and iBook PPC computers).
+      </para>
+    </sect2>
+
+    <sect2 id="faq-no-suspend-or-hibernate">
+      <title>Why does GNOME Power Manager not let me suspend or hibernate?</title>
+
+      <para>
+        Before showing items such as "Suspend" and "Hibernate" in the menu
+        g-p-m checks two things.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            If HAL can detect a sleep handler in the kernel.
+            You can test this doing "lshal | grep can_suspend".
+            HAL works this out from looking at /sys/power/state,
+            and also checking for the presence of suspend2.
+          </para>
+          <para>
+            If your administrator (or you!) has disabled the ability to do a
+            certain action.
+            You can test this using "gconftool-2 -R /apps/gnome-power-manager |
+            grep can" and change the values to be something more suitable.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        For instance, my PowerBook reports from HAL that it can suspend and
+        hibernate, but because I know my hibernate doesn't work,
+        I can disable it in gconf-editor removing the option from
+        gnome-power-preferences and the drop-down menu.
+      </para>
+
+      <para>
+        If HAL doesn't list the options you want, then maybe you need to check your BIOS to check that it's running in the correct mode, and also that you have compiled your kernel with the correct options.
+      </para>
+
+      <para>
+        If there are no gconf keys returned by the second check above, you need
+        to reinstall your gconf schema as per gnomebug:341256:
+        (as root)
+      </para>
+
+      <programlisting>
+export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
+gconftool-2 --makefile-install-rule data/gnome-power-manager.schemas
+killall -HUP gconfd-2
+      </programlisting>
+    </sect2>
+
+    <sect2 id="faq-screen-dim-scroll">
+      <title>
+        Why does my screen dim or screensaver start even when I'm clicking the
+        mouse?
+      </title>
+
+      <para>
+        If you click the mouse, or scroll the scroll-wheel without moving the
+        pointer, then gnome-screensaver will detect the session as being idle.
+        This is a limitation of X.org, but is worked around in newer versions
+        of gnome-screensaver.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-inhibit">
+      <title>
+        How do I make my application stop the computer auto-suspending?
+      </title>
+
+      <para>
+        If your application is doing a long operation, you might want to
+        disable the ability to suspend for a little while.
+        You should use this method if you really don't want the user to be
+        able to suspend, or for the computer to save power by hibernating
+        or suspending during:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>Copying files in Nautilus</para>
+          <para>Doing a long kernel compile or Matlab simulation</para>
+          <para>During a SELinux relabel</para>
+          <para>Many others...</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Then you can use the Inhibit() and UnInhibit() DBUS methods built into
+        the newest versions of gnome-power-manager.
+        Here is a simple demonstration in python:
+      </para>
+
+      <programlisting>
+#!/usr/bin/python
+import dbus
+import time
+bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
+devobj = bus.get_object('org.gnome.PowerManager', '/org/gnome/PowerManager')
+dev = dbus.Interface(devobj, "org.gnome.PowerManager")
+cookie = dev.Inhibit('Nautilus', 'Copying files')
+time.sleep(100)
+dev.UnInhibit(cookie)
+      </programlisting>
+
+      <para>
+        There is an <ulink url="http://cvs.gnome.org/viewcvs/*checkout*/gnome-power-manager/src/gpm-inhibit-test.c">example</ulink>
+        which shows developers how to add Inhibit and UnInhibit DBUS methods
+        into existing programs.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-gs-and-gpm-inhibit">
+      <title>
+        Are gnome-power-manager and gnome-screensaver inhibit methods the same?
+      </title>
+
+      <para>
+        If you call the inhibit methods on gnome-screensaver, then
+        gnome-screensaver will not mark your session as idle.
+        This means that the screen will not dim, the screensaver will not start
+        and the computer will not suspend automatically.
+      </para>
+
+      <para>
+        While playing a movie fullscreen, totem should use the gnome-screensaver
+        inhibit methods.
+        The idea is that totem does not have to worry at all about power
+        management.
+        The only thing it wants to assert is that even though there are no key
+        presses or mouse movements, the session is still being used.
+      </para>
+
+      <para>
+        The only applications that should use the gnome-power-manager inhibit
+        method are things that want to assert that the session can be marked as
+        idle, but important things are still happening, so it shouldn't power
+        down.
+        For example, when copying 4.5GB of files in Nautilus, you want the
+        screensaver to display, and the LCD panel to dim, but you don't want
+        the computer to think that it is idle and shutdown, suspend or hibernate.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-suspend-again">
+      <title>
+        When I suspend on low power, g-p-m keeps suspending again and again on
+        resume
+      </title>
+
+      <para>
+        When you suspend or hibernate due to critically low power, then plug
+        in power and then resume, g-p-m might keep suspending again and again
+        as it still thinks the power is critically low.
+        This is fixed in 2.14.0, where a timeout was added so that we wait for
+        the power subsystem (ACPI/PMU/APM) to settle down before we read the
+        values again.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-no-actions">
+      <title>Why don't I see the actions menu like I used to?</title>
+
+      <para>
+        First, if you are using Fedora Core 5, then the menu has been
+        disabled as g-p-m has been integrated into the gnome panel, just look
+        under "System" for the functionality.
+        If you compiled from source yourself, make sure you added the gconf
+        schema correctly.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-dapper-security">
+      <title>Why using Ubuntu (Dapper) do I get the error</title>
+      <programlisting>
+WARNING **: gpm_hal_suspend: A security policy in place prevents this sender
+from sending this message to this recepient, see message bus configuration
+(rejected message had interface
+"org.freedesktop.Hal.Device.SystemPowerManagement" member "Suspend" error name
+"(unset)" destination "org.freedesktop.Hal")
+WARNING **: org.freedesktop.Hal.Device.SystemPowerManagement.Suspend failed (HAL error)
+      </programlisting>
+
+      <para>
+        Ubuntu ships a locked down DBUS by default for Dapper which prevents
+        non-root from issuing methods to HAL.
+        To allow the current logged in user to use these methods, just install
+        the libpam-foreground package.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-dpms-xscreensaver">
+      <title>Why doesn't DPMS work when I've enabled it in XScreenSaver?</title>
+
+      <para>
+        It's enabled for <emphasis>xscreensaver</emphasis>, not
+        <emphasis>gnome-screensaver</emphasis>.
+        XSS is the legacy system that will be replaced with gnome-screensaver
+        very soon. You probably need to install this package, and then g-p-m
+        will automatically work with gnome-screensaver to use the DPMS
+        settings of your monitor.
+      </para>
+    </sect2>
+
+   <sect2 id="faq-spin-down-hdd">
+      <title>GNOME Power Manager doesn't spin down my hard-drive!</title>
+
+      <para>
+        After numerous debates, the consensus was that is was not a good idea
+        to add this functionality to HAL.
+        It's was decided user-configurable powermanagement was not really
+        required when modern harddisks have really intelligent powermanagment.
+      </para>
+
+      <para>
+        Here the power consumption data for a typical notebook harddisk
+        (ide/sata):
+      </para>
+
+      <programlisting>
+Startup (peak, max.)		5.5W 	NC
+Seek				2.3W	2.7W
+Read (avg.)			2.0W	2.3W
+Write (avg.)			2.0W	2.3W
+Active idle (avg.)		1.1W	1.2W
+Low power idle (avg.)		0.85W	0.9W
+Standby (avg.)			0.2W	0.25W
+Sleep				0.1W	NC
+      </programlisting>
+
+      <para>
+        The conclusions you can take from this are:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            A disk on Low Power idle need less than 1 Watt per hour.
+            For a normal battery with 50000mWh you could run the harddisk for
+            over 50 hours.
+          </para>
+          <para>
+            If you do not read/write from/to the harddisk the disk regulates
+            power, but never shuts down the device.
+            The reason is easy: you lost more power with each startup than to
+            leave the harddisk online somewhere between 'Active idle' and
+            'Low power idle' (depends on the model/manufacturer).
+          </para>
+          <para>
+            The other reason to leave this to the internal powermanagement of
+            the disk is: the time needed to reactivate the device.
+            You lose more performance than you lose power between 'Active idle'
+            and 'Low power idle'.
+          </para>
+          <para>
+            If you use a journaling file system you normally need to flush
+            periodically.
+            This could run in a race between shut down device and restart
+            device by system to flush.
+            This means more power consumption as you change nothing.
+          </para>
+          <para>
+            You can't set powermanagement for exteral USB harddisks, because
+            you can't send the needed commands over the USB link to the disk.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+
+    <sect2 id="faq-acpi-delay">
+      <title>
+        I'm running ACPI. Why do events (such as removing the AC adapter)
+        take so long to register?
+      </title>
+
+      <para>
+        One of two things might be the problem.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            HAL might not be running the addon that captures the acpi event.
+          </para>
+          <para>
+            You BIOS could be faulty, and might need a work-around.
+            Please send a bug report.
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        For the first case, try to find the hal processes that are running:
+      </para>
+      <programlisting>
+ps -eaf | grep hal
+      </programlisting>
+      <para>
+        And check for the process hald-addon-acpi.
+        If it is not being run, then please make sure that HAL is being run
+        with the <emphasis>--retain-privileges</emphasis> option in the
+        haldaemon initscript.
+        An alternative to this is to use acpid, rather than the kernel proc file.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-shell">
+      <title>
+        How do I query or do actions on gnome-power-manager from my shell script?
+      </title>
+
+      <para>
+        You can use the dbus-send program. For example, you can set the DPMS
+        mode by running the following:
+      </para>
+
+      <programlisting>
+dbus-send --session \
+	  --dest=org.gnome.PowerManager \
+	  --type=method_call \
+	  --print-reply \
+	  --reply-timeout=2000 \
+	  /org/gnome/PowerManager \
+	  org.gnome.PowerManager.SetDpmsMode \
+	  string:suspend
+      </programlisting>
+
+      <para>
+        You can put the system into hibernation using the following:
+      </para>
+
+      <programlisting>
+dbus-send --session \
+	  --dest=org.gnome.PowerManager \
+	  --type=method_call \
+	  --print-reply \
+	  --reply-timeout=2000 \
+	  /org/gnome/PowerManager \
+	  org.gnome.PowerManager.Hibernate
+      </programlisting>
+
+      <para>
+        See the developers guide file in CVS for the full list.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-nothing-happens">
+      <title>Nothing happens when I click suspend or hibernate</title>
+
+      <para>
+        HAL might not *yet* support your distro, or you might have found a bug
+        in GNOME Power Manager.
+        Refer to the reporting bugs section.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-powermanager-service">
+      <title>
+        What is the PowerManager system service - why was GNOME Power Manager
+        depending on it, but now obsoletes it?
+      </title>
+
+      <para>
+        Before HAL had the method support (added in 0.5.4), GNOME Power Manager
+        used an external daemon running as root to do all the dirty work.
+        This daemon was called PowerManager.
+        This is now obsolete with HAL 0.5.3, and with the new work that we have
+        done, HAL far surpasses the capabilities of PowerManager.
+        PowerManager and pmscripts are now obsolete.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-rss-feed">
+      <title>
+        Can I get updates to the progress of GNOME Power Manager?
+        Do you have an RSS feed?
+      </title>
+
+      <para>
+        You can get CVS updates from <ulink url="http://cia.navi.cx/stats/project/gnome/gnome-power-manager/.rss">navi.cx</ulink>
+        in RSS format.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-update-dbus">
+      <title>Why do we need such an up-to-date DBUS?</title>
+
+      <para>
+        The DBUS interface API is changing frequently, and will continue to do
+        so until DBUS 1.0 is released.
+        Many DBUS apps have lots of configure logic and extra code that I
+        could not maintain - and is a waste of my time to support a version
+        of DBUS that is already obsolete.
+        I will always track the latest released version.
+        Also, some bugs in the newer DBUS's have been fixed that impact the
+        operation of GNOME Power Manager.
+        You are welcome to patch G-P-M to work with an older DBUS if you wish.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-update-hal">
+      <title>Why do we need such an up-to-date HAL?</title>
+
+      <para>
+        G-P-M uses advanced features of HAL that did not exist in past versions.
+        You cannot patch G-P-M to support an older HAL, as it will not work.
+        Encourage your distro to update their version of HAL, and then G-P-M
+        will work.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-video-resume">
+      <title>
+        Why doesn't my video adaptor come back after a suspend?
+        It just displays black
+      </title>
+
+      <para>
+        You may need to add a s3 command to your kernel boot string so that the
+        kernel can re-initialise your video card.
+        See <ulink url="http://www.kernel.org/git/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;hb=HEAD;f=Documentation/power/video.txt">this document</ulink>
+        for more details, or to see if your system has been identified as
+        needing any extra switches.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-autostart">
+      <title>Why doesn't GNOME Power manager autostart?</title>
+
+      <para>
+        This works automatically using GNOME 2.14, using the new autostart
+        functionality of gnome-session.
+        For older versions of GNOME, you will have to run GNOME Power Manager
+        from a terminal or use gnome-session to launch GNOME Power Manager for
+        each session.
+      </para>
+    </sect2>
+
+    <sect2 id="faq-custom-script">
+      <title>Where do I put my custom suspend/shutdown/hibernate script?</title>
+
+      <para>
+        Because gnome-power-manager uses HAL to toggle bits in the hardware,
+        you need to put your custom instructions in
+        <literal>/prefix/share/hal/scripts/system/hal-system-power-*</literal>
+      </para>
+    </sect2>
+
+
   </sect1>
 
 </chapter>
