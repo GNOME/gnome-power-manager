@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>GNOME Power Manager 2.15.4 Documentation</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.15.4 Documentation"><link rel="next" href="dbus-interface.html" title="Chapter 1. DBUS Interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">GNOME Power Manager 2.15.4 Documentation</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="dbus-interface.html">Next</a></td></tr></table><hr></div><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>GNOME Power Manager 2.15.4 Documentation</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
+            <code class="email">&lt;<a href="mailto:richard@hughsie.com">richard@hughsie.com</a>&gt;</code><br>
+          </p></div></div></div></div></div><div><p class="releaseinfo">Version 2.15.4</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="dbus-interface.html">1. DBUS Interface</a></span></dt><dd><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-Compatibility">Compatibility</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Suspend">
+        <code class="literal">Suspend</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Hibernate">
+        <code class="literal">Hibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Shutdown">
+        <code class="literal">Shutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Reboot">
+        <code class="literal">Reboot</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedSuspend">
+        <code class="literal">AllowedSuspend</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedHibernate">
+        <code class="literal">AllowedHibernate</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedShutdown">
+        <code class="literal">AllowedShutdown</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedReboot">
+        <code class="literal">AllowedReboot</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-SetDpmsMode">
+        <code class="literal">SetDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetDpmsMode">
+        <code class="literal">GetDpmsMode</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Inhibit">
+        <code class="literal">Inhibit</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-UnInhibit">
+        <code class="literal">UnInhibit</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetOnAc">
+        <code class="literal">GetOnAc</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetLowPowerMode">
+        <code class="literal">GetLowPowerMode</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-DpmsModeChanged">
+        <code class="literal">DpmsModeChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-OnAcChanged">
+        <code class="literal">OnAcChanged</code>
+      </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="icon-scheme.html">2. Icon Naming Scheme</a></span></dt><dd><dl><dt><span class="sect1"><a href="icon-scheme.html#icon-indexes">Icon indexes</a></span></dt><dt><span class="sect1"><a href="icon-scheme.html#icon-names">Icon Names</a></span></dt></dl></dd><dt><span class="chapter"><a href="roadmap.html">3. Roadmap</a></span></dt><dd><dl><dt><span class="sect1"><a href="roadmap.html#roadmap-2-15-dev">2-15 Development</a></span></dt></dl></dd><dt><span class="chapter"><a href="sleep-names.html">4. Sleep Names</a></span></dt><dd><dl><dt><span class="sect1"><a href="sleep-names.html#sleep-names-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="sleep-names.html#sleep-names-standby">Standby</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-standby-nomenclature">Recommended Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-suspend">Suspend</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-suspend-nomenclature-good">Recommended Nomenclature</a></span></dt><dt><span class="sect2"><a href="sleep-names.html#sleep-names-suspend-nomenclature-bad">Bad Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-hibernate">Hibernate</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-hibernate-nomenclature-good">Recommended Nomenclature</a></span></dt><dt><span class="sect2"><a href="sleep-names.html#sleep-names-hibernate-nomenclature-bad">Bad Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-conclusion">Conclusion</a></span></dt></dl></dd><dt><span class="chapter"><a href="faq.html">5. FAQ</a></span></dt><dd><dl><dt><span class="sect1"><a href="faq.html#faq-intro">Introduction</a></span></dt></dl></dd></dl></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="dbus-interface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Chapter 1. DBUS Interface</td></tr></table></div></body></html>
