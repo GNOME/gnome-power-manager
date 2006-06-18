@@ -30,12 +30,14 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include <time.h>
+#include <gconf/gconf-client.h>
 
 #include "gpm-info.h"
 #include "gpm-info-data.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-power.h"
+#include "gpm-prefs.h"
 #include "gpm-graph-widget.h"
 #include "gpm-stock-icons.h"
 #include "gpm-info-data.h"
@@ -47,7 +49,6 @@ static void     gpm_info_finalize   (GObject      *object);
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
 #define GPM_INFO_DATA_POLL		5	/* seconds */
-#define GPM_INFO_DATA_RES_X		80	/* x resolution, greater burns the cpu */
 
 struct GpmInfoPrivate
 {
@@ -670,6 +671,14 @@ gpm_info_init (GpmInfo *info)
 	info->priv->rate_data = gpm_info_data_new ();
 	info->priv->time_data = gpm_info_data_new ();
 
+	GConfClient *client = gconf_client_get_default ();
+	int max_time = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
+	g_object_unref (client);
+
+	gpm_info_data_set_max_time (info->priv->events, max_time);
+	gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
+	gpm_info_data_set_max_time (info->priv->rate_data, max_time);
+	gpm_info_data_set_max_time (info->priv->time_data, max_time);
 	glade_set_custom_handler (gpm_graph_custom_handler, info);
 }
 

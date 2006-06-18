@@ -52,6 +52,28 @@ struct GpmInfoDataPrivate
 G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
 
 /**
+ * gpm_info_data_set_max_points:
+ * @info_data: This InfoData instance
+ * @max_points: The maximum number of points to show on the graph
+ */
+void
+gpm_info_data_set_max_points (GpmInfoData *info_data, int max_points)
+{
+	info_data->priv->max_points = max_points;
+}
+
+/**
+ * gpm_info_data_set_max_time:
+ * @info_data: This InfoData instance
+ * @max_points: The maximum number of points to show on the graph
+ */
+void
+gpm_info_data_set_max_time (GpmInfoData *info_data, int max_time)
+{
+	info_data->priv->max_time = max_time;
+}
+
+/**
  * gpm_info_data_get_list:
  * @info_data: This InfoData instance
  *

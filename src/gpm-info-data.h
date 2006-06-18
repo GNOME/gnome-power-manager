@@ -73,6 +73,10 @@ void			 gpm_info_data_limit_dilute	(GpmInfoData	*info_data,
 							 int		 max_num);
 void			 gpm_info_data_limit_truncate	(GpmInfoData	*info_data,
 							 int		 max_num);
+void			 gpm_info_data_set_max_points	(GpmInfoData	*info_data,
+							 int		 max_points);
+void			 gpm_info_data_set_max_time	(GpmInfoData	*info_data,
+							 int		 max_time);
 
 G_END_DECLS
 

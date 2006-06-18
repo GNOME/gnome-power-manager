@@ -62,6 +62,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/graph_data_max_time</key>
+      <applyto>/apps/gnome-power-manager/graph_data_max_time</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>7200</default>
+      <locale name="C">
+        <short>The maximum time displayed on the graph</short>
+        <long>The maximum duration of time displayed on the x-axis of the graph.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/show_actions_in_menu</key>
       <applyto>/apps/gnome-power-manager/show_actions_in_menu</applyto>
       <owner>gnome-power-manager</owner>

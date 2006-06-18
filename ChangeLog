@@ -1,5 +1,20 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-prefs.h:
+	Add in /apps/gnome-power-manager/graph_data_max_time so we can specify
+	the amount of time to show on the graph.
+
+	* src/gpm-info-data.h:
+	* src/gpm-info-data.c:
+	Add the functions gpm_info_data_set_max_points and
+	gpm_info_data_set_max_time so we can set this externally.
+
+	* src/gpm-info.c:
+	Use graph_data_max_time to limit the GpmInfoData.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c:
 	* src/gpm-graph-widget.h:
 	* src/gpm-info.c:
