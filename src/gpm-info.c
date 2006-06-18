@@ -36,6 +36,7 @@
 #include "gpm-info-data.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
+#include "gpm-hal.h"
 #include "gpm-power.h"
 #include "gpm-prefs.h"
 #include "gpm-graph-widget.h"
@@ -68,6 +69,7 @@ struct GpmInfoPrivate
 	GladeXML		*glade_xml;
 
 	time_t			 start_time;
+	gboolean		 is_laptop;
 };
 
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
@@ -402,7 +404,9 @@ gpm_info_clear_rate_cb (GtkWidget *widget,
 {
 	g_object_unref (info->priv->rate_data);
 	info->priv->rate_data = gpm_info_data_new ();
-	gpm_info_graph_update_all (info);
+	if (info->priv->is_laptop) {
+		gpm_info_graph_update_all (info);
+	}
 }
 
 /**
@@ -494,16 +498,17 @@ gpm_info_show_window (GpmInfo *info)
 	widget = glade_xml_get_widget (glade_xml, "button_clear_events");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_clear_events_cb), info);
-	widget = glade_xml_get_widget (glade_xml, "button_clear_rate");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_clear_rate_cb), info);
-	widget = glade_xml_get_widget (glade_xml, "button_clear_percentage");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_clear_percentage_cb), info);
-	widget = glade_xml_get_widget (glade_xml, "button_clear_time");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_clear_time_cb), info);
-
+	if (info->priv->is_laptop) {
+		widget = glade_xml_get_widget (glade_xml, "button_clear_rate");
+		g_signal_connect (widget, "clicked",
+				  G_CALLBACK (gpm_info_clear_rate_cb), info);
+		widget = glade_xml_get_widget (glade_xml, "button_clear_percentage");
+		g_signal_connect (widget, "clicked",
+				  G_CALLBACK (gpm_info_clear_percentage_cb), info);
+		widget = glade_xml_get_widget (glade_xml, "button_clear_time");
+		g_signal_connect (widget, "clicked",
+				  G_CALLBACK (gpm_info_clear_time_cb), info);
+	}
 
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
@@ -513,36 +518,58 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_help_cb), info);
 
-	widget = glade_xml_get_widget (glade_xml, "graph_percentage");
-	gtk_widget_set_size_request (widget, 600, 300);
-	info->priv->percentage_widget = widget;
-	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
+	if (info->priv->is_laptop) {
+		widget = glade_xml_get_widget (glade_xml, "graph_percentage");
+		gtk_widget_set_size_request (widget, 600, 300);
+		info->priv->percentage_widget = widget;
+		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
 
-	widget = glade_xml_get_widget (glade_xml, "graph_rate");
-	gtk_widget_set_size_request (widget, 600, 300);
-	info->priv->rate_widget = widget;
-	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
-	gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
+		widget = glade_xml_get_widget (glade_xml, "graph_rate");
+		gtk_widget_set_size_request (widget, 600, 300);
+		info->priv->rate_widget = widget;
+		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
+		gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
 
-	widget = glade_xml_get_widget (glade_xml, "graph_time");
-	gtk_widget_set_size_request (widget, 600, 300);
-	info->priv->time_widget = widget;
-	gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
-	gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
+		widget = glade_xml_get_widget (glade_xml, "graph_time");
+		gtk_widget_set_size_request (widget, 600, 300);
+		info->priv->time_widget = widget;
+		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
+		gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
+	}
 
 	/* set up the event viewer tree-view */
 	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_event_log");
+	gtk_widget_set_size_request (widget, 400, 200);
 	info->priv->treeview_event_viewer = widget;
 	gpm_info_create_event_viewer_tree (widget);
 
 	gpm_info_populate_device_information (info);
-	gpm_info_graph_update_all (info);
+	if (info->priv->is_laptop) {
+		gpm_info_graph_update_all (info);
+	}
 	gpm_info_update_event_tree (info);
 
 	gtk_widget_show (info->priv->treeview_event_viewer);
-	gtk_widget_show (info->priv->rate_widget);
-	gtk_widget_show (info->priv->time_widget);
-	gtk_widget_show (info->priv->percentage_widget);
+
+	if (info->priv->is_laptop) {
+		gtk_widget_show (info->priv->rate_widget);
+		gtk_widget_show (info->priv->time_widget);
+		gtk_widget_show (info->priv->percentage_widget);
+	} else {
+		GtkWidget *notebook;
+		int page;
+		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_percentage");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_rate");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_time");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+	}
+
 	gtk_widget_show (info->priv->main_window);
 }
 
@@ -592,30 +619,34 @@ gpm_info_log_do_poll (gpointer data)
 				      GPM_POWER_KIND_PRIMARY,
 				      &battery_status);
 
-	/* work out seconds elapsed */
-	value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
+	if (info->priv->is_laptop) {
+		/* work out seconds elapsed */
+		value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
 
-	/* set the correct colours */
-	if (battery_status.is_discharging) {
-		colour = GPM_GRAPH_COLOUR_DARK_RED;
-	} else if (battery_status.is_charging) {
-		colour = GPM_GRAPH_COLOUR_DARK_BLUE;
-	} else {
-		colour = GPM_GRAPH_COLOUR_DEFAULT;
+		/* set the correct colours */
+		if (battery_status.is_discharging) {
+			colour = GPM_GRAPH_COLOUR_DARK_RED;
+		} else if (battery_status.is_charging) {
+			colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+		} else {
+			colour = GPM_GRAPH_COLOUR_DEFAULT;
+		}
+
+		gpm_info_data_add (info->priv->percentage_data,
+				   value_x,
+				   battery_status.percentage_charge, colour);
+		gpm_info_data_add (info->priv->rate_data,
+				   value_x,
+				   battery_status.charge_rate_raw, colour);
+		gpm_info_data_add (info->priv->time_data,
+				   value_x,
+				   battery_status.remaining_time, colour);
 	}
 
-	gpm_info_data_add (info->priv->percentage_data,
-			   value_x,
-			   battery_status.percentage_charge, colour);
-	gpm_info_data_add (info->priv->rate_data,
-			   value_x,
-			   battery_status.charge_rate_raw, colour);
-	gpm_info_data_add (info->priv->time_data,
-			   value_x,
-			   battery_status.remaining_time, colour);
-
 	if (info->priv->main_window) {
-		gpm_info_graph_update_all (info);
+		if (info->priv->is_laptop) {
+			gpm_info_graph_update_all (info);
+		}
 		/* also update the first tab */
 		gpm_info_populate_device_information (info);
 	}
@@ -665,20 +696,32 @@ gpm_info_init (GpmInfo *info)
 	/* set up the timer callback so we can log data */
 	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
 
+	/* find out if we should log and display the extra graphs */
+	info->priv->is_laptop = gpm_hal_is_laptop ();
+
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
-	info->priv->percentage_data = gpm_info_data_new ();
-	info->priv->rate_data = gpm_info_data_new ();
-	info->priv->time_data = gpm_info_data_new ();
+	if (info->priv->is_laptop) {
+		info->priv->percentage_data = gpm_info_data_new ();
+		info->priv->rate_data = gpm_info_data_new ();
+		info->priv->time_data = gpm_info_data_new ();
+	} else {
+		info->priv->percentage_data = NULL;
+		info->priv->rate_data = NULL;
+		info->priv->time_data = NULL;
+	}
 
-	GConfClient *client = gconf_client_get_default ();
-	int max_time = gconf_client_get_int (client, GPM_PREF_GRAPH_DATA_MAX_TIME, NULL);
-	g_object_unref (client);
+	if (info->priv->is_laptop) {
+		/* get the maximum x-asix size from gconf */
+		GConfClient *client = gconf_client_get_default ();
+		int max_time = gconf_client_get_int (client, GPM_PREF_GRAPH_DATA_MAX_TIME, NULL);
+		g_object_unref (client);
 
-	gpm_info_data_set_max_time (info->priv->events, max_time);
-	gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
-	gpm_info_data_set_max_time (info->priv->rate_data, max_time);
-	gpm_info_data_set_max_time (info->priv->time_data, max_time);
+		gpm_info_data_set_max_time (info->priv->events, max_time);
+		gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
+		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
+		gpm_info_data_set_max_time (info->priv->time_data, max_time);
+	}
 	glade_set_custom_handler (gpm_graph_custom_handler, info);
 }
 
@@ -696,9 +739,15 @@ gpm_info_finalize (GObject *object)
 	info = GPM_INFO (object);
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
-	g_object_unref (info->priv->rate_data);
-	g_object_unref (info->priv->percentage_data);
-	g_object_unref (info->priv->time_data);
+	if (info->priv->rate_data) {
+		g_object_unref (info->priv->rate_data);
+	}
+	if (info->priv->percentage_data) {
+		g_object_unref (info->priv->percentage_data);
+	}
+	if (info->priv->time_data) {
+		g_object_unref (info->priv->time_data);
+	}
 	g_object_unref (info->priv->events);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
