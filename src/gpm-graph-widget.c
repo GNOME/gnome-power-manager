@@ -226,6 +226,9 @@ gpm_graph_finalize (GObject *object)
 {
 	GpmGraph *graph = (GpmGraph*) object;
 	cairo_font_options_destroy (graph->priv->options);
+	if (graph->priv->events) {
+		g_list_free (graph->priv->events);
+	}
 }
 
 /**
@@ -266,10 +269,14 @@ gpm_graph_set_invert_y (GpmGraph *graph, gboolean inv)
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_set_data (GpmGraph *graph, GList *list)
+gpm_graph_set_data (GpmGraph *graph, GpmInfoData *data)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (graph));
+	GList *list = gpm_info_data_get_list (data);
+	if (graph->priv->list) {
+		g_list_free (graph->priv->list);
+	}
 	graph->priv->list = list;
 }
 
@@ -281,10 +288,14 @@ gpm_graph_set_data (GpmGraph *graph, GList *list)
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_set_events (GpmGraph *graph, GList *list)
+gpm_graph_set_events (GpmGraph *graph, GpmInfoData *data)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (graph));
+	GList *list = gpm_info_data_get_list (data);
+	if (graph->priv->events) {
+		g_list_free (graph->priv->events);
+	}
 	graph->priv->events = list;
 }
 

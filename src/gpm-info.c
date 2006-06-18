@@ -66,7 +66,7 @@ struct GpmInfoPrivate
 
 	GladeXML		*glade_xml;
 
-	time_t		 start_time;
+	time_t			 start_time;
 };
 
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
@@ -102,7 +102,7 @@ gpm_graph_custom_handler (GladeXML *xml,
  * Update this graph
  **/
 static void
-gpm_info_graph_update (GList *data, GtkWidget *widget, GList *events)
+gpm_info_graph_update (GtkWidget *widget, GpmInfoData *data, GpmInfoData *events)
 {
 	if (! data) {
 		return;
@@ -331,13 +331,15 @@ gpm_info_update_event_tree (GpmInfo *info)
 static void
 gpm_info_graph_update_all (GpmInfo *info)
 {
-	GList *data = gpm_info_data_get_list (info->priv->rate_data);
-	GList *events = gpm_info_data_get_list (info->priv->events);
-	gpm_info_graph_update (data, info->priv->rate_widget, events);
-	data = gpm_info_data_get_list (info->priv->percentage_data);
-	gpm_info_graph_update (data, info->priv->percentage_widget, events);
-	data = gpm_info_data_get_list (info->priv->time_data);
-	gpm_info_graph_update (data, info->priv->time_widget, events);
+	gpm_info_graph_update (info->priv->rate_widget,
+			       info->priv->rate_data,
+			       info->priv->events);
+	gpm_info_graph_update (info->priv->percentage_widget,
+			       info->priv->percentage_data,
+			       info->priv->events);
+	gpm_info_graph_update (info->priv->time_widget,
+			       info->priv->time_data,
+			       info->priv->events);
 }
 
 /**

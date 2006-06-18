@@ -23,6 +23,7 @@
 #define __GPM_GRAPH_H__
 
 #include <gtk/gtk.h>
+#include "gpm-info-data.h"
 
 G_BEGIN_DECLS
 
@@ -102,9 +103,9 @@ void		 gpm_graph_enable_legend		(GpmGraph	*graph,
 void		 gpm_graph_set_invert_y			(GpmGraph	*graph,
 							 gboolean	 inv);
 void		 gpm_graph_set_data			(GpmGraph	*graph,
-							 GList		*list);
+							 GpmInfoData	*data);
 void		 gpm_graph_set_events			(GpmGraph	*graph,
-							 GList		*events);
+							 GpmInfoData	*data);
 void		 gpm_graph_set_axis_x			(GpmGraph	*graph,
 							 GpmGraphAxisType axis);
 void		 gpm_graph_set_axis_y			(GpmGraph	*graph,

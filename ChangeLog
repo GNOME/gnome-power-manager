@@ -1,5 +1,19 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c:
+	Use the GpmInfoData pointer rather than the list pointer so we can keep
+	track of the list and free when not required anymore.
+
+	* src/gpm-info-data.c:
+	Big re-write, which should squash some bugs. Switch to using GPtrArray
+	rather than a GList as it makes things much simpler.
+	I've also added the initial support for limiting the time shown on the
+	graph, configuration to come in a little bit.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	Add the new inhibit stuff. Poked by Marcel Telka <marcel@telka.sk>
 

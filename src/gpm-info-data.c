@@ -44,24 +44,39 @@ static void     gpm_info_data_finalize   (GObject		 	*object);
 
 struct GpmInfoDataPrivate
 {
-	GList			*list;
-	int			 length;	/* we track this to save time on add */
-	GpmInfoDataPoint	*last_point;	/* to avoid having to go thru the list */
+	GPtrArray		*array;		/* the data array */
+	int			 max_points;	/* when we should simplify data */
+	int			 max_time;	/* truncate after this */
 };
 
 G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
 
-/* this should be setable */
-#define GPM_INFO_DATA_MAX_POINTS		120	/* when we should simplify data */
-#define GPM_INFO_DATA_MAX_TIME			10 * 60	/* seconds, truncate after this */
-
-GList*
+/**
+ * gpm_info_data_get_list:
+ * @info_data: This InfoData instance
+ *
+ * Gets a GList of the data in the array.
+ * NOTE: You have to use need to g_list_free (list) to free the returned list.
+ **/
+GList *
 gpm_info_data_get_list (GpmInfoData *info_data)
 {
+	GList *list = NULL;
+	GpmInfoDataPoint *point;
+	int a;
+
 	g_return_val_if_fail (info_data != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), NULL);
-
-	return info_data->priv->list;
+	
+	if (info_data->priv->array->len == 0) {
+		gpm_debug ("no items in array!");
+		return NULL;
+	}
+	for (a=0; a < info_data->priv->array->len; a++) {
+		point = g_ptr_array_index (info_data->priv->array, a);
+		list = g_list_append (list, (gpointer) point);
+	}
+	return list;
 }
 
 /**
@@ -100,9 +115,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	} else {
 		new->desc = NULL;
 	}
-	info_data->priv->list = g_list_append (info_data->priv->list, (gpointer) new);
-	info_data->priv->length++;
-	info_data->priv->last_point = new;
+	g_ptr_array_add (info_data->priv->array, (gpointer) new);
 }
 
 /**
@@ -133,39 +146,32 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
 			  int		max_num)
 {
 	GpmInfoDataPoint *point;
-	GList *l;
-	GList *list;
+	float div;
+	float running_count = 0.0f;
+	int len = info_data->priv->array->len;
+	int a;
 
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
-	list = g_list_last (info_data->priv->list);
-	point = (GpmInfoDataPoint *) list->data;
-	gpm_debug ("Last point: x=%i, y=%i", point->time, point->value);
-	float div = (float) point->time / (float) max_num;
+	point = g_ptr_array_index (info_data->priv->array, len-1);
+	div = (float) point->time / (float) max_num;
 	gpm_debug ("Using a time division of %f", div);
 
-	GList *new = NULL;
 	/* Reduces the number of points to a pre-set level using a time
 	 * division algorithm so we don't keep diluting the previous
 	 * data with a conventional 1-in-x type algorithm. */
-	float a = 0;
-	for (l=info_data->priv->list; l != NULL; l=l->next) {
-		point = (GpmInfoDataPoint *) l->data;
-		if (point->time >= a) {
-			/* adding valid point */
-			new = g_list_append (new, (gpointer) point);
-			a = a + div;
+	for (a=0; a < info_data->priv->array->len; a++) {
+		point = g_ptr_array_index (info_data->priv->array, a);
+		if (point->time >= running_count) {
+			running_count = running_count + div;
+			/* keep valid point */
 		} else {
 			/* removing point */
 			gpm_info_data_free_point (point);
+			g_ptr_array_remove_index (info_data->priv->array, a);
 		}
 	}
-	/* freeing old list */
-	g_list_free (info_data->priv->list);
-	/* setting new data */
-	info_data->priv->list = new;
-	info_data->priv->length = g_list_length (info_data->priv->list);
 }
 
 /**
@@ -182,27 +188,21 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
 			    int		 max_num)
 {
 	GpmInfoDataPoint *point;
-	GList *l;
-	GList *list;
+	int count = 0;
+	int a;
 
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
-	int count = 0;
-	for (l=info_data->priv->list; l != NULL; l=l->next) {
-		point = (GpmInfoDataPoint *) l->data;
+	for (a=0; a < info_data->priv->array->len; a++) {
+		point = g_ptr_array_index (info_data->priv->array, a);
 		count++;
 		if (count == 3) {
-			list = l->prev;
-			/* we need to free the data */
-			gpm_info_data_free_point (l->data);
-			l->data = NULL;
-			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
-			l = list;
+			gpm_info_data_free_point (point);
+			g_ptr_array_remove_index (info_data->priv->array, a);
 			count = 0;
 		}
 	}
-	info_data->priv->length = g_list_length (info_data->priv->list);
 }
 
 /**
@@ -214,57 +214,34 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
  * the amount of time in the list. We have to be careful and not just remove
  * the old points, so we truncate, then limit by time to get the initial points
  * correct.
- *
- * DOES NOT WORK CORRECTLY YET.
  **/
 void
 gpm_info_data_limit_truncate (GpmInfoData *info_data,
 			      int	   max_time)
 {
 	GpmInfoDataPoint *point;
-	GList *l;
-	GList *list;
-	GList *last;
-	int difference;
-	gboolean first = TRUE;
+	int a;
+	int len = info_data->priv->array->len;
+	int last_time;
 
-	g_return_if_fail (info_data != NULL);
-	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+	/* find the last point time */
+	point = g_ptr_array_index (info_data->priv->array, len-1);
+	last_time = point->time;
 
-	last = g_list_last (info_data->priv->list);
-	/* first point */
-	point = (GpmInfoDataPoint *)last->data;
-
-	/* the time difference between the first and last point */
-	difference = point->time - max_time;
-
-	gpm_debug ("diff=%i, max=%i", difference, max_time);
-
-	l = info_data->priv->list;
-	while (l) {
-		point = (GpmInfoDataPoint *) l->data;
-		if (point->time > difference) {
-			if (first) {
-				/* we have to move the first point to the new
-				   threshold else we start with no data */
-				first = FALSE;
-				GpmInfoDataPoint *new = (GpmInfoDataPoint *) l->data;
-				new->time = max_time;
-				list = l->next;
-			} else {
-				info_data->priv->list = l;
-				break;
-			}
+	/* points are always ordered in time */
+	for (a=0; a < len; a++) {
+		point = g_ptr_array_index (info_data->priv->array, a);
+		if (last_time - point->time > max_time) {
+			/* free point */
+			gpm_info_data_free_point (point);
 		} else {
-			list = l->next;
-			/* remove link and point */
-			gpm_info_data_free_point (l->data);
-			l->data = NULL;
-			info_data->priv->list = g_list_delete_link (info_data->priv->list, l);
-			l = list;
+			break;
 		}
 	}
-	info_data->priv->length = g_list_length (info_data->priv->list);
+	if (a > 0) {
+		gpm_debug ("removing %i points from start of list", a);
+		g_ptr_array_remove_range (info_data->priv->array, 0, a);
+	}
 }
 
 
@@ -288,12 +265,18 @@ gpm_info_data_add (GpmInfoData *info_data,
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
-	if (info_data->priv->length > 2) {
-		if (info_data->priv->last_point->value == value) {
+	GpmInfoDataPoint *point;
+	GpmInfoDataPoint *point2;
+	int len = info_data->priv->array->len;
+
+	if (len > 3) {
+		point = g_ptr_array_index (info_data->priv->array, len-1);
+		point2 = g_ptr_array_index (info_data->priv->array, len-2);
+		if (point->value == value && point2->value == value) {
 			/* we are the same as we were before and not the first or
 			   second point, just side the data time across without
 			   making a new point */
-			info_data->priv->last_point->time = time;
+			point->time = time;
 		} else {
 			/* we have to add a new data point as value is different */
 			gpm_info_data_add_always (info_data, time, value, colour, NULL);
@@ -305,33 +288,29 @@ gpm_info_data_add (GpmInfoData *info_data,
 			}
 		}
 	} else {
-		/* a new list requires a data point */
+		/* a list of less than 3 points always requires a data point */
 		gpm_info_data_add_always (info_data, time, value, colour, NULL);
 	}
-	if (info_data->priv->length > GPM_INFO_DATA_MAX_POINTS) {
+	if (len > info_data->priv->max_points) {
 		/* We have too much data, simplify */
 		gpm_debug ("Too many points (%i/%i)",
-			   info_data->priv->length,
-			   GPM_INFO_DATA_MAX_POINTS);
-		gpm_info_data_limit_time (info_data,
-					  GPM_INFO_DATA_MAX_POINTS / 2);
+			   info_data->priv->array->len,
+			   info_data->priv->max_points);
+		gpm_info_data_limit_time (info_data, info_data->priv->max_points / 2);
 	}
-	gpm_debug ("Using %i lines", info_data->priv->length);
-#if 0
-	GList *first = g_list_first (info_data->priv->list);
-	if (info_data->priv->length > 2) {
-		GpmInfoDataPoint *first_point = (GpmInfoDataPoint *)first->data;
-		int diff_time = info_data->priv->last_point->time - first_point->time;
-		gpm_debug ("diff time = %i", diff_time);
-		if (diff_time > GPM_INFO_DATA_MAX_TIME) {
-			gpm_debug ("Too much time (%i/%i)",
-				   diff_time,
-				   GPM_INFO_DATA_MAX_TIME);
-			gpm_info_data_limit_truncate (info_data,
-						      GPM_INFO_DATA_MAX_TIME / 2);
+	gpm_debug ("Using %i lines", info_data->priv->array->len);
+
+	/* check if we need to truncate */
+	if (info_data->priv->array->len > 2) {
+		GpmInfoDataPoint *first = g_ptr_array_index (info_data->priv->array, 0);
+		GpmInfoDataPoint *last = g_ptr_array_index (info_data->priv->array, len-1);
+		int diff_time = last->time - first->time;
+		if (diff_time > info_data->priv->max_time) {
+			gpm_debug ("Too much time (%i/%i)", diff_time,
+				   info_data->priv->max_time);
+			gpm_info_data_limit_truncate (info_data, info_data->priv->max_time / 2);
 		}
 	}
-#endif
 }
 
 /**
@@ -354,9 +333,9 @@ static void
 gpm_info_data_init (GpmInfoData *info_data)
 {
 	info_data->priv = GPM_INFO_DATA_GET_PRIVATE (info_data);
-	info_data->priv->list = NULL;
-	info_data->priv->last_point = NULL;
-	info_data->priv->length = 0;
+	info_data->priv->array = g_ptr_array_new ();
+	info_data->priv->max_points = 120;
+	info_data->priv->max_time = 10 * 60;
 }
 
 /**
@@ -374,13 +353,13 @@ gpm_info_data_finalize (GObject *object)
 	info_data = GPM_INFO_DATA (object);
 
 	/* Free the graph data elements, the list, and also the graph data object */
-	GList *l;
-	for (l=info_data->priv->list; l != NULL; l=l->next) {
-		gpm_info_data_free_point (l->data);
-		l->data = NULL;
+	GpmInfoDataPoint *point;
+	int a;
+	for (a=0; a > info_data->priv->array->len; a++) {
+		point = g_ptr_array_index (info_data->priv->array, a);
+		gpm_info_data_free_point (point);
 	}
-	g_list_free (info_data->priv->list);
-	info_data->priv->list = NULL;
+	g_ptr_array_free (info_data->priv->array, TRUE);
 
 	G_OBJECT_CLASS (gpm_info_data_parent_class)->finalize (object);
 }
