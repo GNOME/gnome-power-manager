@@ -1,5 +1,10 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* docs/Makefile.am:
+	Fix build by including every html file. Oops.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c (gpm_brightness_dim_hw):
 	Make sure machines that do their own dimming get special cased and
 	just set the brightness once.

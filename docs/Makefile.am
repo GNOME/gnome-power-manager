@@ -6,6 +6,14 @@ SPEC_XML_FILES =			\
 	faq.xml				\
 	icon-scheme.xml
 
+SPEC_HTML_FILES =			\
+	dbus-interface.html		\
+	faq.html			\
+	icon-scheme.html		\
+	index.html			\
+	roadmap.html			\
+	sleep-names.html
+
 if DOCBOOK_DOCS_ENABLED
 
 htmldocdir = $(DOCDIR)/spec
@@ -21,8 +29,8 @@ clean-local:
 	rm -f *.html
 
 EXTRA_DIST = 				\
-	*.html				\
 	gnome-power-manager.xml.in	\
 	config.xsl			\
 	docbook.css			\
-	$(SPEC_XML_FILES)
+	$(SPEC_XML_FILES)		\
+	$(SPEC_HTML_FILES)
