@@ -67,7 +67,10 @@ GType		 gpm_manager_get_type		  	(void);
 GpmManager	*gpm_manager_new			(void);
 
 gboolean	 gpm_manager_get_on_ac			(GpmManager	*manager,
-							 gboolean	*on_ac,
+							 gboolean	*retval,
+							 GError		**error);
+gboolean	 gpm_manager_get_low_power_mode		(GpmManager	*manager,
+							 gboolean	*retval,
 							 GError		**error);
 gboolean	 gpm_manager_allowed_shutdown		(GpmManager	*manager,
 							 gboolean	*allowed,

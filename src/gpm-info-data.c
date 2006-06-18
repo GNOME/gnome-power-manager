@@ -70,7 +70,11 @@ gpm_info_data_set_max_points (GpmInfoData *info_data, int max_points)
 void
 gpm_info_data_set_max_time (GpmInfoData *info_data, int max_time)
 {
-	info_data->priv->max_time = max_time;
+	if (max_time > 10 * 60) {
+		info_data->priv->max_time = max_time;
+	} else {
+		gpm_debug ("max_time value %i invalid", max_time);
+	}
 }
 
 /**

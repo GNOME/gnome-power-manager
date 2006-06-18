@@ -26,6 +26,8 @@
         <code class="literal">UnInhibit</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetOnAc">
         <code class="literal">GetOnAc</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetLowPowerMode">
+        <code class="literal">GetLowPowerMode</code>
       </a></span></dt></dl></dd><dt><span class="sect1"><a href="#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-signal-DpmsModeChanged">
         <code class="literal">DpmsModeChanged</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-signal-OnAcChanged">
@@ -56,6 +58,8 @@
         <code class="literal">UnInhibit</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetOnAc">
         <code class="literal">GetOnAc</code>
+      </a></span></dt><dt><span class="sect2"><a href="#pm-method-GetLowPowerMode">
+        <code class="literal">GetLowPowerMode</code>
       </a></span></dt></dl></dd><dt><span class="sect1"><a href="#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pm-signal-DpmsModeChanged">
         <code class="literal">DpmsModeChanged</code>
       </a></span></dt><dt><span class="sect2"><a href="#pm-signal-OnAcChanged">
@@ -71,7 +75,7 @@
     </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-Compatibility"></a>Compatibility</h2></div></div></div><p>
       Since gnome-power-manager version 2.14.x the API has changed in the
       following way:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>2.14.x method name</th><th>2.15.x method name</th></tr></thead><tbody><tr><td><code class="literal">CanSuspend</code></td><td><code class="literal">AllowedSuspend</code></td></tr><tr><td><code class="literal">CanHibernate</code></td><td><code class="literal">AllowedHibernate</code></td></tr><tr><td><code class="literal">InhibitInactiveSleep</code></td><td><code class="literal">Inhibit</code></td></tr><tr><td><code class="literal">AllowInactiveSleep</code></td><td><code class="literal">UnInhibit</code></td></tr><tr><td><code class="literal">getOnAc</code></td><td><code class="literal">GetOnAc</code></td></tr><tr><td><code class="literal">getDpmsMode</code></td><td><code class="literal">GetDpmsMode</code></td></tr><tr><td><code class="literal">setDpmsMode</code></td><td><code class="literal">SetDpmsMode</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">Reboot</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedShutdown</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedReboot</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-methods"></a>Methods</h2></div></div></div><p>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>2.14.x method name</th><th>2.15.x method name</th></tr></thead><tbody><tr><td><code class="literal">CanSuspend</code></td><td><code class="literal">AllowedSuspend</code></td></tr><tr><td><code class="literal">CanHibernate</code></td><td><code class="literal">AllowedHibernate</code></td></tr><tr><td><code class="literal">InhibitInactiveSleep</code></td><td><code class="literal">Inhibit</code></td></tr><tr><td><code class="literal">AllowInactiveSleep</code></td><td><code class="literal">UnInhibit</code></td></tr><tr><td><code class="literal">getOnAc</code></td><td><code class="literal">GetOnAc</code></td></tr><tr><td><code class="literal">getDpmsMode</code></td><td><code class="literal">GetDpmsMode</code></td></tr><tr><td><code class="literal">setDpmsMode</code></td><td><code class="literal">SetDpmsMode</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">Reboot</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedShutdown</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedReboot</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">GetLowPowerMode</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-methods"></a>Methods</h2></div></div></div><p>
       These are the DBUS methods.
     </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Suspend"></a>
         <code class="literal">Suspend</code>
@@ -143,7 +147,12 @@
       </h3></div></div></div><p>
         Finds out if the computer is on AC power, i.e. is not running on primary
         battery or UPS power.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are on AC power</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-signals"></a>Signals</h2></div></div></div><p>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are on AC power</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetLowPowerMode"></a>
+        <code class="literal">GetLowPowerMode</code>
+      </h3></div></div></div><p>
+        Finds out if the applications should use a low power mode, i.e. when this
+        is true, applications should not re-index or do non-essential activity.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we should use a low power mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-signals"></a>Signals</h2></div></div></div><p>
       These are the DBUS signals.
     </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-signal-DpmsModeChanged"></a>
         <code class="literal">DpmsModeChanged</code>

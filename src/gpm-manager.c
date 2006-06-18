@@ -845,27 +845,62 @@ manager_policy_do (GpmManager *manager,
 /**
  * gpm_manager_get_on_ac:
  * @manager: This manager class instance
- * @on_ac: TRUE if we are on AC power
+ * @retval: TRUE if we are on AC power
  **/
 gboolean
 gpm_manager_get_on_ac (GpmManager  *manager,
-			gboolean   *on_ac,
+			gboolean   *retval,
 			GError    **error)
 {
+	gboolean on_ac;
+
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
-	if (on_ac) {
-		gpm_power_get_on_ac (manager->priv->power, on_ac, error);
+	if (retval == NULL) {
+		return FALSE;
 	}
+
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
+	*retval = on_ac;
 
 	return TRUE;
 }
 
 /**
+ * gpm_manager_get_low_power_mode:
+ * @manager: This manager class instance
+ * @retval: TRUE if we are on low power mode
+ **/
+gboolean
+gpm_manager_get_low_power_mode (GpmManager  *manager,
+				gboolean    *retval,
+				GError     **error)
+{
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	if (retval == NULL) {
+		return FALSE;
+	}
+
+	gboolean on_ac;
+	gboolean power_save;
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
+	if (on_ac) {
+		power_save = gconf_client_get_bool (manager->priv->gconf_client,
+						    GPM_PREF_AC_LOWPOWER, NULL);
+	} else {
+		power_save = gconf_client_get_bool (manager->priv->gconf_client,
+						    GPM_PREF_BATTERY_LOWPOWER, NULL);
+	}
+	*retval = power_save;
+
+	return TRUE;
+}
+/**
  * gpm_manager_set_dpms_mode:
  * @manager: This manager class instance
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_STANDBY
- * Return value: TRUE if we could set the GPMS mode OK.
+ * Return value: TRUE if we could set the DPMS mode OK.
  **/
 gboolean
 gpm_manager_set_dpms_mode (GpmManager *manager,

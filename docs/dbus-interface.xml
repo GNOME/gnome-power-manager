@@ -93,6 +93,10 @@
             <entry><literal>(none)</literal></entry>
             <entry><literal>AllowedReboot</literal></entry>
           </row>
+          <row>
+            <entry><literal>(none)</literal></entry>
+            <entry><literal>GetLowPowerMode</literal></entry>
+          </row>
         </tbody>
       </tgroup>
     </informaltable>
@@ -523,6 +527,33 @@
       </informaltable>
     </sect2>
 
+    <sect2 id="pm-method-GetLowPowerMode">
+      <title>
+        <literal>GetLowPowerMode</literal>
+      </title>
+      <para>
+        Finds out if the applications should use a low power mode, i.e. when this
+        is true, applications should not re-index or do non-essential activity.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we should use a low power mode</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
   </sect1>
 
   <sect1 id="pm-signals">

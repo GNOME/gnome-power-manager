@@ -1,5 +1,19 @@
 2006-06-18  Richard Hughes  <richard@hughsie.com>
 
+	* docs/dbus-interface.xml:
+	* docs/gnome-power-manager.html:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-manager.xml:
+	Add gpm_manager_get_low_power_mode and the dbus method GetLowPowerMode
+	for #340355. Still need to do the signal, but that needs some more
+	refactoring of the state code.
+
+	* src/gpm-info-data.c: (gpm_info_data_set_max_time):
+	Only allow greater than 10 minutes as a sanity check.
+
+2006-06-18  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-prefs.h:
 	Add in /apps/gnome-power-manager/graph_data_max_time so we can specify
