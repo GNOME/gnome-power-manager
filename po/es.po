@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-18 21:37+0200\n"
-"PO-Revision-Date: 2006-06-18 21:40+0200\n"
+"POT-Creation-Date: 2006-06-19 20:39+0200\n"
+"PO-Revision-Date: 2006-06-19 21:04+0200\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -133,8 +133,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If the low-power mode should be enabled when on AC"
-msgstr ""
-"Indica si se debe usar el modo de bajo consumo cuando se esté conectado a CA"
+msgstr "Indica si se debe usar el modo de bajo consumo cuando se esté conectado a CA"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid "If the low-power mode should be enabled when on UPS"
@@ -175,8 +174,7 @@ msgstr ""
 "un SAI."
 
 #: ../data/gnome-power-manager.schemas.in.h:24
-msgid ""
-"If the system low-power mode should be enabled when on laptop battery power."
+msgid "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
 "Indica si se debe activar el modo de bajo consumo cuando se esté conectado a "
 "baterías."
@@ -574,8 +572,7 @@ msgstr "Cuando mostrar el icono de notificación"
 
 #: ../data/gnome-power-manager.schemas.in.h:89
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr ""
-"Indica si se debe hibernar, suspender o no hacer nada cuando se esté inactivo"
+msgstr "Indica si se debe hibernar, suspender o no hacer nada cuando se esté inactivo"
 
 #: ../data/gnome-power-manager.schemas.in.h:90
 msgid "Whether to use time-based notifications"
@@ -897,15 +894,15 @@ msgstr "Notificación"
 msgid "Unknown event!"
 msgstr "Suceso desconocido"
 
-#: ../src/gpm-info.c:249
+#: ../src/gpm-info.c:251
 msgid "Time"
 msgstr "Tiempo"
 
-#: ../src/gpm-info.c:254
+#: ../src/gpm-info.c:256
 msgid "Event"
 msgstr "Suceso"
 
-#: ../src/gpm-info.c:259
+#: ../src/gpm-info.c:261
 msgid "Description"
 msgstr "Descripción"
 
@@ -988,8 +985,7 @@ msgstr "Reactivar equipo"
 
 #: ../src/gpm-manager.c:1111
 #, c-format
-msgid ""
-"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
+msgid "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
 "HAL falló al %s. Consulte la <a href=\"%s\">página de PMF</a> para "
 "soluciones a problemas comunes."
@@ -1083,6 +1079,14 @@ msgstr "se ha pulsado el botón de suspensión"
 msgid "the hibernate button has been pressed"
 msgstr "se ha pulsado el botón de hibernación"
 
+#: ../src/gpm-manager.c:1538
+msgid "The laptop lid has been closed"
+msgstr "La tapa del portátil se ha cerrado"
+
+#: ../src/gpm-manager.c:1543
+msgid "The laptop lid has been re-opened"
+msgstr "La tapa del portátil ha sido re-abierta"
+
 #: ../src/gpm-manager.c:1561
 msgid "the lid has been closed on ac power"
 msgstr "se ha cerrado la tapa conectado a ca"
@@ -1099,10 +1103,17 @@ msgstr "Encendiendo de nuevo el panel LCD"
 msgid "laptop lid re-opened"
 msgstr "tapa del portátil re-abierta"
 
+#: ../src/gpm-manager.c:1683
+msgid "AC adapter inserted"
+msgstr "Adaptador AC enchufado"
+
+#: ../src/gpm-manager.c:1687
+msgid "AC adapter removed"
+msgstr "Adaptador CA quitado"
+
 #: ../src/gpm-manager.c:1698
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
-msgstr ""
-"la tapa se ha cerrado, y el adaptador de ca se ha quitado (y gconf está bien)"
+msgstr "la tapa se ha cerrado, y el adaptador de ca se ha quitado (y gconf está bien)"
 
 #: ../src/gpm-manager.c:1780
 msgid "Power Critically Low"
@@ -1158,8 +1169,7 @@ msgstr ""
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
-msgstr ""
-"La batería está por debajo de un nivel crítico y este equipo se apagará."
+msgstr "La batería está por debajo de un nivel crítico y este equipo se apagará."
 
 #: ../src/gpm-manager.c:1952
 msgid "The AC Power has been unplugged. The system is now using battery power."
@@ -1185,15 +1195,13 @@ msgstr ""
 "cuando el SAI esté completamente vacío."
 
 #: ../src/gpm-manager.c:2048
-msgid ""
-"The UPS is below the critical level and this computer is about to hibernate."
+msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "El SAI está por debajo del nivel crítico y este equipo se va a poner a "
 "hibernar."
 
 #: ../src/gpm-manager.c:2052
-msgid ""
-"The UPS is below the critical level and this computer is about to shutdown."
+msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "El SAI está por debajo de un nivel crítico y este equipo se apagará."
 
 #: ../src/gpm-manager.c:2059
@@ -1274,6 +1282,37 @@ msgstr "pda"
 msgid "unknown"
 msgstr "desconocido"
 
+#: ../src/gpm-power.c:677
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Producto:</b> %s\n"
+
+#: ../src/gpm-power.c:680
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Estado:</b> Falta\n"
+
+#: ../src/gpm-power.c:682
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Estado:</b> Cargado\n"
+
+#: ../src/gpm-power.c:684
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Estado:</b> Cargando\n"
+
+#: ../src/gpm-power.c:686
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Estado:</b> Descargando\n"
+
+#: ../src/gpm-power.c:689
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>Porcentaje de la carga: </b> %i%%\n"
+
+#: ../src/gpm-power.c:716
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Fabricante:</b> %s\n"
+
 #: ../src/gpm-power.c:722
 msgid "Lithium ion"
 msgstr "Ion litio"
@@ -1281,6 +1320,26 @@ msgstr "Ion litio"
 #: ../src/gpm-power.c:724
 msgid "Lead acid"
 msgstr "Plomo y ácido"
+
+#: ../src/gpm-power.c:730
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tecnología:</b>%s\n"
+
+#: ../src/gpm-power.c:733
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Número de serie:</b> %s\n"
+
+#: ../src/gpm-power.c:736
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Modelo:</b> %s\n"
+
+#: ../src/gpm-power.c:741
+#, c-format
+msgid "<b>Remaining time:</b> %s\n"
+msgstr "<b>Tiempo restante:</b> %s\n"
 
 #: ../src/gpm-power.c:746
 msgid "Excellent"
@@ -1297,6 +1356,36 @@ msgstr "Normal"
 #: ../src/gpm-power.c:752
 msgid "Poor"
 msgstr "Pobre"
+
+#: ../src/gpm-power.c:754
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Capacidad:</b> %i%% (%s)\n"
+
+#: ../src/gpm-power.c:761
+#, c-format
+msgid "<b>Current charge:</b> %i%s\n"
+msgstr "<b>Carga actual:</b> %i%s\n"
+
+#: ../src/gpm-power.c:766
+#, c-format
+msgid "<b>Last full charge:</b> %i%s\n"
+msgstr "<b>Última carga completa:</b> %i%s\n"
+
+#: ../src/gpm-power.c:770
+#, c-format
+msgid "<b>Design charge:</b> %i%s\n"
+msgstr "<b>Carga de diseño:</b> %i%s\n"
+
+#: ../src/gpm-power.c:774
+#, c-format
+msgid "<b>Charge rate (raw):</b> %imWh\n"
+msgstr "<b>Tasa de carga (bruto):</b> %imWh\n"
+
+#: ../src/gpm-power.c:778
+#, c-format
+msgid "<b>Charge rate (smoothed):</b> %imWh\n"
+msgstr "<b>Tasa de carga (suavizada):</b> %imWh\n"
 
 #: ../src/gpm-power.c:1231
 msgid "fully charged"
@@ -1436,11 +1525,3 @@ msgstr ""
 msgid "translator-credits"
 msgstr "Francisco Javier F. Serrador <serrador@cvs.gnome.org>"
 
-#~ msgid ""
-#~ "Whether we should check network utilization before doing the idle action."
-#~ msgstr ""
-#~ "Indica si se debería comprobar la utilización de red antes de hacer la "
-#~ "acción de inactividad."
-
-#~ msgid "Susspending computer"
-#~ msgstr "Suspender el equipo"
