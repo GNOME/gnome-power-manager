@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 #define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
 
 char		*gpm_get_timestring		(int		time);
+void		 gpm_warning_beep		(void);
 
 G_END_DECLS
 

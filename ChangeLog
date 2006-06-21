@@ -1,3 +1,15 @@
+2006-06-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	Add gpm_warning_beep () to allow us to make a sound when an important
+	event has occurred.
+
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid):
+	Beep if we stopped the action due to an inhibit to warn the user.
+	Also beep if we are low on power for primary, UPS or mouse as these are
+	important. This fixes bug #345595
+
 2006-06-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c: (gpm_graph_auto_range):

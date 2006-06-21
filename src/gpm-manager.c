@@ -225,7 +225,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 	action_ok = gpm_inhibit_check (manager->priv->inhibit);
 	if (! action_ok) {
-		title = g_strdup_printf ("Request to %s", action);
+		title = g_strdup_printf (_("Request to %s"), action);
 		GString *message = g_string_new ("");
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -234,6 +234,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 				      GPM_NOTIFY_TIMEOUT_LONG,
 				      GTK_STOCK_DIALOG_WARNING,
 				      GPM_NOTIFY_URGENCY_NORMAL);
+		gpm_warning_beep ();
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
@@ -1972,6 +1973,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
+		gpm_warning_beep ();
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_EVENT_NOTIFICATION,
 				    title);
@@ -2079,6 +2081,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
+		gpm_warning_beep ();
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_EVENT_NOTIFICATION,
 				    title);
@@ -2162,6 +2165,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      GPM_NOTIFY_TIMEOUT_LONG,
 			      icon,
 			      GPM_NOTIFY_URGENCY_NORMAL);
+	gpm_warning_beep ();
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_NOTIFICATION, title);
 
 	g_free (message);

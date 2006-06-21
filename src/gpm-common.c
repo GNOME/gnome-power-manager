@@ -23,8 +23,19 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gdk/gdk.h>
 
 #include "gpm-common.h"
+
+/**
+ * gpm_warning_beep
+ **/
+void
+gpm_warning_beep (void)
+{
+	GdkDisplay *display = gdk_display_get_default ();
+	gdk_display_beep (display);
+}
 
 /**
  * gpm_get_timestring:
