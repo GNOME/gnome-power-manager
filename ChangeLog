@@ -1,3 +1,13 @@
+2006-06-22  Richard Hughes  <richard@hughsie.com>
+
+	* help/C/figures/gpm-info-event-log.png:
+	* help/C/figures/gpm-info-percentage.png:
+	* help/C/figures/gpm-info-rate.png:
+	* help/C/figures/gpm-info-time.png:
+	* help/C/gnome-power-manager.xml:
+	* help/Makefile.am:
+	Add four new figures for the documentation.
+
 2006-06-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-common.c:
@@ -82,7 +92,7 @@
 
 2006-06-18  Crispin Flowerday  <gnome@flowerday.cx>
 
-	* src/gpm-info.c (gpm_info_init): 
+	* src/gpm-info.c (gpm_info_init):
 
 	Read the correct gconf key to get the graph data max time (fixes
 	bug #345256)
@@ -359,7 +369,7 @@
 	* src/gpm-graph-widget.c: (gpm_graph_interpolate_value):
 	Limit the y intersect to the last height, so we don't extend the graph
 	into the unknown.
- 
+
 	* src/gpm-info.c: (gpm_info_log_do_poll):
 	Set the correct colours of the line depending on discharging/charging
 	status. Fixes #338175.
