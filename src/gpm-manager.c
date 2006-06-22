@@ -1391,7 +1391,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 
 	/* Do different warnings for each GPM_WARNING_* */
 	if (warning_type == GPM_WARNING_ACTION) {
-		const char *action;
+		char *action;
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
@@ -1424,6 +1424,7 @@ battery_status_changed_primary (GpmManager	      *manager,
 		}
 
 		gpm_manager_set_reason (manager, "we are critically low for the primary battery");
+		g_free (action);
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 

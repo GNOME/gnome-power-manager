@@ -1,3 +1,17 @@
+2006-06-22  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-prefs.glade:
+	Increase the spacing between vertical spacing of groups of components
+	to better follow the GNOME HIG.
+	Also fix the issue where the space between 'Running on AC/Battery' and
+	'Put display to sleep...' is different between the AC and Battery tabs.
+	Pointed out by Ian McIntosh <ian@openanswers.org>, many thanks.
+	Fixes #345693, (no string changes)
+
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Free the action, else we loose a tiny bit of memory every time we do a
+	notification.
+
 2006-05-30  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.desktop.in:
