@@ -1639,6 +1639,7 @@ static void
 hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 				  const char    *udi,
 				  const char    *key,
+				  gboolean	 finally,
 				  GpmPower      *power)
 {
 	GpmPowerDevice *device_entry;
@@ -1670,9 +1671,11 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 		return;
 	}
 
-	battery_kind_cache_update (power, type_entry);
-
-	battery_kind_cache_debug_print (type_entry);
+	/* We only refresh the caches when we have all the info from a UDI */
+	if (finally) {
+		battery_kind_cache_update (power, type_entry);
+		battery_kind_cache_debug_print (type_entry);
+	}
 }
 
 /**

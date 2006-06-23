@@ -121,8 +121,6 @@ struct GpmManagerPrivate
 	GpmWarning	 last_keyboard_warning;
 	GpmWarning	 last_pda_warning;
 
-	gint		 last_primary_percentage_change;
-
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
 	gboolean	 done_notify_fully_charged;
@@ -1826,7 +1824,7 @@ manager_critical_action_do (GpmManager *manager)
  * and also do the critical actions here.
  **/
 static void
-battery_status_changed_primary (GpmManager	      *manager,
+battery_status_changed_primary (GpmManager     *manager,
 				GpmPowerKind    battery_kind,
 				GpmPowerStatus *battery_status)
 {
@@ -1846,12 +1844,13 @@ battery_status_changed_primary (GpmManager	      *manager,
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
-	/* We have to track the last percentage, as when we do the transition
-	 * 99 to 100 some laptops report this as charging, some as not-charging.
-	 * This is probably a race. This method should work for both cases. */
-	if (manager->priv->last_primary_percentage_change == 99 &&
-	    battery_status->percentage_charge == 100 &&
-	    ! manager->priv->done_notify_fully_charged) {
+	/* We use the hardware charged state instead of the old 99%->100%
+	 * percentage charge method, as the icon must disappear when this
+	 * notification is shown (if we set to the display policy "charging")
+	 * and also the fact that some ACPI batteries don't make it to 100% */
+	if (manager->priv->done_notify_fully_charged == FALSE && 
+	    gpm_power_battery_is_charged (battery_status)) {
+
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
 		if (show_notify) {
@@ -1872,11 +1871,9 @@ battery_status_changed_primary (GpmManager	      *manager,
 	/* We only re-enable the fully charged notification when the battery
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
-	if (manager->priv->last_primary_percentage_change < 95) {
+	if (battery_status->percentage_charge < 95) {
 		manager->priv->done_notify_fully_charged = FALSE;
 	}
-
-	manager->priv->last_primary_percentage_change = battery_status->percentage_charge;
 
 	if (! battery_status->is_discharging) {
 		gpm_debug ("%s is not discharging", gpm_power_kind_to_localised_string (battery_kind));
@@ -2611,13 +2608,16 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->last_keyboard_warning = GPM_WARNING_NONE;
 	manager->priv->last_pda_warning = GPM_WARNING_NONE;
 	manager->priv->last_primary_warning = GPM_WARNING_NONE;
-	manager->priv->last_primary_percentage_change = 0;
 	manager->priv->done_notify_fully_charged = FALSE;
 
-	/* We don't want to be notified on coldplug if we are on battery power
-	   this should fix #332322 */
+	/* Don't notify on startup if we are on battery power */
 	if (! on_ac) {
 		manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
+	}
+
+	/* Don't notify at startup if we are fully charged on AC */
+	if (on_ac) {
+		manager->priv->done_notify_fully_charged = TRUE;
 	}
 
 	/* We can disable this if the ACPI BIOS is fucked, and the

@@ -55,7 +55,8 @@ typedef struct
 							 const char	*udi);
 	void		(* battery_property_modified)	(GpmHalMonitor	*monitor,
 							 const char	*udi,
-							 const char	*key);
+							 const char	*key,
+							 gboolean	 finally);
 } GpmHalMonitorClass;
 
 GType			 gpm_hal_monitor_get_type	(void);

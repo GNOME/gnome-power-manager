@@ -118,8 +118,8 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_property_modified),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__STRING_STRING,
-			      G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
+			      gpm_marshal_VOID__STRING_STRING_BOOLEAN,
+			      G_TYPE_NONE, 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [BATTERY_ADDED] =
 		g_signal_new ("battery-added",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -207,9 +207,11 @@ watch_device_property_modified (DBusGProxy    *proxy,
 				const char    *key,
 				gboolean       is_added,
 				gboolean       is_removed,
+				gboolean       finally,
 				GpmHalMonitor *monitor)
 {
-	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i", udi, key, is_added, is_removed);
+	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
+		   udi, key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
 	if (is_removed) {
@@ -225,7 +227,7 @@ watch_device_property_modified (DBusGProxy    *proxy,
 	/* only match battery* values */
 	if (strncmp (key, "battery", 7) == 0) {
 		gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
-		g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key);
+		g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key, finally);
 	}
 	/* only match button* values */
 	if (strncmp (key, "button", 6) == 0) {
@@ -245,6 +247,7 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 	const char  *key;
 	gboolean     added;
 	gboolean     removed;
+	gboolean     finally = FALSE;
 	guint	     i;
 
 	udi = dbus_g_proxy_get_path (proxy);
@@ -263,7 +266,14 @@ watch_device_properties_modified (DBusGProxy    *proxy,
 		removed = g_value_get_boolean (g_value_array_get_nth (array, 1));
 		added = g_value_get_boolean (g_value_array_get_nth (array, 2));
 
-		watch_device_property_modified (proxy, udi, key, added, removed, monitor);
+		/* Work out if this PropertyModified is the last to be sent as
+		 * sometimes we only want to refresh caches when we have all
+		 * the info from a UDI */
+		if (i == properties->len - 1) {
+			finally = TRUE;
+		}
+
+		watch_device_property_modified (proxy, udi, key, added, removed, finally, monitor);
 	}
 }
 

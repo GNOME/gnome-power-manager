@@ -1,3 +1,29 @@
+2006-06-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Use the same logic as the tooltip for the notification.
+	This has caused a lot of problems, see #345698 for all the gory details.
+	This means if the policy is set to 'show icon when charging' then the
+	icon removes itself and the 'fully charged' notification is shown in
+	the bottom right of the screen, which I think is sane.
+
+	* help/C/gnome-power-manager.xml:
+	Add a note mentioning the battery has to go down to 95% before a repeat
+	notification will be shown.
+
+	* src/gpm-hal-monitor.c: (watch_device_property_modified),
+	(watch_device_properties_modified):
+	* src/gpm-hal-monitor.h:
+	Add a boolean 'finally' for the battery_property_modified so we know
+	when a split PropertyModified HAL event has finished, and we can update
+	the caches and recompute only when we have all the information.
+	This seems like a pain in the arse, but actually reduces our CPU usage
+	by nearly *5* times on a typical /org/freedesktop/Hal/devices/acpi_BAT1
+	type event update so was worth doing.
+
+	* src/gpm-power.c: (hal_battery_property_modified_cb):
+	Only refresh the caches on the last PropertyModified split event.
+
 2006-06-22  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade:
@@ -156,7 +182,7 @@
 	Add the new inhibit stuff. Poked by Marcel Telka <marcel@telka.sk>
 
 	* src/gpm-inhibit.c: (gpm_inhibit_get_message):
-	Removed the joining word "because" and replaced it with ":" as it was
+	Removed the joining word 'because' and replaced it with ':' as it was
 	difficult to translate.
 
 2006-06-17  Richard Hughes  <richard@hughsie.com>
@@ -220,7 +246,7 @@
 2006-06-11  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
-	Add "nothing" to schema as it's set in the GUI: lp:48290
+	Add 'nothing' to schema as it's set in the GUI: lp:48290
 
 	* data/gpm-info.glade:
 	Remove the save buttons as this is a bad idea.
@@ -554,7 +580,7 @@
 
 	* src/gpm-screensaver.{c|h}: Add gpm_screensaver_auth_begin() and
 	gpm_screensaver_auth_end() so that we can create a signal
-	"auth-request" when gnome-screensaver shows the password dialogue.
+	'auth-request' when gnome-screensaver shows the password dialogue.
 	This is needed so we can undim the screen when we resume and show the
 	password box. Needed for #333290, but still need to connect this up to
 	the manager stuff to solve the problem.
@@ -616,7 +642,7 @@
 
 	* src/gpm-power.c: (battery_kind_cache_update):
 	Don't fallback to broken battery support if we have 0% percentage
-	charge else we start on "charging" with a full battery.
+	charge else we start on 'charging' with a full battery.
 
 2006-04-29  Richard Hughes  <richard@hughsie.com>
 
@@ -844,19 +870,19 @@
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in: Set the default for
-	/apps/gnome-power-manager/display_icon_policy to "present" so we don't
+	/apps/gnome-power-manager/display_icon_policy to 'present' so we don't
 	display by default on desktops. Fixes rh:187140.
 
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-prefs-core.c (setup_ac_actions): Add the action "Do nothing"
+	* src/gpm-prefs-core.c (setup_ac_actions): Add the action 'Do nothing'
 	so we don't do the DPMS action off for the external monitor.
 	Fixes #338689.
 
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-tray-icon.c (gpm_tray_icon_show_about_cb): Add Jakub Steiner
-	to the artists list in the "About" box.
+	to the artists list in the 'About' box.
 
 2006-04-17  Richard Hughes  <richard@hughsie.com>
 
@@ -912,7 +938,7 @@
 	so that the graphs (and data) can start at non-zero. This means the
 	event log stays valid, and the graphs make more sense. This is required
 	so that we can limit the data to a maximum time period without
-	displaying the time "backwards".
+	displaying the time 'backwards'.
 
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
@@ -951,7 +977,7 @@
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c (gpm_info_get_time_string): Write the event log
-	text like "Sat Apr 15, 15:35:40" rather than just a random integer.
+	text like 'Sat Apr 15, 15:35:40' rather than just a random integer.
 
 2006-04-15  Dennis Cranston  <dennis_cranston@yahoo.com>
 
@@ -968,14 +994,14 @@
 	update to trigger the expose event.
 
 	* src/gpm-info.c (gpm_info_show_window, gpm_info_clear_cb):
-	Add the "Clear" button to clear the data from memory, so that the
+	Add the 'Clear' button to clear the data from memory, so that the
 	event log and the graphs reset. Should fix the second half of #338174.
 
 2006-04-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (battery_status_changed_primary): use the new
 	variable done_notify_fully_charged to track whether we have already
-	done the "Fully charged" notification.
+	done the 'Fully charged' notification.
 	We only re-enable the fully charged notification when the battery
 	drops down to 95% as some batteries charge to 100% and then fluctuate
 	from ~98% to 100%. Should fix #338281.
@@ -1002,7 +1028,7 @@
 	settles in. Seporating was done due to the graphing formulaes becoming
 	really complex, and also saving twice the information we needed to.
 	Also, we make the GpmInfoData unit the one-and-only as we have enough
-	confusion as there is. This should reduce the "random" crashes, and
+	confusion as there is. This should reduce the 'random' crashes, and
 	sure makes things more stable for me. Plus this lets us create an
 	event-log in the GUI, to keep more people happy.
 
@@ -1043,7 +1069,7 @@
 2006-04-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c (gpm_graph_draw_graph): Fix
-	"legend_height may be used uninitialized in this function" -- this is
+	'legend_height may be used uninitialized in this function' -- this is
 	incorrect and probably a GCC bug, but initialising them won't hurt.
 
 2006-04-04  Richard Hughes  <richard@hughsie.com>
@@ -1126,7 +1152,7 @@
 
 2006-04-03  Richard Hughes  <richard@hughsie.com>
 
-	* data/gpm-info.glade: Make shadow type "in" for the scrolled window.
+	* data/gpm-info.glade: Make shadow type 'in' for the scrolled window.
 
 	* data/gpm-info.glade, src/gpm-graph-widget.{c|h}:
 	Rename the class to graph from simple_graph as it's not simple!
@@ -1158,7 +1184,7 @@
 
 	* src/gpm-hal-monitor.c (watch_device_properties_modified):
 	Don't switch round the removed and added booleans, the order is
-	"added" then "removed".
+	'added' then 'removed'.
 
 	* src/gpm-hal-monitor.c (watch_device_property_modified):
 	Emit the signal for modified *or* new keys, not just modified keys.
@@ -1186,7 +1212,7 @@
 	Should fix #336061
 
 	* src/gpm-screensaver.c (gpm_screensaver_connect,
-	gpm_screensaver_enable_throttle): Cache the "throttle" value.
+	gpm_screensaver_enable_throttle): Cache the 'throttle' value.
 	This is needed if g-p-m is started before g-s; we apply the setting
 	when g-s is eventually started. Fixes #332366
 
@@ -1218,7 +1244,7 @@
 
 	* src/gpm-power.c (gpm_power_get_description_array): Shorten desc.
 
-	* src/gpm-graph-widget.c (gpm_get_axis_label): Don't display "m"
+	* src/gpm-graph-widget.c (gpm_get_axis_label): Don't display 'm'
 	when we show hours.
 
 	* data/gpm-info.glade: Set HScroll to auto as sometimes the info doesn't
@@ -1287,9 +1313,9 @@
 
 2006-03-27  Richard Hughes  <richard@hughsie.com>
 
-	* data/gpm-info.glade: Make the 3rd tab "Power", not "Rate".
+	* data/gpm-info.glade: Make the 3rd tab 'Power', not 'Rate'.
 
-	* src/gpm-graph-widget.c: Make the Y axis "W" rather than "Wh" as we
+	* src/gpm-graph-widget.c: Make the Y axis 'W' rather than 'Wh' as we
 	are projecting power over time rather than rate over time.
 
 2006-03-27  William Jon McCann  <mccann@jhu.edu>
@@ -1382,8 +1408,8 @@
 
 2006-03-25  Jaap Haitsma  <jaap@haitsma.org>
 
-	* data/gpm-prefs.glade: Change "Running on Battery" and "Running on AC"
-	labels inside the tab to "Sleep" as they are already on the tabs.
+	* data/gpm-prefs.glade: Change 'Running on Battery' and 'Running on AC'
+	labels inside the tab to 'Sleep' as they are already on the tabs.
 	Add a Brightness label to the brightness sliders. Fixes bug #335991
 	Change all the widget names to *battery* i.s.o. *batteries*
 	* src/gpm-prefs.c: Update because of changes in gpm-prefs.glade and some
@@ -1522,7 +1548,7 @@
 
 2006-03-22  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-manager.c: Use the button "battery" rather than "www" to show
+	* src/gpm-manager.c: Use the button 'battery' rather than 'www' to show
 	the battery status. This depends on mjg59's kernel addition and the
 	use of a HAL with the new button patched in.
 
@@ -1537,14 +1563,14 @@
 	data/icons/24x24/battery-broken.png, data/icons/24x24/ups-broken.png:
 	Add broken battery icons so we can easily get bug reports from broken
 	hardware. At the moment we just show 0% charging, which is interpreted
-	as "g-p-m gets the value wrong" rather than "the hardware is broken".
+	as 'g-p-m gets the value wrong' rather than 'the hardware is broken'.
 
 2006-03-21  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-preferences.desktop.in: Apply patch from
 	Vincent Fretin <vincent.fretin@gmail.com> to add X-GNOME-Bugzilla keys
 	for use with bug buddy.
-	Category "Application" is not a freedesktop.org registred category and
+	Category 'Application' is not a freedesktop.org registred category and
 	should be removed.
 
 2006-03-21  Rodrigo Moya <rodrigo@novell.com>
@@ -1638,7 +1664,7 @@
 2006-03-16  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade, src/gpm-prefs.c (gpm_prefs_create): Add a
-	"Running on UPS" tab so we can start to add some policy actions.
+	'Running on UPS' tab so we can start to add some policy actions.
 	Only show when UPS hardware is detected.
 
 2006-03-14  Richard Hughes  <richard@hughsie.com>
@@ -1682,7 +1708,7 @@
 	Thanks to Marcel Telka for the email.
 
 	* src/gpm-power.c (gpm_power_get_description_array): Add another
-	description "lion" to the translation table. Thanks to Fabian Zeindl.
+	description 'lion' to the translation table. Thanks to Fabian Zeindl.
 
 2006-03-11  Richard Hughes  <richard@hughsie.com>
 
@@ -1694,7 +1720,7 @@
 	* src/gpm-power.c: Begin the translate the technology field into known
 	parameters.
 	Ultimately we can feed this information back to HAL, so that hal has a
-	fixed list of types (e.g. "fuel-cell", "lithium", "lead", or "nickel")
+	fixed list of types (e.g. 'fuel-cell', 'lithium', 'lead', or 'nickel')
 	that it can report as part of the spec. At the moment it's just
 	displaying the internal ACPI name which is varied between manufacturers.
 
@@ -1713,13 +1739,13 @@
 	change the value to do what it should do.
 
 	* src/gpm-prefs.(h|c) (setup_icon_policy): Use a key radio button,
-	"Display when battery present" and connect to GUI.
+	'Display when battery present' and connect to GUI.
 	Restore the old text for always as it better reflects what the icon
 	policy is. I know we have lots of options now, but people all want
 	different things, and distros keep changing the defaults :-)
 
 	* src/gpm-manager.c (get_stock_id): make logic more sane by using the
-	new "present" key value. Fixes lp:33388
+	new 'present' key value. Fixes lp:33388
 
 2006-03-10  Richard Hughes  <richard@hughsie.com>
 
@@ -1764,7 +1790,7 @@
 2006-03-08  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/16x16/gnome-power-manager.png: Add this small icon so we
-	can use it for the window icon for the g-p-p and "About" windows.
+	can use it for the window icon for the g-p-p and 'About' windows.
 
 	* src/gpm-prefs.c, src/gpm-tray-icon.c: Use the new 16x16 window icon.
 	Fixes #333675.
@@ -1772,7 +1798,7 @@
 2006-03-07  William Jon McCann  <mccann@jhu.edu>
 
 	* data/gpm-info.glade: Don't use mnemonics in notebook labels.
-	Rename second tab to "Charge History".  Use HIG border spacing.
+	Rename second tab to 'Charge History'.  Use HIG border spacing.
 
 2006-03-07  Richard Hughes  <richard@hughsie.com>
 
@@ -1905,7 +1931,7 @@
 
 	* src/gpm-manager.c (battery_status_changed_primary): Remove the extra
 	return that sneaked in to the notification path. This caused people to
-	get repeated "battery is fully charged" messages if thier hardware was
+	get repeated 'battery is fully charged' messages if thier hardware was
 	a little wonky.	Should fix lp:32650 and rh:183612
 
 2006-03-03  Richard Hughes  <richard@hughsie.com>
@@ -1983,7 +2009,7 @@
 
 	* src/gpm-main.c (gpm_critical_error): Create this function and use it
 	in main to deal with critical warnings for missing dbus. I probably get
-	one bug report a week of g-p-m "crashing" on startup where the dbus
+	one bug report a week of g-p-m 'crashing' on startup where the dbus
 	system or session server is missing. Display a BIG FAT warning in a
 	message box with all the details and exit nicely with error code 1.
 
@@ -2003,8 +2029,8 @@
 
 	* data/gpm-prefs.glade: Add an option to disable the dim on idle as I
 	needed to change this during a demo today, and I had to grapple with
-	gconf. Also change the always icon option to "Always display icon when
-	battery present" as this represents better what it does.
+	gconf. Also change the always icon option to 'Always display icon when
+	battery present' as this represents better what it does.
 
 	* help/C/gnome-power-manager.xml: remove duplicate lock option.
 
@@ -2032,8 +2058,8 @@
 	log *why* a specific action was taken, to also try to fix #332760.
 	This needs to be expanded, giving values and more precise reasons.
 	Log to syslog, so that we get messages such as:
-	"Feb 28 19:19:07 localhost gnome-power-manager: Suspending system
-	because user clicked suspend in tray menu" in /var/log/messages.
+	'Feb 28 19:19:07 localhost gnome-power-manager: Suspending system
+	because user clicked suspend in tray menu' in /var/log/messages.
 	This should help debugging all those weird bugzillas.
 
 	* src/gpm-manager.c (battery_button_pressed): Display a libnotify
@@ -2058,7 +2084,7 @@
 	details field, and make this from VOID__STRING_STRING_BOOLEAN to
 	VOID__STRING_BOOLEAN.
 
-	* src/gpm-manager.c (power_button_pressed_cb): get rid of the "virtual"
+	* src/gpm-manager.c (power_button_pressed_cb): get rid of the 'virtual'
 	mess as the only thing to use it is my toshiba addon, which now does
 	the button events a standard way.
 
@@ -2075,7 +2101,7 @@
 2006-02-27  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c (get_stock_id_helper): use the prefix, rather than
-	hardcoding "battery" for the charged icon. Fixes #332761.
+	hardcoding 'battery' for the charged icon. Fixes #332761.
 
 2006-02-27  Rodrigo Moya <rodrigo@novell.com>
 
@@ -2224,7 +2250,7 @@
 	* src/gpm-prefs.h: Add GPM_PREF_NOTIFY_HAL_ERROR
 
 	* src/gpm-manager.c (gpm_manager_hibernate, gpm_manager_suspend):
-	Only display the "HAL failed to {action}" if set in gconf.
+	Only display the 'HAL failed to {action}' if set in gconf.
 	Fixes #332440.
 
 2006-02-23 Jaap Haitsma  <jaap@haitsma.org>
@@ -2270,9 +2296,9 @@
 
 2006-02-22 Jaap Haitsma  <jaap@haitsma.org>
 
-	* data/gpm-prefs.glade: "Running on Batteries" => "Running on battery"
+	* data/gpm-prefs.glade: 'Running on Batteries' => 'Running on battery'
 	So we are consistent with the name of the tab
-	"Notification Area" => "Notification area"
+	'Notification Area' => 'Notification area'
 	HIG recommends Sentence capitalization
 
 2006-02-21 Jaap Haitsma  <jaap@haitsma.org>
@@ -2297,7 +2323,7 @@
 	the ac_adapter is removed when the laptop is closed and on battery.
 	This should fix (#331655).
 
-	(battery_low_get_title): Changed "Power Warning" to "Power Information"
+	(battery_low_get_title): Changed 'Power Warning' to 'Power Information'
 	for the title when the ac_adapter is removed. Fixes (#331865).
 
 2006-02-20  Richard Hughes  <richard@hughsie.com>
@@ -2369,7 +2395,7 @@
 
 2006-02-18  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-prefs.c (setup_ac_actions): Hide the ac "Actions" box if
+	* src/gpm-prefs.c (setup_ac_actions): Hide the ac 'Actions' box if
 	there is no lib button, as it's now empty.
 	(setup_battery_actions): Use the right glade name for the labels.
 
@@ -2381,7 +2407,7 @@
 	our option.
 
 	* src/gpm-prefs.c: allow blank as an option for lid close events.
-	This stops the problem of having "No action", "Also lock screen" in
+	This stops the problem of having 'No action', 'Also lock screen' in
 	the GUI.
 
 	* data/gnome-power-manager.schemas.in: Change the default action of
@@ -2564,7 +2590,7 @@
 	responsible for creating and destroying the icon, it is done
 	unconditionally at init, and then just hidden and shown as required.
 	Rationale: we are showing notifications for lots of power stuff, and
-	these break when you choose any other state than "Always Show".
+	these break when you choose any other state than 'Always Show'.
 	It also fixes the bug (#331002) as we are not relying on a complex
 	chain of events to do the notifications. Most of this stuff is async,
 	so it needs to be kept simple.
@@ -2661,9 +2687,9 @@
 	(battery_low_get_title): Add a string for GPM_WARNING_DISCHARGING.
 
 	(battery_status_changed_primary): Do the warning
-	"The AC Power has been unplugged." here, for GPM_WARNING_DISCHARGING.
+	'The AC Power has been unplugged.' here, for GPM_WARNING_DISCHARGING.
 	(battery_status_changed_ups): Do the warning
-	"Your system is running on backup power!" for GPM_WARNING_DISCHARGING.
+	'Your system is running on backup power!' for GPM_WARNING_DISCHARGING.
 	(battery_status_changed_misc): Ignore GPM_WARNING_DISCHARGING as this
 	is not relevant for pda, mouse or keyboard devices.
 
@@ -2693,11 +2719,11 @@
 	as they do not provide rate information, but do provide time
 	information.
 	(power_get_summary_for_battery_kind): Simplify the logic, and make
-	"Unknown time remaining until changed" a thing of the past.
+	'Unknown time remaining until changed' a thing of the past.
 	Also show the primary battery type, if we have a UPS installed in the
 	system so we know what the remaining time is refering to.
 	(gpm_power_get_status_summary): If we are using a discharging UPS, then
-	set our state to "Computer is running on backup power".
+	set our state to 'Computer is running on backup power'.
 	Also remove the enum structure thing as it's only used once, and it's
 	easier just to use the defines directly.
 
@@ -2830,7 +2856,7 @@
 	percentage change goes 99->100. This works this way intermittently on
 	my Toshiba, and never works on my iBook. This new code seems to work
 	for me in all cases. Plus we don't have to faff around and invalidate
-	the "show notification" flag as we are testing the change up always.
+	the 'show notification' flag as we are testing the change up always.
 
 2006-01-31 Jaap Haitsma  <jaap@haitsma.org>
 
@@ -2879,7 +2905,7 @@
 
 2006-01-29  Chao-Hsiung Liao  <j_h_liau@yahoo.com.tw>
 
-	* configure.in: Add "zh_HK" "zh_TW" to ALL_LINGUAS.
+	* configure.in: Add 'zh_HK' 'zh_TW' to ALL_LINGUAS.
 
 2006-01-28 Jaap Haitsma  <jaap@haitsma.org>
 
@@ -2967,14 +2993,14 @@
 
 2006-01-25  Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm-prefs.h: "policy_can_hibernate" -> "can_hibernate" Dohh.
+	* src/gpm-prefs.h: 'policy_can_hibernate' -> 'can_hibernate' Dohh.
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c (gpm_prefs_setup_action_combo): Don't segfault if
 	gconf value is missing, just issue warning.
 
-	* data/gnome-power-manager.schemas.in: Remove the elusive "j"
+	* data/gnome-power-manager.schemas.in: Remove the elusive 'j'
 	Also change the default brightnesses for AC to be 100, and battery 50.
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
@@ -3012,7 +3038,7 @@
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade: Do a
-	s/"Power Preferences"/"Power Management Preferences" to fix the
+	s/'Power Preferences'/'Power Management Preferences' to fix the
 	bug (#328397)
 
 2006-01-24  William Jon McCann  <mccann@jhu.edu>
@@ -3027,7 +3053,7 @@
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
-	* data/Makefile.am: Fix up Rodrigo's commit so "make distcheck" works
+	* data/Makefile.am: Fix up Rodrigo's commit so 'make distcheck' works
 
 2006-01-24  Richard Hughes  <richard@hughsie.com>
 
@@ -3081,7 +3107,7 @@
 
 	* src/gpm-power.c (hal_battery_added_cb): Remove the reserved parameter
 	as it's not used anywhere and only confuses us. This should fix the bug
-	where the g-p-m crashes and "gdb bt" intermittently gives:
+	where the g-p-m crashes and 'gdb bt' intermittently gives:
 	hal_monitor_start->gpm_coldplug_batteries->g_signal_emit->
 	g_signal_emit_valist->g_value_array_copy->g_strdup->strlen
 
@@ -3168,7 +3194,7 @@
 
 	* src/gpm-power.c: (power_get_summary_for_kind) Make tooltip more
 	concise. Make some comments clearer or remove them.
-	* src/gpm-common.c: return "Unknown time" if minutes <=0 for
+	* src/gpm-common.c: return 'Unknown time' if minutes <=0 for
  	get_timestring_from_minutes ()
 
 	Patch from Jaap Haitsma  <jaap@haitsma.org>
@@ -3250,7 +3276,7 @@
 2006-01-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c (battery_kind_cache_add_device): Turn the warning
-	about "Adding missing device, may bug" into a debug statement, as this
+	about 'Adding missing device, may bug' into a debug statement, as this
 	is now well tested.
 
 	* src/gpm-manager.c (maybe_notify_battery_power_changed):
@@ -3326,7 +3352,7 @@
 
 	* src/gpm-prefs.c, src/gpm-common.h, src/gpm-tray-icon.c,
 	src/gpm-main.c, src/gpm-hal-monitor.c: Fix so that our name is
-	"Power Manager" rather than "GNOME Power Manager" in the warnings
+	'Power Manager' rather than 'GNOME Power Manager' in the warnings
 	and menus so that we adhere to the GNOME HIG (#327277)
 
 2006-01-16  Richard Hughes  <richard@hughsie.com>
@@ -3369,9 +3395,9 @@
 	Also replace spaces-for-tabs in this file with actual tabs.
 
 	* src/gpm-marshal.list, src/gpm-manager.c, src/gpm-power.c:
-	Add a parameter "charging" and "percentagechanged" which lets us veto
+	Add a parameter 'charging' and 'percentagechanged' which lets us veto
 	some actions when doing the initial startup. This stops the message
-	"Your battery is fully charged"	when starting g-p-m with a full battery.
+	'Your battery is fully charged'	when starting g-p-m with a full battery.
 	Also unconditionally send a signal battery-power-changed when *any*
 	battery property changes, so that the icon changes when !charging
 	as this was not being done.
@@ -3550,7 +3576,7 @@
 	* src/gpm-manager.c: Add some debug text so we know the state.
 
 	* src/gpm-dpms-x11.c (gpm_dpms_mode_from_string): Fix typo where
-	"on" should be GPM_DPMS_MODE_ON rather than GPM_DPMS_MODE_OFF.
+	'on' should be GPM_DPMS_MODE_ON rather than GPM_DPMS_MODE_OFF.
 
 	* Makefile.am: Use DISTCHECK_CONFIGURE_FLAGS (copied from evince)
 	so make diskcheck doesn't try to run scrollkeeper.
@@ -3758,7 +3784,7 @@
 	autogen.sh fails.
 
 	*configure.in, Makefile.am: Don't build help/ yet as
-	"make distcheck" fails (which means no rpm's)
+	'make distcheck' fails (which means no rpm's)
 
 2006-01-03  Slobodan D. Sredojevic  <ssl@uns.ns.ac.yu>
 
@@ -3799,7 +3825,7 @@
 
 2005-12-29  Richard Hughes  <richard@hughsie.com>
 
-	* gnome-power-manager.spec.in: Add "Requires: dbus-x11" to fix
+	* gnome-power-manager.spec.in: Add 'Requires: dbus-x11' to fix
 	rh:176656
 
 	* src/gpm-sysdev.{c|h}, src/gpm-console.c, src/gpm-core.c,
@@ -3881,8 +3907,8 @@
 	we want, so it can be shared between users. This cannot be turned on
 	until https://bugs.freedesktop.org/show_bug.cgi?id=4637 is fixed.
 
-	* src/gpm-hal.c: Fix valgrinds "Conditional jump or move depends on
-	uninitialised value(s)" by initialising the return value to 0.
+	* src/gpm-hal.c: Fix valgrinds 'Conditional jump or move depends on
+	uninitialised value(s)' by initialising the return value to 0.
 
 	* src/gpm-dbus-common.h, src/glibhal.c, src/glibhal-callback.c,
 	src/gpm-hal.c, src/gpm-main.c: Define the HAL_DBUS_* constants and
@@ -3897,7 +3923,7 @@
 2005-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs.c: If no valid options are available then disable
-	the "Actions" frame as it will be empty.
+	the 'Actions' frame as it will be empty.
 
 	* src/gpm-prefs.h, src/gpm-main.c, gnome-power-manager.schemas.in:
 	Implement /apps/gnome-power-manager/notify/ac_adapter so we can
@@ -3956,7 +3982,7 @@
 2005-12-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-extras.{c|h}: Rename to gpm-hal.{c|h} and prefix the
-	functions with "gpm_". Affects most of the other souce files!
+	functions with 'gpm_'. Affects most of the other souce files!
 
 	* src/gpm-info.{c|h|glade}: Removed until we have a point.
 
@@ -4089,7 +4115,7 @@
 	* src/gpm-main.c: Warn if we attempt to hibernate or suspend when HAL
 	says we shouldn't.
 
-	* src/gpm-main.c: Add support for the HAL "virtual button" device.
+	* src/gpm-main.c: Add support for the HAL 'virtual button' device.
 	NB. This is not yet in HAL CVS, and support is patched in only if you
 	use the RPM's in my utopia-experimental repo. The interface WILL change
 	before it is accepted upstream.
@@ -4131,7 +4157,7 @@
 	signify if we require a password when resuming from suspend.
 
 	* src/gpm-prefs.c, src/gpm-prefs.glade:
-	Add the required widgets to control "general/require_password"
+	Add the required widgets to control 'general/require_password'
 
 	* configure.in: Bump HAL dep to 0.5.4 as using 0.5.3 doesn't work
 	correctly with Ubuntu breezy HAL, which is causing lots of bug reports.
@@ -4163,7 +4189,7 @@
 	Disable 'Power Info' from the menu until we show something interesting.
 
 	* gnome-power-preferences.desktop.in:
-	Rename "Power Preferences" to "Power Management" to better fit in with
+	Rename 'Power Preferences' to 'Power Management' to better fit in with
 	the other menu items.
 
 2005-11-21  Richard Hughes  <richard@hughsie.com>
@@ -4221,7 +4247,7 @@
 
 	* src/gpm-screensaver.{c|h}, src/gpm-prefs.c, src/gpm-idle.c:
 	First, do s\gscreensaver_\gpm_screensaver_\g to be consistant.
-	Also add gpm_screensaver_poke() to allow us to "poke" g-s so we can
+	Also add gpm_screensaver_poke() to allow us to 'poke' g-s so we can
 	displays the unlock dialogue, so the user doesn't have to move the
 	mouse or press any key.
 
@@ -4230,7 +4256,7 @@
 	* src/gpm-main.c, src/gpm-info.c, src/gpm-prefs.c, src/gpm-prefs.glade,
 	src/icons/Makefile.am:
 	Merge a patch by Jaap Haitsma <jaap@haitsma.org>:
-	- "Never" on the right of the sleep sliders
+	- 'Never' on the right of the sleep sliders
 	- Sleep sliders range from 1 to 60 minutes with steps of 1 minute
 	- In Makefiles GPM_DATA had a trailing slash. This is not common.
 	- Some code refactoring: There was now one callback handling all the
@@ -4290,7 +4316,7 @@
 
 2005-11-10  Alexander Shopov  <ash@contact.bg>
 
-	* configure.in: Added "bg" (Bulgarian) to ALL_LINGUAS
+	* configure.in: Added 'bg' (Bulgarian) to ALL_LINGUAS
 
 2005-11-10  Fabio Marzocca  <thesaltydog@gmail.com>
 
@@ -4322,7 +4348,7 @@
 
 	* src/gpm-main.c, src/gpm-libnotify.{c|h}:
 	Clear the libnotify box for where we add back the ac_adapter before
-	the "AC Power unplugged" message times out.
+	the 'AC Power unplugged' message times out.
 
 	* src/gpm-notification.c, src/gpm-main.c, src/gpm-prefs.glade,
 	gpm-common.{c|h}, gpm-prefs.c:
@@ -4358,11 +4384,11 @@
 	BATT_PRIMARY on HAL event.
 
 	* src/gpm-notification.c: Do not leak eggtrayicon by just hiding it,
-	but properly unrealize it. This fixes the bug where the icon "moved"
+	but properly unrealize it. This fixes the bug where the icon 'moved'
 	across the notification area when it was repeatedly shown/hidden.
 
 	* src/gpm-sysdev.{c|h}, gpm-main.c (hal_device_property_modified):
-	Check that the battery is at 100%, AND of type "primary" before
+	Check that the battery is at 100%, AND of type 'primary' before
 	notifying the user that their battery is charged :-)
 
 2005-11-05  Richard Hughes  <richard@hughsie.com>
@@ -4474,7 +4500,7 @@
 	* src/gpm-notification.c: Fix up the menu to be more in line with
 	GNOME HIG. Thanks to Jaap Haitsma <jaap@haitsma.org> for the patch.
 
-	* src/gpm-main.c: remove the last bits of the "registered" gslist.
+	* src/gpm-main.c: remove the last bits of the 'registered' gslist.
 	Also invalidate the remaining time on battery.rechargeable.is_charging
 	as we need to wait for the next HAL update. This is a HAL bug I think.
 
@@ -4505,7 +4531,7 @@
 2005-10-29  Richard Hughes  <richard@hughsie.com>
 
 	* gpm-notification.c (get_object_tooltip): Do not display
-	"Unknown remaining" for missing remaining time.
+	'Unknown remaining' for missing remaining time.
 	Fixes #320135
 
 	* src/icons/gnome-power-keyboard.png,
@@ -4607,7 +4633,7 @@
 	in 0.5.3 fixed in later releases.
 	Also bump to 0.2.8.1, and release.
 
-	* src/gpm-info.glade : Don't hide this window, make it "normal" like
+	* src/gpm-info.glade : Don't hide this window, make it 'normal' like
 	the others.
 
 	* src/gpm-main.c (main) : Register the name of the application rather
@@ -4829,9 +4855,9 @@
 	* src/gpm-prefs.c (gtk_set_label): Make a simple wrapper...
 
 	* src/gpm-prefs.c (refresh_info_page) Make a function to populate the
-	new "Information" tab present in the glade file.
+	new 'Information' tab present in the glade file.
 
-	* src/preferences.glade: Add the new "Information" tab with system
+	* src/preferences.glade: Add the new 'Information' tab with system
 	information. This is all very immature, and likely to change.
 
 	* src/gpm-prefs.c (combo_setup_dynamic),
@@ -4861,7 +4887,7 @@
 2005-09-26  Robert Love  <rml@novell.com>
 
 	* src/gpm-main.c: Daemonize by default, via daemon(3).  Add
-	  "--no-daemon" flag.
+	  '--no-daemon' flag.
 
 2005-09-26  Richard Hughes  <richard@hughsie.com>
 
@@ -4936,7 +4962,7 @@
 2005-09-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/glibhal-extras.c (hal_setlowpowermode): Only call SetPowerSave
-	if system.formfactor is "laptop". Patch pending for PMU for HAL.
+	if system.formfactor is 'laptop'. Patch pending for PMU for HAL.
 
 	* src/gpm-prefs.c: Remove all the GSCREENSAVER #ifdefs and switch to
 	runtime detection of the dbus service.
@@ -4958,7 +4984,7 @@
 	* docs/contact.php : Add Matthias Grimm, and Matthew Garrett to the
 	credits - thanks guys!
 
-	* docs/faq.php: Add "Why do events take so long to register?"
+	* docs/faq.php: Add 'Why do events take so long to register?'
 
 	* docs/gnome_power_manager.php : Move content from index.
 
@@ -5175,22 +5201,22 @@
 
 	* src/gpm-main.c: Remove code using USE_POWERMANAGER.
 
-	* gnome-power-manager.schemas.in: Use "halt -s", not shutdown.
+	* gnome-power-manager.schemas.in: Use 'halt -s', not shutdown.
 
 	* doc/faq.php: Explain the obsolete PowerManager.
 
-	* gnome-power-manager.spec.in: Add "Obsoletes: PowerManager" so that
+	* gnome-power-manager.spec.in: Add 'Obsoletes: PowerManager' so that
 	we uninstall the PowerManager Daemon.
 
 2005-08-30  Richard Hughes  <richard@hughsie.com>
 
 	* src/preferences.glade: Fix the combobox padding, and make all siders
-	update policy to "continous" so we can do some clever stuff with steps.
+	update policy to 'continous' so we can do some clever stuff with steps.
 
 	* src/gpm-prefs.c: Rename capability to lcdpanel.
 
 	* src/gpm-main.c: fix a warning for:
-	"g_value_set_uint: assertion `G_VALUE_HOLDS_UINT (value)' failed"
+	'g_value_set_uint: assertion `G_VALUE_HOLDS_UINT (value)' failed'
 	by switching to return a G_TYPE_UINT value.
 
 	* src/gpm-main: (hal_set_brightness, hal_set_brightness_item):
@@ -5360,7 +5386,7 @@
 2005-08-14  Richard Hughes  <richard@hughsie.com>
 
 	* Update src/pixmaps/gnome-dev-acadapter.png so that it matches the
-	"dfong" bluecurve theme.
+	'dfong' bluecurve theme.
 
 	* gpm-main.c: Continue playing with LIBHAL_EXPERIMENT so that we can
 	remove the libhal dep and use the pure glib bindings. With this we are
@@ -5374,7 +5400,7 @@
 
 2005-08-09  Maxim Dziumanenko <mvd@mylinux.ua>
 
-	* configure.in: Added "uk" to ALL_LINGUAS.
+	* configure.in: Added 'uk' to ALL_LINGUAS.
 
 2005-08-04  Richard Hughes  <richard@hughsie.com>
 
@@ -5470,7 +5496,7 @@
 
 	* src/gpm-main.c (use_libnotify): Now do a sound for the notifications.
 	I don't think libnotify supports this yet, but when it does, this should
-	"just-work" :-)
+	'just-work' :-)
 
 	* src/gpm-prefs.c (recalc): Add support for missing lid/power/sleep buttons.
 	Also add the GCONF_ROOT prefix to the keys manually, so we can use
@@ -5489,7 +5515,7 @@
 	people don't like the icons.
 
 	* src/gpm-notification.c (callback_about_activated): No point displaying
-	"Unknown Translator" for un-translated files.
+	'Unknown Translator' for un-translated files.
 
 2005-07-20  Richard Hughes  <richard@hughsie.com>
 
@@ -5566,11 +5592,11 @@
 
 2005-07-17  Christophe Merlet  <redfox@redfoxcenter.org>
 
-	* configure.in: Added "fr" to ALL_LINGUAS.
+	* configure.in: Added 'fr' to ALL_LINGUAS.
 
 2005-07-16  Christian Rose  <menthos@menthos.com>
 
-	* configure.in: Added "sv" to ALL_LINGUAS.
+	* configure.in: Added 'sv' to ALL_LINGUAS.
 
 2005-07-15  Richard Hughes  <richard@hughsie.com>
 
@@ -5587,17 +5613,17 @@
 	* src/gpm-notification.c: Finish removing the low_icon mess.
 
 	* src/gpm-notification.c (callback_about_activated): Added translatable
-	string "Unknown Translator" for all you translators to get a bit of credit.
+	string 'Unknown Translator' for all you translators to get a bit of credit.
 
 2005-07-15  Terance Sola  <terance@lyse.net>
 
-	* configure.in: Added "nb" and "no" to ALL_LINGUAS.
+	* configure.in: Added 'nb' and 'no' to ALL_LINGUAS.
 
 2005-07-14  Richard Hughes  <richard@hughsie.com>
 
 	* gnome-power.preferences.desktop.in:
-	Replace "GNOME Power Preferences" with "Power Preferences" - we shouldn't
-	have "GNOME" in the Preferences menu title.
+	Replace 'GNOME Power Preferences' with 'Power Preferences' - we shouldn't
+	have 'GNOME' in the Preferences menu title.
 
 	* src/gpm-main.c (read_battery_data): Re-arrange the initialisation to
 	known defaults so that valgrind doesn't get upset with a UPS attached.
@@ -5614,11 +5640,11 @@
 
 2005-07-15  Abel Cheung  <maddog@linuxhall.org>
 
-	* configure.in: Added "mk" to ALL_LINGUAS.
+	* configure.in: Added 'mk' to ALL_LINGUAS.
 
 2005-07-13  Francisco Javier F. Serrador  <serrador@cvs.gnome.org>
 
-	* configure.in Added to LINGUAS "es" and missing  "pa" and "zh_CN".
+	* configure.in Added to LINGUAS 'es' and missing  'pa' and 'zh_CN'.
 
 2005-07-13  Richard Hughes  <richard@hughsie.com>
 
@@ -5829,7 +5855,7 @@
 	Distros can use this (e.g. Fedora) if they consider an action dangerous.
 	We could use HAL in the future for this information, and we definatly
 	need to work out what the hardware can do. No point displaying
-	"Hibernate" if the machine is of type APM, for instance.
+	'Hibernate' if the machine is of type APM, for instance.
 
 	* src/prefs.c : Added variable displayIconFull and added in checks for
 	the new checkbox checkbutton_display_icon_full.
@@ -5859,7 +5885,7 @@
 	* src/common.h : Added ACTION_REBOOT
 
 	* src/gpn.c : Added callback_actions_activated so we can get some
-	callbacks for the actions such as "Shutdown"
+	callbacks for the actions such as 'Shutdown'
 	Also add menu_add_separator_item to split the menu up a bit,
 	Add menu_add_action_item's for all the states. At the moment all the
 	states are shown (irrespective to whether supported) but this is mainly
@@ -5880,8 +5906,8 @@
 
 2005-06-16 Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm.c, src/common.c : valgrind doesn't like "Conditional jump or
-	move depends on uninitialised value(s)" when ->present is assumed true.
+	* src/gpm.c, src/common.c : valgrind doesn't like 'Conditional jump or
+	move depends on uninitialised value(s)' when ->present is assumed true.
 	Add check in add_ac_adapter () just use the ->percentageCharge directly.
 
 	* src/gpn.c (create_icon_pixbuf) : Use gtk_icon_info_free () as we
@@ -5913,7 +5939,7 @@
 2005-06-13 Richard Hughes  <richard@hughsie.com>
 
 	* src/gpn.c, src/gpm.c, src/common.c, src/icons.c, src/prefs.c :
-	Remove "!= NULL" from g_assert statements as not needed.
+	Remove '!= NULL' from g_assert statements as not needed.
 
 	* Added code from Andrei Yurkevich for dynamic icons,
 	e.g. icons that do not have the colour bar hardcoded. Big thank you.
@@ -5969,7 +5995,7 @@
 
 2005-05-25 Richard Hughes  <richard@hughsie.com>
 
-	* src/gpm.c : Add new functon "powerDeviceToHalType" to convert
+	* src/gpm.c : Add new functon 'powerDeviceToHalType' to convert
 	the powerDevice to the HAL name.
 	Get action_policy_do working again, so that *Shutdown* events
 	are triggered.
@@ -5989,7 +6015,7 @@
 
 	* src/*.c : Changed some StudlyCaps function names to be more
 	C-like, and consistant e.g.
-	"getHoursStringFromMinutes" -> "get_timestring_from_minutes"
+	'getHoursStringFromMinutes' -> 'get_timestring_from_minutes'
 	Also changed a lot of int's to gint's and chars to gchars for
 	glib portibility (makes no difference at the moment).
 
@@ -6071,7 +6097,7 @@
 
 	* src/common.c : policyoption_to_enum, enum_to_policyoption :
 	new functions to convert the enum ACTION_HIBERNATE into a string
-	"hibernate" and vice versa, for use in gconf to prettyfy names.
+	'hibernate' and vice versa, for use in gconf to prettyfy names.
 	Still needs some work.
 
 2005-05-09  Richard Hughes  <richard@hughsie.com>
@@ -6147,7 +6173,7 @@
 	* src/prefs.c : Make checkboxes use a SList like the combos.
 	This neatens things up, and means gconf policy name doesn't have to
 	match the libglade widgetname.
-	Made the "help" button lauch a web-browser displaying g-p-m homepage.
+	Made the 'help' button lauch a web-browser displaying g-p-m homepage.
 	Also added lots of function comments.
 
 2005-04-06  Richard Hughes  <richard@hughsie.com>
@@ -6279,7 +6305,7 @@
 	* src/gpm.c: Added new option to drop-down on all the icons for preferences
 	dialogue, and set the file to execute.
 
-	* src/common.c: Also added preliminary gconf backend, "Preferences" will
+	* src/common.c: Also added preliminary gconf backend, 'Preferences' will
 	dynamically adjust it's output depending on the gconf settings.
 
 	* Removed some compiled files that snuck into CVS.
@@ -6290,7 +6316,7 @@
 	Added preliminary glade properties file, with thanks to David Zeuthen
 	for the original.
 
-	* mkinstalldirs, new file: Add a needed file for "make install". Oops.
+	* mkinstalldirs, new file: Add a needed file for 'make install'. Oops.
 
 2005-03-21  Richard Hughes  <richard@hughsie.com>
 
