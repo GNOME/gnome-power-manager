@@ -2,6 +2,30 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/enable_pcskr_beeping</key>
+      <applyto>/apps/gnome-power-manager/enable_pcskr_beeping</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If the PC speaker (beeping) should be used</short>
+        <long>If the PC speaker should be used to beep when the power is low, or inhibit requests have stopped the policy action.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ignore_inhibit_requests</key>
+      <applyto>/apps/gnome-power-manager/ignore_inhibit_requests</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If DBUS inhibit requests should be ignored.</short>
+        <long>If DBUS inhibit requests should be ignored from other programs.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/battery_event_when_closed</key>
       <applyto>/apps/gnome-power-manager/battery_event_when_closed</applyto>
       <owner>gnome-power-manager</owner>

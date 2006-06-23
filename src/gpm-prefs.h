@@ -82,6 +82,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_RATE_EXP_AVE_FACTOR	GPM_PREF_DIR "/rate_exponential_average_factor"
 #define GPM_PREF_BATT_EVENT_WHEN_CLOSED	GPM_PREF_DIR "/battery_event_when_closed"
 #define GPM_PREF_GRAPH_DATA_MAX_TIME	GPM_PREF_DIR "/graph_data_max_time"
+#define GPM_PREF_ENABLE_BEEPING		GPM_PREF_DIR "/enable_pcskr_beeping"
+#define GPM_PREF_IGNORE_INHIBITS	GPM_PREF_DIR "/ignore_inhibit_requests"
 
 #define GPM_PREF_AC_LOWPOWER		GPM_PREF_DIR "/use_lowpower_ac"
 #define GPM_PREF_UPS_LOWPOWER		GPM_PREF_DIR "/use_lowpower_ups"

@@ -124,6 +124,8 @@ struct GpmManagerPrivate
 	gboolean	 use_time_to_notify;
 	gboolean	 lid_is_closed;
 	gboolean	 done_notify_fully_charged;
+	gboolean	 enable_beeping;
+	gboolean	 ignore_inhibits;
 
 	time_t		 last_resume_event;
 	int		 suppress_policy_timeout;
@@ -223,6 +225,10 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 	action_ok = gpm_inhibit_check (manager->priv->inhibit);
 	if (! action_ok) {
+		if (manager->priv->ignore_inhibits) {
+			gpm_debug ("Inhibit ignored through gconf policy!");
+			return TRUE;
+		}
 		title = g_strdup_printf (_("Request to %s"), action);
 		GString *message = g_string_new ("");
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
@@ -232,7 +238,9 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 				      GPM_NOTIFY_TIMEOUT_LONG,
 				      GTK_STOCK_DIALOG_WARNING,
 				      GPM_NOTIFY_URGENCY_NORMAL);
-		gpm_warning_beep ();
+		if (manager->priv->enable_beeping) {
+			gpm_warning_beep ();
+		}
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
@@ -1970,7 +1978,9 @@ battery_status_changed_primary (GpmManager     *manager,
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
-		gpm_warning_beep ();
+		if (manager->priv->enable_beeping) {
+			gpm_warning_beep ();
+		}
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_EVENT_NOTIFICATION,
 				    title);
@@ -2078,7 +2088,9 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
-		gpm_warning_beep ();
+		if (manager->priv->enable_beeping) {
+			gpm_warning_beep ();
+		}
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_EVENT_NOTIFICATION,
 				    title);
@@ -2162,7 +2174,9 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      GPM_NOTIFY_TIMEOUT_LONG,
 			      icon,
 			      GPM_NOTIFY_URGENCY_NORMAL);
-	gpm_warning_beep ();
+	if (manager->priv->enable_beeping) {
+		gpm_warning_beep ();
+	}
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_NOTIFICATION, title);
 
 	g_free (message);
@@ -2350,6 +2364,15 @@ gconf_key_changed_cb (GConfClient *client,
 						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 		gpm_brightness_set_level_dim (manager->priv->brightness, brightness);
 
+	} else if (strcmp (entry->key, GPM_PREF_ENABLE_BEEPING) == 0) {
+		manager->priv->enable_beeping =
+			gconf_client_get_bool (manager->priv->gconf_client,
+					       GPM_PREF_ENABLE_BEEPING, NULL);
+
+	} else if (strcmp (entry->key, GPM_PREF_IGNORE_INHIBITS) == 0) {
+		manager->priv->ignore_inhibits =
+			gconf_client_get_bool (manager->priv->gconf_client,
+					       GPM_PREF_IGNORE_INHIBITS, NULL);
 	}
 }
 
@@ -2671,6 +2694,14 @@ gpm_manager_init (GpmManager *manager)
 	lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
 						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 	gpm_brightness_set_level_dim (manager->priv->brightness, lcd_dim_brightness);
+
+	/* Do we beep? */
+	manager->priv->enable_beeping = gconf_client_get_bool (manager->priv->gconf_client,
+							       GPM_PREF_ENABLE_BEEPING, NULL);
+
+	/* Do we ignore inhibit requests? */
+	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
+								GPM_PREF_IGNORE_INHIBITS, NULL);
 }
 
 /**

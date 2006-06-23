@@ -1,5 +1,21 @@
 2006-06-23  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c:
+	* src/gpm-prefs.h:
+	In hindsight, not everyone likes beeping as commented on in #345595.
+	Add a gconf variable /apps/gnome-power-manager/enable_pcskr_beeping
+	to enable the user or distro to turn this off and on. Default on.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c:
+	* src/gpm-prefs.h:
+	Allow the user to ignore the inhibit requests from stopping a policy
+	action. The key /apps/gnome-power-manager/ignore_inhibit_requests can
+	be set to true, and the action will still go ahead. Default off.
+
+2006-06-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c: (battery_status_changed_primary):
 	Use the same logic as the tooltip for the notification.
 	This has caused a lot of problems, see #345698 for all the gory details.
