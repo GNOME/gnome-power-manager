@@ -22,7 +22,7 @@
 <!-- appropriate code -->
 
   <articleinfo>
-    <title>&application; Manual V&manrevision;</title>
+    <title>&application; Manual</title>
     <copyright>
       <year>2006</year>
       <holder>Richard Hughes (richard@hughsie.com)</holder>
@@ -84,8 +84,10 @@
 
     <legalnotice>
       <title>Feedback</title>
-      <para>To report a bug or make a suggestion regarding the &app; application or
-      this manual, follow the directions in the <ulink url="http://www.gnome.org/projects/gnome-power-manager/"
+      <para>
+        To report a bug or make a suggestion regarding the &app; application or
+        this manual, follow the directions in the 
+        <ulink url="http://www.gnome.org/projects/gnome-power-manager/"
 	  type="http">GNOME Power Manager Contact Page</ulink>.
       </para>
 <!-- Translators may also add here feedback address for translations -->
@@ -147,13 +149,13 @@
       It can take up to a minute or more to hibernate and wake your computer.
     </para>
   </section>
-
 </section>
 
 <section id="using">
-  <title>Using &application;</title>
-
-  <para>You can start <application>&app;</application> by doing:
+  <title>Usage</title>
+  <para>
+    <application>&app;</application> is usually started in GNOME startup, but
+    you can manually start <application>&app;</application> by doing:
   </para>
   <variablelist>
     <varlistentry>
@@ -166,94 +168,117 @@
       </listitem>
     </varlistentry>
   </variablelist>
+</section>
 
+<section id="notify">
+  <title>Notification Messages</title>
   <para>
-  When you start &application;, the following notifications may be displayed.
+    When &application; has started, the following notifications may be displayed.
   </para>
 
-  <figure>
-    <title>&app; Notification when AC adapter is removed</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-unplugged.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <note>
+  <section id="notify-unplugged">
+    <title>Usage</title>
+    <figure>
+      <title>&app; Notification when AC adapter is removed</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-unplugged.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <note>
+      <para>
+        You can disable this notification by changing the gconf key
+        <command>/apps/gnome-power-manager/notify_ac_adapter</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="notify-fully-charged">
+    <title>Fully Charged</title>
+    <figure>
+      <title>&app; Notification when laptop primary button is fully charged</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-charged.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <note>
+      <para>
+        You can disable this notification by changing the gconf key
+        <command>/apps/gnome-power-manager/notify_fully_charged</command>.
+      </para>
+    </note>
+    <note>
+      <para>
+        You will only get a repeat notification if your battery percentage charge
+        drops below 95% and then is again fully charged.
+        This prevents some machines from showing unwanted repeat notifications
+        if the battery is incorrectly reporting the charged status.
+      </para>
+    </note>
+  </section>
+
+  <section id="notify-low">
+  <title>Power Low</title>
     <para>
-      You can disable this notification by changing the gconf key
-      <command>/apps/gnome-power-manager/notify_ac_adapter</command>.
+      When the battery is low, you will recieve the following notification.
+      You should consider switching to battery power really soon.
     </para>
-  </note>
+    <figure>
+      <title>&app; Notification when battery power is low</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-low.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
 
-  <figure>
-    <title>&app; Notification when laptop primary button is fully charged</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-charged.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <note>
+  <section id="notify-critical">
+  <title>Power Critical</title>
     <para>
-      You can disable this notification by changing the gconf key
-      <command>/apps/gnome-power-manager/notify_fully_charged</command>.
+      When the computer has run out of power, it will show this notification
+      explaining what action is required.
+      You can change the critical low action using the preferences tool.
     </para>
-  </note>
+    <figure>
+      <title>&app; Notification when the system power is critically low</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-critical.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
 
-  <note>
+  <section id="notify-suspend-failure">
+  <title>Suspend Failure</title>
     <para>
-      You will only get a repeat notification if your battery percentage charge
-      drops below 95% and then is again fully charged.
-      This prevents some machines from showing unwanted repeat notifications
-      if the battery is incorrectly reporting the charged status.
+      When a suspend failure occurs you may get this following warning.
+      The most common reason for this notification is that the current user does
+      not have permission to suspend or hibernate the computer.
     </para>
-  </note>
-
-  <para>
-    When the battery is low, you will recieve the following notification.
-    You should consider switching to battery power really soon.
-  </para>
-  <figure>
-    <title>&app; Notification when battery power is low</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-low.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-
-  <para>
-    When the computer has run out of power, it will show this notification
-    explaining what action is required.
-    You can change the critical low action using the preferences tool.
-  </para>
-  <figure>
-    <title>&app; Notification when the system power is critically low</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-critical.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <para>
-    When a suspend failure occurs you may get this following warning.
-    The most common reason for this notification is that the current user does
-    not have permission to suspend or hibernate the computer.
-  </para>
-  <figure>
-    <title>&app; Notification when suspend failure occurs</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-suspend-problem.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
+    <figure>
+      <title>&app; Notification when suspend failure occurs</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-suspend-problem.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
 </section>
 
 <section id="preferences">
@@ -262,10 +287,26 @@
   <para>The preferences window allows you to control:</para>
 
   <itemizedlist>
-    <listitem><para>The LCD brightness when on AC and battery power</para></listitem>
-    <listitem><para>The idle time for the screen power-down and suspend action</para></listitem>
-    <listitem><para>The actions to perform when the laptop lid is closed</para></listitem>
-    <listitem><para>The notification area icon policy</para></listitem>
+    <listitem>
+      <para>
+        The LCD brightness when on AC and battery power
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The idle time for the screen power-down and suspend action
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The actions to perform when the laptop lid is closed
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The notification area icon policy
+      </para>
+    </listitem>
   </itemizedlist>
 
   <note>
@@ -276,39 +317,47 @@
     </para>
   </note>
 
-  <figure id="prefs-main">
-    <title>&app; AC Power Tab</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-prefs-ac.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <figure id="prefs-options">
-    <title>&app; Battery Power Tab</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-prefs-battery.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <figure id="prefs-advanced">
-    <title>&app; Options Tab</title>
-    <screenshot>
-      <mediaobject>
-        <imageobject><imagedata fileref="figures/gpm-prefs-options.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-  </figure>
-  <note>
-    <para>
-      You can change the idle laptop panel brightness by changing the gconf key
-      <command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>.
-    </para>
-  </note>
+  <section id="preferences-ac">
+    <title>AC Power Preferences</title>
+    <figure id="prefs-ac">
+      <title>&app; AC Power Tab</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-prefs-ac.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
+
+  <section id="preferences-battery">
+    <title>Battery Power Preferences</title>
+    <figure id="prefs-battery">
+      <title>&app; Battery Power Tab</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-prefs-battery.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
+
+  <section id="preferences-options">
+    <title>Preference Options</title>
+    <figure id="prefs-options">
+      <title>&app; Options Tab</title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/gpm-prefs-options.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+  </section>
 
   <section id="preferences-idletimes">
     <title>Session and system idle times</title>
@@ -330,7 +379,8 @@
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gs-prefs.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gs-prefs.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -353,10 +403,23 @@
       in <command>gnome-power-preferences</command> will change accordingly.
     </para>
   </section>
+</section>
+
+<section id="preferences-advanced">
+  <title>Advanced Preferences</title>
+
+  <section id="advanced-preferences-brightness">
+    <title>Screen Dim Brightness</title>
+    <note>
+      <para>
+        You can change the idle laptop panel brightness by changing the gconf key
+        <command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>.
+      </para>
+    </note>
+  </section>
 
   <section id="advanced-preferences-locking">
     <title>Screen Locking</title>
-
     <para>
       By default, gnome-power-manager supports a simple locking scheme.
       This means that the screen will lock if set to "Lock screen" in
@@ -364,13 +427,17 @@
       hibernate action.
     </para>
     <para>
-      There is a complex locking scheme available for power-users that allows locking
-      policy to change for the lid, suspend and hibernate actions.
+      There is a complex locking scheme available for power-users that allows
+      locking policy to change for the lid, suspend and hibernate actions.
       To enable this complex mode, you will have to disable the gconf key:
     </para>
 
     <itemizedlist>
-      <listitem><para><command>/apps/gnome-power-manager/lock_use_screensaver_settings</command></para></listitem>
+      <listitem>
+        <para>
+          <command>/apps/gnome-power-manager/lock_use_screensaver_settings</command>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <para>
@@ -379,9 +446,21 @@
     </para>
 
     <itemizedlist>
-      <listitem><para><command>/apps/gnome-power-manager/lock_on_blank_screen</command></para></listitem>
-      <listitem><para><command>/apps/gnome-power-manager/lock_on_suspend</command></para></listitem>
-      <listitem><para><command>/apps/gnome-power-manager/lock_on_hibernate</command></para></listitem>
+      <listitem>
+        <para>
+          <command>/apps/gnome-power-manager/lock_on_blank_screen</command>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <command>/apps/gnome-power-manager/lock_on_suspend</command>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <command>/apps/gnome-power-manager/lock_on_hibernate</command>
+        </para>
+      </listitem>
     </itemizedlist>
 
     <note>
@@ -390,7 +469,6 @@
         is re-enabled.
       </para>
     </note>
-
   </section>
 </section>
 
@@ -400,11 +478,31 @@
   <para>The information window allows you to see:</para>
 
   <itemizedlist>
-    <listitem><para>The power devices attached to your system</para></listitem>
-    <listitem><para>The percentage change graph of your primary device</para></listitem>
-    <listitem><para>The time remaining change graph of your primary device</para></listitem>
-    <listitem><para>The charging and discharge rate graph of your primary device</para></listitem>
-    <listitem><para>The event log of what's happened in the session</para></listitem>
+    <listitem>
+      <para>
+        The power devices attached to your system.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The percentage change graph of your primary device.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The time remaining change graph of your primary device.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The charging and discharge rate graph of your primary device.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+        The event log of what's happened in the session.
+      </para>
+    </listitem>
   </itemizedlist>
 
   <note>
@@ -432,7 +530,8 @@
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gpm-info-devices.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gpm-info-devices.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -451,11 +550,13 @@
 
     <figure>
       <title>
-        The figure shows a typical discharge with two suspend cycles shown as horizontal lines.
+        The figure shows a typical discharge with two suspend cycles shown as
+        horizontal lines.
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gpm-info-percentage.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gpm-info-percentage.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -493,7 +594,8 @@
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gpm-info-rate.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gpm-info-rate.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -519,12 +621,12 @@
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gpm-info-time.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gpm-info-time.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
     </figure>
-
   </section>
 
   <section id="info-eventlog">
@@ -543,7 +645,8 @@
       </title>
       <screenshot>
         <mediaobject>
-          <imageobject><imagedata fileref="figures/gpm-info-event-log.png" format="PNG"/>
+          <imageobject>
+            <imagedata fileref="figures/gpm-info-event-log.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </screenshot>
@@ -556,13 +659,11 @@
         This permanently removes the data from memory.
       </para>
     </note>
-
   </section>
-
 </section>
 
 <section id="about">
-  <title>About &app;</title>
+  <title>About</title>
   <para>
     &app; was written by Richard Hughes <email>richard@hughsie.com</email>.
     To find more information about &app;, please visit the

@@ -31,8 +31,6 @@ pkgdata_DATA =						\
 	gpm-prefs.glade
 
 EXTRA_DIST =						\
-	gnome-power-manager.spec			\
-	gnome-power-manager.spec.in			\
 	gnome-power-manager.schemas.in			\
 	$(schema_in_files)				\
 	$(desktop_in_files)				\
