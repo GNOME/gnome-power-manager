@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-06-20 23:48+0700\n"
-"PO-Revision-Date: 2006-06-21 00:38+0700\n"
-"Last-Translator: Roys Hengwatanakul <roysheng@msn.com>\n"
+"POT-Creation-Date: 2006-06-24 20:41+0700\n"
+"PO-Revision-Date: 2006-06-24 21:05+0700\n"
+"Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -75,39 +75,59 @@ msgid "Hibernate enabled"
 msgstr "ให้จำศีลเครื่องได้"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr "กำหนดว่าจะละเลยการขอห้ามทำงานจากโปรแกรมอื่นๆ ผ่าน DBUS หรือไม่"
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid "If DBUS inhibit requests should be ignored."
+msgstr "จะละเลยการขอห้ามทำงานจาก DBUS หรือไม่"
+
+#: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "If a notification message should be displayed if the HAL action (suspend or "
 "hibernate) fails."
 msgstr ""
 "กำหนดว่า จะแสดงข้อความแจ้งเตือนหรือไม่ ถ้าการดำเนินการของ HAL (หยุดพักหรือจำศีล) ไม่สำเร็จ"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr "กำหนดว่าจะแจ้งผู้ใช้เมื่อประจุแบตเตอรีเต็มแล้วหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid "If network utilization should be checked before doing the idle action."
 msgstr "กำหนดว่าจะตรวจสอบการใช้งานเครือข่ายก่อนให้เครื่องหลับหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "กำหนดว่าจะตรวจสอบภาระของ CPU ก่อนให้เครื่องหลับหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid "If the PC speaker (beeping) should be used"
+msgstr "จะใช้เสียงบี๊ปทางลำโพงของเครื่องหรือไม่"
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If the PC speaker should be used to beep when the power is low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+"กำหนดว่าจะใช้ลำโพงของเครื่องส่งเสียงบี๊ปหรือไม่ เมื่อพลังงานเหลือน้อย "
+"หรือมีการร้องขอห้ามทำปฏิบัติการตามนโยบายพลังงาน"
+
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr "กำหนดว่า จะให้มีตัวเลือกพักเครื่องและจำศีลเครื่องในเมนูพื้นที่แจ้งเหตุหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr "ดำเนินเหตุการณ์เกี่ยวกับแบตเตอรีหรือไม่เมื่อพับเก็บแล็ปท็อปแล้วไฟ AC ถูกถอด"
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
@@ -116,19 +136,19 @@ msgstr ""
 "กำหนดว่า จะดำเนินเหตุการณ์สำหรับการพับเก็บแล็ปท็อป (เช่น 'พักเครื่องเมื่อพับเก็บแล็ปท็อป') "
 "หรือไม่ เมื่อได้พับเก็บแล็ปท็อปไว้แล้ว แล้วไฟ AC ถูกถอดภายหลัง "
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "กำหนดว่าจะใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "กำหนดว่าจะใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟจาก UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "กำหนดว่าจะใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -136,36 +156,36 @@ msgstr ""
 "กำหนดว่า จะล็อคจอภาพพร้อมกับการดับจอหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the screen should be dimmed to save power when the computer is idle."
 msgstr "กำหนดว่าจะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่คอมพิวเตอร์เริ่มเดินเครื่องเปล่าหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "กำหนดว่า จะให้ระบบใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "กำหนดว่า จะให้ระบบใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟจาก UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "กำหนดว่า จะให้ระบบใช้โหมดพลังงานต่ำหรือไม่ขณะที่ใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the user is authorized to hibernate the computer."
 msgstr "กำหนดว่า ให้ผู้ใช้มีสิทธิ์จำศีลคอมพิวเตอร์ได้หรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the user is authorized to suspend the computer."
 msgstr "กำหนดว่า ให้ผู้ใช้มีสิทธิ์พักคอมพิวเตอร์ได้หรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "กำหนดว่าจะเตือนผู้ใช้เมื่อที่แปลงไฟ AC ถูกถอดหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -173,7 +193,7 @@ msgstr ""
 "กำหนดว่า จะใช้การแจ้งเตือนแบบบอกเวลาหรือไม่ โดยถ้ากำหนดเป็นค่าเท็จ "
 "จะรายงานการเปลี่ยนเปอร์เซ็นต์ประจุแทน ซึ่งอาจช่วยได้ในกรณีที่ ACPI BIOS มีปัญหา"
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
@@ -181,7 +201,7 @@ msgstr ""
 "กำหนดว่า จะล็อคจอเมื่อคอมพิวเตอร์ตื่นขึ้นมาจากการจำศีลหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
 "if lock_use_screensaver_settings is false."
@@ -189,7 +209,7 @@ msgstr ""
 "กำหนดว่า จะล็อคจอเมื่อคอมพิวเตอร์ตื่นขึ้นมาจากการพักเครื่องหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
@@ -197,95 +217,95 @@ msgstr ""
 "กำหนดว่า จะใช้ค่าตั้งการล็อคจอของ gnome-screensaver หรือไม่ "
 "ในการตัดสินใจล็อคจอหลังการจำศีล พักเครื่อง หรือดับจอ"
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid "LCD brightness when on AC"
 msgstr "ค่าความสว่างของจอ LCD ขณะใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on battery"
 msgstr "ค่าความสว่างของจอ LCD ขณะใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
 msgstr "การดำเนินการเมื่อพับเก็บแล็ปท็อปขณะใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action when on AC"
 msgstr "การดำเนินการเมื่อพับเก็บแล็ปท็อปขณะใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen on hibernate"
 msgstr "ล็อคจอขณะจำศีล"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Lock screen on suspend"
 msgstr "ล็อคจอขณะพักเครื่อง"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock screen when blanked"
 msgstr "ล็อคจอเมื่อดับจอ"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Notify on a HAL error"
 msgstr "แจ้งเตือนข้อผิดพลาดของ HAL"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Notify when AC adapter is disconnected"
 msgstr "แจ้งเตือนเมื่อที่แปลงไฟ AC ถูกถอด"
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Notify when fully charged"
 msgstr "เตือนเมื่อแบตเตอรีประจุไฟเต็มแล้ว"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Number of seconds to suppress policy after resume"
 msgstr "จำนวนวินาทีที่จะระงับนโยบายหลังจากเครื่องกลับมาทำงานต่อ"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Percentage action is taken"
 msgstr "เปอร์เซ็นต์ประจุที่จะเริ่มดำเนินการ"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Percentage considered critical"
 msgstr "เปอร์เซ็นต์ประจุที่ถือว่าวิกฤติ"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Percentage considered low"
 msgstr "เปอร์เซ็นต์ประจุที่ถือว่าต่ำ"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage considered very low"
 msgstr "เปอร์เซ็นต์ประจุที่ถือว่าต่ำมาก"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Power button action"
 msgstr "ดำเนินการเมื่อกดปุ่มเปิด/ปิดเครื่อง"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Sleep timeout computer when on AC"
 msgstr "ระยะเวลาก่อนที่คอมพิวเตอร์จะหลับ เมื่อใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Sleep timeout computer when on battery"
 msgstr "ระยะเวลาก่อนที่คอมพิวเตอร์จะหลับ เมื่อใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Sleep timeout display when on AC"
 msgstr "ระยะเวลาก่อนที่จอภาพจะหลับ เมื่อใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout display when on battery"
 msgstr "ระยะเวลาก่อนที่จอภาพจะหลับ เมื่อใช้ไฟจากแบตเตอรี"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Suspend button action"
 msgstr "การดำเนินการสำหรับปุ่มพักเครื่อง"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Suspend enabled"
 msgstr "ให้พักเครื่องได้"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -293,7 +313,7 @@ msgstr ""
 "การดำเนินการเมื่อไฟ UPS ต่ำถึงขั้นวิกฤติ ค่าที่เป็นไปได้คือ \"hibernate\" (จำศีล), \"suspend"
 "\" (พักเครื่อง), \"shutdown\" (ปิดเครื่อง) และ \"nothing\" (ไม่ทำอะไร)"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -301,7 +321,7 @@ msgstr ""
 "การดำเนินการเมื่อประจุแบตเตอรีต่ำถึงขั้นวิกฤติ ค่าที่เป็นไปได้คือ \"hibernate\" (จำศีล), "
 "\"suspend\" (พักเครื่อง), \"shutdown\" (ปิดเครื่อง) และ \"nothing\" (ไม่ทำอะไร)"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -310,7 +330,7 @@ msgstr ""
 "การดำเนินการเมื่อมีการพับเก็บแล็ปท็อปขณะใช้ไฟ AC ค่าที่เป็นไปได้คือ \"suspend\" (พักเครื่อง), "
 "\"hibernate\" (จำศีล), \"blank\" (ดับจอ) และ \"nothing\" (ไม่ต้องหลับ)"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -320,7 +340,7 @@ msgstr ""
 "\" (พักเครื่อง), \"hibernate\" (จำศีล), \"blank\" (ดับจอ) และ \"nothing"
 "\" (ไม่ต้องหลับ)"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -330,7 +350,7 @@ msgstr ""
 "\" (จำศีลเครื่อง), \"interactive\" (สอบถาม), \"shutdown\" (ปิดเครื่อง) และ "
 "\"nothing\" (ไม่ทำอะไร)"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -340,7 +360,7 @@ msgstr ""
 "\"hibernate\" (จำศีล), \"interactive\" (สอบถาม), \"shutdown\" (ปิดเครื่อง) และ "
 "\"nothing\" (ไม่ทำอะไร)"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -350,60 +370,60 @@ msgstr ""
 "\" (จำศีล), \"interactive\" (สอบถาม), \"shutdown\" (ปิดเครื่อง) และ \"nothing"
 "\" (ไม่ทำอะไร)"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr "ช่วงเวลาเป็นวินาที ก่อนที่จอภาพจะหลับ ขณะใช้ไฟ AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr "ช่วงเวลาเป็นวินาทีที่คอมพิวเตอร์ขณะใช้ไฟ AC ต้องว่างการใช้งาน ก่อนที่จะให้เครื่องหลับ"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
 "ช่วงเวลาเป็นวินาทีที่คอมพิวเตอร์ขณะใช้ไฟจากแบตเตอรีต้องว่างการใช้งาน ก่อนที่จะให้เครื่องหลับ"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr "ช่วงเวลาเป็นวินาทีที่คอมพิวเตอร์ขณะใช้ไฟจากแบตเตอรีต้องว่างการใช้งาน ก่อนที่จอภาพจะหลับ"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr "ความสว่างของจอเมื่อใช้ไฟ AC ค่าที่ใช้ได้อยู่ในช่วง 0 ถึง 100"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr "ความสว่างของจอเมื่อใช้ไฟจากแบตเตอรี ค่าที่ใช้ได้อยู่ในช่วง 0 ถึง 100"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "The brightness of the screen when idle"
 msgstr "ความสว่างของจอภาพเมื่อเครื่องไม่มีการใช้งาน"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "The damping factor for the rate"
 msgstr "ตัวคูณหน่วง (damping factor) สำหรับคำนวนอัตราประจุ"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "ช่วงเวลาที่กว้างที่สุดที่แสดงในแกนนอนของกราฟ"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "The maximum time displayed on the graph"
 msgstr "เวลาสูงสุดที่แสดงในของกราฟ"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -411,7 +431,7 @@ msgstr ""
 "เปอร์เซ็นต์ประจุของแบตเตอรีที่ถือว่าวิกฤติ ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ use_time_for_policy "
 "เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -419,7 +439,7 @@ msgstr ""
 "เปอร์เซ็นต์ประจุของแบตเตอรีที่ถือว่าต่ำ ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ use_time_for_policy "
 "เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
 "when use_time_for_policy is false."
@@ -427,7 +447,7 @@ msgstr ""
 "เปอร์เซ็นต์ประจุของแบตเตอรีที่ถือว่าต่ำมาก ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ use_time_for_policy "
 "เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -435,7 +455,7 @@ msgstr ""
 "เปอร์เซ็นต์ประจุของแบตเตอรีที่จะเริ่มดำเนินการขั้นวิกฤติ ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "use_time_for_policy เป็นเท็จเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -443,7 +463,7 @@ msgstr ""
 "เวลาที่เหลือเป็นวินาทีของแบตเตอรีที่จะเริ่มดำเนินการขั้นวิกฤติ ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "use_time_for_policy เป็นจริงเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -451,7 +471,7 @@ msgstr ""
 "เวลาที่เหลือเป็นวินาทีของแบตเตอรีที่ถือว่าอยู่ในขั้นวิกฤติ ค่านี้จะถูกใช้ก็ตือเมื่อค่าของ "
 "use_time_for_policy เป็นจริงเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -459,7 +479,7 @@ msgstr ""
 "เวลาที่เหลือเป็นวินาทีของแบตเตอรีที่ถือว่าอยู่ในขั้นที่ต่ำ ค่านี้จะถูกใช้ก็ตือเมื่อค่าของ "
 "use_time_for_policy เป็นจริงเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
@@ -467,23 +487,23 @@ msgstr ""
 "เวลาที่เหลือเป็นวินาทีของแบตเตอรีที่ถือว่าอยู่ในขั้นที่ต่ำมาก ค่านี้จะถูกใช้ก็ตือเมื่อค่าของ "
 "use_time_for_policy เป็นจริงเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid "The time remaining when action is taken"
 msgstr "เวลาที่เหลือที่จะเริ่มดำเนินการ"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid "The time remaining when critical"
 msgstr "เวลาที่เหลือที่ถือว่าวิกฤติ"
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid "The time remaining when low"
 msgstr "เวลาที่เหลือที่ถือว่าต่ำ"
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid "The time remaining when very low"
 msgstr "เวลาที่เหลือที่ถือว่าต่ำมาก"
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -491,7 +511,7 @@ msgstr ""
 "ชนิดของการหลับที่จะทำเมื่อคอมพิวเตอร์ไม่มีการใช้งาน ค่าที่ใช้ได้คือ \"hibernate\" (จำศีล), "
 "\"suspend\" (พักเครื่อง) และ \"nothing\" (ไม่ต้องหลับ)"
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
@@ -502,7 +522,7 @@ msgstr ""
 "(exponentially weighted average) การเพิ่มค่านี้จะเพิ่มการหน่วงของการเปลี่ยนแปลงประจุ "
 "ซึ่งทำให้การคำนวณเวลาที่เหลือได้ค่าใกล้เคียงขึ้น แต่จะทำให้กราฟตอบสนองน้อยลง"
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -510,23 +530,23 @@ msgstr ""
 "นี่คือความสว่างของจอภาพที่จะใช้เมื่อเครื่องไม่มีการใช้งาน ค่านี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "use_time_for_policy เป็นจริงเท่านั้น"
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid "UPS critical low action"
 msgstr "การดำเนินการขณะ UPS ถึงขั้นวิกฤติ"
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid "Use gnome-screensaver lock setting"
 msgstr "ใช้ค่าตั้งการล็อคจอของ gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid "When to show the notification icon"
 msgstr "เมื่อไรจะแสดงไอคอนแจ้งเหตุ"
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "จำศีล พักเครื่อง หรือไม่ต้องหลับ เมื่อคอมพิวเตอร์ไม่มีการใช้งาน"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid "Whether to use time-based notifications"
 msgstr "ใช้การแจ้งเตือนแบบบอกเวลาหรือไม่"
 
@@ -594,8 +614,8 @@ msgstr "เพิ่มเติม"
 msgid "Power History"
 msgstr "ประวัติการใช้พลังงาน"
 
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1448
-#: ../src/gpm-manager.c:1792
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1455
+#: ../src/gpm-manager.c:1799
 msgid "Power Information"
 msgstr "ข้อมูลการใช้พลังงาน"
 
@@ -749,18 +769,18 @@ msgstr "แนววาง"
 msgid "The orientation of the tray."
 msgstr "แนววางของถาด"
 
-#: ../src/gpm-common.c:49
+#: ../src/gpm-common.c:60
 msgid "Unknown time"
 msgstr "ไม่ทราบกำหนดเวลา"
 
-#: ../src/gpm-common.c:54
+#: ../src/gpm-common.c:65
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i นาที"
 msgstr[1] "%i นาที"
 
-#: ../src/gpm-common.c:65
+#: ../src/gpm-common.c:76
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -769,18 +789,18 @@ msgstr[1] "%i ชั่วโมง"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:82
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:72
+#: ../src/gpm-common.c:83
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ชั่วโมง"
 msgstr[1] "ชั่วโมง"
 
-#: ../src/gpm-common.c:73
+#: ../src/gpm-common.c:84
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
@@ -884,78 +904,83 @@ msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติ
 msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
-#: ../src/gpm-manager.c:574
+#: ../src/gpm-manager.c:232
+#, c-format
+msgid "Request to %s"
+msgstr "การร้องขอไปยัง %s"
+
+#: ../src/gpm-manager.c:581
 msgid "On battery power"
 msgstr "ใช้ไฟจากแบตเตอรี"
 
-#: ../src/gpm-manager.c:589
+#: ../src/gpm-manager.c:596
 msgid "Display power management activated"
 msgstr "โปรแกรมจัดการพลังงานจอภาพทำงาน"
 
-#: ../src/gpm-manager.c:605
+#: ../src/gpm-manager.c:612
 msgid "Laptop lid is closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: ../src/gpm-manager.c:774
+#: ../src/gpm-manager.c:781
 #, c-format
 msgid "%s because %s"
 msgstr "%s เพราะ %s"
 
-#: ../src/gpm-manager.c:810
+#: ../src/gpm-manager.c:817
 msgid "Doing nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: ../src/gpm-manager.c:814 ../src/gpm-manager.c:1258
-#: ../src/gpm-manager.c:2401
+#: ../src/gpm-manager.c:821 ../src/gpm-manager.c:1265
+#: ../src/gpm-manager.c:2425
 msgid "Suspending computer"
 msgstr "กำลังพักเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:819 ../src/gpm-manager.c:1272
-#: ../src/gpm-manager.c:2376
+#: ../src/gpm-manager.c:826 ../src/gpm-manager.c:1279
+#: ../src/gpm-manager.c:2400
 msgid "Hibernating computer"
 msgstr "กำลังจำศีลเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:824
+#: ../src/gpm-manager.c:831
 msgid "DPMS blanking screen"
 msgstr "DPMS กำลังดับจอภาพ"
 
-#: ../src/gpm-manager.c:829 ../src/gpm-manager.c:1287
+#: ../src/gpm-manager.c:836 ../src/gpm-manager.c:1294
 msgid "Shutting down computer"
 msgstr "กำลังปิดเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:834
+#: ../src/gpm-manager.c:841
 msgid "GNOME interactive logout"
 msgstr "การสอบถามการออกจากระบบของ GNOME"
 
-#: ../src/gpm-manager.c:1099 ../src/gpm-manager.c:1189
+#: ../src/gpm-manager.c:1106 ../src/gpm-manager.c:1196
 msgid "Resuming computer"
 msgstr "คอมพิวเตอร์กำลังกลับมาทำงานต่อ"
 
-#: ../src/gpm-manager.c:1111
+#: ../src/gpm-manager.c:1118
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr "HAL ไม่สามารถ%s กรุณาอ่าน <a href=\"%s\">หน้า FAQ</a> สำหรับปัญหาที่พบบ่อย"
 
-#: ../src/gpm-manager.c:1113
+#: ../src/gpm-manager.c:1120
 msgid "hibernate"
 msgstr "จำศีลเครื่อง"
 
-#: ../src/gpm-manager.c:1114
+#: ../src/gpm-manager.c:1121
 msgid "Hibernate Problem"
 msgstr "เกิดปัญหาในการจำศีลเครื่อง"
 
-#: ../src/gpm-manager.c:1201
+#: ../src/gpm-manager.c:1208
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "แบตเตอรีประจุไฟไป %imWh ขณะที่พักเครื่อง"
 
-#: ../src/gpm-manager.c:1204
+#: ../src/gpm-manager.c:1211
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "แบตเตอรีจ่ายไฟไป %imWh ขณะที่พักเครื่อง"
 
-#: ../src/gpm-manager.c:1219
+#: ../src/gpm-manager.c:1226
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -964,134 +989,134 @@ msgstr ""
 "เครื่องคอมพิวเตอร์ไม่สามารถ%s\n"
 "กรุณาอ่าน <a href=\"%s\">หน้า FAQ</a> สำหรับปัญหาที่พบบ่อย"
 
-#: ../src/gpm-manager.c:1221
+#: ../src/gpm-manager.c:1228
 msgid "suspend"
 msgstr "พักเครื่อง"
 
-#: ../src/gpm-manager.c:1222
+#: ../src/gpm-manager.c:1229
 msgid "Suspend Problem"
 msgstr "เกิดปัญหาในการพักเครื่อง"
 
-#: ../src/gpm-manager.c:1259
+#: ../src/gpm-manager.c:1266
 msgid "the DBUS method Suspend() was invoked"
 msgstr "เมธอด Suspend() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:1273
+#: ../src/gpm-manager.c:1280
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "เมธอด Hibernate() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:1288
+#: ../src/gpm-manager.c:1295
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "เมธอด Shutdown() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:1302
+#: ../src/gpm-manager.c:1309
 msgid "Rebooting computer"
 msgstr "กำลังรีบูตเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:1303
+#: ../src/gpm-manager.c:1310
 msgid "the DBUS method Reboot() was invoked"
 msgstr "เมธอด Reboot() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:1353
+#: ../src/gpm-manager.c:1360
 msgid "Screen resume"
 msgstr "เรียกจอภาพกลับขึ้นมาใหม่"
 
-#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1361
 msgid "idle mode ended"
 msgstr "ออกจากโหมดไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-manager.c:1379
+#: ../src/gpm-manager.c:1386
 msgid "Screen dim"
 msgstr "หรี่จอภาพ"
 
-#: ../src/gpm-manager.c:1380
+#: ../src/gpm-manager.c:1387
 msgid "idle mode started"
 msgstr "เข้าสู่โหมดไม่ใช้งานเครื่อง"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1398
+#: ../src/gpm-manager.c:1405
 msgid "the system state is idle"
 msgstr "สถานะของระบบคือไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-manager.c:1472
+#: ../src/gpm-manager.c:1479
 msgid "the power button has been pressed"
 msgstr "ปุ่มเปิด/ปิดเครื่องถูกกด"
 
-#: ../src/gpm-manager.c:1491
+#: ../src/gpm-manager.c:1498
 msgid "the suspend button has been pressed"
 msgstr "ปุ่มพักเครื่องถูกกด"
 
-#: ../src/gpm-manager.c:1511
+#: ../src/gpm-manager.c:1518
 msgid "the hibernate button has been pressed"
 msgstr "ปุ่มจำศีลถูกกด"
 
-#: ../src/gpm-manager.c:1538
+#: ../src/gpm-manager.c:1545
 msgid "The laptop lid has been closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: ../src/gpm-manager.c:1543
+#: ../src/gpm-manager.c:1550
 msgid "The laptop lid has been re-opened"
 msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
 
-#: ../src/gpm-manager.c:1561
+#: ../src/gpm-manager.c:1568
 msgid "the lid has been closed on ac power"
 msgstr "แล็ปท็อปถูกพับเก็บขณะใช้ไฟ AC"
 
-#: ../src/gpm-manager.c:1566
+#: ../src/gpm-manager.c:1573
 msgid "the lid has been closed on battery power"
 msgstr "แล็ปท็อปถูกพับเก็บขณะใช้ไฟจากแบตเตอรี"
 
-#: ../src/gpm-manager.c:1571
+#: ../src/gpm-manager.c:1578
 msgid "Turning LCD panel back on"
 msgstr "เปิดจอภาพ LCD กลับมา"
 
-#: ../src/gpm-manager.c:1572
+#: ../src/gpm-manager.c:1579
 msgid "laptop lid re-opened"
 msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
 
-#: ../src/gpm-manager.c:1683
+#: ../src/gpm-manager.c:1690
 msgid "AC adapter inserted"
 msgstr "ที่แปลงไฟ AC ถูกเสียบเข้า"
 
-#: ../src/gpm-manager.c:1687
+#: ../src/gpm-manager.c:1694
 msgid "AC adapter removed"
 msgstr "ที่แปลงไฟ AC ถูกถอดออก"
 
-#: ../src/gpm-manager.c:1698
+#: ../src/gpm-manager.c:1705
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "แล็ปท็อปถูกพับเก็บอยู่ แล้วที่แปลงไฟ AC ถูกถอด (และ gconf ยังใช้ได้)"
 
-#: ../src/gpm-manager.c:1780
+#: ../src/gpm-manager.c:1787
 msgid "Power Critically Low"
 msgstr "พลังงานต่ำถึงขั้นวิกฤติ"
 
-#: ../src/gpm-manager.c:1784
+#: ../src/gpm-manager.c:1791
 msgid "Power Very Low"
 msgstr "พลังงานต่ำมาก"
 
-#: ../src/gpm-manager.c:1788
+#: ../src/gpm-manager.c:1795
 msgid "Power Low"
 msgstr "พลังงานต่ำ"
 
-#: ../src/gpm-manager.c:1813
+#: ../src/gpm-manager.c:1820
 msgid "battery is critically low"
 msgstr "ไฟแบตเตอรีต่ำถึงขั้นวิกฤติ"
 
-#: ../src/gpm-manager.c:1857
+#: ../src/gpm-manager.c:1865
 msgid "Your battery is now fully charged"
 msgstr "แบตเตอรีของคุณประจุไฟเต็มแล้ว"
 
-#: ../src/gpm-manager.c:1858
+#: ../src/gpm-manager.c:1866
 msgid "Battery Charged"
 msgstr "ประจุแบตเตอรีเสร็จแล้ว"
 
-#: ../src/gpm-manager.c:1924
+#: ../src/gpm-manager.c:1930
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr "ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อแบตเตอรีหมด"
 
-#: ../src/gpm-manager.c:1929
+#: ../src/gpm-manager.c:1935
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1100,23 +1125,23 @@ msgstr ""
 "ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะพักเครื่อง<br><b>ข้อสังเกต:</b> "
 "ต้องเหลือพลังงานเล็กน้อยถ้าจะนำเครื่องเข้าสู่ภาวะพักเครื่อง"
 
-#: ../src/gpm-manager.c:1935
+#: ../src/gpm-manager.c:1941
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
-#: ../src/gpm-manager.c:1939
+#: ../src/gpm-manager.c:1945
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "ประจุไฟในแบตเตอรีต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
-#: ../src/gpm-manager.c:1952
+#: ../src/gpm-manager.c:1958
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี"
 
-#: ../src/gpm-manager.c:1959
+#: ../src/gpm-manager.c:1965
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1125,31 +1150,31 @@ msgstr ""
 "คุณเหลือพลังงานในแบตเตอรีอีกประมาณ <b>%s</b> (%d%%) กรุณาเสียบที่แปลงไฟ AC "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-manager.c:2043
+#: ../src/gpm-manager.c:2052
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อ UPS แบตเตอรีหมด"
 
-#: ../src/gpm-manager.c:2048
+#: ../src/gpm-manager.c:2057
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
-#: ../src/gpm-manager.c:2052
+#: ../src/gpm-manager.c:2061
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
-#: ../src/gpm-manager.c:2059
+#: ../src/gpm-manager.c:2068
 msgid "UPS is critically low"
 msgstr "UPS ต่ำถึงขั้นวิกฤติ"
 
-#: ../src/gpm-manager.c:2062
+#: ../src/gpm-manager.c:2071
 msgid "Your system is running on backup power!"
 msgstr "ระบบกำลังใช้ไฟจากแหล่งจ่ายไฟสำรอง!"
 
-#: ../src/gpm-manager.c:2066
+#: ../src/gpm-manager.c:2075
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1158,7 +1183,7 @@ msgstr ""
 "คุณเหลือพลังงานใน UPS อีกประมาณ <b>%s</b> (%d%%) กรุณาต่อแหล่งจ่ายไฟ "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-manager.c:2152
+#: ../src/gpm-manager.c:2164
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1167,11 +1192,11 @@ msgstr ""
 "อุปกรณ์ %s ที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%d%%) อุปกรณ์นี้จะหยุดทำงานในไม่ช้า "
 "ถ้าไม่ประจุไฟเพิ่ม"
 
-#: ../src/gpm-manager.c:2377
+#: ../src/gpm-manager.c:2401
 msgid "user clicked hibernate from tray menu"
 msgstr "ผู้ใช้คลิกจำศีลเครื่องจากเมนูที่ถาด"
 
-#: ../src/gpm-manager.c:2402
+#: ../src/gpm-manager.c:2426
 msgid "user clicked suspend from tray menu"
 msgstr "ผู้ใช้คลิกพักเครื่องจากเมนูที่ถาด"
 
