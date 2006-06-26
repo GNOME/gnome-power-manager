@@ -119,6 +119,18 @@ fi
 AC_SUBST(DOCDIR)
 
 dnl ---------------------------------------------------------------------------
+dnl - PolicyKit support?
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(policykit, [  --enable-policykit      support PolicyKit permissions daemon (requires polkitd)],enable_polkit=$enableval,enable_polkit=yes)
+AC_MSG_CHECKING([whether to support PolicyKit])
+have_polkit=no
+if test x$enable_polkit = xyes ; then
+    have_polkit=yes
+    AC_DEFINE(HAVE_POLKIT, 1, [Define if we use PolicyKit])
+fi
+#AC_MSG_RESULT(yes)
+
+dnl ---------------------------------------------------------------------------
 dnl - DocBook Documentation
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(docbook-docs, [  --enable-docbook-docs   build documentation (requires xmlto)],enable_docbook_docs=$enableval,enable_docbook_docs=auto)
@@ -470,6 +482,7 @@ echo "
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
         DPMS support:              ${have_dpms}
+        PolicyKit support:         ${have_polkit}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR

@@ -79,6 +79,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-debug.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-polkit.h					\
+	gpm-polkit.c					\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

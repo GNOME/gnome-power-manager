@@ -63,6 +63,7 @@
 #include "gpm-brightness.h"
 #include "gpm-tray-icon.h"
 #include "gpm-inhibit.h"
+#include "gpm-polkit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 
@@ -108,6 +109,7 @@ struct GpmManagerPrivate
 	GpmBrightness   *brightness;
 	GpmScreensaver  *screensaver;
 	GpmInhibit	*inhibit;
+	GpmPolkit	*polkit;
 
 	guint32          ac_throttle_id;
 	guint32          dpms_throttle_id;
@@ -260,13 +262,19 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 			     gboolean   *can,
 			     GError    **error)
 {
-	gboolean gconf_policy;
+	gboolean gconf_ok;
+	gboolean polkit_ok = TRUE;
+	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
+	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_SUSPEND, NULL);
-	if ( gconf_policy && gpm_hal_can_suspend () ) {
+	hal_ok = gpm_hal_can_suspend ();
+#ifdef HAVE_POLKIT
+	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
+#endif
+	if ( gconf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
 
@@ -286,16 +294,21 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 			       gboolean   *can,
 			       GError    **error)
 {
-	gboolean gconf_policy;
+	gboolean gconf_ok;
+	gboolean polkit_ok = TRUE;
+	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gconf_policy = gconf_client_get_bool (manager->priv->gconf_client,
+	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_HIBERNATE, NULL);
-	if ( gconf_policy && gpm_hal_can_hibernate () ) {
+	hal_ok = gpm_hal_can_hibernate ();
+#ifdef HAVE_POLKIT
+	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
+#endif
+	if ( gconf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
-
 	return TRUE;
 }
 
@@ -311,11 +324,12 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 			      gboolean   *can,
 			      GError    **error)
 {
-	if (can) {
-		*can = FALSE;
-	}
-	/* FIXME: check other stuff */
-	if (can) {
+	*can = FALSE;
+	gboolean polkit_ok = TRUE;
+#ifdef HAVE_POLKIT
+	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
+#endif
+	if ( polkit_ok ) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -333,11 +347,12 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 			    gboolean   *can,
 			    GError    **error)
 {
-	if (can) {
-		*can = FALSE;
-	}
-	/* FIXME: check other stuff */
-	if (can) {
+	*can = FALSE;
+	gboolean polkit_ok = TRUE;
+#ifdef HAVE_POLKIT
+	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
+#endif
+	if ( polkit_ok ) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -2579,6 +2594,9 @@ gpm_manager_init (GpmManager *manager)
 	/* use a class to handle the complex stuff */
 	manager->priv->inhibit = gpm_inhibit_new ();
 
+#ifdef HAVE_POLKIT
+	manager->priv->polkit = gpm_polkit_new ();
+#endif
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
 	g_signal_connect (G_OBJECT (manager->priv->tray_icon), "destroy",
@@ -2726,6 +2744,9 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
+#ifdef HAVE_POLKIT
+	g_object_unref (manager->priv->polkit);
+#endif
 	g_object_unref (manager->priv->power);
 	g_object_unref (manager->priv->brightness);
 	g_object_unref (manager->priv->tray_icon);
