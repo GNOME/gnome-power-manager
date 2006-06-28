@@ -2604,8 +2604,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
-	/* logging system needs access to the power stuff... bit of a bodge */
-	gpm_info_set_power (manager->priv->info, manager->priv->power);
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */

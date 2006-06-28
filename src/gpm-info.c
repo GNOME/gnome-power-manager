@@ -654,22 +654,6 @@ gpm_info_log_do_poll (gpointer data)
 }
 
 /**
- * gpm_info_set_power:
- * @info: This info class instance
- * @power: The power class instance
- *
- * The logging system needs access to the power stuff for the device
- * information and also the values to log for the graphs.
- **/
-void
-gpm_info_set_power (GpmInfo *info, GpmPower *power)
-{
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-	info->priv->power = power;
-}
-
-/**
  * gpm_info_class_init:
  * @klass: This info class instance
  **/
@@ -698,6 +682,9 @@ gpm_info_init (GpmInfo *info)
 
 	/* find out if we should log and display the extra graphs */
 	info->priv->is_laptop = gpm_hal_is_laptop ();
+
+	/* singleton, so okay */
+	info->priv->power = gpm_power_new ();
 
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
@@ -749,6 +736,7 @@ gpm_info_finalize (GObject *object)
 		g_object_unref (info->priv->time_data);
 	}
 	g_object_unref (info->priv->events);
+	g_object_unref (info->priv->power);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }

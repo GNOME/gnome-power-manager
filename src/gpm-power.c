@@ -73,6 +73,7 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
+static gpointer      gpm_power_object = NULL;
 
 G_DEFINE_TYPE (GpmPower, gpm_power, G_TYPE_OBJECT)
 
@@ -1897,9 +1898,12 @@ gpm_power_finalize (GObject *object)
 GpmPower *
 gpm_power_new (void)
 {
-	GpmPower *power;
-
-	power = g_object_new (GPM_TYPE_POWER, NULL);
-
-	return GPM_POWER (power);
+	if (gpm_power_object) {
+		g_object_ref (gpm_power_object);
+	} else {
+		gpm_power_object = g_object_new (GPM_TYPE_POWER, NULL);
+		g_object_add_weak_pointer (gpm_power_object,
+					   (gpointer *) &gpm_power_object);
+	}
+	return GPM_POWER (gpm_power_object);
 }

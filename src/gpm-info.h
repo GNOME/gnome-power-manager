@@ -23,7 +23,6 @@
 #define __GPMINFO_H
 
 #include <glib-object.h>
-#include "gpm-power.h"
 #include "gpm-graph-widget.h"
 
 G_BEGIN_DECLS
@@ -51,8 +50,6 @@ typedef struct
 GType		 gpm_info_get_type			(void);
 GpmInfo		*gpm_info_new				(void);
 
-void		 gpm_info_set_power			(GpmInfo	*info,
-							 GpmPower	*power);
 void		 gpm_info_show_window			(GpmInfo	*info);
 void		 gpm_info_event_log			(GpmInfo	*info,
 							 GpmGraphEvent	 event,

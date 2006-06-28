@@ -50,7 +50,7 @@
 static void	gpm_brightness_class_init (GpmBrightnessClass *klass);
 static void	gpm_brightness_init	  (GpmBrightness      *brightness);
 static void	gpm_brightness_finalize	  (GObject	      *object);
-static gboolean	gpm_brightness_update_hw (GpmBrightness *brightness);
+static gboolean	gpm_brightness_update_hw  (GpmBrightness      *brightness);
 static int	gpm_brightness_hw_to_percent (int hw, int levels);
 
 #define GPM_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS, GpmBrightnessPrivate))
@@ -329,13 +329,63 @@ gpm_brightness_percent_to_hw (int percentage,
  * gpm_brightness_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
+ *
+ * Just do the step up and down, after knowing the step interval
+ **/
+static void
+gpm_brightness_dim_hw_step (GpmBrightness *brightness,
+		            int            new_level_hw,
+		            int		   step_interval)
+{
+	int current_hw;
+	int a;
+	current_hw = brightness->priv->current_hw;
+
+	/* we do the step interval as we can have insane levels of brightness */
+	if (new_level_hw > current_hw) {
+		/* going up */
+		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
+			gpm_brightness_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
+	} else {
+		/* going down */
+		for (a=current_hw; a >= new_level_hw; a-=step_interval) {
+			gpm_brightness_set_hw (brightness, a);
+			g_usleep (1000 * DIM_INTERVAL);
+		}
+	}
+}
+
+/**
+ * gpm_brightness_get_step:
+ * @brightness: This brightness class instance
+ * Return value: the amount of hardware steps to do on each update
+ **/
+static int
+gpm_brightness_get_step (GpmBrightness *brightness)
+{
+	int step;
+	if (brightness->priv->levels < 20) {
+		/* less than 20 states should do every state */
+		step = 1;
+	} else {
+		/* macbook pro has a bazzillion brightness levels, do in 5% steps */
+		step = brightness->priv->levels / 20;
+	}
+	return step;
+}
+
+/**
+ * gpm_brightness_dim_hw:
+ * @brightness: This brightness class instance
+ * @new_level_hw: The new hardware level
  **/
 static void
 gpm_brightness_dim_hw (GpmBrightness *brightness,
 		       int	      new_level_hw)
 {
-	int   current_hw;
-	int   a;
+	int step;
 
 	if (! brightness->priv->has_hardware) {
 		return;
@@ -347,21 +397,9 @@ gpm_brightness_dim_hw (GpmBrightness *brightness,
 		return;
 	}
 
-	current_hw = brightness->priv->current_hw;
-
-	if (new_level_hw > current_hw) {
-		/* going up */
-		for (a=current_hw; a <= new_level_hw; a++) {
-			gpm_brightness_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
-	} else {
-		/* going down */
-		for (a=current_hw; a >= new_level_hw; a--) {
-			gpm_brightness_set_hw (brightness, a);
-			g_usleep (1000 * DIM_INTERVAL);
-		}
-	}
+	/* macbook pro has a bazzillion brightness levels, be a bit clever */
+	step = gpm_brightness_get_step (brightness);
+	gpm_brightness_dim_hw_step (brightness, new_level_hw, step);
 }
 
 /**
@@ -456,7 +494,7 @@ gpm_brightness_undim (GpmBrightness *brightness)
 void
 gpm_brightness_set (GpmBrightness *brightness)
 {
-	gpm_brightness_set_hw (brightness, brightness->priv->level_std_hw);
+	gpm_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
 }
 
 /**
@@ -488,6 +526,8 @@ gpm_brightness_get (GpmBrightness *brightness)
 void
 gpm_brightness_up (GpmBrightness *brightness)
 {
+	int step;
+
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
@@ -496,7 +536,9 @@ gpm_brightness_up (GpmBrightness *brightness)
 	if (brightness->priv->does_own_updates) {
 		gpm_brightness_update_hw (brightness);
 	} else {
-		gpm_brightness_set_hw (brightness, brightness->priv->current_hw + 1);
+		/* macbook pro has a bazzillion brightness levels, be a bit clever */
+		step = gpm_brightness_get_step (brightness);
+		gpm_brightness_set_hw (brightness, brightness->priv->current_hw + step);
 	}
 
 	int percentage;
@@ -515,6 +557,8 @@ gpm_brightness_up (GpmBrightness *brightness)
 void
 gpm_brightness_down (GpmBrightness *brightness)
 {
+	int step;
+
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
@@ -523,6 +567,8 @@ gpm_brightness_down (GpmBrightness *brightness)
 	if (brightness->priv->does_own_updates) {
 		gpm_brightness_update_hw (brightness);
 	} else {
+		/* macbook pro has a bazzillion brightness levels, be a bit clever */
+		step = gpm_brightness_get_step (brightness);
 		gpm_brightness_set_hw (brightness, brightness->priv->current_hw - 1);
 	}
 

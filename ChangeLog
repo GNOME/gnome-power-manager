@@ -1,3 +1,23 @@
+2006-06-28  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Increase the graph time size to 6 hours.
+
+	* src/gpm-brightness.c:
+	Support MacBook Pro with it's crazy number of brightness states.
+	Might fix #346080
+
+	* src/gpm-dbus-session-monitor.c:
+	* src/gpm-dbus-system-monitor.c:
+	* src/gpm-power.c:
+	Make singleton classes to save memory and CPU.
+
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c:
+	Remove the bodge of passing the pointer to the power class now we are
+	using singletons.
+
 2006-06-26  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/gnome-power-manager.xml:
