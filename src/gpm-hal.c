@@ -214,8 +214,9 @@ gpm_hal_suspend (gint wakeup)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_ROOT_COMPUTER,
@@ -245,8 +246,9 @@ hal_pm_method_void (const gchar* method)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_ROOT_COMPUTER,
@@ -311,8 +313,9 @@ gpm_hal_enable_power_save (gboolean enable)
 		return FALSE;
 	}
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 
 	gpm_debug ("Doing SetPowerSave (%i)", enable);
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
@@ -327,6 +330,75 @@ gpm_hal_enable_power_save (gboolean enable)
 
 	g_object_unref (G_OBJECT (hal_proxy));
 	return retval;
+}
+
+#if 0
+Refresh devices as a resume can do funny things
+for type in button battery ac_adapter
+do
+	devices=`hal-find-by-capability --capability $type`
+	for device in $devices
+	do
+		dbus-send --system --print-reply --dest=org.freedesktop.Hal \
+			  $device org.freedesktop.Hal.Device.Rescan
+	done
+done
+#endif
+/** Rescans a HAL device manually
+ *
+ *  @param	udi		The HAL UDI
+ *  @return			Success, true if we rescan'd
+ */
+static gboolean
+gpm_hal_device_rescan (const char *udi)
+{
+	gint ret = 0;
+	DBusGConnection *system_connection = NULL;
+	DBusGProxy *hal_proxy = NULL;
+	GError *error = NULL;
+	gboolean retval;
+
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
+		return FALSE;
+	}
+
+	gpm_debug ("Doing Rescan (%s)", udi);
+	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
+					       HAL_DBUS_SERVICE,
+					       udi,
+					       HAL_DBUS_INTERFACE_DEVICE);
+	retval = TRUE;
+	dbus_g_proxy_call (hal_proxy, "Rescan", &error,
+			   G_TYPE_INVALID,
+			   G_TYPE_BOOLEAN, &ret, G_TYPE_INVALID);
+	retval = gpm_hal_handle_error (ret, error, "rescan");
+
+	g_object_unref (G_OBJECT (hal_proxy));
+	return retval;
+
+}
+
+/** Rescans all devices of a specific capability manually
+ *
+ *  @param	capability	The HAL capability, e.g. laptop_panel
+ *  @return			Success, true if we found and devices
+ */
+gboolean
+gpm_hal_device_rescan_capability (const char *capability)
+{
+	gchar **devices;
+	int i;
+
+	gpm_hal_find_device_capability (capability, &devices);
+	if (devices == NULL) {
+		gpm_debug ("No devices of capability %s", capability);
+		return FALSE;
+	}
+	for (i = 0; devices[i]; i++) {
+		gpm_hal_device_rescan (devices[i]);
+	}
+	gpm_hal_free_capability (devices);
+	return TRUE;
 }
 
 /** HAL: get boolean type
@@ -344,8 +416,9 @@ gpm_hal_device_get_bool (const gchar *udi, const gchar *key, gboolean *value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
@@ -382,8 +455,9 @@ gpm_hal_device_get_string (const gchar *udi, const gchar *key, gchar **value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
@@ -418,8 +492,9 @@ gpm_hal_device_get_int (const gchar *udi, const gchar *key, gint *value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
@@ -453,8 +528,9 @@ gpm_hal_find_device_capability (const gchar *capability, gchar ***value)
 	GError *error = NULL;
 	gboolean retval;
 
-	if (!gpm_hal_get_dbus_connection (&system_connection))
+	if (!gpm_hal_get_dbus_connection (&system_connection)) {
 		return FALSE;
+	}
 	hal_proxy = dbus_g_proxy_new_for_name (system_connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_DBUS_PATH_MANAGER,
@@ -501,7 +577,7 @@ gpm_hal_num_devices_of_capability (const gchar *capability)
 	gchar **names;
 
 	gpm_hal_find_device_capability (capability, &names);
-	if (!names) {
+	if (names == NULL) {
 		gpm_debug ("No devices of capability %s", capability);
 		return 0;
 	}

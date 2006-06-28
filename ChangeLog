@@ -1,5 +1,14 @@
 2006-06-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal.h:
+	* src/gpm-hal.c:
+	Add gpm_hal_device_rescan() and gpm_hal_device_rescan_capability()
+	so we can start to fix #346082.
+	I've still got to plumb this into the power or manager classes, but I'm
+	not sure how best to do this yet. Give me a few hours.
+
+2006-06-28  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	Increase the graph time size to 6 hours.
 

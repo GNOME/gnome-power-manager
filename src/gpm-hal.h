@@ -62,7 +62,7 @@ gboolean	 gpm_hal_device_get_int			(const gchar	*udi,
 							 gint		*value);
 gboolean	 gpm_hal_find_device_capability		(const gchar	*capability,
 							 gchar		***value);
-
+gboolean	 gpm_hal_device_rescan_capability	(const char *capability);
 gint		 gpm_hal_num_devices_of_capability	(const gchar	*capability);
 gint		 gpm_hal_num_devices_of_capability_with_value (const gchar *capability,
 							 const gchar	*key,
