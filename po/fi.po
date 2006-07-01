@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-30 12:07+0100\n"
-"PO-Revision-Date: 2006-05-06 10:51+0300\n"
+"POT-Creation-Date: 2006-07-01 12:43+0200\n"
+"PO-Revision-Date: 2006-07-01 12:53+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -33,9 +33,8 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
-#, fuzzy
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "Sallitaanko lepotilojen toiminnot käynnistää valikosta"
+msgstr "Salli keskeytys- ja lepotilojen toiminnot valikosta"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
@@ -71,6 +70,14 @@ msgid "Hibernate enabled"
 msgstr "Lepotila käytettävissä"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid "If DBUS inhibit requests should be ignored."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:12
 #, fuzzy
 msgid ""
 "If a notification message should be displayed if the HAL action (suspend or "
@@ -79,60 +86,70 @@ msgstr ""
 "Näytetäänkö huomautusviesti, jos HAL-toimenpide (keskeytys- tai lepotila) "
 "epäonnistuu"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:13
 #, fuzzy
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr "Annetaanko käyttäjälle huomautusviesti kun akku on ladattu täyteen"
 
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:14
 #, fuzzy
 msgid "If network utilization should be checked before doing the idle action."
 msgstr ""
 "Tarkistetaanko prosessorikuorma ennen joutenolon toiminnon käynnistämistä."
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:15
 #, fuzzy
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr ""
 "Tarkistetaanko prosessorikuorma ennen joutenolon toiminnon käynnistämistä."
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid "If the PC speaker (beeping) should be used"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid ""
+"If the PC speaker should be used to beep when the power is low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:21
 #, fuzzy
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun verkkovirta on käytössä"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:22
 #, fuzzy
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun UPS on käytössä"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:23
 #, fuzzy
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun akku on käytössä"
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:24
 #, fuzzy
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
@@ -142,43 +159,43 @@ msgstr ""
 "valintaa käytetään vain, jos avain \"lock_use_screensaver\" on asetettu "
 "arvoon \"false\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:25
 #, fuzzy
 msgid "If the screen should be dimmed to save power when the computer is idle."
 msgstr "Himmennetäänkö näyttö virran säästämiseksi tietokoneen ollessa jouten."
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:26
 #, fuzzy
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun verkkovirta on käytössä."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:27
 #, fuzzy
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun UPS on käytössä."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:28
 #, fuzzy
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun akku on käytössä."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:29
 #, fuzzy
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Voiko käyttäjä siirtää tietokoneen lepotilaan"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
 msgid "If the user is authorized to suspend the computer."
 msgstr "Voiko käyttäjä siirtää tietokoneen keskeytystilaan"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:31
 #, fuzzy
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Annetaanko käyttäjälle huomautus kun virtajohto on irroitettu"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:32
 #, fuzzy
 msgid ""
 "If time based notifications should be used. If set to false, then the "
@@ -188,7 +205,7 @@ msgstr ""
 "käytetään niiden sijasta prosenttiarvojen muutoksia. Tämä saattaa auttaa "
 "joihinkin rikkinäisiin ACPI BIOSeihin."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:33
 #, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
@@ -198,7 +215,7 @@ msgstr ""
 "valintaa käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
 "asetettu arvoon \"false\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:34
 #, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
@@ -208,7 +225,7 @@ msgstr ""
 "valintaa käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
 "asetettu arvoon \"false\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:35
 #, fuzzy
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
@@ -218,104 +235,96 @@ msgstr ""
 "päätettässä lukitaanko näyttö lepotilan, keskeytystilan tai näytön "
 "pimennyksen jälkeen."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid "LCD brightness when on AC"
 msgstr "LCD-näytön kirkkaus käytettäessä verkkovirtaa"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on battery"
 msgstr "LCD-näytön kirkkaus käytettäessä akkua"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
 msgstr "Kannettavan kannen sulkemisen toiminto käytettäessä akkua"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action when on AC"
 msgstr "Kannettavan kannen sulkemisen toiminto käytettäessä verkkovirtaa"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen on hibernate"
 msgstr "Lukitse näyttö lepotilassa"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Lock screen on suspend"
 msgstr "Lukitse näyttö keskeytystilassa"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
-#, fuzzy
-msgid "Lock screen when blanked"
-msgstr "Lukitse näyttö pimennettäessä näyttö"
-
-#: ../data/gnome-power-manager.schemas.in.h:39
-#, fuzzy
-msgid "Notify on a HAL error"
-msgstr "Huomauta keskeytys- tai lepotilan HAL-virheestä."
-
-#: ../data/gnome-power-manager.schemas.in.h:40
-#, fuzzy
-msgid "Notify when AC adapter is disconnected"
-msgstr "Huomautetaanko kun verkkovirta on irroitettu"
-
-#: ../data/gnome-power-manager.schemas.in.h:41
-#, fuzzy
-msgid "Notify when fully charged"
-msgstr "Huomautetaanko kun akku on täysin ladattu"
-
 #: ../data/gnome-power-manager.schemas.in.h:42
+msgid "Lock screen when blanked"
+msgstr "Lukitaanko näyttö pimennettäessä näyttö"
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid "Notify on a HAL error"
+msgstr "Huomautetaanko HAL-virheistä"
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid "Notify when AC adapter is disconnected"
+msgstr "Huomautetaanko, kun verkkovirta on irroitettu"
+
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid "Notify when fully charged"
+msgstr "Huomautetaanko, kun akku on täysin ladattu"
+
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 "Kuinka monta sekuntia palautumisen jälkeen ollaan valitsematta toimintatapaa"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Percentage action is taken"
 msgstr "Prosenttiosuus, jonka jälkeen toiminto suoritetaan"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Percentage considered critical"
 msgstr "Prosenttiosuus, jonka jälkeen lataus on kriittinen"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Percentage considered low"
 msgstr "Prosenttiosuus, jonka jälkeen lataus on matala"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage considered very low"
 msgstr "Prosenttiosuus, jonka jälkeen lataus on hyvin matala"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Power button action"
 msgstr "Virtanapin toiminto"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Sleep timeout computer when on AC"
 msgstr "Tietokoneen virransäästötilan viive käytettäessä verkkovirtaa"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Sleep timeout computer when on battery"
 msgstr "Tietokoneen virransäästötilan viive käytettäessä akkua"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Sleep timeout display when on AC"
 msgstr "Näytön virransäästötilan viive käytettäessä verkkovirtaa"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout display when on battery"
 msgstr "Näytön virransäästötilan viive käytettäessä akkua"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Suspend button action"
 msgstr "Virransäästönapin toiminto"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Suspend enabled"
 msgstr "Keskeytystila käytettävissä"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -323,35 +332,35 @@ msgstr ""
 "Suoritettava toiminto, kun UPSin virta on lähes loppu. Kelvolliset arvot "
 "ovat \"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:55
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Suoritettava toiminto, kun akku on lähes tyhjä. Kelvolliset arvot ovat "
+"Suoritettava toiminto, kun akku on kriittisen tyhjä. Kelvolliset arvot ovat "
 "\"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:56
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
-"power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
 msgstr ""
 "Suoritettava toiminto, kun kannettavan kansi suljetaan ja kannettava käyttää "
-"verkkovirtaa. Kelvolliset arvot ovat \"hibernate\", \"suspend\" ja \"blank\"."
+"verkkovirtaa. Kelvolliset arvot ovat \"suspend\", \"hibernate\", \"blank\" "
+"ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:57
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
-"battery power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
 msgstr ""
 "Suoritettava toiminto, kun kannettavan kansi suljetaan ja kannettava käyttää "
-"akkua. Kelvolliset arvot ovat \"hibernate\", \"suspend\" ja \"blank\"."
+"akkua. Kelvolliset arvot ovat \"suspend\", \"hibernate\", \"blank\" ja "
+"\"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:58
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -361,8 +370,7 @@ msgstr ""
 "Kelvolliset arvot ovat \"suspend\", \"hibernate\", \"interactive\", "
 "\"shutdown\" ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:59
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -372,8 +380,7 @@ msgstr ""
 "arvot ovat \"suspend\", \"hibernate\" \"interactive\", \"shutdown\" ja "
 "\"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:60
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -382,17 +389,15 @@ msgstr ""
 "Suoritettava toiminto, kun virransäästönappia painetaan. Kelvolliset arvot "
 "ovat \"suspend\", \"hibernate\" \"interactive\", \"shutdown\" ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:61
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
-"Aika sekunteina, jonka jälkeen näyttö siirtyy lepotilaan verkkovirran "
+"Aika sekunteina, jonka jälkeen näyttö siirtyy keskeytystilaan verkkovirran "
 "ollessa kytkettynä."
 
-#: ../data/gnome-power-manager.schemas.in.h:62
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -400,8 +405,7 @@ msgstr ""
 "Aika sekunteina, jonka tietokoneen tulee olla jouten verkkovirran ollessa "
 "kytkettynä ennen kuin se siirtyy virransäästötilaan."
 
-#: ../data/gnome-power-manager.schemas.in.h:63
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
@@ -409,105 +413,109 @@ msgstr ""
 "Aika sekunteina, jonka tietokoneen tulee olla jouten käytettäessä akkua "
 "ennen kuin se siirtyy virransäästötilaan."
 
-#: ../data/gnome-power-manager.schemas.in.h:64
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
 "Aika sekunteina, jonka tietokoneen tulee olla jouten käytettäessä akkua "
-"ennen kuin se näyttö siirtyy virransäästötilaan."
+"ennen kuin näyttö siirtyy virransäästötilaan."
 
-#: ../data/gnome-power-manager.schemas.in.h:65
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
 "Näytön kirkkaus käytettäessä verkkovirtaa. Kelvollinen arvo on väliltä 0-100."
 
-#: ../data/gnome-power-manager.schemas.in.h:66
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
-msgstr "Näytön kirkkaus käytettäessä akkua. Kelvollinen arvo on väliltä 0-100."
+msgstr ""
+"Näytön kirkkaus käytettäessä akkua. Kelvollinen arvo on väliltä 0-100."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "The brightness of the screen when idle"
 msgstr "Näytön kirkkaus, kun istunto on jouten"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "The damping factor for the rate"
-msgstr "Nopeutta laskettaessa käytetty pehmennyskerroin"
+msgstr "Nopeudelle käytetty pehmennyskerroin"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:73
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:74
+msgid "The maximum time displayed on the graph"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid "The time remaining when action is taken"
 msgstr "Jäljelläoleva aika, kun toiminto suoritetaan"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid "The time remaining when critical"
 msgstr "Jäljelläoleva aika, kun lataustila on kriittinen"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid "The time remaining when low"
 msgstr "Jäljelläoleva aika, kun lataustila on matala"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid "The time remaining when very low"
 msgstr "Jäljelläoleva aika, kun lataustila on hyvin matala"
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:87
 #, fuzzy
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
@@ -516,7 +524,7 @@ msgstr ""
 "Virransäästötilan tyyppi jota käytetään, kun tietokone on jouten. "
 "Kelvolliset arvot ovat \"hibernate\", \"suspend\" ja \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
@@ -524,29 +532,29 @@ msgid ""
 "accurate, but the graphs less responsive."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid "UPS critical low action"
 msgstr "Toiminto, kun UPS:in lataustila on kriittisen matala"
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid "Use gnome-screensaver lock setting"
 msgstr "Käytä gnome-screensaverin lukitusasetusta"
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid "When to show the notification icon"
 msgstr "Milloin ilmoitusalueen kuvake näytetään"
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Käytetäänkö joutenollessa lepotilaa, keskeytystilaa vai ei mitään"
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid "Whether to use time-based notifications"
 msgstr "Käytetäänkö aikapohjaisia huomautuksia"
 
@@ -571,9 +579,8 @@ msgid "<b>Laptop batteries</b>"
 msgstr "<b>Kannettavan akut</b>"
 
 #: ../data/gpm-info.glade.h:3
-#, fuzzy
 msgid "<b>UPS</b>"
-msgstr "<b>UPSit</b>"
+msgstr "<b>UPS</b>"
 
 #: ../data/gpm-info.glade.h:4
 msgid "<b>Wireless devices</b>"
@@ -615,8 +622,8 @@ msgstr "Lisää"
 msgid "Power History"
 msgstr "Virrankäytön historia"
 
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1354
-#: ../src/gpm-manager.c:1698
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1470
+#: ../src/gpm-manager.c:1814
 msgid "Power Information"
 msgstr "Tietoja virrankäytöstä"
 
@@ -639,6 +646,34 @@ msgid ""
 msgstr ""
 "Näyttää, kuinka jäljelläoleva aika täyteen latauksen tai tyhjenemiseen "
 "vaihtelee pitkällä aikavälillä."
+
+#: ../data/gpm-inhibit-test.glade.h:1
+msgid "Application:"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:2
+msgid "Burning DVD, titled \"My Photos\""
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:3
+msgid "GNOME Acme Foo"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "Inhibit"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "Inhibit Tester"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:6
+msgid "Reason:"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "UnInhibit"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -721,18 +756,22 @@ msgid "When l_aptop lid is closed:"
 msgstr "Sulj_ettaessa kannettavan kansi:"
 
 #: ../data/gpm-prefs.glade.h:21
+msgid "When power _button is pressed:"
+msgstr "Painettaessa _virtanappia:"
+
+#: ../data/gpm-prefs.glade.h:22
 msgid "_Always display icon"
 msgstr "_Näytä kuvake aina"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:23
 msgid "_Dim the laptop panel when idle"
 msgstr "_Himmennä kannettavan näyttö joutilaana"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:24
 msgid "_Never display icon"
 msgstr "Älä koskaan näytä kuvaketta"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:25
 msgid "_Only display when battery life is critical"
 msgstr "_Näytä vain akun latauksen ollessa kriittinen:"
 
@@ -744,18 +783,18 @@ msgstr "Suunta"
 msgid "The orientation of the tray."
 msgstr "Ilmoitusalueen suunta."
 
-#: ../src/gpm-common.c:49
+#: ../src/gpm-common.c:60
 msgid "Unknown time"
 msgstr "Tuntematon aika"
 
-#: ../src/gpm-common.c:54
+#: ../src/gpm-common.c:65
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i minuutti"
 msgstr[1] "%i minuuttia"
 
-#: ../src/gpm-common.c:65
+#: ../src/gpm-common.c:76
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -764,18 +803,18 @@ msgstr[1] "%i tuntia"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:82
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:72
+#: ../src/gpm-common.c:83
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "tunti"
 msgstr[1] "tuntia"
 
-#: ../src/gpm-common.c:73
+#: ../src/gpm-common.c:84
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuutti"
@@ -809,8 +848,7 @@ msgstr "DPMS pois käytöstä"
 msgid "DPMS on"
 msgstr "DPMS käytössä"
 
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:85
 msgid "Suspend"
 msgstr "Keskeytystila"
 
@@ -818,7 +856,7 @@ msgstr "Keskeytystila"
 msgid "Resume"
 msgstr "Palautus"
 
-#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:86
+#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:87
 msgid "Hibernate"
 msgstr "Lepotila"
 
@@ -838,17 +876,35 @@ msgstr "Huomautus"
 msgid "Unknown event!"
 msgstr "Tuntematon tapahtuma!"
 
-#: ../src/gpm-info.c:248
+#: ../src/gpm-info.c:251
 msgid "Time"
 msgstr "Aika"
 
-#: ../src/gpm-info.c:253
+#: ../src/gpm-info.c:256
 msgid "Event"
 msgstr "Tapahtuma"
 
-#: ../src/gpm-info.c:258
+#: ../src/gpm-info.c:261
 msgid "Description"
 msgstr "Kuvaus"
+
+#: ../src/gpm-inhibit.c:291
+#, c-format
+msgid "<b>%s</b> has stopped the %s from taking place : <i>%s</i>."
+msgstr ""
+
+#: ../src/gpm-inhibit.c:295
+#, c-format
+msgid "Multiple applications have stopped the %s from taking place."
+msgstr ""
+
+#: ../src/gpm-inhibit-test.c:158 ../src/gpm-prefs.c:86
+msgid "GNOME Power Preferences"
+msgstr "Gnomen virrankäytön asetukset"
+
+#: ../src/gpm-inhibit-test.c:164
+msgid "Power Inhibit Test"
+msgstr ""
 
 #: ../src/gpm-main.c:126
 msgid "Do not daemonize"
@@ -862,54 +918,59 @@ msgstr "Näytä ylimääräisiä debug-tietoja"
 msgid "GNOME Power Manager"
 msgstr "Gnomen virranhallinta"
 
-#: ../src/gpm-manager.c:550
+#: ../src/gpm-manager.c:234
+#, c-format
+msgid "Request to %s"
+msgstr ""
+
+#: ../src/gpm-manager.c:596
 msgid "On battery power"
 msgstr "Käyttää akkua"
 
-#: ../src/gpm-manager.c:565
+#: ../src/gpm-manager.c:611
 msgid "Display power management activated"
 msgstr "Näytön virransäästö aktivoitu"
 
-#: ../src/gpm-manager.c:581
+#: ../src/gpm-manager.c:627
 msgid "Laptop lid is closed"
 msgstr "Kansi on suljettu"
 
-#: ../src/gpm-manager.c:748
+#: ../src/gpm-manager.c:796
 #, c-format
 msgid "%s because %s"
 msgstr "%s syynä %s"
 
-#: ../src/gpm-manager.c:784
+#: ../src/gpm-manager.c:832
 msgid "Doing nothing"
 msgstr "Ei tehdä mitään"
 
-#: ../src/gpm-manager.c:788 ../src/gpm-manager.c:1166
-#: ../src/gpm-manager.c:2303
+#: ../src/gpm-manager.c:836 ../src/gpm-manager.c:1280
+#: ../src/gpm-manager.c:2440
 msgid "Suspending computer"
 msgstr "Siirretään tietokone keskeytystilaan"
 
-#: ../src/gpm-manager.c:793 ../src/gpm-manager.c:1180
-#: ../src/gpm-manager.c:2278
+#: ../src/gpm-manager.c:841 ../src/gpm-manager.c:1294
+#: ../src/gpm-manager.c:2415
 msgid "Hibernating computer"
 msgstr "Siirretään tietokone lepotilaan"
 
-#: ../src/gpm-manager.c:798
+#: ../src/gpm-manager.c:846
 msgid "DPMS blanking screen"
 msgstr "Pimennetään näyttö DPMS:llä"
 
-#: ../src/gpm-manager.c:803 ../src/gpm-manager.c:1195
+#: ../src/gpm-manager.c:851 ../src/gpm-manager.c:1309
 msgid "Shutting down computer"
 msgstr "Sammutetaan tietokone"
 
-#: ../src/gpm-manager.c:808
+#: ../src/gpm-manager.c:856
 msgid "GNOME interactive logout"
 msgstr "Gnomen interaktiivinen uloskirjautuminen"
 
-#: ../src/gpm-manager.c:1007 ../src/gpm-manager.c:1097
+#: ../src/gpm-manager.c:1121 ../src/gpm-manager.c:1211
 msgid "Resuming computer"
 msgstr "Palautetaan tietokonetta käyttöön"
 
-#: ../src/gpm-manager.c:1019
+#: ../src/gpm-manager.c:1133
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
@@ -917,25 +978,25 @@ msgstr ""
 "HAL-komento %s epäonnistui. Lue <a href=\"%s\">FAQ-sivulta</a> tietoja "
 "yleisistä ongelmista."
 
-#: ../src/gpm-manager.c:1021
+#: ../src/gpm-manager.c:1135
 msgid "hibernate"
 msgstr "lepotila"
 
-#: ../src/gpm-manager.c:1022
+#: ../src/gpm-manager.c:1136
 msgid "Hibernate Problem"
 msgstr "Ongelma lepotilan kanssa"
 
-#: ../src/gpm-manager.c:1109
+#: ../src/gpm-manager.c:1223
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "Akkua ladattiin %imWh keskeytystilan aikana"
 
-#: ../src/gpm-manager.c:1112
+#: ../src/gpm-manager.c:1226
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "Akun lataus laski %imWh keskeytystilan aikana"
 
-#: ../src/gpm-manager.c:1127
+#: ../src/gpm-manager.c:1241
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -944,105 +1005,128 @@ msgstr ""
 "Tietokone ei voinut suorittaa toimintoa %s.\n"
 "Lue <a href=\"%s\">FAQ-sivulta</a> tietoja yleisistä ongelmista."
 
-#: ../src/gpm-manager.c:1129
+#: ../src/gpm-manager.c:1243
 msgid "suspend"
 msgstr "keskeytystila"
 
-#: ../src/gpm-manager.c:1130
+#: ../src/gpm-manager.c:1244
 msgid "Suspend Problem"
 msgstr "Ongelma keskeytystilan kanssa"
 
-#: ../src/gpm-manager.c:1167
+#: ../src/gpm-manager.c:1281
 msgid "the DBUS method Suspend() was invoked"
 msgstr "Käynnistettiin DBUS-komento Suspend()"
 
-#: ../src/gpm-manager.c:1181
+#: ../src/gpm-manager.c:1295
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "Käynnistettiin DBUS-komento Hibernate()"
 
-#: ../src/gpm-manager.c:1196
+#: ../src/gpm-manager.c:1310
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "Käynnistettiin DBUS-komento Shutdown()"
 
-#: ../src/gpm-manager.c:1246
+#: ../src/gpm-manager.c:1324
+msgid "Rebooting computer"
+msgstr "Käynnistetään tietokone uudestaan"
+
+#: ../src/gpm-manager.c:1325
+msgid "the DBUS method Reboot() was invoked"
+msgstr "Käynnistettiin DBUS-komento Reboot()"
+
+#: ../src/gpm-manager.c:1375
 msgid "Screen resume"
 msgstr "näytön palautus"
 
-#: ../src/gpm-manager.c:1247
+#: ../src/gpm-manager.c:1376
 msgid "idle mode ended"
 msgstr "joutilastila päättyi"
 
-#: ../src/gpm-manager.c:1285
+#: ../src/gpm-manager.c:1401
 msgid "Screen dim"
 msgstr "Näytön himmennys"
 
-#: ../src/gpm-manager.c:1286
+#: ../src/gpm-manager.c:1402
 msgid "idle mode started"
 msgstr "joutilastila aloitettu"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1304
+#: ../src/gpm-manager.c:1420
 msgid "the system state is idle"
 msgstr "järjestelmä on joutilaana"
 
-#: ../src/gpm-manager.c:1378
+#: ../src/gpm-manager.c:1494
 msgid "the power button has been pressed"
 msgstr "virtanappia painettin"
 
-#: ../src/gpm-manager.c:1397
+#: ../src/gpm-manager.c:1513
 msgid "the suspend button has been pressed"
 msgstr "lepotilanappia painettiin"
 
-#: ../src/gpm-manager.c:1417
+#: ../src/gpm-manager.c:1533
 msgid "the hibernate button has been pressed"
 msgstr "lepotilapainiketta on painettu"
 
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1560
+msgid "The laptop lid has been closed"
+msgstr "Kannettavan kansi on suljettu"
+
+#: ../src/gpm-manager.c:1565
+msgid "The laptop lid has been re-opened"
+msgstr "Kannettavan kansi avattiin uudestaan"
+
+#: ../src/gpm-manager.c:1583
 msgid "the lid has been closed on ac power"
 msgstr "kansi on suljettu verkkovirta kytkettynä"
 
-#: ../src/gpm-manager.c:1472
+#: ../src/gpm-manager.c:1588
 msgid "the lid has been closed on battery power"
 msgstr "kansi suljettiin akkukäytön aikana"
 
-#: ../src/gpm-manager.c:1477
+#: ../src/gpm-manager.c:1593
 msgid "Turning LCD panel back on"
 msgstr "Kytketään LCD-paneeli tapaisin päälle"
 
-#: ../src/gpm-manager.c:1478
+#: ../src/gpm-manager.c:1594
 msgid "laptop lid re-opened"
 msgstr "kansi avattiin"
 
-#: ../src/gpm-manager.c:1604
-#, fuzzy
-msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
-msgstr "kansio on suljettu ja virtajohto ei ole liitetty"
+#: ../src/gpm-manager.c:1705
+msgid "AC adapter inserted"
+msgstr ""
 
-#: ../src/gpm-manager.c:1686
+#: ../src/gpm-manager.c:1709
+msgid "AC adapter removed"
+msgstr ""
+
+#: ../src/gpm-manager.c:1720
+msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+msgstr "kansi on suljettu ja virtajohto ei ole liitetty (ja gconf on kunnossa)"
+
+#: ../src/gpm-manager.c:1802
 msgid "Power Critically Low"
 msgstr "Lataustila on kriittisen matala"
 
-#: ../src/gpm-manager.c:1690
+#: ../src/gpm-manager.c:1806
 msgid "Power Very Low"
 msgstr "Lataustila hyvin matala"
 
-#: ../src/gpm-manager.c:1694
+#: ../src/gpm-manager.c:1810
 msgid "Power Low"
 msgstr "Matala lataustila"
 
-#: ../src/gpm-manager.c:1719
+#: ../src/gpm-manager.c:1835
 msgid "battery is critically low"
 msgstr "akku on kriittisen tyhjä"
 
-#: ../src/gpm-manager.c:1763
+#: ../src/gpm-manager.c:1880
 msgid "Your battery is now fully charged"
 msgstr "Akkusi on nyt täysin ladattu"
 
-#: ../src/gpm-manager.c:1764
+#: ../src/gpm-manager.c:1881
 msgid "Battery Charged"
 msgstr "Akku ladattu"
 
-#: ../src/gpm-manager.c:1830
+#: ../src/gpm-manager.c:1945
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1050,7 +1134,7 @@ msgstr ""
 "Akun lataus on alle kriitisen arvon ja <b>tietokone sammuu </b>, kun akku "
 "tyhjenee kokonaan."
 
-#: ../src/gpm-manager.c:1835
+#: ../src/gpm-manager.c:1950
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1060,23 +1144,23 @@ msgstr ""
 "<br<b>HUOMAUTUS:</b> Tietokoneen pitäminen keskeytystilassa vaatii myös "
 "hieman sähköä."
 
-#: ../src/gpm-manager.c:1841
+#: ../src/gpm-manager.c:1956
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Akun lataus on alle kriitisen arvon ja tietokone asetetaan lepotilaan."
 
-#: ../src/gpm-manager.c:1845
+#: ../src/gpm-manager.c:1960
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Akun lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
 
-#: ../src/gpm-manager.c:1857
+#: ../src/gpm-manager.c:1973
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Verkkovirta on irroitettu ja tietokone käyttää nyt akkua."
 
-#: ../src/gpm-manager.c:1864
+#: ../src/gpm-manager.c:1980
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1085,7 +1169,7 @@ msgstr ""
 "Akussa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Kytke verkkovirta, "
 "jotta et menetä tietojasi."
 
-#: ../src/gpm-manager.c:1948
+#: ../src/gpm-manager.c:2067
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1093,25 +1177,25 @@ msgstr ""
 "UPSin akku on alle kriitisen arvon ja <b>tietokone sammuu </b>, kun UPS "
 "tyhjenee kokonaan."
 
-#: ../src/gpm-manager.c:1953
+#: ../src/gpm-manager.c:2072
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS on alle kriitisen lataustilan ja tietokone asetetaan lepotilaan."
 
-#: ../src/gpm-manager.c:1957
+#: ../src/gpm-manager.c:2076
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPSin lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
 
-#: ../src/gpm-manager.c:1963
+#: ../src/gpm-manager.c:2083
 msgid "UPS is critically low"
 msgstr "UPS on kriittisen tyhjä"
 
-#: ../src/gpm-manager.c:1966
+#: ../src/gpm-manager.c:2086
 msgid "Your system is running on backup power!"
 msgstr "Tietokone käyttää varavirtaa!"
 
-#: ../src/gpm-manager.c:1970
+#: ../src/gpm-manager.c:2090
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1120,7 +1204,7 @@ msgstr ""
 "UPSissa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Palauta verkkovirta, "
 "jotta et menetä tietojasi."
 
-#: ../src/gpm-manager.c:2056
+#: ../src/gpm-manager.c:2179
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1129,141 +1213,223 @@ msgstr ""
 "Tietokoneeseen liitetyn laitteen %s lataus on vähissä (%d %%). Tämä laite "
 "lopettaa pian toiminaan jollei sitä ladata."
 
-#: ../src/gpm-manager.c:2279
+#: ../src/gpm-manager.c:2416
 msgid "user clicked hibernate from tray menu"
 msgstr "käyttäjä valitsi lepotilan ilmoitusalueen kuvakkeesta"
 
-#: ../src/gpm-manager.c:2304
+#: ../src/gpm-manager.c:2441
 msgid "user clicked suspend from tray menu"
 msgstr "käyttäjä valitsi keskeytystilan ilmoitusalueen kuvakkeesta"
 
-#: ../src/gpm-power.c:444
+#: ../src/gpm-power.c:445
 msgid "Laptop battery"
 msgstr "Kannettavan akku"
 
-#: ../src/gpm-power.c:446
+#: ../src/gpm-power.c:447
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:448
+#: ../src/gpm-power.c:449
 msgid "Wireless mouse"
 msgstr "Langaton hiiri"
 
-#: ../src/gpm-power.c:450
+#: ../src/gpm-power.c:451
 msgid "Wireless keyboard"
 msgstr "Langaton näppäimistö"
 
-#: ../src/gpm-power.c:452
+#: ../src/gpm-power.c:453
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:454
+#: ../src/gpm-power.c:455
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../src/gpm-power.c:472
+#: ../src/gpm-power.c:473
 msgid "ups"
 msgstr "ups"
 
-#: ../src/gpm-power.c:474
+#: ../src/gpm-power.c:475
 msgid "mouse"
 msgstr "hiiri"
 
-#: ../src/gpm-power.c:476
+#: ../src/gpm-power.c:477
 msgid "keyboard"
 msgstr "näppäimistö"
 
-#: ../src/gpm-power.c:478
+#: ../src/gpm-power.c:479
 msgid "pda"
 msgstr "pda"
 
-#: ../src/gpm-power.c:480
+#: ../src/gpm-power.c:481
 msgid "unknown"
 msgstr "tuntematon"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:678
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Tuote:</b> %s\n"
+
+#: ../src/gpm-power.c:681
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Tila:</b> Ei saatavilla\n"
+
+#: ../src/gpm-power.c:683
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Tila:</b> Ladattu\n"
+
+#: ../src/gpm-power.c:685
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Tila:</b> Ladataan\n"
+
+#: ../src/gpm-power.c:687
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Tila:</b> Purkautuu\n"
+
+#: ../src/gpm-power.c:690
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>Lataus prosentteina:</b> %i%%\n"
+
+#: ../src/gpm-power.c:717
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Valmistaja:</b> %s\n"
+
+#: ../src/gpm-power.c:723
 msgid "Lithium ion"
 msgstr "Li-Ion"
 
-#: ../src/gpm-power.c:724
+#: ../src/gpm-power.c:725
 msgid "Lead acid"
 msgstr "Lyijyhappo"
 
-#: ../src/gpm-power.c:746
+#: ../src/gpm-power.c:731
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Tekniikka:</b> %s\n"
+
+#: ../src/gpm-power.c:734
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Sarjanumero:</b> %s\n"
+
+#: ../src/gpm-power.c:737
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Malli:</b> %s\n"
+
+#: ../src/gpm-power.c:742
+#, c-format
+msgid "<b>Remaining time:</b> %s\n"
+msgstr "<b>Jäljelläoleva aika:</b> %s\n"
+
+#: ../src/gpm-power.c:747
 msgid "Excellent"
 msgstr "Mainio"
 
-#: ../src/gpm-power.c:748
+#: ../src/gpm-power.c:749
 msgid "Good"
 msgstr "Hyvä"
 
-#: ../src/gpm-power.c:750
+#: ../src/gpm-power.c:751
 msgid "Fair"
 msgstr "Kelvollinen"
 
-#: ../src/gpm-power.c:752
+#: ../src/gpm-power.c:753
 msgid "Poor"
 msgstr "Huono"
 
-#: ../src/gpm-power.c:1231
+#: ../src/gpm-power.c:755
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr ""
+
+#: ../src/gpm-power.c:762
+#, c-format
+msgid "<b>Current charge:</b> %i%s\n"
+msgstr "<b>Nykyinen lataustila:</b> %i%s\n"
+
+#: ../src/gpm-power.c:767
+#, c-format
+msgid "<b>Last full charge:</b> %i%s\n"
+msgstr "<b>Viimeisin täysi lataus:</b> %i%s\n"
+
+#: ../src/gpm-power.c:771
+#, c-format
+msgid "<b>Design charge:</b> %i%s\n"
+msgstr "<b>Suunniteltu lataus:</b> %i%s\n"
+
+#: ../src/gpm-power.c:775
+#, c-format
+msgid "<b>Charge rate (raw):</b> %imWh\n"
+msgstr "<b>Latausnopeus (raaka):</b> %imWh\n"
+
+#: ../src/gpm-power.c:779
+#, c-format
+msgid "<b>Charge rate (smoothed):</b> %imWh\n"
+msgstr "<b>Latausnopeus (pehmennetty):</b> %imWh\n"
+
+#: ../src/gpm-power.c:1232
 msgid "fully charged"
 msgstr "täysin ladattu"
 
-#: ../src/gpm-power.c:1236
-#, fuzzy, c-format
+#: ../src/gpm-power.c:1237
+#, c-format
 msgid "%s remaining"
-msgstr "jäljellä"
+msgstr "%s jäljellä"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
+#: ../src/gpm-power.c:1241
 msgid "discharging"
 msgstr "purkautuu"
 
-#: ../src/gpm-power.c:1246
-#, fuzzy, c-format
+#: ../src/gpm-power.c:1247
+#, c-format
 msgid "%s until charged"
-msgstr "kunnes ladattu"
+msgstr "%s kunnes ladattu"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
+#: ../src/gpm-power.c:1251
 msgid "charging"
 msgstr "latautuu"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1292
 msgid "Computer is running on backup power\n"
 msgstr "Tietokone käyttää varavirtaa\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1295
 msgid "Computer is running on AC power\n"
 msgstr "Tietokone käyttää verkkovirtaa\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1298
 msgid "Computer is running on battery power\n"
 msgstr "Tietokone käyttää akkua\n"
-
-#: ../src/gpm-prefs.c:86
-msgid "GNOME Power Preferences"
-msgstr "Gnomen virrankäytön asetukset"
 
 #: ../src/gpm-prefs.c:99
 msgid "Power Preferences"
 msgstr "Virrankäytön asetukset"
 
-#: ../src/gpm-prefs-core.c:85
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs-core.c:84
+msgid "Interactive"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:86
 msgid "Shutdown"
 msgstr "Sammuta"
 
-#: ../src/gpm-prefs-core.c:87
+#: ../src/gpm-prefs-core.c:88
 msgid "Blank screen"
 msgstr "Pimennä näyttö"
 
-#: ../src/gpm-prefs-core.c:88
+#: ../src/gpm-prefs-core.c:89
 msgid "Do nothing"
 msgstr "Älä tee mitään"
 
-#: ../src/gpm-prefs-core.c:232
+#: ../src/gpm-prefs-core.c:233
 msgid "Never"
 msgstr "Ei koskaan"
 
@@ -1387,32 +1553,8 @@ msgstr ""
 #~ msgid "Vendor:"
 #~ msgstr "Valmistaja:"
 
-#~ msgid "Technology:"
-#~ msgstr "Tekniikka:"
-
-#~ msgid "Serial number:"
-#~ msgstr "Sarjanumero:"
-
-#~ msgid "Remaining time:"
-#~ msgstr "Jäljelläoleva aika:"
-
-#~ msgid "Percentage charge:"
-#~ msgstr "Prosenttia ladattu:"
-
 #~ msgid "Capacity:"
 #~ msgstr "Kapasiteetti:"
-
-#~ msgid "Current charge:"
-#~ msgstr "Nykyinen lataustila:"
-
-#~ msgid "Design charge:"
-#~ msgstr "Suunniteltu lataus:"
-
-#~ msgid "Charge rate (raw):"
-#~ msgstr "Latausnopeus (raaka):"
-
-#~ msgid "Charge rate (smoothed):"
-#~ msgstr "Latausnopeus (pehmennetty):"
 
 #~ msgid "Configuration"
 #~ msgstr "Asetukset"
