@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-01 12:43+0200\n"
-"PO-Revision-Date: 2006-07-01 12:53+0200\n"
+"POT-Creation-Date: 2006-07-02 22:36+0300\n"
+"PO-Revision-Date: 2006-07-02 22:44+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -71,61 +71,63 @@ msgstr "Lepotila käytettävissä"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr ""
+msgstr "Jätetäänkö DBUS-estoviestit muista ohjelmista huomioimatta."
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 msgid "If DBUS inhibit requests should be ignored."
-msgstr ""
+msgstr "Jätetäänkö DBUS-estoviestit huomioimatta."
 
 #: ../data/gnome-power-manager.schemas.in.h:12
-#, fuzzy
 msgid ""
 "If a notification message should be displayed if the HAL action (suspend or "
 "hibernate) fails."
 msgstr ""
 "Näytetäänkö huomautusviesti, jos HAL-toimenpide (keskeytys- tai lepotila) "
-"epäonnistuu"
+"epäonnistuu."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
-#, fuzzy
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr "Annetaanko käyttäjälle huomautusviesti kun akku on ladattu täyteen"
+msgstr ""
+"Näytetäänkö huomautusviesti, kun akku on ladattu täyteen."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
-#, fuzzy
 msgid "If network utilization should be checked before doing the idle action."
 msgstr ""
-"Tarkistetaanko prosessorikuorma ennen joutenolon toiminnon käynnistämistä."
+"Tarkistetaanko verkon käyttö ennen joutenolon toiminnon käynnistämistä."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
-#, fuzzy
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr ""
 "Tarkistetaanko prosessorikuorma ennen joutenolon toiminnon käynnistämistä."
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the PC speaker (beeping) should be used"
-msgstr ""
+msgstr "Käytetäänkö PC-kaiutinta (piippausta)"
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
 "If the PC speaker should be used to beep when the power is low, or inhibit "
 "requests have stopped the policy action."
 msgstr ""
+"Piipataanko PC-kaiutinta käyttäen, kun virta on matala tai kun estoviestit "
+"ovat lopettaneet estämästä toimintoja."
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
+"Sallitaanko toiminnot Keskeytystila ja Lepotila ilmoitusalueen kuvakkeen "
+"pudotusvalikosta."
 
 #: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
+"Suoritetaanko akkutoiminto, kun kansi sulketaan ja virtajohto ei ole liitetty"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
@@ -432,8 +434,7 @@ msgstr ""
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
-msgstr ""
-"Näytön kirkkaus käytettäessä akkua. Kelvollinen arvo on väliltä 0-100."
+msgstr "Näytön kirkkaus käytettäessä akkua. Kelvollinen arvo on väliltä 0-100."
 
 #: ../data/gnome-power-manager.schemas.in.h:71
 msgid "The brightness of the screen when idle"
@@ -649,31 +650,31 @@ msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
-msgstr ""
+msgstr "Sovellus:"
 
 #: ../data/gpm-inhibit-test.glade.h:2
 msgid "Burning DVD, titled \"My Photos\""
-msgstr ""
+msgstr "Kirjoitetaan DVD-levyä nimeltä \"Valokuvani\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
 msgid "GNOME Acme Foo"
-msgstr ""
+msgstr "Gnomen Acme Foo"
 
 #: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit"
-msgstr ""
+msgstr "Estetty"
 
 #: ../data/gpm-inhibit-test.glade.h:5
 msgid "Inhibit Tester"
-msgstr ""
+msgstr "Eston testaus"
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "Reason:"
-msgstr ""
+msgstr "Syy:"
 
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "UnInhibit"
-msgstr ""
+msgstr "Peru esto"
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Actions</b>"
@@ -891,12 +892,12 @@ msgstr "Kuvaus"
 #: ../src/gpm-inhibit.c:291
 #, c-format
 msgid "<b>%s</b> has stopped the %s from taking place : <i>%s</i>."
-msgstr ""
+msgstr "<b<%s</b> lopetti toiminnon %s tapahtumisen: <i>%s</i>."
 
 #: ../src/gpm-inhibit.c:295
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
-msgstr ""
+msgstr "Useat sovellukset ovat lopettaneet toiminnon %s tapahtumisen."
 
 #: ../src/gpm-inhibit-test.c:158 ../src/gpm-prefs.c:86
 msgid "GNOME Power Preferences"
@@ -904,7 +905,7 @@ msgstr "Gnomen virrankäytön asetukset"
 
 #: ../src/gpm-inhibit-test.c:164
 msgid "Power Inhibit Test"
-msgstr ""
+msgstr "Virransäästön eston testi"
 
 #: ../src/gpm-main.c:126
 msgid "Do not daemonize"
@@ -921,7 +922,7 @@ msgstr "Gnomen virranhallinta"
 #: ../src/gpm-manager.c:234
 #, c-format
 msgid "Request to %s"
-msgstr ""
+msgstr "Pyyntö kohteelle %s"
 
 #: ../src/gpm-manager.c:596
 msgid "On battery power"
@@ -1092,11 +1093,11 @@ msgstr "kansi avattiin"
 
 #: ../src/gpm-manager.c:1705
 msgid "AC adapter inserted"
-msgstr ""
+msgstr "Verkkovirta liitetty"
 
 #: ../src/gpm-manager.c:1709
 msgid "AC adapter removed"
-msgstr ""
+msgstr "Verkkovirta irroitettu"
 
 #: ../src/gpm-manager.c:1720
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
@@ -1343,7 +1344,7 @@ msgstr "Huono"
 #: ../src/gpm-power.c:755
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
-msgstr ""
+msgstr "<b>Kapasiteetti:</b> %i%% (%s)\n"
 
 #: ../src/gpm-power.c:762
 #, c-format
@@ -1415,7 +1416,7 @@ msgstr "Virrankäytön asetukset"
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:84
 msgid "Interactive"
-msgstr ""
+msgstr "Interaktiivinen"
 
 #: ../src/gpm-prefs-core.c:86
 msgid "Shutdown"
