@@ -1,5 +1,13 @@
 2006-07-08  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	Change /apps/gnome-power-manager/check_type_cpu default to false after
+	discussion in #326742. Power users doing legacy simulations are able
+	to change this setting themselves.
+	This should probably go into the FAQ.
+
+2006-07-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c:
 	Replace the word 'Interactive' in the UI with 'Ask me' to fix #345960
 
