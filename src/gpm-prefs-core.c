@@ -81,7 +81,7 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 };
 
 /* The text that should appear in the action combo boxes */
-#define ACTION_INTERACTIVE_TEXT		_("Interactive")
+#define ACTION_INTERACTIVE_TEXT		_("Ask me")
 #define ACTION_SUSPEND_TEXT		_("Suspend")
 #define ACTION_SHUTDOWN_TEXT		_("Shutdown")
 #define ACTION_HIBERNATE_TEXT		_("Hibernate")
