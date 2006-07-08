@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Power Manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-07 18:19+0200\n"
-"PO-Revision-Date: 2006-07-07 23:58+0100\n"
+"POT-Creation-Date: 2006-07-08 16:36+0200\n"
+"PO-Revision-Date: 2006-07-08 20:06+0100\n"
 "Last-Translator: Priit Laes <amd@store20.com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -173,11 +173,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:36
 msgid "LCD brightness when on AC"
-msgstr ""
+msgstr "LCD heledus kui võrgutoitel"
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on battery"
-msgstr ""
+msgstr "LCD heledus kui akutoitel"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
@@ -435,9 +435,8 @@ msgid "Brightness"
 msgstr "Heledus"
 
 #: ../data/gpm-info.glade.h:1
-#, fuzzy
 msgid "<b>Event log</b>"
-msgstr "_Veebilogi:"
+msgstr "<b>Sündmustelogi</b>"
 
 #: ../data/gpm-info.glade.h:2
 msgid "<b>Laptop batteries</b>"
@@ -445,7 +444,7 @@ msgstr "<b>Sülearvuti akud</b>"
 
 #: ../data/gpm-info.glade.h:3
 msgid "<b>UPS</b>"
-msgstr ""
+msgstr "<b>UPS</b>"
 
 #: ../data/gpm-info.glade.h:4
 msgid "<b>Wireless devices</b>"
@@ -476,9 +475,8 @@ msgid "Event Log"
 msgstr "Sündmustelogi"
 
 #: ../data/gpm-info.glade.h:11
-#, fuzzy
 msgid "Last full: 22022mWh"
-msgstr "Kogu VKaardi kuvamine"
+msgstr "Viimane täislaadimine: 22022mWh"
 
 #: ../data/gpm-info.glade.h:12
 msgid "More"
@@ -558,96 +556,93 @@ msgid "<b>Sleep</b>"
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:6
+msgid "Always _sleep when the lid is closed"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:7
 msgid "General"
 msgstr "Üldine"
 
-#: ../data/gpm-prefs.glade.h:7
+#: ../data/gpm-prefs.glade.h:8
 msgid "Only display when battery _present"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:9
 msgid "Only display when charging or _discharging"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:10
 #, fuzzy
 msgid "Power Management Preferences"
 msgstr "Failihalduse eelistused"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:11
 msgid "Prefer power savings over performance"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:12
 msgid "Put _display to sleep when computer is inactive for:"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:13
 msgid "Put computer to _sleep when it is inactive for:"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:13
-#, fuzzy
-msgid "Running on AC"
-msgstr "Peatumisel teksti ettekandmine"
-
 #: ../data/gpm-prefs.glade.h:14
-#, fuzzy
-msgid "Running on Battery"
-msgstr "Aku tühjeneb"
+msgid "Running on AC"
+msgstr "Töötab vooluvõrgust"
 
 #: ../data/gpm-prefs.glade.h:15
-#, fuzzy
-msgid "Running on UPS"
-msgstr "Peatumisel teksti ettekandmine"
+msgid "Running on Battery"
+msgstr "Töötab akutoitel"
 
 #: ../data/gpm-prefs.glade.h:16
+msgid "Running on UPS"
+msgstr "Töötab UPS'itoitel"
+
+#: ../data/gpm-prefs.glade.h:17
 #, fuzzy
 msgid "Set display _brightness to:"
 msgstr "Kuva seadmine inseneriarvutuste jaoks"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:18
 msgid "Sleep _type when inactive:"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:19
 msgid "When UPS _power critical:"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:20
 #, fuzzy
 msgid "When battery _power critical:"
 msgstr "Süsteem jookseb akutoitel"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:21
 msgid "When l_aptop lid is closed:"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:21
-#, fuzzy
-msgid "When power _button is pressed:"
-msgstr "Muuteklahvi vajutamisel tehakse _piiksu"
-
 #: ../data/gpm-prefs.glade.h:22
-#, fuzzy
-msgid "_Always display icon"
-msgstr "Ikooni ei leitud"
+msgid "When power _button is pressed:"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:23
+msgid "_Always display icon"
+msgstr "_Alati näita ikooni"
+
+#: ../data/gpm-prefs.glade.h:24
 msgid "_Dim the laptop panel when idle"
 msgstr ""
 
-#: ../data/gpm-prefs.glade.h:24
-#, fuzzy
-msgid "_Never display icon"
-msgstr "Ikooni ei leitud"
-
 #: ../data/gpm-prefs.glade.h:25
+msgid "_Never display icon"
+msgstr "Ära _kunagi näita ikooni"
+
+#: ../data/gpm-prefs.glade.h:26
 msgid "_Only display when battery life is critical"
 msgstr ""
 
 #: ../src/eggtrayicon.c:131
-#, fuzzy
 msgid "Orientation"
 msgstr "Suund"
 
@@ -662,18 +657,18 @@ msgid "Unknown time"
 msgstr "Tundmatu aeg (%d%%) järel"
 
 #: ../src/gpm-common.c:65
-#, fuzzy, c-format
+#, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
-msgstr[0] "Minut"
-msgstr[1] ""
+msgstr[0] "%i minut"
+msgstr[1] "%i minutit"
 
 #: ../src/gpm-common.c:76
-#, fuzzy, c-format
+#, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
-msgstr[0] "Tund"
-msgstr[1] ""
+msgstr[0] "%i tund"
+msgstr[1] "%i tundi"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
@@ -683,18 +678,16 @@ msgid "%i %s, %i %s"
 msgstr ""
 
 #: ../src/gpm-common.c:83
-#, fuzzy
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "tund"
-msgstr[1] ""
+msgstr[1] "tundi"
 
 #: ../src/gpm-common.c:84
-#, fuzzy
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minut"
-msgstr[1] ""
+msgstr[1] "minutit"
 
 #: ../src/gpm-common.h:31
 #, fuzzy
@@ -702,14 +695,12 @@ msgid "Power Manager for the GNOME desktop"
 msgstr "Lihtne võtmerõngahaldur GNOME 2 jaoks"
 
 #: ../src/gpm-graph-widget.c:76
-#, fuzzy
 msgid "On AC"
-msgstr "Aegub:"
+msgstr "Vooluvõrgus"
 
 #: ../src/gpm-graph-widget.c:78
-#, fuzzy
 msgid "On battery"
-msgstr "Aku on laetud (%d%%)"
+msgstr "Akutoitel"
 
 #: ../src/gpm-graph-widget.c:80
 msgid "LCD dim"
@@ -721,14 +712,12 @@ msgid "LCD resume"
 msgstr "Peatatud mängu jätkamine"
 
 #: ../src/gpm-graph-widget.c:84
-#, fuzzy
 msgid "DPMS off"
-msgstr "väljas"
+msgstr "DPMS väljas"
 
 #: ../src/gpm-graph-widget.c:86
-#, fuzzy
 msgid "DPMS on"
-msgstr "Aegub:"
+msgstr "DPMS sees"
 
 #: ../src/gpm-graph-widget.c:88
 #: ../src/gpm-prefs-core.c:85
@@ -1035,19 +1024,16 @@ msgid "Power Low"
 msgstr "Aku hakkab tühjaks saama"
 
 #: ../src/gpm-manager.c:1835
-#, fuzzy
 msgid "battery is critically low"
-msgstr "Aku tühjeneb"
+msgstr "aku on kriitiliselt tühi"
 
 #: ../src/gpm-manager.c:1880
-#, fuzzy
 msgid "Your battery is now fully charged"
 msgstr "Aku on nüüd täis laetud"
 
 #: ../src/gpm-manager.c:1881
-#, fuzzy
 msgid "Battery Charged"
-msgstr "Aku on laetud (%d%%)"
+msgstr "Aku on laetud"
 
 #: ../src/gpm-manager.c:1945
 msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
@@ -1087,9 +1073,8 @@ msgid "The UPS is below the critical level and this computer is about to shutdow
 msgstr ""
 
 #: ../src/gpm-manager.c:2083
-#, fuzzy
 msgid "UPS is critically low"
-msgstr "Aku tühjeneb"
+msgstr "UPS on kriitiliselt tühi"
 
 #: ../src/gpm-manager.c:2086
 msgid "Your system is running on backup power!"
@@ -1119,7 +1104,7 @@ msgstr "Sülearvuti aku"
 
 #: ../src/gpm-power.c:447
 msgid "UPS"
-msgstr ""
+msgstr "UPS"
 
 #: ../src/gpm-power.c:449
 msgid "Wireless mouse"
@@ -1131,7 +1116,7 @@ msgstr "Juhtmeta klaviatuur"
 
 #: ../src/gpm-power.c:453
 msgid "PDA"
-msgstr ""
+msgstr "PDA"
 
 #: ../src/gpm-power.c:455
 msgid "Unknown"
@@ -1139,7 +1124,7 @@ msgstr "Tundmatu"
 
 #: ../src/gpm-power.c:473
 msgid "ups"
-msgstr ""
+msgstr "ups"
 
 #: ../src/gpm-power.c:475
 msgid "mouse"
@@ -1151,10 +1136,9 @@ msgstr "klaviatuur"
 
 #: ../src/gpm-power.c:479
 msgid "pda"
-msgstr ""
+msgstr "pda"
 
 #: ../src/gpm-power.c:481
-#, fuzzy
 msgid "unknown"
 msgstr "tundmatu"
 
@@ -1164,24 +1148,20 @@ msgid "<b>Product:</b> %s\n"
 msgstr "<b>Toode:</b> %s\n"
 
 #: ../src/gpm-power.c:681
-#, fuzzy
 msgid "<b>Status:</b> Missing\n"
-msgstr "Puuduv kuupäev."
+msgstr "<b>Olek:</b> Puudub\n"
 
 #: ../src/gpm-power.c:683
-#, fuzzy
 msgid "<b>Status:</b> Charged\n"
-msgstr "Aku on laetud (%d%%)"
+msgstr "<b>Olek:</b> Laetud\n"
 
 #: ../src/gpm-power.c:685
-#, fuzzy
 msgid "<b>Status:</b> Charging\n"
-msgstr "Määra olek"
+msgstr "<b>Olek:</b> Laadimine\n"
 
 #: ../src/gpm-power.c:687
-#, fuzzy
 msgid "<b>Status:</b> Discharging\n"
-msgstr "Määra olek"
+msgstr "<b>Olek:</b> Tühjenemine\n"
 
 #: ../src/gpm-power.c:690
 #, fuzzy, c-format
@@ -1242,7 +1222,7 @@ msgstr ""
 #: ../src/gpm-power.c:755
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
-msgstr ""
+msgstr "<b>Mahtuvus:</b> %i%% (%s)\n"
 
 #: ../src/gpm-power.c:762
 #, c-format
@@ -1314,8 +1294,8 @@ msgstr "Dasheri eelistused"
 
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:84
-msgid "Interactive"
-msgstr ""
+msgid "Ask me"
+msgstr "Küsi minult"
 
 #: ../src/gpm-prefs-core.c:86
 msgid "Shutdown"
@@ -1368,7 +1348,7 @@ msgstr "_Programmist lähemalt"
 
 #: ../src/gpm-tray-icon.c:334
 msgid "Licensed under the GNU General Public License Version 2"
-msgstr ""
+msgstr "Litsentseeritud GNU Üldise Avaliku Litsentsi versioon 2 all"
 
 #: ../src/gpm-tray-icon.c:335
 msgid ""
@@ -1393,6 +1373,9 @@ msgid ""
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 msgstr ""
+"Te peaks olema saanud GNU Üldise Avaliku Litsentsi koopia koos\n"
+"selle programmiga, kui ei, siis võtke ühendust Free Software Foundation'iga,\n"
+"Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA\""
 
 #: ../src/gpm-tray-icon.c:348
 msgid "translator-credits"
