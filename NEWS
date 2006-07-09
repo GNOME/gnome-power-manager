@@ -1,4 +1,70 @@
 ==============
+Version 2.15.4
+==============
+
+Released July 09, 2006
+
+General
+
+ - Change dbus Inhibit and UnInhibit methods to use a UINT32 rather than INT32,
+   as this is specified in the spec.
+ - Fix a compile error when we are compiling the non-libnotify sections of
+   the code, which probably don't happen that often. #344674 (Elijah Newren)
+ - Make a few more shared classes into singletons to save memory and CPU.
+ - Allow use of --disable-schemas-install on autoconf level for disabling
+   registering GConf schemas. (Tomasz Kłoczko)
+ - Change /apps/gnome-power-manager/check_type_cpu default to false after
+   discussion in #326742.
+ - Add a test program that allows us to test the multiple inhibit stuff,
+   and also to show people how easy it is adding Inhibit and UnInhibit calls
+   into an existing program.
+
+Power Manager
+
+ - Support MacBook Pro with it's crazy number of brightness states. #346080
+ - Add in initial support to check with PolicyKit over dbus. #344171
+ - Logically seporate the help file, and add loads of new content.
+ - Allow the user to ignore the inhibit requests from stopping a policy action.
+   The key /apps/gnome-power-manager/ignore_inhibit_requests can be set to true,
+   and the action will still go ahead.
+ - Use the same logic as the tooltip for the notification. #345698
+ - Only refresh the caches on the last PropertyModified split event to save CPU.
+ - Beep if we stopped the action due to an inhibit to warn the user. #345595
+ - Make sure machines that do their own dimming get special cased and just set
+   the brightness once.	This really *ought* to be a HAL propery. #345258.
+ - Fix missing _() macros on some strings (Paweł Marciniak)
+
+Power Preferences
+
+ - Replace the word 'Interactive' in the UI with 'Ask me'. #345960
+
+Power Info
+
+ - Fix the horizontal time scaling so the graph scales correctly.
+ - For non-laptops, hide the new power graphs and do not keep polling the values.
+ - Read the correct key to get the max time. #345256 (Crispin Flowerday)
+ - Big statistics module re-write, which should squash a couple of crasher bugs.
+
+Translators
+
+ - Ankit Patel (gu)
+ - Christopher Orr (en_GB)
+ - I.Felix (ta)
+ - Francisco Javier F. Serrador (es)
+ - Gabor Kelemen (hu)
+ - Ignacio Casal Quinteiro (gl)
+ - Ilkka Tuohela (fi)
+ - Jakub Friedl (cs)
+ - Jovan Naumovski (mk)
+ - Khandakar Mujahidul Islam (bn & bn_IN)
+ - Kjartan Maraas (nb)
+ - Mindu Dorji (dz)
+ - Paweł Marciniak (pl)
+ - Priit Laes (et)
+ - Rajesh Ranjan (hi)
+ - Theppitak Karoonboonyanan (th)
+
+==============
 Version 2.15.3
 ==============
 

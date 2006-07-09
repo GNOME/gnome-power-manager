@@ -1,3 +1,7 @@
+2006-07-09  Richard Hughes  <richard@hughsie.com>
+
+	==== Version 2.15.4 ====
+
 2006-07-08  Richard Hughes  <richard@hughsie.com>
 
 	* data/gpm-prefs.glade:
@@ -217,7 +221,6 @@
 2006-06-18  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* src/gpm-info.c (gpm_info_init):
-
 	Read the correct gconf key to get the graph data max time (fixes
 	bug #345256)
 
@@ -314,7 +317,7 @@
 	In src/Makefile.am unconditionaly are registered GConf schemas.
 	In case installing GPM from non-root account (for example during
 	prepare rpm from non-root account) it produces tons warning.
-	In attachemt is simple patch wchich allow use --disable-schemas-install
+	In attachemt is simple patch which allows use --disable-schemas-install
 	on autoconf level for disable registering GConf schemas.
 
 2006-06-11  Richard Hughes  <richard@hughsie.com>
