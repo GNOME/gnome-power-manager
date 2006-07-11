@@ -1,14 +1,15 @@
 # Finnish messages for gnome-power-manager
 # Copyright (C) Ilkka Tuohela 
-# This file is distributed under the same license as the gnome-power-manager package.
+# This file is distributed under the same license as the gnome-power-manager 
+# package.
 # Ilkka Tuohela <hile@iki.fi>, 2005-2006.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-02 22:36+0300\n"
-"PO-Revision-Date: 2006-07-02 22:44+0300\n"
+"POT-Creation-Date: 2006-07-11 06:54+0300\n"
+"PO-Revision-Date: 2006-07-11 07:34+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -53,12 +54,11 @@ msgid "Dim the screen after a period of inactivity"
 msgstr "Himmennä näyttöä tietokoneen oltua tietyn aikaa käyttämättä"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", "
 "\"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
-"Milloin ilmoitusalueen kuvake näytetään. Vaihtoehdot ovat \"never\", "
+"Ilmoitusalueen kuvakkeen näyttövalinnat. Vaihtoehdot ovat \"never\", "
 "\"critical\", \"charge\", \"present\" ja \"always\""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
@@ -89,8 +89,7 @@ msgstr ""
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr ""
-"Näytetäänkö huomautusviesti, kun akku on ladattu täyteen."
+msgstr "Näytetäänkö huomautusviesti, kun akku on ladattu täyteen."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 msgid "If network utilization should be checked before doing the idle action."
@@ -137,103 +136,88 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:21
-#, fuzzy
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun verkkovirta on käytössä"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
-#, fuzzy
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun UPS on käytössä"
 
 #: ../data/gnome-power-manager.schemas.in.h:23
-#, fuzzy
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Käytetäänkö matalan virrankäytön tilaa, kun akku on käytössä"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
-#, fuzzy
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun näyttö kytketään pois päältä. Huomaa että tätä "
-"valintaa käytetään vain, jos avain \"lock_use_screensaver\" on asetettu "
-"arvoon \"false\"."
+"Lukitaanko näyttö, kun näyttö kytketään pois päältä. Tätä valintaa "
+"käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
+"asetettu arvoon \"false\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
-#, fuzzy
 msgid "If the screen should be dimmed to save power when the computer is idle."
 msgstr "Himmennetäänkö näyttö virran säästämiseksi tietokoneen ollessa jouten."
 
 #: ../data/gnome-power-manager.schemas.in.h:26
-#, fuzzy
 msgid "If the system low-power mode should be enabled when on AC power."
-msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun verkkovirta on käytössä."
+msgstr "Onko matalan virrankäytön tila käytössä kun verkkovirta on kytketty."
 
 #: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
 msgid "If the system low-power mode should be enabled when on UPS power."
-msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun UPS on käytössä."
+msgstr "Onko matalan virrankäytön tila käytössä kun käytetään UPS:ia."
 
 #: ../data/gnome-power-manager.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
-msgstr "Siirrytäänkö matalan virrankäytön tilaa, kun akku on käytössä."
+msgstr "Onko matalan virrankäytön tila käytössä kun käytetään akkua."
 
 #: ../data/gnome-power-manager.schemas.in.h:29
-#, fuzzy
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Voiko käyttäjä siirtää tietokoneen lepotilaan"
 
 #: ../data/gnome-power-manager.schemas.in.h:30
-#, fuzzy
 msgid "If the user is authorized to suspend the computer."
 msgstr "Voiko käyttäjä siirtää tietokoneen keskeytystilaan"
 
 #: ../data/gnome-power-manager.schemas.in.h:31
-#, fuzzy
 msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr "Annetaanko käyttäjälle huomautus kun virtajohto on irroitettu"
+msgstr "Annetaanko käyttäjälle huomautus kun virtajohto on irroitettu."
 
 #: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
-"Käytetäänkö aikapohjaiia huomautuksia. Jos tämä on asetettu arvoon false, "
-"käytetään niiden sijasta prosenttiarvojen muutoksia. Tämä saattaa auttaa "
-"joihinkin rikkinäisiin ACPI BIOSeihin."
+"Käytetäänkö aikaan perustuvia huomautuksia. Jos tämä on asetettu arvoon "
+"false käytetään prosentteihin perustuvia muutoksia, jotka saattavat auttaa "
+"joihinkin rikkinäisiin ACPI BIOS -toteutuksiin."
 
 #: ../data/gnome-power-manager.schemas.in.h:33
-#, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun tietokone palaa lepotilasta. Huomaa, että tätä "
-"valintaa käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
+"Lukitaanko näyttö, kun tietokone palaa lepotilasta. Tätä valintaa "
+"käytetään vain, jos avain \"lock_use_screensaver_settings\" on " 
 "asetettu arvoon \"false\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:34
-#, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun tietokone palaa keskeytystilasta. Huomaa, että tätä "
-"valintaa käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
+"Lukitaanko näyttö, kun tietokone palaa keskeytystilasta. Tätä valintaa "
+"käytetään vain, jos avain \"lock_use_screensaver_settings\" on " 
 "asetettu arvoon \"false\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:35
-#, fuzzy
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
 msgstr ""
-"Käytetäänkö näytön lukituksen asetusta ohjelmasta gnome-screensaver "
+"Käytetäänkö ohjelman gnome-screensaver näytön lukituksen asetuksia "
 "päätettässä lukitaanko näyttö lepotilan, keskeytystilan tai näytön "
 "pimennyksen jälkeen."
 
@@ -517,12 +501,11 @@ msgid "The time remaining when very low"
 msgstr "Jäljelläoleva aika, kun lataustila on hyvin matala"
 
 #: ../data/gnome-power-manager.schemas.in.h:87
-#, fuzzy
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
-"Virransäästötilan tyyppi jota käytetään, kun tietokone on jouten. "
+"Käytettävä virransäästötilan tyyppi, kun tietokone on jouten. "
 "Kelvolliset arvot ovat \"hibernate\", \"suspend\" ja \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:88
@@ -697,82 +680,86 @@ msgid "<b>Sleep</b>"
 msgstr "<b>Lepotila</b>"
 
 #: ../data/gpm-prefs.glade.h:6
+msgid "Always _sleep when the lid is closed"
+msgstr "Siirry aina _keskeytystilaan, kun kansi on suljettu"
+
+#: ../data/gpm-prefs.glade.h:7
 msgid "General"
 msgstr "Yleiset"
 
-#: ../data/gpm-prefs.glade.h:7
+#: ../data/gpm-prefs.glade.h:8
 msgid "Only display when battery _present"
 msgstr "_Näytä vain kun akku on liitetty"
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:9
 msgid "Only display when charging or _discharging"
 msgstr "Näytä vain _ladattaessa tai purettaessa"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:10
 msgid "Power Management Preferences"
 msgstr "Virranhallinnan asetukset"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:11
 msgid "Prefer power savings over performance"
 msgstr "Säästä virtaa suorituskyvyn kustannuksella"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:12
 msgid "Put _display to sleep when computer is inactive for:"
 msgstr "_Näytön virransäästötilan aktivointiviive:"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:13
 msgid "Put computer to _sleep when it is inactive for:"
 msgstr "_Tietokoneen virransäästötilan aktivointiviive:"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:14
 msgid "Running on AC"
 msgstr "Verkkovirta"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:15
 msgid "Running on Battery"
 msgstr "Akkukäyttö"
 
-#: ../data/gpm-prefs.glade.h:15
+#: ../data/gpm-prefs.glade.h:16
 msgid "Running on UPS"
 msgstr "Käyttö UPSilla"
 
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:17
 msgid "Set display _brightness to:"
 msgstr "Aseta näytön _kirkkaus arvoon:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:18
 msgid "Sleep _type when inactive:"
 msgstr "Virransäästötilan _tyyppi joutenollessa:"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:19
 msgid "When UPS _power critical:"
 msgstr "UPSin _tilan ollessa kriittinen:"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:20
 msgid "When battery _power critical:"
 msgstr "Akun _latauksen ollessa kriittinen:"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:21
 msgid "When l_aptop lid is closed:"
 msgstr "Sulj_ettaessa kannettavan kansi:"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:22
 msgid "When power _button is pressed:"
 msgstr "Painettaessa _virtanappia:"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:23
 msgid "_Always display icon"
 msgstr "_Näytä kuvake aina"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:24
 msgid "_Dim the laptop panel when idle"
 msgstr "_Himmennä kannettavan näyttö joutilaana"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:25
 msgid "_Never display icon"
 msgstr "Älä koskaan näytä kuvaketta"
 
-#: ../data/gpm-prefs.glade.h:25
+#: ../data/gpm-prefs.glade.h:26
 msgid "_Only display when battery life is critical"
 msgstr "_Näytä vain akun latauksen ollessa kriittinen:"
 
@@ -1415,8 +1402,8 @@ msgstr "Virrankäytön asetukset"
 
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:84
-msgid "Interactive"
-msgstr "Interaktiivinen"
+msgid "Ask me"
+msgstr "Kysy"
 
 #: ../src/gpm-prefs-core.c:86
 msgid "Shutdown"
@@ -1512,6 +1499,9 @@ msgstr ""
 "Ilkka Tuohela, 2005-2006.\n"
 "\n"
 "http://gnome.fi/"
+
+#~ msgid "Interactive"
+#~ msgstr "Interaktiivinen"
 
 #~ msgid ""
 #~ "Whether we should check network utilization before doing the idle action."
