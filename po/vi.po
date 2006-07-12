@@ -54,7 +54,7 @@ msgstr "Kiểm tra cách chạy mạng trước khi ngủ"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Dim the screen after a period of inactivity"
-msgstr "Mờ đi màn hình sau một thời gian bị động"
+msgstr "Mờ đi màn hình sau một thời gian không làm việc"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
 msgid ""
@@ -395,20 +395,20 @@ msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
-"Số giây máy tính đang chạy bằng điện chính cần bị động trước khi nó ngủ."
+"Số giây máy tính đang chạy bằng điện chính cần ngưng làm việc trước khi nó ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
-msgstr "Số giây máy tính đang chạy bằng pin cần bị động trước khi nó ngủ."
+msgstr "Số giây máy tính đang chạy bằng pin cần ngưng làm việc trước khi nó ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
-"Số giây máy tính đang chạy bằng pin cần bị động trước khi bộ trình bày ngủ."
+"Số giây máy tính đang chạy bằng pin cần ngưng làm việc trước khi bộ trình bày ngủ."
 
 #: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
@@ -522,7 +522,7 @@ msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
-"Kiểu ngủ cần thực hiện khi máy tính bị động. Giá trị hợp lệ:\n"
+"Kiểu ngủ cần thực hiện khi máy tính không làm việc. Giá trị hợp lệ:\n"
 " • hibernate\tngủ đông\n"
 " • suspend\tngưng\n"
 " • nothing\tkhông gì"
@@ -561,7 +561,7 @@ msgstr "Khi cần hiển thị biểu tượng thông báo"
 
 #: ../data/gnome-power-manager.schemas.in.h:87
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "Khi bị động, ngủ đông, ngưng hay không làm gì."
+msgstr "Khi không làm việc, ngủ đông, ngưng hay không làm gì."
 
 #: ../data/gnome-power-manager.schemas.in.h:88
 msgid "Whether to use time-based notifications"
@@ -695,11 +695,11 @@ msgstr "Thích tiết kiệm điện hơn hiệu suất"
 
 #: ../data/gpm-prefs.glade.h:11
 msgid "Put _display to sleep when computer is inactive for:"
-msgstr "Cho bộ trìn_h bày ngủ khi máy tính bị động trong:"
+msgstr "Để máy tính _ngủ nếu không làm việc trong:"
 
 #: ../data/gpm-prefs.glade.h:12
 msgid "Put computer to _sleep when it is inactive for:"
-msgstr "Cho máy tính _ngủ khi bị động trong:"
+msgstr "Cho máy tính _ngủ khi không làm việc trong:"
 
 #: ../data/gpm-prefs.glade.h:13
 msgid "Running on AC"
@@ -719,7 +719,7 @@ msgstr "Đặt độ _sáng cho bộ trình bày:"
 
 #: ../data/gpm-prefs.glade.h:17
 msgid "Sleep _type when inactive:"
-msgstr "Cách ngủ khi bị động:"
+msgstr "Cách ngủ khi không làm việc:"
 
 #: ../data/gpm-prefs.glade.h:18
 msgid "When UPS _power critical:"
