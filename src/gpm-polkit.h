@@ -44,6 +44,8 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* daemon_start)		(GpmPolkit	*polkit);
+	void		(* daemon_stop)			(GpmPolkit	*polkit);
 } GpmPolkitClass;
 
 GType		 gpm_polkit_get_type			(void);

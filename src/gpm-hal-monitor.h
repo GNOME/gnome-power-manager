@@ -63,8 +63,7 @@ GType			 gpm_hal_monitor_get_type	(void);
 GpmHalMonitor		*gpm_hal_monitor_new		(void);
 
 gboolean		 gpm_hal_monitor_get_on_ac	(GpmHalMonitor	*monitor);
-void			 hal_start_monitor		(GpmHalMonitor	*monitor);
-void			 hal_stop_monitor		(GpmHalMonitor	*monitor);
+void			 gpm_hal_monitor_coldplug	(GpmHalMonitor	*monitor);
 
 G_END_DECLS
 

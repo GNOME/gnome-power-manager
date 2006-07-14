@@ -132,7 +132,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	if (value > 0) {
 		new->value = value;
 	} else {
-		gpm_debug ("Not recording a negative value (%i)", value);
+		gpm_debug ("Not recording value (%i)", value);
 		new->value = 0;
 	}
 	new->colour = colour;

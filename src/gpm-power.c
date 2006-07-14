@@ -39,7 +39,6 @@
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
 #include "gpm-prefs.h"
-#include "gpm-dbus-system-monitor.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
@@ -55,7 +54,7 @@ struct GpmPowerPrivate
 	int			 exp_ave_factor;
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
-	GpmDbusSystemMonitor	*dbus_system;
+	GpmHal			*hal;
 	GpmHalMonitor		*hal_monitor;
 };
 
@@ -140,7 +139,7 @@ gpm_power_battery_is_charged (GpmPowerStatus *status)
  * Updates all the information fields in a cache entry
  **/
 static void
-battery_device_cache_entry_update_all (GpmPowerDevice *entry)
+battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 {
 	gboolean exists;
 	GpmPowerStatus *status = &entry->battery_status;
@@ -153,7 +152,7 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 	/* Initialize battery_status to reasonable defaults */
 	gpm_power_battery_status_set_defaults (status);
 
-	gpm_hal_device_get_string (udi, "battery.type", &battery_kind_str);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.type", &battery_kind_str);
 
 	if (!battery_kind_str) {
 		gpm_warning ("cannot obtain battery type");
@@ -178,36 +177,36 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 	g_free (battery_kind_str);
 
 	/* batteries might be missing */
-	gpm_hal_device_get_bool (udi, "battery.present", &status->is_present);
+	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.present", &status->is_present);
 	if (! status->is_present) {
 		gpm_debug ("Battery not present, so not filling up values");
 		return;
 	}
 
-	gpm_hal_device_get_int (udi, "battery.charge_level.design",
+	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.design",
 				&status->design_charge);
-	gpm_hal_device_get_int (udi, "battery.charge_level.last_full",
+	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.last_full",
 				&status->last_full_charge);
-	gpm_hal_device_get_int (udi, "battery.charge_level.current",
+	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.current",
 				&status->current_charge);
 
 	/* battery might not be rechargeable, have to check */
-	gpm_hal_device_get_bool (udi, "battery.is_rechargeable",
+	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.is_rechargeable",
 				&status->is_rechargeable);
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY ||
 	    entry->battery_kind == GPM_POWER_KIND_UPS) {
 		if (status->is_rechargeable) {
-			gpm_hal_device_get_bool (udi, "battery.rechargeable.is_charging",
+			gpm_hal_device_get_bool (power->priv->hal, udi, "battery.rechargeable.is_charging",
 						&status->is_charging);
-			gpm_hal_device_get_bool (udi, "battery.rechargeable.is_discharging",
+			gpm_hal_device_get_bool (power->priv->hal, udi, "battery.rechargeable.is_discharging",
 						&status->is_discharging);
 		}
 	}
 
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
-		exists = gpm_hal_device_get_int (udi, "battery.charge_level.rate",
+		exists = gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.rate",
 						 &status->charge_rate_raw);
 		if (!exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's charge rate");
@@ -225,8 +224,8 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
-	exists = gpm_hal_device_get_int (udi, "battery.charge_level.percentage",
-					     &status->percentage_charge);
+	exists = gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.percentage",
+					 &status->percentage_charge);
 	if (!exists && (status->is_discharging || status->is_charging)) {
 		gpm_warning ("could not read your battery's percentage charge.");
 	}
@@ -234,7 +233,7 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 	/* sanity check that remaining time exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY ||
 	    entry->battery_kind == GPM_POWER_KIND_UPS) {
-		exists = gpm_hal_device_get_int (udi,"battery.remaining_time",
+		exists = gpm_hal_device_get_int (power->priv->hal, udi,"battery.remaining_time",
 						 &status->remaining_time);
 		if (! exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's remaining time");
@@ -258,11 +257,11 @@ battery_device_cache_entry_update_all (GpmPowerDevice *entry)
 	}
 
 	/* get other stuff we might need to know */
-	gpm_hal_device_get_string (udi, "info.product", &entry->product);
-	gpm_hal_device_get_string (udi, "info.vendor", &entry->vendor);
-	gpm_hal_device_get_string (udi, "battery.technology", &entry->technology);
-	gpm_hal_device_get_string (udi, "battery.serial", &entry->serial);
-	gpm_hal_device_get_string (udi, "battery.model", &entry->model);
+	gpm_hal_device_get_string (power->priv->hal, udi, "info.product", &entry->product);
+	gpm_hal_device_get_string (power->priv->hal, udi, "info.vendor", &entry->vendor);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
 		/* true as not reporting, but charge_level */
@@ -328,28 +327,28 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		gpm_hal_device_get_bool (udi, key, &status->is_present);
-		battery_device_cache_entry_update_all (entry);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_present);
+		battery_device_cache_entry_update_all (power, entry);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &status->is_charging);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_charging);
 		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		gpm_hal_device_get_bool (udi, key, &status->is_discharging);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_discharging);
 		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->design_charge);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->design_charge);
 
 	} else if (strcmp (key, "battery.charge_level.last_full") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->last_full_charge);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->last_full_charge);
 
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->current_charge);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->current_charge);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->charge_rate_raw);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->charge_rate_raw);
 
 		/* Do an exponentially weighted average, fixes bug #328927 */
 		status->charge_rate_smoothed = gpm_power_exp_aver (entry->charge_rate_previous,
@@ -365,10 +364,10 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 			status->is_charging = FALSE;
 		}
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->percentage_charge);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->percentage_charge);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		gpm_hal_device_get_int (udi, key, &status->remaining_time);
+		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->remaining_time);
 
 	} else {
 		/* ignore */
@@ -384,7 +383,7 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
  * Return value: The new device cache entry.
  **/
 static GpmPowerDevice *
-battery_device_cache_entry_new_from_udi (const char *udi)
+battery_device_cache_entry_new_from_udi (GpmPower *power, const char *udi)
 {
 	GpmPowerDevice *entry;
 
@@ -399,7 +398,7 @@ battery_device_cache_entry_new_from_udi (const char *udi)
 	entry->model = NULL;
 	entry->unit = GPM_POWER_UNIT_UNKNOWN;
 
-	battery_device_cache_entry_update_all (entry);
+	battery_device_cache_entry_update_all (power, entry);
 
 	return entry;
 }
@@ -998,7 +997,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
 		gboolean on_ac;
-		on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);
+		on_ac = gpm_hal_is_on_ac (power->priv->hal);
 		gpm_debug ("Battery is neither charging nor discharging, "
 			   "using ac_adaptor value %i", on_ac);
 		type_status->is_charging = on_ac;
@@ -1533,7 +1532,7 @@ add_battery (GpmPower   *power,
 
 	g_assert (udi);
 
-	entry = battery_device_cache_entry_new_from_udi (udi);
+	entry = battery_device_cache_entry_new_from_udi (power, udi);
 
 	battery_device_cache_add_device (power, entry);
 	battery_kind_cache_add_device (power, entry);
@@ -1790,38 +1789,36 @@ gpm_power_update_all (GpmPower *power)
 }
 
 /**
- * dbus_name_owner_changed_system_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @manager: This manager class instance
+ * hal_daemon_start_cb:
+ * @hal: The HAL class instance
+ * @power: This power class instance
  *
- * The name-owner-changed system DBUS callback.
+ * Re-create the caches as HAL has started
  **/
 static void
-dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
-				   const char	  *name,
-				   const char	  *prev,
-				   const char	  *new,
-				   GpmPower	  *power)
+hal_daemon_start_cb (GpmHal     *hal,
+		    GpmPower   *power)
 {
-	if (strcmp (name, HAL_DBUS_SERVICE) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
-			hal_stop_monitor (power->priv->hal_monitor);
-			/* We have to clear the caches, else the devices think they are
-			   initialised, and we segfault in various places. */
-			gpm_hash_free_kind_cache (power);
-			gpm_hash_free_device_cache (power);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
-			/* Re-create the caches */
-			gpm_hash_new_kind_cache (power);
-			gpm_hash_new_device_cache (power);
-			hal_start_monitor (power->priv->hal_monitor);
-			battery_kind_cache_update_all (power);
-		}
-	}
+	gpm_hash_new_kind_cache (power);
+	gpm_hash_new_device_cache (power);
+	gpm_hal_monitor_coldplug (power->priv->hal_monitor);
+	battery_kind_cache_update_all (power);
+}
+
+/**
+ * hal_daemon_stop_cb:
+ * @hal: The HAL class instance
+ * @power: This power class instance
+ *
+ * We have to clear the caches, else the devices think they are initialised,
+ * and we segfault in various places.
+ **/
+static void
+hal_daemon_stop_cb (GpmHal     *hal,
+		    GpmPower   *power)
+{
+	gpm_hash_free_kind_cache (power);
+	gpm_hash_free_device_cache (power);
 }
 
 /**
@@ -1835,6 +1832,12 @@ gpm_power_init (GpmPower *power)
 
 	power->priv = GPM_POWER_GET_PRIVATE (power);
 
+	power->priv->hal = gpm_hal_new ();
+	g_signal_connect (power->priv->hal, "daemon-start",
+			  G_CALLBACK (hal_daemon_start_cb), power);
+	g_signal_connect (power->priv->hal, "daemon-stop",
+			  G_CALLBACK (hal_daemon_stop_cb), power);
+
 	power->priv->hal_monitor = gpm_hal_monitor_new ();
 	g_signal_connect (power->priv->hal_monitor, "button-pressed",
 			  G_CALLBACK (hal_button_pressed_cb), power);
@@ -1847,17 +1850,13 @@ gpm_power_init (GpmPower *power)
 	g_signal_connect (power->priv->hal_monitor, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
 
-	power->priv->dbus_system = gpm_dbus_system_monitor_new ();
-	g_signal_connect (power->priv->dbus_system, "name-owner-changed",
-			  G_CALLBACK (dbus_name_owner_changed_system_cb), power);
-
 	power->priv->battery_kind_cache = NULL;
 	power->priv->battery_device_cache = NULL;
 
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
 
-	on_ac = gpm_hal_monitor_get_on_ac (power->priv->hal_monitor);
+	on_ac = gpm_hal_is_on_ac (power->priv->hal);
 	gpm_power_set_on_ac (power, on_ac, NULL);
 
 	GConfClient *client = gconf_client_get_default ();
@@ -1886,7 +1885,7 @@ gpm_power_finalize (GObject *object)
 	gpm_hash_free_device_cache (power);
 
 	g_object_unref (power->priv->hal_monitor);
-	g_object_unref (power->priv->dbus_system);
+	g_object_unref (power->priv->hal);
 
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }

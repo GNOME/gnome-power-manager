@@ -36,6 +36,7 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
+#include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 
 #include "gpm-common.h"
@@ -57,15 +58,16 @@ static int	gpm_brightness_hw_to_percent (int hw, int levels);
 
 struct GpmBrightnessPrivate
 {
-	gboolean    has_hardware;
-	gboolean    does_own_updates;	/* keys are hardwired */
-	gboolean    does_own_dimming;	/* hardware auto-fades */
-	int	    current_hw;		/* hardware */
-	int	    level_dim_hw;
-	int	    level_std_hw;
-	int	    levels;
-	char	   *udi;
-	DBusGProxy *proxy;
+	gboolean		 has_hardware;
+	gboolean		 does_own_updates;	/* keys are hardwired */
+	gboolean		 does_own_dimming;	/* hardware auto-fades */
+	int			 current_hw;		/* hardware */
+	int			 level_dim_hw;
+	int			 level_std_hw;
+	int			 levels;
+	char			*udi;
+	DBusGProxy		*proxy;
+	GpmHal			*hal;
 };
 
 enum {
@@ -131,11 +133,14 @@ gpm_brightness_init (GpmBrightness *brightness)
 	gchar  **names;
 	char    *manufacturer_string = NULL;
 	gboolean res;
+	GError  *error = NULL;
 
 	brightness->priv = GPM_BRIGHTNESS_GET_PRIVATE (brightness);
 
+	brightness->priv->hal = gpm_hal_new ();
+
 	/* save udi of lcd adapter */
-	gpm_hal_find_device_capability ("laptop_panel", &names);
+	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names);
 	if (names == NULL || names[0] == NULL) {
 		brightness->priv->has_hardware = FALSE;
 		gpm_debug ("No devices of capability laptop_panel");
@@ -144,7 +149,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	gpm_hal_free_capability (names);
+	gpm_hal_free_capability (brightness->priv->hal, names);
 
 	brightness->priv->has_hardware = TRUE;
 	brightness->priv->does_own_dimming = FALSE;
@@ -153,7 +158,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 	 * and don't do the new-fangled dimming routine. The ThinkPad dims
 	 * gently itself and the two dimming routines just get messy.
 	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382 */
-	gpm_hal_device_get_string (HAL_ROOT_COMPUTER,
+	gpm_hal_device_get_string (brightness->priv->hal, HAL_ROOT_COMPUTER,
 				   "smbios.system.manufacturer",
 				   &manufacturer_string);
 	if (manufacturer_string) {
@@ -167,7 +172,7 @@ gpm_brightness_init (GpmBrightness *brightness)
 	/* We only want to change the brightness if the machine does not
 	   do it on it's own updates, as this can make the panel flash in a
 	   feedback loop. */
-	res = gpm_hal_device_get_bool (brightness->priv->udi,
+	res = gpm_hal_device_get_bool (brightness->priv->hal, brightness->priv->udi,
 				       "laptop_panel.brightness_in_hardware",
 				       &brightness->priv->does_own_updates);
 	/* This key does not exist on normal machines */
@@ -176,14 +181,19 @@ gpm_brightness_init (GpmBrightness *brightness)
 	}
 
 	/* get proxy once and store */
-	gpm_hal_get_dbus_connection (&system_connection);
+	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	if (error) {
+		gpm_warning ("%s", error->message);
+		g_error_free (error);
+		return;
+	}
 	brightness->priv->proxy = dbus_g_proxy_new_for_name (system_connection,
 							     HAL_DBUS_SERVICE,
 							     brightness->priv->udi,
 							     HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_int (brightness->priv->udi, "laptop_panel.num_levels",
+	gpm_hal_device_get_int (brightness->priv->hal, brightness->priv->udi, "laptop_panel.num_levels",
 				&brightness->priv->levels);
 
 	/* this changes under our feet */
@@ -210,6 +220,7 @@ gpm_brightness_finalize (GObject *object)
 
 	g_free (brightness->priv->udi);
 	g_object_unref (G_OBJECT (brightness->priv->proxy));
+	g_object_unref (brightness->priv->hal);
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_brightness_parent_class)->finalize (object);

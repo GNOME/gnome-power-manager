@@ -931,16 +931,19 @@ gpm_prefs_init (GpmPrefs *prefs)
 				 NULL,
 				 NULL);
 
-	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability ("laptop_panel") > 0;
-	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value ("battery",
+	GpmHal *hal = gpm_hal_new ();
+	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability (hal, "laptop_panel") > 0;
+	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value (hal, "battery",
 							"battery.type",
 							"primary") > 0;
-	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value ("battery",
+	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value (hal, "battery",
 							"battery.type",
 							"ups") > 0;
-	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value ("button",
+	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value (hal, "button",
 							"button.type",
 							"lid") > 0;
+	g_object_unref (hal);
+
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
 

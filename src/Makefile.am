@@ -51,6 +51,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs-core.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
+	gpm-dbus-system-monitor.h			\
+	gpm-dbus-system-monitor.c			\
 	gpm-dbus-session-monitor.h			\
 	gpm-dbus-session-monitor.c			\
 	gpm-common.h					\

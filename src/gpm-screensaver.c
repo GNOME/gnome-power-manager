@@ -59,6 +59,8 @@ enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
 	AUTH_REQUEST,
+	DAEMON_START,
+	DAEMON_STOP,
 	LAST_SIGNAL
 };
 
@@ -393,9 +395,13 @@ dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
 	if (strcmp (name, GS_LISTENER_SERVICE) == 0) {
 		if (strlen (prev) != 0 && strlen (new) == 0 ) {
 			gpm_screensaver_disconnect (screensaver);
+			g_debug ("emitting daemon-stop");
+			g_signal_emit (screensaver, signals [DAEMON_STOP], 0);
 		}
 		if (strlen (prev) == 0 && strlen (new) != 0 ) {
 			gpm_screensaver_connect (screensaver);
+			g_debug ("emitting daemon-start");
+			g_signal_emit (screensaver, signals [DAEMON_START], 0);
 		}
 	}
 }
@@ -420,6 +426,7 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE, 1, G_TYPE_INT);
+
 	signals [CONNECTION_CHANGED] =
 		g_signal_new ("connection-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -429,6 +436,7 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
 	signals [AUTH_REQUEST] =
 		g_signal_new ("auth-request",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -438,6 +446,24 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+	signals [DAEMON_START] =
+		g_signal_new ("daemon-start",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, daemon_start),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+	signals [DAEMON_STOP] =
+		g_signal_new ("daemon-stop",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, daemon_stop),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /**

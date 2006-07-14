@@ -48,6 +48,14 @@ struct GpmPolkitPrivate
 	DBusGProxy		*polkit_proxy;
 };
 
+enum {
+	DAEMON_START,
+	DAEMON_STOP,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
+
 G_DEFINE_TYPE (GpmPolkit, gpm_polkit, G_TYPE_OBJECT)
 
 /**
@@ -141,9 +149,13 @@ dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
 	if (strcmp (name, POLKITD_SERVICE) == 0) {
 		if (strlen (prev) != 0 && strlen (new) == 0 ) {
 			gpm_polkit_disconnect (polkit);
+			g_debug ("emitting daemon-stop");
+			g_signal_emit (polkit, signals [DAEMON_STOP], 0);
 		}
 		if (strlen (prev) == 0 && strlen (new) != 0 ) {
 			gpm_polkit_connect (polkit);
+			g_debug ("emitting daemon-start");
+			g_signal_emit (polkit, signals [DAEMON_START], 0);
 		}
 	}
 }
@@ -158,6 +170,24 @@ gpm_polkit_class_init (GpmPolkitClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_polkit_finalize;
 	g_type_class_add_private (klass, sizeof (GpmPolkitPrivate));
+
+	signals [DAEMON_START] =
+		g_signal_new ("daemon-start",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmPolkitClass, daemon_start),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+
+	signals [DAEMON_STOP] =
+		g_signal_new ("daemon-stop",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmPolkitClass, daemon_stop),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /**

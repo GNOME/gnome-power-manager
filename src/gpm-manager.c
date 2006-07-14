@@ -103,6 +103,7 @@ struct GpmManagerPrivate
 
 	GpmDpms		*dpms;
 	GpmIdle		*idle;
+	GpmHal		*hal;
 	GpmInfo		*info;
 	GpmFeedback	*feedback;
 	GpmPower	*power;
@@ -270,7 +271,7 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 	*can = FALSE;
 	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_SUSPEND, NULL);
-	hal_ok = gpm_hal_can_suspend ();
+	hal_ok = gpm_hal_can_suspend (manager->priv->hal);
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
 #endif
@@ -302,7 +303,7 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 	*can = FALSE;
 	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_HIBERNATE, NULL);
-	hal_ok = gpm_hal_can_hibernate ();
+	hal_ok = gpm_hal_can_hibernate (manager->priv->hal);
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
 #endif
@@ -666,7 +667,7 @@ change_power_policy (GpmManager *manager,
 	gpm_brightness_set_level_std (manager->priv->brightness, brightness);
 	gpm_brightness_set (manager->priv->brightness);
 
-	gpm_hal_enable_power_save (power_save);
+	gpm_hal_enable_power_save (manager->priv->hal, power_save);
 	update_ac_throttle (manager, on_ac);
 
 	/* set the new sleep (inactivity) value */
@@ -1040,7 +1041,7 @@ gpm_manager_shutdown (GpmManager *manager,
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
-	gpm_hal_shutdown ();
+	gpm_hal_shutdown (manager->priv->hal);
 	ret = TRUE;
 
 	return ret;
@@ -1073,7 +1074,7 @@ gpm_manager_reboot (GpmManager *manager,
 				   GNOME_SAVE_GLOBAL,
 				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 
-	gpm_hal_reboot ();
+	gpm_hal_reboot (manager->priv->hal);
 	ret = TRUE;
 
 	return ret;
@@ -1116,7 +1117,7 @@ gpm_manager_hibernate (GpmManager *manager,
 
 	gpm_networkmanager_sleep ();
 
-	ret = gpm_hal_hibernate ();
+	ret = gpm_hal_hibernate (manager->priv->hal);
 	manager_explain_reason (manager, GPM_GRAPH_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
@@ -1206,7 +1207,7 @@ gpm_manager_suspend (GpmManager *manager,
 	int charge_before_suspend = status.current_charge;
 
 	/* Do the suspend */
-	ret = gpm_hal_suspend (0);
+	ret = gpm_hal_suspend (manager->priv->hal, 0);
 	manager_explain_reason (manager, GPM_GRAPH_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
@@ -2548,6 +2549,7 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
+	manager->priv->hal = gpm_hal_new ();
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "connection-changed",
 			  G_CALLBACK (screensaver_connection_changed_cb), manager);
@@ -2739,6 +2741,7 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	g_object_unref (manager->priv->gconf_client);
+	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);

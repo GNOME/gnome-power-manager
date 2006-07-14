@@ -1,3 +1,39 @@
+2006-07-14  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/22x22/gpm-primary-000-charging.png:
+	* data/icons/22x22/gpm-primary-020-charging.png:
+	Make icons green, as a charging battery shouldn't convey bad things.
+
+	* src/Makefile.am:
+	Add dbus-system to gpm-prefs for the new hal stuff.
+
+	* src/gpm-brightness.c:
+	* src/gpm-hal-monitor.c:
+	* src/gpm-hal-monitor.h:
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	* src/gpm-info-data.c:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	* src/gpm-marshal.list:
+	* src/gpm-power.c:
+	* src/gpm-prefs-core.c:
+	Rewrite the GpmHal and GpmHalMonitor as the old versions made me very
+	confused. Now GpmHal acts as an interface to HAL, and the monitor stuff
+	just manages the abstraction suitable for GpmPower class.
+	Also convert a metric boat-load of doxygen comments to gtk-doc comments
+	and add a whole load more. No string changes.
+
+	* src/gpm-polkit.c:
+	* src/gpm-polkit.h:
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	Emit an event when the daemon starts or stops. No string changes.
+
+	* src/gpm-manager.xml:
+	Comment out signal 'low_power_mode_changed' for now to prevent a
+	warning. Fixes #347363.
+
 2006-07-09  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.15.90
