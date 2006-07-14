@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-07-11 06:54+0300\n"
-"PO-Revision-Date: 2006-07-11 07:34+0300\n"
+"POT-Creation-Date: 2006-07-14 08:00+0300\n"
+"PO-Revision-Date: 2006-07-14 08:11+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,10 @@ msgid ""
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
 msgstr ""
+"Virransäästötilasta palattuaan gnome-power-manager estää virransäästön "
+"toimintojen aktivoinnin, jotta viestit asettuvat oikeaan tilaan ja HAL "
+"on päivitetty. Yleensä viisi sekuntia on tarpeeksi pitkä aika, mutta ei "
+"niin pitkä että käyttäjä ihmettelisi miksi virransäästö ei tee mitään."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
@@ -134,6 +138,8 @@ msgid ""
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
+"Käytetäänkö kannen sulkemistapahtumia akkukäytössä, jos kansi oli jo aiemmin "
+"kiinni ja virtajohto irroitetaan myöhemmin."
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the low-power mode should be enabled when on AC"
@@ -152,9 +158,9 @@ msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun näyttö kytketään pois päältä. Tätä valintaa "
-"käytetään vain, jos avain \"lock_use_screensaver_settings\" on "
-"asetettu arvoon \"false\"."
+"Lukitaanko näyttö, kun näyttö kytketään pois päältä. Tätä valintaa käytetään "
+"vain, jos avain \"lock_use_screensaver_settings\" on asetettu arvoon \"false"
+"\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the screen should be dimmed to save power when the computer is idle."
@@ -199,9 +205,9 @@ msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
-"Lukitaanko näyttö, kun tietokone palaa lepotilasta. Tätä valintaa "
-"käytetään vain, jos avain \"lock_use_screensaver_settings\" on " 
-"asetettu arvoon \"false\"."
+"Lukitaanko näyttö, kun tietokone palaa lepotilasta. Tätä valintaa käytetään "
+"vain, jos avain \"lock_use_screensaver_settings\" on asetettu arvoon \"false"
+"\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
@@ -209,8 +215,8 @@ msgid ""
 "if lock_use_screensaver_settings is false."
 msgstr ""
 "Lukitaanko näyttö, kun tietokone palaa keskeytystilasta. Tätä valintaa "
-"käytetään vain, jos avain \"lock_use_screensaver_settings\" on " 
-"asetettu arvoon \"false\"."
+"käytetään vain, jos avain \"lock_use_screensaver_settings\" on asetettu "
+"arvoon \"false\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
@@ -430,59 +436,75 @@ msgstr "Nopeudelle käytetty pehmennyskerroin"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
 msgid "The maximum duration of time displayed on the x-axis of the graph."
-msgstr ""
+msgstr "Käyrän x-akselilla näytettävän ajan enimmäisaika."
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "The maximum time displayed on the graph"
-msgstr ""
+msgstr "Käyrällä näytetyn ajan enimmäisaika"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
+"Kuinka monen prosentin kohdalla akun lataus on kriittinen. Käytössä vain, "
+"jos use_time_for_policy on epätosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
 msgstr ""
+"Kuinka monen prosentin kohdalla akun lataus on matala. Käytössä vain, "
+"jos use_time_for_policy on epätosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
+"Kuinka monen prosentin kohdalla akun lataus on hyvin matala. Käytössä vain, "
+"jos use_time_for_policy on epätosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
 msgstr ""
+"Akun lataus prosentteina, jolloin kriittisen latauksen toiminto suoritetaan. "
+"Käytössä vain, jos use_time_for_policy on epätosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Jäljelläoleva aika sekunteina, jolloin kriittisen latauksen toiminto suoritetaan. "
+"Käytössä vain, jos use_time_for_policy on tosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Jäljelläoleva aika sekunteina, jonka jälkeen akun lataus on kriittinen. "
+"Käytössä vain, jos use_time_for_policy on tosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
+"Jäljelläoleva aika sekunteina, jonka jälkeen akun lataus on matala. "
+"Käytössä vain, jos use_time_for_policy on tosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Jäljelläoleva aika sekunteina, jonka jälkeen akun lataus on hyvin matala. "
+"Käytössä vain, jos use_time_for_policy on tosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid "The time remaining when action is taken"
@@ -505,8 +527,8 @@ msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
-"Käytettävä virransäästötilan tyyppi, kun tietokone on jouten. "
-"Kelvolliset arvot ovat \"hibernate\", \"suspend\" ja \"nothing\"."
+"Käytettävä virransäästötilan tyyppi, kun tietokone on jouten. Kelvolliset "
+"arvot ovat \"hibernate\", \"suspend\" ja \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
@@ -515,12 +537,18 @@ msgid ""
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
 msgstr ""
+"Eksponentiaalisesti painotetun nopeuden keskiarvon laskennassa käytetty "
+"pehmennyskerroin. Tämän arvon kasvattaminen lisää nopeuslaskutoimitusten "
+"pehmennystä ja tekee jäljelläolevan ajan laskennasta tarkempaa, mutta " 
+"samalla käyrästä hitaammin reagoivan."
 
 #: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Käytettävä kannettavan paneelin kirkkauden arvo, kun istunto on jouten. "
+"Käytössä vain, jos use_time_for_policy on tosi."
 
 #: ../data/gnome-power-manager.schemas.in.h:90
 msgid "UPS critical low action"
