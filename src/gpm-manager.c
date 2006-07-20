@@ -2525,6 +2525,17 @@ screensaver_connection_changed_cb (GpmScreensaver *screensaver,
 }
 
 /**
+ * hal_daemon_monitor_cb:
+ * @hal: The HAL class instance
+ **/
+static void
+hal_daemon_monitor_cb (GpmHal     *hal,
+		     GpmManager *manager)
+{
+	tray_icon_update (manager);
+}
+
+/**
  * gpm_manager_init:
  * @manager: This manager class instance
  **/
@@ -2550,6 +2561,12 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
+	g_signal_connect (manager->priv->hal, "daemon-start",
+			  G_CALLBACK (hal_daemon_monitor_cb), manager);
+	g_signal_connect (manager->priv->hal, "daemon-stop",
+			  G_CALLBACK (hal_daemon_monitor_cb), manager);
+	
+
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "connection-changed",
 			  G_CALLBACK (screensaver_connection_changed_cb), manager);

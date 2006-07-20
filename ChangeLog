@@ -1,3 +1,21 @@
+2006-07-20  Richard Hughes  <richard@hughsie.com>
+
+	* docs/dbus-interface.html:
+	* docs/faq.html:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* docs/roadmap.html:
+	* docs/sleep-names.html:
+	Regenerate.
+
+	* src/gpm-hal.c:
+	Make sure we use the correct HAL method names (although HAL doesn't
+	currently care) so we can work with an introspectable daemon.
+
+	* src/gpm-manager.c:
+	Watch for the 'daemon start' and 'daemon stop' signals so we update the
+	tray icon when HAL is stopped or started.
+
 2006-07-14  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/22x22/gpm-primary-000-charging.png:

@@ -564,7 +564,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
+	if (dbus_g_proxy_call (hal_proxy, "GetPropertyString", &error,
 			       G_TYPE_STRING, key, G_TYPE_INVALID,
 			       G_TYPE_STRING, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
@@ -607,7 +607,7 @@ gpm_hal_device_get_int (GpmHal      *hal,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
+	if (dbus_g_proxy_call (hal_proxy, "GetPropertyInteger", &error,
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_INT, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
