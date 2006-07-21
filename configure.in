@@ -121,7 +121,7 @@ AC_SUBST(DOCDIR)
 dnl ---------------------------------------------------------------------------
 dnl - PolicyKit support?
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(policykit, [  --enable-policykit      support PolicyKit permissions daemon (requires polkitd)],enable_polkit=$enableval,enable_polkit=yes)
+AC_ARG_ENABLE(policykit, [  --enable-policykit      support PolicyKit permissions daemon (requires polkitd)],enable_polkit=$enableval,enable_polkit=no)
 AC_MSG_CHECKING([whether to support PolicyKit])
 have_polkit=no
 if test x$enable_polkit = xyes ; then
