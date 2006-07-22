@@ -1190,8 +1190,6 @@ gpm_hal_new_capability_cb (DBusGProxy *proxy,
 {
 	g_debug ("emitting new-capability : %s, %s", udi, capability);
 	g_signal_emit (hal, signals [NEW_CAPABILITY], 0, udi, capability);
-	/* FIXME: requires a device to test... */
-	g_error ("moo");
 }
 
 /**
