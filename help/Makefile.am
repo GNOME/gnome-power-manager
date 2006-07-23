@@ -20,4 +20,4 @@ DOC_FIGURES = \
 	figures/gpm-unplugged.png \
 	figures/gpm-suspend-problem.png
 
-DOC_LINGUAS = ru
+DOC_LINGUAS = ru sv
