@@ -1,3 +1,12 @@
+2006-07-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal.c:
+	Add some more error checking, and module sanity checking.
+
+	* src/gpm-prefs-core.c:
+	Fix a crasher where the g-s timeout is larger than the max range for
+	gnome-power-preferences. #347932
+
 2006-07-23  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.15.91

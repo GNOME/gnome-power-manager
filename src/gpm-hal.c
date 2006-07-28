@@ -1196,17 +1196,21 @@ gpm_hal_new_capability_cb (DBusGProxy *proxy,
  * gpm_hal_connect:
  *
  * @hal: This class instance
+ * Return value: Success
  *
  * Connect the manager proxy to HAL and register some basic callbacks
  */
-static void
+static gboolean
 gpm_hal_connect (GpmHal *hal)
 {
 	GError *error = NULL;
 
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	/* sometimes we get repeat notifications from DBUS */
 	if (hal->priv->is_connected) {
-		g_warning ("Trying to connect already connected hal");
-		return;
+		g_debug ("Trying to connect already connected hal");
+		return FALSE;
 	}
 
 	hal->priv->manager_proxy = dbus_g_proxy_new_for_name_owner (hal->priv->connection,
@@ -1214,7 +1218,19 @@ gpm_hal_connect (GpmHal *hal)
 								    HAL_DBUS_PATH_MANAGER,
 								    HAL_DBUS_INTERFACE_MANAGER,
 								    &error);
+	/* if any error is set, then print */
+	if (error) {
+		g_warning ("cannot connect to HAL: %s", error->message);
+		g_error_free (error);
+	}
 
+	/* we failed to connect */
+	if (hal->priv->manager_proxy == NULL) {
+		hal->priv->is_connected = FALSE;
+		return FALSE;
+	}
+
+	/* connect the org.freedesktop.Hal.Manager signals */
 	dbus_g_proxy_add_signal (hal->priv->manager_proxy, "DeviceAdded",
 				 G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (hal->priv->manager_proxy, "DeviceAdded",
@@ -1233,21 +1249,30 @@ gpm_hal_connect (GpmHal *hal)
 				     G_CALLBACK (gpm_hal_new_capability_cb), hal, NULL);
 
 	hal->priv->is_connected = TRUE;
+	return TRUE;
 }
 
 /**
  * gpm_hal_disconnect:
  *
  * @hal: This class instance
+ * Return value: Success
  *
  * Disconnect the manager proxy to HAL and disconnect some basic callbacks
  */
-static void
+static gboolean
 gpm_hal_disconnect (GpmHal *hal)
 {
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
 	if (hal->priv->is_connected == FALSE) {
-		g_warning ("Trying to disconnect already disconnected hal");
-		return;
+		g_debug ("Trying to disconnect already disconnected hal");
+		return FALSE;
+	}
+
+	if (hal->priv->manager_proxy == NULL) {
+		g_debug ("The proxy is null, but connected. Odd.");
+		return FALSE;
 	}
 
 	dbus_g_proxy_disconnect_signal (hal->priv->manager_proxy, "DeviceRemoved",
@@ -1259,6 +1284,7 @@ gpm_hal_disconnect (GpmHal *hal)
 	hal->priv->manager_proxy = NULL;
 
 	hal->priv->is_connected = FALSE;
+	return TRUE;
 }
 
 /**
@@ -1277,6 +1303,11 @@ dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
 				   const char     *new,
 				   GpmHal         *hal)
 {
+	g_return_if_fail (GPM_IS_HAL (hal));
+	g_return_if_fail (name != NULL);
+	g_return_if_fail (prev != NULL);
+	g_return_if_fail (new != NULL);
+
 	if (strcmp (name, HAL_DBUS_SERVICE) == 0) {
 		if (strlen (prev) != 0 && strlen (new) == 0 ) {
 			gpm_hal_disconnect (hal);

@@ -849,6 +849,11 @@ set_idle_hscale_stops (GpmPrefs   *prefs,
 {
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
+		gpm_warning ("gnome-screensaver timeout is really big. "
+			     "Not sure what to do");
+		return;
+	}
 	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, NEVER_TIME_ON_SLIDER);
 }
 
