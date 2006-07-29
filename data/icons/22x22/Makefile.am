@@ -1,7 +1,7 @@
 EXTRA_DIST =				\
 	$(Data_DATA)
 
-Datadir = $(datadir)/icons/hicolor/24x24/apps
+Datadir = $(datadir)/icons/hicolor/22x22/apps
 
 Data_DATA =				\
 	gpm-ac-adapter.png		\
@@ -44,3 +44,15 @@ Data_DATA =				\
 	gpm-ups-100-charging.png	\
 	gpm-ups-charged.png		\
 	gpm-ups-missing.png
+
+if ENABLE_ICON_FRAMING
+install-data-local: install-DataDATA
+	$(mkinstalldirs) $(datadir)/icons/hicolor/24x24/apps
+	(cd $(datadir)/icons/hicolor && \
+	for icon in $(Data_DATA); do \
+		$(CONVERT) 22x22/apps/$$icon 24x24/apps/$$icon; \
+	done)
+endif
+
+uninstall-local:
+	rm -rf $(datadir)/icons/hicolor/24x24/$(context)

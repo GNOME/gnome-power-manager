@@ -1,3 +1,12 @@
+2006-07-29  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	* data/icons/22x22/Makefile.am:
+	Generate the 24x24 icons by using imagemagick to add a 1px border
+	around the installed icons.
+	This makes gnome generally happier, and should fix the fuzzyness for
+	some people. Fixes #348994
+
 2006-07-28  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal.c:
