@@ -1,5 +1,13 @@
 2006-07-29  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c:
+	* src/gpm-stock-icons.h:
+	Fix a typo where we were trying to assign the wrong icon names so
+	the missing icon didn't show up (instead showed a gtk-broken-image)
+	Fixes #348710
+
+2006-07-29  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	* data/icons/22x22/Makefile.am:
 	Generate the 24x24 icons by using imagemagick to add a 1px border

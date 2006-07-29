@@ -29,8 +29,6 @@ G_BEGIN_DECLS
 #define GPM_STOCK_APP_ICON			"gpm-primary-charged"
 #define GPM_STOCK_AC_ADAPTER			"gpm-ac-adapter"
 #define GPM_STOCK_BATTERY_CHARGED		"gpm-primary-charged"
-#define GPM_STOCK_BATTERY_BROKEN		"gpm-primary-broken"
-#define GPM_STOCK_UPS_BROKEN			"gpm-ups-broken"
 #define GPM_STOCK_HIBERNATE			"gpm-hibernate"
 #define GPM_STOCK_SUSPEND			"gpm-suspend"
 #define GPM_STOCK_BRIGHTNESS			"gpm-brightness"

@@ -833,8 +833,8 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 	char *index = NULL;
 
 	if (! device_status->is_present) {
-		/* battery missing, use the broken icon */
-		filename = g_strdup_printf ("gpm-%s-broken", prefix);
+		/* battery missing */
+		filename = g_strdup_printf ("gpm-%s-missing", prefix);
 
 	} else if (gpm_power_battery_is_charged (device_status)) {
 		filename = g_strdup_printf ("gpm-%s-charged", prefix);
