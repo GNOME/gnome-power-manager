@@ -47,7 +47,7 @@ Data_DATA =				\
 
 if ENABLE_ICON_FRAMING
 install-data-local: install-DataDATA
-	$(mkinstalldirs) $(datadir)/icons/hicolor/24x24/apps
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/icons/hicolor/24x24/apps
 	(cd $(datadir)/icons/hicolor && \
 	for icon in $(Data_DATA); do \
 		$(CONVERT) 22x22/apps/$$icon 24x24/apps/$$icon; \
@@ -55,4 +55,4 @@ install-data-local: install-DataDATA
 endif
 
 uninstall-local:
-	rm -rf $(datadir)/icons/hicolor/24x24/$(context)
+	rm -rf $(datadir)/icons/hicolor/24x24/apps
