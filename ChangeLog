@@ -1,5 +1,11 @@
 2006-07-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c:
+	Reset the action timer after an ac_adapter event has been recieved.
+	This should fix #348201
+
+2006-07-30  Richard Hughes  <richard@hughsie.com>
+
 	Commit a slightly modified patch from
 	William Waghorn <willw@litany.me.uk> many thanks.
 

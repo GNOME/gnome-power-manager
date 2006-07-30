@@ -209,6 +209,19 @@ gpm_manager_is_policy_timout_valid (GpmManager *manager,
 }
 
 /**
+ * gpm_manager_reset_event_time:
+ * @manager: This manager class instance
+ *
+ * Resets the time so we do not do any more actions until the
+ * timeout has passed.
+ **/
+static void
+gpm_manager_reset_event_time (GpmManager *manager)
+{
+	manager->priv->last_resume_event = time (NULL);
+}
+
+/**
  * gpm_manager_is_inhibit_valid:
  * @manager: This manager class instance
  * @action: The action we want to do, e.g. "suspend"
@@ -1187,7 +1200,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	sync_dpms_policy (manager);
 
 	/* save the time that we resumed */
-	manager->priv->last_resume_event = time (NULL);
+	gpm_manager_reset_event_time (manager);
 
 	return ret;
 }
@@ -1295,7 +1308,7 @@ gpm_manager_suspend (GpmManager *manager,
 	sync_dpms_policy (manager);
 
 	/* save the time that we resumed */
-	manager->priv->last_resume_event = time (NULL);
+	gpm_manager_reset_event_time (manager);
 
 	return ret;
 }
@@ -1714,6 +1727,10 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	/* simulate user input, to fix #333525 */
 	gpm_screensaver_poke (manager->priv->screensaver);
+
+	/* Don't do any events for a few seconds after we remove the
+	 * ac_adapter. See #348201 for details */
+	gpm_manager_reset_event_time (manager);
 
 	/* If we are on AC power we should show warnings again */
 	if (on_ac) {
@@ -2736,7 +2753,7 @@ gpm_manager_init (GpmManager *manager)
 		   manager->priv->suppress_policy_timeout);
 
 	/* Pretend we just resumed when we start to let actions settle */
-	manager->priv->last_resume_event = time (NULL);
+	gpm_manager_reset_event_time (manager);
 
 	/* get percentage policy */
 	manager->priv->low_percentage = gconf_client_get_int (manager->priv->gconf_client,
