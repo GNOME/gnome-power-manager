@@ -156,7 +156,7 @@ check_version `hal-get-property --version`
 lshal > $tfile
 
 echo
-echo "This is a tool for power who that know what S3_BIOS and POST mean"
+echo "This is a tool for power users who know what S3_BIOS and VBEPOST mean..."
 echo
 echo "Here you will enter some information about what you already know about"
 echo "suspending and resuming your videocard."

@@ -1,3 +1,12 @@
+2006-07-30  Richard Hughes  <richard@hughsie.com>
+
+	* docs/calculate-video-fdi.sh:
+	Correct a typo in the header.
+
+	* src/gpm-power.c:
+	Reduce the precision to 100mW as the big numbers are too clumsy.
+	The new format will be '24.5 W' rather than '24520mWh'
+
 2006-07-29  Richard Hughes  <richard@hughsie.com>
 
 	* help/sv/.cvsignore:

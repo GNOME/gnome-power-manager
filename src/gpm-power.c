@@ -617,7 +617,7 @@ get_power_unit_suffix (GpmPowerUnit unit)
 {
 	const char *suffix;
 	if (unit == GPM_POWER_UNIT_MWH) {
-		suffix = "mWh";
+		suffix = "W";
 	} else if (unit == GPM_POWER_UNIT_PERCENT) {
 		suffix = "%";
 	} else if (unit == GPM_POWER_UNIT_CSR) {
@@ -758,25 +758,25 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		/* no point displaying these if we are measuring in percent */
 		suffix = get_power_unit_suffix (device->unit);
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, _("<b>Current charge:</b> %i%s\n"),
-						status->current_charge, suffix);
+			g_string_append_printf (details, _("<b>Current charge:</b> %.1f %s\n"),
+						status->current_charge / 1000.0f, suffix);
 		}
 		if (status->last_full_charge > 0 &&
 		    status->design_charge != status->last_full_charge) {
-			g_string_append_printf (details, _("<b>Last full charge:</b> %i%s\n"),
-						status->last_full_charge, suffix);
+			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f %s\n"),
+						status->last_full_charge / 1000.0f, suffix);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, _("<b>Design charge:</b> %i%s\n"),
-						status->design_charge, suffix);
+			g_string_append_printf (details, _("<b>Design charge:</b> %.1f %s\n"),
+						status->design_charge / 1000.0f, suffix);
 		}
 		if (status->charge_rate_raw > 0) {
-			g_string_append_printf (details, _("<b>Charge rate (raw):</b> %imWh\n"),
-						status->charge_rate_raw);
+			g_string_append_printf (details, _("<b>Charge rate (raw):</b> %.1f %sh\n"),
+						status->charge_rate_raw / 1000.0f, suffix);
 		}
 		if (status->charge_rate_smoothed > 0) {
-			g_string_append_printf (details, _("<b>Charge rate (smoothed):</b> %imWh\n"),
-						status->charge_rate_smoothed);
+			g_string_append_printf (details, _("<b>Charge rate (smoothed):</b> %.1f %sh\n"),
+						status->charge_rate_smoothed / 1000.0f, suffix);
 		}
 	}
 	/* remove the last \n */
