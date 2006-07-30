@@ -528,25 +528,33 @@ tray_icon_update (GpmManager *manager)
 static void
 sync_dpms_policy (GpmManager *manager)
 {
-	GError  *error;
-	gboolean res;
-	gboolean on_ac;
-	guint    standby;
-	guint    suspend;
-	guint    off;
+	GError     *error;
+	gboolean    res;
+	gboolean    on_ac;
+	guint       timeout;
+	guint       standby;
+	guint       suspend;
+	guint       off;
+	const char *dpms_method;
 
 	error = NULL;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
-		standby = gconf_client_get_int (manager->priv->gconf_client,
+		timeout = gconf_client_get_int (manager->priv->gconf_client,
 						GPM_PREF_AC_SLEEP_DISPLAY,
 						&error);
+		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
+						       GPM_PREF_AC_DPMS_METHOD,
+						       &error);
 	} else {
-		standby = gconf_client_get_int (manager->priv->gconf_client,
+		timeout = gconf_client_get_int (manager->priv->gconf_client,
 						GPM_PREF_BATTERY_SLEEP_DISPLAY,
 						&error);
+		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
+						       GPM_PREF_BATTERY_DPMS_METHOD,
+						       &error);
 	}
 
 	if (error) {
@@ -556,14 +564,38 @@ sync_dpms_policy (GpmManager *manager)
 	}
 
 	/* old policy was in seconds, warn the user if too small */
-	if (standby < 60) {
+	if (timeout < 60) {
 		gpm_warning ("standby timeout is invalid, please re-configure");
 		return;
 	}
 
-	/* try to make up some reasonable numbers */
-	suspend = standby;
-	off     = standby * 2;
+	/* If we have no dpms_method, possible due to a schema problem */
+	if (dpms_method == NULL) {
+		dpms_method = "default";
+	}
+
+	/* Some monitors do not support certain suspend states, so we have to
+	 * provide a way to only use the one that works. */
+	if (strcmp (dpms_method, "standby") == 0) {
+		standby = timeout;
+		suspend = 0;
+		off     = 0;
+	} else if (strcmp (dpms_method, "suspend") == 0) {
+		standby = 0;
+		suspend = timeout;
+		off     = 0;
+	} else if (strcmp (dpms_method, "off") == 0) {
+		standby = 0;
+		suspend = 0;
+		off     = timeout;
+	} else {
+		/* suspend after one timeout, turn off after another */
+		standby = timeout;
+		suspend = timeout;
+		off     = timeout * 2;
+	}
+
+	gpm_debug ("DPMS parameters %d %d %d, method '%s'\n", standby, suspend, off, dpms_method);
 
 	error = NULL;
 	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);
@@ -2327,6 +2359,14 @@ gconf_key_changed_cb (GConfClient *client,
 		sync_dpms_policy (manager);
 
 	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
+
+		sync_dpms_policy (manager);
+
+	} else if (strcmp (entry->key, GPM_PREF_AC_DPMS_METHOD) == 0) {
+
+		sync_dpms_policy (manager);
+
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_DPMS_METHOD) == 0) {
 
 		sync_dpms_policy (manager);
 

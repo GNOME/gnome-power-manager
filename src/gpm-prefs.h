@@ -29,9 +29,11 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_AC_SLEEP_COMPUTER	GPM_PREF_DIR "/ac_sleep_computer"
 #define GPM_PREF_AC_SLEEP_DISPLAY	GPM_PREF_DIR "/ac_sleep_display"
+#define GPM_PREF_AC_DPMS_METHOD		GPM_PREF_DIR "/ac_dpms_sleep_method"
 #define GPM_PREF_AC_BRIGHTNESS		GPM_PREF_DIR "/ac_brightness"
 #define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/battery_sleep_computer"
 #define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/battery_sleep_display"
+#define GPM_PREF_BATTERY_DPMS_METHOD	GPM_PREF_DIR "/battery_dpms_sleep_method"
 #define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/battery_brightness"
 
 #define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"

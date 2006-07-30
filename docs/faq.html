@@ -1,4 +1,7 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 5. Frequently Asked Questions</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.15.90 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.15.90 Documentation"><link rel="prev" href="sleep-names.html" title="Chapter 4. Sleep Names"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Frequently Asked Questions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sleep-names.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> </td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="faq"></a>Chapter 5. Frequently Asked Questions</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="faq.html#faq-intro">Past entries</a></span></dt><dd><dl><dt><span class="sect2"><a href="faq.html#faq-longer-suspend">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 5. Frequently Asked Questions</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.15.91 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.15.91 Documentation"><link rel="prev" href="sleep-names.html" title="Chapter 4. Sleep Names"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. Frequently Asked Questions</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sleep-names.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> </td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="faq"></a>Chapter 5. Frequently Asked Questions</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="faq.html#faq-intro">Past entries</a></span></dt><dd><dl><dt><span class="sect2"><a href="faq.html#faq-dpms-broken-monitor">
+        My monitor is broken and treats DPMS standby and off states as
+        'no-signal' which leaves the monitor powered on.
+      </a></span></dt><dt><span class="sect2"><a href="faq.html#faq-longer-suspend">
         I've set the computer inactive timeout to one minute and it still
         takes longer than that to suspend.
       </a></span></dt><dt><span class="sect2"><a href="faq.html#faq-discharge-time-wrong">
@@ -38,7 +41,16 @@
       </a></span></dt><dt><span class="sect2"><a href="faq.html#faq-autostart">Why doesn't GNOME Power manager autostart?</a></span></dt><dt><span class="sect2"><a href="faq.html#faq-custom-script">Where do I put my custom suspend/shutdown/hibernate script?</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="faq-intro"></a>Past entries</h2></div></div></div><p>
       Please read through these common questions and answers before emailing
       the mailing list.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="faq-longer-suspend"></a>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="faq-dpms-broken-monitor"></a>
+        My monitor is broken and treats DPMS standby and off states as
+        'no-signal' which leaves the monitor powered on.
+      </h3></div></div></div><p>
+        You have to change the dpms suspend mode gnome-power-manager uses.
+        Open gconf-editor, and then change the keys 
+        <code class="literal">/apps/gnome-power-manager/ac_dpms_sleep_method</code> and
+        <code class="literal">/apps/gnome-power-manager/battery_dpms_sleep_method</code>
+        to one of the modes that work, e.g. standby, suspend or off.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="faq-longer-suspend"></a>
         I've set the computer inactive timeout to one minute and it still
         takes longer than that to suspend.
       </h3></div></div></div><p>

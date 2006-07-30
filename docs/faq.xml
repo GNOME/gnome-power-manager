@@ -12,6 +12,22 @@
       the mailing list.
     </para>
 
+    <sect2 id="faq-dpms-broken-monitor">
+      <title>
+        My monitor is broken and treats DPMS standby and off states as
+        'no-signal' which leaves the monitor powered on.
+      </title>
+
+      <para>
+        You have to change the dpms suspend mode gnome-power-manager uses.
+        Open gconf-editor, and then change the keys 
+        <literal>/apps/gnome-power-manager/ac_dpms_sleep_method</literal> and
+        <literal>/apps/gnome-power-manager/battery_dpms_sleep_method</literal>
+        to one of the modes that work, e.g. standby, suspend or off.
+      </para>
+
+    </sect2>
+
     <sect2 id="faq-longer-suspend">
       <title>
         I've set the computer inactive timeout to one minute and it still

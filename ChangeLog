@@ -1,5 +1,20 @@
 2006-07-30  Richard Hughes  <richard@hughsie.com>
 
+	Commit a slightly modified patch from
+	William Waghorn <willw@litany.me.uk> many thanks.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c:
+	* src/gpm-prefs.h:
+	Add in two new gconf keys battery_dpms_sleep_method and
+	ac_dpms_sleep_method to support systems that only support a specific
+	DPMS sleep mode.
+
+	* docs/faq.xml:
+	Add a entry about the dpms sleep modes and broken monitors.
+
+2006-07-30  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	Make a difficult to translate string easier to understand.
 

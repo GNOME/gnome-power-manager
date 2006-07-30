@@ -274,6 +274,17 @@
    </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/ac_dpms_sleep_method</key>
+      <applyto>/apps/gnome-power-manager/ac_dpms_sleep_method</applyto>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>Method used to blank screen on AC</short>
+        <long>The DPMS method used to blank the screen when on AC power. Possible values are "default", "standby", "suspend" and "off".</long>
+      </locale>
+   </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/battery_brightness</key>
       <applyto>/apps/gnome-power-manager/battery_brightness</applyto>
       <type>int</type>
@@ -305,7 +316,18 @@
         <long>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
       </locale>
    </schema>
-   
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery_dpms_sleep_method</key>
+      <applyto>/apps/gnome-power-manager/battery_dpms_sleep_method</applyto>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>Method used to blank screen on battery</short>
+        <long>The DPMS method used to blank the screen when on battery power. Possible values are "default", "standby", "suspend" and "off".</long>
+      </locale>
+   </schema>
+
     <schema>
       <key>/schemas/apps/gnome-power-manager/action_button_suspend</key>
       <applyto>/apps/gnome-power-manager/action_button_suspend</applyto>
