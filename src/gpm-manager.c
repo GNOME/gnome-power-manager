@@ -2593,6 +2593,22 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 }
 
 /**
+ * manager_rescan_buttons:
+ * @manager: This manager class instance
+ *
+ * Rescan the buttons to avoid #346082
+ *
+ * Return value: TRUE, as we want to repeat this action on resume.
+ **/
+static gboolean
+manager_rescan_buttons (GpmManager *manager)
+{
+	g_debug ("rescanning buttons");
+	gpm_hal_device_rescan_capability (manager->priv->hal, "button");
+	return TRUE;
+}
+
+/**
  * gpm_manager_init:
  * @manager: This manager class instance
  **/
@@ -2794,6 +2810,9 @@ gpm_manager_init (GpmManager *manager)
 	/* Do we ignore inhibit requests? */
 	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
 								GPM_PREF_IGNORE_INHIBITS, NULL);
+
+	/* poll the lid periodically to avoid #346082 */
+	g_timeout_add (1000 * 60, (GSourceFunc) manager_rescan_buttons, manager);
 }
 
 /**

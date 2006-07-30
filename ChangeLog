@@ -1,6 +1,12 @@
 2006-07-30  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c:
+	Add manager_rescan_buttons() to poll all the buttons every minute.
+	This should fix #346082
+
+2006-07-30  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c:
 	Reset the action timer after an ac_adapter event has been recieved.
 	This should fix #348201
 
