@@ -541,39 +541,55 @@ tray_icon_update (GpmManager *manager)
 static void
 sync_dpms_policy (GpmManager *manager)
 {
-	GError     *error;
-	gboolean    res;
-	gboolean    on_ac;
-	guint       timeout;
-	guint       standby;
-	guint       suspend;
-	guint       off;
-	const char *dpms_method;
+	GError  *error;
+	gboolean res;
+	gboolean on_ac;
+	guint    timeout;
+	guint    standby;
+	guint    suspend;
+	guint    off;
+	char    *dpms_method;
 
 	error = NULL;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
+		error = NULL;
 		timeout = gconf_client_get_int (manager->priv->gconf_client,
 						GPM_PREF_AC_SLEEP_DISPLAY,
 						&error);
+		if (error) {
+			gpm_warning ("Unable to get DPMS timeout: %s", error->message);
+			g_error_free (error);
+		}
+
+		error = NULL;
 		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
 						       GPM_PREF_AC_DPMS_METHOD,
 						       &error);
+		if (error) {
+			gpm_warning ("Unable to get DPMS suspend method: %s", error->message);
+			g_error_free (error);
+		}
 	} else {
+		error = NULL;
 		timeout = gconf_client_get_int (manager->priv->gconf_client,
 						GPM_PREF_BATTERY_SLEEP_DISPLAY,
 						&error);
+		if (error) {
+			gpm_warning ("Unable to get DPMS timeout: %s", error->message);
+			g_error_free (error);
+		}
+
+		error = NULL;
 		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
 						       GPM_PREF_BATTERY_DPMS_METHOD,
 						       &error);
-	}
-
-	if (error) {
-		gpm_warning ("Unable to get DPMS timeouts: %s", error->message);
-		g_error_free (error);
-		return;
+		if (error) {
+			gpm_warning ("Unable to get DPMS suspend method: %s", error->message);
+			g_error_free (error);
+		}
 	}
 
 	/* old policy was in seconds, warn the user if too small */
@@ -584,12 +600,18 @@ sync_dpms_policy (GpmManager *manager)
 
 	/* If we have no dpms_method, possible due to a schema problem */
 	if (dpms_method == NULL) {
-		dpms_method = "default";
+		g_warning ("DPMS method unknown. Possible schema problem!");
+		return;
 	}
 
 	/* Some monitors do not support certain suspend states, so we have to
 	 * provide a way to only use the one that works. */
-	if (strcmp (dpms_method, "standby") == 0) {
+	if (strcmp (dpms_method, "default") == 0) {
+		/* suspend after one timeout, turn off after another */
+		standby = timeout;
+		suspend = timeout;
+		off     = timeout * 2;
+	} else if (strcmp (dpms_method, "standby") == 0) {
 		standby = timeout;
 		suspend = 0;
 		off     = 0;
@@ -602,13 +624,14 @@ sync_dpms_policy (GpmManager *manager)
 		suspend = 0;
 		off     = timeout;
 	} else {
-		/* suspend after one timeout, turn off after another */
-		standby = timeout;
-		suspend = timeout;
-		off     = timeout * 2;
+		/* wtf? */
+		g_warning ("unknown dpms mode!");
+		g_free (dpms_method);
+		return;
 	}
 
 	gpm_debug ("DPMS parameters %d %d %d, method '%s'\n", standby, suspend, off, dpms_method);
+	g_free (dpms_method);
 
 	error = NULL;
 	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);

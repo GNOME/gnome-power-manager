@@ -1,3 +1,9 @@
+2006-08-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (sync_dpms_policy):
+	Make sure we free the error and be much more robust. Pointed out by
+	William Jon McCann <mccann@jhu.edu>, many thanks.
+
 2006-07-30  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c:
