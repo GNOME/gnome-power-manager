@@ -1,3 +1,12 @@
+2006-08-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	Apply fix so that we do not crash when g-s is stopped and we change
+	power source (and thus unthrottling).
+	The fix makes the g-s module much more resilient to screensaver or
+	proxy becoming NULL and handling the error. Should fix #349794.
+
 2006-08-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (sync_dpms_policy):

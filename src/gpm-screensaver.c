@@ -96,17 +96,25 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
  * gpm_screensaver_connect:
  * @screensaver: This screensaver class instance
  **/
-static void
+static gboolean
 gpm_screensaver_connect (GpmScreensaver *screensaver)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
 	if (screensaver->priv->is_connected) {
 		/* sometimes dbus goes crazy and we get two events */
-		return;
+		return FALSE;
 	}
 	screensaver->priv->gs_proxy = dbus_g_proxy_new_for_name (screensaver->priv->session_connection,
 								 GS_LISTENER_SERVICE,
 								 GS_LISTENER_PATH,
 								 GS_LISTENER_INTERFACE);
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
+
 	screensaver->priv->is_connected = TRUE;
 	gpm_debug ("gnome-screensaver connected to the session DBUS");
 
@@ -127,18 +135,21 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 				     "AuthenticationRequestEnd",
 				     G_CALLBACK (gpm_screensaver_auth_end),
 				     screensaver, NULL);
+	return TRUE;
 }
 
 /**
  * gpm_screensaver_disconnect:
  * @screensaver: This screensaver class instance
  **/
-static void
+static gboolean
 gpm_screensaver_disconnect (GpmScreensaver *screensaver)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
 	if (! screensaver->priv->is_connected) {
 		/* sometimes dbus goes crazy and we get two events */
-		return;
+		return FALSE;
 	}
 	if (screensaver->priv->gs_proxy) {
 		g_object_unref (G_OBJECT (screensaver->priv->gs_proxy));
@@ -148,6 +159,7 @@ gpm_screensaver_disconnect (GpmScreensaver *screensaver)
 
 	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
 	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
+	return TRUE;
 }
 
 /**
@@ -162,6 +174,9 @@ gconf_key_changed_cb (GConfClient  *client,
 		      gpointer	    user_data)
 {
 	GpmScreensaver *screensaver = GPM_SCREENSAVER (user_data);
+
+	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
+	g_return_if_fail (entry != NULL);
 
 	if (strcmp (entry->key, GS_PREF_IDLE_DELAY) == 0) {
 		screensaver->priv->idle_delay = gconf_client_get_int (client, entry->key, NULL);
@@ -178,6 +193,7 @@ gconf_key_changed_cb (GConfClient  *client,
 gboolean
 gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	return gconf_client_get_bool (screensaver->priv->gconf_client,
 				      GS_PREF_LOCK_ENABLED, NULL);
 }
@@ -187,11 +203,13 @@ gpm_screensaver_lock_enabled (GpmScreensaver *screensaver)
  * @screensaver: This screensaver class instance
  * @lock: If gnome-screensaver should lock the screen on screensave
  **/
-void
+gboolean
 gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	gconf_client_set_bool (screensaver->priv->gconf_client,
 			       GS_PREF_LOCK_ENABLED, lock, NULL);
+	return TRUE;
 }
 
 /**
@@ -202,6 +220,7 @@ gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
 int
 gpm_screensaver_get_delay (GpmScreensaver *screensaver)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
 	return screensaver->priv->idle_delay;
 }
 
@@ -214,12 +233,21 @@ gboolean
 gpm_screensaver_lock (GpmScreensaver *screensaver)
 {
 	int sleepcount = 0;
+
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
 	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Not locking, as gnome-screensaver not running");
 		return FALSE;
 	}
 
 	gpm_debug ("doing gnome-screensaver lock");
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
 	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "Lock", G_TYPE_INVALID);
 
 	/* When we send the Lock signal to g-ss it takes maybe a second
@@ -245,7 +273,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
  * gpm_screensaver_add_throttle:
  * @screensaver: This screensaver class instance
  * @reason:      The reason for throttling
- * Return value: Success value.
+ * Return value: Success value, or zero for failure
  **/
 guint
 gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
@@ -256,9 +284,18 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	guint32  cookie;
 	guint32  ret;
 
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
+	g_return_val_if_fail (reason != NULL, 0);
+
 	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Cannot throttle now as gnome-screensaver not running");
 		return 0;
+	}
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
 	}
 
 	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
@@ -286,9 +323,16 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 	gboolean res;
 	GError  *error;
 
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	gpm_debug ("removing throttle: id %u", cookie);
 
 	error = NULL;
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
+
 	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
 				 "UnThrottle",
 				 &error,
@@ -310,6 +354,14 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
 
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
+
 	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActive", &error,
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
@@ -329,15 +381,33 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
  * dialogue when we resume, so the user doesn't have to move the mouse or press
  * any key before the window comes up.
  **/
-void
+gboolean
 gpm_screensaver_poke (GpmScreensaver *screensaver)
 {
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
 	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Not poke'ing, as gnome-screensaver not running");
-		return;
+		return FALSE;
 	}
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
+		return FALSE;
+	}
+
 	gpm_debug ("poke");
-	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "SimulateUserActivity", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy,
+				    "SimulateUserActivity",
+				    G_TYPE_INVALID);
+	return TRUE;
 }
 
 /**
@@ -352,8 +422,17 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 	GError *error = NULL;
 	gboolean boolret = TRUE;
 
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+	g_return_val_if_fail (time != NULL, FALSE);
+
 	if (! screensaver->priv->is_connected) {
 		gpm_debug ("Not getting idle, as gnome-screensaver not running");
+		return FALSE;
+	}
+
+	/* shouldn't be, but make sure proxy valid */
+	if (screensaver->priv->gs_proxy == NULL) {
+		gpm_warning ("g-s proxy is NULL!");
 		return FALSE;
 	}
 

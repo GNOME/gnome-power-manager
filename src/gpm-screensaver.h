@@ -60,7 +60,7 @@ GpmScreensaver	*gpm_screensaver_new			(void);
 int		 gpm_screensaver_get_delay		(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
-void		 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,
+gboolean	 gpm_screensaver_lock_set		(GpmScreensaver	*screensaver,
 							 gboolean	 lock);
 gboolean	 gpm_screensaver_lock_enabled		(GpmScreensaver	*screensaver);
 guint32 	 gpm_screensaver_add_throttle    	(GpmScreensaver	*screensaver,
@@ -68,7 +68,7 @@ guint32 	 gpm_screensaver_add_throttle    	(GpmScreensaver	*screensaver,
 gboolean 	 gpm_screensaver_remove_throttle    	(GpmScreensaver	*screensaver,
 							 guint32         cookie);
 gboolean	 gpm_screensaver_check_running		(GpmScreensaver	*screensaver);
-void		 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
+gboolean	 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_get_idle		(GpmScreensaver	*screensaver,
 							 gint		*time);
 
