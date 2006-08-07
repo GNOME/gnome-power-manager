@@ -1,7 +1,6 @@
 SPEC_XML_FILES =			\
 	gnome-power-manager.xml		\
 	dbus-interface.xml		\
-	roadmap.xml			\
 	sleep-names.xml			\
 	faq.xml				\
 	icon-scheme.xml
@@ -11,7 +10,6 @@ SPEC_HTML_FILES =			\
 	faq.html			\
 	icon-scheme.html		\
 	index.html			\
-	roadmap.html			\
 	sleep-names.html
 
 if DOCBOOK_DOCS_ENABLED
