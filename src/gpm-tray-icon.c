@@ -784,12 +784,13 @@ libnotify_event (GpmTrayIcon    *icon,
 		 const char	*msgicon,
 		 GpmNotifyLevel	 urgency)
 {
+	GtkWidget *point = NULL;
+
 	if (icon->priv->notify != NULL) {
 		notify_notification_close (icon->priv->notify, NULL);
 	}
 
 	/* Point to the center of the icon as per the GNOME HIG, #338638 */
-	GtkWidget *point = NULL;
 #if USE_EGGTRAYICON
 	if (icon->priv->is_visible) {
 		point = icon->priv->image;

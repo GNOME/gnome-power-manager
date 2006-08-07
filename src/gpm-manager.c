@@ -241,12 +241,13 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 	action_ok = gpm_inhibit_check (manager->priv->inhibit);
 	if (! action_ok) {
+		GString *message = g_string_new ("");
+
 		if (manager->priv->ignore_inhibits) {
 			gpm_debug ("Inhibit ignored through gconf policy!");
 			return TRUE;
 		}
 		title = g_strdup_printf (_("Request to %s"), action);
-		GString *message = g_string_new ("");
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title,
@@ -338,8 +339,8 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 			      gboolean   *can,
 			      GError    **error)
 {
-	*can = FALSE;
 	gboolean polkit_ok = TRUE;
+	*can = FALSE;
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
 #endif
@@ -361,8 +362,8 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 			    gboolean   *can,
 			    GError    **error)
 {
-	*can = FALSE;
 	gboolean polkit_ok = TRUE;
+	*can = FALSE;
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
 #endif
@@ -794,6 +795,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 {
 	gboolean do_lock;
 	gboolean ret = TRUE;
+	GError  *error = NULL;
 
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_DPMS_OFF, NULL);
 
@@ -803,7 +805,6 @@ gpm_manager_blank_screen (GpmManager *manager,
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
-	GError     *error = NULL;
 	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
 	if (error) {
 		gpm_debug ("Unable to set DPMS mode: %s", error->message);
@@ -967,14 +968,15 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 				gboolean    *retval,
 				GError     **error)
 {
+	gboolean on_ac;
+	gboolean power_save;
+
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
 	if (retval == NULL) {
 		return FALSE;
 	}
 
-	gboolean on_ac;
-	gboolean power_save;
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
 	if (on_ac) {
 		power_save = gconf_client_get_bool (manager->priv->gconf_client,
@@ -1199,10 +1201,10 @@ gpm_manager_hibernate (GpmManager *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
 		if (show_notify) {
+			const char *title = _("Hibernate Problem");
 			message = g_strdup_printf (_("HAL failed to %s. "
 						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
 						     _("hibernate"), GPM_FAQ_URL);
-			const char *title = _("Hibernate Problem");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      title,
 					      message,
@@ -1245,8 +1247,11 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean allowed;
 	gboolean ret;
 	gboolean do_lock;
+	gboolean show_notify;
 	GpmPowerStatus status;
 	char *message;
+	int charge_before_suspend;
+	int charge_difference;
 
 	gpm_manager_allowed_suspend (manager, &allowed, NULL);
 
@@ -1272,7 +1277,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_power_get_battery_status (manager->priv->power,
 				      GPM_POWER_KIND_PRIMARY,
 				      &status);
-	int charge_before_suspend = status.current_charge;
+	charge_before_suspend = status.current_charge;
 
 	/* Do the suspend */
 	ret = gpm_hal_suspend (manager->priv->hal, 0);
@@ -1286,7 +1291,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_power_get_battery_status (manager->priv->power,
 				      GPM_POWER_KIND_PRIMARY,
 				      &status);
-	int charge_difference = status.current_charge - charge_before_suspend;
+	charge_difference = status.current_charge - charge_before_suspend;
 	if (charge_difference != 0) {
 		if (charge_difference > 0) {
 			message = g_strdup_printf (_("Battery charged %imWh during suspend"),
@@ -1301,7 +1306,6 @@ gpm_manager_suspend (GpmManager *manager,
 		g_free (message);
 	}
 
-	gboolean show_notify;
 	/* We only show the HAL failed notification if set in gconf */
 	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 					     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
@@ -1746,6 +1750,8 @@ power_on_ac_changed_cb (GpmPower   *power,
 			gboolean    on_ac,
 			GpmManager *manager)
 {
+	gboolean event_when_closed;
+
 	gpm_debug ("Setting on-ac: %d", on_ac);
 
 	/* simulate user input, to fix #333525 */
@@ -1784,7 +1790,6 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	gboolean event_when_closed;
 	event_when_closed = gconf_client_get_bool (manager->priv->gconf_client,
 						   GPM_PREF_BATT_EVENT_WHEN_CLOSED, NULL);
 	if (event_when_closed && (!on_ac) && manager->priv->lid_is_closed) {
@@ -2565,6 +2570,7 @@ tray_icon_destroyed (GtkObject *object, gpointer user_data)
 /**
  * screensaver_auth_request_cb:
  * @manager: This manager class instance
+ * @auth: If we are trying to authenticate
  *
  * Undim the screen when the login screen appears (see #333290)
  **/
@@ -2643,6 +2649,7 @@ gpm_manager_init (GpmManager *manager)
 	gboolean check_type_cpu;
 	gboolean enabled;
 	gboolean allowed_in_menu;
+	int lcd_dim_brightness;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
@@ -2821,7 +2828,6 @@ gpm_manager_init (GpmManager *manager)
 							   GPM_PREF_ACTION_TIME, NULL);
 
 	/* Get dim settings */
-	int lcd_dim_brightness;
 	lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
 						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
 	gpm_brightness_set_level_dim (manager->priv->brightness, lcd_dim_brightness);

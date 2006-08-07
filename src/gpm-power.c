@@ -1830,6 +1830,8 @@ gpm_power_init (GpmPower *power)
 {
 	gboolean on_ac;
 
+	GConfClient *client = gconf_client_get_default ();
+
 	power->priv = GPM_POWER_GET_PRIVATE (power);
 
 	power->priv->hal = gpm_hal_new ();
@@ -1859,7 +1861,6 @@ gpm_power_init (GpmPower *power)
 	on_ac = gpm_hal_is_on_ac (power->priv->hal);
 	gpm_power_set_on_ac (power, on_ac, NULL);
 
-	GConfClient *client = gconf_client_get_default ();
 	power->priv->exp_ave_factor = gconf_client_get_int (client,
 							    GPM_PREF_RATE_EXP_AVE_FACTOR,
 							    NULL);

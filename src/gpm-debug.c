@@ -174,13 +174,13 @@ gpm_critical_error (const char *format, ...)
 {
 	va_list args;
 	char    buffer [1025];
+	GtkWidget *dialog;
 
 	va_start (args, format);
 	g_vsnprintf (buffer, 1024, format, args);
 	va_end (args);
 
 	gpm_syslog ("Critical error: %s", buffer);
-	GtkWidget *dialog;
 	dialog = gtk_message_dialog_new_with_markup (NULL,
 						     GTK_DIALOG_MODAL,
 						     GTK_MESSAGE_WARNING,

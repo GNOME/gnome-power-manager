@@ -303,9 +303,10 @@ gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
 	if (value == 0) {
 		value = NEVER_TIME_ON_SLIDER;
 	} else {
+		int gs_idle_time;
 		/* policy is in seconds, slider is in minutes */
 		value /= 60;
-		int gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
 		value += gs_idle_time;
 	}
 
@@ -920,6 +921,16 @@ gpm_prefs_init (GpmPrefs *prefs)
 {
 	GtkWidget    *main_window;
 	GtkWidget    *widget;
+	GtkWidget    *notebook;
+	int           delay;
+	int           page;
+
+	GpmHal       *hal = gpm_hal_new ();
+        const char   *power_button_actions[] = {ACTION_INTERACTIVE,
+                                                ACTION_SUSPEND,
+                                                ACTION_HIBERNATE,
+                                                ACTION_SHUTDOWN,
+                                                NULL};
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
@@ -936,7 +947,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 				 NULL,
 				 NULL);
 
-	GpmHal *hal = gpm_hal_new ();
 	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability (hal, "laptop_panel") > 0;
 	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value (hal, "battery",
 							"battery.type",
@@ -981,25 +991,17 @@ gpm_prefs_init (GpmPrefs *prefs)
 	setup_ups_actions (prefs);
 	setup_sleep_type (prefs);
 
-	const char   *power_button_actions[] = {ACTION_INTERACTIVE,
-						ACTION_SUSPEND,
-						ACTION_HIBERNATE,
-						ACTION_SHUTDOWN,
-						NULL};
-
 	/* Power button action */
 	gpm_prefs_setup_action_combo (prefs, "combobox_power_button",
 				      GPM_PREF_BUTTON_POWER,
 				      power_button_actions);
 
-	int delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
 	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
 	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
 
-	GtkWidget *notebook;
-	int page;
 	notebook = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
 	/* if no options then disable frame as it will be empty */
 	if (! prefs->priv->has_batteries) {

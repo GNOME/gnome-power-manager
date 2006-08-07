@@ -538,6 +538,7 @@ void
 gpm_brightness_up (GpmBrightness *brightness)
 {
 	int step;
+	int percentage;
 
 	if (! brightness->priv->has_hardware) {
 		return;
@@ -552,7 +553,6 @@ gpm_brightness_up (GpmBrightness *brightness)
 		gpm_brightness_set_hw (brightness, brightness->priv->current_hw + step);
 	}
 
-	int percentage;
 	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
 	gpm_debug ("emitting brightness-step-changed : %i", percentage);
@@ -569,6 +569,7 @@ void
 gpm_brightness_down (GpmBrightness *brightness)
 {
 	int step;
+	int percentage;
 
 	if (! brightness->priv->has_hardware) {
 		return;
@@ -583,7 +584,6 @@ gpm_brightness_down (GpmBrightness *brightness)
 		gpm_brightness_set_hw (brightness, brightness->priv->current_hw - 1);
 	}
 
-	int percentage;
 	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
 	gpm_debug ("emitting brightness-step-changed : %i", percentage);

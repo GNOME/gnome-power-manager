@@ -1,4 +1,19 @@
-2006-08-04  Richard Hughes  <richard@hughsie.com>
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness.c:
+	* src/gpm-debug.c:
+	* src/gpm-graph-widget.c:
+	* src/gpm-info.c:
+	* src/gpm-inhibit.c:
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-tray-icon.c:
+	This should fix all cases reported by sparse/gcc.
+	This should make gnome-power-manager compile on gcc 2.95 and earlier.
+	Patch from Kjartan Maraas, many thanks. Fixes #350058
+
+2006-08-06  Richard Hughes  <richard@hughsie.com>
 
 	* TODO:
 	* docs/gnome-power-manager.xml.in:
@@ -2047,7 +2062,7 @@
 
 	* data/gpm-info.glade: Add the rate and time remaining tabs that use
 	the new graphs. These maybe too much in the UI, but seeing as we get
-	them for free I guess they can't hurt. And they'll be usefull for
+	them for free I guess they can't hurt. And they'll be useful for
 	debugging odd machines.
 
 	* src/gpm-graph-widget.{c|h}: Allow the axes to be changed, and expose

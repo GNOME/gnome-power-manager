@@ -192,11 +192,11 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 static void
 gpm_info_populate_device_information (GpmInfo *info)
 {
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-
 	int	   number;
 	GtkWidget *widget;
+	
+	g_return_if_fail (info != NULL);
+	g_return_if_fail (GPM_IS_INFO (info));
 
 	/* Laptop battery section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
@@ -296,17 +296,17 @@ gpm_info_get_time_string (time_t time)
 static void
 gpm_info_update_event_tree (GpmInfo *info)
 {
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
 	char *timestring;
 	const char *descstring;
-	GtkListStore *store;
-	GtkTreeIter   iter;
-	store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-
 	GpmInfoDataPoint *new;
+	GtkTreeIter   iter;
 	GList *l;
+	GtkListStore *store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 	GList *events = gpm_info_data_get_list (info->priv->events);
+
+	g_return_if_fail (info != NULL);
+	g_return_if_fail (GPM_IS_INFO (info));
+
 	for (l=events; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		timestring = gpm_info_get_time_string (info->priv->start_time + new->time);

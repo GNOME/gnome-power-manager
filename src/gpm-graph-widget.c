@@ -271,9 +271,10 @@ gpm_graph_set_invert_y (GpmGraph *graph, gboolean inv)
 void
 gpm_graph_set_data (GpmGraph *graph, GpmInfoData *data)
 {
+	GList *list = gpm_info_data_get_list (data);
+
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (graph));
-	GList *list = gpm_info_data_get_list (data);
 	if (graph->priv->list) {
 		g_list_free (graph->priv->list);
 	}
@@ -290,9 +291,11 @@ gpm_graph_set_data (GpmGraph *graph, GpmInfoData *data)
 void
 gpm_graph_set_events (GpmGraph *graph, GpmInfoData *data)
 {
+	GList *list = gpm_info_data_get_list (data);
+
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (graph));
-	GList *list = gpm_info_data_get_list (data);
+
 	if (graph->priv->events) {
 		g_list_free (graph->priv->events);
 	}
@@ -475,12 +478,13 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 static void
 gpm_graph_check_range (GpmGraph *graph)
 {
+	GpmInfoDataPoint *new = NULL;
+	GList *l;
+
 	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
 		return;
 	}
-	GpmInfoDataPoint *new = NULL;
-	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		if (new->time < graph->priv->start_x) {
@@ -513,6 +517,13 @@ gpm_graph_check_range (GpmGraph *graph)
 static void
 gpm_graph_auto_range (GpmGraph *graph)
 {
+	int biggest_x = 0;
+	int biggest_y = 0;
+	int smallest_x = 999999;
+	int smallest_y = 999999;
+	GpmInfoDataPoint *new = NULL;
+	GList *l;
+
 	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
 		graph->priv->start_x = 0;
@@ -522,12 +533,6 @@ gpm_graph_auto_range (GpmGraph *graph)
 		return;
 	}
 
-	int biggest_x = 0;
-	int biggest_y = 0;
-	int smallest_x = 999999;
-	int smallest_y = 999999;
-	GpmInfoDataPoint *new = NULL;
-	GList *l;
 	for (l=graph->priv->list; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		if (new->time > biggest_x) {
@@ -745,6 +750,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	float newx, newy;
 	GpmInfoDataPoint *eventdata;
 	GList *l;
+	GpmInfoDataPoint *new;
 
 	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
 		gpm_debug ("no data");
@@ -759,7 +765,6 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	cairo_save (cr);
 
 	/* do the line on the graph */
-	GpmInfoDataPoint *new;
 	l=graph->priv->list;
 	new = (GpmInfoDataPoint *) l->data;
 	gpm_graph_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
@@ -791,6 +796,8 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 			l2 = l2->next;
 		}
 		for (l=graph->priv->events; l != NULL; l=l->next) {
+			int pos;
+
 			eventdata = (GpmInfoDataPoint *) l->data;
 			/* If we have valid list data, go through the list data
 			   until we get a data point time value greater than the
@@ -802,7 +809,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 			}
 			/* Interpolate in the y direction with the two
 			   previous points. This should be 100% accurate */
-			int pos = gpm_graph_interpolate_value (point_this,
+			pos = gpm_graph_interpolate_value (point_this,
 							       point_last,
 							       eventdata->time);
 			gpm_graph_get_pos_on_graph (graph, eventdata->time,
@@ -888,13 +895,14 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 static float
 gpm_graph_legend_calculate_width (GpmGraph *graph, cairo_t *cr)
 {
-	g_return_val_if_fail (graph != NULL, 0.0f);
-	g_return_val_if_fail (GPM_IS_GRAPH (graph), 0.0f);
-
 	int a;
 	const char *desc;
 	cairo_text_extents_t extents;
 	float max_width = 0.0f;
+
+	g_return_val_if_fail (graph != NULL, 0.0f);
+	g_return_val_if_fail (GPM_IS_GRAPH (graph), 0.0f);
+
 
 	cairo_set_font_options (cr, graph->priv->options);
 	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
@@ -925,6 +933,8 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	int legend_y = 0;
 	int legend_height;
 	int legend_width;
+	int data_x;
+	int data_y;
 
 	GpmGraph *graph = (GpmGraph*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -960,8 +970,8 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_auto_range (graph);
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
-	int data_x = graph->priv->stop_x - graph->priv->start_x;
-	int data_y = graph->priv->stop_y - graph->priv->start_y;
+	data_x = graph->priv->stop_x - graph->priv->start_x;
+	data_y = graph->priv->stop_y - graph->priv->start_y;
 	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) data_x;
 	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) data_y;
 

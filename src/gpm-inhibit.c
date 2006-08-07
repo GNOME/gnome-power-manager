@@ -137,6 +137,8 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 		 const char *application,
 		 const char *reason)
 {
+	GpmInhibitData *data = g_new (GpmInhibitData, 1);
+
 	/* handle where the application does not add required data */
 	if (connection == NULL ||
 	    application == NULL ||
@@ -147,7 +149,6 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 	}
 
 	/* seems okay, add to list */
-	GpmInhibitData *data = g_new (GpmInhibitData, 1);
 	data->cookie = gpm_inhibit_generate_cookie (inhibit);
 	data->application = g_strdup (application);
 	data->connection = g_strdup (connection);
@@ -328,6 +329,9 @@ static void
 gpm_inhibit_finalize (GObject *object)
 {
 	GpmInhibit *inhibit;
+	int a;
+	GpmInhibitData *data;
+
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_INHIBIT (object));
 
@@ -335,8 +339,6 @@ gpm_inhibit_finalize (GObject *object)
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 
 	/* remove items in list and free */
-	int a;
-	GpmInhibitData *data;
 	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 		gpm_inhibit_free_data_object (data);
