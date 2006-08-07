@@ -1,5 +1,11 @@
 2006-08-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (screensaver_auth_request_cb):
+	Turn on the monitor unconditionally, as we may be using a smartcard
+	to authenticate and DPMS might still be on. Should fix #350291.
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
 	* docs/Makefile.am:
 	Fix the build, by removing the roadmap stuff. OOps.
 
