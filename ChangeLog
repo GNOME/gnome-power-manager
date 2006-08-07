@@ -1,5 +1,19 @@
 2006-08-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/.cvsignore:
+	* src/run-gpm.sh:
+	* src/run-valgrind-gpm.sh:
+	Add these debugging files (not installed) as it makes starting g-p-m
+	easier from CVS.
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c:
+	Add in an extra battery charged check to avoid repetition in the
+	battery charged notification. Should fix #348938
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c:
 	* src/gpm-brightness.h:
 	Add gpm_brightness_has_hardware() so we can find out if we have lcd
