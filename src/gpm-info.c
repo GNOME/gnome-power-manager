@@ -589,6 +589,7 @@ gpm_info_show_window (GpmInfo *info)
 		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
 		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_devices");
 		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
 	}
 
 	gtk_widget_show (info->priv->main_window);
