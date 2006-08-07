@@ -1,4 +1,46 @@
 ===============
+Version 2.15.91
+===============
+
+Released August 07, 2006
+
+General
+
+ - Turn on the monitor unconditionally, as we may be using a smart-card to
+   authenticate and DPMS might still be on. #350291.
+ - Hide the 'Device Information' window if we have no devices.
+ - Add in an extra battery charged check to avoid repetition in the battery
+   charged notification under some circumstances. #348938
+ - Fix all cases reported by sparse/gcc (Kjartan Maraas). #350058
+ - Move the roadmap into the TODO so it's easier to update.
+ - Make gnome-screensaver connection more resilient to bus failures. #349794
+ - Poll all the buttons every minute to detect a silent lid close event. #346082
+ - Reset the action timer after an ac_adapter event has been received. #348201
+ - Add support for different DPMS sleep modes to support broken monitors.
+   Patch from William Waghorn, many thanks.
+ - Make the precision of the power supply and power rate more reasonable.
+ - Install the 24x24 icons to get rid of the fuzzyness of the tray icon in some
+   circumstances. This optionally requires ImageMagick. #348994
+ - Fix a typo where we were trying to assign the wrong icon names so the
+   battery missing icon didn't show up (instead showed a gtk-broken-image) #348710
+ - Fix a crasher where the g-s timeout was larger than the max range for
+   gnome-power-preferences. #347932
+
+Translators
+
+ - Ankit Patel (gu)
+ - Francisco Javier F. Serrador (es)
+ - Johannes Schmid (de)
+ - Jovan Naumovski (mk)
+ - Kjartan Maraas (nb)
+ - Leonid Kanter (ru)
+ - Raivis Dejus (lv)
+ - Theppitak Karoonboonyanan (th)
+ - Woodman Tuen (zh_HK)
+ - Woodman Tuen (zh_TW)
+ - Žygimantas Beručka (lt)
+
+===============
 Version 2.15.90
 ===============
 
