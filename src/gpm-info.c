@@ -470,8 +470,11 @@ gpm_info_help_cb (GtkWidget *widget,
 void
 gpm_info_show_window (GpmInfo *info)
 {
-	GtkWidget    *widget;
-	GladeXML     *glade_xml;
+	GtkWidget *widget;
+	GladeXML  *glade_xml;
+	GtkWidget *notebook;
+	int total_devices = 0;
+	int page;
 
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
@@ -557,8 +560,7 @@ gpm_info_show_window (GpmInfo *info)
 		gtk_widget_show (info->priv->time_widget);
 		gtk_widget_show (info->priv->percentage_widget);
 	} else {
-		GtkWidget *notebook;
-		int page;
+		/* get rid of the graphs */
 		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
 		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_percentage");
 		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
@@ -569,6 +571,24 @@ gpm_info_show_window (GpmInfo *info)
 		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_time");
 		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
 		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+	}
+
+	/* find the total number of and type of devices */
+	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
+							    GPM_POWER_KIND_PRIMARY);
+	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
+							    GPM_POWER_KIND_UPS);
+	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
+							    GPM_POWER_KIND_MOUSE);
+	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
+							    GPM_POWER_KIND_KEYBOARD);
+
+	/* If the total number of devices is zero, hide the
+	 * 'Device Information' tab. */
+	if (total_devices == 0) {
+		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
+		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_devices");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
 	}
 
 	gtk_widget_show (info->priv->main_window);
