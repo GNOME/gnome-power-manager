@@ -1,5 +1,11 @@
 2006-08-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c:
+	Make sure we check input for NULL (that Jon found in #350058).
+	This should stop a g-p-m segfault with a misconstructed dbus packet.
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness.c:
 	* src/gpm-debug.c:
 	* src/gpm-graph-widget.c:

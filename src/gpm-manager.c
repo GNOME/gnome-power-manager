@@ -340,6 +340,7 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 			      GError    **error)
 {
 	gboolean polkit_ok = TRUE;
+	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
@@ -363,6 +364,7 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 			    GError    **error)
 {
 	gboolean polkit_ok = TRUE;
+	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
