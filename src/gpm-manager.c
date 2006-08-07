@@ -735,8 +735,10 @@ change_power_policy (GpmManager *manager,
 		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
 	}
 
-	gpm_brightness_set_level_std (manager->priv->brightness, brightness);
-	gpm_brightness_set (manager->priv->brightness);
+	if (gpm_brightness_has_hardware (manager->priv->brightness)) {
+		gpm_brightness_set_level_std (manager->priv->brightness, brightness);
+		gpm_brightness_set (manager->priv->brightness);
+	}
 
 	gpm_hal_enable_power_save (manager->priv->hal, power_save);
 	update_ac_throttle (manager, on_ac);
@@ -1444,7 +1446,7 @@ idle_changed_cb (GpmIdle    *idle,
 		/* Should we resume the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
-		if (do_laptop_dim) {
+		if (do_laptop_dim && gpm_brightness_has_hardware (manager->priv->brightness)) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_RESUME,
 						_("Screen resume"),
@@ -1470,7 +1472,7 @@ idle_changed_cb (GpmIdle    *idle,
 		/* Should we dim the screen? */
 		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
 						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
-		if (do_laptop_dim) {
+		if (do_laptop_dim && gpm_brightness_has_hardware (manager->priv->brightness)) {
 			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_DIM,
 						_("Screen dim"),
@@ -2584,8 +2586,10 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 	/* TODO: This may be a bid of a bodge, as we will have multiple
 		 resume requests -- maybe this need a logic cleanup */
 	if (auth) {
-		gpm_debug ("resuming due to auth begin");
-		gpm_brightness_undim (manager->priv->brightness);
+		if (gpm_brightness_has_hardware (manager->priv->brightness)) {
+			gpm_debug ("undimming lcd due to auth begin");
+			gpm_brightness_undim (manager->priv->brightness);
+		}
 	}
 }
 
@@ -2830,9 +2834,12 @@ gpm_manager_init (GpmManager *manager)
 							   GPM_PREF_ACTION_TIME, NULL);
 
 	/* Get dim settings */
-	lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
-						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
-	gpm_brightness_set_level_dim (manager->priv->brightness, lcd_dim_brightness);
+	if (gpm_brightness_has_hardware (manager->priv->brightness)) {
+		lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
+							   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+		gpm_debug ("lcd_dim_brightness is %i", lcd_dim_brightness);
+		gpm_brightness_set_level_dim (manager->priv->brightness, lcd_dim_brightness);
+	}
 
 	/* Do we beep? */
 	manager->priv->enable_beeping = gconf_client_get_bool (manager->priv->gconf_client,

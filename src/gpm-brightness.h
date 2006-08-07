@@ -62,6 +62,7 @@ void		 gpm_brightness_down		(GpmBrightness *brightness);
 int		 gpm_brightness_get		(GpmBrightness *brightness);
 void		 gpm_brightness_set		(GpmBrightness *brightness);
 void		 gpm_brightness_dim		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_has_hardware	(GpmBrightness *brightness);
 
 G_END_DECLS
 

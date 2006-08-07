@@ -1,5 +1,26 @@
 2006-08-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness.c:
+	* src/gpm-brightness.h:
+	Add gpm_brightness_has_hardware() so we can find out if we have lcd
+	hardware.
+	Also do some more error checking here like we did for the screensaver.
+
+	* src/gpm-debug.c: (gpm_syslog):
+	Reduce the log level from LOG_ALERT to LOG_NOTICE.
+	We'll leave this hardcoded for now, as syslog is meant to be a simple
+	debugging aid, not a full blown logging system.
+	Also add the username into the syslog to fix #349971
+
+	* src/gpm-manager.c:
+	Only try to change the LCD if we have the hardware.
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-debug.c: (gpm_syslog):
+
+2006-08-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c:
 	Make sure we check input for NULL (that Jon found in #350058).
 	This should stop a g-p-m segfault with a misconstructed dbus packet.

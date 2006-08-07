@@ -253,6 +253,8 @@ gpm_brightness_update_hw (GpmBrightness *brightness)
 	gboolean retval;
 	gint     brightness_hw = 0;
 
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	retval = TRUE;
 	if (!dbus_g_proxy_call (brightness->priv->proxy, "GetBrightness", &error,
 				G_TYPE_INVALID,
@@ -284,6 +286,8 @@ gpm_brightness_set_hw (GpmBrightness *brightness,
 	GError  *error = NULL;
 	gint     ret;
 	gboolean retval;
+
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	if (brightness_level_hw < 0 ||
 	    brightness_level_hw > brightness->priv->levels - 1) {
@@ -350,6 +354,8 @@ gpm_brightness_dim_hw_step (GpmBrightness *brightness,
 {
 	int current_hw;
 	int a;
+
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
 	current_hw = brightness->priv->current_hw;
 
 	/* we do the step interval as we can have insane levels of brightness */
@@ -371,12 +377,16 @@ gpm_brightness_dim_hw_step (GpmBrightness *brightness,
 /**
  * gpm_brightness_get_step:
  * @brightness: This brightness class instance
- * Return value: the amount of hardware steps to do on each update
+ * Return value: the amount of hardware steps to do on each update or
+ * zero for error.
  **/
 static int
 gpm_brightness_get_step (GpmBrightness *brightness)
 {
 	int step;
+
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), 0);
+
 	if (brightness->priv->levels < 20) {
 		/* less than 20 states should do every state */
 		step = 1;
@@ -397,6 +407,8 @@ gpm_brightness_dim_hw (GpmBrightness *brightness,
 		       int	      new_level_hw)
 {
 	int step;
+
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
 
 	if (! brightness->priv->has_hardware) {
 		return;
@@ -511,7 +523,7 @@ gpm_brightness_set (GpmBrightness *brightness)
 /**
  * gpm_brightness_get:
  * @brightness: This brightness class instance
- * Return value: The percentage brightness, or -1 for no hardware
+ * Return value: The percentage brightness, or -1 for no hardware or error
  *
  * Gets the current (or at least what this class thinks is current) percentage
  * brightness. This is quick as no HAL inquiry is done.
@@ -520,6 +532,9 @@ int
 gpm_brightness_get (GpmBrightness *brightness)
 {
 	int percentage;
+
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), -1);
+
 	if (! brightness->priv->has_hardware) {
 		return -1;
 	}
@@ -539,6 +554,8 @@ gpm_brightness_up (GpmBrightness *brightness)
 {
 	int step;
 	int percentage;
+
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
 
 	if (! brightness->priv->has_hardware) {
 		return;
@@ -571,6 +588,8 @@ gpm_brightness_down (GpmBrightness *brightness)
 	int step;
 	int percentage;
 
+	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
@@ -588,4 +607,19 @@ gpm_brightness_down (GpmBrightness *brightness)
 						   brightness->priv->levels);
 	gpm_debug ("emitting brightness-step-changed : %i", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
+}
+
+/**
+ * gpm_brightness_has_hardware:
+ * @brightness: This brightness class instance
+ * Return value: if we can set or get the lcd brightness
+ *
+ * Returns if the computer has brightness hardware (lcd panel)
+ **/
+gboolean
+gpm_brightness_has_hardware (GpmBrightness *brightness)
+{
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
+	return brightness->priv->has_hardware;
 }

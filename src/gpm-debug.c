@@ -138,7 +138,7 @@ gpm_syslog (const char *format, ...)
 	va_end (args);
 
 	gpm_debug ("Saving to syslog: %s", buffer);
-	syslog (LOG_ALERT, "%s", buffer);
+	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), buffer);
 }
 
 /**
