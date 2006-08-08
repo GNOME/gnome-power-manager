@@ -1,5 +1,13 @@
 2006-08-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c:
+	* src/run-valgrind-gpm.sh:
+	Add a timed exit option to the daemon (--timed-exit).
+	This helps running g-p-m under valgrind and was suggested by Jon.
+	The HAL daemon has something similar. Fixes #350334
+
+2006-08-08  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	Re-organize, and add a note about a GError audit.
 

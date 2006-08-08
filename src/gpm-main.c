@@ -97,10 +97,23 @@ static void
 gpm_exit (GpmManager *manager)
 {
 	gpm_stock_icons_shutdown ();
-
 	gpm_debug_shutdown ();
-	g_object_unref (manager);
 	exit (0);
+}
+
+/**
+ * timed_exit_cb:
+ * @loop: The main loop
+ *
+ * Exits the main loop, which is helpful for valgrinding g-p-m.
+ *
+ * Return value: FALSE, as we don't want to repeat this action.
+ **/
+static gboolean
+timed_exit_cb (GMainLoop *loop)
+{
+	g_main_loop_quit (loop);
+	return FALSE;
 }
 
 /**
@@ -116,6 +129,7 @@ main (int argc, char *argv[])
 	DBusGConnection *session_connection;
 	gboolean	 verbose = FALSE;
 	gboolean	 no_daemon = FALSE;
+	gboolean	 timed_exit = FALSE;
 	GpmManager      *manager = NULL;
 	GError		*error = NULL;
 	GOptionContext  *context;
@@ -126,6 +140,8 @@ main (int argc, char *argv[])
 		  N_("Do not daemonize"), NULL },
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  N_("Show extra debugging information"), NULL },
+		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
+		  N_("Exit after a small delay (for debugging)"), NULL },
 		{ NULL}
 	};
 
@@ -205,10 +221,18 @@ main (int argc, char *argv[])
 
 	loop = g_main_loop_new (NULL, FALSE);
 
+	/* Only timeout and close the mainloop if we have specified it
+	 * on the command line */
+	if (timed_exit) {
+		g_timeout_add (1000 * 20, (GSourceFunc) timed_exit_cb, loop);
+	}
+
 	g_main_loop_run (loop);
 
-	gpm_exit (manager);
+	gpm_stock_icons_shutdown ();
+	gpm_debug_shutdown ();
 
+	g_object_unref (manager);
 	g_object_unref (program);
 	g_option_context_free (context);
 
