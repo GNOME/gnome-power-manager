@@ -2584,24 +2584,29 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 			     gboolean        auth,
 			     GpmManager     *manager)
 {
-	GError *error;
+	GError  *error;
+	gboolean res;
+
+	/* Only act on the begin authentication request */
+	if (! auth) {
+		return;
+	}
 
 	/* TODO: This may be a bid of a bodge, as we will have multiple
 		 resume requests -- maybe this need a logic cleanup */
-	if (auth) {
-		if (gpm_brightness_has_hardware (manager->priv->brightness)) {
-			gpm_debug ("undimming lcd due to auth begin");
-			gpm_brightness_undim (manager->priv->brightness);
-		}
+	if (gpm_brightness_has_hardware (manager->priv->brightness)) {
+		gpm_debug ("undimming lcd due to auth begin");
+		gpm_brightness_undim (manager->priv->brightness);
+	}
 
-		/* We turn on the monitor unconditionally, as we may be using
-		 * a smartcard to authenticate and DPMS might still be on.
-		 * See #350291 for more details */
-		gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
-		if (error) {
-			gpm_warning ("Failed to turn on DPMS: %s", error->message);
-			g_error_free (error);
-		}
+	/* We turn on the monitor unconditionally, as we may be using
+	 * a smartcard to authenticate and DPMS might still be on.
+	 * See #350291 for more details */
+	error = NULL;
+	res = gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	if (! res) {
+		gpm_warning ("Failed to turn on DPMS: %s", error->message);
+		g_error_free (error);
 	}
 }
 
