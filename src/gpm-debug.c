@@ -166,7 +166,7 @@ gpm_debug_init (gboolean debug)
  * @content: The content to show, e.g. "No icons detected"
  *
  * Shows a gtk critical error and logs to syslog.
- * NOTE: we will loose memory, but since this program is a critical error
+ * NOTE: we will lose memory, but since this program is a critical error
  * that is the least of our problems...
  **/
 void

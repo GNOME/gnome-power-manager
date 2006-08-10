@@ -1,3 +1,15 @@
+2006-08-10  Richard Hughes  <richard@hughsie.com>
+
+	Apply patch from Bruce Cowan <bruce.cowan@dsl.pipex.com>
+	to change my incorrect spelling of loose to lose throughout the
+	project. Many thanks.
+
+	* help/C/gnome-power-manager.xml:
+	* help/hu/hu.po:
+	* help/ru/ru.po:
+	* help/sv/sv.po:
+	* src/gpm-debug.c:
+
 2006-08-09  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/24x24/.cvsignore:
@@ -2950,7 +2962,7 @@
 	* src/gpm-hal-monitor.c (gpm_hash_new_devices_cache,
 	gpm_hash_free_devices_cache): Add these so we can simplify our memory
 	management. We need to be more careful that what we were, as hal could
-	be restarted many times and we could loose lots of memory.
+	be restarted many times and we could lose lots of memory.
 
 	(hal_monitor_stop): Inline into _finalize, as not called elsewhere.
 
@@ -3067,7 +3079,7 @@
 	so we can trace, and see what's going on internally.
 
 	* src/gpm-main.c (main): Do the gpm_debug_init earlier in the sequence
-	else we loose the new signal messages on initialization.
+	else we lose the new signal messages on initialization.
 
 2006-02-13  Richard Hughes  <richard@hughsie.com>
 
