@@ -735,6 +735,7 @@ change_power_policy (GpmManager *manager,
 		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
 	}
 
+	/* only do brightness changes if we have the hardware */
 	if (gpm_brightness_has_hardware (manager->priv->brightness)) {
 		gpm_brightness_set_level_std (manager->priv->brightness, brightness);
 		gpm_brightness_set (manager->priv->brightness);
@@ -1166,7 +1167,7 @@ gpm_manager_reboot (GpmManager *manager,
  **/
 static gboolean
 gpm_manager_hibernate (GpmManager *manager,
-			GError    **error)
+		       GError    **error)
 {
 	gboolean allowed;
 	gboolean ret;
@@ -1201,6 +1202,11 @@ gpm_manager_hibernate (GpmManager *manager,
 	if (! ret) {
 		char *message;
 		gboolean show_notify;
+
+		if (manager->priv->enable_beeping) {
+			gpm_warning_beep ();
+		}
+
 		/* We only show the HAL failed notification if set in gconf */
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
@@ -1251,7 +1257,6 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean allowed;
 	gboolean ret;
 	gboolean do_lock;
-	gboolean show_notify;
 	GpmPowerStatus status;
 	char *message;
 	int charge_before_suspend;
@@ -1310,25 +1315,34 @@ gpm_manager_suspend (GpmManager *manager,
 		g_free (message);
 	}
 
-	/* We only show the HAL failed notification if set in gconf */
-	show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-					     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
-	if ((!ret) && show_notify) {
-		const char *title;
-		message = g_strdup_printf (_("Your computer failed to %s.\n"
-					     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
-					     _("suspend"), GPM_FAQ_URL);
-		title = _("Suspend Problem");
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      title,
-				      message,
-				      GPM_NOTIFY_TIMEOUT_LONG,
-				      GTK_STOCK_DIALOG_WARNING,
-				      GPM_NOTIFY_URGENCY_LOW);
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_EVENT_NOTIFICATION,
-				    title);
-		g_free (message);
+	if (! ret) {
+		char *message;
+		gboolean show_notify;
+
+		if (manager->priv->enable_beeping) {
+			gpm_warning_beep ();
+		}
+
+		/* We only show the HAL failed notification if set in gconf */
+		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
+						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
+		if (show_notify) {
+			const char *title;
+			message = g_strdup_printf (_("Your computer failed to %s.\n"
+						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
+						     _("suspend"), GPM_FAQ_URL);
+			title = _("Suspend Problem");
+			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+					      title,
+					      message,
+					      GPM_NOTIFY_TIMEOUT_LONG,
+					      GTK_STOCK_DIALOG_WARNING,
+					      GPM_NOTIFY_URGENCY_LOW);
+			gpm_info_event_log (manager->priv->info,
+					    GPM_GRAPH_EVENT_NOTIFICATION,
+					    title);
+			g_free (message);
+		}
 	}
 
 	if (do_lock) {

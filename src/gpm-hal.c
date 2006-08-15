@@ -408,7 +408,6 @@ gpm_hal_enable_power_save (GpmHal *hal, gboolean enable)
 		return FALSE;
 	}
 
-
 	gpm_debug ("Doing SetPowerSave (%i)", enable);
 	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
 					       HAL_DBUS_SERVICE,
