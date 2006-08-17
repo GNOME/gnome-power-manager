@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-14 16:34+0200\n"
-"PO-Revision-Date: 2006-07-08 20:06+0100\n"
-"Last-Translator: Priit Laes <amd@store20.com>\n"
+"PO-Revision-Date: 2006-08-16 18:27+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -42,15 +42,15 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
-msgstr ""
+msgstr "Aku kriitilise täituvustaseme toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
-msgstr ""
+msgstr "Enne puhkerežiimi siirdumist kontrollitakse protsessori koormust"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Check network utilization before sleeping"
-msgstr ""
+msgstr "Enne puhkerežiimi siirdumist kontrollitakse võrgu koormust"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Dim the screen after a period of inactivity"
@@ -261,9 +261,8 @@ msgid "Percentage action is taken"
 msgstr "Kas see toiming on püsiv"
 
 #: ../data/gnome-power-manager.schemas.in.h:50
-#, fuzzy
 msgid "Percentage considered critical"
-msgstr "Järgijäänud _protsendi näitamine"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:51
 #, fuzzy
@@ -275,9 +274,8 @@ msgid "Percentage considered very low"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:53
-#, fuzzy
 msgid "Power button action"
-msgstr "Viimase toimingu unustamine"
+msgstr "Voolunupu toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Sleep timeout computer when on AC"
@@ -296,9 +294,8 @@ msgid "Sleep timeout display when on battery"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:58
-#, fuzzy
 msgid "Suspend button action"
-msgstr "Viimase toimingu unustamine"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:59
 #, fuzzy
@@ -503,7 +500,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "UPS critical low action"
-msgstr ""
+msgstr "UPS-i kriitilise täituvustaseme toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "Use gnome-screensaver lock setting"
@@ -802,9 +799,8 @@ msgid "LCD dim"
 msgstr ""
 
 #: ../src/gpm-graph-widget.c:82
-#, fuzzy
 msgid "LCD resume"
-msgstr "Peatatud mängu jätkamine"
+msgstr ""
 
 #: ../src/gpm-graph-widget.c:84
 msgid "DPMS off"
@@ -815,36 +811,32 @@ msgid "DPMS on"
 msgstr "DPMS sees"
 
 #: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:85
-#, fuzzy
 msgid "Suspend"
-msgstr "_Peata"
+msgstr ""
 
 #: ../src/gpm-graph-widget.c:90
-#, fuzzy
 msgid "Resume"
-msgstr "_Jätka"
+msgstr ""
 
 #: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:87
 msgid "Hibernate"
-msgstr ""
+msgstr "Uinumine"
 
 #: ../src/gpm-graph-widget.c:94
 msgid "Lid closed"
-msgstr ""
+msgstr "Kaas on suletud"
 
 #: ../src/gpm-graph-widget.c:96
-#, fuzzy
 msgid "Lid opened"
-msgstr "Kui _avatakse:"
+msgstr "Kaas on avatud"
 
 #: ../src/gpm-graph-widget.c:98
 msgid "Notification"
 msgstr "Teavitamine"
 
 #: ../src/gpm-graph-widget.c:100
-#, fuzzy
 msgid "Unknown event!"
-msgstr "Sündmuse kirjeldus"
+msgstr "Tundmatu sündmus!"
 
 #: ../src/gpm-info.c:252
 msgid "Time"
@@ -948,16 +940,12 @@ msgid "GNOME interactive logout"
 msgstr "_Väljalogimisel küsitakse kinnitust"
 
 #: ../src/gpm-manager.c:1196 ../src/gpm-manager.c:1289
-#, fuzzy
 msgid "Resuming computer"
-msgstr "Arvutile alglaadimise tegemine"
+msgstr ""
 
 #: ../src/gpm-manager.c:1208
-#, fuzzy
 msgid "Hibernate Problem"
 msgstr ""
-"Probleem sertifikaadiga: %s\n"
-"Väljastaja: %s"
 
 #: ../src/gpm-manager.c:1209
 #, c-format
@@ -987,16 +975,12 @@ msgid ""
 msgstr ""
 
 #: ../src/gpm-manager.c:1320
-#, fuzzy
 msgid "suspend"
-msgstr "_Peata"
+msgstr ""
 
 #: ../src/gpm-manager.c:1321
-#, fuzzy
 msgid "Suspend Problem"
 msgstr ""
-"Probleem sertifikaadiga: %s\n"
-"Väljastaja: %s"
 
 #: ../src/gpm-manager.c:1358
 msgid "the DBUS method Suspend() was invoked"
@@ -1011,43 +995,37 @@ msgid "the DBUS method Shutdown() was invoked"
 msgstr ""
 
 #: ../src/gpm-manager.c:1401
-#, fuzzy
 msgid "Rebooting computer"
-msgstr "Arvutile alglaadimise tegemine"
+msgstr "Arvuti alglaadimine"
 
 #: ../src/gpm-manager.c:1402
 msgid "the DBUS method Reboot() was invoked"
 msgstr ""
 
 #: ../src/gpm-manager.c:1452
-#, fuzzy
 msgid "Screen resume"
-msgstr "_Täisekraan"
+msgstr ""
 
 #: ../src/gpm-manager.c:1453
-#, fuzzy
 msgid "idle mode ended"
-msgstr "<b>Nupurežiimi sisse/väljalülitamine</b>"
+msgstr ""
 
 #: ../src/gpm-manager.c:1478
-#, fuzzy
 msgid "Screen dim"
-msgstr "_Täisekraan"
+msgstr ""
 
 #: ../src/gpm-manager.c:1479
-#, fuzzy
 msgid "idle mode started"
-msgstr "Uus mäng algas"
+msgstr ""
 
 #. can only be hibernate or suspend
 #: ../src/gpm-manager.c:1497
-#, fuzzy
 msgid "the system state is idle"
-msgstr "See on vaikimisi süsteemne seanss"
+msgstr "süsteem on jõudeolekus"
 
 #: ../src/gpm-manager.c:1571
 msgid "the power button has been pressed"
-msgstr ""
+msgstr "vajutati voolunuppu"
 
 #: ../src/gpm-manager.c:1590
 msgid "the suspend button has been pressed"
@@ -1059,19 +1037,19 @@ msgstr ""
 
 #: ../src/gpm-manager.c:1637
 msgid "The laptop lid has been closed"
-msgstr ""
+msgstr "Sülearvuti kaas suleti"
 
 #: ../src/gpm-manager.c:1642
 msgid "The laptop lid has been re-opened"
-msgstr ""
+msgstr "Sülearvuti kaas avati taas"
 
 #: ../src/gpm-manager.c:1660
 msgid "the lid has been closed on ac power"
-msgstr ""
+msgstr "kaas suleti ajal, mil vooluadapter oli ühendatud"
 
 #: ../src/gpm-manager.c:1665
 msgid "the lid has been closed on battery power"
-msgstr ""
+msgstr "kaas suleti ajal, mil arvuti oli akutoitel"
 
 #: ../src/gpm-manager.c:1670
 msgid "Turning LCD panel back on"
@@ -1082,33 +1060,28 @@ msgid "laptop lid re-opened"
 msgstr ""
 
 #: ../src/gpm-manager.c:1788
-#, fuzzy
 msgid "AC adapter inserted"
-msgstr "Mängi sisestatud CD-plaate"
+msgstr "Vooluadapter on ühendatud"
 
 #: ../src/gpm-manager.c:1792
-#, fuzzy
 msgid "AC adapter removed"
-msgstr "Kõik kontod on kustutatud."
+msgstr "Vooluadapter on eemaldatud"
 
 #: ../src/gpm-manager.c:1802
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
-msgstr ""
+msgstr "kaas on suletud ja vooluadapter eemaldatud (ja gconf on töökorras)"
 
 #: ../src/gpm-manager.c:1884
-#, fuzzy
 msgid "Power Critically Low"
-msgstr "Aku hakkab tühjaks saama"
+msgstr ""
 
 #: ../src/gpm-manager.c:1888
-#, fuzzy
 msgid "Power Very Low"
-msgstr "(Väga madala tähtsusega)"
+msgstr ""
 
 #: ../src/gpm-manager.c:1892
-#, fuzzy
 msgid "Power Low"
-msgstr "Aku hakkab tühjaks saama"
+msgstr ""
 
 #: ../src/gpm-manager.c:1917
 msgid "battery is critically low"
@@ -1146,6 +1119,7 @@ msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
+"Aku täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
 
 #: ../src/gpm-manager.c:2056
 msgid "The AC Power has been unplugged. The system is now using battery power."
@@ -1173,6 +1147,7 @@ msgstr ""
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
+"UPS-i täituvus on alla kriitilist taset ja seetõttu arvuti seisatakse."
 
 #: ../src/gpm-manager.c:2166
 msgid "UPS is critically low"
@@ -1329,24 +1304,24 @@ msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Mahtuvus:</b> %i%% (%s)\n"
 
 #: ../src/gpm-power.c:761
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
-msgstr "<b>Praegune mahtuvus:</b> %i%s\n"
+msgstr "<b>Praegune täituvus:</b> %.1f %s\n"
 
 #: ../src/gpm-power.c:766
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Last full charge:</b> %.1f %s\n"
-msgstr "<b>Viimane täislaadimine:</b> %i%s\n"
+msgstr "<b>Viimane täislaadimine:</b> %.1f %s\n"
 
 #: ../src/gpm-power.c:770
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
-msgstr "<b>Disainitud mahtuvus:</b> %i%s\n"
+msgstr "<b>Disainijärgne mahtuvus:</b> %.1f %s\n"
 
 #: ../src/gpm-power.c:774
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
-msgstr "<b>Praegune mahtuvus:</b> %i%s\n"
+msgstr ""
 
 #: ../src/gpm-power.c:778
 #, c-format
@@ -1392,9 +1367,8 @@ msgid "Computer is running on battery power\n"
 msgstr "Arvuti töötab akutoitel\n"
 
 #: ../src/gpm-prefs.c:99
-#, fuzzy
 msgid "Power Preferences"
-msgstr "Dasheri eelistused"
+msgstr "Voolueelistused"
 
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:84
