@@ -52,16 +52,16 @@ typedef struct
 GType		 gpm_brightness_get_type	(void);
 GpmBrightness	*gpm_brightness_new		(void);
 
-void		 gpm_brightness_set_level_dim	(GpmBrightness *brightness,
+gboolean	 gpm_brightness_set_level_dim	(GpmBrightness *brightness,
 						 int		brightness_level);
-void		 gpm_brightness_set_level_std	(GpmBrightness *brightness,
+gboolean	 gpm_brightness_set_level_std	(GpmBrightness *brightness,
 						 int		brightness_level);
-void		 gpm_brightness_undim		(GpmBrightness *brightness);
-void		 gpm_brightness_up		(GpmBrightness *brightness);
-void		 gpm_brightness_down		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_undim		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_up		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_down		(GpmBrightness *brightness);
 int		 gpm_brightness_get		(GpmBrightness *brightness);
-void		 gpm_brightness_set		(GpmBrightness *brightness);
-void		 gpm_brightness_dim		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_set		(GpmBrightness *brightness);
+gboolean	 gpm_brightness_dim		(GpmBrightness *brightness);
 gboolean	 gpm_brightness_has_hardware	(GpmBrightness *brightness);
 
 G_END_DECLS

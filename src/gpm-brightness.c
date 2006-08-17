@@ -253,6 +253,7 @@ gpm_brightness_update_hw (GpmBrightness *brightness)
 	gboolean retval;
 	gint     brightness_hw = 0;
 
+	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	retval = TRUE;
@@ -287,6 +288,7 @@ gpm_brightness_set_hw (GpmBrightness *brightness,
 	gint     ret;
 	gboolean retval;
 
+	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	if (brightness_level_hw < 0 ||
@@ -344,10 +346,11 @@ gpm_brightness_percent_to_hw (int percentage,
  * gpm_brightness_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
+ * Return value: Success.
  *
  * Just do the step up and down, after knowing the step interval
  **/
-static void
+static gboolean
 gpm_brightness_dim_hw_step (GpmBrightness *brightness,
 		            int            new_level_hw,
 		            int		   step_interval)
@@ -355,7 +358,8 @@ gpm_brightness_dim_hw_step (GpmBrightness *brightness,
 	int current_hw;
 	int a;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 	current_hw = brightness->priv->current_hw;
 
 	/* we do the step interval as we can have insane levels of brightness */
@@ -372,6 +376,7 @@ gpm_brightness_dim_hw_step (GpmBrightness *brightness,
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	}
+	return TRUE;
 }
 
 /**
@@ -385,6 +390,7 @@ gpm_brightness_get_step (GpmBrightness *brightness)
 {
 	int step;
 
+	g_return_val_if_fail (brightness != NULL, 0);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), 0);
 
 	if (brightness->priv->levels < 20) {
@@ -401,28 +407,31 @@ gpm_brightness_get_step (GpmBrightness *brightness)
  * gpm_brightness_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
+ * Return value: Success.
  **/
-static void
+static gboolean
 gpm_brightness_dim_hw (GpmBrightness *brightness,
 		       int	      new_level_hw)
 {
 	int step;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	if (! brightness->priv->has_hardware) {
-		return;
+		return FALSE;
 	}
 
 	/* some machines don't take kindly to auto-dimming */
 	if (brightness->priv->does_own_dimming) {
 		gpm_brightness_set_hw (brightness, new_level_hw);
-		return;
+		return TRUE;
 	}
 
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
 	step = gpm_brightness_get_step (brightness);
 	gpm_brightness_dim_hw_step (brightness, new_level_hw, step);
+	return TRUE;
 }
 
 /**
@@ -451,12 +460,17 @@ gpm_brightness_hw_to_percent (int hw,
  * gpm_brightness_set_level_dim:
  * @brightness: This brightness class instance
  * @brightness_level: The percentage brightness
+ * Return value: Success.
  **/
-void
+gboolean
 gpm_brightness_set_level_dim (GpmBrightness *brightness,
 			      int	     brightness_level)
 {
 	int level_hw;
+
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	level_hw = gpm_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
 
 	/* If the current brightness is less than the dim brightness then just
@@ -469,55 +483,77 @@ gpm_brightness_set_level_dim (GpmBrightness *brightness,
 			     brightness->priv->level_std_hw, level_hw);
 		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
 	}
+	return TRUE;
 }
 
 /**
  * gpm_brightness_set_level_dim:
  * @brightness: This brightness class instance
  * @brightness_level: The percentage brightness
+ * Return value: Success.
  **/
-void
+gboolean
 gpm_brightness_set_level_std (GpmBrightness *brightness,
 			      int	     brightness_level)
 {
 	int level_hw;
+
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	level_hw = gpm_brightness_percent_to_hw (brightness_level,
 						 brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
+	return TRUE;
 }
 
 /**
  * gpm_brightness_dim:
  * @brightness: This brightness class instance
+ * Return value: Success.
  *
  * Sets the screen into dim mode, where the dim brightness is used.
  **/
-void
+gboolean
 gpm_brightness_dim (GpmBrightness *brightness)
 {
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	gpm_brightness_dim_hw (brightness, brightness->priv->level_dim_hw);
+	return TRUE;
 }
 
 /**
  * gpm_brightness_undim:
  * @brightness: This brightness class instance
+ * Return value: Success.
  *
  * Sets the screen into normal mode, where the startdard brightness is used.
  **/
-void
+gboolean
 gpm_brightness_undim (GpmBrightness *brightness)
 {
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	gpm_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
+	return TRUE;
 }
 
 /**
  * gpm_brightness_set:
  * @brightness: This brightness class instance
+ * Return value: Success.
  **/
-void
+gboolean
 gpm_brightness_set (GpmBrightness *brightness)
 {
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
+
 	gpm_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
+	return TRUE;
 }
 
 /**
@@ -533,6 +569,7 @@ gpm_brightness_get (GpmBrightness *brightness)
 {
 	int percentage;
 
+	g_return_val_if_fail (brightness != NULL, -1);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), -1);
 
 	if (! brightness->priv->has_hardware) {
@@ -546,19 +583,21 @@ gpm_brightness_get (GpmBrightness *brightness)
 /**
  * gpm_brightness_up:
  * @brightness: This brightness class instance
+ * Return value: Success.
  *
  * If possible, put the brightness of the LCD up one unit.
  **/
-void
+gboolean
 gpm_brightness_up (GpmBrightness *brightness)
 {
 	int step;
 	int percentage;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	if (! brightness->priv->has_hardware) {
-		return;
+		return FALSE;
 	}
 
 	/* Do we find the new value, or set the new value */
@@ -574,24 +613,27 @@ gpm_brightness_up (GpmBrightness *brightness)
 						   brightness->priv->levels);
 	gpm_debug ("emitting brightness-step-changed : %i", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
+	return TRUE;
 }
 
 /**
  * gpm_brightness_down:
  * @brightness: This brightness class instance
+ * Return value: Success.
  *
  * If possible, put the brightness of the LCD down one unit.
  **/
-void
+gboolean
 gpm_brightness_down (GpmBrightness *brightness)
 {
 	int step;
 	int percentage;
 
-	g_return_if_fail (GPM_IS_BRIGHTNESS (brightness));
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	if (! brightness->priv->has_hardware) {
-		return;
+		return FALSE;
 	}
 
 	/* Do we find the new value, or set the new value */
@@ -607,6 +649,7 @@ gpm_brightness_down (GpmBrightness *brightness)
 						   brightness->priv->levels);
 	gpm_debug ("emitting brightness-step-changed : %i", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_STEP_CHANGED], 0, percentage);
+	return TRUE;
 }
 
 /**
@@ -619,6 +662,7 @@ gpm_brightness_down (GpmBrightness *brightness)
 gboolean
 gpm_brightness_has_hardware (GpmBrightness *brightness)
 {
+	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS (brightness), FALSE);
 
 	return brightness->priv->has_hardware;

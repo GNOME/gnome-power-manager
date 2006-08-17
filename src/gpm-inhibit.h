@@ -56,11 +56,11 @@ guint32		 gpm_inhibit_add			(GpmInhibit	*inhibit,
 							 const char	*connection,
 							 const char	*application,
 							 const char	*reason);
-void		 gpm_inhibit_remove			(GpmInhibit	*inhibit,
+gboolean	 gpm_inhibit_remove			(GpmInhibit	*inhibit,
 							 const char	*connection,
 							 guint32	 cookie);
 gboolean	 gpm_inhibit_check			(GpmInhibit	*inhibit);
-void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
+gboolean	 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
 							 GString	*message,
 							 const char	*action);
 G_END_DECLS

@@ -129,7 +129,7 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  * We need to refcount internally, and data is saved in the GpmInhibitData
  * struct.
  *
- * Return value: a new random cookie.
+ * Return value: a new random cookie, or 0 for error
  **/
 guint32
 gpm_inhibit_add (GpmInhibit *inhibit,
@@ -138,6 +138,9 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 		 const char *reason)
 {
 	GpmInhibitData *data = g_new (GpmInhibitData, 1);
+
+	g_return_val_if_fail (inhibit != NULL, 0);
+	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), 0);
 
 	/* handle where the application does not add required data */
 	if (connection == NULL ||
@@ -177,28 +180,34 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
  * @connection: Connection name
  * @application:	Application name
  * @cookie: The cookie that we used to register
+ * Return value: If we removed okay
  *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
-void
+gboolean
 gpm_inhibit_remove (GpmInhibit *inhibit,
 		    const char *connection,
 		    guint32	cookie)
 {
 	GpmInhibitData *data;
 
+	g_return_val_if_fail (inhibit != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
+
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
-	if (data) {
-		gpm_debug ("UnInhibit okay on '%s' as #%i",
-			   connection, cookie);
-		gpm_inhibit_free_data_object (data);
-		inhibit->priv->list = g_slist_remove (inhibit->priv->list,
-						      (gconstpointer) data);
-	} else {
+	if (data == NULL) {
 		gpm_warning ("Cannot find registered program for #%i, so "
 			     "cannot do UnInhibit", cookie);
+		return FALSE;
 	}
+
+	gpm_debug ("UnInhibit okay on '%s' as #%i",
+		   connection, cookie);
+	gpm_inhibit_free_data_object (data);
+	inhibit->priv->list = g_slist_remove (inhibit->priv->list,
+					      (gconstpointer) data);
+	return TRUE;
 }
 
 /**
@@ -262,6 +271,9 @@ dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
 gboolean
 gpm_inhibit_check (GpmInhibit *inhibit)
 {
+	g_return_val_if_fail (inhibit != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
+
 	if (g_slist_length (inhibit->priv->list) == 0) {
 		return TRUE;
 	}
@@ -274,18 +286,22 @@ gpm_inhibit_check (GpmInhibit *inhibit)
  *
  * @message:	Description string, e.g. "Nautilus because 'copying files'"
  * @action:	Action we wanted to do, e.g. "suspend"
+ * Return value: Success in getting the message
  *
  * Returns a localised message text describing what application has inhibited
  * the action, and why.
  *
  **/
-void
+gboolean
 gpm_inhibit_get_message (GpmInhibit *inhibit,
 			 GString    *message,
 			 const char *action)
 {
 	int a;
 	GpmInhibitData *data;
+
+	g_return_val_if_fail (inhibit != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
@@ -302,6 +318,7 @@ gpm_inhibit_get_message (GpmInhibit *inhibit,
 						data->application, data->reason);
 		}
 	}
+	return TRUE;
 }
 
 /** intialise the class */
