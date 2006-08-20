@@ -485,6 +485,13 @@ gpm_idle_init (GpmIdle *idle)
 		g_error_free (error);
 	}
 
+	idle->priv->mode = GPM_IDLE_MODE_NORMAL;
+	idle->priv->system_timeout = 0;	/* in seconds */
+	idle->priv->system_timer_id = 0;
+	idle->priv->system_idle_timer_id = 0;
+	idle->priv->check_type_cpu = FALSE;
+	idle->priv->init = FALSE;
+
 	acquire_screensaver (idle);
 }
 
@@ -572,12 +579,16 @@ gpm_idle_compute_load (GpmIdle *idle)
 	/* fill "old" value manually */
 	if (! idle->priv->init) {
 		idle->priv->init = TRUE;
-		gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total);
+		if (!gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total))
+		    gpm_warning ("Failed to read CPU values");
 		return 0;
 	}
 
 	/* work out the differences */
-	gpm_idle_get_cpu_values (&cpu_idle, &cpu_total);
+	if (!gpm_idle_get_cpu_values (&cpu_idle, &cpu_total)) {
+	    gpm_warning ("Failed to read CPU values");
+	    return 0;
+	}
 	diff_idle = cpu_idle - idle->priv->old_idle;
 	diff_total = cpu_total - idle->priv->old_total;
 

@@ -1,3 +1,11 @@
+2006-08-20  Richard Hughes  <richard@hughsie.com>
+
+	* TODO: Update.
+	* src/gpm-idle.c:
+	Work round a compiler bug which caused g-p-m compilation to fail when
+	using a high optimising setting.
+	Patch from Ed Catmur <ed@catmur.co.uk> many thanks. Fixes #352104.
+
 2006-08-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness.c:
