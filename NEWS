@@ -1,4 +1,44 @@
 ===============
+Version 2.15.92
+===============
+
+Released August 20, 2006
+
+General
+
+ - Fix a double free in the new smartcard code. (William Jon McCann) #350436
+ - Work round a compiler bug which caused compilation to fail when using a
+   high optimising setting. (Ed Catmur) #352104.
+ - Beep to warn if the suspend or hibernate failed. #346542
+ - Fix up the desktop files with the version number.
+ - Change the spelling of loose to lose throughout the project. (Bruce Cowan)
+ - Add a copy of the 24x24 icons instead of generating them at install time.
+   Doing clever tricks with imagemagick didn't work very well. #350321
+ - Add a timed exit option to the daemon (--timed-exit). #350334
+
+Translators
+
+ - Ankit Patel (gu)
+ - Changwoo Ryu (ko)
+ - Clytie Siddall (vi)
+ - Daniel Nylander (sv)
+ - Duarte Loreto (pt)
+ - Fano Rajaonarisoa (mg)
+ - Francisco Javier F. Serrador (es)
+ - Gabor Kelemen (hu)
+ - Ignacio Casal Quinteiro (gl)
+ - Ilkka Tuohela (fi)
+ - Ivar Smolin (et)
+ - Johannes Schmid (de)
+ - Kjartan Maraas (nb)
+ - Mindu Dorji (dz)
+ - Leonardo Ferreira Fontenelle (pt_BR)
+ - Maxim Dziumanenko (uk)
+ - Satoru SATOH (ja)
+ - Theppitak Karoonboonyanan (th)
+ - Wouter Bolsterlee (nl)
+
+===============
 Version 2.15.91
 ===============
 
