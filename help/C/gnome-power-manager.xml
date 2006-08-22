@@ -472,6 +472,160 @@
   </section>
 </section>
 
+<section id="preferences-cpufreq">
+  <title>Processor Speed Control</title>
+
+  <para>
+    Modern computers allow the speed of the processor to be reduced
+    to save power.
+    This allows a powerful computer to reduce the power usage when
+    idle, or when the full capabilities are not required.
+    This dramatically increases battery life as the processor is not
+    running continuously at 100%.
+  </para>
+
+  <para>
+    Not all processors support speed control, and you will not see
+    the options to select a policy if your computer does not have a
+    compatible processor installed.
+    The following processors are known to support frequency scaling:
+    <itemizedlist>
+      <listitem>
+        <para>All Pentium 4 - M's</para>
+      </listitem>
+      <listitem>
+        <para>Pentium III M's 600Mhz to 1Ghz</para>
+      </listitem>
+      <listitem>
+        <para>Pentium III M's 700+ MHz</para>
+      </listitem>
+    </itemizedlist>
+    Intel Mobile Celeron processors do not have the required functionality
+    and the frequency cannot be controlled.
+  </para>
+
+  <para>
+    There are several ways to control the power consumption of the processor.
+    You can have profiles, for example, to select maximum performance on AC power
+    and maximum power saving on battery power.
+    The easiest way to control the power saving is set the policy to
+    "Automatic" as this will adjust the speed of the processor to the current state
+    of the system automatically.
+    You may not have all the options listed below.
+  </para>
+
+  <section id="preferences-cpufreq-powersave">
+    <title>Maximum power saving</title>
+    <para>
+      This sets the computer operating speed always to the lowest
+      available setting to save battery power.
+    </para>
+    <note>
+      <para>
+        This option corresponds to the kernel cpufreq governor
+        <command>powersave</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="preferences-cpufreq-performance">
+    <title>Maximum performance</title>
+    <para>
+      This governor sets the processor operating speed to the
+      highest available.
+    </para>
+    <note>
+      <para>
+        This option corresponds to the kernel cpufreq governor
+        <command>performance</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="preferences-cpufreq-conservative">
+    <title>Automatic power saving</title>
+    <para>
+      This option changes the frequency of the processor in
+      relation to current processor load.
+      If the processor is being used, then the frequency will
+      increase, but if it is not then will slowly reduce.
+      This provides a nice middle ground between power saving
+      and application speed.
+      This option will keep the processor at high frequency for
+      a few seconds after recent processor activity.
+      This governor may not work correctly on older notebook computers.
+    </para>
+
+    <note>
+      <para>
+        This option corresponds to the kernel cpufreq governor
+        <command>conservative</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="preferences-cpufreq-ondemand">
+    <title>Based on processor load</title>
+    <para>
+      This driver is a dynamic processor frequency policy.
+      It will change the frequency of the processor in direct
+      relation to processor load.
+      Due to the number of frequency changes, this may not work
+      reliably for older notebook computers.
+    </para>
+    <note>
+      <para>
+        This option corresponds to the kernel cpufreq governor
+        <command>ondemand</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="preferences-cpufreq-userspace">
+    <title>Custom</title>
+    <para>
+      You have to choose this option if you want to set the
+      processor operating speed manually.
+      This option is recommended for older computers.
+    </para>
+    <note>
+      <para>
+        This option corresponds to the kernel cpufreq governor
+        <command>userspace</command>.
+      </para>
+    </note>
+  </section>
+
+  <section id="preferences-cpufreq-do-nothing">
+    <title>Do nothing</title>
+    <para>
+      The processor speed will not be changed.
+    </para>
+  </section>
+
+</section>
+
+<section id="preferences-cpufreq-advanced">
+  <title>Advanced</title>
+  <note>
+    <para>
+      Some policies (ondemand and conservitive) only
+      increase the processor frequency from minimum when a
+      process has a positive nice value even though
+      a load greater than 1 occurs.
+      This means user applications work well as the processor
+      speed automatically increases.
+      This can however result in a significant performance
+      reduction for system daemons and some background session
+      services.
+      To rectify this, use another policy (e.g. Maximum Performance)
+      or set the following gconf key:
+      <command>/apps/gnome-power-manager/cpufreq_consider_nice</command>.
+    </para>
+  </note>
+</section>
+
+
 <section id="info">
   <title>Information</title>
 

@@ -1,5 +1,23 @@
 2006-08-22  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	Bump to 2.17.1 to signify we are now on the bleeding edge.
+
+	* src/gpm-prefs.h:
+	* data/gnome-power-manager.schemas.in:
+	Add a whole load of new keys for the cpufreq stuff.
+	
+	* help/C/gnome-power-manager.xml:
+	Start to document the cpufreq stuff (even tho nothing has hit CVS yet)
+	
+	* src/gpm-common.c:
+	* src/gpm-power.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-screensaver.c:
+	Fix some scope problems the compiler found with Wextra.
+
+2006-08-22  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	Update to test the branching has gone okay.
 

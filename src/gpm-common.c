@@ -39,7 +39,7 @@ gpm_warning_beep (void)
 
 /**
  * gpm_get_timestring:
- * @time: The time value to convert in seconds
+ * @time_secs: The time value to convert in seconds
  * @cookie: The cookie we are looking for
  *
  * Returns a localised timestring
@@ -47,14 +47,14 @@ gpm_warning_beep (void)
  * Return value: The time string, e.g. "2 hours 3 minutes"
  **/
 char *
-gpm_get_timestring (int time)
+gpm_get_timestring (int time_secs)
 {
 	char* timestring = NULL;
 	gint  hours;
 	gint  minutes;
 
 	/* Add 0.5 to do rounding */
-	minutes = (int) ( ( time / 60.0 ) + 0.5 );
+	minutes = (int) ( ( time_secs / 60.0 ) + 0.5 );
 
 	if (minutes == 0) {
 		timestring = g_strdup_printf (_("Unknown time"));

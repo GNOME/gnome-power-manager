@@ -413,11 +413,11 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 /**
  * gpm_screensaver_get_idle:
  * @screensaver: This screensaver class instance
- * @time: The returned idle time, passed by ref
+ * @time_secs: The returned idle time, passed by ref
  * Return value: Success value.
  **/
 gboolean
-gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
+gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 {
 	GError *error = NULL;
 	gboolean boolret = TRUE;
@@ -438,7 +438,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time)
 
 	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActiveTime", &error,
 				G_TYPE_INVALID,
-				G_TYPE_UINT, time, G_TYPE_INVALID)) {
+				G_TYPE_UINT, time_secs, G_TYPE_INVALID)) {
 		if (error) {
 			gpm_warning ("%s", error->message);
 			g_error_free (error);

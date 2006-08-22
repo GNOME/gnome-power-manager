@@ -736,9 +736,9 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		g_string_append_printf (details, _("<b>Model:</b> %s\n"), device->model);
 	}
 	if (status->remaining_time > 0) {
-		const char *time;
-		time = gpm_get_timestring (status->remaining_time);
-		g_string_append_printf (details, _("<b>Remaining time:</b> %s\n"), time);
+		const char *time_str;
+		time_str = gpm_get_timestring (status->remaining_time);
+		g_string_append_printf (details, _("<b>Remaining time:</b> %s\n"), time_str);
 	}
 	if (status->capacity > 0) {
 		const char *condition;
@@ -798,7 +798,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
  *
  * Return value: The character string for the filename suffix.
  **/
-static char *
+static const char *
 gpm_power_get_index_from_percent (gint percent)
 {
 	if (percent < 10) {
@@ -830,7 +830,7 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 			    const char     *prefix)
 {
 	char *filename = NULL;
-	char *index = NULL;
+	const char *index_str = NULL;
 
 	if (! device_status->is_present) {
 		/* battery missing */
@@ -840,12 +840,12 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 		filename = g_strdup_printf ("gpm-%s-charged", prefix);
 
 	} else if (device_status->is_charging) {
-		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index);
+		index_str = gpm_power_get_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
 	} else if (device_status->is_discharging) {
-		index = gpm_power_get_index_from_percent (device_status->percentage_charge);
-		filename = g_strdup_printf ("gpm-%s-%s", prefix, index);
+		index_str = gpm_power_get_index_from_percent (device_status->percentage_charge);
+		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 
 	} else {
 		/* We have a broken battery, not sure what to display here */
@@ -869,18 +869,18 @@ gpm_power_get_icon_for_csr (GpmPowerStatus *device_status,
 			    const char     *prefix)
 {
 	char *filename;
-	char *index;
+	const char *index_str;
 
 	if (device_status->current_charge < 2) {
-		index = "000";
+		index_str = "000";
 	} else if (device_status->current_charge < 4) {
-		index = "030";
+		index_str = "030";
 	} else if (device_status->current_charge < 6) {
-		index = "060";
+		index_str = "060";
 	} else {
-		index = "100";
+		index_str = "100";
 	}
-	filename = g_strdup_printf ("gpm-%s-%s", prefix, index);
+	filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 	return filename;
 }
 
@@ -1224,39 +1224,38 @@ power_get_summary_for_battery_kind (GpmPower		*power,
 	/* We always display "Laptop Battery 16 minutes remaining" as we need
 	   to clarify what device we are refering to. For details see :
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
-	g_string_append_printf (summary, "%s ", type_desc);
 
 	if (gpm_power_battery_is_charged (status)) {
 
-			g_string_append (summary, _("fully charged"));
+			g_string_append_printf (summary, _("%s fully charged (%i%%)\n"),
+						type_desc, status->percentage_charge);
 
 	} else if (status->is_discharging) {
 
 		if (status->remaining_time > 60) {
-			g_string_append_printf (summary, _("%s remaining"),
-						timestring);
+			g_string_append_printf (summary, _("%s %s remaining (%i%%)\n"),
+						type_desc, timestring, status->percentage_charge);
 		} else {
 			/* don't display "Unknown remaining" */
-			g_string_append (summary, _("discharging"));
+			g_string_append_printf (summary, _("%s discharging (%i%%)\n"),
+						type_desc, status->percentage_charge);
 		}
 
 	} else if (status->is_charging || power->priv->on_ac) {
 
 		if (status->remaining_time > 60) {
-			g_string_append_printf (summary, _("%s until charged"),
-						timestring);
+			g_string_append_printf (summary, _("%s %s until charged (%i%%)\n"),
+						type_desc, timestring, status->percentage_charge);
 		} else {
 			/* don't display "Unknown remaining" */
-			g_string_append (summary, _("charging"));
+			g_string_append_printf (summary, _("%s charging (%i%%)\n"),
+						type_desc, status->percentage_charge);
 		}
 
 	} else {
 		gpm_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
 	}
-
-	/* append percentage to all devices */
-	g_string_append_printf (summary, " (%i%%)\n", status->percentage_charge);
 
 	g_free (timestring);
 }

@@ -281,9 +281,9 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GpmPrefs  *prefs,
-			      char	*widget_name,
-			      char	*gpm_pref_key)
+gpm_prefs_setup_sleep_slider (GpmPrefs   *prefs,
+			      const char *widget_name,
+			      const char *gpm_pref_key)
 {
 	GtkWidget *widget;
 	gint value;
@@ -388,7 +388,7 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 				   GpmPrefs  *prefs)
 {
 	char *value;
-	char *action;
+	const char *action;
 	char *gpm_pref_key;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
@@ -424,8 +424,8 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
  **/
 static void
 gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
-			      char	  *widget_name,
-			      char	  *gpm_pref_key,
+			      const char  *widget_name,
+			      const char  *gpm_pref_key,
 			      const char **actions)
 {
 	GladeXML    *xml = prefs->priv->glade_xml;
@@ -444,7 +444,7 @@ gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
-	if (! value) {
+	if (value == NULL) {
 		gpm_warning ("invalid schema, please re-install");
 		value = g_strdup ("nothing");
 	}
@@ -521,9 +521,9 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget*
-gpm_prefs_setup_checkbox (GpmPrefs  *prefs,
-			  char	    *widget_name,
-			  char	    *gpm_pref_key)
+gpm_prefs_setup_checkbox (GpmPrefs   *prefs,
+			  const char *widget_name,
+			  const char *gpm_pref_key)
 {
 
 	GladeXML    *xml = prefs->priv->glade_xml;

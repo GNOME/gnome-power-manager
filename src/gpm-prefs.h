@@ -91,6 +91,12 @@ G_BEGIN_DECLS
 #define GPM_PREF_UPS_LOWPOWER		GPM_PREF_DIR "/use_lowpower_ups"
 #define GPM_PREF_BATTERY_LOWPOWER	GPM_PREF_DIR "/use_lowpower_battery"
 
+#define GPM_PREF_AC_CPUFREQ_POLICY	GPM_PREF_DIR "/cpufreq_ac_policy"
+#define GPM_PREF_AC_CPUFREQ_VALUE	GPM_PREF_DIR "/cpufreq_ac_performance"
+#define GPM_PREF_BATTERY_CPUFREQ_POLICY	GPM_PREF_DIR "/cpufreq_battery_policy"
+#define GPM_PREF_BATTERY_CPUFREQ_VALUE	GPM_PREF_DIR "/cpufreq_battery_performance"
+#define GPM_PREF_USE_NICE		GPM_PREF_DIR "/cpufreq_consider_nice"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,

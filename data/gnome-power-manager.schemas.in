@@ -1,5 +1,64 @@
 <gconfschemafile>
   <schemalist>
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/cpufreq_consider_nice</key>
+      <applyto>/apps/gnome-power-manager/cpufreq_consider_nice</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Whether or not niced processes should be considered on processor load calculation</short>
+        <long>If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/cpufreq_ac_policy</key>
+      <applyto>/apps/gnome-power-manager/cpufreq_ac_policy</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>performance</default>
+      <locale name="C">
+        <short>The cpufreq policy to use when on AC power</short>
+        <long>The cpufreq policy to used to scale the processor when on AC power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/cpufreq_ac_performance</key>
+      <applyto>/apps/gnome-power-manager/cpufreq_ac_performance</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>100</default>
+      <locale name="C">
+        <short>The cpufreq custom performance value to use when on AC power</short>
+        <long>The cpufreq custom performance value to used to scale the processor when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/cpufreq_battery_policy</key>
+      <applyto>/apps/gnome-power-manager/cpufreq_battery_policy</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>powersave</default>
+      <locale name="C">
+        <short>The cpufreq policy to use when on battery power</short>
+        <long>The cpufreq policy to used to scale the processor when on battery power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/cpufreq_battery_performance</key>
+      <applyto>/apps/gnome-power-manager/cpufreq_battery_performance</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>The cpufreq custom performance value to use when on battery power</short>
+        <long>The cpufreq custom performance value to used to scale the processor when on battery power.</long>
+      </locale>
+    </schema>
 
     <schema>
       <key>/schemas/apps/gnome-power-manager/enable_pcskr_beeping</key>

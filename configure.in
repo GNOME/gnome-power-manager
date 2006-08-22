@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gnome-power-manager, 2.16.0)
+AC_INIT(gnome-power-manager, 2.17.1)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -18,7 +18,7 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -Wall -Werror -Wextra -fstrict-aliasing -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare -Wno-uninitialized -Wpointer-arith -Wredundant-decls -Wbad-function-cast -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs"
+#CPPFLAGS="$CPPFLAGS -Werror -Wall -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare -Wmissing-prototypes -Wno-uninitialized -Wpointer-arith -Wnested-externs"
 CPPFLAGS="$CPPFLAGS -Wall"
 
 dnl ---------------------------------------------------------------------------
