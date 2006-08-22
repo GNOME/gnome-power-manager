@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2006-05-08 15:38+0100\n"
-"PO-Revision-Date: 2006-07-24 00:35+0100\n"
+"PO-Revision-Date: 2006-08-22 15:43+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Återkoppling"
 
 #: C/gnome-power-manager.xml:101(para)
 msgid "To report a bug or make a suggestion regarding the GNOME Power Manager application or this manual, follow the directions in the <ulink url=\"http://www.gnome.org/projects/gnome-power-manager/\" type=\"http\">GNOME Power Manager Contact Page</ulink>."
-msgstr "För att rapportera ett fel eller komma med ett förslag angående programmet GNOME-energihanterare eller denna handbok, följ instruktionerna på <ulink url=\"http://www.gnome.org/projects/gnome-power-manager/\" type=\"http\">GNOME-energihanterarens kontaktsida</ulink>."
+msgstr "För att rapportera ett fel eller komma med ett förslag angående programmet GNOME-strömhanterare eller denna handbok, följ instruktionerna på <ulink url=\"http://www.gnome.org/projects/gnome-power-manager/\" type=\"http\">GNOME-strömhanterarens kontaktsida</ulink>."
 
 #: C/gnome-power-manager.xml:110(primary)
 #: C/gnome-power-manager.xml:124(primary)
@@ -149,27 +149,27 @@ msgstr "Handbok"
 
 #: C/gnome-power-manager.xml:129(para)
 msgid "The GNOME Power Manager session daemon is a power management daemon for the <systemitem>GNOME desktop</systemitem>"
-msgstr ""
+msgstr "GNOME-strömhanterarens sessionsdemon är en strömhanteringsdemon för <systemitem>GNOME-skrivbordet</systemitem>"
 
 #: C/gnome-power-manager.xml:135(title)
 msgid "Differences between suspend and hibernate"
-msgstr ""
+msgstr "Skillnader mellan viloläge och vänteläge"
 
 #: C/gnome-power-manager.xml:136(para)
 msgid "The Suspend state is a power saving feature which is the lowest level of power consumption that preserves program data in the computers memory. When your computer is in the Suspended state, computation will not be performed until normal activity is resumed. It will not resume until signaled by an external event such as a keyboard button press. WARNING: You still use a small amount of battery power whilst suspended, so is not recommended for the low power action. If you remove AC power on a desktop, or run out of battery power on a laptop then you will lose your work. It generally takes a few seconds to suspend and then resume your computer."
-msgstr ""
+msgstr "Vänteläget är en strömspararfunktion som är den lägsta nivån av strömförbrukning som bevarar programdata i datorns minne. När din dator är försatt i vänteläget kommer inte datorn att genomföra något tills den har återgått till normal aktivitet. Den kommer inte att återuppta något tills den har signalerats av en extern händelse, såsom en tryckning på tangentbordet. VARNING: Du använder fortfarande en liten del av batterikapaciteten när datorn är i vänteläget, så det rekommenderas inte för lågströmsåtgärden. Om du kopplar ur nätadaptern på en stationär dator, eller kör slut på batterikapacitet på en bärbar dator kommer du att förlora ditt osparade data. Det tar normalt sett ett par sekunder att försätta datorn i vänteläge och sedan återgå till normalt läge."
 
 #: C/gnome-power-manager.xml:149(para)
 msgid "The Hibernation state saves the complete state of the computer to hard disk and turns off the power, so that the computer appears to be off. It will not resume until signaled by an external event such as a keyboard button press. This is the lowest power sleeping state available. If you remove AC power on a desktop, or run out of battery power on a laptop then work will not be lost. It can take up to a minute or more to hibernate and wake your computer."
-msgstr ""
+msgstr "Viloläget sparar det kompletta tillståndet för datorn till hårddisken och stänger av strömmen, så att datorn ser ut att vara avstängd. Den kommer inte att återgå till normalt läge förrän den signaleras av en extern händelse, såsom en tryckning på tangentbordet. Detta är det lägsta tillgängliga sovtillståndet. Om du kopplar ur nätadaptern på en stationär dator, eller kör slut på batterikapacitet på en bärbar dator kommer du inte att förlora ditt osparade data. Det kan ta upp till en minut eller mer att försätta datorn i viloläge och sedan väcka din dator."
 
 #: C/gnome-power-manager.xml:164(title)
 msgid "Using <application>GNOME Power Manager</application>"
-msgstr ""
+msgstr "Använda <application>GNOME-strömhanterare</application>"
 
 #: C/gnome-power-manager.xml:166(para)
 msgid "You can start <application>GNOME Power Manager</application> by doing:"
-msgstr "Du kan starta <application>GNOME-energihanterare</application> på följande sätt:"
+msgstr "Du kan starta <application>GNOME-strömhanterare</application> på följande sätt:"
 
 #: C/gnome-power-manager.xml:170(term)
 msgid "Command line"
@@ -181,27 +181,27 @@ msgstr "Skriv <command>gnome-power-manager --verbose --no-daemon</command>, tryc
 
 #: C/gnome-power-manager.xml:178(para)
 msgid "When you start <application>GNOME Power Manager</application>, the following notifications may be displayed."
-msgstr ""
+msgstr "När du startar <application>GNOME-strömhanterare</application> kan följande notifieringar visas."
 
 #: C/gnome-power-manager.xml:183(title)
 msgid "GNOME Power Manager Notification when AC adapter is removed"
-msgstr ""
+msgstr "Notifiering från GNOME-strömhanterare när nätadaptern kopplas ur"
 
 #: C/gnome-power-manager.xml:192(title)
 msgid "GNOME Power Manager Notification when laptop primary button is fully charged"
-msgstr ""
+msgstr "Notifiering från GNOME-strömhanterare när den bärbara datorns primära batteri är fullständigt uppladdat"
 
 #: C/gnome-power-manager.xml:201(title)
 msgid "GNOME Power Manager Notification when the system power is critically low"
-msgstr ""
+msgstr "Notifiering från GNOME-strömhanterare när systemets strömkapacitet är kritiskt låg"
 
 #: C/gnome-power-manager.xml:210(title)
 msgid "GNOME Power Manager Notification when battery power is low"
-msgstr ""
+msgstr "Notifiering från GNOME-strömhanterare när batterikapaciteten är låg"
 
 #: C/gnome-power-manager.xml:219(title)
 msgid "<application>GNOME Power Manager</application> on Startup"
-msgstr ""
+msgstr "<application>GNOME-strömhanterare</application> vid uppstart"
 
 #: C/gnome-power-manager.xml:226(phrase)
 msgid "<placeholder-1/> on startup"
@@ -213,47 +213,47 @@ msgstr "Inställningar"
 
 #: C/gnome-power-manager.xml:237(para)
 msgid "The preferences window allows you to control:"
-msgstr ""
+msgstr "Inställningsfönstret låter dig kontrollera:"
 
 #: C/gnome-power-manager.xml:240(para)
 msgid "The LCD brightness when on AC and battery power"
-msgstr ""
+msgstr "Ljusstyrkan på plattskärmen när nätadapter och batteriström används "
 
 #: C/gnome-power-manager.xml:241(para)
 msgid "The idle time for the screen power-down and suspend action"
-msgstr ""
+msgstr "Inaktivitetstiden för nedstängning av skärmen och väntelägesåtgärd"
 
 #: C/gnome-power-manager.xml:242(para)
 msgid "The actions to perform when the laptop lid is closed"
-msgstr ""
+msgstr "Åtgärderna att genomföra när bärbara datorns lock stängs"
 
 #: C/gnome-power-manager.xml:243(para)
 msgid "The notification area icon policy"
-msgstr ""
+msgstr "Policy för notifieringsytans ikon"
 
 #: C/gnome-power-manager.xml:246(para)
 msgid "Some sliders or option boxes may be disabled if the gconf policy keys are not writable. This allows admins to lock-down the actions that a user can select."
-msgstr ""
+msgstr "Vissa glidare eller alternativrutor kan vara inaktiverade om gconf-policynycklarna inte är skrivbara. Detta gör att administratörerna kan stänga av åtgärder som en användare kan välja."
 
 #: C/gnome-power-manager.xml:252(title)
 msgid "GNOME Power Manager AC Power Tab"
-msgstr ""
+msgstr "Nätadapterfliken i GNOME-strömhanterare"
 
 #: C/gnome-power-manager.xml:261(title)
 msgid "GNOME Power Manager Battery Power Tab"
-msgstr ""
+msgstr "Batterispänningsfliken i GNOME-strömhanterare"
 
 #: C/gnome-power-manager.xml:270(title)
 msgid "GNOME Power Manager Options Tab"
-msgstr ""
+msgstr "Alternativfliken i GNOME-strömhanterare"
 
 #: C/gnome-power-manager.xml:281(title)
 msgid "Advanced Preferences"
-msgstr ""
+msgstr "Avancerade inställningar"
 
 #: C/gnome-power-manager.xml:283(para)
 msgid "There are many settings in gconf that are not expressed to the user. These allow GNOME Power Manager to present a simple imterface to the user, but also be flexible for power users."
-msgstr ""
+msgstr "Det finns många inställningar i gconf som inte visas för användaren. Dessa låter GNOME-strömhanterare att visa ett enkelt gränssnitt för användaren, men även vara flexibel för erfarna användare."
 
 #: C/gnome-power-manager.xml:290(title)
 msgid "Screen Locking"
@@ -261,11 +261,11 @@ msgstr "Skärmlåsning"
 
 #: C/gnome-power-manager.xml:292(para)
 msgid "By default, gnome-power-manager supports a simple locking scheme. This means that the screen will lock if set to \"Lock screen\" in gnome-screensaver when the lid is closed, or the system performs a suspend or hibernate action."
-msgstr ""
+msgstr "Som standard har GNOME-strömhanterare stöd för ett enkelt låsningsschema. Detta betyder att skärmen låses om den är inställd till \"Lås skärmen\" i gnome-screensaver när locket är stängt, eller om systemet genomför en vänte- eller vilolägesåtgärd."
 
 #: C/gnome-power-manager.xml:298(para)
 msgid "There is a complex locking scheme available for power-users that allows locking policy to change for the lid, suspend and hibernate actions. To enable this complex mode, you will have to disable the gconf key:"
-msgstr ""
+msgstr "Det finns ett komplext låsningsschema tillgängligt för erfarna användare som tillåter ändring av låsningspolicy för locket, vilo- och väntelägesåtgärder. För att aktivera detta komplexa läge behöver du inaktivera gconf-nyckeln:"
 
 #: C/gnome-power-manager.xml:305(command)
 msgid "/apps/gnome-power-manager/lock_use_screensaver_settings"
@@ -273,7 +273,7 @@ msgstr "/apps/gnome-power-manager/lock_use_screensaver_settings"
 
 #: C/gnome-power-manager.xml:308(para)
 msgid "Then the policy keys can be set to force a gnome-screensaver lock and unlock when the action is performed:"
-msgstr ""
+msgstr "Sedan kan policynycklarna ställas in för att tvinga en låsning eller upplåsning av gnome-screensaver när åtgärden blir genomförd:"
 
 #: C/gnome-power-manager.xml:314(command)
 msgid "/apps/gnome-power-manager/lock_on_blank_screen"
@@ -289,7 +289,7 @@ msgstr "/apps/gnome-power-manager/lock_on_hibernate"
 
 #: C/gnome-power-manager.xml:319(para)
 msgid "<emphasis>NOTE:</emphasis> The lock policy for gnome-screensaver is ignored until the simple mode is re-enabled."
-msgstr ""
+msgstr "<emphasis>NOTERA:</emphasis> Låsningspolicyn för gnome-screensaver ignoreras fram till att det enkla läget har återaktiverats."
 
 #: C/gnome-power-manager.xml:331(title)
 msgid "Known Bugs and Limitations"
@@ -297,15 +297,15 @@ msgstr "Kända fel och begränsningar"
 
 #: C/gnome-power-manager.xml:332(para)
 msgid "This section lists known bugs and limitations using GNOME Power Manager."
-msgstr ""
+msgstr "Denna sektion listar kända fel och begränsningar i GNOME-strömhanterare."
 
 #: C/gnome-power-manager.xml:336(title)
 msgid "Power consumption when suspended"
-msgstr ""
+msgstr "Strömförbrukning vid vänteläge"
 
 #: C/gnome-power-manager.xml:337(para)
 msgid "Your computer still uses a small amount of charge even whilst suspended. If \"Suspend\" is chosen as the policy option for the battery critical low, and the power completely runs out when sleeping, your work may be lost. See bug <ulink url=\"http://bugzilla.gnome.org/show_bug.cgi?id=330267\" type=\"http\">#330267</ulink> or more details."
-msgstr ""
+msgstr "Din dator använder fortfarande en liten del av strömkapaciteten även om den är försatt i vänteläge. Om \"Vänteläge\" är valt som policyalternativ för kritiskt låg batterikapacitet, och strömkapaciteten tar slut när datorn sover kommer ditt osparade data att gå förlorat. Se felrapporten <ulink url=\"http://bugzilla.gnome.org/show_bug.cgi?id=330267\" type=\"http\">#330267</ulink> för fler detaljer."
 
 #: C/gnome-power-manager.xml:348(title)
 msgid "About GNOME Power Manager"
@@ -313,15 +313,15 @@ msgstr "Om GNOME-strömhanterare"
 
 #: C/gnome-power-manager.xml:349(para)
 msgid "GNOME Power Manager was written by Richard Hughes (<email>richard@hughsie.com</email>). To find more information about GNOME Power Manager, please visit the <ulink url=\"http://www.gnome.org/projects/gnome-power-manager\" type=\"http\"> GNOME Power Manager web page</ulink>."
-msgstr ""
+msgstr "GNOME-strömhanterare skrevs av Richard Hughes (<email>richard@hughsie.com</email>). För att hitta mer information om GNOME-strömhanterare, besök <ulink url=\"http://www.gnome.org/projects/gnome-power-manager\" type=\"http\"> GNOME-strömhanterarens webbplats</ulink>."
 
 #: C/gnome-power-manager.xml:355(para)
 msgid "To report a bug or make a suggestion regarding this application or this manual, follow the directions at the <ulink url=\"http://www.gnome.org/projects/gnome-power-manager/bugs.html\" type=\"http\"> GNOME Power Manager Bug Page</ulink>."
-msgstr ""
+msgstr "För att rapportera ett fel eller komma med förslag angående detta program eller denna handbok, följ anvisningarna på <ulink url=\"http://www.gnome.org/projects/gnome-power-manager/bugs.html\" type=\"http\"> GNOME-strömhanterarens felsida</ulink>."
 
 #: C/gnome-power-manager.xml:362(para)
 msgid "This program is distributed under the terms of the GNU General Public license as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version. A copy of this license can be found at this <ulink url=\"gnome-power-manager:gpl\" type=\"help\">link</ulink>, or in the file COPYING included with the source code of this program."
-msgstr ""
+msgstr "Detta program distribueras under villkoren för GNU General Public License som är publicerad av Free Software Foundation; antingen version 2 av licensen, eller (om du så vill) någon senare version. En kopia av denna licens kan hittas på denna <ulink url=\"gnome-power-manager:gpl\" type=\"help\">länk</ulink>, eller i filen COPYING som är inkluderad i källkoden för detta program."
 
 #: C/gnome-power-manager.xml:0(None)
 msgid "translator-credits"
