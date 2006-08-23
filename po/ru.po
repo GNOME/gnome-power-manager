@@ -6,10 +6,10 @@
 # Leonid Kanter <leon@asplinux.ru>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager.HEAD\n"
+"Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-21 09:30+0200\n"
-"PO-Revision-Date: 2006-08-21 17:47+0300\n"
+"POT-Creation-Date: 2006-08-23 12:10+0300\n"
+"PO-Revision-Date: 2006-08-23 18:40+0300\n"
 "Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
 "Language-Team:  <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,11 @@ msgid ""
 "After resume, gnome-power-manager will suppress policy actions for a number "
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
-msgstr "После восстановления gnome-power-manager приостановит запланированные действия на указанное количество секунд, чтобы сообщения были доставлены и HAL успел обновиться. Как правило, пяти секунд достаточно, так как более длительная задержка смущает пользователя."
+msgstr ""
+"После восстановления gnome-power-manager приостановит запланированные "
+"действия на указанное количество секунд, чтобы сообщения были доставлены и "
+"HAL успел обновиться. Как правило, пяти секунд достаточно, так как более "
+"длительная задержка смущает пользователя."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
@@ -82,7 +86,9 @@ msgstr "Должны ли игнорироваться сдерживающие 
 msgid ""
 "If a notification message should be displayed after the suspend or hibernate "
 "failed."
-msgstr "Отображать ли сообщение, уведомляющее о сбое перехода в ждущий или спящий режим."
+msgstr ""
+"Отображать ли сообщение, уведомляющее о сбое перехода в ждущий или спящий "
+"режим."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
@@ -95,113 +101,134 @@ msgid "If network utilization should be checked before doing the idle action."
 msgstr "Должны ли мы проверять загрузку сети перед выполнением действия простоя."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If niced processes are considered, they can cause a frequency increment even "
+"though their absolute load percentage wouldn't trigger the scaling mechanism "
+"to switch up the frequency."
+msgstr "Если процессы с изменённым nice расссматриваются, они могут вызвать увеличение частоты, даже если из абсолютный процент загрузки процессора не будет достаточным для увеличения частоты."
+
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "Проверять ли загрузку ЦП перед выполнением действия простоя."
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If the PC speaker (beeping) should be used"
 msgstr "Должен ли использоваться системный динамик PC"
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If the PC speaker should be used to beep when the power is low, or inhibit "
 "requests have stopped the policy action."
-msgstr "Должен ли динамик PC использоваться для извещения о низком уровне батарей, или о том, что сдерживающие запросы блокируют запланированное действие."
-
-#: ../data/gnome-power-manager.schemas.in.h:18
-msgid ""
-"If the Suspend and Hibernate options should be allowed in the notification "
-"area drop down menu."
-msgstr "Должны ли быть разрешены параметры \"Ждущий режим\" и \"Спящий режим\" в выпадающем меню области уведомления."
+msgstr ""
+"Должен ли динамик PC использоваться для извещения о низком уровне батарей, "
+"или о том, что сдерживающие запросы блокируют запланированное действие."
 
 #: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
-"If the battery event should occur when the lid is shut and the power "
-"disconnected"
-msgstr "Должно ли происходить событие батареи, когда панель закрыта и питание отключено"
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
+msgstr ""
+"Должны ли быть разрешены параметры \"Ждущий режим\" и \"Спящий режим\" в "
+"выпадающем меню области уведомления."
 
 #: ../data/gnome-power-manager.schemas.in.h:20
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
+msgstr ""
+"Должно ли происходить событие батареи, когда панель закрыта и питание "
+"отключено"
+
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
-msgstr "Генерировать ли событие закрывания панели ноутбука (например, ждущий режим когда панель закрыта на батарее), когда панель была закрыта, а источник питания отключен позже."
+msgstr ""
+"Генерировать ли событие закрывания панели ноутбука (например, ждущий режим "
+"когда панель закрыта на батарее), когда панель была закрыта, а источник "
+"питания отключен позже."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Включить ли режим пониженного потребления при работе от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "Включить ли режим пониженного потребления при работе от UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Включить ли режим пониженного потребления при работе от батареи"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
-"Блокировать ли экран при отключении экрана. Используется только в случае, если не установлен "
-"параметр lock_use_screensaver_settings."
+"Блокировать ли экран при отключении экрана. Используется только в случае, "
+"если не установлен параметр lock_use_screensaver_settings."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid "If the screen should be dimmed to save power when the computer is idle."
 msgstr ""
 "Должна ли приглушаться яркость экрана для сохранения энергии при бездействии "
 "компьютера."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "Должен ли включаться режим пониженного потребления при работе от сети."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "Должен ли включаться режим пониженного потребления при работе системы от UPS."
 
-#: ../data/gnome-power-manager.schemas.in.h:28
-msgid "If the system low-power mode should be enabled when on laptop battery power."
-msgstr "Должен ли включаться режим пониженного потребления при работе системы от батареи."
-
 #: ../data/gnome-power-manager.schemas.in.h:29
+msgid "If the system low-power mode should be enabled when on laptop battery power."
+msgstr ""
+"Должен ли включаться режим пониженного потребления при работе системы от "
+"батареи."
+
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Может ли пользователь перевести компьютер в спящий режим."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user is authorized to suspend the computer."
 msgstr "Может ли пользователь приостанавливать компьютер."
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Уведомлять ли пользователя об отключении сетевого адаптера."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr "Должны ли использоваться уведомления на основе времени. Если этот параметр не установлен, вместо времени будет использоваться процент заряда батареи, что может исправить проблему с испорченными ACPI BIOS."
+msgstr ""
+"Должны ли использоваться уведомления на основе времени. Если этот параметр "
+"не установлен, вместо времени будет использоваться процент заряда батареи, "
+"что может исправить проблему с испорченными ACPI BIOS."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
 "Блокировать ли экран после восстановления компьютера из спящего режима. "
-"Используется только в случае, если не установлен "
-"параметр lock_use_screensaver_settings."
+"Используется только в случае, если не установлен параметр "
+"lock_use_screensaver_settings."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
 "Блокировать ли экран после восстановления компьютера из ждущего режима. "
-"Используется тоько в случае, если не установлен "
-"параметр lock_use_screensaver_settings."
+"Используется тоько в случае, если не установлен параметр "
+"lock_use_screensaver_settings."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
@@ -210,115 +237,121 @@ msgstr ""
 "определить, нужно ли блокировать экран после ждущего режима, спящего режима "
 "или отключения дисплея"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on AC"
 msgstr "Яркость LCD при питании от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "LCD brightness when on battery"
 msgstr "Яркость LCD при питании от батареи"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action on battery"
 msgstr "Действие закрытия панели при питании от батареи"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Laptop lid close action when on AC"
 msgstr "Действие закрытия панели при питании от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Lock screen on hibernate"
 msgstr "Блокировать экран при переходе в спящий режим"
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock screen on suspend"
 msgstr "Блокировать экран при переходе в ждущий режим"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Lock screen when blanked"
 msgstr "Блокировать экран при активировании сохранения экрана"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Method used to blank screen on AC"
 msgstr "Метод, используемый для сохранения экрана при работы от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Method used to blank screen on battery"
 msgstr "Метод, используемый для сохранения экрана при работе на батарее"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Notify on a HAL error"
 msgstr "Извещать об ошибках HAL"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Notify when AC adapter is disconnected"
 msgstr "Извещать при отключении сетевого адаптера"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Notify when fully charged"
 msgstr "Извещать при полном заряде"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
-msgid "Number of seconds to suppress policy after resume"
-msgstr "Задержка выполнения запланированных после восстановления системы действий в секундах"
-
 #: ../data/gnome-power-manager.schemas.in.h:49
+msgid "Number of seconds to suppress policy after resume"
+msgstr ""
+"Задержка выполнения запланированных после восстановления системы действий в "
+"секундах"
+
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage action is taken"
 msgstr "Действие выполняется по проценту заряда"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Percentage considered critical"
 msgstr "Процент заряда, воспринимаемый как критический"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Percentage considered low"
 msgstr "Процент заряда, воспринимаемый как низкий"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Percentage considered very low"
 msgstr "Процент заряда, воспринимаемый как очень низкий"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Power button action"
 msgstr "Действие кнопки \"Power\""
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout computer when on AC"
 msgstr "Задержка приостановки компьютера при питании от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Sleep timeout computer when on battery"
 msgstr "Задержка приостановки компьютера при питании от батареи"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Sleep timeout display when on AC"
 msgstr "Задержка отключения дисплея при питании от сети"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Sleep timeout display when on battery"
 msgstr "Задержка отключения дисплея при питании от батареи"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Suspend button action"
 msgstr "Действие кнопки \"Suspend\""
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Suspend enabled"
 msgstr "Ждущий режим разрешен"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "Метод DPMS, используемый при очистке экрана при питании от сети. Возможные значения: \"default\", \"standby\", \"suspend\" и \"off\". "
+msgstr ""
+"Метод DPMS, используемый при очистке экрана при питании от сети. Возможные "
+"значения: \"default\", \"standby\", \"suspend\" и \"off\". "
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "Метод DPMS, используемый при очистке экрана при питании от батареи. Возможные значения: \"default\", \"standby\", \"suspend\" и \"off\"."
+msgstr ""
+"Метод DPMS, используемый при очистке экрана при питании от батареи. "
+"Возможные значения: \"default\", \"standby\", \"suspend\" и \"off\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -326,7 +359,7 @@ msgstr ""
 "Действие, выполняемое при критическом разряде UPS. Возможные значения: "
 "\"hibernate\", \"suspend\", \"shutdown\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -334,7 +367,7 @@ msgstr ""
 "Действие, выполняемое при критическом разряде батареи. Возможные значения: "
 "\"hibernate\", \"suspend\", \"shutdown\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -343,7 +376,7 @@ msgstr ""
 "Действие, выполняемое при закрытии панели ноутбука, питающегося от сети. "
 "Возможные значения: \"suspend\", \"hibernate\",\"blank\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -352,7 +385,7 @@ msgstr ""
 "Действие, выполняемое при закрытии панели ноутбука, питающегося от батареи. "
 "Возможные значения: \"suspend\", \"hibernate\", \"blank\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -361,7 +394,7 @@ msgstr ""
 "Действие, выполняемое при нажатии кнопки \"Hibernate\". Возможные значения: "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -370,7 +403,7 @@ msgstr ""
 "Действие, выполняемое при нажатии кнопки \"Power\". Возможные значения: "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -379,7 +412,7 @@ msgstr ""
 "Действие, выполняемое при нажатии кнопки \"Suspend\". Возможные значения: "
 "\"suspend\", \"hibernate\", \"interactive\", \"shutdown\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -387,7 +420,7 @@ msgstr ""
 "Время бездействия в секундах, по истечении которого дисплей будет отключен "
 "при работе от сети."
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -395,13 +428,15 @@ msgstr ""
 "Сколько секунд компьютер должен простаивать при питании от сети перед "
 "приостановкой."
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
-msgstr "Сколько секунд компьютер должен простаивать при питании от батарей перед приостановкой."
+msgstr ""
+"Сколько секунд компьютер должен простаивать при питании от батарей перед "
+"приостановкой."
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -409,99 +444,161 @@ msgstr ""
 "Сколько секунд компьютер должен простаивать при питании от батарей перед "
 "отключением дисплея."
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr "Яркость дисплея при питании от сети. Возможные значения - от 0 до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr "Яркость дисплея при питании от батарей. Возможные значения - от 0 до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid "The brightness of the screen when idle"
 msgstr "Яркость экрана при простое"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
-msgid "The damping factor for the rate"
-msgstr "Коэффициент демпфирования для степени разряда"
-
 #: ../data/gnome-power-manager.schemas.in.h:77
-msgid "The maximum duration of time displayed on the x-axis of the graph."
-msgstr "Максимальная продолжительность времени по оси X."
+msgid "The cpufreq custom performance value to use when on AC power"
+msgstr "Значение производительности cpufreq при работе от сети"
 
 #: ../data/gnome-power-manager.schemas.in.h:78
-msgid "The maximum time displayed on the graph"
-msgstr "Максимальное время, отображаемое на графике"
+msgid "The cpufreq custom performance value to use when on battery power"
+msgstr "Значение производительности cpufreq при работе на батарее"
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
-"The percentage of the battery when it is considered critical. Only valid "
-"when use_time_for_policy is false."
-msgstr "Процент заряда батареи, воспринимаемый как критический. Параметр действителен только в том случае, если не установлен ключ use_time_for_policy."
+"The cpufreq custom performance value to used to scale the processor when on "
+"AC power."
+msgstr "Значение производительности cpufreq, используемое для масштабирования процессора при работе от сети."
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
-"The percentage of the battery when it is considered low. Only valid when "
-"use_time_for_policy is false."
-msgstr "Процент заряда батареи, воспринимаемый как низкий. Действителен только если не установлен параметр use_time_for_policy."
+"The cpufreq custom performance value to used to scale the processor when on "
+"battery power."
+msgstr "Значение производительности процессора, используемое для масштабирования процессора при работе от батареи."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
-msgid ""
-"The percentage of the battery when it is considered very low. Only valid "
-"when use_time_for_policy is false."
-msgstr "Процент заряда батареи, воспринимаемый как очень низкий. Действителен только если не установлен параметр use_time_for_policy."
+msgid "The cpufreq policy to use when on AC power"
+msgstr "Политика cpufreq, используемая при питании от сети"
 
 #: ../data/gnome-power-manager.schemas.in.h:82
-msgid ""
-"The percentage of the battery when the critical action is performed. Only "
-"valid when use_time_for_policy is false."
-msgstr "Процент заряда батареи, при котором выполняется критическое действие. Действителен только если не установлен параметр use_time_for_policy."
+msgid "The cpufreq policy to use when on battery power"
+msgstr "Политика cpufreq, используемая при питании от батареи"
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
-"The time remaining in seconds of the battery when critical action is taken. "
-"Only valid when use_time_for_policy is true."
-msgstr "Оставшееся время работы на батарее в секундах, когда выполняется критическое действие. Действительно только в случае, когда установлен параметр use_time_for_policy."
+"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"values are ondemand, conservative, powersave, userspace, performance, "
+"nothing."
+msgstr "Политика cpufreq, используемая для управления частотой процессора при работе от сети. Возможные значения: ondemand, conservative, powersave, userspace, performance, nothing."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
-"The time remaining in seconds of the battery when it is considered critical. "
-"Only valid when use_time_for_policy is true."
-msgstr "Оставшееся время работы на батарее в секундах, воспринимаемое как критическое. Действительно только в случае, когда установлен параметр use_time_for_policy."
+"The cpufreq policy to used to scale the processor when on battery power. "
+"Possible values are ondemand, conservative, powersave, userspace, "
+"performance, nothing."
+msgstr "Политика cpufreq, используемая для управления частотой процессора при работе на батареях. Возможные значения: ondemand, conservative, powersave, userspace, performance, nothing."
 
 #: ../data/gnome-power-manager.schemas.in.h:85
+msgid "The damping factor for the rate"
+msgstr "Коэффициент демпфирования для степени разряда"
+
+#: ../data/gnome-power-manager.schemas.in.h:86
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr "Максимальная продолжительность времени по оси X."
+
+#: ../data/gnome-power-manager.schemas.in.h:87
+msgid "The maximum time displayed on the graph"
+msgstr "Максимальное время, отображаемое на графике"
+
+#: ../data/gnome-power-manager.schemas.in.h:88
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"Процент заряда батареи, воспринимаемый как критический. Параметр "
+"действителен только в том случае, если не установлен ключ "
+"use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:89
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy is false."
+msgstr ""
+"Процент заряда батареи, воспринимаемый как низкий. Действителен только если "
+"не установлен параметр use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:90
+msgid ""
+"The percentage of the battery when it is considered very low. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"Процент заряда батареи, воспринимаемый как очень низкий. Действителен только "
+"если не установлен параметр use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:91
+msgid ""
+"The percentage of the battery when the critical action is performed. Only "
+"valid when use_time_for_policy is false."
+msgstr ""
+"Процент заряда батареи, при котором выполняется критическое действие. "
+"Действителен только если не установлен параметр use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:92
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Оставшееся время работы на батарее в секундах, когда выполняется критическое "
+"действие. Действительно только в случае, когда установлен параметр "
+"use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:93
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"Оставшееся время работы на батарее в секундах, воспринимаемое как "
+"критическое. Действительно только в случае, когда установлен параметр "
+"use_time_for_policy."
+
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
-msgstr "Оставшееся время работы на батарее в секундах, воспринимаемое как низкое. Действительно только в случае, когда установлен параметр use_time_for_policy."
+msgstr ""
+"Оставшееся время работы на батарее в секундах, воспринимаемое как низкое. "
+"Действительно только в случае, когда установлен параметр use_time_for_policy."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
-msgstr "Оставшееся время работы на батарее в секундах, воспринимаемое как очень низкое. Действительно только в случае, когда установлен параметр use_time_for_policy."
+msgstr ""
+"Оставшееся время работы на батарее в секундах, воспринимаемое как очень "
+"низкое. Действительно только в случае, когда установлен параметр "
+"use_time_for_policy."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid "The time remaining when action is taken"
 msgstr "Оставшееся время, когда выполняется действие"
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid "The time remaining when critical"
 msgstr "Оставшееся время, воспринимаемое как критическое"
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The time remaining when low"
 msgstr "Оставшееся время, воспринимаемое как низкое"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid "The time remaining when very low"
 msgstr "Оставшееся время, воспринимаемое как очень низкое"
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -509,39 +606,51 @@ msgstr ""
 "Тип приостановки компьютера после периода неактивности. Допустимые значения: "
 "\"hibernate\", \"suspend\" и \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
-msgstr "Значение демпфирующего фактора используется при вычислении экспоненциально взвешенной средней степени разряда. Увеличение значения увеличивает эффект демпфирования стемени разряда, что делает вычисление оставшегося времени более точным, но графики менее чувствительными."
+msgstr ""
+"Значение демпфирующего фактора используется при вычислении экспоненциально "
+"взвешенной средней степени разряда. Увеличение значения увеличивает эффект "
+"демпфирования стемени разряда, что делает вычисление оставшегося времени "
+"более точным, но графики менее чувствительными."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
-msgstr "Значение яркости панели ноутбука при простое сеанса. Действует только когда установлен ключ use_time_for_policy."
+msgstr ""
+"Значение яркости панели ноутбука при простое сеанса. Действует только когда "
+"установлен ключ use_time_for_policy."
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "UPS critical low action"
 msgstr "Действие при критическом разряде UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "Use gnome-screensaver lock setting"
 msgstr "Использовать параметр блокировки программы gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "When to show the notification icon"
 msgstr "Когда отображать значок уведомления"
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid ""
+"Whether or not niced processes should be considered on processor load "
+"calculation"
+msgstr "Должны ли учитываться при вычислении загрузки процессы с изменённым nice"
+
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
 "Перейти в спящий режим, ждущий режим или ничего не делать после периода "
 "бездействия"
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "Whether to use time-based notifications"
 msgstr "Использовать ли уведомления на основании времени"
 
@@ -1364,41 +1473,44 @@ msgstr "<b>Ток заряда (необработанный):</b> %.1f %sh\n"
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Ток заряда (сглаженный):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1231
-msgid "fully charged"
-msgstr "полностью заряжена"
+#: ../src/gpm-power.c:1230
+#, c-format
+msgid "%s fully charged (%i%%)\n"
+msgstr "%s полностью заряжена (%i%%)\n"
 
 #: ../src/gpm-power.c:1236
 #, c-format
-msgid "%s remaining"
-msgstr "%s осталось"
+msgid "%s %s remaining (%i%%)\n"
+msgstr "%s %s осталось (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1240
-msgid "discharging"
-msgstr "разряжается"
-
-#: ../src/gpm-power.c:1246
 #, c-format
-msgid "%s until charged"
-msgstr "%s до полного заряда"
+msgid "%s discharging (%i%%)\n"
+msgstr "%s разряжается (%i%%)\n"
+
+#: ../src/gpm-power.c:1247
+#, c-format
+msgid "%s %s until charged (%i%%)\n"
+msgstr "%s %s до полного заряда (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
-msgid "charging"
-msgstr "заряжается"
+#: ../src/gpm-power.c:1251
+#, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "%s заряжается (%i%%)\n"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1290
 msgid "Computer is running on backup power\n"
 msgstr "Компьютер работает на резервном питании\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1293
 msgid "Computer is running on AC power\n"
 msgstr "Компьютер работает от сети\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1296
 msgid "Computer is running on battery power\n"
 msgstr "Компьютер работает на батарее\n"
 
