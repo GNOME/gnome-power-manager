@@ -50,8 +50,6 @@ typedef struct
 					    		 gboolean	 connected);
 	void		(* auth_request)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 auth);
-	void		(* daemon_start)		(GpmScreensaver	*screensaver);
-	void		(* daemon_stop)			(GpmScreensaver	*screensaver);
 } GpmScreensaverClass;
 
 GType		 gpm_screensaver_get_type		(void);

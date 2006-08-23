@@ -34,7 +34,7 @@
 #include "gpm-marshal.h"
 #include "gpm-hal.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-system-monitor.h"
+#include "gpm-proxy.h"
 
 static void     gpm_hal_class_init (GpmHalClass *klass);
 static void     gpm_hal_init       (GpmHal      *hal);
@@ -44,12 +44,10 @@ static void     gpm_hal_finalize   (GObject	*object);
 
 struct GpmHalPrivate
 {
-	gboolean		 is_connected;
-	GpmDbusSystemMonitor	*dbus_system;
 	DBusGConnection		*connection;
-	DBusGProxy		*manager_proxy;
 	GHashTable		*watch_device_property_modified;
 	GHashTable		*watch_device_condition;
+	GpmProxy		*gproxy;
 };
 
 /* Signals emitted from GpmHal are:
@@ -101,146 +99,6 @@ gpm_hal_is_running (GpmHal *hal)
 	return running;
 }
 
-/**
- * gpm_hal_is_on_ac:
- *
- * @hal: This hal class instance
- * Return value: TRUE is computer is running on AC
- **/
-gboolean
-gpm_hal_is_on_ac (GpmHal *hal)
-{
-	gboolean is_on_ac;
-	gchar **device_names = NULL;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* find ac_adapter */
-	gpm_hal_device_find_capability (hal, "ac_adapter", &device_names);
-	if (device_names == NULL || device_names[0] == NULL) {
-		gpm_debug ("Couldn't obtain list of ac_adapters");
-		/* If we do not have an AC adapter, then assume we are a
-		 * desktop and return true */
-		return TRUE;
-	}
-	/* assume only one */
-	gpm_hal_device_get_bool (hal, device_names[0], "ac_adapter.present", &is_on_ac);
-	gpm_hal_free_capability (hal, device_names);
-	return is_on_ac;
-}
-
-/**
- * gpm_hal_is_laptop:
- *
- * @hal: This hal class instance
- * Return value: TRUE is computer is identified as a laptop
- *
- * Returns true if system.formfactor is "laptop"
- **/
-gboolean
-gpm_hal_is_laptop (GpmHal *hal)
-{
-	gboolean ret = TRUE;
-	gchar *formfactor = NULL;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* always present */
-	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
-	if (formfactor == NULL) {
-		gpm_debug ("system.formfactor not set! "
-			   "If you have PMU, please update HAL to get the latest fixes.");
-		/* no need to free */
-		return FALSE;
-	}
-	if (strcmp (formfactor, "laptop") != 0) {
-		gpm_debug ("This machine is not identified as a laptop."
-			   "system.formfactor is %s.", formfactor);
-		ret = FALSE;
-	}
-	g_free (formfactor);
-	return ret;
-}
-
-/**
- * gpm_hal_has_power_management:
- *
- * @hal: This hal class instance
- * Return value: TRUE if haldaemon has power management capability
- *
- * Finds out if power management functions are running (only ACPI, PMU, APM)
- **/
-gboolean
-gpm_hal_has_power_management (GpmHal *hal)
-{
-	gchar *ptype = NULL;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "power_management.type", &ptype);
-	/* this key only has to exist to be pm okay */
-	if (ptype) {
-		gpm_debug ("Power management type : %s", ptype);
-		g_free (ptype);
-		return TRUE;
-	}
-	return FALSE;
-}
-
-/**
- * gpm_hal_can_suspend:
- *
- * @hal: This hal class instance
- * Return value: TRUE if kernel suspend support is compiled in
- *
- * Finds out if HAL indicates that we can suspend
- **/
-gboolean
-gpm_hal_can_suspend (GpmHal *hal)
-{
-	gboolean exists;
-	gboolean can_suspend;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* TODO: Change to can_suspend when rely on newer HAL */
-	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
-					  "power_management.can_suspend_to_ram",
-					  &can_suspend);
-	if (exists == FALSE) {
-		gpm_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
-		return FALSE;
-	}
-	return can_suspend;
-}
-
-/**
- * gpm_hal_can_hibernate:
- *
- * @hal: This hal class instance
- * Return value: TRUE if kernel hibernation support is compiled in
- *
- * Finds out if HAL indicates that we can hibernate
- **/
-gboolean
-gpm_hal_can_hibernate (GpmHal *hal)
-{
-	gboolean exists;
-	gboolean can_hibernate;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* TODO: Change to can_hibernate when rely on newer HAL */
-	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
-					  "power_management.can_suspend_to_disk",
-					  &can_hibernate);
-	if (exists == FALSE) {
-		gpm_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
-		return FALSE;
-	}
-	return can_hibernate;
-}
-
 /* we have to be clever, as hal can pass back two types of errors, and we have
    to ignore dbus timeouts */
 static gboolean
@@ -272,158 +130,6 @@ gpm_hal_handle_error (guint ret, GError *error, const char *method)
 }
 
 /**
- * gpm_hal_suspend:
- *
- * @hal: This hal class instance
- * @wakeup: Seconds to wakeup, currently unsupported
- * Return value: Success, true if we suspended OK
- *
- * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
- **/
-gboolean
-gpm_hal_suspend (GpmHal *hal, gint wakeup)
-{
-	guint ret = 0;
-	DBusGProxy *hal_proxy = NULL;
-	GError *error = NULL;
-	gboolean retval;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
-					       HAL_DBUS_SERVICE,
-					       HAL_ROOT_COMPUTER,
-					       HAL_DBUS_INTERFACE_POWER);
-	retval = TRUE;
-	dbus_g_proxy_call (hal_proxy, "Suspend", &error,
-			   G_TYPE_INT, wakeup, G_TYPE_INVALID,
-			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, "suspend");
-
-	g_object_unref (G_OBJECT (hal_proxy));
-	return retval;
-}
-
-/**
- * hal_pm_method_void:
- *
- * @hal: This hal class instance
- * @method: The method name, e.g. "Hibernate"
- * Return value: Success, true if we did OK
- *
- * Do a method on org.freedesktop.Hal.Device.SystemPowerManagement.*
- * with no arguments.
- **/
-static gboolean
-hal_pm_method_void (GpmHal *hal, const gchar* method)
-{
-	guint ret = 0;
-	DBusGProxy *hal_proxy = NULL;
-	GError *error = NULL;
-	gboolean retval;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-	g_return_val_if_fail (method != NULL, FALSE);
-
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
-					       HAL_DBUS_SERVICE,
-					       HAL_ROOT_COMPUTER,
-					       HAL_DBUS_INTERFACE_POWER);
-	retval = TRUE;
-	dbus_g_proxy_call (hal_proxy, method, &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, method);
-
-	g_object_unref (G_OBJECT (hal_proxy));
-	return retval;
-}
-
-/**
- * gpm_hal_hibernate:
- *
- * @hal: This hal class instance
- * Return value: Success, true if we hibernated OK
- *
- * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
- **/
-gboolean
-gpm_hal_hibernate (GpmHal *hal)
-{
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-	return hal_pm_method_void (hal, "Hibernate");
-}
-
-/**
- * gpm_hal_shutdown:
- *
- * Return value: Success, true if we shutdown OK
- *
- * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
- **/
-gboolean
-gpm_hal_shutdown (GpmHal *hal)
-{
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-	return hal_pm_method_void (hal, "Shutdown");
-}
-
-/**
- * gpm_hal_reboot:
- *
- * @hal: This hal class instance
- * Return value: Success, true if we shutdown OK
- *
- * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
- **/
-gboolean
-gpm_hal_reboot (GpmHal *hal)
-{
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-	return hal_pm_method_void (hal, "Reboot");
-}
-
-/**
- * gpm_hal_enable_power_save:
- *
- * @hal: This hal class instance
- * @enable: True to enable low power mode
- * Return value: Success, true if we set the mode
- *
- * Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
- **/
-gboolean
-gpm_hal_enable_power_save (GpmHal *hal, gboolean enable)
-{
-	gint ret = 0;
-	DBusGProxy *hal_proxy = NULL;
-	GError *error = NULL;
-	gboolean retval;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* abort if we are not a "qualified" laptop */
-	if (gpm_hal_is_laptop (hal) == FALSE) {
-		gpm_debug ("We are not a laptop, so not even trying");
-		return FALSE;
-	}
-
-	gpm_debug ("Doing SetPowerSave (%i)", enable);
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
-					       HAL_DBUS_SERVICE,
-					       HAL_ROOT_COMPUTER,
-					       HAL_DBUS_INTERFACE_POWER);
-	retval = TRUE;
-	dbus_g_proxy_call (hal_proxy, "SetPowerSave", &error,
-			   G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
-			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, "power save");
-
-	g_object_unref (G_OBJECT (hal_proxy));
-	return retval;
-}
-
-/**
  * gpm_hal_device_rescan:
  *
  * @hal: This hal class instance
@@ -436,7 +142,7 @@ static gboolean
 gpm_hal_device_rescan (GpmHal *hal, const char *udi)
 {
 	gint ret = 0;
-	DBusGProxy *hal_proxy = NULL;
+	DBusGProxy *proxy;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -444,17 +150,16 @@ gpm_hal_device_rescan (GpmHal *hal, const char *udi)
 	g_return_val_if_fail (udi != NULL, FALSE);
 
 	gpm_debug ("Doing Rescan (%s)", udi);
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
-					       HAL_DBUS_SERVICE,
-					       udi,
-					       HAL_DBUS_INTERFACE_DEVICE);
-	retval = TRUE;
-	dbus_g_proxy_call (hal_proxy, "Rescan", &error,
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+					   HAL_DBUS_SERVICE,
+					   udi,
+					   HAL_DBUS_INTERFACE_DEVICE);
+	dbus_g_proxy_call (proxy, "Rescan", &error,
 			   G_TYPE_INVALID,
 			   G_TYPE_BOOLEAN, &ret, G_TYPE_INVALID);
 	retval = gpm_hal_handle_error (ret, error, "rescan");
 
-	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (proxy));
 	return retval;
 
 }
@@ -504,7 +209,7 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 			 const gchar *key,
 			 gboolean    *value)
 {
-	DBusGProxy *hal_proxy = NULL;
+	DBusGProxy *proxy;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -513,12 +218,12 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "GetPropertyBoolean", &error,
+	if (dbus_g_proxy_call (proxy, "GetPropertyBoolean", &error,
 			       G_TYPE_STRING, key, G_TYPE_INVALID,
 			       G_TYPE_BOOLEAN, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
@@ -528,7 +233,7 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 		*value = FALSE;
 		retval = FALSE;
 	}
-	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -549,7 +254,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 			   const gchar *key,
 			   gchar      **value)
 {
-	DBusGProxy *hal_proxy = NULL;
+	DBusGProxy *proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -558,12 +263,12 @@ gpm_hal_device_get_string (GpmHal      *hal,
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "GetPropertyString", &error,
+	if (dbus_g_proxy_call (proxy, "GetPropertyString", &error,
 			       G_TYPE_STRING, key, G_TYPE_INVALID,
 			       G_TYPE_STRING, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
@@ -573,7 +278,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 		*value = NULL;
 		retval = FALSE;
 	}
-	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -592,7 +297,7 @@ gpm_hal_device_get_int (GpmHal      *hal,
 			const gchar *key,
 			gint        *value)
 {
-	DBusGProxy *hal_proxy = NULL;
+	DBusGProxy *proxy;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -601,12 +306,12 @@ gpm_hal_device_get_int (GpmHal      *hal,
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "GetPropertyInteger", &error,
+	if (dbus_g_proxy_call (proxy, "GetPropertyInteger", &error,
 				G_TYPE_STRING, key, G_TYPE_INVALID,
 				G_TYPE_INT, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
@@ -616,7 +321,7 @@ gpm_hal_device_get_int (GpmHal      *hal,
 		*value = 0;
 		retval = FALSE;
 	}
-	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -633,7 +338,7 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 				const gchar *capability,
 				gchar     ***value)
 {
-	DBusGProxy *hal_proxy = NULL;
+	DBusGProxy *proxy = NULL;
 	GError *error = NULL;
 	gboolean retval;
 
@@ -641,12 +346,12 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 	g_return_val_if_fail (capability != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
 
-	hal_proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
 					       HAL_DBUS_SERVICE,
 					       HAL_DBUS_PATH_MANAGER,
 					       HAL_DBUS_INTERFACE_MANAGER);
 	retval = TRUE;
-	if (dbus_g_proxy_call (hal_proxy, "FindDeviceByCapability", &error,
+	if (dbus_g_proxy_call (proxy, "FindDeviceByCapability", &error,
 			        G_TYPE_STRING, capability, G_TYPE_INVALID,
 			        G_TYPE_STRV, value, G_TYPE_INVALID) == FALSE) {
 		if (error) {
@@ -656,7 +361,7 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 		*value = NULL;
 		retval = FALSE;
 	}
-	g_object_unref (G_OBJECT (hal_proxy));
+	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -977,7 +682,7 @@ gpm_hal_device_remove_condition (GpmHal     *hal,
 	gpointer key, value;
 	gboolean present;
 	char *udi_key;
-	DBusGProxy *proxy = NULL;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
@@ -1192,7 +897,7 @@ gpm_hal_new_capability_cb (DBusGProxy *proxy,
 }
 
 /**
- * gpm_hal_connect:
+ * gpm_hal_proxy_connect_more:
  *
  * @hal: This class instance
  * Return value: Success
@@ -1200,59 +905,42 @@ gpm_hal_new_capability_cb (DBusGProxy *proxy,
  * Connect the manager proxy to HAL and register some basic callbacks
  */
 static gboolean
-gpm_hal_connect (GpmHal *hal)
+gpm_hal_proxy_connect_more (GpmHal *hal)
 {
-	GError *error = NULL;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	/* sometimes we get repeat notifications from DBUS */
-	if (hal->priv->is_connected) {
-		g_debug ("Trying to connect already connected hal");
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
-
-	hal->priv->manager_proxy = dbus_g_proxy_new_for_name_owner (hal->priv->connection,
-								    HAL_DBUS_SERVICE,
-								    HAL_DBUS_PATH_MANAGER,
-								    HAL_DBUS_INTERFACE_MANAGER,
-								    &error);
-	/* if any error is set, then print */
-	if (error) {
-		g_warning ("cannot connect to HAL: %s", error->message);
-		g_error_free (error);
-	}
-
-	/* we failed to connect */
-	if (hal->priv->manager_proxy == NULL) {
-		hal->priv->is_connected = FALSE;
-		return FALSE;
-	}
+	}	
 
 	/* connect the org.freedesktop.Hal.Manager signals */
-	dbus_g_proxy_add_signal (hal->priv->manager_proxy, "DeviceAdded",
+	dbus_g_proxy_add_signal (proxy, "DeviceAdded",
 				 G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal->priv->manager_proxy, "DeviceAdded",
+	dbus_g_proxy_connect_signal (proxy, "DeviceAdded",
 				     G_CALLBACK (gpm_hal_device_added_cb), hal, NULL);
 
-	dbus_g_proxy_add_signal (hal->priv->manager_proxy, "DeviceRemoved",
+	dbus_g_proxy_add_signal (proxy, "DeviceRemoved",
 				 G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal->priv->manager_proxy, "DeviceRemoved",
+	dbus_g_proxy_connect_signal (proxy, "DeviceRemoved",
 				     G_CALLBACK (gpm_hal_device_removed_cb), hal, NULL);
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_add_signal (hal->priv->manager_proxy, "NewCapability",
+	dbus_g_proxy_add_signal (proxy, "NewCapability",
 				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (hal->priv->manager_proxy, "NewCapability",
+	dbus_g_proxy_connect_signal (proxy, "NewCapability",
 				     G_CALLBACK (gpm_hal_new_capability_cb), hal, NULL);
 
-	hal->priv->is_connected = TRUE;
+/*emit daemon stop!*/
 	return TRUE;
 }
 
 /**
- * gpm_hal_disconnect:
+ * gpm_hal_proxy_disconnect_more:
  *
  * @hal: This class instance
  * Return value: Success
@@ -1260,64 +948,43 @@ gpm_hal_connect (GpmHal *hal)
  * Disconnect the manager proxy to HAL and disconnect some basic callbacks
  */
 static gboolean
-gpm_hal_disconnect (GpmHal *hal)
+gpm_hal_proxy_disconnect_more (GpmHal *hal)
 {
+	DBusGProxy *proxy;
+
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	if (hal->priv->is_connected == FALSE) {
-		g_debug ("Trying to disconnect already disconnected hal");
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
+	}	
 
-	if (hal->priv->manager_proxy == NULL) {
-		g_debug ("The proxy is null, but connected. Odd.");
-		return FALSE;
-	}
-
-	dbus_g_proxy_disconnect_signal (hal->priv->manager_proxy, "DeviceRemoved",
+	dbus_g_proxy_disconnect_signal (proxy, "DeviceRemoved",
 					G_CALLBACK (gpm_hal_device_removed_cb), hal);
-	dbus_g_proxy_disconnect_signal (hal->priv->manager_proxy, "NewCapability",
+	dbus_g_proxy_disconnect_signal (proxy, "NewCapability",
 					G_CALLBACK (gpm_hal_new_capability_cb), hal);
 
-	g_object_unref (hal->priv->manager_proxy);
-	hal->priv->manager_proxy = NULL;
-
-	hal->priv->is_connected = FALSE;
 	return TRUE;
 }
 
 /**
- * dbus_name_owner_changed_system_cb:
- *
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- *
- * The name-owner-changed system DBUS callback.
+ * proxy_status_cb:
+ * @proxy: The dbus raw proxy
+ * @status: The status of the service, where TRUE is connected
+ * @hal: This class instance
  **/
 static void
-dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
-				   const char	  *name,
-				   const char     *prev,
-				   const char     *new,
-				   GpmHal         *hal)
+proxy_status_cb (DBusGProxy     *proxy,
+		 gboolean	 status,
+		 GpmHal *hal)
 {
 	g_return_if_fail (GPM_IS_HAL (hal));
-	g_return_if_fail (name != NULL);
-	g_return_if_fail (prev != NULL);
-	g_return_if_fail (new != NULL);
 
-	if (strcmp (name, HAL_DBUS_SERVICE) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
-			gpm_hal_disconnect (hal);
-			g_debug ("emitting daemon-stop");
-			g_signal_emit (hal, signals [DAEMON_STOP], 0);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
-			gpm_hal_connect (hal);
-			g_debug ("emitting daemon-start");
-			g_signal_emit (hal, signals [DAEMON_START], 0);
-		}
+	if (status) {
+		gpm_hal_proxy_connect_more (hal);
+	} else {
+		gpm_hal_proxy_disconnect_more (hal);
 	}
 }
 
@@ -1330,28 +997,32 @@ static void
 gpm_hal_init (GpmHal *hal)
 {
 	GError *error = NULL;
+	DBusGProxy *proxy;
+
 	hal->priv = GPM_HAL_GET_PRIVATE (hal);
 
 	hal->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (hal->priv->connection == NULL) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_critical_error ("Cannot connect to DBUS System Daemon");
+	if (error) {
+		gpm_warning ("%s", error->message);
+		g_error_free (error);
 	}
 
-	/* monitor the system bus so that we can detect when HAL is restarted */
-	hal->priv->dbus_system = gpm_dbus_system_monitor_new ();
-	g_signal_connect (hal->priv->dbus_system, "name-owner-changed",
-			  G_CALLBACK (dbus_name_owner_changed_system_cb), hal);
-	/* FIXME: Reconnect the indervidual devices on HAL restart */
+	hal->priv->gproxy = gpm_proxy_new ();
+	proxy = gpm_proxy_assign (hal->priv->gproxy,
+				  GPM_PROXY_SYSTEM,
+				  HAL_DBUS_SERVICE,
+				  HAL_DBUS_PATH_MANAGER,
+				  HAL_DBUS_INTERFACE_MANAGER);
+
+	g_signal_connect (hal->priv->gproxy, "proxy-status",
+			  G_CALLBACK (proxy_status_cb),
+			  hal);
 
 	hal->priv->watch_device_property_modified = g_hash_table_new (g_str_hash, g_str_equal);
 	hal->priv->watch_device_condition = g_hash_table_new (g_str_hash, g_str_equal);
 
 	/* blindly try to connect, assuming HAL is alive */
-	gpm_hal_connect (hal);
+	gpm_hal_proxy_connect_more (hal);
 }
 
 /**
@@ -1394,10 +1065,6 @@ gpm_hal_finalize (GObject *object)
 	hal = GPM_HAL (object);
 	hal->priv = GPM_HAL_GET_PRIVATE (hal);
 
-	if (hal->priv->is_connected) {
-		gpm_hal_disconnect (hal);
-	}
-
 	g_hash_table_foreach (hal->priv->watch_device_property_modified,
 			      (GHFunc) remove_device_property_modified_in_hash, hal);
 	g_hash_table_foreach (hal->priv->watch_device_condition,
@@ -1405,7 +1072,7 @@ gpm_hal_finalize (GObject *object)
 	g_hash_table_destroy (hal->priv->watch_device_property_modified);
 	g_hash_table_destroy (hal->priv->watch_device_condition);
 
-	g_object_unref (hal->priv->dbus_system);
+	g_object_unref (hal->priv->gproxy);
 
 	G_OBJECT_CLASS (gpm_hal_parent_class)->finalize (object);
 }

@@ -51,10 +51,12 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs-core.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-dbus-system-monitor.h			\
-	gpm-dbus-system-monitor.c			\
-	gpm-dbus-session-monitor.h			\
-	gpm-dbus-session-monitor.c			\
+	gpm-dbus-monitor.h				\
+	gpm-dbus-monitor.c				\
+	gpm-proxy.h					\
+	gpm-proxy.c					\
+	gpm-hal-cpufreq.h				\
+	gpm-hal-cpufreq.c				\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -73,23 +75,27 @@ gnome_power_manager_SOURCES =				\
 	gpm-dpms-x11.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
-	gpm-dbus-system-monitor.h			\
-	gpm-dbus-system-monitor.c			\
-	gpm-dbus-session-monitor.h			\
-	gpm-dbus-session-monitor.c			\
+	gpm-dbus-monitor.h				\
+	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-proxy.h					\
+	gpm-proxy.c					\
 	gpm-polkit.h					\
 	gpm-polkit.c					\
+	gpm-hal-cpufreq.h				\
+	gpm-hal-cpufreq.c				\
+	gpm-hal-power.h					\
+	gpm-hal-power.c					\
+	gpm-hal-brightness.h				\
+	gpm-hal-brightness.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
 	gpm-power.h					\
 	gpm-power.c					\
-	gpm-brightness.h				\
-	gpm-brightness.c				\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
 	eggtrayicon.h					\

@@ -485,13 +485,6 @@ gpm_idle_init (GpmIdle *idle)
 		g_error_free (error);
 	}
 
-	idle->priv->mode = GPM_IDLE_MODE_NORMAL;
-	idle->priv->system_timeout = 0;	/* in seconds */
-	idle->priv->system_timer_id = 0;
-	idle->priv->system_idle_timer_id = 0;
-	idle->priv->check_type_cpu = FALSE;
-	idle->priv->init = FALSE;
-
 	acquire_screensaver (idle);
 }
 
@@ -537,9 +530,9 @@ gpm_idle_new (void)
 static gboolean
 gpm_idle_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 {
-	long unsigned user;
-	long unsigned nice;
-	long unsigned system;
+	long unsigned cpu_user;
+	long unsigned cpu_nice;
+	long unsigned cpu_system;
 	int len;
 	char tmp[5];
 	char str[80];
@@ -552,13 +545,13 @@ gpm_idle_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
 	}
 	suc = fgets (str, 80, fd);
 	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
-		      &user, &nice, &system, cpu_idle);
+		      &cpu_user, &cpu_nice, &cpu_system, cpu_idle);
 	fclose (fd);
 	/*
 	 * Summing up all these times gives you the system uptime in jiffies.
 	 * This is what the uptime command does.
 	 */
-	*cpu_total = user + nice + system + *cpu_idle;
+	*cpu_total = cpu_user + cpu_nice + cpu_system + *cpu_idle;
 	return TRUE;
 }
 
@@ -579,16 +572,12 @@ gpm_idle_compute_load (GpmIdle *idle)
 	/* fill "old" value manually */
 	if (! idle->priv->init) {
 		idle->priv->init = TRUE;
-		if (!gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total))
-		    gpm_warning ("Failed to read CPU values");
+		gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total);
 		return 0;
 	}
 
 	/* work out the differences */
-	if (!gpm_idle_get_cpu_values (&cpu_idle, &cpu_total)) {
-	    gpm_warning ("Failed to read CPU values");
-	    return 0;
-	}
+	gpm_idle_get_cpu_values (&cpu_idle, &cpu_total);
 	diff_idle = cpu_idle - idle->priv->old_idle;
 	diff_total = cpu_total - idle->priv->old_total;
 

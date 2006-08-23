@@ -110,7 +110,7 @@ gboolean	 gpm_power_get_battery_status		(GpmPower	*power,
 							 GpmPowerStatus *battery_status);
 GpmPowerDevice	*gpm_power_get_battery_device_entry	(GpmPower	*power,
 							 GpmPowerKind	 battery_kind,
-							 gint		 device_num);
+							 guint		 device_num);
 gboolean	 gpm_power_get_status_summary		(GpmPower	*power,
 							 char		**summary,
 							 GError		**error);

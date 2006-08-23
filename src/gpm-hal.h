@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 #define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
 #define	HAL_DBUS_INTERFACE_LAPTOP_PANEL	"org.freedesktop.Hal.Device.LaptopPanel"
 #define	HAL_DBUS_INTERFACE_POWER	"org.freedesktop.Hal.Device.SystemPowerManagement"
+#define	HAL_DBUS_INTERFACE_CPUFREQ	"org.freedesktop.Hal.Device.CPUFreq"
 #define HAL_ROOT_COMPUTER		"/org/freedesktop/Hal/devices/computer"
 
 #define GPM_TYPE_HAL		(gpm_hal_get_type ())
@@ -92,19 +93,7 @@ GType		 gpm_hal_get_type			(void);
 GpmHal		*gpm_hal_new				(void);
 gboolean	 gpm_hal_get_idle			(GpmHal		*hal);
 
-gboolean	 gpm_hal_has_power_management		(GpmHal		*hal);
 gboolean	 gpm_hal_is_running			(GpmHal		*hal);
-gboolean	 gpm_hal_is_laptop			(GpmHal		*hal);
-gboolean	 gpm_hal_is_on_ac			(GpmHal		*hal);
-gboolean	 gpm_hal_can_suspend			(GpmHal		*hal);
-gboolean	 gpm_hal_suspend			(GpmHal		*hal,
-							 gint		 wakeup);
-gboolean	 gpm_hal_can_hibernate			(GpmHal		*hal);
-gboolean	 gpm_hal_hibernate			(GpmHal		*hal);
-gboolean	 gpm_hal_shutdown			(GpmHal		*hal);
-gboolean	 gpm_hal_reboot				(GpmHal		*hal);
-gboolean	 gpm_hal_enable_power_save		(GpmHal		*hal,
-							 gboolean	 enable);
 gboolean	 gpm_hal_device_get_bool		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,

@@ -30,11 +30,11 @@
 #include <string.h>
 #include "gpm-inhibit.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-session-monitor.h"
+#include "gpm-dbus-monitor.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
 static void     gpm_inhibit_init       (GpmInhibit      *inhibit);
-static void     gpm_inhibit_finalize   (GObject      *object);
+static void     gpm_inhibit_finalize   (GObject		*object);
 
 #define GPM_INHIBIT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INHIBIT, GpmInhibitPrivate))
 
@@ -49,7 +49,7 @@ typedef struct
 struct GpmInhibitPrivate
 {
 	GSList		*list;
-	GpmDbusSessionMonitor	*dbus_session;
+	GpmDbusMonitor	*dbus_monitor;
 };
 
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
@@ -129,7 +129,7 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  * We need to refcount internally, and data is saved in the GpmInhibitData
  * struct.
  *
- * Return value: a new random cookie, or 0 for error
+ * Return value: a new random cookie.
  **/
 guint32
 gpm_inhibit_add (GpmInhibit *inhibit,
@@ -138,9 +138,6 @@ gpm_inhibit_add (GpmInhibit *inhibit,
 		 const char *reason)
 {
 	GpmInhibitData *data = g_new (GpmInhibitData, 1);
-
-	g_return_val_if_fail (inhibit != NULL, 0);
-	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), 0);
 
 	/* handle where the application does not add required data */
 	if (connection == NULL ||
@@ -180,34 +177,28 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
  * @connection: Connection name
  * @application:	Application name
  * @cookie: The cookie that we used to register
- * Return value: If we removed okay
  *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
-gboolean
+void
 gpm_inhibit_remove (GpmInhibit *inhibit,
 		    const char *connection,
 		    guint32	cookie)
 {
 	GpmInhibitData *data;
 
-	g_return_val_if_fail (inhibit != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
-
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
-	if (data == NULL) {
+	if (data) {
+		gpm_debug ("UnInhibit okay on '%s' as #%i",
+			   connection, cookie);
+		gpm_inhibit_free_data_object (data);
+		inhibit->priv->list = g_slist_remove (inhibit->priv->list,
+						      (gconstpointer) data);
+	} else {
 		gpm_warning ("Cannot find registered program for #%i, so "
 			     "cannot do UnInhibit", cookie);
-		return FALSE;
 	}
-
-	gpm_debug ("UnInhibit okay on '%s' as #%i",
-		   connection, cookie);
-	gpm_inhibit_free_data_object (data);
-	inhibit->priv->list = g_slist_remove (inhibit->priv->list,
-					      (gconstpointer) data);
-	return TRUE;
 }
 
 /**
@@ -240,21 +231,21 @@ gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
 }
 
 /**
- * dbus_name_owner_changed_session_cb:
+ * dbus_noc_session_cb:
  * @power: The power class instance
  * @name: The DBUS name, e.g. hal.freedesktop.org
  * @prev: The previous name, e.g. :0.13
  * @new: The new name, e.g. :0.14
  * @inhibit: This inhibit class instance
  *
- * The name-owner-changed session DBUS callback.
+ * The noc session DBUS callback.
  **/
 static void
-dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
-				    const char	   *name,
-				    const char     *prev,
-				    const char     *new,
-				    GpmInhibit	   *inhibit)
+dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
+			    const char	   *name,
+			    const char     *prev,
+			    const char     *new,
+			    GpmInhibit	   *inhibit)
 {
 	if (strlen (new) == 0) {
 		gpm_inhibit_remove_dbus (inhibit, name);
@@ -271,9 +262,6 @@ dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
 gboolean
 gpm_inhibit_check (GpmInhibit *inhibit)
 {
-	g_return_val_if_fail (inhibit != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
-
 	if (g_slist_length (inhibit->priv->list) == 0) {
 		return TRUE;
 	}
@@ -286,22 +274,18 @@ gpm_inhibit_check (GpmInhibit *inhibit)
  *
  * @message:	Description string, e.g. "Nautilus because 'copying files'"
  * @action:	Action we wanted to do, e.g. "suspend"
- * Return value: Success in getting the message
  *
  * Returns a localised message text describing what application has inhibited
  * the action, and why.
  *
  **/
-gboolean
+void
 gpm_inhibit_get_message (GpmInhibit *inhibit,
 			 GString    *message,
 			 const char *action)
 {
 	int a;
 	GpmInhibitData *data;
-
-	g_return_val_if_fail (inhibit != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_INHIBIT (inhibit), FALSE);
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
@@ -318,7 +302,6 @@ gpm_inhibit_get_message (GpmInhibit *inhibit,
 						data->application, data->reason);
 		}
 	}
-	return TRUE;
 }
 
 /** intialise the class */
@@ -336,9 +319,9 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 {
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 	inhibit->priv->list = NULL;
-	inhibit->priv->dbus_session = gpm_dbus_session_monitor_new ();
-	g_signal_connect (inhibit->priv->dbus_session, "name-owner-changed",
-			  G_CALLBACK (dbus_name_owner_changed_session_cb), inhibit);
+	inhibit->priv->dbus_monitor = gpm_dbus_monitor_new ();
+	g_signal_connect (inhibit->priv->dbus_monitor, "noc-session",
+			  G_CALLBACK (dbus_noc_session_cb), inhibit);
 }
 
 /** finalise the object */
@@ -362,7 +345,7 @@ gpm_inhibit_finalize (GObject *object)
 	}
 	g_slist_free (inhibit->priv->list);
 
-	g_object_unref (inhibit->priv->dbus_session);
+	g_object_unref (inhibit->priv->dbus_monitor);
 	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }
 

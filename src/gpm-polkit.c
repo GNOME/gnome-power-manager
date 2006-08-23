@@ -28,8 +28,8 @@
 #include <gconf/gconf-client.h>
 
 #include "gpm-polkit.h"
+#include "gpm-proxy.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-system-monitor.h"
 
 static void     gpm_polkit_class_init (GpmPolkitClass *klass);
 static void     gpm_polkit_init       (GpmPolkit      *polkit);
@@ -43,49 +43,10 @@ static void     gpm_polkit_finalize   (GObject		   *object);
 
 struct GpmPolkitPrivate
 {
-	GpmDbusSystemMonitor	*dbus_system;
-	DBusGConnection		*system_connection;
-	DBusGProxy		*polkit_proxy;
+	GpmProxy		*gproxy;
 };
-
-enum {
-	DAEMON_START,
-	DAEMON_STOP,
-	LAST_SIGNAL
-};
-
-static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmPolkit, gpm_polkit, G_TYPE_OBJECT)
-
-/**
- * gpm_polkit_connect:
- * @polkit: This polkit class instance
- **/
-static void
-gpm_polkit_connect (GpmPolkit *polkit)
-{
-	polkit->priv->polkit_proxy = dbus_g_proxy_new_for_name (polkit->priv->system_connection,
-								POLKITD_SERVICE,
-								POLKITD_MANAGER_PATH,
-								POLKITD_MANAGER_INTERFACE);
-	gpm_debug ("gnome-polkit connected to the session DBUS");
-}
-
-/**
- * gpm_polkit_disconnect:
- * @polkit: This polkit class instance
- **/
-static void
-gpm_polkit_disconnect (GpmPolkit *polkit)
-{
-	if (polkit->priv->polkit_proxy) {
-		g_object_unref (G_OBJECT (polkit->priv->polkit_proxy));
-		polkit->priv->polkit_proxy = NULL;
-	}
-
-	gpm_debug ("gnome-polkit disconnected from the session DBUS");
-}
 
 /**
  * gpm_polkit_is_user_privileged:
@@ -99,13 +60,24 @@ gpm_polkit_is_user_privileged (GpmPolkit *polkit, const char *privilege)
 	gboolean boolret = TRUE;
 
 	const char *user = g_get_user_name ();
-	const char *bus_unique_name = dbus_g_proxy_get_bus_name (polkit->priv->polkit_proxy);
+	const char *bus_unique_name;
 	const char *myresource = NULL;
 	const char *but_restricted_to = NULL;
 	gboolean out_is_allowed;
 	gboolean out_is_temporary;
+	DBusGProxy *proxy;
 
-	if (!dbus_g_proxy_call (polkit->priv->polkit_proxy, "IsUserPrivileged", &error,
+	g_return_val_if_fail (GPM_IS_POLKIT (polkit), FALSE);
+
+	proxy = gpm_proxy_get_proxy (polkit->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}	
+
+	bus_unique_name = dbus_g_proxy_get_bus_name (proxy);
+
+	if (!dbus_g_proxy_call (proxy, "IsUserPrivileged", &error,
 				G_TYPE_STRING, bus_unique_name, 
 				G_TYPE_STRING, user, 
 				G_TYPE_STRING, privilege,
@@ -130,37 +102,6 @@ gpm_polkit_is_user_privileged (GpmPolkit *polkit, const char *privilege)
 }
 
 /**
- * dbus_name_owner_changed_system_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @manager: This manager class instance
- *
- * The name-owner-changed session DBUS callback.
- **/
-static void
-dbus_name_owner_changed_system_cb (GpmDbusSystemMonitor *dbus_monitor,
-				    const char	   *name,
-				    const char     *prev,
-				    const char     *new,
-				    GpmPolkit *polkit)
-{
-	if (strcmp (name, POLKITD_SERVICE) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
-			gpm_polkit_disconnect (polkit);
-			g_debug ("emitting daemon-stop");
-			g_signal_emit (polkit, signals [DAEMON_STOP], 0);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
-			gpm_polkit_connect (polkit);
-			g_debug ("emitting daemon-start");
-			g_signal_emit (polkit, signals [DAEMON_START], 0);
-		}
-	}
-}
-
-/**
  * gpm_polkit_class_init:
  * @klass: This polkit class instance
  **/
@@ -170,24 +111,6 @@ gpm_polkit_class_init (GpmPolkitClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_polkit_finalize;
 	g_type_class_add_private (klass, sizeof (GpmPolkitPrivate));
-
-	signals [DAEMON_START] =
-		g_signal_new ("daemon-start",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPolkitClass, daemon_start),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-
-	signals [DAEMON_STOP] =
-		g_signal_new ("daemon-stop",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPolkitClass, daemon_stop),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }
 
 /**
@@ -197,26 +120,14 @@ gpm_polkit_class_init (GpmPolkitClass *klass)
 static void
 gpm_polkit_init (GpmPolkit *polkit)
 {
-	GError *error = NULL;
 	polkit->priv = GPM_POLKIT_GET_PRIVATE (polkit);
 
-	polkit->priv->dbus_system = gpm_dbus_system_monitor_new ();
-	g_signal_connect (polkit->priv->dbus_system, "name-owner-changed",
-			  G_CALLBACK (dbus_name_owner_changed_system_cb), polkit);
-
-	polkit->priv->polkit_proxy = NULL;
-
-	polkit->priv->system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (! polkit->priv->system_connection) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_critical_error ("Cannot connect to DBUS Session Daemon");
-	}
-
-	/* blindly try to connect */
-	gpm_polkit_connect (polkit);
+	polkit->priv->gproxy = gpm_proxy_new ();
+	gpm_proxy_assign (polkit->priv->gproxy,
+			  GPM_PROXY_SYSTEM,
+			  POLKITD_SERVICE,
+			  POLKITD_MANAGER_PATH,
+			  POLKITD_MANAGER_INTERFACE);
 }
 
 /**
@@ -232,9 +143,8 @@ gpm_polkit_finalize (GObject *object)
 
 	polkit = GPM_POLKIT (object);
 	polkit->priv = GPM_POLKIT_GET_PRIVATE (polkit);
+	g_object_unref (polkit->priv->gproxy);
 
-	gpm_polkit_disconnect (polkit);
-	g_object_unref (polkit->priv->dbus_system);
 	G_OBJECT_CLASS (gpm_polkit_parent_class)->finalize (object);
 }
 

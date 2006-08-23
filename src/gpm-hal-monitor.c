@@ -40,6 +40,7 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
+#include "gpm-hal-power.h"
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
 
@@ -54,6 +55,7 @@ static void     gpm_hal_monitor_finalize   (GObject	       *object);
 struct GpmHalMonitorPrivate
 {
 	GpmHal			*hal;
+	GpmHalPower		*hal_power;
 };
 
 enum {
@@ -230,7 +232,7 @@ hal_device_property_modified_cb (GpmHal       *hal,
 	}
 
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		gboolean on_ac = gpm_hal_is_on_ac (monitor->priv->hal);
+		gboolean on_ac = gpm_hal_power_is_on_ac (monitor->priv->hal_power);
 		monitor_change_on_ac (monitor, on_ac);
 		return;
 	}
@@ -473,6 +475,7 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
 
 	monitor->priv->hal = gpm_hal_new ();
+	monitor->priv->hal_power = gpm_hal_power_new ();
 
 	g_signal_connect (monitor->priv->hal, "device-removed",
 			  G_CALLBACK (hal_device_removed_cb), monitor);
@@ -504,6 +507,7 @@ gpm_hal_monitor_finalize (GObject *object)
 	g_return_if_fail (monitor->priv != NULL);
 
 	g_object_unref (monitor->priv->hal);
+	g_object_unref (monitor->priv->hal_power);
 
 	G_OBJECT_CLASS (gpm_hal_monitor_parent_class)->finalize (object);
 }

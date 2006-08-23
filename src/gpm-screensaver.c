@@ -29,7 +29,7 @@
 
 #include "gpm-screensaver.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-session-monitor.h"
+#include "gpm-proxy.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
 static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
@@ -47,11 +47,8 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 
 struct GpmScreensaverPrivate
 {
-	GpmDbusSessionMonitor	*dbus_session;
-	DBusGConnection		*session_connection;
-	DBusGProxy		*gs_proxy;
+	GpmProxy		*gproxy;
 	GConfClient		*gconf_client;
-	gboolean		 is_connected;	/* if we are connected to g-s */
 	int			 idle_delay;	/* the setting in g-s-p, cached */
 };
 
@@ -59,8 +56,6 @@ enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
 	AUTH_REQUEST,
-	DAEMON_START,
-	DAEMON_STOP,
 	LAST_SIGNAL
 };
 
@@ -93,45 +88,36 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
 }
 
 /**
- * gpm_screensaver_connect:
+ * gpm_screensaver_proxy_connect_more:
  * @screensaver: This screensaver class instance
  **/
 static gboolean
-gpm_screensaver_connect (GpmScreensaver *screensaver)
+gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 {
+	DBusGProxy *proxy;
+
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	if (screensaver->priv->is_connected) {
-		/* sometimes dbus goes crazy and we get two events */
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
-	screensaver->priv->gs_proxy = dbus_g_proxy_new_for_name (screensaver->priv->session_connection,
-								 GS_LISTENER_SERVICE,
-								 GS_LISTENER_PATH,
-								 GS_LISTENER_INTERFACE);
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
-	}
+	}	
 
-	screensaver->priv->is_connected = TRUE;
-	gpm_debug ("gnome-screensaver connected to the session DBUS");
-
-	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
+	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, TRUE);
 
 	/* get AuthenticationRequestBegin */
-	dbus_g_proxy_add_signal (screensaver->priv->gs_proxy,
+	dbus_g_proxy_add_signal (proxy,
 				 "AuthenticationRequestBegin", G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (screensaver->priv->gs_proxy,
+	dbus_g_proxy_connect_signal (proxy,
 				     "AuthenticationRequestBegin",
 				     G_CALLBACK (gpm_screensaver_auth_begin),
 				     screensaver, NULL);
 
 	/* get AuthenticationRequestEnd */
-	dbus_g_proxy_add_signal (screensaver->priv->gs_proxy,
+	dbus_g_proxy_add_signal (proxy,
 				 "AuthenticationRequestEnd", G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (screensaver->priv->gs_proxy,
+	dbus_g_proxy_connect_signal (proxy,
 				     "AuthenticationRequestEnd",
 				     G_CALLBACK (gpm_screensaver_auth_end),
 				     screensaver, NULL);
@@ -139,25 +125,15 @@ gpm_screensaver_connect (GpmScreensaver *screensaver)
 }
 
 /**
- * gpm_screensaver_disconnect:
+ * gpm_screensaver_proxy_disconnect_more:
  * @screensaver: This screensaver class instance
  **/
 static gboolean
-gpm_screensaver_disconnect (GpmScreensaver *screensaver)
+gpm_screensaver_proxy_disconnect_more (GpmScreensaver *screensaver)
 {
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	if (! screensaver->priv->is_connected) {
-		/* sometimes dbus goes crazy and we get two events */
-		return FALSE;
-	}
-	if (screensaver->priv->gs_proxy) {
-		g_object_unref (G_OBJECT (screensaver->priv->gs_proxy));
-		screensaver->priv->gs_proxy = NULL;
-	}
-	screensaver->priv->is_connected = FALSE;
-
-	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, screensaver->priv->is_connected);
+	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, FALSE);
 	gpm_debug ("gnome-screensaver disconnected from the session DBUS");
 	return TRUE;
 }
@@ -233,22 +209,18 @@ gboolean
 gpm_screensaver_lock (GpmScreensaver *screensaver)
 {
 	int sleepcount = 0;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Not locking, as gnome-screensaver not running");
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
+	}	
 
 	gpm_debug ("doing gnome-screensaver lock");
-
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
-	}
-	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy, "Lock", G_TYPE_INVALID);
+	dbus_g_proxy_call_no_reply (proxy, "Lock", G_TYPE_INVALID);
 
 	/* When we send the Lock signal to g-ss it takes maybe a second
 	   or so to fade the screen and lock. If we suspend mid fade then on
@@ -283,22 +255,24 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	gboolean res;
 	guint32  cookie;
 	guint32  ret;
+	DBusGProxy *proxy;
 
-	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	g_return_val_if_fail (reason != NULL, 0);
 
-	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Cannot throttle now as gnome-screensaver not running");
-		return 0;
-	}
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}	
 
 	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
+	if (proxy == NULL) {
 		gpm_warning ("g-s proxy is NULL!");
 		return FALSE;
 	}
 
-	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+	res = dbus_g_proxy_call (proxy,
 				 "Throttle",
 				 &error,
 				 G_TYPE_STRING, "Power Manager",
@@ -321,21 +295,20 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 				 guint           cookie)
 {
 	gboolean res;
-	GError  *error;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
-	gpm_debug ("removing throttle: id %u", cookie);
 
-	error = NULL;
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
+	}	
 
-	res = dbus_g_proxy_call (screensaver->priv->gs_proxy,
+	gpm_debug ("removing throttle: id %u", cookie);
+	res = dbus_g_proxy_call (proxy,
 				 "UnThrottle",
-				 &error,
+				 NULL,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -350,24 +323,21 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 gboolean
 gpm_screensaver_check_running (GpmScreensaver *screensaver)
 {
-	GError *error = NULL;
 	gboolean boolret = TRUE;
 	gboolean temp = TRUE;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
+	}	
 
-	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActive", &error,
+	if (!dbus_g_proxy_call (proxy, "GetActive", NULL,
 				G_TYPE_INVALID,
 				G_TYPE_BOOLEAN, &temp, G_TYPE_INVALID)) {
-		if (error) {
-			g_error_free (error);
-		}
 		boolret = FALSE;
 	}
 	return boolret;
@@ -384,27 +354,18 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 gboolean
 gpm_screensaver_poke (GpmScreensaver *screensaver)
 {
+	DBusGProxy *proxy;
+
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Not poke'ing, as gnome-screensaver not running");
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
-
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
-	}
-
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
-	}
+	}	
 
 	gpm_debug ("poke");
-	dbus_g_proxy_call_no_reply (screensaver->priv->gs_proxy,
+	dbus_g_proxy_call_no_reply (proxy,
 				    "SimulateUserActivity",
 				    G_TYPE_INVALID);
 	return TRUE;
@@ -421,22 +382,18 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 {
 	GError *error = NULL;
 	gboolean boolret = TRUE;
+	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 	g_return_val_if_fail (time != NULL, FALSE);
 
-	if (! screensaver->priv->is_connected) {
-		gpm_debug ("Not getting idle, as gnome-screensaver not running");
+	proxy = gpm_proxy_get_proxy (screensaver->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
 		return FALSE;
-	}
+	}	
 
-	/* shouldn't be, but make sure proxy valid */
-	if (screensaver->priv->gs_proxy == NULL) {
-		gpm_warning ("g-s proxy is NULL!");
-		return FALSE;
-	}
-
-	if (!dbus_g_proxy_call (screensaver->priv->gs_proxy, "GetActiveTime", &error,
+	if (!dbus_g_proxy_call (proxy, "GetActiveTime", &error,
 				G_TYPE_INVALID,
 				G_TYPE_UINT, time_secs, G_TYPE_INVALID)) {
 		if (error) {
@@ -452,37 +409,6 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 		return FALSE;
 	}
 	return TRUE;
-}
-
-/**
- * dbus_name_owner_changed_session_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @manager: This manager class instance
- *
- * The name-owner-changed session DBUS callback.
- **/
-static void
-dbus_name_owner_changed_session_cb (GpmDbusSessionMonitor *dbus_monitor,
-				    const char	   *name,
-				    const char     *prev,
-				    const char     *new,
-				    GpmScreensaver *screensaver)
-{
-	if (strcmp (name, GS_LISTENER_SERVICE) == 0) {
-		if (strlen (prev) != 0 && strlen (new) == 0 ) {
-			gpm_screensaver_disconnect (screensaver);
-			g_debug ("emitting daemon-stop");
-			g_signal_emit (screensaver, signals [DAEMON_STOP], 0);
-		}
-		if (strlen (prev) == 0 && strlen (new) != 0 ) {
-			gpm_screensaver_connect (screensaver);
-			g_debug ("emitting daemon-start");
-			g_signal_emit (screensaver, signals [DAEMON_START], 0);
-		}
-	}
 }
 
 /**
@@ -525,24 +451,26 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+}
 
-	signals [DAEMON_START] =
-		g_signal_new ("daemon-start",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, daemon_start),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+/**
+ * proxy_status_cb:
+ * @proxy: The dbus raw proxy
+ * @status: The status of the service, where TRUE is connected
+ * @screensaver: This screensaver class instance
+ **/
+static void
+proxy_status_cb (DBusGProxy     *proxy,
+		 gboolean	 status,
+		 GpmScreensaver *screensaver)
+{
+	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
 
-	signals [DAEMON_STOP] =
-		g_signal_new ("daemon-stop",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, daemon_stop),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+	if (status) {
+		gpm_screensaver_proxy_connect_more (screensaver);
+	} else {
+		gpm_screensaver_proxy_disconnect_more (screensaver);
+	}
 }
 
 /**
@@ -552,31 +480,25 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 static void
 gpm_screensaver_init (GpmScreensaver *screensaver)
 {
-	GError *error = NULL;
+	DBusGProxy *proxy;
+
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-	screensaver->priv->dbus_session = gpm_dbus_session_monitor_new ();
-	g_signal_connect (screensaver->priv->dbus_session, "name-owner-changed",
-			  G_CALLBACK (dbus_name_owner_changed_session_cb), screensaver);
+	screensaver->priv->gproxy = gpm_proxy_new ();
+	proxy = gpm_proxy_assign (screensaver->priv->gproxy,
+				  GPM_PROXY_SESSION,
+				  GS_LISTENER_SERVICE,
+				  GS_LISTENER_PATH,
+				  GS_LISTENER_INTERFACE);
 
-	screensaver->priv->is_connected = FALSE;
-	screensaver->priv->gs_proxy = NULL;
+	g_signal_connect (screensaver->priv->gproxy, "proxy-status",
+			  G_CALLBACK (proxy_status_cb),
+			  screensaver);
+
+	gpm_screensaver_proxy_connect_more (screensaver);
+
 	screensaver->priv->gconf_client = gconf_client_get_default ();
 
-	screensaver->priv->session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (! screensaver->priv->session_connection) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_critical_error ("Cannot connect to DBUS Session Daemon");
-	}
-	/* blindly try to connect */
-	gpm_screensaver_connect (screensaver);
-	if (! gpm_screensaver_check_running (screensaver)) {
-		screensaver->priv->is_connected = FALSE;
-		gpm_warning ("gnome-screensaver has not been started yet");
-	}
 
 	/* get value of delay in g-s-p */
 	screensaver->priv->idle_delay = gconf_client_get_int (screensaver->priv->gconf_client,
@@ -606,9 +528,10 @@ gpm_screensaver_finalize (GObject *object)
 	screensaver = GPM_SCREENSAVER (object);
 	screensaver->priv = GPM_SCREENSAVER_GET_PRIVATE (screensaver);
 
-	gpm_screensaver_disconnect (screensaver);
+	gpm_screensaver_proxy_disconnect_more (screensaver);
 	g_object_unref (screensaver->priv->gconf_client);
-	g_object_unref (screensaver->priv->dbus_session);
+	g_object_unref (screensaver->priv->gproxy);
+
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
 }
 

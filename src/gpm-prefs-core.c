@@ -37,6 +37,7 @@
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"
+#include "gpm-hal-cpufreq.h"
 #include "gpm-prefs-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
@@ -56,9 +57,13 @@ struct GpmPrefsPrivate
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
 	gboolean		 has_button_lid;
+	gboolean		 has_cpufreq;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
 	GpmScreensaver		*screensaver;
+	GpmHalCpuFreq		*cpufreq;
+	GpmHalCpuFreqEnum		 cpufreq_types;
+	GpmHal			*hal;
 };
 
 enum {
@@ -87,6 +92,14 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 #define ACTION_HIBERNATE_TEXT		_("Hibernate")
 #define ACTION_BLANK_TEXT		_("Blank screen")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
+
+/* The text that should appear in the processor combo box */
+#define CPUFREQ_ONDEMAND_TEXT		_("Based on processor load")
+#define CPUFREQ_CONSERVATIVE_TEXT	_("Automatic power saving")
+#define CPUFREQ_POWERSAVE_TEXT		_("Maximum power saving")
+#define CPUFREQ_USERSPACE_TEXT		_("Custom")
+#define CPUFREQ_PERFORMANCE_TEXT	_("Maximum speed")
+#define CPUFREQ_NOTHING_TEXT 		_("Do nothing")
 
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
@@ -206,12 +219,12 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 }
 
 /**
- * gpm_prefs_format_brightness_cb:
+ * gpm_prefs_format_percentage_cb:
  * @scale: The GtkScale object
  * @value: The value in %.
  **/
 static char *
-gpm_prefs_format_brightness_cb (GtkScale *scale,
+gpm_prefs_format_percentage_cb (GtkScale *scale,
 				gdouble   value)
 {
 	return g_strdup_printf ("%.0f%%", value);
@@ -348,9 +361,9 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_brightness_slider (GpmPrefs *prefs,
-				   char     *widget_name,
-				   char     *gpm_pref_key)
+gpm_prefs_setup_brightness_slider (GpmPrefs   *prefs,
+				   const char *widget_name,
+				   const char *gpm_pref_key)
 {
 	GladeXML    *xml = prefs->priv->glade_xml;
 	GtkWidget *widget;
@@ -360,7 +373,7 @@ gpm_prefs_setup_brightness_slider (GpmPrefs *prefs,
 	widget = glade_xml_get_widget (xml, widget_name);
 
 	g_signal_connect (G_OBJECT (widget), "format-value",
-			  G_CALLBACK (gpm_prefs_format_brightness_cb), NULL);
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), NULL);
 
 	value = gconf_client_get_int (prefs->priv->gconf_client, gpm_pref_key, NULL);
 	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
@@ -545,269 +558,6 @@ gpm_prefs_setup_checkbox (GpmPrefs   *prefs,
 }
 
 /**
- * setup_battery_sliders:
- * @prefs: This prefs class instance
- **/
-static void
-setup_battery_sliders (GpmPrefs *prefs)
-{
-	GtkWidget   *vbox_battery_brightness;
-
-	/* Sleep time on batteries */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
-				      GPM_PREF_BATTERY_SLEEP_COMPUTER);
-
-	/* Sleep time for display when on batteries */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
-				      GPM_PREF_BATTERY_SLEEP_DISPLAY);
-
-	/* Display brightness when on batteries */
-	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
-					   GPM_PREF_BATTERY_BRIGHTNESS);
-
-	if (! prefs->priv->has_lcd) {
-		vbox_battery_brightness = glade_xml_get_widget (prefs->priv->glade_xml,
-								"vbox_battery_brightness");
-		gtk_widget_hide_all (vbox_battery_brightness);
-	}
-}
-
-/**
- * setup_ac_sliders:
- * @prefs: This prefs class instance
- **/
-static void
-setup_ac_sliders (GpmPrefs *prefs)
-{
-	GladeXML    *xml = prefs->priv->glade_xml;
-	GtkWidget   *vbox_ac_brightness;
-
-	/* Sleep time on AC */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
-				      GPM_PREF_AC_SLEEP_COMPUTER);
-
-	/* Sleep time for display on AC */
-	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
-				      GPM_PREF_AC_SLEEP_DISPLAY);
-
-	/* Display brightness when on AC */
-	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness",
-					   GPM_PREF_AC_BRIGHTNESS);
-
-	if (! prefs->priv->has_lcd) {
-		vbox_ac_brightness = glade_xml_get_widget (xml, "vbox_ac_brightness");
-		gtk_widget_hide_all (vbox_ac_brightness);
-	}
-}
-
-/**
- * setup_sleep_type:
- * @prefs: This prefs class instance
- **/
-static void
-setup_sleep_type (GpmPrefs *prefs)
-{
-	GtkWidget    *checkbutton_dim_idle;
-	const char   *sleep_type_actions[] = {ACTION_NOTHING,
-					      ACTION_SUSPEND,
-					      ACTION_HIBERNATE,
-					      NULL};
-
-	/* Sleep Type Combo Box */
-
-	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_type",
-				      GPM_PREF_SLEEP_TYPE,
-				      sleep_type_actions);
-
-	/* set up the "do we dim screen on idle checkbox */
-	checkbutton_dim_idle = gpm_prefs_setup_checkbox (prefs, "checkbutton_dim_idle",
-				  			 GPM_PREF_IDLE_DIM_SCREEN);
-
-	if (! prefs->priv->has_lcd) {
-		gtk_widget_hide_all (checkbutton_dim_idle);
-	}
-}
-
-/**
- * setup_ac_actions:
- * @prefs: This prefs class instance
- **/
-static void
-setup_ac_actions (GpmPrefs *prefs)
-{
-	GtkWidget    *checkbox_powersave;
-	GtkWidget    *vbox_ac_actions;
-	const char   *button_lid_actions[] = {ACTION_NOTHING,
-					      ACTION_BLANK,
-					      ACTION_SUSPEND,
-					      ACTION_HIBERNATE,
-					      NULL};
-
-	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid_close",
-				      GPM_PREF_AC_BUTTON_LID,
-				      button_lid_actions);
-
-	checkbox_powersave = gpm_prefs_setup_checkbox (prefs,
-						       "checkbutton_ac_powersave",
-						       GPM_PREF_AC_LOWPOWER);
-	/* hide elements that do not apply */
-	if (! prefs->priv->has_batteries) {
-		gtk_widget_hide_all (checkbox_powersave);
-		if (!prefs->priv->has_button_lid) {
-			/* hide the whole vbox if we don't have a lid */
-			vbox_ac_actions = glade_xml_get_widget (prefs->priv->glade_xml,
-								"vbox_ac_actions");
-			gtk_widget_hide_all (vbox_ac_actions);
-		}
-	}
-}
-
-/**
- * setup_battery_actions:
- * @prefs: This prefs class instance
- **/
-static void
-setup_battery_actions (GpmPrefs *prefs)
-{
-	GtkWidget    *label_button_lid;
-	GtkWidget    *combo_button_lid;
-	const char   *button_lid_actions[] = {ACTION_NOTHING,
-					      ACTION_BLANK,
-					      ACTION_SUSPEND,
-					      ACTION_HIBERNATE,
-					      NULL};
-	const char   *battery_critical_actions[] = {ACTION_NOTHING,
-						    ACTION_SUSPEND,
-						    ACTION_HIBERNATE,
-						    ACTION_SHUTDOWN,
-						    NULL};
-
-	/* Button Lid Combo Box */
-	gpm_prefs_setup_action_combo (prefs, "combobox_battery_lid_close",
-				      GPM_PREF_BATTERY_BUTTON_LID,
-				      button_lid_actions);
-
-	if (! prefs->priv->has_button_lid) {
-		label_button_lid = glade_xml_get_widget (prefs->priv->glade_xml,
-							 "label_battery_button_lid");
-		combo_button_lid = glade_xml_get_widget (prefs->priv->glade_xml,
-							 "combobox_battery_lid_close");
-		gtk_widget_hide_all (label_button_lid);
-		gtk_widget_hide_all (combo_button_lid);
-	}
-
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_powersave",
-	  			  GPM_PREF_BATTERY_LOWPOWER);
-
-	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
-				      GPM_PREF_BATTERY_CRITICAL,
-				      battery_critical_actions);
-}
-
-/**
- * setup_ups_actions:
- * @prefs: This prefs class instance
- **/
-static void
-setup_ups_actions (GpmPrefs *prefs)
-{
-	const char   *battery_ups_actions[] = {ACTION_NOTHING,
-					       ACTION_HIBERNATE,
-					       ACTION_SHUTDOWN,
-					       NULL};
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_ups_powersave",
-	  			  GPM_PREF_UPS_LOWPOWER);
-
-	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
-				      GPM_PREF_UPS_CRITICAL,
-				      battery_ups_actions);
-}
-
-/**
- * setup_icon_policy:
- * @prefs: This prefs class instance
- **/
-static void
-setup_icon_policy (GpmPrefs *prefs)
-{
-	char	    *icon_policy_str;
-	int	     icon_policy;
-	GtkWidget   *radiobutton_icon_always;
-	GtkWidget   *radiobutton_icon_present;
-	GtkWidget   *radiobutton_icon_charge;
-	GtkWidget   *radiobutton_icon_critical;
-	GtkWidget   *radiobutton_icon_never;
-	gboolean     is_writable;
-
-	icon_policy_str = gconf_client_get_string (prefs->priv->gconf_client,
-						   GPM_PREF_ICON_POLICY, NULL);
-	icon_policy = GPM_ICON_POLICY_ALWAYS;
-	gconf_string_to_enum (icon_policy_enum_map, icon_policy_str, &icon_policy);
-	g_free (icon_policy_str);
-
-	radiobutton_icon_always = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_icon_always");
-	radiobutton_icon_present = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_icon_present");
-	radiobutton_icon_charge = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_icon_charge");
-	radiobutton_icon_critical = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_icon_critical");
-	radiobutton_icon_never = glade_xml_get_widget (prefs->priv->glade_xml,
-							"radiobutton_icon_never");
-
-	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
-						    GPM_PREF_ICON_POLICY, NULL);
-
-	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_critical, is_writable);
-	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
-				      icon_policy == GPM_ICON_POLICY_ALWAYS);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_present),
-				      icon_policy == GPM_ICON_POLICY_PRESENT);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
-				      icon_policy == GPM_ICON_POLICY_CHARGE);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
-				      icon_policy == GPM_ICON_POLICY_CRITICAL);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
-				      icon_policy == GPM_ICON_POLICY_NEVER);
-
-	g_object_set_data (G_OBJECT (radiobutton_icon_always), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_ALWAYS));
-	g_object_set_data (G_OBJECT (radiobutton_icon_present), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
-	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_CHARGE));
-	g_object_set_data (G_OBJECT (radiobutton_icon_critical), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_CRITICAL));
-	g_object_set_data (G_OBJECT (radiobutton_icon_never), "policy",
-			   GINT_TO_POINTER (GPM_ICON_POLICY_NEVER));
-
-	/* only connect the callbacks after we set the value, else the gconf
-	   keys gets written to (for a split second), and the icon flickers. */
-	g_signal_connect (radiobutton_icon_always, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-	g_signal_connect (radiobutton_icon_present, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-	g_signal_connect (radiobutton_icon_charge, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-	g_signal_connect (radiobutton_icon_critical, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-	g_signal_connect (radiobutton_icon_never, "clicked",
-			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
-
-	if (! prefs->priv->has_batteries) {
-		/* Hide battery radio options if we have no batteries */
-		gtk_widget_hide_all (radiobutton_icon_charge);
-		gtk_widget_hide_all (radiobutton_icon_critical);
-	}
-}
-
-/**
  * gpm_prefs_close_cb:
  * @widget: The GtkWidget object
  * @prefs: This prefs class instance
@@ -897,18 +647,516 @@ gconf_key_changed_cb (GConfClient *client,
 
 	if (strcmp (entry->key, GPM_PREF_AC_LOWPOWER) == 0) {
 		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
-				  	         GPM_PREF_AC_LOWPOWER, NULL);
+				  		 GPM_PREF_AC_LOWPOWER, NULL);
 		gpm_debug ("need to enable checkbox");
 
 	} else if (strcmp (entry->key, GPM_PREF_UPS_LOWPOWER) == 0) {
 		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
-				  	         GPM_PREF_UPS_LOWPOWER, NULL);
+				  		 GPM_PREF_UPS_LOWPOWER, NULL);
 		gpm_debug ("need to enable checkbox");
 
 	} else if (strcmp (entry->key, GPM_PREF_BATTERY_LOWPOWER) == 0) {
 		enabled = gconf_client_get_bool (prefs->priv->gconf_client,
-				  	         GPM_PREF_BATTERY_LOWPOWER, NULL);
+				  		 GPM_PREF_BATTERY_LOWPOWER, NULL);
 		gpm_debug ("need to enable checkbox");
+	}
+}
+
+/**
+ * gpm_prefs_processor_slider_changed_cb:
+ * @range: The GtkRange object
+ * @gpm_pref_key: The GConf key for this preference setting.
+ **/
+static void
+gpm_prefs_processor_slider_changed_cb (GtkRange *range,
+				       GpmPrefs *prefs)
+{
+	int value;
+	char *gpm_pref_key;
+
+	value = (int) gtk_range_get_value (range);
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
+	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
+	gconf_client_set_int (prefs->priv->gconf_client, gpm_pref_key, value, NULL);
+}
+
+/**
+ * gpm_prefs_setup_processor_slider:
+ * @prefs: This prefs class instance
+ * @widget_name: The GtkWidget name
+ * @gpm_pref_key: The GConf key for this preference setting.
+ **/
+static GtkWidget *
+gpm_prefs_setup_processor_slider (GpmPrefs   *prefs,
+				  const char *widget_name,
+				  const char *gpm_pref_key)
+{
+	GtkWidget *widget;
+	gint value;
+	gboolean is_writable;
+
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	g_signal_connect (G_OBJECT (widget), "format-value",
+			  G_CALLBACK (gpm_prefs_format_percentage_cb), prefs);
+
+	value = gconf_client_get_int (prefs->priv->gconf_client, gpm_pref_key, NULL);
+
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    gpm_pref_key, NULL);
+
+	gtk_widget_set_sensitive (widget, is_writable);
+
+	gtk_range_set_value (GTK_RANGE (widget), value);
+
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
+
+	g_signal_connect (G_OBJECT (widget), "value-changed",
+			  G_CALLBACK (gpm_prefs_processor_slider_changed_cb),
+			  prefs);
+
+	return widget;
+}
+
+/**
+ * gpm_prefs_processor_combo_changed_cb:
+ * @widget: The GtkWidget object
+ * @gpm_pref_key: The GConf key for this preference setting.
+ **/
+static void
+gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
+				      GpmPrefs  *prefs)
+{
+	char *value;
+	const char *policy;
+	char *gpm_pref_key;
+	gboolean show_custom = FALSE;
+	GtkWidget *twidget;
+
+	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	if (value == NULL) {
+		g_warning ("active text failed");
+		return;
+	}
+	if (strcmp (value, CPUFREQ_ONDEMAND_TEXT) == 0) {
+		policy = CODE_CPUFREQ_ONDEMAND;
+	} else if (strcmp (value, CPUFREQ_CONSERVATIVE_TEXT) == 0) {
+		policy = CODE_CPUFREQ_CONSERVATIVE;
+	} else if (strcmp (value, CPUFREQ_POWERSAVE_TEXT) == 0) {
+		policy = CODE_CPUFREQ_POWERSAVE;
+	} else if (strcmp (value, CPUFREQ_USERSPACE_TEXT) == 0) {
+		policy = CODE_CPUFREQ_USERSPACE;
+		show_custom = TRUE;
+	} else if (strcmp (value, CPUFREQ_PERFORMANCE_TEXT) == 0) {
+		policy = CODE_CPUFREQ_PERFORMANCE;
+	} else if (strcmp (value, CPUFREQ_NOTHING_TEXT) == 0) {
+		policy = CODE_CPUFREQ_NOTHING;
+	} else {
+		g_assert (FALSE);
+	}
+
+	/* show other options */
+	if (strcmp (gtk_widget_get_name (widget), "combobox_ac_processor") == 0) {
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"label_processor_ac_custom");
+		if (show_custom) {
+			gtk_widget_show (twidget);
+		} else {
+			gtk_widget_hide (twidget);
+		}
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"hscale_processor_ac_custom");
+		if (show_custom) {
+			gtk_widget_show (twidget);
+		} else {
+			gtk_widget_hide (twidget);
+		}
+	} else {
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"label_processor_battery_custom");
+		if (show_custom) {
+			gtk_widget_show (twidget);
+		} else {
+			gtk_widget_hide (twidget);
+		}
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"hscale_processor_battery_custom");
+		if (show_custom) {
+			gtk_widget_show (twidget);
+		} else {
+			gtk_widget_hide (twidget);
+		}
+	}
+
+	g_free (value);
+	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "gconf_key");
+	gpm_debug ("Changing %s to %s", gpm_pref_key, policy);
+	gconf_client_set_string (prefs->priv->gconf_client, gpm_pref_key, policy, NULL);
+}
+
+/**
+ * gpm_prefs_setup_action_combo:
+ * @prefs: This prefs class instance
+ * @widget_name: The GtkWidget name
+ * @gpm_pref_key: The GConf key for this preference setting.
+ * @actions: The actions to associate in an array.
+ **/
+static void
+gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
+				 const char       *widget_name,
+				 const char       *gpm_pref_key,
+				 GpmHalCpuFreqEnum cpufreq_types)
+{
+	char *value;
+	int n_added = 0;
+	gboolean has_option = FALSE;
+	gboolean is_writable;
+	GtkWidget *widget;
+	GpmHalCpuFreqEnum cpufreq_type;
+
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
+	value = gconf_client_get_string (prefs->priv->gconf_client,
+					 gpm_pref_key, NULL);
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    gpm_pref_key, NULL);
+
+	gtk_widget_set_sensitive (widget, is_writable);
+
+	if (value == NULL) {
+		gpm_warning ("invalid schema, please re-install");
+		value = g_strdup ("nothing");
+	}
+
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_prefs_processor_combo_changed_cb),
+			  prefs);
+
+	cpufreq_type = gpm_hal_cpufreq_string_to_enum (value);
+
+	if (cpufreq_types & GPM_CPUFREQ_ONDEMAND) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_ONDEMAND_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+	if (cpufreq_types & GPM_CPUFREQ_CONSERVATIVE) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_CONSERVATIVE_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_CONSERVATIVE) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+	if (cpufreq_types & GPM_CPUFREQ_POWERSAVE) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_POWERSAVE_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_POWERSAVE) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+	if (cpufreq_types & GPM_CPUFREQ_USERSPACE) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_USERSPACE_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_USERSPACE) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+	if (cpufreq_types & GPM_CPUFREQ_PERFORMANCE) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_PERFORMANCE_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_PERFORMANCE) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+
+	/* always add nothing as a valid option */
+	gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+				   CPUFREQ_NOTHING_TEXT);
+	if (has_option == FALSE || cpufreq_type == GPM_CPUFREQ_NOTHING) {
+		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+	}
+	g_free (value);
+}
+
+/** setup the sleep page */
+static void
+prefs_setup_sleep (GpmPrefs *prefs)
+{
+	GtkWidget *widget;
+	int delay;
+
+	const char   *sleep_type_actions[] = {ACTION_NOTHING,
+					      ACTION_SUSPEND,
+					      ACTION_HIBERNATE,
+					      NULL};
+
+	/* Sleep Type Combo Box */
+	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_general_type",
+				      GPM_PREF_SLEEP_TYPE,
+				      sleep_type_actions);
+	/* Sleep time until we sleep */
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ac_inactive",
+				      GPM_PREF_AC_SLEEP_COMPUTER);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_battery_inactive",
+				      GPM_PREF_BATTERY_SLEEP_COMPUTER);
+//FIXME
+//	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ups_inactive",
+//				      GPM_PREF_UPS_SLEEP_COMPUTER);
+
+	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	set_idle_hscale_stops (prefs, "hscale_sleep_battery_inactive", delay);
+	set_idle_hscale_stops (prefs, "hscale_sleep_ac_inactive", delay);
+
+	if (! prefs->priv->has_batteries) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_sleep_battery");
+		gtk_widget_hide_all (widget);
+	}
+	if (! prefs->priv->has_ups) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_sleep_ups");
+		gtk_widget_hide_all (widget);
+	}
+}
+
+/** setup the display page */
+static void
+prefs_setup_display (GpmPrefs *prefs)
+{
+	GtkWidget *widget;
+	int delay;
+
+	/* Sleep time for display to blank */
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_display_ac_sleep",
+				      GPM_PREF_AC_SLEEP_DISPLAY);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_display_battery_sleep",
+				      GPM_PREF_BATTERY_SLEEP_DISPLAY);
+	/* Display brightness */
+	gpm_prefs_setup_brightness_slider (prefs, "hscale_display_ac_brightness",
+					   GPM_PREF_AC_BRIGHTNESS);
+	gpm_prefs_setup_brightness_slider (prefs, "hscale_display_battery_brightness",
+					   GPM_PREF_BATTERY_BRIGHTNESS);
+
+	/* set up the "do we dim screen on idle checkboxes */
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ac_dim",
+				  GPM_PREF_IDLE_DIM_SCREEN);
+//FIXME
+//	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ac_dim",
+//				  GPM_PREF_IDLE_DIM_SCREEN);
+
+	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	set_idle_hscale_stops (prefs, "hscale_display_battery_sleep", delay);
+	set_idle_hscale_stops (prefs, "hscale_display_ac_sleep", delay);
+
+	if (! prefs->priv->has_lcd) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_display_ac_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_display_ac_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_display_battery_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_display_battery_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_ac_dim");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_battery_dim");
+		gtk_widget_hide_all (widget);
+	}
+}
+
+/** setup the processor page */
+static void
+prefs_setup_processor (GpmPrefs *prefs)
+{
+	GtkWidget    *widget;
+	GtkWidget    *notebook;
+	int	      page;
+
+	/* remove if we have no options to set */
+	if (prefs->priv->has_cpufreq == FALSE) {
+		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_processor");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		return;
+	}
+
+	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_ac_profile",
+					 GPM_PREF_AC_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_battery_profile",
+					 GPM_PREF_BATTERY_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+
+	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_battery_custom",
+					  GPM_PREF_BATTERY_CPUFREQ_VALUE);
+	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_ac_custom",
+					  GPM_PREF_AC_CPUFREQ_VALUE);
+}
+
+/** setup the actions page */
+static void
+prefs_setup_actions (GpmPrefs *prefs)
+{
+	GtkWidget    *widget;
+	const char   *button_lid_actions[] = {ACTION_NOTHING,
+					      ACTION_BLANK,
+					      ACTION_SUSPEND,
+					      ACTION_HIBERNATE,
+					      NULL};
+	const char   *battery_critical_actions[] = {ACTION_NOTHING,
+						    ACTION_SUSPEND,
+						    ACTION_HIBERNATE,
+						    ACTION_SHUTDOWN,
+						    NULL};
+	const char   *battery_ups_actions[] = {ACTION_NOTHING,
+					       ACTION_HIBERNATE,
+					       ACTION_SHUTDOWN,
+					       NULL};
+	const char   *power_button_actions[] = {ACTION_INTERACTIVE,
+						ACTION_SUSPEND,
+						ACTION_HIBERNATE,
+						ACTION_SHUTDOWN,
+						NULL};
+	/* Power button action */
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_general_power",
+				      GPM_PREF_BUTTON_POWER,
+				      power_button_actions);
+
+	/* Lid close actions */
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ac_lid",
+				      GPM_PREF_AC_BUTTON_LID,
+				      button_lid_actions);
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_battery_lid",
+				      GPM_PREF_BATTERY_BUTTON_LID,
+				      button_lid_actions);
+
+	/* set up the LowPowerMode checkbox */
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_actions_battery_low_power",
+	  			  GPM_PREF_BATTERY_LOWPOWER);
+
+	/* battery critical actions */
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_battery_critical",
+				      GPM_PREF_BATTERY_CRITICAL,
+				      battery_critical_actions);
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_critical",
+				      GPM_PREF_UPS_CRITICAL,
+				      battery_ups_actions);
+//FIXME
+//	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_low",
+//				      GPM_PREF_UPS_LOW,
+//				      battery_ups_actions);
+
+	if (prefs->priv->has_button_lid == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_ac_lid");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_battery_lid");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_ac_lid");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_battery_lid");
+		gtk_widget_hide_all (widget);
+		/* remove whole box as there is nothing in it */
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_actions_ac");
+		gtk_widget_hide_all (widget);
+	}
+	if (prefs->priv->has_ups == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_actions_ups");
+		gtk_widget_hide_all (widget);
+	}
+	if (prefs->priv->has_batteries == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_actions_battery");
+		gtk_widget_hide_all (widget);
+	}
+}
+
+/** setup the notification page */
+static void
+prefs_setup_notification (GpmPrefs *prefs)
+{
+	char	    *icon_policy_str;
+	int	     icon_policy;
+	GtkWidget   *radiobutton_icon_always;
+	GtkWidget   *radiobutton_icon_present;
+	GtkWidget   *radiobutton_icon_charge;
+	GtkWidget   *radiobutton_icon_critical;
+	GtkWidget   *radiobutton_icon_never;
+	gboolean     is_writable;
+
+	icon_policy_str = gconf_client_get_string (prefs->priv->gconf_client,
+						   GPM_PREF_ICON_POLICY, NULL);
+	icon_policy = GPM_ICON_POLICY_ALWAYS;
+	gconf_string_to_enum (icon_policy_enum_map, icon_policy_str, &icon_policy);
+	g_free (icon_policy_str);
+
+	radiobutton_icon_always = glade_xml_get_widget (prefs->priv->glade_xml,
+							"radiobutton_notification_always");
+	radiobutton_icon_present = glade_xml_get_widget (prefs->priv->glade_xml,
+							"radiobutton_notification_present");
+	radiobutton_icon_charge = glade_xml_get_widget (prefs->priv->glade_xml,
+							"radiobutton_notification_charge");
+	radiobutton_icon_critical = glade_xml_get_widget (prefs->priv->glade_xml,
+							"radiobutton_notification_critical");
+	radiobutton_icon_never = glade_xml_get_widget (prefs->priv->glade_xml,
+							"radiobutton_notification_never");
+
+	is_writable = gconf_client_key_is_writable (prefs->priv->gconf_client,
+						    GPM_PREF_ICON_POLICY, NULL);
+	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_critical, is_writable);
+	gtk_widget_set_sensitive (radiobutton_icon_never, is_writable);
+
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_always),
+				      icon_policy == GPM_ICON_POLICY_ALWAYS);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_present),
+				      icon_policy == GPM_ICON_POLICY_PRESENT);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_charge),
+				      icon_policy == GPM_ICON_POLICY_CHARGE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_critical),
+				      icon_policy == GPM_ICON_POLICY_CRITICAL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radiobutton_icon_never),
+				      icon_policy == GPM_ICON_POLICY_NEVER);
+
+	g_object_set_data (G_OBJECT (radiobutton_icon_always), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_ALWAYS));
+	g_object_set_data (G_OBJECT (radiobutton_icon_present), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_PRESENT));
+	g_object_set_data (G_OBJECT (radiobutton_icon_charge), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_CHARGE));
+	g_object_set_data (G_OBJECT (radiobutton_icon_critical), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_CRITICAL));
+	g_object_set_data (G_OBJECT (radiobutton_icon_never), "policy",
+			   GINT_TO_POINTER (GPM_ICON_POLICY_NEVER));
+
+	/* only connect the callbacks after we set the value, else the gconf
+	   keys gets written to (for a split second), and the icon flickers. */
+	g_signal_connect (radiobutton_icon_always, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+	g_signal_connect (radiobutton_icon_present, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+	g_signal_connect (radiobutton_icon_charge, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+	g_signal_connect (radiobutton_icon_critical, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+	g_signal_connect (radiobutton_icon_never, "clicked",
+			  G_CALLBACK (gpm_prefs_icon_radio_cb), prefs);
+
+	/* set up the sound checkbox */
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
+	  			  GPM_PREF_ENABLE_BEEPING);
+
+	if (! prefs->priv->has_batteries) {
+		/* Hide battery radio options if we have no batteries */
+		gtk_widget_hide_all (radiobutton_icon_charge);
+		gtk_widget_hide_all (radiobutton_icon_critical);
 	}
 }
 
@@ -921,18 +1169,11 @@ gpm_prefs_init (GpmPrefs *prefs)
 {
 	GtkWidget    *main_window;
 	GtkWidget    *widget;
-	GtkWidget    *notebook;
-	int           delay;
-	int           page;
-
-	GpmHal       *hal = gpm_hal_new ();
-        const char   *power_button_actions[] = {ACTION_INTERACTIVE,
-                                                ACTION_SUSPEND,
-                                                ACTION_HIBERNATE,
-                                                ACTION_SHUTDOWN,
-                                                NULL};
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
+
+	prefs->priv->hal = gpm_hal_new ();
+	prefs->priv->cpufreq = gpm_hal_cpufreq_new ();
 
 	prefs->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
@@ -947,20 +1188,32 @@ gpm_prefs_init (GpmPrefs *prefs)
 				 NULL,
 				 NULL);
 
-	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability (hal, "laptop_panel") > 0;
-	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value (hal, "battery",
+	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability (prefs->priv->hal, "laptop_panel") > 0;
+	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "battery",
 							"battery.type",
 							"primary") > 0;
-	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value (hal, "battery",
+	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "battery",
 							"battery.type",
 							"ups") > 0;
-	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value (hal, "button",
+	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "button",
 							"button.type",
 							"lid") > 0;
-	g_object_unref (hal);
 
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
+
+	/* only enable cpufreq stuff if we have the hardware */
+	prefs->priv->has_cpufreq = gpm_hal_cpufreq_has_hardware (prefs->priv->cpufreq);
+	gboolean ret = FALSE;
+	if (prefs->priv->has_cpufreq) {
+		ret = gpm_hal_cpufreq_get_governors (prefs->priv->cpufreq,
+							   &prefs->priv->cpufreq_types);
+	}
+	/* method failed, can't assume we have cpu frequency scaling */
+	if (ret == FALSE) {
+		prefs->priv->cpufreq_types = GPM_CPUFREQ_NOTHING;
+		prefs->priv->has_cpufreq = FALSE;
+	}
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
 
@@ -983,37 +1236,20 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_help_cb), prefs);
 
-	setup_icon_policy (prefs);
-	setup_ac_actions (prefs);
-	setup_ac_sliders (prefs);
-	setup_battery_actions (prefs);
-	setup_battery_sliders (prefs);
-	setup_ups_actions (prefs);
-	setup_sleep_type (prefs);
+	/* the 'Sleep' tab */
+	prefs_setup_sleep (prefs);
 
-	/* Power button action */
-	gpm_prefs_setup_action_combo (prefs, "combobox_power_button",
-				      GPM_PREF_BUTTON_POWER,
-				      power_button_actions);
+	/* the 'Display' tab */
+	prefs_setup_display (prefs);
 
-	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
-	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
+	/* the 'Processing Speed' tab */
+	prefs_setup_processor (prefs);
 
-	notebook = glade_xml_get_widget (prefs->priv->glade_xml, "gpm_notebook");
-	/* if no options then disable frame as it will be empty */
-	if (! prefs->priv->has_batteries) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_battery_power");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-	}
-	if (! prefs->priv->has_ups) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_ups_power");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-	}
+	/* the 'Actions' tab */
+	prefs_setup_actions (prefs);
+
+	/* the 'Notification' tab */
+	prefs_setup_notification (prefs);
 
 	gtk_widget_show (main_window);
 }
@@ -1034,6 +1270,8 @@ gpm_prefs_finalize (GObject *object)
 
 	g_object_unref (prefs->priv->gconf_client);
 	g_object_unref (prefs->priv->screensaver);
+	g_object_unref (prefs->priv->cpufreq);
+	g_object_unref (prefs->priv->hal);
 	/* FIXME: we should unref some stuff */
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);

@@ -108,7 +108,7 @@ gpm_info_data_get_list (GpmInfoData *info_data)
 /**
  * gpm_info_data_add_always:
  * @info_data: This InfoData instance
- * @time: The X data point
+ * @time_secs: The X data point
  * @value: The Y data point or event type
  * @colour: The colour of the point
  *
@@ -116,7 +116,7 @@ gpm_info_data_get_list (GpmInfoData *info_data)
  **/
 void
 gpm_info_data_add_always (GpmInfoData *info_data,
-			  int	       time,
+			  int	       time_secs,
 			  int	       value,
 			  int	       colour,
 			  const char  *desc)
@@ -128,7 +128,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 
 	/* we have to add a new data point */
 	new = g_slice_new (GpmInfoDataPoint);
-	new->time = time;
+	new->time = time_secs;
 	if (value > 0) {
 		new->value = value;
 	} else {
@@ -274,7 +274,7 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
 /**
  * gpm_info_data_add:
  * @info_data: This InfoData instance
- * @time: The X data point
+ * @time_secs: The X data point
  * @value: The Y data point or event type
  * @colour: The colour of the point
  *
@@ -284,7 +284,7 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
  **/
 void
 gpm_info_data_add (GpmInfoData *info_data,
-		   int		time,
+		   int		time_secs,
 		   int		value,
 		   int		colour)
 {
@@ -302,20 +302,20 @@ gpm_info_data_add (GpmInfoData *info_data,
 			/* we are the same as we were before and not the first or
 			   second point, just side the data time across without
 			   making a new point */
-			point->time = time;
+			point->time = time_secs;
 		} else {
 			/* we have to add a new data point as value is different */
-			gpm_info_data_add_always (info_data, time, value, colour, NULL);
+			gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
 			if (value == 0) {
 				/* if the rate suddenly drops we want a line
 				   going down, then across, not a diagonal line.
 				   Add an extra point so that we extend it horiz. */
-				gpm_info_data_add_always (info_data, time, value, colour, NULL);
+				gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
 			}
 		}
 	} else {
 		/* a list of less than 3 points always requires a data point */
-		gpm_info_data_add_always (info_data, time, value, colour, NULL);
+		gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
 	}
 	if (len > info_data->priv->max_points) {
 		/* We have too much data, simplify */

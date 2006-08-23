@@ -37,6 +37,7 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
+#include "gpm-hal-power.h"
 #include "gpm-power.h"
 #include "gpm-prefs.h"
 #include "gpm-graph-widget.h"
@@ -55,6 +56,7 @@ struct GpmInfoPrivate
 {
 	GpmPower		*power;
 	GpmHal			*hal;
+	GpmHalPower		*hal_power;
 
 	GtkWidget		*rate_widget;
 	GtkWidget		*percentage_widget;
@@ -271,18 +273,18 @@ gpm_info_create_event_viewer_tree (GtkWidget *widget)
 
 /**
  * gpm_info_get_time_string:
- * @time: A time_t value
+ * @time_secs: A time_t value
  *
  * Converts a time_t to a string description.
  * The return value must be freed using g_free().
  * Return value: The timestring, e.g. "Sat Apr 15, 15:35:40".
  **/
 static char *
-gpm_info_get_time_string (time_t time)
+gpm_info_get_time_string (time_t time_secs)
 {
 	char outstr[256];
 	struct tm *tmp;
-	tmp = localtime (&time);
+	tmp = localtime (&time_secs);
 	strftime (outstr, sizeof(outstr), "%a %b %d, %T", tmp);
 	return g_strdup (outstr);
 }
@@ -700,12 +702,13 @@ gpm_info_init (GpmInfo *info)
 	info->priv->start_time = time (NULL);
 
 	info->priv->hal = gpm_hal_new ();
+	info->priv->hal_power = gpm_hal_power_new ();
 
 	/* set up the timer callback so we can log data */
 	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
 
 	/* find out if we should log and display the extra graphs */
-	info->priv->is_laptop = gpm_hal_is_laptop (info->priv->hal);
+	info->priv->is_laptop = gpm_hal_power_is_laptop (info->priv->hal_power);
 
 	/* singleton, so okay */
 	info->priv->power = gpm_power_new ();
@@ -762,6 +765,7 @@ gpm_info_finalize (GObject *object)
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
 	g_object_unref (info->priv->hal);
+	g_object_unref (info->priv->hal_power);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
