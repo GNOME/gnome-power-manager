@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-20 08:55+0200\n"
-"PO-Revision-Date: 2006-08-22 15:10+0100\n"
+"POT-Creation-Date: 2006-08-23 00:32+0200\n"
+"PO-Revision-Date: 2006-08-23 08:20+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -85,338 +85,378 @@ msgid "If network utilization should be checked before doing the idle action."
 msgstr "Huruvida vi ska kontrollera nätverksbelastning före inaktivetetshändelsen sker."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
+msgid "If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency."
+msgstr "Om prioritetsinställda processer föredras kan de orsaka en frevensökning även om deras absoluta belastningsprocent inte skulle aktivera skalningsmekanismen för att öka frekvensen."
+
+#: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "Huruvida vi ska kontrollera processorbelastning före inaktivetetshändelsen sker."
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If the PC speaker (beeping) should be used"
 msgstr "Om PC-högtalaren (beep) ska användas"
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid "If the PC speaker should be used to beep when the power is low, or inhibit requests have stopped the policy action."
 msgstr "Huruvida PC-högtalaren ska användas för att ge en signal när strömmen är låg, eller om förhindringsbegäran har stoppat policyåtgärden."
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid "If the Suspend and Hibernate options should be allowed in the notification area drop down menu."
 msgstr "Huruvida alternativen för vänteläge och viloläge ska tillåtas eller inte i notifieringsytans rullgardinsmeny."
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid "If the battery event should occur when the lid is shut and the power disconnected"
 msgstr "Huruvida batterihändelsen bör inträffa när locket är stängt och strömmen frånkopplad"
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time."
 msgstr "Huruvida lockstängningshändelsen ska inträffa vid batteridrift (till exempel \"Vänteläge när locket stängs vid batteridrift\") när locket tidigare stängts och nätspänning frånkopplas vid en senare tidpunkt."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on AC"
 msgstr "Om lågströmsläget ska aktiveras vid nätspänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "Om lågströmsläget ska aktiveras vid användandet av UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the low-power mode should be enabled when on battery"
 msgstr "Om lågströmsläget ska aktiveras vid batterispänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false."
 msgstr "Huruvida skärmen låses när den stängs av. Används endast om lock_use_screensaver_settings har ställts in till false."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid "If the screen should be dimmed to save power when the computer is idle."
 msgstr "Huruvida skärmen ska dämpas när datorn är inaktiv för att spara ström eller inte."
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr "Om systemets lågströmsläge ska aktiveras vid nätspänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:28
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "Om systemets lågströmsläge ska aktiveras vid användandet av UPS-ström."
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the system low-power mode should be enabled when on laptop battery power."
 msgstr "Om systemets lågströmsläge ska aktiveras vid körning på batterispänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Huruvida användaren är behörig att försätta datorn i viloläge eller inte."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user is authorized to suspend the computer."
 msgstr "Huruvida användaren är behörig att försätta datorn i vänteläge eller inte."
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Huruvida användaren ska notifieras när nätadaptern kopplas från eller inte."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid "If time based notifications should be used. If set to false, then the percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr "Huruvida tidsbaserade notifieringar ska användas eller inte. Om inställd till falskt kommer procentändringen att användas istället, vilket kan rätta till ett trasigt ACPI BIOS."
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "If to lock the screen when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false."
 msgstr "Huruvida skärmen ska låsas när datorn vaknar upp från viloläget eller inte. Används endast om lock_use_screensaver_settings har ställts in till false."
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid "If to lock the screen when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false."
 msgstr "Huruvida skärmen ska låsas när datorn vaknar upp från vänteläget eller inte. Används endast om lock_use_screensaver_settings har ställts in till false."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid "If to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen."
 msgstr "Huruvida inställningen för att låsa skärmen från gnome-screensaver ska användas för att bestämma om skärmen ska låsas efter viloläge, vänteläge eller blank skärm."
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on AC"
 msgstr "Ljusstyrka för LCD-skärm när ansluten till nätspänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid "LCD brightness when on battery"
 msgstr "Ljusstyrka för LCD-skärm när ansluten till batterispänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action on battery"
 msgstr "Åtgärd vid stängning av locket på bärbar dator på batterispänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Laptop lid close action when on AC"
 msgstr "Åtgärd vid stängning av locket på bärbar dator på nätspänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Lock screen on hibernate"
 msgstr "Lås skärm vid viloläge"
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock screen on suspend"
 msgstr "Lås skärm vid vänteläge"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Lock screen when blanked"
 msgstr "Lås skärmen när den släcks"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Method used to blank screen on AC"
 msgstr "Metod att använda för att släcka skärmen vid nätspänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Method used to blank screen on battery"
 msgstr "Metod att använda för att släcka skärmen vid batterispänning"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Notify on a HAL error"
 msgstr "Notifiera vid ett HAL-fel"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Notify when AC adapter is disconnected"
 msgstr "Notifiera när nätadaptern kopplas bort"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Notify when fully charged"
 msgstr "Notifiera vid fullständigt uppladdat"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Number of seconds to suppress policy after resume"
 msgstr "Antal sekunder då policyn ignoreras efter uppvaknande"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage action is taken"
 msgstr "Procenttalsåtgärd genomförs"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Percentage considered critical"
 msgstr "Procenttal som anses som kritiskt"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Percentage considered low"
 msgstr "Procenttal som anses som lågt"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Percentage considered very low"
 msgstr "Procenttal som anses som mycket lågt"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Power button action"
 msgstr "Åtgärd för strömknapp"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout computer when on AC"
 msgstr "Tid innan datorn ska somna när nätspänning används"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Sleep timeout computer when on battery"
 msgstr "Tid innan datorn ska somna när batterispänning används"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Sleep timeout display when on AC"
 msgstr "Tid innan skärmen ska somna när nätspänning används"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Sleep timeout display when on battery"
 msgstr "Tid innan skärmen ska somna när batterispänning används"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Suspend button action"
 msgstr "Väntelägesknappens åtgärd"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Suspend enabled"
 msgstr "Vänteläge aktiverat"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "The DPMS method used to blank the screen when on AC power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr "DPMS-åtgärden som ska användas när när datorn går på nätström. Giltiga värden är \"default\", \"standby\", \"suspend\" och \"off\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "The DPMS method used to blank the screen when on battery power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr "DPMS-åtgärden som ska användas när datorn går på batteriström. Möjliga värden är \"default\", \"standby\", \"suspend\" och \"off\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "The action to take when the UPS is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr "Åtgärden som ska ske när UPS:en når en kritiskt låg nivå. Möjliga värden är \"hibernate\", \"suspend\", \"shutdown\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "The action to take when the battery is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr "Åtgärden som ska genomföras när batteriet når en kritiskt låg nivå. Möjliga värden är \"hibernate\", \"suspend\", \"shutdown\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are \"suspend\", \"hibernate\", \"blank\" and \"nothing\"."
 msgstr "Åtgärden som ska genomföras när den bärbara datorns lock är stängt och datorn är på nätspänning. Möjliga värden är \"hibernate\", \"suspend\", \"blank\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", and \"nothing\"."
 msgstr "Åtgärden som ska genomföras när den bärbara datorns lock är stängt och datorn är på batterispänning. Möjliga värden är \"hibernate\", \"suspend\", \"blank\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "The action to take when the system hibernate button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 msgstr "Åtgärden som ska ske när systemets vilolägesknapp används. Möjliga värden är \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "The action to take when the system power button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 msgstr "Åtgärden som ska ske när systemets strömknapp används. Möjliga värden är \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "The action to take when the system suspend button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 msgstr "Åtgärden som ska ske när systemets väntelägesknapp används. Möjliga värden är \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "The amount of time in seconds before the display goes to sleep when the computer is on AC power."
 msgstr "Mängden tid (i sekunder) innan skärmen går tills sömns när datorn körs på nätspänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep."
 msgstr "Mängden inaktiv tid (i sekunder) innan datorn går tills sömns när den körs på nätspänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep."
 msgstr "Mängden inaktiv tid (i sekunder) innan datorn går tills sömns när den körs på batterispänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep."
 msgstr "Mängden inaktiv tid (i sekunder) innan skärmen går tills sömns när datorn körs på batterispänning."
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "The brightness of the display when on AC power. Possible values are between 0 and 100."
 msgstr "Ljusstyrkan för skärmen när nätspänning används. Möjliga värden är mellan 0 och 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "The brightness of the display when on battery power. Possible values are between 0 and 100."
 msgstr "Ljusstyrkan för skärmen när batteriström används. Möjliga värden är mellan 0 och 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid "The brightness of the screen when idle"
 msgstr "Ljusstyrkan på skärmen när skärmen är inaktiv"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:77
+msgid "The cpufreq custom performance value to use when on AC power"
+msgstr "Det anpassade frekvensprestandavärdet att använda vid nätspänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:78
+msgid "The cpufreq custom performance value to use when on battery power"
+msgstr "Det anpassade frekvensprestandavärdet att använda vid batterispänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:79
+msgid "The cpufreq custom performance value to used to scale the processor when on AC power."
+msgstr "Det anpassade frekvensprestandavärdet att använda för att skala processorn vid nätspänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:80
+msgid "The cpufreq custom performance value to used to scale the processor when on battery power."
+msgstr "Det anpassade frekvensprestandavärdet att använda för att skala processorn vid batterispänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:81
+msgid "The cpufreq policy to use when on AC power"
+msgstr "Frekvenspolicy att använda vid nätspänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:82
+msgid "The cpufreq policy to use when on battery power"
+msgstr "Frekvenspolicy att använda vid batterispänning"
+
+#: ../data/gnome-power-manager.schemas.in.h:83
+msgid "The cpufreq policy to used to scale the processor when on AC power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing."
+msgstr "Frekvenspolicyn som ska användas för att skala processorn när datorn går på nätspänning. Möjliga värden är \"ondemand\", \"conservative\", \"powersave\", \"userspace\", \"performance\" och \"nothing\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:84
+msgid "The cpufreq policy to used to scale the processor when on battery power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing."
+msgstr "Frekvenspolicyn som ska användas för att skala processorn när datorn går på batterispänning. Möjliga värden är \"ondemand\", \"conservative\", \"powersave\", \"userspace\", \"performance\" och \"nothing\"."
+
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid "The damping factor for the rate"
 msgstr "Dämpningsfaktor för hastigheten"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Den maximala tidslängden som visas på x-axeln i diagrammet."
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid "The maximum time displayed on the graph"
 msgstr "Den maximala tiden som visas i diagrammet"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid "The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false."
 msgstr "Procenttalet av batteriet när det anses som kritiskt lågt. Endast giltig när use_time_for_policy är inställd till falskt."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid "The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false."
 msgstr "Procenttalet av batteriet när det anses som lågt. Endast giltig när use_time_for_policy är inställd till falskt."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid "The percentage of the battery when it is considered very low. Only valid when use_time_for_policy is false."
 msgstr "Procenttalet av batteriet när det anses som mycket lågt. Endast giltig när use_time_for_policy är inställd till falskt."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid "The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false."
 msgstr "Procenttalet av batteriet när det kritiska åtgärden genomförs. Endast giltig när use_time_for_policy är inställd till falskt."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid "The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true."
 msgstr "Tiden som återstår (i sekunder) av batteriet när den kritiska åtgärden genomförs. Endast giltig när use_time_for_policy är sant."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true."
 msgstr "Tiden som återstår (i sekunder) av batteriet när det anses som kritiskt. Endast giltig när use_time_for_policy är sant."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true."
 msgstr "Tiden som återstår (i sekunder) av batteriet när det anses som lågt. Endast giltig när use_time_for_policy är sant."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The time remaining in seconds of the battery when it is considered very low. Only valid when use_time_for_policy is true."
 msgstr "Tiden som återstår (i sekunder) av batteriet när det anses som mycket lågt. Endast giltig när use_time_for_policy är sant."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid "The time remaining when action is taken"
 msgstr "Tiden som återstår när åtgärd genomförs"
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid "The time remaining when critical"
 msgstr "Tiden som återstår när kritisk"
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The time remaining when low"
 msgstr "Tiden som återstår när låg"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid "The time remaining when very low"
 msgstr "Tiden som återstår när mycket låg"
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The type of sleeping that should be performed when the computer is inactive. Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr "Den typ av sömn som ska genomföras när datorn är inaktiv. Möjliga värden är \"hibernate\", \"suspend\" och \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid "The value of the damping factor used when calculating the exponentially weighted average of the rate. Increasing this value will increase the damping effect of the rate calculations, which makes the time remaining more accurate, but the graphs less responsive."
 msgstr "Värdet för dämpningsfaktorn som används vid beräkning av det exponentiellt vägda medelvärden för hastigheten. Öka detta värde innebär att dämpningseffekten för hastighetsberäkningarna ökar, vilket gör att tiden som återstår blir mer precis, men diagrammen blir mindre mottagliga."
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid "This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy is true."
 msgstr "Detta är ljusstyrkan som används på bärbara datorns skärm när sessionen är inaktiv. Endast giltig när use_time_for_policy är inställd till true."
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "UPS critical low action"
 msgstr "Åtgärd vid kritisk låg UPS-kapacitet"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "Use gnome-screensaver lock setting"
 msgstr "Använd gnome-screensavers låsinställning"
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "When to show the notification icon"
 msgstr "När notifieringsikonen ska visas"
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:106
+msgid "Whether or not niced processes should be considered on processor load calculation"
+msgstr "Huruvida eller inte prioritetsinställda processer ska betänkas vid beräkning av processorbelastning"
+
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Huruvida viloläge, vänteläge eller ingenting ska användas vid inaktivitet"
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "Whether to use time-based notifications"
 msgstr "Huruvida tidsbaserade notifieringar ska användas"
 
@@ -1206,41 +1246,44 @@ msgstr "<b>Laddningshastighet (rå):</b> %.1f %sh\n"
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Laddningshastighet (ungefärlig):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1231
-msgid "fully charged"
-msgstr "fullständigt uppladdat"
+#: ../src/gpm-power.c:1230
+#, c-format
+msgid "%s fully charged (%i%%)\n"
+msgstr "%s fullständigt uppladdat (%i%%)\n"
 
 #: ../src/gpm-power.c:1236
 #, c-format
-msgid "%s remaining"
-msgstr "%s återstående"
+msgid "%s %s remaining (%i%%)\n"
+msgstr "%s %s återstår (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1240
-msgid "discharging"
-msgstr "laddar ur"
-
-#: ../src/gpm-power.c:1246
 #, c-format
-msgid "%s until charged"
-msgstr "%s till uppladdat"
+msgid "%s discharging (%i%%)\n"
+msgstr "%s laddar ur (%i%%)\n"
+
+#: ../src/gpm-power.c:1247
+#, c-format
+msgid "%s %s until charged (%i%%)\n"
+msgstr "%s %s tills uppladdat (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
-msgid "charging"
-msgstr "laddar"
+#: ../src/gpm-power.c:1251
+#, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "%s laddar (%i%%)\n"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1290
 msgid "Computer is running on backup power\n"
 msgstr "Datorn körs på reservspänning\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1293
 msgid "Computer is running on AC power\n"
 msgstr "Datorn körs på nätspänning\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1296
 msgid "Computer is running on battery power\n"
 msgstr "Datorn körs på batterispänning\n"
 
@@ -1307,7 +1350,7 @@ msgstr "_Om"
 
 #: ../src/gpm-tray-icon.c:334
 msgid "Licensed under the GNU General Public License Version 2"
-msgstr "Licensierad under GNU General Public License version 2"
+msgstr "Licensierat under GNU General Public License version 2"
 
 #: ../src/gpm-tray-icon.c:335
 msgid ""
@@ -1353,6 +1396,8 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
+#~ msgid "charging"
+#~ msgstr "laddar"
 #~ msgid ""
 #~ "Whether we should check network utilization before doing the idle action."
 #~ msgstr ""
@@ -1386,8 +1431,6 @@ msgstr ""
 #~ msgstr "Laddad"
 #~ msgid "Charging"
 #~ msgstr "Laddar"
-#~ msgid "Discharging"
-#~ msgstr "Laddar ur"
 #~ msgid "Product:"
 #~ msgstr "Produkt:"
 #~ msgid "Vendor:"
