@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-21 23:02+0200\n"
-"PO-Revision-Date: 2006-08-22 00:58+0200\n"
+"POT-Creation-Date: 2006-08-24 00:54+0200\n"
+"PO-Revision-Date: 2006-08-24 01:08+0200\n"
 "Last-Translator: Esteve Blanch Sanmartí <anakinjinn@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -130,8 +130,8 @@ msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
-"Indica si estan permeses les opcions l'aturar temporal i hibernar al menú "
-"desplegable de l'àrea de notificació."
+"Indica si estan permeses les opcions d'aturar temporalment i hibernar al "
+"menú desplegable de l'àrea de notificació."
 
 #: ../data/gnome-power-manager.schemas.in.h:19
 msgid ""
@@ -139,7 +139,7 @@ msgid ""
 "disconnected"
 msgstr ""
 "Indica si ha d'ocórrer un esdeveniment de bateria en plegar la tapa i "
-"desconnectar la corrent "
+"desconnectar el corrent "
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
@@ -261,11 +261,11 @@ msgstr "Brillantor de l'LCD en bateria"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
-msgstr "Acció al plegar la tapa del portàtil en bateria"
+msgstr "Acció en plegar la tapa del portàtil en bateria"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action when on AC"
-msgstr "Acció al plegar la tapa del portàtil en CA"
+msgstr "Acció en plegar la tapa del portàtil en ca"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen on hibernate"
@@ -352,12 +352,18 @@ msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
+"El mètode DPMS utilitzat per enfosquir la pantalla quan s'utilitzi ca. Els "
+"valors possibles són «default» (per defecte), «standby» (en espera), i "
+"«off» (apagat)."
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
+"El mètode DPMS utilitzat per enfosquir la pantalla quan s'utilitzin les "
+"bateries. Els valors possibles són «default» (per defecte), «standby» (en "
+"espera), «suspend» (aturada temporal), i «off» (apagat)."
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
@@ -385,7 +391,7 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "L'acció a prendre quan es plegui l'ordinador i el portàtil estigui connectat "
-"a la corrent. Els possibles valors són «suspend» (aturar temporalment), "
+"al corrent altern. Els possibles valors són «suspend» (aturar temporalment), "
 "«hibernate» (hibernar), «blank» (pantalla en blanc), i «nothing» (res)."
 
 # FIXME
@@ -436,7 +442,7 @@ msgid ""
 "computer is on AC power."
 msgstr ""
 "El temps d'inactivitat abans que la pantalla intenti posar-se en mode baix "
-"consum quan l'ordinador estigui connectat a la corrent."
+"consum quan l'ordinador estigui connectat al corrent altern."
 
 #: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
@@ -678,7 +684,7 @@ msgstr "Registre d'incidències"
 
 #: ../data/gpm-info.glade.h:11
 msgid "Last full: 22022mWh"
-msgstr "Última càrrega: 22022mWh"
+msgstr "Darrera càrrega: 22022mWh"
 
 #: ../data/gpm-info.glade.h:12
 msgid "More"
@@ -982,7 +988,7 @@ msgstr "Mostra informació extra de depuració"
 
 #: ../src/gpm-main.c:144
 msgid "Exit after a small delay (for debugging)"
-msgstr ""
+msgstr "Surt al cap d'una estona (per a depurar)"
 
 #: ../src/gpm-main.c:148
 msgid "GNOME Power Manager"
@@ -1164,16 +1170,16 @@ msgstr "s'ha tornat a obrir la tapa del portàtil"
 
 #: ../src/gpm-manager.c:1802
 msgid "AC adapter inserted"
-msgstr "S'ha introduït l'adaptador AC"
+msgstr "S'ha connectat l'adaptador de ca"
 
 #: ../src/gpm-manager.c:1806
 msgid "AC adapter removed"
-msgstr "S'ha tret l'adaptador AC"
+msgstr "S'ha desconnectat l'adaptador de ca"
 
 #: ../src/gpm-manager.c:1816
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr ""
-"la tapa s'ha tancat, i l'adaptador de AC s'ha desconnectat (i el gconf és "
+"la tapa s'ha tancat, i l'adaptador de ca s'ha desconnectat (i el gconf és "
 "correcte)"
 
 #: ../src/gpm-manager.c:1898
@@ -1235,7 +1241,8 @@ msgstr "La bateria està per sota el nivell crític i l'ordinador s'apagarà."
 #: ../src/gpm-manager.c:2070
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
-"S'ha desconectat la corrent AC. El sistema utilitza l'energia de la bateria."
+"S'ha desconectat el corrent altern. El sistema utilitza l'energia de la "
+"bateria."
 
 #: ../src/gpm-manager.c:2077
 #, c-format
@@ -1281,7 +1288,7 @@ msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
 "power to your computer to avoid losing data."
 msgstr ""
-"Queda aproximadament <b>%s</b> de vida del SAI (%d%%). Restaureu la corrent "
+"Queda aproximadament <b>%s</b> de vida del SAI (%d%%). Restaureu el corrent "
 "del vostre ordinador per no perdre dades."
 
 #: ../src/gpm-manager.c:2276
@@ -1591,37 +1598,8 @@ msgstr ""
 "Josep Puigdemont <josep.puigdemont@gmail.com>\n"
 "Esteve Blanch <anakinjinn@gmail.com>"
 
-#, fuzzy
-#~ msgid "Susspending computer"
-#~ msgstr "Atura l'ordinador temporalment"
-
 #~ msgid "Critical action"
 #~ msgstr "Acció crítica"
-
-# La bateria
-#, fuzzy
-#~ msgid "Charged"
-#~ msgstr "carregada"
-
-#, fuzzy
-#~ msgid "Charging"
-#~ msgstr "carregant-se"
-
-#, fuzzy
-#~ msgid "Discharging"
-#~ msgstr "descarregant-se"
-
-#, fuzzy
-#~ msgid "Poor condition"
-#~ msgstr "Acció del botó d'aturada temporal"
-
-#, fuzzy
-#~ msgid "<b>Running on AC</b>"
-#~ msgstr "<b>Connectat a la xarxa elèctrica</b>"
-
-#, fuzzy
-#~ msgid "<b>Running on Battery</b>"
-#~ msgstr "<b>Funcionant amb bateries</b>"
 
 #~ msgid "Configuration"
 #~ msgstr "Configuració"
@@ -1634,12 +1612,6 @@ msgstr ""
 
 #~ msgid "If the user can suspend"
 #~ msgstr "Si l'usuari pot aturar temporalment"
-
-# FIXME
-#, fuzzy
-#~ msgid ""
-#~ "The action to take when the laptop lid is closed and on battery power"
-#~ msgstr "La acció a prendre quan es plegui l'ordinador"
 
 #~ msgid "The display icon policy can be never, critical, charge, always"
 #~ msgstr ""
@@ -1670,14 +1642,6 @@ msgstr ""
 #~ "El temps d'inactivitat abans que l'ordinador intenti posar-se a dormir, "
 #~ "quan funcioni amb bateries"
 
-# FIXME
-#, fuzzy
-#~ msgid ""
-#~ "The idle time in seconds before the display tries to sleep whilst on "
-#~ "battery power"
-#~ msgstr ""
-#~ "El temps d'inactivitat abans que la pantalla intenti posar-se a dormir"
-
 #~ msgid "Advanced"
 #~ msgstr "Avançat"
 
@@ -1692,14 +1656,6 @@ msgstr ""
 
 #~ msgid "Sleep"
 #~ msgstr "Dorm"
-
-#, fuzzy
-#~ msgid ""
-#~ "The percentage that the battery has to get to be considered \"low enough"
-#~ "\" to perform an action."
-#~ msgstr ""
-#~ "El tant percent que el dispositiu d'energia ha d'obtenir per considerar-"
-#~ "lo «prou baix» com per prendre alguna acció."
 
 #~ msgid "<b>Other Options</b>"
 #~ msgstr "<b>Altres opcions</b>"
