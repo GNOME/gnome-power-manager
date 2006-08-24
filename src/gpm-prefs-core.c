@@ -755,7 +755,7 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 	}
 
 	/* show other options */
-	if (strcmp (gtk_widget_get_name (widget), "combobox_ac_processor") == 0) {
+	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
 						"label_processor_ac_custom");
 		if (show_custom) {
@@ -947,10 +947,9 @@ prefs_setup_display (GpmPrefs *prefs)
 
 	/* set up the "do we dim screen on idle checkboxes */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ac_dim",
-				  GPM_PREF_IDLE_DIM_SCREEN);
-//FIXME
-//	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ac_dim",
-//				  GPM_PREF_IDLE_DIM_SCREEN);
+				  GPM_PREF_AC_IDLE_DIM_LCD);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_battery_dim",
+				  GPM_PREF_BATTERY_IDLE_DIM_LCD);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_display_battery_sleep", delay);

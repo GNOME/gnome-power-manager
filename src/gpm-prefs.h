@@ -31,10 +31,12 @@ G_BEGIN_DECLS
 #define GPM_PREF_AC_SLEEP_DISPLAY	GPM_PREF_DIR "/ac_sleep_display"
 #define GPM_PREF_AC_DPMS_METHOD		GPM_PREF_DIR "/ac_dpms_sleep_method"
 #define GPM_PREF_AC_BRIGHTNESS		GPM_PREF_DIR "/ac_brightness"
+#define GPM_PREF_AC_IDLE_DIM_LCD	GPM_PREF_DIR "/ac_dim_on_idle"
 #define GPM_PREF_BATTERY_SLEEP_COMPUTER	GPM_PREF_DIR "/battery_sleep_computer"
 #define GPM_PREF_BATTERY_SLEEP_DISPLAY	GPM_PREF_DIR "/battery_sleep_display"
 #define GPM_PREF_BATTERY_DPMS_METHOD	GPM_PREF_DIR "/battery_dpms_sleep_method"
 #define GPM_PREF_BATTERY_BRIGHTNESS	GPM_PREF_DIR "/battery_brightness"
+#define GPM_PREF_BATTERY_IDLE_DIM_LCD	GPM_PREF_DIR "/battery_dim_on_idle"
 
 #define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
 #define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
@@ -62,7 +64,6 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_IDLE_CHECK_CPU		GPM_PREF_DIR "/check_type_cpu"
 #define GPM_PREF_IDLE_CHECK_NET		GPM_PREF_DIR "/check_type_net"
-#define GPM_PREF_IDLE_DIM_SCREEN	GPM_PREF_DIR "/dim_on_idle"
 
 /* This allows us to ignore policy on resume for a bit */
 #define GPM_PREF_POLICY_TIMEOUT		GPM_PREF_DIR "/policy_suppression_timeout"

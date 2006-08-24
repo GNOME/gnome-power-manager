@@ -216,14 +216,26 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/dim_on_idle</key>
-      <applyto>/apps/gnome-power-manager/dim_on_idle</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac_dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/ac_dim_on_idle</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Dim the screen after a period of inactivity</short>
-        <long>If the screen should be dimmed to save power when the computer is idle.</long>
+        <short>Dim the screen after a period of inactivity when on AC power</short>
+        <long>If the screen should be dimmed to save power when the computer is idle when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery_dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/battery_dim_on_idle</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Dim the screen after a period of inactivity when on battery power</short>
+        <long>If the screen should be dimmed to save power when the computer is idle when on battery power.</long>
       </locale>
     </schema>
 

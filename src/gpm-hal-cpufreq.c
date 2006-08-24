@@ -562,9 +562,6 @@ gpm_hal_cpufreq_init (GpmHalCpuFreq *cpufreq)
 	if (num_caps > 0) {
 		cpufreq->priv->has_hardware = TRUE;
 	}
-
-	/* bodge for now.... */
-//	cpufreq->priv->has_hardware = TRUE;
 }
 
 /**

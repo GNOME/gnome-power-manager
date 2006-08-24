@@ -1452,6 +1452,10 @@ idle_changed_cb (GpmIdle    *idle,
 {
 	GError  *error;
 	gboolean do_laptop_dim;
+	gboolean on_ac;
+
+	/* find if we are on AC power */
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	/* Ignore timeout events when the lid is closed, as the DPMS is
 	   already off, and we don't want to perform policy actions or re-enable
@@ -1475,8 +1479,13 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we resume the screen? */
-		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+		if (on_ac) {
+			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+							       GPM_PREF_AC_IDLE_DIM_LCD, NULL);
+		} else {
+			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+							       GPM_PREF_BATTERY_IDLE_DIM_LCD, NULL);
+		}
 		if (do_laptop_dim && gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_RESUME,
@@ -1501,8 +1510,13 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we dim the screen? */
-		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_IDLE_DIM_SCREEN, NULL);
+		if (on_ac) {
+			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+							       GPM_PREF_AC_IDLE_DIM_LCD, NULL);
+		} else {
+			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+							       GPM_PREF_BATTERY_IDLE_DIM_LCD, NULL);
+		}
 		if (do_laptop_dim && gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
 			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_EVENT_SCREEN_DIM,

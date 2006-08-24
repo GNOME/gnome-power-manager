@@ -719,11 +719,22 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	}
 	if (device->technology) {
 		const char *technology;
+/* we can remove these when we depend on HAL 0.5.8 */
+#if 1
 		if (strcasecmp (device->technology, "li-ion") == 0 ||
 		    strcasecmp (device->technology, "lion") == 0) {
 			technology = _("Lithium ion");
 		} else if (strcasecmp (device->technology, "pbac") == 0) {
 			technology = _("Lead acid");
+#endif
+		} else if (strcmp (device->technology, "lithium-ion") == 0) {
+			technology = _("Lithium ion");
+		} else if (strcasecmp (device->technology, "lead-acid") == 0) {
+			technology = _("Lead acid");
+		} else if (strcasecmp (device->technology, "lithium-polymer") == 0) {
+			technology = _("Lithium Polymer");
+		} else if (strcasecmp (device->technology, "nickel-metal-hydride") == 0) {
+			technology = _("Nickel Metal Hydride");
 		} else {
 			gpm_warning ("Battery type %s not translated, please report!",
 				     device->technology);

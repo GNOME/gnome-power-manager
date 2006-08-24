@@ -1,5 +1,29 @@
 2006-08-24  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	Add in the datadir in the final output.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-prefs-core.c:
+	* src/gpm-prefs.h:
+	* src/gpm-manager.c:
+	Split the panel dim into ac and battery halves.
+
+	* help/C/gnome-power-manager.xml:
+	* help/C/figures/gpm-cell-capacity.png
+	* help/Makefile.am:
+	Add a graph for explanation and comment about cell capacity over time.
+
+	* src/gpm-hal-cpufreq.c:
+	Get rid of the commented out code that doesn't apply now the addon
+	as been merged to hal HEAD.
+
+	* src/gpm-power.c:
+	Add the new hal names for the battery descriptions now my patch has
+	been merged. This need backporting for 2.16.1
+
+2006-08-24  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	* configure.in:
 	* data/gpm-prefs.glade:

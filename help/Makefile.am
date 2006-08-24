@@ -18,6 +18,7 @@ DOC_FIGURES = \
 	figures/gpm-critical.png \
 	figures/gpm-low.png \
 	figures/gpm-unplugged.png \
+	figures/gpm-cell-capacity.png \
 	figures/gpm-suspend-problem.png
 
 DOC_LINGUAS = ru sv
