@@ -78,6 +78,20 @@ struct GpmInfoPrivate
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
 /**
+ * gpm_statistics_suspend:
+ * @manager: This manager class instance
+ * @can: If we can suspend
+ **/
+gboolean
+gpm_statistics_moo (GpmInfo *info,
+	  gboolean   *can,
+	  GError    **error)
+{
+	*can = TRUE;
+	return TRUE;
+}
+
+/**
  * gpm_graph_widget_custom_handler:
  * @xml: The glade file we are reading.
  * @func_name: The function name to create the object

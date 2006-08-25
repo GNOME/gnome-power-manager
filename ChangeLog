@@ -1,5 +1,24 @@
 2006-08-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-info.c: (gpm_statistics_moo):
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_manager_init):
+	* src/gpm-statistics.xml:
+	Add in the initial work for the org.gnome.PowerManager.Statistics
+	interface so we can push the data formatting out of process.
+
+2006-08-25  Richard Hughes  <richard@hughsie.com>
+
+	reviewed by: <delete if not using a buddy>
+
+	* src/Makefile.am:
+	* src/gpm-info.c: (gpm_statistics_moo):
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_manager_init):
+
+2006-08-25  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	Add some extra compiler warnings.
 

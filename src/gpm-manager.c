@@ -64,6 +64,7 @@
 #include "gpm-polkit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
+#include "gpm-statistics-glue.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -2718,6 +2719,8 @@ gpm_manager_init (GpmManager *manager)
 	gboolean enabled;
 	gboolean allowed_in_menu;
 	int lcd_dim_brightness;
+	DBusGConnection *connection;
+	GError *error = NULL;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
@@ -2739,31 +2742,6 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->hal_cpufreq = gpm_hal_cpufreq_new ();
 	manager->priv->hal_power = gpm_hal_power_new ();
-
-#if 0
-	gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, TRUE);
-	gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, GPM_CPUFREQ_PERFORMANCE);
-	gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, TRUE);
-	gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, 100);
-
-gboolean nice;
-int performance;
-GpmHalCpuFreqEnum governor_enum;
-
-	gpm_hal_cpufreq_get_governors (manager->priv->hal_cpufreq, &governor_enum);
-	g_debug ("govs=%i", governor_enum);
-
-	gpm_hal_cpufreq_get_consider_nice (manager->priv->hal_cpufreq, &nice);
-	g_debug ("nice=%i", nice);
-
-	gpm_hal_cpufreq_get_performance (manager->priv->hal_cpufreq, &performance);
-	g_debug ("performance=%i", performance);
-
-	gpm_hal_cpufreq_get_governor (manager->priv->hal_cpufreq, &governor_enum);
-	g_debug ("gov=%i", governor_enum);
-
-	exit (1);
-#endif
 
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "connection-changed",
@@ -2822,6 +2800,11 @@ GpmHalCpuFreqEnum governor_enum;
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
+	
+	/* add the new statistics DBUS interface */
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
+	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics", G_OBJECT (manager->priv->info));
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */

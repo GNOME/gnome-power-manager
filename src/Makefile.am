@@ -5,6 +5,7 @@ NULL =
 
 EXTRA_DIST =						\
 	gpm-manager.xml					\
+	gpm-statistics.xml				\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -156,6 +157,7 @@ endif
 
 BUILT_SOURCES = 					\
 	gpm-manager-glue.h				\
+	gpm-statistics-glue.h				\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
@@ -169,6 +171,9 @@ gpm-marshal.h: gpm-marshal.list
 
 gpm-manager-glue.h: gpm-manager.xml
 	libtool --mode=execute dbus-binding-tool --prefix=gpm_manager --mode=glib-server --output=gpm-manager-glue.h $(srcdir)/gpm-manager.xml
+
+gpm-statistics-glue.h: gpm-statistics.xml
+	libtool --mode=execute dbus-binding-tool --prefix=gpm_statistics --mode=glib-server --output=gpm-statistics-glue.h $(srcdir)/gpm-statistics.xml
 
 clean-local:
 	rm -f *~

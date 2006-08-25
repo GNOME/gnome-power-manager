@@ -55,6 +55,10 @@ void		 gpm_info_event_log			(GpmInfo	*info,
 							 GpmGraphWidgetEvent	 event,
 							 const char	*desc);
 
+gboolean	 gpm_statistics_moo			(GpmInfo	*info,
+							 gboolean	*allowed,
+							 GError		**error);
+
 G_END_DECLS
 
 #endif	/* __GPMINFO_H */
