@@ -607,27 +607,6 @@ gpm_power_get_num_devices_of_kind (GpmPower		*power,
 	return (g_slist_length (entry->devices));
 }
 
-/**
- * get_power_unit_suffix:
- * @unit: The unit type, e.g. GPM_POWER_UNIT_MWH
- * Return value: The localised device type. Do not free this.
- **/
-static const char *
-get_power_unit_suffix (GpmPowerUnit unit)
-{
-	const char *suffix;
-	if (unit == GPM_POWER_UNIT_MWH) {
-		suffix = "W";
-	} else if (unit == GPM_POWER_UNIT_PERCENT) {
-		suffix = "%";
-	} else if (unit == GPM_POWER_UNIT_CSR) {
-		suffix = "/7";
-	} else {
-		suffix = "?";
-	}
-	return suffix;
-}
-
 GpmPowerDevice *
 gpm_power_get_battery_device_entry (GpmPower	 *power,
 				    GpmPowerKind  battery_kind,
@@ -754,9 +733,8 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		g_string_append_printf (details, _("<b>Capacity:</b> %i%% (%s)\n"),
 					status->capacity, condition);
 	}
-	if (device->unit != GPM_POWER_UNIT_PERCENT) {
-		/* no point displaying these if we are measuring in percent */
-		suffix = get_power_unit_suffix (device->unit);
+	if (device->unit == GPM_POWER_UNIT_MWH) {
+		suffix = "W";
 		if (status->current_charge > 0) {
 			g_string_append_printf (details, _("<b>Current charge:</b> %.1f %s\n"),
 						status->current_charge / 1000.0f, suffix);
@@ -777,6 +755,17 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		if (status->charge_rate_smoothed > 0) {
 			g_string_append_printf (details, _("<b>Charge rate (smoothed):</b> %.1f %sh\n"),
 						status->charge_rate_smoothed / 1000.0f, suffix);
+		}
+	}
+	if (device->unit == GPM_POWER_UNIT_CSR) {
+		suffix = "/ 7";
+		if (status->current_charge > 0) {
+			g_string_append_printf (details, _("<b>Current charge:</b> %.1f %s\n"),
+						(float) status->current_charge, suffix);
+		}
+		if (status->design_charge > 0) {
+			g_string_append_printf (details, _("<b>Design charge:</b> %.1f %s\n"),
+						(float) status->design_charge, suffix);
 		}
 	}
 	/* remove the last \n */
