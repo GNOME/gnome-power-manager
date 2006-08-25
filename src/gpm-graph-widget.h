@@ -19,99 +19,105 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPM_GRAPH_H__
-#define __GPM_GRAPH_H__
+#ifndef __GPM_GRAPH_WIDGET_H__
+#define __GPM_GRAPH_WIDGET_H__
 
 #include <gtk/gtk.h>
-#include "gpm-info-data.h"
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_GRAPH		(gpm_graph_get_type ())
-#define GPM_GRAPH(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GPM_TYPE_GRAPH, GpmGraph))
-#define GPM_GRAPH_CLASS(obj)	(G_TYPE_CHECK_CLASS_CAST ((obj), GPM_GRAPH, GpmGraphClass))
-#define GPM_IS_GRAPH(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPM_TYPE_GRAPH))
-#define GPM_IS_GRAPH_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH))
-#define GPM_GRAPH_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH, GpmGraphClass))
+#define GPM_TYPE_GRAPH_WIDGET		(gpm_graph_widget_get_type ())
+#define GPM_GRAPH_WIDGET(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidget))
+#define GPM_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_CAST ((obj), GPM_GRAPH_WIDGET, GpmGraphWidgetClass))
+#define GPM_IS_GRAPH_WIDGET(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GPM_TYPE_GRAPH_WIDGET))
+#define GPM_IS_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH_WIDGET))
+#define GPM_GRAPH_WIDGET_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetClass))
 
-typedef struct GpmGraph		GpmGraph;
-typedef struct GpmGraphClass	GpmGraphClass;
-typedef struct GpmGraphPrivate	GpmGraphPrivate;
-
-typedef enum {
-	GPM_GRAPH_COLOUR_DEFAULT,
-	GPM_GRAPH_COLOUR_WHITE,
-	GPM_GRAPH_COLOUR_BLACK,
-	GPM_GRAPH_COLOUR_RED,
-	GPM_GRAPH_COLOUR_BLUE,
-	GPM_GRAPH_COLOUR_GREEN,
-	GPM_GRAPH_COLOUR_MAGENTA,
-	GPM_GRAPH_COLOUR_YELLOW,
-	GPM_GRAPH_COLOUR_CYAN,
-	GPM_GRAPH_COLOUR_GREY,
-	GPM_GRAPH_COLOUR_DARK_BLUE,
-	GPM_GRAPH_COLOUR_DARK_RED,
-	GPM_GRAPH_COLOUR_DARK_MAGENTA,
-	GPM_GRAPH_COLOUR_DARK_YELLOW,
-	GPM_GRAPH_COLOUR_DARK_GREEN,
-	GPM_GRAPH_COLOUR_DARK_CYAN,
-	GPM_GRAPH_COLOUR_DARK_GREY,
-	GPM_GRAPH_COLOUR_LAST
-} GpmGraphColour;
+typedef struct GpmGraphWidget		GpmGraphWidget;
+typedef struct GpmGraphWidgetClass	GpmGraphWidgetClass;
+typedef struct GpmGraphWidgetPrivate	GpmGraphWidgetPrivate;
 
 typedef enum {
-	GPM_GRAPH_EVENT_ON_AC,
-	GPM_GRAPH_EVENT_ON_BATTERY,
-	GPM_GRAPH_EVENT_SCREEN_DIM,
-	GPM_GRAPH_EVENT_SCREEN_RESUME,
-	GPM_GRAPH_EVENT_DPMS_OFF,
-	GPM_GRAPH_EVENT_DPMS_ON,
-	GPM_GRAPH_EVENT_SUSPEND,
-	GPM_GRAPH_EVENT_HIBERNATE,
-	GPM_GRAPH_EVENT_RESUME,
-	GPM_GRAPH_EVENT_LID_CLOSED,
-	GPM_GRAPH_EVENT_LID_OPENED,
-	GPM_GRAPH_EVENT_NOTIFICATION,
-	GPM_GRAPH_EVENT_LAST
-} GpmGraphEvent;
+	GPM_GRAPH_WIDGET_COLOUR_DEFAULT,
+	GPM_GRAPH_WIDGET_COLOUR_WHITE,
+	GPM_GRAPH_WIDGET_COLOUR_BLACK,
+	GPM_GRAPH_WIDGET_COLOUR_RED,
+	GPM_GRAPH_WIDGET_COLOUR_BLUE,
+	GPM_GRAPH_WIDGET_COLOUR_GREEN,
+	GPM_GRAPH_WIDGET_COLOUR_MAGENTA,
+	GPM_GRAPH_WIDGET_COLOUR_YELLOW,
+	GPM_GRAPH_WIDGET_COLOUR_CYAN,
+	GPM_GRAPH_WIDGET_COLOUR_GREY,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_RED,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_MAGENTA,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN,
+	GPM_GRAPH_WIDGET_COLOUR_DARK_GREY,
+	GPM_GRAPH_WIDGET_COLOUR_LAST
+} GpmGraphWidgetColour;
 
 typedef enum {
-	GPM_GRAPH_TYPE_PERCENTAGE,
-	GPM_GRAPH_TYPE_TIME,
-	GPM_GRAPH_TYPE_RATE,
-	GPM_GRAPH_TYPE_LAST
-} GpmGraphAxisType;
+	GPM_GRAPH_WIDGET_EVENT_ON_AC,
+	GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
+	GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
+	GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
+	GPM_GRAPH_WIDGET_EVENT_DPMS_OFF,
+	GPM_GRAPH_WIDGET_EVENT_DPMS_ON,
+	GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+	GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+	GPM_GRAPH_WIDGET_EVENT_RESUME,
+	GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
+	GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
+	GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+	GPM_GRAPH_WIDGET_EVENT_LAST
+} GpmGraphWidgetEvent;
 
-struct GpmGraph
+typedef enum {
+	GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
+	GPM_GRAPH_WIDGET_TYPE_TIME,
+	GPM_GRAPH_WIDGET_TYPE_RATE,
+	GPM_GRAPH_WIDGET_TYPE_LAST
+} GpmGraphWidgetAxisType;
+
+struct GpmGraphWidget
 {
 	GtkDrawingArea	 parent;
-	GpmGraphPrivate	*priv;
+	GpmGraphWidgetPrivate	*priv;
 };
 
-struct GpmGraphClass
+struct GpmGraphWidgetClass
 {
 	GtkDrawingAreaClass parent_class;
 };
 
-GType		 gpm_graph_get_type			(void);
-GtkWidget	*gpm_graph_new				(void);
+typedef struct {
+	int		 time;	/* seconds */
+	int		 value;
+	int		 colour;
+	char		*desc; /* description, or NULL if missing */
+} GpmInfoDataPoint;
 
-void		 gpm_graph_set_invert_x			(GpmGraph	*graph,
+GType		 gpm_graph_widget_get_type		(void);
+GtkWidget	*gpm_graph_widget_new			(void);
+
+void		 gpm_graph_widget_set_invert_x		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
-void		 gpm_graph_enable_legend		(GpmGraph	*graph,
+void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
-void		 gpm_graph_set_invert_y			(GpmGraph	*graph,
+void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
-void		 gpm_graph_set_data			(GpmGraph	*graph,
-							 GpmInfoData	*data);
-void		 gpm_graph_set_events			(GpmGraph	*graph,
-							 GpmInfoData	*data);
-void		 gpm_graph_set_axis_x			(GpmGraph	*graph,
-							 GpmGraphAxisType axis);
-void		 gpm_graph_set_axis_y			(GpmGraph	*graph,
-							 GpmGraphAxisType axis);
-const char *	 gpm_graph_event_description		(GpmGraphEvent	 event);
-GpmGraphColour	 gpm_graph_event_colour			(GpmGraphEvent	 event);
+void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
+							 GList		*list);
+void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
+							 GList		*list);
+void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
+							 GpmGraphWidgetAxisType axis);
+void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
+							 GpmGraphWidgetAxisType axis);
+const char *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent	 event);
+GpmGraphWidgetColour	 gpm_graph_widget_event_colour	(GpmGraphWidgetEvent	 event);
 
 G_END_DECLS
 

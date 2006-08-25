@@ -1,3 +1,31 @@
+2006-08-25  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	Add some extra compiler warnings.
+
+	* data/Makefile.am:
+	* data/gpm-graph.glade:
+	Add the glade file for the new graph application.
+
+	* src/Makefile.am:
+	* src/gpm-graph-core.c:
+	* src/gpm-graph-core.h:
+	* src/gpm-graph.c:
+	Add the beginnings of the new graph application.
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info-data.c:
+	* src/gpm-info-data.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c:
+	Rename GpmGraph to GpmGraphWidget so we can do some other graphing
+	stuff. Changes lots of code ;-)
+
+	* src/gpm-tray-icon.c:
+	Add an extra item to the menu for the out of process graph.
+
 2006-08-24  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:

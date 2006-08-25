@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2006 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -19,42 +19,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPMINFO_H
-#define __GPMINFO_H
+#ifndef __GPMGRAPH_H
+#define __GPMGRAPH_H
 
 #include <glib-object.h>
-#include "gpm-graph-widget.h"
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_INFO		(gpm_info_get_type ())
-#define GPM_INFO(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_INFO, GpmInfo))
-#define GPM_INFO_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_INFO, GpmInfoClass))
-#define GPM_IS_INFO(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_INFO))
-#define GPM_IS_INFO_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_INFO))
-#define GPM_INFO_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_INFO, GpmInfoClass))
+#define GPM_TYPE_GRAPH		(gpm_graph_get_type ())
+#define GPM_GRAPH(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_GRAPH, GpmGraph))
+#define GPM_GRAPH_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_GRAPH, GpmGraphClass))
+#define GPM_IS_GRAPH(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_GRAPH))
+#define GPM_IS_GRAPH_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_GRAPH))
+#define GPM_GRAPH_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_GRAPH, GpmGraphClass))
 
-typedef struct GpmInfoPrivate GpmInfoPrivate;
+typedef struct GpmGraphPrivate GpmGraphPrivate;
 
 typedef struct
 {
-	GObject	 	parent;
-	GpmInfoPrivate *priv;
-} GpmInfo;
+	GObject		 parent;
+	GpmGraphPrivate *priv;
+} GpmGraph;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-} GpmInfoClass;
+	void		(* action_help)			(GpmGraph	*graph);
+	void		(* action_close)		(GpmGraph	*graph);
+} GpmGraphClass;
 
-GType		 gpm_info_get_type			(void);
-GpmInfo		*gpm_info_new				(void);
-
-void		 gpm_info_show_window			(GpmInfo	*info);
-void		 gpm_info_event_log			(GpmInfo	*info,
-							 GpmGraphWidgetEvent	 event,
-							 const char	*desc);
+GType		 gpm_graph_get_type			(void);
+GpmGraph	*gpm_graph_new				(void);
 
 G_END_DECLS
 
-#endif	/* __GPMINFO_H */
+#endif	/* __GPMGRAPH_H */

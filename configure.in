@@ -18,9 +18,8 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
-# -Wsign-compare //eggtrayicon!
-#CPPFLAGS="$CPPFLAGS -Werror -Wall -Wshadow -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wno-uninitialized -Wpointer-arith -Wnested-externs"
-CPPFLAGS="$CPPFLAGS -Wall"
+CPPFLAGS="$CPPFLAGS -Werror -Wall -Wshadow -Wcast-align -Wno-uninitialized"
+#CPPFLAGS="$CPPFLAGS -Wall"
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)

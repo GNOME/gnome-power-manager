@@ -78,7 +78,7 @@ struct GpmInfoPrivate
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
 /**
- * gpm_graph_custom_handler:
+ * gpm_graph_widget_custom_handler:
  * @xml: The glade file we are reading.
  * @func_name: The function name to create the object
  *
@@ -87,7 +87,7 @@ G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
  * Return value: The custom widget.
  **/
 static GtkWidget *
-gpm_graph_custom_handler (GladeXML *xml,
+gpm_graph_widget_custom_handler (GladeXML *xml,
 			  gchar *func_name, gchar *name,
 			  gchar *string1, gchar *string2,
 			  gint int1, gint int2,
@@ -95,7 +95,7 @@ gpm_graph_custom_handler (GladeXML *xml,
 {
 	GtkWidget *widget = NULL;
 	if (strcmp ("gpm_graph_new", func_name) == 0) {
-		widget = gpm_graph_new ();
+		widget = gpm_graph_widget_new ();
 		return widget;
 	}
 	return NULL;
@@ -110,12 +110,15 @@ gpm_graph_custom_handler (GladeXML *xml,
 static void
 gpm_info_graph_update (GtkWidget *widget, GpmInfoData *data, GpmInfoData *events)
 {
+	GList *list;
 	if (! data) {
 		return;
 	}
 	if (data) {
-		gpm_graph_set_data (GPM_GRAPH (widget), data);
-		gpm_graph_set_events (GPM_GRAPH (widget), events);
+		list = gpm_info_data_get_list (data);
+		gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (widget), list);
+		list = gpm_info_data_get_list (events);
+		gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (widget), list);
 	} else {
 		gpm_debug ("no log data");
 	}
@@ -312,7 +315,7 @@ gpm_info_update_event_tree (GpmInfo *info)
 	for (l=events; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		timestring = gpm_info_get_time_string (info->priv->start_time + new->time);
-		descstring = gpm_graph_event_description (new->value);
+		descstring = gpm_graph_widget_event_description (new->value);
 		gpm_debug ("event log: %s: %s", timestring, descstring);
 		/* add data to the list store */
 		gtk_list_store_append (store, &iter);
@@ -528,19 +531,19 @@ gpm_info_show_window (GpmInfo *info)
 		widget = glade_xml_get_widget (glade_xml, "graph_percentage");
 		gtk_widget_set_size_request (widget, 600, 300);
 		info->priv->percentage_widget = widget;
-		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_PERCENTAGE);
+		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 		widget = glade_xml_get_widget (glade_xml, "graph_rate");
 		gtk_widget_set_size_request (widget, 600, 300);
 		info->priv->rate_widget = widget;
-		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_RATE);
-		gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
+		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_RATE);
+		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (widget), TRUE);
 
 		widget = glade_xml_get_widget (glade_xml, "graph_time");
 		gtk_widget_set_size_request (widget, 600, 300);
 		info->priv->time_widget = widget;
-		gpm_graph_set_axis_y (GPM_GRAPH (widget), GPM_GRAPH_TYPE_TIME);
-		gpm_graph_enable_legend (GPM_GRAPH (widget), TRUE);
+		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
+		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (widget), TRUE);
 	}
 
 	/* set up the event viewer tree-view */
@@ -606,7 +609,7 @@ gpm_info_show_window (GpmInfo *info)
  * Adds an point to the event log
  **/
 void
-gpm_info_event_log (GpmInfo *info, GpmGraphEvent event, const char *desc)
+gpm_info_event_log (GpmInfo *info, GpmGraphWidgetEvent event, const char *desc)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
@@ -615,7 +618,7 @@ gpm_info_event_log (GpmInfo *info, GpmGraphEvent event, const char *desc)
 	gpm_info_data_add_always (info->priv->events,
 				  time (NULL) - info->priv->start_time,
 				  event,
-				  gpm_graph_event_colour (event),
+				  gpm_graph_widget_event_colour (event),
 				  desc);
 	if (info->priv->main_window) {
 		/* do this only if the main window is loaded */
@@ -649,11 +652,11 @@ gpm_info_log_do_poll (gpointer data)
 
 		/* set the correct colours */
 		if (battery_status.is_discharging) {
-			colour = GPM_GRAPH_COLOUR_DARK_RED;
+			colour = GPM_GRAPH_WIDGET_COLOUR_DARK_RED;
 		} else if (battery_status.is_charging) {
-			colour = GPM_GRAPH_COLOUR_DARK_BLUE;
+			colour = GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
 		} else {
-			colour = GPM_GRAPH_COLOUR_DEFAULT;
+			colour = GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
 		}
 
 		gpm_info_data_add (info->priv->percentage_data,
@@ -736,7 +739,7 @@ gpm_info_init (GpmInfo *info)
 		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
 		gpm_info_data_set_max_time (info->priv->time_data, max_time);
 	}
-	glade_set_custom_handler (gpm_graph_custom_handler, info);
+	glade_set_custom_handler (gpm_graph_widget_custom_handler, info);
 }
 
 /**

@@ -103,6 +103,7 @@ static void gpm_tray_icon_suspend_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_hibernate_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_info_cb	 	(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_preferences_cb	(GtkAction *action, GpmTrayIcon *icon);
+static void gpm_tray_icon_show_graph_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_help_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_about_cb		(GtkAction *action, GpmTrayIcon *icon);
 
@@ -116,6 +117,8 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
 	{ "TrayInfo", GTK_STOCK_DIALOG_INFO, N_("_Information"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_info_cb) },
+	{ "TrayGraph", GTK_STOCK_CONVERT, N_("_Statistics"),
+	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_graph_cb) },
 	{ "TrayHelp", GTK_STOCK_HELP, N_("_Help"), NULL,
 	  NULL, G_CALLBACK (gpm_tray_icon_show_help_cb) },
 	{ "TrayAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
@@ -273,6 +276,22 @@ gpm_tray_icon_suspend_cb (GtkAction   *action,
 {
 	gpm_debug ("emitting suspend");
 	g_signal_emit (icon, signals [SUSPEND], 0);
+}
+
+/**
+ * gpm_tray_icon_show_graph_cb:
+ * @action: A valid GtkAction
+ * @icon: This TrayIcon class instance
+ **/
+static void
+gpm_tray_icon_show_graph_cb (GtkAction   *action,
+				   GpmTrayIcon *icon)
+{
+	const char *command = "gnome-power-graph";
+
+	if (! g_spawn_command_line_async (command, NULL)) {
+		gpm_warning ("Couldn't execute command: %s", command);
+	}
 }
 
 /**
@@ -525,6 +544,7 @@ gpm_tray_icon_constructor (GType		  type,
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
 					   "    <menuitem action=\"TrayInfo\" />"
+					   "    <menuitem action=\"TrayGraph\" />"
 					   "    <separator />"
 					   "    <menuitem action=\"TrayHelp\" />"
 					   "    <menuitem action=\"TrayAbout\" />"

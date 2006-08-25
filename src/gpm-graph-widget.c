@@ -26,14 +26,12 @@
 #include <stdlib.h>
 
 #include "gpm-graph-widget.h"
-#include "gpm-info.h"
-#include "gpm-info-data.h"
 #include "gpm-debug.h"
 
-G_DEFINE_TYPE (GpmGraph, gpm_graph, GTK_TYPE_DRAWING_AREA);
-#define GPM_GRAPH_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH, GpmGraphPrivate))
+G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
+#define GPM_GRAPH_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetPrivate))
 
-struct GpmGraphPrivate
+struct GpmGraphWidgetPrivate
 {
 	gboolean		 use_grid;
 	gboolean		 use_legend;
@@ -53,48 +51,48 @@ struct GpmGraphPrivate
 	float			 unit_x; /* 10th width of graph */
 	float			 unit_y; /* 10th width of graph */
 
-	GpmGraphAxisType	 axis_x;
-	GpmGraphAxisType	 axis_y;
+	GpmGraphWidgetAxisType	 axis_x;
+	GpmGraphWidgetAxisType	 axis_y;
 	cairo_font_options_t	*options;
 
 	GList			*list;
 	GList			*events;
 };
 
-static gboolean gpm_graph_expose (GtkWidget *graph, GdkEventExpose *event);
-static void	gpm_graph_finalize (GObject *object);
+static gboolean gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event);
+static void	gpm_graph_widget_finalize (GObject *object);
 
 /**
- * gpm_graph_event_description:
- * @event: The event type, e.g. GPM_GRAPH_EVENT_SUSPEND
+ * gpm_graph_widget_event_description:
+ * @event: The event type, e.g. GPM_GRAPH_WIDGET_EVENT_SUSPEND
  * Return value: a string value describing the event
  **/
 const char *
-gpm_graph_event_description (GpmGraphEvent event)
+gpm_graph_widget_event_description (GpmGraphWidgetEvent event)
 {
-	if (event == GPM_GRAPH_EVENT_ON_AC) {
+	if (event == GPM_GRAPH_WIDGET_EVENT_ON_AC) {
 		return _("On AC");
-	} else if (event == GPM_GRAPH_EVENT_ON_BATTERY) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_ON_BATTERY) {
 		return _("On battery");
-	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM) {
 		return _("LCD dim");
-	} else if (event == GPM_GRAPH_EVENT_SCREEN_RESUME) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
 		return _("LCD resume");
-	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_OFF) {
 		return _("DPMS off");
-	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_ON) {
 		return _("DPMS on");
-	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {
 		return _("Suspend");
-	} else if (event == GPM_GRAPH_EVENT_RESUME) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_RESUME) {
 		return _("Resume");
-	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_HIBERNATE) {
 		return _("Hibernate");
-	} else if (event == GPM_GRAPH_EVENT_LID_CLOSED) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_CLOSED) {
 		return _("Lid closed");
-	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_OPENED) {
 		return _("Lid opened");
-	} else if (event == GPM_GRAPH_EVENT_NOTIFICATION) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_NOTIFICATION) {
 		return _("Notification");
 	} else {
 		return _("Unknown event!");
@@ -102,105 +100,108 @@ gpm_graph_event_description (GpmGraphEvent event)
 }
 
 /**
- * gpm_graph_event_colour:
- * @event: The event type, e.g. GPM_GRAPH_EVENT_SUSPEND
- * Return value: a colout, e.g. GPM_GRAPH_COLOUR_DARK_BLUE
+ * gpm_graph_widget_event_colour:
+ * @event: The event type, e.g. GPM_GRAPH_WIDGET_EVENT_SUSPEND
+ * Return value: a colout, e.g. GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE
  **/
-GpmGraphColour
-gpm_graph_event_colour (GpmGraphEvent event)
+GpmGraphWidgetColour
+gpm_graph_widget_event_colour (GpmGraphWidgetEvent event)
 {
-	if (event == GPM_GRAPH_EVENT_ON_AC) {
-		return GPM_GRAPH_COLOUR_BLUE;
-	} else if (event == GPM_GRAPH_EVENT_ON_BATTERY) {
-		return GPM_GRAPH_COLOUR_DARK_BLUE;
-	} else if (event == GPM_GRAPH_EVENT_SCREEN_DIM) {
-		return GPM_GRAPH_COLOUR_CYAN;
-	} else if (event == GPM_GRAPH_EVENT_SCREEN_RESUME) {
-		return GPM_GRAPH_COLOUR_DARK_CYAN;
-	} else if (event == GPM_GRAPH_EVENT_DPMS_OFF) {
-		return GPM_GRAPH_COLOUR_DARK_YELLOW;
-	} else if (event == GPM_GRAPH_EVENT_DPMS_ON) {
-		return GPM_GRAPH_COLOUR_YELLOW;
-	} else if (event == GPM_GRAPH_EVENT_SUSPEND) {
-		return GPM_GRAPH_COLOUR_RED;
-	} else if (event == GPM_GRAPH_EVENT_RESUME) {
-		return GPM_GRAPH_COLOUR_DARK_RED;
-	} else if (event == GPM_GRAPH_EVENT_HIBERNATE) {
-		return GPM_GRAPH_COLOUR_MAGENTA;
-	} else if (event == GPM_GRAPH_EVENT_LID_CLOSED) {
-		return GPM_GRAPH_COLOUR_GREEN;
-	} else if (event == GPM_GRAPH_EVENT_LID_OPENED) {
-		return GPM_GRAPH_COLOUR_DARK_GREEN;
-	} else if (event == GPM_GRAPH_EVENT_NOTIFICATION) {
-		return GPM_GRAPH_COLOUR_GREY;
+	if (event == GPM_GRAPH_WIDGET_EVENT_ON_AC) {
+		return GPM_GRAPH_WIDGET_COLOUR_BLUE;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_ON_BATTERY) {
+		return GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM) {
+		return GPM_GRAPH_WIDGET_COLOUR_CYAN;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
+		return GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_OFF) {
+		return GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_ON) {
+		return GPM_GRAPH_WIDGET_COLOUR_YELLOW;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {
+		return GPM_GRAPH_WIDGET_COLOUR_RED;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_RESUME) {
+		return GPM_GRAPH_WIDGET_COLOUR_DARK_RED;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_HIBERNATE) {
+		return GPM_GRAPH_WIDGET_COLOUR_MAGENTA;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_CLOSED) {
+		return GPM_GRAPH_WIDGET_COLOUR_GREEN;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_OPENED) {
+		return GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN;
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_NOTIFICATION) {
+		return GPM_GRAPH_WIDGET_COLOUR_GREY;
 	} else {
-		return GPM_GRAPH_COLOUR_DEFAULT;
+		return GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
 	}
 }
 
 /**
- * gpm_graph_set_axis_x:
+ * gpm_graph_widget_set_axis_x:
  * @graph: This graph class instance
- * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
  **/
 void
-gpm_graph_set_axis_x (GpmGraph *graph, GpmGraphAxisType axis)
+gpm_graph_widget_set_axis_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
 {
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->axis_x = axis;
 }
 
 /**
- * gpm_graph_set_axis_y:
+ * gpm_graph_widget_set_axis_y:
  * @graph: This graph class instance
- * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
  **/
 void
-gpm_graph_set_axis_y (GpmGraph *graph, GpmGraphAxisType axis)
+gpm_graph_widget_set_axis_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
 {
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->axis_y = axis;
 }
 
 /**
- * gpm_graph_enable_legend:
+ * gpm_graph_widget_enable_legend:
  * @graph: This graph class instance
  * @enable: If we should show the legend
  **/
 void
-gpm_graph_enable_legend	(GpmGraph *graph, gboolean enable)
+gpm_graph_widget_enable_legend	(GpmGraphWidget *graph, gboolean enable)
 {
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->use_legend = enable;
+
+	gtk_widget_hide (GTK_WIDGET (graph));
+	gtk_widget_show (GTK_WIDGET (graph));
 }
 
 /**
- * gpm_graph_class_init:
+ * gpm_graph_widget_class_init:
  * @class: This graph class instance
  **/
 static void
-gpm_graph_class_init (GpmGraphClass *class)
+gpm_graph_widget_class_init (GpmGraphWidgetClass *class)
 {
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 	GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-	widget_class->expose_event = gpm_graph_expose;
-	object_class->finalize = gpm_graph_finalize;
+	widget_class->expose_event = gpm_graph_widget_expose;
+	object_class->finalize = gpm_graph_widget_finalize;
 
-	g_type_class_add_private (class, sizeof (GpmGraphPrivate));
+	g_type_class_add_private (class, sizeof (GpmGraphWidgetPrivate));
 }
 
 /**
- * gpm_graph_init:
+ * gpm_graph_widget_init:
  * @graph: This graph class instance
  **/
 static void
-gpm_graph_init (GpmGraph *graph)
+gpm_graph_widget_init (GpmGraphWidget *graph)
 {
-	graph->priv = GPM_GRAPH_GET_PRIVATE (graph);
+	graph->priv = GPM_GRAPH_WIDGET_GET_PRIVATE (graph);
 	graph->priv->invert_x = FALSE;
 	graph->priv->invert_y = FALSE;
 	graph->priv->start_x = 0;
@@ -211,20 +212,20 @@ gpm_graph_init (GpmGraph *graph)
 	graph->priv->use_legend = FALSE;
 	graph->priv->autorange_x = TRUE;
 	graph->priv->list = NULL;
-	graph->priv->axis_x = GPM_GRAPH_TYPE_TIME;
-	graph->priv->axis_y = GPM_GRAPH_TYPE_PERCENTAGE;
+	graph->priv->axis_x = GPM_GRAPH_WIDGET_TYPE_TIME;
+	graph->priv->axis_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
 	/* setup font */
 	graph->priv->options = cairo_font_options_create ();
 }
 
 /**
- * gpm_graph_finalize:
+ * gpm_graph_widget_finalize:
  * @object: This graph class instance
  **/
 static void
-gpm_graph_finalize (GObject *object)
+gpm_graph_widget_finalize (GObject *object)
 {
-	GpmGraph *graph = (GpmGraph*) object;
+	GpmGraphWidget *graph = (GpmGraphWidget*) object;
 	cairo_font_options_destroy (graph->priv->options);
 	if (graph->priv->events) {
 		g_list_free (graph->priv->events);
@@ -232,49 +233,47 @@ gpm_graph_finalize (GObject *object)
 }
 
 /**
- * gpm_graph_set_invert_x:
+ * gpm_graph_widget_set_invert_x:
  * @graph: This graph class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the X axis, i.e. to count from 0..X or X..0
  **/
 void
-gpm_graph_set_invert_x (GpmGraph *graph, gboolean inv)
+gpm_graph_widget_set_invert_x (GpmGraphWidget *graph, gboolean inv)
 {
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->invert_x = inv;
 }
 
 /**
- * gpm_graph_set_invert_y:
+ * gpm_graph_widget_set_invert_y:
  * @graph: This graph class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0
  **/
 void
-gpm_graph_set_invert_y (GpmGraph *graph, gboolean inv)
+gpm_graph_widget_set_invert_y (GpmGraphWidget *graph, gboolean inv)
 {
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->invert_y = inv;
 }
 
 /**
- * gpm_graph_set_data:
+ * gpm_graph_widget_set_data:
  * @graph: This graph class instance
  * @list: The GList values to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_set_data (GpmGraph *graph, GpmInfoData *data)
+gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list)
 {
-	GList *list = gpm_info_data_get_list (data);
-
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	if (graph->priv->list) {
 		g_list_free (graph->priv->list);
 	}
@@ -282,19 +281,17 @@ gpm_graph_set_data (GpmGraph *graph, GpmInfoData *data)
 }
 
 /**
- * gpm_graph_set_events:
+ * gpm_graph_widget_set_events:
  * @graph: This graph class instance
  * @list: The GList events to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_set_events (GpmGraph *graph, GpmInfoData *data)
+gpm_graph_widget_set_events (GpmGraphWidget *graph, GList *list)
 {
-	GList *list = gpm_info_data_get_list (data);
-
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
 	if (graph->priv->events) {
 		g_list_free (graph->priv->events);
@@ -304,21 +301,21 @@ gpm_graph_set_events (GpmGraph *graph, GpmInfoData *data)
 
 /**
  * gpm_get_axis_label:
- * @axis: The axis type, e.g. GPM_GRAPH_TYPE_TIME
+ * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
  * @value: The data value, e.g. 120
  *
  * Unit is:
- * GPM_GRAPH_TYPE_TIME:		seconds
- * GPM_GRAPH_TYPE_RATE: 	mWh (not mAh)
- * GPM_GRAPH_TYPE_PERCENTAGE:	%
+ * GPM_GRAPH_WIDGET_TYPE_TIME:		seconds
+ * GPM_GRAPH_WIDGET_TYPE_RATE: 	mWh (not mAh)
+ * GPM_GRAPH_WIDGET_TYPE_PERCENTAGE:	%
  *
  * Return value: a string value depending on the axis type and the value.
  **/
 static char *
-gpm_get_axis_label (GpmGraphAxisType axis, int value)
+gpm_get_axis_label (GpmGraphWidgetAxisType axis, int value)
 {
 	char *text = NULL;
-	if (axis == GPM_GRAPH_TYPE_TIME) {
+	if (axis == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		int minutes = value / 60;
 		int seconds = value - (minutes * 60);
 		int hours = minutes / 60;
@@ -338,9 +335,9 @@ gpm_get_axis_label (GpmGraphAxisType axis, int value)
 		} else {
 			text = g_strdup_printf ("%2is", seconds);
 		}
-	} else if (axis == GPM_GRAPH_TYPE_PERCENTAGE) {
+	} else if (axis == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		text = g_strdup_printf ("%i%%", value);
-	} else if (axis == GPM_GRAPH_TYPE_RATE) {
+	} else if (axis == GPM_GRAPH_WIDGET_TYPE_RATE) {
 		text = g_strdup_printf ("%iW", value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
@@ -349,14 +346,14 @@ gpm_get_axis_label (GpmGraphAxisType axis, int value)
 }
 
 /**
- * gpm_graph_draw_grid:
+ * gpm_graph_widget_draw_grid:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the 10x10 dotted grid onto the graph.
  **/
 static void
-gpm_graph_draw_grid (GpmGraph *graph, cairo_t *cr)
+gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 {
 	float a, b;
 	double dotted[] = {1., 2.};
@@ -389,14 +386,14 @@ gpm_graph_draw_grid (GpmGraph *graph, cairo_t *cr)
 }
 
 /**
- * gpm_graph_draw_labels:
+ * gpm_graph_widget_draw_labels:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the X and the Y labels onto the graph.
  **/
 static void
-gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
+gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 {
 	float a, b;
 	gchar *text;
@@ -470,13 +467,13 @@ gpm_graph_draw_labels (GpmGraph *graph, cairo_t *cr)
 }
 
 /**
- * gpm_graph_check_range:
+ * gpm_graph_widget_check_range:
  * @graph: This graph class instance
  *
  * Checks all points are displayable on the graph, nobbling if required.
  **/
 static void
-gpm_graph_check_range (GpmGraph *graph)
+gpm_graph_widget_check_range (GpmGraphWidget *graph)
 {
 	GpmInfoDataPoint *new = NULL;
 	GList *l;
@@ -507,7 +504,7 @@ gpm_graph_check_range (GpmGraph *graph)
 }
 
 /**
- * gpm_graph_auto_range:
+ * gpm_graph_widget_auto_range:
  * @graph: This graph class instance
  *
  * Autoranges the graph axis depending on the axis type, and the maximum
@@ -515,7 +512,7 @@ gpm_graph_check_range (GpmGraph *graph)
  * resolution but also a number that scales "well" to a 10x10 grid.
  **/
 static void
-gpm_graph_auto_range (GpmGraph *graph)
+gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 {
 	int biggest_x = 0;
 	int biggest_y = 0;
@@ -562,11 +559,11 @@ gpm_graph_auto_range (GpmGraph *graph)
 	}
 
 	/* x */
-	if (graph->priv->axis_x == GPM_GRAPH_TYPE_PERCENTAGE) {
+	if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		graph->priv->stop_x = 100;
-	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_TIME) {
+	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / (10 * 60)) + 1) * (10 * 60) + smallest_x;
-	} else if (graph->priv->axis_x == GPM_GRAPH_TYPE_RATE) {
+	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_RATE) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / 10000) + 2) * 10000 + smallest_x;
 		if (graph->priv->stop_x < 10000) {
 			graph->priv->stop_x = 10000 + smallest_x;
@@ -576,10 +573,10 @@ gpm_graph_auto_range (GpmGraph *graph)
 	}
 
 	/* y */
-	if (graph->priv->axis_y == GPM_GRAPH_TYPE_PERCENTAGE) {
+	if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = 100;
-	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_TIME) {
+	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 60) + 2)* 60;
 		if (graph->priv->stop_y > 60) {
@@ -588,7 +585,7 @@ gpm_graph_auto_range (GpmGraph *graph)
 		if (graph->priv->stop_y < 60) {
 			graph->priv->stop_y = 60;
 		}
-	} else if (graph->priv->axis_y == GPM_GRAPH_TYPE_RATE) {
+	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_RATE) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
 		if (graph->priv->stop_y < 10000) {
@@ -604,46 +601,46 @@ gpm_graph_auto_range (GpmGraph *graph)
 }
 
 /**
- * gpm_graph_set_colour:
+ * gpm_graph_widget_set_colour:
  * @cr: Cairo drawing context
  * @colour: The colour enum
  **/
 static void
-gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
+gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
 {
-	if (colour == GPM_GRAPH_COLOUR_DEFAULT) {
+	if (colour == GPM_GRAPH_WIDGET_COLOUR_DEFAULT) {
 		cairo_set_source_rgb (cr, 0, 0.7, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_BLACK) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_BLACK) {
 		cairo_set_source_rgb (cr, 0, 0, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_WHITE) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_WHITE) {
 		cairo_set_source_rgb (cr, 1, 1, 1);
-	} else if (colour == GPM_GRAPH_COLOUR_RED) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_RED) {
 		cairo_set_source_rgb (cr, 1, 0, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_BLUE) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 1);
-	} else if (colour == GPM_GRAPH_COLOUR_GREEN) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_GREEN) {
 		cairo_set_source_rgb (cr, 0, 1, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_MAGENTA) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_MAGENTA) {
 		cairo_set_source_rgb (cr, 1, 0, 1);
-	} else if (colour == GPM_GRAPH_COLOUR_YELLOW) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_YELLOW) {
 		cairo_set_source_rgb (cr, 1, 1, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_CYAN) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_CYAN) {
 		cairo_set_source_rgb (cr, 0, 1, 1);
-	} else if (colour == GPM_GRAPH_COLOUR_GREY) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_GREY) {
 		cairo_set_source_rgb (cr, 0.8, 0.8, 0.8);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_RED) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_RED) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_BLUE) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE) {
 		cairo_set_source_rgb (cr, 0, 0, 0.5);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_GREEN) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN) {
 		cairo_set_source_rgb (cr, 0, 0.5, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_MAGENTA) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_MAGENTA) {
 		cairo_set_source_rgb (cr, 0.5, 0, 0.5);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_YELLOW) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW) {
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_CYAN) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN) {
 		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
-	} else if (colour == GPM_GRAPH_COLOUR_DARK_GREY) {
+	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREY) {
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
 	} else {
 		gpm_critical_error ("Unknown colour!");
@@ -651,7 +648,7 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
 }
 
 /**
- * gpm_graph_draw_dot:
+ * gpm_graph_widget_draw_dot:
  * @cr: Cairo drawing context
  * @x: The X-coordinate for the center
  * @y: The Y-coordinate for the center
@@ -660,10 +657,10 @@ gpm_graph_set_colour (cairo_t *cr, GpmGraphColour colour)
  * Draw the dot on the graph of a specified colour
  **/
 static void
-gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
+gpm_graph_widget_draw_dot (cairo_t *cr, float x, float y, GpmGraphWidgetColour colour)
 {
 	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
-	gpm_graph_set_colour (cr, colour);
+	gpm_graph_widget_set_colour (cr, colour);
 	cairo_fill (cr);
 	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
 	cairo_set_source_rgb (cr, 0, 0, 0);
@@ -672,7 +669,7 @@ gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
 }
 
 /**
- * gpm_graph_get_pos_on_graph:
+ * gpm_graph_widget_get_pos_on_graph:
  * @graph: This graph class instance
  * @data_x: The data X-coordinate
  * @data_y: The data Y-coordinate
@@ -680,14 +677,14 @@ gpm_graph_draw_dot (cairo_t *cr, float x, float y, GpmGraphColour colour)
  * @y: The returned Y position on the cairo surface
  **/
 static void
-gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *x, float *y)
+gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, float data_x, float data_y, float *x, float *y)
 {
 	*x = graph->priv->box_x + (graph->priv->unit_x * (data_x - graph->priv->start_x)) + 1;
 	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - (data_y - graph->priv->start_y))) + 1.5;
 }
 
 /**
- * gpm_graph_interpolate_value:
+ * gpm_graph_widget_interpolate_value:
  * @this: The first data point
  * @last: The other data point
  * @xintersect: The x value (i.e. the x we provide)
@@ -697,7 +694,7 @@ gpm_graph_get_pos_on_graph (GpmGraph *graph, float data_x, float data_y, float *
  * then don't interpolate.
  **/
 static int
-gpm_graph_interpolate_value (GpmInfoDataPoint *this,
+gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
 			     GpmInfoDataPoint *last,
 			     int xintersect)
 {
@@ -736,7 +733,7 @@ gpm_graph_interpolate_value (GpmInfoDataPoint *this,
 }
 
 /**
- * gpm_graph_draw_line:
+ * gpm_graph_widget_draw_line:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
@@ -744,7 +741,7 @@ gpm_graph_interpolate_value (GpmInfoDataPoint *this,
  * limit the data to < ~100 values, so this shouldn't take too long.
  **/
 static void
-gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
+gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 {
 	float oldx, oldy;
 	float newx, newy;
@@ -759,7 +756,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 
 	/* I don't think we need to do this anymore.... */
 	if (FALSE) {
-		gpm_graph_check_range (graph);
+		gpm_graph_widget_check_range (graph);
 	}
 
 	cairo_save (cr);
@@ -767,15 +764,15 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 	/* do the line on the graph */
 	l=graph->priv->list;
 	new = (GpmInfoDataPoint *) l->data;
-	gpm_graph_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
+	gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
 	for (l=l->next; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		/* do line */
-		gpm_graph_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
+		gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
 		cairo_move_to (cr, oldx, oldy);
 		cairo_line_to (cr, newx, newy);
 		cairo_set_line_width (cr, 2);
-		gpm_graph_set_colour (cr, new->colour);
+		gpm_graph_widget_set_colour (cr, new->colour);
 		cairo_stroke (cr);
 		/* save old */
 		oldx = newx;
@@ -809,10 +806,10 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 			}
 			/* Interpolate in the y direction with the two
 			   previous points. This should be 100% accurate */
-			pos = gpm_graph_interpolate_value (point_this,
+			pos = gpm_graph_widget_interpolate_value (point_this,
 							       point_last,
 							       eventdata->time);
-			gpm_graph_get_pos_on_graph (graph, eventdata->time,
+			gpm_graph_widget_get_pos_on_graph (graph, eventdata->time,
 						    pos, &newx, &newy);
 			/* don't overlay the points, stack vertically */
 			if (abs (prevpos - newx) < 8) {
@@ -823,7 +820,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 			newy -= (8 * previous_point);
 			/* only do the event dot, if it's going to fit on the graph */
 			if (eventdata->time > graph->priv->start_x) {
-				gpm_graph_draw_dot (cr, newx, newy, eventdata->colour);
+				gpm_graph_widget_draw_dot (cr, newx, newy, eventdata->colour);
 			}
 			prevpos = newx;
 		}
@@ -833,7 +830,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
 }
 
 /**
- * gpm_graph_draw_bounding_box:
+ * gpm_graph_widget_draw_bounding_box:
  * @cr: Cairo drawing context
  * @x: The X-coordinate for the top-left
  * @y: The Y-coordinate for the top-left
@@ -841,7 +838,7 @@ gpm_graph_draw_line (GpmGraph *graph, cairo_t *cr)
  * @height: The item height
  **/
 static void
-gpm_graph_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
+gpm_graph_widget_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
 {
 	/* background */
 	cairo_rectangle (cr, x, y, width, height);
@@ -855,7 +852,7 @@ gpm_graph_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
 }
 
 /**
- * gpm_graph_draw_legend:
+ * gpm_graph_widget_draw_legend:
  * @cr: Cairo drawing context
  * @x: The X-coordinate for the top-left
  * @y: The Y-coordinate for the top-left
@@ -863,19 +860,19 @@ gpm_graph_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
  * @height: The item height
  **/
 static void
-gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
+gpm_graph_widget_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 {
 	const char *desc;
 	int y_count;
 	int a;
-	GpmGraphColour colour;
+	GpmGraphWidgetColour colour;
 
-	gpm_graph_draw_bounding_box (cr, x, y, width, height);
+	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
 	y_count = y + 10;
-	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
-		desc = gpm_graph_event_description (a);
-		colour = gpm_graph_event_colour (a);
-		gpm_graph_draw_dot (cr, x + 8, y_count, colour);
+	for (a=0; a<GPM_GRAPH_WIDGET_EVENT_LAST; a++) {
+		desc = gpm_graph_widget_event_description (a);
+		colour = gpm_graph_widget_event_colour (a);
+		gpm_graph_widget_draw_dot (cr, x + 8, y_count, colour);
 		cairo_move_to (cr, x + 8 + 10, y_count + 3);
 		cairo_show_text (cr, desc);
 		y_count = y_count + 20;
@@ -883,7 +880,7 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
 }
 
 /**
- * gpm_graph_legend_calculate_width:
+ * gpm_graph_widget_legend_calculate_width:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
  * Return value: The width of the legend, including borders.
@@ -893,7 +890,7 @@ gpm_graph_draw_legend (cairo_t *cr, int x, int y, int width, int height)
  * from machine to machine.
  **/
 static float
-gpm_graph_legend_calculate_width (GpmGraph *graph, cairo_t *cr)
+gpm_graph_widget_legend_calculate_width (GpmGraphWidget *graph, cairo_t *cr)
 {
 	int a;
 	const char *desc;
@@ -901,12 +898,11 @@ gpm_graph_legend_calculate_width (GpmGraph *graph, cairo_t *cr)
 	float max_width = 0.0f;
 
 	g_return_val_if_fail (graph != NULL, 0.0f);
-	g_return_val_if_fail (GPM_IS_GRAPH (graph), 0.0f);
-
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), 0.0f);
 
 	cairo_set_font_options (cr, graph->priv->options);
-	for (a=0; a<GPM_GRAPH_EVENT_LAST; a++) {
-		desc = gpm_graph_event_description (a);
+	for (a=0; a<GPM_GRAPH_WIDGET_EVENT_LAST; a++) {
+		desc = gpm_graph_widget_event_description (a);
 		cairo_text_extents (cr, desc, &extents);
 		if (max_width < extents.width) {
 			max_width = extents.width;
@@ -920,14 +916,14 @@ gpm_graph_legend_calculate_width (GpmGraph *graph, cairo_t *cr)
 }
 
 /**
- * gpm_graph_draw_graph:
+ * gpm_graph_widget_draw_graph:
  * @graph: This graph class instance
  * @cr: Cairo drawing context
  *
  * Draw the complete graph, with the box, the grid, the labels and the line.
  **/
 static void
-gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
+gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
 	int legend_x = 0;
 	int legend_y = 0;
@@ -936,12 +932,12 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	int data_x;
 	int data_y;
 
-	GpmGraph *graph = (GpmGraph*) graph_widget;
+	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH (graph));
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
-	legend_width = gpm_graph_legend_calculate_width (graph, cr);
-	legend_height = GPM_GRAPH_EVENT_LAST * 20;
+	legend_width = gpm_graph_widget_legend_calculate_width (graph, cr);
+	legend_height = GPM_GRAPH_WIDGET_EVENT_LAST * 20;
 
 	cairo_save (cr);
 
@@ -960,14 +956,14 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* graph background */
-	gpm_graph_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
+	gpm_graph_widget_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
 				     graph->priv->box_width, graph->priv->box_height);
 
 	if (graph->priv->use_grid) {
-		gpm_graph_draw_grid (graph, cr);
+		gpm_graph_widget_draw_grid (graph, cr);
 	}
 
-	gpm_graph_auto_range (graph);
+	gpm_graph_widget_auto_range (graph);
 
 	/* -3 is so we can keep the lines inside the box at both extremes */
 	data_x = graph->priv->stop_x - graph->priv->start_x;
@@ -975,25 +971,25 @@ gpm_graph_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->unit_x = (float)(graph->priv->box_width - 3) / (float) data_x;
 	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) data_y;
 
-	gpm_graph_draw_labels (graph, cr);
-	gpm_graph_draw_line (graph, cr);
+	gpm_graph_widget_draw_labels (graph, cr);
+	gpm_graph_widget_draw_line (graph, cr);
 
 	if (graph->priv->use_legend) {
-		gpm_graph_draw_legend (cr, legend_x, legend_y, legend_width, legend_height);
+		gpm_graph_widget_draw_legend (cr, legend_x, legend_y, legend_width, legend_height);
 	}
 
 	cairo_restore (cr);
 }
 
 /**
- * gpm_graph_expose:
+ * gpm_graph_widget_expose:
  * @graph: This graph class instance
  * @event: The expose event
  *
  * Just repaint the entire graph widget on expose.
  **/
 static gboolean
-gpm_graph_expose (GtkWidget *graph, GdkEventExpose *event)
+gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event)
 {
 	cairo_t *cr;
 
@@ -1005,18 +1001,18 @@ gpm_graph_expose (GtkWidget *graph, GdkEventExpose *event)
 			 event->area.width, event->area.height);
 	cairo_clip (cr);
 
-	gpm_graph_draw_graph (graph, cr);
+	gpm_graph_widget_draw_graph (graph, cr);
 
 	cairo_destroy (cr);
 	return FALSE;
 }
 
 /**
- * gpm_graph_new:
- * Return value: A new GpmGraph object.
+ * gpm_graph_widget_new:
+ * Return value: A new GpmGraphWidget object.
  **/
 GtkWidget *
-gpm_graph_new (void)
+gpm_graph_widget_new (void)
 {
-	return g_object_new (GPM_TYPE_GRAPH, NULL);
+	return g_object_new (GPM_TYPE_GRAPH_WIDGET, NULL);
 }

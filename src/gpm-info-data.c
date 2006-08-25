@@ -35,6 +35,7 @@
 #include "gpm-debug.h"
 
 #include "gpm-info-data.h"
+#include "gpm-graph-widget.h"
 
 static void     gpm_info_data_class_init (GpmInfoDataClass *klass);
 static void     gpm_info_data_init       (GpmInfoData      *info_data);
