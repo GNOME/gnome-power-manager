@@ -1,5 +1,13 @@
 2006-08-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c: (gpm_power_status_for_device_more):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_about_cb):
+	* src/run-valgrind-gpm.sh:
+	Patch from Paolo Borelli <pborelli@katamail.com> to cure some
+	small memory leaks. Many Thanks. Fixes #352858.
+
+2006-08-25  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.desktop.in:
 	* data/gnome-power-preferences.desktop.in:
 	Manually hardcode the version to 2.17.x to fix #352840.

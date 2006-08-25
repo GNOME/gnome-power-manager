@@ -728,9 +728,10 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		g_string_append_printf (details, _("<b>Model:</b> %s\n"), device->model);
 	}
 	if (status->remaining_time > 0) {
-		const char *time_str;
+		char *time_str;
 		time_str = gpm_get_timestring (status->remaining_time);
 		g_string_append_printf (details, _("<b>Remaining time:</b> %s\n"), time_str);
+		g_free (time_str);
 	}
 	if (status->capacity > 0) {
 		const char *condition;
