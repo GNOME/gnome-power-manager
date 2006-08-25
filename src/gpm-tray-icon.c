@@ -370,6 +370,8 @@ gpm_tray_icon_show_about_cb (GtkAction   *action,
 			       "translator-credits", translators,
 			       "logo-icon-name", GPM_STOCK_APP_ICON,
 			       NULL);
+
+	g_free (license_trans);
 }
 
 #if USE_EGGTRAYICON
