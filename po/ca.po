@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-24 00:54+0200\n"
-"PO-Revision-Date: 2006-08-24 01:24+0200\n"
+"POT-Creation-Date: 2006-08-26 11:13+0200\n"
+"PO-Revision-Date: 2006-08-26 11:16+0200\n"
 "Last-Translator: Esteve Blanch Sanmartí <anakinjinn@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -130,7 +130,7 @@ msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
-"Indica si estan permeses les opcions d'aturar temporalment i hibernar al "
+"Indica si estan permeses les opcions d'aturar temporalment i d'hibernar al "
 "menú desplegable de l'àrea de notificació."
 
 #: ../data/gnome-power-manager.schemas.in.h:19
@@ -247,17 +247,17 @@ msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
 msgstr ""
-"Indica si s'utilitzen les opcions de blocatge de pantalla del gnome-"
+"Indica si s'utilitzen els paràmetres de blocatge de pantalla del gnome-"
 "screensaver per decidir si s'ha de blocar la pantalla després d'una "
-"hibernació, d'una aturada temporal o un blanqueig de pantalla."
+"hibernació, d'una aturada temporal o d'enfosquir la pantalla."
 
 #: ../data/gnome-power-manager.schemas.in.h:36
 msgid "LCD brightness when on AC"
-msgstr "Brillantor de l'LCD en AC"
+msgstr "Brillantor de l'LCD fent servir el corrent"
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on battery"
-msgstr "Brillantor de l'LCD en bateria"
+msgstr "Brillantor de l'LCD fent servir la bateria"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
@@ -281,7 +281,7 @@ msgstr "Bloca la pantalla en enfosquir"
 
 #: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Method used to blank screen on AC"
-msgstr "Mètode utilitzat per enfosquir la pantalla en AC"
+msgstr "Mètode utilitzat per enfosquir la pantalla en ca"
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Method used to blank screen on battery"
@@ -293,7 +293,7 @@ msgstr "Notifica si hi es produeix algun error del HAL"
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Notify when AC adapter is disconnected"
-msgstr "Notifica quan l'adaptador AC estigui desconnectat"
+msgstr "Notifica quan l'adaptador de ca estigui desconnectat"
 
 #: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Notify when fully charged"
@@ -301,7 +301,7 @@ msgstr "Notifica quan estigui del tot carregada"
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Number of seconds to suppress policy after resume"
-msgstr "Nombre de segons a suprimir la política després de reactivar"
+msgstr "Nombre de segons per suprimir la política després de reactivar"
 
 #: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Percentage action is taken"
@@ -325,7 +325,7 @@ msgstr "Acció del botó d'energia"
 
 #: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Sleep timeout computer when on AC"
-msgstr "Temps d'apagada de l'ordinador en AC"
+msgstr "Temps d'apagada de l'ordinador en ca"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout computer when on battery"
@@ -333,7 +333,7 @@ msgstr "Temps d'apagada de l'ordinador en bateria"
 
 #: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Sleep timeout display when on AC"
-msgstr "Temps d'apagada de la pantalla en AC"
+msgstr "Temps d'apagada de la pantalla en ca"
 
 #: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Sleep timeout display when on battery"
@@ -392,7 +392,7 @@ msgid ""
 msgstr ""
 "L'acció a prendre quan es plegui l'ordinador i el portàtil estigui connectat "
 "al corrent altern. Els possibles valors són «suspend» (aturar temporalment), "
-"«hibernate» (hibernar), «blank» (pantalla en blanc), i «nothing» (res)."
+"«hibernate» (hibernar), «blank» (enfosquir la pantalla), i «nothing» (res)."
 
 # FIXME
 #: ../data/gnome-power-manager.schemas.in.h:65
@@ -401,9 +401,9 @@ msgid ""
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
 "and \"nothing\"."
 msgstr ""
-"L'acció a prendre quan es plegui l'ordinador el portàtil funcioni amb "
+"L'acció a prendre quan es plegui l'ordinador i el portàtil funcioni amb "
 "bateria. Els possibles valors són «suspend» (aturar temporalment), "
-"«hibernate» (hibernar), «blank» (pantalla en blanc), i «nothing» (res)."
+"«hibernate» (hibernar), «blank» (enfosquir la pantalla), i «nothing» (res)."
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
@@ -449,7 +449,7 @@ msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
-"El temps en segons d'inactivitat que necessita l'ordinador en AC abans "
+"El temps en segons d'inactivitat que necessita l'ordinador en ac abans "
 "d'entrar en mode d'espera."
 
 #: ../data/gnome-power-manager.schemas.in.h:71
@@ -465,7 +465,7 @@ msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
-"Els segons d'inactivitat que necessita la pantalla d'un ordinador en AC, "
+"Els segons d'inactivitat que necessita la pantalla d'un ordinador en ac, "
 "abans d'entrar en mode d'espera."
 
 #: ../data/gnome-power-manager.schemas.in.h:73
@@ -473,8 +473,8 @@ msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
-"Lluminositat de la pantalla en energia AC. Els possibles valors estan entre "
-"0 i 100."
+"Lluminositat de la pantalla quan s'estigui connecat al ca. Els possibles "
+"valors estan entre 0 i 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
@@ -1510,7 +1510,7 @@ msgstr "Atura"
 
 #: ../src/gpm-prefs-core.c:88
 msgid "Blank screen"
-msgstr "Pantalla en blanc"
+msgstr "Enfosqueix la pantalla"
 
 #: ../src/gpm-prefs-core.c:89
 msgid "Do nothing"
