@@ -38,6 +38,12 @@ gnome_power_graph_SOURCES =				\
 	gpm-graph-core.c				\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
+	gpm-dbus-monitor.h				\
+	gpm-dbus-monitor.c				\
+	gpm-proxy.h					\
+	gpm-proxy.c					\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	$(NULL)

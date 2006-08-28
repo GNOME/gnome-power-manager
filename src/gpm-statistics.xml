@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.gnome.PowerManager.Statistics">
-    <method name="Moo">
-      <arg type="b" name="low_power" direction="out"/>
+    <method name="GetTypes">
+      <arg type="as" name="types" direction="out"/>
+    </method>
+<!--
+    <method name="GetData">
+      <arg type="i" name="seconds" direction="in"/>
+      <arg type="s" name="type" direction="in"/>
+      <arg type="i" name="options" direction="in"/>
+      <arg type="a{iii}" name="data" direction="out"/>
+    </method>
+-->
+    <method name="GetEventLog">
+      <arg type="i" name="seconds" direction="in"/>
+      <arg type="a(ii)" name="data" direction="out"/>
     </method>
   </interface>
 </node>
-

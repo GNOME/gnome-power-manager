@@ -1,3 +1,17 @@
+2006-08-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	* src/gpm-graph-core.c:
+	Remove dep on InfoData as we are splitting this now.
+
+	* src/gpm-hal-power.c:
+	Don't unref the proxy else subsequent actions fail.
+
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-statistics.xml:
+	Add some more bits of the interface.
+
 2006-08-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: (gpm_power_status_for_device_more):

@@ -243,14 +243,13 @@ gpm_hal_power_suspend (GpmHalPower *hal_power, gint wakeup)
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	dbus_g_proxy_call (proxy, "Suspend", &error,
 			   G_TYPE_INT, wakeup, G_TYPE_INVALID,
 			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
 	retval = gpm_hal_handle_error (ret, error, "suspend");
 
-	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -286,7 +285,6 @@ hal_power_pm_method_void (GpmHalPower *hal_power, const gchar* method)
 			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
 	retval = gpm_hal_handle_error (ret, error, method);
 
-	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 
@@ -371,7 +369,6 @@ gpm_hal_power_enable_power_save (GpmHalPower *hal_power, gboolean enable)
 			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
 	retval = gpm_hal_handle_error (ret, error, "power save");
 
-	g_object_unref (G_OBJECT (proxy));
 	return retval;
 }
 

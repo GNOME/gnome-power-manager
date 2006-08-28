@@ -78,16 +78,73 @@ struct GpmInfoPrivate
 G_DEFINE_TYPE (GpmInfo, gpm_info, G_TYPE_OBJECT)
 
 /**
- * gpm_statistics_suspend:
- * @manager: This manager class instance
- * @can: If we can suspend
+ * device_list_to_strv:
  **/
-gboolean
-gpm_statistics_moo (GpmInfo *info,
-	  gboolean   *can,
-	  GError    **error)
+static char **
+device_list_to_strv (GList *list)
 {
-	*can = TRUE;
+	char **value = NULL;
+	char *device;
+	GList *l;
+	int i = 0;
+
+	value = g_new0 (char *, g_list_length (list) + 1);
+	for (l=list; l != NULL; l=l->next) {
+		device = (char *) l->data;
+		value[i] = g_strdup (device);
+		++i;
+	}
+	value[i] = NULL;
+	return value;
+}
+
+gboolean
+gpm_statistics_get_types (GpmInfo  *info,
+			  char   ***types,
+			  GError  **error)
+{
+	GList *list = NULL;
+
+	list = g_list_append (list, "charge");
+	list = g_list_append (list, "power");
+	list = g_list_append (list, "time");
+
+	*types = device_list_to_strv (list);
+
+	g_list_free (list);
+	return TRUE;
+}
+
+gboolean
+gpm_statistics_get_event_log (GpmInfo      *info,
+			      gint 	    seconds,
+			      GList **list,
+			      GError      **error)
+{
+	g_warning ("seconds=%i", seconds);
+#if 0
+GValueArray *valuearray;
+GValue *value;
+
+*list = NULL;
+
+valuearray = g_value_array_new (2);
+
+value = g_new0 (GValue, 1);
+g_value_init (value, G_TYPE_INT);
+g_value_set_int (value, 55);
+g_value_array_append (valuearray, value);
+g_free (value);
+
+value = g_new0 (GValue, 1);
+g_value_init (value, G_TYPE_INT);
+g_value_set_int (value, 66);
+g_value_array_append (valuearray, value);
+g_free (value);
+
+*list = g_list_append (*list, valuearray);
+#endif
+	*list = NULL;
 	return TRUE;
 }
 

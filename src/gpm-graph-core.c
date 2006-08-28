@@ -37,18 +37,33 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-graph-widget.h"
+#include "gpm-proxy.h"
 
 static void     gpm_graph_class_init (GpmGraphClass *klass);
 static void     gpm_graph_init       (GpmGraph      *graph);
 static void     gpm_graph_finalize   (GObject	    *object);
 
 #define GPM_GRAPH_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH, GpmGraphPrivate))
+#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
+#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
+#define	GPM_DBUS_PATH_STATS		"/org/gnome/PowerManager/Statistics"
+#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
+#define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
+
+#define ACTION_CHARGE		"charge"
+#define ACTION_POWER		"power"
+#define ACTION_TIME		"time"
+#define ACTION_CHARGE_TEXT	_("Charge History")
+#define ACTION_POWER_TEXT	_("Power History")
+#define ACTION_TIME_TEXT	_("Estimated Time History")
+
 
 struct GpmGraphPrivate
 {
 	GladeXML		*glade_xml;
 	GConfClient		*gconf_client;
 	GtkWidget		*graph_widget;
+	GpmProxy		*gproxy;
 };
 
 enum {
@@ -231,6 +246,134 @@ gpm_graph_checkbox_legend_cb (GtkWidget *widget,
 }
 
 /**
+ * gpm_graph_convert_strv_to_glist:
+ *
+ * @devices: The returned devices in strv format
+ * Return value: A GList populated with the UDI's
+ **/
+static GList *
+gpm_graph_convert_strv_to_glist (gchar **array)
+{
+	GList *list = NULL;
+	int i = 0;
+	while (array && array[i]) {
+		list = g_list_append (list, array[i]);
+		++i;
+	}
+	return list;
+}
+
+static gboolean
+gpm_graph_find_types (GpmGraph *graph,
+		      GList   **list)
+{
+	GError *error = NULL;
+	gboolean retval;
+	char **strlist;
+	DBusGProxy *proxy;
+
+	proxy = gpm_proxy_get_proxy (graph->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}	
+
+	retval = TRUE;
+	if (dbus_g_proxy_call (proxy, "GetTypes", &error,
+				G_TYPE_INVALID,
+				G_TYPE_STRV, &strlist,
+				G_TYPE_INVALID) == FALSE) {
+		if (error) {
+			g_debug ("%s", error->message);
+			g_error_free (error);
+		}
+		retval = FALSE;
+	}
+
+	*list = gpm_graph_convert_strv_to_glist (strlist);
+
+	return retval;
+}
+
+/**
+ * gpm_graph_free_list_strings:
+ *
+ * Frees a GList of strings
+ **/
+static void
+gpm_graph_free_list_strings (GList *list)
+{
+	GList *l;
+	char *str;
+
+	for (l=list; l != NULL; l=l->next) {
+		str = l->data;
+		g_free (str);
+	}
+
+	g_list_free (list);
+}
+
+static void
+gpm_graph_type_combo_changed_cb (GtkWidget *widget,
+				 GpmGraph  *graph)
+{
+	char *value;
+	const char *type;
+
+	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+
+	if (strcmp (value, ACTION_CHARGE_TEXT) == 0) {
+		type = ACTION_CHARGE;
+	} else if (strcmp (value, ACTION_POWER_TEXT) == 0) {
+		type = ACTION_POWER;
+	} else if (strcmp (value, ACTION_TIME_TEXT) == 0) {
+		type = ACTION_TIME;
+	} else {
+		g_assert (FALSE);
+	}
+	g_free (value);
+
+	gpm_debug ("Changing graph type to %s", type);
+}
+
+static void
+populate_graph_types (GpmGraph *graph, GtkWidget *widget)
+{
+	GList *list = NULL;
+	GList *l;
+	char *type;
+	char *type_localized;
+	gboolean ret;
+	
+	ret = gpm_graph_find_types (graph, &list);
+	if (ret == FALSE) {
+		return;
+	}
+
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_graph_type_combo_changed_cb),
+			  graph);
+
+	for (l=list; l != NULL; l=l->next) {
+		type = l->data;
+		if (strcmp (type, ACTION_CHARGE) == 0) {
+			type_localized = ACTION_CHARGE_TEXT;
+		} else if (strcmp (type, ACTION_POWER) == 0) {
+			type_localized = ACTION_POWER_TEXT;
+		} else if (strcmp (type, ACTION_TIME) == 0) {
+			type_localized = ACTION_TIME_TEXT;
+		} else {
+			type_localized = _("Unknown");
+		}
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), type_localized);
+	}
+	gpm_graph_free_list_strings (list);
+
+	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+}
+
+/**
  * gpm_graph_init:
  * @graph: This graph class instance
  **/
@@ -245,6 +388,13 @@ gpm_graph_init (GpmGraph *graph)
 	graph->priv->gconf_client = gconf_client_get_default ();
 
 	glade_set_custom_handler (gpm_graph_widget_custom_handler, graph);
+
+	graph->priv->gproxy = gpm_proxy_new ();
+	gpm_proxy_assign (graph->priv->gproxy,
+			  GPM_PROXY_SESSION,
+			  GPM_DBUS_SERVICE,
+			  GPM_DBUS_PATH_STATS,
+			  GPM_DBUS_INTERFACE_STATS);
 
 	gconf_client_notify_add (graph->priv->gconf_client,
 				 GPM_PREF_DIR,
@@ -284,18 +434,12 @@ gpm_graph_init (GpmGraph *graph)
 	gtk_widget_show (GTK_WIDGET (widget));
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "combobox_type");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Charge History");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Power History");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Rate History");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Estimated Time History");
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+	populate_graph_types (graph, widget);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "combobox_device");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Battery 1");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Battery 2");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Average battery");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "UPS 1");
+	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Default");
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "checkbutton_events");
 	g_signal_connect (widget, "clicked",
@@ -323,6 +467,7 @@ gpm_graph_finalize (GObject *object)
 	graph->priv = GPM_GRAPH_GET_PRIVATE (graph);
 
 	g_object_unref (graph->priv->gconf_client);
+	g_object_unref (graph->priv->gproxy);
 
 	G_OBJECT_CLASS (gpm_graph_parent_class)->finalize (object);
 }
