@@ -1,5 +1,16 @@
 2006-08-28  Richard Hughes  <richard@hughsie.com>
 
+	* help/C/gnome-power-manager.xml:
+	* help/gnome-power-manager.omf.in:
+	Apply patch from Brent Smith <gnome@nextreality.net>:
+	Change category from GNOME|Core Desktop to GNOME|System.
+	Also, per the instructions at
+	http://live.gnome.org/GnomeDocUtilsMigrationHowTo there should be
+	elements within the docbook file with the attribute "role" and
+	the value "maintainer" on one of the author tags. Fixes #353123
+
+2006-08-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-graph-core.c:
 	Remove dep on InfoData as we are splitting this now.
