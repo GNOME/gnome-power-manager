@@ -1,5 +1,17 @@
 2006-08-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/Makefile.am:
+	Don't call files -glue, it confuses waf.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/gpm-prefs.h:
+	Add /apps/gnome-power-manager/session_request_save so distros like
+	Ubuntu can just switch a gconf key rather than patch the source.
+
+2006-08-28  Richard Hughes  <richard@hughsie.com>
+
 	* .cvsignore:
 	* src/gpm-info.c:
 	* src/gpm-info.h:

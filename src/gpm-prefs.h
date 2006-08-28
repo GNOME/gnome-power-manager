@@ -98,6 +98,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_BATTERY_CPUFREQ_VALUE	GPM_PREF_DIR "/cpufreq_battery_performance"
 #define GPM_PREF_USE_NICE		GPM_PREF_DIR "/cpufreq_consider_nice"
 
+#define GPM_PREF_SESSION_REQUEST_SAVE	GPM_PREF_DIR "/session_request_save"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,

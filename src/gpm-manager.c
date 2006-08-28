@@ -64,7 +64,7 @@
 #include "gpm-polkit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
-#include "gpm-interface-statistics-glue.h"
+#include "gpm-interface-statistics.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -1120,6 +1120,7 @@ gpm_manager_shutdown (GpmManager *manager,
 {
 	gboolean allowed;
 	gboolean ret;
+	gboolean save_session;
 
 	gpm_manager_allowed_shutdown (manager, &allowed, NULL);
 	if (! allowed) {
@@ -1131,10 +1132,15 @@ gpm_manager_shutdown (GpmManager *manager,
 		return FALSE;
 	}
 
-	gnome_client_request_save (gnome_master_client (),
-				   GNOME_SAVE_GLOBAL,
-				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
-
+	save_session = gconf_client_get_bool (manager->priv->gconf_client,
+					      GPM_PREF_SESSION_REQUEST_SAVE, NULL);
+	/* We can set g-p-m to not save the session to avoid confusing new
+	   users. By default we save the session to preserve data. */
+	if (save_session) {
+		gnome_client_request_save (gnome_master_client (),
+					   GNOME_SAVE_GLOBAL,
+					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+	}
 	gpm_hal_power_shutdown (manager->priv->hal_power);
 	ret = TRUE;
 
@@ -1153,6 +1159,7 @@ gpm_manager_reboot (GpmManager *manager,
 {
 	gboolean allowed;
 	gboolean ret;
+	gboolean save_session;
 
 	gpm_manager_allowed_reboot (manager, &allowed, NULL);
 	if (! allowed) {
@@ -1164,9 +1171,15 @@ gpm_manager_reboot (GpmManager *manager,
 		return FALSE;
 	}
 
-	gnome_client_request_save (gnome_master_client (),
-				   GNOME_SAVE_GLOBAL,
-				   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+	save_session = gconf_client_get_bool (manager->priv->gconf_client,
+					      GPM_PREF_SESSION_REQUEST_SAVE, NULL);
+	/* We can set g-p-m to not save the session to avoid confusing new
+	   users. By default we save the session to preserve data. */
+	if (save_session) {
+		gnome_client_request_save (gnome_master_client (),
+					   GNOME_SAVE_GLOBAL,
+					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
+	}
 
 	gpm_hal_power_reboot (manager->priv->hal_power);
 	ret = TRUE;
