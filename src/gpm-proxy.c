@@ -38,22 +38,6 @@ static void     gpm_proxy_finalize   (GObject		*object);
 
 /* this is a managed proxy, i.e. a proxy that handles messagebus and DBUS service restarts. */
 
-/* convert:
-trivial:
- gpm-polkit		DONE
- gpm-brightness		DONE
- gpm-cpufreq		DONE
- gpm-idle		
-
-complex:
- gpm-screensaver	DONE
- gpm-hal		DONE
- gpm-power
-
-then, rm gpm-dbus-x-monitor.*
-
-*/
-
 struct GpmProxyPrivate
 {
 	GpmProxyBusType  bus_type;

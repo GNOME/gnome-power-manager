@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#define USE_DBUS_COMPAT			TRUE
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
@@ -31,6 +33,9 @@
 #include <string.h>
 #include <time.h>
 #include <gconf/gconf-client.h>
+#ifdef USE_DBUS_COMPAT
+#include <dbus/dbus-gtype-specialized.h>
+#endif
 
 #include "gpm-info.h"
 #include "gpm-info-data.h"
@@ -129,10 +134,10 @@ gpm_statistics_get_types (GpmInfo  *info,
 	return TRUE;
 }
 
-#define TP_SESSION_HANDLER_SET_TYPE (dbus_g_type_get_struct ("GValueArray", \
-	DBUS_TYPE_G_OBJECT_PATH, \
-	G_TYPE_STRING, \
-	G_TYPE_INVALID))
+#define GPM_DBUS_STRUCT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
+#define GPM_DBUS_STRUCT_INT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
 
 gboolean
 gpm_statistics_get_event_log (GpmInfo    *info,
@@ -140,44 +145,27 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 			      GPtrArray **array,
 			      GError    **error)
 {
+#ifdef USE_DBUS_COMPAT
+	*array = g_ptr_array_sized_new (0);
+#else	
 	GList *events, *l;
 	GpmInfoDataPoint *new;
 	GValue *value;
 
-	g_warning ("seconds=%i", seconds);
-
+	g_debug ("seconds=%i", seconds);
 	events = gpm_info_data_get_list (info->priv->events);
+	*array = g_ptr_array_sized_new (g_list_length (events));
+
 	for (l=events; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
 		gpm_debug ("event log: %i: %i", info->priv->start_time + new->time, new->value);
+		value = g_new0 (GValue, 1);
+		g_value_init (value, GPM_DBUS_STRUCT_INT_INT);
+		g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_INT));
+		dbus_g_type_struct_set (value, 0, new->time, 1, new->value, -1);
+		g_ptr_array_add (*array, g_value_get_boxed (value));
+		g_free (value);
 	}
-
-
-	value = g_new0 (GValue, 1);
-	g_value_init (value, G_TYPE_BOXED);
-
-	*array = g_ptr_array_sized_new (1);
-	g_ptr_array_add (*array, g_value_get_boxed (value));
-	g_free (value);
-
-#if 0
-	GValue handler = { 0, };
-	GabbleHandle member;
-	gchar *path;
-
-	g_value_init (&handler, TP_SESSION_HANDLER_SET_TYPE);
-	g_value_take_boxed (&handler,
-			    dbus_g_type_specialized_construct (TP_SESSION_HANDLER_SET_TYPE));
-	g_object_get (priv->session,
-		      "peer", &member,
-		      "object-path", &path,
-		      NULL);
-
-	dbus_g_type_struct_set (&handler, 0, path, 1, "rtp", G_MAXUINT);
-
-	g_free (path);
-	*array = g_ptr_array_sized_new (1);
-	g_ptr_array_add (*array, g_value_get_boxed (&handler));
 #endif
 	return TRUE;
 }
@@ -190,10 +178,12 @@ gpm_statistics_get_data (GpmInfo    *info,
 			 GPtrArray **array,
 			 GError	   **error)
 {
-	g_warning ("TODO!");
-
+#ifdef USE_DBUS_COMPAT
+	*array = g_ptr_array_sized_new (0);
+#else	
 	GList *events, *l;
 	GpmInfoDataPoint *new;
+	GValue *value;
 
 	if (strcmp (type, "rate") == 0) {
 		events = gpm_info_data_get_list (info->priv->rate_data);
@@ -209,12 +199,29 @@ gpm_statistics_get_data (GpmInfo    *info,
 		return FALSE;
 	}
 
+	if (events == NULL) {
+		g_warning ("Data not available");
+		*error = g_error_new (gpm_info_error_quark (),
+				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
+				      "Data not available");
+		return FALSE;
+	}		
+
+	g_warning ("TODO!");
+	g_debug ("seconds=%i", seconds);
+	*array = g_ptr_array_sized_new (g_list_length (events));
+
 	for (l=events; l != NULL; l=l->next) {
 		new = (GpmInfoDataPoint *) l->data;
-		gpm_debug ("data: %i: %i", info->priv->start_time + new->time, new->value);
+		gpm_debug ("data: %i: %i", new->time, new->value);
+		value = g_new0 (GValue, 1);
+		g_value_init (value, GPM_DBUS_STRUCT_INT_INT_INT);
+		g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_INT_INT));
+		dbus_g_type_struct_set (value, 0, new->time, 1, new->value, 2, new->colour, -1);
+		g_ptr_array_add (*array, g_value_get_boxed (value));
+		g_free (value);
 	}
-
-	*array = g_ptr_array_sized_new (0);
+#endif
 	return TRUE;
 }
 

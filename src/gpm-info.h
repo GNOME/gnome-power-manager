@@ -50,7 +50,8 @@ typedef struct
 typedef enum
 {
 	 GPM_INFO_ERROR_GENERAL,
-	 GPM_INFO_ERROR_INVALID_TYPE
+	 GPM_INFO_ERROR_INVALID_TYPE,
+	 GPM_INFO_ERROR_DATA_NOT_AVAILABLE
 } GpmInfoError;
 
 #define GPM_INFO_ERROR gpm_manager_error_quark ()
