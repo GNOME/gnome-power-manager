@@ -1,5 +1,23 @@
 2006-08-28  Richard Hughes  <richard@hughsie.com>
 
+	* TODO:
+	Add more detail about the out of process interface.
+
+	* help/C/gnome-power-manager.xml:
+	Fix make distcheck. TODO: Find out why abstract doesn't work!
+
+	* src/Makefile.am:
+	* src/gpm-interface-manager.xml:
+	* src/gpm-interface-statistics.xml:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/gpm-manager.xml:
+	* src/gpm-statistics.xml:
+	Rename the interface files so we can build with waf without overwriting
+	existing .h files.
+
+2006-08-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c:
 	* src/gpm-info.h:
 	* src/gpm-statistics.xml:

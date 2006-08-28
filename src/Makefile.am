@@ -4,8 +4,8 @@ AUTOMAKE_OPTIONS = 1.7
 NULL =
 
 EXTRA_DIST =						\
-	gpm-manager.xml					\
-	gpm-statistics.xml				\
+	gpm-interface-manager.xml			\
+	gpm-interface-statistics.xml			\
 	gpm-marshal.list				\
 	$(NULL)
 
@@ -162,8 +162,8 @@ gnome_power_manager_LDADD +=				\
 endif
 
 BUILT_SOURCES = 					\
-	gpm-manager-glue.h				\
-	gpm-statistics-glue.h				\
+	gpm-interface-manager-glue.h			\
+	gpm-interface-statistics-glue.h			\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
 	$(NULL)
@@ -175,11 +175,11 @@ gpm-marshal.c: gpm-marshal.list
 gpm-marshal.h: gpm-marshal.list
 	@GLIB_GENMARSHAL@ $< --prefix=gpm_marshal --header > $@
 
-gpm-manager-glue.h: gpm-manager.xml
-	libtool --mode=execute dbus-binding-tool --prefix=gpm_manager --mode=glib-server --output=gpm-manager-glue.h $(srcdir)/gpm-manager.xml
+gpm-interface-manager-glue.h: gpm-interface-manager.xml
+	libtool --mode=execute dbus-binding-tool --prefix=gpm_manager --mode=glib-server --output=gpm-interface-manager-glue.h $(srcdir)/gpm-interface-manager.xml
 
-gpm-statistics-glue.h: gpm-statistics.xml
-	libtool --mode=execute dbus-binding-tool --prefix=gpm_statistics --mode=glib-server --output=gpm-statistics-glue.h $(srcdir)/gpm-statistics.xml
+gpm-interface-statistics-glue.h: gpm-interface-statistics.xml
+	libtool --mode=execute dbus-binding-tool --prefix=gpm_statistics --mode=glib-server --output=gpm-interface-statistics-glue.h $(srcdir)/gpm-interface-statistics.xml
 
 clean-local:
 	rm -f *~

@@ -40,7 +40,7 @@
 #include "gpm-debug.h"
 
 #include "gpm-manager.h"
-#include "gpm-manager-glue.h"
+#include "gpm-interface-manager-glue.h"
 
 static void gpm_exit (GpmManager *manager);
 

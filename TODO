@@ -8,6 +8,11 @@ TODO:
  * Integrate g-p-m with more modules, e.g. nautilus.
  * Add the cpu frequency support when it gets added to HAL
  * Put the graphing stuff out of process
+
+dbus-send --session --print-reply --dest=org.gnome.PowerManager /org/gnome/PowerManager/Statistics org.gnome.PowerManager.Statistics.GetTypes
+dbus-send --session --print-reply --dest=org.gnome.PowerManager /org/gnome/PowerManager/Statistics org.gnome.PowerManager.Statistics.GetEventLog int32:333
+dbus-send --session --print-reply --dest=org.gnome.PowerManager /org/gnome/PowerManager/Statistics org.gnome.PowerManager.Statistics.GetData int32:3 string:rate int32:0
+
  * Control more stuff for UPS's (NUT stuff?)
  * "don't notify me of this anymore" on the libnotify thing.
  * Give the user the ability to force an Inhibit()'d action

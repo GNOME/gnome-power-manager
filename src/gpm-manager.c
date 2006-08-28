@@ -64,7 +64,7 @@
 #include "gpm-polkit.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
-#include "gpm-statistics-glue.h"
+#include "gpm-interface-statistics-glue.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
