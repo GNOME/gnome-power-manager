@@ -47,8 +47,17 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmInfoClass;
 
+typedef enum
+{
+	 GPM_INFO_ERROR_GENERAL,
+	 GPM_INFO_ERROR_INVALID_TYPE
+} GpmInfoError;
+
+#define GPM_INFO_ERROR gpm_manager_error_quark ()
+
 GType		 gpm_info_get_type			(void);
 GpmInfo		*gpm_info_new				(void);
+GQuark		 gpm_info_error_quark			(void);
 
 void		 gpm_info_show_window			(GpmInfo	*info);
 void		 gpm_info_event_log			(GpmInfo	*info,
@@ -60,7 +69,13 @@ gboolean	 gpm_statistics_get_types		(GpmInfo	*info,
 							 GError		**error);
 gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
 							 gint 	    	 seconds,
-							 GList **list,
+							 GPtrArray	**array,
+							 GError		**error);
+gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
+							 gint 	    	 seconds,
+							 const char	*type,
+							 gint		 options,
+							 GPtrArray	**array,
 							 GError		**error);
 
 G_END_DECLS
