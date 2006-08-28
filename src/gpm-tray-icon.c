@@ -45,13 +45,13 @@
 #include <gtk/gtkstatusicon.h>
 #endif
 
-#include <libgnomeui/gnome-help.h> /* for gnome_help_display */
+#include <libgnomeui/gnome-help.h>
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
 #endif
 
-#include "gpm-common.h" /* For GPM_HOMEPAGE_URL, etc */
+#include "gpm-common.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 #include "gpm-debug.h"
@@ -103,7 +103,7 @@ static void gpm_tray_icon_suspend_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_hibernate_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_info_cb	 	(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_preferences_cb	(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_graph_cb		(GtkAction *action, GpmTrayIcon *icon);
+static void gpm_tray_icon_show_statistics_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_help_cb		(GtkAction *action, GpmTrayIcon *icon);
 static void gpm_tray_icon_show_about_cb		(GtkAction *action, GpmTrayIcon *icon);
 
@@ -117,8 +117,8 @@ static GtkActionEntry gpm_tray_icon_action_entries [] =
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
 	{ "TrayInfo", GTK_STOCK_DIALOG_INFO, N_("_Information"),
 	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_info_cb) },
-	{ "TrayGraph", GTK_STOCK_CONVERT, N_("_Statistics"),
-	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_graph_cb) },
+	{ "TrayStatistics", GTK_STOCK_CONVERT, N_("_Statistics"),
+	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_statistics_cb) },
 	{ "TrayHelp", GTK_STOCK_HELP, N_("_Help"), NULL,
 	  NULL, G_CALLBACK (gpm_tray_icon_show_help_cb) },
 	{ "TrayAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
@@ -128,7 +128,11 @@ static guint gpm_tray_icon_n_action_entries = G_N_ELEMENTS (gpm_tray_icon_action
 
 static guint	 signals [LAST_SIGNAL] = { 0, };
 
+#if USE_EGGTRAYICON
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, EGG_TYPE_TRAY_ICON)
+#else
+G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
+#endif
 
 /**
  * gpm_tray_icon_enable_suspend:
@@ -147,8 +151,7 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 		icon->priv->can_suspend = enabled;
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TraySuspend");
-		gtk_action_set_visible (GTK_ACTION (action),
-					enabled);
+		gtk_action_set_visible (GTK_ACTION (action), enabled);
 	}
 }
 
@@ -169,9 +172,7 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 		icon->priv->can_hibernate = enabled;
 		action = gtk_action_group_get_action (icon->priv->actiongroup,
 						      "TrayHibernate");
-		gtk_action_set_visible (GTK_ACTION (action),
-					enabled);
-
+		gtk_action_set_visible (GTK_ACTION (action), enabled);
 	}
 }
 
@@ -279,12 +280,12 @@ gpm_tray_icon_suspend_cb (GtkAction   *action,
 }
 
 /**
- * gpm_tray_icon_show_graph_cb:
+ * gpm_tray_icon_show_statistics_cb:
  * @action: A valid GtkAction
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_graph_cb (GtkAction   *action,
+gpm_tray_icon_show_statistics_cb (GtkAction   *action,
 				   GpmTrayIcon *icon)
 {
 	const char *command = "gnome-power-graph";
@@ -545,7 +546,7 @@ gpm_tray_icon_constructor (GType		  type,
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
 					   "    <menuitem action=\"TrayInfo\" />"
-					   "    <menuitem action=\"TrayGraph\" />"
+					   "    <menuitem action=\"TrayStatistics\" />"
 					   "    <separator />"
 					   "    <menuitem action=\"TrayHelp\" />"
 					   "    <menuitem action=\"TrayAbout\" />"
