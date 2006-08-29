@@ -1245,8 +1245,8 @@ gpm_manager_hibernate (GpmManager *manager,
 		if (show_notify) {
 			const char *title = _("Hibernate Problem");
 			message = g_strdup_printf (_("HAL failed to %s. "
-						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
-						     _("hibernate"), GPM_FAQ_URL);
+						     "Check the help file for common problems."),
+						     _("hibernate"));
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      title,
 					      message,
@@ -1360,8 +1360,8 @@ gpm_manager_suspend (GpmManager *manager,
 		if (show_notify) {
 			const char *title;
 			message = g_strdup_printf (_("Your computer failed to %s.\n"
-						     "Check the <a href=\"%s\">FAQ page</a> for common problems."),
-						     _("suspend"), GPM_FAQ_URL);
+						     "Check the help file for common problems."),
+						     _("suspend"));
 			title = _("Suspend Problem");
 			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      title,
