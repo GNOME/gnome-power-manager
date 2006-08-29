@@ -54,7 +54,7 @@ GpmHalPower	*gpm_hal_power_new			(void);
 gboolean	 gpm_hal_power_has_power_management	(GpmHalPower	*hal);
 gboolean	 gpm_hal_power_can_suspend		(GpmHalPower	*hal);
 gboolean	 gpm_hal_power_suspend			(GpmHalPower	*hal,
-							 gint		 wakeup);
+							 guint		 wakeup);
 gboolean	 gpm_hal_power_can_hibernate		(GpmHalPower	*hal);
 gboolean	 gpm_hal_power_hibernate		(GpmHalPower	*hal);
 gboolean	 gpm_hal_power_shutdown			(GpmHalPower	*hal);

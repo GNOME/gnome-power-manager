@@ -40,9 +40,9 @@ static void     gpm_inhibit_finalize   (GObject		*object);
 
 typedef struct
 {
-	char		*application;
-	char		*reason;
-	char		*connection;
+	gchar		*application;
+	gchar		*reason;
+	gchar		*connection;
 	guint32		 cookie;
 } GpmInhibitData;
 
@@ -132,10 +132,10 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  * Return value: a new random cookie.
  **/
 guint32
-gpm_inhibit_add (GpmInhibit *inhibit,
-		 const char *connection,
-		 const char *application,
-		 const char *reason)
+gpm_inhibit_add (GpmInhibit  *inhibit,
+		 const gchar *connection,
+		 const gchar *application,
+		 const gchar *reason)
 {
 	GpmInhibitData *data = g_new (GpmInhibitData, 1);
 
@@ -181,9 +181,9 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
 void
-gpm_inhibit_remove (GpmInhibit *inhibit,
-		    const char *connection,
-		    guint32	cookie)
+gpm_inhibit_remove (GpmInhibit  *inhibit,
+		    const gchar *connection,
+		    guint32	 cookie)
 {
 	GpmInhibitData *data;
 
@@ -211,8 +211,8 @@ gpm_inhibit_remove (GpmInhibit *inhibit,
  * unregister it.
  **/
 static void
-gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
-			 const char *connection)
+gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
+			 const gchar *connection)
 {
 	int a;
 	GpmInhibitData *data;
@@ -242,10 +242,10 @@ gpm_inhibit_remove_dbus (GpmInhibit *inhibit,
  **/
 static void
 dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
-			    const char	   *name,
-			    const char     *prev,
-			    const char     *new,
-			    GpmInhibit	   *inhibit)
+		     const gchar    *name,
+		     const gchar    *prev,
+		     const gchar    *new,
+		     GpmInhibit	    *inhibit)
 {
 	if (strlen (new) == 0) {
 		gpm_inhibit_remove_dbus (inhibit, name);
@@ -280,11 +280,11 @@ gpm_inhibit_check (GpmInhibit *inhibit)
  *
  **/
 void
-gpm_inhibit_get_message (GpmInhibit *inhibit,
-			 GString    *message,
-			 const char *action)
+gpm_inhibit_get_message (GpmInhibit  *inhibit,
+			 GString     *message,
+			 const gchar *action)
 {
-	int a;
+	guint a;
 	GpmInhibitData *data;
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
@@ -329,7 +329,7 @@ static void
 gpm_inhibit_finalize (GObject *object)
 {
 	GpmInhibit *inhibit;
-	int a;
+	guint a;
 	GpmInhibitData *data;
 
 	g_return_if_fail (object != NULL);

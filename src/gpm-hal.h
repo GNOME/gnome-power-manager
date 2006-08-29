@@ -66,25 +66,25 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* device_added)		(GpmHal		*hal,
-							 const char	*udi);
+							 const gchar	*udi);
 	void		(* device_removed)		(GpmHal		*hal,
-							 const char	*udi);
+							 const gchar	*udi);
 	void		(* device_property_modified)	(GpmHal		*hal,
-							 const char	*udi,
-							 const char	*key,
+							 const gchar	*udi,
+							 const gchar	*key,
 							 gboolean	 is_added,
 							 gboolean	 is_removed,
 							 gboolean	 finally);
 	void		(* device_condition)		(GpmHal		*hal,
-							 const char	*udi,
-							 const char	*condition,
-							 const char	*details);
+							 const gchar	*udi,
+							 const gchar	*condition,
+							 const gchar	*details);
 	void		(* new_capability)		(GpmHal		*hal,
-							 const char	*udi,
-							 const char	*capability);
+							 const gchar	*udi,
+							 const gchar	*capability);
 	void		(* lost_capability)		(GpmHal		*hal,
-							 const char	*udi,
-							 const char	*capability);
+							 const gchar	*udi,
+							 const gchar	*capability);
 	void		(* daemon_start)		(GpmHal		*hal);
 	void		(* daemon_stop)			(GpmHal		*hal);
 } GpmHalClass;

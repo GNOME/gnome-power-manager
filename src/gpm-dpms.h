@@ -94,8 +94,8 @@ gboolean	 gpm_dpms_set_mode	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	 mode,
 						 GError		**error);
 
-const char	*gpm_dpms_mode_to_string	(GpmDpmsMode	 mode);
-GpmDpmsMode	 gpm_dpms_mode_from_string	(const char	*mode);
+const gchar	*gpm_dpms_mode_to_string	(GpmDpmsMode	 mode);
+GpmDpmsMode	 gpm_dpms_mode_from_string	(const gchar	*mode);
 
 G_END_DECLS
 

@@ -1,12 +1,9 @@
 TODO:
 
- * basish char and int - use gchar and guint and gint
  * Implement the low power changed signal
- * Don't show "ac disconnect" when removing power cord while suspended then resumed.
  * Throw dbus errors when we fail dbus methods: org.gnome.PowerManager.NotInhibited.
  * Make strings more translatable
  * Integrate g-p-m with more modules, e.g. nautilus.
- * Add the cpu frequency support when it gets added to HAL
  * Put the graphing stuff out of process
 
 dbus-send --session --print-reply --dest=org.gnome.PowerManager /org/gnome/PowerManager/Statistics org.gnome.PowerManager.Statistics.GetTypes
@@ -18,3 +15,4 @@ dbus-send --session --print-reply --dest=org.gnome.PowerManager /org/gnome/Power
  * Give the user the ability to force an Inhibit()'d action
  * Use the callbacks in libnotify to do a What's this? type help prompt.
  * Give user a choice to abort all actions.
+ * use the updated hal can_suspend_to_disk keys

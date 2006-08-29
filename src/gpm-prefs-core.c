@@ -62,7 +62,7 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	GpmScreensaver		*screensaver;
 	GpmHalCpuFreq		*cpufreq;
-	GpmHalCpuFreqEnum		 cpufreq_types;
+	GpmHalCpuFreqEnum	 cpufreq_types;
 	GpmHal			*hal;
 };
 
@@ -144,12 +144,12 @@ gpm_prefs_class_init (GpmPrefsClass *klass)
  * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
  **/
 static gboolean
-gpm_dbus_method_bool (const char *method)
+gpm_dbus_method_bool (const gchar *method)
 {
 	DBusGConnection *connection;
-	DBusGProxy      *proxy;
-	GError	   *error;
-	gboolean	  value;
+	DBusGProxy *proxy;
+	GError *error;
+	gboolean value;
 
 	value = FALSE;
 	error = NULL;
@@ -207,8 +207,8 @@ static void
 gpm_prefs_icon_radio_cb (GtkWidget *widget,
 			 GpmPrefs  *prefs)
 {
-	const char  *str;
-	int	     policy;
+	const gchar *str;
+	gint policy;
 
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
 	str = gconf_enum_to_string (icon_policy_enum_map, policy);
@@ -223,7 +223,7 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
  * @scale: The GtkScale object
  * @value: The value in %.
  **/
-static char *
+static gchar *
 gpm_prefs_format_percentage_cb (GtkScale *scale,
 				gdouble   value)
 {
@@ -236,12 +236,12 @@ gpm_prefs_format_percentage_cb (GtkScale *scale,
  * @value: The value in minutes.
  * @prefs: This prefs class instance
  **/
-static char *
+static gchar *
 gpm_prefs_format_time_cb (GtkScale *scale,
 			  gdouble   value,
 			  GpmPrefs *prefs)
 {
-	char *str;
+	gchar *str;
 	if ((gint) value == NEVER_TIME_ON_SLIDER) {
 		str = g_strdup (_("Never"));
 	} else {
@@ -294,9 +294,9 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_sleep_slider (GpmPrefs   *prefs,
-			      const char *widget_name,
-			      const char *gpm_pref_key)
+gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
+			      const gchar *widget_name,
+			      const gchar *gpm_pref_key)
 {
 	GtkWidget *widget;
 	gint value;
@@ -344,7 +344,7 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
 					GpmPrefs *prefs)
 {
 	gdouble value;
-	char *gpm_pref_key;
+	gchar *gpm_pref_key;
 
 	value = gtk_range_get_value (range);
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
@@ -361,9 +361,9 @@ gpm_prefs_brightness_slider_changed_cb (GtkRange *range,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget *
-gpm_prefs_setup_brightness_slider (GpmPrefs   *prefs,
-				   const char *widget_name,
-				   const char *gpm_pref_key)
+gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
+				   const gchar *widget_name,
+				   const gchar *gpm_pref_key)
 {
 	GladeXML    *xml = prefs->priv->glade_xml;
 	GtkWidget *widget;
@@ -400,9 +400,9 @@ static void
 gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 				   GpmPrefs  *prefs)
 {
-	char *value;
-	const char *action;
-	char *gpm_pref_key;
+	gchar *value;
+	const gchar *action;
+	gchar *gpm_pref_key;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 
@@ -436,15 +436,15 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
  * @actions: The actions to associate in an array.
  **/
 static void
-gpm_prefs_setup_action_combo (GpmPrefs    *prefs,
-			      const char  *widget_name,
-			      const char  *gpm_pref_key,
-			      const char **actions)
+gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
+			      const gchar  *widget_name,
+			      const gchar  *gpm_pref_key,
+			      const gchar **actions)
 {
 	GladeXML    *xml = prefs->priv->glade_xml;
-	char *value;
-	int i = 0;
-	int n_added = 0;
+	gchar *value;
+	gint i = 0;
+	gint n_added = 0;
 	gboolean is_writable;
 	GtkWidget *widget;
 
@@ -518,7 +518,7 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
 			    GpmPrefs  *prefs)
 {
 	gboolean checked;
-	char *gpm_pref_key;
+	gchar *gpm_pref_key;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
@@ -534,9 +534,9 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static GtkWidget*
-gpm_prefs_setup_checkbox (GpmPrefs   *prefs,
-			  const char *widget_name,
-			  const char *gpm_pref_key)
+gpm_prefs_setup_checkbox (GpmPrefs    *prefs,
+			  const gchar *widget_name,
+			  const gchar *gpm_pref_key)
 {
 
 	GladeXML    *xml = prefs->priv->glade_xml;
@@ -577,9 +577,9 @@ gpm_prefs_close_cb (GtkWidget	*widget,
  * @prefs: This prefs class instance
  **/
 static gboolean
-gpm_prefs_delete_event_cb (GtkWidget	*widget,
-			  GdkEvent	*event,
-			  GpmPrefs	*prefs)
+gpm_prefs_delete_event_cb (GtkWidget *widget,
+			  GdkEvent   *event,
+			  GpmPrefs   *prefs)
 {
 	gpm_prefs_close_cb (widget, prefs);
 	return FALSE;
@@ -594,9 +594,9 @@ gpm_prefs_delete_event_cb (GtkWidget	*widget,
  * gnome-screensaver idle time to avoid confusion.
  **/
 static void
-set_idle_hscale_stops (GpmPrefs   *prefs,
-		       const char *widget_name,
-		       int	   gs_idle_time)
+set_idle_hscale_stops (GpmPrefs    *prefs,
+		       const gchar *widget_name,
+		       gint         gs_idle_time)
 {
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
@@ -615,8 +615,8 @@ set_idle_hscale_stops (GpmPrefs   *prefs,
  **/
 static void
 gs_delay_changed_cb (GpmScreensaver *screensaver,
-		    int		     delay,
-		    GpmPrefs	    *prefs)
+		     gint	     delay,
+		     GpmPrefs	    *prefs)
 {
 	/* update the start and stop points on the hscales */
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
@@ -671,11 +671,11 @@ static void
 gpm_prefs_processor_slider_changed_cb (GtkRange *range,
 				       GpmPrefs *prefs)
 {
-	int value;
-	char *gpm_pref_key;
+	gint value;
+	gchar *gpm_pref_key;
 
-	value = (int) gtk_range_get_value (range);
-	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
+	value = (gint) gtk_range_get_value (range);
+	gpm_pref_key = (gchar *) g_object_get_data (G_OBJECT (range), "gconf_key");
 	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
 	gconf_client_set_int (prefs->priv->gconf_client, gpm_pref_key, value, NULL);
 }
@@ -688,8 +688,8 @@ gpm_prefs_processor_slider_changed_cb (GtkRange *range,
  **/
 static GtkWidget *
 gpm_prefs_setup_processor_slider (GpmPrefs   *prefs,
-				  const char *widget_name,
-				  const char *gpm_pref_key)
+				  const gchar *widget_name,
+				  const gchar *gpm_pref_key)
 {
 	GtkWidget *widget;
 	gint value;
@@ -726,9 +726,9 @@ static void
 gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 				      GpmPrefs  *prefs)
 {
-	char *value;
-	const char *policy;
-	char *gpm_pref_key;
+	gchar *value;
+	const gchar *policy;
+	gchar *gpm_pref_key;
 	gboolean show_custom = FALSE;
 	GtkWidget *twidget;
 
@@ -802,12 +802,12 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
  **/
 static void
 gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
-				 const char       *widget_name,
-				 const char       *gpm_pref_key,
+				 const gchar      *widget_name,
+				 const gchar      *gpm_pref_key,
 				 GpmHalCpuFreqEnum cpufreq_types)
 {
-	char *value;
-	int n_added = 0;
+	gchar *value;
+	guint n_added = 0;
 	gboolean has_option = FALSE;
 	gboolean is_writable;
 	GtkWidget *widget;
@@ -893,12 +893,12 @@ static void
 prefs_setup_sleep (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	int delay;
+	gint delay;
 
-	const char   *sleep_type_actions[] = {ACTION_NOTHING,
-					      ACTION_SUSPEND,
-					      ACTION_HIBERNATE,
-					      NULL};
+	const gchar *sleep_type_actions[] = {ACTION_NOTHING,
+					     ACTION_SUSPEND,
+					     ACTION_HIBERNATE,
+					     NULL};
 
 	/* Sleep Type Combo Box */
 	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_general_type",
@@ -932,7 +932,7 @@ static void
 prefs_setup_display (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
-	int delay;
+	gint delay;
 
 	/* Sleep time for display to blank */
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_display_ac_sleep",
@@ -977,7 +977,7 @@ prefs_setup_processor (GpmPrefs *prefs)
 {
 	GtkWidget    *widget;
 	GtkWidget    *notebook;
-	int	      page;
+	gint	      page;
 
 	/* remove if we have no options to set */
 	if (prefs->priv->has_cpufreq == FALSE) {
@@ -1004,21 +1004,21 @@ static void
 prefs_setup_actions (GpmPrefs *prefs)
 {
 	GtkWidget    *widget;
-	const char   *button_lid_actions[] = {ACTION_NOTHING,
+	const gchar  *button_lid_actions[] = {ACTION_NOTHING,
 					      ACTION_BLANK,
 					      ACTION_SUSPEND,
 					      ACTION_HIBERNATE,
 					      NULL};
-	const char   *battery_critical_actions[] = {ACTION_NOTHING,
+	const gchar  *battery_critical_actions[] = {ACTION_NOTHING,
 						    ACTION_SUSPEND,
 						    ACTION_HIBERNATE,
 						    ACTION_SHUTDOWN,
 						    NULL};
-	const char   *battery_ups_actions[] = {ACTION_NOTHING,
+	const gchar  *battery_ups_actions[] = {ACTION_NOTHING,
 					       ACTION_HIBERNATE,
 					       ACTION_SHUTDOWN,
 					       NULL};
-	const char   *power_button_actions[] = {ACTION_INTERACTIVE,
+	const gchar  *power_button_actions[] = {ACTION_INTERACTIVE,
 						ACTION_SUSPEND,
 						ACTION_HIBERNATE,
 						ACTION_SHUTDOWN,
@@ -1079,8 +1079,8 @@ prefs_setup_actions (GpmPrefs *prefs)
 static void
 prefs_setup_notification (GpmPrefs *prefs)
 {
-	char	    *icon_policy_str;
-	int	     icon_policy;
+	gchar	    *icon_policy_str;
+	gint	     icon_policy;
 	GtkWidget   *radiobutton_icon_always;
 	GtkWidget   *radiobutton_icon_present;
 	GtkWidget   *radiobutton_icon_charge;

@@ -54,15 +54,16 @@ G_DEFINE_TYPE (GpmPolkit, gpm_polkit, G_TYPE_OBJECT)
  * Return value: Success value.
  **/
 gboolean
-gpm_polkit_is_user_privileged (GpmPolkit *polkit, const char *privilege)
+gpm_polkit_is_user_privileged (GpmPolkit   *polkit,
+			       const gchar *privilege)
 {
 	GError *error = NULL;
 	gboolean boolret = TRUE;
 
-	const char *user = g_get_user_name ();
-	const char *bus_unique_name;
-	const char *myresource = NULL;
-	const char *but_restricted_to = NULL;
+	const gchar *user = g_get_user_name ();
+	const gchar *bus_unique_name;
+	const gchar *myresource = NULL;
+	const gchar *but_restricted_to = NULL;
 	gboolean out_is_allowed;
 	gboolean out_is_temporary;
 	DBusGProxy *proxy;

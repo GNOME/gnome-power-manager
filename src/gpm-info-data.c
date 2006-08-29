@@ -46,8 +46,8 @@ static void     gpm_info_data_finalize   (GObject		 	*object);
 struct GpmInfoDataPrivate
 {
 	GPtrArray		*array;		/* the data array */
-	int			 max_points;	/* when we should simplify data */
-	int			 max_time;	/* truncate after this */
+	guint			 max_points;	/* when we should simplify data */
+	guint			 max_time;	/* truncate after this */
 };
 
 G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
@@ -58,7 +58,7 @@ G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
  * @max_points: The maximum number of points to show on the graph
  */
 void
-gpm_info_data_set_max_points (GpmInfoData *info_data, int max_points)
+gpm_info_data_set_max_points (GpmInfoData *info_data, guint max_points)
 {
 	info_data->priv->max_points = max_points;
 }
@@ -69,7 +69,7 @@ gpm_info_data_set_max_points (GpmInfoData *info_data, int max_points)
  * @max_points: The maximum number of points to show on the graph
  */
 void
-gpm_info_data_set_max_time (GpmInfoData *info_data, int max_time)
+gpm_info_data_set_max_time (GpmInfoData *info_data, guint max_time)
 {
 	if (max_time > 10 * 60) {
 		info_data->priv->max_time = max_time;
@@ -117,10 +117,10 @@ gpm_info_data_get_list (GpmInfoData *info_data)
  **/
 void
 gpm_info_data_add_always (GpmInfoData *info_data,
-			  int	       time_secs,
-			  int	       value,
-			  int	       colour,
-			  const char  *desc)
+			  guint	       time_secs,
+			  guint	       value,
+			  guint	       colour,
+			  const gchar *desc)
 {
 	GpmInfoDataPoint *new;
 
@@ -170,13 +170,13 @@ gpm_info_data_free_point (GpmInfoDataPoint *point)
  **/
 void
 gpm_info_data_limit_time (GpmInfoData  *info_data,
-			  int		max_num)
+			  guint		max_num)
 {
 	GpmInfoDataPoint *point;
-	float div;
-	float running_count = 0.0f;
-	int len = info_data->priv->array->len;
-	int a;
+	gfloat div;
+	gfloat running_count = 0.0f;
+	guint len = info_data->priv->array->len;
+	guint a;
 
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
@@ -212,11 +212,11 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
  **/
 void
 gpm_info_data_limit_dilute (GpmInfoData *info_data,
-			    int		 max_num)
+			    guint	 max_num)
 {
 	GpmInfoDataPoint *point;
-	int count = 0;
-	int a;
+	guint count = 0;
+	guint a;
 
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
@@ -244,12 +244,12 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
  **/
 void
 gpm_info_data_limit_truncate (GpmInfoData *info_data,
-			      int	   max_time)
+			      guint	   max_time)
 {
 	GpmInfoDataPoint *point;
-	int a;
-	int len = info_data->priv->array->len;
-	int last_time;
+	guint a;
+	guint len = info_data->priv->array->len;
+	guint last_time;
 
 	/* find the last point time */
 	point = g_ptr_array_index (info_data->priv->array, len-1);
@@ -285,16 +285,16 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
  **/
 void
 gpm_info_data_add (GpmInfoData *info_data,
-		   int		time_secs,
-		   int		value,
-		   int		colour)
+		   guint	time_secs,
+		   guint	value,
+		   guint	colour)
 {
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
 
 	GpmInfoDataPoint *point;
 	GpmInfoDataPoint *point2;
-	int len = info_data->priv->array->len;
+	guint len = info_data->priv->array->len;
 
 	if (len > 3) {
 		point = g_ptr_array_index (info_data->priv->array, len-1);

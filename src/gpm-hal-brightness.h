@@ -50,19 +50,19 @@ typedef struct
 } GpmHalBrightnessClass;
 
 GType		 gpm_hal_brightness_get_type	(void);
-GpmHalBrightness	*gpm_hal_brightness_new		(void);
+GpmHalBrightness *gpm_hal_brightness_new	(void);
 
-void		 gpm_hal_brightness_set_level_dim	(GpmHalBrightness *brightness,
-						 int		brightness_level);
-void		 gpm_hal_brightness_set_level_std	(GpmHalBrightness *brightness,
-						 int		brightness_level);
-void		 gpm_hal_brightness_undim		(GpmHalBrightness *brightness);
+void		 gpm_hal_brightness_set_level_dim (GpmHalBrightness *brightness,
+						 guint		brightness_level);
+void		 gpm_hal_brightness_set_level_std (GpmHalBrightness *brightness,
+						 guint		brightness_level);
+void		 gpm_hal_brightness_undim	(GpmHalBrightness *brightness);
 void		 gpm_hal_brightness_up		(GpmHalBrightness *brightness);
-void		 gpm_hal_brightness_down		(GpmHalBrightness *brightness);
-int		 gpm_hal_brightness_get		(GpmHalBrightness *brightness);
+void		 gpm_hal_brightness_down	(GpmHalBrightness *brightness);
+gint		 gpm_hal_brightness_get		(GpmHalBrightness *brightness);
 void		 gpm_hal_brightness_set		(GpmHalBrightness *brightness);
 void		 gpm_hal_brightness_dim		(GpmHalBrightness *brightness);
-gboolean	 gpm_hal_brightness_has_hardware	(GpmHalBrightness *brightness);
+gboolean	 gpm_hal_brightness_has_hardware (GpmHalBrightness *brightness);
 
 G_END_DECLS
 

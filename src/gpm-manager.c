@@ -108,7 +108,7 @@ struct GpmManagerPrivate
 	GpmInfo		*info;
 	GpmFeedback	*feedback;
 	GpmPower	*power;
-	GpmHalBrightness   *brightness;
+	GpmHalBrightness *brightness;
 	GpmScreensaver  *screensaver;
 	GpmInhibit	*inhibit;
 	GpmPolkit	*polkit;
@@ -132,17 +132,17 @@ struct GpmManagerPrivate
 	gboolean	 ignore_inhibits;
 
 	time_t		 last_resume_event;
-	int		 suppress_policy_timeout;
+	guint		 suppress_policy_timeout;
 
-	int		 low_percentage;
-	int		 very_low_percentage;
-	int		 critical_percentage;
-	int		 action_percentage;
+	guint		 low_percentage;
+	guint		 very_low_percentage;
+	guint		 critical_percentage;
+	guint		 action_percentage;
 
-	int		 low_time;
-	int		 very_low_time;
-	int		 critical_time;
-	int		 action_time;
+	guint		 low_time;
+	guint		 very_low_time;
+	guint		 critical_time;
+	guint		 action_time;
 };
 
 enum {
@@ -194,10 +194,10 @@ gpm_manager_error_quark (void)
  * Return value: TRUE if we can perform the action.
  **/
 static gboolean
-gpm_manager_is_policy_timout_valid (GpmManager *manager,
-				    const char *action)
+gpm_manager_is_policy_timout_valid (GpmManager  *manager,
+				    const gchar *action)
 {
-	char *message;
+	gchar *message;
 	if ((time (NULL) - manager->priv->last_resume_event) <=
 	    manager->priv->suppress_policy_timeout) {
 		message = g_strdup_printf ("Skipping suppressed %s", action);
@@ -238,7 +238,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 			      const char *action)
 {
 	gboolean action_ok;
-	char *title;
+	gchar *title;
 
 	action_ok = gpm_inhibit_check (manager->priv->inhibit);
 	if (! action_ok) {
@@ -388,7 +388,7 @@ gpm_manager_allowed_reboot (GpmManager *manager,
  **/
 static char *
 get_stock_id (GpmManager *manager,
-	      int	  icon_policy)
+	      guint	  icon_policy)
 {
 	GpmPowerStatus status_primary;
 	GpmPowerStatus status_ups;
@@ -495,9 +495,9 @@ get_stock_id (GpmManager *manager,
 static void
 tray_icon_update (GpmManager *manager)
 {
-	char *stock_id = NULL;
-	char *icon_policy_str;
-	int   icon_policy;
+	gchar *stock_id = NULL;
+	gchar *icon_policy_str;
+	gint   icon_policy;
 
 	/* do we want to display the icon */
 	icon_policy_str = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_ICON_POLICY, NULL);
@@ -512,7 +512,7 @@ tray_icon_update (GpmManager *manager)
 
 	/* only create if we have a valid filename */
 	if (stock_id) {
-		char *tooltip = NULL;
+		gchar *tooltip = NULL;
 
 		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
 						    stock_id);
@@ -552,7 +552,7 @@ sync_dpms_policy (GpmManager *manager)
 	guint    standby;
 	guint    suspend;
 	guint    off;
-	char    *dpms_method;
+	gchar   *dpms_method;
 
 	error = NULL;
 
@@ -715,13 +715,13 @@ static void
 change_power_policy (GpmManager *manager,
 		     gboolean	 on_ac)
 {
-	int	     brightness;
-	int	     sleep_display;
-	int	     sleep_computer;
+	guint	     brightness;
+	guint	     sleep_display;
+	guint	     sleep_computer;
 	gboolean     power_save;
 	gboolean     cpufreq_consider_nice;
-	int	     cpufreq_performance;
-	char        *cpufreq_policy;
+	guint	     cpufreq_performance;
+	gchar       *cpufreq_policy;
 	GConfClient *client;
 	GpmHalCpuFreqEnum cpufreq_type;
 
@@ -779,8 +779,8 @@ change_power_policy (GpmManager *manager,
  * Return value: TRUE if we should lock.
  **/
 static gboolean
-gpm_manager_get_lock_policy (GpmManager *manager,
-			     const char *policy)
+gpm_manager_get_lock_policy (GpmManager  *manager,
+			     const gchar *policy)
 {
 	gboolean do_lock;
 	gboolean use_ss_setting;
@@ -881,10 +881,10 @@ gpm_manager_unblank_screen (GpmManager *manager,
 static void
 manager_explain_reason (GpmManager   *manager,
 			GpmGraphWidgetEvent event,
-			const char   *pre,
-			const char   *post)
+			const gchar  *pre,
+			const gchar  *post)
 {
-	char *message;
+	gchar *message;
 	if (post) {
 		message = g_strdup_printf (_("%s because %s"), pre, post);
 	} else {
@@ -904,11 +904,11 @@ manager_explain_reason (GpmManager   *manager,
  * Does one of the policy actions specified in gconf.
  **/
 static void
-manager_policy_do (GpmManager *manager,
-		   const char *policy,
-		   const char *reason)
+manager_policy_do (GpmManager  *manager,
+		   const gchar *policy,
+		   const gchar *reason)
 {
-	char *action;
+	gchar *action;
 
 	gpm_debug ("policy: %s", policy);
 	action = gconf_client_get_string (manager->priv->gconf_client, policy, NULL);
@@ -1020,9 +1020,9 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
  * Return value: TRUE if we could set the DPMS mode OK.
  **/
 gboolean
-gpm_manager_set_dpms_mode (GpmManager *manager,
-			   const char *mode,
-			   GError    **error)
+gpm_manager_set_dpms_mode (GpmManager  *manager,
+			   const gchar *mode,
+			   GError     **error)
 {
 	gboolean ret;
 
@@ -1045,11 +1045,11 @@ gpm_manager_set_dpms_mode (GpmManager *manager,
  * Return value: TRUE if we could get the GPMS mode OK.
  **/
 gboolean
-gpm_manager_get_dpms_mode (GpmManager  *manager,
-			   const char **mode,
-			   GError     **error)
+gpm_manager_get_dpms_mode (GpmManager   *manager,
+			   const gchar **mode,
+			   GError      **error)
 {
-	gboolean    ret;
+	gboolean ret;
 	GpmDpmsMode m;
 
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
@@ -1076,14 +1076,14 @@ gpm_manager_get_dpms_mode (GpmManager  *manager,
  * idle action suspend from happening.
  **/
 void
-gpm_manager_inhibit (GpmManager	*manager,
-		     const char	*application,
-		     const char	*reason,
+gpm_manager_inhibit (GpmManager	 *manager,
+		     const gchar *application,
+		     const gchar *reason,
 		     DBusGMethodInvocation *context,
-		     GError    **error)
+		     GError     **error)
 {
-	const char* connection = dbus_g_method_get_sender (context);
-	int cookie;
+	guint32 cookie;
+	const gchar *connection = dbus_g_method_get_sender (context);
 	cookie = gpm_inhibit_add (manager->priv->inhibit, connection, application, reason);
 	dbus_g_method_return (context, cookie);
 }
@@ -1099,11 +1099,11 @@ gpm_manager_inhibit (GpmManager	*manager,
  **/
 void
 gpm_manager_uninhibit (GpmManager	 *manager,
-		       int		  cookie,
+		       guint32		  cookie,
 		       DBusGMethodInvocation *context,
 		       GError		**error)
 {
-	const char* connection = dbus_g_method_get_sender (context);
+	const gchar *connection = dbus_g_method_get_sender (context);
 	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
 	dbus_g_method_return (context);
 }
@@ -1232,7 +1232,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gpm_power_update_all (manager->priv->power);
 
 	if (! ret) {
-		char *message;
+		gchar *message;
 		gboolean show_notify;
 
 		if (manager->priv->enable_beeping) {
@@ -1243,7 +1243,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
 		if (show_notify) {
-			const char *title = _("Hibernate Problem");
+			const gchar *title = _("Hibernate Problem");
 			message = g_strdup_printf (_("HAL failed to %s. "
 						     "Check the help file for common problems."),
 						     _("hibernate"));
@@ -1290,9 +1290,9 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean ret;
 	gboolean do_lock;
 	GpmPowerStatus status;
-	int charge_before_suspend;
-	int charge_difference;
-	char *message;
+	guint charge_before_suspend;
+	gint charge_difference;
+	gchar *message;
 
 	gpm_manager_allowed_suspend (manager, &allowed, NULL);
 
@@ -1358,7 +1358,7 @@ gpm_manager_suspend (GpmManager *manager,
 		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
 						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
 		if (show_notify) {
-			const char *title;
+			const gchar *title;
 			message = g_strdup_printf (_("Your computer failed to %s.\n"
 						     "Check the help file for common problems."),
 						     _("suspend"));
@@ -1618,7 +1618,7 @@ battery_button_pressed (GpmManager *manager)
  * What to do when the power button is pressed.
  **/
 static void
-power_button_pressed (GpmManager   *manager)
+power_button_pressed (GpmManager *manager)
 {
 	if (! gpm_manager_is_policy_timout_valid (manager, "power button press")) {
 		return;
@@ -1637,7 +1637,7 @@ power_button_pressed (GpmManager   *manager)
  * What to do when the suspend button is pressed.
  **/
 static void
-suspend_button_pressed (GpmManager   *manager)
+suspend_button_pressed (GpmManager *manager)
 {
 	if (! gpm_manager_is_policy_timout_valid (manager, "suspend button press")) {
 		return;
@@ -1656,7 +1656,7 @@ suspend_button_pressed (GpmManager   *manager)
  * What to do when the hibernate button is pressed.
  **/
 static void
-hibernate_button_pressed (GpmManager   *manager)
+hibernate_button_pressed (GpmManager *manager)
 {
 	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate button press")) {
 		return;
@@ -1678,8 +1678,8 @@ hibernate_button_pressed (GpmManager   *manager)
  * battery power.
  **/
 static void
-lid_button_pressed (GpmManager	 *manager,
-		    gboolean	  state)
+lid_button_pressed (GpmManager *manager,
+		    gboolean    state)
 {
 	gboolean  on_ac;
 
@@ -1742,8 +1742,8 @@ lid_button_pressed (GpmManager	 *manager,
  **/
 static void
 brightness_step_changed_cb (GpmHalBrightness *brightness,
-			    int		   percentage,
-			    GpmManager	  *manager)
+			    int		      percentage,
+			    GpmManager	     *manager)
 {
 	gpm_debug ("Need to diplay feedback value %i", percentage);
 	gpm_feedback_display_value (manager->priv->feedback, (float) percentage / 100.0f);
@@ -1759,10 +1759,10 @@ brightness_step_changed_cb (GpmHalBrightness *brightness,
  * description
  **/
 static void
-power_button_pressed_cb (GpmPower   *power,
-			 const char *type,
-			 gboolean    state,
-			 GpmManager *manager)
+power_button_pressed_cb (GpmPower    *power,
+			 const gchar *type,
+			 gboolean     state,
+			 GpmManager  *manager)
 {
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
@@ -1875,9 +1875,9 @@ power_on_ac_changed_cb (GpmPower   *power,
  * Return value: A GpmWarning state, e.g. GPM_WARNING_VERY_LOW
  **/
 static GpmWarning
-gpm_manager_get_warning_type (GpmManager	    *manager,
+gpm_manager_get_warning_type (GpmManager     *manager,
 			      GpmPowerStatus *status,
-			      gboolean		     use_time)
+			      gboolean	      use_time)
 {
 	GpmWarning type = GPM_WARNING_NONE;
 
@@ -1932,28 +1932,20 @@ gpm_manager_get_warning_type (GpmManager	    *manager,
  * @warning_type: The warning type, e.g. GPM_WARNING_VERY_LOW
  * Return value: the title text according to the warning type.
  **/
-static const char *
+static const gchar *
 battery_low_get_title (GpmWarning warning_type)
 {
 	char *title = NULL;
 
 	if (warning_type == GPM_WARNING_ACTION ||
 	    warning_type == GPM_WARNING_CRITICAL) {
-
 		title = _("Power Critically Low");
-
 	} else if (warning_type == GPM_WARNING_VERY_LOW) {
-
 		title = _("Power Very Low");
-
 	} else if (warning_type == GPM_WARNING_LOW) {
-
 		title = _("Power Low");
-
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
-
 		title = _("Power Information");
-
 	}
 
 	return title;
@@ -1992,13 +1984,13 @@ battery_status_changed_primary (GpmManager     *manager,
 				GpmPowerKind    battery_kind,
 				GpmPowerStatus *battery_status)
 {
-	GpmWarning  warning_type;
-	gboolean    show_notify;
-	char	   *message = NULL;
-	char	   *remaining = NULL;
-	const char *title = NULL;
-	gboolean    on_ac;
-	int	    timeout = 0;
+	GpmWarning   warning_type;
+	gboolean     show_notify;
+	gchar	    *message = NULL;
+	gchar	    *remaining = NULL;
+	const gchar *title = NULL;
+	gboolean     on_ac;
+	gint	     timeout = 0;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
@@ -2071,7 +2063,7 @@ battery_status_changed_primary (GpmManager     *manager,
 
 	/* Do different warnings for each GPM_WARNING_* */
 	if (warning_type == GPM_WARNING_ACTION) {
-		char *action;
+		gchar *action;
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
@@ -2129,7 +2121,7 @@ battery_status_changed_primary (GpmManager     *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const char *icon;
+		const gchar *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -2160,9 +2152,9 @@ battery_status_changed_ups (GpmManager	   *manager,
 			    GpmPowerStatus *battery_status)
 {
 	GpmWarning warning_type;
-	char *message = NULL;
-	char *remaining = NULL;
-	const char *title = NULL;
+	gchar *message = NULL;
+	gchar *remaining = NULL;
+	const gchar *title = NULL;
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
@@ -2271,10 +2263,10 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			     GpmPowerStatus *battery_status)
 {
 	GpmWarning warning_type;
-	char *message = NULL;
-	const char *title = NULL;
-	const char *name;
-	const char *icon;
+	gchar *message = NULL;
+	const gchar *title = NULL;
+	const gchar *name;
+	const gchar *icon;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
 	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
@@ -2349,9 +2341,9 @@ battery_status_changed_misc (GpmManager	    	   *manager,
  * different functions for each of the device types.
  **/
 static void
-power_battery_status_changed_cb (GpmPower		*power,
-				 GpmPowerKind	 battery_kind,
-				 GpmManager		*manager)
+power_battery_status_changed_cb (GpmPower    *power,
+				 GpmPowerKind battery_kind,
+				 GpmManager  *manager)
 {
 	GpmPowerStatus battery_status;
 
@@ -2600,7 +2592,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
  **/
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
-			const char    *udi,
+			const gchar   *udi,
 			GpmManager    *manager)
 {
 	gpm_debug ("Battery Removed: %s", udi);

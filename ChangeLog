@@ -1,5 +1,60 @@
 2006-08-29  Richard Hughes  <richard@hughsie.com>
 
+	* TODO:
+	Update, removing the cpufreq and ansi->gtype comments.
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	* src/gpm-dbus-monitor.c:
+	* src/gpm-dbus-monitor.h:
+	* src/gpm-debug.c:
+	* src/gpm-debug.h:
+	* src/gpm-dpms-x11.c:
+	* src/gpm-dpms.h:
+	* src/gpm-feedback-widget.c:
+	* src/gpm-feedback-widget.h:
+	* src/gpm-graph-core.c:
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-hal-brightness.c:
+	* src/gpm-hal-brightness.h:
+	* src/gpm-hal-cpufreq.c:
+	* src/gpm-hal-cpufreq.h:
+	* src/gpm-hal-monitor.c:
+	* src/gpm-hal-monitor.h:
+	* src/gpm-hal-power.c:
+	* src/gpm-hal-power.h:
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	* src/gpm-info-data.c:
+	* src/gpm-info-data.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-inhibit-test.c:
+	* src/gpm-inhibit.c:
+	* src/gpm-inhibit.h:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-polkit.c:
+	* src/gpm-polkit.h:
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	* src/gpm-prefs-core.c:
+	* src/gpm-proxy.c:
+	* src/gpm-proxy.h:
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	* src/gpm-stock-icons.c:
+	* src/gpm-tray-icon.c:
+	* src/gpm-tray-icon.h:
+	Convert lots of code to glib types, and making some more specific
+	marking as constant or unsigned.
+	I still want to make some more varibles more explit to optimise them,
+	for instance having a percentage stored in a 32 bit guint32 makes
+	no sense at all.
+
+2006-08-29  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	* src/gpm-manager.c:
 	Add some more entries to the yelp file for people without internet

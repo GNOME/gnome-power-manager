@@ -37,15 +37,15 @@
 static GtkIconFactory *factory = NULL;
 
 typedef struct {
-	const char *name;
-	gboolean    custom;
+	const gchar *name;
+	gboolean     custom;
 } GpmStockIcon;
 
 gboolean
 gpm_stock_icons_init (void)
 {
 	GtkIconTheme *theme = gtk_icon_theme_get_default ();
-	int	      i;
+	guint i;
 
 	static const GpmStockIcon items [] = {
 		{ GPM_STOCK_HIBERNATE, FALSE },
@@ -57,19 +57,19 @@ gpm_stock_icons_init (void)
 	factory = gtk_icon_factory_new ();
 	gtk_icon_factory_add_default (factory);
 
-	for (i = 0; i < (int) G_N_ELEMENTS (items); i++) {
+	for (i = 0; i < (guint) G_N_ELEMENTS (items); i++) {
 		GtkIconSet *icon_set;
 		GdkPixbuf  *pixbuf;
 
 		if (items[i].custom) {
-			char *filename;
+			gchar *filename;
 
 			filename = g_strconcat (GPM_DATA, G_DIR_SEPARATOR_S, items[i].name, ".png", NULL);
 			pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 			g_free (filename);
 		} else {
 			/* we should really add all the sizes */
-			int size;
+			gint size;
 
 			gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &size, NULL);
 			pixbuf = gtk_icon_theme_load_icon (theme,

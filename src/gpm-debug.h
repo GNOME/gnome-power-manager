@@ -41,16 +41,16 @@ G_BEGIN_DECLS
 
 void		gpm_debug_init			(gboolean	 debug);
 void		gpm_debug_shutdown		(void);
-void		gpm_debug_real			(const char	*func,
-						 const char	*file,
+void		gpm_debug_real			(const gchar	*func,
+						 const gchar	*file,
 						 int		 line,
-						 const char	*format, ...);
-void		gpm_warning_real		(const char	*func,
-						 const char	*file,
+						 const gchar	*format, ...);
+void		gpm_warning_real		(const gchar	*func,
+						 const gchar	*file,
 						 int		 line,
-						 const char	*format, ...);
-void		gpm_syslog			(const char	*format, ...);
-void		gpm_critical_error		(const char	*format, ...);
+						 const gchar	*format, ...);
+void		gpm_syslog			(const gchar	*format, ...);
+void		gpm_critical_error		(const gchar	*format, ...);
 void		gpm_bugzilla			(void);
 
 G_END_DECLS

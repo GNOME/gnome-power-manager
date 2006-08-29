@@ -255,7 +255,7 @@ static GList *
 gpm_graph_convert_strv_to_glist (gchar **array)
 {
 	GList *list = NULL;
-	int i = 0;
+	guint i = 0;
 	while (array && array[i]) {
 		list = g_list_append (list, array[i]);
 		++i;
@@ -269,7 +269,7 @@ gpm_graph_find_types (GpmGraph *graph,
 {
 	GError *error = NULL;
 	gboolean retval;
-	char **strlist;
+	gchar **strlist;
 	DBusGProxy *proxy;
 
 	proxy = gpm_proxy_get_proxy (graph->priv->gproxy);
@@ -304,7 +304,7 @@ static void
 gpm_graph_free_list_strings (GList *list)
 {
 	GList *l;
-	char *str;
+	gchar *str;
 
 	for (l=list; l != NULL; l=l->next) {
 		str = l->data;
@@ -318,8 +318,8 @@ static void
 gpm_graph_type_combo_changed_cb (GtkWidget *widget,
 				 GpmGraph  *graph)
 {
-	char *value;
-	const char *type;
+	gchar *value;
+	const gchar *type;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 
@@ -342,8 +342,8 @@ populate_graph_types (GpmGraph *graph, GtkWidget *widget)
 {
 	GList *list = NULL;
 	GList *l;
-	char *type;
-	char *type_localized;
+	gchar *type;
+	gchar *type_localized;
 	gboolean ret;
 	
 	ret = gpm_graph_find_types (graph, &list);

@@ -52,7 +52,7 @@ GType		 gpm_polkit_get_type			(void);
 GpmPolkit	*gpm_polkit_new				(void);
 
 gboolean	 gpm_polkit_is_user_privileged		(GpmPolkit	*polkit,
-							 const char	*privilege);
+							 const gchar	*privilege);
 
 G_END_DECLS
 

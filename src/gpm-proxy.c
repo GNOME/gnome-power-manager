@@ -41,9 +41,9 @@ static void     gpm_proxy_finalize   (GObject		*object);
 struct GpmProxyPrivate
 {
 	GpmProxyBusType  bus_type;
-	char		*service;
-	char		*interface;
-	char		*path;
+	gchar		*service;
+	gchar		*interface;
+	gchar		*path;
 	DBusGProxy	*proxy;
 	GpmDbusMonitor	*dbus_monitor;
 	gboolean	 assigned;
@@ -137,9 +137,9 @@ gpm_proxy_disconnect (GpmProxy *gproxy)
 DBusGProxy *
 gpm_proxy_assign (GpmProxy	 *gproxy,
 		  GpmProxyBusType bus_type,
-		  const char	 *service,
-		  const char	 *path,
-		  const char	 *interface)
+		  const gchar	 *service,
+		  const gchar	 *path,
+		  const gchar	 *interface)
 {
 	GError *error = NULL;
 
@@ -195,7 +195,7 @@ gpm_proxy_get_proxy (GpmProxy *gproxy)
  * @gproxy: This class instance
  * Return value: The DBUS service name
  **/
-char *
+gchar *
 gpm_proxy_get_service (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
@@ -208,7 +208,7 @@ gpm_proxy_get_service (GpmProxy *gproxy)
  * @gproxy: This class instance
  * Return value: The DBUS interface
  **/
-char *
+gchar *
 gpm_proxy_get_interface (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
@@ -221,7 +221,7 @@ gpm_proxy_get_interface (GpmProxy *gproxy)
  * @gproxy: This class instance
  * Return value: The DBUS path
  **/
-char *
+gchar *
 gpm_proxy_get_path (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
@@ -276,10 +276,10 @@ gpm_proxy_class_init (GpmProxyClass *klass)
  **/
 static void
 dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
-			    const char	   *name,
-			    const char     *prev,
-			    const char     *new,
-			    GpmProxy	   *gproxy)
+		     const gchar    *name,
+		     const gchar    *prev,
+		     const gchar    *new,
+		     GpmProxy	    *gproxy)
 {
 	g_return_if_fail (GPM_IS_PROXY (gproxy));
 	if (gproxy->priv->assigned == FALSE) {
@@ -311,10 +311,10 @@ dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
  **/
 static void
 dbus_noc_system_cb (GpmDbusMonitor *dbus_monitor,
-			    const char	   *name,
-			    const char     *prev,
-			    const char     *new,
-			    GpmProxy	   *gproxy)
+		    const gchar	   *name,
+		    const gchar    *prev,
+		    const gchar    *new,
+		    GpmProxy	   *gproxy)
 {
 	g_return_if_fail (GPM_IS_PROXY (gproxy));
 	if (gproxy->priv->assigned == FALSE) {

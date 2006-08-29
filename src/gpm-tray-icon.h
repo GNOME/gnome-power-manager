@@ -60,16 +60,16 @@ GType		 gpm_tray_icon_get_type			(void);
 GpmTrayIcon	*gpm_tray_icon_new			(void);
 
 void		 gpm_tray_icon_notify			(GpmTrayIcon	*icon,
-							 const char	*title,
-							 const char	*content,
+							 const gchar	*title,
+							 const gchar	*content,
 							 guint		 timeout,
-							 const char	*msgicon,
+							 const gchar	*msgicon,
 							 GpmNotifyLevel	 urgency);
 void		 gpm_tray_icon_cancel_notify		(GpmTrayIcon	*icon);
 void		 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
-							 const char	*tooltip);
+							 const gchar	*tooltip);
 void		 gpm_tray_icon_set_image_from_stock	(GpmTrayIcon	*icon,
-							 const char	*stock_id);
+							 const gchar	*stock_id);
 void		 gpm_tray_icon_enable_suspend		(GpmTrayIcon	*icon,
 							 gboolean	 enabled);
 void		 gpm_tray_icon_enable_hibernate		(GpmTrayIcon	*icon,

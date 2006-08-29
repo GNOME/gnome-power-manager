@@ -81,7 +81,7 @@ struct GpmTrayIconPrivate
 	gboolean	 can_suspend;
 	gboolean	 can_hibernate;
 
-	char		*stock_id;
+	gchar		*stock_id;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notify;
 #endif
@@ -182,8 +182,8 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
  * @tooltip: The tooltip text, e.g. "Batteries fully charged"
  **/
 void
-gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
-			   const char  *tooltip)
+gpm_tray_icon_set_tooltip (GpmTrayIcon  *icon,
+			   const gchar  *tooltip)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	g_return_if_fail (tooltip != NULL);
@@ -207,7 +207,7 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon *icon,
  **/
 void
 gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
-				    const char  *stock_id)
+				    const gchar *stock_id)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
@@ -288,7 +288,7 @@ static void
 gpm_tray_icon_show_statistics_cb (GtkAction   *action,
 				   GpmTrayIcon *icon)
 {
-	const char *command = "gnome-power-graph";
+	const gchar *command = "gnome-power-graph";
 
 	if (! g_spawn_command_line_async (command, NULL)) {
 		gpm_warning ("Couldn't execute command: %s", command);
@@ -304,7 +304,7 @@ static void
 gpm_tray_icon_show_preferences_cb (GtkAction   *action,
 				   GpmTrayIcon *icon)
 {
-	const char *command = "gnome-power-preferences";
+	const gchar *command = "gnome-power-preferences";
 
 	if (! g_spawn_command_line_async (command, NULL)) {
 		gpm_warning ("Couldn't execute command: %s", command);
@@ -401,8 +401,8 @@ gpm_tray_icon_show_about_cb (GtkAction   *action,
  **/
 static void
 tray_popup_position_menu (GtkMenu  *menu,
-			  int      *x,
-			  int      *y,
+			  gint     *x,
+			  gint     *y,
 			  gboolean *push_in,
 			  gpointer  user_data)
 {
@@ -800,10 +800,10 @@ notification_closed_cb (NotifyNotification *notify,
  **/
 static gboolean
 libnotify_event (GpmTrayIcon    *icon,
-		 const char	*title,
-		 const char	*content,
+		 const gchar	*title,
+		 const gchar	*content,
 		 guint		 timeout,
-		 const char	*msgicon,
+		 const gchar	*msgicon,
 		 GpmNotifyLevel	 urgency)
 {
 	GtkWidget *point = NULL;
@@ -855,10 +855,10 @@ libnotify_event (GpmTrayIcon    *icon,
  **/
 static gboolean
 libnotify_event (GpmTrayIcon    *icon,
-		 const char	*title,
-		 const char	*content,
+		 const gchar	*title,
+		 const gchar	*content,
 		 guint		 timeout,
-		 const char	*msgicon,
+		 const gchar	*msgicon,
 		 GpmNotifyLevel	 urgency)
 {
 	GtkWidget     *dialog;
@@ -903,10 +903,10 @@ libnotify_event (GpmTrayIcon    *icon,
  **/
 void
 gpm_tray_icon_notify (GpmTrayIcon	*icon,
-		      const char	*title,
-		      const char	*content,
+		      const gchar	*title,
+		      const gchar	*content,
 		      guint		 timeout,
-		      const char	*msgicon,
+		      const gchar	*msgicon,
 		      GpmNotifyLevel	 urgency)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));

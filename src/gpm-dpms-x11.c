@@ -97,9 +97,9 @@ gpm_dpms_error_quark (void)
 static gboolean
 x11_sync_server_dpms_settings (Display *dpy,
 			       gboolean enabled,
-			       int	standby_secs,
-			       int	suspend_secs,
-			       int	off_secs,
+			       guint	standby_secs,
+			       guint	suspend_secs,
+			       guint	off_secs,
 			       GError **error)
 {
 #ifdef HAVE_DPMS_EXTENSION
@@ -485,7 +485,7 @@ gpm_dpms_set_timeouts (GpmDpms	 *dpms,
 }
 
 GpmDpmsMode
-gpm_dpms_mode_from_string (const char *str)
+gpm_dpms_mode_from_string (const gchar *str)
 {
 	if (str == NULL) {
 		return GPM_DPMS_MODE_UNKNOWN;
@@ -504,10 +504,10 @@ gpm_dpms_mode_from_string (const char *str)
 	}
 }
 
-const char *
+const gchar *
 gpm_dpms_mode_to_string (GpmDpmsMode mode)
 {
-	const char *str = NULL;
+	const gchar *str = NULL;
 
 	switch (mode) {
 	case GPM_DPMS_MODE_ON:

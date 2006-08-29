@@ -48,8 +48,8 @@ struct GpmHalCpuFreqPrivate
 	gboolean		 has_hardware;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
-	int			 available_governors;
-	GpmHalCpuFreqEnum		 current_governor;
+	guint			 available_governors;
+	GpmHalCpuFreqEnum	 current_governor;
 };
 
 static gpointer      gpm_hal_cpufreq_object = NULL;
@@ -62,7 +62,7 @@ G_DEFINE_TYPE (GpmHalCpuFreq, gpm_hal_cpufreq, G_TYPE_OBJECT)
  * Return value: The GpmHalCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
  **/
 GpmHalCpuFreqEnum
-gpm_hal_cpufreq_string_to_enum (const char *governor)
+gpm_hal_cpufreq_string_to_enum (const gchar *governor)
 {
 	GpmHalCpuFreqEnum cpufreq_type = GPM_CPUFREQ_UNKNOWN;
 	g_return_val_if_fail (governor != NULL, FALSE);
@@ -87,7 +87,7 @@ gpm_hal_cpufreq_string_to_enum (const char *governor)
  * @cpufreq_type: The GpmHalCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
  * Return value: The cpufreq kernel governor, e.g. "powersave"
  **/
-const char *
+const gchar *
 gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
 {
 	const char *governor;
@@ -116,7 +116,7 @@ gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
  * Return value: If the method succeeded
  **/
 static gboolean
-gpm_hal_cpufreq_handle_error (GError *error, const char *method)
+gpm_hal_cpufreq_handle_error (GError *error, const gchar *method)
 {
 	gboolean retval = TRUE;
 
@@ -151,7 +151,7 @@ gpm_hal_cpufreq_has_hardware (GpmHalCpuFreq *cpufreq)
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, int performance)
+gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 {
 	GError *error = NULL;
 	gboolean retval;
@@ -201,11 +201,12 @@ gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, int performance)
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_governor (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum cpufreq_type)
+gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
+			      GpmHalCpuFreqEnum cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean retval;
-	const char *governor;
+	const gchar *governor;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
@@ -246,7 +247,8 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum cpufreq_
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_governors (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum *cpufreq_type)
+gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
+			       GpmHalCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean retval;
@@ -296,8 +298,9 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum *cpufre
  * @use_cache: if we should force a cache update
  * Return value: the number of available governors
  **/
-int
-gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq, gboolean use_cache)
+guint
+gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq,
+				      gboolean       use_cache)
 {
 	GpmHalCpuFreqEnum cpufreq_type;
 
@@ -305,7 +308,7 @@ gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq, gboolean use_cache
 
 	/* do we support speedstep and have a new enough hal? */
 	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
+		return 0;
 	}
 
 	if (use_cache == FALSE || cpufreq->priv->available_governors == -1) {
@@ -322,7 +325,8 @@ gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq, gboolean use_cache
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq, gboolean *consider_nice)
+gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
+				   gboolean      *consider_nice)
 {
 	GError *error = NULL;
 	gboolean retval;
@@ -374,7 +378,8 @@ gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq, gboolean *consider_ni
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq, int *performance)
+gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
+				 guint         *performance)
 {
 	GError *error = NULL;
 	gboolean retval;
@@ -425,11 +430,12 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq, int *performance)
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_governor (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum *cpufreq_type)
+gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
+			      GpmHalCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean retval;
-	char *governor;
+	gchar *governor;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
@@ -477,7 +483,8 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq *cpufreq, GpmHalCpuFreqEnum *cpufreq
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq, gboolean consider_nice)
+gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
+				   gboolean       consider_nice)
 {
 	GError *error = NULL;
 	gboolean retval;

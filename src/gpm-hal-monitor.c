@@ -172,11 +172,11 @@ monitor_change_on_ac (GpmHalMonitor *monitor,
  */
 static void
 emit_button_pressed (GpmHalMonitor *monitor,
-		     const char	   *udi,
-		     const char	   *details)
+		     const gchar   *udi,
+		     const gchar   *details)
 {
-	char	   *button_name = NULL;
-	gboolean    value;
+	gchar *button_name = NULL;
+	gboolean value;
 
 	g_return_if_fail (udi != NULL);
 	g_return_if_fail (details != NULL);
@@ -215,9 +215,9 @@ emit_button_pressed (GpmHalMonitor *monitor,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (GpmHal       *hal,
-				 const char    *udi,
-				 const char    *key,
+hal_device_property_modified_cb (GpmHal        *hal,
+				 const gchar   *udi,
+				 const gchar   *key,
 				 gboolean       is_added,
 				 gboolean       is_removed,
 				 gboolean       finally,
@@ -261,9 +261,9 @@ hal_device_property_modified_cb (GpmHal       *hal,
  */
 static void
 hal_device_condition_cb (GpmHal        *hal,
-			 const char    *udi,
-			 const char    *condition,
-			 const char    *details,
+			 const gchar   *udi,
+			 const gchar   *condition,
+			 const gchar   *details,
 			 GpmHalMonitor *monitor)
 {
 	gpm_debug ("udi=%s, condition=%s, details=%s", udi, condition, details);
@@ -280,7 +280,7 @@ hal_device_condition_cb (GpmHal        *hal,
  */
 static void
 watch_add_battery (GpmHalMonitor *monitor,
-		   const char    *udi)
+		   const gchar   *udi)
 {
 	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
 
@@ -295,7 +295,7 @@ watch_add_battery (GpmHalMonitor *monitor,
  */
 static void
 watch_add_button (GpmHalMonitor *monitor,
-		  const char    *udi)
+		  const gchar   *udi)
 {
 	gpm_hal_device_watch_condition (monitor->priv->hal, udi);
 	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
@@ -308,7 +308,7 @@ watch_add_button (GpmHalMonitor *monitor,
  */
 static void
 watch_add_ac_adapter (GpmHalMonitor *monitor,
-		      const char    *udi)
+		      const gchar   *udi)
 {
 	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
 }
@@ -322,7 +322,7 @@ watch_add_ac_adapter (GpmHalMonitor *monitor,
  */
 static void
 hal_device_removed_cb (GpmHal        *hal,
-		       const char    *udi,
+		       const gchar   *udi,
 		       GpmHalMonitor *monitor)
 {
 	gpm_debug ("udi=%s", udi);
@@ -341,8 +341,8 @@ hal_device_removed_cb (GpmHal        *hal,
  */
 static void
 hal_new_capability_cb (GpmHal        *hal,
-		       const char    *udi,
-		       const char    *capability,
+		       const gchar   *udi,
+		       const gchar   *capability,
 		       GpmHalMonitor *monitor)
 {
 	gpm_debug ("udi=%s, capability=%s", udi, capability);

@@ -42,16 +42,16 @@ static gboolean do_verbose = FALSE;	/* if we should print out debugging */
  * gpm_print_line:
  **/
 static void
-gpm_print_line (const char *func,
-		const char *file,
-		const int   line,
-		const char *buffer)
+gpm_print_line (const gchar *func,
+		const gchar *file,
+		const int    line,
+		const gchar *buffer)
 {
-	char   *str_time;
+	gchar   *str_time;
 	time_t  the_time;
 
 	time (&the_time);
-	str_time = g_new0 (char, 255);
+	str_time = g_new0 (gchar, 255);
 	strftime (str_time, 254, "%H:%M:%S", localtime (&the_time));
 
 	fprintf (stderr, "[%s] %s:%d (%s):\t %s\n",
@@ -63,13 +63,13 @@ gpm_print_line (const char *func,
  * gpm_debug_real:
  **/
 void
-gpm_debug_real (const char *func,
-		const char *file,
-		const int   line,
-		const char *format, ...)
+gpm_debug_real (const gchar *func,
+		const gchar *file,
+		const int    line,
+		const gchar *format, ...)
 {
 	va_list args;
-	char    buffer [1025];
+	gchar    buffer [1025];
 
 	if (! do_verbose) {
 		return;
@@ -86,13 +86,13 @@ gpm_debug_real (const char *func,
  * gpm_warning_real:
  **/
 void
-gpm_warning_real (const char *func,
-		  const char *file,
-		  const int   line,
-		  const char *format, ...)
+gpm_warning_real (const gchar *func,
+		  const gchar *file,
+		  const int    line,
+		  const gchar *format, ...)
 {
 	va_list args;
-	char    buffer [1025];
+	gchar buffer[1025];
 
 	if (! do_verbose) {
 		return;
@@ -128,10 +128,10 @@ gpm_bugzilla (void)
  * Logs some text to the syslog, usually in /var/log/messages
  **/
 void
-gpm_syslog (const char *format, ...)
+gpm_syslog (const gchar *format, ...)
 {
 	va_list args;
-	char    buffer [1025];
+	gchar buffer[1025];
 
 	va_start (args, format);
 	g_vsnprintf (buffer, 1024, format, args);
@@ -170,10 +170,10 @@ gpm_debug_init (gboolean debug)
  * that is the least of our problems...
  **/
 void
-gpm_critical_error (const char *format, ...)
+gpm_critical_error (const gchar *format, ...)
 {
 	va_list args;
-	char    buffer [1025];
+	gchar buffer[1025];
 	GtkWidget *dialog;
 
 	va_start (args, format);
@@ -203,8 +203,9 @@ gpm_critical_error (const char *format, ...)
 void
 gpm_debug_shutdown (void)
 {
-	if (! is_init)
+	if (! is_init) {
 		return;
+	}
 
 	gpm_debug ("Shutting down debugging");
 	is_init = FALSE;

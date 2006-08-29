@@ -59,13 +59,13 @@ GpmProxy	*gpm_proxy_new			(void);
 
 DBusGProxy	*gpm_proxy_assign		(GpmProxy	*gproxy,
 						 GpmProxyBusType bus_type,
-						 const char	*service,
-						 const char	*path,
-						 const char	*interface);
+						 const gchar	*service,
+						 const gchar	*path,
+						 const gchar	*interface);
 DBusGProxy	*gpm_proxy_get_proxy		(GpmProxy	*gproxy);
-char		*gpm_proxy_get_service		(GpmProxy	*gproxy);
-char		*gpm_proxy_get_interface	(GpmProxy	*gproxy);
-char		*gpm_proxy_get_path		(GpmProxy	*gproxy);
+gchar		*gpm_proxy_get_service		(GpmProxy	*gproxy);
+gchar		*gpm_proxy_get_interface	(GpmProxy	*gproxy);
+gchar		*gpm_proxy_get_path		(GpmProxy	*gproxy);
 GpmProxyBusType	 gpm_proxy_get_bus_type		(GpmProxy	*gproxy);
 
 G_END_DECLS

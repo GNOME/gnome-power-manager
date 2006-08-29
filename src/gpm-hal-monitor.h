@@ -45,17 +45,17 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* button_pressed)		(GpmHalMonitor	*monitor,
-							 const char	*type,
+							 const gchar	*type,
 							 gboolean	 state);
 	void		(* ac_power_changed)		(GpmHalMonitor	*monitor,
 							 gboolean	 on_ac);
 	void		(* battery_added)		(GpmHalMonitor	*monitor,
-							 const char	*udi);
+							 const gchar	*udi);
 	void		(* battery_removed)		(GpmHalMonitor	*monitor,
-							 const char	*udi);
+							 const gchar	*udi);
 	void		(* battery_property_modified)	(GpmHalMonitor	*monitor,
-							 const char	*udi,
-							 const char	*key,
+							 const gchar	*udi,
+							 const gchar	*key,
 							 gboolean	 finally);
 } GpmHalMonitorClass;
 

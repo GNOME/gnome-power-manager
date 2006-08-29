@@ -44,7 +44,7 @@ struct GpmFeedbackPrivate
 	GladeXML		*xml;
 	GtkWidget		*main_window;
 	GtkWidget		*progress;
-	int			 refcount;
+	gint			 refcount;
 };
 
 G_DEFINE_TYPE (GpmFeedback, gpm_feedback, G_TYPE_OBJECT)
@@ -81,7 +81,7 @@ gpm_feedback_auto_close (gpointer data)
 }
 
 void
-gpm_feedback_display_value (GpmFeedback *feedback, float value)
+gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 {
 	gpm_debug ("Displaying %f on feedback widget", value);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);

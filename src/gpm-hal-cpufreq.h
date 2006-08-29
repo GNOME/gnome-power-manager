@@ -68,8 +68,8 @@ typedef enum {
 GType		 gpm_hal_cpufreq_get_type		(void);
 GpmHalCpuFreq	*gpm_hal_cpufreq_new			(void);
 
-const char	*gpm_hal_cpufreq_enum_to_string		(GpmHalCpuFreqEnum cpufreq_type);
-GpmHalCpuFreqEnum gpm_hal_cpufreq_string_to_enum	(const char *governor);
+const gchar	*gpm_hal_cpufreq_enum_to_string		(GpmHalCpuFreqEnum cpufreq_type);
+GpmHalCpuFreqEnum gpm_hal_cpufreq_string_to_enum	(const gchar *governor);
 gboolean	 gpm_hal_cpufreq_get_governors		(GpmHalCpuFreq	*cpufreq,
 							 GpmHalCpuFreqEnum *cpufreq_type);
 gboolean	 gpm_hal_cpufreq_get_governor		(GpmHalCpuFreq	*cpufreq,
@@ -81,10 +81,10 @@ gboolean	 gpm_hal_cpufreq_get_consider_nice	(GpmHalCpuFreq	*cpufreq,
 gboolean	 gpm_hal_cpufreq_set_consider_nice	(GpmHalCpuFreq	*cpufreq,
 							 gboolean	 consider_nice);
 gboolean	 gpm_hal_cpufreq_get_performance	(GpmHalCpuFreq	*cpufreq,
-							 int		*performance);
+							 guint		*performance);
 gboolean	 gpm_hal_cpufreq_set_performance	(GpmHalCpuFreq	*cpufreq,
-							 int		 performance);
-int		 gpm_hal_cpufreq_get_number_governors	(GpmHalCpuFreq	*cpufreq,
+							 guint		 performance);
+guint		 gpm_hal_cpufreq_get_number_governors	(GpmHalCpuFreq	*cpufreq,
 							 gboolean	 use_cache);
 gboolean	 gpm_hal_cpufreq_has_hardware		(GpmHalCpuFreq	*cpufreq);
 

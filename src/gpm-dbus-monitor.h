@@ -45,13 +45,13 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* dbus_noc_session)  (GpmDbusMonitor	*monitor,
-						      const char	*name,
-						      const char	*prev,
-						      const char	*new);
+					       const gchar	*name,
+					       const gchar	*prev,
+					       const gchar	*new);
 	void		(* dbus_noc_system)  (GpmDbusMonitor	*monitor,
-						      const char	*name,
-						      const char	*prev,
-						      const char	*new);
+					      const gchar	*name,
+					      const gchar	*prev,
+					      const gchar	*new);
 } GpmDbusMonitorClass;
 
 GType		 gpm_dbus_monitor_get_type	(void);

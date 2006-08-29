@@ -37,7 +37,8 @@ guint appcookie = -1;
 
 /** cookie is returned as an unsigned integer */
 static guint
-dbus_inhibit_gpm (const char *appname, const char *reason)
+dbus_inhibit_gpm (const gchar *appname,
+		  const gchar *reason)
 {
 	gboolean         res;
 	guint	         cookie;
@@ -117,8 +118,8 @@ static void
 widget_inhibit_cb (GtkWidget *iwidget, GladeXML *glade_xml)
 {
 	GtkWidget *widget;
-	const char *appname;
-	const char *reason;
+	const gchar *appname;
+	const gchar *reason;
 
 	/* get the application name and the reason from the entry boxes */
 	widget = glade_xml_get_widget (glade_xml, "entry_app");

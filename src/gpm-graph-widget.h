@@ -93,10 +93,10 @@ struct GpmGraphWidgetClass
 };
 
 typedef struct {
-	int		 time;	/* seconds */
-	int		 value;
-	int		 colour;
-	char		*desc; /* description, or NULL if missing */
+	guint		 time;	/* seconds */
+	guint		 value;
+	guint		 colour;
+	gchar		*desc; /* description, or NULL if missing */
 } GpmInfoDataPoint;
 
 GType		 gpm_graph_widget_get_type		(void);
@@ -116,7 +116,7 @@ void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
-const char *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent	 event);
+const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent	 event);
 GpmGraphWidgetColour	 gpm_graph_widget_event_colour	(GpmGraphWidgetEvent	 event);
 
 G_END_DECLS

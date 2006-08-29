@@ -87,22 +87,22 @@ gpm_dbus_monitor_class_init (GpmDbusMonitorClass *klass)
 }
 
 static void
-dbus_noc_session_cb (DBusGProxy	*proxy,
-			 const char	*name,
-			 const char	*prev,
-			 const char	*new,
-			 GpmDbusMonitor	*monitor)
+dbus_noc_session_cb (DBusGProxy     *proxy,
+		     const gchar    *name,
+		     const gchar    *prev,
+		     const gchar    *new,
+		     GpmDbusMonitor *monitor)
 {
 	gpm_debug ("emitting noc-session : %s (%s->%s)", name, prev, new);
 	g_signal_emit (monitor, signals [NOC_SESSON], 0, name, prev, new);
 }
 
 static void
-dbus_noc_system_cb (DBusGProxy	*proxy,
-			 const char	*name,
-			 const char	*prev,
-			 const char	*new,
-			 GpmDbusMonitor	*monitor)
+dbus_noc_system_cb (DBusGProxy     *proxy,
+		    const gchar    *name,
+		    const gchar    *prev,
+		    const gchar    *new,
+		    GpmDbusMonitor *monitor)
 {
 	gpm_debug ("emitting noc-system : %s (%s->%s)", name, prev, new);
 	g_signal_emit (monitor, signals [NOC_SYSTEM], 0, name, prev, new);

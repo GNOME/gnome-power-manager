@@ -46,8 +46,8 @@ gpm_warning_beep (void)
  *
  * Return value: The time string, e.g. "2 hours 3 minutes"
  **/
-char *
-gpm_get_timestring (int time_secs)
+gchar *
+gpm_get_timestring (guint time_secs)
 {
 	char* timestring = NULL;
 	gint  hours;

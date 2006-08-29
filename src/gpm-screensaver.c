@@ -193,7 +193,7 @@ gpm_screensaver_lock_set (GpmScreensaver *screensaver, gboolean lock)
  * @screensaver: This screensaver class instance
  * Return value: The delay for the idle time set in gnome-screesaver-properties.
  **/
-int
+gint
 gpm_screensaver_get_delay (GpmScreensaver *screensaver)
 {
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), 0);
@@ -208,7 +208,7 @@ gpm_screensaver_get_delay (GpmScreensaver *screensaver)
 gboolean
 gpm_screensaver_lock (GpmScreensaver *screensaver)
 {
-	int sleepcount = 0;
+	guint sleepcount = 0;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);

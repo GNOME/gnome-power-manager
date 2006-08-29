@@ -48,8 +48,8 @@ struct GpmGraphWidgetPrivate
 	gint			 box_width;
 	gint			 box_height;
 
-	float			 unit_x; /* 10th width of graph */
-	float			 unit_y; /* 10th width of graph */
+	gfloat			 unit_x; /* 10th width of graph */
+	gfloat			 unit_y; /* 10th width of graph */
 
 	GpmGraphWidgetAxisType	 axis_x;
 	GpmGraphWidgetAxisType	 axis_y;
@@ -311,8 +311,8 @@ gpm_graph_widget_set_events (GpmGraphWidget *graph, GList *list)
  *
  * Return value: a string value depending on the axis type and the value.
  **/
-static char *
-gpm_get_axis_label (GpmGraphWidgetAxisType axis, int value)
+static gchar *
+gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 {
 	char *text = NULL;
 	if (axis == GPM_GRAPH_WIDGET_TYPE_TIME) {
@@ -355,10 +355,10 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, int value)
 static void
 gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 {
-	float a, b;
-	double dotted[] = {1., 2.};
-	float divwidth  = (float)graph->priv->box_width / 10.0f;
-	float divheight = (float)graph->priv->box_height / 10.0f;
+	gfloat a, b;
+	gdouble dotted[] = {1., 2.};
+	gfloat divwidth  = (gfloat)graph->priv->box_width / 10.0f;
+	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
 
 	cairo_save (cr);
 
@@ -369,15 +369,15 @@ gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_x + (a * divwidth);
-		cairo_move_to (cr, (int)b + 0.5f, graph->priv->box_y);
-		cairo_line_to (cr, (int)b + 0.5f, graph->priv->box_y + graph->priv->box_height);
+		cairo_move_to (cr, (gint)b + 0.5f, graph->priv->box_y);
+		cairo_line_to (cr, (gint)b + 0.5f, graph->priv->box_y + graph->priv->box_height);
 		cairo_stroke (cr);
 	}
 
 	/* do horizontal lines */
 	for (a=1; a<10; a++) {
 		b = graph->priv->box_y + (a * divheight);
-		cairo_move_to (cr, graph->priv->box_x, (int)b + 0.5f);
+		cairo_move_to (cr, graph->priv->box_x, (gint)b + 0.5f);
 		cairo_line_to (cr, graph->priv->box_x + graph->priv->box_width, (int)b + 0.5f);
 		cairo_stroke (cr);
 	}
@@ -395,16 +395,16 @@ gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 static void
 gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 {
-	float a, b;
+	gfloat a, b;
 	gchar *text;
 	gint value;
-	float divwidth  = (float)graph->priv->box_width / 10.0f;
-	float divheight = (float)graph->priv->box_height / 10.0f;
-	int length_x = graph->priv->stop_x - graph->priv->start_x;
-	int length_y = graph->priv->stop_y - graph->priv->start_y;
+	gfloat divwidth  = (gfloat)graph->priv->box_width / 10.0f;
+	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
+	gint length_x = graph->priv->stop_x - graph->priv->start_x;
+	gint length_y = graph->priv->stop_y - graph->priv->start_y;
 	cairo_text_extents_t extents;
-	float offsetx = 0;
-	float offsety = 0;
+	gfloat offsetx = 0;
+	gfloat offsety = 0;
 
 	cairo_save (cr);
 
@@ -514,10 +514,10 @@ gpm_graph_widget_check_range (GpmGraphWidget *graph)
 static void
 gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 {
-	int biggest_x = 0;
-	int biggest_y = 0;
-	int smallest_x = 999999;
-	int smallest_y = 999999;
+	gint biggest_x = 0;
+	gint biggest_y = 0;
+	gint smallest_x = 999999;
+	gint smallest_y = 999999;
 	GpmInfoDataPoint *new = NULL;
 	GList *l;
 
@@ -657,12 +657,12 @@ gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
  * Draw the dot on the graph of a specified colour
  **/
 static void
-gpm_graph_widget_draw_dot (cairo_t *cr, float x, float y, GpmGraphWidgetColour colour)
+gpm_graph_widget_draw_dot (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidgetColour colour)
 {
-	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
+	cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
 	gpm_graph_widget_set_colour (cr, colour);
 	cairo_fill (cr);
-	cairo_arc (cr, (int)x + 0.5f, (int)y + 0.5f, 4, 0, 2*M_PI);
+	cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	cairo_set_line_width (cr, 1);
 	cairo_stroke (cr);
@@ -677,10 +677,10 @@ gpm_graph_widget_draw_dot (cairo_t *cr, float x, float y, GpmGraphWidgetColour c
  * @y: The returned Y position on the cairo surface
  **/
 static void
-gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, float data_x, float data_y, float *x, float *y)
+gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, gfloat data_x, gfloat data_y, float *x, float *y)
 {
 	*x = graph->priv->box_x + (graph->priv->unit_x * (data_x - graph->priv->start_x)) + 1;
-	*y = graph->priv->box_y + (graph->priv->unit_y * (float)(graph->priv->stop_y - (data_y - graph->priv->start_y))) + 1.5;
+	*y = graph->priv->box_y + (graph->priv->unit_y * (gfloat)(graph->priv->stop_y - (data_y - graph->priv->start_y))) + 1.5;
 }
 
 /**
@@ -693,15 +693,15 @@ gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, float data_x, float da
  * Interpolates onto the graph in the y direction. If only supplied one point
  * then don't interpolate.
  **/
-static int
+static gint
 gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
 			     GpmInfoDataPoint *last,
-			     int xintersect)
+			     gint xintersect)
 {
-	int dy, dx;
-	float m;
-	int c;
-	int y;
+	gint dy, dx;
+	gfloat m;
+	gint c;
+	gint y;
 
 	/* we have no points */
 	if (! this) {
@@ -716,13 +716,13 @@ gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
 	/* gradient */
 	dx = this->time - last->time;
 	dy = this->value - last->value;
-	m = (float) dy / (float) dx;
+	m = (gfloat) dy / (gfloat) dx;
 
 	/* y-intersect */
-	c = (-m * (float) this->time) + this->value;
+	c = (-m * (gfloat) this->time) + this->value;
 
 	/* y = mx + c */
-	y = (m * (float) xintersect) + c;
+	y = (m * (gfloat) xintersect) + c;
 
 	/* limit the y intersect to the last height, so we don't extend the
 	 * graph into the unknown */
@@ -743,8 +743,8 @@ gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
 static void
 gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 {
-	float oldx, oldy;
-	float newx, newy;
+	gfloat oldx, oldy;
+	gfloat newx, newy;
 	GpmInfoDataPoint *eventdata;
 	GList *l;
 	GpmInfoDataPoint *new;
@@ -781,8 +781,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 
 	/* do the events on the graph if we enabled the legend */
 	if (graph->priv->use_legend) {
-		int previous_point = 0;
-		int prevpos = -1;
+		gint previous_point = 0;
+		gint prevpos = -1;
 		GpmInfoDataPoint *point_this = NULL;
 		GpmInfoDataPoint *point_last = NULL;
 
@@ -793,7 +793,7 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 			l2 = l2->next;
 		}
 		for (l=graph->priv->events; l != NULL; l=l->next) {
-			int pos;
+			gint pos;
 
 			eventdata = (GpmInfoDataPoint *) l->data;
 			/* If we have valid list data, go through the list data
@@ -838,7 +838,11 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
  * @height: The item height
  **/
 static void
-gpm_graph_widget_draw_bounding_box (cairo_t *cr, int x, int y, int width, int height)
+gpm_graph_widget_draw_bounding_box (cairo_t *cr,
+				    gint     x,
+				    gint     y,
+				    gint     width,
+				    gint     height)
 {
 	/* background */
 	cairo_rectangle (cr, x, y, width, height);
@@ -860,11 +864,15 @@ gpm_graph_widget_draw_bounding_box (cairo_t *cr, int x, int y, int width, int he
  * @height: The item height
  **/
 static void
-gpm_graph_widget_draw_legend (cairo_t *cr, int x, int y, int width, int height)
+gpm_graph_widget_draw_legend (cairo_t *cr,
+			      gint     x,
+			      gint     y,
+			      gint     width,
+			      gint     height)
 {
-	const char *desc;
-	int y_count;
-	int a;
+	const gchar *desc;
+	gint y_count;
+	gint a;
 	GpmGraphWidgetColour colour;
 
 	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
@@ -889,13 +897,13 @@ gpm_graph_widget_draw_legend (cairo_t *cr, int x, int y, int width, int height)
  * legend box. We can't hardcode this as the dpi or font size might differ
  * from machine to machine.
  **/
-static float
+static gfloat
 gpm_graph_widget_legend_calculate_width (GpmGraphWidget *graph, cairo_t *cr)
 {
-	int a;
-	const char *desc;
+	gint a;
+	const gchar *desc;
 	cairo_text_extents_t extents;
-	float max_width = 0.0f;
+	gfloat max_width = 0.0f;
 
 	g_return_val_if_fail (graph != NULL, 0.0f);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), 0.0f);
@@ -925,12 +933,12 @@ gpm_graph_widget_legend_calculate_width (GpmGraphWidget *graph, cairo_t *cr)
 static void
 gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 {
-	int legend_x = 0;
-	int legend_y = 0;
-	int legend_height;
-	int legend_width;
-	int data_x;
-	int data_y;
+	gint legend_x = 0;
+	gint legend_y = 0;
+	gint legend_height;
+	gint legend_width;
+	gint data_x;
+	gint data_y;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);

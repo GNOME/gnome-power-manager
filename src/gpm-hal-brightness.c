@@ -56,11 +56,11 @@ struct GpmHalBrightnessPrivate
 	gboolean		 has_hardware;
 	gboolean		 does_own_updates;	/* keys are hardwired */
 	gboolean		 does_own_dimming;	/* hardware auto-fades */
-	int			 current_hw;		/* hardware */
-	int			 level_dim_hw;
-	int			 level_std_hw;
-	int			 levels;
-	char			*udi;
+	gint			 current_hw;		/* hardware */
+	gint			 level_dim_hw;
+	gint			 level_std_hw;
+	gint			 levels;
+	gchar			*udi;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 };
@@ -124,7 +124,7 @@ gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
  **/
 static gboolean
 gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
-		       int	      brightness_level_hw)
+			   guint	     brightness_level_hw)
 {
 	GError     *error = NULL;
 	gint        ret;
@@ -177,9 +177,9 @@ gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
  *
  * Return value: The hardware value for this percentage.
  **/
-static int
-gpm_hal_brightness_percent_to_hw (int percentage,
-			      int levels)
+static gint
+gpm_hal_brightness_percent_to_hw (gint percentage,
+				  gint levels)
 {
 	/* check we are in range */
 	if (percentage < 0) {
@@ -187,7 +187,7 @@ gpm_hal_brightness_percent_to_hw (int percentage,
 	} else if (percentage > 100) {
 		return levels;
 	}
-	return ( (float) percentage * (float) (levels - 1)) / 100.0f;
+	return ( (gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
 }
 
 /**
@@ -199,11 +199,11 @@ gpm_hal_brightness_percent_to_hw (int percentage,
  **/
 static void
 gpm_hal_brightness_dim_hw_step (GpmHalBrightness *brightness,
-		            int            new_level_hw,
-		            int		   step_interval)
+				guint             new_level_hw,
+				guint		  step_interval)
 {
-	int current_hw;
-	int a;
+	guint current_hw;
+	gint a;
 
 	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
 	current_hw = brightness->priv->current_hw;
@@ -230,7 +230,7 @@ gpm_hal_brightness_dim_hw_step (GpmHalBrightness *brightness,
  * Return value: the amount of hardware steps to do on each update or
  * zero for error.
  **/
-static int
+static guint
 gpm_hal_brightness_get_step (GpmHalBrightness *brightness)
 {
 	int step;
@@ -254,9 +254,9 @@ gpm_hal_brightness_get_step (GpmHalBrightness *brightness)
  **/
 static void
 gpm_hal_brightness_dim_hw (GpmHalBrightness *brightness,
-		       int	      new_level_hw)
+			   guint	     new_level_hw)
 {
-	int step;
+	guint step;
 
 	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
 
@@ -284,9 +284,9 @@ gpm_hal_brightness_dim_hw (GpmHalBrightness *brightness,
  *
  * Return value: The percentage for this hardware value.
  **/
-static int
-gpm_hal_brightness_hw_to_percent (int hw,
-			      int levels)
+static guint
+gpm_hal_brightness_hw_to_percent (gint hw,
+				  guint levels)
 {
 	/* check we are in range */
 	if (hw < 0) {
@@ -304,9 +304,9 @@ gpm_hal_brightness_hw_to_percent (int hw,
  **/
 void
 gpm_hal_brightness_set_level_dim (GpmHalBrightness *brightness,
-			      int	     brightness_level)
+				  guint		    brightness_level)
 {
-	int level_hw;
+	guint level_hw;
 	level_hw = gpm_hal_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
 
 	/* If the current brightness is less than the dim brightness then just
@@ -328,9 +328,9 @@ gpm_hal_brightness_set_level_dim (GpmHalBrightness *brightness,
  **/
 void
 gpm_hal_brightness_set_level_std (GpmHalBrightness *brightness,
-			      int	     brightness_level)
+				  guint		    brightness_level)
 {
-	int level_hw;
+	guint level_hw;
 	level_hw = gpm_hal_brightness_percent_to_hw (brightness_level,
 						 brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
@@ -378,10 +378,10 @@ gpm_hal_brightness_set (GpmHalBrightness *brightness)
  * Gets the current (or at least what this class thinks is current) percentage
  * brightness. This is quick as no HAL inquiry is done.
  **/
-int
+gint
 gpm_hal_brightness_get (GpmHalBrightness *brightness)
 {
-	int percentage;
+	gint percentage;
 
 	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), -1);
 
@@ -389,7 +389,7 @@ gpm_hal_brightness_get (GpmHalBrightness *brightness)
 		return -1;
 	}
 	percentage = gpm_hal_brightness_hw_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
+						       brightness->priv->levels);
 	return percentage;
 }
 
@@ -402,8 +402,8 @@ gpm_hal_brightness_get (GpmHalBrightness *brightness)
 void
 gpm_hal_brightness_up (GpmHalBrightness *brightness)
 {
-	int step;
-	int percentage;
+	gint step;
+	gint percentage;
 
 	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
 
@@ -435,8 +435,8 @@ gpm_hal_brightness_up (GpmHalBrightness *brightness)
 void
 gpm_hal_brightness_down (GpmHalBrightness *brightness)
 {
-	int step;
-	int percentage;
+	gint step;
+	gint percentage;
 
 	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
 
@@ -543,8 +543,8 @@ gpm_hal_brightness_class_init (GpmHalBrightnessClass *klass)
 static void
 gpm_hal_brightness_init (GpmHalBrightness *brightness)
 {
-	gchar  **names;
-	char    *manufacturer_string = NULL;
+	gchar **names;
+	gchar *manufacturer_string = NULL;
 	gboolean res;
 
 	brightness->priv = GPM_HAL_BRIGHTNESS_GET_PRIVATE (brightness);

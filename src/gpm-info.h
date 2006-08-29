@@ -63,10 +63,10 @@ GQuark		 gpm_info_error_quark			(void);
 void		 gpm_info_show_window			(GpmInfo	*info);
 void		 gpm_info_event_log			(GpmInfo	*info,
 							 GpmGraphWidgetEvent	 event,
-							 const char	*desc);
+							 const gchar	*desc);
 
 gboolean	 gpm_statistics_get_types		(GpmInfo	*info,
-							 char		***types,
+							 gchar		***types,
 							 GError		**error);
 gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
 							 gint 	    	 seconds,
@@ -74,7 +74,7 @@ gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
 							 GError		**error);
 gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
 							 gint 	    	 seconds,
-							 const char	*type,
+							 const gchar	*type,
 							 gint		 options,
 							 GPtrArray	**array,
 							 GError		**error);

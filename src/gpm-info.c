@@ -99,7 +99,7 @@ gpm_info_error_quark (void)
 /**
  * device_list_to_strv:
  **/
-static char **
+static gchar **
 device_list_to_strv (GList *list)
 {
 	char **value = NULL;
@@ -107,9 +107,9 @@ device_list_to_strv (GList *list)
 	GList *l;
 	int i = 0;
 
-	value = g_new0 (char *, g_list_length (list) + 1);
+	value = g_new0 (gchar *, g_list_length (list) + 1);
 	for (l=list; l != NULL; l=l->next) {
-		device = (char *) l->data;
+		device = (gchar *) l->data;
 		value[i] = g_strdup (device);
 		++i;
 	}
@@ -119,7 +119,7 @@ device_list_to_strv (GList *list)
 
 gboolean
 gpm_statistics_get_types (GpmInfo  *info,
-			  char   ***types,
+			  gchar  ***types,
 			  GError  **error)
 {
 	GList *list = NULL;
@@ -171,12 +171,12 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 }
 
 gboolean
-gpm_statistics_get_data (GpmInfo    *info,
-			 gint 	     seconds,
-			 const char *type,
-			 gint	     options,
-			 GPtrArray **array,
-			 GError	   **error)
+gpm_statistics_get_data (GpmInfo     *info,
+			 gint 	      seconds,
+			 const gchar *type,
+			 gint	      options,
+			 GPtrArray  **array,
+			 GError	    **error)
 {
 #ifdef USE_DBUS_COMPAT
 	*array = g_ptr_array_sized_new (0);
@@ -291,9 +291,9 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 	GtkWidget	*widget;
 	GString		*desc;
 	GpmPowerDevice	*device = NULL;
-	char		*icon_name;
-	const char	*prefix = NULL;
-	char		 widgetname[128];
+	gchar		*icon_name;
+	const gchar	*prefix = NULL;
+	gchar		 widgetname[128];
 
 	prefix = gpm_power_kind_to_string (kind);
 
@@ -345,7 +345,7 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 static void
 gpm_info_populate_device_information (GpmInfo *info)
 {
-	int	   number;
+	guint	   number;
 	GtkWidget *widget;
 	
 	g_return_if_fail (info != NULL);
@@ -430,10 +430,10 @@ gpm_info_create_event_viewer_tree (GtkWidget *widget)
  * The return value must be freed using g_free().
  * Return value: The timestring, e.g. "Sat Apr 15, 15:35:40".
  **/
-static char *
+static gchar *
 gpm_info_get_time_string (time_t time_secs)
 {
-	char outstr[256];
+	gchar outstr[256];
 	struct tm *tmp;
 	tmp = localtime (&time_secs);
 	strftime (outstr, sizeof(outstr), "%a %b %d, %T", tmp);
@@ -449,8 +449,8 @@ gpm_info_get_time_string (time_t time_secs)
 static void
 gpm_info_update_event_tree (GpmInfo *info)
 {
-	char *timestring;
-	const char *descstring;
+	gchar *timestring;
+	const gchar *descstring;
 	GpmInfoDataPoint *new;
 	GtkTreeIter   iter;
 	GList *l;
@@ -757,7 +757,9 @@ gpm_info_show_window (GpmInfo *info)
  * Adds an point to the event log
  **/
 void
-gpm_info_event_log (GpmInfo *info, GpmGraphWidgetEvent event, const char *desc)
+gpm_info_event_log (GpmInfo	       *info,
+		    GpmGraphWidgetEvent event,
+		    const gchar        *desc)
 {
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));

@@ -52,7 +52,7 @@ static void     gpm_power_finalize   (GObject       *object);
 struct GpmPowerPrivate
 {
 	gboolean		 on_ac;
-	int			 exp_ave_factor;
+	gint			 exp_ave_factor;
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
 	GpmHal			*hal;
@@ -145,8 +145,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 {
 	gboolean exists;
 	GpmPowerStatus *status = &entry->battery_status;
-	char *udi = entry->udi;
-	char *battery_kind_str;
+	gchar *udi = entry->udi;
+	gchar *battery_kind_str;
 
 	/* invalidate last rate */
 	entry->charge_rate_previous = 0;
@@ -288,19 +288,19 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
  * does not change drastically between updates.
  **/
 static int
-gpm_power_exp_aver (int previous, int new, int factor_pc)
+gpm_power_exp_aver (gint previous, gint new, gint factor_pc)
 {
-	int result = 0;
-	float factor = 0;
-	float factor_inv = 1;
+	gint result = 0;
+	gfloat factor = 0;
+	gfloat factor_inv = 1;
 	if (previous == 0 || factor_pc == 0) {
 		/* startup, or re-initialization - we have no data */
 		gpm_debug ("Telling rate with no ave factor (okay once)");
 		result = new;
 	} else {
-		factor = (float) factor_pc / 100.0f;
+		factor = (gfloat) factor_pc / 100.0f;
 		factor_inv = 1.0f - factor;
-		result = (int) ((factor_inv * (float) new) + (factor * (float) previous));
+		result = (gint) ((factor_inv * (gfloat) new) + (factor * (gfloat) previous));
 	}
 	gpm_debug ("factor = %f, previous = %i, new=%i, result = %i",
 		   factor, previous, new, result);
@@ -316,12 +316,12 @@ gpm_power_exp_aver (int previous, int new, int factor_pc)
  * Updates the device object with the new information given to us from HAL.
  **/
 static void
-battery_device_cache_entry_update_key (GpmPower		       *power,
+battery_device_cache_entry_update_key (GpmPower	      *power,
 				       GpmPowerDevice *entry,
-				       const char	       *key)
+				       const gchar    *key)
 {
 	GpmPowerStatus *status = &entry->battery_status;
-	char *udi = entry->udi;
+	gchar *udi = entry->udi;
 
 	if (key == NULL) {
 		return;
@@ -385,7 +385,8 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
  * Return value: The new device cache entry.
  **/
 static GpmPowerDevice *
-battery_device_cache_entry_new_from_udi (GpmPower *power, const char *udi)
+battery_device_cache_entry_new_from_udi (GpmPower *power,
+					 const gchar *udi)
 {
 	GpmPowerDevice *entry;
 
@@ -463,10 +464,10 @@ gpm_power_kind_to_localised_string (GpmPowerKind battery_kind)
  * @battery_kind: The type of battery, e.g. GPM_POWER_KIND_PRIMARY
  * Return value: The raw battery kind, e.g. primary. Do not free this string.
  **/
-const char *
+const gchar *
 gpm_power_kind_to_string (GpmPowerKind battery_kind)
 {
-	const char *str;
+	const gchar *str;
 
 	if (battery_kind == GPM_POWER_KIND_PRIMARY) {
  		str = "primary";
@@ -544,8 +545,8 @@ battery_kind_cache_debug_print_all (GpmPower *power)
  * Return value: The entry if found, or NULL if missing.
  **/
 static GpmPowerDevice *
-battery_device_cache_find (GpmPower   *power,
-			   const char *udi)
+battery_device_cache_find (GpmPower    *power,
+			   const gchar *udi)
 {
 	GpmPowerDevice *entry;
 
@@ -573,8 +574,8 @@ battery_device_cache_find (GpmPower   *power,
  * Return value: The entry if found, or NULL if missing.
  **/
 static BatteryKindCacheEntry *
-battery_kind_cache_find (GpmPower		*power,
-			 GpmPowerKind	 battery_kind)
+battery_kind_cache_find (GpmPower     *power,
+			 GpmPowerKind  battery_kind)
 {
 	BatteryKindCacheEntry *entry;
 
@@ -595,8 +596,8 @@ battery_kind_cache_find (GpmPower		*power,
  * Return value: the number of devices of a specific kind.
  **/
 gint
-gpm_power_get_num_devices_of_kind (GpmPower		*power,
-				   GpmPowerKind	 battery_kind)
+gpm_power_get_num_devices_of_kind (GpmPower    *power,
+				   GpmPowerKind	battery_kind)
 {
 	BatteryKindCacheEntry *entry;
 	if (power->priv->battery_kind_cache == NULL) {
@@ -614,9 +615,9 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 				    GpmPowerKind  battery_kind,
 				    guint	  device_num)
 {
-	const char		*udi;
+	const gchar *udi;
 	GpmPowerDevice *device;
-	BatteryKindCacheEntry   *entry;
+	BatteryKindCacheEntry *entry;
 
 	if (! power->priv->battery_kind_cache) {
 		return NULL;
@@ -630,7 +631,7 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 	}
 
 	/* get the udi of the battery we are interested in */
-	udi = (const char *) g_slist_nth_data (entry->devices, device_num);
+	udi = (const gchar *) g_slist_nth_data (entry->devices, device_num);
 
 	/* find the udi in the device cache */
 	device = battery_device_cache_find (power, udi);
@@ -687,7 +688,7 @@ GString *
 gpm_power_status_for_device_more (GpmPowerDevice *device)
 {
 	GString		*details;
-	const char	*suffix;
+	const gchar	*suffix;
 	GpmPowerStatus	*status;
 
 	status = &device->battery_status;
@@ -697,7 +698,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), device->vendor);
 	}
 	if (device->technology) {
-		const char *technology;
+		const gchar *technology;
 /* we can remove these when we depend on HAL 0.5.8 */
 #if 1
 		if (strcasecmp (device->technology, "li-ion") == 0 ||
@@ -775,11 +776,11 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		suffix = "/ 7";
 		if (status->current_charge > 0) {
 			g_string_append_printf (details, _("<b>Current charge:</b> %.1f %s\n"),
-						(float) status->current_charge, suffix);
+						(gfloat) status->current_charge, suffix);
 		}
 		if (status->design_charge > 0) {
 			g_string_append_printf (details, _("<b>Design charge:</b> %.1f %s\n"),
-						(float) status->design_charge, suffix);
+						(gfloat) status->design_charge, suffix);
 		}
 	}
 	/* remove the last \n */
@@ -801,7 +802,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
  *
  * Return value: The character string for the filename suffix.
  **/
-static const char *
+static const gchar *
 gpm_power_get_index_from_percent (gint percent)
 {
 	if (percent < 10) {
@@ -828,9 +829,9 @@ gpm_power_get_index_from_percent (gint percent)
  *
  * Return value: The complete filename, must free using g_free.
  **/
-static char *
+static gchar *
 gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
-			    const char     *prefix)
+			    const gchar    *prefix)
 {
 	char *filename = NULL;
 	const char *index_str = NULL;
@@ -867,12 +868,12 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
  *
  * Return value: The complete filename, must free using g_free.
  **/
-static char *
+static gchar *
 gpm_power_get_icon_for_csr (GpmPowerStatus *device_status,
-			    const char     *prefix)
+			    const gchar    *prefix)
 {
-	char *filename;
-	const char *index_str;
+	gchar *filename;
+	const gchar *index_str;
 
 	if (device_status->current_charge < 2) {
 		index_str = "000";
@@ -896,12 +897,12 @@ gpm_power_get_icon_for_csr (GpmPowerStatus *device_status,
  *
  * Return value: The complete filename, must free using g_free.
  **/
-char *
+gchar *
 gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 				GpmPowerKind    kind)
 {
-	char	   *filename = NULL;
-	const char *prefix;
+	gchar *filename = NULL;
+	const gchar *prefix;
 
 	/* TODO: icons need to be renamed from -battery- to -primary- */
 	prefix = gpm_power_kind_to_string (kind);
@@ -936,8 +937,8 @@ battery_kind_cache_update (GpmPower		 *power,
 			   BatteryKindCacheEntry *entry)
 {
 	GSList *l;
-	int     num_present = 0;
-	int     num_discharging = 0;
+	guint num_present = 0;
+	guint num_discharging = 0;
 	GpmPowerStatus *type_status = &entry->battery_status;
 
 	/* clear old values */
@@ -945,11 +946,11 @@ battery_kind_cache_update (GpmPower		 *power,
 
 	/* iterate thru all the devices to handle multiple batteries */
 	for (l = entry->devices; l; l = l->next) {
-		const char	      *udi;
+		const gchar *udi;
 		GpmPowerDevice *device;
 		GpmPowerStatus	*device_status;
 
-		udi = (const char *)l->data;
+		udi = (const gchar *)l->data;
 
 		device = battery_device_cache_find (power, udi);
 		device_status = &device->battery_status;
@@ -1013,8 +1014,8 @@ battery_kind_cache_update (GpmPower		 *power,
 	 * get an with batteries which have a very small charge unit and consequently
 	 * a very high charge. Fixes bug #327471 */
 	if (type_status->is_present) {
-		int pc = 100 * ((float)type_status->current_charge /
-				(float)type_status->last_full_charge);
+		gint pc = 100 * ((gfloat)type_status->current_charge /
+				(gfloat)type_status->last_full_charge);
 		if (pc < 0) {
 			gpm_warning ("Corrected percentage charge (%i) and set to minimum", pc);
 			pc = 0;
@@ -1053,7 +1054,7 @@ battery_kind_cache_update (GpmPower		 *power,
  * battery_kind_update_cache_iter:
  **/
 static void
-battery_kind_update_cache_iter (const char	      *key,
+battery_kind_update_cache_iter (const gchar	      *key,
 				BatteryKindCacheEntry *entry,
 				GpmPower	      *power)
 {
@@ -1084,7 +1085,7 @@ battery_kind_cache_update_all (GpmPower *power)
  * @entry: A device cache instance
  **/
 static void
-battery_device_cache_add_device (GpmPower		 *power,
+battery_device_cache_add_device (GpmPower       *power,
 				 GpmPowerDevice *entry)
 {
 	g_hash_table_insert (power->priv->battery_device_cache,
@@ -1098,7 +1099,7 @@ battery_device_cache_add_device (GpmPower		 *power,
  * @entry: A device cache instance
  **/
 static void
-battery_device_cache_remove_device (GpmPower		    *power,
+battery_device_cache_remove_device (GpmPower	   *power,
 				    GpmPowerDevice *entry)
 {
 	g_hash_table_remove (power->priv->battery_device_cache,
@@ -1125,7 +1126,7 @@ battery_device_cache_remove_device (GpmPower		    *power,
  * Adds a device entry to the correct cache entry.
  **/
 static void
-battery_kind_cache_add_device (GpmPower			*power,
+battery_kind_cache_add_device (GpmPower		*power,
 			       GpmPowerDevice	*device_entry)
 {
 	BatteryKindCacheEntry *type_entry;
@@ -1157,7 +1158,7 @@ battery_kind_cache_add_device (GpmPower			*power,
  * Removes a device entry from a cache entry.
  **/
 static void
-battery_kind_cache_remove_device (GpmPower		  *power,
+battery_kind_cache_remove_device (GpmPower	 *power,
 				  GpmPowerDevice *entry)
 {
 	BatteryKindCacheEntry *type_entry;
@@ -1189,14 +1190,14 @@ battery_kind_cache_remove_device (GpmPower		  *power,
  * mainly.
  **/
 static void
-power_get_summary_for_battery_kind (GpmPower		*power,
+power_get_summary_for_battery_kind (GpmPower	 *power,
 			    	    GpmPowerKind  battery_kind,
-			    	    GString		*summary)
+			    	    GString	 *summary)
 {
 	BatteryKindCacheEntry *entry;
 	GpmPowerStatus *status;
-	const char	      *type_desc = NULL;
-	char		      *timestring;
+	const gchar *type_desc = NULL;
+	gchar *timestring;
 
 	entry = battery_kind_cache_find (power, battery_kind);
 
@@ -1272,7 +1273,7 @@ power_get_summary_for_battery_kind (GpmPower		*power,
  **/
 gboolean
 gpm_power_get_status_summary (GpmPower *power,
-			      char    **string,
+			      gchar   **string,
 			      GError  **error)
 {
 	GString *summary = NULL;
@@ -1325,9 +1326,9 @@ gpm_power_get_status_summary (GpmPower *power,
  * Return value: if the device was found in the cache.
  **/
 gboolean
-gpm_power_get_battery_status (GpmPower			 *power,
-			      GpmPowerKind	  battery_kind,
-			      GpmPowerStatus      *battery_status)
+gpm_power_get_battery_status (GpmPower       *power,
+			      GpmPowerKind    battery_kind,
+			      GpmPowerStatus *battery_status)
 {
 	BatteryKindCacheEntry *entry;
 
@@ -1524,8 +1525,8 @@ hal_on_ac_changed_cb (GpmHalMonitor *monitor,
  * correct kind cache depending on type.
  **/
 static gboolean
-add_battery (GpmPower   *power,
-	     const char *udi)
+add_battery (GpmPower    *power,
+	     const gchar *udi)
 {
 	GpmPowerDevice *entry;
 	GpmPowerStatus *status;
@@ -1566,8 +1567,8 @@ add_battery (GpmPower   *power,
  * Return value: if a battery was removed.
  **/
 static gboolean
-remove_battery (GpmPower   *power,
-		const char *udi)
+remove_battery (GpmPower    *power,
+		const gchar *udi)
 {
 	GpmPowerDevice *entry;
 
@@ -1597,7 +1598,7 @@ remove_battery (GpmPower   *power,
  **/
 static void
 hal_battery_added_cb (GpmHalMonitor *monitor,
-		      const char    *udi,
+		      const gchar   *udi,
 		      GpmPower      *power)
 {
 	gpm_debug ("Battery Added: %s", udi);
@@ -1615,7 +1616,7 @@ hal_battery_added_cb (GpmHalMonitor *monitor,
  **/
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
-			const char    *udi,
+			const gchar   *udi,
 			GpmPower      *power)
 {
 	gpm_debug ("Battery Removed: %s", udi);
@@ -1639,8 +1640,8 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
  **/
 static void
 hal_battery_property_modified_cb (GpmHalMonitor *monitor,
-				  const char    *udi,
-				  const char    *key,
+				  const gchar   *udi,
+				  const gchar   *key,
 				  gboolean	 finally,
 				  GpmPower      *power)
 {
@@ -1689,7 +1690,7 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
  **/
 static void
 hal_button_pressed_cb (GpmHalMonitor *monitor,
-		       const char    *type,
+		       const gchar   *type,
 		       gboolean       state,
 		       GpmPower      *power)
 {
@@ -1799,7 +1800,7 @@ gpm_power_update_all (GpmPower *power)
  **/
 static void
 hal_daemon_start_cb (GpmHal     *hal,
-		    GpmPower   *power)
+		     GpmPower   *power)
 {
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
@@ -1816,8 +1817,8 @@ hal_daemon_start_cb (GpmHal     *hal,
  * and we segfault in various places.
  **/
 static void
-hal_daemon_stop_cb (GpmHal     *hal,
-		    GpmPower   *power)
+hal_daemon_stop_cb (GpmHal   *hal,
+		    GpmPower *power)
 {
 	gpm_hash_free_kind_cache (power);
 	gpm_hash_free_device_cache (power);

@@ -50,7 +50,7 @@ GType		 gpm_feedback_get_type			(void);
 GpmFeedback	*gpm_feedback_new			(void);
 
 void		 gpm_feedback_display_value		(GpmFeedback	*feedback,
-							 float		 value);
+							 gfloat		 value);
 
 G_END_DECLS
 

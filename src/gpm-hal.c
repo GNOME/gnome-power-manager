@@ -102,7 +102,7 @@ gpm_hal_is_running (GpmHal *hal)
 /* we have to be clever, as hal can pass back two types of errors, and we have
    to ignore dbus timeouts */
 static gboolean
-gpm_hal_handle_error (guint ret, GError *error, const char *method)
+gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
 {
 	gboolean retval = TRUE;
 
@@ -139,7 +139,7 @@ gpm_hal_handle_error (guint ret, GError *error, const char *method)
  * Rescans a HAL device manually
  **/
 static gboolean
-gpm_hal_device_rescan (GpmHal *hal, const char *udi)
+gpm_hal_device_rescan (GpmHal *hal, const gchar *udi)
 {
 	gint ret = 0;
 	DBusGProxy *proxy;
@@ -174,10 +174,10 @@ gpm_hal_device_rescan (GpmHal *hal, const char *udi)
  * Rescans all devices of a specific capability manually
  **/
 gboolean
-gpm_hal_device_rescan_capability (GpmHal *hal, const char *capability)
+gpm_hal_device_rescan_capability (GpmHal *hal, const gchar *capability)
 {
 	gchar **devices;
-	int i;
+	guint i;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (capability != NULL, FALSE);
@@ -476,8 +476,8 @@ gpm_hal_num_devices_of_capability_with_value (GpmHal      *hal,
  */
 static void
 watch_device_property_modified (DBusGProxy *proxy,
-				const char *udi,
-				const char *key,
+				const gchar *udi,
+				const gchar *key,
 				gboolean    is_added,
 				gboolean    is_removed,
 				gboolean    finally,
@@ -506,8 +506,8 @@ watch_device_properties_modified_cb (DBusGProxy *proxy,
 				     GpmHal     *hal)
 {
 	GValueArray *array;
-	const char  *udi;
-	const char  *key;
+	const gchar *udi;
+	const gchar *key;
 	gboolean     added;
 	gboolean     removed;
 	gboolean     finally = FALSE;
@@ -549,8 +549,8 @@ watch_device_properties_modified_cb (DBusGProxy *proxy,
  * Watch the specified device, so it emits device-property-modified
  */
 gboolean
-gpm_hal_device_watch_propery_modified (GpmHal     *hal,
-				       const char *udi)
+gpm_hal_device_watch_propery_modified (GpmHal      *hal,
+				       const gchar *udi)
 {
 	DBusGProxy *proxy;
 	GError     *error = NULL;
@@ -610,12 +610,12 @@ gpm_hal_device_watch_propery_modified (GpmHal     *hal,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-watch_device_condition_cb (DBusGProxy *proxy,
-			   const char *condition,
-			   const char *details,
-			   GpmHal     *hal)
+watch_device_condition_cb (DBusGProxy  *proxy,
+			   const gchar *condition,
+			   const gchar *details,
+			   GpmHal      *hal)
 {
-	const char *udi;
+	const gchar *udi;
 	udi = dbus_g_proxy_get_path (proxy);
 
 	gpm_debug ("emitting device-condition : %s, %s (%s)", udi, condition, details);
@@ -629,8 +629,8 @@ watch_device_condition_cb (DBusGProxy *proxy,
  * Watch the specified device, so it emits a device-condition
  */
 gboolean
-gpm_hal_device_watch_condition (GpmHal     *hal,
-				const char *udi)
+gpm_hal_device_watch_condition (GpmHal      *hal,
+				const gchar *udi)
 {
 	DBusGProxy *proxy;
 	GError     *error = NULL;
@@ -676,12 +676,12 @@ gpm_hal_device_watch_condition (GpmHal     *hal,
  * Remove the specified device, so it does not emit device-condition signals.
  */
 gboolean
-gpm_hal_device_remove_condition (GpmHal     *hal,
-				 const char *udi)
+gpm_hal_device_remove_condition (GpmHal      *hal,
+				 const gchar *udi)
 {
 	gpointer key, value;
 	gboolean present;
-	char *udi_key;
+	gchar *udi_key;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -714,12 +714,12 @@ gpm_hal_device_remove_condition (GpmHal     *hal,
  * Remove the specified device, so it does not emit device-propery-modified.
  */
 gboolean
-gpm_hal_device_remove_propery_modified (GpmHal     *hal,
-				        const char *udi)
+gpm_hal_device_remove_propery_modified (GpmHal      *hal,
+				        const gchar *udi)
 {
 	gpointer key, value;
 	gboolean present;
-	char *udi_key;
+	gchar *udi_key;
 	DBusGProxy *proxy = NULL;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -850,9 +850,9 @@ gpm_hal_class_init (GpmHalClass *klass)
  * Invoked when a device is added.
  */
 static void
-gpm_hal_device_added_cb (DBusGProxy *proxy,
-		           const char *udi,
-		           GpmHal     *hal)
+gpm_hal_device_added_cb (DBusGProxy  *proxy,
+		         const gchar *udi,
+		         GpmHal      *hal)
 {
 	gpm_debug ("emitting device-added : %s", udi);
 	g_signal_emit (hal, signals [DEVICE_ADDED], 0, udi);
@@ -868,9 +868,9 @@ gpm_hal_device_added_cb (DBusGProxy *proxy,
  * Invoked when a device is removed.
  */
 static void
-gpm_hal_device_removed_cb (DBusGProxy *proxy,
-		           const char *udi,
-		           GpmHal     *hal)
+gpm_hal_device_removed_cb (DBusGProxy  *proxy,
+		           const gchar *udi,
+		           GpmHal      *hal)
 {
 	gpm_debug ("emitting device-removed : %s", udi);
 	g_signal_emit (hal, signals [DEVICE_REMOVED], 0, udi);
@@ -887,10 +887,10 @@ gpm_hal_device_removed_cb (DBusGProxy *proxy,
  * Invoked when a device gets a new condition.
  */
 static void
-gpm_hal_new_capability_cb (DBusGProxy *proxy,
-		           const char *udi,
-		           const char *capability,
-		           GpmHal     *hal)
+gpm_hal_new_capability_cb (DBusGProxy  *proxy,
+		           const gchar *udi,
+		           const gchar *capability,
+		           GpmHal      *hal)
 {
 	g_debug ("emitting new-capability : %s, %s", udi, capability);
 	g_signal_emit (hal, signals [NEW_CAPABILITY], 0, udi, capability);
@@ -975,9 +975,9 @@ gpm_hal_proxy_disconnect_more (GpmHal *hal)
  * @hal: This class instance
  **/
 static void
-proxy_status_cb (DBusGProxy     *proxy,
-		 gboolean	 status,
-		 GpmHal *hal)
+proxy_status_cb (DBusGProxy *proxy,
+		 gboolean    status,
+		 GpmHal     *hal)
 {
 	g_return_if_fail (GPM_IS_HAL (hal));
 
@@ -1033,7 +1033,9 @@ gpm_hal_init (GpmHal *hal)
  * HashFunc so we can remove all the device-propery-modified devices
  */
 static void
-remove_device_property_modified_in_hash (const char *udi, gpointer value, GpmHal *hal)
+remove_device_property_modified_in_hash (const gchar *udi,
+					 gpointer     value,
+					 GpmHal      *hal)
 {
 	gpm_hal_device_remove_propery_modified (hal, udi);
 }
@@ -1046,7 +1048,9 @@ remove_device_property_modified_in_hash (const char *udi, gpointer value, GpmHal
  * HashFunc so we can remove all the device-condition devices
  */
 static void
-remove_device_condition_in_hash (const char *udi, gpointer value, GpmHal *hal)
+remove_device_condition_in_hash (const gchar *udi,
+				 gpointer     value,
+				 GpmHal      *hal)
 {
 	gpm_hal_device_remove_condition (hal, udi);
 }

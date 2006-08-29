@@ -193,7 +193,7 @@ gpm_hal_power_can_hibernate (GpmHalPower *hal_power)
 /* we have to be clever, as hal can pass back two types of errors, and we have
    to ignore dbus timeouts */
 static gboolean
-gpm_hal_handle_error (guint ret, GError *error, const char *method)
+gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
 {
 	gboolean retval = TRUE;
 
@@ -230,7 +230,7 @@ gpm_hal_handle_error (guint ret, GError *error, const char *method)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
  **/
 gboolean
-gpm_hal_power_suspend (GpmHalPower *hal_power, gint wakeup)
+gpm_hal_power_suspend (GpmHalPower *hal_power, guint wakeup)
 {
 	guint ret = 0;
 	GError *error = NULL;
