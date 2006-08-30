@@ -37,6 +37,7 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-graph-widget.h"
+#include "gpm-info-data.h"
 #include "gpm-proxy.h"
 
 static void     gpm_graph_class_init (GpmGraphClass *klass);
@@ -211,6 +212,47 @@ gpm_graph_widget_custom_handler (GladeXML *xml,
 	return NULL;
 }
 
+static void
+gpm_graph_core_data_add_always (GPtrArray   *array,
+			  guint	       time_secs,
+			  guint	       value,
+			  guint	       colour,
+			  const gchar *desc)
+{
+	GpmInfoDataPoint *new;
+
+	/* we have to add a new data point */
+	new = g_slice_new (GpmInfoDataPoint);
+	new->time = time_secs;
+	if (value > 0) {
+		new->value = value;
+	} else {
+		gpm_debug ("Not recording value (%i)", value);
+		new->value = 0;
+	}
+	new->colour = colour;
+	if (desc) {
+		new->desc = g_strdup (desc);
+	} else {
+		new->desc = NULL;
+	}
+	g_ptr_array_add (array, (gpointer) new);
+}
+
+static GList *
+convert_ptr_array_to_list (GPtrArray *array)
+{
+	GpmInfoDataPoint *point;
+	GList *list = NULL;
+	guint a;
+
+	for (a=0; a < array->len; a++) {
+		point = g_ptr_array_index (array, a);
+		list = g_list_append (list, (gpointer) point);
+	}
+	return list;
+}
+
 /**
  * gpm_graph_checkbox_events_cb:
  * @widget: The GtkWidget object
@@ -218,14 +260,35 @@ gpm_graph_widget_custom_handler (GladeXML *xml,
  **/
 static void
 gpm_graph_checkbox_events_cb (GtkWidget *widget,
-			    GpmGraph  *graph)
+			      GpmGraph  *graph)
 {
 	gboolean checked;
+	GPtrArray *array = g_ptr_array_new ();
+	GList *list = NULL;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	gpm_debug ("Events enable %i", checked);
 
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph->priv->graph_widget), NULL);
+	if (checked == FALSE) {
+		/* remove the dots from the graph */
+		gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (graph->priv->graph_widget), FALSE);
+		//todo: free previous events?
+		return;
+	}
+
+	//todo, get from DBUS
+	gpm_graph_core_data_add_always (array, 15, 23, 2, NULL);
+	gpm_graph_core_data_add_always (array, 20, 29, 1, NULL);
+
+	list = convert_ptr_array_to_list (array);
+	g_ptr_array_free (array, FALSE);
+
+	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph->priv->graph_widget), list);
+
+	/* only enable the dots if the checkbox is checked */
+	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (graph->priv->graph_widget), TRUE);
+//	gtk_widget_hide (GTK_WIDGET (graph->priv->graph_widget));
+//	gtk_widget_show (GTK_WIDGET (graph->priv->graph_widget));
 }
 
 /**
@@ -280,9 +343,9 @@ gpm_graph_find_types (GpmGraph *graph,
 
 	retval = TRUE;
 	if (dbus_g_proxy_call (proxy, "GetTypes", &error,
-				G_TYPE_INVALID,
-				G_TYPE_STRV, &strlist,
-				G_TYPE_INVALID) == FALSE) {
+			       G_TYPE_INVALID,
+			       G_TYPE_STRV, &strlist,
+			       G_TYPE_INVALID) == FALSE) {
 		if (error) {
 			g_debug ("%s", error->message);
 			g_error_free (error);
@@ -318,6 +381,8 @@ static void
 gpm_graph_type_combo_changed_cb (GtkWidget *widget,
 				 GpmGraph  *graph)
 {
+	GPtrArray *array = g_ptr_array_new ();
+	GList *list = NULL;
 	gchar *value;
 	const gchar *type;
 
@@ -335,6 +400,19 @@ gpm_graph_type_combo_changed_cb (GtkWidget *widget,
 	g_free (value);
 
 	gpm_debug ("Changing graph type to %s", type);
+
+	//todo, get from DBUS
+	gpm_graph_core_data_add_always (array, 10, 20, 2, NULL);
+	gpm_graph_core_data_add_always (array, 25, 25, 2, NULL);
+	gpm_graph_core_data_add_always (array, 32, 30, 3, NULL);
+	gpm_graph_core_data_add_always (array, 40, 50, 3, NULL);
+
+	list = convert_ptr_array_to_list (array);
+	g_ptr_array_free (array, FALSE);
+	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (graph->priv->graph_widget), list);
+
+	gtk_widget_hide (GTK_WIDGET (graph->priv->graph_widget));
+	gtk_widget_show (GTK_WIDGET (graph->priv->graph_widget));
 }
 
 static void

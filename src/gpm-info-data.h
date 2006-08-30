@@ -47,6 +47,13 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmInfoDataClass;
 
+typedef struct {
+	guint		 time;	/* seconds */
+	guint		 value;
+	guint8		 colour;
+	gchar		*desc; /* description, or NULL if missing */
+} GpmInfoDataPoint;
+
 GType			 gpm_info_data_get_type		(void);
 GpmInfoData		*gpm_info_data_new		(void);
 

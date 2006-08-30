@@ -802,11 +802,11 @@ gpm_info_log_do_poll (gpointer data)
 
 		/* set the correct colours */
 		if (battery_status.is_discharging) {
-			colour = GPM_GRAPH_WIDGET_COLOUR_DARK_RED;
+			colour = GPM_GRAPH_WIDGET_COLOUR_DISCHARGING;
 		} else if (battery_status.is_charging) {
-			colour = GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
+			colour = GPM_GRAPH_WIDGET_COLOUR_CHARGING;
 		} else {
-			colour = GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
+			colour = GPM_GRAPH_WIDGET_COLOUR_CHARGED;
 		}
 
 		gpm_info_data_add (info->priv->percentage_data,

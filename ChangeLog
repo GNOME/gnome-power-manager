@@ -1,5 +1,27 @@
 2006-08-30  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-core.c:
+	Make sure we hide all the battery panes when we are on AC.
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info-data.h:
+	* src/gpm-info.c:
+	Impliment more of the graph interface, and add the line colour to the
+	legend to fix #353583.
+
+2006-08-30  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c:
+	* src/gpm-prefs.h:
+	Apply a patch to allow users to turn off the disconnect and reconnect
+	of NetworkManager on sleep and resume.
+	Patch from Khashayar Naderehvandi <khashayar_naderehvandi@yahoo.co.uk>,
+	many thanks. Fixes #353431
+
+2006-08-30  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	* help/C/gnome-power-manager.xml:
 	Better format some of the text, and move some stuff about.

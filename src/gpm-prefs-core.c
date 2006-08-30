@@ -917,11 +917,11 @@ prefs_setup_sleep (GpmPrefs *prefs)
 	set_idle_hscale_stops (prefs, "hscale_sleep_battery_inactive", delay);
 	set_idle_hscale_stops (prefs, "hscale_sleep_ac_inactive", delay);
 
-	if (! prefs->priv->has_batteries) {
+	if (prefs->priv->has_batteries == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_sleep_battery");
 		gtk_widget_hide_all (widget);
 	}
-	if (! prefs->priv->has_ups) {
+	if (prefs->priv->has_ups == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_sleep_ups");
 		gtk_widget_hide_all (widget);
 	}
@@ -955,7 +955,7 @@ prefs_setup_display (GpmPrefs *prefs)
 	set_idle_hscale_stops (prefs, "hscale_display_battery_sleep", delay);
 	set_idle_hscale_stops (prefs, "hscale_display_ac_sleep", delay);
 
-	if (! prefs->priv->has_lcd) {
+	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_display_ac_brightness");
 		gtk_widget_hide_all (widget);
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_display_ac_brightness");
@@ -967,6 +967,10 @@ prefs_setup_display (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_ac_dim");
 		gtk_widget_hide_all (widget);
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_battery_dim");
+		gtk_widget_hide_all (widget);
+	}
+	if (prefs->priv->has_batteries == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_display_battery");
 		gtk_widget_hide_all (widget);
 	}
 }
@@ -1152,7 +1156,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
 	  			  GPM_PREF_ENABLE_BEEPING);
 
-	if (! prefs->priv->has_batteries) {
+	if (prefs->priv->has_batteries == FALSE) {
 		/* Hide battery radio options if we have no batteries */
 		gtk_widget_hide_all (radiobutton_icon_charge);
 		gtk_widget_hide_all (radiobutton_icon_critical);

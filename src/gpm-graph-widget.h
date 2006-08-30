@@ -33,6 +33,11 @@ G_BEGIN_DECLS
 #define GPM_IS_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH_WIDGET))
 #define GPM_GRAPH_WIDGET_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetClass))
 
+#define GPM_GRAPH_WIDGET_COLOUR_CHARGING	GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE
+#define GPM_GRAPH_WIDGET_COLOUR_DISCHARGING	GPM_GRAPH_WIDGET_COLOUR_DARK_RED
+#define GPM_GRAPH_WIDGET_COLOUR_CHARGED		GPM_GRAPH_WIDGET_COLOUR_GREEN
+#define GPM_GRAPH_WIDGET_LEGEND_SPACING		19
+
 typedef struct GpmGraphWidget		GpmGraphWidget;
 typedef struct GpmGraphWidgetClass	GpmGraphWidgetClass;
 typedef struct GpmGraphWidgetPrivate	GpmGraphWidgetPrivate;
@@ -92,19 +97,14 @@ struct GpmGraphWidgetClass
 	GtkDrawingAreaClass parent_class;
 };
 
-typedef struct {
-	guint		 time;	/* seconds */
-	guint		 value;
-	guint		 colour;
-	gchar		*desc; /* description, or NULL if missing */
-} GpmInfoDataPoint;
-
 GType		 gpm_graph_widget_get_type		(void);
 GtkWidget	*gpm_graph_widget_new			(void);
 
 void		 gpm_graph_widget_set_invert_x		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
 void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
+							 gboolean	 enable);
+void		 gpm_graph_widget_enable_events		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
 void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
 							 gboolean	 inv);

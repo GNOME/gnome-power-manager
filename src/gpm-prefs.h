@@ -56,6 +56,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_CAN_SUSPEND		GPM_PREF_DIR "/can_suspend"
 #define GPM_PREF_CAN_HIBERNATE		GPM_PREF_DIR "/can_hibernate"
 
+#define GPM_PREF_NETWORKMANAGER_SLEEP	GPM_PREF_DIR "/networkmanager_sleep"
+
 #define GPM_PREF_LOCK_USE_SCREENSAVER	GPM_PREF_DIR "/lock_use_screensaver_settings"
 /* These are only effective if the system default is turned off. See bug #331164 */
 #define GPM_PREF_LOCK_ON_BLANK_SCREEN	GPM_PREF_DIR "/lock_on_blank_screen"

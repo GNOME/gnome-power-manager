@@ -1204,6 +1204,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gboolean allowed;
 	gboolean ret;
 	gboolean do_lock;
+        gboolean nm_sleep;
 
 	gpm_manager_allowed_hibernate (manager, &allowed, NULL);
 
@@ -1222,7 +1223,11 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
-	gpm_networkmanager_sleep ();
+	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
+					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep) {	
+		gpm_networkmanager_sleep ();
+	}
 
 	ret = gpm_hal_power_hibernate (manager->priv->hal_power);
 	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
@@ -1262,7 +1267,12 @@ gpm_manager_hibernate (GpmManager *manager,
 	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
-	gpm_networkmanager_wake ();
+
+	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
+					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep) {	
+		gpm_networkmanager_wake ();
+	}
 
 	sync_dpms_policy (manager);
 
@@ -1289,6 +1299,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean allowed;
 	gboolean ret;
 	gboolean do_lock;
+	gboolean nm_sleep;
 	GpmPowerStatus status;
 	guint charge_before_suspend;
 	gint charge_difference;
@@ -1311,7 +1322,12 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
-	gpm_networkmanager_sleep ();
+	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
+					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep) {	
+		gpm_networkmanager_sleep ();
+	}
+
 
 	/* We save the current charge in mWh so we can see how much power we
 	   lost or gained over the suspend cycle */
@@ -1379,7 +1395,12 @@ gpm_manager_suspend (GpmManager *manager,
 	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
-	gpm_networkmanager_wake ();
+
+	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
+					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	if (nm_sleep) {	
+		gpm_networkmanager_wake ();
+	}
 
 	sync_dpms_policy (manager);
 

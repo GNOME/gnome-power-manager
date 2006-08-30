@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include "gpm-graph-widget.h"
+#include "gpm-info-data.h"
 #include "gpm-debug.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
@@ -35,6 +36,8 @@ struct GpmGraphWidgetPrivate
 {
 	gboolean		 use_grid;
 	gboolean		 use_legend;
+	gboolean		 use_events;
+
 	gboolean		 invert_x;
 	gboolean		 autorange_x;
 	gboolean		 invert_y;
@@ -168,11 +171,27 @@ gpm_graph_widget_set_axis_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
  * @enable: If we should show the legend
  **/
 void
-gpm_graph_widget_enable_legend	(GpmGraphWidget *graph, gboolean enable)
+gpm_graph_widget_enable_legend (GpmGraphWidget *graph, gboolean enable)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->use_legend = enable;
+
+	gtk_widget_hide (GTK_WIDGET (graph));
+	gtk_widget_show (GTK_WIDGET (graph));
+}
+
+/**
+ * gpm_graph_widget_enable_events:
+ * @graph: This graph class instance
+ * @enable: If we should show the legend
+ **/
+void
+gpm_graph_widget_enable_events (GpmGraphWidget *graph, gboolean enable)
+{
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	graph->priv->use_events = enable;
 
 	gtk_widget_hide (GTK_WIDGET (graph));
 	gtk_widget_show (GTK_WIDGET (graph));
@@ -669,6 +688,31 @@ gpm_graph_widget_draw_dot (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidgetColour
 }
 
 /**
+ * gpm_graph_widget_draw_legend_line:
+ * @cr: Cairo drawing context
+ * @x: The X-coordinate for the center
+ * @y: The Y-coordinate for the center
+ * @colour: The colour enum
+ *
+ * Draw the legend line on the graph of a specified colour
+ **/
+static void
+gpm_graph_widget_draw_legend_line (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidgetColour colour)
+{
+	gfloat width = 10;
+	gfloat height = 2;
+	/* background */
+	cairo_rectangle (cr, (int) (x - (width/2)) + 0.5, (int) (y - (height/2)) + 0.5, width, height);
+	gpm_graph_widget_set_colour (cr, colour);
+	cairo_fill (cr);
+	/* solid outline box */
+	cairo_rectangle (cr, (int) (x - (width/2)) + 0.5, (int) (y - (height/2)) + 0.5, width, height);
+	cairo_set_source_rgb (cr, 0.1, 0.1, 0.1);
+	cairo_set_line_width (cr, 1);
+	cairo_stroke (cr);
+}
+
+/**
  * gpm_graph_widget_get_pos_on_graph:
  * @graph: This graph class instance
  * @data_x: The data X-coordinate
@@ -779,8 +823,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		oldy = newy;
 	}
 
-	/* do the events on the graph if we enabled the legend */
-	if (graph->priv->use_legend) {
+	/* only do the events sometimes */
+	if (graph->priv->use_events) {
 		gint previous_point = 0;
 		gint prevpos = -1;
 		GpmInfoDataPoint *point_this = NULL;
@@ -883,8 +927,27 @@ gpm_graph_widget_draw_legend (cairo_t *cr,
 		gpm_graph_widget_draw_dot (cr, x + 8, y_count, colour);
 		cairo_move_to (cr, x + 8 + 10, y_count + 3);
 		cairo_show_text (cr, desc);
-		y_count = y_count + 20;
+		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	}
+
+	/* add the line colours to the legend */
+	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
+					   GPM_GRAPH_WIDGET_COLOUR_CHARGING);
+	cairo_move_to (cr, x + 8 + 10, y_count + 3);
+	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_show_text (cr, _("Charging"));
+	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
+					   GPM_GRAPH_WIDGET_COLOUR_DISCHARGING);
+	cairo_move_to (cr, x + 8 + 10, y_count + 3);
+	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_show_text (cr, _("Discharging"));
+	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
+					   GPM_GRAPH_WIDGET_COLOUR_CHARGED);
+	cairo_move_to (cr, x + 8 + 10, y_count + 3);
+	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_show_text (cr, _("Charged"));
 }
 
 /**
@@ -945,7 +1008,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
 	legend_width = gpm_graph_widget_legend_calculate_width (graph, cr);
-	legend_height = GPM_GRAPH_WIDGET_EVENT_LAST * 20;
+	legend_height = (GPM_GRAPH_WIDGET_EVENT_LAST + 3) * GPM_GRAPH_WIDGET_LEGEND_SPACING + 2;
 
 	cairo_save (cr);
 
