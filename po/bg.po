@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-30 12:07+0100\n"
-"PO-Revision-Date: 2006-02-07 12:16+0200\n"
+"POT-Creation-Date: 2006-08-30 08:38+0300\n"
+"PO-Revision-Date: 2006-08-30 08:22+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,11 +32,14 @@ msgid ""
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
 msgstr ""
+"След включването gnome-power-manager няма да изпълнява действията в "
+"политиката за известно време, за да се позволи на съобщенията да се "
+"успокоят, а HAL да се обнови. Най-често пет секунди са достатъчни, като в "
+"този кратък интервал потребителят не може да се обърка."
 
 #: ../data/gnome-power-manager.schemas.in.h:2
-#, fuzzy
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "Дали потребителят може да приспива дълбоко компютъра"
+msgstr "Включване на приспиването и дълбокото приспиване в менюто"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
@@ -44,453 +47,668 @@ msgstr "Действие при критично ниско ниво на бат
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
-msgstr ""
+msgstr "Проверка на натоварването на процесора преди заспиване"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Check network utilization before sleeping"
-msgstr ""
+msgstr "Проверка на натоварването на мрежата преди заспиване"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 #, fuzzy
-msgid "Dim the screen after a period of inactivity"
-msgstr "Дали екранът да се затъмни след период на бездействие"
+msgid "Dim the screen after a period of inactivity when on AC power"
+msgstr "Затъмняване на екрана след период на бездействие"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
+#, fuzzy
+msgid "Dim the screen after a period of inactivity when on battery power"
+msgstr "Затъмняване на екрана след период на бездействие"
+
+#: ../data/gnome-power-manager.schemas.in.h:8
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", "
 "\"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:8
-#, fuzzy
-msgid "Hibernate button action"
-msgstr "Действие на бутона за приспиване"
+"Настройки на иконата за известяване. Валидни опции са „never“ (никога), "
+"„critical“ (при критично ниско ниво), „charge“ (при зареждане), "
+"„present“ (при наличие) и „always“ (винаги)."
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-#, fuzzy
-msgid "Hibernate enabled"
-msgstr "Дълбоко приспиване"
+msgid "Hibernate button action"
+msgstr "Действие на бутона за дълбоко приспиване"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
-msgid ""
-"If a notification message should be displayed if the HAL action (suspend or "
-"hibernate) fails."
-msgstr ""
+msgid "Hibernate enabled"
+msgstr "Дълбокото приспиване е включено"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
-#, fuzzy
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr ""
+"Дали заявките за предотвратяване от DBUS да се игнорират от другите програми."
+
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "If DBUS inhibit requests should be ignored."
+msgstr "Дали заявките за предотвратяване от DBUS да се игнорират."
+
+#: ../data/gnome-power-manager.schemas.in.h:13
+msgid ""
+"If a notification message should be displayed after the suspend or hibernate "
+"failed."
+msgstr ""
+"Дали да се предупреждава след неуспех при пробването да се приспи или "
+"дълбоко да се приспи компютъра"
+
+#: ../data/gnome-power-manager.schemas.in.h:14
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr "Дали да се предупреждава при пълното зареждане на батерията"
 
-#: ../data/gnome-power-manager.schemas.in.h:12
+#: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If network utilization should be checked before doing the idle action."
 msgstr ""
+"Проверка на натоварването на мрежата преди извършване на действие за "
+"състоянието на бездействие."
 
-#: ../data/gnome-power-manager.schemas.in.h:13
-msgid "If the CPU load should be checked before doing the idle action."
+#: ../data/gnome-power-manager.schemas.in.h:16
+msgid ""
+"If niced processes are considered, they can cause a frequency increment even "
+"though their absolute load percentage wouldn't trigger the scaling mechanism "
+"to switch up the frequency."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid "If the CPU load should be checked before doing the idle action."
+msgstr ""
+"Проверка на натоварването на процесора преди извършване на действие за "
+"състоянието на бездействие."
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid "If the PC speaker (beeping) should be used"
+msgstr "Дали да се използва звънеца на компютъра"
+
+#: ../data/gnome-power-manager.schemas.in.h:19
+msgid ""
+"If the PC speaker should be used to beep when the power is low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+"Дали да се използва звънеца на компютъра, за да се известява за намаляване "
+"на мощността или за случаите, когато заявки за предотвратяване са спрели "
+"действие по политиката."
+
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
+"Дали да се включат опциите за приспиване и дълбоко приспиване в падащото "
+"меню в областта за известяване."
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
+"Дали да се подаде събитие свързано с батерията, когато екранът е затворен и "
+"се прекъсне връзката с ел. мрежа"
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
+"Дали да се изпълнява действието при затваряне на екрана (напр. „Приспиване "
+"при затваряне на екрана и захранване от батерии“, когато първо се затваря "
+"екрана, а захранването от ел. мрежа след това се прекъсне."
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
+"Дали да се включи режим на енергоспестяване при захранване от ел. мрежа"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr ""
+"Дали да се включи режим на енергоспестяване при захранване от непрекъсваемо "
+"токозахранване"
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the low-power mode should be enabled when on battery"
-msgstr ""
+msgstr "Дали да се включи режим на енергоспестяване при захранване от батерии"
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
+"Дали екранът се заключва след като бъде изгасен. Използва се, само когато "
+"„lock_use_screensaver_settings“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:27
 #, fuzzy
-msgid "If the screen should be dimmed to save power when the computer is idle."
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
 msgstr ""
 "Дали екранът на компютъра да бъде затъмнен, за да се спести енергия, когато "
 "компютърът бездейства."
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:28
+#, fuzzy
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on battery power."
+msgstr ""
+"Дали екранът на компютъра да бъде затъмнен, за да се спести енергия, когато "
+"компютърът бездейства."
+
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
+"Дали да се включи режим на енергоспестяване при захранване от ел. мрежа."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
+"Дали да се включи режим на енергоспестяване при захранване от непрекъсваемо "
+"токозахранване."
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
-msgstr ""
+msgstr "Дали да се включи режим на енергоспестяване при захранване от батерии."
 
-#: ../data/gnome-power-manager.schemas.in.h:25
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:32
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Дали потребителят може да приспива дълбоко компютъра"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid "If the user is authorized to suspend the computer."
-msgstr ""
+msgstr "Дали потребителят е упълномощен да приспива компютъра."
 
-#: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Дали да се предупреждава при махането на адаптера за променлив ток"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
+"Дали да се ползва известяване базирано на време. Ако е ЛЪЖА, ще се ползва "
+"процента на заряда, което може да помогне при лошо функциониращ BIOS с ACPI."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:36
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
+"Дали екранът се заключва след като компютърът се събуди от дълбоко "
+"приспиване. Използва се, само когато „lock_use_screensaver_settings“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
+"Дали екранът се заключва след като компютърът се събуди от приспиване. "
+"Използва се, само когато „lock_use_screensaver_settings“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:38
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
 msgstr ""
+"Дали да се използва настройката в gnome-screensaver, за да се реши дали да "
+"се заключва екрана след приспиване, дълбоко приспиване на компютъра или "
+"изчистване на екрана."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid "LCD brightness when on AC"
 msgstr "Яркост на екрана при захранване от ел. мрежа"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
-#, fuzzy
-msgid "LCD brightness when on battery"
-msgstr "Яркост на екрана при захранване от ел. мрежа"
-
-#: ../data/gnome-power-manager.schemas.in.h:34
-#, fuzzy
-msgid "Laptop lid close action on battery"
-msgstr "Действие при затваряне на екрана"
-
-#: ../data/gnome-power-manager.schemas.in.h:35
-#, fuzzy
-msgid "Laptop lid close action when on AC"
-msgstr "Действие при затваряне на екрана"
-
-#: ../data/gnome-power-manager.schemas.in.h:36
-#, fuzzy
-msgid "Lock screen on hibernate"
-msgstr "Дали потребителят може да приспива дълбоко компютъра"
-
-#: ../data/gnome-power-manager.schemas.in.h:37
-msgid "Lock screen on suspend"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:38
-#, fuzzy
-msgid "Lock screen when blanked"
-msgstr "Дали потребителят може да приспива дълбоко компютъра"
-
-#: ../data/gnome-power-manager.schemas.in.h:39
-#, fuzzy
-msgid "Notify on a HAL error"
-msgstr "Уведомяване при прекъсване на захранването от ел. мрежа"
-
 #: ../data/gnome-power-manager.schemas.in.h:40
-msgid "Notify when AC adapter is disconnected"
-msgstr ""
+msgid "LCD brightness when on battery"
+msgstr "Яркост на екрана при захранване от батерии"
 
 #: ../data/gnome-power-manager.schemas.in.h:41
-#, fuzzy
+msgid "Laptop lid close action on battery"
+msgstr "Действие при затваряне на екрана и захранване от батерии"
+
+#: ../data/gnome-power-manager.schemas.in.h:42
+msgid "Laptop lid close action when on AC"
+msgstr "Действие при затваряне на екрана и захранване от ел. мрежа"
+
+#: ../data/gnome-power-manager.schemas.in.h:43
+msgid "Lock screen on hibernate"
+msgstr "Заключване на екрана при дълбоко приспиване"
+
+#: ../data/gnome-power-manager.schemas.in.h:44
+msgid "Lock screen on suspend"
+msgstr "Заключване на екрана при приспиване"
+
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid "Lock screen when blanked"
+msgstr "Заключване на екрана при изчистването му"
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid "Method used to blank screen on AC"
+msgstr "Метод за изчистване на екрана при захранване от ел. мрежа"
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+msgid "Method used to blank screen on battery"
+msgstr "Метод за изчистване на екрана при захранване от батерии"
+
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid "Notify on a HAL error"
+msgstr "Уведомяване при грешка в HAL"
+
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid "Notify when AC adapter is disconnected"
+msgstr "Уведомяване при изключването на адаптера за ел. мрежа"
+
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Notify when fully charged"
 msgstr "Уведомяване при пълно зареждане на батериите"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
-msgid "Number of seconds to suppress policy after resume"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:43
-msgid "Percentage action is taken"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:44
-msgid "Percentage considered critical"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:45
-msgid "Percentage considered low"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:46
-msgid "Percentage considered very low"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:47
-#, fuzzy
-msgid "Power button action"
-msgstr "Действие на бутона за приспиване"
-
-#: ../data/gnome-power-manager.schemas.in.h:48
-msgid "Sleep timeout computer when on AC"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:49
-msgid "Sleep timeout computer when on battery"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:50
-msgid "Sleep timeout display when on AC"
-msgstr ""
-
 #: ../data/gnome-power-manager.schemas.in.h:51
-msgid "Sleep timeout display when on battery"
-msgstr ""
+msgid "Number of seconds to suppress policy after resume"
+msgstr "Брой секунди за подтискане на политиката след включване"
 
 #: ../data/gnome-power-manager.schemas.in.h:52
+msgid "Percentage action is taken"
+msgstr "Предприето е действие при достигане на процент заряд"
+
+#: ../data/gnome-power-manager.schemas.in.h:53
+msgid "Percentage considered critical"
+msgstr "Зарядът е на критично ниско ниво"
+
+#: ../data/gnome-power-manager.schemas.in.h:54
+msgid "Percentage considered low"
+msgstr "Зарядът се счита за нисък"
+
+#: ../data/gnome-power-manager.schemas.in.h:55
+msgid "Percentage considered very low"
+msgstr "Зарядът се счита за много нисък"
+
+#: ../data/gnome-power-manager.schemas.in.h:56
+msgid "Power button action"
+msgstr "Действие на бутона за изключване"
+
+#: ../data/gnome-power-manager.schemas.in.h:57
+msgid "Sleep timeout computer when on AC"
+msgstr "Време за предотвратяване на приспиването при захранване от ел. мрежа"
+
+#: ../data/gnome-power-manager.schemas.in.h:58
+msgid "Sleep timeout computer when on battery"
+msgstr "Време за предотвратяване на приспиването при захранване от батерии"
+
+#: ../data/gnome-power-manager.schemas.in.h:59
+msgid "Sleep timeout display when on AC"
+msgstr ""
+"Време за предотвратяване на изключването на екрана при захранване от ел. "
+"мрежа"
+
+#: ../data/gnome-power-manager.schemas.in.h:60
+msgid "Sleep timeout display when on battery"
+msgstr ""
+"Време за предотвратяване на изключването на екрана при захранване от батерии"
+
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Suspend button action"
 msgstr "Действие на бутона за приспиване"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Suspend enabled"
-msgstr "Приспиване"
+msgstr "Приспиването е включено"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:63
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Методът на DPMS за изчистването на екрана при захранване от ел. мрежа. "
+"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
+"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+
+#: ../data/gnome-power-manager.schemas.in.h:64
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Методът на DPMS за изчистването на екрана при захранване от батерии. "
+"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
+"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Действие при критично ниско ниво на батериите"
+msgstr ""
+"Действие при критично ниско ниво на непрекъсваемото токозахранване. "
+"Възможните стойности са „hibernate“ (дълбоко приспиване), "
+"„suspend“ (приспиване), „shutdown“ (изключване) и „nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:55
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "Действие при критично ниско ниво на батериите"
+msgstr ""
+"Действие при критично ниско ниво на батериите. Възможните стойности са "
+"„hibernate“ (дълбоко приспиване), „suspend“ (приспиване), "
+"„shutdown“ (изключване) и „nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:56
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
-"power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
-msgstr "Действие при затваряне на екрана"
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
+msgstr ""
+"Действие при затваряне на екрана и ползване на захранване от ел. мрежа. "
+"Възможните стойности са „suspend“ (приспиване), „hibernate“ (дълбоко "
+"приспиване), „blank“ (изчистване) и „nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:57
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
-"battery power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
-msgstr "Действие при затваряне на екрана"
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
+msgstr ""
+"Действие при затваряне на екрана и ползване на захранване от батерии. "
+"Възможните стойности са „suspend“ (приспиване), „hibernate“ (дълбоко "
+"приспиване), „blank“ (изчистване) и „nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:58
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "Действие при натискане на бутона за приспиване на системата"
+msgstr ""
+"Действие при натискане на бутона за дълбоко приспиване на системата. "
+"Възможните стойности са „suspend“ (приспиване), „hibernate“ (дълбоко "
+"приспиване), „interactive“ (запитване), „shutdown“ (спиране) и "
+"„nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:59
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
-msgstr "Действие при натискане на бутона за приспиване на системата"
+msgstr ""
+"Действие при натискане на бутона за включване/изключване на системата. "
+"Възможните стойности са „suspend“ (приспиване), „hibernate“ (дълбоко "
+"приспиване), „interactive“ (запитване), „shutdown“ (спиране) и "
+"„nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:60
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
-msgstr "Действие при натискане на бутона за приспиване на системата"
+msgstr ""
+"Действие при натискане на бутона за приспиване на системата. Възможните "
+"стойности са „suspend“ (приспиване), „hibernate“ (дълбоко приспиване), "
+"„interactive“ (запитване), „shutdown“ (спиране) и „nothing“ (нищо)."
 
-#: ../data/gnome-power-manager.schemas.in.h:61
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
 msgstr ""
-"Колко секунди да се изчакат преди опит за изгасяне на екрана, когато "
-"компютърът се захранва от ел. мрежа"
+"Колко секунди да се изчакат преди изгасяне на екрана, когато компютърът се "
+"захранва от ел. мрежа."
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
+"Колко секунди да се изчакат преди приспиване на компютъра, когато компютърът "
+"се захранва от ел. мрежа и бездейства."
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
+"Колко секунди да се изчакат преди приспиване на компютъра, когато компютърът "
+"се захранва от батерии и бездейства."
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
 msgstr ""
+"Колко секунди да се изчакат преди изгасяне на екрана, когато компютърът се "
+"захранва от батерии."
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
+"Яркост на екрана при захранване от ел. мрежа. Възможните стойности са между "
+"0 и 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
+"Яркост на екрана при захранване от батерии. Възможните стойности са между 0 "
+"и 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid "The brightness of the screen when idle"
+msgstr "Яркост на екрана при бездействие"
+
+#: ../data/gnome-power-manager.schemas.in.h:79
+msgid "The cpufreq custom performance value to use when on AC power"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:68
-#, fuzzy
-msgid "The damping factor for the rate"
-msgstr "Ориентацията на тавата."
+#: ../data/gnome-power-manager.schemas.in.h:80
+msgid "The cpufreq custom performance value to use when on battery power"
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:81
+msgid ""
+"The cpufreq custom performance value to used to scale the processor when on "
+"AC power."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:82
+msgid ""
+"The cpufreq custom performance value to used to scale the processor when on "
+"battery power."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:83
+msgid "The cpufreq policy to use when on AC power"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:84
+#, fuzzy
+msgid "The cpufreq policy to use when on battery power"
+msgstr "екранът бе затворен при захранване от батерии"
+
+#: ../data/gnome-power-manager.schemas.in.h:85
+#, fuzzy
+msgid ""
+"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"values are ondemand, conservative, powersave, userspace, performance, "
+"nothing."
+msgstr ""
+"Методът на DPMS за изчистването на екрана при захранване от ел. мрежа. "
+"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
+"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+
+#: ../data/gnome-power-manager.schemas.in.h:86
+#, fuzzy
+msgid ""
+"The cpufreq policy to used to scale the processor when on battery power. "
+"Possible values are ondemand, conservative, powersave, userspace, "
+"performance, nothing."
+msgstr ""
+"Методът на DPMS за изчистването на екрана при захранване от батерии. "
+"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
+"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+
+#: ../data/gnome-power-manager.schemas.in.h:87
+msgid "The damping factor for the rate"
+msgstr "Коефициент за експоненциално усредняване"
+
+#: ../data/gnome-power-manager.schemas.in.h:88
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr "Максималната продължителност време показвана на оста x на графиката."
+
+#: ../data/gnome-power-manager.schemas.in.h:89
+msgid "The maximum time displayed on the graph"
+msgstr "Максималното време показвано на графиката"
+
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
+"Процентът на заряд на батерията, който се счита за критично нисък. Тази "
+"стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
 msgstr ""
+"Процентът на заряд на батерията, който се счита за нисък. Тази стойност е "
+"валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
 "when use_time_for_policy is false."
 msgstr ""
+"Процентът на заряд на батерията, който се счита за много нисък. Тази "
+"стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
 msgstr ""
+"Процентът на заряд на батерията, когато се предприема действие за критично "
+"нисък заряд. Тази стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Оставащото време на батерията в секунди, когато се предприема действие за "
+"критично нисък заряд. Тази стойност е валидна, само ако "
+"„use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Оставащото време на батерията в секунди, което се счита за критично ниско. "
+"Тази стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr ""
+"Оставащото време на батерията в секунди, което се счита за ниско. Тази "
+"стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Оставащото време на батерията в секунди, което се счита за много ниско. Тази "
+"стойност е валидна, само ако „use_time_for_policy“ е ЛЪЖА."
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The time remaining when action is taken"
-msgstr ""
+msgstr "Оставащото време при предприемане на действие"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid "The time remaining when critical"
-msgstr ""
+msgstr "Оставащото време, за да е критично ниско"
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid "The time remaining when low"
-msgstr ""
+msgstr "Оставащото време, за да е ниско"
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid "The time remaining when very low"
-msgstr ""
+msgstr "Оставащото време, за да е много ниско"
 
-#: ../data/gnome-power-manager.schemas.in.h:81
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-msgstr "Действие при критично ниско ниво на батериите"
+msgstr ""
+"Видът на приспиването при бездействие на компютъра. Възможните стойности са "
+"„hibernate“, „suspend“ и „nothing“."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
 msgstr ""
+"Стойността на коефициента за претеглено експоненциално усреднаване. "
+"Увеличаването на тази стойност прави усреднаването по-силно, което прави "
+"изчисленията за оставащото време по-точни, но графиките - по-гладки."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
+"Яркост на екрана на преносимия компютър при бездействие. Тази стойност е "
+"валидна, само ако „use_time_for_policy“ е ИСТИНА."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "UPS critical low action"
-msgstr "Действие при критично ниско ниво на батерията"
+msgstr "Критично ниско ниво на непрекъсваемото токозахранване"
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "Use gnome-screensaver lock setting"
-msgstr ""
+msgstr "Използване на настройките на заключването на gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "When to show the notification icon"
 msgstr "Кога да се показва иконата за уведомяване"
 
-#: ../data/gnome-power-manager.schemas.in.h:87
-msgid "Whether to hibernate, suspend or do nothing when inactive"
+#: ../data/gnome-power-manager.schemas.in.h:108
+msgid ""
+"Whether or not niced processes should be considered on processor load "
+"calculation"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:88
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:109
+msgid "Whether to hibernate, suspend or do nothing when inactive"
+msgstr ""
+"Дали компютърът да се приспива, дълбоко да се приспива или нищо да не се "
+"прави, когато компютърът бездейства"
+
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid "Whether to use time-based notifications"
-msgstr "Кога да се показва иконата за уведомяване"
+msgstr "Дали да се ползва уведомяване по време"
+
+#: ../data/gnome-power-manager.schemas.in.h:111
+msgid ""
+"Whether we should save the GNOME session state when performing a shutdown."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:112
+msgid "Whether we should save the session when performing a shutdown"
+msgstr ""
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -501,197 +719,256 @@ msgid "Power Management"
 msgstr "Управление на захранването"
 
 #: ../data/gpm-feedback-widget.glade.h:1
-#, fuzzy
 msgid "Brightness"
-msgstr "<b>Действия</b>"
+msgstr "Яркост"
 
 #: ../data/gpm-info.glade.h:1
-#, fuzzy
 msgid "<b>Event log</b>"
-msgstr "<b>Общи</b>"
+msgstr "<b>Дневник на събитията</b>"
 
 #: ../data/gpm-info.glade.h:2
-#, fuzzy
 msgid "<b>Laptop batteries</b>"
-msgstr "Батерия на мобилен компютър"
+msgstr "<b>Батерии на мобилен компютър</b>"
 
 #: ../data/gpm-info.glade.h:3
-#, fuzzy
 msgid "<b>UPS</b>"
-msgstr "<b>Общи</b>"
+msgstr "<b>Непрекъсваемо токозахранване</b>"
 
 #: ../data/gpm-info.glade.h:4
-#, fuzzy
 msgid "<b>Wireless devices</b>"
-msgstr "Безжична мишка"
+msgstr "<b>Безжични устройства</b>"
 
 #: ../data/gpm-info.glade.h:5
 msgid "Charge History"
-msgstr ""
+msgstr "История на зареждането"
 
 #: ../data/gpm-info.glade.h:6
-#, fuzzy
 msgid "Device Information"
-msgstr "Допълнителна информация за изчистване на грешки"
+msgstr "Информация за устройства"
 
 #: ../data/gpm-info.glade.h:7
 msgid ""
 "Device type: Laptop battery (1)\n"
 "Technology: Lithium ION"
 msgstr ""
+"Вид устройство: Батерия за мобилен компютър (1)\n"
+"Технология:     Литиево-йонна"
 
 #: ../data/gpm-info.glade.h:9
 msgid "Estimated Time History"
-msgstr ""
+msgstr "История на прогнозираното време"
 
 #: ../data/gpm-info.glade.h:10
 msgid "Event Log"
-msgstr ""
+msgstr "Дневник на събитията"
 
 #: ../data/gpm-info.glade.h:11
-#, fuzzy
 msgid "Last full: 22022mWh"
-msgstr "100% заряд"
+msgstr "Последно пълно зареждане: 22022mWh"
 
 #: ../data/gpm-info.glade.h:12
 msgid "More"
-msgstr ""
+msgstr "Още"
 
 #: ../data/gpm-info.glade.h:13
-#, fuzzy
 msgid "Power History"
-msgstr "Ниско ниво на батерията"
+msgstr "История на заряда"
 
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1354
-#: ../src/gpm-manager.c:1698
-#, fuzzy
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1606
+#: ../src/gpm-manager.c:1948
 msgid "Power Information"
-msgstr "Допълнителна информация за изчистване на грешки"
+msgstr "Информация за заряда"
 
 #: ../data/gpm-info.glade.h:15
 msgid "This shows how the battery charge and discharge rate varies over time."
 msgstr ""
+"Това показва как са се променяли скоростите на зареждане и разреждане на "
+"батерията във времето."
 
 #: ../data/gpm-info.glade.h:16
 msgid "This shows how the battery percentage charge varies over time."
-msgstr ""
+msgstr "Това показва как се е променял процента на зареденост във времето"
 
 #: ../data/gpm-info.glade.h:17
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
 msgstr ""
+"Това показва как се е променяло оставащото време до зареждане или разреждане "
+"във времето."
+
+#: ../data/gpm-inhibit-test.glade.h:1
+msgid "Application:"
+msgstr "Приложение:"
+
+#: ../data/gpm-inhibit-test.glade.h:2
+msgid "Burning DVD, titled \"My Photos\""
+msgstr "Записване на DVD на име „Моите фотографии“"
+
+#: ../data/gpm-inhibit-test.glade.h:3
+msgid "GNOME Acme Foo"
+msgstr "GNOME Acme Foo"
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "Inhibit"
+msgstr "Предотвратяване"
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "Inhibit Tester"
+msgstr "Тестване на предотвратяването"
+
+#: ../data/gpm-inhibit-test.glade.h:6
+msgid "Reason:"
+msgstr "Причина:"
+
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "UnInhibit"
+msgstr "Премахване на предотвратяването"
 
 #: ../data/gpm-prefs.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Действия</b>"
-
-#: ../data/gpm-prefs.glade.h:2
-#, fuzzy
-msgid "<b>Brightness</b>"
-msgstr "<b>Действия</b>"
-
-#: ../data/gpm-prefs.glade.h:3
 msgid "<b>General</b>"
 msgstr "<b>Общи</b>"
 
-#: ../data/gpm-prefs.glade.h:4
-#, fuzzy
+#: ../data/gpm-prefs.glade.h:2
 msgid "<b>Notification Area</b>"
 msgstr "<b>Област за уведомяване</b>"
 
+#: ../data/gpm-prefs.glade.h:3
+#, fuzzy
+msgid "<b>Running on AC power</b>"
+msgstr "Захранване от ел. мрежа"
+
+#: ../data/gpm-prefs.glade.h:4
+#, fuzzy
+msgid "<b>Running on Battery Power</b>"
+msgstr "Захранване от батерии"
+
 #: ../data/gpm-prefs.glade.h:5
 #, fuzzy
-msgid "<b>Sleep</b>"
-msgstr "<b>Общи</b>"
+msgid "<b>Running on UPS</b>"
+msgstr "Захранване непрекъсваемо токозахранване"
 
 #: ../data/gpm-prefs.glade.h:6
 #, fuzzy
-msgid "General"
-msgstr "<b>Общи</b>"
+msgid "<b>Sounds</b>"
+msgstr "<b>Действия</b>"
 
 #: ../data/gpm-prefs.glade.h:7
 #, fuzzy
-msgid "Only display when battery _present"
-msgstr "Показване само при критично _ниско ниво на батериите"
+msgid "Actions"
+msgstr "<b>Действия</b>"
 
 #: ../data/gpm-prefs.glade.h:8
-msgid "Only display when charging or _discharging"
-msgstr "Показване само при _зареждане или разреждане"
+msgid "Always _sleep when the lid is closed"
+msgstr "_Задължително приспиване при затваряне на екрана"
 
 #: ../data/gpm-prefs.glade.h:9
-msgid "Power Management Preferences"
-msgstr "Настройки на управлението на захранването"
+msgid "Custom usage percentage:"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:10
-msgid "Prefer power savings over performance"
+msgid "Display"
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:11
-#, fuzzy
-msgid "Put _display to sleep when computer is inactive for:"
-msgstr "Изгасяне на _екрана след:"
+msgid "Enable UPS discharge alarm"
+msgstr ""
 
-#: ../data/gpm-prefs.glade.h:12
-#, fuzzy
-msgid "Put computer to _sleep when it is inactive for:"
-msgstr "Приспиване на _компютъра след:"
+#: ../data/gpm-prefs.glade.h:12 ../src/gpm-graph-widget.c:96
+msgid "Notification"
+msgstr "Уведомяване"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
-msgid "Running on AC"
-msgstr "<b>Захранване от ел. мрежа</b>"
+msgid "Only display when battery _present"
+msgstr "Показване само при наличие на батерии"
 
 #: ../data/gpm-prefs.glade.h:14
-#, fuzzy
-msgid "Running on Battery"
-msgstr "<b>Захранване от батерии</b>"
+msgid "Only display when charging or _discharging"
+msgstr "Показване само при _зареждане или разреждане"
 
 #: ../data/gpm-prefs.glade.h:15
-#, fuzzy
-msgid "Running on UPS"
-msgstr "<b>Захранване от ел. мрежа</b>"
+msgid "Power Management Preferences"
+msgstr "Настройки на управлението на захранването"
 
 #: ../data/gpm-prefs.glade.h:16
-#, fuzzy
-msgid "Set display _brightness to:"
-msgstr "_Задаване на яркост на екрана:"
+msgid "Power processor profile:"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:17
-msgid "Sleep _type when inactive:"
+msgid "Processing Speed"
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:18
 #, fuzzy
-msgid "When UPS _power critical:"
-msgstr "При _критично ниско ниво на батериите:"
+msgid "Put _display to sleep when  inactive for:"
+msgstr "Изгасяне на _екрана след бездействие на компютъра от:"
 
 #: ../data/gpm-prefs.glade.h:19
 #, fuzzy
-msgid "When battery _power critical:"
-msgstr "При _критично ниско ниво на батериите:"
+msgid "Put _display to sleep when inactive for:"
+msgstr "Изгасяне на _екрана след бездействие на компютъра от:"
 
 #: ../data/gpm-prefs.glade.h:20
 #, fuzzy
-msgid "When l_aptop lid is closed:"
-msgstr "При _затваряне на екрана:"
+msgid "Put computer to _sleep when inactive for:"
+msgstr "Приспиване на _компютъра след бездействие на компютъра от:"
 
 #: ../data/gpm-prefs.glade.h:21
-msgid "_Always display icon"
-msgstr "_Винаги да се показва икона"
+msgid "Set display _brightness to:"
+msgstr "_Задаване на яркостта на екрана:"
 
 #: ../data/gpm-prefs.glade.h:22
-msgid "_Dim the laptop panel when idle"
+msgid "Sleep"
 msgstr ""
 
 #: ../data/gpm-prefs.glade.h:23
+msgid "Sleep _type when inactive:"
+msgstr "Вид _приспиване при бездействие:"
+
+#: ../data/gpm-prefs.glade.h:24
+msgid "Try to set system low power mode"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "Use sound to notify in event of error"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "When UPS _power critical:"
+msgstr "При критично ниско ниво на непрекъсваемото _токозахранване:"
+
+#: ../data/gpm-prefs.glade.h:27
+#, fuzzy
+msgid "When UPS low:"
+msgstr "При критично ниско ниво на непрекъсваемото _токозахранване:"
+
+#: ../data/gpm-prefs.glade.h:28
+msgid "When battery _power critical:"
+msgstr "При критично ниско ниво на _батериите:"
+
+#: ../data/gpm-prefs.glade.h:29
+msgid "When l_aptop lid is closed:"
+msgstr "При _затваряне на екрана:"
+
+#: ../data/gpm-prefs.glade.h:30
+msgid "When power _button is pressed:"
+msgstr "При натискане на _бутона за спиране:"
+
+#: ../data/gpm-prefs.glade.h:31
+msgid "_Always display icon"
+msgstr "_Винаги да се показва икона"
+
+#: ../data/gpm-prefs.glade.h:32
+msgid "_Dim the laptop panel when idle"
+msgstr "_Затъмняване на екрана при бездействие"
+
+#: ../data/gpm-prefs.glade.h:33
 msgid "_Never display icon"
 msgstr "_Никога да не се показва икона"
 
-#: ../data/gpm-prefs.glade.h:24
-#, fuzzy
+#: ../data/gpm-prefs.glade.h:34
 msgid "_Only display when battery life is critical"
-msgstr "Показване само при критично _ниско ниво на батериите"
+msgstr "Показване само при _критично ниско ниво на батериите"
 
 #: ../src/eggtrayicon.c:131
 msgid "Orientation"
@@ -701,18 +978,18 @@ msgstr "Ориентация"
 msgid "The orientation of the tray."
 msgstr "Ориентацията на тавата."
 
-#: ../src/gpm-common.c:49
+#: ../src/gpm-common.c:60
 msgid "Unknown time"
 msgstr "Неизвестно време"
 
-#: ../src/gpm-common.c:54
+#: ../src/gpm-common.c:65
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i минута"
 msgstr[1] "%i минути"
 
-#: ../src/gpm-common.c:65
+#: ../src/gpm-common.c:76
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -721,18 +998,18 @@ msgstr[1] "%i часа"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:82
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s и %i %s"
 
-#: ../src/gpm-common.c:72
+#: ../src/gpm-common.c:83
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "час"
 msgstr[1] "часа"
 
-#: ../src/gpm-common.c:73
+#: ../src/gpm-common.c:84
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "минута"
@@ -742,316 +1019,346 @@ msgstr[1] "минути"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Мениджър на захранването за GNOME"
 
-#: ../src/gpm-graph-widget.c:76
+#: ../src/gpm-graph-widget.c:74
 msgid "On AC"
-msgstr ""
+msgstr "От ел. мрежа"
+
+#: ../src/gpm-graph-widget.c:76
+msgid "On battery"
+msgstr "От батерии"
 
 #: ../src/gpm-graph-widget.c:78
-#, fuzzy
-msgid "On battery"
-msgstr "Батерия на мобилен компютър"
+msgid "LCD dim"
+msgstr "Затъмняване на екрана"
 
 #: ../src/gpm-graph-widget.c:80
-msgid "LCD dim"
-msgstr ""
+msgid "LCD resume"
+msgstr "Включване на екрана"
 
 #: ../src/gpm-graph-widget.c:82
-msgid "LCD resume"
-msgstr ""
+msgid "DPMS off"
+msgstr "Изключване на DPMS"
 
 #: ../src/gpm-graph-widget.c:84
-msgid "DPMS off"
-msgstr ""
-
-#: ../src/gpm-graph-widget.c:86
 msgid "DPMS on"
-msgstr ""
+msgstr "Включване на DPMS"
 
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-graph-widget.c:86 ../src/gpm-prefs-core.c:90
 msgid "Suspend"
 msgstr "Приспиване"
 
-#: ../src/gpm-graph-widget.c:90
+#: ../src/gpm-graph-widget.c:88
 msgid "Resume"
-msgstr ""
+msgstr "Включване"
 
-#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:86
+#: ../src/gpm-graph-widget.c:90 ../src/gpm-prefs-core.c:92
 msgid "Hibernate"
 msgstr "Дълбоко приспиване"
 
-#: ../src/gpm-graph-widget.c:94
+#: ../src/gpm-graph-widget.c:92
 msgid "Lid closed"
-msgstr ""
+msgstr "Екранът е затворен"
 
-#: ../src/gpm-graph-widget.c:96
+#: ../src/gpm-graph-widget.c:94
 msgid "Lid opened"
-msgstr ""
+msgstr "Екранът е отворен"
 
 #: ../src/gpm-graph-widget.c:98
-#, fuzzy
-msgid "Notification"
-msgstr "<b>Област за уведомяване</b>"
-
-#: ../src/gpm-graph-widget.c:100
-#, fuzzy
 msgid "Unknown event!"
-msgstr "Неизвестно време"
+msgstr "Неизвестно събитие!"
 
-#: ../src/gpm-info.c:248
+#: ../src/gpm-info.c:405
 msgid "Time"
-msgstr ""
+msgstr "Време"
 
-#: ../src/gpm-info.c:253
+#: ../src/gpm-info.c:410
 msgid "Event"
-msgstr ""
+msgstr "Събитие"
 
-#: ../src/gpm-info.c:258
+#: ../src/gpm-info.c:415
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
-#: ../src/gpm-main.c:126
+#: ../src/gpm-inhibit.c:292
+#, c-format
+msgid "<b>%s</b> has stopped the %s from taking place : <i>%s</i>."
+msgstr "<b>%s</b> предотврати %s: <i>%s</i>."
+
+#: ../src/gpm-inhibit.c:296
+#, c-format
+msgid "Multiple applications have stopped the %s from taking place."
+msgstr "Множество приложения предотвратиха настъпването на %s."
+
+#: ../src/gpm-inhibit-test.c:159 ../src/gpm-prefs.c:86
+msgid "GNOME Power Preferences"
+msgstr "Настройки на захранването"
+
+#: ../src/gpm-inhibit-test.c:165
+msgid "Power Inhibit Test"
+msgstr "Тест на предотвратяването"
+
+#: ../src/gpm-main.c:140
 msgid "Do not daemonize"
 msgstr "Да не се минава в режим на демон"
 
-#: ../src/gpm-main.c:128 ../src/gpm-prefs.c:82
+#: ../src/gpm-main.c:142 ../src/gpm-prefs.c:82
 msgid "Show extra debugging information"
 msgstr "Допълнителна информация за изчистване на грешки"
 
-#: ../src/gpm-main.c:132
-#, fuzzy
+#: ../src/gpm-main.c:144
+msgid "Exit after a small delay (for debugging)"
+msgstr "Изход след малко забавяне (за изчистване на грешки)"
+
+#: ../src/gpm-main.c:148
 msgid "GNOME Power Manager"
-msgstr "Управление на захранването"
+msgstr "Управление на захранването на GNOME"
 
-#: ../src/gpm-manager.c:550
-#, fuzzy
+#: ../src/gpm-manager.c:251
+#, c-format
+msgid "Request to %s"
+msgstr "Заявка към %s"
+
+#: ../src/gpm-manager.c:669
 msgid "On battery power"
-msgstr "При _критично ниско ниво на батериите:"
+msgstr "От батерии"
 
-#: ../src/gpm-manager.c:565
-#, fuzzy
+#: ../src/gpm-manager.c:684
 msgid "Display power management activated"
-msgstr "Демон за управление на захранването"
+msgstr "Управлението на захранването на екрана е включено"
 
-#: ../src/gpm-manager.c:581
-#, fuzzy
+#: ../src/gpm-manager.c:700
 msgid "Laptop lid is closed"
-msgstr "При _затваряне на екрана:"
+msgstr "Екранът е затворен"
 
-#: ../src/gpm-manager.c:748
+#: ../src/gpm-manager.c:889
 #, c-format
 msgid "%s because %s"
-msgstr ""
+msgstr "%s поради %s"
 
-#: ../src/gpm-manager.c:784
-#, fuzzy
+#: ../src/gpm-manager.c:925
 msgid "Doing nothing"
-msgstr "Да не се прави нищо"
+msgstr "Не се прави нищо"
 
-#: ../src/gpm-manager.c:788 ../src/gpm-manager.c:1166
-#: ../src/gpm-manager.c:2303
-#, fuzzy
+#: ../src/gpm-manager.c:929 ../src/gpm-manager.c:1402
+#: ../src/gpm-manager.c:2582
 msgid "Suspending computer"
 msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-manager.c:793 ../src/gpm-manager.c:1180
-#: ../src/gpm-manager.c:2278
-#, fuzzy
+#: ../src/gpm-manager.c:934 ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:2557
 msgid "Hibernating computer"
-msgstr "Дълбоко приспиване"
+msgstr "Дълбоко приспиване на компютъра"
 
-#: ../src/gpm-manager.c:798
+#: ../src/gpm-manager.c:939
 msgid "DPMS blanking screen"
-msgstr ""
+msgstr "Изчистване на екрана от DPMS"
 
-#: ../src/gpm-manager.c:803 ../src/gpm-manager.c:1195
-#, fuzzy
+#: ../src/gpm-manager.c:944 ../src/gpm-manager.c:1431
 msgid "Shutting down computer"
-msgstr "Приспиване на компютъра"
+msgstr "Спиране на компютъра"
 
-#: ../src/gpm-manager.c:808
+#: ../src/gpm-manager.c:949
 msgid "GNOME interactive logout"
-msgstr ""
+msgstr "Излизане от системата на GNOME със запитване"
 
-#: ../src/gpm-manager.c:1007 ../src/gpm-manager.c:1097
+#: ../src/gpm-manager.c:1229 ../src/gpm-manager.c:1326
 msgid "Resuming computer"
-msgstr ""
-
-#: ../src/gpm-manager.c:1019
-#, c-format
-msgid ""
-"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
-msgstr ""
-
-#: ../src/gpm-manager.c:1021
-#, fuzzy
-msgid "hibernate"
-msgstr "Дълбоко приспиване"
-
-#: ../src/gpm-manager.c:1022
-#, fuzzy
-msgid "Hibernate Problem"
-msgstr "Дълбоко приспиване"
-
-#: ../src/gpm-manager.c:1109
-#, c-format
-msgid "Battery charged %imWh during suspend"
-msgstr ""
-
-#: ../src/gpm-manager.c:1112
-#, c-format
-msgid "Battery discharged %imWh during suspend"
-msgstr ""
-
-#: ../src/gpm-manager.c:1127
-#, c-format
-msgid ""
-"Your computer failed to %s.\n"
-"Check the <a href=\"%s\">FAQ page</a> for common problems."
-msgstr ""
-
-#: ../src/gpm-manager.c:1129
-#, fuzzy
-msgid "suspend"
-msgstr "Приспиване"
-
-#: ../src/gpm-manager.c:1130
-#, fuzzy
-msgid "Suspend Problem"
-msgstr "Приспиване"
-
-#: ../src/gpm-manager.c:1167
-msgid "the DBUS method Suspend() was invoked"
-msgstr ""
-
-#: ../src/gpm-manager.c:1181
-msgid "the DBUS method Hibernate() was invoked"
-msgstr ""
-
-#: ../src/gpm-manager.c:1196
-msgid "the DBUS method Shutdown() was invoked"
-msgstr ""
+msgstr "Събуждане на компютъра"
 
 #: ../src/gpm-manager.c:1246
-msgid "Screen resume"
-msgstr ""
+msgid "Hibernate Problem"
+msgstr "Проблем при дълбокото приспиване"
 
 #: ../src/gpm-manager.c:1247
-msgid "idle mode ended"
+#, fuzzy, c-format
+msgid "HAL failed to %s. Check the help file for common problems."
 msgstr ""
+"HAL не успя да %s. Проверете страницата с <a href=\"%s\">често задаваните "
+"въпроси</a>, за да потърсите решение."
 
-#: ../src/gpm-manager.c:1285
-msgid "Screen dim"
+#: ../src/gpm-manager.c:1249
+msgid "hibernate"
+msgstr "дълбоко да приспи"
+
+#: ../src/gpm-manager.c:1338
+#, c-format
+msgid "Battery charged %imWh during suspend"
+msgstr "Батерията се зареди с %i mWh след приспиването"
+
+#: ../src/gpm-manager.c:1341
+#, c-format
+msgid "Battery discharged %imWh during suspend"
+msgstr "Батерията се разреди с %i mWh след приспиването<"
+
+#: ../src/gpm-manager.c:1362
+#, fuzzy, c-format
+msgid ""
+"Your computer failed to %s.\n"
+"Check the help file for common problems."
 msgstr ""
+"Компютърът не успя да се %s.\n"
+"Проверете страницата с <a href=\"%s\">често задаваните въпроси</a>, за да "
+"потърсите решение."
 
-#: ../src/gpm-manager.c:1286
-msgid "idle mode started"
-msgstr ""
+#: ../src/gpm-manager.c:1364
+msgid "suspend"
+msgstr "приспи"
 
-#. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1304
-msgid "the system state is idle"
-msgstr ""
+#: ../src/gpm-manager.c:1365
+msgid "Suspend Problem"
+msgstr "Проблем при приспиване"
 
-#: ../src/gpm-manager.c:1378
-#, fuzzy
-msgid "the power button has been pressed"
-msgstr "При натискане на _бутона за приспиване:"
-
-#: ../src/gpm-manager.c:1397
-#, fuzzy
-msgid "the suspend button has been pressed"
-msgstr "При натискане на _бутона за приспиване:"
+#: ../src/gpm-manager.c:1403
+msgid "the DBUS method Suspend() was invoked"
+msgstr "методът Suspend() на DBUS бе извикан"
 
 #: ../src/gpm-manager.c:1417
-#, fuzzy
+msgid "the DBUS method Hibernate() was invoked"
+msgstr "методът Hibernate() на DBUS бе извикан"
+
+#: ../src/gpm-manager.c:1432
+msgid "the DBUS method Shutdown() was invoked"
+msgstr "методът Shutdown() на DBUS бе извикан"
+
+#: ../src/gpm-manager.c:1446
+msgid "Rebooting computer"
+msgstr "Рестартиране на компютъра"
+
+#: ../src/gpm-manager.c:1447
+msgid "the DBUS method Reboot() was invoked"
+msgstr "методът Reboot() на DBUS бе извикан"
+
+#: ../src/gpm-manager.c:1506
+msgid "Screen resume"
+msgstr "Включване на екрана"
+
+#: ../src/gpm-manager.c:1507
+msgid "idle mode ended"
+msgstr "край на бездействането"
+
+#: ../src/gpm-manager.c:1537
+msgid "Screen dim"
+msgstr "Затъмняване на екрана"
+
+#: ../src/gpm-manager.c:1538
+msgid "idle mode started"
+msgstr "начало на бездействието"
+
+#. can only be hibernate or suspend
+#: ../src/gpm-manager.c:1556
+msgid "the system state is idle"
+msgstr "системата бездейства"
+
+#: ../src/gpm-manager.c:1630
+msgid "the power button has been pressed"
+msgstr "бутонът за включване/изключване бе натиснат"
+
+#: ../src/gpm-manager.c:1649
+msgid "the suspend button has been pressed"
+msgstr "бутонът за приспиване бе натиснат"
+
+#: ../src/gpm-manager.c:1669
 msgid "the hibernate button has been pressed"
-msgstr "При натискане на _бутона за приспиване:"
+msgstr "бутонът за дълбоко приспиване бе натиснат"
 
-#: ../src/gpm-manager.c:1467
-msgid "the lid has been closed on ac power"
-msgstr ""
+#: ../src/gpm-manager.c:1696
+msgid "The laptop lid has been closed"
+msgstr "Екранът на мобилния компютър бе затворен"
 
-#: ../src/gpm-manager.c:1472
-#, fuzzy
-msgid "the lid has been closed on battery power"
-msgstr "Компютърът работи на батерии\n"
-
-#: ../src/gpm-manager.c:1477
-msgid "Turning LCD panel back on"
-msgstr ""
-
-#: ../src/gpm-manager.c:1478
-msgid "laptop lid re-opened"
-msgstr ""
-
-#: ../src/gpm-manager.c:1604
-msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
-msgstr ""
-
-#: ../src/gpm-manager.c:1686
-#, fuzzy
-msgid "Power Critically Low"
-msgstr "Критично ниско ниво на батерията"
-
-#: ../src/gpm-manager.c:1690
-#, fuzzy
-msgid "Power Very Low"
-msgstr "Много ниско ниво на батерията"
-
-#: ../src/gpm-manager.c:1694
-#, fuzzy
-msgid "Power Low"
-msgstr "Ниско ниво на батерията"
+#: ../src/gpm-manager.c:1701
+msgid "The laptop lid has been re-opened"
+msgstr "Екранът на мобилния компютър бе отворен"
 
 #: ../src/gpm-manager.c:1719
-#, fuzzy
-msgid "battery is critically low"
-msgstr "Действие при критично ниско ниво на батерията"
+msgid "the lid has been closed on ac power"
+msgstr "екранът бе затворен при захранване от ел. мрежа"
 
-#: ../src/gpm-manager.c:1763
+#: ../src/gpm-manager.c:1724
+msgid "the lid has been closed on battery power"
+msgstr "екранът бе затворен при захранване от батерии"
+
+#: ../src/gpm-manager.c:1729
+msgid "Turning LCD panel back on"
+msgstr "Повторно включване на екрана"
+
+#: ../src/gpm-manager.c:1730
+msgid "laptop lid re-opened"
+msgstr "екранът е отворен отново"
+
+#: ../src/gpm-manager.c:1847
+msgid "AC adapter inserted"
+msgstr "Включен е адаптер за ел. мрежа"
+
+#: ../src/gpm-manager.c:1851
+msgid "AC adapter removed"
+msgstr "Изключен е адаптер за ел. мрежа"
+
+#: ../src/gpm-manager.c:1861
+msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
+msgstr "екранът бе затворен, а адаптерът за ел. мрежа - махнат (gconf е наред)"
+
+#: ../src/gpm-manager.c:1942
+msgid "Power Critically Low"
+msgstr "Критично ниско ниво на заряда"
+
+#: ../src/gpm-manager.c:1944
+msgid "Power Very Low"
+msgstr "Много ниско ниво на заряда"
+
+#: ../src/gpm-manager.c:1946
+msgid "Power Low"
+msgstr "Ниско ниво на заряда"
+
+#: ../src/gpm-manager.c:1968
+msgid "battery is critically low"
+msgstr "критично ниско ниво на батерията"
+
+#: ../src/gpm-manager.c:2013
 msgid "Your battery is now fully charged"
 msgstr "Батериите са напълно заредени"
 
-#: ../src/gpm-manager.c:1764
+#: ../src/gpm-manager.c:2014
 msgid "Battery Charged"
 msgstr "Батериите са заредени"
 
-#: ../src/gpm-manager.c:1830
-#, fuzzy
+#: ../src/gpm-manager.c:2079
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
+msgstr ""
+"Батерията е под критично ниското ниво. Този компютър ще бъде <b>изгасен</b>, "
+"когато батерията напълно се изчерпи."
 
-#: ../src/gpm-manager.c:1835
-#, fuzzy
+#: ../src/gpm-manager.c:2084
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
+msgstr ""
+"Батерията е под критично ниското ниво. Този компютър ще бъде приспан. "
+"<br><b>БЕЛЕЖКА:</b> За поддържането на компютъра в това състояние е "
+"необходим малък заряд на батерията."
 
-#: ../src/gpm-manager.c:1841
-#, fuzzy
+#: ../src/gpm-manager.c:2090
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
+msgstr ""
+"Батерията е под критично ниското ниво. Този компютър ще бъде дълбоко приспан."
 
-#: ../src/gpm-manager.c:1845
+#: ../src/gpm-manager.c:2094
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
 
-#: ../src/gpm-manager.c:1857
+#: ../src/gpm-manager.c:2107
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Захранването от електрическата мрежа е изключено. Системата работи на "
 "батерии."
 
-#: ../src/gpm-manager.c:1864
+#: ../src/gpm-manager.c:2114
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1060,231 +1367,346 @@ msgstr ""
 "Остава Ви приблизително <b>%s</b> живот на батерията (%d%%). Включете се към "
 "захранването от електрическата мрежа, за да не загубите данни."
 
-#: ../src/gpm-manager.c:1948
-#, fuzzy
+#: ../src/gpm-manager.c:2201
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
+msgstr ""
+"Батерията е под критично ниското ниво. Този компютър ще бъде <b>изгасен</b>, "
+"когато непрекъсваемото токозахранване се изтощи."
 
-#: ../src/gpm-manager.c:1953
-#, fuzzy
+#: ../src/gpm-manager.c:2206
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
-msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
+msgstr ""
+"Батерията е под критично ниското ниво. Този компютър ще бъде дълбоко приспан."
 
-#: ../src/gpm-manager.c:1957
-#, fuzzy
+#: ../src/gpm-manager.c:2210
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "Батерията е под критично ниското ниво. Този компютър ще бъде изгасен."
 
-#: ../src/gpm-manager.c:1963
-#, fuzzy
+#: ../src/gpm-manager.c:2217
 msgid "UPS is critically low"
-msgstr "Критично ниско ниво на батерията"
+msgstr "Критично ниско ниво на непрекъсваемото токозахранване"
 
-#: ../src/gpm-manager.c:1966
-#, fuzzy
+#: ../src/gpm-manager.c:2220
 msgid "Your system is running on backup power!"
-msgstr "Компютърът работи на батерии\n"
+msgstr "Компютърът работи на резервно захранване!"
 
-#: ../src/gpm-manager.c:1970
-#, fuzzy, c-format
+#: ../src/gpm-manager.c:2224
+#, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
 "power to your computer to avoid losing data."
 msgstr ""
-"Остава Ви приблизително <b>%s</b> живот на батерията (%d%%). Включете се към "
-"захранването от електрическата мрежа, за да не загубите данни."
+"Остава Ви приблизително <b>%s</b> живот на непрекъсваемото токозахранване (%d"
+"%%). Включете се към захранването от електрическата мрежа, за да не загубите "
+"данни."
 
-#: ../src/gpm-manager.c:2056
+#: ../src/gpm-manager.c:2313
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
 "will soon stop functioning if not charged."
 msgstr ""
+"Захранването на устройството %s, което е свързано с компютъра, пада (%d%%). "
+"Ако не го презаредите, то ще спре да функционира."
 
-#: ../src/gpm-manager.c:2279
+#: ../src/gpm-manager.c:2558
 msgid "user clicked hibernate from tray menu"
-msgstr ""
+msgstr "потребителят натисна дълбокото приспиване от менюто в тавата"
 
-#: ../src/gpm-manager.c:2304
+#: ../src/gpm-manager.c:2583
 msgid "user clicked suspend from tray menu"
-msgstr ""
+msgstr "потребителят натисна приспиването от менюто в тавата"
 
-#: ../src/gpm-power.c:444
+#: ../src/gpm-power.c:447
 msgid "Laptop battery"
 msgstr "Батерия на мобилен компютър"
 
-#: ../src/gpm-power.c:446
+#: ../src/gpm-power.c:449
 msgid "UPS"
-msgstr "Резервно захранване (UPS)"
+msgstr "Непрекъсваемо токозахранване"
 
-#: ../src/gpm-power.c:448
+#: ../src/gpm-power.c:451
 msgid "Wireless mouse"
 msgstr "Безжична мишка"
 
-#: ../src/gpm-power.c:450
+#: ../src/gpm-power.c:453
 msgid "Wireless keyboard"
 msgstr "Безжична клавиатура"
 
-#: ../src/gpm-power.c:452
+#: ../src/gpm-power.c:455
 msgid "PDA"
 msgstr "Цифр. пом."
 
-#: ../src/gpm-power.c:454
+#: ../src/gpm-power.c:457
 msgid "Unknown"
-msgstr "неизвестно"
+msgstr "Неизвестно"
 
-#: ../src/gpm-power.c:472
+#: ../src/gpm-power.c:475
 msgid "ups"
-msgstr ""
+msgstr "непр. ток-не"
 
-#: ../src/gpm-power.c:474
+#: ../src/gpm-power.c:477
 msgid "mouse"
-msgstr ""
+msgstr "мишка"
 
-#: ../src/gpm-power.c:476
-#, fuzzy
+#: ../src/gpm-power.c:479
 msgid "keyboard"
-msgstr "Безжична клавиатура"
+msgstr "клавиатура"
 
-#: ../src/gpm-power.c:478
+#: ../src/gpm-power.c:481
 msgid "pda"
-msgstr ""
+msgstr "цифр. пом."
 
-#: ../src/gpm-power.c:480
-#, fuzzy
+#: ../src/gpm-power.c:483
 msgid "unknown"
 msgstr "неизвестно"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:659
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Продукт:</b> %s\n"
+
+#: ../src/gpm-power.c:662
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Състояние:</b> липсва\n"
+
+#: ../src/gpm-power.c:664
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Състояние:</b> заредена\n"
+
+#: ../src/gpm-power.c:666
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Състояние:</b> зареждане\n"
+
+#: ../src/gpm-power.c:668
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Състояние:</b> разреждане\n"
+
+#: ../src/gpm-power.c:671
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>Процент на зареждането:</b> %i%%\n"
+
+#: ../src/gpm-power.c:698
+#, c-format
+msgid "<b>Vendor:</b> %s\n"
+msgstr "<b>Производител:</b> %s\n"
+
+#: ../src/gpm-power.c:706 ../src/gpm-power.c:711
 msgid "Lithium ion"
+msgstr "Литиево-йонна"
+
+#: ../src/gpm-power.c:708 ../src/gpm-power.c:713
+msgid "Lead acid"
+msgstr "Оловна"
+
+#: ../src/gpm-power.c:715
+#, fuzzy
+msgid "Lithium Polymer"
+msgstr "Литиево-йонна"
+
+#: ../src/gpm-power.c:717
+msgid "Nickel Metal Hydride"
 msgstr ""
 
-#: ../src/gpm-power.c:724
-msgid "Lead acid"
-msgstr ""
+#: ../src/gpm-power.c:723
+#, c-format
+msgid "<b>Technology:</b> %s\n"
+msgstr "<b>Технология:</b> %s\n"
+
+#: ../src/gpm-power.c:726
+#, c-format
+msgid "<b>Serial number:</b> %s\n"
+msgstr "<b>Сериен номер:</b> %s\n"
+
+#: ../src/gpm-power.c:729
+#, c-format
+msgid "<b>Model:</b> %s\n"
+msgstr "<b>Модел:</b> %s\n"
+
+#: ../src/gpm-power.c:734
+#, c-format
+msgid "<b>Remaining time:</b> %s\n"
+msgstr "<b>Оставащо време:</b> %s\n"
+
+#: ../src/gpm-power.c:740
+msgid "Excellent"
+msgstr "Отлично"
+
+#: ../src/gpm-power.c:742
+msgid "Good"
+msgstr "Чудесно"
+
+#: ../src/gpm-power.c:744
+msgid "Fair"
+msgstr "Приемливо"
 
 #: ../src/gpm-power.c:746
-msgid "Excellent"
-msgstr ""
+msgid "Poor"
+msgstr "Лошо"
 
 #: ../src/gpm-power.c:748
-msgid "Good"
-msgstr ""
+#, c-format
+msgid "<b>Capacity:</b> %i%% (%s)\n"
+msgstr "<b>Капацитет:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:750
-msgid "Fair"
-msgstr ""
+#: ../src/gpm-power.c:754 ../src/gpm-power.c:778
+#, c-format
+msgid "<b>Current charge:</b> %.1f %s\n"
+msgstr "<b>Текущ заряд:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:752
-msgid "Poor"
-msgstr ""
+#: ../src/gpm-power.c:759
+#, c-format
+msgid "<b>Last full charge:</b> %.1f %s\n"
+msgstr "<b>Последно пълно зареждане:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:1231
-msgid "fully charged"
-msgstr "100% заряд"
+#: ../src/gpm-power.c:763 ../src/gpm-power.c:782
+#, c-format
+msgid "<b>Design charge:</b> %.1f %s\n"
+msgstr "<b>Проектен заряд:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:767
+#, c-format
+msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
+msgstr "<b>Скорост на зареждане (моментна):</b> %.1f %sh\n"
+
+#: ../src/gpm-power.c:771
+#, c-format
+msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
+msgstr "<b>Скорост на зареждане (усреднена):</b> %.1f %sh\n"
+
+#: ../src/gpm-power.c:1234
 #, fuzzy, c-format
-msgid "%s remaining"
-msgstr "остават"
+msgid "%s fully charged (%i%%)\n"
+msgstr "пълен заряд"
 
-#. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1240
-msgid "discharging"
-msgstr ""
-
-#: ../src/gpm-power.c:1246
 #, fuzzy, c-format
-msgid "%s until charged"
-msgstr "до зареждане"
+msgid "%s %s remaining (%i%%)\n"
+msgstr "остават %s"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
-msgid "charging"
-msgstr ""
+#: ../src/gpm-power.c:1244
+#, fuzzy, c-format
+msgid "%s discharging (%i%%)\n"
+msgstr "разреждане"
+
+#: ../src/gpm-power.c:1251
+#, fuzzy, c-format
+msgid "%s %s until charged (%i%%)\n"
+msgstr "%s до зареждане"
+
+#. don't display "Unknown remaining"
+#: ../src/gpm-power.c:1255
+#, fuzzy, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "разреждане"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
-#, fuzzy
-msgid "Computer is running on backup power\n"
-msgstr "Компютърът работи на захранване от ел. мрежа\n"
-
 #: ../src/gpm-power.c:1294
+msgid "Computer is running on backup power\n"
+msgstr "Компютърът работи на резервно захранване\n"
+
+#: ../src/gpm-power.c:1297
 msgid "Computer is running on AC power\n"
 msgstr "Компютърът работи на захранване от ел. мрежа\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1300
 msgid "Computer is running on battery power\n"
-msgstr "Компютърът работи на батерии\n"
-
-#: ../src/gpm-prefs.c:86
-#, fuzzy
-msgid "GNOME Power Preferences"
-msgstr "Настройки на захранването"
+msgstr "Компютърът работи на захранване от батерии\n"
 
 #: ../src/gpm-prefs.c:99
 msgid "Power Preferences"
 msgstr "Настройки на захранването"
 
-#: ../src/gpm-prefs-core.c:85
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs-core.c:89
+msgid "Ask me"
+msgstr "Запитване към потребителя"
+
+#: ../src/gpm-prefs-core.c:91
 msgid "Shutdown"
 msgstr "Изключване"
 
-#: ../src/gpm-prefs-core.c:87
+#: ../src/gpm-prefs-core.c:93
 msgid "Blank screen"
-msgstr ""
+msgstr "Изчистване на екрана"
 
-#: ../src/gpm-prefs-core.c:88
+#: ../src/gpm-prefs-core.c:94 ../src/gpm-prefs-core.c:102
 msgid "Do nothing"
 msgstr "Да не се прави нищо"
 
-#: ../src/gpm-prefs-core.c:232
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:97
+msgid "Based on processor load"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:98
+msgid "Automatic power saving"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:99
+msgid "Maximum power saving"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:100
+msgid "Custom"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:101
+msgid "Maximum speed"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:246
 msgid "Never"
 msgstr "Никога"
 
-#: ../src/gpm-tray-icon.c:111
+#: ../src/gpm-tray-icon.c:112
 msgid "_Suspend"
 msgstr "_Приспиване"
 
-#: ../src/gpm-tray-icon.c:112
+#: ../src/gpm-tray-icon.c:113
 msgid "Suspend the computer"
 msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-tray-icon.c:113
+#: ../src/gpm-tray-icon.c:114
 msgid "Hi_bernate"
 msgstr "_Дълбоко приспиване"
 
-#: ../src/gpm-tray-icon.c:114
+#: ../src/gpm-tray-icon.c:115
 msgid "Make the computer go to sleep"
 msgstr "Приспиване на компютъра"
 
-#: ../src/gpm-tray-icon.c:115
+#: ../src/gpm-tray-icon.c:116
 msgid "_Preferences"
 msgstr "_Настройки"
 
-#: ../src/gpm-tray-icon.c:117
-#, fuzzy
+#: ../src/gpm-tray-icon.c:118
 msgid "_Information"
-msgstr "Допълнителна информация за изчистване на грешки"
+msgstr "_Информация"
 
-#: ../src/gpm-tray-icon.c:119
+#: ../src/gpm-tray-icon.c:120
+msgid "_Statistics"
+msgstr ""
+
+#: ../src/gpm-tray-icon.c:122
 msgid "_Help"
 msgstr "_Помощ"
 
-#: ../src/gpm-tray-icon.c:121
+#: ../src/gpm-tray-icon.c:124
 msgid "_About"
 msgstr "_Относно"
 
-#: ../src/gpm-tray-icon.c:334
+#: ../src/gpm-tray-icon.c:354
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лиценз - ОПЛ на GNU, версия 2"
 
-#: ../src/gpm-tray-icon.c:335
+#: ../src/gpm-tray-icon.c:355
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -1296,7 +1718,7 @@ msgstr ""
 "2 или по-висока (по Ваш избор) на Общия публичен лиценз на GNU,\n"
 "който е публикуван от Фондацията за свободен софтуер,"
 
-#: ../src/gpm-tray-icon.c:339
+#: ../src/gpm-tray-icon.c:359
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1308,7 +1730,7 @@ msgstr ""
 "се ПРИГОДНОСТ или ГОДНОСТ ЗА КОНКРЕТНА УПОТРЕБА. За подробности\n"
 "прегледайте Общия публичен лиценз на GNU."
 
-#: ../src/gpm-tray-icon.c:343
+#: ../src/gpm-tray-icon.c:363
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -1321,7 +1743,7 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, \n"
 "Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/gpm-tray-icon.c:348
+#: ../src/gpm-tray-icon.c:368
 msgid "translator-credits"
 msgstr ""
 "Александър Шопов <ash@contact.bg>\n"
@@ -1330,148 +1752,17 @@ msgstr ""
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
 
-#, fuzzy
-#~ msgid "Susspending computer"
-#~ msgstr "Приспиване на компютъра"
+#~ msgid "<b>Brightness</b>"
+#~ msgstr "<b>Яркост</b>"
 
-#~ msgid "Critical action"
-#~ msgstr "Критично действие"
+#~ msgid "<b>Sleep</b>"
+#~ msgstr "<b>Приспиване</b>"
 
-#, fuzzy
-#~ msgid "<b>Laptop Battery Bay (2)</b>"
-#~ msgstr "Батерия на мобилен компютър"
+#~ msgid "General"
+#~ msgstr "Общи"
 
-#, fuzzy
-#~ msgid "Charged"
-#~ msgstr "Батериите са заредени"
+#~ msgid "Prefer power savings over performance"
+#~ msgstr "Да се предпочита ниската консумация пред производителността"
 
-#, fuzzy
-#~ msgid "Remaining time:"
-#~ msgstr "остават"
-
-#, fuzzy
-#~ msgid "Poor condition"
-#~ msgstr "Действие на бутона за приспиване"
-
-#, fuzzy
-#~ msgid "Current charge:"
-#~ msgstr "до зареждане"
-
-#, fuzzy
-#~ msgid "<b>Running on AC</b>"
-#~ msgstr "<b>Захранване от ел. мрежа</b>"
-
-#, fuzzy
-#~ msgid "<b>Running on Battery</b>"
-#~ msgstr "<b>Захранване от батерии</b>"
-
-#~ msgid "Configuration"
-#~ msgstr "Настройки"
-
-#~ msgid "Options"
-#~ msgstr "Настройки"
-
-#~ msgid "Battery LCD brightness hardware value"
-#~ msgstr "Яркост на екрана при захранване от батерии"
-
-#~ msgid "Computer AC idle timeout value"
-#~ msgstr ""
-#~ "След колко време бездействие да се приспива компютъра при захранване от "
-#~ "ел. мрежа"
-
-#~ msgid "Computer battery idle timeout value"
-#~ msgstr ""
-#~ "След колко време бездействие да се приспива компютъра при захранване от "
-#~ "батерии"
-
-#~ msgid "Default sleep type"
-#~ msgstr "Стандартен вид приспиване:"
-
-#~ msgid "Display AC idle timeout value"
-#~ msgstr ""
-#~ "След колко време бездействие да се загася екрана при захранване от ел. "
-#~ "мрежа"
-
-#~ msgid "Display battery idle timeout value"
-#~ msgstr ""
-#~ "След колко време бездействие да се загася екрана при захранване от батерии"
-
-#~ msgid "If the user can suspend"
-#~ msgstr "Дали потребителят може да приспива компютъра"
-
-#~ msgid ""
-#~ "If this particular user should have hibernate on the drop-down menu and "
-#~ "in the prefs"
-#~ msgstr ""
-#~ "Дали на точно този потребител да се появява възможност дълбоко да "
-#~ "приспива компютъра в падащото меню и в настройките"
-
-#~ msgid ""
-#~ "If this particular user should have suspend on the drop-down menu and in "
-#~ "the prefs"
-#~ msgstr ""
-#~ "Дали на точно този потребител да се появява възможност да приспива "
-#~ "компютъра в падащото меню и в настройките"
-
-#, fuzzy
-#~ msgid ""
-#~ "The action to take when the laptop lid is closed and on battery power"
-#~ msgstr "Действие при затваряне на екрана"
-
-#~ msgid "The display icon policy can be never, critical, charge, always"
-#~ msgstr ""
-#~ "Възможностите за показване на иконата са „never“ (никога), "
-#~ "„critical“ (критично ниско ниво), „charge“ (зареждане), „always“ (винаги)"
-
-#~ msgid "The hardware brightness the display is set to whilst on AC power"
-#~ msgstr "Яркост на екрана при захранване от ел. мрежа"
-
-#~ msgid ""
-#~ "The hardware brightness the display is set to whilst on battery power"
-#~ msgstr "Яркост на екрана при захранване от батерии"
-
-#~ msgid ""
-#~ "The idle time in seconds before the computer tries to sleep whilst on AC "
-#~ "power"
-#~ msgstr ""
-#~ "Колко секунди да се изчакат преди опит за приспиване на компютъра, когато "
-#~ "се захранва от ел. мрежа"
-
-#~ msgid ""
-#~ "The idle time in seconds before the computer tries to sleep whilst on "
-#~ "battery power"
-#~ msgstr ""
-#~ "Колко секунди да се изчакат преди опит за приспиване на компютъра, когато "
-#~ "се захранва на батерии"
-
-#~ msgid ""
-#~ "The idle time in seconds before the display tries to sleep whilst on "
-#~ "battery power"
-#~ msgstr ""
-#~ "Колко секунди да се изчакат преди опит за изгасяне на екрана, когато "
-#~ "компютърът се захранва от батерии"
-
-#~ msgid "The type of sleep (hibernate/suspend) to use automatically."
-#~ msgstr ""
-#~ "Видът на автоматичното приспиване - нормално/дълбоко (suspend/hibernate)"
-
-#~ msgid "Advanced"
-#~ msgstr "Допълнителни"
-
-#~ msgid "Put c_omputer to sleep after:"
-#~ msgstr "Приспиване на _компютъра след:"
-
-#~ msgid "Put dis_play to sleep after:"
-#~ msgstr "Изгасяне на _екрана след:"
-
-#~ msgid "Set display b_rightness:"
-#~ msgstr "_Задаване на яркост на екрана:"
-
-#~ msgid "Sleep"
-#~ msgstr "Приспиване"
-
-#~ msgid "_Computer sleep type:"
-#~ msgstr "_Вид приспиване:"
-
-#~ msgid "AC Power Unplugged"
-#~ msgstr "Изключено захранване от мрежата"
+#~ msgid "charging"
+#~ msgstr "зареждане"
