@@ -1052,8 +1052,14 @@ killall -HUP gconfd-2
     <itemizedlist>
       <listitem>
         <para>Copying files in Nautilus</para>
+      </listitem>
+      <listitem>
         <para>Doing a long kernel compile or Matlab simulation</para>
+      </listitem>
+      <listitem>
         <para>During a SELinux relabel</para>
+      </listitem>
+      <listitem>
         <para>Many others...</para>
       </listitem>
     </itemizedlist>
@@ -1142,6 +1148,8 @@ Sleep				0.1W	NC
           For a normal battery with 50000mWh you could run the harddisk for
           over 50 hours.
         </para>
+      </listitem>
+      <listitem>
         <para>
           If you do not read/write from/to the harddisk the disk regulates
           power, but never shuts down the device.
@@ -1149,12 +1157,16 @@ Sleep				0.1W	NC
           leave the harddisk online somewhere between 'Active idle' and
           'Low power idle' (depends on the model/manufacturer).
         </para>
+      </listitem>
+      <listitem>
         <para>
           The other reason to leave this to the internal powermanagement of
           the disk is: the time needed to reactivate the device.
           You lose more performance than you lose power between 'Active idle'
           and 'Low power idle'.
         </para>
+      </listitem>
+      <listitem>
         <para>
           If you use a journaling file system you normally need to flush
           periodically.
@@ -1162,6 +1174,8 @@ Sleep				0.1W	NC
           device by system to flush.
           This means more power consumption as you change nothing.
         </para>
+      </listitem>
+      <listitem>
         <para>
           You can't set powermanagement for exteral USB harddisks, because
           you can't send the needed commands over the USB link to the disk.
@@ -1183,6 +1197,8 @@ Sleep				0.1W	NC
         <para>
           HAL might not be running the addon that captures the acpi event.
         </para>
+      </listitem>
+      <listitem>
         <para>
           You BIOS could be faulty, and might need a work-around.
           Please send a bug report.
