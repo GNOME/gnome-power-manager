@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-30 08:38+0300\n"
-"PO-Revision-Date: 2006-08-30 08:22+0300\n"
+"POT-Creation-Date: 2006-09-02 18:59+0300\n"
+"PO-Revision-Date: 2006-09-02 18:57+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -54,14 +54,14 @@ msgid "Check network utilization before sleeping"
 msgstr "Проверка на натоварването на мрежата преди заспиване"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr "Затъмняване на екрана след период на бездействие"
+msgstr ""
+"Затъмняване на екрана след период на бездействие и захранване от ел. мрежа"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Затъмняване на екрана след период на бездействие"
+msgstr ""
+"Затъмняване на екрана след период на бездействие и захранване от батерии"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid ""
@@ -115,6 +115,9 @@ msgid ""
 "though their absolute load percentage wouldn't trigger the scaling mechanism "
 "to switch up the frequency."
 msgstr ""
+"Ако процесите с по-нисък приоритет се включват, те могат да предизвикат "
+"увеличаване на честотата, въпреки че абсолютният процент на натоварване не "
+"би задействал процедурата за увеличаване на честотата на процесора."
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If the CPU load should be checked before doing the idle action."
@@ -185,22 +188,20 @@ msgstr ""
 "„lock_use_screensaver_settings“ е ЛЪЖА."
 
 #: ../data/gnome-power-manager.schemas.in.h:27
-#, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
 "Дали екранът на компютъра да бъде затъмнен, за да се спести енергия, когато "
-"компютърът бездейства."
+"компютърът бездейства и се захранва от ел. мрежа."
 
 #: ../data/gnome-power-manager.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
 "Дали екранът на компютъра да бъде затъмнен, за да се спести енергия, когато "
-"компютърът бездейства."
+"компютърът бездейства и се захранва от батерии."
 
 #: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -504,54 +505,59 @@ msgstr "Яркост на екрана при бездействие"
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid "The cpufreq custom performance value to use when on AC power"
-msgstr ""
+msgstr "Потребителската честота на процесора при захранване от ел. мрежа"
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid "The cpufreq custom performance value to use when on battery power"
-msgstr ""
+msgstr "Потребителската честота на процесора при захранване от батерии"
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The cpufreq custom performance value to used to scale the processor when on "
 "AC power."
 msgstr ""
+"Потребителската честота на процесора, която да се ползва за скоростта му, "
+"при захранване от ел. мрежа."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The cpufreq custom performance value to used to scale the processor when on "
 "battery power."
 msgstr ""
+"Потребителската честота на процесора, която да се ползва за скоростта му, "
+"при захранване от батерии."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid "The cpufreq policy to use when on AC power"
-msgstr ""
+msgstr "Политика за честота на процесора при захранване от ел. мрежа"
 
 #: ../data/gnome-power-manager.schemas.in.h:84
-#, fuzzy
 msgid "The cpufreq policy to use when on battery power"
-msgstr "екранът бе затворен при захранване от батерии"
+msgstr "Политика за честота на процесора при захранване от батерии"
 
 #: ../data/gnome-power-manager.schemas.in.h:85
-#, fuzzy
 msgid ""
 "The cpufreq policy to used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
-"Методът на DPMS за изчистването на екрана при захранване от ел. мрежа. "
-"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
-"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+"Политика за честота на процесора за определяне на скоростта му при "
+"захранване от ел. мрежа. Възможните стойности са „ondemand“ (при поискване), "
+"„conservative“ (консервативна), „powersave“ (енергоспестяваща), "
+"„userspace“ (за потребителските програми), „performance“ (производителна) и "
+"„nothing“ (никаква)."
 
 #: ../data/gnome-power-manager.schemas.in.h:86
-#, fuzzy
 msgid ""
 "The cpufreq policy to used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"Методът на DPMS за изчистването на екрана при захранване от батерии. "
-"Възможните стойности са „default“ (по подразбиране), „standby“ (в режим "
-"готовност), „suspend“ (приспиване) и „off“ (изключване)."
+"Политика за честота на процесора за определяне на скоростта му при "
+"захранване от батерии. Възможните стойности са „ondemand“ (при поискване), "
+"„conservative“ (консервативна), „powersave“ (енергоспестяваща), "
+"„userspace“ (за потребителските програми), „performance“ (производителна) и "
+"„nothing“ (никаква)."
 
 #: ../data/gnome-power-manager.schemas.in.h:87
 msgid "The damping factor for the rate"
@@ -661,8 +667,8 @@ msgid ""
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
 msgstr ""
-"Стойността на коефициента за претеглено експоненциално усреднаване. "
-"Увеличаването на тази стойност прави усреднаването по-силно, което прави "
+"Стойността на коефициента за претеглено експоненциално усредняване. "
+"Увеличаването на тази стойност прави усредняването по-силно, което прави "
 "изчисленията за оставащото време по-точни, но графиките - по-гладки."
 
 #: ../data/gnome-power-manager.schemas.in.h:104
@@ -690,6 +696,8 @@ msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
 msgstr ""
+"Дали процесите с по-нисък приоритет да се включват в изчисляването на "
+"натоварването на процесора"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
 msgid "Whether to hibernate, suspend or do nothing when inactive"
@@ -705,10 +713,12 @@ msgstr "Дали да се ползва уведомяване по време"
 msgid ""
 "Whether we should save the GNOME session state when performing a shutdown."
 msgstr ""
+"Дали състоянието на сесията на GNOME да се запазва при спирането на "
+"компютъра."
 
 #: ../data/gnome-power-manager.schemas.in.h:112
 msgid "Whether we should save the session when performing a shutdown"
-msgstr ""
+msgstr "Дали сесията да се запомня при спиране"
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -834,29 +844,24 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>Област за уведомяване</b>"
 
 #: ../data/gpm-prefs.glade.h:3
-#, fuzzy
 msgid "<b>Running on AC power</b>"
-msgstr "Захранване от ел. мрежа"
+msgstr "<b>Захранване от ел. мрежа</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-#, fuzzy
 msgid "<b>Running on Battery Power</b>"
-msgstr "Захранване от батерии"
+msgstr "<b>Захранване от батерии</b>"
 
 #: ../data/gpm-prefs.glade.h:5
-#, fuzzy
 msgid "<b>Running on UPS</b>"
-msgstr "Захранване непрекъсваемо токозахранване"
+msgstr "<b>Захранване непрекъсваемо токозахранване</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-#, fuzzy
 msgid "<b>Sounds</b>"
-msgstr "<b>Действия</b>"
+msgstr "<b>Звуци</b>"
 
 #: ../data/gpm-prefs.glade.h:7
-#, fuzzy
 msgid "Actions"
-msgstr "<b>Действия</b>"
+msgstr "Действия"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Always _sleep when the lid is closed"
@@ -864,15 +869,15 @@ msgstr "_Задължително приспиване при затваряне
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Custom usage percentage:"
-msgstr ""
+msgstr "Потребителски процент на използване:"
 
 #: ../data/gpm-prefs.glade.h:10
 msgid "Display"
-msgstr ""
+msgstr "Екран"
 
 #: ../data/gpm-prefs.glade.h:11
 msgid "Enable UPS discharge alarm"
-msgstr ""
+msgstr "Предупреждаване при разреждането на непрекъсваемото токозахранване"
 
 #: ../data/gpm-prefs.glade.h:12 ../src/gpm-graph-widget.c:96
 msgid "Notification"
@@ -892,24 +897,21 @@ msgstr "Настройки на управлението на захранван
 
 #: ../data/gpm-prefs.glade.h:16
 msgid "Power processor profile:"
-msgstr ""
+msgstr "Профил на работата на процесора:"
 
 #: ../data/gpm-prefs.glade.h:17
 msgid "Processing Speed"
-msgstr ""
+msgstr "Скорост на изчисленията"
 
 #: ../data/gpm-prefs.glade.h:18
-#, fuzzy
 msgid "Put _display to sleep when  inactive for:"
 msgstr "Изгасяне на _екрана след бездействие на компютъра от:"
 
 #: ../data/gpm-prefs.glade.h:19
-#, fuzzy
 msgid "Put _display to sleep when inactive for:"
 msgstr "Изгасяне на _екрана след бездействие на компютъра от:"
 
 #: ../data/gpm-prefs.glade.h:20
-#, fuzzy
 msgid "Put computer to _sleep when inactive for:"
 msgstr "Приспиване на _компютъра след бездействие на компютъра от:"
 
@@ -919,7 +921,7 @@ msgstr "_Задаване на яркостта на екрана:"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "Sleep"
-msgstr ""
+msgstr "Приспиване"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "Sleep _type when inactive:"
@@ -927,20 +929,19 @@ msgstr "Вид _приспиване при бездействие:"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "Try to set system low power mode"
-msgstr ""
+msgstr "Опит за преминаване към режим на енергоспестяване"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "Use sound to notify in event of error"
-msgstr ""
+msgstr "Звук за предупреждение в случай на грешка"
 
 #: ../data/gpm-prefs.glade.h:26
 msgid "When UPS _power critical:"
 msgstr "При критично ниско ниво на непрекъсваемото _токозахранване:"
 
 #: ../data/gpm-prefs.glade.h:27
-#, fuzzy
 msgid "When UPS low:"
-msgstr "При критично ниско ниво на непрекъсваемото _токозахранване:"
+msgstr "При ниско ниво на непрекъсваемото токозахранване:"
 
 #: ../data/gpm-prefs.glade.h:28
 msgid "When battery _power critical:"
@@ -1170,11 +1171,9 @@ msgid "Hibernate Problem"
 msgstr "Проблем при дълбокото приспиване"
 
 #: ../src/gpm-manager.c:1247
-#, fuzzy, c-format
+#, c-format
 msgid "HAL failed to %s. Check the help file for common problems."
-msgstr ""
-"HAL не успя да %s. Проверете страницата с <a href=\"%s\">често задаваните "
-"въпроси</a>, за да потърсите решение."
+msgstr "HAL не успя да %s. Проверете в помощта, за да потърсите решение."
 
 #: ../src/gpm-manager.c:1249
 msgid "hibernate"
@@ -1191,14 +1190,13 @@ msgid "Battery discharged %imWh during suspend"
 msgstr "Батерията се разреди с %i mWh след приспиването<"
 
 #: ../src/gpm-manager.c:1362
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the help file for common problems."
 msgstr ""
 "Компютърът не успя да се %s.\n"
-"Проверете страницата с <a href=\"%s\">често задаваните въпроси</a>, за да "
-"потърсите решение."
+"Проверете в помощта, за да потърсите решение."
 
 #: ../src/gpm-manager.c:1364
 msgid "suspend"
@@ -1505,13 +1503,12 @@ msgid "Lead acid"
 msgstr "Оловна"
 
 #: ../src/gpm-power.c:715
-#, fuzzy
 msgid "Lithium Polymer"
-msgstr "Литиево-йонна"
+msgstr "Литиево-полимерна"
 
 #: ../src/gpm-power.c:717
 msgid "Nickel Metal Hydride"
-msgstr ""
+msgstr "Никел-метал-хидрид"
 
 #: ../src/gpm-power.c:723
 #, c-format
@@ -1580,31 +1577,31 @@ msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Скорост на зареждане (усреднена):</b> %.1f %sh\n"
 
 #: ../src/gpm-power.c:1234
-#, fuzzy, c-format
+#, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "пълен заряд"
+msgstr "%s е напълно заредена (%i%%)\n"
 
 #: ../src/gpm-power.c:1240
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s remaining (%i%%)\n"
-msgstr "остават %s"
+msgstr "%s остават %s (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1244
-#, fuzzy, c-format
+#, c-format
 msgid "%s discharging (%i%%)\n"
-msgstr "разреждане"
+msgstr "%s се разрежда (%i%%)\n"
 
 #: ../src/gpm-power.c:1251
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s until charged (%i%%)\n"
-msgstr "%s до зареждане"
+msgstr "%s %s до зареждане (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1255
-#, fuzzy, c-format
+#, c-format
 msgid "%s charging (%i%%)\n"
-msgstr "разреждане"
+msgstr "%s се зарежда (%i%%)\n"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
@@ -1644,23 +1641,23 @@ msgstr "Да не се прави нищо"
 #. The text that should appear in the processor combo box
 #: ../src/gpm-prefs-core.c:97
 msgid "Based on processor load"
-msgstr ""
+msgstr "Според натоварването на процесора"
 
 #: ../src/gpm-prefs-core.c:98
 msgid "Automatic power saving"
-msgstr ""
+msgstr "Автоматично енергоспестяване"
 
 #: ../src/gpm-prefs-core.c:99
 msgid "Maximum power saving"
-msgstr ""
+msgstr "Максимално енергоспестяване"
 
 #: ../src/gpm-prefs-core.c:100
 msgid "Custom"
-msgstr ""
+msgstr "Потребителски"
 
 #: ../src/gpm-prefs-core.c:101
 msgid "Maximum speed"
-msgstr ""
+msgstr "Максимална скорост"
 
 #: ../src/gpm-prefs-core.c:246
 msgid "Never"
@@ -1692,7 +1689,7 @@ msgstr "_Информация"
 
 #: ../src/gpm-tray-icon.c:120
 msgid "_Statistics"
-msgstr ""
+msgstr "_Статистика"
 
 #: ../src/gpm-tray-icon.c:122
 msgid "_Help"
@@ -1751,18 +1748,3 @@ msgstr ""
 "Проектът за превод на GNOME има нужда от подкрепа.\n"
 "Научете повече за нас на http://gnome.cult.bg\n"
 "Докладвайте за грешки на http://gnome.cult.bg/bugs"
-
-#~ msgid "<b>Brightness</b>"
-#~ msgstr "<b>Яркост</b>"
-
-#~ msgid "<b>Sleep</b>"
-#~ msgstr "<b>Приспиване</b>"
-
-#~ msgid "General"
-#~ msgstr "Общи"
-
-#~ msgid "Prefer power savings over performance"
-#~ msgstr "Да се предпочита ниската консумация пред производителността"
-
-#~ msgid "charging"
-#~ msgstr "зареждане"
