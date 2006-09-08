@@ -26,13 +26,13 @@ INCLUDES =						\
 	$(NULL)
 
 bin_PROGRAMS =						\
-	gnome-power-graph				\
+	gnome-power-statistics				\
 	gnome-power-manager				\
 	gnome-power-preferences				\
 	gnome-power-inhibit-test			\
 	$(NULL)
 
-gnome_power_graph_SOURCES =				\
+gnome_power_statistics_SOURCES =			\
 	gpm-graph.c					\
 	gpm-graph-core.h				\
 	gpm-graph-core.c				\
@@ -48,7 +48,7 @@ gnome_power_graph_SOURCES =				\
 	gpm-debug.c					\
 	$(NULL)
 
-gnome_power_graph_LDADD =				\
+gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\

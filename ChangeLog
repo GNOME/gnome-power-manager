@@ -1,5 +1,19 @@
 2006-09-08  Richard Hughes  <richard@hughsie.com>
 
+	* BRANCHES:
+	Create, and list all the cool stuff that happened in each branch.
+
+	* docs/dbus-interface.html:
+	Regenerate.
+
+	* data/Makefile.am:
+	* src/Makefile.am:
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_statistics_cb):
+	Make a clickable icon for the statistics option if we don't
+	have the icon displayed.
+
+2006-09-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c:
 	Remove the FIXME to fix #334212. It's breaking more laptops that it
 	was intended to fix and also breaks my (already broken) iBook.

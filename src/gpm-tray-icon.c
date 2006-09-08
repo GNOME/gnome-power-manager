@@ -288,7 +288,7 @@ static void
 gpm_tray_icon_show_statistics_cb (GtkAction   *action,
 				   GpmTrayIcon *icon)
 {
-	const gchar *command = "gnome-power-graph";
+	const gchar *command = "gnome-power-statistics";
 
 	if (! g_spawn_command_line_async (command, NULL)) {
 		gpm_warning ("Couldn't execute command: %s", command);

@@ -89,7 +89,7 @@
         DPMS is a standard from the VESA consortium for managing the power
         supply of monitors.
 	This call requests a change in the state of DPMS for the current screen.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetDpmsMode"></a>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;50% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td> </td><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetDpmsMode"></a>
         <code class="literal">GetDpmsMode</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
