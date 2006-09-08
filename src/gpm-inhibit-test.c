@@ -48,7 +48,7 @@ dbus_inhibit_gpm (const gchar *appname,
 
 	/* get the DBUS session connection */
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-	if (error) {
+	if (error != NULL) {
 		g_warning ("DBUS cannot connect : %s", error->message);
 		g_error_free (error);
 		return -1;
@@ -59,6 +59,11 @@ dbus_inhibit_gpm (const gchar *appname,
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
 					   GPM_DBUS_INTERFACE);
+	if (proxy == NULL) {
+		g_warning ("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		return -1;
+	}
+
 	res = dbus_g_proxy_call (proxy,
 				 "Inhibit", &error,
 				 G_TYPE_STRING, appname,
@@ -66,10 +71,20 @@ dbus_inhibit_gpm (const gchar *appname,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &cookie,
 				 G_TYPE_INVALID);
+
+	/* check the return value */
 	if (! res) {
 		cookie = -1;
 		g_warning ("Inhibit method failed");
 	}
+
+	/* check the error value */
+	if (error != NULL) {
+		g_warning ("Inhibit problem : %s", error->message);
+		g_error_free (error);
+		cookie = -1;
+	}
+
 	g_debug ("cookie = %u", cookie);
 	g_object_unref (G_OBJECT (proxy));
 	return cookie;
@@ -102,14 +117,28 @@ dbus_uninhibit_gpm (guint cookie)
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
 					   GPM_DBUS_INTERFACE);
+	if (proxy == NULL) {
+		g_warning ("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		return;
+	}
+
 	res = dbus_g_proxy_call (proxy,
 				 "UnInhibit",
 				 &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
+
+	/* check the return value */
 	if (! res) {
 		g_warning ("UnInhibit method failed");
+	}
+
+	/* check the error value */
+	if (error != NULL) {
+		g_warning ("Inhibit problem : %s", error->message);
+		g_error_free (error);
+		cookie = -1;
 	}
 	g_object_unref (G_OBJECT (proxy));
 }

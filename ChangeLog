@@ -1,3 +1,9 @@
+2006-09-08  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-inhibit-test.c: (dbus_inhibit_gpm), (dbus_uninhibit_gpm):
+	Don't treat error like a boolean.
+	Also check for a NULL proxy and warn. From a comment in #344979
+
 2006-09-03  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.in:
