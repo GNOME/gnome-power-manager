@@ -1,5 +1,11 @@
 2006-09-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c:
+	Remove the FIXME to fix #334212. It's breaking more laptops that it
+	was intended to fix and also breaks my (already broken) iBook.
+
+2006-09-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-proxy.c: (gpm_proxy_assign), (gpm_proxy_init):
 	Make sure that priv->connection is NULL at startup, and check
 	for a non-null value when we try to get the daemon.
