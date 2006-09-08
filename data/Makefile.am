@@ -53,5 +53,6 @@ clean-local :
 DISTCLEANFILES =					\
 	gnome-power-manager.desktop			\
 	gnome-power-preferences.desktop			\
+	gnome-power-statistics.desktop			\
 	gnome-power-manager.schemas			\
 	gnome-power-manager.service
