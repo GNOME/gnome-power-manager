@@ -1,5 +1,12 @@
 2006-09-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-proxy.c: (gpm_proxy_assign), (gpm_proxy_init):
+	Make sure that priv->connection is NULL at startup, and check
+	for a non-null value when we try to get the daemon.
+	May fix #353769.
+
+2006-09-08  Richard Hughes  <richard@hughsie.com>
+
 	* docs/dbus-interface.xml:
 	Move away from power measurements in Watts to percentages to better
 	suit low power laptops and OLPC.

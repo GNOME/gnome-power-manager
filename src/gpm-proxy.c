@@ -153,23 +153,29 @@ gpm_proxy_assign (GpmProxy	 *gproxy,
 		return NULL;
 	}
 
-	gproxy->priv->service = g_strdup (service);
-	gproxy->priv->interface = g_strdup (interface);
-	gproxy->priv->path = g_strdup (path);
-	gproxy->priv->bus_type = bus_type;
-	gproxy->priv->assigned = TRUE;
-
 	/* get the DBUS connection */
 	if (bus_type == GPM_PROXY_SESSION) {
 		gproxy->priv->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	} else {
 		gproxy->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	}
+
 	if (error) {
-		gpm_warning ("Cannot connect to DBUS daemon: %s", error->message);
+		gpm_warning ("Could not connect to DBUS daemon: %s", error->message);
 		g_error_free (error);
 		return NULL;
 	}
+
+	if (gproxy->priv->connection == NULL) {
+		gpm_warning ("Could not connect to DBUS daemon!");
+		return NULL;
+	}
+
+	gproxy->priv->service = g_strdup (service);
+	gproxy->priv->interface = g_strdup (interface);
+	gproxy->priv->path = g_strdup (path);
+	gproxy->priv->bus_type = bus_type;
+	gproxy->priv->assigned = TRUE;
 
 	/* try to connect and return proxy (or NULL if invalid) */
 	gpm_proxy_connect (gproxy);
@@ -342,6 +348,8 @@ static void
 gpm_proxy_init (GpmProxy *gproxy)
 {
 	gproxy->priv = GPM_PROXY_GET_PRIVATE (gproxy);
+
+	gproxy->priv->connection = NULL;
 	gproxy->priv->proxy = NULL;
 	gproxy->priv->service = NULL;
 	gproxy->priv->interface = NULL;
