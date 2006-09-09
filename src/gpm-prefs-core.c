@@ -1051,10 +1051,10 @@ prefs_setup_actions (GpmPrefs *prefs)
 	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_critical",
 				      GPM_PREF_UPS_CRITICAL,
 				      battery_ups_actions);
-//FIXME
-//	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_low",
-//				      GPM_PREF_UPS_LOW,
-//				      battery_ups_actions);
+
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_low",
+				      GPM_PREF_UPS_LOW,
+				      battery_ups_actions);
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_ac_lid");

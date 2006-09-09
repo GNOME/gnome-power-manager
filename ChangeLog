@@ -1,3 +1,15 @@
+2006-09-09  Richard Hughes  <richard@hughsie.com>
+
+	* data/.cvsignore:
+	* data/gnome-power-statistics.desktop.in:
+	Add the missing desktop file. OOps.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-prefs-core.c: (prefs_setup_actions):
+	* src/gpm-prefs.h:
+	Add the low power policy key to complete the UPS prefs dialogue.
+	Default to nothing for low, and shutdown for critical.
+
 2006-09-08  Richard Hughes  <richard@hughsie.com>
 
 	* data/Makefile.am:
