@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gnome Power Manager 2.16\n"
+"Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-08-14 16:34+0200\n"
-"PO-Revision-Date: 2006-08-16 18:27+0300\n"
+"PO-Revision-Date: 2006-09-10 00:07+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -63,14 +63,12 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-#, fuzzy
 msgid "Hibernate button action"
-msgstr "Viimase toimingu unustamine"
+msgstr "Hiberneerimisnupu toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-#, fuzzy
 msgid "Hibernate enabled"
-msgstr "Tööriistavihjed lubatud"
+msgstr "Hiberneerimine on lubatud"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "If DBUS inhibit requests should be ignored from other programs."
@@ -217,19 +215,16 @@ msgid "Laptop lid close action when on AC"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:40
-#, fuzzy
 msgid "Lock screen on hibernate"
-msgstr "GNOME ekraaniklaviatuur"
+msgstr "Ekraani lukustamine hiberneerimisel"
 
 #: ../data/gnome-power-manager.schemas.in.h:41
-#, fuzzy
 msgid "Lock screen on suspend"
-msgstr "GNOME ekraaniklaviatuur"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:42
-#, fuzzy
 msgid "Lock screen when blanked"
-msgstr "Käesolevat ekraani ei lukustata"
+msgstr "Ekraani lukustamine selle puhastamisel"
 
 #: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Method used to blank screen on AC"
@@ -256,22 +251,20 @@ msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:49
-#, fuzzy
 msgid "Percentage action is taken"
-msgstr "Kas see toiming on püsiv"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage considered critical"
-msgstr ""
+msgstr "Kriitilise oleku protsent "
 
 #: ../data/gnome-power-manager.schemas.in.h:51
-#, fuzzy
 msgid "Percentage considered low"
-msgstr "Aku tühjenemise märguanne"
+msgstr "Madala taseme protsent"
 
 #: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Percentage considered very low"
-msgstr ""
+msgstr "Väga madala taseme protsent"
 
 #: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Power button action"
@@ -298,9 +291,8 @@ msgid "Suspend button action"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:59
-#, fuzzy
 msgid "Suspend enabled"
-msgstr "Tööriistavihjed lubatud"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:60
 msgid ""
@@ -470,9 +462,8 @@ msgid "The time remaining when critical"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:89
-#, fuzzy
 msgid "The time remaining when low"
-msgstr "Kasutaja teavitamine aku tühjenemisest"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:90
 msgid "The time remaining when very low"
@@ -507,9 +498,8 @@ msgid "Use gnome-screensaver lock setting"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-#, fuzzy
 msgid "When to show the notification icon"
-msgstr "Klikkimise peale näidatav URI."
+msgstr "Millal tuleb teavitusikooni näidata."
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid "Whether to hibernate, suspend or do nothing when inactive"
@@ -562,9 +552,8 @@ msgid ""
 msgstr ""
 
 #: ../data/gpm-info.glade.h:9
-#, fuzzy
 msgid "Estimated Time History"
-msgstr "Ajaloolehtede ajavahemik"
+msgstr ""
 
 #: ../data/gpm-info.glade.h:10
 msgid "Event Log"
@@ -610,9 +599,8 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-#, fuzzy
 msgid "GNOME Acme Foo"
-msgstr "Eye of GNOME (gnoomi silma) eelistused"
+msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit"
@@ -695,9 +683,8 @@ msgid "Running on UPS"
 msgstr "UPS'itoitelt töötamine"
 
 #: ../data/gpm-prefs.glade.h:17
-#, fuzzy
 msgid "Set display _brightness to:"
-msgstr "Kuva seadmine inseneriarvutuste jaoks"
+msgstr "Kuva _heleduse seadmine:"
 
 #: ../data/gpm-prefs.glade.h:18
 msgid "Sleep _type when inactive:"
@@ -705,12 +692,11 @@ msgstr ""
 
 #: ../data/gpm-prefs.glade.h:19
 msgid "When UPS _power critical:"
-msgstr ""
+msgstr "Kui UPSitoide on k_riitiline:"
 
 #: ../data/gpm-prefs.glade.h:20
-#, fuzzy
 msgid "When battery _power critical:"
-msgstr "Süsteem jookseb akutoitel"
+msgstr "Kui akutoide on k_riitiline:"
 
 #: ../data/gpm-prefs.glade.h:21
 msgid "When l_aptop lid is closed:"
@@ -767,7 +753,7 @@ msgstr[1] "%i tundi"
 #: ../src/gpm-common.c:82
 #, c-format
 msgid "%i %s, %i %s"
-msgstr ""
+msgstr "%i %s, %i %s"
 
 #: ../src/gpm-common.c:83
 msgid "hour"
@@ -782,9 +768,8 @@ msgstr[0] "minut"
 msgstr[1] "minutit"
 
 #: ../src/gpm-common.h:31
-#, fuzzy
 msgid "Power Manager for the GNOME desktop"
-msgstr "Lihtne võtmerõngahaldur GNOME 2 jaoks"
+msgstr "Vooluhaldur GNOME töölauale"
 
 #: ../src/gpm-graph-widget.c:76
 msgid "On AC"
@@ -865,22 +850,20 @@ msgid "GNOME Power Preferences"
 msgstr "GNOME voolutarbimiseelistused"
 
 #: ../src/gpm-inhibit-test.c:164
-#, fuzzy
 msgid "Power Inhibit Test"
-msgstr "Kontakti printimistest"
+msgstr ""
 
 #: ../src/gpm-main.c:140
 msgid "Do not daemonize"
 msgstr "Deemoniks ei minda"
 
 #: ../src/gpm-main.c:142 ../src/gpm-prefs.c:82
-#, fuzzy
 msgid "Show extra debugging information"
-msgstr "Näitab teavet Evolutioni kohta"
+msgstr "Silumisteabe näitamine"
 
 #: ../src/gpm-main.c:144
 msgid "Exit after a small delay (for debugging)"
-msgstr ""
+msgstr "Lõpetamine peale väikest viivitust (silumiseks)"
 
 #: ../src/gpm-main.c:148
 msgid "GNOME Power Manager"
@@ -914,30 +897,25 @@ msgstr ""
 
 #: ../src/gpm-manager.c:910 ../src/gpm-manager.c:1357
 #: ../src/gpm-manager.c:2531
-#, fuzzy
 msgid "Suspending computer"
-msgstr "Arvutile alglaadimise tegemine"
+msgstr ""
 
 #: ../src/gpm-manager.c:915 ../src/gpm-manager.c:1371
 #: ../src/gpm-manager.c:2506
-#, fuzzy
 msgid "Hibernating computer"
-msgstr "Arvutile alglaadimise tegemine"
+msgstr "Arvuti hiberneerimine"
 
 #: ../src/gpm-manager.c:920
-#, fuzzy
 msgid "DPMS blanking screen"
-msgstr "Sisselogimisekraan on valmis:"
+msgstr "DPMS ekraanipuhastus"
 
 #: ../src/gpm-manager.c:925 ../src/gpm-manager.c:1386
-#, fuzzy
 msgid "Shutting down computer"
-msgstr "Arvuti _seiskamine"
+msgstr "Arvuti seiskamine"
 
 #: ../src/gpm-manager.c:930
-#, fuzzy
 msgid "GNOME interactive logout"
-msgstr "_Väljalogimisel küsitakse kinnitust"
+msgstr "GNOME interaktiivne väljalogimine"
 
 #: ../src/gpm-manager.c:1196 ../src/gpm-manager.c:1289
 msgid "Resuming computer"
@@ -945,7 +923,7 @@ msgstr ""
 
 #: ../src/gpm-manager.c:1208
 msgid "Hibernate Problem"
-msgstr ""
+msgstr "Hiberneerimisprobleem"
 
 #: ../src/gpm-manager.c:1209
 #, c-format
@@ -1155,7 +1133,7 @@ msgstr "UPS on kriitiliselt tühi"
 
 #: ../src/gpm-manager.c:2169
 msgid "Your system is running on backup power!"
-msgstr ""
+msgstr "Sinu süsteem töötab varutoitel!"
 
 #: ../src/gpm-manager.c:2173
 #, c-format
@@ -1284,7 +1262,7 @@ msgstr "<b>Aega jäänud:</b> %s\n"
 
 #: ../src/gpm-power.c:746
 msgid "Excellent"
-msgstr "Eeskujulik"
+msgstr "Suurepärane"
 
 #: ../src/gpm-power.c:748
 msgid "Good"
@@ -1296,7 +1274,7 @@ msgstr "Normaalne"
 
 #: ../src/gpm-power.c:752
 msgid "Poor"
-msgstr ""
+msgstr "Halb"
 
 #: ../src/gpm-power.c:754
 #, c-format
