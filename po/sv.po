@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-20 08:55+0200\n"
-"PO-Revision-Date: 2006-08-22 15:10+0100\n"
+"POT-Creation-Date: 2006-09-14 15:34+0200\n"
+"PO-Revision-Date: 2006-09-14 16:22+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -1101,146 +1101,156 @@ msgstr "handdator"
 msgid "unknown"
 msgstr "okänt"
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:656
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Produkt:</b> %s\n"
 
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:659
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Status:</b> Saknas\n"
 
-#: ../src/gpm-power.c:682
+#: ../src/gpm-power.c:661
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Status:</b> Laddad\n"
 
-#: ../src/gpm-power.c:684
+#: ../src/gpm-power.c:663
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Status:</b> Laddar\n"
 
-#: ../src/gpm-power.c:686
+#: ../src/gpm-power.c:665
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Status:</b> Laddar ur\n"
 
-#: ../src/gpm-power.c:689
+#: ../src/gpm-power.c:668
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Procentuell laddning:</b> %i%%\n"
 
-#: ../src/gpm-power.c:716
+#: ../src/gpm-power.c:695
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Tillverkare:</b> %s\n"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:702
 msgid "Lithium ion"
 msgstr "Litium-jon"
 
-#: ../src/gpm-power.c:724
+#: ../src/gpm-power.c:705
 msgid "Lead acid"
 msgstr "Blybatteri"
 
-#: ../src/gpm-power.c:730
+#: ../src/gpm-power.c:711
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Teknologi:</b> %s\n"
 
-#: ../src/gpm-power.c:733
+#: ../src/gpm-power.c:714
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Serienummer:</b> %s\n"
 
-#: ../src/gpm-power.c:736
+#: ../src/gpm-power.c:717
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Modell:</b> %s\n"
 
-#: ../src/gpm-power.c:741
+#: ../src/gpm-power.c:722
 #, c-format
 msgid "<b>Remaining time:</b> %s\n"
 msgstr "<b>Återstående tid:</b> %s\n"
 
-#: ../src/gpm-power.c:746
+#: ../src/gpm-power.c:728
 msgid "Excellent"
 msgstr "Mycket bra"
 
-#: ../src/gpm-power.c:748
+#: ../src/gpm-power.c:730
 msgid "Good"
 msgstr "Bra"
 
-#: ../src/gpm-power.c:750
+#: ../src/gpm-power.c:732
 msgid "Fair"
 msgstr "OK"
 
-#: ../src/gpm-power.c:752
+#: ../src/gpm-power.c:734
 msgid "Poor"
 msgstr "Dålig"
 
-#: ../src/gpm-power.c:754
+#: ../src/gpm-power.c:736
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Kapacitet:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:761
+#: ../src/gpm-power.c:742
 #, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
 msgstr "<b>Nuvarande laddning:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:766
+#: ../src/gpm-power.c:747
 #, c-format
 msgid "<b>Last full charge:</b> %.1f %s\n"
 msgstr "<b>Senaste fullständiga laddning:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:770
+#: ../src/gpm-power.c:751
 #, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
 msgstr "<b>Anpassad laddning:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:774
+#: ../src/gpm-power.c:755
 #, c-format
 msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
 msgstr "<b>Laddningshastighet (rå):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:778
+#: ../src/gpm-power.c:759
 #, c-format
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Laddningshastighet (ungefärlig):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1231
+#: ../src/gpm-power.c:766
+#, c-format
+msgid "<b>Current charge:</b> %i %s\n"
+msgstr "<b>Aktuell laddning:</b> %i %s\n"
+
+#: ../src/gpm-power.c:770
+#, c-format
+msgid "<b>Design charge:</b> %i %s\n"
+msgstr "<b>Anpassad laddning:</b> %i %s\n"
+
+#: ../src/gpm-power.c:1223
 msgid "fully charged"
 msgstr "fullständigt uppladdat"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:1228
 #, c-format
 msgid "%s remaining"
 msgstr "%s återstående"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
+#: ../src/gpm-power.c:1232
 msgid "discharging"
 msgstr "laddar ur"
 
-#: ../src/gpm-power.c:1246
+#: ../src/gpm-power.c:1238
 #, c-format
 msgid "%s until charged"
 msgstr "%s till uppladdat"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
+#: ../src/gpm-power.c:1242
 msgid "charging"
 msgstr "laddar"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1283
 msgid "Computer is running on backup power\n"
 msgstr "Datorn körs på reservspänning\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1286
 msgid "Computer is running on AC power\n"
 msgstr "Datorn körs på nätspänning\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1289
 msgid "Computer is running on battery power\n"
 msgstr "Datorn körs på batterispänning\n"
 
