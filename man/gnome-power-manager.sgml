@@ -53,6 +53,7 @@ manpage.1: manpage.sgml
     <cmdsynopsis>
       <command>&package;</command>
       <arg><option>--verbose</option></arg>
+      <arg><option>--debug</option></arg>
       <arg><option>--help</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -96,6 +97,14 @@ manpage.1: manpage.sgml
         </term>
         <listitem>
           <para>Do not detach <command>&package;</command> into the background so that error messages will be displayed on console.</para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <option>--debug</option>
+        </term>
+        <listitem>
+          <para>Only show specific debugging options. Useful for developers only.</para>
         </listitem>
       </varlistentry>
  

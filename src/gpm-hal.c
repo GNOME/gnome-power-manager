@@ -892,7 +892,7 @@ gpm_hal_new_capability_cb (DBusGProxy  *proxy,
 		           const gchar *capability,
 		           GpmHal      *hal)
 {
-	g_debug ("emitting new-capability : %s, %s", udi, capability);
+	gpm_debug ("emitting new-capability : %s, %s", udi, capability);
 	g_signal_emit (hal, signals [NEW_CAPABILITY], 0, udi, capability);
 }
 

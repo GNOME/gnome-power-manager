@@ -134,6 +134,8 @@ main (int argc, char *argv[])
 	GError		*error = NULL;
 	GOptionContext  *context;
  	GnomeProgram    *program;
+	char **debugoptions;
+	int i;
 
 	const GOptionEntry options[] = {
 		{ "no-daemon", '\0', 0, G_OPTION_ARG_NONE, &no_daemon,
@@ -142,6 +144,8 @@ main (int argc, char *argv[])
 		  N_("Show extra debugging information"), NULL },
 		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
 		  N_("Exit after a small delay (for debugging)"), NULL },
+		{ "debug", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &debugoptions,
+		  N_("Debug specific files, e.g. power"), NULL },
 		{ NULL}
 	};
 
@@ -163,6 +167,7 @@ main (int argc, char *argv[])
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 
+
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
 		/* We'll disable this as users are getting constant crashes */
 		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
@@ -176,6 +181,11 @@ main (int argc, char *argv[])
 	dbus_g_thread_init ();
 
 	gpm_debug_init (verbose);
+
+	/* Add all of the options specified on the --debug line */
+	for (i = 0; debugoptions[i]; i++) {
+		gpm_add_debug_option (debugoptions[i]);
+	}
 
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);

@@ -52,6 +52,7 @@ void		gpm_warning_real		(const gchar	*func,
 void		gpm_syslog			(const gchar	*format, ...);
 void		gpm_critical_error		(const gchar	*format, ...);
 void		gpm_bugzilla			(void);
+void		gpm_add_debug_option		(const gchar	*option);
 
 G_END_DECLS
 

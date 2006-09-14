@@ -1,3 +1,20 @@
+2006-09-14  Richard Hughes  <richard@hughsie.com>
+
+	* man/gnome-power-manager.sgml:
+	* src/gpm-debug.c:
+	* src/gpm-debug.h:
+	Add in the debug option so we can easier debug g-p-m.
+	Now adding the options --debug=power --debug=manager will only display
+	the gpm-power and gpm-manager debug output.
+
+	* src/gpm-graph-core.c:
+	* src/gpm-hal.c:
+	* src/gpm-info.c:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/gpm-tray-icon.c:
+	Convert some more g_debug's to gpm_debug so we can use the above.
+
 2006-09-12  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Increase dep of libgnome to 2.14.0 because we are using

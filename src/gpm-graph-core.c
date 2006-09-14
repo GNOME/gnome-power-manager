@@ -347,7 +347,7 @@ gpm_graph_find_types (GpmGraph *graph,
 			       G_TYPE_STRV, &strlist,
 			       G_TYPE_INVALID) == FALSE) {
 		if (error) {
-			g_debug ("%s", error->message);
+			gpm_debug ("%s", error->message);
 			g_error_free (error);
 		}
 		retval = FALSE;

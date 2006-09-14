@@ -2727,7 +2727,7 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 static gboolean
 manager_rescan_buttons (GpmManager *manager)
 {
-	g_debug ("rescanning buttons");
+	gpm_debug ("rescanning buttons");
 	gpm_hal_device_rescan_capability (manager->priv->hal, "button");
 	return TRUE;
 }

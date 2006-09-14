@@ -37,6 +37,17 @@
 
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
+static GSList *list = NULL;
+
+/**
+ * gpm_add_debug_option:
+ **/
+void
+gpm_add_debug_option (const gchar *option)
+{
+	/* adding debug option to list */
+	list = g_slist_prepend (list, (gpointer) option);
+}
 
 /**
  * gpm_print_line:
@@ -60,6 +71,45 @@ gpm_print_line (const gchar *func,
 }
 
 /**
+ * gpm_debug_strcmp_func
+ * @a: Pointer to the data to test
+ * @b: Pointer to a cookie to compare
+ * Return value: 0 if cookie matches
+ **/
+static gint
+gpm_debug_strcmp_func (gconstpointer a, gconstpointer b)
+{
+	gchar *aa = (gchar *) a;
+	gchar *bb = (gchar *) b;
+	return strcmp (aa, bb);
+}
+
+/**
+ * gpm_debug_in_options:
+ **/
+static gboolean
+gpm_debug_in_options (const gchar *file)
+{
+	GSList *node;
+	gchar *name;
+	guint8 len;
+
+	/* get rid of the "gpm-" prefix */
+	name = strdup (&file[4]);
+
+	/* get rid of .c */
+	len = strlen (name);
+	if (len>2) {
+		name[len-2] = '\0';
+	}
+
+	/* find string in list */
+	node = g_slist_find_custom (list, name, gpm_debug_strcmp_func);
+	g_free (name);
+	return (node != NULL);
+}
+
+/**
  * gpm_debug_real:
  **/
 void
@@ -71,7 +121,7 @@ gpm_debug_real (const gchar *func,
 	va_list args;
 	gchar    buffer [1025];
 
-	if (! do_verbose) {
+	if (do_verbose == FALSE && gpm_debug_in_options (file) == FALSE) {
 		return;
 	}
 
@@ -94,7 +144,7 @@ gpm_warning_real (const gchar *func,
 	va_list args;
 	gchar buffer[1025];
 
-	if (! do_verbose) {
+	if (do_verbose == FALSE) {
 		return;
 	}
 

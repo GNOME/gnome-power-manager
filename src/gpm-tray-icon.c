@@ -678,7 +678,7 @@ static void
 gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 			   GpmTrayIcon   *icon)
 {
-	g_debug ("icon activated");
+	gpm_debug ("icon activated");
 }
 #endif
 
