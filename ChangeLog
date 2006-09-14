@@ -1,3 +1,13 @@
+2006-09-14  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal-monitor.c:
+	Fix hotplug add and remove of wireless mice.
+	
+	* src/gpm-power.c:
+	Don't express the decimal point for the / 7 csr scale.
+	Also add the new battery types so we don't print a warning with
+	greater than HAL 0.5.8.
+
 2006-09-12  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Increase dep of libgnome to 2.14.0 because we are using
