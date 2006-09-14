@@ -329,6 +329,7 @@ hal_device_removed_cb (GpmHal        *hal,
 
 	/* FIXME: these may not all be batteries */
 	gpm_hal_device_remove_propery_modified (monitor->priv->hal, udi);
+	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
 }
 
 /**
@@ -348,7 +349,7 @@ hal_new_capability_cb (GpmHal        *hal,
 	gpm_debug ("udi=%s, capability=%s", udi, capability);
 
 	if (strcmp (capability, "battery") == 0) {
-		gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
+		watch_add_battery (monitor, udi);
 	}
 }
 
