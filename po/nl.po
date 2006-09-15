@@ -17,10 +17,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GNOME Power Manager HEAD\n"
+"Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-15 10:09+0200\n"
-"PO-Revision-Date: 2006-08-09 09:34+0200 \n"
+"POT-Creation-Date: 2006-09-15 11:21+0200\n"
+"PO-Revision-Date: 2006-09-15 11:21+0200 \n"
 "Last-Translator: Wouter Bolsterlee <uws+gnome@xs4all.nl>\n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1459,7 +1459,7 @@ msgstr "Matig"
 msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Capaciteit:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:742
+#: ../src/gpm-power.c:742 ../src/gpm-power.c:766
 #, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
 msgstr "<b>Huidige lading:</b> %.1f %s\n"
@@ -1469,7 +1469,7 @@ msgstr "<b>Huidige lading:</b> %.1f %s\n"
 msgid "<b>Last full charge:</b> %.1f %s\n"
 msgstr "<b>Laatste volledige lading:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:751
+#: ../src/gpm-power.c:751 ../src/gpm-power.c:770
 #, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
 msgstr "<b>Lading (fabrieksontwerp):</b> %.1f %s\n"
@@ -1483,16 +1483,6 @@ msgstr "<b>Laadsnelheid (puur):</b> %.1f %su\n"
 #, c-format
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Laadsnelheid (afgevlakt):</b> %.1f %su\n"
-
-#: ../src/gpm-power.c:766
-#, c-format
-msgid "<b>Current charge:</b> %i %s\n"
-msgstr "<b>Huidige lading:</b> %i %s\n"
-
-#: ../src/gpm-power.c:770
-#, c-format
-msgid "<b>Design charge:</b> %i %s\n"
-msgstr "<b>Lading (fabrieksontwerp):</b> %i %s\n"
 
 #: ../src/gpm-power.c:1223
 msgid "fully charged"
@@ -1641,6 +1631,12 @@ msgstr ""
 "Wouter Bolsterlee\n"
 "\n"
 "Zie voor meer informatie: http://nl.gnome.org"
+
+#~ msgid "<b>Current charge:</b> %i %s\n"
+#~ msgstr "<b>Huidige lading:</b> %i %s\n"
+
+#~ msgid "<b>Design charge:</b> %i %s\n"
+#~ msgstr "<b>Lading (fabrieksontwerp):</b> %i %s\n"
 
 #~ msgid "Critical action"
 #~ msgstr "Actie wanneer accu bijna leeg is"
