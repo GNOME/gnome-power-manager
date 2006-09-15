@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-14 10:14+0300\n"
-"PO-Revision-Date: 2006-08-14 10:14+0300\n"
+"POT-Creation-Date: 2006-09-15 10:47+0300\n"
+"PO-Revision-Date: 2006-09-15 10:48+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -658,8 +658,8 @@ msgstr "Lisää"
 msgid "Power History"
 msgstr "Virrankäytön historia"
 
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1547
-#: ../src/gpm-manager.c:1896
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1561
+#: ../src/gpm-manager.c:1910
 msgid "Power Information"
 msgstr "Tietoja virrankäytöstä"
 
@@ -928,12 +928,12 @@ msgstr "Tapahtuma"
 msgid "Description"
 msgstr "Kuvaus"
 
-#: ../src/gpm-inhibit.c:292
+#: ../src/gpm-inhibit.c:308
 #, c-format
 msgid "<b>%s</b> has stopped the %s from taking place : <i>%s</i>."
 msgstr "<b<%s</b> lopetti toiminnon %s tapahtumisen: <i>%s</i>."
 
-#: ../src/gpm-inhibit.c:296
+#: ../src/gpm-inhibit.c:312
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Useat sovellukset ovat lopettaneet toiminnon %s tapahtumisen."
@@ -979,46 +979,46 @@ msgstr "Näytön virransäästö aktivoitu"
 msgid "Laptop lid is closed"
 msgstr "Kansi on suljettu"
 
-#: ../src/gpm-manager.c:870
+#: ../src/gpm-manager.c:871
 #, c-format
 msgid "%s because %s"
 msgstr "%s syynä %s"
 
-#: ../src/gpm-manager.c:906
+#: ../src/gpm-manager.c:907
 msgid "Doing nothing"
 msgstr "Ei tehdä mitään"
 
-#: ../src/gpm-manager.c:910 ../src/gpm-manager.c:1357
-#: ../src/gpm-manager.c:2531
+#: ../src/gpm-manager.c:911 ../src/gpm-manager.c:1371
+#: ../src/gpm-manager.c:2545
 msgid "Suspending computer"
 msgstr "Siirretään tietokone keskeytystilaan"
 
-#: ../src/gpm-manager.c:915 ../src/gpm-manager.c:1371
-#: ../src/gpm-manager.c:2506
+#: ../src/gpm-manager.c:916 ../src/gpm-manager.c:1385
+#: ../src/gpm-manager.c:2520
 msgid "Hibernating computer"
 msgstr "Siirretään tietokone lepotilaan"
 
-#: ../src/gpm-manager.c:920
+#: ../src/gpm-manager.c:921
 msgid "DPMS blanking screen"
 msgstr "Pimennetään näyttö DPMS:llä"
 
-#: ../src/gpm-manager.c:925 ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:926 ../src/gpm-manager.c:1400
 msgid "Shutting down computer"
 msgstr "Sammutetaan tietokone"
 
-#: ../src/gpm-manager.c:930
+#: ../src/gpm-manager.c:931
 msgid "GNOME interactive logout"
 msgstr "Gnomen interaktiivinen uloskirjautuminen"
 
-#: ../src/gpm-manager.c:1196 ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1197 ../src/gpm-manager.c:1294
 msgid "Resuming computer"
 msgstr "Palautetaan tietokonetta käyttöön"
 
-#: ../src/gpm-manager.c:1208
+#: ../src/gpm-manager.c:1214
 msgid "Hibernate Problem"
 msgstr "Ongelma lepotilan kanssa"
 
-#: ../src/gpm-manager.c:1209
+#: ../src/gpm-manager.c:1215
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
@@ -1026,21 +1026,21 @@ msgstr ""
 "HAL-komento %s epäonnistui. Lue <a href=\"%s\">FAQ-sivulta</a> tietoja "
 "yleisistä ongelmista."
 
-#: ../src/gpm-manager.c:1211
+#: ../src/gpm-manager.c:1217
 msgid "hibernate"
 msgstr "lepotila"
 
-#: ../src/gpm-manager.c:1301
+#: ../src/gpm-manager.c:1306
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "Akkua ladattiin %imWh keskeytystilan aikana"
 
-#: ../src/gpm-manager.c:1304
+#: ../src/gpm-manager.c:1309
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "Akun lataus laski %imWh keskeytystilan aikana"
 
-#: ../src/gpm-manager.c:1318
+#: ../src/gpm-manager.c:1331
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -1049,128 +1049,128 @@ msgstr ""
 "Tietokone ei voinut suorittaa toimintoa %s.\n"
 "Lue <a href=\"%s\">FAQ-sivulta</a> tietoja yleisistä ongelmista."
 
-#: ../src/gpm-manager.c:1320
+#: ../src/gpm-manager.c:1333
 msgid "suspend"
 msgstr "keskeytystila"
 
-#: ../src/gpm-manager.c:1321
+#: ../src/gpm-manager.c:1334
 msgid "Suspend Problem"
 msgstr "Ongelma keskeytystilan kanssa"
 
-#: ../src/gpm-manager.c:1358
+#: ../src/gpm-manager.c:1372
 msgid "the DBUS method Suspend() was invoked"
 msgstr "Käynnistettiin DBUS-komento Suspend()"
 
-#: ../src/gpm-manager.c:1372
+#: ../src/gpm-manager.c:1386
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "Käynnistettiin DBUS-komento Hibernate()"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1401
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "Käynnistettiin DBUS-komento Shutdown()"
 
-#: ../src/gpm-manager.c:1401
+#: ../src/gpm-manager.c:1415
 msgid "Rebooting computer"
 msgstr "Käynnistetään tietokone uudestaan"
 
-#: ../src/gpm-manager.c:1402
+#: ../src/gpm-manager.c:1416
 msgid "the DBUS method Reboot() was invoked"
 msgstr "Käynnistettiin DBUS-komento Reboot()"
 
-#: ../src/gpm-manager.c:1452
+#: ../src/gpm-manager.c:1466
 msgid "Screen resume"
 msgstr "näytön palautus"
 
-#: ../src/gpm-manager.c:1453
+#: ../src/gpm-manager.c:1467
 msgid "idle mode ended"
 msgstr "joutilastila päättyi"
 
-#: ../src/gpm-manager.c:1478
+#: ../src/gpm-manager.c:1492
 msgid "Screen dim"
 msgstr "Näytön himmennys"
 
-#: ../src/gpm-manager.c:1479
+#: ../src/gpm-manager.c:1493
 msgid "idle mode started"
 msgstr "joutilastila aloitettu"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1497
+#: ../src/gpm-manager.c:1511
 msgid "the system state is idle"
 msgstr "järjestelmä on joutilaana"
 
-#: ../src/gpm-manager.c:1571
+#: ../src/gpm-manager.c:1585
 msgid "the power button has been pressed"
 msgstr "virtanappia painettin"
 
-#: ../src/gpm-manager.c:1590
+#: ../src/gpm-manager.c:1604
 msgid "the suspend button has been pressed"
 msgstr "lepotilanappia painettiin"
 
-#: ../src/gpm-manager.c:1610
+#: ../src/gpm-manager.c:1624
 msgid "the hibernate button has been pressed"
 msgstr "lepotilapainiketta on painettu"
 
-#: ../src/gpm-manager.c:1637
+#: ../src/gpm-manager.c:1651
 msgid "The laptop lid has been closed"
 msgstr "Kannettavan kansi on suljettu"
 
-#: ../src/gpm-manager.c:1642
+#: ../src/gpm-manager.c:1656
 msgid "The laptop lid has been re-opened"
 msgstr "Kannettavan kansi avattiin uudestaan"
 
-#: ../src/gpm-manager.c:1660
+#: ../src/gpm-manager.c:1674
 msgid "the lid has been closed on ac power"
 msgstr "kansi on suljettu verkkovirta kytkettynä"
 
-#: ../src/gpm-manager.c:1665
+#: ../src/gpm-manager.c:1679
 msgid "the lid has been closed on battery power"
 msgstr "kansi suljettiin akkukäytön aikana"
 
-#: ../src/gpm-manager.c:1670
+#: ../src/gpm-manager.c:1684
 msgid "Turning LCD panel back on"
 msgstr "Kytketään LCD-paneeli tapaisin päälle"
 
-#: ../src/gpm-manager.c:1671
+#: ../src/gpm-manager.c:1685
 msgid "laptop lid re-opened"
 msgstr "kansi avattiin"
 
-#: ../src/gpm-manager.c:1788
+#: ../src/gpm-manager.c:1802
 msgid "AC adapter inserted"
 msgstr "Verkkovirta liitetty"
 
-#: ../src/gpm-manager.c:1792
+#: ../src/gpm-manager.c:1806
 msgid "AC adapter removed"
 msgstr "Verkkovirta irroitettu"
 
-#: ../src/gpm-manager.c:1802
+#: ../src/gpm-manager.c:1816
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "kansi on suljettu ja virtajohto ei ole liitetty (ja gconf on kunnossa)"
 
-#: ../src/gpm-manager.c:1884
+#: ../src/gpm-manager.c:1898
 msgid "Power Critically Low"
 msgstr "Lataustila on kriittisen matala"
 
-#: ../src/gpm-manager.c:1888
+#: ../src/gpm-manager.c:1902
 msgid "Power Very Low"
 msgstr "Lataustila hyvin matala"
 
-#: ../src/gpm-manager.c:1892
+#: ../src/gpm-manager.c:1906
 msgid "Power Low"
 msgstr "Matala lataustila"
 
-#: ../src/gpm-manager.c:1917
+#: ../src/gpm-manager.c:1931
 msgid "battery is critically low"
 msgstr "akku on kriittisen tyhjä"
 
-#: ../src/gpm-manager.c:1962
+#: ../src/gpm-manager.c:1976
 msgid "Your battery is now fully charged"
 msgstr "Akkusi on nyt täysin ladattu"
 
-#: ../src/gpm-manager.c:1963
+#: ../src/gpm-manager.c:1977
 msgid "Battery Charged"
 msgstr "Akku ladattu"
 
-#: ../src/gpm-manager.c:2028
+#: ../src/gpm-manager.c:2042
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1178,7 +1178,7 @@ msgstr ""
 "Akun lataus on alle kriitisen arvon ja <b>tietokone sammuu </b>, kun akku "
 "tyhjenee kokonaan."
 
-#: ../src/gpm-manager.c:2033
+#: ../src/gpm-manager.c:2047
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1188,23 +1188,23 @@ msgstr ""
 "<br<b>HUOMAUTUS:</b> Tietokoneen pitäminen keskeytystilassa vaatii myös "
 "hieman sähköä."
 
-#: ../src/gpm-manager.c:2039
+#: ../src/gpm-manager.c:2053
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Akun lataus on alle kriitisen arvon ja tietokone asetetaan lepotilaan."
 
-#: ../src/gpm-manager.c:2043
+#: ../src/gpm-manager.c:2057
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Akun lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
 
-#: ../src/gpm-manager.c:2056
+#: ../src/gpm-manager.c:2070
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Verkkovirta on irroitettu ja tietokone käyttää nyt akkua."
 
-#: ../src/gpm-manager.c:2063
+#: ../src/gpm-manager.c:2077
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1213,7 +1213,7 @@ msgstr ""
 "Akussa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Kytke verkkovirta, "
 "jotta et menetä tietojasi."
 
-#: ../src/gpm-manager.c:2150
+#: ../src/gpm-manager.c:2164
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1221,25 +1221,25 @@ msgstr ""
 "UPSin akku on alle kriitisen arvon ja <b>tietokone sammuu </b>, kun UPS "
 "tyhjenee kokonaan."
 
-#: ../src/gpm-manager.c:2155
+#: ../src/gpm-manager.c:2169
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS on alle kriitisen lataustilan ja tietokone asetetaan lepotilaan."
 
-#: ../src/gpm-manager.c:2159
+#: ../src/gpm-manager.c:2173
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPSin lataus on alle kriitisen arvon ja siksi tietokone sammutetaan."
 
-#: ../src/gpm-manager.c:2166
+#: ../src/gpm-manager.c:2180
 msgid "UPS is critically low"
 msgstr "UPS on kriittisen tyhjä"
 
-#: ../src/gpm-manager.c:2169
+#: ../src/gpm-manager.c:2183
 msgid "Your system is running on backup power!"
 msgstr "Tietokone käyttää varavirtaa!"
 
-#: ../src/gpm-manager.c:2173
+#: ../src/gpm-manager.c:2187
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1248,7 +1248,7 @@ msgstr ""
 "UPSissa riittää sähköä arviolta vielä <b>%s</b> (%d%%). Palauta verkkovirta, "
 "jotta et menetä tietojasi."
 
-#: ../src/gpm-manager.c:2262
+#: ../src/gpm-manager.c:2276
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1257,11 +1257,11 @@ msgstr ""
 "Tietokoneeseen liitetyn laitteen %s lataus on vähissä (%d %%). Tämä laite "
 "lopettaa pian toiminaan jollei sitä ladata."
 
-#: ../src/gpm-manager.c:2507
+#: ../src/gpm-manager.c:2521
 msgid "user clicked hibernate from tray menu"
 msgstr "käyttäjä valitsi lepotilan ilmoitusalueen kuvakkeesta"
 
-#: ../src/gpm-manager.c:2532
+#: ../src/gpm-manager.c:2546
 msgid "user clicked suspend from tray menu"
 msgstr "käyttäjä valitsi keskeytystilan ilmoitusalueen kuvakkeesta"
 
@@ -1309,146 +1309,156 @@ msgstr "pda"
 msgid "unknown"
 msgstr "tuntematon"
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:656
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Tuote:</b> %s\n"
 
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:659
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Tila:</b> Ei saatavilla\n"
 
-#: ../src/gpm-power.c:682
+#: ../src/gpm-power.c:661
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Tila:</b> Ladattu\n"
 
-#: ../src/gpm-power.c:684
+#: ../src/gpm-power.c:663
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Tila:</b> Ladataan\n"
 
-#: ../src/gpm-power.c:686
+#: ../src/gpm-power.c:665
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Tila:</b> Purkautuu\n"
 
-#: ../src/gpm-power.c:689
+#: ../src/gpm-power.c:668
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Lataus prosentteina:</b> %i%%\n"
 
-#: ../src/gpm-power.c:716
+#: ../src/gpm-power.c:695
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Valmistaja:</b> %s\n"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:702
 msgid "Lithium ion"
 msgstr "Li-Ion"
 
-#: ../src/gpm-power.c:724
+#: ../src/gpm-power.c:705
 msgid "Lead acid"
 msgstr "Lyijyhappo"
 
-#: ../src/gpm-power.c:730
+#: ../src/gpm-power.c:711
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Tekniikka:</b> %s\n"
 
-#: ../src/gpm-power.c:733
+#: ../src/gpm-power.c:714
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Sarjanumero:</b> %s\n"
 
-#: ../src/gpm-power.c:736
+#: ../src/gpm-power.c:717
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Malli:</b> %s\n"
 
-#: ../src/gpm-power.c:741
+#: ../src/gpm-power.c:722
 #, c-format
 msgid "<b>Remaining time:</b> %s\n"
 msgstr "<b>Jäljelläoleva aika:</b> %s\n"
 
-#: ../src/gpm-power.c:746
+#: ../src/gpm-power.c:728
 msgid "Excellent"
 msgstr "Mainio"
 
-#: ../src/gpm-power.c:748
+#: ../src/gpm-power.c:730
 msgid "Good"
 msgstr "Hyvä"
 
-#: ../src/gpm-power.c:750
+#: ../src/gpm-power.c:732
 msgid "Fair"
 msgstr "Kelvollinen"
 
-#: ../src/gpm-power.c:752
+#: ../src/gpm-power.c:734
 msgid "Poor"
 msgstr "Huono"
 
-#: ../src/gpm-power.c:754
+#: ../src/gpm-power.c:736
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Kapasiteetti:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:761
+#: ../src/gpm-power.c:742
 #, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
 msgstr "<b>Nykyinen lataustila:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:766
+#: ../src/gpm-power.c:747
 #, c-format
 msgid "<b>Last full charge:</b> %.1f %s\n"
 msgstr "<b>Viimeisin täysi lataus:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:770
+#: ../src/gpm-power.c:751
 #, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
 msgstr "<b>Suunniteltu lataus:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:774
+#: ../src/gpm-power.c:755
 #, c-format
 msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
 msgstr "<b>Latausnopeus (raaka):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:778
+#: ../src/gpm-power.c:759
 #, c-format
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Latausnopeus (pehmennetty):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1231
+#: ../src/gpm-power.c:766
+#, c-format
+msgid "<b>Current charge:</b> %i %s\n"
+msgstr "<b>Nykyinen lataustila:</b> %i %s\n"
+
+#: ../src/gpm-power.c:770
+#, c-format
+msgid "<b>Design charge:</b> %i %s\n"
+msgstr "<b>Suunniteltu lataus:</b> %i %s\n"
+
+#: ../src/gpm-power.c:1223
 msgid "fully charged"
 msgstr "täysin ladattu"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:1228
 #, c-format
 msgid "%s remaining"
 msgstr "%s jäljellä"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
+#: ../src/gpm-power.c:1232
 msgid "discharging"
 msgstr "purkautuu"
 
-#: ../src/gpm-power.c:1246
+#: ../src/gpm-power.c:1238
 #, c-format
 msgid "%s until charged"
 msgstr "%s kunnes ladattu"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
+#: ../src/gpm-power.c:1242
 msgid "charging"
 msgstr "latautuu"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1283
 msgid "Computer is running on backup power\n"
 msgstr "Tietokone käyttää varavirtaa\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1286
 msgid "Computer is running on AC power\n"
 msgstr "Tietokone käyttää verkkovirtaa\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1289
 msgid "Computer is running on battery power\n"
 msgstr "Tietokone käyttää akkua\n"
 
