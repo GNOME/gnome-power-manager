@@ -763,12 +763,12 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	if (device->unit == GPM_POWER_UNIT_CSR) {
 		suffix = "/ 7";
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, _("<b>Current charge:</b> %i %s\n"),
-						status->current_charge, suffix);
+			g_string_append_printf (details, _("<b>Current charge:</b> %.1f %s\n"),
+						(float) status->current_charge, suffix);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, _("<b>Design charge:</b> %i %s\n"),
-						status->design_charge, suffix);
+			g_string_append_printf (details, _("<b>Design charge:</b> %.1f %s\n"),
+						(float) status->design_charge, suffix);
 		}
 	}
 	/* remove the last \n */
