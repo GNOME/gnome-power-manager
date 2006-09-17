@@ -1,5 +1,26 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
+	* NEWS:
+	Add in 2.16.0 info.
+
+	* configure.in:
+	Oops. We only want dbus 0.70 for the glib bindings.
+
+	* src/Makefile.am:
+	Don't ship the inhibit test application.
+
+	* src/gpm-hal.c:
+	Only include config.h once.
+
+	* src/gpm-manager.c:
+	Fix another icon name g_free.
+
+	* src/run-valgrind-gpm.sh:
+	* src/valgrind-gpm.sh:
+	Rename.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	Update dbus dep to 0.92. 
 

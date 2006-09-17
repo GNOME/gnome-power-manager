@@ -2246,7 +2246,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const gchar *icon;
+		gchar *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -2258,6 +2258,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 				    title);
+		g_free (icon);
 		g_free (message);
 	}
 }

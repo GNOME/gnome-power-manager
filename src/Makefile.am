@@ -29,6 +29,9 @@ bin_PROGRAMS =						\
 	gnome-power-statistics				\
 	gnome-power-manager				\
 	gnome-power-preferences				\
+	$(NULL)
+
+noinst_PROGRAMS =					\
 	gnome-power-inhibit-test			\
 	$(NULL)
 
