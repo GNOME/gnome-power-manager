@@ -47,7 +47,6 @@
 #include "gpm-prefs.h"
 #include "gpm-graph-widget.h"
 #include "gpm-stock-icons.h"
-#include "gpm-info-data.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);

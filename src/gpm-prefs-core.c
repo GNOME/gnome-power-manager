@@ -33,7 +33,6 @@
 #include <math.h>
 #include <string.h>
 
-#include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-hal.h"

@@ -33,7 +33,6 @@
 
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-common.h"
 
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
