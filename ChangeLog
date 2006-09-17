@@ -1,3 +1,12 @@
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c:
+	Fix a couple of small memory leaks where we don't free the icon name.
+
+	* src/gpm-manager.c: (gpm_manager_init):
+	Don't rescan buttons every minute. This belongs in HAL. Fixes #356170.
+	The HAL patch will be submitted this week.
+
 2006-09-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: (gpm_power_status_for_device_more):

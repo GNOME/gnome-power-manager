@@ -2084,12 +2084,13 @@ battery_status_changed_primary (GpmManager     *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const char *icon;
+		char *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
+		g_free (icon);
 		if (manager->priv->enable_beeping) {
 			gpm_warning_beep ();
 		}
@@ -2194,7 +2195,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const char *icon;
+		char *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -2206,6 +2207,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_EVENT_NOTIFICATION,
 				    title);
+		g_free (icon);
 		g_free (message);
 	}
 }
@@ -2229,7 +2231,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	char *message = NULL;
 	const char *title = NULL;
 	const char *name;
-	const char *icon;
+	char *icon;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
 	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
@@ -2291,6 +2293,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	}
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_EVENT_NOTIFICATION, title);
 
+	g_free (icon);
 	g_free (message);
 }
 
@@ -2659,22 +2662,6 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 }
 
 /**
- * manager_rescan_buttons:
- * @manager: This manager class instance
- *
- * Rescan the buttons to avoid #346082
- *
- * Return value: TRUE, as we want to repeat this action on resume.
- **/
-static gboolean
-manager_rescan_buttons (GpmManager *manager)
-{
-	g_debug ("rescanning buttons");
-	gpm_hal_device_rescan_capability (manager->priv->hal, "button");
-	return TRUE;
-}
-
-/**
  * gpm_manager_init:
  * @manager: This manager class instance
  **/
@@ -2879,9 +2866,6 @@ gpm_manager_init (GpmManager *manager)
 	/* Do we ignore inhibit requests? */
 	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
 								GPM_PREF_IGNORE_INHIBITS, NULL);
-
-	/* poll the lid periodically to avoid #346082 */
-	g_timeout_add (1000 * 60, (GSourceFunc) manager_rescan_buttons, manager);
 }
 
 /**
