@@ -1,5 +1,16 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	Update dbus dep to 0.92. 
+
+	* src/gpm-hal.c:
+	Remove obsolete dbus < 0.62 ifdef code.
+	
+	* src/gpm-info-data.c: (gpm_info_data_add_always):
+	guint can never be negative. Instead check for zero.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c:
 	Fix a couple of small memory leaks where we don't free the icon name.
 

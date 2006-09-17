@@ -130,7 +130,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	/* we have to add a new data point */
 	new = g_slice_new (GpmInfoDataPoint);
 	new->time = time_secs;
-	if (value > 0) {
+	if (value != 0) {
 		new->value = value;
 	} else {
 		gpm_debug ("Not recording value (%i)", value);
