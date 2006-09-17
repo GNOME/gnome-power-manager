@@ -2135,12 +2135,13 @@ battery_status_changed_primary (GpmManager     *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const gchar *icon;
+		gchar *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
+		g_free (icon);
 		if (manager->priv->enable_beeping) {
 			gpm_warning_beep ();
 		}
@@ -2245,7 +2246,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 	/* If we had a message, print it as a notification */
 	if (message) {
-		const char *icon;
+		const gchar *icon;
 		title = battery_low_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -2280,7 +2281,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 	gchar *message = NULL;
 	const gchar *title = NULL;
 	const gchar *name;
-	const gchar *icon;
+	gchar *icon;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
 	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
@@ -2332,16 +2333,15 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 
 	icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      title,
-			      message,
-			      GPM_NOTIFY_TIMEOUT_LONG,
-			      icon,
-			      GPM_NOTIFY_URGENCY_NORMAL);
+			      title, message, GPM_NOTIFY_TIMEOUT_LONG,
+			      icon, GPM_NOTIFY_URGENCY_NORMAL);
+
 	if (manager->priv->enable_beeping) {
 		gpm_warning_beep ();
 	}
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
 
+	g_free (icon);
 	g_free (message);
 }
 

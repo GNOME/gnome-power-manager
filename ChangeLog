@@ -1,5 +1,10 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c:
+	Fix a couple of small memory leaks where we don't free the icon name.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/figures/gpm-critical.png:
 	* help/C/figures/gpm-low.png:
 	* help/C/figures/gpm-tooltip.png:
