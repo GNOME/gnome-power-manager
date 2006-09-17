@@ -1,5 +1,17 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
+	* help/C/figures/gpm-critical.png:
+	* help/C/figures/gpm-low.png:
+	* help/C/figures/gpm-tooltip.png:
+	* help/C/figures/gpm-unplugged.png:
+	* help/C/figures/gs-prefs.png:
+	Update to reflect 2-16.
+	
+	* src/gpm-tray-icon.c: (libnotify_event):
+	Add in a note about the non-pointing libnotify bubbles.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* data/gpm-prefs.glade:
 	* src/gpm-hal-brightness.c:
@@ -8,7 +20,7 @@
 	* src/gpm-prefs.h:
 	Add elements in the UI to prevent g-p-m from modifying the brightness
 	on AC state change. Also add in the UI for the keyboard light sensor
-	but disable it for now.
+	but disable it for now. Fixes #356085
 
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 

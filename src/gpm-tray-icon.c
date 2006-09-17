@@ -669,15 +669,19 @@ libnotify_event (GpmTrayIcon    *icon,
 		 const gchar	*msgicon,
 		 GpmNotifyLevel	 urgency)
 {
-	GtkWidget *point = NULL;
-
 	if (icon->priv->notify != NULL) {
 		notify_notification_close (icon->priv->notify, NULL);
 	}
 
-	/* Point to the center of the icon as per the GNOME HIG, #338638 */
+#if 0
+	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
+	icon->priv->notify = notify_notification_new_with_status_icon (title, content,
+								       msgicon, icon->priv->status_icon);
+#else
+	/* Use the bottom of the screen */
 	icon->priv->notify = notify_notification_new (title, content,
-						      msgicon, point);
+						      msgicon, NULL);
+#endif
 
 	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
 
