@@ -49,6 +49,7 @@ LIBGLADE_REQUIRED=2.5.0
 LIBNOTIFY_REQUIRED=0.3.0
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
+LIBGUNIQUEAPP_REQUIRED=0.5
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -63,6 +64,7 @@ AC_SUBST(LIBGLADE_REQUIRED)
 AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
+AC_SUBST(LIBGUNIQUEAPP_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -204,50 +206,35 @@ DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MICRO=$DBUS_VERSION_MICRO"
 dnl ---------------------------------------------------------------------------
 dnl - Is libnotify available?
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(libnotify,
-              [AC_HELP_STRING([--enable-libnotify],
-                              [build with libnotify support [default=auto]])],,
-              [enable_libnotify=auto])
-if test x$enable_libnotify = xno ; then
-    have_libnotify=no;
+if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
+   have_libnotify=yes
+   PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
+   AC_SUBST(LIBNOTIFY_CFLAGS)
+   AC_SUBST(LIBNOTIFY_LIBS)
+   AC_DEFINE(HAVE_LIBNOTIFY, 1, [Building with libnotify support]) 
+   echo $LIBNOTIFY_LIBS
 else
-    # See if we have sufficiently new libnotify library
-    PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED, have_libnotify=yes, have_libnotify=no)
-    if test x$enable_libnotify = xauto ; then
-        if test x$have_libnotify = xno ; then
-                AC_MSG_WARN([Sufficiently new libnotify library not found])
-        fi
-    else 
-        if test x$have_libnotify = xno ; then
-                AC_MSG_ERROR([libnotify explicitly required, and sufficiently new libnotify library not found])
-        fi
-    fi
+   have_libnotify=no
+   AC_DEFINE(HAVE_LIBNOTIFY, 0, [Not building with libnotify support]) 
 fi
-AM_CONDITIONAL(HAVE_LIBNOTIFY, test x$have_libnotify = xyes)
-if test x$have_libnotify = xyes ; then
-    # Find out the version of LIBNOTIFY we're using
-    libnotify_version=`pkg-config --modversion libnotify`
-    LIBNOTIFY_VERSION_MAJOR=`echo $libnotify_version | awk -F. '{print $1}'`
-    LIBNOTIFY_VERSION_MINOR=`echo $libnotify_version | awk -F. '{print $2}'`
-    LIBNOTIFY_VERSION_MICRO=`echo $libnotify_version | awk -F. '{print $3}'`
-    if test "z$LIBNOTIFY_VERSION_MAJOR" = "z"; then
-        LIBNOTIFY_VERSION_MAJOR="0"
-    fi
-    if test "z$LIBNOTIFY_VERSION_MINOR" = "z"; then
-        LIBNOTIFY_VERSION_MINOR="0"
-    fi
-    if test "z$LIBNOTIFY_VERSION_MICRO" = "z"; then
-        LIBNOTIFY_VERSION_MICRO="0"
-    fi
-    echo "Your libnotify version is $LIBNOTIFY_VERSION_MAJOR,$LIBNOTIFY_VERSION_MINOR,$LIBNOTIFY_VERSION_MICRO."
-    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MAJOR=$LIBNOTIFY_VERSION_MAJOR"
-    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MINOR=$LIBNOTIFY_VERSION_MINOR"
-    LIBNOTIFY_CFLAGS="$LIBNOTIFY_CFLAGS -DLIBNOTIFY_VERSION_MICRO=$LIBNOTIFY_VERSION_MICRO"
+AM_CONDITIONAL([HAVE_LIBNOTIFY], [test $have_libnotify = yes])
 
-    AC_DEFINE(HAVE_LIBNOTIFY,1,[libnotify support])
-    AC_SUBST(LIBNOTIFY_CFLAGS)
-    AC_SUBST(LIBNOTIFY_LIBS)
+
+dnl ---------------------------------------------------------------------------
+dnl - Is libguniqueapp available?
+dnl ---------------------------------------------------------------------------
+if $PKG_CONFIG --atleast-version $LIBGUNIQUEAPP_REQUIRED libguniqueapp; then
+   have_libguniqueapp=yes
+   PKG_CHECK_MODULES(LIBGUNIQUEAPP, libguniqueapp >= $LIBGUNIQUEAPP_REQUIRED)
+   AC_SUBST(LIBGUNIQUEAPP_CFLAGS)
+   AC_SUBST(LIBGUNIQUEAPP_LIBS)
+   AC_DEFINE(HAVE_LIBGUNIQUEAPP, 1, [Building with libguniqueapp support]) 
+   echo $LIBGUNIQUEAPP_LIBS
+else
+   have_libguniqueapp=no
+   AC_DEFINE(HAVE_LIBGUNIQUEAPP, 0, [Not building with libguniqueapp support]) 
 fi
+AM_CONDITIONAL([HAVE_LIBGUNIQUEAPP], [test $have_libguniqueapp = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Some utility functions to make checking for X things easier.
@@ -484,6 +471,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
+        libguniqueapp support:     ${have_libguniqueapp}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}
         Docbook support:           ${enable_docbook_docs}

@@ -15,6 +15,7 @@ INCLUDES =						\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(LIBNOTIFY_CFLAGS)				\
+	$(LIBGUNIQUEAPP_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
@@ -97,6 +98,12 @@ gnome_power_preferences_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(NULL)
 
+if HAVE_LIBGUNIQUEAPP
+gnome_power_preferences_LDADD +=			\
+	$(LIBGUNIQUEAPP_LIBS)				\
+	$(NULL)
+endif
+
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms-x11.c					\
@@ -163,7 +170,7 @@ gnome_power_manager_LDADD +=				\
 endif
 
 BUILT_SOURCES = 					\
-	gpm-interface-manager.h			\
+	gpm-interface-manager.h				\
 	gpm-interface-statistics.h			\
 	gpm-marshal.c					\
 	gpm-marshal.h					\

@@ -139,6 +139,20 @@ gpm_prefs_class_init (GpmPrefsClass *klass)
 }
 
 /**
+ * gpm_prefs_activate_window:
+ * @prefs: This prefs class instance
+ *
+ * Activates (shows) the window.
+ **/
+void
+gpm_prefs_activate_window (GpmPrefs *prefs)
+{
+	GtkWidget *widget;
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, "window_preferences");
+	gtk_window_present (GTK_WINDOW (widget));
+}
+
+/**
  * gpm_dbus_method_bool:
  * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
  **/

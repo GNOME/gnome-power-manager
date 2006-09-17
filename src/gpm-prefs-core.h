@@ -50,6 +50,7 @@ typedef struct
 
 GType		 gpm_prefs_get_type			(void);
 GpmPrefs	*gpm_prefs_new				(void);
+void		 gpm_prefs_activate_window		(GpmPrefs	*prefs);
 
 G_END_DECLS
 
