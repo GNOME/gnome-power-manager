@@ -1,3 +1,15 @@
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/eggtrayicon.c:
+	* src/eggtrayicon.h:
+	* src/gpm-tray-icon.c:
+	* src/gpm-tray-icon.h:
+	Remove eggtrayicon support. This means we depend on GTK+ 2.10.0
+	This fixes #356150.
+
 2006-09-14  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-monitor.c:

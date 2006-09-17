@@ -122,8 +122,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-power.c					\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
-	eggtrayicon.h					\
-	eggtrayicon.c					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-hal.h					\

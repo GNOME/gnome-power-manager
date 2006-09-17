@@ -24,7 +24,6 @@
 #define __GPM_TRAY_ICON_H
 
 #include <glib-object.h>
-#include "eggtrayicon.h"
 
 G_BEGIN_DECLS
 
@@ -39,13 +38,13 @@ typedef struct GpmTrayIconPrivate GpmTrayIconPrivate;
 
 typedef struct
 {
-	EggTrayIcon	    parent;
+	GObject		    parent;
 	GpmTrayIconPrivate *priv;
 } GpmTrayIcon;
 
 typedef struct
 {
-	EggTrayIconClass			 parent_class;
+	GObjectClass	parent_class;
 	void	(* suspend)			(GpmTrayIcon *tray_icon);
 	void	(* hibernate)			(GpmTrayIcon *tray_icon);
 } GpmTrayIconClass;
