@@ -720,6 +720,7 @@ change_power_policy (GpmManager *manager,
 	guint	     sleep_computer;
 	gboolean     power_save;
 	gboolean     cpufreq_consider_nice;
+	gboolean     do_laptop_lcd;
 	guint	     cpufreq_performance;
 	gchar       *cpufreq_policy;
 	GConfClient *client;
@@ -747,7 +748,9 @@ change_power_policy (GpmManager *manager,
 	}
 
 	/* only do brightness changes if we have the hardware */
-	if (gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
+	do_laptop_lcd = gconf_client_get_bool (manager->priv->gconf_client,
+					       GPM_PREF_DISPLAY_STATE_CHANGE, NULL);
+	if (do_laptop_lcd && gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
 		gpm_hal_brightness_set_level_std (manager->priv->brightness, brightness);
 		gpm_hal_brightness_set (manager->priv->brightness);
 	}
@@ -1514,13 +1517,8 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we resume the screen? */
-		if (on_ac) {
-			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							       GPM_PREF_AC_IDLE_DIM_LCD, NULL);
-		} else {
-			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							       GPM_PREF_BATTERY_IDLE_DIM_LCD, NULL);
-		}
+		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+						       GPM_PREF_DISPLAY_IDLE_DIM, NULL);
 		if (do_laptop_dim && gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
@@ -1545,13 +1543,8 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we dim the screen? */
-		if (on_ac) {
-			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							       GPM_PREF_AC_IDLE_DIM_LCD, NULL);
-		} else {
-			do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-							       GPM_PREF_BATTERY_IDLE_DIM_LCD, NULL);
-		}
+		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
+						       GPM_PREF_DISPLAY_IDLE_DIM, NULL);
 		if (do_laptop_dim && gpm_hal_brightness_has_hardware (manager->priv->brightness)) {
 			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
@@ -2717,22 +2710,6 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 }
 
 /**
- * manager_rescan_buttons:
- * @manager: This manager class instance
- *
- * Rescan the buttons to avoid #346082
- *
- * Return value: TRUE, as we want to repeat this action on resume.
- **/
-static gboolean
-manager_rescan_buttons (GpmManager *manager)
-{
-	gpm_debug ("rescanning buttons");
-	gpm_hal_device_rescan_capability (manager->priv->hal, "button");
-	return TRUE;
-}
-
-/**
  * gpm_manager_init:
  * @manager: This manager class instance
  **/
@@ -2947,9 +2924,6 @@ gpm_manager_init (GpmManager *manager)
 	/* Do we ignore inhibit requests? */
 	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
 								GPM_PREF_IGNORE_INHIBITS, NULL);
-
-	/* poll the lid periodically to avoid #346082 */
-	g_timeout_add (1000 * 60, (GSourceFunc) manager_rescan_buttons, manager);
 }
 
 /**

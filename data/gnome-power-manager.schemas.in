@@ -217,20 +217,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/check_type_net</key>
-      <applyto>/apps/gnome-power-manager/check_type_net</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Check network utilization before sleeping</short>
-        <long>If network utilization should be checked before doing the idle action.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_dim_on_idle</key>
-      <applyto>/apps/gnome-power-manager/ac_dim_on_idle</applyto>
+      <key>/schemas/apps/gnome-power-manager/display_dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/display_dim_on_idle</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -241,14 +229,26 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_dim_on_idle</key>
-      <applyto>/apps/gnome-power-manager/battery_dim_on_idle</applyto>
+      <key>/schemas/apps/gnome-power-manager/display_state_change</key>
+      <applyto>/apps/gnome-power-manager/display_state_change</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Dim the screen after a period of inactivity when on battery power</short>
-        <long>If the screen should be dimmed to save power when the computer is idle when on battery power.</long>
+        <short>Change the brightness to a preset level on AC state change</short>
+        <long>If the screen brightness should be changed when switching between AC and battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/display_ambient</key>
+      <applyto>/apps/gnome-power-manager/display_ambient</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Change the brightness to automatically using the ambient light sensors</short>
+        <long>If the screen brightness should be changed automatically using the ambient light sensors.</long>
       </locale>
     </schema>
 

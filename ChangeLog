@@ -1,5 +1,23 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* src/gpm-hal-brightness.c:
+	* src/gpm-manager.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-prefs.h:
+	Add elements in the UI to prevent g-p-m from modifying the brightness
+	on AC state change. Also add in the UI for the keyboard light sensor
+	but disable it for now.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (gpm_manager_init):
+	Don't rescan buttons every minute. This belongs in HAL. Fixes #356170.
+	The HAL patch will be submitted this week.
+
+2006-09-17  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	* po/POTFILES.in:
 	* src/Makefile.am:

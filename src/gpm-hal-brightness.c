@@ -203,12 +203,17 @@ gpm_hal_brightness_dim_hw_step (GpmHalBrightness *brightness,
 				guint		  step_interval)
 {
 	guint current_hw;
-	gint a;
+	guint a;
 
 	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
 	current_hw = brightness->priv->current_hw;
+	gpm_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
 
 	/* we do the step interval as we can have insane levels of brightness */
+	if (new_level_hw == current_hw) {
+		return;
+	}
+
 	if (new_level_hw > current_hw) {
 		/* going up */
 		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
@@ -217,7 +222,7 @@ gpm_hal_brightness_dim_hw_step (GpmHalBrightness *brightness,
 		}
 	} else {
 		/* going down */
-		for (a=current_hw; a >= new_level_hw; a-=step_interval) {
+		for (a=current_hw; a + 1 > new_level_hw; a-=step_interval) {
 			gpm_hal_brightness_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
@@ -263,6 +268,8 @@ gpm_hal_brightness_dim_hw (GpmHalBrightness *brightness,
 	if (! brightness->priv->has_hardware) {
 		return;
 	}
+
+	gpm_debug ("new_level_hw=%i", new_level_hw);
 
 	/* some machines don't take kindly to auto-dimming */
 	if (brightness->priv->does_own_dimming) {

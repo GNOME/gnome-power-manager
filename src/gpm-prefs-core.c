@@ -519,8 +519,26 @@ gpm_prefs_checkbox_lock_cb (GtkWidget *widget,
 {
 	gboolean checked;
 	gchar *gpm_pref_key;
+	GtkWidget *twidget;
+	const gchar *widget_name;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
+	widget_name = gtk_widget_get_name (widget);
+	if (widget_name && strcmp (widget_name, "checkbutton_display_state_change") == 0) {
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"label_display_ac_brightness");
+		gtk_widget_set_sensitive (twidget, checked);
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"hscale_display_ac_brightness");
+		gtk_widget_set_sensitive (twidget, checked);
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"label_display_battery_brightness");
+		gtk_widget_set_sensitive (twidget, checked);
+		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
+						"hscale_display_battery_brightness");
+		gtk_widget_set_sensitive (twidget, checked);
+	}
 
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "gconf_key");
 	gpm_debug ("Changing %s to %i", gpm_pref_key, checked);
@@ -553,6 +571,9 @@ gpm_prefs_setup_checkbox (GpmPrefs    *prefs,
 	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_prefs_checkbox_lock_cb), prefs);
+
+	/* manually do the callback in case we hide elements in the cb */
+	gpm_prefs_checkbox_lock_cb (widget, prefs);
 
 	return widget;
 }
@@ -758,33 +779,17 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
 						"label_processor_ac_custom");
-		if (show_custom) {
-			gtk_widget_show (twidget);
-		} else {
-			gtk_widget_hide (twidget);
-		}
+		gtk_widget_set_sensitive (twidget, show_custom);
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
 						"hscale_processor_ac_custom");
-		if (show_custom) {
-			gtk_widget_show (twidget);
-		} else {
-			gtk_widget_hide (twidget);
-		}
+		gtk_widget_set_sensitive (twidget, show_custom);
 	} else {
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
 						"label_processor_battery_custom");
-		if (show_custom) {
-			gtk_widget_show (twidget);
-		} else {
-			gtk_widget_hide (twidget);
-		}
+		gtk_widget_set_sensitive (twidget, show_custom);
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
 						"hscale_processor_battery_custom");
-		if (show_custom) {
-			gtk_widget_show (twidget);
-		} else {
-			gtk_widget_hide (twidget);
-		}
+		gtk_widget_set_sensitive (twidget, show_custom);
 	}
 
 	g_free (value);
@@ -945,11 +950,16 @@ prefs_setup_display (GpmPrefs *prefs)
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_display_battery_brightness",
 					   GPM_PREF_BATTERY_BRIGHTNESS);
 
-	/* set up the "do we dim screen on idle checkboxes */
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ac_dim",
-				  GPM_PREF_AC_IDLE_DIM_LCD);
-	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_battery_dim",
-				  GPM_PREF_BATTERY_IDLE_DIM_LCD);
+	/* set up the general checkboxes */
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_dim",
+				  GPM_PREF_DISPLAY_IDLE_DIM);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_state_change",
+				  GPM_PREF_DISPLAY_STATE_CHANGE);
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_display_ambient",
+				  GPM_PREF_DISPLAY_STATE_CHANGE);
+	/* for now, hide */
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_ambient");
+	gtk_widget_hide_all (widget);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_display_battery_sleep", delay);
