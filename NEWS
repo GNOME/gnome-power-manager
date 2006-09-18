@@ -1,3 +1,78 @@
+GNOME Power Manager is a session daemon that makes it easy to manage the
+power on your laptop or desktop system.
+
+This _unstable_ release contains lots of new features since 2.16.0 was released.
+2.16.1 will be released in the next couple of weeks as a bugfix to 2.16.0
+
+==============
+Version 2.17.1
+==============
+
+Released September 18, 2006
+
+General
+
+ - Add processor frequency scaling support. Requires HAL 0.5.8.
+ - Create a new class to handle a managed proxy, i.e. a DBusGProxy that
+   automatically does sane things with bus disconnects, or service restarts.
+ - Add libguniqueapp shared library support. This is optional.
+ - Update yelp images to reflect 2-16 and generally pretify the help xml.
+ - Add in the debug option so we can easier debug g-p-m. Now adding the
+   options --debug=power --debug=manager will only display the gpm-power
+   and gpm-manager debug output.
+ - Move to power measurement in percentages in the spec to better suit low
+   power laptops and OLPC.
+ - Allow power users to turn off the disconnect and reconnection feature of
+   NetworkManager on sleep and resume using gconf.
+   (Khashayar Naderehvandi) #353431
+ - Add /apps/gnome-power-manager/session_request_save so distros like
+   Ubuntu can just switch a gconf key rather than patch the source.
+ - Start to implement org.gnome.PowerManager.Statistics for the
+   out-of-process graphing interface. It actually doesn't do much yet.
+ - Use DPMS_METHOD_OFF when we specify "default" for the DPMS action when on
+   laptop hardware. Suspending the screen keeps the backlight on. #354726
+
+Power Manager
+
+ - Fix a couple of small memory leaks where we don't free the icon name.
+ - Don't rescan buttons every minute. This task belongs in HAL. #356170
+ - Remove eggtrayicon support. This means we depend on GTK+ 2.10. #356150
+ - Fix hotplug add and remove of wireless mice.
+ - Don't express the decimal point for the / 7 csr scale
+ - Remove the broken battery FIXME. It's breaking more laptops that it was
+   intended to fix and also breaks my old iBook. #334212
+ - Fix some small memory leaks. (Paolo Borelli). #352858.
+
+Power Preferences
+
+ - Update the UI to be task-centric, rather than state centric. This is
+   required now the preferences tool is starting to become a bit cleverer.
+ - Add elements in the UI to prevent g-p-m from modifying the brightness
+   on AC state change. Also add in the UI for the keyboard light sensor
+   but disable it for now. #356085
+ - Make sure that session connection is not NULL at startup. #353769.
+
+Translators
+
+ - Adam Weinberger (en_CA)
+ - Ani Peter (ml)
+ - Ankit Patel (gu)
+ - Daniel Nylander (sv)
+ - David Lodge (en_GB)
+ - Elnaz Sarbar (fa)
+ - Esteve Blanch Sanmartí (ca)
+ - Hendrik Brandt (de)
+ - Ilkka Tuohela (fi)
+ - Ivar Smolin (et)
+ - Jovan Naumovski (mk)
+ - Leonid Kanter (ru)
+ - Paweł Marciniak (pl)
+ - Rhys Jones (cy)
+ - Satoru SATOH (ja)
+ - Theppitak Karoonboonyanan (th)
+ - Woodman Tuen (zh_HK)
+ - Woodman Tuen (zh_TW)
+
 ==============
 Version 2.16.0
 ==============

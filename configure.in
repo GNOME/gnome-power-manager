@@ -212,7 +212,6 @@ if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
    AC_SUBST(LIBNOTIFY_CFLAGS)
    AC_SUBST(LIBNOTIFY_LIBS)
    AC_DEFINE(HAVE_LIBNOTIFY, 1, [Building with libnotify support]) 
-   echo $LIBNOTIFY_LIBS
 else
    have_libnotify=no
    AC_DEFINE(HAVE_LIBNOTIFY, 0, [Not building with libnotify support]) 
@@ -229,7 +228,6 @@ if $PKG_CONFIG --atleast-version $LIBGUNIQUEAPP_REQUIRED libguniqueapp; then
    AC_SUBST(LIBGUNIQUEAPP_CFLAGS)
    AC_SUBST(LIBGUNIQUEAPP_LIBS)
    AC_DEFINE(HAVE_LIBGUNIQUEAPP, 1, [Building with libguniqueapp support]) 
-   echo $LIBGUNIQUEAPP_LIBS
 else
    have_libguniqueapp=no
    AC_DEFINE(HAVE_LIBGUNIQUEAPP, 0, [Not building with libguniqueapp support]) 
