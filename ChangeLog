@@ -1,3 +1,9 @@
+2006-09-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-prefs-core.c: (prefs_setup_processor):
+	Setup the sliders before the combo-bosex else we re-enable the sliders
+	for the non-custom policy.
+
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
@@ -40,11 +46,11 @@
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
-	Update dbus dep to 0.92. 
+	Update dbus dep to 0.92.
 
 	* src/gpm-hal.c:
 	Remove obsolete dbus < 0.62 ifdef code.
-	
+
 	* src/gpm-info-data.c: (gpm_info_data_add_always):
 	guint can never be negative. Instead check for zero.
 
@@ -61,7 +67,7 @@
 	* help/C/figures/gpm-unplugged.png:
 	* help/C/figures/gs-prefs.png:
 	Update to reflect 2-16.
-	
+
 	* src/gpm-tray-icon.c: (libnotify_event):
 	Add in a note about the non-pointing libnotify bubbles.
 
@@ -99,7 +105,7 @@
 
 	* src/gpm-hal-monitor.c:
 	Fix hotplug add and remove of wireless mice.
-	
+
 	* src/gpm-power.c:
 	Don't express the decimal point for the / 7 csr scale.
 
@@ -394,8 +400,6 @@
 
 2006-08-25  Richard Hughes  <richard@hughsie.com>
 
-	reviewed by: <delete if not using a buddy>
-
 	* src/Makefile.am:
 	* src/gpm-info.c: (gpm_statistics_moo):
 	* src/gpm-info.h:
@@ -533,10 +537,10 @@
 	* src/gpm-prefs.h:
 	* data/gnome-power-manager.schemas.in:
 	Add a whole load of new keys for the cpufreq stuff.
-	
+
 	* help/C/gnome-power-manager.xml:
 	Start to document the cpufreq stuff (even tho nothing has hit CVS yet)
-	
+
 	* src/gpm-common.c:
 	* src/gpm-power.c:
 	* src/gpm-prefs-core.c:

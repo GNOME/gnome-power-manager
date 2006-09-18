@@ -1015,15 +1015,15 @@ prefs_setup_processor (GpmPrefs *prefs)
 		return;
 	}
 
-	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_ac_profile",
-					 GPM_PREF_AC_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
-	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_battery_profile",
-					 GPM_PREF_BATTERY_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
-
 	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_battery_custom",
 					  GPM_PREF_BATTERY_CPUFREQ_VALUE);
 	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_ac_custom",
 					  GPM_PREF_AC_CPUFREQ_VALUE);
+
+	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_ac_profile",
+					 GPM_PREF_AC_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_battery_profile",
+					 GPM_PREF_BATTERY_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
 }
 
 /** setup the actions page */
