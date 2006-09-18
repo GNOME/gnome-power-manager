@@ -484,6 +484,41 @@ gpm_dpms_set_timeouts (GpmDpms	 *dpms,
 	return ret;
 }
 
+/**
+ * gpm_dpms_method_from_string:
+ * @dpms_method: Method type, e.g. "off" or "staggered"
+ *
+ * Convert descriptive types to enumerated values.
+ **/
+GpmDpmsMethod
+gpm_dpms_method_from_string (const gchar *dpms_method)
+{
+	GpmDpmsMethod method;
+
+	/* default to unknown */	
+	method = GPM_DPMS_METHOD_UNKNOWN;
+	if (dpms_method == NULL) {
+		return method;
+	}
+	
+	/* convert descriptive types to enumerated values */
+	if (strcmp (dpms_method, "default") == 0) {
+		method = GPM_DPMS_METHOD_DEFAULT;
+	} else if (strcmp (dpms_method, "stagger") == 0) {
+		method = GPM_DPMS_METHOD_STAGGER;
+	} else if (strcmp (dpms_method, "standby") == 0) {
+		method = GPM_DPMS_METHOD_STANDBY;
+	} else if (strcmp (dpms_method, "suspend") == 0) {
+		method = GPM_DPMS_METHOD_SUSPEND;
+	} else if (strcmp (dpms_method, "off") == 0) {
+		method = GPM_DPMS_METHOD_OFF;
+	} else {
+		gpm_warning ("dpms_method '%s' not recognised", dpms_method);
+	}
+
+	return method;
+}
+
 GpmDpmsMode
 gpm_dpms_mode_from_string (const gchar *str)
 {

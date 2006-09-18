@@ -548,14 +548,14 @@ sync_dpms_policy (GpmManager *manager)
 	GError  *error;
 	gboolean res;
 	gboolean on_ac;
-	guint    timeout;
-	guint    standby;
-	guint    suspend;
-	guint    off;
+	guint    timeout = 0;
+	guint    standby = 0;
+	guint    suspend = 0;
+	guint    off = 0;
 	gchar   *dpms_method;
+	GpmDpmsMethod method;
 
 	error = NULL;
-
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
@@ -596,46 +596,53 @@ sync_dpms_policy (GpmManager *manager)
 		}
 	}
 
-	/* old policy was in seconds, warn the user if too small */
-	if (timeout < 60) {
-		gpm_warning ("standby timeout is invalid, please re-configure");
-		return;
-	}
+	/* convert the string types to standard types */
+	method = gpm_dpms_method_from_string (dpms_method);
+	g_free (dpms_method);
 
-	/* If we have no dpms_method, possible due to a schema problem */
-	if (dpms_method == NULL) {
+	/* check if method is valid */
+	if (method == GPM_DPMS_METHOD_UNKNOWN) {
 		g_warning ("DPMS method unknown. Possible schema problem!");
 		return;
 	}
 
+	/* choose a sensible default */
+	if (method == GPM_DPMS_METHOD_DEFAULT) {
+		gpm_debug ("choosing sensible default");
+		if (gpm_hal_power_is_laptop (manager->priv->hal_power)) {
+			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
+			method = GPM_DPMS_METHOD_OFF;
+		} else {
+			gpm_debug ("not laptop, so use GPM_DPMS_METHOD_STAGGER");
+			method = GPM_DPMS_METHOD_STAGGER;
+		}
+	}
+
 	/* Some monitors do not support certain suspend states, so we have to
 	 * provide a way to only use the one that works. */
-	if (strcmp (dpms_method, "default") == 0) {
+	if (method == GPM_DPMS_METHOD_STAGGER) {
 		/* suspend after one timeout, turn off after another */
 		standby = timeout;
 		suspend = timeout;
 		off     = timeout * 2;
-	} else if (strcmp (dpms_method, "standby") == 0) {
+	} else if (method == GPM_DPMS_METHOD_STANDBY) {
 		standby = timeout;
 		suspend = 0;
 		off     = 0;
-	} else if (strcmp (dpms_method, "suspend") == 0) {
+	} else if (method == GPM_DPMS_METHOD_SUSPEND) {
 		standby = 0;
 		suspend = timeout;
 		off     = 0;
-	} else if (strcmp (dpms_method, "off") == 0) {
+	} else if (method == GPM_DPMS_METHOD_OFF) {
 		standby = 0;
 		suspend = 0;
 		off     = timeout;
 	} else {
 		/* wtf? */
-		g_warning ("unknown dpms mode!");
-		g_free (dpms_method);
-		return;
+		gpm_warning ("unknown dpms mode!");
 	}
 
-	gpm_debug ("DPMS parameters %d %d %d, method '%s'\n", standby, suspend, off, dpms_method);
-	g_free (dpms_method);
+	gpm_debug ("DPMS parameters %d %d %d, method '%i'\n", standby, suspend, off, method);
 
 	error = NULL;
 	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);

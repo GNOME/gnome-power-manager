@@ -97,8 +97,7 @@ gpm_hal_power_is_laptop (GpmHalPower *hal_power)
 	/* always present */
 	gpm_hal_device_get_string (hal_power->priv->hal, HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
 	if (formfactor == NULL) {
-		gpm_debug ("system.formfactor not set! "
-			   "If you have PMU, please update HAL to get the latest fixes.");
+		gpm_debug ("system.formfactor not set!");
 		/* no need to free */
 		return FALSE;
 	}

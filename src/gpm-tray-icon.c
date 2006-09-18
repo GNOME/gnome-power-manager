@@ -437,7 +437,7 @@ gpm_tray_icon_constructor (GType		  type,
 					   "    <separator />"
 					   "    <menuitem action=\"TrayPreferences\" />"
 					   "    <menuitem action=\"TrayInfo\" />"
-					   "    <menuitem action=\"TrayStatistics\" />"
+/*					   "    <menuitem action=\"TrayStatistics\" />"*/
 					   "    <separator />"
 					   "    <menuitem action=\"TrayHelp\" />"
 					   "    <menuitem action=\"TrayAbout\" />"
@@ -541,8 +541,6 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
 	GtkWidget *popup;
 	popup = gtk_ui_manager_get_widget (GTK_UI_MANAGER (icon->priv->ui_manager),
 					   "/GpmTrayPopup");
-	gtk_menu_set_screen (GTK_MENU (popup),
-			     gtk_widget_get_screen (GTK_WIDGET (icon)));
 
 	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
 			gtk_status_icon_position_menu, status_icon,

@@ -1,5 +1,26 @@
 2006-09-18  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-dpms-x11.c:
+	* src/gpm-dpms.c:
+	Rename this file, to match the other module syntax names.
+
+	* src/gpm-dpms.h:
+	* src/gpm-dpms.c: (gpm_dpms_method_from_string)
+	* src/gpm-manager.c: (sync_dpms_policy):
+	Add gpm_dpms_method_from_string(), and try to do more sane things for
+	laptop hardware to try to fix bug #354726.
+
+	* src/gpm-hal-power.c: (gpm_hal_power_is_laptop):
+	Remove fixme that applied to an old version of HAL.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_popup_menu_cb)
+	Don't error when we right click. Also disable the statistics thing
+	for now as it doesn't do much.
+
+2006-09-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c: (prefs_setup_processor):
 	Setup the sliders before the combo-bosex else we re-enable the sliders
 	for the non-custom policy.

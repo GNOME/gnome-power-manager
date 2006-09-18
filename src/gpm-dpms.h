@@ -39,6 +39,15 @@ typedef enum {
 	GPM_DPMS_MODE_UNKNOWN
 } GpmDpmsMode;
 
+typedef enum {
+	GPM_DPMS_METHOD_DEFAULT,
+	GPM_DPMS_METHOD_STAGGER,
+	GPM_DPMS_METHOD_STANDBY,
+	GPM_DPMS_METHOD_SUSPEND,
+	GPM_DPMS_METHOD_OFF,
+	GPM_DPMS_METHOD_UNKNOWN
+} GpmDpmsMethod;
+
 typedef struct GpmDpmsPrivate GpmDpmsPrivate;
 
 typedef struct
@@ -96,6 +105,8 @@ gboolean	 gpm_dpms_set_mode	 	(GpmDpms	*dpms,
 
 const gchar	*gpm_dpms_mode_to_string	(GpmDpmsMode	 mode);
 GpmDpmsMode	 gpm_dpms_mode_from_string	(const gchar	*mode);
+
+GpmDpmsMethod	 gpm_dpms_method_from_string	(const gchar	*dpms_method);
 
 G_END_DECLS
 

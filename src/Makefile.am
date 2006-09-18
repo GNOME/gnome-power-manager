@@ -27,9 +27,9 @@ INCLUDES =						\
 	$(NULL)
 
 bin_PROGRAMS =						\
-	gnome-power-statistics				\
 	gnome-power-manager				\
 	gnome-power-preferences				\
+	gnome-power-statistics				\
 	$(NULL)
 
 noinst_PROGRAMS =					\
@@ -106,7 +106,7 @@ endif
 
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
-	gpm-dpms-x11.c					\
+	gpm-dpms.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
 	gpm-dbus-monitor.h				\
