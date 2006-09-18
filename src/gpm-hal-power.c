@@ -38,10 +38,6 @@ static void     gpm_hal_power_finalize   (GObject	   *object);
 
 #define GPM_HAL_POWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_POWER, GpmHalPowerPrivate))
 
-#define HALD_SERVICE		"org.freedesktop.PolicyKit"
-#define HALD_MANAGER_PATH		"/org/freedesktop/PolicyKit/Manager"
-#define HALD_MANAGER_INTERFACE	"org.freedesktop.PolicyKit.Manager"
-
 struct GpmHalPowerPrivate
 {
 	GpmProxy		*gproxy;

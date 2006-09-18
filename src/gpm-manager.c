@@ -285,7 +285,7 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 
 	*can = FALSE;
 	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
-					      GPM_PREF_CAN_SUSPEND, NULL);
+					  GPM_PREF_CAN_SUSPEND, NULL);
 	hal_ok = gpm_hal_power_can_suspend (manager->priv->hal_power);
 #ifdef HAVE_POLKIT
 	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
@@ -642,7 +642,7 @@ sync_dpms_policy (GpmManager *manager)
 		gpm_warning ("unknown dpms mode!");
 	}
 
-	gpm_debug ("DPMS parameters %d %d %d, method '%i'\n", standby, suspend, off, method);
+	gpm_debug ("DPMS parameters %d %d %d, method '%i'", standby, suspend, off, method);
 
 	error = NULL;
 	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);
@@ -1310,10 +1310,6 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean ret;
 	gboolean do_lock;
 	gboolean nm_sleep;
-	GpmPowerStatus status;
-	guint charge_before_suspend;
-	gint charge_difference;
-	gchar *message;
 
 	gpm_manager_allowed_suspend (manager, &allowed, NULL);
 
@@ -1338,14 +1334,6 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_networkmanager_sleep ();
 	}
 
-
-	/* We save the current charge in mWh so we can see how much power we
-	   lost or gained over the suspend cycle */
-	gpm_power_get_battery_status (manager->priv->power,
-				      GPM_POWER_KIND_PRIMARY,
-				      &status);
-	charge_before_suspend = status.current_charge;
-
 	/* Do the suspend */
 	ret = gpm_hal_power_suspend (manager->priv->hal_power, 0);
 	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
@@ -1353,25 +1341,6 @@ gpm_manager_suspend (GpmManager *manager,
 
 	/* We need to refresh all the power caches */
 	gpm_power_update_all (manager->priv->power);
-
-	/* Get the difference in charge and add it to the event log */
-	gpm_power_get_battery_status (manager->priv->power,
-				      GPM_POWER_KIND_PRIMARY,
-				      &status);
-	charge_difference = status.current_charge - charge_before_suspend;
-	if (charge_difference != 0) {
-		if (charge_difference > 0) {
-			message = g_strdup_printf (_("Battery charged %imWh during suspend"),
-						   charge_difference);
-		} else {
-			message = g_strdup_printf (_("Battery discharged %imWh during suspend"),
-						   -charge_difference);
-		}
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
-				    message);
-		g_free (message);
-	}
 
 	if (! ret) {
 		gboolean show_notify;
@@ -1385,6 +1354,7 @@ gpm_manager_suspend (GpmManager *manager,
 						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
 		if (show_notify) {
 			const gchar *title;
+			gchar *message;
 			message = g_strdup_printf (_("Your computer failed to %s.\n"
 						     "Check the help file for common problems."),
 						     _("suspend"));
@@ -2635,17 +2605,6 @@ gpm_manager_tray_icon_show_info (GpmManager   *manager,
 }
 
 /**
- * tray_icon_destroyed:
- **/
-static void
-tray_icon_destroyed (GtkObject *object, gpointer user_data)
-{
-	GpmManager *manager = user_data;
-
-	manager->priv->tray_icon = gpm_tray_icon_new ();
-}
-
-/**
  * screensaver_auth_request_cb:
  * @manager: This manager class instance
  * @auth: If we are trying to authenticate
@@ -2806,8 +2765,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
-	g_signal_connect (G_OBJECT (manager->priv->tray_icon), "destroy",
-			  G_CALLBACK (tray_icon_destroyed), manager);
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
