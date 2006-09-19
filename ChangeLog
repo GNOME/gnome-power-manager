@@ -1,5 +1,11 @@
 2006-09-19  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	Remove -Wshadow as it causes compilation failure on YDL-4.1.
+	Fixes #356667.
+
+2006-09-19  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal-monitor.c:
 	* src/gpm-hal.c:
 	* src/gpm-hal.h:
