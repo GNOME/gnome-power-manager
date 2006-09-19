@@ -19,38 +19,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPMGRAPH_H
-#define __GPMGRAPH_H
+#ifndef __GPMSTATISTICS_H
+#define __GPMSTATISTICS_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_GRAPH		(gpm_graph_get_type ())
-#define GPM_GRAPH(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_GRAPH, GpmGraph))
-#define GPM_GRAPH_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_GRAPH, GpmGraphClass))
-#define GPM_IS_GRAPH(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_GRAPH))
-#define GPM_IS_GRAPH_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_GRAPH))
-#define GPM_GRAPH_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_GRAPH, GpmGraphClass))
+#define GPM_TYPE_GRAPH			(gpm_statistics_get_type ())
+#define GPM_STATISTICS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_GRAPH, GpmStatistics))
+#define GPM_STATISTICS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_GRAPH, GpmStatisticsClass))
+#define GPM_IS_GRAPH(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_GRAPH))
+#define GPM_IS_GRAPH_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_GRAPH))
+#define GPM_STATISTICS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_GRAPH, GpmStatisticsClass))
 
-typedef struct GpmGraphPrivate GpmGraphPrivate;
+typedef struct GpmStatisticsPrivate GpmStatisticsPrivate;
 
 typedef struct
 {
 	GObject		 parent;
-	GpmGraphPrivate *priv;
-} GpmGraph;
+	GpmStatisticsPrivate *priv;
+} GpmStatistics;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* action_help)			(GpmGraph	*graph);
-	void		(* action_close)		(GpmGraph	*graph);
-} GpmGraphClass;
+	void		(* action_help)			(GpmStatistics	*graph);
+	void		(* action_close)		(GpmStatistics	*graph);
+} GpmStatisticsClass;
 
-GType		 gpm_graph_get_type			(void);
-GpmGraph	*gpm_graph_new				(void);
+GType		 gpm_statistics_get_type		(void);
+GpmStatistics	*gpm_statistics_new			(void);
 
 G_END_DECLS
 
-#endif	/* __GPMGRAPH_H */
+#endif	/* __GPMSTATISTICS_H */

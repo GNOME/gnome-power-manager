@@ -37,9 +37,9 @@ noinst_PROGRAMS =					\
 	$(NULL)
 
 gnome_power_statistics_SOURCES =			\
-	gpm-graph.c					\
-	gpm-graph-core.h				\
-	gpm-graph-core.c				\
+	gpm-statistics.c				\
+	gpm-statistics-core.h				\
+	gpm-statistics-core.c				\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
 	gpm-marshal.h					\

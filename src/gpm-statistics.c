@@ -31,16 +31,16 @@
 
 #include "gpm-prefs.h"
 #include "gpm-debug.h"
-#include "gpm-graph-core.h"
+#include "gpm-statistics-core.h"
 
 /**
- * gpm_graph_help_cb
- * @graph: This graph class instance
+ * gpm_statistics_help_cb
+ * @statistics: This statistics class instance
  *
  * What to do when help is requested
  **/
 static void
-gpm_graph_help_cb (GpmGraph *graph)
+gpm_statistics_help_cb (GpmStatistics *statistics)
 {
 	GError *error = NULL;
 
@@ -53,15 +53,15 @@ gpm_graph_help_cb (GpmGraph *graph)
 }
 
 /**
- * gpm_graph_close_cb
- * @graph: This graph class instance
+ * gpm_statistics_close_cb
+ * @statistics: This statistics class instance
  *
  * What to do when we are asked to close for whatever reason
  **/
 static void
-gpm_graph_close_cb (GpmGraph *graph)
+gpm_statistics_close_cb (GpmStatistics *statistics)
 {
-	g_object_unref (graph);
+	g_object_unref (statistics);
 	exit (0);
 }
 
@@ -74,7 +74,7 @@ main (int argc, char **argv)
 	gboolean	 verbose = FALSE;
 	GOptionContext  *context;
  	GnomeProgram    *program;
-	GpmGraph	*graph = NULL;
+	GpmStatistics	*statistics = NULL;
 	GMainLoop       *loop;
 
 	const GOptionEntry options[] = {
@@ -101,18 +101,18 @@ main (int argc, char **argv)
 
 	gpm_debug_init (verbose);
 
-	graph = gpm_graph_new ();
+	statistics = gpm_statistics_new ();
 
-	g_signal_connect (graph, "action-help",
-			  G_CALLBACK (gpm_graph_help_cb), NULL);
-	g_signal_connect (graph, "action-close",
-			  G_CALLBACK (gpm_graph_close_cb), NULL);
+	g_signal_connect (statistics, "action-help",
+			  G_CALLBACK (gpm_statistics_help_cb), NULL);
+	g_signal_connect (statistics, "action-close",
+			  G_CALLBACK (gpm_statistics_close_cb), NULL);
 
 	loop = g_main_loop_new (NULL, FALSE);
 
 	g_main_loop_run (loop);
 
-	g_object_unref (graph);
+	g_object_unref (statistics);
 
 	gpm_debug_shutdown ();
 

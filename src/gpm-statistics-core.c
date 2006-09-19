@@ -33,18 +33,18 @@
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-graph-core.h"
+#include "gpm-statistics-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-graph-widget.h"
 #include "gpm-info-data.h"
 #include "gpm-proxy.h"
 
-static void     gpm_graph_class_init (GpmGraphClass *klass);
-static void     gpm_graph_init       (GpmGraph      *graph);
-static void     gpm_graph_finalize   (GObject	    *object);
+static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
+static void     gpm_statistics_init       (GpmStatistics      *graph);
+static void     gpm_statistics_finalize   (GObject	    *object);
 
-#define GPM_GRAPH_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH, GpmGraphPrivate))
+#define GPM_STATISTICS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH, GpmStatisticsPrivate))
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_PATH_STATS		"/org/gnome/PowerManager/Statistics"
@@ -59,7 +59,7 @@ static void     gpm_graph_finalize   (GObject	    *object);
 #define ACTION_TIME_TEXT	_("Estimated Time History")
 
 
-struct GpmGraphPrivate
+struct GpmStatisticsPrivate
 {
 	GladeXML		*glade_xml;
 	GConfClient		*gconf_client;
@@ -75,7 +75,7 @@ enum {
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
-G_DEFINE_TYPE (GpmGraph, gpm_graph, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmStatistics, gpm_statistics, G_TYPE_OBJECT)
 
 /* The text that should appear in the action combo boxes */
 #define ACTION_INTERACTIVE_TEXT		_("Ask me")
@@ -90,21 +90,21 @@ G_DEFINE_TYPE (GpmGraph, gpm_graph, G_TYPE_OBJECT)
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
 /**
- * gpm_graph_class_init:
+ * gpm_statistics_class_init:
  * @klass: This graph class instance
  **/
 static void
-gpm_graph_class_init (GpmGraphClass *klass)
+gpm_statistics_class_init (GpmStatisticsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_graph_finalize;
-	g_type_class_add_private (klass, sizeof (GpmGraphPrivate));
+	object_class->finalize = gpm_statistics_finalize;
+	g_type_class_add_private (klass, sizeof (GpmStatisticsPrivate));
 
 	signals [ACTION_HELP] =
 		g_signal_new ("action-help",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmGraphClass, action_help),
+			      G_STRUCT_OFFSET (GpmStatisticsClass, action_help),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID,
@@ -113,7 +113,7 @@ gpm_graph_class_init (GpmGraphClass *klass)
 		g_signal_new ("action-close",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmGraphClass, action_close),
+			      G_STRUCT_OFFSET (GpmStatisticsClass, action_close),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID,
@@ -121,43 +121,43 @@ gpm_graph_class_init (GpmGraphClass *klass)
 }
 
 /**
- * gpm_graph_help_cb:
+ * gpm_statistics_help_cb:
  * @widget: The GtkWidget object
  * @graph: This graph class instance
  **/
 static void
-gpm_graph_help_cb (GtkWidget *widget,
-		   GpmGraph  *graph)
+gpm_statistics_help_cb (GtkWidget *widget,
+		   GpmStatistics  *graph)
 {
 	gpm_debug ("emitting action-help");
 	g_signal_emit (graph, signals [ACTION_HELP], 0);
 }
 
 /**
- * gpm_graph_close_cb:
+ * gpm_statistics_close_cb:
  * @widget: The GtkWidget object
  * @graph: This graph class instance
  **/
 static void
-gpm_graph_close_cb (GtkWidget	*widget,
-		    GpmGraph	*graph)
+gpm_statistics_close_cb (GtkWidget	*widget,
+		    GpmStatistics	*graph)
 {
 	gpm_debug ("emitting action-close");
 	g_signal_emit (graph, signals [ACTION_CLOSE], 0);
 }
 
 /**
- * gpm_graph_delete_event_cb:
+ * gpm_statistics_delete_event_cb:
  * @widget: The GtkWidget object
  * @event: The event type, unused.
  * @graph: This graph class instance
  **/
 static gboolean
-gpm_graph_delete_event_cb (GtkWidget	*widget,
+gpm_statistics_delete_event_cb (GtkWidget	*widget,
 			  GdkEvent	*event,
-			  GpmGraph	*graph)
+			  GpmStatistics	*graph)
 {
-	gpm_graph_close_cb (widget, graph);
+	gpm_statistics_close_cb (widget, graph);
 	return FALSE;
 }
 
@@ -172,7 +172,7 @@ gconf_key_changed_cb (GConfClient *client,
 		      GConfEntry  *entry,
 		      gpointer	   user_data)
 {
-	GpmGraph *graph = GPM_GRAPH (user_data);
+	GpmStatistics *graph = GPM_STATISTICS (user_data);
 	gboolean  enabled;
 
 	gpm_debug ("Key changed %s", entry->key);
@@ -205,7 +205,7 @@ gpm_graph_widget_custom_handler (GladeXML *xml,
 			  gpointer user_data)
 {
 	GtkWidget *widget = NULL;
-	if (strcmp ("gpm_graph_new", func_name) == 0) {
+	if (strcmp ("gpm_statistics_new", func_name) == 0) {
 		widget = gpm_graph_widget_new ();
 		return widget;
 	}
@@ -213,7 +213,7 @@ gpm_graph_widget_custom_handler (GladeXML *xml,
 }
 
 static void
-gpm_graph_core_data_add_always (GPtrArray   *array,
+gpm_statistics_core_data_add_always (GPtrArray   *array,
 			  guint	       time_secs,
 			  guint	       value,
 			  guint	       colour,
@@ -254,13 +254,13 @@ convert_ptr_array_to_list (GPtrArray *array)
 }
 
 /**
- * gpm_graph_checkbox_events_cb:
+ * gpm_statistics_checkbox_events_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_graph_checkbox_events_cb (GtkWidget *widget,
-			      GpmGraph  *graph)
+gpm_statistics_checkbox_events_cb (GtkWidget *widget,
+			      GpmStatistics  *graph)
 {
 	gboolean checked;
 	GPtrArray *array = g_ptr_array_new ();
@@ -277,8 +277,8 @@ gpm_graph_checkbox_events_cb (GtkWidget *widget,
 	}
 
 	//todo, get from DBUS
-	gpm_graph_core_data_add_always (array, 15, 23, 2, NULL);
-	gpm_graph_core_data_add_always (array, 20, 29, 1, NULL);
+	gpm_statistics_core_data_add_always (array, 15, 23, 2, NULL);
+	gpm_statistics_core_data_add_always (array, 20, 29, 1, NULL);
 
 	list = convert_ptr_array_to_list (array);
 	g_ptr_array_free (array, FALSE);
@@ -287,18 +287,16 @@ gpm_graph_checkbox_events_cb (GtkWidget *widget,
 
 	/* only enable the dots if the checkbox is checked */
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (graph->priv->graph_widget), TRUE);
-//	gtk_widget_hide (GTK_WIDGET (graph->priv->graph_widget));
-//	gtk_widget_show (GTK_WIDGET (graph->priv->graph_widget));
 }
 
 /**
- * gpm_graph_checkbox_legend_cb:
+ * gpm_statistics_checkbox_legend_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_graph_checkbox_legend_cb (GtkWidget *widget,
-			    GpmGraph  *graph)
+gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
+			    GpmStatistics  *graph)
 {
 	gboolean checked;
 
@@ -309,13 +307,13 @@ gpm_graph_checkbox_legend_cb (GtkWidget *widget,
 }
 
 /**
- * gpm_graph_convert_strv_to_glist:
+ * gpm_statistics_convert_strv_to_glist:
  *
  * @devices: The returned devices in strv format
  * Return value: A GList populated with the UDI's
  **/
 static GList *
-gpm_graph_convert_strv_to_glist (gchar **array)
+gpm_statistics_convert_strv_to_glist (gchar **array)
 {
 	GList *list = NULL;
 	guint i = 0;
@@ -327,7 +325,7 @@ gpm_graph_convert_strv_to_glist (gchar **array)
 }
 
 static gboolean
-gpm_graph_find_types (GpmGraph *graph,
+gpm_statistics_find_types (GpmStatistics *graph,
 		      GList   **list)
 {
 	GError *error = NULL;
@@ -353,18 +351,18 @@ gpm_graph_find_types (GpmGraph *graph,
 		retval = FALSE;
 	}
 
-	*list = gpm_graph_convert_strv_to_glist (strlist);
+	*list = gpm_statistics_convert_strv_to_glist (strlist);
 
 	return retval;
 }
 
 /**
- * gpm_graph_free_list_strings:
+ * gpm_statistics_free_list_strings:
  *
  * Frees a GList of strings
  **/
 static void
-gpm_graph_free_list_strings (GList *list)
+gpm_statistics_free_list_strings (GList *list)
 {
 	GList *l;
 	gchar *str;
@@ -378,8 +376,8 @@ gpm_graph_free_list_strings (GList *list)
 }
 
 static void
-gpm_graph_type_combo_changed_cb (GtkWidget *widget,
-				 GpmGraph  *graph)
+gpm_statistics_type_combo_changed_cb (GtkWidget *widget,
+				 GpmStatistics  *graph)
 {
 	GPtrArray *array = g_ptr_array_new ();
 	GList *list = NULL;
@@ -402,10 +400,10 @@ gpm_graph_type_combo_changed_cb (GtkWidget *widget,
 	gpm_debug ("Changing graph type to %s", type);
 
 	//todo, get from DBUS
-	gpm_graph_core_data_add_always (array, 10, 20, 2, NULL);
-	gpm_graph_core_data_add_always (array, 25, 25, 2, NULL);
-	gpm_graph_core_data_add_always (array, 32, 30, 3, NULL);
-	gpm_graph_core_data_add_always (array, 40, 50, 3, NULL);
+	gpm_statistics_core_data_add_always (array, 10, 20, 2, NULL);
+	gpm_statistics_core_data_add_always (array, 25, 25, 2, NULL);
+	gpm_statistics_core_data_add_always (array, 32, 30, 3, NULL);
+	gpm_statistics_core_data_add_always (array, 40, 50, 3, NULL);
 
 	list = convert_ptr_array_to_list (array);
 	g_ptr_array_free (array, FALSE);
@@ -416,7 +414,7 @@ gpm_graph_type_combo_changed_cb (GtkWidget *widget,
 }
 
 static void
-populate_graph_types (GpmGraph *graph, GtkWidget *widget)
+populate_graph_types (GpmStatistics *graph, GtkWidget *widget)
 {
 	GList *list = NULL;
 	GList *l;
@@ -424,13 +422,13 @@ populate_graph_types (GpmGraph *graph, GtkWidget *widget)
 	gchar *type_localized;
 	gboolean ret;
 	
-	ret = gpm_graph_find_types (graph, &list);
+	ret = gpm_statistics_find_types (graph, &list);
 	if (ret == FALSE) {
 		return;
 	}
 
 	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_graph_type_combo_changed_cb),
+			  G_CALLBACK (gpm_statistics_type_combo_changed_cb),
 			  graph);
 
 	for (l=list; l != NULL; l=l->next) {
@@ -446,22 +444,22 @@ populate_graph_types (GpmGraph *graph, GtkWidget *widget)
 		}
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), type_localized);
 	}
-	gpm_graph_free_list_strings (list);
+	gpm_statistics_free_list_strings (list);
 
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 }
 
 /**
- * gpm_graph_init:
+ * gpm_statistics_init:
  * @graph: This graph class instance
  **/
 static void
-gpm_graph_init (GpmGraph *graph)
+gpm_statistics_init (GpmStatistics *graph)
 {
 	GtkWidget    *main_window;
 	GtkWidget    *widget;
 
-	graph->priv = GPM_GRAPH_GET_PRIVATE (graph);
+	graph->priv = GPM_STATISTICS_GET_PRIVATE (graph);
 
 	graph->priv->gconf_client = gconf_client_get_default ();
 
@@ -492,15 +490,15 @@ gpm_graph_init (GpmGraph *graph)
 
 	/* Get the main window quit */
 	g_signal_connect (main_window, "delete_event",
-			  G_CALLBACK (gpm_graph_delete_event_cb), graph);
+			  G_CALLBACK (gpm_statistics_delete_event_cb), graph);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_graph_close_cb), graph);
+			  G_CALLBACK (gpm_statistics_close_cb), graph);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "button_help");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_graph_help_cb), graph);
+			  G_CALLBACK (gpm_statistics_help_cb), graph);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "custom_graph");
 	gtk_widget_set_size_request (widget, 600, 300);
@@ -521,43 +519,43 @@ gpm_graph_init (GpmGraph *graph)
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "checkbutton_events");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_graph_checkbox_events_cb), graph);
+			  G_CALLBACK (gpm_statistics_checkbox_events_cb), graph);
 
 	widget = glade_xml_get_widget (graph->priv->glade_xml, "checkbutton_legend");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_graph_checkbox_legend_cb), graph);
+			  G_CALLBACK (gpm_statistics_checkbox_legend_cb), graph);
 
 	gtk_widget_show (main_window);
 }
 
 /**
- * gpm_graph_finalize:
+ * gpm_statistics_finalize:
  * @object: This graph class instance
  **/
 static void
-gpm_graph_finalize (GObject *object)
+gpm_statistics_finalize (GObject *object)
 {
-	GpmGraph *graph;
+	GpmStatistics *graph;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_GRAPH (object));
 
-	graph = GPM_GRAPH (object);
-	graph->priv = GPM_GRAPH_GET_PRIVATE (graph);
+	graph = GPM_STATISTICS (object);
+	graph->priv = GPM_STATISTICS_GET_PRIVATE (graph);
 
 	g_object_unref (graph->priv->gconf_client);
 	g_object_unref (graph->priv->gproxy);
 
-	G_OBJECT_CLASS (gpm_graph_parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_statistics_parent_class)->finalize (object);
 }
 
 /**
- * gpm_graph_new:
- * Return value: new GpmGraph instance.
+ * gpm_statistics_new:
+ * Return value: new GpmStatistics instance.
  **/
-GpmGraph *
-gpm_graph_new (void)
+GpmStatistics *
+gpm_statistics_new (void)
 {
-	GpmGraph *graph;
+	GpmStatistics *graph;
 	graph = g_object_new (GPM_TYPE_GRAPH, NULL);
-	return GPM_GRAPH (graph);
+	return GPM_STATISTICS (graph);
 }
