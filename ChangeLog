@@ -1,3 +1,12 @@
+2006-09-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dbus-monitor.c:
+	Reduce the debugging level, it's a bit verbose.
+
+	* src/gpm-main.c:
+	Remove a potential null-dereference, spotted by Joseph Sacco.
+	This fixes #356667 where g-p-m would crash on startup.
+
 2006-09-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-power.c:

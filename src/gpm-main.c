@@ -122,19 +122,19 @@ timed_exit_cb (GMainLoop *loop)
 int
 main (int argc, char *argv[])
 {
-	GMainLoop       *loop;
-	GnomeClient     *master;
+	GMainLoop *loop;
+	GnomeClient *master;
 	GnomeClientFlags flags;
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
-	gboolean	 verbose = FALSE;
-	gboolean	 no_daemon = FALSE;
-	gboolean	 timed_exit = FALSE;
-	GpmManager      *manager = NULL;
-	GError		*error = NULL;
-	GOptionContext  *context;
- 	GnomeProgram    *program;
-	char **debugoptions;
+	gboolean verbose = FALSE;
+	gboolean no_daemon = FALSE;
+	gboolean timed_exit = FALSE;
+	GpmManager *manager = NULL;
+	GError *error = NULL;
+	GOptionContext *context;
+ 	GnomeProgram *program;
+	char **debugoptions = NULL;
 	int i;
 
 	const GOptionEntry options[] = {
@@ -183,8 +183,10 @@ main (int argc, char *argv[])
 	gpm_debug_init (verbose);
 
 	/* Add all of the options specified on the --debug line */
-	for (i = 0; debugoptions[i]; i++) {
-		gpm_add_debug_option (debugoptions[i]);
+	if (debugoptions) {
+		for (i = 0; debugoptions[i]; i++) {
+			gpm_add_debug_option (debugoptions[i]);
+		}
 	}
 
 	/* check dbus connections, exit if not valid */

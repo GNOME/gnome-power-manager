@@ -93,7 +93,6 @@ dbus_noc_session_cb (DBusGProxy     *proxy,
 		     const gchar    *new,
 		     GpmDbusMonitor *monitor)
 {
-	gpm_debug ("emitting noc-session : %s (%s->%s)", name, prev, new);
 	g_signal_emit (monitor, signals [NOC_SESSON], 0, name, prev, new);
 }
 
@@ -104,7 +103,6 @@ dbus_noc_system_cb (DBusGProxy     *proxy,
 		    const gchar    *new,
 		    GpmDbusMonitor *monitor)
 {
-	gpm_debug ("emitting noc-system : %s (%s->%s)", name, prev, new);
 	g_signal_emit (monitor, signals [NOC_SYSTEM], 0, name, prev, new);
 }
 
