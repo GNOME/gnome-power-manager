@@ -543,11 +543,13 @@ watch_device_properties_modified_cb (DBusGProxy *proxy,
  *
  * @udi: The HAL UDI
  *
- * Watch the specified device, so it emits device-property-modified
+ * Watch the specified device, so it emits device-property-modified and
+ * adds to the gpm cache so we don't get asked to add it again.
  */
 gboolean
 gpm_hal_device_watch_propery_modified (GpmHal      *hal,
-				       const gchar *udi)
+				       const gchar *udi,
+				       gboolean     force)
 {
 	DBusGProxy *proxy;
 	GError     *error = NULL;
@@ -558,7 +560,7 @@ gpm_hal_device_watch_propery_modified (GpmHal      *hal,
 
 	/* Check we are not already monitoring this device */
 	proxy = g_hash_table_lookup (hal->priv->watch_device_property_modified, udi);
-	if (proxy != NULL) {
+	if (force == FALSE && proxy != NULL) {
 		gpm_debug ("Device is already being watched for PropertyModified: %s", udi);
 		return FALSE;
 	}
@@ -624,7 +626,8 @@ watch_device_condition_cb (DBusGProxy  *proxy,
  */
 gboolean
 gpm_hal_device_watch_condition (GpmHal      *hal,
-				const gchar *udi)
+				const gchar *udi,
+				gboolean     force)
 {
 	DBusGProxy *proxy;
 	GError     *error = NULL;
@@ -634,7 +637,7 @@ gpm_hal_device_watch_condition (GpmHal      *hal,
 
 	/* Check we are not already monitoring this device */
 	proxy = g_hash_table_lookup (hal->priv->watch_device_condition, udi);
-	if (proxy != NULL) {
+	if (force == FALSE && proxy != NULL) {
 		gpm_debug ("Device is already being watched for NewCondition: %s", udi);
 		return FALSE;
 	}
@@ -650,7 +653,6 @@ gpm_hal_device_watch_condition (GpmHal      *hal,
 		return FALSE;
 	}
 	g_hash_table_insert (hal->priv->watch_device_condition, g_strdup (udi), proxy);
-
 
 	dbus_g_object_register_marshaller (gpm_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING,
@@ -891,6 +893,40 @@ gpm_hal_new_capability_cb (DBusGProxy  *proxy,
 }
 
 /**
+ * reattach_property_modified_in_hash:
+ *
+ * @udi: The HAL UDI
+ *
+ * HashFunc so we can remove all the device-propery-modified devices
+ */
+static void
+reattach_property_modified_in_hash (const gchar *udi,
+				    gpointer     value,
+				    GpmHal      *hal)
+{
+	/* force the new proxy as DBUS has invalidaded the old ones */
+	g_debug ("reattach property-modified %s", udi);
+	gpm_hal_device_watch_propery_modified (hal, udi, TRUE);
+}
+
+/**
+ * reattach_condition_in_hash:
+ *
+ * @udi: The HAL UDI
+ *
+ * HashFunc so we can remove all the device-propery-modified devices
+ */
+static void
+reattach_condition_in_hash (const gchar *udi,
+				    gpointer     value,
+				    GpmHal      *hal)
+{
+	/* force the new proxy as DBUS has invalidaded the old ones */
+	g_debug ("reattach condition %s", udi);
+	gpm_hal_device_watch_condition (hal, udi, TRUE);
+}
+
+/**
  * gpm_hal_proxy_connect_more:
  *
  * @hal: This class instance
@@ -929,7 +965,15 @@ gpm_hal_proxy_connect_more (GpmHal *hal)
 	dbus_g_proxy_connect_signal (proxy, "NewCapability",
 				     G_CALLBACK (gpm_hal_new_capability_cb), hal, NULL);
 
-/*emit daemon stop!*/
+	/* we need to re-register anything in:
+	   - hal->priv->watch_device_condition
+	   - hal->priv->watch_property_modified
+	 */
+	g_hash_table_foreach (hal->priv->watch_device_property_modified,
+			      (GHFunc) reattach_property_modified_in_hash, hal);
+	g_hash_table_foreach (hal->priv->watch_device_condition,
+			      (GHFunc) reattach_condition_in_hash, hal);
+
 	return TRUE;
 }
 
@@ -974,7 +1018,6 @@ proxy_status_cb (DBusGProxy *proxy,
 		 GpmHal     *hal)
 {
 	g_return_if_fail (GPM_IS_HAL (hal));
-
 	if (status) {
 		gpm_hal_proxy_connect_more (hal);
 	} else {
@@ -1009,8 +1052,7 @@ gpm_hal_init (GpmHal *hal)
 				  HAL_DBUS_INTERFACE_MANAGER);
 
 	g_signal_connect (hal->priv->gproxy, "proxy-status",
-			  G_CALLBACK (proxy_status_cb),
-			  hal);
+			  G_CALLBACK (proxy_status_cb), hal);
 
 	hal->priv->watch_device_property_modified = g_hash_table_new (g_str_hash, g_str_equal);
 	hal->priv->watch_device_condition = g_hash_table_new (g_str_hash, g_str_equal);

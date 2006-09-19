@@ -97,7 +97,7 @@ gpm_proxy_connect (GpmProxy *gproxy)
 	}
 
 	gpm_debug ("emitting proxy-status TRUE: %s", gproxy->priv->service);
-	g_signal_emit (gproxy, signals [PROXY_STATUS], 0, FALSE);
+	g_signal_emit (gproxy, signals [PROXY_STATUS], 0, TRUE);
 
 	return TRUE;
 }

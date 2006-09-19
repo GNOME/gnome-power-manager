@@ -1,5 +1,19 @@
 2006-09-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-monitor.c:
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Bullet-proof the hal interface so we automatically connect up the
+	device DeviceCondition and PropertyChanged on HAL restart.
+	This fixes #349842 where HAL wasn't detecting the charge correctly
+	on resume. Thanks to Pascal Terjan for help with the bug.
+
+	* src/gpm-proxy.c:
+	Fix a silly typo where we were emmiting PROXY_STATUS FALSE on
+	both connection and disconnection.
+
+2006-09-19  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-dbus-monitor.c:
 	Reduce the debugging level, it's a bit verbose.
 

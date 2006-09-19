@@ -282,7 +282,7 @@ static void
 watch_add_battery (GpmHalMonitor *monitor,
 		   const gchar   *udi)
 {
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
+	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
 
 	gpm_debug ("emitting battery-added : %s", udi);
 	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
@@ -297,8 +297,8 @@ static void
 watch_add_button (GpmHalMonitor *monitor,
 		  const gchar   *udi)
 {
-	gpm_hal_device_watch_condition (monitor->priv->hal, udi);
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
+	gpm_hal_device_watch_condition (monitor->priv->hal, udi, FALSE);
+	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
 }
 
 /**
@@ -310,7 +310,7 @@ static void
 watch_add_ac_adapter (GpmHalMonitor *monitor,
 		      const gchar   *udi)
 {
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi);
+	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
 }
 
 /**

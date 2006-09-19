@@ -120,9 +120,11 @@ gint		 gpm_hal_num_devices_of_capability_with_value (GpmHal	*hal,
 void		 gpm_hal_free_capability		(GpmHal		*hal,
 							 gchar		**value);
 gboolean	 gpm_hal_device_watch_condition		(GpmHal		*hal,
-							 const char	*udi);
+							 const char	*udi,
+							 gboolean	 force);
 gboolean	 gpm_hal_device_watch_propery_modified	(GpmHal		*hal,
-							 const char	*udi);
+							 const char	*udi,
+							 gboolean	 force);
 gboolean	 gpm_hal_device_remove_condition	(GpmHal		*hal,
 							 const char	*udi);
 gboolean	 gpm_hal_device_remove_propery_modified	(GpmHal		*hal,
