@@ -29,7 +29,7 @@
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-help.h>
 
-#include "gpm-prefs.h"
+#include "gpm-gconf.h"
 #include "gpm-debug.h"
 #include "gpm-statistics-core.h"
 

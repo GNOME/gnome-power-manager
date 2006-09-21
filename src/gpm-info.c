@@ -40,7 +40,7 @@
 #include "gpm-hal.h"
 #include "gpm-hal-power.h"
 #include "gpm-power.h"
-#include "gpm-prefs.h"
+#include "gpm-gconf.h"
 #include "gpm-graph-widget.h"
 #include "gpm-stock-icons.h"
 

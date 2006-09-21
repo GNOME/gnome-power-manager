@@ -35,6 +35,7 @@
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
+#include "gpm-gconf.h"
 #include "gpm-hal.h"
 #include "gpm-hal-cpufreq.h"
 #include "gpm-prefs-core.h"

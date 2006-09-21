@@ -43,6 +43,7 @@
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
+#include "gpm-gconf.h"
 #include "gpm-screensaver.h"
 #include "gpm-networkmanager.h"
 

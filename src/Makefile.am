@@ -44,6 +44,7 @@ gnome_power_statistics_SOURCES =			\
 	gpm-info-data.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
+	gpm-gconf.h					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
@@ -79,6 +80,7 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
 	gpm-prefs-core.c				\
+	gpm-gconf.h					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
@@ -115,6 +117,7 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
+	gpm-gconf.h					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-proxy.h					\

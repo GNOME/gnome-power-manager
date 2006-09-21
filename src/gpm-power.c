@@ -39,7 +39,7 @@
 #include "gpm-power.h"
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
-#include "gpm-prefs.h"
+#include "gpm-gconf.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);

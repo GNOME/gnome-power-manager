@@ -1,5 +1,20 @@
 2006-09-21  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-gconf.h:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-prefs.h:
+	* src/gpm-statistics-core.c:
+	* src/gpm-statistics.c:
+	Move the gconf keys out of gpm-prefs.h into a new file gpm-gconf.h
+	There are no good reasons to have the keys in the prefs header.
+
+2006-09-21  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs.h:
 	* data/gnome-power-manager.schemas.in:
 	Add statistics_show_legend and statistics_show_events so we have

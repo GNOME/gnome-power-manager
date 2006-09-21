@@ -33,6 +33,7 @@
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
+#include "gpm-gconf.h"
 #include "gpm-statistics-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
