@@ -1,3 +1,24 @@
+2006-09-21  Richard Hughes  <richard@hughsie.com>
+
+	* TODO:
+	Remove dbus-send cruft.
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	Add a new function gpm_graph_widget_string_to_axis_type().
+
+	* src/gpm-hal-power.c: (gpm_hal_handle_error):
+	Check another possible execption. It may make the suspend-failed
+	warning go away.
+
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-interface-statistics.xml:
+	* src/gpm-statistics-core.c:
+	* src/gpm-statistics-core.h:
+	Do some more to the statistics interface. It actually sort-of runs
+	but it's pretty rough code. And it leaks memory like a bitch.
+
 2006-09-19  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.in:

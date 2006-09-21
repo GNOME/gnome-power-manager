@@ -21,8 +21,6 @@
 
 #include "config.h"
 
-#define USE_DBUS_COMPAT			TRUE
-
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
@@ -33,9 +31,7 @@
 #include <string.h>
 #include <time.h>
 #include <gconf/gconf-client.h>
-#ifdef USE_DBUS_COMPAT
 #include <dbus/dbus-gtype-specialized.h>
-#endif
 
 #include "gpm-info.h"
 #include "gpm-info-data.h"
@@ -55,6 +51,11 @@ static void     gpm_info_finalize   (GObject      *object);
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
 #define GPM_INFO_DATA_POLL		5	/* seconds */
+
+#define GPM_DBUS_STRUCT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
+#define GPM_DBUS_STRUCT_INT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
 
 struct GpmInfoPrivate
 {
@@ -116,12 +117,23 @@ device_list_to_strv (GList *list)
 	return value;
 }
 
+/**
+ * gpm_statistics_get_types:
+ * @info: This class instance
+ * @types: The return type STRV artay
+ *
+ * Return value: TRUE for success.
+ **/
 gboolean
 gpm_statistics_get_types (GpmInfo  *info,
 			  gchar  ***types,
 			  GError  **error)
 {
 	GList *list = NULL;
+
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+	g_return_val_if_fail (types != NULL, FALSE);
 
 	list = g_list_append (list, "charge");
 	list = g_list_append (list, "power");
@@ -133,23 +145,71 @@ gpm_statistics_get_types (GpmInfo  *info,
 	return TRUE;
 }
 
-#define GPM_DBUS_STRUCT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
-	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
-#define GPM_DBUS_STRUCT_INT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
-	G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
+/**
+ * gpm_statistics_get_axis_type:
+ * @info: This class instance
+ * @type: The graph type, e.g. "charge", "power", "time", etc.
+ * @axis_type_x: The axis type, only "percentage", "power" or "time"
+ * @axis_type_y: The axis type, only "percentage", "power" or "time"
+ *
+ * Return value: TRUE for success, if FALSE then error set
+ **/
+gboolean
+gpm_statistics_get_axis_type (GpmInfo *info,
+			      gchar   *type,
+			      gchar  **axis_type_x,
+			      gchar  **axis_type_y,
+			      GError **error)
+{
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+	g_return_val_if_fail (type != NULL, FALSE);
+	g_return_val_if_fail (axis_type_x != NULL, FALSE);
+	g_return_val_if_fail (axis_type_y != NULL, FALSE);
 
+	if (strcmp (type, "power") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("power");
+		return TRUE;
+	}
+	if (strcmp (type, "time") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("time");
+		return TRUE;
+	}
+	if (strcmp (type, "charge") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("percentage");
+		return TRUE;
+	}
+	
+	/* not recognised... */
+	*error = g_error_new (gpm_info_error_quark (),
+			      GPM_INFO_ERROR_INVALID_TYPE,
+			      "Invalid type %s", type);
+	return FALSE;
+}
+
+/**
+ * gpm_statistics_get_event_log:
+ * @info: This class instance
+ * @seconds: The amount of data to get, currently unused.
+ *
+ * Return value: TRUE for success
+ **/
 gboolean
 gpm_statistics_get_event_log (GpmInfo    *info,
 			      gint 	  seconds,
 			      GPtrArray **array,
 			      GError    **error)
 {
-#ifdef USE_DBUS_COMPAT
-	*array = g_ptr_array_sized_new (0);
-#else	
 	GList *events, *l;
 	GpmInfoDataPoint *new;
 	GValue *value;
+
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+	g_return_val_if_fail (array != NULL, FALSE);
 
 	gpm_debug ("seconds=%i", seconds);
 	events = gpm_info_data_get_list (info->priv->events);
@@ -165,33 +225,41 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
-#endif
 	return TRUE;
 }
 
+/**
+ * gpm_statistics_get_data:
+ * @info: This class instance
+ * @seconds: The amount of data to get, currently unused.
+ * @type: The graph type, e.g. "charge", "power", "time", etc.
+ *
+ * Return value: TRUE for success
+ **/
 gboolean
 gpm_statistics_get_data (GpmInfo     *info,
 			 gint 	      seconds,
 			 const gchar *type,
-			 gint	      options,
 			 GPtrArray  **array,
 			 GError	    **error)
 {
-#ifdef USE_DBUS_COMPAT
-	*array = g_ptr_array_sized_new (0);
-#else	
 	GList *events, *l;
 	GpmInfoDataPoint *new;
 	GValue *value;
 
-	if (strcmp (type, "rate") == 0) {
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+	g_return_val_if_fail (type != NULL, FALSE);
+	g_return_val_if_fail (array != NULL, FALSE);
+
+	if (strcmp (type, "power") == 0) {
 		events = gpm_info_data_get_list (info->priv->rate_data);
 	} else if (strcmp (type, "time") == 0) {
 		events = gpm_info_data_get_list (info->priv->time_data);
-	} else if (strcmp (type, "percentage") == 0) {
+	} else if (strcmp (type, "charge") == 0) {
 		events = gpm_info_data_get_list (info->priv->percentage_data);
 	} else {
-		g_warning ("Data type %s no known!", type);
+		g_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_INVALID_TYPE,
 				      "Data type %s not known!", type);
@@ -220,7 +288,6 @@ gpm_statistics_get_data (GpmInfo     *info,
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
-#endif
 	return TRUE;
 }
 
@@ -683,7 +750,7 @@ gpm_info_show_window (GpmInfo *info)
 		widget = glade_xml_get_widget (glade_xml, "graph_rate");
 		gtk_widget_set_size_request (widget, 600, 300);
 		info->priv->rate_widget = widget;
-		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_RATE);
+		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_POWER);
 		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (widget), TRUE);
 
 		widget = glade_xml_get_widget (glade_xml, "graph_time");

@@ -24,6 +24,7 @@
 #include <glib/gi18n.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gpm-graph-widget.h"
 #include "gpm-info-data.h"
@@ -137,6 +138,31 @@ gpm_graph_widget_event_colour (GpmGraphWidgetEvent event)
 	} else {
 		return GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
 	}
+}
+
+/**
+ * gpm_graph_widget_string_to_axis_type:
+ * @graph: This graph class instance
+ * @type: The axis type, e.g. "percentage"
+ *
+ * Return value: The enumerated axis type
+ **/
+GpmGraphWidgetAxisType
+gpm_graph_widget_string_to_axis_type (const gchar *type)
+{
+	GpmGraphWidgetAxisType ret;
+	g_return_val_if_fail (type != NULL, GPM_GRAPH_WIDGET_TYPE_INVALID);
+
+	ret = GPM_GRAPH_WIDGET_TYPE_INVALID;
+	if (strcmp (type, "percentage") == 0) {
+		ret = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
+	} else if (strcmp (type, "time") == 0) {
+		ret = GPM_GRAPH_WIDGET_TYPE_TIME;
+	} else if (strcmp (type, "power") == 0) {
+		ret = GPM_GRAPH_WIDGET_TYPE_POWER;
+	}
+	
+	return ret;
 }
 
 /**
@@ -325,7 +351,7 @@ gpm_graph_widget_set_events (GpmGraphWidget *graph, GList *list)
  *
  * Unit is:
  * GPM_GRAPH_WIDGET_TYPE_TIME:		seconds
- * GPM_GRAPH_WIDGET_TYPE_RATE: 	mWh (not mAh)
+ * GPM_GRAPH_WIDGET_TYPE_POWER: 	mWh (not mAh)
  * GPM_GRAPH_WIDGET_TYPE_PERCENTAGE:	%
  *
  * Return value: a string value depending on the axis type and the value.
@@ -356,7 +382,7 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 		}
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		text = g_strdup_printf ("%i%%", value);
-	} else if (axis == GPM_GRAPH_WIDGET_TYPE_RATE) {
+	} else if (axis == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		text = g_strdup_printf ("%iW", value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
@@ -582,7 +608,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		graph->priv->stop_x = 100;
 	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / (10 * 60)) + 1) * (10 * 60) + smallest_x;
-	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_RATE) {
+	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / 10000) + 2) * 10000 + smallest_x;
 		if (graph->priv->stop_x < 10000) {
 			graph->priv->stop_x = 10000 + smallest_x;
@@ -604,7 +630,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		if (graph->priv->stop_y < 60) {
 			graph->priv->stop_y = 60;
 		}
-	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_RATE) {
+	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
 		if (graph->priv->stop_y < 10000) {

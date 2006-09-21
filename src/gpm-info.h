@@ -75,8 +75,12 @@ gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
 gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
 							 gint 	    	 seconds,
 							 const gchar	*type,
-							 gint		 options,
 							 GPtrArray	**array,
+							 GError		**error);
+gboolean	 gpm_statistics_get_axis_type		(GpmInfo	*info,
+							 gchar		*type,
+							 gchar		**axis_type_x,
+							 gchar		**axis_type_y,
 							 GError		**error);
 
 G_END_DECLS

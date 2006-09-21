@@ -80,9 +80,10 @@ typedef enum {
 } GpmGraphWidgetEvent;
 
 typedef enum {
+	GPM_GRAPH_WIDGET_TYPE_INVALID,
 	GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
 	GPM_GRAPH_WIDGET_TYPE_TIME,
-	GPM_GRAPH_WIDGET_TYPE_RATE,
+	GPM_GRAPH_WIDGET_TYPE_POWER,
 	GPM_GRAPH_WIDGET_TYPE_LAST
 } GpmGraphWidgetAxisType;
 
@@ -118,6 +119,7 @@ void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent	 event);
 GpmGraphWidgetColour	 gpm_graph_widget_event_colour	(GpmGraphWidgetEvent	 event);
+GpmGraphWidgetAxisType	 gpm_graph_widget_string_to_axis_type (const gchar	*type);
 
 G_END_DECLS
 

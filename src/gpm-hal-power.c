@@ -200,10 +200,15 @@ gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
 		if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
 			gpm_debug ("DBUS timed out, but recovering");
 			retval = TRUE;
+		/* We might also get a generic remote exception if we time out */
+		} else if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_REMOTE_EXCEPTION)) {
+			gpm_debug ("Remote exception, recovering");
+			retval = TRUE;
 		} else {
 			gpm_warning ("%s failed\n(%s)",
 				     method,
 				     error->message);
+			gpm_syslog ("%s code='%i' quark='%s'", error->message, error->code, g_quark_to_string (error->domain));
 			retval = FALSE;
 		}
 		g_error_free (error);

@@ -26,12 +26,12 @@
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_GRAPH			(gpm_statistics_get_type ())
-#define GPM_STATISTICS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_GRAPH, GpmStatistics))
-#define GPM_STATISTICS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_GRAPH, GpmStatisticsClass))
-#define GPM_IS_GRAPH(o)			(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_GRAPH))
-#define GPM_IS_GRAPH_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_GRAPH))
-#define GPM_STATISTICS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_GRAPH, GpmStatisticsClass))
+#define GPM_TYPE_STATISTICS		(gpm_statistics_get_type ())
+#define GPM_STATISTICS(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_STATISTICS, GpmStatistics))
+#define GPM_STATISTICS_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_STATISTICS, GpmStatisticsClass))
+#define GPM_IS_STATISTICS(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_STATISTICS))
+#define GPM_IS_STATISTICS_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_STATISTICS))
+#define GPM_STATISTICS_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_STATISTICS, GpmStatisticsClass))
 
 typedef struct GpmStatisticsPrivate GpmStatisticsPrivate;
 
@@ -44,8 +44,8 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* action_help)			(GpmStatistics	*graph);
-	void		(* action_close)		(GpmStatistics	*graph);
+	void		(* action_help)			(GpmStatistics	*statistics);
+	void		(* action_close)		(GpmStatistics	*statistics);
 } GpmStatisticsClass;
 
 GType		 gpm_statistics_get_type		(void);
