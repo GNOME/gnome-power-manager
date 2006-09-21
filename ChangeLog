@@ -1,5 +1,16 @@
 2006-09-21  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade:
+	* src/gpm-info.c:
+	Remove the graphs from the info window.
+	This saves over 500kb of writable memory from each
+	gnome-power-manager daemon process. More to be cut soon.
+
+	* src/gpm-tray-icon.c:
+	Enable the statistics option in the right mouse button menu.
+
+2006-09-21  Richard Hughes  <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-gconf.h:

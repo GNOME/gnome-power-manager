@@ -63,9 +63,6 @@ struct GpmInfoPrivate
 	GpmHal			*hal;
 	GpmHalPower		*hal_power;
 
-	GtkWidget		*rate_widget;
-	GtkWidget		*percentage_widget;
-	GtkWidget		*time_widget;
 	GtkWidget		*main_window;
 	GtkWidget		*treeview_event_viewer;
 
@@ -290,57 +287,6 @@ gpm_statistics_get_data (GpmInfo     *info,
 }
 
 /**
- * gpm_graph_widget_custom_handler:
- * @xml: The glade file we are reading.
- * @func_name: The function name to create the object
- *
- * Handler for libglade to provide interface with a pointer
- *
- * Return value: The custom widget.
- **/
-static GtkWidget *
-gpm_graph_widget_custom_handler (GladeXML *xml,
-			  gchar *func_name, gchar *name,
-			  gchar *string1, gchar *string2,
-			  gint int1, gint int2,
-			  gpointer user_data)
-{
-	GtkWidget *widget = NULL;
-	if (strcmp ("gpm_graph_new", func_name) == 0) {
-		widget = gpm_graph_widget_new ();
-		return widget;
-	}
-	return NULL;
-}
-
-/**
- * gpm_info_graph_update:
- * @graph_data: The data we have for a specific graph
- *
- * Update this graph
- **/
-static void
-gpm_info_graph_update (GtkWidget *widget, GpmInfoData *data, GpmInfoData *events)
-{
-	GList *list;
-	if (! data) {
-		return;
-	}
-	if (data) {
-		list = gpm_info_data_get_list (data);
-		gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (widget), list);
-		list = gpm_info_data_get_list (events);
-		gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (widget), list);
-	} else {
-		gpm_debug ("no log data");
-	}
-
-	/* FIXME: There's got to be a better way than this */
-	gtk_widget_hide (widget);
-	gtk_widget_show (GTK_WIDGET (widget));
-}
-
-/**
  * gpm_info_populate_device_information:
  * @info: This info class instance
  * @kind: the hardware battery kind, e.g. GPM_POWER_KIND_PRIMARY
@@ -544,26 +490,6 @@ gpm_info_update_event_tree (GpmInfo *info)
 }
 
 /**
- * gpm_info_graph_update_all:
- * @info: This info class instance
- *
- * Updates all the graphs together.
- **/
-static void
-gpm_info_graph_update_all (GpmInfo *info)
-{
-	gpm_info_graph_update (info->priv->rate_widget,
-			       info->priv->rate_data,
-			       info->priv->events);
-	gpm_info_graph_update (info->priv->percentage_widget,
-			       info->priv->percentage_data,
-			       info->priv->events);
-	gpm_info_graph_update (info->priv->time_widget,
-			       info->priv->time_data,
-			       info->priv->events);
-}
-
-/**
  * gpm_info_close_cb:
  * @widget: The GtkWidget button object
  * @info: This info class instance
@@ -607,56 +533,6 @@ gpm_info_clear_events_cb (GtkWidget *widget,
 	g_object_unref (info->priv->events);
 	info->priv->events = gpm_info_data_new ();
 	gpm_info_update_event_tree (info);
-}
-
-/**
- * gpm_info_clear_rate_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- *
- * Clears the rate data from memory
- **/
-static void
-gpm_info_clear_rate_cb (GtkWidget *widget,
-			GpmInfo   *info)
-{
-	g_object_unref (info->priv->rate_data);
-	info->priv->rate_data = gpm_info_data_new ();
-	if (info->priv->is_laptop) {
-		gpm_info_graph_update_all (info);
-	}
-}
-
-/**
- * gpm_info_clear_percentage_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- *
- * Clears the percentage data from memory
- **/
-static void
-gpm_info_clear_percentage_cb (GtkWidget *widget,
-			      GpmInfo   *info)
-{
-	g_object_unref (info->priv->percentage_data);
-	info->priv->percentage_data = gpm_info_data_new ();
-	gpm_info_graph_update_all (info);
-}
-
-/**
- * gpm_info_clear_time_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- *
- * Clears the time data from memory
- **/
-static void
-gpm_info_clear_time_cb (GtkWidget *widget,
-			GpmInfo   *info)
-{
-	g_object_unref (info->priv->time_data);
-	info->priv->time_data = gpm_info_data_new ();
-	gpm_info_graph_update_all (info);
 }
 
 /**
@@ -719,17 +595,6 @@ gpm_info_show_window (GpmInfo *info)
 	widget = glade_xml_get_widget (glade_xml, "button_clear_events");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_clear_events_cb), info);
-	if (info->priv->is_laptop) {
-		widget = glade_xml_get_widget (glade_xml, "button_clear_rate");
-		g_signal_connect (widget, "clicked",
-				  G_CALLBACK (gpm_info_clear_rate_cb), info);
-		widget = glade_xml_get_widget (glade_xml, "button_clear_percentage");
-		g_signal_connect (widget, "clicked",
-				  G_CALLBACK (gpm_info_clear_percentage_cb), info);
-		widget = glade_xml_get_widget (glade_xml, "button_clear_time");
-		g_signal_connect (widget, "clicked",
-				  G_CALLBACK (gpm_info_clear_time_cb), info);
-	}
 
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
@@ -739,25 +604,6 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_help_cb), info);
 
-	if (info->priv->is_laptop) {
-		widget = glade_xml_get_widget (glade_xml, "graph_percentage");
-		gtk_widget_set_size_request (widget, 600, 300);
-		info->priv->percentage_widget = widget;
-		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
-
-		widget = glade_xml_get_widget (glade_xml, "graph_rate");
-		gtk_widget_set_size_request (widget, 600, 300);
-		info->priv->rate_widget = widget;
-		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_POWER);
-		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (widget), TRUE);
-
-		widget = glade_xml_get_widget (glade_xml, "graph_time");
-		gtk_widget_set_size_request (widget, 600, 300);
-		info->priv->time_widget = widget;
-		gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
-		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (widget), TRUE);
-	}
-
 	/* set up the event viewer tree-view */
 	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_event_log");
 	gtk_widget_set_size_request (widget, 400, 200);
@@ -765,30 +611,9 @@ gpm_info_show_window (GpmInfo *info)
 	gpm_info_create_event_viewer_tree (widget);
 
 	gpm_info_populate_device_information (info);
-	if (info->priv->is_laptop) {
-		gpm_info_graph_update_all (info);
-	}
 	gpm_info_update_event_tree (info);
 
 	gtk_widget_show (info->priv->treeview_event_viewer);
-
-	if (info->priv->is_laptop) {
-		gtk_widget_show (info->priv->rate_widget);
-		gtk_widget_show (info->priv->time_widget);
-		gtk_widget_show (info->priv->percentage_widget);
-	} else {
-		/* get rid of the graphs */
-		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_percentage");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_rate");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_time");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-	}
 
 	/* find the total number of and type of devices */
 	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
@@ -885,10 +710,7 @@ gpm_info_log_do_poll (gpointer data)
 	}
 
 	if (info->priv->main_window) {
-		if (info->priv->is_laptop) {
-			gpm_info_graph_update_all (info);
-		}
-		/* also update the first tab */
+		/* update the first tab */
 		gpm_info_populate_device_information (info);
 	}
 	return TRUE;
@@ -953,7 +775,6 @@ gpm_info_init (GpmInfo *info)
 		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
 		gpm_info_data_set_max_time (info->priv->time_data, max_time);
 	}
-	glade_set_custom_handler (gpm_graph_widget_custom_handler, info);
 }
 
 /**
