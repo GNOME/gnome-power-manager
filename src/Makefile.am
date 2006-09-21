@@ -40,6 +40,8 @@ gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
+	gpm-info-data.h					\
+	gpm-info-data.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
 	gpm-marshal.h					\

@@ -2,6 +2,30 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/statistics_show_legend</key>
+      <applyto>/apps/gnome-power-manager/statistics_show_legend</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether we should show the legend in the statistics window</short>
+        <long>Whether we should show the legend in the statistics window.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/statistics_show_events</key>
+      <applyto>/apps/gnome-power-manager/statistics_show_events</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Whether we should show the events in the statistics window</short>
+        <long>Whether we should show the events in the statistics window.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/session_request_save</key>
       <applyto>/apps/gnome-power-manager/session_request_save</applyto>
       <owner>gnome-power-manager</owner>

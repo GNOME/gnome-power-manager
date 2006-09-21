@@ -58,6 +58,7 @@ static void     gpm_statistics_finalize   (GObject	    *object);
 #define ACTION_POWER_TEXT	_("Power History")
 #define ACTION_TIME_TEXT	_("Estimated Time History")
 
+#define GPM_STATISTICS_POLL_INTERVAL	15000 /* ms */
 
 struct GpmStatisticsPrivate
 {
@@ -65,6 +66,9 @@ struct GpmStatisticsPrivate
 	GConfClient		*gconf_client;
 	GtkWidget		*graph_widget;
 	GpmProxy		*gproxy;
+	GpmInfoData		*events;
+	GpmInfoData		*data;
+	const gchar		*graph_type;
 };
 
 enum {
@@ -212,78 +216,107 @@ gpm_graph_widget_custom_handler (GladeXML *xml,
 	return NULL;
 }
 
-static void
-gpm_statistics_core_data_add_always (GPtrArray   *array,
-			  guint	       time_secs,
-			  guint	       value,
-			  guint	       colour,
-			  const gchar *desc)
+static gboolean
+gpm_statistics_get_events (GpmStatistics *statistics)
 {
-	GpmInfoDataPoint *new;
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+	GValueArray *gva;
+	GValue *gv;
+	GPtrArray *ptrarray = NULL;
+	GType g_type_ptrarray;
+	int i;
+	int x, col;
+	gint time = 0;
 
-	/* we have to add a new data point */
-	new = g_slice_new (GpmInfoDataPoint);
-	new->time = time_secs;
-	if (value > 0) {
-		new->value = value;
-	} else {
-		gpm_debug ("Not recording value (%i)", value);
-		new->value = 0;
+	g_return_val_if_fail (statistics != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
+
+	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}	
+
+	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
+					dbus_g_type_get_struct("GValueArray",
+						G_TYPE_INT,
+						G_TYPE_INT,
+						G_TYPE_INVALID));
+
+	ret = dbus_g_proxy_call (proxy, "GetEventLog", &error,
+				 G_TYPE_INT, time,
+				 G_TYPE_INVALID,
+				 g_type_ptrarray, &ptrarray,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
-	new->colour = colour;
-	if (desc) {
-		new->desc = g_strdup (desc);
-	} else {
-		new->desc = NULL;
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("GetEventLog failed!");
+		return FALSE;
 	}
-	g_ptr_array_add (array, (gpointer) new);
+
+	g_debug ("size=%i", ptrarray->len);
+
+	/* clear current events */
+	gpm_info_data_clear (statistics->priv->events);
+
+	for (i=0; i< ptrarray->len; i++) {
+		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
+		gv = g_value_array_get_nth (gva, 0);
+		x = g_value_get_int (gv);
+		g_value_unset (gv);
+		gv = g_value_array_get_nth (gva, 1);
+		col = g_value_get_int (gv);
+		g_value_unset (gv);
+		gpm_info_data_add_always (statistics->priv->events, x, 0, col, NULL);
+		g_value_array_free (gva);
+	}
+	g_ptr_array_free (ptrarray, TRUE);
+
+	return TRUE;
 }
 
-static GList *
-convert_ptr_array_to_list (GPtrArray *array)
+static void
+gpm_statistics_refresh_events (GpmStatistics *statistics)
 {
-	GpmInfoDataPoint *point;
-	GList *list = NULL;
-	guint a;
+	GList *list;
 
-	for (a=0; a < array->len; a++) {
-		point = g_ptr_array_index (array, a);
-		list = g_list_append (list, (gpointer) point);
-	}
-	return list;
+	gpm_statistics_get_events (statistics);
+	list = gpm_info_data_get_list (statistics->priv->events);
+
+	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
 }
 
 /**
  * gpm_statistics_checkbox_events_cb:
  * @widget: The GtkWidget object
- * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
 gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 			           GpmStatistics *statistics)
 {
 	gboolean checked;
-	GPtrArray *array = g_ptr_array_new ();
-	GList *list = NULL;
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	gpm_debug ("Events enable %i", checked);
 
+	/* save to gconf so we open next time with the correct setting */
+	gconf_client_set_bool (statistics->priv->gconf_client,
+			       GPM_PREF_STAT_SHOW_EVENTS, checked, NULL);
+
 	if (checked == FALSE) {
 		/* remove the dots from the graph */
 		gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), FALSE);
-		//todo: free previous events?
 		return;
 	}
 
-	//todo, get from DBUS
-	gpm_statistics_core_data_add_always (array, 15, 23, 2, NULL);
-	gpm_statistics_core_data_add_always (array, 20, 29, 1, NULL);
-
-	list = convert_ptr_array_to_list (array);
-	g_ptr_array_free (array, FALSE);
-
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
+	/* refresh data automatically */
+	gpm_statistics_refresh_events (statistics);
 
 	/* only enable the dots if the checkbox is checked */
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), TRUE);
@@ -302,6 +335,10 @@ gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
 
 	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 	gpm_debug ("Legend enable %i", checked);
+
+	/* save to gconf so we open next time with the correct setting */
+	gconf_client_set_bool (statistics->priv->gconf_client,
+			       GPM_PREF_STAT_SHOW_LEGEND, checked, NULL);
 
 	gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), checked);
 }
@@ -329,7 +366,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 			   GList        **list)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	gchar **strlist;
 	DBusGProxy *proxy;
 
@@ -339,21 +376,23 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 		return FALSE;
 	}	
 
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "GetTypes", &error,
-			       G_TYPE_INVALID,
-			       G_TYPE_STRV, &strlist,
-			       G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
-		retval = FALSE;
+	ret = dbus_g_proxy_call (proxy, "GetTypes", &error,
+			         G_TYPE_INVALID,
+			         G_TYPE_STRV, &strlist,
+			         G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("GetTypes failed!");
+		return FALSE;
 	}
 
 	*list = gpm_statistics_convert_strv_to_glist (strlist);
 
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -377,11 +416,10 @@ gpm_statistics_free_list_strings (GList *list)
 
 static gboolean
 gpm_statistics_get_data (GpmStatistics *statistics,
-			GPtrArray *data_array,
-			const gchar *type)
+			 const gchar *type)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	DBusGProxy *proxy;
 	GValueArray *gva;
 	GValue *gv;
@@ -393,7 +431,6 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
-	g_return_val_if_fail (data_array != NULL, FALSE);
 	g_return_val_if_fail (type != NULL, FALSE);
 
 	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
@@ -402,8 +439,6 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 		return FALSE;
 	}	
 
-	retval = TRUE;
-
 	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
 						G_TYPE_INT,
@@ -411,14 +446,26 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 						G_TYPE_INT,
 						G_TYPE_INVALID));
 
-	dbus_g_proxy_call (proxy, "GetData", &error,
-			   G_TYPE_INT, time,
-			   G_TYPE_STRING, type,
-			   G_TYPE_INVALID,
-			   g_type_ptrarray, &ptrarray,
-			   G_TYPE_INVALID);
+	ret = dbus_g_proxy_call (proxy, "GetData", &error,
+				 G_TYPE_INT, time,
+				 G_TYPE_STRING, type,
+				 G_TYPE_INVALID,
+				 g_type_ptrarray, &ptrarray,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("GetData failed!");
+		return FALSE;
+	}
 
 	g_debug ("size=%i", ptrarray->len);
+
+	/* clear current events */
+	gpm_info_data_clear (statistics->priv->data);
 
 	for (i=0; i< ptrarray->len; i++) {
 		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
@@ -431,12 +478,12 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 		gv = g_value_array_get_nth (gva, 2);
 		col = g_value_get_int (gv);
 		g_value_unset (gv);
-		gpm_statistics_core_data_add_always (data_array, x, y, col, NULL);
+		gpm_info_data_add_always (statistics->priv->data, x, y, col, NULL);
 		g_value_array_free (gva);
 	}
 	g_ptr_array_free (ptrarray, TRUE);
 
-	return retval;
+	return TRUE;
 }
 
 static gboolean
@@ -446,7 +493,7 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 			      GpmGraphWidgetAxisType *y)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	gchar *axis_type_x;
 	gchar *axis_type_y;
 	DBusGProxy *proxy;
@@ -461,19 +508,23 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 		g_warning ("not connected");
 		return FALSE;
 	}	
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "GetAxisType", &error,
-			       G_TYPE_STRING, type,
-			       G_TYPE_INVALID,
-			       G_TYPE_STRING, &axis_type_x,
-			       G_TYPE_STRING, &axis_type_y,
-			       G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
-		retval = FALSE;
+
+	ret = dbus_g_proxy_call (proxy, "GetAxisType", &error,
+			         G_TYPE_STRING, type,
+			         G_TYPE_INVALID,
+			         G_TYPE_STRING, &axis_type_x,
+			         G_TYPE_STRING, &axis_type_y,
+			         G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("GetAxisType failed!");
+		return FALSE;
+	}
+
 	g_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x);
 	g_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y);
 
@@ -481,22 +532,32 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 	*x = gpm_graph_widget_string_to_axis_type (axis_type_x);
 	*y = gpm_graph_widget_string_to_axis_type (axis_type_y);
 
-	return retval;
+	return TRUE;
+}
+
+static void
+gpm_statistics_refresh_data (GpmStatistics *statistics)
+{
+	GList *list = NULL;
+	gpm_statistics_get_data (statistics, statistics->priv->graph_type);
+	list = gpm_info_data_get_list (statistics->priv->data);
+
+	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
+
+	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));
+	gtk_widget_show (GTK_WIDGET (statistics->priv->graph_widget));
 }
 
 static void
 gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 				      GpmStatistics  *statistics)
 {
-	GPtrArray *array = g_ptr_array_new ();
-	GList *list = NULL;
 	gchar *value;
 	gchar *type;
 	GpmGraphWidgetAxisType axis_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
 	GpmGraphWidgetAxisType axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
-
 	if (strcmp (value, ACTION_CHARGE_TEXT) == 0) {
 		type = ACTION_CHARGE;
 	} else if (strcmp (value, ACTION_POWER_TEXT) == 0) {
@@ -513,19 +574,16 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	gpm_graph_widget_set_axis_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_x);
 	gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_y);
 
-	gpm_statistics_get_data (statistics, array, type);
+	/* const, so no need to free */
+	statistics->priv->graph_type = type;
 
-	list = convert_ptr_array_to_list (array);
-	g_ptr_array_free (array, FALSE);
-
-	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
-
-	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));
-	gtk_widget_show (GTK_WIDGET (statistics->priv->graph_widget));
+	/* refresh data automatically */
+	gpm_statistics_refresh_data (statistics);
 }
 
 static void
-populate_graph_types (GpmStatistics *statistics, GtkWidget *widget)
+gpm_statistics_populate_graph_types (GpmStatistics *statistics,
+				     GtkWidget     *widget)
 {
 	GList *list = NULL;
 	GList *l;
@@ -560,6 +618,16 @@ populate_graph_types (GpmStatistics *statistics, GtkWidget *widget)
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
 }
 
+static gboolean 
+gpm_statistics_graph_refresh (gpointer data)
+{
+	GpmStatistics *statistics = GPM_STATISTICS (data);
+	g_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
+	gpm_statistics_refresh_data (statistics);
+	gpm_statistics_refresh_events (statistics);
+	return TRUE;
+}
+
 /**
  * gpm_statistics_init:
  * @graph: This graph class instance
@@ -567,8 +635,9 @@ populate_graph_types (GpmStatistics *statistics, GtkWidget *widget)
 static void
 gpm_statistics_init (GpmStatistics *statistics)
 {
-	GtkWidget    *main_window;
-	GtkWidget    *widget;
+	GtkWidget *main_window;
+	GtkWidget *widget;
+	gboolean   checked;
 
 	statistics->priv = GPM_STATISTICS_GET_PRIVATE (statistics);
 
@@ -589,6 +658,10 @@ gpm_statistics_init (GpmStatistics *statistics)
 				 statistics,
 				 NULL,
 				 NULL);
+
+	statistics->priv->graph_type = NULL;
+	statistics->priv->events = gpm_info_data_new ();
+	statistics->priv->data = gpm_info_data_new ();
 
 	statistics->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-graph.glade", NULL, NULL);
 
@@ -621,7 +694,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gtk_widget_show (GTK_WIDGET (widget));
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "combobox_type");
-	populate_graph_types (statistics, widget);
+	gpm_statistics_populate_graph_types (statistics, widget);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "combobox_device");
 	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Default");
@@ -629,14 +702,24 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_events");
+	checked = gconf_client_get_bool (statistics->priv->gconf_client,
+					 GPM_PREF_STAT_SHOW_EVENTS, NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);
+	gpm_statistics_checkbox_events_cb (widget, statistics);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_legend");
+	checked = gconf_client_get_bool (statistics->priv->gconf_client,
+					 GPM_PREF_STAT_SHOW_LEGEND, NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_legend_cb), statistics);
+	gpm_statistics_checkbox_legend_cb (widget, statistics);
 
 	gtk_widget_show (main_window);
+	g_timeout_add (GPM_STATISTICS_POLL_INTERVAL,
+		       gpm_statistics_graph_refresh, statistics);
 }
 
 /**
@@ -655,6 +738,8 @@ gpm_statistics_finalize (GObject *object)
 
 	g_object_unref (statistics->priv->gconf_client);
 	g_object_unref (statistics->priv->gproxy);
+	g_object_unref (statistics->priv->events);
+	g_object_unref (statistics->priv->data);
 
 	G_OBJECT_CLASS (gpm_statistics_parent_class)->finalize (object);
 }

@@ -119,7 +119,7 @@ void
 gpm_info_data_add_always (GpmInfoData *info_data,
 			  guint	       time_secs,
 			  guint	       value,
-			  guint	       colour,
+			  guint8       colour,
 			  const gchar *desc)
 {
 	GpmInfoDataPoint *new;
@@ -130,12 +130,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 	/* we have to add a new data point */
 	new = g_slice_new (GpmInfoDataPoint);
 	new->time = time_secs;
-	if (value != 0) {
-		new->value = value;
-	} else {
-		gpm_debug ("Not recording value (%i)", value);
-		new->value = 0;
-	}
+	new->value = value;
 	new->colour = colour;
 	if (desc) {
 		new->desc = g_strdup (desc);
@@ -287,7 +282,7 @@ void
 gpm_info_data_add (GpmInfoData *info_data,
 		   guint	time_secs,
 		   guint	value,
-		   guint	colour)
+		   guint8	colour)
 {
 	g_return_if_fail (info_data != NULL);
 	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
@@ -353,6 +348,22 @@ gpm_info_data_class_init (GpmInfoDataClass *klass)
 }
 
 /**
+ * gpm_info_data_free:
+ * @object: This info data class instance
+ **/
+static void
+gpm_info_data_free (GpmInfoData *info_data)
+{
+	GpmInfoDataPoint *point;
+	int i;
+	for (i=0; i > info_data->priv->array->len; i++) {
+		point = g_ptr_array_index (info_data->priv->array, i);
+		gpm_info_data_free_point (point);
+	}
+	g_ptr_array_free (info_data->priv->array, TRUE);
+}
+
+/**
  * gpm_info_data_init:
  * @graph: This info data instance
  **/
@@ -363,6 +374,18 @@ gpm_info_data_init (GpmInfoData *info_data)
 	info_data->priv->array = g_ptr_array_new ();
 	info_data->priv->max_points = 120;
 	info_data->priv->max_time = 10 * 60;
+}
+
+/**
+ * gpm_info_data_clear:
+ * @graph: This info data instance
+ **/
+void
+gpm_info_data_clear (GpmInfoData *info_data)
+{
+	/* we just want to free all the elements and start again */
+	gpm_info_data_free (info_data);
+	gpm_info_data_init (info_data);
 }
 
 /**
@@ -380,13 +403,7 @@ gpm_info_data_finalize (GObject *object)
 	info_data = GPM_INFO_DATA (object);
 
 	/* Free the graph data elements, the list, and also the graph data object */
-	GpmInfoDataPoint *point;
-	int a;
-	for (a=0; a > info_data->priv->array->len; a++) {
-		point = g_ptr_array_index (info_data->priv->array, a);
-		gpm_info_data_free_point (point);
-	}
-	g_ptr_array_free (info_data->priv->array, TRUE);
+	gpm_info_data_free (info_data);
 
 	G_OBJECT_CLASS (gpm_info_data_parent_class)->finalize (object);
 }

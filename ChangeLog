@@ -1,5 +1,25 @@
 2006-09-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs.h:
+	* data/gnome-power-manager.schemas.in:
+	Add statistics_show_legend and statistics_show_events so we have
+	persistent settings for the statistics program.
+
+	* src/Makefile.am:
+	* src/gpm-info-data.c:
+	* src/gpm-info-data.h:
+	* src/gpm-statistics-core.c:
+	Add gpm_info_data_clear() so we can re-init the data.
+	Use GpmInfoData as a datastore in the statistics module so we leak
+	a lot less memory. Also clean up this module.
+	gnome-power-statistics now works as well as the "Information" screen
+	that we used before and is out of process.
+	
+	* src/gpm-info.c:
+	Send the correct format information for the event log dbus method.
+
+2006-09-21  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	Remove dbus-send cruft.
 

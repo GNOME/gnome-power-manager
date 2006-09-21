@@ -104,6 +104,9 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_SESSION_REQUEST_SAVE	GPM_PREF_DIR "/session_request_save"
 
+#define GPM_PREF_STAT_SHOW_LEGEND	GPM_PREF_DIR "/statistics_show_legend"
+#define GPM_PREF_STAT_SHOW_EVENTS	GPM_PREF_DIR "/statistics_show_events"
+
 typedef enum {
 	GPM_ICON_POLICY_ALWAYS,
 	GPM_ICON_POLICY_PRESENT,

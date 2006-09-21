@@ -61,11 +61,11 @@ GList			*gpm_info_data_get_list		(GpmInfoData	*info_data);
 void			 gpm_info_data_add		(GpmInfoData	*info_data,
 							 guint		 time,
 							 guint		 value,
-							 guint		 colour);
+							 guint8		 colour);
 void			 gpm_info_data_add_always	(GpmInfoData	*info_data,
 							 guint		 time,
 							 guint		 value,
-							 guint		 colour,
+							 guint8		 colour,
 							 const gchar	*desc);
 void			 gpm_info_data_limit_time	(GpmInfoData	*info_data,
 							 guint		 max_num);
@@ -77,6 +77,7 @@ void			 gpm_info_data_set_max_points	(GpmInfoData	*info_data,
 							 guint		 max_points);
 void			 gpm_info_data_set_max_time	(GpmInfoData	*info_data,
 							 guint		 max_time);
+void			 gpm_info_data_clear		(GpmInfoData	*info_data);
 
 G_END_DECLS
 
