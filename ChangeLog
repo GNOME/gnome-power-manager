@@ -1,5 +1,22 @@
 2006-09-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-brightness.c:
+	* src/gpm-hal-cpufreq.c:
+	* src/gpm-hal-power.c:
+	* src/gpm-hal.c:
+	* src/gpm-info.c:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/gpm-polkit.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-screensaver.c:
+	* src/gpm-statistics-core.c:
+	Convert all the wacky invokations of dbus_g_proxy_call to use
+	a common format. Also convert all the g_warnings into gpm_warnings
+	so we can log them properly. Lots more GError love too.
+
+2006-09-21  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-info.glade:
 	* src/gpm-info.c:
 	Remove the graphs from the info window.

@@ -61,27 +61,36 @@ gpm_object_register (DBusGConnection *connection,
 	DBusGProxy *bus_proxy = NULL;
 	GError *error = NULL;
 	guint request_name_result;
+	gboolean ret;
 
 	bus_proxy = dbus_g_proxy_new_for_name (connection,
 					       DBUS_SERVICE_DBUS,
 					       DBUS_PATH_DBUS,
 					       DBUS_INTERFACE_DBUS);
 
-	if (!dbus_g_proxy_call (bus_proxy, "RequestName", &error,
-		G_TYPE_STRING, GPM_DBUS_SERVICE,
-		G_TYPE_UINT, 0,
-		G_TYPE_INVALID,
-		G_TYPE_UINT, &request_name_result,
-		G_TYPE_INVALID)) {
-		g_warning ("Failed to acquire %s: %s", GPM_DBUS_SERVICE, error->message);
+	ret = dbus_g_proxy_call (bus_proxy, "RequestName", &error,
+				 G_TYPE_STRING, GPM_DBUS_SERVICE,
+				 G_TYPE_UINT, 0,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &request_name_result,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("RequestName failed!");
 		return FALSE;
 	}
 
- 	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
-		return FALSE;
-
 	/* free the bus_proxy */
 	g_object_unref (G_OBJECT (bus_proxy));
+
+	/* already running */
+ 	if (request_name_result != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
+		return FALSE;
+	}
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);

@@ -58,45 +58,42 @@ gpm_polkit_is_user_privileged (GpmPolkit   *polkit,
 			       const gchar *privilege)
 {
 	GError *error = NULL;
-	gboolean boolret = TRUE;
-
 	const gchar *user = g_get_user_name ();
 	const gchar *bus_unique_name;
 	const gchar *myresource = NULL;
 	const gchar *but_restricted_to = NULL;
 	gboolean out_is_allowed;
 	gboolean out_is_temporary;
+	gboolean ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_POLKIT (polkit), FALSE);
 
 	proxy = gpm_proxy_get_proxy (polkit->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	bus_unique_name = dbus_g_proxy_get_bus_name (proxy);
 
-	if (!dbus_g_proxy_call (proxy, "IsUserPrivileged", &error,
-				G_TYPE_STRING, bus_unique_name, 
-				G_TYPE_STRING, user, 
-				G_TYPE_STRING, privilege,
-				G_TYPE_STRING, myresource,
-				G_TYPE_INVALID,
-				G_TYPE_BOOLEAN, &out_is_allowed,
-				G_TYPE_BOOLEAN, &out_is_temporary,
-				G_TYPE_STRING, but_restricted_to,
-				G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		gpm_debug ("polkitd service is not running.");
-		boolret = FALSE;
+	ret = dbus_g_proxy_call (proxy, "IsUserPrivileged", &error,
+				 G_TYPE_STRING, bus_unique_name, 
+				 G_TYPE_STRING, user, 
+				 G_TYPE_STRING, privilege,
+				 G_TYPE_STRING, myresource,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &out_is_allowed,
+				 G_TYPE_BOOLEAN, &out_is_temporary,
+				 G_TYPE_STRING, but_restricted_to,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
-	if (!boolret) {
-		gpm_debug ("IsUserPrivileged failed");
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("IsUserPrivileged failed!");
 		return FALSE;
 	}
 	return out_is_allowed;

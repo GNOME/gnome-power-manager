@@ -163,9 +163,8 @@ gpm_dbus_method_bool (const gchar *method)
 	DBusGConnection *connection;
 	DBusGProxy *proxy;
 	GError *error;
-	gboolean value;
-
-	value = FALSE;
+	gboolean ret;
+	gboolean value = FALSE;
 	error = NULL;
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (connection == NULL) {
@@ -181,22 +180,20 @@ gpm_dbus_method_bool (const gchar *method)
 					   GPM_DBUS_SERVICE,
 					   GPM_DBUS_PATH,
 					   GPM_DBUS_INTERFACE);
-	if (! dbus_g_proxy_call (proxy,
-				 method,
-				 &error,
+	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, &value,
-				 G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("Couldn't connect to PowerManager %s",
-				     error->message);
-			g_error_free (error);
-		}
-		value = FALSE;
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
-
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("%s failed!", method);
+		return FALSE;
+	}
 	g_object_unref (proxy);
-
 	return value;
 }
 
@@ -769,7 +766,7 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (value == NULL) {
-		g_warning ("active text failed");
+		gpm_warning ("active text failed");
 		return;
 	}
 	if (strcmp (value, CPUFREQ_ONDEMAND_TEXT) == 0) {

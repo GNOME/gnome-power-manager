@@ -96,36 +96,6 @@ gpm_hal_is_running (GpmHal *hal)
 	return running;
 }
 
-/* we have to be clever, as hal can pass back two types of errors, and we have
-   to ignore dbus timeouts */
-static gboolean
-gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
-{
-	gboolean retval = TRUE;
-
-	g_return_val_if_fail (method != NULL, FALSE);
-
-	if (error) {
-		/* DBUS might time out, which is okay. We can remove this code
-		   when the dbus glib bindings are fixed. See #332888 */
-		if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
-			gpm_debug ("DBUS timed out, but recovering");
-			retval = TRUE;
-		} else {
-			gpm_warning ("%s failed\n(%s)",
-				     method,
-				     error->message);
-			retval = FALSE;
-		}
-		g_error_free (error);
-	} else if (ret != 0) {
-		/* we might not get an error set */
-		gpm_warning ("%s failed (Unknown error)", method);
-		retval = FALSE;
-	}
-	return retval;
-}
-
 /**
  * gpm_hal_device_rescan:
  *
@@ -138,10 +108,10 @@ gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
 static gboolean
 gpm_hal_device_rescan (GpmHal *hal, const gchar *udi)
 {
-	gint ret = 0;
+	gint retval = 0;
 	DBusGProxy *proxy;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
@@ -151,14 +121,20 @@ gpm_hal_device_rescan (GpmHal *hal, const gchar *udi)
 					   HAL_DBUS_SERVICE,
 					   udi,
 					   HAL_DBUS_INTERFACE_DEVICE);
-	dbus_g_proxy_call (proxy, "Rescan", &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_BOOLEAN, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, "rescan");
-
+	ret = dbus_g_proxy_call (proxy, "Rescan", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, &retval, G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("Rescan failed!");
+		return FALSE;
+	}
 	g_object_unref (G_OBJECT (proxy));
-	return retval;
-
+	return TRUE;
 }
 
 /**
@@ -208,7 +184,7 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 {
 	DBusGProxy *proxy;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
@@ -219,19 +195,23 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "GetPropertyBoolean", &error,
-			       G_TYPE_STRING, key, G_TYPE_INVALID,
-			       G_TYPE_BOOLEAN, value, G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
+	ret = dbus_g_proxy_call (proxy, "GetPropertyBoolean", &error,
+				 G_TYPE_STRING, key,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, value,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
 		*value = FALSE;
-		retval = FALSE;
+		gpm_warning ("GetPropertyBoolean failed!");
+		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -253,7 +233,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 {
 	DBusGProxy *proxy = NULL;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
@@ -264,19 +244,23 @@ gpm_hal_device_get_string (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "GetPropertyString", &error,
-			       G_TYPE_STRING, key, G_TYPE_INVALID,
-			       G_TYPE_STRING, value, G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
+	ret = dbus_g_proxy_call (proxy, "GetPropertyString", &error,
+				 G_TYPE_STRING, key,
+				 G_TYPE_INVALID,
+				 G_TYPE_STRING, value,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
 		*value = NULL;
-		retval = FALSE;
+		gpm_warning ("GetPropertyString failed!");
+		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -296,7 +280,7 @@ gpm_hal_device_get_int (GpmHal      *hal,
 {
 	DBusGProxy *proxy;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
@@ -307,19 +291,23 @@ gpm_hal_device_get_int (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "GetPropertyInteger", &error,
-				G_TYPE_STRING, key, G_TYPE_INVALID,
-				G_TYPE_INT, value, G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
+	ret = dbus_g_proxy_call (proxy, "GetPropertyInteger", &error,
+				 G_TYPE_STRING, key,
+				 G_TYPE_INVALID,
+				 G_TYPE_INT, value,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
 		*value = 0;
-		retval = FALSE;
+		gpm_warning ("GetPropertyInteger failed!");
+		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -337,7 +325,7 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 {
 	DBusGProxy *proxy = NULL;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (capability != NULL, FALSE);
@@ -347,19 +335,23 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       HAL_DBUS_PATH_MANAGER,
 					       HAL_DBUS_INTERFACE_MANAGER);
-	retval = TRUE;
-	if (dbus_g_proxy_call (proxy, "FindDeviceByCapability", &error,
-			        G_TYPE_STRING, capability, G_TYPE_INVALID,
-			        G_TYPE_STRV, value, G_TYPE_INVALID) == FALSE) {
-		if (error) {
-			gpm_debug ("%s", error->message);
-			g_error_free (error);
-		}
+	ret = dbus_g_proxy_call (proxy, "FindDeviceByCapability", &error,
+				 G_TYPE_STRING, capability,
+				 G_TYPE_INVALID,
+				 G_TYPE_STRV, value,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
 		*value = NULL;
-		retval = FALSE;
+		gpm_warning ("FindDeviceByCapability failed!");
+		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -943,7 +935,7 @@ gpm_hal_proxy_connect_more (GpmHal *hal)
 
 	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
@@ -994,7 +986,7 @@ gpm_hal_proxy_disconnect_more (GpmHal *hal)
 
 	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 

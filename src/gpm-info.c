@@ -255,7 +255,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	} else if (strcmp (type, "charge") == 0) {
 		events = gpm_info_data_get_list (info->priv->percentage_data);
 	} else {
-		g_warning ("Data type %s not known!", type);
+		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_INVALID_TYPE,
 				      "Data type %s not known!", type);
@@ -263,7 +263,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	}
 
 	if (events == NULL) {
-		g_warning ("Data not available");
+		gpm_warning ("Data not available");
 		*error = g_error_new (gpm_info_error_quark (),
 				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available");

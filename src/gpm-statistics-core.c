@@ -236,7 +236,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 
 	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
@@ -257,7 +257,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		g_warning ("GetEventLog failed!");
+		gpm_warning ("GetEventLog failed!");
 		return FALSE;
 	}
 
@@ -373,7 +373,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 
 	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
@@ -387,7 +387,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		g_warning ("GetTypes failed!");
+		gpm_warning ("GetTypes failed!");
 		return FALSE;
 	}
 
@@ -436,7 +436,7 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 
 	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
@@ -459,7 +459,7 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		g_warning ("GetData failed!");
+		gpm_warning ("GetData failed!");
 		return FALSE;
 	}
 
@@ -506,7 +506,7 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 
 	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
@@ -522,7 +522,7 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		g_warning ("GetAxisType failed!");
+		gpm_warning ("GetAxisType failed!");
 		return FALSE;
 	}
 

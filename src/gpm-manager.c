@@ -603,7 +603,7 @@ sync_dpms_policy (GpmManager *manager)
 
 	/* check if method is valid */
 	if (method == GPM_DPMS_METHOD_UNKNOWN) {
-		g_warning ("DPMS method unknown. Possible schema problem!");
+		gpm_warning ("DPMS method unknown. Possible schema problem!");
 		return;
 	}
 

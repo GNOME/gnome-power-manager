@@ -108,27 +108,6 @@ gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
 }
 
 /**
- * gpm_hal_cpufreq_handle_error:
- * @ret: return value (==0 in this case)
- * @method: The method name
- * Return value: If the method succeeded
- **/
-static gboolean
-gpm_hal_cpufreq_handle_error (GError *error, const gchar *method)
-{
-	gboolean retval = TRUE;
-
-	g_return_val_if_fail (method != NULL, FALSE);
-
-	if (error) {
-		gpm_debug ("%s failed\n(%s)", method, error->message);
-		retval = FALSE;
-		g_error_free (error);
-	}
-	return retval;
-}
-
-/**
  * gpm_hal_cpufreq_has_hardware:
  *
  * @cpufreq: This cpufreq class instance
@@ -152,7 +131,7 @@ gboolean
 gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
@@ -180,15 +159,24 @@ gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
-	dbus_g_proxy_call (proxy, "SetCPUFreqPerformance", &error,
-			   G_TYPE_INT, performance, G_TYPE_INVALID,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "SetCPUFreqPerformance");
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "SetCPUFreqPerformance", &error,
+				 G_TYPE_INT, performance,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetCPUFreqPerformance failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -203,7 +191,7 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
 			      GpmHalCpuFreqEnum cpufreq_type)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	const gchar *governor;
 	DBusGProxy *proxy;
 
@@ -219,22 +207,28 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing SetCPUFreqGovernor (%s)", governor);
-	dbus_g_proxy_call (proxy, "SetCPUFreqGovernor", &error,
-			   G_TYPE_STRING, governor, G_TYPE_INVALID,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "SetCPUFreqGovernor");
-
-	/* save the cache */
-	if (retval == TRUE) {
-		cpufreq->priv->current_governor = cpufreq_type;
+	ret = dbus_g_proxy_call (proxy, "SetCPUFreqGovernor", &error,
+				 G_TYPE_STRING, governor,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetCPUFreqGovernor failed!");
+		return FALSE;
 	}
 
-	return retval;
+	/* save the cache */
+	cpufreq->priv->current_governor = cpufreq_type;
+	return TRUE;
 }
 
 /**
@@ -249,7 +243,7 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 			       GpmHalCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	char **strlist;
 	int i = 0;
 	DBusGProxy *proxy;
@@ -266,27 +260,32 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing GetCPUFreqAvailableGovernors");
-	dbus_g_proxy_call (proxy, "GetCPUFreqAvailableGovernors", &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_STRV, &strlist,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "GetCPUFreqAvailableGovernors");
+	ret = dbus_g_proxy_call (proxy, "GetCPUFreqAvailableGovernors", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_STRV, &strlist,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("GetCPUFreqAvailableGovernors failed!");
+		return FALSE;
+	}
 
 	/* treat as binary flags */
-	if (retval) {
-		while (strlist && strlist[i]) {
-			*cpufreq_type += gpm_hal_cpufreq_string_to_enum (strlist[i]);
-			++i;
-		}
+	while (strlist && strlist[i]) {
+		*cpufreq_type += gpm_hal_cpufreq_string_to_enum (strlist[i]);
+		++i;
 	}
 	cpufreq->priv->available_governors = i;
-
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -327,7 +326,7 @@ gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
 				   gboolean      *consider_nice)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
@@ -355,17 +354,25 @@ gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing GetCPUFreqConsiderNice");
-	dbus_g_proxy_call (proxy, "GetCPUFreqConsiderNice", &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_BOOLEAN, consider_nice,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "GetCPUFreqConsiderNice");
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "GetCPUFreqConsiderNice", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, consider_nice,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("GetCPUFreqConsiderNice failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -380,7 +387,7 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
 				 guint         *performance)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
@@ -388,7 +395,7 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
 	g_return_val_if_fail (performance != NULL, FALSE);
 
 	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
+	if (cpufreq->priv->has_hardware == FALSE) {
 		*performance = -1;
 		return FALSE;
 	}
@@ -407,17 +414,25 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing GetCPUFreqPerformance");
-	dbus_g_proxy_call (proxy, "GetCPUFreqPerformance", &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_INT, performance,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "GetCPUFreqPerformance");
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "GetCPUFreqPerformance", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_INT, performance,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("GetCPUFreqPerformance failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -432,7 +447,7 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 			      GpmHalCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	gchar *governor;
 	DBusGProxy *proxy;
 
@@ -453,24 +468,32 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing GetCPUFreqGovernor");
-	dbus_g_proxy_call (proxy, "GetCPUFreqGovernor", &error,
-			   G_TYPE_INVALID,
-			   G_TYPE_STRING, &governor,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "GetCPUFreqGovernor");
+	ret = dbus_g_proxy_call (proxy, "GetCPUFreqGovernor", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_STRING, &governor,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("GetCPUFreqGovernor failed!");
+		return FALSE;
+	}
 
 	/* convert to enumerated type */
-	if (retval == TRUE && governor != NULL) {
+	if (governor != NULL) {
 		*cpufreq_type = gpm_hal_cpufreq_string_to_enum (governor);
 		cpufreq->priv->current_governor = *cpufreq_type;
 	}
 
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -485,7 +508,7 @@ gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
 				   gboolean       consider_nice)
 {
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
@@ -510,16 +533,25 @@ gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected");
+		gpm_warning ("not connected");
 		return FALSE;
 	}	
 
 	gpm_debug ("Doing SetCPUFreqConsiderNice (%i)", consider_nice);
-	dbus_g_proxy_call (proxy, "SetCPUFreqConsiderNice", &error,
-			   G_TYPE_BOOLEAN, consider_nice, G_TYPE_INVALID,
-			   G_TYPE_INVALID);
-	retval = gpm_hal_cpufreq_handle_error (error, "SetCPUFreqConsiderNice");
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "SetCPUFreqConsiderNice", &error,
+				 G_TYPE_BOOLEAN, consider_nice,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetCPUFreqConsiderNice failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**

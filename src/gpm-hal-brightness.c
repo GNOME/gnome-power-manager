@@ -86,7 +86,7 @@ static gboolean
 gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
 {
 	GError     *error = NULL;
-	gboolean    retval;
+	gboolean    ret;
 	gint        brightness_hw = 0;
 	DBusGProxy *proxy;
 
@@ -94,23 +94,25 @@ gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected to HAL");
+		gpm_warning ("not connected to HAL");
 		return FALSE;
 	}	
 
-	retval = TRUE;
-	if (!dbus_g_proxy_call (proxy, "GetBrightness", &error,
-				G_TYPE_INVALID,
-				G_TYPE_UINT, &brightness_hw, G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		retval = FALSE;
+	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &brightness_hw,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
-
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("GetBrightness failed!");
+		return FALSE;
+	}
 	brightness->priv->current_hw = brightness_hw;
-	return retval;
+	return TRUE;
 }
 
 /**
@@ -127,15 +129,15 @@ gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
 			   guint	     brightness_level_hw)
 {
 	GError     *error = NULL;
-	gint        ret;
-	gboolean    retval;
+	gint        retval;
+	gboolean    ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
-		g_warning ("not connected to HAL");
+		gpm_warning ("not connected to HAL");
 		return FALSE;
 	}	
 
@@ -148,22 +150,22 @@ gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
 
 	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
-	retval = TRUE;
-	if (!dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				G_TYPE_INT, brightness_level_hw, G_TYPE_INVALID,
-				G_TYPE_UINT, &ret, G_TYPE_INVALID)) {
-		if (error) {
-			gpm_warning ("%s", error->message);
-			g_error_free (error);
-		}
-		retval = FALSE;
+	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
+				 G_TYPE_INT, brightness_level_hw,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
 	}
-	if (ret != 0) {
-		retval = FALSE;
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetBrightness failed!");
+		return FALSE;
 	}
-
 	brightness->priv->current_hw = brightness_level_hw;
-	return retval;
+	return TRUE;
 }
 
 
