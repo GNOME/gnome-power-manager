@@ -579,6 +579,10 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	/* const, so no need to free */
 	statistics->priv->graph_type = type;
 
+	/* save in gconf so we choose the correct graph type on next startup */
+	gconf_client_set_string (statistics->priv->gconf_client,
+				 GPM_PREF_STAT_GRAPH_TYPE, type, NULL);
+
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
 }
@@ -590,18 +594,25 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 	GList *list = NULL;
 	GList *l;
 	gchar *type;
+	gchar *saved;
 	gchar *type_localized;
 	gboolean ret;
-	
+	guint count, pos;
+
 	ret = gpm_statistics_find_types (statistics, &list);
 	if (ret == FALSE) {
 		return;
 	}
 
-	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_statistics_type_combo_changed_cb),
-			  statistics);
+	saved = gconf_client_get_string (statistics->priv->gconf_client,
+					 GPM_PREF_STAT_GRAPH_TYPE, NULL);
+	/* gconf error, bahh */
+	if (saved == NULL) {
+		saved = g_strdup ("power");
+	}
 
+	count = 0;
+	pos = 0;
 	for (l=list; l != NULL; l=l->next) {
 		type = l->data;
 		if (strcmp (type, ACTION_CHARGE) == 0) {
@@ -613,11 +624,20 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 		} else {
 			type_localized = _("Unknown");
 		}
+		/* is this the same value as we have stored in gconf? */
+		if (strcmp (type, saved) == 0) {
+			pos = count;
+		}
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget), type_localized);
+		count++;
 	}
 	gpm_statistics_free_list_strings (list);
+	g_free (saved);
 
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_statistics_type_combo_changed_cb),
+			  statistics);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), pos);
 }
 
 static gboolean 

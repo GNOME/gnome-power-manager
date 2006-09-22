@@ -107,6 +107,7 @@ G_BEGIN_DECLS
 
 #define GPM_PREF_STAT_SHOW_LEGEND	GPM_PREF_DIR "/statistics_show_legend"
 #define GPM_PREF_STAT_SHOW_EVENTS	GPM_PREF_DIR "/statistics_show_events"
+#define GPM_PREF_STAT_GRAPH_TYPE	GPM_PREF_DIR "/statistics_graph_type"
 
 G_END_DECLS
 
