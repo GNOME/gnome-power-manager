@@ -76,8 +76,6 @@ typedef enum {
 	GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
 	GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
 	GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
-	GPM_GRAPH_WIDGET_EVENT_DPMS_OFF,
-	GPM_GRAPH_WIDGET_EVENT_DPMS_ON,
 	GPM_GRAPH_WIDGET_EVENT_SUSPEND,
 	GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
 	GPM_GRAPH_WIDGET_EVENT_RESUME,
@@ -125,8 +123,10 @@ void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
-const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent	 event);
-GpmGraphWidgetColour	 gpm_graph_widget_event_colour	(GpmGraphWidgetEvent	 event);
+const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent event);
+void		 gpm_graph_widget_get_event_visual		(GpmGraphWidgetEvent event,
+							 GpmGraphWidgetColour *colour,
+							 GpmGraphWidgetShape *shape);
 GpmGraphWidgetAxisType	 gpm_graph_widget_string_to_axis_type (const gchar	*type);
 
 G_END_DECLS

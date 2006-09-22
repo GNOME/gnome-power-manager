@@ -227,8 +227,9 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	GValue *gv;
 	GPtrArray *ptrarray = NULL;
 	GType g_type_ptrarray;
-	int i;
-	int x, col;
+	gint i;
+	gint x;
+	gint event;
 	gint time = 0;
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
@@ -261,7 +262,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 		return FALSE;
 	}
 
-	g_debug ("size=%i", ptrarray->len);
+	gpm_debug ("events size=%i", ptrarray->len);
 
 	/* clear current events */
 	gpm_info_data_clear (statistics->priv->events);
@@ -272,9 +273,9 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 		x = g_value_get_int (gv);
 		g_value_unset (gv);
 		gv = g_value_array_get_nth (gva, 1);
-		col = g_value_get_int (gv);
+		event = g_value_get_int (gv);
 		g_value_unset (gv);
-		gpm_info_data_add_always (statistics->priv->events, x, 0, col, NULL);
+		gpm_info_data_add_always (statistics->priv->events, x, event, 0, NULL);
 		g_value_array_free (gva);
 	}
 	g_ptr_array_free (ptrarray, TRUE);
@@ -463,7 +464,7 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 		return FALSE;
 	}
 
-	g_debug ("size=%i", ptrarray->len);
+	gpm_debug ("size=%i", ptrarray->len);
 
 	/* clear current events */
 	gpm_info_data_clear (statistics->priv->data);
@@ -526,8 +527,8 @@ gpm_statistics_get_axis_type (GpmStatistics          *statistics,
 		return FALSE;
 	}
 
-	g_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x);
-	g_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y);
+	gpm_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x);
+	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y);
 
 	/* convert the string types to enumerated values */
 	*x = gpm_graph_widget_string_to_axis_type (axis_type_x);
@@ -623,7 +624,7 @@ static gboolean
 gpm_statistics_graph_refresh (gpointer data)
 {
 	GpmStatistics *statistics = GPM_STATISTICS (data);
-	g_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
+	gpm_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
 	gpm_statistics_refresh_data (statistics);
 	gpm_statistics_refresh_events (statistics);
 	return TRUE;

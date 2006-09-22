@@ -831,8 +831,6 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gboolean ret = TRUE;
 	GError  *error = NULL;
 
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_WIDGET_EVENT_DPMS_OFF, NULL);
-
 	do_lock = gpm_manager_get_lock_policy (manager,
 					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
@@ -946,8 +944,6 @@ manager_policy_do (GpmManager  *manager,
 		gpm_manager_hibernate (manager, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_DPMS_OFF,
-					_("DPMS blanking screen"), reason);
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
@@ -1717,9 +1713,6 @@ lid_button_pressed (GpmManager *manager,
 		}
 	} else {
 		/* we turn the lid dpms back on unconditionally */
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_DPMS_ON,
-					_("Turning LCD panel back on"),
-					_("laptop lid re-opened"));
 		gpm_manager_unblank_screen (manager, NULL);
 	}
 }

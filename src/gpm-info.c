@@ -216,7 +216,7 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 		value = g_new0 (GValue, 1);
 		g_value_init (value, GPM_DBUS_STRUCT_INT_INT);
 		g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_INT));
-		dbus_g_type_struct_set (value, 0, new->time, 1, new->colour, -1);
+		dbus_g_type_struct_set (value, 0, new->time, 1, new->value, -1);
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
@@ -536,9 +536,7 @@ gpm_info_event_log (GpmInfo	       *info,
 
 	gpm_info_data_add_always (info->priv->events,
 				  time (NULL) - info->priv->start_time,
-				  event,
-				  gpm_graph_widget_event_colour (event),
-				  desc);
+				  event, 0, desc);
 }
 
 /**

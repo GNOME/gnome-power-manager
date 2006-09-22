@@ -82,10 +82,6 @@ gpm_graph_widget_event_description (GpmGraphWidgetEvent event)
 		return _("LCD dim");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
 		return _("LCD resume");
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_OFF) {
-		return _("DPMS off");
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_ON) {
-		return _("DPMS on");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {
 		return _("Suspend");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_RESUME) {
@@ -104,40 +100,50 @@ gpm_graph_widget_event_description (GpmGraphWidgetEvent event)
 }
 
 /**
- * gpm_graph_widget_event_colour:
+ * gpm_graph_widget_get_event_visual:
  * @event: The event type, e.g. GPM_GRAPH_WIDGET_EVENT_SUSPEND
  * Return value: a colout, e.g. GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE
  **/
-GpmGraphWidgetColour
-gpm_graph_widget_event_colour (GpmGraphWidgetEvent event)
+void
+gpm_graph_widget_get_event_visual (GpmGraphWidgetEvent   event,
+				   GpmGraphWidgetColour *colour,
+				   GpmGraphWidgetShape  *shape)
 {
 	if (event == GPM_GRAPH_WIDGET_EVENT_ON_AC) {
-		return GPM_GRAPH_WIDGET_COLOUR_BLUE;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_BLUE;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_CIRCLE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_ON_BATTERY) {
-		return GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_CIRCLE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM) {
-		return GPM_GRAPH_WIDGET_COLOUR_CYAN;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_YELLOW;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_SQUARE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
-		return GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN;
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_OFF) {
-		return GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW;
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_DPMS_ON) {
-		return GPM_GRAPH_WIDGET_COLOUR_YELLOW;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_SQUARE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {
-		return GPM_GRAPH_WIDGET_COLOUR_RED;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_RED;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_DIAMOND;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_RESUME) {
-		return GPM_GRAPH_WIDGET_COLOUR_DARK_RED;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_RED;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_DIAMOND;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_HIBERNATE) {
-		return GPM_GRAPH_WIDGET_COLOUR_MAGENTA;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_MAGENTA;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_DIAMOND;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_CLOSED) {
-		return GPM_GRAPH_WIDGET_COLOUR_GREEN;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_GREEN;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_TRIANGLE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_LID_OPENED) {
-		return GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_TRIANGLE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_NOTIFICATION) {
-		return GPM_GRAPH_WIDGET_COLOUR_GREY;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_GREY;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_CIRCLE;
 	} else {
-		return GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
+		*colour = GPM_GRAPH_WIDGET_COLOUR_DEFAULT;
+		*shape = GPM_GRAPH_WIDGET_SHAPE_CIRCLE;
 	}
+	return;
 }
 
 /**
@@ -914,6 +920,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		gint prevpos = -1;
 		GpmInfoDataPoint *point_this = NULL;
 		GpmInfoDataPoint *point_last = NULL;
+		GpmGraphWidgetColour colour;
+		GpmGraphWidgetShape shape;
 
 		/* we track the list so we can put the point on the line */
 		GList *l2 = graph->priv->list;
@@ -949,9 +957,10 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 			newy -= (8 * previous_point);
 			/* only do the event dot, if it's going to fit on the graph */
 			if (eventdata->time > graph->priv->start_x) {
+				gpm_graph_widget_get_event_visual (eventdata->value,
+								   &colour, &shape);
 				gpm_graph_widget_draw_dot (cr, newx, newy,
-							   eventdata->colour,
-							   GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+							   colour, shape);
 			}
 			prevpos = newx;
 		}
@@ -1005,14 +1014,15 @@ gpm_graph_widget_draw_legend (cairo_t *cr,
 	gint y_count;
 	gint a;
 	GpmGraphWidgetColour colour;
+	GpmGraphWidgetShape shape;
 
 	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
 	y_count = y + 10;
 	for (a=0; a<GPM_GRAPH_WIDGET_EVENT_LAST; a++) {
 		desc = gpm_graph_widget_event_description (a);
-		colour = gpm_graph_widget_event_colour (a);
+		gpm_graph_widget_get_event_visual (a, &colour, &shape);
 		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
-					   colour, GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+					   colour, shape);
 		cairo_move_to (cr, x + 8 + 10, y_count + 3);
 		cairo_show_text (cr, desc);
 		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;

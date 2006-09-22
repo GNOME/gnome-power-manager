@@ -2,6 +2,19 @@
 
 	* src/gpm-graph-widget.c:
 	* src/gpm-graph-widget.h:
+	Draw different shapes for the event for colour-blind support.
+
+	* src/gpm-statistics-core.c:
+	* src/gpm-info.c:
+	Send the *event* rather than the colour of the event.
+
+	* src/gpm-manager.c:
+	Remove the DPMS events, they never really belonged anyway.
+
+2006-09-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
 	Add in initial code to be able to draw dots of differing shape:
 	circle, square, diamond and triangle.
 	This is to make the graph output more suitable for colour-blind
