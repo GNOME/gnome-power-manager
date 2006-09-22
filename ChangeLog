@@ -1,5 +1,13 @@
 2006-09-22  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-info.glade:
+	* src/gpm-info.c:
+	Remove the infrequently used event log from the UI.
+	There goes another 200Kb of writable memory. I plan to add tooltip
+	support for the text points in the statistics tool.
+
+2006-09-22  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_info_init):
 	Fix simple comment typo.
 

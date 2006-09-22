@@ -64,7 +64,6 @@ struct GpmInfoPrivate
 	GpmHalPower		*hal_power;
 
 	GtkWidget		*main_window;
-	GtkWidget		*treeview_event_viewer;
 
 	GpmInfoData		*events;
 	GpmInfoData		*rate_data;
@@ -400,96 +399,6 @@ gpm_info_populate_device_information (GpmInfo *info)
 }
 
 /**
- * gpm_info_create_event_viewer_tree:
- * @widget: The GtkWidget object
- *
- * Create the event viewer widget, setting up the columns
- **/
-static void
-gpm_info_create_event_viewer_tree (GtkWidget *widget)
-{
-	GtkCellRenderer *renderer;
-	GtkTreeViewColumn *column;
-
-	renderer = gtk_cell_renderer_text_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Time"), renderer, "text", 0, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 0);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, 120);
-
-	column = gtk_tree_view_column_new_with_attributes (_("Event"), renderer, "text", 1, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 1);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, 100);
-
-	column = gtk_tree_view_column_new_with_attributes (_("Description"), renderer, "text", 2, NULL);
-	gtk_tree_view_column_set_sort_column_id (column, 2);
-	gtk_tree_view_append_column (GTK_TREE_VIEW (widget), column);
-	gtk_tree_view_column_set_min_width (column, 200);
-
-	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (widget), TRUE);
-	gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (widget), TRUE);
-	gtk_tree_view_set_headers_clickable (GTK_TREE_VIEW (widget), FALSE);
-}
-
-/**
- * gpm_info_get_time_string:
- * @time_secs: A time_t value
- *
- * Converts a time_t to a string description.
- * The return value must be freed using g_free().
- * Return value: The timestring, e.g. "Sat Apr 15, 15:35:40".
- **/
-static gchar *
-gpm_info_get_time_string (time_t time_secs)
-{
-	gchar outstr[256];
-	struct tm *tmp;
-	tmp = localtime (&time_secs);
-	strftime (outstr, sizeof(outstr), "%a %b %d, %T", tmp);
-	return g_strdup (outstr);
-}
-
-/**
- * gpm_info_update_event_tree:
- * @info: This info class instance
- *
- * Updates the event log tree widget with the data we currently have.
- **/
-static void
-gpm_info_update_event_tree (GpmInfo *info)
-{
-	gchar *timestring;
-	const gchar *descstring;
-	GpmInfoDataPoint *new;
-	GtkTreeIter   iter;
-	GList *l;
-	GtkListStore *store = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-	GList *events = gpm_info_data_get_list (info->priv->events);
-
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-
-	for (l=events; l != NULL; l=l->next) {
-		new = (GpmInfoDataPoint *) l->data;
-		timestring = gpm_info_get_time_string (info->priv->start_time + new->time);
-		descstring = gpm_graph_widget_event_description (new->value);
-		gpm_debug ("event log: %s: %s", timestring, descstring);
-		/* add data to the list store */
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    0, timestring,
-				    1, descstring,
-				    2, new->desc, -1);
-		g_free (timestring);
-	}
-
-	gtk_tree_view_set_model (GTK_TREE_VIEW (info->priv->treeview_event_viewer),
-				 GTK_TREE_MODEL (store));
-	g_object_unref (store);
-}
-
-/**
  * gpm_info_close_cb:
  * @widget: The GtkWidget button object
  * @info: This info class instance
@@ -517,22 +426,6 @@ gpm_info_delete_event_cb (GtkWidget *widget,
 {
 	gpm_info_close_cb (widget, info);
 	return FALSE;
-}
-
-/**
- * gpm_info_clear_events_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- *
- * Clears the events data from memory
- **/
-static void
-gpm_info_clear_events_cb (GtkWidget *widget,
-			  GpmInfo   *info)
-{
-	g_object_unref (info->priv->events);
-	info->priv->events = gpm_info_data_new ();
-	gpm_info_update_event_tree (info);
 }
 
 /**
@@ -592,10 +485,6 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (info->priv->main_window, "delete_event",
 			  G_CALLBACK (gpm_info_delete_event_cb), info);
 
-	widget = glade_xml_get_widget (glade_xml, "button_clear_events");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_clear_events_cb), info);
-
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_close_cb), info);
@@ -604,16 +493,7 @@ gpm_info_show_window (GpmInfo *info)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_info_help_cb), info);
 
-	/* set up the event viewer tree-view */
-	widget = glade_xml_get_widget (info->priv->glade_xml, "treeview_event_log");
-	gtk_widget_set_size_request (widget, 400, 200);
-	info->priv->treeview_event_viewer = widget;
-	gpm_info_create_event_viewer_tree (widget);
-
 	gpm_info_populate_device_information (info);
-	gpm_info_update_event_tree (info);
-
-	gtk_widget_show (info->priv->treeview_event_viewer);
 
 	/* find the total number of and type of devices */
 	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
@@ -659,10 +539,6 @@ gpm_info_event_log (GpmInfo	       *info,
 				  event,
 				  gpm_graph_widget_event_colour (event),
 				  desc);
-	if (info->priv->main_window) {
-		/* do this only if the main window is loaded */
-		gpm_info_update_event_tree (info);
-	}
 }
 
 /**
