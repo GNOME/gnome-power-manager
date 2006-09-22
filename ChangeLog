@@ -1,5 +1,14 @@
 2006-09-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	Add in initial code to be able to draw dots of differing shape:
+	circle, square, diamond and triangle.
+	This is to make the graph output more suitable for colour-blind
+	people as pointed out in my blog.
+
+2006-09-22  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-info.glade:
 	* src/gpm-info.c:
 	Remove the infrequently used event log from the UI.

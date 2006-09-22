@@ -698,19 +698,78 @@ gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
  * @x: The X-coordinate for the center
  * @y: The Y-coordinate for the center
  * @colour: The colour enum
+ * @shape: The shape enum
  *
  * Draw the dot on the graph of a specified colour
  **/
 static void
-gpm_graph_widget_draw_dot (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidgetColour colour)
+gpm_graph_widget_draw_dot (cairo_t             *cr,
+			   gfloat               x,
+			   gfloat               y,
+			   GpmGraphWidgetColour colour,
+			   GpmGraphWidgetShape  shape)
 {
-	cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
-	gpm_graph_widget_set_colour (cr, colour);
-	cairo_fill (cr);
-	cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
-	cairo_set_source_rgb (cr, 0, 0, 0);
-	cairo_set_line_width (cr, 1);
-	cairo_stroke (cr);
+	gfloat width;
+	if (shape == GPM_GRAPH_WIDGET_SHAPE_CIRCLE) {
+		/* circle */
+		cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
+		gpm_graph_widget_set_colour (cr, colour);
+		cairo_fill (cr);
+		cairo_arc (cr, (gint)x + 0.5f, (gint)y + 0.5f, 4, 0, 2*M_PI);
+		cairo_set_source_rgb (cr, 0, 0, 0);
+		cairo_set_line_width (cr, 1);
+		cairo_stroke (cr);
+	} else if (shape == GPM_GRAPH_WIDGET_SHAPE_SQUARE) {
+		/* box */
+		width = 8.0;
+		cairo_rectangle (cr, (gint)x + 0.5f - (width/2), (gint)y + 0.5f - (width/2), width, width);
+		gpm_graph_widget_set_colour (cr, colour);
+		cairo_fill (cr);
+		cairo_rectangle (cr, (gint)x + 0.5f - (width/2), (gint)y + 0.5f - (width/2), width, width);
+		cairo_set_source_rgb (cr, 0, 0, 0);
+		cairo_set_line_width (cr, 1);
+		cairo_stroke (cr);
+	} else if (shape == GPM_GRAPH_WIDGET_SHAPE_DIAMOND) {
+		/* diamond */
+		width = 4.0;
+		cairo_new_path (cr);
+		cairo_move_to (cr, x+0.5, y-width+0.5);
+		cairo_line_to (cr, x+width+0.5, y+0.5);
+		cairo_line_to (cr, x+0.5, y+width+0.5);
+		cairo_line_to (cr, x-width+0.5, y+0.5);
+		cairo_close_path (cr);
+		gpm_graph_widget_set_colour (cr, colour);
+		cairo_fill (cr);
+		cairo_new_path (cr);
+		cairo_move_to (cr, x+0.5, y-width+0.5);
+		cairo_line_to (cr, x+width+0.5, y+0.5);
+		cairo_line_to (cr, x+0.5, y+width+0.5);
+		cairo_line_to (cr, x-width+0.5, y+0.5);
+		cairo_close_path (cr);
+		cairo_set_source_rgb (cr, 0, 0, 0);
+		cairo_set_line_width (cr, 1);
+		cairo_stroke (cr);
+	} else if (shape == GPM_GRAPH_WIDGET_SHAPE_TRIANGLE) {
+		/* triangle */
+		width = 4.0;
+		cairo_new_path (cr);
+		cairo_move_to (cr, x+0.5, y-width+0.5);
+		cairo_line_to (cr, x+width+0.5, y+width+0.5-1.0);
+		cairo_line_to (cr, x-width+0.5, y+width+0.5-1.0);
+		cairo_close_path (cr);
+		gpm_graph_widget_set_colour (cr, colour);
+		cairo_fill (cr);
+		cairo_new_path (cr);
+		cairo_move_to (cr, x+0.5, y-width+0.5);
+		cairo_line_to (cr, x+width+0.5, y+width+0.5-1.0);
+		cairo_line_to (cr, x-width+0.5, y+width+0.5-1.0);
+		cairo_close_path (cr);
+		cairo_set_source_rgb (cr, 0, 0, 0);
+		cairo_set_line_width (cr, 1);
+		cairo_stroke (cr);
+	} else {
+		gpm_warning ("shape %i not recognised!", shape);
+	}
 }
 
 /**
@@ -890,7 +949,9 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 			newy -= (8 * previous_point);
 			/* only do the event dot, if it's going to fit on the graph */
 			if (eventdata->time > graph->priv->start_x) {
-				gpm_graph_widget_draw_dot (cr, newx, newy, eventdata->colour);
+				gpm_graph_widget_draw_dot (cr, newx, newy,
+							   eventdata->colour,
+							   GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 			}
 			prevpos = newx;
 		}
@@ -950,7 +1011,8 @@ gpm_graph_widget_draw_legend (cairo_t *cr,
 	for (a=0; a<GPM_GRAPH_WIDGET_EVENT_LAST; a++) {
 		desc = gpm_graph_widget_event_description (a);
 		colour = gpm_graph_widget_event_colour (a);
-		gpm_graph_widget_draw_dot (cr, x + 8, y_count, colour);
+		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
+					   colour, GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 		cairo_move_to (cr, x + 8 + 10, y_count + 3);
 		cairo_show_text (cr, desc);
 		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
