@@ -215,41 +215,6 @@ gpm_hal_filter_error (GError **error)
 	return FALSE;
 }
 
-/* we have to be clever, as hal can pass back two types of errors, and we have
-   to ignore dbus timeouts */
-static gboolean
-gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
-{
-	gboolean retval = TRUE;
-
-	g_return_val_if_fail (method != NULL, FALSE);
-
-	if (error) {
-		/* DBUS might time out, which is okay. We can remove this code
-		   when the dbus glib bindings are fixed. See #332888 */
-		if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
-			gpm_debug ("DBUS timed out, but recovering");
-			retval = TRUE;
-		/* We might also get a generic remote exception if we time out */
-		} else if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_REMOTE_EXCEPTION)) {
-			gpm_debug ("Remote exception, recovering");
-			retval = TRUE;
-		} else {
-			gpm_warning ("%s failed\n(%s)",
-				     method,
-				     error->message);
-			gpm_syslog ("%s code='%i' quark='%s'", error->message, error->code, g_quark_to_string (error->domain));
-			retval = FALSE;
-		}
-		g_error_free (error);
-	} else if (ret != 0) {
-		/* we might not get an error set */
-		gpm_warning ("%s failed (Unknown error)", method);
-		retval = FALSE;
-	}
-	return retval;
-}
-
 /**
  * gpm_hal_power_suspend:
  *
@@ -262,9 +227,9 @@ gpm_hal_handle_error (guint ret, GError *error, const gchar *method)
 gboolean
 gpm_hal_power_suspend (GpmHalPower *hal_power, guint wakeup)
 {
-	guint ret = 0;
+	guint retval = 0;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_POWER (hal_power), FALSE);
@@ -275,12 +240,25 @@ gpm_hal_power_suspend (GpmHalPower *hal_power, guint wakeup)
 		return FALSE;
 	}
 
-	dbus_g_proxy_call (proxy, "Suspend", &error,
-			   G_TYPE_INT, wakeup, G_TYPE_INVALID,
-			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, "suspend");
-
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "Suspend", &error,
+				 G_TYPE_INT, wakeup,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	/* we might have to ignore the error */
+	if (gpm_hal_filter_error (&error)) {
+		return TRUE;
+	}
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("Suspend failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -386,9 +364,9 @@ gpm_hal_power_reboot (GpmHalPower *hal_power)
 gboolean
 gpm_hal_power_enable_power_save (GpmHalPower *hal_power, gboolean enable)
 {
-	gint ret = 0;
+	gint retval = 0;
 	GError *error = NULL;
-	gboolean retval;
+	gboolean ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_POWER (hal_power), FALSE);
@@ -406,12 +384,21 @@ gpm_hal_power_enable_power_save (GpmHalPower *hal_power, gboolean enable)
 	}
 
 	gpm_debug ("Doing SetPowerSave (%i)", enable);
-	dbus_g_proxy_call (proxy, "SetPowerSave", &error,
-			   G_TYPE_BOOLEAN, enable, G_TYPE_INVALID,
-			   G_TYPE_UINT, &ret, G_TYPE_INVALID);
-	retval = gpm_hal_handle_error (ret, error, "power save");
-
-	return retval;
+	ret = dbus_g_proxy_call (proxy, "SetPowerSave", &error,
+				 G_TYPE_BOOLEAN, enable,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetPowerSave failed!");
+		return FALSE;
+	}
+	return TRUE;
 }
 
 

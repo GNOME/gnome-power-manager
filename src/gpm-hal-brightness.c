@@ -128,9 +128,9 @@ static gboolean
 gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
 			   guint	     brightness_level_hw)
 {
-	GError     *error = NULL;
-	gint        retval;
-	gboolean    ret;
+	GError *error = NULL;
+	guint retval;
+	gboolean ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), FALSE);

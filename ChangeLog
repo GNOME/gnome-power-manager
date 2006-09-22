@@ -1,3 +1,18 @@
+2006-09-22  Richard Hughes  <richard@hughsie.com>
+
+	* help/C/figures/gpm-stats-graph.png:
+	* help/C/gnome-power-manager.xml:
+	* help/Makefile.am:
+	Add this new image so I can blog about it.
+
+	* src/gpm-hal-brightness.c:
+	* src/gpm-hal-power.c:
+	Convert the last two (insane) users of dbus_g_proxy_call to something
+	a bit more standard.
+
+	* src/gpm-hal.c:
+	Be less verbose about missing keys, sometimes it's legitimate.
+
 2006-09-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-brightness.c:

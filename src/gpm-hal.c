@@ -207,7 +207,7 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
 		*value = FALSE;
-		gpm_warning ("GetPropertyBoolean failed!");
+		gpm_debug ("GetPropertyBoolean failed!");
 		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
@@ -256,7 +256,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
 		*value = NULL;
-		gpm_warning ("GetPropertyString failed!");
+		gpm_debug ("GetPropertyString failed!");
 		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
@@ -303,7 +303,7 @@ gpm_hal_device_get_int (GpmHal      *hal,
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
 		*value = 0;
-		gpm_warning ("GetPropertyInteger failed!");
+		gpm_debug ("GetPropertyInteger failed!");
 		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
