@@ -103,7 +103,7 @@ main (int argc, char **argv)
 	GMainLoop *loop;
 #if HAVE_LIBGUNIQUEAPP
 	GUniqueApp *uniqueapp;
-	gchar *startup_id = NULL;
+	const gchar *startup_id = NULL;
 #endif
 
 	const GOptionEntry options[] = {

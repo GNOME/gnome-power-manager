@@ -1,3 +1,18 @@
+2006-09-22  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: (gpm_info_init):
+	Fix simple comment typo.
+
+	* src/gpm-prefs.c:
+	Make Elijah's patch compile with -Werror. :-)
+
+	* src/gpm-tray-icon.c:
+	Remove the gtk_ui_manager-style dropdown menus in favour of something
+	simpler. We need to be able to add arbitary number of entries with
+	custom icons for devices and so we need more control of the menu.
+	Move Help, About, Statistics and Preferences to right mouse button
+	action to fix #347913.
+
 2006-09-22  Elijah Newren  <newren gmail com>
 
 	* src/gpm-prefs.c (main): Make sure to obtain the

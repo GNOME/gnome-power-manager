@@ -765,7 +765,7 @@ gpm_info_init (GpmInfo *info)
 	}
 
 	if (info->priv->is_laptop) {
-		/* get the maximum x-asix size from gconf */
+		/* get the maximum x-axis size from gconf */
 		GConfClient *client = gconf_client_get_default ();
 		int max_time = gconf_client_get_int (client, GPM_PREF_GRAPH_DATA_MAX_TIME, NULL);
 		g_object_unref (client);

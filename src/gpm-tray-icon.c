@@ -59,17 +59,12 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 struct GpmTrayIconPrivate
 {
-	GtkUIManager	*ui_manager;
-	GtkActionGroup	*actiongroup;
 	GtkWidget	*popup_menu;
 	GtkStatusIcon	*status_icon;
-
 	gboolean	 show_notifications;
 	gboolean	 is_visible;
-
-	gboolean	 can_suspend;
-	gboolean	 can_hibernate;
-
+	gboolean	 show_suspend;
+	gboolean	 show_hibernate;
 	gchar		*stock_id;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification *notify;
@@ -88,33 +83,6 @@ enum {
 	PROP_MODE
 };
 
-static void gpm_tray_icon_suspend_cb		(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_hibernate_cb		(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_info_cb	 	(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_preferences_cb	(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_statistics_cb		(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_help_cb		(GtkAction *action, GpmTrayIcon *icon);
-static void gpm_tray_icon_show_about_cb		(GtkAction *action, GpmTrayIcon *icon);
-
-static GtkActionEntry gpm_tray_icon_action_entries [] =
-{
-	{ "TraySuspend", GPM_STOCK_SUSPEND, N_("_Suspend"),
-	  NULL, N_("Suspend the computer"), G_CALLBACK (gpm_tray_icon_suspend_cb) },
-	{ "TrayHibernate", GPM_STOCK_HIBERNATE, N_("Hi_bernate"),
-	  NULL, N_("Make the computer go to sleep"), G_CALLBACK (gpm_tray_icon_hibernate_cb) },
-	{ "TrayPreferences", GTK_STOCK_PREFERENCES, N_("_Preferences"),
-	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_preferences_cb) },
-	{ "TrayInfo", GTK_STOCK_DIALOG_INFO, N_("_Information"),
-	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_info_cb) },
-	{ "TrayStatistics", GTK_STOCK_CONVERT, N_("_Statistics"),
-	  NULL, NULL, G_CALLBACK (gpm_tray_icon_show_statistics_cb) },
-	{ "TrayHelp", GTK_STOCK_HELP, N_("_Help"), NULL,
-	  NULL, G_CALLBACK (gpm_tray_icon_show_help_cb) },
-	{ "TrayAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
-	  NULL, G_CALLBACK (gpm_tray_icon_show_about_cb) }
-};
-static guint gpm_tray_icon_n_action_entries = G_N_ELEMENTS (gpm_tray_icon_action_entries);
-
 static guint	 signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
@@ -129,15 +97,7 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 			      gboolean     enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
-	if (icon->priv->can_suspend != enabled) {
-		GtkAction *action;
-
-		icon->priv->can_suspend = enabled;
-		action = gtk_action_group_get_action (icon->priv->actiongroup,
-						      "TraySuspend");
-		gtk_action_set_visible (GTK_ACTION (action), enabled);
-	}
+	icon->priv->show_suspend = enabled;
 }
 
 /**
@@ -150,15 +110,7 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 				gboolean     enabled)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
-	if (icon->priv->can_hibernate != enabled) {
-		GtkAction *action;
-
-		icon->priv->can_hibernate = enabled;
-		action = gtk_action_group_get_action (icon->priv->actiongroup,
-						      "TrayHibernate");
-		gtk_action_set_visible (GTK_ACTION (action), enabled);
-	}
+	icon->priv->show_hibernate = enabled;
 }
 
 /**
@@ -173,8 +125,7 @@ gpm_tray_icon_set_tooltip (GpmTrayIcon  *icon,
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 	g_return_if_fail (tooltip != NULL);
 
-	gtk_status_icon_set_tooltip (GTK_STATUS_ICON (icon->priv->status_icon),
-				     tooltip);
+	gtk_status_icon_set_tooltip (GTK_STATUS_ICON (icon->priv->status_icon), tooltip);
 }
 
 /**
@@ -212,9 +163,9 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_info_cb (GtkAction   *action,
-			    GpmTrayIcon *icon)
+gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 {
+	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
 	gpm_debug ("emitting show_info");
 	g_signal_emit (icon, signals [SHOW_INFO], 0);
 }
@@ -225,9 +176,9 @@ gpm_tray_icon_show_info_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_hibernate_cb (GtkAction   *action,
-			    GpmTrayIcon *icon)
+gpm_tray_icon_hibernate_cb (GtkMenuItem *item, gpointer data)
 {
+	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
 	gpm_debug ("emitting hibernate");
 	g_signal_emit (icon, signals [HIBERNATE], 0);
 }
@@ -238,9 +189,9 @@ gpm_tray_icon_hibernate_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_suspend_cb (GtkAction   *action,
-			  GpmTrayIcon *icon)
+gpm_tray_icon_suspend_cb (GtkMenuItem *item, gpointer data)
 {
+	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
 	gpm_debug ("emitting suspend");
 	g_signal_emit (icon, signals [SUSPEND], 0);
 }
@@ -251,8 +202,7 @@ gpm_tray_icon_suspend_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_statistics_cb (GtkAction   *action,
-				   GpmTrayIcon *icon)
+gpm_tray_icon_show_statistics_cb (GtkMenuItem *item, gpointer data)
 {
 	const gchar *command = "gnome-power-statistics";
 
@@ -267,8 +217,7 @@ gpm_tray_icon_show_statistics_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_preferences_cb (GtkAction   *action,
-				   GpmTrayIcon *icon)
+gpm_tray_icon_show_preferences_cb (GtkMenuItem *item, gpointer data)
 {
 	const gchar *command = "gnome-power-preferences";
 
@@ -283,8 +232,7 @@ gpm_tray_icon_show_preferences_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_help_cb (GtkAction   *action,
-			    GpmTrayIcon *icon)
+gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
 {
 	GError *error = NULL;
 
@@ -301,8 +249,7 @@ gpm_tray_icon_show_help_cb (GtkAction   *action,
  * @icon: This TrayIcon class instance
  **/
 static void
-gpm_tray_icon_show_about_cb (GtkAction   *action,
-			     GpmTrayIcon *icon)
+gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
 {
 	const char *authors[] = {
 		"Richard Hughes <richard@hughsie.com>",
@@ -370,30 +317,8 @@ static void
 gpm_tray_icon_popup_cleared_cd (GtkWidget   *widget,
 				GpmTrayIcon *icon)
 {
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-}
-
-/**
- * gpm_tray_icon_sync_actions:
- * @icon: This TrayIcon class instance
- *
- * Syncs the private icon->priv->can_* variables with the icon states
- **/
-static void
-gpm_tray_icon_sync_actions (GpmTrayIcon *icon)
-{
-	GtkAction *action;
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
-	if (icon->priv->actiongroup != NULL) {
-		action = gtk_action_group_get_action (icon->priv->actiongroup,
-						      "TraySuspend");
-		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_suspend);
-
-		action = gtk_action_group_get_action (icon->priv->actiongroup,
-						      "TrayHibernate");
-		gtk_action_set_visible (GTK_ACTION (action), icon->priv->can_hibernate);
-	}
+//	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+	g_debug ("clear tray (icon = %p)", icon);
 }
 
 /**
@@ -408,54 +333,12 @@ gpm_tray_icon_constructor (GType		  type,
 {
 	GpmTrayIcon      *tray;
 	GpmTrayIconClass *klass;
-	GError		 *error = NULL;
-	GtkWidget	 *widget;
 
 	klass = GPM_TRAY_ICON_CLASS (g_type_class_peek (GPM_TYPE_TRAY_ICON));
 
 	tray = GPM_TRAY_ICON (G_OBJECT_CLASS (gpm_tray_icon_parent_class)->constructor
 			      (type, n_construct_properties,
 			       construct_properties));
-
-	tray->priv->actiongroup = gtk_action_group_new ("TrayActions");
-
-	gtk_action_group_set_translation_domain (tray->priv->actiongroup,
-						 GETTEXT_PACKAGE);
-
-	gtk_action_group_add_actions (tray->priv->actiongroup,
-				      gpm_tray_icon_action_entries,
-				      gpm_tray_icon_n_action_entries,
-				      tray);
-	gpm_tray_icon_sync_actions (tray);
-
-	gtk_ui_manager_insert_action_group (tray->priv->ui_manager, tray->priv->actiongroup, 0);
-	gtk_ui_manager_add_ui_from_string (tray->priv->ui_manager,
-					   "<ui>"
-					   "  <popup name=\"GpmTrayPopup\">"
-					   "    <menuitem action=\"TraySuspend\" />"
-					   "    <menuitem action=\"TrayHibernate\" />"
-					   "    <separator />"
-					   "    <menuitem action=\"TrayPreferences\" />"
-					   "    <menuitem action=\"TrayInfo\" />"
-					   "    <menuitem action=\"TrayStatistics\" />"
-					   "    <separator />"
-					   "    <menuitem action=\"TrayHelp\" />"
-					   "    <menuitem action=\"TrayAbout\" />"
-					   "  </popup>"
-					   "</ui>",
-					   -1, &error);
-	if (error != NULL) {
-		gpm_warning ("Couldn't merge user interface for popup: %s", error->message);
-		g_clear_error (&error);
-	}
-
-	gtk_ui_manager_ensure_update (tray->priv->ui_manager);
-
-	/* Get notified of when the menu goes, as we have to re-enable the tooltip */
-	widget = gtk_ui_manager_get_widget (tray->priv->ui_manager, "/GpmTrayPopup");
-	g_signal_connect (GTK_WIDGET (widget), "hide", G_CALLBACK (gpm_tray_icon_popup_cleared_cd), tray);
-
-	g_object_unref (tray->priv->actiongroup);
 
 	return G_OBJECT (tray);
 }
@@ -534,17 +417,58 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
  **/
 static void
 gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
-			     guint          button,
-			     guint32        activate_time,
-			     GpmTrayIcon    *icon)
+			     GpmTrayIcon   *icon)
 {
-	GtkWidget *popup;
-	popup = gtk_ui_manager_get_widget (GTK_UI_MANAGER (icon->priv->ui_manager),
-					   "/GpmTrayPopup");
+	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
+	GtkWidget *item;
+	GtkWidget *image;
 
-	gtk_menu_popup (GTK_MENU (popup), NULL, NULL,
+	gpm_debug ("icon right clicked");
+
+	/* Preferences */
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Preferences"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_preferences_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* Statistics */
+	item = gtk_image_menu_item_new_with_mnemonic (_("Power _History"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_CONVERT, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* Separator for HIG? */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* Help */
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Help"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_HELP, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_help_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* About */
+	item = gtk_image_menu_item_new_with_mnemonic (_("_About"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_about_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* show the menu */
+	gtk_widget_show_all (GTK_WIDGET (menu));
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 			gtk_status_icon_position_menu, status_icon,
-			button, activate_time);
+			1, gtk_get_current_event_time());
+
+	g_signal_connect (GTK_WIDGET (menu), "hide",
+			  G_CALLBACK (gpm_tray_icon_popup_cleared_cd), icon);
 }
 
 /**
@@ -558,7 +482,74 @@ static void
 gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 			   GpmTrayIcon   *icon)
 {
-	gpm_debug ("icon activated");
+	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
+	GtkWidget *item;
+	GtkWidget *image;
+
+	gpm_debug ("icon left clicked");
+//#define DISPLAY_DEVICES
+#ifdef DISPLAY_DEVICES
+	item = gtk_image_menu_item_new_with_mnemonic (_("Laptop Battery Bay #1"));
+	image = gtk_image_new_from_icon_name ("gpm-primary-040-charging", GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_image_menu_item_new_with_mnemonic (_("Laptop Battery Bay #2"));
+	image = gtk_image_new_from_icon_name ("gpm-primary-charged", GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	item = gtk_image_menu_item_new_with_mnemonic (_("MGE Ellipse 750 UPS"));
+	image = gtk_image_new_from_icon_name ("gpm-ups-040-charging", GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+#else
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Information"));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	g_signal_connect (G_OBJECT (item), "activate",
+			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+#endif
+
+	/* TODO: only do the seporator if we have at least one device */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	/* Suspend if available */
+	if (icon->priv->show_suspend) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Suspend"));
+		image = gtk_image_new_from_icon_name (GPM_STOCK_SUSPEND, GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		g_signal_connect (G_OBJECT (item), "activate",
+				  G_CALLBACK (gpm_tray_icon_suspend_cb), icon);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
+
+	/* Hibernate if available */
+	if (icon->priv->show_hibernate) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("Hi_bernate"));
+		image = gtk_image_new_from_icon_name (GPM_STOCK_HIBERNATE, GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		g_signal_connect (G_OBJECT (item), "activate",
+				  G_CALLBACK (gpm_tray_icon_hibernate_cb), icon);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
+
+	/* show the menu */
+	gtk_widget_show_all (GTK_WIDGET (menu));
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+			gtk_status_icon_position_menu, status_icon,
+			1, gtk_get_current_event_time());
+
+	g_signal_connect (GTK_WIDGET (menu), "hide",
+			  G_CALLBACK (gpm_tray_icon_popup_cleared_cd), icon);
 }
 
 /**
@@ -577,8 +568,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	/* FIXME: make this a property */
 	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
-
-	icon->priv->ui_manager = gtk_ui_manager_new ();
 
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
@@ -671,7 +660,7 @@ libnotify_event (GpmTrayIcon    *icon,
 		notify_notification_close (icon->priv->notify, NULL);
 	}
 
-#if 0
+#if 1
 	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
 	icon->priv->notify = notify_notification_new_with_status_icon (title, content,
 								       msgicon, icon->priv->status_icon);
