@@ -103,6 +103,7 @@ main (int argc, char **argv)
 	GMainLoop *loop;
 #if HAVE_LIBGUNIQUEAPP
 	GUniqueApp *uniqueapp;
+	gchar *startup_id = NULL;
 #endif
 
 	const GOptionEntry options[] = {
@@ -119,6 +120,15 @@ main (int argc, char **argv)
 
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 
+#if HAVE_LIBGUNIQUEAPP
+	/* FIXME: We don't need to get the startup id once we can
+	 * depend on gtk+-2.12.  Until then we must get it BEFORE
+	 * gtk_init() is called, otherwise gtk_init() will clear it
+	 * and libguniqueapp has to use racy workarounds.
+	 */
+	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+#endif
+
 	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
 			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
@@ -134,14 +144,19 @@ main (int argc, char **argv)
 
 	/* Arrr! Until we depend on gtk+2 2.12 we can't just use g_unique_app_get */
 	uniqueapp = g_unique_app_get_with_startup_id ("gnome-power-preferences",
-						      g_getenv ("DESKTOP_STARTUP_ID"));
+						      startup_id);
 	/* check to see if the user has another prefs window open */
 	if (g_unique_app_is_running (uniqueapp)) {
 		gpm_warning ("You have another instance running. "
 			     "This program will now close");
 		g_unique_app_activate (uniqueapp);
-		/* Until we depend on gtk+2 2.12, we need to do the startup
-		 * notification manually. Remove later... */
+
+		/* FIXME: This next line should be removed once we can depend
+		 * upon gtk+-2.12.  This causes the busy cursor and temporary
+		 * task in the tasklist to go away too soon (though that's
+		 * better than having them be stuck until the 30-second-or-so
+		 * timeout ends).
+		 */
 		gdk_notify_startup_complete ();
 	} else {
 #else

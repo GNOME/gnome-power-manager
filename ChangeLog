@@ -1,3 +1,9 @@
+2006-09-22  Elijah Newren  <newren gmail com>
+
+	* src/gpm-prefs.c (main): Make sure to obtain the
+	DESKTOP_STARTUP_ID environment variable before gtk_init() is
+	called since gtk_init() clears it.  #357128.
+
 2006-09-22  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/figures/gpm-stats-graph.png:
