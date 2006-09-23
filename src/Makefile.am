@@ -61,6 +61,12 @@ gnome_power_statistics_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(NULL)
 
+if HAVE_LIBGUNIQUEAPP
+gnome_power_statistics_LDADD +=				\
+	$(LIBGUNIQUEAPP_LIBS)				\
+	$(NULL)
+endif
+
 gnome_power_inhibit_test_SOURCES =			\
 	gpm-inhibit-test.c				\
 	$(NULL)

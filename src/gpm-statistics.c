@@ -29,6 +29,10 @@
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-help.h>
 
+#if HAVE_LIBGUNIQUEAPP
+#include <libguniqueapp/guniqueapp.h>
+#endif
+
 #include "gpm-gconf.h"
 #include "gpm-debug.h"
 #include "gpm-statistics-core.h"
@@ -65,6 +69,25 @@ gpm_statistics_close_cb (GpmStatistics *statistics)
 	exit (0);
 }
 
+#if HAVE_LIBGUNIQUEAPP
+/**
+ * guniqueapp_command_cb:
+ **/
+static void
+guniqueapp_command_cb (GUniqueApp       *app,
+		       GUniqueAppCommand command,
+		       gchar            *data,
+		       gchar            *startup_id,
+		       guint             workspace,
+		       gpointer          user_data)
+{
+	GpmStatistics *statistics = GPM_STATISTICS (user_data);
+	if (command == G_UNIQUE_APP_ACTIVATE) {
+		gpm_statistics_activate_window (statistics);
+	}
+}
+#endif
+
 /**
  * main:
  **/
@@ -76,6 +99,10 @@ main (int argc, char **argv)
  	GnomeProgram    *program;
 	GpmStatistics	*statistics = NULL;
 	GMainLoop       *loop;
+#if HAVE_LIBGUNIQUEAPP
+	GUniqueApp *uniqueapp;
+	const gchar *startup_id = NULL;
+#endif
 
 	const GOptionEntry options[] = {
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
@@ -83,7 +110,7 @@ main (int argc, char **argv)
 		{ NULL}
 	};
 
-	context = g_option_context_new (_("GNOME Power Preferences"));
+	context = g_option_context_new (_("GNOME Power Statistics"));
 
 	bindtextdomain (GETTEXT_PACKAGE, GNOMELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -91,33 +118,76 @@ main (int argc, char **argv)
 
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 
+#if HAVE_LIBGUNIQUEAPP
+	/* FIXME: We don't need to get the startup id once we can
+	 * depend on gtk+-2.12.  Until then we must get it BEFORE
+	 * gtk_init() is called, otherwise gtk_init() will clear it
+	 * and libguniqueapp has to use racy workarounds.
+	 */
+	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+#endif
+
 	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
 			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_GOPTION_CONTEXT, context,
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    _("Power Preferences"),
+			    _("Power Statistics"),
 			    NULL);
 
 	gpm_debug_init (verbose);
 
-	statistics = gpm_statistics_new ();
+#if HAVE_LIBGUNIQUEAPP
+	gpm_debug ("Using libguniqueapp support.");
 
-	g_signal_connect (statistics, "action-help",
-			  G_CALLBACK (gpm_statistics_help_cb), NULL);
-	g_signal_connect (statistics, "action-close",
-			  G_CALLBACK (gpm_statistics_close_cb), NULL);
+	/* Arrr! Until we depend on gtk+2 2.12 we can't just use g_unique_app_get */
+	uniqueapp = g_unique_app_get_with_startup_id ("gnome-power-statistics",
+						      startup_id);
+	/* check to see if the user has another prefs window open */
+	if (g_unique_app_is_running (uniqueapp)) {
+		gpm_warning ("You have another instance running. "
+			     "This program will now close");
+		g_unique_app_activate (uniqueapp);
 
-	loop = g_main_loop_new (NULL, FALSE);
+		/* FIXME: This next line should be removed once we can depend
+		 * upon gtk+-2.12.  This causes the busy cursor and temporary
+		 * task in the tasklist to go away too soon (though that's
+		 * better than having them be stuck until the 30-second-or-so
+		 * timeout ends).
+		 */
+		gdk_notify_startup_complete ();
+	} else {
+#else
+	gpm_warning ("No libguniqueapp support. Cannot signal other instances");
+	/* we always assume we have no other running instance */
+	if (1) {
+#endif
+		statistics = gpm_statistics_new ();
 
-	g_main_loop_run (loop);
+		g_signal_connect (statistics, "action-help",
+				  G_CALLBACK (gpm_statistics_help_cb), NULL);
+		g_signal_connect (statistics, "action-close",
+				  G_CALLBACK (gpm_statistics_close_cb), NULL);
+#if HAVE_LIBGUNIQUEAPP
+		/* Listen for messages from another instances */
+		g_signal_connect (G_OBJECT (uniqueapp), "message",
+				  G_CALLBACK (guniqueapp_command_cb), statistics);
+#endif
+		loop = g_main_loop_new (NULL, FALSE);
+		g_main_loop_run (loop);
 
-	g_object_unref (statistics);
+		g_object_unref (statistics);
+	}
 
 	gpm_debug_shutdown ();
 
+#if HAVE_LIBGUNIQUEAPP
+	g_object_unref (uniqueapp);
+#endif
+
 	g_object_unref (program);
-	g_option_context_free (context);
+/* seems to not work...
+	g_option_context_free (context); */
 
 	return 0;
 }

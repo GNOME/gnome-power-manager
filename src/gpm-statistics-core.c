@@ -651,6 +651,20 @@ gpm_statistics_graph_refresh (gpointer data)
 }
 
 /**
+ * gpm_statistics_activate_window:
+ * @statistics: This class instance
+ *
+ * Activates (shows) the window.
+ **/
+void
+gpm_statistics_activate_window (GpmStatistics *statistics)
+{
+	GtkWidget *widget;
+	widget = glade_xml_get_widget (statistics->priv->glade_xml, "window_graph");
+	gtk_window_present (GTK_WINDOW (widget));
+}
+
+/**
  * gpm_statistics_init:
  * @graph: This graph class instance
  **/

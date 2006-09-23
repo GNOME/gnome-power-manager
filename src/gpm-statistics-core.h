@@ -50,6 +50,7 @@ typedef struct
 
 GType		 gpm_statistics_get_type		(void);
 GpmStatistics	*gpm_statistics_new			(void);
+void		 gpm_statistics_activate_window		(GpmStatistics	*statistics);
 
 G_END_DECLS
 
