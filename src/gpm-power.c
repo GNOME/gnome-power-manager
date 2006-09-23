@@ -65,6 +65,7 @@ enum {
 	AC_STATE_CHANGED,
 	BATTERY_STATUS_CHANGED,
 	BATTERY_REMOVED,
+	BATTERY_MIGHT_EXPLODE,
 	LAST_SIGNAL
 };
 
@@ -147,6 +148,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	GpmPowerStatus *status = &entry->battery_status;
 	gchar *udi = entry->udi;
 	gchar *battery_kind_str;
+	gboolean might_expode;
 
 	/* invalidate last rate */
 	entry->charge_rate_previous = 0;
@@ -257,6 +259,19 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
+
+	/* this is more common than you might expect */
+	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.fault.might_overheat", &might_expode);
+//	might_expode = TRUE;	
+	if (might_expode) {
+		gchar *oem_vendor;
+		gchar *website;
+		gpm_hal_device_get_string (power->priv->hal, udi, "battery.fault.oem_vendor", &oem_vendor);
+		gpm_hal_device_get_string (power->priv->hal, udi, "battery.fault.website", &website);
+//		oem_vendor = "DELL";
+//		website = "https://www.dellbatteryprogram.com/";
+		g_signal_emit (power, signals [BATTERY_MIGHT_EXPLODE], 0, oem_vendor, website);
+	}
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
 		/* true as not reporting, but charge_level */
@@ -1474,6 +1489,16 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1, G_TYPE_STRING);
+	signals [BATTERY_MIGHT_EXPLODE] =
+		g_signal_new ("battery-might-explode",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmPowerClass, battery_might_explode),
+			      NULL,
+			      NULL,
+			      gpm_marshal_VOID__STRING_STRING,
+			      G_TYPE_NONE,
+			      2, G_TYPE_STRING, G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmPowerPrivate));
 }

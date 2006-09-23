@@ -95,9 +95,12 @@ typedef struct
 	void		(* ac_state_changed)		(GpmPower	*power,
 							 gboolean	 on_ac);
 	void		(* battery_status_changed)	(GpmPower	*power,
-							 GpmPowerKind  battery_kind);
+							 GpmPowerKind	 battery_kind);
 	void		(* battery_removed)		(GpmPower	*power,
-							 const gchar	 *udi);
+							 const gchar	*udi);
+	void		(* battery_might_explode)	(GpmPower	*power,
+							 const gchar	*oem_vendor,
+							 const gchar	*website);
 } GpmPowerClass;
 
 GType		 gpm_power_get_type			(void);

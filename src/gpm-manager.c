@@ -2357,6 +2357,54 @@ power_battery_status_changed_cb (GpmPower    *power,
 }
 
 /**
+ * power_battery_status_might_explode_cb:
+ * @power: The power class instance
+ * @vendor: The battery vendor, e.g. "DELL"
+ * @manager: This manager class instance
+ *
+ * This function splits up the battery status changed callback, and calls
+ * different functions for each of the device types.
+ **/
+static void
+power_battery_status_might_explode_cb (GpmPower    *power,
+				       const gchar *oem_vendor,
+				       const gchar *website,
+				       GpmManager  *manager)
+{
+	gchar *msg;
+
+	/* check to see if HAL has given us all the right info */
+	if (oem_vendor == NULL || website == NULL) {
+		gpm_warning ("Possibly a potential critial hardware problem, "
+			     "but not enough data from HAL to report to the user");
+		return;
+	}
+
+	const gchar *title = _("Potential problem discovered!");
+	const char *issue = _("GNOME Power manager may have identified a "
+			      "potential issue associated with a battery found "
+			      "in your laptop computer.");
+	const char *problem = _("Under rare conditions, it is possible for some "
+				"batteries to overheat, which could pose a risk "
+				"of fire.");
+	const char *action = _("Please click the following link to find out "
+			       "if your battery has been identified as being "
+			       "faulty.");
+
+	msg = g_strdup_printf ("%s\n%s\n%s\nPlease see the <a href=\"%s\">%s</a> website.",
+			       issue, problem, action, website, oem_vendor);
+				 
+/* TODO:
+ [x] do not notify me of this anymore.
+ */
+	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+			      title, msg, 0,
+			      GTK_STOCK_DIALOG_WARNING,
+			      GPM_NOTIFY_URGENCY_NORMAL);
+	g_free (msg);
+}
+
+/**
  * gpm_manager_class_init:
  * @klass: The GpmManagerClass
  **/
@@ -2697,6 +2745,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
+	g_signal_connect (manager->priv->power, "battery-might-explode",
+			  G_CALLBACK (power_battery_status_might_explode_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
 	g_signal_connect (manager->priv->hal, "daemon-start",
