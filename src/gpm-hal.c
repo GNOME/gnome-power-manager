@@ -256,6 +256,9 @@ gpm_hal_handle_error (guint ret, GError *error, const char *method)
 		if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
 			gpm_debug ("DBUS timed out, but recovering");
 			retval = TRUE;
+		} else if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_REMOTE_EXCEPTION)) {
+			gpm_debug ("Remote exception, recovering");
+			retval = TRUE;
 		} else {
 			gpm_warning ("%s failed\n(%s)",
 				     method,

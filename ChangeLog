@@ -1,3 +1,10 @@
+2006-09-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal.c: (gpm_hal_handle_error):
+	Also ignore DBUS_GERROR_REMOTE_EXCEPTION as this prevents the
+	'HAL failed to suspend' when actually it suspended fine but the bus
+	timed out.
+
 2006-09-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c:
