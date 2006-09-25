@@ -2357,7 +2357,7 @@ power_battery_status_changed_cb (GpmPower    *power,
 }
 
 /**
- * power_battery_status_might_explode_cb:
+ * power_battery_status_perhaps_recall_cb:
  * @power: The power class instance
  * @vendor: The battery vendor, e.g. "DELL"
  * @manager: This manager class instance
@@ -2366,7 +2366,7 @@ power_battery_status_changed_cb (GpmPower    *power,
  * different functions for each of the device types.
  **/
 static void
-power_battery_status_might_explode_cb (GpmPower    *power,
+power_battery_status_perhaps_recall_cb (GpmPower    *power,
 				       const gchar *oem_vendor,
 				       const gchar *website,
 				       GpmManager  *manager)
@@ -2380,19 +2380,14 @@ power_battery_status_might_explode_cb (GpmPower    *power,
 		return;
 	}
 
-	const gchar *title = _("Potential problem discovered!");
-	const char *issue = _("GNOME Power manager may have identified a "
-			      "potential issue associated with a battery found "
-			      "in your laptop computer.");
-	const char *problem = _("Under rare conditions, it is possible for some "
-				"batteries to overheat, which could pose a risk "
-				"of fire.");
-	const char *action = _("Please click the following link to find out "
-			       "if your battery has been identified as being "
-			       "faulty.");
+	const gchar *title = _("Your battery may have been recalled");
+	const char *problem = _("The battery in your computer may have been "
+				"recalled by the manufacturer and you may be "
+				"at risk.\n");
+	const char *action = _("For more information visit the following web site:\n");
 
-	msg = g_strdup_printf ("%s\n%s\n%s\nPlease see the <a href=\"%s\">%s</a> website.",
-			       issue, problem, action, website, oem_vendor);
+	msg = g_strdup_printf ("%s\n%s\n<a href=\"%s\">%s</a>",
+			       problem, action, website, oem_vendor);
 				 
 /* TODO:
  [x] do not notify me of this anymore.
@@ -2745,8 +2740,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
-	g_signal_connect (manager->priv->power, "battery-might-explode",
-			  G_CALLBACK (power_battery_status_might_explode_cb), manager);
+	g_signal_connect (manager->priv->power, "battery-perhaps-recall",
+			  G_CALLBACK (power_battery_status_perhaps_recall_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
 	g_signal_connect (manager->priv->hal, "daemon-start",

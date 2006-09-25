@@ -65,7 +65,7 @@ enum {
 	AC_STATE_CHANGED,
 	BATTERY_STATUS_CHANGED,
 	BATTERY_REMOVED,
-	BATTERY_MIGHT_EXPLODE,
+	BATTERY_PERHAPS_RECALL,
 	LAST_SIGNAL
 };
 
@@ -148,7 +148,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	GpmPowerStatus *status = &entry->battery_status;
 	gchar *udi = entry->udi;
 	gchar *battery_kind_str;
-	gboolean might_expode;
+	gboolean perhaps_recall;
 
 	/* invalidate last rate */
 	entry->charge_rate_previous = 0;
@@ -261,16 +261,17 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
 
 	/* this is more common than you might expect */
-	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.fault.might_overheat", &might_expode);
-//	might_expode = TRUE;	
-	if (might_expode) {
+	gpm_hal_device_get_bool (power->priv->hal, udi, "info.perhaps_recalled", &perhaps_recall);
+	if (perhaps_recall) {
 		gchar *oem_vendor;
 		gchar *website;
-		gpm_hal_device_get_string (power->priv->hal, udi, "battery.fault.oem_vendor", &oem_vendor);
-		gpm_hal_device_get_string (power->priv->hal, udi, "battery.fault.website", &website);
-//		oem_vendor = "DELL";
-//		website = "https://www.dellbatteryprogram.com/";
-		g_signal_emit (power, signals [BATTERY_MIGHT_EXPLODE], 0, oem_vendor, website);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_text", &oem_vendor);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_target", &website);
+/*
+		oem_vendor = "Dell Battery Return Program";
+		website = "https://www.dellbatteryprogram.com/";
+*/
+		g_signal_emit (power, signals [BATTERY_PERHAPS_RECALL], 0, oem_vendor, website);
 	}
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
@@ -1489,11 +1490,11 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1, G_TYPE_STRING);
-	signals [BATTERY_MIGHT_EXPLODE] =
-		g_signal_new ("battery-might-explode",
+	signals [BATTERY_PERHAPS_RECALL] =
+		g_signal_new ("battery-perhaps-recall",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPowerClass, battery_might_explode),
+			      G_STRUCT_OFFSET (GpmPowerClass, battery_perhaps_recall),
 			      NULL,
 			      NULL,
 			      gpm_marshal_VOID__STRING_STRING,

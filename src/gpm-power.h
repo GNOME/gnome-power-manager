@@ -98,7 +98,7 @@ typedef struct
 							 GpmPowerKind	 battery_kind);
 	void		(* battery_removed)		(GpmPower	*power,
 							 const gchar	*udi);
-	void		(* battery_might_explode)	(GpmPower	*power,
+	void		(* battery_perhaps_recall)	(GpmPower	*power,
 							 const gchar	*oem_vendor,
 							 const gchar	*website);
 } GpmPowerClass;
