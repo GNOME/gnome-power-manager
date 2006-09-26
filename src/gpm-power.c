@@ -214,13 +214,6 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		if (exists) {
 			status->charge_rate_smoothed = status->charge_rate_raw;
 		}
-		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
-		   gets fixed and is part of a new release of HAL and we depend on that
-		   version*/
-		if (exists && status->charge_rate_raw == 0) {
-			status->is_discharging = FALSE;
-			status->is_charging = FALSE;
-		}
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
@@ -356,13 +349,6 @@ battery_device_cache_entry_update_key (GpmPower		       *power,
 							power->priv->exp_ave_factor);
 		entry->charge_rate_previous = status->charge_rate_smoothed;
 
-		/* FIXME: following can be removed if bug #5752 of hal on freedesktop
-		   gets fixed and is part of a new release of HAL and we depend on that
-		   version */
-		if (status->charge_rate_raw == 0) {
-			status->is_discharging = FALSE;
-			status->is_charging = FALSE;
-		}
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->percentage_charge);
 
