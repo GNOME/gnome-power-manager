@@ -57,6 +57,7 @@ struct GpmPrefsPrivate
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
 	gboolean		 has_button_lid;
+	gboolean		 has_button_suspend;
 	gboolean		 has_cpufreq;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
@@ -1029,29 +1030,43 @@ static void
 prefs_setup_actions (GpmPrefs *prefs)
 {
 	GtkWidget    *widget;
-	const gchar  *button_lid_actions[] = {ACTION_NOTHING,
-					      ACTION_BLANK,
-					      ACTION_SUSPEND,
-					      ACTION_HIBERNATE,
-					      NULL};
-	const gchar  *battery_critical_actions[] = {ACTION_NOTHING,
-						    ACTION_SUSPEND,
-						    ACTION_HIBERNATE,
-						    ACTION_SHUTDOWN,
-						    NULL};
-	const gchar  *battery_ups_actions[] = {ACTION_NOTHING,
-					       ACTION_HIBERNATE,
-					       ACTION_SHUTDOWN,
-					       NULL};
-	const gchar  *power_button_actions[] = {ACTION_INTERACTIVE,
-						ACTION_SUSPEND,
-						ACTION_HIBERNATE,
-						ACTION_SHUTDOWN,
-						NULL};
+	const gchar  *button_lid_actions[] =
+				{ACTION_NOTHING,
+				 ACTION_BLANK,
+				 ACTION_SUSPEND,
+				 ACTION_HIBERNATE,
+				 NULL};
+	const gchar  *suspend_button_actions[] =
+				{ACTION_NOTHING,
+				 ACTION_SUSPEND,
+				 ACTION_HIBERNATE,
+				 NULL};
+	const gchar  *battery_critical_actions[] =
+				{ACTION_NOTHING,
+				 ACTION_SUSPEND,
+				 ACTION_HIBERNATE,
+				 ACTION_SHUTDOWN,
+				 NULL};
+	const gchar  *battery_ups_actions[] =
+				{ACTION_NOTHING,
+				 ACTION_HIBERNATE,
+				 ACTION_SHUTDOWN,
+				 NULL};
+	const gchar  *power_button_actions[] =
+				{ACTION_INTERACTIVE,
+				 ACTION_SUSPEND,
+				 ACTION_HIBERNATE,
+				 ACTION_SHUTDOWN,
+				 NULL};
 	/* Power button action */
 	gpm_prefs_setup_action_combo (prefs, "combobox_actions_general_power",
 				      GPM_PREF_BUTTON_POWER,
 				      power_button_actions);
+
+	/* Suspend button action */
+	gpm_prefs_setup_action_combo (prefs, "combobox_actions_general_suspend",
+				      GPM_PREF_BUTTON_SUSPEND,
+				      suspend_button_actions);
 
 	/* Lid close actions */
 	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ac_lid",
@@ -1072,10 +1087,16 @@ prefs_setup_actions (GpmPrefs *prefs)
 	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_critical",
 				      GPM_PREF_UPS_CRITICAL,
 				      battery_ups_actions);
-
 	gpm_prefs_setup_action_combo (prefs, "combobox_actions_ups_low",
 				      GPM_PREF_UPS_LOW,
 				      battery_ups_actions);
+
+	if (prefs->priv->has_button_suspend == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_general_suspend");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_general_suspend");
+		gtk_widget_hide_all (widget);
+	}
 
 	if (prefs->priv->has_button_lid == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_ac_lid");
@@ -1222,6 +1243,9 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "button",
 							"button.type",
 							"lid") > 0;
+	prefs->priv->has_button_suspend = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "button",
+							"button.type",
+							"suspend") > 0;
 
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
