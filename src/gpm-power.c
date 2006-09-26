@@ -538,7 +538,7 @@ battery_kind_cache_debug_print_all (GpmPower *power)
 }
 
 /**
- * battery_device_cache_find:
+ * gpm_power_get_device_from_udi:
  * @power: This power class instance
  * @udi: The HAL UDI for this device
  *
@@ -546,13 +546,13 @@ battery_kind_cache_debug_print_all (GpmPower *power)
  *
  * Return value: The entry if found, or NULL if missing.
  **/
-static GpmPowerDevice *
-battery_device_cache_find (GpmPower    *power,
-			   const gchar *udi)
+GpmPowerDevice *
+gpm_power_get_device_from_udi (GpmPower    *power,
+			       const gchar *udi)
 {
 	GpmPowerDevice *entry;
 
-	if (! udi) {
+	if (udi == NULL) {
 		gpm_warning ("UDI is NULL");
 		return NULL;
 	}
@@ -636,7 +636,7 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 	udi = (const gchar *) g_slist_nth_data (entry->devices, device_num);
 
 	/* find the udi in the device cache */
-	device = battery_device_cache_find (power, udi);
+	device = gpm_power_get_device_from_udi (power, udi);
 	return device;
 }
 
@@ -951,7 +951,7 @@ battery_kind_cache_update (GpmPower		 *power,
 
 		udi = (const gchar *)l->data;
 
-		device = battery_device_cache_find (power, udi);
+		device = gpm_power_get_device_from_udi (power, udi);
 		device_status = &device->battery_status;
 
 		if (! device_status->is_present) {
@@ -1585,7 +1585,7 @@ remove_battery (GpmPower    *power,
 
 	g_assert (udi);
 
-	entry = battery_device_cache_find (power,
+	entry = gpm_power_get_device_from_udi (power,
 					   udi);
 	if (entry == NULL) {
 		gpm_warning ("trying to remove battery that is not present in db");
@@ -1659,7 +1659,7 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 
 	gpm_debug ("Battery Property Modified: %s", udi);
 
-	device_entry = battery_device_cache_find (power, udi);
+	device_entry = gpm_power_get_device_from_udi (power, udi);
 
 	/*
 	 * if we BUG here then *HAL* has a problem where key modification is

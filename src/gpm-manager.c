@@ -2629,19 +2629,6 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 }
 
 /**
- * gpm_manager_tray_icon_show_info:
- * @manager: This manager class instance
- * @tray: The tray object
- **/
-static void
-gpm_manager_tray_icon_show_info (GpmManager   *manager,
-				 GpmTrayIcon  *tray)
-{
-	gpm_debug ("Received show-info signal from tray icon");
-	gpm_info_show_window (manager->priv->info);
-}
-
-/**
  * screensaver_auth_request_cb:
  * @manager: This manager class instance
  * @auth: If we are trying to authenticate
@@ -2832,11 +2819,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
 				 "hibernate",
 				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
-				 manager,
-				 G_CONNECT_SWAPPED);
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "show-info",
-				 G_CALLBACK (gpm_manager_tray_icon_show_info),
 				 manager,
 				 G_CONNECT_SWAPPED);
 

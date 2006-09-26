@@ -1,5 +1,24 @@
 2006-09-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c: (gpm_power_get_device_from_udi),
+	* src/gpm-power.h:
+	Export this, we need it in the tray icon class.
+
+	* src/gpm-info.c: (gpm_info_log_do_poll):
+	* src/gpm-manager.c: (gpm_manager_init):
+	* src/gpm-tray-icon.c:
+	Remove the info code and place into a notification. This will change to
+	a modal dialogue at some stage, to conform more to the HIG.
+	Ooop. There goes another 200Kb writable from the daemon now we are
+	not loading all the glade and GTK stuff.
+
+	* data/Makefile.am:
+	* data/gpm-info.glade:
+	* po/POTFILES.in:
+	Remove the glade file now we are not using it.
+
+2006-09-26  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-prefs.glade:
 	* src/gpm-prefs-core.c: (prefs_setup_actions), (gpm_prefs_init):
 	Added policy in the UI for the suspend button action due to a distro

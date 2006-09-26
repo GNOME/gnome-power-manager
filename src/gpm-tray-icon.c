@@ -48,6 +48,7 @@
 
 #include "gpm-common.h"
 #include "gpm-stock-icons.h"
+#include "gpm-power.h"
 #include "gpm-tray-icon.h"
 #include "gpm-debug.h"
 
@@ -57,24 +58,26 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 #define GPM_TRAY_ICON_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_TRAY_ICON, GpmTrayIconPrivate))
 
+#define MAX_BATTERIES_PER_TYPE 5 /* the cosmetic restriction on the dropdown */
+
 struct GpmTrayIconPrivate
 {
-	GtkWidget	*popup_menu;
-	GtkStatusIcon	*status_icon;
-	gboolean	 show_notifications;
-	gboolean	 is_visible;
-	gboolean	 show_suspend;
-	gboolean	 show_hibernate;
-	gchar		*stock_id;
+	GtkWidget		*popup_menu;
+	GtkStatusIcon		*status_icon;
+	GpmPower		*power;
+	gboolean		 show_notifications;
+	gboolean		 is_visible;
+	gboolean		 show_suspend;
+	gboolean		 show_hibernate;
+	gchar			*stock_id;
 #ifdef HAVE_LIBNOTIFY
-	NotifyNotification *notify;
+	NotifyNotification	*notify;
 #endif
 };
 
 enum {
 	SUSPEND,
 	HIBERNATE,
-	SHOW_INFO,
 	LAST_SIGNAL
 };
 
@@ -84,6 +87,13 @@ enum {
 };
 
 static guint	 signals [LAST_SIGNAL] = { 0, };
+static gboolean
+libnotify_event (GpmTrayIcon    *icon,
+		 const gchar	*title,
+		 const gchar	*content,
+		 guint		 timeout,
+		 const gchar	*msgicon,
+		 GpmNotifyLevel	 urgency);
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
 
@@ -166,8 +176,30 @@ static void
 gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 {
 	GpmTrayIcon *icon = GPM_TRAY_ICON (data);
-	gpm_debug ("emitting show_info");
-	g_signal_emit (icon, signals [SHOW_INFO], 0);
+	const char *udi = g_object_get_data (G_OBJECT (item), "udi");
+	GpmPowerDevice *device;
+	char *msgicon;
+	char *desc;
+	char *longdesc;
+	GString *gdesc;
+
+	gpm_debug ("udi=%s", udi);
+	device = gpm_power_get_device_from_udi (icon->priv->power, udi);
+	if (device == NULL) {
+		return;
+	}
+
+	msgicon = gpm_power_get_icon_from_status (&device->battery_status, device->battery_kind);
+	gdesc = gpm_power_status_for_device (device);
+	desc = g_strdup (gdesc->str);
+	g_string_free (gdesc, TRUE);
+
+	/* get long description */
+	gdesc = gpm_power_status_for_device_more (device);
+	longdesc = g_strdup (gdesc->str);
+	g_string_free (gdesc, TRUE);
+
+	libnotify_event (icon, desc, longdesc, 0, msgicon, GPM_NOTIFY_URGENCY_LOW);
 }
 
 /**
@@ -376,16 +408,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
-	signals [SHOW_INFO] =
-		g_signal_new ("show-info",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmTrayIconClass, hibernate),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 }
 
 /**
@@ -410,8 +432,6 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
 
 /**
  * gpm_tray_icon_popup_menu_cb:
- * @button: Which buttons are pressed
- * @icon: This TrayIcon class instance
  *
  * Display the popup menu.
  **/
@@ -472,6 +492,53 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
 }
 
 /**
+ * gpm_tray_icon_add_device:
+ *
+ * Add all the selected type of devices to the menu to form "drop down" info.
+ **/
+static guint
+gpm_tray_icon_add_device (GpmTrayIcon *icon,
+			  GtkMenu     *menu,
+			  GpmPowerKind kind)
+{
+	GtkWidget *item;
+	GtkWidget *image;
+	GpmPowerDevice *device;
+	guint i;
+	gchar *icon_name;
+	gchar *label;
+	gint percentage;
+
+	for (i=0; i<MAX_BATTERIES_PER_TYPE; i++) {
+		device = gpm_power_get_battery_device_entry (icon->priv->power, kind, i);
+		if (device == NULL) {
+			break;
+		}
+		gpm_debug ("adding device '%s'", device->udi);
+
+		/* generate the label */
+		percentage = device->battery_status.percentage_charge;
+		label = g_strdup_printf ("%s (%i%%)", device->product, percentage);
+		item = gtk_image_menu_item_new_with_label (label);
+		g_free (label);
+
+		/* generate the image */
+		icon_name = gpm_power_get_icon_from_status (&device->battery_status, kind);
+		image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		g_free (icon_name);
+
+		/* callback with the UDI and add the the menu */
+		g_signal_connect (G_OBJECT (item), "activate",
+				  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
+		g_object_set_data (G_OBJECT (item), "udi", (gpointer) device->udi);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+	}
+	return i;
+}
+
+/**
  * gpm_tray_icon_activate_cb:
  * @button: Which buttons are pressed
  * @icon: This TrayIcon class instance
@@ -485,42 +552,20 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
 	GtkWidget *item;
 	GtkWidget *image;
+	guint dev_cnt = 0;
 
 	gpm_debug ("icon left clicked");
-//#define DISPLAY_DEVICES
-#ifdef DISPLAY_DEVICES
-	item = gtk_image_menu_item_new_with_mnemonic (_("Laptop Battery Bay #1"));
-	image = gtk_image_new_from_icon_name ("gpm-primary-040-charging", GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-	item = gtk_image_menu_item_new_with_mnemonic (_("Laptop Battery Bay #2"));
-	image = gtk_image_new_from_icon_name ("gpm-primary-charged", GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	/* add all device types to the drop down menu */
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, GPM_POWER_KIND_PRIMARY);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, GPM_POWER_KIND_UPS);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, GPM_POWER_KIND_MOUSE);
 
-	item = gtk_image_menu_item_new_with_mnemonic (_("MGE Ellipse 750 UPS"));
-	image = gtk_image_new_from_icon_name ("gpm-ups-040-charging", GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#else
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Information"));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_MENU);
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-	g_signal_connect (G_OBJECT (item), "activate",
-			  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-#endif
-
-	/* TODO: only do the seporator if we have at least one device */
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	/* only do the seporator if we have at least one device */
+	if (dev_cnt != 0) {
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	}
 
 	/* Suspend if available */
 	if (icon->priv->show_suspend) {
@@ -568,6 +613,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	/* FIXME: make this a property */
 	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
+	icon->priv->power = gpm_power_new ();
 
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
@@ -602,6 +648,8 @@ gpm_tray_icon_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_TRAY_ICON (object));
 
 	tray_icon = GPM_TRAY_ICON (object);
+
+	g_object_unref (tray_icon->priv->power);
 
 	g_return_if_fail (tray_icon->priv != NULL);
 

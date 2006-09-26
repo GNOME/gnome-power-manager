@@ -119,6 +119,8 @@ gboolean	 gpm_power_get_status_summary		(GpmPower	*power,
 							 GError		**error);
 gint		 gpm_power_get_num_devices_of_kind	(GpmPower	*power,
 							 GpmPowerKind	 battery_kind);
+GpmPowerDevice	*gpm_power_get_device_from_udi		(GpmPower	*power,
+							 const gchar	*udi);
 GString		*gpm_power_status_for_device		(GpmPowerDevice *device);
 GString		*gpm_power_status_for_device_more	(GpmPowerDevice *device);
 void		 gpm_power_update_all			(GpmPower	*power);

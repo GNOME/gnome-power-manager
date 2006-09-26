@@ -25,9 +25,6 @@
 #include <glib/gi18n.h>
 #include <glib/gprintf.h>
 
-#include <glade/glade.h>
-#include <libgnomeui/gnome-help.h>
-#include <gtk/gtk.h>
 #include <string.h>
 #include <time.h>
 #include <gconf/gconf-client.h>
@@ -41,7 +38,6 @@
 #include "gpm-hal-power.h"
 #include "gpm-power.h"
 #include "gpm-gconf.h"
-#include "gpm-graph-widget.h"
 #include "gpm-stock-icons.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
@@ -63,14 +59,10 @@ struct GpmInfoPrivate
 	GpmHal			*hal;
 	GpmHalPower		*hal_power;
 
-	GtkWidget		*main_window;
-
 	GpmInfoData		*events;
 	GpmInfoData		*rate_data;
 	GpmInfoData		*time_data;
 	GpmInfoData		*percentage_data;
-
-	GladeXML		*glade_xml;
 
 	time_t			 start_time;
 	gboolean		 is_laptop;
@@ -286,238 +278,6 @@ gpm_statistics_get_data (GpmInfo     *info,
 }
 
 /**
- * gpm_info_populate_device_information:
- * @info: This info class instance
- * @kind: the hardware battery kind, e.g. GPM_POWER_KIND_PRIMARY
- * @id: The number in the hardware database.
- *
- * Populate the a specific device. Note, only 2 devices per class are supported
- * for primary, and one for the others.
- **/
-static void
-gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
-{
-	GtkWidget	*widget;
-	GString		*desc;
-	GpmPowerDevice	*device = NULL;
-	gchar		*icon_name;
-	const gchar	*prefix = NULL;
-	gchar		 widgetname[128];
-
-	prefix = gpm_power_kind_to_string (kind);
-
-	/* set icon name */
-	g_sprintf (widgetname, "image_%s%i", prefix, id);
-	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
-	device = gpm_power_get_battery_device_entry (info->priv->power, kind, id);
-	if (device == NULL) {
-		gpm_warning ("gpm_power_get_battery_device_entry returned NULL!");
-		return;
-	}
-	icon_name = gpm_power_get_icon_from_status (&device->battery_status, kind);
-	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_DIALOG);
-	g_free (icon_name);
-	gtk_widget_show (GTK_WIDGET (widget));
-
-	/* set info */
-	g_sprintf (widgetname, "label_%s%i", prefix, id);
-	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
-	desc = gpm_power_status_for_device (device);
-	gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-	g_string_free (desc, TRUE);
-	gtk_widget_show (GTK_WIDGET (widget));
-
-	/* set more */
-	g_sprintf (widgetname, "expander_%s%i", prefix, id);
-	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
-	if (device->battery_status.is_present) {
-		/* only show expander is battery is present */
-		gtk_widget_show (GTK_WIDGET (widget));
-		g_sprintf (widgetname, "label_%s%i_more", prefix, id);
-		widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
-		desc = gpm_power_status_for_device_more (device);
-		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
-		g_string_free (desc, TRUE);
-		gtk_widget_show (GTK_WIDGET (widget));
-	} else {
-		gtk_widget_hide (GTK_WIDGET (widget));
-	}
-}
-
-/**
- * gpm_info_populate_device_information:
- * @info: This info class instance
- *
- * Populate the 4 possible devices, depending on the hardware we have
- * available on our system.
- **/
-static void
-gpm_info_populate_device_information (GpmInfo *info)
-{
-	guint	   number;
-	GtkWidget *widget;
-	
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-
-	/* Laptop battery section */
-	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_KIND_PRIMARY);
-	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_primary");
-		gtk_widget_show (GTK_WIDGET (widget));
-		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_PRIMARY, 0);
-	}
-	if (number > 1) {
-		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_PRIMARY, 1);
-	}
-
-	/* UPS section */
-	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_KIND_UPS);
-	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_ups");
-		gtk_widget_show (GTK_WIDGET (widget));
-		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_UPS, 0);
-	}
-
-	/* Misc section */
-	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_KIND_MOUSE);
-	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
-		gtk_widget_show (GTK_WIDGET (widget));
-		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_MOUSE, 0);
-	}
-	number = gpm_power_get_num_devices_of_kind (info->priv->power,
-						    GPM_POWER_KIND_KEYBOARD);
-	if (number > 0) {
-		widget = glade_xml_get_widget (info->priv->glade_xml, "frame_mouse");
-		gtk_widget_show (GTK_WIDGET (widget));
-		gpm_info_specific_device_widgets (info, GPM_POWER_KIND_KEYBOARD, 0);
-	}
-}
-
-/**
- * gpm_info_close_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- **/
-static void
-gpm_info_close_cb (GtkWidget *widget,
-		   GpmInfo   *info)
-{
-	if (info->priv->main_window) {
-		gtk_widget_destroy (info->priv->main_window);
-		info->priv->main_window = NULL;
-	}
-}
-
-/**
- * gpm_info_delete_event_cb:
- * @widget: The GtkWidget object
- * @event: The event type, unused.
- * @info: This info class instance
- **/
-static gboolean
-gpm_info_delete_event_cb (GtkWidget *widget,
-			  GdkEvent  *event,
-			  GpmInfo   *info)
-{
-	gpm_info_close_cb (widget, info);
-	return FALSE;
-}
-
-/**
- * gpm_info_help_cb:
- * @widget: The GtkWidget button object
- * @info: This info class instance
- **/
-static void
-gpm_info_help_cb (GtkWidget *widget,
-		  GpmInfo   *info)
-{
-	GError *error = NULL;
-
-	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
-	if (error != NULL) {
-		gpm_warning (error->message);
-		g_error_free (error);
-	}
-}
-
-/**
- * gpm_info_show_window:
- * @info: This info class instance
- *
- * Show the information window, setting up callbacks and initialising widgets
- * when required.
- **/
-void
-gpm_info_show_window (GpmInfo *info)
-{
-	GtkWidget *widget;
-	GladeXML  *glade_xml;
-	GtkWidget *notebook;
-	int total_devices = 0;
-	int page;
-
-	g_return_if_fail (info != NULL);
-	g_return_if_fail (GPM_IS_INFO (info));
-
-	if (info->priv->main_window) {
-		gpm_debug ("already showing info");
-		return;
-	}
-
-	glade_xml = glade_xml_new (GPM_DATA "/gpm-info.glade", NULL, NULL);
-	info->priv->glade_xml = glade_xml;
-	/* don't segfault on missing glade file */
-	if (! glade_xml) {
-		gpm_critical_error ("gpm-info.glade not found");
-	}
-	info->priv->main_window = glade_xml_get_widget (glade_xml, "window_info");
-
-	/* Hide window first so that the dialogue resizes itself without redrawing */
-	gtk_widget_hide (info->priv->main_window);
-	gtk_window_set_icon_name (GTK_WINDOW(info->priv->main_window), GPM_STOCK_APP_ICON);
-
-	g_signal_connect (info->priv->main_window, "delete_event",
-			  G_CALLBACK (gpm_info_delete_event_cb), info);
-
-	widget = glade_xml_get_widget (glade_xml, "button_close");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_close_cb), info);
-
-	widget = glade_xml_get_widget (glade_xml, "button_help");
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_info_help_cb), info);
-
-	gpm_info_populate_device_information (info);
-
-	/* find the total number of and type of devices */
-	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
-							    GPM_POWER_KIND_PRIMARY);
-	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
-							    GPM_POWER_KIND_UPS);
-	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
-							    GPM_POWER_KIND_MOUSE);
-	total_devices += gpm_power_get_num_devices_of_kind (info->priv->power,
-							    GPM_POWER_KIND_KEYBOARD);
-
-	/* If the total number of devices is zero, hide the
-	 * 'Device Information' tab. */
-	if (total_devices == 0) {
-		notebook = glade_xml_get_widget (info->priv->glade_xml, "notebook_main");
-		widget = glade_xml_get_widget (info->priv->glade_xml, "vbox_devices");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-	}
-
-	gtk_widget_show (info->priv->main_window);
-}
-
-/**
  * gpm_info_event_log
  * @info: This info class instance
  * @event: The event description, e.g. "Application started"
@@ -581,11 +341,6 @@ gpm_info_log_do_poll (gpointer data)
 		gpm_info_data_add (info->priv->time_data,
 				   value_x,
 				   battery_status.remaining_time, colour);
-	}
-
-	if (info->priv->main_window) {
-		/* update the first tab */
-		gpm_info_populate_device_information (info);
 	}
 	return TRUE;
 }
