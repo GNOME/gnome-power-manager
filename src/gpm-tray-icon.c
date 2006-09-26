@@ -435,7 +435,7 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
 
 	/* Statistics */
 	item = gtk_image_menu_item_new_with_mnemonic (_("Power _History"));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_CONVERT, GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_icon_name (GPM_STOCK_STATISTICS, GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 	g_signal_connect (G_OBJECT (item), "activate",
 			  G_CALLBACK (gpm_tray_icon_show_statistics_cb), icon);
