@@ -111,6 +111,10 @@ gboolean	 gpm_hal_device_find_capability		(GpmHal		*hal,
 							 gchar	      ***value);
 gboolean	 gpm_hal_device_rescan_capability	(GpmHal		*hal,
 							 const char	*capability);
+gboolean	 gpm_hal_device_has_capability		(GpmHal		*hal,
+							 const gchar	*udi,
+							 const gchar	*capability,
+							 gboolean	*has_capability);
 gint		 gpm_hal_num_devices_of_capability	(GpmHal		*hal,
 							 const gchar	*capability);
 gint		 gpm_hal_num_devices_of_capability_with_value (GpmHal	*hal,

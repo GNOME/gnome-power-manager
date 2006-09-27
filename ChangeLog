@@ -1,3 +1,22 @@
+2006-09-27  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/16x16/gpm-keyboard-030.png:
+	* data/icons/16x16/gpm-keyboard-060.png:
+	* data/icons/16x16/gpm-keyboard-100.png:
+	* data/icons/16x16/gpm-mouse-030.png:
+	* data/icons/16x16/gpm-mouse-060.png:
+	* data/icons/16x16/gpm-mouse-100.png:
+	Update the icons to have the right colours and levels.
+	This partially fixes #352416
+
+	* src/gpm-hal-monitor.c:
+	* src/gpm-manager.c:
+	Better detect hotplugged wireless mice.
+
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Add gpm_hal_device_has_capability().
+
 2006-09-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: (gpm_power_get_device_from_udi),

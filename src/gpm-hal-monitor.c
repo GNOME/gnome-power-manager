@@ -354,6 +354,35 @@ hal_new_capability_cb (GpmHal        *hal,
 }
 
 /**
+ * hal_device_added_cb:
+ *
+ * @hal: The hal instance
+ * @udi: The HAL UDI
+ * @monitor: This monitor instance
+ */
+static void
+hal_device_added_cb (GpmHal        *hal,
+		       const gchar   *udi,
+		       GpmHalMonitor *monitor)
+{
+	gboolean is_battery;
+	gboolean dummy;
+
+	/* find out if the new device has capability battery 
+	   this might fail for CSR as the addon is weird */
+	gpm_hal_device_has_capability (hal, udi, "battery", &is_battery);
+	/* try harder */
+	if (is_battery == FALSE) {
+		is_battery = gpm_hal_device_get_bool (hal, udi, "battery.present", &dummy);
+	}
+
+	/* if a battery, then add */
+	if (is_battery) {
+		watch_add_battery (monitor, udi);
+	}
+}
+
+/**
  * coldplug_acadapter:
  */
 static gboolean
@@ -478,6 +507,8 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv->hal = gpm_hal_new ();
 	monitor->priv->hal_power = gpm_hal_power_new ();
 
+	g_signal_connect (monitor->priv->hal, "device-added",
+			  G_CALLBACK (hal_device_added_cb), monitor);
 	g_signal_connect (monitor->priv->hal, "device-removed",
 			  G_CALLBACK (hal_device_removed_cb), monitor);
 	g_signal_connect (monitor->priv->hal, "new-capability",

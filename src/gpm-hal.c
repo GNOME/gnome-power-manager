@@ -355,6 +355,52 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 }
 
 /**
+ * gpm_hal_device_has_capability:
+ *
+ * @hal: This hal class instance
+ * @capability: The capability, e.g. "battery"
+ * @value: return value, passed by ref
+ * Return value: TRUE for success, FALSE for failure
+ **/
+gboolean
+gpm_hal_device_has_capability (GpmHal      *hal,
+			       const gchar *udi,
+			       const gchar *capability,
+			       gboolean    *has_capability)
+{
+	DBusGProxy *proxy = NULL;
+	GError *error = NULL;
+	gboolean ret;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	g_return_val_if_fail (udi != NULL, FALSE);
+	g_return_val_if_fail (capability != NULL, FALSE);
+	g_return_val_if_fail (has_capability != NULL, FALSE);
+
+	proxy = dbus_g_proxy_new_for_name (hal->priv->connection,
+					   HAL_DBUS_SERVICE,
+					   udi,
+					   HAL_DBUS_INTERFACE_DEVICE);
+	ret = dbus_g_proxy_call (proxy, "QueryCapability", &error,
+				 G_TYPE_STRING, udi,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, has_capability,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		*has_capability = FALSE;
+		gpm_warning ("QueryCapability failed!");
+		return FALSE;
+	}
+	g_object_unref (G_OBJECT (proxy));
+	return TRUE;
+}
+
+/**
  * gpm_hal_free_capability:
  *
  * @hal: This hal class instance

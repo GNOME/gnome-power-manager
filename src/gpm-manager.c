@@ -2375,7 +2375,7 @@ power_battery_status_perhaps_recall_cb (GpmPower    *power,
 
 	/* check to see if HAL has given us all the right info */
 	if (oem_vendor == NULL || website == NULL) {
-		gpm_warning ("Possibly a potential critial hardware problem, "
+		gpm_warning ("Possibly a potential critical hardware problem, "
 			     "but not enough data from HAL to report to the user");
 		return;
 	}
