@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 #define	HAL_DBUS_INTERFACE_POWER	 "org.freedesktop.Hal.Device.SystemPowerManagement"
 #define	HAL_DBUS_INTERFACE_CPUFREQ	 "org.freedesktop.Hal.Device.CPUFreq"
 #define	HAL_DBUS_INTERFACE_KBD_BACKLIGHT "org.freedesktop.Hal.Device.KeyboardBacklight"
+#define	HAL_DBUS_INTERFACE_LIGHT_SENSOR	 "org.freedesktop.Hal.Device.LightSensor"
 #define HAL_ROOT_COMPUTER		 "/org/freedesktop/Hal/devices/computer"
 
 #define GPM_TYPE_HAL		(gpm_hal_get_type ())

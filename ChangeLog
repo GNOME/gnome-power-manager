@@ -1,5 +1,18 @@
 2006-09-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal-brightness-kbd.c: (gpm_hal_brightness_kbd_new):
+	* src/gpm-hal-brightness-lcd.c: (gpm_hal_brightness_lcd_new):
+	Return NULL for no hardware, not FALSE;
+
+	* src/gpm-hal-cpufreq.c: (gpm_hal_cpufreq_has_hw):
+	Only load the gobject if we have the cpufreq_control hardware.
+
+	* src/gpm-hal.h:
+	Define org.freedesktop.Hal.Device.LightSensor for some crazy new
+	experimental stuff on the horizon.
+
+2006-09-28  Richard Hughes  <richard@hughsie.com>
+
 	* docs/icon-scheme.xml:
 	Add gpm-brightness-lcd and gpm-brightness-kbd.
 

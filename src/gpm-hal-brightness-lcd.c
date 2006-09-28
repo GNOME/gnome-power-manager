@@ -632,7 +632,7 @@ gpm_hal_brightness_lcd_new (void)
 
 	/* only load an instance of this module if we have the hardware */
 	if (gpm_hal_brightness_lcd_has_hw () == FALSE) {
-		return FALSE;
+		return NULL;
 	}
 
 	brightness = g_object_new (GPM_TYPE_HAL_BRIGHTNESS_LCD, NULL);

@@ -599,7 +599,7 @@ gpm_hal_brightness_kbd_new (void)
 
 	/* only load an instance of this module if we have the hardware */
 	if (gpm_hal_brightness_kbd_has_hw () == FALSE) {
-		return FALSE;
+		return NULL;
 	}
 
 	brightness = g_object_new (GPM_TYPE_HAL_BRIGHTNESS_KBD, NULL);

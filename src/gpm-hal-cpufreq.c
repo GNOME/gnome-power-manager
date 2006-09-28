@@ -622,12 +622,44 @@ gpm_hal_cpufreq_finalize (GObject *object)
 }
 
 /**
+ * gpm_hal_cpufreq_has_hw:
+ *
+ * Self contained function that works out if we have the hardware.
+ * If not, we return FALSE and the module is unloaded.
+ **/
+static gboolean
+gpm_hal_cpufreq_has_hw (void)
+{
+	GpmHal *hal;
+	gchar **names;
+	gboolean ret = TRUE;
+
+	/* okay, as singleton - so we don't allocate more memory */
+	hal = gpm_hal_new ();
+	gpm_hal_device_find_capability (hal, "cpufreq_control", &names);
+
+	/* nothing found */
+	if (names == NULL || names[0] == NULL) {
+		ret = FALSE;
+	}
+
+	gpm_hal_free_capability (hal, names);
+	g_object_unref (hal);
+	return ret;
+}
+
+/**
  * gpm_hal_cpufreq_new:
  * Return value: new GpmHalCpuFreq instance.
  **/
 GpmHalCpuFreq *
 gpm_hal_cpufreq_new (void)
 {
+	/* only load an instance of this module if we have the hardware */
+	if (gpm_hal_cpufreq_has_hw () == FALSE) {
+		return NULL;
+	}
+
 	if (gpm_hal_cpufreq_object) {
 		g_object_ref (gpm_hal_cpufreq_object);
 	} else {
