@@ -1,5 +1,13 @@
 2006-09-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c:
+	* src/gpm-polkit.c:
+	Move the HAVE_POLKIT stuff into the GpmPolkit module and just return
+	NULL if support is not compiled in.
+	This means we get ridof some ugly ifdefs from the manager class.
+
+2006-09-28  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal-brightness-kbd.c: (gpm_hal_brightness_kbd_new):
 	* src/gpm-hal-brightness-lcd.c: (gpm_hal_brightness_lcd_new):
 	Return NULL for no hardware, not FALSE;

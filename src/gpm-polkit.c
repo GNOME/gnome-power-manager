@@ -154,6 +154,10 @@ GpmPolkit *
 gpm_polkit_new (void)
 {
 	GpmPolkit *polkit;
+#ifdef HAVE_POLKIT
 	polkit = g_object_new (GPM_TYPE_POLKIT, NULL);
+#else
+	polkit = NULL;
+#endif
 	return GPM_POLKIT (polkit);
 }

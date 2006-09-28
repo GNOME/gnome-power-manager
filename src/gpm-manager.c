@@ -290,9 +290,9 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					  GPM_PREF_CAN_SUSPEND, NULL);
 	hal_ok = gpm_hal_power_can_suspend (manager->priv->hal_power);
-#ifdef HAVE_POLKIT
-	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
-#endif
+	if (manager->priv->polkit) {
+		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
+	}
 	if ( gconf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
@@ -322,9 +322,9 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
 					      GPM_PREF_CAN_HIBERNATE, NULL);
 	hal_ok = gpm_hal_power_can_hibernate (manager->priv->hal_power);
-#ifdef HAVE_POLKIT
-	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
-#endif
+	if (manager->priv->polkit) {
+		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
+	}
 	if ( gconf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
@@ -346,9 +346,9 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 	gboolean polkit_ok = TRUE;
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
-#ifdef HAVE_POLKIT
-	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
-#endif
+	if (manager->priv->polkit) {
+		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
+	}
 	if ( polkit_ok ) {
 		*can = TRUE;
 	}
@@ -370,9 +370,9 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 	gboolean polkit_ok = TRUE;
 	g_return_val_if_fail (can, FALSE);
 	*can = FALSE;
-#ifdef HAVE_POLKIT
-	polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
-#endif
+	if (manager->priv->polkit) {
+		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
+	}
 	if ( polkit_ok ) {
 		*can = TRUE;
 	}
@@ -2802,9 +2802,8 @@ gpm_manager_init (GpmManager *manager)
 	/* use a class to handle the complex stuff */
 	manager->priv->inhibit = gpm_inhibit_new ();
 
-#ifdef HAVE_POLKIT
+	/* this will be NULL if we don't compile in support */
 	manager->priv->polkit = gpm_polkit_new ();
-#endif
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
@@ -2947,28 +2946,31 @@ gpm_manager_finalize (GObject *object)
 
 	g_return_if_fail (manager->priv != NULL);
 
+	/* compulsory gobjects */
 	g_object_unref (manager->priv->gconf_client);
 	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->hal_power);
-	if (manager->priv->hal_cpufreq) {
-		g_object_unref (manager->priv->hal_cpufreq);
-	}
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
-#ifdef HAVE_POLKIT
-	g_object_unref (manager->priv->polkit);
-#endif
 	g_object_unref (manager->priv->power);
+	g_object_unref (manager->priv->tray_icon);
+	g_object_unref (manager->priv->inhibit);
+	g_object_unref (manager->priv->screensaver);
+
+	/* optional gobjects */
+	if (manager->priv->hal_cpufreq) {
+		g_object_unref (manager->priv->hal_cpufreq);
+	}
+	if (manager->priv->polkit) {
+		g_object_unref (manager->priv->polkit);
+	}
 	if (manager->priv->brightness_lcd) {
 		g_object_unref (manager->priv->brightness_lcd);
 	}
 	if (manager->priv->brightness_kbd) {
 		g_object_unref (manager->priv->brightness_kbd);
 	}
-	g_object_unref (manager->priv->tray_icon);
-	g_object_unref (manager->priv->inhibit);
-	g_object_unref (manager->priv->screensaver);
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);
 }
