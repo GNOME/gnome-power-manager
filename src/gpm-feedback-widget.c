@@ -100,6 +100,8 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 gboolean
 gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 {
+	GtkWidget *image;
+
 	g_return_val_if_fail (feedback != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
 	g_return_val_if_fail (icon_name != NULL, FALSE);
@@ -108,7 +110,15 @@ gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
 	if (feedback->priv->icon_name != NULL) {
 		g_free (feedback->priv->icon_name);
 	}
+
+	gpm_debug ("Using icon name '%s'", icon_name);
 	feedback->priv->icon_name = g_strdup (icon_name);
+
+	image = glade_xml_get_widget (feedback->priv->xml, "image");
+	gtk_image_set_from_icon_name  (GTK_IMAGE (image),
+				       feedback->priv->icon_name,
+				       GTK_ICON_SIZE_DIALOG);
+
 	return TRUE;
 }
 
@@ -124,21 +134,11 @@ gpm_feedback_init (GpmFeedback *feedback)
 	feedback->priv->icon_name = NULL;
 
 	/* initialise the window */
-	GtkWidget *image;
-
 	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
 	if (! feedback->priv->xml) {
 		gpm_critical_error ("Can't find gpm-feedback-widget.glade");
 	}
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
-
-	/* if set, use an icon */
-	if (feedback->priv->icon_name) {
-		image = glade_xml_get_widget (feedback->priv->xml, "image");
-		gtk_image_set_from_icon_name  (GTK_IMAGE (image),
-  					       feedback->priv->icon_name,
-					       GTK_ICON_SIZE_DIALOG);
-	}
 
 	feedback->priv->progress = glade_xml_get_widget (feedback->priv->xml, "progressbar");
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), 0.0f);
