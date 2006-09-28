@@ -6,9 +6,13 @@ DOC_ENTITIES = legal.xml
 DOC_INCLUDES = 
 DOC_FIGURES = \
 	figures/gs-prefs.png \
-	figures/gpm-prefs-ac.png \
-	figures/gpm-prefs-battery.png \
-	figures/gpm-prefs-options.png \
+	figures/gpm-mouse-left.png \
+	figures/gpm-mouse-right.png \
+	figures/gpm-prefs-actions.png \
+	figures/gpm-prefs-display.png \
+	figures/gpm-prefs-notification.png \
+	figures/gpm-prefs-processor.png \
+	figures/gpm-prefs-sleep.png \
 	figures/gpm-info-devices.png \
 	figures/gpm-info-percentage.png \
 	figures/gpm-info-rate.png \
