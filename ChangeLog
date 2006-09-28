@@ -1,3 +1,10 @@
+2006-09-28  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness.c: (gpm_brightness_down):
+	Use the step value we computed (rather than one) to fix pressing
+	brightness-down on the Macbook Pro.
+	David Zeuthen <david@fubar.dk>, fixes #358067
+
 2006-09-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c:

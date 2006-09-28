@@ -642,7 +642,7 @@ gpm_brightness_down (GpmBrightness *brightness)
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_get_step (brightness);
-		gpm_brightness_set_hw (brightness, brightness->priv->current_hw - 1);
+		gpm_brightness_set_hw (brightness, brightness->priv->current_hw - step);
 	}
 
 	percentage = gpm_brightness_hw_to_percent (brightness->priv->current_hw,
