@@ -44,14 +44,14 @@ typedef enum {
 } GpmPowerUnit;
 
 typedef struct {
-	gint		design_charge;
-	gint		last_full_charge;
-	gint		current_charge;
-	gint		charge_rate_smoothed;	/* exp ave smoothed */
-	gint		charge_rate_raw;	/* no smoothing done */
-	gint		percentage_charge;
-	gint		remaining_time;
-	gint		capacity;
+	guint		design_charge;
+	guint		last_full_charge;
+	guint		current_charge;
+	guint		charge_rate_smoothed;	/* exp ave smoothed */
+	guint		charge_rate_raw;	/* no smoothing done */
+	guint		percentage_charge;
+	guint		remaining_time;
+	guint		capacity;
 	gboolean	is_rechargeable;
 	gboolean	is_present;
 	gboolean	is_charging;
@@ -65,7 +65,7 @@ typedef struct {
 	gchar		*technology;
 	gchar		*serial;
 	gchar		*model;
-	gint		 charge_rate_previous;
+	guint		 charge_rate_previous;
 	GpmPowerKind	 battery_kind;
 	GpmPowerStatus	 battery_status;
 	GpmPowerUnit	 unit;
@@ -117,7 +117,7 @@ GpmPowerDevice	*gpm_power_get_battery_device_entry	(GpmPower	*power,
 gboolean	 gpm_power_get_status_summary		(GpmPower	*power,
 							 gchar		**summary,
 							 GError		**error);
-gint		 gpm_power_get_num_devices_of_kind	(GpmPower	*power,
+guint		 gpm_power_get_num_devices_of_kind	(GpmPower	*power,
 							 GpmPowerKind	 battery_kind);
 GpmPowerDevice	*gpm_power_get_device_from_udi		(GpmPower	*power,
 							 const gchar	*udi);

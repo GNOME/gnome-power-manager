@@ -187,12 +187,12 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		return;
 	}
 
-	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.design",
-				&status->design_charge);
-	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.last_full",
-				&status->last_full_charge);
-	gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.current",
-				&status->current_charge);
+	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.design",
+				 &status->design_charge);
+	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.last_full",
+				 &status->last_full_charge);
+	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.current",
+				 &status->current_charge);
 
 	/* battery might not be rechargeable, have to check */
 	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.is_rechargeable",
@@ -210,8 +210,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
-		exists = gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.rate",
-						 &status->charge_rate_raw);
+		exists = gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.rate",
+						  &status->charge_rate_raw);
 		if (!exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
@@ -221,8 +221,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	}
 
 	/* sanity check that charge_level.percentage exists (if it should) */
-	exists = gpm_hal_device_get_int (power->priv->hal, udi, "battery.charge_level.percentage",
-					 &status->percentage_charge);
+	exists = gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.percentage",
+					  &status->percentage_charge);
 	if (!exists && (status->is_discharging || status->is_charging)) {
 		gpm_warning ("could not read your battery's percentage charge.");
 	}
@@ -230,8 +230,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	/* sanity check that remaining time exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY ||
 	    entry->battery_kind == GPM_POWER_KIND_UPS) {
-		exists = gpm_hal_device_get_int (power->priv->hal, udi,"battery.remaining_time",
-						 &status->remaining_time);
+		exists = gpm_hal_device_get_uint (power->priv->hal, udi,"battery.remaining_time",
+						  &status->remaining_time);
 		if (! exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's remaining time");
 		}
@@ -350,16 +350,16 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->design_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->design_charge);
 
 	} else if (strcmp (key, "battery.charge_level.last_full") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->last_full_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->last_full_charge);
 
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->current_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->current_charge);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->charge_rate_raw);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->charge_rate_raw);
 
 		/* Do an exponentially weighted average, fixes bug #328927 */
 		status->charge_rate_smoothed = gpm_power_exp_aver (entry->charge_rate_previous,
@@ -368,10 +368,10 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 		entry->charge_rate_previous = status->charge_rate_smoothed;
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->percentage_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->percentage_charge);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		gpm_hal_device_get_int (power->priv->hal, udi, key, &status->remaining_time);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->remaining_time);
 
 	} else {
 		/* ignore */
@@ -597,7 +597,7 @@ battery_kind_cache_find (GpmPower     *power,
  *
  * Return value: the number of devices of a specific kind.
  **/
-gint
+guint
 gpm_power_get_num_devices_of_kind (GpmPower    *power,
 				   GpmPowerKind	battery_kind)
 {
@@ -802,7 +802,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
  * Return value: The character string for the filename suffix.
  **/
 static const gchar *
-gpm_power_get_index_from_percent (gint percent)
+gpm_power_get_index_from_percent (guint percent)
 {
 	if (percent < 10) {
 		return "000";
