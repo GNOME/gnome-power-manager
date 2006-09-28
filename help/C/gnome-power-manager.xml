@@ -263,11 +263,13 @@
     The statistics program allows you to visualise the power consumption
     of your laptop hardware.
   </para>
-  <para>
-    This has been removed from the infofmation window of previous versions of
-    &app; as the data interface is now using DBUS rather than internal IPC.
-    This allows other applications to query and display the data if required.
-  </para>
+  <note>
+    <para>
+      This has been removed from the infofmation window of previous versions of
+      &app; as the data interface is now using DBUS rather than internal IPC.
+      This allows other applications to query and display the data if required.
+    </para>
+  </note>
   <figure id="statistics-graph">
     <title>Power History going from battery power to AC</title>
     <screenshot>
@@ -278,6 +280,62 @@
       </mediaobject>
     </screenshot>
   </figure>
+  <note>
+    <para>
+      You man not see some options or graphs if your computer does not have the
+      required hardware.
+      You may also see other hardware not shown here (for example UPS devices)
+      but these are treated the same way as other devices.
+    </para>
+  </note>
+
+  <section id="statistics-charge">
+    <title>Charge History</title>
+    <para>
+      This graph shows the percentage charge available for the composite primary
+      battery, so if you have a main laptop battery and an auxiliary battery
+      then only the averaged value will be shown.
+      A legend is not shown with this graph.
+    </para>
+  </section>
+
+  <section id="statistics-power">
+    <title>Power History</title>
+    <para>
+      This graph shows the power history charge used by the composite
+      primary battery.
+      This line represents the amount of power that is either being used to
+      charge the batteries in the system, or the power being used by the system
+      from the batteries.
+      You should see the line go up when processor intensive tasks are
+      performed, and down when the system is at idle, or when the screen is
+      dimmed.
+      A legend is shown with this graph when data events have been received.
+    </para>
+
+    <note>
+      <para>
+        You do will not recieve rate data from your computer if it is not
+        charging or discharging, or if the computer is suspended.
+        This is due to hardware limitiations where the rate is only sent from
+        the battery management chip, rather than the power management chip on
+        the motherboard.
+      </para>
+    </note>
+  </section>
+
+  <section id="statistics-time">
+    <title>Estimated Time History</title>
+    <para>
+      This graph shows the estimated charge history for the composite primary
+      battery.
+      This line represents the amount of time required until charged, or the
+      amount of time until discharge.
+      This line should go proportionally up when the power decreases and down
+      when the rate increases.
+      A legend is shown with this graph when data events have been received.
+    </para>
+  </section>
 </section>
 
 <section id="preferences">
@@ -356,6 +414,123 @@
         </mediaobject>
       </screenshot>
     </figure>
+    <para>
+      Modern computers allow the speed of the processor to be reduced
+      to save power.
+      This allows a powerful computer to reduce the power usage when
+      idle, or when the full capabilities are not required.
+      This dramatically increases battery life as the processor is not
+      running continuously at 100%.
+    </para>
+
+    <para>
+      Not all processors support speed control, and you will not see
+      the options to select a policy if your computer does not have a
+      compatible processor installed.
+      The following processors are known to support frequency scaling:
+      <itemizedlist>
+        <listitem>
+          <para>All Pentium 4 - M's</para>
+        </listitem>
+        <listitem>
+          <para>Pentium III M's 600Mhz to 1Ghz</para>
+        </listitem>
+        <listitem>
+          <para>Pentium III M's 700+ MHz</para>
+        </listitem>
+      </itemizedlist>
+      Intel Mobile Celeron processors do not have the required functionality
+      and the frequency cannot be controlled.
+    </para>
+
+    <para>
+      There are several ways to control the power consumption of the processor.
+      You can have profiles, for example, to select maximum performance on AC power
+      and maximum power saving on battery power.
+      The easiest way to control the power saving is set the policy to
+      "Automatic" as this will adjust the speed of the processor to the current state
+      of the system automatically.
+    </para>
+
+    <para>
+      You may not have all the options listed below:
+      <itemizedlist>
+        <listitem>
+          <para>
+            Maximum power saving:
+            This sets the computer operating speed always to the lowest
+            available setting to save battery power.
+            (Linux kernel name: <command>powersave</command>.)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Maximum performance:
+            This governor sets the processor operating speed to the
+            highest available.
+            (Linux kernel name: <command>performance</command>.)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Automatic power saving:
+            This option changes the frequency of the processor in
+            relation to current processor load.
+            If the processor is being used, then the frequency will
+            increase, but if it is not then will slowly reduce.
+            This provides a nice middle ground between power saving
+            and application speed.
+            This option will keep the processor at high frequency for
+            a few seconds after recent processor activity.
+            This governor may not work correctly on older notebook computers.
+            (Linux kernel name: <command>conservative</command>.)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Based on processor load:
+            This driver is a dynamic processor frequency policy.
+            It will change the frequency of the processor in direct
+            relation to processor load.
+            Due to the number of frequency changes, this may not work
+            reliably for older notebook computers.
+            (Linux kernel name: <command>ondemand</command>.)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Custom:
+            You have to choose this option if you want to set the
+            processor operating speed manually.
+            This option is recommended for older computers.
+            (Linux kernel name: <command>userspace</command>.)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Do nothing:
+            The processor speed will not be changed.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <note>
+      <para>
+        Some policies (ondemand and conservitive) only
+        increase the processor frequency from minimum when a
+        process has a positive nice value even though
+        a load greater than 1 occurs.
+        This means user applications work well as the processor
+        speed automatically increases.
+        This can however result in a significant performance
+        reduction for system daemons and some background session
+        services.
+        To rectify this, use another policy (e.g. Maximum Performance)
+        or set the following gconf key:
+        <command>/apps/gnome-power-manager/cpufreq_consider_nice</command>.
+      </para>
+    </note>
   </section>
 
   <section id="preferences-actions">
@@ -490,343 +665,6 @@
       <para>
         The lock policy for gnome-screensaver is ignored until the simple mode
         is re-enabled.
-      </para>
-    </note>
-  </section>
-</section>
-
-<section id="preferences-cpufreq">
-  <title>Processor Speed Control</title>
-
-  <para>
-    Modern computers allow the speed of the processor to be reduced
-    to save power.
-    This allows a powerful computer to reduce the power usage when
-    idle, or when the full capabilities are not required.
-    This dramatically increases battery life as the processor is not
-    running continuously at 100%.
-  </para>
-
-  <para>
-    Not all processors support speed control, and you will not see
-    the options to select a policy if your computer does not have a
-    compatible processor installed.
-    The following processors are known to support frequency scaling:
-    <itemizedlist>
-      <listitem>
-        <para>All Pentium 4 - M's</para>
-      </listitem>
-      <listitem>
-        <para>Pentium III M's 600Mhz to 1Ghz</para>
-      </listitem>
-      <listitem>
-        <para>Pentium III M's 700+ MHz</para>
-      </listitem>
-    </itemizedlist>
-    Intel Mobile Celeron processors do not have the required functionality
-    and the frequency cannot be controlled.
-  </para>
-
-  <para>
-    There are several ways to control the power consumption of the processor.
-    You can have profiles, for example, to select maximum performance on AC power
-    and maximum power saving on battery power.
-    The easiest way to control the power saving is set the policy to
-    "Automatic" as this will adjust the speed of the processor to the current state
-    of the system automatically.
-    You may not have all the options listed below.
-  </para>
-
-  <section id="preferences-cpufreq-powersave">
-    <title>Maximum power saving</title>
-    <para>
-      This sets the computer operating speed always to the lowest
-      available setting to save battery power.
-    </para>
-    <note>
-      <para>
-        This option corresponds to the kernel cpufreq governor
-        <command>powersave</command>.
-      </para>
-    </note>
-  </section>
-
-  <section id="preferences-cpufreq-performance">
-    <title>Maximum performance</title>
-    <para>
-      This governor sets the processor operating speed to the
-      highest available.
-    </para>
-    <note>
-      <para>
-        This option corresponds to the kernel cpufreq governor
-        <command>performance</command>.
-      </para>
-    </note>
-  </section>
-
-  <section id="preferences-cpufreq-conservative">
-    <title>Automatic power saving</title>
-    <para>
-      This option changes the frequency of the processor in
-      relation to current processor load.
-      If the processor is being used, then the frequency will
-      increase, but if it is not then will slowly reduce.
-      This provides a nice middle ground between power saving
-      and application speed.
-      This option will keep the processor at high frequency for
-      a few seconds after recent processor activity.
-      This governor may not work correctly on older notebook computers.
-    </para>
-
-    <note>
-      <para>
-        This option corresponds to the kernel cpufreq governor
-        <command>conservative</command>.
-      </para>
-    </note>
-  </section>
-
-  <section id="preferences-cpufreq-ondemand">
-    <title>Based on processor load</title>
-    <para>
-      This driver is a dynamic processor frequency policy.
-      It will change the frequency of the processor in direct
-      relation to processor load.
-      Due to the number of frequency changes, this may not work
-      reliably for older notebook computers.
-    </para>
-    <note>
-      <para>
-        This option corresponds to the kernel cpufreq governor
-        <command>ondemand</command>.
-      </para>
-    </note>
-  </section>
-
-  <section id="preferences-cpufreq-userspace">
-    <title>Custom</title>
-    <para>
-      You have to choose this option if you want to set the
-      processor operating speed manually.
-      This option is recommended for older computers.
-    </para>
-    <note>
-      <para>
-        This option corresponds to the kernel cpufreq governor
-        <command>userspace</command>.
-      </para>
-    </note>
-  </section>
-
-  <section id="preferences-cpufreq-do-nothing">
-    <title>Do nothing</title>
-    <para>
-      The processor speed will not be changed.
-    </para>
-  </section>
-
-  <section id="preferences-cpufreq-advanced">
-    <title>Advanced</title>
-    <note>
-      <para>
-        Some policies (ondemand and conservitive) only
-        increase the processor frequency from minimum when a
-        process has a positive nice value even though
-        a load greater than 1 occurs.
-        This means user applications work well as the processor
-        speed automatically increases.
-        This can however result in a significant performance
-        reduction for system daemons and some background session
-        services.
-        To rectify this, use another policy (e.g. Maximum Performance)
-        or set the following gconf key:
-        <command>/apps/gnome-power-manager/cpufreq_consider_nice</command>.
-      </para>
-    </note>
-  </section>
-</section>
-
-<section id="info">
-  <title>Information</title>
-
-  <para>The information window allows you to see:</para>
-
-  <itemizedlist>
-    <listitem>
-      <para>
-        The power devices attached to your system.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        The percentage change graph of your primary device.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        The time remaining change graph of your primary device.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        The charging and discharge rate graph of your primary device.
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-        The event log of what's happened in the session.
-      </para>
-    </listitem>
-  </itemizedlist>
-
-  <note>
-    <para>
-      You man not see some options or graphs if your computer does not have the
-      required hardware.
-      You may also see other hardware not shown here (for example UPS devices)
-      but these are treated the same way as other devices.
-    </para>
-  </note>
-
-  <section id="info-devices">
-    <title>Device Information</title>
-    <para>
-      The device information tab shows the power hardware attached to your system.
-      You can click on the "More" expanders for more detailed information about
-      your battery device, for instance the design voltage or the capacity
-      percentage for a battery.
-    </para>
-
-    <figure>
-      <title>
-        The devices shown on a typical laptop system with a wireless mouse attached
-      </title>
-      <screenshot>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="figures/gpm-info-devices.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-    </figure>
-  </section>
-
-  <section id="info-charge">
-    <title>Charge History</title>
-    <para>
-      This graph shows the percentage charge available for the composite primary
-      battery, so if you have a main laptop battery and an auxiliary battery
-      then only the averaged value will be shown.
-      A legend is not shown with this graph.
-    </para>
-
-    <figure>
-      <title>
-        The figure shows a typical discharge with two suspend cycles shown as
-        horizontal lines.
-      </title>
-      <screenshot>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="figures/gpm-info-percentage.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-    </figure>
-  </section>
-
-  <section id="info-power">
-    <title>Power History</title>
-    <para>
-      This graph shows the power history charge used by the composite
-      primary battery.
-      This line represents the amount of power that is either being used to
-      charge the batteries in the system, or the power being used by the system
-      from the batteries.
-      You should see the line go up when processor intensive tasks are
-      performed, and down when the system is at idle, or when the screen is
-      dimmed.
-      A legend is shown with this graph when data events have been received.
-    </para>
-
-    <note>
-      <para>
-        You do will not recieve rate data from your computer if it is not
-        charging or discharging, or if the computer is suspended.
-        This is due to hardware limitiations where the rate is only sent from
-        the battery management chip, rather than the power management chip on
-        the motherboard.
-      </para>
-    </note>
-
-    <figure>
-      <title>
-        The figure shows part of a typical discharge with two suspend cycles.
-      </title>
-      <screenshot>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="figures/gpm-info-rate.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-    </figure>
-  </section>
-
-  <section id="info-time">
-    <title>Estimated Time History</title>
-    <para>
-      This graph shows the estimated charge history for the composite primary
-      battery.
-      This line represents the amount of time required until charged, or the
-      amount of time until discharge.
-      This line should go proportionally up when the power decreases and down
-      when the rate increases.
-      A legend is shown with this graph when data events have been received.
-    </para>
-
-    <figure>
-      <title>
-        The figure shows part of a typical discharge with two suspend cycles.
-      </title>
-      <screenshot>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="figures/gpm-info-time.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-    </figure>
-  </section>
-
-  <section id="info-eventlog">
-    <title>Event Log</title>
-    <para>
-      The event log is a record of all the actions that &application; has
-      processed.
-      An event might be an dim of the screen, turning on DPMS, or suspending
-      due to system inactivity.
-    </para>
-
-    <figure>
-      <title>
-        The event log showing the time, the event and the event description.
-      </title>
-      <screenshot>
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="figures/gpm-info-event-log.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </screenshot>
-    </figure>
-
-    <note>
-      <para>
-        You can clear the event log, or any of the graphs using the "Clear"
-        button.
-        This permanently removes the data from memory.
       </para>
     </note>
   </section>

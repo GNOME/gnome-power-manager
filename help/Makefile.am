@@ -13,11 +13,6 @@ DOC_FIGURES = \
 	figures/gpm-prefs-notification.png \
 	figures/gpm-prefs-processor.png \
 	figures/gpm-prefs-sleep.png \
-	figures/gpm-info-devices.png \
-	figures/gpm-info-percentage.png \
-	figures/gpm-info-rate.png \
-	figures/gpm-info-time.png \
-	figures/gpm-info-event-log.png \
 	figures/gpm-stats-graph.png \
 	figures/gpm-charged.png \
 	figures/gpm-critical.png \
