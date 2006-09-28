@@ -311,6 +311,26 @@ gpm_hal_device_get_int (GpmHal      *hal,
 }
 
 /**
+ * gpm_hal_device_get_uint:
+ *
+ * HAL has no concept of a UINT, only INT
+ **/
+gboolean
+gpm_hal_device_get_uint (GpmHal      *hal,
+			 const gchar *udi,
+			 const gchar *key,
+			 guint       *value)
+{
+	gint tvalue;
+	gboolean ret;
+
+	/* bodge */
+	ret = gpm_hal_device_get_int (hal, udi, key, &tvalue);
+	*value = (guint) tvalue;
+	return ret;
+}
+
+/**
  * gpm_hal_device_find_capability:
  *
  * @hal: This hal class instance

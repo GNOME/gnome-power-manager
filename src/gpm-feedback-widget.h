@@ -49,8 +49,10 @@ typedef struct
 GType		 gpm_feedback_get_type			(void);
 GpmFeedback	*gpm_feedback_new			(void);
 
-void		 gpm_feedback_display_value		(GpmFeedback	*feedback,
+gboolean	 gpm_feedback_display_value		(GpmFeedback	*feedback,
 							 gfloat		 value);
+gboolean	 gpm_feedback_set_icon_name		(GpmFeedback	*feedback,
+							 const gchar	*icon_name);
 
 G_END_DECLS
 

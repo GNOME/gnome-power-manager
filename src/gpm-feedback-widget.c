@@ -37,7 +37,7 @@ static void     gpm_feedback_finalize   (GObject	  *object);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
-#define GPM_FEEDBACK_TIMOUT		1	/* seconds */
+#define GPM_FEEDBACK_TIMOUT		2	/* seconds */
 
 struct GpmFeedbackPrivate
 {
@@ -45,6 +45,7 @@ struct GpmFeedbackPrivate
 	GtkWidget		*main_window;
 	GtkWidget		*progress;
 	gint			 refcount;
+	gchar			*icon_name;
 };
 
 G_DEFINE_TYPE (GpmFeedback, gpm_feedback, G_TYPE_OBJECT)
@@ -80,9 +81,12 @@ gpm_feedback_auto_close (gpointer data)
 	return FALSE;
 }
 
-void
+gboolean
 gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 {
+	g_return_val_if_fail (feedback != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
+
 	gpm_debug ("Displaying %f on feedback widget", value);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);
 	gtk_widget_show_all (feedback->priv->main_window);
@@ -90,6 +94,22 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 	g_idle_remove_by_data (feedback);
 	g_timeout_add (GPM_FEEDBACK_TIMOUT * 1000, gpm_feedback_auto_close, feedback);
 	feedback->priv->refcount++;
+	return TRUE;
+}
+
+gboolean
+gpm_feedback_set_icon_name (GpmFeedback *feedback, const gchar *icon_name)
+{
+	g_return_val_if_fail (feedback != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_FEEDBACK (feedback), FALSE);
+	g_return_val_if_fail (icon_name != NULL, FALSE);
+
+	/* if name already set then free */
+	if (feedback->priv->icon_name != NULL) {
+		g_free (feedback->priv->icon_name);
+	}
+	feedback->priv->icon_name = g_strdup (icon_name);
+	return TRUE;
 }
 
 /**
@@ -101,6 +121,7 @@ gpm_feedback_init (GpmFeedback *feedback)
 {
 	feedback->priv = GPM_FEEDBACK_GET_PRIVATE (feedback);
 	feedback->priv->refcount = 0;
+	feedback->priv->icon_name = NULL;
 
 	/* initialise the window */
 	GtkWidget *image;
@@ -111,10 +132,13 @@ gpm_feedback_init (GpmFeedback *feedback)
 	}
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
 
-	image = glade_xml_get_widget (feedback->priv->xml, "image");
-	gtk_image_set_from_icon_name  (GTK_IMAGE (image),
-  				       GPM_STOCK_BRIGHTNESS,
-				       GTK_ICON_SIZE_DIALOG);
+	/* if set, use an icon */
+	if (feedback->priv->icon_name) {
+		image = glade_xml_get_widget (feedback->priv->xml, "image");
+		gtk_image_set_from_icon_name  (GTK_IMAGE (image),
+  					       feedback->priv->icon_name,
+					       GTK_ICON_SIZE_DIALOG);
+	}
 
 	feedback->priv->progress = glade_xml_get_widget (feedback->priv->xml, "progressbar");
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), 0.0f);
@@ -137,6 +161,10 @@ gpm_feedback_finalize (GObject *object)
 
 	feedback = GPM_FEEDBACK (object);
 	feedback->priv = GPM_FEEDBACK_GET_PRIVATE (feedback);
+
+	if (feedback->priv->icon_name != NULL) {
+		g_free (feedback->priv->icon_name);
+	}
 
 	/* FIXME: we should unref some stuff */
 

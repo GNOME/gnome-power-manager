@@ -32,7 +32,8 @@ G_BEGIN_DECLS
 #define GPM_STOCK_HIBERNATE			"gpm-hibernate"
 #define GPM_STOCK_SUSPEND			"gpm-suspend"
 #define GPM_STOCK_STATISTICS			"gpm-statistics"
-#define GPM_STOCK_BRIGHTNESS			"gpm-brightness"
+#define GPM_STOCK_BRIGHTNESS_LCD		"gpm-brightness-lcd"
+#define GPM_STOCK_BRIGHTNESS_KBD		"gpm-brightness-kbd"
 
 gboolean	gpm_stock_icons_init			(void);
 void		gpm_stock_icons_shutdown		(void);

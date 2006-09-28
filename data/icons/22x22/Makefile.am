@@ -5,7 +5,8 @@ Datadir = $(datadir)/icons/hicolor/22x22/apps
 
 Data_DATA =				\
 	gpm-ac-adapter.png		\
-	gpm-brightness.png		\
+	gpm-brightness-lcd.png		\
+	gpm-brightness-kbd.png		\
 	gpm-hibernate.png		\
 	gpm-suspend.png			\
 	gpm-statistics.png		\

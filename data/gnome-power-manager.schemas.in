@@ -372,6 +372,17 @@
    </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/ac_brightness_kbd</key>
+      <applyto>/apps/gnome-power-manager/ac_brightness_kbd</applyto>
+      <type>int</type>
+      <default>100</default>
+      <locale name="C">
+        <short>Keyboard brightness when on AC</short>
+        <long>The brightness of the keyboard when on AC power. Possible values are between 0 and 100.</long>
+      </locale>
+   </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/ac_sleep_computer</key>
       <applyto>/apps/gnome-power-manager/ac_sleep_computer</applyto>
       <type>int</type>
@@ -412,6 +423,17 @@
       <locale name="C">
         <short>LCD brightness when on battery</short>
         <long>The brightness of the display when on battery power. Possible values are between 0 and 100.</long>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery_brightness_kbd</key>
+      <applyto>/apps/gnome-power-manager/battery_brightness_kbd</applyto>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>Keyboard brightness when on battery</short>
+        <long>The brightness of the keyboard when on battery power. Possible values are between 0 and 100.</long>
       </locale>
    </schema>
 

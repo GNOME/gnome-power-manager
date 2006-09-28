@@ -28,6 +28,47 @@
 #include "gpm-common.h"
 
 /**
+ * gpm_percent_to_discrete:
+ * @percentage: The percentage to convert
+ * @levels: The number of discrete levels
+ *
+ * We have to be carefull when converting from %->discrete as precision is very
+ * important if we want the highest value.
+ *
+ * Return value: The discrete value for this percentage.
+ **/
+guint
+gpm_percent_to_discrete (guint percentage,
+			 guint levels)
+{
+	/* check we are in range */
+	if (percentage > 100) {
+		return levels;
+	}
+	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
+}
+
+/**
+ * gpm_discrete_to_percent:
+ * @hw: The discrete level
+ * @levels: The number of discrete levels
+ *
+ * We have to be carefull when converting from discrete->%.
+ *
+ * Return value: The percentage for this discrete value.
+ **/
+guint
+gpm_discrete_to_percent (guint discrete,
+			 guint levels)
+{
+	/* check we are in range */
+	if (discrete > levels) {
+		return 100;
+	}
+	return (guint) ((float) discrete * (100.0f / (float) (levels - 1)));
+}
+
+/**
  * gpm_warning_beep
  **/
 void

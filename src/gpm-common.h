@@ -37,6 +37,10 @@ G_BEGIN_DECLS
 
 gchar		*gpm_get_timestring		(guint		time);
 void		 gpm_warning_beep		(void);
+guint		 gpm_percent_to_discrete	(guint		percentage,
+						 guint		levels);
+guint		 gpm_discrete_to_percent	(guint		discrete,
+						 guint		levels);
 
 G_END_DECLS
 

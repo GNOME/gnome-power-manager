@@ -43,39 +43,34 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
-#include "gpm-hal-brightness.h"
+#include "gpm-hal-brightness-lcd.h"
 #include "gpm-proxy.h"
 #include "gpm-marshal.h"
+#include "gpm-feedback-widget.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
-#define GPM_HAL_BRIGHTNESS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_BRIGHTNESS, GpmHalBrightnessPrivate))
+#define GPM_HAL_BRIGHTNESS_LCD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_BRIGHTNESS_LCD, GpmHalBrightnessLcdPrivate))
 
-struct GpmHalBrightnessPrivate
+struct GpmHalBrightnessLcdPrivate
 {
-	gboolean		 has_hardware;
 	gboolean		 does_own_updates;	/* keys are hardwired */
 	gboolean		 does_own_dimming;	/* hardware auto-fades */
-	gint			 current_hw;		/* hardware */
-	gint			 level_dim_hw;
-	gint			 level_std_hw;
-	gint			 levels;
+	gboolean		 is_dimmed;
+	guint			 current_hw;		/* hardware */
+	guint			 level_dim_hw;
+	guint			 level_std_hw;
+	guint			 levels;
 	gchar			*udi;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
+	GpmFeedback		*feedback;
 };
 
-enum {
-	HAL_BRIGHTNESS_STEP_CHANGED,
-	LAST_SIGNAL
-};
-
-static guint	     signals [LAST_SIGNAL] = { 0, };
-
-G_DEFINE_TYPE (GpmHalBrightness, gpm_hal_brightness, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmHalBrightnessLcd, gpm_hal_brightness_lcd, G_TYPE_OBJECT)
 
 /**
- * gpm_hal_brightness_update_hw:
+ * gpm_hal_brightness_lcd_get_hw:
  * @brightness: This brightness class instance
  *
  * Updates the private local value of brightness_level_hw as it may have
@@ -83,14 +78,15 @@ G_DEFINE_TYPE (GpmHalBrightness, gpm_hal_brightness, G_TYPE_OBJECT)
  * Return value: Success.
  **/
 static gboolean
-gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
+gpm_hal_brightness_lcd_get_hw (GpmHalBrightnessLcd *brightness,
+			       guint	    *brightness_level_hw)
 {
 	GError     *error = NULL;
 	gboolean    ret;
-	gint        brightness_hw = 0;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), FALSE);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
@@ -100,7 +96,7 @@ gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, &brightness_hw,
+				 G_TYPE_UINT, brightness_level_hw,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -111,12 +107,11 @@ gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
 	}
-	brightness->priv->current_hw = brightness_hw;
 	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_set_hw:
+ * gpm_hal_brightness_lcd_set_hw:
  * @brightness: This brightness class instance
  * @brightness_level_hw: The hardware level in raw units
  *
@@ -125,15 +120,16 @@ gpm_hal_brightness_update_hw (GpmHalBrightness *brightness)
  * Return value: Success.
  **/
 static gboolean
-gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
-			   guint	     brightness_level_hw)
+gpm_hal_brightness_lcd_set_hw (GpmHalBrightnessLcd *brightness,
+			       guint	     brightness_level_hw)
 {
 	GError *error = NULL;
 	guint retval;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), FALSE);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
@@ -168,81 +164,61 @@ gpm_hal_brightness_set_hw (GpmHalBrightness *brightness,
 	return TRUE;
 }
 
-
 /**
- * gpm_hal_brightness_percent_to_hw:
- * @percentage: The percentage to convert
- * @levels: The number of hardware levels for our hardware
- *
- * We have to be carefull when converting from %->hw as precision is very
- * important if we want the highest value.
- *
- * Return value: The hardware value for this percentage.
- **/
-static gint
-gpm_hal_brightness_percent_to_hw (gint percentage,
-				  gint levels)
-{
-	/* check we are in range */
-	if (percentage < 0) {
-		return 0;
-	} else if (percentage > 100) {
-		return levels;
-	}
-	return ( (gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
-}
-
-/**
- * gpm_hal_brightness_dim_hw:
+ * gpm_hal_brightness_lcd_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
  *
  * Just do the step up and down, after knowing the step interval
  **/
-static void
-gpm_hal_brightness_dim_hw_step (GpmHalBrightness *brightness,
+static gboolean
+gpm_hal_brightness_lcd_dim_hw_step (GpmHalBrightnessLcd *brightness,
 				guint             new_level_hw,
 				guint		  step_interval)
 {
 	guint current_hw;
-	guint a;
+	gint a;
 
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
+
 	current_hw = brightness->priv->current_hw;
 	gpm_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
 
 	/* we do the step interval as we can have insane levels of brightness */
 	if (new_level_hw == current_hw) {
-		return;
+		return FALSE;
 	}
 
 	if (new_level_hw > current_hw) {
 		/* going up */
 		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
-			gpm_hal_brightness_set_hw (brightness, a);
+			gpm_hal_brightness_lcd_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	} else {
 		/* going down */
-		for (a=current_hw; a + 1 > new_level_hw; a-=step_interval) {
-			gpm_hal_brightness_set_hw (brightness, a);
+		for (a=current_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
+			gpm_hal_brightness_lcd_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	}
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_get_step:
+ * gpm_hal_brightness_lcd_get_step:
  * @brightness: This brightness class instance
  * Return value: the amount of hardware steps to do on each update or
  * zero for error.
  **/
 static guint
-gpm_hal_brightness_get_step (GpmHalBrightness *brightness)
+gpm_hal_brightness_lcd_get_step (GpmHalBrightnessLcd *brightness)
 {
 	int step;
 
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), 0);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), 0);
 
 	if (brightness->priv->levels < 20) {
 		/* less than 20 states should do every state */
@@ -255,68 +231,50 @@ gpm_hal_brightness_get_step (GpmHalBrightness *brightness)
 }
 
 /**
- * gpm_hal_brightness_dim_hw:
+ * gpm_hal_brightness_lcd_dim_hw:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
  **/
-static void
-gpm_hal_brightness_dim_hw (GpmHalBrightness *brightness,
+static gboolean
+gpm_hal_brightness_lcd_dim_hw (GpmHalBrightnessLcd *brightness,
 			   guint	     new_level_hw)
 {
 	guint step;
 
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
-
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
 	gpm_debug ("new_level_hw=%i", new_level_hw);
 
 	/* some machines don't take kindly to auto-dimming */
 	if (brightness->priv->does_own_dimming) {
-		gpm_hal_brightness_set_hw (brightness, new_level_hw);
-		return;
+		gpm_hal_brightness_lcd_set_hw (brightness, new_level_hw);
+		return FALSE;
 	}
 
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
-	step = gpm_hal_brightness_get_step (brightness);
-	gpm_hal_brightness_dim_hw_step (brightness, new_level_hw, step);
+	step = gpm_hal_brightness_lcd_get_step (brightness);
+	gpm_hal_brightness_lcd_dim_hw_step (brightness, new_level_hw, step);
+
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_hw_to_percent:
- * @hw: The hardware level
- * @levels: The number of hardware levels for our hardware
- *
- * We have to be carefull when converting from hw->%.
- *
- * Return value: The percentage for this hardware value.
- **/
-static guint
-gpm_hal_brightness_hw_to_percent (gint hw,
-				  guint levels)
-{
-	/* check we are in range */
-	if (hw < 0) {
-		return 0;
-	} else if (hw > levels) {
-		return 100;
-	}
-	return (int) ((float) hw * (100.0f / (float) (levels - 1)));
-}
-
-/**
- * gpm_hal_brightness_set_level_dim:
+ * gpm_hal_brightness_lcd_set_dim:
  * @brightness: This brightness class instance
  * @brightness_level: The percentage brightness
  **/
-void
-gpm_hal_brightness_set_level_dim (GpmHalBrightness *brightness,
+gboolean
+gpm_hal_brightness_lcd_set_dim (GpmHalBrightnessLcd *brightness,
 				  guint		    brightness_level)
 {
 	guint level_hw;
-	level_hw = gpm_hal_brightness_percent_to_hw (brightness_level, brightness->priv->levels);
+
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
+
+	level_hw = gpm_percent_to_discrete (brightness_level,
+						     brightness->priv->levels);
 
 	/* If the current brightness is less than the dim brightness then just
 	 * use the current brightness so that we don't *increase* in brightness
@@ -324,225 +282,232 @@ gpm_hal_brightness_set_level_dim (GpmHalBrightness *brightness,
 	if (brightness->priv->level_std_hw > level_hw) {
 		brightness->priv->level_dim_hw = level_hw;
 	} else {
-		gpm_warning ("Current brightness is %i, dim brightness is %i.",
-			     brightness->priv->level_std_hw, level_hw);
+		gpm_debug ("Current brightness is %i, dim brightness is %i, "
+			   "so we'll use the current as the dim brightness.",
+			   brightness->priv->level_std_hw, level_hw);
 		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
 	}
+
+	/* if in this state, then update */
+	if (brightness->priv->is_dimmed == TRUE) {
+		gpm_hal_brightness_lcd_dim_hw (brightness, brightness->priv->level_dim_hw);
+	}
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_set_level_dim:
+ * gpm_hal_brightness_lcd_set_std:
  * @brightness: This brightness class instance
  * @brightness_level: The percentage brightness
  **/
-void
-gpm_hal_brightness_set_level_std (GpmHalBrightness *brightness,
+gboolean
+gpm_hal_brightness_lcd_set_std (GpmHalBrightnessLcd *brightness,
 				  guint		    brightness_level)
 {
 	guint level_hw;
-	level_hw = gpm_hal_brightness_percent_to_hw (brightness_level,
-						 brightness->priv->levels);
+
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
+
+	level_hw = gpm_percent_to_discrete (brightness_level,
+						     brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
+
+	/* if in this state, then update */
+	if (brightness->priv->is_dimmed == FALSE) {
+		gpm_hal_brightness_lcd_dim_hw (brightness, brightness->priv->level_std_hw);
+	}
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_dim:
+ * gpm_hal_brightness_lcd_dim:
  * @brightness: This brightness class instance
  *
  * Sets the screen into dim mode, where the dim brightness is used.
  **/
-void
-gpm_hal_brightness_dim (GpmHalBrightness *brightness)
+gboolean
+gpm_hal_brightness_lcd_dim (GpmHalBrightnessLcd *brightness)
 {
-	gpm_hal_brightness_dim_hw (brightness, brightness->priv->level_dim_hw);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
+
+	/* check to see if we are already dimmed */
+	if (brightness->priv->is_dimmed == TRUE) {
+		gpm_warning ("already dim'ed");
+		return FALSE;
+	}
+	brightness->priv->is_dimmed = TRUE;
+	return gpm_hal_brightness_lcd_dim_hw (brightness, brightness->priv->level_dim_hw);
 }
 
 /**
- * gpm_hal_brightness_undim:
+ * gpm_hal_brightness_lcd_undim:
  * @brightness: This brightness class instance
  *
  * Sets the screen into normal mode, where the startdard brightness is used.
  **/
-void
-gpm_hal_brightness_undim (GpmHalBrightness *brightness)
+gboolean
+gpm_hal_brightness_lcd_undim (GpmHalBrightnessLcd *brightness)
 {
-	gpm_hal_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
+
+	/* check to see if we are already dimmed */
+	if (brightness->priv->is_dimmed == FALSE) {
+		gpm_warning ("already undim'ed");
+		return FALSE;
+	}
+	brightness->priv->is_dimmed = FALSE;
+	return gpm_hal_brightness_lcd_dim_hw (brightness, brightness->priv->level_std_hw);
 }
 
 /**
- * gpm_hal_brightness_set:
- * @brightness: This brightness class instance
- **/
-void
-gpm_hal_brightness_set (GpmHalBrightness *brightness)
-{
-	gpm_hal_brightness_dim_hw (brightness, brightness->priv->level_std_hw);
-}
-
-/**
- * gpm_hal_brightness_get:
+ * gpm_hal_brightness_lcd_get:
  * @brightness: This brightness class instance
  * Return value: The percentage brightness, or -1 for no hardware or error
  *
  * Gets the current (or at least what this class thinks is current) percentage
  * brightness. This is quick as no HAL inquiry is done.
  **/
-gint
-gpm_hal_brightness_get (GpmHalBrightness *brightness)
+gboolean
+gpm_hal_brightness_lcd_get (GpmHalBrightnessLcd *brightness,
+			guint		 *brightness_level)
 {
 	gint percentage;
 
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), -1);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
-	if (! brightness->priv->has_hardware) {
-		return -1;
-	}
-	percentage = gpm_hal_brightness_hw_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						       brightness->priv->levels);
-	return percentage;
+	*brightness_level = percentage;
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_up:
+ * gpm_hal_brightness_lcd_up:
  * @brightness: This brightness class instance
  *
  * If possible, put the brightness of the LCD up one unit.
  **/
-void
-gpm_hal_brightness_up (GpmHalBrightness *brightness)
+gboolean
+gpm_hal_brightness_lcd_up (GpmHalBrightnessLcd *brightness)
 {
 	gint step;
 	gint percentage;
 
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
-
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
-		gpm_hal_brightness_update_hw (brightness);
+		gpm_hal_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
-		step = gpm_hal_brightness_get_step (brightness);
-		gpm_hal_brightness_set_hw (brightness, brightness->priv->current_hw + step);
+		step = gpm_hal_brightness_lcd_get_step (brightness);
+		/* don't overflow */
+		if (brightness->priv->current_hw + step > brightness->priv->levels - 1) {
+			step = (brightness->priv->levels - 1) - brightness->priv->current_hw;
+		}
+		gpm_hal_brightness_lcd_set_hw (brightness, brightness->priv->current_hw + step);
 	}
 
-	percentage = gpm_hal_brightness_hw_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
-	gpm_debug ("emitting brightness-step-changed : %i", percentage);
-	g_signal_emit (brightness, signals [HAL_BRIGHTNESS_STEP_CHANGED], 0, percentage);
+
+	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
+	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_down:
+ * gpm_hal_brightness_lcd_down:
  * @brightness: This brightness class instance
  *
  * If possible, put the brightness of the LCD down one unit.
  **/
-void
-gpm_hal_brightness_down (GpmHalBrightness *brightness)
+gboolean
+gpm_hal_brightness_lcd_down (GpmHalBrightnessLcd *brightness)
 {
 	gint step;
 	gint percentage;
 
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness));
-
-	if (! brightness->priv->has_hardware) {
-		return;
-	}
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (brightness), FALSE);
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
-		gpm_hal_brightness_update_hw (brightness);
+		gpm_hal_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
-		step = gpm_hal_brightness_get_step (brightness);
-		gpm_hal_brightness_set_hw (brightness, brightness->priv->current_hw - 1);
+		step = gpm_hal_brightness_lcd_get_step (brightness);
+		/* don't underflow */
+		if (brightness->priv->current_hw < step) {
+			step = brightness->priv->current_hw;
+		}
+		gpm_hal_brightness_lcd_set_hw (brightness, brightness->priv->current_hw - step);
 	}
 
-	percentage = gpm_hal_brightness_hw_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
-	gpm_debug ("emitting brightness-step-changed : %i", percentage);
-	g_signal_emit (brightness, signals [HAL_BRIGHTNESS_STEP_CHANGED], 0, percentage);
+
+	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
+	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
+	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_has_hardware:
- * @brightness: This brightness class instance
- * Return value: if we can set or get the lcd brightness
- *
- * Returns if the computer has brightness hardware (lcd panel)
- **/
-gboolean
-gpm_hal_brightness_has_hardware (GpmHalBrightness *brightness)
-{
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS (brightness), FALSE);
-
-	return brightness->priv->has_hardware;
-}
-
-/**
- * gpm_hal_brightness_constructor:
+ * gpm_hal_brightness_lcd_constructor:
  **/
 static GObject *
-gpm_hal_brightness_constructor (GType		  type,
+gpm_hal_brightness_lcd_constructor (GType		  type,
 			    guint		  n_construct_properties,
 			    GObjectConstructParam *construct_properties)
 {
-	GpmHalBrightness      *brightness;
-	GpmHalBrightnessClass *klass;
-	klass = GPM_HAL_BRIGHTNESS_CLASS (g_type_class_peek (GPM_TYPE_HAL_BRIGHTNESS));
-	brightness = GPM_HAL_BRIGHTNESS (G_OBJECT_CLASS (gpm_hal_brightness_parent_class)->constructor
-			      	     (type, n_construct_properties, construct_properties));
+	GpmHalBrightnessLcd      *brightness;
+	GpmHalBrightnessLcdClass *klass;
+	klass = GPM_HAL_BRIGHTNESS_LCD_CLASS (g_type_class_peek (GPM_TYPE_HAL_BRIGHTNESS_LCD));
+	brightness = GPM_HAL_BRIGHTNESS_LCD (G_OBJECT_CLASS (gpm_hal_brightness_lcd_parent_class)->constructor
+			      		     (type, n_construct_properties, construct_properties));
 	return G_OBJECT (brightness);
 }
 
 /**
- * gpm_hal_brightness_finalize:
+ * gpm_hal_brightness_lcd_finalize:
  **/
 static void
-gpm_hal_brightness_finalize (GObject *object)
+gpm_hal_brightness_lcd_finalize (GObject *object)
 {
-	GpmHalBrightness *brightness;
+	GpmHalBrightnessLcd *brightness;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS (object));
-	brightness = GPM_HAL_BRIGHTNESS (object);
+	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS_LCD (object));
+	brightness = GPM_HAL_BRIGHTNESS_LCD (object);
 
 	g_free (brightness->priv->udi);
 	g_object_unref (brightness->priv->gproxy);
 	g_object_unref (brightness->priv->hal);
+	g_object_unref (brightness->priv->feedback);
 
 	g_return_if_fail (brightness->priv != NULL);
-	G_OBJECT_CLASS (gpm_hal_brightness_parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_hal_brightness_lcd_parent_class)->finalize (object);
 }
 
 /**
- * gpm_hal_brightness_class_init:
+ * gpm_hal_brightness_lcd_class_init:
  **/
 static void
-gpm_hal_brightness_class_init (GpmHalBrightnessClass *klass)
+gpm_hal_brightness_lcd_class_init (GpmHalBrightnessLcdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_hal_brightness_finalize;
-	object_class->constructor  = gpm_hal_brightness_constructor;
+	object_class->finalize	   = gpm_hal_brightness_lcd_finalize;
+	object_class->constructor  = gpm_hal_brightness_lcd_constructor;
 
-	g_type_class_add_private (klass, sizeof (GpmHalBrightnessPrivate));
-
-	signals [HAL_BRIGHTNESS_STEP_CHANGED] =
-		g_signal_new ("brightness-step-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalBrightnessClass, lcd_step_changed),
-			      NULL,
-			      NULL,
-			      gpm_marshal_VOID__INT,
-			      G_TYPE_NONE, 1, G_TYPE_INT);
+	g_type_class_add_private (klass, sizeof (GpmHalBrightnessLcdPrivate));
 }
 
 /**
- * gpm_hal_brightness_init:
+ * gpm_hal_brightness_lcd_init:
  * @brightness: This brightness class instance
  *
  * initialises the brightness class. NOTE: We expect laptop_panel objects
@@ -550,21 +515,24 @@ gpm_hal_brightness_class_init (GpmHalBrightnessClass *klass)
  * We only control the first laptop_panel object if there are more than one.
  **/
 static void
-gpm_hal_brightness_init (GpmHalBrightness *brightness)
+gpm_hal_brightness_lcd_init (GpmHalBrightnessLcd *brightness)
 {
 	gchar **names;
 	gchar *manufacturer_string = NULL;
 	gboolean res;
 
-	brightness->priv = GPM_HAL_BRIGHTNESS_GET_PRIVATE (brightness);
+	brightness->priv = GPM_HAL_BRIGHTNESS_LCD_GET_PRIVATE (brightness);
 
 	brightness->priv->hal = gpm_hal_new ();
+
+	brightness->priv->feedback = gpm_feedback_new ();
+	gpm_feedback_set_icon_name (brightness->priv->feedback,
+				    GPM_STOCK_BRIGHTNESS_LCD);
 
 	/* save udi of lcd adapter */
 	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names);
 	if (names == NULL || names[0] == NULL) {
-		brightness->priv->has_hardware = FALSE;
-		gpm_debug ("No devices of capability laptop_panel");
+		gpm_warning ("No devices of capability laptop_panel");
 		return;
 	}
 
@@ -572,7 +540,6 @@ gpm_hal_brightness_init (GpmHalBrightness *brightness)
 	brightness->priv->udi = g_strdup (names[0]);
 	gpm_hal_free_capability (brightness->priv->hal, names);
 
-	brightness->priv->has_hardware = TRUE;
 	brightness->priv->does_own_dimming = FALSE;
 
 	/* If the manufacturer is IBM, then assume we are a ThinkPad,
@@ -610,28 +577,64 @@ gpm_hal_brightness_init (GpmHalBrightness *brightness)
 			  HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_int (brightness->priv->hal, brightness->priv->udi, "laptop_panel.num_levels",
-				&brightness->priv->levels);
+	gpm_hal_device_get_uint (brightness->priv->hal,
+				 brightness->priv->udi,
+				 "laptop_panel.num_levels",
+				 &brightness->priv->levels);
 
 	/* this changes under our feet */
-	gpm_hal_brightness_update_hw (brightness);
+	gpm_hal_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
 
 	/* set to known value */
 	brightness->priv->level_dim_hw = 1;
 	brightness->priv->level_std_hw = 1;
 
-	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
+	gpm_debug ("Starting: (%i of %i)",
+		   brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
 }
 
 /**
- * gpm_hal_brightness_new:
+ * gpm_hal_brightness_lcd_has_hw:
+ *
+ * Self contained function that works out if we have the hardware.
+ * If not, we return FALSE and the module is unloaded.
+ **/
+static gboolean
+gpm_hal_brightness_lcd_has_hw (void)
+{
+	GpmHal *hal;
+	gchar **names;
+	gboolean ret = TRUE;
+
+	/* okay, as singleton - so we don't allocate more memory */
+	hal = gpm_hal_new ();
+	gpm_hal_device_find_capability (hal, "laptop_panel", &names);
+
+	/* nothing found */
+	if (names == NULL || names[0] == NULL) {
+		ret = FALSE;
+	}
+
+	gpm_hal_free_capability (hal, names);
+	g_object_unref (hal);
+	return ret;
+}
+
+/**
+ * gpm_hal_brightness_lcd_new:
  * Return value: A new brightness class instance.
  **/
-GpmHalBrightness *
-gpm_hal_brightness_new (void)
+GpmHalBrightnessLcd *
+gpm_hal_brightness_lcd_new (void)
 {
-	GpmHalBrightness *brightness;
-	brightness = g_object_new (GPM_TYPE_HAL_BRIGHTNESS, NULL);
-	return GPM_HAL_BRIGHTNESS (brightness);
+	GpmHalBrightnessLcd *brightness;
+
+	/* only load an instance of this module if we have the hardware */
+	if (gpm_hal_brightness_lcd_has_hw () == FALSE) {
+		return FALSE;
+	}
+
+	brightness = g_object_new (GPM_TYPE_HAL_BRIGHTNESS_LCD, NULL);
+	return GPM_HAL_BRIGHTNESS_LCD (brightness);
 }

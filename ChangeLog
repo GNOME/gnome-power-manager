@@ -1,3 +1,67 @@
+2006-09-28  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/16x16/Makefile.am:
+	* data/icons/16x16/gpm-brightness-kbd.png:
+	* data/icons/16x16/gpm-brightness-lcd.png:
+	* data/icons/16x16/gpm-brightness.png:
+	* data/icons/16x16/gpm-primary-missing.png:
+	* data/icons/16x16/gpm-ups-100-charging.png:
+	* data/icons/22x22/Makefile.am:
+	* data/icons/22x22/gpm-brightness-kbd.png:
+	* data/icons/22x22/gpm-brightness-lcd.png:
+	* data/icons/22x22/gpm-brightness.png:
+	* data/icons/24x24/Makefile.am:
+	* data/icons/24x24/gpm-brightness-kbd.png:
+	* data/icons/24x24/gpm-brightness-lcd.png:
+	* data/icons/24x24/gpm-brightness.png:
+	* data/icons/scalable/Makefile.am:
+	* data/icons/scalable/gpm-brightness-kbd.svg:
+	* data/icons/scalable/gpm-brightness-lcd.svg:
+	* data/icons/scalable/gpm-brightness.svg:
+	Rename gpm-brightness to gpm-brightness-lcd and add gpm-brightness-kbd.
+	This is for the feedback widget for keyboard backlight feedback.
+
+	* data/gnome-power-manager.schemas.in:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-hal-brightness.c:
+	* src/gpm-hal-brightness.h:
+	* src/gpm-hal-brightness-lcd.c:
+	* src/gpm-hal-brightness-lcd.h:
+	Rename as we have a new kid on the block, namely kbd.
+
+	* src/gpm-hal-brightness.c:
+	* src/gpm-hal-brightness.h:
+	When stepping down, actually use the step value. (David Zeuthen)
+	Check for overflow / underflow when step value > 1.
+	Used signed integers when stepping down as we may underflow.
+	Should fix #358067.
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	Add gpm_percent_to_discrete() and gpm_discrete_to_percent() generic
+	functions.
+
+	* src/gpm-feedback-widget.c:
+	* src/gpm-feedback-widget.h:
+	* src/gpm-stock-icons.h:
+	Add gpm_feedback_set_icon_name() so we can set different icons on the
+	feedback widget.
+	Also load the feedback widget here and get rid of the manager signal -
+	this allows us to save memory if we don't have the hardware.
+
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Add a dummy function gpm_hal_device_get_uint() so we don't have to muck
+	about with casting.
+
+	* src/gpm-gconf.h:
+	* src/gpm-manager.c:
+	* src/gpm-hal-brightness-kbd.c:
+	* src/gpm-hal-brightness-kbd.h:
+	Add a heavily modified patch from David Zeuthen to add keyboard
+	backlight (write) support to gnome-power-manager. Many thanks!
+
 2006-09-27  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/16x16/gpm-keyboard-030.png:

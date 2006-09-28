@@ -26,14 +26,15 @@
 
 G_BEGIN_DECLS
 
-#define	HAL_DBUS_SERVICE		"org.freedesktop.Hal"
-#define	HAL_DBUS_PATH_MANAGER		"/org/freedesktop/Hal/Manager"
-#define	HAL_DBUS_INTERFACE_MANAGER	"org.freedesktop.Hal.Manager"
-#define	HAL_DBUS_INTERFACE_DEVICE	"org.freedesktop.Hal.Device"
-#define	HAL_DBUS_INTERFACE_LAPTOP_PANEL	"org.freedesktop.Hal.Device.LaptopPanel"
-#define	HAL_DBUS_INTERFACE_POWER	"org.freedesktop.Hal.Device.SystemPowerManagement"
-#define	HAL_DBUS_INTERFACE_CPUFREQ	"org.freedesktop.Hal.Device.CPUFreq"
-#define HAL_ROOT_COMPUTER		"/org/freedesktop/Hal/devices/computer"
+#define	HAL_DBUS_SERVICE		 "org.freedesktop.Hal"
+#define	HAL_DBUS_PATH_MANAGER		 "/org/freedesktop/Hal/Manager"
+#define	HAL_DBUS_INTERFACE_MANAGER	 "org.freedesktop.Hal.Manager"
+#define	HAL_DBUS_INTERFACE_DEVICE	 "org.freedesktop.Hal.Device"
+#define	HAL_DBUS_INTERFACE_LAPTOP_PANEL	 "org.freedesktop.Hal.Device.LaptopPanel"
+#define	HAL_DBUS_INTERFACE_POWER	 "org.freedesktop.Hal.Device.SystemPowerManagement"
+#define	HAL_DBUS_INTERFACE_CPUFREQ	 "org.freedesktop.Hal.Device.CPUFreq"
+#define	HAL_DBUS_INTERFACE_KBD_BACKLIGHT "org.freedesktop.Hal.Device.KeyboardBacklight"
+#define HAL_ROOT_COMPUTER		 "/org/freedesktop/Hal/devices/computer"
 
 #define GPM_TYPE_HAL		(gpm_hal_get_type ())
 #define GPM_HAL(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_HAL, GpmHal))
@@ -106,6 +107,10 @@ gboolean	 gpm_hal_device_get_int			(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,
 							 gint		*value);
+gboolean	 gpm_hal_device_get_uint		(GpmHal		*hal,
+							 const gchar	*udi,
+							 const gchar	*key,
+							 guint		*value);
 gboolean	 gpm_hal_device_find_capability		(GpmHal		*hal,
 							 const gchar	*capability,
 							 gchar	      ***value);
