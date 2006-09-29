@@ -1,4 +1,47 @@
 ==============
+Version 2.16.1
+==============
+
+Released September 29, 2006
+
+General
+
+ - Use the step value we computed (rather than one) to fix pressing
+	 brightness-down on the Macbook Pro. (David Zeuthen) #358067
+ - Remove the FIXME to fix #334212. It's breaking more laptops that it
+	 was intended to fix and also breaks my (already broken) iBook.
+ - Also ignore DBUS_GERROR_REMOTE_EXCEPTION as this prevents the
+	 'HAL failed to suspend' when actually it suspended fine but the bus
+	 timed out.
+ - Fix a couple of small memory leaks where we don't free an icon name.
+ - Don't rescan buttons every minute. #356170.
+ - Fix hotplug add and remove of wireless mice.
+ - Add the new battery types so we don't print a warning with
+	 newer than HAL 0.5.8.1
+ - Increase dep of libgnome to 2.14.0 because we are using
+	 GNOME_PARAM_GOPTION_CONTEXT, which was introduced in 2-14
+	 (Mart Raudsepp) #355437
+
+Translators
+
+ - Ankit Patel (gu)
+ - Daniel Nylander (sv)
+ - David Lodge (en_GB)
+ - Elnaz Sarbar (fa)
+ - Erdal Ronahi (ku)
+ - Ilkka Tuohela (fi)
+ - Ivar Smolin (et)
+ - Jovan Naumovski (mk)
+ - Mindu Dorji (dz)
+ - Matic Žgur (sl)
+ - Paolo Insogna (it)
+ - Rhys Jones (cy)
+ - Theppitak Karoonboonyanan (th)
+ - Woodman Tuen (zh_HK)
+ - Woodman Tuen (zh_TW)
+ - Wouter Bolsterlee (nl)
+
+==============
 Version 2.16.0
 ==============
 
