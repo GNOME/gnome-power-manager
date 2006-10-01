@@ -1,3 +1,21 @@
+2006-10-01  Richard Hughes  <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	Add a missing file (Marcel Telka)
+
+	* src/Makefile.am:
+	* src/gpm-hal-brightness-kbd.c:
+	* src/gpm-hal-brightness-kbd.h:
+	* src/gpm-hal-light-sensor.c:
+	* src/gpm-hal-light-sensor.h:
+	* src/gpm-manager.c:
+	Merge some new light-sensor stuff based on a patch from David Zeuthen.
+	This isn't finished yet - I need to take some more ideas from David's
+	patch and merge them - along with some more ideas of my own on the
+	feedback mechanism for the LCD and keyboard backlight.
+	I've been busy this weekend - so coding will resume some point this
+	week.
+
 2006-09-29  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal-brightness-sensor.c:

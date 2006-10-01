@@ -48,6 +48,7 @@
 #include "gpm-proxy.h"
 #include "gpm-marshal.h"
 #include "gpm-feedback-widget.h"
+#include "gpm-hal-light-sensor.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -58,6 +59,7 @@ struct GpmHalBrightnessKbdPrivate
 	gboolean		 does_own_updates;	/* keys are hardwired */
 	gboolean		 does_own_dimming;	/* hardware auto-fades */
 	gboolean		 is_dimmed;
+	gboolean		 is_disabled;
 	guint			 current_hw;		/* hardware */
 	guint			 level_dim_hw;
 	guint			 level_std_hw;
@@ -66,6 +68,7 @@ struct GpmHalBrightnessKbdPrivate
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 	GpmFeedback		*feedback;
+	GpmHalLightSensor  *sensor;
 };
 
 G_DEFINE_TYPE (GpmHalBrightnessKbd, gpm_hal_brightness_kbd, G_TYPE_OBJECT)
@@ -97,7 +100,7 @@ gpm_hal_brightness_kbd_get_hw (GpmHalBrightnessKbd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, brightness_level_hw,
+				 G_TYPE_INT, brightness_level_hw,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -292,13 +295,13 @@ gpm_hal_brightness_kbd_set_dim (GpmHalBrightnessKbd *brightness,
 }
 
 /**
- * gpm_hal_brightness_kbd_set_dim:
+ * gpm_hal_brightness_kbd_set_std:
  * @brightness_kbd: This brightness_kbd class instance
  * @brightness_level: The percentage brightness_kbd
  **/
 gboolean
 gpm_hal_brightness_kbd_set_std (GpmHalBrightnessKbd *brightness,
-				  guint		    brightness_level)
+				guint		    brightness_level)
 {
 	guint level_hw;
 
@@ -334,6 +337,7 @@ gpm_hal_brightness_kbd_dim (GpmHalBrightnessKbd *brightness)
 		return FALSE;
 	}
 	brightness->priv->is_dimmed = TRUE;
+//need to save old value
 	return gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
 }
 
@@ -355,6 +359,7 @@ gpm_hal_brightness_kbd_undim (GpmHalBrightnessKbd *brightness)
 		return FALSE;
 	}
 	brightness->priv->is_dimmed = FALSE;
+//need to restore old value
 	return gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_std_hw);
 }
 
@@ -370,7 +375,7 @@ gboolean
 gpm_hal_brightness_kbd_get (GpmHalBrightnessKbd *brightness,
 			guint		 *brightness_level)
 {
-	gint percentage;
+	guint percentage;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
@@ -484,6 +489,7 @@ gpm_hal_brightness_kbd_finalize (GObject *object)
 	g_object_unref (brightness->priv->gproxy);
 	g_object_unref (brightness->priv->hal);
 	g_object_unref (brightness->priv->feedback);
+	g_object_unref (brightness->priv->sensor);
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_hal_brightness_kbd_parent_class)->finalize (object);
@@ -500,6 +506,154 @@ gpm_hal_brightness_kbd_class_init (GpmHalBrightnessKbdClass *klass)
 	object_class->constructor  = gpm_hal_brightness_kbd_constructor;
 
 	g_type_class_add_private (klass, sizeof (GpmHalBrightnessKbdPrivate));
+}
+
+enum {
+	STATE_FORCED_UNKNOWN,
+	STATE_FORCED_ON,
+	STATE_FORCED_OFF
+};
+
+
+/**
+ * adjust_kbd_brightness_according_to_ambient_light:
+ * @brightness: class instance
+ * @startup: whether we should set the backlight depending on the
+ * current ambient light level
+ *
+ * This function adjusts the keyboard backlight according to ambient
+ * light. It tries to be smart about things. So, if we detect that
+ * the light changes to very dark (30%) we force the backlight on
+ * and if we detect that it changes to very bright (70%) we force
+ * the backlight off. The reason for this is that we want to
+ * respect the users settings and try to change as little as possible,
+ * e.g. should it get dark (30%) we know we've already forced it off
+ * so the user can e.g. change it himself too as we won't do anything
+ * until it's very bright again.
+ *
+ * For startup conditions we look at whether the ambient light is
+ * greater or lower than 50% to set force keyboard backlight on/off.
+ * Note that enabling the keyboard backlight after disabling it is
+ * a startup condition too.
+ */
+static gboolean
+adjust_kbd_brightness_according_to_ambient_light (GpmHalBrightnessKbd *brightness,
+						  gboolean startup)
+{
+	guint ambient_light;
+	static int state = STATE_FORCED_UNKNOWN;
+
+	if (brightness->priv->sensor == NULL) {
+		return FALSE;
+	}
+
+	gpm_hal_light_sensor_get (brightness->priv->sensor, &ambient_light);
+
+	/* this is also used if user reenables the keyboard backlight */
+	if (startup) {
+		state = STATE_FORCED_UNKNOWN;
+	}
+
+ 	g_debug ("ambient light percent = %d", ambient_light);
+
+	if (state == STATE_FORCED_UNKNOWN) {
+		/* if this is the first time we're launched with ambient light data... */
+		if (ambient_light < 50 ) {
+			gpm_hal_brightness_kbd_set_std (brightness, 100);
+			state = STATE_FORCED_ON;
+		} else {
+			gpm_hal_brightness_kbd_set_std (brightness, 0);
+			state = STATE_FORCED_OFF;
+		}
+	} else {
+		if (ambient_light < 30 && state != STATE_FORCED_ON ) {
+			/* if it's dark.. and we haven't already turned light on... 
+			 *   => turn it on.. full blast! */
+			gpm_hal_brightness_kbd_set_std (brightness, 100);
+			state = STATE_FORCED_ON;
+		} else if (ambient_light > 70 && state != STATE_FORCED_OFF) {
+			/* if it's bright... and we haven't already turned light off... 
+			 *   => turn it off */
+			gpm_hal_brightness_kbd_set_std (brightness, 0);
+			state = STATE_FORCED_OFF;
+		}
+	}
+	return TRUE;
+}
+
+/**
+ * sensor_changed_cb:
+ * @sensor: the brightness sensor
+ * @ambient_light: ambient light percentage (0: dark, 100: bright)
+ * @brightness: the keyboard brightness instance
+ *
+ * Called when the reading from the ambient light sensor changes.
+ **/
+static void
+sensor_changed_cb (GpmHalLightSensor	*sensor,
+		   guint	                 ambient_light,
+		   GpmHalBrightnessKbd          *brightness)
+{
+	if (brightness->priv->is_disabled == FALSE) {
+		adjust_kbd_brightness_according_to_ambient_light (brightness, FALSE);
+	}
+}
+#if 0
+/**
+ * gpm_hal_brightness_kbd_is_disabled:
+ * @brightness: the instance
+ * @is_disabled: out value
+ *
+ * Returns whether the keyboard backlight is disabled by the user
+ */
+gboolean
+gpm_hal_brightness_kbd_is_disabled  (GpmHalBrightnessKbd	*brightness, 
+				     gboolean                   *is_disabled)
+{
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (is_disabled != NULL, FALSE);
+
+	*is_disabled = brightness->priv->is_disabled;
+
+	return TRUE;
+}
+#endif
+
+/**
+ * gpm_hal_brightness_kbd_toggle:
+ * @brightness: the instance
+ * @is_disabled: whether keyboard backlight is disabled by the user
+ * @do_startup_on_enable: whether we should automatically select the 
+ * keyboard backlight depending on the ambient light when enabling it.
+ *
+ * Set whether keyboard backlight is disabled by the user. Note that
+ * do_startup_on_enable only makes sense if is_disables is FALSE. Typically
+ * one wants do_startup_on_enable=TRUE when handling the keyboard backlight
+ * is already disabled and the user presses illum+ and you want to enable
+ * the backlight in response to that.
+ **/
+gboolean
+gpm_hal_brightness_kbd_toggle (GpmHalBrightnessKbd *brightness)
+{
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+
+	if (brightness->priv->is_disabled == FALSE) {
+		/* go dark, that's what the user wants */
+		gpm_hal_brightness_kbd_set_std (brightness, 0);
+		gpm_feedback_display_value (brightness->priv->feedback, 0.0f);
+	} else {
+		/* select the appropriate level just as when we're starting up */
+//		if (do_startup_on_enable) {
+			adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
+			gpm_hal_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
+			gpm_feedback_display_value (brightness->priv->feedback, 
+						    (gfloat) gpm_discrete_to_percent (brightness->priv->current_hw,
+										     brightness->priv->levels) / 100.0f);
+//		}
+	}
+	return TRUE;
 }
 
 /**
@@ -523,6 +677,13 @@ gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
 	gpm_feedback_set_icon_name (brightness->priv->feedback,
 				    GPM_STOCK_BRIGHTNESS_KBD);
 
+	/* listen for ambient light changes.. if we have an ambient light sensor */
+	brightness->priv->sensor = gpm_hal_light_sensor_new ();
+	if (brightness->priv->sensor != NULL) {
+		g_signal_connect (brightness->priv->sensor, "brightness-changed",
+				  G_CALLBACK (sensor_changed_cb), brightness);
+	}
+
 	/* save udi of kbd adapter */
 	gpm_hal_device_find_capability (brightness->priv->hal, "keyboard_backlight", &names);
 	if (names == NULL || names[0] == NULL) {
@@ -536,6 +697,7 @@ gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
 
 	brightness->priv->does_own_dimming = FALSE;
 	brightness->priv->does_own_updates = FALSE;
+	brightness->priv->is_disabled = FALSE;
 
 	/* get a managed proxy */
 	brightness->priv->gproxy = gpm_proxy_new ();
@@ -559,6 +721,9 @@ gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
 	gpm_debug ("Starting: (%i of %i)",
 		   brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
+
+	/* choose a start value */
+	adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
 }
 
 /**

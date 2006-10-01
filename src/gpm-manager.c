@@ -93,6 +93,7 @@ typedef enum {
 #define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightnessdown" /* as these are the old names */
 #define GPM_BUTTON_KBD_BRIGHT_UP	"kbd-illum-up"
 #define GPM_BUTTON_KBD_BRIGHT_DOWN	"kbd-illum-down"
+#define GPM_BUTTON_KBD_BRIGHT_TOGGLE	"kbd-illum-toggle"
 #define GPM_BUTTON_LOCK			"lock"
 #define GPM_BUTTON_BATTERY		"battery"
 
@@ -772,10 +773,12 @@ change_power_policy (GpmManager *manager,
 	}
 
 	/* change to the right governer and settings */
-	cpufreq_type = gpm_hal_cpufreq_string_to_enum (cpufreq_policy);
-	gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, cpufreq_consider_nice);
-	gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, cpufreq_type);
-	gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, cpufreq_performance);
+	if (manager->priv->hal_cpufreq) {
+		cpufreq_type = gpm_hal_cpufreq_string_to_enum (cpufreq_policy);
+		gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, cpufreq_consider_nice);
+		gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, cpufreq_type);
+		gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, cpufreq_performance);
+	}
 	g_free (cpufreq_policy);
 
 	gpm_hal_power_enable_power_save (manager->priv->hal_power, power_save);
@@ -1509,6 +1512,11 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_hal_brightness_lcd_undim (manager->priv->brightness_lcd);
 		}
 
+		/* turn keyboard backlight back on */
+		if (manager->priv->brightness_kbd) {
+			gpm_hal_brightness_kbd_undim (manager->priv->brightness_kbd);
+		}
+
 		/* sync timeouts */
 		sync_dpms_policy (manager);
 
@@ -1533,6 +1541,11 @@ idle_changed_cb (GpmIdle    *idle,
 						_("Screen dim"),
 						_("idle mode started"));
 			gpm_hal_brightness_lcd_dim (manager->priv->brightness_lcd);
+		}
+
+		/* dim keyboard backlight */
+		if (do_laptop_dim && manager->priv->brightness_kbd) {
+			gpm_hal_brightness_kbd_dim (manager->priv->brightness_kbd);
 		}
 
 		/* sync timeouts */
@@ -1780,6 +1793,11 @@ power_button_pressed_cb (GpmPower    *power,
 	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_DOWN) == 0) {
 		if (manager->priv->brightness_kbd) {
 			gpm_hal_brightness_kbd_down (manager->priv->brightness_kbd);
+		}
+
+	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
+		if (manager->priv->brightness_kbd) {
+			gpm_hal_brightness_kbd_toggle (manager->priv->brightness_kbd);
 		}
 
 	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {

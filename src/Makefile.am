@@ -138,6 +138,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal-brightness-lcd.c			\
 	gpm-hal-brightness-kbd.h			\
 	gpm-hal-brightness-kbd.c			\
+	gpm-hal-light-sensor.h			\
+	gpm-hal-light-sensor.c			\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

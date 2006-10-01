@@ -61,6 +61,7 @@ gboolean	 gpm_hal_brightness_kbd_set_std		(GpmHalBrightnessKbd	*brightness,
 							 guint			 brightness_level);
 gboolean	 gpm_hal_brightness_kbd_dim		(GpmHalBrightnessKbd	*brightness);
 gboolean	 gpm_hal_brightness_kbd_undim		(GpmHalBrightnessKbd	*brightness);
+gboolean	 gpm_hal_brightness_kbd_toggle		(GpmHalBrightnessKbd	*brightness);
 
 G_END_DECLS
 
