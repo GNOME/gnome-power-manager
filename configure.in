@@ -214,7 +214,6 @@ if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
    AC_DEFINE(HAVE_LIBNOTIFY, 1, [Building with libnotify support]) 
 else
    have_libnotify=no
-   AC_DEFINE(HAVE_LIBNOTIFY, 0, [Not building with libnotify support]) 
 fi
 AM_CONDITIONAL([HAVE_LIBNOTIFY], [test $have_libnotify = yes])
 
