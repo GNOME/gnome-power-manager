@@ -490,14 +490,14 @@ get_stock_id (GpmManager *manager,
 }
 
 /**
- * tray_icon_update:
+ * gpm_manager_sync_tray_icon:
  * @manager: This manager class instance
  *
  * Update the tray icon and set the correct tooltip when required, or remove
  * (hide) the icon when no longer required by policy.
  **/
 static void
-tray_icon_update (GpmManager *manager)
+gpm_manager_sync_tray_icon (GpmManager *manager)
 {
 	gchar *stock_id = NULL;
 	gchar *icon_policy_str;
@@ -541,13 +541,13 @@ tray_icon_update (GpmManager *manager)
 }
 
 /**
- * sync_dpms_policy:
+ * gpm_manager_sync_policy_dpms:
  * @manager: This manager class instance
  *
  * Sync the DPMS policy with what we have set in gconf.
  **/
 static void
-sync_dpms_policy (GpmManager *manager)
+gpm_manager_sync_policy_dpms (GpmManager *manager)
 {
 	GError  *error;
 	gboolean res;
@@ -713,7 +713,94 @@ update_lid_throttle (GpmManager	*manager,
 }
 
 /**
- * change_power_policy:
+ * gpm_manager_sync_policy_cpufreq:
+ * @manager: This manager class instance
+ * @on_ac: If we are on AC power
+ *
+ * Changes the cpufreq policy if required
+ **/
+static gboolean
+gpm_manager_sync_policy_cpufreq (GpmManager *manager)
+{
+	gboolean     cpufreq_consider_nice;
+	gboolean     on_ac;
+	guint	     cpufreq_performance;
+	gchar       *cpufreq_policy;
+	GConfClient *client;
+	GpmHalCpuFreqEnum cpufreq_type;
+
+	if (manager->priv->hal_cpufreq == NULL) {
+		gpm_debug ("cpufreq support absent, so ignoring");
+		return FALSE;
+	}
+
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+	client = manager->priv->gconf_client;
+
+	if (on_ac) {
+		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
+		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_AC_CPUFREQ_POLICY, NULL);
+		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_AC_CPUFREQ_VALUE, NULL);
+	} else {
+		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
+		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_BATTERY_CPUFREQ_POLICY, NULL);
+		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_BATTERY_CPUFREQ_VALUE, NULL);
+	}
+
+	/* use enumerated value */
+	cpufreq_type = gpm_hal_cpufreq_string_to_enum (cpufreq_policy);
+	g_free (cpufreq_policy);
+
+	/* change to the right governer and settings */
+	gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, cpufreq_consider_nice);
+	gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, cpufreq_type);
+	gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, cpufreq_performance);
+	return TRUE;
+}
+
+/**
+ * gpm_manager_sync_policy_brightness:
+ * @manager: This manager class instance
+ * @on_ac: If we are on AC power
+ *
+ * Changes the policy setting brightness
+ **/
+static void
+gpm_manager_sync_policy_brightness (GpmManager *manager)
+{
+	gboolean     on_ac;
+	gboolean     do_laptop_lcd;
+	guint	     brightness_lcd;
+	guint	     brightness_kbd;
+	GConfClient *client;
+
+	client = manager->priv->gconf_client;
+
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
+	if (on_ac) {
+		brightness_lcd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
+		brightness_kbd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS_KBD, NULL);
+	} else {
+		brightness_lcd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
+		brightness_kbd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS_KBD, NULL);
+	}
+
+	/* only do brightness changes if we have the hardware */
+	do_laptop_lcd = gconf_client_get_bool (manager->priv->gconf_client,
+					       GPM_PREF_DISPLAY_STATE_CHANGE, NULL);
+	if (do_laptop_lcd && manager->priv->brightness_lcd) {
+		gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness_lcd);
+	}
+
+	if (manager->priv->brightness_kbd) {
+		gpm_hal_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness_kbd);
+	}
+}
+
+/**
+ * gpm_manager_sync_policy_sleep:
  * @manager: This manager class instance
  * @on_ac: If we are on AC power
  *
@@ -723,70 +810,35 @@ update_lid_throttle (GpmManager	*manager,
  * monitor DPMS instead when on batteries to save power.
  **/
 static void
-change_power_policy (GpmManager *manager,
-		     gboolean	 on_ac)
+gpm_manager_sync_policy_sleep (GpmManager *manager)
 {
-	guint	     brightness;
-	guint	     brightness_kbd;
 	guint	     sleep_display;
 	guint	     sleep_computer;
+	gboolean     on_ac;
 	gboolean     power_save;
-	gboolean     cpufreq_consider_nice;
-	gboolean     do_laptop_lcd;
-	guint	     cpufreq_performance;
-	gchar       *cpufreq_policy;
 	GConfClient *client;
-	GpmHalCpuFreqEnum cpufreq_type;
 
 	client = manager->priv->gconf_client;
 
+	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+
 	if (on_ac) {
-		brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
-		brightness_kbd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS_KBD, NULL);
 		sleep_computer = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_COMPUTER, NULL);
 		sleep_display = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_DISPLAY, NULL);
 		power_save = gconf_client_get_bool (client, GPM_PREF_AC_LOWPOWER, NULL);
-		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
-		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_AC_CPUFREQ_POLICY, NULL);
-		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_AC_CPUFREQ_VALUE, NULL);
 	} else {
-		brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
-		brightness_kbd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS_KBD, NULL);
 		sleep_computer = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_COMPUTER, NULL);
 		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
 		/* todo: what about when on UPS? */
 		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
-		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
-		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_BATTERY_CPUFREQ_POLICY, NULL);
-		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_BATTERY_CPUFREQ_VALUE, NULL);
 	}
 
 	/* only do brightness changes if we have the hardware */
-	do_laptop_lcd = gconf_client_get_bool (manager->priv->gconf_client,
-					       GPM_PREF_DISPLAY_STATE_CHANGE, NULL);
-	if (do_laptop_lcd && manager->priv->brightness_lcd) {
-		gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness);
-	}
-
-	if (manager->priv->brightness_kbd) {
-		gpm_hal_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness_kbd);
-	}
-
-	/* change to the right governer and settings */
-	if (manager->priv->hal_cpufreq) {
-		cpufreq_type = gpm_hal_cpufreq_string_to_enum (cpufreq_policy);
-		gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, cpufreq_consider_nice);
-		gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, cpufreq_type);
-		gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, cpufreq_performance);
-	}
-	g_free (cpufreq_policy);
-
 	gpm_hal_power_enable_power_save (manager->priv->hal_power, power_save);
 	update_ac_throttle (manager, on_ac);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
-	sync_dpms_policy (manager);
 }
 
 /**
@@ -1292,7 +1344,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	sync_dpms_policy (manager);
+	gpm_manager_sync_policy_dpms (manager);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -1390,7 +1442,7 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	sync_dpms_policy (manager);
+	gpm_manager_sync_policy_dpms (manager);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -1518,7 +1570,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* sync timeouts */
-		sync_dpms_policy (manager);
+		gpm_manager_sync_policy_dpms (manager);
 
 		break;
 	case GPM_IDLE_MODE_SESSION:
@@ -1549,7 +1601,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* sync timeouts */
-		sync_dpms_policy (manager);
+		gpm_manager_sync_policy_dpms (manager);
 
 		break;
 	case GPM_IDLE_MODE_SYSTEM:
@@ -1838,14 +1890,17 @@ power_on_ac_changed_cb (GpmPower   *power,
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
-	tray_icon_update (manager);
+	gpm_manager_sync_tray_icon (manager);
 
 	if (on_ac) {
 		/* for where we add back the ac_adapter before
 		 * the "AC Power unplugged" message times out. */
 		gpm_tray_icon_cancel_notify (GPM_TRAY_ICON (manager->priv->tray_icon));
 	}
-	change_power_policy (manager, on_ac);
+	gpm_manager_sync_policy_sleep (manager);
+	gpm_manager_sync_policy_cpufreq (manager);
+	gpm_manager_sync_policy_brightness (manager);
+	gpm_manager_sync_policy_dpms (manager);
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
@@ -2356,7 +2411,7 @@ power_battery_status_changed_cb (GpmPower    *power,
 {
 	GpmPowerStatus battery_status;
 
-	tray_icon_update (manager);
+	gpm_manager_sync_tray_icon (manager);
 
 	gpm_power_get_battery_status (manager->priv->power, battery_kind, &battery_status);
 
@@ -2470,9 +2525,7 @@ gconf_key_changed_cb (GConfClient *client,
 		      GConfEntry  *entry,
 		      gpointer	   user_data)
 {
-	gint	    value = 0;
 	gint	    brightness;
-	gint	    brightness_kbd;
 	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
 	gboolean    enabled;
@@ -2488,69 +2541,35 @@ gconf_key_changed_cb (GConfClient *client,
 
 	if (strcmp (entry->key, GPM_PREF_ICON_POLICY) == 0) {
 
-		tray_icon_update (manager);
+		gpm_manager_sync_tray_icon (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0) {
-		/* set new suspend timeouts */
-		value = gconf_client_get_int (client, entry->key, NULL);
+	} else if (strcmp (entry->key, GPM_PREF_AC_CPUFREQ_POLICY) == 0 ||
+		   strcmp (entry->key, GPM_PREF_AC_CPUFREQ_VALUE) == 0 ||
+		   strcmp (entry->key, GPM_PREF_BATTERY_CPUFREQ_POLICY) == 0 ||
+		   strcmp (entry->key, GPM_PREF_BATTERY_CPUFREQ_VALUE) == 0 ||
+		   strcmp (entry->key, GPM_PREF_USE_NICE) == 0) {
 
-		if (! on_ac) {
-			gpm_idle_set_system_timeout (manager->priv->idle, value);
-		}
+		gpm_manager_sync_policy_cpufreq (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_COMPUTER) == 0) {
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0 ||
+		   strcmp (entry->key, GPM_PREF_AC_SLEEP_COMPUTER) == 0) {
 
-		/* set new suspend timeouts */
-		value = gconf_client_get_int (client, entry->key, NULL);
+		gpm_manager_sync_policy_sleep (manager);
 
-		if (on_ac) {
-			gpm_idle_set_system_timeout (manager->priv->idle,
-						     value);
-		}
+	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0 ||
+		   strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0 ||
+		   strcmp (entry->key, GPM_PREF_AC_DPMS_METHOD) == 0 ||
+		   strcmp (entry->key, GPM_PREF_BATTERY_DPMS_METHOD) == 0) {
 
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0) {
+		gpm_manager_sync_policy_dpms (manager);
 
-		sync_dpms_policy (manager);
+	} else if (strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS) == 0 ||
+		   strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS) == 0 ||
+		   strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS_KBD) == 0 ||
+		   strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS_KBD) == 0) {
 
-	} else if (strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0) {
+		gpm_manager_sync_policy_brightness (manager);
 
-		sync_dpms_policy (manager);
-
-	} else if (strcmp (entry->key, GPM_PREF_AC_DPMS_METHOD) == 0) {
-
-		sync_dpms_policy (manager);
-
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_DPMS_METHOD) == 0) {
-
-		sync_dpms_policy (manager);
-
-	} else if (strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS) == 0) {
-
-		if (on_ac == TRUE && manager->priv->brightness_lcd) {
-			brightness = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
-			gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness);
-		}
-
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS) == 0) {
-
-		if (on_ac == FALSE && manager->priv->brightness_lcd) {
-			brightness = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
-			gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness);
-		}
-
-	} else if (strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS_KBD) == 0) {
-
-		if (on_ac == TRUE && manager->priv->brightness_kbd) {
-			brightness_kbd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS_KBD, NULL);
-			gpm_hal_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness_kbd);
-		}
-
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS_KBD) == 0) {
-
-		if (on_ac == FALSE && manager->priv->brightness_kbd) {
-			brightness_kbd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS_KBD, NULL);
-			gpm_hal_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness_kbd);
-		}
 
 	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
@@ -2663,7 +2682,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 			GpmManager    *manager)
 {
 	gpm_debug ("Battery Removed: %s", udi);
-	tray_icon_update (manager);
+	gpm_manager_sync_tray_icon (manager);
 }
 
 /**
@@ -2735,7 +2754,7 @@ static void
 hal_daemon_monitor_cb (GpmHal     *hal,
 		     GpmManager *manager)
 {
-	tray_icon_update (manager);
+	gpm_manager_sync_tray_icon (manager);
 }
 
 /**
@@ -2857,10 +2876,14 @@ gpm_manager_init (GpmManager *manager)
 				 G_CONNECT_SWAPPED);
 
 	/* coldplug so we are in the correct state at startup */
-	sync_dpms_policy (manager);
+	gpm_manager_sync_policy_dpms (manager);
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-	change_power_policy (manager, on_ac);
-	tray_icon_update (manager);
+
+	gpm_manager_sync_policy_sleep (manager);
+	gpm_manager_sync_policy_cpufreq (manager);
+	gpm_manager_sync_policy_brightness (manager);
+	gpm_manager_sync_policy_dpms (manager);
+	gpm_manager_sync_tray_icon (manager);
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);

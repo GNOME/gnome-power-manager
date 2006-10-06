@@ -1,3 +1,11 @@
+2006-10-06  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+
+	* src/gpm-manager.c:
+	Now react immediatly when the user changes the cpufreq policy.
+	Also clean up this the actions, and split the sync routine into
+	it's seporate parts. It's more manageable this way, and reduces CPU
+	load when you start changing bazzillions of gconf keys.
+
 2006-10-05  Frederic Peters  <fpeters@0d.be>
 
 	* configure.in:
