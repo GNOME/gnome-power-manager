@@ -373,23 +373,29 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 		minutes =  minutes - (hours * 60);
 		if (hours > 0) {
 			if (minutes == 0) {
-				text = g_strdup_printf ("%ih", hours);
+				/*Translators: This is %i hours*/
+				text = g_strdup_printf (_("%ih"), hours);
 			} else {
-				text = g_strdup_printf ("%ih%02i", hours, minutes);
+				/*Translators: This is %i hours %02i minutes*/
+				text = g_strdup_printf (_("%ih%02i"), hours, minutes);
 			}
 		} else if (minutes > 0) {
 			if (seconds == 0) {
-				text = g_strdup_printf ("%2im", minutes);
+				/*Translators: This is %2i minutes*/
+				text = g_strdup_printf (_("%2im"), minutes);
 			} else {
-				text = g_strdup_printf ("%2im%02i", minutes, seconds);
+				/*Translators: This is %2i minutes %02i seconds*/
+				text = g_strdup_printf (_("%2im%02i"), minutes, seconds);
 			}
 		} else {
-			text = g_strdup_printf ("%2is", seconds);
+			/*Translators: This is %2i seconds*/
+			text = g_strdup_printf (_("%2is"), seconds);
 		}
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		text = g_strdup_printf ("%i%%", value);
+		text = g_strdup_printf (_("%i%%"), value);
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		text = g_strdup_printf ("%iW", value / 1000);
+		/*Translators: This is %i Watts*/
+		text = g_strdup_printf (_("%iW"), value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
 	}
