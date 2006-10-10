@@ -47,6 +47,7 @@ HAL_REQUIRED=0.5.6
 DBUS_REQUIRED=0.60
 LIBGLADE_REQUIRED=2.5.0
 LIBNOTIFY_REQUIRED=0.3.0
+LIBNOTIFY_SUGGESTED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
 
@@ -248,6 +249,17 @@ if test x$have_libnotify = xyes ; then
     AC_SUBST(LIBNOTIFY_CFLAGS)
     AC_SUBST(LIBNOTIFY_LIBS)
 fi
+
+dnl ---------------------------------------------------------------------------
+dnl - Is a new libnotify available (i.e. has a fix for GtkStatusIcon support)?
+dnl ---------------------------------------------------------------------------
+if $PKG_CONFIG --atleast-version $LIBNOTIFY_SUGGESTED libnotify; then
+   have_libnotify_new=yes
+   AC_DEFINE(HAVE_LIBNOTIFY_NEW, 1, [Building with libnotify with GtkStatusIcon support]) 
+else
+   have_libnotify_new=no
+fi
+AM_CONDITIONAL([HAVE_LIBNOTIFY_NEW], [test $have_libnotify_new = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Some utility functions to make checking for X things easier.
@@ -491,3 +503,19 @@ echo "
         dbus-1 services dir:       $DBUS_SERVICES_DIR
 	gconf-schema dir:          $GCONF_SCHEMA_FILE_DIR
 "
+
+dnl ---------------------------------------------------------------------------
+dnl - Warnings
+dnl ---------------------------------------------------------------------------
+
+if test "$have_libnotify_new" = "no" ; then
+   echo "*************************************************"
+   echo "**            BIG LIBNOTIFY WARNING            **"
+   echo "*************************************************"
+   echo "You have an old version of libnotify that has a buggy version of"
+   echo "notify_notification_new_with_status_icon ()"
+   echo
+   echo "Notifications will be shown in the default location and will"
+   echo "not point to the icon."
+   echo
+   fi

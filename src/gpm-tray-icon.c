@@ -797,9 +797,17 @@ libnotify_event (GpmTrayIcon    *icon,
 	if (icon->priv->is_visible) {
 		point = icon->priv->image;
 	}
-#endif
 	icon->priv->notify = notify_notification_new (title, content,
 						      msgicon, point);
+/* DISTROS: If you've patched your libnotify 0.4.2 package you can remove this check */
+#elif HAVE_LIBNOTIFY_NEW
+	icon->priv->notify = notify_notification_new_with_status_icon (title, content,
+								       msgicon, icon->priv->status_icon);
+#else
+	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
+	icon->priv->notify = notify_notification_new (title, content,
+						      msgicon, NULL);
+#endif
 
 	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
 

@@ -1,3 +1,12 @@
+2006-10-10  Richard Hughes <richard@hughsie.com>
+
+	* configure.in:
+	* src/gpm-tray-icon.c: (libnotify_event):
+	Detect a new enough libnotify and enable the pointing code if new
+	enough. This fixes #356431
+	Distros should comment this check out if libnotify 0.4.2 has been
+	patched from CVS.
+
 2006-09-29  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.16.2
