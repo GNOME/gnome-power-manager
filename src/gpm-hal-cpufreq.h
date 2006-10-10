@@ -86,7 +86,6 @@ gboolean	 gpm_hal_cpufreq_set_performance	(GpmHalCpuFreq	*cpufreq,
 							 guint		 performance);
 guint		 gpm_hal_cpufreq_get_number_governors	(GpmHalCpuFreq	*cpufreq,
 							 gboolean	 use_cache);
-gboolean	 gpm_hal_cpufreq_has_hardware		(GpmHalCpuFreq	*cpufreq);
 
 G_END_DECLS
 

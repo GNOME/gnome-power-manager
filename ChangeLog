@@ -1,5 +1,14 @@
 2006-10-10  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-hal-cpufreq.c:
+	* src/gpm-hal-cpufreq.h:
+	* src/gpm-prefs-core.c:
+	Get rid of gpm_hal_cpufreq_has_hardware and use the singleton method
+	like we do for the brightness classes. This fixes a warning in the
+	preferences code when you have a HAL not capable of cpufreq_control.
+
+2006-10-10  Richard Hughes <richard@hughsie.com>
+
 	* data/icons/scalable/gpm-keyboard-030.svg:
 	* data/icons/scalable/gpm-mouse-030.svg:
 	Make these icons have the correct 'fill' colour. Fixes #352416.

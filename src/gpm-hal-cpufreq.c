@@ -43,7 +43,6 @@ static void     gpm_hal_cpufreq_finalize   (GObject	*object);
 
 struct GpmHalCpuFreqPrivate
 {
-	gboolean		 has_hardware;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 	guint			 available_governors;
@@ -108,19 +107,6 @@ gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
 }
 
 /**
- * gpm_hal_cpufreq_has_hardware:
- *
- * @cpufreq: This cpufreq class instance
- * Return value: If we have cpufreq support in hal
- **/
-gboolean
-gpm_hal_cpufreq_has_hardware (GpmHalCpuFreq *cpufreq)
-{
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
-	return cpufreq->priv->has_hardware;
-}
-
-/**
  * gpm_hal_cpufreq_set_performance:
  *
  * @cpufreq: This cpufreq class instance
@@ -135,14 +121,10 @@ gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (performance >= 0, FALSE);
 	g_return_val_if_fail (performance <= 100, FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
-	}
 
 	gpm_debug ("Doing SetCPUFreqPerformance (%i)", performance);
 
@@ -195,15 +177,12 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
 	const gchar *governor;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type != GPM_CPUFREQ_UNKNOWN, FALSE);
+
 	governor = gpm_hal_cpufreq_enum_to_string (cpufreq_type);
 	g_return_val_if_fail (governor != NULL, FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
-	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
@@ -250,13 +229,9 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 
 	*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type != NULL, FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
-	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
@@ -301,12 +276,8 @@ gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq,
 {
 	GpmHalCpuFreqEnum cpufreq_type;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return 0;
-	}
 
 	if (use_cache == FALSE || cpufreq->priv->available_governors == -1) {
 		gpm_hal_cpufreq_get_governors (cpufreq, &cpufreq_type);
@@ -330,14 +301,9 @@ gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (consider_nice != NULL, FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		*consider_nice = FALSE;
-		return FALSE;
-	}
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
@@ -391,14 +357,9 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (performance != NULL, FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (cpufreq->priv->has_hardware == FALSE) {
-		*performance = -1;
-		return FALSE;
-	}
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
@@ -451,15 +412,11 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 	gchar *governor;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type, FALSE);
 
 	*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
-	}
 
 	/* use the cache */
 	if (cpufreq->priv->current_governor != GPM_CPUFREQ_UNKNOWN) {
@@ -512,12 +469,8 @@ gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
 	GpmHalCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
-
-	/* do we support speedstep and have a new enough hal? */
-	if (! cpufreq->priv->has_hardware) {
-		return FALSE;
-	}
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
@@ -574,8 +527,6 @@ gpm_hal_cpufreq_class_init (GpmHalCpuFreqClass *klass)
 static void
 gpm_hal_cpufreq_init (GpmHalCpuFreq *cpufreq)
 {
-	int num_caps;
-
 	cpufreq->priv = GPM_GPM_CPUFREQ_GET_PRIVATE (cpufreq);
 
 	cpufreq->priv->hal = gpm_hal_new ();
@@ -590,15 +541,6 @@ gpm_hal_cpufreq_init (GpmHalCpuFreq *cpufreq)
 	/* set defaults */
 	cpufreq->priv->available_governors = -1;
 	cpufreq->priv->current_governor = GPM_CPUFREQ_UNKNOWN;
-	cpufreq->priv->has_hardware = FALSE;
-
-	num_caps = gpm_hal_num_devices_of_capability (cpufreq->priv->hal,
-						      "cpufreq_control");
-
-	/* if we have cpufreq_control then we can use hal for cpufreq control */
-	if (num_caps > 0) {
-		cpufreq->priv->has_hardware = TRUE;
-	}
 }
 
 /**

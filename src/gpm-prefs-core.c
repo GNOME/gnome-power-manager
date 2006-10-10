@@ -58,7 +58,6 @@ struct GpmPrefsPrivate
 	gboolean		 has_ups;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
-	gboolean		 has_cpufreq;
 	gboolean		 can_suspend;
 	gboolean		 can_hibernate;
 	GpmScreensaver		*screensaver;
@@ -1006,7 +1005,7 @@ prefs_setup_processor (GpmPrefs *prefs)
 	gint	      page;
 
 	/* remove if we have no options to set */
-	if (prefs->priv->has_cpufreq == FALSE) {
+	if (prefs->priv->cpufreq == NULL) {
 		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_processor");
 		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
@@ -1251,16 +1250,11 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
 
 	/* only enable cpufreq stuff if we have the hardware */
-	prefs->priv->has_cpufreq = gpm_hal_cpufreq_has_hardware (prefs->priv->cpufreq);
-	gboolean ret = FALSE;
-	if (prefs->priv->has_cpufreq) {
-		ret = gpm_hal_cpufreq_get_governors (prefs->priv->cpufreq,
-							   &prefs->priv->cpufreq_types);
-	}
-	/* method failed, can't assume we have cpu frequency scaling */
-	if (ret == FALSE) {
+	if (prefs->priv->cpufreq) {
+		gpm_hal_cpufreq_get_governors (prefs->priv->cpufreq,
+					       &prefs->priv->cpufreq_types);
+	} else {
 		prefs->priv->cpufreq_types = GPM_CPUFREQ_NOTHING;
-		prefs->priv->has_cpufreq = FALSE;
 	}
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
@@ -1317,10 +1311,15 @@ gpm_prefs_finalize (GObject *object)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	g_object_unref (prefs->priv->gconf_client);
-	g_object_unref (prefs->priv->screensaver);
-	g_object_unref (prefs->priv->cpufreq);
-	g_object_unref (prefs->priv->hal);
-	/* FIXME: we should unref some stuff */
+	if (prefs->priv->screensaver) {
+		g_object_unref (prefs->priv->screensaver);
+	}
+	if (prefs->priv->cpufreq) {
+		g_object_unref (prefs->priv->cpufreq);
+	}
+	if (prefs->priv->hal) {
+		g_object_unref (prefs->priv->hal);
+	}
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
 }
