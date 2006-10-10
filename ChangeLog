@@ -1,9 +1,27 @@
+2006-10-10  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c:
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	* src/gpm-statistics-core.c:
+	Display a graph for battery voltage. This is interesting for power
+	people that want to calculate hysteresis. Like me.
+
+	* configure.in:
+	* src/gpm-tray-icon.c: (libnotify_event):
+	Detect a new enough libnotify and enable the pointing code if new
+	enough. This fixes #356431
+	Distros should comment this check out if libnotify 0.4.2 has been
+	patched from CVS.
+
 2006-10-09  Gabor Kelemen  <kelemeng@gnome.hu>
 	
 	* src/gpm-graph-widget.c: 
 	Mark time measurement units for translation. Fix for bug #359089.
 
-2006-10-06  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+2006-10-06  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c:
 	Now react immediatly when the user changes the cpufreq policy.

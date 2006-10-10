@@ -107,6 +107,7 @@ gpm_power_battery_status_set_defaults (GpmPowerStatus *status)
 	status->charge_rate_raw = 0;
 	status->percentage_charge = 0;
 	status->remaining_time = 0;
+	status->voltage = 0;
 	status->capacity = 0;
 	status->is_rechargeable = FALSE;
 	status->is_present = FALSE;
@@ -259,6 +260,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
+	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.voltage.current", &status->voltage);
 
 	/* this is more common than you might expect */
 	gpm_hal_device_get_bool (power->priv->hal, udi, "info.perhaps_recalled", &perhaps_recall);
@@ -267,10 +269,6 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		gchar *website;
 		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_text", &oem_vendor);
 		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_target", &website);
-/*
-		oem_vendor = "Dell Battery Return Program";
-		website = "https://www.dellbatteryprogram.com/";
-*/
 		g_signal_emit (power, signals [BATTERY_PERHAPS_RECALL], 0, oem_vendor, website);
 	}
 
@@ -372,6 +370,9 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
 		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->remaining_time);
+
+	} else if (strcmp (key, "battery.voltage.current") == 0) {
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->voltage);
 
 	} else {
 		/* ignore */
@@ -508,8 +509,8 @@ battery_kind_cache_debug_print (BatteryKindCacheEntry *entry)
 		   status->is_charging, status->charge_rate_raw);
 	gpm_debug ("discharge  %i\tremaining  %i",
 		   status->is_discharging, status->remaining_time);
-	gpm_debug ("capacity   %i",
-		   status->capacity);
+	gpm_debug ("capacity   %i\tvoltage    %i",
+		   status->capacity, status->voltage);
 }
 
 /**
@@ -978,9 +979,15 @@ battery_kind_cache_update (GpmPower		 *power,
 		type_status->current_charge += device_status->current_charge;
 		type_status->charge_rate_smoothed += device_status->charge_rate_smoothed;
 		type_status->charge_rate_raw += device_status->charge_rate_raw;
+		type_status->voltage += device_status->voltage;
 		/* we have to sum this here, in case the device has no rate
 		   data, and we can't compute it further down */
 		type_status->remaining_time += device_status->remaining_time;
+	}
+
+	/* average out the voltage for the global device */
+	if (num_present > 1) {
+		type_status->voltage /= num_present;
 	}
 
 	/* sanity check */
@@ -996,7 +1003,8 @@ battery_kind_cache_update (GpmPower		 *power,
 	 * In this case, we'll use the ac_adaptor to determine whether it's
 	 * charging or not. */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY &&
-	    (! type_status->is_charging) && (! type_status->is_discharging) &&
+	    type_status->is_charging == FALSE &&
+	    type_status->is_discharging == FALSE &&
 	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
 		gboolean on_ac;

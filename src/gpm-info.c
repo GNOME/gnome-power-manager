@@ -63,6 +63,7 @@ struct GpmInfoPrivate
 	GpmInfoData		*rate_data;
 	GpmInfoData		*time_data;
 	GpmInfoData		*percentage_data;
+	GpmInfoData		*voltage;
 
 	time_t			 start_time;
 	gboolean		 is_laptop;
@@ -126,6 +127,7 @@ gpm_statistics_get_types (GpmInfo  *info,
 	list = g_list_append (list, "charge");
 	list = g_list_append (list, "power");
 	list = g_list_append (list, "time");
+	list = g_list_append (list, "voltage");
 
 	*types = device_list_to_strv (list);
 
@@ -168,6 +170,11 @@ gpm_statistics_get_axis_type (GpmInfo *info,
 	if (strcmp (type, "charge") == 0) {
 		*axis_type_x = g_strdup ("time");
 		*axis_type_y = g_strdup ("percentage");
+		return TRUE;
+	}
+	if (strcmp (type, "voltage") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("voltage");
 		return TRUE;
 	}
 	
@@ -245,6 +252,8 @@ gpm_statistics_get_data (GpmInfo     *info,
 		events = gpm_info_data_get_list (info->priv->time_data);
 	} else if (strcmp (type, "charge") == 0) {
 		events = gpm_info_data_get_list (info->priv->percentage_data);
+	} else if (strcmp (type, "voltage") == 0) {
+		events = gpm_info_data_get_list (info->priv->voltage);
 	} else {
 		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
@@ -341,6 +350,9 @@ gpm_info_log_do_poll (gpointer data)
 		gpm_info_data_add (info->priv->time_data,
 				   value_x,
 				   battery_status.remaining_time, colour);
+		gpm_info_data_add (info->priv->voltage,
+				   value_x,
+				   battery_status.voltage, colour);
 	}
 	return TRUE;
 }
@@ -387,10 +399,12 @@ gpm_info_init (GpmInfo *info)
 		info->priv->percentage_data = gpm_info_data_new ();
 		info->priv->rate_data = gpm_info_data_new ();
 		info->priv->time_data = gpm_info_data_new ();
+		info->priv->voltage = gpm_info_data_new ();
 	} else {
 		info->priv->percentage_data = NULL;
 		info->priv->rate_data = NULL;
 		info->priv->time_data = NULL;
+		info->priv->voltage = NULL;
 	}
 
 	if (info->priv->is_laptop) {
@@ -403,6 +417,7 @@ gpm_info_init (GpmInfo *info)
 		gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
 		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
 		gpm_info_data_set_max_time (info->priv->time_data, max_time);
+		gpm_info_data_set_max_time (info->priv->voltage, max_time);
 	}
 }
 
@@ -428,6 +443,9 @@ gpm_info_finalize (GObject *object)
 	}
 	if (info->priv->time_data) {
 		g_object_unref (info->priv->time_data);
+	}
+	if (info->priv->voltage) {
+		g_object_unref (info->priv->voltage);
 	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);

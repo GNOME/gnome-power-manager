@@ -166,6 +166,8 @@ gpm_graph_widget_string_to_axis_type (const gchar *type)
 		ret = GPM_GRAPH_WIDGET_TYPE_TIME;
 	} else if (strcmp (type, "power") == 0) {
 		ret = GPM_GRAPH_WIDGET_TYPE_POWER;
+	} else if (strcmp (type, "voltage") == 0) {
+		ret = GPM_GRAPH_WIDGET_TYPE_VOLTAGE;
 	}
 	
 	return ret;
@@ -392,10 +394,14 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 			text = g_strdup_printf (_("%2is"), seconds);
 		}
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		/*Translators: This is %i Percentage*/
 		text = g_strdup_printf (_("%i%%"), value);
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		/*Translators: This is %i Watts*/
 		text = g_strdup_printf (_("%iW"), value / 1000);
+	} else if (axis == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		/*Translators: This is %i Volts*/
+		text = g_strdup_printf (_("%iV"), value / 1000);
 	} else {
 		text = g_strdup_printf ("%i??", value);
 	}
@@ -625,6 +631,11 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		if (graph->priv->stop_x < 10000) {
 			graph->priv->stop_x = 10000 + smallest_x;
 		}
+	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		graph->priv->stop_x = (((biggest_x - smallest_x) / 1000) + 2) * 1000 + smallest_x;
+		if (graph->priv->stop_x < 1000) {
+			graph->priv->stop_x = 1000 + smallest_x;
+		}
 	} else {
 		graph->priv->stop_x = ((biggest_x / 10) + 1) * 10 + smallest_x;
 	}
@@ -647,6 +658,12 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
 		if (graph->priv->stop_y < 10000) {
 			graph->priv->stop_y = 10000;
+		}
+	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		graph->priv->start_y = 0;
+		graph->priv->stop_y = ((biggest_y / 1000) + 2) * 1000;
+		if (graph->priv->stop_y < 1000) {
+			graph->priv->stop_y = 1000;
 		}
 	} else {
 		graph->priv->start_y = 0;

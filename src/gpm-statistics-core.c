@@ -52,11 +52,13 @@ static void     gpm_statistics_finalize   (GObject	    *object);
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
 
+#define ACTION_VOLTAGE		"voltage"
 #define ACTION_CHARGE		"charge"
 #define ACTION_POWER		"power"
 #define ACTION_TIME		"time"
 #define ACTION_CHARGE_TEXT	_("Charge History")
 #define ACTION_POWER_TEXT	_("Power History")
+#define ACTION_VOLTAGE_TEXT	_("Voltage History")
 #define ACTION_TIME_TEXT	_("Estimated Time History")
 
 #define GPM_STATISTICS_POLL_INTERVAL	15000 /* ms */
@@ -566,6 +568,8 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 		type = ACTION_POWER;
 	} else if (strcmp (value, ACTION_TIME_TEXT) == 0) {
 		type = ACTION_TIME;
+	} else if (strcmp (value, ACTION_VOLTAGE_TEXT) == 0) {
+		type = ACTION_VOLTAGE;
 	} else {
 		g_assert (FALSE);
 	}
@@ -621,6 +625,8 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 			type_localized = ACTION_POWER_TEXT;
 		} else if (strcmp (type, ACTION_TIME) == 0) {
 			type_localized = ACTION_TIME_TEXT;
+		} else if (strcmp (type, ACTION_VOLTAGE) == 0) {
+			type_localized = ACTION_VOLTAGE_TEXT;
 		} else {
 			type_localized = _("Unknown");
 		}
