@@ -708,13 +708,12 @@ libnotify_event (GpmTrayIcon    *icon,
 		notify_notification_close (icon->priv->notify, NULL);
 	}
 
-/* DISTROS: If you've patched your 0.4.2 package you can remove this check */
+/* DISTROS: If you've patched your libnotify 0.4.2 package you can remove this check */
 #if HAVE_LIBNOTIFY_NEW
-	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
 	icon->priv->notify = notify_notification_new_with_status_icon (title, content,
 								       msgicon, icon->priv->status_icon);
 #else
-	/* Use the bottom of the screen */
+	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
 	icon->priv->notify = notify_notification_new (title, content,
 						      msgicon, NULL);
 #endif

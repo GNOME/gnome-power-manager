@@ -659,19 +659,25 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 	details = g_string_new ("");
 
 	if (device->product) {
-		g_string_append_printf (details, _("<b>Product:</b> %s\n"), device->product);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Product:"), device->product);
 	}
 	if (status->is_present == FALSE) {
-		g_string_append (details, _("<b>Status:</b> Missing\n"));
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Status:"), _("Missing"));
 	} else if (gpm_power_battery_is_charged (status)) {
-		g_string_append (details, _("<b>Status:</b> Charged\n"));
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Status:"), _("Charged"));
 	} else if (status->is_charging) {
-		g_string_append (details, _("<b>Status:</b> Charging\n"));
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Status:"), _("Charging"));
 	} else if (status->is_discharging) {
-		g_string_append (details, _("<b>Status:</b> Discharging\n"));
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Status:"), _("Discharging"));
 	}
 	if (status->percentage_charge > 0) {
-		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
+		g_string_append_printf (details, "<b>%s</b> %i%%\n",
+					_("Percentage charge:"), 
 					status->percentage_charge);
 	}
 	/* remove the last \n */
@@ -697,7 +703,8 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	details = g_string_new ("");
 
 	if (device->vendor) {
-		g_string_append_printf (details, _("<b>Vendor:</b> %s\n"), device->vendor);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Vendor:"), device->vendor);
 	}
 	if (device->technology) {
 		const gchar *technology;
@@ -722,18 +729,22 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 				     device->technology);
 			technology = device->technology;
 		}
-		g_string_append_printf (details, _("<b>Technology:</b> %s\n"), technology);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Technology:"), technology);
 	}
 	if (device->serial) {
-		g_string_append_printf (details, _("<b>Serial number:</b> %s\n"), device->serial);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Serial number:"), device->serial);
 	}
 	if (device->model) {
-		g_string_append_printf (details, _("<b>Model:</b> %s\n"), device->model);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Model:"), device->model);
 	}
 	if (status->remaining_time > 0) {
 		char *time_str;
 		time_str = gpm_get_timestring (status->remaining_time);
-		g_string_append_printf (details, _("<b>Remaining time:</b> %s\n"), time_str);
+		g_string_append_printf (details, "<b>%s</b> %s\n",
+					_("Remaining time:"), time_str);
 		g_free (time_str);
 	}
 	if (status->capacity > 0) {
@@ -747,39 +758,47 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 		} else {
 			condition = _("Poor");
 		}
-		g_string_append_printf (details, _("<b>Capacity:</b> %i%% (%s)\n"),
+		g_string_append_printf (details, "<b>%s</b> %i%% (%s)\n",
+					_("Capacity:"), 
 					status->capacity, condition);
 	}
 	if (device->unit == GPM_POWER_UNIT_MWH) {
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, _("<b>Current charge:</b> %.1f W\n"),
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+						_("Current charge:"),
 						status->current_charge / 1000.0f);
 		}
 		if (status->last_full_charge > 0 &&
 		    status->design_charge != status->last_full_charge) {
-			g_string_append_printf (details, _("<b>Last full charge:</b> %.1f W\n"),
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+						_("Last full charge:"),
 						status->last_full_charge / 1000.0f);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, _("<b>Design charge:</b> %.1f W\n"),
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+						_("Design charge:"),
 						status->design_charge / 1000.0f);
 		}
 		if (status->charge_rate_raw > 0) {
-			g_string_append_printf (details, _("<b>Charge rate (raw):</b> %.1f Wh\n"),
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+						_("Charge rate (raw):"),
 						status->charge_rate_raw / 1000.0f);
 		}
 		if (status->charge_rate_smoothed > 0) {
-			g_string_append_printf (details, _("<b>Charge rate (smoothed):</b> %.1f Wh\n"),
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
+						_("Charge rate (smoothed):"),
 						status->charge_rate_smoothed / 1000.0f);
 		}
 	}
 	if (device->unit == GPM_POWER_UNIT_CSR) {
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, _("<b>Current charge:</b> %i/7\n"),
+			g_string_append_printf (details, "<b>%s</b> %i/7\n",
+						_("Current charge:"),
 						status->current_charge);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, _("<b>Design charge:</b> %i/7\n"),
+			g_string_append_printf (details, "<b>%s</b> %i/7\n",
+						_("Design charge:"),
 						status->design_charge);
 		}
 	}

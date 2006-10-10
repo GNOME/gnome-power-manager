@@ -289,9 +289,13 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 
 	if (g_slist_length (inhibit->priv->list) == 1) {
 		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
-		g_string_append_printf (message, _("<b>%s</b> has stopped the "
-					"%s from taking place : <i>%s</i>."),
-					data->application, action, data->reason);
+		g_string_append_printf (message, "<b>%s</b> ",
+					data->application);
+		g_string_append_printf (message, _("has stopped the %s from "
+						   "taking place : "),
+					action);
+		g_string_append_printf (message, "<i>%s</i>.",
+					data->reason);
 	} else {
 		g_string_append_printf (message, _("Multiple applications have stopped the "
 					"%s from taking place."), action);

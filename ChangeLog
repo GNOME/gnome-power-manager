@@ -1,5 +1,16 @@
 2006-10-10  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-inhibit.c:
+	* src/gpm-power.c:
+	Apply a patch from Elijah Newren to remove markup in translatable
+	messages. This fixes #360464.
+
+	* configure.in:
+	* src/gpm-tray-icon.c: (libnotify_event):
+	OOps. Make this build.
+
+2006-10-10  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c:
 	* src/gpm-graph-widget.h:
 	* src/gpm-info.c:
