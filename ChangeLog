@@ -1,5 +1,18 @@
 2006-10-11  Richard Hughes <richard@hughsie.com>
 
+	* .cvsignore:
+	Add the .lineno files debian likes to chuck out.
+
+	* configure.in:
+	Check for HAL 0.5.8 and warn the user if they are using an old HAL.
+	NOTE: The required dependency has not changed, but the recommended
+	one has. You can still build with 0.5.6
+
+	* src/gpm-power.c:
+	Small whitespace fix.
+
+2006-10-11  Richard Hughes <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-refcount.c:

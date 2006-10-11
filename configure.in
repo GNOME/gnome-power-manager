@@ -44,6 +44,7 @@ GTK_REQUIRED=2.10.0
 LIBGNOME_REQUIRED=2.14.0
 LIBGNOMEUI_REQUIRED=2.14.0
 HAL_REQUIRED=0.5.6
+HAL_SUGGESTED=0.5.8
 DBUS_REQUIRED=0.70
 LIBGLADE_REQUIRED=2.5.0
 LIBNOTIFY_REQUIRED=0.3.0
@@ -108,6 +109,17 @@ AC_SUBST(SYSCONFDIR, $sysconfdir)
 AC_SUBST(DATADIR, $datadir)
 AC_SUBST(BINDIR, $bindir)
 AC_SUBST(SBINDIR, $sbindir)
+
+dnl ---------------------------------------------------------------------------
+dnl - Is a new HAL available (i.e. has the latest fixes)?
+dnl ---------------------------------------------------------------------------
+if $PKG_CONFIG --atleast-version $HAL_SUGGESTED hal; then
+   have_hal_new=yes
+   AC_DEFINE(HAVE_HAL_NEW, 1, [Building with newer HAL]) 
+else
+   have_hal_new=no
+fi
+AM_CONDITIONAL([HAVE_HAL_NEW], [test $have_hal_new = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Where should we put documentation ?
@@ -493,13 +505,21 @@ dnl ---------------------------------------------------------------------------
 dnl - Warnings
 dnl ---------------------------------------------------------------------------
 
+if test "$have_hal_new" = "no" ; then
+   echo "*****************************************************************"
+   echo "**                       BIG HAL WARNING                       **"
+   echo "*****************************************************************"
+   echo "You have an old version of HAL that has multiple known bugs that"
+   echo "may affect the working of gnome-power-manager."
+   echo
+   fi
+
 if test "$have_libnotify_new" = "no" ; then
-   echo "*************************************************"
-   echo "**            BIG LIBNOTIFY WARNING            **"
-   echo "*************************************************"
+   echo "*****************************************************************"
+   echo "**                     BIG LIBNOTIFY WARNING                   **"
+   echo "*****************************************************************"
    echo "You have an old version of libnotify that has a buggy version of"
    echo "notify_notification_new_with_status_icon ()"
-   echo
    echo "Notifications will be shown in the default location and will"
    echo "not point to the icon."
    echo

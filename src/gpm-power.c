@@ -150,7 +150,6 @@ gpm_power_refcount_added (GpmRefcount *refcount,
 	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, GPM_POWER_KIND_PRIMARY);
 }
 
-
 /**
  * gpm_power_get_data_is_trusted:
  *
