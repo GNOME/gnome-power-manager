@@ -124,12 +124,13 @@ GpmPowerDevice	*gpm_power_get_device_from_udi		(GpmPower	*power,
 							 const gchar	*udi);
 GString		*gpm_power_status_for_device		(GpmPowerDevice *device);
 GString		*gpm_power_status_for_device_more	(GpmPowerDevice *device);
-void		 gpm_power_update_all			(GpmPower	*power);
+gboolean	 gpm_power_update_all			(GpmPower	*power);
 gboolean	 gpm_power_battery_is_charged		(GpmPowerStatus *status);
 const gchar 	*gpm_power_kind_to_localised_string	(GpmPowerKind	 battery_kind);
 const gchar 	*gpm_power_kind_to_string		(GpmPowerKind	 battery_kind);
 gchar		*gpm_power_get_icon_from_status		(GpmPowerStatus *device_status,
 							 GpmPowerKind    kind);
+gboolean	 gpm_power_get_data_is_trusted		(GpmPower	*power);
 
 G_END_DECLS
 

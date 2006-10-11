@@ -45,6 +45,7 @@ struct GpmHalPowerPrivate
 };
 
 G_DEFINE_TYPE (GpmHalPower, gpm_hal_power, G_TYPE_OBJECT)
+static gpointer      gpm_hal_power_object = NULL;
 
 /**
  * gpm_hal_power_is_on_ac:
@@ -369,13 +370,14 @@ gpm_hal_power_enable_power_save (GpmHalPower *hal_power, gboolean enable)
 	gboolean ret;
 	DBusGProxy *proxy;
 
+	g_return_val_if_fail (hal_power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_POWER (hal_power), FALSE);
 
 	proxy = gpm_proxy_get_proxy (hal_power->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	/* abort if we are not a "qualified" laptop */
 	if (gpm_hal_power_is_laptop (hal_power) == FALSE) {
@@ -459,7 +461,12 @@ gpm_hal_power_finalize (GObject *object)
 GpmHalPower *
 gpm_hal_power_new (void)
 {
-	GpmHalPower *hal_power;
-	hal_power = g_object_new (GPM_TYPE_HAL_POWER, NULL);
-	return GPM_HAL_POWER (hal_power);
+	if (gpm_hal_power_object) {
+		g_object_ref (gpm_hal_power_object);
+	} else {
+		gpm_hal_power_object = g_object_new (GPM_TYPE_HAL_POWER, NULL);
+		g_object_add_weak_pointer (gpm_hal_power_object,
+					   (gpointer *) &gpm_hal_power_object);
+	}
+	return GPM_HAL_POWER (gpm_hal_power_object);
 }

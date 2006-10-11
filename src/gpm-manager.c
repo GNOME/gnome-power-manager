@@ -520,10 +520,8 @@ gpm_manager_sync_tray_icon (GpmManager *manager)
 
 		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
 						    stock_id);
-
 		/* make sure that we are visible */
 		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), TRUE);
-
 		g_free (stock_id);
 
 		gpm_power_get_status_summary (manager->priv->power, &tooltip, NULL);
@@ -1897,6 +1895,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 		 * the "AC Power unplugged" message times out. */
 		gpm_tray_icon_cancel_notify (GPM_TRAY_ICON (manager->priv->tray_icon));
 	}
+
 	gpm_manager_sync_policy_sleep (manager);
 	gpm_manager_sync_policy_cpufreq (manager);
 	gpm_manager_sync_policy_brightness (manager);
@@ -1904,6 +1903,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
+
 	if (on_ac) {
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_ON_AC,
@@ -2120,6 +2120,12 @@ battery_status_changed_primary (GpmManager     *manager,
 		gpm_debug ("Already notified %i", warning_type);
 		return;
 	}
+
+	/* Wait until data is trusted... */
+	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
+		gpm_debug ("Data is not yet trusted.. wait..");
+		return;
+	}	
 
 	/* As the level is more critical than the last warning, save it */
 	manager->priv->last_primary_warning = warning_type;
@@ -2851,7 +2857,8 @@ gpm_manager_init (GpmManager *manager)
 	/* add the new statistics DBUS interface */
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
-	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics", G_OBJECT (manager->priv->info));
+	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics",
+					     G_OBJECT (manager->priv->info));
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */

@@ -29,6 +29,7 @@
 
 #include "gpm-feedback-widget.h"
 #include "gpm-stock-icons.h"
+#include "gpm-refcount.h"
 #include "gpm-debug.h"
 
 static void     gpm_feedback_class_init (GpmFeedbackClass *klass);
@@ -37,14 +38,14 @@ static void     gpm_feedback_finalize   (GObject	  *object);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
-#define GPM_FEEDBACK_TIMOUT		2	/* seconds */
+#define GPM_FEEDBACK_TIMOUT		2000	/* ms */
 
 struct GpmFeedbackPrivate
 {
 	GladeXML		*xml;
 	GtkWidget		*main_window;
 	GtkWidget		*progress;
-	gint			 refcount;
+	GpmRefcount		*refcount;
 	gchar			*icon_name;
 };
 
@@ -63,22 +64,15 @@ gpm_feedback_class_init (GpmFeedbackClass *klass)
 }
 
 /**
- * gpm_info_log_do_poll:
- * @data: gpointer to this info class instance
- *
- * This is the callback to get the log data every timeout period, where we have
- * to add points to the database and also update the graphs.
+ * gpm_feedback_close_window:
+ * @data: gpointer to this class instance
  **/
-static gboolean
-gpm_feedback_auto_close (gpointer data)
+static void
+gpm_feedback_close_window (GpmRefcount *refcount,
+			   GpmFeedback *feedback)
 {
-	GpmFeedback *feedback = (GpmFeedback*) data;
-	feedback->priv->refcount--;
-	if (feedback->priv->refcount == 0) {
-		gpm_debug ("Auto-closing feedback widget");
-		gtk_widget_hide (feedback->priv->main_window);
-	}
-	return FALSE;
+	gpm_debug ("Closing feedback widget");
+	gtk_widget_hide (feedback->priv->main_window);
 }
 
 gboolean
@@ -90,10 +84,10 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 	gpm_debug ("Displaying %f on feedback widget", value);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);
 	gtk_widget_show_all (feedback->priv->main_window);
-	/* set up the timer auto-close thing */
-	g_idle_remove_by_data (feedback);
-	g_timeout_add (GPM_FEEDBACK_TIMOUT * 1000, gpm_feedback_auto_close, feedback);
-	feedback->priv->refcount++;
+
+	/* set up the window auto-close */
+	gpm_refcount_add (feedback->priv->refcount);
+
 	return TRUE;
 }
 
@@ -133,6 +127,11 @@ gpm_feedback_init (GpmFeedback *feedback)
 	feedback->priv->refcount = 0;
 	feedback->priv->icon_name = NULL;
 
+	feedback->priv->refcount = gpm_refcount_new ();
+	g_signal_connect (feedback->priv->refcount, "refcount-zero",
+			  G_CALLBACK (gpm_feedback_close_window), feedback);
+	gpm_refcount_set_timeout (feedback->priv->refcount, GPM_FEEDBACK_TIMOUT);
+
 	/* initialise the window */
 	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
 	if (! feedback->priv->xml) {
@@ -164,6 +163,9 @@ gpm_feedback_finalize (GObject *object)
 
 	if (feedback->priv->icon_name != NULL) {
 		g_free (feedback->priv->icon_name);
+	}
+	if (feedback->priv->refcount != NULL) {
+		g_object_unref (feedback->priv->refcount);
 	}
 
 	/* FIXME: we should unref some stuff */

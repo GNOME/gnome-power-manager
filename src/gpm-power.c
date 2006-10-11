@@ -38,6 +38,7 @@
 
 #include "gpm-power.h"
 #include "gpm-marshal.h"
+#include "gpm-refcount.h"
 #include "gpm-debug.h"
 #include "gpm-gconf.h"
 
@@ -53,6 +54,8 @@ struct GpmPowerPrivate
 {
 	gboolean		 on_ac;
 	gint			 exp_ave_factor;
+	gboolean		 data_is_trusted;
+	GpmRefcount		*refcount;
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
 	GpmHal			*hal;
@@ -78,6 +81,8 @@ static guint	     signals [LAST_SIGNAL] = { 0, };
 static gpointer      gpm_power_object = NULL;
 
 G_DEFINE_TYPE (GpmPower, gpm_power, G_TYPE_OBJECT)
+
+#define GPM_POWER_INVALID_TIMOUT 3000
 
 /**
  * Multiple batteries percentages are averaged and times added
@@ -116,6 +121,55 @@ gpm_power_battery_status_set_defaults (GpmPowerStatus *status)
 }
 
 /**
+ * gpm_power_refcount_zero:
+ * @data: gpointer to this class instance
+ **/
+static void
+gpm_power_refcount_zero (GpmRefcount *refcount,
+			 GpmPower    *power)
+{
+	gpm_debug ("Data is now trusted");
+	power->priv->data_is_trusted = TRUE;
+
+	/* we fake a status change to redo the tooltip and warnings as required */
+	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, GPM_POWER_KIND_PRIMARY);
+}
+
+/**
+ * gpm_power_refcount_added:
+ * @data: gpointer to this class instance
+ **/
+static void
+gpm_power_refcount_added (GpmRefcount *refcount,
+			  GpmPower    *power)
+{
+	gpm_debug ("Data is now not trusted");
+	power->priv->data_is_trusted = FALSE;
+
+	/* we fake a status change to redo the tooltip and warnings as required */
+	g_signal_emit (power, signals [BATTERY_STATUS_CHANGED], 0, GPM_POWER_KIND_PRIMARY);
+}
+
+
+/**
+ * gpm_power_get_data_is_trusted:
+ *
+ * This function tells other modules if the data is trusted.
+ * Data may be untrusted for a few seconds after a power event, where new
+ * values are being recalculated.
+ *
+ * Return value: If the data is trusted.
+ **/
+gboolean
+gpm_power_get_data_is_trusted (GpmPower *power)
+{
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+
+	return power->priv->data_is_trusted;
+}
+
+/**
  * gpm_power_battery_is_charged:
  * @status: A battery info structure
  *
@@ -142,7 +196,7 @@ gpm_power_battery_is_charged (GpmPowerStatus *status)
  *
  * Updates all the information fields in a cache entry
  **/
-static void
+static gboolean
 battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 {
 	gboolean exists;
@@ -150,6 +204,9 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gchar *udi = entry->udi;
 	gchar *battery_kind_str;
 	gboolean perhaps_recall;
+
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
 	/* invalidate last rate */
 	entry->charge_rate_previous = 0;
@@ -161,7 +218,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 
 	if (!battery_kind_str) {
 		gpm_warning ("cannot obtain battery type");
-		return;
+		return FALSE;
 	}
 	if (strcmp (battery_kind_str, "primary") == 0) {
 		entry->battery_kind = GPM_POWER_KIND_PRIMARY;
@@ -177,7 +234,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		gpm_warning ("battery type %s unknown",
 			   battery_kind_str);
 		g_free (battery_kind_str);
-		return;
+		return FALSE;
 	}
 	g_free (battery_kind_str);
 
@@ -185,7 +242,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.present", &status->is_present);
 	if (! status->is_present) {
 		gpm_debug ("Battery not present, so not filling up values");
-		return;
+		return FALSE;
 	}
 
 	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.design",
@@ -282,6 +339,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		   entry->battery_kind == GPM_POWER_KIND_KEYBOARD) {
 		entry->unit = GPM_POWER_UNIT_CSR;
 	}
+	return TRUE;
 }
 
 /**
@@ -553,6 +611,9 @@ gpm_power_get_device_from_udi (GpmPower    *power,
 {
 	GpmPowerDevice *entry;
 
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+
 	if (udi == NULL) {
 		gpm_warning ("UDI is NULL");
 		return NULL;
@@ -603,6 +664,10 @@ gpm_power_get_num_devices_of_kind (GpmPower    *power,
 				   GpmPowerKind	battery_kind)
 {
 	BatteryKindCacheEntry *entry;
+
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+
 	if (power->priv->battery_kind_cache == NULL) {
 		return 0;
 	}
@@ -621,6 +686,9 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 	const gchar *udi;
 	GpmPowerDevice *device;
 	BatteryKindCacheEntry *entry;
+
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
 	if (! power->priv->battery_kind_cache) {
 		return NULL;
@@ -654,6 +722,8 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 {
 	GString		*details;
 	GpmPowerStatus	*status;
+
+	g_return_val_if_fail (device != NULL, NULL);
 
 	status = &device->battery_status;
 	details = g_string_new ("");
@@ -698,6 +768,8 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 {
 	GString		*details;
 	GpmPowerStatus	*status;
+
+	g_return_val_if_fail (device != NULL, NULL);
 
 	status = &device->battery_status;
 	details = g_string_new ("");
@@ -855,6 +927,8 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 	char *filename = NULL;
 	const char *index_str = NULL;
 
+	g_return_val_if_fail (device_status != NULL, NULL);
+
 	if (! device_status->is_present) {
 		/* battery missing */
 		filename = g_strdup_printf ("gpm-%s-missing", prefix);
@@ -922,6 +996,8 @@ gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 {
 	gchar *filename = NULL;
 	const gchar *prefix;
+
+	g_return_val_if_fail (device_status != NULL, NULL);
 
 	/* TODO: icons need to be renamed from -battery- to -primary- */
 	prefix = gpm_power_kind_to_string (kind);
@@ -1306,8 +1382,13 @@ gpm_power_get_status_summary (GpmPower *power,
 	gboolean ups_present;
 	GpmPowerStatus status;
 
-	if (! string) {
-		return FALSE;
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+	g_return_val_if_fail (string != NULL, FALSE);
+
+	if (power->priv->data_is_trusted == FALSE) {
+		*string = g_strdup (_("Recalculating information..."));
+		return TRUE;
 	}
 
 	ups_present = gpm_power_get_battery_status (power,
@@ -1358,6 +1439,8 @@ gpm_power_get_battery_status (GpmPower       *power,
 {
 	BatteryKindCacheEntry *entry;
 
+	g_return_val_if_fail (battery_status != NULL, FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
 	/* Make sure we at least return the defaults */
@@ -1381,6 +1464,7 @@ gpm_power_set_on_ac (GpmPower *power,
 		     gboolean  on_ac,
 		     GError  **error)
 {
+	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
 	if (on_ac != power->priv->on_ac) {
@@ -1389,6 +1473,7 @@ gpm_power_set_on_ac (GpmPower *power,
 		gpm_debug ("emitting ac-state-changed : %i", on_ac);
 		g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
 	}
+	gpm_refcount_add (power->priv->refcount);
 
 	return TRUE;
 }
@@ -1402,6 +1487,7 @@ gpm_power_get_on_ac (GpmPower *power,
 		     gboolean *on_ac,
 		     GError  **error)
 {
+	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
 	if (on_ac) {
@@ -1821,10 +1907,14 @@ gpm_hash_free_device_cache (GpmPower *power)
  *
  * We can call this anywhere to update all the device and kind caches
  **/
-void
+gboolean
 gpm_power_update_all (GpmPower *power)
 {
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
+
 	battery_kind_cache_update_all (power);
+	return TRUE;
 }
 
 /**
@@ -1893,6 +1983,16 @@ gpm_power_init (GpmPower *power)
 
 	power->priv->hal_power = gpm_hal_power_new ();
 
+	power->priv->refcount = gpm_refcount_new ();
+	g_signal_connect (power->priv->refcount, "refcount-zero",
+			  G_CALLBACK (gpm_power_refcount_zero), power);
+	g_signal_connect (power->priv->refcount, "refcount-added",
+			  G_CALLBACK (gpm_power_refcount_added), power);
+	gpm_refcount_set_timeout (power->priv->refcount, GPM_POWER_INVALID_TIMOUT);
+
+	/* when we first start, the data might be invalid */
+	gpm_refcount_add (power->priv->refcount);
+
 	power->priv->battery_kind_cache = NULL;
 	power->priv->battery_device_cache = NULL;
 
@@ -1926,9 +2026,18 @@ gpm_power_finalize (GObject *object)
 	gpm_hash_free_kind_cache (power);
 	gpm_hash_free_device_cache (power);
 
-	g_object_unref (power->priv->hal);
-	g_object_unref (power->priv->hal_monitor);
-	g_object_unref (power->priv->hal_power);
+	if (power->priv->hal != NULL) {
+		g_object_unref (power->priv->hal);
+	}
+	if (power->priv->hal_monitor != NULL) {
+		g_object_unref (power->priv->hal_monitor);
+	}
+	if (power->priv->hal_power != NULL) {
+		g_object_unref (power->priv->hal_power);
+	}
+	if (power->priv->refcount != NULL) {
+		g_object_unref (power->priv->refcount);
+	}
 
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }

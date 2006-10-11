@@ -1,3 +1,29 @@
+2006-10-11  Richard Hughes <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-refcount.c:
+	* src/gpm-refcount.h:
+	Create this new object to be a general purpose refcounting object now
+	that we are doing a similar thing in two places.
+
+	* src/gpm-feedback-widget.c:
+	Use the new beautiful GpmRefcount object rather than doing our own
+	clunky thing.
+
+	* src/gpm-hal-power.c:
+	Make into a singleton as two things are using this in g-p-m.
+	This fixes a pretty random crash in the SetLowMowerMode code. Oops.
+
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	Add GpmRefcount functionality so that the data is tainted for a few
+	seconds after a	power event.
+	This means that we should not be shutting down or warning after just
+	pulling the plug or starting up and waiting for HAL to update the
+	battery charge values. This should fix #350374.
+
 2006-10-10  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-hal-cpufreq.c:
