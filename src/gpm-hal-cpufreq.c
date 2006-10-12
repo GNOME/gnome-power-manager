@@ -226,8 +226,7 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 	char **strlist;
 	int i = 0;
 	DBusGProxy *proxy;
-
-	*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
+	GpmHalCpuFreqEnum types = GPM_CPUFREQ_UNKNOWN;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
@@ -236,6 +235,7 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
+		*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
 		return FALSE;
 	}	
 
@@ -251,14 +251,23 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("GetCPUFreqAvailableGovernors failed!");
+		*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
 		return FALSE;
 	}
 
 	/* treat as binary flags */
 	while (strlist && strlist[i]) {
-		*cpufreq_type += gpm_hal_cpufreq_string_to_enum (strlist[i]);
+		types += gpm_hal_cpufreq_string_to_enum (strlist[i]);
 		++i;
 	}
+
+	/* when we have conservative and ondemand available, only expose
+	   conservative in the UI. They are too similar. */
+	if (types & GPM_CPUFREQ_ONDEMAND && types & GPM_CPUFREQ_CONSERVATIVE) {
+		types -= GPM_CPUFREQ_ONDEMAND;
+	}
+
+	*cpufreq_type = types;
 	cpufreq->priv->available_governors = i;
 	return TRUE;
 }

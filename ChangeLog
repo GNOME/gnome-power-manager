@@ -1,5 +1,11 @@
 2006-10-12  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-hal-cpufreq.c: (gpm_hal_cpufreq_get_governors):
+	When we have conservative and ondemand available, only expose
+	conservative in the UI. They are too similar.
+
+2006-10-12  Richard Hughes <richard@hughsie.com>
+
 	* Makefile.am:
 	Add a couple of fixes to make sure we can trivially build on debian.
 
