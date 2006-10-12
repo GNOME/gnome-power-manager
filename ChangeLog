@@ -1,5 +1,12 @@
 2006-10-12  Richard Hughes <richard@hughsie.com>
 
+	* data/gpm-prefs.glade:
+	* src/gpm-prefs-core.c:
+	Make the glade file spacing more correct. The extra hbox's also allow
+	us to use a smaller amount of code to enable and disable rows.
+
+2006-10-12  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-hal-cpufreq.c: (gpm_hal_cpufreq_get_governors):
 	When we have conservative and ondemand available, only expose
 	conservative in the UI. They are too similar.

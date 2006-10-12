@@ -789,18 +789,20 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 	/* show other options */
 	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"label_processor_ac_custom");
-		gtk_widget_set_sensitive (twidget, show_custom);
-		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"hscale_processor_ac_custom");
-		gtk_widget_set_sensitive (twidget, show_custom);
+						"hbox_processor_ac_custom");
+		if (show_custom) {
+			gtk_widget_show_all (twidget);
+		} else {
+			gtk_widget_hide_all (twidget);
+		}
 	} else {
 		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"label_processor_battery_custom");
-		gtk_widget_set_sensitive (twidget, show_custom);
-		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"hscale_processor_battery_custom");
-		gtk_widget_set_sensitive (twidget, show_custom);
+						"hbox_processor_battery_custom");
+		if (show_custom) {
+			gtk_widget_show_all (twidget);
+		} else {
+			gtk_widget_hide_all (twidget);
+		}
 	}
 
 	g_free (value);
@@ -977,19 +979,22 @@ prefs_setup_display (GpmPrefs *prefs)
 	set_idle_hscale_stops (prefs, "hscale_display_ac_sleep", delay);
 
 	if (prefs->priv->has_lcd == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_display_ac_brightness");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_display_ac_brightness");
 		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_display_ac_brightness");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_display_battery_brightness");
 		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hscale_display_battery_brightness");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_dim");
 		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_display_battery_brightness");
-		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_ac_dim");
-		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_battery_dim");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_display_state_change");
 		gtk_widget_hide_all (widget);
 	}
+
+	/* the box will be empty */
+	if (prefs->priv->has_lcd == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_display_general");
+		gtk_widget_hide_all (widget);
+	}
+
 	if (prefs->priv->has_batteries == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_display_battery");
 		gtk_widget_hide_all (widget);
@@ -1091,20 +1096,14 @@ prefs_setup_actions (GpmPrefs *prefs)
 				      battery_ups_actions);
 
 	if (prefs->priv->has_button_suspend == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_general_suspend");
-		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_general_suspend");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_actions_general_suspend");
 		gtk_widget_hide_all (widget);
 	}
 
 	if (prefs->priv->has_button_lid == FALSE) {
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_ac_lid");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_actions_battery_lid");
 		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "combobox_actions_battery_lid");
-		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_ac_lid");
-		gtk_widget_hide_all (widget);
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "label_actions_battery_lid");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_actions_ac_lid");
 		gtk_widget_hide_all (widget);
 		/* remove whole box as there is nothing in it */
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_actions_ac");
