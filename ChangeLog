@@ -1,3 +1,11 @@
+2006-10-12  Richard Hughes <richard@hughsie.com>
+
+	* Makefile.am:
+	Add a couple of fixes to make sure we can trivially build on debian.
+
+	* src/gpm-power.c: (gpm_power_status_for_device_more):
+	Change rate to be unit W, and capacity to be unit Wh.
+
 2006-10-11  Richard Hughes <richard@hughsie.com>
 
 	* .cvsignore:

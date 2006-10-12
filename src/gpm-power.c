@@ -835,18 +835,18 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	}
 	if (device->unit == GPM_POWER_UNIT_MWH) {
 		if (status->current_charge > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
 						_("Current charge:"),
 						status->current_charge / 1000.0f);
 		}
 		if (status->last_full_charge > 0 &&
 		    status->design_charge != status->last_full_charge) {
-			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
 						_("Last full charge:"),
 						status->last_full_charge / 1000.0f);
 		}
 		if (status->design_charge > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
+			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
 						_("Design charge:"),
 						status->design_charge / 1000.0f);
 		}
@@ -856,7 +856,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 						status->charge_rate_raw / 1000.0f);
 		}
 		if (status->charge_rate_smoothed > 0) {
-			g_string_append_printf (details, "<b>%s</b> %.1f Wh\n",
+			g_string_append_printf (details, "<b>%s</b> %.1f W\n",
 						_("Charge rate (smoothed):"),
 						status->charge_rate_smoothed / 1000.0f);
 		}
