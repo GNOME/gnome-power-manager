@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-30 12:07+0100\n"
+"POT-Creation-Date: 2006-10-14 09:02+0100\n"
 "PO-Revision-Date: 2006-04-09 11:17+0300\n"
 "Last-Translator: Kostas Papadimas <pkst@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -49,18 +49,23 @@ msgid "Battery critical low action"
 msgstr "Πολύ χαμηλό φορτίο μπαταρίας"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
+msgid "Change the brightness to a preset level on AC state change"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:5
+msgid "Change the brightness to automatically using the ambient light sensors"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
 msgstr "Έλεγχος φόρτου CPU πριν από τη μετάβαση σε αναμονή"
 
-#: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Check network utilization before sleeping"
-msgstr "Έλεγχος φόρτου δικτύου πριν από τη μετάβαση σε αναμονή"
-
-#: ../data/gnome-power-manager.schemas.in.h:6
-msgid "Dim the screen after a period of inactivity"
+#: ../data/gnome-power-manager.schemas.in.h:7
+#, fuzzy
+msgid "Dim the screen after a period of inactivity when on AC power"
 msgstr "Μείωση φωτεινότητας οθόνης μετά από μια περίοδο αδράνειας"
 
-#: ../data/gnome-power-manager.schemas.in.h:7
+#: ../data/gnome-power-manager.schemas.in.h:8
 #, fuzzy
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", "
@@ -69,24 +74,32 @@ msgstr ""
 "Αν θα εμφανίζεται το εικονίδιο ειδοποίησης. Έγκυρες επιλογές είναι \"never"
 "\", \"critical\", \"charge\" \"present\" και \"always\""
 
-#: ../data/gnome-power-manager.schemas.in.h:8
+#: ../data/gnome-power-manager.schemas.in.h:9
 msgid "Hibernate button action"
 msgstr "Ενέργεια κουμπιού αδρανοποίησης"
 
-#: ../data/gnome-power-manager.schemas.in.h:9
+#: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate enabled"
 msgstr "Η αδρανοποίηση ενεργοποιήθηκε"
 
-#: ../data/gnome-power-manager.schemas.in.h:10
+#: ../data/gnome-power-manager.schemas.in.h:11
+msgid "If DBUS inhibit requests should be ignored from other programs."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:12
+msgid "If DBUS inhibit requests should be ignored."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:13
 #, fuzzy
 msgid ""
-"If a notification message should be displayed if the HAL action (suspend or "
-"hibernate) fails."
+"If a notification message should be displayed after the suspend or hibernate "
+"failed."
 msgstr ""
 "Αν θα εμφανίζεται ένα μήνυμα ειδοποίησης όταν η ενέργεια του HAL (αναστολή ή "
 "αδρανοποίηση) αποτύχει"
 
-#: ../data/gnome-power-manager.schemas.in.h:11
+#: ../data/gnome-power-manager.schemas.in.h:14
 #, fuzzy
 msgid ""
 "If a notification message should be displayed when the battery is fully "
@@ -94,17 +107,29 @@ msgid ""
 msgstr ""
 "Αν θα εμφανίζεται ένα μήνυμα ειδοποίησης όταν η μπαταρία φορτίζεται πλήρως"
 
-#: ../data/gnome-power-manager.schemas.in.h:12
-#, fuzzy
-msgid "If network utilization should be checked before doing the idle action."
-msgstr "Αν θα γίνεται έλεγχος φόρτου CPU πριν να γίνει κάποια ενέργεια."
+#: ../data/gnome-power-manager.schemas.in.h:15
+msgid ""
+"If niced processes are considered, they can cause a frequency increment even "
+"though their absolute load percentage wouldn't trigger the scaling mechanism "
+"to switch up the frequency."
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:13
+#: ../data/gnome-power-manager.schemas.in.h:16
 #, fuzzy
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr "Αν θα γίνεται έλεγχος φόρτου CPU πριν να γίνει κάποια ενέργεια."
 
-#: ../data/gnome-power-manager.schemas.in.h:14
+#: ../data/gnome-power-manager.schemas.in.h:17
+msgid "If the PC speaker (beeping) should be used"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:18
+msgid ""
+"If the PC speaker should be used to beep when the power is low, or inhibit "
+"requests have stopped the policy action."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:19
 #, fuzzy
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
@@ -113,32 +138,45 @@ msgstr ""
 "Αν θα επιτρέπονται ή όχι οι επιλογές Αναστολής και Αδρανοποίησης στη περιοχή "
 "ειδοποίησης του μενού επιλογής."
 
-#: ../data/gnome-power-manager.schemas.in.h:15
+#: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:16
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:22
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:24
 msgid "If the low-power mode should be enabled when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:25
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:26
+#, fuzzy
+msgid ""
+"If the screen brightness should be changed when switching between AC and "
+"battery power."
+msgstr "Αν θα ειδοποιείται ο χρήστης στην αποσύνδεση του καλωδίου AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:27
 #, fuzzy
 msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
@@ -148,41 +186,43 @@ msgstr ""
 "επιλογή χρησιμοποιείται μόνο αν το lock_use_screensaver_settings είναι στο "
 "false."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:28
 #, fuzzy
-msgid "If the screen should be dimmed to save power when the computer is idle."
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
 msgstr ""
 "Αν θα μειώνεται η φωτεινότητα της οθόνης όταν ο υπολογιστής είναι σε αδράνεια"
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:32
 #, fuzzy
 msgid "If the user is authorized to hibernate the computer."
 msgstr "Αν ο χρήστης μπορεί να κάνει αδρανοποίηση του υπολογιστή"
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:33
 #, fuzzy
 msgid "If the user is authorized to suspend the computer."
 msgstr "Αν θα μπορεί ο χρήστης να βάζει τον υπολογιστή σε αναστολή"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:34
 #, fuzzy
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Αν θα ειδοποιείται ο χρήστης στην αποσύνδεση του καλωδίου AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:35
 #, fuzzy
 msgid ""
 "If time based notifications should be used. If set to false, then the "
@@ -191,7 +231,7 @@ msgstr ""
 "Αν θα χρησιμοποιούνται ή όχι χρονομετρημένες ειδοποιήσεις. Αν ορισθεί σε "
 "false, τότε θα χρησιμοποιείται τη αλλαγή ποσοστού."
 
-#: ../data/gnome-power-manager.schemas.in.h:29
+#: ../data/gnome-power-manager.schemas.in.h:36
 #, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
@@ -201,7 +241,7 @@ msgstr ""
 "αδρανοποίηση. ΣΗΜΕΙΩΣΗ, αυτή η επιλογή χρησιμοποιείται μόνο αν το  "
 "lock_use_screensaver_settings είναιστο false"
 
-#: ../data/gnome-power-manager.schemas.in.h:30
+#: ../data/gnome-power-manager.schemas.in.h:37
 #, fuzzy
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
@@ -211,7 +251,7 @@ msgstr ""
 "αναστολή. ΣΗΜΕΙΩΣΗ, αυτή η επιλογή χρησιμοποιείται μόνο αν το  "
 "lock_use_screensaver_settings είναιστο false"
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:38
 #, fuzzy
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
@@ -220,104 +260,142 @@ msgstr ""
 "Αν θα γίνεται χρήση ή όχι της ρύθμισης κλειδώματος οθόνης του gnome-"
 "screensaver."
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:39
+#, fuzzy
+msgid "Keyboard brightness when on AC"
+msgstr "Φωτεινότητα LCD σε λειτουργία AC"
+
+#: ../data/gnome-power-manager.schemas.in.h:40
+#, fuzzy
+msgid "Keyboard brightness when on battery"
+msgstr "Φωτεινότητα LCD σε λειτουργία μπαταρίας"
+
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "LCD brightness when on AC"
 msgstr "Φωτεινότητα LCD σε λειτουργία AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "LCD brightness when on battery"
 msgstr "Φωτεινότητα LCD σε λειτουργία μπαταρίας"
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Laptop lid close action on battery"
 msgstr "Ενέργεια στο κλείσιμο του καπακιού του φορητού όταν είναι σε μπαταρία"
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Laptop lid close action when on AC"
 msgstr "Ενέργεια στο κλείσιμο του καπακιού όταν είναι σε AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Lock screen on hibernate"
 msgstr "Κλείδωμα οθόνης στην αδρανοποίηση"
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Lock screen on suspend"
 msgstr "Κλείδωμα οθόνης στην αναστολή"
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:47
 #, fuzzy
 msgid "Lock screen when blanked"
 msgstr "Κλείδωμα οθόνης όταν γίνεται κενή"
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:48
+msgid "Method used to blank screen on AC"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:49
+msgid "Method used to blank screen on battery"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:50
 #, fuzzy
 msgid "Notify on a HAL error"
 msgstr "Ειδοποίηση σε σφάλμα αδρανοποίησης ή αναστολής του HAL"
 
-#: ../data/gnome-power-manager.schemas.in.h:40
+#: ../data/gnome-power-manager.schemas.in.h:51
 #, fuzzy
 msgid "Notify when AC adapter is disconnected"
 msgstr "Ειδοποίηση όταν αποσυνδεθεί ο μετασχηματιστής"
 
-#: ../data/gnome-power-manager.schemas.in.h:41
+#: ../data/gnome-power-manager.schemas.in.h:52
 #, fuzzy
 msgid "Notify when fully charged"
 msgstr "Ειδοποίηση στην πλήρη φόρτιση"
 
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Number of seconds to suppress policy after resume"
 msgstr ""
 "Ο αριθμός των δευτερολέπτων για την καταστολή της πολιτικής μετά από "
 "επανέναρξη"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Percentage action is taken"
 msgstr "Έγινε ενέργεια ποσοστού"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:55
 #, fuzzy
 msgid "Percentage considered critical"
 msgstr "Το ποσοστό θεωρείται εξαιρετικά χαμηλό"
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:56
 #, fuzzy
 msgid "Percentage considered low"
 msgstr "Το ποσοστό θεωρείται χαμηλό"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:57
 #, fuzzy
 msgid "Percentage considered very low"
 msgstr "Ο ποσοστό θεωρείται πολύ χαμηλό"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Power button action"
 msgstr "Ενέργεια κουμπιού Power"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Sleep timeout computer when on AC"
 msgstr "Όριο χρόνου αναμονής υπολογιστή σε λειτουργία AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Sleep timeout computer when on battery"
 msgstr "Όριο χρόνου αναμονής υπολογιστή σε λειτουργία μπαταρίας"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Sleep timeout display when on AC"
 msgstr "Όριο χρόνου αναμονής οθόνης σε λειτουργία AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Sleep timeout display when on battery"
 msgstr "Όριο χρόνου αναμονής οθόνης σε λειτουργία μπαταρίας"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Suspend button action"
 msgstr "Ενέργεια κουμπιού αναστολής"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Suspend enabled"
 msgstr "Ενεργοποίηση αναστολής"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:65
+#, fuzzy
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Η ενέργεια που θα εκτελείται όταν το φορτίο του UPS είναι εξαιρετικά χαμηλό. "
+"Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\", \"shutdown\" και \"nothing"
+"\""
+
+#: ../data/gnome-power-manager.schemas.in.h:66
+#, fuzzy
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"Η ενέργεια που θα εκτελείται όταν το φορτίο της μπαταρίας είναι εξαιρετικά "
+"χαμηλό. Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\", \"shutdown\" και "
+"\"nothing\""
+
+#: ../data/gnome-power-manager.schemas.in.h:67
 #, fuzzy
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
@@ -327,7 +405,17 @@ msgstr ""
 "Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\", \"shutdown\" και \"nothing"
 "\""
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:68
+#, fuzzy
+msgid ""
+"The action to take when the UPS is low. Possible values are \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"Η ενέργεια που θα εκτελείται όταν το φορτίο του UPS είναι εξαιρετικά χαμηλό. "
+"Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\", \"shutdown\" και \"nothing"
+"\""
+
+#: ../data/gnome-power-manager.schemas.in.h:69
 #, fuzzy
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
@@ -337,27 +425,29 @@ msgstr ""
 "χαμηλό. Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\", \"shutdown\" και "
 "\"nothing\""
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:70
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
-"power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
 msgstr ""
 "Η ενέργεια που θα εκτελείται όταν κλείνει το καπάκι του φορητού υπολογιστή "
 "και δεν τροφοδοτείται από μπαταρία. Οι έγκυρες τιμές είναι \"suspend\", "
 "\"hibernate\" και \"blank\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:71
 #, fuzzy
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
-"battery power. Possible values are \"suspend\", \"hibernate\" and \"blank\"."
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
 msgstr ""
 "Η ενέργεια που θα εκτελείται όταν κλείνει το καπάκι του φορητού υπολογιστή "
 "και δεν τροφοδοτείται από μπαταρία.Οι έγκυρες τιμές είναι \"suspend\", "
 "\"hibernate\" και \"blank\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:72
 #, fuzzy
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
@@ -367,7 +457,7 @@ msgstr ""
 "Η ενέργεια που θα εκτελείται όταν πατιέται το κουπί της αδρανοποίησης. Οι "
 "έγκυρες τιμές είναι \"suspend\", \"hibernate\", \"shutdown\"και \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:73
 #, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
@@ -377,7 +467,7 @@ msgstr ""
 "Η ενέργεια που θα εκτελείται όταν πατιέται το κουμπί του system power. Οι "
 "έγκυρες τιμές είναι \"suspend\", \"hibernate\" \"shutdown\" και \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:74
 #, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
@@ -387,7 +477,7 @@ msgstr ""
 "Η ενέργεια που θα εκτελείται όταν πατιέται το κουπί της αναστολής. Οι "
 "έγκυρες τιμές είναι \"suspend\", \"hibernate\",\"shutdown\" και \"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:75
 #, fuzzy
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
@@ -396,7 +486,7 @@ msgstr ""
 "Ο αριθμός δευτερολέπτων για την μετάβαση σε λειτουργία αναμονής της οθόνης, "
 "όταν το σύστημα τροφοδοτείται από AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:76
 #, fuzzy
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
@@ -405,7 +495,7 @@ msgstr ""
 "Ο αριθμός δευτερολέπτων αδράνειας για την μετάβαση σε λειτουργία αναμονής "
 "του υπολογιστή, όταν το σύστημα τροφοδοτείται από AC"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:77
 #, fuzzy
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
@@ -414,7 +504,7 @@ msgstr ""
 "Ο αριθμός δευτερολέπτων αδράνειας για την μετάβαση σε λειτουργία αναμονής "
 "του υπολογιστή, όταν το σύστημα τροφοδοτείται από μπαταρία."
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:78
 #, fuzzy
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
@@ -423,7 +513,7 @@ msgstr ""
 "Ο αριθμός δευτερολέπτων για την μετάβαση σε λειτουργία αναμονής της οθόνης, "
 "όταν το σύστημα τροφοδοτείται από μπαταρία."
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:79
 #, fuzzy
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
@@ -432,7 +522,7 @@ msgstr ""
 "Η φωτεινότητα της οθόνης όταν είναι σε λειτουργία AC. Οι έγκυρες τιμές είναι "
 "μεταξύ 0 και 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:80
 #, fuzzy
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
@@ -441,18 +531,95 @@ msgstr ""
 "Η φωτεινότητα της οθόνης όταν είναι σε λειτουργία μπαταρίας. Οι έγκυρες "
 "τιμές είναι μεταξύ 0 και 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:81
+#, fuzzy
+msgid ""
+"The brightness of the keyboard when on AC power. Possible values are between "
+"0 and 100."
+msgstr ""
+"Η φωτεινότητα της οθόνης όταν είναι σε λειτουργία AC. Οι έγκυρες τιμές είναι "
+"μεταξύ 0 και 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:82
+#, fuzzy
+msgid ""
+"The brightness of the keyboard when on battery power. Possible values are "
+"between 0 and 100."
+msgstr ""
+"Η φωτεινότητα της οθόνης όταν είναι σε λειτουργία μπαταρίας. Οι έγκυρες "
+"τιμές είναι μεταξύ 0 και 100."
+
+#: ../data/gnome-power-manager.schemas.in.h:83
 #, fuzzy
 msgid "The brightness of the screen when idle"
 msgstr "Η φωτεινότητα της οθόνης όταν η συνεδρία είναι αδρανής"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:84
+msgid "The cpufreq custom performance value to use when on AC power"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:85
+msgid "The cpufreq custom performance value to use when on battery power"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:86
+msgid ""
+"The cpufreq custom performance value to used to scale the processor when on "
+"AC power."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:87
+msgid ""
+"The cpufreq custom performance value to used to scale the processor when on "
+"battery power."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:88
+msgid "The cpufreq policy to use when on AC power"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:89
+#, fuzzy
+msgid "The cpufreq policy to use when on battery power"
+msgstr "Το σύστημα τροφοδοτείται από μπαταρία\n"
+
+#: ../data/gnome-power-manager.schemas.in.h:90
+msgid ""
+"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"values are ondemand, conservative, powersave, userspace, performance, "
+"nothing."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:91
+msgid ""
+"The cpufreq policy to used to scale the processor when on battery power. "
+"Possible values are ondemand, conservative, powersave, userspace, "
+"performance, nothing."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:92
 #, fuzzy
 msgid "The damping factor for the rate"
 msgstr ""
 "Ο παράγοντας μείωσης που χρησιμοποιείται κατά τον υπολογισμό του ρυθμού"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:93
+msgid "The default graph type to show in the statistics window"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:94
+msgid "The default graph type to show in the statistics window."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:95
+msgid "The maximum duration of time displayed on the x-axis of the graph."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:96
+msgid "The maximum time displayed on the graph"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:97
 #, fuzzy
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
@@ -461,7 +628,7 @@ msgstr ""
 "Το ποσοστό της μπαταρίας όταν το φορτίο θεωρείται εξαιρετικά χαμηλό. Είναι "
 "έγκυρο μόνο αν είναι false το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:98
 #, fuzzy
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
@@ -470,7 +637,7 @@ msgstr ""
 "Το ποσοστό της μπαταρίας όταν το φορτίο θεωρείται χαμηλό. Είναι έγκυρο μόνο "
 "αν είναι false το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:99
 #, fuzzy
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
@@ -479,7 +646,7 @@ msgstr ""
 "Το ποσοστό της μπαταρίας όταν το φορτίο θεωρείται πολύ χαμηλό. Είναι έγκυρο "
 "μόνο αν είναι false το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:100
 #, fuzzy
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
@@ -488,7 +655,7 @@ msgstr ""
 "Το ποσοστό της μπαταρίας όταν εκτελείται μια ενέργεια για εξαιρετικά χαμηλό "
 "φορτίο. Είναι έγκυρο μόνο αν είναι false το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:101
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
@@ -498,7 +665,7 @@ msgstr ""
 "για εξαιρετικά χαμηλό φορτίο.Είναι έγκυρο μόνο αν είναι true το "
 "use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:102
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
@@ -507,7 +674,7 @@ msgstr ""
 "Ο χρόνος μπαταρίας που απομένει σε δευτερόλεπτα όταν το φορτίο θεωρείται "
 "εξαιρετικά χαμηλό.Είναι έγκυρο μόνο αν είναι true το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:103
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
@@ -516,7 +683,7 @@ msgstr ""
 "Ο χρόνος μπαταρίας που απομένει σε δευτερόλεπτα όταν το φορτίο θεωρείται "
 "χαμηλό.Είναι έγκυρο μόνο αν είναι true το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:104
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
@@ -525,23 +692,23 @@ msgstr ""
 "Ο χρόνος μπαταρίας που απομένει σε δευτερόλεπτα όταν το φορτίο θεωρείται "
 "πολύ χαμηλό.Είναι έγκυρο μόνο αν είναι true το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The time remaining when action is taken"
 msgstr "Ο χρόνος που απομένει όταν εκτελείται μια ενέργεια"
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The time remaining when critical"
 msgstr "Ο χρόνος που απομένει όταν το φορτίο είναι εξαιρετικά χαμηλό "
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The time remaining when low"
 msgstr "Ο χρόνος που απομένει όταν το φορτίο είναι χαμηλό "
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The time remaining when very low"
 msgstr "Ο χρόνος που απομένει όταν το φορτίο είναι πολύ χαμηλό "
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:109
 #, fuzzy
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
@@ -551,7 +718,7 @@ msgstr ""
 "είναι σε αδράνεια. Οι έγκυρες τιμές είναι \"hibernate\", \"suspend\" και "
 "\"nothing\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
@@ -563,7 +730,7 @@ msgstr ""
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:111
 #, fuzzy
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
@@ -572,27 +739,73 @@ msgstr ""
 "Αυτή είναι η φωτεινότητα της οθόνης του laptop όταν η συνεδρία είναι αδρανής."
 "Είναι έγκθρο μόνο όταν είναι true το use_time_for_policy"
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid "UPS critical low action"
 msgstr "Ενέργεια για πολύ χαμηλό φορτίο UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:113
+#, fuzzy
+msgid "UPS low power action"
+msgstr "Ενέργεια για πολύ χαμηλό φορτίο UPS"
+
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid "Use gnome-screensaver lock setting"
 msgstr "Χρήση ρύθμισης κλειδώματος του gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid "When to show the notification icon"
 msgstr "Αν θα εμφανίζεται το εικονίδιο ειδοποίησης"
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid "Whether NetworkManager should be connected and disconnected on sleep."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:117
+msgid ""
+"Whether NetworkManager should disconnect before suspending or hibernating "
+"and connect on resume."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:118
+msgid ""
+"Whether or not niced processes should be considered on processor load "
+"calculation"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
 "Αν θα γίνεται αδρανοποίηση, αναστολή ή τίποτα όταν ο υπολογιστής είναι "
 "αδρανής."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "Whether to use time-based notifications"
 msgstr "Αν θα εμφανίζονται το χρονομετρημένες ειδοποιήσεις"
+
+#: ../data/gnome-power-manager.schemas.in.h:121
+msgid ""
+"Whether we should save the GNOME session state when performing a shutdown."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:122
+msgid "Whether we should save the session when performing a shutdown"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:123
+msgid "Whether we should show the events in the statistics window"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:124
+msgid "Whether we should show the events in the statistics window."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:125
+msgid "Whether we should show the legend in the statistics window"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:126
+msgid "Whether we should show the legend in the statistics window."
+msgstr ""
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -602,208 +815,238 @@ msgstr "Ρύθμιση διαχείρισης ενέργειας"
 msgid "Power Management"
 msgstr "Διαχείριση ενέργειας"
 
+#: ../data/gnome-power-statistics.desktop.in.h:1
+#, fuzzy
+msgid "Observe power management"
+msgstr "Ρύθμιση διαχείρισης ενέργειας"
+
+#: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:135
+#, fuzzy
+msgid "Power Statistics"
+msgstr "Ιστορικό ενέργειας"
+
 #: ../data/gpm-feedback-widget.glade.h:1
 msgid "Brightness"
 msgstr "Φωτεινότητα"
 
-#: ../data/gpm-info.glade.h:1
-#, fuzzy
-msgid "<b>Event log</b>"
-msgstr "<b>Γενικά</b>"
-
-#: ../data/gpm-info.glade.h:2
-#, fuzzy
-msgid "<b>Laptop batteries</b>"
-msgstr "<b>Συρτάρι μπαταρίας φορητού</b>"
-
-#: ../data/gpm-info.glade.h:3
-#, fuzzy
-msgid "<b>UPS</b>"
-msgstr "<b>UPS</b>"
-
-#: ../data/gpm-info.glade.h:4
-#, fuzzy
-msgid "<b>Wireless devices</b>"
-msgstr "<b>Ασύρματο ποντίκι</b>"
-
-#: ../data/gpm-info.glade.h:5
-msgid "Charge History"
-msgstr "Ιστορικό φόρτισης"
-
-#: ../data/gpm-info.glade.h:6
-msgid "Device Information"
-msgstr "Πληροφορίες συσκευής"
-
-#: ../data/gpm-info.glade.h:7
-msgid ""
-"Device type: Laptop battery (1)\n"
-"Technology: Lithium ION"
+#: ../data/gpm-graph.glade.h:1
+msgid "Add legend"
 msgstr ""
 
-#: ../data/gpm-info.glade.h:9
-msgid "Estimated Time History"
-msgstr "Ιστορικό εναπομείναντα χρόνου"
-
-#: ../data/gpm-info.glade.h:10
-msgid "Event Log"
+#: ../data/gpm-graph.glade.h:2
+msgid "Add related events"
 msgstr ""
 
-#: ../data/gpm-info.glade.h:11
-#, fuzzy
-msgid "Last full: 22022mWh"
-msgstr "Τελευταία πλήρης φόρτιση:"
-
-#: ../data/gpm-info.glade.h:12
-#, fuzzy
-msgid "More"
-msgstr "Μοντέλο:"
-
-#: ../data/gpm-info.glade.h:13
-msgid "Power History"
-msgstr "Ιστορικό ενέργειας"
-
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1354
-#: ../src/gpm-manager.c:1698
-msgid "Power Information"
-msgstr "Πληροφορίες ενέργειας"
-
-#: ../data/gpm-info.glade.h:15
-msgid "This shows how the battery charge and discharge rate varies over time."
+#: ../data/gpm-graph.glade.h:3
+msgid "Device:"
 msgstr ""
-"Εμφανίζει πως μεταβάλλεται στον χρόνο ο ρυθμός φόρτισης και εκφόρτισης της "
-"μπαταρίας."
 
-#: ../data/gpm-info.glade.h:16
-msgid "This shows how the battery percentage charge varies over time."
+#: ../data/gpm-graph.glade.h:4
+msgid "Graph type:"
 msgstr ""
-"Εμφανίζει πως μεταβάλλεται στον χρόνο το ποσοστό φόρτισης της μπαταρίας."
 
-#: ../data/gpm-info.glade.h:17
-msgid ""
-"This shows how the remaining time until charged or discharged varies over "
-"time."
+#: ../data/gpm-graph.glade.h:5
+msgid "Power Graphs"
 msgstr ""
-"Εμφανίζει πως μεταβάλλεται στον χρόνο ο χρόνος που απομένει για την φόρτιση "
-"και την εκφόρτιση της μπαταρίας."
+
+#: ../data/gpm-inhibit-test.glade.h:1
+msgid "Application:"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:2
+msgid "Burning DVD, titled \"My Photos\""
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:3
+msgid "GNOME Acme Foo"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "Inhibit"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "Inhibit Tester"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:6
+msgid "Reason:"
+msgstr ""
+
+#: ../data/gpm-inhibit-test.glade.h:7
+msgid "UnInhibit"
+msgstr ""
 
 #: ../data/gpm-prefs.glade.h:1
-msgid "<b>Actions</b>"
-msgstr "<b>Ενέργειες</b>"
-
-#: ../data/gpm-prefs.glade.h:2
-msgid "<b>Brightness</b>"
-msgstr "<b>Φωτεινότητα</b>"
-
-#: ../data/gpm-prefs.glade.h:3
 msgid "<b>General</b>"
 msgstr "<b>Γενικά</b>"
 
-#: ../data/gpm-prefs.glade.h:4
+#: ../data/gpm-prefs.glade.h:2
 msgid "<b>Notification Area</b>"
 msgstr "<b>Περιοχή ειδοποίησης</b>"
 
+#: ../data/gpm-prefs.glade.h:3
+#, fuzzy
+msgid "<b>Running on AC power</b>"
+msgstr "<b>Λειτουργία με εναλλασσόμενο ρεύμα</b>"
+
+#: ../data/gpm-prefs.glade.h:4
+#, fuzzy
+msgid "<b>Running on Battery Power</b>"
+msgstr "<b>Λειτουργία με μπαταρία</b>"
+
 #: ../data/gpm-prefs.glade.h:5
-msgid "<b>Sleep</b>"
-msgstr "<b>Αναμονή</b>"
+#, fuzzy
+msgid "<b>Running on UPS</b>"
+msgstr "<b>Λειτουργία με εναλλασσόμενο ρεύμα</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-msgid "General"
-msgstr "Γενικά"
+#, fuzzy
+msgid "<b>Sounds</b>"
+msgstr "<b>Ενέργειες</b>"
 
 #: ../data/gpm-prefs.glade.h:7
+#, fuzzy
+msgid "Actions"
+msgstr "Επιλογές"
+
+#: ../data/gpm-prefs.glade.h:8
+#, fuzzy
+msgid "Always _sleep when the lid is closed"
+msgstr "Όταν το κα_πάκι του υπολογιστή κλείσει:"
+
+#: ../data/gpm-prefs.glade.h:9
+msgid "Custom usage percentage:"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:10
+msgid "Display"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:11
+msgid "Enable UPS discharge alarm"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:12 ../src/gpm-graph-widget.c:96
+#, fuzzy
+msgid "Notification"
+msgstr "<b>Περιοχή ειδοποίησης</b>"
+
+#: ../data/gpm-prefs.glade.h:13
 msgid "Only display when battery _present"
 msgstr "_Να εμφανίζεται μόνο όταν υπάρχει μπαταρία"
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:14
 msgid "Only display when charging or _discharging"
 msgstr "Εμφάνιση μόνο κατά την φόρτιση ή την εκ_φόρτιση"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:15
+msgid "Override brightness on AC change"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:16
 msgid "Power Management Preferences"
 msgstr "Προτιμήσεις διαχείρισης ενέργειας"
 
-#: ../data/gpm-prefs.glade.h:10
-msgid "Prefer power savings over performance"
+#: ../data/gpm-prefs.glade.h:17
+msgid "Power processor profile:"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:18
+msgid "Processing Speed"
 msgstr ""
 
 # #-#-#-#-#  libbonoboui.HEAD.el.po (el)  #-#-#-#-#
 # #-#-#-#-#  libgnomeui.HEAD.el.po (el)  #-#-#-#-##
-#: ../data/gpm-prefs.glade.h:11
-msgid "Put _display to sleep when computer is inactive for:"
+#: ../data/gpm-prefs.glade.h:19
+#, fuzzy
+msgid "Put _display to sleep when inactive for:"
 msgstr "Ανα_μονή οθόνης μετά από αδράνεια του υπολογιστή για:"
 
-#: ../data/gpm-prefs.glade.h:12
-msgid "Put computer to _sleep when it is inactive for:"
+#: ../data/gpm-prefs.glade.h:20
+#, fuzzy
+msgid "Put computer to _sleep when inactive for:"
 msgstr "Αναμονή του υ_πολογιστή μετά από αδράνεια:"
 
-#: ../data/gpm-prefs.glade.h:13
-msgid "Running on AC"
-msgstr "Λειτουργία με AC"
-
-#: ../data/gpm-prefs.glade.h:14
-msgid "Running on Battery"
-msgstr "Λειτουργία με μπαταρία"
-
-#: ../data/gpm-prefs.glade.h:15
-msgid "Running on UPS"
-msgstr "Λειτουργία με UPS"
-
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:21
 msgid "Set display _brightness to:"
 msgstr "Καθορισμός _φωτεινότητας οθόνης σε:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:22
+msgid "Sleep"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:23
 msgid "Sleep _type when inactive:"
 msgstr "Είδος ε_ξοικονόμησης ενέργειας:"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:24
+msgid "Try to set system low power mode"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "Use ambient light to adjust brightness"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:26
+msgid "Use sound to notify in event of error"
+msgstr ""
+
+#: ../data/gpm-prefs.glade.h:27
 msgid "When UPS _power critical:"
 msgstr "Όταν το φορτίο του UPS είναι εξαιρετικά χαμηλό:"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:28
+#, fuzzy
+msgid "When UPS low:"
+msgstr "Όταν το φορτίο του UPS είναι εξαιρετικά χαμηλό:"
+
+#: ../data/gpm-prefs.glade.h:29
 msgid "When battery _power critical:"
 msgstr "Όταν το φορτίο της μ_παταρίας είναι εξαιρετικά χαμηλό:"
 
-#: ../data/gpm-prefs.glade.h:20
+#: ../data/gpm-prefs.glade.h:30
 msgid "When l_aptop lid is closed:"
 msgstr "Όταν το κα_πάκι του υπολογιστή κλείσει:"
 
-#: ../data/gpm-prefs.glade.h:21
+#: ../data/gpm-prefs.glade.h:31
+#, fuzzy
+msgid "When power _button is pressed:"
+msgstr "Ενέργεια κουμπιού αδρανοποίησης"
+
+#: ../data/gpm-prefs.glade.h:32
+#, fuzzy
+msgid "When suspend _button is pressed:"
+msgstr "Ενέργεια κουμπιού αδρανοποίησης"
+
+#: ../data/gpm-prefs.glade.h:33
 msgid "_Always display icon"
 msgstr "Να εμ_φανίζεται πάντα εικονίδιο"
 
-#: ../data/gpm-prefs.glade.h:22
+#: ../data/gpm-prefs.glade.h:34
 msgid "_Dim the laptop panel when idle"
 msgstr "_Μείωση φωτεινότητας του ταμπλό του φορητού όταν είναι σε αδράνεια"
 
-#: ../data/gpm-prefs.glade.h:23
+#: ../data/gpm-prefs.glade.h:35
 msgid "_Never display icon"
 msgstr "Να μην εμ_φανίζεται ποτέ το εικονίδιο"
 
-#: ../data/gpm-prefs.glade.h:24
+#: ../data/gpm-prefs.glade.h:36
 msgid "_Only display when battery life is critical"
 msgstr "Εμ_φάνιση μόνο αν το φορτίο της μπαταρίας είναι εξαιρετικά χαμηλό"
 
-#: ../src/eggtrayicon.c:131
-msgid "Orientation"
-msgstr "Προσανατολισμός"
-
-#: ../src/eggtrayicon.c:132
-msgid "The orientation of the tray."
-msgstr "Ο προσανατολισμός του συρταριού."
-
-#: ../src/gpm-common.c:49
+#: ../src/gpm-common.c:101
 msgid "Unknown time"
 msgstr "Άγνωστος χρόνος"
 
-#: ../src/gpm-common.c:54
+#: ../src/gpm-common.c:106
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i λεπτό"
 msgstr[1] "%i λεπτά"
 
-#: ../src/gpm-common.c:65
+#: ../src/gpm-common.c:117
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -812,18 +1055,18 @@ msgstr[1] "%i ώρες"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:71
+#: ../src/gpm-common.c:123
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:72
+#: ../src/gpm-common.c:124
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ώρα"
 msgstr[1] "ώρες"
 
-#: ../src/gpm-common.c:73
+#: ../src/gpm-common.c:125
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "λεπτό"
@@ -833,278 +1076,352 @@ msgstr[1] "λεπτά"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Διαχείριση ενέργειας για την επιφάνεια εργασίας του GNOME"
 
-#: ../src/gpm-graph-widget.c:76
+#: ../src/gpm-graph-widget.c:78
 msgid "On AC"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:78
+#: ../src/gpm-graph-widget.c:80
 #, fuzzy
 msgid "On battery"
 msgstr "Μπαταρία φορητού"
 
-#: ../src/gpm-graph-widget.c:80
+#: ../src/gpm-graph-widget.c:82
 msgid "LCD dim"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:82
+#: ../src/gpm-graph-widget.c:84
 msgid "LCD resume"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:84
-msgid "DPMS off"
-msgstr ""
-
-#: ../src/gpm-graph-widget.c:86
-msgid "DPMS on"
-msgstr ""
-
-#. The text that should appear in the action combo boxes
-#: ../src/gpm-graph-widget.c:88 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-graph-widget.c:86 ../src/gpm-prefs-core.c:90
+#: ../src/gpm-statistics-core.c:89
 msgid "Suspend"
 msgstr "Αναστολή"
 
-#: ../src/gpm-graph-widget.c:90
+#: ../src/gpm-graph-widget.c:88
 msgid "Resume"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:92 ../src/gpm-prefs-core.c:86
+#: ../src/gpm-graph-widget.c:90 ../src/gpm-prefs-core.c:92
+#: ../src/gpm-statistics-core.c:91
 msgid "Hibernate"
 msgstr "Αδρανοποίηση"
 
-#: ../src/gpm-graph-widget.c:94
+#: ../src/gpm-graph-widget.c:92
 msgid "Lid closed"
 msgstr ""
 
-#: ../src/gpm-graph-widget.c:96
+#: ../src/gpm-graph-widget.c:94
 msgid "Lid opened"
 msgstr ""
 
 #: ../src/gpm-graph-widget.c:98
 #, fuzzy
-msgid "Notification"
-msgstr "<b>Περιοχή ειδοποίησης</b>"
-
-#: ../src/gpm-graph-widget.c:100
-#, fuzzy
 msgid "Unknown event!"
 msgstr "Άγνωστος χρόνος"
 
-#: ../src/gpm-info.c:248
-msgid "Time"
+#. Translators: This is %i hours
+#: ../src/gpm-graph-widget.c:379
+#, fuzzy, c-format
+msgid "%ih"
+msgstr "%i ώρα"
+
+#. Translators: This is %i hours %02i minutes
+#: ../src/gpm-graph-widget.c:382
+#, c-format
+msgid "%ih%02i"
 msgstr ""
 
-#: ../src/gpm-info.c:253
-msgid "Event"
+#. Translators: This is %2i minutes
+#: ../src/gpm-graph-widget.c:387
+#, c-format
+msgid "%2im"
 msgstr ""
 
-#: ../src/gpm-info.c:258
-msgid "Description"
+#. Translators: This is %2i minutes %02i seconds
+#: ../src/gpm-graph-widget.c:390
+#, c-format
+msgid "%2im%02i"
 msgstr ""
 
-#: ../src/gpm-main.c:126
+#. Translators: This is %2i seconds
+#: ../src/gpm-graph-widget.c:394
+#, c-format
+msgid "%2is"
+msgstr ""
+
+#. Translators: This is %i Percentage
+#: ../src/gpm-graph-widget.c:398
+#, c-format
+msgid "%i%%"
+msgstr ""
+
+#. Translators: This is %i Watts
+#: ../src/gpm-graph-widget.c:401
+#, c-format
+msgid "%iW"
+msgstr ""
+
+#. Translators: This is %i Volts
+#: ../src/gpm-graph-widget.c:404
+#, c-format
+msgid "%iV"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:1059 ../src/gpm-power.c:742
+msgid "Charging"
+msgstr "Γίνεται φόρτιση"
+
+#: ../src/gpm-graph-widget.c:1065 ../src/gpm-power.c:745
+msgid "Discharging"
+msgstr "Γίνεται εκφόρτιση"
+
+#: ../src/gpm-graph-widget.c:1071 ../src/gpm-power.c:739
+msgid "Charged"
+msgstr "Φορτίστηκε"
+
+#: ../src/gpm-inhibit.c:294
+#, c-format
+msgid "has stopped the %s from taking place : "
+msgstr ""
+
+#: ../src/gpm-inhibit.c:300
+#, c-format
+msgid "Multiple applications have stopped the %s from taking place."
+msgstr ""
+
+#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:115
+msgid "GNOME Power Preferences"
+msgstr "Προτιμήσεις ενέργειας του GNOME"
+
+#: ../src/gpm-inhibit-test.c:194
+msgid "Power Inhibit Test"
+msgstr ""
+
+#: ../src/gpm-main.c:151
 msgid "Do not daemonize"
 msgstr "Να μην γίνει daemonize"
 
-#: ../src/gpm-main.c:128 ../src/gpm-prefs.c:82
+#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:111 ../src/gpm-statistics.c:109
 msgid "Show extra debugging information"
 msgstr "Προβολή επιπρόσθετων επιλογών αποσφαλμάτωσης"
 
-#: ../src/gpm-main.c:132
+#: ../src/gpm-main.c:155
+msgid "Exit after a small delay (for debugging)"
+msgstr ""
+
+#: ../src/gpm-main.c:157
+msgid "Debug specific files, e.g. power"
+msgstr ""
+
+#: ../src/gpm-main.c:161
 msgid "GNOME Power Manager"
 msgstr "Διαχείριση ενέργειας του GNOME"
 
-#: ../src/gpm-manager.c:550
+#: ../src/gpm-manager.c:242
+#, c-format
+msgid "Request to %s"
+msgstr ""
+
+#: ../src/gpm-manager.c:665
 #, fuzzy
 msgid "On battery power"
 msgstr "Όταν το φορτίο της μ_παταρίας είναι εξαιρετικά χαμηλό:"
 
-#: ../src/gpm-manager.c:565
+#: ../src/gpm-manager.c:680
 #, fuzzy
 msgid "Display power management activated"
 msgstr "Daemon διαχείρισης ενέργειας"
 
-#: ../src/gpm-manager.c:581
+#: ../src/gpm-manager.c:696
 #, fuzzy
 msgid "Laptop lid is closed"
 msgstr "Όταν το κα_πάκι του υπολογιστή κλείσει:"
 
-#: ../src/gpm-manager.c:748
+#: ../src/gpm-manager.c:946
 #, c-format
 msgid "%s because %s"
 msgstr ""
 
-#: ../src/gpm-manager.c:784
+#: ../src/gpm-manager.c:982
 #, fuzzy
 msgid "Doing nothing"
 msgstr "Καμία ενέργεια"
 
-#: ../src/gpm-manager.c:788 ../src/gpm-manager.c:1166
-#: ../src/gpm-manager.c:2303
+#: ../src/gpm-manager.c:986 ../src/gpm-manager.c:1448
+#: ../src/gpm-manager.c:2661
 #, fuzzy
 msgid "Suspending computer"
 msgstr "Αναστολή του υπολογιστή"
 
-#: ../src/gpm-manager.c:793 ../src/gpm-manager.c:1180
-#: ../src/gpm-manager.c:2278
+#: ../src/gpm-manager.c:991 ../src/gpm-manager.c:1462
+#: ../src/gpm-manager.c:2636
 #, fuzzy
 msgid "Hibernating computer"
 msgstr "Αδρανοποίηση"
 
-#: ../src/gpm-manager.c:798
-#, fuzzy
-msgid "DPMS blanking screen"
-msgstr "Κενή οθόνη"
-
-#: ../src/gpm-manager.c:803 ../src/gpm-manager.c:1195
+#: ../src/gpm-manager.c:999 ../src/gpm-manager.c:1477
 #, fuzzy
 msgid "Shutting down computer"
 msgstr "Αναστολή του υπολογιστή"
 
-#: ../src/gpm-manager.c:808
+#: ../src/gpm-manager.c:1004
 msgid "GNOME interactive logout"
 msgstr ""
 
-#: ../src/gpm-manager.c:1007 ../src/gpm-manager.c:1097
+#: ../src/gpm-manager.c:1289 ../src/gpm-manager.c:1385
 msgid "Resuming computer"
 msgstr ""
 
-#: ../src/gpm-manager.c:1019
-#, c-format
-msgid ""
-"HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
+#: ../src/gpm-manager.c:1306
+msgid "Hibernate Problem"
+msgstr "Πρόβλημα αδρανοποίησης"
+
+#: ../src/gpm-manager.c:1307
+#, fuzzy, c-format
+msgid "HAL failed to %s. Check the help file for common problems."
 msgstr ""
 "Ο HAL απέτυχε να  %s. Ελέγξτε τη <a href=\"%s\">σελίδα FAQ</a> για κοινά "
 "προβλήματα."
 
-#: ../src/gpm-manager.c:1021
+#: ../src/gpm-manager.c:1309
 msgid "hibernate"
 msgstr "αδρανοποίηση"
 
-#: ../src/gpm-manager.c:1022
-msgid "Hibernate Problem"
-msgstr "Πρόβλημα αδρανοποίησης"
-
-#: ../src/gpm-manager.c:1109
-#, c-format
-msgid "Battery charged %imWh during suspend"
-msgstr ""
-
-#: ../src/gpm-manager.c:1112
-#, c-format
-msgid "Battery discharged %imWh during suspend"
-msgstr ""
-
-#: ../src/gpm-manager.c:1127
-#, c-format
+#: ../src/gpm-manager.c:1403
+#, fuzzy, c-format
 msgid ""
 "Your computer failed to %s.\n"
-"Check the <a href=\"%s\">FAQ page</a> for common problems."
+"Check the help file for common problems."
 msgstr ""
 "Ο υπολογιστής απέτυχε να  %s. \n"
 "Ελέγξτε το <a href=\"%s\">FAQ page</a> για κοινά προβλήματα."
 
-#: ../src/gpm-manager.c:1129
+#: ../src/gpm-manager.c:1405
 msgid "suspend"
 msgstr "αναστολή"
 
-#: ../src/gpm-manager.c:1130
+#: ../src/gpm-manager.c:1406
 msgid "Suspend Problem"
 msgstr "Πρόβλημα αναστολής"
 
-#: ../src/gpm-manager.c:1167
+#: ../src/gpm-manager.c:1449
 msgid "the DBUS method Suspend() was invoked"
 msgstr ""
 
-#: ../src/gpm-manager.c:1181
+#: ../src/gpm-manager.c:1463
 msgid "the DBUS method Hibernate() was invoked"
 msgstr ""
 
-#: ../src/gpm-manager.c:1196
+#: ../src/gpm-manager.c:1478
 msgid "the DBUS method Shutdown() was invoked"
 msgstr ""
 
-#: ../src/gpm-manager.c:1246
+#: ../src/gpm-manager.c:1492
+#, fuzzy
+msgid "Rebooting computer"
+msgstr "Αδρανοποίηση"
+
+#: ../src/gpm-manager.c:1493
+msgid "the DBUS method Reboot() was invoked"
+msgstr ""
+
+#: ../src/gpm-manager.c:1547
 #, fuzzy
 msgid "Screen resume"
 msgstr "Μείωση φωτεινότητας οθόνης"
 
-#: ../src/gpm-manager.c:1247
+#: ../src/gpm-manager.c:1548
 msgid "idle mode ended"
 msgstr ""
 
-#: ../src/gpm-manager.c:1285
+#: ../src/gpm-manager.c:1578
 msgid "Screen dim"
 msgstr "Μείωση φωτεινότητας οθόνης"
 
-#: ../src/gpm-manager.c:1286
+#: ../src/gpm-manager.c:1579
 msgid "idle mode started"
 msgstr ""
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1304
+#: ../src/gpm-manager.c:1602
 msgid "the system state is idle"
 msgstr ""
 
-#: ../src/gpm-manager.c:1378
+#: ../src/gpm-manager.c:1652 ../src/gpm-manager.c:1998
+msgid "Power Information"
+msgstr "Πληροφορίες ενέργειας"
+
+#: ../src/gpm-manager.c:1676
 msgid "the power button has been pressed"
 msgstr ""
 
-#: ../src/gpm-manager.c:1397
+#: ../src/gpm-manager.c:1695
 msgid "the suspend button has been pressed"
 msgstr ""
 
-#: ../src/gpm-manager.c:1417
+#: ../src/gpm-manager.c:1715
 #, fuzzy
 msgid "the hibernate button has been pressed"
 msgstr "Ενέργεια κουμπιού αδρανοποίησης"
 
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1742
+#, fuzzy
+msgid "The laptop lid has been closed"
+msgstr "Όταν το κα_πάκι του υπολογιστή κλείσει:"
+
+#: ../src/gpm-manager.c:1747
+#, fuzzy
+msgid "The laptop lid has been re-opened"
+msgstr "Όταν το κα_πάκι του υπολογιστή κλείσει:"
+
+#: ../src/gpm-manager.c:1765
 msgid "the lid has been closed on ac power"
 msgstr ""
 
-#: ../src/gpm-manager.c:1472
+#: ../src/gpm-manager.c:1770
 #, fuzzy
 msgid "the lid has been closed on battery power"
 msgstr "Το σύστημα τροφοδοτείται από μπαταρία\n"
 
-#: ../src/gpm-manager.c:1477
-msgid "Turning LCD panel back on"
+#: ../src/gpm-manager.c:1897
+msgid "AC adapter inserted"
 msgstr ""
 
-#: ../src/gpm-manager.c:1478
-msgid "laptop lid re-opened"
+#: ../src/gpm-manager.c:1901
+msgid "AC adapter removed"
 msgstr ""
 
-#: ../src/gpm-manager.c:1604
+#: ../src/gpm-manager.c:1911
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr ""
 
-#: ../src/gpm-manager.c:1686
+#: ../src/gpm-manager.c:1992
 msgid "Power Critically Low"
 msgstr "Πολύ χαμηλό φορτίο μπαταρίας"
 
-#: ../src/gpm-manager.c:1690
+#: ../src/gpm-manager.c:1994
 msgid "Power Very Low"
 msgstr "Πολύ χαμηλή μπαταρία"
 
-#: ../src/gpm-manager.c:1694
+#: ../src/gpm-manager.c:1996
 msgid "Power Low"
 msgstr "Χαμηλή μπαταρία"
 
-#: ../src/gpm-manager.c:1719
+#: ../src/gpm-manager.c:2018
 #, fuzzy
 msgid "battery is critically low"
 msgstr "Πολύ χαμηλό φορτίο μπαταρίας"
 
-#: ../src/gpm-manager.c:1763
+#: ../src/gpm-manager.c:2063
 msgid "Your battery is now fully charged"
 msgstr "Η μπαταρία  σας είναι πλήρως φορτισμένη"
 
-#: ../src/gpm-manager.c:1764
+#: ../src/gpm-manager.c:2064
 msgid "Battery Charged"
 msgstr "Η μπαταρία φορτίστηκε"
 
-#: ../src/gpm-manager.c:1830
+#: ../src/gpm-manager.c:2135
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1112,7 +1429,7 @@ msgstr ""
 "Η μπαταρία είναι σε εξαιρετικά χαμηλό επίπεδο φόρτισης και ο υπολογιστής θα "
 "<b>κλείσει</b> όταν η μπαταρία αδειάσει "
 
-#: ../src/gpm-manager.c:1835
+#: ../src/gpm-manager.c:2140
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1122,7 +1439,7 @@ msgstr ""
 "μπει σε αναστολή.<br><b> ΣΗΜΕΙΩΣΗ:</b> Ένα μικρό ποσοστό ενέργειας "
 "απαιτείται για να διατηρήσει τον υπολογιστή σας σε αναστολή."
 
-#: ../src/gpm-manager.c:1841
+#: ../src/gpm-manager.c:2146
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
@@ -1130,7 +1447,7 @@ msgstr ""
 "Η μπαταρία είναι σε εξαιρετικά χαμηλό επίπεδο φόρτισης και ο υπολογιστής "
 "πρόκειται να αδρανοποιηθεί."
 
-#: ../src/gpm-manager.c:1845
+#: ../src/gpm-manager.c:2150
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
@@ -1138,13 +1455,13 @@ msgstr ""
 "Η μπαταρία είναι σε εξαιρετικά χαμηλό επίπεδο φόρτισης και ο υπολογιστής θα "
 "κλείσει."
 
-#: ../src/gpm-manager.c:1857
+#: ../src/gpm-manager.c:2163
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr ""
 "Αποσυνδέθηκε το καλώδιο εναλλασσόμενου ρεύματος. Το σύστημα τώρα "
 "τροφοδοτείται από τη μπαταρία."
 
-#: ../src/gpm-manager.c:1864
+#: ../src/gpm-manager.c:2170
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1153,7 +1470,7 @@ msgstr ""
 "Απομένουν περίπου <b>%s</b> από το φορτίο της μπαταρίας (%d%%). Τοποθετήστε "
 "το καλώδιο στη πρίζα για να μην χάσετε δεδομένα."
 
-#: ../src/gpm-manager.c:1948
+#: ../src/gpm-manager.c:2258
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1161,30 +1478,30 @@ msgstr ""
 "Το UPS είναι σε εξαιρετικά χαμηλό επίπεδο φορτίου  και ο υπολογιστής θα "
 "<b>κλείσει</b> όταν το UPS αδειάσει "
 
-#: ../src/gpm-manager.c:1953
+#: ../src/gpm-manager.c:2263
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
 "Το UPS είναι σε εξαιρετικά χαμηλό επίπεδο φορτίου και ο υπολογιστής "
 "πρόκειται να αδρανοποιηθεί."
 
-#: ../src/gpm-manager.c:1957
+#: ../src/gpm-manager.c:2267
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "Το UPS είναι σε εξαιρετικά χαμηλό επίπεδο φορτίου και ο υπολογιστής θα "
 "κλείσει."
 
-#: ../src/gpm-manager.c:1963
+#: ../src/gpm-manager.c:2274
 #, fuzzy
 msgid "UPS is critically low"
 msgstr "Ενέργεια για πολύ χαμηλό φορτίο UPS"
 
-#: ../src/gpm-manager.c:1966
+#: ../src/gpm-manager.c:2277
 msgid "Your system is running on backup power!"
 msgstr "Το σύστημα τροφοδοτείται από εφεδρική ενέργεια!"
 
-#: ../src/gpm-manager.c:1970
+#: ../src/gpm-manager.c:2281
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1193,7 +1510,7 @@ msgstr ""
 "Απομένουν περίπου <b>%s</b> από το φορτίο του UPS  (%d%%). Τοποθετήστε το "
 "καλώδιο στη πρίζα για να μην χάσετε δεδομένα."
 
-#: ../src/gpm-manager.c:2056
+#: ../src/gpm-manager.c:2371
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1203,171 +1520,348 @@ msgstr ""
 "ενέργειας (%d%%). Αυτή η συσκευή θα σταματήσει να λειτουργεί σε λίγο αν δεν "
 "φορτιστεί."
 
-#: ../src/gpm-manager.c:2279
+#: ../src/gpm-manager.c:2454
+msgid "Your battery may have been recalled"
+msgstr ""
+
+#: ../src/gpm-manager.c:2455
+msgid ""
+"The battery in your computer may have been recalled by the manufacturer and "
+"you may be at risk.\n"
+msgstr ""
+
+#: ../src/gpm-manager.c:2458
+msgid "For more information visit the following web site:\n"
+msgstr ""
+
+#: ../src/gpm-manager.c:2637
 msgid "user clicked hibernate from tray menu"
 msgstr ""
 
-#: ../src/gpm-manager.c:2304
+#: ../src/gpm-manager.c:2662
 msgid "user clicked suspend from tray menu"
 msgstr ""
 
-#: ../src/gpm-power.c:444
+#: ../src/gpm-power.c:507
 msgid "Laptop battery"
 msgstr "Μπαταρία φορητού"
 
-#: ../src/gpm-power.c:446
+#: ../src/gpm-power.c:509
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:448
+#: ../src/gpm-power.c:511
 msgid "Wireless mouse"
 msgstr "Ασύρματο ποντίκι"
 
-#: ../src/gpm-power.c:450
+#: ../src/gpm-power.c:513
 msgid "Wireless keyboard"
 msgstr "Ασύρματο πληκτρολόγιο"
 
-#: ../src/gpm-power.c:452
+#: ../src/gpm-power.c:515
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:454
+#: ../src/gpm-power.c:517 ../src/gpm-statistics-core.c:631
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: ../src/gpm-power.c:472
+#: ../src/gpm-power.c:535
 msgid "ups"
 msgstr ""
 
-#: ../src/gpm-power.c:474
+#: ../src/gpm-power.c:537
 msgid "mouse"
 msgstr ""
 
-#: ../src/gpm-power.c:476
+#: ../src/gpm-power.c:539
 #, fuzzy
 msgid "keyboard"
 msgstr "Ασύρματο πληκτρολόγιο"
 
-#: ../src/gpm-power.c:478
+#: ../src/gpm-power.c:541
 msgid "pda"
 msgstr ""
 
-#: ../src/gpm-power.c:480
+#: ../src/gpm-power.c:543
 #, fuzzy
 msgid "unknown"
 msgstr "Άγνωστο"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:732
+msgid "Product:"
+msgstr "Προϊόν"
+
+#: ../src/gpm-power.c:736 ../src/gpm-power.c:739 ../src/gpm-power.c:742
+#: ../src/gpm-power.c:745
+msgid "Status:"
+msgstr "Κατάσταση:"
+
+#: ../src/gpm-power.c:736
+msgid "Missing"
+msgstr "Λείπει"
+
+#: ../src/gpm-power.c:749
+msgid "Percentage charge:"
+msgstr "Ποσοστό φόρτισης:"
+
+#: ../src/gpm-power.c:778
+msgid "Vendor:"
+msgstr "Διανομέας:"
+
+#: ../src/gpm-power.c:786 ../src/gpm-power.c:791
 msgid "Lithium ion"
 msgstr "Λιθίου ιόντων"
 
-#: ../src/gpm-power.c:724
+#: ../src/gpm-power.c:788 ../src/gpm-power.c:793
 msgid "Lead acid"
 msgstr "Μολύβδου"
 
-#: ../src/gpm-power.c:746
+#: ../src/gpm-power.c:795
+#, fuzzy
+msgid "Lithium polymer"
+msgstr "Λιθίου ιόντων"
+
+#: ../src/gpm-power.c:797
+msgid "Nickel metal hydride"
+msgstr ""
+
+#: ../src/gpm-power.c:804
+msgid "Technology:"
+msgstr "Τεχνολογία:"
+
+#: ../src/gpm-power.c:808
+msgid "Serial number:"
+msgstr "Σειριακός αριθμός"
+
+#: ../src/gpm-power.c:812
+#, fuzzy
+msgid "Model:"
+msgstr "Μοντέλο:"
+
+#: ../src/gpm-power.c:818
+msgid "Remaining time:"
+msgstr "Χρόνος που απομένει:"
+
+#: ../src/gpm-power.c:824
 msgid "Excellent"
 msgstr "Εξαιρετική"
 
-#: ../src/gpm-power.c:748
+#: ../src/gpm-power.c:826
 msgid "Good"
 msgstr "Καλή"
 
-#: ../src/gpm-power.c:750
+#: ../src/gpm-power.c:828
 msgid "Fair"
 msgstr "Μέτρια"
 
-#: ../src/gpm-power.c:752
+#: ../src/gpm-power.c:830
 msgid "Poor"
 msgstr "Κακή"
 
-#: ../src/gpm-power.c:1231
-msgid "fully charged"
+#: ../src/gpm-power.c:833
+msgid "Capacity:"
+msgstr "Χωρητικότητα:"
+
+#: ../src/gpm-power.c:839 ../src/gpm-power.c:867
+msgid "Current charge:"
+msgstr "Τρέχουσα φόρτιση:"
+
+#: ../src/gpm-power.c:845
+#, fuzzy
+msgid "Last full charge:"
 msgstr "πλήρης φόρτιση"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:850 ../src/gpm-power.c:872
+msgid "Design charge:"
+msgstr "Σχεδιασμός φόρτισης:"
+
+#: ../src/gpm-power.c:855
+msgid "Charge rate (raw):"
+msgstr "Ρυθμός φόρτισης (προχ):"
+
+#: ../src/gpm-power.c:860
+msgid "Charge rate (smoothed):"
+msgstr "Ρυθμός φόρτισης (εξομάλυνση):"
+
+#: ../src/gpm-power.c:1335
 #, fuzzy, c-format
-msgid "%s remaining"
+msgid "%s fully charged (%i%%)\n"
+msgstr "πλήρης φόρτιση"
+
+#: ../src/gpm-power.c:1341
+#, fuzzy, c-format
+msgid "%s %s remaining (%i%%)\n"
 msgstr "απομένουν"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
-msgid "discharging"
+#: ../src/gpm-power.c:1345
+#, fuzzy, c-format
+msgid "%s discharging (%i%%)\n"
 msgstr "γίνεται εκφόρτιση"
 
-#: ../src/gpm-power.c:1246
+#: ../src/gpm-power.c:1352
 #, fuzzy, c-format
-msgid "%s until charged"
+msgid "%s %s until charged (%i%%)\n"
 msgstr "μέχρι τη φόρτιση"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
-msgid "charging"
-msgstr "φόρτιση"
+#: ../src/gpm-power.c:1356
+#, fuzzy, c-format
+msgid "%s charging (%i%%)\n"
+msgstr "γίνεται εκφόρτιση"
+
+#: ../src/gpm-power.c:1389
+#, fuzzy
+msgid "Recalculating information..."
+msgstr "Προβολή επιπρόσθετων επιλογών αποσφαλμάτωσης"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1400
 msgid "Computer is running on backup power\n"
 msgstr "Το σύστημα τροφοδοτείται από ενέργεια backup\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1403
 msgid "Computer is running on AC power\n"
 msgstr "Το σύστημα τροφοδοτείται από εναλλασσόμενο ρεύμα\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1406
 msgid "Computer is running on battery power\n"
 msgstr "Το σύστημα τροφοδοτείται από μπαταρία\n"
 
-#: ../src/gpm-prefs.c:86
-msgid "GNOME Power Preferences"
-msgstr "Προτιμήσεις ενέργειας του GNOME"
-
-#: ../src/gpm-prefs.c:99
+#: ../src/gpm-prefs.c:137
 msgid "Power Preferences"
 msgstr "Προτιμήσεις ενέργειας"
 
-#: ../src/gpm-prefs-core.c:85
+#. The text that should appear in the action combo boxes
+#: ../src/gpm-prefs-core.c:89 ../src/gpm-statistics-core.c:88
+msgid "Ask me"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:91 ../src/gpm-statistics-core.c:90
 msgid "Shutdown"
 msgstr "Κλείσιμο υπολογιστή"
 
-#: ../src/gpm-prefs-core.c:87
+#: ../src/gpm-prefs-core.c:93 ../src/gpm-statistics-core.c:92
 msgid "Blank screen"
 msgstr "Κενή οθόνη"
 
-#: ../src/gpm-prefs-core.c:88
+#: ../src/gpm-prefs-core.c:94 ../src/gpm-prefs-core.c:102
+#: ../src/gpm-statistics-core.c:93
 msgid "Do nothing"
 msgstr "Καμία ενέργεια"
 
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:97
+msgid "Based on processor load"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:98
+msgid "Automatic power saving"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:99
+msgid "Maximum power saving"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:100
+msgid "Custom"
+msgstr ""
+
+#: ../src/gpm-prefs-core.c:101
+msgid "Maximum speed"
+msgstr ""
+
 # #-#-#-#-#  nautilus.HEAD.el.po (el)  #-#-#-#-#
 #
-#: ../src/gpm-prefs-core.c:232
+#: ../src/gpm-prefs-core.c:257
 msgid "Never"
 msgstr "Ποτέ"
 
-#: ../src/gpm-tray-icon.c:111
-msgid "_Suspend"
-msgstr "Αναστο_λή"
+#: ../src/gpm-statistics.c:113
+#, fuzzy
+msgid "GNOME Power Statistics"
+msgstr "Διαχείριση ενέργειας του GNOME"
 
-#: ../src/gpm-tray-icon.c:112
-msgid "Suspend the computer"
-msgstr "Αναστολή του υπολογιστή"
+#: ../src/gpm-statistics-core.c:59
+msgid "Charge History"
+msgstr "Ιστορικό φόρτισης"
 
-#: ../src/gpm-tray-icon.c:113
-msgid "Hi_bernate"
-msgstr "Α_δρανοποίηση"
+#: ../src/gpm-statistics-core.c:60
+msgid "Power History"
+msgstr "Ιστορικό ενέργειας"
 
-#: ../src/gpm-tray-icon.c:114
-msgid "Make the computer go to sleep"
-msgstr "Μετάβαση σε εξοικονόμηση ενέργειας υπολογιστή"
+#: ../src/gpm-statistics-core.c:61
+#, fuzzy
+msgid "Voltage History"
+msgstr "Ιστορικό φόρτισης"
 
-#: ../src/gpm-tray-icon.c:115
+#: ../src/gpm-statistics-core.c:62
+msgid "Estimated Time History"
+msgstr "Ιστορικό εναπομείναντα χρόνου"
+
+#: ../src/gpm-tray-icon.c:299
+msgid "Licensed under the GNU General Public License Version 2"
+msgstr "Εκδόθηκε κάτω από την GNU General Public License Version 2"
+
+#: ../src/gpm-tray-icon.c:300
+msgid ""
+"Power Manager is free software; you can redistribute it and/or\n"
+"modify it under the terms of the GNU General Public License\n"
+"as published by the Free Software Foundation; either version 2\n"
+"of the License, or (at your option) any later version."
+msgstr ""
+"Ο Power Manager  είναι ελεύθερο λογισμικό. Μπορείτε να το αναδιανέμετε ή/"
+"και \n"
+"να το τροποποιείτε μέσω των όρων της GNU General Public License όπως \n"
+"αυτή δημοσιεύτηκε από το Free Software Foundation, έκδοση 2 , ή \n"
+"(προαιρετικά) οποιαδήποτε νεότερη έκδοση."
+
+#: ../src/gpm-tray-icon.c:304
+msgid ""
+"Power Manager is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details."
+msgstr ""
+"Ο Power Manager  διανέμεται με την ελπίδα οτι θα είναι χρήσιμος, \n"
+"αλλά ΧΩΡΙΣ ΚΑΜΜΙΑ ΑΠΟΛΥΤΩΣ ΕΓΓΥΗΣΗ για συγκεκριμένο σκοπό.\n"
+"Δείτε για περισσότερες λεπτομέρειες την\n"
+" GNU General Public License"
+
+#: ../src/gpm-tray-icon.c:308
+msgid ""
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
+msgstr ""
+"Θα πρέπει να έχετε λάβει ένα αντίγραφο της GNU General Public License \n"
+"μαζί με αυτό το πρόγραμμα. Αν όχι γράψτε στο Free Software Foundation, "
+"Inc., \n"
+"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+
+# #-#-#-#-#  nautilus.HEAD.el.po (el)  #-#-#-#-#
+#
+# #-#-#-#-#  procman.HEAD.el.po (el)  #-#-#-#-#
+#
+#: ../src/gpm-tray-icon.c:313
+msgid "translator-credits"
+msgstr ""
+"Κώστας Παπαδήμας <pkst@gnome.org>\n"
+"Nikos Charonitakis <nikosx@gmail.com>"
+
+#. Preferences
+#: ../src/gpm-tray-icon.c:449
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
-#: ../src/gpm-tray-icon.c:117
-msgid "_Information"
-msgstr "Πληρο_φορίες"
+#. Statistics
+#: ../src/gpm-tray-icon.c:457
+#, fuzzy
+msgid "Power _History"
+msgstr "Ιστορικό ενέργειας"
 
 # #-#-#-#-#  gnomemeeting.HEAD.el.po (el)  #-#-#-#-#
 #
@@ -1401,7 +1895,8 @@ msgstr "Πληρο_φορίες"
 #
 # #-#-#-#-#  gnomemeeting-el.po (gnomemeeting 0.12.2)  #-#-#-#-#
 #
-#: ../src/gpm-tray-icon.c:119
+#. Help
+#: ../src/gpm-tray-icon.c:469
 msgid "_Help"
 msgstr "_Βοήθεια"
 
@@ -1409,60 +1904,106 @@ msgstr "_Βοήθεια"
 # #-#-#-#-#  memory.el.po (abiword 1.0)  #-#-#-#-#
 # #-#-#-#-#  gnome-libs-el.po (gnome-libs 1.2.12)  #-#-#-#-#
 #
-#: ../src/gpm-tray-icon.c:121
+#. About
+#: ../src/gpm-tray-icon.c:477
 msgid "_About"
 msgstr "Π_ερί"
 
-#: ../src/gpm-tray-icon.c:334
-msgid "Licensed under the GNU General Public License Version 2"
-msgstr "Εκδόθηκε κάτω από την GNU General Public License Version 2"
+#: ../src/gpm-tray-icon.c:572
+msgid "_Suspend"
+msgstr "Αναστο_λή"
 
-#: ../src/gpm-tray-icon.c:335
-msgid ""
-"Power Manager is free software; you can redistribute it and/or\n"
-"modify it under the terms of the GNU General Public License\n"
-"as published by the Free Software Foundation; either version 2\n"
-"of the License, or (at your option) any later version."
-msgstr ""
-"Ο Power Manager  είναι ελεύθερο λογισμικό. Μπορείτε να το αναδιανέμετε ή/"
-"και \n"
-"να το τροποποιείτε μέσω των όρων της GNU General Public License όπως \n"
-"αυτή δημοσιεύτηκε από το Free Software Foundation, έκδοση 2 , ή \n"
-"(προαιρετικά) οποιαδήποτε νεότερη έκδοση."
+#: ../src/gpm-tray-icon.c:582
+msgid "Hi_bernate"
+msgstr "Α_δρανοποίηση"
 
-#: ../src/gpm-tray-icon.c:339
-msgid ""
-"Power Manager is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-"GNU General Public License for more details."
-msgstr ""
-"Ο Power Manager  διανέμεται με την ελπίδα οτι θα είναι χρήσιμος, \n"
-"αλλά ΧΩΡΙΣ ΚΑΜΜΙΑ ΑΠΟΛΥΤΩΣ ΕΓΓΥΗΣΗ για συγκεκριμένο σκοπό.\n"
-"Δείτε για περισσότερες λεπτομέρειες την\n"
-" GNU General Public License"
+#~ msgid "Check network utilization before sleeping"
+#~ msgstr "Έλεγχος φόρτου δικτύου πριν από τη μετάβαση σε αναμονή"
 
-#: ../src/gpm-tray-icon.c:343
-msgid ""
-"You should have received a copy of the GNU General Public License\n"
-"along with this program; if not, write to the Free Software\n"
-"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
-"02110-1301, USA."
-msgstr ""
-"Θα πρέπει να έχετε λάβει ένα αντίγραφο της GNU General Public License \n"
-"μαζί με αυτό το πρόγραμμα. Αν όχι γράψτε στο Free Software Foundation, "
-"Inc., \n"
-"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+#, fuzzy
+#~ msgid ""
+#~ "If network utilization should be checked before doing the idle action."
+#~ msgstr "Αν θα γίνεται έλεγχος φόρτου CPU πριν να γίνει κάποια ενέργεια."
 
-# #-#-#-#-#  nautilus.HEAD.el.po (el)  #-#-#-#-#
-#
-# #-#-#-#-#  procman.HEAD.el.po (el)  #-#-#-#-#
-#
-#: ../src/gpm-tray-icon.c:348
-msgid "translator-credits"
-msgstr ""
-"Κώστας Παπαδήμας <pkst@gnome.org>\n"
-"Nikos Charonitakis <nikosx@gmail.com>"
+#, fuzzy
+#~ msgid "<b>Event log</b>"
+#~ msgstr "<b>Γενικά</b>"
+
+#, fuzzy
+#~ msgid "<b>Laptop batteries</b>"
+#~ msgstr "<b>Συρτάρι μπαταρίας φορητού</b>"
+
+#, fuzzy
+#~ msgid "<b>UPS</b>"
+#~ msgstr "<b>UPS</b>"
+
+#, fuzzy
+#~ msgid "<b>Wireless devices</b>"
+#~ msgstr "<b>Ασύρματο ποντίκι</b>"
+
+#~ msgid "Device Information"
+#~ msgstr "Πληροφορίες συσκευής"
+
+#, fuzzy
+#~ msgid "Last full: 22022mWh"
+#~ msgstr "Τελευταία πλήρης φόρτιση:"
+
+#~ msgid ""
+#~ "This shows how the battery charge and discharge rate varies over time."
+#~ msgstr ""
+#~ "Εμφανίζει πως μεταβάλλεται στον χρόνο ο ρυθμός φόρτισης και εκφόρτισης "
+#~ "της μπαταρίας."
+
+#~ msgid "This shows how the battery percentage charge varies over time."
+#~ msgstr ""
+#~ "Εμφανίζει πως μεταβάλλεται στον χρόνο το ποσοστό φόρτισης της μπαταρίας."
+
+#~ msgid ""
+#~ "This shows how the remaining time until charged or discharged varies over "
+#~ "time."
+#~ msgstr ""
+#~ "Εμφανίζει πως μεταβάλλεται στον χρόνο ο χρόνος που απομένει για την "
+#~ "φόρτιση και την εκφόρτιση της μπαταρίας."
+
+#~ msgid "<b>Brightness</b>"
+#~ msgstr "<b>Φωτεινότητα</b>"
+
+#~ msgid "<b>Sleep</b>"
+#~ msgstr "<b>Αναμονή</b>"
+
+#~ msgid "General"
+#~ msgstr "Γενικά"
+
+#~ msgid "Running on AC"
+#~ msgstr "Λειτουργία με AC"
+
+#~ msgid "Running on Battery"
+#~ msgstr "Λειτουργία με μπαταρία"
+
+#~ msgid "Running on UPS"
+#~ msgstr "Λειτουργία με UPS"
+
+#~ msgid "Orientation"
+#~ msgstr "Προσανατολισμός"
+
+#~ msgid "The orientation of the tray."
+#~ msgstr "Ο προσανατολισμός του συρταριού."
+
+#, fuzzy
+#~ msgid "DPMS blanking screen"
+#~ msgstr "Κενή οθόνη"
+
+#~ msgid "charging"
+#~ msgstr "φόρτιση"
+
+#~ msgid "Suspend the computer"
+#~ msgstr "Αναστολή του υπολογιστή"
+
+#~ msgid "Make the computer go to sleep"
+#~ msgstr "Μετάβαση σε εξοικονόμηση ενέργειας υπολογιστή"
+
+#~ msgid "_Information"
+#~ msgstr "Πληρο_φορίες"
 
 #~ msgid ""
 #~ "Whether we should check network utilization before doing the idle action."
@@ -1494,54 +2035,6 @@ msgstr ""
 #~ msgid "Screen off"
 #~ msgstr "Οθόνη ανενεργή"
 
-#~ msgid "Status:"
-#~ msgstr "Κατάσταση:"
-
-#~ msgid "Missing"
-#~ msgstr "Λείπει"
-
-#~ msgid "Charged"
-#~ msgstr "Φορτίστηκε"
-
-#~ msgid "Charging"
-#~ msgstr "Γίνεται φόρτιση"
-
-#~ msgid "Discharging"
-#~ msgstr "Γίνεται εκφόρτιση"
-
-#~ msgid "Product:"
-#~ msgstr "Προϊόν"
-
-#~ msgid "Vendor:"
-#~ msgstr "Διανομέας:"
-
-#~ msgid "Technology:"
-#~ msgstr "Τεχνολογία:"
-
-#~ msgid "Serial number:"
-#~ msgstr "Σειριακός αριθμός"
-
-#~ msgid "Remaining time:"
-#~ msgstr "Χρόνος που απομένει:"
-
-#~ msgid "Percentage charge:"
-#~ msgstr "Ποσοστό φόρτισης:"
-
-#~ msgid "Capacity:"
-#~ msgstr "Χωρητικότητα:"
-
-#~ msgid "Current charge:"
-#~ msgstr "Τρέχουσα φόρτιση:"
-
-#~ msgid "Design charge:"
-#~ msgstr "Σχεδιασμός φόρτισης:"
-
-#~ msgid "Charge rate (raw):"
-#~ msgstr "Ρυθμός φόρτισης (προχ):"
-
-#~ msgid "Charge rate (smoothed):"
-#~ msgstr "Ρυθμός φόρτισης (εξομάλυνση):"
-
 #, fuzzy
 #~ msgid "Poor condition"
 #~ msgstr "Ενέργεια κουμπιού Power"
@@ -1556,14 +2049,5 @@ msgstr ""
 #~ msgid "Whether to use an icon for desktop systems"
 #~ msgstr "Αν θα χρησιμοποιείται εικονίδιο για σταθμούς εργασίας."
 
-#~ msgid "<b>Running on AC</b>"
-#~ msgstr "<b>Λειτουργία με εναλλασσόμενο ρεύμα</b>"
-
-#~ msgid "<b>Running on battery</b>"
-#~ msgstr "<b>Λειτουργία με μπαταρία</b>"
-
 #~ msgid "Configuration"
 #~ msgstr "Ρύθμιση"
-
-#~ msgid "Options"
-#~ msgstr "Επιλογές"
