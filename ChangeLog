@@ -1,3 +1,15 @@
+2006-10-14  Richard Hughes <richard@hughsie.com>
+
+	* configure.in:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-button.c:
+	* src/gpm-button.h:
+	* src/gpm-manager.c:
+	Add XEVENTS functionality. This allows g-p-m to respond to events sent
+	by X, as soon the kernel is going to be outputting INPUT events.
+	Disabled by default. Very lightly tested.
+
 2006-10-12  Richard Hughes <richard@hughsie.com>
 
 	* data/gpm-prefs.glade:

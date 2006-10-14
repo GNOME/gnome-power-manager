@@ -63,6 +63,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-inhibit.h"
 #include "gpm-polkit.h"
+#include "gpm-button.h"
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 #include "gpm-interface-statistics.h"
@@ -82,21 +83,6 @@ typedef enum {
 	GPM_WARNING_ACTION = 5
 } GpmWarning;
 
-#define GPM_BUTTON_POWER		"power"
-#define GPM_BUTTON_SLEEP		"sleep"
-#define GPM_BUTTON_SUSPEND		"suspend"
-#define GPM_BUTTON_HIBERNATE		"hibernate"
-#define GPM_BUTTON_LID			"lid"
-#define GPM_BUTTON_BRIGHT_UP		"brightness-up"
-#define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
-#define GPM_BUTTON_BRIGHT_UP_DEP	"brightnessup"	 /* Remove when we depend on HAL 0.5.8 */
-#define GPM_BUTTON_BRIGHT_DOWN_DEP	"brightnessdown" /* as these are the old names */
-#define GPM_BUTTON_KBD_BRIGHT_UP	"kbd-illum-up"
-#define GPM_BUTTON_KBD_BRIGHT_DOWN	"kbd-illum-down"
-#define GPM_BUTTON_KBD_BRIGHT_TOGGLE	"kbd-illum-toggle"
-#define GPM_BUTTON_LOCK			"lock"
-#define GPM_BUTTON_BATTERY		"battery"
-
 #define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
 #define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
 
@@ -105,6 +91,7 @@ struct GpmManagerPrivate
 	GConfClient	*gconf_client;
 
 	GpmDpms		*dpms;
+	GpmButton	*button;
 	GpmIdle		*idle;
 	GpmHal		*hal;
 	GpmHalPower	*hal_power;
@@ -2125,7 +2112,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
 		gpm_debug ("Data is not yet trusted.. wait..");
 		return;
-	}	
+	}
 
 	/* As the level is more critical than the last warning, save it */
 	manager->priv->last_primary_warning = warning_type;
@@ -2793,6 +2780,15 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->power, "battery-perhaps-recall",
 			  G_CALLBACK (power_battery_status_perhaps_recall_cb), manager);
 
+	manager->priv->button = gpm_button_new ();
+	if (manager->priv->button) {
+		g_signal_connect (manager->priv->button, "button-pressed",
+				  G_CALLBACK (power_button_pressed_cb), manager);
+	} else {
+		gpm_warning ("You have no XEVENTS support. You may not get "
+			     "buttons to work with very new kernels");
+	}
+
 	manager->priv->hal = gpm_hal_new ();
 	g_signal_connect (manager->priv->hal, "daemon-start",
 			  G_CALLBACK (hal_daemon_monitor_cb), manager);
@@ -3007,6 +3003,9 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->screensaver);
 
 	/* optional gobjects */
+	if (manager->priv->button) {
+		g_object_unref (manager->priv->button);
+	}
 	if (manager->priv->hal_cpufreq) {
 		g_object_unref (manager->priv->hal_cpufreq);
 	}

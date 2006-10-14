@@ -147,6 +147,17 @@ fi
 #AC_MSG_RESULT(yes)
 
 dnl ---------------------------------------------------------------------------
+dnl - Respond to XEvents
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(xevents, [  --enable-xevents      Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)
+AC_MSG_CHECKING([whether to support xevents])
+have_xevents=no
+if test x$enable_xevents = xyes ; then
+    have_xevents=yes
+    AC_DEFINE(HAVE_XEVENTS, 1, [Define if we use XEVENTS])
+fi
+
+dnl ---------------------------------------------------------------------------
 dnl - DocBook Documentation
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(docbook-docs, [  --enable-docbook-docs   build documentation (requires xmlto)],enable_docbook_docs=$enableval,enable_docbook_docs=auto)
@@ -494,6 +505,7 @@ echo "
         libguniqueapp support:     ${have_libguniqueapp}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}
+        XEVENTS support:           ${have_xevents}
         Docbook support:           ${enable_docbook_docs}
         documentation dir:         $DOCDIR
         dbus-1 system.d dir:       $DBUS_SYS_DIR
@@ -510,7 +522,7 @@ if test "$have_hal_new" = "no" ; then
    echo "**                       BIG HAL WARNING                       **"
    echo "*****************************************************************"
    echo "You have an old version of HAL that has multiple known bugs that"
-   echo "may affect the working of gnome-power-manager."
+   echo "may affect the correct working of gnome-power-manager."
    echo
    fi
 

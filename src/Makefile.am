@@ -130,6 +130,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-proxy.c					\
 	gpm-refcount.h					\
 	gpm-refcount.c					\
+	gpm-button.h					\
+	gpm-button.c					\
 	gpm-polkit.h					\
 	gpm-polkit.c					\
 	gpm-hal-cpufreq.h				\
