@@ -1,3 +1,12 @@
+2006-10-16  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-button.c: (gpm_button_init):
+	Added another accesskey. Will fix up the X stuff in a few mins.
+
+	* src/gpm-power.c: (gpm_power_get_battery_device_entry):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_add_device):
+	Only add a battery to the drop down if present. Fixes #362690
+
 2006-10-14  Richard Hughes <richard@hughsie.com>
 
 	* configure.in:

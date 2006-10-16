@@ -693,7 +693,7 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 		return NULL;
 	}
 	entry = g_hash_table_lookup (power->priv->battery_kind_cache, &battery_kind);
-	if (! entry) {
+	if (entry == NULL) {
 		return NULL;
 	}
 	if (device_num > g_slist_length (entry->devices) - 1) {

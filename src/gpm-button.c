@@ -277,6 +277,7 @@ gpm_button_init (GpmButton *button)
 	gpm_button_monitor_key (button, "<Control>F11", GPM_BUTTON_BRIGHT_UP);
 
 	gpm_button_monitor_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
+	gpm_button_monitor_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
 	gpm_button_monitor_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
 	gpm_button_monitor_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
 	gpm_button_monitor_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);

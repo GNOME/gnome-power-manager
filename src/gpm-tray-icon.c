@@ -514,6 +514,12 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 		if (device == NULL) {
 			break;
 		}
+
+		/* only add battery to list if present */
+		if (device->battery_status.is_present == FALSE) {
+			gpm_debug ("not adding device '%s' as not present", device->udi);
+			break;
+		}
 		gpm_debug ("adding device '%s'", device->udi);
 
 		/* generate the label */
