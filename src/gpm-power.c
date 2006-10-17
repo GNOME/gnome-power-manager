@@ -1092,23 +1092,6 @@ battery_kind_cache_update (GpmPower		 *power,
 		type_status->is_charging = FALSE;
 	}
 
-	/* If the primary battery is neither charging nor discharging, and
-	 * the charge is low the battery is most likely broken.
-	 * In this case, we'll use the ac_adaptor to determine whether it's
-	 * charging or not. */
-	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY &&
-	    type_status->is_charging == FALSE &&
-	    type_status->is_discharging == FALSE &&
-	    type_status->percentage_charge > 0 &&
-	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
-		gboolean on_ac;
-		on_ac = gpm_hal_power_is_on_ac (power->priv->hal_power);
-		gpm_debug ("Battery is neither charging nor discharging, "
-			   "using ac_adaptor value %i", on_ac);
-		type_status->is_charging = on_ac;
-		type_status->is_discharging = !(on_ac);
-	}
-
 	gpm_debug ("%i devices of type %s", num_present, gpm_power_kind_to_localised_string (entry->battery_kind));
 
 	/* Perform following calculations with floating point otherwise we might
@@ -1126,6 +1109,24 @@ battery_kind_cache_update (GpmPower		 *power,
 		}
 		type_status->percentage_charge = pc;
 	}
+
+	/* If the primary battery is neither charging nor discharging, and
+	 * the charge is low the battery is most likely broken.
+	 * In this case, we'll use the ac_adaptor to determine whether it's
+	 * charging or not. */
+	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY &&
+	    type_status->is_charging == FALSE &&
+	    type_status->is_discharging == FALSE &&
+	    type_status->percentage_charge > 0 &&
+	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
+		gboolean on_ac;
+		on_ac = gpm_hal_power_is_on_ac (power->priv->hal_power);
+		gpm_debug ("Battery is neither charging nor discharging, "
+			   "using ac_adaptor value %i", on_ac);
+		type_status->is_charging = on_ac;
+		type_status->is_discharging = !(on_ac);
+	}
+
 	/* We only do the "better" remaining time algorithm if the battery has rate,
 	   i.e not a UPS, which gives it's own battery.remaining_time but has no rate */
 	if (type_status->charge_rate_smoothed > 0) {

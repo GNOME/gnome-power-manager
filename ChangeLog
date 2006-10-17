@@ -1,5 +1,16 @@
 2006-10-17  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-manager.c: (power_button_pressed_cb):
+	Don't poke the screen when we shut the lid. This should stop the
+	display going off, on, off when the lid is closed. Should fix #362694.
+
+	* src/gpm-power.c: (battery_kind_cache_update):
+	When we fall back to using the ac-adapter, we check the percentage.
+	The percentage was set below the check, and thus always failed.
+	Pointed out in #361583, and will probably affect multibattery laptops.
+
+2006-10-17  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-button.c: (gpm_button_grab_keystring), (gpm_button_init):
 	Only allow single keys to be grabbed. It makes our life simpler.
 
