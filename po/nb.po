@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.15.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-10-14 09:02+0100\n"
-"PO-Revision-Date: 2006-08-09 15:11+0200\n"
+"POT-Creation-Date: 2006-10-17 16:12+0200\n"
+"PO-Revision-Date: 2006-10-17 16:19+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -718,14 +718,12 @@ msgid "Power Management"
 msgstr "Strømstyring"
 
 #: ../data/gnome-power-statistics.desktop.in.h:1
-#, fuzzy
 msgid "Observe power management"
-msgstr "Konfigurer strømstyring"
+msgstr "Overvåk strømstyring"
 
 #: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:135
-#, fuzzy
 msgid "Power Statistics"
-msgstr "Strømhistorikk"
+msgstr "Strømstatistikk"
 
 #: ../data/gpm-feedback-widget.glade.h:1
 msgid "Brightness"
@@ -733,23 +731,23 @@ msgstr "Lysstyrke"
 
 #: ../data/gpm-graph.glade.h:1
 msgid "Add legend"
-msgstr ""
+msgstr "Legg til historikk"
 
 #: ../data/gpm-graph.glade.h:2
 msgid "Add related events"
-msgstr ""
+msgstr "Legg til relaterte hendelser"
 
 #: ../data/gpm-graph.glade.h:3
 msgid "Device:"
-msgstr ""
+msgstr "Enhet:"
 
 #: ../data/gpm-graph.glade.h:4
 msgid "Graph type:"
-msgstr ""
+msgstr "Type graf:"
 
 #: ../data/gpm-graph.glade.h:5
 msgid "Power Graphs"
-msgstr ""
+msgstr "Strømgrafer"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -818,11 +816,11 @@ msgstr "Alltid gå i hvilemodus når lokket lukkes"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Custom usage percentage:"
-msgstr ""
+msgstr "Egendefinert bruksprosent:"
 
 #: ../data/gpm-prefs.glade.h:10
 msgid "Display"
-msgstr ""
+msgstr "Skjerm"
 
 #: ../data/gpm-prefs.glade.h:11
 msgid "Enable UPS discharge alarm"
@@ -872,7 +870,7 @@ msgstr "Sett lysstyrke for skjerm til:"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "Sleep"
-msgstr ""
+msgstr "Sov"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "Sleep _type when inactive:"
@@ -1025,43 +1023,43 @@ msgstr "%i time"
 #: ../src/gpm-graph-widget.c:382
 #, c-format
 msgid "%ih%02i"
-msgstr ""
+msgstr "%it%02i"
 
 #. Translators: This is %2i minutes
 #: ../src/gpm-graph-widget.c:387
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
 #: ../src/gpm-graph-widget.c:390
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
 #: ../src/gpm-graph-widget.c:394
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2is"
 
 #. Translators: This is %i Percentage
 #: ../src/gpm-graph-widget.c:398
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. Translators: This is %i Watts
 #: ../src/gpm-graph-widget.c:401
 #, c-format
 msgid "%iW"
-msgstr ""
+msgstr "%iW"
 
 #. Translators: This is %i Volts
 #: ../src/gpm-graph-widget.c:404
 #, c-format
 msgid "%iV"
-msgstr ""
+msgstr "%iV"
 
 #: ../src/gpm-graph-widget.c:1059 ../src/gpm-power.c:742
 #, fuzzy
@@ -1586,14 +1584,13 @@ msgstr "%s til batteriet er fulladet"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-power.c:1356
-#, fuzzy, c-format
+#, c-format
 msgid "%s charging (%i%%)\n"
-msgstr "lader ut"
+msgstr "%s lader (%i%%)\n"
 
 #: ../src/gpm-power.c:1389
-#, fuzzy
 msgid "Recalculating information..."
-msgstr "Vis ekstra feilsøkingsinformasjon"
+msgstr "Beregner informasjon på nytt..."
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
@@ -1657,9 +1654,8 @@ msgid "Never"
 msgstr "Aldri"
 
 #: ../src/gpm-statistics.c:113
-#, fuzzy
 msgid "GNOME Power Statistics"
-msgstr "GNOME strømstyring"
+msgstr "GNOME strømstatistikk"
 
 #: ../src/gpm-statistics-core.c:59
 msgid "Charge History"
@@ -1670,9 +1666,8 @@ msgid "Power History"
 msgstr "Strømhistorikk"
 
 #: ../src/gpm-statistics-core.c:61
-#, fuzzy
 msgid "Voltage History"
-msgstr "Ladningshistorikk"
+msgstr "Historikk for spenning"
 
 #: ../src/gpm-statistics-core.c:62
 msgid "Estimated Time History"
@@ -1723,9 +1718,8 @@ msgstr "_Brukervalg"
 
 #. Statistics
 #: ../src/gpm-tray-icon.c:457
-#, fuzzy
 msgid "Power _History"
-msgstr "Strømhistorikk"
+msgstr "Strøm_historikk"
 
 #. Help
 #: ../src/gpm-tray-icon.c:469
@@ -1737,147 +1731,10 @@ msgstr "_Hjelp"
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/gpm-tray-icon.c:572
+#: ../src/gpm-tray-icon.c:578
 msgid "_Suspend"
 msgstr "Gå i _hvilemodus"
 
-#: ../src/gpm-tray-icon.c:582
+#: ../src/gpm-tray-icon.c:588
 msgid "Hi_bernate"
 msgstr "_Dvalemodus"
-
-#~ msgid "Check network utilization before sleeping"
-#~ msgstr "Sjekk bruk av nettverksforbindelse før maskinen settes i hvilemodus"
-
-#, fuzzy
-#~ msgid ""
-#~ "If network utilization should be checked before doing the idle action."
-#~ msgstr ""
-#~ "Hvorvidt prosessorbelastningen skal sjekkes før inaktiv-handling utføres."
-
-#~ msgid "<b>Event log</b>"
-#~ msgstr "<b>Hendelseslogg</b>"
-
-#~ msgid "<b>Laptop batteries</b>"
-#~ msgstr "<b>Batteri på bærbar datamaskin</b>"
-
-#~ msgid "<b>UPS</b>"
-#~ msgstr "<b>UPS</b>"
-
-#~ msgid "<b>Wireless devices</b>"
-#~ msgstr "<b>Trådløst utstyr</b>"
-
-#~ msgid "Device Information"
-#~ msgstr "Informasjon om enhet"
-
-#~ msgid ""
-#~ "Device type: Laptop battery (1)\n"
-#~ "Technology: Lithium ION"
-#~ msgstr ""
-#~ "Enhetstype: Bærbart batteri (1)\n"
-#~ "Teknologi: Lithium ION"
-
-#~ msgid "Event Log"
-#~ msgstr "Hendelseslogg"
-
-# why the 22022mWh?
-#~ msgid "Last full: 22022mWh"
-#~ msgstr "Sist full: 22022mWh"
-
-#~ msgid ""
-#~ "This shows how the battery charge and discharge rate varies over time."
-#~ msgstr ""
-#~ "Dette viser hvordan batteriets rate for lading og utlading varierer over "
-#~ "tid."
-
-#~ msgid "This shows how the battery percentage charge varies over time."
-#~ msgstr "Dette viser hvordan batteriladingsprosenten varierer over tid."
-
-#~ msgid ""
-#~ "This shows how the remaining time until charged or discharged varies over "
-#~ "time."
-#~ msgstr ""
-#~ "Dette viser hvordan gjenværende tid før opp/utlading varierer over tid."
-
-#~ msgid "<b>Brightness</b>"
-#~ msgstr "<b>Lysstyrke</b>"
-
-#~ msgid "<b>Sleep</b>"
-#~ msgstr "<b>Hvilemodus</b>"
-
-#~ msgid "General"
-#~ msgstr "Generelt"
-
-#~ msgid "Prefer power savings over performance"
-#~ msgstr "Foretrekk strømsparing framfor ytelse"
-
-#~ msgid "Orientation"
-#~ msgstr "Orientering"
-
-#~ msgid "The orientation of the tray."
-#~ msgstr "Orientering for trauet."
-
-#~ msgid "DPMS off"
-#~ msgstr "DPMS av"
-
-#~ msgid "DPMS on"
-#~ msgstr "DPMS på"
-
-#~ msgid "Time"
-#~ msgstr "Tid"
-
-#~ msgid "Event"
-#~ msgstr "Hendelse"
-
-#~ msgid "Description"
-#~ msgstr "Beskrivelse"
-
-#~ msgid "DPMS blanking screen"
-#~ msgstr "DPMS demper skjermen"
-
-#~ msgid "Battery charged %imWh during suspend"
-#~ msgstr "Batteriet ble ladet med %imWh i hvilemodus"
-
-#~ msgid "Battery discharged %imWh during suspend"
-#~ msgstr "Batteriet ble ladet ut med %imWh i hvilemodus"
-
-#~ msgid "Turning LCD panel back on"
-#~ msgstr "Skrur på igjen LCD-panelet"
-
-#~ msgid "laptop lid re-opened"
-#~ msgstr "lokk på bærbar maskin åpnet igjen"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>Produkt:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>Status:</b> Mangler\n"
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>Status:</b> Ladet\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>Status:</b> Lader\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>Status:</b> Lader ut\n"
-
-#~ msgid "<b>Vendor:</b> %s\n"
-#~ msgstr "<b>Produsent:</b> %s\n"
-
-#~ msgid "<b>Model:</b> %s\n"
-#~ msgstr "<b>Modell:</b> %s\n"
-
-#~ msgid "<b>Capacity:</b> %i%% (%s)\n"
-#~ msgstr "<b>Kapasitet:</b> %i%% (%s)\n"
-
-#~ msgid "<b>Last full charge:</b> %.1f %s\n"
-#~ msgstr "<b>Nivå ved siste fulle lading:</b> %.1f %s\n"
-
-#~ msgid "Suspend the computer"
-#~ msgstr "Sett datamaskinen i hvilemodus"
-
-#~ msgid "Make the computer go to sleep"
-#~ msgstr "Sett datamaskinen i dvalemodus"
-
-#~ msgid "_Information"
-#~ msgstr "_Informasjon"
