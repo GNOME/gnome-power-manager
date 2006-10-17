@@ -356,7 +356,7 @@ gpm_info_data_free (GpmInfoData *info_data)
 {
 	GpmInfoDataPoint *point;
 	int i;
-	for (i=0; i > info_data->priv->array->len; i++) {
+	for (i=0; i < info_data->priv->array->len; i++) {
 		point = g_ptr_array_index (info_data->priv->array, i);
 		gpm_info_data_free_point (point);
 	}

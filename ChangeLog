@@ -1,5 +1,22 @@
 2006-10-17  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-hal-cpufreq.c: (gpm_hal_cpufreq_get_governor)
+	Free the return string.
+
+	* src/gpm-hal-cpufreq.c: (gpm_hal_cpufreq_finalize):
+	Free any gobjects in use.
+
+	* src/gpm-info-data.c: (gpm_info_data_free):
+	Correct a typo that was stopping the info data being freed.
+
+	* src/gpm-proxy.c: (gpm_proxy_finalize):
+	Only unref if the object is not null. Paranoia.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_finalize):
+	Free the strings in use by the gobject.
+
+2006-10-17  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-manager.c: (power_button_pressed_cb):
 	Don't poke the screen when we shut the lid. This should stop the
 	display going off, on, off when the lid is closed. Should fix #362694.
@@ -153,7 +170,7 @@
 	patched from CVS.
 
 2006-10-09  Gabor Kelemen  <kelemeng@gnome.hu>
-	
+
 	* src/gpm-graph-widget.c: 
 	Mark time measurement units for translation. Fix for bug #359089.
 
@@ -552,7 +569,7 @@
 	a lot less memory. Also clean up this module.
 	gnome-power-statistics now works as well as the "Information" screen
 	that we used before and is out of process.
-	
+
 	* src/gpm-info.c:
 	Send the correct format information for the event log dbus method.
 
@@ -627,7 +644,7 @@
 
 	* src/gpm-hal-power.c:
 	Remove erroneous HALD_SERVICE definitions.
-	
+
 	* src/gpm-manager.c:
 	Don't watch to see if the tray icon is destroyed; it can't happen with
 	GtkStatusIcon.

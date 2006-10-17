@@ -62,7 +62,6 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 struct GpmTrayIconPrivate
 {
-	GtkWidget		*popup_menu;
 	GtkStatusIcon		*status_icon;
 	GpmPower		*power;
 	gboolean		 show_notifications;
@@ -657,7 +656,18 @@ gpm_tray_icon_finalize (GObject *object)
 
 	tray_icon = GPM_TRAY_ICON (object);
 
-	g_object_unref (tray_icon->priv->power);
+	if (tray_icon->priv->stock_id != NULL) {
+		g_free (tray_icon->priv->stock_id);
+	}
+	if (tray_icon->priv->power != NULL) {
+		g_object_unref (tray_icon->priv->power);
+	}
+	if (tray_icon->priv->status_icon != NULL) {
+		g_object_unref (tray_icon->priv->status_icon);
+	}
+	if (tray_icon->priv->notify != NULL) {
+		notify_notification_close (tray_icon->priv->notify, NULL);
+	}
 
 	g_return_if_fail (tray_icon->priv != NULL);
 
@@ -840,7 +850,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 
 #ifdef HAVE_LIBNOTIFY
 	if (icon->priv->notify != NULL) {
-		notify_notification_close (icon->priv->notify, &error);
+		g_object_unref (icon->priv->notify);
 	}
 	if (error != NULL) {
 		g_error_free (error);

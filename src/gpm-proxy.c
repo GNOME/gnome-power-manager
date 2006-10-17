@@ -379,11 +379,22 @@ gpm_proxy_finalize (GObject *object)
 	gproxy->priv = GPM_PROXY_GET_PRIVATE (gproxy);
 
 	gpm_proxy_disconnect (gproxy);
-	g_object_unref (gproxy->priv->proxy);
-	g_object_unref (gproxy->priv->dbus_monitor);
-	g_free (gproxy->priv->service);
-	g_free (gproxy->priv->interface);
-	g_free (gproxy->priv->path);
+
+	if (gproxy->priv->proxy != NULL) {
+		g_object_unref (gproxy->priv->proxy);
+	}
+	if (gproxy->priv->dbus_monitor != NULL) {
+		g_object_unref (gproxy->priv->dbus_monitor);
+	}
+	if (gproxy->priv->service != NULL) {
+		g_free (gproxy->priv->service);
+	}
+	if (gproxy->priv->interface != NULL) {
+		g_free (gproxy->priv->interface);
+	}
+	if (gproxy->priv->path != NULL) {
+		g_free (gproxy->priv->path);
+	}
 }
 
 /**

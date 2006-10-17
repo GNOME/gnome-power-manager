@@ -457,6 +457,7 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 	if (governor != NULL) {
 		*cpufreq_type = gpm_hal_cpufreq_string_to_enum (governor);
 		cpufreq->priv->current_governor = *cpufreq_type;
+		g_free (governor);
 	}
 
 	return TRUE;
@@ -566,8 +567,12 @@ gpm_hal_cpufreq_finalize (GObject *object)
 	cpufreq = GPM_HAL_CPUFREQ (object);
 	cpufreq->priv = GPM_GPM_CPUFREQ_GET_PRIVATE (cpufreq);
 
-	g_object_unref (cpufreq->priv->hal);
-	g_object_unref (cpufreq->priv->gproxy);
+	if (cpufreq->priv->hal != NULL) {
+		g_object_unref (cpufreq->priv->hal);
+	}
+	if (cpufreq->priv->gproxy != NULL) {
+		g_object_unref (cpufreq->priv->gproxy);
+	}
 
 	G_OBJECT_CLASS (gpm_hal_cpufreq_parent_class)->finalize (object);
 }
