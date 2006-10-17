@@ -105,8 +105,7 @@ static GConfEnumStringPair icon_policy_enum_map [] = {
 #define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
-/* If sleep time in a slider is set to 61 it is considered as never sleep */
-const int NEVER_TIME_ON_SLIDER = 61;
+#define GPM_SLEEP_MAX_TIME		60
 
 /**
  * gpm_prefs_class_init:
@@ -253,14 +252,7 @@ gpm_prefs_format_time_cb (GtkScale *scale,
 			  GpmPrefs *prefs)
 {
 	gchar *str;
-	if ((gint) value == NEVER_TIME_ON_SLIDER) {
-		str = g_strdup (_("Never"));
-	} else {
-		/* we auto-add the gss idle time to stop users getting
-		   confused. */
-		str = gpm_get_timestring (value * 60);
-	}
-
+	str = gpm_get_timestring (value * 60);
 	return str;
 }
 
@@ -279,19 +271,14 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 
 	value = (int) gtk_range_get_value (range);
 
-	if (value == NEVER_TIME_ON_SLIDER) {
-		/* power manager interprets 0 as Never */
-		value = 0;
-	} else {
-		/* We take away the g-s idle time as the slider represents
-		 * global time but we only do our timeout from when g-s
-		 * declares the session idle */
-		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-		value -= gs_idle_time;
+	/* We take away the g-s idle time as the slider represents
+	 * global time but we only do our timeout from when g-s
+	 * declares the session idle */
+	gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	value -= gs_idle_time;
 
-		/* policy is in seconds, slider is in minutes */
-		value *= 60;
-	}
+	/* policy is in seconds, slider is in minutes */
+	value *= 60;
 
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "gconf_key");
 	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
@@ -312,6 +299,7 @@ gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
 	GtkWidget *widget;
 	gint value;
 	gboolean is_writable;
+	guint gs_idle_time;
 
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	g_signal_connect (G_OBJECT (widget), "format-value",
@@ -324,15 +312,10 @@ gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
-	if (value == 0) {
-		value = NEVER_TIME_ON_SLIDER;
-	} else {
-		int gs_idle_time;
-		/* policy is in seconds, slider is in minutes */
-		value /= 60;
-		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-		value += gs_idle_time;
-	}
+	/* policy is in seconds, slider is in minutes */
+	value /= 60;
+	gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+	value += gs_idle_time;
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
@@ -403,6 +386,30 @@ gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
 }
 
 /**
+ * gpm_prefs_show_widget:
+ **/
+static gboolean
+gpm_prefs_show_widget (GpmPrefs    *prefs,
+		       const gchar *widgetname,
+		       gboolean     show)
+{
+	GtkWidget *widget;
+
+	widget = glade_xml_get_widget (prefs->priv->glade_xml, widgetname);
+	if (widget == NULL) {
+		gpm_warning ("widget '%s' not found", widgetname);
+		return FALSE;
+	}
+
+	if (show) {
+		gtk_widget_show_all (widget);
+	} else {
+		gtk_widget_hide_all (widget);
+	}
+	return TRUE;
+}
+
+/**
  * gpm_prefs_action_combo_changed_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
@@ -414,6 +421,7 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	gchar *value;
 	const gchar *action;
 	gchar *gpm_pref_key;
+	const gchar *widget_name;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 
@@ -437,6 +445,13 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "gconf_key");
 	gpm_debug ("Changing %s to %s", gpm_pref_key, action);
 	gconf_client_set_string (prefs->priv->gconf_client, gpm_pref_key, action, NULL);
+
+	widget_name = gtk_widget_get_name (widget);
+	if (widget_name && strcmp (widget_name, "combobox_sleep_ac_type") == 0) {
+		gpm_prefs_show_widget (prefs, "hbox_sleep_ac_custom", action != ACTION_NOTHING);
+	} else if (widget_name && strcmp (widget_name, "combobox_sleep_battery_type") == 0) {
+		gpm_prefs_show_widget (prefs, "hbox_sleep_battery_custom", action != ACTION_NOTHING);
+	}
 }
 
 /**
@@ -467,6 +482,10 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 						    gpm_pref_key, NULL);
 
 	gtk_widget_set_sensitive (widget, is_writable);
+
+	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
+	g_signal_connect (G_OBJECT (widget), "changed",
+			  G_CALLBACK (gpm_prefs_action_combo_changed_cb), prefs);
 
 	if (value == NULL) {
 		gpm_warning ("invalid schema, please re-install");
@@ -511,10 +530,6 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 			 gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added - 1);
 		i++;
 	}
-	g_object_set_data (G_OBJECT (widget), "gconf_key", (gpointer) gpm_pref_key);
-	g_signal_connect (G_OBJECT (widget), "changed",
-			  G_CALLBACK (gpm_prefs_action_combo_changed_cb),
-			  prefs);
 
 	g_free (value);
 }
@@ -632,12 +647,12 @@ set_idle_hscale_stops (GpmPrefs    *prefs,
 {
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
-	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
+	if (gs_idle_time + 1 > GPM_SLEEP_MAX_TIME) {
 		gpm_warning ("gnome-screensaver timeout is really big. "
 			     "Not sure what to do");
 		return;
 	}
-	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, NEVER_TIME_ON_SLIDER);
+	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, GPM_SLEEP_MAX_TIME);
 }
 
 /**
@@ -762,7 +777,6 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 	const gchar *policy;
 	gchar *gpm_pref_key;
 	gboolean show_custom = FALSE;
-	GtkWidget *twidget;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (value == NULL) {
@@ -788,21 +802,9 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 
 	/* show other options */
 	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
-		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"hbox_processor_ac_custom");
-		if (show_custom) {
-			gtk_widget_show_all (twidget);
-		} else {
-			gtk_widget_hide_all (twidget);
-		}
+		gpm_prefs_show_widget (prefs, "hbox_processor_ac_custom", show_custom);
 	} else {
-		twidget = glade_xml_get_widget (prefs->priv->glade_xml,
-						"hbox_processor_battery_custom");
-		if (show_custom) {
-			gtk_widget_show_all (twidget);
-		} else {
-			gtk_widget_hide_all (twidget);
-		}
+		gpm_prefs_show_widget (prefs, "hbox_processor_battery_custom", show_custom);
 	}
 
 	g_free (value);
@@ -919,21 +921,28 @@ prefs_setup_sleep (GpmPrefs *prefs)
 					     NULL};
 
 	/* Sleep Type Combo Box */
-	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_general_type",
-				      GPM_PREF_SLEEP_TYPE,
+	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_ac_type",
+				      GPM_PREF_AC_SLEEP_TYPE,
 				      sleep_type_actions);
+	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_battery_type",
+				      GPM_PREF_BATTERY_SLEEP_TYPE,
+				      sleep_type_actions);
+	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_ups_type",
+				      GPM_PREF_BATTERY_SLEEP_TYPE, /* fixme */
+				      sleep_type_actions);
+
 	/* Sleep time until we sleep */
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ac_inactive",
 				      GPM_PREF_AC_SLEEP_COMPUTER);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_battery_inactive",
 				      GPM_PREF_BATTERY_SLEEP_COMPUTER);
-//FIXME
-//	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ups_inactive",
-//				      GPM_PREF_UPS_SLEEP_COMPUTER);
+	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ups_inactive",
+				      GPM_PREF_BATTERY_SLEEP_COMPUTER);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	set_idle_hscale_stops (prefs, "hscale_sleep_battery_inactive", delay);
 	set_idle_hscale_stops (prefs, "hscale_sleep_ac_inactive", delay);
+	set_idle_hscale_stops (prefs, "hscale_sleep_battery_inactive", delay);
+	set_idle_hscale_stops (prefs, "hscale_sleep_ups_inactive", delay);
 
 	if (prefs->priv->has_batteries == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_sleep_battery");

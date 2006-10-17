@@ -43,7 +43,8 @@ G_BEGIN_DECLS
 #define GPM_PREF_DISPLAY_STATE_CHANGE	GPM_PREF_DIR "/display_state_change"
 #define GPM_PREF_DISPLAY_AMBIENT	GPM_PREF_DIR "/display_ambient"
 
-#define GPM_PREF_SLEEP_TYPE		GPM_PREF_DIR "/action_sleep_type"
+#define GPM_PREF_AC_SLEEP_TYPE		GPM_PREF_DIR "/action_ac_sleep_type"
+#define GPM_PREF_BATTERY_SLEEP_TYPE	GPM_PREF_DIR "/action_battery_sleep_type"
 #define GPM_PREF_BUTTON_SUSPEND		GPM_PREF_DIR "/action_button_suspend"
 #define GPM_PREF_BUTTON_HIBERNATE	GPM_PREF_DIR "/action_button_hibernate"
 #define GPM_PREF_BUTTON_POWER		GPM_PREF_DIR "/action_button_power"

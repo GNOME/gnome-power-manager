@@ -526,8 +526,19 @@
    </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/action_sleep_type</key>
-      <applyto>/apps/gnome-power-manager/action_sleep_type</applyto>
+      <key>/schemas/apps/gnome-power-manager/action_ac_sleep_type</key>
+      <applyto>/apps/gnome-power-manager/action_ac_sleep_type</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>Whether to hibernate, suspend or do nothing when inactive</short>
+        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
+      </locale>
+   </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/action_battery_sleep_type</key>
+      <applyto>/apps/gnome-power-manager/action_battery_sleep_type</applyto>
       <type>string</type>
       <default>suspend</default>
       <locale name="C">

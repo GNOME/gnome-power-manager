@@ -1,3 +1,21 @@
+2006-10-17  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-button.c: (gpm_button_grab_keystring), (gpm_button_init):
+	Only allow single keys to be grabbed. It makes our life simpler.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_add_device):
+	Use the localised general string to describe the battery device in the
+	dropdown. This fixes #362690.
+
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* src/gpm-gconf.h:
+	* src/gpm-manager.c: (idle_changed_cb):
+	* src/gpm-prefs-core.c: (gpm_prefs_format_time_cb),
+	Make the sleep options drop-downs like the other options, as feedback
+	from a typical non-technical user (my girlfriend) was that is wasn't
+	clear how to disable.
+
 2006-10-16  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-button.c: (gpm_button_init):

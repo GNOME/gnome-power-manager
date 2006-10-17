@@ -108,52 +108,24 @@ gpm_button_grab_keystring (GpmButton   *button,
 			   const gchar *keystr,
 			   gchar      **hashkey)
 {
-	guint i;
 	guint modmask = 0;
-	const gchar *part = NULL;
 	KeySym keysym = 0;
 	KeyCode keycode = 0;
-	gchar **set;
 	Display *display;
 	gint ret;
-
-	/* delimit by angle brackets */
-	set = g_strsplit_set (keystr, "<>", 0);
-
-	/* invalid set ? */
-	if (set == NULL) {
-		return FALSE;
-	}
 
 	/* get the current X Display */
 	display = GDK_DISPLAY ();
 
-	/* try to parse each substring */
-	i = 0;
-	while (set[i]) {
-		part = set[i];
-		if (strlen (part) > 0) {
-			/* try to find a mask string */
-			if (strcmp (part, "Control") == 0) {
-				modmask = modmask | ControlMask;
-			} else if (strcmp (part, "Alt") == 0) {
-				modmask = modmask | Mod1Mask;
-			} else if (strcmp (part, "Win") == 0) {
-				modmask = modmask | Mod4Mask;
-			} else {
-				/* no mask string, lets try find a keysym */
-				keysym = XStringToKeysym (part);
-				if (keysym == NoSymbol) {
-					gpm_debug ("'%s' not in XStringToKeysym", part);
-				} else {
-					keycode = XKeysymToKeycode (display, keysym);
-				}
-			}
-		}
-		i++;
-	}
-	g_strfreev (set);
+	keysym = XStringToKeysym (keystr);
 
+	/* no mask string, lets try find a keysym */
+	if (keysym == NoSymbol) {
+		gpm_debug ("'%s' not in XStringToKeysym", keystr);
+		return FALSE;
+	}
+
+	keycode = XKeysymToKeycode (display, keysym);
 	/* check we got a valid keycode */
 	if (keycode == 0) {
 		return FALSE;
@@ -182,7 +154,7 @@ gpm_button_grab_keystring (GpmButton   *button,
 		return FALSE;
 	}
 
-	/* we are not proceessing the error */
+	/* we are not processing the error */
 	gdk_flush ();
 	gdk_error_trap_pop ();
 
@@ -273,9 +245,6 @@ gpm_button_init (GpmButton *button)
 	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
 	/* register the brightness keys */
-	gpm_button_monitor_key (button, "<Control>F10", GPM_BUTTON_BRIGHT_DOWN);
-	gpm_button_monitor_key (button, "<Control>F11", GPM_BUTTON_BRIGHT_UP);
-
 	gpm_button_monitor_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
 	gpm_button_monitor_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
 	gpm_button_monitor_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);

@@ -1598,8 +1598,12 @@ idle_changed_cb (GpmIdle    *idle,
 		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
 			return;
 		}
-		/* can only be hibernate or suspend */
-		manager_policy_do (manager, GPM_PREF_SLEEP_TYPE, _("the system state is idle"));
+		/* can only be hibernate, suspend or nothing */
+		if (on_ac) {
+			manager_policy_do (manager, GPM_PREF_AC_SLEEP_TYPE, _("the system state is idle"));
+		} else {
+			manager_policy_do (manager, GPM_PREF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
+		}
 
 		break;
 	default:

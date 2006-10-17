@@ -507,6 +507,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 	guint i;
 	gchar *icon_name;
 	gchar *label;
+	const gchar *desc;
 	gint percentage;
 
 	for (i=0; i<MAX_BATTERIES_PER_TYPE; i++) {
@@ -524,7 +525,8 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 
 		/* generate the label */
 		percentage = device->battery_status.percentage_charge;
-		label = g_strdup_printf ("%s (%i%%)", device->product, percentage);
+		desc = gpm_power_kind_to_localised_string (kind);
+		label = g_strdup_printf ("%s (%i%%)", desc, percentage);
 		item = gtk_image_menu_item_new_with_label (label);
 		g_free (label);
 
