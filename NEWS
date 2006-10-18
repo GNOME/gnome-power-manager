@@ -1,8 +1,65 @@
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
 
-This _unstable_ release contains lots of new features since 2.16.0 was released.
-2.16.1 will be released in the next couple of weeks as a bugfix to 2.16.0
+This _unstable_ release contains lots of new features since 2.16.1 was released.
+
+==============
+Version 2.17.2
+==============
+
+Released October 18, 2006
+
+General
+
+ - Fix up the recent configure change to allow g-p-m to build without libnotity
+   (Frederic Peters) #359824
+ - Add in preliminary support for detecting batteries that might explode.
+   See http://hughsient.livejournal.com/ for more details.
+
+Power Manager
+
+ - Fix the hal interface so we automatically connect up the device
+   DeviceCondition and PropertyChanged on HAL restart. #349842
+ - Remove a potential null-dereference, spotted by Joseph Sacco. #356667
+ - Replace the hardware info pane with a drop-down of devices. #356804
+   This saves another 200kb from the daemon process.
+ - Add initial support for keyboard backlight device - this works with
+   the Apple Macbook Pro. (David Zeuthen) #357994
+ - Only load the GpmHal* interface gobjects if we have the hardware.
+   This saves another 100k of writable memory on my desktop PC.
+ - Use the localised general string to describe the battery device in the
+   dropdown. #362690.
+ - Add XEVENTS functionality. This allows g-p-m to respond to events sent
+   by X, as soon the kernel is going to be outputting INPUT events.
+ - Fix up a couple of small memory leaks detected by valgrind.
+
+Power Preferences
+
+ - Fix guniqueapp support for the preferences program (Elijah Newren)
+   and add support in the statistics program.
+ - Make the auto-sleep functionality disable feature easier to understand.
+
+Power Statistics
+
+ - gnome-power-statistics now works instead of the "Information" screen
+   that we used before. As it this is out of process we save 300kb for each
+   instance of gnome-power-manager daemon running.
+ - We can now trivially add new graph types and export them over DBUS.
+ - The statistics application now includes light/dark coloured symbols with
+   different shapes for colour-blind or partially sighted people.
+ - gnome-power-statistics now remembers settings between invocations.
+ - Add a proper tango gpm-statistics tango icon. (Jakub Steiner)
+ - Add an icon the the statistics program to the "System Tools" menu.
+
+Translators
+
+ - Kjartan Maraas (nb)
+ - Hendrik Richter (de)
+ - Yair Hershkovitz (he)
+ - Erdal Ronahi (ku)
+ - Francisco Javier F. Serrador (es)
+ - Priit Laes (et)
+ - Ilkka Tuohela (fi)
 
 ==============
 Version 2.17.1
