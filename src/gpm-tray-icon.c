@@ -665,9 +665,11 @@ gpm_tray_icon_finalize (GObject *object)
 	if (tray_icon->priv->status_icon != NULL) {
 		g_object_unref (tray_icon->priv->status_icon);
 	}
+#ifdef HAVE_LIBNOTIFY
 	if (tray_icon->priv->notify != NULL) {
 		notify_notification_close (tray_icon->priv->notify, NULL);
 	}
+#endif
 
 	g_return_if_fail (tray_icon->priv != NULL);
 

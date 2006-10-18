@@ -1,5 +1,21 @@
 2006-10-18  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in
+	Change release to 2.17.2.1 so we can be included in the GNOME
+	development release. See #363169 for details.
+
+	* docs/dbus-interface.html:
+	* docs/faq.html:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* docs/sleep-names.html:
+	Regenerate with xmlto.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_finalize):
+	Allow building without libnotify. My bad. Fixes #363169
+
+2006-10-18  Richard Hughes  <richard@hughsie.com>
+
 	==== Version 2.17.2 ====
 
 2006-10-17  Richard Hughes <richard@hughsie.com>
