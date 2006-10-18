@@ -27,13 +27,12 @@
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <dbus/dbus-glib.h>
-#include <gconf/gconf-client.h>
 #include <math.h>
 #include <string.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-gconf.h"
+#include "gpm-conf.h"
 #include "gpm-statistics-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
@@ -66,8 +65,8 @@ static void     gpm_statistics_finalize   (GObject	    *object);
 struct GpmStatisticsPrivate
 {
 	GladeXML		*glade_xml;
-	GConfClient		*gconf_client;
 	GtkWidget		*graph_widget;
+	GpmConf			*conf;
 	GpmProxy		*gproxy;
 	GpmInfoData		*events;
 	GpmInfoData		*data;
@@ -169,28 +168,19 @@ gpm_statistics_delete_event_cb (GtkWidget	*widget,
 }
 
 /**
- * gconf_key_changed_cb:
+ * conf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-gconf_key_changed_cb (GConfClient *client,
-		      guint	   cnxn_id,
-		      GConfEntry  *entry,
-		      gpointer	   user_data)
+conf_key_changed_cb (GpmConf       *conf,
+		     const gchar   *key,
+		     GpmStatistics *statistics)
 {
-	GpmStatistics *statistics = GPM_STATISTICS (user_data);
 	gboolean  enabled;
 
-	gpm_debug ("Key changed %s", entry->key);
-
-	if (gconf_entry_get_value (entry) == NULL) {
-		return;
-	}
-
-	if (strcmp (entry->key, GPM_PREF_AC_LOWPOWER) == 0) {
-		enabled = gconf_client_get_bool (statistics->priv->gconf_client,
-				  		 GPM_PREF_AC_LOWPOWER, NULL);
+	if (strcmp (key, GPM_CONF_AC_LOWPOWER) == 0) {
+		gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_AC_LOWPOWER, &enabled);
 		gpm_debug ("need to enable checkbox");
 	}
 }
@@ -310,8 +300,7 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 	gpm_debug ("Events enable %i", checked);
 
 	/* save to gconf so we open next time with the correct setting */
-	gconf_client_set_bool (statistics->priv->gconf_client,
-			       GPM_PREF_STAT_SHOW_EVENTS, checked, NULL);
+	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_EVENTS, checked);
 
 	if (checked == FALSE) {
 		/* remove the dots from the graph */
@@ -341,8 +330,7 @@ gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
 	gpm_debug ("Legend enable %i", checked);
 
 	/* save to gconf so we open next time with the correct setting */
-	gconf_client_set_bool (statistics->priv->gconf_client,
-			       GPM_PREF_STAT_SHOW_LEGEND, checked, NULL);
+	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_LEGEND, checked);
 
 	gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), checked);
 }
@@ -584,8 +572,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	statistics->priv->graph_type = type;
 
 	/* save in gconf so we choose the correct graph type on next startup */
-	gconf_client_set_string (statistics->priv->gconf_client,
-				 GPM_PREF_STAT_GRAPH_TYPE, type, NULL);
+	gpm_conf_set_string (statistics->priv->conf, GPM_CONF_STAT_GRAPH_TYPE, type);
 
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
@@ -608,8 +595,7 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 		return;
 	}
 
-	saved = gconf_client_get_string (statistics->priv->gconf_client,
-					 GPM_PREF_STAT_GRAPH_TYPE, NULL);
+	gpm_conf_get_string (statistics->priv->conf, GPM_CONF_STAT_GRAPH_TYPE, &saved);
 	/* gconf error, bahh */
 	if (saved == NULL) {
 		saved = g_strdup ("power");
@@ -683,7 +669,9 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	statistics->priv = GPM_STATISTICS_GET_PRIVATE (statistics);
 
-	statistics->priv->gconf_client = gconf_client_get_default ();
+	statistics->priv->conf = gpm_conf_new ();
+	g_signal_connect (statistics->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), statistics);
 
 	glade_set_custom_handler (gpm_graph_widget_custom_handler, statistics);
 
@@ -693,13 +681,6 @@ gpm_statistics_init (GpmStatistics *statistics)
 			  GPM_DBUS_SERVICE,
 			  GPM_DBUS_PATH_STATS,
 			  GPM_DBUS_INTERFACE_STATS);
-
-	gconf_client_notify_add (statistics->priv->gconf_client,
-				 GPM_PREF_DIR,
-				 gconf_key_changed_cb,
-				 statistics,
-				 NULL,
-				 NULL);
 
 	statistics->priv->graph_type = NULL;
 	statistics->priv->events = gpm_info_data_new ();
@@ -744,16 +725,14 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_events");
-	checked = gconf_client_get_bool (statistics->priv->gconf_client,
-					 GPM_PREF_STAT_SHOW_EVENTS, NULL);
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_EVENTS, &checked);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);
 	gpm_statistics_checkbox_events_cb (widget, statistics);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_legend");
-	checked = gconf_client_get_bool (statistics->priv->gconf_client,
-					 GPM_PREF_STAT_SHOW_LEGEND, NULL);
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_LEGEND, &checked);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_legend_cb), statistics);
@@ -778,7 +757,7 @@ gpm_statistics_finalize (GObject *object)
 	statistics = GPM_STATISTICS (object);
 	statistics->priv = GPM_STATISTICS_GET_PRIVATE (statistics);
 
-	g_object_unref (statistics->priv->gconf_client);
+	g_object_unref (statistics->priv->conf);
 	g_object_unref (statistics->priv->gproxy);
 	g_object_unref (statistics->priv->events);
 	g_object_unref (statistics->priv->data);

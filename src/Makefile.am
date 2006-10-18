@@ -44,11 +44,12 @@ gnome_power_statistics_SOURCES =			\
 	gpm-info-data.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
-	gpm-gconf.h					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
 	gpm-dbus-monitor.c				\
+	gpm-conf.h					\
+	gpm-conf.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
 	gpm-debug.h					\
@@ -80,13 +81,14 @@ gnome_power_inhibit_test_LDADD =			\
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
 	gpm-hal.c					\
+	gpm-conf.h					\
+	gpm-conf.c					\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
 	gpm-prefs-core.c				\
-	gpm-gconf.h					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
@@ -123,7 +125,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
-	gpm-gconf.h					\
+	gpm-conf.h					\
+	gpm-conf.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
 	gpm-proxy.h					\
@@ -142,8 +145,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-hal-brightness-lcd.c			\
 	gpm-hal-brightness-kbd.h			\
 	gpm-hal-brightness-kbd.c			\
-	gpm-hal-light-sensor.h			\
-	gpm-hal-light-sensor.c			\
+	gpm-hal-light-sensor.h				\
+	gpm-hal-light-sensor.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

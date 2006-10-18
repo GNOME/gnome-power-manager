@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <string.h>
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
 
@@ -124,4 +125,44 @@ gpm_get_timestring (guint time_secs)
 				hours, ngettext ("hour", "hours", hours),
 				minutes, ngettext ("minute", "minutes", minutes));
 	return timestring;
+}
+
+GpmIconPolicy
+gpm_tray_icon_mode_from_string (const gchar *str)
+{
+	if (str == NULL) {
+		return GPM_ICON_POLICY_NEVER;
+	}
+
+	if (strcmp (str, "always") == 0) {
+		return GPM_ICON_POLICY_ALWAYS;
+	} else if (strcmp (str, "present") == 0) {
+		return GPM_ICON_POLICY_PRESENT;
+	} else if (strcmp (str, "charge") == 0) {
+		return GPM_ICON_POLICY_CHARGE;
+	} else if (strcmp (str, "critical") == 0) {
+		return GPM_ICON_POLICY_CRITICAL;
+	} else if (strcmp (str, "never") == 0) {
+		return GPM_ICON_POLICY_NEVER;
+	} else {
+		return GPM_ICON_POLICY_NEVER;
+	}
+}
+
+const gchar *
+gpm_tray_icon_mode_to_string (GpmIconPolicy mode)
+{
+	if (mode == GPM_ICON_POLICY_ALWAYS) {
+		return "always";
+	} else if (mode == GPM_ICON_POLICY_PRESENT) {
+		return "present";
+	} else if (mode == GPM_ICON_POLICY_CHARGE) {
+		return "charge";
+	} else if (mode == GPM_ICON_POLICY_CRITICAL) {
+		return "critical";
+	} else if (mode == GPM_ICON_POLICY_NEVER) {
+		return "never";
+	} else {
+		return "never";
+	}
 }

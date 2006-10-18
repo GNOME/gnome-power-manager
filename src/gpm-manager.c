@@ -36,18 +36,17 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-gconf.h"
 #include "gpm-screensaver.h"
 #include "gpm-networkmanager.h"
 
 #include "gpm-hal.h"
+#include "gpm-conf.h"
 #include "gpm-hal-monitor.h"
 #include "gpm-hal-cpufreq.h"
 #include "gpm-hal-power.h"
@@ -88,9 +87,8 @@ typedef enum {
 
 struct GpmManagerPrivate
 {
-	GConfClient	*gconf_client;
-
 	GpmDpms		*dpms;
+	GpmConf		*conf;
 	GpmButton	*button;
 	GpmIdle		*idle;
 	GpmHal		*hal;
@@ -143,15 +141,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-
-static GConfEnumStringPair icon_policy_enum_map [] = {
-	{ GPM_ICON_POLICY_ALWAYS,	"always"   },
-	{ GPM_ICON_POLICY_PRESENT,	"present"  },
-	{ GPM_ICON_POLICY_CHARGE,	"charge"   },
-	{ GPM_ICON_POLICY_CRITICAL,     "critical" },
-	{ GPM_ICON_POLICY_NEVER,	"never"    },
-	{ 0, NULL }
-};
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
@@ -269,19 +258,18 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 			     gboolean   *can,
 			     GError    **error)
 {
-	gboolean gconf_ok;
+	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
 	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_CAN_SUSPEND, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
 	hal_ok = gpm_hal_power_can_suspend (manager->priv->hal_power);
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
 	}
-	if ( gconf_ok && hal_ok && polkit_ok ) {
+	if ( conf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
 
@@ -301,19 +289,18 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 			       gboolean   *can,
 			       GError    **error)
 {
-	gboolean gconf_ok;
+	gboolean conf_ok;
 	gboolean polkit_ok = TRUE;
 	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
 
 	*can = FALSE;
-	gconf_ok = gconf_client_get_bool (manager->priv->gconf_client,
-					      GPM_PREF_CAN_HIBERNATE, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
 	hal_ok = gpm_hal_power_can_hibernate (manager->priv->hal_power);
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
 	}
-	if ( gconf_ok && hal_ok && polkit_ok ) {
+	if ( conf_ok && hal_ok && polkit_ok ) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -389,7 +376,7 @@ get_stock_id (GpmManager *manager,
 	gboolean present;
 
 	if (icon_policy == GPM_ICON_POLICY_NEVER) {
-		gpm_debug ("The key " GPM_PREF_ICON_POLICY
+		gpm_debug ("The key " GPM_CONF_ICON_POLICY
 			   " is set to never, so no icon will be displayed.\n"
 			   "You can change this using gnome-power-preferences");
 		return NULL;
@@ -491,9 +478,9 @@ gpm_manager_sync_tray_icon (GpmManager *manager)
 	gint   icon_policy;
 
 	/* do we want to display the icon */
-	icon_policy_str = gconf_client_get_string (manager->priv->gconf_client, GPM_PREF_ICON_POLICY, NULL);
-	icon_policy = GPM_ICON_POLICY_ALWAYS;
-	gconf_string_to_enum (icon_policy_enum_map, icon_policy_str, &icon_policy);
+	gpm_conf_get_string (manager->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy_str);
+	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
+
 	g_free (icon_policy_str);
 
 	/* try to get stock image */
@@ -548,41 +535,11 @@ gpm_manager_sync_policy_dpms (GpmManager *manager)
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
-		error = NULL;
-		timeout = gconf_client_get_int (manager->priv->gconf_client,
-						GPM_PREF_AC_SLEEP_DISPLAY,
-						&error);
-		if (error) {
-			gpm_warning ("Unable to get DPMS timeout: %s", error->message);
-			g_error_free (error);
-		}
-
-		error = NULL;
-		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
-						       GPM_PREF_AC_DPMS_METHOD,
-						       &error);
-		if (error) {
-			gpm_warning ("Unable to get DPMS suspend method: %s", error->message);
-			g_error_free (error);
-		}
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
 	} else {
-		error = NULL;
-		timeout = gconf_client_get_int (manager->priv->gconf_client,
-						GPM_PREF_BATTERY_SLEEP_DISPLAY,
-						&error);
-		if (error) {
-			gpm_warning ("Unable to get DPMS timeout: %s", error->message);
-			g_error_free (error);
-		}
-
-		error = NULL;
-		dpms_method = gconf_client_get_string (manager->priv->gconf_client,
-						       GPM_PREF_BATTERY_DPMS_METHOD,
-						       &error);
-		if (error) {
-			gpm_warning ("Unable to get DPMS suspend method: %s", error->message);
-			g_error_free (error);
-		}
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
 	}
 
 	/* convert the string types to standard types */
@@ -711,7 +668,6 @@ gpm_manager_sync_policy_cpufreq (GpmManager *manager)
 	gboolean     on_ac;
 	guint	     cpufreq_performance;
 	gchar       *cpufreq_policy;
-	GConfClient *client;
 	GpmHalCpuFreqEnum cpufreq_type;
 
 	if (manager->priv->hal_cpufreq == NULL) {
@@ -721,16 +677,14 @@ gpm_manager_sync_policy_cpufreq (GpmManager *manager)
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	client = manager->priv->gconf_client;
-
 	if (on_ac) {
-		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
-		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_AC_CPUFREQ_POLICY, NULL);
-		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_AC_CPUFREQ_VALUE, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
 	} else {
-		cpufreq_consider_nice = gconf_client_get_bool (client, GPM_PREF_USE_NICE, NULL);
-		cpufreq_policy = gconf_client_get_string (client, GPM_PREF_BATTERY_CPUFREQ_POLICY, NULL);
-		cpufreq_performance = gconf_client_get_int (client, GPM_PREF_BATTERY_CPUFREQ_VALUE, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_CPUFREQ_POLICY, &cpufreq_policy);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_CPUFREQ_VALUE, &cpufreq_performance);
 	}
 
 	/* use enumerated value */
@@ -758,23 +712,19 @@ gpm_manager_sync_policy_brightness (GpmManager *manager)
 	gboolean     do_laptop_lcd;
 	guint	     brightness_lcd;
 	guint	     brightness_kbd;
-	GConfClient *client;
-
-	client = manager->priv->gconf_client;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
-		brightness_lcd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS, NULL);
-		brightness_kbd = gconf_client_get_int (client, GPM_PREF_AC_BRIGHTNESS_KBD, NULL);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_BRIGHTNESS, &brightness_lcd);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &brightness_kbd);
 	} else {
-		brightness_lcd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS, NULL);
-		brightness_kbd = gconf_client_get_int (client, GPM_PREF_BATTERY_BRIGHTNESS_KBD, NULL);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &brightness_lcd);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &brightness_kbd);
 	}
 
 	/* only do brightness changes if we have the hardware */
-	do_laptop_lcd = gconf_client_get_bool (manager->priv->gconf_client,
-					       GPM_PREF_DISPLAY_STATE_CHANGE, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
 	if (do_laptop_lcd && manager->priv->brightness_lcd) {
 		gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness_lcd);
 	}
@@ -801,21 +751,17 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	guint	     sleep_computer;
 	gboolean     on_ac;
 	gboolean     power_save;
-	GConfClient *client;
-
-	client = manager->priv->gconf_client;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	if (on_ac) {
-		sleep_computer = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_COMPUTER, NULL);
-		sleep_display = gconf_client_get_int (client, GPM_PREF_AC_SLEEP_DISPLAY, NULL);
-		power_save = gconf_client_get_bool (client, GPM_PREF_AC_LOWPOWER, NULL);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_COMPUTER, &sleep_computer);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &sleep_display);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
 	} else {
-		sleep_computer = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_COMPUTER, NULL);
-		sleep_display = gconf_client_get_int (client, GPM_PREF_BATTERY_SLEEP_DISPLAY, NULL);
-		/* todo: what about when on UPS? */
-		power_save = gconf_client_get_bool (client, GPM_PREF_BATTERY_LOWPOWER, NULL);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_COMPUTER, &sleep_computer);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &sleep_display);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
 	}
 
 	/* only do brightness changes if we have the hardware */
@@ -846,15 +792,12 @@ gpm_manager_get_lock_policy (GpmManager  *manager,
 	/* This allows us to over-ride the custom lock settings set in gconf
 	   with a system default set in gnome-screensaver.
 	   See bug #331164 for all the juicy details. :-) */
-	use_ss_setting = gconf_client_get_bool (manager->priv->gconf_client,
-						GPM_PREF_LOCK_USE_SCREENSAVER,
-						NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, &use_ss_setting);
 	if (use_ss_setting) {
 		do_lock = gpm_screensaver_lock_enabled (manager->priv->screensaver);
 		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
 	} else {
-		do_lock = gconf_client_get_bool (manager->priv->gconf_client,
-						 policy, NULL);
+		gpm_conf_get_bool (manager->priv->conf, policy, &do_lock);
 		gpm_debug ("Using custom locking settings (%i)", do_lock);
 	}
 	return do_lock;
@@ -880,7 +823,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 	GError  *error = NULL;
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
+					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
@@ -919,7 +862,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					       GPM_PREF_LOCK_ON_BLANK_SCREEN);
+					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
@@ -965,10 +908,10 @@ manager_policy_do (GpmManager  *manager,
 		   const gchar *policy,
 		   const gchar *reason)
 {
-	gchar *action;
+	gchar *action = NULL;
 
 	gpm_debug ("policy: %s", policy);
-	action = gconf_client_get_string (manager->priv->gconf_client, policy, NULL);
+	gpm_conf_get_string (manager->priv->conf, policy, &action);
 
 	if (! action) {
 		return;
@@ -1057,11 +1000,9 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
 	if (on_ac) {
-		power_save = gconf_client_get_bool (manager->priv->gconf_client,
-						    GPM_PREF_AC_LOWPOWER, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
 	} else {
-		power_save = gconf_client_get_bool (manager->priv->gconf_client,
-						    GPM_PREF_BATTERY_LOWPOWER, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
 	}
 	*retval = power_save;
 
@@ -1187,8 +1128,7 @@ gpm_manager_shutdown (GpmManager *manager,
 		return FALSE;
 	}
 
-	save_session = gconf_client_get_bool (manager->priv->gconf_client,
-					      GPM_PREF_SESSION_REQUEST_SAVE, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
@@ -1226,8 +1166,7 @@ gpm_manager_reboot (GpmManager *manager,
 		return FALSE;
 	}
 
-	save_session = gconf_client_get_bool (manager->priv->gconf_client,
-					      GPM_PREF_SESSION_REQUEST_SAVE, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
 	if (save_session) {
@@ -1273,13 +1212,12 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					       GPM_PREF_LOCK_ON_HIBERNATE);
+					       GPM_CONF_LOCK_ON_HIBERNATE);
 	if (do_lock) {
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
-	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	gpm_conf_get_bool (manager->priv->conf,  GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
 	if (nm_sleep) {	
 		gpm_networkmanager_sleep ();
 	}
@@ -1300,8 +1238,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		}
 
 		/* We only show the HAL failed notification if set in gconf */
-		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
 		if (show_notify) {
 			const gchar *title = _("Hibernate Problem");
 			message = g_strdup_printf (_("HAL failed to %s. "
@@ -1323,8 +1260,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 
-	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
 	if (nm_sleep) {	
 		gpm_networkmanager_wake ();
 	}
@@ -1368,13 +1304,12 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
-					       GPM_PREF_LOCK_ON_SUSPEND);
+					       GPM_CONF_LOCK_ON_SUSPEND);
 	if (do_lock) {
 		gpm_screensaver_lock (manager->priv->screensaver);
 	}
 
-	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
 	if (nm_sleep) {	
 		gpm_networkmanager_sleep ();
 	}
@@ -1395,8 +1330,7 @@ gpm_manager_suspend (GpmManager *manager,
 		}
 
 		/* We only show the HAL failed notification if set in gconf */
-		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-						     GPM_PREF_NOTIFY_HAL_ERROR, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
 		if (show_notify) {
 			const gchar *title;
 			gchar *message;
@@ -1421,8 +1355,7 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
 
-	nm_sleep = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_NETWORKMANAGER_SLEEP, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
 	if (nm_sleep) {	
 		gpm_networkmanager_wake ();
 	}
@@ -1539,8 +1472,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we resume the screen? */
-		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_DISPLAY_IDLE_DIM, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &do_laptop_dim);
 		if (do_laptop_dim && manager->priv->brightness_lcd) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
@@ -1570,8 +1502,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* Should we dim the screen? */
-		do_laptop_dim = gconf_client_get_bool (manager->priv->gconf_client,
-						       GPM_PREF_DISPLAY_IDLE_DIM, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &do_laptop_dim);
 		if (do_laptop_dim && manager->priv->brightness_lcd) {
 			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
@@ -1600,9 +1531,9 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 		/* can only be hibernate, suspend or nothing */
 		if (on_ac) {
-			manager_policy_do (manager, GPM_PREF_AC_SLEEP_TYPE, _("the system state is idle"));
+			manager_policy_do (manager, GPM_CONF_AC_SLEEP_TYPE, _("the system state is idle"));
 		} else {
-			manager_policy_do (manager, GPM_PREF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
+			manager_policy_do (manager, GPM_CONF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
 		}
 
 		break;
@@ -1677,7 +1608,7 @@ power_button_pressed (GpmManager *manager)
 		return;
 	}
 	gpm_debug ("power button pressed");
-	manager_policy_do (manager, GPM_PREF_BUTTON_POWER, _("the power button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("the power button has been pressed"));
 }
 
 /**
@@ -1696,7 +1627,7 @@ suspend_button_pressed (GpmManager *manager)
 		return;
 	}
 	gpm_debug ("suspend button pressed");
-	manager_policy_do (manager, GPM_PREF_BUTTON_SUSPEND, _("the suspend button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("the suspend button has been pressed"));
 }
 
 /**
@@ -1715,7 +1646,7 @@ hibernate_button_pressed (GpmManager *manager)
 		return;
 	}
 	manager_policy_do (manager,
-			   GPM_PREF_BUTTON_HIBERNATE,
+			   GPM_CONF_BUTTON_HIBERNATE,
 			   _("the hibernate button has been pressed"));
 }
 
@@ -1765,12 +1696,12 @@ lid_button_pressed (GpmManager *manager,
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
 			manager_policy_do (manager,
-					   GPM_PREF_AC_BUTTON_LID,
+					   GPM_CONF_AC_BUTTON_LID,
 					   _("the lid has been closed on ac power"));
 		} else {
 			gpm_debug ("Performing battery policy");
 			manager_policy_do (manager,
-					   GPM_PREF_BATTERY_BUTTON_LID,
+					   GPM_CONF_BATTERY_BUTTON_LID,
 					   _("the lid has been closed on battery power"));
 		}
 	} else {
@@ -1904,11 +1835,10 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	event_when_closed = gconf_client_get_bool (manager->priv->gconf_client,
-						   GPM_PREF_BATT_EVENT_WHEN_CLOSED, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_EVENT_WHEN_CLOSED, &event_when_closed);
 	if (event_when_closed && (!on_ac) && manager->priv->lid_is_closed) {
 		manager_policy_do (manager,
-				   GPM_PREF_BATTERY_BUTTON_LID,
+				   GPM_CONF_BATTERY_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)"));
 	}
@@ -2015,7 +1945,7 @@ static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
 	manager_policy_do (manager,
-			   GPM_PREF_BATTERY_CRITICAL,
+			   GPM_CONF_BATTERY_CRITICAL,
 			   _("battery is critically low"));
 	return FALSE;
 }
@@ -2058,8 +1988,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	if (manager->priv->done_notify_fully_charged == FALSE && 
 	    gpm_power_battery_is_charged (battery_status)) {
 
-		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-						     GPM_PREF_NOTIFY_BATTCHARGED, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_BATTCHARGED, &show_notify);
 		if (show_notify) {
 			message = _("Your battery is now fully charged");
 			title = _("Battery Charged");
@@ -2128,8 +2057,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		}
 
 		/* we have to do different warnings depending on the policy */
-		action = gconf_client_get_string (manager->priv->gconf_client,
-						  GPM_PREF_BATTERY_CRITICAL, NULL);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_CRITICAL, &action);
 
 		/* TODO: we should probably convert to an ENUM type, and use that */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -2158,8 +2086,7 @@ battery_status_changed_primary (GpmManager     *manager,
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 
-		show_notify = gconf_client_get_bool (manager->priv->gconf_client,
-						     GPM_PREF_NOTIFY_ACADAPTER, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_ACADAPTER, &show_notify);
 		if (show_notify) {
 			message = g_strdup (_("The AC Power has been unplugged. "
 					      "The system is now using battery power."));
@@ -2251,8 +2178,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 		}
 
 		/* we have to do different warnings depending on the policy */
-		action = gconf_client_get_string (manager->priv->gconf_client,
-						  GPM_PREF_UPS_CRITICAL, NULL);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_UPS_CRITICAL, &action);
 
 		/* FIXME: we should probably convert to an ENUM type, and use that */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -2271,7 +2197,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 		g_free (action);
 		/* TODO: need to add 10 second delay so we get notification */
-		manager_policy_do (manager, GPM_PREF_UPS_CRITICAL,
+		manager_policy_do (manager, GPM_CONF_UPS_CRITICAL,
 				   _("UPS is critically low"));
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
@@ -2509,79 +2435,68 @@ gpm_manager_class_init (GpmManagerClass *klass)
 }
 
 /**
- * gconf_key_changed_cb:
+ * conf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-gconf_key_changed_cb (GConfClient *client,
-		      guint	   cnxn_id,
-		      GConfEntry  *entry,
-		      gpointer	   user_data)
+conf_key_changed_cb (GpmConf     *conf,
+		     const gchar *key,
+		     GpmManager  *manager)
 {
 	gint	    brightness;
-	GpmManager *manager = GPM_MANAGER (user_data);
 	gboolean    on_ac;
 	gboolean    enabled;
 	gboolean    allowed_in_menu;
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	gpm_debug ("Key changed %s", entry->key);
-
-	if (gconf_entry_get_value (entry) == NULL) {
-		return;
-	}
-
-	if (strcmp (entry->key, GPM_PREF_ICON_POLICY) == 0) {
+	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
 
 		gpm_manager_sync_tray_icon (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_AC_CPUFREQ_POLICY) == 0 ||
-		   strcmp (entry->key, GPM_PREF_AC_CPUFREQ_VALUE) == 0 ||
-		   strcmp (entry->key, GPM_PREF_BATTERY_CPUFREQ_POLICY) == 0 ||
-		   strcmp (entry->key, GPM_PREF_BATTERY_CPUFREQ_VALUE) == 0 ||
-		   strcmp (entry->key, GPM_PREF_USE_NICE) == 0) {
+	} else if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
+		   strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
+		   strcmp (key, GPM_CONF_BATTERY_CPUFREQ_POLICY) == 0 ||
+		   strcmp (key, GPM_CONF_BATTERY_CPUFREQ_VALUE) == 0 ||
+		   strcmp (key, GPM_CONF_USE_NICE) == 0) {
 
 		gpm_manager_sync_policy_cpufreq (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_COMPUTER) == 0 ||
-		   strcmp (entry->key, GPM_PREF_AC_SLEEP_COMPUTER) == 0) {
+	} else if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
+		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_BATTERY_SLEEP_DISPLAY) == 0 ||
-		   strcmp (entry->key, GPM_PREF_AC_SLEEP_DISPLAY) == 0 ||
-		   strcmp (entry->key, GPM_PREF_AC_DPMS_METHOD) == 0 ||
-		   strcmp (entry->key, GPM_PREF_BATTERY_DPMS_METHOD) == 0) {
+	} else if (strcmp (key, GPM_CONF_BATTERY_SLEEP_DISPLAY) == 0 ||
+		   strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
+		   strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
+		   strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
 
 		gpm_manager_sync_policy_dpms (manager);
 
-	} else if (strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS) == 0 ||
-		   strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS) == 0 ||
-		   strcmp (entry->key, GPM_PREF_AC_BRIGHTNESS_KBD) == 0 ||
-		   strcmp (entry->key, GPM_PREF_BATTERY_BRIGHTNESS_KBD) == 0) {
+	} else if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0 ||
+		   strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0 ||
+		   strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0 ||
+		   strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
 
 		gpm_manager_sync_policy_brightness (manager);
 
 
-	} else if (strcmp (entry->key, GPM_PREF_CAN_SUSPEND) == 0) {
+	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
-		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
-							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      allowed_in_menu && enabled);
 
-	} else if (strcmp (entry->key, GPM_PREF_CAN_HIBERNATE) == 0) {
+	} else if (strcmp (key, GPM_CONF_CAN_HIBERNATE) == 0) {
 		gpm_manager_allowed_hibernate (manager, &enabled, NULL);
-		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
-							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
 						allowed_in_menu && enabled);
 
-	} else if (strcmp (entry->key, GPM_PREF_SHOW_ACTIONS_IN_MENU) == 0) {
-		allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
-							 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+	} else if (strcmp (key, GPM_CONF_SHOW_ACTIONS_IN_MENU) == 0) {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
 		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 					      allowed_in_menu && enabled);
@@ -2589,27 +2504,23 @@ gconf_key_changed_cb (GConfClient *client,
 		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
 						allowed_in_menu && enabled);
 
-	} else if (strcmp (entry->key, GPM_PREF_POLICY_TIMEOUT) == 0) {
-		manager->priv->suppress_policy_timeout =
-			gconf_client_get_int (manager->priv->gconf_client,
-				  	      GPM_PREF_POLICY_TIMEOUT, NULL);
+	} else if (strcmp (key, GPM_CONF_POLICY_TIMEOUT) == 0) {
+		 gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
+		 		    &manager->priv->suppress_policy_timeout);
 
-	} else if (strcmp (entry->key, GPM_PREF_PANEL_DIM_BRIGHTNESS) == 0) {
-		brightness = gconf_client_get_int (manager->priv->gconf_client,
-						   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
+		gpm_conf_get_int (manager->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &brightness);
 		if (manager->priv->brightness_lcd) {
 			gpm_hal_brightness_lcd_set_dim (manager->priv->brightness_lcd, brightness);
 		}
 
-	} else if (strcmp (entry->key, GPM_PREF_ENABLE_BEEPING) == 0) {
-		manager->priv->enable_beeping =
-			gconf_client_get_bool (manager->priv->gconf_client,
-					       GPM_PREF_ENABLE_BEEPING, NULL);
+	} else if (strcmp (key, GPM_CONF_ENABLE_BEEPING) == 0) {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING,
+				   &manager->priv->enable_beeping);
 
-	} else if (strcmp (entry->key, GPM_PREF_IGNORE_INHIBITS) == 0) {
-		manager->priv->ignore_inhibits =
-			gconf_client_get_bool (manager->priv->gconf_client,
-					       GPM_PREF_IGNORE_INHIBITS, NULL);
+	} else if (strcmp (key, GPM_CONF_IGNORE_INHIBITS) == 0) {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IGNORE_INHIBITS,
+				   &manager->priv->ignore_inhibits);
 	}
 }
 
@@ -2769,7 +2680,9 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
-	manager->priv->gconf_client = gconf_client_get_default ();
+	manager->priv->conf = gpm_conf_new ();
+	g_signal_connect (manager->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), manager);
 
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "button-pressed",
@@ -2812,18 +2725,6 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->power, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), manager);
 
-	gconf_client_add_dir (manager->priv->gconf_client,
-			      GPM_PREF_DIR,
-			      GCONF_CLIENT_PRELOAD_NONE,
-			      NULL);
-
-	gconf_client_notify_add (manager->priv->gconf_client,
-				 GPM_PREF_DIR,
-				 gconf_key_changed_cb,
-				 manager,
-				 NULL,
-				 NULL);
-
 	manager->priv->brightness_lcd = gpm_hal_brightness_lcd_new ();
 	manager->priv->brightness_kbd = gpm_hal_brightness_kbd_new ();
 
@@ -2832,9 +2733,7 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (idle_changed_cb), manager);
 
 	/* set up the check_type_cpu, so we can disable the CPU load check */
-	check_type_cpu = gconf_client_get_bool (manager->priv->gconf_client,
-						GPM_PREF_IDLE_CHECK_CPU,
-						NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IDLE_CHECK_CPU, &check_type_cpu);
 	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
@@ -2859,8 +2758,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
-	allowed_in_menu = gconf_client_get_bool (manager->priv->gconf_client,
-						 GPM_PREF_SHOW_ACTIONS_IN_MENU, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 	gpm_manager_allowed_suspend (manager, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      enabled && allowed_in_menu);
@@ -2912,8 +2810,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* We can disable this if the ACPI BIOS is fucked, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
-	use_time = gconf_client_get_bool (manager->priv->gconf_client,
-					  GPM_PREF_USE_TIME_POLICY, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time);
 	manager->priv->use_time_to_notify = use_time;
 	if (use_time) {
 		gpm_debug ("Using per-time notification policy");
@@ -2921,9 +2818,8 @@ gpm_manager_init (GpmManager *manager)
 		gpm_debug ("Using percentage notification policy");
 	}
 
-	manager->priv->suppress_policy_timeout =
-		gconf_client_get_int (manager->priv->gconf_client,
-				      GPM_PREF_POLICY_TIMEOUT, NULL);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
+			   &manager->priv->suppress_policy_timeout);
 	gpm_debug ("Using a supressed policy timeout of %i seconds",
 		   manager->priv->suppress_policy_timeout);
 
@@ -2931,14 +2827,10 @@ gpm_manager_init (GpmManager *manager)
 	gpm_manager_reset_event_time (manager);
 
 	/* get percentage policy */
-	manager->priv->low_percentage = gconf_client_get_int (manager->priv->gconf_client,
-							      GPM_PREF_LOW_PERCENTAGE, NULL);
-	manager->priv->very_low_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								   GPM_PREF_VERY_LOW_PERCENTAGE, NULL);
-	manager->priv->critical_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								   GPM_PREF_CRITICAL_PERCENTAGE, NULL);
-	manager->priv->action_percentage = gconf_client_get_int (manager->priv->gconf_client,
-								 GPM_PREF_ACTION_PERCENTAGE, NULL);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_LOW_PERCENTAGE, &manager->priv->low_percentage);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_VERY_LOW_PERCENTAGE, &manager->priv->very_low_percentage);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_CRITICAL_PERCENTAGE, &manager->priv->critical_percentage);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &manager->priv->action_percentage);
 
 	/* can remove when we next release, until then, assume we are morons */
 	if (manager->priv->low_percentage == 0) {
@@ -2947,30 +2839,23 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	/* get time policy */
-	manager->priv->low_time = gconf_client_get_int (manager->priv->gconf_client,
-							GPM_PREF_LOW_TIME, NULL);
-	manager->priv->very_low_time = gconf_client_get_int (manager->priv->gconf_client,
-							     GPM_PREF_VERY_LOW_TIME, NULL);
-	manager->priv->critical_time = gconf_client_get_int (manager->priv->gconf_client,
-							     GPM_PREF_CRITICAL_TIME, NULL);
-	manager->priv->action_time = gconf_client_get_int (manager->priv->gconf_client,
-							   GPM_PREF_ACTION_TIME, NULL);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_LOW_TIME, &manager->priv->low_time);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_VERY_LOW_TIME, &manager->priv->very_low_time);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_CRITICAL_TIME, &manager->priv->critical_time);
+	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_ACTION_TIME, &manager->priv->action_time);
 
 	/* Get dim settings */
 	if (manager->priv->brightness_lcd) {
-		lcd_dim_brightness = gconf_client_get_int (manager->priv->gconf_client,
-							   GPM_PREF_PANEL_DIM_BRIGHTNESS, NULL);
+		gpm_conf_get_int (manager->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &lcd_dim_brightness);
 		gpm_debug ("lcd_dim_brightness is %i", lcd_dim_brightness);
 		gpm_hal_brightness_lcd_set_dim (manager->priv->brightness_lcd, lcd_dim_brightness);
 	}
 
 	/* Do we beep? */
-	manager->priv->enable_beeping = gconf_client_get_bool (manager->priv->gconf_client,
-							       GPM_PREF_ENABLE_BEEPING, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING, &manager->priv->enable_beeping);
 
 	/* Do we ignore inhibit requests? */
-	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
-								GPM_PREF_IGNORE_INHIBITS, NULL);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IGNORE_INHIBITS, &manager->priv->ignore_inhibits);
 }
 
 /**
@@ -2992,7 +2877,7 @@ gpm_manager_finalize (GObject *object)
 	g_return_if_fail (manager->priv != NULL);
 
 	/* compulsory gobjects */
-	g_object_unref (manager->priv->gconf_client);
+	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->hal_power);
 	g_object_unref (manager->priv->dpms);

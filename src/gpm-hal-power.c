@@ -25,7 +25,6 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
-#include <gconf/gconf-client.h>
 
 #include "gpm-hal.h"
 #include "gpm-hal-power.h"

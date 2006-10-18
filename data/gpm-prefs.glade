@@ -1961,7 +1961,7 @@
 			    <widget class="GtkCheckButton" id="checkbutton_actions_battery_low_power">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Try to set system low power mode</property>
+			      <property name="label" translatable="yes">Set system low power mode</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -2515,6 +2515,28 @@
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="button_reset_default">
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label">_Reset to defaults</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
+	    </widget>
+	  </child>
+
+	  <child>
+	    <widget class="GtkButton" id="button_make_default">
+	      <property name="can_default">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">_Make default</property>
+	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
 	    </widget>

@@ -27,7 +27,6 @@
 
 #include <string.h>
 #include <time.h>
-#include <gconf/gconf-client.h>
 #include <dbus/dbus-gtype-specialized.h>
 
 #include "gpm-info.h"
@@ -37,7 +36,7 @@
 #include "gpm-hal.h"
 #include "gpm-hal-power.h"
 #include "gpm-power.h"
-#include "gpm-gconf.h"
+#include "gpm-conf.h"
 #include "gpm-stock-icons.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
@@ -409,9 +408,10 @@ gpm_info_init (GpmInfo *info)
 
 	if (info->priv->is_laptop) {
 		/* get the maximum x-axis size from gconf */
-		GConfClient *client = gconf_client_get_default ();
-		int max_time = gconf_client_get_int (client, GPM_PREF_GRAPH_DATA_MAX_TIME, NULL);
-		g_object_unref (client);
+		GpmConf *conf = gpm_conf_new ();
+		guint max_time;
+		gpm_conf_get_uint (conf, GPM_CONF_GRAPH_DATA_MAX_TIME, &max_time);
+		g_object_unref (conf);
 
 		gpm_info_data_set_max_time (info->priv->events, max_time);
 		gpm_info_data_set_max_time (info->priv->percentage_data, max_time);

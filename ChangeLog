@@ -1,4 +1,38 @@
-2006-10-18  Richard Hughes  <richard@hughsie.com>
+2006-10-18  Richard Hughes <richard@hughsie.com>
+
+	* data/gpm-prefs.glade:
+	Add a 'Make default' button in readyness for changing the system wide
+	policy for all users.
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-conf.c:
+	* src/gpm-conf.h:
+	* src/gpm-gconf.h:
+	Replace the statatic header with a new GpmConf gobject to abstract
+	getting and setting values from gconf.
+	We'll need this for headless use where we might not have gconf
+	available running as root.
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	* src/gpm-hal-power.c:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	* src/gpm-networkmanager.c:
+	* src/gpm-polkit.c:
+	* src/gpm-power.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-prefs.h:
+	* src/gpm-screensaver.c:
+	* src/gpm-statistics-core.c:
+	* src/gpm-statistics.c:
+	Looks a lot of changes, but basically use the GpmConf singleton rather
+	than create a new copy of gconf_client for each object.
+	This probably saves a little bit of memory, but it also makes the code
+	look a lot better. ;-)
+
+2006-10-18  Richard Hughes <richard@hughsie.com>
 
 	* configure.in
 	Change release to 2.17.2.1 so we can be included in the GNOME

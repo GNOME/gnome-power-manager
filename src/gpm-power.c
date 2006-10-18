@@ -29,7 +29,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gconf/gconf-client.h>
 
 #include "gpm-common.h"
 #include "gpm-hal.h"
@@ -40,7 +39,7 @@
 #include "gpm-marshal.h"
 #include "gpm-refcount.h"
 #include "gpm-debug.h"
-#include "gpm-gconf.h"
+#include "gpm-conf.h"
 
 static void     gpm_power_class_init (GpmPowerClass *klass);
 static void     gpm_power_init       (GpmPower      *power);
@@ -53,7 +52,7 @@ static void     gpm_power_finalize   (GObject       *object);
 struct GpmPowerPrivate
 {
 	gboolean		 on_ac;
-	gint			 exp_ave_factor;
+	guint			 exp_ave_factor;
 	gboolean		 data_is_trusted;
 	GpmRefcount		*refcount;
 	GHashTable		*battery_kind_cache;
@@ -352,7 +351,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
  * does not change drastically between updates.
  **/
 static int
-gpm_power_exp_aver (gint previous, gint new, gint factor_pc)
+gpm_power_exp_aver (gint previous, gint new, guint factor_pc)
 {
 	gint result = 0;
 	gfloat factor = 0;
@@ -1958,8 +1957,7 @@ static void
 gpm_power_init (GpmPower *power)
 {
 	gboolean on_ac;
-
-	GConfClient *client = gconf_client_get_default ();
+	GpmConf *conf = gpm_conf_new ();
 
 	power->priv = GPM_POWER_GET_PRIVATE (power);
 
@@ -2002,10 +2000,8 @@ gpm_power_init (GpmPower *power)
 	on_ac = gpm_hal_power_is_on_ac (power->priv->hal_power);
 	gpm_power_set_on_ac (power, on_ac, NULL);
 
-	power->priv->exp_ave_factor = gconf_client_get_int (client,
-							    GPM_PREF_RATE_EXP_AVE_FACTOR,
-							    NULL);
-	g_object_unref (client);
+	gpm_conf_get_uint (conf, GPM_CONF_RATE_EXP_AVE_FACTOR, &power->priv->exp_ave_factor);
+	g_object_unref (conf);
 }
 
 /**

@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
-#include <gconf/gconf-client.h>
 
 #include "gpm-networkmanager.h"
 #include "gpm-debug.h"

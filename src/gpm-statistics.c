@@ -33,7 +33,7 @@
 #include <libguniqueapp/guniqueapp.h>
 #endif
 
-#include "gpm-gconf.h"
+#include "gpm-conf.h"
 #include "gpm-debug.h"
 #include "gpm-statistics-core.h"
 

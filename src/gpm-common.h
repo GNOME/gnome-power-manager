@@ -35,12 +35,22 @@ G_BEGIN_DECLS
 #define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
 #define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
 
+typedef enum {
+	GPM_ICON_POLICY_ALWAYS,
+	GPM_ICON_POLICY_PRESENT,
+	GPM_ICON_POLICY_CHARGE,
+	GPM_ICON_POLICY_CRITICAL,
+	GPM_ICON_POLICY_NEVER
+} GpmIconPolicy;
+
 gchar		*gpm_get_timestring		(guint		time);
 void		 gpm_warning_beep		(void);
 guint		 gpm_percent_to_discrete	(guint		percentage,
 						 guint		levels);
 guint		 gpm_discrete_to_percent	(guint		discrete,
 						 guint		levels);
+GpmIconPolicy	 gpm_tray_icon_mode_from_string		(const gchar	*mode);
+const gchar	*gpm_tray_icon_mode_to_string		(GpmIconPolicy	 mode);
 
 G_END_DECLS
 
