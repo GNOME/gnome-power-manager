@@ -381,7 +381,7 @@ gpm_info_data_finalize (GObject *object)
 	/* Free the graph data elements, the list, and also the graph data object */
 	GpmInfoDataPoint *point;
 	int a;
-	for (a=0; a > info_data->priv->array->len; a++) {
+	for (a=0; a < info_data->priv->array->len; a++) {
 		point = g_ptr_array_index (info_data->priv->array, a);
 		gpm_info_data_free_point (point);
 	}

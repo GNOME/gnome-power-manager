@@ -1,5 +1,10 @@
 2006-10-19  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-info-data.c: (gpm_info_data_free):
+	Correct a typo that was stopping the info data being freed.
+
+2006-10-19  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_init):
 	Properly initialise icon->priv->notify in the tray icon.
 	This might fix #363446.
