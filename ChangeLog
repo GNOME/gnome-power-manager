@@ -1,6 +1,11 @@
 2006-10-19  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-tray-icon.c: (gpm_tray_icon_init):
+	Oops. Fix compilation without libnotify. I hate #ifdefs.
+
+2006-10-19  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_init):
 	Properly initialise icon->priv->notify in the tray icon.
 	This might fix #363446.
 
