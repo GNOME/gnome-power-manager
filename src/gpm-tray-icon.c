@@ -679,6 +679,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
 
+#ifdef HAVE_LIBNOTIFY
+	icon->priv->notify = NULL;
+#endif
+
 	icon->priv->ui_manager = gtk_ui_manager_new ();
 
 #if USE_EGGTRAYICON
