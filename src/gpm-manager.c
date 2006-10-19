@@ -1721,9 +1721,6 @@ power_button_pressed_cb (GpmPower   *power,
 {
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
-	/* simulate user input */
-	gpm_screensaver_poke (manager->priv->screensaver);
-
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
 
