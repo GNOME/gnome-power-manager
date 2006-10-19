@@ -621,6 +621,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
 	icon->priv->power = gpm_power_new ();
+	icon->priv->notify = NULL;
 
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
