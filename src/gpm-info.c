@@ -343,12 +343,20 @@ gpm_info_log_do_poll (gpointer data)
 		gpm_info_data_add (info->priv->percentage_data,
 				   value_x,
 				   battery_status.percentage_charge, colour);
-		gpm_info_data_add (info->priv->rate_data,
-				   value_x,
-				   battery_status.charge_rate_raw, colour);
-		gpm_info_data_add (info->priv->time_data,
-				   value_x,
-				   battery_status.remaining_time, colour);
+
+		/* sanity check to less than 100W */
+		if (battery_status.charge_rate_raw < 100000) {
+			gpm_info_data_add (info->priv->rate_data,
+					   value_x,
+					   battery_status.charge_rate_raw, colour);
+		}
+
+		/* sanity check to less than 10 hours */
+		if (battery_status.charge_rate_raw < 10*60*60) {
+			gpm_info_data_add (info->priv->time_data,
+					   value_x,
+					   battery_status.remaining_time, colour);
+		}
 		gpm_info_data_add (info->priv->voltage,
 				   value_x,
 				   battery_status.voltage, colour);

@@ -1,5 +1,15 @@
 2006-10-22  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Don't do *any* action until the battery data is marked as valid.
+	Patch from Stu Hood <stuhood@gmail.com>, many thanks.
+
+	* src/gpm-info.c: (gpm_info_log_do_poll):
+	Sanity check the rate and time values in case the hardware really
+	goes screwy for a few seconds, and gets the values wrong.
+
+2006-10-22  Richard Hughes <richard@hughsie.com>
+
 	* data/gpm-graph.glade:
 	Update The window title to be Power History rather than Power Graphs
 	to match the drop down menu. Fixes #364200.

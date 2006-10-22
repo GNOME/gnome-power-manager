@@ -1973,6 +1973,12 @@ battery_status_changed_primary (GpmManager     *manager,
 	gboolean     on_ac;
 	gint	     timeout = 0;
 
+	/* Wait until data is trusted... */
+	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
+		gpm_debug ("Data is not yet trusted.. wait..");
+		return;
+	}
+
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
@@ -2004,6 +2010,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		}
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
+	
 	/* We only re-enable the fully charged notification when the battery
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
@@ -2035,12 +2042,6 @@ battery_status_changed_primary (GpmManager     *manager,
 	/* Always check if we already notified the user */
 	if (warning_type <= manager->priv->last_primary_warning) {
 		gpm_debug ("Already notified %i", warning_type);
-		return;
-	}
-
-	/* Wait until data is trusted... */
-	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
-		gpm_debug ("Data is not yet trusted.. wait..");
 		return;
 	}
 
