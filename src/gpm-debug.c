@@ -37,6 +37,7 @@
 static gboolean is_init = FALSE;	/* if we are initialised */
 static gboolean do_verbose = FALSE;	/* if we should print out debugging */
 static GSList *list = NULL;
+static gchar va_args_buffer [1025];
 
 /**
  * gpm_add_debug_option:
@@ -118,17 +119,16 @@ gpm_debug_real (const gchar *func,
 		const gchar *format, ...)
 {
 	va_list args;
-	gchar    buffer [1025];
 
 	if (do_verbose == FALSE && gpm_debug_in_options (file) == FALSE) {
 		return;
 	}
 
 	va_start (args, format);
-	g_vsnprintf (buffer, 1024, format, args);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_print_line (func, file, line, buffer);
+	gpm_print_line (func, file, line, va_args_buffer);
 }
 
 /**
@@ -141,19 +141,18 @@ gpm_warning_real (const gchar *func,
 		  const gchar *format, ...)
 {
 	va_list args;
-	gchar buffer[1025];
 
 	if (do_verbose == FALSE) {
 		return;
 	}
 
 	va_start (args, format);
-	g_vsnprintf (buffer, 1024, format, args);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
 	/* do extra stuff for a warning */
 	fprintf (stderr, "*** WARNING ***\n");
-	gpm_print_line (func, file, line, buffer);
+	gpm_print_line (func, file, line, va_args_buffer);
 }
 
 /**
@@ -180,14 +179,13 @@ void
 gpm_syslog (const gchar *format, ...)
 {
 	va_list args;
-	gchar buffer[1025];
 
 	va_start (args, format);
-	g_vsnprintf (buffer, 1024, format, args);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_debug ("Saving to syslog: %s", buffer);
-	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), buffer);
+	gpm_debug ("Saving to syslog: %s", va_args_buffer);
+	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), va_args_buffer);
 }
 
 /**
@@ -222,14 +220,13 @@ void
 gpm_critical_error (const gchar *format, ...)
 {
 	va_list args;
-	gchar buffer[1025];
 	GtkWidget *dialog;
 
 	va_start (args, format);
-	g_vsnprintf (buffer, 1024, format, args);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_syslog ("Critical error: %s", buffer);
+	gpm_syslog ("Critical error: %s", va_args_buffer);
 	dialog = gtk_message_dialog_new_with_markup (NULL,
 						     GTK_DIALOG_MODAL,
 						     GTK_MESSAGE_WARNING,
@@ -237,7 +234,7 @@ gpm_critical_error (const gchar *format, ...)
 						     "<span size='larger'><b>%s</b></span>",
 						     GPM_NAME);
 	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-						    buffer);
+						    va_args_buffer);
 	/* we close the gtk loop when the user clicks ok */
 	g_signal_connect_swapped (dialog,
 				  "response",

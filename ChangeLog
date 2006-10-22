@@ -1,5 +1,12 @@
 2006-10-19  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-debug.c:
+	Only allocate the var_args buffer once, globally. This stops us
+	allocating and then deallocating 1024 byte chunks on each debug line.
+	Fixes #363991, many thanks to Stu Hood.
+
+2006-10-19  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_init):
 	Oops. Fix compilation without libnotify. I hate #ifdefs.
 
