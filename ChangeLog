@@ -1,5 +1,18 @@
 2006-10-23  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-feedback-widget.c:
+	* src/gpm-hal-brightness-kbd.c:
+	* src/gpm-hal-brightness-lcd.c:
+	* src/gpm-hal-light-sensor.c:
+	* src/gpm-inhibit.c:
+	* src/gpm-refcount.c:
+	Remove a few non-required includes.
+
+	* src/gpm-prefs-core.c: (gpm_prefs_init):
+	Warn if glade file not found.
+
+2006-10-23  Richard Hughes <richard@hughsie.com>
+
 	* data/gpm-prefs.glade:
 	Change the checkbox text to "Dim the display when the computer is idle"
 	to fix #363765.

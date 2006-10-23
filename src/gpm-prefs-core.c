@@ -1227,6 +1227,9 @@ gpm_prefs_init (GpmPrefs *prefs)
 	}
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
+	if (prefs->priv->glade_xml == NULL) {
+		g_error ("Cannot find 'gpm-prefs.glade'");
+	}
 
 	main_window = glade_xml_get_widget (prefs->priv->glade_xml, "window_preferences");
 

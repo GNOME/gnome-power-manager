@@ -24,7 +24,6 @@
 #include <string.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <dbus/dbus-glib.h>
 
 #include "gpm-refcount.h"
 #include "gpm-debug.h"

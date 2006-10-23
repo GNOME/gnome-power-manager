@@ -24,7 +24,6 @@
 #include <glib.h>
 
 #include <glade/glade.h>
-#include <libgnomeui/gnome-help.h>
 #include <gtk/gtk.h>
 
 #include "gpm-feedback-widget.h"
