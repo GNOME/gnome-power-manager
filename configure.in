@@ -18,8 +18,10 @@ AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
 dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
-#CPPFLAGS="$CPPFLAGS -Wall -Werror -Wextra -fstrict-aliasing -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare -Wno-uninitialized -Wpointer-arith -Wredundant-decls -Wbad-function-cast -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs"
-CPPFLAGS="$CPPFLAGS -Wall"
+if test "$GCC" = "yes"; then
+    #CPPFLAGS="$CPPFLAGS -Wall -Werror -Wextra -fstrict-aliasing -Wshadow -Wcast-align -Wwrite-strings -Wsign-compare -Wno-uninitialized -Wpointer-arith -Wredundant-decls -Wbad-function-cast -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs"
+    CPPFLAGS="$CPPFLAGS -Wall"
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl - Debugging switches (uncomment this if you want to use gdb)
@@ -376,6 +378,7 @@ dnl ---------------------------------------------------------------------------
 
 have_dpms=no
 with_dpms_req=unspecified
+GPM_EXTRA_LIBS="-lresolv"
 AC_ARG_WITH(dpms-ext,
 [  --with-dpms-ext         Include support for the DPMS extension.],
   [with_dpms="$withval"; with_dpms_req="$withval"],[with_dpms=yes])
@@ -408,12 +411,15 @@ if test "$with_dpms" = yes; then
   # if that succeeded, then we've really got it.
   if test "$have_dpms" = yes; then
     AC_DEFINE(HAVE_DPMS_EXTENSION, 1, [Define if the DPMS extension is available])
+    GPM_EXTRA_LIBS="$GPM_EXTRA_LIBS -lXext"
   fi
 
 elif test "$with_dpms" != no; then
   echo "error: must be yes or no: --with-dpms-ext=$with_dpms"
   exit 1
 fi
+
+AC_SUBST(GPM_EXTRA_LIBS)
 
 dnl ---------------------------------------------------------------------------
 dnl - Is docbook2man available?

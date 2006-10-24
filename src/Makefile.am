@@ -123,6 +123,7 @@ gnome_power_manager_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(GPM_EXTRA_LIBS)				\
 	$(NULL)
 
 if HAVE_LIBNOTIFY

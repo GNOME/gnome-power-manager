@@ -1,3 +1,9 @@
+2006-10-24  Harry Lu  <harry.lu@sun.com>
+
+	* configure.in: enable "-Wall" only for gcc. Add "-lresolv -lXext"
+	to GPM_EXTRA_LIBS.
+	* src/Makefile.am: Add GPM_EXTRA_LIBS to gnome_power_manager_LDADD.
+
 2006-10-19  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-manager.c: (power_button_pressed_cb):
