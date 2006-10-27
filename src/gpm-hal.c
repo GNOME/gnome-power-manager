@@ -1195,6 +1195,32 @@ gpm_hal_new_capability_cb (DBusGProxy *proxy,
 }
 
 /**
+ * remove_device_property_modified_in_hash:
+ *
+ * @udi: The HAL UDI
+ *
+ * HashFunc so we can remove all the device-propery-modified devices
+ */
+static void
+remove_device_property_modified_in_hash (const char *udi, gpointer value, GpmHal *hal)
+{
+	gpm_hal_device_remove_propery_modified (hal, udi);
+}
+
+/**
+ * remove_device_condition_in_hash:
+ *
+ * @udi: The HAL UDI
+ *
+ * HashFunc so we can remove all the device-condition devices
+ */
+static void
+remove_device_condition_in_hash (const char *udi, gpointer value, GpmHal *hal)
+{
+	gpm_hal_device_remove_condition (hal, udi);
+}
+
+/**
  * gpm_hal_connect:
  *
  * @hal: This class instance
@@ -1282,6 +1308,11 @@ gpm_hal_disconnect (GpmHal *hal)
 	dbus_g_proxy_disconnect_signal (hal->priv->manager_proxy, "NewCapability",
 					G_CALLBACK (gpm_hal_new_capability_cb), hal);
 
+        g_hash_table_foreach (hal->priv->watch_device_property_modified,
+					(GHFunc) remove_device_property_modified_in_hash, hal);
+        g_hash_table_foreach (hal->priv->watch_device_condition,
+		 			(GHFunc) remove_device_condition_in_hash, hal);
+
 	g_object_unref (hal->priv->manager_proxy);
 	hal->priv->manager_proxy = NULL;
 
@@ -1355,32 +1386,6 @@ gpm_hal_init (GpmHal *hal)
 
 	/* blindly try to connect, assuming HAL is alive */
 	gpm_hal_connect (hal);
-}
-
-/**
- * remove_device_property_modified_in_hash:
- *
- * @udi: The HAL UDI
- *
- * HashFunc so we can remove all the device-propery-modified devices
- */
-static void
-remove_device_property_modified_in_hash (const char *udi, gpointer value, GpmHal *hal)
-{
-	gpm_hal_device_remove_propery_modified (hal, udi);
-}
-
-/**
- * remove_device_condition_in_hash:
- *
- * @udi: The HAL UDI
- *
- * HashFunc so we can remove all the device-condition devices
- */
-static void
-remove_device_condition_in_hash (const char *udi, gpointer value, GpmHal *hal)
-{
-	gpm_hal_device_remove_condition (hal, udi);
 }
 
 /**

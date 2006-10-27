@@ -1,3 +1,9 @@
+2006-10-28  Pascal Terjan <pterjan@linuxfr.org>
+
+	* src/gpm-hal.c: Empty the lists of monitored devices when HAL
+	disconnects so that they get monitored again after reconnecting.
+	Fixes #349842
+
 2006-10-24  Harry Lu  <harry.lu@sun.com>
 
 	* configure.in: enable "-Wall" only for gcc. Add "-lresolv -lXext"
