@@ -1274,19 +1274,6 @@ lid_button_pressed (GpmManager *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	/* todo move to info */
-	if (state) {
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
-				    _("The laptop lid has been closed"));
-		gpm_debug ("lid button CLOSED");
-	} else {
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
-				    _("The laptop lid has been re-opened"));
-		gpm_debug ("lid button OPENED");
-	}
-
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
@@ -1378,17 +1365,6 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
-
-	/* move all this to the gpm-info */
-	if (on_ac) {
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_ON_AC,
-				    _("AC adapter inserted"));
-	} else {
-		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
-				    _("AC adapter removed"));
-	}
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */

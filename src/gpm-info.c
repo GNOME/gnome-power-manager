@@ -37,6 +37,7 @@
 #include "gpm-power.h"
 #include "gpm-conf.h"
 #include "gpm-stock-icons.h"
+#include "gpm-button.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);
@@ -55,6 +56,7 @@ struct GpmInfoPrivate
 {
 	GpmPower		*power;
 	GpmHal			*hal;
+	GpmButton		*button;
 
 	GpmInfoData		*events;
 	GpmInfoData		*rate_data;
@@ -375,6 +377,56 @@ gpm_info_class_init (GpmInfoClass *klass)
 }
 
 /**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @manager: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+power_on_ac_changed_cb (GpmPower   *power,
+			gboolean    on_ac,
+			GpmInfo    *info)
+{
+	if (on_ac) {
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_ON_AC,
+				    _("AC adapter inserted"));
+	} else {
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
+				    _("AC adapter removed"));
+	}
+}
+
+/**
+ * button_pressed_cb:
+ * @power: The power class instance
+ * @type: The button type, e.g. "power"
+ * @state: The state, where TRUE is depressed or closed
+ * @brightness: This class instance
+ **/
+static void
+button_pressed_cb (GpmButton   *power,
+		   const gchar *type,
+		   GpmInfo     *info)
+{
+	gpm_debug ("Button press event type=%s", type);
+
+	if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+		gpm_info_event_log (info,
+				    GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
+				    _("The laptop lid has been closed"));
+		gpm_debug ("lid button CLOSED");
+
+	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
+		gpm_info_event_log (info,
+				    GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
+				    _("The laptop lid has been re-opened"));
+		gpm_debug ("lid button OPENED");
+	}
+}
+
+/**
  * gpm_info_init:
  * @info: This info class instance
  **/
@@ -397,6 +449,13 @@ gpm_info_init (GpmInfo *info)
 
 	/* singleton, so okay */
 	info->priv->power = gpm_power_new ();
+	g_signal_connect (info->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), info);
+
+	/* watch for lid open/close */
+	info->priv->button = gpm_button_new ();
+	g_signal_connect (info->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), info);
 
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
