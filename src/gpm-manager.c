@@ -302,7 +302,6 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
  * @manager: This class instance
  * @can: If we can shutdown
  *
- * Stub function -- TODO.
  **/
 gboolean
 gpm_manager_allowed_shutdown (GpmManager *manager,
@@ -343,164 +342,6 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 		*can = TRUE;
 	}
 	return TRUE;
-}
-
-/**
- * get_stock_id:
- * @manager: This class instance
- * @icon_policy: The policy set from gconf
- *
- * Get the stock filename id after analysing the state of all the devices
- * attached to the computer, and applying policy from gconf.
- *
- * Return value: The icon filename, must free using g_free.
- **/
-static char *
-get_stock_id (GpmManager *manager,
-	      guint	  icon_policy)
-{
-	GpmPowerStatus status_primary;
-	GpmPowerStatus status_ups;
-	GpmPowerStatus status_mouse;
-	GpmPowerStatus status_keyboard;
-	gboolean on_ac;
-	gboolean present;
-
-	if (icon_policy == GPM_ICON_POLICY_NEVER) {
-		gpm_debug ("The key " GPM_CONF_ICON_POLICY
-			   " is set to never, so no icon will be displayed.\n"
-			   "You can change this using gnome-power-preferences");
-		return NULL;
-	}
-
-	/* Finds if a device was found in the cache AND that it is present */
-	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_KIND_PRIMARY,
-						&status_primary);
-	status_primary.is_present &= present;
-	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_KIND_UPS,
-						&status_ups);
-	status_ups.is_present &= present;
-	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_KIND_MOUSE,
-						&status_mouse);
-	status_mouse.is_present &= present;
-	present = gpm_power_get_battery_status (manager->priv->power,
-						GPM_POWER_KIND_KEYBOARD,
-						&status_keyboard);
-	status_keyboard.is_present &= present;
-
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
-	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
-	if (status_primary.is_present &&
-	    status_primary.percentage_charge < manager->priv->low_percentage) {
-		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
-
-	} else if (status_ups.is_present &&
-		   status_ups.percentage_charge < manager->priv->low_percentage) {
-		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
-
-	} else if (status_mouse.is_present &&
-		   status_mouse.percentage_charge < manager->priv->low_percentage) {
-		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_MOUSE);
-
-	} else if (status_keyboard.is_present &&
-		   status_keyboard.percentage_charge < manager->priv->low_percentage) {
-		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_KEYBOARD);
-	}
-
-	if (icon_policy == GPM_ICON_POLICY_CRITICAL) {
-		gpm_debug ("no devices critical, so no icon will be displayed.");
-		return NULL;
-	}
-
-	/* we try (DIS)CHARGING: PRIMARY, UPS */
-	gpm_debug ("Trying CHARGING icon: primary, ups");
-	if (status_primary.is_present &&
-	    (status_primary.is_charging || status_primary.is_discharging) ) {
-		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
-
-	} else if (status_ups.is_present &&
-		   (status_ups.is_charging || status_ups.is_discharging) ) {
-		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
-	}
-
-	/* Check if we should just show the icon all the time */
-	if (icon_policy == GPM_ICON_POLICY_CHARGE) {
-		gpm_debug ("no devices (dis)charging, so no icon will be displayed.");
-		return NULL;
-	}
-
-	/* we try PRESENT: PRIMARY, UPS */
-	gpm_debug ("Trying PRESENT icon: primary, ups");
-	if (status_primary.is_present) {
-		return gpm_power_get_icon_from_status (&status_primary, GPM_POWER_KIND_PRIMARY);
-
-	} else if (status_ups.is_present) {
-		return gpm_power_get_icon_from_status (&status_ups, GPM_POWER_KIND_UPS);
-	}
-
-	/* Check if we should just fallback to the ac icon */
-	if (icon_policy == GPM_ICON_POLICY_PRESENT) {
-		gpm_debug ("no devices present, so no icon will be displayed.");
-		return NULL;
-	}
-
-	/* we fallback to the ac_adapter icon */
-	gpm_debug ("Using fallback");
-	return g_strdup_printf (GPM_STOCK_AC_ADAPTER);
-}
-
-/**
- * gpm_manager_sync_tray_icon:
- * @manager: This class instance
- *
- * Update the tray icon and set the correct tooltip when required, or remove
- * (hide) the icon when no longer required by policy.
- **/
-static void
-gpm_manager_sync_tray_icon (GpmManager *manager)
-{
-	gchar *stock_id = NULL;
-	gchar *icon_policy_str;
-	gint   icon_policy;
-
-	/* do we want to display the icon */
-	gpm_conf_get_string (manager->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy_str);
-	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
-
-	g_free (icon_policy_str);
-
-	/* try to get stock image */
-	stock_id = get_stock_id (manager, icon_policy);
-
-	gpm_debug ("Going to use stock id: %s", stock_id);
-
-	/* only create if we have a valid filename */
-	if (stock_id) {
-		gchar *tooltip = NULL;
-
-		gpm_tray_icon_set_image_from_stock (GPM_TRAY_ICON (manager->priv->tray_icon),
-						    stock_id);
-		/* make sure that we are visible */
-		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), TRUE);
-		g_free (stock_id);
-
-		gpm_power_get_status_summary (manager->priv->power, &tooltip, NULL);
-
-		gpm_tray_icon_set_tooltip (GPM_TRAY_ICON (manager->priv->tray_icon),
-					   tooltip);
-		g_free (tooltip);
-	} else {
-		/* remove icon */
-		gpm_debug ("no icon will be displayed");
-
-		/* make sure that we are hidden */
-		gpm_tray_icon_show (GPM_TRAY_ICON (manager->priv->tray_icon), FALSE);
-	}
 }
 
 /**
@@ -1435,6 +1276,7 @@ lid_button_pressed (GpmManager *manager,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
+	/* todo move to info */
 	if (state) {
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
@@ -1534,19 +1376,12 @@ power_on_ac_changed_cb (GpmPower   *power,
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
-	gpm_manager_sync_tray_icon (manager);
-
-	if (on_ac) {
-		/* for where we add back the ac_adapter before
-		 * the "AC Power unplugged" message times out. */
-		gpm_tray_icon_cancel_notify (GPM_TRAY_ICON (manager->priv->tray_icon));
-	}
-
 	gpm_manager_sync_policy_sleep (manager);
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
 
+	/* move all this to the gpm-info */
 	if (on_ac) {
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_ON_AC,
@@ -2056,7 +1891,7 @@ power_battery_status_changed_cb (GpmPower    *power,
 {
 	GpmPowerStatus battery_status;
 
-	gpm_manager_sync_tray_icon (manager);
+	gpm_tray_icon_sync (manager->priv->tray_icon);
 
 	gpm_power_get_battery_status (manager->priv->power, battery_kind, &battery_status);
 
@@ -2175,15 +2010,12 @@ conf_key_changed_cb (GpmConf     *conf,
 
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
-	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
-
-		gpm_manager_sync_tray_icon (manager);
-
-	} else if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
+	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
 
+	/* todo, move into gpm-tray-icon */
 	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
@@ -2278,7 +2110,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 			GpmManager    *manager)
 {
 	gpm_debug ("Battery Removed: %s", udi);
-	gpm_manager_sync_tray_icon (manager);
+	gpm_tray_icon_sync (manager->priv->tray_icon);
 }
 
 /**
@@ -2289,7 +2121,7 @@ static void
 hal_daemon_monitor_cb (GpmHal     *hal,
 		     GpmManager *manager)
 {
-	gpm_manager_sync_tray_icon (manager);
+	gpm_tray_icon_sync (manager->priv->tray_icon);
 }
 
 /**
@@ -2414,7 +2246,7 @@ gpm_manager_init (GpmManager *manager)
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_manager_sync_tray_icon (manager);
+	gpm_tray_icon_sync (manager->priv->tray_icon);
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);

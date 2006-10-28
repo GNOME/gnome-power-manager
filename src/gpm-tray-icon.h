@@ -75,6 +75,7 @@ void		 gpm_tray_icon_enable_hibernate		(GpmTrayIcon	*icon,
 							 gboolean	 enabled);
 void		 gpm_tray_icon_show			(GpmTrayIcon	*icon,
 							 gboolean	 enabled);
+void		 gpm_tray_icon_sync			(GpmTrayIcon	*icon);
 
 G_END_DECLS
 
