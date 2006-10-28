@@ -198,6 +198,11 @@ main (int argc, char *argv[])
 		}
 	}
 
+	/* we need to daemonize before we get a system connection to fix #366057 */
+	if (! no_daemon && daemon (0, 0)) {
+		gpm_critical_error ("Could not daemonize: %s", g_strerror (errno));
+	}
+
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
@@ -225,10 +230,6 @@ main (int argc, char *argv[])
 
 	if (! gpm_stock_icons_init()) {
 		gpm_critical_error ("Cannot continue without stock icons");
-	}
-
-	if (! no_daemon && daemon (0, 0)) {
-		gpm_critical_error ("Could not daemonize: %s", g_strerror (errno));
 	}
 
 	manager = gpm_manager_new ();

@@ -1,3 +1,18 @@
+2006-10-28  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-main.c: (main):
+	Daemonize earlier than we connect to the system messagebus to fix
+	#366057 so we can support PolicyKit and ConsoleKit.
+
+	* .cvsignore:
+	Add NEWS.new, the way I keep track of changes internally.
+
+	* configure.in:
+	Bump to 2.17.3, this was never done after the bodge release.
+	
+	* src/gpm-button.c: (gpm_button_new):
+	Make into a singleton for future work.
+
 2006-10-24  Harry Lu  <harry.lu@sun.com>
 
 	* configure.in: enable "-Wall" only for gcc. Add "-lresolv -lXext"
