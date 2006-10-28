@@ -1,5 +1,21 @@
 2006-10-28  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-dpms.c:
+	Make into singleton.
+
+	* src/Makefile.am:
+	* src/gpm-manager.c:
+	* src/gpm-screensaver.c:
+	Move some more functionality away from the manager class into the
+	screensaver class. The idea is that GpmScreensaver should handle
+	all interactions with the screensaver, even dimming and undimming the
+	screen when the screensaver wants.	
+
+	* src/gpm-brightness-lcd.c:
+	Make into a singleton so we can use this in the screensaver class.
+
+2006-10-28  Richard Hughes <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-brightness-kbd.c:
 	* src/gpm-brightness-lcd.c:

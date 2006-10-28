@@ -102,10 +102,6 @@ struct GpmManagerPrivate
 	GpmInhibit		*inhibit;
 	GpmPolkit		*polkit;
 
-	guint32         	 ac_throttle_id;
-	guint32         	 dpms_throttle_id;
-	guint32         	 lid_throttle_id;
-
 	GpmTrayIcon		*tray_icon;
 
 	GpmWarning		 last_primary_warning;
@@ -507,53 +503,6 @@ gpm_manager_sync_tray_icon (GpmManager *manager)
 	}
 }
 
-static void
-update_ac_throttle (GpmManager *manager,
-		    gboolean    on_ac)
-{
-	/* Throttle the screensaver when we are not on AC power so we don't
-	   waste the battery */
-	if (on_ac) {
-		if (manager->priv->ac_throttle_id > 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->ac_throttle_id);
-			manager->priv->ac_throttle_id = 0;
-		}
-	} else {
-		manager->priv->ac_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("On battery power"));
-	}
-}
-
-static void
-update_dpms_throttle (GpmManager *manager,
-		      GpmDpmsMode mode)
-{
-	/* Throttle the screensaver when DPMS is active since we can't see it anyway */
-	if (mode == GPM_DPMS_MODE_ON) {
-		if (manager->priv->dpms_throttle_id > 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->dpms_throttle_id);
-			manager->priv->dpms_throttle_id = 0;
-		}
-	} else {
-		manager->priv->dpms_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Display power management activated"));
-	}
-}
-
-static void
-update_lid_throttle (GpmManager	*manager,
-		     gboolean    lid_is_closed)
-{
-	/* Throttle the screensaver when the lid is close since we can't see it anyway
-	   and it may overheat the laptop */
-	if (! lid_is_closed) {
-		if (manager->priv->lid_throttle_id > 0) {
-			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->lid_throttle_id);
-			manager->priv->lid_throttle_id = 0;
-		}
-	} else {
-		manager->priv->lid_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Laptop lid is closed"));
-	}
-}
-
 /**
  * gpm_manager_sync_policy_sleep:
  * @manager: This class instance
@@ -585,7 +534,6 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	}
 
 	gpm_hal_power_enable_power_save (manager->priv->hal_power, power_save);
-	update_ac_throttle (manager, on_ac);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
@@ -1365,7 +1313,6 @@ idle_changed_cb (GpmIdle    *idle,
 
 /**
  * dpms_mode_changed_cb:
- * @dpms: dpmsdesc
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
  * @manager: This class instance
  *
@@ -1377,8 +1324,6 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 		      GpmManager *manager)
 {
 	gpm_debug ("DPMS mode changed: %d", mode);
-
-	update_dpms_throttle (manager, mode);
 
 	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (manager,
@@ -1507,10 +1452,6 @@ lid_button_pressed (GpmManager *manager,
 	   is closed. Fixes #331655 */
 	manager->priv->lid_is_closed = state;
 
-	/* Disable or enable the fancy screensaver, as we don't want this starting
-	   when the lid is shut */
-	update_lid_throttle (manager, manager->priv->lid_is_closed);
-
 	if (state) {
 		if (on_ac) {
 			gpm_debug ("Performing AC policy");
@@ -1582,9 +1523,6 @@ power_on_ac_changed_cb (GpmPower   *power,
 	gboolean event_when_closed;
 
 	gpm_debug ("Setting on-ac: %d", on_ac);
-
-	/* simulate user input, to fix #333525 */
-	gpm_screensaver_poke (manager->priv->screensaver);
 
 	/* Don't do any events for a few seconds after we remove the
 	 * ac_adapter. See #348201 for details */
@@ -2344,67 +2282,6 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 }
 
 /**
- * screensaver_auth_request_cb:
- * @manager: This class instance
- * @auth: If we are trying to authenticate
- *
- * Undim the screen when the login screen appears (see #333290)
- **/
-static void
-screensaver_auth_request_cb (GpmScreensaver *screensaver,
-			     gboolean        auth,
-			     GpmManager     *manager)
-{
-	GError  *error;
-	gboolean res;
-
-	/* Only act on the begin authentication request */
-	if (! auth) {
-		return;
-	}
-
-	/* TODO: This may be a bid of a bodge, as we will have multiple
-		 resume requests -- maybe this need a logic cleanup */
-	if (manager->priv->brightness_lcd) {
-		gpm_debug ("undimming lcd due to auth begin");
-		gpm_brightness_lcd_undim (manager->priv->brightness_lcd);
-	}
-
-	/* We turn on the monitor unconditionally, as we may be using
-	 * a smartcard to authenticate and DPMS might still be on.
-	 * See #350291 for more details */
-	error = NULL;
-	res = gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
-	if (! res) {
-		gpm_warning ("Failed to turn on DPMS: %s", error->message);
-		g_error_free (error);
-	}
-}
-
-/**
- * screensaver_connection_changed_cb:
- * @manager: This class instance
- **/
-static void
-screensaver_connection_changed_cb (GpmScreensaver *screensaver,
-				   gboolean        connected,
-				   GpmManager     *manager)
-{
-	/* add throttlers when first connected */
-	if (connected) {
-		gboolean    on_ac;
-		GpmDpmsMode mode;
-
-		gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-		gpm_dpms_get_mode (manager->priv->dpms, &mode, NULL);
-
-		update_ac_throttle (manager, on_ac);
-		update_dpms_throttle (manager, mode);
-		update_lid_throttle (manager, manager->priv->lid_is_closed);
-	}
-}
-
-/**
  * hal_daemon_monitor_cb:
  * @hal: The HAL class instance
  **/
@@ -2466,10 +2343,6 @@ gpm_manager_init (GpmManager *manager)
 	if (manager->priv->screensaver) {
 		gpm_screensaver_service_init (manager->priv->screensaver);
 	}
-	g_signal_connect (manager->priv->screensaver, "connection-changed",
-			  G_CALLBACK (screensaver_connection_changed_cb), manager);
-	g_signal_connect (manager->priv->screensaver, "auth-request",
-			  G_CALLBACK (screensaver_auth_request_cb), manager);
 
 	/* FIXME: We shouldn't assume the lid is open at startup */
 	manager->priv->lid_is_closed = FALSE;

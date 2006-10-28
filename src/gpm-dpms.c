@@ -84,6 +84,7 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
+static gpointer      gpm_dpms_object = NULL;
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)
 
@@ -940,7 +941,7 @@ gpm_dpms_init (GpmDpms *dpms)
 	g_signal_connect (dpms->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), dpms);
 
-	/* we use power for the ac-power=changed signal */
+	/* we use power for the ac-power-changed signal */
 	dpms->priv->hal_power = gpm_hal_power_new ();
 
 	/* we use power for the ac-power=changed signal */
@@ -982,9 +983,12 @@ gpm_dpms_finalize (GObject *object)
 GpmDpms *
 gpm_dpms_new (void)
 {
-	GpmDpms *dpms;
-
-	dpms = g_object_new (GPM_TYPE_DPMS, NULL);
-
-	return GPM_DPMS (dpms);
+	if (gpm_dpms_object) {
+		g_object_ref (gpm_dpms_object);
+	} else {
+		gpm_dpms_object = g_object_new (GPM_TYPE_DPMS, NULL);
+		g_object_add_weak_pointer (gpm_dpms_object,
+					   (gpointer *) &gpm_dpms_object);
+	}
+	return GPM_DPMS (gpm_dpms_object);
 }

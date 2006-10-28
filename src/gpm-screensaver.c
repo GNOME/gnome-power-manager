@@ -31,6 +31,9 @@
 #include "gpm-debug.h"
 #include "gpm-proxy.h"
 #include "gpm-button.h"
+#include "gpm-dpms.h"
+#include "gpm-power.h"
+#include "gpm-brightness-lcd.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
 static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
@@ -51,7 +54,13 @@ struct GpmScreensaverPrivate
 	GpmProxy		*gproxy;
 	GpmConf			*conf;
 	GpmButton		*button;
+	GpmDpms			*dpms;
+	GpmPower		*power;
+	GpmBrightnessLcd	*brightness_lcd;
 	guint			 idle_delay;	/* the setting in g-s-p, cached */
+	guint32         	 ac_throttle_id;
+	guint32         	 dpms_throttle_id;
+	guint32         	 lid_throttle_id;
 };
 
 enum {
@@ -73,8 +82,28 @@ gpm_screensaver_auth_begin (DBusGProxy     *proxy,
 			    GpmScreensaver *screensaver)
 {
 	const gboolean value = TRUE;
+	GError  *error;
+	gboolean res;
+
 	gpm_debug ("emitting auth-request : (%i)", value);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+
+	/* TODO: This may be a bid of a bodge, as we will have multiple
+		 resume requests -- maybe this need a logic cleanup */
+	if (screensaver->priv->brightness_lcd) {
+		gpm_debug ("undimming lcd due to auth begin");
+		gpm_brightness_lcd_undim (screensaver->priv->brightness_lcd);
+	}
+
+	/* We turn on the monitor unconditionally, as we may be using
+	 * a smartcard to authenticate and DPMS might still be on.
+	 * See #350291 for more details */
+	error = NULL;
+	res = gpm_dpms_set_mode (screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	if (! res) {
+		gpm_warning ("Failed to turn on DPMS: %s", error->message);
+		g_error_free (error);
+	}
 }
 
 /** Invoked when we get the AuthenticationRequestEnd from g-s when the user
@@ -87,6 +116,55 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
 	const gboolean value = FALSE;
 	gpm_debug ("emitting auth-request : (%i)", value);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+}
+
+static void
+update_dpms_throttle (GpmScreensaver *screensaver)
+{
+	GpmDpmsMode mode;
+	gpm_dpms_get_mode (screensaver->priv->dpms, &mode, NULL);
+
+	/* Throttle the screensaver when DPMS is active since we can't see it anyway */
+	if (mode == GPM_DPMS_MODE_ON) {
+		if (screensaver->priv->dpms_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->dpms_throttle_id);
+			screensaver->priv->dpms_throttle_id = 0;
+		}
+	} else {
+		screensaver->priv->dpms_throttle_id = gpm_screensaver_add_throttle (screensaver, _("Display DPMS activated"));
+	}
+}
+
+static void
+update_ac_throttle (GpmScreensaver *screensaver,
+		    gboolean        on_ac)
+{
+	/* Throttle the screensaver when we are not on AC power so we don't
+	   waste the battery */
+	if (on_ac) {
+		if (screensaver->priv->ac_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->ac_throttle_id);
+			screensaver->priv->ac_throttle_id = 0;
+		}
+	} else {
+		screensaver->priv->ac_throttle_id = gpm_screensaver_add_throttle (screensaver, _("On battery power"));
+	}
+}
+
+static void
+update_lid_throttle (GpmScreensaver *screensaver,
+		     gboolean        lid_is_closed)
+{
+	/* Throttle the screensaver when the lid is close since we can't see it anyway
+	   and it may overheat the laptop */
+	if (! lid_is_closed) {
+		if (screensaver->priv->lid_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->lid_throttle_id);
+			screensaver->priv->lid_throttle_id = 0;
+		}
+	} else {
+		screensaver->priv->lid_throttle_id = gpm_screensaver_add_throttle (screensaver, _("Laptop lid is closed"));
+	}
 }
 
 /**
@@ -123,6 +201,10 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 				     "AuthenticationRequestEnd",
 				     G_CALLBACK (gpm_screensaver_auth_end),
 				     screensaver, NULL);
+
+	update_dpms_throttle (screensaver);
+//	update_lid_throttle (screensaver, lid_is_closed);
+
 	return TRUE;
 }
 
@@ -272,7 +354,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	}
 
 	ret = dbus_g_proxy_call (proxy, "Throttle", &error,
-				 G_TYPE_STRING, "Power Manager",
+				 G_TYPE_STRING, "Power screensaver",
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &cookie,
@@ -504,7 +586,52 @@ button_pressed_cb (GpmButton      *button,
 	/* really belongs in gnome-screensaver */
 	if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
 		gpm_screensaver_lock (screensaver);
+
+	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
+		/* Disable or enable the fancy screensaver, as we don't want
+		 * this starting when the lid is shut */
+		update_lid_throttle (screensaver, TRUE);
+
+	} else if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+		update_lid_throttle (screensaver, FALSE);
+
 	}
+}
+
+/**
+ * dpms_mode_changed_cb:
+ * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
+ * @screensaver: This class instance
+ *
+ * What happens when the DPMS mode is changed.
+ **/
+static void
+dpms_mode_changed_cb (GpmDpms        *dpms,
+		      GpmDpmsMode     mode,
+		      GpmScreensaver *screensaver)
+{
+	gpm_debug ("DPMS mode changed: %d", mode);
+
+	update_dpms_throttle (screensaver);
+}
+
+/**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @screensaver: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+power_on_ac_changed_cb (GpmPower       *power,
+			gboolean        on_ac,
+			GpmScreensaver *screensaver)
+{
+	update_ac_throttle (screensaver, on_ac);
+
+	/* simulate user input, to fix #333525 */
+	gpm_screensaver_poke (screensaver);
 }
 
 /**
@@ -521,6 +648,8 @@ button_pressed_cb (GpmButton      *button,
 gboolean
 gpm_screensaver_service_init (GpmScreensaver *screensaver)
 {
+	gboolean on_ac;
+
 	g_return_val_if_fail (screensaver != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
@@ -528,6 +657,22 @@ gpm_screensaver_service_init (GpmScreensaver *screensaver)
 	screensaver->priv->button = gpm_button_new ();
 	g_signal_connect (screensaver->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), screensaver);
+
+	/* we use dpms so we turn off the screensaver when dpms is on */
+	screensaver->priv->dpms = gpm_dpms_new ();
+	g_signal_connect (screensaver->priv->dpms, "mode-changed",
+			  G_CALLBACK (dpms_mode_changed_cb), screensaver);
+
+	/* we use power so we can poke the screensaver and throttle */
+	screensaver->priv->power = gpm_power_new ();
+	g_signal_connect (screensaver->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), screensaver);
+
+	/* we use brightness so we undim when we need authentication */
+	screensaver->priv->brightness_lcd = gpm_brightness_lcd_new ();
+
+	gpm_power_get_on_ac (screensaver->priv->power, &on_ac, NULL);
+	update_ac_throttle (screensaver, on_ac);
 
 	return TRUE;
 }
@@ -584,6 +729,15 @@ gpm_screensaver_finalize (GObject *object)
 	g_object_unref (screensaver->priv->gproxy);
 	if (screensaver->priv->button != NULL) {
 		g_object_unref (screensaver->priv->button);
+	}
+	if (screensaver->priv->dpms != NULL) {
+		g_object_unref (screensaver->priv->dpms);
+	}
+	if (screensaver->priv->power != NULL) {
+		g_object_unref (screensaver->priv->power);
+	}
+	if (screensaver->priv->brightness_lcd != NULL) {
+		g_object_unref (screensaver->priv->brightness_lcd);
 	}
 
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);

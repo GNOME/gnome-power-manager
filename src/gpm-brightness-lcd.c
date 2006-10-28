@@ -73,6 +73,7 @@ struct GpmBrightnessLcdPrivate
 };
 
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
+static gpointer      gpm_brightness_lcd_object = NULL;
 
 /**
  * gpm_brightness_lcd_get_hw:
@@ -632,7 +633,7 @@ gpm_brightness_lcd_service_init (GpmBrightnessLcd *brightness)
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	/* we use power for the ac-power=changed signal */
+	/* we use power for the ac-power-changed signal */
 	brightness->priv->power = gpm_power_new ();
 	g_signal_connect (brightness->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), brightness);
@@ -775,13 +776,14 @@ gpm_brightness_lcd_has_hw (void)
 GpmBrightnessLcd *
 gpm_brightness_lcd_new (void)
 {
-	GpmBrightnessLcd *brightness;
-
-	/* only load an instance of this module if we have the hardware */
-	if (gpm_brightness_lcd_has_hw () == FALSE) {
-		return NULL;
+	if (gpm_brightness_lcd_object) {
+		g_object_ref (gpm_brightness_lcd_object);
+	} else {
+		if (gpm_brightness_lcd_has_hw () == TRUE) {
+			gpm_brightness_lcd_object = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
+			g_object_add_weak_pointer (gpm_brightness_lcd_object,
+						   (gpointer *) &gpm_brightness_lcd_object);
+		}
 	}
-
-	brightness = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
-	return GPM_BRIGHTNESS_LCD (brightness);
+	return GPM_BRIGHTNESS_LCD (gpm_brightness_lcd_object);
 }

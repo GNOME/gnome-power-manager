@@ -81,6 +81,8 @@ gnome_power_inhibit_test_LDADD =			\
 gnome_power_preferences_SOURCES =			\
 	gpm-hal.h					\
 	gpm-hal.c					\
+	gpm-dpms.h					\
+	gpm-dpms.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-debug.h					\
@@ -103,6 +105,10 @@ gnome_power_preferences_SOURCES =			\
 	gpm-hal-power.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
+	gpm-brightness-lcd.h				\
+	gpm-brightness-lcd.c				\
+	gpm-feedback-widget.h				\
+	gpm-feedback-widget.c				\
 	gpm-power.h					\
 	gpm-power.c					\
 	gpm-refcount.h					\
