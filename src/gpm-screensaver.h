@@ -69,6 +69,7 @@ gboolean	 gpm_screensaver_check_running		(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_poke			(GpmScreensaver	*screensaver);
 gboolean	 gpm_screensaver_get_idle		(GpmScreensaver	*screensaver,
 							 gint		*time);
+gboolean	 gpm_screensaver_service_init		(GpmScreensaver *screensaver);
 
 G_END_DECLS
 

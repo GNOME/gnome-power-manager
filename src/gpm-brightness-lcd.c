@@ -535,19 +535,16 @@ power_on_ac_changed_cb (GpmPower         *power,
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmPower         *power,
+button_pressed_cb (GpmButton        *power,
 		   const gchar      *type,
-		   gboolean          state,
 		   GpmBrightnessLcd *brightness)
 {
-	gpm_debug ("Button press event type=%s state=%d", type, state);
+	gpm_debug ("Button press event type=%s", type);
 
-	if ((strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) ||
-	    (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0)) {
+	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 		gpm_brightness_lcd_up (brightness);
 
-	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) ||
-		   (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0)) {
+	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 		gpm_brightness_lcd_down (brightness);
 	}
 }
@@ -639,16 +636,12 @@ gpm_brightness_lcd_service_init (GpmBrightnessLcd *brightness)
 	brightness->priv->power = gpm_power_new ();
 	g_signal_connect (brightness->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), brightness);
-	/* remove when button support of moved out of hal and into x */
-	g_signal_connect (brightness->priv->power, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), brightness);
 
 	/* watch for brightness up and down buttons */
 	brightness->priv->button = gpm_button_new ();
-	if (brightness->priv->button) {
-		g_signal_connect (brightness->priv->button, "button-pressed",
-				  G_CALLBACK (button_pressed_cb), brightness);
-	}
+	g_signal_connect (brightness->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), brightness);
+
 	return TRUE;
 }
 

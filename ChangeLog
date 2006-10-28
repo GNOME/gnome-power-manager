@@ -1,5 +1,20 @@
 2006-10-28  Richard Hughes <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-button.c:
+	* src/gpm-button.h:
+	Abstract the button class further so that we don't need to setup
+	callbacks on GpmPower to get hal buttons.
+
+	* src/gpm-manager.c:
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	Detect the lock button here, not in the manager.
+
+2006-10-28  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-dpms.c:
 	* src/gpm-dpms.h:
 	* src/gpm-manager.c:

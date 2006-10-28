@@ -97,6 +97,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-proxy.c					\
 	gpm-cpufreq.h					\
 	gpm-cpufreq.c					\
+	gpm-button.h					\
+	gpm-button.c					\
 	gpm-hal-power.h					\
 	gpm-hal-power.c					\
 	gpm-hal-monitor.h				\

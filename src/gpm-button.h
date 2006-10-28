@@ -39,7 +39,9 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_SLEEP		"sleep"
 #define GPM_BUTTON_SUSPEND		"suspend"
 #define GPM_BUTTON_HIBERNATE		"hibernate"
-#define GPM_BUTTON_LID			"lid"
+#define GPM_BUTTON_LID_DEP		"lid"		/* Remove when HAL drops input support */
+#define GPM_BUTTON_LID_UP		"lid-up"
+#define GPM_BUTTON_LID_DOWN		"lid-down"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
 #define GPM_BUTTON_BRIGHT_UP_DEP	"brightnessup"	 /* Remove when we depend on HAL 0.5.8 */
@@ -60,8 +62,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* button_pressed)	(GpmButton	*button,
-						 const gchar	*type,
-						 gboolean	 state);
+						 const gchar	*type);
 } GpmButtonClass;
 
 GType		 gpm_button_get_type		(void);

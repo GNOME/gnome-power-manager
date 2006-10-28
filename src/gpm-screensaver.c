@@ -30,6 +30,7 @@
 #include "gpm-screensaver.h"
 #include "gpm-debug.h"
 #include "gpm-proxy.h"
+#include "gpm-button.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
 static void     gpm_screensaver_init       (GpmScreensaver      *screensaver);
@@ -49,6 +50,7 @@ struct GpmScreensaverPrivate
 {
 	GpmProxy		*gproxy;
 	GpmConf			*conf;
+	GpmButton		*button;
 	guint			 idle_delay;	/* the setting in g-s-p, cached */
 };
 
@@ -486,6 +488,51 @@ proxy_status_cb (DBusGProxy     *proxy,
 }
 
 /**
+ * button_pressed_cb:
+ * @power: The power class instance
+ * @type: The button type, e.g. "power"
+ * @state: The state, where TRUE is depressed or closed
+ * @screensaver: This class instance
+ **/
+static void
+button_pressed_cb (GpmButton      *button,
+		   const gchar    *type,
+		   GpmScreensaver *screensaver)
+{
+	gpm_debug ("Button press event type=%s", type);
+
+	/* really belongs in gnome-screensaver */
+	if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
+		gpm_screensaver_lock (screensaver);
+	}
+}
+
+/**
+ * gpm_screensaver_service_init:
+ *
+ * @screensaver: This class instance
+ *
+ * This starts the interactive parts of the class, for instance it makes the
+ * the class respond to button presses and AC state changes.
+ *
+ * If your are using this class in the preferences or info programs you don't
+ * need to call this function
+ **/
+gboolean
+gpm_screensaver_service_init (GpmScreensaver *screensaver)
+{
+	g_return_val_if_fail (screensaver != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
+
+	/* we use power for the ac-power-changed signal */
+	screensaver->priv->button = gpm_button_new ();
+	g_signal_connect (screensaver->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), screensaver);
+
+	return TRUE;
+}
+
+/**
  * gpm_screensaver_init:
  * @screensaver: This screensaver class instance
  **/
@@ -535,6 +582,9 @@ gpm_screensaver_finalize (GObject *object)
 	gpm_screensaver_proxy_disconnect_more (screensaver);
 	g_object_unref (screensaver->priv->conf);
 	g_object_unref (screensaver->priv->gproxy);
+	if (screensaver->priv->button != NULL) {
+		g_object_unref (screensaver->priv->button);
+	}
 
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);
 }

@@ -58,22 +58,22 @@
 
 struct GpmBrightnessKbdPrivate
 {
-	gboolean	   does_own_updates;	/* keys are hardwired */
-	gboolean	   does_own_dimming;	/* hardware auto-fades */
-	gboolean	   is_dimmed;
-	gboolean	   is_disabled;
-	guint		   current_hw;		/* hardware */
-	guint		   level_dim_hw;
-	guint		   level_std_hw;
-	guint		   levels;
-	gchar		  *udi;
-	GpmConf		  *conf;
-	GpmButton	  *button;
-	GpmPower	  *power;
-	GpmProxy	  *gproxy;
-	GpmHal		  *hal;
-	GpmFeedback	  *feedback;
-	GpmLightSensor *sensor;
+	gboolean		 does_own_updates;	/* keys are hardwired */
+	gboolean		 does_own_dimming;	/* hardware auto-fades */
+	gboolean		 is_dimmed;
+	gboolean		 is_disabled;
+	guint			 current_hw;		/* hardware */
+	guint			 level_dim_hw;
+	guint			 level_std_hw;
+	guint			 levels;
+	gchar			*udi;
+	GpmConf			*conf;
+	GpmButton		*button;
+	GpmPower		*power;
+	GpmProxy		*gproxy;
+	GpmHal			*hal;
+	GpmFeedback		*feedback;
+	GpmLightSensor		*sensor;
 };
 
 G_DEFINE_TYPE (GpmBrightnessKbd, gpm_brightness_kbd, G_TYPE_OBJECT)
@@ -527,12 +527,11 @@ power_on_ac_changed_cb (GpmPower         *power,
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmPower          *power,
-		   const gchar       *type,
-		   gboolean           state,
-		   GpmBrightnessKbd  *brightness)
+button_pressed_cb (GpmButton        *button,
+		   const gchar      *type,
+		   GpmBrightnessKbd *brightness)
 {
-	gpm_debug ("Button press event type=%s state=%d", type, state);
+	gpm_debug ("Button press event type=%s", type);
 
 	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
 		gpm_brightness_kbd_up (brightness);
@@ -783,16 +782,12 @@ gpm_brightness_kbd_service_init (GpmBrightnessKbd *brightness)
 	brightness->priv->power = gpm_power_new ();
 	g_signal_connect (brightness->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), brightness);
-	/* remove when button support of moved out of hal and into x */
-	g_signal_connect (brightness->priv->power, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), brightness);
 
 	/* watch for brightness up and down buttons */
 	brightness->priv->button = gpm_button_new ();
-	if (brightness->priv->button) {
-		g_signal_connect (brightness->priv->button, "button-pressed",
-				  G_CALLBACK (button_pressed_cb), brightness);
-	}
+	g_signal_connect (brightness->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), brightness);
+
 	return TRUE;
 }
 

@@ -1537,12 +1537,11 @@ lid_button_pressed (GpmManager *manager,
  * @manager: This class instance
  **/
 static void
-button_pressed_cb (GpmPower    *power,
+button_pressed_cb (GpmButton   *button,
 		   const gchar *type,
-		   gboolean     state,
 		   GpmManager  *manager)
 {
-	gpm_debug ("Button press event type=%s state=%d", type, state);
+	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_POWER) == 0) {
 		power_button_pressed (manager);
@@ -1556,11 +1555,11 @@ button_pressed_cb (GpmPower    *power,
 	} else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0) {
 		hibernate_button_pressed (manager);
 
-	} else if (strcmp (type, GPM_BUTTON_LID) == 0) {
-		lid_button_pressed (manager, state);
+	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
+		lid_button_pressed (manager, TRUE);
 
-	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
-		gpm_screensaver_lock (manager->priv->screensaver);
+	} else if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+		lid_button_pressed (manager, FALSE);
 
 	} else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
 		battery_button_pressed (manager);
@@ -2438,8 +2437,6 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (conf_key_changed_cb), manager);
 
 	manager->priv->power = gpm_power_new ();
-	g_signal_connect (manager->priv->power, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), manager);
 	g_signal_connect (manager->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
@@ -2448,10 +2445,8 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (power_battery_status_perhaps_recall_cb), manager);
 
 	manager->priv->button = gpm_button_new ();
-	if (manager->priv->button) {
-		g_signal_connect (manager->priv->button, "button-pressed",
-				  G_CALLBACK (button_pressed_cb), manager);
-	}
+	g_signal_connect (manager->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
 	g_signal_connect (manager->priv->hal, "daemon-start",
@@ -2468,6 +2463,9 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->hal_power = gpm_hal_power_new ();
 
 	manager->priv->screensaver = gpm_screensaver_new ();
+	if (manager->priv->screensaver) {
+		gpm_screensaver_service_init (manager->priv->screensaver);
+	}
 	g_signal_connect (manager->priv->screensaver, "connection-changed",
 			  G_CALLBACK (screensaver_connection_changed_cb), manager);
 	g_signal_connect (manager->priv->screensaver, "auth-request",

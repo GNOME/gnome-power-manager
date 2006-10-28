@@ -32,6 +32,7 @@
 
 #include "gpm-button.h"
 #include "gpm-debug.h"
+#include "gpm-power.h"
 #include "gpm-marshal.h"
 
 static void     gpm_button_class_init (GpmButtonClass *klass);
@@ -45,6 +46,7 @@ struct GpmButtonPrivate
 	GdkScreen	*screen;
 	GdkWindow	*window;
 	GHashTable	*hash_to_hal;
+	GpmPower	*power; /* remove when iput events is in the kernel */
 };
 
 enum {
@@ -53,9 +55,7 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-#ifdef HAVE_XEVENTS
 static gpointer      gpm_button_object = NULL;
-#endif
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
@@ -82,9 +82,7 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 			gpm_warning ("Key '%s' not found in hash!", hashkey);
 		} else {
 			gpm_debug ("Key '%s' mapped to HAL key %s", hashkey, key);
-			/* FIXME: we need to use the state for lid, in the current plan,
-			 * or maybe better to use lid-open and lid-closed for clarity */
-			g_signal_emit (button, signals [BUTTON_PRESSED], 0, key, TRUE);
+			g_signal_emit (button, signals [BUTTON_PRESSED], 0, key);
 		}
 
 		g_free (hashkey);
@@ -229,8 +227,41 @@ gpm_button_class_init (GpmButtonClass *klass)
 			      G_STRUCT_OFFSET (GpmButtonClass, button_pressed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__STRING_BOOLEAN,
-			      G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+			      gpm_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
+}
+
+/**
+ * button_pressed_cb:
+ * @power: The power class instance
+ * @type: The button type, e.g. "power"
+ * @state: The state, where TRUE is depressed or closed
+ * @brightness: This class instance
+ **/
+static void
+button_pressed_cb (GpmPower    *power,
+		   const gchar *type,
+		   gboolean     state,
+		   GpmButton   *button)
+{
+	gpm_debug ("Button press event type=%s state=%d", type, state);
+	const char *atype = type;
+
+	/* abstact away that HAL has an extra parameter */
+	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == TRUE) {
+		atype = GPM_BUTTON_LID_UP;
+	} else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == TRUE) {
+		atype = GPM_BUTTON_LID_DOWN;
+	}
+
+	/* the names changed in 0.5.8 */
+	if (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0) {
+		atype = GPM_BUTTON_BRIGHT_UP;
+	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0) {
+		atype = GPM_BUTTON_BRIGHT_DOWN;
+	}
+
+	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype, TRUE);
 }
 
 /**
@@ -240,6 +271,7 @@ gpm_button_class_init (GpmButtonClass *klass)
 static void
 gpm_button_init (GpmButton *button)
 {
+	gboolean have_xevents = FALSE;
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
 	button->priv->screen = gdk_screen_get_default ();
@@ -247,22 +279,37 @@ gpm_button_init (GpmButton *button)
 
 	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-	/* register the brightness keys */
-	gpm_button_monitor_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
-	gpm_button_monitor_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
-	gpm_button_monitor_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
-	gpm_button_monitor_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
-	gpm_button_monitor_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);
-	gpm_button_monitor_key (button, "XF86BrightnessUp", GPM_BUTTON_BRIGHT_UP);
-	gpm_button_monitor_key (button, "XF86BrightnessDown", GPM_BUTTON_BRIGHT_DOWN);
-	gpm_button_monitor_key (button, "XF86XK_ScreenSaver", GPM_BUTTON_LOCK);
-	gpm_button_monitor_key (button, "XF86XK_Battery", GPM_BUTTON_BATTERY);
-	gpm_button_monitor_key (button, "XF86KeyboardLightUp", GPM_BUTTON_KBD_BRIGHT_UP);
-	gpm_button_monitor_key (button, "XF86KeyboardLightDown", GPM_BUTTON_KBD_BRIGHT_DOWN);
-	gpm_button_monitor_key (button, "XF86KeyboardLightOnOff", GPM_BUTTON_KBD_BRIGHT_TOGGLE);
+#ifdef HAVE_XEVENTS
+	have_xevents = TRUE;
+#endif
 
-	gdk_window_add_filter (button->priv->window,
-			       gpm_button_filter_x_events, (gpointer) button);
+	if (have_xevents == TRUE) {
+		/* register the brightness keys */
+		gpm_button_monitor_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
+		gpm_button_monitor_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
+		gpm_button_monitor_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
+		gpm_button_monitor_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
+		gpm_button_monitor_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);
+		gpm_button_monitor_key (button, "XF86BrightnessUp", GPM_BUTTON_BRIGHT_UP);
+		gpm_button_monitor_key (button, "XF86BrightnessDown", GPM_BUTTON_BRIGHT_DOWN);
+		gpm_button_monitor_key (button, "XF86XK_ScreenSaver", GPM_BUTTON_LOCK);
+		gpm_button_monitor_key (button, "XF86XK_Battery", GPM_BUTTON_BATTERY);
+		gpm_button_monitor_key (button, "XF86KeyboardLightUp", GPM_BUTTON_KBD_BRIGHT_UP);
+		gpm_button_monitor_key (button, "XF86KeyboardLightDown", GPM_BUTTON_KBD_BRIGHT_DOWN);
+		gpm_button_monitor_key (button, "XF86KeyboardLightOnOff", GPM_BUTTON_KBD_BRIGHT_TOGGLE);
+
+		/* use global filter */
+		gdk_window_add_filter (button->priv->window,
+				       gpm_button_filter_x_events, (gpointer) button);
+	}
+
+	/* remove when button support is out of HAL */
+	button->priv->power = gpm_power_new ();
+
+	/* remove when button support of moved out of hal and into x */
+	g_signal_connect (button->priv->power, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), button);
+
 }
 
 /**
@@ -278,7 +325,11 @@ gpm_button_finalize (GObject *object)
 
 	button = GPM_BUTTON (object);
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
-	
+
+	if (button->priv->power != NULL) {
+		g_object_unref (button->priv->power);
+	}
+
 	g_hash_table_unref (button->priv->hash_to_hal);
 }
 
@@ -289,7 +340,6 @@ gpm_button_finalize (GObject *object)
 GpmButton *
 gpm_button_new (void)
 {
-#ifdef HAVE_XEVENTS
 	if (gpm_button_object) {
 		g_object_ref (gpm_button_object);
 	} else {
@@ -298,7 +348,4 @@ gpm_button_new (void)
 					   (gpointer *) &gpm_button_object);
 	}
 	return GPM_BUTTON (gpm_button_object);
-#else
-	return NULL;
-#endif
 }
