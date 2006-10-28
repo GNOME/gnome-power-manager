@@ -40,8 +40,8 @@ typedef struct GpmButtonPrivate GpmButtonPrivate;
 #define GPM_BUTTON_SUSPEND		"suspend"
 #define GPM_BUTTON_HIBERNATE		"hibernate"
 #define GPM_BUTTON_LID_DEP		"lid"		/* Remove when HAL drops input support */
-#define GPM_BUTTON_LID_UP		"lid-up"
-#define GPM_BUTTON_LID_DOWN		"lid-down"
+#define GPM_BUTTON_LID_OPEN		"lid-up"
+#define GPM_BUTTON_LID_CLOSED		"lid-down"
 #define GPM_BUTTON_BRIGHT_UP		"brightness-up"
 #define GPM_BUTTON_BRIGHT_DOWN		"brightness-down"
 #define GPM_BUTTON_BRIGHT_UP_DEP	"brightnessup"	 /* Remove when we depend on HAL 0.5.8 */
@@ -67,6 +67,7 @@ typedef struct
 
 GType		 gpm_button_get_type		(void);
 GpmButton	*gpm_button_new			(void);
+gboolean	 button_is_lid_closed		(GpmButton *button);
 
 G_END_DECLS
 

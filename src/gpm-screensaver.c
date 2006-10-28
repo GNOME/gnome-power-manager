@@ -587,12 +587,12 @@ button_pressed_cb (GpmButton      *button,
 	if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
 		gpm_screensaver_lock (screensaver);
 
-	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		/* Disable or enable the fancy screensaver, as we don't want
 		 * this starting when the lid is shut */
 		update_lid_throttle (screensaver, TRUE);
 
-	} else if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		update_lid_throttle (screensaver, FALSE);
 
 	}

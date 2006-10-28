@@ -109,7 +109,6 @@ struct GpmManagerPrivate
 	GpmWarning		 last_pda_warning;
 
 	gboolean		 use_time_to_notify;
-	gboolean		 lid_is_closed;
 	gboolean		 done_notify_fully_charged;
 	gboolean		 enable_beeping;
 
@@ -519,7 +518,7 @@ manager_policy_do (GpmManager  *manager,
 	gpm_debug ("policy: %s", policy);
 	gpm_conf_get_string (manager->priv->conf, policy, &action);
 
-	if (! action) {
+	if (action == NULL) {
 		return;
 	}
 	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
@@ -634,8 +633,7 @@ gpm_manager_set_dpms_mode (GpmManager  *manager,
 
 	/* just proxy this */
 	ret = gpm_dpms_set_mode (manager->priv->dpms,
-				 gpm_dpms_mode_from_string (mode),
-				 error);
+				 gpm_dpms_mode_from_string (mode), error);
 
 	return ret;
 }
@@ -1061,7 +1059,7 @@ idle_changed_cb (GpmIdle    *idle,
 	   the screen when the user moves the mouse on systems that do not
 	   support hardware blanking.
 	   Details are here: https://launchpad.net/malone/bugs/22522 */
-	if (manager->priv->lid_is_closed) {
+	if (button_is_lid_closed (manager->priv->button)) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
@@ -1267,17 +1265,7 @@ lid_button_pressed (GpmManager *manager,
 {
 	gboolean  on_ac;
 
-	if (manager->priv->lid_is_closed == state) {
-		gpm_debug ("duplicate lid change event");
-		return;
-	}
-
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	/* We keep track of the lid state so we can do the
-	   lid close on battery action if the ac_adapter is removed when the laptop
-	   is closed. Fixes #331655 */
-	manager->priv->lid_is_closed = state;
 
 	if (state) {
 		if (on_ac) {
@@ -1323,11 +1311,11 @@ button_pressed_cb (GpmButton   *button,
 	} else if (strcmp (type, GPM_BUTTON_HIBERNATE) == 0) {
 		hibernate_button_pressed (manager);
 
-	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
-		lid_button_pressed (manager, TRUE);
-
-	} else if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		lid_button_pressed (manager, FALSE);
+
+	} else if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
+		lid_button_pressed (manager, TRUE);
 
 	} else if (strcmp (type, GPM_BUTTON_BATTERY) == 0) {
 		battery_button_pressed (manager);
@@ -1369,7 +1357,11 @@ power_on_ac_changed_cb (GpmPower   *power,
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_EVENT_WHEN_CLOSED, &event_when_closed);
-	if (event_when_closed && (!on_ac) && manager->priv->lid_is_closed) {
+
+	/* We keep track of the lid state so we can do the
+	   lid close on battery action if the ac_adapter is removed when the laptop
+	   is closed. Fixes #331655 */
+	if (event_when_closed && on_ac == FALSE && button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager,
 				   GPM_CONF_BATTERY_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "
@@ -2093,7 +2085,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
  **/
 static void
 hal_daemon_monitor_cb (GpmHal     *hal,
-		     GpmManager *manager)
+		       GpmManager *manager)
 {
 	gpm_tray_icon_sync (manager->priv->tray_icon);
 }
@@ -2137,7 +2129,7 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->hal, "daemon-stop",
 			  G_CALLBACK (hal_daemon_monitor_cb), manager);
 
-	/* try an start an interactive service */
+	/* try and start an interactive service */
 	manager->priv->cpufreq = gpm_cpufreq_new ();
 	if (manager->priv->cpufreq) {
 		gpm_cpufreq_service_init (manager->priv->cpufreq);
@@ -2149,9 +2141,6 @@ gpm_manager_init (GpmManager *manager)
 	if (manager->priv->screensaver) {
 		gpm_screensaver_service_init (manager->priv->screensaver);
 	}
-
-	/* FIXME: We shouldn't assume the lid is open at startup */
-	manager->priv->lid_is_closed = FALSE;
 
 	/* we need these to refresh the tooltip and icon */
 	g_signal_connect (manager->priv->power, "battery-removed",

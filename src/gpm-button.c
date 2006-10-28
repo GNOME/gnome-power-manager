@@ -30,6 +30,7 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include "gpm-common.h"
 #include "gpm-button.h"
 #include "gpm-debug.h"
 #include "gpm-power.h"
@@ -43,10 +44,11 @@ static void     gpm_button_finalize   (GObject	      *object);
 
 struct GpmButtonPrivate
 {
-	GdkScreen	*screen;
-	GdkWindow	*window;
-	GHashTable	*hash_to_hal;
-	GpmPower	*power; /* remove when iput events is in the kernel */
+	GdkScreen		*screen;
+	GdkWindow		*window;
+	GHashTable		*hash_to_hal;
+	gboolean		 lid_is_closed;
+	GpmPower		*power; /* remove when iput events is in the kernel */
 };
 
 enum {
@@ -232,6 +234,15 @@ gpm_button_class_init (GpmButtonClass *klass)
 }
 
 /**
+ * button_is_lid_closed:
+ **/
+gboolean
+button_is_lid_closed (GpmButton *button)
+{
+	return button->priv->lid_is_closed;
+}
+
+/**
  * button_pressed_cb:
  * @power: The power class instance
  * @type: The button type, e.g. "power"
@@ -248,10 +259,26 @@ button_pressed_cb (GpmPower    *power,
 	const char *atype = type;
 
 	/* abstact away that HAL has an extra parameter */
-	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == TRUE) {
-		atype = GPM_BUTTON_LID_UP;
+	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE) {
+		atype = GPM_BUTTON_LID_OPEN;
 	} else if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == TRUE) {
-		atype = GPM_BUTTON_LID_DOWN;
+		atype = GPM_BUTTON_LID_CLOSED;
+	}
+
+	/* filter out duplicate lid events */
+	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
+		if (button->priv->lid_is_closed == TRUE) {
+			g_debug ("ignoring duplicate lid event");
+			return;
+		}
+		button->priv->lid_is_closed = TRUE;
+	}
+	if (strcmp (atype, GPM_BUTTON_LID_OPEN) == 0) {
+		if (button->priv->lid_is_closed == FALSE) {
+			g_debug ("ignoring duplicate lid event");
+			return;
+		}
+		button->priv->lid_is_closed = FALSE;
 	}
 
 	/* the names changed in 0.5.8 */
@@ -278,6 +305,8 @@ gpm_button_init (GpmButton *button)
 	button->priv->window = gdk_screen_get_root_window (button->priv->screen);
 
 	button->priv->hash_to_hal = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+	button->priv->lid_is_closed = FALSE;
 
 #ifdef HAVE_XEVENTS
 	have_xevents = TRUE;

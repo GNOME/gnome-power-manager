@@ -412,13 +412,13 @@ button_pressed_cb (GpmButton   *power,
 {
 	gpm_debug ("Button press event type=%s", type);
 
-	if (strcmp (type, GPM_BUTTON_LID_DOWN) == 0) {
+	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		gpm_info_event_log (info,
 				    GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
 				    _("The laptop lid has been closed"));
 		gpm_debug ("lid button CLOSED");
 
-	} else if (strcmp (type, GPM_BUTTON_LID_UP) == 0) {
+	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		gpm_info_event_log (info,
 				    GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
 				    _("The laptop lid has been re-opened"));
