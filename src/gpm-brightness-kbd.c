@@ -43,37 +43,43 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-hal.h"
-#include "gpm-hal-brightness-kbd.h"
+#include "gpm-brightness-kbd.h"
 #include "gpm-proxy.h"
 #include "gpm-marshal.h"
 #include "gpm-feedback-widget.h"
-#include "gpm-hal-light-sensor.h"
+#include "gpm-light-sensor.h"
+#include "gpm-conf.h"
+#include "gpm-power.h"
+#include "gpm-button.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
-#define GPM_HAL_BRIGHTNESS_KBD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_BRIGHTNESS_KBD, GpmHalBrightnessKbdPrivate))
+#define GPM_BRIGHTNESS_KBD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BRIGHTNESS_KBD, GpmBrightnessKbdPrivate))
 
-struct GpmHalBrightnessKbdPrivate
+struct GpmBrightnessKbdPrivate
 {
-	gboolean		 does_own_updates;	/* keys are hardwired */
-	gboolean		 does_own_dimming;	/* hardware auto-fades */
-	gboolean		 is_dimmed;
-	gboolean		 is_disabled;
-	guint			 current_hw;		/* hardware */
-	guint			 level_dim_hw;
-	guint			 level_std_hw;
-	guint			 levels;
-	gchar			*udi;
-	GpmProxy		*gproxy;
-	GpmHal			*hal;
-	GpmFeedback		*feedback;
-	GpmHalLightSensor  *sensor;
+	gboolean	   does_own_updates;	/* keys are hardwired */
+	gboolean	   does_own_dimming;	/* hardware auto-fades */
+	gboolean	   is_dimmed;
+	gboolean	   is_disabled;
+	guint		   current_hw;		/* hardware */
+	guint		   level_dim_hw;
+	guint		   level_std_hw;
+	guint		   levels;
+	gchar		  *udi;
+	GpmConf		  *conf;
+	GpmButton	  *button;
+	GpmPower	  *power;
+	GpmProxy	  *gproxy;
+	GpmHal		  *hal;
+	GpmFeedback	  *feedback;
+	GpmLightSensor *sensor;
 };
 
-G_DEFINE_TYPE (GpmHalBrightnessKbd, gpm_hal_brightness_kbd, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmBrightnessKbd, gpm_brightness_kbd, G_TYPE_OBJECT)
 
 /**
- * gpm_hal_brightness_kbd_get_hw:
+ * gpm_brightness_kbd_get_hw:
  * @brightness: This brightness class instance
  *
  * Updates the private local value of brightness_level_hw as it may have
@@ -81,15 +87,15 @@ G_DEFINE_TYPE (GpmHalBrightnessKbd, gpm_hal_brightness_kbd, G_TYPE_OBJECT)
  * Return value: Success.
  **/
 static gboolean
-gpm_hal_brightness_kbd_get_hw (GpmHalBrightnessKbd *brightness,
-			       guint	    *brightness_level_hw)
+gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
+			   guint	    *brightness_level_hw)
 {
 	GError     *error = NULL;
 	gboolean    ret;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
@@ -114,7 +120,7 @@ gpm_hal_brightness_kbd_get_hw (GpmHalBrightnessKbd *brightness,
 }
 
 /**
- * gpm_hal_brightness_kbd_set_hw:
+ * gpm_brightness_kbd_set_hw:
  * @brightness_kbd: This brightness_kbd class instance
  * @brightness_level_hw: The hardware level in raw units
  *
@@ -123,7 +129,7 @@ gpm_hal_brightness_kbd_get_hw (GpmHalBrightnessKbd *brightness,
  * Return value: Success.
  **/
 static gboolean
-gpm_hal_brightness_kbd_set_hw (GpmHalBrightnessKbd *brightness,
+gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 			   guint	     brightness_level_hw)
 {
 	GError *error = NULL;
@@ -131,7 +137,7 @@ gpm_hal_brightness_kbd_set_hw (GpmHalBrightnessKbd *brightness,
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
@@ -166,14 +172,14 @@ gpm_hal_brightness_kbd_set_hw (GpmHalBrightnessKbd *brightness,
 }
 
 /**
- * gpm_hal_brightness_kbd_dim_hw:
+ * gpm_brightness_kbd_dim_hw:
  * @brightness_kbd: This brightness_kbd class instance
  * @new_level_hw: The new hardware level
  *
  * Just do the step up and down, after knowing the step interval
  **/
 static gboolean
-gpm_hal_brightness_kbd_dim_hw_step (GpmHalBrightnessKbd *brightness,
+gpm_brightness_kbd_dim_hw_step (GpmBrightnessKbd *brightness,
 				guint             new_level_hw,
 				guint		  step_interval)
 {
@@ -181,7 +187,7 @@ gpm_hal_brightness_kbd_dim_hw_step (GpmHalBrightnessKbd *brightness,
 	gint a;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	current_hw = brightness->priv->current_hw;
 	gpm_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
@@ -194,13 +200,13 @@ gpm_hal_brightness_kbd_dim_hw_step (GpmHalBrightnessKbd *brightness,
 	if (new_level_hw > current_hw) {
 		/* going up */
 		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
-			gpm_hal_brightness_kbd_set_hw (brightness, a);
+			gpm_brightness_kbd_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	} else {
 		/* going down */
 		for (a=current_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
-			gpm_hal_brightness_kbd_set_hw (brightness, a);
+			gpm_brightness_kbd_set_hw (brightness, a);
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	}
@@ -208,18 +214,18 @@ gpm_hal_brightness_kbd_dim_hw_step (GpmHalBrightnessKbd *brightness,
 }
 
 /**
- * gpm_hal_brightness_kbd_get_step:
+ * gpm_brightness_kbd_get_step:
  * @brightness_kbd: This brightness_kbd class instance
  * Return value: the amount of hardware steps to do on each update or
  * zero for error.
  **/
 static guint
-gpm_hal_brightness_kbd_get_step (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_get_step (GpmBrightnessKbd *brightness)
 {
 	int step;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), 0);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), 0);
 
 	if (brightness->priv->levels < 20) {
 		/* less than 20 states should do every state */
@@ -232,47 +238,47 @@ gpm_hal_brightness_kbd_get_step (GpmHalBrightnessKbd *brightness)
 }
 
 /**
- * gpm_hal_brightness_kbd_dim_hw:
+ * gpm_brightness_kbd_dim_hw:
  * @brightness_kbd: This brightness_kbd class instance
  * @new_level_hw: The new hardware level
  **/
 static gboolean
-gpm_hal_brightness_kbd_dim_hw (GpmHalBrightnessKbd *brightness,
+gpm_brightness_kbd_dim_hw (GpmBrightnessKbd *brightness,
 			   guint	     new_level_hw)
 {
 	guint step;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	gpm_debug ("new_level_hw=%i", new_level_hw);
 
 	/* some machines don't take kindly to auto-dimming */
 	if (brightness->priv->does_own_dimming) {
-		gpm_hal_brightness_kbd_set_hw (brightness, new_level_hw);
+		gpm_brightness_kbd_set_hw (brightness, new_level_hw);
 		return FALSE;
 	}
 
 	/* macbook pro has a bazzillion brightness_kbd levels, be a bit clever */
-	step = gpm_hal_brightness_kbd_get_step (brightness);
-	gpm_hal_brightness_kbd_dim_hw_step (brightness, new_level_hw, step);
+	step = gpm_brightness_kbd_get_step (brightness);
+	gpm_brightness_kbd_dim_hw_step (brightness, new_level_hw, step);
 
 	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_kbd_set_dim:
+ * gpm_brightness_kbd_set_dim:
  * @brightness_kbd: This brightness_kbd class instance
  * @brightness_level: The percentage brightness_kbd
  **/
 gboolean
-gpm_hal_brightness_kbd_set_dim (GpmHalBrightnessKbd *brightness,
-				  guint		    brightness_level)
+gpm_brightness_kbd_set_dim (GpmBrightnessKbd *brightness,
+			    guint	      brightness_level)
 {
 	guint level_hw;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	level_hw = gpm_percent_to_discrete (brightness_level, brightness->priv->levels);
 
@@ -288,24 +294,24 @@ gpm_hal_brightness_kbd_set_dim (GpmHalBrightnessKbd *brightness,
 	}
 	/* if in this state, then update */
 	if (brightness->priv->is_dimmed == TRUE) {
-		gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
+		gpm_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
 	}
 	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_kbd_set_std:
+ * gpm_brightness_kbd_set_std:
  * @brightness_kbd: This brightness_kbd class instance
  * @brightness_level: The percentage brightness_kbd
  **/
 gboolean
-gpm_hal_brightness_kbd_set_std (GpmHalBrightnessKbd *brightness,
-				guint		    brightness_level)
+gpm_brightness_kbd_set_std (GpmBrightnessKbd *brightness,
+			    guint	      brightness_level)
 {
 	guint level_hw;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	level_hw = gpm_percent_to_discrete (brightness_level,
 						 brightness->priv->levels);
@@ -313,22 +319,22 @@ gpm_hal_brightness_kbd_set_std (GpmHalBrightnessKbd *brightness,
 
 	/* if in this state, then update */
 	if (brightness->priv->is_dimmed == FALSE) {
-		gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_std_hw);
+		gpm_brightness_kbd_dim_hw (brightness, brightness->priv->level_std_hw);
 	}
 	return TRUE;
 }
 
 /**
- * gpm_hal_brightness_kbd_dim:
+ * gpm_brightness_kbd_dim:
  * @brightness_kbd: This brightness_kbd class instance
  *
  * Sets the screen into dim mode, where the dim brightness_kbd is used.
  **/
 gboolean
-gpm_hal_brightness_kbd_dim (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_dim (GpmBrightnessKbd *brightness)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed == TRUE) {
@@ -337,20 +343,20 @@ gpm_hal_brightness_kbd_dim (GpmHalBrightnessKbd *brightness)
 	}
 	brightness->priv->is_dimmed = TRUE;
 //need to save old value
-	return gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
+	return gpm_brightness_kbd_dim_hw (brightness, brightness->priv->level_dim_hw);
 }
 
 /**
- * gpm_hal_brightness_kbd_undim:
+ * gpm_brightness_kbd_undim:
  * @brightness_kbd: This brightness_kbd class instance
  *
  * Sets the screen into normal mode, where the startdard brightness_kbd is used.
  **/
 gboolean
-gpm_hal_brightness_kbd_undim (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_undim (GpmBrightnessKbd *brightness)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	/* check to see if we are already dimmed */
 	if (brightness->priv->is_dimmed == FALSE) {
@@ -359,11 +365,11 @@ gpm_hal_brightness_kbd_undim (GpmHalBrightnessKbd *brightness)
 	}
 	brightness->priv->is_dimmed = FALSE;
 //need to restore old value
-	return gpm_hal_brightness_kbd_dim_hw (brightness, brightness->priv->level_std_hw);
+	return gpm_brightness_kbd_dim_hw (brightness, brightness->priv->level_std_hw);
 }
 
 /**
- * gpm_hal_brightness_kbd_get:
+ * gpm_brightness_kbd_get:
  * @brightness_kbd: This brightness_kbd class instance
  * Return value: The percentage brightness_kbd, or -1 for no hardware or error
  *
@@ -371,13 +377,13 @@ gpm_hal_brightness_kbd_undim (GpmHalBrightnessKbd *brightness)
  * brightness_kbd. This is quick as no HAL inquiry is done.
  **/
 gboolean
-gpm_hal_brightness_kbd_get (GpmHalBrightnessKbd *brightness,
+gpm_brightness_kbd_get (GpmBrightnessKbd *brightness,
 			guint		 *brightness_level)
 {
 	guint percentage;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						       brightness->priv->levels);
@@ -386,31 +392,31 @@ gpm_hal_brightness_kbd_get (GpmHalBrightnessKbd *brightness,
 }
 
 /**
- * gpm_hal_brightness_kbd_up:
+ * gpm_brightness_kbd_up:
  * @brightness_kbd: This brightness_kbd class instance
  *
  * If possible, put the brightness_kbd of the KBD up one unit.
  **/
 gboolean
-gpm_hal_brightness_kbd_up (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 {
 	gint step;
 	gint percentage;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
-		gpm_hal_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
+		gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness_kbd levels, be a bit clever */
-		step = gpm_hal_brightness_kbd_get_step (brightness);
+		step = gpm_brightness_kbd_get_step (brightness);
 		/* don't overflow */
 		if (brightness->priv->current_hw + step > brightness->priv->levels - 1) {
 			step = (brightness->priv->levels - 1) - brightness->priv->current_hw;
 		}
-		gpm_hal_brightness_kbd_set_hw (brightness, brightness->priv->current_hw + step);
+		gpm_brightness_kbd_set_hw (brightness, brightness->priv->current_hw + step);
 	}
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
@@ -422,31 +428,31 @@ gpm_hal_brightness_kbd_up (GpmHalBrightnessKbd *brightness)
 }
 
 /**
- * gpm_hal_brightness_kbd_down:
+ * gpm_brightness_kbd_down:
  * @brightness_kbd: This brightness_kbd class instance
  *
  * If possible, put the brightness_kbd of the KBD down one unit.
  **/
 gboolean
-gpm_hal_brightness_kbd_down (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 {
 	gint step;
 	gint percentage;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	/* Do we find the new value, or set the new value */
 	if (brightness->priv->does_own_updates) {
-		gpm_hal_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
+		gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness_kbd levels, be a bit clever */
-		step = gpm_hal_brightness_kbd_get_step (brightness);
+		step = gpm_brightness_kbd_get_step (brightness);
 		/* don't underflow */
 		if (brightness->priv->current_hw < step) {
 			step = brightness->priv->current_hw;
 		}
-		gpm_hal_brightness_kbd_set_hw (brightness, brightness->priv->current_hw - step);
+		gpm_brightness_kbd_set_hw (brightness, brightness->priv->current_hw - step);
 	}
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
@@ -457,54 +463,156 @@ gpm_hal_brightness_kbd_down (GpmHalBrightnessKbd *brightness)
 	return TRUE;
 }
 
+/**
+ * conf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+conf_key_changed_cb (GpmConf          *conf,
+		     const gchar      *key,
+		     GpmBrightnessKbd *brightness)
+{
+	gint value;
+	gboolean on_ac;
+
+	gpm_power_get_on_ac (brightness->priv->power, &on_ac, NULL);
+
+	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0) {
+
+		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		if (on_ac == TRUE) {
+			gpm_brightness_kbd_set_std (brightness, value);
+		}
+
+	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
+
+		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		if (on_ac == FALSE) {
+			gpm_brightness_kbd_set_std (brightness, value);
+		}
+
+	}
+}
+
+/**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @brightness: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+power_on_ac_changed_cb (GpmPower         *power,
+			gboolean          on_ac,
+			GpmBrightnessKbd *brightness)
+{
+	guint value;
+
+	if (on_ac) {
+		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &value);
+	} else {
+		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &value);
+	}
+
+	gpm_brightness_kbd_set_std (brightness, value);
+}
+
+/**
+ * button_pressed_cb:
+ * @power: The power class instance
+ * @type: The button type, e.g. "power"
+ * @state: The state, where TRUE is depressed or closed
+ * @brightness: This class instance
+ **/
+static void
+button_pressed_cb (GpmPower          *power,
+		   const gchar       *type,
+		   gboolean           state,
+		   GpmBrightnessKbd  *brightness)
+{
+	gpm_debug ("Button press event type=%s state=%d", type, state);
+
+	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
+		gpm_brightness_kbd_up (brightness);
+
+	} else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
+		gpm_brightness_kbd_down (brightness);
+
+	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
+		gpm_brightness_kbd_toggle (brightness);
+		
+	}
+}
+
 /**keyboard_backlight
- * gpm_hal_brightness_kbd_constructor:
+ * gpm_brightness_kbd_constructor:
  **/
 static GObject *
-gpm_hal_brightness_kbd_constructor (GType		  type,
-			    guint		  n_construct_properties,
-			    GObjectConstructParam *construct_properties)
+gpm_brightness_kbd_constructor (GType		  type,
+			        guint		  n_construct_properties,
+			        GObjectConstructParam *construct_properties)
 {
-	GpmHalBrightnessKbd      *brightness;
-	GpmHalBrightnessKbdClass *klass;
-	klass = GPM_HAL_BRIGHTNESS_KBD_CLASS (g_type_class_peek (GPM_TYPE_HAL_BRIGHTNESS_KBD));
-	brightness = GPM_HAL_BRIGHTNESS_KBD (G_OBJECT_CLASS (gpm_hal_brightness_kbd_parent_class)->constructor
+	GpmBrightnessKbd      *brightness;
+	GpmBrightnessKbdClass *klass;
+	klass = GPM_BRIGHTNESS_KBD_CLASS (g_type_class_peek (GPM_TYPE_BRIGHTNESS_KBD));
+	brightness = GPM_BRIGHTNESS_KBD (G_OBJECT_CLASS (gpm_brightness_kbd_parent_class)->constructor
 			      		     (type, n_construct_properties, construct_properties));
 	return G_OBJECT (brightness);
 }
 
 /**
- * gpm_hal_brightness_kbd_finalize:
+ * gpm_brightness_kbd_finalize:
  **/
 static void
-gpm_hal_brightness_kbd_finalize (GObject *object)
+gpm_brightness_kbd_finalize (GObject *object)
 {
-	GpmHalBrightnessKbd *brightness;
+	GpmBrightnessKbd *brightness;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (object));
-	brightness = GPM_HAL_BRIGHTNESS_KBD (object);
+	g_return_if_fail (GPM_IS_BRIGHTNESS_KBD (object));
+	brightness = GPM_BRIGHTNESS_KBD (object);
 
-	g_free (brightness->priv->udi);
-	g_object_unref (brightness->priv->gproxy);
-	g_object_unref (brightness->priv->hal);
-	g_object_unref (brightness->priv->feedback);
-	g_object_unref (brightness->priv->sensor);
+	if (brightness->priv->udi != NULL) {
+		g_free (brightness->priv->udi);
+	}
+	if (brightness->priv->gproxy != NULL) {
+		g_object_unref (brightness->priv->gproxy);
+	}
+	if (brightness->priv->hal != NULL) {
+		g_object_unref (brightness->priv->hal);
+	}
+	if (brightness->priv->feedback != NULL) {
+		g_object_unref (brightness->priv->feedback);
+	}
+	if (brightness->priv->conf != NULL) {
+		g_object_unref (brightness->priv->conf);
+	}
+	if (brightness->priv->sensor != NULL) {
+		g_object_unref (brightness->priv->sensor);
+	}
+	if (brightness->priv->power != NULL) {
+		g_object_unref (brightness->priv->power);
+	}
+	if (brightness->priv->button != NULL) {
+		g_object_unref (brightness->priv->button);
+	}
 
 	g_return_if_fail (brightness->priv != NULL);
-	G_OBJECT_CLASS (gpm_hal_brightness_kbd_parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_brightness_kbd_parent_class)->finalize (object);
 }
 
 /**
- * gpm_hal_brightness_kbd_class_init:
+ * gpm_brightness_kbd_class_init:
  **/
 static void
-gpm_hal_brightness_kbd_class_init (GpmHalBrightnessKbdClass *klass)
+gpm_brightness_kbd_class_init (GpmBrightnessKbdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_hal_brightness_kbd_finalize;
-	object_class->constructor  = gpm_hal_brightness_kbd_constructor;
+	object_class->finalize	   = gpm_brightness_kbd_finalize;
+	object_class->constructor  = gpm_brightness_kbd_constructor;
 
-	g_type_class_add_private (klass, sizeof (GpmHalBrightnessKbdPrivate));
+	g_type_class_add_private (klass, sizeof (GpmBrightnessKbdPrivate));
 }
 
 enum {
@@ -512,7 +620,6 @@ enum {
 	STATE_FORCED_ON,
 	STATE_FORCED_OFF
 };
-
 
 /**
  * adjust_kbd_brightness_according_to_ambient_light:
@@ -536,7 +643,7 @@ enum {
  * a startup condition too.
  */
 static gboolean
-adjust_kbd_brightness_according_to_ambient_light (GpmHalBrightnessKbd *brightness,
+adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 						  gboolean startup)
 {
 	guint ambient_light;
@@ -546,7 +653,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmHalBrightnessKbd *brightnes
 		return FALSE;
 	}
 
-	gpm_hal_light_sensor_get (brightness->priv->sensor, &ambient_light);
+	gpm_light_sensor_get (brightness->priv->sensor, &ambient_light);
 
 	/* this is also used if user reenables the keyboard backlight */
 	if (startup) {
@@ -558,22 +665,22 @@ adjust_kbd_brightness_according_to_ambient_light (GpmHalBrightnessKbd *brightnes
 	if (state == STATE_FORCED_UNKNOWN) {
 		/* if this is the first time we're launched with ambient light data... */
 		if (ambient_light < 50 ) {
-			gpm_hal_brightness_kbd_set_std (brightness, 100);
+			gpm_brightness_kbd_set_std (brightness, 100);
 			state = STATE_FORCED_ON;
 		} else {
-			gpm_hal_brightness_kbd_set_std (brightness, 0);
+			gpm_brightness_kbd_set_std (brightness, 0);
 			state = STATE_FORCED_OFF;
 		}
 	} else {
 		if (ambient_light < 30 && state != STATE_FORCED_ON ) {
 			/* if it's dark.. and we haven't already turned light on... 
 			 *   => turn it on.. full blast! */
-			gpm_hal_brightness_kbd_set_std (brightness, 100);
+			gpm_brightness_kbd_set_std (brightness, 100);
 			state = STATE_FORCED_ON;
 		} else if (ambient_light > 70 && state != STATE_FORCED_OFF) {
 			/* if it's bright... and we haven't already turned light off... 
 			 *   => turn it off */
-			gpm_hal_brightness_kbd_set_std (brightness, 0);
+			gpm_brightness_kbd_set_std (brightness, 0);
 			state = STATE_FORCED_OFF;
 		}
 	}
@@ -589,9 +696,9 @@ adjust_kbd_brightness_according_to_ambient_light (GpmHalBrightnessKbd *brightnes
  * Called when the reading from the ambient light sensor changes.
  **/
 static void
-sensor_changed_cb (GpmHalLightSensor	*sensor,
-		   guint	                 ambient_light,
-		   GpmHalBrightnessKbd          *brightness)
+sensor_changed_cb (GpmLightSensor	*sensor,
+		   guint	         ambient_light,
+		   GpmBrightnessKbd     *brightness)
 {
 	if (brightness->priv->is_disabled == FALSE) {
 		adjust_kbd_brightness_according_to_ambient_light (brightness, FALSE);
@@ -599,18 +706,18 @@ sensor_changed_cb (GpmHalLightSensor	*sensor,
 }
 #if 0
 /**
- * gpm_hal_brightness_kbd_is_disabled:
+ * gpm_brightness_kbd_is_disabled:
  * @brightness: the instance
  * @is_disabled: out value
  *
  * Returns whether the keyboard backlight is disabled by the user
  */
 gboolean
-gpm_hal_brightness_kbd_is_disabled  (GpmHalBrightnessKbd	*brightness, 
+gpm_brightness_kbd_is_disabled  (GpmBrightnessKbd	*brightness, 
 				     gboolean                   *is_disabled)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 	g_return_val_if_fail (is_disabled != NULL, FALSE);
 
 	*is_disabled = brightness->priv->is_disabled;
@@ -620,7 +727,7 @@ gpm_hal_brightness_kbd_is_disabled  (GpmHalBrightnessKbd	*brightness,
 #endif
 
 /**
- * gpm_hal_brightness_kbd_toggle:
+ * gpm_brightness_kbd_toggle:
  * @brightness: the instance
  * @is_disabled: whether keyboard backlight is disabled by the user
  * @do_startup_on_enable: whether we should automatically select the 
@@ -633,20 +740,20 @@ gpm_hal_brightness_kbd_is_disabled  (GpmHalBrightnessKbd	*brightness,
  * the backlight in response to that.
  **/
 gboolean
-gpm_hal_brightness_kbd_toggle (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_toggle (GpmBrightnessKbd *brightness)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_BRIGHTNESS_KBD (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
 
 	if (brightness->priv->is_disabled == FALSE) {
 		/* go dark, that's what the user wants */
-		gpm_hal_brightness_kbd_set_std (brightness, 0);
+		gpm_brightness_kbd_set_std (brightness, 0);
 		gpm_feedback_display_value (brightness->priv->feedback, 0.0f);
 	} else {
 		/* select the appropriate level just as when we're starting up */
 //		if (do_startup_on_enable) {
 			adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
-			gpm_hal_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
+			gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
 			gpm_feedback_display_value (brightness->priv->feedback, 
 						    (gfloat) gpm_discrete_to_percent (brightness->priv->current_hw,
 										     brightness->priv->levels) / 100.0f);
@@ -656,7 +763,41 @@ gpm_hal_brightness_kbd_toggle (GpmHalBrightnessKbd *brightness)
 }
 
 /**
- * gpm_hal_brightness_kbd_init:
+ * gpm_brightness_kbd_service_init:
+ *
+ * @brightness: This class instance
+ *
+ * This starts the interactive parts of the class, for instance it makes the
+ * the class respond to button presses and AC state changes.
+ *
+ * If your are using this class in the preferences or info programs you don't
+ * need to call this function
+ **/
+gboolean
+gpm_brightness_kbd_service_init (GpmBrightnessKbd *brightness)
+{
+	g_return_val_if_fail (brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
+
+	/* we use power for the ac-power=changed signal */
+	brightness->priv->power = gpm_power_new ();
+	g_signal_connect (brightness->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), brightness);
+	/* remove when button support of moved out of hal and into x */
+	g_signal_connect (brightness->priv->power, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), brightness);
+
+	/* watch for brightness up and down buttons */
+	brightness->priv->button = gpm_button_new ();
+	if (brightness->priv->button) {
+		g_signal_connect (brightness->priv->button, "button-pressed",
+				  G_CALLBACK (button_pressed_cb), brightness);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_brightness_kbd_init:
  * @brightness_kbd: This brightness_kbd class instance
  *
  * initialises the brightness_kbd class. NOTE: We expect keyboard_backlight objects
@@ -664,20 +805,23 @@ gpm_hal_brightness_kbd_toggle (GpmHalBrightnessKbd *brightness)
  * We only control the first keyboard_backlight object if there are more than one.
  **/
 static void
-gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
+gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 {
 	gchar **names;
 
-	brightness->priv = GPM_HAL_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
+	brightness->priv = GPM_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
 
 	brightness->priv->hal = gpm_hal_new ();
+	brightness->priv->conf = gpm_conf_new ();
+	g_signal_connect (brightness->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), brightness);
 
 	brightness->priv->feedback = gpm_feedback_new ();
 	gpm_feedback_set_icon_name (brightness->priv->feedback,
 				    GPM_STOCK_BRIGHTNESS_KBD);
 
 	/* listen for ambient light changes.. if we have an ambient light sensor */
-	brightness->priv->sensor = gpm_hal_light_sensor_new ();
+	brightness->priv->sensor = gpm_light_sensor_new ();
 	if (brightness->priv->sensor != NULL) {
 		g_signal_connect (brightness->priv->sensor, "brightness-changed",
 				  G_CALLBACK (sensor_changed_cb), brightness);
@@ -711,7 +855,7 @@ gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
 				 &brightness->priv->levels);
 
 	/* this changes under our feet */
-	gpm_hal_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
+	gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
 
 	/* set to known value */
 	brightness->priv->level_dim_hw = 1;
@@ -726,13 +870,13 @@ gpm_hal_brightness_kbd_init (GpmHalBrightnessKbd *brightness)
 }
 
 /**
- * gpm_hal_brightness_kbd_has_hw:
+ * gpm_brightness_kbd_has_hw:
  *
  * Self contained function that works out if we have the hardware.
  * If not, we return FALSE and the module is unloaded.
  **/
 static gboolean
-gpm_hal_brightness_kbd_has_hw (void)
+gpm_brightness_kbd_has_hw (void)
 {
 	GpmHal *hal;
 	gchar **names;
@@ -753,19 +897,19 @@ gpm_hal_brightness_kbd_has_hw (void)
 }
 
 /**
- * gpm_hal_brightness_kbd_new:
+ * gpm_brightness_kbd_new:
  * Return value: A new brightness_kbd class instance.
  **/
-GpmHalBrightnessKbd *
-gpm_hal_brightness_kbd_new (void)
+GpmBrightnessKbd *
+gpm_brightness_kbd_new (void)
 {
-	GpmHalBrightnessKbd *brightness;
+	GpmBrightnessKbd *brightness;
 
 	/* only load an instance of this module if we have the hardware */
-	if (gpm_hal_brightness_kbd_has_hw () == FALSE) {
+	if (gpm_brightness_kbd_has_hw () == FALSE) {
 		return NULL;
 	}
 
-	brightness = g_object_new (GPM_TYPE_HAL_BRIGHTNESS_KBD, NULL);
-	return GPM_HAL_BRIGHTNESS_KBD (brightness);
+	brightness = g_object_new (GPM_TYPE_BRIGHTNESS_KBD, NULL);
+	return GPM_BRIGHTNESS_KBD (brightness);
 }

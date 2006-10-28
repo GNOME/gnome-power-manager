@@ -23,7 +23,6 @@
 #  include <config.h>
 #endif
 
-
 #include <string.h>
 #include <glib.h>
 #include <dbus/dbus-glib.h>
@@ -32,36 +31,40 @@
 #include "gpm-marshal.h"
 #include "gpm-proxy.h"
 #include "gpm-hal.h"
-#include "gpm-hal-cpufreq.h"
+#include "gpm-cpufreq.h"
 #include "gpm-debug.h"
+#include "gpm-conf.h"
+#include "gpm-power.h"
 
-static void     gpm_hal_cpufreq_class_init (GpmHalCpuFreqClass *klass);
-static void     gpm_hal_cpufreq_init       (GpmHalCpuFreq      *hal);
-static void     gpm_hal_cpufreq_finalize   (GObject	*object);
+static void     gpm_cpufreq_class_init (GpmCpuFreqClass *klass);
+static void     gpm_cpufreq_init       (GpmCpuFreq      *hal);
+static void     gpm_cpufreq_finalize   (GObject	*object);
 
-#define GPM_GPM_CPUFREQ_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_CPUFREQ, GpmHalCpuFreqPrivate))
+#define GPM_CPUFREQ_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CPUFREQ, GpmCpuFreqPrivate))
 
-struct GpmHalCpuFreqPrivate
+struct GpmCpuFreqPrivate
 {
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 	guint			 available_governors;
-	GpmHalCpuFreqEnum	 current_governor;
+	GpmCpuFreqEnum		 current_governor;
+	GpmConf			*conf;
+	GpmPower		*power;
 };
 
-static gpointer      gpm_hal_cpufreq_object = NULL;
+static gpointer      gpm_cpufreq_object = NULL;
 
-G_DEFINE_TYPE (GpmHalCpuFreq, gpm_hal_cpufreq, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmCpuFreq, gpm_cpufreq, G_TYPE_OBJECT)
 
 /**
- * gpm_hal_cpufreq_string_to_enum:
+ * gpm_cpufreq_string_to_enum:
  * @governor: The cpufreq kernel governor, e.g. "powersave"
- * Return value: The GpmHalCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
+ * Return value: The GpmCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
  **/
-GpmHalCpuFreqEnum
-gpm_hal_cpufreq_string_to_enum (const gchar *governor)
+GpmCpuFreqEnum
+gpm_cpufreq_string_to_enum (const gchar *governor)
 {
-	GpmHalCpuFreqEnum cpufreq_type = GPM_CPUFREQ_UNKNOWN;
+	GpmCpuFreqEnum cpufreq_type = GPM_CPUFREQ_UNKNOWN;
 	g_return_val_if_fail (governor != NULL, FALSE);
 	if (strcmp (governor, CODE_CPUFREQ_ONDEMAND) == 0) {
 		cpufreq_type = GPM_CPUFREQ_ONDEMAND;
@@ -80,12 +83,12 @@ gpm_hal_cpufreq_string_to_enum (const gchar *governor)
 }
 
 /**
- * gpm_hal_cpufreq_string_to_enum:
- * @cpufreq_type: The GpmHalCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
+ * gpm_cpufreq_string_to_enum:
+ * @cpufreq_type: The GpmCpuFreqEnum value, e.g. GPM_CPUFREQ_POWERSAVE
  * Return value: The cpufreq kernel governor, e.g. "powersave"
  **/
 const gchar *
-gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
+gpm_cpufreq_enum_to_string (GpmCpuFreqEnum cpufreq_type)
 {
 	const char *governor;
 	if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
@@ -107,22 +110,22 @@ gpm_hal_cpufreq_enum_to_string (GpmHalCpuFreqEnum cpufreq_type)
 }
 
 /**
- * gpm_hal_cpufreq_set_performance:
+ * gpm_cpufreq_set_performance:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @performance: The percentage perfomance figure
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
+gpm_cpufreq_set_performance (GpmCpuFreq *cpufreq, guint performance)
 {
 	GError *error = NULL;
 	gboolean ret;
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (performance >= 0, FALSE);
 	g_return_val_if_fail (performance <= 100, FALSE);
 
@@ -130,7 +133,7 @@ gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
-		gpm_hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
+		gpm_cpufreq_get_governor (cpufreq, &cpufreq_type);
 	}
 
 	/* only applies to some governors */
@@ -162,15 +165,15 @@ gpm_hal_cpufreq_set_performance (GpmHalCpuFreq *cpufreq, guint performance)
 }
 
 /**
- * gpm_hal_cpufreq_set_governor:
+ * gpm_cpufreq_set_governor:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @cpufreq_type: The CPU governor type, e.g. GPM_CPUFREQ_CONSERVATIVE
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
-			      GpmHalCpuFreqEnum cpufreq_type)
+gpm_cpufreq_set_governor (GpmCpuFreq    *cpufreq,
+			  GpmCpuFreqEnum cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -178,10 +181,10 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type != GPM_CPUFREQ_UNKNOWN, FALSE);
 
-	governor = gpm_hal_cpufreq_enum_to_string (cpufreq_type);
+	governor = gpm_cpufreq_enum_to_string (cpufreq_type);
 	g_return_val_if_fail (governor != NULL, FALSE);
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
@@ -211,25 +214,25 @@ gpm_hal_cpufreq_set_governor (GpmHalCpuFreq    *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_get_governors:
+ * gpm_cpufreq_get_governors:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @cpufreq_type: Return variable, The CPU governor type as an combined bitwise type
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
-			       GpmHalCpuFreqEnum *cpufreq_type)
+gpm_cpufreq_get_governors (GpmCpuFreq     *cpufreq,
+			   GpmCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
 	char **strlist;
 	int i = 0;
 	DBusGProxy *proxy;
-	GpmHalCpuFreqEnum types = GPM_CPUFREQ_UNKNOWN;
+	GpmCpuFreqEnum types = GPM_CPUFREQ_UNKNOWN;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type != NULL, FALSE);
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
@@ -257,7 +260,7 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 
 	/* treat as binary flags */
 	while (strlist && strlist[i]) {
-		types += gpm_hal_cpufreq_string_to_enum (strlist[i]);
+		types += gpm_cpufreq_string_to_enum (strlist[i]);
 		++i;
 	}
 
@@ -273,50 +276,50 @@ gpm_hal_cpufreq_get_governors (GpmHalCpuFreq     *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_get_number_governors:
+ * gpm_cpufreq_get_number_governors:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @use_cache: if we should force a cache update
  * Return value: the number of available governors
  **/
 guint
-gpm_hal_cpufreq_get_number_governors (GpmHalCpuFreq *cpufreq,
-				      gboolean       use_cache)
+gpm_cpufreq_get_number_governors (GpmCpuFreq *cpufreq,
+				  gboolean    use_cache)
 {
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 
 	if (use_cache == FALSE || cpufreq->priv->available_governors == -1) {
-		gpm_hal_cpufreq_get_governors (cpufreq, &cpufreq_type);
+		gpm_cpufreq_get_governors (cpufreq, &cpufreq_type);
 	}
 	return cpufreq->priv->available_governors;
 }
 
 /**
- * gpm_hal_cpufreq_get_consider_nice:
+ * gpm_cpufreq_get_consider_nice:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @consider_nice: Return variable, if consider niced processes
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
-				   gboolean      *consider_nice)
+gpm_cpufreq_get_consider_nice (GpmCpuFreq *cpufreq,
+			       gboolean      *consider_nice)
 {
 	GError *error = NULL;
 	gboolean ret;
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (consider_nice != NULL, FALSE);
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
-		gpm_hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
+		gpm_cpufreq_get_governor (cpufreq, &cpufreq_type);
 	}
 
 	/* only applies to some governors */
@@ -351,28 +354,28 @@ gpm_hal_cpufreq_get_consider_nice (GpmHalCpuFreq *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_get_performance:
+ * gpm_cpufreq_get_performance:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @performance: Return variable, the percentage performance
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
-				 guint         *performance)
+gpm_cpufreq_get_performance (GpmCpuFreq *cpufreq,
+		             guint         *performance)
 {
 	GError *error = NULL;
 	gboolean ret;
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (performance != NULL, FALSE);
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
-		gpm_hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
+		gpm_cpufreq_get_governor (cpufreq, &cpufreq_type);
 	}
 
 	/* only applies to some governors */
@@ -406,15 +409,15 @@ gpm_hal_cpufreq_get_performance (GpmHalCpuFreq *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_get_governor:
+ * gpm_cpufreq_get_governor:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @cpufreq_type: Return variable, the governor type, e.g. GPM_CPUFREQ_POWERSAVE
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
-			      GpmHalCpuFreqEnum *cpufreq_type)
+gpm_cpufreq_get_governor (GpmCpuFreq     *cpufreq,
+			  GpmCpuFreqEnum *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -422,7 +425,7 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type, FALSE);
 
 	*cpufreq_type = GPM_CPUFREQ_UNKNOWN;
@@ -455,7 +458,7 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 
 	/* convert to enumerated type */
 	if (governor != NULL) {
-		*cpufreq_type = gpm_hal_cpufreq_string_to_enum (governor);
+		*cpufreq_type = gpm_cpufreq_string_to_enum (governor);
 		cpufreq->priv->current_governor = *cpufreq_type;
 		g_free (governor);
 	}
@@ -464,27 +467,27 @@ gpm_hal_cpufreq_get_governor (GpmHalCpuFreq     *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_set_consider_nice:
+ * gpm_cpufreq_set_consider_nice:
  *
- * @cpufreq: This cpufreq class instance
+ * @cpufreq: This class instance
  * @enable: True to consider nice processes
  * Return value: If the method succeeded
  **/
 gboolean
-gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
-				   gboolean       consider_nice)
+gpm_cpufreq_set_consider_nice (GpmCpuFreq *cpufreq,
+			       gboolean    consider_nice)
 {
 	GError *error = NULL;
 	gboolean ret;
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_CPUFREQ (cpufreq), FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
 
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == GPM_CPUFREQ_UNKNOWN) {
-		gpm_hal_cpufreq_get_governor (cpufreq, &cpufreq_type);
+		gpm_cpufreq_get_governor (cpufreq, &cpufreq_type);
 	}
 
 	/* only applies to some governors */
@@ -518,26 +521,139 @@ gpm_hal_cpufreq_set_consider_nice (GpmHalCpuFreq *cpufreq,
 }
 
 /**
- * gpm_hal_cpufreq_class_init:
- * @klass: This cpufreq class instance
+ * gpm_cpufreq_sync_policy:
+ * @cpufreq: This class instance
+ * @on_ac: If we are on AC power
+ *
+ * Changes the cpufreq policy if required
  **/
-static void
-gpm_hal_cpufreq_class_init (GpmHalCpuFreqClass *klass)
+static gboolean
+gpm_cpufreq_sync_policy (GpmCpuFreq *cpufreq)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_hal_cpufreq_finalize;
-	g_type_class_add_private (klass, sizeof (GpmHalCpuFreqPrivate));
+	gboolean     cpufreq_consider_nice;
+	gboolean     on_ac;
+	guint	     cpufreq_performance;
+	gchar       *cpufreq_policy;
+	GpmCpuFreqEnum cpufreq_type;
+
+	if (cpufreq == NULL) {
+		gpm_debug ("cpufreq support absent, so ignoring");
+		return FALSE;
+	}
+
+	gpm_power_get_on_ac (cpufreq->priv->power, &on_ac, NULL);
+
+	if (on_ac) {
+		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
+		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
+	} else {
+		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_POLICY, &cpufreq_policy);
+		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_VALUE, &cpufreq_performance);
+	}
+
+	/* use enumerated value */
+	cpufreq_type = gpm_cpufreq_string_to_enum (cpufreq_policy);
+	g_free (cpufreq_policy);
+
+	/* change to the right governer and settings */
+	gpm_cpufreq_set_consider_nice (cpufreq, cpufreq_consider_nice);
+	gpm_cpufreq_set_governor (cpufreq, cpufreq_type);
+	gpm_cpufreq_set_performance (cpufreq, cpufreq_performance);
+	return TRUE;
 }
 
 /**
- * gpm_hal_cpufreq_init:
+ * conf_key_changed_cb:
  *
- * @cpufreq: This cpufreq class instance
+ * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-gpm_hal_cpufreq_init (GpmHalCpuFreq *cpufreq)
+conf_key_changed_cb (GpmConf     *conf,
+		     const gchar *key,
+		     GpmCpuFreq  *cpufreq)
 {
-	cpufreq->priv = GPM_GPM_CPUFREQ_GET_PRIVATE (cpufreq);
+	/* if any change, just resync the whole lot */
+	if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
+	    strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
+	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_POLICY) == 0 ||
+	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_VALUE) == 0 ||
+	    strcmp (key, GPM_CONF_USE_NICE) == 0) {
+
+		gpm_cpufreq_sync_policy (cpufreq);
+	}
+}
+
+/**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @cpufreq: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+power_on_ac_changed_cb (GpmPower   *power,
+			gboolean    on_ac,
+			GpmCpuFreq *cpufreq)
+{
+	gpm_cpufreq_sync_policy (cpufreq);
+}
+
+/**
+ * gpm_cpufreq_class_init:
+ * @klass: This class instance
+ **/
+static void
+gpm_cpufreq_class_init (GpmCpuFreqClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = gpm_cpufreq_finalize;
+	g_type_class_add_private (klass, sizeof (GpmCpuFreqPrivate));
+}
+
+/**
+ * gpm_cpufreq_service_init:
+ *
+ * @cpufreq: This class instance
+ *
+ * This starts the interactive parts of the class, for instance it makes the
+ * the class respond to button presses and AC state changes.
+ *
+ * If your are using this class in the preferences or info programs you don't
+ * need to call this function
+ **/
+gboolean
+gpm_cpufreq_service_init (GpmCpuFreq *cpufreq)
+{
+	g_return_val_if_fail (cpufreq != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
+
+	/* get changes from gconf */
+	cpufreq->priv->conf = gpm_conf_new ();
+	g_signal_connect (cpufreq->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), cpufreq);
+
+	/* we use power for the ac-power-changed signal */
+	cpufreq->priv->power = gpm_power_new ();
+	g_signal_connect (cpufreq->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), cpufreq);
+
+	/* sync policy */
+	gpm_cpufreq_sync_policy (cpufreq);
+	return TRUE;
+}
+
+/**
+ * gpm_cpufreq_init:
+ *
+ * @cpufreq: This class instance
+ **/
+static void
+gpm_cpufreq_init (GpmCpuFreq *cpufreq)
+{
+	cpufreq->priv = GPM_CPUFREQ_GET_PRIVATE (cpufreq);
 
 	cpufreq->priv->hal = gpm_hal_new ();
 
@@ -548,24 +664,27 @@ gpm_hal_cpufreq_init (GpmHalCpuFreq *cpufreq)
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_CPUFREQ);
 
+	cpufreq->priv->conf = NULL;
+	cpufreq->priv->power = NULL;
+
 	/* set defaults */
 	cpufreq->priv->available_governors = -1;
 	cpufreq->priv->current_governor = GPM_CPUFREQ_UNKNOWN;
 }
 
 /**
- * gpm_hal_cpufreq_finalize:
- * @object: This cpufreq class instance
+ * gpm_cpufreq_finalize:
+ * @object: This class instance
  **/
 static void
-gpm_hal_cpufreq_finalize (GObject *object)
+gpm_cpufreq_finalize (GObject *object)
 {
-	GpmHalCpuFreq *cpufreq;
+	GpmCpuFreq *cpufreq;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_HAL_CPUFREQ (object));
+	g_return_if_fail (GPM_IS_CPUFREQ (object));
 
-	cpufreq = GPM_HAL_CPUFREQ (object);
-	cpufreq->priv = GPM_GPM_CPUFREQ_GET_PRIVATE (cpufreq);
+	cpufreq = GPM_CPUFREQ (object);
+	cpufreq->priv = GPM_CPUFREQ_GET_PRIVATE (cpufreq);
 
 	if (cpufreq->priv->hal != NULL) {
 		g_object_unref (cpufreq->priv->hal);
@@ -573,18 +692,23 @@ gpm_hal_cpufreq_finalize (GObject *object)
 	if (cpufreq->priv->gproxy != NULL) {
 		g_object_unref (cpufreq->priv->gproxy);
 	}
-
-	G_OBJECT_CLASS (gpm_hal_cpufreq_parent_class)->finalize (object);
+	if (cpufreq->priv->conf != NULL) {
+		g_object_unref (cpufreq->priv->conf);
+	}
+	if (cpufreq->priv->power != NULL) {
+		g_object_unref (cpufreq->priv->power);
+	}
+	G_OBJECT_CLASS (gpm_cpufreq_parent_class)->finalize (object);
 }
 
 /**
- * gpm_hal_cpufreq_has_hw:
+ * gpm_cpufreq_has_hw:
  *
  * Self contained function that works out if we have the hardware.
  * If not, we return FALSE and the module is unloaded.
  **/
 static gboolean
-gpm_hal_cpufreq_has_hw (void)
+gpm_cpufreq_has_hw (void)
 {
 	GpmHal *hal;
 	gchar **names;
@@ -605,23 +729,23 @@ gpm_hal_cpufreq_has_hw (void)
 }
 
 /**
- * gpm_hal_cpufreq_new:
- * Return value: new GpmHalCpuFreq instance.
+ * gpm_cpufreq_new:
+ * Return value: new GpmCpuFreq instance.
  **/
-GpmHalCpuFreq *
-gpm_hal_cpufreq_new (void)
+GpmCpuFreq *
+gpm_cpufreq_new (void)
 {
 	/* only load an instance of this module if we have the hardware */
-	if (gpm_hal_cpufreq_has_hw () == FALSE) {
+	if (gpm_cpufreq_has_hw () == FALSE) {
 		return NULL;
 	}
 
-	if (gpm_hal_cpufreq_object) {
-		g_object_ref (gpm_hal_cpufreq_object);
+	if (gpm_cpufreq_object) {
+		g_object_ref (gpm_cpufreq_object);
 	} else {
-		gpm_hal_cpufreq_object = g_object_new (GPM_TYPE_HAL_CPUFREQ, NULL);
-		g_object_add_weak_pointer (gpm_hal_cpufreq_object,
-					   (gpointer *) &gpm_hal_cpufreq_object);
+		gpm_cpufreq_object = g_object_new (GPM_TYPE_CPUFREQ, NULL);
+		g_object_add_weak_pointer (gpm_cpufreq_object,
+					   (gpointer *) &gpm_cpufreq_object);
 	}
-	return GPM_HAL_CPUFREQ (gpm_hal_cpufreq_object);
+	return GPM_CPUFREQ (gpm_cpufreq_object);
 }

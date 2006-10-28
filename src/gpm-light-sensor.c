@@ -41,15 +41,15 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
-#include "gpm-hal-light-sensor.h"
+#include "gpm-light-sensor.h"
 #include "gpm-proxy.h"
 #include "gpm-marshal.h"
 
 #define POLL_INTERVAL		10000 /* ms */
 
-#define GPM_HAL_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_LIGHT_SENSOR, GpmHalLightSensorPrivate))
+#define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
-struct GpmHalLightSensorPrivate
+struct GpmLightSensorPrivate
 {
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
@@ -66,10 +66,10 @@ enum {
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 
-G_DEFINE_TYPE (GpmHalLightSensor, gpm_hal_light_sensor, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmLightSensor, gpm_light_sensor, G_TYPE_OBJECT)
 
 /**
- * gpm_hal_light_sensor_get_hw:
+ * gpm_light_sensor_get_hw:
  * @brightness: This brightness class instance
  *
  * Updates the private local value of brightness_level_hw as it may have
@@ -77,8 +77,8 @@ G_DEFINE_TYPE (GpmHalLightSensor, gpm_hal_light_sensor, G_TYPE_OBJECT)
  * Return value: Success.
  **/
 static gboolean
-gpm_hal_light_sensor_get_hw (GpmHalLightSensor *brightness,
-			   	  guint			 *brightness_level_hw)
+gpm_light_sensor_get_hw (GpmLightSensor *brightness,
+		         guint	        *brightness_level_hw)
 {
 	GError     *error = NULL;
 	gboolean    ret;
@@ -87,7 +87,7 @@ gpm_hal_light_sensor_get_hw (GpmHalLightSensor *brightness,
 	int         i;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_LIGHT_SENSOR (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (brightness), FALSE);
 
 	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
@@ -121,7 +121,7 @@ gpm_hal_light_sensor_get_hw (GpmHalLightSensor *brightness,
 }
 
 /**
- * gpm_hal_light_sensor_get:
+ * gpm_light_sensor_get:
  * @brightness: This brightness class instance
  * Return value: The percentage brightness, or -1 for no hardware or error
  *
@@ -129,13 +129,13 @@ gpm_hal_light_sensor_get_hw (GpmHalLightSensor *brightness,
  * brightness. This is quick as no HAL inquiry is done.
  **/
 gboolean
-gpm_hal_light_sensor_get (GpmHalLightSensor *brightness,
-			       guint		      *brightness_level)
+gpm_light_sensor_get (GpmLightSensor *brightness,
+		      guint	     *brightness_level)
 {
 	gint percentage;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_HAL_LIGHT_SENSOR (brightness), FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (brightness), FALSE);
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
@@ -144,55 +144,55 @@ gpm_hal_light_sensor_get (GpmHalLightSensor *brightness,
 }
 
 /**
- * gpm_hal_light_sensor_constructor:
+ * gpm_light_sensor_constructor:
  **/
 static GObject *
-gpm_hal_light_sensor_constructor (GType		  type,
-				       guint		  n_construct_properties,
-				       GObjectConstructParam *construct_properties)
+gpm_light_sensor_constructor (GType		  type,
+			      guint		  n_construct_properties,
+			      GObjectConstructParam *construct_properties)
 {
-	GpmHalLightSensor      *brightness;
-	GpmHalLightSensorClass *klass;
-	klass = GPM_HAL_LIGHT_SENSOR_CLASS (g_type_class_peek (GPM_TYPE_HAL_LIGHT_SENSOR));
-	brightness = GPM_HAL_LIGHT_SENSOR (G_OBJECT_CLASS (gpm_hal_light_sensor_parent_class)->constructor
+	GpmLightSensor      *brightness;
+	GpmLightSensorClass *klass;
+	klass = GPM_LIGHT_SENSOR_CLASS (g_type_class_peek (GPM_TYPE_LIGHT_SENSOR));
+	brightness = GPM_LIGHT_SENSOR (G_OBJECT_CLASS (gpm_light_sensor_parent_class)->constructor
 			      		     (type, n_construct_properties, construct_properties));
 	return G_OBJECT (brightness);
 }
 
 /**
- * gpm_hal_light_sensor_finalize:
+ * gpm_light_sensor_finalize:
  **/
 static void
-gpm_hal_light_sensor_finalize (GObject *object)
+gpm_light_sensor_finalize (GObject *object)
 {
-	GpmHalLightSensor *brightness;
+	GpmLightSensor *brightness;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_HAL_LIGHT_SENSOR (object));
-	brightness = GPM_HAL_LIGHT_SENSOR (object);
+	g_return_if_fail (GPM_IS_LIGHT_SENSOR (object));
+	brightness = GPM_LIGHT_SENSOR (object);
 
 	g_free (brightness->priv->udi);
 	g_object_unref (brightness->priv->gproxy);
 	g_object_unref (brightness->priv->hal);
 
 	g_return_if_fail (brightness->priv != NULL);
-	G_OBJECT_CLASS (gpm_hal_light_sensor_parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_light_sensor_parent_class)->finalize (object);
 }
 
 /**
- * gpm_hal_light_sensor_class_init:
+ * gpm_light_sensor_class_init:
  **/
 static void
-gpm_hal_light_sensor_class_init (GpmHalLightSensorClass *klass)
+gpm_light_sensor_class_init (GpmLightSensorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_hal_light_sensor_finalize;
-	object_class->constructor  = gpm_hal_light_sensor_constructor;
+	object_class->finalize	   = gpm_light_sensor_finalize;
+	object_class->constructor  = gpm_light_sensor_constructor;
 
 	signals [BRIGHTNESS_CHANGED] =
 		g_signal_new ("brightness-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalLightSensorClass, brightness_changed),
+			      G_STRUCT_OFFSET (GpmLightSensorClass, brightness_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__UINT,
@@ -200,33 +200,29 @@ gpm_hal_light_sensor_class_init (GpmHalLightSensorClass *klass)
 			      1,
 			      G_TYPE_UINT);
 
-	g_type_class_add_private (klass, sizeof (GpmHalLightSensorPrivate));
+	g_type_class_add_private (klass, sizeof (GpmLightSensorPrivate));
 }
 
 /**
- * gpm_hal_light_sensor_poll_hardware
+ * gpm_light_sensor_poll_hardware
  * @brightness: This brightness class instance
  */
 gboolean
-gpm_hal_light_sensor_poll_hardware (GpmHalLightSensor *brightness)
+gpm_light_sensor_poll_hardware (GpmLightSensor *brightness)
 {
 	gboolean ret;
 	guint old;
 	guint new;
 
-	gpm_hal_light_sensor_get (brightness, &old);
+	gpm_light_sensor_get (brightness, &old);
 
-	ret = gpm_hal_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
+	ret = gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
 
 	if (ret) {
-		gpm_hal_light_sensor_get (brightness, &new);
-
+		gpm_light_sensor_get (brightness, &new);
 		if (new != old) {
 			g_signal_emit (brightness,
-				       signals [BRIGHTNESS_CHANGED],
-				       0,
-				       new,
-				       old);
+				       signals [BRIGHTNESS_CHANGED], 0, new, old);
 		}
 	}
 
@@ -234,24 +230,24 @@ gpm_hal_light_sensor_poll_hardware (GpmHalLightSensor *brightness)
 }
 
 /**
- * gpm_hal_light_sensor_poll_fn:
+ * gpm_light_sensor_poll_cb:
  * @userdata: userdata; a brightness sensor class instance
  */
 static gboolean
-gpm_hal_light_sensor_poll_fn (gpointer userdata)
+gpm_light_sensor_poll_cb (gpointer userdata)
 {
-	GpmHalLightSensor *brightness;
+	GpmLightSensor *brightness;
 	g_return_val_if_fail (userdata != NULL, TRUE);
-	g_return_val_if_fail (GPM_IS_HAL_LIGHT_SENSOR (userdata), TRUE);
-	brightness = GPM_HAL_LIGHT_SENSOR (userdata);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (userdata), TRUE);
+	brightness = GPM_LIGHT_SENSOR (userdata);
 
-	gpm_hal_light_sensor_poll_hardware (brightness);
+	gpm_light_sensor_poll_hardware (brightness);
 
 	return TRUE;
 }
 
 /**
- * gpm_hal_light_sensor_init:
+ * gpm_light_sensor_init:
  * @brightness: This brightness class instance
  *
  * initialises the brightness class. NOTE: We expect light_sensor objects
@@ -259,11 +255,11 @@ gpm_hal_light_sensor_poll_fn (gpointer userdata)
  * We only control the first light_sensor object if there are more than one.
  **/
 static void
-gpm_hal_light_sensor_init (GpmHalLightSensor *brightness)
+gpm_light_sensor_init (GpmLightSensor *brightness)
 {
 	gchar **names;
 
-	brightness->priv = GPM_HAL_LIGHT_SENSOR_GET_PRIVATE (brightness);
+	brightness->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (brightness);
 
 	brightness->priv->hal = gpm_hal_new ();
 
@@ -291,21 +287,19 @@ gpm_hal_light_sensor_init (GpmHalLightSensor *brightness)
 				 &brightness->priv->levels);
 
 	/* this changes under our feet */
-	gpm_hal_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
+	gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
 
-	g_timeout_add (2000,
-		       gpm_hal_light_sensor_poll_fn,
-		       brightness);
+	g_timeout_add (2000, gpm_light_sensor_poll_cb, brightness);
 }
 
 /**
- * gpm_hal_light_sensor_has_hw:
+ * gpm_light_sensor_has_hw:
  *
  * Self contained function that works out if we have the hardware.
  * If not, we return FALSE and the module is unloaded.
  **/
 static gboolean
-gpm_hal_light_sensor_has_hw (void)
+gpm_light_sensor_has_hw (void)
 {
 	GpmHal *hal;
 	gchar **names;
@@ -326,13 +320,13 @@ gpm_hal_light_sensor_has_hw (void)
 }
 
 /**
- * gpm_hal_light_sensor_new:
+ * gpm_light_sensor_new:
  * Return value: A new brightness class instance.
  **/
-GpmHalLightSensor *
-gpm_hal_light_sensor_new (void)
+GpmLightSensor *
+gpm_light_sensor_new (void)
 {
-	static GpmHalLightSensor *brightness = NULL;
+	static GpmLightSensor *brightness = NULL;
 
 	if (brightness != NULL) {
 		g_object_ref (brightness);
@@ -340,10 +334,10 @@ gpm_hal_light_sensor_new (void)
 	}
 
 	/* only load an instance of this module if we have the hardware */
-	if (gpm_hal_light_sensor_has_hw () == FALSE) {
+	if (gpm_light_sensor_has_hw () == FALSE) {
 		return NULL;
 	}
 
-	brightness = g_object_new (GPM_TYPE_HAL_LIGHT_SENSOR, NULL);
+	brightness = g_object_new (GPM_TYPE_LIGHT_SENSOR, NULL);
 	return brightness;
 }

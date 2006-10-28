@@ -48,10 +48,10 @@
 #include "gpm-hal.h"
 #include "gpm-conf.h"
 #include "gpm-hal-monitor.h"
-#include "gpm-hal-cpufreq.h"
+#include "gpm-cpufreq.h"
 #include "gpm-hal-power.h"
-#include "gpm-hal-brightness-lcd.h"
-#include "gpm-hal-brightness-kbd.h"
+#include "gpm-brightness-lcd.h"
+#include "gpm-brightness-kbd.h"
 
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
@@ -87,51 +87,50 @@ typedef enum {
 
 struct GpmManagerPrivate
 {
-	GpmDpms		*dpms;
-	GpmConf		*conf;
-	GpmButton	*button;
-	GpmIdle		*idle;
-	GpmHal		*hal;
-	GpmHalPower	*hal_power;
-	GpmHalCpuFreq	*hal_cpufreq;
-	GpmInfo		*info;
-	GpmPower	*power;
-	GpmHalBrightnessLcd *brightness_lcd;
-	GpmHalBrightnessKbd *brightness_kbd;
-	GpmScreensaver  *screensaver;
-	GpmInhibit	*inhibit;
-	GpmPolkit	*polkit;
+	GpmDpms			*dpms;
+	GpmConf			*conf;
+	GpmButton		*button;
+	GpmIdle			*idle;
+	GpmHal			*hal;
+	GpmHalPower		*hal_power;
+	GpmCpuFreq		*cpufreq;
+	GpmInfo			*info;
+	GpmPower		*power;
+	GpmBrightnessLcd	*brightness_lcd;
+	GpmBrightnessKbd	*brightness_kbd;
+	GpmScreensaver 		*screensaver;
+	GpmInhibit		*inhibit;
+	GpmPolkit		*polkit;
 
-	guint32          ac_throttle_id;
-	guint32          dpms_throttle_id;
-	guint32          lid_throttle_id;
+	guint32         	 ac_throttle_id;
+	guint32         	 dpms_throttle_id;
+	guint32         	 lid_throttle_id;
 
-	GpmTrayIcon	*tray_icon;
+	GpmTrayIcon		*tray_icon;
 
-	GpmWarning	 last_primary_warning;
-	GpmWarning	 last_ups_warning;
-	GpmWarning	 last_mouse_warning;
-	GpmWarning	 last_keyboard_warning;
-	GpmWarning	 last_pda_warning;
+	GpmWarning		 last_primary_warning;
+	GpmWarning		 last_ups_warning;
+	GpmWarning		 last_mouse_warning;
+	GpmWarning		 last_keyboard_warning;
+	GpmWarning		 last_pda_warning;
 
-	gboolean	 use_time_to_notify;
-	gboolean	 lid_is_closed;
-	gboolean	 done_notify_fully_charged;
-	gboolean	 enable_beeping;
-	gboolean	 ignore_inhibits;
+	gboolean		 use_time_to_notify;
+	gboolean		 lid_is_closed;
+	gboolean		 done_notify_fully_charged;
+	gboolean		 enable_beeping;
 
-	time_t		 last_resume_event;
-	guint		 suppress_policy_timeout;
+	time_t			 last_resume_event;
+	guint			 suppress_policy_timeout;
 
-	guint		 low_percentage;
-	guint		 very_low_percentage;
-	guint		 critical_percentage;
-	guint		 action_percentage;
+	guint			 low_percentage;
+	guint			 very_low_percentage;
+	guint			 critical_percentage;
+	guint			 action_percentage;
 
-	guint		 low_time;
-	guint		 very_low_time;
-	guint		 critical_time;
-	guint		 action_time;
+	guint			 low_time;
+	guint			 very_low_time;
+	guint			 critical_time;
+	guint			 action_time;
 };
 
 enum {
@@ -165,7 +164,7 @@ gpm_manager_error_quark (void)
 
 /**
  * gpm_manager_is_policy_timout_valid:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @action: The action we want to do, e.g. "suspend"
  *
  * Checks if the difference in time between this request for an action, and
@@ -191,7 +190,7 @@ gpm_manager_is_policy_timout_valid (GpmManager  *manager,
 
 /**
  * gpm_manager_reset_event_time:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Resets the time so we do not do any more actions until the
  * timeout has passed.
@@ -204,7 +203,7 @@ gpm_manager_reset_event_time (GpmManager *manager)
 
 /**
  * gpm_manager_is_inhibit_valid:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @action: The action we want to do, e.g. "suspend"
  *
  * Checks to see if the specific action has been inhibited by a program.
@@ -224,10 +223,6 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 	if (! action_ok) {
 		GString *message = g_string_new ("");
 
-		if (manager->priv->ignore_inhibits) {
-			gpm_debug ("Inhibit ignored through gconf policy!");
-			return TRUE;
-		}
 		title = g_strdup_printf (_("Request to %s"), action);
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
@@ -247,7 +242,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 /**
  * gpm_manager_allowed_suspend:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @can: If we can suspend
  *
  * Checks the HAL key power_management.can_suspend_to_ram and also
@@ -278,7 +273,7 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 
 /**
  * gpm_manager_allowed_hibernate:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @can: If we can hibernate
  *
  * Checks the HAL key power_management.can_suspend_to_disk and also
@@ -308,7 +303,7 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 
 /**
  * gpm_manager_allowed_shutdown:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @can: If we can shutdown
  *
  * Stub function -- TODO.
@@ -332,7 +327,7 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 
 /**
  * gpm_manager_allowed_reboot:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @can: If we can reboot
  *
  * Stub function -- TODO.
@@ -356,7 +351,7 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 
 /**
  * get_stock_id:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @icon_policy: The policy set from gconf
  *
  * Get the stock filename id after analysing the state of all the devices
@@ -465,7 +460,7 @@ get_stock_id (GpmManager *manager,
 
 /**
  * gpm_manager_sync_tray_icon:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Update the tray icon and set the correct tooltip when required, or remove
  * (hide) the icon when no longer required by policy.
@@ -514,7 +509,7 @@ gpm_manager_sync_tray_icon (GpmManager *manager)
 
 /**
  * gpm_manager_sync_policy_dpms:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Sync the DPMS policy with what we have set in gconf.
  **/
@@ -655,88 +650,8 @@ update_lid_throttle (GpmManager	*manager,
 }
 
 /**
- * gpm_manager_sync_policy_cpufreq:
- * @manager: This manager class instance
- * @on_ac: If we are on AC power
- *
- * Changes the cpufreq policy if required
- **/
-static gboolean
-gpm_manager_sync_policy_cpufreq (GpmManager *manager)
-{
-	gboolean     cpufreq_consider_nice;
-	gboolean     on_ac;
-	guint	     cpufreq_performance;
-	gchar       *cpufreq_policy;
-	GpmHalCpuFreqEnum cpufreq_type;
-
-	if (manager->priv->hal_cpufreq == NULL) {
-		gpm_debug ("cpufreq support absent, so ignoring");
-		return FALSE;
-	}
-
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	if (on_ac) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
-	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_CPUFREQ_VALUE, &cpufreq_performance);
-	}
-
-	/* use enumerated value */
-	cpufreq_type = gpm_hal_cpufreq_string_to_enum (cpufreq_policy);
-	g_free (cpufreq_policy);
-
-	/* change to the right governer and settings */
-	gpm_hal_cpufreq_set_consider_nice (manager->priv->hal_cpufreq, cpufreq_consider_nice);
-	gpm_hal_cpufreq_set_governor (manager->priv->hal_cpufreq, cpufreq_type);
-	gpm_hal_cpufreq_set_performance (manager->priv->hal_cpufreq, cpufreq_performance);
-	return TRUE;
-}
-
-/**
- * gpm_manager_sync_policy_brightness:
- * @manager: This manager class instance
- * @on_ac: If we are on AC power
- *
- * Changes the policy setting brightness
- **/
-static void
-gpm_manager_sync_policy_brightness (GpmManager *manager)
-{
-	gboolean     on_ac;
-	gboolean     do_laptop_lcd;
-	guint	     brightness_lcd;
-	guint	     brightness_kbd;
-
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	if (on_ac) {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_BRIGHTNESS, &brightness_lcd);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &brightness_kbd);
-	} else {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &brightness_lcd);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &brightness_kbd);
-	}
-
-	/* only do brightness changes if we have the hardware */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
-	if (do_laptop_lcd && manager->priv->brightness_lcd) {
-		gpm_hal_brightness_lcd_set_std (manager->priv->brightness_lcd, brightness_lcd);
-	}
-
-	if (manager->priv->brightness_kbd) {
-		gpm_hal_brightness_kbd_set_std (manager->priv->brightness_kbd, brightness_kbd);
-	}
-}
-
-/**
  * gpm_manager_sync_policy_sleep:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @on_ac: If we are on AC power
  *
  * Changes the policy if required, setting brightness, display and computer
@@ -764,7 +679,6 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
 	}
 
-	/* only do brightness changes if we have the hardware */
 	gpm_hal_power_enable_power_save (manager->priv->hal_power, power_save);
 	update_ac_throttle (manager, on_ac);
 
@@ -774,7 +688,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 
 /**
  * gpm_manager_get_lock_policy:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @policy: The policy gconf string.
  *
  * This function finds out if we should lock the screen when we do an
@@ -805,7 +719,7 @@ gpm_manager_get_lock_policy (GpmManager  *manager,
 
 /**
  * gpm_manager_blank_screen:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Turn off the backlight of the LCD when we shut the lid, and lock
  * if required. This is required because some laptops do not turn off the
@@ -839,7 +753,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 
 /**
  * gpm_manager_unblank_screen:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Unblank the screen after we have opened the lid of the laptop
  *
@@ -871,7 +785,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 
 /**
  * manager_explain_reason:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @event: The event type, e.g. GPM_GRAPH_WIDGET_EVENT_DPMS_OFF
  * @pre: The action we are about to do, e.g. "Suspending computer"
  * @post: The reason we are performing the policy action, e.g. "battery critical"
@@ -897,7 +811,7 @@ manager_explain_reason (GpmManager   *manager,
 
 /**
  * manager_policy_do:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
  * @reason: The reason we are performing the policy action, e.g. "battery critical"
  *
@@ -957,7 +871,7 @@ manager_policy_do (GpmManager  *manager,
 
 /**
  * gpm_manager_get_on_ac:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @retval: TRUE if we are on AC power
  **/
 gboolean
@@ -981,7 +895,7 @@ gpm_manager_get_on_ac (GpmManager  *manager,
 
 /**
  * gpm_manager_get_low_power_mode:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @retval: TRUE if we are on low power mode
  **/
 gboolean
@@ -1011,7 +925,7 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 
 /**
  * gpm_manager_set_dpms_mode:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_STANDBY
  * Return value: TRUE if we could set the DPMS mode OK.
  **/
@@ -1036,7 +950,7 @@ gpm_manager_set_dpms_mode (GpmManager  *manager,
 
 /**
  * gpm_manager_get_dpms_mode:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_STANDBY
  * Return value: TRUE if we could get the GPMS mode OK.
  **/
@@ -1063,7 +977,7 @@ gpm_manager_get_dpms_mode (GpmManager   *manager,
 
 /**
  * gpm_manager_inhibit:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @application: The application that sent the request, e.g. "Nautilus"
  * @reason: The reason given to inhibit, e.g. "Copying files"
  * @context: The context we are talking to
@@ -1086,7 +1000,7 @@ gpm_manager_inhibit (GpmManager	 *manager,
 
 /**
  * gpm_manager_uninhibit:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @cookie: The application cookie, e.g. 17534
  * @context: The context we are talking to
  *
@@ -1106,7 +1020,7 @@ gpm_manager_uninhibit (GpmManager	 *manager,
 
 /**
  * gpm_manager_shutdown:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Shuts down the computer, saving the session if possible.
  **/
@@ -1144,7 +1058,7 @@ gpm_manager_shutdown (GpmManager *manager,
 
 /**
  * gpm_manager_reboot:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Reboots the computer, saving the session if possible.
  **/
@@ -1183,7 +1097,7 @@ gpm_manager_reboot (GpmManager *manager,
 
 /**
  * gpm_manager_hibernate:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * We want to hibernate the computer. This function deals with the "fluff" -
  * like disconnecting the networks and locking the screen, then does the
@@ -1275,7 +1189,7 @@ gpm_manager_hibernate (GpmManager *manager,
 
 /**
  * gpm_manager_suspend:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * We want to suspend the computer. This function deals with the "fluff" -
  * like disconnecting the networks and locking the screen, then does the
@@ -1370,7 +1284,7 @@ gpm_manager_suspend (GpmManager *manager,
 
 /**
  * gpm_manager_suspend_dbus_method:
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 gboolean
 gpm_manager_suspend_dbus_method (GpmManager *manager,
@@ -1399,7 +1313,7 @@ gpm_manager_hibernate_dbus_method (GpmManager *manager,
 
 /**
  * gpm_manager_shutdown_dbus_method:
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 gboolean
 gpm_manager_shutdown_dbus_method (GpmManager *manager,
@@ -1414,7 +1328,7 @@ gpm_manager_shutdown_dbus_method (GpmManager *manager,
 
 /**
  * gpm_manager_reboot_dbus_method:
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 gboolean
 gpm_manager_reboot_dbus_method (GpmManager *manager,
@@ -1431,7 +1345,7 @@ gpm_manager_reboot_dbus_method (GpmManager *manager,
  * idle_changed_cb:
  * @idle: The idle class instance
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * This callback is called when gnome-screensaver detects that the idle state
  * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
@@ -1478,12 +1392,12 @@ idle_changed_cb (GpmIdle    *idle,
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
 						_("Screen resume"),
 						_("idle mode ended"));
-			gpm_hal_brightness_lcd_undim (manager->priv->brightness_lcd);
+			gpm_brightness_lcd_undim (manager->priv->brightness_lcd);
 		}
 
 		/* turn keyboard backlight back on */
 		if (manager->priv->brightness_kbd) {
-			gpm_hal_brightness_kbd_undim (manager->priv->brightness_kbd);
+			gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
 		}
 
 		/* sync timeouts */
@@ -1508,12 +1422,12 @@ idle_changed_cb (GpmIdle    *idle,
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
 						_("Screen dim"),
 						_("idle mode started"));
-			gpm_hal_brightness_lcd_dim (manager->priv->brightness_lcd);
+			gpm_brightness_lcd_dim (manager->priv->brightness_lcd);
 		}
 
 		/* dim keyboard backlight */
 		if (do_laptop_dim && manager->priv->brightness_kbd) {
-			gpm_hal_brightness_kbd_dim (manager->priv->brightness_kbd);
+			gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
 		}
 
 		/* sync timeouts */
@@ -1548,7 +1462,7 @@ idle_changed_cb (GpmIdle    *idle,
  * dpms_mode_changed_cb:
  * @dpms: dpmsdesc
  * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * What happens when the DPMS mode is changed.
  **/
@@ -1570,7 +1484,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 
 /**
  * battery_button_pressed:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * What to do when the battery button is pressed. This used to be allocated to
  * "www", but now we watch for "battery" which has to go upstream to HAL and
@@ -1594,7 +1508,7 @@ battery_button_pressed (GpmManager *manager)
 
 /**
  * power_button_pressed:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * What to do when the power button is pressed.
  **/
@@ -1613,7 +1527,7 @@ power_button_pressed (GpmManager *manager)
 
 /**
  * suspend_button_pressed:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * What to do when the suspend button is pressed.
  **/
@@ -1632,7 +1546,7 @@ suspend_button_pressed (GpmManager *manager)
 
 /**
  * hibernate_button_pressed:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * What to do when the hibernate button is pressed.
  **/
@@ -1652,7 +1566,7 @@ hibernate_button_pressed (GpmManager *manager)
 
 /**
  * lid_button_pressed:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @state: TRUE for closed
  *
  * Does actions when the lid is closed, depending on if we are on AC or
@@ -1711,19 +1625,17 @@ lid_button_pressed (GpmManager *manager,
 }
 
 /**
- * power_button_pressed_cb:
+ * button_pressed_cb:
  * @power: The power class instance
  * @type: The button type, e.g. "power"
  * @state: The state, where TRUE is depressed or closed
- * @manager: This manager class instance
- *
- * description
+ * @manager: This class instance
  **/
 static void
-power_button_pressed_cb (GpmPower    *power,
-			 const gchar *type,
-			 gboolean     state,
-			 GpmManager  *manager)
+button_pressed_cb (GpmPower    *power,
+		   const gchar *type,
+		   gboolean     state,
+		   GpmManager  *manager)
 {
 	gpm_debug ("Button press event type=%s state=%d", type, state);
 
@@ -1742,33 +1654,6 @@ power_button_pressed_cb (GpmPower    *power,
 	} else if (strcmp (type, GPM_BUTTON_LID) == 0) {
 		lid_button_pressed (manager, state);
 
-	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) ||
-		   (strcmp (type, GPM_BUTTON_BRIGHT_UP_DEP) == 0)) {
-		if (manager->priv->brightness_lcd) {
-			gpm_hal_brightness_lcd_up (manager->priv->brightness_lcd);
-		}
-
-	} else if ((strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) ||
-		   (strcmp (type, GPM_BUTTON_BRIGHT_DOWN_DEP) == 0)) {
-		if (manager->priv->brightness_lcd) {
-			gpm_hal_brightness_lcd_down (manager->priv->brightness_lcd);
-		}
-
-	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0) {
-		if (manager->priv->brightness_kbd) {
-			gpm_hal_brightness_kbd_up (manager->priv->brightness_kbd);
-		}
-
-	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_DOWN) == 0) {
-		if (manager->priv->brightness_kbd) {
-			gpm_hal_brightness_kbd_down (manager->priv->brightness_kbd);
-		}
-
-	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
-		if (manager->priv->brightness_kbd) {
-			gpm_hal_brightness_kbd_toggle (manager->priv->brightness_kbd);
-		}
-
 	} else if (strcmp (type, GPM_BUTTON_LOCK) == 0) {
 		gpm_screensaver_lock (manager->priv->screensaver);
 
@@ -1781,7 +1666,7 @@ power_button_pressed_cb (GpmPower    *power,
  * power_on_ac_changed_cb:
  * @power: The power class instance
  * @on_ac: if we are on AC power
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
@@ -1816,8 +1701,6 @@ power_on_ac_changed_cb (GpmPower   *power,
 	}
 
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_manager_sync_policy_cpufreq (manager);
-	gpm_manager_sync_policy_brightness (manager);
 	gpm_manager_sync_policy_dpms (manager);
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
@@ -1846,7 +1729,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 
 /**
  * gpm_manager_get_warning_type:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @battery_status: The battery status information
  * @use_time: If we should use a per-time or per-percent policy
  *
@@ -1934,7 +1817,7 @@ battery_low_get_title (GpmWarning warning_type)
 
 /**
  * manager_critical_action_do:
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * This is the stub function when we have waited a few seconds for the user to
  * see the message, explaining what we are about to do.
@@ -1952,7 +1835,7 @@ manager_critical_action_do (GpmManager *manager)
 
 /**
  * battery_status_changed_primary:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_PRIMARY
  * @battery_status: The battery status information
  *
@@ -2125,7 +2008,7 @@ battery_status_changed_primary (GpmManager     *manager,
 
 /**
  * battery_status_changed_ups:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_UPS
  * @battery_status: The battery status information
  *
@@ -2235,7 +2118,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 
 /**
  * battery_status_changed_misc:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
  * @battery_status: The battery status information
  *
@@ -2320,7 +2203,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
  * power_battery_status_changed_cb:
  * @power: The power class instance
  * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * This function splits up the battery status changed callback, and calls
  * different functions for each of the device types.
@@ -2359,7 +2242,7 @@ power_battery_status_changed_cb (GpmPower    *power,
  * power_battery_status_perhaps_recall_cb:
  * @power: The power class instance
  * @vendor: The battery vendor, e.g. "DELL"
- * @manager: This manager class instance
+ * @manager: This class instance
  *
  * This function splits up the battery status changed callback, and calls
  * different functions for each of the device types.
@@ -2445,7 +2328,6 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmManager  *manager)
 {
-	gint	    brightness;
 	gboolean    on_ac;
 	gboolean    enabled;
 	gboolean    allowed_in_menu;
@@ -2455,14 +2337,6 @@ conf_key_changed_cb (GpmConf     *conf,
 	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
 
 		gpm_manager_sync_tray_icon (manager);
-
-	} else if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
-		   strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
-		   strcmp (key, GPM_CONF_BATTERY_CPUFREQ_POLICY) == 0 ||
-		   strcmp (key, GPM_CONF_BATTERY_CPUFREQ_VALUE) == 0 ||
-		   strcmp (key, GPM_CONF_USE_NICE) == 0) {
-
-		gpm_manager_sync_policy_cpufreq (manager);
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
@@ -2475,14 +2349,6 @@ conf_key_changed_cb (GpmConf     *conf,
 		   strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
 
 		gpm_manager_sync_policy_dpms (manager);
-
-	} else if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0 ||
-		   strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0 ||
-		   strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0 ||
-		   strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
-
-		gpm_manager_sync_policy_brightness (manager);
-
 
 	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
@@ -2509,25 +2375,15 @@ conf_key_changed_cb (GpmConf     *conf,
 		 gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
 		 		    &manager->priv->suppress_policy_timeout);
 
-	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
-		gpm_conf_get_int (manager->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &brightness);
-		if (manager->priv->brightness_lcd) {
-			gpm_hal_brightness_lcd_set_dim (manager->priv->brightness_lcd, brightness);
-		}
-
 	} else if (strcmp (key, GPM_CONF_ENABLE_BEEPING) == 0) {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING,
 				   &manager->priv->enable_beeping);
-
-	} else if (strcmp (key, GPM_CONF_IGNORE_INHIBITS) == 0) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IGNORE_INHIBITS,
-				   &manager->priv->ignore_inhibits);
 	}
 }
 
 /**
  * gpm_manager_tray_icon_hibernate:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @tray: The tray object
  *
  * The icon tray hibernate callback, which only should happen if both policy and
@@ -2553,7 +2409,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 
 /**
  * gpm_manager_tray_icon_suspend:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @tray: The tray object
  *
  * The icon tray suspend callback, which only should happen if both policy and
@@ -2580,7 +2436,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
  * hal_battery_removed_cb:
  * @monitor: The monitor class
  * @udi: The HAL udi of the device that was removed
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 static void
 hal_battery_removed_cb (GpmHalMonitor *monitor,
@@ -2593,7 +2449,7 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 
 /**
  * screensaver_auth_request_cb:
- * @manager: This manager class instance
+ * @manager: This class instance
  * @auth: If we are trying to authenticate
  *
  * Undim the screen when the login screen appears (see #333290)
@@ -2615,7 +2471,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		 resume requests -- maybe this need a logic cleanup */
 	if (manager->priv->brightness_lcd) {
 		gpm_debug ("undimming lcd due to auth begin");
-		gpm_hal_brightness_lcd_undim (manager->priv->brightness_lcd);
+		gpm_brightness_lcd_undim (manager->priv->brightness_lcd);
 	}
 
 	/* We turn on the monitor unconditionally, as we may be using
@@ -2631,7 +2487,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 
 /**
  * screensaver_connection_changed_cb:
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 static void
 screensaver_connection_changed_cb (GpmScreensaver *screensaver,
@@ -2665,7 +2521,7 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 
 /**
  * gpm_manager_init:
- * @manager: This manager class instance
+ * @manager: This class instance
  **/
 static void
 gpm_manager_init (GpmManager *manager)
@@ -2675,7 +2531,6 @@ gpm_manager_init (GpmManager *manager)
 	gboolean check_type_cpu;
 	gboolean enabled;
 	gboolean allowed_in_menu;
-	int lcd_dim_brightness;
 	DBusGConnection *connection;
 	GError *error = NULL;
 
@@ -2687,7 +2542,7 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "button-pressed",
-			  G_CALLBACK (power_button_pressed_cb), manager);
+			  G_CALLBACK (button_pressed_cb), manager);
 	g_signal_connect (manager->priv->power, "ac-power-changed",
 			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
@@ -2698,10 +2553,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->button = gpm_button_new ();
 	if (manager->priv->button) {
 		g_signal_connect (manager->priv->button, "button-pressed",
-				  G_CALLBACK (power_button_pressed_cb), manager);
-	} else {
-		gpm_warning ("You have no XEVENTS support. You may not get "
-			     "buttons to work with very new kernels");
+				  G_CALLBACK (button_pressed_cb), manager);
 	}
 
 	manager->priv->hal = gpm_hal_new ();
@@ -2710,7 +2562,12 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->hal, "daemon-stop",
 			  G_CALLBACK (hal_daemon_monitor_cb), manager);
 
-	manager->priv->hal_cpufreq = gpm_hal_cpufreq_new ();
+	/* try an start an interactive service */
+	manager->priv->cpufreq = gpm_cpufreq_new ();
+	if (manager->priv->cpufreq) {
+		gpm_cpufreq_service_init (manager->priv->cpufreq);
+	}
+
 	manager->priv->hal_power = gpm_hal_power_new ();
 
 	manager->priv->screensaver = gpm_screensaver_new ();
@@ -2726,8 +2583,15 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->power, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), manager);
 
-	manager->priv->brightness_lcd = gpm_hal_brightness_lcd_new ();
-	manager->priv->brightness_kbd = gpm_hal_brightness_kbd_new ();
+	/* try an start an interactive service */
+	manager->priv->brightness_lcd = gpm_brightness_lcd_new ();
+	if (manager->priv->brightness_lcd) {
+		gpm_brightness_lcd_service_init (manager->priv->brightness_lcd);
+	}
+	manager->priv->brightness_kbd = gpm_brightness_kbd_new ();
+	if (manager->priv->brightness_kbd) {
+		gpm_brightness_kbd_service_init (manager->priv->brightness_kbd);
+	}
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "changed",
@@ -2779,12 +2643,9 @@ gpm_manager_init (GpmManager *manager)
 				 G_CONNECT_SWAPPED);
 
 	/* coldplug so we are in the correct state at startup */
-	gpm_manager_sync_policy_dpms (manager);
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_manager_sync_policy_cpufreq (manager);
-	gpm_manager_sync_policy_brightness (manager);
 	gpm_manager_sync_policy_dpms (manager);
 	gpm_manager_sync_tray_icon (manager);
 
@@ -2845,18 +2706,8 @@ gpm_manager_init (GpmManager *manager)
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_CRITICAL_TIME, &manager->priv->critical_time);
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_ACTION_TIME, &manager->priv->action_time);
 
-	/* Get dim settings */
-	if (manager->priv->brightness_lcd) {
-		gpm_conf_get_int (manager->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &lcd_dim_brightness);
-		gpm_debug ("lcd_dim_brightness is %i", lcd_dim_brightness);
-		gpm_hal_brightness_lcd_set_dim (manager->priv->brightness_lcd, lcd_dim_brightness);
-	}
-
 	/* Do we beep? */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING, &manager->priv->enable_beeping);
-
-	/* Do we ignore inhibit requests? */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_IGNORE_INHIBITS, &manager->priv->ignore_inhibits);
 }
 
 /**
@@ -2893,8 +2744,8 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->button) {
 		g_object_unref (manager->priv->button);
 	}
-	if (manager->priv->hal_cpufreq) {
-		g_object_unref (manager->priv->hal_cpufreq);
+	if (manager->priv->cpufreq) {
+		g_object_unref (manager->priv->cpufreq);
 	}
 	if (manager->priv->polkit) {
 		g_object_unref (manager->priv->polkit);

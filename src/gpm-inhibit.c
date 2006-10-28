@@ -28,6 +28,7 @@
 #include "gpm-inhibit.h"
 #include "gpm-debug.h"
 #include "gpm-dbus-monitor.h"
+#include "gpm-conf.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
 static void     gpm_inhibit_init       (GpmInhibit      *inhibit);
@@ -37,16 +38,18 @@ static void     gpm_inhibit_finalize   (GObject		*object);
 
 typedef struct
 {
-	gchar		*application;
-	gchar		*reason;
-	gchar		*connection;
-	guint32		 cookie;
+	gchar			*application;
+	gchar			*reason;
+	gchar			*connection;
+	guint32			 cookie;
 } GpmInhibitData;
 
 struct GpmInhibitPrivate
 {
-	GSList		*list;
-	GpmDbusMonitor	*dbus_monitor;
+	GSList			*list;
+	GpmDbusMonitor		*dbus_monitor;
+	GpmConf			*conf;
+	gboolean		 ignore_inhibits;
 };
 
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
@@ -259,9 +262,15 @@ dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
 gboolean
 gpm_inhibit_check (GpmInhibit *inhibit)
 {
+	if (inhibit->priv->ignore_inhibits) {
+		gpm_debug ("Inhibit ignored through gconf policy!");
+		return TRUE;
+	}
+
 	if (g_slist_length (inhibit->priv->list) == 0) {
 		return TRUE;
 	}
+
 	/* we have at least one application blocking the action */
 	return FALSE;
 }
@@ -305,6 +314,22 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 	}
 }
 
+/**
+ * conf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+conf_key_changed_cb (GpmConf       *conf,
+		     const gchar   *key,
+		     GpmInhibit    *inhibit)
+{
+	if (strcmp (key, GPM_CONF_IGNORE_INHIBITS) == 0) {
+		gpm_conf_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS,
+				   &inhibit->priv->ignore_inhibits);
+	}
+}
+
 /** intialise the class */
 static void
 gpm_inhibit_class_init (GpmInhibitClass *klass)
@@ -323,6 +348,13 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 	inhibit->priv->dbus_monitor = gpm_dbus_monitor_new ();
 	g_signal_connect (inhibit->priv->dbus_monitor, "noc-session",
 			  G_CALLBACK (dbus_noc_session_cb), inhibit);
+
+	inhibit->priv->conf = gpm_conf_new ();
+	g_signal_connect (inhibit->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), inhibit);
+
+	/* Do we ignore inhibit requests? */
+	gpm_conf_get_bool (inhibit->priv->conf, GPM_CONF_IGNORE_INHIBITS, &inhibit->priv->ignore_inhibits);
 }
 
 /** finalise the object */
@@ -346,6 +378,7 @@ gpm_inhibit_finalize (GObject *object)
 	}
 	g_slist_free (inhibit->priv->list);
 
+	g_object_unref (inhibit->priv->conf);
 	g_object_unref (inhibit->priv->dbus_monitor);
 	G_OBJECT_CLASS (gpm_inhibit_parent_class)->finalize (object);
 }

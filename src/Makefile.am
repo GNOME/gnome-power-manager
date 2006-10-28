@@ -95,8 +95,16 @@ gnome_power_preferences_SOURCES =			\
 	gpm-dbus-monitor.c				\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
-	gpm-hal-cpufreq.h				\
-	gpm-hal-cpufreq.c				\
+	gpm-cpufreq.h					\
+	gpm-cpufreq.c					\
+	gpm-hal-power.h					\
+	gpm-hal-power.c					\
+	gpm-hal-monitor.h				\
+	gpm-hal-monitor.c				\
+	gpm-power.h					\
+	gpm-power.c					\
+	gpm-refcount.h					\
+	gpm-refcount.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -137,16 +145,16 @@ gnome_power_manager_SOURCES =				\
 	gpm-button.c					\
 	gpm-polkit.h					\
 	gpm-polkit.c					\
-	gpm-hal-cpufreq.h				\
-	gpm-hal-cpufreq.c				\
+	gpm-cpufreq.h					\
+	gpm-cpufreq.c					\
 	gpm-hal-power.h					\
 	gpm-hal-power.c					\
-	gpm-hal-brightness-lcd.h			\
-	gpm-hal-brightness-lcd.c			\
-	gpm-hal-brightness-kbd.h			\
-	gpm-hal-brightness-kbd.c			\
-	gpm-hal-light-sensor.h				\
-	gpm-hal-light-sensor.c				\
+	gpm-brightness-lcd.h				\
+	gpm-brightness-lcd.c				\
+	gpm-brightness-kbd.h				\
+	gpm-brightness-kbd.c				\
+	gpm-light-sensor.h				\
+	gpm-light-sensor.c				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\

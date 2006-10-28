@@ -19,33 +19,33 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPMHAL_CPUFREQ_H
-#define __GPMHAL_CPUFREQ_H
+#ifndef __GPMCPUFREQ_H
+#define __GPMCPUFREQ_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_HAL_CPUFREQ		(gpm_hal_cpufreq_get_type ())
-#define GPM_HAL_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_HAL_CPUFREQ, GpmHalCpuFreq))
-#define GPM_HAL_CPUFREQ_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_HAL_CPUFREQ, GpmHalCpuFreqClass))
-#define GPM_IS_HAL_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_HAL_CPUFREQ))
-#define GPM_IS_HAL_CPUFREQ_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_HAL_CPUFREQ))
-#define GPM_HAL_CPUFREQ_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_HAL_CPUFREQ, GpmHalCpuFreqClass))
+#define GPM_TYPE_CPUFREQ		(gpm_cpufreq_get_type ())
+#define GPM_CPUFREQ(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_CPUFREQ, GpmCpuFreq))
+#define GPM_CPUFREQ_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_CPUFREQ, GpmCpuFreqClass))
+#define GPM_IS_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_CPUFREQ))
+#define GPM_IS_CPUFREQ_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_CPUFREQ))
+#define GPM_CPUFREQ_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_CPUFREQ, GpmCpuFreqClass))
 
-typedef struct GpmHalCpuFreqPrivate GpmHalCpuFreqPrivate;
+typedef struct GpmCpuFreqPrivate GpmCpuFreqPrivate;
 
 typedef struct
 {
 	GObject			 parent;
-	GpmHalCpuFreqPrivate	*priv;
-} GpmHalCpuFreq;
+	GpmCpuFreqPrivate	*priv;
+} GpmCpuFreq;
 
 
 typedef struct
 {
 	GObjectClass	parent_class;
-} GpmHalCpuFreqClass;
+} GpmCpuFreqClass;
 
 /* types of governor */
 typedef enum {
@@ -56,7 +56,7 @@ typedef enum {
 	GPM_CPUFREQ_USERSPACE = 8,
 	GPM_CPUFREQ_PERFORMANCE = 16,
 	GPM_CPUFREQ_NOTHING = 32,
-} GpmHalCpuFreqEnum;
+} GpmCpuFreqEnum;
 
 #define CODE_CPUFREQ_ONDEMAND		"ondemand"
 #define CODE_CPUFREQ_CONSERVATIVE	"conservative"
@@ -65,28 +65,29 @@ typedef enum {
 #define CODE_CPUFREQ_PERFORMANCE	"performance"
 #define CODE_CPUFREQ_NOTHING		"nothing"
 
-GType		 gpm_hal_cpufreq_get_type		(void);
-GpmHalCpuFreq	*gpm_hal_cpufreq_new			(void);
+GType		 gpm_cpufreq_get_type			(void);
+GpmCpuFreq	*gpm_cpufreq_new			(void);
+gboolean	 gpm_cpufreq_service_init		(GpmCpuFreq *cpufreq);
 
-const gchar	*gpm_hal_cpufreq_enum_to_string		(GpmHalCpuFreqEnum cpufreq_type);
-GpmHalCpuFreqEnum gpm_hal_cpufreq_string_to_enum	(const gchar *governor);
-gboolean	 gpm_hal_cpufreq_get_governors		(GpmHalCpuFreq	*cpufreq,
-							 GpmHalCpuFreqEnum *cpufreq_type);
-gboolean	 gpm_hal_cpufreq_get_governor		(GpmHalCpuFreq	*cpufreq,
-							 GpmHalCpuFreqEnum *cpufreq_type);
-gboolean	 gpm_hal_cpufreq_set_governor		(GpmHalCpuFreq	*cpufreq,
-							 GpmHalCpuFreqEnum  governor_enum);
-gboolean	 gpm_hal_cpufreq_get_consider_nice	(GpmHalCpuFreq	*cpufreq,
+const gchar	*gpm_cpufreq_enum_to_string		(GpmCpuFreqEnum cpufreq_type);
+GpmCpuFreqEnum gpm_cpufreq_string_to_enum		(const gchar *governor);
+gboolean	 gpm_cpufreq_get_governors		(GpmCpuFreq	*cpufreq,
+							 GpmCpuFreqEnum *cpufreq_type);
+gboolean	 gpm_cpufreq_get_governor		(GpmCpuFreq	*cpufreq,
+							 GpmCpuFreqEnum *cpufreq_type);
+gboolean	 gpm_cpufreq_set_governor		(GpmCpuFreq	*cpufreq,
+							 GpmCpuFreqEnum  governor_enum);
+gboolean	 gpm_cpufreq_get_consider_nice		(GpmCpuFreq	*cpufreq,
 							 gboolean	*consider_nice);
-gboolean	 gpm_hal_cpufreq_set_consider_nice	(GpmHalCpuFreq	*cpufreq,
+gboolean	 gpm_cpufreq_set_consider_nice		(GpmCpuFreq	*cpufreq,
 							 gboolean	 consider_nice);
-gboolean	 gpm_hal_cpufreq_get_performance	(GpmHalCpuFreq	*cpufreq,
+gboolean	 gpm_cpufreq_get_performance		(GpmCpuFreq	*cpufreq,
 							 guint		*performance);
-gboolean	 gpm_hal_cpufreq_set_performance	(GpmHalCpuFreq	*cpufreq,
+gboolean	 gpm_cpufreq_set_performance		(GpmCpuFreq	*cpufreq,
 							 guint		 performance);
-guint		 gpm_hal_cpufreq_get_number_governors	(GpmHalCpuFreq	*cpufreq,
+guint		 gpm_cpufreq_get_number_governors	(GpmCpuFreq	*cpufreq,
 							 gboolean	 use_cache);
 
 G_END_DECLS
 
-#endif	/* __GPMHAL_CPUFREQ_H */
+#endif	/* __GPMCPUFREQ_H */

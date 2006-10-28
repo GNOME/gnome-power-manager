@@ -37,7 +37,7 @@
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
 #include "gpm-hal.h"
-#include "gpm-hal-cpufreq.h"
+#include "gpm-cpufreq.h"
 #include "gpm-prefs-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
@@ -61,8 +61,8 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	GpmConf			*conf;
 	GpmScreensaver		*screensaver;
-	GpmHalCpuFreq		*cpufreq;
-	GpmHalCpuFreqEnum	 cpufreq_types;
+	GpmCpuFreq		*cpufreq;
+	GpmCpuFreqEnum		 cpufreq_types;
 	GpmHal			*hal;
 };
 
@@ -795,14 +795,14 @@ static void
 gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 				 const gchar      *widget_name,
 				 const gchar      *gpm_pref_key,
-				 GpmHalCpuFreqEnum cpufreq_types)
+				 GpmCpuFreqEnum cpufreq_types)
 {
 	gchar *value;
 	guint n_added = 0;
 	gboolean has_option = FALSE;
 	gboolean is_writable;
 	GtkWidget *widget;
-	GpmHalCpuFreqEnum cpufreq_type;
+	GpmCpuFreqEnum cpufreq_type;
 
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	gpm_conf_get_string (prefs->priv->conf, gpm_pref_key, &value);
@@ -820,7 +820,7 @@ gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 			  G_CALLBACK (gpm_prefs_processor_combo_changed_cb),
 			  prefs);
 
-	cpufreq_type = gpm_hal_cpufreq_string_to_enum (value);
+	cpufreq_type = gpm_cpufreq_string_to_enum (value);
 
 	if (cpufreq_types & GPM_CPUFREQ_ONDEMAND) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
@@ -1191,7 +1191,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
 	prefs->priv->hal = gpm_hal_new ();
-	prefs->priv->cpufreq = gpm_hal_cpufreq_new ();
+	prefs->priv->cpufreq = gpm_cpufreq_new ();
 
 	prefs->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
@@ -1220,7 +1220,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 
 	/* only enable cpufreq stuff if we have the hardware */
 	if (prefs->priv->cpufreq) {
-		gpm_hal_cpufreq_get_governors (prefs->priv->cpufreq,
+		gpm_cpufreq_get_governors (prefs->priv->cpufreq,
 					       &prefs->priv->cpufreq_types);
 	} else {
 		prefs->priv->cpufreq_types = GPM_CPUFREQ_NOTHING;
