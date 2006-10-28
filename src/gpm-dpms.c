@@ -44,6 +44,9 @@
 
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
+#include "gpm-conf.h"
+#include "gpm-power.h"
+#include "gpm-hal-power.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
 static void     gpm_dpms_init       (GpmDpms      *dpms);
@@ -53,16 +56,19 @@ static void     gpm_dpms_finalize   (GObject      *object);
 
 struct GpmDpmsPrivate
 {
-	gboolean       enabled;
-	gboolean       active;
+	gboolean		 enabled;
+	gboolean		 active;
 
-	guint	       standby_timeout;
-	guint	       suspend_timeout;
-	guint	       off_timeout;
+	guint			 standby_timeout;
+	guint			 suspend_timeout;
+	guint			 off_timeout;
 
-	GpmDpmsMode    mode;
+	GpmDpmsMode		 mode;
+	GpmConf			*conf;
+	GpmPower		*power;
+	GpmHalPower		*hal_power;
 
-	guint	       timer_id;
+	guint			 timer_id;
 };
 
 enum {
@@ -795,12 +801,155 @@ add_poll_timer (GpmDpms *dpms,
 	dpms->priv->timer_id = g_timeout_add (timeout, (GSourceFunc)poll_dpms_mode, dpms);
 }
 
+
+/**
+ * gpm_dpms_sync_policy:
+ * @dpms: This class instance
+ *
+ * Sync the DPMS policy with what we have set in gconf.
+ **/
+void
+gpm_dpms_sync_policy (GpmDpms *dpms)
+{
+	GError  *error;
+	gboolean res;
+	gboolean on_ac;
+	guint    timeout = 0;
+	guint    standby = 0;
+	guint    suspend = 0;
+	guint    off = 0;
+	gchar   *dpms_method;
+	GpmDpmsMethod method;
+
+	error = NULL;
+	gpm_power_get_on_ac (dpms->priv->power, &on_ac, NULL);
+
+	if (on_ac) {
+		gpm_conf_get_uint (dpms->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (dpms->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
+	} else {
+		gpm_conf_get_uint (dpms->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (dpms->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
+	}
+
+	/* convert the string types to standard types */
+	method = gpm_dpms_method_from_string (dpms_method);
+	g_free (dpms_method);
+
+	/* check if method is valid */
+	if (method == GPM_DPMS_METHOD_UNKNOWN) {
+		gpm_warning ("DPMS method unknown. Possible schema problem!");
+		return;
+	}
+
+	/* choose a sensible default */
+	if (method == GPM_DPMS_METHOD_DEFAULT) {
+		gpm_debug ("choosing sensible default");
+		if (gpm_hal_power_is_laptop (dpms->priv->hal_power)) {
+			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
+			method = GPM_DPMS_METHOD_OFF;
+		} else {
+			gpm_debug ("not laptop, so use GPM_DPMS_METHOD_STAGGER");
+			method = GPM_DPMS_METHOD_STAGGER;
+		}
+	}
+
+	/* Some monitors do not support certain suspend states, so we have to
+	 * provide a way to only use the one that works. */
+	if (method == GPM_DPMS_METHOD_STAGGER) {
+		/* suspend after one timeout, turn off after another */
+		standby = timeout;
+		suspend = timeout;
+		off     = timeout * 2;
+	} else if (method == GPM_DPMS_METHOD_STANDBY) {
+		standby = timeout;
+		suspend = 0;
+		off     = 0;
+	} else if (method == GPM_DPMS_METHOD_SUSPEND) {
+		standby = 0;
+		suspend = timeout;
+		off     = 0;
+	} else if (method == GPM_DPMS_METHOD_OFF) {
+		standby = 0;
+		suspend = 0;
+		off     = timeout;
+	} else {
+		/* wtf? */
+		gpm_warning ("unknown dpms mode!");
+	}
+
+	gpm_debug ("DPMS parameters %d %d %d, method '%i'", standby, suspend, off, method);
+
+	error = NULL;
+	res = gpm_dpms_set_enabled (dpms, TRUE, &error);
+	if (error) {
+		gpm_warning ("Unable to enable DPMS: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+
+	error = NULL;
+	res = gpm_dpms_set_timeouts (dpms, standby, suspend, off, &error);
+	if (error) {
+		gpm_warning ("Unable to get DPMS timeouts: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+}
+
+/**
+ * conf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+conf_key_changed_cb (GpmConf     *conf,
+		     const gchar *key,
+		     GpmDpms     *dpms)
+{
+	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_DISPLAY) == 0 ||
+	    strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
+	    strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
+	    strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
+		gpm_dpms_sync_policy (dpms);
+	}
+}
+
+/**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @manager: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+power_on_ac_changed_cb (GpmPower   *power,
+			gboolean    on_ac,
+			GpmDpms    *dpms)
+{
+		gpm_dpms_sync_policy (dpms);	
+}
+
 static void
 gpm_dpms_init (GpmDpms *dpms)
 {
 	dpms->priv = GPM_DPMS_GET_PRIVATE (dpms);
 
+	dpms->priv->conf = gpm_conf_new ();
+	g_signal_connect (dpms->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), dpms);
+
+	/* we use power for the ac-power=changed signal */
+	dpms->priv->hal_power = gpm_hal_power_new ();
+
+	/* we use power for the ac-power=changed signal */
+	dpms->priv->power = gpm_power_new ();
+	g_signal_connect (dpms->priv->power, "ac-power-changed",
+			  G_CALLBACK (power_on_ac_changed_cb), dpms);
+
 	add_poll_timer (dpms, 500);
+	gpm_dpms_sync_policy (dpms);
 }
 
 static void
@@ -816,6 +965,16 @@ gpm_dpms_finalize (GObject *object)
 	g_return_if_fail (dpms->priv != NULL);
 
 	remove_poll_timer (dpms);
+
+	if (dpms->priv->conf != NULL) {
+		g_object_unref (dpms->priv->conf);
+	}
+	if (dpms->priv->power != NULL) {
+		g_object_unref (dpms->priv->power);
+	}
+	if (dpms->priv->hal_power != NULL) {
+		g_object_unref (dpms->priv->hal_power);
+	}
 
 	G_OBJECT_CLASS (gpm_dpms_parent_class)->finalize (object);
 }

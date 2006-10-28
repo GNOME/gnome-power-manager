@@ -507,101 +507,6 @@ gpm_manager_sync_tray_icon (GpmManager *manager)
 	}
 }
 
-/**
- * gpm_manager_sync_policy_dpms:
- * @manager: This class instance
- *
- * Sync the DPMS policy with what we have set in gconf.
- **/
-static void
-gpm_manager_sync_policy_dpms (GpmManager *manager)
-{
-	GError  *error;
-	gboolean res;
-	gboolean on_ac;
-	guint    timeout = 0;
-	guint    standby = 0;
-	guint    suspend = 0;
-	guint    off = 0;
-	gchar   *dpms_method;
-	GpmDpmsMethod method;
-
-	error = NULL;
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	if (on_ac) {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
-	} else {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
-	}
-
-	/* convert the string types to standard types */
-	method = gpm_dpms_method_from_string (dpms_method);
-	g_free (dpms_method);
-
-	/* check if method is valid */
-	if (method == GPM_DPMS_METHOD_UNKNOWN) {
-		gpm_warning ("DPMS method unknown. Possible schema problem!");
-		return;
-	}
-
-	/* choose a sensible default */
-	if (method == GPM_DPMS_METHOD_DEFAULT) {
-		gpm_debug ("choosing sensible default");
-		if (gpm_hal_power_is_laptop (manager->priv->hal_power)) {
-			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
-			method = GPM_DPMS_METHOD_OFF;
-		} else {
-			gpm_debug ("not laptop, so use GPM_DPMS_METHOD_STAGGER");
-			method = GPM_DPMS_METHOD_STAGGER;
-		}
-	}
-
-	/* Some monitors do not support certain suspend states, so we have to
-	 * provide a way to only use the one that works. */
-	if (method == GPM_DPMS_METHOD_STAGGER) {
-		/* suspend after one timeout, turn off after another */
-		standby = timeout;
-		suspend = timeout;
-		off     = timeout * 2;
-	} else if (method == GPM_DPMS_METHOD_STANDBY) {
-		standby = timeout;
-		suspend = 0;
-		off     = 0;
-	} else if (method == GPM_DPMS_METHOD_SUSPEND) {
-		standby = 0;
-		suspend = timeout;
-		off     = 0;
-	} else if (method == GPM_DPMS_METHOD_OFF) {
-		standby = 0;
-		suspend = 0;
-		off     = timeout;
-	} else {
-		/* wtf? */
-		gpm_warning ("unknown dpms mode!");
-	}
-
-	gpm_debug ("DPMS parameters %d %d %d, method '%i'", standby, suspend, off, method);
-
-	error = NULL;
-	res = gpm_dpms_set_enabled (manager->priv->dpms, TRUE, &error);
-	if (error) {
-		gpm_warning ("Unable to enable DPMS: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-
-	error = NULL;
-	res = gpm_dpms_set_timeouts (manager->priv->dpms, standby, suspend, off, &error);
-	if (error) {
-		gpm_warning ("Unable to get DPMS timeouts: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-}
-
 static void
 update_ac_throttle (GpmManager *manager,
 		    gboolean    on_ac)
@@ -1179,7 +1084,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	gpm_manager_sync_policy_dpms (manager);
+	gpm_dpms_sync_policy (manager->priv->dpms);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -1274,7 +1179,7 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	gpm_manager_sync_policy_dpms (manager);
+	gpm_dpms_sync_policy (manager->priv->dpms);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -1401,7 +1306,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* sync timeouts */
-		gpm_manager_sync_policy_dpms (manager);
+		gpm_dpms_sync_policy (manager->priv->dpms);
 
 		break;
 	case GPM_IDLE_MODE_SESSION:
@@ -1431,7 +1336,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* sync timeouts */
-		gpm_manager_sync_policy_dpms (manager);
+		gpm_dpms_sync_policy (manager->priv->dpms);
 
 		break;
 	case GPM_IDLE_MODE_SYSTEM:
@@ -1701,7 +1606,6 @@ power_on_ac_changed_cb (GpmPower   *power,
 	}
 
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_manager_sync_policy_dpms (manager);
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
@@ -2343,13 +2247,6 @@ conf_key_changed_cb (GpmConf     *conf,
 
 		gpm_manager_sync_policy_sleep (manager);
 
-	} else if (strcmp (key, GPM_CONF_BATTERY_SLEEP_DISPLAY) == 0 ||
-		   strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
-		   strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
-		   strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
-
-		gpm_manager_sync_policy_dpms (manager);
-
 	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_manager_allowed_suspend (manager, &enabled, NULL);
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
@@ -2646,7 +2543,6 @@ gpm_manager_init (GpmManager *manager)
 	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
 
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_manager_sync_policy_dpms (manager);
 	gpm_manager_sync_tray_icon (manager);
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",

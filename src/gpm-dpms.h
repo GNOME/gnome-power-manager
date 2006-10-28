@@ -95,6 +95,8 @@ gboolean	 gpm_dpms_set_timeouts		(GpmDpms 	*dpms,
 						 guint		 off,
 						 GError 	**error);
 
+void		 gpm_dpms_sync_policy		(GpmDpms	*dpms);
+
 /* Direct manipulation */
 gboolean	 gpm_dpms_get_mode	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	*mode,
