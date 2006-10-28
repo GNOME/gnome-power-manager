@@ -46,7 +46,7 @@
 #include "gpm-dpms.h"
 #include "gpm-conf.h"
 #include "gpm-power.h"
-#include "gpm-hal-power.h"
+#include "gpm-hal.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
 static void     gpm_dpms_init       (GpmDpms      *dpms);
@@ -66,7 +66,7 @@ struct GpmDpmsPrivate
 	GpmDpmsMode		 mode;
 	GpmConf			*conf;
 	GpmPower		*power;
-	GpmHalPower		*hal_power;
+	GpmHal			*hal;
 
 	guint			 timer_id;
 };
@@ -846,7 +846,7 @@ gpm_dpms_sync_policy (GpmDpms *dpms)
 	/* choose a sensible default */
 	if (method == GPM_DPMS_METHOD_DEFAULT) {
 		gpm_debug ("choosing sensible default");
-		if (gpm_hal_power_is_laptop (dpms->priv->hal_power)) {
+		if (gpm_hal_is_laptop (dpms->priv->hal)) {
 			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
 			method = GPM_DPMS_METHOD_OFF;
 		} else {
@@ -942,7 +942,7 @@ gpm_dpms_init (GpmDpms *dpms)
 			  G_CALLBACK (conf_key_changed_cb), dpms);
 
 	/* we use power for the ac-power-changed signal */
-	dpms->priv->hal_power = gpm_hal_power_new ();
+	dpms->priv->hal = gpm_hal_new ();
 
 	/* we use power for the ac-power=changed signal */
 	dpms->priv->power = gpm_power_new ();
@@ -973,8 +973,8 @@ gpm_dpms_finalize (GObject *object)
 	if (dpms->priv->power != NULL) {
 		g_object_unref (dpms->priv->power);
 	}
-	if (dpms->priv->hal_power != NULL) {
-		g_object_unref (dpms->priv->hal_power);
+	if (dpms->priv->hal != NULL) {
+		g_object_unref (dpms->priv->hal);
 	}
 
 	G_OBJECT_CLASS (gpm_dpms_parent_class)->finalize (object);

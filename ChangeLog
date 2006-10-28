@@ -1,5 +1,21 @@
 2006-10-28  Richard Hughes <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-dpms.c:
+	* src/gpm-hal-monitor.c: 
+	* src/gpm-hal-power.c:
+	* src/gpm-hal-power.h:
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	Remove GpmHalPower and add the functionality to GpmHal - there's no
+	point having two gobjects doing basically the same thing.
+
+2006-10-28  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-hal-brightness-sensor.c:
 	* src/gpm-hal-brightness-sensor.h:
 	Remove these spare files that escaped the cvs rm session.

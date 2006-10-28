@@ -1150,6 +1150,364 @@ remove_device_condition_in_hash (const gchar *udi,
 }
 
 /**
+ * gpm_hal_is_on_ac:
+ *
+ * @hal: This hal class instance
+ * Return value: TRUE is computer is running on AC
+ **/
+gboolean
+gpm_hal_is_on_ac (GpmHal *hal)
+{
+	gboolean is_on_ac;
+	gchar **device_names = NULL;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	/* find ac_adapter */
+	gpm_hal_device_find_capability (hal, "ac_adapter", &device_names);
+	if (device_names == NULL || device_names[0] == NULL) {
+		gpm_debug ("Couldn't obtain list of ac_adapters");
+		/* If we do not have an AC adapter, then assume we are a
+		 * desktop and return true */
+		return TRUE;
+	}
+	/* assume only one */
+	gpm_hal_device_get_bool (hal, device_names[0], "ac_adapter.present", &is_on_ac);
+	gpm_hal_free_capability (hal, device_names);
+	return is_on_ac;
+}
+
+/**
+ * gpm_hal_is_laptop:
+ *
+ * @hal: This hal class instance
+ * Return value: TRUE is computer is identified as a laptop
+ *
+ * Returns true if system.formfactor is "laptop"
+ **/
+gboolean
+gpm_hal_is_laptop (GpmHal *hal)
+{
+	gboolean ret = TRUE;
+	gchar *formfactor = NULL;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	/* always present */
+	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
+	if (formfactor == NULL) {
+		gpm_debug ("system.formfactor not set!");
+		/* no need to free */
+		return FALSE;
+	}
+	if (strcmp (formfactor, "laptop") != 0) {
+		gpm_debug ("This machine is not identified as a laptop."
+			   "system.formfactor is %s.", formfactor);
+		ret = FALSE;
+	}
+	g_free (formfactor);
+	return ret;
+}
+
+/**
+ * gpm_hal_has_power_management:
+ *
+ * @hal: This hal class instance
+ * Return value: TRUE if haldaemon has power management capability
+ *
+ * Finds out if power management functions are running (only ACPI, PMU, APM)
+ **/
+gboolean
+gpm_hal_has_power_management (GpmHal *hal)
+{
+	gchar *ptype = NULL;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "power_management.type", &ptype);
+	/* this key only has to exist to be pm okay */
+	if (ptype) {
+		gpm_debug ("Power management type : %s", ptype);
+		g_free (ptype);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/**
+ * gpm_hal_can_suspend:
+ *
+ * @hal: This hal class instance
+ * Return value: TRUE if kernel suspend support is compiled in
+ *
+ * Finds out if HAL indicates that we can suspend
+ **/
+gboolean
+gpm_hal_can_suspend (GpmHal *hal)
+{
+	gboolean exists;
+	gboolean can_suspend;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	/* TODO: Change to can_suspend when rely on newer HAL */
+	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
+					  "power_management.can_suspend_to_ram",
+					  &can_suspend);
+	if (exists == FALSE) {
+		gpm_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
+		return FALSE;
+	}
+	return can_suspend;
+}
+
+/**
+ * gpm_hal_can_hibernate:
+ *
+ * @hal: This hal class instance
+ * Return value: TRUE if kernel hibernation support is compiled in
+ *
+ * Finds out if HAL indicates that we can hibernate
+ **/
+gboolean
+gpm_hal_can_hibernate (GpmHal *hal)
+{
+	gboolean exists;
+	gboolean can_hibernate;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	/* TODO: Change to can_hibernate when rely on newer HAL */
+	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
+					  "power_management.can_suspend_to_disk",
+					  &can_hibernate);
+	if (exists == FALSE) {
+		gpm_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
+		return FALSE;
+	}
+	return can_hibernate;
+}
+
+/* we have to ignore dbus timeouts */
+static gboolean
+gpm_hal_filter_error (GError **error)
+{
+	/* short cut for speed, no error */
+	if (error == NULL) {
+		return FALSE;
+	}
+
+	/* DBUS might time out, which is okay. We can remove this code
+	   when the dbus glib bindings are fixed. See #332888 */
+	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
+		gpm_debug ("DBUS timed out, but recovering");
+		g_error_free (*error);
+		*error = NULL;
+		return TRUE;
+	}
+	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_REMOTE_EXCEPTION)) {
+		gpm_debug ("Remote exception, recovering");
+		g_error_free (*error);
+		*error = NULL;
+		return TRUE;
+	}
+	gpm_warning ("Method failed\n(%s)",
+		     (*error)->message);
+	gpm_syslog ("%s code='%i' quark='%s'", (*error)->message,
+		    (*error)->code, g_quark_to_string ((*error)->domain));
+	return FALSE;
+}
+
+/**
+ * gpm_hal_suspend:
+ *
+ * @hal: This hal class instance
+ * @wakeup: Seconds to wakeup, currently unsupported
+ * Return value: Success, true if we suspended OK
+ *
+ * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
+ **/
+gboolean
+gpm_hal_suspend (GpmHal *hal, guint wakeup)
+{
+	guint retval = 0;
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "Suspend", &error,
+				 G_TYPE_INT, wakeup,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	/* we might have to ignore the error */
+	if (gpm_hal_filter_error (&error)) {
+		return TRUE;
+	}
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("Suspend failed!");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
+ * hal_pm_method_void:
+ *
+ * @hal: This hal class instance
+ * @method: The method name, e.g. "Hibernate"
+ * Return value: Success, true if we did OK
+ *
+ * Do a method on org.freedesktop.Hal.Device.SystemPowerManagement.*
+ * with no arguments.
+ **/
+static gboolean
+hal_pm_method_void (GpmHal *hal, const gchar* method)
+{
+	guint retval = 0;
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	g_return_val_if_fail (method != NULL, FALSE);
+
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}	
+
+	ret = dbus_g_proxy_call (proxy, method, &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	/* we might have to ignore the error */
+	if (gpm_hal_filter_error (&error)) {
+		return TRUE;
+	}
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("%s failed!", method);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_hal_hibernate:
+ *
+ * @hal: This hal class instance
+ * Return value: Success, true if we hibernated OK
+ *
+ * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
+ **/
+gboolean
+gpm_hal_hibernate (GpmHal *hal)
+{
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	return hal_pm_method_void (hal, "Hibernate");
+}
+
+/**
+ * gpm_hal_shutdown:
+ *
+ * Return value: Success, true if we shutdown OK
+ *
+ * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
+ **/
+gboolean
+gpm_hal_shutdown (GpmHal *hal)
+{
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	return hal_pm_method_void (hal, "Shutdown");
+}
+
+/**
+ * gpm_hal_reboot:
+ *
+ * @hal: This hal class instance
+ * Return value: Success, true if we shutdown OK
+ *
+ * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
+ **/
+gboolean
+gpm_hal_reboot (GpmHal *hal)
+{
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	return hal_pm_method_void (hal, "Reboot");
+}
+
+/**
+ * gpm_hal_enable_power_save:
+ *
+ * @hal: This hal class instance
+ * @enable: True to enable low power mode
+ * Return value: Success, true if we set the mode
+ *
+ * Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
+ **/
+gboolean
+gpm_hal_enable_power_save (GpmHal *hal, gboolean enable)
+{
+	gint retval = 0;
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (hal != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	/* abort if we are not a "qualified" laptop */
+	if (gpm_hal_is_laptop (hal) == FALSE) {
+		gpm_debug ("We are not a laptop, so not even trying");
+		return FALSE;
+	}
+
+	gpm_debug ("Doing SetPowerSave (%i)", enable);
+	ret = dbus_g_proxy_call (proxy, "SetPowerSave", &error,
+				 G_TYPE_BOOLEAN, enable,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE || retval != 0) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SetPowerSave failed!");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+
+
+/**
  * gpm_hal_finalize:
  * @object: This hal class instance
  **/

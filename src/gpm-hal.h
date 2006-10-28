@@ -140,6 +140,19 @@ gboolean	 gpm_hal_device_remove_condition	(GpmHal		*hal,
 gboolean	 gpm_hal_device_remove_propery_modified	(GpmHal		*hal,
 							 const char	*udi);
 
+gboolean	 gpm_hal_has_power_management		(GpmHal		*hal);
+gboolean	 gpm_hal_can_suspend			(GpmHal		*hal);
+gboolean	 gpm_hal_suspend			(GpmHal		*hal,
+							 guint		 wakeup);
+gboolean	 gpm_hal_can_hibernate			(GpmHal		*hal);
+gboolean	 gpm_hal_hibernate			(GpmHal		*hal);
+gboolean	 gpm_hal_shutdown			(GpmHal		*hal);
+gboolean	 gpm_hal_reboot				(GpmHal		*hal);
+gboolean	 gpm_hal_enable_power_save		(GpmHal		*hal,
+							 gboolean	 enable);
+gboolean	 gpm_hal_is_laptop			(GpmHal		*hal);
+gboolean	 gpm_hal_is_on_ac			(GpmHal		*hal);
+
 G_END_DECLS
 
 #endif	/* __GPMHAL_H */

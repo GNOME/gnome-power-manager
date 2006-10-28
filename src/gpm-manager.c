@@ -49,7 +49,6 @@
 #include "gpm-conf.h"
 #include "gpm-hal-monitor.h"
 #include "gpm-cpufreq.h"
-#include "gpm-hal-power.h"
 #include "gpm-brightness-lcd.h"
 #include "gpm-brightness-kbd.h"
 
@@ -92,7 +91,6 @@ struct GpmManagerPrivate
 	GpmButton		*button;
 	GpmIdle			*idle;
 	GpmHal			*hal;
-	GpmHalPower		*hal_power;
 	GpmCpuFreq		*cpufreq;
 	GpmInfo			*info;
 	GpmPower		*power;
@@ -256,7 +254,7 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 
 	*can = FALSE;
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
-	hal_ok = gpm_hal_power_can_suspend (manager->priv->hal_power);
+	hal_ok = gpm_hal_can_suspend (manager->priv->hal);
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
 	}
@@ -287,7 +285,7 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 
 	*can = FALSE;
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
-	hal_ok = gpm_hal_power_can_hibernate (manager->priv->hal_power);
+	hal_ok = gpm_hal_can_hibernate (manager->priv->hal);
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
 	}
@@ -374,7 +372,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
 	}
 
-	gpm_hal_power_enable_power_save (manager->priv->hal_power, power_save);
+	gpm_hal_enable_power_save (manager->priv->hal, power_save);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
@@ -744,7 +742,7 @@ gpm_manager_shutdown (GpmManager *manager,
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
-	gpm_hal_power_shutdown (manager->priv->hal_power);
+	gpm_hal_shutdown (manager->priv->hal);
 	ret = TRUE;
 
 	return ret;
@@ -783,7 +781,7 @@ gpm_manager_reboot (GpmManager *manager,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
-	gpm_hal_power_reboot (manager->priv->hal_power);
+	gpm_hal_reboot (manager->priv->hal);
 	ret = TRUE;
 
 	return ret;
@@ -830,7 +828,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_networkmanager_sleep ();
 	}
 
-	ret = gpm_hal_power_hibernate (manager->priv->hal_power);
+	ret = gpm_hal_hibernate (manager->priv->hal);
 	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
@@ -923,7 +921,7 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	/* Do the suspend */
-	ret = gpm_hal_power_suspend (manager->priv->hal_power, 0);
+	ret = gpm_hal_suspend (manager->priv->hal, 0);
 	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
@@ -2169,7 +2167,7 @@ gpm_manager_init (GpmManager *manager)
 		gpm_cpufreq_service_init (manager->priv->cpufreq);
 	}
 
-	manager->priv->hal_power = gpm_hal_power_new ();
+	manager->priv->hal = gpm_hal_new ();
 
 	manager->priv->screensaver = gpm_screensaver_new ();
 	if (manager->priv->screensaver) {
@@ -2330,7 +2328,7 @@ gpm_manager_finalize (GObject *object)
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal);
-	g_object_unref (manager->priv->hal_power);
+	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);

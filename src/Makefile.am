@@ -101,8 +101,6 @@ gnome_power_preferences_SOURCES =			\
 	gpm-cpufreq.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-hal-power.h					\
-	gpm-hal-power.c					\
 	gpm-hal-monitor.h				\
 	gpm-hal-monitor.c				\
 	gpm-brightness-lcd.h				\
@@ -155,8 +153,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-polkit.c					\
 	gpm-cpufreq.h					\
 	gpm-cpufreq.c					\
-	gpm-hal-power.h					\
-	gpm-hal-power.c					\
 	gpm-brightness-lcd.h				\
 	gpm-brightness-lcd.c				\
 	gpm-brightness-kbd.h				\

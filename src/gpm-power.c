@@ -33,7 +33,6 @@
 #include "gpm-common.h"
 #include "gpm-hal.h"
 #include "gpm-hal-monitor.h"
-#include "gpm-hal-power.h"
 
 #include "gpm-power.h"
 #include "gpm-marshal.h"
@@ -59,7 +58,6 @@ struct GpmPowerPrivate
 	GHashTable		*battery_device_cache;
 	GpmHal			*hal;
 	GpmHalMonitor		*hal_monitor;
-	GpmHalPower		*hal_power;
 };
 
 enum {
@@ -1119,7 +1117,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
 		gboolean on_ac;
-		on_ac = gpm_hal_power_is_on_ac (power->priv->hal_power);
+		on_ac = gpm_hal_is_on_ac (power->priv->hal);
 		gpm_debug ("Battery is neither charging nor discharging, "
 			   "using ac_adaptor value %i", on_ac);
 		type_status->is_charging = on_ac;
@@ -1979,7 +1977,7 @@ gpm_power_init (GpmPower *power)
 	g_signal_connect (power->priv->hal_monitor, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
 
-	power->priv->hal_power = gpm_hal_power_new ();
+	power->priv->hal = gpm_hal_new ();
 
 	power->priv->refcount = gpm_refcount_new ();
 	g_signal_connect (power->priv->refcount, "refcount-zero",
@@ -1997,7 +1995,7 @@ gpm_power_init (GpmPower *power)
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
 
-	on_ac = gpm_hal_power_is_on_ac (power->priv->hal_power);
+	on_ac = gpm_hal_is_on_ac (power->priv->hal);
 	gpm_power_set_on_ac (power, on_ac, NULL);
 
 	gpm_conf_get_uint (conf, GPM_CONF_RATE_EXP_AVE_FACTOR, &power->priv->exp_ave_factor);
@@ -2028,8 +2026,8 @@ gpm_power_finalize (GObject *object)
 	if (power->priv->hal_monitor != NULL) {
 		g_object_unref (power->priv->hal_monitor);
 	}
-	if (power->priv->hal_power != NULL) {
-		g_object_unref (power->priv->hal_power);
+	if (power->priv->hal != NULL) {
+		g_object_unref (power->priv->hal);
 	}
 	if (power->priv->refcount != NULL) {
 		g_object_unref (power->priv->refcount);
