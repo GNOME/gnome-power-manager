@@ -1,5 +1,17 @@
 2006-10-30  Richard Hughes <richard@hughsie.com>
 
+	* configure.in:
+	* data/Makefile.am:
+	* data/sounds/.cvsignore:
+	* data/sounds/Makefile.am:
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	* src/gpm-manager.c:
+	Add really basic support for gpm_event_sound() so we can make a sound
+	when critical events happen.
+
+2006-10-30  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-hal.c:
 	Make suspend and hibernate work by using the correct power interface
 	rather than the manager interface.

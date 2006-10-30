@@ -812,6 +812,7 @@ gpm_manager_hibernate (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot hibernate");
+		gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
 	}
 
@@ -857,6 +858,7 @@ gpm_manager_hibernate (GpmManager *manager,
 			gpm_info_event_log (manager->priv->info,
 					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
 			g_free (message);
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		}
 	}
 
@@ -904,6 +906,7 @@ gpm_manager_suspend (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot suspend");
+		gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
 	}
 
@@ -952,6 +955,7 @@ gpm_manager_suspend (GpmManager *manager,
 					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 					    title);
 			g_free (message);
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		}
 	}
 
@@ -1609,6 +1613,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		g_free (action);
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
+		gpm_event_sound (GPM_SOUND_CRITICAL_POWER);
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 
@@ -1618,6 +1623,7 @@ battery_status_changed_primary (GpmManager     *manager,
 					      "The system is now using battery power."));
 			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
 		}
+		gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
 
 	} else {
 		remaining = gpm_get_timestring (battery_status->remaining_time);

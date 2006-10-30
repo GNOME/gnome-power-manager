@@ -1,4 +1,4 @@
-SUBDIRS = icons
+SUBDIRS = icons sounds
 
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = gnome-power-manager.schemas.in
