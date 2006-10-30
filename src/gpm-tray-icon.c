@@ -937,6 +937,7 @@ libnotify_event (GpmTrayIcon    *icon,
 {
 	if (icon->priv->notify != NULL) {
 		notify_notification_close (icon->priv->notify, NULL);
+		icon->priv->notify = NULL;
 	}
 
 /* DISTROS: If you've patched your libnotify 0.4.2 package you can remove this check */

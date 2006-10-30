@@ -1,5 +1,16 @@
 2006-10-30  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-common.c: (gpm_event_sound):
+	* src/gpm-common.h:
+	* src/gpm-manager.c:
+	Only make a sound if we are allowed to in gconf.
+
+	* src/gpm-tray-icon.c: (libnotify_event):
+	Set the notification NULL if we cleared if to avoid an error if the
+	user clicks two notifications at once.
+
+2006-10-30  Richard Hughes <richard@hughsie.com>
+
 	* data/sounds/Makefile.am:
 	* data/sounds/gpm-critical-power.wav:
 	* data/sounds/gpm-suspend-failure.wav:

@@ -91,7 +91,7 @@ gpm_event_sound (GpmSound sound)
 
 	if (sound == GPM_SOUND_AC_UNPLUGGED) {
 		filename = "gpm-unplugged.wav";
-	} else if (sound == GPM_SOUND_CRITICAL_POWER) {
+	} else if (sound == GPM_SOUND_POWER_LOW) {
 		filename = "gpm-critical-power.wav";
 	} else if (sound == GPM_SOUND_SUSPEND_FAILURE) {
 		filename = "gpm-suspend-failure.wav";

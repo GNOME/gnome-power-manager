@@ -224,9 +224,6 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 				      GPM_NOTIFY_TIMEOUT_LONG,
 				      GTK_STOCK_DIALOG_WARNING,
 				      GPM_NOTIFY_URGENCY_NORMAL);
-		if (manager->priv->enable_beeping) {
-			gpm_warning_beep ();
-		}
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
@@ -812,7 +809,9 @@ gpm_manager_hibernate (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot hibernate");
-		gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+		}
 		return FALSE;
 	}
 
@@ -839,7 +838,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gboolean show_notify;
 
 		if (manager->priv->enable_beeping) {
-			gpm_warning_beep ();
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		}
 
 		/* We only show the HAL failed notification if set in gconf */
@@ -858,7 +857,6 @@ gpm_manager_hibernate (GpmManager *manager,
 			gpm_info_event_log (manager->priv->info,
 					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
 			g_free (message);
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		}
 	}
 
@@ -906,7 +904,9 @@ gpm_manager_suspend (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot suspend");
-		gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+		}
 		return FALSE;
 	}
 
@@ -933,7 +933,7 @@ gpm_manager_suspend (GpmManager *manager,
 		gboolean show_notify;
 
 		if (manager->priv->enable_beeping) {
-			gpm_warning_beep ();
+			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
 		}
 
 		/* We only show the HAL failed notification if set in gconf */
@@ -955,7 +955,9 @@ gpm_manager_suspend (GpmManager *manager,
 					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 					    title);
 			g_free (message);
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+			if (manager->priv->enable_beeping) {
+				gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
+			}
 		}
 	}
 
@@ -1613,7 +1615,6 @@ battery_status_changed_primary (GpmManager     *manager,
 		g_free (action);
 		/* wait 10 seconds for user-panic */
 		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
-		gpm_event_sound (GPM_SOUND_CRITICAL_POWER);
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 
@@ -1622,8 +1623,10 @@ battery_status_changed_primary (GpmManager     *manager,
 			message = g_strdup (_("The AC Power has been unplugged. "
 					      "The system is now using battery power."));
 			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
+			if (manager->priv->enable_beeping) {
+				gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
+			}
 		}
-		gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
 
 	} else {
 		remaining = gpm_get_timestring (battery_status->remaining_time);
@@ -1633,6 +1636,9 @@ battery_status_changed_primary (GpmManager     *manager,
 					   remaining, battery_status->percentage_charge);
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 		g_free (remaining);
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_POWER_LOW);
+		}
 	}
 
 	/* If we had a message, print it as a notification */
@@ -1644,9 +1650,6 @@ battery_status_changed_primary (GpmManager     *manager,
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
 		g_free (icon);
-		if (manager->priv->enable_beeping) {
-			gpm_warning_beep ();
-		}
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 				    title);
@@ -1731,9 +1734,17 @@ battery_status_changed_ups (GpmManager	   *manager,
 		/* TODO: need to add 10 second delay so we get notification */
 		manager_policy_do (manager, GPM_CONF_UPS_CRITICAL,
 				   _("UPS is critically low"));
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_POWER_LOW);
+			gpm_warning_beep ();
+		}
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 		message = g_strdup_printf (_("Your system is running on backup power!"));
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
+			gpm_warning_beep ();
+		}
 
 	} else {
 		remaining = gpm_get_timestring (battery_status->remaining_time);
@@ -1743,6 +1754,10 @@ battery_status_changed_ups (GpmManager	   *manager,
 					     "avoid losing data."),
 					   remaining, battery_status->percentage_charge);
 		g_free (remaining);
+		if (manager->priv->enable_beeping) {
+			gpm_event_sound (GPM_SOUND_POWER_LOW);
+			gpm_warning_beep ();
+		}
 	}
 
 	/* If we had a message, print it as a notification */
@@ -1753,9 +1768,6 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
-		if (manager->priv->enable_beeping) {
-			gpm_warning_beep ();
-		}
 		gpm_info_event_log (manager->priv->info,
 				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 				    title);
@@ -1839,6 +1851,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      icon, GPM_NOTIFY_URGENCY_NORMAL);
 
 	if (manager->priv->enable_beeping) {
+		gpm_event_sound (GPM_SOUND_POWER_LOW);
 		gpm_warning_beep ();
 	}
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
