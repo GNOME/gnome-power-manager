@@ -1,3 +1,10 @@
+2006-10-30  Richard Hughes <richard@hughsie.com>
+
+	* src/gpm-hal.c:
+	Make suspend and hibernate work by using the correct power interface
+	rather than the manager interface.
+	Find/replace can bite you in the ass sometimes. :-)
+
 2006-10-28  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-button.c:

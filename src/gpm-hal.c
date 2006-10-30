@@ -44,7 +44,8 @@ struct GpmHalPrivate
 	DBusGConnection		*connection;
 	GHashTable		*watch_device_property_modified;
 	GHashTable		*watch_device_condition;
-	GpmProxy		*gproxy;
+	GpmProxy		*gproxy_manager;
+	GpmProxy		*gproxy_power;
 };
 
 /* Signals emitted from GpmHal are:
@@ -999,7 +1000,7 @@ gpm_hal_proxy_connect_more (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_manager);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -1050,7 +1051,7 @@ gpm_hal_proxy_disconnect_more (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_manager);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -1102,14 +1103,23 @@ gpm_hal_init (GpmHal *hal)
 		g_error_free (error);
 	}
 
-	hal->priv->gproxy = gpm_proxy_new ();
-	proxy = gpm_proxy_assign (hal->priv->gproxy,
+	/* get the manager connection */
+	hal->priv->gproxy_manager = gpm_proxy_new ();
+	proxy = gpm_proxy_assign (hal->priv->gproxy_manager,
 				  GPM_PROXY_SYSTEM,
 				  HAL_DBUS_SERVICE,
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);
 
-	g_signal_connect (hal->priv->gproxy, "proxy-status",
+	/* get the power connection */
+	hal->priv->gproxy_power = gpm_proxy_new ();
+	proxy = gpm_proxy_assign (hal->priv->gproxy_power,
+				  GPM_PROXY_SYSTEM,
+				  HAL_DBUS_SERVICE,
+				  HAL_ROOT_COMPUTER,
+				  HAL_DBUS_INTERFACE_POWER);
+
+	g_signal_connect (hal->priv->gproxy_manager, "proxy-status",
 			  G_CALLBACK (proxy_status_cb), hal);
 
 	hal->priv->watch_device_property_modified = g_hash_table_new (g_str_hash, g_str_equal);
@@ -1337,7 +1347,7 @@ gpm_hal_suspend (GpmHal *hal, guint wakeup)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -1385,7 +1395,7 @@ hal_pm_method_void (GpmHal *hal, const gchar* method)
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 	g_return_val_if_fail (method != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -1475,7 +1485,7 @@ gpm_hal_enable_power_save (GpmHal *hal, gboolean enable)
 	g_return_val_if_fail (hal != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -1528,7 +1538,8 @@ gpm_hal_finalize (GObject *object)
 	g_hash_table_destroy (hal->priv->watch_device_property_modified);
 	g_hash_table_destroy (hal->priv->watch_device_condition);
 
-	g_object_unref (hal->priv->gproxy);
+	g_object_unref (hal->priv->gproxy_manager);
+	g_object_unref (hal->priv->gproxy_power);
 
 	G_OBJECT_CLASS (gpm_hal_parent_class)->finalize (object);
 }
