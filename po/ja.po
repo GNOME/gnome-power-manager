@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-10 04:09+0900\n"
-"PO-Revision-Date: 2006-08-10 04:09+0900\n"
+"POT-Creation-Date: 2006-11-01 22:18+0900\n"
+"PO-Revision-Date: 2006-11-02 00:40+0900\n"
 "Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "電源管理"
 
 #: ../data/gnome-power-manager.desktop.in.h:2
 msgid "Power management daemon"
-msgstr "電源管理用のデーモンを起動します"
+msgstr "電源管理用のデーモン"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
 msgid ""
@@ -32,13 +32,13 @@ msgid ""
 "of seconds to allow messages to settle and HAL to refresh. Commonly five "
 "seconds is enough while not being so long that the user gets confused."
 msgstr ""
-"gnome-power-manager は、復帰後メッセージがすべて表示され HAL が情報を更新でき"
-"るように、指定の時間 (秒) ポリシーアクションを実行せずに待機します。あまり長"
-"いとユーザが混乱しますので通常 5 秒で十分です。"
+"レジューム後メッセージがすべて表示され HAL が情報を更新できるように "
+"gnome-power-manager は指定の時間 (秒) ポリシーアクションを実行せずに"
+"待機します。あまり長いとユーザが混乱しますので通常 5 秒で十分です。"
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "メニューからサスペンド、ハイバーネートできるようにする。"
+msgstr "メニューからサスペンド、ハイバーネートできるようにする"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
@@ -46,24 +46,24 @@ msgstr "バッテリーの残量が僅かになった時のアクション"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Check CPU load before sleeping"
-msgstr "スリープする前に CPU の使用率とチェックする"
+msgstr "スリープする前に CPU 負荷をチェックする"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Check network utilization before sleeping"
-msgstr "スリープする前にネットワークの状況をチェックする"
+msgstr "スリープする前にネットワークの利用状況をチェックする"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Dim the screen after a period of inactivity"
-msgstr "システムがアイドル時に画面を暗くするかどうか"
+msgstr "システムのアイドル時に画面を暗くするかどうか"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
 msgid ""
 "Display options for the notification icon. Valid options are \"never\", "
 "\"critical\", \"charge\", \"present\" and \"always\"."
 msgstr ""
-"通知アイコンの表示オプション。指定可能な値: \"never\" (表示しない)、"
+"通知アイコンの表示オプション。指定可能な値は \"never\" (表示しない)、"
 "\"critical\" (バッテリーが残り僅かなとき)、\"charge\" (充電時)、\"present"
-"\" (存在するとき)、\"always\" (常に表示)"
+"\" (存在するとき)、\"always\" (常に表示) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
 msgid "Hibernate button action"
@@ -71,49 +71,53 @@ msgstr "ハイバーネート・ボタンを押した時のアクション"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid "Hibernate enabled"
-msgstr "ハイバーネートが有効かどうか"
+msgstr "ハイバーネートの利用可否"
 
+# gnome-power-manager の D-Bus API "Inhibit" のこと。
+# @see gnome-power-manager/docs/gnome-power-manager.html#pm-method-Inhibit
+# 例: あるアプリケーションがアイドル時にインデクス作成を行う場合、この
+# API によってアイドル時のアクション (e.g. スリープ) の実行を抑制できる。 [ss]
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr "DBUS 抑制リクエストが他のプログラムから無視されるようにするかどうか"
+msgstr "DBUS inhibit リクエストが他のプログラムから無視されるようにするか"
+"どうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 msgid "If DBUS inhibit requests should be ignored."
-msgstr "DBUS 抑制リクエストが無視されるようにするかどうか"
+msgstr "DBUS inhibit リクエストが無視されるようにするかどうか"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid ""
 "If a notification message should be displayed after the suspend or hibernate "
 "failed."
-msgstr ""
-"サスペンドまたはハイバーネートが失敗したら通知メッセージを表示するかどうか。"
+msgstr "サスペンドまたはハイバーネートが失敗した場合に、通知メッセージを"
+"表示するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
-msgstr "バッテリの充電完了時に通知メッセージを表示するかどうか。"
+msgstr "バッテリーの充電完了時に通知メッセージを表示するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 msgid "If network utilization should be checked before doing the idle action."
-msgstr ""
-"アイドル時のアクションを実行する前にネットワークの使用を確認するかどうか。"
+msgstr "アイドル時のアクションを実行する前に、ネットワークの使用を"
+"確認するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr "アイドル時のアクションを実行する前に CPU 負荷を確認するかどうか。"
+msgstr "アイドル時のアクションを実行する前に CPU 負荷を確認するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid "If the PC speaker (beeping) should be used"
-msgstr "PC スピーカ (ビープ) を使うかどうか"
+msgstr "PC スピーカ (ビープ音) を使うかどうか"
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
 "If the PC speaker should be used to beep when the power is low, or inhibit "
 "requests have stopped the policy action."
-msgstr ""
-"電力が低い、または抑制リクエストがポリシーアクションを停止している場合に PC "
-"スピーカ(ビープ音)で知らせるかどうか。"
+msgstr "電力が低い、または inhibit リクエストがポリシーアクションの"
+"実行を止めている時、PC スピーカ (ビープ音) で通知するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
@@ -127,18 +131,17 @@ msgstr ""
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
-msgstr ""
-"蓋が閉じられ、電源に接続されていない場合にバッテリー・イベントを起こすかどう"
-"か"
+msgstr "蓋が閉じられ、電源に接続されていない場合にバッテリー・イベントを"
+"起こすかどうか"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
-msgstr ""
-"蓋が前に閉じられ AC 電源がなくなったら、バッテリー・蓋を閉じるイベント(例: "
-"バッテリ使用時に蓋が閉じられたらサスペンドする) を起こすかどうか。"
+msgstr "先に蓋が閉じられ、AC 電源が外されたら、バッテリー・\"蓋が"
+"閉じられている\" イベント (例: バッテリー使用時に蓋が閉じられたら"
+"サスペンドする) を起こすかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the low-power mode should be enabled when on AC"
@@ -157,8 +160,8 @@ msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
-"画面がオフの場合にロックするかどうか。lock_use_screensaver_settings が FALSE "
-"の場合にのみ使用される。"
+"画面がオフの場合にロックするかどうかを指定します。"
+"lock_use_screensaver_settings が false の場合にのみ使用されます。"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid "If the screen should be dimmed to save power when the computer is idle."
@@ -166,15 +169,13 @@ msgstr "コンピュータのアイドル時に電力節約のために画面を
 
 #: ../data/gnome-power-manager.schemas.in.h:26
 msgid "If the system low-power mode should be enabled when on AC power."
-msgstr ""
-"AC 電源使用時にシステムの電力が低い場合のモードを有効にするかどうかを指定しま"
-"す。"
+msgstr "AC 電源使用時にシステムの電力が低い場合のモードを"
+"有効にするかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the system low-power mode should be enabled when on UPS power."
-msgstr ""
-"UPS 使用時にシステムの電力が低い場合のモードを有効にするかどうかを指定しま"
-"す。"
+msgstr "UPS 使用時にシステムの電力が低い場合のモードを有効に"
+"するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:28
 msgid ""
@@ -185,12 +186,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the user is authorized to hibernate the computer."
-msgstr ""
-"ユーザ権限でシステムをハイバーネートできるようにするかどうかを指定します。"
+msgstr "ユーザがシステムをハイバーネートできるようにするかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the user is authorized to suspend the computer."
-msgstr "ユーザ権限でシステムをサスペンドできるようにするかどうかを指定します。"
+msgstr "ユーザがシステムをサスペンドできるようにするかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the user should be notified when the AC adapter is disconnected."
@@ -202,7 +202,7 @@ msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
-"時間をベースにした通知にするかどうかを指定します。FALSE にすると時間の代わり"
+"時間をベースにした通知にするかどうかを指定します。false にすると時間の代わり"
 "に百分率を使用します。ACPI BIOS に不良がある場合はこのオプションによって問題"
 "を修正できるかもしれません。"
 
@@ -212,8 +212,7 @@ msgid ""
 "if lock_use_screensaver_settings is false."
 msgstr ""
 "ハイバーネートの状態から復帰した後、画面をロックするかどうかを指定します。こ"
-"のオプションは lock_use_screensaver_settings が FALSE の場合にのみ使用されま"
-"す。"
+"のオプションは lock_use_screensaver_settings が false の場合にのみ使用されます。"
 
 #: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
@@ -227,9 +226,8 @@ msgstr ""
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
-msgstr ""
-"ハイバーネート、サスペンド、またはブランク・スクリーンの後で画面をロックする"
-"か、gnome-screensaver の設定に委ねるかどうかを指定します。"
+msgstr "ハイバーネート、サスペンドまたはブランク・スクリーンの後の画面ロックについて "
+"gnome-screensaver のロックの設定を使用するかどうかを指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:36
 msgid "LCD brightness when on AC"
@@ -237,11 +235,11 @@ msgstr "液晶ディスプレイの明るさ (AC 電源使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "LCD brightness when on battery"
-msgstr "液晶ディスプレイの明るさ (バッテリ使用時)"
+msgstr "液晶ディスプレイの明るさ (バッテリー使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "Laptop lid close action on battery"
-msgstr "ノート PC を閉じたときのアクション (バッテリ使用時)"
+msgstr "ノート PC を閉じたときのアクション (バッテリー使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "Laptop lid close action when on AC"
@@ -249,43 +247,43 @@ msgstr "ノート PC を閉じたときのアクション (AC 電源使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "Lock screen on hibernate"
-msgstr "ハイバーネートになったら画面をロックする"
+msgstr "ハイバーネート時、画面をロック"
 
 #: ../data/gnome-power-manager.schemas.in.h:41
 msgid "Lock screen on suspend"
-msgstr "サスペンドになったら画面をロックする"
+msgstr "サスペンド時、画面をロック"
 
 #: ../data/gnome-power-manager.schemas.in.h:42
 msgid "Lock screen when blanked"
-msgstr "ブランク時に画面をロックする"
+msgstr "ブランク時、画面をロック"
 
 #: ../data/gnome-power-manager.schemas.in.h:43
 msgid "Method used to blank screen on AC"
-msgstr "AC 電源使用時に画面をブランクにするのに利用する方法"
+msgstr "ブランク画面にする方法 (AC 電源使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "Method used to blank screen on battery"
-msgstr "バッテリー使用時に画面をブランクにするのに利用する方法"
+msgstr "ブランク画面にする方法 (バッテリー使用時)"
 
 #: ../data/gnome-power-manager.schemas.in.h:45
 msgid "Notify on a HAL error"
-msgstr "HAL のエラーを通知する"
+msgstr "HAL のエラーを通知"
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid "Notify when AC adapter is disconnected"
-msgstr "AC アダプタが外れていたら通知する"
+msgstr "AC アダプタが外れている場合に通知"
 
 #: ../data/gnome-power-manager.schemas.in.h:47
 msgid "Notify when fully charged"
-msgstr "充電完了時に通知する"
+msgstr "充電完了時に通知"
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Number of seconds to suppress policy after resume"
-msgstr "復帰後にアクション待ちにする時間 (秒)"
+msgstr "レジューム後のポリシーの抑制時間 (秒)"
 
 #: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Percentage action is taken"
-msgstr "アクションが実行される比率"
+msgstr "アクションを実行する比率"
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Percentage considered critical"
@@ -309,7 +307,7 @@ msgstr "AC 電源の使用中にシステムがスリープするまでの時間
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Sleep timeout computer when on battery"
-msgstr "バッテリの使用中にシステムがスリープするまでの時間"
+msgstr "バッテリー使用時にシステムがスリープするまでの時間"
 
 #: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Sleep timeout display when on AC"
@@ -317,51 +315,51 @@ msgstr "AC 電源の使用中にディスプレイがスリープするまでの
 
 #: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Sleep timeout display when on battery"
-msgstr "バッテリの使用中にディスプレイがスリープするまでの時間"
+msgstr "バッテリー使用時にディスプレイがスリープするまでの時間"
 
 #: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Suspend button action"
-msgstr "サスペンド・ボタンを押下した時のアクション"
+msgstr "サスペンド・ボタンを押した時のアクション"
 
 #: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Suspend enabled"
-msgstr "サスペンドの実行可否"
+msgstr "サスペンドの利用可否"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
-"AC 電源使用時に画面をブランクにするのに利用する DPMS メソッド。指定可能な値: "
-"\"default\"、\"standby\" (スタンバイ)、\"suspend\" (サスペンド)、\"off\" (オ"
-"フ)"
+"AC 電源使用時に画面をブランクにするのに利用する DPMS メソッドを指定します。"
+"指定可能な値は \"default\"、\"standby\" (スタンバイ)、\"suspend\" "
+"(サスペンド)、\"off\" (オフ) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
-"バッテリー使用時に画面をブランクにするのに利用する DPMS メソッド。指定可能な"
-"値:  \"default\"、\"standby\" (スタンバイ)、\"suspend\" (サスペンド)、\"off"
-"\" (オフ)"
+"バッテリー使用時に画面をブランクにするのに利用する DPMS メソッドを指定します。"
+"指定可能な値は  \"default\"、\"standby\" (スタンバイ)、\"suspend\" "
+"(サスペンド)、\"off\" (オフ) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"UPS の電力が極度に低いときに実行するアクション。指定可能な値: \"hibernate"
+"UPS の電力が極度に低いときに実行するアクションを指定します。指定可能な値は \"hibernate"
 "\" (ハイバーネート)、\"suspend\" (サスペンド)、\"shutdown\" (シャットダウ"
-"ン)、\"nothing\" (何もしない)"
+"ン)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"バッテリーの電力が極度に低いときに実行するアクション。指定可能な値: "
+"バッテリーの電力が極度に低いときに実行するアクションを指定します。指定可能な値は "
 "\"hibernate\" (ハイバーネート)、\"suspend\" (サスペンド)、\"shutdown"
-"\" (シャットダウン)、\"nothing\" (何もしない)"
+"\" (シャットダウン)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:64
 msgid ""
@@ -369,9 +367,9 @@ msgid ""
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
 "\"nothing\"."
 msgstr ""
-"ラップトップを AC 電源で使っていて、蓋が閉じられたときに実行するアクション。"
-"指定可能な値: \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、"
-"\"blank\" (ブランク画面)、\"nothing\" (何もしない)"
+"ラップトップを AC 電源で使っていて、蓋が閉じられたときに実行するアクションを指定します。"
+"指定可能な値は \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、"
+"\"blank\" (ブランク画面)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:65
 msgid ""
@@ -380,8 +378,8 @@ msgid ""
 "and \"nothing\"."
 msgstr ""
 "ラップトップをバッテリーで使っていて、蓋が閉じられたときに実行するアクショ"
-"ン。指定可能な値: \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、"
-"\"blank\" (ブランク画面)、\"nothing\" (何もしない)"
+"ンを指定します。指定可能な値は \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、"
+"\"blank\" (ブランク画面)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:66
 msgid ""
@@ -389,9 +387,9 @@ msgid ""
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
 msgstr ""
-"システムのハイバーネート・ボタンを押したときに実行するアクション。指定可能な"
-"値: \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、\"interactive"
-"\" (対話的に処理)、\"shutdown\" (シャットダウン)、\"nothing\" (何もしない)"
+"システムのハイバーネート・ボタンを押したときに実行するアクションを指定します。指定可能な"
+"値は \"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、\"interactive"
+"\" (対話的に処理)、\"shutdown\" (シャットダウン)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:67
 msgid ""
@@ -399,9 +397,9 @@ msgid ""
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
 "\"."
 msgstr ""
-"システムの電源ボタンを押したときに実行するアクション。指定可能な値: \"suspend"
+"システムの電源ボタンを押したときに実行するアクションを指定します。指定可能な値は \"suspend"
 "\" (サスペンド)、\"hibernate\" (ハイバーネート)、\"interactive\" (対話的に処"
-"理)、\"shutdown\" (シャットダウン)、\"nothing\" (何もしない)"
+"理)、\"shutdown\" (シャットダウン)、\"nothing\" (何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:68
 msgid ""
@@ -409,7 +407,7 @@ msgid ""
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
 msgstr ""
-"システムのサスペンド・ボタンを押した時に実行するアクション。指定可能な値: "
+"システムのサスペンド・ボタンを押した時に実行するアクションを指定します。指定可能な値は "
 "\"suspend\" (サスペンド)、\"hibernate\" (ハイバーネート)、\"interactive\" (対"
 "話的に処理)、\"shutdown\" (シャットダウン)、\"nothing\" (何もしない)"
 
@@ -450,8 +448,8 @@ msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
-"AC 電源を使用しているときのディスプレイの明るさを指定します。指定可能な値: "
-"0〜100 までの数値"
+"AC 電源を使用しているときのディスプレイの明るさを指定します。指定可能な値は "
+"0〜100 までの数値です。"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid ""
@@ -459,7 +457,7 @@ msgid ""
 "between 0 and 100."
 msgstr ""
 "バッテリー電力を使用しているときのディスプレイの明るさを指定します。指定可能"
-"な値: 0〜100 までの数値"
+"な値は 0〜100 までの数値です"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid "The brightness of the screen when idle"
@@ -471,7 +469,7 @@ msgstr "比率の減衰因子"
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid "The maximum duration of time displayed on the x-axis of the graph."
-msgstr "グラフの X 軸上に表示される持続時間の最大値。"
+msgstr "グラフの X 軸上に表示される持続時間の最大値を指定します。"
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid "The maximum time displayed on the graph"
@@ -543,11 +541,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:87
 msgid "The time remaining when action is taken"
-msgstr "アクションをとる残り時間"
+msgstr "アクションを実行する際の残り時間"
 
 #: ../data/gnome-power-manager.schemas.in.h:88
 msgid "The time remaining when critical"
-msgstr "電力が危機的な状況とみなす残り時間"
+msgstr "電力が危機的な状況であるとみなす残り時間"
 
 #: ../data/gnome-power-manager.schemas.in.h:89
 msgid "The time remaining when low"
@@ -562,9 +560,9 @@ msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
-"システムがアクティブではない状態になった時に実行するスリープの種類です。指定"
-"可能な値: \"hibernate\" (ハイバーネート)、\"suspend\" (サスペンド)、\"nothing"
-"\" (何もしない)"
+"システムがアイドル状態の場合に実行するスリープの種類です。指定可能な値は "
+"\"hibernate\" (ハイバーネート)、\"suspend\" (サスペンド)、\"nothing \" "
+"(何もしない) のどれかです。"
 
 #: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
@@ -573,7 +571,7 @@ msgid ""
 "damping effect of the rate calculations, which makes the time remaining more "
 "accurate, but the graphs less responsive."
 msgstr ""
-"比率の、指数関数的に重みづけされた平均を計算する際の減衰因子の値。この値を増"
+"指数関数的に重みづけされた平均を計算する際の比率の減衰因子の値です。この値を増"
 "加させると比率の計算時の減衰効果が増大し、残り時間はより正確に、しかしグラフ"
 "はより応答性の低いものとなります。"
 
@@ -583,7 +581,7 @@ msgid ""
 "Only valid when use_time_for_policy is true."
 msgstr ""
 "これはセッションのアイドル時に使われるラップトップのパネル画面の明るさです。"
-"use_time_for_policy が TRUE のときにのみ有効となります。"
+"use_time_for_policy が true のときにのみ有効となります。"
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "UPS critical low action"
@@ -591,15 +589,15 @@ msgstr "UPS の残量が僅かになった時のアクション"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "Use gnome-screensaver lock setting"
-msgstr "GNOME スクリーンセーバーでロックする"
+msgstr "GNOME スクリーンセーバーのロック設定を使用"
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 msgid "When to show the notification icon"
-msgstr "通知アイコンを表示する時期"
+msgstr "通知アイコンを表示するタイミング"
 
 #: ../data/gnome-power-manager.schemas.in.h:97
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "スリープ状態の種類"
+msgstr "アイドル状態になったときのアクション (ハイバーネート、サスペンド、何もしない)"
 
 #: ../data/gnome-power-manager.schemas.in.h:98
 msgid "Whether to use time-based notifications"
@@ -671,26 +669,25 @@ msgstr "詳細"
 msgid "Power History"
 msgstr "電力の履歴"
 
-#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1547
-#: ../src/gpm-manager.c:1896
+#: ../data/gpm-info.glade.h:14 ../src/gpm-manager.c:1561
+#: ../src/gpm-manager.c:1907
 msgid "Power Information"
 msgstr "電源の情報"
 
 #: ../data/gpm-info.glade.h:15
 msgid "This shows how the battery charge and discharge rate varies over time."
-msgstr "このグラフは、時間軸に対してバッテリの充電率と放電率を表示します。"
+msgstr "このグラフは時間軸に対してバッテリーの充電率と放電率を表示します。"
 
 #: ../data/gpm-info.glade.h:16
 msgid "This shows how the battery percentage charge varies over time."
-msgstr "このグラフは、時間軸に対してバッテリの使用率を表示します。"
+msgstr "このグラフは時間軸に対してバッテリーの使用率を表示します。"
 
 #: ../data/gpm-info.glade.h:17
 msgid ""
 "This shows how the remaining time until charged or discharged varies over "
 "time."
 msgstr ""
-"このグラフは、時間軸に対してバッテリを充電/放電するまでの経過時間を表示しま"
-"す。"
+"このグラフは時間軸に対してバッテリーを充電/放電するまでの経過時間を表示します。"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -742,7 +739,7 @@ msgstr "<b>スリープ</b>"
 
 #: ../data/gpm-prefs.glade.h:6
 msgid "Always _sleep when the lid is closed"
-msgstr "蓋を閉じたらいつもスリープする(_S)"
+msgstr "蓋を閉じたら常にスリープする(_S)"
 
 #: ../data/gpm-prefs.glade.h:7
 msgid "General"
@@ -750,11 +747,11 @@ msgstr "全般"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Only display when battery _present"
-msgstr "バッテリを使用している時だけアイコンを表示する(_P)"
+msgstr "バッテリーを使用している時だけアイコンを表示する(_P)"
 
 #: ../data/gpm-prefs.glade.h:9
 msgid "Only display when charging or _discharging"
-msgstr "バッテリを充電/放電中の場合にのみ表示する(_D)"
+msgstr "バッテリーを充電/放電中の場合にのみ表示する(_D)"
 
 #: ../data/gpm-prefs.glade.h:10
 msgid "Power Management Preferences"
@@ -778,7 +775,7 @@ msgstr "AC 電源使用時"
 
 #: ../data/gpm-prefs.glade.h:15
 msgid "Running on Battery"
-msgstr "バッテリ使用時"
+msgstr "バッテリー使用時"
 
 #: ../data/gpm-prefs.glade.h:16
 msgid "Running on UPS"
@@ -798,11 +795,11 @@ msgstr "UPS 電源がほとんどない時(_P):"
 
 #: ../data/gpm-prefs.glade.h:20
 msgid "When battery _power critical:"
-msgstr "バッテリがほとんどない時(_P):"
+msgstr "バッテリーがほとんどない時(_P):"
 
 #: ../data/gpm-prefs.glade.h:21
 msgid "When l_aptop lid is closed:"
-msgstr "ノート PC を閉じた時(_A):"
+msgstr "ノート PC の蓋を閉じた時(_A):"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "When power _button is pressed:"
@@ -814,7 +811,7 @@ msgstr "常にアイコンを表示する(_A)"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "_Dim the laptop panel when idle"
-msgstr "アイドル状態になったらラップトップの液晶を暗くする(_D)"
+msgstr "アイドル状態になったらラップトップの液晶画面を暗くする(_D)"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "_Never display icon"
@@ -822,7 +819,7 @@ msgstr "アイコンを表示しない(_N)"
 
 #: ../data/gpm-prefs.glade.h:26
 msgid "_Only display when battery life is critical"
-msgstr "バッテリの残量がほとんどない場合にのみ表示する(_C)"
+msgstr "バッテリーの残量がほとんどない場合にのみ表示する(_C)"
 
 #: ../src/eggtrayicon.c:131
 msgid "Orientation"
@@ -841,14 +838,12 @@ msgstr "日時不明"
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i分"
-msgstr[1] "%i分"
 
 #: ../src/gpm-common.c:76
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
 msgstr[0] "%i時間"
-msgstr[1] "%i時間"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
@@ -861,13 +856,11 @@ msgstr "%i %s, %i %s"
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "時間"
-msgstr[1] "時間"
 
 #: ../src/gpm-common.c:84
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "分"
-msgstr[1] "分"
 
 #: ../src/gpm-common.h:31
 msgid "Power Manager for the GNOME desktop"
@@ -911,11 +904,11 @@ msgstr "ハイバーネート"
 
 #: ../src/gpm-graph-widget.c:94
 msgid "Lid closed"
-msgstr "蓋が閉じられました"
+msgstr "蓋を閉じた"
 
 #: ../src/gpm-graph-widget.c:96
 msgid "Lid opened"
-msgstr "蓋が開かれました"
+msgstr "蓋を開いた"
 
 #: ../src/gpm-graph-widget.c:98
 msgid "Notification"
@@ -937,12 +930,12 @@ msgstr "イベント"
 msgid "Description"
 msgstr "説明"
 
-#: ../src/gpm-inhibit.c:292
+#: ../src/gpm-inhibit.c:308
 #, c-format
 msgid "<b>%s</b> has stopped the %s from taking place : <i>%s</i>."
 msgstr "<b>%s</b> は進行中の %s を停止させました: <i>%s</i>."
 
-#: ../src/gpm-inhibit.c:296
+#: ../src/gpm-inhibit.c:312
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "複数のアプリケーションが進行中の %s を停止させました。"
@@ -978,7 +971,7 @@ msgstr "%s にリクエスト"
 
 #: ../src/gpm-manager.c:668
 msgid "On battery power"
-msgstr "バッテリ電力で動作"
+msgstr "バッテリー電力で動作"
 
 #: ../src/gpm-manager.c:683
 msgid "Display power management activated"
@@ -988,46 +981,46 @@ msgstr "画面の電源管理をアクティブにしました"
 msgid "Laptop lid is closed"
 msgstr "ラップトップの蓋は閉じられています"
 
-#: ../src/gpm-manager.c:870
+#: ../src/gpm-manager.c:871
 #, c-format
 msgid "%s because %s"
 msgstr "%s - 理由: %s"
 
-#: ../src/gpm-manager.c:906
+#: ../src/gpm-manager.c:907
 msgid "Doing nothing"
 msgstr "何もしていません"
 
-#: ../src/gpm-manager.c:910 ../src/gpm-manager.c:1357
-#: ../src/gpm-manager.c:2531
+#: ../src/gpm-manager.c:911 ../src/gpm-manager.c:1371
+#: ../src/gpm-manager.c:2545
 msgid "Suspending computer"
 msgstr "コンピュータをサスペンドしています"
 
-#: ../src/gpm-manager.c:915 ../src/gpm-manager.c:1371
-#: ../src/gpm-manager.c:2506
+#: ../src/gpm-manager.c:916 ../src/gpm-manager.c:1385
+#: ../src/gpm-manager.c:2520
 msgid "Hibernating computer"
 msgstr "コンピュータをハイバーネートしています"
 
-#: ../src/gpm-manager.c:920
+#: ../src/gpm-manager.c:921
 msgid "DPMS blanking screen"
 msgstr "DPMS は画面をブランク・スクリーンにしています"
 
-#: ../src/gpm-manager.c:925 ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:926 ../src/gpm-manager.c:1400
 msgid "Shutting down computer"
 msgstr "コンピュータをシャットダウンしています"
 
-#: ../src/gpm-manager.c:930
+#: ../src/gpm-manager.c:931
 msgid "GNOME interactive logout"
 msgstr "GNOME の対話的なログアウト"
 
-#: ../src/gpm-manager.c:1196 ../src/gpm-manager.c:1289
+#: ../src/gpm-manager.c:1197 ../src/gpm-manager.c:1294
 msgid "Resuming computer"
 msgstr "コンピュータをレジュームしています"
 
-#: ../src/gpm-manager.c:1208
+#: ../src/gpm-manager.c:1214
 msgid "Hibernate Problem"
 msgstr "ハイバーネートの問題"
 
-#: ../src/gpm-manager.c:1209
+#: ../src/gpm-manager.c:1215
 #, c-format
 msgid ""
 "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
@@ -1035,197 +1028,197 @@ msgstr ""
 "HAL は %s に失敗しました。一般的な問題については <a href=\"%s\">FAQ ページ</"
 "a> をご確認下さい。"
 
-#: ../src/gpm-manager.c:1211
+#: ../src/gpm-manager.c:1217
 msgid "hibernate"
 msgstr "ハイバーネート"
 
-#: ../src/gpm-manager.c:1301
+#: ../src/gpm-manager.c:1306
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "サスペンド中にバッテリーを %imWh 充電しました"
 
-#: ../src/gpm-manager.c:1304
+#: ../src/gpm-manager.c:1309
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "サスペンド中にバッテリーは %imWh 放電しました"
 
-#: ../src/gpm-manager.c:1318
+#: ../src/gpm-manager.c:1331
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
 "Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr ""
-" %sする際にエラーが発生しました。\n"
+" %s する際にエラーが発生しました。\n"
 "一般的な問題については <a href=\"%s\">FAQ ページ</a> を確認してみて下さい。"
 
-#: ../src/gpm-manager.c:1320
+#: ../src/gpm-manager.c:1333
 msgid "suspend"
 msgstr "サスペンド"
 
-#: ../src/gpm-manager.c:1321
+#: ../src/gpm-manager.c:1334
 msgid "Suspend Problem"
 msgstr "サスペンドの問題"
 
-#: ../src/gpm-manager.c:1358
+#: ../src/gpm-manager.c:1372
 msgid "the DBUS method Suspend() was invoked"
 msgstr "DBUS メソッド Suspend() が実行されました"
 
-#: ../src/gpm-manager.c:1372
+#: ../src/gpm-manager.c:1386
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "DBUS メソッド Hibernate() が実行されました"
 
-#: ../src/gpm-manager.c:1387
+#: ../src/gpm-manager.c:1401
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "DBUS メソッド Shutdown() が実行されました"
 
-#: ../src/gpm-manager.c:1401
+#: ../src/gpm-manager.c:1415
 msgid "Rebooting computer"
 msgstr "コンピュータを再起動しています"
 
-#: ../src/gpm-manager.c:1402
+#: ../src/gpm-manager.c:1416
 msgid "the DBUS method Reboot() was invoked"
 msgstr "DBUS メソッド Reboot() が実行されました"
 
-#: ../src/gpm-manager.c:1452
+#: ../src/gpm-manager.c:1466
 msgid "Screen resume"
 msgstr "画面をレジューム"
 
-#: ../src/gpm-manager.c:1453
+#: ../src/gpm-manager.c:1467
 msgid "idle mode ended"
 msgstr "アイドルモードを終了しました"
 
-#: ../src/gpm-manager.c:1478
+#: ../src/gpm-manager.c:1492
 msgid "Screen dim"
 msgstr "画面を暗くします"
 
-#: ../src/gpm-manager.c:1479
+#: ../src/gpm-manager.c:1493
 msgid "idle mode started"
 msgstr "アイドルモードを開始しました"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1497
+#: ../src/gpm-manager.c:1511
 msgid "the system state is idle"
 msgstr "システムはアイドル状態です"
 
-#: ../src/gpm-manager.c:1571
+#: ../src/gpm-manager.c:1585
 msgid "the power button has been pressed"
 msgstr "電源ボタンが押されました"
 
-#: ../src/gpm-manager.c:1590
+#: ../src/gpm-manager.c:1604
 msgid "the suspend button has been pressed"
 msgstr "サスペンド・ボタンが押されました"
 
-#: ../src/gpm-manager.c:1610
+#: ../src/gpm-manager.c:1624
 msgid "the hibernate button has been pressed"
 msgstr "ハイバーネート・ボタンが押されました"
 
-#: ../src/gpm-manager.c:1637
+#: ../src/gpm-manager.c:1651
 msgid "The laptop lid has been closed"
 msgstr "ラップトップの蓋が閉じられました"
 
-#: ../src/gpm-manager.c:1642
+#: ../src/gpm-manager.c:1656
 msgid "The laptop lid has been re-opened"
 msgstr "ラップトップの蓋が再度開かれました"
 
-#: ../src/gpm-manager.c:1660
+#: ../src/gpm-manager.c:1674
 msgid "the lid has been closed on ac power"
 msgstr "AC 電源で動作中に蓋が閉じられました"
 
-#: ../src/gpm-manager.c:1665
+#: ../src/gpm-manager.c:1679
 msgid "the lid has been closed on battery power"
-msgstr "バッテリで動作中に蓋が閉じられました"
+msgstr "バッテリーで動作中に蓋が閉じられました"
 
-#: ../src/gpm-manager.c:1670
+#: ../src/gpm-manager.c:1684
 msgid "Turning LCD panel back on"
 msgstr "LCD パネルを再度オンにしました"
 
-#: ../src/gpm-manager.c:1671
+#: ../src/gpm-manager.c:1685
 msgid "laptop lid re-opened"
 msgstr "ラップトップの蓋が再度開かれました"
 
-#: ../src/gpm-manager.c:1788
+#: ../src/gpm-manager.c:1799
 msgid "AC adapter inserted"
 msgstr "AC アダプタが接続されました"
 
-#: ../src/gpm-manager.c:1792
+#: ../src/gpm-manager.c:1803
 msgid "AC adapter removed"
 msgstr "AC 電源が外されました"
 
-#: ../src/gpm-manager.c:1802
+#: ../src/gpm-manager.c:1813
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "蓋が閉じられ、AC 電源が外されました (gconf: OK)"
 
-#: ../src/gpm-manager.c:1884
+#: ../src/gpm-manager.c:1895
 msgid "Power Critically Low"
 msgstr "電源が深刻なほど少くなっています"
 
-#: ../src/gpm-manager.c:1888
+#: ../src/gpm-manager.c:1899
 msgid "Power Very Low"
 msgstr "電源がとても少くなっています"
 
-#: ../src/gpm-manager.c:1892
+#: ../src/gpm-manager.c:1903
 msgid "Power Low"
 msgstr "電力が低くなっています"
 
-#: ../src/gpm-manager.c:1917
+#: ../src/gpm-manager.c:1928
 msgid "battery is critically low"
 msgstr "バッテリーの残量が深刻なほど僅かです"
 
-#: ../src/gpm-manager.c:1962
+#: ../src/gpm-manager.c:1973
 msgid "Your battery is now fully charged"
-msgstr "バッテリの充電が完了しました"
+msgstr "バッテリーの充電が完了しました"
 
-#: ../src/gpm-manager.c:1963
+#: ../src/gpm-manager.c:1974
 msgid "Battery Charged"
-msgstr "バッテリの充電完了"
+msgstr "バッテリーの充電完了"
 
-#: ../src/gpm-manager.c:2028
+#: ../src/gpm-manager.c:2039
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr ""
-"次に示すように、バッテリの残量が深刻な状態です。このままバッテリが空になると"
+"次に示すようにバッテリーの残量が深刻な状態です。このままバッテリーが空になると"
 "<b>システムの電源が落ちます</b>。"
 
-#: ../src/gpm-manager.c:2033
+#: ../src/gpm-manager.c:2044
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"次に示すように、バッテリの残量が深刻な状態でサスペンドに入ろうとしています。"
+"次に示すようにバッテリーの残量が深刻な状態でサスペンドに入ろうとしています。"
 "<br><b>注意:</b> サスペンドの状態を維持するには、微量ながらも電力が必要です。"
 
-#: ../src/gpm-manager.c:2039
+#: ../src/gpm-manager.c:2050
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr ""
-"次に示すように、バッテリの残量が深刻な状態でハイバーネートに入ろうとしていま"
+"次に示すようにバッテリーの残量が深刻な状態でハイバーネートに入ろうとしていま"
 "す。"
 
-#: ../src/gpm-manager.c:2043
+#: ../src/gpm-manager.c:2054
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr ""
-"次に示すように、バッテリの残量が深刻な状態でシャットダウンしようとしていま"
+"次に示すようにバッテリーの残量が深刻な状態でシャットダウンしようとしていま"
 "す。"
 
-#: ../src/gpm-manager.c:2056
+#: ../src/gpm-manager.c:2067
 msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr "AC 電源のプラグが外れているので、システムはバッテリで動作中です"
+msgstr "AC 電源のプラグが外れているので、システムはバッテリーで動作中です"
 
-#: ../src/gpm-manager.c:2063
+#: ../src/gpm-manager.c:2074
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
 "your AC Adapter to avoid losing data."
 msgstr ""
-"バッテリの残量はおよそ <b>%s</b> (%i%%) です (データを失う前に AC 電源に差し"
+"バッテリーの残量はおよそ <b>%s</b> (%i%%) です (データを失う前に AC 電源に差し"
 "て下さい)"
 
-#: ../src/gpm-manager.c:2150
+#: ../src/gpm-manager.c:2162
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1233,29 +1226,29 @@ msgstr ""
 "次に示すように、UPS の残量が深刻な状態であり、UPS の電力が完全になくなるとコ"
 "ンピュータの <b>電源が落ちます</b>。"
 
-#: ../src/gpm-manager.c:2155
+#: ../src/gpm-manager.c:2167
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr ""
-"次に示すようにバッテリの残量が深刻な状態であり、ハイバーネートしようとしてい"
+"次に示すようにバッテリーの残量が深刻な状態であり、ハイバーネートしようとしてい"
 "ます。"
 
-#: ../src/gpm-manager.c:2159
+#: ../src/gpm-manager.c:2171
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr ""
 "次に示すように UPS の残量が深刻な状態であり、シャットダウンしようとしていま"
 "す。"
 
-#: ../src/gpm-manager.c:2166
+#: ../src/gpm-manager.c:2178
 msgid "UPS is critically low"
 msgstr "UPS が深刻なほど少くなっています"
 
-#: ../src/gpm-manager.c:2169
+#: ../src/gpm-manager.c:2181
 msgid "Your system is running on backup power!"
 msgstr "システムはバックアップ電力で動作中です！"
 
-#: ../src/gpm-manager.c:2173
+#: ../src/gpm-manager.c:2185
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1264,7 +1257,7 @@ msgstr ""
 "UPS 電源の残量はおよそ <b>%s</b> (%d%%) です (データを失う前に AC 電源に差し"
 "て下さい)"
 
-#: ../src/gpm-manager.c:2262
+#: ../src/gpm-manager.c:2275
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1273,200 +1266,200 @@ msgstr ""
 "このコンピュータに接続されている %s デバイスの電力が低くなっています (%d%%) "
 "(充電しないとこのデバイスはすぐに停止します)"
 
-#: ../src/gpm-manager.c:2507
+#: ../src/gpm-manager.c:2521
 msgid "user clicked hibernate from tray menu"
 msgstr "ユーザがトレイメニューからハイバーネートをクリックしました"
 
-#: ../src/gpm-manager.c:2532
+#: ../src/gpm-manager.c:2546
 msgid "user clicked suspend from tray menu"
 msgstr "ユーザがトレイメニューからサスペンドをクリックしました"
 
-#: ../src/gpm-power.c:444
+#: ../src/gpm-power.c:430
 msgid "Laptop battery"
-msgstr "ノート PC のバッテリ"
+msgstr "ノート PC のバッテリー"
 
-#: ../src/gpm-power.c:446
+#: ../src/gpm-power.c:432
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:448
+#: ../src/gpm-power.c:434
 msgid "Wireless mouse"
 msgstr "無線マウス"
 
-#: ../src/gpm-power.c:450
+#: ../src/gpm-power.c:436
 msgid "Wireless keyboard"
 msgstr "無線キーボード"
 
-#: ../src/gpm-power.c:452
+#: ../src/gpm-power.c:438
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:454
+#: ../src/gpm-power.c:440
 msgid "Unknown"
 msgstr "不明"
 
-#: ../src/gpm-power.c:472
+#: ../src/gpm-power.c:458
 msgid "ups"
 msgstr "ups"
 
-#: ../src/gpm-power.c:474
+#: ../src/gpm-power.c:460
 msgid "mouse"
 msgstr "マウス"
 
-#: ../src/gpm-power.c:476
+#: ../src/gpm-power.c:462
 msgid "keyboard"
 msgstr "キーボード"
 
-#: ../src/gpm-power.c:478
+#: ../src/gpm-power.c:464
 msgid "pda"
 msgstr "pda"
 
-#: ../src/gpm-power.c:480
+#: ../src/gpm-power.c:466
 msgid "unknown"
 msgstr "不明"
 
-#: ../src/gpm-power.c:677
+#: ../src/gpm-power.c:642
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>プロダクト:</b> %s\n"
 
-#: ../src/gpm-power.c:680
+#: ../src/gpm-power.c:645
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>状態:</b> (バッテリーがありません)\n"
 
-#: ../src/gpm-power.c:682
+#: ../src/gpm-power.c:647
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>状態:</b> 充電済み\n"
 
-#: ../src/gpm-power.c:684
+#: ../src/gpm-power.c:649
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>状態:</b> 充電中\n"
 
-#: ../src/gpm-power.c:686
+#: ../src/gpm-power.c:651
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>状態:</b> 放電中\n"
 
-#: ../src/gpm-power.c:689
+#: ../src/gpm-power.c:654
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>充電率:</b> %i%%\n"
 
-#: ../src/gpm-power.c:716
+#: ../src/gpm-power.c:681
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>ベンダー:</b> %s\n"
 
-#: ../src/gpm-power.c:722
+#: ../src/gpm-power.c:688
 msgid "Lithium ion"
 msgstr "リチウムイオン"
 
-#: ../src/gpm-power.c:724
+#: ../src/gpm-power.c:691
 msgid "Lead acid"
 msgstr "鉛蓄電池"
 
-#: ../src/gpm-power.c:730
+#: ../src/gpm-power.c:697
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>特徴:</b> %s\n"
 
-#: ../src/gpm-power.c:733
+#: ../src/gpm-power.c:700
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>シリアル番号:</b> %s\n"
 
-#: ../src/gpm-power.c:736
+#: ../src/gpm-power.c:703
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>型番:</b> %s\n"
 
-#: ../src/gpm-power.c:741
+#: ../src/gpm-power.c:708
 #, c-format
 msgid "<b>Remaining time:</b> %s\n"
 msgstr "<b>残り時間:</b> %s\n"
 
-#: ../src/gpm-power.c:746
+#: ../src/gpm-power.c:714
 msgid "Excellent"
 msgstr "極大"
 
-#: ../src/gpm-power.c:748
+#: ../src/gpm-power.c:716
 msgid "Good"
 msgstr "大"
 
-#: ../src/gpm-power.c:750
+#: ../src/gpm-power.c:718
 msgid "Fair"
 msgstr "十分"
 
-#: ../src/gpm-power.c:752
+#: ../src/gpm-power.c:720
 msgid "Poor"
 msgstr "わずか"
 
-#: ../src/gpm-power.c:754
+#: ../src/gpm-power.c:722
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>最大容量:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:761
+#: ../src/gpm-power.c:728 ../src/gpm-power.c:752
 #, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
 msgstr "<b>現在の充電量:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:766
+#: ../src/gpm-power.c:733
 #, c-format
 msgid "<b>Last full charge:</b> %.1f %s\n"
 msgstr "<b>最近の完全充電量:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:770
+#: ../src/gpm-power.c:737 ../src/gpm-power.c:756
 #, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
 msgstr "<b>工場出荷時の充電量:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:774
+#: ../src/gpm-power.c:741
 #, c-format
 msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
 msgstr "<b>充電率 (元データ):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:778
+#: ../src/gpm-power.c:745
 #, c-format
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>充電率 (平滑化データ):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1231
+#: ../src/gpm-power.c:1209
 msgid "fully charged"
 msgstr "充電完了"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:1214
 #, c-format
 msgid "%s remaining"
 msgstr "残量: %s"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
+#: ../src/gpm-power.c:1218
 msgid "discharging"
 msgstr "放電中"
 
-#: ../src/gpm-power.c:1246
+#: ../src/gpm-power.c:1224
 #, c-format
 msgid "%s until charged"
 msgstr "充電完了まで: %s"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1250
+#: ../src/gpm-power.c:1228
 msgid "charging"
 msgstr "充電中"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1291
+#: ../src/gpm-power.c:1269
 msgid "Computer is running on backup power\n"
 msgstr "システムはバックアップ電源で動作中です\n"
 
-#: ../src/gpm-power.c:1294
+#: ../src/gpm-power.c:1272
 msgid "Computer is running on AC power\n"
 msgstr "システムは AC 電源で動作中です\n"
 
-#: ../src/gpm-power.c:1297
+#: ../src/gpm-power.c:1275
 msgid "Computer is running on battery power\n"
-msgstr "システムはバッテリで動作中です\n"
+msgstr "システムはバッテリーで動作中です\n"
 
 #: ../src/gpm-prefs.c:99
 msgid "Power Preferences"
@@ -1483,7 +1476,7 @@ msgstr "停止する"
 
 #: ../src/gpm-prefs-core.c:88
 msgid "Blank screen"
-msgstr "ブランク・スクリーンにする"
+msgstr "ブランク画面にする"
 
 #: ../src/gpm-prefs-core.c:89
 msgid "Do nothing"
@@ -1499,7 +1492,7 @@ msgstr "サスペンド(_S)"
 
 #: ../src/gpm-tray-icon.c:112
 msgid "Suspend the computer"
-msgstr "コンピュータをサスペンドします"
+msgstr "コンピュータをサスペンド"
 
 #: ../src/gpm-tray-icon.c:113
 msgid "Hi_bernate"
@@ -1507,7 +1500,7 @@ msgstr "ハイバーネート(_B)"
 
 #: ../src/gpm-tray-icon.c:114
 msgid "Make the computer go to sleep"
-msgstr "コンピュータをスリープさせます"
+msgstr "コンピュータをスリープ"
 
 #: ../src/gpm-tray-icon.c:115
 msgid "_Preferences"
@@ -1568,8 +1561,8 @@ msgstr ""
 #: ../src/gpm-tray-icon.c:348
 msgid "translator-credits"
 msgstr ""
-"佐藤 暁 <ss@gnome.gr.jp>\n"
 "相花 毅 <aihana@gnome.gr.jp>\n"
+"佐藤 暁 <ss@gnome.gr.jp>\n"
 "日本 GNOME ユーザー会 http://www.gnome.gr.jp"
 
 #~ msgid ""
