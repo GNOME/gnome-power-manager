@@ -1,5 +1,14 @@
 2006-11-02  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-battery.c:
+	Only add and remove batteries if sane. This uses a hashtable to keep
+	track of what batteries we are watching and should fix #369488.
+
+	* src/gpm-refcount.c: (gpm_refcount_set_timeout):
+	In an error, just assume 1000ms else we don't get refcount timeouts.
+
+2006-11-02  Richard Hughes <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	Use /apps/gnome-power-manager/enable_sounds rather than mentioning
 	the pc beeper as we are now using gstreamer.

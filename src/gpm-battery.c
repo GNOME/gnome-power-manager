@@ -54,6 +54,7 @@ static void     gpm_battery_finalize   (GObject	       *object);
 struct GpmBatteryPrivate
 {
 	GpmHal			*hal;
+	GHashTable		*devices;
 };
 
 enum {
@@ -151,14 +152,24 @@ hal_device_property_modified_cb (GpmHal      *hal,
  *
  * @udi: The HAL UDI
  */
-static void
+static gboolean
 watch_add_battery (GpmBattery    *battery,
 		   const gchar   *udi)
 {
+	const gchar *hash_udi;
+
+	hash_udi = g_hash_table_lookup (battery->priv->devices, udi);
+	if (hash_udi != NULL) {
+		gpm_warning ("cannot watch already watched battery '%s'", udi);
+		return FALSE;
+	}
+	g_hash_table_insert (battery->priv->devices, (gpointer) udi, (gpointer) udi);
+
 	gpm_hal_device_watch_propery_modified (battery->priv->hal, udi, FALSE);
 
 	gpm_debug ("emitting battery-added : %s", udi);
 	g_signal_emit (battery, signals [BATTERY_ADDED], 0, udi);
+	return TRUE;
 }
 
 /**
@@ -168,16 +179,26 @@ watch_add_battery (GpmBattery    *battery,
  * @udi: The HAL UDI
  * @battery: This battery instance
  */
-static void
+static gboolean
 hal_device_removed_cb (GpmHal      *hal,
 		       const gchar *udi,
 		       GpmBattery  *battery)
 {
+	const gchar *hash_udi;
+
 	gpm_debug ("udi=%s", udi);
 
-	/* FIXME: these may not all be batteries */
+	hash_udi = g_hash_table_lookup (battery->priv->devices, udi);
+	if (hash_udi == NULL) {
+		gpm_warning ("cannot remove battery not in hash");
+		return FALSE;
+	}
+
+	g_hash_table_remove (battery->priv->devices, udi);
+
 	gpm_hal_device_remove_propery_modified (battery->priv->hal, udi);
 	g_signal_emit (battery, signals [BATTERY_REMOVED], 0, udi);
+	return TRUE;
 }
 
 /**
@@ -300,6 +321,8 @@ gpm_battery_init (GpmBattery *battery)
 	g_signal_connect (battery->priv->hal, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), battery);
 
+	battery->priv->devices = g_hash_table_new (g_str_hash, g_str_equal);
+
 	g_idle_add ((GSourceFunc)start_idle, battery);
 }
 
@@ -320,7 +343,11 @@ gpm_battery_finalize (GObject *object)
 
 	g_return_if_fail (battery->priv != NULL);
 
-	g_object_unref (battery->priv->hal);
+	if (battery->priv->hal != NULL) {
+		g_object_unref (battery->priv->hal);
+	}
+
+	g_hash_table_destroy (battery->priv->devices);
 
 	G_OBJECT_CLASS (gpm_battery_parent_class)->finalize (object);
 }
