@@ -57,17 +57,13 @@ struct GpmHalMonitorPrivate
 };
 
 enum {
-	BUTTON_PRESSED,
 	BATTERY_PROPERTY_MODIFIED,
 	BATTERY_ADDED,
 	BATTERY_REMOVED,
 	LAST_SIGNAL
 };
 
-enum {
-	PROP_0,
-	PROP_MODE
-};
+/************************ to BECOME gpm-battery.c ********************************/
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
@@ -88,16 +84,6 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 
 	g_type_class_add_private (klass, sizeof (GpmHalMonitorPrivate));
 
-	signals [BUTTON_PRESSED] =
-		g_signal_new ("button-pressed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, button_pressed),
-			      NULL,
-			      NULL,
-			      gpm_marshal_VOID__STRING_BOOLEAN,
-			      G_TYPE_NONE,
-			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [BATTERY_PROPERTY_MODIFIED] =
 		g_signal_new ("battery-property-modified",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -125,55 +111,6 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
-}
-
-/**
- * emit_button_pressed:
- *
- * @udi: The HAL UDI
- * @details: The event details, or "" for unknown or invalid
- *				NOTE: details cannot be NULL
- *
- * Use when we want to emit a ButtonPressed event and we know the udi.
- * We can get two different types of ButtonPressed condition
- *   1. The old acpi hardware buttons
- *      udi="acpi_foo", details="";
- *      button.type="power"
- *   2. The new keyboard buttons
- *      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
- *      button.type=""
- */
-static void
-emit_button_pressed (GpmHalMonitor *monitor,
-		     const gchar   *udi,
-		     const gchar   *details)
-{
-	gchar *button_name = NULL;
-	gboolean value;
-
-	g_return_if_fail (udi != NULL);
-	g_return_if_fail (details != NULL);
-
-	if (strcmp (details, "") == 0) {
-		/* no details about the event, so we get more info
-		   for type 1 buttons */
-		gpm_hal_device_get_string (monitor->priv->hal, udi, "button.type", &button_name);
-	} else {
-		button_name = g_strdup (details);
-	}
-
-	/* Buttons without state should default to true. */
-	value = TRUE;
-	/* we need to get the button state for lid buttons */
-	if (strcmp (button_name, "lid") == 0) {
-		gpm_hal_device_get_bool (monitor->priv->hal, udi, "button.state.value", &value);
-	}
-
-	/* we now emit all buttons, even the ones we don't know */
-	gpm_debug ("emitting button-pressed : %s (%i)", button_name, value);
-	g_signal_emit (monitor, signals [BUTTON_PRESSED], 0, button_name, value);
-
-	g_free (button_name);
 }
 
 /**
@@ -209,35 +146,6 @@ hal_device_property_modified_cb (GpmHal        *hal,
 		gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
 		g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key, finally);
 	}
-	/* only match button* values */
-	if (strncmp (key, "button", 6) == 0) {
-		gpm_debug ("state of a button has changed : %s, %s", udi, key);
-		emit_button_pressed (monitor, udi, "");
-	}
-}
-
-/**
- * hal_device_condition_cb:
- *
- * @udi: Univerisal Device Id
- * @name: Name of condition
- * @details: D-BUS message with parameters
- *
- * Invoked when a property of a device in the Global Device List is
- * changed, and we have we have subscribed to changes for that device.
- */
-static void
-hal_device_condition_cb (GpmHal        *hal,
-			 const gchar   *udi,
-			 const gchar   *condition,
-			 const gchar   *details,
-			 GpmHalMonitor *monitor)
-{
-	gpm_debug ("udi=%s, condition=%s, details=%s", udi, condition, details);
-
-	if (strcmp (condition, "ButtonPressed") == 0) {
-		emit_button_pressed (monitor, udi, details);
-	}
 }
 
 /**
@@ -253,19 +161,6 @@ watch_add_battery (GpmHalMonitor *monitor,
 
 	gpm_debug ("emitting battery-added : %s", udi);
 	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
-}
-
-/**
- * watch_add_button:
- *
- * @udi: The HAL UDI
- */
-static void
-watch_add_button (GpmHalMonitor *monitor,
-		  const gchar   *udi)
-{
-	gpm_hal_device_watch_condition (monitor->priv->hal, udi, FALSE);
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
 }
 
 /**
@@ -338,31 +233,6 @@ hal_device_added_cb (GpmHal        *hal,
 }
 
 /**
- * coldplug_buttons:
- */
-static gboolean
-coldplug_buttons (GpmHalMonitor *monitor)
-{
-	int    i;
-	char **device_names = NULL;
-
-	/* devices of type button */
-	gpm_hal_device_find_capability (monitor->priv->hal, "button", &device_names);
-	if (! device_names) {
-		gpm_debug ("Couldn't obtain list of buttons");
-		return FALSE;
-	}
-
-	for (i = 0; device_names[i]; i++) {
-		watch_add_button (monitor, device_names [i]);
-	}
-
-	gpm_hal_free_capability (monitor->priv->hal, device_names);
-
-	return TRUE;
-}
-
-/**
  * coldplug_batteries:
  *
  *  @return			If any devices of capability battery were found.
@@ -392,18 +262,6 @@ coldplug_batteries (GpmHalMonitor *monitor)
 }
 
 /**
- * coldplug_all:
- */
-static void
-coldplug_all (GpmHalMonitor *monitor)
-{
-	/* sets up these devices and adds watches */
-	gpm_debug ("coldplugging all devices");
-	coldplug_batteries (monitor);
-	coldplug_buttons (monitor);
-}
-
-/**
  * gpm_hal_monitor_coldplug:
  *
  *
@@ -412,7 +270,7 @@ coldplug_all (GpmHalMonitor *monitor)
 void
 gpm_hal_monitor_coldplug (GpmHalMonitor *monitor)
 {
-	coldplug_all (monitor);
+	coldplug_batteries (monitor);
 }
 
 /**
@@ -421,7 +279,7 @@ gpm_hal_monitor_coldplug (GpmHalMonitor *monitor)
 static gboolean
 start_idle (GpmHalMonitor *monitor)
 {
-	coldplug_all (monitor);
+	coldplug_batteries (monitor);
 	return FALSE;
 }
 
@@ -434,7 +292,6 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
 
 	monitor->priv->hal = gpm_hal_new ();
-	monitor->priv->hal = gpm_hal_new ();
 
 	g_signal_connect (monitor->priv->hal, "device-added",
 			  G_CALLBACK (hal_device_added_cb), monitor);
@@ -444,8 +301,6 @@ gpm_hal_monitor_init (GpmHalMonitor *monitor)
 			  G_CALLBACK (hal_new_capability_cb), monitor);
 	g_signal_connect (monitor->priv->hal, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), monitor);
-	g_signal_connect (monitor->priv->hal, "device-condition",
-			  G_CALLBACK (hal_device_condition_cb), monitor);
 
 	g_idle_add ((GSourceFunc)start_idle, monitor);
 }

@@ -33,7 +33,7 @@
 #include "gpm-common.h"
 #include "gpm-button.h"
 #include "gpm-debug.h"
-#include "gpm-power.h"
+#include "gpm-hal.h"
 #include "gpm-marshal.h"
 
 static void     gpm_button_class_init (GpmButtonClass *klass);
@@ -48,7 +48,7 @@ struct GpmButtonPrivate
 	GdkWindow		*window;
 	GHashTable		*hash_to_hal;
 	gboolean		 lid_is_closed;
-	GpmPower		*power; /* remove when iput events is in the kernel */
+	GpmHal			*hal; /* remove when iput events is in the kernel */
 };
 
 enum {
@@ -183,7 +183,7 @@ gpm_button_grab_keystring (GpmButton   *button,
  * Return value: TRUE if we parsed and grabbed okay
  **/
 static gboolean
-gpm_button_monitor_key (GpmButton   *button,
+gpm_button_button_key (GpmButton   *button,
 			   const gchar *keystr,
 			   const gchar *hal_key)
 {
@@ -193,7 +193,7 @@ gpm_button_monitor_key (GpmButton   *button,
 	/* is the key string already in our DB? */
 	key = g_hash_table_lookup (button->priv->hash_to_hal, keystr);
 	if (key != NULL) {
-		gpm_warning ("Already monitoring %s", keystr);
+		gpm_warning ("Already buttoning %s", keystr);
 		return FALSE;
 	}
 
@@ -243,20 +243,48 @@ button_is_lid_closed (GpmButton *button)
 }
 
 /**
- * button_pressed_cb:
- * @power: The power class instance
- * @type: The button type, e.g. "power"
- * @state: The state, where TRUE is depressed or closed
- * @brightness: This class instance
- **/
+ * emit_button_pressed:
+ *
+ * @udi: The HAL UDI
+ * @details: The event details, or "" for unknown or invalid
+ *				NOTE: details cannot be NULL
+ *
+ * Use when we want to emit a ButtonPressed event and we know the udi.
+ * We can get two different types of ButtonPressed condition
+ *   1. The old acpi hardware buttons
+ *      udi="acpi_foo", details="";
+ *      button.type="power"
+ *   2. The new keyboard buttons
+ *      udi="foo_Kbd_Port_logicaldev_input", details="sleep"
+ *      button.type=""
+ */
 static void
-button_pressed_cb (GpmPower    *power,
-		   const gchar *type,
-		   gboolean     state,
-		   GpmButton   *button)
+emit_button_pressed (GpmButton *button,
+		     const gchar   *udi,
+		     const gchar   *details)
 {
-	gpm_debug ("Button press event type=%s state=%d", type, state);
-	const char *atype = type;
+	gchar *type = NULL;
+	gboolean state;
+	const char *atype;
+
+	g_return_if_fail (udi != NULL);
+	g_return_if_fail (details != NULL);
+
+	if (strcmp (details, "") == 0) {
+		/* no details about the event, so we get more info
+		   for type 1 buttons */
+		gpm_hal_device_get_string (button->priv->hal, udi, "button.type", &type);
+	} else {
+		type = g_strdup (details);
+	}
+	atype = type;
+
+	/* Buttons without state should default to true. */
+	state = TRUE;
+	/* we need to get the button state for lid buttons */
+	if (strcmp (type, "lid") == 0) {
+		gpm_hal_device_get_bool (button->priv->hal, udi, "button.state.value", &state);
+	}
 
 	/* abstact away that HAL has an extra parameter */
 	if (strcmp (type, GPM_BUTTON_LID_DEP) == 0 && state == FALSE) {
@@ -288,7 +316,83 @@ button_pressed_cb (GpmPower    *power,
 		atype = GPM_BUTTON_BRIGHT_DOWN;
 	}
 
-	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype, TRUE);
+	/* we now emit all buttons, even the ones we don't know */
+	gpm_debug ("emitting button-pressed : %s", atype);
+	g_signal_emit (button, signals [BUTTON_PRESSED], 0, atype);
+
+	g_free (type);
+}
+
+/**
+ * hal_device_property_modified_cb:
+ *
+ * @udi: The HAL UDI
+ * @key: Property key
+ * @is_added: If the key was added
+ * @is_removed: If the key was removed
+ *
+ * Invoked when a property of a device in the Global Device List is
+ * changed, and we have we have subscribed to changes for that device.
+ */
+static void
+hal_device_property_modified_cb (GpmHal        *hal,
+				 const gchar   *udi,
+				 const gchar   *key,
+				 gboolean       is_added,
+				 gboolean       is_removed,
+				 gboolean       finally,
+				 GpmButton *button)
+{
+	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
+		   udi, key, is_added, is_removed, finally);
+
+	/* do not process keys that have been removed */
+	if (is_removed) {
+		return;
+	}
+
+	/* only match button* values */
+	if (strncmp (key, "button", 6) == 0) {
+		gpm_debug ("state of a button has changed : %s, %s", udi, key);
+		emit_button_pressed (button, udi, "");
+	}
+}
+
+/**
+ * hal_device_condition_cb:
+ *
+ * @udi: Univerisal Device Id
+ * @name: Name of condition
+ * @details: D-BUS message with parameters
+ *
+ * Invoked when a property of a device in the Global Device List is
+ * changed, and we have we have subscribed to changes for that device.
+ */
+static void
+hal_device_condition_cb (GpmHal        *hal,
+			 const gchar   *udi,
+			 const gchar   *condition,
+			 const gchar   *details,
+			 GpmButton *button)
+{
+	gpm_debug ("udi=%s, condition=%s, details=%s", udi, condition, details);
+
+	if (strcmp (condition, "ButtonPressed") == 0) {
+		emit_button_pressed (button, udi, details);
+	}
+}
+
+/**
+ * watch_add_button:
+ *
+ * @udi: The HAL UDI
+ */
+static void
+watch_add_button (GpmButton *button,
+		  const gchar   *udi)
+{
+	gpm_hal_device_watch_condition (button->priv->hal, udi, FALSE);
+	gpm_hal_device_watch_propery_modified (button->priv->hal, udi, FALSE);
 }
 
 /**
@@ -299,6 +403,9 @@ static void
 gpm_button_init (GpmButton *button)
 {
 	gboolean have_xevents = FALSE;
+	int    i;
+	char **device_names = NULL;
+
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
 	button->priv->screen = gdk_screen_get_default ();
@@ -314,18 +421,18 @@ gpm_button_init (GpmButton *button)
 
 	if (have_xevents == TRUE) {
 		/* register the brightness keys */
-		gpm_button_monitor_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
-		gpm_button_monitor_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
-		gpm_button_monitor_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
-		gpm_button_monitor_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
-		gpm_button_monitor_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);
-		gpm_button_monitor_key (button, "XF86BrightnessUp", GPM_BUTTON_BRIGHT_UP);
-		gpm_button_monitor_key (button, "XF86BrightnessDown", GPM_BUTTON_BRIGHT_DOWN);
-		gpm_button_monitor_key (button, "XF86XK_ScreenSaver", GPM_BUTTON_LOCK);
-		gpm_button_monitor_key (button, "XF86XK_Battery", GPM_BUTTON_BATTERY);
-		gpm_button_monitor_key (button, "XF86KeyboardLightUp", GPM_BUTTON_KBD_BRIGHT_UP);
-		gpm_button_monitor_key (button, "XF86KeyboardLightDown", GPM_BUTTON_KBD_BRIGHT_DOWN);
-		gpm_button_monitor_key (button, "XF86KeyboardLightOnOff", GPM_BUTTON_KBD_BRIGHT_TOGGLE);
+		gpm_button_button_key (button, "XF86XK_Execute", GPM_BUTTON_POWER);
+		gpm_button_button_key (button, "XF86XK_PowerOff", GPM_BUTTON_POWER);
+		gpm_button_button_key (button, "XF86XK_Suspend", GPM_BUTTON_SUSPEND);
+		gpm_button_button_key (button, "XF86XK_Sleep", GPM_BUTTON_SUSPEND); /* should be configurable */
+		gpm_button_button_key (button, "XF86XK_Hibernate", GPM_BUTTON_HIBERNATE);
+		gpm_button_button_key (button, "XF86BrightnessUp", GPM_BUTTON_BRIGHT_UP);
+		gpm_button_button_key (button, "XF86BrightnessDown", GPM_BUTTON_BRIGHT_DOWN);
+		gpm_button_button_key (button, "XF86XK_ScreenSaver", GPM_BUTTON_LOCK);
+		gpm_button_button_key (button, "XF86XK_Battery", GPM_BUTTON_BATTERY);
+		gpm_button_button_key (button, "XF86KeyboardLightUp", GPM_BUTTON_KBD_BRIGHT_UP);
+		gpm_button_button_key (button, "XF86KeyboardLightDown", GPM_BUTTON_KBD_BRIGHT_DOWN);
+		gpm_button_button_key (button, "XF86KeyboardLightOnOff", GPM_BUTTON_KBD_BRIGHT_TOGGLE);
 
 		/* use global filter */
 		gdk_window_add_filter (button->priv->window,
@@ -333,12 +440,25 @@ gpm_button_init (GpmButton *button)
 	}
 
 	/* remove when button support is out of HAL */
-	button->priv->power = gpm_power_new ();
+	button->priv->hal = gpm_hal_new ();
 
-	/* remove when button support of moved out of hal and into x */
-	g_signal_connect (button->priv->power, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), button);
+	/* devices of type button */
+	gpm_hal_device_find_capability (button->priv->hal, "button", &device_names);
+	if (! device_names) {
+		gpm_debug ("Couldn't obtain list of buttons");
+		return;
+	}
 
+	for (i = 0; device_names[i]; i++) {
+		watch_add_button (button, device_names [i]);
+	}
+
+	gpm_hal_free_capability (button->priv->hal, device_names);
+
+	g_signal_connect (button->priv->hal, "property-modified",
+			  G_CALLBACK (hal_device_property_modified_cb), button);
+	g_signal_connect (button->priv->hal, "device-condition",
+			  G_CALLBACK (hal_device_condition_cb), button);
 }
 
 /**
@@ -355,8 +475,8 @@ gpm_button_finalize (GObject *object)
 	button = GPM_BUTTON (object);
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
-	if (button->priv->power != NULL) {
-		g_object_unref (button->priv->power);
+	if (button->priv->hal != NULL) {
+		g_object_unref (button->priv->hal);
 	}
 
 	g_hash_table_unref (button->priv->hash_to_hal);

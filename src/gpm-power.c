@@ -62,7 +62,6 @@ struct GpmPowerPrivate
 };
 
 enum {
-	BUTTON_PRESSED,
 	BATTERY_STATUS_CHANGED,
 	BATTERY_REMOVED,
 	BATTERY_PERHAPS_RECALL,
@@ -1472,16 +1471,6 @@ gpm_power_class_init (GpmPowerClass *klass)
 
 	object_class->finalize	   = gpm_power_finalize;
 
-	signals [BUTTON_PRESSED] =
-		g_signal_new ("button-pressed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPowerClass, button_pressed),
-			      NULL,
-			      NULL,
-			      gpm_marshal_VOID__STRING_BOOLEAN,
-			      G_TYPE_NONE,
-			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
 	signals [BATTERY_STATUS_CHANGED] =
 		g_signal_new ("battery-status-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -1703,24 +1692,6 @@ hal_battery_property_modified_cb (GpmHalMonitor *monitor,
 }
 
 /**
- * hal_button_pressed_cb:
- * @monitor: The HAL monitor class instance
- * @type: the button type, e.g. "power"
- * @power: This power class instance
- * @state: The lid state, where TRUE is open or pressed
- **/
-static void
-hal_button_pressed_cb (GpmHalMonitor *monitor,
-		       const gchar   *type,
-		       gboolean       state,
-		       GpmPower      *power)
-{
-	/* just proxy it */
-	gpm_debug ("emitting button-pressed : %s (%i)", type, state);
-	g_signal_emit (power, signals [BUTTON_PRESSED], 0, type, state);
-}
-
-/**
  * gpm_hash_remove_return:
  * FIXME: there must be a better way to do this
  **/
@@ -1871,8 +1842,6 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (hal_daemon_stop_cb), power);
 
 	power->priv->hal_monitor = gpm_hal_monitor_new ();
-	g_signal_connect (power->priv->hal_monitor, "button-pressed",
-			  G_CALLBACK (hal_button_pressed_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-property-modified",
 			  G_CALLBACK (hal_battery_property_modified_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-added",
