@@ -1827,6 +1827,8 @@ hal_daemon_stop_cb (GpmHal   *hal,
 static void
 gpm_power_init (GpmPower *power)
 {
+	guint invalid_timeout;
+
 	GpmConf *conf = gpm_conf_new ();
 
 	power->priv = GPM_POWER_GET_PRIVATE (power);
@@ -1856,7 +1858,10 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (gpm_power_refcount_zero), power);
 	g_signal_connect (power->priv->refcount, "refcount-added",
 			  G_CALLBACK (gpm_power_refcount_added), power);
-	gpm_refcount_set_timeout (power->priv->refcount, GPM_POWER_INVALID_TIMOUT);
+
+	/* we get this from gconf as some machines take longer to settle down */
+	gpm_conf_get_uint (conf, GPM_CONF_INVALID_TIMEOUT, &invalid_timeout);
+	gpm_refcount_set_timeout (power->priv->refcount, invalid_timeout);
 
 	/* when we first start, the data might be invalid */
 	gpm_refcount_add (power->priv->refcount);

@@ -1,5 +1,22 @@
 2006-11-02  Richard Hughes <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	Use /apps/gnome-power-manager/enable_sounds rather than mentioning
+	the pc beeper as we are now using gstreamer.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-power.c: (gpm_power_init):
+	Add /apps/gnome-power-manager/invalid_timeout as some machines take
+	a massive amount of time to settle down after an ac adapter event.
+	I don't want to penalise correct machines with a lag when it's only
+	a small proportion that have this problem.
+
+	* src/gpm-refcount.c: (gpm_refcount_set_timeout):
+	Check for a refcount of zero, and warn if set.
+
+2006-11-02  Richard Hughes <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-battery.c:

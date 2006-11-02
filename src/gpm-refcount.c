@@ -148,6 +148,10 @@ gpm_refcount_set_timeout (GpmRefcount *refcount, guint timeout)
 		gpm_warning ("refcount is not designed for long timeouts");
 		return FALSE;
 	}
+	if (timeout == 0) {
+		gpm_warning ("refcount cannot be zero");
+		return FALSE;
+	}
 
 	refcount->priv->timeout = timeout;
 	return TRUE;

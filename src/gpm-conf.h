@@ -80,6 +80,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_ON_HIBERNATE	GPM_CONF_DIR "/lock_on_hibernate"
 
 #define GPM_CONF_IDLE_CHECK_CPU		GPM_CONF_DIR "/check_type_cpu"
+#define GPM_CONF_INVALID_TIMEOUT	GPM_CONF_DIR "/invalid_timeout"
 
 /* This allows us to ignore policy on resume for a bit */
 #define GPM_CONF_POLICY_TIMEOUT		GPM_CONF_DIR "/policy_suppression_timeout"
@@ -101,7 +102,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_RATE_EXP_AVE_FACTOR	GPM_CONF_DIR "/rate_exponential_average_factor"
 #define GPM_CONF_BATT_EVENT_WHEN_CLOSED	GPM_CONF_DIR "/battery_event_when_closed"
 #define GPM_CONF_GRAPH_DATA_MAX_TIME	GPM_CONF_DIR "/graph_data_max_time"
-#define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/enable_pcskr_beeping"
+#define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/enable_sounds"
 #define GPM_CONF_IGNORE_INHIBITS	GPM_CONF_DIR "/ignore_inhibit_requests"
 
 #define GPM_CONF_AC_LOWPOWER		GPM_CONF_DIR "/use_lowpower_ac"

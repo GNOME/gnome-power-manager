@@ -110,14 +110,26 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/enable_pcskr_beeping</key>
-      <applyto>/apps/gnome-power-manager/enable_pcskr_beeping</applyto>
+      <key>/schemas/apps/gnome-power-manager/enable_sounds</key>
+      <applyto>/apps/gnome-power-manager/enable_sounds</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>If the PC speaker (beeping) should be used</short>
-        <long>If the PC speaker should be used to beep when the power is low, or inhibit requests have stopped the policy action.</long>
+        <short>If sounds should be used</short>
+        <long>If sounds should be used when the power is critically low, or inhibit requests have stopped the policy action.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/invalid_timeout</key>
+      <applyto>/apps/gnome-power-manager/invalid_timeout</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+        <short>The invalid timeout for power actions</short>
+        <long>The invalid timeout in ms for power actions. Set this longer if you get 'battery critical' messages when you unplug.</long>
       </locale>
     </schema>
 
