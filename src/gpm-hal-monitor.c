@@ -58,7 +58,6 @@ struct GpmHalMonitorPrivate
 
 enum {
 	BUTTON_PRESSED,
-	AC_POWER_CHANGED,
 	BATTERY_PROPERTY_MODIFIED,
 	BATTERY_ADDED,
 	BATTERY_REMOVED,
@@ -99,17 +98,6 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      gpm_marshal_VOID__STRING_BOOLEAN,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
-	signals [AC_POWER_CHANGED] =
-		g_signal_new ("ac-power-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, ac_power_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_BOOLEAN);
 	signals [BATTERY_PROPERTY_MODIFIED] =
 		g_signal_new ("battery-property-modified",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -137,19 +125,6 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
-}
-
-/**
- * monitor_change_on_ac:
- *
- * @on_ac: If we are on AC power
- */
-static void
-monitor_change_on_ac (GpmHalMonitor *monitor,
-		      gboolean	     on_ac)
-{
-	gpm_debug ("emitting ac-power-changed : %i", on_ac);
-	g_signal_emit (monitor, signals [AC_POWER_CHANGED], 0, on_ac);
 }
 
 /**
@@ -229,12 +204,6 @@ hal_device_property_modified_cb (GpmHal        *hal,
 		return;
 	}
 
-	if (strcmp (key, "ac_adapter.present") == 0) {
-		gboolean on_ac = gpm_hal_is_on_ac (monitor->priv->hal);
-		monitor_change_on_ac (monitor, on_ac);
-		return;
-	}
-
 	/* only match battery* values */
 	if (strncmp (key, "battery", 7) == 0) {
 		gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
@@ -296,18 +265,6 @@ watch_add_button (GpmHalMonitor *monitor,
 		  const gchar   *udi)
 {
 	gpm_hal_device_watch_condition (monitor->priv->hal, udi, FALSE);
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
-}
-
-/**
- * watch_add_ac_adapter:
- *
- * @udi: The HAL UDI
- */
-static void
-watch_add_ac_adapter (GpmHalMonitor *monitor,
-		      const gchar   *udi)
-{
 	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
 }
 
@@ -381,31 +338,6 @@ hal_device_added_cb (GpmHal        *hal,
 }
 
 /**
- * coldplug_acadapter:
- */
-static gboolean
-coldplug_acadapter (GpmHalMonitor *monitor)
-{
-	int    i;
-	char **device_names = NULL;
-
-	/* devices of type ac_adapter */
-	gpm_hal_device_find_capability (monitor->priv->hal, "ac_adapter", &device_names);
-	if (! device_names) {
-		gpm_debug ("Couldn't obtain list of ac_adapters");
-		return FALSE;
-	}
-
-	for (i = 0; device_names[i]; i++) {
-		watch_add_ac_adapter (monitor, device_names [i]);
-	}
-
-	gpm_hal_free_capability (monitor->priv->hal, device_names);
-
-	return TRUE;
-}
-
-/**
  * coldplug_buttons:
  */
 static gboolean
@@ -468,7 +400,6 @@ coldplug_all (GpmHalMonitor *monitor)
 	/* sets up these devices and adds watches */
 	gpm_debug ("coldplugging all devices");
 	coldplug_batteries (monitor);
-	coldplug_acadapter (monitor);
 	coldplug_buttons (monitor);
 }
 
@@ -536,7 +467,6 @@ gpm_hal_monitor_finalize (GObject *object)
 
 	g_return_if_fail (monitor->priv != NULL);
 
-	g_object_unref (monitor->priv->hal);
 	g_object_unref (monitor->priv->hal);
 
 	G_OBJECT_CLASS (gpm_hal_monitor_parent_class)->finalize (object);

@@ -45,7 +45,7 @@
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-conf.h"
-#include "gpm-power.h"
+#include "gpm-ac-adapter.h"
 #include "gpm-hal.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
@@ -65,7 +65,7 @@ struct GpmDpmsPrivate
 
 	GpmDpmsMode		 mode;
 	GpmConf			*conf;
-	GpmPower		*power;
+	GpmAcAdapter		*ac_adapter;
 	GpmHal			*hal;
 
 	guint			 timer_id;
@@ -814,18 +814,20 @@ gpm_dpms_sync_policy (GpmDpms *dpms)
 {
 	GError  *error;
 	gboolean res;
-	gboolean on_ac;
 	guint    timeout = 0;
 	guint    standby = 0;
 	guint    suspend = 0;
 	guint    off = 0;
 	gchar   *dpms_method;
 	GpmDpmsMethod method;
+	GpmAcAdapterState state;
+
+	/* get the ac state */
+	gpm_ac_adapter_get_state (dpms->priv->ac_adapter, &state);
 
 	error = NULL;
-	gpm_power_get_on_ac (dpms->priv->power, &on_ac, NULL);
 
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_conf_get_uint (dpms->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
 		gpm_conf_get_string (dpms->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
 	} else {
@@ -925,11 +927,11 @@ conf_key_changed_cb (GpmConf     *conf,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower   *power,
-			gboolean    on_ac,
-			GpmDpms    *dpms)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean      on_ac,
+		       GpmDpms      *dpms)
 {
-		gpm_dpms_sync_policy (dpms);	
+	gpm_dpms_sync_policy (dpms);	
 }
 
 static void
@@ -941,13 +943,13 @@ gpm_dpms_init (GpmDpms *dpms)
 	g_signal_connect (dpms->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), dpms);
 
-	/* we use power for the ac-power-changed signal */
+	/* we use hal to see if we are a laptop */
 	dpms->priv->hal = gpm_hal_new ();
 
-	/* we use power for the ac-power=changed signal */
-	dpms->priv->power = gpm_power_new ();
-	g_signal_connect (dpms->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), dpms);
+	/* we use power for the ac-adapter-changed */
+	dpms->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (dpms->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), dpms);
 
 	add_poll_timer (dpms, 500);
 	gpm_dpms_sync_policy (dpms);
@@ -970,8 +972,8 @@ gpm_dpms_finalize (GObject *object)
 	if (dpms->priv->conf != NULL) {
 		g_object_unref (dpms->priv->conf);
 	}
-	if (dpms->priv->power != NULL) {
-		g_object_unref (dpms->priv->power);
+	if (dpms->priv->ac_adapter != NULL) {
+		g_object_unref (dpms->priv->ac_adapter);
 	}
 	if (dpms->priv->hal != NULL) {
 		g_object_unref (dpms->priv->hal);

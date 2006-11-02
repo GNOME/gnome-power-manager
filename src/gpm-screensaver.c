@@ -32,7 +32,7 @@
 #include "gpm-proxy.h"
 #include "gpm-button.h"
 #include "gpm-dpms.h"
-#include "gpm-power.h"
+#include "gpm-ac-adapter.h"
 #include "gpm-brightness-lcd.h"
 
 static void     gpm_screensaver_class_init (GpmScreensaverClass *klass);
@@ -55,7 +55,7 @@ struct GpmScreensaverPrivate
 	GpmConf			*conf;
 	GpmButton		*button;
 	GpmDpms			*dpms;
-	GpmPower		*power;
+	GpmAcAdapter		*ac_adapter;
 	GpmBrightnessLcd	*brightness_lcd;
 	guint			 idle_delay;	/* the setting in g-s-p, cached */
 	guint32         	 ac_throttle_id;
@@ -137,11 +137,11 @@ update_dpms_throttle (GpmScreensaver *screensaver)
 
 static void
 update_ac_throttle (GpmScreensaver *screensaver,
-		    gboolean        on_ac)
+		    GpmAcAdapterState state)
 {
 	/* Throttle the screensaver when we are not on AC power so we don't
 	   waste the battery */
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		if (screensaver->priv->ac_throttle_id > 0) {
 			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->ac_throttle_id);
 			screensaver->priv->ac_throttle_id = 0;
@@ -616,19 +616,19 @@ dpms_mode_changed_cb (GpmDpms        *dpms,
 }
 
 /**
- * power_on_ac_changed_cb:
- * @power: The power class instance
- * @on_ac: if we are on AC power
+ * ac_adapter_changed_cb:
+ * @ac_adapter: The ac_adapter class instance
+ * @on_ac: if we are on AC ac_adapter
  * @screensaver: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower       *power,
-			gboolean        on_ac,
-			GpmScreensaver *screensaver)
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmScreensaver   *screensaver)
 {
-	update_ac_throttle (screensaver, on_ac);
+	update_ac_throttle (screensaver, state);
 
 	/* simulate user input, to fix #333525 */
 	gpm_screensaver_poke (screensaver);
@@ -648,12 +648,12 @@ power_on_ac_changed_cb (GpmPower       *power,
 gboolean
 gpm_screensaver_service_init (GpmScreensaver *screensaver)
 {
-	gboolean on_ac;
+	GpmAcAdapterState state;
 
 	g_return_val_if_fail (screensaver != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_SCREENSAVER (screensaver), FALSE);
 
-	/* we use power for the ac-power-changed signal */
+	/* we use button for the button-pressed signals */
 	screensaver->priv->button = gpm_button_new ();
 	g_signal_connect (screensaver->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), screensaver);
@@ -663,16 +663,16 @@ gpm_screensaver_service_init (GpmScreensaver *screensaver)
 	g_signal_connect (screensaver->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), screensaver);
 
-	/* we use power so we can poke the screensaver and throttle */
-	screensaver->priv->power = gpm_power_new ();
-	g_signal_connect (screensaver->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), screensaver);
+	/* we use ac_adapter so we can poke the screensaver and throttle */
+	screensaver->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (screensaver->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), screensaver);
 
 	/* we use brightness so we undim when we need authentication */
 	screensaver->priv->brightness_lcd = gpm_brightness_lcd_new ();
 
-	gpm_power_get_on_ac (screensaver->priv->power, &on_ac, NULL);
-	update_ac_throttle (screensaver, on_ac);
+	gpm_ac_adapter_get_state (screensaver->priv->ac_adapter, &state);
+	update_ac_throttle (screensaver, state);
 
 	return TRUE;
 }
@@ -733,11 +733,14 @@ gpm_screensaver_finalize (GObject *object)
 	if (screensaver->priv->dpms != NULL) {
 		g_object_unref (screensaver->priv->dpms);
 	}
-	if (screensaver->priv->power != NULL) {
-		g_object_unref (screensaver->priv->power);
+	if (screensaver->priv->ac_adapter != NULL) {
+		g_object_unref (screensaver->priv->ac_adapter);
 	}
 	if (screensaver->priv->brightness_lcd != NULL) {
 		g_object_unref (screensaver->priv->brightness_lcd);
+	}
+	if (screensaver->priv->ac_adapter != NULL) {
+		g_object_unref (screensaver->priv->ac_adapter);
 	}
 
 	G_OBJECT_CLASS (gpm_screensaver_parent_class)->finalize (object);

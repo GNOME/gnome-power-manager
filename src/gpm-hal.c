@@ -1160,34 +1160,6 @@ remove_device_condition_in_hash (const gchar *udi,
 }
 
 /**
- * gpm_hal_is_on_ac:
- *
- * @hal: This hal class instance
- * Return value: TRUE is computer is running on AC
- **/
-gboolean
-gpm_hal_is_on_ac (GpmHal *hal)
-{
-	gboolean is_on_ac;
-	gchar **device_names = NULL;
-
-	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
-
-	/* find ac_adapter */
-	gpm_hal_device_find_capability (hal, "ac_adapter", &device_names);
-	if (device_names == NULL || device_names[0] == NULL) {
-		gpm_debug ("Couldn't obtain list of ac_adapters");
-		/* If we do not have an AC adapter, then assume we are a
-		 * desktop and return true */
-		return TRUE;
-	}
-	/* assume only one */
-	gpm_hal_device_get_bool (hal, device_names[0], "ac_adapter.present", &is_on_ac);
-	gpm_hal_free_capability (hal, device_names);
-	return is_on_ac;
-}
-
-/**
  * gpm_hal_is_laptop:
  *
  * @hal: This hal class instance

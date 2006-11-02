@@ -47,7 +47,7 @@
 #include "gpm-marshal.h"
 #include "gpm-feedback-widget.h"
 #include "gpm-conf.h"
-#include "gpm-power.h"
+#include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 
 #define DIM_INTERVAL		10 /* ms */
@@ -66,7 +66,7 @@ struct GpmBrightnessLcdPrivate
 	gchar			*udi;
 	GpmConf			*conf;
 	GpmButton		*button;
-	GpmPower		*power;
+	GpmAcAdapter		*ac_adapter;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 	GpmFeedback		*feedback;
@@ -474,21 +474,21 @@ conf_key_changed_cb (GpmConf          *conf,
 		     GpmBrightnessLcd *brightness)
 {
 	gint value;
-	gboolean on_ac;
+	GpmAcAdapterState state;
 
-	gpm_power_get_on_ac (brightness->priv->power, &on_ac, NULL);
+	gpm_ac_adapter_get_state (brightness->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
 
 		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (on_ac == TRUE) {
+		if (state == GPM_AC_ADAPTER_PRESENT) {
 			gpm_brightness_lcd_set_std (brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0) {
 
 		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (on_ac == FALSE) {
+		if (state == GPM_AC_ADAPTER_MISSING) {
 			gpm_brightness_lcd_set_std (brightness, value);
 		}
 
@@ -500,22 +500,22 @@ conf_key_changed_cb (GpmConf          *conf,
 }
 
 /**
- * power_on_ac_changed_cb:
- * @power: The power class instance
+ * ac_adapter_changed_cb:
+ * @ac_adapter: The ac_adapter class instance
  * @on_ac: if we are on AC power
  * @brightness: This class instance
  *
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower         *power,
-			gboolean          on_ac,
+ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
+			GpmAcAdapterState state,
 			GpmBrightnessLcd *brightness)
 {
 	gboolean do_laptop_lcd;
 	guint value;
 
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 	} else {
 		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
@@ -536,7 +536,7 @@ power_on_ac_changed_cb (GpmPower         *power,
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmButton        *power,
+button_pressed_cb (GpmButton        *button,
 		   const gchar      *type,
 		   GpmBrightnessLcd *brightness)
 {
@@ -592,8 +592,8 @@ gpm_brightness_lcd_finalize (GObject *object)
 	if (brightness->priv->conf != NULL) {
 		g_object_unref (brightness->priv->conf);
 	}
-	if (brightness->priv->power != NULL) {
-		g_object_unref (brightness->priv->power);
+	if (brightness->priv->ac_adapter != NULL) {
+		g_object_unref (brightness->priv->ac_adapter);
 	}
 	if (brightness->priv->button != NULL) {
 		g_object_unref (brightness->priv->button);
@@ -633,10 +633,10 @@ gpm_brightness_lcd_service_init (GpmBrightnessLcd *brightness)
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	/* we use power for the ac-power-changed signal */
-	brightness->priv->power = gpm_power_new ();
-	g_signal_connect (brightness->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), brightness);
+	/* we use ac_adapter for the ac-adapter-changed signal */
+	brightness->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (brightness->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), brightness);
 
 	/* watch for brightness up and down buttons */
 	brightness->priv->button = gpm_button_new ();

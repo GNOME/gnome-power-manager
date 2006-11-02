@@ -1,3 +1,38 @@
+2006-11-02  Richard Hughes <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-ac-adapter.c:
+	* src/gpm-ac-adapter.h:
+	Create a new class for the AC adapter. Simple and easy.
+
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-cpufreq.c:
+	* src/gpm-dpms.c:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	* src/gpm-screensaver.c:
+	* src/gpm-tray-icon.c:
+	Use the new GpmAcAdapter class and get rid of the GpmPower dep.
+
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Remove the silly hardcoded function.
+
+	* src/gpm-hal-monitor.c:
+	* src/gpm-hal-monitor.h:
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	Rip out the *three-times-layered* ac-adapter handling.
+
+	* src/gpm-power.c:
+	Change the settling timeout to be 500ms so we don't get so much of
+	a delay on unplug before we hear the click.	
+
+	* src/gpm-tray-icon.c:
+	Make sure we actually get rid of any notification on AC.
+
 2006-10-30  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-common.c: (gpm_event_sound):

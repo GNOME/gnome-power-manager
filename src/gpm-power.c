@@ -37,6 +37,7 @@
 #include "gpm-power.h"
 #include "gpm-marshal.h"
 #include "gpm-refcount.h"
+#include "gpm-ac-adapter.h"
 #include "gpm-debug.h"
 #include "gpm-conf.h"
 
@@ -50,7 +51,6 @@ static void     gpm_power_finalize   (GObject       *object);
 
 struct GpmPowerPrivate
 {
-	gboolean		 on_ac;
 	guint			 exp_ave_factor;
 	gboolean		 data_is_trusted;
 	GpmRefcount		*refcount;
@@ -58,20 +58,15 @@ struct GpmPowerPrivate
 	GHashTable		*battery_device_cache;
 	GpmHal			*hal;
 	GpmHalMonitor		*hal_monitor;
+	GpmAcAdapter		*ac_adapter;
 };
 
 enum {
 	BUTTON_PRESSED,
-	AC_STATE_CHANGED,
 	BATTERY_STATUS_CHANGED,
 	BATTERY_REMOVED,
 	BATTERY_PERHAPS_RECALL,
 	LAST_SIGNAL
-};
-
-enum {
-	PROP_0,
-	PROP_ON_AC
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
@@ -79,7 +74,7 @@ static gpointer      gpm_power_object = NULL;
 
 G_DEFINE_TYPE (GpmPower, gpm_power, G_TYPE_OBJECT)
 
-#define GPM_POWER_INVALID_TIMOUT 3000
+#define GPM_POWER_INVALID_TIMOUT 500
 
 /**
  * Multiple batteries percentages are averaged and times added
@@ -1116,12 +1111,19 @@ battery_kind_cache_update (GpmPower		 *power,
 	    type_status->is_discharging == FALSE &&
 	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
-		gboolean on_ac;
-		on_ac = gpm_hal_is_on_ac (power->priv->hal);
+		GpmAcAdapterState state;
+
+		/* get the ac state */
+		gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
 		gpm_debug ("Battery is neither charging nor discharging, "
-			   "using ac_adaptor value %i", on_ac);
-		type_status->is_charging = on_ac;
-		type_status->is_discharging = !(on_ac);
+			   "using ac_adaptor value %i", state);
+		if (state == GPM_AC_ADAPTER_PRESENT) {
+			type_status->is_charging = TRUE;
+			type_status->is_discharging = FALSE;
+		} else {
+			type_status->is_charging = FALSE;
+			type_status->is_discharging = TRUE;
+		}		
 	}
 
 	/* We only do the "better" remaining time algorithm if the battery has rate,
@@ -1297,6 +1299,10 @@ power_get_summary_for_battery_kind (GpmPower	 *power,
 	GpmPowerStatus *status;
 	const gchar *type_desc = NULL;
 	gchar *timestring;
+	GpmAcAdapterState state;
+
+	/* get the ac status */
+	gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
 
 	entry = battery_kind_cache_find (power, battery_kind);
 
@@ -1344,7 +1350,7 @@ power_get_summary_for_battery_kind (GpmPower	 *power,
 						type_desc, status->percentage_charge);
 		}
 
-	} else if (status->is_charging || power->priv->on_ac) {
+	} else if (status->is_charging || state == GPM_AC_ADAPTER_PRESENT) {
 
 		if (status->remaining_time > 60) {
 			g_string_append_printf (summary, _("%s %s until charged (%i%%)\n"),
@@ -1378,6 +1384,10 @@ gpm_power_get_status_summary (GpmPower *power,
 	GString *summary = NULL;
 	gboolean ups_present;
 	GpmPowerStatus status;
+	GpmAcAdapterState state;
+
+	/* get the ac state */
+	gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
 
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
@@ -1397,7 +1407,7 @@ gpm_power_get_status_summary (GpmPower *power,
 		   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
 		summary = g_string_new (_("Computer is running on backup power\n"));
 
-	} else if (power->priv->on_ac) {
+	} else if (state == GPM_AC_ADAPTER_PRESENT) {
 		summary = g_string_new (_("Computer is running on AC power\n"));
 
 	} else {
@@ -1453,94 +1463,6 @@ gpm_power_get_battery_status (GpmPower       *power,
 }
 
 /**
- * gpm_power_set_on_ac:
- * @power: This power class instance
- **/
-static gboolean
-gpm_power_set_on_ac (GpmPower *power,
-		     gboolean  on_ac,
-		     GError  **error)
-{
-	g_return_val_if_fail (power != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
-
-	if (on_ac != power->priv->on_ac) {
-		power->priv->on_ac = on_ac;
-
-		gpm_debug ("emitting ac-state-changed : %i", on_ac);
-		g_signal_emit (power, signals [AC_STATE_CHANGED], 0, on_ac);
-	}
-	gpm_refcount_add (power->priv->refcount);
-
-	return TRUE;
-}
-
-/**
- * gpm_power_get_on_ac:
- * @power: This power class instance
- **/
-gboolean
-gpm_power_get_on_ac (GpmPower *power,
-		     gboolean *on_ac,
-		     GError  **error)
-{
-	g_return_val_if_fail (power != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
-
-	if (on_ac) {
-		*on_ac = power->priv->on_ac;
-	}
-
-	return TRUE;
-}
-
-/**
- * gpm_power_set_property:
- **/
-static void
-gpm_power_set_property (GObject	     *object,
-			guint	      prop_id,
-			const GValue *value,
-			GParamSpec   *pspec)
-{
-	GpmPower *power;
-
-	power = GPM_POWER (object);
-
-	switch (prop_id) {
-	case PROP_ON_AC:
-		gpm_power_set_on_ac (power, g_value_get_boolean (value), NULL);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-/**
- * gpm_power_get_property:
- **/
-static void
-gpm_power_get_property (GObject    *object,
-			guint       prop_id,
-			GValue     *value,
-			GParamSpec *pspec)
-{
-	GpmPower *power;
-
-	power = GPM_POWER (object);
-
-	switch (prop_id) {
-	case PROP_ON_AC:
-		g_value_set_boolean (value, power->priv->on_ac);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
-	}
-}
-
-/**
  * gpm_power_class_init:
  **/
 static void
@@ -1549,16 +1471,6 @@ gpm_power_class_init (GpmPowerClass *klass)
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize	   = gpm_power_finalize;
-	object_class->get_property = gpm_power_get_property;
-	object_class->set_property = gpm_power_set_property;
-
-	g_object_class_install_property (object_class,
-					 PROP_ON_AC,
-					 g_param_spec_boolean ("on_ac",
-							       NULL,
-							       NULL,
-							       TRUE,
-							       G_PARAM_READWRITE));
 
 	signals [BUTTON_PRESSED] =
 		g_signal_new ("button-pressed",
@@ -1570,16 +1482,6 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      gpm_marshal_VOID__STRING_BOOLEAN,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_BOOLEAN);
-	signals [AC_STATE_CHANGED] =
-		g_signal_new ("ac-power-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPowerClass, ac_state_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
 	signals [BATTERY_STATUS_CHANGED] =
 		g_signal_new ("battery-status-changed",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -1615,7 +1517,7 @@ gpm_power_class_init (GpmPowerClass *klass)
 }
 
 /**
- * hal_on_ac_changed_cb:
+ * ac_adaptor_changed_cb:
  * @monitor: The HAL monitor class instance
  * @on_ac: If we are on AC power
  * @power: This power class instance
@@ -1624,15 +1526,15 @@ gpm_power_class_init (GpmPowerClass *klass)
  * and kind caches as they have likely changed.
  **/
 static void
-hal_on_ac_changed_cb (GpmHalMonitor *monitor,
-		      gboolean       on_ac,
-		      GpmPower      *power)
+ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmPower *power)
 {
-	gpm_power_set_on_ac (power, on_ac, NULL);
+	/* update the caches */
+	battery_kind_cache_update_all (power);
 
-	if (! on_ac) {
-		battery_kind_cache_update_all (power);
-	}
+	/* add a refcount, as we don't want to trigger a suspend */
+	gpm_refcount_add (power->priv->refcount);
 }
 
 /**
@@ -1954,10 +1856,13 @@ hal_daemon_stop_cb (GpmHal   *hal,
 static void
 gpm_power_init (GpmPower *power)
 {
-	gboolean on_ac;
 	GpmConf *conf = gpm_conf_new ();
 
 	power->priv = GPM_POWER_GET_PRIVATE (power);
+
+	power->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (power->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adaptor_changed_cb), power);
 
 	power->priv->hal = gpm_hal_new ();
 	g_signal_connect (power->priv->hal, "daemon-start",
@@ -1968,8 +1873,6 @@ gpm_power_init (GpmPower *power)
 	power->priv->hal_monitor = gpm_hal_monitor_new ();
 	g_signal_connect (power->priv->hal_monitor, "button-pressed",
 			  G_CALLBACK (hal_button_pressed_cb), power);
-	g_signal_connect (power->priv->hal_monitor, "ac-power-changed",
-			  G_CALLBACK (hal_on_ac_changed_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-property-modified",
 			  G_CALLBACK (hal_battery_property_modified_cb), power);
 	g_signal_connect (power->priv->hal_monitor, "battery-added",
@@ -1994,9 +1897,6 @@ gpm_power_init (GpmPower *power)
 
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
-
-	on_ac = gpm_hal_is_on_ac (power->priv->hal);
-	gpm_power_set_on_ac (power, on_ac, NULL);
 
 	gpm_conf_get_uint (conf, GPM_CONF_RATE_EXP_AVE_FACTOR, &power->priv->exp_ave_factor);
 	g_object_unref (conf);
@@ -2031,6 +1931,9 @@ gpm_power_finalize (GObject *object)
 	}
 	if (power->priv->refcount != NULL) {
 		g_object_unref (power->priv->refcount);
+	}
+	if (power->priv->ac_adapter != NULL) {
+		g_object_unref (power->priv->ac_adapter);
 	}
 
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);

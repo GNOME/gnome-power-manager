@@ -106,9 +106,6 @@ typedef struct
 
 GType		 gpm_power_get_type			(void);
 GpmPower	*gpm_power_new				(void);
-gboolean	 gpm_power_get_on_ac			(GpmPower	*power,
-							 gboolean	*on_ac,
-							 GError		**error);
 gboolean	 gpm_power_get_battery_status		(GpmPower	*power,
 							 GpmPowerKind	 battery_kind,
 							 GpmPowerStatus *battery_status);

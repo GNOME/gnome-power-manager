@@ -47,8 +47,6 @@ typedef struct
 	void		(* button_pressed)		(GpmHalMonitor	*monitor,
 							 const gchar	*type,
 							 gboolean	 state);
-	void		(* ac_power_changed)		(GpmHalMonitor	*monitor,
-							 gboolean	 on_ac);
 	void		(* battery_added)		(GpmHalMonitor	*monitor,
 							 const gchar	*udi);
 	void		(* battery_removed)		(GpmHalMonitor	*monitor,
@@ -62,7 +60,6 @@ typedef struct
 GType			 gpm_hal_monitor_get_type	(void);
 GpmHalMonitor		*gpm_hal_monitor_new		(void);
 
-gboolean		 gpm_hal_monitor_get_on_ac	(GpmHalMonitor	*monitor);
 void			 gpm_hal_monitor_coldplug	(GpmHalMonitor	*monitor);
 
 G_END_DECLS

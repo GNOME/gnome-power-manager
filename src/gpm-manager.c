@@ -65,6 +65,7 @@
 #include "gpm-stock-icons.h"
 #include "gpm-manager.h"
 #include "gpm-interface-statistics.h"
+#include "gpm-ac-adapter.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -94,6 +95,7 @@ struct GpmManagerPrivate
 	GpmCpuFreq		*cpufreq;
 	GpmInfo			*info;
 	GpmPower		*power;
+	GpmAcAdapter		*ac_adapter;
 	GpmBrightnessLcd	*brightness_lcd;
 	GpmBrightnessKbd	*brightness_kbd;
 	GpmScreensaver 		*screensaver;
@@ -353,12 +355,12 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 {
 	guint	     sleep_display;
 	guint	     sleep_computer;
-	gboolean     on_ac;
+	GpmAcAdapterState state;
 	gboolean     power_save;
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_COMPUTER, &sleep_computer);
 		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &sleep_display);
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
@@ -567,7 +569,7 @@ gpm_manager_get_on_ac (GpmManager  *manager,
 			gboolean   *retval,
 			GError    **error)
 {
-	gboolean on_ac;
+	GpmAcAdapterState state;
 
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
@@ -575,8 +577,12 @@ gpm_manager_get_on_ac (GpmManager  *manager,
 		return FALSE;
 	}
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
-	*retval = on_ac;
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		*retval = TRUE;
+	} else {
+		*retval = FALSE;
+	}
 
 	return TRUE;
 }
@@ -591,8 +597,8 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 				gboolean    *retval,
 				GError     **error)
 {
-	gboolean on_ac;
 	gboolean power_save;
+	GpmAcAdapterState state;
 
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
@@ -600,8 +606,8 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 		return FALSE;
 	}
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, error);
-	if (on_ac) {
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
 	} else {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
@@ -1055,10 +1061,10 @@ idle_changed_cb (GpmIdle    *idle,
 {
 	GError  *error;
 	gboolean do_laptop_dim;
-	gboolean on_ac;
+	GpmAcAdapterState state;
 
 	/* find if we are on AC power */
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	/* Ignore timeout events when the lid is closed, as the DPMS is
 	   already off, and we don't want to perform policy actions or re-enable
@@ -1140,7 +1146,7 @@ idle_changed_cb (GpmIdle    *idle,
 			return;
 		}
 		/* can only be hibernate, suspend or nothing */
-		if (on_ac) {
+		if (state == GPM_AC_ADAPTER_PRESENT) {
 			manager_policy_do (manager, GPM_CONF_AC_SLEEP_TYPE, _("the system state is idle"));
 		} else {
 			manager_policy_do (manager, GPM_CONF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
@@ -1267,14 +1273,14 @@ hibernate_button_pressed (GpmManager *manager)
  **/
 static void
 lid_button_pressed (GpmManager *manager,
-		    gboolean    state)
+		    gboolean    pressed)
 {
-	gboolean  on_ac;
+	GpmAcAdapterState state;
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
-
-	if (state) {
-		if (on_ac) {
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
+	
+	if (pressed) {
+		if (state == GPM_AC_ADAPTER_PRESENT) {
 			gpm_debug ("Performing AC policy");
 			manager_policy_do (manager,
 					   GPM_CONF_AC_BUTTON_LID,
@@ -1337,28 +1343,32 @@ button_pressed_cb (GpmButton   *button,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower   *power,
-			gboolean    on_ac,
-			GpmManager *manager)
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmManager       *manager)
 {
 	gboolean event_when_closed;
 
-	gpm_debug ("Setting on-ac: %d", on_ac);
+	gpm_debug ("Setting on-ac: %d", state);
 
 	/* Don't do any events for a few seconds after we remove the
 	 * ac_adapter. See #348201 for details */
 	gpm_manager_reset_event_time (manager);
 
 	/* If we are on AC power we should show warnings again */
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_debug ("Resetting warning to NONE as on AC power");
 		manager->priv->last_primary_warning = GPM_WARNING_NONE;
 	}
 
 	gpm_manager_sync_policy_sleep (manager);
 
-	gpm_debug ("emitting on-ac-changed : %i", on_ac);
-	g_signal_emit (manager, signals [ON_AC_CHANGED], 0, on_ac);
+	gpm_debug ("emitting on-ac-changed : %i", state);
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, TRUE);
+	} else {
+		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, FALSE);
+	}
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
@@ -1367,7 +1377,7 @@ power_on_ac_changed_cb (GpmPower   *power,
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed && on_ac == FALSE && button_is_lid_closed (manager->priv->button)) {
+	if (event_when_closed && state == GPM_AC_ADAPTER_MISSING && button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager,
 				   GPM_CONF_BATTERY_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "
@@ -1501,8 +1511,8 @@ battery_status_changed_primary (GpmManager     *manager,
 	gchar	    *message = NULL;
 	gchar	    *remaining = NULL;
 	const gchar *title = NULL;
-	gboolean     on_ac;
 	gint	     timeout = 0;
+	GpmAcAdapterState state;
 
 	/* Wait until data is trusted... */
 	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
@@ -1510,7 +1520,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		return;
 	}
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
@@ -1555,7 +1565,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		return;
 	}
 
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_debug ("Computer marked as on_ac.");
 		return;
 	}
@@ -1989,11 +1999,11 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmManager  *manager)
 {
-	gboolean    on_ac;
 	gboolean    enabled;
 	gboolean    allowed_in_menu;
+//	GpmAcAdapterState state;
 
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+//	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
@@ -2116,13 +2126,13 @@ hal_daemon_monitor_cb (GpmHal     *hal,
 static void
 gpm_manager_init (GpmManager *manager)
 {
-	gboolean on_ac;
 	gboolean use_time;
 	gboolean check_type_cpu;
 	gboolean enabled;
 	gboolean allowed_in_menu;
 	DBusGConnection *connection;
 	GError *error = NULL;
+	GpmAcAdapterState state;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
@@ -2130,9 +2140,12 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), manager);
 
+	/* we use ac_adapter so we can poke the screensaver and throttle */
+	manager->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (manager->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), manager);
+
 	manager->priv->power = gpm_power_new ();
-	g_signal_connect (manager->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
 	g_signal_connect (manager->priv->power, "battery-perhaps-recall",
@@ -2225,7 +2238,7 @@ gpm_manager_init (GpmManager *manager)
 				 G_CONNECT_SWAPPED);
 
 	/* coldplug so we are in the correct state at startup */
-	gpm_power_get_on_ac (manager->priv->power, &on_ac, NULL);
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	gpm_manager_sync_policy_sleep (manager);
 	gpm_tray_icon_sync (manager->priv->tray_icon);
@@ -2242,12 +2255,12 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->done_notify_fully_charged = FALSE;
 
 	/* Don't notify on startup if we are on battery power */
-	if (! on_ac) {
+	if (state == GPM_AC_ADAPTER_MISSING) {
 		manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
 	}
 
 	/* Don't notify at startup if we are fully charged on AC */
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
 

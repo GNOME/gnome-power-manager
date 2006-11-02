@@ -107,6 +107,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-brightness-lcd.c				\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
+	gpm-ac-adapter.h				\
+	gpm-ac-adapter.c				\
 	gpm-power.h					\
 	gpm-power.c					\
 	gpm-refcount.h					\
@@ -162,6 +164,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-main.c					\
 	gpm-manager.h					\
 	gpm-manager.c					\
+	gpm-ac-adapter.h				\
+	gpm-ac-adapter.c				\
 	gpm-power.h					\
 	gpm-power.c					\
 	gpm-tray-icon.h					\

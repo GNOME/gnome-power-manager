@@ -151,7 +151,6 @@ gboolean	 gpm_hal_reboot				(GpmHal		*hal);
 gboolean	 gpm_hal_enable_power_save		(GpmHal		*hal,
 							 gboolean	 enable);
 gboolean	 gpm_hal_is_laptop			(GpmHal		*hal);
-gboolean	 gpm_hal_is_on_ac			(GpmHal		*hal);
 
 G_END_DECLS
 

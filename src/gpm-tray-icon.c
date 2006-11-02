@@ -52,6 +52,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-debug.h"
 #include "gpm-conf.h"
+#include "gpm-ac-adapter.h"
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
 static void     gpm_tray_icon_init       (GpmTrayIcon      *tray_icon);
@@ -66,6 +67,7 @@ struct GpmTrayIconPrivate
 	GtkStatusIcon		*status_icon;
 	GpmPower		*power;
 	GpmConf			*conf;
+	GpmAcAdapter		*ac_adapter;
 	guint			 low_percentage;
 	gboolean		 show_notifications;
 	gboolean		 is_visible;
@@ -625,7 +627,6 @@ get_stock_id (GpmTrayIcon *icon,
 	GpmPowerStatus status_ups;
 	GpmPowerStatus status_mouse;
 	GpmPowerStatus status_keyboard;
-	gboolean on_ac;
 	gboolean present;
 
 	if (icon_policy == GPM_ICON_POLICY_NEVER) {
@@ -652,8 +653,6 @@ get_stock_id (GpmTrayIcon *icon,
 						GPM_POWER_KIND_KEYBOARD,
 						&status_keyboard);
 	status_keyboard.is_present &= present;
-
-	gpm_power_get_on_ac (icon->priv->power, &on_ac, NULL);
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
@@ -772,15 +771,15 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower    *power,
-			gboolean     on_ac,
-			GpmTrayIcon *icon)
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmTrayIcon      *icon)
 {
 	gpm_tray_icon_sync (icon);
 
 	/* for where we add back the ac_adapter before the "AC Power unplugged"
 	 * message times out. */
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_tray_icon_cancel_notify (icon);
 	}
 }
@@ -830,8 +829,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	/* get percentage policy */
 	gpm_conf_get_uint (icon->priv->conf, GPM_CONF_LOW_PERCENTAGE, &icon->priv->low_percentage);
 
-	g_signal_connect (icon->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), icon);
+	/* we use ac_adapter so we can log the event */
+	icon->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (icon->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), icon);
 
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
@@ -875,6 +876,9 @@ gpm_tray_icon_finalize (GObject *object)
 	}
 	if (tray_icon->priv->status_icon != NULL) {
 		g_object_unref (tray_icon->priv->status_icon);
+	}
+	if (tray_icon->priv->ac_adapter != NULL) {
+		g_object_unref (tray_icon->priv->ac_adapter);
 	}
 #ifdef HAVE_LIBNOTIFY
 	if (tray_icon->priv->notify != NULL) {
@@ -1064,6 +1068,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 
 #ifdef HAVE_LIBNOTIFY
 	if (icon->priv->notify != NULL) {
+		notify_notification_close (icon->priv->notify, NULL);
 		g_object_unref (icon->priv->notify);
 	}
 	if (error != NULL) {

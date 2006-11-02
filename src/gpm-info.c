@@ -38,6 +38,7 @@
 #include "gpm-conf.h"
 #include "gpm-stock-icons.h"
 #include "gpm-button.h"
+#include "gpm-ac-adapter.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);
@@ -57,6 +58,7 @@ struct GpmInfoPrivate
 	GpmPower		*power;
 	GpmHal			*hal;
 	GpmButton		*button;
+	GpmAcAdapter		*ac_adapter;
 
 	GpmInfoData		*events;
 	GpmInfoData		*rate_data;
@@ -385,11 +387,11 @@ gpm_info_class_init (GpmInfoClass *klass)
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-power_on_ac_changed_cb (GpmPower   *power,
-			gboolean    on_ac,
-			GpmInfo    *info)
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmInfo          *info)
 {
-	if (on_ac) {
+	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_ON_AC,
 				    _("AC adapter inserted"));
 	} else {
@@ -449,8 +451,11 @@ gpm_info_init (GpmInfo *info)
 
 	/* singleton, so okay */
 	info->priv->power = gpm_power_new ();
-	g_signal_connect (info->priv->power, "ac-power-changed",
-			  G_CALLBACK (power_on_ac_changed_cb), info);
+
+	/* we use ac_adapter so we can log the event */
+	info->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (info->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), info);
 
 	/* watch for lid open/close */
 	info->priv->button = gpm_button_new ();
@@ -511,6 +516,9 @@ gpm_info_finalize (GObject *object)
 	}
 	if (info->priv->voltage) {
 		g_object_unref (info->priv->voltage);
+	}
+	if (info->priv->ac_adapter != NULL) {
+		g_object_unref (info->priv->ac_adapter);
 	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
