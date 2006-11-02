@@ -1070,6 +1070,7 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 	if (icon->priv->notify != NULL) {
 		notify_notification_close (icon->priv->notify, NULL);
 		g_object_unref (icon->priv->notify);
+		icon->priv->notify = NULL;
 	}
 	if (error != NULL) {
 		g_error_free (error);

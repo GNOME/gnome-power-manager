@@ -1,5 +1,22 @@
 2006-11-02  Richard Hughes <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-battery.c:
+	* src/gpm-battery.h:
+	* src/gpm-hal-monitor.c:
+	* src/gpm-hal-monitor.h:
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	Rename GpmHalMonitor to GpmBattery as this is all we do now.
+	My renaming spree has ended now, the sanity can continue.
+
+	* src/gpm-tray-icon.c:
+	Set the libnotify to NULL after we unref it, which will probably fix
+	the crash in #365279
+
+2006-11-02  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-button.c:
 	* src/gpm-hal-monitor.c:
 	* src/gpm-power.c:

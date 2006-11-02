@@ -43,52 +43,50 @@
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
 
-#include "gpm-hal-monitor.h"
+#include "gpm-battery.h"
 
-static void     gpm_hal_monitor_class_init (GpmHalMonitorClass *klass);
-static void     gpm_hal_monitor_init       (GpmHalMonitor      *hal_monitor);
-static void     gpm_hal_monitor_finalize   (GObject	       *object);
+static void     gpm_battery_class_init (GpmBatteryClass *klass);
+static void     gpm_battery_init       (GpmBattery      *battery);
+static void     gpm_battery_finalize   (GObject	       *object);
 
-#define GPM_HAL_MONITOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitorPrivate))
+#define GPM_BATTERY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BATTERY, GpmBatteryPrivate))
 
-struct GpmHalMonitorPrivate
+struct GpmBatteryPrivate
 {
 	GpmHal			*hal;
 };
 
 enum {
-	BATTERY_PROPERTY_MODIFIED,
+	BATTERY_MODIFIED,
 	BATTERY_ADDED,
 	BATTERY_REMOVED,
 	LAST_SIGNAL
 };
 
-/************************ to BECOME gpm-battery.c ********************************/
-
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
-static gpointer      monitor_object = NULL;
+static gpointer      battery_object = NULL;
 
-G_DEFINE_TYPE (GpmHalMonitor, gpm_hal_monitor, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmBattery, gpm_battery, G_TYPE_OBJECT)
 
 /**
- * gpm_hal_monitor_class_init:
+ * gpm_battery_class_init:
  * @klass: This class instance
  **/
 static void
-gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
+gpm_battery_class_init (GpmBatteryClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize	   = gpm_hal_monitor_finalize;
+	object_class->finalize	   = gpm_battery_finalize;
 
-	g_type_class_add_private (klass, sizeof (GpmHalMonitorPrivate));
+	g_type_class_add_private (klass, sizeof (GpmBatteryPrivate));
 
-	signals [BATTERY_PROPERTY_MODIFIED] =
-		g_signal_new ("battery-property-modified",
+	signals [BATTERY_MODIFIED] =
+		g_signal_new ("battery-modified",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_property_modified),
+			      G_STRUCT_OFFSET (GpmBatteryClass, battery_modified),
 			      NULL,
 			      NULL,
 			      gpm_marshal_VOID__STRING_STRING_BOOLEAN,
@@ -97,7 +95,7 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 		g_signal_new ("battery-added",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_added),
+			      G_STRUCT_OFFSET (GpmBatteryClass, battery_added),
 			      NULL,
 			      NULL,
 			      gpm_marshal_VOID__STRING,
@@ -106,7 +104,7 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
 		g_signal_new ("battery-removed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmHalMonitorClass, battery_removed),
+			      G_STRUCT_OFFSET (GpmBatteryClass, battery_removed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__STRING,
@@ -125,13 +123,13 @@ gpm_hal_monitor_class_init (GpmHalMonitorClass *klass)
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (GpmHal        *hal,
-				 const gchar   *udi,
-				 const gchar   *key,
-				 gboolean       is_added,
-				 gboolean       is_removed,
-				 gboolean       finally,
-				 GpmHalMonitor *monitor)
+hal_device_property_modified_cb (GpmHal      *hal,
+				 const gchar *udi,
+				 const gchar *key,
+				 gboolean     is_added,
+				 gboolean     is_removed,
+				 gboolean     finally,
+				 GpmBattery  *battery)
 {
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
@@ -143,8 +141,8 @@ hal_device_property_modified_cb (GpmHal        *hal,
 
 	/* only match battery* values */
 	if (strncmp (key, "battery", 7) == 0) {
-		gpm_debug ("emitting battery-property-modified : %s, %s", udi, key);
-		g_signal_emit (monitor, signals [BATTERY_PROPERTY_MODIFIED], 0, udi, key, finally);
+		gpm_debug ("emitting battery-modified : %s, %s", udi, key);
+		g_signal_emit (battery, signals [BATTERY_MODIFIED], 0, udi, key, finally);
 	}
 }
 
@@ -154,13 +152,13 @@ hal_device_property_modified_cb (GpmHal        *hal,
  * @udi: The HAL UDI
  */
 static void
-watch_add_battery (GpmHalMonitor *monitor,
+watch_add_battery (GpmBattery    *battery,
 		   const gchar   *udi)
 {
-	gpm_hal_device_watch_propery_modified (monitor->priv->hal, udi, FALSE);
+	gpm_hal_device_watch_propery_modified (battery->priv->hal, udi, FALSE);
 
 	gpm_debug ("emitting battery-added : %s", udi);
-	g_signal_emit (monitor, signals [BATTERY_ADDED], 0, udi);
+	g_signal_emit (battery, signals [BATTERY_ADDED], 0, udi);
 }
 
 /**
@@ -168,18 +166,18 @@ watch_add_battery (GpmHalMonitor *monitor,
  *
  * @hal: The hal instance
  * @udi: The HAL UDI
- * @monitor: This monitor instance
+ * @battery: This battery instance
  */
 static void
-hal_device_removed_cb (GpmHal        *hal,
-		       const gchar   *udi,
-		       GpmHalMonitor *monitor)
+hal_device_removed_cb (GpmHal      *hal,
+		       const gchar *udi,
+		       GpmBattery  *battery)
 {
 	gpm_debug ("udi=%s", udi);
 
 	/* FIXME: these may not all be batteries */
-	gpm_hal_device_remove_propery_modified (monitor->priv->hal, udi);
-	g_signal_emit (monitor, signals [BATTERY_REMOVED], 0, udi);
+	gpm_hal_device_remove_propery_modified (battery->priv->hal, udi);
+	g_signal_emit (battery, signals [BATTERY_REMOVED], 0, udi);
 }
 
 /**
@@ -188,18 +186,18 @@ hal_device_removed_cb (GpmHal        *hal,
  * @hal: The hal instance
  * @udi: The HAL UDI
  * @capability: the capability, e.g. "battery"
- * @monitor: This monitor instance
+ * @battery: This battery instance
  */
 static void
-hal_new_capability_cb (GpmHal        *hal,
-		       const gchar   *udi,
-		       const gchar   *capability,
-		       GpmHalMonitor *monitor)
+hal_new_capability_cb (GpmHal      *hal,
+		       const gchar *udi,
+		       const gchar *capability,
+		       GpmBattery  *battery)
 {
 	gpm_debug ("udi=%s, capability=%s", udi, capability);
 
 	if (strcmp (capability, "battery") == 0) {
-		watch_add_battery (monitor, udi);
+		watch_add_battery (battery, udi);
 	}
 }
 
@@ -208,12 +206,12 @@ hal_new_capability_cb (GpmHal        *hal,
  *
  * @hal: The hal instance
  * @udi: The HAL UDI
- * @monitor: This monitor instance
+ * @battery: This battery instance
  */
 static void
 hal_device_added_cb (GpmHal        *hal,
-		       const gchar   *udi,
-		       GpmHalMonitor *monitor)
+		       const gchar *udi,
+		       GpmBattery  *battery)
 {
 	gboolean is_battery;
 	gboolean dummy;
@@ -228,7 +226,7 @@ hal_device_added_cb (GpmHal        *hal,
 
 	/* if a battery, then add */
 	if (is_battery) {
-		watch_add_battery (monitor, udi);
+		watch_add_battery (battery, udi);
 	}
 }
 
@@ -240,107 +238,107 @@ hal_device_added_cb (GpmHal        *hal,
  * Coldplugs devices of type battery & ups at startup
  */
 static gboolean
-coldplug_batteries (GpmHalMonitor *monitor)
+coldplug_batteries (GpmBattery *battery)
 {
 	int    i;
 	char **device_names = NULL;
 
 	/* devices of type battery */
-	gpm_hal_device_find_capability (monitor->priv->hal, "battery", &device_names);
+	gpm_hal_device_find_capability (battery->priv->hal, "battery", &device_names);
 	if (! device_names) {
 		gpm_debug ("Couldn't obtain list of batteries");
 		return FALSE;
 	}
 
 	for (i = 0; device_names [i]; i++) {
-		watch_add_battery (monitor, device_names [i]);
+		watch_add_battery (battery, device_names [i]);
 	}
 
-	gpm_hal_free_capability (monitor->priv->hal, device_names);
+	gpm_hal_free_capability (battery->priv->hal, device_names);
 
 	return TRUE;
 }
 
 /**
- * gpm_hal_monitor_coldplug:
+ * gpm_battery_coldplug:
  *
  *
  * Cold-plugs (re-adds) all the basic devices.
  */
 void
-gpm_hal_monitor_coldplug (GpmHalMonitor *monitor)
+gpm_battery_coldplug (GpmBattery *battery)
 {
-	coldplug_batteries (monitor);
+	coldplug_batteries (battery);
 }
 
 /**
- * gpm_hal_monitor_coldplug:
+ * gpm_battery_coldplug:
  */
 static gboolean
-start_idle (GpmHalMonitor *monitor)
+start_idle (GpmBattery *battery)
 {
-	coldplug_batteries (monitor);
+	coldplug_batteries (battery);
 	return FALSE;
 }
 
 /**
- * gpm_hal_monitor_coldplug:
+ * gpm_battery_coldplug:
  */
 static void
-gpm_hal_monitor_init (GpmHalMonitor *monitor)
+gpm_battery_init (GpmBattery *battery)
 {
-	monitor->priv = GPM_HAL_MONITOR_GET_PRIVATE (monitor);
+	battery->priv = GPM_BATTERY_GET_PRIVATE (battery);
 
-	monitor->priv->hal = gpm_hal_new ();
+	battery->priv->hal = gpm_hal_new ();
 
-	g_signal_connect (monitor->priv->hal, "device-added",
-			  G_CALLBACK (hal_device_added_cb), monitor);
-	g_signal_connect (monitor->priv->hal, "device-removed",
-			  G_CALLBACK (hal_device_removed_cb), monitor);
-	g_signal_connect (monitor->priv->hal, "new-capability",
-			  G_CALLBACK (hal_new_capability_cb), monitor);
-	g_signal_connect (monitor->priv->hal, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), monitor);
+	g_signal_connect (battery->priv->hal, "device-added",
+			  G_CALLBACK (hal_device_added_cb), battery);
+	g_signal_connect (battery->priv->hal, "device-removed",
+			  G_CALLBACK (hal_device_removed_cb), battery);
+	g_signal_connect (battery->priv->hal, "new-capability",
+			  G_CALLBACK (hal_new_capability_cb), battery);
+	g_signal_connect (battery->priv->hal, "property-modified",
+			  G_CALLBACK (hal_device_property_modified_cb), battery);
 
-	g_idle_add ((GSourceFunc)start_idle, monitor);
+	g_idle_add ((GSourceFunc)start_idle, battery);
 }
 
 /**
- * gpm_hal_monitor_coldplug:
+ * gpm_battery_coldplug:
  *
- * @object: This monitor instance
+ * @object: This battery instance
  */
 static void
-gpm_hal_monitor_finalize (GObject *object)
+gpm_battery_finalize (GObject *object)
 {
-	GpmHalMonitor *monitor;
+	GpmBattery *battery;
 
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_HAL_MONITOR (object));
+	g_return_if_fail (GPM_IS_BATTERY (object));
 
-	monitor = GPM_HAL_MONITOR (object);
+	battery = GPM_BATTERY (object);
 
-	g_return_if_fail (monitor->priv != NULL);
+	g_return_if_fail (battery->priv != NULL);
 
-	g_object_unref (monitor->priv->hal);
+	g_object_unref (battery->priv->hal);
 
-	G_OBJECT_CLASS (gpm_hal_monitor_parent_class)->finalize (object);
+	G_OBJECT_CLASS (gpm_battery_parent_class)->finalize (object);
 }
 
 /**
- * gpm_hal_monitor_new:
- * Return value: new GpmHalMonitor instance.
+ * gpm_battery_new:
+ * Return value: new GpmBattery instance.
  **/
-GpmHalMonitor *
-gpm_hal_monitor_new (void)
+GpmBattery *
+gpm_battery_new (void)
 {
-	if (monitor_object) {
-		g_object_ref (monitor_object);
+	if (battery_object) {
+		g_object_ref (battery_object);
 	} else {
-		monitor_object = g_object_new (GPM_TYPE_HAL_MONITOR, NULL);
-		g_object_add_weak_pointer (monitor_object,
-					   (gpointer *) &monitor_object);
+		battery_object = g_object_new (GPM_TYPE_BATTERY, NULL);
+		g_object_add_weak_pointer (battery_object,
+					   (gpointer *) &battery_object);
 	}
 
-	return GPM_HAL_MONITOR (monitor_object);
+	return GPM_BATTERY (battery_object);
 }

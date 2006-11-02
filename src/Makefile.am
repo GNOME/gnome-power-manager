@@ -101,8 +101,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-cpufreq.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-hal-monitor.h				\
-	gpm-hal-monitor.c				\
+	gpm-battery.h				\
+	gpm-battery.c				\
 	gpm-brightness-lcd.h				\
 	gpm-brightness-lcd.c				\
 	gpm-feedback-widget.h				\
@@ -135,8 +135,8 @@ endif
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-hal-monitor.h				\
-	gpm-hal-monitor.c				\
+	gpm-battery.h				\
+	gpm-battery.c				\
 	gpm-dbus-monitor.h				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\

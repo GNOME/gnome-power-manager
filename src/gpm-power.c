@@ -32,7 +32,7 @@
 
 #include "gpm-common.h"
 #include "gpm-hal.h"
-#include "gpm-hal-monitor.h"
+#include "gpm-battery.h"
 
 #include "gpm-power.h"
 #include "gpm-marshal.h"
@@ -57,7 +57,7 @@ struct GpmPowerPrivate
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
 	GpmHal			*hal;
-	GpmHalMonitor		*hal_monitor;
+	GpmBattery		*battery;
 	GpmAcAdapter		*ac_adapter;
 };
 
@@ -1507,7 +1507,7 @@ gpm_power_class_init (GpmPowerClass *klass)
 
 /**
  * ac_adaptor_changed_cb:
- * @monitor: The HAL monitor class instance
+ * @battery: The HAL battery class instance
  * @on_ac: If we are on AC power
  * @power: This power class instance
  *
@@ -1601,13 +1601,13 @@ remove_battery (GpmPower    *power,
 
 /**
  * hal_battery_added_cb:
- * @monitor: The HAL monitor class instance
+ * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @power: This power class instance
  * Called from HAL...
  **/
 static void
-hal_battery_added_cb (GpmHalMonitor *monitor,
+hal_battery_added_cb (GpmBattery *battery,
 		      const gchar   *udi,
 		      GpmPower      *power)
 {
@@ -1619,13 +1619,13 @@ hal_battery_added_cb (GpmHalMonitor *monitor,
 
 /**
  * hal_battery_removed_cb:
- * @monitor: The HAL monitor class instance
+ * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @power: This power class instance
  * Called from HAL...
  **/
 static void
-hal_battery_removed_cb (GpmHalMonitor *monitor,
+hal_battery_removed_cb (GpmBattery *battery,
 			const gchar   *udi,
 			GpmPower      *power)
 {
@@ -1642,14 +1642,14 @@ hal_battery_removed_cb (GpmHalMonitor *monitor,
 
 /**
  * hal_battery_property_modified_cb:
- * @monitor: The HAL monitor class instance
+ * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @key: The HAL key that is modified
  * @power: This power class instance
  * Called from HAL...
  **/
 static void
-hal_battery_property_modified_cb (GpmHalMonitor *monitor,
+hal_battery_property_modified_cb (GpmBattery *battery,
 				  const gchar   *udi,
 				  const gchar   *key,
 				  gboolean	 finally,
@@ -1800,7 +1800,7 @@ hal_daemon_start_cb (GpmHal     *hal,
 {
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
-	gpm_hal_monitor_coldplug (power->priv->hal_monitor);
+	gpm_battery_coldplug (power->priv->battery);
 	battery_kind_cache_update_all (power);
 }
 
@@ -1841,12 +1841,12 @@ gpm_power_init (GpmPower *power)
 	g_signal_connect (power->priv->hal, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), power);
 
-	power->priv->hal_monitor = gpm_hal_monitor_new ();
-	g_signal_connect (power->priv->hal_monitor, "battery-property-modified",
+	power->priv->battery = gpm_battery_new ();
+	g_signal_connect (power->priv->battery, "battery-modified",
 			  G_CALLBACK (hal_battery_property_modified_cb), power);
-	g_signal_connect (power->priv->hal_monitor, "battery-added",
+	g_signal_connect (power->priv->battery, "battery-added",
 			  G_CALLBACK (hal_battery_added_cb), power);
-	g_signal_connect (power->priv->hal_monitor, "battery-removed",
+	g_signal_connect (power->priv->battery, "battery-removed",
 			  G_CALLBACK (hal_battery_removed_cb), power);
 
 	power->priv->hal = gpm_hal_new ();
@@ -1892,8 +1892,8 @@ gpm_power_finalize (GObject *object)
 	if (power->priv->hal != NULL) {
 		g_object_unref (power->priv->hal);
 	}
-	if (power->priv->hal_monitor != NULL) {
-		g_object_unref (power->priv->hal_monitor);
+	if (power->priv->battery != NULL) {
+		g_object_unref (power->priv->battery);
 	}
 	if (power->priv->hal != NULL) {
 		g_object_unref (power->priv->hal);

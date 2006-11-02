@@ -19,49 +19,49 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPM_HAL_MONITOR_H
-#define __GPM_HAL_MONITOR_H
+#ifndef __GPM_BATTERY_H
+#define __GPM_BATTERY_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_HAL_MONITOR		(gpm_hal_monitor_get_type ())
-#define GPM_HAL_MONITOR(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitor))
-#define GPM_HAL_MONITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
-#define GPM_IS_HAL_MONITOR(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_HAL_MONITOR))
-#define GPM_IS_HAL_MONITOR_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_HAL_MONITOR))
-#define GPM_HAL_MONITOR_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_HAL_MONITOR, GpmHalMonitorClass))
+#define GPM_TYPE_BATTERY		(gpm_battery_get_type ())
+#define GPM_BATTERY(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_BATTERY, GpmBattery))
+#define GPM_BATTERY_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_BATTERY, GpmBatteryClass))
+#define GPM_IS_BATTERY(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_BATTERY))
+#define GPM_IS_BATTERY_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_BATTERY))
+#define GPM_BATTERY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_BATTERY, GpmBatteryClass))
 
-typedef struct GpmHalMonitorPrivate GpmHalMonitorPrivate;
+typedef struct GpmBatteryPrivate GpmBatteryPrivate;
 
 typedef struct
 {
 	GObject			 parent;
-	GpmHalMonitorPrivate	*priv;
-} GpmHalMonitor;
+	GpmBatteryPrivate	*priv;
+} GpmBattery;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* button_pressed)		(GpmHalMonitor	*monitor,
+	void		(* button_pressed)		(GpmBattery	*battery,
 							 const gchar	*type,
 							 gboolean	 state);
-	void		(* battery_added)		(GpmHalMonitor	*monitor,
+	void		(* battery_added)		(GpmBattery	*battery,
 							 const gchar	*udi);
-	void		(* battery_removed)		(GpmHalMonitor	*monitor,
+	void		(* battery_removed)		(GpmBattery	*battery,
 							 const gchar	*udi);
-	void		(* battery_property_modified)	(GpmHalMonitor	*monitor,
+	void		(* battery_modified)		(GpmBattery	*battery,
 							 const gchar	*udi,
 							 const gchar	*key,
 							 gboolean	 finally);
-} GpmHalMonitorClass;
+} GpmBatteryClass;
 
-GType			 gpm_hal_monitor_get_type	(void);
-GpmHalMonitor		*gpm_hal_monitor_new		(void);
+GType			 gpm_battery_get_type		(void);
+GpmBattery		*gpm_battery_new		(void);
 
-void			 gpm_hal_monitor_coldplug	(GpmHalMonitor	*monitor);
+void			 gpm_battery_coldplug		(GpmBattery	*battery);
 
 G_END_DECLS
 
-#endif /* __GPM_HAL_MONITOR_H */
+#endif /* __GPM_BATTERY_H */

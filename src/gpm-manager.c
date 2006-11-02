@@ -47,7 +47,7 @@
 
 #include "gpm-hal.h"
 #include "gpm-conf.h"
-#include "gpm-hal-monitor.h"
+#include "gpm-battery.h"
 #include "gpm-cpufreq.h"
 #include "gpm-brightness-lcd.h"
 #include "gpm-brightness-kbd.h"
@@ -2095,12 +2095,12 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 
 /**
  * hal_battery_removed_cb:
- * @monitor: The monitor class
+ * @battery: The battery class
  * @udi: The HAL udi of the device that was removed
  * @manager: This class instance
  **/
 static void
-hal_battery_removed_cb (GpmHalMonitor *monitor,
+hal_battery_removed_cb (GpmBattery *battery,
 			const gchar   *udi,
 			GpmManager    *manager)
 {
