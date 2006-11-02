@@ -1,5 +1,20 @@
 2006-11-02  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-manager.c: (power_battery_status_perhaps_recall_cb)
+	Add a translated string that I'll be using soon.
+
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	Don't proxy the battery removed signal, we should use the GpmBattery
+	class directly.
+
+	* src/gpm-manager.c:
+	* src/gpm-tray-icon.c:
+	Use the GpmBattery class directly, and move funcionality from
+	GpmManager class.
+
+2006-11-02  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-battery.c:
 	Only add and remove batteries if sane. This uses a hashtable to keep
 	track of what batteries we are watching and should fix #369488.

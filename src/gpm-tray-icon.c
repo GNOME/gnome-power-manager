@@ -52,6 +52,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-debug.h"
 #include "gpm-conf.h"
+#include "gpm-battery.h"
 #include "gpm-ac-adapter.h"
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
@@ -64,10 +65,12 @@ static void     gpm_tray_icon_finalize   (GObject	   *object);
 
 struct GpmTrayIconPrivate
 {
-	GtkStatusIcon		*status_icon;
-	GpmPower		*power;
-	GpmConf			*conf;
 	GpmAcAdapter		*ac_adapter;
+	GpmConf			*conf;
+	GpmPower		*power;
+	GpmBattery		*battery;
+
+	GtkStatusIcon		*status_icon;
 	guint			 low_percentage;
 	gboolean		 show_notifications;
 	gboolean		 is_visible;
@@ -800,6 +803,21 @@ conf_key_changed_cb (GpmConf     *conf,
 }
 
 /**
+ * battery_removed_cb:
+ * @battery: The battery class
+ * @udi: The HAL udi of the device that was removed
+ * @manager: This class instance
+ **/
+static void
+battery_removed_cb (GpmBattery *battery,
+			const gchar *udi,
+			GpmTrayIcon *icon)
+{
+	gpm_debug ("Battery Removed: %s", udi);
+	gpm_tray_icon_sync (icon);
+}
+
+/**
  * gpm_tray_icon_init:
  * @icon: This TrayIcon class instance
  *
@@ -818,6 +836,13 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* we use power for the messages and the icon state */
 	icon->priv->power = gpm_power_new ();
+
+	icon->priv->battery = gpm_battery_new ();
+	/* we need these to refresh the tooltip and icon */
+	g_signal_connect (icon->priv->battery, "battery-removed",
+			  G_CALLBACK (battery_removed_cb), icon);
+
+
 #ifdef HAVE_LIBNOTIFY
 	icon->priv->notify = NULL;
 #endif
@@ -879,6 +904,9 @@ gpm_tray_icon_finalize (GObject *object)
 	}
 	if (tray_icon->priv->ac_adapter != NULL) {
 		g_object_unref (tray_icon->priv->ac_adapter);
+	}
+	if (tray_icon->priv->battery != NULL) {
+		g_object_unref (tray_icon->priv->battery);
 	}
 #ifdef HAVE_LIBNOTIFY
 	if (tray_icon->priv->notify != NULL) {

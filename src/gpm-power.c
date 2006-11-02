@@ -63,7 +63,6 @@ struct GpmPowerPrivate
 
 enum {
 	BATTERY_STATUS_CHANGED,
-	BATTERY_REMOVED,
 	BATTERY_PERHAPS_RECALL,
 	LAST_SIGNAL
 };
@@ -1481,16 +1480,6 @@ gpm_power_class_init (GpmPowerClass *klass)
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE,
 			      1, G_TYPE_INT);
-	signals [BATTERY_REMOVED] =
-		g_signal_new ("battery-removed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmPowerClass, battery_removed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1, G_TYPE_STRING);
 	signals [BATTERY_PERHAPS_RECALL] =
 		g_signal_new ("battery-perhaps-recall",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -1600,14 +1589,14 @@ remove_battery (GpmPower    *power,
 }
 
 /**
- * hal_battery_added_cb:
+ * battery_added_cb:
  * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @power: This power class instance
  * Called from HAL...
  **/
 static void
-hal_battery_added_cb (GpmBattery *battery,
+battery_added_cb (GpmBattery *battery,
 		      const gchar   *udi,
 		      GpmPower      *power)
 {
@@ -1618,30 +1607,26 @@ hal_battery_added_cb (GpmBattery *battery,
 }
 
 /**
- * hal_battery_removed_cb:
+ * battery_removed_cb:
  * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @power: This power class instance
  * Called from HAL...
  **/
 static void
-hal_battery_removed_cb (GpmBattery *battery,
-			const gchar   *udi,
-			GpmPower      *power)
+battery_removed_cb (GpmBattery  *battery,
+		    const gchar *udi,
+		    GpmPower    *power)
 {
 	gpm_debug ("Battery Removed: %s", udi);
 
 	remove_battery (power, udi);
 
 	battery_kind_cache_debug_print_all (power);
-
-	/* proxy it */
-	gpm_debug ("emitting battery-removed : %s", udi);
-	g_signal_emit (power, signals [BATTERY_REMOVED], 0, udi);
 }
 
 /**
- * hal_battery_property_modified_cb:
+ * battery_modified_cb:
  * @battery: The HAL battery class instance
  * @udi: The HAL UDI for this device
  * @key: The HAL key that is modified
@@ -1649,7 +1634,7 @@ hal_battery_removed_cb (GpmBattery *battery,
  * Called from HAL...
  **/
 static void
-hal_battery_property_modified_cb (GpmBattery *battery,
+battery_modified_cb (GpmBattery *battery,
 				  const gchar   *udi,
 				  const gchar   *key,
 				  gboolean	 finally,
@@ -1845,11 +1830,11 @@ gpm_power_init (GpmPower *power)
 
 	power->priv->battery = gpm_battery_new ();
 	g_signal_connect (power->priv->battery, "battery-modified",
-			  G_CALLBACK (hal_battery_property_modified_cb), power);
+			  G_CALLBACK (battery_modified_cb), power);
 	g_signal_connect (power->priv->battery, "battery-added",
-			  G_CALLBACK (hal_battery_added_cb), power);
+			  G_CALLBACK (battery_added_cb), power);
 	g_signal_connect (power->priv->battery, "battery-removed",
-			  G_CALLBACK (hal_battery_removed_cb), power);
+			  G_CALLBACK (battery_removed_cb), power);
 
 	power->priv->hal = gpm_hal_new ();
 

@@ -87,21 +87,20 @@ typedef enum {
 
 struct GpmManagerPrivate
 {
-	GpmDpms			*dpms;
-	GpmConf			*conf;
-	GpmButton		*button;
-	GpmIdle			*idle;
-	GpmHal			*hal;
-	GpmCpuFreq		*cpufreq;
-	GpmInfo			*info;
-	GpmPower		*power;
 	GpmAcAdapter		*ac_adapter;
 	GpmBrightnessLcd	*brightness_lcd;
 	GpmBrightnessKbd	*brightness_kbd;
-	GpmScreensaver 		*screensaver;
+	GpmButton		*button;
+	GpmConf			*conf;
+	GpmCpuFreq		*cpufreq;
+	GpmDpms			*dpms;
+	GpmHal			*hal;
+	GpmIdle			*idle;
+	GpmInfo			*info;
 	GpmInhibit		*inhibit;
+	GpmPower		*power;
 	GpmPolkit		*polkit;
-
+	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 
 	GpmWarning		 last_primary_warning;
@@ -1941,7 +1940,12 @@ power_battery_status_perhaps_recall_cb (GpmPower    *power,
 
 	msg = g_strdup_printf ("%s\n%s\n<a href=\"%s\">%s</a>",
 			       problem, action, website, oem_vendor);
-				 
+
+	/* I want this translated before the string freeze */
+	const char *temp;
+	if (FALSE) {
+		temp = _("Do not notify me of this anymore");
+	}
 /* TODO:
  [x] do not notify me of this anymore.
  */
@@ -2094,21 +2098,6 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 }
 
 /**
- * hal_battery_removed_cb:
- * @battery: The battery class
- * @udi: The HAL udi of the device that was removed
- * @manager: This class instance
- **/
-static void
-hal_battery_removed_cb (GpmBattery *battery,
-			const gchar   *udi,
-			GpmManager    *manager)
-{
-	gpm_debug ("Battery Removed: %s", udi);
-	gpm_tray_icon_sync (manager->priv->tray_icon);
-}
-
-/**
  * hal_daemon_monitor_cb:
  * @hal: The HAL class instance
  **/
@@ -2173,10 +2162,6 @@ gpm_manager_init (GpmManager *manager)
 	if (manager->priv->screensaver) {
 		gpm_screensaver_service_init (manager->priv->screensaver);
 	}
-
-	/* we need these to refresh the tooltip and icon */
-	g_signal_connect (manager->priv->power, "battery-removed",
-			  G_CALLBACK (hal_battery_removed_cb), manager);
 
 	/* try an start an interactive service */
 	manager->priv->brightness_lcd = gpm_brightness_lcd_new ();

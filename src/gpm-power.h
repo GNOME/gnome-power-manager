@@ -90,15 +90,8 @@ typedef struct
 typedef struct
 {
 	GObjectClass parent_class;
-	void		(* button_pressed)		(GpmPower	*power,
-							 const gchar	*type,
-							 gboolean	 state);
-	void		(* ac_state_changed)		(GpmPower	*power,
-							 gboolean	 on_ac);
 	void		(* battery_status_changed)	(GpmPower	*power,
 							 GpmPowerKind	 battery_kind);
-	void		(* battery_removed)		(GpmPower	*power,
-							 const gchar	*udi);
 	void		(* battery_perhaps_recall)	(GpmPower	*power,
 							 const gchar	*oem_vendor,
 							 const gchar	*website);
