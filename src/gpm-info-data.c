@@ -31,11 +31,10 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "gpm-marshal.h"
 #include "gpm-debug.h"
-
-#include "gpm-info-data.h"
 #include "gpm-graph-widget.h"
+#include "gpm-info-data.h"
+#include "gpm-marshal.h"
 
 static void     gpm_info_data_class_init (GpmInfoDataClass *klass);
 static void     gpm_info_data_init       (GpmInfoData      *info_data);
@@ -48,39 +47,48 @@ struct GpmInfoDataPrivate
 	GPtrArray		*array;		/* the data array */
 	guint			 max_points;	/* when we should simplify data */
 	guint			 max_time;	/* truncate after this */
+	gboolean		 has_data;	/* if we've had valid data (non zero) before */
 };
 
 G_DEFINE_TYPE (GpmInfoData, gpm_info_data, G_TYPE_OBJECT)
 
 /**
  * gpm_info_data_set_max_points:
- * @info_data: This InfoData instance
+ * @info_data: This class instance
  * @max_points: The maximum number of points to show on the graph
  */
-void
+gboolean
 gpm_info_data_set_max_points (GpmInfoData *info_data, guint max_points)
 {
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
+
 	info_data->priv->max_points = max_points;
+	return TRUE;
 }
 
 /**
  * gpm_info_data_set_max_time:
- * @info_data: This InfoData instance
+ * @info_data: This class instance
  * @max_points: The maximum number of points to show on the graph
  */
-void
+gboolean
 gpm_info_data_set_max_time (GpmInfoData *info_data, guint max_time)
 {
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
+
 	if (max_time > 10 * 60) {
 		info_data->priv->max_time = max_time;
 	} else {
 		gpm_debug ("max_time value %i invalid", max_time);
 	}
+	return TRUE;
 }
 
 /**
  * gpm_info_data_get_list:
- * @info_data: This InfoData instance
+ * @info_data: This class instance
  *
  * Gets a GList of the data in the array.
  * NOTE: You have to use need to g_list_free (list) to free the returned list.
@@ -92,8 +100,8 @@ gpm_info_data_get_list (GpmInfoData *info_data)
 	GpmInfoDataPoint *point;
 	int a;
 
-	g_return_val_if_fail (info_data != NULL, NULL);
-	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), NULL);
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
 	
 	if (info_data->priv->array->len == 0) {
 		gpm_debug ("no items in array!");
@@ -108,14 +116,14 @@ gpm_info_data_get_list (GpmInfoData *info_data)
 
 /**
  * gpm_info_data_add_always:
- * @info_data: This InfoData instance
+ * @info_data: This class instance
  * @time_secs: The X data point
  * @value: The Y data point or event type
  * @colour: The colour of the point
  *
  * Allocates the memory and adds to the list.
  **/
-void
+gboolean
 gpm_info_data_add_always (GpmInfoData *info_data,
 			  guint	       time_secs,
 			  guint	       value,
@@ -124,8 +132,8 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 {
 	GpmInfoDataPoint *new;
 
-	g_return_if_fail (info_data != NULL);
-	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
 
 	/* we have to add a new data point */
 	new = g_slice_new (GpmInfoDataPoint);
@@ -138,6 +146,7 @@ gpm_info_data_add_always (GpmInfoData *info_data,
 		new->desc = NULL;
 	}
 	g_ptr_array_add (info_data->priv->array, (gpointer) new);
+	return TRUE;
 }
 
 /**
@@ -163,7 +172,7 @@ gpm_info_data_free_point (GpmInfoDataPoint *point)
  * time to plot accuracy we don't need at the larger scales.
  * This will not reduce the scale or range of the data.
  **/
-void
+gboolean
 gpm_info_data_limit_time (GpmInfoData  *info_data,
 			  guint		max_num)
 {
@@ -173,8 +182,8 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
 	guint len = info_data->priv->array->len;
 	guint a;
 
-	g_return_if_fail (info_data != NULL);
-	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
 
 	point = g_ptr_array_index (info_data->priv->array, len-1);
 	div = (float) point->time / (float) max_num;
@@ -194,6 +203,7 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
 			g_ptr_array_remove_index (info_data->priv->array, a);
 		}
 	}
+	return TRUE;
 }
 
 /**
@@ -205,7 +215,7 @@ gpm_info_data_limit_time (GpmInfoData  *info_data,
  * Do a conventional 1-in-x type algorithm. This dilutes the data if run
  * again and again.
  **/
-void
+gboolean
 gpm_info_data_limit_dilute (GpmInfoData *info_data,
 			    guint	 max_num)
 {
@@ -213,8 +223,8 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
 	guint count = 0;
 	guint a;
 
-	g_return_if_fail (info_data != NULL);
-	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
 
 	for (a=0; a < info_data->priv->array->len; a++) {
 		point = g_ptr_array_index (info_data->priv->array, a);
@@ -225,6 +235,7 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
 			count = 0;
 		}
 	}
+	return TRUE;
 }
 
 /**
@@ -237,7 +248,7 @@ gpm_info_data_limit_dilute (GpmInfoData *info_data,
  * the old points, so we truncate, then limit by time to get the initial points
  * correct.
  **/
-void
+gboolean
 gpm_info_data_limit_truncate (GpmInfoData *info_data,
 			      guint	   max_time)
 {
@@ -264,12 +275,13 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
 		gpm_debug ("removing %i points from start of list", a);
 		g_ptr_array_remove_range (info_data->priv->array, 0, a);
 	}
+	return TRUE;
 }
 
 
 /**
  * gpm_info_data_add:
- * @info_data: This InfoData instance
+ * @info_data: This class instance
  * @time_secs: The X data point
  * @value: The Y data point or event type
  * @colour: The colour of the point
@@ -278,18 +290,27 @@ gpm_info_data_limit_truncate (GpmInfoData *info_data,
  * when we prune the values (when we have over 100) the X and Y values are
  * lost, and the data-points becomes non-uniform.
  **/
-void
+gboolean
 gpm_info_data_add (GpmInfoData *info_data,
 		   guint	time_secs,
 		   guint	value,
 		   guint8	colour)
 {
-	g_return_if_fail (info_data != NULL);
-	g_return_if_fail (GPM_IS_INFO_DATA (info_data));
-
 	GpmInfoDataPoint *point;
 	GpmInfoDataPoint *point2;
 	guint len = info_data->priv->array->len;
+
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
+
+	/* there is no point storing leading zeros data */
+	if (info_data->priv->has_data == FALSE && value == 0) {
+		gpm_debug ("not storing NULL data");
+		return FALSE;
+	}
+
+	/* mark that we now have good data */
+	info_data->priv->has_data = TRUE;
 
 	if (len > 3) {
 		point = g_ptr_array_index (info_data->priv->array, len-1);
@@ -301,17 +322,17 @@ gpm_info_data_add (GpmInfoData *info_data,
 			point->time = time_secs;
 		} else {
 			/* we have to add a new data point as value is different */
-			gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
+			gpm_info_data_add_always (info_data, time_secs, value, colour, FALSE);
 			if (value == 0) {
 				/* if the rate suddenly drops we want a line
 				   going down, then across, not a diagonal line.
 				   Add an extra point so that we extend it horiz. */
-				gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
+				gpm_info_data_add_always (info_data, time_secs, value, colour, FALSE);
 			}
 		}
 	} else {
 		/* a list of less than 3 points always requires a data point */
-		gpm_info_data_add_always (info_data, time_secs, value, colour, NULL);
+		gpm_info_data_add_always (info_data, time_secs, value, colour, FALSE);
 	}
 	if (len > info_data->priv->max_points) {
 		/* We have too much data, simplify */
@@ -333,6 +354,7 @@ gpm_info_data_add (GpmInfoData *info_data,
 			gpm_info_data_limit_truncate (info_data, info_data->priv->max_time / 2);
 		}
 	}
+	return TRUE;
 }
 
 /**
@@ -374,18 +396,23 @@ gpm_info_data_init (GpmInfoData *info_data)
 	info_data->priv->array = g_ptr_array_new ();
 	info_data->priv->max_points = 120;
 	info_data->priv->max_time = 10 * 60;
+	info_data->priv->has_data = FALSE;
 }
 
 /**
  * gpm_info_data_clear:
  * @graph: This info data instance
  **/
-void
+gboolean
 gpm_info_data_clear (GpmInfoData *info_data)
 {
+	g_return_val_if_fail (info_data != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
+
 	/* we just want to free all the elements and start again */
 	gpm_info_data_free (info_data);
 	gpm_info_data_init (info_data);
+	return TRUE;
 }
 
 /**

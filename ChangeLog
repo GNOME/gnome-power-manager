@@ -1,3 +1,20 @@
+2006-11-07  Richard Hughes <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Make the shutdown when critcal levels a little less critical.
+
+	* data/gpm-prefs.glade:
+	Fix the duplicated table names that was causing the battery
+	items to show on desktops.
+
+	* src/gpm-manager.c:
+	* src/gpm-tray-icon.c:
+	Move the tray sync on HAL restart code into GpmTrayIcon.
+
+	* src/gpm-info-data.c:
+	* src/gpm-info-data.h:
+	Move the gonject init stuff to the end of the file.
+
 2006-11-02  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-manager.c: (power_battery_status_perhaps_recall_cb)

@@ -46,14 +46,15 @@
 #include <libnotify/notify.h>
 #endif
 
-#include "gpm-common.h"
-#include "gpm-stock-icons.h"
-#include "gpm-power.h"
-#include "gpm-tray-icon.h"
-#include "gpm-debug.h"
-#include "gpm-conf.h"
-#include "gpm-battery.h"
 #include "gpm-ac-adapter.h"
+#include "gpm-battery.h"
+#include "gpm-conf.h"
+#include "gpm-common.h"
+#include "gpm-debug.h"
+#include "gpm-hal.h"
+#include "gpm-power.h"
+#include "gpm-stock-icons.h"
+#include "gpm-tray-icon.h"
 
 static void     gpm_tray_icon_class_init (GpmTrayIconClass *klass);
 static void     gpm_tray_icon_init       (GpmTrayIcon      *tray_icon);
@@ -67,6 +68,7 @@ struct GpmTrayIconPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
+	GpmHal			*hal;
 	GpmPower		*power;
 	GpmBattery		*battery;
 
@@ -765,172 +767,6 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 	}
 }
 
-/**
- * power_on_ac_changed_cb:
- * @power: The power class instance
- * @on_ac: if we are on AC power
- * @icon: This class instance
- *
- * Does the actions when the ac power source is inserted/removed.
- **/
-static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmTrayIcon      *icon)
-{
-	gpm_tray_icon_sync (icon);
-
-	/* for where we add back the ac_adapter before the "AC Power unplugged"
-	 * message times out. */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_tray_icon_cancel_notify (icon);
-	}
-}
-
-/**
- * conf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmTrayIcon *icon)
-{
-	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
-		gpm_tray_icon_sync (icon);
-	}
-}
-
-/**
- * battery_removed_cb:
- * @battery: The battery class
- * @udi: The HAL udi of the device that was removed
- * @manager: This class instance
- **/
-static void
-battery_removed_cb (GpmBattery *battery,
-			const gchar *udi,
-			GpmTrayIcon *icon)
-{
-	gpm_debug ("Battery Removed: %s", udi);
-	gpm_tray_icon_sync (icon);
-}
-
-/**
- * gpm_tray_icon_init:
- * @icon: This TrayIcon class instance
- *
- * Initialise the tray object, and set up libnotify
- **/
-static void
-gpm_tray_icon_init (GpmTrayIcon *icon)
-{
-	gboolean ret = TRUE;
-
-	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
-
-	/* FIXME: make this a property */
-	icon->priv->show_notifications = TRUE;
-	icon->priv->stock_id = g_strdup ("about-blank");
-
-	/* we use power for the messages and the icon state */
-	icon->priv->power = gpm_power_new ();
-
-	icon->priv->battery = gpm_battery_new ();
-	/* we need these to refresh the tooltip and icon */
-	g_signal_connect (icon->priv->battery, "battery-removed",
-			  G_CALLBACK (battery_removed_cb), icon);
-
-
-#ifdef HAVE_LIBNOTIFY
-	icon->priv->notify = NULL;
-#endif
-
-	icon->priv->conf = gpm_conf_new ();
-	g_signal_connect (icon->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), icon);
-
-	/* get percentage policy */
-	gpm_conf_get_uint (icon->priv->conf, GPM_CONF_LOW_PERCENTAGE, &icon->priv->low_percentage);
-
-	/* we use ac_adapter so we can log the event */
-	icon->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (icon->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), icon);
-
-	icon->priv->status_icon = gtk_status_icon_new ();
-	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
-				 "popup_menu",
-				 G_CALLBACK (gpm_tray_icon_popup_menu_cb),
-				 icon, 0);
-	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
-				 "activate",
-				 G_CALLBACK (gpm_tray_icon_activate_cb),
-				 icon, 0);
-
-	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
-
-#ifdef HAVE_LIBNOTIFY
-	ret = notify_init (GPM_NAME);
-#endif
-	if (!ret) {
-		gpm_warning ("gpm_tray_icon_init failed");
-	}
-}
-
-/**
- * gpm_tray_icon_finalize:
- * @object: This TrayIcon class instance
- **/
-static void
-gpm_tray_icon_finalize (GObject *object)
-{
-	GpmTrayIcon *tray_icon;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_TRAY_ICON (object));
-
-	tray_icon = GPM_TRAY_ICON (object);
-
-	if (tray_icon->priv->stock_id != NULL) {
-		g_free (tray_icon->priv->stock_id);
-	}
-	if (tray_icon->priv->power != NULL) {
-		g_object_unref (tray_icon->priv->power);
-	}
-	if (tray_icon->priv->status_icon != NULL) {
-		g_object_unref (tray_icon->priv->status_icon);
-	}
-	if (tray_icon->priv->ac_adapter != NULL) {
-		g_object_unref (tray_icon->priv->ac_adapter);
-	}
-	if (tray_icon->priv->battery != NULL) {
-		g_object_unref (tray_icon->priv->battery);
-	}
-#ifdef HAVE_LIBNOTIFY
-	if (tray_icon->priv->notify != NULL) {
-		notify_notification_close (tray_icon->priv->notify, NULL);
-	}
-#endif
-
-	g_return_if_fail (tray_icon->priv != NULL);
-
-	G_OBJECT_CLASS (gpm_tray_icon_parent_class)->finalize (object);
-}
-
-/**
- * gpm_tray_icon_new:
- * Return value: A new TrayIcon object.
- **/
-GpmTrayIcon *
-gpm_tray_icon_new (void)
-{
-	GpmTrayIcon *tray_icon;
-	tray_icon = g_object_new (GPM_TYPE_TRAY_ICON, NULL);
-	return GPM_TRAY_ICON (tray_icon);
-}
-
 #ifdef HAVE_LIBNOTIFY
 
 /**
@@ -1104,4 +940,191 @@ gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
 		g_error_free (error);
 	}
 #endif
+}
+
+/**
+ * power_on_ac_changed_cb:
+ * @power: The power class instance
+ * @on_ac: if we are on AC power
+ * @icon: This class instance
+ *
+ * Does the actions when the ac power source is inserted/removed.
+ **/
+static void
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmTrayIcon      *icon)
+{
+	gpm_tray_icon_sync (icon);
+
+	/* for where we add back the ac_adapter before the "AC Power unplugged"
+	 * message times out. */
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		gpm_tray_icon_cancel_notify (icon);
+	}
+}
+
+/**
+ * conf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+conf_key_changed_cb (GpmConf     *conf,
+		     const gchar *key,
+		     GpmTrayIcon *icon)
+{
+	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
+		gpm_tray_icon_sync (icon);
+	}
+}
+
+/**
+ * battery_removed_cb:
+ * @battery: The battery class
+ * @udi: The HAL udi of the device that was removed
+ * @manager: This class instance
+ **/
+static void
+battery_removed_cb (GpmBattery *battery,
+		    const gchar *udi,
+		    GpmTrayIcon *icon)
+{
+	gpm_debug ("Battery Removed: %s", udi);
+	gpm_tray_icon_sync (icon);
+}
+
+/**
+ * hal_daemon_monitor_cb:
+ * @hal: The HAL class instance
+ **/
+static void
+hal_daemon_monitor_cb (GpmHal      *hal,
+		       GpmTrayIcon *icon)
+{
+	gpm_tray_icon_sync (icon);
+}
+
+/**
+ * gpm_tray_icon_init:
+ * @icon: This TrayIcon class instance
+ *
+ * Initialise the tray object, and set up libnotify
+ **/
+static void
+gpm_tray_icon_init (GpmTrayIcon *icon)
+{
+	gboolean ret = TRUE;
+
+	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
+
+	/* FIXME: make this a property */
+	icon->priv->show_notifications = TRUE;
+	icon->priv->stock_id = g_strdup ("about-blank");
+
+	/* we use power for the messages and the icon state */
+	icon->priv->power = gpm_power_new ();
+
+	icon->priv->battery = gpm_battery_new ();
+	/* we need these to refresh the tooltip and icon */
+	g_signal_connect (icon->priv->battery, "battery-removed",
+			  G_CALLBACK (battery_removed_cb), icon);
+
+	/* we need this to refresh the tooltip and icon on hal restart */
+	icon->priv->hal = gpm_hal_new ();
+	g_signal_connect (icon->priv->hal, "daemon-start",
+			  G_CALLBACK (hal_daemon_monitor_cb), icon);
+	g_signal_connect (icon->priv->hal, "daemon-stop",
+			  G_CALLBACK (hal_daemon_monitor_cb), icon);
+
+
+#ifdef HAVE_LIBNOTIFY
+	icon->priv->notify = NULL;
+#endif
+
+	icon->priv->conf = gpm_conf_new ();
+	g_signal_connect (icon->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), icon);
+
+	/* get percentage policy */
+	gpm_conf_get_uint (icon->priv->conf, GPM_CONF_LOW_PERCENTAGE, &icon->priv->low_percentage);
+
+	/* we use ac_adapter so we can log the event */
+	icon->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (icon->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), icon);
+
+	icon->priv->status_icon = gtk_status_icon_new ();
+	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
+				 "popup_menu",
+				 G_CALLBACK (gpm_tray_icon_popup_menu_cb),
+				 icon, 0);
+	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
+				 "activate",
+				 G_CALLBACK (gpm_tray_icon_activate_cb),
+				 icon, 0);
+
+	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
+
+#ifdef HAVE_LIBNOTIFY
+	ret = notify_init (GPM_NAME);
+#endif
+	if (!ret) {
+		gpm_warning ("gpm_tray_icon_init failed");
+	}
+}
+
+/**
+ * gpm_tray_icon_finalize:
+ * @object: This TrayIcon class instance
+ **/
+static void
+gpm_tray_icon_finalize (GObject *object)
+{
+	GpmTrayIcon *tray_icon;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GPM_IS_TRAY_ICON (object));
+
+	tray_icon = GPM_TRAY_ICON (object);
+
+	if (tray_icon->priv->stock_id != NULL) {
+		g_free (tray_icon->priv->stock_id);
+	}
+	if (tray_icon->priv->power != NULL) {
+		g_object_unref (tray_icon->priv->power);
+	}
+	if (tray_icon->priv->status_icon != NULL) {
+		g_object_unref (tray_icon->priv->status_icon);
+	}
+	if (tray_icon->priv->ac_adapter != NULL) {
+		g_object_unref (tray_icon->priv->ac_adapter);
+	}
+	if (tray_icon->priv->battery != NULL) {
+		g_object_unref (tray_icon->priv->battery);
+	}
+	if (tray_icon->priv->hal != NULL) {
+		g_object_unref (tray_icon->priv->hal);
+	}
+#ifdef HAVE_LIBNOTIFY
+	if (tray_icon->priv->notify != NULL) {
+		notify_notification_close (tray_icon->priv->notify, NULL);
+	}
+#endif
+
+	g_return_if_fail (tray_icon->priv != NULL);
+
+	G_OBJECT_CLASS (gpm_tray_icon_parent_class)->finalize (object);
+}
+
+/**
+ * gpm_tray_icon_new:
+ * Return value: A new TrayIcon object.
+ **/
+GpmTrayIcon *
+gpm_tray_icon_new (void)
+{
+	GpmTrayIcon *tray_icon;
+	tray_icon = g_object_new (GPM_TYPE_TRAY_ICON, NULL);
+	return GPM_TRAY_ICON (tray_icon);
 }

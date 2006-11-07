@@ -40,32 +40,30 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
 
-#include "gpm-common.h"
-#include "gpm-prefs.h"
-#include "gpm-screensaver.h"
-#include "gpm-networkmanager.h"
-
-#include "gpm-hal.h"
-#include "gpm-conf.h"
+#include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
-#include "gpm-cpufreq.h"
 #include "gpm-brightness-lcd.h"
 #include "gpm-brightness-kbd.h"
-
+#include "gpm-button.h"
+#include "gpm-conf.h"
+#include "gpm-common.h"
+#include "gpm-cpufreq.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
+#include "gpm-graph-widget.h"
+#include "gpm-hal.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
-#include "gpm-graph-widget.h"
-#include "gpm-power.h"
-#include "gpm-tray-icon.h"
 #include "gpm-inhibit.h"
-#include "gpm-polkit.h"
-#include "gpm-button.h"
-#include "gpm-stock-icons.h"
-#include "gpm-manager.h"
 #include "gpm-interface-statistics.h"
-#include "gpm-ac-adapter.h"
+#include "gpm-networkmanager.h"
+#include "gpm-manager.h"
+#include "gpm-power.h"
+#include "gpm-polkit.h"
+#include "gpm-prefs.h"
+#include "gpm-screensaver.h"
+#include "gpm-stock-icons.h"
+#include "gpm-tray-icon.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -2005,9 +2003,6 @@ conf_key_changed_cb (GpmConf     *conf,
 {
 	gboolean    enabled;
 	gboolean    allowed_in_menu;
-//	GpmAcAdapterState state;
-
-//	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
@@ -2098,17 +2093,6 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 }
 
 /**
- * hal_daemon_monitor_cb:
- * @hal: The HAL class instance
- **/
-static void
-hal_daemon_monitor_cb (GpmHal     *hal,
-		       GpmManager *manager)
-{
-	gpm_tray_icon_sync (manager->priv->tray_icon);
-}
-
-/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -2145,18 +2129,12 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (button_pressed_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
-	g_signal_connect (manager->priv->hal, "daemon-start",
-			  G_CALLBACK (hal_daemon_monitor_cb), manager);
-	g_signal_connect (manager->priv->hal, "daemon-stop",
-			  G_CALLBACK (hal_daemon_monitor_cb), manager);
 
 	/* try and start an interactive service */
 	manager->priv->cpufreq = gpm_cpufreq_new ();
 	if (manager->priv->cpufreq) {
 		gpm_cpufreq_service_init (manager->priv->cpufreq);
 	}
-
-	manager->priv->hal = gpm_hal_new ();
 
 	manager->priv->screensaver = gpm_screensaver_new ();
 	if (manager->priv->screensaver) {
@@ -2279,6 +2257,13 @@ gpm_manager_init (GpmManager *manager)
 				    "battery_low_percentage cannot be zero");
 	}
 
+	/* needed in the future */
+	if (FALSE) {
+		char *temp;
+		temp = _("Your system did not resume correctly.");
+		temp = _("This might be a hardware or software problem.");
+	}
+
 	/* get time policy */
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_LOW_TIME, &manager->priv->low_time);
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_VERY_LOW_TIME, &manager->priv->very_low_time);
@@ -2309,7 +2294,6 @@ gpm_manager_finalize (GObject *object)
 
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
-	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->hal);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
