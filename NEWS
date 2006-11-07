@@ -1,4 +1,42 @@
 ==============
+Version 2.16.2
+==============
+
+Released November 7, 2006
+
+General
+
+ - Make the shutdown when critical levels a little less low,
+   as we might not have enough power to hibernate. #369529
+ - When we add a DPMS state throttle, remove the last one if set.
+   This fixes the bug where the screensaver would not show if
+   DPMS had been allowed to activate. #355279
+ - Empty the lists of monitored devices when HAL disconnects so that
+   they get monitored again after reconnecting. #349842 (Pascal Terjan)
+ - Fix compile on opensolaris. #364621 (Harry Lu)
+ - Don't poke the screen when we shut the lid. This should stop the
+   display going off, on, off when the lid is closed. #362694
+ - When we fall back to using the ac-adapter, we check the percentage.
+   The percentage was set below the check, and thus always failed.
+   Pointed out in #361583.
+ - Correct a typo that was stopping the info data being freed.
+ - Properly initialise libnotify in the tray icon. #363446
+ - Detect a new enough libnotify and enable the pointing code if new
+   enough. #356431
+ * Distros should comment this check out if libnotify 0.4.2 has been
+   patched with the patch from CVS.
+
+Translators
+
+ - Ivar Smolin (et)
+ - Satoru SATOH (ja)
+ - Djihed Afifi (ar)
+ - Ignacio Casal Quinteiro (gl)
+ - Kjartan Maraas (nb)
+ - Inaki Larranaga (eu)
+ - Yaniv Abir (he)
+
+==============
 Version 2.16.1
 ==============
 
