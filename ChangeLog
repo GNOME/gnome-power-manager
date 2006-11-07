@@ -1,3 +1,14 @@
+2006-11-07  Richard Hughes <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Make the shutdown when critical levels a little less critical,
+	as we might not have enough power to hibernate. Fixes #369529.
+
+	* src/gpm-manager.c: (update_dpms_throttle):
+	When we add a DPMS state throttle, remove the last one if set.
+	This fixes the bug where the screensaver would not show if
+	DPMS had been allowed to activate. Fixes #355279.
+
 2006-10-28  Pascal Terjan <pterjan@linuxfr.org>
 
 	* src/gpm-hal.c: Empty the lists of monitored devices when HAL

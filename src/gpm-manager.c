@@ -680,6 +680,10 @@ update_dpms_throttle (GpmManager *manager,
 			manager->priv->dpms_throttle_id = 0;
 		}
 	} else {
+		/* if throttle already exists then remove */
+		if (manager->priv->dpms_throttle_id > 0) {
+			gpm_screensaver_remove_throttle (manager->priv->screensaver, manager->priv->dpms_throttle_id);
+		}
 		manager->priv->dpms_throttle_id = gpm_screensaver_add_throttle (manager->priv->screensaver, _("Display power management activated"));
 	}
 }
@@ -2863,6 +2867,8 @@ gpm_manager_init (GpmManager *manager)
 	/* Do we ignore inhibit requests? */
 	manager->priv->ignore_inhibits = gconf_client_get_bool (manager->priv->gconf_client,
 								GPM_PREF_IGNORE_INHIBITS, NULL);
+	/* set no throttle */
+	manager->priv->dpms_throttle_id = -1;
 }
 
 /**
