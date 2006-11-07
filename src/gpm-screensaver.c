@@ -126,11 +126,15 @@ update_dpms_throttle (GpmScreensaver *screensaver)
 
 	/* Throttle the screensaver when DPMS is active since we can't see it anyway */
 	if (mode == GPM_DPMS_MODE_ON) {
-		if (screensaver->priv->dpms_throttle_id > 0) {
+		if (screensaver->priv->dpms_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->dpms_throttle_id);
 			screensaver->priv->dpms_throttle_id = 0;
 		}
 	} else {
+		/* if throttle already exists then remove */
+		if (screensaver->priv->dpms_throttle_id != 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->dpms_throttle_id);
+		}
 		screensaver->priv->dpms_throttle_id = gpm_screensaver_add_throttle (screensaver, _("Display DPMS activated"));
 	}
 }
@@ -142,11 +146,15 @@ update_ac_throttle (GpmScreensaver *screensaver,
 	/* Throttle the screensaver when we are not on AC power so we don't
 	   waste the battery */
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		if (screensaver->priv->ac_throttle_id > 0) {
+		if (screensaver->priv->ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->ac_throttle_id);
 			screensaver->priv->ac_throttle_id = 0;
 		}
 	} else {
+		/* if throttle already exists then remove */
+		if (screensaver->priv->ac_throttle_id != 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->ac_throttle_id);
+		}
 		screensaver->priv->ac_throttle_id = gpm_screensaver_add_throttle (screensaver, _("On battery power"));
 	}
 }
@@ -158,11 +166,15 @@ update_lid_throttle (GpmScreensaver *screensaver,
 	/* Throttle the screensaver when the lid is close since we can't see it anyway
 	   and it may overheat the laptop */
 	if (! lid_is_closed) {
-		if (screensaver->priv->lid_throttle_id > 0) {
+		if (screensaver->priv->lid_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->lid_throttle_id);
 			screensaver->priv->lid_throttle_id = 0;
 		}
 	} else {
+		/* if throttle already exists then remove */
+		if (screensaver->priv->lid_throttle_id != 0) {
+			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->lid_throttle_id);
+		}
 		screensaver->priv->lid_throttle_id = gpm_screensaver_add_throttle (screensaver, _("Laptop lid is closed"));
 	}
 }
@@ -671,6 +683,12 @@ gpm_screensaver_service_init (GpmScreensaver *screensaver)
 	/* we use brightness so we undim when we need authentication */
 	screensaver->priv->brightness_lcd = gpm_brightness_lcd_new ();
 
+	/* init to unthrottled */
+	screensaver->priv->ac_throttle_id = 0;
+	screensaver->priv->dpms_throttle_id = 0;
+	screensaver->priv->lid_throttle_id = 0;
+
+	/* update ac throttle */
 	gpm_ac_adapter_get_state (screensaver->priv->ac_adapter, &state);
 	update_ac_throttle (screensaver, state);
 

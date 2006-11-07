@@ -1,5 +1,12 @@
 2006-11-07  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-screensaver.c:
+	When we add a DPMS state throttle, remove the last one if set.
+	This fixes the bug where the screensaver would not show if
+	DPMS had been allowed to activate. Fixes #355279.
+
+2006-11-07  Richard Hughes <richard@hughsie.com>
+
 	* data/gpm-prefs.glade:
 	Fix the duplicated action table name that was causing the
 	battery item to show on desktops.
@@ -7,7 +14,7 @@
 2006-11-07  Richard Hughes <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
-	Make the shutdown when critcal levels a little less critical.
+	Make the shutdown when critical levels a little less critical.
 
 	* data/gpm-prefs.glade:
 	Fix the duplicated table names that was causing the battery
