@@ -39,18 +39,19 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-common.h"
-#include "gpm-debug.h"
-#include "gpm-stock-icons.h"
-#include "gpm-hal.h"
-#include "gpm-brightness-kbd.h"
-#include "gpm-proxy.h"
-#include "gpm-marshal.h"
-#include "gpm-feedback-widget.h"
-#include "gpm-light-sensor.h"
-#include "gpm-conf.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
+#include "gpm-brightness-kbd.h"
+#include "gpm-conf.h"
+#include "gpm-common.h"
+#include "gpm-debug.h"
+#include "gpm-feedback-widget.h"
+#include "gpm-hal.h"
+#include "gpm-idle.h"
+#include "gpm-light-sensor.h"
+#include "gpm-marshal.h"
+#include "gpm-proxy.h"
+#include "gpm-stock-icons.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -67,13 +68,14 @@ struct GpmBrightnessKbdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GpmConf			*conf;
-	GpmButton		*button;
 	GpmAcAdapter		*ac_adapter;
-	GpmProxy		*gproxy;
-	GpmHal			*hal;
+	GpmButton		*button;
+	GpmConf			*conf;
 	GpmFeedback		*feedback;
+	GpmIdle			*idle;
+	GpmHal			*hal;
 	GpmLightSensor		*sensor;
+	GpmProxy		*gproxy;
 };
 
 G_DEFINE_TYPE (GpmBrightnessKbd, gpm_brightness_kbd, G_TYPE_OBJECT)
@@ -101,7 +103,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
@@ -143,7 +145,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
-	}	
+	}
 
 	if (brightness_level_hw < 0 ||
 	    brightness_level_hw > brightness->priv->levels - 1) {
@@ -541,7 +543,7 @@ button_pressed_cb (GpmButton        *button,
 
 	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
 		gpm_brightness_kbd_toggle (brightness);
-		
+
 	}
 }
 
@@ -595,6 +597,9 @@ gpm_brightness_kbd_finalize (GObject *object)
 	}
 	if (brightness->priv->button != NULL) {
 		g_object_unref (brightness->priv->button);
+	}
+	if (brightness->priv->idle != NULL) {
+		g_object_unref (brightness->priv->idle);
 	}
 
 	g_return_if_fail (brightness->priv != NULL);
@@ -672,12 +677,12 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 		}
 	} else {
 		if (ambient_light < 30 && state != STATE_FORCED_ON ) {
-			/* if it's dark.. and we haven't already turned light on... 
+			/* if it's dark.. and we haven't already turned light on...
 			 *   => turn it on.. full blast! */
 			gpm_brightness_kbd_set_std (brightness, 100);
 			state = STATE_FORCED_ON;
 		} else if (ambient_light > 70 && state != STATE_FORCED_OFF) {
-			/* if it's bright... and we haven't already turned light off... 
+			/* if it's bright... and we haven't already turned light off...
 			 *   => turn it off */
 			gpm_brightness_kbd_set_std (brightness, 0);
 			state = STATE_FORCED_OFF;
@@ -712,7 +717,7 @@ sensor_changed_cb (GpmLightSensor	*sensor,
  * Returns whether the keyboard backlight is disabled by the user
  */
 gboolean
-gpm_brightness_kbd_is_disabled  (GpmBrightnessKbd	*brightness, 
+gpm_brightness_kbd_is_disabled  (GpmBrightnessKbd	*brightness,
 				     gboolean                   *is_disabled)
 {
 	g_return_val_if_fail (brightness != NULL, FALSE);
@@ -729,7 +734,7 @@ gpm_brightness_kbd_is_disabled  (GpmBrightnessKbd	*brightness,
  * gpm_brightness_kbd_toggle:
  * @brightness: the instance
  * @is_disabled: whether keyboard backlight is disabled by the user
- * @do_startup_on_enable: whether we should automatically select the 
+ * @do_startup_on_enable: whether we should automatically select the
  * keyboard backlight depending on the ambient light when enabling it.
  *
  * Set whether keyboard backlight is disabled by the user. Note that
@@ -753,12 +758,39 @@ gpm_brightness_kbd_toggle (GpmBrightnessKbd *brightness)
 //		if (do_startup_on_enable) {
 			adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
 			gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
-			gpm_feedback_display_value (brightness->priv->feedback, 
+			gpm_feedback_display_value (brightness->priv->feedback,
 						    (gfloat) gpm_discrete_to_percent (brightness->priv->current_hw,
 										     brightness->priv->levels) / 100.0f);
 //		}
 	}
 	return TRUE;
+}
+
+
+/**
+ * idle_changed_cb:
+ * @idle: The idle class instance
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @manager: This class instance
+ *
+ * This callback is called when gnome-screensaver detects that the idle state
+ * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
+ * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * session timeout has elapsed for the idle action.
+ **/
+static void
+idle_changed_cb (GpmIdle          *idle,
+		 GpmIdleMode       mode,
+		 GpmBrightnessKbd *brightness)
+{
+	if (mode == GPM_IDLE_MODE_NORMAL) {
+
+		gpm_brightness_kbd_undim (brightness);
+
+	} else if (mode == GPM_IDLE_MODE_SESSION) {
+
+		gpm_brightness_kbd_dim (brightness);
+	}
 }
 
 /**
@@ -787,6 +819,11 @@ gpm_brightness_kbd_service_init (GpmBrightnessKbd *brightness)
 	brightness->priv->button = gpm_button_new ();
 	g_signal_connect (brightness->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), brightness);
+
+	/* watch for idle mode changes */
+	brightness->priv->idle = gpm_idle_new ();
+	g_signal_connect (brightness->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), brightness);
 
 	return TRUE;
 }

@@ -1084,8 +1084,7 @@ idle_changed_cb (GpmIdle    *idle,
 		return;
 	}
 
-	switch (mode) {
-	case GPM_IDLE_MODE_NORMAL:
+	if (mode == GPM_IDLE_MODE_NORMAL) {
 		gpm_debug ("Idle state changed: NORMAL");
 
 		/* deactivate display power management */
@@ -1107,16 +1106,10 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_brightness_lcd_undim (manager->priv->brightness_lcd);
 		}
 
-		/* turn keyboard backlight back on */
-		if (manager->priv->brightness_kbd) {
-			gpm_brightness_kbd_undim (manager->priv->brightness_kbd);
-		}
-
 		/* sync timeouts */
 		gpm_dpms_sync_policy (manager->priv->dpms);
 
-		break;
-	case GPM_IDLE_MODE_SESSION:
+	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
 		gpm_debug ("Idle state changed: SESSION");
 
@@ -1139,16 +1132,10 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_brightness_lcd_dim (manager->priv->brightness_lcd);
 		}
 
-		/* dim keyboard backlight */
-		if (laptop_do_dim && manager->priv->brightness_kbd) {
-			gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
-		}
-
 		/* sync timeouts */
 		gpm_dpms_sync_policy (manager->priv->dpms);
 
-		break;
-	case GPM_IDLE_MODE_SYSTEM:
+	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
 
 		if (! gpm_manager_is_policy_timout_valid (manager, "timeout action")) {
@@ -1163,13 +1150,7 @@ idle_changed_cb (GpmIdle    *idle,
 		} else {
 			manager_policy_do (manager, GPM_CONF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
 		}
-
-		break;
-	default:
-		g_assert_not_reached ();
-		break;
 	}
-
 }
 
 /**
@@ -2167,7 +2148,7 @@ gpm_manager_init (GpmManager *manager)
 	}
 
 	manager->priv->idle = gpm_idle_new ();
-	g_signal_connect (manager->priv->idle, "changed",
+	g_signal_connect (manager->priv->idle, "idle-changed",
 			  G_CALLBACK (idle_changed_cb), manager);
 
 	/* set up the check_type_cpu, so we can disable the CPU load check */

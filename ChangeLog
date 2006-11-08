@@ -1,5 +1,16 @@
 2006-11-08  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-idle.c:
+	* src/gpm-idle.h:
+	Change the signal name from 'changed' to 'idle-changed'.
+
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-manager.c:
+	Move the keyboard dim functionality into the GpmBrightnessKbd
+	module where it belongs.
+
+2006-11-08  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-screensaver.c:
 	* src/gpm-screensaver.h:
 	Emit an event when idle mode is changed.
@@ -326,7 +337,7 @@
 
 2006-10-24  Harry Lu  <harry.lu@sun.com>
 
-	* configure.in: enable "-Wall" only for gcc. Add "-lresolv -lXext"
+	* configure.in: enable '-Wall' only for gcc. Add '-lresolv -lXext'
 	to GPM_EXTRA_LIBS.
 	* src/Makefile.am: Add GPM_EXTRA_LIBS to gnome_power_manager_LDADD.
 
@@ -357,7 +368,7 @@
 2006-10-23  Richard Hughes <richard@hughsie.com>
 
 	* data/gpm-prefs.glade:
-	Change the checkbox text to "Dim the display when the computer is idle"
+	Change the checkbox text to 'Dim the display when the computer is idle'
 	to fix #363765.
 
 2006-10-22  Richard Hughes <richard@hughsie.com>
@@ -832,7 +843,7 @@
 	* data/gpm-prefs.glade:
 	* src/gpm-prefs-core.c: (prefs_setup_actions), (gpm_prefs_init):
 	Added policy in the UI for the suspend button action due to a distro
-	beginning with U changing the default action to "nothing".
+	beginning with U changing the default action to 'nothing'.
 
 2006-09-26  Francisco Javier F. Serrador  <serrador@openshine.com>
 
@@ -1017,7 +1028,7 @@
 	Add gpm_info_data_clear() so we can re-init the data.
 	Use GpmInfoData as a datastore in the statistics module so we leak
 	a lot less memory. Also clean up this module.
-	gnome-power-statistics now works as well as the "Information" screen
+	gnome-power-statistics now works as well as the 'Information' screen
 	that we used before and is out of process.
 
 	* src/gpm-info.c:
@@ -1483,8 +1494,8 @@
 	Change category from GNOME|Core Desktop to GNOME|System.
 	Also, per the instructions at
 	http://live.gnome.org/GnomeDocUtilsMigrationHowTo there should be
-	elements within the docbook file with the attribute "role" and
-	the value "maintainer" on one of the author tags. Fixes #353123
+	elements within the docbook file with the attribute 'role' and
+	the value 'maintainer' on one of the author tags. Fixes #353123
 
 2006-08-28  Richard Hughes  <richard@hughsie.com>
 

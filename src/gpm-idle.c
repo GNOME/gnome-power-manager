@@ -68,7 +68,7 @@ struct GpmIdlePrivate
 };
 
 enum {
-	CHANGED,
+	IDLE_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -168,7 +168,7 @@ gpm_idle_set_mode (GpmIdle    *idle,
 
 		gpm_debug ("Doing a state transition: %d", mode);
 		g_signal_emit (idle,
-			       signals [CHANGED],
+			       signals [IDLE_CHANGED],
 			       0,
 			       mode);
 	}
@@ -423,11 +423,11 @@ gpm_idle_class_init (GpmIdleClass *klass)
 
 	object_class->finalize = gpm_idle_finalize;
 
-	signals [CHANGED] =
-		g_signal_new ("changed",
+	signals [IDLE_CHANGED] =
+		g_signal_new ("idle-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmIdleClass, changed),
+			      G_STRUCT_OFFSET (GpmIdleClass, idle_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,

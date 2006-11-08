@@ -51,7 +51,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 
-	void		(* changed)			(GpmIdle	*idle,
+	void		(* idle_changed)		(GpmIdle	*idle,
 							 GpmIdleMode	 mode);
 } GpmIdleClass;
 
