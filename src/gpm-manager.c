@@ -825,7 +825,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	gpm_conf_get_bool (manager->priv->conf,  GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {	
+	if (nm_sleep) {
 		gpm_networkmanager_sleep ();
 	}
 
@@ -868,7 +868,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {	
+	if (nm_sleep) {
 		gpm_networkmanager_wake ();
 	}
 
@@ -920,7 +920,7 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {	
+	if (nm_sleep) {
 		gpm_networkmanager_sleep ();
 	}
 
@@ -969,7 +969,7 @@ gpm_manager_suspend (GpmManager *manager,
 	}
 
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep) {	
+	if (nm_sleep) {
 		gpm_networkmanager_wake ();
 	}
 
@@ -1071,7 +1071,7 @@ idle_changed_cb (GpmIdle    *idle,
 	 * Details here: http://bugzilla.gnome.org/show_bug.cgi?id=365016
 	 */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LAPTOP_USES_EXT_MON, &laptop_using_ext_mon);
-	
+
 	/*
 	 * Ignore timeout events when the lid is closed, as the DPMS is
 	 * already off, and we don't want to perform policy actions or re-enable
@@ -1290,7 +1290,7 @@ lid_button_pressed (GpmManager *manager,
 	GpmAcAdapterState state;
 
 	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
-	
+
 	if (pressed) {
 		if (state == GPM_AC_ADAPTER_PRESENT) {
 			gpm_debug ("Performing AC policy");
@@ -1563,7 +1563,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		}
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
-	
+
 	/* We only re-enable the fully charged notification when the battery
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
@@ -2147,22 +2147,22 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try and start an interactive service */
 	manager->priv->cpufreq = gpm_cpufreq_new ();
-	if (manager->priv->cpufreq) {
+	if (manager->priv->cpufreq != NULL) {
 		gpm_cpufreq_service_init (manager->priv->cpufreq);
 	}
 
 	manager->priv->screensaver = gpm_screensaver_new ();
-	if (manager->priv->screensaver) {
+	if (manager->priv->screensaver != NULL) {
 		gpm_screensaver_service_init (manager->priv->screensaver);
 	}
 
 	/* try an start an interactive service */
 	manager->priv->brightness_lcd = gpm_brightness_lcd_new ();
-	if (manager->priv->brightness_lcd) {
+	if (manager->priv->brightness_lcd != NULL) {
 		gpm_brightness_lcd_service_init (manager->priv->brightness_lcd);
 	}
 	manager->priv->brightness_kbd = gpm_brightness_kbd_new ();
-	if (manager->priv->brightness_kbd) {
+	if (manager->priv->brightness_kbd != NULL) {
 		gpm_brightness_kbd_service_init (manager->priv->brightness_kbd);
 	}
 
@@ -2187,7 +2187,7 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
-	
+
 	/* add the new statistics DBUS interface */
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);

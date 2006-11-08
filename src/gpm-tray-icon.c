@@ -359,7 +359,7 @@ gpm_tray_icon_popup_cleared_cd (GtkWidget   *widget,
 				GpmTrayIcon *icon)
 {
 //	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	g_debug ("clear tray (icon = %p)", icon);
+	gpm_debug ("clear tray (icon = %p)", icon);
 }
 
 /**

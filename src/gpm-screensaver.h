@@ -50,6 +50,8 @@ typedef struct
 					    		 gboolean	 connected);
 	void		(* auth_request)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 auth);
+	void		(* idle_changed)		(GpmScreensaver	*screensaver,
+					    		 gboolean	 is_idle);
 } GpmScreensaverClass;
 
 GType		 gpm_screensaver_get_type		(void);

@@ -59,7 +59,6 @@ GType		 gpm_idle_get_type			(void);
 GpmIdle		*gpm_idle_new				(void);
 
 GpmIdleMode	 gpm_idle_get_mode			(GpmIdle	*idle);
-void		 gpm_idle_reset				(GpmIdle	*idle);
 void		 gpm_idle_set_mode			(GpmIdle	*idle,
 							 GpmIdleMode	 mode);
 void		 gpm_idle_set_check_cpu			(GpmIdle	*idle,

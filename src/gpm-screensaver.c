@@ -66,6 +66,7 @@ struct GpmScreensaverPrivate
 enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
+	IDLE_CHANGED,
 	AUTH_REQUEST,
 	LAST_SIGNAL
 };
@@ -116,6 +117,18 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
 	const gboolean value = FALSE;
 	gpm_debug ("emitting auth-request : (%i)", value);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+}
+
+/** Invoked when we get the AuthenticationRequestEnd from g-s when the user
+ *  has entered a valid password or re-authenticated.
+ */
+static void
+gpm_screensaver_idle_changed (DBusGProxy     *proxy,
+			      gboolean        is_idle,
+			      GpmScreensaver *screensaver)
+{
+	gpm_debug ("emitting idle-changed : (%i)", is_idle);
+	g_signal_emit (screensaver, signals [IDLE_CHANGED], 0, is_idle);
 }
 
 static void
@@ -205,19 +218,24 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, TRUE);
 
 	/* get AuthenticationRequestBegin */
-	dbus_g_proxy_add_signal (proxy,
-				 "AuthenticationRequestBegin", G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (proxy, "AuthenticationRequestBegin", G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy,
 				     "AuthenticationRequestBegin",
 				     G_CALLBACK (gpm_screensaver_auth_begin),
 				     screensaver, NULL);
 
 	/* get AuthenticationRequestEnd */
-	dbus_g_proxy_add_signal (proxy,
-				 "AuthenticationRequestEnd", G_TYPE_INVALID);
+	dbus_g_proxy_add_signal (proxy, "AuthenticationRequestEnd", G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy,
 				     "AuthenticationRequestEnd",
 				     G_CALLBACK (gpm_screensaver_auth_end),
+				     screensaver, NULL);
+
+	/* get SessionIdleChanged */
+	dbus_g_proxy_add_signal (proxy, "SessionIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy,
+				     "SessionIdleChanged",
+				     G_CALLBACK (gpm_screensaver_idle_changed),
 				     screensaver, NULL);
 
 	update_dpms_throttle (screensaver);
@@ -561,6 +579,16 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmScreensaverClass, auth_request),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+
+	signals [IDLE_CHANGED] =
+		g_signal_new ("idle-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, idle_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,

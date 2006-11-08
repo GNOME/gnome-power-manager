@@ -1,5 +1,23 @@
 2006-11-08  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	Emit an event when idle mode is changed.
+
+	* src/gpm-idle.c:
+	* src/gpm-idle.h:
+	Use a GpmScreensaver object rather than trying (wrongly) to
+	handle the dbus connection ourselves.
+	Also make into singleton, and tidy up.
+
+	* src/gpm-manager.c:
+	Small tidy-up.
+
+	* src/gpm-tray-icon.c:
+	Use gpm_debug in one case rather than g_debug.
+
+2006-11-08  Richard Hughes <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-conf.h:
 	* src/gpm-manager.c: (idle_changed_cb):
