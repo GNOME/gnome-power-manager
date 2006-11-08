@@ -1,5 +1,12 @@
 2006-11-08  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-manager.c: (ac_adapter_changed_cb):
+	Reset the event time only after we have checked for
+	event_when_closed so we actually perform the action rather
+	than fail the check. Should fix #366526.
+
+2006-11-08  Richard Hughes <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-brightness-kbd.c:
 	* src/gpm-brightness-lcd.c:

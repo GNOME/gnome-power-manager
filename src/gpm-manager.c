@@ -1296,10 +1296,6 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 
 	gpm_debug ("Setting on-ac: %d", state);
 
-	/* Don't do any events for a few seconds after we remove the
-	 * ac_adapter. See #348201 for details */
-	gpm_manager_reset_event_time (manager);
-
 	/* If we are on AC power we should show warnings again */
 	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_debug ("Resetting warning to NONE as on AC power");
@@ -1330,6 +1326,10 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 				   _("the lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)"));
 	}
+
+	/* Don't do any events for a few seconds after we remove the
+	 * ac_adapter. See #348201 for details */
+	gpm_manager_reset_event_time (manager);
 }
 
 /**
