@@ -38,17 +38,19 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-common.h"
-#include "gpm-debug.h"
-#include "gpm-stock-icons.h"
-#include "gpm-hal.h"
-#include "gpm-brightness-lcd.h"
-#include "gpm-proxy.h"
-#include "gpm-marshal.h"
-#include "gpm-feedback-widget.h"
-#include "gpm-conf.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
+#include "gpm-brightness-lcd.h"
+#include "gpm-conf.h"
+#include "gpm-common.h"
+#include "gpm-debug.h"
+#include "gpm-feedback-widget.h"
+#include "gpm-hal.h"
+#include "gpm-idle.h"
+#include "gpm-light-sensor.h"
+#include "gpm-marshal.h"
+#include "gpm-proxy.h"
+#include "gpm-stock-icons.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -64,12 +66,13 @@ struct GpmBrightnessLcdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GpmConf			*conf;
-	GpmButton		*button;
 	GpmAcAdapter		*ac_adapter;
-	GpmProxy		*gproxy;
-	GpmHal			*hal;
+	GpmButton		*button;
+	GpmConf			*conf;
 	GpmFeedback		*feedback;
+	GpmHal			*hal;
+	GpmIdle			*idle;
+	GpmProxy		*gproxy;
 };
 
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
@@ -543,10 +546,58 @@ button_pressed_cb (GpmButton        *button,
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
+
 		gpm_brightness_lcd_up (brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
+
 		gpm_brightness_lcd_down (brightness);
+
+	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
+
+		/* make sure we undim when we lift the lid */
+		gpm_brightness_lcd_undim (brightness);
+	}
+}
+
+/**
+ * idle_changed_cb:
+ * @idle: The idle class instance
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @manager: This class instance
+ *
+ * This callback is called when gnome-screensaver detects that the idle state
+ * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
+ * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * session timeout has elapsed for the idle action.
+ **/
+static void
+idle_changed_cb (GpmIdle          *idle,
+		 GpmIdleMode       mode,
+		 GpmBrightnessLcd *brightness)
+{
+	gboolean laptop_do_dim;
+
+	gpm_conf_get_bool (brightness->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
+
+	/* should we ignore this? */
+	if (laptop_do_dim == FALSE) {
+		return;
+	}
+
+	/* don't dim or undim the screen when the lid is closed */
+	if (button_is_lid_closed (brightness->priv->button) == TRUE) {
+		return;
+	}
+
+	if (mode == GPM_IDLE_MODE_NORMAL) {
+
+		gpm_brightness_lcd_undim (brightness);
+
+	} else if (mode == GPM_IDLE_MODE_SESSION) {
+
+		/* Dim the screen, fixes #328564 */
+		gpm_brightness_lcd_dim (brightness);
 	}
 }
 
@@ -598,6 +649,9 @@ gpm_brightness_lcd_finalize (GObject *object)
 	if (brightness->priv->button != NULL) {
 		g_object_unref (brightness->priv->button);
 	}
+	if (brightness->priv->idle != NULL) {
+		g_object_unref (brightness->priv->idle);
+	}
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_brightness_lcd_parent_class)->finalize (object);
@@ -642,6 +696,11 @@ gpm_brightness_lcd_service_init (GpmBrightnessLcd *brightness)
 	brightness->priv->button = gpm_button_new ();
 	g_signal_connect (brightness->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), brightness);
+
+	/* watch for idle mode changes */
+	brightness->priv->idle = gpm_idle_new ();
+	g_signal_connect (brightness->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), brightness);
 
 	return TRUE;
 }

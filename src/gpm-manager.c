@@ -307,7 +307,7 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
 	}
-	if ( polkit_ok ) {
+	if (polkit_ok == TRUE) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -331,7 +331,7 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 	if (manager->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
 	}
-	if ( polkit_ok ) {
+	if (polkit_ok == TRUE) {
 		*can = TRUE;
 	}
 	return TRUE;
@@ -462,8 +462,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 		ret = FALSE;
 	}
 
-	do_lock = gpm_manager_get_lock_policy (manager,
-					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
+	do_lock = gpm_manager_get_lock_policy (manager, GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
@@ -517,7 +516,7 @@ manager_policy_do (GpmManager  *manager,
 	if (action == NULL) {
 		return;
 	}
-	if (! gpm_manager_is_policy_timout_valid (manager, "policy event")) {
+	if (gpm_manager_is_policy_timout_valid (manager, "policy event") == FALSE) {
 		return;
 	}
 
@@ -654,9 +653,7 @@ gpm_manager_get_dpms_mode (GpmManager   *manager,
 
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
-	ret = gpm_dpms_get_mode (manager->priv->dpms,
-				 &m,
-				 error);
+	ret = gpm_dpms_get_mode (manager->priv->dpms, &m, error);
 	gpm_debug ("Got DPMS mode result=%d mode=%d", ret, m);
 	if (ret && mode) {
 		*mode = gpm_dpms_mode_to_string (m);
@@ -1056,10 +1053,8 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
 		 GpmManager *manager)
 {
-	GError  *error;
-	gboolean laptop_do_dim;
-	gboolean laptop_using_ext_mon;
 	GpmAcAdapterState state;
+	gboolean laptop_using_ext_mon;
 
 	/* find if we are on AC power */
 	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
@@ -1085,55 +1080,12 @@ idle_changed_cb (GpmIdle    *idle,
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
+
 		gpm_debug ("Idle state changed: NORMAL");
-
-		/* deactivate display power management */
-		error = NULL;
-		gpm_dpms_set_active (manager->priv->dpms, FALSE, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS active: %s", error->message);
-		}
-
-		/* Should we resume the screen? We should not do this when the lid is closed */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
-		if (button_is_lid_closed (manager->priv->button) == FALSE &&
-		    laptop_do_dim == TRUE &&
-		    manager->priv->brightness_lcd) {
-			/* resume to the previous brightness */
-			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
-						_("Screen resume"),
-						_("idle mode ended"));
-			gpm_brightness_lcd_undim (manager->priv->brightness_lcd);
-		}
-
-		/* sync timeouts */
-		gpm_dpms_sync_policy (manager->priv->dpms);
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
 		gpm_debug ("Idle state changed: SESSION");
-
-		/* activate display power management */
-		error = NULL;
-		gpm_dpms_set_active (manager->priv->dpms, TRUE, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS active: %s", error->message);
-		}
-
-		/* Should we dim the screen? Never dim when lid closed. */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
-		if (button_is_lid_closed (manager->priv->button) == FALSE &&
-		    laptop_do_dim == TRUE &&
-		    manager->priv->brightness_lcd) {
-			/* Dim the screen, fixes #328564 */
-			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
-						_("Screen dim"),
-						_("idle mode started"));
-			gpm_brightness_lcd_dim (manager->priv->brightness_lcd);
-		}
-
-		/* sync timeouts */
-		gpm_dpms_sync_policy (manager->priv->dpms);
 
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
@@ -1370,7 +1322,9 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
 	   is closed. Fixes #331655 */
-	if (event_when_closed && state == GPM_AC_ADAPTER_MISSING && button_is_lid_closed (manager->priv->button)) {
+	if (event_when_closed == TRUE &&
+	    state == GPM_AC_ADAPTER_MISSING &&
+	    button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager,
 				   GPM_CONF_BATTERY_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "

@@ -42,11 +42,12 @@
 #include <X11/extensions/dpmsstr.h>
 #endif
 
+#include "gpm-ac-adapter.h"
+#include "gpm-conf.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
-#include "gpm-conf.h"
-#include "gpm-ac-adapter.h"
 #include "gpm-hal.h"
+#include "gpm-idle.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
 static void     gpm_dpms_init       (GpmDpms      *dpms);
@@ -63,10 +64,11 @@ struct GpmDpmsPrivate
 	guint			 suspend_timeout;
 	guint			 off_timeout;
 
-	GpmDpmsMode		 mode;
-	GpmConf			*conf;
 	GpmAcAdapter		*ac_adapter;
+	GpmConf			*conf;
+	GpmDpmsMode		 mode;
 	GpmHal			*hal;
+	GpmIdle			*idle;
 
 	guint			 timer_id;
 };
@@ -934,6 +936,50 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	gpm_dpms_sync_policy (dpms);	
 }
 
+/**
+ * idle_changed_cb:
+ * @idle: The idle class instance
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @manager: This class instance
+ *
+ * This callback is called when gnome-screensaver detects that the idle state
+ * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
+ * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * session timeout has elapsed for the idle action.
+ **/
+static void
+idle_changed_cb (GpmIdle     *idle,
+		 GpmIdleMode  mode,
+		 GpmDpms     *dpms)
+{
+	GError  *error;
+
+	if (mode == GPM_IDLE_MODE_NORMAL) {
+
+		/* deactivate display power management */
+		error = NULL;
+		gpm_dpms_set_active (dpms, FALSE, &error);
+		if (error) {
+			gpm_debug ("Unable to set DPMS not active: %s", error->message);
+		}
+
+		/* sync timeouts */
+		gpm_dpms_sync_policy (dpms);
+
+	} else if (mode == GPM_IDLE_MODE_SESSION) {
+
+		/* activate display power management */
+		error = NULL;
+		gpm_dpms_set_active (dpms, TRUE, &error);
+		if (error) {
+			gpm_debug ("Unable to set DPMS active: %s", error->message);
+		}
+
+		/* sync timeouts */
+		gpm_dpms_sync_policy (dpms);
+	}
+}
+
 static void
 gpm_dpms_init (GpmDpms *dpms)
 {
@@ -950,6 +996,11 @@ gpm_dpms_init (GpmDpms *dpms)
 	dpms->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (dpms->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), dpms);
+
+	/* watch for idle mode changes */
+	dpms->priv->idle = gpm_idle_new ();
+	g_signal_connect (dpms->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), dpms);
 
 	add_poll_timer (dpms, 500);
 	gpm_dpms_sync_policy (dpms);
@@ -977,6 +1028,9 @@ gpm_dpms_finalize (GObject *object)
 	}
 	if (dpms->priv->hal != NULL) {
 		g_object_unref (dpms->priv->hal);
+	}
+	if (dpms->priv->idle != NULL) {
+		g_object_unref (dpms->priv->idle);
 	}
 
 	G_OBJECT_CLASS (gpm_dpms_parent_class)->finalize (object);

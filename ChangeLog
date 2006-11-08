@@ -1,5 +1,18 @@
 2006-11-08  Richard Hughes <richard@hughsie.com>
 
+	* src/Makefile.am:
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-dpms.c:
+	* src/gpm-info.c:
+	* src/gpm-manager.c:
+	Move more of the idle functionality into gpm-dpms and make
+	a few other cosmetic changes. I should have done this
+	state machine stuff ages ago, it's made the code much easier
+	for my little brain to comprehend.
+
+2006-11-08  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-idle.c:
 	* src/gpm-idle.h:
 	Change the signal name from 'changed' to 'idle-changed'.

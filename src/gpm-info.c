@@ -29,16 +29,17 @@
 #include <time.h>
 #include <dbus/dbus-gtype-specialized.h>
 
-#include "gpm-info.h"
-#include "gpm-info-data.h"
+#include "gpm-ac-adapter.h"
+#include "gpm-button.h"
+#include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
+#include "gpm-info.h"
+#include "gpm-info-data.h"
 #include "gpm-power.h"
-#include "gpm-conf.h"
 #include "gpm-stock-icons.h"
-#include "gpm-button.h"
-#include "gpm-ac-adapter.h"
+#include "gpm-idle.h"
 
 static void     gpm_info_class_init (GpmInfoClass *klass);
 static void     gpm_info_init       (GpmInfo      *info);
@@ -55,10 +56,11 @@ static void     gpm_info_finalize   (GObject      *object);
 
 struct GpmInfoPrivate
 {
-	GpmPower		*power;
-	GpmHal			*hal;
-	GpmButton		*button;
 	GpmAcAdapter		*ac_adapter;
+	GpmButton		*button;
+	GpmHal			*hal;
+	GpmIdle			*idle;
+	GpmPower		*power;
 
 	GpmInfoData		*events;
 	GpmInfoData		*rate_data;
@@ -367,18 +369,6 @@ gpm_info_log_do_poll (gpointer data)
 }
 
 /**
- * gpm_info_class_init:
- * @klass: This info class instance
- **/
-static void
-gpm_info_class_init (GpmInfoClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_info_finalize;
-	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
-}
-
-/**
  * power_on_ac_changed_cb:
  * @power: The power class instance
  * @on_ac: if we are on AC power
@@ -429,6 +419,44 @@ button_pressed_cb (GpmButton   *power,
 }
 
 /**
+ * idle_changed_cb:
+ * @idle: The idle class instance
+ * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
+ * @manager: This class instance
+ *
+ * This callback is called when gnome-screensaver detects that the idle state
+ * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
+ * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
+ * session timeout has elapsed for the idle action.
+ **/
+static void
+idle_changed_cb (GpmIdle     *idle,
+		 GpmIdleMode  mode,
+		 GpmInfo     *info)
+{
+	if (mode == GPM_IDLE_MODE_NORMAL) {
+
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME, _("idle mode ended"));
+
+	} else if (mode == GPM_IDLE_MODE_SESSION) {
+
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM, _("idle mode started"));
+	}
+}
+
+/**
+ * gpm_info_class_init:
+ * @klass: This info class instance
+ **/
+static void
+gpm_info_class_init (GpmInfoClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = gpm_info_finalize;
+	g_type_class_add_private (klass, sizeof (GpmInfoPrivate));
+}
+
+/**
  * gpm_info_init:
  * @info: This info class instance
  **/
@@ -440,7 +468,6 @@ gpm_info_init (GpmInfo *info)
 	/* record our start time */
 	info->priv->start_time = time (NULL);
 
-	info->priv->hal = gpm_hal_new ();
 	info->priv->hal = gpm_hal_new ();
 
 	/* set up the timer callback so we can log data */
@@ -461,6 +488,11 @@ gpm_info_init (GpmInfo *info)
 	info->priv->button = gpm_button_new ();
 	g_signal_connect (info->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), info);
+
+	/* watch for idle mode changes */
+	info->priv->idle = gpm_idle_new ();
+	g_signal_connect (info->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), info);
 
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
@@ -520,9 +552,11 @@ gpm_info_finalize (GObject *object)
 	if (info->priv->ac_adapter != NULL) {
 		g_object_unref (info->priv->ac_adapter);
 	}
+	if (info->priv->idle != NULL) {
+		g_object_unref (info->priv->idle);
+	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
-	g_object_unref (info->priv->hal);
 	g_object_unref (info->priv->hal);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);

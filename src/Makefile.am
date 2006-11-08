@@ -87,6 +87,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-conf.c					\
 	gpm-debug.h					\
 	gpm-debug.c					\
+	gpm-idle.h					\
+	gpm-idle.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
@@ -101,8 +103,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-cpufreq.c					\
 	gpm-button.h					\
 	gpm-button.c					\
-	gpm-battery.h				\
-	gpm-battery.c				\
+	gpm-battery.h					\
+	gpm-battery.c					\
 	gpm-brightness-lcd.h				\
 	gpm-brightness-lcd.c				\
 	gpm-feedback-widget.h				\

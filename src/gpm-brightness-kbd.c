@@ -766,7 +766,6 @@ gpm_brightness_kbd_toggle (GpmBrightnessKbd *brightness)
 	return TRUE;
 }
 
-
 /**
  * idle_changed_cb:
  * @idle: The idle class instance
