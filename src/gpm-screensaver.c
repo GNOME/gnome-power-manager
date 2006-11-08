@@ -163,9 +163,15 @@ static void
 update_lid_throttle (GpmScreensaver *screensaver,
 		     gboolean        lid_is_closed)
 {
+	gboolean laptop_using_ext_mon;
+
+	/* action differs if just a laptop with a monitor connected */
+	gpm_conf_get_bool (screensaver->priv->conf, GPM_CONF_LAPTOP_USES_EXT_MON,
+			   &laptop_using_ext_mon);
+
 	/* Throttle the screensaver when the lid is close since we can't see it anyway
 	   and it may overheat the laptop */
-	if (! lid_is_closed) {
+	if (lid_is_closed == FALSE || laptop_using_ext_mon == TRUE) {
 		if (screensaver->priv->lid_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (screensaver, screensaver->priv->lid_throttle_id);
 			screensaver->priv->lid_throttle_id = 0;

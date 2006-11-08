@@ -1,3 +1,15 @@
+2006-11-08  Richard Hughes <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-manager.c: (idle_changed_cb):
+	* src/gpm-screensaver.c: (update_lid_throttle):
+	Apply a patch from Johannes Hansen (slightly tweaked by me)
+	to better support using a laptop with an external monitor and
+	keyboard connected. This uses a gconf key for now, but support
+	should be added to HAL in the future to detect this docked
+	case automatically. Fixes #365016.
+
 2006-11-07  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-screensaver.c:

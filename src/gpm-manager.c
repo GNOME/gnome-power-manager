@@ -1057,18 +1057,29 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmManager *manager)
 {
 	GError  *error;
-	gboolean do_laptop_dim;
+	gboolean laptop_do_dim;
+	gboolean laptop_using_ext_mon;
 	GpmAcAdapterState state;
 
 	/* find if we are on AC power */
 	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
-	/* Ignore timeout events when the lid is closed, as the DPMS is
-	   already off, and we don't want to perform policy actions or re-enable
-	   the screen when the user moves the mouse on systems that do not
-	   support hardware blanking.
-	   Details are here: https://launchpad.net/malone/bugs/22522 */
-	if (button_is_lid_closed (manager->priv->button)) {
+	/*
+	 * If external monitor connected we shouldn't ignore idle when lid closed.
+	 * Until HAL is able to detect which monitors are connected, control
+	 * behavior through gconf-key.
+	 * Details here: http://bugzilla.gnome.org/show_bug.cgi?id=365016
+	 */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LAPTOP_USES_EXT_MON, &laptop_using_ext_mon);
+	
+	/*
+	 * Ignore timeout events when the lid is closed, as the DPMS is
+	 * already off, and we don't want to perform policy actions or re-enable
+	 * the screen when the user moves the mouse on systems that do not
+	 * support hardware blanking.
+	 * Details are here: https://launchpad.net/malone/bugs/22522
+	 */
+	if (button_is_lid_closed (manager->priv->button) == TRUE && laptop_using_ext_mon == FALSE) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
@@ -1084,9 +1095,11 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
-		/* Should we resume the screen? */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &do_laptop_dim);
-		if (do_laptop_dim && manager->priv->brightness_lcd) {
+		/* Should we resume the screen? We should not do this when the lid is closed */
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
+		if (button_is_lid_closed (manager->priv->button) == FALSE &&
+		    laptop_do_dim == TRUE &&
+		    manager->priv->brightness_lcd) {
 			/* resume to the previous brightness */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME,
 						_("Screen resume"),
@@ -1114,9 +1127,11 @@ idle_changed_cb (GpmIdle    *idle,
 			gpm_debug ("Unable to set DPMS active: %s", error->message);
 		}
 
-		/* Should we dim the screen? */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &do_laptop_dim);
-		if (do_laptop_dim && manager->priv->brightness_lcd) {
+		/* Should we dim the screen? Never dim when lid closed. */
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
+		if (button_is_lid_closed (manager->priv->button) == FALSE &&
+		    laptop_do_dim == TRUE &&
+		    manager->priv->brightness_lcd) {
 			/* Dim the screen, fixes #328564 */
 			manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM,
 						_("Screen dim"),
@@ -1125,7 +1140,7 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 
 		/* dim keyboard backlight */
-		if (do_laptop_dim && manager->priv->brightness_kbd) {
+		if (laptop_do_dim && manager->priv->brightness_kbd) {
 			gpm_brightness_kbd_dim (manager->priv->brightness_kbd);
 		}
 

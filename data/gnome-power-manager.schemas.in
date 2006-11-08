@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/laptop_uses_external_monitor</key>
+      <applyto>/apps/gnome-power-manager/laptop_uses_external_monitor</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the laptop should be configured as if it is using an permanent external monitor</short>
+        <long>If the laptop should be configured to not do dimming actions and DPMS off if it is using a dock or external monitor. Most laptop and desktop users should select FALSE here.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/statistics_show_legend</key>
       <applyto>/apps/gnome-power-manager/statistics_show_legend</applyto>
       <owner>gnome-power-manager</owner>

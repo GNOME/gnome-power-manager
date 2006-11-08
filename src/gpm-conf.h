@@ -82,6 +82,8 @@ G_BEGIN_DECLS
 #define GPM_CONF_IDLE_CHECK_CPU		GPM_CONF_DIR "/check_type_cpu"
 #define GPM_CONF_INVALID_TIMEOUT	GPM_CONF_DIR "/invalid_timeout"
 
+#define GPM_CONF_LAPTOP_USES_EXT_MON	GPM_CONF_DIR "/laptop_uses_external_monitor"
+
 /* This allows us to ignore policy on resume for a bit */
 #define GPM_CONF_POLICY_TIMEOUT		GPM_CONF_DIR "/policy_suppression_timeout"
 
