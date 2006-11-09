@@ -78,10 +78,10 @@ gpm_graph_widget_event_description (GpmGraphWidgetEvent event)
 		return _("On AC");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_ON_BATTERY) {
 		return _("On battery");
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM) {
-		return _("LCD dim");
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
-		return _("LCD resume");
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE) {
+		return _("Session idle");
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE) {
+		return _("Session active");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {
 		return _("Suspend");
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_RESUME) {
@@ -115,10 +115,10 @@ gpm_graph_widget_get_event_visual (GpmGraphWidgetEvent   event,
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_ON_BATTERY) {
 		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE;
 		*shape = GPM_GRAPH_WIDGET_SHAPE_CIRCLE;
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE) {
 		*colour = GPM_GRAPH_WIDGET_COLOUR_YELLOW;
 		*shape = GPM_GRAPH_WIDGET_SHAPE_SQUARE;
-	} else if (event == GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME) {
+	} else if (event == GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE) {
 		*colour = GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW;
 		*shape = GPM_GRAPH_WIDGET_SHAPE_SQUARE;
 	} else if (event == GPM_GRAPH_WIDGET_EVENT_SUSPEND) {

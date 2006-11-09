@@ -1,5 +1,13 @@
 2006-11-09  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c: (idle_changed_cb):
+	Don't refer to screen dim when we are talking about session
+	idle and resume.
+
+2006-11-09  Richard Hughes <richard@hughsie.com>
+
 	* src/gpm-proxy.h:
 	* src/gpm-proxy.c: (gpm_proxy_is_connected):
 	Add this new method to see if the proxy if connected.
@@ -6345,7 +6353,7 @@
 	Also make the whitespace a bit more sane in this file.
 
 	* src/gpm-prefs.c: Don't try to free a constant if schema missing.
-	Fixes bug: https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=174196
+	Fixes bug: rh:174196
 
 2005-11-28  Richard Hughes  <richard@hughsie.com>
 
@@ -6394,7 +6402,7 @@
 
 	* gnome-power-manager.schemas.in:
 	Default to suspend on lid close on advice of Havoc Pennington, to
-	address bug https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=174160
+	address bug rh:174160
 	Also make /apps/gnome-power-manager/policy/sleep_type to type suspend
 	as nothing is no longer a valid option.
 
@@ -6575,7 +6583,7 @@
 	* src/gpm-sysdev.c: Shortcut for the single battery case so we don't
 	average over 1 each time. Might save a few CPU cycles.
 	Also try to start to fix:
-	https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=169158
+	rh:169158
 	by multiplying the remainingTime by the number of devices present
 	if one battery is discharging and others not. This assumes they have
 	the same capacity, and needs to be fixed properly.

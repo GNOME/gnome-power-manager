@@ -436,11 +436,11 @@ idle_changed_cb (GpmIdle     *idle,
 {
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SCREEN_RESUME, _("idle mode ended"));
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE, _("idle mode ended"));
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SCREEN_DIM, _("idle mode started"));
+		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE, _("idle mode started"));
 	}
 }
 
