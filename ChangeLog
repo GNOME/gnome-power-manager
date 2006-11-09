@@ -1,5 +1,17 @@
 2006-11-09  Richard Hughes <richard@hughsie.com>
 
+	* src/gpm-proxy.h:
+	* src/gpm-proxy.c: (gpm_proxy_is_connected):
+	Add this new method to see if the proxy if connected.
+
+	* src/gpm-statistics-core.c: (gpm_statistics_init):
+	Check if the proxy is valid, and if not warn the user.
+
+	* src/gpm-statistics-core.c: (gpm_statistics_refresh_data):
+	Only get the data for non-null data. Should fix #372703.
+
+2006-11-09  Richard Hughes <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-manager.c:

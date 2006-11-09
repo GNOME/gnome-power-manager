@@ -67,6 +67,7 @@ gchar		*gpm_proxy_get_service		(GpmProxy	*gproxy);
 gchar		*gpm_proxy_get_interface	(GpmProxy	*gproxy);
 gchar		*gpm_proxy_get_path		(GpmProxy	*gproxy);
 GpmProxyBusType	 gpm_proxy_get_bus_type		(GpmProxy	*gproxy);
+gboolean	 gpm_proxy_is_connected		(GpmProxy	*gproxy);
 
 G_END_DECLS
 

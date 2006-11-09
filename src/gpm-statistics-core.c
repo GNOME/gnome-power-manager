@@ -531,7 +531,12 @@ static void
 gpm_statistics_refresh_data (GpmStatistics *statistics)
 {
 	GList *list = NULL;
-	gpm_statistics_get_data (statistics, statistics->priv->graph_type);
+
+	/* only get the data for a valid type */
+	if (statistics->priv->graph_type != NULL) {
+		gpm_statistics_get_data (statistics, statistics->priv->graph_type);
+	}
+
 	list = gpm_info_data_get_list (statistics->priv->data);
 
 	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
@@ -681,6 +686,12 @@ gpm_statistics_init (GpmStatistics *statistics)
 			  GPM_DBUS_SERVICE,
 			  GPM_DBUS_PATH_STATS,
 			  GPM_DBUS_INTERFACE_STATS);
+
+	/* would happen if not using g-p-m or using an old version of g-p-m */
+	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
+		gpm_critical_error ("%s\n%s", _("Could not connect to GNOME Power Manager."),
+				    _("Perhaps the program is not running or you are using an old version?"));
+	}
 
 	statistics->priv->graph_type = NULL;
 	statistics->priv->events = gpm_info_data_new ();

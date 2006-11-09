@@ -249,6 +249,23 @@ gpm_proxy_get_bus_type (GpmProxy *gproxy)
 }
 
 /**
+ * gpm_proxy_is_connected:
+ * @gproxy: This class instance
+ * Return value: if we are connected to a valid proxy
+ **/
+gboolean
+gpm_proxy_is_connected (GpmProxy *gproxy)
+{
+	g_return_val_if_fail (GPM_IS_PROXY (gproxy), FALSE);
+	g_return_val_if_fail (gproxy->priv->assigned == TRUE, FALSE);
+	
+	if (gproxy->priv->proxy == NULL) {
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
  * gpm_proxy_class_init:
  * @gproxy: This class instance
  **/
