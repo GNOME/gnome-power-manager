@@ -64,21 +64,13 @@
 #include "gpm-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
+#include "gpm-warning.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
 static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
-
-typedef enum {
-	GPM_WARNING_NONE = 0,
-	GPM_WARNING_DISCHARGING = 1,
-	GPM_WARNING_LOW = 2,
-	GPM_WARNING_VERY_LOW = 3,
-	GPM_WARNING_CRITICAL = 4,
-	GPM_WARNING_ACTION = 5
-} GpmWarning;
 
 #define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
 #define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
@@ -100,29 +92,19 @@ struct GpmManagerPrivate
 	GpmPolkit		*polkit;
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
+	GpmWarning		*warning;
 
-	GpmWarning		 last_primary_warning;
-	GpmWarning		 last_ups_warning;
-	GpmWarning		 last_mouse_warning;
-	GpmWarning		 last_keyboard_warning;
-	GpmWarning		 last_pda_warning;
+	GpmWarningState		 last_primary;
+	GpmWarningState		 last_ups;
+	GpmWarningState		 last_mouse;
+	GpmWarningState		 last_keyboard;
+	GpmWarningState		 last_pda;
 
-	gboolean		 use_time_to_notify;
 	gboolean		 done_notify_fully_charged;
 	gboolean		 enable_beeping;
 
 	time_t			 last_resume_event;
 	guint			 suppress_policy_timeout;
-
-	guint			 low_percentage;
-	guint			 very_low_percentage;
-	guint			 critical_percentage;
-	guint			 action_percentage;
-
-	guint			 low_time;
-	guint			 very_low_time;
-	guint			 critical_time;
-	guint			 action_time;
 };
 
 enum {
@@ -1299,7 +1281,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	/* If we are on AC power we should show warnings again */
 	if (state == GPM_AC_ADAPTER_PRESENT) {
 		gpm_debug ("Resetting warning to NONE as on AC power");
-		manager->priv->last_primary_warning = GPM_WARNING_NONE;
+		manager->priv->last_primary = GPM_WARNING_NONE;
 	}
 
 	gpm_manager_sync_policy_sleep (manager);
@@ -1330,94 +1312,6 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	/* Don't do any events for a few seconds after we remove the
 	 * ac_adapter. See #348201 for details */
 	gpm_manager_reset_event_time (manager);
-}
-
-/**
- * gpm_manager_get_warning_type:
- * @manager: This class instance
- * @battery_status: The battery status information
- * @use_time: If we should use a per-time or per-percent policy
- *
- * This gets the possible warning state for the device according to the
- * policy, which could be per-percent, or per-time.
- *
- * Return value: A GpmWarning state, e.g. GPM_WARNING_VERY_LOW
- **/
-static GpmWarning
-gpm_manager_get_warning_type (GpmManager     *manager,
-			      GpmPowerStatus *status,
-			      gboolean	      use_time)
-{
-	GpmWarning type = GPM_WARNING_NONE;
-
-	/* this is a CSR mouse */
-	if (status->design_charge == 7) {
-		if (status->current_charge == 2) {
-			type = GPM_WARNING_LOW;
-		} else if (status->current_charge == 1) {
-			type = GPM_WARNING_VERY_LOW;
-		}
-	} else if (use_time) {
-		if (status->remaining_time <= 0) {
-			type = GPM_WARNING_NONE;
-		} else if (status->remaining_time <= manager->priv->action_time) {
-			type = GPM_WARNING_ACTION;
-		} else if (status->remaining_time <= manager->priv->critical_time) {
-			type = GPM_WARNING_CRITICAL;
-		} else if (status->remaining_time <= manager->priv->very_low_time) {
-			type = GPM_WARNING_VERY_LOW;
-		} else if (status->remaining_time <= manager->priv->low_time) {
-			type = GPM_WARNING_LOW;
-		}
-	} else {
-		if (status->percentage_charge <= 0) {
-			type = GPM_WARNING_NONE;
-			gpm_warning ("Your hardware is reporting a percentage "
-				     "charge of %i, which is impossible. "
-				     "WARNING_ACTION will *not* be reported.",
-				     status->percentage_charge);
-		} else if (status->percentage_charge <= manager->priv->action_percentage) {
-			type = GPM_WARNING_ACTION;
-		} else if (status->percentage_charge <= manager->priv->critical_percentage) {
-			type = GPM_WARNING_CRITICAL;
-		} else if (status->percentage_charge <= manager->priv->very_low_percentage) {
-			type = GPM_WARNING_VERY_LOW;
-		} else if (status->percentage_charge <= manager->priv->low_percentage) {
-			type = GPM_WARNING_LOW;
-		}
-	}
-
-	/* If we have no important warnings, we should test for discharging */
-	if (type == GPM_WARNING_NONE) {
-		if (status->is_discharging) {
-			type = GPM_WARNING_DISCHARGING;
-		}
-	}
-	return type;
-}
-
-/**
- * battery_low_get_title:
- * @warning_type: The warning type, e.g. GPM_WARNING_VERY_LOW
- * Return value: the title text according to the warning type.
- **/
-static const gchar *
-battery_low_get_title (GpmWarning warning_type)
-{
-	char *title = NULL;
-
-	if (warning_type == GPM_WARNING_ACTION ||
-	    warning_type == GPM_WARNING_CRITICAL) {
-		title = _("Power Critically Low");
-	} else if (warning_type == GPM_WARNING_VERY_LOW) {
-		title = _("Power Very Low");
-	} else if (warning_type == GPM_WARNING_LOW) {
-		title = _("Power Low");
-	} else if (warning_type == GPM_WARNING_DISCHARGING) {
-		title = _("Power Information");
-	}
-
-	return title;
 }
 
 /**
@@ -1453,12 +1347,12 @@ battery_status_changed_primary (GpmManager     *manager,
 				GpmPowerKind    battery_kind,
 				GpmPowerStatus *battery_status)
 {
-	GpmWarning   warning_type;
-	gboolean     show_notify;
-	gchar	    *message = NULL;
-	gchar	    *remaining = NULL;
+	GpmWarningState warning_type;
+	gboolean show_notify;
+	gchar *message = NULL;
+	gchar *remaining = NULL;
 	const gchar *title = NULL;
-	gint	     timeout = 0;
+	gint timeout = 0;
 	GpmAcAdapterState state;
 
 	/* Wait until data is trusted... */
@@ -1472,7 +1366,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
 		gpm_debug ("Resetting warning to NONE as charging");
-		manager->priv->last_primary_warning = GPM_WARNING_NONE;
+		manager->priv->last_primary = GPM_WARNING_NONE;
 	}
 
 	/* We use the hardware charged state instead of the old 99%->100%
@@ -1517,9 +1411,8 @@ battery_status_changed_primary (GpmManager     *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager,
-						     battery_status,
-						     manager->priv->use_time_to_notify);
+	warning_type = gpm_warning_get_state (manager->priv->warning,
+					     battery_status, GPM_WARNING_AUTO);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1528,13 +1421,13 @@ battery_status_changed_primary (GpmManager     *manager,
 	}
 
 	/* Always check if we already notified the user */
-	if (warning_type <= manager->priv->last_primary_warning) {
+	if (warning_type <= manager->priv->last_primary) {
 		gpm_debug ("Already notified %i", warning_type);
 		return;
 	}
 
 	/* As the level is more critical than the last warning, save it */
-	manager->priv->last_primary_warning = warning_type;
+	manager->priv->last_primary = warning_type;
 
 	/* Do different warnings for each GPM_WARNING_* */
 	if (warning_type == GPM_WARNING_ACTION) {
@@ -1601,7 +1494,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	/* If we had a message, print it as a notification */
 	if (message) {
 		gchar *icon;
-		title = battery_low_get_title (warning_type);
+		title = gpm_warning_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, timeout,
@@ -1628,14 +1521,14 @@ battery_status_changed_ups (GpmManager	   *manager,
 			    GpmPowerKind    battery_kind,
 			    GpmPowerStatus *battery_status)
 {
-	GpmWarning warning_type;
+	GpmWarningState warning_type;
 	gchar *message = NULL;
 	gchar *remaining = NULL;
 	const gchar *title = NULL;
 
 	/* If we are charging we should show warnings again as soon as we discharge again */
 	if (battery_status->is_charging) {
-		manager->priv->last_ups_warning = GPM_WARNING_NONE;
+		manager->priv->last_ups = GPM_WARNING_NONE;
 	}
 
 	if (! battery_status->is_discharging) {
@@ -1643,9 +1536,8 @@ battery_status_changed_ups (GpmManager	   *manager,
 		return;
 	}
 
-	warning_type = gpm_manager_get_warning_type (manager,
-						     battery_status,
-						     manager->priv->use_time_to_notify);
+	warning_type = gpm_warning_get_state (manager->priv->warning,
+					     battery_status, GPM_WARNING_AUTO);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE) {
@@ -1654,13 +1546,13 @@ battery_status_changed_ups (GpmManager	   *manager,
 	}
 
 	/* Always check if we already notified the user */
-	if (warning_type <= manager->priv->last_ups_warning) {
+	if (warning_type <= manager->priv->last_ups) {
 		gpm_debug ("Already notified %i", warning_type);
 		return;
 	}
 
 	/* As the level is more critical than the last warning, save it */
-	manager->priv->last_ups_warning = warning_type;
+	manager->priv->last_ups = warning_type;
 
 	if (warning_type == GPM_WARNING_ACTION) {
 		char *action;
@@ -1720,7 +1612,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 	/* If we had a message, print it as a notification */
 	if (message) {
 		gchar *icon;
-		title = battery_low_get_title (warning_type);
+		title = gpm_warning_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
 		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
@@ -1748,14 +1640,15 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			     GpmPowerKind    battery_kind,
 			     GpmPowerStatus *battery_status)
 {
-	GpmWarning warning_type;
+	GpmWarningState warning_type;
 	gchar *message = NULL;
 	const gchar *title = NULL;
 	const gchar *name;
 	gchar *icon;
 
 	/* mouse, keyboard and PDA have no time, just percentage */
-	warning_type = gpm_manager_get_warning_type (manager, battery_status, FALSE);
+	warning_type = gpm_warning_get_state (manager->priv->warning, battery_status,
+					      GPM_WARNING_PERCENTAGE);
 
 	/* no point continuing, we are not going to match */
 	if (warning_type == GPM_WARNING_NONE ||
@@ -1766,20 +1659,20 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 
 	/* Always check if we already notified the user */
 	if (battery_kind == GPM_POWER_KIND_MOUSE) {
-		if (warning_type > manager->priv->last_mouse_warning) {
-			manager->priv->last_mouse_warning = warning_type;
+		if (warning_type > manager->priv->last_mouse) {
+			manager->priv->last_mouse = warning_type;
 		} else {
 			warning_type = GPM_WARNING_NONE;
 		}
 	} else if (battery_kind == GPM_POWER_KIND_KEYBOARD) {
-		if (warning_type > manager->priv->last_keyboard_warning) {
-			manager->priv->last_keyboard_warning = warning_type;
+		if (warning_type > manager->priv->last_keyboard) {
+			manager->priv->last_keyboard = warning_type;
 		} else {
 			warning_type = GPM_WARNING_NONE;
 		}
 	} else if (battery_kind == GPM_POWER_KIND_PDA) {
-		if (warning_type > manager->priv->last_pda_warning) {
-			manager->priv->last_pda_warning = warning_type;
+		if (warning_type > manager->priv->last_pda) {
+			manager->priv->last_pda = warning_type;
 		} else {
 			warning_type = GPM_WARNING_NONE;
 		}
@@ -1791,10 +1684,10 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 		return;
 	}
 
-	manager->priv->last_ups_warning = warning_type;
+	manager->priv->last_ups = warning_type;
 	name = gpm_power_kind_to_localised_string (battery_kind);
 
-	title = battery_low_get_title (warning_type);
+	title = gpm_warning_get_title (warning_type);
 
 	message = g_strdup_printf (_("The %s device attached to this computer "
 				     "is low in power (%d%%). "
@@ -2049,7 +1942,6 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 static void
 gpm_manager_init (GpmManager *manager)
 {
-	gboolean use_time;
 	gboolean check_type_cpu;
 	gboolean enabled;
 	gboolean allowed_in_menu;
@@ -2079,6 +1971,7 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (button_pressed_cb), manager);
 
 	manager->priv->hal = gpm_hal_new ();
+	manager->priv->warning = gpm_warning_new ();
 
 	/* try and start an interactive service */
 	manager->priv->cpufreq = gpm_cpufreq_new ();
@@ -2160,31 +2053,21 @@ gpm_manager_init (GpmManager *manager)
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
 	/* we want all notifications */
-	manager->priv->last_ups_warning = GPM_WARNING_NONE;
-	manager->priv->last_mouse_warning = GPM_WARNING_NONE;
-	manager->priv->last_keyboard_warning = GPM_WARNING_NONE;
-	manager->priv->last_pda_warning = GPM_WARNING_NONE;
-	manager->priv->last_primary_warning = GPM_WARNING_NONE;
+	manager->priv->last_ups = GPM_WARNING_NONE;
+	manager->priv->last_mouse = GPM_WARNING_NONE;
+	manager->priv->last_keyboard = GPM_WARNING_NONE;
+	manager->priv->last_pda = GPM_WARNING_NONE;
+	manager->priv->last_primary = GPM_WARNING_NONE;
 	manager->priv->done_notify_fully_charged = FALSE;
 
 	/* Don't notify on startup if we are on battery power */
 	if (state == GPM_AC_ADAPTER_MISSING) {
-		manager->priv->last_primary_warning = GPM_WARNING_DISCHARGING;
+		manager->priv->last_primary = GPM_WARNING_DISCHARGING;
 	}
 
 	/* Don't notify at startup if we are fully charged on AC */
 	if (state == GPM_AC_ADAPTER_PRESENT) {
 		manager->priv->done_notify_fully_charged = TRUE;
-	}
-
-	/* We can disable this if the ACPI BIOS is fucked, and the
-	   time_remaining is therefore inaccurate or just plain wrong. */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time);
-	manager->priv->use_time_to_notify = use_time;
-	if (use_time) {
-		gpm_debug ("Using per-time notification policy");
-	} else {
-		gpm_debug ("Using percentage notification policy");
 	}
 
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
@@ -2195,30 +2078,12 @@ gpm_manager_init (GpmManager *manager)
 	/* Pretend we just resumed when we start to let actions settle */
 	gpm_manager_reset_event_time (manager);
 
-	/* get percentage policy */
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_LOW_PERCENTAGE, &manager->priv->low_percentage);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_VERY_LOW_PERCENTAGE, &manager->priv->very_low_percentage);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_CRITICAL_PERCENTAGE, &manager->priv->critical_percentage);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &manager->priv->action_percentage);
-
-	/* can remove when we next release, until then, assume we are morons */
-	if (manager->priv->low_percentage == 0) {
-		gpm_critical_error ("GConf schema installer error, "
-				    "battery_low_percentage cannot be zero");
-	}
-
 	/* needed in the future */
 	if (FALSE) {
 		char *temp;
 		temp = _("Your system did not resume correctly.");
 		temp = _("This might be a hardware or software problem.");
 	}
-
-	/* get time policy */
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_LOW_TIME, &manager->priv->low_time);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_VERY_LOW_TIME, &manager->priv->very_low_time);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_CRITICAL_TIME, &manager->priv->critical_time);
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_ACTION_TIME, &manager->priv->action_time);
 
 	/* Do we beep? */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING, &manager->priv->enable_beeping);
@@ -2245,6 +2110,7 @@ gpm_manager_finalize (GObject *object)
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal);
+	g_object_unref (manager->priv->warning);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);

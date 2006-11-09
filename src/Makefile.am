@@ -143,6 +143,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
+	gpm-warning.h					\
+	gpm-warning.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-idle.h					\

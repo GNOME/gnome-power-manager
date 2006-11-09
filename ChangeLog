@@ -1,3 +1,13 @@
+2006-11-09  Richard Hughes <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-manager.c:
+	* src/gpm-warning.c:
+	* src/gpm-warning.h:
+	Abstract some of the warning code to GpmWarning - we can make
+	a few optimisations while we are here also.
+
 2006-11-08  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-manager.c: (ac_adapter_changed_cb):
