@@ -42,12 +42,9 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
-#include "gpm-brightness-lcd.h"
-#include "gpm-brightness-kbd.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
-#include "gpm-cpufreq.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-graph-widget.h"
@@ -62,6 +59,11 @@
 #include "gpm-polkit.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
+#include "gpm-srv-brightness-lcd.h"
+#include "gpm-srv-brightness-kbd.h"
+#include "gpm-srv-cpufreq.h"
+#include "gpm-srv-dpms.h"
+#include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
@@ -78,11 +80,8 @@ static void     gpm_manager_finalize	(GObject	 *object);
 struct GpmManagerPrivate
 {
 	GpmAcAdapter		*ac_adapter;
-	GpmBrightnessLcd	*brightness_lcd;
-	GpmBrightnessKbd	*brightness_kbd;
 	GpmButton		*button;
 	GpmConf			*conf;
-	GpmCpuFreq		*cpufreq;
 	GpmDpms			*dpms;
 	GpmHal			*hal;
 	GpmIdle			*idle;
@@ -93,6 +92,13 @@ struct GpmManagerPrivate
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 	GpmWarning		*warning;
+
+	/* interactive services */
+	GpmSrvBrightnessLcd	*srv_brightness_lcd;
+	GpmSrvBrightnessKbd	*srv_brightness_kbd;
+	GpmSrvCpuFreq	 	*srv_cpufreq;
+	GpmSrvDpms	 	*srv_dpms;
+	GpmSrvScreensaver 	*srv_screensaver;
 
 	GpmWarningState		 last_primary;
 	GpmWarningState		 last_ups;
@@ -852,7 +858,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	gpm_dpms_sync_policy (manager->priv->dpms);
+	gpm_srv_dpms_sync_policy (manager->priv->srv_dpms);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -953,7 +959,7 @@ gpm_manager_suspend (GpmManager *manager,
 		gpm_networkmanager_wake ();
 	}
 
-	gpm_dpms_sync_policy (manager->priv->dpms);
+	gpm_srv_dpms_sync_policy (manager->priv->srv_dpms);
 
 	/* save the time that we resumed */
 	gpm_manager_reset_event_time (manager);
@@ -1982,15 +1988,15 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
  * @manager: This manager class instance
  * @auth: If we are trying to authenticate
  *
- * Called when the user has authenticated
+ * Called when the user is trying or has authenticated
  **/
 static void
 screensaver_auth_request_cb (GpmScreensaver *screensaver,
-			     gboolean        auth,
+			     gboolean        auth_begin,
 			     GpmManager     *manager)
 {
 	/* only clear errors if we have finished the authentication */
-	if (auth == FALSE) {
+	if (auth_begin == FALSE) {
 		gpm_hal_clear_suspend_error (manager->priv->hal);
 		gpm_hal_clear_hibernate_error (manager->priv->hal);
 	}
@@ -2053,27 +2059,20 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->warning = gpm_warning_new ();
 
 	/* try and start an interactive service */
-	manager->priv->cpufreq = gpm_cpufreq_new ();
-	if (manager->priv->cpufreq != NULL) {
-		gpm_cpufreq_service_init (manager->priv->cpufreq);
-	}
+	manager->priv->srv_cpufreq = gpm_srv_cpufreq_new ();
 
+	/* try and start an interactive service */
+	manager->priv->srv_dpms = gpm_srv_dpms_new ();
+
+	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
-	if (manager->priv->screensaver != NULL) {
-		gpm_screensaver_service_init (manager->priv->screensaver);
-	 	g_signal_connect (manager->priv->screensaver, "auth-request",
-	 			  G_CALLBACK (screensaver_auth_request_cb), manager);
-	}
+	g_signal_connect (manager->priv->screensaver, "auth-request",
+ 			  G_CALLBACK (screensaver_auth_request_cb), manager);
+	manager->priv->srv_screensaver = gpm_srv_screensaver_new ();
 
 	/* try an start an interactive service */
-	manager->priv->brightness_lcd = gpm_brightness_lcd_new ();
-	if (manager->priv->brightness_lcd != NULL) {
-		gpm_brightness_lcd_service_init (manager->priv->brightness_lcd);
-	}
-	manager->priv->brightness_kbd = gpm_brightness_kbd_new ();
-	if (manager->priv->brightness_kbd != NULL) {
-		gpm_brightness_kbd_service_init (manager->priv->brightness_kbd);
-	}
+	manager->priv->srv_brightness_lcd = gpm_srv_brightness_lcd_new ();
+	manager->priv->srv_brightness_kbd = gpm_srv_brightness_kbd_new ();
 
 	manager->priv->idle = gpm_idle_new ();
 	g_signal_connect (manager->priv->idle, "idle-changed",
@@ -2195,22 +2194,26 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);
+	g_object_unref (manager->priv->srv_screensaver);
 
 	/* optional gobjects */
 	if (manager->priv->button) {
 		g_object_unref (manager->priv->button);
 	}
-	if (manager->priv->cpufreq) {
-		g_object_unref (manager->priv->cpufreq);
-	}
 	if (manager->priv->polkit) {
 		g_object_unref (manager->priv->polkit);
 	}
-	if (manager->priv->brightness_lcd) {
-		g_object_unref (manager->priv->brightness_lcd);
+	if (manager->priv->srv_cpufreq) {
+		g_object_unref (manager->priv->srv_cpufreq);
 	}
-	if (manager->priv->brightness_kbd) {
-		g_object_unref (manager->priv->brightness_kbd);
+	if (manager->priv->srv_dpms) {
+		g_object_unref (manager->priv->srv_dpms);
+	}
+	if (manager->priv->srv_brightness_lcd) {
+		g_object_unref (manager->priv->srv_brightness_lcd);
+	}
+	if (manager->priv->srv_brightness_kbd) {
+		g_object_unref (manager->priv->srv_brightness_kbd);
 	}
 
 	G_OBJECT_CLASS (gpm_manager_parent_class)->finalize (object);

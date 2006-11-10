@@ -74,6 +74,7 @@ typedef enum
 GQuark		 gpm_dpms_error_quark		(void);
 GType		 gpm_dpms_get_type		(void);
 GpmDpms		*gpm_dpms_new			(void);
+gboolean	 gpm_dpms_has_hw		(void);
 
 gboolean	 gpm_dpms_get_active		(GpmDpms 	*dpms,
 						 gboolean	*active,
@@ -94,8 +95,6 @@ gboolean	 gpm_dpms_set_timeouts		(GpmDpms 	*dpms,
 						 guint		 suspend,
 						 guint		 off,
 						 GError 	**error);
-
-void		 gpm_dpms_sync_policy		(GpmDpms	*dpms);
 
 /* Direct manipulation */
 gboolean	 gpm_dpms_get_mode	 	(GpmDpms	*dpms,

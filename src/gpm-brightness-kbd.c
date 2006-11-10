@@ -39,19 +39,14 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-ac-adapter.h"
-#include "gpm-button.h"
 #include "gpm-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-feedback-widget.h"
 #include "gpm-hal.h"
-#include "gpm-idle.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 #include "gpm-proxy.h"
-#include "gpm-stock-icons.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -68,11 +63,7 @@ struct GpmBrightnessKbdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GpmAcAdapter		*ac_adapter;
-	GpmButton		*button;
 	GpmConf			*conf;
-	GpmFeedback		*feedback;
-	GpmIdle			*idle;
 	GpmHal			*hal;
 	GpmLightSensor		*sensor;
 	GpmProxy		*gproxy;
@@ -423,9 +414,6 @@ gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
 	return TRUE;
 }
 
@@ -459,92 +447,7 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
 	return TRUE;
-}
-
-/**
- * conf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-conf_key_changed_cb (GpmConf          *conf,
-		     const gchar      *key,
-		     GpmBrightnessKbd *brightness)
-{
-	gint value;
-	GpmAcAdapterState state;
-
-	gpm_ac_adapter_get_state (brightness->priv->ac_adapter, &state);
-
-	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0) {
-
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
-			gpm_brightness_kbd_set_std (brightness, value);
-		}
-
-	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
-
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_MISSING) {
-			gpm_brightness_kbd_set_std (brightness, value);
-		}
-
-	}
-}
-
-/**
- * ac_adapter_changed_cb:
- * @ac_adapter: The ac_adapter class instance
- * @on_ac: if we are on AC power
- * @brightness: This class instance
- *
- * Does the actions when the ac power source is inserted/removed.
- **/
-static void
-ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
-			GpmAcAdapterState state,
-			GpmBrightnessKbd *brightness)
-{
-	guint value;
-
-	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &value);
-	} else {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &value);
-	}
-
-	gpm_brightness_kbd_set_std (brightness, value);
-}
-
-/**
- * button_pressed_cb:
- * @power: The power class instance
- * @type: The button type, e.g. "power"
- * @state: The state, where TRUE is depressed or closed
- * @brightness: This class instance
- **/
-static void
-button_pressed_cb (GpmButton        *button,
-		   const gchar      *type,
-		   GpmBrightnessKbd *brightness)
-{
-	gpm_debug ("Button press event type=%s", type);
-
-	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
-		gpm_brightness_kbd_up (brightness);
-
-	} else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
-		gpm_brightness_kbd_down (brightness);
-
-	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
-		gpm_brightness_kbd_toggle (brightness);
-
-	}
 }
 
 /**keyboard_backlight
@@ -583,23 +486,11 @@ gpm_brightness_kbd_finalize (GObject *object)
 	if (brightness->priv->hal != NULL) {
 		g_object_unref (brightness->priv->hal);
 	}
-	if (brightness->priv->feedback != NULL) {
-		g_object_unref (brightness->priv->feedback);
-	}
 	if (brightness->priv->conf != NULL) {
 		g_object_unref (brightness->priv->conf);
 	}
 	if (brightness->priv->sensor != NULL) {
 		g_object_unref (brightness->priv->sensor);
-	}
-	if (brightness->priv->ac_adapter != NULL) {
-		g_object_unref (brightness->priv->ac_adapter);
-	}
-	if (brightness->priv->button != NULL) {
-		g_object_unref (brightness->priv->button);
-	}
-	if (brightness->priv->idle != NULL) {
-		g_object_unref (brightness->priv->idle);
 	}
 
 	g_return_if_fail (brightness->priv != NULL);
@@ -752,78 +643,13 @@ gpm_brightness_kbd_toggle (GpmBrightnessKbd *brightness)
 	if (brightness->priv->is_disabled == FALSE) {
 		/* go dark, that's what the user wants */
 		gpm_brightness_kbd_set_std (brightness, 0);
-		gpm_feedback_display_value (brightness->priv->feedback, 0.0f);
 	} else {
 		/* select the appropriate level just as when we're starting up */
 //		if (do_startup_on_enable) {
 			adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
 			gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
-			gpm_feedback_display_value (brightness->priv->feedback,
-						    (gfloat) gpm_discrete_to_percent (brightness->priv->current_hw,
-										     brightness->priv->levels) / 100.0f);
 //		}
 	}
-	return TRUE;
-}
-
-/**
- * idle_changed_cb:
- * @idle: The idle class instance
- * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
- * @manager: This class instance
- *
- * This callback is called when gnome-screensaver detects that the idle state
- * has changed. GPM_IDLE_MODE_SESSION is when the session has become inactive,
- * and GPM_IDLE_MODE_SYSTEM is where the session has become inactive, AND the
- * session timeout has elapsed for the idle action.
- **/
-static void
-idle_changed_cb (GpmIdle          *idle,
-		 GpmIdleMode       mode,
-		 GpmBrightnessKbd *brightness)
-{
-	if (mode == GPM_IDLE_MODE_NORMAL) {
-
-		gpm_brightness_kbd_undim (brightness);
-
-	} else if (mode == GPM_IDLE_MODE_SESSION) {
-
-		gpm_brightness_kbd_dim (brightness);
-	}
-}
-
-/**
- * gpm_brightness_kbd_service_init:
- *
- * @brightness: This class instance
- *
- * This starts the interactive parts of the class, for instance it makes the
- * the class respond to button presses and AC state changes.
- *
- * If your are using this class in the preferences or info programs you don't
- * need to call this function
- **/
-gboolean
-gpm_brightness_kbd_service_init (GpmBrightnessKbd *brightness)
-{
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_BRIGHTNESS_KBD (brightness), FALSE);
-
-	/* we use ac_adapter for the ac-adapter-changed signal */
-	brightness->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (brightness->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), brightness);
-
-	/* watch for brightness up and down buttons */
-	brightness->priv->button = gpm_button_new ();
-	g_signal_connect (brightness->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), brightness);
-
-	/* watch for idle mode changes */
-	brightness->priv->idle = gpm_idle_new ();
-	g_signal_connect (brightness->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), brightness);
-
 	return TRUE;
 }
 
@@ -844,12 +670,6 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 
 	brightness->priv->hal = gpm_hal_new ();
 	brightness->priv->conf = gpm_conf_new ();
-	g_signal_connect (brightness->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), brightness);
-
-	brightness->priv->feedback = gpm_feedback_new ();
-	gpm_feedback_set_icon_name (brightness->priv->feedback,
-				    GPM_STOCK_BRIGHTNESS_KBD);
 
 	/* listen for ambient light changes.. if we have an ambient light sensor */
 	brightness->priv->sensor = gpm_light_sensor_new ();
@@ -906,7 +726,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
  * Self contained function that works out if we have the hardware.
  * If not, we return FALSE and the module is unloaded.
  **/
-static gboolean
+gboolean
 gpm_brightness_kbd_has_hw (void)
 {
 	GpmHal *hal;

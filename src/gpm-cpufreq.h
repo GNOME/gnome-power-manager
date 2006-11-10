@@ -67,10 +67,10 @@ typedef enum {
 
 GType		 gpm_cpufreq_get_type			(void);
 GpmCpuFreq	*gpm_cpufreq_new			(void);
-gboolean	 gpm_cpufreq_service_init		(GpmCpuFreq *cpufreq);
+gboolean	 gpm_cpufreq_has_hw			(void);
 
-const gchar	*gpm_cpufreq_enum_to_string		(GpmCpuFreqEnum cpufreq_type);
-GpmCpuFreqEnum gpm_cpufreq_string_to_enum		(const gchar *governor);
+const gchar	*gpm_cpufreq_enum_to_string		(GpmCpuFreqEnum  cpufreq_type);
+GpmCpuFreqEnum	 gpm_cpufreq_string_to_enum		(const gchar	*governor);
 gboolean	 gpm_cpufreq_get_governors		(GpmCpuFreq	*cpufreq,
 							 GpmCpuFreqEnum *cpufreq_type);
 gboolean	 gpm_cpufreq_get_governor		(GpmCpuFreq	*cpufreq,

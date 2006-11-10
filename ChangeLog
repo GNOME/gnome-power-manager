@@ -1,5 +1,37 @@
 2006-11-10  Richard Hughes <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/README:
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-kbd.h:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-brightness-lcd.h:
+	* src/gpm-cpufreq.c:
+	* src/gpm-cpufreq.h:
+	* src/gpm-dpms.c:
+	* src/gpm-dpms.h:
+	* src/gpm-manager.c:
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	* src/gpm-srv-brightness-kbd.c:
+	* src/gpm-srv-brightness-kbd.h:
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	* src/gpm-srv-cpufreq.c:
+	* src/gpm-srv-cpufreq.h:
+	* src/gpm-srv-dpms.c:
+	* src/gpm-srv-dpms.h:
+	* src/gpm-srv-screensaver.c:
+	* src/gpm-srv-screensaver.h:
+	Split the policy and the action of each state machine.
+	GpmSrv* is the policy, and Gpm* is the action.
+	src/README will explain more.
+	I've also broken the brightness UI in the process.
+	I'll fix that real soon, I promise.
+
+2006-11-10  Richard Hughes <richard@hughsie.com>
+
 	* src/screensaver.c (gpm_screensaver_auth_begin):
 	Fix a crasher when unlocking the screen. #373278
 

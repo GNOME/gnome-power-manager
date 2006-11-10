@@ -49,7 +49,7 @@ typedef struct
 
 GType		 gpm_brightness_lcd_get_type		(void);
 GpmBrightnessLcd *gpm_brightness_lcd_new		(void);
-gboolean	 gpm_brightness_lcd_service_init	(GpmBrightnessLcd *brightness);
+gboolean	  gpm_brightness_lcd_has_hw		(void);
 
 gboolean	 gpm_brightness_lcd_up			(GpmBrightnessLcd	*brightness);
 gboolean	 gpm_brightness_lcd_down		(GpmBrightnessLcd	*brightness);

@@ -101,20 +101,6 @@ gnome_power_preferences_SOURCES =			\
 	gpm-proxy.c					\
 	gpm-cpufreq.h					\
 	gpm-cpufreq.c					\
-	gpm-button.h					\
-	gpm-button.c					\
-	gpm-battery.h					\
-	gpm-battery.c					\
-	gpm-brightness-lcd.h				\
-	gpm-brightness-lcd.c				\
-	gpm-feedback-widget.h				\
-	gpm-feedback-widget.c				\
-	gpm-ac-adapter.h				\
-	gpm-ac-adapter.c				\
-	gpm-power.h					\
-	gpm-power.c					\
-	gpm-refcount.h					\
-	gpm-refcount.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -137,14 +123,24 @@ endif
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-battery.h				\
-	gpm-battery.c				\
+	gpm-battery.h					\
+	gpm-battery.c					\
 	gpm-dbus-monitor.h				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-warning.h					\
 	gpm-warning.c					\
+	gpm-srv-brightness-lcd.h			\
+	gpm-srv-brightness-lcd.c			\
+	gpm-srv-brightness-kbd.h			\
+	gpm-srv-brightness-kbd.c			\
+	gpm-srv-dpms.h					\
+	gpm-srv-dpms.c					\
+	gpm-srv-screensaver.h				\
+	gpm-srv-screensaver.c				\
+	gpm-srv-cpufreq.h				\
+	gpm-srv-cpufreq.c				\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-idle.h					\

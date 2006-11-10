@@ -33,8 +33,6 @@
 #include "gpm-hal.h"
 #include "gpm-cpufreq.h"
 #include "gpm-debug.h"
-#include "gpm-conf.h"
-#include "gpm-ac-adapter.h"
 
 static void     gpm_cpufreq_class_init (GpmCpuFreqClass *klass);
 static void     gpm_cpufreq_init       (GpmCpuFreq      *hal);
@@ -48,8 +46,6 @@ struct GpmCpuFreqPrivate
 	GpmHal			*hal;
 	guint			 available_governors;
 	GpmCpuFreqEnum		 current_governor;
-	GpmConf			*conf;
-	GpmAcAdapter		*ac_adapter;
 };
 
 static gpointer      gpm_cpufreq_object = NULL;
@@ -521,87 +517,6 @@ gpm_cpufreq_set_consider_nice (GpmCpuFreq *cpufreq,
 }
 
 /**
- * gpm_cpufreq_sync_policy:
- * @cpufreq: This class instance
- * @on_ac: If we are on AC power
- *
- * Changes the cpufreq policy if required
- **/
-static gboolean
-gpm_cpufreq_sync_policy (GpmCpuFreq *cpufreq)
-{
-	gboolean     cpufreq_consider_nice;
-	GpmAcAdapterState state;
-	guint	     cpufreq_performance;
-	gchar       *cpufreq_policy;
-	GpmCpuFreqEnum cpufreq_type;
-
-	if (cpufreq == NULL) {
-		gpm_debug ("cpufreq support absent, so ignoring");
-		return FALSE;
-	}
-
-	gpm_ac_adapter_get_state (cpufreq->priv->ac_adapter, &state);
-
-	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
-	} else {
-		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_VALUE, &cpufreq_performance);
-	}
-
-	/* use enumerated value */
-	cpufreq_type = gpm_cpufreq_string_to_enum (cpufreq_policy);
-	g_free (cpufreq_policy);
-
-	/* change to the right governer and settings */
-	gpm_cpufreq_set_consider_nice (cpufreq, cpufreq_consider_nice);
-	gpm_cpufreq_set_governor (cpufreq, cpufreq_type);
-	gpm_cpufreq_set_performance (cpufreq, cpufreq_performance);
-	return TRUE;
-}
-
-/**
- * conf_key_changed_cb:
- *
- * We might have to do things when the gconf keys change; do them here.
- **/
-static void
-conf_key_changed_cb (GpmConf     *conf,
-		     const gchar *key,
-		     GpmCpuFreq  *cpufreq)
-{
-	/* if any change, just resync the whole lot */
-	if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
-	    strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
-	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_POLICY) == 0 ||
-	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_VALUE) == 0 ||
-	    strcmp (key, GPM_CONF_USE_NICE) == 0) {
-
-		gpm_cpufreq_sync_policy (cpufreq);
-	}
-}
-
-/**
- * ac_adapter_changed_cb:
- * @ac_adapter: The ac_adapter class instance
- * @on_ac: if we are on AC power
- * @cpufreq: This class instance
- *
- * Does the actions when the ac power source is inserted/removed.
- **/
-static void
-ac_adapter_changed_cb (GpmAcAdapter   *ac_adapter,
-			gboolean    on_ac,
-			GpmCpuFreq *cpufreq)
-{
-	gpm_cpufreq_sync_policy (cpufreq);
-}
-
-/**
  * gpm_cpufreq_class_init:
  * @klass: This class instance
  **/
@@ -611,38 +526,6 @@ gpm_cpufreq_class_init (GpmCpuFreqClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_cpufreq_finalize;
 	g_type_class_add_private (klass, sizeof (GpmCpuFreqPrivate));
-}
-
-/**
- * gpm_cpufreq_service_init:
- *
- * @cpufreq: This class instance
- *
- * This starts the interactive parts of the class, for instance it makes the
- * the class respond to button presses and AC state changes.
- *
- * If your are using this class in the preferences or info programs you don't
- * need to call this function
- **/
-gboolean
-gpm_cpufreq_service_init (GpmCpuFreq *cpufreq)
-{
-	g_return_val_if_fail (cpufreq != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_CPUFREQ (cpufreq), FALSE);
-
-	/* get changes from gconf */
-	cpufreq->priv->conf = gpm_conf_new ();
-	g_signal_connect (cpufreq->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), cpufreq);
-
-	/* we use ac_adapter for the ac-adapter-changed signal */
-	cpufreq->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (cpufreq->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), cpufreq);
-
-	/* sync policy */
-	gpm_cpufreq_sync_policy (cpufreq);
-	return TRUE;
 }
 
 /**
@@ -663,9 +546,6 @@ gpm_cpufreq_init (GpmCpuFreq *cpufreq)
 			  HAL_DBUS_SERVICE,
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_CPUFREQ);
-
-	cpufreq->priv->conf = NULL;
-	cpufreq->priv->ac_adapter = NULL;
 
 	/* set defaults */
 	cpufreq->priv->available_governors = -1;
@@ -692,12 +572,6 @@ gpm_cpufreq_finalize (GObject *object)
 	if (cpufreq->priv->gproxy != NULL) {
 		g_object_unref (cpufreq->priv->gproxy);
 	}
-	if (cpufreq->priv->conf != NULL) {
-		g_object_unref (cpufreq->priv->conf);
-	}
-	if (cpufreq->priv->ac_adapter != NULL) {
-		g_object_unref (cpufreq->priv->ac_adapter);
-	}
 	G_OBJECT_CLASS (gpm_cpufreq_parent_class)->finalize (object);
 }
 
@@ -707,7 +581,7 @@ gpm_cpufreq_finalize (GObject *object)
  * Self contained function that works out if we have the hardware.
  * If not, we return FALSE and the module is unloaded.
  **/
-static gboolean
+gboolean
 gpm_cpufreq_has_hw (void)
 {
 	GpmHal *hal;
