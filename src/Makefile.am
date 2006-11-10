@@ -180,6 +180,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-common.c					\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
+	gpm-sound.h					\
+	gpm-sound.c					\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\

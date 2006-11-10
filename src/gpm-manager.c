@@ -65,6 +65,7 @@
 #include "gpm-srv-dpms.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
+#include "gpm-sound.h"
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
 
@@ -90,6 +91,7 @@ struct GpmManagerPrivate
 	GpmPower		*power;
 	GpmPolicy		*policy;
 	GpmScreensaver 		*screensaver;
+	GpmSound 		*sound;
 	GpmTrayIcon		*tray_icon;
 	GpmWarning		*warning;
 
@@ -107,7 +109,6 @@ struct GpmManagerPrivate
 	GpmWarningState		 last_pda;
 
 	gboolean		 done_notify_fully_charged;
-	gboolean		 enable_beeping;
 
 	time_t			 last_resume_event;
 	guint			 suppress_policy_timeout;
@@ -759,9 +760,7 @@ gpm_manager_hibernate (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot hibernate");
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
 	}
 
@@ -787,9 +786,7 @@ gpm_manager_hibernate (GpmManager *manager,
 		gchar *message;
 		gboolean show_notify;
 
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 
 		/* We only show the HAL failed notification if set in gconf */
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
@@ -854,9 +851,7 @@ gpm_manager_suspend (GpmManager *manager,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
 			     "Cannot suspend");
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
 	}
 
@@ -882,9 +877,7 @@ gpm_manager_suspend (GpmManager *manager,
 	if (! ret) {
 		gboolean show_notify;
 
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 
 		/* We only show the HAL failed notification if set in gconf */
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
@@ -905,9 +898,7 @@ gpm_manager_suspend (GpmManager *manager,
 					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
 					    title);
 			g_free (message);
-			if (manager->priv->enable_beeping) {
-				gpm_event_sound (GPM_SOUND_SUSPEND_FAILURE);
-			}
+			gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 		}
 	}
 
@@ -1441,9 +1432,6 @@ battery_status_changed_primary (GpmManager     *manager,
 			message = g_strdup (_("The AC Power has been unplugged. "
 					      "The system is now using battery power."));
 			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
-			if (manager->priv->enable_beeping) {
-				gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
-			}
 		}
 
 	} else {
@@ -1454,9 +1442,7 @@ battery_status_changed_primary (GpmManager     *manager,
 					   remaining, battery_status->percentage_charge);
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 		g_free (remaining);
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_POWER_LOW);
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
 	}
 
 	/* If we had a message, print it as a notification */
@@ -1551,17 +1537,10 @@ battery_status_changed_ups (GpmManager	   *manager,
 		/* TODO: need to add 10 second delay so we get notification */
 		manager_policy_do (manager, GPM_CONF_UPS_CRITICAL,
 				   _("UPS is critically low"));
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_POWER_LOW);
-			gpm_warning_beep ();
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
 
 	} else if (warning_type == GPM_WARNING_DISCHARGING) {
 		message = g_strdup_printf (_("Your system is running on backup power!"));
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_AC_UNPLUGGED);
-			gpm_warning_beep ();
-		}
 
 	} else {
 		remaining = gpm_get_timestring (battery_status->remaining_time);
@@ -1571,10 +1550,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 					     "avoid losing data."),
 					   remaining, battery_status->percentage_charge);
 		g_free (remaining);
-		if (manager->priv->enable_beeping) {
-			gpm_event_sound (GPM_SOUND_POWER_LOW);
-			gpm_warning_beep ();
-		}
+		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
 	}
 
 	/* If we had a message, print it as a notification */
@@ -1604,7 +1580,7 @@ battery_status_changed_ups (GpmManager	   *manager,
  * are not critical to the system power state.
  **/
 static void
-battery_status_changed_misc (GpmManager	    	   *manager,
+battery_status_changed_misc (GpmManager	    *manager,
 			     GpmPowerKind    battery_kind,
 			     GpmPowerStatus *battery_status)
 {
@@ -1668,10 +1644,7 @@ battery_status_changed_misc (GpmManager	    	   *manager,
 			      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			      icon, GPM_NOTIFY_URGENCY_NORMAL);
 
-	if (manager->priv->enable_beeping) {
-		gpm_event_sound (GPM_SOUND_POWER_LOW);
-		gpm_warning_beep ();
-	}
+	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
 	gpm_info_event_log (manager->priv->info, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
 
 	g_free (icon);
@@ -1820,10 +1793,6 @@ conf_key_changed_cb (GpmConf     *conf,
 	} else if (strcmp (key, GPM_CONF_POLICY_TIMEOUT) == 0) {
 		 gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
 		 		    &manager->priv->suppress_policy_timeout);
-
-	} else if (strcmp (key, GPM_CONF_ENABLE_BEEPING) == 0) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING,
-				   &manager->priv->enable_beeping);
 	}
 }
 
@@ -1991,6 +1960,7 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv->hal = gpm_hal_new ();
 	manager->priv->warning = gpm_warning_new ();
+	manager->priv->sound = gpm_sound_new ();
 
 	/* try and start an interactive service */
 	manager->priv->srv_cpufreq = gpm_srv_cpufreq_new ();
@@ -2082,9 +2052,6 @@ gpm_manager_init (GpmManager *manager)
 	/* Pretend we just resumed when we start to let actions settle */
 	gpm_manager_reset_event_time (manager);
 
-	/* do we beep? */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING, &manager->priv->enable_beeping);
-
 	/* on startup, check if there are suspend errors left */
 	gpm_manager_check_sleep_errors (manager);
 }
@@ -2110,6 +2077,7 @@ gpm_manager_finalize (GObject *object)
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal);
+	g_object_unref (manager->priv->sound);
 	g_object_unref (manager->priv->warning);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);

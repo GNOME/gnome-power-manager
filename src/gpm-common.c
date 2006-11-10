@@ -71,46 +71,6 @@ gpm_discrete_to_percent (guint discrete,
 }
 
 /**
- * gpm_warning_beep
- **/
-void
-gpm_warning_beep (void)
-{
-	GdkDisplay *display = gdk_display_get_default ();
-	gdk_display_beep (display);
-}
-
-/**
- * gpm_event_sound:
- **/
-void
-gpm_event_sound (GpmSound sound)
-{
-	char *command;
-	const char *filename = NULL;
-
-	if (sound == GPM_SOUND_AC_UNPLUGGED) {
-		filename = "gpm-unplugged.wav";
-	} else if (sound == GPM_SOUND_POWER_LOW) {
-		filename = "gpm-critical-power.wav";
-	} else if (sound == GPM_SOUND_SUSPEND_FAILURE) {
-		filename = "gpm-suspend-failure.wav";
-	} else {
-		g_error ("enum %i not known", sound);
-	}
-
-	command = g_strdup_printf ("gst-launch filesrc location=%s%s ! "
-				   "decodebin ! audioconvert ! gconfaudiosink",
-				   GPM_DATA, filename);
-
-	if (! g_spawn_command_line_async (command, NULL)) {
-		gpm_warning ("Couldn't execute command: %s", command);
-	}
-
-	g_free (command);
-}
-
-/**
  * gpm_get_timestring:
  * @time_secs: The time value to convert in seconds
  * @cookie: The cookie we are looking for

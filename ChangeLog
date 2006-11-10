@@ -2,6 +2,20 @@
 
 	* po/POTFILES.in:
 	* src/Makefile.am:
+	* src/README:
+	* src/gpm-sound.c:
+	* src/gpm-sound.h:
+	Make a new GpmSound class.
+
+	* src/gpm-common.c:
+	* src/gpm-common.h:
+	* src/gpm-manager.c:
+	Use the GpmSound class.
+
+2006-11-10  Richard Hughes <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
 	* src/gpm-policy.c:
 	* src/gpm-policy.h:
 	Create a policy class so we can get at it from other than
