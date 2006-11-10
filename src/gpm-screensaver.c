@@ -83,7 +83,6 @@ gpm_screensaver_auth_begin (DBusGProxy     *proxy,
 			    GpmScreensaver *screensaver)
 {
 	GError  *error;
-	gboolean res;
 
 	gpm_debug ("emitting auth-request : (%i)", TRUE);
 	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, TRUE);
@@ -99,8 +98,8 @@ gpm_screensaver_auth_begin (DBusGProxy     *proxy,
 	 * a smartcard to authenticate and DPMS might still be on.
 	 * See #350291 for more details */
 	error = NULL;
-	res = gpm_dpms_set_mode (screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
-	if (! res) {
+	gpm_dpms_set_mode (screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	if (error != NULL) {
 		gpm_warning ("Failed to turn on DPMS: %s", error->message);
 		g_error_free (error);
 	}
