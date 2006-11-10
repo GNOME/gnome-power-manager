@@ -56,7 +56,7 @@
 #include "gpm-networkmanager.h"
 #include "gpm-manager.h"
 #include "gpm-power.h"
-#include "gpm-polkit.h"
+#include "gpm-policy.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-srv-brightness-lcd.h"
@@ -88,7 +88,7 @@ struct GpmManagerPrivate
 	GpmInfo			*info;
 	GpmInhibit		*inhibit;
 	GpmPower		*power;
-	GpmPolkit		*polkit;
+	GpmPolicy		*policy;
 	GpmScreensaver 		*screensaver;
 	GpmTrayIcon		*tray_icon;
 	GpmWarning		*warning;
@@ -231,21 +231,8 @@ gpm_manager_allowed_suspend (GpmManager *manager,
 			     gboolean   *can,
 			     GError    **error)
 {
-	gboolean conf_ok;
-	gboolean polkit_ok = TRUE;
-	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
-
-	*can = FALSE;
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
-	hal_ok = gpm_hal_can_suspend (manager->priv->hal);
-	if (manager->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-suspend");
-	}
-	if ( conf_ok && hal_ok && polkit_ok ) {
-		*can = TRUE;
-	}
-
+	gpm_policy_allowed_suspend (manager->priv->policy, can);
 	return TRUE;
 }
 
@@ -262,20 +249,8 @@ gpm_manager_allowed_hibernate (GpmManager *manager,
 			       gboolean   *can,
 			       GError    **error)
 {
-	gboolean conf_ok;
-	gboolean polkit_ok = TRUE;
-	gboolean hal_ok = FALSE;
 	g_return_val_if_fail (can, FALSE);
-
-	*can = FALSE;
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
-	hal_ok = gpm_hal_can_hibernate (manager->priv->hal);
-	if (manager->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-hibernate");
-	}
-	if ( conf_ok && hal_ok && polkit_ok ) {
-		*can = TRUE;
-	}
+	gpm_policy_allowed_hibernate (manager->priv->policy, can);
 	return TRUE;
 }
 
@@ -290,15 +265,8 @@ gpm_manager_allowed_shutdown (GpmManager *manager,
 			      gboolean   *can,
 			      GError    **error)
 {
-	gboolean polkit_ok = TRUE;
 	g_return_val_if_fail (can, FALSE);
-	*can = FALSE;
-	if (manager->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-shutdown");
-	}
-	if (polkit_ok == TRUE) {
-		*can = TRUE;
-	}
+	gpm_policy_allowed_shutdown (manager->priv->policy, can);
 	return TRUE;
 }
 
@@ -314,15 +282,8 @@ gpm_manager_allowed_reboot (GpmManager *manager,
 			    gboolean   *can,
 			    GError    **error)
 {
-	gboolean polkit_ok = TRUE;
 	g_return_val_if_fail (can, FALSE);
-	*can = FALSE;
-	if (manager->priv->polkit) {
-		polkit_ok = gpm_polkit_is_user_privileged (manager->priv->polkit, "hal-power-reboot");
-	}
-	if (polkit_ok == TRUE) {
-		*can = TRUE;
-	}
+	gpm_policy_allowed_reboot (manager->priv->policy, can);
 	return TRUE;
 }
 
@@ -708,7 +669,7 @@ gpm_manager_shutdown (GpmManager *manager,
 	gboolean ret;
 	gboolean save_session;
 
-	gpm_manager_allowed_shutdown (manager, &allowed, NULL);
+	gpm_policy_allowed_shutdown (manager->priv->policy, &allowed);
 	if (! allowed) {
 		gpm_warning ("Cannot shutdown");
 		g_set_error (error,
@@ -746,7 +707,7 @@ gpm_manager_reboot (GpmManager *manager,
 	gboolean ret;
 	gboolean save_session;
 
-	gpm_manager_allowed_reboot (manager, &allowed, NULL);
+	gpm_policy_allowed_reboot (manager->priv->policy, &allowed);
 	if (! allowed) {
 		gpm_warning ("Cannot reboot");
 		g_set_error (error,
@@ -790,7 +751,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gboolean do_lock;
         gboolean nm_sleep;
 
-	gpm_manager_allowed_hibernate (manager, &allowed, NULL);
+	gpm_policy_allowed_hibernate (manager->priv->policy, &allowed);
 
 	if (! allowed) {
 		gpm_warning ("Cannot hibernate");
@@ -885,7 +846,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean do_lock;
 	gboolean nm_sleep;
 
-	gpm_manager_allowed_suspend (manager, &allowed, NULL);
+	gpm_policy_allowed_suspend (manager->priv->policy, &allowed);
 
 	if (! allowed) {
 		gpm_warning ("Cannot suspend");
@@ -1851,35 +1812,10 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmManager  *manager)
 {
-	gboolean    enabled;
-	gboolean    allowed_in_menu;
-
 	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
-
-	/* todo, move into gpm-tray-icon */
-	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
-		gpm_manager_allowed_suspend (manager, &enabled, NULL);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
-		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      allowed_in_menu && enabled);
-
-	} else if (strcmp (key, GPM_CONF_CAN_HIBERNATE) == 0) {
-		gpm_manager_allowed_hibernate (manager, &enabled, NULL);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
-		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
-						allowed_in_menu && enabled);
-
-	} else if (strcmp (key, GPM_CONF_SHOW_ACTIONS_IN_MENU) == 0) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
-		gpm_manager_allowed_suspend (manager, &enabled, NULL);
-		gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
-					      allowed_in_menu && enabled);
-		gpm_manager_allowed_hibernate (manager, &enabled, NULL);
-		gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
-						allowed_in_menu && enabled);
 
 	} else if (strcmp (key, GPM_CONF_POLICY_TIMEOUT) == 0) {
 		 gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
@@ -2025,8 +1961,6 @@ static void
 gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
-	gboolean enabled;
-	gboolean allowed_in_menu;
 	DBusGConnection *connection;
 	GError *error = NULL;
 	GpmAcAdapterState state;
@@ -2087,8 +2021,8 @@ gpm_manager_init (GpmManager *manager)
 	/* use a class to handle the complex stuff */
 	manager->priv->inhibit = gpm_inhibit_new ();
 
-	/* this will be NULL if we don't compile in support */
-	manager->priv->polkit = gpm_polkit_new ();
+	/* use the policy object */
+	manager->priv->policy = gpm_policy_new ();
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
@@ -2101,16 +2035,6 @@ gpm_manager_init (GpmManager *manager)
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
 	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics",
 					     G_OBJECT (manager->priv->info));
-
-	/* only show the suspend and hibernate icons if we can do the action,
-	   and the policy allows the actions in the menu */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
-	gpm_manager_allowed_suspend (manager, &enabled, NULL);
-	gpm_tray_icon_enable_suspend (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      enabled && allowed_in_menu);
-	gpm_manager_allowed_hibernate (manager, &enabled, NULL);
-	gpm_tray_icon_enable_hibernate (GPM_TRAY_ICON (manager->priv->tray_icon),
-				      enabled && allowed_in_menu);
 
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
 				 "suspend",
@@ -2199,9 +2123,6 @@ gpm_manager_finalize (GObject *object)
 	/* optional gobjects */
 	if (manager->priv->button) {
 		g_object_unref (manager->priv->button);
-	}
-	if (manager->priv->polkit) {
-		g_object_unref (manager->priv->polkit);
 	}
 	if (manager->priv->srv_cpufreq) {
 		g_object_unref (manager->priv->srv_cpufreq);

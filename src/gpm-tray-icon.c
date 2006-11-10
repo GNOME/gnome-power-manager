@@ -52,6 +52,7 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
+#include "gpm-policy.h"
 #include "gpm-power.h"
 #include "gpm-stock-icons.h"
 #include "gpm-tray-icon.h"
@@ -69,6 +70,7 @@ struct GpmTrayIconPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
 	GpmHal			*hal;
+	GpmPolicy		*policy;
 	GpmPower		*power;
 	GpmBattery		*battery;
 
@@ -974,8 +976,28 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmTrayIcon *icon)
 {
+	gboolean    enabled;
+	gboolean    allowed_in_menu;
+
 	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
 		gpm_tray_icon_sync (icon);
+
+	} else if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
+		gpm_policy_allowed_suspend (icon->priv->policy, &enabled);
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
+
+	} else if (strcmp (key, GPM_CONF_CAN_HIBERNATE) == 0) {
+		gpm_policy_allowed_hibernate (icon->priv->policy, &enabled);
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
+
+	} else if (strcmp (key, GPM_CONF_SHOW_ACTIONS_IN_MENU) == 0) {
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		gpm_policy_allowed_suspend (icon->priv->policy, &enabled);
+		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
+		gpm_policy_allowed_hibernate (icon->priv->policy, &enabled);
+		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
 	}
 }
 
@@ -1015,6 +1037,8 @@ static void
 gpm_tray_icon_init (GpmTrayIcon *icon)
 {
 	gboolean ret = TRUE;
+	gboolean enabled;
+	gboolean allowed_in_menu;
 
 	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
 
@@ -1024,6 +1048,9 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* we use power for the messages and the icon state */
 	icon->priv->power = gpm_power_new ();
+
+	/* use the policy object */
+	icon->priv->policy = gpm_policy_new ();
 
 	icon->priv->battery = gpm_battery_new ();
 	/* we need these to refresh the tooltip and icon */
@@ -1064,6 +1091,14 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 G_CALLBACK (gpm_tray_icon_activate_cb),
 				 icon, 0);
 
+	/* only show the suspend and hibernate icons if we can do the action,
+	   and the policy allows the actions in the menu */
+	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+	gpm_policy_allowed_suspend (icon->priv->policy, &enabled);
+	gpm_tray_icon_enable_suspend (icon, enabled && allowed_in_menu);
+	gpm_policy_allowed_hibernate (icon->priv->policy, &enabled);
+	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
+
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
 
 #ifdef HAVE_LIBNOTIFY
@@ -1090,6 +1125,9 @@ gpm_tray_icon_finalize (GObject *object)
 
 	if (tray_icon->priv->stock_id != NULL) {
 		g_free (tray_icon->priv->stock_id);
+	}
+	if (tray_icon->priv->policy != NULL) {
+		g_object_unref (tray_icon->priv->policy);
 	}
 	if (tray_icon->priv->power != NULL) {
 		g_object_unref (tray_icon->priv->power);

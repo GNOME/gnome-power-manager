@@ -2,6 +2,19 @@
 
 	* po/POTFILES.in:
 	* src/Makefile.am:
+	* src/gpm-policy.c:
+	* src/gpm-policy.h:
+	Create a policy class so we can get at it from other than
+	the manager class.
+
+	* src/gpm-manager.c:
+	* src/gpm-tray-icon.c:
+	Use GpmPolicy. More code out of manager. Yay.
+
+2006-11-10  Richard Hughes <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
 	* src/README:
 	* src/gpm-brightness-kbd.c:
 	* src/gpm-brightness-kbd.h:
