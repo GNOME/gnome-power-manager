@@ -114,6 +114,7 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
+static gpointer      manager_object = NULL; /* needed for g_atexit */
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
@@ -1936,6 +1937,81 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 }
 
 /**
+ * gpm_manager_check_sleep_errors:
+ * @manager: This class instance
+ *
+ * Checks HAL for resume failures
+ **/
+static void
+gpm_manager_check_sleep_errors (GpmManager *manager)
+{
+	gboolean suspend_error;
+	gboolean hibernate_error;
+	const gchar *error_title = NULL;
+	const gchar *error_body = NULL;
+	gchar *error_msg;
+
+	gpm_hal_has_suspend_error (manager->priv->hal, &suspend_error);
+	gpm_hal_has_hibernate_error (manager->priv->hal, &hibernate_error);
+
+	if (suspend_error == TRUE) {
+		error_title = _("Suspend failure");
+		error_body = _("Your computer did not appear to resume correctly from suspend.");
+	}
+	if (hibernate_error == TRUE) {
+		error_title = _("Hibernate failure");
+		error_body = _("Your computer did not appear to resume correctly from hibernate.");
+	}
+
+	if (suspend_error == TRUE || hibernate_error == TRUE) {
+		error_msg = g_strdup_printf ("%s\n%s\n%s", error_body,
+					     _("This may be a driver or hardware problem."),
+					     _("Check the GNOME Power Manager manual for common problems."));
+		gpm_tray_icon_notify (manager->priv->tray_icon,
+				      error_title,
+				      error_msg,
+				      GPM_NOTIFY_TIMEOUT_LONG,
+				      GTK_STOCK_DIALOG_WARNING,
+				      GPM_NOTIFY_URGENCY_NORMAL);
+		g_free (error_msg);
+	}
+}
+
+/**
+ * screensaver_auth_request_cb:
+ * @manager: This manager class instance
+ * @auth: If we are trying to authenticate
+ *
+ * Called when the user has authenticated
+ **/
+static void
+screensaver_auth_request_cb (GpmScreensaver *screensaver,
+			     gboolean        auth,
+			     GpmManager     *manager)
+{
+	/* only clear errors if we have finished the authentication */
+	if (auth == FALSE) {
+		gpm_hal_clear_suspend_error (manager->priv->hal);
+		gpm_hal_clear_hibernate_error (manager->priv->hal);
+	}
+}
+
+/**
+ * gpm_manager_at_exit:
+ *
+ * Called when we are exiting. We should remove the errors if any
+ * exist so we don't get them again on next boot.
+ **/
+static void 
+gpm_manager_at_exit (void)
+{
+	/* we can't use manager as g_atexit has no userdata */
+	GpmManager *manager = GPM_MANAGER (manager_object);
+	gpm_hal_clear_suspend_error (manager->priv->hal);
+	gpm_hal_clear_hibernate_error (manager->priv->hal);
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1950,6 +2026,9 @@ gpm_manager_init (GpmManager *manager)
 	GpmAcAdapterState state;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
+
+	/* do some actions even when killed */
+	g_atexit (gpm_manager_at_exit);
 
 	manager->priv->conf = gpm_conf_new ();
 	g_signal_connect (manager->priv->conf, "value-changed",
@@ -1982,6 +2061,8 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->screensaver = gpm_screensaver_new ();
 	if (manager->priv->screensaver != NULL) {
 		gpm_screensaver_service_init (manager->priv->screensaver);
+	 	g_signal_connect (manager->priv->screensaver, "auth-request",
+	 			  G_CALLBACK (screensaver_auth_request_cb), manager);
 	}
 
 	/* try an start an interactive service */
@@ -2078,15 +2159,11 @@ gpm_manager_init (GpmManager *manager)
 	/* Pretend we just resumed when we start to let actions settle */
 	gpm_manager_reset_event_time (manager);
 
-	/* needed in the future */
-	if (FALSE) {
-		char *temp;
-		temp = _("Your system did not resume correctly.");
-		temp = _("This might be a hardware or software problem.");
-	}
-
-	/* Do we beep? */
+	/* do we beep? */
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ENABLE_BEEPING, &manager->priv->enable_beeping);
+
+	/* on startup, check if there are suspend errors left */
+	gpm_manager_check_sleep_errors (manager);
 }
 
 /**
@@ -2150,6 +2227,7 @@ gpm_manager_new (void)
 	GpmManager *manager;
 
 	manager = g_object_new (GPM_TYPE_MANAGER, NULL);
+	manager_object = manager;
 
 	return GPM_MANAGER (manager);
 }

@@ -176,7 +176,6 @@ main (int argc, char *argv[])
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
 
-
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
 		/* We'll disable this as users are getting constant crashes */
 		/* gnome_client_set_restart_style (master, GNOME_RESTART_IMMEDIATELY);*/
@@ -238,8 +237,6 @@ main (int argc, char *argv[])
 		gpm_warning ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
-
-	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
 
 	loop = g_main_loop_new (NULL, FALSE);
 

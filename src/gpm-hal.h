@@ -151,6 +151,12 @@ gboolean	 gpm_hal_reboot				(GpmHal		*hal);
 gboolean	 gpm_hal_enable_power_save		(GpmHal		*hal,
 							 gboolean	 enable);
 gboolean	 gpm_hal_is_laptop			(GpmHal		*hal);
+gboolean	 gpm_hal_has_suspend_error		(GpmHal		*hal,
+							 gboolean	*state);
+gboolean	 gpm_hal_has_hibernate_error		(GpmHal		*hal,
+							 gboolean	*state);
+gboolean	 gpm_hal_clear_suspend_error		(GpmHal		*hal);
+gboolean	 gpm_hal_clear_hibernate_error		(GpmHal		*hal);
 
 G_END_DECLS
 

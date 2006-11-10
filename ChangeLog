@@ -1,3 +1,22 @@
+2006-11-10  Richard Hughes <richard@hughsie.com>
+
+	Adapted from a patch from David Zeuthen <david@fubar.dk>:
+
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Add gpm_hal_has_suspend_error, gpm_hal_has_hibernate_error
+	gpm_hal_clear_suspend_error, gpm_hal_clear_hibernate_error
+	to support the new suspend error reporting.
+
+	* src/gpm-main.c: (main):
+	Don't register the dbus interface twice.
+
+	* src/gpm-manager.c:
+	Add in logic and translations for detecting a resume failure.
+
+	* src/gpm-screensaver.c:
+	Cosmetic changes.
+
 2006-11-09  Richard Hughes <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c:

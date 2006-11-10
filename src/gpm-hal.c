@@ -79,7 +79,7 @@ G_DEFINE_TYPE (GpmHal, gpm_hal, G_TYPE_OBJECT)
 /**
  * gpm_hal_is_running:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: TRUE if haldaemon is running
  *
  * Finds out if hal is running
@@ -100,7 +100,7 @@ gpm_hal_is_running (GpmHal *hal)
 /**
  * gpm_hal_device_rescan:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @udi: The HAL UDI
  * Return value: Success, true if we rescan'd
  *
@@ -141,7 +141,7 @@ gpm_hal_device_rescan (GpmHal *hal, const gchar *udi)
 /**
  * gpm_hal_device_rescan_capability:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @capability: The HAL capability, e.g. laptop_panel
  * Return value: Success, true if we found and devices
  *
@@ -171,7 +171,7 @@ gpm_hal_device_rescan_capability (GpmHal *hal, const gchar *capability)
 /**
  * gpm_hal_device_get_bool:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @udi: The UDI of the device
  * @key: The key to query
  * @value: return value, passed by ref
@@ -218,7 +218,7 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 /**
  * gpm_hal_device_get_string:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @udi: The UDI of the device
  * @key: The key to query
  * @value: return value, passed by ref
@@ -267,7 +267,7 @@ gpm_hal_device_get_string (GpmHal      *hal,
 /**
  * gpm_hal_device_get_int:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @udi: The UDI of the device
  * @key: The key to query
  * @value: return value, passed by ref
@@ -334,7 +334,7 @@ gpm_hal_device_get_uint (GpmHal      *hal,
 /**
  * gpm_hal_device_find_capability:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @capability: The capability, e.g. "battery"
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
@@ -378,7 +378,7 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 /**
  * gpm_hal_device_has_capability:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @capability: The capability, e.g. "battery"
  * @value: return value, passed by ref
  * Return value: TRUE for success, FALSE for failure
@@ -424,7 +424,7 @@ gpm_hal_device_has_capability (GpmHal      *hal,
 /**
  * gpm_hal_free_capability:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @value: The list of strings to free
  *
  * Frees value result of gpm_hal_device_find_capability
@@ -446,7 +446,7 @@ gpm_hal_free_capability (GpmHal *hal, gchar **value)
 /**
  * gpm_hal_num_devices_of_capability:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @capability: The capability, e.g. "battery"
  * Return value: Number of devices of that capability
  *
@@ -476,7 +476,7 @@ gpm_hal_num_devices_of_capability (GpmHal *hal, const gchar *capability)
 /**
  * gpm_hal_num_devices_of_capability_with_value:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @capability: The capability, e.g. "battery"
  * @key: The key to match, e.g. "button.type"
  * @value: The key match, e.g. "power"
@@ -801,7 +801,7 @@ gpm_hal_device_remove_propery_modified (GpmHal      *hal,
 
 /**
  * gpm_hal_class_init:
- * @klass: This hal class instance
+ * @klass: This class instance
  **/
 static void
 gpm_hal_class_init (GpmHalClass *klass)
@@ -1087,7 +1087,7 @@ proxy_status_cb (DBusGProxy *proxy,
 /**
  * gpm_hal_init:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  **/
 static void
 gpm_hal_init (GpmHal *hal)
@@ -1162,7 +1162,7 @@ remove_device_condition_in_hash (const gchar *udi,
 /**
  * gpm_hal_is_laptop:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: TRUE is computer is identified as a laptop
  *
  * Returns true if system.formfactor is "laptop"
@@ -1194,7 +1194,7 @@ gpm_hal_is_laptop (GpmHal *hal)
 /**
  * gpm_hal_has_power_management:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: TRUE if haldaemon has power management capability
  *
  * Finds out if power management functions are running (only ACPI, PMU, APM)
@@ -1219,7 +1219,7 @@ gpm_hal_has_power_management (GpmHal *hal)
 /**
  * gpm_hal_can_suspend:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: TRUE if kernel suspend support is compiled in
  *
  * Finds out if HAL indicates that we can suspend
@@ -1246,7 +1246,7 @@ gpm_hal_can_suspend (GpmHal *hal)
 /**
  * gpm_hal_can_hibernate:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: TRUE if kernel hibernation support is compiled in
  *
  * Finds out if HAL indicates that we can hibernate
@@ -1303,7 +1303,7 @@ gpm_hal_filter_error (GError **error)
 /**
  * gpm_hal_suspend:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @wakeup: Seconds to wakeup, currently unsupported
  * Return value: Success, true if we suspended OK
  *
@@ -1349,7 +1349,7 @@ gpm_hal_suspend (GpmHal *hal, guint wakeup)
 /**
  * hal_pm_method_void:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @method: The method name, e.g. "Hibernate"
  * Return value: Success, true if we did OK
  *
@@ -1396,7 +1396,7 @@ hal_pm_method_void (GpmHal *hal, const gchar* method)
 /**
  * gpm_hal_hibernate:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: Success, true if we hibernated OK
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
@@ -1425,7 +1425,7 @@ gpm_hal_shutdown (GpmHal *hal)
 /**
  * gpm_hal_reboot:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * Return value: Success, true if we shutdown OK
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
@@ -1440,7 +1440,7 @@ gpm_hal_reboot (GpmHal *hal)
 /**
  * gpm_hal_enable_power_save:
  *
- * @hal: This hal class instance
+ * @hal: This class instance
  * @enable: True to enable low power mode
  * Return value: Success, true if we set the mode
  *
@@ -1487,11 +1487,125 @@ gpm_hal_enable_power_save (GpmHal *hal, gboolean enable)
 	return TRUE;
 }
 
+/**
+ * gpm_hal_has_suspend_error:
+ *
+ * @hal: This class instance
+ * @enable: Return true if there was a suspend error
+ * Return value: Success
+ *
+ * TODO: should call a method on HAL and also return the ouput of the file
+ **/
+gboolean
+gpm_hal_has_suspend_error (GpmHal *hal, gboolean *state)
+{
+	g_return_val_if_fail (hal != NULL, FALSE);
+	g_return_val_if_fail (state != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	*state = g_file_test ("/var/lib/hal/system-power-suspend-output", G_FILE_TEST_EXISTS);
+	return TRUE;
+}
 
+/**
+ * gpm_hal_has_hibernate_error:
+ *
+ * @hal: This class instance
+ * @enable: Return true if there was a hibernate error
+ * Return value: Success
+ *
+ * TODO: should call a method on HAL and also return the ouput of the file
+ **/
+gboolean
+gpm_hal_has_hibernate_error (GpmHal *hal, gboolean *state)
+{
+	g_return_val_if_fail (hal != NULL, FALSE);
+	g_return_val_if_fail (state != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	*state = g_file_test ("/var/lib/hal/system-power-hibernate-output", G_FILE_TEST_EXISTS);
+	return TRUE;
+}
+
+/**
+ * gpm_hal_clear_suspend_error:
+ *
+ * @hal: This class instance
+ * Return value: Success
+ *
+ * Tells HAL to try and clear the suspend error as we appear to be okay
+ **/
+gboolean
+gpm_hal_clear_suspend_error (GpmHal *hal)
+{
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (hal != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	gpm_debug ("Doing SuspendClearError");
+	ret = dbus_g_proxy_call (proxy, "SuspendClearError", &error,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("SuspendClearError failed!");
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_hal_clear_hibernate_error:
+ *
+ * @hal: This class instance
+ * Return value: Success
+ *
+ * Tells HAL to try and clear the hibernate error as we appear to be okay
+ **/
+gboolean
+gpm_hal_clear_hibernate_error (GpmHal *hal)
+{
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (hal != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+
+	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	gpm_debug ("Doing HibernateClearError");
+	ret = dbus_g_proxy_call (proxy, "HibernateClearError", &error,
+				 G_TYPE_INVALID, G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("HibernateClearError failed!");
+		return FALSE;
+	}
+	return TRUE;
+}
 
 /**
  * gpm_hal_finalize:
- * @object: This hal class instance
+ * @object: This class instance
  **/
 static void
 gpm_hal_finalize (GObject *object)

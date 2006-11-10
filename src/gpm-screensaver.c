@@ -82,12 +82,11 @@ static void
 gpm_screensaver_auth_begin (DBusGProxy     *proxy,
 			    GpmScreensaver *screensaver)
 {
-	const gboolean value = TRUE;
 	GError  *error;
 	gboolean res;
 
-	gpm_debug ("emitting auth-request : (%i)", value);
-	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+	gpm_debug ("emitting auth-request : (%i)", TRUE);
+	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, TRUE);
 
 	/* TODO: This may be a bid of a bodge, as we will have multiple
 		 resume requests -- maybe this need a logic cleanup */
@@ -114,9 +113,8 @@ static void
 gpm_screensaver_auth_end (DBusGProxy     *proxy,
 			  GpmScreensaver *screensaver)
 {
-	const gboolean value = FALSE;
-	gpm_debug ("emitting auth-request : (%i)", value);
-	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, value);
+	gpm_debug ("emitting auth-request : (%i)", FALSE);
+	g_signal_emit (screensaver, signals [AUTH_REQUEST], 0, FALSE);
 }
 
 /** Invoked when we get the AuthenticationRequestEnd from g-s when the user
