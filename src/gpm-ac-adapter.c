@@ -63,7 +63,7 @@ G_DEFINE_TYPE (GpmAcAdapter, gpm_ac_adapter, G_TYPE_OBJECT)
 
 /**
  * gpm_ac_adapter_get:
- * @ac_adapter: This ac_adapter class instance
+ * @ac_adapter: This class instance
  *
  * Gets the current state of the AC adapter
  **/
@@ -182,7 +182,7 @@ gpm_ac_adapter_class_init (GpmAcAdapterClass *klass)
 
 /**
  * gpm_ac_adapter_init:
- * @ac_adapter: This ac_adapter class instance
+ * @ac_adapter: This class instance
  *
  * initialises the ac_adapter class. NOTE: We expect ac_adapter objects
  * to *NOT* be removed or added during the session.

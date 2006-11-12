@@ -71,80 +71,6 @@ struct GpmSrvBrightnessKbdPrivate
 
 G_DEFINE_TYPE (GpmSrvBrightnessKbd, gpm_srv_brightness_kbd, G_TYPE_OBJECT)
 
-#if 0
-/**
- * gpm_srv_brightness_kbd_up:
- * @srv_brightness_kbd: This srv_brightness_kbd class instance
- *
- * If possible, put the srv_brightness_kbd of the KBD up one unit.
- **/
-gboolean
-gpm_srv_brightness_kbd_up (GpmSrvBrightnessKbd *brightness)
-{
-	gint step;
-	gint percentage;
-
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_KBD (brightness), FALSE);
-
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_srv_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
-	} else {
-		/* macbook pro has a bazzillion srv_brightness_kbd levels, be a bit clever */
-		step = gpm_srv_brightness_kbd_get_step (brightness);
-		/* don't overflow */
-		if (brightness->priv->current_hw + step > brightness->priv->levels - 1) {
-			step = (brightness->priv->levels - 1) - brightness->priv->current_hw;
-		}
-		gpm_srv_brightness_kbd_set_hw (brightness, brightness->priv->current_hw + step);
-	}
-
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
-	return TRUE;
-}
-
-/**
- * gpm_srv_brightness_kbd_down:
- * @srv_brightness_kbd: This srv_brightness_kbd class instance
- *
- * If possible, put the srv_brightness_kbd of the KBD down one unit.
- **/
-gboolean
-gpm_srv_brightness_kbd_down (GpmSrvBrightnessKbd *brightness)
-{
-	gint step;
-	gint percentage;
-
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_KBD (brightness), FALSE);
-
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_srv_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
-	} else {
-		/* macbook pro has a bazzillion srv_brightness_kbd levels, be a bit clever */
-		step = gpm_srv_brightness_kbd_get_step (brightness);
-		/* don't underflow */
-		if (brightness->priv->current_hw < step) {
-			step = brightness->priv->current_hw;
-		}
-		gpm_srv_brightness_kbd_set_hw (brightness, brightness->priv->current_hw - step);
-	}
-
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
-	return TRUE;
-}
-#endif
-
 /**
  * conf_key_changed_cb:
  *
@@ -153,25 +79,25 @@ gpm_srv_brightness_kbd_down (GpmSrvBrightnessKbd *brightness)
 static void
 conf_key_changed_cb (GpmConf          *conf,
 		     const gchar      *key,
-		     GpmSrvBrightnessKbd *brightness)
+		     GpmSrvBrightnessKbd *srv_brightness)
 {
 	gint value;
 	GpmAcAdapterState state;
 
-	gpm_ac_adapter_get_state (brightness->priv->ac_adapter, &state);
+	gpm_ac_adapter_get_state (srv_brightness->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0) {
 
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		if (state == GPM_AC_ADAPTER_PRESENT) {
-			gpm_brightness_kbd_set_std (brightness->priv->brightness, value);
+			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
 
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		if (state == GPM_AC_ADAPTER_MISSING) {
-			gpm_brightness_kbd_set_std (brightness->priv->brightness, value);
+			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	}
@@ -188,17 +114,17 @@ conf_key_changed_cb (GpmConf          *conf,
 static void
 ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 			GpmAcAdapterState state,
-			GpmSrvBrightnessKbd *brightness)
+			GpmSrvBrightnessKbd *srv_brightness)
 {
 	guint value;
 
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &value);
+		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &value);
 	} else {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &value);
+		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &value);
 	}
 
-	gpm_brightness_kbd_set_std (brightness->priv->brightness, value);
+	gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 }
 
 /**
@@ -211,18 +137,18 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 static void
 button_pressed_cb (GpmButton        *button,
 		   const gchar      *type,
-		   GpmSrvBrightnessKbd *brightness)
+		   GpmSrvBrightnessKbd *srv_brightness)
 {
 	gpm_debug ("Button press event type=%s", type);
 
 	if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
-		gpm_brightness_kbd_up (brightness->priv->brightness);
+		gpm_brightness_kbd_up (srv_brightness->priv->brightness);
 
 	} else if ((strcmp (type, GPM_BUTTON_KBD_BRIGHT_UP) == 0)) {
-		gpm_brightness_kbd_down (brightness->priv->brightness);
+		gpm_brightness_kbd_down (srv_brightness->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_KBD_BRIGHT_TOGGLE) == 0) {
-		gpm_brightness_kbd_toggle (brightness->priv->brightness);
+		gpm_brightness_kbd_toggle (srv_brightness->priv->brightness);
 
 	}
 }
@@ -249,31 +175,34 @@ gpm_srv_brightness_kbd_constructor (GType type,
 static void
 gpm_srv_brightness_kbd_finalize (GObject *object)
 {
-	GpmSrvBrightnessKbd *brightness;
+	GpmSrvBrightnessKbd *srv_brightness;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_SRV_BRIGHTNESS_KBD (object));
-	brightness = GPM_SRV_BRIGHTNESS_KBD (object);
+	srv_brightness = GPM_SRV_BRIGHTNESS_KBD (object);
 
-	if (brightness->priv->feedback != NULL) {
-		g_object_unref (brightness->priv->feedback);
+	if (srv_brightness->priv->feedback != NULL) {
+		g_object_unref (srv_brightness->priv->feedback);
 	}
-	if (brightness->priv->conf != NULL) {
-		g_object_unref (brightness->priv->conf);
+	if (srv_brightness->priv->conf != NULL) {
+		g_object_unref (srv_brightness->priv->conf);
 	}
-	if (brightness->priv->sensor != NULL) {
-		g_object_unref (brightness->priv->sensor);
+	if (srv_brightness->priv->sensor != NULL) {
+		g_object_unref (srv_brightness->priv->sensor);
 	}
-	if (brightness->priv->ac_adapter != NULL) {
-		g_object_unref (brightness->priv->ac_adapter);
+	if (srv_brightness->priv->ac_adapter != NULL) {
+		g_object_unref (srv_brightness->priv->ac_adapter);
 	}
-	if (brightness->priv->button != NULL) {
-		g_object_unref (brightness->priv->button);
+	if (srv_brightness->priv->button != NULL) {
+		g_object_unref (srv_brightness->priv->button);
 	}
-	if (brightness->priv->idle != NULL) {
-		g_object_unref (brightness->priv->idle);
+	if (srv_brightness->priv->idle != NULL) {
+		g_object_unref (srv_brightness->priv->idle);
+	}
+	if (srv_brightness->priv->brightness != NULL) {
+		g_object_unref (srv_brightness->priv->brightness);
 	}
 
-	g_return_if_fail (brightness->priv != NULL);
+	g_return_if_fail (srv_brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_srv_brightness_kbd_parent_class)->finalize (object);
 }
 
@@ -290,66 +219,6 @@ gpm_srv_brightness_kbd_class_init (GpmSrvBrightnessKbdClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmSrvBrightnessKbdPrivate));
 }
 
-#if 0
-/**
- * gpm_srv_brightness_kbd_is_disabled:
- * @brightness: the instance
- * @is_disabled: out value
- *
- * Returns whether the keyboard backlight is disabled by the user
- */
-gboolean
-gpm_srv_brightness_kbd_is_disabled  (GpmSrvBrightnessKbd	*brightness,
-				     gboolean                   *is_disabled)
-{
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_KBD (brightness), FALSE);
-	g_return_val_if_fail (is_disabled != NULL, FALSE);
-
-	*is_disabled = brightness->priv->is_disabled;
-
-	return TRUE;
-}
-#endif
-
-#if 0
-/**
- * gpm_srv_brightness_kbd_toggle:
- * @brightness: the instance
- * @is_disabled: whether keyboard backlight is disabled by the user
- * @do_startup_on_enable: whether we should automatically select the
- * keyboard backlight depending on the ambient light when enabling it.
- *
- * Set whether keyboard backlight is disabled by the user. Note that
- * do_startup_on_enable only makes sense if is_disables is FALSE. Typically
- * one wants do_startup_on_enable=TRUE when handling the keyboard backlight
- * is already disabled and the user presses illum+ and you want to enable
- * the backlight in response to that.
- **/
-gboolean
-gpm_srv_brightness_kbd_toggle (GpmSrvBrightnessKbd *brightness)
-{
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_KBD (brightness), FALSE);
-
-	if (brightness->priv->is_disabled == FALSE) {
-		/* go dark, that's what the user wants */
-		gpm_srv_brightness_kbd_set_std (brightness, 0);
-		gpm_feedback_display_value (brightness->priv->feedback, 0.0f);
-	} else {
-		/* select the appropriate level just as when we're starting up */
-//		if (do_startup_on_enable) {
-			adjust_kbd_brightness_according_to_ambient_light (brightness, TRUE);
-			gpm_srv_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
-			gpm_feedback_display_value (brightness->priv->feedback,
-						    (gfloat) gpm_discrete_to_percent (brightness->priv->current_hw,
-										     brightness->priv->levels) / 100.0f);
-//		}
-	}
-	return TRUE;
-}
-#endif
-
 /**
  * idle_changed_cb:
  * @idle: The idle class instance
@@ -364,17 +233,35 @@ gpm_srv_brightness_kbd_toggle (GpmSrvBrightnessKbd *brightness)
 static void
 idle_changed_cb (GpmIdle          *idle,
 		 GpmIdleMode       mode,
-		 GpmSrvBrightnessKbd *brightness)
+		 GpmSrvBrightnessKbd *srv_brightness)
 {
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
-		gpm_brightness_kbd_undim (brightness->priv->brightness);
+		gpm_brightness_kbd_undim (srv_brightness->priv->brightness);
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
-		gpm_brightness_kbd_dim (brightness->priv->brightness);
+		gpm_brightness_kbd_dim (srv_brightness->priv->brightness);
 	}
 }
+
+/**
+ * brightness_changed_cb:
+ * @brightness: The GpmBrightnessKbd class instance
+ * @percentage: The new percentage brightness
+ * @brightness: This class instance
+ *
+ * This callback is called when the brightness value changes.
+ **/
+static void
+brightness_changed_cb (GpmBrightnessKbd    *brightness,
+		       gint                 percentage,
+		       GpmSrvBrightnessKbd *srv_brightness)
+{
+	gpm_debug ("Need to display backlight feedback value %i", percentage);
+	gpm_feedback_display_value (srv_brightness->priv->feedback, (float) percentage / 100.0f);
+}
+
 
 /**
  * gpm_srv_brightness_kbd_init:
@@ -385,33 +272,41 @@ idle_changed_cb (GpmIdle          *idle,
  * We only control the first keyboard_backlight object if there are more than one.
  **/
 static void
-gpm_srv_brightness_kbd_init (GpmSrvBrightnessKbd *brightness)
+gpm_srv_brightness_kbd_init (GpmSrvBrightnessKbd *srv_brightness)
 {
-	brightness->priv = GPM_SRV_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
+	srv_brightness->priv = GPM_SRV_BRIGHTNESS_KBD_GET_PRIVATE (srv_brightness);
 
-	brightness->priv->hal = gpm_hal_new ();
-	brightness->priv->conf = gpm_conf_new ();
-	g_signal_connect (brightness->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), brightness);
+	srv_brightness->priv->hal = gpm_hal_new ();
+	srv_brightness->priv->conf = gpm_conf_new ();
 
-	brightness->priv->feedback = gpm_feedback_new ();
-	gpm_feedback_set_icon_name (brightness->priv->feedback,
+	/* watch for dim value changes */
+	g_signal_connect (srv_brightness->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), srv_brightness);
+
+	/* watch for manual brightness changes (for the feedback widget) */
+	srv_brightness->priv->brightness = gpm_brightness_kbd_new ();
+	g_signal_connect (srv_brightness->priv->brightness, "brightness-changed",
+			  G_CALLBACK (brightness_changed_cb), srv_brightness);
+
+	/* use a visual widget */
+	srv_brightness->priv->feedback = gpm_feedback_new ();
+	gpm_feedback_set_icon_name (srv_brightness->priv->feedback,
 				    GPM_STOCK_BRIGHTNESS_KBD);
 
 	/* we use ac_adapter for the ac-adapter-changed signal */
-	brightness->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (brightness->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), brightness);
+	srv_brightness->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (srv_brightness->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), srv_brightness);
 
 	/* watch for brightness up and down buttons */
-	brightness->priv->button = gpm_button_new ();
-	g_signal_connect (brightness->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), brightness);
+	srv_brightness->priv->button = gpm_button_new ();
+	g_signal_connect (srv_brightness->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), srv_brightness);
 
 	/* watch for idle mode changes */
-	brightness->priv->idle = gpm_idle_new ();
-	g_signal_connect (brightness->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), brightness);
+	srv_brightness->priv->idle = gpm_idle_new ();
+	g_signal_connect (srv_brightness->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), srv_brightness);
 }
 
 /**

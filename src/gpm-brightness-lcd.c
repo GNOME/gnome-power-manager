@@ -65,7 +65,13 @@ struct GpmBrightnessLcdPrivate
 	GpmHal			*hal;
 };
 
+enum {
+	BRIGHTNESS_CHANGED,
+	LAST_SIGNAL
+};
+
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
+static guint	     signals [LAST_SIGNAL] = { 0, };
 static gpointer      gpm_brightness_lcd_object = NULL;
 
 /**
@@ -159,6 +165,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 		gpm_warning ("SetBrightness failed!");
 		return FALSE;
 	}
+
 	brightness->priv->current_hw = brightness_level_hw;
 	return TRUE;
 }
@@ -379,7 +386,7 @@ gpm_brightness_lcd_get (GpmBrightnessLcd *brightness,
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						       brightness->priv->levels);
+					      brightness->priv->levels);
 	*brightness_level = percentage;
 	return TRUE;
 }
@@ -413,7 +420,10 @@ gpm_brightness_lcd_up (GpmBrightnessLcd *brightness)
 	}
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
+					      brightness->priv->levels);
+	g_debug ("emitting brightness-changed (%i)", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
+
 	return TRUE;
 }
 
@@ -446,7 +456,10 @@ gpm_brightness_lcd_down (GpmBrightnessLcd *brightness)
 	}
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
+					      brightness->priv->levels);
+	g_debug ("emitting brightness-changed (%i)", percentage);
+	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
+
 	return TRUE;
 }
 
@@ -503,6 +516,18 @@ gpm_brightness_lcd_class_init (GpmBrightnessLcdClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_brightness_lcd_finalize;
 	object_class->constructor  = gpm_brightness_lcd_constructor;
+
+	signals [BRIGHTNESS_CHANGED] =
+		g_signal_new ("brightness-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmBrightnessLcdClass, brightness_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE,
+			      1,
+			      G_TYPE_INT);
 
 	g_type_class_add_private (klass, sizeof (GpmBrightnessLcdPrivate));
 }

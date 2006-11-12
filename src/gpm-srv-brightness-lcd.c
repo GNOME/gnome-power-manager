@@ -69,48 +69,6 @@ struct GpmSrvBrightnessLcdPrivate
 
 G_DEFINE_TYPE (GpmSrvBrightnessLcd, gpm_srv_brightness_lcd, G_TYPE_OBJECT)
 
-#if 0
-/**
- * gpm_srv_brightness_lcd_up:
- * @brightness: This brightness class instance
- *
- * If possible, put the brightness of the LCD up one unit.
- **/
-static gboolean
-gpm_srv_brightness_lcd_up (GpmSrvBrightnessLcd *brightness)
-{
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
-	return TRUE;
-}
-
-/**
- * gpm_srv_brightness_lcd_down:
- * @brightness: This brightness class instance
- *
- * If possible, put the brightness of the LCD down one unit.
- **/
-static gboolean
-gpm_srv_brightness_lcd_down (GpmSrvBrightnessLcd *brightness)
-{
-	gint step;
-	gint percentage;
-
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_LCD (brightness), FALSE);
-
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-						   brightness->priv->levels);
-
-	gpm_debug ("Need to diplay backlight feedback value %i", percentage);
-	gpm_feedback_display_value (brightness->priv->feedback, (float) percentage / 100.0f);
-	return TRUE;
-}
-#endif
-
 /**
  * conf_key_changed_cb:
  *
@@ -119,31 +77,31 @@ gpm_srv_brightness_lcd_down (GpmSrvBrightnessLcd *brightness)
 static void
 conf_key_changed_cb (GpmConf          *conf,
 		     const gchar      *key,
-		     GpmSrvBrightnessLcd *brightness)
+		     GpmSrvBrightnessLcd *srv_brightness)
 {
 	gint value;
 	GpmAcAdapterState state;
 
-	gpm_ac_adapter_get_state (brightness->priv->ac_adapter, &state);
+	gpm_ac_adapter_get_state (srv_brightness->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		if (state == GPM_AC_ADAPTER_PRESENT) {
-			gpm_brightness_lcd_set_std (brightness->priv->brightness, value);
+			gpm_brightness_lcd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		if (state == GPM_AC_ADAPTER_MISSING) {
-			gpm_brightness_lcd_set_std (brightness->priv->brightness, value);
+			gpm_brightness_lcd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-		gpm_brightness_lcd_set_dim (brightness->priv->brightness, value);
+		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+		gpm_brightness_lcd_set_dim (srv_brightness->priv->brightness, value);
 	}
 }
 
@@ -158,21 +116,21 @@ conf_key_changed_cb (GpmConf          *conf,
 static void
 ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 			GpmAcAdapterState state,
-			GpmSrvBrightnessLcd *brightness)
+			GpmSrvBrightnessLcd *srv_brightness)
 {
 	gboolean do_laptop_lcd;
 	guint value;
 
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 	} else {
-		gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
 	}
 
 	/* only do brightness changes if we have the hardware */
-	gpm_conf_get_bool (brightness->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
+	gpm_conf_get_bool (srv_brightness->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
 	if (do_laptop_lcd) {
-		gpm_brightness_lcd_set_std (brightness->priv->brightness, value);
+		gpm_brightness_lcd_set_std (srv_brightness->priv->brightness, value);
 	}
 }
 
@@ -186,22 +144,22 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 static void
 button_pressed_cb (GpmButton        *button,
 		   const gchar      *type,
-		   GpmSrvBrightnessLcd *brightness)
+		   GpmSrvBrightnessLcd *srv_brightness)
 {
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 
-		gpm_brightness_lcd_up (brightness->priv->brightness);
+		gpm_brightness_lcd_up (srv_brightness->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 
-		gpm_brightness_lcd_down (brightness->priv->brightness);
+		gpm_brightness_lcd_down (srv_brightness->priv->brightness);
 
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 
 		/* make sure we undim when we lift the lid */
-		gpm_brightness_lcd_undim (brightness->priv->brightness);
+		gpm_brightness_lcd_undim (srv_brightness->priv->brightness);
 	}
 }
 
@@ -217,13 +175,13 @@ button_pressed_cb (GpmButton        *button,
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle          *idle,
-		 GpmIdleMode       mode,
-		 GpmSrvBrightnessLcd *brightness)
+idle_changed_cb (GpmIdle             *idle,
+		 GpmIdleMode          mode,
+		 GpmSrvBrightnessLcd *srv_brightness)
 {
 	gboolean laptop_do_dim;
 
-	gpm_conf_get_bool (brightness->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
+	gpm_conf_get_bool (srv_brightness->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
 
 	/* should we ignore this? */
 	if (laptop_do_dim == FALSE) {
@@ -231,27 +189,44 @@ idle_changed_cb (GpmIdle          *idle,
 	}
 
 	/* don't dim or undim the screen when the lid is closed */
-	if (button_is_lid_closed (brightness->priv->button) == TRUE) {
+	if (button_is_lid_closed (srv_brightness->priv->button) == TRUE) {
 		return;
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
-		gpm_brightness_lcd_undim (brightness->priv->brightness);
+		gpm_brightness_lcd_undim (srv_brightness->priv->brightness);
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
 		/* Dim the screen, fixes #328564 */
-		gpm_brightness_lcd_dim (brightness->priv->brightness);
+		gpm_brightness_lcd_dim (srv_brightness->priv->brightness);
 	}
+}
+
+/**
+ * brightness_changed_cb:
+ * @brightness: The GpmBrightnessLcd class instance
+ * @percentage: The new percentage brightness
+ * @brightness: This class instance
+ *
+ * This callback is called when the brightness value changes.
+ **/
+static void
+brightness_changed_cb (GpmBrightnessLcd    *brightness,
+		       gint                 percentage,
+		       GpmSrvBrightnessLcd *srv_brightness)
+{
+	gpm_debug ("Need to display backlight feedback value %i", percentage);
+	gpm_feedback_display_value (srv_brightness->priv->feedback, (float) percentage / 100.0f);
 }
 
 /**
  * gpm_srv_brightness_lcd_constructor:
  **/
 static GObject *
-gpm_srv_brightness_lcd_constructor (GType		   type,
-			        guint		   n_construct_properties,
+gpm_srv_brightness_lcd_constructor (GType type,
+			        guint n_construct_properties,
 			        GObjectConstructParam *construct_properties)
 {
 	GpmSrvBrightnessLcd      *brightness;
@@ -268,28 +243,31 @@ gpm_srv_brightness_lcd_constructor (GType		   type,
 static void
 gpm_srv_brightness_lcd_finalize (GObject *object)
 {
-	GpmSrvBrightnessLcd *brightness;
+	GpmSrvBrightnessLcd *srv_brightness;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_SRV_BRIGHTNESS_LCD (object));
-	brightness = GPM_SRV_BRIGHTNESS_LCD (object);
+	srv_brightness = GPM_SRV_BRIGHTNESS_LCD (object);
 
-	if (brightness->priv->feedback != NULL) {
-		g_object_unref (brightness->priv->feedback);
+	if (srv_brightness->priv->feedback != NULL) {
+		g_object_unref (srv_brightness->priv->feedback);
 	}
-	if (brightness->priv->conf != NULL) {
-		g_object_unref (brightness->priv->conf);
+	if (srv_brightness->priv->conf != NULL) {
+		g_object_unref (srv_brightness->priv->conf);
 	}
-	if (brightness->priv->ac_adapter != NULL) {
-		g_object_unref (brightness->priv->ac_adapter);
+	if (srv_brightness->priv->ac_adapter != NULL) {
+		g_object_unref (srv_brightness->priv->ac_adapter);
 	}
-	if (brightness->priv->button != NULL) {
-		g_object_unref (brightness->priv->button);
+	if (srv_brightness->priv->button != NULL) {
+		g_object_unref (srv_brightness->priv->button);
 	}
-	if (brightness->priv->idle != NULL) {
-		g_object_unref (brightness->priv->idle);
+	if (srv_brightness->priv->idle != NULL) {
+		g_object_unref (srv_brightness->priv->idle);
+	}
+	if (srv_brightness->priv->brightness != NULL) {
+		g_object_unref (srv_brightness->priv->brightness);
 	}
 
-	g_return_if_fail (brightness->priv != NULL);
+	g_return_if_fail (srv_brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_srv_brightness_lcd_parent_class)->finalize (object);
 }
 
@@ -315,38 +293,45 @@ gpm_srv_brightness_lcd_class_init (GpmSrvBrightnessLcdClass *klass)
  * We only control the first laptop_panel object if there are more than one.
  **/
 static void
-gpm_srv_brightness_lcd_init (GpmSrvBrightnessLcd *brightness)
+gpm_srv_brightness_lcd_init (GpmSrvBrightnessLcd *srv_brightness)
 {
 	gint value;
 
-	brightness->priv = GPM_SRV_BRIGHTNESS_LCD_GET_PRIVATE (brightness);
+	srv_brightness->priv = GPM_SRV_BRIGHTNESS_LCD_GET_PRIVATE (srv_brightness);
 
-	brightness->priv->conf = gpm_conf_new ();
-	g_signal_connect (brightness->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), brightness);
+	/* watch for dim value changes */
+	srv_brightness->priv->conf = gpm_conf_new ();
+	g_signal_connect (srv_brightness->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), srv_brightness);
+
+	/* watch for manual brightness changes (for the feedback widget) */
+	srv_brightness->priv->brightness = gpm_brightness_lcd_new ();
+	g_signal_connect (srv_brightness->priv->brightness, "brightness-changed",
+			  G_CALLBACK (brightness_changed_cb), srv_brightness);
 
 	/* set the default dim */
-	gpm_conf_get_int (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-	gpm_brightness_lcd_set_dim (brightness->priv->brightness, value);
+	gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+	gpm_brightness_lcd_set_dim (srv_brightness->priv->brightness, value);
 
-	brightness->priv->feedback = gpm_feedback_new ();
-	gpm_feedback_set_icon_name (brightness->priv->feedback,
+	/* use a visual widget */
+	srv_brightness->priv->feedback = gpm_feedback_new ();
+	gpm_feedback_set_icon_name (srv_brightness->priv->feedback,
 				    GPM_STOCK_BRIGHTNESS_LCD);
 
 	/* we use ac_adapter for the ac-adapter-changed signal */
-	brightness->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (brightness->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), brightness);
+	srv_brightness->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (srv_brightness->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), srv_brightness);
 
 	/* watch for brightness up and down buttons */
-	brightness->priv->button = gpm_button_new ();
-	g_signal_connect (brightness->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), brightness);
+	srv_brightness->priv->button = gpm_button_new ();
+	g_signal_connect (srv_brightness->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), srv_brightness);
 
 	/* watch for idle mode changes */
-	brightness->priv->idle = gpm_idle_new ();
-	g_signal_connect (brightness->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), brightness);
+	srv_brightness->priv->idle = gpm_idle_new ();
+	g_signal_connect (srv_brightness->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), srv_brightness);
 }
 
 /**

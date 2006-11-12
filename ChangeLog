@@ -1,3 +1,42 @@
+2006-11-12  Richard Hughes  <richard@hughsie.com>
+
+	* docs/dbus-interface.html:
+	* docs/faq.html:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* docs/sleep-names.html:
+	Regenerate.
+	
+	* src/.cvsignore:
+	* src/run-gpm.sh:
+	* src/valgrind-gpm.sh:
+	Save the output in .log files.
+
+	* src/gpm-ac-adapter.c:
+	Tab fixes.
+
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-kbd.h:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-brightness-lcd.h:
+	Send a signal when the brightness is manually changed.
+	
+	* src/gpm-hal.c:
+	Only try to clear the error if we are using a new HAL.
+	
+	* src/gpm-manager.c:
+	Don't re-use the manager object on atexit as it produces an
+	invalid read using valgrind.
+
+	* src/gpm-srv-brightness-kbd.c:
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	Add back the brightness changed UI by connecing to the
+	brightness-changed signal.
+
+	* src/gpm-srv-cpufreq.c:
+	Set the policy before the nice, else we get a warning.
+
 2006-11-10  Richard Hughes <richard@hughsie.com>
 
 	* po/POTFILES.in:

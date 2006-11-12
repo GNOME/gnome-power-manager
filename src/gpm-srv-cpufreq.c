@@ -82,8 +82,8 @@ gpm_srv_cpufreq_sync_policy (GpmSrvCpuFreq *srv_cpufreq)
 	g_free (cpufreq_policy);
 
 	/* change to the right governer and settings */
-	gpm_cpufreq_set_consider_nice (srv_cpufreq->priv->cpufreq, cpufreq_consider_nice);
 	gpm_cpufreq_set_governor (srv_cpufreq->priv->cpufreq, srv_cpufreq_type);
+	gpm_cpufreq_set_consider_nice (srv_cpufreq->priv->cpufreq, cpufreq_consider_nice);
 	gpm_cpufreq_set_performance (srv_cpufreq->priv->cpufreq, cpufreq_performance);
 	return TRUE;
 }

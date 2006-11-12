@@ -121,7 +121,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      manager_object = NULL; /* needed for g_atexit */
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
 
@@ -683,7 +682,7 @@ gpm_manager_shutdown (GpmManager *manager,
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
-	if (save_session) {
+	if (save_session == TRUE) {
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
@@ -1917,9 +1916,10 @@ static void
 gpm_manager_at_exit (void)
 {
 	/* we can't use manager as g_atexit has no userdata */
-	GpmManager *manager = GPM_MANAGER (manager_object);
-	gpm_hal_clear_suspend_error (manager->priv->hal);
-	gpm_hal_clear_hibernate_error (manager->priv->hal);
+	GpmHal *hal = gpm_hal_new ();
+	gpm_hal_clear_suspend_error (hal);
+	gpm_hal_clear_hibernate_error (hal);
+	g_object_unref (hal);
 }
 
 /**
@@ -2119,7 +2119,6 @@ gpm_manager_new (void)
 	GpmManager *manager;
 
 	manager = g_object_new (GPM_TYPE_MANAGER, NULL);
-	manager_object = manager;
 
 	return GPM_MANAGER (manager);
 }

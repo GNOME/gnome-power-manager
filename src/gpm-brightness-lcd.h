@@ -45,22 +45,24 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* brightness_changed)	(GpmBrightnessLcd	*brightness,
+						 gint			 percentage);
 } GpmBrightnessLcdClass;
 
-GType		 gpm_brightness_lcd_get_type		(void);
-GpmBrightnessLcd *gpm_brightness_lcd_new		(void);
-gboolean	  gpm_brightness_lcd_has_hw		(void);
+GType		 gpm_brightness_lcd_get_type	(void);
+GpmBrightnessLcd *gpm_brightness_lcd_new	(void);
+gboolean	  gpm_brightness_lcd_has_hw	(void);
 
-gboolean	 gpm_brightness_lcd_up			(GpmBrightnessLcd	*brightness);
-gboolean	 gpm_brightness_lcd_down		(GpmBrightnessLcd	*brightness);
-gboolean	 gpm_brightness_lcd_get			(GpmBrightnessLcd	*brightness,
-							 guint			*brightness_level);
-gboolean	 gpm_brightness_lcd_set_dim		(GpmBrightnessLcd	*brightness,
-							 guint			 brightness_level);
-gboolean	 gpm_brightness_lcd_set_std		(GpmBrightnessLcd	*brightness,
-							 guint			 brightness_level);
-gboolean	 gpm_brightness_lcd_dim			(GpmBrightnessLcd	*brightness);
-gboolean	 gpm_brightness_lcd_undim		(GpmBrightnessLcd	*brightness);
+gboolean	 gpm_brightness_lcd_up		(GpmBrightnessLcd	*brightness);
+gboolean	 gpm_brightness_lcd_down	(GpmBrightnessLcd	*brightness);
+gboolean	 gpm_brightness_lcd_get		(GpmBrightnessLcd	*brightness,
+						 guint			*brightness_level);
+gboolean	 gpm_brightness_lcd_set_dim	(GpmBrightnessLcd	*brightness,
+						 guint			 brightness_level);
+gboolean	 gpm_brightness_lcd_set_std	(GpmBrightnessLcd	*brightness,
+						 guint			 brightness_level);
+gboolean	 gpm_brightness_lcd_dim		(GpmBrightnessLcd	*brightness);
+gboolean	 gpm_brightness_lcd_undim	(GpmBrightnessLcd	*brightness);
 
 G_END_DECLS
 

@@ -1536,6 +1536,7 @@ gpm_hal_has_hibernate_error (GpmHal *hal, gboolean *state)
 gboolean
 gpm_hal_clear_suspend_error (GpmHal *hal)
 {
+#if HAVE_HAL_NEW
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
@@ -1561,6 +1562,7 @@ gpm_hal_clear_suspend_error (GpmHal *hal)
 		gpm_warning ("SuspendClearError failed!");
 		return FALSE;
 	}
+#endif
 	return TRUE;
 }
 
@@ -1575,6 +1577,7 @@ gpm_hal_clear_suspend_error (GpmHal *hal)
 gboolean
 gpm_hal_clear_hibernate_error (GpmHal *hal)
 {
+#if HAVE_HAL_NEW
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
@@ -1600,6 +1603,7 @@ gpm_hal_clear_hibernate_error (GpmHal *hal)
 		gpm_warning ("HibernateClearError failed!");
 		return FALSE;
 	}
+#endif
 	return TRUE;
 }
 
