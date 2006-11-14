@@ -53,7 +53,7 @@ LIBNOTIFY_REQUIRED=0.3.0
 LIBNOTIFY_SUGGESTED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
-LIBGUNIQUEAPP_REQUIRED=0.5
+GTKUNIQUE_REQUIRED=0.9.1
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -68,7 +68,7 @@ AC_SUBST(LIBGLADE_REQUIRED)
 AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
-AC_SUBST(LIBGUNIQUEAPP_REQUIRED)
+AC_SUBST(GTKUNIQUE_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -255,19 +255,20 @@ fi
 AM_CONDITIONAL([HAVE_LIBNOTIFY_NEW], [test $have_libnotify_new = yes])
 
 dnl ---------------------------------------------------------------------------
-dnl - Is libguniqueapp available?
+dnl - Is gtkunique available?
 dnl ---------------------------------------------------------------------------
-if $PKG_CONFIG --atleast-version $LIBGUNIQUEAPP_REQUIRED libguniqueapp; then
-   have_libguniqueapp=yes
-   PKG_CHECK_MODULES(LIBGUNIQUEAPP, libguniqueapp >= $LIBGUNIQUEAPP_REQUIRED)
-   AC_SUBST(LIBGUNIQUEAPP_CFLAGS)
-   AC_SUBST(LIBGUNIQUEAPP_LIBS)
-   AC_DEFINE(HAVE_LIBGUNIQUEAPP, 1, [Building with libguniqueapp support]) 
+if $PKG_CONFIG --atleast-version $GTKUNIQUE_REQUIRED gtkunique-1.0; then
+   have_gtkunique=yes
+   echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+   PKG_CHECK_MODULES(GTKUNIQUE, gtkunique-1.0 >= $GTKUNIQUE_REQUIRED)
+   AC_SUBST(GTKUNIQUE_CFLAGS)
+   AC_SUBST(GTKUNIQUE_LIBS)
+   AC_DEFINE(HAVE_GTKUNIQUE, 1, [Building with gtkunique support]) 
 else
-   have_libguniqueapp=no
-   AC_DEFINE(HAVE_LIBGUNIQUEAPP, 0, [Not building with libguniqueapp support]) 
+   have_gtkunique=no
+   AC_DEFINE(HAVE_GTKUNIQUE, 0, [Not building with gtkunique support]) 
 fi
-AM_CONDITIONAL([HAVE_LIBGUNIQUEAPP], [test $have_libguniqueapp = yes])
+AM_CONDITIONAL([HAVE_GTKUNIQUE], [test $have_gtkunique = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Some utility functions to make checking for X things easier.
@@ -509,7 +510,7 @@ echo "
         compiler:                  ${CC}
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
-        libguniqueapp support:     ${have_libguniqueapp}
+        gtkunique support:         ${have_gtkunique}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}
         XEVENTS support:           ${have_xevents}

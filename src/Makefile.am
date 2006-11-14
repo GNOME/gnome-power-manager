@@ -15,7 +15,7 @@ INCLUDES =						\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
 	$(LIBNOTIFY_CFLAGS)				\
-	$(LIBGUNIQUEAPP_CFLAGS)				\
+	$(GTKUNIQUE_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
@@ -62,10 +62,9 @@ gnome_power_statistics_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(NULL)
 
-if HAVE_LIBGUNIQUEAPP
+if HAVE_GTKUNIQUE
 gnome_power_statistics_LDADD +=				\
-	$(LIBGUNIQUEAPP_LIBS)				\
-	$(NULL)
+	$(GTKUNIQUE_LIBS)
 endif
 
 gnome_power_inhibit_test_SOURCES =			\
@@ -114,10 +113,9 @@ gnome_power_preferences_LDADD =				\
 	$(DBUS_LIBS)					\
 	$(NULL)
 
-if HAVE_LIBGUNIQUEAPP
+if HAVE_GTKUNIQUE
 gnome_power_preferences_LDADD +=			\
-	$(LIBGUNIQUEAPP_LIBS)				\
-	$(NULL)
+	$(GTKUNIQUE_LIBS)
 endif
 
 gnome_power_manager_SOURCES =				\

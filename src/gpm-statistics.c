@@ -29,8 +29,8 @@
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-help.h>
 
-#if HAVE_LIBGUNIQUEAPP
-#include <libguniqueapp/guniqueapp.h>
+#if HAVE_GTKUNIQUE
+#include <gtkunique/gtkunique.h>
 #endif
 
 #include "gpm-conf.h"
@@ -69,20 +69,21 @@ gpm_statistics_close_cb (GpmStatistics *statistics)
 	exit (0);
 }
 
-#if HAVE_LIBGUNIQUEAPP
+#if HAVE_GTKUNIQUE
 /**
- * guniqueapp_command_cb:
+ * gtkuniqueapp_command_cb:
  **/
 static void
-guniqueapp_command_cb (GUniqueApp       *app,
-		       GUniqueAppCommand command,
-		       gchar            *data,
-		       gchar            *startup_id,
-		       guint             workspace,
-		       gpointer          user_data)
+gtkuniqueapp_command_cb (GtkUniqueApp    *app,
+		         GtkUniqueCommand command,
+		         const gchar     *data,
+		         const gchar     *startup_id,
+		         GdkScreen	 *screen,
+		         guint            workspace,
+		         gpointer         user_data)
 {
 	GpmStatistics *statistics = GPM_STATISTICS (user_data);
-	if (command == G_UNIQUE_APP_ACTIVATE) {
+	if (command == GTK_UNIQUE_ACTIVATE) {
 		gpm_statistics_activate_window (statistics);
 	}
 }
@@ -99,8 +100,8 @@ main (int argc, char **argv)
  	GnomeProgram    *program;
 	GpmStatistics	*statistics = NULL;
 	GMainLoop       *loop;
-#if HAVE_LIBGUNIQUEAPP
-	GUniqueApp *uniqueapp;
+#if HAVE_GTKUNIQUE
+	GtkUniqueApp *uniqueapp;
 	const gchar *startup_id = NULL;
 #endif
 
@@ -118,7 +119,7 @@ main (int argc, char **argv)
 
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 
-#if HAVE_LIBGUNIQUEAPP
+#if HAVE_GTKUNIQUE
 	/* FIXME: We don't need to get the startup id once we can
 	 * depend on gtk+-2.12.  Until then we must get it BEFORE
 	 * gtk_init() is called, otherwise gtk_init() will clear it
@@ -137,17 +138,16 @@ main (int argc, char **argv)
 
 	gpm_debug_init (verbose);
 
-#if HAVE_LIBGUNIQUEAPP
+#if HAVE_GTKUNIQUE
 	gpm_debug ("Using libguniqueapp support.");
 
-	/* Arrr! Until we depend on gtk+2 2.12 we can't just use g_unique_app_get */
-	uniqueapp = g_unique_app_get_with_startup_id ("gnome-power-statistics",
-						      startup_id);
+	/* Arrr! Until we depend on gtk+2 2.12 we can't just use gtk_unique_app_get */
+	uniqueapp = gtk_unique_app_new_with_id ("org.gnome.PowerManager.Statistics", startup_id);
 	/* check to see if the user has another prefs window open */
-	if (g_unique_app_is_running (uniqueapp)) {
+	if (gtk_unique_app_is_running (uniqueapp)) {
 		gpm_warning ("You have another instance running. "
 			     "This program will now close");
-		g_unique_app_activate (uniqueapp);
+		gtk_unique_app_activate (uniqueapp);
 
 		/* FIXME: This next line should be removed once we can depend
 		 * upon gtk+-2.12.  This causes the busy cursor and temporary
@@ -168,10 +168,10 @@ main (int argc, char **argv)
 				  G_CALLBACK (gpm_statistics_help_cb), NULL);
 		g_signal_connect (statistics, "action-close",
 				  G_CALLBACK (gpm_statistics_close_cb), NULL);
-#if HAVE_LIBGUNIQUEAPP
+#if HAVE_GTKUNIQUE
 		/* Listen for messages from another instances */
 		g_signal_connect (G_OBJECT (uniqueapp), "message",
-				  G_CALLBACK (guniqueapp_command_cb), statistics);
+				  G_CALLBACK (gtkuniqueapp_command_cb), statistics);
 #endif
 		loop = g_main_loop_new (NULL, FALSE);
 		g_main_loop_run (loop);
@@ -181,7 +181,7 @@ main (int argc, char **argv)
 
 	gpm_debug_shutdown ();
 
-#if HAVE_LIBGUNIQUEAPP
+#if HAVE_GTKUNIQUE
 	g_object_unref (uniqueapp);
 #endif
 

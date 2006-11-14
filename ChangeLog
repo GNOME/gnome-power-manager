@@ -1,5 +1,13 @@
 2006-11-14  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	* src/Makefile.am:
+	* src/gpm-prefs.c: (gtkuniqueapp_command_cb):
+	* src/gpm-statistics.c: (gtkuniqueapp_command_cb):
+	Use GtkUnique rather than libguiqueapp.
+
+2006-11-14  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_key_add):
 	* src/gpm-graph-widget.h:
 	* src/gpm-statistics-core.c: (gpm_statistics_init):
