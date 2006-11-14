@@ -82,7 +82,10 @@ gtkuniqueapp_command_cb (GtkUniqueApp    *app,
 		         guint            workspace,
 		         gpointer         user_data)
 {
-	GpmStatistics *statistics = GPM_STATISTICS (user_data);
+	GpmStatistics *statistics;
+
+	gpm_debug ("GtkUnique message %i", command);
+	statistics = GPM_STATISTICS (user_data);
 	if (command == GTK_UNIQUE_ACTIVATE) {
 		gpm_statistics_activate_window (statistics);
 	}
@@ -123,7 +126,7 @@ main (int argc, char **argv)
 	/* FIXME: We don't need to get the startup id once we can
 	 * depend on gtk+-2.12.  Until then we must get it BEFORE
 	 * gtk_init() is called, otherwise gtk_init() will clear it
-	 * and libguniqueapp has to use racy workarounds.
+	 * and GtkUnique has to use racy workarounds.
 	 */
 	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
 #endif
@@ -139,9 +142,9 @@ main (int argc, char **argv)
 	gpm_debug_init (verbose);
 
 #if HAVE_GTKUNIQUE
-	gpm_debug ("Using libguniqueapp support.");
+	gpm_debug ("Using GtkUnique support.");
 
-	/* Arrr! Until we depend on gtk+2 2.12 we can't just use gtk_unique_app_get */
+	/* Arrr! Until we depend on gtk+2 2.12 we can't just use gtk_unique_app_new */
 	uniqueapp = gtk_unique_app_new_with_id ("org.gnome.PowerManager.Statistics", startup_id);
 	/* check to see if the user has another prefs window open */
 	if (gtk_unique_app_is_running (uniqueapp)) {
@@ -158,7 +161,7 @@ main (int argc, char **argv)
 		gdk_notify_startup_complete ();
 	} else {
 #else
-	gpm_warning ("No libguniqueapp support. Cannot signal other instances");
+	gpm_warning ("No GtkUnique support. Cannot signal other instances");
 	/* we always assume we have no other running instance */
 	if (1) {
 #endif

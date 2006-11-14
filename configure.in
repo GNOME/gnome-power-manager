@@ -259,7 +259,6 @@ dnl - Is gtkunique available?
 dnl ---------------------------------------------------------------------------
 if $PKG_CONFIG --atleast-version $GTKUNIQUE_REQUIRED gtkunique-1.0; then
    have_gtkunique=yes
-   echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    PKG_CHECK_MODULES(GTKUNIQUE, gtkunique-1.0 >= $GTKUNIQUE_REQUIRED)
    AC_SUBST(GTKUNIQUE_CFLAGS)
    AC_SUBST(GTKUNIQUE_LIBS)
