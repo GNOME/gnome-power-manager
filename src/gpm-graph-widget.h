@@ -71,6 +71,7 @@ typedef enum {
 	GPM_GRAPH_WIDGET_SHAPE_LAST
 } GpmGraphWidgetShape;
 
+/* needs to be in gpm-common.h */
 typedef enum {
 	GPM_GRAPH_WIDGET_EVENT_ON_AC,
 	GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
@@ -93,6 +94,13 @@ typedef enum {
 	GPM_GRAPH_WIDGET_TYPE_VOLTAGE,
 	GPM_GRAPH_WIDGET_TYPE_LAST
 } GpmGraphWidgetAxisType;
+
+typedef struct {
+	guint			 id;
+	const gchar		*name;
+	GpmGraphWidgetColour	 colour;
+	GpmGraphWidgetShape	 shape;
+} GpmGraphWidgetKeyStruct;
 
 struct GpmGraphWidget
 {
@@ -125,9 +133,15 @@ void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
 void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent event);
-void		 gpm_graph_widget_get_event_visual		(GpmGraphWidgetEvent event,
+void		 gpm_graph_widget_get_event_visual	(GpmGraphWidgetEvent event,
 							 GpmGraphWidgetColour *colour,
 							 GpmGraphWidgetShape *shape);
+gboolean	 gpm_graph_widget_key_add		(GpmGraphWidget	*graph,
+							 const gchar	*name,
+							 guint		 id,
+							 GpmGraphWidgetColour colour,
+							 GpmGraphWidgetShape shape);
+
 GpmGraphWidgetAxisType	 gpm_graph_widget_string_to_axis_type (const gchar	*type);
 
 G_END_DECLS

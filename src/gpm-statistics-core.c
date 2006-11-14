@@ -723,6 +723,59 @@ gpm_statistics_init (GpmStatistics *statistics)
 	statistics->priv->graph_widget = widget;
 	gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
+	/* add the key items */
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("On AC"),
+				  GPM_GRAPH_WIDGET_EVENT_ON_AC,
+				  GPM_GRAPH_WIDGET_COLOUR_BLUE,
+				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("On battery"),
+				  GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
+				  GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE,
+				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Session idle"),
+				  GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE,
+				  GPM_GRAPH_WIDGET_COLOUR_YELLOW,
+				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Session active"),
+				  GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE,
+				  GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW,
+				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Suspend"),
+				  GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+				  GPM_GRAPH_WIDGET_COLOUR_RED,
+				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Resume"),
+				  GPM_GRAPH_WIDGET_EVENT_RESUME,
+				  GPM_GRAPH_WIDGET_COLOUR_DARK_RED,
+				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Hibernate"),
+				  GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+				  GPM_GRAPH_WIDGET_COLOUR_MAGENTA,
+				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Lid closed"),
+				  GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
+				  GPM_GRAPH_WIDGET_COLOUR_GREEN,
+				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Lid opened"),
+				  GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
+				  GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN,
+				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("Notification"),
+				  GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+				  GPM_GRAPH_WIDGET_COLOUR_GREY,
+				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+				       
+
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (GTK_WIDGET (widget));
 	gtk_widget_show (GTK_WIDGET (widget));

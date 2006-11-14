@@ -147,6 +147,21 @@ gpm_graph_widget_get_event_visual (GpmGraphWidgetEvent   event,
 }
 
 /**
+ * gpm_graph_widget_key_add:
+ **/
+gboolean
+gpm_graph_widget_key_add (GpmGraphWidget       *graph,
+			  const gchar	       *name,
+			  guint		        id,
+			  GpmGraphWidgetColour  colour,
+			  GpmGraphWidgetShape   shape)
+{
+	gpm_debug ("TODO: gpm_graph_widget_key_add to hashtable");
+	return TRUE;
+}
+
+
+/**
  * gpm_graph_widget_string_to_axis_type:
  * @graph: This graph class instance
  * @type: The axis type, e.g. "percentage"
