@@ -127,6 +127,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
+	gpm-notify.h					\
+	gpm-notify.c					\
 	gpm-warning.h					\
 	gpm-warning.c					\
 	gpm-srv-brightness-lcd.h			\

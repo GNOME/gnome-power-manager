@@ -1,5 +1,19 @@
 2006-11-15  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-notify.c:
+	* src/gpm-notify.h:
+	Create this notification abstraction class and add the code
+	needed for the battery recall buttons.
+
+	* src/gpm-manager.c:
+	* src/gpm-tray-icon.c:
+	* src/gpm-tray-icon.h:
+	Remove duplicated and muddled code.
+
+2006-11-15  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	Fix the maintainers field.
 

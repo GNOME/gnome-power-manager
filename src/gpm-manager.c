@@ -55,6 +55,7 @@
 #include "gpm-interface-statistics.h"
 #include "gpm-networkmanager.h"
 #include "gpm-manager.h"
+#include "gpm-notify.h"
 #include "gpm-power.h"
 #include "gpm-policy.h"
 #include "gpm-prefs.h"
@@ -88,6 +89,7 @@ struct GpmManagerPrivate
 	GpmIdle			*idle;
 	GpmInfo			*info;
 	GpmInhibit		*inhibit;
+	GpmNotify		*notify;
 	GpmPower		*power;
 	GpmPolicy		*policy;
 	GpmScreensaver 		*screensaver;
@@ -206,7 +208,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 
 		title = g_strdup_printf (_("Request to %s"), action);
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+		gpm_notify_display (manager->priv->notify,
 				      title,
 				      message->str,
 				      GPM_NOTIFY_TIMEOUT_LONG,
@@ -794,7 +796,7 @@ gpm_manager_hibernate (GpmManager *manager,
 			message = g_strdup_printf (_("HAL failed to %s. "
 						     "Check the help file for common problems."),
 						     _("hibernate"));
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+			gpm_notify_display (manager->priv->notify,
 					      title,
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
@@ -887,7 +889,7 @@ gpm_manager_suspend (GpmManager *manager,
 						     "Check the help file for common problems."),
 						     _("suspend"));
 			title = _("Suspend Problem");
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+			gpm_notify_display (manager->priv->notify,
 					      title,
 					      message,
 					      GPM_NOTIFY_TIMEOUT_LONG,
@@ -1070,9 +1072,7 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
  * battery_button_pressed:
  * @manager: This class instance
  *
- * What to do when the battery button is pressed. This used to be allocated to
- * "www", but now we watch for "battery" which has to go upstream to HAL and
- * the kernel.
+ * What to do when the battery button is pressed.
  **/
 static void
 battery_button_pressed (GpmManager *manager)
@@ -1081,7 +1081,7 @@ battery_button_pressed (GpmManager *manager)
 
 	gpm_power_get_status_summary (manager->priv->power, &message, NULL);
 
-	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+	gpm_notify_display (manager->priv->notify,
 			      _("Power Information"),
 			      message,
 			      GPM_NOTIFY_TIMEOUT_LONG,
@@ -1338,7 +1338,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		if (show_notify) {
 			message = _("Your battery is now fully charged");
 			title = _("Battery Charged");
-			gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+			gpm_notify_display (manager->priv->notify,
 					      title,
 					      message,
 					      GPM_NOTIFY_TIMEOUT_SHORT,
@@ -1449,7 +1449,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		gchar *icon;
 		title = gpm_warning_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+		gpm_notify_display (manager->priv->notify,
 				      title, message, timeout,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
 		g_free (icon);
@@ -1557,7 +1557,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 		gchar *icon;
 		title = gpm_warning_get_title (warning_type);
 		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-		gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+		gpm_notify_display (manager->priv->notify,
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
 		gpm_info_event_log (manager->priv->info,
@@ -1639,7 +1639,7 @@ battery_status_changed_misc (GpmManager	    *manager,
 				   name, battery_status->percentage_charge);
 
 	icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
+	gpm_notify_display (manager->priv->notify,
 			      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			      icon, GPM_NOTIFY_URGENCY_NORMAL);
 
@@ -1687,57 +1687,6 @@ power_battery_status_changed_cb (GpmPower    *power,
 		/* MOUSE, KEYBOARD, and PDA only do low power warnings */
 		battery_status_changed_misc (manager, battery_kind, &battery_status);
 	}
-}
-
-/**
- * power_battery_status_perhaps_recall_cb:
- * @power: The power class instance
- * @vendor: The battery vendor, e.g. "DELL"
- * @manager: This class instance
- *
- * This function splits up the battery status changed callback, and calls
- * different functions for each of the device types.
- **/
-static void
-power_battery_status_perhaps_recall_cb (GpmPower    *power,
-				       const gchar *oem_vendor,
-				       const gchar *website,
-				       GpmManager  *manager)
-{
-	gchar *msg;
-	const gchar *title;
-	const gchar *problem;
-	const gchar *action;
-
-	/* check to see if HAL has given us all the right info */
-	if (oem_vendor == NULL || website == NULL) {
-		gpm_warning ("Possibly a potential critical hardware problem, "
-			     "but not enough data from HAL to report to the user");
-		return;
-	}
-
-	title = _("Your battery may have been recalled");
-	problem = _("The battery in your computer may have been "
-		    "recalled by the manufacturer and you may be "
-		    "at risk.\n");
-	action = _("For more information visit the following web site:\n");
-
-	msg = g_strdup_printf ("%s\n%s\n<a href=\"%s\">%s</a>",
-			       problem, action, website, oem_vendor);
-
-	/* I want this translated before the string freeze */
-	const char *temp;
-	if (FALSE) {
-		temp = _("Do not notify me of this anymore");
-	}
-/* TODO:
- [x] do not notify me of this anymore.
- */
-	gpm_tray_icon_notify (GPM_TRAY_ICON (manager->priv->tray_icon),
-			      title, msg, 0,
-			      GTK_STOCK_DIALOG_WARNING,
-			      GPM_NOTIFY_URGENCY_NORMAL);
-	g_free (msg);
 }
 
 /**
@@ -1880,7 +1829,7 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
 		error_msg = g_strdup_printf ("%s\n%s\n%s", error_body,
 					     _("This may be a driver or hardware problem."),
 					     _("Check the GNOME Power Manager manual for common problems."));
-		gpm_tray_icon_notify (manager->priv->tray_icon,
+		gpm_notify_display (manager->priv->notify,
 				      error_title,
 				      error_msg,
 				      GPM_NOTIFY_TIMEOUT_LONG,
@@ -1954,8 +1903,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
-	g_signal_connect (manager->priv->power, "battery-perhaps-recall",
-			  G_CALLBACK (power_battery_status_perhaps_recall_cb), manager);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
@@ -1990,6 +1937,7 @@ gpm_manager_init (GpmManager *manager)
 	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
+	manager->priv->notify = gpm_notify_new ();
 
 	/* use a class to handle the complex stuff */
 	manager->priv->inhibit = gpm_inhibit_new ();
@@ -2089,6 +2037,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);
+	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->srv_screensaver);
 
 	/* optional gobjects */

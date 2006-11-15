@@ -49,32 +49,13 @@ typedef struct
 	void	(* hibernate)			(GpmTrayIcon *tray_icon);
 } GpmTrayIconClass;
 
-typedef enum {
-	GPM_NOTIFY_URGENCY_CRITICAL = 1,
-	GPM_NOTIFY_URGENCY_NORMAL   = 2,
-	GPM_NOTIFY_URGENCY_LOW      = 3
-} GpmNotifyLevel;
-
 GType		 gpm_tray_icon_get_type			(void);
 GpmTrayIcon	*gpm_tray_icon_new			(void);
 
-void		 gpm_tray_icon_notify			(GpmTrayIcon	*icon,
-							 const gchar	*title,
-							 const gchar	*content,
-							 guint		 timeout,
-							 const gchar	*msgicon,
-							 GpmNotifyLevel	 urgency);
-void		 gpm_tray_icon_cancel_notify		(GpmTrayIcon	*icon);
 void		 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
 							 const gchar	*tooltip);
 void		 gpm_tray_icon_set_image_from_stock	(GpmTrayIcon	*icon,
 							 const gchar	*stock_id);
-void		 gpm_tray_icon_enable_suspend		(GpmTrayIcon	*icon,
-							 gboolean	 enabled);
-void		 gpm_tray_icon_enable_hibernate		(GpmTrayIcon	*icon,
-							 gboolean	 enabled);
-void		 gpm_tray_icon_show			(GpmTrayIcon	*icon,
-							 gboolean	 enabled);
 void		 gpm_tray_icon_sync			(GpmTrayIcon	*icon);
 
 G_END_DECLS

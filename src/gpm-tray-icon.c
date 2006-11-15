@@ -42,16 +42,13 @@
 
 #include <libgnomeui/gnome-help.h>
 
-#ifdef HAVE_LIBNOTIFY
-#include <libnotify/notify.h>
-#endif
-
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
+#include "gpm-notify.h"
 #include "gpm-policy.h"
 #include "gpm-power.h"
 #include "gpm-stock-icons.h"
@@ -73,17 +70,14 @@ struct GpmTrayIconPrivate
 	GpmPolicy		*policy;
 	GpmPower		*power;
 	GpmBattery		*battery;
+	GpmNotify		*notify;
 
 	GtkStatusIcon		*status_icon;
 	guint			 low_percentage;
-	gboolean		 show_notifications;
 	gboolean		 is_visible;
 	gboolean		 show_suspend;
 	gboolean		 show_hibernate;
 	gchar			*stock_id;
-#ifdef HAVE_LIBNOTIFY
-	NotifyNotification	*notify;
-#endif
 };
 
 enum {
@@ -98,13 +92,6 @@ enum {
 };
 
 static guint	 signals [LAST_SIGNAL] = { 0, };
-static gboolean
-libnotify_event (GpmTrayIcon    *icon,
-		 const gchar	*title,
-		 const gchar	*content,
-		 guint		 timeout,
-		 const gchar	*msgicon,
-		 GpmNotifyLevel	 urgency);
 
 G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
 
@@ -113,7 +100,7 @@ G_DEFINE_TYPE (GpmTrayIcon, gpm_tray_icon, G_TYPE_OBJECT)
  * @icon: This TrayIcon class instance
  * @enabled: If we should enable (i.e. show) the suspend icon
  **/
-void
+static void
 gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
 			      gboolean     enabled)
 {
@@ -126,7 +113,7 @@ gpm_tray_icon_enable_suspend (GpmTrayIcon *icon,
  * @icon: This TrayIcon class instance
  * @enabled: If we should enable (i.e. show) the hibernate icon
  **/
-void
+static void
 gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 				gboolean     enabled)
 {
@@ -210,7 +197,9 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 	longdesc = g_strdup (gdesc->str);
 	g_string_free (gdesc, TRUE);
 
-	libnotify_event (icon, desc, longdesc, 0, msgicon, GPM_NOTIFY_URGENCY_LOW);
+	gpm_notify_display (icon->priv->notify, desc, longdesc,
+			    GPM_NOTIFY_TIMEOUT_NEVER, msgicon,
+			    GPM_NOTIFY_URGENCY_LOW);
 }
 
 /**
@@ -426,7 +415,7 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
  * @icon: This TrayIcon class instance
  * @enabled: If we should show the tray
  **/
-void
+static void
 gpm_tray_icon_show (GpmTrayIcon *icon,
 		    gboolean     enabled)
 {
@@ -769,194 +758,6 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 	}
 }
 
-#ifdef HAVE_LIBNOTIFY
-
-/**
- * notification_closed_cb:
- * @notify: our libnotify instance
- * @icon: This TrayIcon class instance
- **/
-static void
-notification_closed_cb (NotifyNotification *notify,
-			GpmTrayIcon	*icon)
-{
-	/* just invalidate the pointer */
-	gpm_debug ("caught notification closed signal");
-	icon->priv->notify = NULL;
-}
-
-/**
- * libnotify_event:
- * @icon: This icon class instance
- * @title: The title, e.g. "Battery Low"
- * @content: The contect, e.g. "17 minutes remaining"
- * @timeout: The time we should remain on screen in seconds
- * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
- * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
- *
- * Does a libnotify messagebox dialogue.
- * Return value: success
- **/
-static gboolean
-libnotify_event (GpmTrayIcon    *icon,
-		 const gchar	*title,
-		 const gchar	*content,
-		 guint		 timeout,
-		 const gchar	*msgicon,
-		 GpmNotifyLevel	 urgency)
-{
-	if (icon->priv->notify != NULL) {
-		notify_notification_close (icon->priv->notify, NULL);
-		icon->priv->notify = NULL;
-	}
-
-/* DISTROS: If you've patched your libnotify 0.4.2 package you can remove this check */
-#if HAVE_LIBNOTIFY_NEW
-	icon->priv->notify = notify_notification_new_with_status_icon (title, content,
-								       msgicon, icon->priv->status_icon);
-#else
-	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
-	icon->priv->notify = notify_notification_new (title, content,
-						      msgicon, NULL);
-#endif
-
-#if 0
-	notify_notification_add_action  (icon->priv->notify,
-	                                 "dont-show-again",
-	                                 "Visit recall website",
-	                                 (NotifyActionCallback) notification_closed_cb,
-	                                 icon, NULL);
-	notify_notification_add_action  (icon->priv->notify,
-	                                 "dont-show-again",
-	                                 "Don't show me this again",
-	                                 (NotifyActionCallback) notification_closed_cb,
-	                                 icon, NULL);
-#endif
-
-	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
-
-	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
-		gpm_warning ("libnotify: %s : %s", GPM_NAME, content);
-	} else {
-		gpm_debug ("libnotify: %s : %s", GPM_NAME, content);
-	}
-
-	g_signal_connect (icon->priv->notify, "closed", G_CALLBACK (notification_closed_cb), icon);
-
-	if (! notify_notification_show (icon->priv->notify, NULL)) {
-		gpm_warning ("failed to send notification (%s)", content);
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-#else
-
-/**
- * libnotify_event:
- * @icon: This icon class instance
- * @title: The title, e.g. "Battery Low"
- * @content: The contect, e.g. "17 minutes remaining"
- * @timeout: The time we should remain on screen in seconds
- * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
- * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
- *
- * Does a gtk messagebox dialogue.
- * Return value: success
- **/
-static gboolean
-libnotify_event (GpmTrayIcon    *icon,
-		 const gchar	*title,
-		 const gchar	*content,
-		 guint		 timeout,
-		 const gchar	*msgicon,
-		 GpmNotifyLevel	 urgency)
-{
-	GtkWidget     *dialog;
-	GtkMessageType msg_type;
-
-	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
-		msg_type = GTK_MESSAGE_WARNING;
-	} else {
-		msg_type = GTK_MESSAGE_INFO;
-	}
-
-	dialog = gtk_message_dialog_new_with_markup (NULL,
-						     GTK_DIALOG_DESTROY_WITH_PARENT,
-						     msg_type,
-						     GTK_BUTTONS_CLOSE,
-						     "<span size='larger'><b>%s</b></span>",
-						     GPM_NAME);
-
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog), content);
-
-	g_signal_connect_swapped (dialog,
-				  "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  dialog);
-
-	gtk_window_present (GTK_WINDOW (dialog));
-
-	return TRUE;
-}
-#endif
-
-/**
- * gpm_tray_icon_notify:
- * @icon: This icon class instance
- * @title: The title, e.g. "Battery Low"
- * @content: The contect, e.g. "17 minutes remaining"
- * @timeout: The time we should remain on screen in seconds
- * @msgicon: The icon to display, or NULL, e.g. GPM_STOCK_UPS_CHARGING_080
- * @urgency: The urgency type, e.g. GPM_NOTIFY_URGENCY_CRITICAL
- *
- * Does a libnotify or gtk messagebox dialogue.
- **/
-void
-gpm_tray_icon_notify (GpmTrayIcon	*icon,
-		      const gchar	*title,
-		      const gchar	*content,
-		      guint		 timeout,
-		      const gchar	*msgicon,
-		      GpmNotifyLevel	 urgency)
-{
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
-	if (! icon->priv->show_notifications) {
-		gpm_debug ("ignoring notification: %s", title);
-		return;
-	}
-
-	gpm_debug ("doing notify: %s", title);
-	libnotify_event (icon, title, content, timeout, msgicon, urgency);
-}
-
-/**
- * gpm_tray_icon_cancel_notify:
- * @icon: This icon class instance
- *
- * Cancels the notification, i.e. removes it from the screen.
- **/
-void
-gpm_tray_icon_cancel_notify (GpmTrayIcon *icon)
-{
-	GError *error;
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-	error = NULL;
-
-#ifdef HAVE_LIBNOTIFY
-	if (icon->priv->notify != NULL) {
-		notify_notification_close (icon->priv->notify, NULL);
-		g_object_unref (icon->priv->notify);
-		icon->priv->notify = NULL;
-	}
-	if (error != NULL) {
-		g_error_free (error);
-	}
-#endif
-}
-
 /**
  * power_on_ac_changed_cb:
  * @power: The power class instance
@@ -971,12 +772,6 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 		       GpmTrayIcon      *icon)
 {
 	gpm_tray_icon_sync (icon);
-
-	/* for where we add back the ac_adapter before the "AC Power unplugged"
-	 * message times out. */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_tray_icon_cancel_notify (icon);
-	}
 }
 
 /**
@@ -1044,23 +839,23 @@ hal_daemon_monitor_cb (GpmHal      *hal,
  * gpm_tray_icon_init:
  * @icon: This TrayIcon class instance
  *
- * Initialise the tray object, and set up libnotify
+ * Initialise the tray object
  **/
 static void
 gpm_tray_icon_init (GpmTrayIcon *icon)
 {
-	gboolean ret = TRUE;
 	gboolean enabled;
 	gboolean allowed_in_menu;
 
 	icon->priv = GPM_TRAY_ICON_GET_PRIVATE (icon);
 
-	/* FIXME: make this a property */
-	icon->priv->show_notifications = TRUE;
 	icon->priv->stock_id = g_strdup ("about-blank");
 
 	/* we use power for the messages and the icon state */
 	icon->priv->power = gpm_power_new ();
+
+	/* use libnotify */
+	icon->priv->notify = gpm_notify_new ();
 
 	/* use the policy object */
 	icon->priv->policy = gpm_policy_new ();
@@ -1076,11 +871,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 			  G_CALLBACK (hal_daemon_monitor_cb), icon);
 	g_signal_connect (icon->priv->hal, "daemon-stop",
 			  G_CALLBACK (hal_daemon_monitor_cb), icon);
-
-
-#ifdef HAVE_LIBNOTIFY
-	icon->priv->notify = NULL;
-#endif
 
 	icon->priv->conf = gpm_conf_new ();
 	g_signal_connect (icon->priv->conf, "value-changed",
@@ -1103,6 +893,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 				 "activate",
 				 G_CALLBACK (gpm_tray_icon_activate_cb),
 				 icon, 0);
+	gpm_notify_use_status_icon (icon->priv->notify, icon->priv->status_icon);
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
@@ -1113,13 +904,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	gpm_tray_icon_enable_hibernate (icon, enabled && allowed_in_menu);
 
 	gpm_tray_icon_show (GPM_TRAY_ICON (icon), FALSE);
-
-#ifdef HAVE_LIBNOTIFY
-	ret = notify_init (GPM_NAME);
-#endif
-	if (!ret) {
-		gpm_warning ("gpm_tray_icon_init failed");
-	}
 }
 
 /**
@@ -1139,6 +923,9 @@ gpm_tray_icon_finalize (GObject *object)
 	if (tray_icon->priv->stock_id != NULL) {
 		g_free (tray_icon->priv->stock_id);
 	}
+	if (tray_icon->priv->notify != NULL) {
+		g_object_unref (tray_icon->priv->notify);
+	}
 	if (tray_icon->priv->policy != NULL) {
 		g_object_unref (tray_icon->priv->policy);
 	}
@@ -1157,11 +944,6 @@ gpm_tray_icon_finalize (GObject *object)
 	if (tray_icon->priv->hal != NULL) {
 		g_object_unref (tray_icon->priv->hal);
 	}
-#ifdef HAVE_LIBNOTIFY
-	if (tray_icon->priv->notify != NULL) {
-		notify_notification_close (tray_icon->priv->notify, NULL);
-	}
-#endif
 
 	g_return_if_fail (tray_icon->priv != NULL);
 
