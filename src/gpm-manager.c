@@ -1992,6 +1992,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
 	if (battery_status->percentage_charge < 95 &&
+	    battery_status->percentage_charge > 0 &&
 	    gpm_power_battery_is_charged (battery_status) == FALSE) {
 		manager->priv->done_notify_fully_charged = FALSE;
 	}

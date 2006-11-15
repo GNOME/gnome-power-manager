@@ -1,3 +1,10 @@
+2006-11-15  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Fix a race where percentage_charge can be momentarily zero
+	at startup. This fixes an incorrect 'fully charged'
+	notification on startup.
+
 2006-11-07  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in: Post release bump to 2.16.3
