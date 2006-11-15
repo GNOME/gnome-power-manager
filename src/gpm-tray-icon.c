@@ -820,6 +820,19 @@ libnotify_event (GpmTrayIcon    *icon,
 						      msgicon, NULL);
 #endif
 
+#if 0
+	notify_notification_add_action  (icon->priv->notify,
+	                                 "dont-show-again",
+	                                 "Visit recall website",
+	                                 (NotifyActionCallback) notification_closed_cb,
+	                                 icon, NULL);
+	notify_notification_add_action  (icon->priv->notify,
+	                                 "dont-show-again",
+	                                 "Don't show me this again",
+	                                 (NotifyActionCallback) notification_closed_cb,
+	                                 icon, NULL);
+#endif
+
 	notify_notification_set_timeout (icon->priv->notify, timeout * 1000);
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {
