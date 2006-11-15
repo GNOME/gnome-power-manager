@@ -56,9 +56,10 @@ struct GpmPowerPrivate
 	GpmRefcount		*refcount;
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
-	GpmHal			*hal;
 	GpmBattery		*battery;
 	GpmAcAdapter		*ac_adapter;
+	GpmConf			*conf;
+	GpmHal			*hal;
 };
 
 enum {
@@ -193,6 +194,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gchar *udi = entry->udi;
 	gchar *battery_kind_str;
 	gboolean perhaps_recall;
+	gboolean show_recall;
 
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
@@ -308,13 +310,17 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
 	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.voltage.current", &status->voltage);
 
-	/* this is more common than you might expect */
-	gpm_hal_device_get_bool (power->priv->hal, udi, "info.perhaps_recalled", &perhaps_recall);
-	if (perhaps_recall) {
+	/* this is more common than you might expect: hardware that might blow up */
+	gpm_hal_device_get_bool (power->priv->hal, udi, "info.is_recalled", &perhaps_recall);
+
+	/* do we show the notification? */
+	gpm_conf_get_bool (power->priv->conf, GPM_CONF_SHOW_BATTERY_WARNING, &show_recall);
+
+	if (perhaps_recall == TRUE && show_recall == TRUE) {
 		gchar *oem_vendor;
 		gchar *website;
-		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_text", &oem_vendor);
-		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.oem_url_link_target", &website);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.vendor", &oem_vendor);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.website_url", &website);
 		g_signal_emit (power, signals [BATTERY_PERHAPS_RECALL], 0, oem_vendor, website);
 	}
 
@@ -1814,9 +1820,9 @@ gpm_power_init (GpmPower *power)
 {
 	guint invalid_timeout;
 
-	GpmConf *conf = gpm_conf_new ();
-
 	power->priv = GPM_POWER_GET_PRIVATE (power);
+
+	power->priv->conf = gpm_conf_new ();
 
 	power->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (power->priv->ac_adapter, "ac-adapter-changed",
@@ -1845,7 +1851,7 @@ gpm_power_init (GpmPower *power)
 			  G_CALLBACK (gpm_power_refcount_added), power);
 
 	/* we get this from gconf as some machines take longer to settle down */
-	gpm_conf_get_uint (conf, GPM_CONF_INVALID_TIMEOUT, &invalid_timeout);
+	gpm_conf_get_uint (power->priv->conf, GPM_CONF_INVALID_TIMEOUT, &invalid_timeout);
 	gpm_refcount_set_timeout (power->priv->refcount, invalid_timeout);
 
 	/* when we first start, the data might be invalid */
@@ -1857,8 +1863,8 @@ gpm_power_init (GpmPower *power)
 	gpm_hash_new_kind_cache (power);
 	gpm_hash_new_device_cache (power);
 
-	gpm_conf_get_uint (conf, GPM_CONF_RATE_EXP_AVE_FACTOR, &power->priv->exp_ave_factor);
-	g_object_unref (conf);
+	gpm_conf_get_uint (power->priv->conf, GPM_CONF_RATE_EXP_AVE_FACTOR,
+			   &power->priv->exp_ave_factor);
 }
 
 /**
@@ -1878,6 +1884,8 @@ gpm_power_finalize (GObject *object)
 
 	gpm_hash_free_kind_cache (power);
 	gpm_hash_free_device_cache (power);
+
+	g_object_unref (power->priv->conf);
 
 	if (power->priv->hal != NULL) {
 		g_object_unref (power->priv->hal);

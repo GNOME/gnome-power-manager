@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/show_recalled_battery_warning</key>
+      <applyto>/apps/gnome-power-manager/show_recalled_battery_warning</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If we should show the recalled battery warning for a broken battery</short>
+        <long>If we should show the recalled battery warning for a broken battery. Set this to false only if you know your battery is okay.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/laptop_uses_external_monitor</key>
       <applyto>/apps/gnome-power-manager/laptop_uses_external_monitor</applyto>
       <owner>gnome-power-manager</owner>

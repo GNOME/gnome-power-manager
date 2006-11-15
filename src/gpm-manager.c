@@ -1705,6 +1705,9 @@ power_battery_status_perhaps_recall_cb (GpmPower    *power,
 				       GpmManager  *manager)
 {
 	gchar *msg;
+	const gchar *title;
+	const gchar *problem;
+	const gchar *action;
 
 	/* check to see if HAL has given us all the right info */
 	if (oem_vendor == NULL || website == NULL) {
@@ -1713,11 +1716,11 @@ power_battery_status_perhaps_recall_cb (GpmPower    *power,
 		return;
 	}
 
-	const gchar *title = _("Your battery may have been recalled");
-	const char *problem = _("The battery in your computer may have been "
-				"recalled by the manufacturer and you may be "
-				"at risk.\n");
-	const char *action = _("For more information visit the following web site:\n");
+	title = _("Your battery may have been recalled");
+	problem = _("The battery in your computer may have been "
+		    "recalled by the manufacturer and you may be "
+		    "at risk.\n");
+	action = _("For more information visit the following web site:\n");
 
 	msg = g_strdup_printf ("%s\n%s\n<a href=\"%s\">%s</a>",
 			       problem, action, website, oem_vendor);
