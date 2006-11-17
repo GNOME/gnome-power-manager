@@ -59,7 +59,7 @@ struct GpmNotifyPrivate
 	GpmConf			*conf;
 	GpmPower		*power;
 	GtkStatusIcon		*status_icon;
-	const gchar		*recall_website;
+	gchar			*recall_website;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification	*libnotify;
 #endif
@@ -281,12 +281,15 @@ notify_recall_action_cb (NotifyNotification *libnotify,
 	gboolean ret;
 
 	if (strcmp (action, "visit-website") == 0) {
-		g_warning ("visit website");
+		gpm_debug ("autovisit website %s", notify->priv->recall_website);
 		ret = gnome_url_show (notify->priv->recall_website, &error);
 		if (ret == FALSE) {
 			g_debug ("failed to show url: %s", error->message);
 			g_error_free (error);
 		}
+		/* free the stored string */
+		g_free (notify->priv->recall_website);
+		notify->priv->recall_website = NULL;
 	} else if (strcmp (action, "dont-show-again") == 0) {
 		gpm_debug ("not showing warning anymore!");
 		gpm_conf_set_bool (notify->priv->conf,
@@ -320,7 +323,7 @@ power_perhaps_recall_cb (GpmPower    *power,
 	}
 
 	/* save in state */
-	notify->priv->recall_website = website;
+	notify->priv->recall_website = g_strdup (website);
 
 	title = _("Battery may be recalled");
 	msg = g_strdup_printf (_("The battery in your computer may have been "
@@ -341,7 +344,7 @@ power_perhaps_recall_cb (GpmPower    *power,
 	                                 notify, NULL);
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
-	                                 _("Don't show me this again"),
+	                                 _("Do not show me this again"),
 	                                 (NotifyActionCallback) notify_recall_action_cb,
 	                                 notify, NULL);
 	gpm_notify_show (notify);

@@ -1,5 +1,26 @@
 2006-11-15  Richard Hughes  <richard@hughsie.com>
 
+	* configure.in:
+	* help/C/gnome-power-manager.xml:
+	* src/gpm-manager.c:
+	Add gnome-keyring functionality to lock keyrings when
+	sleeping. This fixes #375681 - but means gnome-power-manager
+	must have gnome-keyring development files to build from
+	now on.
+
+	* src/gpm-notify.c: (power_perhaps_recall_cb):
+	Change 'don't' to 'do not'.
+
+	* src/gpm-srv-dpms.c: (gpm_srv_dpms_sync_policy):
+	Fix a typo in a comment.
+
+	* src/gpm-manager.c: (battery_status_changed_primary):
+	Fix a race where percentage_charge can be momentarily zero
+	at startup. This fixes an incorrect 'fully charged'
+	notification on startup.
+
+2006-11-15  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	Add missing abstract. Fixes #374780
 

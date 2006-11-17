@@ -43,6 +43,7 @@ dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.6.0
 GTK_REQUIRED=2.10.0
+GNOME_KEYRING_REQUIRED=0.6.0
 LIBGNOME_REQUIRED=2.14.0
 LIBGNOMEUI_REQUIRED=2.14.0
 HAL_REQUIRED=0.5.6
@@ -93,6 +94,7 @@ PKG_CHECK_MODULES(GNOME, \
  libglade-2.0 >= $LIBGLADE_REQUIRED \
  libwnck-1.0 >= $LIBWNCK_REQUIRED \
  gtk+-2.0 >= $GTK_REQUIRED \
+ gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED \
  cairo >= $CAIRO_REQUIRED)
 AC_SUBST(GNOME_CFLAGS)
 AC_SUBST(GNOME_LIBS)

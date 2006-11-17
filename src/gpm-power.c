@@ -322,6 +322,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.vendor", &oem_vendor);
 		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.website_url", &website);
 		g_signal_emit (power, signals [BATTERY_PERHAPS_RECALL], 0, oem_vendor, website);
+		g_free (oem_vendor);
+		g_free (website);
 	}
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {

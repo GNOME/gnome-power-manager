@@ -39,7 +39,8 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
-
+#include <libgnomeui/gnome-client.h>
+#include <gnome-keyring-1/gnome-keyring.h>
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-button.h"
@@ -752,6 +753,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gboolean ret;
 	gboolean do_lock;
         gboolean nm_sleep;
+	GnomeKeyringResult keyres;
 
 	gpm_policy_allowed_hibernate (manager->priv->policy, &allowed);
 
@@ -763,6 +765,12 @@ gpm_manager_hibernate (GpmManager *manager,
 			     "Cannot hibernate");
 		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
+	}
+
+	/* we should lock keyrings when sleeping #375681 */
+	keyres = gnome_keyring_lock_all_sync ();
+	if (keyres != GNOME_KEYRING_RESULT_OK) {
+		gpm_debug ("could not lock keyring");
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
@@ -843,6 +851,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gboolean ret;
 	gboolean do_lock;
 	gboolean nm_sleep;
+	GnomeKeyringResult keyres;
 
 	gpm_policy_allowed_suspend (manager->priv->policy, &allowed);
 
@@ -854,6 +863,12 @@ gpm_manager_suspend (GpmManager *manager,
 			     "Cannot suspend");
 		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
 		return FALSE;
+	}
+
+	/* we should lock keyrings when sleeping #375681 */
+	keyres = gnome_keyring_lock_all_sync ();
+	if (keyres != GNOME_KEYRING_RESULT_OK) {
+		gpm_debug ("could not lock keyring");
 	}
 
 	do_lock = gpm_manager_get_lock_policy (manager,
@@ -1355,6 +1370,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	   drops down to 95% as some batteries charge to 100% and then fluctuate
 	   from ~98% to 100%. See #338281 for details */
 	if (battery_status->percentage_charge < 95 &&
+	    battery_status->percentage_charge > 0 &&
 	    gpm_power_battery_is_charged (battery_status) == FALSE) {
 		manager->priv->done_notify_fully_charged = FALSE;
 	}
@@ -1900,6 +1916,20 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), manager);
 
+	/* coldplug so we are in the correct state at startup */
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
+	manager->priv->done_notify_fully_charged = FALSE;
+
+	/* Don't notify on startup if we are on battery power */
+	if (state == GPM_AC_ADAPTER_MISSING) {
+		manager->priv->last_primary = GPM_WARNING_DISCHARGING;
+	}
+
+	/* Don't notify at startup if we are fully charged on AC */
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		manager->priv->done_notify_fully_charged = TRUE;
+	}
+
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
@@ -1968,9 +1998,6 @@ gpm_manager_init (GpmManager *manager)
 				 manager,
 				 G_CONNECT_SWAPPED);
 
-	/* coldplug so we are in the correct state at startup */
-	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
-
 	gpm_manager_sync_policy_sleep (manager);
 	gpm_tray_icon_sync (manager->priv->tray_icon);
 
@@ -1983,17 +2010,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->last_keyboard = GPM_WARNING_NONE;
 	manager->priv->last_pda = GPM_WARNING_NONE;
 	manager->priv->last_primary = GPM_WARNING_NONE;
-	manager->priv->done_notify_fully_charged = FALSE;
-
-	/* Don't notify on startup if we are on battery power */
-	if (state == GPM_AC_ADAPTER_MISSING) {
-		manager->priv->last_primary = GPM_WARNING_DISCHARGING;
-	}
-
-	/* Don't notify at startup if we are fully charged on AC */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
-		manager->priv->done_notify_fully_charged = TRUE;
-	}
 
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
 			   &manager->priv->suppress_policy_timeout);

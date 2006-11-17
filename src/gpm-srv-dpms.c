@@ -104,7 +104,7 @@ gpm_srv_dpms_sync_policy (GpmSrvDpms *srv_dpms)
 	if (method == GPM_DPMS_METHOD_DEFAULT) {
 		gpm_debug ("choosing sensible default");
 		if (gpm_hal_is_laptop (srv_dpms->priv->hal)) {
-			gpm_debug ("laptop, so use GPM_SRV_DPMS_METHOD_OFF");
+			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
 			method = GPM_DPMS_METHOD_OFF;
 		} else {
 			gpm_debug ("not laptop, so use GPM_SRV_DPMS_METHOD_STAGGER");
