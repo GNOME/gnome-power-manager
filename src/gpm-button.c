@@ -57,7 +57,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      gpm_button_object = NULL;
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
@@ -489,12 +488,11 @@ gpm_button_finalize (GObject *object)
 GpmButton *
 gpm_button_new (void)
 {
-	if (gpm_button_object) {
-		g_object_ref (gpm_button_object);
+	static GpmButton *button = NULL;
+	if (button != NULL) {
+		g_object_ref (button);
 	} else {
-		gpm_button_object = g_object_new (GPM_TYPE_BUTTON, NULL);
-		g_object_add_weak_pointer (gpm_button_object,
-					   (gpointer *) &gpm_button_object);
+		button = g_object_new (GPM_TYPE_BUTTON, NULL);
 	}
-	return GPM_BUTTON (gpm_button_object);
+	return GPM_BUTTON (button);
 }

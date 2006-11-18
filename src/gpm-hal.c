@@ -72,7 +72,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      gpm_hal_object = NULL;
 
 G_DEFINE_TYPE (GpmHal, gpm_hal, G_TYPE_OBJECT)
 
@@ -1110,6 +1109,9 @@ gpm_hal_init (GpmHal *hal)
 				  HAL_DBUS_SERVICE,
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);
+	if (proxy == NULL) {
+		gpm_critical_error ("Either HAL or DBUS are not working!");
+	}
 
 	/* get the power connection */
 	hal->priv->gproxy_power = gpm_proxy_new ();
@@ -1118,6 +1120,9 @@ gpm_hal_init (GpmHal *hal)
 				  HAL_DBUS_SERVICE,
 				  HAL_ROOT_COMPUTER,
 				  HAL_DBUS_INTERFACE_POWER);
+	if (proxy == NULL) {
+		gpm_critical_error ("HAL does not support power management!");
+	}
 
 	g_signal_connect (hal->priv->gproxy_manager, "proxy-status",
 			  G_CALLBACK (proxy_status_cb), hal);
@@ -1641,12 +1646,11 @@ gpm_hal_finalize (GObject *object)
 GpmHal *
 gpm_hal_new (void)
 {
-	if (gpm_hal_object) {
-		g_object_ref (gpm_hal_object);
+	static GpmHal *hal = NULL;
+	if (hal != NULL) {
+		g_object_ref (hal);
 	} else {
-		gpm_hal_object = g_object_new (GPM_TYPE_HAL, NULL);
-		g_object_add_weak_pointer (gpm_hal_object,
-					   (gpointer *) &gpm_hal_object);
+		hal = g_object_new (GPM_TYPE_HAL, NULL);
 	}
-	return GPM_HAL (gpm_hal_object);
+	return GPM_HAL (hal);
 }

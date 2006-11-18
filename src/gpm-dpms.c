@@ -82,7 +82,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      gpm_dpms_object = NULL;
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)
 
@@ -837,12 +836,11 @@ gpm_dpms_finalize (GObject *object)
 GpmDpms *
 gpm_dpms_new (void)
 {
-	if (gpm_dpms_object) {
-		g_object_ref (gpm_dpms_object);
+	static GpmDpms *dpms = NULL;
+	if (dpms != NULL) {
+		g_object_ref (dpms);
 	} else {
-		gpm_dpms_object = g_object_new (GPM_TYPE_DPMS, NULL);
-		g_object_add_weak_pointer (gpm_dpms_object,
-					   (gpointer *) &gpm_dpms_object);
+		dpms = g_object_new (GPM_TYPE_DPMS, NULL);
 	}
-	return GPM_DPMS (gpm_dpms_object);
+	return GPM_DPMS (dpms);
 }

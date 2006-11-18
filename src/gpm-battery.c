@@ -66,8 +66,6 @@ enum {
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
-static gpointer      battery_object = NULL;
-
 G_DEFINE_TYPE (GpmBattery, gpm_battery, G_TYPE_OBJECT)
 
 /**
@@ -359,13 +357,11 @@ gpm_battery_finalize (GObject *object)
 GpmBattery *
 gpm_battery_new (void)
 {
-	if (battery_object) {
-		g_object_ref (battery_object);
+	static GpmBattery *battery = NULL;
+	if (battery != NULL) {
+		g_object_ref (battery);
 	} else {
-		battery_object = g_object_new (GPM_TYPE_BATTERY, NULL);
-		g_object_add_weak_pointer (battery_object,
-					   (gpointer *) &battery_object);
+		battery = g_object_new (GPM_TYPE_BATTERY, NULL);
 	}
-
-	return GPM_BATTERY (battery_object);
+	return GPM_BATTERY (battery);
 }

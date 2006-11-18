@@ -72,7 +72,6 @@ enum {
 
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      gpm_brightness_lcd_object = NULL;
 
 /**
  * gpm_brightness_lcd_get_hw:
@@ -656,14 +655,13 @@ gpm_brightness_lcd_has_hw (void)
 GpmBrightnessLcd *
 gpm_brightness_lcd_new (void)
 {
-	if (gpm_brightness_lcd_object) {
-		g_object_ref (gpm_brightness_lcd_object);
+	static GpmBrightnessLcd *brightness = NULL;
+	if (brightness != NULL) {
+		g_object_ref (brightness);
 	} else {
 		if (gpm_brightness_lcd_has_hw () == TRUE) {
-			gpm_brightness_lcd_object = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
-			g_object_add_weak_pointer (gpm_brightness_lcd_object,
-						   (gpointer *) &gpm_brightness_lcd_object);
+			brightness = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
 		}
 	}
-	return GPM_BRIGHTNESS_LCD (gpm_brightness_lcd_object);
+	return GPM_BRIGHTNESS_LCD (brightness);
 }

@@ -1,3 +1,21 @@
+2006-11-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_new):
+	* src/gpm-battery.c: (gpm_battery_new):
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_new):
+	* src/gpm-button.c: (gpm_button_new):
+	* src/gpm-conf.c: (gpm_conf_new):
+	* src/gpm-cpufreq.c: (gpm_cpufreq_new):
+	* src/gpm-dbus-monitor.c: (gpm_dbus_monitor_new):
+	* src/gpm-dpms.c: (gpm_dpms_new):
+	* src/gpm-hal.c: (gpm_hal_init), (gpm_hal_new):
+	* src/gpm-idle.c: (gpm_idle_new):
+	* src/gpm-power.c: (gpm_power_new):
+	Convert all singletons to use a local static.
+
+	* src/gpm-manager.c: (gpm_manager_init):
+	Make sure we don't warn we on battery at startup.
+
 2006-11-15  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:

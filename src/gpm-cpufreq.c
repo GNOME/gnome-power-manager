@@ -48,8 +48,6 @@ struct GpmCpuFreqPrivate
 	GpmCpuFreqEnum		 current_governor;
 };
 
-static gpointer      gpm_cpufreq_object = NULL;
-
 G_DEFINE_TYPE (GpmCpuFreq, gpm_cpufreq, G_TYPE_OBJECT)
 
 /**
@@ -609,17 +607,15 @@ gpm_cpufreq_has_hw (void)
 GpmCpuFreq *
 gpm_cpufreq_new (void)
 {
-	/* only load an instance of this module if we have the hardware */
-	if (gpm_cpufreq_has_hw () == FALSE) {
-		return NULL;
-	}
-
-	if (gpm_cpufreq_object) {
-		g_object_ref (gpm_cpufreq_object);
+	static GpmCpuFreq *cpufreq = NULL;
+	if (cpufreq != NULL) {
+		g_object_ref (cpufreq);
 	} else {
-		gpm_cpufreq_object = g_object_new (GPM_TYPE_CPUFREQ, NULL);
-		g_object_add_weak_pointer (gpm_cpufreq_object,
-					   (gpointer *) &gpm_cpufreq_object);
+		/* only load an instance of this module if we have the hardware */
+		if (gpm_cpufreq_has_hw () == FALSE) {
+			return NULL;
+		}
+		cpufreq = g_object_new (GPM_TYPE_CPUFREQ, NULL);
 	}
-	return GPM_CPUFREQ (gpm_cpufreq_object);
+	return GPM_CPUFREQ (cpufreq);
 }

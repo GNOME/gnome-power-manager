@@ -229,12 +229,10 @@ GpmAcAdapter *
 gpm_ac_adapter_new (void)
 {
 	static GpmAcAdapter *ac_adapter = NULL;
-
 	if (ac_adapter != NULL) {
 		g_object_ref (ac_adapter);
-		return ac_adapter;
+	} else {
+		ac_adapter = g_object_new (GPM_TYPE_AC_ADAPTER, NULL);
 	}
-
-	ac_adapter = g_object_new (GPM_TYPE_AC_ADAPTER, NULL);
 	return ac_adapter;
 }

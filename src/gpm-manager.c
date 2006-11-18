@@ -1904,6 +1904,13 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 
+	/* we want all notifications */
+	manager->priv->last_ups = GPM_WARNING_NONE;
+	manager->priv->last_mouse = GPM_WARNING_NONE;
+	manager->priv->last_keyboard = GPM_WARNING_NONE;
+	manager->priv->last_pda = GPM_WARNING_NONE;
+	manager->priv->last_primary = GPM_WARNING_NONE;
+
 	/* do some actions even when killed */
 	g_atexit (gpm_manager_at_exit);
 
@@ -2003,13 +2010,6 @@ gpm_manager_init (GpmManager *manager)
 
 	g_signal_connect (manager->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), manager);
-
-	/* we want all notifications */
-	manager->priv->last_ups = GPM_WARNING_NONE;
-	manager->priv->last_mouse = GPM_WARNING_NONE;
-	manager->priv->last_keyboard = GPM_WARNING_NONE;
-	manager->priv->last_pda = GPM_WARNING_NONE;
-	manager->priv->last_primary = GPM_WARNING_NONE;
 
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
 			   &manager->priv->suppress_policy_timeout);

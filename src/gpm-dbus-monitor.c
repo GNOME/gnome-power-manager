@@ -55,7 +55,6 @@ enum {
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
-static gpointer      gpm_dbus_monitor_object = NULL;
 
 G_DEFINE_TYPE (GpmDbusMonitor, gpm_dbus_monitor, G_TYPE_OBJECT)
 
@@ -180,12 +179,11 @@ gpm_dbus_monitor_finalize (GObject *object)
 GpmDbusMonitor *
 gpm_dbus_monitor_new (void)
 {
-	if (gpm_dbus_monitor_object) {
-		g_object_ref (gpm_dbus_monitor_object);
+	static GpmDbusMonitor *monitor = NULL;
+	if (monitor != NULL) {
+		g_object_ref (monitor);
 	} else {
-		gpm_dbus_monitor_object = g_object_new (GPM_TYPE_DBUS_MONITOR, NULL);
-		g_object_add_weak_pointer (gpm_dbus_monitor_object,
-					   (gpointer *) &gpm_dbus_monitor_object);
+		monitor = g_object_new (GPM_TYPE_DBUS_MONITOR, NULL);
 	}
-	return GPM_DBUS_MONITOR (gpm_dbus_monitor_object);
+	return GPM_DBUS_MONITOR (monitor);
 }
