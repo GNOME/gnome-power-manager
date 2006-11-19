@@ -1,3 +1,18 @@
+2006-11-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c:
+	* src/gpm-statistics-core.c:
+	Complete the GpmGraphWidget separation, so now event policy is
+	not enforced in the graph, but in the object that initializes
+	the graph. This means we can have a dynamic key that only
+	displays relevant entries, which I've done as well.
+	Added DPMS state change entries also, so we now display all
+	the events on the graph.
+
 2006-11-18  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-ac-adapter.c: (gpm_ac_adapter_new):

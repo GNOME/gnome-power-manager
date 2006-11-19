@@ -48,7 +48,6 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
-#include "gpm-graph-widget.h"
 #include "gpm-hal.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
@@ -165,7 +164,7 @@ gpm_manager_is_policy_timout_valid (GpmManager  *manager,
 	    manager->priv->suppress_policy_timeout) {
 		message = g_strdup_printf ("Skipping suppressed %s", action);
 		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, message);
+				    GPM_EVENT_NOTIFICATION, message);
 		g_free (message);
 		return FALSE;
 	}
@@ -425,7 +424,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 /**
  * manager_explain_reason:
  * @manager: This class instance
- * @event: The event type, e.g. GPM_GRAPH_WIDGET_EVENT_DPMS_OFF
+ * @event: The event type, e.g. GPM_EVENT_DPMS_OFF
  * @pre: The action we are about to do, e.g. "Suspending computer"
  * @post: The reason we are performing the policy action, e.g. "battery critical"
  *
@@ -474,16 +473,16 @@ manager_policy_do (GpmManager  *manager,
 	}
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+		manager_explain_reason (manager, GPM_EVENT_NOTIFICATION,
 					_("Doing nothing"), reason);
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+		manager_explain_reason (manager, GPM_EVENT_SUSPEND,
 					_("Suspending computer"), reason);
 		gpm_manager_suspend (manager, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+		manager_explain_reason (manager, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer"), reason);
 		gpm_manager_hibernate (manager, NULL);
 
@@ -491,12 +490,12 @@ manager_policy_do (GpmManager  *manager,
 		gpm_manager_blank_screen (manager, NULL);
 
 	} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+		manager_explain_reason (manager, GPM_EVENT_NOTIFICATION,
 					_("Shutting down computer"), reason);
 		gpm_manager_shutdown (manager, NULL);
 
 	} else if (strcmp (action, ACTION_INTERACTIVE) == 0) {
-		manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+		manager_explain_reason (manager, GPM_EVENT_NOTIFICATION,
 					_("GNOME interactive logout"), reason);
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
@@ -785,7 +784,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	}
 
 	ret = gpm_hal_hibernate (manager->priv->hal);
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
+	manager_explain_reason (manager, GPM_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
 	/* we need to refresh all the power caches */
@@ -811,7 +810,7 @@ gpm_manager_hibernate (GpmManager *manager,
 					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
 			gpm_info_event_log (manager->priv->info,
-					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
+					    GPM_EVENT_NOTIFICATION, title);
 			g_free (message);
 		}
 	}
@@ -884,7 +883,7 @@ gpm_manager_suspend (GpmManager *manager,
 
 	/* Do the suspend */
 	ret = gpm_hal_suspend (manager->priv->hal, 0);
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_RESUME,
+	manager_explain_reason (manager, GPM_EVENT_RESUME,
 				_("Resuming computer"), NULL);
 
 	/* We need to refresh all the power caches */
@@ -911,7 +910,7 @@ gpm_manager_suspend (GpmManager *manager,
 					      GTK_STOCK_DIALOG_WARNING,
 					      GPM_NOTIFY_URGENCY_LOW);
 			gpm_info_event_log (manager->priv->info,
-					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+					    GPM_EVENT_NOTIFICATION,
 					    title);
 			g_free (message);
 			gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
@@ -944,7 +943,7 @@ gpm_manager_suspend_dbus_method (GpmManager *manager,
 				 GError    **error)
 {
 	/* FIXME: From where? */
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+	manager_explain_reason (manager, GPM_EVENT_SUSPEND,
 				_("Suspending computer"),
 				_("the DBUS method Suspend() was invoked"));
 	return gpm_manager_suspend (manager, error);
@@ -958,7 +957,7 @@ gpm_manager_hibernate_dbus_method (GpmManager *manager,
 				   GError    **error)
 {
 	/* FIXME: From where? */
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+	manager_explain_reason (manager, GPM_EVENT_HIBERNATE,
 				_("Hibernating computer"),
 				_("the DBUS method Hibernate() was invoked"));
 	return gpm_manager_hibernate (manager, error);
@@ -973,7 +972,7 @@ gpm_manager_shutdown_dbus_method (GpmManager *manager,
 				  GError    **error)
 {
 	/* FIXME: From where? */
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+	manager_explain_reason (manager, GPM_EVENT_NOTIFICATION,
 				_("Shutting down computer"),
 				_("the DBUS method Shutdown() was invoked"));
 	return gpm_manager_shutdown (manager, error);
@@ -988,7 +987,7 @@ gpm_manager_reboot_dbus_method (GpmManager *manager,
 				GError    **error)
 {
 	/* FIXME: From where? */
-	manager_explain_reason (manager, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+	manager_explain_reason (manager, GPM_EVENT_NOTIFICATION,
 				_("Rebooting computer"),
 				_("the DBUS method Reboot() was invoked"));
 	return gpm_manager_reboot (manager, error);
@@ -1360,7 +1359,7 @@ battery_status_changed_primary (GpmManager     *manager,
 					      GPM_STOCK_BATTERY_CHARGED,
 					      GPM_NOTIFY_URGENCY_LOW);
 			gpm_info_event_log (manager->priv->info,
-					    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+					    GPM_EVENT_NOTIFICATION,
 					    title);
 		}
 		manager->priv->done_notify_fully_charged = TRUE;
@@ -1470,7 +1469,7 @@ battery_status_changed_primary (GpmManager     *manager,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
 		g_free (icon);
 		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+				    GPM_EVENT_NOTIFICATION,
 				    title);
 		g_free (message);
 	}
@@ -1577,7 +1576,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
 				      icon, GPM_NOTIFY_URGENCY_NORMAL);
 		gpm_info_event_log (manager->priv->info,
-				    GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+				    GPM_EVENT_NOTIFICATION,
 				    title);
 		g_free (icon);
 		g_free (message);
@@ -1660,7 +1659,7 @@ battery_status_changed_misc (GpmManager	    *manager,
 			      icon, GPM_NOTIFY_URGENCY_NORMAL);
 
 	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
-	gpm_info_event_log (manager->priv->info, GPM_GRAPH_WIDGET_EVENT_NOTIFICATION, title);
+	gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, title);
 
 	g_free (icon);
 	g_free (message);
@@ -1783,7 +1782,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 	}
 
 	manager_explain_reason (manager,
-				GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+				GPM_EVENT_HIBERNATE,
 				_("Hibernating computer"),
 				_("user clicked hibernate from tray menu"));
 	gpm_manager_hibernate (manager, NULL);
@@ -1808,7 +1807,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 		return;
 	}
 	manager_explain_reason (manager,
-				GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+				GPM_EVENT_SUSPEND,
 				_("Suspending computer"),
 				_("user clicked suspend from tray menu"));
 	gpm_manager_suspend (manager, NULL);

@@ -36,7 +36,7 @@
 #include "gpm-statistics-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
-#include "gpm-graph-widget.h"
+#include "gpm-info.h"
 #include "gpm-info-data.h"
 #include "gpm-proxy.h"
 
@@ -407,7 +407,7 @@ gpm_statistics_free_list_strings (GList *list)
 }
 
 static gboolean
-gpm_statistics_get_data (GpmStatistics *statistics,
+gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 			 const gchar *type)
 {
 	GError *error = NULL;
@@ -479,7 +479,7 @@ gpm_statistics_get_data (GpmStatistics *statistics,
 }
 
 static gboolean
-gpm_statistics_get_axis_type (GpmStatistics          *statistics,
+gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 			      const gchar 	     *type,
 			      GpmGraphWidgetAxisType *x,
 			      GpmGraphWidgetAxisType *y)
@@ -534,7 +534,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 
 	/* only get the data for a valid type */
 	if (statistics->priv->graph_type != NULL) {
-		gpm_statistics_get_data (statistics, statistics->priv->graph_type);
+		gpm_statistics_get_data_dbus (statistics, statistics->priv->graph_type);
 	}
 
 	list = gpm_info_data_get_list (statistics->priv->data);
@@ -569,7 +569,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	g_free (value);
 
 	/* find out what sort of grid axis we need */
-	gpm_statistics_get_axis_type (statistics, type, &axis_x, &axis_y);
+	gpm_statistics_get_axis_type_dbus (statistics, type, &axis_x, &axis_y);
 	gpm_graph_widget_set_axis_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_x);
 	gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_y);
 
@@ -726,54 +726,74 @@ gpm_statistics_init (GpmStatistics *statistics)
 	/* add the key items */
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("On AC"),
-				  GPM_GRAPH_WIDGET_EVENT_ON_AC,
+				  GPM_EVENT_ON_AC,
 				  GPM_GRAPH_WIDGET_COLOUR_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("On battery"),
-				  GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
+				  GPM_EVENT_ON_BATTERY,
 				  GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session idle"),
-				  GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE,
+				  GPM_EVENT_SESSION_IDLE,
 				  GPM_GRAPH_WIDGET_COLOUR_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session active"),
-				  GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE,
+				  GPM_EVENT_SESSION_ACTIVE,
 				  GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Suspend"),
-				  GPM_GRAPH_WIDGET_EVENT_SUSPEND,
+				  GPM_EVENT_SUSPEND,
 				  GPM_GRAPH_WIDGET_COLOUR_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Resume"),
-				  GPM_GRAPH_WIDGET_EVENT_RESUME,
+				  GPM_EVENT_RESUME,
 				  GPM_GRAPH_WIDGET_COLOUR_DARK_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Hibernate"),
-				  GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
+				  GPM_EVENT_HIBERNATE,
 				  GPM_GRAPH_WIDGET_COLOUR_MAGENTA,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid closed"),
-				  GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
+				  GPM_EVENT_LID_CLOSED,
 				  GPM_GRAPH_WIDGET_COLOUR_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid opened"),
-				  GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
+				  GPM_EVENT_LID_OPENED,
 				  GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Notification"),
-				  GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
+				  GPM_EVENT_NOTIFICATION,
 				  GPM_GRAPH_WIDGET_COLOUR_GREY,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("DPMS On"),
+				  GPM_EVENT_DPMS_ON,
+				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("DPMS Standby"),
+				  GPM_EVENT_DPMS_STANDBY,
+				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("DPMS Suspend"),
+				  GPM_EVENT_DPMS_SUSPEND,
+				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
+	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+				  _("DPMS Off"),
+				  GPM_EVENT_DPMS_OFF,
+				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 				       
 
 	/* FIXME: There's got to be a better way than this */

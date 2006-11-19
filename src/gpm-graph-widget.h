@@ -71,21 +71,6 @@ typedef enum {
 	GPM_GRAPH_WIDGET_SHAPE_LAST
 } GpmGraphWidgetShape;
 
-/* needs to be in gpm-common.h */
-typedef enum {
-	GPM_GRAPH_WIDGET_EVENT_ON_AC,
-	GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
-	GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE,
-	GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE,
-	GPM_GRAPH_WIDGET_EVENT_SUSPEND,
-	GPM_GRAPH_WIDGET_EVENT_HIBERNATE,
-	GPM_GRAPH_WIDGET_EVENT_RESUME,
-	GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
-	GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
-	GPM_GRAPH_WIDGET_EVENT_NOTIFICATION,
-	GPM_GRAPH_WIDGET_EVENT_LAST
-} GpmGraphWidgetEvent;
-
 typedef enum {
 	GPM_GRAPH_WIDGET_TYPE_INVALID,
 	GPM_GRAPH_WIDGET_TYPE_PERCENTAGE,
@@ -100,7 +85,7 @@ typedef struct {
 	const gchar		*name;
 	GpmGraphWidgetColour	 colour;
 	GpmGraphWidgetShape	 shape;
-} GpmGraphWidgetKeyStruct;
+} GpmGraphWidgetKeyItem;
 
 struct GpmGraphWidget
 {
@@ -132,10 +117,6 @@ void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
-const gchar *	 gpm_graph_widget_event_description	(GpmGraphWidgetEvent event);
-void		 gpm_graph_widget_get_event_visual	(GpmGraphWidgetEvent event,
-							 GpmGraphWidgetColour *colour,
-							 GpmGraphWidgetShape *shape);
 gboolean	 gpm_graph_widget_key_add		(GpmGraphWidget	*graph,
 							 const gchar	*name,
 							 guint		 id,

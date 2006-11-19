@@ -34,6 +34,7 @@
 #include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
+#include "gpm-dpms.h"
 #include "gpm-hal.h"
 #include "gpm-info.h"
 #include "gpm-info-data.h"
@@ -58,6 +59,7 @@ struct GpmInfoPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
+	GpmDpms			*dpms;
 	GpmHal			*hal;
 	GpmIdle			*idle;
 	GpmPower		*power;
@@ -382,10 +384,10 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 		       GpmInfo          *info)
 {
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_ON_AC,
+		gpm_info_event_log (info, GPM_EVENT_ON_AC,
 				    _("AC adapter inserted"));
 	} else {
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_ON_BATTERY,
+		gpm_info_event_log (info, GPM_EVENT_ON_BATTERY,
 				    _("AC adapter removed"));
 	}
 }
@@ -406,13 +408,13 @@ button_pressed_cb (GpmButton   *power,
 
 	if (strcmp (type, GPM_BUTTON_LID_CLOSED) == 0) {
 		gpm_info_event_log (info,
-				    GPM_GRAPH_WIDGET_EVENT_LID_CLOSED,
+				    GPM_EVENT_LID_CLOSED,
 				    _("The laptop lid has been closed"));
 		gpm_debug ("lid button CLOSED");
 
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 		gpm_info_event_log (info,
-				    GPM_GRAPH_WIDGET_EVENT_LID_OPENED,
+				    GPM_EVENT_LID_OPENED,
 				    _("The laptop lid has been re-opened"));
 		gpm_debug ("lid button OPENED");
 	}
@@ -435,12 +437,35 @@ idle_changed_cb (GpmIdle     *idle,
 		 GpmInfo     *info)
 {
 	if (mode == GPM_IDLE_MODE_NORMAL) {
-
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SESSION_ACTIVE, _("idle mode ended"));
+		gpm_info_event_log (info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
+		gpm_info_event_log (info, GPM_EVENT_SESSION_IDLE, _("idle mode started"));
+	}
+}
 
-		gpm_info_event_log (info, GPM_GRAPH_WIDGET_EVENT_SESSION_IDLE, _("idle mode started"));
+/**
+ * dpms_mode_changed_cb:
+ * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
+ * @info: This class instance
+ *
+ * Log when the DPMS mode is changed.
+ **/
+static void
+dpms_mode_changed_cb (GpmDpms    *dpms,
+		      GpmDpmsMode mode,
+		      GpmInfo *info)
+{
+	gpm_debug ("DPMS mode changed: %d", mode);
+
+	if (mode == GPM_DPMS_MODE_ON) {
+		gpm_info_event_log (info, GPM_EVENT_DPMS_ON, _("dpms on"));
+	} else if (mode == GPM_DPMS_MODE_STANDBY) {
+		gpm_info_event_log (info, GPM_EVENT_DPMS_STANDBY, _("dpms standby"));
+	} else if (mode == GPM_DPMS_MODE_SUSPEND) {
+		gpm_info_event_log (info, GPM_EVENT_DPMS_SUSPEND, _("dpms suspend"));
+	} else if (mode == GPM_DPMS_MODE_OFF) {
+		gpm_info_event_log (info, GPM_EVENT_DPMS_OFF, _("dpms off"));
 	}
 }
 
@@ -493,6 +518,11 @@ gpm_info_init (GpmInfo *info)
 	info->priv->idle = gpm_idle_new ();
 	g_signal_connect (info->priv->idle, "idle-changed",
 			  G_CALLBACK (idle_changed_cb), info);
+
+	/* watch for dpms mode changes */
+	info->priv->dpms = gpm_dpms_new ();
+	g_signal_connect (info->priv->dpms, "mode-changed",
+			  G_CALLBACK (dpms_mode_changed_cb), info);
 
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
@@ -554,6 +584,9 @@ gpm_info_finalize (GObject *object)
 	}
 	if (info->priv->idle != NULL) {
 		g_object_unref (info->priv->idle);
+	}
+	if (info->priv->dpms != NULL) {
+		g_object_unref (info->priv->dpms);
 	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
