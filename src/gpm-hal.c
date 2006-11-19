@@ -1280,7 +1280,7 @@ static gboolean
 gpm_hal_filter_error (GError **error)
 {
 	/* short cut for speed, no error */
-	if (error == NULL) {
+	if (*error == NULL) {
 		return FALSE;
 	}
 
