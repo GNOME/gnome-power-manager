@@ -153,12 +153,23 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl - Respond to XEvents
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(xevents, [  --enable-xevents      Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)
+AC_ARG_ENABLE(xevents, [  --enable-xevents        Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)
 AC_MSG_CHECKING([whether to support xevents])
 have_xevents=no
 if test x$enable_xevents = xyes ; then
     have_xevents=yes
     AC_DEFINE(HAVE_XEVENTS, 1, [Define if we use XEVENTS])
+fi
+
+dnl ---------------------------------------------------------------------------
+dnl - Build applets
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(applets, [  --enable-applets        Build the extra power applets],enable_applets=$enableval,enable_applets=no)
+AC_MSG_CHECKING([whether to build applet support])
+have_applets=no
+if test x$enable_applets = xyes ; then
+    have_applets=yes
+    AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -512,6 +523,7 @@ echo "
         cflags:                    ${CFLAGS}
         libnotify support:         ${have_libnotify}
         gtkunique support:         ${have_gtkunique}
+        Building extra applets:    ${enable_applets}
         DPMS support:              ${have_dpms}
         PolicyKit support:         ${have_polkit}
         XEVENTS support:           ${have_xevents}
