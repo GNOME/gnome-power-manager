@@ -187,6 +187,8 @@ emit_button_pressed (GpmHalMonitor *monitor,
 		button_name = g_strdup (details);
 	}
 
+	g_return_if_fail (button_name != NULL);
+
 	/* Buttons without state should default to true. */
 	value = TRUE;
 	/* we need to get the button state for lid buttons */

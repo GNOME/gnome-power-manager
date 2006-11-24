@@ -1,3 +1,9 @@
+2006-11-24  Pascal Terjan  <pterjan@linuxfr.org>
+
+	* src/gpm-hal-monitor.c: don't crash if hal tell us that a 
+	button was pressed but then can not tell which one (it exited
+	since).
+
 2006-11-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (battery_status_changed_primary):
