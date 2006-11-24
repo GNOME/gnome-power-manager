@@ -1,5 +1,13 @@
 2006-11-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-prefs-core.c: (prefs_setup_notification):
+	Hide the 'When battery present' option when there is no
+	battery in the system. This does mean neither option will
+	be selected in the GUI from first-install, which is why
+	a better solution should probably be found. Fixes #363757
+
+2006-11-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-prefs-core.c: (gpm_prefs_enable_widget),
 	As per GNOME HIG, don't hide the disabled sliders, but
 	grey them out instead.

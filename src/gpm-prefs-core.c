@@ -1169,6 +1169,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 
 	if (prefs->priv->has_batteries == FALSE) {
 		/* Hide battery radio options if we have no batteries */
+		gtk_widget_hide_all (radiobutton_icon_present);
 		gtk_widget_hide_all (radiobutton_icon_charge);
 		gtk_widget_hide_all (radiobutton_icon_critical);
 	}
