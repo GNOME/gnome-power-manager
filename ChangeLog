@@ -2,9 +2,10 @@
 
 	* src/gpm-prefs-core.c: (prefs_setup_notification):
 	Hide the 'When battery present' option when there is no
-	battery in the system. This does mean neither option will
-	be selected in the GUI from first-install, which is why
-	a better solution should probably be found. Fixes #363757
+	primary batteries or UPS's in the system.
+	This does mean neither option will be selected in the GUI for
+	desktop PC's from first-install, which is why a better
+	solution should probably be found. Fixes #363757
 
 2006-11-24  Richard Hughes  <richard@hughsie.com>
 
