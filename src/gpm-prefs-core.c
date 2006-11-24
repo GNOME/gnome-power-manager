@@ -372,10 +372,10 @@ gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
 }
 
 /**
- * gpm_prefs_show_widget:
+ * gpm_prefs_enable_widget:
  **/
 static gboolean
-gpm_prefs_show_widget (GpmPrefs    *prefs,
+gpm_prefs_enable_widget (GpmPrefs    *prefs,
 		       const gchar *widgetname,
 		       gboolean     show)
 {
@@ -387,11 +387,7 @@ gpm_prefs_show_widget (GpmPrefs    *prefs,
 		return FALSE;
 	}
 
-	if (show) {
-		gtk_widget_show_all (widget);
-	} else {
-		gtk_widget_hide_all (widget);
-	}
+	gtk_widget_set_sensitive (widget, show);
 	return TRUE;
 }
 
@@ -434,9 +430,9 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 
 	widget_name = gtk_widget_get_name (widget);
 	if (widget_name && strcmp (widget_name, "combobox_sleep_ac_type") == 0) {
-		gpm_prefs_show_widget (prefs, "hbox_sleep_ac_custom", action != ACTION_NOTHING);
+		gpm_prefs_enable_widget (prefs, "hbox_sleep_ac_custom", action != ACTION_NOTHING);
 	} else if (widget_name && strcmp (widget_name, "combobox_sleep_battery_type") == 0) {
-		gpm_prefs_show_widget (prefs, "hbox_sleep_battery_custom", action != ACTION_NOTHING);
+		gpm_prefs_enable_widget (prefs, "hbox_sleep_battery_custom", action != ACTION_NOTHING);
 	}
 }
 
@@ -773,9 +769,9 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 
 	/* show other options */
 	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
-		gpm_prefs_show_widget (prefs, "hbox_processor_ac_custom", show_custom);
+		gpm_prefs_enable_widget (prefs, "hbox_processor_ac_custom", show_custom);
 	} else {
-		gpm_prefs_show_widget (prefs, "hbox_processor_battery_custom", show_custom);
+		gpm_prefs_enable_widget (prefs, "hbox_processor_battery_custom", show_custom);
 	}
 
 	g_free (value);
