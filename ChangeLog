@@ -1,3 +1,9 @@
+2006-11-24  Pascal Terjan  <pterjan@linuxfr.org>
+
+	* src/gpm-button.c: (emit_button_pressed):
+	don't crash if hal tell us that a button was pressed but then can
+	not give the type.
+
 2006-11-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-prefs-core.c: (prefs_setup_notification):

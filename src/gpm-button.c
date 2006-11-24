@@ -273,6 +273,8 @@ emit_button_pressed (GpmButton *button,
 		/* no details about the event, so we get more info
 		   for type 1 buttons */
 		gpm_hal_device_get_string (button->priv->hal, udi, "button.type", &type);
+		/* hal may no longer be there */
+		g_return_if_fail (type != NULL);
 	} else {
 		type = g_strdup (details);
 	}
