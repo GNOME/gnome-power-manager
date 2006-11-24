@@ -757,7 +757,7 @@ gpm_manager_hibernate (GpmManager *manager,
 	gpm_policy_allowed_hibernate (manager->priv->policy, &allowed);
 
 	if (! allowed) {
-		gpm_warning ("Cannot hibernate");
+		gpm_syslog ("cannot hibernate as not allowed from policy");
 		g_set_error (error,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
@@ -803,6 +803,7 @@ gpm_manager_hibernate (GpmManager *manager,
 			message = g_strdup_printf (_("HAL failed to %s. "
 						     "Check the help file for common problems."),
 						     _("hibernate"));
+			gpm_syslog ("hibernate failed");
 			gpm_notify_display (manager->priv->notify,
 					      title,
 					      message,
@@ -855,7 +856,7 @@ gpm_manager_suspend (GpmManager *manager,
 	gpm_policy_allowed_suspend (manager->priv->policy, &allowed);
 
 	if (! allowed) {
-		gpm_warning ("Cannot suspend");
+		gpm_syslog ("cannot suspend as not allowed from policy");
 		g_set_error (error,
 			     GPM_MANAGER_ERROR,
 			     GPM_MANAGER_ERROR_GENERAL,
@@ -903,6 +904,7 @@ gpm_manager_suspend (GpmManager *manager,
 						     "Check the help file for common problems."),
 						     _("suspend"));
 			title = _("Suspend Problem");
+			gpm_syslog ("suspend failed");
 			gpm_notify_display (manager->priv->notify,
 					      title,
 					      message,

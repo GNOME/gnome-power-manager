@@ -175,6 +175,19 @@ gpm_bugzilla (void)
  *
  * Logs some text to the syslog, usually in /var/log/messages
  **/
+static void
+gpm_syslog_internal (const gchar *string)
+{
+	fprintf (stderr, "Saving to syslog: %s", string);
+	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), string);
+}
+
+/**
+ * gpm_syslog:
+ * @format: This va format string, e.g. ("test %s", hello)
+ *
+ * Logs some text to the syslog, usually in /var/log/messages
+ **/
 void
 gpm_syslog (const gchar *format, ...)
 {
@@ -184,8 +197,7 @@ gpm_syslog (const gchar *format, ...)
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_debug ("Saving to syslog: %s", va_args_buffer);
-	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), va_args_buffer);
+	gpm_syslog_internal (va_args_buffer);
 }
 
 /**
@@ -226,7 +238,7 @@ gpm_critical_error (const gchar *format, ...)
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_syslog ("Critical error: %s", va_args_buffer);
+	gpm_syslog_internal (va_args_buffer);
 	dialog = gtk_message_dialog_new_with_markup (NULL,
 						     GTK_DIALOG_MODAL,
 						     GTK_MESSAGE_WARNING,

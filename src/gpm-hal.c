@@ -1287,13 +1287,7 @@ gpm_hal_filter_error (GError **error)
 	/* DBUS might time out, which is okay. We can remove this code
 	   when the dbus glib bindings are fixed. See #332888 */
 	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
-		gpm_debug ("DBUS timed out, but recovering");
-		g_error_free (*error);
-		*error = NULL;
-		return TRUE;
-	}
-	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_REMOTE_EXCEPTION)) {
-		gpm_debug ("Remote exception, recovering");
+		gpm_syslog ("DBUS timed out, but recovering");
 		g_error_free (*error);
 		*error = NULL;
 		return TRUE;

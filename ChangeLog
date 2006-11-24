@@ -1,3 +1,14 @@
+2006-11-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-debug.c:
+	Don't try to use the global buffer recursively. Fixes #378171
+
+	* src/gpm-hal.c: (gpm_hal_filter_error):
+	Don't filter remote exceptions. Fixes #378179
+
+	* src/gpm-manager.c:
+	Save to syslog when suspend or hibernate failed.
+
 2006-11-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal.c: (gpm_hal_filter_error):
