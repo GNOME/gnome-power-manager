@@ -1,5 +1,9 @@
 SUBDIRS = src po docs man data help
 
+if HAVE_APPLETS
+SUBDIRS += applets
+endif
+
 EXTRA_DIST =						\
 	HACKING						\
 	MAINTAINERS					\
@@ -19,4 +23,4 @@ DISTCLEANFILES =					\
 	intltool-update					\
 	gnome-power-manager-*.tar.gz
 
-DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper
+DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper --disable-applets

@@ -55,6 +55,7 @@ LIBNOTIFY_SUGGESTED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
 GTKUNIQUE_REQUIRED=0.9.1
+LIBPANEL_REQUIRED=2.0.0
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -70,6 +71,7 @@ AC_SUBST(LIBNOTIFY_REQUIRED)
 AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
 AC_SUBST(GTKUNIQUE_REQUIRED)
+AC_SUBST(LIBPANEL_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -95,6 +97,7 @@ PKG_CHECK_MODULES(GNOME, \
  libwnck-1.0 >= $LIBWNCK_REQUIRED \
  gtk+-2.0 >= $GTK_REQUIRED \
  gnome-keyring-1 >= $GNOME_KEYRING_REQUIRED \
+ libpanelapplet-2.0 >= $LIBPANEL_REQUIRED \
  cairo >= $CAIRO_REQUIRED)
 AC_SUBST(GNOME_CFLAGS)
 AC_SUBST(GNOME_LIBS)
@@ -164,13 +167,14 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl - Build applets
 dnl ---------------------------------------------------------------------------
-AC_ARG_ENABLE(applets, [  --enable-applets        Build the extra power applets],enable_applets=$enableval,enable_applets=no)
+AC_ARG_ENABLE(applets, [  --enable-applets        Build the extra power applets],enable_applets=$enableval,enable_applets=yes)
 AC_MSG_CHECKING([whether to build applet support])
 have_applets=no
 if test x$enable_applets = xyes ; then
     have_applets=yes
     AC_DEFINE(HAVE_APPLETS, 1, [Define if we are building applets])
 fi
+AM_CONDITIONAL([HAVE_APPLETS], [test $have_applets = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - DocBook Documentation
@@ -498,6 +502,8 @@ dnl ---------------------------------------------------------------------------
 AC_OUTPUT([
 Makefile
 src/Makefile
+applets/Makefile
+applets/brightness-applet/Makefile
 docs/Makefile
 docs/gnome-power-manager.xml
 man/Makefile
