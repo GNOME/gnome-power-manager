@@ -52,7 +52,7 @@ static gboolean  bonobo_cb                        (PanelApplet *_applet, const g
 #define GPM_BRIGHTNESS_APPLET_OAFID              "OAFIID:GNOME_BrightnessApplet"
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID      "OAFIID:GNOME_BrightnessApplet_Factory"
 #define GPM_BRIGHTNESS_APPLET_VERSION_STRING     "0.1"
-#define GPM_ICON_BRIGHTNESS                      "gpm-brightness"
+#define GPM_ICON_BRIGHTNESS                      "gpm-brightness-lcd"
 #define GPM_ICON_DISABLED                        "error"
 #define PANEL_APPLET_VERTICAL(p)					\
 	 (((p) == PANEL_APPLET_ORIENT_LEFT) || ((p) == PANEL_APPLET_ORIENT_RIGHT))
@@ -148,7 +148,7 @@ draw_applet_cb (GpmBrightnessApplet *applet)
 
 	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
 	if (bg_type == PANEL_PIXMAP_BACKGROUND && !applet->popped) {
-		/* fill wih given background pixmap */
+		/* fill with given background pixmap */
 		gdk_draw_drawable (backbuf, gc_backbuf, background, 0, 0, 0, 0, w, h);
 	} else {
 		/* fill with appropriate color */
