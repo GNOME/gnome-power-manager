@@ -1,5 +1,15 @@
 2006-11-25  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/brightness-applet.c:
+	A few minor changes:
+	- Use the global g-p-m version, not 0.1
+	- Use the gnome-power-manager yelp file.
+	- Set the applet name prefix to be 'Power Manager' to
+	indicate it's part of the same package.
+	- Make some localised text a little nicer.
+
+2006-11-25  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
 	* applets/brightness/brightness-applet.c:
 	Use the correct icon name so we show up in the panel.

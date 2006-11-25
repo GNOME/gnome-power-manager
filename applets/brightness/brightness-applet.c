@@ -20,6 +20,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <panel-applet.h>
@@ -28,6 +32,7 @@
 #include <libgnomeui/gnome-help.h>
 
 #include "brightness-applet.h"
+#include "../../src/gpm-common.h"
 
 static void      gpm_brightness_applet_class_init (GpmBrightnessAppletClass *klass);
 static void      gpm_brightness_applet_init       (GpmBrightnessApplet *applet);
@@ -49,11 +54,11 @@ static gboolean  popup_cb                         (GpmBrightnessApplet *applet, 
 static void      dialog_about_cb                  (BonoboUIComponent *uic, gpointer data, const gchar *verbname);
 static gboolean  bonobo_cb                        (PanelApplet *_applet, const gchar *iid, gpointer data);
 
-#define GPM_BRIGHTNESS_APPLET_OAFID              "OAFIID:GNOME_BrightnessApplet"
-#define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID      "OAFIID:GNOME_BrightnessApplet_Factory"
-#define GPM_BRIGHTNESS_APPLET_VERSION_STRING     "0.1"
-#define GPM_ICON_BRIGHTNESS                      "gpm-brightness-lcd"
-#define GPM_ICON_DISABLED                        "error"
+#define GPM_BRIGHTNESS_APPLET_OAFID		"OAFIID:GNOME_BrightnessApplet"
+#define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
+#define GPM_BRIGHTNESS_APPLET_ICON		"gpm-brightness-lcd"
+#define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manger Brightness Applet")
+#define GPM_BRIGHTNESS_APPLET_DESC		_("Adjusts laptop panel brightness.")
 #define PANEL_APPLET_VERTICAL(p)					\
 	 (((p) == PANEL_APPLET_ORIENT_LEFT) || ((p) == PANEL_APPLET_ORIENT_RIGHT))
 
@@ -78,7 +83,7 @@ retrieve_icon (GpmBrightnessApplet *applet)
 
 	/*get icon */
 	applet->icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-						 GPM_ICON_BRIGHTNESS,
+						 GPM_BRIGHTNESS_APPLET_ICON,
 						 applet->size - 2,
 						 0,
 						 NULL);
@@ -207,9 +212,9 @@ update_tooltip (GpmBrightnessApplet *applet)
 {
 	static gchar buf[101];
 	if (applet->enabled) {
-		snprintf (buf, 100, _("brightness : %d%%"), applet->level);
+		snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
 	} else {
-		snprintf (buf, 100, _("can't retrieve laptop panel's brightness"));
+		snprintf (buf, 100, _("Cannot get laptop panel brightness"));
 	}
 	gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
 }
@@ -467,13 +472,12 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 
 	GdkPixbuf *logo =
 		gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-					  GPM_ICON_BRIGHTNESS,
-					  128,
-					  0,
-					  NULL);
+					  GPM_BRIGHTNESS_APPLET_ICON,
+					  128, 0, NULL);
 
 	static const gchar *authors[] = {
-		"Benjamin Canou",
+		"Benjamin Canou <bookeldor@gmail.com>",
+		"Richard Hughes <richard@hughsie.com>",
 		NULL
 	};
 	const char *documenters [] = {
@@ -506,15 +510,16 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 				     _(license[2]), "\n\n", _(license[3]), "\n", NULL);
 
 	about = (GtkAboutDialog*) gtk_about_dialog_new ();
-	gtk_about_dialog_set_name (about, _("Brightness Applet"));
-	gtk_about_dialog_set_version (about, GPM_BRIGHTNESS_APPLET_VERSION_STRING);
-	gtk_about_dialog_set_copyright (about, " (C) 2006 Benjamin Canou");
-	gtk_about_dialog_set_comments (about, _("Adjusts the laptop panel brightness."));
+	gtk_about_dialog_set_name (about, GPM_BRIGHTNESS_APPLET_NAME);
+	gtk_about_dialog_set_version (about, VERSION);
+	gtk_about_dialog_set_copyright (about, _("Copyright \xc2\xa9 2006 Benjamin Canou"));
+	gtk_about_dialog_set_comments (about, GPM_BRIGHTNESS_APPLET_DESC);
 	gtk_about_dialog_set_authors (about, authors);
 	gtk_about_dialog_set_documenters (about, documenters);
 	gtk_about_dialog_set_translator_credits (about, translator_credits);
 	gtk_about_dialog_set_logo (about, logo);
 	gtk_about_dialog_set_license (about, license_trans);
+	gtk_about_dialog_set_website (about, GPM_HOMEPAGE_URL);
 
 	g_signal_connect (G_OBJECT(about), "response",
 			  G_CALLBACK(gtk_widget_destroy), NULL);
@@ -522,7 +527,6 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 	gtk_widget_show (GTK_WIDGET(about));
 
 	g_free (license_trans);
-
 }
 
 /**
@@ -535,7 +539,7 @@ help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GError *error = NULL;
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(data);
-	gnome_help_display ("gnome-brighness-applet.xml", NULL, &error);
+	gnome_help_display ("gnome-power-icon.xml", NULL, &error);
 	if (error != NULL) {
 		GtkWidget *dialog =
 			gtk_message_dialog_new (GTK_WINDOW (GTK_WIDGET(applet)->parent),
@@ -661,6 +665,6 @@ PANEL_APPLET_BONOBO_FACTORY
  /* generates brighness applets instead of regular gnome applets  */
  GPM_TYPE_BRIGHTNESS_APPLET,
  /* the applet name and version */
- "BrightnessApplet", GPM_BRIGHTNESS_APPLET_VERSION_STRING,
+ "BrightnessApplet", VERSION,
  /* our callback (with no user data) */
  bonobo_cb, NULL);
