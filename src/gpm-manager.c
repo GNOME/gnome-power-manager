@@ -52,7 +52,6 @@
 #include "gpm-idle.h"
 #include "gpm-info.h"
 #include "gpm-inhibit.h"
-#include "gpm-interface-statistics.h"
 #include "gpm-networkmanager.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
@@ -69,6 +68,9 @@
 #include "gpm-sound.h"
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
+
+#include "gpm-interface-statistics.h"
+#include "gpm-interface-brightness-lcd.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -1904,6 +1906,7 @@ gpm_manager_init (GpmManager *manager)
 	GpmAcAdapterState state;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 
 	/* we want all notifications */
 	manager->priv->last_ups = GPM_WARNING_NONE;
@@ -1964,6 +1967,14 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try an start an interactive service */
 	manager->priv->srv_brightness_lcd = gpm_srv_brightness_lcd_new ();
+	if (manager->priv->srv_brightness_lcd != NULL) {
+		/* add the new brightness lcd DBUS interface */
+		dbus_g_object_type_install_info (GPM_TYPE_SRV_BRIGHTNESS_LCD,
+						 &dbus_glib_gpm_brightness_lcd_object_info);
+		dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/BrightnessLcd",
+						     G_OBJECT (manager->priv->srv_brightness_lcd));
+	}
+
 	manager->priv->srv_brightness_kbd = gpm_srv_brightness_kbd_new ();
 
 	manager->priv->idle = gpm_idle_new ();
@@ -1990,7 +2001,6 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->info = gpm_info_new ();
 
 	/* add the new statistics DBUS interface */
-	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
 	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics",
 					     G_OBJECT (manager->priv->info));

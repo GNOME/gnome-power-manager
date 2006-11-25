@@ -47,8 +47,22 @@ typedef struct
 	GObjectClass	parent_class;
 } GpmSrvBrightnessLcdClass;
 
-GType		 gpm_srv_brightness_lcd_get_type		(void);
+typedef enum
+{
+	 GPM_BRIGHTNESS_LCD_ERROR_GENERAL,
+	 GPM_BRIGHTNESS_LCD_ERROR_DATA_NOT_AVAILABLE
+} GpmSrvBrightnessLcdError;
+
+GType		 gpm_srv_brightness_lcd_get_type	(void);
+GQuark		 gpm_srv_brightness_lcd_error_quark	(void);
 GpmSrvBrightnessLcd *gpm_srv_brightness_lcd_new		(void);
+
+gboolean gpm_brightness_lcd_get_policy_brightness	(GpmSrvBrightnessLcd	*srv_brightness,
+							 gint			*brightness,
+							 GError			**error);
+gboolean gpm_brightness_lcd_set_policy_brightness	(GpmSrvBrightnessLcd	*srv_brightness,
+							 gint			 brightness,
+							 GError			**error);
 
 G_END_DECLS
 

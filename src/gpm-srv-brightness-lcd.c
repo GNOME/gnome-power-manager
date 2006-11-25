@@ -70,6 +70,67 @@ struct GpmSrvBrightnessLcdPrivate
 G_DEFINE_TYPE (GpmSrvBrightnessLcd, gpm_srv_brightness_lcd, G_TYPE_OBJECT)
 
 /**
+ * gpm_srv_brightness_lcd_error_quark:
+ * Return value: Our personal error quark.
+ **/
+GQuark
+gpm_srv_brightness_lcd_error_quark (void)
+{
+	static GQuark quark = 0;
+	if (!quark) {
+		quark = g_quark_from_static_string ("gpm_brightness_error");
+	}
+	return quark;
+}
+
+/**
+ * gpm_brightness_lcd_get_policy_brightness:
+ **/
+gboolean
+gpm_brightness_lcd_get_policy_brightness (GpmSrvBrightnessLcd	*srv_brightness,
+					  gint			*brightness,
+					  GError		**error)
+{
+	guint level;
+	gboolean ret;
+	g_return_val_if_fail (srv_brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_LCD (srv_brightness), FALSE);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+
+	/* gets the current brightness */
+	ret = gpm_brightness_lcd_get (srv_brightness->priv->brightness, &level);
+	if (ret == TRUE) {
+		*brightness = level;
+	} else {
+		*error = g_error_new (gpm_srv_brightness_lcd_error_quark (),
+				      GPM_BRIGHTNESS_LCD_ERROR_DATA_NOT_AVAILABLE,
+				      "Data not available");
+	}
+	return ret;
+}
+
+/**
+ * gpm_brightness_lcd_get_policy_brightness:
+ **/
+gboolean gpm_brightness_lcd_set_policy_brightness (GpmSrvBrightnessLcd	*srv_brightness,
+						   gint			 brightness,
+						   GError		**error)
+{
+	gboolean ret;
+	g_return_val_if_fail (srv_brightness != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_SRV_BRIGHTNESS_LCD (srv_brightness), FALSE);
+
+	/* sets the current policy brightness */
+	ret = gpm_brightness_lcd_set_std (srv_brightness->priv->brightness, brightness);
+	if (ret == FALSE) {
+		*error = g_error_new (gpm_srv_brightness_lcd_error_quark (),
+				      GPM_BRIGHTNESS_LCD_ERROR_GENERAL,
+				      "Cannot set policy brightness");
+	}
+	return ret;
+}
+
+/**
  * conf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.

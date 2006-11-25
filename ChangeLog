@@ -1,5 +1,17 @@
 2006-11-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/.cvsignore:
+	* src/Makefile.am:
+	* src/gpm-interface-brightness-lcd.xml:
+	* src/gpm-manager.c: (gpm_manager_init):
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	Add the DBUS service org.gnome.PowerManager.BrightnessLcd
+	This name might change, as might the method names, so don't
+	use this outside of gnome-power-manager for now.
+
+2006-11-25  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	* applets/.cvsignore:
 	* applets/Makefile.am:
