@@ -39,17 +39,13 @@
 #include "gpm-info.h"
 #include "gpm-info-data.h"
 #include "gpm-proxy.h"
+#include "gpm-powermanager.h"
 
 static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
 static void     gpm_statistics_init       (GpmStatistics      *statistics);
 static void     gpm_statistics_finalize   (GObject	    *object);
 
 #define GPM_STATISTICS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_STATISTICS, GpmStatisticsPrivate))
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
-#define	GPM_DBUS_PATH_STATS		"/org/gnome/PowerManager/Statistics"
-#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
-#define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
 
 #define ACTION_VOLTAGE		"voltage"
 #define ACTION_CHARGE		"charge"

@@ -1,5 +1,21 @@
 2006-11-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-powermanager.h:
+	Move all the duplicated DBUS defines here.
+
+	* src/Makefile.am:
+	* src/gpm-manager.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-statistics-core.c:
+	Use gpm-powermanager.h rather than defining them ourselves.
+
+	* src/gpm-powermanager.c:
+	Provide a simple accessor class so that the brightness applet
+	can easily talk to g-p-m. Just create an instance of this
+	class, and then don't worry about DBUS. ;-)
+
+2006-11-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/.cvsignore:
 	* src/Makefile.am:
 	* src/gpm-interface-brightness-lcd.xml:

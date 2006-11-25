@@ -42,6 +42,7 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-screensaver.h"
+#include "gpm-powermanager.h"
 
 static void     gpm_prefs_class_init (GpmPrefsClass *klass);
 static void     gpm_prefs_init       (GpmPrefs      *prefs);
@@ -91,10 +92,6 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define CPUFREQ_USERSPACE_TEXT		_("Custom")
 #define CPUFREQ_PERFORMANCE_TEXT	_("Maximum speed")
 #define CPUFREQ_NOTHING_TEXT 		_("Do nothing")
-
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 
 #define GPM_SLEEP_MAX_TIME		60
 

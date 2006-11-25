@@ -53,6 +53,7 @@ gnome_power_statistics_SOURCES =			\
 	gpm-conf.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
+	gpm-powermanager.h				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	$(NULL)
@@ -93,6 +94,7 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
 	gpm-prefs-core.c				\
+	gpm-powermanager.h				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
@@ -150,6 +152,7 @@ gnome_power_manager_SOURCES =				\
 	gpm-policy.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
+	gpm-powermanager.h				\
 	gpm-refcount.h					\
 	gpm-refcount.c					\
 	gpm-button.h					\

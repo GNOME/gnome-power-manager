@@ -57,6 +57,7 @@
 #include "gpm-notify.h"
 #include "gpm-power.h"
 #include "gpm-policy.h"
+#include "gpm-powermanager.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
 #include "gpm-srv-brightness-lcd.h"
@@ -1971,7 +1972,7 @@ gpm_manager_init (GpmManager *manager)
 		/* add the new brightness lcd DBUS interface */
 		dbus_g_object_type_install_info (GPM_TYPE_SRV_BRIGHTNESS_LCD,
 						 &dbus_glib_gpm_brightness_lcd_object_info);
-		dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/BrightnessLcd",
+		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BRIGHT_LCD,
 						     G_OBJECT (manager->priv->srv_brightness_lcd));
 	}
 
@@ -2002,7 +2003,7 @@ gpm_manager_init (GpmManager *manager)
 
 	/* add the new statistics DBUS interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
-	dbus_g_connection_register_g_object (connection, "/org/gnome/PowerManager/Statistics",
+	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_STATS,
 					     G_OBJECT (manager->priv->info));
 
 	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
