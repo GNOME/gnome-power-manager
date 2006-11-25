@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<oaf_info>
+  <oaf_server iid="OAFIID:GNOME_BrightnessApplet_Factory" type="exe" location="@BINDIR@/gnome-brightness-applet">
+    <oaf_attribute name="repo_ids" type="stringv">
+      <item value="IDL:Bonobo/GenericFactory:1.0"/>
+      <item value="IDL:Bonobo/Unknown:1.0"/>
+    </oaf_attribute>
+    <oaf_attribute name="name" type="string" value="Brightness Applet Factory"/>
+    <oaf_attribute name="description" type="string" value="Factory for Brightness Applet"/>
+  </oaf_server>
+  <oaf_server iid="OAFIID:GNOME_BrightnessApplet" type="factory" location="OAFIID:GNOME_BrightnessApplet_Factory">
+    <oaf_attribute name="repo_ids" type="stringv">
+      <item value="IDL:GNOME/Vertigo/PanelAppletShell:1.0"/>
+      <item value="IDL:Bonobo/Control:1.0"/>
+      <item value="IDL:Bonobo/Unknown:1.0"/>
+    </oaf_attribute>
+    <oaf_attribute name="panel:category" type="string" value="System &amp; Hardware"/>
+    <oaf_attribute name="panel:icon" type="string" value="gpm-brightness"/>
+    <oaf_attribute name="name" type="string" value="Brightness Applet"/>
+    <oaf_attribute name="description" type="string" value="Adjusts Laptop panel brightness"/>
+  </oaf_server>
+</oaf_info>
