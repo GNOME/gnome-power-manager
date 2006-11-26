@@ -12,6 +12,22 @@
       the mailing list.
     </para>
 
+    <sect2 id="faq-debian-etch-locked-down-dbus">
+      <title>
+        Why using Debian (Etch) do I get the error : <literal>A security policy in place prevents this sender
+from sending this message to this recepient...</literal>
+      </title>
+
+      <para>
+        Debian ships a locked down DBUS by default for Etch which
+        prevents ordinary users from issuing methods to HAL.
+        To allow the current logged in user to use these methods,
+        just add it to the powerdev group (see 
+        <literal>/usr/share/doc/gnome-power-manager/README.Debian</literal>).
+      </para>
+
+    </sect2>
+
     <sect2 id="faq-dpms-broken-monitor">
       <title>
         My monitor is broken and treats DPMS standby and off states as
@@ -54,17 +70,7 @@
       </para>
 
       <para>
-        In gnome-power-manager 2-14 the timouts are not obviously linked to
-        gnome-screensaver, but the timeouts are linked in reality.
-        This is because the gnome-screensaver declares the session "idle" and
-        then gnome-power-manager starts.
-        Therefore the real time to suspend is actually the gnome-screensaver
-        timeout <emphasis>PLUS</emphasis> the gnome-power-manager time.
-      </para>
-
-      <para>
-        In the g-p-m 2-15 development branch, the sliders in
-        gnome-power-preferences are set to start at the value of the
+        The sliders in gnome-power-preferences are set to start at the value of the
         session-timout + 1 minute, as we cannot logically trigger before the
         session is marked as idle.
         If you adjust the value of the 'session idle' timeout in
@@ -115,18 +121,6 @@ options ibm_acpi experimental=1
       </para>
     </sect2>
 
-    <sect2 id="faq-cool-screenshots">
-      <title>Have you got any screenshots of the cool new stuff?</title>
-
-      <para>
-        Well actually, yes.
-        They are hosted on my <ulink url="http://www.hughsie.com/applications/Coppermine/thumbnails.php?album=9">personal website</ulink>
-        so please don't link to them from other places.
-        They tend to change quite rapidly too, so you can see the current
-        development work.
-      </para>
-    </sect2>
-
     <sect2 id="faq-lid-state-confused">
       <title>
         Why does my lid state get confused after suspending or hibernating? (and)
@@ -142,58 +136,11 @@ options ibm_acpi experimental=1
       </para>
 
       <para>
-        What we have to do it manually refresh the lid device using HAL when we
+        What we have to do is manually refresh the lid device using HAL when we
         resume, so that the new "lid open" value is propagated to
-        gnome-power-manager.
+        gnome-power-manager. Please make sure you use a new HAL (greater than 0.5.7).
       </para>
 
-      <para>
-        We can do this in the <literal>hal-system-power-suspend</literal> and
-        <literal>hal-system-power-hibernate</literal> files,
-        which are usually located in <literal>/usr/share/hal/scripts/</literal>.
-      </para>
-
-      <para>
-        You have to edit this file, and change:
-      </para>
-
-      <programlisting>
-exit $RET
-      </programlisting>
-
-      <para>
-        to:
-      </para>
-
-      <programlisting>
-#Refresh devices as a resume can do funny things
-for type in button battery ac_adapter
-do
-	devices=`hal-find-by-capability --capability $type`
-	for device in $devices
-	do
-		dbus-send --system --print-reply --dest=org.freedesktop.Hal \
-			  $device org.freedesktop.Hal.Device.Rescan
-	done
-done
-exit $RET
-      </programlisting>
-
-      <para>
-        <emphasis>IMPORTANT:</emphasis> I may have told you to add these lines
-        already which probably won't have worked.
-        The "--print-reply" was the missing option - you 
-        <emphasis>must</emphasis> include this option for the Rescan() to work.
-      </para>
-
-      <para>
-        CVS HAL already has this fix upstream, but the next version may not be
-        released for a while, hence why I'm providing this fix here.
-      </para>
-
-      <para>
-        <emphasis>Update3</emphasis>: All the fixes are present in released 2.14.3.
-      </para>
     </sect2>
 
     <sect2 id="faq-gpm-apm">
@@ -254,20 +201,6 @@ export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`
 gconftool-2 --makefile-install-rule data/gnome-power-manager.schemas
 killall -HUP gconfd-2
       </programlisting>
-    </sect2>
-
-    <sect2 id="faq-screen-dim-scroll">
-      <title>
-        Why does my screen dim or screensaver start even when I'm clicking the
-        mouse?
-      </title>
-
-      <para>
-        If you click the mouse, or scroll the scroll-wheel without moving the
-        pointer, then gnome-screensaver will detect the session as being idle.
-        This is a limitation of X.org, but is worked around in newer versions
-        of gnome-screensaver.
-      </para>
     </sect2>
 
     <sect2 id="faq-inhibit">
@@ -373,25 +306,6 @@ dev.UnInhibit(cookie)
         under "System" for the functionality.
         If you compiled from source yourself, make sure you added the gconf
         schema correctly.
-      </para>
-    </sect2>
-
-    <sect2 id="faq-dapper-security">
-      <title>Why using Ubuntu (Dapper) do I get the error</title>
-      <programlisting>
-WARNING **: gpm_hal_suspend: A security policy in place prevents this sender
-from sending this message to this recepient, see message bus configuration
-(rejected message had interface
-"org.freedesktop.Hal.Device.SystemPowerManagement" member "Suspend" error name
-"(unset)" destination "org.freedesktop.Hal")
-WARNING **: org.freedesktop.Hal.Device.SystemPowerManagement.Suspend failed (HAL error)
-      </programlisting>
-
-      <para>
-        Ubuntu ships a locked down DBUS by default for Dapper which prevents
-        non-root from issuing methods to HAL.
-        To allow the current logged in user to use these methods, just install
-        the libpam-foreground package.
       </para>
     </sect2>
 
@@ -559,22 +473,6 @@ dbus-send --session \
       </para>
     </sect2>
 
-    <sect2 id="faq-powermanager-service">
-      <title>
-        What is the PowerManager system service - why was GNOME Power Manager
-        depending on it, but now obsoletes it?
-      </title>
-
-      <para>
-        Before HAL had the method support (added in 0.5.4), GNOME Power Manager
-        used an external daemon running as root to do all the dirty work.
-        This daemon was called PowerManager.
-        This is now obsolete with HAL 0.5.3, and with the new work that we have
-        done, HAL far surpasses the capabilities of PowerManager.
-        PowerManager and pmscripts are now obsolete.
-      </para>
-    </sect2>
-
     <sect2 id="faq-rss-feed">
       <title>
         Can I get updates to the progress of GNOME Power Manager?
@@ -591,8 +489,6 @@ dbus-send --session \
       <title>Why do we need such an up-to-date DBUS?</title>
 
       <para>
-        The DBUS interface API is changing frequently, and will continue to do
-        so until DBUS 1.0 is released.
         Many DBUS apps have lots of configure logic and extra code that I
         could not maintain - and is a waste of my time to support a version
         of DBUS that is already obsolete.
@@ -629,18 +525,6 @@ dbus-send --session \
       </para>
     </sect2>
 
-    <sect2 id="faq-autostart">
-      <title>Why doesn't GNOME Power manager autostart?</title>
-
-      <para>
-        This works automatically using GNOME 2.14, using the new autostart
-        functionality of gnome-session.
-        For older versions of GNOME, you will have to run GNOME Power Manager
-        from a terminal or use gnome-session to launch GNOME Power Manager for
-        each session.
-      </para>
-    </sect2>
-
     <sect2 id="faq-custom-script">
       <title>Where do I put my custom suspend/shutdown/hibernate script?</title>
 
@@ -650,7 +534,6 @@ dbus-send --session \
         <literal>/prefix/share/hal/scripts/system/hal-system-power-*</literal>
       </para>
     </sect2>
-
 
   </sect1>
 
