@@ -36,7 +36,6 @@
 
 static void      gpm_brightness_applet_class_init (GpmBrightnessAppletClass *klass);
 static void      gpm_brightness_applet_init       (GpmBrightnessApplet *applet);
-static void      gpm_brightness_applet_finalize   (GObject *object);
 
 G_DEFINE_TYPE (GpmBrightnessApplet, gpm_brightness_applet, PANEL_TYPE_APPLET)
 
@@ -53,6 +52,7 @@ static void      create_popup                     (GpmBrightnessApplet *applet);
 static gboolean  popup_cb                         (GpmBrightnessApplet *applet, GdkEventButton *event);
 static void      dialog_about_cb                  (BonoboUIComponent *uic, gpointer data, const gchar *verbname);
 static gboolean  bonobo_cb                        (PanelApplet *_applet, const gchar *iid, gpointer data);
+static void      destroy_cb                       (GtkObject *object);
 
 #define GPM_BRIGHTNESS_APPLET_OAFID		"OAFIID:GNOME_BrightnessApplet"
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
@@ -468,7 +468,7 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 static void
 dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
-	GtkAboutDialog *about = NULL;
+	GtkAboutDialog *about;
 
 	GdkPixbuf *logo =
 		gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
@@ -501,11 +501,6 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 	const char *translator_credits = NULL;
 	char	   *license_trans;
 
-	if (about != NULL){
-		gtk_window_present (GTK_WINDOW (about));
-		return;
-	}
-
 	license_trans = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
 				     _(license[2]), "\n\n", _(license[3]), "\n", NULL);
 
@@ -527,6 +522,7 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 	gtk_widget_show (GTK_WIDGET(about));
 
 	g_free (license_trans);
+	gdk_pixbuf_unref (logo);
 }
 
 /**
@@ -553,16 +549,31 @@ help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 	}
 }
 
+/**
+ * destroy_cb:
+ * @object: Class instance to destroy
+ **/
+static void
+destroy_cb (GtkObject *object)
+{
+	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(object);
+
+	if (applet->powermanager != NULL) {
+		g_object_unref (applet->powermanager);
+	}
+	if (applet->icon != NULL) {
+		gdk_pixbuf_unref (applet->icon);
+	}
+}
 
 /**
  * gpm_brightness_applet_class_init:
  * @klass: Class instance
  **/
 static void
-gpm_brightness_applet_class_init (GpmBrightnessAppletClass *klass)
+gpm_brightness_applet_class_init (GpmBrightnessAppletClass *class)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize = gpm_brightness_applet_finalize;
+	/* nothing to do here */
 }
 
 /**
@@ -608,22 +619,9 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 
 	g_signal_connect (G_OBJECT(applet), "change-orient",
 			  G_CALLBACK(destroy_popup_cb), NULL);
-}
 
-/**
- * gpm_brightness_applet_finalize:
- * @object: Class instance to finalize (GpmBrightnessApplet)
- **/
-static void
-gpm_brightness_applet_finalize (GObject *object)
-{
-	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(object);
-
-	if (applet->popup != NULL) {
-		gtk_widget_destroy (applet->popup);
-	}
-	g_object_unref (applet->powermanager);
-	g_object_unref (applet->icon);
+	g_signal_connect (G_OBJECT(applet), "destroy",
+			  G_CALLBACK(destroy_cb), NULL);
 }
 
 /**
