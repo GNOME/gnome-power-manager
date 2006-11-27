@@ -1,1 +1,1 @@
-SUBDIRS = brightness
+SUBDIRS = brightness inhibit
