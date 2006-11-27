@@ -40,7 +40,7 @@
 #include "gpm-debug.h"
 
 #include "gpm-manager.h"
-#include "gpm-interface-manager.h"
+#include "dbus/gpm-dbus-manager.h"
 
 static void gpm_exit (GpmManager *manager);
 

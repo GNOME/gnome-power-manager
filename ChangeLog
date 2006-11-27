@@ -1,14 +1,30 @@
 2006-11-27  Richard Hughes  <richard@hughsie.com>
 
-	reviewed by: <delete if not using a buddy>
+	* configure.in:
+	* src/Makefile.am:
+	* src/gpm-interface-brightness-lcd.xml:
+	* src/gpm-interface-manager.xml:
+	* src/gpm-interface-statistics.xml:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/dbus/.cvsignore:
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-brightness-lcd.xml:
+	* src/dbus/gpm-dbus-manager.xml:
+	* src/dbus/gpm-dbus-statistics.xml:
+	Move the interface files into thier own directory.
+
+2006-11-27  Richard Hughes  <richard@hughsie.com>
 
 	* TODO:
+	Add some notes about the new DBUS API.
+
 	* applets/brightness/brightness-applet.c: (retrieve_icon):
-	* src/gpm-powermanager.c: (gpm_powermanager_get_brightness_lcd),
-	(gpm_powermanager_set_brightness_lcd), (gpm_powermanager_inhibit),
-	(gpm_powermanager_uninhibit), (gpm_powermanager_init),
-	(gpm_powermanager_finalize):
+	Fix comment style.
+
+	* src/gpm-powermanager.c:
 	* src/gpm-powermanager.h:
+	Add the inhibit methods needed for the new applet.
 
 2006-11-26  Richard Hughes  <richard@hughsie.com>
 

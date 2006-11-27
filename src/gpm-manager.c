@@ -70,8 +70,8 @@
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
 
-#include "gpm-interface-statistics.h"
-#include "gpm-interface-brightness-lcd.h"
+#include "dbus/gpm-dbus-statistics.h"
+#include "dbus/gpm-dbus-brightness-lcd.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
