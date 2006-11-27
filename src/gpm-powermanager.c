@@ -39,6 +39,7 @@ static void     gpm_powermanager_finalize   (GObject		  *object);
 struct GpmPowermanagerPrivate
 {
 	GpmProxy		*gproxy_brightness;
+	GpmProxy		*gproxy_inhibit;
 };
 
 G_DEFINE_TYPE (GpmPowermanager, gpm_powermanager, G_TYPE_OBJECT)
@@ -62,12 +63,6 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_brightness);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
-		return FALSE;
-	}	
-
-	/* shouldn't be, but make sure proxy valid */
-	if (proxy == NULL) {
-		gpm_warning ("proxy is NULL!");
 		return FALSE;
 	}
 
@@ -107,12 +102,6 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
-
-	/* shouldn't be, but make sure proxy valid */
-	if (proxy == NULL) {
-		gpm_warning ("proxy is NULL!");
-		return FALSE;
 	}
 
 	ret = dbus_g_proxy_call (proxy, "SetPolicyBrightness", &error,
@@ -126,6 +115,77 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
 		gpm_warning ("SetPolicyBrightness failed!");
+	}
+
+	return ret;
+}
+
+/** cookie is returned as an unsigned integer */
+gboolean
+gpm_powermanager_inhibit (GpmPowermanager *powermanager,
+			  const gchar     *appname,
+		          const gchar     *reason,
+		          guint	          *cookie)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
+	g_return_val_if_fail (cookie != NULL, FALSE);
+
+	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "Inhibit", &error,
+				 G_TYPE_STRING, appname,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+		*cookie = 0;
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("Inhibit failed!");
+	}
+
+	return ret;
+}
+
+gboolean
+gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
+			    guint            cookie)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
+
+	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("Inhibit failed!");
 	}
 
 	return ret;
@@ -160,6 +220,12 @@ gpm_powermanager_init (GpmPowermanager *powermanager)
 				  GPM_DBUS_SERVICE,
 				  GPM_DBUS_PATH_BRIGHT_LCD,
 				  GPM_DBUS_INTERFACE_BRIGHT_LCD);
+	powermanager->priv->gproxy_inhibit = gpm_proxy_new ();
+	proxy = gpm_proxy_assign (powermanager->priv->gproxy_inhibit,
+				  GPM_PROXY_SESSION,
+				  GPM_DBUS_SERVICE,
+				  GPM_DBUS_PATH,
+				  GPM_DBUS_INTERFACE);
 }
 
 /**
@@ -177,6 +243,7 @@ gpm_powermanager_finalize (GObject *object)
 	powermanager->priv = GPM_POWERMANAGER_GET_PRIVATE (powermanager);
 
 	g_object_unref (powermanager->priv->gproxy_brightness);
+	g_object_unref (powermanager->priv->gproxy_inhibit);
 
 	G_OBJECT_CLASS (gpm_powermanager_parent_class)->finalize (object);
 }

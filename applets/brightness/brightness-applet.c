@@ -81,7 +81,7 @@ retrieve_icon (GpmBrightnessApplet *applet)
 		return;
 	}
 
-	/*get icon */
+	/* get icon */
 	applet->icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
 						 GPM_BRIGHTNESS_APPLET_ICON,
 						 applet->size - 2,
