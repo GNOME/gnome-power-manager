@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-10-14 09:02+0100\n"
-"PO-Revision-Date: 2006-08-26 11:19+0200\n"
+"PO-Revision-Date: 2006-11-29 07:38+0100\n"
 "Last-Translator: Esteve Blanch Sanmartí <anakinjinn@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -276,14 +276,12 @@ msgstr ""
 "hibernació, d'una aturada temporal o d'enfosquir la pantalla."
 
 #: ../data/gnome-power-manager.schemas.in.h:39
-#, fuzzy
 msgid "Keyboard brightness when on AC"
-msgstr "Brillantor de l'LCD fent servir el corrent"
+msgstr "Brillantor del teclat fent servir el corrent"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
-#, fuzzy
 msgid "Keyboard brightness when on battery"
-msgstr "Brillantor de l'LCD fent servir la bateria"
+msgstr "Brillantor del teclat fent servir la bateria"
 
 #: ../data/gnome-power-manager.schemas.in.h:41
 msgid "LCD brightness when on AC"
@@ -409,14 +407,12 @@ msgstr ""
 "«shutdown» (apagar), i «nothing» (res)."
 
 #: ../data/gnome-power-manager.schemas.in.h:68
-#, fuzzy
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"L'acció a prendre quan el SAI estigui criticament baix. Els valors possibles "
-"són «hibernate» (hibernar), «suspend» (aturar temporalment), "
-"«shutdown» (apagar), i «nothing» (res)."
+"L'acció a prendre quan el SAI estigui baix. Els valors possibles són "
+"«hibernate» (hibernar), «shutdown» (apagar), i «nothing» (res)."
 
 #: ../data/gnome-power-manager.schemas.in.h:69
 msgid ""
@@ -529,22 +525,20 @@ msgstr ""
 "100."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
-#, fuzzy
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
-"Lluminositat de la pantalla quan s'estigui connecat al ca. Els possibles "
+"La lluminositat del teclat quan s'estigui connecat al corrent. Els possibles "
 "valors estan entre 0 i 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
-#, fuzzy
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
-"Lluminositat de la pantalla en bateria. Els possibles valors estan entre 0 i "
-"100."
+"Lluminositat del teclat quan s'utilitzi la bateria. Els possibles valors "
+"estan entre 0 i 100."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid "The brightness of the screen when idle"
@@ -736,9 +730,8 @@ msgid "UPS critical low action"
 msgstr "Acció quan el SAI estigui críticament baix"
 
 #: ../data/gnome-power-manager.schemas.in.h:113
-#, fuzzy
 msgid "UPS low power action"
-msgstr "Acció quan el SAI estigui críticament baix"
+msgstr "Acció quan l'energia del SAI estigui críticament baixa"
 
 #: ../data/gnome-power-manager.schemas.in.h:114
 msgid "Use gnome-screensaver lock setting"
@@ -806,14 +799,12 @@ msgid "Power Management"
 msgstr "Gestor d'energia"
 
 #: ../data/gnome-power-statistics.desktop.in.h:1
-#, fuzzy
 msgid "Observe power management"
-msgstr "Configureu el gestor d'energia"
+msgstr "Observeu la gestió d'energia"
 
 #: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:135
-#, fuzzy
 msgid "Power Statistics"
-msgstr "_Estadístiques"
+msgstr "Estadístiques de l'energia"
 
 #: ../data/gpm-feedback-widget.glade.h:1
 msgid "Brightness"
@@ -821,23 +812,23 @@ msgstr "Brillantor"
 
 #: ../data/gpm-graph.glade.h:1
 msgid "Add legend"
-msgstr ""
+msgstr "Afegeix la llegenda"
 
 #: ../data/gpm-graph.glade.h:2
 msgid "Add related events"
-msgstr ""
+msgstr "Afegix els esdeveniments relacionats"
 
 #: ../data/gpm-graph.glade.h:3
 msgid "Device:"
-msgstr ""
+msgstr "Dispositiu:"
 
 #: ../data/gpm-graph.glade.h:4
 msgid "Graph type:"
-msgstr ""
+msgstr "Tipus de gràfica:"
 
 #: ../data/gpm-graph.glade.h:5
 msgid "Power Graphs"
-msgstr ""
+msgstr "Gràfics d'energia"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -876,29 +867,24 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>Àrea de notificació</b>"
 
 #: ../data/gpm-prefs.glade.h:3
-#, fuzzy
 msgid "<b>Running on AC power</b>"
-msgstr "Connectat a la xarxa elèctrica"
+msgstr "<b>Connectat a la xarxa elèctrica</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-#, fuzzy
 msgid "<b>Running on Battery Power</b>"
-msgstr "Funcionant amb bateries"
+msgstr "<b>Funcionant amb bateries</b>"
 
 #: ../data/gpm-prefs.glade.h:5
-#, fuzzy
 msgid "<b>Running on UPS</b>"
-msgstr "Funcionant amb SAI"
+msgstr "<b>Funcionant amb SAI</b>"
 
 #: ../data/gpm-prefs.glade.h:6
-#, fuzzy
 msgid "<b>Sounds</b>"
-msgstr "<b>Accions</b>"
+msgstr "<b>Sons</b>"
 
 #: ../data/gpm-prefs.glade.h:7
-#, fuzzy
 msgid "Actions"
-msgstr "Opcions"
+msgstr "Accions"
 
 #: ../data/gpm-prefs.glade.h:8
 msgid "Always _sleep when the lid is closed"
@@ -1113,58 +1099,55 @@ msgstr "%i hora"
 #: ../src/gpm-graph-widget.c:382
 #, c-format
 msgid "%ih%02i"
-msgstr ""
+msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
 #: ../src/gpm-graph-widget.c:387
 #, c-format
 msgid "%2im"
-msgstr ""
+msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
 #: ../src/gpm-graph-widget.c:390
 #, c-format
 msgid "%2im%02i"
-msgstr ""
+msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
 #: ../src/gpm-graph-widget.c:394
 #, c-format
 msgid "%2is"
-msgstr ""
+msgstr "%2is"
 
 #. Translators: This is %i Percentage
 #: ../src/gpm-graph-widget.c:398
 #, c-format
 msgid "%i%%"
-msgstr ""
+msgstr "%i%%"
 
 #. Translators: This is %i Watts
 #: ../src/gpm-graph-widget.c:401
 #, c-format
 msgid "%iW"
-msgstr ""
+msgstr "%iW"
 
 #. Translators: This is %i Volts
 #: ../src/gpm-graph-widget.c:404
 #, c-format
 msgid "%iV"
-msgstr ""
+msgstr "%iV"
 
 #: ../src/gpm-graph-widget.c:1059 ../src/gpm-power.c:742
-#, fuzzy
 msgid "Charging"
-msgstr "carregant-se"
+msgstr "Carregant-se"
 
 #: ../src/gpm-graph-widget.c:1065 ../src/gpm-power.c:745
-#, fuzzy
 msgid "Discharging"
-msgstr "carregant-se"
+msgstr "Descarregant-se"
 
 #: ../src/gpm-graph-widget.c:1071 ../src/gpm-power.c:739
-#, fuzzy
 msgid "Charged"
-msgstr "Bateria carregada"
+msgstr "Carregada"
 
 #: ../src/gpm-inhibit.c:294
 #, fuzzy, c-format
@@ -1571,13 +1554,12 @@ msgid "Missing"
 msgstr ""
 
 #: ../src/gpm-power.c:749
-#, fuzzy
 msgid "Percentage charge:"
-msgstr "<b>Percentatge de càrrega:</b> %i%%\n"
+msgstr "Percentatge de càrrega:"
 
 #: ../src/gpm-power.c:778
 msgid "Vendor:"
-msgstr ""
+msgstr "Fabricant:"
 
 #: ../src/gpm-power.c:786 ../src/gpm-power.c:791
 msgid "Lithium ion"
@@ -1597,24 +1579,20 @@ msgid "Nickel metal hydride"
 msgstr ""
 
 #: ../src/gpm-power.c:804
-#, fuzzy
 msgid "Technology:"
-msgstr "<b>Tecnologia:</b> %s\n"
+msgstr "Tecnologia:"
 
 #: ../src/gpm-power.c:808
-#, fuzzy
 msgid "Serial number:"
-msgstr "<b>Número de sèrie:</b> %s\n"
+msgstr "Número de sèrie:"
 
 #: ../src/gpm-power.c:812
-#, fuzzy
 msgid "Model:"
-msgstr "Més"
+msgstr "Model:"
 
 #: ../src/gpm-power.c:818
-#, fuzzy
 msgid "Remaining time:"
-msgstr "<b>Temps restant:</b> %s\n"
+msgstr "Temps restant:"
 
 #: ../src/gpm-power.c:824
 msgid "Excellent"
@@ -1634,37 +1612,32 @@ msgstr "Dolenta"
 
 #: ../src/gpm-power.c:833
 msgid "Capacity:"
-msgstr ""
+msgstr "Capacitat:"
 
 #: ../src/gpm-power.c:839 ../src/gpm-power.c:867
-#, fuzzy
 msgid "Current charge:"
-msgstr "<b>Càrrega actual:</b> %.1f %s\n"
+msgstr "Càrrega actual:"
 
 #: ../src/gpm-power.c:845
-#, fuzzy
 msgid "Last full charge:"
-msgstr "<b>Última càrrega completa:</b> %.1f %s\n"
+msgstr "Última càrrega completa:"
 
 #: ../src/gpm-power.c:850 ../src/gpm-power.c:872
-#, fuzzy
 msgid "Design charge:"
-msgstr "<b>Càrrega de disseny:</b> %.1f %s\n"
+msgstr "Càrrega de disseny:"
 
 #: ../src/gpm-power.c:855
-#, fuzzy
 msgid "Charge rate (raw):"
-msgstr "<b>Taxa de càrrega (brut):</b> %.1f %sh\n"
+msgstr "Taxa de càrrega (en brut):"
 
 #: ../src/gpm-power.c:860
-#, fuzzy
 msgid "Charge rate (smoothed):"
-msgstr "<b>Taxa de càrrega (suavitzat):</b> %.1f %sh\n"
+msgstr "Taxa de càrrega (suavitzat):"
 
 #: ../src/gpm-power.c:1335
-#, fuzzy, c-format
+#, c-format
 msgid "%s fully charged (%i%%)\n"
-msgstr "del tot carregada"
+msgstr "%s del tot carregada (%i%%)\n"
 
 #: ../src/gpm-power.c:1341
 #, fuzzy, c-format
@@ -1689,9 +1662,8 @@ msgid "%s charging (%i%%)\n"
 msgstr "descarregant-se"
 
 #: ../src/gpm-power.c:1389
-#, fuzzy
 msgid "Recalculating information..."
-msgstr "Mostra informació extra de depuració"
+msgstr "S'està recalculant la informació..."
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
@@ -1755,9 +1727,8 @@ msgid "Never"
 msgstr "Mai"
 
 #: ../src/gpm-statistics.c:113
-#, fuzzy
 msgid "GNOME Power Statistics"
-msgstr "Gestor d'energia del GNOME"
+msgstr "Estadístiques de l'energia del GNOME"
 
 #: ../src/gpm-statistics-core.c:59
 msgid "Charge History"
@@ -1768,9 +1739,8 @@ msgid "Power History"
 msgstr "Historial d'energia"
 
 #: ../src/gpm-statistics-core.c:61
-#, fuzzy
 msgid "Voltage History"
-msgstr "Historial de càrrega"
+msgstr "Historial del voltatge"
 
 #: ../src/gpm-statistics-core.c:62
 msgid "Estimated Time History"
@@ -1787,7 +1757,7 @@ msgid ""
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
 msgstr ""
-"El Power Manager és programari lliure; el podeu redistribuir i/o\n"
+"El Gestor d'Energia és programari lliure; el podeu redistribuir i/o\n"
 "modificar sota els termes de la Llicència Publica General GNU\n"
 "publicat per el Free Software Foundation; o bé la versió 2\n"
 "de la llicència, o bé (a la vostra opció) qualsevol versió posterior."
@@ -1829,9 +1799,8 @@ msgstr "_Preferències"
 
 #. Statistics
 #: ../src/gpm-tray-icon.c:457
-#, fuzzy
 msgid "Power _History"
-msgstr "Historial d'energia"
+msgstr "_Historial d'energia"
 
 #. Help
 #: ../src/gpm-tray-icon.c:469
@@ -1853,10 +1822,6 @@ msgstr "Hi_berna"
 
 #~ msgid "Check network utilization before sleeping"
 #~ msgstr "Comprova l'ús de la xarxa abans de posar en baix consum"
-
-#, fuzzy
-#~ msgid "Dim the screen after a period of inactivity when on battery power"
-#~ msgstr "Atenua la pantalla després d'un període d'inactivitat"
 
 #~ msgid ""
 #~ "If network utilization should be checked before doing the idle action."
@@ -1907,11 +1872,6 @@ msgstr "Hi_berna"
 #~ "time."
 #~ msgstr ""
 #~ "Mostra com varia el temps restant per la càrrega o descàrrega en el temps."
-
-#, fuzzy
-#~ msgid "Put _display to sleep when  inactive for:"
-#~ msgstr ""
-#~ "Posa la pantalla en baix consum quan l'or_dinador estigui inactiu per:"
 
 #~ msgid "Orientation"
 #~ msgstr "Orientació"
