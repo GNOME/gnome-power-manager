@@ -47,7 +47,8 @@ typedef struct {
 	guint		design_charge;
 	guint		last_full_charge;
 	guint		current_charge;
-	guint		charge_rate_smoothed;	/* exp ave smoothed */
+	guint		charge_rate_smoothed;	/* exp ave smoothed... calculated for caches */
+	guint		charge_rate_previous;	/* used to calculate the exp ave */
 	guint		charge_rate_raw;	/* no smoothing done */
 	guint		percentage_charge;
 	guint		remaining_time;
@@ -66,7 +67,6 @@ typedef struct {
 	gchar		*technology;
 	gchar		*serial;
 	gchar		*model;
-	guint		 charge_rate_previous;
 	GpmPowerKind	 battery_kind;
 	GpmPowerStatus	 battery_status;
 	GpmPowerUnit	 unit;

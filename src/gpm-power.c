@@ -198,9 +198,6 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
 
-	/* invalidate last rate */
-	entry->charge_rate_previous = 0;
-
 	/* Initialize battery_status to reasonable defaults */
 	gpm_power_battery_status_set_defaults (status);
 
@@ -412,12 +409,6 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
 		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->charge_rate_raw);
-
-		/* Do an exponentially weighted average, fixes bug #328927 */
-		status->charge_rate_smoothed = gpm_power_exp_aver (entry->charge_rate_previous,
-							status->charge_rate_raw,
-							power->priv->exp_ave_factor);
-		entry->charge_rate_previous = status->charge_rate_smoothed;
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->percentage_charge);
@@ -1032,7 +1023,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	guint num_discharging = 0;
 	GpmPowerStatus *type_status = &entry->battery_status;
 
-	/* clear old values */
+	/* clear old values (except previous charge rate) */
 	gpm_power_battery_status_set_defaults (type_status);
 
 	/* iterate thru all the devices to handle multiple batteries */
@@ -1068,13 +1059,28 @@ battery_kind_cache_update (GpmPower		 *power,
 		type_status->design_charge += device_status->design_charge;
 		type_status->last_full_charge += device_status->last_full_charge;
 		type_status->current_charge += device_status->current_charge;
-		type_status->charge_rate_smoothed += device_status->charge_rate_smoothed;
 		type_status->charge_rate_raw += device_status->charge_rate_raw;
 		type_status->voltage += device_status->voltage;
 		/* we have to sum this here, in case the device has no rate
 		   data, and we can't compute it further down */
 		type_status->remaining_time += device_status->remaining_time;
 	}
+
+	/* Do an exponentially weighted average, fixes bug #328927 */
+	type_status->charge_rate_smoothed = gpm_power_exp_aver (type_status->charge_rate_previous,
+								type_status->charge_rate_raw,
+								power->priv->exp_ave_factor);
+	
+	/* If the average is healthy, store it as the previous value */
+	if( type_status->charge_rate_smoothed != 0 ) {
+		type_status->charge_rate_previous = type_status->charge_rate_smoothed;
+	} else {
+		gpm_warning("Exponential average of 0 calculated (not okay.):"
+			    " inputs were charge_rate_previous=%d, charge_rate_raw=%d, exp_ave_factor=%d",
+			    type_status->charge_rate_previous,
+			    type_status->charge_rate_raw,
+			    power->priv->exp_ave_factor );
+ 	}
 
 	/* average out the voltage for the global device */
 	if (num_present > 1) {
