@@ -732,7 +732,7 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 		g_string_append_printf (details, "<b>%s</b> %s\n",
 					_("Status:"), _("Discharging"));
 	}
-	if (status->percentage_charge > 0) {
+	if (status->percentage_charge >= 0) {
 		g_string_append_printf (details, "<b>%s</b> %i%%\n",
 					_("Percentage charge:"), 
 					status->percentage_charge);
@@ -927,14 +927,10 @@ gpm_power_get_icon_for_all (GpmPowerStatus *device_status,
 		index_str = gpm_power_get_index_from_percent (device_status->percentage_charge);
 		filename = g_strdup_printf ("gpm-%s-%s-charging", prefix, index_str);
 
-	} else if (device_status->is_discharging) {
+	} else {
 		index_str = gpm_power_get_index_from_percent (device_status->percentage_charge);
 		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 
-	} else {
-		/* We have a broken battery, not sure what to display here */
-		gpm_debug ("Broken or missing battery...");
-		filename = g_strdup_printf ("gpm-%s-missing", prefix);
 	}
 	return filename;
 }
