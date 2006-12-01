@@ -208,6 +208,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 	action_ok = gpm_inhibit_check (manager->priv->inhibit);
 	if (! action_ok) {
 		GString *message = g_string_new ("");
+		const char *msg;
 
 		title = g_strdup_printf (_("Request to %s"), action);
 		gpm_inhibit_get_message (manager->priv->inhibit, message, action);
@@ -217,6 +218,8 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 				      GPM_NOTIFY_TIMEOUT_LONG,
 				      GTK_STOCK_DIALOG_WARNING,
 				      GPM_NOTIFY_URGENCY_NORMAL);
+		/* I want this translated */
+		msg = _("Perform action anyway");
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
