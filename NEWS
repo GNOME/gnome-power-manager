@@ -1,7 +1,70 @@
 GNOME Power Manager is a session daemon that makes it easy to manage the
 power on your laptop or desktop system.
 
-This _unstable_ release contains lots of new features since 2.16.1 was released.
+This _unstable_ release contains lots of new features since 2.17.2 was released.
+
+==============
+Version 2.17.3
+==============
+
+Released December 04, 2006
+
+General
+
+ - Add the initial versions of the inhibit and brightness applets.
+ - Update the window title to be Power History rather than Power Graphs to
+   match the drop down menu. #364200
+ - Only allocate a buffer once, globally. #363991 (Stu Hood)
+ - Fix several build errors on Solaris. #364621 (Harry Lu)
+ - Lots of code structure changes, so now task-gobjects are now responsible
+   for applying policy. Actions are now mostly asyncronous and modular.
+   Code is now easier to understand IMO, and has a better structure.
+ - Add really basic support for sounds when critical events happen, for
+   instance if suspend fails and the lid is shut. Prevents melting.
+   This uses gst-launch to use gstreamer. Add some sample sounds done by me.
+ - Convert multi-instance code from libguniqueapp to GtkUnique.
+ - Add gnome-keyring functionality to lock keyrings when sleeping. #375681
+ - Use GtkUnique rather than libguniqueapp. Optional but recommended dep.
+
+Power Manager
+
+ - Add proper support for detecting broken batteries with UI to ignore
+   and visit the vendor page. Requires a new hal-info to work.
+ - Add code to detect when we didn't quite make it back from resume.
+   This functionality requires a patch to HAL to work. (David Zeuthen)
+ - Add charging flash to match the other charging icons. #364574
+ - Don't do *any* action until the battery data is marked as valid. (Stu Hood)
+ - Fix an infrequent odd crash when we are suspending. (Pascal Terjan)
+ - Sanity check the rate and time values in case the hardware really goes
+   screwy for a few seconds, and gets the values wrong.
+ - Set the libnotify window to NULL after we unref it, which will probably fix
+   the crash in #365279
+ - Only add and remove batteries if sane. This uses a hashtable to keep
+   track of what batteries we are watching and should fix #369488.
+ - When we add a DPMS state throttle, remove the last one if set.
+   This fixes the bug where the screensaver would not show if
+   DPMS had been allowed to activate. Fixes #355279.
+ - Fix the bug that was causing the battery items to show on some desktops.
+ - Fix a race where percentage_charge can be momentarily zero at startup.
+   This fixes an incorrect 'fully charged' notification on startup.
+ - Instead of showing "missing" as the catchall, show "discharging".
+   #364450. (Stu Hood)
+ - Calculate the smoothed rate from device caches, instead of devices.
+   #361583. (Stu Hood)
+
+Power Preferences
+
+ - Change the checkbox to "Dim the display when the computer is idle" #363765
+
+Translators
+
+ - Josep Puigdemont i Casamajó (ca)
+ - Francisco Javier F. Serrador  (es)
+ - Theppitak Karoonboonyanan (th)
+ - Ivar Smolin (et)
+ - Satoru SATOH (ja)
+ - Kjartan Maraas (nb)
+ - Daniel Nylander (sv)
 
 ==============
 Version 2.17.2
