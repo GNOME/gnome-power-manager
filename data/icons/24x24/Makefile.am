@@ -9,6 +9,7 @@ Data_DATA =				\
 	gpm-brightness-kbd.png		\
 	gpm-hibernate.png		\
 	gpm-suspend.png			\
+	gpm-inhibit.png			\
 	gpm-statistics.png		\
 	gpm-keyboard-000.png		\
 	gpm-keyboard-030.png		\

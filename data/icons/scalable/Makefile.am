@@ -9,6 +9,7 @@ Data_DATA =				\
 	gpm-brightness-kbd.svg		\
 	gpm-hibernate.svg		\
 	gpm-suspend.svg			\
+	gpm-inhibit.svg			\
 	gpm-statistics.svg		\
 	gpm-keyboard-000.svg		\
 	gpm-keyboard-030.svg		\
