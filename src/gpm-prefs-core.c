@@ -92,7 +92,8 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define CPUFREQ_PERFORMANCE_TEXT	_("Always maximum speed")
 #define CPUFREQ_NOTHING_TEXT 		_("Do nothing")
 
-#define GPM_SLEEP_MAX_TIME		60
+/* If sleep time in a slider is set to 61 it is considered as never */
+const int NEVER_TIME_ON_SLIDER = 61;
 
 /**
  * gpm_prefs_class_init:
@@ -237,7 +238,11 @@ gpm_prefs_format_time_cb (GtkScale *scale,
 			  GpmPrefs *prefs)
 {
 	gchar *str;
-	str = gpm_get_timestring (value * 60);
+	if ((gint) value == NEVER_TIME_ON_SLIDER) {
+		str = g_strdup (_("Never"));
+	} else {
+		str = gpm_get_timestring (value * 60);
+	}
 	return str;
 }
 
@@ -256,14 +261,19 @@ gpm_prefs_sleep_slider_changed_cb (GtkRange *range,
 
 	value = (int) gtk_range_get_value (range);
 
-	/* We take away the g-s idle time as the slider represents
-	 * global time but we only do our timeout from when g-s
-	 * declares the session idle */
-	gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	value -= gs_idle_time;
+	if (value == NEVER_TIME_ON_SLIDER) {
+		/* power manager interprets 0 as Never */
+		value = 0;
+	} else {
+		/* We take away the g-s idle time as the slider represents
+		 * global time but we only do our timeout from when g-s
+		 * declares the session idle */
+		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+		value -= gs_idle_time;
 
-	/* policy is in seconds, slider is in minutes */
-	value *= 60;
+		/* policy is in seconds, slider is in minutes */
+		value *= 60;
+	}
 
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (range), "conf_key");
 	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
@@ -295,10 +305,14 @@ gpm_prefs_setup_sleep_slider (GpmPrefs    *prefs,
 
 	gtk_widget_set_sensitive (widget, is_writable);
 
-	/* policy is in seconds, slider is in minutes */
-	value /= 60;
-	gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
-	value += gs_idle_time;
+	if (value == 0) {
+		value = NEVER_TIME_ON_SLIDER;
+	} else {
+		/* policy is in seconds, slider is in minutes */
+		value /= 60;
+		gs_idle_time = gpm_screensaver_get_delay (prefs->priv->screensaver);
+		value += gs_idle_time;
+	}
 
 	gtk_range_set_value (GTK_RANGE (widget), value);
 
@@ -623,12 +637,12 @@ set_idle_hscale_stops (GpmPrefs    *prefs,
 {
 	GtkWidget *widget;
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
-	if (gs_idle_time + 1 > GPM_SLEEP_MAX_TIME) {
+	if (gs_idle_time + 1 > NEVER_TIME_ON_SLIDER) {
 		gpm_warning ("gnome-screensaver timeout is really big. "
 			     "Not sure what to do");
 		return;
 	}
-	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, GPM_SLEEP_MAX_TIME);
+	gtk_range_set_range (GTK_RANGE (widget), gs_idle_time + 1, NEVER_TIME_ON_SLIDER);
 }
 
 /**
@@ -803,8 +817,7 @@ prefs_setup_sleep (GpmPrefs *prefs)
 	GtkWidget *widget;
 	gint delay;
 
-	const gchar *sleep_type_actions[] = {ACTION_NOTHING,
-					     ACTION_SUSPEND,
+	const gchar *sleep_type_actions[] = {ACTION_SUSPEND,
 					     ACTION_HIBERNATE,
 					     NULL};
 
