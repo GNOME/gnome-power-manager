@@ -89,8 +89,7 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define CPUFREQ_ONDEMAND_TEXT		_("Based on processor load")
 #define CPUFREQ_CONSERVATIVE_TEXT	_("Automatic power saving")
 #define CPUFREQ_POWERSAVE_TEXT		_("Maximum power saving")
-#define CPUFREQ_USERSPACE_TEXT		_("Custom")
-#define CPUFREQ_PERFORMANCE_TEXT	_("Maximum speed")
+#define CPUFREQ_PERFORMANCE_TEXT	_("Always maximum speed")
 #define CPUFREQ_NOTHING_TEXT 		_("Do nothing")
 
 #define GPM_SLEEP_MAX_TIME		60
@@ -676,59 +675,6 @@ conf_key_changed_cb (GpmConf     *conf,
 }
 
 /**
- * gpm_prefs_processor_slider_changed_cb:
- * @range: The GtkRange object
- * @gpm_pref_key: The GConf key for this preference setting.
- **/
-static void
-gpm_prefs_processor_slider_changed_cb (GtkRange *range,
-				       GpmPrefs *prefs)
-{
-	gint value;
-	gchar *gpm_pref_key;
-
-	value = (gint) gtk_range_get_value (range);
-	gpm_pref_key = (gchar *) g_object_get_data (G_OBJECT (range), "conf_key");
-	gpm_debug ("Changing %s to %i", gpm_pref_key, value);
-	gpm_conf_set_int (prefs->priv->conf, gpm_pref_key, value);
-}
-
-/**
- * gpm_prefs_setup_processor_slider:
- * @prefs: This prefs class instance
- * @widget_name: The GtkWidget name
- * @gpm_pref_key: The GConf key for this preference setting.
- **/
-static GtkWidget *
-gpm_prefs_setup_processor_slider (GpmPrefs   *prefs,
-				  const gchar *widget_name,
-				  const gchar *gpm_pref_key)
-{
-	GtkWidget *widget;
-	gint value;
-	gboolean is_writable;
-
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
-	g_signal_connect (G_OBJECT (widget), "format-value",
-			  G_CALLBACK (gpm_prefs_format_percentage_cb), prefs);
-
-	gpm_conf_get_int (prefs->priv->conf, gpm_pref_key, &value);
-	gpm_conf_is_writable (prefs->priv->conf, gpm_pref_key, &is_writable);
-
-	gtk_widget_set_sensitive (widget, is_writable);
-
-	gtk_range_set_value (GTK_RANGE (widget), value);
-
-	g_object_set_data (G_OBJECT (widget), "conf_key", (gpointer) gpm_pref_key);
-
-	g_signal_connect (G_OBJECT (widget), "value-changed",
-			  G_CALLBACK (gpm_prefs_processor_slider_changed_cb),
-			  prefs);
-
-	return widget;
-}
-
-/**
  * gpm_prefs_processor_combo_changed_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
@@ -740,7 +686,6 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 	gchar *value;
 	const gchar *policy;
 	gchar *gpm_pref_key;
-	gboolean show_custom = FALSE;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (value == NULL) {
@@ -753,22 +698,12 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 		policy = CODE_CPUFREQ_CONSERVATIVE;
 	} else if (strcmp (value, CPUFREQ_POWERSAVE_TEXT) == 0) {
 		policy = CODE_CPUFREQ_POWERSAVE;
-	} else if (strcmp (value, CPUFREQ_USERSPACE_TEXT) == 0) {
-		policy = CODE_CPUFREQ_USERSPACE;
-		show_custom = TRUE;
 	} else if (strcmp (value, CPUFREQ_PERFORMANCE_TEXT) == 0) {
 		policy = CODE_CPUFREQ_PERFORMANCE;
 	} else if (strcmp (value, CPUFREQ_NOTHING_TEXT) == 0) {
 		policy = CODE_CPUFREQ_NOTHING;
 	} else {
 		g_assert (FALSE);
-	}
-
-	/* show other options */
-	if (strcmp (gtk_widget_get_name (widget), "combobox_processor_ac_profile") == 0) {
-		gpm_prefs_enable_widget (prefs, "hbox_processor_ac_custom", show_custom);
-	} else {
-		gpm_prefs_enable_widget (prefs, "hbox_processor_battery_custom", show_custom);
 	}
 
 	g_free (value);
@@ -837,15 +772,6 @@ gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_POWERSAVE_TEXT);
 		if (cpufreq_type == GPM_CPUFREQ_POWERSAVE) {
-			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
-			has_option = TRUE;
-		}
-		n_added++;
-	}
-	if (cpufreq_types & GPM_CPUFREQ_USERSPACE) {
-		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
-					   CPUFREQ_USERSPACE_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_USERSPACE) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
@@ -988,11 +914,6 @@ prefs_setup_processor (GpmPrefs *prefs)
 		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
 		return;
 	}
-
-	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_battery_custom",
-					  GPM_CONF_BATTERY_CPUFREQ_VALUE);
-	gpm_prefs_setup_processor_slider (prefs, "hscale_processor_ac_custom",
-					  GPM_CONF_AC_CPUFREQ_VALUE);
 
 	gpm_prefs_setup_processor_combo (prefs, "combobox_processor_ac_profile",
 					 GPM_CONF_AC_CPUFREQ_POLICY, prefs->priv->cpufreq_types);

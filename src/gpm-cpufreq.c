@@ -264,6 +264,11 @@ gpm_cpufreq_get_governors (GpmCpuFreq     *cpufreq,
 		types -= GPM_CPUFREQ_ONDEMAND;
 	}
 
+	/* We never allow the user to use userspace. */
+	if (types & GPM_CPUFREQ_USERSPACE) {
+		types -= GPM_CPUFREQ_USERSPACE;
+	}
+
 	*cpufreq_type = types;
 	cpufreq->priv->available_governors = i;
 	return TRUE;
