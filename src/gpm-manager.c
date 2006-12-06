@@ -1002,6 +1002,64 @@ gpm_manager_reboot_dbus_method (GpmManager *manager,
 }
 
 /**
+ * idle_do_sleep:
+ * @manager: This class instance
+ *
+ * This callback is called when we want to sleep. Use the users
+ * preference from gconf, but change it if we can't do the action.
+ **/
+static void
+idle_do_sleep (GpmManager *manager)
+{
+	GpmAcAdapterState state;
+	gchar *action = NULL;
+	gboolean ret;
+
+	/* find if we are on AC power */
+	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
+
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_SLEEP_TYPE, &action);
+	} else {
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_TYPE, &action);
+	}
+
+	if (action == NULL) {
+		gpm_warning ("action NULL, gconf error");
+		return;
+	}
+
+	if (strcmp (action, ACTION_NOTHING) == 0) {
+		gpm_debug ("doing nothing as system idle action");
+
+	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+		manager_explain_reason (manager, GPM_EVENT_SUSPEND,
+					_("Suspending computer"), _("System idle"));
+		ret = gpm_manager_suspend (manager, NULL);
+		if (ret == FALSE) {
+			gpm_warning ("cannot suspend, so trying hibernate");
+			ret = gpm_manager_hibernate (manager, NULL);
+			if (ret == FALSE) {
+				gpm_warning ("cannot suspend or hibernate!");
+			}
+		}
+
+	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+		manager_explain_reason (manager, GPM_EVENT_HIBERNATE,
+					_("Hibernating computer"), _("System idle"));
+		ret = gpm_manager_hibernate (manager, NULL);
+		if (ret == FALSE) {
+			gpm_warning ("cannot hibernate, so trying suspend");
+			ret = gpm_manager_suspend (manager, NULL);
+			if (ret == FALSE) {
+				gpm_warning ("cannot suspend or hibernate!");
+			}
+		}
+	}
+	g_free (action);
+}
+
+/**
  * idle_changed_cb:
  * @idle: The idle class instance
  * @mode: The idle mode, e.g. GPM_IDLE_MODE_SESSION
@@ -1017,11 +1075,7 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
 		 GpmManager *manager)
 {
-	GpmAcAdapterState state;
 	gboolean laptop_using_ext_mon;
-
-	/* find if we are on AC power */
-	gpm_ac_adapter_get_state (manager->priv->ac_adapter, &state);
 
 	/*
 	 * If external monitor connected we shouldn't ignore idle when lid closed.
@@ -1060,12 +1114,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
 			return;
 		}
-		/* can only be hibernate, suspend or nothing */
-		if (state == GPM_AC_ADAPTER_PRESENT) {
-			manager_policy_do (manager, GPM_CONF_AC_SLEEP_TYPE, _("the system state is idle"));
-		} else {
-			manager_policy_do (manager, GPM_CONF_BATTERY_SLEEP_TYPE, _("the system state is idle"));
-		}
+		idle_do_sleep (manager);
 	}
 }
 

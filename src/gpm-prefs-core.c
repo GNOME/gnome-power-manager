@@ -382,26 +382,6 @@ gpm_prefs_setup_brightness_slider (GpmPrefs    *prefs,
 }
 
 /**
- * gpm_prefs_enable_widget:
- **/
-static gboolean
-gpm_prefs_enable_widget (GpmPrefs    *prefs,
-		       const gchar *widgetname,
-		       gboolean     show)
-{
-	GtkWidget *widget;
-
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, widgetname);
-	if (widget == NULL) {
-		gpm_warning ("widget '%s' not found", widgetname);
-		return FALSE;
-	}
-
-	gtk_widget_set_sensitive (widget, show);
-	return TRUE;
-}
-
-/**
  * gpm_prefs_action_combo_changed_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
@@ -413,7 +393,6 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	gchar *value;
 	const gchar *action;
 	gchar *gpm_pref_key;
-	const gchar *widget_name;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 
@@ -437,13 +416,6 @@ gpm_prefs_action_combo_changed_cb (GtkWidget *widget,
 	gpm_pref_key = (char *) g_object_get_data (G_OBJECT (widget), "conf_key");
 	gpm_debug ("Changing %s to %s", gpm_pref_key, action);
 	gpm_conf_set_string (prefs->priv->conf, gpm_pref_key, action);
-
-	widget_name = gtk_widget_get_name (widget);
-	if (widget_name && strcmp (widget_name, "combobox_sleep_ac_type") == 0) {
-		gpm_prefs_enable_widget (prefs, "hbox_sleep_ac_custom", action != ACTION_NOTHING);
-	} else if (widget_name && strcmp (widget_name, "combobox_sleep_battery_type") == 0) {
-		gpm_prefs_enable_widget (prefs, "hbox_sleep_battery_custom", action != ACTION_NOTHING);
-	}
 }
 
 /**
@@ -816,21 +788,6 @@ prefs_setup_sleep (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
 	gint delay;
-
-	const gchar *sleep_type_actions[] = {ACTION_SUSPEND,
-					     ACTION_HIBERNATE,
-					     NULL};
-
-	/* Sleep Type Combo Box */
-	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_ac_type",
-				      GPM_CONF_AC_SLEEP_TYPE,
-				      sleep_type_actions);
-	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_battery_type",
-				      GPM_CONF_BATTERY_SLEEP_TYPE,
-				      sleep_type_actions);
-	gpm_prefs_setup_action_combo (prefs, "combobox_sleep_ups_type",
-				      GPM_CONF_BATTERY_SLEEP_TYPE, /* fixme */
-				      sleep_type_actions);
 
 	/* Sleep time until we sleep */
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_sleep_ac_inactive",

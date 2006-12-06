@@ -477,7 +477,7 @@
       <key>/schemas/apps/gnome-power-manager/battery_sleep_computer</key>
       <applyto>/apps/gnome-power-manager/battery_sleep_computer</applyto>
       <type>int</type>
-      <default>1200</default>
+      <default>0</default>
       <locale name="C">
         <short>Sleep timeout computer when on battery</short>
         <long>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
@@ -565,7 +565,7 @@
       <key>/schemas/apps/gnome-power-manager/action_ac_sleep_type</key>
       <applyto>/apps/gnome-power-manager/action_ac_sleep_type</applyto>
       <type>string</type>
-      <default>nothing</default>
+      <default>suspend</default>
       <locale name="C">
         <short>Whether to hibernate, suspend or do nothing when inactive</short>
         <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
@@ -576,7 +576,7 @@
       <key>/schemas/apps/gnome-power-manager/action_battery_sleep_type</key>
       <applyto>/apps/gnome-power-manager/action_battery_sleep_type</applyto>
       <type>string</type>
-      <default>suspend</default>
+      <default>hibernate</default>
       <locale name="C">
         <short>Whether to hibernate, suspend or do nothing when inactive</short>
         <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
