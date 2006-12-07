@@ -21,4 +21,4 @@ DOC_FIGURES = \
 	figures/gpm-cell-capacity.png \
 	figures/gpm-suspend-problem.png
 
-DOC_LINGUAS = hu ru sv
+DOC_LINGUAS = es hu ru sv
