@@ -1,5 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
  *
  * Licensed under the GNU General Public License Version 2
@@ -43,7 +44,7 @@
 
 static void     gpm_srv_dpms_class_init (GpmSrvDpmsClass *klass);
 static void     gpm_srv_dpms_init       (GpmSrvDpms      *srv_dpms);
-static void     gpm_srv_dpms_finalize   (GObject      *object);
+static void     gpm_srv_dpms_finalize   (GObject         *object);
 
 #define GPM_SRV_DPMS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SRV_DPMS, GpmSrvDpmsPrivate))
 
@@ -55,6 +56,13 @@ struct GpmSrvDpmsPrivate
 	GpmHal			*hal;
 	GpmIdle			*idle;
 };
+
+enum {
+	MODE_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmSrvDpms, gpm_srv_dpms, G_TYPE_OBJECT)
 
@@ -155,6 +163,43 @@ gpm_srv_dpms_sync_policy (GpmSrvDpms *srv_dpms)
 	}
 }
 
+/* dbus methods shouldn't use enumerated types, but should use textual descriptors */
+gboolean
+gpm_dpms_set_mode (GpmSrvDpms *srv_dpms,
+		   const char *mode_str,
+		   GError    **error)
+{
+	gboolean ret;
+	GpmDpmsMode mode;
+
+	g_return_val_if_fail (GPM_IS_SRV_DPMS (srv_dpms), FALSE);
+
+	/* convert mode to an enumerated type */
+	mode = gpm_dpms_mode_from_string (mode_str);
+
+	ret = gpm_dpms_set_mode_enum (srv_dpms->priv->dpms, mode, error);
+	return ret;
+}
+
+/* dbus methods shouldn't use enumerated types, but should use textual descriptors */
+gboolean
+gpm_dpms_get_mode (GpmSrvDpms *srv_dpms,
+		   const char **mode_str,
+		   GError     **error)
+{
+	gboolean ret;
+	GpmDpmsMode mode;
+
+	g_return_val_if_fail (GPM_IS_SRV_DPMS (srv_dpms), FALSE);
+	g_return_val_if_fail (mode_str != NULL, FALSE);
+
+	ret = gpm_dpms_get_mode_enum (srv_dpms->priv->dpms, &mode, error);
+	if (ret == TRUE) {
+		*mode_str = g_strdup (gpm_dpms_mode_to_string (mode));
+	}
+	return ret;
+}
+
 /**
  * conf_key_changed_cb:
  *
@@ -203,7 +248,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 static void
 idle_changed_cb (GpmIdle     *idle,
 		 GpmIdleMode  mode,
-		 GpmSrvDpms     *srv_dpms)
+		 GpmSrvDpms  *srv_dpms)
 {
 	GError  *error;
 
@@ -233,12 +278,38 @@ idle_changed_cb (GpmIdle     *idle,
 	}
 }
 
+/**
+ * mode_changed_cb:
+ * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
+ * @manager: This class instance
+ *
+ * What happens when the DPMS mode is changed.
+ **/
+static void
+mode_changed_cb (GpmDpms    *dpms,
+		      GpmDpmsMode mode,
+		      GpmSrvDpms *srv_dpms)
+{
+	gpm_debug ("emitting mode-changed : %s", gpm_dpms_mode_to_string (mode));
+	g_signal_emit (srv_dpms, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
+}
+
 static void
 gpm_srv_dpms_class_init (GpmSrvDpmsClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize	   = gpm_srv_dpms_finalize;
+
+	signals [MODE_CHANGED] =
+		g_signal_new ("mode-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSrvDpmsClass, mode_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
+
 	g_type_class_add_private (klass, sizeof (GpmSrvDpmsPrivate));
 }
 
@@ -256,6 +327,8 @@ gpm_srv_dpms_init (GpmSrvDpms *srv_dpms)
 
 	/* master class */
 	srv_dpms->priv->dpms = gpm_dpms_new ();
+	g_signal_connect (srv_dpms->priv->dpms, "mode-changed",
+			  G_CALLBACK (mode_changed_cb), srv_dpms);
 
 	/* we use power for the ac-adapter-changed */
 	srv_dpms->priv->ac_adapter = gpm_ac_adapter_new ();

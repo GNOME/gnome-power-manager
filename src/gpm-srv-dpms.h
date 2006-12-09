@@ -1,5 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
  * Copyright (C) 2004-2005 William Jon McCann <mccann@jhu.edu>
  *
  * Licensed under the GNU General Public License Version 2
@@ -42,12 +43,20 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* mode_changed)	(GpmSrvDpms	*srv_dpms,
+						 const char	*mode);
 } GpmSrvDpmsClass;
 
 GType		 gpm_srv_dpms_get_type		(void);
 GpmSrvDpms	*gpm_srv_dpms_new		(void);
 
-void		 gpm_srv_dpms_sync_policy	(GpmSrvDpms *srv_dpms);
+void		 gpm_srv_dpms_sync_policy	(GpmSrvDpms	*srv_dpms);
+gboolean	 gpm_dpms_get_mode		(GpmSrvDpms	*srv_dpms,
+						 const gchar	**mode,
+						 GError		**error);
+gboolean	 gpm_dpms_set_mode		(GpmSrvDpms	*srv_dpms,
+						 const gchar	*mode,
+						 GError		**error);
 
 G_END_DECLS
 

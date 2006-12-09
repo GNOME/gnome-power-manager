@@ -1,5 +1,22 @@
 2006-12-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-dpms.xml:
+	* src/dbus/gpm-dbus-manager.xml:
+	* src/gpm-dpms.c:
+	* src/gpm-dpms.h:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-powermanager.h:
+	* src/gpm-srv-dpms.c:
+	* src/gpm-srv-dpms.h:
+	* src/gpm-srv-screensaver.c:
+	Move the DBUS interface from the manager to
+	/org/gnome/PowerManager/Dpms so we can start to modularize
+	the interface for standardization.
+
+2006-12-09  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	Fix a few spellings of timeout, fixes #383116.
 

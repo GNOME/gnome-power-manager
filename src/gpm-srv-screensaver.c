@@ -83,7 +83,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 		 * a smartcard to authenticate and DPMS might still be on.
 		 * See #350291 for more details */
 		error = NULL;
-		gpm_dpms_set_mode (srv_screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
+		gpm_dpms_set_mode_enum (srv_screensaver->priv->dpms, GPM_DPMS_MODE_ON, &error);
 		if (error != NULL) {
 			gpm_warning ("Failed to turn on DPMS: %s", error->message);
 			g_error_free (error);
@@ -95,7 +95,7 @@ static void
 update_dpms_throttle (GpmSrvScreensaver *srv_screensaver)
 {
 	GpmDpmsMode mode;
-	gpm_dpms_get_mode (srv_screensaver->priv->dpms, &mode, NULL);
+	gpm_dpms_get_mode_enum (srv_screensaver->priv->dpms, &mode, NULL);
 
 	/* Throttle the srv_screensaver when DPMS is active since we can't see it anyway */
 	if (mode == GPM_DPMS_MODE_ON) {

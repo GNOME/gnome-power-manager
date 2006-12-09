@@ -37,16 +37,6 @@
     <method name="Reboot">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_reboot_dbus_method"/>
     </method>
-    <method name="GetDpmsMode">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_get_dpms_mode"/>
-      <arg type="s" name="mode" direction="out">
-        <annotation name="org.freedesktop.DBus.GLib.Const" value=""/>
-      </arg>
-    </method>
-    <method name="SetDpmsMode">
-      <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_set_dpms_mode"/>
-      <arg type="s" name="mode" direction="in"/>
-    </method>
     <method name="Inhibit">
       <annotation name="org.freedesktop.DBus.GLib.CSymbol" value="gpm_manager_inhibit"/>
       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
@@ -63,6 +53,5 @@
 <!--
     <signal name="LowPowerModeChanged"/>
 -->
-    <signal name="DpmsModeChanged"/>
   </interface>
 </node>

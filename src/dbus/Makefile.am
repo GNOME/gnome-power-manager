@@ -1,16 +1,25 @@
 NULL =
 
 EXTRA_DIST =						\
+	gpm-dbus-dpms.xml				\
 	gpm-dbus-manager.xml				\
 	gpm-dbus-statistics.xml				\
 	gpm-dbus-brightness-lcd.xml			\
 	$(NULL)
 
 BUILT_SOURCES = 					\
+	gpm-dbus-dpms.h					\
 	gpm-dbus-manager.h				\
 	gpm-dbus-statistics.h				\
 	gpm-dbus-brightness-lcd.h			\
 	$(NULL)
+
+gpm-dbus-dpms.h: gpm-dbus-dpms.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_dpms			\
+		--mode=glib-server			\
+		--output=gpm-dbus-dpms.h		\
+		$(srcdir)/gpm-dbus-dpms.xml
 
 gpm-dbus-manager.h: gpm-dbus-manager.xml
 	libtool --mode=execute dbus-binding-tool	\

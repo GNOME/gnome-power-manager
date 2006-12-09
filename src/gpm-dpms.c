@@ -580,9 +580,9 @@ gpm_dpms_mode_to_string (GpmDpmsMode mode)
 }
 
 gboolean
-gpm_dpms_set_mode (GpmDpms    *dpms,
-		   GpmDpmsMode mode,
-		   GError    **error)
+gpm_dpms_set_mode_enum (GpmDpms    *dpms,
+		        GpmDpmsMode mode,
+		        GError    **error)
 {
 	gboolean ret;
 
@@ -603,9 +603,9 @@ gpm_dpms_set_mode (GpmDpms    *dpms,
 }
 
 gboolean
-gpm_dpms_get_mode (GpmDpms     *dpms,
-		   GpmDpmsMode *mode,
-		   GError     **error)
+gpm_dpms_get_mode_enum (GpmDpms     *dpms,
+		        GpmDpmsMode *mode,
+		        GError     **error)
 {
 	gboolean ret;
 

@@ -59,7 +59,6 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-
 	void		(* mode_changed)	(GpmDpms 	*dpms,
 						 GpmDpmsMode	 mode);
 } GpmDpmsClass;
@@ -97,10 +96,10 @@ gboolean	 gpm_dpms_set_timeouts		(GpmDpms 	*dpms,
 						 GError 	**error);
 
 /* Direct manipulation */
-gboolean	 gpm_dpms_get_mode	 	(GpmDpms	*dpms,
+gboolean	 gpm_dpms_get_mode_enum	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	*mode,
 						 GError		**error);
-gboolean	 gpm_dpms_set_mode	 	(GpmDpms	*dpms,
+gboolean	 gpm_dpms_set_mode_enum	 	(GpmDpms	*dpms,
 						 GpmDpmsMode	 mode,
 						 GError		**error);
 

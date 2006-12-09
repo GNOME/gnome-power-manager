@@ -70,6 +70,7 @@
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
 
+#include "dbus/gpm-dbus-dpms.h"
 #include "dbus/gpm-dbus-statistics.h"
 #include "dbus/gpm-dbus-brightness-lcd.h"
 
@@ -121,7 +122,6 @@ struct GpmManagerPrivate
 
 enum {
 	ON_AC_CHANGED,
-	DPMS_MODE_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -387,7 +387,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
 			gpm_debug ("Could not lock screen via gnome-screensaver");
 	}
-	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
+	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_OFF, &error);
 	if (error) {
 		gpm_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
@@ -413,7 +413,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 	GError   *error;
 
 	error = NULL;
-	gpm_dpms_set_mode (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
+	gpm_dpms_set_mode_enum (manager->priv->dpms, GPM_DPMS_MODE_ON, &error);
 	if (error) {
 		gpm_debug ("Unable to set DPMS mode: %s", error->message);
 		g_error_free (error);
@@ -569,55 +569,6 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 	*retval = power_save;
 
 	return TRUE;
-}
-
-/**
- * gpm_manager_set_dpms_mode:
- * @manager: This class instance
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_STANDBY
- * Return value: TRUE if we could set the DPMS mode OK.
- **/
-gboolean
-gpm_manager_set_dpms_mode (GpmManager  *manager,
-			   const gchar *mode,
-			   GError     **error)
-{
-	gboolean ret;
-
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	gpm_debug ("Setting DPMS to %s", mode);
-
-	/* just proxy this */
-	ret = gpm_dpms_set_mode (manager->priv->dpms,
-				 gpm_dpms_mode_from_string (mode), error);
-
-	return ret;
-}
-
-/**
- * gpm_manager_get_dpms_mode:
- * @manager: This class instance
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_STANDBY
- * Return value: TRUE if we could get the GPMS mode OK.
- **/
-gboolean
-gpm_manager_get_dpms_mode (GpmManager   *manager,
-			   const gchar **mode,
-			   GError      **error)
-{
-	gboolean ret;
-	GpmDpmsMode m;
-
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	ret = gpm_dpms_get_mode (manager->priv->dpms, &m, error);
-	gpm_debug ("Got DPMS mode result=%d mode=%d", ret, m);
-	if (ret && mode) {
-		*mode = gpm_dpms_mode_to_string (m);
-	}
-
-	return ret;
 }
 
 /**
@@ -1116,27 +1067,6 @@ idle_changed_cb (GpmIdle    *idle,
 		}
 		idle_do_sleep (manager);
 	}
-}
-
-/**
- * dpms_mode_changed_cb:
- * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
- * @manager: This class instance
- *
- * What happens when the DPMS mode is changed.
- **/
-static void
-dpms_mode_changed_cb (GpmDpms    *dpms,
-		      GpmDpmsMode mode,
-		      GpmManager *manager)
-{
-	gpm_debug ("DPMS mode changed: %d", mode);
-
-	gpm_debug ("emitting dpms-mode-changed : %s", gpm_dpms_mode_to_string (mode));
-	g_signal_emit (manager,
-			signals [DPMS_MODE_CHANGED],
-			0,
-			gpm_dpms_mode_to_string (mode));
 }
 
 /**
@@ -1783,17 +1713,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 			      G_TYPE_NONE,
 			      1,
 			      G_TYPE_BOOLEAN);
-	signals [DPMS_MODE_CHANGED] =
-		g_signal_new ("dpms-mode-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, dpms_mode_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1,
-			      G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmManagerPrivate));
 }
@@ -2011,6 +1930,13 @@ gpm_manager_init (GpmManager *manager)
 
 	/* try and start an interactive service */
 	manager->priv->srv_dpms = gpm_srv_dpms_new ();
+	if (manager->priv->srv_dpms != NULL) {
+		/* add the new brightness lcd DBUS interface */
+		dbus_g_object_type_install_info (GPM_TYPE_SRV_DPMS,
+						 &dbus_glib_gpm_dpms_object_info);
+		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_DPMS,
+						     G_OBJECT (manager->priv->srv_dpms));
+	}
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
@@ -2071,9 +1997,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_manager_sync_policy_sleep (manager);
 	gpm_tray_icon_sync (manager->priv->tray_icon);
-
-	g_signal_connect (manager->priv->dpms, "mode-changed",
-			  G_CALLBACK (dpms_mode_changed_cb), manager);
 
 	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
 			   &manager->priv->suppress_policy_timeout);

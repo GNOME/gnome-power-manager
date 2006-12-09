@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 William Jon McCann <mccann@jhu.edu>
+ * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -51,8 +52,6 @@ typedef struct
 	 GObjectClass	parent_class;
 	 void		(* on_ac_changed)		(GpmManager	*manager,
 							 gboolean	 on_ac);
-	 void		(* dpms_mode_changed)		(GpmManager	*manager,
-							 const char	*mode);
 } GpmManagerClass;
 
 typedef enum
@@ -83,12 +82,6 @@ gboolean	 gpm_manager_allowed_suspend		(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_allowed_hibernate		(GpmManager	*manager,
 							 gboolean	*allowed,
-							 GError		**error);
-gboolean	 gpm_manager_get_dpms_mode		(GpmManager	*manager,
-							 const gchar	**mode,
-							 GError		**error);
-gboolean	 gpm_manager_set_dpms_mode		(GpmManager	*manager,
-							 const gchar	*mode,
 							 GError		**error);
 gboolean	 gpm_manager_suspend_dbus_method	(GpmManager	*manager,
 							 GError		**error);
