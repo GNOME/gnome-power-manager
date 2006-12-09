@@ -576,7 +576,7 @@
 
     <figure>
       <title>
-      Changing the session idle timout in <command>gnome-screensaver-preferences</command>
+      Changing the session idle timeout in <command>gnome-screensaver-preferences</command>
       </title>
       <screenshot>
         <mediaobject>
@@ -595,7 +595,7 @@
     </para>
     <para>
       To make this clearer, the sliders in <command>gnome-power-preferences</command>
-      are set to start at the value of the session-timout + 1 minute, as we cannot
+      are set to start at the value of the session-timeout + 1 minute, as we cannot
       logically trigger before the session is marked as idle.
       If you adjust the value of the 'session idle' timeout in
       <command>gnome-screensaver-preferences</command> then the start of the sliders
@@ -764,7 +764,7 @@
       suspend or hibernate.
     </para>
     <para>
-      In &application; 2.14 the timouts were not obviously linked to
+      In &application; 2.14 the timeouts were not obviously linked to
       gnome-screensaver, but the timeouts are linked in reality.
       This is because the gnome-screensaver declares the session "idle" and
       then &application; starts.
@@ -774,7 +774,7 @@
     <para>
       In &application; 2.16, the sliders in
       <command>gnome-power-preferences</command> are set to start at the value
-      of the session-timout + 1 minute, as we cannot logically trigger before
+      of the session-timeout + 1 minute, as we cannot logically trigger before
       the session is marked as idle.
       If you adjust the value of the 'session idle' timeout in
       <command>gnome-screensaver-preferences</command> then the start of the
