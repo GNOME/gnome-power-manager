@@ -1,4 +1,4 @@
-SUBDIRS = src po docs man data help
+SUBDIRS = src po docs man data help tools
 
 if HAVE_APPLETS
 SUBDIRS += applets

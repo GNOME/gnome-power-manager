@@ -1,0 +1,67 @@
+# Copyright (C) 2006 Richard Hughes <richard@hughsie.com>
+#
+# Licensed under the GNU General Public License Version 2
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+#$1 = keyname
+print_hal_key ()
+{
+	ret=`hal-get-property --udi /org/freedesktop/Hal/devices/computer --key $1 2> /dev/null`
+	if [ $? -eq 0 ]; then
+		echo $ret
+	else
+		echo "missing"
+		fi 
+}
+
+#$1 = capability
+print_hal_capability ()
+{
+	ret=`hal-find-by-capability --capability $1`
+	if [ -n "$ret" ]; then
+		echo "yes"
+	else
+		echo "no"
+		fi
+}
+
+echo -n "HAL version:          "
+lshal -V | cut -f3 -d" "
+
+echo -n "Distro version:       "
+cat /etc/*-release | uniq
+#cat /tmp/lshal | grep smbios.system.manufacturer | cut -f5 -d" "
+
+echo -n "Kernel version:       "
+uname -r
+
+echo -n "System manufacturer:  "
+print_hal_key "smbios.system.manufacturer"
+echo -n "System version:       "
+print_hal_key "smbios.system.version"
+echo -n "System product:       "
+print_hal_key "smbios.system.product"
+
+echo -n "ac adapter present:   "
+print_hal_capability "ac_adapter"
+
+echo -n "battery present:      "
+print_hal_capability "battery"
+
+echo -n "laptop panel present: "
+print_hal_capability "laptop_panel"
+
+echo -n "cpu scaling present:  "
+print_hal_capability "cpufreq_control"
+
+echo "Battery Information:"
+lshal | grep "battery\."
