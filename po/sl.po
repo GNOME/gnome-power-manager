@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-09-12 15:27+0200\n"
-"PO-Revision-Date: 2006-09-27 10:02+0100\n"
+"POT-Creation-Date: 2006-12-11 07:18+0100\n"
+"PO-Revision-Date: 2006-12-11 13:54+0100\n"
 "Last-Translator: Matic Žgur <mr.zgur@gmail.com>\n"
 "Language-Team: Slovenian <SL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 "X-Poedit-Country: Slovenia\n"
 
 #. common descriptions of this program
@@ -485,8 +485,8 @@ msgid "Power History"
 msgstr "Zgodovina porabe"
 
 #: ../data/gpm-info.glade.h:14
-#: ../src/gpm-manager.c:1561
-#: ../src/gpm-manager.c:1910
+#: ../src/gpm-manager.c:1565
+#: ../src/gpm-manager.c:1911
 msgid "Power Information"
 msgstr "Podatki o porabi"
 
@@ -650,19 +650,19 @@ msgstr "Neznan čas"
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
-msgstr[0] "%i minut"
-msgstr[1] "%i minuta"
-msgstr[2] "%i minuti"
-msgstr[3] "%i minute"
+msgstr[0] "%i minuto"
+msgstr[1] "%i minuti"
+msgstr[2] "%i minute"
+msgstr[3] "%i minut"
 
 #: ../src/gpm-common.c:76
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
-msgstr[0] "%i hours"
-msgstr[1] "%i ura"
-msgstr[2] "%i uri"
-msgstr[3] "%i ure"
+msgstr[0] "%i uro"
+msgstr[1] "%i uri"
+msgstr[2] "%i ure"
+msgstr[3] "%i ur"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
@@ -674,18 +674,18 @@ msgstr "%i %s, %i %s"
 #: ../src/gpm-common.c:83
 msgid "hour"
 msgid_plural "hours"
-msgstr[0] "ur"
-msgstr[1] "uro"
-msgstr[2] "uri"
-msgstr[3] "ure"
+msgstr[0] "uro"
+msgstr[1] "uri"
+msgstr[2] "ure"
+msgstr[3] "ur"
 
 #: ../src/gpm-common.c:84
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] "minut"
-msgstr[1] "minuto"
-msgstr[2] "minuti"
-msgstr[3] "minute"
+msgstr[0] "minuto"
+msgstr[1] "minuti"
+msgstr[2] "minute"
+msgstr[3] "minut"
 
 #: ../src/gpm-common.h:31
 msgid "Power Manager for the GNOME desktop"
@@ -802,77 +802,77 @@ msgstr "Zahteva za %s"
 msgid "On battery power"
 msgstr "Uporaba akumulatorja"
 
-#: ../src/gpm-manager.c:683
+#: ../src/gpm-manager.c:687
 msgid "Display power management activated"
 msgstr "Upravljanje porabe zaslona vključeno"
 
-#: ../src/gpm-manager.c:699
+#: ../src/gpm-manager.c:703
 msgid "Laptop lid is closed"
 msgstr "Pokrov prenosnika zaprt"
 
-#: ../src/gpm-manager.c:871
+#: ../src/gpm-manager.c:875
 #, c-format
 msgid "%s because %s"
 msgstr "%s zaradi %s"
 
-#: ../src/gpm-manager.c:907
+#: ../src/gpm-manager.c:911
 msgid "Doing nothing"
 msgstr "Ne naredi ničesar"
 
-#: ../src/gpm-manager.c:911
-#: ../src/gpm-manager.c:1371
-#: ../src/gpm-manager.c:2545
+#: ../src/gpm-manager.c:915
+#: ../src/gpm-manager.c:1375
+#: ../src/gpm-manager.c:2550
 msgid "Suspending computer"
 msgstr "Zaustavljanje računalnika"
 
-#: ../src/gpm-manager.c:916
-#: ../src/gpm-manager.c:1385
-#: ../src/gpm-manager.c:2520
+#: ../src/gpm-manager.c:920
+#: ../src/gpm-manager.c:1389
+#: ../src/gpm-manager.c:2525
 msgid "Hibernating computer"
 msgstr "Hiberniranje računalnika"
 
-#: ../src/gpm-manager.c:921
+#: ../src/gpm-manager.c:925
 msgid "DPMS blanking screen"
 msgstr "Izklaplanje zaslona DPMS"
 
-#: ../src/gpm-manager.c:926
-#: ../src/gpm-manager.c:1400
+#: ../src/gpm-manager.c:930
+#: ../src/gpm-manager.c:1404
 msgid "Shutting down computer"
 msgstr "Ugašanje računalnika"
 
-#: ../src/gpm-manager.c:931
+#: ../src/gpm-manager.c:935
 msgid "GNOME interactive logout"
 msgstr "Interaktivna odjava iz GNOME"
 
-#: ../src/gpm-manager.c:1197
-#: ../src/gpm-manager.c:1294
+#: ../src/gpm-manager.c:1201
+#: ../src/gpm-manager.c:1298
 msgid "Resuming computer"
 msgstr "Povrnitev računalnika"
 
-#: ../src/gpm-manager.c:1214
+#: ../src/gpm-manager.c:1218
 msgid "Hibernate Problem"
 msgstr "Napaka pri hibernaciji"
 
-#: ../src/gpm-manager.c:1215
+#: ../src/gpm-manager.c:1219
 #, c-format
 msgid "HAL failed to %s. Check the <a href=\"%s\">FAQ page</a> for common problems."
 msgstr "%s s HAL ni uspela. Za več podatkov o težavah preverite <a href=\"%s\">Strani FAQ</a>."
 
-#: ../src/gpm-manager.c:1217
+#: ../src/gpm-manager.c:1221
 msgid "hibernate"
 msgstr "Hibernacija"
 
-#: ../src/gpm-manager.c:1306
+#: ../src/gpm-manager.c:1310
 #, c-format
 msgid "Battery charged %imWh during suspend"
 msgstr "V času zaustavitve je bil akumulator napolnjen za %imWh"
 
-#: ../src/gpm-manager.c:1309
+#: ../src/gpm-manager.c:1313
 #, c-format
 msgid "Battery discharged %imWh during suspend"
 msgstr "V času zaustavitve je bil akumulator izpraznjen za %imWh"
 
-#: ../src/gpm-manager.c:1331
+#: ../src/gpm-manager.c:1335
 #, c-format
 msgid ""
 "Your computer failed to %s.\n"
@@ -881,376 +881,376 @@ msgstr ""
 "%s računalnika ni uspela.\n"
 "Za več podatkov o težavah preverite <a href=\"%s\">Strani FAQ</a>."
 
-#: ../src/gpm-manager.c:1333
+#: ../src/gpm-manager.c:1337
 msgid "suspend"
 msgstr "Zaustavitev"
 
-#: ../src/gpm-manager.c:1334
+#: ../src/gpm-manager.c:1338
 msgid "Suspend Problem"
 msgstr "Težave pri zaustavitvi"
 
-#: ../src/gpm-manager.c:1372
+#: ../src/gpm-manager.c:1376
 msgid "the DBUS method Suspend() was invoked"
 msgstr "uporabljena je bila metoda DBUS Suspend()"
 
-#: ../src/gpm-manager.c:1386
+#: ../src/gpm-manager.c:1390
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "uporabljena je bila metoda DBUS Hibernate()"
 
-#: ../src/gpm-manager.c:1401
+#: ../src/gpm-manager.c:1405
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "uporabljena je bila metoda DBUS Shutdown()"
 
-#: ../src/gpm-manager.c:1415
+#: ../src/gpm-manager.c:1419
 msgid "Rebooting computer"
 msgstr "Ponovno zaganjanje računalnika"
 
-#: ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:1420
 msgid "the DBUS method Reboot() was invoked"
 msgstr "uporabljena je bila metoda DBUS Reboot()"
 
-#: ../src/gpm-manager.c:1466
+#: ../src/gpm-manager.c:1470
 msgid "Screen resume"
 msgstr "Ponovna osvetlitev zaslona"
 
-#: ../src/gpm-manager.c:1467
+#: ../src/gpm-manager.c:1471
 msgid "idle mode ended"
 msgstr "način nedejavnosti končan"
 
-#: ../src/gpm-manager.c:1492
+#: ../src/gpm-manager.c:1496
 msgid "Screen dim"
 msgstr "Zatemnitev zaslona"
 
-#: ../src/gpm-manager.c:1493
+#: ../src/gpm-manager.c:1497
 msgid "idle mode started"
 msgstr "način nedejavnosti začet"
 
 #. can only be hibernate or suspend
-#: ../src/gpm-manager.c:1511
+#: ../src/gpm-manager.c:1515
 msgid "the system state is idle"
 msgstr "sistem je v stanju nedejavnosti"
 
-#: ../src/gpm-manager.c:1585
+#: ../src/gpm-manager.c:1589
 msgid "the power button has been pressed"
 msgstr "pritisnjen je bil gumb za vklop"
 
-#: ../src/gpm-manager.c:1604
+#: ../src/gpm-manager.c:1608
 msgid "the suspend button has been pressed"
 msgstr "pritisnjen je bil gumb za zaustavitev"
 
-#: ../src/gpm-manager.c:1624
+#: ../src/gpm-manager.c:1628
 msgid "the hibernate button has been pressed"
 msgstr "pritisnjen je bil gumb za hibernacijo"
 
-#: ../src/gpm-manager.c:1651
+#: ../src/gpm-manager.c:1655
 msgid "The laptop lid has been closed"
 msgstr "Pokrov prenosnika je bil zaprt"
 
-#: ../src/gpm-manager.c:1656
+#: ../src/gpm-manager.c:1660
 msgid "The laptop lid has been re-opened"
 msgstr "Pokrov prenosnika je bil ponovno odprt"
 
-#: ../src/gpm-manager.c:1674
+#: ../src/gpm-manager.c:1678
 msgid "the lid has been closed on ac power"
 msgstr "pokrov je bil zaprt med uporabo napajanja"
 
-#: ../src/gpm-manager.c:1679
+#: ../src/gpm-manager.c:1683
 msgid "the lid has been closed on battery power"
 msgstr "pokrov je bil zaprt med uporabo akumulatorja"
 
-#: ../src/gpm-manager.c:1684
+#: ../src/gpm-manager.c:1688
 msgid "Turning LCD panel back on"
 msgstr "Ponovni vklop zaslona LCD"
 
-#: ../src/gpm-manager.c:1685
+#: ../src/gpm-manager.c:1689
 msgid "laptop lid re-opened"
 msgstr "pokrov prenosnika ponovno odprt"
 
-#: ../src/gpm-manager.c:1802
+#: ../src/gpm-manager.c:1803
 msgid "AC adapter inserted"
 msgstr "Napajalnik vsavljen"
 
-#: ../src/gpm-manager.c:1806
+#: ../src/gpm-manager.c:1807
 msgid "AC adapter removed"
 msgstr "Napajalnik odstranjen"
 
-#: ../src/gpm-manager.c:1816
+#: ../src/gpm-manager.c:1817
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "pokrov je bil zaprt, napajalnik pa odstranjen (gconf je v redu)"
 
-#: ../src/gpm-manager.c:1898
+#: ../src/gpm-manager.c:1899
 msgid "Power Critically Low"
 msgstr "Stanje akumulatorja kritično"
 
-#: ../src/gpm-manager.c:1902
+#: ../src/gpm-manager.c:1903
 msgid "Power Very Low"
 msgstr "Stanje akumulatorja zelo nizko"
 
-#: ../src/gpm-manager.c:1906
+#: ../src/gpm-manager.c:1907
 msgid "Power Low"
 msgstr "Stanje akumulatorja nizko"
 
-#: ../src/gpm-manager.c:1931
+#: ../src/gpm-manager.c:1932
 msgid "battery is critically low"
 msgstr "stanje akumulatorja je kritično"
 
-#: ../src/gpm-manager.c:1976
+#: ../src/gpm-manager.c:1977
 msgid "Your battery is now fully charged"
 msgstr "Vaš akumulator je zdaj napolnjen"
 
-#: ../src/gpm-manager.c:1977
+#: ../src/gpm-manager.c:1978
 msgid "Battery Charged"
 msgstr "Akumulator poln"
 
-#: ../src/gpm-manager.c:2042
+#: ../src/gpm-manager.c:2044
 msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
 msgstr "Akumulator je pod kritičnim nivojem. Računalnik se bo <b>ugasnil</b>, ko se akumulator do konca izprazni."
 
-#: ../src/gpm-manager.c:2047
+#: ../src/gpm-manager.c:2049
 msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
 msgstr "Akumulator je pod kritičnim nivojem. Računalnik se bo zaustavil. <br><b>OPOMBA:</b> Za zadržanje računalnika v zaustavljenem stanju je potrebna manjša količina energije."
 
-#: ../src/gpm-manager.c:2053
+#: ../src/gpm-manager.c:2055
 msgid "The battery is below the critical level and this computer is about to hibernate."
 msgstr "Akumulator je pod kritičnim nivojem. Računalnik se bo hiberniral."
 
-#: ../src/gpm-manager.c:2057
+#: ../src/gpm-manager.c:2059
 msgid "The battery is below the critical level and this computer is about to shutdown."
 msgstr "Akumulator je pod kritičnim nivojem. Računalnik se bo ugasnil."
 
-#: ../src/gpm-manager.c:2070
+#: ../src/gpm-manager.c:2072
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "Napajalnik je izključen, zato računalnik uporablja akumulator."
 
-#: ../src/gpm-manager.c:2077
+#: ../src/gpm-manager.c:2079
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in your AC Adapter to avoid losing data."
 msgstr "Akumulator je še približno <b>%s</b> poln (%d%%). Če ne želite izgubiti podatkov, računalnik priklopite na napajanje."
 
-#: ../src/gpm-manager.c:2164
+#: ../src/gpm-manager.c:2167
 msgid "The UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
 msgstr "UPS je pod kritičnim nivojem. Računalnik se bo <b>ugasnil</b>, ko se UPS do konca izprazni."
 
-#: ../src/gpm-manager.c:2169
+#: ../src/gpm-manager.c:2172
 msgid "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS je pod kritičnim nivojem. Računalnik se bo hiberniral."
 
-#: ../src/gpm-manager.c:2173
+#: ../src/gpm-manager.c:2176
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS je pod kritičnim nivojem. Računalnik se bo ugasnil."
 
-#: ../src/gpm-manager.c:2180
+#: ../src/gpm-manager.c:2183
 msgid "UPS is critically low"
 msgstr "Stanje UPS je kritično"
 
-#: ../src/gpm-manager.c:2183
+#: ../src/gpm-manager.c:2186
 msgid "Your system is running on backup power!"
 msgstr "Vaš računalnik teče na rezervni energiji!"
 
-#: ../src/gpm-manager.c:2187
+#: ../src/gpm-manager.c:2190
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore power to your computer to avoid losing data."
 msgstr "UPS je še približno <b>%s</b> poln (%d%%). Če ne želite izgubiti podatkov, računalnik priklopite na napajanje."
 
-#: ../src/gpm-manager.c:2276
+#: ../src/gpm-manager.c:2280
 #, c-format
 msgid "The %s device attached to this computer is low in power (%d%%). This device will soon stop functioning if not charged."
 msgstr "Napravi %s, ki je priključena na ta računalnik, zmanjkuje energije (%d%%), zato bo kmalu prenehala delovati, če je ne napolnite."
 
-#: ../src/gpm-manager.c:2521
+#: ../src/gpm-manager.c:2526
 msgid "user clicked hibernate from tray menu"
 msgstr "uporabnik je kliknil hiberniraj v meniju pladnja"
 
-#: ../src/gpm-manager.c:2546
+#: ../src/gpm-manager.c:2551
 msgid "user clicked suspend from tray menu"
 msgstr "uporabnik je kliknil zaustavi v meniju pladnja"
 
-#: ../src/gpm-power.c:444
+#: ../src/gpm-power.c:430
 msgid "Laptop battery"
 msgstr "Akumulator prenosnika"
 
-#: ../src/gpm-power.c:446
+#: ../src/gpm-power.c:432
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:448
+#: ../src/gpm-power.c:434
 msgid "Wireless mouse"
 msgstr "Brezžična miška"
 
-#: ../src/gpm-power.c:450
+#: ../src/gpm-power.c:436
 msgid "Wireless keyboard"
 msgstr "Brezžična tipkovnica"
 
-#: ../src/gpm-power.c:452
+#: ../src/gpm-power.c:438
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:454
+#: ../src/gpm-power.c:440
 msgid "Unknown"
 msgstr "Neznano"
 
-#: ../src/gpm-power.c:472
+#: ../src/gpm-power.c:458
 msgid "ups"
 msgstr "ups"
 
-#: ../src/gpm-power.c:474
+#: ../src/gpm-power.c:460
 msgid "mouse"
 msgstr "miška"
 
-#: ../src/gpm-power.c:476
+#: ../src/gpm-power.c:462
 msgid "keyboard"
 msgstr "tipkovnica"
 
-#: ../src/gpm-power.c:478
+#: ../src/gpm-power.c:464
 msgid "pda"
 msgstr "pda"
 
-#: ../src/gpm-power.c:480
+#: ../src/gpm-power.c:466
 msgid "unknown"
 msgstr "neznano"
 
-#: ../src/gpm-power.c:656
+#: ../src/gpm-power.c:642
 #, c-format
 msgid "<b>Product:</b> %s\n"
 msgstr "<b>Izdelek:</b> %s\n"
 
-#: ../src/gpm-power.c:659
+#: ../src/gpm-power.c:645
 msgid "<b>Status:</b> Missing\n"
 msgstr "<b>Stanje:</b> manjkajoče\n"
 
-#: ../src/gpm-power.c:661
+#: ../src/gpm-power.c:647
 msgid "<b>Status:</b> Charged\n"
 msgstr "<b>Stanje:</b> polno\n"
 
-#: ../src/gpm-power.c:663
+#: ../src/gpm-power.c:649
 msgid "<b>Status:</b> Charging\n"
 msgstr "<b>Stanje:</b> polnjenje\n"
 
-#: ../src/gpm-power.c:665
+#: ../src/gpm-power.c:651
 msgid "<b>Status:</b> Discharging\n"
 msgstr "<b>Stanje:</b> praznjenje\n"
 
-#: ../src/gpm-power.c:668
+#: ../src/gpm-power.c:654
 #, c-format
 msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "<b>Odstotkov polno:</b> %i%%\n"
 
-#: ../src/gpm-power.c:695
+#: ../src/gpm-power.c:681
 #, c-format
 msgid "<b>Vendor:</b> %s\n"
 msgstr "<b>Ponudnik:</b> %s\n"
 
-#: ../src/gpm-power.c:701
+#: ../src/gpm-power.c:688
 msgid "Lithium ion"
 msgstr "Litij-ionska"
 
-#: ../src/gpm-power.c:703
+#: ../src/gpm-power.c:691
 msgid "Lead acid"
 msgstr "Svinčena kislina"
 
-#: ../src/gpm-power.c:709
+#: ../src/gpm-power.c:697
 #, c-format
 msgid "<b>Technology:</b> %s\n"
 msgstr "<b>Tehnologija:</b> %s\n"
 
-#: ../src/gpm-power.c:712
+#: ../src/gpm-power.c:700
 #, c-format
 msgid "<b>Serial number:</b> %s\n"
 msgstr "<b>Serijska številka:</b> %s\n"
 
-#: ../src/gpm-power.c:715
+#: ../src/gpm-power.c:703
 #, c-format
 msgid "<b>Model:</b> %s\n"
 msgstr "<b>Model:</b> %s\n"
 
-#: ../src/gpm-power.c:720
+#: ../src/gpm-power.c:708
 #, c-format
 msgid "<b>Remaining time:</b> %s\n"
 msgstr "<b>Preostali čas:</b> %s\n"
 
-#: ../src/gpm-power.c:726
+#: ../src/gpm-power.c:714
 msgid "Excellent"
 msgstr "Odlično"
 
-#: ../src/gpm-power.c:728
+#: ../src/gpm-power.c:716
 msgid "Good"
 msgstr "Dobro"
 
-#: ../src/gpm-power.c:730
+#: ../src/gpm-power.c:718
 msgid "Fair"
 msgstr "Solidno"
 
-#: ../src/gpm-power.c:732
+#: ../src/gpm-power.c:720
 msgid "Poor"
 msgstr "Slabo"
 
-#: ../src/gpm-power.c:734
+#: ../src/gpm-power.c:722
 #, c-format
 msgid "<b>Capacity:</b> %i%% (%s)\n"
 msgstr "<b>Kapaciteta:</b> %i%% (%s)\n"
 
-#: ../src/gpm-power.c:740
-#: ../src/gpm-power.c:764
+#: ../src/gpm-power.c:728
+#: ../src/gpm-power.c:752
 #, c-format
 msgid "<b>Current charge:</b> %.1f %s\n"
 msgstr "<b>Trenutno polnjenje:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:745
+#: ../src/gpm-power.c:733
 #, c-format
 msgid "<b>Last full charge:</b> %.1f %s\n"
 msgstr "<b>Zadnje celotno polnjenje:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:749
-#: ../src/gpm-power.c:768
+#: ../src/gpm-power.c:737
+#: ../src/gpm-power.c:756
 #, c-format
 msgid "<b>Design charge:</b> %.1f %s\n"
 msgstr "<b>Prvotno polnjenje:</b> %.1f %s\n"
 
-#: ../src/gpm-power.c:753
+#: ../src/gpm-power.c:741
 #, c-format
 msgid "<b>Charge rate (raw):</b> %.1f %sh\n"
 msgstr "<b>Hitrost polnjenja (surovo):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:757
+#: ../src/gpm-power.c:745
 #, c-format
 msgid "<b>Charge rate (smoothed):</b> %.1f %sh\n"
 msgstr "<b>Hitrost polnjenja (glajeno):</b> %.1f %sh\n"
 
-#: ../src/gpm-power.c:1221
+#: ../src/gpm-power.c:1209
 msgid "fully charged"
 msgstr "polno"
 
-#: ../src/gpm-power.c:1226
+#: ../src/gpm-power.c:1214
 #, c-format
 msgid "%s remaining"
 msgstr "%s do konca"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1230
+#: ../src/gpm-power.c:1218
 msgid "discharging"
 msgstr "praznjenje"
 
-#: ../src/gpm-power.c:1236
+#: ../src/gpm-power.c:1224
 #, c-format
 msgid "%s until charged"
 msgstr "%s do polnega"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1240
+#: ../src/gpm-power.c:1228
 msgid "charging"
 msgstr "polnjenje"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1281
+#: ../src/gpm-power.c:1269
 msgid "Computer is running on backup power\n"
 msgstr "Računalnik uporablja rezervno energijo\n"
 
-#: ../src/gpm-power.c:1284
+#: ../src/gpm-power.c:1272
 msgid "Computer is running on AC power\n"
 msgstr "Računalnik uporablja napajalnik\n"
 
-#: ../src/gpm-power.c:1287
+#: ../src/gpm-power.c:1275
 msgid "Computer is running on battery power\n"
 msgstr "Računalnik uporablja akumulator\n"
 
