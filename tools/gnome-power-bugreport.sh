@@ -15,7 +15,8 @@
 #$1 = keyname
 print_hal_key ()
 {
-	ret=`hal-get-property --udi /org/freedesktop/Hal/devices/computer --key $1 2> /dev/null`
+	udi="/org/freedesktop/Hal/devices/computer"
+	ret=`hal-get-property --udi $udi --key $1 2> /dev/null`
 	if [ $? -eq 0 ]; then
 		echo $ret
 	else
@@ -34,15 +35,14 @@ print_hal_capability ()
 		fi
 }
 
-echo -n "HAL version:          "
-lshal -V | cut -f3 -d" "
-
 echo -n "Distro version:       "
 cat /etc/*-release | uniq
-#cat /tmp/lshal | grep smbios.system.manufacturer | cut -f5 -d" "
 
 echo -n "Kernel version:       "
 uname -r
+
+echo -n "HAL version:          "
+lshal -V | cut -f3 -d" "
 
 echo -n "System manufacturer:  "
 print_hal_key "smbios.system.manufacturer"
@@ -51,16 +51,16 @@ print_hal_key "smbios.system.version"
 echo -n "System product:       "
 print_hal_key "smbios.system.product"
 
-echo -n "ac adapter present:   "
+echo -n "AC adapter present:   "
 print_hal_capability "ac_adapter"
 
-echo -n "battery present:      "
+echo -n "Battery present:      "
 print_hal_capability "battery"
 
-echo -n "laptop panel present: "
+echo -n "Laptop panel present: "
 print_hal_capability "laptop_panel"
 
-echo -n "cpu scaling present:  "
+echo -n "CPU scaling present:  "
 print_hal_capability "cpufreq_control"
 
 echo "Battery Information:"
