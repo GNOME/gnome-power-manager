@@ -200,8 +200,8 @@ gpm_srv_cpufreq_new (void)
 	GpmSrvCpuFreq *srv_cpufreq = NULL;
 
 	/* only load if we have the hardware */
-	if (gpm_cpufreq_has_hw () == TRUE) {
-		srv_cpufreq = g_object_new (GPM_TYPE_SRV_CPUFREQ, NULL);;
+	if (gpm_cpufreq_has_hw() == TRUE) {
+		srv_cpufreq = g_object_new (GPM_TYPE_SRV_CPUFREQ, NULL);
 	}
 
 	return srv_cpufreq;

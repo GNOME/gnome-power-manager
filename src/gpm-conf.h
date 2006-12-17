@@ -41,13 +41,14 @@ G_BEGIN_DECLS
 #define GPM_CONF_AC_DPMS_METHOD		GPM_CONF_DIR "/ac_dpms_sleep_method"
 #define GPM_CONF_AC_BRIGHTNESS		GPM_CONF_DIR "/ac_brightness"
 #define GPM_CONF_AC_BRIGHTNESS_KBD	GPM_CONF_DIR "/ac_brightness_kbd"
+#define GPM_CONF_AC_IDLE_DIM		GPM_CONF_DIR "/ac_dim_on_idle"
 #define GPM_CONF_BATTERY_SLEEP_COMPUTER	GPM_CONF_DIR "/battery_sleep_computer"
 #define GPM_CONF_BATTERY_SLEEP_DISPLAY	GPM_CONF_DIR "/battery_sleep_display"
 #define GPM_CONF_BATTERY_DPMS_METHOD	GPM_CONF_DIR "/battery_dpms_sleep_method"
 #define GPM_CONF_BATTERY_BRIGHTNESS	GPM_CONF_DIR "/battery_brightness"
 #define GPM_CONF_BATTERY_BRIGHTNESS_KBD	GPM_CONF_DIR "/battery_brightness_kbd"
+#define GPM_CONF_BATTERY_IDLE_DIM	GPM_CONF_DIR "/battery_dim_on_idle"
 
-#define GPM_CONF_DISPLAY_IDLE_DIM	GPM_CONF_DIR "/display_dim_on_idle"
 #define GPM_CONF_DISPLAY_STATE_CHANGE	GPM_CONF_DIR "/display_state_change"
 #define GPM_CONF_DISPLAY_AMBIENT	GPM_CONF_DIR "/display_ambient"
 

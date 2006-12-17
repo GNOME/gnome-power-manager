@@ -1,5 +1,19 @@
 2006-12-17  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-prefs.glade:
+	Correct the grammar in two places.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-srv-brightness-lcd.c: (idle_changed_cb):
+	Split the policy for dimming the screen, defaulting to on
+	for battery power and off for on AC.
+
+	* src/gpm-srv-cpufreq.c: (gpm_srv_cpufreq_new):
+	Remove double ;;.
+
+2006-12-17  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-conf.h:
 	* src/gpm-manager.c:

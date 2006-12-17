@@ -240,9 +240,15 @@ idle_changed_cb (GpmIdle             *idle,
 		 GpmIdleMode          mode,
 		 GpmSrvBrightnessLcd *srv_brightness)
 {
+	GpmAcAdapterState state;
 	gboolean laptop_do_dim;
 
-	gpm_conf_get_bool (srv_brightness->priv->conf, GPM_CONF_DISPLAY_IDLE_DIM, &laptop_do_dim);
+	gpm_ac_adapter_get_state (srv_brightness->priv->ac_adapter, &state);
+	if (state == GPM_AC_ADAPTER_PRESENT) {
+		gpm_conf_get_bool (srv_brightness->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
+	} else {
+		gpm_conf_get_bool (srv_brightness->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
+	}
 
 	/* should we ignore this? */
 	if (laptop_do_dim == FALSE) {
