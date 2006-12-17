@@ -118,11 +118,12 @@ G_BEGIN_DECLS
 #define GPM_CONF_BATTERY_CPUFREQ_VALUE	GPM_CONF_DIR "/cpufreq_battery_performance"
 #define GPM_CONF_USE_NICE		GPM_CONF_DIR "/cpufreq_consider_nice"
 
-#define GPM_CONF_SESSION_REQUEST_SAVE	GPM_CONF_DIR "/session_request_save"
-
 #define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics_show_legend"
 #define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics_show_events"
 #define GPM_CONF_STAT_GRAPH_TYPE	GPM_CONF_DIR "/statistics_graph_type"
+
+/* we use the gnome-session key now */
+#define GPM_CONF_SESSION_REQUEST_SAVE	"/apps/gnome-session/options/auto_save_session"
 
 typedef struct GpmConfPrivate GpmConfPrivate;
 

@@ -679,7 +679,7 @@ gpm_manager_reboot (GpmManager *manager,
 	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_SESSION_REQUEST_SAVE, &save_session);
 	/* We can set g-p-m to not save the session to avoid confusing new
 	   users. By default we save the session to preserve data. */
-	if (save_session) {
+	if (save_session == TRUE) {
 		gnome_client_request_save (gnome_master_client (),
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);

@@ -1,3 +1,13 @@
+2006-12-17  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-manager.c:
+	Don't use our own custom key for saving the session on
+	shutdown, instead use the gnome-session "auto-save" key.
+	Based on a patch from Bernat Tallaferro, many thanks.
+	Fixes #375682
+
 2006-12-16  Richard Hughes  <richard@hughsie.com>
 
 	* help/C/figures/gpm-prefs-ac.png:
