@@ -834,6 +834,10 @@ prefs_setup_notification (GpmPrefs *prefs)
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
 	  			  GPM_CONF_ENABLE_BEEPING);
 
+	if (prefs->priv->has_batteries == TRUE) {
+		/* there's no use case for displaying this option */
+		gtk_widget_hide_all (radiobutton_icon_never);
+	}
 	if (prefs->priv->has_batteries == FALSE) {
 		/* Hide battery radio options if we have no batteries */
 		gtk_widget_hide_all (radiobutton_icon_charge);
