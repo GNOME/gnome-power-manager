@@ -640,7 +640,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label121">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When battery _power is critical:</property>
+		      <property name="label" translatable="yes">When battery _power is critically low:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -843,7 +843,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label_ups_low">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When UPS _low:</property>
+		      <property name="label" translatable="yes">When UPS power is _low:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -895,7 +895,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label_ups_critical">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When UPS _critical:</property>
+		      <property name="label" translatable="yes">When UPS power is _critically low:</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1051,7 +1051,7 @@
 			      <child>
 				<widget class="GtkLabel" id="label_general_power">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">When _power button is pressed:</property>
+				  <property name="label" translatable="yes">When the _power button is pressed:</property>
 				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1103,7 +1103,7 @@
 			      <child>
 				<widget class="GtkLabel" id="label_general_suspend">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">When _suspend button is pressed:</property>
+				  <property name="label" translatable="yes">When the _suspend button is pressed:</property>
 				  <property name="use_underline">True</property>
 				  <property name="use_markup">False</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -1215,7 +1215,7 @@
 			    <widget class="GtkRadioButton" id="radiobutton_notification_never">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Never display icon</property>
+			      <property name="label" translatable="yes">_Never display an icon</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1234,7 +1234,7 @@
 			    <widget class="GtkRadioButton" id="radiobutton_notification_critical">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Only display when battery life is critical</property>
+			      <property name="label" translatable="yes">_Only display an icon when battery power is critically low</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1254,7 +1254,7 @@
 			    <widget class="GtkRadioButton" id="radiobutton_notification_charge">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Only display when charging or _discharging</property>
+			      <property name="label" translatable="yes">Only display an icon when charging or _discharging</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1274,7 +1274,7 @@
 			    <widget class="GtkRadioButton" id="radiobutton_notification_present">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Only display when battery _present</property>
+			      <property name="label" translatable="yes">Only display an icon when a _battery is present</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1294,7 +1294,7 @@
 			    <widget class="GtkRadioButton" id="radiobutton_notification_always">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Always display icon</property>
+			      <property name="label" translatable="yes">_Always display an icon</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
@@ -1398,7 +1398,7 @@
 			    <widget class="GtkCheckButton" id="checkbutton_general_ambient">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">Use _ambient light to adjust brightness</property>
+			      <property name="label" translatable="yes">Use _ambient light to adjust LCD brightness</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
 			      <property name="focus_on_click">True</property>
