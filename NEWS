@@ -1,7 +1,35 @@
-GNOME Power Manager is a session daemon that makes it easy to manage the
-power on your laptop or desktop system.
+==============
+Version 2.17.4
+==============
 
-This _unstable_ release contains lots of new features since 2.17.2 was released.
+Released December 18, 2006
+
+General
+
+ - Fix lots of typos in the yelp file. #380920, #381928, #381930.
+   (Jorge Gonzalez)
+ - Add gnome-power-bugreport.sh so we can automatically get the
+   distro version and stuff from HAL using the fantastic new
+   X-GNOME-Bugzilla-ExtraInfoScript.
+
+Power Preferences
+
+ - Remove the auto-sleep type from the UI.
+ - Revert the glade file design to be similar to the 2.16 layout.
+   This means we have On Ac Power and On Battery Power rather than
+   the actions tabs. The change wasn't popular.
+ - Various grammar changes as suggested by Tino Meinen.
+
+Translators
+
+ - Theppitak Karoonboonyanan (th)
+ - Daniel Nylander (sv)
+ - Ilkka Tuohela  (fi)
+ - Matic Zgur (sl)
+ - Jakub Friedl (cs)
+ - Francisco Javier F. Serrador (es)
+ - Kjartan Maraas (nb)
+ - Jakub Friedl (cs)
 
 ==============
 Version 2.17.3
