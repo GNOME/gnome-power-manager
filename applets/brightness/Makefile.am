@@ -30,5 +30,5 @@ ui_DATA = GNOME_BrightnessApplet.xml
 
 EXTRA_DIST = GNOME_BrightnessApplet.server.in.in $(ui_DATA)
 
-DISTCLEANFILES =			\		
+DISTCLEANFILES =						\
 	$(server_DATA) $(server_DATA).in
