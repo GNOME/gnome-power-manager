@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.15.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-18 00:05+0000\n"
-"PO-Revision-Date: 2006-12-11 02:29+0100\n"
+"POT-Creation-Date: 2006-12-18 12:35+0100\n"
+"PO-Revision-Date: 2006-12-18 13:10+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -20,11 +20,11 @@ msgstr ""
 
 #: ../applets/brightness/brightness-applet.c:60
 msgid "Power Manger Brightness Applet"
-msgstr ""
+msgstr "Panelprogram for styring av lysstyrke"
 
 #: ../applets/brightness/brightness-applet.c:61
 msgid "Adjusts laptop panel brightness."
-msgstr ""
+msgstr "Justerer lysstyrke for skjerm på bærbare datamaskiner"
 
 #: ../applets/brightness/brightness-applet.c:215
 #, c-format
@@ -34,7 +34,7 @@ msgstr "LCD lysstyrke: %d%%"
 #: ../applets/brightness/brightness-applet.c:217
 #, c-format
 msgid "Cannot get laptop panel brightness"
-msgstr ""
+msgstr "Kan ikke hente lysstyrke for skjerm"
 
 #: ../applets/brightness/brightness-applet.c:487
 #: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:299
@@ -74,36 +74,33 @@ msgstr ""
 
 #: ../applets/brightness/brightness-applet.c:510
 msgid "Copyright © 2006 Benjamin Canou"
-msgstr ""
+msgstr "Opphavsrett © 2006 Benjamin Canou"
 
 #: ../applets/inhibit/inhibit-applet.c:56
-#, fuzzy
 msgid "Power Manger Inhibit Applet"
-msgstr "Test av hindring for strømstyring"
+msgstr "Panelprogram for hindring av strømstyring"
 
 #: ../applets/inhibit/inhibit-applet.c:57
-#, fuzzy
 msgid "Allows user to inhibit automatic power saving."
-msgstr "Automatisk strømstyring"
+msgstr "Lar brukeren hindre automatisk strømstyring."
 
 #: ../applets/inhibit/inhibit-applet.c:195
 #, c-format
 msgid "Automatic sleep inhibited"
-msgstr ""
+msgstr "Automatisk hvilemodus hindret"
 
 #: ../applets/inhibit/inhibit-applet.c:197
 #, c-format
 msgid "Automatic sleep enabled"
-msgstr ""
+msgstr "Automatisk hvilemodus aktivert"
 
 #: ../applets/inhibit/inhibit-applet.c:224
-#, fuzzy
 msgid "Manual inhibit"
-msgstr "Fjern hindring"
+msgstr "Manuell hindring"
 
 #: ../applets/inhibit/inhibit-applet.c:282
 msgid "Copyright © 2006 Richard Hughes"
-msgstr ""
+msgstr "Opphavsrett © 2006 Richard Hughes"
 
 #. common descriptions of this program
 #: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
@@ -145,14 +142,12 @@ msgid "Check CPU load before sleeping"
 msgstr "Sjekk arbeidsmengde før maskinen settes i hvilemodus"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr "Demp skjermens lysstyrke etter en gitt periode inaktivitet"
+msgstr "Demp skjermens lysstyrke etter en gitt periode inaktivitet på nettstrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Demp skjermens lysstyrke etter en gitt periode inaktivitet"
+msgstr "Demp skjermens lysstyrke etter en gitt periode inaktivitet på batteristrøm"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 msgid ""
@@ -172,11 +167,11 @@ msgstr "Dvalemodus aktivert"
 
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid "If DBUS inhibit requests should be ignored from other programs."
-msgstr ""
+msgstr "Om DBUS-forespørsler om hinding skal ignoreres av andre programmer."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If DBUS inhibit requests should be ignored."
-msgstr ""
+msgstr "Om DBUS-forespørsler om hindring skal ignoreres."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 #, fuzzy
@@ -200,7 +195,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid "If sounds should be used"
-msgstr ""
+msgstr "Om lyder skal benyttes"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
@@ -901,32 +896,28 @@ msgid "UnInhibit"
 msgstr "Fjern hindring"
 
 #: ../data/gpm-prefs.glade.h:1
-#, fuzzy
 msgid "<b>Buttons</b>"
-msgstr "<b>Lyder</b>"
+msgstr "<b>Knapper</b>"
 
 #: ../data/gpm-prefs.glade.h:2
-#, fuzzy
 msgid "<b>Extras</b>"
-msgstr "<b>Lyder</b>"
+msgstr "<b>Ekstra</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
 msgstr "<b>Varslingsområde</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-#, fuzzy
 msgid "Always sleep when the _lid is closed"
-msgstr "Alltid gå i hvilemodus når lokket lukkes"
+msgstr "Alltid gå i hvilemodus når _lokket lukkes"
 
 #: ../data/gpm-prefs.glade.h:5
 msgid "Computer _speed policy:"
-msgstr ""
+msgstr "Regler for datamaskinens ha_stighet:"
 
 #: ../data/gpm-prefs.glade.h:6
-#, fuzzy
 msgid "Enable UPS discharge _alarm"
-msgstr "Aktiver alarm for utlading av UPS"
+msgstr "Aktiver _alarm for utlading av UPS"
 
 #: ../data/gpm-prefs.glade.h:7
 msgid "General"
@@ -949,26 +940,22 @@ msgid "On UPS Power"
 msgstr "På UPS-strøm"
 
 #: ../data/gpm-prefs.glade.h:12
-#, fuzzy
 msgid "Only display an icon when a _battery is present"
-msgstr "K_un når batteri er tilkoblet"
+msgstr "K_un vis et ikon når et _batteri er tilstede"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
 msgid "Only display an icon when charging or _discharging"
-msgstr "Vis kun når batteriet lades eller la_des ut"
+msgstr "Kun vis ikon når batteriet lades eller la_des ut"
 
 #: ../data/gpm-prefs.glade.h:14
 msgid "Power Management Preferences"
 msgstr "Brukervalg for strøm"
 
 #: ../data/gpm-prefs.glade.h:15
-#, fuzzy
 msgid "Put _computer to sleep when inactive for:"
-msgstr "_Sett datamaskinen i hvilemodus når den har vært inaktiv i:"
+msgstr "Sett _datamaskinen i hvilemodus når den har vært inaktiv i:"
 
 #: ../data/gpm-prefs.glade.h:16
-#, fuzzy
 msgid "Put _display to sleep when inactive for:"
 msgstr "Sett _skjermen i hvilemodus når den har vært inaktiv i:"
 
@@ -978,56 +965,47 @@ msgstr "Sett lysstyrke for skjerm til:"
 
 #: ../data/gpm-prefs.glade.h:18
 msgid "Use _ambient light to adjust LCD brightness"
-msgstr ""
+msgstr "Bruk _ambient lys for å justere lysstyrken på LCDen"
 
 #: ../data/gpm-prefs.glade.h:19
 msgid "Use _sound to notify in event of an error"
-msgstr ""
+msgstr "Bruk _lyd for å melde fra om feil"
 
 #: ../data/gpm-prefs.glade.h:20
-#, fuzzy
 msgid "When UPS power is _critically low:"
-msgstr "UPS-kapasitet kritisk lav"
+msgstr "Når UPS-kapasiteten er kritisk lav:"
 
 #: ../data/gpm-prefs.glade.h:21
-#, fuzzy
 msgid "When UPS power is _low:"
-msgstr "Når UPS-kapasiteten er lav:"
+msgstr "Når UPS-kapasiteten er _lav:"
 
 #: ../data/gpm-prefs.glade.h:22
-#, fuzzy
 msgid "When battery _power is critically low:"
-msgstr "Når batterika_pasiteten når kritisk nivå:"
+msgstr "Når batterika_pasiteten er kritisk lav:"
 
 #: ../data/gpm-prefs.glade.h:23
-#, fuzzy
 msgid "When laptop _lid is closed:"
-msgstr "Når lokket på d_atamaskinen lukkes:"
+msgstr "Når _lokket på datamaskinen lukkes:"
 
 #: ../data/gpm-prefs.glade.h:24
-#, fuzzy
 msgid "When the _power button is pressed:"
-msgstr "Når strømk_nappen trykkes:"
+msgstr "Når strømkna_ppen trykkes:"
 
 #: ../data/gpm-prefs.glade.h:25
-#, fuzzy
 msgid "When the _suspend button is pressed:"
-msgstr "Når knapp for hvilemodus trykkes:"
+msgstr "Når knapp for hvilemodu_s trykkes:"
 
 #: ../data/gpm-prefs.glade.h:26
-#, fuzzy
 msgid "_Always display an icon"
-msgstr "_Alltid vis ikon"
+msgstr "_Alltid vis et ikon"
 
 #: ../data/gpm-prefs.glade.h:27
-#, fuzzy
 msgid "_Never display an icon"
-msgstr "_Aldri vis ikon"
+msgstr "_Aldri vis et ikon"
 
 #: ../data/gpm-prefs.glade.h:28
-#, fuzzy
 msgid "_Only display an icon when battery power is critically low"
-msgstr "K_un når levetiden for batteriet er kritisk"
+msgstr "Vis kun ik_on når levetiden for batteriet er kritisk lav"
 
 #: ../src/gpm-common.c:93
 msgid "Unknown time"
@@ -1156,25 +1134,24 @@ msgstr "inaktiv modus startet"
 
 #: ../src/gpm-info.c:462
 msgid "dpms on"
-msgstr ""
+msgstr "dpms på"
 
 #: ../src/gpm-info.c:464
 msgid "dpms standby"
-msgstr ""
+msgstr "dpms ventemodus"
 
 #: ../src/gpm-info.c:466
-#, fuzzy
 msgid "dpms suspend"
-msgstr "gå i hvilemodus"
+msgstr "dpms hvilemodus"
 
 #: ../src/gpm-info.c:468
 msgid "dpms off"
 msgstr "dpms av"
 
 #: ../src/gpm-inhibit.c:300
-#, fuzzy, c-format
+#, c-format
 msgid "has stopped the %s from taking place : "
-msgstr "<b>%s</b> har stoppet %s fra å hende : <i>%s</i>."
+msgstr "har stoppet %s fra å hende : "
 
 #: ../src/gpm-inhibit.c:306
 #, c-format
@@ -1302,7 +1279,7 @@ msgstr "DBUS-metoden Reboot() ble kalt"
 
 #: ../src/gpm-manager.c:988 ../src/gpm-manager.c:1000
 msgid "System idle"
-msgstr ""
+msgstr "Systemet ledig"
 
 #: ../src/gpm-manager.c:1086 ../src/gpm-warning.c:159
 msgid "Power Information"
@@ -1389,23 +1366,20 @@ msgstr ""
 "å unngå å tape data."
 
 #: ../src/gpm-manager.c:1524
-#, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
-msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
+msgstr "UPSen er under kritisk nivå og datamaskinen vil <b>slå seg av</b> når UPSen er tom."
 
 #: ../src/gpm-manager.c:1529
-#, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
-msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
+msgstr "UPSen er under kritisk nivå og datamaskinen er i ferd med å gå i dvalemodus."
 
 #: ../src/gpm-manager.c:1533
-#, fuzzy
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
-msgstr "Batterinivået er kritisk, og datamaskinen er i ferd med å skru seg av."
+msgstr "UPSen er under kritisk nivå og datamaskinen er i ferd med å slå seg av."
 
 #: ../src/gpm-manager.c:1540
 msgid "UPS is critically low"
@@ -1442,54 +1416,52 @@ msgid "user clicked suspend from tray menu"
 msgstr "bruker klikket hvilemodus i varslingsmenyen"
 
 #: ../src/gpm-manager.c:1811
-#, fuzzy
 msgid "Suspend failure"
-msgstr "Hvilemodus aktivert"
+msgstr "Hvilemodus feilet"
 
 #: ../src/gpm-manager.c:1812
 msgid "Your computer did not appear to resume correctly from suspend."
-msgstr ""
+msgstr "Datamaskinen hadde problemer med å returnere fra hvilemodus."
 
 #: ../src/gpm-manager.c:1815
-#, fuzzy
 msgid "Hibernate failure"
-msgstr "Dvalemodus aktivert"
+msgstr "Dvalemodus feilet"
 
 #: ../src/gpm-manager.c:1816
 msgid "Your computer did not appear to resume correctly from hibernate."
-msgstr ""
+msgstr "Datamaskinen hadde problemer med å returnere fra dvalemodus."
 
 #: ../src/gpm-manager.c:1821
 msgid "This may be a driver or hardware problem."
-msgstr ""
+msgstr "Dette kan være et problem med driver eller maskinvare."
 
 #: ../src/gpm-manager.c:1822
 msgid "Check the GNOME Power Manager manual for common problems."
-msgstr ""
+msgstr "Sjekk hjelp for GNOME strømstyring for vanlige problemer."
 
 #: ../src/gpm-notify.c:328
-#, fuzzy
 msgid "Battery may be recalled"
-msgstr "Ditt batteri kan ha blitt kalt tilbake"
+msgstr "Batteriet kan være tilbakekalt"
 
 #: ../src/gpm-notify.c:329
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
 "risk.\n"
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
-"Batteriet i din datamaskin kan ha blitt kalt tilbake av produsenten og du "
-"kan være utsatt for risiko.\n"
+"Batteriet i din datamaskin kan være kalt tilbake av %s og du kan være utsatt for risiko.\n"
+"\n"
+"For mer informasjon se nettsted %s for tilbakekalling av batterier."
 
 #: ../src/gpm-notify.c:342
 msgid "Visit recall website"
-msgstr ""
+msgstr "Gå til nettside for tilbakekalling"
 
 #: ../src/gpm-notify.c:347
 msgid "Do not show me this again"
-msgstr ""
+msgstr "Ikke vis dette igjen"
 
 #: ../src/gpm-power.c:495
 msgid "Laptop battery"
@@ -1617,9 +1589,8 @@ msgid "Last full charge:"
 msgstr "Sist gang fullt ladet:"
 
 #: ../src/gpm-power.c:838 ../src/gpm-power.c:860
-#, fuzzy
 msgid "Design charge:"
-msgstr "%s til batteriet er fulladet"
+msgstr "Ladekapasitet fra fabrikk:"
 
 #: ../src/gpm-power.c:843
 msgid "Charge rate (raw):"
@@ -1719,9 +1690,8 @@ msgid "Maximum power saving"
 msgstr "Maksimal strømsparing"
 
 #: ../src/gpm-prefs-core.c:92
-#, fuzzy
 msgid "Always maximum speed"
-msgstr "Maksimal hastighet"
+msgstr "Alltid maksimal hastighet"
 
 #: ../src/gpm-prefs-core.c:241
 msgid "Never"
@@ -1744,13 +1714,12 @@ msgid "Estimated Time History"
 msgstr "Estimert tidshistorikk"
 
 #: ../src/gpm-statistics-core.c:688
-#, fuzzy
 msgid "Could not connect to GNOME Power Manager."
-msgstr "GNOME strømstyring"
+msgstr "Kunne ikke koble til GNOME strømstyring."
 
 #: ../src/gpm-statistics-core.c:689
 msgid "Perhaps the program is not running or you are using an old version?"
-msgstr ""
+msgstr "Kanskje programmet ikke kjører eller du bruker en gammel versjon?"
 
 #: ../src/gpm-statistics-core.c:724
 msgid "On AC"
@@ -1762,11 +1731,11 @@ msgstr "På batteri"
 
 #: ../src/gpm-statistics-core.c:734
 msgid "Session idle"
-msgstr ""
+msgstr "Sesjonen ledig"
 
 #: ../src/gpm-statistics-core.c:739
 msgid "Session active"
-msgstr ""
+msgstr "Sesjonen aktiv"
 
 #: ../src/gpm-statistics-core.c:749
 msgid "Resume"
@@ -1786,20 +1755,19 @@ msgstr "Varsling"
 
 #: ../src/gpm-statistics-core.c:774
 msgid "DPMS On"
-msgstr ""
+msgstr "DPMS på"
 
 #: ../src/gpm-statistics-core.c:779
 msgid "DPMS Standby"
-msgstr ""
+msgstr "DPMS ventemodus"
 
 #: ../src/gpm-statistics-core.c:784
-#, fuzzy
 msgid "DPMS Suspend"
-msgstr "Hvilemodus"
+msgstr "DPMS hvilemodus"
 
 #: ../src/gpm-statistics-core.c:789
 msgid "DPMS Off"
-msgstr ""
+msgstr "DPMS av"
 
 #: ../src/gpm-srv-screensaver.c:111
 msgid "Display DPMS activated"
@@ -1862,7 +1830,3 @@ msgstr "Batterikapasitet meget lav"
 #: ../src/gpm-warning.c:157
 msgid "Power Low"
 msgstr "Batterikapasitet lav"
-
-#, fuzzy
-#~ msgid "When UPS _critical:"
-#~ msgstr "Når UPS-kapasiteten når kritisk nivå:"
