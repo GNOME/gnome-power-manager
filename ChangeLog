@@ -1,3 +1,16 @@
+2006-12-19  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Change default to be ondemand at 85 performance on AC and
+	ondemand at 25 performance on battery. Ubuntu set ondemand
+	by default, and have had no bad reports.
+	The rationale for this change is that we should still save
+	power on AC, there's no point having the processor run at
+	100 percent when the system is idle.
+
+	* src/gpm-cpufreq.c: (gpm_cpufreq_set_performance):
+	Allow setting the performance for the dynamic policies.
+
 2006-12-19  Francisco Javier F. Serrador  <serrador@openshine.com>
 
 	* applets/inhibit/inhibit-applet.c (GPM_INHIBIT_APPLET_NAME):

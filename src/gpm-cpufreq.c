@@ -131,7 +131,8 @@ gpm_cpufreq_set_performance (GpmCpuFreq *cpufreq, guint performance)
 	}
 
 	/* only applies to some governors */
-	if (cpufreq->priv->current_governor != GPM_CPUFREQ_USERSPACE) {
+	if (cpufreq->priv->current_governor == GPM_CPUFREQ_PERFORMANCE ||
+	    cpufreq->priv->current_governor == GPM_CPUFREQ_POWERSAVE) {
 		gpm_debug ("not valid for current governor!");
 		return FALSE;
 	}

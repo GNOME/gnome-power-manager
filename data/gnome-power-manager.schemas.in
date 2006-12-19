@@ -78,7 +78,7 @@
       <applyto>/apps/gnome-power-manager/cpufreq_ac_policy</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
-      <default>performance</default>
+      <default>ondemand</default>
       <locale name="C">
         <short>The cpufreq policy to use when on AC power</short>
         <long>The cpufreq policy to used to scale the processor when on AC power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
@@ -90,10 +90,10 @@
       <applyto>/apps/gnome-power-manager/cpufreq_ac_performance</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
-      <default>100</default>
+      <default>85</default>
       <locale name="C">
-        <short>The cpufreq custom performance value to use when on AC power</short>
-        <long>The cpufreq custom performance value to used to scale the processor when on AC power.</long>
+        <short>The cpufreq performance value to use when on AC power</short>
+        <long>The cpufreq performance value to used to scale the processor when on AC power.</long>
       </locale>
     </schema>
 
@@ -102,7 +102,7 @@
       <applyto>/apps/gnome-power-manager/cpufreq_battery_policy</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
-      <default>powersave</default>
+      <default>ondemand</default>
       <locale name="C">
         <short>The cpufreq policy to use when on battery power</short>
         <long>The cpufreq policy to used to scale the processor when on battery power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing.</long>
@@ -114,10 +114,10 @@
       <applyto>/apps/gnome-power-manager/cpufreq_battery_performance</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
-      <default>50</default>
+      <default>25</default>
       <locale name="C">
-        <short>The cpufreq custom performance value to use when on battery power</short>
-        <long>The cpufreq custom performance value to used to scale the processor when on battery power.</long>
+        <short>The cpufreq performance value to use when on battery power</short>
+        <long>The cpufreq performance value to used to scale the processor when on battery power.</long>
       </locale>
     </schema>
 
