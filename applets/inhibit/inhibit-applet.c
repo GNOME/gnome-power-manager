@@ -53,7 +53,7 @@ static void      destroy_cb                       (GtkObject *object);
 #define GPM_INHIBIT_APPLET_FACTORY_OAFID	"OAFIID:GNOME_InhibitApplet_Factory"
 #define GPM_INHIBIT_APPLET_ICON_INHIBIT		"gpm-inhibit"
 #define GPM_INHIBIT_APPLET_ICON_UNINHIBIT	"gpm-hibernate"
-#define GPM_INHIBIT_APPLET_NAME			_("Power Manger Inhibit Applet")
+#define GPM_INHIBIT_APPLET_NAME			_("Power Manager Inhibit Applet")
 #define GPM_INHIBIT_APPLET_DESC			_("Allows user to inhibit automatic power saving.")
 #define PANEL_APPLET_VERTICAL(p)					\
 	 (((p) == PANEL_APPLET_ORIENT_LEFT) || ((p) == PANEL_APPLET_ORIENT_RIGHT))
