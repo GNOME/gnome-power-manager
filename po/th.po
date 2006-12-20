@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-12-18 00:05+0000\n"
-"PO-Revision-Date: 2006-12-15 18:36+0700\n"
+"PO-Revision-Date: 2006-12-20 16:18+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -293,16 +293,15 @@ msgid ""
 "on AC power."
 msgstr ""
 "กำหนดว่า ขณะใช้ไฟ AC "
-"จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่คอมพิวเตอร์เริ่มเดินเครื่องเปล่าหรือไม่"
+"จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่ไม่มีการใช้งานคอมพิวเตอร์หรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
-#, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on battery power."
 msgstr ""
-"กำหนดว่า ขณะใช้ไฟ AC "
-"จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่คอมพิวเตอร์เริ่มเดินเครื่องเปล่าหรือไม่"
+"กำหนดว่า ขณะใช้ไฟแบตเตอรี่ "
+"จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่ไม่มีการใช้งานคอมพิวเตอร์หรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:33
 msgid "If the system low-power mode should be enabled when on AC power."
@@ -886,11 +885,11 @@ msgstr "ความสว่าง"
 
 #: ../data/gpm-graph.glade.h:1
 msgid "Add legend"
-msgstr "เพิ่มสัญลักษณ์"
+msgstr "แสดงสัญลักษณ์"
 
 #: ../data/gpm-graph.glade.h:2
 msgid "Add related events"
-msgstr "เพิ่มเหตุการณ์ที่เกี่ยวข้อง"
+msgstr "แสดงเหตุการณ์ที่เกี่ยวข้อง"
 
 #: ../data/gpm-graph.glade.h:3
 msgid "Device:"
@@ -933,14 +932,12 @@ msgid "UnInhibit"
 msgstr "เลิกระงับ"
 
 #: ../data/gpm-prefs.glade.h:1
-#, fuzzy
 msgid "<b>Buttons</b>"
-msgstr "<b>เสียง</b>"
+msgstr "<b>ปุ่ม</b>"
 
 #: ../data/gpm-prefs.glade.h:2
-#, fuzzy
 msgid "<b>Extras</b>"
-msgstr "<b>ทั่วไป</b>"
+msgstr "<b>เพิ่มเติม</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -979,12 +976,10 @@ msgid "On UPS Power"
 msgstr "เมื่อใช้ไฟจาก UPS"
 
 #: ../data/gpm-prefs.glade.h:12
-#, fuzzy
 msgid "Only display an icon when a _battery is present"
 msgstr "แสดงไอคอนเมื่อมีแ_บตเตอรี่เท่านั้น"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
 msgid "Only display an icon when charging or _discharging"
 msgstr "แสดงไอคอนเมื่อแบตเตอรี่_ประจุไฟหรือจ่ายไฟเท่านั้น"
 
@@ -1005,27 +1000,22 @@ msgid "Set display _brightness to:"
 msgstr "ตั้งความ_สว่างของจอภาพที่:"
 
 #: ../data/gpm-prefs.glade.h:18
-#, fuzzy
 msgid "Use _ambient light to adjust LCD brightness"
 msgstr "ใช้แสง_รอบข้างปรับความสว่าง"
 
 #: ../data/gpm-prefs.glade.h:19
-#, fuzzy
 msgid "Use _sound to notify in event of an error"
 msgstr "ใช้เ_สียงเตือนเมื่อมีเหตุขัดข้อง"
 
 #: ../data/gpm-prefs.glade.h:20
-#, fuzzy
 msgid "When UPS power is _critically low:"
-msgstr "UPS ต่ำถึงขั้นวิกฤติ"
+msgstr "เมื่อพลังงานของ UPS ต่ำถึงขีด_วิกฤติ:"
 
 #: ../data/gpm-prefs.glade.h:21
-#, fuzzy
 msgid "When UPS power is _low:"
 msgstr "เมื่อพลังงานของ UPS _ต่ำ:"
 
 #: ../data/gpm-prefs.glade.h:22
-#, fuzzy
 msgid "When battery _power is critically low:"
 msgstr "เมื่อแบตเตอรี่ถึงขีด_วิกฤติ:"
 
@@ -1034,27 +1024,22 @@ msgid "When laptop _lid is closed:"
 msgstr "เมื่อ_พับเก็บแล็ปท็อป:"
 
 #: ../data/gpm-prefs.glade.h:24
-#, fuzzy
 msgid "When the _power button is pressed:"
 msgstr "เมื่อปุ่มเ_ปิด/ปิดเครื่องถูกกด:"
 
 #: ../data/gpm-prefs.glade.h:25
-#, fuzzy
 msgid "When the _suspend button is pressed:"
 msgstr "เมื่อปุ่ม_พักเครื่องถูกกด:"
 
 #: ../data/gpm-prefs.glade.h:26
-#, fuzzy
 msgid "_Always display an icon"
 msgstr "แสดงไอคอนเ_สมอ"
 
 #: ../data/gpm-prefs.glade.h:27
-#, fuzzy
 msgid "_Never display an icon"
 msgstr "ไ_ม่ต้องแสดงไอคอน"
 
 #: ../data/gpm-prefs.glade.h:28
-#, fuzzy
 msgid "_Only display an icon when battery power is critically low"
 msgstr "แสดงไอคอนเมื่อแบตเตอรี่ถึงขีด_วิกฤติเท่านั้น"
 
