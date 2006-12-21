@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-18 00:05+0000\n"
-"PO-Revision-Date: 2006-12-20 16:18+0700\n"
+"POT-Creation-Date: 2006-12-21 09:51+0700\n"
+"PO-Revision-Date: 2006-12-21 09:56+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -84,7 +84,7 @@ msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
 #: ../applets/inhibit/inhibit-applet.c:56
-msgid "Power Manger Inhibit Applet"
+msgid "Power Manager Inhibit Applet"
 msgstr "แอพเพล็ตระงับการจัดการพลังงาน"
 
 #: ../applets/inhibit/inhibit-applet.c:57
@@ -292,8 +292,7 @@ msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
 "on AC power."
 msgstr ""
-"กำหนดว่า ขณะใช้ไฟ AC "
-"จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่ไม่มีการใช้งานคอมพิวเตอร์หรือไม่"
+"กำหนดว่า ขณะใช้ไฟ AC จะหรี่จอภาพเพื่อประหยัดพลังงานหลังจากที่ไม่มีการใช้งานคอมพิวเตอร์หรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
 msgid ""
@@ -619,24 +618,24 @@ msgid "The brightness of the screen when idle"
 msgstr "ความสว่างของจอภาพเมื่อเครื่องไม่มีการใช้งาน"
 
 #: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The cpufreq custom performance value to use when on AC power"
-msgstr "ค่าความถี่ซีพียูกำหนดเองที่จะใช้เมื่อใช้ไฟ AC"
+msgid "The cpufreq performance value to use when on AC power"
+msgstr "ค่าความถี่ซีพียูที่จะใช้เมื่อใช้ไฟ AC"
 
 #: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The cpufreq custom performance value to use when on battery power"
-msgstr "ค่าความถี่ซีพียูกำหนดเองที่จะใช้เมื่อใช้ไฟจากแบตเตอรี่"
+msgid "The cpufreq performance value to use when on battery power"
+msgstr "ค่าความถี่ซีพียูที่จะใช้เมื่อใช้ไฟจากแบตเตอรี่"
 
 #: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"AC power."
-msgstr "ค่าความถี่ซีพียูกำหนดเองที่จะใช้ปรับความถี่ซีพียูขณะใช้ไฟ AC"
+"The cpufreq performance value to used to scale the processor when on AC "
+"power."
+msgstr "ค่าความถี่ซีพียูที่จะใช้ปรับความถี่ซีพียูขณะใช้ไฟ AC"
 
 #: ../data/gnome-power-manager.schemas.in.h:93
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"battery power."
-msgstr "ค่าความถี่ซีพียูกำหนดเองที่จะใช้ปรับความถี่ซีพียูขณะใช้ไฟจากแบตเตอรี่"
+"The cpufreq performance value to used to scale the processor when on battery "
+"power."
+msgstr "ค่าความถี่ซีพียูที่จะใช้ปรับความถี่ซีพียูขณะใช้ไฟจากแบตเตอรี่"
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The cpufreq policy to use when on AC power"
@@ -944,11 +943,11 @@ msgid "<b>Notification Area</b>"
 msgstr "<b>พื้นที่แจ้งเหตุ</b>"
 
 #: ../data/gpm-prefs.glade.h:4
-msgid "Always sleep when the _lid is closed"
+msgid "Always sleep when the lid is _closed"
 msgstr "ให้เครื่องหลับเสมอเมื่อแล็ปท็อปถูก_พับเก็บ"
 
 #: ../data/gpm-prefs.glade.h:5
-msgid "Computer _speed policy:"
+msgid "Computer sp_eed policy:"
 msgstr "นโยบายความเ_ร็วคอมพิวเตอร์:"
 
 #: ../data/gpm-prefs.glade.h:6
@@ -976,7 +975,7 @@ msgid "On UPS Power"
 msgstr "เมื่อใช้ไฟจาก UPS"
 
 #: ../data/gpm-prefs.glade.h:12
-msgid "Only display an icon when a _battery is present"
+msgid "Only display an icon when a battery is p_resent"
 msgstr "แสดงไอคอนเมื่อมีแ_บตเตอรี่เท่านั้น"
 
 #: ../data/gpm-prefs.glade.h:13
@@ -988,12 +987,12 @@ msgid "Power Management Preferences"
 msgstr "ปรับแต่งการใช้พลังงาน"
 
 #: ../data/gpm-prefs.glade.h:15
-msgid "Put _computer to sleep when inactive for:"
-msgstr "ให้_คอมพิวเตอร์หลับเมื่อไม่มีการใช้เป็นเวลา:"
-
-#: ../data/gpm-prefs.glade.h:16
 msgid "Put _display to sleep when inactive for:"
 msgstr "ให้_จอภาพหลับเมื่อไม่มีการใช้คอมพิวเตอร์เป็นเวลา:"
+
+#: ../data/gpm-prefs.glade.h:16
+msgid "Put computer to _sleep when inactive for:"
+msgstr "ให้คอมพิวเตอร์ห_ลับเมื่อไม่มีการใช้เป็นเวลา:"
 
 #: ../data/gpm-prefs.glade.h:17
 msgid "Set display _brightness to:"
@@ -1012,24 +1011,24 @@ msgid "When UPS power is _critically low:"
 msgstr "เมื่อพลังงานของ UPS ต่ำถึงขีด_วิกฤติ:"
 
 #: ../data/gpm-prefs.glade.h:21
-msgid "When UPS power is _low:"
+msgid "When UPS power is l_ow:"
 msgstr "เมื่อพลังงานของ UPS _ต่ำ:"
 
 #: ../data/gpm-prefs.glade.h:22
-msgid "When battery _power is critically low:"
+msgid "When battery po_wer is critically low:"
 msgstr "เมื่อแบตเตอรี่ถึงขีด_วิกฤติ:"
 
 #: ../data/gpm-prefs.glade.h:23
-msgid "When laptop _lid is closed:"
+msgid "When laptop lid is cl_osed:"
 msgstr "เมื่อ_พับเก็บแล็ปท็อป:"
 
 #: ../data/gpm-prefs.glade.h:24
-msgid "When the _power button is pressed:"
-msgstr "เมื่อปุ่มเ_ปิด/ปิดเครื่องถูกกด:"
-
-#: ../data/gpm-prefs.glade.h:25
 msgid "When the _suspend button is pressed:"
 msgstr "เมื่อปุ่ม_พักเครื่องถูกกด:"
+
+#: ../data/gpm-prefs.glade.h:25
+msgid "When the power _button is pressed:"
+msgstr "เมื่อปุ่มเ_ปิด/ปิดเครื่องถูกกด:"
 
 #: ../data/gpm-prefs.glade.h:26
 msgid "_Always display an icon"
