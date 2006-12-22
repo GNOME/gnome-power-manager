@@ -758,6 +758,39 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 	}
 }
 
+gboolean
+gpm_ui_get_description (GpmTrayIcon  *icon,
+		        gchar       **description,
+		        GError      **error)
+{
+	gpm_debug ("org.gnome.PowerManager.UI.GetDescription");
+
+	/* return tooltip */
+	gpm_power_get_status_summary (icon->priv->power, description, NULL);
+	return TRUE;
+}
+
+gboolean
+gpm_ui_get_icon (GpmTrayIcon  *icon,
+		 gchar       **iconname,
+		 GError      **error)
+{
+	gchar *icon_policy_str;
+	gint   icon_policy;
+
+	/* do we want to display the icon */
+	gpm_conf_get_string (icon->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy_str);
+	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
+
+	g_free (icon_policy_str);
+
+	gpm_debug ("org.gnome.PowerManager.UI.GetIcon");
+
+	/* return icon name */
+	*iconname = get_stock_id (icon, icon_policy);
+	return TRUE;
+}
+
 /**
  * power_on_ac_changed_cb:
  * @power: The power class instance

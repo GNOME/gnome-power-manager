@@ -73,6 +73,7 @@
 #include "dbus/gpm-dbus-dpms.h"
 #include "dbus/gpm-dbus-statistics.h"
 #include "dbus/gpm-dbus-brightness-lcd.h"
+#include "dbus/gpm-dbus-ui.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -1975,6 +1976,12 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
+	if (manager->priv->tray_icon != NULL) {
+		dbus_g_object_type_install_info (GPM_TYPE_TRAY_ICON,
+						 &dbus_glib_gpm_ui_object_info);
+		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_UI,
+						     G_OBJECT (manager->priv->tray_icon));
+	}
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();

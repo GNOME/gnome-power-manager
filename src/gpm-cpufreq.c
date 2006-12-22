@@ -260,9 +260,9 @@ gpm_cpufreq_get_governors (GpmCpuFreq     *cpufreq,
 	}
 
 	/* when we have conservative and ondemand available, only expose
-	   conservative in the UI. They are too similar. */
+	   ondemand in the UI. They are too similar and ondemand is better. */
 	if (types & GPM_CPUFREQ_ONDEMAND && types & GPM_CPUFREQ_CONSERVATIVE) {
-		types -= GPM_CPUFREQ_ONDEMAND;
+		types -= GPM_CPUFREQ_CONSERVATIVE;
 	}
 
 	/* We never allow the user to use userspace. */

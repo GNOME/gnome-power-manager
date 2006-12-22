@@ -38,10 +38,12 @@ G_BEGIN_DECLS
 #define	GPM_DBUS_PATH_STATS		"/org/gnome/PowerManager/Statistics"
 #define	GPM_DBUS_PATH_BRIGHT_LCD	"/org/gnome/PowerManager/BrightnessLcd"
 #define	GPM_DBUS_PATH_DPMS		"/org/gnome/PowerManager/Dpms"
+#define	GPM_DBUS_PATH_UI		"/org/gnome/PowerManager/UI"
 #define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
 #define	GPM_DBUS_INTERFACE_BRIGHT_LCD	"org.gnome.PowerManager.BrightnessLcd"
 #define	GPM_DBUS_INTERFACE_DPMS		"org.gnome.PowerManager.Dpms"
+#define	GPM_DBUS_INTERFACE_UI		"org.gnome.PowerManager.UI"
 
 typedef struct GpmPowermanagerPrivate GpmPowermanagerPrivate;
 

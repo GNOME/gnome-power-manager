@@ -4,6 +4,7 @@ EXTRA_DIST =						\
 	gpm-dbus-dpms.xml				\
 	gpm-dbus-manager.xml				\
 	gpm-dbus-statistics.xml				\
+	gpm-dbus-ui.xml					\
 	gpm-dbus-brightness-lcd.xml			\
 	$(NULL)
 
@@ -11,8 +12,16 @@ BUILT_SOURCES = 					\
 	gpm-dbus-dpms.h					\
 	gpm-dbus-manager.h				\
 	gpm-dbus-statistics.h				\
+	gpm-dbus-ui.h					\
 	gpm-dbus-brightness-lcd.h			\
 	$(NULL)
+
+gpm-dbus-ui.h: gpm-dbus-ui.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_ui				\
+		--mode=glib-server			\
+		--output=gpm-dbus-ui.h			\
+		$(srcdir)/gpm-dbus-ui.xml
 
 gpm-dbus-dpms.h: gpm-dbus-dpms.xml
 	libtool --mode=execute dbus-binding-tool	\

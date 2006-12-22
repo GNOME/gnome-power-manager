@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/">
+  <interface name="org.gnome.PowerManager.UI">
+    <method name="GetDescription">
+      <arg type="s" name="description" direction="out"/>
+    </method>
+    <method name="GetIcon">
+      <arg type="s" name="icon" direction="out"/>
+    </method>
+    <signal name="DescriptionChanged"/>
+    <signal name="IconChanged"/>
+  </interface>
+</node>

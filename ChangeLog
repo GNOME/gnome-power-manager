@@ -1,3 +1,24 @@
+2006-12-22  Richard Hughes  <richard@hughsie.com>
+
+	* docs/dbus-interface.html:
+	* docs/faq.html:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* docs/sleep-names.html:
+	Update with new version number.
+
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-ui.xml:
+	* src/gpm-manager.c: (gpm_manager_init):
+	* src/gpm-powermanager.h:
+	* src/gpm-tray-icon.c: (gpm_ui_get_description), (gpm_ui_get_icon):
+	* src/gpm-tray-icon.h:
+	Add this new dbus interface so we can provide an alternate UI
+	environment, for instance for XFCE or OLPC.
+
+	* src/gpm-cpufreq.c: (gpm_cpufreq_get_governors):
+	Use ondemand, not conservative.
+
 2006-12-19  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:

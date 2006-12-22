@@ -58,6 +58,15 @@ void		 gpm_tray_icon_set_image_from_stock	(GpmTrayIcon	*icon,
 							 const gchar	*stock_id);
 void		 gpm_tray_icon_sync			(GpmTrayIcon	*icon);
 
+gboolean
+gpm_ui_get_description (GpmTrayIcon  *icon,
+		        gchar **mode_str,
+		        GError      **error);
+gboolean
+gpm_ui_get_icon (GpmTrayIcon  *icon,
+		 gchar **mode_str,
+		 GError      **error);
+
 G_END_DECLS
 
 #endif /* __GPM_TRAY_ICON_H */
