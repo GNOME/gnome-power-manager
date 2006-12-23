@@ -878,6 +878,8 @@ gpm_power_get_icon_from_status (GpmPowerStatus *device_status,
 	char	   *filename = NULL;
 	const char *prefix;
 
+	gpm_debug ("getting kind %i", kind);
+
 	/* TODO: icons need to be renamed from -battery- to -primary- */
 	prefix = gpm_power_kind_to_string (kind);
 

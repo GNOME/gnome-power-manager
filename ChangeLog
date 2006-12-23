@@ -1,3 +1,14 @@
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-info.glade:
+	Rename the duplicated keyboard more string.
+
+	* src/gpm-info.c: (gpm_info_specific_device_widgets),
+	* src/gpm-power.c: (gpm_power_get_icon_from_status):
+	Add some more NULL checking and debug output. Also try to
+	fix the problem where a misc class device can crash the
+	info screen.
+
 2006-11-24  Pascal Terjan  <pterjan@linuxfr.org>
 
 	* src/gpm-hal-monitor.c: don't crash if hal tell us that a 

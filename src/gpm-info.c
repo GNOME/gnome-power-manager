@@ -143,10 +143,15 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 	char		 widgetname[128];
 
 	prefix = gpm_power_kind_to_string (kind);
+	gpm_debug ("doing %i (%i)", kind, id);
 
 	/* set icon name */
 	g_sprintf (widgetname, "image_%s%i", prefix, id);
 	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	if (widget == NULL) {
+		gpm_warning ("glade_xml_get_widget(%s) returned NULL!", widgetname);
+		return;
+	}
 	device = gpm_power_get_battery_device_entry (info->priv->power, kind, id);
 	if (device == NULL) {
 		gpm_warning ("gpm_power_get_battery_device_entry returned NULL!");
@@ -160,6 +165,10 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 	/* set info */
 	g_sprintf (widgetname, "label_%s%i", prefix, id);
 	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	if (widget == NULL) {
+		gpm_warning ("glade_xml_get_widget(%s) returned NULL!", widgetname);
+		return;
+	}
 	desc = gpm_power_status_for_device (device);
 	gtk_label_set_markup (GTK_LABEL (widget), desc->str);
 	g_string_free (desc, TRUE);
@@ -168,11 +177,19 @@ gpm_info_specific_device_widgets (GpmInfo *info, GpmPowerKind kind, int id)
 	/* set more */
 	g_sprintf (widgetname, "expander_%s%i", prefix, id);
 	widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+	if (widget == NULL) {
+		gpm_warning ("glade_xml_get_widget(%s) returned NULL!", widgetname);
+		return;
+	}
 	if (device->battery_status.is_present) {
-		/* only show expander is battery is present */
+		/* only show expander if battery is present */
 		gtk_widget_show (GTK_WIDGET (widget));
 		g_sprintf (widgetname, "label_%s%i_more", prefix, id);
 		widget = glade_xml_get_widget (info->priv->glade_xml, widgetname);
+		if (widget == NULL) {
+			gpm_warning ("glade_xml_get_widget(%s) returned NULL!", widgetname);
+			return;
+		}
 		desc = gpm_power_status_for_device_more (device);
 		gtk_label_set_markup (GTK_LABEL (widget), desc->str);
 		g_string_free (desc, TRUE);
@@ -197,6 +214,8 @@ gpm_info_populate_device_information (GpmInfo *info)
 	
 	g_return_if_fail (info != NULL);
 	g_return_if_fail (GPM_IS_INFO (info));
+
+	gpm_debug ("filling in sections");
 
 	/* Laptop battery section */
 	number = gpm_power_get_num_devices_of_kind (info->priv->power,
