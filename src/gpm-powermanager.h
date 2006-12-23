@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 #define	GPM_DBUS_PATH_DPMS		"/org/gnome/PowerManager/Dpms"
 #define	GPM_DBUS_PATH_UI		"/org/gnome/PowerManager/UI"
 #define	GPM_DBUS_PATH_INHIBIT		"/org/gnome/PowerManager/Inhibit"
+#define	GPM_DBUS_PATH_CONTROL		"/org/gnome/PowerManager/Control"
 
 typedef struct GpmPowermanagerPrivate GpmPowermanagerPrivate;
 

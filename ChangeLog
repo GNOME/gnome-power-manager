@@ -1,5 +1,25 @@
 2006-12-23  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/gpm-control.c:
+	* src/gpm-control.h:
+	* src/gpm-policy.c:
+	* src/gpm-policy.h:
+	Rename GpmPolicy to GpmControl.
+
+	* src/Makefile.am:
+	* src/dbus/Makefile.am:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	* src/gpm-powermanager.h:
+	* src/gpm-tray-icon.c:
+	Use the new GpmControl interface, and start to add the
+	registrations interface.
+
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
 	* TODO:
 	* src/dbus/gpm-dbus-brightness-lcd.xml:
 	* src/dbus/gpm-dbus-dpms.xml:

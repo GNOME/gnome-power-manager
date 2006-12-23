@@ -1,6 +1,7 @@
 NULL =
 
 EXTRA_DIST =						\
+	gpm-dbus-control.xml				\
 	gpm-dbus-inhibit.xml				\
 	gpm-dbus-dpms.xml				\
 	gpm-dbus-manager.xml				\
@@ -10,6 +11,7 @@ EXTRA_DIST =						\
 	$(NULL)
 
 BUILT_SOURCES = 					\
+	gpm-dbus-control.h				\
 	gpm-dbus-inhibit.h				\
 	gpm-dbus-dpms.h					\
 	gpm-dbus-manager.h				\
@@ -17,6 +19,13 @@ BUILT_SOURCES = 					\
 	gpm-dbus-ui.h					\
 	gpm-dbus-brightness-lcd.h			\
 	$(NULL)
+
+gpm-dbus-control.h: gpm-dbus-control.xml
+	libtool --mode=execute dbus-binding-tool	\
+		--prefix=gpm_control			\
+		--mode=glib-server			\
+		--output=gpm-dbus-control.h		\
+		$(srcdir)/gpm-dbus-control.xml
 
 gpm-dbus-inhibit.h: gpm-dbus-inhibit.xml
 	libtool --mode=execute dbus-binding-tool	\

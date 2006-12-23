@@ -100,6 +100,10 @@ gboolean	 gpm_statistics_get_axis_type		(GpmInfo	*info,
 							 gchar		**axis_type_x,
 							 gchar		**axis_type_y,
 							 GError		**error);
+void		 gpm_info_explain_reason		(GpmInfo	*info,
+							 GpmGraphWidgetEvent event,
+							 const gchar	*pre,
+							 const gchar	*post);
 
 G_END_DECLS
 

@@ -91,6 +91,32 @@ gpm_info_error_quark (void)
 }
 
 /**
+ * gpm_info_explain_reason:
+ * @manager: This class instance
+ * @event: The event type, e.g. GPM_EVENT_DPMS_OFF
+ * @pre: The action we are about to do, e.g. "Suspending computer"
+ * @post: The reason we are performing the policy action, e.g. "battery critical"
+ *
+ * Helper function
+ **/
+void
+gpm_info_explain_reason (GpmInfo      *info,
+			 GpmGraphWidgetEvent event,
+			 const gchar  *pre,
+			 const gchar  *post)
+{
+	gchar *message;
+	if (post) {
+		message = g_strdup_printf (_("%s because %s"), pre, post);
+	} else {
+		message = g_strdup (pre);
+	}
+	gpm_syslog (message);
+	gpm_info_event_log (info, event, message);
+	g_free (message);
+}
+
+/**
  * device_list_to_strv:
  **/
 static gchar **

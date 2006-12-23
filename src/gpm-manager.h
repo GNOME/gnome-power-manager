@@ -49,8 +49,8 @@ typedef struct
 
 typedef struct
 {
-	 GObjectClass	parent_class;
-	 void		(* on_ac_changed)		(GpmManager	*manager,
+	GObjectClass	parent_class;
+	void		(* on_ac_changed)		(GpmManager	*manager,
 							 gboolean	 on_ac);
 } GpmManagerClass;
 
