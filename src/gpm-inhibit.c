@@ -22,7 +22,8 @@
 #include "config.h"
 
 #include <glib.h>
-
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 #include <glib/gi18n.h>
 #include <string.h>
 #include "gpm-inhibit.h"
@@ -119,7 +120,7 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
 }
 
 /**
- * gpm_inhibit_add:
+ * gpm_inhibit_request_cookie:
  * @connection: Connection name, e.g. ":0.13"
  * @application:	Application name, e.g. "Nautilus"
  * @reason: Reason for inhibiting, e.g. "Copying files"
@@ -131,13 +132,18 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  *
  * Return value: a new random cookie.
  **/
-guint32
-gpm_inhibit_add (GpmInhibit  *inhibit,
-		 const gchar *connection,
-		 const gchar *application,
-		 const gchar *reason)
+void
+gpm_inhibit_request_cookie (GpmInhibit	*inhibit,
+			    const gchar *application,
+			    const gchar *reason,
+			    DBusGMethodInvocation *context,
+			    GError	**error)
 {
-	GpmInhibitData *data = g_new (GpmInhibitData, 1);
+	const gchar *connection;
+	GpmInhibitData *data;
+
+	/* as we are async, we can get the sender */
+	connection = dbus_g_method_get_sender (context);
 
 	/* handle where the application does not add required data */
 	if (connection == NULL ||
@@ -145,10 +151,12 @@ gpm_inhibit_add (GpmInhibit  *inhibit,
 	    reason == NULL) {
 		gpm_warning ("Recieved Inhibit, but application "
 			     "did not set the parameters correctly");
-		return -1;
+		dbus_g_method_return (context, -1);
+		return;
 	}
 
 	/* seems okay, add to list */
+	data = g_new (GpmInhibitData, 1);
 	data->cookie = gpm_inhibit_generate_cookie (inhibit);
 	data->application = g_strdup (application);
 	data->connection = g_strdup (connection);
@@ -159,7 +167,8 @@ gpm_inhibit_add (GpmInhibit  *inhibit,
 
 	gpm_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
-	return data->cookie;
+
+	dbus_g_method_return (context, data->cookie);
 }
 
 /* free one element in GpmInhibitData struct */
@@ -173,32 +182,45 @@ gpm_inhibit_free_data_object (GpmInhibitData *data)
 }
 
 /**
- * gpm_inhibit_remove:
- * @connection: Connection name
+ * gpm_inhibit_clear_cookie:
  * @application:	Application name
  * @cookie: The cookie that we used to register
  *
  * Removes a cookie and associated data from the GpmInhibitData struct.
  **/
-void
-gpm_inhibit_remove (GpmInhibit  *inhibit,
-		    const gchar *connection,
-		    guint32	 cookie)
+gboolean
+gpm_inhibit_clear_cookie (GpmInhibit  *inhibit,
+		          guint32      cookie,
+		          GError     **error)
 {
 	GpmInhibitData *data;
 
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
-	if (data) {
-		gpm_debug ("UnInhibit okay on '%s' as #%i",
-			   connection, cookie);
-		gpm_inhibit_free_data_object (data);
-		inhibit->priv->list = g_slist_remove (inhibit->priv->list,
-						      (gconstpointer) data);
-	} else {
+	if (data == NULL) {
 		gpm_warning ("Cannot find registered program for #%i, so "
 			     "cannot do UnInhibit", cookie);
+		return FALSE;
 	}
+	gpm_debug ("UnInhibit okay #%i", cookie);
+	gpm_inhibit_free_data_object (data);
+	inhibit->priv->list = g_slist_remove (inhibit->priv->list,
+					      (gconstpointer) data);
+	return TRUE;
+}
+
+/**
+ * gpm_inhibit_get_requests:
+ *
+ * Gets a list of inhibits.
+ **/
+gboolean
+gpm_inhibit_get_requests (GpmInhibit *inhibit,
+			  gchar	   ***requests,
+			  GError    **error)
+{
+	gpm_warning ("Not implimented");
+	return FALSE;
 }
 
 /**

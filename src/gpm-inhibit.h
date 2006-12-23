@@ -23,7 +23,7 @@
 #define __GPMINHIBIT_H
 
 #include <glib-object.h>
-#include "gpm-power.h"
+#include <dbus/dbus-glib.h>
 
 G_BEGIN_DECLS
 
@@ -49,20 +49,24 @@ typedef struct
 
 GpmInhibit	*gpm_inhibit_new			(void);
 GType		 gpm_inhibit_get_type			(void);
-
-void		 gpm_inhibit_set_power			(GpmInhibit	*inhibit,
-							 GpmPower	*power);
-guint32		 gpm_inhibit_add			(GpmInhibit	*inhibit,
-							 const gchar	*connection,
-							 const gchar	*application,
-							 const gchar	*reason);
-void		 gpm_inhibit_remove			(GpmInhibit	*inhibit,
-							 const gchar	*connection,
-							 guint32	 cookie);
 gboolean	 gpm_inhibit_check			(GpmInhibit	*inhibit);
 void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
 							 GString	*message,
 							 const gchar	*action);
+
+void		 gpm_inhibit_request_cookie		(GpmInhibit	*inhibit,
+							 const gchar	*application,
+							 const gchar	*reason,
+							 DBusGMethodInvocation *context,
+							 GError		**error);
+gboolean	 gpm_inhibit_clear_cookie		(GpmInhibit	*inhibit,
+							 guint32	 cookie,
+							 GError		**error);
+gboolean	 gpm_inhibit_get_requests		(GpmInhibit	*inhibit,
+							 gchar		***requests,
+							 GError		**error);
+
+
 G_END_DECLS
 
 #endif	/* __GPMINHIBIT_H */

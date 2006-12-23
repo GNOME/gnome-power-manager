@@ -28,9 +28,9 @@
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 
-#define	GPM_DBUS_SERVICE	"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH		"/org/gnome/PowerManager"
-#define	GPM_DBUS_INTERFACE	"org.gnome.PowerManager"
+#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
+#define	GPM_DBUS_INHIBIT_PATH		"/org/gnome/PowerManager/Inhibit"
+#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager.Inhibit"
 
 /* imagine this in a GObject private struct... */
 guint appcookie = -1;
@@ -57,15 +57,15 @@ dbus_inhibit_gpm (const gchar *appname,
 	/* get the proxy with g-p-m */
 	proxy = dbus_g_proxy_new_for_name (session_connection,
 					   GPM_DBUS_SERVICE,
-					   GPM_DBUS_PATH,
-					   GPM_DBUS_INTERFACE);
+					   GPM_DBUS_INHIBIT_PATH,
+					   GPM_DBUS_INHIBIT_INTERFACE);
 	if (proxy == NULL) {
 		g_warning ("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
 		return -1;
 	}
 
 	res = dbus_g_proxy_call (proxy,
-				 "Inhibit", &error,
+				 "RequestCookie", &error,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
@@ -75,12 +75,12 @@ dbus_inhibit_gpm (const gchar *appname,
 	/* check the return value */
 	if (! res) {
 		cookie = -1;
-		g_warning ("Inhibit method failed");
+		g_warning ("RequestCookie method failed");
 	}
 
 	/* check the error value */
 	if (error != NULL) {
-		g_warning ("Inhibit problem : %s", error->message);
+		g_warning ("RequestCookie problem : %s", error->message);
 		g_error_free (error);
 		cookie = -1;
 	}
@@ -115,15 +115,15 @@ dbus_uninhibit_gpm (guint cookie)
 	/* get the proxy with g-p-m */
 	proxy = dbus_g_proxy_new_for_name (session_connection,
 					   GPM_DBUS_SERVICE,
-					   GPM_DBUS_PATH,
-					   GPM_DBUS_INTERFACE);
+					   GPM_DBUS_INHIBIT_PATH,
+					   GPM_DBUS_INHIBIT_INTERFACE);
 	if (proxy == NULL) {
 		g_warning ("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
 		return;
 	}
 
 	res = dbus_g_proxy_call (proxy,
-				 "UnInhibit",
+				 "ClearCookie",
 				 &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
@@ -131,7 +131,7 @@ dbus_uninhibit_gpm (guint cookie)
 
 	/* check the return value */
 	if (! res) {
-		g_warning ("UnInhibit method failed");
+		g_warning ("ClearCookie method failed");
 	}
 
 	/* check the error value */

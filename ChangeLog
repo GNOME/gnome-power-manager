@@ -1,5 +1,24 @@
 2006-12-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-inhibit.xml:
+	Add the new inhibit interface.
+
+	* src/gpm-inhibit-test.c:
+	* src/gpm-inhibit.c:
+	* src/gpm-inhibit.h:
+	Deal with the DBUS interface here, rather than using the
+	manager class to proxy requests.
+
+	* src/gpm-manager.c:
+	Proxy the old Inhibit and UnInihibit calls to the new
+	interface.
+
+	* src/gpm-powermanager.h:
+	Add the Inhibit DBUS path.
+
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-conf.h:
 	* src/gpm-manager.c: (battery_status_changed_primary):

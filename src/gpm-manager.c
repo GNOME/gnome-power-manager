@@ -74,6 +74,7 @@
 #include "dbus/gpm-dbus-statistics.h"
 #include "dbus/gpm-dbus-brightness-lcd.h"
 #include "dbus/gpm-dbus-ui.h"
+#include "dbus/gpm-dbus-inhibit.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -574,13 +575,8 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 
 /**
  * gpm_manager_inhibit:
- * @manager: This class instance
- * @application: The application that sent the request, e.g. "Nautilus"
- * @reason: The reason given to inhibit, e.g. "Copying files"
- * @context: The context we are talking to
  *
- * Processes an inhibit request from an application that want to stop the
- * idle action suspend from happening.
+ * Proxy this while we support the old API.
  **/
 void
 gpm_manager_inhibit (GpmManager	 *manager,
@@ -589,20 +585,13 @@ gpm_manager_inhibit (GpmManager	 *manager,
 		     DBusGMethodInvocation *context,
 		     GError     **error)
 {
-	guint32 cookie;
-	const gchar *connection = dbus_g_method_get_sender (context);
-	cookie = gpm_inhibit_add (manager->priv->inhibit, connection, application, reason);
-	dbus_g_method_return (context, cookie);
+	gpm_inhibit_request_cookie (manager->priv->inhibit, application, reason, context, error);
 }
 
 /**
  * gpm_manager_uninhibit:
- * @manager: This class instance
- * @cookie: The application cookie, e.g. 17534
- * @context: The context we are talking to
  *
- * Processes an allow request from an application that want to allow the
- * idle action suspend to happen.
+ * Proxy this while we support the old API.
  **/
 void
 gpm_manager_uninhibit (GpmManager	 *manager,
@@ -610,8 +599,7 @@ gpm_manager_uninhibit (GpmManager	 *manager,
 		       DBusGMethodInvocation *context,
 		       GError		**error)
 {
-	const gchar *connection = dbus_g_method_get_sender (context);
-	gpm_inhibit_remove (manager->priv->inhibit, connection, cookie);
+	gpm_inhibit_clear_cookie (manager->priv->inhibit, cookie, error);
 	dbus_g_method_return (context);
 }
 
@@ -1973,7 +1961,15 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->notify = gpm_notify_new ();
 
 	/* use a class to handle the complex stuff */
+	gpm_debug ("creating new inhibit instance");
 	manager->priv->inhibit = gpm_inhibit_new ();
+	if (manager->priv->inhibit != NULL) {
+		/* add the new brightness lcd DBUS interface */
+		dbus_g_object_type_install_info (GPM_TYPE_INHIBIT,
+						 &dbus_glib_gpm_inhibit_object_info);
+		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_INHIBIT,
+						     G_OBJECT (manager->priv->inhibit));
+	}
 
 	/* use the policy object */
 	manager->priv->policy = gpm_policy_new ();

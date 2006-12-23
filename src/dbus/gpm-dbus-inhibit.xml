@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/">
+  <interface name="org.gnome.PowerManager.Inhibit">
+     <method name="RequestCookie">
+      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
+      <arg type="s" name="application" direction="in"/>
+      <arg type="s" name="reason" direction="in"/>
+      <arg type="u" name="cookie" direction="out"/>
+    </method>
+    <method name="ClearCookie">
+      <arg type="u" name="cookie" direction="in"/>
+    </method>
+    <method name="GetRequests">
+      <arg type="ass" name="requests" direction="out"/>
+    </method>
+  </interface>
+</node>
