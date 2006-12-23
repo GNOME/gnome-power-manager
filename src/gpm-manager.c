@@ -1437,13 +1437,17 @@ battery_status_changed_primary (GpmManager     *manager,
 		}
 
 	} else {
-		remaining = gpm_get_timestring (battery_status->remaining_time);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining battery life (%d%%). "
-					     "Plug in your AC Adapter to avoid losing data."),
-					   remaining, battery_status->percentage_charge);
-		timeout = GPM_NOTIFY_TIMEOUT_LONG;
-		g_free (remaining);
+
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_LOW_POWER, &show_notify);
+		if (show_notify) {
+			remaining = gpm_get_timestring (battery_status->remaining_time);
+			message = g_strdup_printf (_("You have approximately <b>%s</b> "
+						     "of remaining battery life (%d%%). "
+						     "Plug in your AC Adapter to avoid losing data."),
+						   remaining, battery_status->percentage_charge);
+			timeout = GPM_NOTIFY_TIMEOUT_LONG;
+			g_free (remaining);
+		}
 		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
 	}
 

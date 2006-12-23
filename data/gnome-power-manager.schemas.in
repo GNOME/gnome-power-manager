@@ -385,6 +385,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/notify_low_power</key>
+      <applyto>/apps/gnome-power-manager/notify_low_power</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify on a low power</short>
+        <long>If a notification message should be displayed when the battery is getting low.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/display_icon_policy</key>
       <applyto>/apps/gnome-power-manager/display_icon_policy</applyto>
       <owner>gnome-power-manager</owner>

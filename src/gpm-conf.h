@@ -68,6 +68,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_NOTIFY_ACADAPTER	GPM_CONF_DIR "/notify_ac_adapter"
 #define GPM_CONF_NOTIFY_BATTCHARGED	GPM_CONF_DIR "/notify_fully_charged"
 #define GPM_CONF_NOTIFY_HAL_ERROR	GPM_CONF_DIR "/notify_hal_error"
+#define GPM_CONF_NOTIFY_LOW_POWER	GPM_CONF_DIR "/notify_low_power"
 
 #define GPM_CONF_CAN_SUSPEND		GPM_CONF_DIR "/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE		GPM_CONF_DIR "/can_hibernate"
