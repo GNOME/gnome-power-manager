@@ -40,7 +40,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
 #include <libgnomeui/gnome-client.h>
-#include <gnome-keyring-1/gnome-keyring.h>
+#include <gnome-keyring.h>
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-button.h"

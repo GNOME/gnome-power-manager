@@ -1,3 +1,14 @@
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c:
+	When running in a custom root Elijah gets:
+	'gnome-keyring-1/gnome-keyring.h: No such file or directory'
+	The fix is trivial, just remove the 'gnome-keyring-1/'
+	from the #include line.
+	I'm not sure why no body has mentioned this before, but
+	it seems to work either with or without on FC6.
+	Fixes #388815.
+
 2006-12-22  Richard Hughes  <richard@hughsie.com>
 
 	* docs/dbus-interface.html:
