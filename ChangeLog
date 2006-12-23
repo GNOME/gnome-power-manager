@@ -1,5 +1,19 @@
 2006-12-23  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/Makefile.am:
+	* applets/inhibit/Makefile.am:
+	Make the applets look in the right place for the help file.
+	Not that one exists: we need to write then or remove the
+	help option. Starts fixing #388904.
+
+	* applets/brightness/brightness-applet.c: (help_cb):
+	* applets/inhibit/inhibit-applet.c: (help_cb):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show_help_cb):
+	Correct the name of the XML yelp file. Not sure who changed
+	this, but it was wrong. Fixes #388905.
+
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-manager.c:
 	When running in a custom root Elijah gets:
 	'gnome-keyring-1/gnome-keyring.h: No such file or directory'

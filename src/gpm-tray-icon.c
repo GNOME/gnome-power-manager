@@ -268,7 +268,7 @@ gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
 {
 	GError *error = NULL;
 
-	gnome_help_display ("gnome-power-icon.xml", NULL, &error);
+	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
 	if (error != NULL) {
 		gpm_warning (error->message);
 		g_error_free (error);

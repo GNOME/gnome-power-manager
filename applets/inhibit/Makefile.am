@@ -1,9 +1,20 @@
-INCLUDES=-I. -I$(srcdir) 					\
-	$(GLIB_CFLAGS)	 					\
-	$(DBUS_CFLAGS)	 					\
-	$(GNOME_CFLAGS)  					\
-	-DDATADIR=\""$(prefix)/$(DATADIRNAME)"\"		\
-	-DGNOMELOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\"
+INCLUDES =						\
+	-I. -I$(srcdir) 				\
+	$(GLIB_CFLAGS)					\
+	$(HAL_CFLAGS)					\
+	$(DBUS_CFLAGS)					\
+	$(GNOME_CFLAGS)					\
+	$(LIBNOTIFY_CFLAGS)				\
+	$(GTKUNIQUE_CFLAGS)				\
+	-DBINDIR=\"$(bindir)\"			 	\
+	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
+	-DDATADIR=\"$(datadir)\"			\
+	-DPREFIX=\""$(prefix)"\" 			\
+	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
+	-DLIBDIR=\""$(libdir)"\" 			\
+	-DVERSION="\"$(VERSION)\"" 			\
+	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
+	$(NULL)
 
 bin_PROGRAMS=gnome-inhibit-applet
 
