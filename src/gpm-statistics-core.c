@@ -681,7 +681,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 			  GPM_PROXY_SESSION,
 			  GPM_DBUS_SERVICE,
 			  GPM_DBUS_PATH_STATS,
-			  GPM_DBUS_INTERFACE_STATS);
+			  GPM_DBUS_INTERFACE);
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
 	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {

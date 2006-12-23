@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <interface name="org.gnome.PowerManager.BrightnessLcd">
-    <method name="GetPolicyBrightness">
+  <interface name="org.gnome.PowerManager">
+    <method name="GetPolicy">
       <arg type="i" name="brightness" direction="out"/>
     </method>
-    <method name="SetPolicyBrightness">
+    <method name="SetPolicy">
       <arg type="i" name="brightness" direction="in"/>
     </method>
   </interface>

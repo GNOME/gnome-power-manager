@@ -1,5 +1,22 @@
 2006-12-23  Richard Hughes  <richard@hughsie.com>
 
+	* TODO:
+	* src/dbus/gpm-dbus-brightness-lcd.xml:
+	* src/dbus/gpm-dbus-dpms.xml:
+	* src/dbus/gpm-dbus-statistics.xml:
+	* src/dbus/gpm-dbus-ui.xml:
+	* src/gpm-inhibit-test.c:
+	* src/gpm-powermanager.c:
+	* src/gpm-powermanager.h:
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	* src/gpm-statistics-core.c:
+	Remove the custom suffix for each of the interfaces.
+	As we have a custom path for each one, we have no need for
+	indervidual interfaces.
+
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/dbus/Makefile.am:
 	* src/dbus/gpm-dbus-inhibit.xml:
 	Add the new inhibit interface.

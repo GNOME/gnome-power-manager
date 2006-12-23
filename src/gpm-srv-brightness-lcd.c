@@ -84,12 +84,12 @@ gpm_srv_brightness_lcd_error_quark (void)
 }
 
 /**
- * gpm_brightness_lcd_get_policy_brightness:
+ * gpm_brightness_lcd_get_policy:
  **/
 gboolean
-gpm_brightness_lcd_get_policy_brightness (GpmSrvBrightnessLcd	*srv_brightness,
-					  gint			*brightness,
-					  GError		**error)
+gpm_brightness_lcd_get_policy (GpmSrvBrightnessLcd	*srv_brightness,
+			       gint			*brightness,
+			       GError			**error)
 {
 	guint level;
 	gboolean ret;
@@ -110,11 +110,11 @@ gpm_brightness_lcd_get_policy_brightness (GpmSrvBrightnessLcd	*srv_brightness,
 }
 
 /**
- * gpm_brightness_lcd_get_policy_brightness:
+ * gpm_brightness_lcd_set_policy:
  **/
-gboolean gpm_brightness_lcd_set_policy_brightness (GpmSrvBrightnessLcd	*srv_brightness,
-						   gint			 brightness,
-						   GError		**error)
+gboolean gpm_brightness_lcd_set_policy (GpmSrvBrightnessLcd	*srv_brightness,
+				        gint			 brightness,
+				        GError			**error)
 {
 	gboolean ret;
 	g_return_val_if_fail (srv_brightness != NULL, FALSE);

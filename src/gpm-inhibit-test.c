@@ -30,7 +30,7 @@
 
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INHIBIT_PATH		"/org/gnome/PowerManager/Inhibit"
-#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager.Inhibit"
+#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager"
 
 /* imagine this in a GObject private struct... */
 guint appcookie = -1;

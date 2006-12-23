@@ -6,20 +6,3 @@ TODO:
  * Integrate g-p-m with more modules, e.g. nautilus.
  * Give the user the ability to force an Inhibit()'d action
  * use the updated hal can_suspend_to_disk keys
-
- * Make new dbus interface (backwards compat):
-- org.gnome.PowerManager.Inhibit.RequestCookie
-- org.gnome.PowerManager.Inhibit.ClearCookie
-- org.gnome.PowerManager.Inhibit.GetRequests
-- org.gnome.PowerManager.Dpms.SetMode
-- org.gnome.PowerManager.Dpms.GetMode
-- org.gnome.PowerManager.BrightnessLcd.SetPercentage
-- org.gnome.PowerManager.BrightnessLcd.GetPercentage
-- org.gnome.PowerManager.BrightnessLcd.GetLevels
-- org.gnome.PowerManager.Processor.SetGoverner
-- org.gnome.PowerManager.Processor.GetGoverner
-- org.gnome.PowerManager.Policy.CanSuspend
-- org.gnome.PowerManager.Policy.CanHibernate
-- org.gnome.PowerManager.Policy.CanShutdown
-- org.gnome.PowerManager.Policy.CanRestart
-- All have path of /org/gnome/PowerManager and org.gnome.PowerManager service.
