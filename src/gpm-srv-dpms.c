@@ -36,6 +36,7 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-conf.h"
+#include "gpm-control.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-srv-dpms.h"
@@ -52,6 +53,7 @@ struct GpmSrvDpmsPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
+	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmHal			*hal;
 	GpmIdle			*idle;
@@ -287,11 +289,26 @@ idle_changed_cb (GpmIdle     *idle,
  **/
 static void
 mode_changed_cb (GpmDpms    *dpms,
-		      GpmDpmsMode mode,
-		      GpmSrvDpms *srv_dpms)
+		 GpmDpmsMode mode,
+		 GpmSrvDpms *srv_dpms)
 {
 	gpm_debug ("emitting mode-changed : %s", gpm_dpms_mode_to_string (mode));
 	g_signal_emit (srv_dpms, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
+}
+
+/**
+ * control_resume_cb:
+ * @control: The control class instance
+ * @power: This power class instance
+ *
+ * We have to update the caches on resume
+ **/
+static void
+control_resume_cb (GpmControl *control,
+		   GpmControlAction action,
+		   GpmSrvDpms *srv_dpms)
+{
+	gpm_srv_dpms_sync_policy (srv_dpms);
 }
 
 static void
@@ -325,6 +342,11 @@ gpm_srv_dpms_init (GpmSrvDpms *srv_dpms)
 	/* we use hal to see if we are a laptop */
 	srv_dpms->priv->hal = gpm_hal_new ();
 
+	/* we refresh DPMS on resume */
+	srv_dpms->priv->control = gpm_control_new ();
+	g_signal_connect (srv_dpms->priv->control, "resume",
+			  G_CALLBACK (control_resume_cb), srv_dpms);
+
 	/* master class */
 	srv_dpms->priv->dpms = gpm_dpms_new ();
 	g_signal_connect (srv_dpms->priv->dpms, "mode-changed",
@@ -357,6 +379,9 @@ gpm_srv_dpms_finalize (GObject *object)
 
 	if (srv_dpms->priv->dpms != NULL) {
 		g_object_unref (srv_dpms->priv->dpms);
+	}
+	if (srv_dpms->priv->control != NULL) {
+		g_object_unref (srv_dpms->priv->control);
 	}
 	if (srv_dpms->priv->conf != NULL) {
 		g_object_unref (srv_dpms->priv->conf);

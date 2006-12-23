@@ -39,7 +39,6 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
-#include <gnome-keyring.h>
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-button.h"
@@ -52,7 +51,6 @@
 #include "gpm-idle.h"
 #include "gpm-info.h"
 #include "gpm-inhibit.h"
-#include "gpm-networkmanager.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
 #include "gpm-power.h"
@@ -117,9 +115,6 @@ struct GpmManagerPrivate
 	GpmWarningState		 last_pda;
 
 	gboolean		 done_notify_fully_charged;
-
-	time_t			 last_resume_event;
-	guint			 suppress_policy_timeout;
 };
 
 enum {
@@ -130,10 +125,6 @@ enum {
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
-
-/* prototypes */
-static gboolean gpm_manager_suspend (GpmManager *manager, GError **error);
-static gboolean gpm_manager_hibernate (GpmManager *manager, GError **error);
 
 /**
  * gpm_manager_error_quark:
@@ -147,45 +138,6 @@ gpm_manager_error_quark (void)
 		quark = g_quark_from_static_string ("gpm_manager_error");
 	}
 	return quark;
-}
-
-/**
- * gpm_manager_is_policy_timout_valid:
- * @manager: This class instance
- * @action: The action we want to do, e.g. "suspend"
- *
- * Checks if the difference in time between this request for an action, and
- * the last action completing is larger than the timeout set in gconf.
- *
- * Return value: TRUE if we can perform the action.
- **/
-static gboolean
-gpm_manager_is_policy_timout_valid (GpmManager  *manager,
-				    const gchar *action)
-{
-	gchar *message;
-	if ((time (NULL) - manager->priv->last_resume_event) <=
-	    manager->priv->suppress_policy_timeout) {
-		message = g_strdup_printf ("Skipping suppressed %s", action);
-		gpm_info_event_log (manager->priv->info,
-				    GPM_EVENT_NOTIFICATION, message);
-		g_free (message);
-		return FALSE;
-	}
-	return TRUE;
-}
-
-/**
- * gpm_manager_reset_event_time:
- * @manager: This class instance
- *
- * Resets the time so we do not do any more actions until the
- * timeout has passed.
- **/
-static void
-gpm_manager_reset_event_time (GpmManager *manager)
-{
-	manager->priv->last_resume_event = time (NULL);
 }
 
 /**
@@ -316,37 +268,6 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 }
 
 /**
- * gpm_manager_get_lock_policy:
- * @manager: This class instance
- * @policy: The policy gconf string.
- *
- * This function finds out if we should lock the screen when we do an
- * action. It is required as we can either use the gnome-screensaver policy
- * or the custom policy. See the yelp file for more information.
- *
- * Return value: TRUE if we should lock.
- **/
-static gboolean
-gpm_manager_get_lock_policy (GpmManager  *manager,
-			     const gchar *policy)
-{
-	gboolean do_lock;
-	gboolean use_ss_setting;
-	/* This allows us to over-ride the custom lock settings set in gconf
-	   with a system default set in gnome-screensaver.
-	   See bug #331164 for all the juicy details. :-) */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, &use_ss_setting);
-	if (use_ss_setting) {
-		do_lock = gpm_screensaver_lock_enabled (manager->priv->screensaver);
-		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
-	} else {
-		gpm_conf_get_bool (manager->priv->conf, policy, &do_lock);
-		gpm_debug ("Using custom locking settings (%i)", do_lock);
-	}
-	return do_lock;
-}
-
-/**
  * gpm_manager_blank_screen:
  * @manager: This class instance
  *
@@ -365,7 +286,7 @@ gpm_manager_blank_screen (GpmManager *manager,
 	gboolean ret = TRUE;
 	GError  *error = NULL;
 
-	do_lock = gpm_manager_get_lock_policy (manager,
+	do_lock = gpm_control_get_lock_policy (manager->priv->control,
 					       GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock == TRUE) {
 		if (!gpm_screensaver_lock (manager->priv->screensaver))
@@ -404,7 +325,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
 		ret = FALSE;
 	}
 
-	do_lock = gpm_manager_get_lock_policy (manager, GPM_CONF_LOCK_ON_BLANK_SCREEN);
+	do_lock = gpm_control_get_lock_policy (manager->priv->control, GPM_CONF_LOCK_ON_BLANK_SCREEN);
 	if (do_lock == TRUE) {
 		gpm_screensaver_poke (manager->priv->screensaver);
 	}
@@ -432,7 +353,7 @@ manager_policy_do (GpmManager  *manager,
 	if (action == NULL) {
 		return;
 	}
-	if (gpm_manager_is_policy_timout_valid (manager, "policy event") == FALSE) {
+	if (gpm_control_is_policy_timout_valid (manager->priv->control, "policy event") == FALSE) {
 		return;
 	}
 
@@ -443,12 +364,12 @@ manager_policy_do (GpmManager  *manager,
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer"), reason);
-		gpm_manager_suspend (manager, NULL);
+		gpm_control_suspend (manager->priv->control, NULL);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer"), reason);
-		gpm_manager_hibernate (manager, NULL);
+		gpm_control_hibernate (manager->priv->control, NULL);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
 		gpm_manager_blank_screen (manager, NULL);
@@ -560,208 +481,9 @@ gpm_manager_uninhibit (GpmManager	 *manager,
 }
 
 /**
- * gpm_manager_hibernate:
- * @manager: This class instance
- *
- * We want to hibernate the computer. This function deals with the "fluff" -
- * like disconnecting the networks and locking the screen, then does the
- * hibernate using HAL, then handles all the resume actions.
- *
- * Return value: If the hibernate was successful.
- **/
-static gboolean
-gpm_manager_hibernate (GpmManager *manager,
-		       GError    **error)
-{
-	gboolean allowed;
-	gboolean ret;
-	gboolean do_lock;
-        gboolean nm_sleep;
-	GnomeKeyringResult keyres;
-
-	gpm_control_allowed_hibernate (manager->priv->control, &allowed, error);
-
-	if (allowed == FALSE) {
-		gpm_syslog ("cannot hibernate as not allowed from policy");
-		g_set_error (error,
-			     GPM_MANAGER_ERROR,
-			     GPM_MANAGER_ERROR_GENERAL,
-			     "Cannot hibernate");
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
-		return FALSE;
-	}
-
-	/* we should lock keyrings when sleeping #375681 */
-	keyres = gnome_keyring_lock_all_sync ();
-	if (keyres != GNOME_KEYRING_RESULT_OK) {
-		gpm_debug ("could not lock keyring");
-	}
-
-	do_lock = gpm_manager_get_lock_policy (manager, GPM_CONF_LOCK_ON_HIBERNATE);
-	if (do_lock == TRUE) {
-		gpm_screensaver_lock (manager->priv->screensaver);
-	}
-
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
-		gpm_networkmanager_sleep ();
-	}
-
-	ret = gpm_hal_hibernate (manager->priv->hal);
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_RESUME,
-				_("Resuming computer"), NULL);
-
-	/* we need to refresh all the power caches */
-	gpm_power_update_all (manager->priv->power);
-
-	if (ret == FALSE) {
-		gchar *message;
-		gboolean show_notify;
-
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
-
-		/* We only show the HAL failed notification if set in gconf */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
-		if (show_notify) {
-			const gchar *title = _("Hibernate Problem");
-			message = g_strdup_printf (_("HAL failed to %s. "
-						     "Check the help file for common problems."),
-						     _("hibernate"));
-			gpm_syslog ("hibernate failed");
-			gpm_notify_display (manager->priv->notify,
-					      title,
-					      message,
-					      GPM_NOTIFY_TIMEOUT_LONG,
-					      GTK_STOCK_DIALOG_WARNING,
-					      GPM_NOTIFY_URGENCY_LOW);
-			gpm_info_event_log (manager->priv->info,
-					    GPM_EVENT_NOTIFICATION, title);
-			g_free (message);
-		}
-	}
-
-	if (do_lock == TRUE) {
-		gpm_screensaver_poke (manager->priv->screensaver);
-	}
-
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
-		gpm_networkmanager_wake ();
-	}
-
-	gpm_srv_dpms_sync_policy (manager->priv->srv_dpms);
-
-	/* save the time that we resumed */
-	gpm_manager_reset_event_time (manager);
-
-	return ret;
-}
-
-/**
- * gpm_manager_suspend:
- * @manager: This class instance
- *
- * We want to suspend the computer. This function deals with the "fluff" -
- * like disconnecting the networks and locking the screen, then does the
- * suspend using HAL, then handles all the resume actions.
- *
- * Return value: If the suspend was successful.
- **/
-static gboolean
-gpm_manager_suspend (GpmManager *manager,
-		     GError    **error)
-{
-	gboolean allowed;
-	gboolean ret;
-	gboolean do_lock;
-	gboolean nm_sleep;
-	GnomeKeyringResult keyres;
-
-	gpm_control_allowed_suspend (manager->priv->control, &allowed, error);
-
-	if (allowed == FALSE) {
-		gpm_syslog ("cannot suspend as not allowed from policy");
-		g_set_error (error,
-			     GPM_MANAGER_ERROR,
-			     GPM_MANAGER_ERROR_GENERAL,
-			     "Cannot suspend");
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
-		return FALSE;
-	}
-
-	/* we should lock keyrings when sleeping #375681 */
-	keyres = gnome_keyring_lock_all_sync ();
-	if (keyres != GNOME_KEYRING_RESULT_OK) {
-		gpm_debug ("could not lock keyring");
-	}
-
-	do_lock = gpm_manager_get_lock_policy (manager, GPM_CONF_LOCK_ON_SUSPEND);
-	if (do_lock == TRUE) {
-		gpm_screensaver_lock (manager->priv->screensaver);
-	}
-
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
-		gpm_networkmanager_sleep ();
-	}
-
-	/* Do the suspend */
-	ret = gpm_hal_suspend (manager->priv->hal, 0);
-	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_RESUME,
-				_("Resuming computer"), NULL);
-
-	/* We need to refresh all the power caches */
-	gpm_power_update_all (manager->priv->power);
-
-	if (ret == FALSE) {
-		gboolean show_notify;
-
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
-
-		/* We only show the HAL failed notification if set in gconf */
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
-		if (show_notify) {
-			const gchar *title;
-			gchar *message;
-			message = g_strdup_printf (_("Your computer failed to %s.\n"
-						     "Check the help file for common problems."),
-						     _("suspend"));
-			title = _("Suspend Problem");
-			gpm_syslog ("suspend failed");
-			gpm_notify_display (manager->priv->notify,
-					      title,
-					      message,
-					      GPM_NOTIFY_TIMEOUT_LONG,
-					      GTK_STOCK_DIALOG_WARNING,
-					      GPM_NOTIFY_URGENCY_LOW);
-			gpm_info_event_log (manager->priv->info,
-					    GPM_EVENT_NOTIFICATION,
-					    title);
-			g_free (message);
-			gpm_sound_event (manager->priv->sound, GPM_SOUND_SUSPEND_FAILURE);
-		}
-	}
-
-	if (do_lock == TRUE) {
-		gpm_screensaver_poke (manager->priv->screensaver);
-	}
-
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
-	if (nm_sleep == TRUE) {
-		gpm_networkmanager_wake ();
-	}
-
-	gpm_srv_dpms_sync_policy (manager->priv->srv_dpms);
-
-	/* save the time that we resumed */
-	gpm_manager_reset_event_time (manager);
-
-	return ret;
-}
-
-/**
  * gpm_manager_suspend_dbus_method:
- * @manager: This class instance
+ *
+ * Proxy this while we support the old API.
  **/
 gboolean
 gpm_manager_suspend_dbus_method (GpmManager *manager,
@@ -771,11 +493,13 @@ gpm_manager_suspend_dbus_method (GpmManager *manager,
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 				_("Suspending computer"),
 				_("the DBUS method Suspend() was invoked"));
-	return gpm_manager_suspend (manager, error);
+	return gpm_control_suspend (manager->priv->control, error);
 }
 
 /**
  * gpm_manager_hibernate_dbus_method:
+ *
+ * Proxy this while we support the old API.
  **/
 gboolean
 gpm_manager_hibernate_dbus_method (GpmManager *manager,
@@ -785,7 +509,7 @@ gpm_manager_hibernate_dbus_method (GpmManager *manager,
 	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 				_("Hibernating computer"),
 				_("the DBUS method Hibernate() was invoked"));
-	return gpm_manager_hibernate (manager, error);
+	return gpm_control_hibernate (manager->priv->control, error);
 }
 
 /**
@@ -854,10 +578,10 @@ idle_do_sleep (GpmManager *manager)
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
 					_("Suspending computer"), _("System idle"));
-		ret = gpm_manager_suspend (manager, NULL);
+		ret = gpm_control_suspend (manager->priv->control, NULL);
 		if (ret == FALSE) {
 			gpm_warning ("cannot suspend, so trying hibernate");
-			ret = gpm_manager_hibernate (manager, NULL);
+			ret = gpm_control_hibernate (manager->priv->control, NULL);
 			if (ret == FALSE) {
 				gpm_warning ("cannot suspend or hibernate!");
 			}
@@ -866,10 +590,10 @@ idle_do_sleep (GpmManager *manager)
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
 		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
 					_("Hibernating computer"), _("System idle"));
-		ret = gpm_manager_hibernate (manager, NULL);
+		ret = gpm_control_hibernate (manager->priv->control, NULL);
 		if (ret == FALSE) {
 			gpm_warning ("cannot hibernate, so trying suspend");
-			ret = gpm_manager_suspend (manager, NULL);
+			ret = gpm_control_suspend (manager->priv->control, NULL);
 			if (ret == FALSE) {
 				gpm_warning ("cannot suspend or hibernate!");
 			}
@@ -927,7 +651,7 @@ idle_changed_cb (GpmIdle    *idle,
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (! gpm_manager_is_policy_timout_valid (manager, "timeout action")) {
+		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "timeout action")) {
 			return;
 		}
 		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
@@ -968,7 +692,7 @@ battery_button_pressed (GpmManager *manager)
 static void
 power_button_pressed (GpmManager *manager)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "power button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "power button press")) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, "power button press")) {
@@ -987,7 +711,7 @@ power_button_pressed (GpmManager *manager)
 static void
 suspend_button_pressed (GpmManager *manager)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "suspend button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend button press")) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, "suspend button press")) {
@@ -1006,7 +730,7 @@ suspend_button_pressed (GpmManager *manager)
 static void
 hibernate_button_pressed (GpmManager *manager)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate button press")) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, "hibernate button press")) {
@@ -1138,7 +862,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 
 	/* Don't do any events for a few seconds after we remove the
 	 * ac_adapter. See #348201 for details */
-	gpm_manager_reset_event_time (manager);
+	gpm_control_reset_event_time (manager->priv->control);
 }
 
 /**
@@ -1262,7 +986,7 @@ battery_status_changed_primary (GpmManager     *manager,
 		gchar *action;
 		timeout = GPM_NOTIFY_TIMEOUT_LONG;
 
-		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
+		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "critical action")) {
 			return;
 		}
 
@@ -1384,7 +1108,7 @@ battery_status_changed_ups (GpmManager	   *manager,
 	if (warning_type == GPM_WARNING_ACTION) {
 		char *action;
 
-		if (! gpm_manager_is_policy_timout_valid (manager, "critical action")) {
+		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "critical action")) {
 			return;
 		}
 
@@ -1602,10 +1326,6 @@ conf_key_changed_cb (GpmConf     *conf,
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
-
-	} else if (strcmp (key, GPM_CONF_POLICY_TIMEOUT) == 0) {
-		 gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
-		 		    &manager->priv->suppress_policy_timeout);
 	}
 }
 
@@ -1621,7 +1341,7 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				 GpmTrayIcon  *tray)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "hibernate signal")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate signal")) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, "hibernate")) {
@@ -1632,7 +1352,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 				GPM_EVENT_HIBERNATE,
 				_("Hibernating computer"),
 				_("user clicked hibernate from tray menu"));
-	gpm_manager_hibernate (manager, NULL);
+	gpm_control_hibernate (manager->priv->control, NULL);
 }
 
 /**
@@ -1647,7 +1367,7 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	if (! gpm_manager_is_policy_timout_valid (manager, "suspend signal")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend signal")) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, "suspend")) {
@@ -1657,7 +1377,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 				GPM_EVENT_SUSPEND,
 				_("Suspending computer"),
 				_("user clicked suspend from tray menu"));
-	gpm_manager_suspend (manager, NULL);
+	gpm_control_suspend (manager->priv->control, NULL);
 }
 
 /**
@@ -1849,7 +1569,8 @@ gpm_manager_init (GpmManager *manager)
 						     G_OBJECT (manager->priv->inhibit));
 	}
 
-	/* use the policy object */
+	/* use the control object */
+	gpm_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
 	if (manager->priv->control != NULL) {
 		/* add the new brightness lcd DBUS interface */
@@ -1889,14 +1610,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_manager_sync_policy_sleep (manager);
 	gpm_tray_icon_sync (manager->priv->tray_icon);
-
-	gpm_conf_get_uint (manager->priv->conf, GPM_CONF_POLICY_TIMEOUT,
-			   &manager->priv->suppress_policy_timeout);
-	gpm_debug ("Using a supressed policy timeout of %i seconds",
-		   manager->priv->suppress_policy_timeout);
-
-	/* Pretend we just resumed when we start to let actions settle */
-	gpm_manager_reset_event_time (manager);
 
 	/* on startup, check if there are suspend errors left */
 	gpm_manager_check_sleep_errors (manager);

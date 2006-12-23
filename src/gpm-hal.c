@@ -1318,6 +1318,8 @@ gpm_hal_suspend (GpmHal *hal, guint wakeup)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
+	gpm_debug ("Try to suspend...");
+
 	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
@@ -1404,6 +1406,7 @@ gboolean
 gpm_hal_hibernate (GpmHal *hal)
 {
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	gpm_debug ("Try to hibernate...");
 	return hal_pm_method_void (hal, "Hibernate");
 }
 
@@ -1418,6 +1421,7 @@ gboolean
 gpm_hal_shutdown (GpmHal *hal)
 {
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	gpm_debug ("Try to shutdown...");
 	return hal_pm_method_void (hal, "Shutdown");
 }
 
@@ -1433,6 +1437,7 @@ gboolean
 gpm_hal_reboot (GpmHal *hal)
 {
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
+	gpm_debug ("Try to reboot...");
 	return hal_pm_method_void (hal, "Reboot");
 }
 

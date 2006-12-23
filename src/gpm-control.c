@@ -39,14 +39,17 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
+#include <gnome-keyring.h>
 
 #include "gpm-conf.h"
+#include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
 #include "gpm-control.h"
 #include "gpm-polkit.h"
 #include "gpm-dbus-monitor.h"
+#include "gpm-networkmanager.h"
 
 #define GPM_CONTROL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CONTROL, GpmControlPrivate))
 
@@ -64,11 +67,14 @@ struct GpmControlPrivate
 	GpmPolkit		*polkit;
 	GSList			*list;
 	GpmDbusMonitor		*dbus_monitor;
+	time_t			 last_resume_event;
+	guint			 suppress_policy_timeout;
 };
 
 enum {
 	RESUME,
 	SLEEP,
+	SLEEP_FAILURE,
 	LAST_SIGNAL
 };
 
@@ -88,6 +94,44 @@ gpm_control_error_quark (void)
 		quark = g_quark_from_static_string ("gpm_control_error");
 	}
 	return quark;
+}
+
+/**
+ * gpm_control_is_policy_timout_valid:
+ * @manager: This class instance
+ * @action: The action we want to do, e.g. "suspend"
+ *
+ * Checks if the difference in time between this request for an action, and
+ * the last action completing is larger than the timeout set in gconf.
+ *
+ * Return value: TRUE if we can perform the action.
+ **/
+gboolean
+gpm_control_is_policy_timout_valid (GpmControl  *control,
+				    const gchar *action)
+{
+	gchar *message;
+	if ((time (NULL) - control->priv->last_resume_event) <=
+	    control->priv->suppress_policy_timeout) {
+		message = g_strdup_printf ("Skipping suppressed %s", action);
+		gpm_debug (message);
+		g_free (message);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_control_reset_event_time:
+ * @manager: This class instance
+ *
+ * Resets the time so we do not do any more actions until the
+ * timeout has passed.
+ **/
+void
+gpm_control_reset_event_time (GpmControl *control)
+{
+	control->priv->last_resume_event = time (NULL);
 }
 
 /**
@@ -491,20 +535,171 @@ gpm_control_reboot (GpmControl *control,
 	return ret;
 }
 
-//	g_signal_emit (manager, signals [SLEEP], 0);
+/**
+ * gpm_control_get_lock_policy:
+ * @control: This class instance
+ * @policy: The policy gconf string.
+ *
+ * This function finds out if we should lock the screen when we do an
+ * action. It is required as we can either use the gnome-screensaver policy
+ * or the custom policy. See the yelp file for more information.
+ *
+ * Return value: TRUE if we should lock.
+ **/
+gboolean
+gpm_control_get_lock_policy (GpmControl  *control,
+			     const gchar *policy)
+{
+	gboolean do_lock;
+	gboolean use_ss_setting;
+	/* This allows us to over-ride the custom lock settings set in gconf
+	   with a system default set in gnome-screensaver.
+	   See bug #331164 for all the juicy details. :-) */
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_USE_SCREENSAVER, &use_ss_setting);
+	if (use_ss_setting) {
+		gpm_conf_get_bool (control->priv->conf, GS_PREF_LOCK_ENABLED, &do_lock);
+		gpm_debug ("Using ScreenSaver settings (%i)", do_lock);
+	} else {
+		gpm_conf_get_bool (control->priv->conf, policy, &do_lock);
+		gpm_debug ("Using custom locking settings (%i)", do_lock);
+	}
+	return do_lock;
+}
 
 gboolean
 gpm_control_suspend (GpmControl *control,
 		     GError    **error)
 {
-	return FALSE;
+	gboolean allowed;
+	gboolean ret;
+	gboolean do_lock;
+	gboolean nm_sleep;
+	GnomeKeyringResult keyres;
+	GpmScreensaver *screensaver;
+	
+	screensaver = gpm_screensaver_new ();
+
+	gpm_control_allowed_suspend (control, &allowed, error);
+	if (allowed == FALSE) {
+		gpm_syslog ("cannot suspend as not allowed from policy");
+		g_set_error (error,
+			     GPM_CONTROL_ERROR,
+			     GPM_CONTROL_ERROR_GENERAL,
+			     "Cannot suspend");
+		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
+		return FALSE;
+	}
+
+	/* we should lock keyrings when sleeping #375681 */
+	keyres = gnome_keyring_lock_all_sync ();
+	if (keyres != GNOME_KEYRING_RESULT_OK) {
+		gpm_debug ("could not lock keyring");
+	}
+
+	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
+	if (do_lock == TRUE) {
+		gpm_screensaver_lock (screensaver);
+	}
+
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
+	if (nm_sleep == TRUE) {
+		gpm_networkmanager_sleep ();
+	}
+
+	/* Do the suspend */
+	gpm_debug ("emitting sleep");
+	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
+	ret = gpm_hal_suspend (control->priv->hal, 0);
+	gpm_debug ("emitting resume");
+	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
+
+	if (ret == FALSE) {
+		gpm_debug ("emitting sleep-failure");
+		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
+	}
+
+	if (do_lock == TRUE) {
+		gpm_screensaver_poke (screensaver);
+	}
+
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
+	if (nm_sleep == TRUE) {
+		gpm_networkmanager_wake ();
+	}
+
+	/* save the time that we resumed */
+	gpm_control_reset_event_time (control);
+	g_object_unref (screensaver);
+
+	return ret;
 }
 
 gboolean
 gpm_control_hibernate (GpmControl *control,
 		       GError    **error)
 {
-	return FALSE;
+	gboolean allowed;
+	gboolean ret;
+	gboolean do_lock;
+        gboolean nm_sleep;
+	GnomeKeyringResult keyres;
+	GpmScreensaver *screensaver;
+	
+	screensaver = gpm_screensaver_new ();
+
+	gpm_control_allowed_hibernate (control, &allowed, error);
+
+	if (allowed == FALSE) {
+		gpm_syslog ("cannot hibernate as not allowed from policy");
+		g_set_error (error,
+			     GPM_CONTROL_ERROR,
+			     GPM_CONTROL_ERROR_GENERAL,
+			     "Cannot hibernate");
+		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
+		return FALSE;
+	}
+
+	/* we should lock keyrings when sleeping #375681 */
+	keyres = gnome_keyring_lock_all_sync ();
+	if (keyres != GNOME_KEYRING_RESULT_OK) {
+		gpm_debug ("could not lock keyring");
+	}
+
+	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
+	if (do_lock == TRUE) {
+		gpm_screensaver_lock (screensaver);
+	}
+
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
+	if (nm_sleep == TRUE) {
+		gpm_networkmanager_sleep ();
+	}
+
+	gpm_debug ("emitting sleep");
+	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
+	ret = gpm_hal_hibernate (control->priv->hal);
+	gpm_debug ("emitting resume");
+	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
+
+	if (ret == FALSE) {
+		gpm_debug ("emitting sleep-failure");
+		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_HIBERNATE);
+	}
+
+	if (do_lock == TRUE) {
+		gpm_screensaver_poke (screensaver);
+	}
+
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_NETWORKMANAGER_SLEEP, &nm_sleep);
+	if (nm_sleep == TRUE) {
+		gpm_networkmanager_wake ();
+	}
+
+	/* save the time that we resumed */
+	gpm_control_reset_event_time (control);
+	g_object_unref (screensaver);
+
+	return ret;
 }
 
 /**
@@ -577,8 +772,8 @@ gpm_control_class_init (GpmControlClass *klass)
 			      G_STRUCT_OFFSET (GpmControlClass, resume),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 	signals [SLEEP] =
 		g_signal_new ("sleep",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -586,8 +781,17 @@ gpm_control_class_init (GpmControlClass *klass)
 			      G_STRUCT_OFFSET (GpmControlClass, sleep),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
+	signals [SLEEP_FAILURE] =
+		g_signal_new ("sleep-failure",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmControlClass, sleep_failure),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 
 	g_type_class_add_private (klass, sizeof (GpmControlPrivate));
 }
@@ -613,6 +817,13 @@ gpm_control_init (GpmControl *control)
 			  G_CALLBACK (dbus_noc_session_cb), control);
 
 	control->priv->conf = gpm_conf_new ();
+	gpm_conf_get_uint (control->priv->conf, GPM_CONF_POLICY_TIMEOUT,
+			   &control->priv->suppress_policy_timeout);
+	gpm_debug ("Using a supressed policy timeout of %i seconds",
+		   control->priv->suppress_policy_timeout);
+
+	/* Pretend we just resumed when we start to let actions settle */
+	gpm_control_reset_event_time (control);
 }
 
 /**

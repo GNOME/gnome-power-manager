@@ -40,6 +40,7 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
+#include "gpm-control.h"
 #include "gpm-debug.h"
 #include "gpm-conf.h"
 #include "gpm-sound.h"
@@ -51,6 +52,7 @@ struct GpmSoundPrivate
 	gboolean		 enable_beeping;
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
+	GpmControl		*control;
 };
 
 G_DEFINE_TYPE (GpmSound, gpm_sound, G_TYPE_OBJECT)
@@ -137,6 +139,19 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 }
 
 /**
+ * control_sleep_failure_cb:
+ *
+ * Sleep failed for some reason, alert the user.
+ **/
+static void
+control_sleep_failure_cb (GpmControl      *control,
+		          GpmControlAction action,
+		          GpmSound        *sound)
+{
+	gpm_sound_event (sound, GPM_SOUND_SUSPEND_FAILURE);
+}
+
+/**
  * gpm_sound_constructor:
  **/
 static GObject *
@@ -165,6 +180,7 @@ gpm_sound_finalize (GObject *object)
 
 	g_object_unref (sound->priv->conf);
 	g_object_unref (sound->priv->ac_adapter);
+	g_object_unref (sound->priv->control);
 
 	g_return_if_fail (sound->priv != NULL);
 	G_OBJECT_CLASS (gpm_sound_parent_class)->finalize (object);
@@ -199,6 +215,10 @@ gpm_sound_init (GpmSound *sound)
 	sound->priv->conf = gpm_conf_new ();
 	g_signal_connect (sound->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), sound);
+
+	sound->priv->control = gpm_control_new ();
+	g_signal_connect (sound->priv->control, "sleep-failure",
+			  G_CALLBACK (control_sleep_failure_cb), sound);
 
 	/* we use ac_adapter so we can make the right sound */
 	sound->priv->ac_adapter = gpm_ac_adapter_new ();

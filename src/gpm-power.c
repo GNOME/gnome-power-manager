@@ -34,6 +34,7 @@
 #include "gpm-hal.h"
 #include "gpm-battery.h"
 
+#include "gpm-control.h"
 #include "gpm-power.h"
 #include "gpm-marshal.h"
 #include "gpm-refcount.h"
@@ -57,6 +58,7 @@ struct GpmPowerPrivate
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
 	GpmBattery		*battery;
+	GpmControl		*control;
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
 	GpmHal			*hal;
@@ -1815,6 +1817,21 @@ hal_daemon_stop_cb (GpmHal   *hal,
 }
 
 /**
+ * control_resume_cb:
+ * @control: The control class instance
+ * @power: This power class instance
+ *
+ * We have to update the caches on resume
+ **/
+static void
+control_resume_cb (GpmControl *control,
+		   GpmControlAction action,
+		   GpmPower   *power)
+{
+	gpm_power_update_all (power);
+}
+
+/**
  * gpm_power_init:
  * @power: This power class instance
  **/
@@ -1853,6 +1870,10 @@ gpm_power_init (GpmPower *power)
 	g_signal_connect (power->priv->refcount, "refcount-added",
 			  G_CALLBACK (gpm_power_refcount_added), power);
 
+	power->priv->control = gpm_control_new ();
+	g_signal_connect (power->priv->control, "resume",
+			  G_CALLBACK (control_resume_cb), power);
+
 	/* we get this from gconf as some machines take longer to settle down */
 	gpm_conf_get_uint (power->priv->conf, GPM_CONF_INVALID_TIMEOUT, &invalid_timeout);
 	gpm_refcount_set_timeout (power->priv->refcount, invalid_timeout);
@@ -1890,6 +1911,9 @@ gpm_power_finalize (GObject *object)
 
 	g_object_unref (power->priv->conf);
 
+	if (power->priv->control != NULL) {
+		g_object_unref (power->priv->control);
+	}
 	if (power->priv->hal != NULL) {
 		g_object_unref (power->priv->hal);
 	}

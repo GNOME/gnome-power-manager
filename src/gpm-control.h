@@ -43,17 +43,29 @@ typedef struct
 	GpmControlPrivate *priv;
 } GpmControl;
 
-typedef struct
+typedef enum
 {
-	GObjectClass	parent_class;
-	void		(* resume)			(GpmControl	*control);
-	void		(* sleep)			(GpmControl	*control);
-} GpmControlClass;
+	 GPM_CONTROL_ACTION_SUSPEND,
+	 GPM_CONTROL_ACTION_HIBERNATE,
+	 GPM_CONTROL_ACTION_LAST
+} GpmControlAction;
 
 typedef enum
 {
-	 GPM_CONTROL_ERROR_GENERAL
+	 GPM_CONTROL_ERROR_GENERAL,
+	 GPM_CONTROL_ERROR_LAST
 } GpmControlError;
+
+typedef struct
+{
+	GObjectClass	parent_class;
+	void		(* resume)			(GpmControl	*control,
+							 GpmControlAction action);
+	void		(* sleep)			(GpmControl	*control,
+							 GpmControlAction action);
+	void		(* sleep_failure)		(GpmControl	*control,
+							 GpmControlAction action);
+} GpmControlClass;
 
 #define GPM_CONTROL_ERROR gpm_control_error_quark ()
 
@@ -92,6 +104,11 @@ gboolean	 gpm_control_policy			(GpmControl	*control,
 							 guint32	 cookie,
 							 gboolean	 allowed,
 							 GError		**error);
+gboolean	 gpm_control_get_lock_policy		(GpmControl	*control,
+							 const gchar	*policy);
+gboolean	 gpm_control_is_policy_timout_valid	(GpmControl	*control,
+							 const gchar	*action);
+void		 gpm_control_reset_event_time		(GpmControl	*control);
 
 G_END_DECLS
 

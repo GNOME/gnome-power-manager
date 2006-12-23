@@ -33,6 +33,14 @@ G_BEGIN_DECLS
 #define GPM_IS_SCREENSAVER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_SCREENSAVER))
 #define GPM_SCREENSAVER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverClass))
 
+#define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
+#define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
+#define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
+
+#define GS_PREF_DIR		"/apps/gnome-screensaver"
+#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
+#define GS_PREF_IDLE_DELAY	GS_PREF_DIR "/idle_delay"
+
 typedef struct GpmScreensaverPrivate GpmScreensaverPrivate;
 
 typedef struct

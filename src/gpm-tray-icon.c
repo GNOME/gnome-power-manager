@@ -45,6 +45,7 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-conf.h"
+#include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
@@ -869,6 +870,47 @@ hal_daemon_monitor_cb (GpmHal      *hal,
 }
 
 /**
+ * control_sleep_failure_cb:
+ * @control: The control class instance
+ * @icon: This icon class instance
+ *
+ * We have to notify the user is suspend failed
+ **/
+static void
+control_sleep_failure_cb (GpmControl  *control,
+			  GpmControlAction action,
+		          GpmTrayIcon *icon)
+{
+	gchar *message;
+	gboolean show_notify;
+	gchar *title;
+
+	/* We only show the HAL failed notification if set in gconf */
+	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_NOTIFY_HAL_ERROR, &show_notify);
+	if (show_notify) {
+		if (action == GPM_CONTROL_ACTION_HIBERNATE) {
+			title = _("Hibernate Problem");
+			message = g_strdup_printf (_("HAL failed to %s. "
+						     "Check the help file for common problems."),
+						     _("hibernate"));
+			gpm_syslog ("hibernate failed");
+		} else {
+			message = g_strdup_printf (_("Your computer failed to %s.\n"
+						     "Check the help file for common problems."),
+						     _("suspend"));
+			title = _("Suspend Problem");
+			gpm_syslog ("suspend failed");
+		}
+		gpm_notify_display (icon->priv->notify,
+				    title, message,
+				    GPM_NOTIFY_TIMEOUT_LONG,
+				    GTK_STOCK_DIALOG_WARNING,
+				    GPM_NOTIFY_URGENCY_LOW);
+		g_free (message);
+	}
+}
+
+/**
  * gpm_tray_icon_init:
  * @icon: This TrayIcon class instance
  *
@@ -892,6 +934,8 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* use the policy object */
 	icon->priv->control = gpm_control_new ();
+	g_signal_connect (icon->priv->control, "sleep-failure",
+			  G_CALLBACK (control_sleep_failure_cb), icon);
 
 	icon->priv->battery = gpm_battery_new ();
 	/* we need these to refresh the tooltip and icon */

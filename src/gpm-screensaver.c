@@ -37,14 +37,6 @@ static void     gpm_screensaver_finalize   (GObject		*object);
 
 #define GPM_SCREENSAVER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SCREENSAVER, GpmScreensaverPrivate))
 
-#define GS_LISTENER_SERVICE	"org.gnome.ScreenSaver"
-#define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
-#define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
-
-#define GS_PREF_DIR		"/apps/gnome-screensaver"
-#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
-#define GS_PREF_IDLE_DELAY	GS_PREF_DIR "/idle_delay"
-
 struct GpmScreensaverPrivate
 {
 	GpmProxy		*gproxy;
@@ -573,7 +565,13 @@ gpm_screensaver_finalize (GObject *object)
 GpmScreensaver *
 gpm_screensaver_new (void)
 {
-	GpmScreensaver *screensaver;
+	static GpmScreensaver *screensaver = NULL;
+
+	if (screensaver != NULL) {
+		g_object_ref (screensaver);
+		return screensaver;
+	}
+
 	screensaver = g_object_new (GPM_TYPE_SCREENSAVER, NULL);
-	return GPM_SCREENSAVER (screensaver);
+	return screensaver;
 }

@@ -32,6 +32,7 @@
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
+#include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
@@ -59,6 +60,7 @@ struct GpmInfoPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmButton		*button;
+	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmHal			*hal;
 	GpmIdle			*idle;
@@ -496,6 +498,41 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 /**
+ * control_resume_cb:
+ * @control: The control class instance
+ * @info: This class instance
+ *
+ * We have to update the caches on resume
+ **/
+static void
+control_resume_cb (GpmControl *control,
+		   GpmControlAction action,
+		   GpmInfo    *info)
+{
+	gpm_info_explain_reason (info, GPM_EVENT_RESUME,
+				_("Resuming computer"), NULL);
+}
+
+/**
+ * control_sleep_failure_cb:
+ * @control: The control class instance
+ * @info: This class instance
+ *
+ * We have to log if suspend failed
+ **/
+static void
+control_sleep_failure_cb (GpmControl  *control,
+			  GpmControlAction action,
+		          GpmInfo *info)
+{
+	if (action == GPM_CONTROL_ACTION_HIBERNATE) {
+		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Hibernate Problem"));
+	} else {
+		gpm_info_event_log (info, GPM_EVENT_NOTIFICATION, _("Suspend Problem"));
+	}
+}
+
+/**
  * gpm_info_class_init:
  * @klass: This info class instance
  **/
@@ -520,6 +557,12 @@ gpm_info_init (GpmInfo *info)
 	info->priv->start_time = time (NULL);
 
 	info->priv->hal = gpm_hal_new ();
+
+	info->priv->control = gpm_control_new ();
+	g_signal_connect (info->priv->control, "resume",
+			  G_CALLBACK (control_resume_cb), info);
+	g_signal_connect (info->priv->control, "sleep-failure",
+			  G_CALLBACK (control_sleep_failure_cb), info);
 
 	/* set up the timer callback so we can log data */
 	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
@@ -613,6 +656,9 @@ gpm_info_finalize (GObject *object)
 	}
 	if (info->priv->dpms != NULL) {
 		g_object_unref (info->priv->dpms);
+	}
+	if (info->priv->control != NULL) {
+		g_object_unref (info->priv->control);
 	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
