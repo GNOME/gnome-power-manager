@@ -1,5 +1,17 @@
 2006-12-23  Richard Hughes  <richard@hughsie.com>
 
+	* help/C/figures/applet-brightness.png:
+	* help/C/figures/applet-inhibit.png:
+	* help/C/gnome-power-manager.xml:
+	Add a section in the help file for the applets.
+
+	* applets/brightness/brightness-applet.c: (help_cb):
+	* applets/inhibit/inhibit-applet.c: (help_cb):
+	Point to the applets section in the help file.
+	Should fix #388904.
+
+2006-12-23  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/Makefile.am:
 	* applets/inhibit/Makefile.am:
 	Make the applets look in the right place for the help file.

@@ -627,6 +627,67 @@
   </section>
 </section>
 
+<section id="applets-general">
+  <title>GNOME Power Applets</title>
+
+  <section id="applets-brightness">
+    <title>Brightness Applet</title>
+    <para>
+      The brightness applet allows the user to change the brightness
+      temporarily without changing the default policy.
+      This may be useful if you've got a laptop without brightness
+      buttons, as you can now change the brightness easily.
+    </para>
+    <figure>
+      <title>
+      Brightness applet dropdown.
+      </title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/applet-brightness.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <note>
+      <para>
+        You will not get the slider if your hardware is not supported.
+      </para>
+    </note>
+  </section>
+
+  <section id="applets-inhibit">
+    <title>Inhibit Applet</title>
+    <para>
+      The inihibit applet allows the user to prevent the computer
+      auto-sleeping when inactive. This may be required with old or
+      proprietary programs such as VMWare or Matlab.
+      Just click the icon for the auto-suspend to be inhibited,
+      and click it again for normal operation.
+    </para>
+    <figure>
+      <title>
+      Inhibit applet in inhibited state.
+      </title>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="figures/applet-inhibit.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </figure>
+    <note>
+      <para>
+        Don't use this applet if you just use GNOME software, instead
+        file a bug to make the application use the Inhibit() and
+        UnInhibit() methods as this should 'just work'.
+      </para>
+    </note>
+  </section>
+</section>
+
 <section id="faq">
   <title>Frequently Asked Questions</title>
   <para>

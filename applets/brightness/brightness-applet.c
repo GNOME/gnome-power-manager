@@ -535,7 +535,11 @@ help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GError *error = NULL;
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(data);
-	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
+	GnomeProgram *program = gnome_program_get ();
+
+	gnome_help_display_with_doc_id (program, "gnome-power-manager",
+					"gnome-power-manager.xml",
+					"applets-brightness", &error);
 	if (error != NULL) {
 		GtkWidget *dialog =
 			gtk_message_dialog_new (GTK_WINDOW (GTK_WIDGET(applet)->parent),
