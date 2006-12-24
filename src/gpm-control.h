@@ -65,6 +65,8 @@ typedef struct
 							 GpmControlAction action);
 	void		(* sleep_failure)		(GpmControl	*control,
 							 GpmControlAction action);
+	void		(* request)			(GpmControl	*control,
+							 const gchar	**type);
 } GpmControlClass;
 
 #define GPM_CONTROL_ERROR gpm_control_error_quark ()

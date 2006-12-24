@@ -72,6 +72,7 @@ struct GpmControlPrivate
 };
 
 enum {
+	REQUEST,
 	RESUME,
 	SLEEP,
 	SLEEP_FAILURE,
@@ -792,6 +793,15 @@ gpm_control_class_init (GpmControlClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__INT,
 			      G_TYPE_NONE, 1, G_TYPE_INT);
+	signals [REQUEST] =
+		g_signal_new ("request",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmControlClass, request),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE, 1, G_TYPE_STRING);
 
 	g_type_class_add_private (klass, sizeof (GpmControlPrivate));
 }
