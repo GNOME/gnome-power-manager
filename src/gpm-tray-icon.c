@@ -84,6 +84,8 @@ struct GpmTrayIconPrivate
 enum {
 	SUSPEND,
 	HIBERNATE,
+	DESCRIPTION_CHANGED,
+	ICON_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -149,6 +151,9 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 				    const gchar *stock_id)
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+
+	gpm_debug ("emitting icon-changed");
+	g_signal_emit (icon, signals [ICON_CHANGED], 0);
 
 	if (stock_id) {
 		/* we only set a new icon if the name differs */
@@ -409,6 +414,26 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE,
 			      0);
+	signals [DESCRIPTION_CHANGED] =
+		g_signal_new ("description-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmTrayIconClass, description_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1, G_TYPE_STRING);
+	signals [ICON_CHANGED] =
+		g_signal_new ("icon-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmTrayIconClass, icon_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__STRING,
+			      G_TYPE_NONE,
+			      1, G_TYPE_STRING);
 }
 
 /**
@@ -745,6 +770,9 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 		/* make sure that we are visible */
 		gpm_tray_icon_show (icon, TRUE);
 		g_free (stock_id);
+
+		gpm_debug ("emitting description-changed");
+		g_signal_emit (icon, signals [DESCRIPTION_CHANGED], 0);
 
 		gpm_power_get_status_summary (icon->priv->power, &tooltip, NULL);
 

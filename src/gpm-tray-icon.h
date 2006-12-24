@@ -45,8 +45,12 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void	(* suspend)			(GpmTrayIcon *tray_icon);
-	void	(* hibernate)			(GpmTrayIcon *tray_icon);
+	void	(* suspend)				(GpmTrayIcon	*tray_icon);
+	void	(* hibernate)				(GpmTrayIcon	*tray_icon);
+	void	(* description_changed)			(GpmTrayIcon	*tray_icon,
+							 const gchar	**description);
+	void	(* icon_changed)			(GpmTrayIcon	*tray_icon,
+							 const gchar	**icon);
 } GpmTrayIconClass;
 
 GType		 gpm_tray_icon_get_type			(void);

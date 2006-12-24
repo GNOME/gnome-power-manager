@@ -1,5 +1,12 @@
 2006-12-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c:
+	* src/gpm-tray-icon.h:
+	Add the icon changed and description changed signals to the
+	UI class. This prevents a warning on startup.
+
+2006-12-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/dbus/gpm-dbus-control.xml:
 	Add the file I missed off the last commit. Fixes #389121.
 	Sometimes, I wish I tested things harder. Apologies.
