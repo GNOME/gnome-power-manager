@@ -447,13 +447,8 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
-	if (enabled) {
-		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), TRUE);
-		icon->priv->is_visible = TRUE;
-	} else {
-		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), FALSE);
-		icon->priv->is_visible = FALSE;
-	}
+	gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), enabled);
+	icon->priv->is_visible = enabled != FALSE;
 }
 
 /**
@@ -463,6 +458,8 @@ gpm_tray_icon_show (GpmTrayIcon *icon,
  **/
 static void
 gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
+			     guint          button,
+			     guint32        timestamp,
 			     GpmTrayIcon   *icon)
 {
 	GtkMenu *menu = (GtkMenu*) gtk_menu_new ();
@@ -511,7 +508,10 @@ gpm_tray_icon_popup_menu_cb (GtkStatusIcon *status_icon,
 	gtk_widget_show_all (GTK_WIDGET (menu));
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
 			gtk_status_icon_position_menu, status_icon,
-			1, gtk_get_current_event_time());
+			button, timestamp);
+	if (button == 0) {
+		gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+	}
 
 	g_signal_connect (GTK_WIDGET (menu), "hide",
 			  G_CALLBACK (gpm_tray_icon_popup_cleared_cd), icon);
