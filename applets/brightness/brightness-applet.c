@@ -325,7 +325,7 @@ create_popup (GpmBrightnessApplet *applet)
 	g_signal_connect (G_OBJECT(applet->slider), "value-changed", G_CALLBACK(slide_cb), applet);
 
 	/* minus button */
-	applet->btn_minus = gtk_button_new_with_label ("\u2212");
+	applet->btn_minus = gtk_button_new_with_label ("\342\210\222"); /* U+2212 MINUS SIGN */
 	gtk_button_set_relief (GTK_BUTTON(applet->btn_minus), GTK_RELIEF_NONE);
 	g_signal_connect (G_OBJECT(applet->btn_minus), "pressed", G_CALLBACK(minus_cb), applet);
 
