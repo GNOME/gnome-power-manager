@@ -455,15 +455,15 @@ gpm_power_kind_to_string (GpmPowerKind battery_kind)
 	if (battery_kind == GPM_POWER_KIND_PRIMARY) {
  		str = "primary";
 	} else if (battery_kind == GPM_POWER_KIND_UPS) {
- 		str = _("ups");
+ 		str = "ups";
 	} else if (battery_kind == GPM_POWER_KIND_MOUSE) {
- 		str = _("mouse");
+ 		str = "mouse";
 	} else if (battery_kind == GPM_POWER_KIND_KEYBOARD) {
- 		str = _("keyboard");
+ 		str = "keyboard";
 	} else if (battery_kind == GPM_POWER_KIND_PDA) {
- 		str = _("pda");
+ 		str = "pda";
  	} else {
- 		str = _("unknown");
+ 		str = "unknown";
 	}
 	return str;
 }
