@@ -16,7 +16,7 @@ PKG_NAME=gnome-power-manager
 }
 
 which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME CVS"
+    echo "You need to install gnome-common!"
     exit 1
 }
 
