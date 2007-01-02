@@ -34,6 +34,7 @@ bin_PROGRAMS =						\
 
 noinst_PROGRAMS =					\
 	gnome-power-inhibit-test			\
+	gnome-power-self-test				\
 	$(NULL)
 
 gnome_power_statistics_SOURCES =			\
@@ -73,6 +74,26 @@ gnome_power_inhibit_test_SOURCES =			\
 	$(NULL)
 
 gnome_power_inhibit_test_LDADD =			\
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(DBUS_LIBS)					\
+	$(NULL)
+
+gnome_power_self_test_SOURCES =				\
+	gpm-self-test.c					\
+	gpm-dbus-monitor.h				\
+	gpm-dbus-monitor.c				\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
+	gpm-proxy.h					\
+	gpm-proxy.c					\
+	gpm-powermanager.h				\
+	gpm-powermanager.c				\
+	gpm-debug.h					\
+	gpm-debug.c					\
+	$(NULL)
+
+gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\

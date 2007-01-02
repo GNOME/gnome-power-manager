@@ -140,7 +140,7 @@ gpm_powermanager_inhibit (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "Inhibit", &error,
+	ret = dbus_g_proxy_call (proxy, "RequestCookie", &error,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
@@ -153,7 +153,7 @@ gpm_powermanager_inhibit (GpmPowermanager *powermanager,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("Inhibit failed!");
+		gpm_warning ("RequestCookie failed!");
 	}
 
 	return ret;
@@ -175,7 +175,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
+	ret = dbus_g_proxy_call (proxy, "ClearCookie", &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -185,7 +185,39 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("Inhibit failed!");
+		gpm_warning ("ClearCookie failed!");
+	}
+
+	return ret;
+}
+
+gboolean
+gpm_powermanager_is_valid (GpmPowermanager *powermanager,
+			   gboolean        *valid)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
+
+	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "IsValid", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, valid,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("IsValid failed!");
 	}
 
 	return ret;
@@ -224,7 +256,7 @@ gpm_powermanager_init (GpmPowermanager *powermanager)
 	proxy = gpm_proxy_assign (powermanager->priv->gproxy_inhibit,
 				  GPM_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
-				  GPM_DBUS_PATH,
+				  GPM_DBUS_PATH_INHIBIT,
 				  GPM_DBUS_INTERFACE);
 }
 

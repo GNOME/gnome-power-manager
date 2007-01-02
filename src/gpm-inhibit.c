@@ -275,26 +275,42 @@ dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
 }
 
 /**
- * gpm_inhibit_check:
+ * gpm_inhibit_is_valid
  *
  * Checks to see if we are being stopped from performing an action.
  *
+ * TRUE if the action is OK, i.e. we have *not* been inhibited.
+ **/
+gboolean
+gpm_inhibit_is_valid (GpmInhibit *inhibit,
+		      gboolean   *valid,
+		      GError    **error)
+{
+
+	if (inhibit->priv->ignore_inhibits == TRUE) {
+		gpm_debug ("Inhibit ignored through gconf policy!");
+		*valid = TRUE;
+	} else if (g_slist_length (inhibit->priv->list) == 0) {
+		gpm_debug ("Valid as no inhibitors");
+		*valid = TRUE;
+	} else {
+		/* we have at least one application blocking the action */
+		*valid = FALSE;
+	}
+	/* we always return successful for DBUS */
+	return TRUE;
+}
+
+/**
+ * gpm_inhibit_check:
  * Return value: TRUE if the action is OK, i.e. we have *not* been inhibited
  **/
 gboolean
 gpm_inhibit_check (GpmInhibit *inhibit)
 {
-	if (inhibit->priv->ignore_inhibits) {
-		gpm_debug ("Inhibit ignored through gconf policy!");
-		return TRUE;
-	}
-
-	if (g_slist_length (inhibit->priv->list) == 0) {
-		return TRUE;
-	}
-
-	/* we have at least one application blocking the action */
-	return FALSE;
+	gboolean valid;
+	gpm_inhibit_is_valid (inhibit, &valid, NULL);
+	return valid;
 }
 
 /**

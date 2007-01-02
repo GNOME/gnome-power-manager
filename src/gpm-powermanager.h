@@ -69,6 +69,8 @@ gboolean	 gpm_powermanager_inhibit		(GpmPowermanager *powermanager,
 						         guint	         *cookie);
 gboolean	 gpm_powermanager_uninhibit		(GpmPowermanager *powermanager,
 							 guint            cookie);
+gboolean	 gpm_powermanager_is_valid		(GpmPowermanager *powermanager,
+							 gboolean        *valid);
 
 G_END_DECLS
 
