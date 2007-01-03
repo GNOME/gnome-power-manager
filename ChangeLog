@@ -1,5 +1,17 @@
 2007-01-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-self-test.c:
+	Remove all the _("foo") strings for gnome program init as
+	they are not required and I don't want to be accused of
+	breaking string freeze.
+
+	* po/POTFILES.in:
+	Add gpm-self-test.c - no string additions - this is a new
+	test module that should not be translated and only used by
+	developers.
+
+2007-01-03  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-inhibit.c: (gpm_inhibit_is_valid):
 	* src/gpm-self-test.c:
 	Add some more self tests.

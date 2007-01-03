@@ -31,8 +31,6 @@
 #include "gpm-debug.h"
 #include "gpm-powermanager.h"
 
-//guint appcookie = -1;
-
 guint test_total = 0;
 guint test_suc = 0;
 gchar *test_type = NULL;
@@ -193,13 +191,13 @@ main (int argc, char **argv)
 	GpmPowermanager *powermanager;
 	int retval;
 
-	context = g_option_context_new (_("GNOME Power Manager Self Test"));
+	context = g_option_context_new ("GNOME Power Manager Self Test");
 	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
 			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
 			    GNOME_PARAM_GOPTION_CONTEXT, context,
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    _("Power Inhibit Test"),
+			    "Power Inhibit Test",
 			    NULL);
 	gpm_debug_init (FALSE);
 
