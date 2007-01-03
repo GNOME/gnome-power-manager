@@ -295,6 +295,7 @@ gpm_inhibit_is_valid (GpmInhibit *inhibit,
 		*valid = TRUE;
 	} else {
 		/* we have at least one application blocking the action */
+		gpm_debug ("We have valid inhibitors");
 		*valid = FALSE;
 	}
 	/* we always return successful for DBUS */

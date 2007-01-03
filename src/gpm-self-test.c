@@ -35,16 +35,17 @@
 
 guint test_total = 0;
 guint test_suc = 0;
+gchar *test_type = NULL;
 
 void
-test_title (const char *title, const gchar *format, ...)
+test_title (const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
-	g_print ("> check #%u\t%s: \t%s...", test_total+1, title, va_args_buffer);
+	g_print ("> check #%u\t%s: \t%s...", test_total+1, test_type, va_args_buffer);
 	test_total++;
 }
 
@@ -53,6 +54,7 @@ test_success (const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
+	test_suc++;
 	if (format == NULL) {
 		g_print ("...OK\n");
 		return;
@@ -61,7 +63,6 @@ test_success (const gchar *format, ...)
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 	g_print ("...OK [%s]\n", va_args_buffer);
-	test_suc++;
 }
 
 void
@@ -80,9 +81,12 @@ test_inhibit (GpmPowermanager *powermanager)
 {
 	gboolean ret;
 	gboolean valid;
-	guint cookie = 0;
+	guint cookie1 = 0;
+	guint cookie2 = 0;
+	test_type = "inhibit";
 
-	test_title ("inhibit", "make sure we are not inhibited");
+	/************************************************************/
+	test_title ("make sure we are not inhibited");
 	ret = gpm_powermanager_is_valid (powermanager, &valid);
 	if (ret == FALSE) {
 		test_failed ("Unable to test validity");
@@ -92,25 +96,92 @@ test_inhibit (GpmPowermanager *powermanager)
 		test_success (NULL);
 	}
 
-	test_title ("inhibit", "clear an invalid cookie");
+	/************************************************************/
+	test_title ("clear an invalid cookie");
 	ret = gpm_powermanager_uninhibit (powermanager, 123456);
 	if (ret == FALSE) {
 		test_success ("invalid cookie failed as expected");
 	} else {
-		test_failed ("Should have rejected invalid cookie");
+		test_failed ("should have rejected invalid cookie");
 	}
 
-	test_title ("inhibit", "get a cookie");
+	/************************************************************/
+	test_title ("get cookie 1");
 	ret = gpm_powermanager_inhibit (powermanager,
 				  "gnome-power-self-test",
 				  "test inhibit",
-				  &cookie);
+				  &cookie1);
 	if (ret == FALSE) {
 		test_failed ("Unable to inhibit");
-	} else if (cookie == 0) {
-		test_failed ("Cookie invalid (cookie: %u)", cookie);
+	} else if (cookie1 == 0) {
+		test_failed ("Cookie invalid (cookie: %u)", cookie1);
 	} else {
-		test_success ("cookie: %u", cookie);
+		test_success ("cookie: %u", cookie1);
+	}
+
+	/************************************************************/
+	test_title ("make sure we are inhibited");
+	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	if (ret == FALSE) {
+		test_failed ("Unable to test validity");
+	} else if (valid == FALSE) {
+		test_success ("inhibited");
+	} else {
+		test_failed ("inhibit failed");
+	}
+
+	/************************************************************/
+	test_title ("get cookie 2");
+	ret = gpm_powermanager_inhibit (powermanager,
+				  "gnome-power-self-test",
+				  "test inhibit",
+				  &cookie2);
+	if (ret == FALSE) {
+		test_failed ("Unable to inhibit");
+	} else if (cookie2 == 0) {
+		test_failed ("Cookie invalid (cookie: %u)", cookie2);
+	} else {
+		test_success ("cookie: %u", cookie2);
+	}
+
+	/************************************************************/
+	test_title ("clear cookie 1");
+	ret = gpm_powermanager_uninhibit (powermanager, cookie1);
+	if (ret == FALSE) {
+		test_failed ("cookie failed to clear");
+	} else {
+		test_success (NULL);
+	}
+
+	/************************************************************/
+	test_title ("make sure we are still inhibited");
+	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	if (ret == FALSE) {
+		test_failed ("Unable to test validity");
+	} else if (valid == FALSE) {
+		test_success ("inhibited");
+	} else {
+		test_failed ("inhibit failed");
+	}
+
+	/************************************************************/
+	test_title ("clear cookie 2");
+	ret = gpm_powermanager_uninhibit (powermanager, cookie2);
+	if (ret == FALSE) {
+		test_failed ("cookie failed to clear");
+	} else {
+		test_success (NULL);
+	}
+
+	/************************************************************/
+	test_title ("make sure we are not inhibited");
+	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	if (ret == FALSE) {
+		test_failed ("Unable to test validity");
+	} else if (valid == FALSE) {
+		test_failed ("Already inhibited");
+	} else {
+		test_success (NULL);
 	}
 }
 
@@ -140,8 +211,8 @@ main (int argc, char **argv)
 
 	test_inhibit (powermanager);
 
-	gpm_debug ("test passes (%u/%u)", test_suc, test_total);
-	if (test_suc + 1 == test_total) {
+	g_print ("test passes (%u/%u) : ", test_suc, test_total);
+	if (test_suc == test_total) {
 		g_print ("ALL OKAY\n");
 		retval = 0;
 	} else {
