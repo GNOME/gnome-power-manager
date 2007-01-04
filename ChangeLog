@@ -1,3 +1,14 @@
+2007-01-04  Richard Hughes  <richard@hughsie.com>
+
+	* BRANCHES:
+	* README:
+	Update to better reflect release dependencies.
+
+	* src/gpm-hal.c: (proxy_status_cb):
+	Emit the DAEMON_START and DAEMON_STOP signals when HAL
+	disconnects or connects. This fixes the problem where the
+	icon does not change when HAL is restarted.
+
 2007-01-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-self-test.c:

@@ -1076,9 +1076,11 @@ proxy_status_cb (DBusGProxy *proxy,
 		 GpmHal     *hal)
 {
 	g_return_if_fail (GPM_IS_HAL (hal));
-	if (status) {
+	if (status == TRUE) {
+		g_signal_emit (hal, signals [DAEMON_START], 0);
 		gpm_hal_proxy_connect_more (hal);
 	} else {
+		g_signal_emit (hal, signals [DAEMON_STOP], 0);
 		gpm_hal_proxy_disconnect_more (hal);
 	}
 }

@@ -15,16 +15,17 @@ GNOME Power Manager comes in three parts:
 
 	- gnome-power-manager:	    the manager daemon itself
 	- gnome-power-preferences:  the control panel program, for configuration
+	- gnome-power-statistics:   the statistics graphing program
 
 To build, GNOME Power Manager requires
 
 	- libgnomeui-2.0
 	- libglade-2.0
-	- libhal-0 (from HAL 0.5.7 or later)
-	- libdbus-1 (from D-BUS 0.61 or later)
-	- libdbus-glib-1 (from D-BUS 0.61 or later)
-	- libnotify (from 0.3.0 or later)
+	- libhal-0 (from HAL 0.5.7 , 0.5.8 recommended)
+	- libdbus-1 (from D-BUS 0.70 or later)
+	- libdbus-glib-1 (from D-BUS 0.70 or later)
+	- libnotify (from 0.3.0 or later, 0.4.3 recommended)
 
-To run, gnome-power-manager requires hald to be running.
+To work properly, gnome-power-manager requires hald to be running.
 
 For more information, please see http://www.gnome.org/projects/gnome-power-manager/
