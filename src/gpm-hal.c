@@ -963,7 +963,7 @@ reattach_property_modified_in_hash (const gchar *udi,
 				    GpmHal      *hal)
 {
 	/* force the new proxy as DBUS has invalidaded the old ones */
-	g_debug ("reattach property-modified %s", udi);
+	gpm_debug ("reattach property-modified %s", udi);
 	gpm_hal_device_watch_propery_modified (hal, udi, TRUE);
 }
 
@@ -980,7 +980,7 @@ reattach_condition_in_hash (const gchar *udi,
 				    GpmHal      *hal)
 {
 	/* force the new proxy as DBUS has invalidaded the old ones */
-	g_debug ("reattach condition %s", udi);
+	gpm_debug ("reattach condition %s", udi);
 	gpm_hal_device_watch_condition (hal, udi, TRUE);
 }
 

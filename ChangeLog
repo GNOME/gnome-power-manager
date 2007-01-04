@@ -1,5 +1,15 @@
 2007-01-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_up),
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_up),
+	* src/gpm-button.c: (emit_button_pressed):
+	* src/gpm-hal.c: (reattach_property_modified_in_hash),
+	* src/gpm-notify.c: (notify_recall_action_cb):
+	* src/gpm-power.c: (battery_kind_cache_update):
+	Replace instances of g_debug with gpm_debug.
+
+2007-01-04  Richard Hughes  <richard@hughsie.com>
+
 	* BRANCHES:
 	* README:
 	Update to better reflect release dependencies.

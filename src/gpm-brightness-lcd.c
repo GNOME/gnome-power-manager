@@ -420,7 +420,7 @@ gpm_brightness_lcd_up (GpmBrightnessLcd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	g_debug ("emitting brightness-changed (%i)", percentage);
+	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
@@ -456,7 +456,7 @@ gpm_brightness_lcd_down (GpmBrightnessLcd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	g_debug ("emitting brightness-changed (%i)", percentage);
+	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;

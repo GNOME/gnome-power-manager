@@ -1073,11 +1073,11 @@ battery_kind_cache_update (GpmPower		 *power,
 	if( type_status->charge_rate_smoothed != 0 ) {
 		type_status->charge_rate_previous = type_status->charge_rate_smoothed;
 	} else {
-		gpm_warning("Exponential average of 0 calculated (not okay.):"
-			    " inputs were charge_rate_previous=%d, charge_rate_raw=%d, exp_ave_factor=%d",
-			    type_status->charge_rate_previous,
-			    type_status->charge_rate_raw,
-			    power->priv->exp_ave_factor );
+		gpm_debug ("Exponential average of 0 calculated:"
+			   " inputs were charge_rate_previous=%d, charge_rate_raw=%d, exp_ave_factor=%d",
+			   type_status->charge_rate_previous,
+			   type_status->charge_rate_raw,
+			   power->priv->exp_ave_factor );
  	}
 
 	/* average out the voltage for the global device */

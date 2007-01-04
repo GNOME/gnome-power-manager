@@ -420,7 +420,7 @@ gpm_brightness_kbd_up (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	g_debug ("emitting brightness-changed (%i)", percentage);
+	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
@@ -456,7 +456,7 @@ gpm_brightness_kbd_down (GpmBrightnessKbd *brightness)
 
 	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
 					      brightness->priv->levels);
-	g_debug ("emitting brightness-changed (%i)", percentage);
+	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 
 	return TRUE;
@@ -579,7 +579,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 		state = STATE_FORCED_UNKNOWN;
 	}
 
- 	g_debug ("ambient light percent = %d", ambient_light);
+ 	gpm_debug ("ambient light percent = %d", ambient_light);
 
 	if (state == STATE_FORCED_UNKNOWN) {
 		/* if this is the first time we're launched with ambient light data... */

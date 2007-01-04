@@ -297,14 +297,14 @@ emit_button_pressed (GpmButton *button,
 	/* filter out duplicate lid events */
 	if (strcmp (atype, GPM_BUTTON_LID_CLOSED) == 0) {
 		if (button->priv->lid_is_closed == TRUE) {
-			g_debug ("ignoring duplicate lid event");
+			gpm_debug ("ignoring duplicate lid event");
 			return;
 		}
 		button->priv->lid_is_closed = TRUE;
 	}
 	if (strcmp (atype, GPM_BUTTON_LID_OPEN) == 0) {
 		if (button->priv->lid_is_closed == FALSE) {
-			g_debug ("ignoring duplicate lid event");
+			gpm_debug ("ignoring duplicate lid event");
 			return;
 		}
 		button->priv->lid_is_closed = FALSE;

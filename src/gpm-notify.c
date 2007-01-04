@@ -284,7 +284,7 @@ notify_recall_action_cb (NotifyNotification *libnotify,
 		gpm_debug ("autovisit website %s", notify->priv->recall_website);
 		ret = gnome_url_show (notify->priv->recall_website, &error);
 		if (ret == FALSE) {
-			g_debug ("failed to show url: %s", error->message);
+			gpm_debug ("failed to show url: %s", error->message);
 			g_error_free (error);
 		}
 		/* free the stored string */
