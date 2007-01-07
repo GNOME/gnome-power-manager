@@ -119,6 +119,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_BATTERY_CPUFREQ_POLICY	GPM_CONF_DIR "/cpufreq_battery_policy"
 #define GPM_CONF_BATTERY_CPUFREQ_VALUE	GPM_CONF_DIR "/cpufreq_battery_performance"
 #define GPM_CONF_USE_NICE		GPM_CONF_DIR "/cpufreq_consider_nice"
+#define GPM_CONF_SHOW_CPUFREQ_UI	GPM_CONF_DIR "/show_cpufreq_ui"
 
 #define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics_show_legend"
 #define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics_show_events"

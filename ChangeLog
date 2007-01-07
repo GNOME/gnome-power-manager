@@ -1,5 +1,20 @@
 2007-01-07  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	Add /apps/gnome-power-manager/show_cpufreq_ui GConf key.
+	It's not something I wanted to do, as 99% of people don't need to
+	ever change this, but the 1% will need to for specific systems.
+	Default to hiding the control. Distros can patch this if required.
+
+	* src/gpm-prefs-core.c:
+	Add 'Do nothing' back as a valid UI object, else this policy is
+	reverted to ondemand the first time the prefs tool is run.
+	By default we don't show the UI. This is not a new string as we
+	already use it for the action text.
+
+2007-01-07  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	Fix a metric ton of spelling errors.
 

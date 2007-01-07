@@ -2,6 +2,18 @@
   <schemalist>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/show_cpufreq_ui</key>
+      <applyto>/apps/gnome-power-manager/show_cpufreq_ui</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If we should show the CPU frequency scaling in the UI</short>
+        <long>If we should show the CPU frequency scaling in the UI. Some people need to configure this for specific systems.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/show_recalled_battery_warning</key>
       <applyto>/apps/gnome-power-manager/show_recalled_battery_warning</applyto>
       <owner>gnome-power-manager</owner>

@@ -86,6 +86,7 @@ G_DEFINE_TYPE (GpmPrefs, gpm_prefs, G_TYPE_OBJECT)
 #define ACTION_NOTHING_TEXT		_("Do nothing")
 
 /* The text that should appear in the processor combo box */
+#define CPUFREQ_NOTHING_TEXT		_("Do nothing")
 #define CPUFREQ_ONDEMAND_TEXT		_("Based on processor load")
 #define CPUFREQ_CONSERVATIVE_TEXT	_("Automatic power saving")
 #define CPUFREQ_POWERSAVE_TEXT		_("Maximum power saving")
@@ -669,6 +670,8 @@ gpm_prefs_processor_combo_changed_cb (GtkWidget *widget,
 		policy = CODE_CPUFREQ_POWERSAVE;
 	} else if (strcmp (value, CPUFREQ_PERFORMANCE_TEXT) == 0) {
 		policy = CODE_CPUFREQ_PERFORMANCE;
+	} else if (strcmp (value, CPUFREQ_NOTHING_TEXT) == 0) {
+		policy = CODE_CPUFREQ_NOTHING;
 	} else {
 		g_assert (FALSE);
 	}
@@ -720,6 +723,15 @@ gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 	if (cpufreq_types & GPM_CPUFREQ_ONDEMAND) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_ONDEMAND_TEXT);
+		if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
+			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
+			has_option = TRUE;
+		}
+		n_added++;
+	}
+	if (cpufreq_types & GPM_CPUFREQ_NOTHING) {
+		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
+					   CPUFREQ_NOTHING_TEXT);
 		if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
@@ -854,12 +866,14 @@ prefs_setup_ac (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
 	gint delay;
+	gboolean show_cpufreq;
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
 				 ACTION_BLANK,
 				 ACTION_SUSPEND,
 				 ACTION_HIBERNATE,
 				 NULL};
+
 	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid",
 				      GPM_CONF_AC_BUTTON_LID,
 				      button_lid_actions);
@@ -888,6 +902,12 @@ prefs_setup_ac (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_brightness");
 		gtk_widget_hide_all (widget);
 	}
+
+	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_SHOW_CPUFREQ_UI, &show_cpufreq);
+	if (show_cpufreq == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_cpu");
+		gtk_widget_hide_all (widget);
+	}
 }
 
 static void
@@ -897,6 +917,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 	GtkWidget *notebook;
 	gint delay;
 	gint page;
+	gboolean show_cpufreq;
 	
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
@@ -948,6 +969,11 @@ prefs_setup_battery (GpmPrefs *prefs)
 	}
 	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_brightness");
+		gtk_widget_hide_all (widget);
+	}
+	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_SHOW_CPUFREQ_UI, &show_cpufreq);
+	if (show_cpufreq == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_cpu");
 		gtk_widget_hide_all (widget);
 	}
 }
