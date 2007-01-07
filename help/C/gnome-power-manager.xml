@@ -166,7 +166,7 @@
     </figure>
     <note>
       <para>
-        You can disable this notification by changing the gconf key
+        You can disable this notification by changing the GConf key
         <command>/apps/gnome-power-manager/notify_ac_adapter</command>.
       </para>
     </note>
@@ -186,7 +186,7 @@
     </figure>
     <note>
       <para>
-        You can disable this notification by changing the gconf key
+        You can disable this notification by changing the GConf key
         <command>/apps/gnome-power-manager/notify_fully_charged</command>.
       </para>
     </note>
@@ -203,7 +203,7 @@
   <section id="notify-low">
   <title>Power Low</title>
     <para>
-      When the battery is low, you will recieve the following notification.
+      When the battery is low, you will receive the following notification.
       You should consider switching to battery power really soon.
     </para>
     <figure>
@@ -260,7 +260,7 @@
 <section id="statistics">
   <title>Statistics</title>
   <para>
-    The statistics program allows you to visualise the power consumption
+    The statistics program allows you to visualize the power consumption
     of your laptop hardware.
   </para>
   <note>
@@ -315,9 +315,9 @@
 
     <note>
       <para>
-        You do will not recieve rate data from your computer if it is not
+        You do will not receive rate data from your computer if it is not
         charging or discharging, or if the computer is suspended.
-        This is due to hardware limitiations where the rate is only sent from
+        This is due to hardware limitations where the rate is only sent from
         the battery management chip, rather than the power management chip on
         the motherboard.
       </para>
@@ -368,7 +368,7 @@
 
   <note>
     <para>
-      Some sliders or option boxes may be disabled if the gconf policy keys are
+      Some sliders or option boxes may be disabled if the GConf policy keys are
       not writable.
       This allows administrators to lock-down the actions that a user can select.
     </para>
@@ -419,7 +419,7 @@
           <para>All Pentium 4 - M's</para>
         </listitem>
         <listitem>
-          <para>Pentium III M's 600Mhz to 1Ghz</para>
+          <para>Pentium III M's 600MHz to 1GHz</para>
         </listitem>
         <listitem>
           <para>Pentium III M's 700+ MHz</para>
@@ -488,7 +488,7 @@
 
     <note>
       <para>
-        Some policies (ondemand and conservitive) only
+        Some policies (ondemand and conservative) only
         increase the processor frequency from minimum when a
         process has a positive nice value even though
         a load greater than 1 occurs.
@@ -498,7 +498,7 @@
         reduction for system daemons and some background session
         services.
         To rectify this, use another policy (e.g. Maximum Performance)
-        or set the following gconf key:
+        or set the following GConf key:
         <command>/apps/gnome-power-manager/cpufreq_consider_nice</command>.
       </para>
     </note>
@@ -568,7 +568,7 @@
     <title>Screen Dim Brightness</title>
     <note>
       <para>
-        You can change the idle laptop panel brightness by changing the gconf key
+        You can change the idle laptop panel brightness by changing the GConf key
         <command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>.
       </para>
     </note>
@@ -585,7 +585,7 @@
     <para>
       There is a complex locking scheme available for power-users that allows
       locking policy to change for the lid, suspend and hibernate actions.
-      To enable this complex mode, you will have to disable the gconf key:
+      To enable this complex mode, you will have to disable the GConf key:
     </para>
 
     <itemizedlist>
@@ -635,12 +635,12 @@
     <para>
       The brightness applet allows the user to change the brightness
       temporarily without changing the default policy.
-      This may be useful if you've got a laptop without brightness
+      This may be useful if you have got a laptop without brightness
       buttons, as you can now change the brightness easily.
     </para>
     <figure>
       <title>
-      Brightness applet dropdown.
+      Brightness applet drop-down.
       </title>
       <screenshot>
         <mediaobject>
@@ -660,7 +660,7 @@
   <section id="applets-inhibit">
     <title>Inhibit Applet</title>
     <para>
-      The inihibit applet allows the user to prevent the computer
+      The inhibit applet allows the user to prevent the computer
       auto-sleeping when inactive. This may be required with old or
       proprietary programs such as VMWare or Matlab.
       Just click the icon for the auto-suspend to be inhibited,
@@ -751,7 +751,7 @@
       'no-signal' which leaves the monitor powered on.
     </title>
     <para>
-      You have to change the dpms suspend mode &application; uses.
+      You have to change the DPMS suspend mode &application; uses.
       Open <command>gconf-editor</command>, and then change the keys 
       <literal>/apps/gnome-power-manager/ac_dpms_sleep_method</literal> and
       <literal>/apps/gnome-power-manager/battery_dpms_sleep_method</literal>
@@ -825,7 +825,7 @@
 
   <section id="faq-ibm-brightness">
     <title>
-      Why doesn't my IBM laptop have the brightness sliders in Power
+      Why does not my IBM laptop have the brightness sliders in Power
       Preferences?
     </title>
     <para>
@@ -861,7 +861,7 @@
     </para>
     <para>
       You need to update to a newer version of HAL, or use your updated
-      distribution bugfix packages.
+      distribution bug-fix packages.
     </para>
   </section>
 
@@ -876,7 +876,7 @@
         <para>APM (Pre-2000 Intel computers)</para>
       </listitem>
       <listitem>
-        <para>ACPI (most modern Intel compatable computers)</para>
+        <para>ACPI (most modern Intel compatible computers)</para>
       </listitem>
       <listitem>
         <para>PMU (Powerbook, and iBook PPC computers)</para>
@@ -911,12 +911,12 @@
     </itemizedlist>
     <para>
       For instance, my PowerBook reports from HAL that it can suspend and
-      hibernate, but because I know my hibernate doesn't work,
+      hibernate, but because I know my hibernate does not work,
       I can disable it in <command>gconf-editor</command> removing the option
       from <command>gnome-power-preferences</command> and the drop-down menu.
     </para>
     <para>
-      If HAL doesn't list the options you want, then maybe you need to check
+      If HAL does not list the options you want, then maybe you need to check
       your BIOS to check that it's running in the correct mode, and also that
       you have compiled your kernel with the correct options.
     </para>
@@ -1004,7 +1004,7 @@ dev.UnInhibit(cookie)
       and the computer will not suspend automatically.
     </para>
     <para>
-      While playing a movie fullscreen, totem should use the gnome-screensaver
+      While playing a movie full-screen, totem should use the gnome-screensaver
       inhibit methods.
       The idea is that totem does not have to worry at all about power
       management.
@@ -1014,7 +1014,7 @@ dev.UnInhibit(cookie)
     <para>
       The only applications that should use the &application; inhibit
       method are things that want to assert that the session can be marked as
-      idle, but important things are still happening, so it shouldn't power
+      idle, but important things are still happening, so it should not power
       down.
       For example, when copying 4.5GB of files in Nautilus, you want the
       screensaver to display, and the LCD panel to dim, but you don't want
@@ -1023,16 +1023,16 @@ dev.UnInhibit(cookie)
   </section>
 
  <section id="faq-spin-down-hdd">
-    <title>&application; doesn't spin down my hard-drive!</title>
+    <title>&application; does not spin down my hard-drive!</title>
     <para>
       After numerous debates, the consensus was that is was not a good idea
       to add this functionality to HAL.
-      It's was decided user-configurable powermanagement was not really
-      required when modern harddisks have really intelligent powermanagment.
+      It's was decided user-configurable power management was not really
+      required when modern hard disks have really intelligent power management.
     </para>
     <para>
-      Here the power consumption data for a typical notebook harddisk
-      (ide/sata):
+      Here the power consumption data for a typical notebook hard disk
+      (IDE/SATA):
     </para>
 
 <programlisting>
@@ -1052,22 +1052,22 @@ Sleep				0.1W	NC
       <listitem>
         <para>
           A disk on Low Power idle need less than 1 Watt per hour.
-          For a normal battery with 50000mWh you could run the harddisk for
+          For a normal battery with 50000mWh you could run the hard disk for
           over 50 hours.
         </para>
       </listitem>
       <listitem>
         <para>
-          If you do not read/write from/to the harddisk the disk regulates
+          If you do not read/write from/to the hard disk the disk regulates
           power, but never shuts down the device.
           The reason is easy: you lost more power with each startup than to
-          leave the harddisk online somewhere between 'Active idle' and
+          leave the hard disk online somewhere between 'Active idle' and
           'Low power idle' (depends on the model/manufacturer).
         </para>
       </listitem>
       <listitem>
         <para>
-          The other reason to leave this to the internal powermanagement of
+          The other reason to leave this to the internal power management of
           the disk is: the time needed to reactivate the device.
           You lose more performance than you lose power between 'Active idle'
           and 'Low power idle'.
@@ -1084,7 +1084,7 @@ Sleep				0.1W	NC
       </listitem>
       <listitem>
         <para>
-          You can't set powermanagement for exteral USB harddisks, because
+          You can't set power management for external USB hard disks, because
           you can't send the needed commands over the USB link to the disk.
         </para>
       </listitem>
@@ -1102,7 +1102,7 @@ Sleep				0.1W	NC
     <itemizedlist>
       <listitem>
         <para>
-          HAL might not be running the addon that captures the acpi event.
+          HAL might not be running the addon that captures the ACPI event.
         </para>
       </listitem>
       <listitem>
@@ -1113,7 +1113,7 @@ Sleep				0.1W	NC
       </listitem>
     </itemizedlist>
     <para>
-      For the first case, try to find the hal processes that are running:
+      For the first case, try to find the HAL processes that are running:
       <command>ps -eaf | grep hal</command>
     </para>
     <para>
@@ -1171,12 +1171,12 @@ dbus-send --session \
 
   <section id="faq-video-resume">
     <title>
-      Why doesn't my video adaptor come back after a suspend?
-      It just displays black
+      Why does not my video adaptor come back after a suspend?
+      It just displays black!
     </title>
     <para>
       You may need to add a s3 command to your kernel boot string so that the
-      kernel can re-initialise your video card.
+      kernel can re-initialize your video card.
       See <ulink url="http://www.kernel.org/git/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;hb=HEAD;f=Documentation/power/video.txt">this document</ulink>
       for more details, or to see if your system has been identified as
       needing any extra switches.
@@ -1184,7 +1184,7 @@ dbus-send --session \
     <note>
       <para>
         Using the new pm-utils should make all this stuff just work in the
-        future using HAL fdi matching against machine DMI and videocard vendor
+        future using HAL fdi matching against machine DMI and video card vendor
         and product ID's.
       </para>
     </note>
