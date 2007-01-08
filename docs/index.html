@@ -1,37 +1,71 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>GNOME Power Manager 2.17.5 Documentation</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="next" href="dbus-interface.html" title="Chapter 1. DBUS Interface"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">GNOME Power Manager 2.17.5 Documentation</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="dbus-interface.html">Next</a></td></tr></table><hr></div><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>GNOME Power Manager 2.17.5 Documentation</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
             <code class="email">&lt;<a href="mailto:richard@hughsie.com">richard@hughsie.com</a>&gt;</code><br>
-          </p></div></div></div></div></div><div><p class="releaseinfo">Version 2.17.5</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="dbus-interface.html">1. DBUS Interface</a></span></dt><dd><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-Compatibility">Compatibility</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Suspend">
-        <code class="literal">Suspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Hibernate">
-        <code class="literal">Hibernate</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Shutdown">
-        <code class="literal">Shutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Reboot">
-        <code class="literal">Reboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedSuspend">
-        <code class="literal">AllowedSuspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedHibernate">
-        <code class="literal">AllowedHibernate</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedShutdown">
-        <code class="literal">AllowedShutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedReboot">
-        <code class="literal">AllowedReboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-SetDpmsMode">
-        <code class="literal">SetDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetDpmsMode">
-        <code class="literal">GetDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Inhibit">
-        <code class="literal">Inhibit</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-UnInhibit">
-        <code class="literal">UnInhibit</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetOnAc">
-        <code class="literal">GetOnAc</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetLowPowerMode">
-        <code class="literal">GetLowPowerMode</code>
-      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-DpmsModeChanged">
-        <code class="literal">DpmsModeChanged</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-OnAcChanged">
+          </p></div></div></div></div></div><div><p class="releaseinfo">Version 2.17.5</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="dbus-interface.html">1. DBUS Interface</a></span></dt><dd><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-dpms">DPMS Monitor Power Saving</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-SetMode">
+        <code class="literal">SetMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-GetMode">
+        <code class="literal">GetMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-ModeChanged">
+        <code class="literal">ModeChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-brightness">Backlight Brightness Adjustment</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-SetBrightness">
+        <code class="literal">SetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-GetBrightness">
+        <code class="literal">GetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-BrightnessChanged">
+        <code class="literal">BrightnessChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-ui">User Interface Frontends</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetDescription">
+        <code class="literal">GetDescription()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-DescriptionChanged">
+        <code class="literal">DescriptionChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetIcon">
+        <code class="literal">GetIcon()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-IconChanged">
+        <code class="literal">IconChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-manager">System State Information</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetOnAc">
+        <code class="literal">GetOnAc()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-OnAcChanged">
         <code class="literal">OnAcChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetLowPowerMode">
+        <code class="literal">GetLowPowerMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-LowPowerModeChanged">
+        <code class="literal">LowPowerModeChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-inhibit">Inhibit System Sleep</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-RequestCookie">
+        <code class="literal">RequestCookie()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-ClearCookie">
+        <code class="literal">ClearCookie()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-IsValid">
+        <code class="literal">IsValid()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-IsValidChanged">
+        <code class="literal">IsValidChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-control">Actions Control</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Suspend">
+        <code class="literal">Suspend()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Hibernate">
+        <code class="literal">Hibernate()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Shutdown">
+        <code class="literal">Shutdown()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Reboot">
+        <code class="literal">Reboot()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedSuspend">
+        <code class="literal">AllowedSuspend()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedHibernate">
+        <code class="literal">AllowedHibernate()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedShutdown">
+        <code class="literal">AllowedShutdown()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedReboot">
+        <code class="literal">AllowedReboot()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Register">
+        <code class="literal">Register()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-UnRegister">
+        <code class="literal">UnRegister()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-Request">
+        <code class="literal">Request</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Policy">
+        <code class="literal">Policy()</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-statistics">Statistics Data</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetTypes">
+        <code class="literal">GetTypes()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetAxisType">
+        <code class="literal">GetAxisType()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetData">
+        <code class="literal">GetData()</code>
       </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="icon-scheme.html">2. Icon Naming Scheme</a></span></dt><dd><dl><dt><span class="sect1"><a href="icon-scheme.html#icon-indexes">Icon indexes</a></span></dt><dt><span class="sect1"><a href="icon-scheme.html#icon-names">Icon Names</a></span></dt></dl></dd><dt><span class="chapter"><a href="sleep-names.html">3. Sleep Names</a></span></dt><dd><dl><dt><span class="sect1"><a href="sleep-names.html#sleep-names-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="sleep-names.html#sleep-names-standby">Standby</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-standby-nomenclature">Recommended Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-suspend">Suspend</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-suspend-nomenclature-good">Recommended Nomenclature</a></span></dt><dt><span class="sect2"><a href="sleep-names.html#sleep-names-suspend-nomenclature-bad">Bad Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-hibernate">Hibernate</a></span></dt><dd><dl><dt><span class="sect2"><a href="sleep-names.html#sleep-names-hibernate-nomenclature-good">Recommended Nomenclature</a></span></dt><dt><span class="sect2"><a href="sleep-names.html#sleep-names-hibernate-nomenclature-bad">Bad Nomenclature</a></span></dt></dl></dd><dt><span class="sect1"><a href="sleep-names.html#sleep-names-conclusion">Conclusion</a></span></dt></dl></dd><dt><span class="chapter"><a href="faq.html">4. Frequently Asked Questions</a></span></dt><dd><dl><dt><span class="sect1"><a href="faq.html#faq-intro">Past entries</a></span></dt><dd><dl><dt><span class="sect2"><a href="faq.html#faq-debian-etch-locked-down-dbus">
         Why using Debian (Etch) do I get the error : <code class="literal">A security policy in place prevents this sender
 from sending this message to this recepient...</code>

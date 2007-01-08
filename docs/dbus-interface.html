@@ -1,131 +1,317 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. DBUS Interface</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="prev" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="next" href="icon-scheme.html" title="Chapter 2. Icon Naming Scheme"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. DBUS Interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="dbus-interface"></a>Chapter 1. DBUS Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-Compatibility">Compatibility</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-methods">Methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Suspend">
-        <code class="literal">Suspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Hibernate">
-        <code class="literal">Hibernate</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Shutdown">
-        <code class="literal">Shutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Reboot">
-        <code class="literal">Reboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedSuspend">
-        <code class="literal">AllowedSuspend</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedHibernate">
-        <code class="literal">AllowedHibernate</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedShutdown">
-        <code class="literal">AllowedShutdown</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-AllowedReboot">
-        <code class="literal">AllowedReboot</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-SetDpmsMode">
-        <code class="literal">SetDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetDpmsMode">
-        <code class="literal">GetDpmsMode</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-Inhibit">
-        <code class="literal">Inhibit</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-UnInhibit">
-        <code class="literal">UnInhibit</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetOnAc">
-        <code class="literal">GetOnAc</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-method-GetLowPowerMode">
-        <code class="literal">GetLowPowerMode</code>
-      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-signals">Signals</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-DpmsModeChanged">
-        <code class="literal">DpmsModeChanged</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-signal-OnAcChanged">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. DBUS Interface</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="prev" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="next" href="icon-scheme.html" title="Chapter 2. Icon Naming Scheme"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. DBUS Interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="dbus-interface"></a>Chapter 1. DBUS Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-dpms">DPMS Monitor Power Saving</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-SetMode">
+        <code class="literal">SetMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-GetMode">
+        <code class="literal">GetMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-ModeChanged">
+        <code class="literal">ModeChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-brightness">Backlight Brightness Adjustment</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-SetBrightness">
+        <code class="literal">SetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-GetBrightness">
+        <code class="literal">GetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-BrightnessChanged">
+        <code class="literal">BrightnessChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-ui">User Interface Frontends</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetDescription">
+        <code class="literal">GetDescription()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-DescriptionChanged">
+        <code class="literal">DescriptionChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetIcon">
+        <code class="literal">GetIcon()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-IconChanged">
+        <code class="literal">IconChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-manager">System State Information</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetOnAc">
+        <code class="literal">GetOnAc()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-OnAcChanged">
         <code class="literal">OnAcChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetLowPowerMode">
+        <code class="literal">GetLowPowerMode()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-LowPowerModeChanged">
+        <code class="literal">LowPowerModeChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-inhibit">Inhibit System Sleep</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-RequestCookie">
+        <code class="literal">RequestCookie()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-ClearCookie">
+        <code class="literal">ClearCookie()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-IsValid">
+        <code class="literal">IsValid()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-IsValidChanged">
+        <code class="literal">IsValidChanged</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-control">Actions Control</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Suspend">
+        <code class="literal">Suspend()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Hibernate">
+        <code class="literal">Hibernate()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Shutdown">
+        <code class="literal">Shutdown()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Reboot">
+        <code class="literal">Reboot()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedSuspend">
+        <code class="literal">AllowedSuspend()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedHibernate">
+        <code class="literal">AllowedHibernate()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedShutdown">
+        <code class="literal">AllowedShutdown()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-AllowedReboot">
+        <code class="literal">AllowedReboot()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Register">
+        <code class="literal">Register()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-UnRegister">
+        <code class="literal">UnRegister()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-Request">
+        <code class="literal">Request</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Policy">
+        <code class="literal">Policy()</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-statistics">Statistics Data</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetTypes">
+        <code class="literal">GetTypes()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetAxisType">
+        <code class="literal">GetAxisType()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetData">
+        <code class="literal">GetData()</code>
       </a></span></dt></dl></dd></dl></div><p>
     This API is currently unstable and is likely to change in the future.
   </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-intro"></a>Introduction</h2></div></div></div><p>
       Power Manager exposes a DBUS API for programs to obtain information about
-      the DPMS state and to change it if required.
+      the power state and to change it if required.
     </p><p>
-      The following constants are used to uniquely refer to the PowerManager
-      object when making DBUS method calls:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-Compatibility"></a>Compatibility</h2></div></div></div><p>
-      Since gnome-power-manager version 2.14.x the API has changed in the
-      following way:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>2.14.x method name</th><th>2.15.x method name</th></tr></thead><tbody><tr><td><code class="literal">CanSuspend</code></td><td><code class="literal">AllowedSuspend</code></td></tr><tr><td><code class="literal">CanHibernate</code></td><td><code class="literal">AllowedHibernate</code></td></tr><tr><td><code class="literal">InhibitInactiveSleep</code></td><td><code class="literal">Inhibit</code></td></tr><tr><td><code class="literal">AllowInactiveSleep</code></td><td><code class="literal">UnInhibit</code></td></tr><tr><td><code class="literal">getOnAc</code></td><td><code class="literal">GetOnAc</code></td></tr><tr><td><code class="literal">getDpmsMode</code></td><td><code class="literal">GetDpmsMode</code></td></tr><tr><td><code class="literal">setDpmsMode</code></td><td><code class="literal">SetDpmsMode</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">Reboot</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedShutdown</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">AllowedReboot</code></td></tr><tr><td><code class="literal">(none)</code></td><td><code class="literal">GetLowPowerMode</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-methods"></a>Methods</h2></div></div></div><p>
-      These are the DBUS methods.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Suspend"></a>
-        <code class="literal">Suspend</code>
+      The following constants are used to uniquely refer to the session-wide
+      PowerManager object when making DBUS method calls:
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-dpms"></a>DPMS Monitor Power Saving</h2></div></div></div><p>
+      DPMS is a standard from the VESA consortium for managing the power
+      supply of monitors.
+      These are the optional DBUS methods for controlling the power saving of
+      the backlight of the current screen. These correspond to Xorg DPMS states:
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>on</td><td>100% power usage</td></tr><tr><td>standby</td><td>&lt;50% power usage</td></tr><tr><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Dpms</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-SetMode"></a>
+        <code class="literal">SetMode()</code>
       </h3></div></div></div><p>
-        This call will attempt to suspend the system.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Hibernate"></a>
-        <code class="literal">Hibernate</code>
-      </h3></div></div></div><p>
-        This call will attempt to hibernate the system.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Shutdown"></a>
-        <code class="literal">Shutdown</code>
-      </h3></div></div></div><p>
-        This call will attempt to shutdown the system.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Reboot"></a>
-        <code class="literal">Reboot</code>
-      </h3></div></div></div><p>
-        This call will attempt to reboot the system.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>Success value</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedSuspend"></a>
-        <code class="literal">AllowedSuspend</code>
-      </h3></div></div></div><p>
-        If the current user in the session is able to suspend, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to suspend</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedHibernate"></a>
-        <code class="literal">AllowedHibernate</code>
-      </h3></div></div></div><p>
-        If the current user in the session is able to hibernate, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to hibernate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedShutdown"></a>
-        <code class="literal">AllowedShutdown</code>
-      </h3></div></div></div><p>
-        If the current user in the session is able to shutdown, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to shutdown</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-AllowedReboot"></a>
-        <code class="literal">AllowedReboot</code>
-      </h3></div></div></div><p>
-        If the current user in the session is able to reboot, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to reboot</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-SetDpmsMode"></a>
-        <code class="literal">SetDpmsMode</code>
-      </h3></div></div></div><p>
-        DPMS is a standard from the VESA consortium for managing the power
-        supply of monitors.
-	This call requests a change in the state of DPMS for the current screen.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;50% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td> </td><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetDpmsMode"></a>
-        <code class="literal">GetDpmsMode</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>Required DPMS mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-GetMode"></a>
+        <code class="literal">GetMode()</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-Inhibit"></a>
-        <code class="literal">Inhibit</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Current screen DPMS mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-ModeChanged"></a>
+        <code class="literal">ModeChanged</code>
+      </h3></div></div></div><p>
+        Signals the value of the current DPMS state has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Current screen DPMS mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-brightness"></a>Backlight Brightness Adjustment</h2></div></div></div><p>
+      Backlight brightness can be changed on most LCD hardware.
+      These are the optional DBUS methods for controlling the brightness of
+      the backlight.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/BrightnessLcd</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-SetBrightness"></a>
+        <code class="literal">SetBrightness()</code>
+      </h3></div></div></div><p>
+        This may not immediatly set the brightness if we are in a low power
+        sleep mode, if the panel is switched off, or if the panel is in an
+        idle dim state.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-GetBrightness"></a>
+        <code class="literal">GetBrightness()</code>
+      </h3></div></div></div><p>
+        Returns the DPMS mode state.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-BrightnessChanged"></a>
+        <code class="literal">BrightnessChanged</code>
+      </h3></div></div></div><p>
+        Signals the value of the current DPMS state has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-ui"></a>User Interface Frontends</h2></div></div></div><p>
+      Some user interface frontends will be in a different process to that
+      of any power manager and system state will have to be transmitted
+      over DBUS.
+      We only export the final 'result', i.e. the icon and description
+      as presenting a abstract power interface is wrong for this functionality.
+      These are the required DBUS methods for presenting an interface to the
+      user.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Ui</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetDescription"></a>
+        <code class="literal">GetDescription()</code>
+      </h3></div></div></div><p>
+        Returns the system state description, used commonly as the tooltip
+        for a applet or system tray icon.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>System state description, e.g. Laptop battery 34 minutes until charged (34%)</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-DescriptionChanged"></a>
+        <code class="literal">DescriptionChanged</code>
+      </h3></div></div></div><p>
+        Signals the system state description has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>System state description</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetIcon"></a>
+        <code class="literal">GetIcon()</code>
+      </h3></div></div></div><p>
+        Returns the system icon used as the applet or system tray icon.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Icon name, e.g. gpm-primary-080-charging</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-IconChanged"></a>
+        <code class="literal">IconChanged</code>
+      </h3></div></div></div><p>
+        Signals the system icon has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Icon name</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-manager"></a>System State Information</h2></div></div></div><p>
+      Some programs may want to know if the system is running on AC power,
+      or running in a low power mode, for instance to disable index updating.
+      These are the required DBUS methods for showing system state.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Manager</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetOnAc"></a>
+        <code class="literal">GetOnAc()</code>
+      </h3></div></div></div><p>
+        Returns the system AC state, i.e. if we are not running on battery
+        power.
+        Note: This method may still return false on AC using a desktop system
+        if the computer is using backup power from a monitored UPS.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the system is using AC power</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-OnAcChanged"></a>
+        <code class="literal">OnAcChanged</code>
+      </h3></div></div></div><p>
+        Signals the AC state has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the system is using AC power</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetLowPowerMode"></a>
+        <code class="literal">GetLowPowerMode()</code>
+      </h3></div></div></div><p>
+        Returns true if low power mode has been set.
+        This may be set on AC or battery power, both or neither depending on
+        the users policy setting.
+        This setting may also change with the battery level changing.
+        Programs should respect this value for the session, and only
+        perform cache-updates when absolutely required.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the session should be run in low power mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-LowPowerModeChanged"></a>
+        <code class="literal">LowPowerModeChanged</code>
+      </h3></div></div></div><p>
+        Signals the low power mode has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the session should be run in low power mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-inhibit"></a>Inhibit System Sleep</h2></div></div></div><p>
+      When the power manager detects an idle session and system, it can perform
+      a system suspend or hibernate, known as a system sleep.
+      We can prevent the power manager doing this action, if for instance
+      we are doing a slow network copy that will take many hours.
+      These are the required DBUS methods for inhibiting system sleep.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Inhibit</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-RequestCookie"></a>
+        <code class="literal">RequestCookie()</code>
       </h3></div></div></div><p>
         Inhibits the computer from performing the idle sleep action.
         Useful if you want to do an operation of long duration without the
         computer suspending.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div><p>
-        A cookie is a random UINT32 used to identify the inhibit.
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-UnInhibit"></a>
-        <code class="literal">UnInhibit</code>
+        Requests a cookie which is used for inhibiting an action.
+      </p><p>
+        A cookie is a random 32bit unsigned integer used to identify the
+        inhibit.
+        It is required as the same application may want to call inhibit
+        multiple times, without managing the inhibit calls itself.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-inhibit-ClearCookie"></a>
+        <code class="literal">ClearCookie()</code>
       </h3></div></div></div><p>
         Allows the computer to perform the idle sleep action.
-        Applications that quit without calling this method will be
-        automatically unregistered, but this is not recommended as the user
-        may be warned.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetOnAc"></a>
-        <code class="literal">GetOnAc</code>
+        If the program holding the cookie exits from the system bus without
+        calling <code class="literal">ClearCookie()</code> then it is automatically removed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-inhibit-IsValid"></a>
+        <code class="literal">IsValid()</code>
       </h3></div></div></div><p>
-        Finds out if the computer is on AC power, i.e. is not running on primary
-        battery or UPS power.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are on AC power</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-method-GetLowPowerMode"></a>
-        <code class="literal">GetLowPowerMode</code>
+        Returns true if the auto-suspend functionality would be valid.
+        This will return false as soon as the number of inhibit cookies
+        is greater than zero.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the auto-sleep is valid</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-IsValidChanged"></a>
+        <code class="literal">IsValidChanged</code>
       </h3></div></div></div><p>
-        Finds out if the applications should use a low power mode, i.e. when this
-        is true, applications should not re-index or do non-essential activity.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we should use a low power mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-signals"></a>Signals</h2></div></div></div><p>
-      These are the DBUS signals.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-signal-DpmsModeChanged"></a>
-        <code class="literal">DpmsModeChanged</code>
+        Signals the valid state has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If the auto-sleep is valid</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-control"></a>Actions Control</h2></div></div></div><p>
+      This path control the session policy and provides a way to trigger
+      actions for other programs.
+      Using the session methods rather than the system HAL methods
+      provides the sleep-notification features and also enables other
+      security features, such as forgetting session keys on suspend.
+      These are the required DBUS methods for controlling system actions.
+    </p><p>
+      The <code class="literal">AllowedFoo</code> methods check if the current user in
+      the session is able to suspend, and has permission to do so.
+      This may also fail if the admin has locked down the session or system
+      action or if the computer cannot do the action due to a hardware
+      limitiation.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Control</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Suspend"></a>
+        <code class="literal">Suspend()</code>
       </h3></div></div></div><p>
-        Signals the value of the current DPMS state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td> </td></tr><tr><td> </td><td>on</td><td>100% power usage</td></tr><tr><td> </td><td>standby</td><td>&lt;80% power usage</td></tr><tr><td> </td><td>suspend</td><td>&lt;30W power usage</td></tr><tr><td> </td><td>off</td><td>&lt;8W power usage</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-signal-OnAcChanged"></a>
-        <code class="literal">OnAcChanged</code>
+        This call will attempt to suspend the system.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Hibernate"></a>
+        <code class="literal">Hibernate()</code>
       </h3></div></div></div><p>
-        Signals the new AC power state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>bool</td><td>The new AC power state</td></tr></tbody></table></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">GNOME Power Manager 2.17.5 Documentation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Icon Naming Scheme</td></tr></table></div></body></html>
+        This call will attempt to hibernate the system.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Shutdown"></a>
+        <code class="literal">Shutdown()</code>
+      </h3></div></div></div><p>
+        This call will attempt to shutdown the system.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Reboot"></a>
+        <code class="literal">Reboot()</code>
+      </h3></div></div></div><p>
+        This call will attempt to reboot the system.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-AllowedSuspend"></a>
+        <code class="literal">AllowedSuspend()</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to suspend.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to suspend</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-AllowedHibernate"></a>
+        <code class="literal">AllowedHibernate()</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to hibernate.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to hibernate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-AllowedShutdown"></a>
+        <code class="literal">AllowedShutdown()</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to shutdown.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to shutdown</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-AllowedReboot"></a>
+        <code class="literal">AllowedReboot()</code>
+      </h3></div></div></div><p>
+        If the current user in the session is able to reboot.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>boolean</td><td>If we are able to reboot</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Register"></a>
+        <code class="literal">Register()</code>
+      </h3></div></div></div><p>
+        Registers a program that wants notification and veto on any system
+        actions, such as suspending and shutdown.
+      </p><p>
+        This provides programs with information so they can do certain
+        operations, such as flush passwords on suspend or disconnect from
+        network shares.
+      </p><p>
+        NOTE: The power manager may disregard the <code class="literal">Register()</code>
+        call in some situations such as critically low power conditions.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "networkmanager-applet"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-UnRegister"></a>
+        <code class="literal">UnRegister()</code>
+      </h3></div></div></div><p>
+        Removes the request on the power notification.
+        If the program holding the cookie exits from the system bus without
+        calling <code class="literal">UnRegister()</code> then it is automatically removed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-Request"></a>
+        <code class="literal">Request</code>
+      </h3></div></div></div><p>
+        Signals that a system power action is required.
+        This signal can only be actioned by clients holding a
+        <code class="literal">Register()</code> cookie.
+      </p><p>
+        NOTE: Applications that fail to respond in a set time (typically one
+        second) may be ignored.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>The system action, e.g. suspend</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-control-Policy"></a>
+        <code class="literal">Policy()</code>
+      </h3></div></div></div><p>
+        Calling this method provides the power manager with a policy decision
+        after the <code class="literal">Request</code> signal has been received.
+        Applications should not respond with a negative response just because
+        they are working - only use the negative return value to indicate
+        that an operation cannot be safely be interrupted, such as saving
+        a file to a network share.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr><tr><td>in</td><td>boolean</td><td>if the action is allowed</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-statistics"></a>Statistics Data</h2></div></div></div><p>
+      Statistics data is values that can be collected by the power manager
+      for review or profiling.
+      These are important (but not requrired) methods allow the profiling
+      of power saving methods, for instancing showing on a graph that 20% more
+      power is saved using certain CPU schedulers.
+      These are optional DBUS methods for getting system statistics.
+    </p><p>
+      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Statistics</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetTypes"></a>
+        <code class="literal">GetTypes()</code>
+      </h3></div></div></div><p>
+        Gets a list of the types of data available.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>list of strings [as]</td><td>The types of data we support, e.g. [ 'voltage', 'power', 'percentage' ]</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetAxisType"></a>
+        <code class="literal">GetAxisType()</code>
+      </h3></div></div></div><p>
+        For some presentations, for example graphs we can present the data in
+        many different ways.
+        This method returns the type of data that is recorded for each axis.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>
+                The type of data (and entry from <code class="literal">GetTypes()</code>)
+              </td></tr><tr><td>out</td><td>string</td><td>X axis type, e.g. percentage</td></tr><tr><td>out</td><td>string</td><td>Y axis type, e.g. rate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetData"></a>
+        <code class="literal">GetData()</code>
+      </h3></div></div></div><p>
+        Gets the data for a given type.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>integer</td><td>The number of seconds of data we should return</td></tr><tr><td>in</td><td>string</td><td>The type of data we want</td></tr><tr><td>out</td><td>array of 3-integers [a(iii)]</td><td>
+                The data, where the 3-integers represent the X value, Y value
+                and data value respectively.
+              </td></tr></tbody></table></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">GNOME Power Manager 2.17.5 Documentation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. Icon Naming Scheme</td></tr></table></div></body></html>

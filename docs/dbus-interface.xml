@@ -12,11 +12,11 @@
     <title>Introduction</title>
     <para>
       Power Manager exposes a DBUS API for programs to obtain information about
-      the DPMS state and to change it if required.
+      the power state and to change it if required.
     </para>
     <para>
-      The following constants are used to uniquely refer to the PowerManager
-      object when making DBUS method calls:
+      The following constants are used to uniquely refer to the session-wide
+      PowerManager object when making DBUS method calls:
     </para>
     <informaltable>
       <tgroup cols="2">
@@ -24,10 +24,6 @@
           <row>
             <entry>DBUS Service:</entry>
             <entry><literal>org.gnome.PowerManager</literal></entry>
-          </row>
-          <row>
-            <entry>DBUS Object Path:</entry>
-            <entry><literal>/org/gnome/PowerManager</literal></entry>
           </row>
           <row>
             <entry>DBUS Interface:</entry>
@@ -38,307 +34,52 @@
     </informaltable>
   </sect1>
 
-  <sect1 id="pm-Compatibility">
-    <title>Compatibility</title>
+  <sect1 id="pm-dpms">
+    <title>DPMS Monitor Power Saving</title>
     <para>
-      Since gnome-power-manager version 2.14.x the API has changed in the
-      following way:
+      DPMS is a standard from the VESA consortium for managing the power
+      supply of monitors.
+      These are the optional DBUS methods for controlling the power saving of
+      the backlight of the current screen. These correspond to Xorg DPMS states:
     </para>
     <informaltable>
       <tgroup cols="2">
         <thead>
           <row>
-            <entry>2.14.x method name</entry>
-            <entry>2.15.x method name</entry>
+            <entry>Mode</entry>
+            <entry>Description</entry>
           </row>
         </thead>
         <tbody>
           <row>
-            <entry><literal>CanSuspend</literal></entry>
-            <entry><literal>AllowedSuspend</literal></entry>
+            <entry>on</entry>
+            <entry>100% power usage</entry>
           </row>
           <row>
-            <entry><literal>CanHibernate</literal></entry>
-            <entry><literal>AllowedHibernate</literal></entry>
+            <entry>standby</entry>
+            <entry>&lt;50% power usage</entry>
           </row>
           <row>
-            <entry><literal>InhibitInactiveSleep</literal></entry>
-            <entry><literal>Inhibit</literal></entry>
+            <entry>suspend</entry>
+            <entry>&lt;20% power usage</entry>
           </row>
           <row>
-            <entry><literal>AllowInactiveSleep</literal></entry>
-            <entry><literal>UnInhibit</literal></entry>
-          </row>
-          <row>
-            <entry><literal>getOnAc</literal></entry>
-            <entry><literal>GetOnAc</literal></entry>
-          </row>
-          <row>
-            <entry><literal>getDpmsMode</literal></entry>
-            <entry><literal>GetDpmsMode</literal></entry>
-          </row>
-          <row>
-            <entry><literal>setDpmsMode</literal></entry>
-            <entry><literal>SetDpmsMode</literal></entry>
-          </row>
-          <row>
-            <entry><literal>(none)</literal></entry>
-            <entry><literal>Reboot</literal></entry>
-          </row>
-          <row>
-            <entry><literal>(none)</literal></entry>
-            <entry><literal>AllowedShutdown</literal></entry>
-          </row>
-          <row>
-            <entry><literal>(none)</literal></entry>
-            <entry><literal>AllowedReboot</literal></entry>
-          </row>
-          <row>
-            <entry><literal>(none)</literal></entry>
-            <entry><literal>GetLowPowerMode</literal></entry>
+            <entry>off</entry>
+            <entry>&lt;5% power usage</entry>
           </row>
         </tbody>
       </tgroup>
     </informaltable>
-  </sect1>
 
-  <sect1 id="pm-methods">
-    <title>Methods</title>
     <para>
-      These are the DBUS methods.
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Dpms</literal>
     </para>
-    <sect2 id="pm-method-Suspend">
-      <title>
-        <literal>Suspend</literal>
-      </title>
-      <para>
-        This call will attempt to suspend the system.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>Success value</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
 
-    <sect2 id="pm-method-Hibernate">
+    <sect2 id="pm-dpms-SetMode">
       <title>
-        <literal>Hibernate</literal>
+        <literal>SetMode()</literal>
       </title>
       <para>
-        This call will attempt to hibernate the system.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>Success value</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-Shutdown">
-      <title>
-        <literal>Shutdown</literal>
-      </title>
-      <para>
-        This call will attempt to shutdown the system.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>Success value</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-Reboot">
-      <title>
-        <literal>Reboot</literal>
-      </title>
-      <para>
-        This call will attempt to reboot the system.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>Success value</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-AllowedSuspend">
-      <title>
-        <literal>AllowedSuspend</literal>
-      </title>
-      <para>
-        If the current user in the session is able to suspend, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>If we are able to suspend</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-AllowedHibernate">
-      <title>
-        <literal>AllowedHibernate</literal>
-      </title>
-      <para>
-        If the current user in the session is able to hibernate, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>If we are able to hibernate</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-AllowedShutdown">
-      <title>
-        <literal>AllowedShutdown</literal>
-      </title>
-      <para>
-        If the current user in the session is able to shutdown, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>If we are able to shutdown</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-AllowedReboot">
-      <title>
-        <literal>AllowedReboot</literal>
-      </title>
-      <para>
-        If the current user in the session is able to reboot, and has
-        permission to do so.
-        This may fail if the admin has locked down the session.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>boolean</entry>
-              <entry>If we are able to reboot</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-method-SetDpmsMode">
-      <title>
-        <literal>SetDpmsMode</literal>
-      </title>
-      <para>
-        DPMS is a standard from the VESA consortium for managing the power
-        supply of monitors.
-	This call requests a change in the state of DPMS for the current screen.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -353,36 +94,16 @@
             <row>
               <entry>in</entry>
               <entry>string</entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>on</entry>
-              <entry>100% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>standby</entry>
-              <entry>&lt;50% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>suspend</entry>
-              <entry>&lt;20% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>off</entry>
-              <entry>&lt;5% power usage</entry>
+              <entry>Required DPMS mode</entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-GetDpmsMode">
+    <sect2 id="pm-dpms-GetMode">
       <title>
-        <literal>GetDpmsMode</literal>
+        <literal>GetMode()</literal>
       </title>
       <para>
         Returns the DPMS mode state.
@@ -400,41 +121,421 @@
             <row>
               <entry>out</entry>
               <entry>string</entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>on</entry>
-              <entry>100% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>standby</entry>
-              <entry>&lt;80% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>suspend</entry>
-              <entry>&lt;30W power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>off</entry>
-              <entry>&lt;8W power usage</entry>
+              <entry>Current screen DPMS mode</entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-Inhibit">
+    <sect2 id="pm-dpms-ModeChanged">
       <title>
-        <literal>Inhibit</literal>
+        <literal>ModeChanged</literal>
+      </title>
+      <para>
+        Signals the value of the current DPMS state has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>Current screen DPMS mode</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-brightness">
+    <title>Backlight Brightness Adjustment</title>
+    <para>
+      Backlight brightness can be changed on most LCD hardware.
+      These are the optional DBUS methods for controlling the brightness of
+      the backlight.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/BrightnessLcd</literal>
+    </para>
+
+    <sect2 id="pm-brightness-SetBrightness">
+      <title>
+        <literal>SetBrightness()</literal>
+      </title>
+      <para>
+        This may not immediatly set the brightness if we are in a low power
+        sleep mode, if the panel is switched off, or if the panel is in an
+        idle dim state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-brightness-GetBrightness">
+      <title>
+        <literal>GetBrightness()</literal>
+      </title>
+      <para>
+        Returns the DPMS mode state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-brightness-BrightnessChanged">
+      <title>
+        <literal>BrightnessChanged</literal>
+      </title>
+      <para>
+        Signals the value of the current DPMS state has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-ui">
+    <title>User Interface Frontends</title>
+    <para>
+      Some user interface frontends will be in a different process to that
+      of any power manager and system state will have to be transmitted
+      over DBUS.
+      We only export the final 'result', i.e. the icon and description
+      as presenting a abstract power interface is wrong for this functionality.
+      These are the required DBUS methods for presenting an interface to the
+      user.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Ui</literal>
+    </para>
+
+    <sect2 id="pm-ui-GetDescription">
+      <title>
+        <literal>GetDescription()</literal>
+      </title>
+      <para>
+        Returns the system state description, used commonly as the tooltip
+        for a applet or system tray icon.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>System state description, e.g. Laptop battery 34 minutes until charged (34%)</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-DescriptionChanged">
+      <title>
+        <literal>DescriptionChanged</literal>
+      </title>
+      <para>
+        Signals the system state description has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>System state description</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-GetIcon">
+      <title>
+        <literal>GetIcon()</literal>
+      </title>
+      <para>
+        Returns the system icon used as the applet or system tray icon.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>Icon name, e.g. gpm-primary-080-charging</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-IconChanged">
+      <title>
+        <literal>IconChanged</literal>
+      </title>
+      <para>
+        Signals the system icon has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>Icon name</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-manager">
+    <title>System State Information</title>
+    <para>
+      Some programs may want to know if the system is running on AC power,
+      or running in a low power mode, for instance to disable index updating.
+      These are the required DBUS methods for showing system state.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Manager</literal>
+    </para>
+
+    <sect2 id="pm-ui-GetOnAc">
+      <title>
+        <literal>GetOnAc()</literal>
+      </title>
+      <para>
+        Returns the system AC state, i.e. if we are not running on battery
+        power.
+        Note: This method may still return false on AC using a desktop system
+        if the computer is using backup power from a monitored UPS.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If the system is using AC power</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-OnAcChanged">
+      <title>
+        <literal>OnAcChanged</literal>
+      </title>
+      <para>
+        Signals the AC state has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If the system is using AC power</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-GetLowPowerMode">
+      <title>
+        <literal>GetLowPowerMode()</literal>
+      </title>
+      <para>
+        Returns true if low power mode has been set.
+        This may be set on AC or battery power, both or neither depending on
+        the users policy setting.
+        This setting may also change with the battery level changing.
+        Programs should respect this value for the session, and only
+        perform cache-updates when absolutely required.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If the session should be run in low power mode</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-LowPowerModeChanged">
+      <title>
+        <literal>LowPowerModeChanged</literal>
+      </title>
+      <para>
+        Signals the low power mode has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If the session should be run in low power mode</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-inhibit">
+    <title>Inhibit System Sleep</title>
+    <para>
+      When the power manager detects an idle session and system, it can perform
+      a system suspend or hibernate, known as a system sleep.
+      We can prevent the power manager doing this action, if for instance
+      we are doing a slow network copy that will take many hours.
+      These are the required DBUS methods for inhibiting system sleep.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Inhibit</literal>
+    </para>
+
+    <sect2 id="pm-ui-RequestCookie">
+      <title>
+        <literal>RequestCookie()</literal>
       </title>
       <para>
         Inhibits the computer from performing the idle sleep action.
         Useful if you want to do an operation of long duration without the
         computer suspending.
+        Requests a cookie which is used for inhibiting an action.
+      </para>
+      <para>
+        A cookie is a random 32bit unsigned integer used to identify the
+        inhibit.
+        It is required as the same application may want to call inhibit
+        multiple times, without managing the inhibit calls itself.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -464,20 +565,16 @@
           </tbody>
         </tgroup>
       </informaltable>
-      <para>
-        A cookie is a random UINT32 used to identify the inhibit.
-      </para>
     </sect2>
 
-    <sect2 id="pm-method-UnInhibit">
+    <sect2 id="pm-inhibit-ClearCookie">
       <title>
-        <literal>UnInhibit</literal>
+        <literal>ClearCookie()</literal>
       </title>
       <para>
         Allows the computer to perform the idle sleep action.
-        Applications that quit without calling this method will be
-        automatically unregistered, but this is not recommended as the user
-        may be warned.
+        If the program holding the cookie exits from the system bus without
+        calling <literal>ClearCookie()</literal> then it is automatically removed.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -499,13 +596,14 @@
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-GetOnAc">
+    <sect2 id="pm-inhibit-IsValid">
       <title>
-        <literal>GetOnAc</literal>
+        <literal>IsValid()</literal>
       </title>
       <para>
-        Finds out if the computer is on AC power, i.e. is not running on primary
-        battery or UPS power.
+        Returns true if the auto-suspend functionality would be valid.
+        This will return false as soon as the number of inhibit cookies
+        is greater than zero.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -520,20 +618,19 @@
             <row>
               <entry>out</entry>
               <entry>boolean</entry>
-              <entry>If we are on AC power</entry>
+              <entry>If the auto-sleep is valid</entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-method-GetLowPowerMode">
+    <sect2 id="pm-ui-IsValidChanged">
       <title>
-        <literal>GetLowPowerMode</literal>
+        <literal>IsValidChanged</literal>
       </title>
       <para>
-        Finds out if the applications should use a low power mode, i.e. when this
-        is true, applications should not re-index or do non-essential activity.
+        Signals the valid state has changed.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -548,7 +645,7 @@
             <row>
               <entry>out</entry>
               <entry>boolean</entry>
-              <entry>If we should use a low power mode</entry>
+              <entry>If the auto-sleep is valid</entry>
             </row>
           </tbody>
         </tgroup>
@@ -556,17 +653,256 @@
     </sect2>
   </sect1>
 
-  <sect1 id="pm-signals">
-    <title>Signals</title>
+  <sect1 id="pm-control">
+    <title>Actions Control</title>
     <para>
-      These are the DBUS signals.
+      This path control the session policy and provides a way to trigger
+      actions for other programs.
+      Using the session methods rather than the system HAL methods
+      provides the sleep-notification features and also enables other
+      security features, such as forgetting session keys on suspend.
+      These are the required DBUS methods for controlling system actions.
     </para>
-    <sect2 id="pm-signal-DpmsModeChanged">
+
+    <para>
+      The <literal>AllowedFoo</literal> methods check if the current user in
+      the session is able to suspend, and has permission to do so.
+      This may also fail if the admin has locked down the session or system
+      action or if the computer cannot do the action due to a hardware
+      limitiation.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Control</literal>
+    </para>
+
+    <sect2 id="pm-control-Suspend">
       <title>
-        <literal>DpmsModeChanged</literal>
+        <literal>Suspend()</literal>
       </title>
       <para>
-        Signals the value of the current DPMS state.
+        This call will attempt to suspend the system.
+      </para>
+    </sect2>
+
+    <sect2 id="pm-control-Hibernate">
+      <title>
+        <literal>Hibernate()</literal>
+      </title>
+      <para>
+        This call will attempt to hibernate the system.
+      </para>
+    </sect2>
+
+    <sect2 id="pm-control-Shutdown">
+      <title>
+        <literal>Shutdown()</literal>
+      </title>
+      <para>
+        This call will attempt to shutdown the system.
+      </para>
+    </sect2>
+
+    <sect2 id="pm-control-Reboot">
+      <title>
+        <literal>Reboot()</literal>
+      </title>
+      <para>
+        This call will attempt to reboot the system.
+      </para>
+    </sect2>
+
+    <sect2 id="pm-control-AllowedSuspend">
+      <title>
+        <literal>AllowedSuspend()</literal>
+      </title>
+      <para>
+        If the current user in the session is able to suspend.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to suspend</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-control-AllowedHibernate">
+      <title>
+        <literal>AllowedHibernate()</literal>
+      </title>
+      <para>
+        If the current user in the session is able to hibernate.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to hibernate</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-control-AllowedShutdown">
+      <title>
+        <literal>AllowedShutdown()</literal>
+      </title>
+      <para>
+        If the current user in the session is able to shutdown.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to shutdown</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-control-AllowedReboot">
+      <title>
+        <literal>AllowedReboot()</literal>
+      </title>
+      <para>
+        If the current user in the session is able to reboot.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>boolean</entry>
+              <entry>If we are able to reboot</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-control-Register">
+      <title>
+        <literal>Register()</literal>
+      </title>
+      <para>
+        Registers a program that wants notification and veto on any system
+        actions, such as suspending and shutdown.
+      </para>
+      <para>
+        This provides programs with information so they can do certain
+        operations, such as flush passwords on suspend or disconnect from
+        network shares.
+      </para>
+      <para>
+        NOTE: The power manager may disregard the <literal>Register()</literal>
+        call in some situations such as critically low power conditions.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>the application name, e.g. "networkmanager-applet"</entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>unsigned integer</entry>
+              <entry>the cookie</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-control-UnRegister">
+      <title>
+        <literal>UnRegister()</literal>
+      </title>
+      <para>
+        Removes the request on the power notification.
+        If the program holding the cookie exits from the system bus without
+        calling <literal>UnRegister()</literal> then it is automatically removed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>unsigned integer</entry>
+              <entry>the cookie</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-ui-Request">
+      <title>
+        <literal>Request</literal>
+      </title>
+      <para>
+        Signals that a system power action is required.
+        This signal can only be actioned by clients holding a
+        <literal>Register()</literal> cookie.
+      </para>
+      <para>
+        NOTE: Applications that fail to respond in a set time (typically one
+        second) may be ignored.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -581,39 +917,72 @@
             <row>
               <entry>out</entry>
               <entry>string</entry>
-              <entry></entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>on</entry>
-              <entry>100% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>standby</entry>
-              <entry>&lt;80% power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>suspend</entry>
-              <entry>&lt;30W power usage</entry>
-            </row>
-            <row>
-              <entry></entry>
-              <entry>off</entry>
-              <entry>&lt;8W power usage</entry>
+              <entry>The system action, e.g. suspend</entry>
             </row>
           </tbody>
         </tgroup>
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-signal-OnAcChanged">
+    <sect2 id="pm-control-Policy">
       <title>
-        <literal>OnAcChanged</literal>
+        <literal>Policy()</literal>
       </title>
       <para>
-        Signals the new AC power state.
+        Calling this method provides the power manager with a policy decision
+        after the <literal>Request</literal> signal has been received.
+        Applications should not respond with a negative response just because
+        they are working - only use the negative return value to indicate
+        that an operation cannot be safely be interrupted, such as saving
+        a file to a network share.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>unsigned integer</entry>
+              <entry>the cookie</entry>
+            </row>
+            <row>
+              <entry>in</entry>
+              <entry>boolean</entry>
+              <entry>if the action is allowed</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+  </sect1>
+
+  <sect1 id="pm-statistics">
+    <title>Statistics Data</title>
+    <para>
+      Statistics data is values that can be collected by the power manager
+      for review or profiling.
+      These are important (but not requrired) methods allow the profiling
+      of power saving methods, for instancing showing on a graph that 20% more
+      power is saved using certain CPU schedulers.
+      These are optional DBUS methods for getting system statistics.
+    </para>
+
+    <para>
+      DBUS Object Path: <literal>/org/gnome/PowerManager/Statistics</literal>
+    </para>
+
+    <sect2 id="pm-statistics-GetTypes">
+      <title>
+        <literal>GetTypes()</literal>
+      </title>
+      <para>
+        Gets a list of the types of data available.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -627,8 +996,89 @@
           <tbody>
             <row>
               <entry>out</entry>
-              <entry>bool</entry>
-              <entry>The new AC power state</entry>
+              <entry>list of strings [as]</entry>
+              <entry>The types of data we support, e.g. [ 'voltage', 'power', 'percentage' ]</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-statistics-GetAxisType">
+      <title>
+        <literal>GetAxisType()</literal>
+      </title>
+      <para>
+        For some presentations, for example graphs we can present the data in
+        many different ways.
+        This method returns the type of data that is recorded for each axis.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>
+                The type of data (and entry from <literal>GetTypes()</literal>)
+              </entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>X axis type, e.g. percentage</entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>string</entry>
+              <entry>Y axis type, e.g. rate</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-statistics-GetData">
+      <title>
+        <literal>GetData()</literal>
+      </title>
+      <para>
+        Gets the data for a given type.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>integer</entry>
+              <entry>The number of seconds of data we should return</entry>
+            </row>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>The type of data we want</entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>array of 3-integers [a(iii)]</entry>
+              <entry>
+                The data, where the 3-integers represent the X value, Y value
+                and data value respectively.
+              </entry>
             </row>
           </tbody>
         </tgroup>
