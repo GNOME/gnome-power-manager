@@ -66,7 +66,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "GetPolicy", &error,
+	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, &policy_brightness,
 				 G_TYPE_INVALID);
@@ -78,7 +78,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 		*brightness = policy_brightness;
 	} else {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetPolicy failed!");
+		gpm_warning ("GetBrightness failed!");
 	}
 
 	return ret;
@@ -104,7 +104,7 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "SetPolicy", &error,
+	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
 				 G_TYPE_INT, brightness,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -114,7 +114,7 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetPolicy failed!");
+		gpm_warning ("SetBrightness failed!");
 	}
 
 	return ret;

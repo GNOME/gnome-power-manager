@@ -45,6 +45,8 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* brightness_changed)		(GpmSrvBrightnessLcd	*srv_brightness,
+							 gint			 brightness);
 } GpmSrvBrightnessLcdClass;
 
 typedef enum
@@ -57,10 +59,10 @@ GType		 gpm_srv_brightness_lcd_get_type	(void);
 GQuark		 gpm_srv_brightness_lcd_error_quark	(void);
 GpmSrvBrightnessLcd *gpm_srv_brightness_lcd_new		(void);
 
-gboolean gpm_brightness_lcd_get_policy			(GpmSrvBrightnessLcd	*srv_brightness,
+gboolean gpm_brightness_lcd_get_brightness		(GpmSrvBrightnessLcd	*srv_brightness,
 							 gint			*brightness,
 							 GError			**error);
-gboolean gpm_brightness_lcd_set_policy			(GpmSrvBrightnessLcd	*srv_brightness,
+gboolean gpm_brightness_lcd_set_brightness		(GpmSrvBrightnessLcd	*srv_brightness,
 							 gint			 brightness,
 							 GError			**error);
 

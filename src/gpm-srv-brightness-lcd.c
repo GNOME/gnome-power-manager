@@ -67,6 +67,13 @@ struct GpmSrvBrightnessLcdPrivate
 	GpmIdle			*idle;
 };
 
+enum {
+	BRIGHTNESS_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
+
 G_DEFINE_TYPE (GpmSrvBrightnessLcd, gpm_srv_brightness_lcd, G_TYPE_OBJECT)
 
 /**
@@ -87,9 +94,9 @@ gpm_srv_brightness_lcd_error_quark (void)
  * gpm_brightness_lcd_get_policy:
  **/
 gboolean
-gpm_brightness_lcd_get_policy (GpmSrvBrightnessLcd	*srv_brightness,
-			       gint			*brightness,
-			       GError			**error)
+gpm_brightness_lcd_get_brightness (GpmSrvBrightnessLcd	*srv_brightness,
+			           gint			*brightness,
+			           GError		**error)
 {
 	guint level;
 	gboolean ret;
@@ -110,11 +117,11 @@ gpm_brightness_lcd_get_policy (GpmSrvBrightnessLcd	*srv_brightness,
 }
 
 /**
- * gpm_brightness_lcd_set_policy:
+ * gpm_brightness_lcd_set_brightness:
  **/
-gboolean gpm_brightness_lcd_set_policy (GpmSrvBrightnessLcd	*srv_brightness,
-				        gint			 brightness,
-				        GError			**error)
+gboolean gpm_brightness_lcd_set_brightness (GpmSrvBrightnessLcd	*srv_brightness,
+				            gint		 brightness,
+				            GError		**error)
 {
 	gboolean ret;
 	g_return_val_if_fail (srv_brightness != NULL, FALSE);
@@ -286,22 +293,10 @@ brightness_changed_cb (GpmBrightnessLcd    *brightness,
 {
 	gpm_debug ("Need to display backlight feedback value %i", percentage);
 	gpm_feedback_display_value (srv_brightness->priv->feedback, (float) percentage / 100.0f);
-}
 
-/**
- * gpm_srv_brightness_lcd_constructor:
- **/
-static GObject *
-gpm_srv_brightness_lcd_constructor (GType type,
-			        guint n_construct_properties,
-			        GObjectConstructParam *construct_properties)
-{
-	GpmSrvBrightnessLcd      *brightness;
-	GpmSrvBrightnessLcdClass *klass;
-	klass = GPM_SRV_BRIGHTNESS_LCD_CLASS (g_type_class_peek (GPM_TYPE_SRV_BRIGHTNESS_LCD));
-	brightness = GPM_SRV_BRIGHTNESS_LCD (G_OBJECT_CLASS (gpm_srv_brightness_lcd_parent_class)->constructor
-			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (brightness);
+	/* we emit a signal for the brightness applet */
+	gpm_debug ("emitting brightness-changed : %i", percentage);
+	g_signal_emit (srv_brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
 }
 
 /**
@@ -346,7 +341,15 @@ gpm_srv_brightness_lcd_class_init (GpmSrvBrightnessLcdClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize	   = gpm_srv_brightness_lcd_finalize;
-	object_class->constructor  = gpm_srv_brightness_lcd_constructor;
+
+	signals [BRIGHTNESS_CHANGED] =
+		g_signal_new ("brightness-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmSrvBrightnessLcdClass, brightness_changed),
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__INT,
+			      G_TYPE_NONE, 1, G_TYPE_INT);
 
 	g_type_class_add_private (klass, sizeof (GpmSrvBrightnessLcdPrivate));
 }

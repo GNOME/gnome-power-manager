@@ -1,3 +1,14 @@
+2007-01-08  Richard Hughes  <richard@hughsie.com>
+
+	* src/dbus/gpm-dbus-brightness-lcd.xml:
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	Add a BrightnessChanged signal, and convert the method names to similar
+	style to DPMS.
+
+	* src/gpm-powermanager.c:
+	Use the new method names.
+
 2007-01-07  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
