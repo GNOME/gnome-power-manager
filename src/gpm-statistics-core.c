@@ -87,10 +87,6 @@ G_DEFINE_TYPE (GpmStatistics, gpm_statistics, G_TYPE_OBJECT)
 #define ACTION_BLANK_TEXT		_("Blank screen")
 #define ACTION_NOTHING_TEXT		_("Do nothing")
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_PATH			"/org/gnome/PowerManager"
-#define	GPM_DBUS_INTERFACE		"org.gnome.PowerManager"
-
 /**
  * gpm_statistics_class_init:
  * @klass: This graph class instance
@@ -681,7 +677,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 			  GPM_PROXY_SESSION,
 			  GPM_DBUS_SERVICE,
 			  GPM_DBUS_PATH_STATS,
-			  GPM_DBUS_INTERFACE);
+			  GPM_DBUS_INTERFACE_STATS);
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
 	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {

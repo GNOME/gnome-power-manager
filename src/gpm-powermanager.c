@@ -251,13 +251,13 @@ gpm_powermanager_init (GpmPowermanager *powermanager)
 				  GPM_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
 				  GPM_DBUS_PATH_BRIGHT_LCD,
-				  GPM_DBUS_INTERFACE);
+				  GPM_DBUS_INTERFACE_BRIGHT_LCD);
 	powermanager->priv->gproxy_inhibit = gpm_proxy_new ();
 	proxy = gpm_proxy_assign (powermanager->priv->gproxy_inhibit,
 				  GPM_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
 				  GPM_DBUS_PATH_INHIBIT,
-				  GPM_DBUS_INTERFACE);
+				  GPM_DBUS_INTERFACE_INHIBIT);
 }
 
 /**

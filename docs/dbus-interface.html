@@ -72,14 +72,12 @@
     </p><p>
       The following constants are used to uniquely refer to the session-wide
       PowerManager object when making DBUS method calls:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-dpms"></a>DPMS Monitor Power Saving</h2></div></div></div><p>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-dpms"></a>DPMS Monitor Power Saving</h2></div></div></div><p>
       DPMS is a standard from the VESA consortium for managing the power
       supply of monitors.
       These are the optional DBUS methods for controlling the power saving of
       the backlight of the current screen. These correspond to Xorg DPMS states:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>on</td><td>100% power usage</td></tr><tr><td>standby</td><td>&lt;50% power usage</td></tr><tr><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div><p>
-      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Dpms</code>
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-SetMode"></a>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>on</td><td>100% power usage</td></tr><tr><td>standby</td><td>&lt;50% power usage</td></tr><tr><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/Dpms</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.Dpms</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-SetMode"></a>
         <code class="literal">SetMode()</code>
       </h3></div></div></div><p>
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>Required DPMS mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-GetMode"></a>
@@ -94,23 +92,21 @@
       Backlight brightness can be changed on most LCD hardware.
       These are the optional DBUS methods for controlling the brightness of
       the backlight.
-    </p><p>
-      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/BrightnessLcd</code>
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-SetBrightness"></a>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/BrightnessLcd</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.BrightnessLcd</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-SetBrightness"></a>
         <code class="literal">SetBrightness()</code>
       </h3></div></div></div><p>
         This may not immediatly set the brightness if we are in a low power
         sleep mode, if the panel is switched off, or if the panel is in an
         idle dim state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-GetBrightness"></a>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-GetBrightness"></a>
         <code class="literal">GetBrightness()</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-BrightnessChanged"></a>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-BrightnessChanged"></a>
         <code class="literal">BrightnessChanged</code>
       </h3></div></div></div><p>
         Signals the value of the current DPMS state has changed.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>integer</td><td>Percentage brightness</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-ui"></a>User Interface Frontends</h2></div></div></div><p>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-ui"></a>User Interface Frontends</h2></div></div></div><p>
       Some user interface frontends will be in a different process to that
       of any power manager and system state will have to be transmitted
       over DBUS.
@@ -141,9 +137,7 @@
       Some programs may want to know if the system is running on AC power,
       or running in a low power mode, for instance to disable index updating.
       These are the required DBUS methods for showing system state.
-    </p><p>
-      DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Manager</code>
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetOnAc"></a>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/Manager</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.Manager</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-GetOnAc"></a>
         <code class="literal">GetOnAc()</code>
       </h3></div></div></div><p>
         Returns the system AC state, i.e. if we are not running on battery

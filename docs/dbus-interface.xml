@@ -25,10 +25,6 @@
             <entry>DBUS Service:</entry>
             <entry><literal>org.gnome.PowerManager</literal></entry>
           </row>
-          <row>
-            <entry>DBUS Interface:</entry>
-            <entry><literal>org.gnome.PowerManager</literal></entry>
-          </row>
         </tbody>
       </tgroup>
     </informaltable>
@@ -71,9 +67,20 @@
       </tgroup>
     </informaltable>
 
-    <para>
-      DBUS Object Path: <literal>/org/gnome/PowerManager/Dpms</literal>
-    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>DBUS Object Path:</entry>
+            <entry><literal>/org/gnome/PowerManager/Dpms</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Interface:</entry>
+            <entry><literal>org.gnome.PowerManager.Dpms</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
 
     <sect2 id="pm-dpms-SetMode">
       <title>
@@ -164,9 +171,20 @@
       the backlight.
     </para>
 
-    <para>
-      DBUS Object Path: <literal>/org/gnome/PowerManager/BrightnessLcd</literal>
-    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>DBUS Object Path:</entry>
+            <entry><literal>/org/gnome/PowerManager/BrightnessLcd</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Interface:</entry>
+            <entry><literal>org.gnome.PowerManager.BrightnessLcd</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
 
     <sect2 id="pm-brightness-SetBrightness">
       <title>
@@ -386,9 +404,20 @@
       These are the required DBUS methods for showing system state.
     </para>
 
-    <para>
-      DBUS Object Path: <literal>/org/gnome/PowerManager/Manager</literal>
-    </para>
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>DBUS Object Path:</entry>
+            <entry><literal>/org/gnome/PowerManager/Manager</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Interface:</entry>
+            <entry><literal>org.gnome.PowerManager.Manager</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
 
     <sect2 id="pm-ui-GetOnAc">
       <title>

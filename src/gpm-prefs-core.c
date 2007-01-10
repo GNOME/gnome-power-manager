@@ -165,8 +165,8 @@ gpm_dbus_method_bool (const gchar *method)
 
 	proxy = dbus_g_proxy_new_for_name (connection,
 					   GPM_DBUS_SERVICE,
-					   GPM_DBUS_PATH,
-					   GPM_DBUS_INTERFACE);
+					   GPM_DBUS_PATH_CONTROL,
+					   GPM_DBUS_INTERFACE_CONTROL);
 	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, &value,
