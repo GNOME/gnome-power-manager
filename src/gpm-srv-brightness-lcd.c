@@ -95,7 +95,7 @@ gpm_srv_brightness_lcd_error_quark (void)
  **/
 gboolean
 gpm_brightness_lcd_get_brightness (GpmSrvBrightnessLcd	*srv_brightness,
-			           gint			*brightness,
+			           guint		*brightness,
 			           GError		**error)
 {
 	guint level;
@@ -120,7 +120,7 @@ gpm_brightness_lcd_get_brightness (GpmSrvBrightnessLcd	*srv_brightness,
  * gpm_brightness_lcd_set_brightness:
  **/
 gboolean gpm_brightness_lcd_set_brightness (GpmSrvBrightnessLcd	*srv_brightness,
-				            gint		 brightness,
+				            guint		 brightness,
 				            GError		**error)
 {
 	gboolean ret;
@@ -288,7 +288,7 @@ idle_changed_cb (GpmIdle             *idle,
  **/
 static void
 brightness_changed_cb (GpmBrightnessLcd    *brightness,
-		       gint                 percentage,
+		       guint                percentage,
 		       GpmSrvBrightnessLcd *srv_brightness)
 {
 	gpm_debug ("Need to display backlight feedback value %i", percentage);
@@ -348,8 +348,8 @@ gpm_srv_brightness_lcd_class_init (GpmSrvBrightnessLcdClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmSrvBrightnessLcdClass, brightness_changed),
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__INT,
-			      G_TYPE_NONE, 1, G_TYPE_INT);
+			      g_cclosure_marshal_VOID__UINT,
+			      G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	g_type_class_add_private (klass, sizeof (GpmSrvBrightnessLcdPrivate));
 }

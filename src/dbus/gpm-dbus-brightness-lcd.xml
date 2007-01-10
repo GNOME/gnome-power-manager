@@ -2,10 +2,10 @@
 <node name="/">
   <interface name="org.gnome.PowerManager">
     <method name="GetBrightness">
-      <arg type="i" name="brightness" direction="out"/>
+      <arg type="u" name="brightness" direction="out"/>
     </method>
     <method name="SetBrightness">
-      <arg type="i" name="brightness" direction="in"/>
+      <arg type="u" name="brightness" direction="in"/>
     </method>
     <signal name="BrightnessChanged"/>
   </interface>

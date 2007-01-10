@@ -60,10 +60,10 @@ GQuark		 gpm_srv_brightness_lcd_error_quark	(void);
 GpmSrvBrightnessLcd *gpm_srv_brightness_lcd_new		(void);
 
 gboolean gpm_brightness_lcd_get_brightness		(GpmSrvBrightnessLcd	*srv_brightness,
-							 gint			*brightness,
+							 guint			*brightness,
 							 GError			**error);
 gboolean gpm_brightness_lcd_set_brightness		(GpmSrvBrightnessLcd	*srv_brightness,
-							 gint			 brightness,
+							 guint			 brightness,
 							 GError			**error);
 
 G_END_DECLS

@@ -55,7 +55,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 	GError  *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
-	gint policy_brightness;
+	guint policy_brightness;
 
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 	g_return_val_if_fail (brightness != NULL, FALSE);
@@ -68,7 +68,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_INT, &policy_brightness,
+				 G_TYPE_UINT, &policy_brightness,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -105,7 +105,7 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 	}
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				 G_TYPE_INT, brightness,
+				 G_TYPE_UINT, brightness,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {

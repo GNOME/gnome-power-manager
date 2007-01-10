@@ -1,3 +1,13 @@
+2007-01-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/dbus/gpm-dbus-brightness-lcd.xml:
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_set_hw):
+	* src/gpm-powermanager.c: (gpm_powermanager_get_brightness_lcd),
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	Make sure we always use an unsigned int for brightness.
+	This should fix #395174.
+
 2007-01-08  Richard Hughes  <richard@hughsie.com>
 
 	* docs/dbus-interface.html:
