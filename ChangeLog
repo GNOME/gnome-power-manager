@@ -1,5 +1,14 @@
 2007-01-12  Richard Hughes  <richard@hughsie.com>
 
+	Patch by: William Jon McCann <mccann@jhu.edu>
+
+	* src/gpm-brightness-lcd.c:
+	GPM uses UINT32 for brightness but HAL uses INT32. Fix the crasher
+	of #395174. This is only become apparent as the new DELL smbios addon
+	enforces correct signedness but the old method did not.
+
+2007-01-12  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw),
 	* src/gpm-brightness-kbd.h:
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_class_init),
@@ -9,7 +18,7 @@
 	* src/gpm-proxy.c:
 	Make sure an invalid proxy doesn't segfault gnome-power-manager.
 	This is due to a critical log message, where we should probably
-	only be a user.
+	only be a developer warning.
 
 2007-01-12  Thomas Wood  <thos@gnome.org>
 

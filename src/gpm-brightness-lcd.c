@@ -88,6 +88,7 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 	GError     *error = NULL;
 	gboolean    ret;
 	DBusGProxy *proxy;
+	int         level;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
@@ -100,8 +101,12 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_UINT, brightness_level_hw,
+				 G_TYPE_INT, &level,
 				 G_TYPE_INVALID);
+	if (brightness_level_hw != NULL) {
+		*brightness_level_hw = (guint)level;
+	}
+
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
@@ -150,7 +155,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				 G_TYPE_UINT, brightness_level_hw,
+				 G_TYPE_INT, (int)brightness_level_hw,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
