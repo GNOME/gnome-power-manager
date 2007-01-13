@@ -1,3 +1,16 @@
+2007-01-12  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw),
+	* src/gpm-brightness-kbd.h:
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_class_init),
+	* src/gpm-brightness-lcd.h:
+	Clear up some more guint and gint problems.
+
+	* src/gpm-proxy.c:
+	Make sure an invalid proxy doesn't segfault gnome-power-manager.
+	This is due to a critical log message, where we should probably
+	only be a user.
+
 2007-01-12  Thomas Wood  <thos@gnome.org>
 
 	Patch by: Denis Washington <dwashington@gmx.net>

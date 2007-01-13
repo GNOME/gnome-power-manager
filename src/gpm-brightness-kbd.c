@@ -104,7 +104,7 @@ gpm_brightness_kbd_get_hw (GpmBrightnessKbd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_INT, brightness_level_hw,
+				 G_TYPE_UINT, brightness_level_hw,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -154,7 +154,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				 G_TYPE_INT, brightness_level_hw,
+				 G_TYPE_UINT, brightness_level_hw,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
@@ -526,10 +526,10 @@ gpm_brightness_kbd_class_init (GpmBrightnessKbdClass *klass)
 			      G_STRUCT_OFFSET (GpmBrightnessKbdClass, brightness_changed),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__INT,
+			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_INT);
+			      G_TYPE_UINT);
 
 	g_type_class_add_private (klass, sizeof (GpmBrightnessKbdPrivate));
 }

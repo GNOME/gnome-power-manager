@@ -192,7 +192,10 @@ DBusGProxy *
 gpm_proxy_get_proxy (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, NULL);
+	if (gproxy->priv->assigned == FALSE) {
+		gpm_warning ("Cannot get proxy, not assigned");
+		return NULL;
+	}
 	return gproxy->priv->proxy;
 }
 
@@ -205,7 +208,10 @@ gchar *
 gpm_proxy_get_service (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, NULL);
+	if (gproxy->priv->assigned == FALSE) {
+		gpm_warning ("Cannot get service, not assigned");
+		return NULL;
+	}
 	return gproxy->priv->service;
 }
 
@@ -218,7 +224,10 @@ gchar *
 gpm_proxy_get_interface (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, NULL);
+	if (gproxy->priv->assigned == FALSE) {
+		gpm_warning ("Cannot get interface, not assigned");
+		return NULL;
+	}
 	return gproxy->priv->interface;
 }
 
@@ -231,7 +240,10 @@ gchar *
 gpm_proxy_get_path (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), NULL);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, NULL);
+	if (gproxy->priv->assigned == FALSE) {
+		gpm_warning ("Cannot get path, not assigned");
+		return NULL;
+	}
 	return gproxy->priv->path;
 }
 
@@ -244,7 +256,10 @@ GpmProxyBusType
 gpm_proxy_get_bus_type (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), GPM_PROXY_UNKNOWN);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, GPM_PROXY_UNKNOWN);
+	if (gproxy->priv->assigned == FALSE) {
+		gpm_warning ("Cannot get bus type, not assigned");
+		return GPM_PROXY_UNKNOWN;
+	}
 	return gproxy->priv->bus_type;
 }
 
@@ -257,8 +272,9 @@ gboolean
 gpm_proxy_is_connected (GpmProxy *gproxy)
 {
 	g_return_val_if_fail (GPM_IS_PROXY (gproxy), FALSE);
-	g_return_val_if_fail (gproxy->priv->assigned == TRUE, FALSE);
-	
+	if (gproxy->priv->assigned == FALSE) {
+		return FALSE;
+	}
 	if (gproxy->priv->proxy == NULL) {
 		return FALSE;
 	}

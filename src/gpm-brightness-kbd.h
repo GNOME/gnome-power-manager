@@ -47,7 +47,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* brightness_changed)	(GpmBrightnessKbd	*brightness,
-						 gint			 percentage);
+						 guint			 percentage);
 } GpmBrightnessKbdClass;
 
 GType		 gpm_brightness_kbd_get_type	(void);

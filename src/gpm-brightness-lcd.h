@@ -46,7 +46,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* brightness_changed)	(GpmBrightnessLcd	*brightness,
-						 gint			 percentage);
+						 guint			 percentage);
 } GpmBrightnessLcdClass;
 
 GType		 gpm_brightness_lcd_get_type	(void);

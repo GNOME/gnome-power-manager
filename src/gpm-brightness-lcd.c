@@ -521,10 +521,10 @@ gpm_brightness_lcd_class_init (GpmBrightnessLcdClass *klass)
 			      G_STRUCT_OFFSET (GpmBrightnessLcdClass, brightness_changed),
 			      NULL,
 			      NULL,
-			      g_cclosure_marshal_VOID__INT,
+			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE,
 			      1,
-			      G_TYPE_INT);
+			      G_TYPE_UINT);
 
 	g_type_class_add_private (klass, sizeof (GpmBrightnessLcdPrivate));
 }
@@ -543,7 +543,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	gchar **names;
 	gchar *manufacturer_string = NULL;
 	gboolean res;
-	gint value;
+	guint value;
 
 	brightness->priv = GPM_BRIGHTNESS_LCD_GET_PRIVATE (brightness);
 
@@ -551,7 +551,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	brightness->priv->conf = gpm_conf_new ();
 
 	/* set the default dim */
-	gpm_conf_get_int (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
 	gpm_brightness_lcd_set_dim (brightness, value);
 
 	/* save udi of lcd adapter */
