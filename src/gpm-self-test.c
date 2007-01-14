@@ -30,6 +30,7 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-powermanager.h"
+#include "gpm-proxy.h"
 
 guint test_total = 0;
 guint test_suc = 0;
@@ -72,6 +73,57 @@ test_failed (const gchar *format, ...)
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 	g_print ("...FAILED [%s]\n", va_args_buffer);
+}
+
+void
+test_proxy (GpmPowermanager *powermanager)
+{
+	GpmProxy *gproxy = NULL;
+	DBusGProxy *proxy = NULL;
+
+	test_type = "proxy  ";
+
+	/************************************************************/
+	test_title ("make sure we can get a new gproxy");
+	gproxy = gpm_proxy_new ();
+	if (gproxy != NULL) {
+		test_success ("got gproxy");
+	} else {
+		test_failed ("could not get gproxy");
+	}
+
+	/************************************************************/
+	test_title ("make sure proxy if NULL when no assign");
+	proxy = gpm_proxy_get_proxy (gproxy);
+	if (proxy == NULL) {
+		test_success ("got NULL proxy");
+	} else {
+		test_failed ("did not get NULL proxy");
+	}
+
+	/************************************************************/
+	test_title ("make sure we can assign and connect");
+	proxy = gpm_proxy_assign (gproxy,
+				  GPM_PROXY_SESSION,
+				  GPM_DBUS_SERVICE,
+				  GPM_DBUS_PATH_INHIBIT,
+				  GPM_DBUS_INTERFACE_INHIBIT);
+	if (proxy != NULL) {
+		test_success ("got proxy (init)");
+	} else {
+		test_failed ("could not get proxy (init)");
+	}
+
+	/************************************************************/
+	test_title ("make sure proxy non NULL when assigned");
+	proxy = gpm_proxy_get_proxy (gproxy);
+	if (proxy != NULL) {
+		test_success ("got valid proxy");
+	} else {
+		test_failed ("did not get valid proxy");
+	}
+
+	g_object_unref (gproxy);	
 }
 
 void
@@ -208,6 +260,7 @@ main (int argc, char **argv)
 	}
 
 	test_inhibit (powermanager);
+	test_proxy (powermanager);
 
 	g_print ("test passes (%u/%u) : ", test_suc, test_total);
 	if (test_suc == test_total) {
