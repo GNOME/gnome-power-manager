@@ -250,8 +250,8 @@ gpm_powermanager_init (GpmPowermanager *powermanager)
 	proxy = gpm_proxy_assign (powermanager->priv->gproxy_brightness,
 				  GPM_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
-				  GPM_DBUS_PATH_BRIGHT_LCD,
-				  GPM_DBUS_INTERFACE_BRIGHT_LCD);
+				  GPM_DBUS_PATH_BACKLIGHT,
+				  GPM_DBUS_INTERFACE_BACKLIGHT);
 	powermanager->priv->gproxy_inhibit = gpm_proxy_new ();
 	proxy = gpm_proxy_assign (powermanager->priv->gproxy_inhibit,
 				  GPM_PROXY_SESSION,

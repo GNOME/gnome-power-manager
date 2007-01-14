@@ -57,20 +57,18 @@
 #include "gpm-powermanager.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
-#include "gpm-srv-brightness-lcd.h"
+#include "gpm-srv-backlight.h"
 #include "gpm-srv-brightness-kbd.h"
 #include "gpm-srv-cpufreq.h"
-#include "gpm-srv-dpms.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-sound.h"
 #include "gpm-tray-icon.h"
 #include "gpm-warning.h"
 
-#include "dbus/gpm-dbus-dpms.h"
 #include "dbus/gpm-dbus-control.h"
 #include "dbus/gpm-dbus-statistics.h"
-#include "dbus/gpm-dbus-brightness-lcd.h"
+#include "dbus/gpm-dbus-backlight.h"
 #include "dbus/gpm-dbus-ui.h"
 #include "dbus/gpm-dbus-inhibit.h"
 
@@ -102,10 +100,9 @@ struct GpmManagerPrivate
 	GpmWarning		*warning;
 
 	/* interactive services */
-	GpmSrvBrightnessLcd	*srv_brightness_lcd;
+	GpmSrvBacklight		*srv_backlight;
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
 	GpmSrvCpuFreq	 	*srv_cpufreq;
-	GpmSrvDpms	 	*srv_dpms;
 	GpmSrvScreensaver 	*srv_screensaver;
 
 	GpmWarningState		 last_primary;
@@ -1520,29 +1517,19 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->srv_cpufreq = gpm_srv_cpufreq_new ();
 
 	/* try and start an interactive service */
-	manager->priv->srv_dpms = gpm_srv_dpms_new ();
-	if (manager->priv->srv_dpms != NULL) {
-		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_SRV_DPMS,
-						 &dbus_glib_gpm_dpms_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_DPMS,
-						     G_OBJECT (manager->priv->srv_dpms));
-	}
-
-	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (manager->priv->screensaver, "auth-request",
  			  G_CALLBACK (screensaver_auth_request_cb), manager);
 	manager->priv->srv_screensaver = gpm_srv_screensaver_new ();
 
 	/* try an start an interactive service */
-	manager->priv->srv_brightness_lcd = gpm_srv_brightness_lcd_new ();
-	if (manager->priv->srv_brightness_lcd != NULL) {
+	manager->priv->srv_backlight = gpm_srv_backlight_new ();
+	if (manager->priv->srv_backlight != NULL) {
 		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_SRV_BRIGHTNESS_LCD,
-						 &dbus_glib_gpm_brightness_lcd_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BRIGHT_LCD,
-						     G_OBJECT (manager->priv->srv_brightness_lcd));
+		dbus_g_object_type_install_info (GPM_TYPE_SRV_BACKLIGHT,
+						 &dbus_glib_gpm_backlight_object_info);
+		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BACKLIGHT,
+						     G_OBJECT (manager->priv->srv_backlight));
 	}
 
 	manager->priv->srv_brightness_kbd = gpm_srv_brightness_kbd_new ();
@@ -1655,11 +1642,8 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->srv_cpufreq) {
 		g_object_unref (manager->priv->srv_cpufreq);
 	}
-	if (manager->priv->srv_dpms) {
-		g_object_unref (manager->priv->srv_dpms);
-	}
-	if (manager->priv->srv_brightness_lcd) {
-		g_object_unref (manager->priv->srv_brightness_lcd);
+	if (manager->priv->srv_backlight) {
+		g_object_unref (manager->priv->srv_backlight);
 	}
 	if (manager->priv->srv_brightness_kbd) {
 		g_object_unref (manager->priv->srv_brightness_kbd);

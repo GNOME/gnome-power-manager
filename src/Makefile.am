@@ -154,12 +154,10 @@ gnome_power_manager_SOURCES =				\
 	gpm-notify.c					\
 	gpm-warning.h					\
 	gpm-warning.c					\
-	gpm-srv-brightness-lcd.h			\
-	gpm-srv-brightness-lcd.c			\
+	gpm-srv-backlight.h				\
+	gpm-srv-backlight.c				\
 	gpm-srv-brightness-kbd.h			\
 	gpm-srv-brightness-kbd.c			\
-	gpm-srv-dpms.h					\
-	gpm-srv-dpms.c					\
 	gpm-srv-screensaver.h				\
 	gpm-srv-screensaver.c				\
 	gpm-srv-cpufreq.h				\

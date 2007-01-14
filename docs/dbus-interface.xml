@@ -30,11 +30,117 @@
     </informaltable>
   </sect1>
 
-  <sect1 id="pm-dpms">
-    <title>DPMS Monitor Power Saving</title>
+  <sect1 id="pm-backlight">
+    <title>Backlight Adjustment</title>
     <para>
-      DPMS is a standard from the VESA consortium for managing the power
-      supply of monitors.
+      Backlight brightness and state can be changed on most LCD hardware.
+      These are the optional DBUS methods for controlling the brightness of
+      the backlight.
+    </para>
+
+    <informaltable>
+      <tgroup cols="2">
+        <tbody>
+          <row>
+            <entry>DBUS Object Path:</entry>
+            <entry><literal>/org/gnome/PowerManager/Backlight</literal></entry>
+          </row>
+          <row>
+            <entry>DBUS Interface:</entry>
+            <entry><literal>org.gnome.PowerManager.Backlight</literal></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+
+    <sect2 id="pm-backlight-SetBrightness">
+      <title>
+        <literal>SetBrightness()</literal>
+      </title>
+      <para>
+        This may not immediatly set the brightness if we are in a low power
+        sleep mode, if the panel is switched off, or if the panel is in an
+        idle dim state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>unsigned integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-backlight-GetBrightness">
+      <title>
+        <literal>GetBrightness()</literal>
+      </title>
+      <para>
+        Returns the DPMS mode state.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>unsigned integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-backlight-BrightnessChanged">
+      <title>
+        <literal>BrightnessChanged</literal>
+      </title>
+      <para>
+        Signals the value of the current DPMS state has changed.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>out</entry>
+              <entry>unsigned integer</entry>
+              <entry>Percentage brightness</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-dpms-SetMode">
+      <title>
+        <literal>SetMode()</literal>
+      </title>
+    <para>
       These are the optional DBUS methods for controlling the power saving of
       the backlight of the current screen. These correspond to Xorg DPMS states:
     </para>
@@ -66,28 +172,6 @@
         </tbody>
       </tgroup>
     </informaltable>
-
-    <informaltable>
-      <tgroup cols="2">
-        <tbody>
-          <row>
-            <entry>DBUS Object Path:</entry>
-            <entry><literal>/org/gnome/PowerManager/Dpms</literal></entry>
-          </row>
-          <row>
-            <entry>DBUS Interface:</entry>
-            <entry><literal>org.gnome.PowerManager.Dpms</literal></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </informaltable>
-
-    <sect2 id="pm-dpms-SetMode">
-      <title>
-        <literal>SetMode()</literal>
-      </title>
-      <para>
-      </para>
       <informaltable>
         <tgroup cols="2">
           <thead>
@@ -161,113 +245,7 @@
         </tgroup>
       </informaltable>
     </sect2>
-  </sect1>
 
-  <sect1 id="pm-brightness">
-    <title>Backlight Brightness Adjustment</title>
-    <para>
-      Backlight brightness can be changed on most LCD hardware.
-      These are the optional DBUS methods for controlling the brightness of
-      the backlight.
-    </para>
-
-    <informaltable>
-      <tgroup cols="2">
-        <tbody>
-          <row>
-            <entry>DBUS Object Path:</entry>
-            <entry><literal>/org/gnome/PowerManager/BrightnessLcd</literal></entry>
-          </row>
-          <row>
-            <entry>DBUS Interface:</entry>
-            <entry><literal>org.gnome.PowerManager.BrightnessLcd</literal></entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </informaltable>
-
-    <sect2 id="pm-brightness-SetBrightness">
-      <title>
-        <literal>SetBrightness()</literal>
-      </title>
-      <para>
-        This may not immediatly set the brightness if we are in a low power
-        sleep mode, if the panel is switched off, or if the panel is in an
-        idle dim state.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>in</entry>
-              <entry>unsigned integer</entry>
-              <entry>Percentage brightness</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-brightness-GetBrightness">
-      <title>
-        <literal>GetBrightness()</literal>
-      </title>
-      <para>
-        Returns the DPMS mode state.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>unsigned integer</entry>
-              <entry>Percentage brightness</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
-
-    <sect2 id="pm-brightness-BrightnessChanged">
-      <title>
-        <literal>BrightnessChanged</literal>
-      </title>
-      <para>
-        Signals the value of the current DPMS state has changed.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Direction</entry>
-              <entry>Type</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry>out</entry>
-              <entry>unsigned integer</entry>
-              <entry>Percentage brightness</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-    </sect2>
   </sect1>
 
   <sect1 id="pm-ui">

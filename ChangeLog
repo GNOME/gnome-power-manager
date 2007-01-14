@@ -1,5 +1,29 @@
 2007-01-13  Richard Hughes  <richard@hughsie.com>
 
+	* docs/dbus-interface.xml:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-backlight.xml:
+	* src/dbus/gpm-dbus-brightness-lcd.xml:
+	* src/dbus/gpm-dbus-dpms.xml:
+	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-powermanager.c: (gpm_powermanager_init):
+	* src/gpm-powermanager.h:
+	As discussed, having two interfaces for backlight control is crazy.
+	Merge BrightnessLcd and Dpms into Backlight so we can use this interface
+	in a more generic way.
+
+	* src/gpm-srv-brightness-lcd.c:
+	* src/gpm-srv-brightness-lcd.h:
+	* src/gpm-srv-dpms.c:
+	* src/gpm-srv-dpms.h:
+	* src/gpm-srv-backlight.c:
+	* src/gpm-srv-backlight.h:
+	Merge the two interfaces into one new GObject.
+
+2007-01-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/dbus/gpm-dbus-brightness-lcd.xml:
 	* src/dbus/gpm-dbus-control.xml:
 	* src/dbus/gpm-dbus-dpms.xml:

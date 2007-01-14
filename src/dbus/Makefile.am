@@ -3,21 +3,19 @@ NULL =
 EXTRA_DIST =						\
 	gpm-dbus-control.xml				\
 	gpm-dbus-inhibit.xml				\
-	gpm-dbus-dpms.xml				\
 	gpm-dbus-manager.xml				\
 	gpm-dbus-statistics.xml				\
 	gpm-dbus-ui.xml					\
-	gpm-dbus-brightness-lcd.xml			\
+	gpm-dbus-backlight.xml				\
 	$(NULL)
 
 BUILT_SOURCES = 					\
 	gpm-dbus-control.h				\
 	gpm-dbus-inhibit.h				\
-	gpm-dbus-dpms.h					\
 	gpm-dbus-manager.h				\
 	gpm-dbus-statistics.h				\
 	gpm-dbus-ui.h					\
-	gpm-dbus-brightness-lcd.h			\
+	gpm-dbus-backlight.h				\
 	$(NULL)
 
 gpm-dbus-control.h: gpm-dbus-control.xml
@@ -41,13 +39,6 @@ gpm-dbus-ui.h: gpm-dbus-ui.xml
 		--output=gpm-dbus-ui.h			\
 		$(srcdir)/gpm-dbus-ui.xml
 
-gpm-dbus-dpms.h: gpm-dbus-dpms.xml
-	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_dpms			\
-		--mode=glib-server			\
-		--output=gpm-dbus-dpms.h		\
-		$(srcdir)/gpm-dbus-dpms.xml
-
 gpm-dbus-manager.h: gpm-dbus-manager.xml
 	libtool --mode=execute dbus-binding-tool	\
 		--prefix=gpm_manager			\
@@ -62,12 +53,12 @@ gpm-dbus-statistics.h: gpm-dbus-statistics.xml
 		--output=gpm-dbus-statistics.h		\
 		$(srcdir)/gpm-dbus-statistics.xml
 
-gpm-dbus-brightness-lcd.h: gpm-dbus-brightness-lcd.xml
+gpm-dbus-backlight.h: gpm-dbus-backlight.xml
 	libtool --mode=execute dbus-binding-tool	\
-		--prefix=gpm_brightness_lcd		\
+		--prefix=gpm_backlight			\
 		--mode=glib-server			\
-		--output=gpm-dbus-brightness-lcd.h	\
-		$(srcdir)/gpm-dbus-brightness-lcd.xml
+		--output=gpm-dbus-backlight.h		\
+		$(srcdir)/gpm-dbus-backlight.xml
 
 clean-local:
 	rm -f *~

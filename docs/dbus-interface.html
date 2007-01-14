@@ -1,15 +1,15 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. DBUS Interface</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="prev" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="next" href="icon-scheme.html" title="Chapter 2. Icon Naming Scheme"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. DBUS Interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="dbus-interface"></a>Chapter 1. DBUS Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-dpms">DPMS Monitor Power Saving</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-SetMode">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 1. DBUS Interface</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"><link rel="start" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="up" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="prev" href="index.html" title="GNOME Power Manager 2.17.5 Documentation"><link rel="next" href="icon-scheme.html" title="Chapter 2. Icon Naming Scheme"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 1. DBUS Interface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="icon-scheme.html">Next</a></td></tr></table><hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="dbus-interface"></a>Chapter 1. DBUS Interface</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="dbus-interface.html#pm-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="dbus-interface.html#pm-backlight">Backlight Adjustment</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-backlight-SetBrightness">
+        <code class="literal">SetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-backlight-GetBrightness">
+        <code class="literal">GetBrightness()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-backlight-BrightnessChanged">
+        <code class="literal">BrightnessChanged</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-SetMode">
         <code class="literal">SetMode()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-GetMode">
         <code class="literal">GetMode()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-dpms-ModeChanged">
         <code class="literal">ModeChanged</code>
-      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-brightness">Backlight Brightness Adjustment</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-SetBrightness">
-        <code class="literal">SetBrightness()</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-GetBrightness">
-        <code class="literal">GetBrightness()</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-brightness-BrightnessChanged">
-        <code class="literal">BrightnessChanged</code>
       </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-ui">User Interface Frontends</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-GetDescription">
         <code class="literal">GetDescription()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-DescriptionChanged">
@@ -72,15 +72,30 @@
     </p><p>
       The following constants are used to uniquely refer to the session-wide
       PowerManager object when making DBUS method calls:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-dpms"></a>DPMS Monitor Power Saving</h2></div></div></div><p>
-      DPMS is a standard from the VESA consortium for managing the power
-      supply of monitors.
-      These are the optional DBUS methods for controlling the power saving of
-      the backlight of the current screen. These correspond to Xorg DPMS states:
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>on</td><td>100% power usage</td></tr><tr><td>standby</td><td>&lt;50% power usage</td></tr><tr><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/Dpms</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.Dpms</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-SetMode"></a>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.gnome.PowerManager</code></td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-backlight"></a>Backlight Adjustment</h2></div></div></div><p>
+      Backlight brightness and state can be changed on most LCD hardware.
+      These are the optional DBUS methods for controlling the brightness of
+      the backlight.
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/Backlight</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.Backlight</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-backlight-SetBrightness"></a>
+        <code class="literal">SetBrightness()</code>
+      </h3></div></div></div><p>
+        This may not immediatly set the brightness if we are in a low power
+        sleep mode, if the panel is switched off, or if the panel is in an
+        idle dim state.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-backlight-GetBrightness"></a>
+        <code class="literal">GetBrightness()</code>
+      </h3></div></div></div><p>
+        Returns the DPMS mode state.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-backlight-BrightnessChanged"></a>
+        <code class="literal">BrightnessChanged</code>
+      </h3></div></div></div><p>
+        Signals the value of the current DPMS state has changed.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-SetMode"></a>
         <code class="literal">SetMode()</code>
       </h3></div></div></div><p>
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>Required DPMS mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-GetMode"></a>
+      These are the optional DBUS methods for controlling the power saving of
+      the backlight of the current screen. These correspond to Xorg DPMS states:
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Mode</th><th>Description</th></tr></thead><tbody><tr><td>on</td><td>100% power usage</td></tr><tr><td>standby</td><td>&lt;50% power usage</td></tr><tr><td>suspend</td><td>&lt;20% power usage</td></tr><tr><td>off</td><td>&lt;5% power usage</td></tr></tbody></table></div><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>Required DPMS mode</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-dpms-GetMode"></a>
         <code class="literal">GetMode()</code>
       </h3></div></div></div><p>
         Returns the DPMS mode state.
@@ -88,25 +103,7 @@
         <code class="literal">ModeChanged</code>
       </h3></div></div></div><p>
         Signals the value of the current DPMS state has changed.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Current screen DPMS mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-brightness"></a>Backlight Brightness Adjustment</h2></div></div></div><p>
-      Backlight brightness can be changed on most LCD hardware.
-      These are the optional DBUS methods for controlling the brightness of
-      the backlight.
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Object Path:</td><td><code class="literal">/org/gnome/PowerManager/BrightnessLcd</code></td></tr><tr><td>DBUS Interface:</td><td><code class="literal">org.gnome.PowerManager.BrightnessLcd</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-SetBrightness"></a>
-        <code class="literal">SetBrightness()</code>
-      </h3></div></div></div><p>
-        This may not immediatly set the brightness if we are in a low power
-        sleep mode, if the panel is switched off, or if the panel is in an
-        idle dim state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-GetBrightness"></a>
-        <code class="literal">GetBrightness()</code>
-      </h3></div></div></div><p>
-        Returns the DPMS mode state.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-brightness-BrightnessChanged"></a>
-        <code class="literal">BrightnessChanged</code>
-      </h3></div></div></div><p>
-        Signals the value of the current DPMS state has changed.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>unsigned integer</td><td>Percentage brightness</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-ui"></a>User Interface Frontends</h2></div></div></div><p>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>string</td><td>Current screen DPMS mode</td></tr></tbody></table></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pm-ui"></a>User Interface Frontends</h2></div></div></div><p>
       Some user interface frontends will be in a different process to that
       of any power manager and system state will have to be transmitted
       over DBUS.
