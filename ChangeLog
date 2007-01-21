@@ -1,3 +1,13 @@
+2007-01-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-button.c:
+	* src/gpm-button.h:
+	* src/gpm-manager.c:
+	* src/gpm-srv-backlight.c: (idle_changed_cb):
+	* src/gpm-srv-screensaver.c: (ac_adapter_changed_cb):
+	Don't poke the screensaver when we remove the ac adapter when the lid
+	is closed. Fixes #384254.
+
 2007-01-19  Denis Washington <dwashington@gmx.net>
 
 	Fixes #394701

@@ -632,7 +632,7 @@ idle_changed_cb (GpmIdle    *idle,
 	 * support hardware blanking.
 	 * Details are here: https://launchpad.net/malone/bugs/22522
 	 */
-	if (button_is_lid_closed (manager->priv->button) == TRUE && laptop_using_ext_mon == FALSE) {
+	if (gpm_button_is_lid_closed (manager->priv->button) == TRUE && laptop_using_ext_mon == FALSE) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
@@ -850,7 +850,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	   is closed. Fixes #331655 */
 	if (event_when_closed == TRUE &&
 	    state == GPM_AC_ADAPTER_MISSING &&
-	    button_is_lid_closed (manager->priv->button)) {
+	    gpm_button_is_lid_closed (manager->priv->button)) {
 		manager_policy_do (manager,
 				   GPM_CONF_BATTERY_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "
@@ -1661,8 +1661,6 @@ GpmManager *
 gpm_manager_new (void)
 {
 	GpmManager *manager;
-
 	manager = g_object_new (GPM_TYPE_MANAGER, NULL);
-
 	return GPM_MANAGER (manager);
 }

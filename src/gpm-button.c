@@ -233,10 +233,10 @@ gpm_button_class_init (GpmButtonClass *klass)
 }
 
 /**
- * button_is_lid_closed:
+ * gpm_button_is_lid_closed:
  **/
 gboolean
-button_is_lid_closed (GpmButton *button)
+gpm_button_is_lid_closed (GpmButton *button)
 {
 	return button->priv->lid_is_closed;
 }

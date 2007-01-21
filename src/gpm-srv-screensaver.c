@@ -219,8 +219,10 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 {
 	update_ac_throttle (srv_screensaver, state);
 
-	/* simulate user input, to fix #333525 */
-	gpm_screensaver_poke (srv_screensaver->priv->screensaver);
+	/* simulate user input, but only when the lid is open */
+	if (gpm_button_is_lid_closed (srv_screensaver->priv->button) == FALSE) {
+		gpm_screensaver_poke (srv_screensaver->priv->screensaver);
+	}
 }
 
 /**

@@ -448,7 +448,7 @@ idle_changed_cb (GpmIdle             *idle,
 	}
 
 	/* don't dim or undim the screen when the lid is closed */
-	if (button_is_lid_closed (srv_backlight->priv->button) == TRUE) {
+	if (gpm_button_is_lid_closed (srv_backlight->priv->button) == TRUE) {
 		return;
 	}
 
