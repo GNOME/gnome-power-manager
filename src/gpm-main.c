@@ -253,7 +253,10 @@ main (int argc, char *argv[])
 
 	g_object_unref (manager);
 	g_object_unref (program);
+	/*
+	In uncommented, valgrind reports an invalid read
 	g_option_context_free (context);
+	*/
 
 	return 0;
 }

@@ -298,10 +298,12 @@ gpm_info_data_add (GpmInfoData *info_data,
 {
 	GpmInfoDataPoint *point;
 	GpmInfoDataPoint *point2;
-	guint len = info_data->priv->array->len;
+	guint len;
 
 	g_return_val_if_fail (info_data != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
+
+	len = info_data->priv->array->len;
 
 	/* there is no point storing leading zeros data */
 	if (info_data->priv->has_data == FALSE && value == 0) {
@@ -349,8 +351,7 @@ gpm_info_data_add (GpmInfoData *info_data,
 		GpmInfoDataPoint *last = g_ptr_array_index (info_data->priv->array, len-1);
 		int diff_time = last->time - first->time;
 		if (diff_time > info_data->priv->max_time) {
-			gpm_debug ("Too much time (%i/%i)", diff_time,
-				   info_data->priv->max_time);
+			gpm_debug ("Too much time (%i/%i)", diff_time, info_data->priv->max_time);
 			gpm_info_data_limit_truncate (info_data, info_data->priv->max_time / 2);
 		}
 	}

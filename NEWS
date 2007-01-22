@@ -1,3 +1,59 @@
+================
+Version 2.17.90
+================
+
+Released January 22, 2006
+
+General
+
+ - Add the start of a self-test framework.
+ - Fix a metric ton of spelling errors in the yelp file.
+ - Add a BrightnessChanged signal for the brightness applet.
+
+Power Manager
+
+ - Change default to be ondemand at 85 performance on AC and ondemand at 25
+   performance on battery.
+ - Add this new dbus interface so we can provide an alternate UI environment,
+   for instance for XFCE or OLPC.
+ - Use correct gnome-keyring-1 include directory. #388815
+ - Point the applets help to the applets section in the main help file. #388904.
+ - Don't localise battery description string as this is used internally for
+   icon name. (Pascal Terjan)
+ - Emit the correct signals when HAL disconnects or connects. This fixes the
+   problem where the icon does not change when HAL is restarted.
+ - Make sure we always use an SetBrightness int for brightness. This fixes a
+   crash for people using the new libsmbios dell addon in HAL. #395174.
+ - Merge BrightnessLcd and Dpms into Backlight so we can use this interface
+   in a more generic way.
+
+Power Preferences
+
+ - Fix popup_menu callback signature. (Christian Persch) #390172.
+ - Add /apps/gnome-power-manager/show_cpufreq_ui GConf key. It's not something
+   I wanted to do, as 99% of people don't need to ever change this, but the
+   1% will need to for specific systems. Default to hiding the control.
+   Distros can patch this if required.
+ - Categorize gnome-power-preferences for the control center shell.
+   (Denis Washington) #394701.
+
+Translators
+
+ - Christopher Orr (en_GB)
+ - Clytie Siddall (vi)
+ - Daniel Nylander (sv)
+ - David Lodge (en_GB)
+ - Djihed Afifi (ar)
+ - Francisco Javier F. Serrador (es)
+ - Ilkka Tuohela (fi)
+ - Jovan Naumovski (mk)
+ - Kjartan Maraas (nb)
+ - Raivis Dejus (lv)
+ - Raphael Higino (pt_BR)
+ - Theppitak Karoonboonyanan (th
+ - Yair Hershkovitz (he)
+ - Žygimantas Beručka (lt)
+
 ==============
 Version 2.17.4
 ==============
