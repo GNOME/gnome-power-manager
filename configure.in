@@ -154,6 +154,18 @@ fi
 #AC_MSG_RESULT(yes)
 
 dnl ---------------------------------------------------------------------------
+dnl - Use check-foreground-console (Debian specific) support?
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(checkfg, [  --enable-checkfg        Use check-foreground-console (Debian systems)],enable_checkfg=$enableval,enable_checkfg=no)
+AC_MSG_CHECKING([whether to use check-foreground-console])
+have_checkfg=no
+if test x$enable_checkfg = xyes ; then
+    have_checkfg=yes
+    AC_DEFINE(HAVE_CHECK_FG, 1, [Define if we want to use check-foreground-console])
+fi
+#AC_MSG_RESULT(yes)
+
+dnl ---------------------------------------------------------------------------
 dnl - Respond to XEvents
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(xevents, [  --enable-xevents        Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)

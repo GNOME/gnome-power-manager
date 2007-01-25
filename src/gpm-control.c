@@ -32,6 +32,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
@@ -105,6 +106,9 @@ gpm_control_error_quark (void)
  * Checks if the difference in time between this request for an action, and
  * the last action completing is larger than the timeout set in gconf.
  *
+ * Also check for the foreground console if we specified
+ * --enable-checkfg on the command line. This is only needed on Debian.
+ *
  * Return value: TRUE if we can perform the action.
  **/
 gboolean
@@ -112,6 +116,11 @@ gpm_control_is_policy_timout_valid (GpmControl  *control,
 				    const gchar *action)
 {
 	gchar *message;
+#ifdef HAVE_CHECK_FG
+	gchar *argv[] = { "check-foreground-console", NULL };
+	int retcode;
+#endif
+
 	if ((time (NULL) - control->priv->last_resume_event) <=
 	    control->priv->suppress_policy_timeout) {
 		message = g_strdup_printf ("Skipping suppressed %s", action);
@@ -119,6 +128,19 @@ gpm_control_is_policy_timout_valid (GpmControl  *control,
 		g_free (message);
 		return FALSE;
 	}
+
+#ifdef HAVE_CHECK_FG
+	if (!g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL,
+				 NULL, NULL, &retcode, NULL)  || ! WIFEXITED (retcode) ) {
+		/* if check-foreground-console could not be executed,
+		 * assume active console */
+		gpm_debug ("could not execute check-foreground-console");
+		return TRUE;
+	}
+	gpm_debug ("check-foreground-console returned with %i", WEXITSTATUS (retcode));
+	return WEXITSTATUS (retcode) == 0;
+#endif
+	/* no other checks failed, so return okay */
 	return TRUE;
 }
 

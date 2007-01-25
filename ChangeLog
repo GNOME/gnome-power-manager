@@ -1,3 +1,12 @@
+2007-01-25  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	* src/gpm-control.c: (gpm_control_is_policy_timout_valid):
+	Add the --enable-checkfg configure argument to upstream one of the
+	ubuntu patches. You only need this argument if you want to check with
+	check-foreground-console before you do an action.
+	Original patch from Oliver Grawert, many thanks.
+
 2007-01-22  Richard Hughes  <richard@hughsie.com>
 
 	==== Version 2.17.90 ====
