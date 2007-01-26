@@ -152,10 +152,10 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 {
 	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
 
-	gpm_debug ("emitting icon-changed");
-	g_signal_emit (icon, signals [ICON_CHANGED], 0);
+	gpm_debug ("emitting icon-changed %s", stock_id);
+	g_signal_emit (icon, signals [ICON_CHANGED], 0, stock_id);
 
-	if (stock_id) {
+	if (stock_id != NULL) {
 		/* we only set a new icon if the name differs */
 		if (strcmp (icon->priv->stock_id, stock_id) != 0) {
 			gpm_debug ("Setting icon to %s", stock_id);

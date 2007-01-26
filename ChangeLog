@@ -1,3 +1,9 @@
+2007-01-26  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_set_image_from_stock):
+	Fix a crasher on PPC where we were not sending the correct marshalled
+	type on icon change. Should fix lp:81427 and #400654.
+
 2007-01-25  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
