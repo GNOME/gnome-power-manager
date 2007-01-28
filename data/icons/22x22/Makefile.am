@@ -7,6 +7,8 @@ Data_DATA =				\
 	gpm-ac-adapter.png		\
 	gpm-brightness-lcd.png		\
 	gpm-brightness-kbd.png		\
+	gpm-brightness-lcd-disabled.png	\
+	gpm-brightness-kbd-disabled.png	\
 	gpm-hibernate.png		\
 	gpm-suspend.png			\
 	gpm-inhibit.png			\

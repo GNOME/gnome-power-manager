@@ -1,3 +1,17 @@
+2007-01-28  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/brightness-applet.c:
+	* data/icons/16x16/Makefile.am:
+	* data/icons/22x22/Makefile.am:
+	* data/icons/24x24/Makefile.am:
+	* data/icons/scalable/Makefile.am:
+	* data/icons/scalable/gpm-brightness-kbd-disabled.svg:
+	* data/icons/scalable/gpm-brightness-lcd-disabled.svg:
+	* docs/icon-scheme.xml:
+	Add some icons by Paul Betts <betts.62@osu.edu> to convey the
+	brightness control in the addon is either disabled, or no hardware is
+	present. Fixes #400006
+
 2007-01-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-tray-icon.c: (gpm_tray_icon_set_image_from_stock):

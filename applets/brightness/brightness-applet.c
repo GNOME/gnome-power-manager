@@ -57,6 +57,7 @@ static void      destroy_cb                       (GtkObject *object);
 #define GPM_BRIGHTNESS_APPLET_OAFID		"OAFIID:GNOME_BrightnessApplet"
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
 #define GPM_BRIGHTNESS_APPLET_ICON		"gpm-brightness-lcd"
+#define GPM_BRIGHTNESS_APPLET_ICON_DISABLED	"gpm-brightness-lcd-disabled"
 #define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manger Brightness Applet")
 #define GPM_BRIGHTNESS_APPLET_DESC		_("Adjusts laptop panel brightness.")
 #define PANEL_APPLET_VERTICAL(p)					\
@@ -71,6 +72,8 @@ static void      destroy_cb                       (GtkObject *object);
 static void
 retrieve_icon (GpmBrightnessApplet *applet)
 {
+	const gchar *icon;
+
 	/* free */
 	if (applet->icon != NULL) {
 		g_object_unref (applet->icon);
@@ -82,15 +85,21 @@ retrieve_icon (GpmBrightnessApplet *applet)
 	}
 
 	/* get icon */
+	if (applet->enabled == TRUE) {
+		icon = GPM_BRIGHTNESS_APPLET_ICON;
+	} else {
+		icon = GPM_BRIGHTNESS_APPLET_ICON_DISABLED;
+	}
 	applet->icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-						 GPM_BRIGHTNESS_APPLET_ICON,
-						 applet->size - 2,
-						 0,
-						 NULL);
+						 icon, applet->size - 2, 0, NULL);
 
-	/* update size cache */
-	applet->icon_height = gdk_pixbuf_get_height (applet->icon);
-	applet->icon_width = gdk_pixbuf_get_width (applet->icon);
+	if (applet->icon == NULL) {
+		g_warning ("Cannot find %s!", icon);
+	} else {
+		/* update size cache */
+		applet->icon_height = gdk_pixbuf_get_height (applet->icon);
+		applet->icon_width = gdk_pixbuf_get_width (applet->icon);
+	}
 }
 
 /**
@@ -141,6 +150,11 @@ draw_applet_cb (GpmBrightnessApplet *applet)
 	/* retrieve applet size */
 	check_size (applet);
 	if (applet->size <= 2) {
+		return FALSE;
+	}
+
+	/* if no icon, then don't try to display */
+	if (applet->icon == NULL) {
 		return FALSE;
 	}
 

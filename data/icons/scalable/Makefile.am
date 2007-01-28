@@ -7,6 +7,8 @@ Data_DATA =				\
 	gpm-ac-adapter.svg		\
 	gpm-brightness-lcd.svg		\
 	gpm-brightness-kbd.svg		\
+	gpm-brightness-lcd-disabled.svg	\
+	gpm-brightness-kbd-disabled.svg	\
 	gpm-hibernate.svg		\
 	gpm-suspend.svg			\
 	gpm-inhibit.svg			\
