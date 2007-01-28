@@ -1,5 +1,12 @@
 2007-01-28  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (gpm_button_is_lid_closed):
+	* src/gpm-srv-backlight.c: (gpm_srv_backlight_init):
+	Fix a difficult-to-find crasher which would only happen sometimes when
+	the session became idle on a laptop without a backlight.
+
+2007-01-28  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/brightness-applet.c:
 	* data/icons/16x16/Makefile.am:
 	* data/icons/22x22/Makefile.am:

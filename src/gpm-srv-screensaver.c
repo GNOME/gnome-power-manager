@@ -134,7 +134,7 @@ update_ac_throttle (GpmSrvScreensaver *srv_screensaver,
 
 static void
 update_lid_throttle (GpmSrvScreensaver *srv_screensaver,
-		     gboolean        lid_is_closed)
+		     gboolean           lid_is_closed)
 {
 	gboolean laptop_using_ext_mon;
 
@@ -213,9 +213,9 @@ dpms_mode_changed_cb (GpmDpms        *dpms,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmSrvScreensaver   *srv_screensaver)
+ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
+		       GpmAcAdapterState  state,
+		       GpmSrvScreensaver *srv_screensaver)
 {
 	update_ac_throttle (srv_screensaver, state);
 

@@ -183,8 +183,8 @@ gpm_button_grab_keystring (GpmButton   *button,
  **/
 static gboolean
 gpm_button_button_key (GpmButton   *button,
-			   const gchar *keystr,
-			   const gchar *hal_key)
+		       const gchar *keystr,
+		       const gchar *hal_key)
 {
 	char *key = NULL;
 	gboolean ret;
@@ -238,6 +238,8 @@ gpm_button_class_init (GpmButtonClass *klass)
 gboolean
 gpm_button_is_lid_closed (GpmButton *button)
 {
+	g_return_val_if_fail (button != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BUTTON (button), FALSE);
 	return button->priv->lid_is_closed;
 }
 

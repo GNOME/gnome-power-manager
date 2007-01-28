@@ -118,6 +118,11 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 	GpmDpmsMethod method;
 	GpmAcAdapterState state;
 
+	/* no point processing if we can't do the dpms action */
+	if (srv_backlight->priv->can_dpms == FALSE) {
+		return;
+	}
+
 	/* get the ac state */
 	gpm_ac_adapter_get_state (srv_backlight->priv->ac_adapter, &state);
 
@@ -427,8 +432,8 @@ button_pressed_cb (GpmButton        *button,
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle             *idle,
-		 GpmIdleMode          mode,
+idle_changed_cb (GpmIdle         *idle,
+		 GpmIdleMode      mode,
 		 GpmSrvBacklight *srv_backlight)
 {
 	GpmAcAdapterState state;
@@ -442,11 +447,6 @@ idle_changed_cb (GpmIdle             *idle,
 		gpm_conf_get_bool (srv_backlight->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
 	}
 
-	/* should we ignore this? */
-	if (laptop_do_dim == FALSE) {
-		return;
-	}
-
 	/* don't dim or undim the screen when the lid is closed */
 	if (gpm_button_is_lid_closed (srv_backlight->priv->button) == TRUE) {
 		return;
@@ -455,31 +455,41 @@ idle_changed_cb (GpmIdle             *idle,
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
 		/* deactivate display power management */
-		error = NULL;
-		gpm_dpms_set_active (srv_backlight->priv->dpms, FALSE, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS not active: %s", error->message);
+		if (srv_backlight->priv->can_dpms == TRUE) {
+			error = NULL;
+			gpm_dpms_set_active (srv_backlight->priv->dpms, FALSE, &error);
+			if (error) {
+				gpm_debug ("Unable to set DPMS not active: %s", error->message);
+				g_error_free (error);
+			}
 		}
 
 		/* sync timeouts */
 		gpm_srv_backlight_sync_policy (srv_backlight);
 
-		gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		if (laptop_do_dim == TRUE && srv_backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		}
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
 		/* activate display power management */
-		error = NULL;
-		gpm_dpms_set_active (srv_backlight->priv->dpms, TRUE, &error);
-		if (error) {
-			gpm_debug ("Unable to set DPMS active: %s", error->message);
+		if (srv_backlight->priv->can_dpms == TRUE) {
+			error = NULL;
+			gpm_dpms_set_active (srv_backlight->priv->dpms, TRUE, &error);
+			if (error) {
+				gpm_debug ("Unable to set DPMS active: %s", error->message);
+				g_error_free (error);
+			}
 		}
 
 		/* sync timeouts */
 		gpm_srv_backlight_sync_policy (srv_backlight);
 
 		/* Dim the screen, fixes #328564 */
-		gpm_brightness_lcd_dim (srv_backlight->priv->brightness);
+		if (laptop_do_dim == TRUE && srv_backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_dim (srv_backlight->priv->brightness);
+		}
 	}
 }
 
@@ -634,6 +644,11 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 	g_signal_connect (srv_backlight->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), srv_backlight);
 
+	/* watch for brightness up and down buttons and also check lid state */
+	srv_backlight->priv->button = gpm_button_new ();
+	g_signal_connect (srv_backlight->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), srv_backlight);
+
 	if (srv_backlight->priv->can_dim == TRUE) {
 		/* watch for manual brightness changes (for the feedback widget) */
 		srv_backlight->priv->brightness = gpm_brightness_lcd_new ();
@@ -648,12 +663,6 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 		srv_backlight->priv->feedback = gpm_feedback_new ();
 		gpm_feedback_set_icon_name (srv_backlight->priv->feedback,
 					    GPM_STOCK_BRIGHTNESS_LCD);
-
-		/* watch for brightness up and down buttons */
-		srv_backlight->priv->button = gpm_button_new ();
-		g_signal_connect (srv_backlight->priv->button, "button-pressed",
-				  G_CALLBACK (button_pressed_cb), srv_backlight);
-
 	}
 
 	if (srv_backlight->priv->can_dpms == TRUE) {
