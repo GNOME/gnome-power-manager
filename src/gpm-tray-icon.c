@@ -769,10 +769,10 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 		gpm_tray_icon_set_image_from_stock (icon, stock_id);
 		/* make sure that we are visible */
 		gpm_tray_icon_show (icon, TRUE);
-		g_free (stock_id);
 
-		gpm_debug ("emitting description-changed");
-		g_signal_emit (icon, signals [DESCRIPTION_CHANGED], 0);
+		gpm_debug ("emitting description-changed %s", stock_id);
+		g_signal_emit (icon, signals [DESCRIPTION_CHANGED], 0, stock_id);
+		g_free (stock_id);
 
 		gpm_power_get_status_summary (icon->priv->power, &tooltip, NULL);
 
