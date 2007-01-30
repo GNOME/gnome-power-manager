@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-17 13:22+0700\n"
-"PO-Revision-Date: 2007-01-17 13:25+0700\n"
+"POT-Creation-Date: 2007-01-30 12:12+0700\n"
+"PO-Revision-Date: 2007-01-30 12:17+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,30 +18,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../applets/brightness/brightness-applet.c:60
+#: ../applets/brightness/brightness-applet.c:61
 msgid "Power Manger Brightness Applet"
 msgstr "แอพเพล็ตปรับความสว่างของระบบจัดการพลังงาน"
 
-#: ../applets/brightness/brightness-applet.c:61
+#: ../applets/brightness/brightness-applet.c:62
 msgid "Adjusts laptop panel brightness."
 msgstr "ปรับความสว่างของจอภาพแล็ปท็อป"
 
-#: ../applets/brightness/brightness-applet.c:215
+#: ../applets/brightness/brightness-applet.c:229
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "ความสว่างของจอ LCD : %d%%"
 
-#: ../applets/brightness/brightness-applet.c:217
+#: ../applets/brightness/brightness-applet.c:231
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "ไม่สามารถอ่านค่าความสว่างของจอภาพแล็ปท็อป"
 
-#: ../applets/brightness/brightness-applet.c:487
+#: ../applets/brightness/brightness-applet.c:501
 #: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:305
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "อนุญาตภายใต้เงื่อนไข GNU General Public License รุ่นที่ 2"
 
-#: ../applets/brightness/brightness-applet.c:488
+#: ../applets/brightness/brightness-applet.c:502
 #: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -54,7 +54,7 @@ msgstr ""
 "ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา\n"
 "(ตามแต่คุณจะเลือก)"
 
-#: ../applets/brightness/brightness-applet.c:492
+#: ../applets/brightness/brightness-applet.c:506
 #: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:310
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -67,7 +67,7 @@ msgstr ""
 "***อรรถประโยชน์เชิงพาณิชย์*** หรือ ***ความเหมาะสมสำหรับวัตถุประสงค์\n"
 "เฉพาะกิจใดๆ*** กรุณาอ่าน GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: ../applets/brightness/brightness-applet.c:496
+#: ../applets/brightness/brightness-applet.c:510
 #: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:314
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -79,7 +79,7 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc.,\n"
 "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:510
+#: ../applets/brightness/brightness-applet.c:524
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -374,7 +374,8 @@ msgid ""
 "If we should show the CPU frequency scaling in the UI. Some people need to "
 "configure this for specific systems."
 msgstr ""
-"กำหนดว่า จะแสดงการปรับความถี่ CPU ในส่วนติดต่อผู้ใช้หรือไม่ บางคนจำเป็นต้องตั้งค่านี้สำหรับบางระบบ"
+"กำหนดว่า จะแสดงการปรับความถี่ CPU ในส่วนติดต่อผู้ใช้หรือไม่ "
+"บางคนจำเป็นต้องตั้งค่านี้สำหรับบางระบบ"
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the recalled battery warning for a broken battery"
@@ -1100,15 +1101,15 @@ msgstr[0] "นาที"
 msgid "Power Manager for the GNOME desktop"
 msgstr "โปรแกรมจัดการการใช้พลังงานสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/gpm-graph-widget.c:73 ../src/gpm-power.c:729
+#: ../src/gpm-graph-widget.c:73
 msgid "Charged"
 msgstr "ประจุไฟเสร็จแล้ว"
 
-#: ../src/gpm-graph-widget.c:74 ../src/gpm-power.c:732
+#: ../src/gpm-graph-widget.c:74
 msgid "Charging"
 msgstr "กำลังประจุไฟ"
 
-#: ../src/gpm-graph-widget.c:75 ../src/gpm-power.c:735
+#: ../src/gpm-graph-widget.c:75
 msgid "Discharging"
 msgstr "กำลังจ่ายไฟ"
 
@@ -1513,141 +1514,150 @@ msgstr "PDA"
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
-#: ../src/gpm-power.c:722
-msgid "Product:"
-msgstr "ผลิตภัณฑ์:"
+#: ../src/gpm-power.c:721
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>ผลิตภัณฑ์:</b> %s\n"
 
-#: ../src/gpm-power.c:726 ../src/gpm-power.c:729 ../src/gpm-power.c:732
-#: ../src/gpm-power.c:735
-msgid "Status:"
-msgstr "สถานะ:"
+#: ../src/gpm-power.c:724
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>สถานะ:</b> ไม่มี\n"
 
 #: ../src/gpm-power.c:726
-msgid "Missing"
-msgstr "ไม่มี"
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>สถานะ:</b> ประจุเต็ม\n"
 
-#: ../src/gpm-power.c:739
-msgid "Percentage charge:"
-msgstr "เปอร์เซ็นต์ประจุ:"
+#: ../src/gpm-power.c:728
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>สถานะ:</b> กำลังประจุไฟ\n"
 
-#: ../src/gpm-power.c:768
+#: ../src/gpm-power.c:730
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>สถานะ:</b> กำลังจ่ายไฟ\n"
+
+#: ../src/gpm-power.c:733
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>เปอร์เซ็นต์ประจุ:</b> %i%%\n"
+
+#: ../src/gpm-power.c:762
 msgid "Vendor:"
 msgstr "ผู้ผลิต:"
 
-#: ../src/gpm-power.c:776 ../src/gpm-power.c:781
+#: ../src/gpm-power.c:770 ../src/gpm-power.c:775
 msgid "Lithium ion"
 msgstr "ลิเทียมไอออน"
 
-#: ../src/gpm-power.c:778 ../src/gpm-power.c:783
+#: ../src/gpm-power.c:772 ../src/gpm-power.c:777
 msgid "Lead acid"
 msgstr "กรดตะกั่ว"
 
-#: ../src/gpm-power.c:785
+#: ../src/gpm-power.c:779
 msgid "Lithium polymer"
 msgstr "ลิเทียมโพลิเมอร์"
 
-#: ../src/gpm-power.c:787
+#: ../src/gpm-power.c:781
 msgid "Nickel metal hydride"
 msgstr "นิกเกิลเมทัลไฮไดรด์"
 
-#: ../src/gpm-power.c:794
+#: ../src/gpm-power.c:788
 msgid "Technology:"
 msgstr "เทคโนโลยี:"
 
-#: ../src/gpm-power.c:798
+#: ../src/gpm-power.c:792
 msgid "Serial number:"
 msgstr "เลขลำดับผลิตภัณฑ์:"
 
-#: ../src/gpm-power.c:802
+#: ../src/gpm-power.c:796
 msgid "Model:"
 msgstr "รุ่น:"
 
-#: ../src/gpm-power.c:808
+#: ../src/gpm-power.c:802
 msgid "Remaining time:"
 msgstr "เวลาที่เหลือ:"
 
-#: ../src/gpm-power.c:814
+#: ../src/gpm-power.c:808
 msgid "Excellent"
 msgstr "ดีมาก"
 
-#: ../src/gpm-power.c:816
+#: ../src/gpm-power.c:810
 msgid "Good"
 msgstr "สภาพดี"
 
-#: ../src/gpm-power.c:818
+#: ../src/gpm-power.c:812
 msgid "Fair"
 msgstr "ปานกลาง"
 
-#: ../src/gpm-power.c:820
+#: ../src/gpm-power.c:814
 msgid "Poor"
 msgstr "สภาพแย่"
 
-#: ../src/gpm-power.c:823
+#: ../src/gpm-power.c:817
 msgid "Capacity:"
 msgstr "ความจุ:"
 
-#: ../src/gpm-power.c:829 ../src/gpm-power.c:857
+#: ../src/gpm-power.c:823 ../src/gpm-power.c:851
 msgid "Current charge:"
 msgstr "ประจุปัจจุบัน:"
 
-#: ../src/gpm-power.c:835
+#: ../src/gpm-power.c:829
 msgid "Last full charge:"
 msgstr "ประจุเต็มครั้งล่าสุด:"
 
-#: ../src/gpm-power.c:840 ../src/gpm-power.c:862
+#: ../src/gpm-power.c:834 ../src/gpm-power.c:856
 msgid "Design charge:"
 msgstr "ประจุที่ออกแบบไว้:"
 
-#: ../src/gpm-power.c:845
+#: ../src/gpm-power.c:839
 msgid "Charge rate (raw):"
 msgstr "อัตราการประจุ (ข้อมูลดิบ):"
 
-#: ../src/gpm-power.c:850
+#: ../src/gpm-power.c:844
 msgid "Charge rate (smoothed):"
 msgstr "อัตราการประจุ (ปรับเฉลี่ยแล้ว):"
 
-#: ../src/gpm-power.c:1348
+#: ../src/gpm-power.c:1342
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s ประจุเต็มแล้ว (%i%%)\n"
 
-#: ../src/gpm-power.c:1354
+#: ../src/gpm-power.c:1348
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s อีก %s จะหมด (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1358
+#: ../src/gpm-power.c:1352
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s กำลังจ่ายไฟ (%i%%)\n"
 
-#: ../src/gpm-power.c:1365
+#: ../src/gpm-power.c:1359
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s อีก %s จะเต็ม (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1369
+#: ../src/gpm-power.c:1363
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s กำลังประจุไฟ (%i%%)\n"
 
-#: ../src/gpm-power.c:1406
+#: ../src/gpm-power.c:1400
 msgid "Recalculating information..."
 msgstr "กำลังคำนวณข้อมูลใหม่..."
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1417
+#: ../src/gpm-power.c:1411
 msgid "Computer is running on backup power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากแหล่งจ่ายไฟสำรอง\n"
 
-#: ../src/gpm-power.c:1420
+#: ../src/gpm-power.c:1414
 msgid "Computer is running on AC power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากปลั๊กไฟ AC\n"
 
-#: ../src/gpm-power.c:1423
+#: ../src/gpm-power.c:1417
 msgid "Computer is running on battery power\n"
 msgstr "คอมพิวเตอร์กำลังใช้ไฟจากแบตเตอรี่\n"
 
@@ -1858,6 +1868,15 @@ msgstr "พลังงานต่ำมาก"
 msgid "Power Low"
 msgstr "พลังงานต่ำ"
 
+#~ msgid "Product:"
+#~ msgstr "ผลิตภัณฑ์:"
+
+#~ msgid "Status:"
+#~ msgstr "สถานะ:"
+
+#~ msgid "Missing"
+#~ msgstr "ไม่มี"
+
 #~ msgid "ups"
 #~ msgstr "ups"
 
@@ -2031,21 +2050,6 @@ msgstr "พลังงานต่ำ"
 
 #~ msgid "laptop lid re-opened"
 #~ msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>ผลิตภัณฑ์:</b> %s\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>สถานะ:</b> ไม่มี\n"
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>สถานะ:</b> ประจุเต็ม\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>สถานะ:</b> กำลังประจุไฟ\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>สถานะ:</b> กำลังจ่ายไฟ\n"
 
 #~ msgid "<b>Vendor:</b> %s\n"
 #~ msgstr "<b>ผู้ผลิต:</b> %s\n"
