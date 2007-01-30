@@ -1,4 +1,31 @@
 ==============
+Version 2.16.3
+==============
+
+Released January 29, 2007
+
+General
+
+ - Don't localise the power string as this is used internally for icon name.
+   Fixes display of UPS on info pane. (Pascal Terjan)
+ - Rename the duplicated keyboard more string so we don't get a crash with
+   a wireless keyboard on the info screen.
+ - Don't crash if hal tell us that a button was pressed but then can not tell
+   which one it was. (Pascal Terjan)
+ - Fix a race where percentage_charge can be momentarily zero at startup.
+   This fixes an incorrect 'fully charged' notification on startup.
+
+Translators
+
+ - Mathieu Gaspard (fr)
+ - Raphael Higino (pt_BR)
+ - Djihed Afifi (ar)
+ - Ilkka Tuohela (fi)
+ - Matic Zgur (sl)
+ - Artur Flinta (pl)
+ - Ivar Smolin (et)
+
+==============
 Version 2.16.2
 ==============
 
