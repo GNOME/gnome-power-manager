@@ -49,20 +49,25 @@ typedef struct
 
 GpmInhibit	*gpm_inhibit_new			(void);
 GType		 gpm_inhibit_get_type			(void);
-gboolean	 gpm_inhibit_check			(GpmInhibit	*inhibit);
 gboolean	 gpm_inhibit_is_valid			(GpmInhibit	*inhibit,
+							 gboolean	 user_action,
 							 gboolean	*valid,
 							 GError		**error);
 void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
 							 GString	*message,
 							 const gchar	*action);
 
-void		 gpm_inhibit_request_cookie		(GpmInhibit	*inhibit,
+void		 gpm_inhibit_inhibit_manual		(GpmInhibit	*inhibit,
 							 const gchar	*application,
 							 const gchar	*reason,
 							 DBusGMethodInvocation *context,
 							 GError		**error);
-gboolean	 gpm_inhibit_clear_cookie		(GpmInhibit	*inhibit,
+void		 gpm_inhibit_inhibit_auto		(GpmInhibit	*inhibit,
+							 const gchar	*application,
+							 const gchar	*reason,
+							 DBusGMethodInvocation *context,
+							 GError		**error);
+gboolean	 gpm_inhibit_un_inhibit			(GpmInhibit	*inhibit,
 							 guint32	 cookie,
 							 GError		**error);
 gboolean	 gpm_inhibit_get_requests		(GpmInhibit	*inhibit,

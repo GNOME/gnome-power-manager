@@ -30,7 +30,7 @@
 
 #define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
 #define	GPM_DBUS_INHIBIT_PATH		"/org/gnome/PowerManager/Inhibit"
-#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager"
+#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager.Inhibit"
 
 /* imagine this in a GObject private struct... */
 guint appcookie = -1;
@@ -65,7 +65,7 @@ dbus_inhibit_gpm (const gchar *appname,
 	}
 
 	res = dbus_g_proxy_call (proxy,
-				 "RequestCookie", &error,
+				 "InhibitAuto", &error,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
@@ -75,12 +75,67 @@ dbus_inhibit_gpm (const gchar *appname,
 	/* check the return value */
 	if (! res) {
 		cookie = -1;
-		g_warning ("RequestCookie method failed");
+		g_warning ("InhibitAuto method failed");
 	}
 
 	/* check the error value */
 	if (error != NULL) {
-		g_warning ("RequestCookie problem : %s", error->message);
+		g_warning ("InhibitAuto problem : %s", error->message);
+		g_error_free (error);
+		cookie = -1;
+	}
+
+	g_debug ("cookie = %u", cookie);
+	g_object_unref (G_OBJECT (proxy));
+	return cookie;
+}
+
+/** cookie is returned as an unsigned integer */
+static guint
+dbus_inhibit_manual_gpm (const gchar *appname,
+		        const gchar *reason)
+{
+	gboolean         res;
+	guint	         cookie;
+	GError          *error = NULL;
+	DBusGProxy      *proxy = NULL;
+	DBusGConnection *session_connection = NULL;
+
+	/* get the DBUS session connection */
+	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (error != NULL) {
+		g_warning ("DBUS cannot connect : %s", error->message);
+		g_error_free (error);
+		return -1;
+	}
+
+	/* get the proxy with g-p-m */
+	proxy = dbus_g_proxy_new_for_name (session_connection,
+					   GPM_DBUS_SERVICE,
+					   GPM_DBUS_INHIBIT_PATH,
+					   GPM_DBUS_INHIBIT_INTERFACE);
+	if (proxy == NULL) {
+		g_warning ("Could not get DBUS proxy: %s", GPM_DBUS_SERVICE);
+		return -1;
+	}
+
+	res = dbus_g_proxy_call (proxy,
+				 "InhibitManual", &error,
+				 G_TYPE_STRING, appname,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &cookie,
+				 G_TYPE_INVALID);
+
+	/* check the return value */
+	if (! res) {
+		cookie = -1;
+		g_warning ("InhibitManual method failed");
+	}
+
+	/* check the error value */
+	if (error != NULL) {
+		g_warning ("InhibitManual problem : %s", error->message);
 		g_error_free (error);
 		cookie = -1;
 	}
@@ -123,7 +178,7 @@ dbus_uninhibit_gpm (guint cookie)
 	}
 
 	res = dbus_g_proxy_call (proxy,
-				 "ClearCookie",
+				 "UnInhibit",
 				 &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
@@ -131,7 +186,7 @@ dbus_uninhibit_gpm (guint cookie)
 
 	/* check the return value */
 	if (! res) {
-		g_warning ("ClearCookie method failed");
+		g_warning ("UnInhibit method failed");
 	}
 
 	/* check the error value */
@@ -144,7 +199,7 @@ dbus_uninhibit_gpm (guint cookie)
 }
 
 static void
-widget_inhibit_cb (GtkWidget *iwidget, GladeXML *glade_xml)
+widget_inhibit_auto_cb (GtkWidget *iwidget, GladeXML *glade_xml)
 {
 	GtkWidget *widget;
 	const gchar *appname;
@@ -159,6 +214,24 @@ widget_inhibit_cb (GtkWidget *iwidget, GladeXML *glade_xml)
 	/* try to add the inhibit */
 	appcookie = dbus_inhibit_gpm (appname, reason);
 	g_debug ("adding inhibit: %u", appcookie);
+}
+
+static void
+widget_inhibit_manual_cb (GtkWidget *iwidget, GladeXML *glade_xml)
+{
+	GtkWidget *widget;
+	const gchar *appname;
+	const gchar *reason;
+
+	/* get the application name and the reason from the entry boxes */
+	widget = glade_xml_get_widget (glade_xml, "entry_app");
+	appname = gtk_entry_get_text (GTK_ENTRY (widget));
+	widget = glade_xml_get_widget (glade_xml, "entry_reason");
+	reason = gtk_entry_get_text (GTK_ENTRY (widget));
+	
+	/* try to add the inhibit */
+	appcookie = dbus_inhibit_manual_gpm (appname, reason);
+	g_debug ("adding force inhibit: %u", appcookie);
 }
 
 static void
@@ -199,9 +272,12 @@ main (int argc, char **argv)
 	widget = glade_xml_get_widget (glade_xml, "button_close");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (window_close_cb), glade_xml);
-	widget = glade_xml_get_widget (glade_xml, "button_inhibit");
+	widget = glade_xml_get_widget (glade_xml, "button_inhibit_auto");
 	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (widget_inhibit_cb), glade_xml);
+			  G_CALLBACK (widget_inhibit_auto_cb), glade_xml);
+	widget = glade_xml_get_widget (glade_xml, "button_inhibit_manual");
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (widget_inhibit_manual_cb), glade_xml);
 	widget = glade_xml_get_widget (glade_xml, "button_uninhibit");
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (widget_uninhibit_cb), glade_xml);

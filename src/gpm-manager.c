@@ -150,13 +150,16 @@ gpm_manager_error_quark (void)
  **/
 static gboolean
 gpm_manager_is_inhibit_valid (GpmManager *manager,
+			      gboolean	  user_action,
 			      const char *action)
 {
-	gboolean action_ok;
+	gboolean valid;
 	gchar *title;
 
-	action_ok = gpm_inhibit_check (manager->priv->inhibit);
-	if (! action_ok) {
+	/* We have to decide on whether this is a idle action or a user keypress */
+	gpm_inhibit_is_valid (manager->priv->inhibit, user_action, &valid, NULL);
+
+	if (valid == FALSE) {
 		GString *message = g_string_new ("");
 		const char *msg;
 
@@ -173,7 +176,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
-	return action_ok;
+	return valid;
 }
 
 /**
@@ -459,7 +462,7 @@ gpm_manager_inhibit (GpmManager	 *manager,
 		     DBusGMethodInvocation *context,
 		     GError     **error)
 {
-	gpm_inhibit_request_cookie (manager->priv->inhibit, application, reason, context, error);
+	gpm_inhibit_inhibit_auto (manager->priv->inhibit, application, reason, context, error);
 }
 
 /**
@@ -473,7 +476,7 @@ gpm_manager_uninhibit (GpmManager	 *manager,
 		       DBusGMethodInvocation *context,
 		       GError		**error)
 {
-	gpm_inhibit_clear_cookie (manager->priv->inhibit, cookie, error);
+	gpm_inhibit_un_inhibit (manager->priv->inhibit, cookie, error);
 	dbus_g_method_return (context);
 }
 
@@ -651,7 +654,7 @@ idle_changed_cb (GpmIdle    *idle,
 		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "timeout action")) {
 			return;
 		}
-		if (! gpm_manager_is_inhibit_valid (manager, "timeout action")) {
+		if (! gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action")) {
 			return;
 		}
 		idle_do_sleep (manager);
@@ -692,7 +695,7 @@ power_button_pressed (GpmManager *manager)
 	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "power button press")) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, "power button press")) {
+	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "power button press")) {
 		return;
 	}
 	gpm_debug ("power button pressed");
@@ -711,7 +714,7 @@ suspend_button_pressed (GpmManager *manager)
 	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend button press")) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, "suspend button press")) {
+	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "suspend button press")) {
 		return;
 	}
 	gpm_debug ("suspend button pressed");
@@ -730,7 +733,7 @@ hibernate_button_pressed (GpmManager *manager)
 	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate button press")) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, "hibernate button press")) {
+	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate button press")) {
 		return;
 	}
 	manager_policy_do (manager,
@@ -1341,7 +1344,7 @@ gpm_manager_tray_icon_hibernate (GpmManager   *manager,
 	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate signal")) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, "hibernate")) {
+	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate")) {
 		return;
 	}
 
@@ -1367,7 +1370,7 @@ gpm_manager_tray_icon_suspend (GpmManager   *manager,
 	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend signal")) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, "suspend")) {
+	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "suspend")) {
 		return;
 	}
 	gpm_info_explain_reason (manager->priv->info,

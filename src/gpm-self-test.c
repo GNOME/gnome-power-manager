@@ -137,7 +137,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("make sure we are not inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
 	if (ret == FALSE) {
 		test_failed ("Unable to test validity");
 	} else if (valid == FALSE) {
@@ -157,7 +157,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("get cookie 1");
-	ret = gpm_powermanager_inhibit (powermanager,
+	ret = gpm_powermanager_inhibit_auto (powermanager,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie1);
@@ -171,7 +171,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("make sure we are inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
 	if (ret == FALSE) {
 		test_failed ("Unable to test validity");
 	} else if (valid == FALSE) {
@@ -182,7 +182,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("get cookie 2");
-	ret = gpm_powermanager_inhibit (powermanager,
+	ret = gpm_powermanager_inhibit_auto (powermanager,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie2);
@@ -205,7 +205,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("make sure we are still inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
 	if (ret == FALSE) {
 		test_failed ("Unable to test validity");
 	} else if (valid == FALSE) {
@@ -225,7 +225,7 @@ test_inhibit (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("make sure we are not inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, &valid);
+	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
 	if (ret == FALSE) {
 		test_failed ("Unable to test validity");
 	} else if (valid == FALSE) {

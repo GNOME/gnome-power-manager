@@ -122,10 +122,10 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 
 /** cookie is returned as an unsigned integer */
 gboolean
-gpm_powermanager_inhibit (GpmPowermanager *powermanager,
-			  const gchar     *appname,
-		          const gchar     *reason,
-		          guint	          *cookie)
+gpm_powermanager_inhibit_auto (GpmPowermanager *powermanager,
+			       const gchar     *appname,
+		               const gchar     *reason,
+		               guint	       *cookie)
 {
 	GError  *error = NULL;
 	gboolean ret;
@@ -140,7 +140,7 @@ gpm_powermanager_inhibit (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "RequestCookie", &error,
+	ret = dbus_g_proxy_call (proxy, "InhibitAuto", &error,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
@@ -153,7 +153,46 @@ gpm_powermanager_inhibit (GpmPowermanager *powermanager,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("RequestCookie failed!");
+		gpm_warning ("InhibitAuto failed!");
+	}
+
+	return ret;
+}
+
+/** cookie is returned as an unsigned integer */
+gboolean
+gpm_powermanager_inhibit_manual (GpmPowermanager *powermanager,
+			         const gchar     *appname,
+		                 const gchar     *reason,
+		                 guint	        *cookie)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
+	g_return_val_if_fail (cookie != NULL, FALSE);
+
+	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	if (proxy == NULL) {
+		gpm_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "InhibitManual", &error,
+				 G_TYPE_STRING, appname,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+		*cookie = 0;
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("InhibitManual failed!");
 	}
 
 	return ret;
@@ -175,7 +214,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "ClearCookie", &error,
+	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -185,7 +224,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("ClearCookie failed!");
+		gpm_warning ("UnInhibit failed!");
 	}
 
 	return ret;
@@ -193,6 +232,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 
 gboolean
 gpm_powermanager_is_valid (GpmPowermanager *powermanager,
+			   gboolean	    user_action,
 			   gboolean        *valid)
 {
 	GError  *error = NULL;
@@ -208,6 +248,7 @@ gpm_powermanager_is_valid (GpmPowermanager *powermanager,
 	}
 
 	ret = dbus_g_proxy_call (proxy, "IsValid", &error,
+				 G_TYPE_BOOLEAN, user_action,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, valid,
 				 G_TYPE_INVALID);

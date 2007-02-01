@@ -528,9 +528,9 @@
       DBUS Object Path: <literal>/org/gnome/PowerManager/Inhibit</literal>
     </para>
 
-    <sect2 id="pm-ui-RequestCookie">
+    <sect2 id="pm-ui-InhibitAuto">
       <title>
-        <literal>RequestCookie()</literal>
+        <literal>InhibitAuto()</literal>
       </title>
       <para>
         Inhibits the computer from performing the idle sleep action.
@@ -562,7 +562,7 @@
             <row>
               <entry>in</entry>
               <entry>string</entry>
-              <entry>the localised reason to inhibit, e.g. "indexing files"</entry>
+              <entry>the localised reason to inhibit, e.g. "Copying files"</entry>
             </row>
             <row>
               <entry>out</entry>
@@ -574,14 +574,53 @@
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-inhibit-ClearCookie">
+    <sect2 id="pm-ui-InhibitManual">
       <title>
-        <literal>ClearCookie()</literal>
+        <literal>InhibitManual()</literal>
       </title>
       <para>
-        Allows the computer to perform the idle sleep action.
+        Inhibits the computer from performing the any sleep or shutdown action.
+        Useful if you want to perform an operation that cannot be interrupted like
+        a firmware reflash or RPM transaction.
+      </para>
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Direction</entry>
+              <entry>Type</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>the application name, e.g. "rpm"</entry>
+            </row>
+            <row>
+              <entry>in</entry>
+              <entry>string</entry>
+              <entry>the localised reason to inhibit, e.g. "performing transaction"</entry>
+            </row>
+            <row>
+              <entry>out</entry>
+              <entry>unsigned integer</entry>
+              <entry>the cookie</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+    </sect2>
+
+    <sect2 id="pm-inhibit-UnInhibit">
+      <title>
+        <literal>UnInhibit()</literal>
+      </title>
+      <para>
+        Allows the computer to perform the idle sleep or user action.
         If the program holding the cookie exits from the system bus without
-        calling <literal>ClearCookie()</literal> then it is automatically removed.
+        calling <literal>UnInhibit()</literal> then it is automatically removed.
       </para>
       <informaltable>
         <tgroup cols="2">

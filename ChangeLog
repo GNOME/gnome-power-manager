@@ -1,5 +1,27 @@
 2007-02-01  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-inhibit-test.glade:
+	* docs/dbus-interface.html:
+	* docs/dbus-interface.xml:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* src/dbus/gpm-dbus-inhibit.xml:
+	* src/gpm-inhibit-test.c: (dbus_inhibit_gpm),
+	* src/gpm-inhibit.c: (gpm_inhibit_find_cookie),
+	* src/gpm-inhibit.h:
+	* src/gpm-manager.c: (gpm_manager_is_inhibit_valid),
+	* src/gpm-powermanager.c: (gpm_powermanager_inhibit_auto),
+	* src/gpm-powermanager.h:
+	* src/gpm-self-test.c: (test_inhibit):
+	Convert the new API to InhibitAuto for auto-suspend prevention and
+	InhibitManual for stuff like RPM transactions and BIOS flashes.
+	The old manager inhibit API has been converted to the InihibitAuto
+	style to fix #402863
+	Update the self test program, the inhibit example program and the
+	documentation.
+
+2007-02-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_statistics_get_event_log):
 	Do the same fix as #403156 for GetEventLog.
 

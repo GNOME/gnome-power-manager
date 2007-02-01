@@ -26,10 +26,12 @@
         <code class="literal">GetLowPowerMode()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-LowPowerModeChanged">
         <code class="literal">LowPowerModeChanged</code>
-      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-inhibit">Inhibit System Sleep</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-RequestCookie">
-        <code class="literal">RequestCookie()</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-ClearCookie">
-        <code class="literal">ClearCookie()</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-inhibit">Inhibit System Sleep</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-InhibitAuto">
+        <code class="literal">InhibitAuto()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-InhibitManual">
+        <code class="literal">InhibitManual()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-UnInhibit">
+        <code class="literal">UnInhibit()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-inhibit-IsValid">
         <code class="literal">IsValid()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-ui-IsValidChanged">
@@ -166,8 +168,8 @@
       These are the required DBUS methods for inhibiting system sleep.
     </p><p>
       DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Inhibit</code>
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-RequestCookie"></a>
-        <code class="literal">RequestCookie()</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-InhibitAuto"></a>
+        <code class="literal">InhibitAuto()</code>
       </h3></div></div></div><p>
         Inhibits the computer from performing the idle sleep action.
         Useful if you want to do an operation of long duration without the
@@ -178,12 +180,18 @@
         inhibit.
         It is required as the same application may want to call inhibit
         multiple times, without managing the inhibit calls itself.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "indexing files"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-inhibit-ClearCookie"></a>
-        <code class="literal">ClearCookie()</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "nautilus"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "Copying files"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-ui-InhibitManual"></a>
+        <code class="literal">InhibitManual()</code>
       </h3></div></div></div><p>
-        Allows the computer to perform the idle sleep action.
+        Inhibits the computer from performing the any sleep or shutdown action.
+        Useful if you want to perform an operation that cannot be interrupted like
+        a firmware reflash or RPM transaction.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>the application name, e.g. "rpm"</td></tr><tr><td>in</td><td>string</td><td>the localised reason to inhibit, e.g. "performing transaction"</td></tr><tr><td>out</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-inhibit-UnInhibit"></a>
+        <code class="literal">UnInhibit()</code>
+      </h3></div></div></div><p>
+        Allows the computer to perform the idle sleep or user action.
         If the program holding the cookie exits from the system bus without
-        calling <code class="literal">ClearCookie()</code> then it is automatically removed.
+        calling <code class="literal">UnInhibit()</code> then it is automatically removed.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>unsigned integer</td><td>the cookie</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-inhibit-IsValid"></a>
         <code class="literal">IsValid()</code>
       </h3></div></div></div><p>
