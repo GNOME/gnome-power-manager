@@ -40,8 +40,8 @@ EXTRA_DIST =						\
 	$(pkgdata_DATA)					\
 	$(dbusconf_DATA)
 
-install-data-local:
 if GCONF_SCHEMAS_INSTALL
+install-data-local:
 	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
 	$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
 endif
