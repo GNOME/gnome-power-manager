@@ -1,5 +1,13 @@
 2007-02-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: (gpm_statistics_get_data):
+	Only try to get the percentage data if we are a laptop.
+	If we are not a laptop then info->priv->percentage_data will be NULL
+	and a dereference will kill gnome-power-manager.
+	Should fix the crash reported by Kjartan Maraas in #402823.
+
+2007-02-01  Richard Hughes  <richard@hughsie.com>
+
 	* applets/inhibit/inhibit-applet.c: (click_cb):
 	Fix compile error. OOps.
 
@@ -68,7 +76,7 @@
 	* data/icons/scalable/gpm-brightness-kbd-disabled.svg:
 	* data/icons/scalable/gpm-brightness-lcd-disabled.svg:
 	* docs/icon-scheme.xml:
-	Add some icons by Paul Betts <betts.62@osu.edu> to convey the
+	Add some icons by Paul Betts <paul.betts@gmail.com> to convey the
 	brightness control in the addon is either disabled, or no hardware is
 	present. Fixes #400006
 

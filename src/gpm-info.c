@@ -281,6 +281,14 @@ gpm_statistics_get_data (GpmInfo     *info,
 	g_return_val_if_fail (type != NULL, FALSE);
 	g_return_val_if_fail (array != NULL, FALSE);
 
+	if (info->priv->is_laptop == FALSE) {
+		gpm_warning ("Data not available as not a laptop");
+		*error = g_error_new (gpm_info_error_quark (),
+				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
+				      "Data not available as not a laptop");
+		return FALSE;
+	}
+
 	if (strcmp (type, "power") == 0) {
 		events = gpm_info_data_get_list (info->priv->rate_data);
 	} else if (strcmp (type, "time") == 0) {
@@ -365,7 +373,7 @@ gpm_info_log_do_poll (gpointer data)
 				      GPM_POWER_KIND_PRIMARY,
 				      &battery_status);
 
-	if (info->priv->is_laptop) {
+	if (info->priv->is_laptop == TRUE) {
 		/* work out seconds elapsed */
 		value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
 
@@ -568,9 +576,6 @@ gpm_info_init (GpmInfo *info)
 	g_signal_connect (info->priv->control, "sleep-failure",
 			  G_CALLBACK (control_sleep_failure_cb), info);
 
-	/* set up the timer callback so we can log data */
-	g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
-
 	/* find out if we should log and display the extra graphs */
 	info->priv->is_laptop = gpm_hal_is_laptop (info->priv->hal);
 
@@ -599,11 +604,15 @@ gpm_info_init (GpmInfo *info)
 
 	/* set to a blank list */
 	info->priv->events = gpm_info_data_new ();
-	if (info->priv->is_laptop) {
+	if (info->priv->is_laptop == TRUE) {
 		info->priv->percentage_data = gpm_info_data_new ();
 		info->priv->rate_data = gpm_info_data_new ();
 		info->priv->time_data = gpm_info_data_new ();
 		info->priv->voltage = gpm_info_data_new ();
+
+		/* set up the timer callback so we can log data */
+		g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
+
 	} else {
 		info->priv->percentage_data = NULL;
 		info->priv->rate_data = NULL;
@@ -611,7 +620,7 @@ gpm_info_init (GpmInfo *info)
 		info->priv->voltage = NULL;
 	}
 
-	if (info->priv->is_laptop) {
+	if (info->priv->is_laptop == TRUE) {
 		/* get the maximum x-axis size from gconf */
 		GpmConf *conf = gpm_conf_new ();
 		guint max_time;
