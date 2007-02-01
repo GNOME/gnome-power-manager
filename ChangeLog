@@ -1,3 +1,10 @@
+2007-02-01  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: (gpm_statistics_get_data):
+	Fix a 153 byte memory leak that would happen each time the statistics
+	GetData method was accessed over DBUS.
+	Spotted by Kjartan Maraas, many thanks. Fixes #403156.
+
 2007-01-29  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: (gpm_power_status_for_device):

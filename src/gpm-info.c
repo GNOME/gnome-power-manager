@@ -316,6 +316,8 @@ gpm_statistics_get_data (GpmInfo     *info,
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
+
+	g_list_free (events);
 	return TRUE;
 }
 
