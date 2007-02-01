@@ -356,30 +356,36 @@ gpm_inhibit_is_valid (GpmInhibit *inhibit,
 		      gboolean   *valid,
 		      GError    **error)
 {
+	guint length_auto;
+	guint length_manual;
+
+	length_auto = g_slist_length (inhibit->priv->list_auto);
+	length_manual = g_slist_length (inhibit->priv->list_manual);
 
 	if (inhibit->priv->ignore_inhibits == TRUE) {
 		gpm_debug ("Inhibit ignored through gconf policy!");
 		*valid = TRUE;
 	}
 
-	/* if user clicks button or closes lid then only manual inhibitors
-	   can stop the action. */
 	if (user_action == TRUE) {
-		if (g_slist_length (inhibit->priv->list_manual) == 0) {
+		/* if user clicks button or closes lid then only manual inhibitors
+		   can stop the action. */
+		if (length_manual == 0) {
 			gpm_debug ("Valid as no manual inhibitors");
 			*valid = TRUE;
 		} else {
 			/* we have at least one application blocking the action */
-			gpm_debug ("We have valid manual inhibitors");
+			gpm_debug ("We have %i valid manual inhibitors", length_manual);
 			*valid = FALSE;
 		}
 	} else {
-		if (g_slist_length (inhibit->priv->list_auto) == 0) {
-			gpm_debug ("Valid as no auto inhibitors");
+		/* A manual or auto inhibit can stop the action if not consciously done. */
+		if (length_auto == 0 && length_manual == 0) {
+			gpm_debug ("Valid as no auto or manual inhibitors");
 			*valid = TRUE;
 		} else {
 			/* we have at least one application blocking the action */
-			gpm_debug ("We have valid auto inhibitors");
+			gpm_debug ("We have %i valid auto and %i manual inhibitors", length_auto, length_manual);
 			*valid = FALSE;
 		}
 	}

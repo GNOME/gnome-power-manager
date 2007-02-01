@@ -1,5 +1,12 @@
 2007-02-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-inhibit.c: (gpm_inhibit_is_valid):
+	* src/gpm-self-test.c: (test_inhibit):
+	Add some more tests and also fix up a situation where a manual inhibit
+	was not stopping an auto-action.
+
+2007-02-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_statistics_get_data):
 	Only try to get the percentage data if we are a laptop.
 	If we are not a laptop then info->priv->percentage_data will be NULL
