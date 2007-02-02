@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-30 12:12+0700\n"
-"PO-Revision-Date: 2007-01-30 12:17+0700\n"
+"POT-Creation-Date: 2007-02-02 20:40+0700\n"
+"PO-Revision-Date: 2007-02-02 20:44+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -933,16 +933,16 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "กำลังเขียนดีวีดีชื่อ \"ภาพถ่ายของฉัน\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-msgid "GNOME Acme Foo"
-msgstr "GNOME Acme Foo"
-
-#: ../data/gpm-inhibit-test.glade.h:4
-msgid "Inhibit"
-msgstr "ระงับ"
-
-#: ../data/gpm-inhibit-test.glade.h:5
 msgid "Inhibit Tester"
 msgstr "สอบถามการระงับ"
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "InhibitAuto"
+msgstr "ระงับอัตโนมัติ"
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "InhibitManual"
+msgstr "ระงับสั่งเอง"
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "Reason:"
@@ -951,6 +951,10 @@ msgstr "เหตุผล:"
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "UnInhibit"
 msgstr "เลิกระงับ"
+
+#: ../data/gpm-inhibit-test.glade.h:8
+msgid "Vendor Acme Foo"
+msgstr "ผู้ผลิต Acme Foo"
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Buttons</b>"
@@ -1166,73 +1170,73 @@ msgstr "%iV"
 msgid "%s because %s"
 msgstr "%s เพราะ %s"
 
-#: ../src/gpm-info.c:416
+#: ../src/gpm-info.c:428
 msgid "AC adapter inserted"
 msgstr "ที่แปลงไฟ AC ถูกเสียบเข้า"
 
-#: ../src/gpm-info.c:419
+#: ../src/gpm-info.c:431
 msgid "AC adapter removed"
 msgstr "ที่แปลงไฟ AC ถูกถอดออก"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:452
 msgid "The laptop lid has been closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: ../src/gpm-info.c:446
+#: ../src/gpm-info.c:458
 msgid "The laptop lid has been re-opened"
 msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
 
-#: ../src/gpm-info.c:468
+#: ../src/gpm-info.c:480
 msgid "idle mode ended"
 msgstr "ออกจากโหมดไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-info.c:471
+#: ../src/gpm-info.c:483
 msgid "idle mode started"
 msgstr "เข้าสู่โหมดไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-info.c:490
+#: ../src/gpm-info.c:502
 msgid "dpms on"
 msgstr "dpms เปิดใช้"
 
-#: ../src/gpm-info.c:492
+#: ../src/gpm-info.c:504
 msgid "dpms standby"
 msgstr "dpms พักคอย"
 
-#: ../src/gpm-info.c:494
+#: ../src/gpm-info.c:506
 msgid "dpms suspend"
 msgstr "dpms พักเครื่อง"
 
-#: ../src/gpm-info.c:496
+#: ../src/gpm-info.c:508
 msgid "dpms off"
 msgstr "dpms ปิดการใช้งาน"
 
-#: ../src/gpm-info.c:513
+#: ../src/gpm-info.c:525
 msgid "Resuming computer"
 msgstr "คอมพิวเตอร์กำลังกลับมาทำงานต่อ"
 
-#: ../src/gpm-info.c:529 ../src/gpm-tray-icon.c:920
+#: ../src/gpm-info.c:541 ../src/gpm-tray-icon.c:920
 msgid "Hibernate Problem"
 msgstr "เกิดปัญหาในการจำศีลเครื่อง"
 
-#: ../src/gpm-info.c:531 ../src/gpm-tray-icon.c:929
+#: ../src/gpm-info.c:543 ../src/gpm-tray-icon.c:929
 msgid "Suspend Problem"
 msgstr "เกิดปัญหาในการพักเครื่อง"
 
-#: ../src/gpm-inhibit.c:339
+#: ../src/gpm-inhibit.c:420
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "ได้หยุด %s ไม่ให้เกิดขึ้น : "
 
-#: ../src/gpm-inhibit.c:345
+#: ../src/gpm-inhibit.c:426
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "มีหลายโปรแกรมได้หยุด %s ไม่ให้เกิดขึ้น"
 
-#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:119
+#: ../src/gpm-inhibit-test.c:261 ../src/gpm-prefs.c:119
 msgid "GNOME Power Preferences"
 msgstr "ปรับแต่งโปรแกรมจัดการพลังงานของ GNOME"
 
-#: ../src/gpm-inhibit-test.c:194
+#: ../src/gpm-inhibit-test.c:267
 msgid "Power Inhibit Test"
 msgstr "สอบถามการระงับการจัดการพลังงาน"
 
@@ -1256,109 +1260,109 @@ msgstr "ดีบั๊กเจาะจงแฟ้ม เช่น power"
 msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
-#: ../src/gpm-manager.c:163
+#: ../src/gpm-manager.c:166
 #, c-format
 msgid "Request to %s"
 msgstr "การร้องขอไปยัง %s"
 
 #. I want this translated
-#: ../src/gpm-manager.c:172
+#: ../src/gpm-manager.c:175
 msgid "Perform action anyway"
 msgstr "ยังคงทำต่อไป"
 
-#: ../src/gpm-manager.c:359
+#: ../src/gpm-manager.c:362
 msgid "Doing nothing"
 msgstr "ไม่ต้องทำอะไร"
 
-#: ../src/gpm-manager.c:363 ../src/gpm-manager.c:491 ../src/gpm-manager.c:577
-#: ../src/gpm-manager.c:1375
+#: ../src/gpm-manager.c:366 ../src/gpm-manager.c:494 ../src/gpm-manager.c:580
+#: ../src/gpm-manager.c:1378
 msgid "Suspending computer"
 msgstr "กำลังพักเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:368 ../src/gpm-manager.c:507 ../src/gpm-manager.c:589
-#: ../src/gpm-manager.c:1350
+#: ../src/gpm-manager.c:371 ../src/gpm-manager.c:510 ../src/gpm-manager.c:592
+#: ../src/gpm-manager.c:1353
 msgid "Hibernating computer"
 msgstr "กำลังจำศีลเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:376 ../src/gpm-manager.c:523
+#: ../src/gpm-manager.c:379 ../src/gpm-manager.c:526
 msgid "Shutting down computer"
 msgstr "กำลังปิดเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:381
+#: ../src/gpm-manager.c:384
 msgid "GNOME interactive logout"
 msgstr "การสอบถามการออกจากระบบของ GNOME"
 
-#: ../src/gpm-manager.c:492
+#: ../src/gpm-manager.c:495
 msgid "the DBUS method Suspend() was invoked"
 msgstr "เมธอด Suspend() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:508
+#: ../src/gpm-manager.c:511
 msgid "the DBUS method Hibernate() was invoked"
 msgstr "เมธอด Hibernate() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:524
+#: ../src/gpm-manager.c:527
 msgid "the DBUS method Shutdown() was invoked"
 msgstr "เมธอด Shutdown() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:539
+#: ../src/gpm-manager.c:542
 msgid "Rebooting computer"
 msgstr "กำลังรีบูตเครื่องคอมพิวเตอร์"
 
-#: ../src/gpm-manager.c:540
+#: ../src/gpm-manager.c:543
 msgid "the DBUS method Reboot() was invoked"
 msgstr "เมธอด Reboot() ของ DBUS ถูกเรียก"
 
-#: ../src/gpm-manager.c:577 ../src/gpm-manager.c:589
+#: ../src/gpm-manager.c:580 ../src/gpm-manager.c:592
 msgid "System idle"
 msgstr "เครื่องไม่ได้ใช้งาน"
 
-#: ../src/gpm-manager.c:675 ../src/gpm-warning.c:159
+#: ../src/gpm-manager.c:678 ../src/gpm-warning.c:159
 msgid "Power Information"
 msgstr "ข้อมูลการใช้พลังงาน"
 
-#: ../src/gpm-manager.c:699
+#: ../src/gpm-manager.c:702
 msgid "the power button has been pressed"
 msgstr "ปุ่มเปิด/ปิดเครื่องถูกกด"
 
-#: ../src/gpm-manager.c:718
+#: ../src/gpm-manager.c:721
 msgid "the suspend button has been pressed"
 msgstr "ปุ่มพักเครื่องถูกกด"
 
-#: ../src/gpm-manager.c:738
+#: ../src/gpm-manager.c:741
 msgid "the hibernate button has been pressed"
 msgstr "ปุ่มจำศีลถูกกด"
 
-#: ../src/gpm-manager.c:762
+#: ../src/gpm-manager.c:765
 msgid "the lid has been closed on ac power"
 msgstr "แล็ปท็อปถูกพับเก็บขณะใช้ไฟ AC"
 
-#: ../src/gpm-manager.c:767
+#: ../src/gpm-manager.c:770
 msgid "the lid has been closed on battery power"
 msgstr "แล็ปท็อปถูกพับเก็บขณะใช้ไฟจากแบตเตอรี่"
 
-#: ../src/gpm-manager.c:856
+#: ../src/gpm-manager.c:859
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "แล็ปท็อปถูกพับเก็บอยู่ แล้วที่แปลงไฟ AC ถูกถอด (และ gconf ยังใช้ได้)"
 
-#: ../src/gpm-manager.c:879
+#: ../src/gpm-manager.c:882
 msgid "battery is critically low"
 msgstr "ไฟแบตเตอรี่ต่ำถึงขั้นวิกฤติ"
 
-#: ../src/gpm-manager.c:929
+#: ../src/gpm-manager.c:932
 msgid "Your battery is now fully charged"
 msgstr "แบตเตอรี่ของคุณประจุไฟเต็มแล้ว"
 
-#: ../src/gpm-manager.c:930
+#: ../src/gpm-manager.c:933
 msgid "Battery Charged"
 msgstr "ประจุแบตเตอรี่เสร็จแล้ว"
 
-#: ../src/gpm-manager.c:995
+#: ../src/gpm-manager.c:998
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อแบตเตอรี่หมด"
 
-#: ../src/gpm-manager.c:1000
+#: ../src/gpm-manager.c:1003
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1367,23 +1371,23 @@ msgstr ""
 "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะพักเครื่อง<br><b>ข้อสังเกต:</b> "
 "ต้องเหลือพลังงานเล็กน้อยถ้าจะนำเครื่องเข้าสู่ภาวะพักเครื่อง"
 
-#: ../src/gpm-manager.c:1006
+#: ../src/gpm-manager.c:1009
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
-#: ../src/gpm-manager.c:1010
+#: ../src/gpm-manager.c:1013
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "ประจุไฟในแบตเตอรี่ต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
-#: ../src/gpm-manager.c:1022
+#: ../src/gpm-manager.c:1025
 msgid "The AC Power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี่"
 
-#: ../src/gpm-manager.c:1032
+#: ../src/gpm-manager.c:1035
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
@@ -1392,31 +1396,31 @@ msgstr ""
 "คุณเหลือพลังงานในแบตเตอรี่อีกประมาณ <b>%s</b> (%d%%) กรุณาเสียบที่แปลงไฟ AC "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-manager.c:1117
+#: ../src/gpm-manager.c:1120
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะ<b>ปิด</b> เมื่อ UPS แบตเตอรี่หมด"
 
-#: ../src/gpm-manager.c:1122
+#: ../src/gpm-manager.c:1125
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะจำศีล"
 
-#: ../src/gpm-manager.c:1126
+#: ../src/gpm-manager.c:1129
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS ถึงระดับต่ำกว่าขีดวิกฤติแล้ว และเครื่องนี้กำลังจะปิด"
 
-#: ../src/gpm-manager.c:1133
+#: ../src/gpm-manager.c:1136
 msgid "UPS is critically low"
 msgstr "UPS ต่ำถึงขั้นวิกฤติ"
 
-#: ../src/gpm-manager.c:1137
+#: ../src/gpm-manager.c:1140
 msgid "Your system is running on backup power!"
 msgstr "ระบบกำลังใช้ไฟจากแหล่งจ่ายไฟสำรอง!"
 
-#: ../src/gpm-manager.c:1141
+#: ../src/gpm-manager.c:1144
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
@@ -1425,7 +1429,7 @@ msgstr ""
 "คุณเหลือพลังงานใน UPS อีกประมาณ <b>%s</b> (%d%%) กรุณาต่อแหล่งจ่ายไฟ "
 "เพื่อหลีกเลี่ยงการสูญเสียข้อมูล"
 
-#: ../src/gpm-manager.c:1230
+#: ../src/gpm-manager.c:1233
 #, c-format
 msgid ""
 "The %s device attached to this computer is low in power (%d%%). This device "
@@ -1434,35 +1438,35 @@ msgstr ""
 "อุปกรณ์ %s ที่ต่อกับเครื่องคอมพิวเตอร์นี้ เหลือพลังงานต่ำแล้ว (%d%%) อุปกรณ์นี้จะหยุดทำงานในไม่ช้า "
 "ถ้าไม่ประจุไฟเพิ่ม"
 
-#: ../src/gpm-manager.c:1351
+#: ../src/gpm-manager.c:1354
 msgid "user clicked hibernate from tray menu"
 msgstr "ผู้ใช้คลิกจำศีลเครื่องจากเมนูที่ถาด"
 
-#: ../src/gpm-manager.c:1376
+#: ../src/gpm-manager.c:1379
 msgid "user clicked suspend from tray menu"
 msgstr "ผู้ใช้คลิกพักเครื่องจากเมนูที่ถาด"
 
-#: ../src/gpm-manager.c:1399
+#: ../src/gpm-manager.c:1402
 msgid "Suspend failure"
 msgstr "เกิดข้อผิดพลาดขณะพักเครื่อง"
 
-#: ../src/gpm-manager.c:1400
+#: ../src/gpm-manager.c:1403
 msgid "Your computer did not appear to resume correctly from suspend."
 msgstr "ดูเหมือนเครื่องของคุณไม่ได้ฟื้นจากการพักเครื่องอย่างถูกต้อง"
 
-#: ../src/gpm-manager.c:1403
+#: ../src/gpm-manager.c:1406
 msgid "Hibernate failure"
 msgstr "เกิดข้อผิดพลาดขณะจำศีลเครื่อง"
 
-#: ../src/gpm-manager.c:1404
+#: ../src/gpm-manager.c:1407
 msgid "Your computer did not appear to resume correctly from hibernate."
 msgstr "ดูเหมือนเครื่องของคุณไม่ได้ฟื้นจากการจำศีลเครื่องอย่างถูกต้อง"
 
-#: ../src/gpm-manager.c:1409
+#: ../src/gpm-manager.c:1412
 msgid "This may be a driver or hardware problem."
 msgstr "อาจเป็นปัญหาของไดรเวอร์หรือฮาร์ดแวร์"
 
-#: ../src/gpm-manager.c:1410
+#: ../src/gpm-manager.c:1413
 msgid "Check the GNOME Power Manager manual for common problems."
 msgstr "กรุณาตรวจสอบปัญหาที่พบบ่อยในคู่มือเครื่องมือจัดการการใช้พลังงานของ GNOME"
 
