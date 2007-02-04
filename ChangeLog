@@ -1,5 +1,11 @@
 2007-02-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-srv-backlight.c: (button_pressed_cb):
+	Only update the DPMS parameters if we closed the lid, not on every
+	brightness change.
+
+2007-02-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_init):
 	Add a check for non zero brightness levels.
 

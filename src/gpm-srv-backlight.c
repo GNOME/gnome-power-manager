@@ -415,9 +415,8 @@ button_pressed_cb (GpmButton        *button,
 
 		/* make sure we undim when we lift the lid */
 		gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		gpm_srv_backlight_sync_policy (srv_backlight);	
 	}
-
-	gpm_srv_backlight_sync_policy (srv_backlight);	
 }
 
 /**
