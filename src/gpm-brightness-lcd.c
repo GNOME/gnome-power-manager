@@ -317,13 +317,12 @@ gpm_brightness_lcd_set_std (GpmBrightnessLcd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	level_hw = gpm_percent_to_discrete (brightness_level,
-						     brightness->priv->levels);
+	level_hw = gpm_percent_to_discrete (brightness_level, brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 
 	/* if in this state, then update */
 	if (brightness->priv->is_dimmed == FALSE) {
-		gpm_brightness_lcd_dim_hw (brightness, brightness->priv->level_std_hw);
+		gpm_brightness_lcd_dim_hw (brightness, level_hw);
 	}
 	return TRUE;
 }
@@ -611,6 +610,10 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 				 brightness->priv->udi,
 				 "laptop_panel.num_levels",
 				 &brightness->priv->levels);
+	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
+	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
+		gpm_warning ("Laptop panel levels are invalid!");
+	}
 
 	/* this changes under our feet */
 	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
@@ -619,8 +622,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	brightness->priv->level_dim_hw = 1;
 	brightness->priv->level_std_hw = 1;
 
-	gpm_debug ("Starting: (%i of %i)",
-		   brightness->priv->current_hw,
+	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
 }
 
