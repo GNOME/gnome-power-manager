@@ -39,7 +39,6 @@
 #include <dbus/dbus-glib.h>
 
 #include "gpm-brightness-lcd.h"
-#include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-hal.h"
@@ -60,7 +59,6 @@ struct GpmBrightnessLcdPrivate
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
-	GpmConf			*conf;
 	GpmProxy		*gproxy;
 	GpmHal			*hal;
 };
@@ -507,9 +505,6 @@ gpm_brightness_lcd_finalize (GObject *object)
 	if (brightness->priv->hal != NULL) {
 		g_object_unref (brightness->priv->hal);
 	}
-	if (brightness->priv->conf != NULL) {
-		g_object_unref (brightness->priv->conf);
-	}
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_brightness_lcd_parent_class)->finalize (object);
@@ -554,12 +549,10 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	gchar **names;
 	gchar *manufacturer_string = NULL;
 	gboolean res;
-	guint value;
 
 	brightness->priv = GPM_BRIGHTNESS_LCD_GET_PRIVATE (brightness);
 
 	brightness->priv->hal = gpm_hal_new ();
-	brightness->priv->conf = gpm_conf_new ();
 
 	/* save udi of lcd adapter */
 	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names);
@@ -609,10 +602,8 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 			  HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_uint (brightness->priv->hal,
-				 brightness->priv->udi,
-				 "laptop_panel.num_levels",
-				 &brightness->priv->levels);
+	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi,
+				 "laptop_panel.num_levels", &brightness->priv->levels);
 	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
 	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
 		gpm_warning ("Laptop panel levels are invalid!");
@@ -623,12 +614,8 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	gpm_debug ("current hw brightness: %i", brightness->priv->current_hw);
 
 	/* set to known value */
-	brightness->priv->level_dim_hw = 1;
-	brightness->priv->level_std_hw = brightness->priv->current_hw;
-
-	/* set the default dim */
-	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-	gpm_brightness_lcd_set_dim (brightness, value);
+	brightness->priv->level_dim_hw = 0;
+	brightness->priv->level_std_hw = 0;
 
 	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
 		   brightness->priv->levels - 1);
