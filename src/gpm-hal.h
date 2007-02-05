@@ -115,8 +115,6 @@ gboolean	 gpm_hal_device_get_uint		(GpmHal		*hal,
 gboolean	 gpm_hal_device_find_capability		(GpmHal		*hal,
 							 const gchar	*capability,
 							 gchar	      ***value);
-gboolean	 gpm_hal_device_rescan_capability	(GpmHal		*hal,
-							 const char	*capability);
 gboolean	 gpm_hal_device_has_capability		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*capability,
