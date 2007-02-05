@@ -70,7 +70,7 @@ struct GpmInfoPrivate
 	GpmInfoData		*rate_data;
 	GpmInfoData		*time_data;
 	GpmInfoData		*percentage_data;
-	GpmInfoData		*voltage;
+	GpmInfoData		*voltage_data;
 
 	time_t			 start_time;
 	gboolean		 is_laptop;
@@ -152,15 +152,29 @@ gpm_statistics_get_types (GpmInfo  *info,
 			  GError  **error)
 {
 	GList *list = NULL;
+	GList *data;
 
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
 	g_return_val_if_fail (types != NULL, FALSE);
 
-	list = g_list_append (list, "charge");
-	list = g_list_append (list, "power");
-	list = g_list_append (list, "time");
-	list = g_list_append (list, "voltage");
+	/* only return the type if we have data */
+	data = gpm_info_data_get_list (info->priv->rate_data);
+	if (g_list_length (data) > 0) {
+		list = g_list_append (list, "power");
+	}
+	data = gpm_info_data_get_list (info->priv->time_data);
+	if (g_list_length (data) > 0) {
+		list = g_list_append (list, "time");
+	}
+	data = gpm_info_data_get_list (info->priv->percentage_data);
+	if (g_list_length (data) > 0) {
+		list = g_list_append (list, "charge");
+	}
+	data = gpm_info_data_get_list (info->priv->voltage_data);
+	if (g_list_length (data) > 0) {
+		list = g_list_append (list, "voltage");
+	}
 
 	*types = device_list_to_strv (list);
 
@@ -296,7 +310,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 	} else if (strcmp (type, "charge") == 0) {
 		events = gpm_info_data_get_list (info->priv->percentage_data);
 	} else if (strcmp (type, "voltage") == 0) {
-		events = gpm_info_data_get_list (info->priv->voltage);
+		events = gpm_info_data_get_list (info->priv->voltage_data);
 	} else {
 		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
@@ -403,7 +417,7 @@ gpm_info_log_do_poll (gpointer data)
 					   value_x,
 					   battery_status.remaining_time, colour);
 		}
-		gpm_info_data_add (info->priv->voltage,
+		gpm_info_data_add (info->priv->voltage_data,
 				   value_x,
 				   battery_status.voltage, colour);
 	}
@@ -608,7 +622,7 @@ gpm_info_init (GpmInfo *info)
 		info->priv->percentage_data = gpm_info_data_new ();
 		info->priv->rate_data = gpm_info_data_new ();
 		info->priv->time_data = gpm_info_data_new ();
-		info->priv->voltage = gpm_info_data_new ();
+		info->priv->voltage_data = gpm_info_data_new ();
 
 		/* set up the timer callback so we can log data */
 		g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
@@ -617,7 +631,7 @@ gpm_info_init (GpmInfo *info)
 		info->priv->percentage_data = NULL;
 		info->priv->rate_data = NULL;
 		info->priv->time_data = NULL;
-		info->priv->voltage = NULL;
+		info->priv->voltage_data = NULL;
 	}
 
 	if (info->priv->is_laptop == TRUE) {
@@ -631,7 +645,7 @@ gpm_info_init (GpmInfo *info)
 		gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
 		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
 		gpm_info_data_set_max_time (info->priv->time_data, max_time);
-		gpm_info_data_set_max_time (info->priv->voltage, max_time);
+		gpm_info_data_set_max_time (info->priv->voltage_data, max_time);
 	}
 }
 
@@ -658,8 +672,8 @@ gpm_info_finalize (GObject *object)
 	if (info->priv->time_data) {
 		g_object_unref (info->priv->time_data);
 	}
-	if (info->priv->voltage) {
-		g_object_unref (info->priv->voltage);
+	if (info->priv->voltage_data) {
+		g_object_unref (info->priv->voltage_data);
 	}
 	if (info->priv->ac_adapter != NULL) {
 		g_object_unref (info->priv->ac_adapter);

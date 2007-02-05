@@ -307,7 +307,6 @@ gpm_info_data_add (GpmInfoData *info_data,
 
 	/* there is no point storing leading zeros data */
 	if (info_data->priv->has_data == FALSE && value == 0) {
-		gpm_debug ("not storing NULL data");
 		return FALSE;
 	}
 
@@ -331,6 +330,7 @@ gpm_info_data_add (GpmInfoData *info_data,
 				   Add an extra point so that we extend it horiz. */
 				gpm_info_data_add_always (info_data, time_secs, value, colour, FALSE);
 			}
+			gpm_debug ("Using %i lines", info_data->priv->array->len);
 		}
 	} else {
 		/* a list of less than 3 points always requires a data point */
@@ -343,7 +343,6 @@ gpm_info_data_add (GpmInfoData *info_data,
 			   info_data->priv->max_points);
 		gpm_info_data_limit_time (info_data, info_data->priv->max_points / 2);
 	}
-	gpm_debug ("Using %i lines", info_data->priv->array->len);
 
 	/* check if we need to truncate */
 	if (info_data->priv->array->len > 2) {

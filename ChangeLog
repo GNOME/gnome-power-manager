@@ -1,5 +1,11 @@
 2007-02-05  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info-data.c: (gpm_info_data_add):
+	* src/gpm-info.c: (gpm_statistics_get_types):
+	Don't return the types that have no data when we call GetTypes().
+
+2007-02-05  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-lcd.c:
 	Use the old (2.16) GetBrightness and SetBrightness methods because
 	these work. I think the DELL smbios addon is returning an integer rather
