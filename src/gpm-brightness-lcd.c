@@ -85,10 +85,10 @@ static gboolean
 gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 			   guint	    *brightness_level_hw)
 {
-	GError     *error = NULL;
-	gboolean    ret;
+	GError *error = NULL;
+	gboolean ret;
 	DBusGProxy *proxy;
-	int         level;
+	int level;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
@@ -101,8 +101,9 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
-				 G_TYPE_INT, &level,
+				 G_TYPE_UINT, &level,
 				 G_TYPE_INVALID);
+
 	if (brightness_level_hw != NULL) {
 		*brightness_level_hw = (guint)level;
 	}
@@ -116,6 +117,8 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 		gpm_warning ("GetBrightness failed!");
 		return FALSE;
 	}
+	gpm_debug ("GetBrightness returned level: %i", level);
+
 	return TRUE;
 }
 
@@ -135,6 +138,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
+	gint retval;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
@@ -157,7 +161,10 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
 				 G_TYPE_INT, (int)brightness_level_hw,
 				 G_TYPE_INVALID,
+				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
+	/* retval is ignored, the HAL API is broken... */
+
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
@@ -554,10 +561,6 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	brightness->priv->hal = gpm_hal_new ();
 	brightness->priv->conf = gpm_conf_new ();
 
-	/* set the default dim */
-	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-	gpm_brightness_lcd_set_dim (brightness, value);
-
 	/* save udi of lcd adapter */
 	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names);
 	if (names == NULL || names[0] == NULL) {
@@ -617,10 +620,15 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 
 	/* this changes under our feet */
 	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
+	gpm_debug ("current hw brightness: %i", brightness->priv->current_hw);
 
 	/* set to known value */
 	brightness->priv->level_dim_hw = 1;
-	brightness->priv->level_std_hw = 1;
+	brightness->priv->level_std_hw = brightness->priv->current_hw;
+
+	/* set the default dim */
+	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+	gpm_brightness_lcd_set_dim (brightness, value);
 
 	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
 		   brightness->priv->levels - 1);

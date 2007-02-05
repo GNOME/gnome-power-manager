@@ -334,22 +334,28 @@ conf_key_changed_cb (GpmConf          *conf,
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
-			gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+			if (state == GPM_AC_ADAPTER_PRESENT) {
+				gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+			}
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_MISSING) {
-			gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+			if (state == GPM_AC_ADAPTER_MISSING) {
+				gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+			}
 		}
 
 	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
 
-		gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-		gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+			gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
+		}
 	}
 
 	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_DISPLAY) == 0 ||
@@ -627,8 +633,6 @@ gpm_srv_backlight_class_init (GpmSrvBacklightClass *klass)
 static void
 gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 {
-	gint value;
-
 	srv_backlight->priv = GPM_SRV_BACKLIGHT_GET_PRIVATE (srv_backlight);
 
 	/* gets caps */
@@ -653,10 +657,6 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 		srv_backlight->priv->brightness = gpm_brightness_lcd_new ();
 		g_signal_connect (srv_backlight->priv->brightness, "brightness-changed",
 				  G_CALLBACK (brightness_changed_cb), srv_backlight);
-
-		/* set the default dim */
-		gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-		gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
 
 		/* use a visual widget */
 		srv_backlight->priv->feedback = gpm_feedback_new ();

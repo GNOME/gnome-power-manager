@@ -47,6 +47,10 @@ gpm_percent_to_discrete (guint percentage,
 	if (percentage > 100) {
 		return levels;
 	}
+	if (levels == 0) {
+		gpm_warning ("levels is 0!");
+		return 0;
+	}
 	return ((gfloat) percentage * (gfloat) (levels - 1)) / 100.0f;
 }
 
@@ -66,6 +70,10 @@ gpm_discrete_to_percent (guint discrete,
 	/* check we are in range */
 	if (discrete > levels) {
 		return 100;
+	}
+	if (levels == 0) {
+		gpm_warning ("levels is 0!");
+		return 0;
 	}
 	return (guint) ((float) discrete * (100.0f / (float) (levels - 1)));
 }

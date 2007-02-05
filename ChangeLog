@@ -1,3 +1,17 @@
+2007-02-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-brightness-lcd.c:
+	Use the old (2.16) GetBrightness and SetBrightness methods because
+	these work. I think the DELL smbios addon is returning an integer rather
+	than an unsigned integer and this is the source of confusion.
+
+	* src/gpm-common.c:
+	Check that the levels are not zero, else we get non-sensical results.
+
+	* src/gpm-srv-backlight.c:
+	Set the dim value after the first GetBrightness to avoid setting the
+	dim value as the current brightness.
+
 2007-02-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-srv-backlight.c: (button_pressed_cb):
