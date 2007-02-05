@@ -264,7 +264,7 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 	brightness->priv->hal = gpm_hal_new ();
 
 	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (brightness->priv->hal, "light_sensor", &names);
+	gpm_hal_device_find_capability (brightness->priv->hal, "light_sensor", &names, NULL);
 	if (names == NULL || names[0] == NULL) {
 		gpm_warning ("No devices of capability light_sensor");
 		return;
@@ -284,7 +284,7 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 
 	/* get levels that the adapter supports -- this does not change ever */
 	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi, "light_sensor.num_levels",
-				 &brightness->priv->levels);
+				 &brightness->priv->levels, NULL);
 
 	/* this changes under our feet */
 	gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
@@ -307,7 +307,7 @@ gpm_light_sensor_has_hw (void)
 
 	/* okay, as singleton - so we don't allocate more memory */
 	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "light_sensor", &names);
+	gpm_hal_device_find_capability (hal, "light_sensor", &names, NULL);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {

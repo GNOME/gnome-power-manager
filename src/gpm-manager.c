@@ -1433,10 +1433,22 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 			     gboolean        auth_begin,
 			     GpmManager     *manager)
 {
+	GError *error;
+	gboolean ret;
 	/* only clear errors if we have finished the authentication */
 	if (auth_begin == FALSE) {
-		gpm_hal_clear_suspend_error (manager->priv->hal);
-		gpm_hal_clear_hibernate_error (manager->priv->hal);
+		error = NULL;
+		ret = gpm_hal_clear_suspend_error (manager->priv->hal, &error);
+		if (ret == FALSE) {
+			gpm_debug ("Failed to clear suspend error; %s", error->message);
+			g_error_free (error);
+		}
+		error = NULL;
+		ret = gpm_hal_clear_hibernate_error (manager->priv->hal, &error);
+		if (ret == FALSE) {
+			gpm_debug ("Failed to clear hibernate error; %s", error->message);
+			g_error_free (error);
+		}
 	}
 }
 
@@ -1451,8 +1463,8 @@ gpm_manager_at_exit (void)
 {
 	/* we can't use manager as g_atexit has no userdata */
 	GpmHal *hal = gpm_hal_new ();
-	gpm_hal_clear_suspend_error (hal);
-	gpm_hal_clear_hibernate_error (hal);
+	gpm_hal_clear_suspend_error (hal, NULL);
+	gpm_hal_clear_hibernate_error (hal, NULL);
 	g_object_unref (hal);
 }
 

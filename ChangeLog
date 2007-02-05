@@ -1,5 +1,26 @@
 2007-02-05  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: (main):
+	Print the version number at startup.
+
+	* src/gpm-ac-adapter.c:
+	* src/gpm-battery.c:
+	* src/gpm-brightness-kbd.c:
+	* src/gpm-brightness-lcd.c:
+	* src/gpm-button.c:
+	* src/gpm-cpufreq.c:
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	* src/gpm-light-sensor.c:
+	* src/gpm-manager.c:
+	* src/gpm-power.c:
+	Use conventional GError based error reporting rather than alert the
+	user about missing optional keys. Convert most of the users to just
+	ignore the error by passing NULL to the HAL function, but handle the
+	ones that need something special done.
+
+2007-02-05  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal.c:
 	* src/gpm-hal.h:
 	Remove the unused gpm_hal_device_rescan_capability()

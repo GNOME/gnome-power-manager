@@ -594,7 +594,7 @@ gpm_cpufreq_has_hw (void)
 
 	/* okay, as singleton - so we don't allocate more memory */
 	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "cpufreq_control", &names);
+	ret = gpm_hal_device_find_capability (hal, "cpufreq_control", &names, NULL);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {

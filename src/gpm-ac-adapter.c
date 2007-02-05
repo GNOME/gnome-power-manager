@@ -72,6 +72,7 @@ gpm_ac_adapter_get_state (GpmAcAdapter *ac_adapter,
 		          GpmAcAdapterState *state)
 {
 	gboolean is_on_ac;
+	GError *error;
 
 	g_return_val_if_fail (ac_adapter != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_AC_ADAPTER (ac_adapter), FALSE);
@@ -82,8 +83,14 @@ gpm_ac_adapter_get_state (GpmAcAdapter *ac_adapter,
 		return TRUE;
 	}
 
+	error = NULL;
 	gpm_hal_device_get_bool (ac_adapter->priv->hal, ac_adapter->priv->udi,
-				 "ac_adapter.present", &is_on_ac);
+				 "ac_adapter.present", &is_on_ac, &error);
+	if (error != NULL) {
+		gpm_warning ("could not read ac_adapter.present");
+		g_error_free (error);
+	}
+
 	if (is_on_ac == TRUE) {
 		*state = GPM_AC_ADAPTER_PRESENT;
 	} else {
@@ -197,7 +204,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	ac_adapter->priv->hal = gpm_hal_new ();
 
 	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (ac_adapter->priv->hal, "ac_adapter", &names);
+	gpm_hal_device_find_capability (ac_adapter->priv->hal, "ac_adapter", &names, NULL);
 	if (names == NULL || names[0] == NULL) {
 		/* this shouldn't happen */
 		ac_adapter->priv->has_hardware = FALSE;

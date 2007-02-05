@@ -203,9 +203,9 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	/* Initialize battery_status to reasonable defaults */
 	gpm_power_battery_status_set_defaults (status);
 
-	gpm_hal_device_get_string (power->priv->hal, udi, "battery.type", &battery_kind_str);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.type", &battery_kind_str, NULL);
 
-	if (!battery_kind_str) {
+	if (battery_kind_str == NULL) {
 		gpm_warning ("cannot obtain battery type");
 		return FALSE;
 	}
@@ -228,37 +228,37 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	g_free (battery_kind_str);
 
 	/* batteries might be missing */
-	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.present", &status->is_present);
-	if (! status->is_present) {
+	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.present", &status->is_present, NULL);
+	if (status->is_present == FALSE) {
 		gpm_debug ("Battery not present, so not filling up values");
 		return FALSE;
 	}
 
 	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.design",
-				 &status->design_charge);
+				 &status->design_charge, NULL);
 	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.last_full",
-				 &status->last_full_charge);
+				 &status->last_full_charge, NULL);
 	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.current",
-				 &status->current_charge);
+				 &status->current_charge, NULL);
 
 	/* battery might not be rechargeable, have to check */
 	gpm_hal_device_get_bool (power->priv->hal, udi, "battery.is_rechargeable",
-				&status->is_rechargeable);
+				&status->is_rechargeable, NULL);
 
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY ||
 	    entry->battery_kind == GPM_POWER_KIND_UPS) {
 		if (status->is_rechargeable) {
 			gpm_hal_device_get_bool (power->priv->hal, udi, "battery.rechargeable.is_charging",
-						&status->is_charging);
+						&status->is_charging, NULL);
 			gpm_hal_device_get_bool (power->priv->hal, udi, "battery.rechargeable.is_discharging",
-						&status->is_discharging);
+						&status->is_discharging, NULL);
 		}
 	}
 
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY) {
 		exists = gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.rate",
-						  &status->charge_rate_raw);
+						  &status->charge_rate_raw, NULL);
 		if (!exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
@@ -269,7 +269,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 
 	/* sanity check that charge_level.percentage exists (if it should) */
 	exists = gpm_hal_device_get_uint (power->priv->hal, udi, "battery.charge_level.percentage",
-					  &status->percentage_charge);
+					  &status->percentage_charge, NULL);
 	if (!exists && (status->is_discharging || status->is_charging)) {
 		gpm_warning ("could not read your battery's percentage charge.");
 	}
@@ -278,7 +278,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	if (entry->battery_kind == GPM_POWER_KIND_PRIMARY ||
 	    entry->battery_kind == GPM_POWER_KIND_UPS) {
 		exists = gpm_hal_device_get_uint (power->priv->hal, udi,"battery.remaining_time",
-						  &status->remaining_time);
+						  &status->remaining_time, NULL);
 		if (! exists && (status->is_discharging || status->is_charging)) {
 			gpm_warning ("could not read your battery's remaining time");
 		}
@@ -301,15 +301,15 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	}
 
 	/* get other stuff we might need to know */
-	gpm_hal_device_get_string (power->priv->hal, udi, "info.product", &entry->product);
-	gpm_hal_device_get_string (power->priv->hal, udi, "info.vendor", &entry->vendor);
-	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology);
-	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial);
-	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model);
-	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.voltage.current", &status->voltage);
+	gpm_hal_device_get_string (power->priv->hal, udi, "info.product", &entry->product, NULL);
+	gpm_hal_device_get_string (power->priv->hal, udi, "info.vendor", &entry->vendor, NULL);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology, NULL);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial, NULL);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model, NULL);
+	gpm_hal_device_get_uint (power->priv->hal, udi, "battery.voltage.current", &status->voltage, NULL);
 
 	/* this is more common than you might expect: hardware that might blow up */
-	gpm_hal_device_get_bool (power->priv->hal, udi, "info.is_recalled", &perhaps_recall);
+	gpm_hal_device_get_bool (power->priv->hal, udi, "info.is_recalled", &perhaps_recall, NULL);
 
 	/* do we show the notification? */
 	gpm_conf_get_bool (power->priv->conf, GPM_CONF_SHOW_BATTERY_WARNING, &show_recall);
@@ -317,8 +317,8 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	if (perhaps_recall == TRUE && show_recall == TRUE) {
 		gchar *oem_vendor;
 		gchar *website;
-		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.vendor", &oem_vendor);
-		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.website_url", &website);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.vendor", &oem_vendor, NULL);
+		gpm_hal_device_get_string (power->priv->hal, udi, "info.recall.website_url", &website, NULL);
 		g_signal_emit (power, signals [BATTERY_PERHAPS_RECALL], 0, oem_vendor, website);
 		g_free (oem_vendor);
 		g_free (website);
@@ -389,37 +389,37 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
-		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_present);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_present, NULL);
 		battery_device_cache_entry_update_all (power, entry);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_charging);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_charging, NULL);
 		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
-		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_discharging);
+		gpm_hal_device_get_bool (power->priv->hal, udi, key, &status->is_discharging, NULL);
 		status->charge_rate_smoothed = 0;
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->design_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->design_charge, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.last_full") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->last_full_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->last_full_charge, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.current") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->current_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->current_charge, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.rate") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->charge_rate_raw);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->charge_rate_raw, NULL);
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->percentage_charge);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->percentage_charge, NULL);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->remaining_time);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->remaining_time, NULL);
 
 	} else if (strcmp (key, "battery.voltage.current") == 0) {
-		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->voltage);
+		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->voltage, NULL);
 
 	} else {
 		/* ignore */

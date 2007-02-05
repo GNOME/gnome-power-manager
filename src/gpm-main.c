@@ -202,6 +202,8 @@ main (int argc, char *argv[])
 		gpm_critical_error ("Could not daemonize: %s", g_strerror (errno));
 	}
 
+	gpm_debug ("GNOME %s %s", GPM_NAME, VERSION);
+
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {

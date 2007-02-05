@@ -237,10 +237,10 @@ hal_device_added_cb (GpmHal        *hal,
 
 	/* find out if the new device has capability battery 
 	   this might fail for CSR as the addon is weird */
-	gpm_hal_device_has_capability (hal, udi, "battery", &is_battery);
+	gpm_hal_device_has_capability (hal, udi, "battery", &is_battery, NULL);
 	/* try harder */
 	if (is_battery == FALSE) {
-		is_battery = gpm_hal_device_get_bool (hal, udi, "battery.present", &dummy);
+		is_battery = gpm_hal_device_get_bool (hal, udi, "battery.present", &dummy, NULL);
 	}
 
 	/* if a battery, then add */
@@ -261,11 +261,15 @@ coldplug_batteries (GpmBattery *battery)
 {
 	int    i;
 	char **device_names = NULL;
+	gboolean ret;
+	GError *error;
 
 	/* devices of type battery */
-	gpm_hal_device_find_capability (battery->priv->hal, "battery", &device_names);
-	if (! device_names) {
-		gpm_debug ("Couldn't obtain list of batteries");
+	error = NULL;
+	ret = gpm_hal_device_find_capability (battery->priv->hal, "battery", &device_names, &error);
+	if (device_names == NULL || device_names[0] == NULL) {
+		gpm_warning ("Couldn't obtain list of batteries: %s", error->message);
+		g_error_free (error);
 		return FALSE;
 	}
 

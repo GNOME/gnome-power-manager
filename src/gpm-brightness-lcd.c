@@ -555,7 +555,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	brightness->priv->hal = gpm_hal_new ();
 
 	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names);
+	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names, NULL);
 	if (names == NULL || names[0] == NULL) {
 		gpm_warning ("No devices of capability laptop_panel");
 		return;
@@ -573,7 +573,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382 */
 	gpm_hal_device_get_string (brightness->priv->hal, HAL_ROOT_COMPUTER,
 				   "smbios.system.manufacturer",
-				   &manufacturer_string);
+				   &manufacturer_string, NULL);
 	if (manufacturer_string) {
 		/* FIXME: This should be a HAL property */
 		if (strcmp (manufacturer_string, "IBM") == 0) {
@@ -587,7 +587,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	   feedback loop. */
 	res = gpm_hal_device_get_bool (brightness->priv->hal, brightness->priv->udi,
 				       "laptop_panel.brightness_in_hardware",
-				       &brightness->priv->does_own_updates);
+				       &brightness->priv->does_own_updates, NULL);
 	/* This key does not exist on normal machines */
 	if (!res) {
 		brightness->priv->does_own_updates = FALSE;
@@ -603,7 +603,7 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 
 	/* get levels that the adapter supports -- this does not change ever */
 	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi,
-				 "laptop_panel.num_levels", &brightness->priv->levels);
+				 "laptop_panel.num_levels", &brightness->priv->levels, NULL);
 	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
 	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
 		gpm_warning ("Laptop panel levels are invalid!");
@@ -636,7 +636,7 @@ gpm_brightness_lcd_has_hw (void)
 
 	/* okay, as singleton - so we don't allocate more memory */
 	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "laptop_panel", &names);
+	gpm_hal_device_find_capability (hal, "laptop_panel", &names, NULL);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {

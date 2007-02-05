@@ -274,7 +274,7 @@ emit_button_pressed (GpmButton *button,
 	if (strcmp (details, "") == 0) {
 		/* no details about the event, so we get more info
 		   for type 1 buttons */
-		gpm_hal_device_get_string (button->priv->hal, udi, "button.type", &type);
+		gpm_hal_device_get_string (button->priv->hal, udi, "button.type", &type, NULL);
 		/* hal may no longer be there */
 		g_return_if_fail (type != NULL);
 	} else {
@@ -286,7 +286,7 @@ emit_button_pressed (GpmButton *button,
 	state = TRUE;
 	/* we need to get the button state for lid buttons */
 	if (strcmp (type, "lid") == 0) {
-		gpm_hal_device_get_bool (button->priv->hal, udi, "button.state.value", &state);
+		gpm_hal_device_get_bool (button->priv->hal, udi, "button.state.value", &state, NULL);
 	}
 
 	/* abstact away that HAL has an extra parameter */
@@ -408,6 +408,7 @@ gpm_button_init (GpmButton *button)
 	gboolean have_xevents = FALSE;
 	int    i;
 	char **device_names = NULL;
+	gboolean ret;
 
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
@@ -446,8 +447,8 @@ gpm_button_init (GpmButton *button)
 	button->priv->hal = gpm_hal_new ();
 
 	/* devices of type button */
-	gpm_hal_device_find_capability (button->priv->hal, "button", &device_names);
-	if (! device_names) {
+	ret = gpm_hal_device_find_capability (button->priv->hal, "button", &device_names, NULL);
+	if (device_names == NULL || device_names[0] == NULL) {
 		gpm_debug ("Couldn't obtain list of buttons");
 		return;
 	}

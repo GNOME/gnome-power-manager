@@ -91,7 +91,7 @@ gpm_hal_is_running (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	running = gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "info.udi", &udi);
+	running = gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "info.udi", &udi, NULL);
 	g_free (udi);
 	return running;
 }
@@ -109,10 +109,10 @@ gboolean
 gpm_hal_device_get_bool (GpmHal      *hal,
 			 const gchar *udi,
 			 const gchar *key,
-			 gboolean    *value)
+			 gboolean    *value,
+			 GError     **error)
 {
 	DBusGProxy *proxy;
-	GError *error = NULL;
 	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -124,23 +124,16 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	ret = dbus_g_proxy_call (proxy, "GetPropertyBoolean", &error,
+	ret = dbus_g_proxy_call (proxy, "GetPropertyBoolean", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, value,
 				 G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
 		*value = FALSE;
-		gpm_debug ("GetPropertyBoolean failed!");
-		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -158,10 +151,10 @@ gboolean
 gpm_hal_device_get_string (GpmHal      *hal,
 			   const gchar *udi,
 			   const gchar *key,
-			   gchar      **value)
+			   gchar      **value,
+			   GError     **error)
 {
 	DBusGProxy *proxy = NULL;
-	GError *error = NULL;
 	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -173,23 +166,16 @@ gpm_hal_device_get_string (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	ret = dbus_g_proxy_call (proxy, "GetPropertyString", &error,
+	ret = dbus_g_proxy_call (proxy, "GetPropertyString", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRING, value,
 				 G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
 		*value = NULL;
-		gpm_debug ("GetPropertyString failed!");
-		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -205,10 +191,10 @@ gboolean
 gpm_hal_device_get_int (GpmHal      *hal,
 			const gchar *udi,
 			const gchar *key,
-			gint        *value)
+			gint        *value,
+			GError     **error)
 {
 	DBusGProxy *proxy;
-	GError *error = NULL;
 	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -220,23 +206,16 @@ gpm_hal_device_get_int (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
-	ret = dbus_g_proxy_call (proxy, "GetPropertyInteger", &error,
+	ret = dbus_g_proxy_call (proxy, "GetPropertyInteger", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, value,
 				 G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
 		*value = 0;
-		gpm_debug ("GetPropertyInteger failed!");
-		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -248,13 +227,14 @@ gboolean
 gpm_hal_device_get_uint (GpmHal      *hal,
 			 const gchar *udi,
 			 const gchar *key,
-			 guint       *value)
+			 guint       *value,
+			 GError     **error)
 {
 	gint tvalue;
 	gboolean ret;
 
 	/* bodge */
-	ret = gpm_hal_device_get_int (hal, udi, key, &tvalue);
+	ret = gpm_hal_device_get_int (hal, udi, key, &tvalue, error);
 	*value = (guint) tvalue;
 	return ret;
 }
@@ -270,10 +250,10 @@ gpm_hal_device_get_uint (GpmHal      *hal,
 gboolean
 gpm_hal_device_find_capability (GpmHal      *hal,
 				const gchar *capability,
-				gchar     ***value)
+				gchar     ***value,
+				GError     **error)
 {
 	DBusGProxy *proxy = NULL;
-	GError *error = NULL;
 	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -284,23 +264,16 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       HAL_DBUS_PATH_MANAGER,
 					       HAL_DBUS_INTERFACE_MANAGER);
-	ret = dbus_g_proxy_call (proxy, "FindDeviceByCapability", &error,
+	ret = dbus_g_proxy_call (proxy, "FindDeviceByCapability", error,
 				 G_TYPE_STRING, capability,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRV, value,
 				 G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
 		*value = NULL;
-		gpm_warning ("FindDeviceByCapability failed!");
-		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -315,10 +288,10 @@ gboolean
 gpm_hal_device_has_capability (GpmHal      *hal,
 			       const gchar *udi,
 			       const gchar *capability,
-			       gboolean    *has_capability)
+			       gboolean    *has_capability,
+			       GError     **error)
 {
 	DBusGProxy *proxy = NULL;
-	GError *error = NULL;
 	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
@@ -330,23 +303,16 @@ gpm_hal_device_has_capability (GpmHal      *hal,
 					   HAL_DBUS_SERVICE,
 					   udi,
 					   HAL_DBUS_INTERFACE_DEVICE);
-	ret = dbus_g_proxy_call (proxy, "QueryCapability", &error,
+	ret = dbus_g_proxy_call (proxy, "QueryCapability", error,
 				 G_TYPE_STRING, udi,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, has_capability,
 				 G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
 		*has_capability = FALSE;
-		gpm_warning ("QueryCapability failed!");
-		return FALSE;
 	}
 	g_object_unref (G_OBJECT (proxy));
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -355,7 +321,7 @@ gpm_hal_device_has_capability (GpmHal      *hal,
  * @hal: This class instance
  * @value: The list of strings to free
  *
- * Frees value result of gpm_hal_device_find_capability
+ * Frees value result of gpm_hal_device_find_capability. Safe to call with NULL.
  **/
 void
 gpm_hal_free_capability (GpmHal *hal, gchar **value)
@@ -363,8 +329,10 @@ gpm_hal_free_capability (GpmHal *hal, gchar **value)
 	gint i;
 
 	g_return_if_fail (GPM_IS_HAL (hal));
-	g_return_if_fail (value != NULL);
 
+	if (value == NULL) {
+		return;
+	}
 	for (i=0; value[i]; i++) {
 		g_free (value[i]);
 	}
@@ -385,12 +353,13 @@ gpm_hal_num_devices_of_capability (GpmHal *hal, const gchar *capability)
 {
 	gint i;
 	gchar **names;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), 0);
 	g_return_val_if_fail (capability != NULL, 0);
 
-	gpm_hal_device_find_capability (hal, capability, &names);
-	if (names == NULL) {
+	ret = gpm_hal_device_find_capability (hal, capability, &names, NULL);
+	if (ret == FALSE) {
 		gpm_debug ("No devices of capability %s", capability);
 		return 0;
 	}
@@ -421,20 +390,21 @@ gpm_hal_num_devices_of_capability_with_value (GpmHal      *hal,
 	gint i;
 	gint valid = 0;
 	gchar **names;
+	gboolean ret;
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), 0);
 	g_return_val_if_fail (capability != NULL, 0);
 	g_return_val_if_fail (key != NULL, 0);
 	g_return_val_if_fail (value != NULL, 0);
 
-	gpm_hal_device_find_capability (hal, capability, &names);
-	if (names == NULL) {
+	ret = gpm_hal_device_find_capability (hal, capability, &names, NULL);
+	if (ret == FALSE) {
 		gpm_debug ("No devices of capability %s", capability);
 		return 0;
 	}
 	for (i = 0; names[i]; i++) {
 		gchar *type = NULL;
-		gpm_hal_device_get_string (hal, names[i], key, &type);
+		gpm_hal_device_get_string (hal, names[i], key, &type, NULL);
 		if (type != NULL) {
 			if (strcmp (type, value) == 0)
 				valid++;
@@ -1112,7 +1082,7 @@ gpm_hal_is_laptop (GpmHal *hal)
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
 	/* always present */
-	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "system.formfactor", &formfactor);
+	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "system.formfactor", &formfactor, NULL);
 	if (formfactor == NULL) {
 		gpm_debug ("system.formfactor not set!");
 		/* no need to free */
@@ -1142,7 +1112,7 @@ gpm_hal_has_power_management (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "power_management.type", &ptype);
+	gpm_hal_device_get_string (hal, HAL_ROOT_COMPUTER, "power_management.type", &ptype, NULL);
 	/* this key only has to exist to be pm okay */
 	if (ptype) {
 		gpm_debug ("Power management type : %s", ptype);
@@ -1171,7 +1141,7 @@ gpm_hal_can_suspend (GpmHal *hal)
 	/* TODO: Change to can_suspend when rely on newer HAL */
 	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
 					  "power_management.can_suspend_to_ram",
-					  &can_suspend);
+					  &can_suspend, NULL);
 	if (exists == FALSE) {
 		gpm_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
 		return FALSE;
@@ -1198,7 +1168,7 @@ gpm_hal_can_hibernate (GpmHal *hal)
 	/* TODO: Change to can_hibernate when rely on newer HAL */
 	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
 					  "power_management.can_suspend_to_disk",
-					  &can_hibernate);
+					  &can_hibernate, NULL);
 	if (exists == FALSE) {
 		gpm_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
 		return FALSE;
@@ -1469,10 +1439,9 @@ gpm_hal_has_hibernate_error (GpmHal *hal, gboolean *state)
  * Tells HAL to try and clear the suspend error as we appear to be okay
  **/
 gboolean
-gpm_hal_clear_suspend_error (GpmHal *hal)
+gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 {
 #if HAVE_HAL_NEW
-	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -1486,17 +1455,9 @@ gpm_hal_clear_suspend_error (GpmHal *hal)
 	}
 
 	gpm_debug ("Doing SuspendClearError");
-	ret = dbus_g_proxy_call (proxy, "SuspendClearError", &error,
+	ret = dbus_g_proxy_call (proxy, "SuspendClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
-	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
-		gpm_warning ("SuspendClearError failed!");
-		return FALSE;
-	}
+	return ret;
 #endif
 	return TRUE;
 }
@@ -1510,10 +1471,9 @@ gpm_hal_clear_suspend_error (GpmHal *hal)
  * Tells HAL to try and clear the hibernate error as we appear to be okay
  **/
 gboolean
-gpm_hal_clear_hibernate_error (GpmHal *hal)
+gpm_hal_clear_hibernate_error (GpmHal *hal, GError **error)
 {
 #if HAVE_HAL_NEW
-	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -1527,17 +1487,9 @@ gpm_hal_clear_hibernate_error (GpmHal *hal)
 	}
 
 	gpm_debug ("Doing HibernateClearError");
-	ret = dbus_g_proxy_call (proxy, "HibernateClearError", &error,
+	ret = dbus_g_proxy_call (proxy, "HibernateClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
-	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
-	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
-		gpm_warning ("HibernateClearError failed!");
-		return FALSE;
-	}
+	return ret;
 #endif
 	return TRUE;
 }

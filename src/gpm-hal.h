@@ -99,26 +99,32 @@ gboolean	 gpm_hal_is_running			(GpmHal		*hal);
 gboolean	 gpm_hal_device_get_bool		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,
-							 gboolean	*value);
+							 gboolean	*value,
+							 GError		**error);
 gboolean	 gpm_hal_device_get_string		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,
-							 gchar		**value);
+							 gchar		**value,
+							 GError		**error);
 gboolean	 gpm_hal_device_get_int			(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,
-							 gint		*value);
+							 gint		*value,
+							 GError		**error);
 gboolean	 gpm_hal_device_get_uint		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*key,
-							 guint		*value);
+							 guint		*value,
+							 GError		**error);
 gboolean	 gpm_hal_device_find_capability		(GpmHal		*hal,
 							 const gchar	*capability,
-							 gchar	      ***value);
+							 gchar	      ***value,
+							 GError		**error);
 gboolean	 gpm_hal_device_has_capability		(GpmHal		*hal,
 							 const gchar	*udi,
 							 const gchar	*capability,
-							 gboolean	*has_capability);
+							 gboolean	*has_capability,
+							 GError		**error);
 gint		 gpm_hal_num_devices_of_capability	(GpmHal		*hal,
 							 const gchar	*capability);
 gint		 gpm_hal_num_devices_of_capability_with_value (GpmHal	*hal,
@@ -153,8 +159,10 @@ gboolean	 gpm_hal_has_suspend_error		(GpmHal		*hal,
 							 gboolean	*state);
 gboolean	 gpm_hal_has_hibernate_error		(GpmHal		*hal,
 							 gboolean	*state);
-gboolean	 gpm_hal_clear_suspend_error		(GpmHal		*hal);
-gboolean	 gpm_hal_clear_hibernate_error		(GpmHal		*hal);
+gboolean	 gpm_hal_clear_suspend_error		(GpmHal		*hal,
+							 GError		**error);
+gboolean	 gpm_hal_clear_hibernate_error		(GpmHal		*hal,
+							 GError		**error);
 
 G_END_DECLS
 
