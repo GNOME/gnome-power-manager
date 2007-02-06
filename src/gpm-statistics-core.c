@@ -567,6 +567,10 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	GpmGraphWidgetAxisType axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
+	if (value == NULL) {
+		gpm_debug ("no graph types available");
+		return;
+	}
 	if (strcmp (value, ACTION_CHARGE_TEXT) == 0) {
 		type = ACTION_CHARGE;
 	} else if (strcmp (value, ACTION_POWER_TEXT) == 0) {
@@ -733,6 +737,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "custom_graph");
 	gtk_widget_set_size_request (widget, 600, 300);
 	statistics->priv->graph_widget = widget;
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
 	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 	/* add the key items */

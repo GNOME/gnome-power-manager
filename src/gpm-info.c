@@ -158,21 +158,21 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
 	g_return_val_if_fail (types != NULL, FALSE);
 
-	/* only return the type if we have data */
+	/* only return the type if we have sufficient data */
 	data = gpm_info_data_get_list (info->priv->rate_data);
-	if (g_list_length (data) > 0) {
+	if (g_list_length (data) > 2) {
 		list = g_list_append (list, "power");
 	}
 	data = gpm_info_data_get_list (info->priv->time_data);
-	if (g_list_length (data) > 0) {
+	if (g_list_length (data) > 2) {
 		list = g_list_append (list, "time");
 	}
 	data = gpm_info_data_get_list (info->priv->percentage_data);
-	if (g_list_length (data) > 0) {
+	if (g_list_length (data) > 2) {
 		list = g_list_append (list, "charge");
 	}
 	data = gpm_info_data_get_list (info->priv->voltage_data);
-	if (g_list_length (data) > 0) {
+	if (g_list_length (data) > 2) {
 		list = g_list_append (list, "voltage");
 	}
 
