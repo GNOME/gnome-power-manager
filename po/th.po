@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-02 20:40+0700\n"
-"PO-Revision-Date: 2007-02-02 20:44+0700\n"
+"POT-Creation-Date: 2007-02-06 23:02+0700\n"
+"PO-Revision-Date: 2007-02-06 23:11+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <l10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -869,18 +869,26 @@ msgid "Whether to use time-based notifications"
 msgstr "ใช้การแจ้งเตือนแบบบอกเวลาหรือไม่"
 
 #: ../data/gnome-power-manager.schemas.in.h:133
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr "ควรแสดงข้อความกำกับแกนต่างๆ ในหน้าต่างกราฟหรือไม่"
+
+#: ../data/gnome-power-manager.schemas.in.h:134
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr "ควรแสดงข้อความกำกับแกนต่างๆ ในหน้าต่างกราฟหรือไม่"
+
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "Whether we should show the events in the statistics window"
 msgstr "ควรแสดงเหตุการณ์ต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid "Whether we should show the events in the statistics window."
 msgstr "ควรแสดงเหตุการณ์ต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:135
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid "Whether we should show the legend in the statistics window"
 msgstr "ควรแสดงคำอธิบายสัญลักษณ์ในหน้าต่างกราฟหรือไม่"
 
-#: ../data/gnome-power-manager.schemas.in.h:136
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid "Whether we should show the legend in the statistics window."
 msgstr "ควรแสดงคำอธิบายสัญลักษณ์ในหน้าต่างกราฟหรือไม่"
 
@@ -905,22 +913,26 @@ msgid "Brightness"
 msgstr "ความสว่าง"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add legend"
-msgstr "แสดงสัญลักษณ์"
+msgid "Add _axis labels"
+msgstr "แสดงข้อความกำกับแ_กน"
 
 #: ../data/gpm-graph.glade.h:2
-msgid "Add related events"
-msgstr "แสดงเหตุการณ์ที่เกี่ยวข้อง"
+msgid "Add lege_nd"
+msgstr "แสดง_สัญลักษณ์"
 
 #: ../data/gpm-graph.glade.h:3
+msgid "Add related _events"
+msgstr "แสดงเ_หตุการณ์ที่เกี่ยวข้อง"
+
+#: ../data/gpm-graph.glade.h:4
 msgid "Device:"
 msgstr "อุปกรณ์:"
 
-#: ../data/gpm-graph.glade.h:4
+#: ../data/gpm-graph.glade.h:5
 msgid "Graph type:"
 msgstr "ชนิดของกราฟ:"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-statistics-core.c:55
+#: ../data/gpm-graph.glade.h:6 ../src/gpm-statistics-core.c:55
 msgid "Power History"
 msgstr "กราฟการใช้พลังงาน"
 
@@ -1068,17 +1080,17 @@ msgstr "ไ_ม่ต้องแสดงไอคอน"
 msgid "_Only display an icon when battery power is critically low"
 msgstr "แสดงไอคอนเมื่อแบตเตอรี่ถึงขีด_วิกฤติเท่านั้น"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:101
 msgid "Unknown time"
 msgstr "ไม่ทราบกำหนดเวลา"
 
-#: ../src/gpm-common.c:98
+#: ../src/gpm-common.c:106
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i นาที"
 
-#: ../src/gpm-common.c:109
+#: ../src/gpm-common.c:117
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1086,17 +1098,17 @@ msgstr[0] "%i ชั่วโมง"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:115
+#: ../src/gpm-common.c:123
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:116
+#: ../src/gpm-common.c:124
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ชั่วโมง"
 
-#: ../src/gpm-common.c:117
+#: ../src/gpm-common.c:125
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
@@ -1105,62 +1117,90 @@ msgstr[0] "นาที"
 msgid "Power Manager for the GNOME desktop"
 msgstr "โปรแกรมจัดการการใช้พลังงานสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/gpm-graph-widget.c:73
+#: ../src/gpm-graph-widget.c:77
 msgid "Charged"
 msgstr "ประจุไฟเสร็จแล้ว"
 
-#: ../src/gpm-graph-widget.c:74
+#: ../src/gpm-graph-widget.c:78
 msgid "Charging"
 msgstr "กำลังประจุไฟ"
 
-#: ../src/gpm-graph-widget.c:75
+#: ../src/gpm-graph-widget.c:79
 msgid "Discharging"
 msgstr "กำลังจ่ายไฟ"
 
+#: ../src/gpm-graph-widget.c:181
+msgid "Charge percentage"
+msgstr "เปอร์เซ็นต์ประจุ"
+
+#: ../src/gpm-graph-widget.c:184
+msgid "Time remaining"
+msgstr "เวลาที่เหลือ"
+
+#: ../src/gpm-graph-widget.c:187
+msgid "Power"
+msgstr "พลังงาน"
+
+#: ../src/gpm-graph-widget.c:190
+msgid "Cell Voltage"
+msgstr "ศักย์ไฟฟ้าแบตเตอรี่"
+
+#: ../src/gpm-graph-widget.c:192 ../src/gpm-graph-widget.c:212
+msgid "Unknown caption"
+msgstr "ข้อมูลไม่ทราบชนิด"
+
+#: ../src/gpm-graph-widget.c:209
+msgid "Time"
+msgstr "เวลา"
+
+#: ../src/gpm-graph-widget.c:210
+msgid "Time since startup"
+msgstr "เวลาตั้งแต่เริ่มเข้าระบบ"
+
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:379
+#: ../src/gpm-graph-widget.c:450
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:382
+#: ../src/gpm-graph-widget.c:453
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:387
+#: ../src/gpm-graph-widget.c:458
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:390
+#: ../src/gpm-graph-widget.c:461
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:394
+#: ../src/gpm-graph-widget.c:465
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:398
+#: ../src/gpm-graph-widget.c:469
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:401
+#: ../src/gpm-graph-widget.c:472
 #, c-format
 msgid "%iW"
 msgstr "%iW"
 
 #. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:404
+#: ../src/gpm-graph-widget.c:475
 #, c-format
 msgid "%iV"
 msgstr "%iV"
@@ -1170,55 +1210,55 @@ msgstr "%iV"
 msgid "%s because %s"
 msgstr "%s เพราะ %s"
 
-#: ../src/gpm-info.c:428
+#: ../src/gpm-info.c:442
 msgid "AC adapter inserted"
 msgstr "ที่แปลงไฟ AC ถูกเสียบเข้า"
 
-#: ../src/gpm-info.c:431
+#: ../src/gpm-info.c:445
 msgid "AC adapter removed"
 msgstr "ที่แปลงไฟ AC ถูกถอดออก"
 
-#: ../src/gpm-info.c:452
+#: ../src/gpm-info.c:466
 msgid "The laptop lid has been closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: ../src/gpm-info.c:458
+#: ../src/gpm-info.c:472
 msgid "The laptop lid has been re-opened"
 msgstr "แล็ปท็อปถูกเปิดฝาออกใหม่"
 
-#: ../src/gpm-info.c:480
+#: ../src/gpm-info.c:494
 msgid "idle mode ended"
 msgstr "ออกจากโหมดไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-info.c:483
+#: ../src/gpm-info.c:497
 msgid "idle mode started"
 msgstr "เข้าสู่โหมดไม่ใช้งานเครื่อง"
 
-#: ../src/gpm-info.c:502
+#: ../src/gpm-info.c:516
 msgid "dpms on"
 msgstr "dpms เปิดใช้"
 
-#: ../src/gpm-info.c:504
+#: ../src/gpm-info.c:518
 msgid "dpms standby"
 msgstr "dpms พักคอย"
 
-#: ../src/gpm-info.c:506
+#: ../src/gpm-info.c:520
 msgid "dpms suspend"
 msgstr "dpms พักเครื่อง"
 
-#: ../src/gpm-info.c:508
+#: ../src/gpm-info.c:522
 msgid "dpms off"
 msgstr "dpms ปิดการใช้งาน"
 
-#: ../src/gpm-info.c:525
+#: ../src/gpm-info.c:539
 msgid "Resuming computer"
 msgstr "คอมพิวเตอร์กำลังกลับมาทำงานต่อ"
 
-#: ../src/gpm-info.c:541 ../src/gpm-tray-icon.c:920
+#: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:920
 msgid "Hibernate Problem"
 msgstr "เกิดปัญหาในการจำศีลเครื่อง"
 
-#: ../src/gpm-info.c:543 ../src/gpm-tray-icon.c:929
+#: ../src/gpm-info.c:557 ../src/gpm-tray-icon.c:929
 msgid "Suspend Problem"
 msgstr "เกิดปัญหาในการพักเครื่อง"
 
@@ -1514,7 +1554,7 @@ msgstr "แป้นพิมพ์ไร้สาย"
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:507 ../src/gpm-statistics-core.c:614
+#: ../src/gpm-power.c:507 ../src/gpm-statistics-core.c:634
 msgid "Unknown"
 msgstr "ไม่ทราบ"
 
@@ -1675,7 +1715,7 @@ msgid "Ask me"
 msgstr "ถาม"
 
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:740
+#: ../src/gpm-statistics-core.c:760
 msgid "Suspend"
 msgstr "พักเครื่อง"
 
@@ -1684,7 +1724,7 @@ msgid "Shutdown"
 msgstr "ปิดเครื่อง"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:750
+#: ../src/gpm-statistics-core.c:770
 msgid "Hibernate"
 msgstr "จำศีลเครื่อง"
 
@@ -1734,59 +1774,59 @@ msgstr "กราฟศักย์ไฟฟ้า"
 msgid "Estimated Time History"
 msgstr "กราฟเวลาประเมิน"
 
-#: ../src/gpm-statistics-core.c:684
+#: ../src/gpm-statistics-core.c:704
 msgid "Could not connect to GNOME Power Manager."
 msgstr "ไม่สามารถติดต่อไปยังเครื่องมือจัดการการใช้พลังงานของ GNOME"
 
-#: ../src/gpm-statistics-core.c:685
+#: ../src/gpm-statistics-core.c:705
 msgid "Perhaps the program is not running or you are using an old version?"
 msgstr "บางที โปรแกรมอาจไม่ได้ทำงานอยู่ หรือคุณอาจกำลังใช้รุ่นเก่าอยู่?"
 
-#: ../src/gpm-statistics-core.c:720
+#: ../src/gpm-statistics-core.c:740
 msgid "On AC"
 msgstr "ใช้ไฟ AC"
 
-#: ../src/gpm-statistics-core.c:725
+#: ../src/gpm-statistics-core.c:745
 msgid "On battery"
 msgstr "ใช้ไฟแบตเตอรี่"
 
-#: ../src/gpm-statistics-core.c:730
+#: ../src/gpm-statistics-core.c:750
 msgid "Session idle"
 msgstr "เครื่องไม่ได้ใช้งาน"
 
-#: ../src/gpm-statistics-core.c:735
+#: ../src/gpm-statistics-core.c:755
 msgid "Session active"
 msgstr "เครื่องใช้งาน"
 
-#: ../src/gpm-statistics-core.c:745
+#: ../src/gpm-statistics-core.c:765
 msgid "Resume"
 msgstr "ทำงานต่อ"
 
-#: ../src/gpm-statistics-core.c:755
+#: ../src/gpm-statistics-core.c:775
 msgid "Lid closed"
 msgstr "ฝาปิด"
 
-#: ../src/gpm-statistics-core.c:760
+#: ../src/gpm-statistics-core.c:780
 msgid "Lid opened"
 msgstr "ฝาเปิด"
 
-#: ../src/gpm-statistics-core.c:765
+#: ../src/gpm-statistics-core.c:785
 msgid "Notification"
 msgstr "การแจ้งเหตุ"
 
-#: ../src/gpm-statistics-core.c:770
+#: ../src/gpm-statistics-core.c:790
 msgid "DPMS On"
 msgstr "DPMS เปิดใช้"
 
-#: ../src/gpm-statistics-core.c:775
+#: ../src/gpm-statistics-core.c:795
 msgid "DPMS Standby"
 msgstr "DPMS พักคอย"
 
-#: ../src/gpm-statistics-core.c:780
+#: ../src/gpm-statistics-core.c:800
 msgid "DPMS Suspend"
 msgstr "DPMS พักเครื่อง"
 
-#: ../src/gpm-statistics-core.c:785
+#: ../src/gpm-statistics-core.c:805
 msgid "DPMS Off"
 msgstr "DPMS ปิดการใช้งาน"
 
@@ -1921,9 +1961,6 @@ msgstr "พลังงานต่ำ"
 #~ msgid "Actions"
 #~ msgstr "การดำเนินการ"
 
-#~ msgid "Custom usage percentage:"
-#~ msgstr "ร้อยละของการใช้งานกำหนดเอง:"
-
 #~ msgid "Display"
 #~ msgstr "หน้าจอ"
 
@@ -2030,9 +2067,6 @@ msgstr "พลังงานต่ำ"
 
 #~ msgid "The orientation of the tray."
 #~ msgstr "แนววางของถาด"
-
-#~ msgid "Time"
-#~ msgstr "เวลา"
 
 #~ msgid "Event"
 #~ msgstr "เหตุการณ์"
