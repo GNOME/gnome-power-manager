@@ -253,7 +253,6 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
 	g_return_val_if_fail (array != NULL, FALSE);
 
-	gpm_debug ("seconds=%i", seconds);
 	events = gpm_info_data_get_list (info->priv->events);
 	*array = g_ptr_array_sized_new (g_list_length (events));
 
@@ -327,8 +326,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 		return FALSE;
 	}		
 
-	/* TODO! */
-	gpm_debug ("seconds=%i", seconds);
+	/* TODO: process seconds */
 	*array = g_ptr_array_sized_new (g_list_length (events));
 
 	for (l=events; l != NULL; l=l->next) {
