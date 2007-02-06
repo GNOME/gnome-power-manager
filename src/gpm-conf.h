@@ -122,6 +122,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_SHOW_CPUFREQ_UI	GPM_CONF_DIR "/show_cpufreq_ui"
 
 #define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics_show_legend"
+#define GPM_CONF_STAT_SHOW_AXIS_LABELS	GPM_CONF_DIR "/statistics_show_axis_labels"
 #define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics_show_events"
 #define GPM_CONF_STAT_GRAPH_TYPE	GPM_CONF_DIR "/statistics_graph_type"
 
