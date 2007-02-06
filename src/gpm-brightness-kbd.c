@@ -154,7 +154,7 @@ gpm_brightness_kbd_set_hw (GpmBrightnessKbd *brightness,
 	gpm_debug ("Setting %i of %i", brightness_level_hw, brightness->priv->levels - 1);
 
 	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
-				 G_TYPE_UINT, brightness_level_hw,
+				 G_TYPE_INT, brightness_level_hw,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {

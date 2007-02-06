@@ -1,5 +1,12 @@
 2007-02-06  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_set_hw):
+	Apply patch from David Zeuthen <david@fubar.dk>:
+	g-p-m times out on lots of method calls on startup.
+	Attached patch makes it work for me on my Macbook Pro.
+
+2007-02-06  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-graph.glade:
 	* src/gpm-graph-widget.c:
 	* src/gpm-graph-widget.h:
