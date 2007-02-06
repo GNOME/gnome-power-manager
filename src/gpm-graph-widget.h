@@ -113,9 +113,9 @@ void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
 							 GList		*list);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
 							 GList		*list);
-void		 gpm_graph_widget_set_axis_x		(GpmGraphWidget	*graph,
+void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
-void		 gpm_graph_widget_set_axis_y		(GpmGraphWidget	*graph,
+void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 gboolean	 gpm_graph_widget_key_add		(GpmGraphWidget	*graph,
 							 const gchar	*name,

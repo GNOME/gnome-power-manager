@@ -562,8 +562,8 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 
 	/* find out what sort of grid axis we need */
 	gpm_statistics_get_axis_type_dbus (statistics, type, &axis_x, &axis_y);
-	gpm_graph_widget_set_axis_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_x);
-	gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_y);
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_x);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_y);
 
 	/* const, so no need to free */
 	statistics->priv->graph_type = type;
@@ -713,7 +713,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "custom_graph");
 	gtk_widget_set_size_request (widget, 600, 300);
 	statistics->priv->graph_widget = widget;
-	gpm_graph_widget_set_axis_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 	/* add the key items */
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),

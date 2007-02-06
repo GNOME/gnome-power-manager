@@ -60,10 +60,10 @@
         <code class="literal">Request</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-control-Policy">
         <code class="literal">Policy()</code>
-      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-statistics">Statistics Data</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetTypes">
-        <code class="literal">GetTypes()</code>
-      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetAxisType">
-        <code class="literal">GetAxisType()</code>
+      </a></span></dt></dl></dd><dt><span class="sect1"><a href="dbus-interface.html#pm-statistics">Statistics Data</a></span></dt><dd><dl><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetDataTypes">
+        <code class="literal">GetDataTypes()</code>
+      </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetAxisTypes">
+        <code class="literal">GetAxisTypes()</code>
       </a></span></dt><dt><span class="sect2"><a href="dbus-interface.html#pm-statistics-GetData">
         <code class="literal">GetData()</code>
       </a></span></dt></dl></dd></dl></div><p>
@@ -294,18 +294,18 @@
       These are optional DBUS methods for getting system statistics.
     </p><p>
       DBUS Object Path: <code class="literal">/org/gnome/PowerManager/Statistics</code>
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetTypes"></a>
-        <code class="literal">GetTypes()</code>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetDataTypes"></a>
+        <code class="literal">GetDataTypes()</code>
       </h3></div></div></div><p>
         Gets a list of the types of data available.
-      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>list of strings [as]</td><td>The types of data we support, e.g. [ 'voltage', 'power', 'percentage' ]</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetAxisType"></a>
-        <code class="literal">GetAxisType()</code>
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>out</td><td>list of strings [as]</td><td>The types of data we support, e.g. [ 'voltage', 'power', 'percentage' ]</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetAxisTypes"></a>
+        <code class="literal">GetAxisTypes()</code>
       </h3></div></div></div><p>
         For some presentations, for example graphs we can present the data in
         many different ways.
         This method returns the type of data that is recorded for each axis.
       </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Direction</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>in</td><td>string</td><td>
-                The type of data (and entry from <code class="literal">GetTypes()</code>)
+                The type of data (and entry from <code class="literal">GetDataTypes()</code>)
               </td></tr><tr><td>out</td><td>string</td><td>X axis type, e.g. percentage</td></tr><tr><td>out</td><td>string</td><td>Y axis type, e.g. rate</td></tr></tbody></table></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pm-statistics-GetData"></a>
         <code class="literal">GetData()</code>
       </h3></div></div></div><p>

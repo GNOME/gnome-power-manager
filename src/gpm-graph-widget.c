@@ -37,6 +37,7 @@ struct GpmGraphWidgetPrivate
 {
 	gboolean		 use_grid;
 	gboolean		 use_legend;
+	gboolean		 use_axis_labels;
 	gboolean		 use_events;
 
 	gboolean		 invert_x;
@@ -57,8 +58,11 @@ struct GpmGraphWidgetPrivate
 	gfloat			 unit_x; /* 10th width of graph */
 	gfloat			 unit_y; /* 10th width of graph */
 
-	GpmGraphWidgetAxisType	 axis_x;
-	GpmGraphWidgetAxisType	 axis_y;
+	GpmGraphWidgetAxisType	 axis_type_x;
+	GpmGraphWidgetAxisType	 axis_type_y;
+	const gchar			*axis_label_x;
+	const gchar			*axis_label_y;
+
 	cairo_t			*cr;
 	cairo_font_options_t	*options;
 
@@ -137,7 +141,7 @@ gpm_graph_widget_key_add (GpmGraphWidget       *graph,
 
 /**
  * gpm_graph_widget_string_to_axis_type:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @type: The axis type, e.g. "percentage"
  *
  * Return value: The enumerated axis type
@@ -163,34 +167,79 @@ gpm_graph_widget_string_to_axis_type (const gchar *type)
 }
 
 /**
- * gpm_graph_widget_set_axis_x:
- * @graph: This graph class instance
- * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ * gpm_graph_widget_get_axis_label_y:
+ * @graph: This class instance
+ * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
  **/
-void
-gpm_graph_widget_set_axis_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
+static const gchar *
+gpm_graph_widget_get_axis_label_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType type)
 {
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	graph->priv->axis_x = axis;
+	g_return_val_if_fail (graph != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
+
+	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		return _("Charge percentage");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		return _("Time remaining");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_POWER) {
+		return _("Power");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		return _("Cell Voltage");
+	}
+	return _("Unknown caption");
 }
 
 /**
- * gpm_graph_widget_set_axis_y:
- * @graph: This graph class instance
+ * gpm_graph_widget_get_axis_label_x:
+ * @graph: This class instance
+ * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ **/
+static const gchar *
+gpm_graph_widget_get_axis_label_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType type)
+{
+	g_return_val_if_fail (graph != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
+
+	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		return _("Time since startup");
+	}
+	return _("Unknown caption");
+}
+
+/**
+ * gpm_graph_widget_set_axis_type_x:
+ * @graph: This class instance
  * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
  **/
 void
-gpm_graph_widget_set_axis_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
+gpm_graph_widget_set_axis_type_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	graph->priv->axis_y = axis;
+	graph->priv->axis_type_x = axis;
+	graph->priv->axis_label_x = gpm_graph_widget_get_axis_label_x (graph, axis);
+}
+
+/**
+ * gpm_graph_widget_set_axis_type_y:
+ * @graph: This class instance
+ * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ **/
+void
+gpm_graph_widget_set_axis_type_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType axis)
+{
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	graph->priv->axis_type_y = axis;
+	graph->priv->axis_label_y = gpm_graph_widget_get_axis_label_y (graph, axis);
 }
 
 /**
  * gpm_graph_widget_enable_legend:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @enable: If we should show the legend
  **/
 void
@@ -205,8 +254,24 @@ gpm_graph_widget_enable_legend (GpmGraphWidget *graph, gboolean enable)
 }
 
 /**
+ * gpm_graph_widget_enable_axis_labels:
+ * @graph: This class instance
+ * @enable: If we should show the axis labels
+ **/
+void
+gpm_graph_widget_enable_axis_labels (GpmGraphWidget *graph, gboolean enable)
+{
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	graph->priv->use_axis_labels = enable;
+
+	gtk_widget_hide (GTK_WIDGET (graph));
+	gtk_widget_show (GTK_WIDGET (graph));
+}
+
+/**
  * gpm_graph_widget_enable_events:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @enable: If we should show the legend
  **/
 void
@@ -238,7 +303,7 @@ gpm_graph_widget_class_init (GpmGraphWidgetClass *class)
 
 /**
  * gpm_graph_widget_init:
- * @graph: This graph class instance
+ * @graph: This class instance
  **/
 static void
 gpm_graph_widget_init (GpmGraphWidget *graph)
@@ -252,11 +317,14 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
+	graph->priv->use_axis_labels = FALSE;
 	graph->priv->autorange_x = TRUE;
 	graph->priv->list = NULL;
 	graph->priv->keyvals = NULL;
-	graph->priv->axis_x = GPM_GRAPH_WIDGET_TYPE_TIME;
-	graph->priv->axis_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
+	graph->priv->axis_label_x = NULL;
+	graph->priv->axis_label_y = NULL;
+	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
+	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
 	/* setup font */
 	graph->priv->options = cairo_font_options_create ();
 }
@@ -287,7 +355,7 @@ gpm_graph_widget_finalize (GObject *object)
 
 /**
  * gpm_graph_widget_set_invert_x:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the X axis, i.e. to count from 0..X or X..0
@@ -302,7 +370,7 @@ gpm_graph_widget_set_invert_x (GpmGraphWidget *graph, gboolean inv)
 
 /**
  * gpm_graph_widget_set_invert_y:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @inv: If we should invert the axis
  *
  * Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0
@@ -317,7 +385,7 @@ gpm_graph_widget_set_invert_y (GpmGraphWidget *graph, gboolean inv)
 
 /**
  * gpm_graph_widget_set_data:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @list: The GList values to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
@@ -335,7 +403,7 @@ gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list)
 
 /**
  * gpm_graph_widget_set_events:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @list: The GList events to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
@@ -410,7 +478,7 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 
 /**
  * gpm_graph_widget_draw_grid:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @cr: Cairo drawing context
  *
  * Draw the 10x10 dotted grid onto the graph.
@@ -450,7 +518,7 @@ gpm_graph_widget_draw_grid (GpmGraphWidget *graph, cairo_t *cr)
 
 /**
  * gpm_graph_widget_draw_labels:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @cr: Cairo drawing context
  *
  * Draw the X and the Y labels onto the graph.
@@ -482,7 +550,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 		} else {
 			value = ((length_x / 10) * a) + graph->priv->start_x;
 		}
-		text = gpm_get_axis_label (graph->priv->axis_x, value);
+		text = gpm_get_axis_label (graph->priv->axis_type_x, value);
 
 		cairo_text_extents (cr, text, &extents);
 		/* have data points 0 and 10 bounded, but 1..9 centered */
@@ -509,7 +577,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 		} else {
 			value = (length_y / 10) * (10 - a) - graph->priv->start_y;
 		}
-		text = gpm_get_axis_label (graph->priv->axis_y, value);
+		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
 
 		cairo_text_extents (cr, text, &extents);
 		/* have data points 0 and 10 bounded, but 1..9 centered */
@@ -531,7 +599,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 
 /**
  * gpm_graph_widget_check_range:
- * @graph: This graph class instance
+ * @graph: This class instance
  *
  * Checks all points are displayable on the graph, nobbling if required.
  **/
@@ -568,7 +636,7 @@ gpm_graph_widget_check_range (GpmGraphWidget *graph)
 
 /**
  * gpm_graph_widget_auto_range:
- * @graph: This graph class instance
+ * @graph: This class instance
  *
  * Autoranges the graph axis depending on the axis type, and the maximum
  * value of the data. We have to be careful to choose a number that gives good
@@ -622,16 +690,16 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	}
 
 	/* x */
-	if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		graph->priv->stop_x = 100;
-	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
+	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / (10 * 60)) + 1) * (10 * 60) + smallest_x;
-	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_POWER) {
+	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / 10000) + 2) * 10000 + smallest_x;
 		if (graph->priv->stop_x < 10000) {
 			graph->priv->stop_x = 10000 + smallest_x;
 		}
-	} else if (graph->priv->axis_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
 		graph->priv->stop_x = (((biggest_x - smallest_x) / 1000) + 2) * 1000 + smallest_x;
 		if (graph->priv->stop_x < 1000) {
 			graph->priv->stop_x = 1000 + smallest_x;
@@ -641,10 +709,10 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	}
 
 	/* y */
-	if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = 100;
-	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 60) + 2)* 60;
 		if (graph->priv->stop_y > 60) {
@@ -653,13 +721,13 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		if (graph->priv->stop_y < 60) {
 			graph->priv->stop_y = 60;
 		}
-	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
 		if (graph->priv->stop_y < 10000) {
 			graph->priv->stop_y = 10000;
 		}
-	} else if (graph->priv->axis_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 1000) + 2) * 1000;
 		if (graph->priv->stop_y < 1000) {
@@ -828,7 +896,7 @@ gpm_graph_widget_draw_legend_line (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidg
 
 /**
  * gpm_graph_widget_get_pos_on_graph:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @data_x: The data X-coordinate
  * @data_y: The data Y-coordinate
  * @x: The returned X position on the cairo surface
@@ -892,7 +960,7 @@ gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
 
 /**
  * gpm_graph_widget_draw_line:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @cr: Cairo drawing context
  *
  * Draw the data line onto the graph with a big green line. We should already
@@ -1094,7 +1162,7 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 
 /**
  * gpm_graph_widget_legend_calculate_width:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @cr: Cairo drawing context
  * Return value: The width of the legend, including borders.
  *
@@ -1157,7 +1225,7 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 
 /**
  * gpm_graph_widget_draw_graph:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @cr: Cairo drawing context
  *
  * Draw the complete graph, with the box, the grid, the labels and the line.
@@ -1171,6 +1239,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	guint legend_width = 0;
 	gint data_x;
 	gint data_y;
+	cairo_text_extents_t extents;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -1183,6 +1252,22 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_x = 35;
 	graph->priv->box_y = 5;
 
+	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
+
+	/* make size adjustment for axis labels */
+	const char *text = "Time since startup";
+	if (graph->priv->use_axis_labels) {
+		/* get the size of the x axis text */
+		cairo_save (cr);
+		cairo_set_font_size (cr, 12);
+		cairo_text_extents (cr, text, &extents);
+		cairo_restore (cr);
+
+		graph->priv->box_height -= (extents.height + 2);
+		graph->priv->box_x += (extents.height + 2);
+	}
+
+	/* make size adjustment for legend */
 	if (graph->priv->use_legend) {
 		graph->priv->box_width = graph_widget->allocation.width -
 					 (3 + legend_width + 5 + graph->priv->box_x);
@@ -1192,7 +1277,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 		graph->priv->box_width = graph_widget->allocation.width -
 					 (3 + graph->priv->box_x);
 	}
-	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* graph background */
 	gpm_graph_widget_draw_bounding_box (cr, graph->priv->box_x, graph->priv->box_y,
@@ -1211,6 +1295,20 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) data_y;
 
 	gpm_graph_widget_draw_labels (graph, cr);
+
+	if (graph->priv->use_axis_labels) {
+		/* horizontal axis label */
+		cairo_save (cr);
+		cairo_set_font_size (cr, 12);
+		cairo_move_to (cr, graph->priv->box_x + ((graph->priv->box_width - extents.width)/2), graph_widget->allocation.height - 3);
+		cairo_show_text (cr, text);
+		/* vertical axis label */
+		cairo_move_to (cr, extents.height, ((graph->priv->box_height + extents.width) / 2) - graph->priv->box_y);
+		cairo_rotate (cr, -3.1415927 / 2.0);
+		cairo_show_text (cr, text);
+		cairo_restore (cr);
+	}
+
 	gpm_graph_widget_draw_line (graph, cr);
 
 	if (graph->priv->use_legend) {
@@ -1222,7 +1320,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 /**
  * gpm_graph_widget_expose:
- * @graph: This graph class instance
+ * @graph: This class instance
  * @event: The expose event
  *
  * Just repaint the entire graph widget on expose.
