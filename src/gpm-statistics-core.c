@@ -360,7 +360,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 		return FALSE;
 	}	
 
-	ret = dbus_g_proxy_call (proxy, "GetTypes", &error,
+	ret = dbus_g_proxy_call (proxy, "GetDataTypes", &error,
 			         G_TYPE_INVALID,
 			         G_TYPE_STRV, &strlist,
 			         G_TYPE_INVALID);
@@ -493,7 +493,7 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 		return FALSE;
 	}	
 
-	ret = dbus_g_proxy_call (proxy, "GetAxisType", &error,
+	ret = dbus_g_proxy_call (proxy, "GetAxisTypes", &error,
 			         G_TYPE_STRING, type,
 			         G_TYPE_INVALID,
 			         G_TYPE_STRING, &axis_type_x,
@@ -505,7 +505,7 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetAxisType failed!");
+		gpm_warning ("GetAxisTypes failed!");
 		return FALSE;
 	}
 

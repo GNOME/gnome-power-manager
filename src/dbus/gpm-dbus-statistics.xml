@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.gnome.PowerManager.Statistics">
-    <method name="GetTypes">
+    <method name="GetDataTypes">
       <arg type="as" name="types" direction="out"/>
     </method>
-    <method name="GetAxisType">
+    <method name="GetAxisTypes">
       <arg type="s" name="type" direction="in"/>
       <arg type="s" name="axis_type_x" direction="out"/>
       <arg type="s" name="axis_type_y" direction="out"/>

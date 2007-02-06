@@ -147,9 +147,9 @@ device_list_to_strv (GList *list)
  * Return value: TRUE for success.
  **/
 gboolean
-gpm_statistics_get_types (GpmInfo  *info,
-			  gchar  ***types,
-			  GError  **error)
+gpm_statistics_get_data_types (GpmInfo  *info,
+			       gchar  ***types,
+			       GError  **error)
 {
 	GList *list = NULL;
 	GList *data;
@@ -183,7 +183,7 @@ gpm_statistics_get_types (GpmInfo  *info,
 }
 
 /**
- * gpm_statistics_get_axis_type:
+ * gpm_statistics_get_axis_types:
  * @info: This class instance
  * @type: The graph type, e.g. "charge", "power", "time", etc.
  * @axis_type_x: The axis type, only "percentage", "power" or "time"
@@ -192,11 +192,11 @@ gpm_statistics_get_types (GpmInfo  *info,
  * Return value: TRUE for success, if FALSE then error set
  **/
 gboolean
-gpm_statistics_get_axis_type (GpmInfo *info,
-			      gchar   *type,
-			      gchar  **axis_type_x,
-			      gchar  **axis_type_y,
-			      GError **error)
+gpm_statistics_get_axis_types (GpmInfo *info,
+			       gchar   *type,
+			       gchar  **axis_type_x,
+			       gchar  **axis_type_y,
+			       GError **error)
 {
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);

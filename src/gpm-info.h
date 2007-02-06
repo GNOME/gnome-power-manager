@@ -83,7 +83,7 @@ void		 gpm_info_event_log			(GpmInfo	*info,
 							 GpmGraphWidgetEvent	 event,
 							 const gchar	*desc);
 
-gboolean	 gpm_statistics_get_types		(GpmInfo	*info,
+gboolean	 gpm_statistics_get_data_types		(GpmInfo	*info,
 							 gchar		***types,
 							 GError		**error);
 gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
@@ -95,7 +95,7 @@ gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
 							 const gchar	*type,
 							 GPtrArray	**array,
 							 GError		**error);
-gboolean	 gpm_statistics_get_axis_type		(GpmInfo	*info,
+gboolean	 gpm_statistics_get_axis_types		(GpmInfo	*info,
 							 gchar		*type,
 							 gchar		**axis_type_x,
 							 gchar		**axis_type_y,

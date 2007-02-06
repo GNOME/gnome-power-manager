@@ -1023,9 +1023,9 @@
       DBUS Object Path: <literal>/org/gnome/PowerManager/Statistics</literal>
     </para>
 
-    <sect2 id="pm-statistics-GetTypes">
+    <sect2 id="pm-statistics-GetDataTypes">
       <title>
-        <literal>GetTypes()</literal>
+        <literal>GetDataTypes()</literal>
       </title>
       <para>
         Gets a list of the types of data available.
@@ -1050,9 +1050,9 @@
       </informaltable>
     </sect2>
 
-    <sect2 id="pm-statistics-GetAxisType">
+    <sect2 id="pm-statistics-GetAxisTypes">
       <title>
-        <literal>GetAxisType()</literal>
+        <literal>GetAxisTypes()</literal>
       </title>
       <para>
         For some presentations, for example graphs we can present the data in
@@ -1073,7 +1073,7 @@
               <entry>in</entry>
               <entry>string</entry>
               <entry>
-                The type of data (and entry from <literal>GetTypes()</literal>)
+                The type of data (and entry from <literal>GetDataTypes()</literal>)
               </entry>
             </row>
             <row>
