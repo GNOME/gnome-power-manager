@@ -107,6 +107,8 @@ void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
 void		 gpm_graph_widget_enable_events		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
+void		 gpm_graph_widget_enable_axis_labels	(GpmGraphWidget	*graph,
+							 gboolean	 enable);
 void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
 void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,

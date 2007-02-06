@@ -60,8 +60,8 @@ struct GpmGraphWidgetPrivate
 
 	GpmGraphWidgetAxisType	 axis_type_x;
 	GpmGraphWidgetAxisType	 axis_type_y;
-	const gchar			*axis_label_x;
-	const gchar			*axis_label_y;
+	const gchar		*axis_label_x;
+	const gchar		*axis_label_y;
 
 	cairo_t			*cr;
 	cairo_font_options_t	*options;
@@ -204,6 +204,9 @@ gpm_graph_widget_get_axis_label_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
 
 	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		/* I want this translated please */
+		const char *moo;
+		moo = _("Time");
 		return _("Time since startup");
 	}
 	return _("Unknown caption");
@@ -1239,7 +1242,8 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	guint legend_width = 0;
 	gint data_x;
 	gint data_y;
-	cairo_text_extents_t extents;
+	cairo_text_extents_t extents_axis_label_x;
+	cairo_text_extents_t extents_axis_label_y;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -1255,16 +1259,16 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* make size adjustment for axis labels */
-	const char *text = "Time since startup";
 	if (graph->priv->use_axis_labels) {
 		/* get the size of the x axis text */
 		cairo_save (cr);
 		cairo_set_font_size (cr, 12);
-		cairo_text_extents (cr, text, &extents);
+		cairo_text_extents (cr, graph->priv->axis_label_x, &extents_axis_label_x);
+		cairo_text_extents (cr, graph->priv->axis_label_y, &extents_axis_label_y);
 		cairo_restore (cr);
 
-		graph->priv->box_height -= (extents.height + 2);
-		graph->priv->box_x += (extents.height + 2);
+		graph->priv->box_height -= (extents_axis_label_x.height + 2);
+		graph->priv->box_x += (extents_axis_label_y.height + 2);
 	}
 
 	/* make size adjustment for legend */
@@ -1300,12 +1304,12 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 		/* horizontal axis label */
 		cairo_save (cr);
 		cairo_set_font_size (cr, 12);
-		cairo_move_to (cr, graph->priv->box_x + ((graph->priv->box_width - extents.width)/2), graph_widget->allocation.height - 3);
-		cairo_show_text (cr, text);
+		cairo_move_to (cr, graph->priv->box_x + ((graph->priv->box_width - extents_axis_label_x.width)/2), graph_widget->allocation.height - 3);
+		cairo_show_text (cr, graph->priv->axis_label_x);
 		/* vertical axis label */
-		cairo_move_to (cr, extents.height, ((graph->priv->box_height + extents.width) / 2) - graph->priv->box_y);
+		cairo_move_to (cr, extents_axis_label_y.height, ((graph->priv->box_height + extents_axis_label_y.width) / 2) - graph->priv->box_y);
 		cairo_rotate (cr, -3.1415927 / 2.0);
-		cairo_show_text (cr, text);
+		cairo_show_text (cr, graph->priv->axis_label_y);
 		cairo_restore (cr);
 	}
 

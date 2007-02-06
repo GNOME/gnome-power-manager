@@ -328,6 +328,26 @@ gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
 }
 
 /**
+ * gpm_statistics_checkbox_axis_labels_cb:
+ * @widget: The GtkWidget object
+ * @gpm_pref_key: The GConf key for this preference setting.
+ **/
+static void
+gpm_statistics_checkbox_axis_labels_cb (GtkWidget *widget,
+			    GpmStatistics  *statistics)
+{
+	gboolean checked;
+
+	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	gpm_debug ("axis labels enable %i", checked);
+
+	/* save to gconf so we open next time with the correct setting */
+	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, checked);
+
+	gpm_graph_widget_enable_axis_labels (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), checked);
+}
+
+/**
  * gpm_statistics_convert_strv_to_glist:
  *
  * @devices: The returned devices in strv format
@@ -813,6 +833,13 @@ gpm_statistics_init (GpmStatistics *statistics)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_legend_cb), statistics);
 	gpm_statistics_checkbox_legend_cb (widget, statistics);
+
+	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_axis");
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, &checked);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_statistics_checkbox_axis_labels_cb), statistics);
+	gpm_statistics_checkbox_axis_labels_cb (widget, statistics);
 
 	gtk_widget_show (main_window);
 	g_timeout_add (GPM_STATISTICS_POLL_INTERVAL,
