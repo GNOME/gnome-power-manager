@@ -551,7 +551,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 
 	list = gpm_info_data_get_list (statistics->priv->data);
 
-	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
+	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list, 0);
 
 	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));
 	gtk_widget_show (GTK_WIDGET (statistics->priv->graph_widget));

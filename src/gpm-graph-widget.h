@@ -112,7 +112,8 @@ void		 gpm_graph_widget_enable_axis_labels	(GpmGraphWidget	*graph,
 void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
 void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
-							 GList		*list);
+							 GList		*list,
+							 guint		 id);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
 							 GList		*list);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,

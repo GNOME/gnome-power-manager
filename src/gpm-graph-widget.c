@@ -66,7 +66,7 @@ struct GpmGraphWidgetPrivate
 	cairo_t			*cr;
 	cairo_font_options_t	*options;
 
-	GList			*list;
+	GPtrArray		*data_list;
 	GList			*events;
 };
 
@@ -322,7 +322,7 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->use_legend = FALSE;
 	graph->priv->use_axis_labels = FALSE;
 	graph->priv->autorange_x = TRUE;
-	graph->priv->list = NULL;
+	graph->priv->data_list = g_ptr_array_new ();
 	graph->priv->keyvals = NULL;
 	graph->priv->axis_label_x = NULL;
 	graph->priv->axis_label_y = NULL;
@@ -350,6 +350,7 @@ gpm_graph_widget_finalize (GObject *object)
 		g_free (keyitem);
 	}
 	g_slist_free (graph->priv->keyvals);
+	g_ptr_array_free (graph->priv->data_list, FALSE);
 
 	if (graph->priv->events) {
 		g_list_free (graph->priv->events);
@@ -394,14 +395,19 @@ gpm_graph_widget_set_invert_y (GpmGraphWidget *graph, gboolean inv)
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list)
+gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list, guint id)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	if (graph->priv->list) {
-		g_list_free (graph->priv->list);
+
+	/* fresh list */
+	if (graph->priv->data_list->len == 0 || graph->priv->data_list->len < id + 1) {
+		g_ptr_array_add (graph->priv->data_list, (gpointer) list);
+	} else {
+		/* do nothing */
+		gpm_warning ("cannot add dataset");
 	}
-	graph->priv->list = list;
+
 }
 
 /**
@@ -601,43 +607,6 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 }
 
 /**
- * gpm_graph_widget_check_range:
- * @graph: This class instance
- *
- * Checks all points are displayable on the graph, nobbling if required.
- **/
-static void
-gpm_graph_widget_check_range (GpmGraphWidget *graph)
-{
-	GpmInfoDataPoint *new = NULL;
-	GList *l;
-
-	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
-		gpm_debug ("no data");
-		return;
-	}
-	for (l=graph->priv->list; l != NULL; l=l->next) {
-		new = (GpmInfoDataPoint *) l->data;
-		if (new->time < graph->priv->start_x) {
-			gpm_warning ("point out of range (x=%i)", new->time);
-			new->time = graph->priv->start_x;
-		}
-		if (new->time > graph->priv->stop_x) {
-			gpm_warning ("point out of range (x=%i)", new->time);
-			new->time = graph->priv->stop_x;
-		}
-		if (new->value < graph->priv->start_y) {
-			gpm_warning ("point out of range (y=%i)", new->value);
-			new->value = graph->priv->start_y;
-		}
-		if (new->value > graph->priv->stop_y) {
-			gpm_warning ("point out of range (y=%i)", new->value);
-			new->value = graph->priv->stop_y;
-		}
-	}
-}
-
-/**
  * gpm_graph_widget_auto_range:
  * @graph: This class instance
  *
@@ -654,8 +623,10 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	gint smallest_y = 999999;
 	GpmInfoDataPoint *new = NULL;
 	GList *l;
+	GList *list;
+	guint i;
 
-	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
+	if (graph->priv->data_list->len == 0) {
 		gpm_debug ("no data");
 		graph->priv->start_x = 0;
 		graph->priv->start_y = 0;
@@ -664,20 +635,24 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		return;
 	}
 
-	for (l=graph->priv->list; l != NULL; l=l->next) {
-		new = (GpmInfoDataPoint *) l->data;
-		if (new->time > biggest_x) {
-			biggest_x = new->time;
-		}
-		if (new->value > biggest_y) {
-			biggest_y = new->value;
-		}
-		if (new->time < smallest_x) {
-			smallest_x = new->time;
-		}
-		if (new->value < smallest_y) {
-			smallest_y = new->value;
-		}
+	/* get the range for all graphs */
+	for (i=0; i<graph->priv->data_list->len; i++) {
+		list = (GList *) g_ptr_array_index (graph->priv->data_list, i);
+		for (l=list; l != NULL; l=l->next) {
+			new = (GpmInfoDataPoint *) l->data;
+			if (new->time > biggest_x) {
+				biggest_x = new->time;
+			}
+			if (new->value > biggest_y) {
+				biggest_y = new->value;
+			}
+			if (new->time < smallest_x) {
+				smallest_x = new->time;
+			}
+			if (new->value < smallest_y) {
+				smallest_y = new->value;
+			}
+		}		
 	}
 
 	/* do we autorange the start (so it starts at non-zero)? */
@@ -978,35 +953,35 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	GpmGraphWidgetKeyItem *keyitem;
 	GList *l;
 	GpmInfoDataPoint *new;
+	guint i;
 
-	if (graph->priv->list == NULL || graph->priv->list->data == NULL) {
+	if (graph->priv->data_list->len == 0) {
 		gpm_debug ("no data");
 		return;
 	}
-
-	/* I don't think we need to do this anymore.... */
-	if (FALSE) {
-		gpm_graph_widget_check_range (graph);
-	}
-
 	cairo_save (cr);
 
-	/* do the line on the graph */
-	l=graph->priv->list;
-	new = (GpmInfoDataPoint *) l->data;
-	gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
-	for (l=l->next; l != NULL; l=l->next) {
+	/* do the lines on the graphs */
+	for (i=0; i<graph->priv->data_list->len; i++) {
+		gpm_debug ("drawing line %i", i);
+		l = (GList *) g_ptr_array_index (graph->priv->data_list, i);
 		new = (GpmInfoDataPoint *) l->data;
-		/* do line */
-		gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
-		cairo_move_to (cr, oldx, oldy);
-		cairo_line_to (cr, newx, newy);
-		cairo_set_line_width (cr, 2);
-		gpm_graph_widget_set_colour (cr, new->colour);
-		cairo_stroke (cr);
-		/* save old */
-		oldx = newx;
-		oldy = newy;
+		oldx = 0;
+		oldy = 0;
+		gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
+		for (l=l->next; l != NULL; l=l->next) {
+			new = (GpmInfoDataPoint *) l->data;
+			/* do line */
+			gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
+			cairo_move_to (cr, oldx, oldy);
+			cairo_line_to (cr, newx, newy);
+			cairo_set_line_width (cr, 1.5);
+			gpm_graph_widget_set_colour (cr, new->colour);
+			cairo_stroke (cr);
+			/* save old */
+			oldx = newx;
+			oldy = newy;
+		}
 	}
 
 	/* only do the events sometimes */
@@ -1017,7 +992,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		GpmInfoDataPoint *point_last = NULL;
 
 		/* we track the list so we can put the point on the line */
-		GList *l2 = graph->priv->list;
+		l = (GList *) g_ptr_array_index (graph->priv->data_list, 0);
+		GList *l2 = l;
 		if (l2) {
 			point_this = (GpmInfoDataPoint *) l2->data;
 			l2 = l2->next;
