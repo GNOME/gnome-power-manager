@@ -404,8 +404,10 @@ gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list, guint id)
 	if (graph->priv->data_list->len == 0 || graph->priv->data_list->len < id + 1) {
 		g_ptr_array_add (graph->priv->data_list, (gpointer) list);
 	} else {
-		/* do nothing */
-		gpm_warning ("cannot add dataset");
+		/* remove existing, and add new */
+		gpm_debug ("Re-assigning dataset");
+		g_ptr_array_remove_index (graph->priv->data_list, id);
+		g_ptr_array_add (graph->priv->data_list, (gpointer) list);
 	}
 
 }
@@ -654,6 +656,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			}
 		}		
 	}
+	gpm_debug ("Data range is %i<x<%i, %i<y<%i", smallest_x, biggest_x, smallest_y, biggest_y);
 
 	/* do we autorange the start (so it starts at non-zero)? */
 	if (graph->priv->autorange_x) {
@@ -716,6 +719,9 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		graph->priv->start_y = smallest_y;
 		graph->priv->stop_y = biggest_y;
 	}
+	gpm_debug ("Processed range is %i<x<%i, %i<y<%i",
+		   graph->priv->start_x, graph->priv->stop_x,
+		   graph->priv->start_y, graph->priv->stop_y);
 }
 
 /**
@@ -761,7 +767,7 @@ gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
 	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREY) {
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
 	} else {
-		gpm_critical_error ("Unknown colour!");
+		gpm_warning ("Unknown colour: %i", colour);
 	}
 }
 
