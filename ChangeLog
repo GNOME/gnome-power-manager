@@ -1,5 +1,12 @@
 2007-02-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.c: (gpm_exponential_average):
+	* src/gpm-common.h:
+	* src/gpm-power.c: (battery_kind_cache_update):
+	Move common functionality to a shared file. No logic changes.
+
+2007-02-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
 	Don't autorange INVALID graphs.
 

@@ -338,36 +338,6 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 }
 
 /**
- * gpm_power_exp_aver:
- * @previous: The old value
- * @new: The new value
- * @factor_pc: The factor as a percentage
- *
- * We should do an exponentially weighted average so that high frequency
- * changes are smoothed. This should mean the rate (and thus the remaining time)
- * does not change drastically between updates.
- **/
-static int
-gpm_power_exp_aver (gint previous, gint new, guint factor_pc)
-{
-	gint result = 0;
-	gfloat factor = 0;
-	gfloat factor_inv = 1;
-	if (previous == 0 || factor_pc == 0) {
-		/* startup, or re-initialization - we have no data */
-		gpm_debug ("Telling rate with no ave factor (okay once)");
-		result = new;
-	} else {
-		factor = (gfloat) factor_pc / 100.0f;
-		factor_inv = 1.0f - factor;
-		result = (gint) ((factor_inv * (gfloat) new) + (factor * (gfloat) previous));
-	}
-	gpm_debug ("factor = %f, previous = %i, new=%i, result = %i",
-		   factor, previous, new, result);
-	return result;
-}
-
-/**
  * battery_device_cache_entry_update_key:
  * @power: This power class instance
  * @entry: A device cache instance
@@ -1059,7 +1029,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	}
 
 	/* Do an exponentially weighted average, fixes bug #328927 */
-	type_status->charge_rate_smoothed = gpm_power_exp_aver (type_status->charge_rate_previous,
+	type_status->charge_rate_smoothed = gpm_exponential_average (type_status->charge_rate_previous,
 								type_status->charge_rate_raw,
 								power->priv->exp_ave_factor);
 	

@@ -43,11 +43,14 @@ typedef enum {
 	GPM_ICON_POLICY_NEVER
 } GpmIconPolicy;
 
-gchar		*gpm_get_timestring		(guint		time);
-guint		 gpm_percent_to_discrete	(guint		percentage,
-						 guint		levels);
-guint		 gpm_discrete_to_percent	(guint		discrete,
-						 guint		levels);
+gchar		*gpm_get_timestring		(guint		 time);
+guint		 gpm_percent_to_discrete	(guint		 percentage,
+						 guint		 levels);
+int		 gpm_exponential_average	(gint		 previous,
+						 gint		 new,
+						 guint		 factor_pc);
+guint		 gpm_discrete_to_percent	(guint		 discrete,
+						 guint		 levels);
 GpmIconPolicy	 gpm_tray_icon_mode_from_string	(const gchar	*mode);
 const gchar	*gpm_tray_icon_mode_to_string	(GpmIconPolicy	 mode);
 
