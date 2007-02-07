@@ -1,5 +1,11 @@
 2007-02-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-battery.c: (watch_add_battery):
+	Fix the bug where hotplug batteries (such as mice) would show up more
+	than once after a suspend-resume cycle. Fixes #404929.
+
+2007-02-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_labels),
 	(gpm_graph_widget_get_pos_on_graph):
 	Fix a bug where the labels were negative and the line didn't show

@@ -154,14 +154,17 @@ static gboolean
 watch_add_battery (GpmBattery    *battery,
 		   const gchar   *udi)
 {
-	const gchar *hash_udi;
+	gchar *hash_udi;
 
 	hash_udi = g_hash_table_lookup (battery->priv->devices, udi);
 	if (hash_udi != NULL) {
 		gpm_warning ("cannot watch already watched battery '%s'", udi);
 		return FALSE;
 	}
-	g_hash_table_insert (battery->priv->devices, (gpointer) udi, (gpointer) udi);
+
+	/* we have to make a local copy for the hash compare to work */
+	hash_udi = g_strdup (udi);
+	g_hash_table_insert (battery->priv->devices, (gpointer) hash_udi, (gpointer) hash_udi);
 
 	gpm_hal_device_watch_propery_modified (battery->priv->hal, udi, FALSE);
 
