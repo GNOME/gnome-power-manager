@@ -480,7 +480,7 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 		/*Translators: This is %i Volts*/
 		text = g_strdup_printf (_("%iV"), value / 1000);
 	} else {
-		text = g_strdup_printf ("%i??", value);
+		text = g_strdup_printf ("%i", value);
 	}
 	return text;
 }
@@ -683,7 +683,8 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			graph->priv->stop_x = 1000 + smallest_x;
 		}
 	} else {
-		graph->priv->stop_x = ((biggest_x / 10) + 1) * 10 + smallest_x;
+		graph->priv->start_x = smallest_x;
+		graph->priv->stop_x = biggest_x;
 	}
 
 	/* y */
@@ -712,11 +713,8 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			graph->priv->stop_y = 1000;
 		}
 	} else {
-		graph->priv->start_y = 0;
-		graph->priv->stop_y = ((biggest_y / 10) + 1) * 10;
-		if (graph->priv->stop_y < 10) {
-			graph->priv->stop_y = 10;
-		}
+		graph->priv->start_y = smallest_y;
+		graph->priv->stop_y = biggest_y;
 	}
 }
 
