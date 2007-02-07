@@ -584,9 +584,9 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
 		if (graph->priv->invert_y) {
-			value = (length_y / 10) * a - graph->priv->start_y;
+			value = (length_y / 10) * a + graph->priv->start_y;
 		} else {
-			value = (length_y / 10) * (10 - a) - graph->priv->start_y;
+			value = (length_y / 10) * (10 - a) + graph->priv->start_y;
 		}
 		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
 
@@ -888,7 +888,7 @@ static void
 gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, gfloat data_x, gfloat data_y, float *x, float *y)
 {
 	*x = graph->priv->box_x + (graph->priv->unit_x * (data_x - graph->priv->start_x)) + 1;
-	*y = graph->priv->box_y + (graph->priv->unit_y * (gfloat)(graph->priv->stop_y - (data_y - graph->priv->start_y))) + 1.5;
+	*y = graph->priv->box_y + (graph->priv->unit_y * (gfloat)(graph->priv->stop_y - data_y)) + 1.5;
 }
 
 /**
