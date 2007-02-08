@@ -1,19 +1,19 @@
-# translation of gnome-power-manager.gnome-2-16.ar.po to Arabic
+# translation of gnome-power-manager.HEAD.ar.po to Arabic
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 #
 # Yousef Raffah <yousef@raffah.com>, 2006.
 # Djihed Afifi <djihed@gmail.com>, 2006.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.gnome-2-16.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-08 14:58+0000\n"
-"PO-Revision-Date: 2007-01-08 16:40+0200\n"
-"Last-Translator: Mohamed Magdy <alnokta@yahoo.com>\n"
-"Language-Team: Arabic <support@arabeyes.org>\n"
+"POT-Creation-Date: 2007-02-07 03:22+0000\n"
+"PO-Revision-Date: 2007-01-30 07:52+0200\n"
+"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
+"Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,30 +21,30 @@ msgstr ""
 "n<=10 ? 2 : 3\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../applets/brightness/brightness-applet.c:60
-msgid "Power Manger Brightness Applet"
-msgstr ""
-
 #: ../applets/brightness/brightness-applet.c:61
+msgid "Power Manger Brightness Applet"
+msgstr "بريمج سطوع مدير الطاقة"
+
+#: ../applets/brightness/brightness-applet.c:62
 msgid "Adjusts laptop panel brightness."
-msgstr ""
+msgstr "يضبط سطوع لوحة الحاسوب المحمول."
 
-#: ../applets/brightness/brightness-applet.c:215
-#, fuzzy, c-format
+#: ../applets/brightness/brightness-applet.c:229
+#, c-format
 msgid "LCD brightness : %d%%"
-msgstr "إضبط السطوع"
+msgstr "سطوع LCD: %d%%"
 
-#: ../applets/brightness/brightness-applet.c:217
+#: ../applets/brightness/brightness-applet.c:231
 #, c-format
 msgid "Cannot get laptop panel brightness"
-msgstr ""
+msgstr "تعذّر الحصول على سطوع لوحة الحاسوب المحمول"
 
-#: ../applets/brightness/brightness-applet.c:487
+#: ../applets/brightness/brightness-applet.c:501
 #: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:305
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "مرخّص تحت النسخة 2 من رخصة جنو العمومية العامة "
 
-#: ../applets/brightness/brightness-applet.c:488
+#: ../applets/brightness/brightness-applet.c:502
 #: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -58,7 +58,7 @@ msgstr ""
 "أو \n"
 "أي إصدارة بعدها حسب رغبتك."
 
-#: ../applets/brightness/brightness-applet.c:492
+#: ../applets/brightness/brightness-applet.c:506
 #: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:310
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -70,7 +70,7 @@ msgstr ""
 "أيضمان يضمن صلاحية العرض في السوق أو توافقه مع أي استخدام محدد. يمكنك \n"
 "مراجعةالرخصة العمومية العامة لجنو لمزيد من التفاصيل."
 
-#: ../applets/brightness/brightness-applet.c:496
+#: ../applets/brightness/brightness-applet.c:510
 #: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:314
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -84,39 +84,35 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
 "02110-1301, USA"
 
-#: ../applets/brightness/brightness-applet.c:510
-#, fuzzy
+#: ../applets/brightness/brightness-applet.c:524
 msgid "Copyright © 2006 Benjamin Canou"
-msgstr "حقوق النسخ © 2006 Travis Watkins"
+msgstr "حقوق النسخ © 2006 Benjamin Canou"
 
 #: ../applets/inhibit/inhibit-applet.c:56
-#, fuzzy
 msgid "Power Manager Inhibit Applet"
-msgstr "اختبار تثبيط الطاقة"
+msgstr "بريمج تثبيط مدير الطاقة"
 
 #: ../applets/inhibit/inhibit-applet.c:57
 msgid "Allows user to inhibit automatic power saving."
-msgstr ""
+msgstr "يسمح للمستخدم بتثبيط حفظ الطاقة الآلي."
 
 #: ../applets/inhibit/inhibit-applet.c:195
-#, fuzzy, c-format
+#, c-format
 msgid "Automatic sleep inhibited"
-msgstr "\t-s قيمة السبات (الإفتراضي 8)\n"
+msgstr "ثُبِّط النوم الآلي"
 
 #: ../applets/inhibit/inhibit-applet.c:197
-#, fuzzy, c-format
+#, c-format
 msgid "Automatic sleep enabled"
-msgstr "تم تمكين H.245 Tunnelling"
+msgstr "فُعِّل النوم الآلي"
 
 #: ../applets/inhibit/inhibit-applet.c:224
-#, fuzzy
 msgid "Manual inhibit"
-msgstr "ثبّط الفاحص"
+msgstr "تثبيط يدوي"
 
 #: ../applets/inhibit/inhibit-applet.c:282
-#, fuzzy
 msgid "Copyright © 2006 Richard Hughes"
-msgstr "حقوق النسخ © 2006 Travis Watkins"
+msgstr "حقوق النسخ © 2006 Richard Hughes"
 
 #. common descriptions of this program
 #: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
@@ -147,11 +143,11 @@ msgstr "إجراء انخفاض البطارية الحرِج"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Change the brightness to a preset level on AC state change"
-msgstr ""
+msgstr "غيّر السطوع للمستوى المضبوط مُسبقا عند تغير حالة التيار المتردد"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Change the brightness to automatically using the ambient light sensors"
-msgstr ""
+msgstr "غيّر السطوع آليا باستخدام أجهزة استشعار أمبيانت"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
@@ -895,18 +891,26 @@ msgid "Whether to use time-based notifications"
 msgstr "ما إذا يتم استخدام تنبيهات مبنية على الوقت"
 
 #: ../data/gnome-power-manager.schemas.in.h:133
-msgid "Whether we should show the events in the statistics window"
+msgid "Whether we should show the axis labels in the statistics window"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:134
-msgid "Whether we should show the events in the statistics window."
+msgid "Whether we should show the axis labels in the statistics window."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:135
-msgid "Whether we should show the legend in the statistics window"
+msgid "Whether we should show the events in the statistics window"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:136
+msgid "Whether we should show the events in the statistics window."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:137
+msgid "Whether we should show the legend in the statistics window"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid "Whether we should show the legend in the statistics window."
 msgstr ""
 
@@ -933,25 +937,29 @@ msgid "Brightness"
 msgstr "سطوع"
 
 #: ../data/gpm-graph.glade.h:1
-#, fuzzy
-msgid "Add legend"
-msgstr "نوع المحتوى"
+msgid "Add _axis labels"
+msgstr ""
 
 #: ../data/gpm-graph.glade.h:2
 #, fuzzy
-msgid "Add related events"
-msgstr "أصوات لأحداث إكيجا"
+msgid "Add lege_nd"
+msgstr "نوع المحتوى"
 
 #: ../data/gpm-graph.glade.h:3
+#, fuzzy
+msgid "Add related _events"
+msgstr "أصوات لأحداث إكيجا"
+
+#: ../data/gpm-graph.glade.h:4
 msgid "Device:"
 msgstr "مشغل:"
 
-#: ../data/gpm-graph.glade.h:4
+#: ../data/gpm-graph.glade.h:5
 #, fuzzy
 msgid "Graph type:"
 msgstr "نوع التّنبيه"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-statistics-core.c:55
+#: ../data/gpm-graph.glade.h:6 ../src/gpm-statistics-core.c:55
 msgid "Power History"
 msgstr "تاريخ الطاقة"
 
@@ -964,16 +972,18 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "حرق DVD, بعنوان  \"My Photos\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-msgid "GNOME Acme Foo"
-msgstr "جنوم أكمي فو"
+msgid "Inhibit Tester"
+msgstr "ثبّط الفاحص"
 
 #: ../data/gpm-inhibit-test.glade.h:4
-msgid "Inhibit"
+#, fuzzy
+msgid "InhibitAuto"
 msgstr "ثبّط"
 
 #: ../data/gpm-inhibit-test.glade.h:5
-msgid "Inhibit Tester"
-msgstr "ثبّط الفاحص"
+#, fuzzy
+msgid "InhibitManual"
+msgstr "ثبّط"
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "Reason:"
@@ -982,6 +992,11 @@ msgstr "السبب: "
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "UnInhibit"
 msgstr "الغي التثبيط"
+
+#: ../data/gpm-inhibit-test.glade.h:8
+#, fuzzy
+msgid "Vendor Acme Foo"
+msgstr "جنوم أكمي فو"
 
 #: ../data/gpm-prefs.glade.h:1
 #, fuzzy
@@ -1115,11 +1130,11 @@ msgstr "لا ت_عرض الأيقون أبدا"
 msgid "_Only display an icon when battery power is critically low"
 msgstr "اعرض _فقط عندما يكون عمر البطارية حرِجاً"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:131
 msgid "Unknown time"
 msgstr "وقت غير معروف"
 
-#: ../src/gpm-common.c:98
+#: ../src/gpm-common.c:136
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1128,7 +1143,7 @@ msgstr[1] "%i دّقيقة"
 msgstr[2] "%i دّقيقة"
 msgstr[3] "%i دّقيقة"
 
-#: ../src/gpm-common.c:109
+#: ../src/gpm-common.c:147
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1139,12 +1154,12 @@ msgstr[3] "%i ساعات"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:115
+#: ../src/gpm-common.c:153
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s، %i %s"
 
-#: ../src/gpm-common.c:116
+#: ../src/gpm-common.c:154
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ساعة"
@@ -1152,7 +1167,7 @@ msgstr[1] "ساعات"
 msgstr[2] "ساعات"
 msgstr[3] "ساعات"
 
-#: ../src/gpm-common.c:117
+#: ../src/gpm-common.c:155
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "دقيقة"
@@ -1164,63 +1179,94 @@ msgstr[3] "دقائق"
 msgid "Power Manager for the GNOME desktop"
 msgstr "مدير الطاقة لسطح المكتب جنوم"
 
-#: ../src/gpm-graph-widget.c:73 ../src/gpm-power.c:729
+#: ../src/gpm-graph-widget.c:77
 msgid "Charged"
 msgstr "مشحونة"
 
-#: ../src/gpm-graph-widget.c:74 ../src/gpm-power.c:732
+#: ../src/gpm-graph-widget.c:78
 msgid "Charging"
 msgstr "جاري الشحن"
 
-#: ../src/gpm-graph-widget.c:75 ../src/gpm-power.c:735
+#: ../src/gpm-graph-widget.c:79
 #, fuzzy
 msgid "Discharging"
 msgstr "الإطلاق"
 
+#: ../src/gpm-graph-widget.c:181
+msgid "Charge percentage"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:184
+#, fuzzy
+msgid "Time remaining"
+msgstr "الوقت المتبقي في الحالة المنخفضة"
+
+#: ../src/gpm-graph-widget.c:187
+#, fuzzy
+msgid "Power"
+msgstr "طاقة البطارية منخفضة"
+
+#: ../src/gpm-graph-widget.c:190
+msgid "Cell Voltage"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:192 ../src/gpm-graph-widget.c:212
+#, fuzzy
+msgid "Unknown caption"
+msgstr "وقت غير معروف"
+
+#: ../src/gpm-graph-widget.c:209
+msgid "Time"
+msgstr ""
+
+#: ../src/gpm-graph-widget.c:210
+msgid "Time since startup"
+msgstr ""
+
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:379
+#: ../src/gpm-graph-widget.c:456
 #, c-format
 msgid "%ih"
 msgstr "%ih ساعة"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:382
+#: ../src/gpm-graph-widget.c:459
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:387
+#: ../src/gpm-graph-widget.c:464
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:390
+#: ../src/gpm-graph-widget.c:467
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:394
+#: ../src/gpm-graph-widget.c:471
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:398
+#: ../src/gpm-graph-widget.c:475
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:401
+#: ../src/gpm-graph-widget.c:478
 #, c-format
 msgid "%iW"
 msgstr "%iW"
 
 #. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:404
+#: ../src/gpm-graph-widget.c:481
 #, c-format
 msgid "%iV"
 msgstr "%iV"
@@ -1230,74 +1276,74 @@ msgstr "%iV"
 msgid "%s because %s"
 msgstr "%s لأن %s"
 
-#: ../src/gpm-info.c:416
+#: ../src/gpm-info.c:440
 msgid "AC adapter inserted"
 msgstr "تم وضع سلك الطاقة"
 
-#: ../src/gpm-info.c:419
+#: ../src/gpm-info.c:443
 msgid "AC adapter removed"
 msgstr "تم نزع سلك الطاقة"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:464
 msgid "The laptop lid has been closed"
 msgstr "أُغلق غطاء الحاسوب المحمول"
 
-#: ../src/gpm-info.c:446
+#: ../src/gpm-info.c:470
 msgid "The laptop lid has been re-opened"
 msgstr "أُعيد فتح غطاء الحاسوب المحمول"
 
-#: ../src/gpm-info.c:468
+#: ../src/gpm-info.c:492
 msgid "idle mode ended"
 msgstr "بدأ وضع الثبات"
 
-#: ../src/gpm-info.c:471
+#: ../src/gpm-info.c:495
 msgid "idle mode started"
 msgstr "بدأ وضع الثبات"
 
-#: ../src/gpm-info.c:490
+#: ../src/gpm-info.c:514
 msgid "dpms on"
 msgstr "dpms تعمل"
 
-#: ../src/gpm-info.c:492
+#: ../src/gpm-info.c:516
 msgid "dpms standby"
 msgstr "dpms مستعدة"
 
-#: ../src/gpm-info.c:494
+#: ../src/gpm-info.c:518
 #, fuzzy
 msgid "dpms suspend"
 msgstr "علّق الآلة"
 
-#: ../src/gpm-info.c:496
+#: ../src/gpm-info.c:520
 msgid "dpms off"
 msgstr "dpms لاتعمل"
 
-#: ../src/gpm-info.c:513
+#: ../src/gpm-info.c:537
 msgid "Resuming computer"
 msgstr "إستئناف الحاسوب"
 
-#: ../src/gpm-info.c:529 ../src/gpm-tray-icon.c:920
+#: ../src/gpm-info.c:553 ../src/gpm-tray-icon.c:920
 msgid "Hibernate Problem"
 msgstr "مشكلة إسبات"
 
-#: ../src/gpm-info.c:531 ../src/gpm-tray-icon.c:929
+#: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:929
 msgid "Suspend Problem"
 msgstr "مشكل تعليق"
 
-#: ../src/gpm-inhibit.c:339
+#: ../src/gpm-inhibit.c:420
 #, fuzzy, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "اوقفت تطبيقات عديدة %s من الحدوث."
 
-#: ../src/gpm-inhibit.c:345
+#: ../src/gpm-inhibit.c:426
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "اوقفت تطبيقات عديدة %s من الحدوث."
 
-#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:119
+#: ../src/gpm-inhibit-test.c:261 ../src/gpm-prefs.c:119
 msgid "GNOME Power Preferences"
 msgstr "تفضيلات الطّاقة لجنوم"
 
-#: ../src/gpm-inhibit-test.c:194
+#: ../src/gpm-inhibit-test.c:267
 msgid "Power Inhibit Test"
 msgstr "اختبار تثبيط الطاقة"
 
@@ -1561,179 +1607,186 @@ msgstr "ابحث عن مواقع الويب"
 msgid "Do not show me this again"
 msgstr "لا تظهر هذا الحوار مجدداً"
 
-#: ../src/gpm-power.c:497
+#: ../src/gpm-power.c:467
 msgid "Laptop battery"
 msgstr "بطارية حاسوب محمول"
 
-#: ../src/gpm-power.c:499
+#: ../src/gpm-power.c:469
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:501
+#: ../src/gpm-power.c:471
 msgid "Wireless mouse"
 msgstr "فأرة لاسلكية"
 
-#: ../src/gpm-power.c:503
+#: ../src/gpm-power.c:473
 msgid "Wireless keyboard"
 msgstr "لوحة مفاتيح لاسلكية"
 
-#: ../src/gpm-power.c:505
+#: ../src/gpm-power.c:475
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:507 ../src/gpm-statistics-core.c:618
+#: ../src/gpm-power.c:477 ../src/gpm-statistics-core.c:638
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../src/gpm-power.c:722
-msgid "Product:"
-msgstr "المنتج:"
+#: ../src/gpm-power.c:691
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr ""
 
-#: ../src/gpm-power.c:726 ../src/gpm-power.c:729 ../src/gpm-power.c:732
-#: ../src/gpm-power.c:735
-msgid "Status:"
-msgstr "الحالة:"
+#: ../src/gpm-power.c:694
+msgid "<b>Status:</b> Missing\n"
+msgstr ""
 
-#: ../src/gpm-power.c:726
-#, fuzzy
-msgid "Missing"
-msgstr "الفقدان"
+#: ../src/gpm-power.c:696
+msgid "<b>Status:</b> Charged\n"
+msgstr ""
 
-#: ../src/gpm-power.c:739
-#, fuzzy
-msgid "Percentage charge:"
+#: ../src/gpm-power.c:698
+msgid "<b>Status:</b> Charging\n"
+msgstr ""
+
+#: ../src/gpm-power.c:700
+msgid "<b>Status:</b> Discharging\n"
+msgstr ""
+
+#: ../src/gpm-power.c:703
+#, fuzzy, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
 msgstr "تاريخ الشّحن"
 
-#: ../src/gpm-power.c:768
+#: ../src/gpm-power.c:732
 #, fuzzy
 msgid "Vendor:"
 msgstr "المنتِج:"
 
-#: ../src/gpm-power.c:776 ../src/gpm-power.c:781
+#: ../src/gpm-power.c:740 ../src/gpm-power.c:745
 msgid "Lithium ion"
 msgstr "Lithium ion"
 
-#: ../src/gpm-power.c:778 ../src/gpm-power.c:783
+#: ../src/gpm-power.c:742 ../src/gpm-power.c:747
 msgid "Lead acid"
 msgstr "اسِد الرئيسي"
 
-#: ../src/gpm-power.c:785
+#: ../src/gpm-power.c:749
 #, fuzzy
 msgid "Lithium polymer"
 msgstr "Lithium ion"
 
-#: ../src/gpm-power.c:787
+#: ../src/gpm-power.c:751
 msgid "Nickel metal hydride"
 msgstr ""
 
-#: ../src/gpm-power.c:794
+#: ../src/gpm-power.c:758
 #, fuzzy
 msgid "Technology:"
 msgstr "تقنية"
 
-#: ../src/gpm-power.c:798
+#: ../src/gpm-power.c:762
 #, fuzzy
 msgid "Serial number:"
 msgstr "الرقم التسلسلي:"
 
-#: ../src/gpm-power.c:802
+#: ../src/gpm-power.c:766
 #, fuzzy
 msgid "Model:"
 msgstr "الطّراز:"
 
-#: ../src/gpm-power.c:808
+#: ../src/gpm-power.c:772
 #, fuzzy
 msgid "Remaining time:"
 msgstr "_الوقت المتبقي"
 
-#: ../src/gpm-power.c:814
+#: ../src/gpm-power.c:778
 msgid "Excellent"
 msgstr "ممتاز"
 
-#: ../src/gpm-power.c:816
+#: ../src/gpm-power.c:780
 msgid "Good"
 msgstr "جيّد"
 
-#: ../src/gpm-power.c:818
+#: ../src/gpm-power.c:782
 msgid "Fair"
 msgstr "عادل"
 
-#: ../src/gpm-power.c:820
+#: ../src/gpm-power.c:784
 msgid "Poor"
 msgstr "فقير"
 
-#: ../src/gpm-power.c:823
+#: ../src/gpm-power.c:787
 msgid "Capacity:"
 msgstr "سعة:"
 
-#: ../src/gpm-power.c:829 ../src/gpm-power.c:857
+#: ../src/gpm-power.c:793 ../src/gpm-power.c:821
 #, fuzzy
 msgid "Current charge:"
 msgstr "تاريخ الشّحن"
 
-#: ../src/gpm-power.c:835
+#: ../src/gpm-power.c:799
 #, fuzzy
 msgid "Last full charge:"
 msgstr "مراقب شحن البطارية"
 
-#: ../src/gpm-power.c:840 ../src/gpm-power.c:862
+#: ../src/gpm-power.c:804 ../src/gpm-power.c:826
 #, fuzzy
 msgid "Design charge:"
 msgstr "تاريخ الشّحن"
 
-#: ../src/gpm-power.c:845
+#: ../src/gpm-power.c:809
 #, fuzzy
 msgid "Charge rate (raw):"
 msgstr "طابور طباعة خام"
 
-#: ../src/gpm-power.c:850
+#: ../src/gpm-power.c:814
 #, fuzzy
 msgid "Charge rate (smoothed):"
 msgstr "معدل ربح ضرفي"
 
-#: ../src/gpm-power.c:1348
+#: ../src/gpm-power.c:1312
 #, fuzzy, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "تم شحن البطارية تماما"
 
-#: ../src/gpm-power.c:1354
+#: ../src/gpm-power.c:1318
 #, fuzzy, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "متبقّ"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1358
+#: ../src/gpm-power.c:1322
 #, fuzzy, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "الإطلاق"
 
-#: ../src/gpm-power.c:1365
+#: ../src/gpm-power.c:1329
 #, fuzzy, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%d %s %d %s حتى الشحن (%d%%)"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1369
+#: ../src/gpm-power.c:1333
 #, fuzzy, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "جاري الشحن"
 
-#: ../src/gpm-power.c:1406
+#: ../src/gpm-power.c:1370
 #, fuzzy
 msgid "Recalculating information..."
 msgstr "بيانات سيّئة"
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1417
+#: ../src/gpm-power.c:1381
 msgid "Computer is running on backup power\n"
 msgstr "النظام يعمل على طاقة مخبّأة\n"
 
-#: ../src/gpm-power.c:1420
+#: ../src/gpm-power.c:1384
 msgid "Computer is running on AC power\n"
 msgstr "النظام يعمل على التيار الكهربائي\n"
 
-#: ../src/gpm-power.c:1423
+#: ../src/gpm-power.c:1387
 msgid "Computer is running on battery power\n"
 msgstr "النظام يعمل على طاقة البطارية\n"
 
@@ -1747,7 +1800,7 @@ msgid "Ask me"
 msgstr "اسألني"
 
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:744
+#: ../src/gpm-statistics-core.c:765
 msgid "Suspend"
 msgstr "تعليق"
 
@@ -1756,7 +1809,7 @@ msgid "Shutdown"
 msgstr "إطفاء"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:754
+#: ../src/gpm-statistics-core.c:775
 msgid "Hibernate"
 msgstr "سبات"
 
@@ -1812,64 +1865,64 @@ msgstr "لا تاريخ"
 msgid "Estimated Time History"
 msgstr "تاريخ الزمن المقدر"
 
-#: ../src/gpm-statistics-core.c:688
+#: ../src/gpm-statistics-core.c:708
 #, fuzzy
 msgid "Could not connect to GNOME Power Manager."
 msgstr "مدير طاقة جنوم"
 
-#: ../src/gpm-statistics-core.c:689
+#: ../src/gpm-statistics-core.c:709
 msgid "Perhaps the program is not running or you are using an old version?"
 msgstr ""
 
-#: ../src/gpm-statistics-core.c:724
+#: ../src/gpm-statistics-core.c:745
 msgid "On AC"
 msgstr "على التيار"
 
-#: ../src/gpm-statistics-core.c:729
+#: ../src/gpm-statistics-core.c:750
 msgid "On battery"
 msgstr "على البطارية"
 
-#: ../src/gpm-statistics-core.c:734
+#: ../src/gpm-statistics-core.c:755
 #, fuzzy
 msgid "Session idle"
 msgstr "اختيرت جلسة %s"
 
-#: ../src/gpm-statistics-core.c:739
+#: ../src/gpm-statistics-core.c:760
 #, fuzzy
 msgid "Session active"
 msgstr "الإمتدادات النشطة"
 
-#: ../src/gpm-statistics-core.c:749
+#: ../src/gpm-statistics-core.c:770
 msgid "Resume"
 msgstr "إستأناف"
 
-#: ../src/gpm-statistics-core.c:759
+#: ../src/gpm-statistics-core.c:780
 msgid "Lid closed"
 msgstr "غطاء مغلق"
 
-#: ../src/gpm-statistics-core.c:764
+#: ../src/gpm-statistics-core.c:785
 msgid "Lid opened"
 msgstr "غطاء مفتوح"
 
-#: ../src/gpm-statistics-core.c:769
+#: ../src/gpm-statistics-core.c:790
 msgid "Notification"
 msgstr "اشعار "
 
-#: ../src/gpm-statistics-core.c:774
+#: ../src/gpm-statistics-core.c:795
 msgid "DPMS On"
 msgstr "DPMS مشغلة"
 
-#: ../src/gpm-statistics-core.c:779
+#: ../src/gpm-statistics-core.c:800
 #, fuzzy
 msgid "DPMS Standby"
 msgstr "dpms مستعدة"
 
-#: ../src/gpm-statistics-core.c:784
+#: ../src/gpm-statistics-core.c:805
 #, fuzzy
 msgid "DPMS Suspend"
 msgstr "علّق الآلة"
 
-#: ../src/gpm-statistics-core.c:789
+#: ../src/gpm-statistics-core.c:810
 msgid "DPMS Off"
 msgstr "DPMS مطفئة"
 
@@ -1960,179 +2013,12 @@ msgstr "طاقة منخفضة جدا"
 msgid "Power Low"
 msgstr "طاقة البطارية منخفضة"
 
+#~ msgid "Product:"
+#~ msgstr "المنتج:"
+
+#~ msgid "Status:"
+#~ msgstr "الحالة:"
+
 #, fuzzy
-#~ msgid "When UPS _critical:"
-#~ msgstr "الإجراء العاجل لـ UPS"
-
-#~ msgid "ups"
-#~ msgstr "UPS"
-
-#~ msgid "mouse"
-#~ msgstr "فأرة"
-
-#~ msgid "keyboard"
-#~ msgstr "لوحة المفاتيح"
-
-#~ msgid "pda"
-#~ msgstr "pda"
-
-#~ msgid "unknown"
-#~ msgstr "مجهول"
-
-#~ msgid "<b>Brightness</b>"
-#~ msgstr "<b>سطوع</b>"
-
-#~ msgid "<b>Capacity:</b> %i%% (%s)\n"
-#~ msgstr "<b>سعة:</b> %i%% (%s)\n"
-
-#~ msgid "<b>Event log</b>"
-#~ msgstr "<b>سجل الأحداث</b>"
-
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>عام</b>"
-
-#~ msgid "<b>Laptop batteries</b>"
-#~ msgstr "<b>بطّاريات حاسوب محمول</b>"
-
-#~ msgid "<b>Last full charge:</b> %.1f %s\n"
-#~ msgstr "<b>الشحن الكامل الأخير:</b> %.1f %s\n"
-
-#~ msgid "<b>Model:</b> %s\n"
-#~ msgstr "<b>النّموذج:</b> %s\n"
-
-#~ msgid "<b>Product:</b> %s\n"
-#~ msgstr "<b>منتج:</b> %s\n"
-
-#~ msgid "<b>Sleep</b>"
-#~ msgstr "<b>نوم</b>"
-
-#~ msgid "<b>Status:</b> Charged\n"
-#~ msgstr "<b>الحالة:</b> مشحون\n"
-
-#~ msgid "<b>Status:</b> Charging\n"
-#~ msgstr "<b>الحالة:</b> شحن\n"
-
-#~ msgid "<b>Status:</b> Discharging\n"
-#~ msgstr "<b>الحالة:</b> شحنة قيد التفريغ\n"
-
-#~ msgid "<b>Status:</b> Missing\n"
-#~ msgstr "<b>الحالة:</b> غير موجود\n"
-
-#~ msgid "<b>UPS</b>"
-#~ msgstr "<b>UPS</b>"
-
-#~ msgid "<b>Vendor:</b> %s\n"
-#~ msgstr "<b>البائع:</b> %s\n"
-
-#~ msgid "<b>Wireless devices</b>"
-#~ msgstr "<b>أجهزة لاسلكية</b>"
-
-#~ msgid "Battery charged %imWh during suspend"
-#~ msgstr "شحنت البطارية %imWh أثناء التوقيف"
-
-#~ msgid "Battery discharged %imWh during suspend"
-#~ msgstr "أفرغت البطارية %imWh أثناء التوقيف"
-
-#~ msgid "Check network utilization before sleeping"
-#~ msgstr "تأكد من ضغط استخدام الشبكة قبل النوم"
-
-#~ msgid "DPMS blanking screen"
-#~ msgstr "DPMS مسح الشاشه "
-
-#~ msgid "Description"
-#~ msgstr "وصف"
-
-#~ msgid "Device Information"
-#~ msgstr "معلومات الجهاز"
-
-#~ msgid ""
-#~ "Device type: Laptop battery (1)\n"
-#~ "Technology: Lithium ION"
-#~ msgstr ""
-#~ "نوع الجهاز: بطارية حاسوب محمول (1)\n"
-#~ "التقنية: Lithium ION"
-
-#~ msgid "Event Log"
-#~ msgstr "سجل الأحداث"
-
-#~ msgid "Event"
-#~ msgstr "حدث"
-
-#~ msgid ""
-#~ "If network utilization should be checked before doing the idle action."
-#~ msgstr "إذا يفترض التأكد من ضغط الشبكة قبل عمل إجراء الخمول"
-
-#~ msgid "LCD dim"
-#~ msgstr "تعتيم شاشة الـ LCD"
-
-#~ msgid "LCD resume"
-#~ msgstr "استرجاع الشاشة"
-
-#~ msgid "Last full: 22022mWh"
-#~ msgstr "التمام الماضي : 22022mwh "
-
-#~ msgid "Make the computer go to sleep"
-#~ msgstr "تنويم الحاسوب. "
-
-#~ msgid "Orientation"
-#~ msgstr "الإتّجاه"
-
-#~ msgid "Prefer power savings over performance"
-#~ msgstr "فَضِّل ادّخار الطاقة على الأداء"
-
-#~ msgid "Running on AC"
-#~ msgstr "مشتغل على التيار المتردد"
-
-#~ msgid "Running on Battery"
-#~ msgstr "مشتغل على البطارية"
-
-#~ msgid "Running on UPS"
-#~ msgstr "مشتغل على  UPS"
-
-#~ msgid "Screen dim"
-#~ msgstr "تعتيم الشاشة"
-
-#~ msgid "Screen resume"
-#~ msgstr "استرجاع الشاشة"
-
-#~ msgid "Sleep _type when inactive:"
-#~ msgstr "_نوع النوم عند عدم الحركة: "
-
-#~ msgid "Suspend the computer"
-#~ msgstr "تعليق الحاسوب"
-
-#~ msgid "The orientation of the tray."
-#~ msgstr "إتجاه الطبق."
-
-#~ msgid ""
-#~ "This shows how the battery charge and discharge rate varies over time."
-#~ msgstr "يظهر هذا كيف يتفاوت شحن وإفراغ البطارية مع الزمن."
-
-#~ msgid "This shows how the battery percentage charge varies over time."
-#~ msgstr "يظهر هذا كيف تتفاوت نسبة شحن البطارية مع الزمن."
-
-#~ msgid ""
-#~ "This shows how the remaining time until charged or discharged varies over "
-#~ "time."
-#~ msgstr "يظهر هذا كيف يتفاوت الزمن الباقي على شحن وإفراغ البطارية مع الزمن."
-
-#~ msgid "Time"
-#~ msgstr "وقت"
-
-#~ msgid "Turning LCD panel back on"
-#~ msgstr "فتح شاشة ال LCD من جديد"
-
-#~ msgid "Unknown event!"
-#~ msgstr "حدث غير معروف"
-
-#~ msgid "_Dim the laptop panel when idle"
-#~ msgstr "_تبهيت شاشة الجهز المحمول عند عدم النشاط"
-
-#~ msgid "_Information"
-#~ msgstr "م_علومات"
-
-#~ msgid "laptop lid re-opened"
-#~ msgstr "تم فتح غطاء الحاسوب المحمول"
-
-#~ msgid "the system state is idle"
-#~ msgstr "حالة النظام: غير مستخدم"
+#~ msgid "Missing"
+#~ msgstr "الفقدان"
