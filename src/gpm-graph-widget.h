@@ -116,6 +116,8 @@ void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
 							 guint		 id);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
 							 GList		*list);
+void		 gpm_graph_widget_set_title		(GpmGraphWidget	*graph,
+							 const gchar	*title);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,

@@ -33,29 +33,27 @@
  * gpm_exponential_average:
  * @previous: The old value
  * @new: The new value
- * @factor_pc: The factor as a percentage
+ * @slew: The slew rate as a percentage
  *
  * We should do an exponentially weighted average so that high frequency
  * changes are smoothed. This should mean the output does not change
  * drastically between updates.
  **/
-int
-gpm_exponential_average (gint previous, gint new, guint factor_pc)
+gint
+gpm_exponential_average (gint previous, gint new, guint slew)
 {
 	gint result = 0;
 	gfloat factor = 0;
 	gfloat factor_inv = 1;
-	if (previous == 0 || factor_pc == 0) {
+	if (previous == 0 || slew == 0) {
 		/* startup, or re-initialization - we have no data */
 		gpm_debug ("Quoting output with only one value...");
 		result = new;
 	} else {
-		factor = (gfloat) factor_pc / 100.0f;
+		factor = (gfloat) slew / 100.0f;
 		factor_inv = 1.0f - factor;
 		result = (gint) ((factor_inv * (gfloat) new) + (factor * (gfloat) previous));
 	}
-	gpm_debug ("factor = %f, previous = %i, new=%i, result = %i",
-		   factor, previous, new, result);
 	return result;
 }
 

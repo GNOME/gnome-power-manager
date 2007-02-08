@@ -62,6 +62,7 @@ struct GpmGraphWidgetPrivate
 	GpmGraphWidgetAxisType	 axis_type_y;
 	const gchar		*axis_label_x;
 	const gchar		*axis_label_y;
+	gchar			*title;
 
 	cairo_t			*cr;
 	cairo_font_options_t	*options;
@@ -213,6 +214,22 @@ gpm_graph_widget_get_axis_label_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType
 }
 
 /**
+ * gpm_graph_widget_set_title:
+ * @graph: This class instance
+ * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ **/
+void
+gpm_graph_widget_set_title (GpmGraphWidget *graph, const gchar *title)
+{
+	g_return_if_fail (graph != NULL);
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	if (graph->priv->title != NULL) {
+		g_free (graph->priv->title);
+	}
+	graph->priv->title = g_strdup (title);
+}
+
+/**
  * gpm_graph_widget_set_axis_type_x:
  * @graph: This class instance
  * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
@@ -326,6 +343,7 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->keyvals = NULL;
 	graph->priv->axis_label_x = NULL;
 	graph->priv->axis_label_y = NULL;
+	graph->priv->title = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
 	/* setup font */
@@ -351,6 +369,8 @@ gpm_graph_widget_finalize (GObject *object)
 	}
 	g_slist_free (graph->priv->keyvals);
 	g_ptr_array_free (graph->priv->data_list, FALSE);
+
+	g_free (graph->priv->title);
 
 	if (graph->priv->events) {
 		g_list_free (graph->priv->events);
@@ -1224,6 +1244,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gint data_y;
 	cairo_text_extents_t extents_axis_label_x;
 	cairo_text_extents_t extents_axis_label_y;
+	cairo_text_extents_t extents_title;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -1235,6 +1256,11 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	graph->priv->box_x = 35;
 	graph->priv->box_y = 5;
+
+	if (graph->priv->title != NULL) {
+		cairo_text_extents (cr, graph->priv->title, &extents_title);
+		graph->priv->box_y += extents_title.height;
+	}
 
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
@@ -1260,6 +1286,12 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	} else {
 		graph->priv->box_width = graph_widget->allocation.width -
 					 (3 + graph->priv->box_x);
+	}
+
+	/* center title */
+	if (graph->priv->title != NULL) {
+		cairo_move_to (cr, graph->priv->box_x + (graph->priv->box_width-extents_title.width)/2, 9);
+		cairo_show_text (cr, graph->priv->title);
 	}
 
 	/* graph background */
