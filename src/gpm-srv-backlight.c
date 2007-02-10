@@ -655,6 +655,11 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 	g_signal_connect (srv_backlight->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), srv_backlight);
 
+	/* we use ac_adapter for the ac-adapter-changed signal */
+	srv_backlight->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (srv_backlight->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), srv_backlight);
+
 	if (srv_backlight->priv->can_dim == TRUE) {
 		/* watch for manual brightness changes (for the feedback widget) */
 		srv_backlight->priv->brightness = gpm_brightness_lcd_new ();
@@ -670,9 +675,9 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 		}
 		gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
 
-		/* set the default dim */ 	 
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value); 	 
-		gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value); 	 
+		/* set the default dim */
+		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+		gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
 
 		/* use a visual widget */
 		srv_backlight->priv->feedback = gpm_feedback_new ();
@@ -691,11 +696,6 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 		g_signal_connect (srv_backlight->priv->control, "resume",
 				  G_CALLBACK (control_resume_cb), srv_backlight);
 	}
-
-	/* we use ac_adapter for the ac-adapter-changed signal */
-	srv_backlight->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (srv_backlight->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), srv_backlight);
 
 	/* watch for idle mode changes */
 	srv_backlight->priv->idle = gpm_idle_new ();
