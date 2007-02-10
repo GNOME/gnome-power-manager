@@ -409,6 +409,7 @@ gpm_button_init (GpmButton *button)
 	int    i;
 	char **device_names = NULL;
 	gboolean ret;
+	GError *error;
 
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
@@ -447,22 +448,27 @@ gpm_button_init (GpmButton *button)
 	button->priv->hal = gpm_hal_new ();
 
 	/* devices of type button */
-	ret = gpm_hal_device_find_capability (button->priv->hal, "button", &device_names, NULL);
-	if (device_names == NULL || device_names[0] == NULL) {
-		gpm_debug ("Couldn't obtain list of buttons");
+	error = NULL;
+	ret = gpm_hal_device_find_capability (button->priv->hal, "button", &device_names, &error);
+	if (ret == FALSE) {
+		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
+		g_error_free (error);
 		return;
 	}
-
-	for (i = 0; device_names[i]; i++) {
-		watch_add_button (button, device_names [i]);
+	if (device_names[0] != NULL) {
+		/* we have found buttons */
+		for (i = 0; device_names[i]; i++) {
+			watch_add_button (button, device_names[i]);
+		}
+		g_signal_connect (button->priv->hal, "property-modified",
+				  G_CALLBACK (hal_device_property_modified_cb), button);
+		g_signal_connect (button->priv->hal, "device-condition",
+				  G_CALLBACK (hal_device_condition_cb), button);
+	} else {
+		gpm_debug ("Couldn't obtain list of buttons");
 	}
 
 	gpm_hal_free_capability (button->priv->hal, device_names);
-
-	g_signal_connect (button->priv->hal, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), button);
-	g_signal_connect (button->priv->hal, "device-condition",
-			  G_CALLBACK (hal_device_condition_cb), button);
 }
 
 /**

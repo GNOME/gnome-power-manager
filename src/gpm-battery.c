@@ -270,14 +270,14 @@ coldplug_batteries (GpmBattery *battery)
 	/* devices of type battery */
 	error = NULL;
 	ret = gpm_hal_device_find_capability (battery->priv->hal, "battery", &device_names, &error);
-	if (device_names == NULL || device_names[0] == NULL) {
+	if (ret == FALSE) {
 		gpm_warning ("Couldn't obtain list of batteries: %s", error->message);
 		g_error_free (error);
 		return FALSE;
 	}
 
-	for (i = 0; device_names [i]; i++) {
-		watch_add_battery (battery, device_names [i]);
+	for (i = 0; device_names[i]; i++) {
+		watch_add_battery (battery, device_names[i]);
 	}
 
 	gpm_hal_free_capability (battery->priv->hal, device_names);

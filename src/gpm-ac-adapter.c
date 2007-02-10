@@ -198,34 +198,42 @@ gpm_ac_adapter_class_init (GpmAcAdapterClass *klass)
 static void
 gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 {
-	gchar **names;
+	gchar **device_names;
+	gboolean ret;
+	GError *error;
 
 	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
 	ac_adapter->priv->hal = gpm_hal_new ();
 
 	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (ac_adapter->priv->hal, "ac_adapter", &names, NULL);
-	if (names == NULL || names[0] == NULL) {
-		/* this shouldn't happen */
-		ac_adapter->priv->has_hardware = FALSE;
-		gpm_warning ("No devices of capability ac_adapter");
+	error = NULL;
+	ret = gpm_hal_device_find_capability (ac_adapter->priv->hal, "ac_adapter", &device_names, &error);
+	if (ret == FALSE) {
+		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
+		g_error_free (error);
 		return;
 	}
+	if (device_names[0] != NULL) {
+		/* we track this by hand as machines that have no ac_adapter object must
+		 * return that they are on ac power */
+		ac_adapter->priv->has_hardware = TRUE;
 
-	/* we track this by hand as machines that have no ac_adapter object must
-	 * return that they are on ac power */
-	ac_adapter->priv->has_hardware = TRUE;
+		/* We only want first ac_adapter object (should only be one) */
+		ac_adapter->priv->udi = g_strdup (device_names[0]);
 
-	/* We only want first ac_adapter object (should only be one) */
-	ac_adapter->priv->udi = g_strdup (names[0]);
-	gpm_hal_free_capability (ac_adapter->priv->hal, names);
+		/* watch this device */
+		gpm_hal_device_watch_propery_modified (ac_adapter->priv->hal, ac_adapter->priv->udi, FALSE);
 
-	/* watch this device */
-	gpm_hal_device_watch_propery_modified (ac_adapter->priv->hal, ac_adapter->priv->udi, FALSE);
-
-	/* we want state changes */
-	g_signal_connect (ac_adapter->priv->hal, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);
+		/* we want state changes */
+		g_signal_connect (ac_adapter->priv->hal, "property-modified",
+				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);		
+	} else {
+		/* no ac-adapter class support */
+		ac_adapter->priv->has_hardware = FALSE;
+		ac_adapter->priv->udi = NULL;
+		gpm_debug ("No devices of capability ac_adapter");
+	}
+	gpm_hal_free_capability (ac_adapter->priv->hal, device_names);
 }
 
 /**

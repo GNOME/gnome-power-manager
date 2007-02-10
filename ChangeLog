@@ -1,5 +1,15 @@
 2007-02-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-battery.c: (coldplug_batteries):
+	Do not try to dereference error if we find no battery devices, it might
+	actually be okay. Rework the error handling a little to fix #406529
+
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_init):
+	* src/gpm-button.c: (gpm_button_init):
+	Fix two small memory leaks when no devices are found.
+
+2007-02-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-srv-backlight.c: (gpm_srv_backlight_init):
 	Part of a patch from Jon McCann:
 	Don't use the ac-adapter object before you create it.
