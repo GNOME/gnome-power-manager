@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
  * Copyright (C) 2005 Jaap Haitsma <jaap@haitsma.org>
- * Copyright (C) 2005-2006 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2005-2007 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
