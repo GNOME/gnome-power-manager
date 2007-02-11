@@ -326,7 +326,7 @@ gpm_battery_init (GpmBattery *battery)
 	g_signal_connect (battery->priv->hal, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), battery);
 
-	battery->priv->devices = g_hash_table_new (g_str_hash, g_str_equal);
+	battery->priv->devices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
 	g_idle_add ((GSourceFunc)start_idle, battery);
 }
