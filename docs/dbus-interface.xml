@@ -58,7 +58,7 @@
         <literal>SetBrightness()</literal>
       </title>
       <para>
-        This may not immediatly set the brightness if we are in a low power
+        This may not immediately set the brightness if we are in a low power
         sleep mode, if the panel is switched off, or if the panel is in an
         idle dim state.
       </para>
@@ -249,13 +249,13 @@
   </sect1>
 
   <sect1 id="pm-ui">
-    <title>User Interface Frontends</title>
+    <title>User Interface Front-ends</title>
     <para>
-      Some user interface frontends will be in a different process to that
+      Some user interface front-ends will be in a different process to that
       of any power manager and system state will have to be transmitted
       over DBUS.
-      We only export the final 'result', i.e. the icon and description
-      as presenting a abstract power interface is wrong for this functionality.
+      We only export the final 'result' (the icon and description)
+      as presenting an abstract power interface is wrong for this functionality.
       These are the required DBUS methods for presenting an interface to the
       user.
     </para>
@@ -562,7 +562,7 @@
             <row>
               <entry>in</entry>
               <entry>string</entry>
-              <entry>the localised reason to inhibit, e.g. "Copying files"</entry>
+              <entry>the localized reason to inhibit, e.g. "Copying files"</entry>
             </row>
             <row>
               <entry>out</entry>
@@ -581,7 +581,7 @@
       <para>
         Inhibits the computer from performing the any sleep or shutdown action.
         Useful if you want to perform an operation that cannot be interrupted like
-        a firmware reflash or RPM transaction.
+        a firmware re-flash or RPM transaction.
       </para>
       <informaltable>
         <tgroup cols="2">
@@ -601,7 +601,7 @@
             <row>
               <entry>in</entry>
               <entry>string</entry>
-              <entry>the localised reason to inhibit, e.g. "performing transaction"</entry>
+              <entry>the localized reason to inhibit, e.g. "performing transaction"</entry>
             </row>
             <row>
               <entry>out</entry>
@@ -618,7 +618,10 @@
         <literal>UnInhibit()</literal>
       </title>
       <para>
-        Allows the computer to perform the idle sleep or user action.
+        Allows the computer to perform the idle sleep or user action is the
+        number of inhibit calls is zero.
+        If there are multiple cookies outstanding, clearing one cookie
+	does not allow the action to happen.
         If the program holding the cookie exits from the system bus without
         calling <literal>UnInhibit()</literal> then it is automatically removed.
       </para>
@@ -648,7 +651,7 @@
       </title>
       <para>
         Returns true if the auto-suspend functionality would be valid.
-        This will return false as soon as the number of inhibit cookies
+        This will return false if the number of inhibit cookies
         is greater than zero.
       </para>
       <informaltable>
@@ -715,7 +718,7 @@
       the session is able to suspend, and has permission to do so.
       This may also fail if the admin has locked down the session or system
       action or if the computer cannot do the action due to a hardware
-      limitiation.
+      limitation.
     </para>
 
     <para>
@@ -1013,8 +1016,8 @@
     <para>
       Statistics data is values that can be collected by the power manager
       for review or profiling.
-      These are important (but not requrired) methods allow the profiling
-      of power saving methods, for instancing showing on a graph that 20% more
+      These are important (but not required) methods allow the profiling
+      of power saving methods, for instance showing on a graph that 20% more
       power is saved using certain CPU schedulers.
       These are optional DBUS methods for getting system statistics.
     </para>
@@ -1029,6 +1032,8 @@
       </title>
       <para>
         Gets a list of the types of data available.
+        Data types are single strings that represent the complete data and do not
+        indicate the axis.
       </para>
       <informaltable>
         <tgroup cols="2">
