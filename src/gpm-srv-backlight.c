@@ -390,7 +390,7 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
 
 	/* only do brightness changes if we have the hardware */
 	gpm_conf_get_bool (srv_backlight->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
-	if (do_laptop_lcd) {
+	if (do_laptop_lcd == TRUE && srv_backlight->priv->can_dim == TRUE) {
 		gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
 	}
 }
