@@ -1,3 +1,12 @@
+2007-02-14  Benjamin Canou  <bookeldor@gmail.com>
+
+	* applets/brightness/brightness-applet.c:
+	Patch against the SVN trunk to enable scroll and keyboard events.
+	It corrects also corrects two little bugs too: tooltips are not shown
+	anymore when popped, and a comment was wrong.
+	There's still a bug: themes using an image as background are not
+	handled correctly. I'll try to correct it soon. Fixes: 383653
+
 2007-02-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-srv-backlight.c: (ac_adapter_changed_cb):

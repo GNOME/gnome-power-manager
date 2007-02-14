@@ -30,7 +30,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
-
+#include <gdk/gdkkeysyms.h>
 #include "brightness-applet.h"
 #include "../../src/gpm-common.h"
 
@@ -47,6 +47,8 @@ static void      update_tooltip                   (GpmBrightnessApplet *applet);
 static void      update_level                     (GpmBrightnessApplet *applet, gboolean hw_get, gboolean hw_set);
 static gboolean  plus_cb                          (GtkWidget *w, GpmBrightnessApplet *applet);
 static gboolean  minus_cb                         (GtkWidget *w, GpmBrightnessApplet *applet);
+static gboolean  key_press_cb                     (GpmBrightnessApplet *applet, GdkEventKey   *event);
+static gboolean  scroll_cb                        (GpmBrightnessApplet *applet, GdkEventScroll *event);
 static gboolean  slide_cb                         (GtkWidget *w, GpmBrightnessApplet *applet);
 static void      create_popup                     (GpmBrightnessApplet *applet);
 static gboolean  popup_cb                         (GpmBrightnessApplet *applet, GdkEventButton *event);
@@ -225,12 +227,16 @@ static void
 update_tooltip (GpmBrightnessApplet *applet)
 {
 	static gchar buf[101];
-	if (applet->enabled) {
-		snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
+	if (!applet->popped) {
+		if (applet->enabled) {
+			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
+		} else {
+			snprintf (buf, 100, _("Cannot get laptop panel brightness"));
+		}
+		gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
 	} else {
-		snprintf (buf, 100, _("Cannot get laptop panel brightness"));
+		gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), NULL, NULL);
 	}
-	gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
 }
 
 /**
@@ -242,8 +248,8 @@ update_tooltip (GpmBrightnessApplet *applet)
  * updates popup and hardware level of brightness
  * FALSE FAlSE -> set UI from cached value
  * TRUE  FAlSE -> set UI from HW value
- * TRUE  TRUE  -> set HW from UI value, then set UI from HW value
- * TRUE  TRUE  -> set HW from UI value
+ * TRUE  FALSE -> set HW from UI value, then set UI from HW value
+ * FALSE TRUE  -> set HW from UI value
  **/
 static void
 update_level (GpmBrightnessApplet *applet, gboolean get_hw, gboolean set_hw)
@@ -255,7 +261,7 @@ update_level (GpmBrightnessApplet *applet, gboolean get_hw, gboolean set_hw)
 		applet->enabled = gpm_powermanager_get_brightness_lcd (applet->powermanager, &applet->level);
 	}
 	if (applet->popup != NULL) {
-		gtk_widget_set_sensitive (applet->btn_plus,applet->level < 100);
+		gtk_widget_set_sensitive (applet->btn_plus,applet->level < 99);
 		gtk_widget_set_sensitive (applet->btn_minus,applet->level > 0);
 		gtk_range_set_value (GTK_RANGE(applet->slider), (guint) applet->level);
 	}
@@ -311,6 +317,95 @@ slide_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 	return TRUE;
 }
 
+/**
+ * slide_cb:
+ * @applet: Brightness applet instance
+ * @event: The key press event
+ *
+ * callback handling keyboard
+ * mainly escape to unpop and arrows to change brightness
+ **/
+static gboolean
+key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
+{
+	int i;
+
+	switch (event->keyval) {
+	case GDK_KP_Enter:
+	case GDK_ISO_Enter:
+	case GDK_3270_Enter:
+	case GDK_Return:
+	case GDK_space:
+	case GDK_KP_Space:
+	case GDK_Escape:
+		/* if yet popped, release focus and hide then redraw applet unselected */
+		if (applet->popped) {
+			gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+			gdk_pointer_ungrab (GDK_CURRENT_TIME);
+			gtk_grab_remove (GTK_WIDGET(applet));
+			gtk_widget_set_state (GTK_WIDGET(applet), GTK_STATE_NORMAL);
+			gtk_widget_hide (applet->popup);
+			applet->popped = FALSE;
+			draw_applet_cb (applet);
+			update_tooltip (applet);
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+		break;
+	case GDK_Page_Up:
+		for (i = 0;i < 10;i++) {
+			plus_cb (NULL, applet);
+		}
+		return TRUE;
+		break;
+	case GDK_Left:
+	case GDK_Up:
+		plus_cb (NULL, applet);
+		return TRUE;
+		break;
+	case GDK_Page_Down:
+		for (i = 0;i < 10;i++) {
+			minus_cb (NULL, applet);
+		}
+		return TRUE;
+		break;
+	case GDK_Right:
+	case GDK_Down:
+		minus_cb (NULL, applet);
+		return TRUE;
+		break;
+	default:
+		return FALSE;
+		break;
+	}
+  
+	return FALSE;
+}
+
+/**
+ * scroll_cb:
+ * @applet: Brightness applet instance
+ * @event: The scroll event
+ *
+ * callback handling mouse scrolls, either when the applet
+ * is not popped and the mouse is over the applet, or when
+ * the applet is popped and no matter where the mouse is
+ **/
+static gboolean
+scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
+{
+	if (event->type == GDK_SCROLL) {
+		if (event->direction == GDK_SCROLL_UP) {
+			plus_cb (NULL, applet);
+		} else {
+			minus_cb (NULL, applet);
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+	
 /**
  * create_popup:
  * @applet: Brightness applet instance
@@ -395,6 +490,7 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 		gtk_widget_hide (applet->popup);
 		applet->popped = FALSE;
 		draw_applet_cb (applet);
+		update_tooltip (applet);
 		return TRUE;
 	}
 
@@ -625,6 +721,12 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	/* connect */
 	g_signal_connect (G_OBJECT(applet), "button-press-event",
 			  G_CALLBACK(popup_cb), NULL);
+
+	g_signal_connect (G_OBJECT(applet), "scroll-event",
+			  G_CALLBACK(scroll_cb), NULL);
+
+	g_signal_connect (G_OBJECT(applet), "key-press-event",
+			  G_CALLBACK(key_press_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "expose-event",
 			  G_CALLBACK(draw_applet_cb), NULL);
