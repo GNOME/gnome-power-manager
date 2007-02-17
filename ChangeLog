@@ -1,3 +1,10 @@
+2007-02-17  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-hal.c: (gpm_hal_device_get_bool),
+	(gpm_hal_device_get_string), (gpm_hal_device_get_int),
+	(gpm_hal_device_find_capability), (gpm_hal_device_has_capability):
+	Check for a NULL proxy when we access HAL to help debug #408705
+
 2007-02-14  Benjamin Canou  <bookeldor@gmail.com>
 
 	* applets/brightness/brightness-applet.c:

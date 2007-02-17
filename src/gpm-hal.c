@@ -124,6 +124,10 @@ gpm_hal_device_get_bool (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
+	if (proxy == NULL) {
+		gpm_warning ("GetPropertyBoolean failed to get proxy for %s", udi);
+		return FALSE;
+	}
 	ret = dbus_g_proxy_call (proxy, "GetPropertyBoolean", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
@@ -166,6 +170,10 @@ gpm_hal_device_get_string (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
+	if (proxy == NULL) {
+		gpm_warning ("GetPropertyString failed to get proxy for %s", udi);
+		return FALSE;
+	}
 	ret = dbus_g_proxy_call (proxy, "GetPropertyString", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
@@ -206,6 +214,10 @@ gpm_hal_device_get_int (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       udi,
 					       HAL_DBUS_INTERFACE_DEVICE);
+	if (proxy == NULL) {
+		gpm_warning ("GetPropertyInteger failed to get proxy for %s", udi);
+		return FALSE;
+	}
 	ret = dbus_g_proxy_call (proxy, "GetPropertyInteger", error,
 				 G_TYPE_STRING, key,
 				 G_TYPE_INVALID,
@@ -264,6 +276,10 @@ gpm_hal_device_find_capability (GpmHal      *hal,
 					       HAL_DBUS_SERVICE,
 					       HAL_DBUS_PATH_MANAGER,
 					       HAL_DBUS_INTERFACE_MANAGER);
+	if (proxy == NULL) {
+		gpm_warning ("FindDeviceByCapability failed to get proxy");
+		return FALSE;
+	}
 	ret = dbus_g_proxy_call (proxy, "FindDeviceByCapability", error,
 				 G_TYPE_STRING, capability,
 				 G_TYPE_INVALID,
@@ -303,6 +319,10 @@ gpm_hal_device_has_capability (GpmHal      *hal,
 					   HAL_DBUS_SERVICE,
 					   udi,
 					   HAL_DBUS_INTERFACE_DEVICE);
+	if (proxy == NULL) {
+		gpm_warning ("QueryCapability failed to get proxy for %s", udi);
+		return FALSE;
+	}
 	ret = dbus_g_proxy_call (proxy, "QueryCapability", error,
 				 G_TYPE_STRING, udi,
 				 G_TYPE_INVALID,
