@@ -32,7 +32,7 @@
 
 static void     gpm_proxy_class_init (GpmProxyClass *klass);
 static void     gpm_proxy_init       (GpmProxy      *proxy);
-static void     gpm_proxy_finalize   (GObject		*object);
+static void     gpm_proxy_finalize   (GObject	    *object);
 
 #define GPM_PROXY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PROXY, GpmProxyPrivate))
 
@@ -48,6 +48,8 @@ struct GpmProxyPrivate
 	GpmDbusMonitor	*dbus_monitor;
 	gboolean	 assigned;
 	DBusGConnection	*connection;
+	gulong		 ses_sig_id;
+	gulong		 sys_sig_id;
 };
 
 enum {
@@ -120,6 +122,8 @@ gpm_proxy_disconnect (GpmProxy *gproxy)
 
 	gpm_debug ("emitting proxy-status FALSE: %s", gproxy->priv->service);
 	g_signal_emit (gproxy, signals [PROXY_STATUS], 0, FALSE);
+
+	g_object_unref (gproxy->priv->proxy);
 	gproxy->priv->proxy = NULL;
 
 	return TRUE;
@@ -391,10 +395,18 @@ gpm_proxy_init (GpmProxy *gproxy)
 	gproxy->priv->assigned = FALSE;
 
 	gproxy->priv->dbus_monitor = gpm_dbus_monitor_new ();
-	g_signal_connect (gproxy->priv->dbus_monitor, "noc-session",
-			  G_CALLBACK (dbus_noc_session_cb), gproxy);
-	g_signal_connect (gproxy->priv->dbus_monitor, "noc-system",
-			  G_CALLBACK (dbus_noc_system_cb), gproxy);
+
+	/* We have to save the connection and remove the signal id later as
+	   instances of this object are likely to be registering with a
+	   singleton object many times */
+	gproxy->priv->ses_sig_id = g_signal_connect (gproxy->priv->dbus_monitor,
+						     "noc-session",
+						     G_CALLBACK (dbus_noc_session_cb),
+						     gproxy);
+	gproxy->priv->sys_sig_id = g_signal_connect (gproxy->priv->dbus_monitor,
+						     "noc-system",
+						     G_CALLBACK (dbus_noc_system_cb),
+						     gproxy);
 }
 
 /**
@@ -410,6 +422,9 @@ gpm_proxy_finalize (GObject *object)
 
 	gproxy = GPM_PROXY (object);
 	gproxy->priv = GPM_PROXY_GET_PRIVATE (gproxy);
+
+	g_signal_handler_disconnect (gproxy->priv->dbus_monitor, gproxy->priv->ses_sig_id);
+	g_signal_handler_disconnect (gproxy->priv->dbus_monitor, gproxy->priv->sys_sig_id);
 
 	gpm_proxy_disconnect (gproxy);
 
@@ -437,7 +452,7 @@ gpm_proxy_finalize (GObject *object)
 GpmProxy *
 gpm_proxy_new (void)
 {
-	GpmProxy *proxy;
-	proxy = g_object_new (GPM_TYPE_PROXY, NULL);
-	return GPM_PROXY (proxy);
+	GpmProxy *gproxy;
+	gproxy = g_object_new (GPM_TYPE_PROXY, NULL);
+	return GPM_PROXY (gproxy);
 }

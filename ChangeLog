@@ -1,3 +1,10 @@
+2007-02-18  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-proxy.c:
+	Save the signal connection id's and remove then when we finalize.
+	Prevents a very difficulto to trigger and even more difficult to debug
+	crasher where proxy instances are connecting to GpmDbusMonitor objects.
+
 2007-02-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-hal.c: (gpm_hal_device_get_bool),
