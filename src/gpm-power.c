@@ -1826,8 +1826,6 @@ gpm_power_init (GpmPower *power)
 	g_signal_connect (power->priv->battery, "battery-removed",
 			  G_CALLBACK (battery_removed_cb), power);
 
-	power->priv->hal = gpm_hal_new ();
-
 	power->priv->refcount = gpm_refcount_new ();
 	g_signal_connect (power->priv->refcount, "refcount-zero",
 			  G_CALLBACK (gpm_power_refcount_zero), power);
@@ -1883,9 +1881,6 @@ gpm_power_finalize (GObject *object)
 	}
 	if (power->priv->battery != NULL) {
 		g_object_unref (power->priv->battery);
-	}
-	if (power->priv->hal != NULL) {
-		g_object_unref (power->priv->hal);
 	}
 	if (power->priv->refcount != NULL) {
 		g_object_unref (power->priv->refcount);

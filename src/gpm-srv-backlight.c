@@ -411,16 +411,22 @@ button_pressed_cb (GpmButton        *button,
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 
-		gpm_brightness_lcd_up (srv_backlight->priv->brightness);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_up (srv_backlight->priv->brightness);
+		}
 
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 
-		gpm_brightness_lcd_down (srv_backlight->priv->brightness);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_down (srv_backlight->priv->brightness);
+		}
 
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 
 		/* make sure we undim when we lift the lid */
-		gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		if (srv_backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		}
 		gpm_srv_backlight_sync_policy (srv_backlight);	
 	}
 }
