@@ -60,7 +60,7 @@ static void      destroy_cb                       (GtkObject *object);
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
 #define GPM_BRIGHTNESS_APPLET_ICON		"gpm-brightness-lcd"
 #define GPM_BRIGHTNESS_APPLET_ICON_DISABLED	"gpm-brightness-lcd-disabled"
-#define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manger Brightness Applet")
+#define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manager Brightness Applet")
 #define GPM_BRIGHTNESS_APPLET_DESC		_("Adjusts laptop panel brightness.")
 #define PANEL_APPLET_VERTICAL(p)					\
 	 (((p) == PANEL_APPLET_ORIENT_LEFT) || ((p) == PANEL_APPLET_ORIENT_RIGHT))
