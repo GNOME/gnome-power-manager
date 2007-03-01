@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-02-25 21:30+0100\n"
-"PO-Revision-Date: 2007-02-23 18:31+0100\n"
+"POT-Creation-Date: 2007-03-01 23:26+0100\n"
+"PO-Revision-Date: 2007-03-01 23:27+0100\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,9 +27,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-# Voir #393388
 #: ../applets/brightness/brightness-applet.c:63
-msgid "Power Manger Brightness Applet"
+msgid "Power Manager Brightness Applet"
 msgstr "Applet de luminosité du gestionnaire d'énergie"
 
 #: ../applets/brightness/brightness-applet.c:64
@@ -144,7 +143,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "Autorise la mise en veille prolongée ou l'hibernation depuis le menu"
+msgstr "Autorise la mise en veille ou l'hibernation depuis le menu"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
@@ -185,7 +184,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate button action"
-msgstr "Action sur appui du bouton de mise en hibernation"
+msgstr "Action sur appui du bouton d'hibernation"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 msgid "Hibernate enabled"
@@ -207,7 +206,7 @@ msgid ""
 "failed."
 msgstr ""
 "Indique si une notification doit être affichée suite à un échec de "
-"l'hibernation ou de la mise en veille prolongée."
+"l'hibernation ou de la mise en veille."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
@@ -257,9 +256,7 @@ msgstr ""
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
-msgstr ""
-"Indique si les options mise en veille prolongée et mise en hibernation sont "
-"autorisées dans le menu déroulant de la zone de notification."
+msgstr "Indique si les options mise en veille et d'hibernation sont autorisées depuis le menu déroulant de la zone de notification."
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid ""
@@ -282,11 +279,11 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:24
 msgid ""
-"If the laptop should be configured as if it is using an permanent external "
+"If the laptop should be configured as if it is using a permanent external "
 "monitor"
 msgstr ""
-"Indique si le portable doit être configuré comme utilisant un écran avec "
-"alimentation externe"
+"Indique si le portable doit être configuré comme utilisant constamment un "
+"écran externe"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
@@ -376,9 +373,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the user is authorized to suspend the computer."
-msgstr ""
-"Indique si l'utilisateur est autorisé à mettre l'ordinateur en veille "
-"prolongée."
+msgstr "Indique si l'utilisateur est autorisé à mettre l'ordinateur en veille."
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the user should be notified when the AC adapter is disconnected."
@@ -410,7 +405,7 @@ msgid ""
 "if lock_use_screensaver_settings is false."
 msgstr ""
 "Indique si l'écran doit être verrouillé quand l'ordinateur est réactivé "
-"suite à une mise en veille prolongée. Uniquement utilisé si "
+"suite à une mise en veille. Uniquement utilisé si "
 "lock_use_screensaver_settings est désactivé."
 
 #: ../data/gnome-power-manager.schemas.in.h:43
@@ -482,7 +477,7 @@ msgstr "Verrouille l'écran lors de l'hibernation"
 
 #: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Lock screen on suspend"
-msgstr "Verrouille l'écran lors de la mise en veille prolongée"
+msgstr "Verrouille l'écran lors de la mise en veille"
 
 #: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Lock screen when blanked"
@@ -560,7 +555,7 @@ msgstr "Action lors de l'appui sur le bouton de mise en veille"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Suspend enabled"
-msgstr "Mise en veille prolongée activée"
+msgstr "Mise en veille activée"
 
 #: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
@@ -568,8 +563,8 @@ msgid ""
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Méthode DPMS utilisée pour éteindre l'écran alimenté sur secteur. Les "
-"options possibles sont « default » (par défaut), « standby » (mise en "
-"veille), « suspend » (mise en veille prolongée) et « off » (éteint)."
+"options possibles sont « default » (par défaut), « standby » (mettre en "
+"veille), « suspend » (mettre en veille prolongée) et « off » (éteindre)."
 
 #: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
@@ -577,8 +572,8 @@ msgid ""
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr ""
 "Méthode DPMS utilisée pour éteindre l'écran alimenté sur batterie. Les "
-"options possibles sont « default » (par défaut), « standby » (mise en "
-"veille), « suspend » (mise en veille prolongée) et « off » (éteint)."
+"options possibles sont « default » (par défaut), « standby » (mettre en "
+"veille), « suspend » (mettre en veille prolongée) et « off » (éteindre)."
 
 #: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
@@ -586,9 +581,9 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Action quand la batterie de l'onduleur atteint un niveau critique. Les "
-"options possibles sont « suspend » (mise en veille prolongée), "
-"« hibernate » (mise en hibernation), « shutdown » (éteindre) et "
-"« nothing » (aucune)."
+"options possibles sont « suspend » (mettre en veille), "
+"« hibernate » (hiberner), « shutdown » (éteindre) et « nothing » (ne rien "
+"faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
@@ -596,8 +591,8 @@ msgid ""
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Action quand la batterie de l'onduleur atteint un niveau faible. Les options "
-"possibles sont « suspend » (mise en veille prolongée), « hibernate » (mise "
-"en hibernation), « shutdown » (éteindre) et « nothing » (aucune)."
+"possibles sont « suspend » (mettre en veille), « hibernate » (hiberner), "
+"« shutdown » (éteindre) et « nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
@@ -605,8 +600,8 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Action quand la batterie atteint un niveau critique. Les options possibles "
-"sont « suspend » (mise en veille prolongée), « hibernate » (mise en "
-"hibernation), « shutdown » (éteindre) et « nothing » (aucune)."
+"sont « suspend » (mettre en veille), « hibernate » (hiberner), "
+"« shutdown » (éteindre) et « nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
@@ -615,8 +610,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Action quand l'écran du portable sur secteur est rabattu. Les options "
-"possibles sont « suspend » (mise en veille prolongée), « hibernate » (mise "
-"en hibernation), « blank » (extinction de l'écran) et « nothing » (aucune)."
+"possibles sont « suspend » (mettre en veille), « hibernate » (hiberner), "
+"« blank » (éteindre l'écran) et « nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
@@ -625,8 +620,8 @@ msgid ""
 "and \"nothing\"."
 msgstr ""
 "Action quand l'écran du portable sur batterie est rabattu. Les options "
-"possibles sont « suspend » (mise en veille prolongée), « hibernate » (mise "
-"en hibernation), « blank » (extinction de l'écran) et « nothing » (rien)."
+"possibles sont « suspend » (mettre en veille), « hibernate » (hiberner), "
+"« blank » (éteindre l'écran) et « nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
@@ -635,8 +630,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Action quand le bouton de mise en hibernation est appuyé. Les options "
-"possibles sont « suspend » (mise en veille prolongée), « hibernate » (mise "
-"en hibernation) et « nothing » (aucune)."
+"possibles sont « suspend » (mettre en veille), « hibernate » (hiberner) et "
+"« nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
@@ -645,8 +640,8 @@ msgid ""
 "\"."
 msgstr ""
 "Action quand le bouton de mise sous tension est appuyé. Les options "
-"possibles sont « suspend » (mise en veille prolongée), « hibernate » (mise "
-"en hibernation) et « nothing » (aucune)."
+"possibles sont « suspend » (mettre en veille), « hibernate » (hiberner) et "
+"« nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
@@ -655,8 +650,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Action quand le bouton de mise en veille est appuyé. Les options possibles "
-"sont « suspend » (mise en veille prolongée), « hibernate » (mise en "
-"hibernation) et « nothing » (aucune)."
+"sont « suspend » (mettre en veille), « hibernate » (hiberner) et "
+"« nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
@@ -909,8 +904,8 @@ msgid ""
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 "Type de mise en veille quand l'ordinateur est inactif. Les valeurs possibles "
-"sont « hibernate » (hibernatio), « suspend » (mise en veille prolongée) et "
-"« nothing » (aucune)."
+"sont « hibernate » (hiberner), « suspend » (mettre en veille) et "
+"« nothing » (ne rien faire)."
 
 #: ../data/gnome-power-manager.schemas.in.h:122
 msgid ""
@@ -946,7 +941,7 @@ msgstr "Utiliser les paramètres de verrouillage de l'économiseur d'écran"
 
 #: ../data/gnome-power-manager.schemas.in.h:127
 msgid "When to show the notification icon"
-msgstr "Quand afficher l'icône de notification"
+msgstr "Dans quel cas afficher l'icône de notification"
 
 #: ../data/gnome-power-manager.schemas.in.h:128
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
@@ -973,8 +968,8 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:131
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr ""
-"Indique s'il faut hiberner, mettre en veille prolongée ou ne rien faire en "
-"cas d'inactivité"
+"Indique s'il faut hiberner, mettre en veille ou ne rien faire en cas "
+"d'inactivité"
 
 #: ../data/gnome-power-manager.schemas.in.h:132
 msgid "Whether to use time-based notifications"
@@ -1149,11 +1144,11 @@ msgstr "Préférences de gestion d'énergie"
 
 #: ../data/gpm-prefs.glade.h:15
 msgid "Put _display to sleep when inactive for:"
-msgstr "Mettre l'_écran en veille quand inactif depuis :"
+msgstr "Mettre l'_écran en veille si inactif depuis :"
 
 #: ../data/gpm-prefs.glade.h:16
 msgid "Put computer to _sleep when inactive for:"
-msgstr "Mettre l'_ordinateur en veille quand inactif depuis :"
+msgstr "Mettre l'_ordinateur en veille si inactif depuis :"
 
 #: ../data/gpm-prefs.glade.h:17
 msgid "Set display _brightness to:"
@@ -1169,27 +1164,27 @@ msgstr "Utiliser un son pour avertir du déclenchement d'une erreur"
 
 #: ../data/gpm-prefs.glade.h:20
 msgid "When UPS power is _critically low:"
-msgstr "Quand le _niveau de l'onduleur est critique :"
+msgstr "Lorsque le _niveau de l'onduleur est critique :"
 
 #: ../data/gpm-prefs.glade.h:21
 msgid "When UPS power is l_ow:"
-msgstr "Quand le _niveau de l'onduleur est faible :"
+msgstr "Lorsque le _niveau de l'onduleur est faible :"
 
 #: ../data/gpm-prefs.glade.h:22
 msgid "When battery po_wer is critically low:"
-msgstr "Quand le _niveau de la batterie est critique :"
+msgstr "Lorsque le _niveau de la batterie est critique :"
 
 #: ../data/gpm-prefs.glade.h:23
 msgid "When laptop lid is cl_osed:"
-msgstr "Quand l'écran du portable est _rabattu :"
+msgstr "Lorsque l'écran du portable est _rabattu :"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When the _suspend button is pressed:"
-msgstr "Quand le bouton de mise en veille _prolongée est appuyé :"
+msgstr "Lorsque le bouton de mise en _veille est appuyé :"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "When the power _button is pressed:"
-msgstr "Quand le bouton de mise sous _tension est appuyé :"
+msgstr "Lorsque le bouton de mise sous _tension est appuyé :"
 
 #: ../data/gpm-prefs.glade.h:26
 msgid "_Always display an icon"
@@ -1283,7 +1278,7 @@ msgstr "Temps"
 
 #: ../src/gpm-graph-widget.c:211
 msgid "Time since startup"
-msgstr "Temps depuis le démarrage"
+msgstr "Temps écoulé depuis le démarrage"
 
 #. Translators: This is %i hours
 #: ../src/gpm-graph-widget.c:478
@@ -1388,7 +1383,7 @@ msgstr "Problème d'hibernation"
 
 #: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:929
 msgid "Suspend Problem"
-msgstr "Problème de mise en veille prolongée"
+msgstr "Problème de mise en veille"
 
 #: ../src/gpm-inhibit.c:420
 #, c-format
@@ -1445,16 +1440,16 @@ msgstr "Ne fait rien"
 #: ../src/gpm-manager.c:366 ../src/gpm-manager.c:494 ../src/gpm-manager.c:580
 #: ../src/gpm-manager.c:1378
 msgid "Suspending computer"
-msgstr "Mise en veille prolongée de l'ordinateur"
+msgstr "Mise en veille de l'ordinateur"
 
 #: ../src/gpm-manager.c:371 ../src/gpm-manager.c:510 ../src/gpm-manager.c:592
 #: ../src/gpm-manager.c:1353
 msgid "Hibernating computer"
-msgstr "Mise en hibernation de l'ordinateur"
+msgstr "Hibernation de l'ordinateur"
 
 #: ../src/gpm-manager.c:379 ../src/gpm-manager.c:526
 msgid "Shutting down computer"
-msgstr "Arrêt de l'ordinateur"
+msgstr "Extinction de l'ordinateur"
 
 #: ../src/gpm-manager.c:384
 msgid "GNOME interactive logout"
@@ -1494,7 +1489,7 @@ msgstr "le bouton de mise sous tension a été appuyé"
 
 #: ../src/gpm-manager.c:721
 msgid "the suspend button has been pressed"
-msgstr "le bouton de mise en veille prolongée a été appuyé"
+msgstr "le bouton de mise en veille a été appuyé"
 
 #: ../src/gpm-manager.c:741
 msgid "the hibernate button has been pressed"
@@ -1541,8 +1536,8 @@ msgid ""
 "computer in a suspended state."
 msgstr ""
 "La batterie est en dessous de son niveau critique ; l'ordinateur va <b>être "
-"mis en veille prolongée</b>.<br><b>Note :</b> une petite quantité d'énergie "
-"est requise pour maintenir l'ordinateur en état de veille prolongée."
+"mis en veille</b>.<br><b>Note :</b> une petite quantité d'énergie est "
+"requise pour maintenir l'ordinateur en état de veille."
 
 #: ../src/gpm-manager.c:1009
 msgid ""
@@ -1625,24 +1620,24 @@ msgstr ""
 #: ../src/gpm-manager.c:1354
 msgid "user clicked hibernate from tray menu"
 msgstr ""
-"l'utilisateur a cliqué sur mise en hibernation à partir du menu de la zone "
-"de notification"
+"l'utilisateur a cliqué sur hiberner à partir du menu de la zone de "
+"notification"
 
 #: ../src/gpm-manager.c:1379
 msgid "user clicked suspend from tray menu"
 msgstr ""
-"l'utilisateur a cliqué sur mise en veille prolongée à partir du menu de la "
-"zone de notification"
+"l'utilisateur a cliqué sur mise en veille à partir du menu de la zone de "
+"notification"
 
 #: ../src/gpm-manager.c:1402
 msgid "Suspend failure"
-msgstr "La mise en veille prolongée a échoué"
+msgstr "La mise en veille a échoué"
 
 #: ../src/gpm-manager.c:1403
 msgid "Your computer did not appear to resume correctly from suspend."
 msgstr ""
 "Votre ordinateur ne semble pas être en mesure de reprendre après une mise en "
-"veille prolongée."
+"veille."
 
 #: ../src/gpm-manager.c:1406
 msgid "Hibernate failure"
@@ -1869,21 +1864,22 @@ msgstr "Préférences de gestion d'énergie"
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:81 ../src/gpm-statistics-core.c:83
 msgid "Ask me"
-msgstr "Demandez-moi"
+msgstr "Me poser la question"
 
+# VOIR BUG #413642
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
 #: ../src/gpm-statistics-core.c:765
 msgid "Suspend"
-msgstr "Mise en veille prolongée"
+msgstr "Mettre en veille"
 
 #: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:85
 msgid "Shutdown"
-msgstr "Arrêt"
+msgstr "Éteindre"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
 #: ../src/gpm-statistics-core.c:775
 msgid "Hibernate"
-msgstr "Mise en hibernation"
+msgstr "Hiberner"
 
 #: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:87
 msgid "Blank screen"
@@ -1893,11 +1889,11 @@ msgstr "Éteindre l'écran"
 #: ../src/gpm-prefs-core.c:86 ../src/gpm-prefs-core.c:89
 #: ../src/gpm-statistics-core.c:88
 msgid "Do nothing"
-msgstr "Ne fait rien"
+msgstr "Ne rien faire"
 
 #: ../src/gpm-prefs-core.c:90
 msgid "Based on processor load"
-msgstr "Basée sur la charge processeur"
+msgstr "Adapter à la charge processeur"
 
 #: ../src/gpm-prefs-core.c:91
 msgid "Automatic power saving"
@@ -2038,11 +2034,11 @@ msgstr "À _propos"
 
 #: ../src/gpm-tray-icon.c:606
 msgid "_Suspend"
-msgstr "_Mise en veille prolongée"
+msgstr "_Mettre en veille"
 
 #: ../src/gpm-tray-icon.c:616
 msgid "Hi_bernate"
-msgstr "Hi_bernation"
+msgstr "Hi_berner"
 
 #: ../src/gpm-tray-icon.c:921
 #, c-format
@@ -2053,7 +2049,7 @@ msgstr ""
 
 #: ../src/gpm-tray-icon.c:923
 msgid "hibernate"
-msgstr "mise en hibernation"
+msgstr "hiberner"
 
 #: ../src/gpm-tray-icon.c:926
 #, c-format
@@ -2066,7 +2062,7 @@ msgstr ""
 
 #: ../src/gpm-tray-icon.c:928
 msgid "suspend"
-msgstr "mise en veille prolongée"
+msgstr "mettre en veille"
 
 #: ../src/gpm-warning.c:153
 msgid "Power Critically Low"
