@@ -302,7 +302,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 
 	/* get other stuff we might need to know */
 	gpm_hal_device_get_string (power->priv->hal, udi, "info.product", &entry->product, NULL);
-	gpm_hal_device_get_string (power->priv->hal, udi, "info.vendor", &entry->vendor, NULL);
+	gpm_hal_device_get_string (power->priv->hal, udi, "battery.vendor", &entry->vendor, NULL);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.technology", &entry->technology, NULL);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.serial", &entry->serial, NULL);
 	gpm_hal_device_get_string (power->priv->hal, udi, "battery.model", &entry->model, NULL);
