@@ -1,5 +1,12 @@
 2007-03-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-power.c: (battery_key_changed):
+	Merge a modified patch from Peter Jones (thanks!) to properly
+	handle when a battery is removed and inserted when hibernated, or
+	just replaced with really broken ACPI.
+
+2007-03-01  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-power.c: (battery_device_cache_entry_update_all):
 	Merge a patch from Peter Jones to actually get the vendor of the
 	battery. We should have been using battery.vendor and not info.vendor.

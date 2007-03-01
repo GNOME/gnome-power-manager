@@ -337,6 +337,42 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	return TRUE;
 }
 
+static gboolean remove_battery (GpmPower *power, const gchar *udi);
+static gboolean add_battery (GpmPower *power, const gchar *udi);
+
+/**
+ * battery_key_changed:
+ * @power: This power class instance
+ * @udi: The HAL UDI for this device
+ * @key: the new propty value
+ * @oldval: the old property value
+ **/
+static gboolean
+battery_key_changed (GpmPower	 *power,
+		     const gchar *udi,
+		     const gchar *key,
+		     const gchar *oldval)
+{
+	gchar *newval;
+	gboolean ret = TRUE;
+
+	if (oldval == NULL) {
+		return FALSE;
+	}
+
+	/* get the new value */
+	gpm_hal_device_get_string (power->priv->hal, udi, key, &newval, NULL);
+
+	if (newval == NULL) {
+		return FALSE;
+	}
+	if (strcmp (newval, oldval) == 0) {
+		ret = FALSE;
+	}
+	g_free (newval);
+	return ret;
+}
+
 /**
  * battery_device_cache_entry_update_key:
  * @power: This power class instance
@@ -390,6 +426,21 @@ battery_device_cache_entry_update_key (GpmPower	      *power,
 
 	} else if (strcmp (key, "battery.voltage.current") == 0) {
 		gpm_hal_device_get_uint (power->priv->hal, udi, key, &status->voltage, NULL);
+
+	} else if (strcmp (key, "battery.model") == 0 ||
+		   strcmp (key, "battery.serial") == 0 ||
+		   strcmp (key, "battery.vendor") == 0 ||
+		   strcmp (key, "info.product") == 0) {
+		if (battery_key_changed (power, udi, "info.product", entry->product) ||
+		    battery_key_changed (power, udi, "battery.vendor", entry->vendor) ||
+		    battery_key_changed (power, udi, "battery.serial", entry->serial) ||
+		    battery_key_changed (power, udi, "battery.model", entry->model)) {
+		    	/* we have to replug the battery to reprobe */
+			gchar *nudi = g_strdup (udi);
+			remove_battery (power, udi);
+			add_battery (power, nudi);
+			g_free (nudi);
+		}
 
 	} else {
 		/* ignore */
@@ -1609,16 +1660,16 @@ battery_removed_cb (GpmBattery  *battery,
  * Called from HAL...
  **/
 static void
-battery_modified_cb (GpmBattery *battery,
-				  const gchar   *udi,
-				  const gchar   *key,
-				  gboolean	 finally,
-				  GpmPower      *power)
+battery_modified_cb (GpmBattery  *battery,
+		     const gchar *udi,
+		     const gchar *key,
+		     gboolean	  finally,
+		     GpmPower    *power)
 {
 	GpmPowerDevice *device_entry;
 	BatteryKindCacheEntry   *type_entry;
 
-	gpm_debug ("Battery Property Modified: %s", udi);
+	gpm_debug ("Battery Property Modified: %s %s", udi, key);
 
 	device_entry = gpm_power_get_device_from_udi (power, udi);
 
