@@ -43,8 +43,8 @@ gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
 	gpm-statistics-core.c				\
-	gpm-info-data.h					\
-	gpm-info-data.c					\
+	gpm-array.h					\
+	gpm-array.c					\
 	gpm-graph-widget.h				\
 	gpm-graph-widget.c				\
 	gpm-marshal.h					\
@@ -53,6 +53,8 @@ gnome_power_statistics_SOURCES =			\
 	gpm-dbus-monitor.c				\
 	gpm-conf.h					\
 	gpm-conf.c					\
+	gpm-common.h					\
+	gpm-common.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
 	gpm-powermanager.h				\
@@ -183,8 +185,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-stock-icons.c				\
 	gpm-info.h					\
 	gpm-info.c					\
-	gpm-info-data.h					\
-	gpm-info-data.c					\
+	gpm-array.h					\
+	gpm-array.c					\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
 	gpm-graph-widget.h				\

@@ -87,6 +87,7 @@ test_gpm_array (GpmPowermanager *powermanager)
 	gboolean ret;
 	guint size;
 	GpmArrayPoint *point;
+	gint svalue;
 	test_type = "GpmArray    ";
 	guint i;
 
@@ -221,6 +222,18 @@ test_gpm_array (GpmPowermanager *powermanager)
 		test_success ("get size passed");
 	} else {
 		test_failed ("get size failed: %i", size);
+	}
+
+	/************************************************************/
+	test_title ("interpolate data");
+	gpm_array_clear (array);
+	gpm_array_add (array, 1, 2, 0);
+	gpm_array_add (array, 3, 9, 0);
+	svalue = gpm_array_interpolate (array, 2);
+	if (svalue == 6) {
+		test_success ("interpolated");
+	} else {
+		test_failed ("interpolated incorrect: %i", svalue);
 	}
 
 	g_object_unref (array);

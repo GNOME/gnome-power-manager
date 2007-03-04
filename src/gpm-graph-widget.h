@@ -23,6 +23,7 @@
 #define __GPM_GRAPH_WIDGET_H__
 
 #include <gtk/gtk.h>
+#include "gpm-array.h"
 
 G_BEGIN_DECLS
 
@@ -112,10 +113,10 @@ void		 gpm_graph_widget_enable_axis_labels	(GpmGraphWidget	*graph,
 void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
 							 gboolean	 inv);
 void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
-							 GList		*list,
+							 GpmArray	*array,
 							 guint		 id);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
-							 GList		*list);
+							 GpmArray	*array);
 void		 gpm_graph_widget_set_title		(GpmGraphWidget	*graph,
 							 const gchar	*title);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,

@@ -27,7 +27,7 @@
 #include <string.h>
 
 #include "gpm-graph-widget.h"
-#include "gpm-info-data.h"
+#include "gpm-array.h"
 #include "gpm-debug.h"
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
@@ -68,7 +68,7 @@ struct GpmGraphWidgetPrivate
 	cairo_font_options_t	*options;
 
 	GPtrArray		*data_list;
-	GList			*events;
+	GpmArray		*events;
 };
 
 static gboolean gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event);
@@ -371,10 +371,6 @@ gpm_graph_widget_finalize (GObject *object)
 	g_ptr_array_free (graph->priv->data_list, FALSE);
 
 	g_free (graph->priv->title);
-
-	if (graph->priv->events) {
-		g_list_free (graph->priv->events);
-	}
 }
 
 /**
@@ -415,19 +411,25 @@ gpm_graph_widget_set_invert_y (GpmGraphWidget *graph, gboolean inv)
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list, guint id)
+gpm_graph_widget_set_data (GpmGraphWidget *graph, GpmArray *array, guint id)
 {
+	g_return_if_fail (array != NULL);
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
+	if (gpm_array_get_size (array) == 0) {
+		gpm_warning ("Trying to assign a zero length array");
+		return;
+	}
+
 	/* fresh list */
 	if (graph->priv->data_list->len == 0 || graph->priv->data_list->len < id + 1) {
-		g_ptr_array_add (graph->priv->data_list, (gpointer) list);
+		g_ptr_array_add (graph->priv->data_list, (gpointer) array);
 	} else {
 		/* remove existing, and add new */
 		gpm_debug ("Re-assigning dataset");
 		g_ptr_array_remove_index (graph->priv->data_list, id);
-		g_ptr_array_add (graph->priv->data_list, (gpointer) list);
+		g_ptr_array_add (graph->priv->data_list, (gpointer) array);
 	}
 
 }
@@ -440,15 +442,12 @@ gpm_graph_widget_set_data (GpmGraphWidget *graph, GList *list, guint id)
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_widget_set_events (GpmGraphWidget *graph, GList *list)
+gpm_graph_widget_set_events (GpmGraphWidget *graph, GpmArray *array)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
-	if (graph->priv->events) {
-		g_list_free (graph->priv->events);
-	}
-	graph->priv->events = list;
+	graph->priv->events = array;
 }
 
 /**
@@ -643,10 +642,11 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	gint biggest_y = 0;
 	gint smallest_x = 999999;
 	gint smallest_y = 999999;
-	GpmInfoDataPoint *new = NULL;
-	GList *l;
-	GList *list;
+	GpmArray *array;
+	GpmArrayPoint *point;
 	guint i;
+	guint j;
+	guint length;
 
 	if (graph->priv->data_list->len == 0) {
 		gpm_debug ("no data");
@@ -659,20 +659,21 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 
 	/* get the range for all graphs */
 	for (i=0; i<graph->priv->data_list->len; i++) {
-		list = (GList *) g_ptr_array_index (graph->priv->data_list, i);
-		for (l=list; l != NULL; l=l->next) {
-			new = (GpmInfoDataPoint *) l->data;
-			if (new->time > biggest_x) {
-				biggest_x = new->time;
+		array = g_ptr_array_index (graph->priv->data_list, i);
+		length = gpm_array_get_size (array);
+		for (j=0; j < length; j++) {
+			point = gpm_array_get (array, j);
+			if (point->x > biggest_x) {
+				biggest_x = point->x;
 			}
-			if (new->value > biggest_y) {
-				biggest_y = new->value;
+			if (point->y > biggest_y) {
+				biggest_y = point->y;
 			}
-			if (new->time < smallest_x) {
-				smallest_x = new->time;
+			if (point->x < smallest_x) {
+				smallest_x = point->x;
 			}
-			if (new->value < smallest_y) {
-				smallest_y = new->value;
+			if (point->y < smallest_y) {
+				smallest_y = point->y;
 			}
 		}
 	}
@@ -706,7 +707,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			graph->priv->stop_x = 1000 + smallest_x;
 		}
 	} else {
-		graph->priv->start_x = smallest_x;
+		graph->priv->start_x = 0;
 		graph->priv->stop_x = biggest_x;
 	}
 
@@ -736,7 +737,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			graph->priv->stop_y = 1000;
 		}
 	} else {
-		graph->priv->start_y = smallest_y;
+		graph->priv->start_y = 0;
 		graph->priv->stop_y = biggest_y;
 	}
 	gpm_debug ("Processed range is %i<x<%i, %i<y<%i",
@@ -787,6 +788,7 @@ gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
 	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREY) {
 		cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
 	} else {
+		cairo_set_source_rgb (cr, 0, 1, 0);
 		gpm_warning ("Unknown colour: %i", colour);
 	}
 }
@@ -912,55 +914,6 @@ gpm_graph_widget_get_pos_on_graph (GpmGraphWidget *graph, gfloat data_x, gfloat 
 }
 
 /**
- * gpm_graph_widget_interpolate_value:
- * @this: The first data point
- * @last: The other data point
- * @xintersect: The x value (i.e. the x we provide)
- * Return value: The interpolated value, or 0 if invalid
- *
- * Interpolates onto the graph in the y direction. If only supplied one point
- * then don't interpolate.
- **/
-static gint
-gpm_graph_widget_interpolate_value (GpmInfoDataPoint *this,
-			     GpmInfoDataPoint *last,
-			     gint xintersect)
-{
-	gint dy, dx;
-	gfloat m;
-	gint c;
-	gint y;
-
-	/* we have no points */
-	if (! this) {
-		return 0;
-	}
-
-	/* we only have one point, don't interpolate */
-	if (! last) {
-		return this->value;
-	}
-
-	/* gradient */
-	dx = this->time - last->time;
-	dy = this->value - last->value;
-	m = (gfloat) dy / (gfloat) dx;
-
-	/* y-intersect */
-	c = (-m * (gfloat) this->time) + this->value;
-
-	/* y = mx + c */
-	y = (m * (gfloat) xintersect) + c;
-
-	/* limit the y intersect to the last height, so we don't extend the
-	 * graph into the unknown */
-	if (y > this->value) {
-		y = this->value;
-	}
-	return y;
-}
-
-/**
  * gpm_graph_widget_draw_line:
  * @graph: This class instance
  * @cr: Cairo drawing context
@@ -973,10 +926,10 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 {
 	gfloat oldx, oldy;
 	gfloat newx, newy;
-	GpmInfoDataPoint *eventdata;
-	GpmGraphWidgetKeyItem *keyitem;
-	GList *l;
-	GpmInfoDataPoint *new;
+	guint j;
+	guint length;
+	GpmArray *array;
+	GpmArrayPoint *point;
 	guint i;
 
 	if (graph->priv->data_list->len == 0) {
@@ -985,22 +938,27 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	}
 	cairo_save (cr);
 
-	/* do the lines on the graphs */
+	/* do all the lines on the graphs */
 	for (i=0; i<graph->priv->data_list->len; i++) {
 		gpm_debug ("drawing line %i", i);
-		l = (GList *) g_ptr_array_index (graph->priv->data_list, i);
-		new = (GpmInfoDataPoint *) l->data;
+		array = g_ptr_array_index (graph->priv->data_list, i);
+
+		/* get the very first point so we can work out the old */
+		point = gpm_array_get (array, 0);
 		oldx = 0;
 		oldy = 0;
-		gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
-		for (l=l->next; l != NULL; l=l->next) {
-			new = (GpmInfoDataPoint *) l->data;
-			/* do line */
-			gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
+		gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &oldx, &oldy);
+
+		length = gpm_array_get_size (array);
+		for (j=1; j < length; j++) {
+			point = gpm_array_get (array, j);
+
+			/* draw line */
+			gpm_graph_widget_get_pos_on_graph (graph, point->x, point->y, &newx, &newy);
 			cairo_move_to (cr, oldx, oldy);
 			cairo_line_to (cr, newx, newy);
 			cairo_set_line_width (cr, 1.5);
-			gpm_graph_widget_set_colour (cr, new->colour);
+			gpm_graph_widget_set_colour (cr, point->data);
 			cairo_stroke (cr);
 			/* save old */
 			oldx = newx;
@@ -1008,54 +966,63 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		}
 	}
 
-	/* only do the events sometimes */
-	if (graph->priv->use_events) {
-		gint previous_point = 0;
-		gint prevpos = -1;
-		GpmInfoDataPoint *point_this = NULL;
-		GpmInfoDataPoint *point_last = NULL;
+	cairo_restore (cr);
+}
 
-		/* we track the list so we can put the point on the line */
-		l = (GList *) g_ptr_array_index (graph->priv->data_list, 0);
-		GList *l2 = l;
-		if (l2) {
-			point_this = (GpmInfoDataPoint *) l2->data;
-			l2 = l2->next;
-		}
-		for (l=graph->priv->events; l != NULL; l=l->next) {
-			gint pos;
+/**
+ * gpm_graph_widget_draw_event_dots:
+ * @graph: This class instance
+ * @cr: Cairo drawing context
+ *
+ * Draw the data line onto the graph with a big green line. We should already
+ * limit the data to < ~100 values, so this shouldn't take too long.
+ **/
+static void
+gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
+{
+	gfloat newx, newy;
+	GpmGraphWidgetKeyItem *keyitem;
+	guint i;
+	guint length;
+	GpmArray *array = NULL;
+	GpmArrayPoint *point;
+	gint dot;
+	guint previous_point = 0;
+	gint prevpos = -1;
 
-			eventdata = (GpmInfoDataPoint *) l->data;
-			/* If we have valid list data, go through the list data
-			   until we get a data point time value greater than the
-			   event we have. */
-			while (l2 && eventdata->time > point_this->time) {
-				point_last = point_this;
-				point_this = (GpmInfoDataPoint *) l2->data;
-				l2 = l2->next;
-			}
-			/* Interpolate in the y direction with the two
-			   previous points. This should be 100% accurate */
-			pos = gpm_graph_widget_interpolate_value (point_this,
-							       point_last,
-							       eventdata->time);
-			gpm_graph_widget_get_pos_on_graph (graph, eventdata->time,
-						    pos, &newx, &newy);
-			/* don't overlay the points, stack vertically */
-			if (abs (prevpos - newx) < 8) {
-				previous_point++;
-			} else {
-				previous_point = 0;
-			}
-			newy -= (8 * previous_point);
-			/* only do the event dot, if it's going to fit on the graph */
-			if (eventdata->time > graph->priv->start_x) {
-				keyitem = gpm_graph_widget_key_find_id (graph, eventdata->value);
-				gpm_graph_widget_draw_dot (cr, newx, newy,
-							   keyitem->colour, keyitem->shape);
-			}
-			prevpos = newx;
+	cairo_save (cr);
+
+	length = gpm_array_get_size (graph->priv->events);
+
+	/* always use the first data array */
+	if (graph->priv->data_list->len > 0) {
+		array = g_ptr_array_index (graph->priv->data_list, 0);
+	}
+
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (graph->priv->events, i);
+		/* try to position the point on the line, or at zero if there is no line */
+		if (array == NULL) {
+			dot = 0;
+		} else {
+			dot = gpm_array_interpolate (array, point->x);
 		}
+		gpm_graph_widget_get_pos_on_graph (graph, point->x, dot, &newx, &newy);
+
+		/* don't overlay the points, stack vertically */
+		if (abs (newx - prevpos) < 10) {
+			previous_point++;
+		} else {
+			previous_point = 0;
+		}
+		newy -= (8 * previous_point);
+
+		/* only do the event dot, if it's going to be valid on the graph */
+		if (point->x > graph->priv->start_x && newy > graph->priv->box_y) {
+			keyitem = gpm_graph_widget_key_find_id (graph, point->y);
+			gpm_graph_widget_draw_dot (cr, newx, newy, keyitem->colour, keyitem->shape);
+		}
+		prevpos = newx;
 	}
 
 	cairo_restore (cr);
@@ -1094,11 +1061,14 @@ gpm_graph_widget_draw_bounding_box (cairo_t *cr,
 static gboolean
 gpm_graph_widget_have_key_id (GpmGraphWidget *graph, guint id)
 {
-	GpmInfoDataPoint *eventdata;
-	GList *l;
-	for (l=graph->priv->events; l != NULL; l=l->next) {
-		eventdata = (GpmInfoDataPoint *) l->data;
-		if (eventdata->value == id) {
+	guint i;
+	guint length;
+	GpmArrayPoint *point;
+
+	length = gpm_array_get_size (graph->priv->events);
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (graph->priv->events, i);
+		if (point->y == id) {
 			return TRUE;
 		}
 	}
@@ -1326,6 +1296,10 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	}
 
 	gpm_graph_widget_draw_line (graph, cr);
+
+	if (graph->priv->use_events) {
+		gpm_graph_widget_draw_event_dots (graph, cr);
+	}
 
 	if (graph->priv->use_legend) {
 		gpm_graph_widget_draw_legend (graph, legend_x, legend_y, legend_width, legend_height);

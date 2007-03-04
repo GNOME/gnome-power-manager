@@ -1,5 +1,21 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-graph-widget.c: (gpm_graph_widget_finalize),
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c: (gpm_statistics_get_data_types),
+	* src/gpm-statistics-core.c: (gpm_statistics_get_events),
+	Remove gpm-info-data.* and use gpm-array.* instead.
+
+	* test/gpm-self-test.c: (test_gpm_array):
+	Add another test for the interpolation.
+
+	* src/gpm-refcount.c: (gpm_refcount_finalize):
+	Whitespace fixes.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-array.c:
 	* src/gpm-array.h:
 	Add a supercool, superfast (tested) smart array class with some nifty

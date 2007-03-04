@@ -38,7 +38,7 @@
 #include "gpm-dpms.h"
 #include "gpm-hal.h"
 #include "gpm-info.h"
-#include "gpm-info-data.h"
+#include "gpm-array.h"
 #include "gpm-power.h"
 #include "gpm-stock-icons.h"
 #include "gpm-idle.h"
@@ -66,11 +66,11 @@ struct GpmInfoPrivate
 	GpmIdle			*idle;
 	GpmPower		*power;
 
-	GpmInfoData		*events;
-	GpmInfoData		*rate_data;
-	GpmInfoData		*time_data;
-	GpmInfoData		*percentage_data;
-	GpmInfoData		*voltage_data;
+	GpmArray		*events;
+	GpmArray		*rate_data;
+	GpmArray		*time_data;
+	GpmArray		*percentage_data;
+	GpmArray		*voltage_data;
 
 	time_t			 start_time;
 	gboolean		 is_laptop;
@@ -152,27 +152,22 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 			       GError  **error)
 {
 	GList *list = NULL;
-	GList *data;
 
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
 	g_return_val_if_fail (types != NULL, FALSE);
 
 	/* only return the type if we have sufficient data */
-	data = gpm_info_data_get_list (info->priv->rate_data);
-	if (g_list_length (data) > 2) {
+	if (gpm_array_get_size (info->priv->rate_data) > 2) {
 		list = g_list_append (list, "power");
 	}
-	data = gpm_info_data_get_list (info->priv->time_data);
-	if (g_list_length (data) > 2) {
+	if (gpm_array_get_size (info->priv->time_data) > 2) {
 		list = g_list_append (list, "time");
 	}
-	data = gpm_info_data_get_list (info->priv->percentage_data);
-	if (g_list_length (data) > 2) {
+	if (gpm_array_get_size (info->priv->percentage_data) > 2) {
 		list = g_list_append (list, "charge");
 	}
-	data = gpm_info_data_get_list (info->priv->voltage_data);
-	if (g_list_length (data) > 2) {
+	if (gpm_array_get_size (info->priv->voltage_data) > 2) {
 		list = g_list_append (list, "voltage");
 	}
 
@@ -245,27 +240,27 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 			      GPtrArray **array,
 			      GError    **error)
 {
-	GList *events, *l;
-	GpmInfoDataPoint *new;
+	GpmArrayPoint *point;
+	GpmArray *events;
+	gint i;
 	GValue *value;
+	guint length;
 
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
-	g_return_val_if_fail (array != NULL, FALSE);
 
-	events = gpm_info_data_get_list (info->priv->events);
-	*array = g_ptr_array_sized_new (g_list_length (events));
-
-	for (l=events; l != NULL; l=l->next) {
-		new = (GpmInfoDataPoint *) l->data;
+	events = info->priv->events;
+	length = gpm_array_get_size (events);
+	*array = g_ptr_array_sized_new (length);
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (events, i);
 		value = g_new0 (GValue, 1);
 		g_value_init (value, GPM_DBUS_STRUCT_INT_INT);
 		g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_INT));
-		dbus_g_type_struct_set (value, 0, new->time, 1, new->value, -1);
+		dbus_g_type_struct_set (value, 0, point->x, 1, point->y, -1);
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
-	g_list_free (events);
 
 	return TRUE;
 }
@@ -285,14 +280,15 @@ gpm_statistics_get_data (GpmInfo     *info,
 			 GPtrArray  **array,
 			 GError	    **error)
 {
-	GList *events, *l;
-	GpmInfoDataPoint *new;
 	GValue *value;
+	GpmArray *events;
+	GpmArrayPoint *point;
+	gint i;
+	guint length;
 
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
 	g_return_val_if_fail (type != NULL, FALSE);
-	g_return_val_if_fail (array != NULL, FALSE);
 
 	if (info->priv->is_laptop == FALSE) {
 		gpm_warning ("Data not available as not a laptop");
@@ -303,13 +299,13 @@ gpm_statistics_get_data (GpmInfo     *info,
 	}
 
 	if (strcmp (type, "power") == 0) {
-		events = gpm_info_data_get_list (info->priv->rate_data);
+		events = info->priv->rate_data;
 	} else if (strcmp (type, "time") == 0) {
-		events = gpm_info_data_get_list (info->priv->time_data);
+		events = info->priv->time_data;
 	} else if (strcmp (type, "charge") == 0) {
-		events = gpm_info_data_get_list (info->priv->percentage_data);
+		events = info->priv->percentage_data;
 	} else if (strcmp (type, "voltage") == 0) {
-		events = gpm_info_data_get_list (info->priv->voltage_data);
+		events = info->priv->voltage_data;
 	} else {
 		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
@@ -327,19 +323,17 @@ gpm_statistics_get_data (GpmInfo     *info,
 	}
 
 	/* TODO: process seconds */
-	*array = g_ptr_array_sized_new (g_list_length (events));
-
-	for (l=events; l != NULL; l=l->next) {
-		new = (GpmInfoDataPoint *) l->data;
+	length = gpm_array_get_size (events);
+	*array = g_ptr_array_sized_new (length);
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (events, i);
 		value = g_new0 (GValue, 1);
 		g_value_init (value, GPM_DBUS_STRUCT_INT_INT_INT);
 		g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_INT_INT));
-		dbus_g_type_struct_set (value, 0, new->time, 1, new->value, 2, new->colour, -1);
+		dbus_g_type_struct_set (value, 0, point->x, 1, point->y, 2, point->data, -1);
 		g_ptr_array_add (*array, g_value_get_boxed (value));
 		g_free (value);
 	}
-
-	g_list_free (events);
 	return TRUE;
 }
 
@@ -360,9 +354,9 @@ gpm_info_event_log (GpmInfo	       *info,
 	g_return_if_fail (GPM_IS_INFO (info));
 	gpm_debug ("Adding %i to the event log", event);
 
-	gpm_info_data_add_always (info->priv->events,
-				  time (NULL) - info->priv->start_time,
-				  event, 0, desc);
+	gpm_array_append (info->priv->events,
+			  time (NULL) - info->priv->start_time,
+			  event, 0);
 }
 
 /**
@@ -398,26 +392,22 @@ gpm_info_log_do_poll (gpointer data)
 			colour = GPM_GRAPH_WIDGET_COLOUR_CHARGED;
 		}
 
-		gpm_info_data_add (info->priv->percentage_data,
-				   value_x,
-				   battery_status.percentage_charge, colour);
+		gpm_array_add (info->priv->percentage_data, value_x,
+			       battery_status.percentage_charge, colour);
 
 		/* sanity check to less than 100W */
 		if (battery_status.charge_rate_raw < 100000) {
-			gpm_info_data_add (info->priv->rate_data,
-					   value_x,
-					   battery_status.charge_rate_raw, colour);
+			gpm_array_add (info->priv->rate_data, value_x,
+				       battery_status.charge_rate_raw, colour);
 		}
 
 		/* sanity check to less than 10 hours */
 		if (battery_status.remaining_time < 10*60*60) {
-			gpm_info_data_add (info->priv->time_data,
-					   value_x,
+			gpm_array_add (info->priv->time_data, value_x,
 					   battery_status.remaining_time, colour);
 		}
-		gpm_info_data_add (info->priv->voltage_data,
-				   value_x,
-				   battery_status.voltage, colour);
+		gpm_array_add (info->priv->voltage_data, value_x,
+			       battery_status.voltage, colour);
 	}
 	return TRUE;
 }
@@ -615,12 +605,12 @@ gpm_info_init (GpmInfo *info)
 			  G_CALLBACK (dpms_mode_changed_cb), info);
 
 	/* set to a blank list */
-	info->priv->events = gpm_info_data_new ();
+	info->priv->events = gpm_array_new ();
 	if (info->priv->is_laptop == TRUE) {
-		info->priv->percentage_data = gpm_info_data_new ();
-		info->priv->rate_data = gpm_info_data_new ();
-		info->priv->time_data = gpm_info_data_new ();
-		info->priv->voltage_data = gpm_info_data_new ();
+		info->priv->percentage_data = gpm_array_new ();
+		info->priv->rate_data = gpm_array_new ();
+		info->priv->time_data = gpm_array_new ();
+		info->priv->voltage_data = gpm_array_new ();
 
 		/* set up the timer callback so we can log data */
 		g_timeout_add (GPM_INFO_DATA_POLL * 1000, gpm_info_log_do_poll, info);
@@ -639,11 +629,11 @@ gpm_info_init (GpmInfo *info)
 		gpm_conf_get_uint (conf, GPM_CONF_GRAPH_DATA_MAX_TIME, &max_time);
 		g_object_unref (conf);
 
-		gpm_info_data_set_max_time (info->priv->events, max_time);
-		gpm_info_data_set_max_time (info->priv->percentage_data, max_time);
-		gpm_info_data_set_max_time (info->priv->rate_data, max_time);
-		gpm_info_data_set_max_time (info->priv->time_data, max_time);
-		gpm_info_data_set_max_time (info->priv->voltage_data, max_time);
+		gpm_array_set_max_width (info->priv->events, max_time);
+		gpm_array_set_max_width (info->priv->percentage_data, max_time);
+		gpm_array_set_max_width (info->priv->rate_data, max_time);
+		gpm_array_set_max_width (info->priv->time_data, max_time);
+		gpm_array_set_max_width (info->priv->voltage_data, max_time);
 	}
 }
 

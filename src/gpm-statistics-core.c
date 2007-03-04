@@ -30,6 +30,7 @@
 #include <math.h>
 #include <string.h>
 
+#include "gpm-array.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
@@ -37,7 +38,6 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-info.h"
-#include "gpm-info-data.h"
 #include "gpm-proxy.h"
 #include "gpm-powermanager.h"
 
@@ -64,8 +64,8 @@ struct GpmStatisticsPrivate
 	GtkWidget		*graph_widget;
 	GpmConf			*conf;
 	GpmProxy		*gproxy;
-	GpmInfoData		*events;
-	GpmInfoData		*data;
+	GpmArray		*events;
+	GpmArray		*data;
 	const gchar		*graph_type;
 };
 
@@ -249,7 +249,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	gpm_debug ("events size=%i", ptrarray->len);
 
 	/* clear current events */
-	gpm_info_data_clear (statistics->priv->events);
+	gpm_array_clear (statistics->priv->events);
 
 	for (i=0; i< ptrarray->len; i++) {
 		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
@@ -259,7 +259,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 		gv = g_value_array_get_nth (gva, 1);
 		event = g_value_get_int (gv);
 		g_value_unset (gv);
-		gpm_info_data_add_always (statistics->priv->events, x, event, 0, NULL);
+		gpm_array_append (statistics->priv->events, x, event, 0);
 		g_value_array_free (gva);
 	}
 	g_ptr_array_free (ptrarray, TRUE);
@@ -270,12 +270,9 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 static void
 gpm_statistics_refresh_events (GpmStatistics *statistics)
 {
-	GList *list;
-
 	gpm_statistics_get_events (statistics);
-	list = gpm_info_data_get_list (statistics->priv->events);
-
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list);
+	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
+				     statistics->priv->events);
 }
 
 /**
@@ -469,7 +466,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 	gpm_debug ("size=%i", ptrarray->len);
 
 	/* clear current events */
-	gpm_info_data_clear (statistics->priv->data);
+	gpm_array_clear (statistics->priv->data);
 
 	for (i=0; i< ptrarray->len; i++) {
 		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
@@ -482,7 +479,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 		gv = g_value_array_get_nth (gva, 2);
 		col = g_value_get_int (gv);
 		g_value_unset (gv);
-		gpm_info_data_add_always (statistics->priv->data, x, y, col, NULL);
+		gpm_array_append (statistics->priv->data, x, y, col);
 		g_value_array_free (gva);
 	}
 	g_ptr_array_free (ptrarray, TRUE);
@@ -542,16 +539,13 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 static void
 gpm_statistics_refresh_data (GpmStatistics *statistics)
 {
-	GList *list = NULL;
-
 	/* only get the data for a valid type */
 	if (statistics->priv->graph_type != NULL) {
 		gpm_statistics_get_data_dbus (statistics, statistics->priv->graph_type);
 	}
 
-	list = gpm_info_data_get_list (statistics->priv->data);
-
-	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), list, 0);
+	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
+				   statistics->priv->data, 0);
 
 	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));
 	gtk_widget_show (GTK_WIDGET (statistics->priv->graph_widget));
@@ -656,7 +650,13 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 static gboolean
 gpm_statistics_graph_refresh (gpointer data)
 {
+	GtkWidget *widget;
 	GpmStatistics *statistics = GPM_STATISTICS (data);
+
+	/* we get the data everytime as some data might not be available at program start */
+	widget = glade_xml_get_widget (statistics->priv->glade_xml, "combobox_type");
+	gpm_statistics_populate_graph_types (statistics, widget);
+
 	gpm_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
 	gpm_statistics_refresh_data (statistics);
 	gpm_statistics_refresh_events (statistics);
@@ -710,8 +710,8 @@ gpm_statistics_init (GpmStatistics *statistics)
 	}
 
 	statistics->priv->graph_type = NULL;
-	statistics->priv->events = gpm_info_data_new ();
-	statistics->priv->data = gpm_info_data_new ();
+	statistics->priv->events = gpm_array_new ();
+	statistics->priv->data = gpm_array_new ();
 
 	statistics->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-graph.glade", NULL, NULL);
 
@@ -811,7 +811,6 @@ gpm_statistics_init (GpmStatistics *statistics)
 				  GPM_EVENT_DPMS_OFF,
 				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-
 
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (GTK_WIDGET (widget));
