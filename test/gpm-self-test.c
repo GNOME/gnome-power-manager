@@ -35,12 +35,13 @@
 #include "../src/gpm-debug.h"
 #include "../src/gpm-powermanager.h"
 #include "../src/gpm-proxy.h"
+#include "../src/gpm-array.h"
 
 guint test_total = 0;
 guint test_suc = 0;
 gchar *test_type = NULL;
 
-void
+static void
 test_title (const gchar *format, ...)
 {
 	va_list args;
@@ -52,7 +53,7 @@ test_title (const gchar *format, ...)
 	test_total++;
 }
 
-void
+static void
 test_success (const gchar *format, ...)
 {
 	va_list args;
@@ -68,7 +69,7 @@ test_success (const gchar *format, ...)
 	g_print ("...OK [%s]\n", va_args_buffer);
 }
 
-void
+static void
 test_failed (const gchar *format, ...)
 {
 	va_list args;
@@ -79,7 +80,153 @@ test_failed (const gchar *format, ...)
 	g_print ("...FAILED [%s]\n", va_args_buffer);
 }
 
-void
+static void
+test_gpm_array (GpmPowermanager *powermanager)
+{
+	GpmArray *array;
+	gboolean ret;
+	guint size;
+	GpmArrayPoint *point;
+	test_type = "GpmArray    ";
+	guint i;
+
+	/************************************************************/
+	test_title ("make sure we get a non null array");
+	array = gpm_array_new ();
+	if (array != NULL) {
+		test_success ("got GpmArray");
+	} else {
+		test_failed ("could not get GpmArray");
+	}
+
+	/************** FIXED SIZE TESTS ****************************/
+	test_title ("set fixed size of 10");
+	ret = gpm_array_set_fixed_size (array, 10);
+	if (ret == TRUE) {
+		test_success ("set size");
+	} else {
+		test_failed ("set size failed");
+	}
+
+	/************************************************************/
+	test_title ("get fixed size");
+	size = gpm_array_get_size (array);
+	if (size == 10) {
+		test_success ("get size passed");
+	} else {
+		test_failed ("get size failed");
+	}
+
+	/************************************************************/
+	test_title ("add some data (should fail as fixed size)");
+	ret = gpm_array_add (array, 1, 2, 3);
+	if (ret == FALSE) {
+		test_success ("could not append to fixed size");
+	} else {
+		test_failed ("appended to fixed size array");
+	}
+
+	/************************************************************/
+	test_title ("get valid element (should be zero)");
+	point = gpm_array_get (array, 0);
+	if (point != NULL && point->x == 0 && point->y == 0 && point->data == 0) {
+		test_success ("got blank data");
+	} else {
+		test_failed ("did not get blank data");
+	}
+
+	/************************************************************/
+	test_title ("get out of range element (should fail)");
+	point = gpm_array_get (array, 10);
+	if (point == NULL) {
+		test_success ("got NULL as OOB");
+	} else {
+		test_failed ("did not NULL for OOB");
+	}
+
+	g_object_unref (array);
+	array = gpm_array_new ();
+
+	/************* VARIABLE SIZED TESTS *************************/
+	test_title ("add some data (should pass as variable size)");
+	ret = gpm_array_add (array, 1, 2, 3);
+	if (ret == TRUE) {
+		test_success ("appended to variable size");
+	} else {
+		test_failed ("did not append to variable size array");
+	}
+
+	/************************************************************/
+	test_title ("get variable size");
+	size = gpm_array_get_size (array);
+	if (size == 1) {
+		test_success ("get size passed");
+	} else {
+		test_failed ("get size failed");
+	}
+
+	/************************************************************/
+	test_title ("get out of range element (should fail)");
+	point = gpm_array_get (array, 1);
+	if (point == NULL) {
+		test_success ("got NULL as OOB");
+	} else {
+		test_failed ("did not NULL for OOB");
+	}
+
+	/************************************************************/
+	test_title ("clear array");
+	ret = gpm_array_clear (array);
+	if (ret == TRUE) {
+		test_success ("cleared");
+	} else {
+		test_failed ("did not clear");
+	}
+
+	/************************************************************/
+	test_title ("get cleared size");
+	size = gpm_array_get_size (array);
+	if (size == 0) {
+		test_success ("get size passed");
+	} else {
+		test_failed ("get size failed");
+	}
+
+	/************************************************************/
+	test_title ("save to disk");
+	for (i=0;i<100;i++) {
+		gpm_array_add (array, i, i, i);
+	}
+	ret = gpm_array_save_to_file (array, "/tmp/gpm-self-test.txt");
+	if (ret == TRUE) {
+		test_success ("saved to disk");
+	} else {
+		test_failed ("could not save to disk");
+	}
+
+	/************************************************************/
+	test_title ("load from disk");
+	gpm_array_clear (array);
+	ret = gpm_array_append_from_file (array, "/tmp/gpm-self-test.txt");
+	if (ret == TRUE) {
+		test_success ("loaded from disk");
+	} else {
+		test_failed ("could not load from disk");
+	}
+
+	/************************************************************/
+	test_title ("get file appended size");
+	size = gpm_array_get_size (array);
+	if (size == 99) {
+		test_success ("get size passed");
+	} else {
+		test_failed ("get size failed: %i", size);
+	}
+
+	g_object_unref (array);
+}
+
+static void
 test_hal_power (GpmPowermanager *powermanager)
 {
 	HalGPower *power;
@@ -107,7 +254,7 @@ test_hal_power (GpmPowermanager *powermanager)
 	g_object_unref (power);
 }
 
-void
+static void
 test_hal_manager (GpmPowermanager *powermanager)
 {
 	HalGManager *manager;
@@ -147,7 +294,7 @@ test_hal_manager (GpmPowermanager *powermanager)
 	g_object_unref (manager);
 }
 
-void
+static void
 test_hal_device (GpmPowermanager *powermanager)
 {
 	HalGDevice *device;
@@ -249,8 +396,8 @@ test_hal_device (GpmPowermanager *powermanager)
 	g_object_unref (device);
 }
 
-void
-test_proxy (GpmPowermanager *powermanager)
+static void
+test_gpm_proxy (GpmPowermanager *powermanager)
 {
 	GpmProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
@@ -300,8 +447,8 @@ test_proxy (GpmPowermanager *powermanager)
 	g_object_unref (gproxy);	
 }
 
-void
-test_inhibit (GpmPowermanager *powermanager)
+static void
+test_gpm_inhibit (GpmPowermanager *powermanager)
 {
 	gboolean ret;
 	gboolean valid;
@@ -501,11 +648,12 @@ main (int argc, char **argv)
 		return 1;
 	}
 
+	test_gpm_array (powermanager);
+	test_gpm_inhibit (powermanager);
+	test_gpm_proxy (powermanager);
 	test_hal_device (powermanager);
 	test_hal_manager (powermanager);
 	test_hal_power (powermanager);
-	test_inhibit (powermanager);
-	test_proxy (powermanager);
 
 	g_print ("test passes (%u/%u) : ", test_suc, test_total);
 	if (test_suc == test_total) {

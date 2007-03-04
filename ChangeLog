@@ -1,5 +1,24 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c:
+	* src/gpm-array.h:
+	Add a supercool, superfast (tested) smart array class with some nifty
+	mathematics and convenient processing functions. The idea is to convert
+	the old GpmInfoData code to the new GpmArray code.
+
+	* test/Makefile.am:
+	* test/gpm-self-test.c:
+	Add lots of test cases for the new GpmArray object.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/*:
+	* applets/*:
+	* libhal-glib/*:
+	Remove an insane amount of trailing whitespace.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	Build the library first to fix make distcheck.
 
