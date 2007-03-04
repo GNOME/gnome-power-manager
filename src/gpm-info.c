@@ -224,7 +224,7 @@ gpm_statistics_get_axis_types (GpmInfo *info,
 		*axis_type_y = g_strdup ("voltage");
 		return TRUE;
 	}
-	
+
 	/* not recognised... */
 	*error = g_error_new (gpm_info_error_quark (),
 			      GPM_INFO_ERROR_INVALID_TYPE,
@@ -324,7 +324,7 @@ gpm_statistics_get_data (GpmInfo     *info,
 				      GPM_INFO_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available");
 		return FALSE;
-	}		
+	}
 
 	/* TODO: process seconds */
 	*array = g_ptr_array_sized_new (g_list_length (events));

@@ -72,13 +72,13 @@ gpm_polkit_is_user_privileged (GpmPolkit   *polkit,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	bus_unique_name = dbus_g_proxy_get_bus_name (proxy);
 
 	ret = dbus_g_proxy_call (proxy, "IsUserPrivileged", &error,
-				 G_TYPE_STRING, bus_unique_name, 
-				 G_TYPE_STRING, user, 
+				 G_TYPE_STRING, bus_unique_name,
+				 G_TYPE_STRING, user,
 				 G_TYPE_STRING, privilege,
 				 G_TYPE_STRING, myresource,
 				 G_TYPE_INVALID,

@@ -93,7 +93,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *brightness,
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,

@@ -223,7 +223,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
@@ -378,7 +378,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetDataTypes", &error,
 			         G_TYPE_INVALID,
@@ -441,7 +441,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
@@ -511,7 +511,7 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetAxisTypes", &error,
 			         G_TYPE_STRING, type,
@@ -653,7 +653,7 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), pos);
 }
 
-static gboolean 
+static gboolean
 gpm_statistics_graph_refresh (gpointer data)
 {
 	GpmStatistics *statistics = GPM_STATISTICS (data);
@@ -811,7 +811,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 				  GPM_EVENT_DPMS_OFF,
 				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-				       
+
 
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (GTK_WIDGET (widget));

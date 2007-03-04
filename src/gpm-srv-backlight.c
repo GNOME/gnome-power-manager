@@ -427,7 +427,7 @@ button_pressed_cb (GpmButton        *button,
 		if (srv_backlight->priv->can_dim == TRUE) {
 			gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
 		}
-		gpm_srv_backlight_sync_policy (srv_backlight);	
+		gpm_srv_backlight_sync_policy (srv_backlight);
 	}
 }
 

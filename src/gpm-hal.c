@@ -554,10 +554,10 @@ gpm_hal_device_watch_propery_modified (GpmHal      *hal,
 	}
 	g_hash_table_insert (hal->priv->watch_device_property_modified, g_strdup (udi), proxy);
 
-	struct_type = dbus_g_type_get_struct ("GValueArray", 
-					      G_TYPE_STRING, 
-					      G_TYPE_BOOLEAN, 
-					      G_TYPE_BOOLEAN, 
+	struct_type = dbus_g_type_get_struct ("GValueArray",
+					      G_TYPE_STRING,
+					      G_TYPE_BOOLEAN,
+					      G_TYPE_BOOLEAN,
 					      G_TYPE_INVALID);
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", struct_type);
@@ -922,7 +922,7 @@ gpm_hal_proxy_connect_more (GpmHal *hal)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	/* connect the org.freedesktop.Hal.Manager signals */
 	dbus_g_proxy_add_signal (proxy, "DeviceAdded",
@@ -973,7 +973,7 @@ gpm_hal_proxy_disconnect_more (GpmHal *hal)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	dbus_g_proxy_disconnect_signal (proxy, "DeviceRemoved",
 					G_CALLBACK (gpm_hal_device_removed_cb), hal);
@@ -1293,7 +1293,7 @@ hal_pm_method_void (GpmHal *hal, const gchar* method)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,

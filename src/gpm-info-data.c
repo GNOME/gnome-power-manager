@@ -102,7 +102,7 @@ gpm_info_data_get_list (GpmInfoData *info_data)
 
 	g_return_val_if_fail (info_data != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO_DATA (info_data), FALSE);
-	
+
 	if (info_data->priv->array->len == 0) {
 		gpm_debug ("no items in array!");
 		return NULL;

@@ -239,7 +239,7 @@ hal_device_added_cb (GpmHal        *hal,
 	gboolean is_battery;
 	gboolean dummy;
 
-	/* find out if the new device has capability battery 
+	/* find out if the new device has capability battery
 	   this might fail for CSR as the addon is weird */
 	gpm_hal_device_has_capability (hal, udi, "battery", &is_battery, NULL);
 	/* try harder */

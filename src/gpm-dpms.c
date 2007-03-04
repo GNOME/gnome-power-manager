@@ -508,12 +508,12 @@ gpm_dpms_method_from_string (const gchar *dpms_method)
 {
 	GpmDpmsMethod method;
 
-	/* default to unknown */	
+	/* default to unknown */
 	method = GPM_DPMS_METHOD_UNKNOWN;
 	if (dpms_method == NULL) {
 		return method;
 	}
-	
+
 	/* convert descriptive types to enumerated values */
 	if (strcmp (dpms_method, "default") == 0) {
 		method = GPM_DPMS_METHOD_DEFAULT;

@@ -379,7 +379,7 @@ key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 		return FALSE;
 		break;
 	}
-  
+
 	return FALSE;
 }
 
@@ -405,7 +405,7 @@ scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
 	}
 	return FALSE;
 }
-	
+
 /**
  * create_popup:
  * @applet: Brightness applet instance

@@ -106,7 +106,7 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	g_signal_emit (screensaver, signals [CONNECTION_CHANGED], 0, TRUE);
 
@@ -225,7 +225,7 @@ gpm_screensaver_lock (GpmScreensaver *screensaver)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("doing gnome-screensaver lock");
 	dbus_g_proxy_call_no_reply (proxy, "Lock", G_TYPE_INVALID);
@@ -271,7 +271,7 @@ gpm_screensaver_add_throttle (GpmScreensaver *screensaver,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	/* shouldn't be, but make sure proxy valid */
 	if (proxy == NULL) {
@@ -313,7 +313,7 @@ gpm_screensaver_remove_throttle (GpmScreensaver *screensaver,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("removing throttle: id %u", cookie);
 	ret = dbus_g_proxy_call (proxy, "UnThrottle", &error,
@@ -352,7 +352,7 @@ gpm_screensaver_check_running (GpmScreensaver *screensaver)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetActive", &error,
 				 G_TYPE_INVALID,
@@ -385,7 +385,7 @@ gpm_screensaver_poke (GpmScreensaver *screensaver)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("poke");
 	dbus_g_proxy_call_no_reply (proxy,
@@ -414,7 +414,7 @@ gpm_screensaver_get_idle (GpmScreensaver *screensaver, gint *time_secs)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetActiveTime", &error,
 				 G_TYPE_INVALID,

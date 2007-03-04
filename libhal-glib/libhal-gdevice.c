@@ -389,10 +389,10 @@ hal_gdevice_watch_property_modified (HalGDevice *hal_gdevice)
 
 	hal_gdevice->priv->use_property_modified = TRUE;
 
-	struct_type = dbus_g_type_get_struct ("GValueArray", 
-					      G_TYPE_STRING, 
-					      G_TYPE_BOOLEAN, 
-					      G_TYPE_BOOLEAN, 
+	struct_type = dbus_g_type_get_struct ("GValueArray",
+					      G_TYPE_STRING,
+					      G_TYPE_BOOLEAN,
+					      G_TYPE_BOOLEAN,
 					      G_TYPE_INVALID);
 
 	struct_array_type = dbus_g_type_get_collection ("GPtrArray", struct_type);

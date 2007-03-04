@@ -600,7 +600,7 @@ gpm_control_suspend (GpmControl *control,
 	gboolean nm_sleep;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
-	
+
 	screensaver = gpm_screensaver_new ();
 
 	gpm_control_allowed_suspend (control, &allowed, error);
@@ -668,7 +668,7 @@ gpm_control_hibernate (GpmControl *control,
         gboolean nm_sleep;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
-	
+
 	screensaver = gpm_screensaver_new ();
 
 	gpm_control_allowed_hibernate (control, &allowed, error);

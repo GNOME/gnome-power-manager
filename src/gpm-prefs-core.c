@@ -918,7 +918,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 	gint delay;
 	gint page;
 	gboolean show_cpufreq;
-	
+
 	const gchar  *button_lid_actions[] =
 				{ACTION_NOTHING,
 				 ACTION_BLANK,

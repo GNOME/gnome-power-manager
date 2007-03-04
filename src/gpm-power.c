@@ -836,7 +836,7 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 			condition = _("Poor");
 		}
 		g_string_append_printf (details, "<b>%s</b> %i%% (%s)\n",
-					_("Capacity:"), 
+					_("Capacity:"),
 					status->capacity, condition);
 	}
 	if (device->unit == GPM_POWER_UNIT_MWH) {
@@ -1084,7 +1084,7 @@ battery_kind_cache_update (GpmPower		 *power,
 	type_status->charge_rate_smoothed = gpm_exponential_average (type_status->charge_rate_previous,
 								type_status->charge_rate_raw,
 								power->priv->exp_ave_factor);
-	
+
 	/* If the average is healthy, store it as the previous value */
 	if( type_status->charge_rate_smoothed != 0 ) {
 		type_status->charge_rate_previous = type_status->charge_rate_smoothed;
@@ -1148,7 +1148,7 @@ battery_kind_cache_update (GpmPower		 *power,
 		} else {
 			type_status->is_charging = FALSE;
 			type_status->is_discharging = TRUE;
-		}		
+		}
 	}
 
 	/* We only do the "better" remaining time algorithm if the battery has rate,

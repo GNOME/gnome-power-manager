@@ -215,7 +215,7 @@ gpm_refcount_finalize (GObject *object)
 	refcount = GPM_REFCOUNT (object);
 	refcount->priv = GPM_REFCOUNT_GET_PRIVATE (refcount);
 	/* emit signal ? */
-	
+
 }
 
 /**

@@ -74,7 +74,7 @@ gpm_button_filter_x_events (GdkXEvent *xevent,
 
 	keycode = xev->xkey.keycode;
 	state = xev->xkey.state;
-	
+
 	if (xev->type != KeyPress) {
 		hashkey = g_strdup_printf ("key_%x_%x", state, keycode);
 
@@ -202,7 +202,7 @@ gpm_button_button_key (GpmButton   *button,
 	if (ret == FALSE) {
 		gpm_warning ("Failed to grab %s", keystr);
 		return FALSE;
-	}	
+	}
 
 	/* add to hash table */
 	g_hash_table_insert (button->priv->hash_to_hal, key, (gpointer) hal_key);

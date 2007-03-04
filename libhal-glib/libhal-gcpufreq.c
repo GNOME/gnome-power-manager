@@ -144,7 +144,7 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "SetCPUFreqPerformance", &error,
 				 G_TYPE_INT, performance,
@@ -189,7 +189,7 @@ hal_gcpufreq_set_governor (HalGCpufreq    *cpufreq,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing SetCPUFreqGovernor (%s)", governor);
 	ret = dbus_g_proxy_call (proxy, "SetCPUFreqGovernor", &error,
@@ -238,7 +238,7 @@ hal_gcpufreq_get_governors (HalGCpufreq     *cpufreq,
 		gpm_warning ("not connected");
 		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing GetCPUFreqAvailableGovernors");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqAvailableGovernors", &error,
@@ -337,7 +337,7 @@ hal_gcpufreq_get_consider_nice (HalGCpufreq *cpufreq,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing GetCPUFreqConsiderNice");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqConsiderNice", &error,
@@ -392,7 +392,7 @@ hal_gcpufreq_get_performance (HalGCpufreq *cpufreq,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing GetCPUFreqPerformance");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqPerformance", &error,
@@ -442,7 +442,7 @@ hal_gcpufreq_get_governor (HalGCpufreq     *cpufreq,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing GetCPUFreqGovernor");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqGovernor", &error,
@@ -504,7 +504,7 @@ hal_gcpufreq_set_consider_nice (HalGCpufreq *cpufreq,
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	gpm_debug ("Doing SetCPUFreqConsiderNice (%i)", consider_nice);
 	ret = dbus_g_proxy_call (proxy, "SetCPUFreqConsiderNice", &error,

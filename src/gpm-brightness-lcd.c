@@ -96,7 +96,7 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
@@ -146,7 +146,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
-	}	
+	}
 
 	if (brightness_level_hw < 0 ||
 	    brightness_level_hw > brightness->priv->levels - 1) {

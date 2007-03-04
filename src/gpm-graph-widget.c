@@ -163,7 +163,7 @@ gpm_graph_widget_string_to_axis_type (const gchar *type)
 	} else if (strcmp (type, "voltage") == 0) {
 		ret = GPM_GRAPH_WIDGET_TYPE_VOLTAGE;
 	}
-	
+
 	return ret;
 }
 
@@ -674,7 +674,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 			if (new->value < smallest_y) {
 				smallest_y = new->value;
 			}
-		}		
+		}
 	}
 	gpm_debug ("Data range is %i<x<%i, %i<y<%i", smallest_x, biggest_x, smallest_y, biggest_y);
 

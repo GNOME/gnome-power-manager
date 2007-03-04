@@ -924,7 +924,7 @@ battery_status_changed_primary (GpmManager     *manager,
 	 * percentage charge method, as the icon must disappear when this
 	 * notification is shown (if we set to the display policy "charging")
 	 * and also the fact that some ACPI batteries don't make it to 100% */
-	if (manager->priv->done_notify_fully_charged == FALSE && 
+	if (manager->priv->done_notify_fully_charged == FALSE &&
 	    gpm_power_battery_is_charged (battery_status)) {
 
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_BATTCHARGED, &show_notify);
@@ -1458,7 +1458,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
  * Called when we are exiting. We should remove the errors if any
  * exist so we don't get them again on next boot.
  **/
-static void 
+static void
 gpm_manager_at_exit (void)
 {
 	/* we can't use manager as g_atexit has no userdata */

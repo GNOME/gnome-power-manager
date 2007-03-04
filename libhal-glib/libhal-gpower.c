@@ -303,7 +303,7 @@ hal_gpower_pm_method_void (HalGPower *hal_gpower, const gchar *method)
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("not connected");
 		return FALSE;
-	}	
+	}
 
 	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,

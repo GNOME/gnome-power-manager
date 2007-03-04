@@ -227,7 +227,7 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 
 		/* we want state changes */
 		g_signal_connect (ac_adapter->priv->hal, "property-modified",
-				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);		
+				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);
 	} else {
 		/* no ac-adapter class support */
 		ac_adapter->priv->has_hardware = FALSE;
