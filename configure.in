@@ -1,6 +1,6 @@
 AC_PREREQ(2.52)
 
-AC_INIT(gnome-power-manager, 2.17.92)
+AC_INIT(gnome-power-manager, 2.19.1)
 AC_CONFIG_SRCDIR(src)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
 AM_CONFIG_HEADER(config.h)
@@ -518,12 +518,14 @@ src/dbus/Makefile
 applets/Makefile
 applets/brightness/Makefile
 applets/inhibit/Makefile
+libhal-glib/Makefile
 docs/Makefile
 docs/gnome-power-manager.xml
 man/Makefile
 help/Makefile
 po/Makefile.in
 tools/Makefile
+test/Makefile
 data/Makefile
 data/sounds/Makefile
 data/icons/Makefile

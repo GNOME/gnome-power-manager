@@ -27,10 +27,10 @@
 #include <libgnomeui/gnome-ui-init.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-common.h"
-#include "gpm-debug.h"
-#include "gpm-powermanager.h"
-#include "gpm-proxy.h"
+#include "../src/gpm-common.h"
+#include "../src/gpm-debug.h"
+#include "../src/gpm-powermanager.h"
+#include "../src/gpm-proxy.h"
 
 guint test_total = 0;
 guint test_suc = 0;

@@ -1,4 +1,13 @@
-SUBDIRS = src po docs man data help tools
+SUBDIRS =						\
+	src						\
+	po						\
+	docs						\
+	man						\
+	data						\
+	help						\
+	test						\
+	libhal-glib					\
+	tools
 
 if HAVE_APPLETS
 SUBDIRS += applets

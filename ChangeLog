@@ -1,5 +1,40 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* configure.in:
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-inhibit-test.c:
+	* src/gpm-self-test.c:
+	* test/Makefile.am:
+	* test/gpm-self-test.c:
+	Move test files to thier own directory.
+
+	* docs/dbus-interface.html:
+	* docs/faq.html:
+	* docs/icon-scheme.html:
+	* docs/index.html:
+	* docs/sleep-names.html:
+	Regenerate with new versions.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
+	* Makefile.am:
+	* configure.in:
+	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_string_to_enum),
+	* libhal-glib/libhal-gcpufreq.h:
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_set_udi),
+	* libhal-glib/libhal-gdevice.h:
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_is_running),
+	* libhal-glib/libhal-gmanager.h:
+	* libhal-glib/libhal-gpower.c: (hal_gpower_class_init),
+	* libhal-glib/libhal-gpower.h:
+	* libhal-glib/libhal-marshal.list:
+	Add a really simple libhal glib binding to greatly simplify the
+	HAL access in gnome-power-manager.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/massif-gpm.sh:
 	* src/run-gpm.sh:
 	Add the profile script, and adjust the run tool to make critical
