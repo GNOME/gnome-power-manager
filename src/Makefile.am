@@ -24,8 +24,15 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
+	-I$(top_srcdir) -I$(top_srcdir)/libhal-glib	\
 	$(NULL)
 
+LIBHAL_LIBS =						\
+	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
+	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
+	$(top_builddir)/libhal-glib/libhal-gcpufreq.la	\
+	$(top_builddir)/libhal-glib/libhal-gpower.la
+ 
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
@@ -99,6 +106,7 @@ gnome_power_preferences_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(LIBHAL_LIBS)					\
 	$(NULL)
 
 if HAVE_GTKUNIQUE
@@ -191,6 +199,7 @@ gnome_power_manager_LDADD =				\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
+	$(LIBHAL_LIBS)					\
 	$(NULL)
 
 if HAVE_LIBNOTIFY

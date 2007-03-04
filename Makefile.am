@@ -1,4 +1,5 @@
 SUBDIRS =						\
+	libhal-glib					\
 	src						\
 	po						\
 	docs						\
@@ -6,7 +7,6 @@ SUBDIRS =						\
 	data						\
 	help						\
 	test						\
-	libhal-glib					\
 	tools
 
 if HAVE_APPLETS

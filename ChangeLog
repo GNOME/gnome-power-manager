@@ -1,5 +1,13 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	Build the library first to fix make distcheck.
+
+	* src/Makefile.am:
+	Add the libhal-glib paths. Nothing uses these yet.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/Makefile.am:
 	Add file that missed the import.
 
