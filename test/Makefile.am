@@ -17,6 +17,11 @@ INCLUDES =						\
 	-I$(top_srcdir) -I$(top_srcdir)/libhal-glib	\
 	$(NULL)
 
+LIBHAL_LIBS =						\
+	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
+	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
+	$(top_builddir)/libhal-glib/libhal-gpower.la
+
 noinst_PROGRAMS =					\
 	gnome-power-inhibit-test			\
 	gnome-power-self-test				\

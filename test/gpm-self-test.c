@@ -27,6 +27,10 @@
 #include <libgnomeui/gnome-ui-init.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gpower.h>
+#include <libhal-gdevice.h>
+#include <libhal-gmanager.h>
+
 #include "../src/gpm-common.h"
 #include "../src/gpm-debug.h"
 #include "../src/gpm-powermanager.h"
@@ -76,12 +80,182 @@ test_failed (const gchar *format, ...)
 }
 
 void
+test_hal_power (GpmPowermanager *powermanager)
+{
+	HalGPower *power;
+	gboolean ret;
+	test_type = "HalGPower   ";
+
+	/************************************************************/
+	test_title ("make sure we get a non null device");
+	power = hal_gpower_new ();
+	if (power != NULL) {
+		test_success ("got HalGPower");
+	} else {
+		test_failed ("could not get HalGPower");
+	}
+
+	/************************************************************/
+	test_title ("make sure we have pm support");
+	ret = hal_gpower_has_support (power);
+	if (ret == TRUE) {
+		test_success ("has pm support");
+	} else {
+		test_failed ("does not have pm support");
+	}
+
+	g_object_unref (power);
+}
+
+void
+test_hal_manager (GpmPowermanager *powermanager)
+{
+	HalGManager *manager;
+	gboolean ret;
+	test_type = "HalGManager ";
+
+	/************************************************************/
+	test_title ("make sure we get a non null device");
+	manager = hal_gmanager_new ();
+	if (manager != NULL) {
+		test_success ("got HalGManager");
+	} else {
+		test_failed ("could not get HalGManager");
+	}
+
+	/************************************************************/
+	test_title ("check if we are a laptop");
+	ret = hal_gmanager_is_laptop (manager);
+	if (ret == TRUE) {
+		test_success ("identified as a laptop");
+	} else {
+		test_failed ("not identified as a laptop");
+	}
+
+
+	/************************************************************/
+	gchar **value;
+	test_title ("search for battery devices");
+	ret = hal_gmanager_find_capability (manager, "battery", &value, NULL);
+	if (ret == TRUE && value != NULL && value[0] != NULL) {
+		test_success ("found battery device");
+	} else {
+		test_failed ("did not find battery device");
+	}
+	hal_gmanager_free_capability (value);
+
+	g_object_unref (manager);
+}
+
+void
+test_hal_device (GpmPowermanager *powermanager)
+{
+	HalGDevice *device;
+	const char *udi;
+	char *retstr;
+	gboolean ret;
+	test_type = "HalGDevice  ";
+
+	/************************************************************/
+	test_title ("make sure we get a non null device");
+	device = hal_gdevice_new ();
+	if (device != NULL) {
+		test_success ("got HalGDevice");
+	} else {
+		test_failed ("could not get HalGDevice");
+	}
+
+	/************************************************************/
+	test_title ("make sure we get a null UDI");
+	udi = hal_gdevice_get_udi (device);
+	if (udi == NULL) {
+		test_success ("got NULL UDI");
+	} else {
+		test_failed ("got non-null UDI: %s", udi);
+	}
+
+	/************************************************************/
+	test_title ("make sure we can set a UDI");
+	ret = hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
+	if (ret == TRUE) {
+		test_success ("set UDI");
+	} else {
+		test_failed ("could not set UDI");
+	}
+
+	/************************************************************/
+	test_title ("make sure we can get the UDI");
+	udi = hal_gdevice_get_udi (device);
+	if (udi && strcmp (udi, HAL_ROOT_COMPUTER) == 0) {
+		test_success ("got correct UDI: %s", udi);
+	} else {
+		test_failed ("got incorrect UDI: %s", udi);
+	}
+
+	/************************************************************/
+	test_title ("make sure we cannot set another UDI");
+	ret = hal_gdevice_set_udi (device, "foo");
+	if (ret == FALSE) {
+		test_success ("Cannot set another UDI");
+	} else {
+		test_failed ("Able to overwrite UDI");
+	}
+
+	/************************************************************/
+	test_title ("make sure we can get a string key");
+	ret = hal_gdevice_get_string (device, "info.product", &retstr, NULL);
+	if (ret == TRUE && retstr && strcmp (retstr, "Computer") == 0) {
+		test_success ("got correct key");
+	} else {
+		test_failed ("got invalid key");
+	}
+
+	/************************************************************/
+	test_title ("try to get property modified events");
+	ret = hal_gdevice_watch_property_modified (device);
+	if (ret == TRUE) {
+		test_success ("got notification");
+	} else {
+		test_failed ("could not get notification");
+	}
+
+	/************************************************************/
+	test_title ("try to get duplicate property modified events");
+	ret = hal_gdevice_watch_property_modified (device);
+	if (ret == FALSE) {
+		test_success ("duplicate notification refused");
+	} else {
+		test_failed ("got duplicate notification");
+	}
+
+	/************************************************************/
+	test_title ("try to cancel property modified events");
+	ret = hal_gdevice_remove_property_modified (device);
+	if (ret == TRUE) {
+		test_success ("cancel notification");
+	} else {
+		test_failed ("could not cancel notification");
+	}
+
+	/************************************************************/
+	test_title ("try to get duplicate property modified cancel");
+	ret = hal_gdevice_remove_property_modified (device);
+	if (ret == FALSE) {
+		test_success ("duplicate cancel refused");
+	} else {
+		test_failed ("did duplicate cancel");
+	}
+
+	g_object_unref (device);
+}
+
+void
 test_proxy (GpmPowermanager *powermanager)
 {
 	GpmProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	test_type = "proxy  ";
+	test_type = "GpmProxy    ";
 
 	/************************************************************/
 	test_title ("make sure we can get a new gproxy");
@@ -133,7 +307,7 @@ test_inhibit (GpmPowermanager *powermanager)
 	gboolean valid;
 	guint cookie1 = 0;
 	guint cookie2 = 0;
-	test_type = "inhibit";
+	test_type = "GpmInhibit  ";
 
 	/************************************************************/
 	test_title ("make sure we are not inhibited");
@@ -327,6 +501,9 @@ main (int argc, char **argv)
 		return 1;
 	}
 
+	test_hal_device (powermanager);
+	test_hal_manager (powermanager);
+	test_hal_power (powermanager);
 	test_inhibit (powermanager);
 	test_proxy (powermanager);
 
