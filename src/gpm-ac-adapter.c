@@ -155,11 +155,11 @@ gpm_ac_adapter_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_AC_ADAPTER (object));
 	ac_adapter = GPM_AC_ADAPTER (object);
+	g_return_if_fail (ac_adapter->priv != NULL);
 
 	g_free (ac_adapter->priv->udi);
 	g_object_unref (ac_adapter->priv->hal);
 
-	g_return_if_fail (ac_adapter->priv != NULL);
 	G_OBJECT_CLASS (gpm_ac_adapter_parent_class)->finalize (object);
 }
 

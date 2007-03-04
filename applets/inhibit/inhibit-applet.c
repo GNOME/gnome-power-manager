@@ -2,7 +2,7 @@
  *
  * GNOME Power Manager Inhibit Applet
  * Copyright (C) 2006 Benjamin Canou <bookeldor@gmail.com>
- * Copyright (C) 2006 Richard Hughes <richard@hughsie.com>
+ * Copyright (C) 2006-2007 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
