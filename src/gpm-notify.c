@@ -104,7 +104,8 @@ gpm_notify_create (GpmNotify 	 *notify,
 
 /* DISTROS: If you've patched your libnotify 0.4.2 package you can add this define */
 #ifdef HAVE_LIBNOTIFY_NEW
-	if (notify->priv->status_icon != NULL) {
+	if (notify->priv->status_icon != NULL &&
+	    gtk_status_icon_get_visible (notify->priv->status_icon) == TRUE) {
 		notify->priv->libnotify = notify_notification_new_with_status_icon (title, content,
 										    msgicon,
 										    notify->priv->status_icon);
