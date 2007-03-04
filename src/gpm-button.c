@@ -48,7 +48,7 @@ struct GpmButtonPrivate
 	GdkWindow		*window;
 	GHashTable		*hash_to_hal;
 	gboolean		 lid_is_closed;
-	GpmHal			*hal; /* remove when iput events is in the kernel */
+	GpmHal			*hal; /* remove when input events is in the kernel */
 };
 
 enum {
@@ -56,7 +56,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_button_object = NULL;
 
 G_DEFINE_TYPE (GpmButton, gpm_button, G_TYPE_OBJECT)
 
@@ -488,8 +489,9 @@ gpm_button_finalize (GObject *object)
 	if (button->priv->hal != NULL) {
 		g_object_unref (button->priv->hal);
 	}
-
 	g_hash_table_unref (button->priv->hash_to_hal);
+
+	G_OBJECT_CLASS (gpm_button_parent_class)->finalize (object);
 }
 
 /**
@@ -499,11 +501,11 @@ gpm_button_finalize (GObject *object)
 GpmButton *
 gpm_button_new (void)
 {
-	static GpmButton *button = NULL;
-	if (button != NULL) {
-		g_object_ref (button);
+	if (gpm_button_object != NULL) {
+		g_object_ref (gpm_button_object);
 	} else {
-		button = g_object_new (GPM_TYPE_BUTTON, NULL);
+		gpm_button_object = g_object_new (GPM_TYPE_BUTTON, NULL);
+		g_object_add_weak_pointer (gpm_button_object, &gpm_button_object);
 	}
-	return GPM_BUTTON (button);
+	return GPM_BUTTON (gpm_button_object);
 }

@@ -45,7 +45,6 @@
 #include "gpm-conf.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
-#include "gpm-hal.h"
 
 static void     gpm_dpms_class_init (GpmDpmsClass *klass);
 static void     gpm_dpms_init       (GpmDpms      *dpms);
@@ -64,7 +63,6 @@ struct GpmDpmsPrivate
 
 	GpmConf			*conf;
 	GpmDpmsMode		 mode;
-	GpmHal			*hal;
 
 	guint			 timer_id;
 };
@@ -81,7 +79,8 @@ enum {
 	PROP_OFF_TIMEOUT,
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_dpms_object = NULL;
 
 G_DEFINE_TYPE (GpmDpms, gpm_dpms, G_TYPE_OBJECT)
 
@@ -836,11 +835,11 @@ gpm_dpms_finalize (GObject *object)
 GpmDpms *
 gpm_dpms_new (void)
 {
-	static GpmDpms *dpms = NULL;
-	if (dpms != NULL) {
-		g_object_ref (dpms);
+	if (gpm_dpms_object != NULL) {
+		g_object_ref (gpm_dpms_object);
 	} else {
-		dpms = g_object_new (GPM_TYPE_DPMS, NULL);
+		gpm_dpms_object = g_object_new (GPM_TYPE_DPMS, NULL);
+		g_object_add_weak_pointer (gpm_dpms_object, &gpm_dpms_object);
 	}
-	return GPM_DPMS (dpms);
+	return GPM_DPMS (gpm_dpms_object);
 }

@@ -69,7 +69,8 @@ enum {
 };
 
 G_DEFINE_TYPE (GpmBrightnessLcd, gpm_brightness_lcd, G_TYPE_OBJECT)
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_brightness_object = NULL;
 
 /**
  * gpm_brightness_lcd_get_hw:
@@ -506,7 +507,6 @@ gpm_brightness_lcd_finalize (GObject *object)
 		g_object_unref (brightness->priv->hal);
 	}
 
-	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_brightness_lcd_parent_class)->finalize (object);
 }
 
@@ -651,17 +651,19 @@ gpm_brightness_lcd_has_hw (void)
 /**
  * gpm_brightness_lcd_new:
  * Return value: A new brightness class instance.
+ * Can return NULL if no suitable hardware is found.
  **/
 GpmBrightnessLcd *
 gpm_brightness_lcd_new (void)
 {
-	static GpmBrightnessLcd *brightness = NULL;
-	if (brightness != NULL) {
-		g_object_ref (brightness);
+	if (gpm_brightness_object != NULL) {
+		g_object_ref (gpm_brightness_object);
 	} else {
-		if (gpm_brightness_lcd_has_hw () == TRUE) {
-			brightness = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
+		if (gpm_brightness_lcd_has_hw () == FALSE) {
+			return NULL;
 		}
+		gpm_brightness_object = g_object_new (GPM_TYPE_BRIGHTNESS_LCD, NULL);
+		g_object_add_weak_pointer (gpm_brightness_object, &gpm_brightness_object);
 	}
-	return GPM_BRIGHTNESS_LCD (brightness);
+	return GPM_BRIGHTNESS_LCD (gpm_brightness_object);
 }

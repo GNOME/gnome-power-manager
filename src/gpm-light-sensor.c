@@ -63,8 +63,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
-
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_brightness_object = NULL;
 
 G_DEFINE_TYPE (GpmLightSensor, gpm_light_sensor, G_TYPE_OBJECT)
 
@@ -322,22 +322,19 @@ gpm_light_sensor_has_hw (void)
 /**
  * gpm_light_sensor_new:
  * Return value: A new brightness class instance.
+ * Can return NULL if no suitable hardware is found.
  **/
 GpmLightSensor *
 gpm_light_sensor_new (void)
 {
-	static GpmLightSensor *brightness = NULL;
-
-	if (brightness != NULL) {
-		g_object_ref (brightness);
-		return brightness;
+	if (gpm_brightness_object != NULL) {
+		g_object_ref (gpm_brightness_object);
+	} else {
+		if (gpm_light_sensor_has_hw () == FALSE) {
+			return NULL;
+		}
+		gpm_brightness_object = g_object_new (GPM_TYPE_LIGHT_SENSOR, NULL);
+		g_object_add_weak_pointer (gpm_brightness_object, &gpm_brightness_object);
 	}
-
-	/* only load an instance of this module if we have the hardware */
-	if (gpm_light_sensor_has_hw () == FALSE) {
-		return NULL;
-	}
-
-	brightness = g_object_new (GPM_TYPE_LIGHT_SENSOR, NULL);
-	return brightness;
+	return GPM_LIGHT_SENSOR (gpm_brightness_object);
 }

@@ -1,5 +1,27 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_finalize),
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_finalize),
+	* libhal-glib/libhal-gpower.c: (hal_gpower_init),
+	* libhal-glib/libhal-gpower.h:
+	* src/gpm-button.c: (gpm_button_finalize), (gpm_button_new):
+	* src/gpm-conf.c: (gpm_conf_new):
+	* src/gpm-control.c: (gpm_control_new):
+	* src/gpm-dbus-monitor.c: (gpm_dbus_monitor_finalize),
+	* src/gpm-dpms.c: (gpm_dpms_new):
+	* src/gpm-idle.c: (gpm_idle_new):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_new):
+	* src/gpm-main.c:
+	* src/gpm-notify.c: (gpm_notify_finalize), (gpm_notify_new):
+	* src/gpm-power.c: (gpm_power_new):
+	* src/gpm-screensaver.c: (gpm_screensaver_new):
+	* src/gpm-sound.c: (gpm_sound_finalize), (gpm_sound_new):
+	* src/gpm-warning.c: (gpm_warning_new):
+	Use the g_object_add_weak_pointer function rather than rely on the
+	fact that we *shouldn't* hit the finalise->new case.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* Makefile.am:
 	* configure.in:
 	* po/POTFILES.in:

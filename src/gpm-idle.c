@@ -72,7 +72,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_idle_object = NULL;
 
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
 
@@ -461,11 +462,11 @@ gpm_idle_init (GpmIdle *idle)
 GpmIdle *
 gpm_idle_new (void)
 {
-	static GpmIdle *idle = NULL;
-	if (idle != NULL) {
-		g_object_ref (idle);
+	if (gpm_idle_object != NULL) {
+		g_object_ref (gpm_idle_object);
 	} else {
-		idle = g_object_new (GPM_TYPE_IDLE, NULL);
+		gpm_idle_object = g_object_new (GPM_TYPE_IDLE, NULL);
+		g_object_add_weak_pointer (gpm_idle_object, &gpm_idle_object);
 	}
-	return GPM_IDLE (idle);
+	return GPM_IDLE (gpm_idle_object);
 }

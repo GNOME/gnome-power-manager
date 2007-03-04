@@ -39,7 +39,7 @@ static void     hal_gpower_class_init (HalGPowerClass *klass);
 static void     hal_gpower_init       (HalGPower      *hal_gpower);
 static void     hal_gpower_finalize   (GObject	      *object);
 
-#define LIBHAL_HAL_GPOWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_HAL_GPOWER, HalGPowerPrivate))
+#define LIBHAL_GPOWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_GPOWER, HalGPowerPrivate))
 
 struct HalGPowerPrivate
 {
@@ -47,6 +47,7 @@ struct HalGPowerPrivate
 	GpmProxy		*gproxy;
 };
 
+static gpointer hal_gpower_object = NULL;
 G_DEFINE_TYPE (HalGPower, hal_gpower, G_TYPE_OBJECT)
 
 /**
@@ -69,7 +70,7 @@ hal_gpower_class_init (HalGPowerClass *klass)
 static void
 hal_gpower_init (HalGPower *hal_gpower)
 {
-	hal_gpower->priv = LIBHAL_HAL_GPOWER_GET_PRIVATE (hal_gpower);
+	hal_gpower->priv = LIBHAL_GPOWER_GET_PRIVATE (hal_gpower);
 
 	/* get the power connection */
 	hal_gpower->priv->gproxy = gpm_proxy_new ();
@@ -100,7 +101,7 @@ hal_gpower_is_laptop (HalGPower *hal_gpower)
 	gboolean ret = TRUE;
 	gchar *formfactor = NULL;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	/* always present */
 	hal_gdevice_get_string (hal_gpower->priv->computer, "system.formfactor", &formfactor, NULL);
@@ -131,7 +132,7 @@ hal_gpower_has_support (HalGPower *hal_gpower)
 {
 	gchar *type = NULL;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	hal_gdevice_get_string (hal_gpower->priv->computer, "power_management.type", &type, NULL);
 	/* this key only has to exist to be pm okay */
@@ -157,7 +158,7 @@ hal_gpower_can_suspend (HalGPower *hal_gpower)
 	gboolean exists;
 	gboolean can_suspend;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	/* TODO: Change to can_suspend when rely on newer HAL */
 	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
@@ -184,7 +185,7 @@ hal_gpower_can_hibernate (HalGPower *hal_gpower)
 	gboolean exists;
 	gboolean can_hibernate;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	/* TODO: Change to can_hibernate when rely on newer HAL */
 	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
@@ -242,7 +243,7 @@ hal_gpower_suspend (HalGPower *hal_gpower, guint wakeup)
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	gpm_debug ("Try to suspend...");
 
@@ -291,7 +292,7 @@ hal_gpower_pm_method_void (HalGPower *hal_gpower, const gchar *method)
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	g_return_val_if_fail (method != NULL, FALSE);
 
 	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
@@ -335,7 +336,7 @@ hal_gpower_pm_method_void (HalGPower *hal_gpower, const gchar *method)
 gboolean
 hal_gpower_hibernate (HalGPower *hal_gpower)
 {
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	gpm_debug ("Try to hibernate...");
 	return hal_gpower_pm_method_void (hal_gpower, "Hibernate");
 }
@@ -350,7 +351,7 @@ hal_gpower_hibernate (HalGPower *hal_gpower)
 gboolean
 hal_gpower_shutdown (HalGPower *hal_gpower)
 {
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	gpm_debug ("Try to shutdown...");
 	return hal_gpower_pm_method_void (hal_gpower, "Shutdown");
 }
@@ -366,7 +367,7 @@ hal_gpower_shutdown (HalGPower *hal_gpower)
 gboolean
 hal_gpower_reboot (HalGPower *hal_gpower)
 {
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	gpm_debug ("Try to reboot...");
 	return hal_gpower_pm_method_void (hal_gpower, "Reboot");
 }
@@ -389,7 +390,7 @@ hal_gpower_enable_power_save (HalGPower *hal_gpower, gboolean enable)
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
@@ -435,7 +436,7 @@ hal_gpower_has_suspend_error (HalGPower *hal_gpower, gboolean *state)
 {
 	g_return_val_if_fail (hal_gpower != NULL, FALSE);
 	g_return_val_if_fail (state != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	*state = g_file_test ("/var/lib/hal_gpower/system-power-suspend-output", G_FILE_TEST_EXISTS);
 	return TRUE;
 }
@@ -454,7 +455,7 @@ hal_gpower_has_hibernate_error (HalGPower *hal_gpower, gboolean *state)
 {
 	g_return_val_if_fail (hal_gpower != NULL, FALSE);
 	g_return_val_if_fail (state != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 	*state = g_file_test ("/var/lib/hal_gpower/system-power-hibernate-output", G_FILE_TEST_EXISTS);
 	return TRUE;
 }
@@ -475,7 +476,7 @@ hal_gpower_clear_suspend_error (HalGPower *hal_gpower, GError **error)
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
@@ -507,7 +508,7 @@ hal_gpower_clear_hibernate_error (HalGPower *hal_gpower, GError **error)
 	DBusGProxy *proxy;
 
 	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_HAL_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
 
 	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
@@ -532,10 +533,10 @@ hal_gpower_finalize (GObject *object)
 {
 	HalGPower *hal_gpower;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (LIBHAL_IS_HAL_GPOWER (object));
+	g_return_if_fail (LIBHAL_IS_GPOWER (object));
 
-	hal_gpower = LIBHAL_HAL_GPOWER (object);
-	hal_gpower->priv = LIBHAL_HAL_GPOWER_GET_PRIVATE (hal_gpower);
+	hal_gpower = LIBHAL_GPOWER (object);
+	hal_gpower->priv = LIBHAL_GPOWER_GET_PRIVATE (hal_gpower);
 
 	g_object_unref (hal_gpower->priv->gproxy);
 	g_object_unref (hal_gpower->priv->computer);
@@ -550,11 +551,11 @@ hal_gpower_finalize (GObject *object)
 HalGPower *
 hal_gpower_new (void)
 {
-	static HalGPower *hal_gpower = NULL;
-	if (hal_gpower != NULL) {
-		g_object_ref (hal_gpower);
+	if (hal_gpower_object != NULL) {
+		g_object_ref (hal_gpower_object);
 	} else {
-		hal_gpower = g_object_new (LIBHAL_TYPE_HAL_GPOWER, NULL);
+		hal_gpower_object = g_object_new (LIBHAL_TYPE_GPOWER, NULL);
+		g_object_add_weak_pointer (hal_gpower_object, &hal_gpower_object);
 	}
-	return LIBHAL_HAL_GPOWER (hal_gpower);
+	return LIBHAL_GPOWER (hal_gpower_object);
 }

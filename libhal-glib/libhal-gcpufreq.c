@@ -51,7 +51,7 @@ struct HalGCpufreqPrivate
 
 G_DEFINE_TYPE (HalGCpufreq, hal_gcpufreq, G_TYPE_OBJECT)
 
-static HalGCpufreq *cpufreq_obj = NULL;
+static gpointer hal_gcpufreq_object = NULL;
 
 /**
  * hal_gcpufreq_string_to_enum:
@@ -575,7 +575,6 @@ hal_gcpufreq_finalize (GObject *object)
 		g_object_unref (cpufreq->priv->gproxy);
 	}
 
-	cpufreq_obj = NULL;
 	G_OBJECT_CLASS (hal_gcpufreq_parent_class)->finalize (object);
 }
 
@@ -613,14 +612,15 @@ hal_gcpufreq_has_hw (void)
 HalGCpufreq *
 hal_gcpufreq_new (void)
 {
-	if (cpufreq_obj != NULL) {
-		g_object_ref (cpufreq_obj);
+	if (hal_gcpufreq_object != NULL) {
+		g_object_ref (hal_gcpufreq_object);
 	} else {
 		/* only load an instance of this module if we have the hardware */
 		if (hal_gcpufreq_has_hw () == FALSE) {
 			return NULL;
 		}
-		cpufreq_obj = g_object_new (LIBHAL_TYPE_CPUFREQ, NULL);
+		hal_gcpufreq_object = g_object_new (LIBHAL_TYPE_CPUFREQ, NULL);
+		g_object_add_weak_pointer (hal_gcpufreq_object, &hal_gcpufreq_object);
 	}
-	return LIBHAL_CPUFREQ (cpufreq_obj);
+	return LIBHAL_CPUFREQ (hal_gcpufreq_object);
 }

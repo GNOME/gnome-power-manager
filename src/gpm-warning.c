@@ -64,6 +64,8 @@ struct GpmWarningPrivate
 
 G_DEFINE_TYPE (GpmWarning, gpm_warning, G_TYPE_OBJECT)
 
+static gpointer gpm_warning_object = NULL;
+
 /**
  * gpm_warning_get_state:
  * @warning: This class instance
@@ -270,13 +272,11 @@ gpm_warning_init (GpmWarning *warning)
 GpmWarning *
 gpm_warning_new (void)
 {
-	static GpmWarning *warning = NULL;
-
-	if (warning != NULL) {
-		g_object_ref (warning);
-		return warning;
+	if (gpm_warning_object != NULL) {
+		g_object_ref (gpm_warning_object);
+	} else {
+		gpm_warning_object = g_object_new (GPM_TYPE_WARNING, NULL);
+		g_object_add_weak_pointer (gpm_warning_object, &gpm_warning_object);
 	}
-
-	warning = g_object_new (GPM_TYPE_WARNING, NULL);
-	return warning;
+	return GPM_WARNING (gpm_warning_object);
 }

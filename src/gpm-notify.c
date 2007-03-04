@@ -70,7 +70,8 @@ enum {
 	LAST_SIGNAL
 };
 
-//static guint	     signals [LAST_SIGNAL] = { 0, };
+//static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_notify_object = NULL;
 
 G_DEFINE_TYPE (GpmNotify, gpm_notify, G_TYPE_OBJECT)
 
@@ -379,6 +380,7 @@ gpm_notify_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_NOTIFY (object));
 	notify = GPM_NOTIFY (object);
+	g_return_if_fail (notify->priv != NULL);
 
 #ifdef HAVE_LIBNOTIFY
 	if (notify->priv->libnotify != NULL) {
@@ -391,7 +393,6 @@ gpm_notify_finalize (GObject *object)
 		g_object_unref (notify->priv->ac_adapter);
 	}
 
-	g_return_if_fail (notify->priv != NULL);
 	G_OBJECT_CLASS (gpm_notify_parent_class)->finalize (object);
 }
 
@@ -447,13 +448,11 @@ gpm_notify_init (GpmNotify *notify)
 GpmNotify *
 gpm_notify_new (void)
 {
-	static GpmNotify *notify = NULL;
-
-	if (notify != NULL) {
-		g_object_ref (notify);
-		return notify;
+	if (gpm_notify_object != NULL) {
+		g_object_ref (gpm_notify_object);
+	} else {
+		gpm_notify_object = g_object_new (GPM_TYPE_NOTIFY, NULL);
+		g_object_add_weak_pointer (gpm_notify_object, &gpm_notify_object);
 	}
-
-	notify = g_object_new (GPM_TYPE_NOTIFY, NULL);
-	return notify;
+	return GPM_NOTIFY (gpm_notify_object);
 }

@@ -68,8 +68,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
-static HalGManager  *hal_gmanager_obj = NULL;
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer hal_gmanager_object = NULL;
 
 G_DEFINE_TYPE (HalGManager, hal_gmanager, G_TYPE_OBJECT)
 
@@ -550,10 +550,6 @@ hal_gmanager_finalize (GObject *object)
 	g_object_unref (hal_gmanager->priv->gproxy);
 	g_object_unref (hal_gmanager->priv->computer);
 
-	/* clear global reference, as this is the last reference, and any
-	 * future references will need to create the object */
-	hal_gmanager_obj = NULL;
-
 	G_OBJECT_CLASS (hal_gmanager_parent_class)->finalize (object);
 }
 
@@ -564,10 +560,11 @@ hal_gmanager_finalize (GObject *object)
 HalGManager *
 hal_gmanager_new (void)
 {
-	if (hal_gmanager_obj != NULL) {
-		g_object_ref (hal_gmanager_obj);
+	if (hal_gmanager_object != NULL) {
+		g_object_ref (hal_gmanager_object);
 	} else {
-		hal_gmanager_obj = g_object_new (LIBHAL_TYPE_GMANAGER, NULL);
+		hal_gmanager_object = g_object_new (LIBHAL_TYPE_GMANAGER, NULL);
+		g_object_add_weak_pointer (hal_gmanager_object, &hal_gmanager_object);
 	}
-	return LIBHAL_GMANAGER (hal_gmanager_obj);
+	return LIBHAL_GMANAGER (hal_gmanager_object);
 }

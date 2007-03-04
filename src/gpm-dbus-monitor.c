@@ -54,7 +54,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_monitor_object = NULL;
 
 G_DEFINE_TYPE (GpmDbusMonitor, gpm_dbus_monitor, G_TYPE_OBJECT)
 
@@ -169,8 +170,10 @@ gpm_dbus_monitor_finalize (GObject *object)
 
 	monitor = GPM_DBUS_MONITOR (object);
 
-	if (monitor->priv->proxy_ses) {
+	if (monitor->priv->proxy_ses != NULL) {
 		g_object_unref (monitor->priv->proxy_ses);
+	}
+	if (monitor->priv->proxy_sys != NULL) {
 		g_object_unref (monitor->priv->proxy_sys);
 	}
 	G_OBJECT_CLASS (gpm_dbus_monitor_parent_class)->finalize (object);
@@ -179,11 +182,11 @@ gpm_dbus_monitor_finalize (GObject *object)
 GpmDbusMonitor *
 gpm_dbus_monitor_new (void)
 {
-	static GpmDbusMonitor *monitor = NULL;
-	if (monitor != NULL) {
-		g_object_ref (monitor);
+	if (gpm_monitor_object != NULL) {
+		g_object_ref (gpm_monitor_object);
 	} else {
-		monitor = g_object_new (GPM_TYPE_DBUS_MONITOR, NULL);
+		gpm_monitor_object = g_object_new (GPM_TYPE_DBUS_MONITOR, NULL);
+		g_object_add_weak_pointer (gpm_monitor_object, &gpm_monitor_object);
 	}
-	return GPM_DBUS_MONITOR (monitor);
+	return GPM_DBUS_MONITOR (gpm_monitor_object);
 }

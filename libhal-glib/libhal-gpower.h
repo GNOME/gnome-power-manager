@@ -19,19 +19,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __LIBHAL_GPOWER_H
-#define __LIBHAL_GPOWER_H
+#ifndef __LIBGPOWER_H
+#define __LIBGPOWER_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define LIBHAL_TYPE_HAL_GPOWER		(hal_gpower_get_type ())
-#define LIBHAL_HAL_GPOWER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), LIBHAL_TYPE_HAL_GPOWER, HalGPower))
-#define LIBHAL_HAL_GPOWER_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), LIBHAL_TYPE_HAL_GPOWER, HalGPowerClass))
-#define LIBHAL_IS_HAL_GPOWER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), LIBHAL_TYPE_HAL_GPOWER))
-#define LIBHAL_IS_HAL_GPOWER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), LIBHAL_TYPE_HAL_GPOWER))
-#define LIBHAL_HAL_GPOWER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), LIBHAL_TYPE_HAL_GPOWER, HalGPowerClass))
+#define LIBHAL_TYPE_GPOWER		(hal_gpower_get_type ())
+#define LIBHAL_GPOWER(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), LIBHAL_TYPE_GPOWER, HalGPower))
+#define LIBHAL_GPOWER_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), LIBHAL_TYPE_GPOWER, HalGPowerClass))
+#define LIBHAL_IS_GPOWER(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), LIBHAL_TYPE_GPOWER))
+#define LIBHAL_IS_GPOWER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), LIBHAL_TYPE_GPOWER))
+#define LIBHAL_GPOWER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), LIBHAL_TYPE_GPOWER, HalGPowerClass))
 
 typedef struct HalGPowerPrivate HalGPowerPrivate;
 
@@ -70,4 +70,4 @@ gboolean	 hal_gpower_enable_power_save		(HalGPower	*hal_gpower,
 
 G_END_DECLS
 
-#endif	/* __LIBHAL_GPOWER_H */
+#endif	/* __LIBGPOWER_H */

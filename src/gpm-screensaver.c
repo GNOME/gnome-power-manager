@@ -52,7 +52,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_screensaver_object = NULL;
 
 G_DEFINE_TYPE (GpmScreensaver, gpm_screensaver, G_TYPE_OBJECT)
 
@@ -565,13 +566,11 @@ gpm_screensaver_finalize (GObject *object)
 GpmScreensaver *
 gpm_screensaver_new (void)
 {
-	static GpmScreensaver *screensaver = NULL;
-
-	if (screensaver != NULL) {
-		g_object_ref (screensaver);
-		return screensaver;
+	if (gpm_screensaver_object != NULL) {
+		g_object_ref (gpm_screensaver_object);
+	} else {
+		gpm_screensaver_object = g_object_new (GPM_TYPE_SCREENSAVER, NULL);
+		g_object_add_weak_pointer (gpm_screensaver_object, &gpm_screensaver_object);
 	}
-
-	screensaver = g_object_new (GPM_TYPE_SCREENSAVER, NULL);
-	return screensaver;
+	return GPM_SCREENSAVER (gpm_screensaver_object);
 }

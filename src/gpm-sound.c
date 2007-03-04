@@ -56,6 +56,7 @@ struct GpmSoundPrivate
 };
 
 G_DEFINE_TYPE (GpmSound, gpm_sound, G_TYPE_OBJECT)
+static gpointer gpm_sound_object = NULL;
 
 /**
  * gpm_sound_force:
@@ -182,7 +183,6 @@ gpm_sound_finalize (GObject *object)
 	g_object_unref (sound->priv->ac_adapter);
 	g_object_unref (sound->priv->control);
 
-	g_return_if_fail (sound->priv != NULL);
 	G_OBJECT_CLASS (gpm_sound_parent_class)->finalize (object);
 }
 
@@ -236,13 +236,11 @@ gpm_sound_init (GpmSound *sound)
 GpmSound *
 gpm_sound_new (void)
 {
-	static GpmSound *sound = NULL;
-
-	if (sound != NULL) {
-		g_object_ref (sound);
-		return sound;
+	if (gpm_sound_object != NULL) {
+		g_object_ref (gpm_sound_object);
+	} else {
+		gpm_sound_object = g_object_new (GPM_TYPE_SOUND, NULL);
+		g_object_add_weak_pointer (gpm_sound_object, &gpm_sound_object);
 	}
-
-	sound = g_object_new (GPM_TYPE_SOUND, NULL);
-	return sound;
+	return GPM_SOUND (gpm_sound_object);
 }

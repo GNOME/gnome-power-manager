@@ -47,7 +47,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_conf_object = NULL;
 
 G_DEFINE_TYPE (GpmConf, gpm_conf, G_TYPE_OBJECT)
 
@@ -405,11 +406,11 @@ gpm_conf_finalize (GObject *object)
 GpmConf *
 gpm_conf_new (void)
 {
-	static GpmConf *conf = NULL;
-	if (conf != NULL) {
-		g_object_ref (conf);
+	if (gpm_conf_object != NULL) {
+		g_object_ref (gpm_conf_object);
 	} else {
-		conf = g_object_new (GPM_TYPE_CONF, NULL);
+		gpm_conf_object = g_object_new (GPM_TYPE_CONF, NULL);
+		g_object_add_weak_pointer (gpm_conf_object, &gpm_conf_object);
 	}
-	return GPM_CONF (conf);
+	return GPM_CONF (gpm_conf_object);
 }

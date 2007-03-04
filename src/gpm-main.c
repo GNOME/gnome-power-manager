@@ -35,7 +35,6 @@
 #include <glade/glade.h>
 
 #include "gpm-stock-icons.h"
-#include "gpm-hal.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
 

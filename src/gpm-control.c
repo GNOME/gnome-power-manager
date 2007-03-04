@@ -80,7 +80,8 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
+static gpointer gpm_control_object = NULL;
 
 G_DEFINE_TYPE (GpmControl, gpm_control, G_TYPE_OBJECT)
 
@@ -865,13 +866,11 @@ gpm_control_init (GpmControl *control)
 GpmControl *
 gpm_control_new (void)
 {
-	static GpmControl *control = NULL;
-
-	if (control != NULL) {
-		g_object_ref (control);
-		return control;
+	if (gpm_control_object != NULL) {
+		g_object_ref (gpm_control_object);
+	} else {
+		gpm_control_object = g_object_new (GPM_TYPE_CONTROL, NULL);
+		g_object_add_weak_pointer (gpm_control_object, &gpm_control_object);
 	}
-
-	control = g_object_new (GPM_TYPE_CONTROL, NULL);
-	return control;
+	return GPM_CONTROL (gpm_control_object);
 }
