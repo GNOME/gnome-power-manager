@@ -1,5 +1,12 @@
 2007-03-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_line):
+	* src/gpm-statistics-core.c: (gpm_statistics_graph_refresh):
+	Fix the segfault when we try to draw a graph that does not exist.
+	Fixes #412345 and plenty more duplicates.
+
+2007-03-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-notify.c: (gpm_notify_create):
 	Don't point to the icon if it's not currently showing. Fixes #414010
 
