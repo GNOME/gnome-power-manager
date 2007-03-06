@@ -36,7 +36,7 @@
 #include "../src/gpm-proxy.h"
 
 static void     hal_gpower_class_init (HalGPowerClass *klass);
-static void     hal_gpower_init       (HalGPower      *hal_gpower);
+static void     hal_gpower_init       (HalGPower      *power);
 static void     hal_gpower_finalize   (GObject	      *object);
 
 #define LIBHAL_GPOWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_GPOWER, HalGPowerPrivate))
@@ -65,46 +65,46 @@ hal_gpower_class_init (HalGPowerClass *klass)
 /**
  * hal_gpower_init:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  **/
 static void
-hal_gpower_init (HalGPower *hal_gpower)
+hal_gpower_init (HalGPower *power)
 {
-	hal_gpower->priv = LIBHAL_GPOWER_GET_PRIVATE (hal_gpower);
+	power->priv = LIBHAL_GPOWER_GET_PRIVATE (power);
 
 	/* get the power connection */
-	hal_gpower->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (hal_gpower->priv->gproxy,
+	power->priv->gproxy = gpm_proxy_new ();
+	gpm_proxy_assign (power->priv->gproxy,
 			  GPM_PROXY_SYSTEM,
 			  HAL_DBUS_SERVICE,
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_POWER);
-	if (hal_gpower->priv->gproxy == NULL) {
+	if (power->priv->gproxy == NULL) {
 		gpm_warning ("HAL does not support power management!");
 	}
 
-	hal_gpower->priv->computer = hal_gdevice_new ();
-	hal_gdevice_set_udi (hal_gpower->priv->computer, HAL_ROOT_COMPUTER);
+	power->priv->computer = hal_gdevice_new ();
+	hal_gdevice_set_udi (power->priv->computer, HAL_ROOT_COMPUTER);
 }
 
 /**
  * hal_gpower_is_laptop:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: TRUE is computer is identified as a laptop
  *
  * Returns true if system.formfactor is "laptop"
  **/
 gboolean
-hal_gpower_is_laptop (HalGPower *hal_gpower)
+hal_gpower_is_laptop (HalGPower *power)
 {
 	gboolean ret = TRUE;
 	gchar *formfactor = NULL;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
 	/* always present */
-	hal_gdevice_get_string (hal_gpower->priv->computer, "system.formfactor", &formfactor, NULL);
+	hal_gdevice_get_string (power->priv->computer, "system.formfactor", &formfactor, NULL);
 	if (formfactor == NULL) {
 		gpm_debug ("system.formfactor not set!");
 		/* no need to free */
@@ -122,19 +122,19 @@ hal_gpower_is_laptop (HalGPower *hal_gpower)
 /**
  * hal_gpower_has_support:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: TRUE if haldaemon has power management capability
  *
  * Finds out if power management functions are running (only ACPI, PMU, APM)
  **/
 gboolean
-hal_gpower_has_support (HalGPower *hal_gpower)
+hal_gpower_has_support (HalGPower *power)
 {
 	gchar *type = NULL;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	hal_gdevice_get_string (hal_gpower->priv->computer, "power_management.type", &type, NULL);
+	hal_gdevice_get_string (power->priv->computer, "power_management.type", &type, NULL);
 	/* this key only has to exist to be pm okay */
 	if (type != NULL) {
 		gpm_debug ("Power management type : %s", type);
@@ -147,21 +147,21 @@ hal_gpower_has_support (HalGPower *hal_gpower)
 /**
  * hal_gpower_can_suspend:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: TRUE if kernel suspend support is compiled in
  *
  * Finds out if HAL indicates that we can suspend
  **/
 gboolean
-hal_gpower_can_suspend (HalGPower *hal_gpower)
+hal_gpower_can_suspend (HalGPower *power)
 {
 	gboolean exists;
 	gboolean can_suspend;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
 	/* TODO: Change to can_suspend when rely on newer HAL */
-	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
+	exists = hal_gdevice_get_bool (power->priv->computer,
 					  "power_management.can_suspend",
 					  &can_suspend, NULL);
 	if (exists == FALSE) {
@@ -174,21 +174,21 @@ hal_gpower_can_suspend (HalGPower *hal_gpower)
 /**
  * hal_gpower_can_hibernate:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: TRUE if kernel hibernation support is compiled in
  *
  * Finds out if HAL indicates that we can hibernate
  **/
 gboolean
-hal_gpower_can_hibernate (HalGPower *hal_gpower)
+hal_gpower_can_hibernate (HalGPower *power)
 {
 	gboolean exists;
 	gboolean can_hibernate;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
 	/* TODO: Change to can_hibernate when rely on newer HAL */
-	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
+	exists = hal_gdevice_get_bool (power->priv->computer,
 					  "power_management.can_hibernate",
 					  &can_hibernate, NULL);
 	if (exists == FALSE) {
@@ -229,25 +229,25 @@ hal_gpower_filter_error (GError **error)
 /**
  * hal_gpower_suspend:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * @wakeup: Seconds to wakeup, currently unsupported
  * Return value: Success, true if we suspended OK
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
  **/
 gboolean
-hal_gpower_suspend (HalGPower *hal_gpower, guint wakeup)
+hal_gpower_suspend (HalGPower *power, guint wakeup)
 {
 	guint retval = 0;
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
 	gpm_debug ("Try to suspend...");
 
-	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -277,7 +277,7 @@ hal_gpower_suspend (HalGPower *hal_gpower, guint wakeup)
 /**
  * hal_gpower_pm_method_void:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * @method: The method name, e.g. "Hibernate"
  * Return value: Success, true if we did OK
  *
@@ -285,17 +285,17 @@ hal_gpower_suspend (HalGPower *hal_gpower, guint wakeup)
  * with no arguments.
  **/
 static gboolean
-hal_gpower_pm_method_void (HalGPower *hal_gpower, const gchar *method)
+hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
 {
 	guint retval = 0;
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	g_return_val_if_fail (method != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -328,17 +328,17 @@ hal_gpower_pm_method_void (HalGPower *hal_gpower, const gchar *method)
 /**
  * hal_gpower_hibernate:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: Success, true if we hibernated OK
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
  **/
 gboolean
-hal_gpower_hibernate (HalGPower *hal_gpower)
+hal_gpower_hibernate (HalGPower *power)
 {
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	gpm_debug ("Try to hibernate...");
-	return hal_gpower_pm_method_void (hal_gpower, "Hibernate");
+	return hal_gpower_pm_method_void (power, "Hibernate");
 }
 
 /**
@@ -349,57 +349,57 @@ hal_gpower_hibernate (HalGPower *hal_gpower)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
  **/
 gboolean
-hal_gpower_shutdown (HalGPower *hal_gpower)
+hal_gpower_shutdown (HalGPower *power)
 {
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	gpm_debug ("Try to shutdown...");
-	return hal_gpower_pm_method_void (hal_gpower, "Shutdown");
+	return hal_gpower_pm_method_void (power, "Shutdown");
 }
 
 /**
  * hal_gpower_reboot:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: Success, true if we shutdown OK
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
  **/
 gboolean
-hal_gpower_reboot (HalGPower *hal_gpower)
+hal_gpower_reboot (HalGPower *power)
 {
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	gpm_debug ("Try to reboot...");
-	return hal_gpower_pm_method_void (hal_gpower, "Reboot");
+	return hal_gpower_pm_method_void (power, "Reboot");
 }
 
 /**
  * hal_gpower_enable_power_save:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * @enable: True to enable low power mode
  * Return value: Success, true if we set the mode
  *
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.SetPowerSave ()
  **/
 gboolean
-hal_gpower_enable_power_save (HalGPower *hal_gpower, gboolean enable)
+hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 {
 	gint retval = 0;
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
 	/* abort if we are not a "qualified" laptop */
-	if (hal_gpower_is_laptop (hal_gpower) == FALSE) {
+	if (hal_gpower_is_laptop (power) == FALSE) {
 		gpm_debug ("We are not a laptop, so not even trying");
 		return FALSE;
 	}
@@ -425,60 +425,59 @@ hal_gpower_enable_power_save (HalGPower *hal_gpower, gboolean enable)
 /**
  * hal_gpower_has_suspend_error:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * @enable: Return true if there was a suspend error
  * Return value: Success
  *
  * TODO: should call a method on HAL and also return the ouput of the file
  **/
 gboolean
-hal_gpower_has_suspend_error (HalGPower *hal_gpower, gboolean *state)
+hal_gpower_has_suspend_error (HalGPower *power, gboolean *state)
 {
-	g_return_val_if_fail (hal_gpower != NULL, FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (state != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
-	*state = g_file_test ("/var/lib/hal_gpower/system-power-suspend-output", G_FILE_TEST_EXISTS);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
+	*state = g_file_test ("/var/lib/hal/system-power-suspend-output", G_FILE_TEST_EXISTS);
 	return TRUE;
 }
 
 /**
  * hal_gpower_has_hibernate_error:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * @enable: Return true if there was a hibernate error
  * Return value: Success
  *
  * TODO: should call a method on HAL and also return the ouput of the file
  **/
 gboolean
-hal_gpower_has_hibernate_error (HalGPower *hal_gpower, gboolean *state)
+hal_gpower_has_hibernate_error (HalGPower *power, gboolean *state)
 {
-	g_return_val_if_fail (hal_gpower != NULL, FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (state != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
-	*state = g_file_test ("/var/lib/hal_gpower/system-power-hibernate-output", G_FILE_TEST_EXISTS);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
+	*state = g_file_test ("/var/lib/hal/system-power-hibernate-output", G_FILE_TEST_EXISTS);
 	return TRUE;
 }
 
 /**
  * hal_gpower_clear_suspend_error:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: Success
  *
  * Tells HAL to try and clear the suspend error as we appear to be okay
  **/
 gboolean
-hal_gpower_clear_suspend_error (HalGPower *hal_gpower, GError **error)
+hal_gpower_clear_suspend_error (HalGPower *power, GError **error)
 {
-#if HAVE_HAL_NEW
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -488,29 +487,26 @@ hal_gpower_clear_suspend_error (HalGPower *hal_gpower, GError **error)
 	ret = dbus_g_proxy_call (proxy, "SuspendClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
-#endif
-	return TRUE;
 }
 
 /**
  * hal_gpower_clear_hibernate_error:
  *
- * @hal_gpower: This class instance
+ * @power: This class instance
  * Return value: Success
  *
  * Tells HAL to try and clear the hibernate error as we appear to be okay
  **/
 gboolean
-hal_gpower_clear_hibernate_error (HalGPower *hal_gpower, GError **error)
+hal_gpower_clear_hibernate_error (HalGPower *power, GError **error)
 {
-#if HAVE_HAL_NEW
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (hal_gpower != NULL, FALSE);
-	g_return_val_if_fail (LIBHAL_IS_GPOWER (hal_gpower), FALSE);
+	g_return_val_if_fail (power != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gpower->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -520,8 +516,6 @@ hal_gpower_clear_hibernate_error (HalGPower *hal_gpower, GError **error)
 	ret = dbus_g_proxy_call (proxy, "HibernateClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
-#endif
-	return TRUE;
 }
 
 /**
@@ -531,15 +525,15 @@ hal_gpower_clear_hibernate_error (HalGPower *hal_gpower, GError **error)
 static void
 hal_gpower_finalize (GObject *object)
 {
-	HalGPower *hal_gpower;
+	HalGPower *power;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (LIBHAL_IS_GPOWER (object));
 
-	hal_gpower = LIBHAL_GPOWER (object);
-	hal_gpower->priv = LIBHAL_GPOWER_GET_PRIVATE (hal_gpower);
+	power = LIBHAL_GPOWER (object);
+	power->priv = LIBHAL_GPOWER_GET_PRIVATE (power);
 
-	g_object_unref (hal_gpower->priv->gproxy);
-	g_object_unref (hal_gpower->priv->computer);
+	g_object_unref (power->priv->gproxy);
+	g_object_unref (power->priv->computer);
 
 	G_OBJECT_CLASS (hal_gpower_parent_class)->finalize (object);
 }
@@ -559,3 +553,4 @@ hal_gpower_new (void)
 	}
 	return LIBHAL_GPOWER (hal_gpower_object);
 }
+

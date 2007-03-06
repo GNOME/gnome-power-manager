@@ -49,23 +49,23 @@ typedef struct
 GType		 hal_gpower_get_type			(void);
 HalGPower	*hal_gpower_new				(void);
 
-gboolean	 hal_gpower_has_support			(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_can_suspend			(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_can_hibernate		(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_suspend			(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_has_support			(HalGPower	*power);
+gboolean	 hal_gpower_can_suspend			(HalGPower	*power);
+gboolean	 hal_gpower_can_hibernate		(HalGPower	*power);
+gboolean	 hal_gpower_suspend			(HalGPower	*power,
 							 guint		 wakeup);
-gboolean	 hal_gpower_hibernate			(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_shutdown			(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_reboot			(HalGPower	*hal_gpower);
-gboolean	 hal_gpower_has_suspend_error		(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_hibernate			(HalGPower	*power);
+gboolean	 hal_gpower_shutdown			(HalGPower	*power);
+gboolean	 hal_gpower_reboot			(HalGPower	*power);
+gboolean	 hal_gpower_has_suspend_error		(HalGPower	*power,
 							 gboolean	*state);
-gboolean	 hal_gpower_has_hibernate_error		(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_has_hibernate_error		(HalGPower	*power,
 							 gboolean	*state);
-gboolean	 hal_gpower_clear_suspend_error		(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_clear_suspend_error		(HalGPower	*power,
 							 GError		**error);
-gboolean	 hal_gpower_clear_hibernate_error	(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_clear_hibernate_error	(HalGPower	*power,
 							 GError		**error);
-gboolean	 hal_gpower_enable_power_save		(HalGPower	*hal_gpower,
+gboolean	 hal_gpower_enable_power_save		(HalGPower	*power,
 							 gboolean	 enable);
 
 G_END_DECLS
