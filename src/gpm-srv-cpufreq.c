@@ -28,8 +28,9 @@
 #include <dbus/dbus-glib.h>
 #include <glib/gi18n.h>
 
+#include <libhal-gcpufreq.h>
+
 #include "gpm-ac-adapter.h"
-#include "gpm-cpufreq.h"
 #include "gpm-conf.h"
 #include "gpm-debug.h"
 #include "gpm-srv-cpufreq.h"
@@ -42,7 +43,7 @@ static void     gpm_srv_cpufreq_finalize   (GObject	*object);
 
 struct GpmSrvCpuFreqPrivate
 {
-	GpmCpuFreq		*cpufreq;
+	HalGCpufreq		*hal_cpufreq;
 	GpmConf			*conf;
 	GpmAcAdapter		*ac_adapter;
 };
@@ -63,7 +64,7 @@ gpm_srv_cpufreq_sync_policy (GpmSrvCpuFreq *srv_cpufreq)
 	GpmAcAdapterState state;
 	guint cpufreq_performance;
 	gchar *cpufreq_policy;
-	GpmCpuFreqEnum srv_cpufreq_type;
+	HalGCpufreqType srv_cpufreq_type;
 
 	gpm_ac_adapter_get_state (srv_cpufreq->priv->ac_adapter, &state);
 
@@ -78,13 +79,13 @@ gpm_srv_cpufreq_sync_policy (GpmSrvCpuFreq *srv_cpufreq)
 	}
 
 	/* use enumerated value */
-	srv_cpufreq_type = gpm_cpufreq_string_to_enum (cpufreq_policy);
+	srv_cpufreq_type = hal_gcpufreq_string_to_enum (cpufreq_policy);
 	g_free (cpufreq_policy);
 
 	/* change to the right governer and settings */
-	gpm_cpufreq_set_governor (srv_cpufreq->priv->cpufreq, srv_cpufreq_type);
-	gpm_cpufreq_set_consider_nice (srv_cpufreq->priv->cpufreq, cpufreq_consider_nice);
-	gpm_cpufreq_set_performance (srv_cpufreq->priv->cpufreq, cpufreq_performance);
+	hal_gcpufreq_set_governor (srv_cpufreq->priv->hal_cpufreq, srv_cpufreq_type);
+	hal_gcpufreq_set_consider_nice (srv_cpufreq->priv->hal_cpufreq, cpufreq_consider_nice);
+	hal_gcpufreq_set_performance (srv_cpufreq->priv->hal_cpufreq, cpufreq_performance);
 	return TRUE;
 }
 
@@ -148,7 +149,7 @@ gpm_srv_cpufreq_init (GpmSrvCpuFreq *srv_cpufreq)
 	srv_cpufreq->priv = GPM_SRV_CPUFREQ_GET_PRIVATE (srv_cpufreq);
 
 	/* we use cpufreq as the master class */
-	srv_cpufreq->priv->cpufreq = gpm_cpufreq_new ();
+	srv_cpufreq->priv->hal_cpufreq = hal_gcpufreq_new ();
 
 	/* get changes from gconf */
 	srv_cpufreq->priv->conf = gpm_conf_new ();
@@ -178,8 +179,8 @@ gpm_srv_cpufreq_finalize (GObject *object)
 	srv_cpufreq = GPM_SRV_CPUFREQ (object);
 	srv_cpufreq->priv = GPM_SRV_CPUFREQ_GET_PRIVATE (srv_cpufreq);
 
-	if (srv_cpufreq->priv->cpufreq != NULL) {
-		g_object_unref (srv_cpufreq->priv->cpufreq);
+	if (srv_cpufreq->priv->hal_cpufreq != NULL) {
+		g_object_unref (srv_cpufreq->priv->hal_cpufreq);
 	}
 	if (srv_cpufreq->priv->conf != NULL) {
 		g_object_unref (srv_cpufreq->priv->conf);
@@ -200,9 +201,10 @@ gpm_srv_cpufreq_new (void)
 	GpmSrvCpuFreq *srv_cpufreq = NULL;
 
 	/* only load if we have the hardware */
-	if (gpm_cpufreq_has_hw() == TRUE) {
+	if (hal_gcpufreq_has_hw() == TRUE) {
 		srv_cpufreq = g_object_new (GPM_TYPE_SRV_CPUFREQ, NULL);
 	}
 
 	return srv_cpufreq;
 }
+
