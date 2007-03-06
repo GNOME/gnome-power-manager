@@ -29,6 +29,8 @@
 #include <time.h>
 #include <dbus/dbus-gtype-specialized.h>
 
+#include <libhal-gmanager.h>
+
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
@@ -36,7 +38,6 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
-#include "gpm-hal.h"
 #include "gpm-info.h"
 #include "gpm-array.h"
 #include "gpm-power.h"
@@ -62,7 +63,6 @@ struct GpmInfoPrivate
 	GpmButton		*button;
 	GpmControl		*control;
 	GpmDpms			*dpms;
-	GpmHal			*hal;
 	GpmIdle			*idle;
 	GpmPower		*power;
 
@@ -565,12 +565,11 @@ gpm_info_class_init (GpmInfoClass *klass)
 static void
 gpm_info_init (GpmInfo *info)
 {
+	HalGManager *hal_manager;
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
 	/* record our start time */
 	info->priv->start_time = time (NULL);
-
-	info->priv->hal = gpm_hal_new ();
 
 	info->priv->control = gpm_control_new ();
 	g_signal_connect (info->priv->control, "resume",
@@ -579,7 +578,9 @@ gpm_info_init (GpmInfo *info)
 			  G_CALLBACK (control_sleep_failure_cb), info);
 
 	/* find out if we should log and display the extra graphs */
-	info->priv->is_laptop = gpm_hal_is_laptop (info->priv->hal);
+	hal_manager = hal_gmanager_new ();
+	info->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
+	g_object_unref (hal_manager);
 
 	/* singleton, so okay */
 	info->priv->power = gpm_power_new ();
@@ -677,7 +678,6 @@ gpm_info_finalize (GObject *object)
 	}
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
-	g_object_unref (info->priv->hal);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
