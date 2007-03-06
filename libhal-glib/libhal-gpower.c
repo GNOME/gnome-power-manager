@@ -162,10 +162,10 @@ hal_gpower_can_suspend (HalGPower *hal_gpower)
 
 	/* TODO: Change to can_suspend when rely on newer HAL */
 	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
-					  "power_management.can_suspend_to_ram",
+					  "power_management.can_suspend",
 					  &can_suspend, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("hal_gpower_can_suspend: Key can_suspend_to_ram missing");
+		gpm_warning ("Key can_suspend missing");
 		return FALSE;
 	}
 	return can_suspend;
@@ -189,10 +189,10 @@ hal_gpower_can_hibernate (HalGPower *hal_gpower)
 
 	/* TODO: Change to can_hibernate when rely on newer HAL */
 	exists = hal_gdevice_get_bool (hal_gpower->priv->computer,
-					  "power_management.can_suspend_to_disk",
+					  "power_management.can_hibernate",
 					  &can_hibernate, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("hal_gpower_can_hibernate: Key can_suspend_to_disk missing");
+		gpm_warning ("Key can_hibernate missing");
 		return FALSE;
 	}
 	return can_hibernate;

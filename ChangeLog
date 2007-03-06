@@ -1,6 +1,16 @@
 2007-03-06  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
+	* libhal-glib/libhal-gpower.c:
+	* src/gpm-hal.c: (gpm_hal_can_suspend), (gpm_hal_can_hibernate),
+	(gpm_hal_clear_suspend_error), (gpm_hal_clear_hibernate_error):
+	* src/gpm-power.c: (gpm_power_status_for_device_more):
+	Increase dependency on HAL to 0.5.8 and remove a lot of the
+	compatibility code.
+
+2007-03-06  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
 	* src/gpm-notify.c: (gpm_notify_create):
 	Increase dependency on libnotify to 0.4.3 and remove a lot of the
 	compatibility code working around the broken GtkStatusIcon support.

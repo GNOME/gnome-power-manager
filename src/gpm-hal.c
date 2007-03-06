@@ -1158,12 +1158,11 @@ gpm_hal_can_suspend (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	/* TODO: Change to can_suspend when rely on newer HAL */
 	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
-					  "power_management.can_suspend_to_ram",
+					  "power_management.can_suspend",
 					  &can_suspend, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("gpm_hal_can_suspend: Key can_suspend_to_ram missing");
+		gpm_warning ("Key can_suspend missing");
 		return FALSE;
 	}
 	return can_suspend;
@@ -1185,12 +1184,11 @@ gpm_hal_can_hibernate (GpmHal *hal)
 
 	g_return_val_if_fail (GPM_IS_HAL (hal), FALSE);
 
-	/* TODO: Change to can_hibernate when rely on newer HAL */
 	exists = gpm_hal_device_get_bool (hal, HAL_ROOT_COMPUTER,
-					  "power_management.can_suspend_to_disk",
+					  "power_management.can_hibernate",
 					  &can_hibernate, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("gpm_hal_can_hibernate: Key can_suspend_to_disk missing");
+		gpm_warning ("Key can_hibernate missing");
 		return FALSE;
 	}
 	return can_hibernate;
@@ -1461,7 +1459,6 @@ gpm_hal_has_hibernate_error (GpmHal *hal, gboolean *state)
 gboolean
 gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 {
-#if HAVE_HAL_NEW
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -1478,8 +1475,6 @@ gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 	ret = dbus_g_proxy_call (proxy, "SuspendClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
-#endif
-	return TRUE;
 }
 
 /**
@@ -1493,7 +1488,6 @@ gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 gboolean
 gpm_hal_clear_hibernate_error (GpmHal *hal, GError **error)
 {
-#if HAVE_HAL_NEW
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -1510,8 +1504,6 @@ gpm_hal_clear_hibernate_error (GpmHal *hal, GError **error)
 	ret = dbus_g_proxy_call (proxy, "HibernateClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
-#endif
-	return TRUE;
 }
 
 /**
