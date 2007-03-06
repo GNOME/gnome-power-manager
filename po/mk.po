@@ -1,17 +1,17 @@
-# translation of gnome-power-manager.HEAD.mk.po to Macedonian
+# translation of gnome-power-manager.gnome-2-18.mk.po to Macedonian
 # English translation of gnome-power-manager.
 # Copyright (C) 2005 THE gnome-power-manager'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-power-manager package.
 #
 # Арангел Ангов <ufo@linux.net.mk>, 2005.
-# Jovan Naumovski <jovan@lugola.net>, 2006.
+# Jovan Naumovski <jovan@lugola.net>, 2006, 2007.
 # Arangel Angov <ufo@linux.net.mk>, 2006.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager.HEAD.mk\n"
+"Project-Id-Version: gnome-power-manager.gnome-2-18.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-25 10:58+0100\n"
-"PO-Revision-Date: 2006-12-28 00:29+0100\n"
+"POT-Creation-Date: 2007-03-05 03:23+0000\n"
+"PO-Revision-Date: 2007-03-06 19:55+0100\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -20,30 +20,30 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural= n==1 || n%10==1 ? 0 : 1\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../applets/brightness/brightness-applet.c:60
-msgid "Power Manger Brightness Applet"
+#: ../applets/brightness/brightness-applet.c:63
+msgid "Power Manager Brightness Applet"
 msgstr "Аплет за светлост на менаџерот за енергија"
 
-#: ../applets/brightness/brightness-applet.c:61
+#: ../applets/brightness/brightness-applet.c:64
 msgid "Adjusts laptop panel brightness."
 msgstr "Ја прилагодува светлоста на екранот на лаптопот."
 
-#: ../applets/brightness/brightness-applet.c:215
+#: ../applets/brightness/brightness-applet.c:232
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "LCD светлост : %d%%"
 
-#: ../applets/brightness/brightness-applet.c:217
+#: ../applets/brightness/brightness-applet.c:234
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Не можам да ја добијам светлоста на екранот на лаптопот"
 
-#: ../applets/brightness/brightness-applet.c:487
+#: ../applets/brightness/brightness-applet.c:597
 #: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:305
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Лиценцирано под општата јавна ГНУ лиценца верзија 2"
 
-#: ../applets/brightness/brightness-applet.c:488
+#: ../applets/brightness/brightness-applet.c:598
 #: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Фондацијата за слободен софтвер; можете да ја разгледате втората\n"
 " или пак некоја понова верзија."
 
-#: ../applets/brightness/brightness-applet.c:492
+#: ../applets/brightness/brightness-applet.c:602
 #: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:310
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
@@ -69,7 +69,7 @@ msgstr ""
 " но без БИЛО КАКВИ ГАРАНЦИИ.  За повеќе погледнете ја\n"
 " општата јавна ГНУ лиценца."
 
-#: ../applets/brightness/brightness-applet.c:496
+#: ../applets/brightness/brightness-applet.c:606
 #: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:314
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
@@ -82,7 +82,7 @@ msgstr ""
 "слободен софтвер на следнава адреса: 59 Temple Place, Suite 330, Boston,\n"
 " MA  02111-1307  USA"
 
-#: ../applets/brightness/brightness-applet.c:510
+#: ../applets/brightness/brightness-applet.c:620
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Авторски права © 2006 Benjamin Canou"
 
@@ -109,8 +109,8 @@ msgid "Manual inhibit"
 msgstr "Рачно спречување"
 
 #: ../applets/inhibit/inhibit-applet.c:282
-msgid "Copyright © 2006 Richard Hughes"
-msgstr "Авторски права © 2006 Richard Hughes"
+msgid "Copyright © 2006-2007 Richard Hughes"
+msgstr "Авторски права © 2006-2007 Richard Hughes"
 
 #. common descriptions of this program
 #: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
@@ -141,11 +141,15 @@ msgstr "Дејство кога батеријата е при крај"
 
 #: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Change the brightness to a preset level on AC state change"
-msgstr "Промени ја светлоста на нормално ниво кога се променува состојбата на адаптерот"
+msgstr ""
+"Промени ја светлоста на нормално ниво кога се променува состојбата на "
+"адаптерот"
 
 #: ../data/gnome-power-manager.schemas.in.h:5
 msgid "Change the brightness to automatically using the ambient light sensors"
-msgstr "Промени ја светлоста на нормално ниво со користење на сензорите за амбиентална светлина"
+msgstr ""
+"Промени ја светлоста на нормално ниво со користење на сензорите за "
+"амбиентална светлина"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
@@ -203,7 +207,9 @@ msgstr ""
 msgid ""
 "If a notification message should be displayed when the battery is getting "
 "low."
-msgstr "Дали порака за известување треба да биде прикажана кога батеријата е при крај."
+msgstr ""
+"Дали порака за известување треба да биде прикажана кога батеријата е при "
+"крај."
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
@@ -261,9 +267,9 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:24
 msgid ""
-"If the laptop should be configured as if it is using an permanent external "
+"If the laptop should be configured as if it is using a permanent external "
 "monitor"
-msgstr "Дали лаптопот да се конфигурира како да користи надворешен екран"
+msgstr "Дали лаптопот да се конфигурира како да користи траен надворешен екран"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
@@ -272,8 +278,8 @@ msgid ""
 "select FALSE here."
 msgstr ""
 "Дали лаптопот да биде конфигуриран да не се затемнува и DPMS да биде "
-"исклучен ако користи надворешен екран. Повеќето корисници на лаптопи "
-"и десктоп компјутери овде треба да одберат FALSE."
+"исклучен ако користи надворешен екран. Повеќето корисници на лаптопи и "
+"десктоп компјутери овде треба да одберат FALSE."
 
 #: ../data/gnome-power-manager.schemas.in.h:26
 msgid "If the low-power mode should be enabled when on AC"
@@ -398,126 +404,141 @@ msgstr ""
 "суспендирање или затемнување на екранот."
 
 #: ../data/gnome-power-manager.schemas.in.h:44
-msgid "If we should show the recalled battery warning for a broken battery"
-msgstr "Дали да покажеме предупредување дека отповиканата батерија е расипана батерија"
+msgid "If we should show the CPU frequency scaling in the UI"
+msgstr "Дали да се прикаже намалувањето на фреквенцијата на процесорот во корисничкиот интерфејс"
 
 #: ../data/gnome-power-manager.schemas.in.h:45
+msgid ""
+"If we should show the CPU frequency scaling in the UI. Some people need to "
+"configure this for specific systems."
+msgstr ""
+"Дали да се прикаже намалувањето на фреквенцијата на процесорот во корисничкиот интерфејс. Некои "
+"треба да го конфигурираат ова за одредени системи."
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+msgid "If we should show the recalled battery warning for a broken battery"
+msgstr ""
+"Дали да покажеме предупредување дека отповиканата батерија е расипана "
+"батерија"
+
+#: ../data/gnome-power-manager.schemas.in.h:47
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
 msgstr ""
-"Дали да покажеме предупредување дека отповиканата батерија е расипана батерија. "
-"Поставете го ова false само ако сте сигурни дека батеријата Ви е во ред."
+"Дали да покажеме предупредување дека отповиканата батерија е расипана "
+"батерија. Поставете го ова false само ако сте сигурни дека батеријата Ви е "
+"во ред."
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "Keyboard brightness when on AC"
 msgstr "Светлост на тастатурата кога сум на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid "Keyboard brightness when on battery"
 msgstr "Светлост на тастатурата кога сум на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "LCD brightness when on AC"
 msgstr "Светлост на LCD екранот кога сум на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "LCD brightness when on battery"
 msgstr "Светлост на LCD екранот кога сум на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "Laptop lid close action on battery"
 msgstr "Дејство кога е затворен лаптопот и е на батерија:"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "Laptop lid close action when on AC"
 msgstr "Дејство кога е затворен лаптопот и е на адаптер:"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Lock screen on hibernate"
 msgstr "Заклучи го екранот при хибернирање"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Lock screen on suspend"
 msgstr "Заклучи го екранот при суспендирање"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:56
 msgid "Lock screen when blanked"
 msgstr "Заклучи го екранот при затемнување"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Method used to blank screen on AC"
 msgstr "Метод користен за затемнување на екранот кога сум на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Method used to blank screen on battery"
 msgstr "Метод користен за затемнување на екранот кога сум на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Notify on a HAL error"
 msgstr "Извести за HAL грешка"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Notify on a low power"
 msgstr "Извести при малку енергија"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Notify when AC adapter is disconnected"
 msgstr "Извести кога адаптерот е отстранет"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Notify when fully charged"
 msgstr "Извести кога батеријата е целосно наполнета"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Number of seconds to suppress policy after resume"
 msgstr "Број на секунди за потиснување на правилата по продолжување"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Percentage action is taken"
 msgstr "Процент при кој се превзема дејство"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Percentage considered critical"
 msgstr "Процент кој се смета за критичен"
 
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:66
 msgid "Percentage considered low"
 msgstr "Процент кој се смета за низок"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Percentage considered very low"
 msgstr "Процент кој се смета за многу низок"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Power button action"
 msgstr "Дејство на копчето за приклучување"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Sleep timeout computer when on AC"
 msgstr "За колку време компјутерот ќе оди на мирување кога е на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Sleep timeout computer when on battery"
 msgstr "За колку време компјутерот ќе оди на мирување кога е на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Sleep timeout display when on AC"
 msgstr "Време за кое екранот ќе оди на мирување кога компјутерот е на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Sleep timeout display when on battery"
 msgstr "Време за кое екранот ќе оди на мирување кога компјутерот е на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Suspend button action"
 msgstr "Дејство на копчето за суспендирање"
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Suspend enabled"
 msgstr "Суспендирањето е овозможено"
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -526,7 +547,7 @@ msgstr ""
 "адаптер. Можни вредности се \"стандардно\", \"мирувај\", \"суспендирај се\" "
 "и \"исклучи се\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
@@ -535,7 +556,7 @@ msgstr ""
 "батерија. Можни вредности се \"стандардно\", \"мирувај\", \"суспендирај се\" "
 "и \"исклучи се\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -544,16 +565,16 @@ msgstr ""
 "критично празен. Можни вредности се \"хибернирај\", \"суспендирај\", "
 "\"исклучи се\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:78
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Дејство кое ќе се изврши кога акумулаторот на непрекинатото напојување е "
-" празен. Можни вредности се \"хибернирај\", \"суспендирај\", "
-"\"исклучи се\" и \"ништо\"."
+"Дејство кое ќе се изврши кога акумулаторот на непрекинатото напојување е  "
+"празен. Можни вредности се \"хибернирај\", \"суспендирај\", \"исклучи се\" и "
+"\"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -561,7 +582,7 @@ msgstr ""
 "Дејство кое ќе се изврши кога батеријата е критично празна. Можни вредности "
 "се \"хибернирај\", \"суспендирај\", \"исклучи се\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:80
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -570,7 +591,7 @@ msgstr ""
 "Дејство кое ќе се изврши кога лаптопот е затворен и работи на адаптер. Можни "
 "вредности се \"хибернирај\", \"суспендирај\", \"исклучи се\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -580,7 +601,7 @@ msgstr ""
 "Можни вредности се \"хибернирај\", \"суспендирај\", \"исклучи се\" и \"ништо"
 "\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -590,7 +611,7 @@ msgstr ""
 "хибернирање: Можни вредности се \"хибернирај\", \"суспендирај\", \"исклучи се"
 "\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
 "are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
@@ -600,7 +621,7 @@ msgstr ""
 "вклучување/исклучување: Можни вредности се \"хибернирај\", \"суспендирај\", "
 "\"исклучи се\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
@@ -610,7 +631,7 @@ msgstr ""
 "суспендирање: Можни вредности се \"хибернирај\", \"суспендирај\", \"исклучи "
 "се\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
 "computer is on AC power."
@@ -618,7 +639,7 @@ msgstr ""
 "Време во секунди кое на компјутерот му треба кога е на енергија од адаптер "
 "за екранот да оди во мирување."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
@@ -626,7 +647,7 @@ msgstr ""
 "Време во секунди кое на компјутерот му треба кога е на енергија од адаптер "
 "за да оди во мирување."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
@@ -634,7 +655,7 @@ msgstr ""
 "Време во секунди кое на компјутерот му треба кога е на енергија од батерија "
 "за да оди во мирување."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -642,7 +663,7 @@ msgstr ""
 "Време во секунди кое на компјутерот му треба кога е на енергија од батерија "
 "за екранот да оди во мирување."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
@@ -650,7 +671,7 @@ msgstr ""
 "Светлост на екранот кога е на енергија од адаптер. Можните вредности се од 0 "
 "до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
@@ -658,7 +679,7 @@ msgstr ""
 "Светлост на екранот кога е на енергија од батерија. Можните вредности се од "
 "0 до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -666,7 +687,7 @@ msgstr ""
 "Светлост на екранот кога е на енергија од адаптер. Можните вредности се од 0 "
 "до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:90
+#: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
@@ -674,94 +695,96 @@ msgstr ""
 "Светлост на екранот кога е на енергија од батерија. Можните вредности се од "
 "0 до 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:91
+#: ../data/gnome-power-manager.schemas.in.h:93
 msgid "The brightness of the screen when idle"
 msgstr "Светлост на екранот кога е неактивен"
 
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The cpufreq performance value to use when on AC power"
 msgstr "Вредноста на перформанси на cpufreq која ќе се користи кога сум на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The cpufreq performance value to use when on battery power"
 msgstr "Вредноста на перформанси на cpufreq која ќе се користи кога сум на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The cpufreq performance value to used to scale the processor when on AC "
 "power."
 msgstr "Вредноста на перформанси на cpufreq која ќе се користи кога сум на адаптер."
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The cpufreq performance value to used to scale the processor when on battery "
 "power."
 msgstr ""
-"Вредноста на перформанси на cpufreq која ќе се користи за намалување на фреквенцијата "
-"на процесорот  кога сум на батерија."
+"Вредноста на перформанси на cpufreq која ќе се користи за намалување на "
+"фреквенцијата на процесорот  кога сум на батерија."
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The cpufreq policy to use when on AC power"
 msgstr "Правилото на cpufreq кое ќе се користи кога сум на адаптер"
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid "The cpufreq policy to use when on battery power"
 msgstr "Правилото на cpufreq кое ќе се користи кога сум на батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:98
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
 "The cpufreq policy to used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
-"Правилото за cpufreq кој ќе се користи за намалување на фреквенцијата на процесорот "
-"кога сум на адаптер. Можни вредности се при потреба, конзервативно, зачувување на енергија, "
-"кор. простор, подобри перформанси или ништо."
+"Правилото за cpufreq кој ќе се користи за намалување на фреквенцијата на "
+"процесорот кога сум на адаптер. Можни вредности се при потреба, "
+"конзервативно, зачувување на енергија, кор. простор, подобри перформанси или "
+"ништо."
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:101
 msgid ""
 "The cpufreq policy to used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"Правилото за cpufreq кој ќе се користи за намалување на фреквенцијата на процесорот "
-"кога сум на батерија. Можни вредности се при потреба, конзервативно, зачувување на енергија, "
-"кор. простор, подобри перформанси или ништо."
+"Правилото за cpufreq кој ќе се користи за намалување на фреквенцијата на "
+"процесорот кога сум на батерија. Можни вредности се при потреба, "
+"конзервативно, зачувување на енергија, кор. простор, подобри перформанси или "
+"ништо."
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The damping factor for the rate"
 msgstr "Фактор на запирање за интензитетот"
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:103
 msgid "The default graph type to show in the statistics window"
 msgstr "Стандардниот тип на графикон за прикажување во прозорецот за статистики"
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:104
 msgid "The default graph type to show in the statistics window."
 msgstr "Стандардниот тип на графикон за прикажување во прозорецот за статистика."
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The invalid timeout for power actions"
 msgstr "Невалидното време за дејства со енергијата"
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
 msgstr ""
-"Невалидното времетраење во милисекунди за извршување на дејствата за енергијата. Поставете "
-"го ова подолго ако добивате пораки како „батеријата е при критично ниво“ кога ја откачувате од "
-"струја."
+"Невалидното времетраење во милисекунди за извршување на дејствата за "
+"енергијата. Поставете го ова подолго ако добивате пораки како „батеријата е "
+"при критично ниво“ кога ја откачувате од струја."
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:107
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Максимално времетраење прикажано на x-оската на графиконот."
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:108
 msgid "The maximum time displayed on the graph"
 msgstr "Максимално време прикажано на графиконот."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
+#: ../data/gnome-power-manager.schemas.in.h:109
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -770,7 +793,7 @@ msgstr ""
 "смета за „критично ниско“. Валидно е само ако опцијата use_time_for_policy е "
 "поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:110
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -779,7 +802,7 @@ msgstr ""
 "за да се смета за „ниско“. Валидно е само ако опцијата use_time_for_policy е "
 "поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid ""
 "The percentage of the battery when it is considered very low. Only valid "
 "when use_time_for_policy is false."
@@ -788,7 +811,7 @@ msgstr ""
 "за да се смета за „многу ниско“. Валидно е само ако опцијата "
 "use_time_for_policy е поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -797,7 +820,7 @@ msgstr ""
 "за да се изврши критичното дејство. Валидно е само ако опцијата "
 "use_time_for_policy е поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:113
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
@@ -806,7 +829,7 @@ msgstr ""
 "дејство. Валидно е само ако опцијата use_time_for_policy е поставена на "
 "неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:112
+#: ../data/gnome-power-manager.schemas.in.h:114
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
@@ -814,7 +837,7 @@ msgstr ""
 "Преостанато време во секунди за кое полнежот на батеријата се смета за "
 "критично низок. Валидно е само кога use_time_for_policy е true."
 
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:115
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
@@ -823,7 +846,7 @@ msgstr ""
 "за да се смета за „ниско“. Валидно е само ако опцијата use_time_for_policy е "
 "поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:116
 msgid ""
 "The time remaining in seconds of the battery when it is considered very low. "
 "Only valid when use_time_for_policy is true."
@@ -832,23 +855,23 @@ msgstr ""
 "за многу слаб. Валидно е само ако опцијата use_time_for_policy е поставена "
 "на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid "The time remaining when action is taken"
 msgstr "Преостанато време кога е направено дејство"
 
-#: ../data/gnome-power-manager.schemas.in.h:116
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid "The time remaining when critical"
 msgstr "Преостанато време при критично празна батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The time remaining when low"
 msgstr "Преостанато време при празна батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:118
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The time remaining when very low"
 msgstr "Преостанато време при многу празна батерија"
 
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
@@ -856,7 +879,7 @@ msgstr ""
 "Типот на мирување кој треба да се изврши кога компјутерот е неактивен. Можни "
 "вредности се \"хибернирај\", \"суспендирај\" и \"ништо\"."
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid ""
 "The value of the damping factor used when calculating the exponentially "
 "weighted average of the rate. Increasing this value will increase the "
@@ -869,7 +892,7 @@ msgstr ""
 "проценката за преостанато време поточна, но графиконот помалку одговара на "
 "промени."
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
@@ -877,59 +900,71 @@ msgstr ""
 "Ова е светлоста на екранот на лаптопот кога е неактивен. Валидно е само ако "
 "опцијата use_time_for_policy е поставена на неточно."
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:124
 msgid "UPS critical low action"
 msgstr "Дејство кога непрекинатото напојување(UPS) е критично празно"
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:125
 msgid "UPS low power action"
 msgstr "Дејство кога непрекинатото напојување(UPS) е празно"
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:126
 msgid "Use gnome-screensaver lock setting"
 msgstr "Користи го поставувањето за заклучување на gnome-screensaver"
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid "When to show the notification icon"
 msgstr "Кога да ја прикажам иконата за известување"
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Дали NetworkManager да се поврзува или исклучува при мирување."
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
-msgstr "Дали NetworkManager да се поврзува или исклучува при суспендирање или хибернирање."
+msgstr ""
+"Дали NetworkManager да се поврзува или исклучува при суспендирање или "
+"хибернирање."
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:130
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
-msgstr "Дали процесите со приоритет да се земаат во предвит при пресметката за оптовареност на процесорот"
+msgstr ""
+"Дали процесите со приоритет да се земаат во предвит при пресметката за "
+"оптовареност на процесорот"
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Дали да хибернирам, суспендирам или да не правам ништо при неактивност"
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:132
 msgid "Whether to use time-based notifications"
 msgstr "Дали да користам временски-ориентирани известувања"
 
-#: ../data/gnome-power-manager.schemas.in.h:131
+#: ../data/gnome-power-manager.schemas.in.h:133
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr "Дали да ги прикажуваме натписите за оска во прозорецот за статистики"
+
+#: ../data/gnome-power-manager.schemas.in.h:134
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr "Дали да ги прикажуваме натписите за оска во прозорецот за статистики."
+
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "Whether we should show the events in the statistics window"
 msgstr "Дали да ги прикажуваме настаните во прозорецот за статистики"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid "Whether we should show the events in the statistics window."
 msgstr "Дали да ги прикажуваме настаните во прозорецот за статистики."
 
-#: ../data/gnome-power-manager.schemas.in.h:133
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid "Whether we should show the legend in the statistics window"
 msgstr "Дали да ја прикажуваме легендата во прозорецот за статистики"
 
-#: ../data/gnome-power-manager.schemas.in.h:134
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid "Whether we should show the legend in the statistics window."
 msgstr "Дали да ја прикажуваме легендата во прозорецот за статистики."
 
@@ -954,22 +989,26 @@ msgid "Brightness"
 msgstr "Светлост"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add legend"
-msgstr "Додај легенда"
+msgid "Add _axis labels"
+msgstr "Додај натписи за _оска"
 
 #: ../data/gpm-graph.glade.h:2
-msgid "Add related events"
-msgstr "Додај слични настани"
+msgid "Add lege_nd"
+msgstr "Додај леге_нда"
 
 #: ../data/gpm-graph.glade.h:3
+msgid "Add related _events"
+msgstr "Додај слични _настани"
+
+#: ../data/gpm-graph.glade.h:4
 msgid "Device:"
 msgstr "Уред:"
 
-#: ../data/gpm-graph.glade.h:4
+#: ../data/gpm-graph.glade.h:5
 msgid "Graph type:"
 msgstr "Тип на графикон:"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-statistics-core.c:55
+#: ../data/gpm-graph.glade.h:6 ../src/gpm-statistics-core.c:55
 msgid "Power History"
 msgstr "Историја на напојувањето"
 
@@ -982,16 +1021,16 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "Снимам DVD насловено \"Моите слики\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-msgid "GNOME Acme Foo"
-msgstr "GNOME Acme Foo"
-
-#: ../data/gpm-inhibit-test.glade.h:4
-msgid "Inhibit"
-msgstr "Спречи"
-
-#: ../data/gpm-inhibit-test.glade.h:5
 msgid "Inhibit Tester"
 msgstr "Спречи го тестерот"
+
+#: ../data/gpm-inhibit-test.glade.h:4
+msgid "InhibitAuto"
+msgstr "СпречиАвтоматски"
+
+#: ../data/gpm-inhibit-test.glade.h:5
+msgid "InhibitManual"
+msgstr "СпречиРачно"
 
 #: ../data/gpm-inhibit-test.glade.h:6
 msgid "Reason:"
@@ -1000,6 +1039,10 @@ msgstr "Причина:"
 #: ../data/gpm-inhibit-test.glade.h:7
 msgid "UnInhibit"
 msgstr "Не спречувај"
+
+#: ../data/gpm-inhibit-test.glade.h:8
+msgid "Vendor Acme Foo"
+msgstr "Произведител Acme Foo"
 
 #: ../data/gpm-prefs.glade.h:1
 msgid "<b>Buttons</b>"
@@ -1113,11 +1156,11 @@ msgstr "_Никогаш не прикажувај икона"
 msgid "_Only display an icon when battery power is critically low"
 msgstr "Прикажи _само кога батеријата е при крај"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:129
 msgid "Unknown time"
 msgstr "Непознато време"
 
-#: ../src/gpm-common.c:98
+#: ../src/gpm-common.c:134
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1125,7 +1168,7 @@ msgstr[0] "%i минута"
 msgstr[1] "%i минути"
 msgstr[2] "%i минути"
 
-#: ../src/gpm-common.c:109
+#: ../src/gpm-common.c:145
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1135,19 +1178,19 @@ msgstr[2] "%i часови"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:115
+#: ../src/gpm-common.c:151
 #, c-format
 msgid "%i %s, %i %s"
 msgstr "%i %s, %i %s"
 
-#: ../src/gpm-common.c:116
+#: ../src/gpm-common.c:152
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "еден час"
 msgstr[1] "часови"
 msgstr[2] "часови"
 
-#: ../src/gpm-common.c:117
+#: ../src/gpm-common.c:153
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "1 минута"
@@ -1158,62 +1201,90 @@ msgstr[2] "минути"
 msgid "Power Manager for the GNOME desktop"
 msgstr "Менаџер за енергија на GNOME десктопот"
 
-#: ../src/gpm-graph-widget.c:73 ../src/gpm-power.c:729
+#: ../src/gpm-graph-widget.c:78
 msgid "Charged"
 msgstr "Наполнета"
 
-#: ../src/gpm-graph-widget.c:74 ../src/gpm-power.c:732
+#: ../src/gpm-graph-widget.c:79
 msgid "Charging"
 msgstr "Се полни"
 
-#: ../src/gpm-graph-widget.c:75 ../src/gpm-power.c:735
+#: ../src/gpm-graph-widget.c:80
 msgid "Discharging"
 msgstr "Се празни"
 
+#: ../src/gpm-graph-widget.c:182
+msgid "Charge percentage"
+msgstr "Процент на полнење"
+
+#: ../src/gpm-graph-widget.c:185
+msgid "Time remaining"
+msgstr "Преостанато време"
+
+#: ../src/gpm-graph-widget.c:188
+msgid "Power"
+msgstr "Батерија"
+
+#: ../src/gpm-graph-widget.c:191
+msgid "Cell Voltage"
+msgstr "Волтажа на ќелијата"
+
+#: ../src/gpm-graph-widget.c:193 ../src/gpm-graph-widget.c:213
+msgid "Unknown caption"
+msgstr "Непознат наслов"
+
+#: ../src/gpm-graph-widget.c:210
+msgid "Time"
+msgstr "Време"
+
+#: ../src/gpm-graph-widget.c:211
+msgid "Time since startup"
+msgstr "Време од подигнувањето на системот"
+
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:379
+#: ../src/gpm-graph-widget.c:478
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:382
+#: ../src/gpm-graph-widget.c:481
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:387
+#: ../src/gpm-graph-widget.c:486
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:390
+#: ../src/gpm-graph-widget.c:489
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:394
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:398
+#: ../src/gpm-graph-widget.c:497
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:401
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%iW"
 msgstr "%iW"
 
 #. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:404
+#: ../src/gpm-graph-widget.c:503
 #, c-format
 msgid "%iV"
 msgstr "%iV"
@@ -1223,73 +1294,73 @@ msgstr "%iV"
 msgid "%s because %s"
 msgstr "%s поради %s"
 
-#: ../src/gpm-info.c:416
+#: ../src/gpm-info.c:440
 msgid "AC adapter inserted"
 msgstr "Адаптерот е приклучен"
 
-#: ../src/gpm-info.c:419
+#: ../src/gpm-info.c:443
 msgid "AC adapter removed"
 msgstr "Адаптерот е отстранет"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:464
 msgid "The laptop lid has been closed"
 msgstr "Лаптопот е затворен"
 
-#: ../src/gpm-info.c:446
+#: ../src/gpm-info.c:470
 msgid "The laptop lid has been re-opened"
 msgstr "Лаптопот е повторно отворен"
 
-#: ../src/gpm-info.c:468
+#: ../src/gpm-info.c:492
 msgid "idle mode ended"
 msgstr "заврши режимот на неактивност"
 
-#: ../src/gpm-info.c:471
+#: ../src/gpm-info.c:495
 msgid "idle mode started"
 msgstr "започна режимот на неактивност"
 
-#: ../src/gpm-info.c:490
+#: ../src/gpm-info.c:514
 msgid "dpms on"
 msgstr "dpms вклучено"
 
-#: ../src/gpm-info.c:492
+#: ../src/gpm-info.c:516
 msgid "dpms standby"
 msgstr "dpms мирување"
 
-#: ../src/gpm-info.c:494
+#: ../src/gpm-info.c:518
 msgid "dpms suspend"
 msgstr "dpms суспензија"
 
-#: ../src/gpm-info.c:496
+#: ../src/gpm-info.c:520
 msgid "dpms off"
 msgstr "dpms исклучено"
 
-#: ../src/gpm-info.c:513
+#: ../src/gpm-info.c:537
 msgid "Resuming computer"
 msgstr "Компјутерот продолжува со работа"
 
-#: ../src/gpm-info.c:529 ../src/gpm-tray-icon.c:920
+#: ../src/gpm-info.c:553 ../src/gpm-tray-icon.c:920
 msgid "Hibernate Problem"
 msgstr "Проблем во хибернирањето"
 
-#: ../src/gpm-info.c:531 ../src/gpm-tray-icon.c:929
+#: ../src/gpm-info.c:555 ../src/gpm-tray-icon.c:929
 msgid "Suspend Problem"
 msgstr "Проблем во суспендирањето"
 
-#: ../src/gpm-inhibit.c:322
+#: ../src/gpm-inhibit.c:420
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "%s го запре стартувањето на : "
 
-#: ../src/gpm-inhibit.c:328
+#: ../src/gpm-inhibit.c:426
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Повеќе апликации го спречија %s од стартување."
 
-#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:119
+#: ../src/gpm-inhibit-test.c:261 ../src/gpm-prefs.c:119
 msgid "GNOME Power Preferences"
 msgstr "Преференции за енергија на GNOME"
 
-#: ../src/gpm-inhibit-test.c:194
+#: ../src/gpm-inhibit-test.c:267
 msgid "Power Inhibit Test"
 msgstr "Тест за задржување на енергијата"
 
@@ -1531,11 +1602,11 @@ msgstr "Ова може да е грешка со хардверот или др
 msgid "Check the GNOME Power Manager manual for common problems."
 msgstr "Проверете го упатството на GNOME менаџерот на енергија за чести проблеми."
 
-#: ../src/gpm-notify.c:328
+#: ../src/gpm-notify.c:329
 msgid "Battery may be recalled"
 msgstr "Батеријата може да недостасува"
 
-#: ../src/gpm-notify.c:329
+#: ../src/gpm-notify.c:330
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1543,198 +1614,188 @@ msgid ""
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
-"Батеријата во Вашиот компјутер може да е отповикана од %s и може да сте "
-"во ризик.\n"
+"Батеријата во Вашиот компјутер може да е отповикана од %s и може да сте во "
+"ризик.\n"
 "\n"
-"За повеќе информации, посетете ја страницата за отповикување на батеријата %s."
+"За повеќе информации, посетете ја страницата за отповикување на батеријата %"
+"s."
 
-#: ../src/gpm-notify.c:342
+#: ../src/gpm-notify.c:343
 msgid "Visit recall website"
 msgstr "Посетете ја страницата за отповикување"
 
-#: ../src/gpm-notify.c:347
+#: ../src/gpm-notify.c:348
 msgid "Do not show me this again"
 msgstr "Не ми го покажувај ова никогаш"
 
-#: ../src/gpm-power.c:497
+#: ../src/gpm-power.c:518
 msgid "Laptop battery"
 msgstr "Батерија на лаптоп"
 
-#: ../src/gpm-power.c:499
+#: ../src/gpm-power.c:520
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-power.c:501
+#: ../src/gpm-power.c:522
 msgid "Wireless mouse"
 msgstr "Безжично глувче"
 
-#: ../src/gpm-power.c:503
+#: ../src/gpm-power.c:524
 msgid "Wireless keyboard"
 msgstr "Безжична тастатура"
 
-#: ../src/gpm-power.c:505
+#: ../src/gpm-power.c:526
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:507 ../src/gpm-statistics-core.c:618
+#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:638
 msgid "Unknown"
 msgstr "Непознато"
 
-#: ../src/gpm-power.c:525
-msgid "ups"
-msgstr "акумулатор"
+#: ../src/gpm-power.c:742
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr "<b>Производ:</b> %s\n"
 
-#: ../src/gpm-power.c:527
-msgid "mouse"
-msgstr "глувче"
+#: ../src/gpm-power.c:745
+msgid "<b>Status:</b> Missing\n"
+msgstr "<b>Статус:</b> Недостасува\n"
 
-#: ../src/gpm-power.c:529
-msgid "keyboard"
-msgstr "тастатура"
+#: ../src/gpm-power.c:747
+msgid "<b>Status:</b> Charged\n"
+msgstr "<b>Статус:</b> Наполнета\n"
 
-#: ../src/gpm-power.c:531
-msgid "pda"
-msgstr "pda"
+#: ../src/gpm-power.c:749
+msgid "<b>Status:</b> Charging\n"
+msgstr "<b>Статус:</b> Полнење\n"
 
-#: ../src/gpm-power.c:533
-msgid "unknown"
-msgstr "непознато"
+#: ../src/gpm-power.c:751
+msgid "<b>Status:</b> Discharging\n"
+msgstr "<b>Статус:</b> Празнење\n"
 
-#: ../src/gpm-power.c:722
-msgid "Product:"
-msgstr "Производ:"
+#: ../src/gpm-power.c:754
+#, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "<b>Полнење во проценти:</b> %i%%\n"
 
-#: ../src/gpm-power.c:726 ../src/gpm-power.c:729 ../src/gpm-power.c:732
-#: ../src/gpm-power.c:735
-msgid "Status:"
-msgstr "Статус:"
-
-#: ../src/gpm-power.c:726
-msgid "Missing"
-msgstr "Недостасува"
-
-#: ../src/gpm-power.c:739
-msgid "Percentage charge:"
-msgstr "Полнеж во проценти:"
-
-#: ../src/gpm-power.c:768
+#: ../src/gpm-power.c:783
 msgid "Vendor:"
 msgstr "Произведувач:"
 
-#: ../src/gpm-power.c:776 ../src/gpm-power.c:781
+#: ../src/gpm-power.c:791 ../src/gpm-power.c:796
 msgid "Lithium ion"
 msgstr "Литиум-јонска"
 
-#: ../src/gpm-power.c:778 ../src/gpm-power.c:783
+#: ../src/gpm-power.c:793 ../src/gpm-power.c:798
 msgid "Lead acid"
 msgstr "Олово-ацид"
 
-#: ../src/gpm-power.c:785
+#: ../src/gpm-power.c:800
 msgid "Lithium polymer"
 msgstr "Литиум-полимерска"
 
-#: ../src/gpm-power.c:787
+#: ../src/gpm-power.c:802
 msgid "Nickel metal hydride"
 msgstr "Никел метален хидрид"
 
-#: ../src/gpm-power.c:794
+#: ../src/gpm-power.c:809
 msgid "Technology:"
 msgstr "Технологија:"
 
-#: ../src/gpm-power.c:798
+#: ../src/gpm-power.c:813
 msgid "Serial number:"
 msgstr "Сериски број:"
 
-#: ../src/gpm-power.c:802
+#: ../src/gpm-power.c:817
 msgid "Model:"
 msgstr "Модел:"
 
-#: ../src/gpm-power.c:808
+#: ../src/gpm-power.c:823
 msgid "Remaining time:"
 msgstr "Преостанато време:"
 
-#: ../src/gpm-power.c:814
+#: ../src/gpm-power.c:829
 msgid "Excellent"
 msgstr "Најдобро"
 
-#: ../src/gpm-power.c:816
+#: ../src/gpm-power.c:831
 msgid "Good"
 msgstr "Добро"
 
-#: ../src/gpm-power.c:818
+#: ../src/gpm-power.c:833
 msgid "Fair"
 msgstr "Не толку лошо"
 
-#: ../src/gpm-power.c:820
+#: ../src/gpm-power.c:835
 msgid "Poor"
 msgstr "Лошо"
 
-#: ../src/gpm-power.c:823
+#: ../src/gpm-power.c:838
 msgid "Capacity:"
 msgstr "Капацитет:"
 
-#: ../src/gpm-power.c:829 ../src/gpm-power.c:857
+#: ../src/gpm-power.c:844 ../src/gpm-power.c:872
 msgid "Current charge:"
 msgstr "Моментален полнеж:"
 
-#: ../src/gpm-power.c:835
+#: ../src/gpm-power.c:850
 msgid "Last full charge:"
 msgstr "Последно целосно полнење:"
 
-#: ../src/gpm-power.c:840 ../src/gpm-power.c:862
+#: ../src/gpm-power.c:855 ../src/gpm-power.c:877
 msgid "Design charge:"
 msgstr "Дизајниран полнеж:"
 
-#: ../src/gpm-power.c:845
+#: ../src/gpm-power.c:860
 msgid "Charge rate (raw):"
 msgstr "Стапка на промена (чиста):"
 
-#: ../src/gpm-power.c:850
+#: ../src/gpm-power.c:865
 msgid "Charge rate (smoothed):"
 msgstr "Стапка на промена (урамнотежена):"
 
-#: ../src/gpm-power.c:1348
+#: ../src/gpm-power.c:1363
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s целосно наполнета (%i%%)\n"
 
-#: ../src/gpm-power.c:1354
+#: ../src/gpm-power.c:1369
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s преостанато (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1358
+#: ../src/gpm-power.c:1373
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s се празни (%i%%)\n"
 
-#: ../src/gpm-power.c:1365
+#: ../src/gpm-power.c:1380
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s %s додека да се наполни (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1369
+#: ../src/gpm-power.c:1384
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s charging (%i%%)\n"
 
-#: ../src/gpm-power.c:1406
+#: ../src/gpm-power.c:1421
 msgid "Recalculating information..."
 msgstr "Повторно ги пресметувам информациите..."
 
 #. only enable this if discharging on UPS, for details see:
 #. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1417
+#: ../src/gpm-power.c:1432
 msgid "Computer is running on backup power\n"
 msgstr "Компјутерот работи на акумулатор\n"
 
-#: ../src/gpm-power.c:1420
+#: ../src/gpm-power.c:1435
 msgid "Computer is running on AC power\n"
 msgstr "Компјутерот работи на адаптер\n"
 
-#: ../src/gpm-power.c:1423
+#: ../src/gpm-power.c:1438
 msgid "Computer is running on battery power\n"
 msgstr "Компјутерот работи на батерија\n"
 
@@ -1748,7 +1809,7 @@ msgid "Ask me"
 msgstr "Прашај ме"
 
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:744
+#: ../src/gpm-statistics-core.c:765
 msgid "Suspend"
 msgstr "Суспендирај"
 
@@ -1757,7 +1818,7 @@ msgid "Shutdown"
 msgstr "Исклучи"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:754
+#: ../src/gpm-statistics-core.c:775
 msgid "Hibernate"
 msgstr "Хибернирај"
 
@@ -1765,28 +1826,29 @@ msgstr "Хибернирај"
 msgid "Blank screen"
 msgstr "Темен екран"
 
-#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:88
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-prefs-core.c:89
+#: ../src/gpm-statistics-core.c:88
 msgid "Do nothing"
 msgstr "Не прави ништо"
 
-#. The text that should appear in the processor combo box
-#: ../src/gpm-prefs-core.c:89
+#: ../src/gpm-prefs-core.c:90
 msgid "Based on processor load"
 msgstr "Во зависност од оптовареноста на процесорот"
 
-#: ../src/gpm-prefs-core.c:90
+#: ../src/gpm-prefs-core.c:91
 msgid "Automatic power saving"
 msgstr "Автоматско зачувување на енергија"
 
-#: ../src/gpm-prefs-core.c:91
+#: ../src/gpm-prefs-core.c:92
 msgid "Maximum power saving"
 msgstr "Максимално зачувување на енергија"
 
-#: ../src/gpm-prefs-core.c:92
+#: ../src/gpm-prefs-core.c:93
 msgid "Always maximum speed"
 msgstr "Секогаш со максимална брзина"
 
-#: ../src/gpm-prefs-core.c:241
+#: ../src/gpm-prefs-core.c:242
 msgid "Never"
 msgstr "Никогаш"
 
@@ -1806,59 +1868,59 @@ msgstr "Историја на волтажата"
 msgid "Estimated Time History"
 msgstr "Пресметано време на историјата"
 
-#: ../src/gpm-statistics-core.c:688
+#: ../src/gpm-statistics-core.c:708
 msgid "Could not connect to GNOME Power Manager."
 msgstr "Не можам да се поврзам со менаџерот за енергија на GNOME."
 
-#: ../src/gpm-statistics-core.c:689
+#: ../src/gpm-statistics-core.c:709
 msgid "Perhaps the program is not running or you are using an old version?"
 msgstr "Можеби програмата не се извршува или користите стара верзија?"
 
-#: ../src/gpm-statistics-core.c:724
+#: ../src/gpm-statistics-core.c:745
 msgid "On AC"
 msgstr "На адаптер"
 
-#: ../src/gpm-statistics-core.c:729
+#: ../src/gpm-statistics-core.c:750
 msgid "On battery"
 msgstr "На батерија"
 
-#: ../src/gpm-statistics-core.c:734
+#: ../src/gpm-statistics-core.c:755
 msgid "Session idle"
 msgstr "Сесијата е неактивна"
 
-#: ../src/gpm-statistics-core.c:739
+#: ../src/gpm-statistics-core.c:760
 msgid "Session active"
 msgstr "Сесијата е активна"
 
-#: ../src/gpm-statistics-core.c:749
+#: ../src/gpm-statistics-core.c:770
 msgid "Resume"
 msgstr "Продолжи со работа"
 
-#: ../src/gpm-statistics-core.c:759
+#: ../src/gpm-statistics-core.c:780
 msgid "Lid closed"
 msgstr "Лаптопот е затворен"
 
-#: ../src/gpm-statistics-core.c:764
+#: ../src/gpm-statistics-core.c:785
 msgid "Lid opened"
 msgstr "Лаптопот е отворен"
 
-#: ../src/gpm-statistics-core.c:769
+#: ../src/gpm-statistics-core.c:790
 msgid "Notification"
 msgstr "Известување"
 
-#: ../src/gpm-statistics-core.c:774
+#: ../src/gpm-statistics-core.c:795
 msgid "DPMS On"
 msgstr "DPMS е приклучен"
 
-#: ../src/gpm-statistics-core.c:779
+#: ../src/gpm-statistics-core.c:800
 msgid "DPMS Standby"
 msgstr "DPMS мирува"
 
-#: ../src/gpm-statistics-core.c:784
+#: ../src/gpm-statistics-core.c:805
 msgid "DPMS Suspend"
 msgstr "DPMS суспендирај"
 
-#: ../src/gpm-statistics-core.c:789
+#: ../src/gpm-statistics-core.c:810
 msgid "DPMS Off"
 msgstr "DPMS е исклучен"
 
@@ -1879,24 +1941,24 @@ msgid "translator-credits"
 msgstr "Jovan Naumovski <jovan@lugola.net>, 2006"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:475
+#: ../src/gpm-tray-icon.c:472
 msgid "_Preferences"
 msgstr "_Преференции"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:483
+#: ../src/gpm-tray-icon.c:480
 msgid "Power _History"
 msgstr "Историја на _напојувањето"
 
 #. Help
-#: ../src/gpm-tray-icon.c:495
+#: ../src/gpm-tray-icon.c:492
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_Помош"
 
 #. About
-#: ../src/gpm-tray-icon.c:503
+#: ../src/gpm-tray-icon.c:500
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
