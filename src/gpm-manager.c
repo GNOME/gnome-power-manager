@@ -39,6 +39,9 @@
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/gnome-client.h>
+
+#include <libhal-gpower.h>
+
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
 #include "gpm-button.h"
@@ -47,7 +50,6 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
-#include "gpm-hal.h"
 #include "gpm-idle.h"
 #include "gpm-info.h"
 #include "gpm-inhibit.h"
@@ -87,7 +89,6 @@ struct GpmManagerPrivate
 	GpmButton		*button;
 	GpmConf			*conf;
 	GpmDpms			*dpms;
-	GpmHal			*hal;
 	GpmIdle			*idle;
 	GpmInfo			*info;
 	GpmInhibit		*inhibit;
@@ -98,6 +99,8 @@ struct GpmManagerPrivate
 	GpmSound 		*sound;
 	GpmTrayIcon		*tray_icon;
 	GpmWarning		*warning;
+
+	HalGPower		*hal_power;
 
 	/* interactive services */
 	GpmSrvBacklight		*srv_backlight;
@@ -261,7 +264,7 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
 	}
 
-	gpm_hal_enable_power_save (manager->priv->hal, power_save);
+	hal_gpower_enable_power_save (manager->priv->hal_power, power_save);
 
 	/* set the new sleep (inactivity) value */
 	gpm_idle_set_system_timeout (manager->priv->idle, sleep_computer);
@@ -1395,8 +1398,8 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
 	const gchar *error_body = NULL;
 	gchar *error_msg;
 
-	gpm_hal_has_suspend_error (manager->priv->hal, &suspend_error);
-	gpm_hal_has_hibernate_error (manager->priv->hal, &hibernate_error);
+	hal_gpower_has_suspend_error (manager->priv->hal_power, &suspend_error);
+	hal_gpower_has_hibernate_error (manager->priv->hal_power, &hibernate_error);
 
 	if (suspend_error == TRUE) {
 		error_title = _("Suspend failure");
@@ -1438,13 +1441,13 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 	/* only clear errors if we have finished the authentication */
 	if (auth_begin == FALSE) {
 		error = NULL;
-		ret = gpm_hal_clear_suspend_error (manager->priv->hal, &error);
+		ret = hal_gpower_clear_suspend_error (manager->priv->hal_power, &error);
 		if (ret == FALSE) {
 			gpm_debug ("Failed to clear suspend error; %s", error->message);
 			g_error_free (error);
 		}
 		error = NULL;
-		ret = gpm_hal_clear_hibernate_error (manager->priv->hal, &error);
+		ret = hal_gpower_clear_hibernate_error (manager->priv->hal_power, &error);
 		if (ret == FALSE) {
 			gpm_debug ("Failed to clear hibernate error; %s", error->message);
 			g_error_free (error);
@@ -1462,10 +1465,10 @@ static void
 gpm_manager_at_exit (void)
 {
 	/* we can't use manager as g_atexit has no userdata */
-	GpmHal *hal = gpm_hal_new ();
-	gpm_hal_clear_suspend_error (hal, NULL);
-	gpm_hal_clear_hibernate_error (hal, NULL);
-	g_object_unref (hal);
+	HalGPower *hal_power = hal_gpower_new ();
+	hal_gpower_clear_suspend_error (hal_power, NULL);
+	hal_gpower_clear_hibernate_error (hal_power, NULL);
+	g_object_unref (hal_power);
 }
 
 /**
@@ -1524,7 +1527,7 @@ gpm_manager_init (GpmManager *manager)
 	g_signal_connect (manager->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), manager);
 
-	manager->priv->hal = gpm_hal_new ();
+	manager->priv->hal_power = hal_gpower_new ();
 	manager->priv->warning = gpm_warning_new ();
 	manager->priv->sound = gpm_sound_new ();
 
@@ -1637,7 +1640,7 @@ gpm_manager_finalize (GObject *object)
 
 	/* compulsory gobjects */
 	g_object_unref (manager->priv->conf);
-	g_object_unref (manager->priv->hal);
+	g_object_unref (manager->priv->hal_power);
 	g_object_unref (manager->priv->sound);
 	g_object_unref (manager->priv->warning);
 	g_object_unref (manager->priv->dpms);
