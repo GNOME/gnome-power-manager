@@ -50,8 +50,7 @@ HAL_REQUIRED=0.5.6
 HAL_SUGGESTED=0.5.8
 DBUS_REQUIRED=0.70
 LIBGLADE_REQUIRED=2.5.0
-LIBNOTIFY_REQUIRED=0.3.0
-LIBNOTIFY_SUGGESTED=0.4.3
+LIBNOTIFY_REQUIRED=0.4.3
 LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
 GTKUNIQUE_REQUIRED=0.9.1
@@ -259,7 +258,7 @@ DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MINOR=$DBUS_VERSION_MINOR"
 DBUS_CFLAGS="$DBUS_CFLAGS -DDBUS_VERSION_MICRO=$DBUS_VERSION_MICRO"
 
 dnl ---------------------------------------------------------------------------
-dnl - Is libnotify available?
+dnl - Is a new enough libnotify available?
 dnl ---------------------------------------------------------------------------
 if $PKG_CONFIG --atleast-version $LIBNOTIFY_REQUIRED libnotify; then
    have_libnotify=yes
@@ -271,17 +270,6 @@ else
    have_libnotify=no
 fi
 AM_CONDITIONAL([HAVE_LIBNOTIFY], [test $have_libnotify = yes])
-
-dnl ---------------------------------------------------------------------------
-dnl - Is a new libnotify available (i.e. has a fix for GtkStatusIcon support)?
-dnl ---------------------------------------------------------------------------
-if $PKG_CONFIG --atleast-version $LIBNOTIFY_SUGGESTED libnotify; then
-   have_libnotify_new=yes
-   AC_DEFINE(HAVE_LIBNOTIFY_NEW, 1, [Building with libnotify with GtkStatusIcon support]) 
-else
-   have_libnotify_new=no
-fi
-AM_CONDITIONAL([HAVE_LIBNOTIFY_NEW], [test $have_libnotify_new = yes])
 
 dnl ---------------------------------------------------------------------------
 dnl - Is gtkunique available?
@@ -570,13 +558,3 @@ if test "$have_hal_new" = "no" ; then
    echo
    fi
 
-if test "$have_libnotify_new" = "no" ; then
-   echo "*****************************************************************"
-   echo "**                     BIG LIBNOTIFY WARNING                   **"
-   echo "*****************************************************************"
-   echo "You have an old version of libnotify that has a buggy version of"
-   echo "notify_notification_new_with_status_icon ()"
-   echo "Notifications will be shown in the default location and will"
-   echo "not point to the icon."
-   echo
-   fi

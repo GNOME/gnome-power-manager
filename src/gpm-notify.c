@@ -103,8 +103,6 @@ gpm_notify_create (GpmNotify 	 *notify,
 		notify->priv->libnotify = NULL;
 	}
 
-/* DISTROS: If you've patched your libnotify 0.4.2 package you can add this define */
-#ifdef HAVE_LIBNOTIFY_NEW
 	if (notify->priv->status_icon != NULL &&
 	    gtk_status_icon_get_visible (notify->priv->status_icon) == TRUE) {
 		notify->priv->libnotify = notify_notification_new_with_status_icon (title, content,
@@ -113,10 +111,7 @@ gpm_notify_create (GpmNotify 	 *notify,
 	} else {
 		notify->priv->libnotify = notify_notification_new (title, content, msgicon, NULL);
 	}
-#else
-	/* we can't point because of a bug in libnotify. Need dependency on 0.4.3 */
-	notify->priv->libnotify = notify_notification_new (title, content, msgicon, NULL);
-#endif
+
 	if (timeout == GPM_NOTIFY_TIMEOUT_NEVER) {
 		notify_notification_set_timeout (notify->priv->libnotify, 0);
 	} else if (timeout == GPM_NOTIFY_TIMEOUT_LONG) {
