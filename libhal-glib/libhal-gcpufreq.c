@@ -171,7 +171,7 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
  **/
 gboolean
 hal_gcpufreq_set_governor (HalGCpufreq    *cpufreq,
-			  HalGCpufreqType cpufreq_type)
+			   HalGCpufreqType cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -220,7 +220,7 @@ hal_gcpufreq_set_governor (HalGCpufreq    *cpufreq,
  **/
 gboolean
 hal_gcpufreq_get_governors (HalGCpufreq     *cpufreq,
-			   HalGCpufreqType *cpufreq_type)
+			    HalGCpufreqType *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -287,7 +287,7 @@ hal_gcpufreq_get_governors (HalGCpufreq     *cpufreq,
  **/
 guint
 hal_gcpufreq_get_number_governors (HalGCpufreq *cpufreq,
-				  gboolean    use_cache)
+				   gboolean    use_cache)
 {
 	HalGCpufreqType cpufreq_type;
 
@@ -309,7 +309,7 @@ hal_gcpufreq_get_number_governors (HalGCpufreq *cpufreq,
  **/
 gboolean
 hal_gcpufreq_get_consider_nice (HalGCpufreq *cpufreq,
-			       gboolean      *consider_nice)
+			        gboolean      *consider_nice)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -365,7 +365,7 @@ hal_gcpufreq_get_consider_nice (HalGCpufreq *cpufreq,
  **/
 gboolean
 hal_gcpufreq_get_performance (HalGCpufreq *cpufreq,
-		             guint         *performance)
+		              guint         *performance)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -420,7 +420,7 @@ hal_gcpufreq_get_performance (HalGCpufreq *cpufreq,
  **/
 gboolean
 hal_gcpufreq_get_governor (HalGCpufreq     *cpufreq,
-			  HalGCpufreqType *cpufreq_type)
+			   HalGCpufreqType *cpufreq_type)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -478,7 +478,7 @@ hal_gcpufreq_get_governor (HalGCpufreq     *cpufreq,
  **/
 gboolean
 hal_gcpufreq_set_consider_nice (HalGCpufreq *cpufreq,
-			       gboolean    consider_nice)
+			        gboolean    consider_nice)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -624,3 +624,4 @@ hal_gcpufreq_new (void)
 	}
 	return LIBHAL_CPUFREQ (hal_gcpufreq_object);
 }
+

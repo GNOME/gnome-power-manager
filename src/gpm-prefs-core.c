@@ -32,12 +32,13 @@
 #include <math.h>
 #include <string.h>
 
+#include <libhal-gmanager.h>
+#include <libhal-gcpufreq.h>
+
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
-#include "gpm-hal.h"
-#include "gpm-cpufreq.h"
 #include "gpm-prefs-core.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
@@ -62,9 +63,8 @@ struct GpmPrefsPrivate
 	gboolean		 can_hibernate;
 	GpmConf			*conf;
 	GpmScreensaver		*screensaver;
-	GpmCpuFreq		*cpufreq;
-	GpmCpuFreqEnum		 cpufreq_types;
-	GpmHal			*hal;
+	HalGCpufreq		*hal_cpufreq;
+	HalGCpufreqType		 cpufreq_types;
 };
 
 enum {
@@ -693,14 +693,14 @@ static void
 gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 				 const gchar      *widget_name,
 				 const gchar      *gpm_pref_key,
-				 GpmCpuFreqEnum cpufreq_types)
+				 HalGCpufreqType cpufreq_types)
 {
 	gchar *value;
 	guint n_added = 0;
 	gboolean has_option = FALSE;
 	gboolean is_writable;
 	GtkWidget *widget;
-	GpmCpuFreqEnum cpufreq_type;
+	HalGCpufreqType cpufreq_type;
 
 	widget = glade_xml_get_widget (prefs->priv->glade_xml, widget_name);
 	gpm_conf_get_string (prefs->priv->conf, gpm_pref_key, &value);
@@ -718,55 +718,55 @@ gpm_prefs_setup_processor_combo (GpmPrefs         *prefs,
 			  G_CALLBACK (gpm_prefs_processor_combo_changed_cb),
 			  prefs);
 
-	cpufreq_type = gpm_cpufreq_string_to_enum (value);
+	cpufreq_type = hal_gcpufreq_string_to_enum (value);
 
-	if (cpufreq_types & GPM_CPUFREQ_ONDEMAND) {
+	if (cpufreq_types & LIBHAL_CPUFREQ_ONDEMAND) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_ONDEMAND_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
+		if (cpufreq_type == LIBHAL_CPUFREQ_ONDEMAND) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
 		n_added++;
 	}
-	if (cpufreq_types & GPM_CPUFREQ_NOTHING) {
+	if (cpufreq_types & LIBHAL_CPUFREQ_NOTHING) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_NOTHING_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_ONDEMAND) {
+		if (cpufreq_type == LIBHAL_CPUFREQ_ONDEMAND) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
 		n_added++;
 	}
-	if (cpufreq_types & GPM_CPUFREQ_CONSERVATIVE) {
+	if (cpufreq_types & LIBHAL_CPUFREQ_CONSERVATIVE) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_CONSERVATIVE_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_CONSERVATIVE) {
+		if (cpufreq_type == LIBHAL_CPUFREQ_CONSERVATIVE) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
 		n_added++;
 	}
-	if (cpufreq_types & GPM_CPUFREQ_POWERSAVE) {
+	if (cpufreq_types & LIBHAL_CPUFREQ_POWERSAVE) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_POWERSAVE_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_POWERSAVE) {
+		if (cpufreq_type == LIBHAL_CPUFREQ_POWERSAVE) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
 		n_added++;
 	}
-	if (cpufreq_types & GPM_CPUFREQ_PERFORMANCE) {
+	if (cpufreq_types & LIBHAL_CPUFREQ_PERFORMANCE) {
 		gtk_combo_box_append_text (GTK_COMBO_BOX (widget),
 					   CPUFREQ_PERFORMANCE_TEXT);
-		if (cpufreq_type == GPM_CPUFREQ_PERFORMANCE) {
+		if (cpufreq_type == LIBHAL_CPUFREQ_PERFORMANCE) {
 			gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 			has_option = TRUE;
 		}
 		n_added++;
 	}
 
-	if (has_option == FALSE || cpufreq_type == GPM_CPUFREQ_NOTHING) {
+	if (has_option == FALSE || cpufreq_type == LIBHAL_CPUFREQ_NOTHING) {
 		gtk_combo_box_set_active (GTK_COMBO_BOX (widget), n_added);
 	}
 	g_free (value);
@@ -894,7 +894,7 @@ prefs_setup_ac (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_lid");
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->cpufreq == NULL) {
+	if (prefs->priv->hal_cpufreq == NULL) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_cpu");
 		gtk_widget_hide_all (widget);
 	}
@@ -963,7 +963,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_lid");
 		gtk_widget_hide_all (widget);
 	}
-	if (prefs->priv->cpufreq == NULL) {
+	if (prefs->priv->hal_cpufreq == NULL) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_cpu");
 		gtk_widget_hide_all (widget);
 	}
@@ -1053,13 +1053,13 @@ prefs_setup_general (GpmPrefs *prefs)
 static void
 gpm_prefs_init (GpmPrefs *prefs)
 {
-	GtkWidget    *main_window;
-	GtkWidget    *widget;
+	GtkWidget *main_window;
+	GtkWidget *widget;
+	HalGManager *hal_manager;
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
-	prefs->priv->hal = gpm_hal_new ();
-	prefs->priv->cpufreq = gpm_cpufreq_new ();
+	prefs->priv->hal_cpufreq = hal_gcpufreq_new ();
 
 	prefs->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (prefs->priv->screensaver, "gs-delay-changed",
@@ -1069,28 +1069,31 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (prefs->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), prefs);
 
-	prefs->priv->has_lcd = gpm_hal_num_devices_of_capability (prefs->priv->hal, "laptop_panel") > 0;
-	prefs->priv->has_batteries = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "battery",
+	hal_manager = hal_gmanager_new ();
+	prefs->priv->has_lcd = hal_gmanager_num_devices_of_capability (hal_manager, "laptop_panel") > 0;
+	prefs->priv->has_batteries = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "battery",
 							"battery.type",
 							"primary") > 0;
-	prefs->priv->has_ups = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "battery",
+	prefs->priv->has_ups = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "battery",
 							"battery.type",
 							"ups") > 0;
-	prefs->priv->has_button_lid = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "button",
+	prefs->priv->has_button_lid = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "button",
 							"button.type",
 							"lid") > 0;
-	prefs->priv->has_button_suspend = gpm_hal_num_devices_of_capability_with_value (prefs->priv->hal, "button",
+	prefs->priv->has_button_suspend = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "button",
 							"button.type",
 							"suspend") > 0;
+	g_object_unref (hal_manager);
+
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
 
 	/* only enable cpufreq stuff if we have the hardware */
-	if (prefs->priv->cpufreq) {
-		gpm_cpufreq_get_governors (prefs->priv->cpufreq,
-					       &prefs->priv->cpufreq_types);
+	if (prefs->priv->hal_cpufreq) {
+		hal_gcpufreq_get_governors (prefs->priv->hal_cpufreq,
+					    &prefs->priv->cpufreq_types);
 	} else {
-		prefs->priv->cpufreq_types = GPM_CPUFREQ_NOTHING;
+		prefs->priv->cpufreq_types = LIBHAL_CPUFREQ_NOTHING;
 	}
 
 	prefs->priv->glade_xml = glade_xml_new (GPM_DATA "/gpm-prefs.glade", NULL, NULL);
@@ -1144,11 +1147,8 @@ gpm_prefs_finalize (GObject *object)
 	if (prefs->priv->screensaver) {
 		g_object_unref (prefs->priv->screensaver);
 	}
-	if (prefs->priv->cpufreq) {
-		g_object_unref (prefs->priv->cpufreq);
-	}
-	if (prefs->priv->hal) {
-		g_object_unref (prefs->priv->hal);
+	if (prefs->priv->hal_cpufreq) {
+		g_object_unref (prefs->priv->hal_cpufreq);
 	}
 
 	G_OBJECT_CLASS (gpm_prefs_parent_class)->finalize (object);
