@@ -48,6 +48,7 @@
 #include "gpm-conf.h"
 #include "gpm-control.h"
 #include "gpm-common.h"
+#include "gpm-cpufreq.h"
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-idle.h"
@@ -61,7 +62,6 @@
 #include "gpm-screensaver.h"
 #include "gpm-srv-backlight.h"
 #include "gpm-srv-brightness-kbd.h"
-#include "gpm-srv-cpufreq.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
 #include "gpm-sound.h"
@@ -105,7 +105,7 @@ struct GpmManagerPrivate
 	/* interactive services */
 	GpmSrvBacklight		*srv_backlight;
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
-	GpmSrvCpuFreq	 	*srv_cpufreq;
+	GpmCpufreq	 	*cpufreq;
 	GpmSrvScreensaver 	*srv_screensaver;
 
 	GpmWarningState		 last_primary;
@@ -1532,7 +1532,7 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->sound = gpm_sound_new ();
 
 	/* try and start an interactive service */
-	manager->priv->srv_cpufreq = gpm_srv_cpufreq_new ();
+	manager->priv->cpufreq = gpm_cpufreq_new ();
 
 	/* try and start an interactive service */
 	manager->priv->screensaver = gpm_screensaver_new ();
@@ -1657,8 +1657,8 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->button) {
 		g_object_unref (manager->priv->button);
 	}
-	if (manager->priv->srv_cpufreq) {
-		g_object_unref (manager->priv->srv_cpufreq);
+	if (manager->priv->cpufreq) {
+		g_object_unref (manager->priv->cpufreq);
 	}
 	if (manager->priv->srv_backlight) {
 		g_object_unref (manager->priv->srv_backlight);

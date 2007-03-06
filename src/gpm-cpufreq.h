@@ -19,36 +19,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GPMSRV_CPUFREQ_H
-#define __GPMSRV_CPUFREQ_H
+#ifndef __GPMCPUFREQ_H
+#define __GPMCPUFREQ_H
 
 #include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GPM_TYPE_SRV_CPUFREQ		(gpm_srv_cpufreq_get_type ())
-#define GPM_SRV_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_SRV_CPUFREQ, GpmSrvCpuFreq))
-#define GPM_SRV_CPUFREQ_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_SRV_CPUFREQ, GpmSrvCpuFreqClass))
-#define GPM_IS_SRV_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_SRV_CPUFREQ))
-#define GPM_IS_SRV_CPUFREQ_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_SRV_CPUFREQ))
-#define GPM_SRV_CPUFREQ_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_SRV_CPUFREQ, GpmSrvCpuFreqClass))
+#define GPM_TYPE_CPUFREQ		(gpm_cpufreq_get_type ())
+#define GPM_CPUFREQ(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_CPUFREQ, GpmCpufreq))
+#define GPM_CPUFREQ_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_CPUFREQ, GpmCpufreqClass))
+#define GPM_IS_CPUFREQ(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_CPUFREQ))
+#define GPM_IS_CPUFREQ_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_CPUFREQ))
+#define GPM_CPUFREQ_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_CPUFREQ, GpmCpufreqClass))
 
-typedef struct GpmSrvCpuFreqPrivate GpmSrvCpuFreqPrivate;
+typedef struct GpmCpufreqPrivate GpmCpufreqPrivate;
 
 typedef struct
 {
 	GObject			 parent;
-	GpmSrvCpuFreqPrivate	*priv;
-} GpmSrvCpuFreq;
+	GpmCpufreqPrivate	*priv;
+} GpmCpufreq;
 
 typedef struct
 {
 	GObjectClass	parent_class;
-} GpmSrvCpuFreqClass;
+} GpmCpufreqClass;
 
-GType		 gpm_srv_cpufreq_get_type		(void);
-GpmSrvCpuFreq	*gpm_srv_cpufreq_new			(void);
+GType		 gpm_cpufreq_get_type				(void);
+GpmCpufreq	*gpm_cpufreq_new				(void);
 
 G_END_DECLS
 
-#endif	/* __GPMSRV_CPUFREQ_H */
+#endif	/* __GPMCPUFREQ_H */
+

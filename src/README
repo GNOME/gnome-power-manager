@@ -1,9 +1,0 @@
-This will be expanded with gnome-power-manager structure.
-
-Policy:
-
-GpmSrv* classes only should action thier parent class - i.e. source->master.
-GpmSrv* classes should never be singletons.
-GpmSrv* classes should never instantiate another GpmSrv* object else loops will develop.
-
-Need a gpm-sleep with signal "sleep" "resume"

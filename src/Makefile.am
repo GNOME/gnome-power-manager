@@ -133,8 +133,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-srv-brightness-kbd.c			\
 	gpm-srv-screensaver.h				\
 	gpm-srv-screensaver.c				\
-	gpm-srv-cpufreq.h				\
-	gpm-srv-cpufreq.c				\
+	gpm-cpufreq.h					\
+	gpm-cpufreq.c					\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-idle.h					\
