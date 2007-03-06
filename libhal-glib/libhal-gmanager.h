@@ -65,36 +65,36 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* device_added)		(HalGManager	*hal_gmanager,
+	void		(* device_added)		(HalGManager	*manager,
 							 const gchar	*udi);
-	void		(* device_removed)		(HalGManager	*hal_gmanager,
+	void		(* device_removed)		(HalGManager	*manager,
 							 const gchar	*udi);
-	void		(* new_capability)		(HalGManager	*hal_gmanager,
+	void		(* new_capability)		(HalGManager	*manager,
 							 const gchar	*udi,
 							 const gchar	*capability);
-	void		(* lost_capability)		(HalGManager	*hal_gmanager,
+	void		(* lost_capability)		(HalGManager	*manager,
 							 const gchar	*udi,
 							 const gchar	*capability);
-	void		(* daemon_start)		(HalGManager	*hal_gmanager);
-	void		(* daemon_stop)			(HalGManager	*hal_gmanager);
+	void		(* daemon_start)		(HalGManager	*manager);
+	void		(* daemon_stop)			(HalGManager	*manager);
 } HalGManagerClass;
 
 GType		 hal_gmanager_get_type			(void);
 HalGManager	*hal_gmanager_new			(void);
 
-gboolean	 hal_gmanager_is_running		(HalGManager	*hal_gmanager);
-gint		 hal_gmanager_num_devices_of_capability (HalGManager	*hal_gmanager,
+gboolean	 hal_gmanager_is_running		(HalGManager	*manager);
+gint		 hal_gmanager_num_devices_of_capability (HalGManager	*manager,
 							 const gchar	*capability);
-gint		 hal_gmanager_num_devices_of_capability_with_value (HalGManager *hal_gmanager,
+gint		 hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 							 const gchar	*capability,
 							 const gchar	*key,
 							 const gchar	*value);
-gboolean	 hal_gmanager_find_capability		(HalGManager	*hal_gmanager,
+gboolean	 hal_gmanager_find_capability		(HalGManager	*manager,
 							 const gchar	*capability,
 							 gchar     	***value,
 							 GError		**error);
 void		 hal_gmanager_free_capability		(gchar		**value);
-gboolean	 hal_gmanager_is_laptop			(HalGManager	*hal_gmanager);
+gboolean	 hal_gmanager_is_laptop			(HalGManager	*manager);
 
 G_END_DECLS
 

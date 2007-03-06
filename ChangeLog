@@ -1,5 +1,18 @@
 2007-03-06  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gdevice.c:
+	* libhal-glib/libhal-gdevice.h:
+	* libhal-glib/libhal-gmanager.c:
+	* libhal-glib/libhal-gmanager.h:
+	* libhal-glib/libhal-marshal.list:
+	Merge a whole heap of cleanups, and remove the udi from the
+	property modified and devive condition callbacks.
+
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_get_state):
+	Switch to using the libhal-glib functions rather than gpm-hal.
+
+2007-03-06  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	* libhal-glib/libhal-gpower.c:
 	* src/gpm-hal.c: (gpm_hal_can_suspend), (gpm_hal_can_hibernate),

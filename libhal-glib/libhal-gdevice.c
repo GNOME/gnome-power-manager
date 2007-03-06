@@ -36,7 +36,7 @@
 #include "../src/gpm-proxy.h"
 
 static void     hal_gdevice_class_init (HalGDeviceClass *klass);
-static void     hal_gdevice_init       (HalGDevice      *hal_gdevice);
+static void     hal_gdevice_init       (HalGDevice      *device);
 static void     hal_gdevice_finalize   (GObject	     *object);
 
 #define LIBHAL_GDEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), LIBHAL_TYPE_GDEVICE, HalGDevicePrivate))
@@ -77,20 +77,20 @@ G_DEFINE_TYPE (HalGDevice, hal_gdevice, G_TYPE_OBJECT)
 const gchar  * * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_set_udi (HalGDevice *hal_gdevice,
-		        const gchar  *udi)
+hal_gdevice_set_udi (HalGDevice  *device,
+		     const gchar *udi)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (udi != NULL, FALSE);
 
-	if (hal_gdevice->priv->udi != NULL) {
+	if (device->priv->udi != NULL) {
 		/* aready set UDI */
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_assign (hal_gdevice->priv->gproxy,
+	proxy = gpm_proxy_assign (device->priv->gproxy,
 				  GPM_PROXY_SYSTEM,
 				  HAL_DBUS_SERVICE,
 				  udi,
@@ -99,7 +99,7 @@ hal_gdevice_set_udi (HalGDevice *hal_gdevice,
 		gpm_warning ("proxy failed");
 		return FALSE;
 	}
-	hal_gdevice->priv->udi = g_strdup (udi);
+	device->priv->udi = g_strdup (udi);
 
 	return TRUE;
 }
@@ -110,11 +110,11 @@ hal_gdevice_set_udi (HalGDevice *hal_gdevice,
  * Return value: UDI
  **/
 const gchar *
-hal_gdevice_get_udi (HalGDevice *hal_gdevice)
+hal_gdevice_get_udi (HalGDevice *device)
 {
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 
-	return hal_gdevice->priv->udi;
+	return device->priv->udi;
 }
 
 /**
@@ -126,20 +126,20 @@ hal_gdevice_get_udi (HalGDevice *hal_gdevice)
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_get_bool (HalGDevice *hal_gdevice,
-			 const gchar  *key,
-			 gboolean     *value,
-			 GError      **error)
+hal_gdevice_get_bool (HalGDevice  *device,
+		      const gchar *key,
+		      gboolean    *value,
+		      GError     **error)
 {
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -166,7 +166,7 @@ hal_gdevice_get_bool (HalGDevice *hal_gdevice,
  * You must g_free () the return value.
  **/
 gboolean
-hal_gdevice_get_string (HalGDevice   *hal_gdevice,
+hal_gdevice_get_string (HalGDevice   *device,
 			const gchar  *key,
 			gchar       **value,
 			GError      **error)
@@ -174,12 +174,12 @@ hal_gdevice_get_string (HalGDevice   *hal_gdevice,
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -204,20 +204,20 @@ hal_gdevice_get_string (HalGDevice   *hal_gdevice,
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_get_int (HalGDevice *hal_gdevice,
-			const gchar  *key,
-			gint         *value,
-			GError      **error)
+hal_gdevice_get_int (HalGDevice   *device,
+		     const gchar  *key,
+		     gint         *value,
+		     GError      **error)
 {
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (value != NULL, FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -239,16 +239,16 @@ hal_gdevice_get_int (HalGDevice *hal_gdevice,
  * HAL has no concept of a UINT, only INT
  **/
 gboolean
-hal_gdevice_get_uint (HalGDevice *hal_gdevice,
-			 const gchar  *key,
-			 guint        *value,
-			 GError      **error)
+hal_gdevice_get_uint (HalGDevice   *device,
+		      const gchar  *key,
+		      guint        *value,
+		      GError      **error)
 {
 	gint tvalue;
 	gboolean ret;
 
 	/* bodge */
-	ret = hal_gdevice_get_int (hal_gdevice, key, &tvalue, error);
+	ret = hal_gdevice_get_int (device, key, &tvalue, error);
 	*value = (guint) tvalue;
 	return ret;
 }
@@ -262,26 +262,26 @@ hal_gdevice_get_uint (HalGDevice *hal_gdevice,
  * Return value: TRUE for success, FALSE for failure
  **/
 gboolean
-hal_gdevice_query_capability (HalGDevice *hal_gdevice,
-			         const gchar  *capability,
-			         gboolean     *has_capability,
-			         GError      **error)
+hal_gdevice_query_capability (HalGDevice  *device,
+			      const gchar *capability,
+			      gboolean    *has_capability,
+			      GError     **error)
 {
 	gboolean ret;
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 	g_return_val_if_fail (capability != NULL, FALSE);
 	g_return_val_if_fail (has_capability != NULL, FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
 	}
 	ret = dbus_g_proxy_call (proxy, "QueryCapability", error,
-				 G_TYPE_STRING, hal_gdevice->priv->udi,
+				 G_TYPE_STRING, device->priv->udi,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, has_capability,
 				 G_TYPE_INVALID);
@@ -302,35 +302,35 @@ hal_gdevice_query_capability (HalGDevice *hal_gdevice,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-watch_device_property_modified (DBusGProxy   *proxy,
-				const gchar  *key,
-				gboolean      is_added,
-				gboolean      is_removed,
-				gboolean      finally,
-				HalGDevice *hal_gdevice)
+watch_device_property_modified (DBusGProxy  *proxy,
+				const gchar *key,
+				gboolean     is_added,
+				gboolean     is_removed,
+				gboolean     finally,
+				HalGDevice  *device)
 {
-	const gchar *udi = hal_gdevice->priv->udi;
+	const gchar *udi = device->priv->udi;
 	gpm_debug ("emitting property-modified : udi=%s, key=%s, "
 		   "added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
-	g_signal_emit (hal_gdevice, signals [DEVICE_PROPERTY_MODIFIED], 0,
-		       udi, key, is_added, is_removed, finally);
+	g_signal_emit (device, signals [DEVICE_PROPERTY_MODIFIED], 0,
+		       key, is_added, is_removed, finally);
 }
 
 /**
  * watch_device_properties_modified_cb:
  *
  * @proxy: The org.freedesktop.Hal.Manager proxy
- * @hal_gdevice: This class instance
+ * @device: This class instance
  *
  * Demultiplex the composite PropertyModified events here.
  */
 static void
-watch_device_properties_modified_cb (DBusGProxy   *proxy,
-				     gint	   type,
-				     GPtrArray    *properties,
-				     HalGDevice *hal_gdevice)
+watch_device_properties_modified_cb (DBusGProxy *proxy,
+				     gint	 type,
+				     GPtrArray  *properties,
+				     HalGDevice *device)
 {
 	GValueArray *array;
 	const gchar *udi;
@@ -363,7 +363,7 @@ watch_device_properties_modified_cb (DBusGProxy   *proxy,
 			finally = TRUE;
 		}
 
-		watch_device_property_modified (proxy, key, added, removed, finally, hal_gdevice);
+		watch_device_property_modified (proxy, key, added, removed, finally, device);
 	}
 }
 
@@ -374,20 +374,20 @@ watch_device_properties_modified_cb (DBusGProxy   *proxy,
  * adds to the gpm cache so we don't get asked to add it again.
  */
 gboolean
-hal_gdevice_watch_property_modified (HalGDevice *hal_gdevice)
+hal_gdevice_watch_property_modified (HalGDevice *device)
 {
 	DBusGProxy *proxy;
 	GType struct_array_type, struct_type;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	if (hal_gdevice->priv->use_property_modified == TRUE) {
+	if (device->priv->use_property_modified == TRUE) {
 		/* already watched */
 		return FALSE;
 	}
 
-	hal_gdevice->priv->use_property_modified = TRUE;
+	device->priv->use_property_modified = TRUE;
 
 	struct_type = dbus_g_type_get_struct ("GValueArray",
 					      G_TYPE_STRING,
@@ -401,7 +401,7 @@ hal_gdevice_watch_property_modified (HalGDevice *hal_gdevice)
 					   G_TYPE_NONE, G_TYPE_INT,
 					   struct_array_type, G_TYPE_INVALID);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -409,7 +409,7 @@ hal_gdevice_watch_property_modified (HalGDevice *hal_gdevice)
 	dbus_g_proxy_add_signal (proxy, "PropertyModified",
 				 G_TYPE_INT, struct_array_type, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "PropertyModified",
-				     G_CALLBACK (watch_device_properties_modified_cb), hal_gdevice, NULL);
+				     G_CALLBACK (watch_device_properties_modified_cb), device, NULL);
 	return TRUE;
 }
 
@@ -427,13 +427,13 @@ static void
 watch_device_condition_cb (DBusGProxy  *proxy,
 			   const gchar *condition,
 			   const gchar *details,
-			   HalGDevice      *hal_gdevice)
+			   HalGDevice  *device)
 {
 	const gchar *udi;
 	udi = dbus_g_proxy_get_path (proxy);
 
 	gpm_debug ("emitting device-condition : %s, %s (%s)", udi, condition, details);
-	g_signal_emit (hal_gdevice, signals [DEVICE_CONDITION], 0, udi, condition, details);
+	g_signal_emit (device, signals [DEVICE_CONDITION], 0, condition, details);
 }
 
 /**
@@ -442,25 +442,25 @@ watch_device_condition_cb (DBusGProxy  *proxy,
  * Watch the specified device, so it emits a device-condition
  */
 gboolean
-hal_gdevice_watch_condition (HalGDevice *hal_gdevice)
+hal_gdevice_watch_condition (HalGDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
-	g_return_val_if_fail (hal_gdevice->priv->udi != NULL, FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
+	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	if (hal_gdevice->priv->use_condition == TRUE) {
+	if (device->priv->use_condition == TRUE) {
 		/* already watched */
 		return FALSE;
 	}
 
-	hal_gdevice->priv->use_condition = TRUE;
+	device->priv->use_condition = TRUE;
 
 	dbus_g_object_register_marshaller (libhal_marshal_VOID__STRING_STRING,
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING,
 					   G_TYPE_INVALID);
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
@@ -468,7 +468,7 @@ hal_gdevice_watch_condition (HalGDevice *hal_gdevice)
 	dbus_g_proxy_add_signal (proxy, "Condition",
 				 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy, "Condition",
-				     G_CALLBACK (watch_device_condition_cb), hal_gdevice, NULL);
+				     G_CALLBACK (watch_device_condition_cb), device, NULL);
 	return TRUE;
 }
 
@@ -478,26 +478,26 @@ hal_gdevice_watch_condition (HalGDevice *hal_gdevice)
  * Remove the specified device, so it does not emit device-condition signals.
  */
 gboolean
-hal_gdevice_remove_condition (HalGDevice *hal_gdevice)
+hal_gdevice_remove_condition (HalGDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 
-	if (hal_gdevice->priv->use_condition == FALSE) {
+	if (device->priv->use_condition == FALSE) {
 		/* already connected */
 		return FALSE;
 	}
 
-	hal_gdevice->priv->use_condition = FALSE;
+	device->priv->use_condition = FALSE;
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
 	}
 	dbus_g_proxy_disconnect_signal (proxy, "Condition",
-					G_CALLBACK (watch_device_condition_cb), hal_gdevice);
+					G_CALLBACK (watch_device_condition_cb), device);
 	return TRUE;
 }
 
@@ -507,26 +507,26 @@ hal_gdevice_remove_condition (HalGDevice *hal_gdevice)
  * Remove the specified device, so it does not emit device-propery-modified.
  */
 gboolean
-hal_gdevice_remove_property_modified (HalGDevice *hal_gdevice)
+hal_gdevice_remove_property_modified (HalGDevice *device)
 {
 	DBusGProxy *proxy;
 
-	g_return_val_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice), FALSE);
+	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 
-	if (hal_gdevice->priv->use_property_modified == FALSE) {
+	if (device->priv->use_property_modified == FALSE) {
 		/* already disconnected */
 		return FALSE;
 	}
 
-	hal_gdevice->priv->use_property_modified = FALSE;
+	device->priv->use_property_modified = FALSE;
 
-	proxy = gpm_proxy_get_proxy (hal_gdevice->priv->gproxy);
+	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		gpm_warning ("proxy NULL!!");
 		return FALSE;
 	}
 	dbus_g_proxy_disconnect_signal (proxy, "PropertyModified",
-				        G_CALLBACK (watch_device_properties_modified_cb), hal_gdevice);
+				        G_CALLBACK (watch_device_properties_modified_cb), device);
 	return TRUE;
 }
 
@@ -537,11 +537,11 @@ hal_gdevice_remove_property_modified (HalGDevice *hal_gdevice)
  * @hal_manager: This class instance
  **/
 static void
-proxy_status_cb (DBusGProxy   *proxy,
-		 gboolean      status,
-		 HalGDevice *hal_gdevice)
+proxy_status_cb (DBusGProxy *proxy,
+		 gboolean    status,
+		 HalGDevice *device)
 {
-	g_return_if_fail (LIBHAL_IS_GDEVICE (hal_gdevice));
+	g_return_if_fail (LIBHAL_IS_GDEVICE (device));
 	if (status == TRUE) {
 		/* should join */
 	} else {
@@ -567,9 +567,8 @@ hal_gdevice_class_init (HalGDeviceClass *klass)
 			      G_STRUCT_OFFSET (HalGDeviceClass, device_property_modified),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_STRING_BOOLEAN_BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 5, G_TYPE_STRING, G_TYPE_STRING,
-			      G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+			      libhal_marshal_VOID__STRING_BOOLEAN_BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 4, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
 	signals [DEVICE_CONDITION] =
 		g_signal_new ("device-condition",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -577,9 +576,9 @@ hal_gdevice_class_init (HalGDeviceClass *klass)
 			      G_STRUCT_OFFSET (HalGDeviceClass, device_condition),
 			      NULL,
 			      NULL,
-			      libhal_marshal_VOID__STRING_STRING_STRING,
+			      libhal_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
-			      3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+			      2, G_TYPE_STRING, G_TYPE_STRING);
 }
 
 /**
@@ -588,25 +587,25 @@ hal_gdevice_class_init (HalGDeviceClass *klass)
  * @hal_gdevice: This class instance
  **/
 static void
-hal_gdevice_init (HalGDevice *hal_gdevice)
+hal_gdevice_init (HalGDevice *device)
 {
 	GError *error = NULL;
 
-	hal_gdevice->priv = LIBHAL_GDEVICE_GET_PRIVATE (hal_gdevice);
+	device->priv = LIBHAL_GDEVICE_GET_PRIVATE (device);
 
-	hal_gdevice->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
+	device->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error != NULL) {
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
 	}
 
-	hal_gdevice->priv->use_property_modified = FALSE;
-	hal_gdevice->priv->use_condition = FALSE;
+	device->priv->use_property_modified = FALSE;
+	device->priv->use_condition = FALSE;
 
 	/* get the manager connection */
-	hal_gdevice->priv->gproxy = gpm_proxy_new ();
-	g_signal_connect (hal_gdevice->priv->gproxy, "proxy-status",
-			  G_CALLBACK (proxy_status_cb), hal_gdevice);
+	device->priv->gproxy = gpm_proxy_new ();
+	g_signal_connect (device->priv->gproxy, "proxy-status",
+			  G_CALLBACK (proxy_status_cb), device);
 }
 
 /**
@@ -616,22 +615,22 @@ hal_gdevice_init (HalGDevice *hal_gdevice)
 static void
 hal_gdevice_finalize (GObject *object)
 {
-	HalGDevice *hal_gdevice;
+	HalGDevice *device;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (LIBHAL_IS_GDEVICE (object));
 
-	hal_gdevice = LIBHAL_GDEVICE (object);
-	hal_gdevice->priv = LIBHAL_GDEVICE_GET_PRIVATE (hal_gdevice);
+	device = LIBHAL_GDEVICE (object);
+	device->priv = LIBHAL_GDEVICE_GET_PRIVATE (device);
 
-	if (hal_gdevice->priv->use_property_modified == TRUE) {
-		hal_gdevice_remove_property_modified (hal_gdevice);
+	if (device->priv->use_property_modified == TRUE) {
+		hal_gdevice_remove_property_modified (device);
 	}
-	if (hal_gdevice->priv->use_condition == TRUE) {
-		hal_gdevice_remove_condition (hal_gdevice);
+	if (device->priv->use_condition == TRUE) {
+		hal_gdevice_remove_condition (device);
 	}
 
-	g_object_unref (hal_gdevice->priv->gproxy);
-	g_free (hal_gdevice->priv->udi);
+	g_object_unref (device->priv->gproxy);
+	g_free (device->priv->udi);
 
 	G_OBJECT_CLASS (hal_gdevice_parent_class)->finalize (object);
 }
@@ -643,6 +642,6 @@ hal_gdevice_finalize (GObject *object)
 HalGDevice *
 hal_gdevice_new (void)
 {
-	HalGDevice *hal_gdevice = g_object_new (LIBHAL_TYPE_GDEVICE, NULL);
-	return LIBHAL_GDEVICE (hal_gdevice);
+	HalGDevice *device = g_object_new (LIBHAL_TYPE_GDEVICE, NULL);
+	return LIBHAL_GDEVICE (device);
 }

@@ -38,18 +38,19 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gdevice.h>
+#include <libhal-gmanager.h>
+
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-ac-adapter.h"
 
 #define GPM_AC_ADAPTER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_AC_ADAPTER, GpmAcAdapterPrivate))
 
 struct GpmAcAdapterPrivate
 {
-	gchar			*udi;
 	gboolean		 has_hardware;
-	GpmHal			*hal;
+	HalGDevice		*hal_device;
 };
 
 enum {
@@ -69,7 +70,7 @@ G_DEFINE_TYPE (GpmAcAdapter, gpm_ac_adapter, G_TYPE_OBJECT)
  * Gets the current state of the AC adapter
  **/
 gboolean
-gpm_ac_adapter_get_state (GpmAcAdapter *ac_adapter,
+gpm_ac_adapter_get_state (GpmAcAdapter      *ac_adapter,
 		          GpmAcAdapterState *state)
 {
 	gboolean is_on_ac;
@@ -85,8 +86,8 @@ gpm_ac_adapter_get_state (GpmAcAdapter *ac_adapter,
 	}
 
 	error = NULL;
-	gpm_hal_device_get_bool (ac_adapter->priv->hal, ac_adapter->priv->udi,
-				 "ac_adapter.present", &is_on_ac, &error);
+	hal_gdevice_get_bool (ac_adapter->priv->hal_device,
+			      "ac_adapter.present", &is_on_ac, &error);
 	if (error != NULL) {
 		gpm_warning ("could not read ac_adapter.present");
 		g_error_free (error);
@@ -112,8 +113,7 @@ gpm_ac_adapter_get_state (GpmAcAdapter *ac_adapter,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (GpmHal       *hal,
-				 const gchar  *udi,
+hal_device_property_modified_cb (HalGDevice   *hal_device,
 				 const gchar  *key,
 				 gboolean      is_added,
 				 gboolean      is_removed,
@@ -121,7 +121,6 @@ hal_device_property_modified_cb (GpmHal       *hal,
 				 GpmAcAdapter *ac_adapter)
 {
 	GpmAcAdapterState state;
-
 	if (strcmp (key, "ac_adapter.present") == 0) {
 		gpm_ac_adapter_get_state (ac_adapter, &state);
 		g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, state);
@@ -157,8 +156,7 @@ gpm_ac_adapter_finalize (GObject *object)
 	ac_adapter = GPM_AC_ADAPTER (object);
 	g_return_if_fail (ac_adapter->priv != NULL);
 
-	g_free (ac_adapter->priv->udi);
-	g_object_unref (ac_adapter->priv->hal);
+	g_object_unref (ac_adapter->priv->hal_device);
 
 	G_OBJECT_CLASS (gpm_ac_adapter_parent_class)->finalize (object);
 }
@@ -202,13 +200,15 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 	gchar **device_names;
 	gboolean ret;
 	GError *error;
+	HalGManager *hal_manager;
 
 	ac_adapter->priv = GPM_AC_ADAPTER_GET_PRIVATE (ac_adapter);
-	ac_adapter->priv->hal = gpm_hal_new ();
+	ac_adapter->priv->hal_device = hal_gdevice_new ();
+	hal_manager = hal_gmanager_new ();
 
 	/* save udi of lcd adapter */
 	error = NULL;
-	ret = gpm_hal_device_find_capability (ac_adapter->priv->hal, "ac_adapter", &device_names, &error);
+	ret = hal_gmanager_find_capability (hal_manager, "ac_adapter", &device_names, &error);
 	if (ret == FALSE) {
 		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
 		g_error_free (error);
@@ -218,23 +218,22 @@ gpm_ac_adapter_init (GpmAcAdapter *ac_adapter)
 		/* we track this by hand as machines that have no ac_adapter object must
 		 * return that they are on ac power */
 		ac_adapter->priv->has_hardware = TRUE;
+		gpm_debug ("using %s", device_names[0]);
 
 		/* We only want first ac_adapter object (should only be one) */
-		ac_adapter->priv->udi = g_strdup (device_names[0]);
-
-		/* watch this device */
-		gpm_hal_device_watch_propery_modified (ac_adapter->priv->hal, ac_adapter->priv->udi, FALSE);
+		hal_gdevice_set_udi (ac_adapter->priv->hal_device, device_names[0]);
+		hal_gdevice_watch_property_modified (ac_adapter->priv->hal_device);
 
 		/* we want state changes */
-		g_signal_connect (ac_adapter->priv->hal, "property-modified",
+		g_signal_connect (ac_adapter->priv->hal_device, "property-modified",
 				  G_CALLBACK (hal_device_property_modified_cb), ac_adapter);
 	} else {
 		/* no ac-adapter class support */
 		ac_adapter->priv->has_hardware = FALSE;
-		ac_adapter->priv->udi = NULL;
 		gpm_debug ("No devices of capability ac_adapter");
 	}
-	gpm_hal_free_capability (ac_adapter->priv->hal, device_names);
+	hal_gmanager_free_capability (device_names);
+	g_object_unref (hal_manager);
 }
 
 /**
@@ -252,3 +251,4 @@ gpm_ac_adapter_new (void)
 	}
 	return GPM_AC_ADAPTER (gpm_ac_adapter_object);
 }
+

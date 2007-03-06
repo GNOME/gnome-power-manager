@@ -50,12 +50,12 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* device_property_modified)	(HalGDevice	*hal_device,
+	void		(* device_property_modified)	(HalGDevice	*device,
 							 const gchar	*key,
 							 gboolean	 is_added,
 							 gboolean	 is_removed,
 							 gboolean	 finally);
-	void		(* device_condition)		(HalGDevice	*hal_device,
+	void		(* device_condition)		(HalGDevice	*device,
 							 const gchar	*condition,
 							 const gchar	*details);
 } HalGDeviceClass;
@@ -63,33 +63,33 @@ typedef struct
 GType		 hal_gdevice_get_type			(void);
 HalGDevice	*hal_gdevice_new			(void);
 
-gboolean	 hal_gdevice_set_udi			(HalGDevice	*hal_device,
+gboolean	 hal_gdevice_set_udi			(HalGDevice	*device,
 							 const gchar	*udi);
-const gchar	*hal_gdevice_get_udi			(HalGDevice	*hal_device);
-gboolean	 hal_gdevice_get_bool			(HalGDevice	*hal_device,
+const gchar	*hal_gdevice_get_udi			(HalGDevice	*device);
+gboolean	 hal_gdevice_get_bool			(HalGDevice	*device,
 							 const gchar	*key,
 							 gboolean	*value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_string			(HalGDevice	*hal_device,
+gboolean	 hal_gdevice_get_string			(HalGDevice	*device,
 							 const gchar	*key,
 							 gchar		**value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_int			(HalGDevice	*hal_device,
+gboolean	 hal_gdevice_get_int			(HalGDevice	*device,
 							 const gchar	*key,
 							 gint		*value,
 							 GError		**error);
-gboolean	 hal_gdevice_get_uint			(HalGDevice	*hal_device,
+gboolean	 hal_gdevice_get_uint			(HalGDevice	*device,
 							 const gchar	*key,
 							 guint		*value,
 							 GError		**error);
-gboolean	 hal_gdevice_query_capability		(HalGDevice	*hal_device,
+gboolean	 hal_gdevice_query_capability		(HalGDevice	*device,
 							 const gchar	*capability,
 							 gboolean	*has_capability,
 							 GError		**error);
-gboolean	 hal_gdevice_watch_condition		(HalGDevice	*hal_device);
-gboolean	 hal_gdevice_watch_property_modified	(HalGDevice	*hal_device);
-gboolean	 hal_gdevice_remove_condition		(HalGDevice	*hal_device);
-gboolean	 hal_gdevice_remove_property_modified	(HalGDevice	*hal_device);
+gboolean	 hal_gdevice_watch_condition		(HalGDevice	*device);
+gboolean	 hal_gdevice_watch_property_modified	(HalGDevice	*device);
+gboolean	 hal_gdevice_remove_condition		(HalGDevice	*device);
+gboolean	 hal_gdevice_remove_property_modified	(HalGDevice	*device);
 
 G_END_DECLS
 
