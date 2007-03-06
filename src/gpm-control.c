@@ -42,11 +42,12 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <gnome-keyring.h>
 
+#include <libhal-gpower.h>
+
 #include "gpm-conf.h"
 #include "gpm-screensaver.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-control.h"
 #include "gpm-polkit.h"
 #include "gpm-dbus-monitor.h"
@@ -64,7 +65,7 @@ typedef struct
 struct GpmControlPrivate
 {
 	GpmConf			*conf;
-	GpmHal			*hal;
+	HalGPower		*hal_power;
 	GpmPolkit		*polkit;
 	GSList			*list;
 	GpmDbusMonitor		*dbus_monitor;
@@ -394,7 +395,7 @@ gpm_control_allowed_suspend (GpmControl *control,
 
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_SUSPEND, &conf_ok);
-	hal_ok = gpm_hal_can_suspend (control->priv->hal);
+	hal_ok = hal_gpower_can_suspend (control->priv->hal_power);
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-suspend");
 	}
@@ -425,7 +426,7 @@ gpm_control_allowed_hibernate (GpmControl *control,
 
 	*can = FALSE;
 	gpm_conf_get_bool (control->priv->conf, GPM_CONF_CAN_HIBERNATE, &conf_ok);
-	hal_ok = gpm_hal_can_hibernate (control->priv->hal);
+	hal_ok = hal_gpower_can_hibernate (control->priv->hal_power);
 	if (control->priv->polkit) {
 		polkit_ok = gpm_polkit_is_user_privileged (control->priv->polkit, "hal-power-hibernate");
 	}
@@ -514,7 +515,7 @@ gpm_control_shutdown (GpmControl *control,
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
-	gpm_hal_shutdown (control->priv->hal);
+	hal_gpower_shutdown (control->priv->hal_power);
 	ret = TRUE;
 
 	return ret;
@@ -553,7 +554,7 @@ gpm_control_reboot (GpmControl *control,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
-	gpm_hal_reboot (control->priv->hal);
+	hal_gpower_reboot (control->priv->hal_power);
 	ret = TRUE;
 
 	return ret;
@@ -633,7 +634,7 @@ gpm_control_suspend (GpmControl *control,
 	/* Do the suspend */
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
-	ret = gpm_hal_suspend (control->priv->hal, 0);
+	ret = hal_gpower_suspend (control->priv->hal_power, 0);
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
@@ -701,7 +702,7 @@ gpm_control_hibernate (GpmControl *control,
 
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
-	ret = gpm_hal_hibernate (control->priv->hal);
+	ret = hal_gpower_hibernate (control->priv->hal_power);
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
@@ -731,8 +732,8 @@ gpm_control_hibernate (GpmControl *control,
  **/
 static GObject *
 gpm_control_constructor (GType		  type,
-			      guint		  n_construct_properties,
-			      GObjectConstructParam *construct_properties)
+			 guint		  n_construct_properties,
+			 GObjectConstructParam *construct_properties)
 {
 	GpmControl      *control;
 	GpmControlClass *klass;
@@ -756,12 +757,8 @@ gpm_control_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_CONTROL (object));
 	control = GPM_CONTROL (object);
 
-	if (control->priv->conf) {
-		g_object_unref (control->priv->conf);
-	}
-	if (control->priv->hal) {
-		g_object_unref (control->priv->hal);
-	}
+	g_object_unref (control->priv->conf);
+	g_object_unref (control->priv->hal_power);
 	if (control->priv->polkit) {
 		g_object_unref (control->priv->polkit);
 	}
@@ -844,7 +841,7 @@ gpm_control_init (GpmControl *control)
 
 	/* this will be NULL if we don't compile in support */
 	control->priv->polkit = gpm_polkit_new ();
-	control->priv->hal = gpm_hal_new ();
+	control->priv->hal_power = hal_gpower_new ();
 	control->priv->dbus_monitor = gpm_dbus_monitor_new ();
 	g_signal_connect (control->priv->dbus_monitor, "noc-session",
 			  G_CALLBACK (dbus_noc_session_cb), control);
@@ -874,3 +871,4 @@ gpm_control_new (void)
 	}
 	return GPM_CONTROL (gpm_control_object);
 }
+
