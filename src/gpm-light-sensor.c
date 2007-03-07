@@ -38,9 +38,11 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gdevice.h>
+#include <libhal-gmanager.h>
+
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-light-sensor.h"
 #include "gpm-proxy.h"
 #include "gpm-marshal.h"
@@ -55,7 +57,6 @@ struct GpmLightSensorPrivate
 	guint			 levels;
 	gchar			*udi;
 	GpmProxy		*gproxy;
-	GpmHal			*hal;
 };
 
 enum {
@@ -172,7 +173,6 @@ gpm_light_sensor_finalize (GObject *object)
 
 	g_free (brightness->priv->udi);
 	g_object_unref (brightness->priv->gproxy);
-	g_object_unref (brightness->priv->hal);
 
 	g_return_if_fail (brightness->priv != NULL);
 	G_OBJECT_CLASS (gpm_light_sensor_parent_class)->finalize (object);
@@ -258,13 +258,16 @@ static void
 gpm_light_sensor_init (GpmLightSensor *brightness)
 {
 	gchar **names;
+	HalGManager *manager;
+	HalGDevice *device;
 
 	brightness->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (brightness);
 
-	brightness->priv->hal = gpm_hal_new ();
+	/* get devices of light sensor type */
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "light_sensor", &names, NULL);
+	g_object_unref (manager);
 
-	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (brightness->priv->hal, "light_sensor", &names, NULL);
 	if (names == NULL || names[0] == NULL) {
 		gpm_warning ("No devices of capability light_sensor");
 		return;
@@ -272,7 +275,7 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 
 	/* We only want first light_sensor object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	gpm_hal_free_capability (brightness->priv->hal, names);
+	hal_gmanager_free_capability (names);
 
 	/* get a managed proxy */
 	brightness->priv->gproxy = gpm_proxy_new ();
@@ -283,8 +286,11 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 			  HAL_DBUS_INTERFACE_LIGHT_SENSOR);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi, "light_sensor.num_levels",
-				 &brightness->priv->levels, NULL);
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, brightness->priv->udi);
+	hal_gdevice_get_uint (device, "light_sensor.num_levels",
+			      &brightness->priv->levels, NULL);
+	g_object_unref (device);
 
 	/* this changes under our feet */
 	gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
@@ -301,21 +307,21 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 static gboolean
 gpm_light_sensor_has_hw (void)
 {
-	GpmHal *hal;
+	HalGManager *manager;
 	gchar **names;
 	gboolean ret = TRUE;
 
 	/* okay, as singleton - so we don't allocate more memory */
-	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "light_sensor", &names, NULL);
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "light_sensor", &names, NULL);
+	g_object_unref (manager);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {
 		ret = FALSE;
 	}
 
-	gpm_hal_free_capability (hal, names);
-	g_object_unref (hal);
+	hal_gmanager_free_capability (names);
 	return ret;
 }
 

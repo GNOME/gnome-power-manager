@@ -1,5 +1,10 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-light-sensor.c:
+	Switch to using libhal-glib functions rather than gpm-hal.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-srv-brightness-kbd.c: (gpm_srv_brightness_kbd_init):
 	Remove GpmHal stuff. Nothing uses it in this class.
 
