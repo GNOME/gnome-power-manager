@@ -38,10 +38,12 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gdevice.h>
+#include <libhal-gmanager.h>
+
 #include "gpm-brightness-lcd.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-marshal.h"
 #include "gpm-proxy.h"
 
@@ -60,7 +62,6 @@ struct GpmBrightnessLcdPrivate
 	guint			 levels;
 	gchar			*udi;
 	GpmProxy		*gproxy;
-	GpmHal			*hal;
 };
 
 enum {
@@ -503,9 +504,6 @@ gpm_brightness_lcd_finalize (GObject *object)
 	if (brightness->priv->gproxy != NULL) {
 		g_object_unref (brightness->priv->gproxy);
 	}
-	if (brightness->priv->hal != NULL) {
-		g_object_unref (brightness->priv->hal);
-	}
 
 	G_OBJECT_CLASS (gpm_brightness_lcd_parent_class)->finalize (object);
 }
@@ -547,15 +545,16 @@ static void
 gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 {
 	gchar **names;
-	gchar *manufacturer_string = NULL;
 	gboolean res;
+	HalGManager *manager;
+	HalGDevice *device;
 
 	brightness->priv = GPM_BRIGHTNESS_LCD_GET_PRIVATE (brightness);
 
-	brightness->priv->hal = gpm_hal_new ();
-
 	/* save udi of lcd adapter */
-	gpm_hal_device_find_capability (brightness->priv->hal, "laptop_panel", &names, NULL);
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "laptop_panel", &names, NULL);
+	g_object_unref (manager);
 	if (names == NULL || names[0] == NULL) {
 		gpm_warning ("No devices of capability laptop_panel");
 		return;
@@ -563,35 +562,31 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 
 	/* We only want first laptop_panel object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	gpm_hal_free_capability (brightness->priv->hal, names);
+	hal_gmanager_free_capability (names);
 
+	/* FIXME: This should be a HAL property */
 	brightness->priv->does_own_dimming = FALSE;
 
-	/* If the manufacturer is IBM, then assume we are a ThinkPad,
-	 * and don't do the new-fangled dimming routine. The ThinkPad dims
-	 * gently itself and the two dimming routines just get messy.
-	 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=173382 */
-	gpm_hal_device_get_string (brightness->priv->hal, HAL_ROOT_COMPUTER,
-				   "smbios.system.manufacturer",
-				   &manufacturer_string, NULL);
-	if (manufacturer_string) {
-		/* FIXME: This should be a HAL property */
-		if (strcmp (manufacturer_string, "IBM") == 0) {
-			brightness->priv->does_own_dimming = TRUE;
-		}
-		g_free (manufacturer_string);
-	}
-
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, brightness->priv->udi);
 	/* We only want to change the brightness if the machine does not
 	   do it on it's own updates, as this can make the panel flash in a
 	   feedback loop. */
-	res = gpm_hal_device_get_bool (brightness->priv->hal, brightness->priv->udi,
-				       "laptop_panel.brightness_in_hardware",
-				       &brightness->priv->does_own_updates, NULL);
+	res = hal_gdevice_get_bool (device, "laptop_panel.brightness_in_hardware",
+				    &brightness->priv->does_own_updates, NULL);
 	/* This key does not exist on normal machines */
-	if (!res) {
+	if (res == FALSE) {
 		brightness->priv->does_own_updates = FALSE;
 	}
+
+	/* get levels that the adapter supports -- this does not change ever */
+	hal_gdevice_get_uint (device, "laptop_panel.num_levels",
+			      &brightness->priv->levels, NULL);
+	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
+	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
+		gpm_warning ("Laptop panel levels are invalid!");
+	}
+	g_object_unref (device);
 
 	/* get a managed proxy */
 	brightness->priv->gproxy = gpm_proxy_new ();
@@ -600,14 +595,6 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 			  HAL_DBUS_SERVICE,
 			  brightness->priv->udi,
 			  HAL_DBUS_INTERFACE_LAPTOP_PANEL);
-
-	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi,
-				 "laptop_panel.num_levels", &brightness->priv->levels, NULL);
-	gpm_debug ("Laptop panel levels: %i", brightness->priv->levels);
-	if (brightness->priv->levels == 0 || brightness->priv->levels > 256) {
-		gpm_warning ("Laptop panel levels are invalid!");
-	}
 
 	/* this changes under our feet */
 	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
@@ -630,21 +617,21 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 gboolean
 gpm_brightness_lcd_has_hw (void)
 {
-	GpmHal *hal;
+	HalGManager *manager;
 	gchar **names;
 	gboolean ret = TRUE;
 
 	/* okay, as singleton - so we don't allocate more memory */
-	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "laptop_panel", &names, NULL);
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "laptop_panel", &names, NULL);
+	g_object_unref (manager);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {
 		ret = FALSE;
 	}
 
-	gpm_hal_free_capability (hal, names);
-	g_object_unref (hal);
+	hal_gmanager_free_capability (names);
 	return ret;
 }
 

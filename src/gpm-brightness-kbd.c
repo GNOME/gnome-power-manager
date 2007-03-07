@@ -39,11 +39,13 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gdevice.h>
+#include <libhal-gmanager.h>
+
 #include "gpm-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 #include "gpm-proxy.h"
@@ -64,7 +66,6 @@ struct GpmBrightnessKbdPrivate
 	guint			 levels;
 	gchar			*udi;
 	GpmConf			*conf;
-	GpmHal			*hal;
 	GpmLightSensor		*sensor;
 	GpmProxy		*gproxy;
 };
@@ -495,9 +496,6 @@ gpm_brightness_kbd_finalize (GObject *object)
 	if (brightness->priv->gproxy != NULL) {
 		g_object_unref (brightness->priv->gproxy);
 	}
-	if (brightness->priv->hal != NULL) {
-		g_object_unref (brightness->priv->hal);
-	}
 	if (brightness->priv->conf != NULL) {
 		g_object_unref (brightness->priv->conf);
 	}
@@ -689,10 +687,11 @@ static void
 gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 {
 	gchar **names;
+	HalGManager *manager;
+	HalGDevice *device;
 
 	brightness->priv = GPM_BRIGHTNESS_KBD_GET_PRIVATE (brightness);
 
-	brightness->priv->hal = gpm_hal_new ();
 	brightness->priv->conf = gpm_conf_new ();
 
 	/* listen for ambient light changes.. if we have an ambient light sensor */
@@ -703,7 +702,9 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 	}
 
 	/* save udi of kbd adapter */
-	gpm_hal_device_find_capability (brightness->priv->hal, "keyboard_backlight", &names, NULL);
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "keyboard_backlight", &names, NULL);
+	g_object_unref (manager);
 	if (names == NULL || names[0] == NULL) {
 		gpm_warning ("No devices of capability keyboard_backlight");
 		return;
@@ -711,7 +712,7 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 
 	/* We only want first keyboard_backlight object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
-	gpm_hal_free_capability (brightness->priv->hal, names);
+	hal_gmanager_free_capability (names);
 
 	brightness->priv->does_own_dimming = FALSE;
 	brightness->priv->does_own_updates = FALSE;
@@ -726,8 +727,11 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 			  HAL_DBUS_INTERFACE_KBD_BACKLIGHT);
 
 	/* get levels that the adapter supports -- this does not change ever */
-	gpm_hal_device_get_uint (brightness->priv->hal, brightness->priv->udi, "keyboard_backlight.num_levels",
-				 &brightness->priv->levels, NULL);
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, brightness->priv->udi);
+	hal_gdevice_get_uint (device, "keyboard_backlight.num_levels",
+			      &brightness->priv->levels, NULL);
+	g_object_unref (device);
 
 	/* this changes under our feet */
 	gpm_brightness_kbd_get_hw (brightness, &brightness->priv->current_hw);
@@ -753,21 +757,21 @@ gpm_brightness_kbd_init (GpmBrightnessKbd *brightness)
 gboolean
 gpm_brightness_kbd_has_hw (void)
 {
-	GpmHal *hal;
+	HalGManager *manager;
 	gchar **names;
 	gboolean ret = TRUE;
 
 	/* okay, as singleton - so we don't allocate more memory */
-	hal = gpm_hal_new ();
-	gpm_hal_device_find_capability (hal, "keyboard_backlight", &names, NULL);
+	manager = hal_gmanager_new ();
+	hal_gmanager_find_capability (manager, "keyboard_backlight", &names, NULL);
+	g_object_unref (manager);
 
 	/* nothing found */
 	if (names == NULL || names[0] == NULL) {
 		ret = FALSE;
 	}
 
-	gpm_hal_free_capability (hal, names);
-	g_object_unref (hal);
+	hal_gmanager_free_capability (names);
 	return ret;
 }
 
