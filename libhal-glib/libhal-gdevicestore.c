@@ -82,7 +82,7 @@ hal_gdevicestore_index (HalGDevicestore *devicestore, HalGDevice *device)
 			gpm_debug ("Found %s with trivial check", udi);
 			return i;
 		}
-	}	
+	}
 
 	/* non trivial check, is udi the same (SLOW) */
 	for (i=0;i<length;i++) {
@@ -91,7 +91,7 @@ hal_gdevicestore_index (HalGDevicestore *devicestore, HalGDevice *device)
 			gpm_debug ("Found %s with udi check", udi);
 			return i;
 		}
-	}	
+	}
 
 	gpm_debug ("Did not find %s", udi);
 	return -1;

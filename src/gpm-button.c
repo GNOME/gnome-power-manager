@@ -30,10 +30,13 @@
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
+#include <libhal-gmanager.h>
+#include <libhal-gdevice.h>
+#include <libhal-gdevicestore.h>
+
 #include "gpm-common.h"
 #include "gpm-button.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-marshal.h"
 
 static void     gpm_button_class_init (GpmButtonClass *klass);
@@ -48,7 +51,8 @@ struct GpmButtonPrivate
 	GdkWindow		*window;
 	GHashTable		*hash_to_hal;
 	gboolean		 lid_is_closed;
-	GpmHal			*hal; /* remove when input events is in the kernel */
+	HalGManager		*hal_manager; /* remove when input events is in the kernel */
+	HalGDevicestore	*hal_devicestore;
 };
 
 enum {
@@ -261,21 +265,21 @@ gpm_button_is_lid_closed (GpmButton *button)
  *      button.type=""
  */
 static void
-emit_button_pressed (GpmButton *button,
-		     const gchar   *udi,
-		     const gchar   *details)
+emit_button_pressed (GpmButton   *button,
+		     HalGDevice  *device,
+		     const gchar *details)
 {
 	gchar *type = NULL;
 	gboolean state;
 	const char *atype;
 
-	g_return_if_fail (udi != NULL);
+	g_return_if_fail (device != NULL);
 	g_return_if_fail (details != NULL);
 
 	if (strcmp (details, "") == 0) {
 		/* no details about the event, so we get more info
 		   for type 1 buttons */
-		gpm_hal_device_get_string (button->priv->hal, udi, "button.type", &type, NULL);
+		hal_gdevice_get_string (device, "button.type", &type, NULL);
 		/* hal may no longer be there */
 		g_return_if_fail (type != NULL);
 	} else {
@@ -287,7 +291,7 @@ emit_button_pressed (GpmButton *button,
 	state = TRUE;
 	/* we need to get the button state for lid buttons */
 	if (strcmp (type, "lid") == 0) {
-		gpm_hal_device_get_bool (button->priv->hal, udi, "button.state.value", &state, NULL);
+		hal_gdevice_get_bool (device, "button.state.value", &state, NULL);
 	}
 
 	/* abstact away that HAL has an extra parameter */
@@ -339,26 +343,25 @@ emit_button_pressed (GpmButton *button,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (GpmHal        *hal,
-				 const gchar   *udi,
+hal_device_property_modified_cb (HalGDevice    *device,
 				 const gchar   *key,
 				 gboolean       is_added,
 				 gboolean       is_removed,
 				 gboolean       finally,
-				 GpmButton *button)
+				 GpmButton     *button)
 {
-	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
-		   udi, key, is_added, is_removed, finally);
+	gpm_debug ("key=%s, added=%i, removed=%i, finally=%i",
+		   key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
-	if (is_removed) {
+	if (is_removed == TRUE) {
 		return;
 	}
 
 	/* only match button* values */
 	if (strncmp (key, "button", 6) == 0) {
-		gpm_debug ("state of a button has changed : %s, %s", udi, key);
-		emit_button_pressed (button, udi, "");
+		gpm_debug ("state of a button has changed : %s, %s", hal_gdevice_get_udi (device), key);
+		emit_button_pressed (button, device, "");
 	}
 }
 
@@ -373,16 +376,15 @@ hal_device_property_modified_cb (GpmHal        *hal,
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_condition_cb (GpmHal        *hal,
-			 const gchar   *udi,
+hal_device_condition_cb (HalGDevice    *device,
 			 const gchar   *condition,
 			 const gchar   *details,
-			 GpmButton *button)
+			 GpmButton     *button)
 {
-	gpm_debug ("udi=%s, condition=%s, details=%s", udi, condition, details);
+	gpm_debug ("condition=%s, details=%s", condition, details);
 
 	if (strcmp (condition, "ButtonPressed") == 0) {
-		emit_button_pressed (button, udi, details);
+		emit_button_pressed (button, device, details);
 	}
 }
 
@@ -395,8 +397,20 @@ static void
 watch_add_button (GpmButton *button,
 		  const gchar   *udi)
 {
-	gpm_hal_device_watch_condition (button->priv->hal, udi, FALSE);
-	gpm_hal_device_watch_propery_modified (button->priv->hal, udi, FALSE);
+	HalGDevice *device;
+
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, udi);
+	hal_gdevice_watch_condition (device);
+	hal_gdevice_watch_property_modified (device);
+
+	g_signal_connect (device, "property-modified",
+			  G_CALLBACK (hal_device_property_modified_cb), button);
+	g_signal_connect (device, "device-condition",
+			  G_CALLBACK (hal_device_condition_cb), button);
+
+	/* when added to the devicestore, devices are automatically unref'ed */
+	hal_gdevicestore_insert (button->priv->hal_devicestore, device);
 }
 
 /**
@@ -446,11 +460,12 @@ gpm_button_init (GpmButton *button)
 	}
 
 	/* remove when button support is out of HAL */
-	button->priv->hal = gpm_hal_new ();
+	button->priv->hal_manager = hal_gmanager_new ();
+	button->priv->hal_devicestore = hal_gdevicestore_new ();
 
 	/* devices of type button */
 	error = NULL;
-	ret = gpm_hal_device_find_capability (button->priv->hal, "button", &device_names, &error);
+	ret = hal_gmanager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
 	if (ret == FALSE) {
 		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
 		g_error_free (error);
@@ -461,15 +476,11 @@ gpm_button_init (GpmButton *button)
 		for (i = 0; device_names[i]; i++) {
 			watch_add_button (button, device_names[i]);
 		}
-		g_signal_connect (button->priv->hal, "property-modified",
-				  G_CALLBACK (hal_device_property_modified_cb), button);
-		g_signal_connect (button->priv->hal, "device-condition",
-				  G_CALLBACK (hal_device_condition_cb), button);
 	} else {
 		gpm_debug ("Couldn't obtain list of buttons");
 	}
 
-	gpm_hal_free_capability (button->priv->hal, device_names);
+	hal_gmanager_free_capability (device_names);
 }
 
 /**
@@ -486,9 +497,9 @@ gpm_button_finalize (GObject *object)
 	button = GPM_BUTTON (object);
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
-	if (button->priv->hal != NULL) {
-		g_object_unref (button->priv->hal);
-	}
+	g_object_unref (button->priv->hal_manager);
+	g_object_unref (button->priv->hal_devicestore);
+
 	g_hash_table_unref (button->priv->hash_to_hal);
 
 	G_OBJECT_CLASS (gpm_button_parent_class)->finalize (object);
