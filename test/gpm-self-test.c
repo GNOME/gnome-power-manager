@@ -237,6 +237,37 @@ test_gpm_array (GpmPowermanager *powermanager)
 		test_failed ("interpolated incorrect: %i", svalue);
 	}
 
+	/************************************************************/
+	test_title ("limit x size");
+	gpm_array_clear (array);
+	for (i=0;i<100;i++) {
+		gpm_array_add (array, i, i, i);
+	}
+	gpm_array_limit_x_size (array, 10);
+	size = gpm_array_get_size (array);
+	if (size == 10) {
+		test_success ("limited size X");
+	} else {
+		test_failed ("did not limit size X, size: %i", size);
+	}
+
+	/************************************************************/
+	test_title ("limit x width");
+	gpm_array_clear (array);
+	for (i=0;i<100;i++) {
+		gpm_array_add (array, i, i, i);
+	}
+	gpm_array_limit_x_width (array, 10);
+	size = gpm_array_get_size (array);
+	if (size == 11) {
+		test_success ("limited width X");
+	} else {
+		test_failed ("did not limit width X, size: %i", size);
+	}
+	gpm_array_print (array);
+
+	/************************************************************/
+
 	g_object_unref (array);
 }
 
@@ -795,3 +826,4 @@ main (int argc, char **argv)
 	g_option_context_free (context);
 	return retval;
 }
+

@@ -1,5 +1,16 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* test/gpm-self-test.c: (test_gpm_array):
+	Add a test for gpm_array_limit_x_size to try to trigger #415717
+
+	* src/gpm-array.c: (gpm_array_limit_x_size), (gpm_array_add):
+	Hopefully fix the crash in #415717, where we were accessing longer
+	than the array size, as the length of the array was not re-evaluated
+	when an element was removed.
+	This might be also the source of some odd 2.17.x bugs.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_remove):
 	Unref the device because this may be the only pointer to this instance.
 

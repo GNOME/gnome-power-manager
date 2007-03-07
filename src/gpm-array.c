@@ -869,6 +869,14 @@ gpm_array_limit_x_size (GpmArray *array,
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	length = gpm_array_get_size (array);
+
+	/* sanity check */
+	if (length < max_num) {
+		gpm_debug ("no limit possible as under limit");
+		return FALSE;
+	}
+
+	/* last element */
 	point = gpm_array_get (array, length-1);
 	div = (gfloat) point->x / (gfloat) max_num;
 	gpm_debug ("Using a x division of %f", div);
@@ -880,11 +888,18 @@ gpm_array_limit_x_size (GpmArray *array,
 		point = gpm_array_get (array, a);
 		if (point->x >= running_count) {
 			running_count = running_count + div;
+			gpm_debug ("keeping valid point %i", a);
 			/* keep valid point */
 		} else {
-			/* removing point */
+			/* remove point */
+			gpm_debug ("removing invalid point %i", a);
 			gpm_array_free_point (point);
 			g_ptr_array_remove_index (array->priv->array, a);
+
+			/* decrement the array length as we removed a point */
+			length--;
+			/* re-evaluate the 'current' item */
+			a--;
 		}
 	}
 	return TRUE;
@@ -988,7 +1003,7 @@ gpm_array_add (GpmArray *array,
 				   Add an extra point so that we extend it horiz. */
 				gpm_array_append (array, x, y, data);
 			}
-			gpm_debug ("Using %i lines", array->priv->array->len);
+			gpm_debug ("Using %i elements", length);
 		}
 	} else {
 		/* a list of less than 3 points always requires a data point */
