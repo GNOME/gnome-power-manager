@@ -477,6 +477,15 @@ test_hal_devicestore (GpmPowermanager *powermanager)
 	}
 
 	/************************************************************/
+	test_title ("find missing device by UDI");
+	device3 = hal_gdevicestore_find_udi (devicestore, "/foo");
+	if (device3 == NULL) {
+		test_success ("not found invalid device");
+	} else {
+		test_failed ("Found /foo device");
+	}
+
+	/************************************************************/
 	test_title ("make sure we can match on UDI");
 	device2 = hal_gdevice_new ();
 	hal_gdevice_set_udi (device2, HAL_ROOT_COMPUTER);
@@ -489,6 +498,7 @@ test_hal_devicestore (GpmPowermanager *powermanager)
 
 	/************************************************************/
 	test_title ("remove device");
+	g_object_ref (device); /* so we can test it in a minute */
 	ret = hal_gdevicestore_remove (devicestore, device);
 	if (ret == TRUE) {
 		test_success ("removed device");

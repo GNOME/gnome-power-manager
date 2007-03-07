@@ -35,11 +35,14 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
-#include <dbus/dbus-glib.h>
+
+#include <libhal-gpower.h>
+#include <libhal-gdevice.h>
+#include <libhal-gdevicestore.h>
+#include <libhal-gmanager.h>
 
 #include "gpm-common.h"
 #include "gpm-prefs.h"
-#include "gpm-hal.h"
 #include "gpm-marshal.h"
 #include "gpm-debug.h"
 
@@ -53,8 +56,8 @@ static void     gpm_battery_finalize   (GObject	       *object);
 
 struct GpmBatteryPrivate
 {
-	GpmHal			*hal;
-	GHashTable		*devices;
+	HalGManager		*hal_manager;
+	HalGDevicestore		*hal_devicestore;
 };
 
 enum {
@@ -76,9 +79,9 @@ G_DEFINE_TYPE (GpmBattery, gpm_battery, G_TYPE_OBJECT)
 static void
 gpm_battery_class_init (GpmBatteryClass *klass)
 {
-	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize	   = gpm_battery_finalize;
+	object_class->finalize = gpm_battery_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmBatteryPrivate));
 
@@ -123,19 +126,19 @@ gpm_battery_class_init (GpmBatteryClass *klass)
  * changed, and we have we have subscribed to changes for that device.
  */
 static void
-hal_device_property_modified_cb (GpmHal      *hal,
-				 const gchar *udi,
-				 const gchar *key,
-				 gboolean     is_added,
-				 gboolean     is_removed,
-				 gboolean     finally,
-				 GpmBattery  *battery)
+hal_device_property_modified_cb (HalGDevice   *device,
+				 const gchar  *key,
+				 gboolean      is_added,
+				 gboolean      is_removed,
+				 gboolean      finally,
+				 GpmBattery   *battery)
 {
+	const gchar *udi = hal_gdevice_get_udi (device);
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
 	/* do not process keys that have been removed */
-	if (is_removed) {
+	if (is_removed == TRUE) {
 		return;
 	}
 
@@ -155,19 +158,23 @@ static gboolean
 watch_add_battery (GpmBattery    *battery,
 		   const gchar   *udi)
 {
-	gchar *hash_udi;
+	HalGDevice *device;
 
-	hash_udi = g_hash_table_lookup (battery->priv->devices, udi);
-	if (hash_udi != NULL) {
+	device = hal_gdevicestore_find_udi (battery->priv->hal_devicestore, udi);
+	if (device != NULL) {
 		gpm_warning ("cannot watch already watched battery '%s'", udi);
 		return FALSE;
 	}
 
-	/* we have to make a local copy for the hash compare to work */
-	hash_udi = g_strdup (udi);
-	g_hash_table_insert (battery->priv->devices, (gpointer) hash_udi, (gpointer) hash_udi);
+	/* create a new device */
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, udi);
+	hal_gdevice_watch_property_modified (device);
+	g_signal_connect (device, "property-modified",
+			  G_CALLBACK (hal_device_property_modified_cb), battery);
 
-	gpm_hal_device_watch_propery_modified (battery->priv->hal, udi, FALSE);
+	/* when added to the devicestore, devices are automatically unref'ed */
+	hal_gdevicestore_insert (battery->priv->hal_devicestore, device);
 
 	gpm_debug ("emitting battery-added : %s", udi);
 	g_signal_emit (battery, signals [BATTERY_ADDED], 0, udi);
@@ -182,23 +189,21 @@ watch_add_battery (GpmBattery    *battery,
  * @battery: This battery instance
  */
 static gboolean
-hal_device_removed_cb (GpmHal      *hal,
-		       const gchar *udi,
-		       GpmBattery  *battery)
+hal_device_removed_cb (HalGManager *hal_manager,
+		       const gchar  *udi,
+		       GpmBattery   *battery)
 {
-	const gchar *hash_udi;
+	HalGDevice *device;
 
 	gpm_debug ("udi=%s", udi);
 
-	hash_udi = g_hash_table_lookup (battery->priv->devices, udi);
-	if (hash_udi == NULL) {
-		gpm_warning ("cannot remove battery not in hash");
+	device = hal_gdevicestore_find_udi (battery->priv->hal_devicestore, udi);
+	if (device == NULL) {
+		gpm_warning ("cannot remove battery not in devicestore");
 		return FALSE;
 	}
+	hal_gdevicestore_remove (battery->priv->hal_devicestore, device);
 
-	g_hash_table_remove (battery->priv->devices, udi);
-
-	gpm_hal_device_remove_propery_modified (battery->priv->hal, udi);
 	g_signal_emit (battery, signals [BATTERY_REMOVED], 0, udi);
 	return TRUE;
 }
@@ -212,10 +217,10 @@ hal_device_removed_cb (GpmHal      *hal,
  * @battery: This battery instance
  */
 static void
-hal_new_capability_cb (GpmHal      *hal,
-		       const gchar *udi,
-		       const gchar *capability,
-		       GpmBattery  *battery)
+hal_new_capability_cb (HalGManager *hal_manager,
+		       const gchar   *udi,
+		       const gchar   *capability,
+		       GpmBattery    *battery)
 {
 	gpm_debug ("udi=%s, capability=%s", udi, capability);
 
@@ -232,25 +237,30 @@ hal_new_capability_cb (GpmHal      *hal,
  * @battery: This battery instance
  */
 static void
-hal_device_added_cb (GpmHal        *hal,
-		       const gchar *udi,
-		       GpmBattery  *battery)
+hal_device_added_cb (HalGManager *hal_manager,
+		     const gchar   *udi,
+		     GpmBattery    *battery)
 {
 	gboolean is_battery;
 	gboolean dummy;
+	HalGDevice *device;
 
 	/* find out if the new device has capability battery
 	   this might fail for CSR as the addon is weird */
-	gpm_hal_device_has_capability (hal, udi, "battery", &is_battery, NULL);
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, udi);
+	hal_gdevice_query_capability (device, "battery", &is_battery, NULL);
+
 	/* try harder */
 	if (is_battery == FALSE) {
-		is_battery = gpm_hal_device_get_bool (hal, udi, "battery.present", &dummy, NULL);
+		is_battery = hal_gdevice_get_bool (device, "battery.present", &dummy, NULL);
 	}
 
 	/* if a battery, then add */
-	if (is_battery) {
+	if (is_battery == TRUE) {
 		watch_add_battery (battery, udi);
 	}
+	g_object_unref (device);
 }
 
 /**
@@ -270,7 +280,7 @@ coldplug_batteries (GpmBattery *battery)
 
 	/* devices of type battery */
 	error = NULL;
-	ret = gpm_hal_device_find_capability (battery->priv->hal, "battery", &device_names, &error);
+	ret = hal_gmanager_find_capability (battery->priv->hal_manager, "battery", &device_names, &error);
 	if (ret == FALSE) {
 		gpm_warning ("Couldn't obtain list of batteries: %s", error->message);
 		g_error_free (error);
@@ -281,7 +291,7 @@ coldplug_batteries (GpmBattery *battery)
 		watch_add_battery (battery, device_names[i]);
 	}
 
-	gpm_hal_free_capability (battery->priv->hal, device_names);
+	hal_gmanager_free_capability (device_names);
 
 	return TRUE;
 }
@@ -299,37 +309,34 @@ gpm_battery_coldplug (GpmBattery *battery)
 }
 
 /**
- * gpm_battery_coldplug:
+ * gpm_battery_start_idle:
  */
 static gboolean
-start_idle (GpmBattery *battery)
+gpm_battery_start_idle (GpmBattery *battery)
 {
-	coldplug_batteries (battery);
-	return FALSE;
+       coldplug_batteries (battery);
+       return FALSE;
 }
 
 /**
- * gpm_battery_coldplug:
+ * gpm_battery_init:
  */
 static void
 gpm_battery_init (GpmBattery *battery)
 {
 	battery->priv = GPM_BATTERY_GET_PRIVATE (battery);
 
-	battery->priv->hal = gpm_hal_new ();
+	battery->priv->hal_manager = hal_gmanager_new ();
+	battery->priv->hal_devicestore = hal_gdevicestore_new ();
 
-	g_signal_connect (battery->priv->hal, "device-added",
+	g_signal_connect (battery->priv->hal_manager, "device-added",
 			  G_CALLBACK (hal_device_added_cb), battery);
-	g_signal_connect (battery->priv->hal, "device-removed",
+	g_signal_connect (battery->priv->hal_manager, "device-removed",
 			  G_CALLBACK (hal_device_removed_cb), battery);
-	g_signal_connect (battery->priv->hal, "new-capability",
+	g_signal_connect (battery->priv->hal_manager, "new-capability",
 			  G_CALLBACK (hal_new_capability_cb), battery);
-	g_signal_connect (battery->priv->hal, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), battery);
 
-	battery->priv->devices = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-	g_idle_add ((GSourceFunc)start_idle, battery);
+	g_idle_add ((GSourceFunc)gpm_battery_start_idle, battery);
 }
 
 /**
@@ -349,11 +356,8 @@ gpm_battery_finalize (GObject *object)
 
 	g_return_if_fail (battery->priv != NULL);
 
-	if (battery->priv->hal != NULL) {
-		g_object_unref (battery->priv->hal);
-	}
-
-	g_hash_table_destroy (battery->priv->devices);
+	g_object_unref (battery->priv->hal_manager);
+	g_object_unref (battery->priv->hal_devicestore);
 
 	G_OBJECT_CLASS (gpm_battery_parent_class)->finalize (object);
 }
@@ -373,3 +377,4 @@ gpm_battery_new (void)
 	}
 	return GPM_BATTERY (gpm_battery_object);
 }
+

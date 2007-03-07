@@ -1,5 +1,18 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_remove):
+	Unref the device because this may be the only pointer to this instance.
+
+	* test/gpm-self-test.c: (test_hal_devicestore):
+	Fix the test to ref the object before deletion else we get an error.
+
+	* src/gpm-battery.c:
+	Switch to using libhal-glib functions rather than gpm-hal and a custom
+	hacky hashtable implimentation.
+	Unplug and plug events are also handled much quicker now!
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_find_udi):
 	* libhal-glib/libhal-gdevicestore.h:
 	* test/gpm-self-test.c: (test_hal_devicestore):

@@ -191,6 +191,7 @@ gboolean
 hal_gdevicestore_remove (HalGDevicestore *devicestore, HalGDevice *device)
 {
 	gint index;
+	HalGDevice *d;
 
 	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
@@ -201,6 +202,11 @@ hal_gdevicestore_remove (HalGDevicestore *devicestore, HalGDevice *device)
 		return FALSE;
 	}
 
+	/* we unref because this may be the only pointer to this instance */
+	d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, index);
+	g_object_unref (d);
+
+	/* remove from the devicestore */
 	g_ptr_array_remove_index (devicestore->priv->array, index);
 
 	return TRUE;
