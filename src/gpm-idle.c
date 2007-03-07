@@ -37,6 +37,7 @@
 #include <glib.h>
 
 #include "gpm-idle.h"
+#include "gpm-load.h"
 #include "gpm-debug.h"
 #include "gpm-screensaver.h"
 
@@ -53,6 +54,7 @@ static void	gpm_idle_reset (GpmIdle *idle);
 
 struct GpmIdlePrivate
 {
+	GpmLoad		*load;
 	GpmScreensaver	*screensaver;
 	GpmIdleMode	 mode;
 
@@ -76,79 +78,6 @@ static guint signals [LAST_SIGNAL] = { 0, };
 static gpointer gpm_idle_object = NULL;
 
 G_DEFINE_TYPE (GpmIdle, gpm_idle, G_TYPE_OBJECT)
-
-/**
- * gpm_idle_get_cpu_values:
- * @cpu_idle: The idle time reported by the CPU
- * @cpu_total: The total time reported by the CPU
- * Return value: Success of reading /proc/stat.
- **/
-static gboolean
-gpm_idle_get_cpu_values (long unsigned *cpu_idle, long unsigned *cpu_total)
-{
-	long unsigned cpu_user;
-	long unsigned cpu_nice;
-	long unsigned cpu_system;
-	int len;
-	char tmp[5];
-	char str[80];
-	FILE *fd;
-	char *suc;
-
-	fd = fopen("/proc/stat", "r");
-	if (! fd) {
-		return FALSE;
-	}
-	suc = fgets (str, 80, fd);
-	len = sscanf (str, "%s %lu %lu %lu %lu", tmp,
-		      &cpu_user, &cpu_nice, &cpu_system, cpu_idle);
-	fclose (fd);
-	/*
-	 * Summing up all these times gives you the system uptime in jiffies.
-	 * This is what the uptime command does.
-	 */
-	*cpu_total = cpu_user + cpu_nice + cpu_system + *cpu_idle;
-	return TRUE;
-}
-
-/**
- * gpm_idle_compute_load:
- * @idle: This class instance
- * Return value: The CPU idle load
- **/
-static gdouble
-gpm_idle_compute_load (GpmIdle *idle)
-{
-	double	      percentage_load;
-	long unsigned cpu_idle;
-	long unsigned cpu_total;
-	long unsigned diff_idle;
-	long unsigned diff_total;
-
-	/* fill "old" value manually */
-	if (! idle->priv->init) {
-		idle->priv->init = TRUE;
-		gpm_idle_get_cpu_values (&idle->priv->old_idle, &idle->priv->old_total);
-		return 0;
-	}
-
-	/* work out the differences */
-	gpm_idle_get_cpu_values (&cpu_idle, &cpu_total);
-	diff_idle = cpu_idle - idle->priv->old_idle;
-	diff_total = cpu_total - idle->priv->old_total;
-
-	/* If we divide the total time by idle time we get the load. */
-	if (diff_idle > 0) {
-		percentage_load = (double) diff_total / (double) diff_idle;
-	} else {
-		percentage_load = 100;
-	}
-
-	idle->priv->old_idle = cpu_idle;
-	idle->priv->old_total = cpu_total;
-
-	return percentage_load;
-}
 
 /**
  * gpm_idle_set_mode:
@@ -188,7 +117,7 @@ gpm_idle_poll_system_timer (GpmIdle *idle)
 	/* get our computed load value */
 	if (idle->priv->check_type_cpu) {
 
-		load = gpm_idle_compute_load (idle);
+		load = gpm_load_get_current (idle->priv->load);
 
 		/* FIXME: should this stay below this level for a certain time? */
 		if (load > IDLE_LIMIT) {
@@ -406,6 +335,7 @@ gpm_idle_finalize (GObject *object)
 
 	g_return_if_fail (idle->priv != NULL);
 
+	g_object_unref (idle->priv->load);
 	g_object_unref (idle->priv->screensaver);
 	gpm_idle_remove_all_timers (idle);
 
@@ -450,6 +380,7 @@ gpm_idle_init (GpmIdle *idle)
 {
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
+	idle->priv->load = gpm_load_new ();
 	idle->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (idle->priv->screensaver, "idle-changed",
 			  G_CALLBACK (session_idle_changed_cb), idle);
@@ -470,3 +401,4 @@ gpm_idle_new (void)
 	}
 	return GPM_IDLE (gpm_idle_object);
 }
+

@@ -83,6 +83,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-debug.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-load.h					\
+	gpm-load.c					\
 	gpm-prefs.h					\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
@@ -138,6 +140,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-conf.c					\
 	gpm-idle.h					\
 	gpm-idle.c					\
+	gpm-load.h					\
+	gpm-load.c					\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-proxy.h					\

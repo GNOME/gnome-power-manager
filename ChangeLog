@@ -1,5 +1,15 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-idle.c:
+	* src/gpm-load.c:
+	* src/gpm-load.h:
+	Split out the CPU load functionality into a super small GObject
+	so that we can use it for other future (super cool) stuff.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal.c:
 	* src/gpm-hal.h:
 	Woohoo. Remove the monstrosity that was GpmHal.
