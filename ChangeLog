@@ -1,5 +1,14 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal.c:
+	* src/gpm-hal.h:
+	Woohoo. Remove the monstrosity that was GpmHal.
+	 gpm-hal.c | 1550 -----------------------------
+	 gpm-hal.h |  169 -----------------------------
+	 2 files changed, 1719 deletions(-)
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-power.c:
