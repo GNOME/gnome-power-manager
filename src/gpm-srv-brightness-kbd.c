@@ -48,7 +48,6 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-feedback-widget.h"
-#include "gpm-hal.h"
 #include "gpm-idle.h"
 #include "gpm-light-sensor.h"
 #include "gpm-stock-icons.h"
@@ -65,7 +64,6 @@ struct GpmSrvBrightnessKbdPrivate
 	GpmConf			*conf;
 	GpmFeedback		*feedback;
 	GpmIdle			*idle;
-	GpmHal			*hal;
 	GpmLightSensor		*sensor;
 };
 
@@ -276,7 +274,6 @@ gpm_srv_brightness_kbd_init (GpmSrvBrightnessKbd *srv_brightness)
 {
 	srv_brightness->priv = GPM_SRV_BRIGHTNESS_KBD_GET_PRIVATE (srv_brightness);
 
-	srv_brightness->priv->hal = gpm_hal_new ();
 	srv_brightness->priv->conf = gpm_conf_new ();
 
 	/* watch for dim value changes */

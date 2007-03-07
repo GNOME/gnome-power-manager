@@ -1,5 +1,10 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-srv-brightness-kbd.c: (gpm_srv_brightness_kbd_init):
+	Remove GpmHal stuff. Nothing uses it in this class.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* test/gpm-self-test.c: (test_gpm_array):
 	Add a test for gpm_array_limit_x_size to try to trigger #415717
 
