@@ -53,6 +53,33 @@ static guint	     signals [LAST_SIGNAL] = { 0, };
 G_DEFINE_TYPE (HalGDevicestore, hal_gdevicestore, G_TYPE_OBJECT)
 
 /**
+ * hal_devicestore_index_udi:
+ *
+ * Returns -1 if not found
+ *
+ * @devicestore: This store instance
+ * @device: The device
+ */
+static gint
+hal_gdevicestore_index_udi (HalGDevicestore *devicestore, const gchar *udi)
+{
+	gint i;
+	guint length;
+	HalGDevice *d;
+
+	length = devicestore->priv->array->len;
+	for (i=0;i<length;i++) {
+		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
+		if (strcmp (hal_gdevice_get_udi (d), udi) == 0) {
+			gpm_debug ("Found %s with udi check", udi);
+			return i;
+		}
+	}
+	gpm_debug ("Did not find %s", udi);
+	return -1;
+}
+
+/**
  * hal_devicestore_index:
  *
  * Returns -1 if not found
@@ -85,16 +112,33 @@ hal_gdevicestore_index (HalGDevicestore *devicestore, HalGDevice *device)
 	}
 
 	/* non trivial check, is udi the same (SLOW) */
-	for (i=0;i<length;i++) {
-		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
-		if (strcmp (hal_gdevice_get_udi (d), udi) == 0) {
-			gpm_debug ("Found %s with udi check", udi);
-			return i;
-		}
+	return hal_gdevicestore_index_udi (devicestore, udi);
+}
+
+/**
+ * hal_gdevicestore_find_udi:
+ *
+ * NULL return value is not found
+ *
+ * @devicestore: This store instance
+ * @device: The device
+ */
+HalGDevice *
+hal_gdevicestore_find_udi (HalGDevicestore *devicestore, const gchar *udi)
+{
+	gint index;
+
+	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), FALSE);
+	g_return_val_if_fail (udi != NULL, FALSE);
+
+	index = hal_gdevicestore_index_udi (devicestore, udi);
+	if (index == -1) {
+		gpm_debug ("not found");
+		return NULL;
 	}
 
-	gpm_debug ("Did not find %s", udi);
-	return -1;
+	/* return the device */
+	return (HalGDevice *) g_ptr_array_index (devicestore->priv->array, index);
 }
 
 /**

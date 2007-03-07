@@ -52,6 +52,8 @@ typedef struct
 GType		 hal_gdevicestore_get_type		(void);
 HalGDevicestore	*hal_gdevicestore_new			(void);
 
+HalGDevice	*hal_gdevicestore_find_udi		(HalGDevicestore *devicestore,
+							 const gchar	 *udi);
 gboolean	 hal_gdevicestore_insert		(HalGDevicestore *devicestore,
 							 HalGDevice	 *device);
 gboolean	 hal_gdevicestore_present		(HalGDevicestore *devicestore,

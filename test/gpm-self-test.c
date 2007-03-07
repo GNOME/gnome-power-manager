@@ -416,6 +416,7 @@ test_hal_devicestore (GpmPowermanager *powermanager)
 	HalGDevicestore *devicestore;
 	HalGDevice *device;
 	HalGDevice *device2;
+	HalGDevice *device3;
 	gboolean ret;
 	test_type = "HalGDevicestore  ";
 
@@ -449,9 +450,27 @@ test_hal_devicestore (GpmPowermanager *powermanager)
 	}
 
 	/************************************************************/
+	test_title ("insert duplicate device");
+	ret = hal_gdevicestore_insert (devicestore, device);
+	if (ret == FALSE) {
+		test_success ("cannot insert duplicate device");
+	} else {
+		test_failed ("inserted duplicate device");
+	}
+
+	/************************************************************/
 	test_title ("make sure device in store");
 	ret = hal_gdevicestore_present (devicestore, device);
 	if (ret == TRUE) {
+		test_success ("found device");
+	} else {
+		test_failed ("could not find device");
+	}
+
+	/************************************************************/
+	test_title ("find device by UDI");
+	device3 = hal_gdevicestore_find_udi (devicestore, HAL_ROOT_COMPUTER);
+	if (device3 == device) {
 		test_success ("found device");
 	} else {
 		test_failed ("could not find device");

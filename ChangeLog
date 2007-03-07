@@ -1,5 +1,12 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_find_udi):
+	* libhal-glib/libhal-gdevicestore.h:
+	* test/gpm-self-test.c: (test_hal_devicestore):
+	Provide methods to find the HalGDevice from the UDI.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-button.c:
 	Switch to using libhal-glib functions rather than gpm-hal and a custom
