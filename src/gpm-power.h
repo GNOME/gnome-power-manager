@@ -25,6 +25,7 @@
 #define __GPM_POWER_H
 
 #include <glib-object.h>
+#include <libhal-gdevice.h>
 
 G_BEGIN_DECLS
 
@@ -61,7 +62,7 @@ typedef struct {
 } GpmPowerStatus;
 
 typedef struct {
-	gchar		*udi;
+	HalGDevice	*hal_device;
 	gchar		*product;
 	gchar		*vendor;
 	gchar		*technology;

@@ -1,5 +1,16 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	* src/gpm-tray-icon.c:
+	Switch to using libhal-glib functions rather than gpm-hal.
+	This completes the transformation, and was the most complex to do.
+	If there are bugs in the new system, they will be exposed here. ;-)
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-kbd.c:
 	* src/gpm-brightness-lcd.c:
 	Switch to using libhal-glib functions rather than gpm-hal.

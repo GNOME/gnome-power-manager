@@ -39,8 +39,9 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkstatusicon.h>
-
 #include <libgnomeui/gnome-help.h>
+
+#include <libhal-gmanager.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-battery.h"
@@ -48,7 +49,6 @@
 #include "gpm-control.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"
-#include "gpm-hal.h"
 #include "gpm-notify.h"
 #include "gpm-control.h"
 #include "gpm-power.h"
@@ -67,7 +67,7 @@ struct GpmTrayIconPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
-	GpmHal			*hal;
+	HalGManager		*hal_manager;
 	GpmControl		*control;
 	GpmPower		*power;
 	GpmBattery		*battery;
@@ -535,6 +535,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 	gchar *label;
 	const gchar *desc;
 	gint percentage;
+	const gchar *udi;
 
 	for (i=0; i<MAX_BATTERIES_PER_TYPE; i++) {
 		device = gpm_power_get_battery_device_entry (icon->priv->power, kind, i);
@@ -543,11 +544,12 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 		}
 
 		/* only add battery to list if present */
+		udi = hal_gdevice_get_udi (device->hal_device);
 		if (device->battery_status.is_present == FALSE) {
-			gpm_debug ("not adding device '%s' as not present", device->udi);
+			gpm_debug ("not adding device '%s' as not present", udi);
 			break;
 		}
-		gpm_debug ("adding device '%s'", device->udi);
+		gpm_debug ("adding device '%s'", udi);
 
 		/* generate the label */
 		percentage = device->battery_status.percentage_charge;
@@ -565,7 +567,7 @@ gpm_tray_icon_add_device (GpmTrayIcon *icon,
 		/* callback with the UDI and add the the menu */
 		g_signal_connect (G_OBJECT (item), "activate",
 				  G_CALLBACK (gpm_tray_icon_show_info_cb), icon);
-		g_object_set_data (G_OBJECT (item), "udi", (gpointer) device->udi);
+		g_object_set_data (G_OBJECT (item), "udi", (gpointer) udi);
 		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
 	}
@@ -891,7 +893,7 @@ battery_removed_cb (GpmBattery *battery,
  * @hal: The HAL class instance
  **/
 static void
-hal_daemon_monitor_cb (GpmHal      *hal,
+hal_daemon_monitor_cb (HalGManager *hal_manager,
 		       GpmTrayIcon *icon)
 {
 	gpm_tray_icon_sync (icon);
@@ -971,10 +973,10 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 			  G_CALLBACK (battery_removed_cb), icon);
 
 	/* we need this to refresh the tooltip and icon on hal restart */
-	icon->priv->hal = gpm_hal_new ();
-	g_signal_connect (icon->priv->hal, "daemon-start",
+	icon->priv->hal_manager = hal_gmanager_new ();
+	g_signal_connect (icon->priv->hal_manager, "daemon-start",
 			  G_CALLBACK (hal_daemon_monitor_cb), icon);
-	g_signal_connect (icon->priv->hal, "daemon-stop",
+	g_signal_connect (icon->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_monitor_cb), icon);
 
 	icon->priv->conf = gpm_conf_new ();
@@ -1046,8 +1048,8 @@ gpm_tray_icon_finalize (GObject *object)
 	if (tray_icon->priv->battery != NULL) {
 		g_object_unref (tray_icon->priv->battery);
 	}
-	if (tray_icon->priv->hal != NULL) {
-		g_object_unref (tray_icon->priv->hal);
+	if (tray_icon->priv->hal_manager != NULL) {
+		g_object_unref (tray_icon->priv->hal_manager);
 	}
 
 	g_return_if_fail (tray_icon->priv != NULL);

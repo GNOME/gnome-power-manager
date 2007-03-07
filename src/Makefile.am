@@ -75,8 +75,6 @@ gnome_power_statistics_LDADD +=				\
 endif
 
 gnome_power_preferences_SOURCES =			\
-	gpm-hal.h					\
-	gpm-hal.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-conf.h					\
@@ -168,8 +166,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-tray-icon.c					\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-hal.h					\
-	gpm-hal.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
