@@ -1,5 +1,11 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw):
+	Make sure we initialize a value to zero to prevent a warning if the
+	method call fails.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-backlight.c:
