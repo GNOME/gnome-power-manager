@@ -7,6 +7,7 @@ INCLUDES = \
 noinst_LTLIBRARIES =						\
 	libhal-gmanager.la					\
 	libhal-gdevice.la					\
+	libhal-gdevicestore.la					\
 	libhal-gcpufreq.la					\
 	libhal-gpower.la
 
@@ -36,6 +37,15 @@ libhal_gdevice_la_SOURCES =					\
 	libhal-gdevice.c					\
 	libhal-gdevice.h
 libhal_gdevice_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
+
+libhal_gdevicestore_la_SOURCES =				\
+	libhal-marshal.h					\
+	libhal-marshal.c					\
+	libhal-gdevice.c					\
+	libhal-gdevice.h					\
+	libhal-gdevicestore.c					\
+	libhal-gdevicestore.h
+libhal_gdevicestore_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
 
 libhal_gpower_la_SOURCES =					\
 	libhal-marshal.h					\

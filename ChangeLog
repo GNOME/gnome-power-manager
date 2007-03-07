@@ -1,5 +1,13 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/Makefile.am:
+	* libhal-glib/libhal-gdevicestore.c:
+	* test/Makefile.am:
+	* test/gpm-self-test.c:
+	Add a new devicestore class that, well, stores devices.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw):
 	Make sure we initialize a value to zero to prevent a warning if the
 	method call fails.

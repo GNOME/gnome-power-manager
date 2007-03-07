@@ -29,6 +29,7 @@
 
 #include <libhal-gpower.h>
 #include <libhal-gdevice.h>
+#include <libhal-gdevicestore.h>
 #include <libhal-gmanager.h>
 
 #include "../src/gpm-common.h"
@@ -88,7 +89,7 @@ test_gpm_array (GpmPowermanager *powermanager)
 	guint size;
 	GpmArrayPoint *point;
 	gint svalue;
-	test_type = "GpmArray    ";
+	test_type = "GpmArray         ";
 	guint i;
 
 	/************************************************************/
@@ -244,7 +245,7 @@ test_hal_power (GpmPowermanager *powermanager)
 {
 	HalGPower *power;
 	gboolean ret;
-	test_type = "HalGPower   ";
+	test_type = "HalGPower        ";
 
 	/************************************************************/
 	test_title ("make sure we get a non null device");
@@ -272,7 +273,7 @@ test_hal_manager (GpmPowermanager *powermanager)
 {
 	HalGManager *manager;
 	gboolean ret;
-	test_type = "HalGManager ";
+	test_type = "HalGManager      ";
 
 	/************************************************************/
 	test_title ("make sure we get a non null device");
@@ -314,7 +315,7 @@ test_hal_device (GpmPowermanager *powermanager)
 	const char *udi;
 	char *retstr;
 	gboolean ret;
-	test_type = "HalGDevice  ";
+	test_type = "HalGDevice       ";
 
 	/************************************************************/
 	test_title ("make sure we get a non null device");
@@ -410,12 +411,93 @@ test_hal_device (GpmPowermanager *powermanager)
 }
 
 static void
+test_hal_devicestore (GpmPowermanager *powermanager)
+{
+	HalGDevicestore *devicestore;
+	HalGDevice *device;
+	HalGDevice *device2;
+	gboolean ret;
+	test_type = "HalGDevicestore  ";
+
+	/************************************************************/
+	test_title ("make sure we get a non null devicestore");
+	devicestore = hal_gdevicestore_new ();
+	if (devicestore != NULL) {
+		test_success ("got HalGDevicestore");
+	} else {
+		test_failed ("could not get HalGDevicestore");
+	}
+
+	/************************************************************/
+	test_title ("make sure device not in devicestore");
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, HAL_ROOT_COMPUTER);
+	ret = hal_gdevicestore_present (devicestore, device);
+	if (ret == FALSE) {
+		test_success ("could not get different device");
+	} else {
+		test_failed ("got computer in empty store");
+	}
+
+	/************************************************************/
+	test_title ("insert device");
+	ret = hal_gdevicestore_insert (devicestore, device);
+	if (ret == TRUE) {
+		test_success ("inserted device");
+	} else {
+		test_failed ("could not insert device");
+	}
+
+	/************************************************************/
+	test_title ("make sure device in store");
+	ret = hal_gdevicestore_present (devicestore, device);
+	if (ret == TRUE) {
+		test_success ("found device");
+	} else {
+		test_failed ("could not find device");
+	}
+
+	/************************************************************/
+	test_title ("make sure we can match on UDI");
+	device2 = hal_gdevice_new ();
+	hal_gdevice_set_udi (device2, HAL_ROOT_COMPUTER);
+	ret = hal_gdevicestore_present (devicestore, device2);
+	if (ret == TRUE) {
+		test_success ("found device");
+	} else {
+		test_failed ("could not find device");
+	}
+
+	/************************************************************/
+	test_title ("remove device");
+	ret = hal_gdevicestore_remove (devicestore, device);
+	if (ret == TRUE) {
+		test_success ("removed device");
+	} else {
+		test_failed ("could not remove device");
+	}
+
+	/************************************************************/
+	test_title ("make sure device not in devicestore");
+	ret = hal_gdevicestore_present (devicestore, device);
+	if (ret == FALSE) {
+		test_success ("could not get device from empty devicestore");
+	} else {
+		test_failed ("got computer in empty store");
+	}
+
+	g_object_unref (device);
+	g_object_unref (device2);
+	g_object_unref (devicestore);
+}
+
+static void
 test_gpm_proxy (GpmPowermanager *powermanager)
 {
 	GpmProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	test_type = "GpmProxy    ";
+	test_type = "GpmProxy         ";
 
 	/************************************************************/
 	test_title ("make sure we can get a new gproxy");
@@ -467,7 +549,7 @@ test_gpm_inhibit (GpmPowermanager *powermanager)
 	gboolean valid;
 	guint cookie1 = 0;
 	guint cookie2 = 0;
-	test_type = "GpmInhibit  ";
+	test_type = "GpmInhibit       ";
 
 	/************************************************************/
 	test_title ("make sure we are not inhibited");
@@ -665,6 +747,7 @@ main (int argc, char **argv)
 	test_gpm_inhibit (powermanager);
 	test_gpm_proxy (powermanager);
 	test_hal_device (powermanager);
+	test_hal_devicestore (powermanager);
 	test_hal_manager (powermanager);
 	test_hal_power (powermanager);
 
