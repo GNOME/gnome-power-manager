@@ -39,6 +39,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
+#include <libhal-gmanager.h>
+
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
 #include "gpm-srv-backlight.h"
@@ -49,7 +51,6 @@
 #include "gpm-debug.h"
 #include "gpm-feedback-widget.h"
 #include "gpm-dpms.h"
-#include "gpm-hal.h"
 #include "gpm-idle.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
@@ -69,10 +70,10 @@ struct GpmSrvBacklightPrivate
 	GpmFeedback		*feedback;
 	GpmControl		*control;
 	GpmDpms			*dpms;
-	GpmHal			*hal;
 	GpmIdle			*idle;
 	gboolean		 can_dim;
 	gboolean		 can_dpms;
+	gboolean		 is_laptop;
 };
 
 enum {
@@ -149,7 +150,7 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 	/* choose a sensible default */
 	if (method == GPM_DPMS_METHOD_DEFAULT) {
 		gpm_debug ("choosing sensible default");
-		if (gpm_hal_is_laptop (srv_backlight->priv->hal)) {
+		if (srv_backlight->priv->is_laptop == TRUE) {
 			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
 			method = GPM_DPMS_METHOD_OFF;
 		} else {
@@ -582,9 +583,6 @@ gpm_srv_backlight_finalize (GObject *object)
 	if (srv_backlight->priv->ac_adapter != NULL) {
 		g_object_unref (srv_backlight->priv->ac_adapter);
 	}
-	if (srv_backlight->priv->hal != NULL) {
-		g_object_unref (srv_backlight->priv->hal);
-	}
 	if (srv_backlight->priv->button != NULL) {
 		g_object_unref (srv_backlight->priv->button);
 	}
@@ -640,6 +638,7 @@ static void
 gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 {
 	GpmAcAdapterState state;
+	HalGManager *hal_manager;
 	guint value;
 
 	srv_backlight->priv = GPM_SRV_BACKLIGHT_GET_PRIVATE (srv_backlight);
@@ -649,7 +648,9 @@ gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
 	srv_backlight->priv->can_dpms = gpm_dpms_has_hw ();
 
 	/* we use hal to see if we are a laptop */
-	srv_backlight->priv->hal = gpm_hal_new ();
+	hal_manager = hal_gmanager_new ();
+	srv_backlight->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
+	g_object_unref (hal_manager);
 
 	/* watch for dim value changes */
 	srv_backlight->priv->conf = gpm_conf_new ();
