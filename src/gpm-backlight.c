@@ -43,7 +43,7 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
-#include "gpm-srv-backlight.h"
+#include "gpm-backlight.h"
 #include "gpm-brightness-lcd.h"
 #include "gpm-conf.h"
 #include "gpm-control.h"
@@ -59,9 +59,9 @@
 
 #define DIM_INTERVAL		10 /* ms */
 
-#define GPM_SRV_BACKLIGHT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_SRV_BACKLIGHT, GpmSrvBacklightPrivate))
+#define GPM_BACKLIGHT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_BACKLIGHT, GpmBacklightPrivate))
 
-struct GpmSrvBacklightPrivate
+struct GpmBacklightPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmBrightnessLcd	*brightness;
@@ -84,30 +84,30 @@ enum {
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
-G_DEFINE_TYPE (GpmSrvBacklight, gpm_srv_backlight, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GpmBacklight, gpm_backlight, G_TYPE_OBJECT)
 
 /**
- * gpm_srv_backlight_error_quark:
+ * gpm_backlight_error_quark:
  * Return value: Our personal error quark.
  **/
 GQuark
-gpm_srv_backlight_error_quark (void)
+gpm_backlight_error_quark (void)
 {
 	static GQuark quark = 0;
 	if (!quark) {
-		quark = g_quark_from_static_string ("gpm_srv_backlight_error");
+		quark = g_quark_from_static_string ("gpm_backlight_error");
 	}
 	return quark;
 }
 
 /**
- * gpm_srv_backlight_sync_policy:
- * @srv_backlight: This class instance
+ * gpm_backlight_sync_policy:
+ * @backlight: This class instance
  *
- * Sync the SRV_BACKLIGHT policy with what we have set in gconf.
+ * Sync the BACKLIGHT policy with what we have set in gconf.
  **/
 static void
-gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
+gpm_backlight_sync_policy (GpmBacklight *backlight)
 {
 	GError  *error;
 	gboolean res;
@@ -120,21 +120,21 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 	GpmAcAdapterState state;
 
 	/* no point processing if we can't do the dpms action */
-	if (srv_backlight->priv->can_dpms == FALSE) {
+	if (backlight->priv->can_dpms == FALSE) {
 		return;
 	}
 
 	/* get the ac state */
-	gpm_ac_adapter_get_state (srv_backlight->priv->ac_adapter, &state);
+	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
 
 	error = NULL;
 
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (srv_backlight->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
 	} else {
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (srv_backlight->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
 	}
 
 	/* convert the string types to standard types */
@@ -143,18 +143,18 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 
 	/* check if method is valid */
 	if (method == GPM_DPMS_METHOD_UNKNOWN) {
-		gpm_warning ("SRV_BACKLIGHT method unknown. Possible schema problem!");
+		gpm_warning ("BACKLIGHT method unknown. Possible schema problem!");
 		return;
 	}
 
 	/* choose a sensible default */
 	if (method == GPM_DPMS_METHOD_DEFAULT) {
 		gpm_debug ("choosing sensible default");
-		if (srv_backlight->priv->is_laptop == TRUE) {
+		if (backlight->priv->is_laptop == TRUE) {
 			gpm_debug ("laptop, so use GPM_DPMS_METHOD_OFF");
 			method = GPM_DPMS_METHOD_OFF;
 		} else {
-			gpm_debug ("not laptop, so use GPM_SRV_BACKLIGHT_METHOD_STAGGER");
+			gpm_debug ("not laptop, so use GPM_BACKLIGHT_METHOD_STAGGER");
 			method = GPM_DPMS_METHOD_STAGGER;
 		}
 	}
@@ -180,23 +180,23 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 		off     = timeout;
 	} else {
 		/* wtf? */
-		gpm_warning ("unknown srv_backlight mode!");
+		gpm_warning ("unknown backlight mode!");
 	}
 
-	gpm_debug ("SRV_BACKLIGHT parameters %d %d %d, method '%i'", standby, suspend, off, method);
+	gpm_debug ("BACKLIGHT parameters %d %d %d, method '%i'", standby, suspend, off, method);
 
 	error = NULL;
-	res = gpm_dpms_set_enabled (srv_backlight->priv->dpms, TRUE, &error);
+	res = gpm_dpms_set_enabled (backlight->priv->dpms, TRUE, &error);
 	if (error) {
-		gpm_warning ("Unable to enable SRV_BACKLIGHT: %s", error->message);
+		gpm_warning ("Unable to enable BACKLIGHT: %s", error->message);
 		g_error_free (error);
 		return;
 	}
 
 	error = NULL;
-	res = gpm_dpms_set_timeouts (srv_backlight->priv->dpms, standby, suspend, off, &error);
+	res = gpm_dpms_set_timeouts (backlight->priv->dpms, standby, suspend, off, &error);
 	if (error) {
-		gpm_warning ("Unable to get SRV_BACKLIGHT timeouts: %s", error->message);
+		gpm_warning ("Unable to get BACKLIGHT timeouts: %s", error->message);
 		g_error_free (error);
 		return;
 	}
@@ -204,18 +204,18 @@ gpm_srv_backlight_sync_policy (GpmSrvBacklight *srv_backlight)
 
 /* dbus methods shouldn't use enumerated types, but should use textual descriptors */
 gboolean
-gpm_backlight_set_mode (GpmSrvBacklight *srv_backlight,
-			const gchar     *mode_str,
-			GError          **error)
+gpm_backlight_set_mode (GpmBacklight *backlight,
+			const gchar  *mode_str,
+			GError      **error)
 {
 	gboolean ret;
 	GpmDpmsMode mode;
 
-	g_return_val_if_fail (GPM_IS_SRV_BACKLIGHT (srv_backlight), FALSE);
+	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 
 	/* check if we have the hw */
-	if (srv_backlight->priv->can_dpms == FALSE) {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+	if (backlight->priv->can_dpms == FALSE) {
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "DPMS capable hardware not present");
 		return FALSE;
@@ -224,31 +224,31 @@ gpm_backlight_set_mode (GpmSrvBacklight *srv_backlight,
 	/* convert mode to an enumerated type */
 	mode = gpm_dpms_mode_from_string (mode_str);
 
-	ret = gpm_dpms_set_mode_enum (srv_backlight->priv->dpms, mode, error);
+	ret = gpm_dpms_set_mode_enum (backlight->priv->dpms, mode, error);
 	return ret;
 }
 
 /* dbus methods shouldn't use enumerated types, but should use textual descriptors */
 gboolean
-gpm_backlight_get_mode (GpmSrvBacklight *srv_backlight,
-			const gchar    **mode_str,
-			GError         **error)
+gpm_backlight_get_mode (GpmBacklight *backlight,
+			const gchar **mode_str,
+			GError      **error)
 {
 	gboolean ret;
 	GpmDpmsMode mode;
 
-	g_return_val_if_fail (GPM_IS_SRV_BACKLIGHT (srv_backlight), FALSE);
+	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 	g_return_val_if_fail (mode_str != NULL, FALSE);
 
 	/* check if we have the hw */
-	if (srv_backlight->priv->can_dpms == FALSE) {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+	if (backlight->priv->can_dpms == FALSE) {
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "DPMS capable hardware not present");
 		return FALSE;
 	}
 
-	ret = gpm_dpms_get_mode_enum (srv_backlight->priv->dpms, &mode, error);
+	ret = gpm_dpms_get_mode_enum (backlight->priv->dpms, &mode, error);
 	if (ret == TRUE) {
 		*mode_str = g_strdup (gpm_dpms_mode_to_string (mode));
 	}
@@ -259,30 +259,30 @@ gpm_backlight_get_mode (GpmSrvBacklight *srv_backlight,
  * gpm_backlight_get_brightness:
  **/
 gboolean
-gpm_backlight_get_brightness (GpmSrvBacklight	*srv_backlight,
-			      guint		*brightness,
-			      GError		**error)
+gpm_backlight_get_brightness (GpmBacklight *backlight,
+			      guint	   *brightness,
+			      GError	  **error)
 {
 	guint level;
 	gboolean ret;
-	g_return_val_if_fail (srv_backlight != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BACKLIGHT (srv_backlight), FALSE);
+	g_return_val_if_fail (backlight != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 	g_return_val_if_fail (brightness != NULL, FALSE);
 
 	/* check if we have the hw */
-	if (srv_backlight->priv->can_dim == FALSE) {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+	if (backlight->priv->can_dim == FALSE) {
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "Dim capable hardware not present");
 		return FALSE;
 	}
 
 	/* gets the current brightness */
-	ret = gpm_brightness_lcd_get (srv_backlight->priv->brightness, &level);
+	ret = gpm_brightness_lcd_get (backlight->priv->brightness, &level);
 	if (ret == TRUE) {
 		*brightness = level;
 	} else {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_DATA_NOT_AVAILABLE,
 				      "Data not available");
 	}
@@ -292,26 +292,26 @@ gpm_backlight_get_brightness (GpmSrvBacklight	*srv_backlight,
 /**
  * gpm_backlight_set_brightness:
  **/
-gboolean gpm_backlight_set_brightness (GpmSrvBacklight	*srv_backlight,
-				       guint		 brightness,
-				       GError		**error)
+gboolean gpm_backlight_set_brightness (GpmBacklight *backlight,
+				       guint	     brightness,
+				       GError	   **error)
 {
 	gboolean ret;
-	g_return_val_if_fail (srv_backlight != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_SRV_BACKLIGHT (srv_backlight), FALSE);
+	g_return_val_if_fail (backlight != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 
 	/* check if we have the hw */
-	if (srv_backlight->priv->can_dim == FALSE) {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+	if (backlight->priv->can_dim == FALSE) {
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_HARDWARE_NOT_PRESENT,
 				      "Dim capable hardware not present");
 		return FALSE;
 	}
 
 	/* sets the current policy brightness */
-	ret = gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, brightness);
+	ret = gpm_brightness_lcd_set_std (backlight->priv->brightness, brightness);
 	if (ret == FALSE) {
-		*error = g_error_new (gpm_srv_backlight_error_quark (),
+		*error = g_error_new (gpm_backlight_error_quark (),
 				      GPM_BACKLIGHT_ERROR_GENERAL,
 				      "Cannot set policy brightness");
 	}
@@ -324,38 +324,38 @@ gboolean gpm_backlight_set_brightness (GpmSrvBacklight	*srv_backlight,
  * We might have to do things when the gconf keys change; do them here.
  **/
 static void
-conf_key_changed_cb (GpmConf          *conf,
-		     const gchar      *key,
-		     GpmSrvBacklight *srv_backlight)
+conf_key_changed_cb (GpmConf      *conf,
+		     const gchar  *key,
+		     GpmBacklight *backlight)
 {
 	gint value;
 	GpmAcAdapterState state;
 
-	gpm_ac_adapter_get_state (srv_backlight->priv->ac_adapter, &state);
+	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
 
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 			if (state == GPM_AC_ADAPTER_PRESENT) {
-				gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 			}
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0) {
 
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
 			if (state == GPM_AC_ADAPTER_MISSING) {
-				gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 			}
 		}
 
 	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
 
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-			gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+			gpm_brightness_lcd_set_dim (backlight->priv->brightness, value);
 		}
 	}
 
@@ -363,7 +363,7 @@ conf_key_changed_cb (GpmConf          *conf,
 	    strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
 	    strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
 	    strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
-		gpm_srv_backlight_sync_policy (srv_backlight);
+		gpm_backlight_sync_policy (backlight);
 	}
 }
 
@@ -376,23 +376,23 @@ conf_key_changed_cb (GpmConf          *conf,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
-			GpmAcAdapterState state,
-			GpmSrvBacklight *srv_backlight)
+ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmBacklight     *backlight)
 {
 	gboolean do_laptop_lcd;
 	guint value;
 
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 	} else {
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
 	}
 
 	/* only do brightness changes if we have the hardware */
-	gpm_conf_get_bool (srv_backlight->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
-	if (do_laptop_lcd == TRUE && srv_backlight->priv->can_dim == TRUE) {
-		gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
+	if (do_laptop_lcd == TRUE && backlight->priv->can_dim == TRUE) {
+		gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 	}
 }
 
@@ -404,31 +404,31 @@ ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmButton        *button,
-		   const gchar      *type,
-		   GpmSrvBacklight *srv_backlight)
+button_pressed_cb (GpmButton    *button,
+		   const gchar  *type,
+		   GpmBacklight *backlight)
 {
 	gpm_debug ("Button press event type=%s", type);
 
 	if (strcmp (type, GPM_BUTTON_BRIGHT_UP) == 0) {
 
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_up (srv_backlight->priv->brightness);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_up (backlight->priv->brightness);
 		}
 
 	} else if (strcmp (type, GPM_BUTTON_BRIGHT_DOWN) == 0) {
 
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_down (srv_backlight->priv->brightness);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_down (backlight->priv->brightness);
 		}
 
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 
 		/* make sure we undim when we lift the lid */
-		if (srv_backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		if (backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_undim (backlight->priv->brightness);
 		}
-		gpm_srv_backlight_sync_policy (srv_backlight);
+		gpm_backlight_sync_policy (backlight);
 	}
 }
 
@@ -444,32 +444,32 @@ button_pressed_cb (GpmButton        *button,
  * session timeout has elapsed for the idle action.
  **/
 static void
-idle_changed_cb (GpmIdle         *idle,
-		 GpmIdleMode      mode,
-		 GpmSrvBacklight *srv_backlight)
+idle_changed_cb (GpmIdle      *idle,
+		 GpmIdleMode   mode,
+		 GpmBacklight *backlight)
 {
 	GpmAcAdapterState state;
 	gboolean laptop_do_dim;
 	GError *error;
 
-	gpm_ac_adapter_get_state (srv_backlight->priv->ac_adapter, &state);
+	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
 	if (state == GPM_AC_ADAPTER_PRESENT) {
-		gpm_conf_get_bool (srv_backlight->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
+		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
 	} else {
-		gpm_conf_get_bool (srv_backlight->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
+		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
 	}
 
 	/* don't dim or undim the screen when the lid is closed */
-	if (gpm_button_is_lid_closed (srv_backlight->priv->button) == TRUE) {
+	if (gpm_button_is_lid_closed (backlight->priv->button) == TRUE) {
 		return;
 	}
 
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 
 		/* deactivate display power management */
-		if (srv_backlight->priv->can_dpms == TRUE) {
+		if (backlight->priv->can_dpms == TRUE) {
 			error = NULL;
-			gpm_dpms_set_active (srv_backlight->priv->dpms, FALSE, &error);
+			gpm_dpms_set_active (backlight->priv->dpms, FALSE, &error);
 			if (error) {
 				gpm_debug ("Unable to set DPMS not active: %s", error->message);
 				g_error_free (error);
@@ -477,18 +477,18 @@ idle_changed_cb (GpmIdle         *idle,
 		}
 
 		/* sync timeouts */
-		gpm_srv_backlight_sync_policy (srv_backlight);
+		gpm_backlight_sync_policy (backlight);
 
-		if (laptop_do_dim == TRUE && srv_backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_undim (srv_backlight->priv->brightness);
+		if (laptop_do_dim == TRUE && backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_undim (backlight->priv->brightness);
 		}
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
 		/* activate display power management */
-		if (srv_backlight->priv->can_dpms == TRUE) {
+		if (backlight->priv->can_dpms == TRUE) {
 			error = NULL;
-			gpm_dpms_set_active (srv_backlight->priv->dpms, TRUE, &error);
+			gpm_dpms_set_active (backlight->priv->dpms, TRUE, &error);
 			if (error) {
 				gpm_debug ("Unable to set DPMS active: %s", error->message);
 				g_error_free (error);
@@ -496,11 +496,11 @@ idle_changed_cb (GpmIdle         *idle,
 		}
 
 		/* sync timeouts */
-		gpm_srv_backlight_sync_policy (srv_backlight);
+		gpm_backlight_sync_policy (backlight);
 
 		/* Dim the screen, fixes #328564 */
-		if (laptop_do_dim == TRUE && srv_backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_dim (srv_backlight->priv->brightness);
+		if (laptop_do_dim == TRUE && backlight->priv->can_dim == TRUE) {
+			gpm_brightness_lcd_dim (backlight->priv->brightness);
 		}
 	}
 }
@@ -513,12 +513,12 @@ idle_changed_cb (GpmIdle         *idle,
  * What happens when the DPMS mode is changed.
  **/
 static void
-mode_changed_cb (GpmDpms    *dpms,
-		 GpmDpmsMode mode,
-		 GpmSrvBacklight *srv_backlight)
+mode_changed_cb (GpmDpms      *dpms,
+		 GpmDpmsMode   mode,
+		 GpmBacklight *backlight)
 {
 	gpm_debug ("emitting mode-changed : %s", gpm_dpms_mode_to_string (mode));
-	g_signal_emit (srv_backlight, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
+	g_signal_emit (backlight, signals [MODE_CHANGED], 0, gpm_dpms_mode_to_string (mode));
 }
 
 /**
@@ -530,16 +530,16 @@ mode_changed_cb (GpmDpms    *dpms,
  * This callback is called when the brightness value changes.
  **/
 static void
-brightness_changed_cb (GpmBrightnessLcd    *brightness,
-		       guint                percentage,
-		       GpmSrvBacklight *srv_backlight)
+brightness_changed_cb (GpmBrightnessLcd *brightness,
+		       guint             percentage,
+		       GpmBacklight     *backlight)
 {
 	gpm_debug ("Need to display backlight feedback value %i", percentage);
-	gpm_feedback_display_value (srv_backlight->priv->feedback, (float) percentage / 100.0f);
+	gpm_feedback_display_value (backlight->priv->feedback, (float) percentage / 100.0f);
 
 	/* we emit a signal for the brightness applet */
 	gpm_debug ("emitting brightness-changed : %i", percentage);
-	g_signal_emit (srv_backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
+	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, percentage);
 }
 
 /**
@@ -550,67 +550,67 @@ brightness_changed_cb (GpmBrightnessLcd    *brightness,
  * We have to update the caches on resume
  **/
 static void
-control_resume_cb (GpmControl *control,
+control_resume_cb (GpmControl      *control,
 		   GpmControlAction action,
-		   GpmSrvBacklight *srv_backlight)
+		   GpmBacklight    *backlight)
 {
-	gpm_srv_backlight_sync_policy (srv_backlight);
+	gpm_backlight_sync_policy (backlight);
 }
 
 /**
- * gpm_srv_backlight_finalize:
+ * gpm_backlight_finalize:
  **/
 static void
-gpm_srv_backlight_finalize (GObject *object)
+gpm_backlight_finalize (GObject *object)
 {
-	GpmSrvBacklight *srv_backlight;
+	GpmBacklight *backlight;
 	g_return_if_fail (object != NULL);
-	g_return_if_fail (GPM_IS_SRV_BACKLIGHT (object));
-	srv_backlight = GPM_SRV_BACKLIGHT (object);
+	g_return_if_fail (GPM_IS_BACKLIGHT (object));
+	backlight = GPM_BACKLIGHT (object);
 
-	if (srv_backlight->priv->feedback != NULL) {
-		g_object_unref (srv_backlight->priv->feedback);
+	if (backlight->priv->feedback != NULL) {
+		g_object_unref (backlight->priv->feedback);
 	}
-	if (srv_backlight->priv->dpms != NULL) {
-		g_object_unref (srv_backlight->priv->dpms);
+	if (backlight->priv->dpms != NULL) {
+		g_object_unref (backlight->priv->dpms);
 	}
-	if (srv_backlight->priv->control != NULL) {
-		g_object_unref (srv_backlight->priv->control);
+	if (backlight->priv->control != NULL) {
+		g_object_unref (backlight->priv->control);
 	}
-	if (srv_backlight->priv->conf != NULL) {
-		g_object_unref (srv_backlight->priv->conf);
+	if (backlight->priv->conf != NULL) {
+		g_object_unref (backlight->priv->conf);
 	}
-	if (srv_backlight->priv->ac_adapter != NULL) {
-		g_object_unref (srv_backlight->priv->ac_adapter);
+	if (backlight->priv->ac_adapter != NULL) {
+		g_object_unref (backlight->priv->ac_adapter);
 	}
-	if (srv_backlight->priv->button != NULL) {
-		g_object_unref (srv_backlight->priv->button);
+	if (backlight->priv->button != NULL) {
+		g_object_unref (backlight->priv->button);
 	}
-	if (srv_backlight->priv->idle != NULL) {
-		g_object_unref (srv_backlight->priv->idle);
+	if (backlight->priv->idle != NULL) {
+		g_object_unref (backlight->priv->idle);
 	}
-	if (srv_backlight->priv->brightness != NULL) {
-		g_object_unref (srv_backlight->priv->brightness);
+	if (backlight->priv->brightness != NULL) {
+		g_object_unref (backlight->priv->brightness);
 	}
 
-	g_return_if_fail (srv_backlight->priv != NULL);
-	G_OBJECT_CLASS (gpm_srv_backlight_parent_class)->finalize (object);
+	g_return_if_fail (backlight->priv != NULL);
+	G_OBJECT_CLASS (gpm_backlight_parent_class)->finalize (object);
 }
 
 /**
- * gpm_srv_backlight_class_init:
+ * gpm_backlight_class_init:
  **/
 static void
-gpm_srv_backlight_class_init (GpmSrvBacklightClass *klass)
+gpm_backlight_class_init (GpmBacklightClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_srv_backlight_finalize;
+	object_class->finalize	   = gpm_backlight_finalize;
 
 	signals [BRIGHTNESS_CHANGED] =
 		g_signal_new ("brightness-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmSrvBacklightClass, brightness_changed),
+			      G_STRUCT_OFFSET (GpmBacklightClass, brightness_changed),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
@@ -618,16 +618,16 @@ gpm_srv_backlight_class_init (GpmSrvBacklightClass *klass)
 		g_signal_new ("mode-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmSrvBacklightClass, mode_changed),
+			      G_STRUCT_OFFSET (GpmBacklightClass, mode_changed),
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE, 1, G_TYPE_STRING);
 
-	g_type_class_add_private (klass, sizeof (GpmSrvBacklightPrivate));
+	g_type_class_add_private (klass, sizeof (GpmBacklightPrivate));
 }
 
 /**
- * gpm_srv_backlight_init:
+ * gpm_backlight_init:
  * @brightness: This brightness class instance
  *
  * initialises the brightness class. NOTE: We expect laptop_panel objects
@@ -635,88 +635,89 @@ gpm_srv_backlight_class_init (GpmSrvBacklightClass *klass)
  * We only control the first laptop_panel object if there are more than one.
  **/
 static void
-gpm_srv_backlight_init (GpmSrvBacklight *srv_backlight)
+gpm_backlight_init (GpmBacklight *backlight)
 {
 	GpmAcAdapterState state;
 	HalGManager *hal_manager;
 	guint value;
 
-	srv_backlight->priv = GPM_SRV_BACKLIGHT_GET_PRIVATE (srv_backlight);
+	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
 
 	/* gets caps */
-	srv_backlight->priv->can_dim = gpm_brightness_lcd_has_hw ();
-	srv_backlight->priv->can_dpms = gpm_dpms_has_hw ();
+	backlight->priv->can_dim = gpm_brightness_lcd_has_hw ();
+	backlight->priv->can_dpms = gpm_dpms_has_hw ();
 
 	/* we use hal to see if we are a laptop */
 	hal_manager = hal_gmanager_new ();
-	srv_backlight->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
+	backlight->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
 
 	/* watch for dim value changes */
-	srv_backlight->priv->conf = gpm_conf_new ();
-	g_signal_connect (srv_backlight->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), srv_backlight);
+	backlight->priv->conf = gpm_conf_new ();
+	g_signal_connect (backlight->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), backlight);
 
 	/* watch for brightness up and down buttons and also check lid state */
-	srv_backlight->priv->button = gpm_button_new ();
-	g_signal_connect (srv_backlight->priv->button, "button-pressed",
-			  G_CALLBACK (button_pressed_cb), srv_backlight);
+	backlight->priv->button = gpm_button_new ();
+	g_signal_connect (backlight->priv->button, "button-pressed",
+			  G_CALLBACK (button_pressed_cb), backlight);
 
 	/* we use ac_adapter for the ac-adapter-changed signal */
-	srv_backlight->priv->ac_adapter = gpm_ac_adapter_new ();
-	g_signal_connect (srv_backlight->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adapter_changed_cb), srv_backlight);
+	backlight->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (backlight->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adapter_changed_cb), backlight);
 
-	if (srv_backlight->priv->can_dim == TRUE) {
+	if (backlight->priv->can_dim == TRUE) {
 		/* watch for manual brightness changes (for the feedback widget) */
-		srv_backlight->priv->brightness = gpm_brightness_lcd_new ();
-		g_signal_connect (srv_backlight->priv->brightness, "brightness-changed",
-				  G_CALLBACK (brightness_changed_cb), srv_backlight);
+		backlight->priv->brightness = gpm_brightness_lcd_new ();
+		g_signal_connect (backlight->priv->brightness, "brightness-changed",
+				  G_CALLBACK (brightness_changed_cb), backlight);
 
 		/* set the standard setting */
-		gpm_ac_adapter_get_state (srv_backlight->priv->ac_adapter, &state);
+		gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
 		if (state == GPM_AC_ADAPTER_PRESENT) {
-			gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
+			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		} else {
-			gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
 		}
-		gpm_brightness_lcd_set_std (srv_backlight->priv->brightness, value);
+		gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 
 		/* set the default dim */
-		gpm_conf_get_uint (srv_backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-		gpm_brightness_lcd_set_dim (srv_backlight->priv->brightness, value);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
+		gpm_brightness_lcd_set_dim (backlight->priv->brightness, value);
 
 		/* use a visual widget */
-		srv_backlight->priv->feedback = gpm_feedback_new ();
-		gpm_feedback_set_icon_name (srv_backlight->priv->feedback,
+		backlight->priv->feedback = gpm_feedback_new ();
+		gpm_feedback_set_icon_name (backlight->priv->feedback,
 					    GPM_STOCK_BRIGHTNESS_LCD);
 	}
 
-	if (srv_backlight->priv->can_dpms == TRUE) {
+	if (backlight->priv->can_dpms == TRUE) {
 		/* DPMS mode poll class */
-		srv_backlight->priv->dpms = gpm_dpms_new ();
-		g_signal_connect (srv_backlight->priv->dpms, "mode-changed",
-				  G_CALLBACK (mode_changed_cb), srv_backlight);
+		backlight->priv->dpms = gpm_dpms_new ();
+		g_signal_connect (backlight->priv->dpms, "mode-changed",
+				  G_CALLBACK (mode_changed_cb), backlight);
 
 		/* we refresh DPMS on resume */
-		srv_backlight->priv->control = gpm_control_new ();
-		g_signal_connect (srv_backlight->priv->control, "resume",
-				  G_CALLBACK (control_resume_cb), srv_backlight);
+		backlight->priv->control = gpm_control_new ();
+		g_signal_connect (backlight->priv->control, "resume",
+				  G_CALLBACK (control_resume_cb), backlight);
 	}
 
 	/* watch for idle mode changes */
-	srv_backlight->priv->idle = gpm_idle_new ();
-	g_signal_connect (srv_backlight->priv->idle, "idle-changed",
-			  G_CALLBACK (idle_changed_cb), srv_backlight);
+	backlight->priv->idle = gpm_idle_new ();
+	g_signal_connect (backlight->priv->idle, "idle-changed",
+			  G_CALLBACK (idle_changed_cb), backlight);
 }
 
 /**
- * gpm_srv_backlight_new:
+ * gpm_backlight_new:
  * Return value: A new brightness class instance.
  **/
-GpmSrvBacklight *
-gpm_srv_backlight_new (void)
+GpmBacklight *
+gpm_backlight_new (void)
 {
-	GpmSrvBacklight *srv_backlight = g_object_new (GPM_TYPE_SRV_BACKLIGHT, NULL);
-	return srv_backlight;
+	GpmBacklight *backlight = g_object_new (GPM_TYPE_BACKLIGHT, NULL);
+	return backlight;
 }
+

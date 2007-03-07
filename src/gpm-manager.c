@@ -60,7 +60,7 @@
 #include "gpm-powermanager.h"
 #include "gpm-prefs.h"
 #include "gpm-screensaver.h"
-#include "gpm-srv-backlight.h"
+#include "gpm-backlight.h"
 #include "gpm-srv-brightness-kbd.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
@@ -103,7 +103,7 @@ struct GpmManagerPrivate
 	HalGPower		*hal_power;
 
 	/* interactive services */
-	GpmSrvBacklight		*srv_backlight;
+	GpmBacklight		*backlight;
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
 	GpmCpufreq	 	*cpufreq;
 	GpmSrvScreensaver 	*srv_screensaver;
@@ -1541,13 +1541,13 @@ gpm_manager_init (GpmManager *manager)
 	manager->priv->srv_screensaver = gpm_srv_screensaver_new ();
 
 	/* try an start an interactive service */
-	manager->priv->srv_backlight = gpm_srv_backlight_new ();
-	if (manager->priv->srv_backlight != NULL) {
+	manager->priv->backlight = gpm_backlight_new ();
+	if (manager->priv->backlight != NULL) {
 		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_SRV_BACKLIGHT,
+		dbus_g_object_type_install_info (GPM_TYPE_BACKLIGHT,
 						 &dbus_glib_gpm_backlight_object_info);
 		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_BACKLIGHT,
-						     G_OBJECT (manager->priv->srv_backlight));
+						     G_OBJECT (manager->priv->backlight));
 	}
 
 	manager->priv->srv_brightness_kbd = gpm_srv_brightness_kbd_new ();
@@ -1660,8 +1660,8 @@ gpm_manager_finalize (GObject *object)
 	if (manager->priv->cpufreq) {
 		g_object_unref (manager->priv->cpufreq);
 	}
-	if (manager->priv->srv_backlight) {
-		g_object_unref (manager->priv->srv_backlight);
+	if (manager->priv->backlight) {
+		g_object_unref (manager->priv->backlight);
 	}
 	if (manager->priv->srv_brightness_kbd) {
 		g_object_unref (manager->priv->srv_brightness_kbd);

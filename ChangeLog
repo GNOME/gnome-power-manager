@@ -1,5 +1,17 @@
 2007-03-07  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-backlight.c:
+	* src/gpm-backlight.h:
+	* src/gpm-manager.c:
+	* src/gpm-srv-backlight.c:
+	* src/gpm-srv-backlight.h:
+	Switch to using libhal-glib manager functions rather than gpm-hal.
+	Rename from gpm-srv-backlight to gpm-backlight.
+
+2007-03-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-srv-backlight.c:
 	Switch to using libhal-glib manager functions rather than gpm-hal.
 
