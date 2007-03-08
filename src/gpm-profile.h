@@ -1,0 +1,60 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
+ *
+ * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
+ *
+ * Licensed under the GNU General Public License Version 2
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+#ifndef __GPM_PROFILE_H
+#define __GPM_PROFILE_H
+
+#include <glib-object.h>
+
+G_BEGIN_DECLS
+
+#define GPM_TYPE_PROFILE		(gpm_profile_get_type ())
+#define GPM_PROFILE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_PROFILE, GpmProfile))
+#define GPM_PROFILE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_PROFILE, GpmProfileClass))
+#define GPM_IS_PROFILE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_PROFILE))
+#define GPM_IS_PROFILE_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_PROFILE))
+#define GPM_PROFILE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_PROFILE, GpmProfileClass))
+
+typedef struct GpmProfilePrivate GpmProfilePrivate;
+
+typedef struct
+{
+	GObject			 parent;
+	GpmProfilePrivate	*priv;
+} GpmProfile;
+
+typedef struct
+{
+	GObjectClass	parent_class;
+} GpmProfileClass;
+
+GType			 gpm_profile_get_type			(void);
+GpmProfile		*gpm_profile_new			(void);
+
+void			 gpm_profile_activate_mode		(GpmProfile	*profile,
+								 gboolean	 is_discharging);
+GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile);
+guint			 gpm_profile_get_time			(GpmProfile	*profile,
+								 guint		 percentage);
+
+G_END_DECLS
+
+#endif /* __GPM_PROFILE_H */

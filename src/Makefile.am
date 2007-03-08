@@ -142,6 +142,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-idle.c					\
 	gpm-load.h					\
 	gpm-load.c					\
+	gpm-profile.h					\
+	gpm-profile.c					\
 	gpm-control.h					\
 	gpm-control.c					\
 	gpm-proxy.h					\
