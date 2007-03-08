@@ -51,6 +51,7 @@ static void     gpm_profile_init       (GpmProfile      *profile);
 static void     gpm_profile_finalize   (GObject	       *object);
 
 #define GPM_PROFILE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PROFILE, GpmProfilePrivate))
+#define DATA_FILENAME "/home/hughsie/profile-data-02.csv"
 
 struct GpmProfilePrivate
 {
@@ -61,6 +62,7 @@ struct GpmProfilePrivate
 	GpmArray		*array_data;
 	GpmArray		*array_accuracy;
 	gboolean		 ac_mode;
+	gboolean		 data_valid;
 };
 
 static gpointer gpm_profile_object = NULL;
@@ -79,6 +81,23 @@ gpm_profile_class_init (GpmProfileClass *klass)
 	object_class->finalize = gpm_profile_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmProfilePrivate));
+}
+
+
+/**
+ * gpm_profile_provide_data:
+ *
+ * Provide the profiler (this class!) with data.
+ * WILL ONLY BE USED WHEN HOOKED UP TO GPM-POWER
+ *
+ * @profile: This class
+ */
+gboolean
+gpm_profile_provide_data (GpmProfile *profile, guint percentage)
+{
+	g_return_val_if_fail (profile != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
+	return TRUE;
 }
 
 /**
@@ -156,26 +175,57 @@ gpm_profile_register_percentage (GpmProfile *profile,
 				 guint	     percentage)
 {
 	gdouble elapsed;
-	guint load;
+	gdouble load;
+	guint accuracy;
 	GpmAcAdapterState state;
 
 	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
 
-//	if (state == GPM_AC_ADAPTER_PRESENT) {
-
-	load = (guint) (gpm_load_get_current (profile->priv->load) * 20.0f);
+/*
+	if (state != GPM_AC_ADAPTER_PRESENT && data_valid == FALSE) {
+		gpm_debug ("ignoring as we are monitoring charging");
+		return;
+	}
+	if (state == GPM_AC_ADAPTER_PRESENT && data_valid == TRUE) {
+		gpm_debug ("ignoring as we are monitoring discharging");
+		return;
+	}
+*/
+	/* turn the load into a nice scaled percentage */
+	load = gpm_load_get_current (profile->priv->load);
+	if (load > 0.01) {
+		accuracy = (guint) (100.0f / load);
+		if (accuracy > 100) {
+			accuracy = 100;
+		}
+	} else {
+		accuracy = 100;
+	}
 
 	elapsed = g_timer_elapsed (profile->priv->timer, NULL);
 
 	/* reset timer for next time */
 	g_timer_start (profile->priv->timer);
 
-	gpm_warning ("elapsed is %f for %i at load %f", elapsed, percentage, load);
+	gpm_debug ("elapsed is %f for %i at load %f (accuracy:%i)", elapsed, percentage, load, accuracy);
 
-	gpm_array_set (profile->priv->array_data, percentage, percentage, (guint) elapsed, load);
+	/* don't process the first point, we maybe in between percentage points */
+	if (profile->priv->data_valid == FALSE) {
+		gpm_debug ("data is not valid, will process next");
+		profile->priv->data_valid = TRUE;
+		return;
+	}
+
+	if (accuracy < 10) {
+		gpm_debug ("not accurate enough");
+	}
+	/* need to do averaging */
+	gpm_array_set (profile->priv->array_data, percentage, percentage, (guint) elapsed, accuracy);
 
 	/* recompute the discharge graph */
-
+	
+	/* save data file when idle */
+	gpm_array_save_to_file (profile->priv->array_data, DATA_FILENAME);
 }
 
 /**
@@ -214,6 +264,23 @@ hal_device_property_modified_cb (HalGDevice   *device,
 }
 
 /**
+ * ac_adaptor_changed_cb:
+ * @on_ac: If we are on AC power
+ *
+ **/
+static void
+ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmProfile *profile)
+{
+	/* we might be halfway through a percentage change */
+	profile->priv->data_valid = FALSE;
+
+	/* reset timer as we have changed state */
+	g_timer_start (profile->priv->timer);
+}
+
+/**
  * gpm_profile_init:
  */
 static void
@@ -234,14 +301,15 @@ gpm_profile_init (GpmProfile *profile)
 	gpm_array_set_fixed_size (profile->priv->array_accuracy, 100);
 
 	/* read in profile from disk */
-	filename = "/home/hughsie/profile-data-02.csv";
+	filename = DATA_FILENAME;
+	gpm_debug ("loading data from '%s'", filename);
 	ret = gpm_array_load_from_file (profile->priv->array_data, filename);
 
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
 		gpm_debug ("no data found, generating intinial (poor) data");
 		for (i=0;i<100;i++) {
-			gpm_array_set (profile->priv->array_data, i, i, 3*60, 0);
+			gpm_array_set (profile->priv->array_data, i, i, 2*60, 0);
 		}
 		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
 		if (ret == FALSE) {
@@ -249,26 +317,15 @@ gpm_profile_init (GpmProfile *profile)
 		}
 	}
 
+	/* we might be halfway through a percentage change */
+	profile->priv->data_valid = FALSE;
+
 	/* find, and add a single device */
 	profile->priv->hal_device = hal_gdevice_new ();
 	hal_gdevice_set_udi (profile->priv->hal_device, "/org/freedesktop/Hal/devices/acpi_BAT1");
 	hal_gdevice_watch_property_modified (profile->priv->hal_device);
 	g_signal_connect (profile->priv->hal_device, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), profile);
-}
-
-/**
- * ac_adaptor_changed_cb:
- * @on_ac: If we are on AC power
- *
- **/
-static void
-ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmProfile *profile)
-{
-	/* reset timer as we have changed state */
-	g_timer_start (profile->priv->timer);
 }
 
 /**

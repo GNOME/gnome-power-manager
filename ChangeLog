@@ -1,5 +1,12 @@
 2007-03-08  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-profile.c:
+	* src/gpm-profile.h:
+	Use the load in a sane way, and also don't count the first reading as
+	we may be between updates.
+
+2007-03-08  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_get_axis_label_x):
 	Add X percentage caption text.
 
