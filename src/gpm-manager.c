@@ -59,6 +59,7 @@
 #include "gpm-power.h"
 #include "gpm-powermanager.h"
 #include "gpm-prefs.h"
+#include "gpm-profile.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
 #include "gpm-srv-brightness-kbd.h"
@@ -94,6 +95,7 @@ struct GpmManagerPrivate
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
 	GpmPower		*power;
+	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmSound 		*sound;
@@ -1519,6 +1521,7 @@ gpm_manager_init (GpmManager *manager)
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
 
+	manager->priv->profile = gpm_profile_new ();
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
@@ -1647,6 +1650,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
 	g_object_unref (manager->priv->power);
+	g_object_unref (manager->priv->profile);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);

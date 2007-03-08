@@ -58,7 +58,8 @@ struct GpmProfilePrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmLoad			*load;
 	GTimer			*timer;
-	GpmArray		*array;
+	GpmArray		*array_data;
+	GpmArray		*array_accuracy;
 	gboolean		 ac_mode;
 };
 
@@ -96,7 +97,7 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage)
 }
 
 /**
- * gpm_profile_activate_mode:
+ * gpm_profile_get_data_time_percent:
  *
  * @profile: This class
  */
@@ -105,7 +106,30 @@ gpm_profile_get_data_time_percent (GpmProfile *profile)
 {
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
-	return profile->priv->array;
+	return profile->priv->array_data;
+}
+
+/**
+ * gpm_profile_get_data_accuracy_percent:
+ *
+ * @profile: This class
+ */
+GpmArray *
+gpm_profile_get_data_accuracy_percent (GpmProfile *profile)
+{
+	guint i;
+	GpmArrayPoint *point;
+
+	g_return_val_if_fail (profile != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
+
+	/* copy the data field into the y field */
+	for (i=0; i<100; i++) {
+		point = gpm_array_get (profile->priv->array_data, i);
+		gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 3);
+	}
+
+	return profile->priv->array_accuracy;
 }
 
 /**
@@ -132,14 +156,14 @@ gpm_profile_register_percentage (GpmProfile *profile,
 				 guint	     percentage)
 {
 	gdouble elapsed;
-	gdouble load;
+	guint load;
 	GpmAcAdapterState state;
 
 	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
 
 //	if (state == GPM_AC_ADAPTER_PRESENT) {
 
-	load = gpm_load_get_current (profile->priv->load);
+	load = (guint) (gpm_load_get_current (profile->priv->load) * 20.0f);
 
 	elapsed = g_timer_elapsed (profile->priv->timer, NULL);
 
@@ -147,6 +171,8 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	g_timer_start (profile->priv->timer);
 
 	gpm_warning ("elapsed is %f for %i at load %f", elapsed, percentage, load);
+
+	gpm_array_set (profile->priv->array_data, percentage, percentage, (guint) elapsed, load);
 
 	/* recompute the discharge graph */
 
@@ -202,20 +228,22 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->timer = g_timer_new ();
 	profile->priv->load = gpm_load_new ();
 	profile->priv->ac_adapter = gpm_ac_adapter_new ();
-	profile->priv->array = gpm_array_new ();
-	gpm_array_set_fixed_size (profile->priv->array, 100);
+	profile->priv->array_data = gpm_array_new ();
+	gpm_array_set_fixed_size (profile->priv->array_data, 100);
+	profile->priv->array_accuracy = gpm_array_new ();
+	gpm_array_set_fixed_size (profile->priv->array_accuracy, 100);
 
 	/* read in profile from disk */
-	filename = "/home/hughsie/profile-data-01.csv";
-	ret = gpm_array_load_from_file (profile->priv->array, filename);
+	filename = "/home/hughsie/profile-data-02.csv";
+	ret = gpm_array_load_from_file (profile->priv->array_data, filename);
 
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
 		gpm_debug ("no data found, generating intinial (poor) data");
 		for (i=0;i<100;i++) {
-			gpm_array_set (profile->priv->array, i, i, i, 0);
+			gpm_array_set (profile->priv->array_data, i, i, 3*60, 0);
 		}
-		ret = gpm_array_save_to_file (profile->priv->array, filename);
+		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
 		if (ret == FALSE) {
 			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
 		}
@@ -227,6 +255,20 @@ gpm_profile_init (GpmProfile *profile)
 	hal_gdevice_watch_property_modified (profile->priv->hal_device);
 	g_signal_connect (profile->priv->hal_device, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), profile);
+}
+
+/**
+ * ac_adaptor_changed_cb:
+ * @on_ac: If we are on AC power
+ *
+ **/
+static void
+ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
+		       GpmAcAdapterState state,
+		       GpmProfile *profile)
+{
+	/* reset timer as we have changed state */
+	g_timer_start (profile->priv->timer);
 }
 
 /**
@@ -249,7 +291,11 @@ gpm_profile_finalize (GObject *object)
 	g_object_unref (profile->priv->hal_device);
 	g_object_unref (profile->priv->load);
 	g_object_unref (profile->priv->ac_adapter);
-	g_object_unref (profile->priv->array);
+	g_signal_connect (profile->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adaptor_changed_cb), profile);
+
+	g_object_unref (profile->priv->array_accuracy);
+	g_object_unref (profile->priv->array_data);
 	g_timer_destroy (profile->priv->timer);
 
 	G_OBJECT_CLASS (gpm_profile_parent_class)->finalize (object);

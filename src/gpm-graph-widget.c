@@ -204,6 +204,9 @@ gpm_graph_widget_get_axis_label_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType
 	g_return_val_if_fail (graph != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
 
+	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		return _("Battery percentage");
+	}
 	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		/* I want this translated please */
 		const char *moo;

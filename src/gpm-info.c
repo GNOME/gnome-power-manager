@@ -39,6 +39,7 @@
 #include "gpm-debug.h"
 #include "gpm-dpms.h"
 #include "gpm-info.h"
+#include "gpm-profile.h"
 #include "gpm-array.h"
 #include "gpm-power.h"
 #include "gpm-stock-icons.h"
@@ -65,6 +66,7 @@ struct GpmInfoPrivate
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPower		*power;
+	GpmProfile		*profile;
 
 	GpmArray		*events;
 	GpmArray		*rate_data;
@@ -152,6 +154,7 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 			       GError  **error)
 {
 	GList *list = NULL;
+	GpmArray *array;
 
 	g_return_val_if_fail (info != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
@@ -169,6 +172,14 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	}
 	if (gpm_array_get_size (info->priv->voltage_data) > 2) {
 		list = g_list_append (list, "voltage");
+	}
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile);
+	if (gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-accuracy");
+	}
+	array = gpm_profile_get_data_time_percent (info->priv->profile);
+	if (gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-time");
 	}
 
 	*types = device_list_to_strv (list);
@@ -217,6 +228,16 @@ gpm_statistics_get_axis_types (GpmInfo *info,
 	if (strcmp (type, "voltage") == 0) {
 		*axis_type_x = g_strdup ("time");
 		*axis_type_y = g_strdup ("voltage");
+		return TRUE;
+	}
+	if (strcmp (type, "profile-accuracy") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("percentage");
+		return TRUE;
+	}
+	if (strcmp (type, "profile-time") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("time");
 		return TRUE;
 	}
 
@@ -306,6 +327,10 @@ gpm_statistics_get_data (GpmInfo     *info,
 		events = info->priv->percentage_data;
 	} else if (strcmp (type, "voltage") == 0) {
 		events = info->priv->voltage_data;
+	} else if (strcmp (type, "profile-accuracy") == 0) {
+		events = gpm_profile_get_data_accuracy_percent (info->priv->profile);
+	} else if (strcmp (type, "profile-time") == 0) {
+		events = gpm_profile_get_data_time_percent (info->priv->profile);
 	} else {
 		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
@@ -585,6 +610,9 @@ gpm_info_init (GpmInfo *info)
 	/* singleton, so okay */
 	info->priv->power = gpm_power_new ();
 
+	/* singleton, so okay */
+	info->priv->profile = gpm_profile_new ();
+
 	/* we use ac_adapter so we can log the event */
 	info->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (info->priv->ac_adapter, "ac-adapter-changed",
@@ -664,18 +692,15 @@ gpm_info_finalize (GObject *object)
 	if (info->priv->voltage_data) {
 		g_object_unref (info->priv->voltage_data);
 	}
-	if (info->priv->ac_adapter != NULL) {
-		g_object_unref (info->priv->ac_adapter);
-	}
-	if (info->priv->idle != NULL) {
-		g_object_unref (info->priv->idle);
-	}
 	if (info->priv->dpms != NULL) {
 		g_object_unref (info->priv->dpms);
 	}
 	if (info->priv->control != NULL) {
 		g_object_unref (info->priv->control);
 	}
+	g_object_unref (info->priv->ac_adapter);
+	g_object_unref (info->priv->idle);
+	g_object_unref (info->priv->profile);
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
 
@@ -693,3 +718,4 @@ gpm_info_new (void)
 	info = g_object_new (GPM_TYPE_INFO, NULL);
 	return GPM_INFO (info);
 }
+
