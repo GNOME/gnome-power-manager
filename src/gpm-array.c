@@ -56,7 +56,7 @@ G_DEFINE_TYPE (GpmArray, gpm_array, G_TYPE_OBJECT)
 /**
  * gpm_array_get:
  * @array: This class instance
- * @i: The number
+ * @i: The array element
  **/
 GpmArrayPoint *
 gpm_array_get (GpmArray *array,
@@ -79,10 +79,41 @@ gpm_array_get (GpmArray *array,
 }
 
 /**
+ * gpm_array_set:
+ * @array: This class instance
+ * @i: The array element
+ * @x: The X data point
+ * @y: The Y data point or event type
+ * @data: The data for the point
+ *
+ * Sets the values of something already in the list
+ **/
+gboolean
+gpm_array_set (GpmArray *array,
+	       guint	 i,
+	       guint	 x,
+	       guint	 y,
+	       guint	 data)
+{
+	GpmArrayPoint *point;
+
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	/* we have to add a new data point */
+	point = gpm_array_get (array, i);
+	point->x = x;
+	point->y = y;
+	point->data = data;
+	return TRUE;
+}
+
+/**
  * gpm_array_append:
  * @array: This class instance
  * @x: The X data point
  * @y: The Y data point or event type
+ * @data: The data for the point
  *
  * Allocates the memory and adds to the list.
  **/
@@ -227,7 +258,6 @@ gpm_array_load_from_file (GpmArray *array, const gchar *filename)
 	guint x;
 	guint y;
 	guint data;
-	GpmArrayPoint *point;
 
 	if (array->priv->fixed_size == FALSE) {
 		/* not valid as array is variable size */
@@ -246,10 +276,7 @@ gpm_array_load_from_file (GpmArray *array, const gchar *filename)
 	while (lines[i] != NULL) {
 		if (strlen (lines[i]) > 3) {
 			sscanf (lines[i], "%u, %u, %u", &x, &y, &data);
-			point = gpm_array_get (array, i);
-			point->x = x;
-			point->y = y;
-			point->data = data;
+			gpm_array_set (array, i, x, y, data);
 		}
 		i++;
 	}

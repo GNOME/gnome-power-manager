@@ -58,6 +58,11 @@ GpmArray		*gpm_array_new			(void);
 gboolean		 gpm_array_clear		(GpmArray	*array);
 GpmArrayPoint		*gpm_array_get			(GpmArray	*array,
 							 guint		 i);
+GpmArrayPoint		*gpm_array_set			(GpmArray	*array,
+							 guint		 i);
+							 guint		 x,
+							 guint		 y,
+							 guint		 data);
 gboolean		 gpm_array_append		(GpmArray	*array,
 							 guint		 x,
 							 guint		 y,
