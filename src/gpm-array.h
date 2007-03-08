@@ -64,6 +64,8 @@ gboolean		 gpm_array_append		(GpmArray	*array,
 							 guint		 data);
 gboolean		 gpm_array_append_from_file	(GpmArray	*array,
 							 const gchar	*filename);
+gboolean		 gpm_array_load_from_file	(GpmArray	*array,
+							 const gchar	*filename);
 gboolean		 gpm_array_save_to_file		(GpmArray	*array,
 							 const gchar	*filename);
 gboolean		 gpm_array_interpolate_zeros	(GpmArray	*array);

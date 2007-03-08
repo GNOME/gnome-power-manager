@@ -184,6 +184,11 @@ gpm_array_append_from_file (GpmArray *array, const gchar *filename)
 	guint y;
 	guint data;
 
+	if (array->priv->fixed_size == TRUE) {
+		/* not valid as array is fixed size */
+		return FALSE;
+	}
+
 	g_file_get_contents (filename, &contents, &length, NULL);
 	if (contents == NULL) {
 		g_warning ("cannot open file %s", filename);
@@ -197,6 +202,54 @@ gpm_array_append_from_file (GpmArray *array, const gchar *filename)
 		if (strlen (lines[i]) > 3) {
 			sscanf (lines[i], "%u, %u, %u", &x, &y, &data);
 			gpm_array_append (array, x, y, data);
+		}
+		i++;
+	}
+	g_strfreev (lines);
+	g_free (contents);
+	return TRUE;
+}
+
+/**
+ * gpm_array_load_from_file:
+ * @array: This class instance
+ * @filename: CSV data file.
+ *
+ * Loads data from a CSV file
+ **/
+gboolean
+gpm_array_load_from_file (GpmArray *array, const gchar *filename)
+{
+	gchar *contents;
+	gchar **lines;
+	gsize length;
+	guint i;
+	guint x;
+	guint y;
+	guint data;
+	GpmArrayPoint *point;
+
+	if (array->priv->fixed_size == FALSE) {
+		/* not valid as array is variable size */
+		return FALSE;
+	}
+
+	g_file_get_contents (filename, &contents, &length, NULL);
+	if (contents == NULL) {
+		g_warning ("cannot open file %s", filename);
+		return FALSE;
+	}
+
+	/* split into lines and process each one */
+	lines = g_strsplit (contents, "\n", -1);
+	i = 0;
+	while (lines[i] != NULL) {
+		if (strlen (lines[i]) > 3) {
+			sscanf (lines[i], "%u, %u, %u", &x, &y, &data);
+			point = gpm_array_get (array, i);
+			point->x = x;
+			point->y = y;
+			point->data = data;
 		}
 		i++;
 	}
