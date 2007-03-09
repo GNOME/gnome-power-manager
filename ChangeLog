@@ -1,5 +1,12 @@
 2007-03-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.c: (gpm_rgb_to_colour), (gpm_colour_to_rgb):
+	* src/gpm-common.h:
+	* test/gpm-self-test.c: (test_common), (main):
+	Add some colour handling code. I want to sort out the graph colours.
+
+2007-03-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c:
 	Add DPMS state monitoring. When the panel is off, we are not
 	representative of power used.

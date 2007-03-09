@@ -82,6 +82,95 @@ test_failed (const gchar *format, ...)
 }
 
 static void
+test_common (GpmPowermanager *powermanager)
+{
+	guint8 r, g, b;
+	guint32 colour;
+	test_type = "GpmCommon        ";
+
+	/************************************************************/
+	test_title ("get red");
+	gpm_colour_to_rgb (0xff0000, &r, &g, &b);
+	if (r == 255 && g == 0 && b == 0) {
+		test_success ("got red");
+	} else {
+		test_failed ("could not get red (%i, %i, %i)", r, g, b);
+	}
+
+	/************************************************************/
+	test_title ("get green");
+	gpm_colour_to_rgb (0x00ff00, &r, &g, &b);
+	if (r == 0 && g == 255 && b == 0) {
+		test_success ("got green");
+	} else {
+		test_failed ("could not get green (%i, %i, %i)", r, g, b);
+	}
+
+	/************************************************************/
+	test_title ("get blue");
+	gpm_colour_to_rgb (0x0000ff, &r, &g, &b);
+	if (r == 0 && g == 0 && b == 255) {
+		test_success ("got blue");
+	} else {
+		test_failed ("could not get blue (%i, %i, %i)", r, g, b);
+	}
+
+	/************************************************************/
+	test_title ("get black");
+	gpm_colour_to_rgb (0x000000, &r, &g, &b);
+	if (r == 0 && g == 0 && b == 0) {
+		test_success ("got black");
+	} else {
+		test_failed ("could not get black (%i, %i, %i)", r, g, b);
+	}
+
+	/************************************************************/
+	test_title ("get white");
+	gpm_colour_to_rgb (0xffffff, &r, &g, &b);
+	if (r == 255 && g == 255 && b == 255) {
+		test_success ("got white");
+	} else {
+		test_failed ("could not get white (%i, %i, %i)", r, g, b);
+	}
+	
+	/************************************************************/
+	test_title ("set red");
+	colour = gpm_rgb_to_colour (0xff, 0x00, 0x00);
+	if (colour == 0xff0000) {
+		test_success ("set red");
+	} else {
+		test_failed ("could not set red (%i)", colour);
+	}
+
+	/************************************************************/
+	test_title ("set green");
+	colour = gpm_rgb_to_colour (0x00, 0xff, 0x00);
+	if (colour == 0x00ff00) {
+		test_success ("set green");
+	} else {
+		test_failed ("could not set green (%i)", colour);
+	}
+
+	/************************************************************/
+	test_title ("set blue");
+	colour = gpm_rgb_to_colour (0x00, 0x00, 0xff);
+	if (colour == 0x0000ff) {
+		test_success ("set blue");
+	} else {
+		test_failed ("could not set blue (%i)", colour);
+	}
+
+	/************************************************************/
+	test_title ("set white");
+	colour = gpm_rgb_to_colour (0xff, 0xff, 0xff);
+	if (colour == 0xffffff) {
+		test_success ("set white");
+	} else {
+		test_failed ("could not set white (%i)", colour);
+	}
+}
+
+static void
 test_gpm_array (GpmPowermanager *powermanager)
 {
 	GpmArray *array;
@@ -803,6 +892,7 @@ main (int argc, char **argv)
 		return 1;
 	}
 
+	test_common (powermanager);
 	test_gpm_array (powermanager);
 	test_gpm_inhibit (powermanager);
 	test_gpm_proxy (powermanager);

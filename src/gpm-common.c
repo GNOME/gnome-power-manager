@@ -30,6 +30,38 @@
 #include "gpm-common.h"
 
 /**
+ * gpm_rgb_to_colour:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ *
+ **/
+guint32
+gpm_rgb_to_colour (guint8 red, guint8 green, guint8 blue)
+{
+	guint32 colour = 0;
+	colour += (guint32) red * 0x10000;
+	colour += (guint32) green * 0x100;
+	colour += (guint32) blue;
+	return colour;
+}
+
+/**
+ * gpm_colour_to_rgb:
+ * @red: The red value
+ * @green: The green value
+ * @blue: The blue value
+ *
+ **/
+void
+gpm_colour_to_rgb (guint32 colour, guint8 *red, guint8 *green, guint8 *blue)
+{
+	*red = (colour & 0xff0000) / 0x10000;
+	*green = (colour & 0x00ff00) / 0x100;
+	*blue = colour & 0x0000ff;
+}
+
+/**
  * gpm_exponential_average:
  * @previous: The old value
  * @new: The new value
