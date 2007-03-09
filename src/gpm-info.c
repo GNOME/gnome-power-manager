@@ -432,11 +432,11 @@ gpm_info_log_do_poll (gpointer data)
 
 		/* set the correct colours */
 		if (battery_status.is_discharging) {
-			colour = GPM_GRAPH_WIDGET_COLOUR_DISCHARGING;
+			colour = GPM_COLOUR_DISCHARGING;
 		} else if (battery_status.is_charging) {
-			colour = GPM_GRAPH_WIDGET_COLOUR_CHARGING;
+			colour = GPM_COLOUR_CHARGING;
 		} else {
-			colour = GPM_GRAPH_WIDGET_COLOUR_CHARGED;
+			colour = GPM_COLOUR_CHARGED;
 		}
 
 		gpm_array_add (info->priv->percentage_data, value_x,

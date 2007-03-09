@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gpm-common.h"
 #include "gpm-graph-widget.h"
 #include "gpm-array.h"
 #include "gpm-debug.h"
@@ -119,7 +120,7 @@ gboolean
 gpm_graph_widget_key_add (GpmGraphWidget       *graph,
 			  const gchar	       *name,
 			  guint		        id,
-			  GpmGraphWidgetColour  colour,
+			  guint32               colour,
 			  GpmGraphWidgetShape   shape)
 {
 	GpmGraphWidgetKeyItem *keyitem;
@@ -754,46 +755,11 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
  * @colour: The colour enum
  **/
 static void
-gpm_graph_widget_set_colour (cairo_t *cr, GpmGraphWidgetColour colour)
+gpm_graph_widget_set_colour (cairo_t *cr, guint32 colour)
 {
-	if (colour == GPM_GRAPH_WIDGET_COLOUR_DEFAULT) {
-		cairo_set_source_rgb (cr, 0, 0.7, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_BLACK) {
-		cairo_set_source_rgb (cr, 0, 0, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_WHITE) {
-		cairo_set_source_rgb (cr, 1, 1, 1);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_RED) {
-		cairo_set_source_rgb (cr, 1, 0, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_BLUE) {
-		cairo_set_source_rgb (cr, 0, 0, 1);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_GREEN) {
-		cairo_set_source_rgb (cr, 0, 1, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_MAGENTA) {
-		cairo_set_source_rgb (cr, 1, 0, 1);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_YELLOW) {
-		cairo_set_source_rgb (cr, 1, 1, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_CYAN) {
-		cairo_set_source_rgb (cr, 0, 1, 1);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_GREY) {
-		cairo_set_source_rgb (cr, 0.8, 0.8, 0.8);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_RED) {
-		cairo_set_source_rgb (cr, 0.5, 0, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE) {
-		cairo_set_source_rgb (cr, 0, 0, 0.5);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN) {
-		cairo_set_source_rgb (cr, 0, 0.5, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_MAGENTA) {
-		cairo_set_source_rgb (cr, 0.5, 0, 0.5);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW) {
-		cairo_set_source_rgb (cr, 0.5, 0.5, 0);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN) {
-		cairo_set_source_rgb (cr, 0, 0.5, 0.5);
-	} else if (colour == GPM_GRAPH_WIDGET_COLOUR_DARK_GREY) {
-		cairo_set_source_rgb (cr, 0.5, 0.5, 0.5);
-	} else {
-		cairo_set_source_rgb (cr, 0, 1, 0);
-		gpm_warning ("Unknown colour: %i", colour);
-	}
+	guint8 r, g, b;
+	gpm_colour_to_rgb (colour, &r, &g, &b);
+	cairo_set_source_rgb (cr, ((gdouble) r)/256.0f, ((gdouble) g)/256.0f, ((gdouble) b)/256.0f);
 }
 
 /**
@@ -810,7 +776,7 @@ static void
 gpm_graph_widget_draw_dot (cairo_t             *cr,
 			   gfloat               x,
 			   gfloat               y,
-			   GpmGraphWidgetColour colour,
+			   guint32              colour,
 			   GpmGraphWidgetShape  shape)
 {
 	gfloat width;
@@ -886,7 +852,7 @@ gpm_graph_widget_draw_dot (cairo_t             *cr,
  * Draw the legend line on the graph of a specified colour
  **/
 static void
-gpm_graph_widget_draw_legend_line (cairo_t *cr, gfloat x, gfloat y, GpmGraphWidgetColour colour)
+gpm_graph_widget_draw_legend_line (cairo_t *cr, gfloat x, gfloat y, guint32 colour)
 {
 	gfloat width = 10;
 	gfloat height = 2;
@@ -1134,19 +1100,19 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 
 	/* add the line colours to the legend */
 	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_GRAPH_WIDGET_COLOUR_CHARGING);
+					   GPM_COLOUR_CHARGING);
 	cairo_move_to (cr, x + 8 + 10, y_count + 3);
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	cairo_show_text (cr, GPM_CHARGING_TEXT);
 	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_GRAPH_WIDGET_COLOUR_DISCHARGING);
+					   GPM_COLOUR_DISCHARGING);
 	cairo_move_to (cr, x + 8 + 10, y_count + 3);
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	cairo_show_text (cr, GPM_DISCHARGING_TEXT);
 	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_GRAPH_WIDGET_COLOUR_CHARGED);
+					   GPM_COLOUR_CHARGED);
 	cairo_move_to (cr, x + 8 + 10, y_count + 3);
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	cairo_show_text (cr, GPM_CHARGED_TEXT);

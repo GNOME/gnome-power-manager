@@ -207,10 +207,10 @@ gpm_profile_get_data_time_percent (GpmProfile *profile)
 		point = gpm_array_get (profile->priv->array_data, i);
 		/* only set points that are not zero */
 		if (point->data > 0) {
-			gpm_array_set (profile->priv->array_battery, i, point->x, point->y, 4);
+			gpm_array_set (profile->priv->array_battery, i, point->x, point->y, GPM_COLOUR_BLUE);
 		} else {
 			/* set zero points a different colour, and use the average */
-			gpm_array_set (profile->priv->array_battery, i, point->x, average, 11);
+			gpm_array_set (profile->priv->array_battery, i, point->x, average, GPM_COLOUR_DARK_BLUE);
 		}
 	}
 
@@ -236,10 +236,10 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile)
 		point = gpm_array_get (profile->priv->array_data, i);
 		/* only set points that are not zero */
 		if (point->data > 0) {
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 3);
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_GREY);
 		} else {
 			/* set zero points a different colour */
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 10);
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_DARK_GREY);
 		}
 	}
 

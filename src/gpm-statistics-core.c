@@ -763,72 +763,72 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("On AC"),
 				  GPM_EVENT_ON_AC,
-				  GPM_GRAPH_WIDGET_COLOUR_BLUE,
+				  GPM_COLOUR_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("On battery"),
 				  GPM_EVENT_ON_BATTERY,
-				  GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE,
+				  GPM_COLOUR_DARK_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session idle"),
 				  GPM_EVENT_SESSION_IDLE,
-				  GPM_GRAPH_WIDGET_COLOUR_YELLOW,
+				  GPM_COLOUR_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session active"),
 				  GPM_EVENT_SESSION_ACTIVE,
-				  GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW,
+				  GPM_COLOUR_DARK_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Suspend"),
 				  GPM_EVENT_SUSPEND,
-				  GPM_GRAPH_WIDGET_COLOUR_RED,
+				  GPM_COLOUR_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Resume"),
 				  GPM_EVENT_RESUME,
-				  GPM_GRAPH_WIDGET_COLOUR_DARK_RED,
+				  GPM_COLOUR_DARK_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Hibernate"),
 				  GPM_EVENT_HIBERNATE,
-				  GPM_GRAPH_WIDGET_COLOUR_MAGENTA,
+				  GPM_COLOUR_MAGENTA,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid closed"),
 				  GPM_EVENT_LID_CLOSED,
-				  GPM_GRAPH_WIDGET_COLOUR_GREEN,
+				  GPM_COLOUR_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid opened"),
 				  GPM_EVENT_LID_OPENED,
-				  GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN,
+				  GPM_COLOUR_DARK_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("Notification"),
 				  GPM_EVENT_NOTIFICATION,
-				  GPM_GRAPH_WIDGET_COLOUR_GREY,
+				  GPM_COLOUR_GREY,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS On"),
 				  GPM_EVENT_DPMS_ON,
-				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Standby"),
 				  GPM_EVENT_DPMS_STANDBY,
-				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Suspend"),
 				  GPM_EVENT_DPMS_SUSPEND,
-				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
 	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Off"),
 				  GPM_EVENT_DPMS_OFF,
-				  GPM_GRAPH_WIDGET_COLOUR_CYAN,
+				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
 
 	/* FIXME: There's got to be a better way than this */

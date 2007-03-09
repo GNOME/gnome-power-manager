@@ -1,5 +1,16 @@
 2007-03-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.h:
+	* src/gpm-graph-widget.c: (gpm_graph_widget_key_add),
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c: (gpm_info_log_do_poll):
+	* src/gpm-profile.c: (gpm_profile_get_data_time_percent),
+	* src/gpm-statistics-core.c: (gpm_statistics_init):
+	Allow the graphs to be any colour, and rip out the crazy enumerated
+	colour types. This lets us do some very cool stuff.
+
+2007-03-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.c: (gpm_rgb_to_colour), (gpm_colour_to_rgb):
 	* src/gpm-common.h:
 	* test/gpm-self-test.c: (test_common), (main):

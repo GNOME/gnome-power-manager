@@ -34,35 +34,14 @@ G_BEGIN_DECLS
 #define GPM_IS_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH_WIDGET))
 #define GPM_GRAPH_WIDGET_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetClass))
 
-#define GPM_GRAPH_WIDGET_COLOUR_CHARGING	GPM_GRAPH_WIDGET_COLOUR_BLUE
-#define GPM_GRAPH_WIDGET_COLOUR_DISCHARGING	GPM_GRAPH_WIDGET_COLOUR_DARK_RED
-#define GPM_GRAPH_WIDGET_COLOUR_CHARGED		GPM_GRAPH_WIDGET_COLOUR_GREEN
+#define GPM_COLOUR_CHARGING			GPM_COLOUR_BLUE
+#define GPM_COLOUR_DISCHARGING			GPM_COLOUR_DARK_RED
+#define GPM_COLOUR_CHARGED			GPM_COLOUR_GREEN
 #define GPM_GRAPH_WIDGET_LEGEND_SPACING		19
 
 typedef struct GpmGraphWidget		GpmGraphWidget;
 typedef struct GpmGraphWidgetClass	GpmGraphWidgetClass;
 typedef struct GpmGraphWidgetPrivate	GpmGraphWidgetPrivate;
-
-typedef enum {
-	GPM_GRAPH_WIDGET_COLOUR_DEFAULT,
-	GPM_GRAPH_WIDGET_COLOUR_WHITE,
-	GPM_GRAPH_WIDGET_COLOUR_BLACK,
-	GPM_GRAPH_WIDGET_COLOUR_RED,
-	GPM_GRAPH_WIDGET_COLOUR_BLUE,
-	GPM_GRAPH_WIDGET_COLOUR_GREEN,
-	GPM_GRAPH_WIDGET_COLOUR_MAGENTA,
-	GPM_GRAPH_WIDGET_COLOUR_YELLOW,
-	GPM_GRAPH_WIDGET_COLOUR_CYAN,
-	GPM_GRAPH_WIDGET_COLOUR_GREY,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_BLUE,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_RED,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_MAGENTA,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_YELLOW,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_GREEN,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_CYAN,
-	GPM_GRAPH_WIDGET_COLOUR_DARK_GREY,
-	GPM_GRAPH_WIDGET_COLOUR_LAST
-} GpmGraphWidgetColour;
 
 typedef enum {
 	GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
@@ -84,7 +63,7 @@ typedef enum {
 typedef struct {
 	guint			 id;
 	const gchar		*name;
-	GpmGraphWidgetColour	 colour;
+	guint32			 colour;
 	GpmGraphWidgetShape	 shape;
 } GpmGraphWidgetKeyItem;
 
@@ -126,7 +105,7 @@ void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,
 gboolean	 gpm_graph_widget_key_add		(GpmGraphWidget	*graph,
 							 const gchar	*name,
 							 guint		 id,
-							 GpmGraphWidgetColour colour,
+							 guint32	 colour,
 							 GpmGraphWidgetShape shape);
 
 GpmGraphWidgetAxisType	 gpm_graph_widget_string_to_axis_type (const gchar	*type);
