@@ -40,6 +40,7 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"
+#include "gpm-dpms.h"
 #include "gpm-common.h"
 #include "gpm-load.h"
 #include "gpm-debug.h"
@@ -60,11 +61,13 @@ struct GpmProfilePrivate
 	HalGDevice		*hal_device;
 	GpmAcAdapter		*ac_adapter;
 	GpmLoad			*load;
+	GpmDpms			*dpms;
 	GTimer			*timer;
 	GpmArray		*array_data;
 	GpmArray		*array_accuracy;
 	GpmArray		*array_battery;
 	gboolean		 is_discharging;
+	gboolean		 lcd_on;
 	gboolean		 data_valid;
 };
 
@@ -269,7 +272,9 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	gdouble elapsed;
 	gdouble load;
 	guint accuracy;
+	guint data;
 	GpmAcAdapterState state;
+	GpmArrayPoint *point;
 	gchar *filename;
 
 	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
@@ -314,16 +319,25 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		return;
 	}
 
-//	if (dpms_state == OFF) {
-//		gpm_debug ("screen blanked, so not representative");
-//		return;
-//	}
+	if (profile->priv->lcd_on == FALSE) {
+		gpm_debug ("screen blanked, so not representative - ignoring");
+		return;
+	}
 
-	/* need to do averaging */
-	gpm_array_set (profile->priv->array_data, percentage, percentage, (guint) elapsed, accuracy);
+	data = (guint) elapsed;
+	point = gpm_array_get (profile->priv->array_data, percentage);
 
-	/* recompute the discharge graph */
-	
+	/* if we have no data, then just use the new value */
+	if (point->y == 0) {
+		point->y = data;
+	} else {
+		/* average the data so we converge to a common point */
+		point->y = gpm_exponential_average (point->y, data, 80);
+	}
+
+	/* save new accuracy */
+	point->data = accuracy;
+
 	/* save data file when idle */
 	filename = gpm_profile_get_data_file (profile, "profile-battery");
 	gpm_array_save_to_file (profile->priv->array_data, filename);
@@ -383,6 +397,31 @@ ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
 }
 
 /**
+ * dpms_mode_changed_cb:
+ * @mode: The DPMS mode, e.g. GPM_DPMS_MODE_OFF
+ * @info: This class instance
+ *
+ * Log when the DPMS mode is changed.
+ **/
+static void
+dpms_mode_changed_cb (GpmDpms    *dpms,
+		      GpmDpmsMode mode,
+		      GpmProfile *profile)
+{
+	gpm_debug ("DPMS mode changed: %d", mode);
+
+	/* We have to monitor the screen as it's one of the biggest energy
+	 * users. If this goes off, then out battery usage is non-proportional
+	 * to actual discharge rates when in use, and the data is bad. */
+	if (mode == GPM_DPMS_MODE_ON) {
+		profile->priv->lcd_on = TRUE;
+	} else {
+		/* any other powersaving mode is not typical */
+		profile->priv->lcd_on = FALSE;
+	}
+}
+
+/**
  * gpm_profile_init:
  */
 static void
@@ -397,7 +436,15 @@ gpm_profile_init (GpmProfile *profile)
 
 	profile->priv->timer = g_timer_new ();
 	profile->priv->load = gpm_load_new ();
+
 	profile->priv->ac_adapter = gpm_ac_adapter_new ();
+	g_signal_connect (profile->priv->ac_adapter, "ac-adapter-changed",
+			  G_CALLBACK (ac_adaptor_changed_cb), profile);
+
+	profile->priv->dpms = gpm_dpms_new ();
+	g_signal_connect (profile->priv->dpms, "mode-changed",
+			  G_CALLBACK (dpms_mode_changed_cb), profile);
+	
 	profile->priv->array_data = gpm_array_new ();
 	profile->priv->array_accuracy = gpm_array_new ();
 	profile->priv->array_battery = gpm_array_new ();
@@ -407,6 +454,7 @@ gpm_profile_init (GpmProfile *profile)
 
 	/* default */
 	profile->priv->is_discharging = TRUE;
+	profile->priv->lcd_on = TRUE;
 
 	/* read in data profile from disk */
 	filename = gpm_profile_get_data_file (profile, "profile-battery");
@@ -463,9 +511,8 @@ gpm_profile_finalize (GObject *object)
 
 	g_object_unref (profile->priv->hal_device);
 	g_object_unref (profile->priv->load);
+	g_object_unref (profile->priv->dpms);
 	g_object_unref (profile->priv->ac_adapter);
-	g_signal_connect (profile->priv->ac_adapter, "ac-adapter-changed",
-			  G_CALLBACK (ac_adaptor_changed_cb), profile);
 
 	g_object_unref (profile->priv->array_accuracy);
 	g_object_unref (profile->priv->array_battery);
