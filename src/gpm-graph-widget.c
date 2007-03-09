@@ -946,6 +946,11 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		gpm_debug ("drawing line %i", i);
 		array = g_ptr_array_index (graph->priv->data_list, i);
 
+		/* we have no data */
+		if (array == NULL) {
+			break;
+		}
+
 		/* get the very first point so we can work out the old */
 		point = gpm_array_get (array, 0);
 		oldx = 0;
@@ -992,6 +997,12 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 	gint dot;
 	guint previous_point = 0;
 	gint prevpos = -1;
+
+
+	if (graph->priv->events == NULL) {
+		/* we have no events */
+		return;
+	}
 
 	cairo_save (cr);
 
@@ -1067,6 +1078,11 @@ gpm_graph_widget_have_key_id (GpmGraphWidget *graph, guint id)
 	guint i;
 	guint length;
 	GpmArrayPoint *point;
+
+	/* not set */
+	if (graph->priv->events == NULL) {
+		return FALSE;
+	}
 
 	length = gpm_array_get_size (graph->priv->events);
 	for (i=0; i < length; i++) {

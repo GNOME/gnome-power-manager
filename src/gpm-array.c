@@ -848,8 +848,6 @@ gpm_array_interpolate (GpmArray *array, gint xintersect)
 /**
  * gpm_array_set_data:
  * @array: This class instance
- * @x: The X data point
- * @y: The Y data point or event type
  *
  * Overwrites the data value for the whole array.
  **/

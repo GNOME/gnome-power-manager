@@ -181,6 +181,14 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	if (gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-time");
 	}
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile);
+	if (gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-discharge-accuracy");
+	}
+	array = gpm_profile_get_data_time_percent (info->priv->profile);
+	if (gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-discharge-time");
+	}
 
 	*types = device_list_to_strv (list);
 
@@ -236,6 +244,16 @@ gpm_statistics_get_axis_types (GpmInfo *info,
 		return TRUE;
 	}
 	if (strcmp (type, "profile-charge-time") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("time");
+		return TRUE;
+	}
+	if (strcmp (type, "profile-discharge-accuracy") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("percentage");
+		return TRUE;
+	}
+	if (strcmp (type, "profile-discharge-time") == 0) {
 		*axis_type_x = g_strdup ("percentage");
 		*axis_type_y = g_strdup ("time");
 		return TRUE;
@@ -330,6 +348,10 @@ gpm_statistics_get_data (GpmInfo     *info,
 	} else if (strcmp (type, "profile-charge-accuracy") == 0) {
 		events = gpm_profile_get_data_accuracy_percent (info->priv->profile);
 	} else if (strcmp (type, "profile-charge-time") == 0) {
+		events = gpm_profile_get_data_time_percent (info->priv->profile);
+	} else if (strcmp (type, "profile-discharge-accuracy") == 0) {
+		events = gpm_profile_get_data_accuracy_percent (info->priv->profile);
+	} else if (strcmp (type, "profile-discharge-time") == 0) {
 		events = gpm_profile_get_data_time_percent (info->priv->profile);
 	} else {
 		gpm_warning ("Data type %s not known!", type);

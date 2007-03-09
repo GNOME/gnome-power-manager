@@ -53,8 +53,8 @@ static void     gpm_statistics_finalize   (GObject	    *object);
 #define ACTION_TIME				"time"
 #define ACTION_PROFILE_CHARGE_TIME		"profile-charge-time"
 #define ACTION_PROFILE_CHARGE_ACCURACY		"profile-charge-accuracy"
-#define ACTION_PROFILE_DISCHARGE_TIME		"profile-charge-time"
-#define ACTION_PROFILE_DISCHARGE_ACCURACY	"profile-charge-accuracy"
+#define ACTION_PROFILE_DISCHARGE_TIME		"profile-discharge-time"
+#define ACTION_PROFILE_DISCHARGE_ACCURACY	"profile-discharge-accuracy"
 #define ACTION_CHARGE_TEXT			_("Charge History")
 #define ACTION_POWER_TEXT			_("Power History")
 #define ACTION_VOLTAGE_TEXT			_("Voltage History")

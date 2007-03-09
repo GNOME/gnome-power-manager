@@ -51,7 +51,9 @@ static void     gpm_profile_init       (GpmProfile      *profile);
 static void     gpm_profile_finalize   (GObject	       *object);
 
 #define GPM_PROFILE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PROFILE, GpmProfilePrivate))
-#define DATA_FILENAME "/home/hughsie/profile-data-02.csv"
+
+/* assume an average of 2 hour battery life */
+#define SECONDS_PER_PERCENT 72
 
 struct GpmProfilePrivate
 {
@@ -61,7 +63,8 @@ struct GpmProfilePrivate
 	GTimer			*timer;
 	GpmArray		*array_data;
 	GpmArray		*array_accuracy;
-	gboolean		 ac_mode;
+	GpmArray		*array_battery;
+	gboolean		 is_discharging;
 	gboolean		 data_valid;
 };
 
@@ -101,6 +104,28 @@ gpm_profile_provide_data (GpmProfile *profile, guint percentage)
 }
 
 /**
+ * gpm_profile_get_data_file:
+ *
+ * Gets the time remaining for the current percentage
+ *
+ * @profile: This class
+ */
+static gchar *
+gpm_profile_get_data_file (GpmProfile *profile, const gchar *prefix)
+{
+	const gchar *suffix;
+
+	/* use home directory */
+	if (profile->priv->is_discharging == TRUE) {
+		suffix = "discharging.csv";
+	} else {
+		suffix = "charging.csv";
+	}
+
+	return g_strdup_printf ("%s/.gnome2/gnome-power-manager/%s-%s", g_get_home_dir (), prefix, suffix);
+}
+
+/**
  * gpm_profile_get_time:
  *
  * Gets the time remaining for the current percentage
@@ -116,6 +141,47 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage)
 }
 
 /**
+ * gpm_profile_array_get_nonzero_average:
+ * @array: This class instance
+ *
+ * Gets the average y value, but only counting the elements not equal to a constant.
+ **/
+guint
+gpm_profile_array_get_nonzero_average (GpmArray *array, guint value)
+{
+	GpmArrayPoint *point;
+	guint i;
+	guint length;
+	guint total;
+	guint average;
+	guint non_zero;
+
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	/* sum all the y values that are not zero */
+	total = 0;
+	non_zero = 0;
+	length = gpm_array_get_size (array);
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (array, i);
+		if (point->y != value) {
+			non_zero++;
+			total += point->y;
+		}
+	}
+
+	/* empty array */
+	if (non_zero == 0) {
+		return 0;
+	}
+
+	/* divide by number elements */
+	average = (guint) ((gdouble) total / (gdouble) non_zero);
+	return average;
+}
+
+/**
  * gpm_profile_get_data_time_percent:
  *
  * @profile: This class
@@ -123,9 +189,29 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage)
 GpmArray *
 gpm_profile_get_data_time_percent (GpmProfile *profile)
 {
+	guint i;
+	guint average;
+	GpmArrayPoint *point;
+
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
-	return profile->priv->array_data;
+
+	/* get the average not including the default */
+	average = gpm_profile_array_get_nonzero_average (profile->priv->array_data, SECONDS_PER_PERCENT);
+
+	/* copy the y data field into the y battery field */
+	for (i=0; i<100; i++) {
+		point = gpm_array_get (profile->priv->array_data, i);
+		/* only set points that are not zero */
+		if (point->data > 0) {
+			gpm_array_set (profile->priv->array_battery, i, point->x, point->y, 4);
+		} else {
+			/* set zero points a different colour, and use the average */
+			gpm_array_set (profile->priv->array_battery, i, point->x, average, 11);
+		}
+	}
+
+	return profile->priv->array_battery;
 }
 
 /**
@@ -142,10 +228,16 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile)
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
-	/* copy the data field into the y field */
+	/* copy the data field into the accuracy y field */
 	for (i=0; i<100; i++) {
 		point = gpm_array_get (profile->priv->array_data, i);
-		gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 3);
+		/* only set points that are not zero */
+		if (point->data > 0) {
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 3);
+		} else {
+			/* set zero points a different colour */
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, 10);
+		}
 	}
 
 	return profile->priv->array_accuracy;
@@ -161,7 +253,7 @@ gpm_profile_activate_mode (GpmProfile *profile, gboolean is_discharging)
 {
 	g_return_if_fail (profile != NULL);
 	g_return_if_fail (GPM_IS_PROFILE (profile));
-	profile->priv->ac_mode = is_discharging;
+	profile->priv->is_discharging = is_discharging;
 }
 
 /**
@@ -178,6 +270,7 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	gdouble load;
 	guint accuracy;
 	GpmAcAdapterState state;
+	gchar *filename;
 
 	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
 
@@ -218,14 +311,23 @@ gpm_profile_register_percentage (GpmProfile *profile,
 
 	if (accuracy < 10) {
 		gpm_debug ("not accurate enough");
+		return;
 	}
+
+//	if (dpms_state == OFF) {
+//		gpm_debug ("screen blanked, so not representative");
+//		return;
+//	}
+
 	/* need to do averaging */
 	gpm_array_set (profile->priv->array_data, percentage, percentage, (guint) elapsed, accuracy);
 
 	/* recompute the discharge graph */
 	
 	/* save data file when idle */
-	gpm_array_save_to_file (profile->priv->array_data, DATA_FILENAME);
+	filename = gpm_profile_get_data_file (profile, "profile-battery");
+	gpm_array_save_to_file (profile->priv->array_data, filename);
+	g_free (filename);
 }
 
 /**
@@ -288,7 +390,8 @@ gpm_profile_init (GpmProfile *profile)
 {
 	gboolean ret;
 	guint i;
-	const gchar *filename;
+	gchar *filename;
+	gchar *path;
 
 	profile->priv = GPM_PROFILE_GET_PRIVATE (profile);
 
@@ -296,27 +399,39 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->load = gpm_load_new ();
 	profile->priv->ac_adapter = gpm_ac_adapter_new ();
 	profile->priv->array_data = gpm_array_new ();
-	gpm_array_set_fixed_size (profile->priv->array_data, 100);
 	profile->priv->array_accuracy = gpm_array_new ();
+	profile->priv->array_battery = gpm_array_new ();
+	gpm_array_set_fixed_size (profile->priv->array_data, 100);
 	gpm_array_set_fixed_size (profile->priv->array_accuracy, 100);
+	gpm_array_set_fixed_size (profile->priv->array_battery, 100);
 
-	/* read in profile from disk */
-	filename = DATA_FILENAME;
-	gpm_debug ("loading data from '%s'", filename);
+	/* default */
+	profile->priv->is_discharging = TRUE;
+
+	/* read in data profile from disk */
+	filename = gpm_profile_get_data_file (profile, "profile-battery");
+	gpm_debug ("loading battery data from '%s'", filename);
 	ret = gpm_array_load_from_file (profile->priv->array_data, filename);
 
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
-		gpm_debug ("no data found, generating intinial (poor) data");
+		/* directory might not exist */
+		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
+		g_mkdir_with_parents (path, 744);
+		g_free (path);
+
+		gpm_debug ("no data found, generating initial (poor) data");
 		for (i=0;i<100;i++) {
-			/* assume average battery lasts 2 hours */
-			gpm_array_set (profile->priv->array_data, i, i, 72, 0);
+			/* assume average battery lasts 2 hours, but we are 0% accurate */
+			gpm_array_set (profile->priv->array_data, i, i, SECONDS_PER_PERCENT, 0);
 		}
+
 		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
 		if (ret == FALSE) {
 			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
 		}
 	}
+	g_free (filename);
 
 	/* we might be halfway through a percentage change */
 	profile->priv->data_valid = FALSE;
@@ -353,6 +468,7 @@ gpm_profile_finalize (GObject *object)
 			  G_CALLBACK (ac_adaptor_changed_cb), profile);
 
 	g_object_unref (profile->priv->array_accuracy);
+	g_object_unref (profile->priv->array_battery);
 	g_object_unref (profile->priv->array_data);
 	g_timer_destroy (profile->priv->timer);
 
