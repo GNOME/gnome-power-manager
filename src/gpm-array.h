@@ -86,6 +86,9 @@ gboolean		 gpm_array_print		(GpmArray	*array);
 gboolean		 gpm_array_compute_rate_lsrl	(GpmArray	*array,
 							 GpmArray	*newarray,
 							 guint		 slew);
+gboolean		 gpm_array_compute_uwe		(GpmArray	*array,
+							 GpmArray	*newarray,
+							 guint		 slew);
 gboolean		 gpm_array_compute_relationship	(GpmArray	*array1,
 							 GpmArray	*array2,
 							 GpmArray	*newarray);

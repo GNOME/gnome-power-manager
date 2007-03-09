@@ -446,6 +446,62 @@ gpm_array_compute_rate_lsrl (GpmArray	*array,
 
 	return TRUE;
 }
+/**
+ * gpm_array_compute_uwe:
+ * @array: This class instance
+ * @newarray: The new rate array
+ * @slew: The slew rate to be used either side of the filter.
+ *
+ * Computes the uniform wieghted average for a dataset
+ **/
+gboolean
+gpm_array_compute_uwe (GpmArray	*array,
+		       GpmArray	*newarray,
+		       guint	 slew)
+{
+	GpmArrayPoint *point;
+	guint i, j;
+	guint run;
+	gfloat meany;
+	guint length;
+	gint start;
+	gint end;
+
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	/* we have to add a new data point */
+	length = gpm_array_get_size (array);
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (array, i);
+
+		/* i is the center position and the data we are trying to find.
+		 * start and end are up to slew wide, as long as they fit in the dataset
+		 * run is the width of the sample */
+		start = i - slew;
+		if (start < 0) {
+			start = 0;
+		}
+		end = i + slew;
+		if (end > length - 1) {
+			end = length - 1;
+		}
+		run = end - start;
+
+		/* calculate the mean of y over the window */
+		meany = 0.0f;
+		for (j=start; j<end; j++) {
+			point = gpm_array_get (array, j);
+			meany += point->y;
+		}
+		meany /= (gfloat) run+1;
+
+		/* do not append, just set for speed */
+		gpm_array_set (newarray, i, point->x, (guint) meany, 0);
+	}
+
+	return TRUE;
+}
 
 /**
  * gpm_array_sort_by_x_compare_func

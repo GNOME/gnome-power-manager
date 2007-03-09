@@ -214,6 +214,11 @@ gpm_profile_get_data_time_percent (GpmProfile *profile)
 		}
 	}
 
+//gboolean
+//GpmArray *newarray = gpm_array_new ();
+//gpm_array_compute_uwe (profile->priv->array_battery, newarray, 15);
+//	return newarray;
+
 	return profile->priv->array_battery;
 }
 

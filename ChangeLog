@@ -1,5 +1,13 @@
 2007-03-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c: (gpm_array_compute_uwe):
+	* src/gpm-array.h:
+	* src/gpm-profile.c: (gpm_profile_get_data_time_percent):
+	Add a new function to compute the uniform weighted average of
+	the whole dataset. This is a very nice smoothing function.
+
+2007-03-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-common.h:
 	* src/gpm-graph-widget.c: (gpm_graph_widget_key_add),
 	* src/gpm-graph-widget.h:
