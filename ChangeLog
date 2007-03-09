@@ -1,3 +1,16 @@
+2007-03-09  Richard Hughes  <richard@hughsie.com>
+
+	* po/POTFILES.in:
+	Fix make distcheck. Oops.
+	
+	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
+	Allow down to 4 minutes in the y autoscale.
+
+	* src/gpm-info.c:
+	* src/gpm-profile.c: (gpm_profile_init):
+	* src/gpm-statistics-core.c:
+	Prefix with charging and discharging for future usage.
+
 2007-03-08  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-profile.c:

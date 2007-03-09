@@ -47,18 +47,22 @@ static void     gpm_statistics_finalize   (GObject	    *object);
 
 #define GPM_STATISTICS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_STATISTICS, GpmStatisticsPrivate))
 
-#define ACTION_VOLTAGE			"voltage"
-#define ACTION_CHARGE			"charge"
-#define ACTION_POWER			"power"
-#define ACTION_TIME			"time"
-#define ACTION_PROFILE_TIME		"profile-time"
-#define ACTION_PROFILE_ACCURACY		"profile-accuracy"
-#define ACTION_CHARGE_TEXT		_("Charge History")
-#define ACTION_POWER_TEXT		_("Power History")
-#define ACTION_VOLTAGE_TEXT		_("Voltage History")
-#define ACTION_TIME_TEXT		_("Estimated Time History")
-#define ACTION_PROFILE_TIME_TEXT	_("Profiled Time")
-#define ACTION_PROFILE_ACCURACY_TEXT	_("Profiled Accuracy")
+#define ACTION_VOLTAGE				"voltage"
+#define ACTION_CHARGE				"charge"
+#define ACTION_POWER				"power"
+#define ACTION_TIME				"time"
+#define ACTION_PROFILE_CHARGE_TIME		"profile-charge-time"
+#define ACTION_PROFILE_CHARGE_ACCURACY		"profile-charge-accuracy"
+#define ACTION_PROFILE_DISCHARGE_TIME		"profile-charge-time"
+#define ACTION_PROFILE_DISCHARGE_ACCURACY	"profile-charge-accuracy"
+#define ACTION_CHARGE_TEXT			_("Charge History")
+#define ACTION_POWER_TEXT			_("Power History")
+#define ACTION_VOLTAGE_TEXT			_("Voltage History")
+#define ACTION_TIME_TEXT			_("Estimated Time History")
+#define ACTION_PROFILE_CHARGE_TIME_TEXT		_("Profiled Charge Time")
+#define ACTION_PROFILE_CHARGE_ACCURACY_TEXT	_("Profiled Charge Accuracy")
+#define ACTION_PROFILE_DISCHARGE_TIME_TEXT	_("Profiled Discharge Time")
+#define ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT	_("Profiled Discharge Accuracy")
 
 #define GPM_STATISTICS_POLL_INTERVAL	15000 /* ms */
 
@@ -577,10 +581,14 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 		type = ACTION_TIME;
 	} else if (strcmp (value, ACTION_VOLTAGE_TEXT) == 0) {
 		type = ACTION_VOLTAGE;
-	} else if (strcmp (value, ACTION_PROFILE_TIME_TEXT) == 0) {
-		type = ACTION_PROFILE_TIME;
-	} else if (strcmp (value, ACTION_PROFILE_ACCURACY_TEXT) == 0) {
-		type = ACTION_PROFILE_ACCURACY;
+	} else if (strcmp (value, ACTION_PROFILE_CHARGE_TIME_TEXT) == 0) {
+		type = ACTION_PROFILE_CHARGE_TIME;
+	} else if (strcmp (value, ACTION_PROFILE_CHARGE_ACCURACY_TEXT) == 0) {
+		type = ACTION_PROFILE_CHARGE_ACCURACY;
+	} else if (strcmp (value, ACTION_PROFILE_DISCHARGE_TIME_TEXT) == 0) {
+		type = ACTION_PROFILE_DISCHARGE_TIME;
+	} else if (strcmp (value, ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT) == 0) {
+		type = ACTION_PROFILE_DISCHARGE_ACCURACY;
 	} else {
 		g_error ("value '%s' unknown", value);
 	}
@@ -636,10 +644,14 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 			type_localized = ACTION_TIME_TEXT;
 		} else if (strcmp (type, ACTION_VOLTAGE) == 0) {
 			type_localized = ACTION_VOLTAGE_TEXT;
-		} else if (strcmp (type, ACTION_PROFILE_TIME) == 0) {
-			type_localized = ACTION_PROFILE_TIME_TEXT;
-		} else if (strcmp (type, ACTION_PROFILE_ACCURACY) == 0) {
-			type_localized = ACTION_PROFILE_ACCURACY_TEXT;
+		} else if (strcmp (type, ACTION_PROFILE_CHARGE_TIME) == 0) {
+			type_localized = ACTION_PROFILE_CHARGE_TIME_TEXT;
+		} else if (strcmp (type, ACTION_PROFILE_CHARGE_ACCURACY) == 0) {
+			type_localized = ACTION_PROFILE_CHARGE_ACCURACY_TEXT;
+		} else if (strcmp (type, ACTION_PROFILE_DISCHARGE_TIME) == 0) {
+			type_localized = ACTION_PROFILE_DISCHARGE_TIME_TEXT;
+		} else if (strcmp (type, ACTION_PROFILE_DISCHARGE_ACCURACY) == 0) {
+			type_localized = ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT;
 		} else {
 			type_localized = _("Unknown");
 		}

@@ -309,7 +309,8 @@ gpm_profile_init (GpmProfile *profile)
 	if (ret == FALSE) {
 		gpm_debug ("no data found, generating intinial (poor) data");
 		for (i=0;i<100;i++) {
-			gpm_array_set (profile->priv->array_data, i, i, 2*60, 0);
+			/* assume average battery lasts 2 hours */
+			gpm_array_set (profile->priv->array_data, i, i, 72, 0);
 		}
 		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
 		if (ret == FALSE) {

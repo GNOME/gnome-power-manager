@@ -722,7 +722,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = ((biggest_y / 60) + 2)* 60;
 		if (graph->priv->stop_y > 60) {
-			graph->priv->stop_y = ((biggest_y / (10 * 60)) + 2) * (10 * 60);
+			graph->priv->stop_y = ((biggest_y / (1 * 60)) + 2) * (1 * 60);
 		}
 		if (graph->priv->stop_y < 60) {
 			graph->priv->stop_y = 60;

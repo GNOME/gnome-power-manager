@@ -175,11 +175,11 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	}
 	array = gpm_profile_get_data_accuracy_percent (info->priv->profile);
 	if (gpm_array_get_size (array) > 2) {
-		list = g_list_append (list, "profile-accuracy");
+		list = g_list_append (list, "profile-charge-accuracy");
 	}
 	array = gpm_profile_get_data_time_percent (info->priv->profile);
 	if (gpm_array_get_size (array) > 2) {
-		list = g_list_append (list, "profile-time");
+		list = g_list_append (list, "profile-charge-time");
 	}
 
 	*types = device_list_to_strv (list);
@@ -230,12 +230,12 @@ gpm_statistics_get_axis_types (GpmInfo *info,
 		*axis_type_y = g_strdup ("voltage");
 		return TRUE;
 	}
-	if (strcmp (type, "profile-accuracy") == 0) {
+	if (strcmp (type, "profile-charge-accuracy") == 0) {
 		*axis_type_x = g_strdup ("percentage");
 		*axis_type_y = g_strdup ("percentage");
 		return TRUE;
 	}
-	if (strcmp (type, "profile-time") == 0) {
+	if (strcmp (type, "profile-charge-time") == 0) {
 		*axis_type_x = g_strdup ("percentage");
 		*axis_type_y = g_strdup ("time");
 		return TRUE;
@@ -327,9 +327,9 @@ gpm_statistics_get_data (GpmInfo     *info,
 		events = info->priv->percentage_data;
 	} else if (strcmp (type, "voltage") == 0) {
 		events = info->priv->voltage_data;
-	} else if (strcmp (type, "profile-accuracy") == 0) {
+	} else if (strcmp (type, "profile-charge-accuracy") == 0) {
 		events = gpm_profile_get_data_accuracy_percent (info->priv->profile);
-	} else if (strcmp (type, "profile-time") == 0) {
+	} else if (strcmp (type, "profile-charge-time") == 0) {
 		events = gpm_profile_get_data_time_percent (info->priv->profile);
 	} else {
 		gpm_warning ("Data type %s not known!", type);
