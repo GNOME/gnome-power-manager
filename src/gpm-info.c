@@ -66,8 +66,7 @@ struct GpmInfoPrivate
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmPower		*power;
-	GpmProfile		*profile_charge;
-	GpmProfile		*profile_discharge;
+	GpmProfile		*profile;
 
 	GpmArray		*events;
 	GpmArray		*rate_data;
@@ -119,25 +118,6 @@ gpm_info_explain_reason (GpmInfo      *info,
 	gpm_syslog (message);
 	gpm_info_event_log (info, event, message);
 	g_free (message);
-}
-
-/**
- * gpm_info_register_profile:
- **/
-gboolean
-gpm_info_register_profile (GpmInfo	*info,
-			   GpmProfile   *profile,
-			   gboolean	 is_discharging)
-{
-	g_return_val_if_fail (info != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
-
-	if (is_discharging == TRUE) {
-		info->priv->profile_discharge = profile;
-	} else {
-		info->priv->profile_charge = profile;
-	}
-	return TRUE;
 }
 
 /**
@@ -193,19 +173,19 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	if (gpm_array_get_size (info->priv->voltage_data) > 2) {
 		list = g_list_append (list, "voltage");
 	}
-	array = gpm_profile_get_data_accuracy_percent (info->priv->profile_charge);
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, FALSE);
 	if (gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-accuracy");
 	}
-	array = gpm_profile_get_data_time_percent (info->priv->profile_charge);
+	array = gpm_profile_get_data_time_percent (info->priv->profile, FALSE);
 	if (gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-time");
 	}
-	array = gpm_profile_get_data_accuracy_percent (info->priv->profile_discharge);
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, TRUE);
 	if (gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-discharge-accuracy");
 	}
-	array = gpm_profile_get_data_time_percent (info->priv->profile_discharge);
+	array = gpm_profile_get_data_time_percent (info->priv->profile, TRUE);
 	if (gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-discharge-time");
 	}
@@ -366,13 +346,13 @@ gpm_statistics_get_data (GpmInfo     *info,
 	} else if (strcmp (type, "voltage") == 0) {
 		events = info->priv->voltage_data;
 	} else if (strcmp (type, "profile-charge-accuracy") == 0) {
-		events = gpm_profile_get_data_accuracy_percent (info->priv->profile_charge);
+		events = gpm_profile_get_data_accuracy_percent (info->priv->profile, FALSE);
 	} else if (strcmp (type, "profile-charge-time") == 0) {
-		events = gpm_profile_get_data_time_percent (info->priv->profile_charge);
+		events = gpm_profile_get_data_time_percent (info->priv->profile, FALSE);
 	} else if (strcmp (type, "profile-discharge-accuracy") == 0) {
-		events = gpm_profile_get_data_accuracy_percent (info->priv->profile_discharge);
+		events = gpm_profile_get_data_accuracy_percent (info->priv->profile, TRUE);
 	} else if (strcmp (type, "profile-discharge-time") == 0) {
-		events = gpm_profile_get_data_time_percent (info->priv->profile_discharge);
+		events = gpm_profile_get_data_time_percent (info->priv->profile, TRUE);
 	} else {
 		gpm_warning ("Data type %s not known!", type);
 		*error = g_error_new (gpm_info_error_quark (),
@@ -653,8 +633,7 @@ gpm_info_init (GpmInfo *info)
 	info->priv->power = gpm_power_new ();
 
 	/* set default, we have to set these from the manager */
-	info->priv->profile_charge = NULL;
-	info->priv->profile_discharge = NULL;
+	info->priv->profile = gpm_profile_new ();
 
 	/* we use ac_adapter so we can log the event */
 	info->priv->ac_adapter = gpm_ac_adapter_new ();
@@ -745,6 +724,7 @@ gpm_info_finalize (GObject *object)
 	g_object_unref (info->priv->idle);
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->power);
+	g_object_unref (info->priv->profile);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }

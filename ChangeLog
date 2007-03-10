@@ -1,5 +1,16 @@
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-info.c: (gpm_statistics_get_data_types):
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-profile.c: (gpm_profile_get_data_file),
+	* src/gpm-profile.h:
+	Convert the GpmProfile class back into a singleton and handle both
+	charging and discharging data. We'll use less memory and resources this
+	way, and we also don't have to play horrible pointer passing games.
+
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-array.c: (gpm_array_compute_uwe_self),
 	(gpm_array_compute_uwe), (gpm_array_copy), (gpm_array_copy_append):
 	* src/gpm-array.h:

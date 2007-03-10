@@ -49,14 +49,15 @@ typedef struct
 GType			 gpm_profile_get_type			(void);
 GpmProfile		*gpm_profile_new			(void);
 
-void			 gpm_profile_activate_mode		(GpmProfile	*profile,
-								 gboolean	 is_discharging);
 gboolean		 gpm_profile_provide_data		(GpmProfile	*profile,
 								 guint		 percentage);
-GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile);
-GpmArray		*gpm_profile_get_data_accuracy_percent	(GpmProfile	*profile);
+GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile,
+								 gboolean	 discharging);
+GpmArray		*gpm_profile_get_data_accuracy_percent	(GpmProfile	*profile,
+								 gboolean	 discharging);
 guint			 gpm_profile_get_time			(GpmProfile	*profile,
-								 guint		 percentage);
+								 guint		 percentage,
+								 gboolean	 discharging);
 
 G_END_DECLS
 

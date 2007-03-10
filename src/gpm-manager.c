@@ -95,8 +95,7 @@ struct GpmManagerPrivate
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
 	GpmPower		*power;
-	GpmProfile		*profile_charge;
-	GpmProfile		*profile_discharge;
+	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmSound 		*sound;
@@ -1599,12 +1598,20 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
-	manager->priv->profile_charge = gpm_profile_new ();
-	manager->priv->profile_discharge = gpm_profile_new ();
-	gpm_profile_activate_mode (manager->priv->profile_charge, FALSE);
-	gpm_profile_activate_mode (manager->priv->profile_discharge, TRUE);
-	gpm_info_register_profile (manager->priv->info, manager->priv->profile_charge, FALSE);
-	gpm_info_register_profile (manager->priv->info, manager->priv->profile_discharge, TRUE);
+	manager->priv->profile = gpm_profile_new ();
+
+	/* do debugging self tests */
+	guint time;
+	gpm_debug ("Reference times");
+	time = gpm_profile_get_time (manager->priv->profile, 100, TRUE);
+	gpm_debug ("100-50\t%i minutes", time / 60);
+	time = gpm_profile_get_time (manager->priv->profile, 50, TRUE);
+	gpm_debug ("50-0\t%i minutes", time / 60);
+
+	time = gpm_profile_get_time (manager->priv->profile, 0, FALSE);
+	gpm_debug ("0-100\t%i minutes", time / 60);
+	time = gpm_profile_get_time (manager->priv->profile, 50, FALSE);
+	gpm_debug ("50-100\t%i minutes", time / 60);
 
 	/* add the new statistics DBUS interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
@@ -1656,8 +1663,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
 	g_object_unref (manager->priv->power);
-	g_object_unref (manager->priv->profile_charge);
-	g_object_unref (manager->priv->profile_discharge);
+	g_object_unref (manager->priv->profile);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);

@@ -24,7 +24,6 @@
 
 #include <glib-object.h>
 #include "gpm-graph-widget.h"
-#include "gpm-profile.h"
 
 G_BEGIN_DECLS
 
@@ -96,9 +95,6 @@ gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
 							 const gchar	*type,
 							 GPtrArray	**array,
 							 GError		**error);
-gboolean	 gpm_info_register_profile		(GpmInfo	*info,
-							 GpmProfile    	*profile,
-							 gboolean	 is_discharging);
 gboolean	 gpm_statistics_get_axis_types		(GpmInfo	*info,
 							 gchar		*type,
 							 gchar		**axis_type_x,
