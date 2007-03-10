@@ -183,9 +183,7 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 	const char *udi = g_object_get_data (G_OBJECT (item), "udi");
 	GpmPowerDevice *device;
 	char *msgicon;
-	char *desc;
 	char *longdesc;
-	GString *gdesc;
 
 	gpm_debug ("udi=%s", udi);
 	device = gpm_power_get_device_from_udi (icon->priv->power, udi);
@@ -193,19 +191,14 @@ gpm_tray_icon_show_info_cb (GtkMenuItem *item, gpointer data)
 		return;
 	}
 
-	msgicon = gpm_power_get_icon_from_status (&device->battery_status, device->battery_kind);
-	gdesc = gpm_power_status_for_device (device);
-	desc = g_strdup (gdesc->str);
-	g_string_free (gdesc, TRUE);
-
 	/* get long description */
-	gdesc = gpm_power_status_for_device_more (device);
-	longdesc = g_strdup (gdesc->str);
-	g_string_free (gdesc, TRUE);
-
-	gpm_notify_display (icon->priv->notify, desc, longdesc,
+	longdesc = gpm_power_status_for_device (device);
+	msgicon = gpm_power_get_icon_from_status (&device->battery_status, device->battery_kind);
+	gpm_notify_display (icon->priv->notify, _("Device information"), longdesc,
 			    GPM_NOTIFY_TIMEOUT_NEVER, msgicon,
 			    GPM_NOTIFY_URGENCY_LOW);
+	g_free (longdesc);
+	g_free (msgicon);
 }
 
 /**

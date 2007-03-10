@@ -754,18 +754,18 @@ gpm_power_get_battery_device_entry (GpmPower	 *power,
 }
 
 /**
- * gpm_power_status_for_device:
+ * gpm_power_status_for_device_more:
  * @power: This power class instance
  * @battery_kind: The type of battery, e.g. GPM_POWER_KIND_PRIMARY
  * @device_num: The device number (e.g. 1 for the second primary battery)
  *
  * Return value: A description array.
  **/
-GString *
+gchar *
 gpm_power_status_for_device (GpmPowerDevice *device)
 {
-	GString		*details;
-	GpmPowerStatus	*status;
+	GString	*details;
+	GpmPowerStatus *status;
 
 	g_return_val_if_fail (device != NULL, NULL);
 
@@ -788,30 +788,6 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
 					status->percentage_charge);
 	}
-	/* remove the last \n */
-	g_string_truncate (details, details->len-1);
-	return details;
-}
-
-/**
- * gpm_power_status_for_device_more:
- * @power: This power class instance
- * @battery_kind: The type of battery, e.g. GPM_POWER_KIND_PRIMARY
- * @device_num: The device number (e.g. 1 for the second primary battery)
- *
- * Return value: A description array.
- **/
-GString *
-gpm_power_status_for_device_more (GpmPowerDevice *device)
-{
-	GString		*details;
-	GpmPowerStatus	*status;
-
-	g_return_val_if_fail (device != NULL, NULL);
-
-	status = &device->battery_status;
-	details = g_string_new ("");
-
 	if (device->vendor) {
 		g_string_append_printf (details, "<b>%s</b> %s\n",
 					_("Vendor:"), device->vendor);
@@ -906,7 +882,8 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	}
 	/* remove the last \n */
 	g_string_truncate (details, details->len-1);
-	return details;
+	
+	return g_string_free (details, FALSE);
 }
 
 /**
