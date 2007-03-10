@@ -1,5 +1,22 @@
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c:
+	* test/Makefile.am:
+	* test/gpm-self-test.c:
+	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-common.c: (gpm_st_common):
+	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
+	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
+	* test/gpm-st-inhibit.c: (gpm_st_inhibit):
+	* test/gpm-st-main.c:
+	* test/gpm-st-main.h:
+	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	Modulalize the test program.
+
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_statistics_get_data_types):
 	* src/gpm-info.h:
 	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):

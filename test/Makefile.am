@@ -39,7 +39,16 @@ gnome_power_inhibit_test_LDADD =			\
 	$(NULL)
 
 gnome_power_self_test_SOURCES =				\
-	gpm-self-test.c					\
+	gpm-st-main.c					\
+	gpm-st-main.h					\
+	gpm-st-common.c					\
+	gpm-st-array.c					\
+	gpm-st-proxy.c					\
+	gpm-st-inhibit.c				\
+	gpm-st-hal-power.c				\
+	gpm-st-hal-device.c				\
+	gpm-st-hal-devicestore.c			\
+	gpm-st-hal-manager.c				\
 	../src/gpm-dbus-monitor.h			\
 	../src/gpm-dbus-monitor.c			\
 	../src/gpm-marshal.h				\
