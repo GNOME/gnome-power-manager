@@ -625,7 +625,7 @@ gpm_array_compute_integral (GpmArray *array, guint x1, guint x2)
 
 	value = 0;
 	gpm_debug ("computing integral from %i to %i", x1, x2);
-	for (i=x1; i < x2; i++) {
+	for (i=x1; i <= x2; i++) {
 		point = gpm_array_get (array, i);
 		value += point->y;
 	}

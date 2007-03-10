@@ -1,5 +1,14 @@
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* test/gpm-st-array.c: (gpm_st_array):
+	Add some self tests for the integration.
+
+	* src/gpm-array.c: (gpm_array_compute_integral):
+	* src/gpm-manager.c: (gpm_manager_init):
+	Fix two bugs with the integration.
+
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c: (gpm_profile_register_percentage):
 	Fix a thinko where we were checking the wrong thing.
 

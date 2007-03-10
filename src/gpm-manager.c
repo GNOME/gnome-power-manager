@@ -1603,15 +1603,15 @@ gpm_manager_init (GpmManager *manager)
 	/* do debugging self tests */
 	guint time;
 	gpm_debug ("Reference times");
-	time = gpm_profile_get_time (manager->priv->profile, 100, TRUE);
-	gpm_debug ("100-50\t%i minutes", time / 60);
+	time = gpm_profile_get_time (manager->priv->profile, 99, TRUE);
+	gpm_debug ("99-0\t%i minutes", time / 60);
 	time = gpm_profile_get_time (manager->priv->profile, 50, TRUE);
 	gpm_debug ("50-0\t%i minutes", time / 60);
 
 	time = gpm_profile_get_time (manager->priv->profile, 0, FALSE);
-	gpm_debug ("0-100\t%i minutes", time / 60);
+	gpm_debug ("0-99\t%i minutes", time / 60);
 	time = gpm_profile_get_time (manager->priv->profile, 50, FALSE);
-	gpm_debug ("50-100\t%i minutes", time / 60);
+	gpm_debug ("50-99\t%i minutes", time / 60);
 
 	/* add the new statistics DBUS interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
