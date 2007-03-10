@@ -471,6 +471,12 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 static void
 gpm_profile_init (GpmProfile *profile)
 {
+	GError *error;
+	HalGManager *hal_manager;
+	gchar **device_names;
+	gboolean ret;
+	const gchar *udi;
+
 	profile->priv = GPM_PROFILE_GET_PRIVATE (profile);
 
 	profile->priv->timer = g_timer_new ();
@@ -499,11 +505,27 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->data_valid = FALSE;
 
 	/* find, and add a single device */
-	profile->priv->hal_device = hal_gdevice_new ();
-	hal_gdevice_set_udi (profile->priv->hal_device, "/org/freedesktop/Hal/devices/acpi_BAT1");
-	hal_gdevice_watch_property_modified (profile->priv->hal_device);
-	g_signal_connect (profile->priv->hal_device, "property-modified",
-			  G_CALLBACK (hal_device_property_modified_cb), profile);
+	hal_manager = hal_gmanager_new ();
+	error = NULL;
+	ret = hal_gmanager_find_capability (hal_manager, "battery", &device_names, &error);
+	if (ret == FALSE) {
+		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
+		g_error_free (error);
+	}
+	if (device_names[0] != NULL) {
+		udi = device_names[0];
+		gpm_debug ("using %s", udi);
+		profile->priv->hal_device = hal_gdevice_new ();
+		hal_gdevice_set_udi (profile->priv->hal_device, udi);
+		hal_gdevice_watch_property_modified (profile->priv->hal_device);
+		g_signal_connect (profile->priv->hal_device, "property-modified",
+				  G_CALLBACK (hal_device_property_modified_cb), profile);
+	} else {
+		gpm_debug ("No devices of capability ac_adapter");
+	}
+
+	hal_gmanager_free_capability (device_names);
+	g_object_unref (hal_manager);
 }
 
 /**

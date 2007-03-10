@@ -1,5 +1,10 @@
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-profile.c: (gpm_profile_init):
+	Don't hardcode the UDI of my battery, try to discover it. Bodge.
+
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-array.c: (gpm_array_add):
 	Fix a crash after we try to do gpm_array_limit_x_size and then
 	gpm_array_limit_x_width and access a cached length that's invalid.
