@@ -132,7 +132,7 @@ test_common (GpmPowermanager *powermanager)
 	} else {
 		test_failed ("could not get white (%i, %i, %i)", r, g, b);
 	}
-	
+
 	/************************************************************/
 	test_title ("set red");
 	colour = gpm_rgb_to_colour (0xff, 0x00, 0x00);
@@ -174,8 +174,10 @@ static void
 test_gpm_array (GpmPowermanager *powermanager)
 {
 	GpmArray *array;
+	GpmArray *array2;
 	gboolean ret;
 	guint size;
+	guint x, y, data;
 	GpmArrayPoint *point;
 	gint svalue;
 	test_type = "GpmArray         ";
@@ -355,9 +357,48 @@ test_gpm_array (GpmPowermanager *powermanager)
 	}
 	gpm_array_print (array);
 
+	/*************** COPY TEST **********************************/
+	test_title ("test copy");
+	array2 = gpm_array_new ();
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	gpm_array_set_fixed_size (array2, 10);
+	for (i=0;i<10;i++) {
+		gpm_array_set (array, i, 2, 2, 2);
+	}
+	size = gpm_array_get_size (array2);
+	gpm_array_copy (array, array2);
+	x = gpm_array_get(array2,0)->x;
+	y = gpm_array_get(array2,9)->y;
+	data = gpm_array_get(array2,5)->data;
+	if (size == 10 && x == 2 && y == 2 && gpm_array_get(array2,5)->data == 2) {
+		test_success ("limited width X");
+	} else {
+		test_failed ("did not limit width X, size: %i (%i,%i,%i)", size, x, y, data);
+	}
+
+	/*************** UWE TEST **********************************/
+	test_title ("uniform weighted average");
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	for (i=0;i<10;i++) {
+		gpm_array_set (array, i, i, 2, 3);
+	}
+	gpm_array_compute_uwe_self (array, 5);
+	size = gpm_array_get_size (array);
+	x = gpm_array_get(array,0)->x;
+	y = gpm_array_get(array,9)->y;
+	data = gpm_array_get(array,5)->data;
+	if (size == 10 && x == 0 && y == 2 && data == 3) {
+		test_success ("averaged okay");
+	} else {
+		test_failed ("did not average okay (%i,%i,%i)", x, y, data);
+	}
+
 	/************************************************************/
 
 	g_object_unref (array);
+	g_object_unref (array2);
 }
 
 static void
@@ -688,7 +729,7 @@ test_gpm_proxy (GpmPowermanager *powermanager)
 		test_failed ("did not get valid proxy");
 	}
 
-	g_object_unref (gproxy);	
+	g_object_unref (gproxy);
 }
 
 static void

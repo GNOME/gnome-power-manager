@@ -446,6 +446,38 @@ gpm_array_compute_rate_lsrl (GpmArray	*array,
 
 	return TRUE;
 }
+
+/**
+ * gpm_array_compute_uwe_self:
+ * @array: This class instance
+ * @slew: The slew rate to be used either side of the filter.
+ *
+ * Computes the uniform wieghted average for a dataset
+ **/
+gboolean
+gpm_array_compute_uwe_self (GpmArray *array, guint slew)
+{
+	GpmArray *temp;
+	guint size;
+
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	/* create temp array */
+	size = gpm_array_get_size (array);
+	/* create an array with the same size as the target */
+	temp = gpm_array_new ();
+	gpm_array_set_fixed_size (temp, size);
+
+	/* compute average */
+	gpm_array_compute_uwe (array, temp, slew);
+	gpm_array_copy (temp, array);
+
+	/* we've used and abused the temp array, now kill it */
+	g_object_unref (temp);
+	return TRUE;
+}
+
 /**
  * gpm_array_compute_uwe:
  * @array: This class instance
@@ -494,10 +526,10 @@ gpm_array_compute_uwe (GpmArray	*array,
 			point = gpm_array_get (array, j);
 			meany += point->y;
 		}
-		meany /= (gfloat) run+1;
+		meany /= (gfloat) run;
 
 		/* do not append, just set for speed */
-		gpm_array_set (newarray, i, point->x, (guint) meany, 0);
+		gpm_array_set (newarray, i, i, (guint) meany, point->data);
 	}
 
 	return TRUE;
@@ -632,12 +664,50 @@ gpm_array_invert_value_y (GpmArray *array)
 
 /**
  * gpm_array_copy:
- * @array: This class instance
+ * @from: list to copy from
+ * @to: list to copy to
  *
- * Does 1/point->y.
+ * Lists must be the same size
+ *
  **/
 gboolean
 gpm_array_copy (GpmArray *from, GpmArray *to)
+{
+	GpmArrayPoint *point;
+	gint i;
+	guint lengthto;
+	guint lengthfrom;
+
+	g_return_val_if_fail (from != NULL, 0);
+	g_return_val_if_fail (GPM_IS_ARRAY (from), 0);
+	g_return_val_if_fail (to != NULL, 0);
+	g_return_val_if_fail (GPM_IS_ARRAY (to), 0);
+
+	lengthto = gpm_array_get_size (to);
+	lengthfrom = gpm_array_get_size (from);
+
+	/* check lengths are the same */
+	if (lengthfrom != lengthto) {
+		gpm_debug ("arrays are not the same length");
+		return FALSE;
+	}
+
+	/* just set */
+	for (i=0; i < lengthfrom; i++) {
+		point = gpm_array_get (from, i);
+		gpm_array_set (to, i, point->x, point->y, point->data);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_array_copy_append:
+ * @from: list to copy from
+ * @to: list to copy to
+ *
+ **/
+gboolean
+gpm_array_copy_append (GpmArray *from, GpmArray *to)
 {
 	GpmArrayPoint *point;
 	gint i;

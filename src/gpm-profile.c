@@ -221,12 +221,8 @@ gpm_profile_get_data_time_percent (GpmProfile *profile)
 		}
 	}
 
-/* create a temp array, smooth the data into it, and then swap the arrays */
-//GpmArray *array = gpm_array_new ();
-//gpm_array_set_fixed_size (array, 100);
-//gpm_array_compute_uwe (profile->priv->array_battery, array, 15);
-//g_object_unref (profile->priv->array_battery);
-//profile->priv->array_battery = array;
+	/* smooth data using moving average algorithm, with slew 5 */
+	gpm_array_compute_uwe_self (profile->priv->array_battery, 5);
 
 	return profile->priv->array_battery;
 }
@@ -250,10 +246,10 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile)
 		point = gpm_array_get (profile->priv->array_data, i);
 		/* only set points that are not zero */
 		if (point->data > 0) {
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_GREY);
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_RED);
 		} else {
 			/* set zero points a different colour */
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_DARK_GREY);
+			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_DARK_RED);
 		}
 	}
 
@@ -489,7 +485,7 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->dpms = gpm_dpms_new ();
 	g_signal_connect (profile->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), profile);
-	
+
 	profile->priv->array_data = gpm_array_new ();
 	profile->priv->array_accuracy = gpm_array_new ();
 	profile->priv->array_battery = gpm_array_new ();

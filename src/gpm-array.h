@@ -89,10 +89,14 @@ gboolean		 gpm_array_compute_rate_lsrl	(GpmArray	*array,
 gboolean		 gpm_array_compute_uwe		(GpmArray	*array,
 							 GpmArray	*newarray,
 							 guint		 slew);
+gboolean		 gpm_array_compute_uwe_self	(GpmArray	*array,
+							 guint		 slew);
 gboolean		 gpm_array_compute_relationship	(GpmArray	*array1,
 							 GpmArray	*array2,
 							 GpmArray	*newarray);
 gboolean		 gpm_array_copy			(GpmArray	*from,
+							 GpmArray	*to);
+gboolean		 gpm_array_copy_insert		(GpmArray	*from,
 							 GpmArray	*to);
 guint			 gpm_array_compute_integral	(GpmArray	*array,
 							 guint		 x1,

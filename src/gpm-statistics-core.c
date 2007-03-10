@@ -564,7 +564,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 				      GpmStatistics  *statistics)
 {
 	gchar *value;
-	gchar *type;
+	gchar *type = NULL;
 	GpmGraphWidgetAxisType axis_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
 	GpmGraphWidgetAxisType axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 

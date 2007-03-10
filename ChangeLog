@@ -1,5 +1,18 @@
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c: (gpm_array_compute_uwe_self),
+	(gpm_array_compute_uwe), (gpm_array_copy), (gpm_array_copy_append):
+	* src/gpm-array.h:
+	* test/gpm-self-test.c: (test_gpm_array):
+	Create some new functions to help us with the data smoothing.
+	
+	* src/gpm-profile.c: (gpm_profile_get_data_time_percent),
+	(gpm_profile_get_data_accuracy_percent):
+	* src/gpm-statistics-core.c:
+	Smooth the data we use, and report over the interface.
+
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c: (gpm_profile_init):
 	Don't hardcode the UDI of my battery, try to discover it. Bodge.
 
