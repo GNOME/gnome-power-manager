@@ -374,7 +374,7 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	if (profile->priv->discharging == TRUE) {
 		array_percentage = percentage;
 	} else {
-		if (array_percentage == 0) {
+		if (percentage == 0) {
 			gpm_debug ("ignoring percentage zero when charging");
 			return;
 		}
