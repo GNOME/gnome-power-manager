@@ -1150,6 +1150,7 @@ gpm_array_add (GpmArray *array,
 	}
 
 	/* check if we need to truncate */
+	length = gpm_array_get_size (array);
 	if (length > 2) {
 		point1 = gpm_array_get (array, 0);
 		point2 = gpm_array_get (array, length-1);

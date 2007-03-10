@@ -1,3 +1,15 @@
+2007-03-10  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-array.c: (gpm_array_add):
+	Fix a crash after we try to do gpm_array_limit_x_size and then
+	gpm_array_limit_x_width and access a cached length that's invalid.
+
+	* src/gpm-info.c: (gpm_info_register_profile):
+	* src/gpm-info.h:
+	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-profile.c: (gpm_profile_get_data_file):
+	Make the profile code work.
+
 2007-03-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-array.c: (gpm_array_compute_uwe):

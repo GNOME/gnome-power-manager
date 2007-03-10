@@ -66,12 +66,10 @@ struct GpmProfilePrivate
 	GpmArray		*array_data;
 	GpmArray		*array_accuracy;
 	GpmArray		*array_battery;
-	gboolean		 is_discharging;
+	gboolean		 monitor_discharging;
 	gboolean		 lcd_on;
 	gboolean		 data_valid;
 };
-
-static gpointer gpm_profile_object = NULL;
 
 G_DEFINE_TYPE (GpmProfile, gpm_profile, G_TYPE_OBJECT)
 
@@ -119,7 +117,7 @@ gpm_profile_get_data_file (GpmProfile *profile, const gchar *prefix)
 	const gchar *suffix;
 
 	/* use home directory */
-	if (profile->priv->is_discharging == TRUE) {
+	if (profile->priv->monitor_discharging == TRUE) {
 		suffix = "discharging.csv";
 	} else {
 		suffix = "charging.csv";
@@ -138,9 +136,18 @@ gpm_profile_get_data_file (GpmProfile *profile, const gchar *prefix)
 guint
 gpm_profile_get_time (GpmProfile *profile, guint percentage)
 {
+	guint time;
+
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
-	return 123;
+
+	if (profile->priv->monitor_discharging == TRUE) {
+		time = gpm_array_compute_integral (profile->priv->array_battery, 0, percentage);
+	} else {
+		time = gpm_array_compute_integral (profile->priv->array_battery, percentage, 99);
+	}
+
+	return time;
 }
 
 /**
@@ -176,7 +183,7 @@ gpm_profile_array_get_nonzero_average (GpmArray *array, guint value)
 
 	/* empty array */
 	if (non_zero == 0) {
-		return 0;
+		return value;
 	}
 
 	/* divide by number elements */
@@ -214,10 +221,12 @@ gpm_profile_get_data_time_percent (GpmProfile *profile)
 		}
 	}
 
-//gboolean
-//GpmArray *newarray = gpm_array_new ();
-//gpm_array_compute_uwe (profile->priv->array_battery, newarray, 15);
-//	return newarray;
+/* create a temp array, smooth the data into it, and then swap the arrays */
+//GpmArray *array = gpm_array_new ();
+//gpm_array_set_fixed_size (array, 100);
+//gpm_array_compute_uwe (profile->priv->array_battery, array, 15);
+//g_object_unref (profile->priv->array_battery);
+//profile->priv->array_battery = array;
 
 	return profile->priv->array_battery;
 }
@@ -257,11 +266,41 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile)
  * @profile: This class
  */
 void
-gpm_profile_activate_mode (GpmProfile *profile, gboolean is_discharging)
+gpm_profile_activate_mode (GpmProfile *profile, gboolean monitor_discharging)
 {
+	gboolean ret;
+	guint i;
+	gchar *filename;
+	gchar *path;
+
 	g_return_if_fail (profile != NULL);
 	g_return_if_fail (GPM_IS_PROFILE (profile));
-	profile->priv->is_discharging = is_discharging;
+	profile->priv->monitor_discharging = monitor_discharging;
+
+	/* read in data profile from disk */
+	filename = gpm_profile_get_data_file (profile, "profile-battery");
+	gpm_debug ("loading battery data from '%s'", filename);
+	ret = gpm_array_load_from_file (profile->priv->array_data, filename);
+
+	/* if not found, then generate a new one with a low propability */
+	if (ret == FALSE) {
+		/* directory might not exist */
+		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
+		g_mkdir_with_parents (path, 744);
+		g_free (path);
+
+		gpm_debug ("no data found, generating initial (poor) data");
+		for (i=0;i<100;i++) {
+			/* assume average battery lasts 2 hours, but we are 0% accurate */
+			gpm_array_set (profile->priv->array_data, i, i, SECONDS_PER_PERCENT, 0);
+		}
+
+		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
+		if (ret == FALSE) {
+			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
+		}
+	}
+	g_free (filename);
 }
 
 /**
@@ -284,16 +323,16 @@ gpm_profile_register_percentage (GpmProfile *profile,
 
 	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
 
-/*
-	if (state != GPM_AC_ADAPTER_PRESENT && data_valid == FALSE) {
+	/* check to see if we are the correct state */
+	if (state != GPM_AC_ADAPTER_PRESENT && profile->priv->monitor_discharging == FALSE) {
 		gpm_debug ("ignoring as we are monitoring charging");
 		return;
 	}
-	if (state == GPM_AC_ADAPTER_PRESENT && data_valid == TRUE) {
+	if (state == GPM_AC_ADAPTER_PRESENT && profile->priv->monitor_discharging == TRUE) {
 		gpm_debug ("ignoring as we are monitoring discharging");
 		return;
 	}
-*/
+
 	/* turn the load into a nice scaled percentage */
 	load = gpm_load_get_current (profile->priv->load);
 	if (load > 0.01) {
@@ -340,8 +379,8 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		point->y = gpm_exponential_average (point->y, data, 80);
 	}
 
-	/* save new accuracy */
-	point->data = accuracy;
+	/* save new accuracy (max gain is 20%, but less if the load was higher) */
+	point->data += accuracy / 5;
 
 	/* save data file when idle */
 	filename = gpm_profile_get_data_file (profile, "profile-battery");
@@ -432,11 +471,6 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 static void
 gpm_profile_init (GpmProfile *profile)
 {
-	gboolean ret;
-	guint i;
-	gchar *filename;
-	gchar *path;
-
 	profile->priv = GPM_PROFILE_GET_PRIVATE (profile);
 
 	profile->priv->timer = g_timer_new ();
@@ -458,33 +492,8 @@ gpm_profile_init (GpmProfile *profile)
 	gpm_array_set_fixed_size (profile->priv->array_battery, 100);
 
 	/* default */
-	profile->priv->is_discharging = TRUE;
+	profile->priv->monitor_discharging = TRUE;
 	profile->priv->lcd_on = TRUE;
-
-	/* read in data profile from disk */
-	filename = gpm_profile_get_data_file (profile, "profile-battery");
-	gpm_debug ("loading battery data from '%s'", filename);
-	ret = gpm_array_load_from_file (profile->priv->array_data, filename);
-
-	/* if not found, then generate a new one with a low propability */
-	if (ret == FALSE) {
-		/* directory might not exist */
-		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
-		g_mkdir_with_parents (path, 744);
-		g_free (path);
-
-		gpm_debug ("no data found, generating initial (poor) data");
-		for (i=0;i<100;i++) {
-			/* assume average battery lasts 2 hours, but we are 0% accurate */
-			gpm_array_set (profile->priv->array_data, i, i, SECONDS_PER_PERCENT, 0);
-		}
-
-		ret = gpm_array_save_to_file (profile->priv->array_data, filename);
-		if (ret == FALSE) {
-			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
-		}
-	}
-	g_free (filename);
 
 	/* we might be halfway through a percentage change */
 	profile->priv->data_valid = FALSE;
@@ -534,12 +543,8 @@ gpm_profile_finalize (GObject *object)
 GpmProfile *
 gpm_profile_new (void)
 {
-	if (gpm_profile_object != NULL) {
-		g_object_ref (gpm_profile_object);
-	} else {
-		gpm_profile_object = g_object_new (GPM_TYPE_PROFILE, NULL);
-		g_object_add_weak_pointer (gpm_profile_object, &gpm_profile_object);
-	}
-	return GPM_PROFILE (gpm_profile_object);
+	GpmProfile *profile;
+	profile = g_object_new (GPM_TYPE_PROFILE, NULL);
+	return GPM_PROFILE (profile);
 }
 

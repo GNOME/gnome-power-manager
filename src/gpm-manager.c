@@ -95,7 +95,8 @@ struct GpmManagerPrivate
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
 	GpmPower		*power;
-	GpmProfile		*profile;
+	GpmProfile		*profile_charge;
+	GpmProfile		*profile_discharge;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmSound 		*sound;
@@ -1521,7 +1522,6 @@ gpm_manager_init (GpmManager *manager)
 		manager->priv->done_notify_fully_charged = TRUE;
 	}
 
-	manager->priv->profile = gpm_profile_new ();
 	manager->priv->power = gpm_power_new ();
 	g_signal_connect (manager->priv->power, "battery-status-changed",
 			  G_CALLBACK (power_battery_status_changed_cb), manager);
@@ -1599,6 +1599,12 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
+	manager->priv->profile_charge = gpm_profile_new ();
+	manager->priv->profile_discharge = gpm_profile_new ();
+	gpm_profile_activate_mode (manager->priv->profile_charge, FALSE);
+	gpm_profile_activate_mode (manager->priv->profile_discharge, TRUE);
+	gpm_info_register_profile (manager->priv->info, manager->priv->profile_charge, FALSE);
+	gpm_info_register_profile (manager->priv->info, manager->priv->profile_discharge, TRUE);
 
 	/* add the new statistics DBUS interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
@@ -1650,7 +1656,8 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
 	g_object_unref (manager->priv->power);
-	g_object_unref (manager->priv->profile);
+	g_object_unref (manager->priv->profile_charge);
+	g_object_unref (manager->priv->profile_discharge);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);
