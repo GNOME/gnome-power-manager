@@ -23,6 +23,7 @@
 #define __GPM_PROFILE_H
 
 #include <glib-object.h>
+#include "gpm-array.h"
 
 G_BEGIN_DECLS
 

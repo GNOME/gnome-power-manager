@@ -37,6 +37,7 @@
 #include "gpm-battery.h"
 #include "gpm-control.h"
 #include "gpm-power.h"
+#include "gpm-profile.h"
 #include "gpm-marshal.h"
 #include "gpm-refcount.h"
 #include "gpm-ac-adapter.h"
@@ -59,6 +60,7 @@ struct GpmPowerPrivate
 	GHashTable		*battery_kind_cache;
 	GHashTable		*battery_device_cache;
 	GpmBattery		*battery;
+	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
@@ -1857,6 +1859,7 @@ gpm_power_init (GpmPower *power)
 	power->priv = GPM_POWER_GET_PRIVATE (power);
 
 	power->priv->conf = gpm_conf_new ();
+	power->priv->profile = gpm_profile_new ();
 
 	power->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (power->priv->ac_adapter, "ac-adapter-changed",
@@ -1922,22 +1925,12 @@ gpm_power_finalize (GObject *object)
 	gpm_hash_free_device_cache (power);
 
 	g_object_unref (power->priv->conf);
-
-	if (power->priv->control != NULL) {
-		g_object_unref (power->priv->control);
-	}
-	if (power->priv->hal_manager != NULL) {
-		g_object_unref (power->priv->hal_manager);
-	}
-	if (power->priv->battery != NULL) {
-		g_object_unref (power->priv->battery);
-	}
-	if (power->priv->refcount != NULL) {
-		g_object_unref (power->priv->refcount);
-	}
-	if (power->priv->ac_adapter != NULL) {
-		g_object_unref (power->priv->ac_adapter);
-	}
+	g_object_unref (power->priv->profile);
+	g_object_unref (power->priv->hal_manager);
+	g_object_unref (power->priv->ac_adapter);
+	g_object_unref (power->priv->control);
+	g_object_unref (power->priv->battery);
+	g_object_unref (power->priv->refcount);
 
 	G_OBJECT_CLASS (gpm_power_parent_class)->finalize (object);
 }

@@ -1,3 +1,14 @@
+2007-03-11  Richard Hughes  <richard@hughsie.com>
+
+	* src/dbus/gpm-dbus-manager.xml:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	Remove depricated Manager DBUS interface.
+
+	* src/gpm-power.c: (gpm_power_init), (gpm_power_finalize):
+	* src/gpm-profile.h:
+	Add in prelim profile support. Does nothing yet.
+
 2007-03-10  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c: (gpm_power_status_for_device):

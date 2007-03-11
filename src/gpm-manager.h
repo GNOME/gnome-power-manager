@@ -71,35 +71,6 @@ gboolean	 gpm_manager_get_on_ac			(GpmManager	*manager,
 gboolean	 gpm_manager_get_low_power_mode		(GpmManager	*manager,
 							 gboolean	*retval,
 							 GError		**error);
-gboolean	 gpm_manager_allowed_shutdown		(GpmManager	*manager,
-							 gboolean	*allowed,
-							 GError		**error);
-gboolean	 gpm_manager_allowed_reboot		(GpmManager	*manager,
-							 gboolean	*allowed,
-							 GError		**error);
-gboolean	 gpm_manager_allowed_suspend		(GpmManager	*manager,
-							 gboolean	*allowed,
-							 GError		**error);
-gboolean	 gpm_manager_allowed_hibernate		(GpmManager	*manager,
-							 gboolean	*allowed,
-							 GError		**error);
-gboolean	 gpm_manager_suspend_dbus_method	(GpmManager	*manager,
-							 GError		**error);
-gboolean	 gpm_manager_hibernate_dbus_method	(GpmManager	*manager,
-							 GError		**error);
-gboolean	 gpm_manager_shutdown_dbus_method	(GpmManager	*manager,
-						 	 GError		**error);
-gboolean	 gpm_manager_reboot_dbus_method		(GpmManager	*manager,
-						 	 GError		**error);
-void		 gpm_manager_inhibit			(GpmManager	*manager,
-						   	 const gchar	*application,
-							 const gchar	*reason,
-							 DBusGMethodInvocation *context,
-							 GError		**error);
-void		 gpm_manager_uninhibit			(GpmManager	*manager,
-						 	 guint32	 cookie,
-				   			 DBusGMethodInvocation *context,
-				   			 GError		**error);
 
 G_END_DECLS
 
