@@ -173,3 +173,23 @@ gpm_cell_unit_get_icon (GpmCellUnit *unit)
 	return filename;
 }
 
+/**
+ * gpm_cell_unit_set_measure:
+ **/
+gboolean
+gpm_cell_unit_set_measure (GpmCellUnit *unit)
+{
+	g_return_val_if_fail (unit != NULL, FALSE);
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		/* true as not reporting, but charge_level */
+		unit->measure = GPM_CELL_UNIT_MWH;
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
+		/* is this always correct? */
+		unit->measure = GPM_CELL_UNIT_PERCENT;
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE ||
+		   unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+		unit->measure = GPM_CELL_UNIT_CSR;
+	}
+	return TRUE;
+}
+

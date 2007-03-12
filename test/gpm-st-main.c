@@ -101,6 +101,7 @@ main (int argc, char **argv)
 	gpm_st_hal_device (test);
 	gpm_st_hal_devicestore (test);
 	gpm_st_cell_unit (test);
+	gpm_st_cell (test);
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);
 	if (test->succeeded == test->total) {

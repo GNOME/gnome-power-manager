@@ -1,5 +1,24 @@
 2007-03-12  Richard Hughes  <richard@hughsie.com>
 
+	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
+	* src/gpm-cell-unit.c: (gpm_cell_unit_set_measure):
+	* src/gpm-cell-unit.h:
+	Create a new function to set the measurement unit.
+
+	* src/gpm-profile.c:
+	Make the graphs smoother, and put into a constant value.
+
+	* src/gpm-cell.c:
+	* src/gpm-cell.h:
+	* src/gpm-marshal.list:
+	* test/Makefile.am:
+	* test/gpm-st-cell.c: (gpm_st_cell):
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-main.h:
+	Add GpmCell, a generic class for a single battery object.
+
+2007-03-12  Richard Hughes  <richard@hughsie.com>
+
 	* test/Makefile.am:
 	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
 	* test/gpm-st-main.c: (main):

@@ -54,7 +54,10 @@ static void     gpm_profile_finalize   (GObject	       *object);
 #define GPM_PROFILE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PROFILE, GpmProfilePrivate))
 
 /* assume an average of 2 hour battery life */
-#define SECONDS_PER_PERCENT 72
+#define GPM_PROFILE_SECONDS_PER_PERCENT		72
+
+/* nicely smoothed, but still pretty fast */
+#define GPM_PROFILE_SMOOTH_SLEW_RATE		8
 
 struct GpmProfilePrivate
 {
@@ -199,7 +202,7 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 	array = gpm_profile_get_data_array (profile, discharge);
 
 	/* get the average not including the default */
-	average = gpm_profile_array_get_nonzero_average (array, SECONDS_PER_PERCENT);
+	average = gpm_profile_array_get_nonzero_average (array, GPM_PROFILE_SECONDS_PER_PERCENT);
 
 	/* copy the y data field into the y battery field */
 	for (i=0; i<100; i++) {
@@ -213,8 +216,8 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 		}
 	}
 
-	/* smooth data using moving average algorithm, with slew 5 */
-	gpm_array_compute_uwe_self (profile->priv->array_battery, 5);
+	/* smooth data using moving average algorithm */
+	gpm_array_compute_uwe_self (profile->priv->array_battery, GPM_PROFILE_SMOOTH_SLEW_RATE);
 }
 
 /**
@@ -244,8 +247,8 @@ gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
 		}
 	}
 
-	/* smooth data using moving average algorithm, with slew 5 */
-	gpm_array_compute_uwe_self (profile->priv->array_accuracy, 5);
+	/* smooth data using moving average algorithm */
+	gpm_array_compute_uwe_self (profile->priv->array_accuracy, GPM_PROFILE_SMOOTH_SLEW_RATE);
 }
 
 /**
@@ -515,7 +518,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		gpm_debug ("no data found, generating initial (poor) data");
 		for (i=0;i<100;i++) {
 			/* assume average battery lasts 2 hours, but we are 0% accurate */
-			gpm_array_set (array, i, i, SECONDS_PER_PERCENT, 0);
+			gpm_array_set (array, i, i, GPM_PROFILE_SECONDS_PER_PERCENT, 0);
 		}
 
 		ret = gpm_array_save_to_file (array, filename);

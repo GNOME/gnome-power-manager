@@ -30,8 +30,16 @@ typedef enum {
 	GPM_CELL_UNIT_KIND_PDA,
 } GpmCellUnitKind;
 
+typedef enum {
+	GPM_CELL_UNIT_MWH,
+	GPM_CELL_UNIT_CSR,
+	GPM_CELL_UNIT_PERCENT,
+	GPM_CELL_UNIT_UNKNOWN,
+} GpmCellUnitMeasure;
+
 typedef struct {
 	GpmCellUnitKind	 kind;
+	GpmCellUnitMeasure measure;
 	guint		 charge_design;
 	guint		 charge_last_full;
 	guint		 charge_current;
@@ -50,6 +58,7 @@ typedef struct {
 gboolean	 gpm_cell_unit_init		(GpmCellUnit	*unit);
 gchar		*gpm_cell_unit_get_icon		(GpmCellUnit	*unit);
 gboolean	 gpm_cell_unit_is_charged	(GpmCellUnit	*unit);
+gboolean	 gpm_cell_unit_set_measure	(GpmCellUnit	*unit);
 
 #endif	/* __GPMCELLUNIT_H */
 

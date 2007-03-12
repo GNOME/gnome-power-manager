@@ -122,5 +122,14 @@ gpm_st_cell_unit (GpmSelfTest *test)
 		gpm_st_failed (test, "icon not correct: %s", value);
 	}
 	g_free (value);
+	
+	/************************************************************/
+	gpm_st_title (test, "setting measure");
+	gpm_cell_unit_set_measure (unit);
+	if (unit->measure == GPM_CELL_UNIT_MWH) {
+		gpm_st_success (test, "measure correct");
+	} else {
+		gpm_st_failed (test, "measre not correct: %s", unit->measure);
+	}
 }
 
