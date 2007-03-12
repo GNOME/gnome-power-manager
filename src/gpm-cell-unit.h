@@ -19,26 +19,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <glib.h>
+#ifndef __GPMCELLUNIT_H
+#define __GPMCELLUNIT_H
 
-typedef struct
-{
-	guint	total;
-	guint	succeeded;
-	gchar  *type;
-} GpmSelfTest;
+typedef enum {
+	GPM_CELL_UNIT_KIND_PRIMARY,
+	GPM_CELL_UNIT_KIND_UPS,
+	GPM_CELL_UNIT_KIND_MOUSE,
+	GPM_CELL_UNIT_KIND_KEYBOARD,
+	GPM_CELL_UNIT_KIND_PDA,
+} GpmCellUnitKind;
 
-void gpm_st_title (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_success (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);
+typedef struct {
+	GpmCellUnitKind	 kind;
+	guint		 charge_design;
+	guint		 charge_last_full;
+	guint		 charge_current;
+	guint		 rate;
+	guint		 percentage;
+	guint		 time_charge;
+	guint		 time_discharge;
+	guint		 capacity;
+	guint		 voltage;
+	gboolean	 is_rechargeable;
+	gboolean	 is_present;
+	gboolean	 is_charging;
+	gboolean	 is_discharging;
+} GpmCellUnit;
 
-void gpm_st_common (GpmSelfTest *test);
-void gpm_st_array (GpmSelfTest *test);
-void gpm_st_cell_unit (GpmSelfTest *test);
-void gpm_st_proxy (GpmSelfTest *test);
-void gpm_st_inhibit (GpmSelfTest *test);
-void gpm_st_hal_device (GpmSelfTest *test);
-void gpm_st_hal_devicestore (GpmSelfTest *test);
-void gpm_st_hal_power (GpmSelfTest *test);
-void gpm_st_hal_manager (GpmSelfTest *test);
+gboolean	 gpm_cell_unit_init		(GpmCellUnit	*unit);
+gchar		*gpm_cell_unit_get_icon		(GpmCellUnit	*unit);
+gboolean	 gpm_cell_unit_is_charged	(GpmCellUnit	*unit);
+
+#endif	/* __GPMCELLUNIT_H */
 

@@ -43,6 +43,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-main.h					\
 	gpm-st-common.c					\
 	gpm-st-array.c					\
+	gpm-st-cell-unit.c				\
 	gpm-st-proxy.c					\
 	gpm-st-inhibit.c				\
 	gpm-st-hal-power.c				\
@@ -53,6 +54,8 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-dbus-monitor.c			\
 	../src/gpm-marshal.h				\
 	../src/gpm-marshal.c				\
+	../src/gpm-cell-unit.h				\
+	../src/gpm-cell-unit.c				\
 	../src/gpm-array.h				\
 	../src/gpm-array.c				\
 	../src/gpm-common.h				\

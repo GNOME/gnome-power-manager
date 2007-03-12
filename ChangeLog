@@ -1,3 +1,17 @@
+2007-03-12  Richard Hughes  <richard@hughsie.com>
+
+	* test/Makefile.am:
+	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-main.h:
+	* src/gpm-cell-unit.c:
+	* src/gpm-cell-unit.h:
+	GpmPower and GpmBattery confuse me greatly. I'll be abstracting these
+	out in the next few days into GpmCellUnit, GpmCell and GpmCellAray,
+	which hopefully will be easier to read.
+	Add the GpmCellUnit helper, and unit tests for now, but nothing
+	uses it yet, so no worries.
+
 2007-03-11  Richard Hughes  <richard@hughsie.com>
 
 	* src/dbus/gpm-dbus-manager.xml:
