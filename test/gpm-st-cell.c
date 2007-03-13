@@ -24,6 +24,14 @@
 
 #include "../src/gpm-cell.h"
 
+guint recall_count = 0;
+
+static void
+gpm_cell_perhaps_recall_cb (GpmCell *cell, gchar *oem_vendor, gchar *website, gpointer data)
+{
+	recall_count++;
+}
+
 void
 gpm_st_cell (GpmSelfTest *test)
 {
@@ -36,6 +44,8 @@ gpm_st_cell (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null cell");
 	cell = gpm_cell_new ();
+	g_signal_connect (cell, "perhaps-recall",
+			  G_CALLBACK (gpm_cell_perhaps_recall_cb), NULL);
 	if (cell != NULL) {
 		gpm_st_success (test, "got GpmCell");
 	} else {
@@ -70,7 +80,15 @@ gpm_st_cell (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a null description for set cell");
+	gpm_st_title (test, "make sure we got a single recall notice");
+	if (recall_count == 1) {
+		gpm_st_success (test, "got recall");
+	} else {
+		gpm_st_failed (test, "did not get recall (install fdi?)");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a full description for set cell");
 	desc = gpm_cell_get_description (cell);
 	if (desc != NULL) {
 		gpm_st_success (test, "got description %s", desc);

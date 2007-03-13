@@ -73,6 +73,7 @@ struct GpmProfilePrivate
 	gboolean		 discharging;
 	gboolean		 lcd_on;
 	gboolean		 data_valid;
+	guint			 last_percentage;
 };
 
 static gpointer gpm_profile_object = NULL;
@@ -385,6 +386,10 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	}
 	point = gpm_array_get (array, array_percentage);
 
+	/* save the last valid percent so we can cope with batteries that
+	   stop charging at < 100% */
+	profile->priv->last_percentage = array_percentage;
+
 	/* if we have no data, then just use the new value */
 	if (point->y == 0) {
 		point->y = data;
@@ -400,6 +405,34 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	filename = gpm_profile_get_data_file (profile, "profile-battery", profile->priv->discharging);
 	gpm_array_save_to_file (array, filename);
 	g_free (filename);
+}
+
+/**
+ * gpm_profile_register_charging:
+ */
+static void
+gpm_profile_register_charging (GpmProfile *profile,
+			       gboolean    is_charging)
+{
+	guint i;
+	if (is_charging == TRUE) {
+		/* uninteresting case */
+		return;
+	}
+	if (profile->priv->discharging == TRUE) {
+		/* normal case, the ac_adapter has been removed half way
+		   through charging, and we really don't care */
+		return;
+	}
+	/* for batteries that stop charging before they
+	   get to 100% we have to set the last charging
+	   values to zero for the correct rates. */
+	if (profile->priv->last_percentage != 100) {
+		for (i=profile->priv->last_percentage; i<100; i++) {
+			gpm_profile_register_percentage (profile, i);
+			gpm_debug ("set percentage %i to zero", i);
+		}
+	}
 }
 
 /**
@@ -423,6 +456,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 {
 	const gchar *udi = hal_gdevice_get_udi (device);
 	guint percentage;
+	gboolean is_charging;
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
@@ -434,6 +468,10 @@ hal_device_property_modified_cb (HalGDevice   *device,
 	if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_gdevice_get_uint (device, key, &percentage, NULL);
 		gpm_profile_register_percentage (profile, percentage);
+	}
+	if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
+		hal_gdevice_get_bool (device, key, &is_charging, NULL);
+		gpm_profile_register_charging(profile, is_charging);
 	}
 }
 
@@ -569,6 +607,7 @@ gpm_profile_init (GpmProfile *profile)
 
 	/* default */
 	profile->priv->lcd_on = TRUE;
+	profile->priv->last_percentage = 100;
 
 	/* we might be halfway through a percentage change */
 	profile->priv->data_valid = FALSE;

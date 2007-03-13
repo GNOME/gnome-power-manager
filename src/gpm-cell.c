@@ -60,7 +60,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint	     signals [LAST_SIGNAL] = { 0, };
+static guint signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmCell, gpm_cell, G_TYPE_OBJECT)
 
@@ -510,7 +510,7 @@ gpm_cell_get_description (GpmCell *cell)
 	}
 	/* remove the last \n */
 	g_string_truncate (details, details->len-1);
-	
+
 	return g_string_free (details, FALSE);
 }
 

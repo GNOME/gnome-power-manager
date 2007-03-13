@@ -1,5 +1,17 @@
 2007-03-13  Richard Hughes  <richard@hughsie.com>
 
+	* docs/calculate-video-fdi.sh:
+	Remove file, we don't need this data anymore.
+
+	* src/gpm-profile.c:
+	Correctly profile batteries that stop charging before they get to
+	100%.
+
+	* test/gpm-st-cell.c: (gpm_cell_perhaps_recall_cb), (gpm_st_cell):
+	Test to see if the recall notifier was called.
+
+2007-03-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-unit.c (gpm_cell_unit_get_kind_localised):
 	* src/gpm-cell-unit.h:
 	* test/gpm-st-cell-unit.c (gpm_st_cell_unit):
