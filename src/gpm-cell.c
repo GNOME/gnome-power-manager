@@ -384,6 +384,21 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind type, const gchar *udi)
 }
 
 /**
+ * gpm_cell_get_icon:
+ **/
+gchar *
+gpm_cell_get_icon (GpmCell *cell)
+{
+	GpmCellUnit *unit;
+
+	g_return_val_if_fail (cell != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
+
+	unit = &(cell->priv->unit);
+	return gpm_cell_unit_get_icon (unit);
+}
+
+/**
  * gpm_cell_get_description:
  **/
 gchar *
