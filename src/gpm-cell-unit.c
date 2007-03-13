@@ -64,7 +64,7 @@ gpm_cell_unit_print (GpmCellUnit *unit)
 {
 	g_return_val_if_fail (unit != NULL, FALSE);
 
-	gpm_debug ("device         %s", gpm_cell_unit_get_kind_localised (unit));
+	gpm_debug ("device         %s", gpm_cell_unit_get_kind_localised (unit, FALSE));
 	gpm_debug ("present        %i", unit->is_present);
 	gpm_debug ("percent        %i", unit->percentage);
 	gpm_debug ("is charging    %i", unit->is_charging);
@@ -211,24 +211,40 @@ gpm_cell_unit_set_measure (GpmCellUnit *unit)
  * gpm_cell_unit_get_localised_kind:
  **/
 const gchar *
-gpm_cell_unit_get_kind_localised (GpmCellUnit *unit)
+gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 {
-	const gchar *str;
+	const gchar *str = NULL;
 
 	g_return_val_if_fail (unit != NULL, NULL);
 
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
- 		str = _("Laptop battery");
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
- 		str = _("UPS");
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
- 		str = _("Wireless mouse");
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
- 		str = _("Wireless keyboard");
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
- 		str = _("PDA");
- 	} else {
- 		str = _("Unknown");
+	if (plural == TRUE) {
+		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	 		str = _("Laptop batteries");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
+	 		str = _("UPSs");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
+	 		str = _("Wireless mice");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+	 		str = _("Wireless keyboards");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
+	 		str = _("PDAs");
+	 	} else {
+	 		str = _("Unknown");
+		}
+	} else {
+		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+	 		str = _("Laptop battery");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
+	 		str = _("UPS");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
+	 		str = _("Wireless mouse");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+	 		str = _("Wireless keyboard");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
+	 		str = _("PDA");
+	 	} else {
+	 		str = _("Unknown");
+		}
 	}
 	return str;
 }

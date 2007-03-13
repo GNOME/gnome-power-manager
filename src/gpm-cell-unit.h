@@ -63,7 +63,8 @@ gboolean	 gpm_cell_unit_set_measure	(GpmCellUnit	*unit);
 gboolean	 gpm_cell_unit_set_kind		(GpmCellUnit	*unit,
 						 const gchar	*kind);
 const gchar	*gpm_cell_unit_get_kind_string	(GpmCellUnit	*unit);
-const gchar	*gpm_cell_unit_get_kind_localised (GpmCellUnit	*unit);
+const gchar	*gpm_cell_unit_get_kind_localised (GpmCellUnit	*unit,
+						 gboolean	 plural);
 
 #endif	/* __GPMCELLUNIT_H */
 

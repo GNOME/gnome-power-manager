@@ -68,9 +68,18 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure localised type is okay");
-	cvalue = gpm_cell_unit_get_kind_localised (unit);
+	gpm_st_title (test, "make sure single localised type is okay");
+	cvalue = gpm_cell_unit_get_kind_localised (unit, FALSE);
 	if (strcmp (cvalue, "Laptop battery") == 0) {
+		gpm_st_success (test, "localised type okay");
+	} else {
+		gpm_st_failed (test, "localised type not okay: %s", cvalue);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure plural localised type is okay");
+	cvalue = gpm_cell_unit_get_kind_localised (unit, TRUE);
+	if (strcmp (cvalue, "Laptop batteries") == 0) {
 		gpm_st_success (test, "localised type okay");
 	} else {
 		gpm_st_failed (test, "localised type not okay: %s", cvalue);
