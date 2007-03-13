@@ -28,6 +28,7 @@
 #include <libhal-gdevice.h>
 
 #include "gpm-common.h"
+#include "gpm-profile.h"
 #include "gpm-marshal.h"
 #include "gpm-cell.h"
 #include "gpm-cell-unit.h"
@@ -43,6 +44,7 @@ struct GpmCellPrivate
 {
 	HalGDevice	*hal_device;
 	GpmCellUnit	 unit;
+	GpmProfile	*profile;
 	gchar		*product;
 	gchar		*vendor;
 	gchar		*technology;
@@ -85,13 +87,21 @@ guint
 gpm_cell_get_time_discharge (GpmCell *cell)
 {
 	GpmCellUnit *unit;
+	guint time;
 
 	g_return_val_if_fail (cell != NULL, 0);
 	g_return_val_if_fail (GPM_IS_CELL (cell), 0);
 
 	unit = &(cell->priv->unit);
 
-	return unit->time_discharge;
+	/* primary has special profiling class */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		time = gpm_profile_get_time (cell->priv->profile, unit->percentage, TRUE);
+	} else {
+		time = unit->time_discharge;
+	}
+
+	return time;
 }
 
 /**
@@ -101,13 +111,21 @@ guint
 gpm_cell_get_time_charge (GpmCell *cell)
 {
 	GpmCellUnit *unit;
+	guint time;
 
 	g_return_val_if_fail (cell != NULL, 0);
 	g_return_val_if_fail (GPM_IS_CELL (cell), 0);
 
 	unit = &(cell->priv->unit);
 
-	return unit->time_charge;
+	/* primary has special profiling class */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		time = gpm_profile_get_time (cell->priv->profile, unit->percentage, FALSE);
+	} else {
+		time = unit->time_charge;
+	}
+
+	return time;
 }
 
 /**
@@ -352,19 +370,9 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind type, const gchar *udi)
 		return FALSE;
 	}
 
-	if (strcmp (battery_kind_str, "primary") == 0) {
-		unit->kind = GPM_CELL_UNIT_KIND_PRIMARY;
-	} else if (strcmp (battery_kind_str, "ups") == 0) {
-		unit->kind = GPM_CELL_UNIT_KIND_UPS;
-	} else if (strcmp (battery_kind_str, "keyboard") == 0) {
-		unit->kind = GPM_CELL_UNIT_KIND_KEYBOARD;
-	} else if (strcmp (battery_kind_str, "mouse") == 0) {
-		unit->kind = GPM_CELL_UNIT_KIND_MOUSE;
-	} else if (strcmp (battery_kind_str, "pda") == 0) {
-		unit->kind = GPM_CELL_UNIT_KIND_PDA;
-	} else {
-		gpm_warning ("battery type %s unknown",
-			   battery_kind_str);
+	ret = gpm_cell_unit_set_kind (unit, battery_kind_str);
+	if (ret == FALSE) {
+		gpm_warning ("battery type %s unknown", battery_kind_str);
 		g_free (battery_kind_str);
 		return FALSE;
 	}
@@ -567,6 +575,7 @@ gpm_cell_init (GpmCell *cell)
 	cell->priv = GPM_CELL_GET_PRIVATE (cell);
 
 	cell->priv->hal_device = hal_gdevice_new ();
+	cell->priv->profile = gpm_profile_new ();
 	cell->priv->product = NULL;
 	cell->priv->vendor = NULL;
 	cell->priv->technology = NULL;
@@ -594,6 +603,7 @@ gpm_cell_finalize (GObject *object)
 	g_free (cell->priv->technology);
 	g_free (cell->priv->serial);
 	g_free (cell->priv->model);
+	g_object_unref (cell->priv->profile);
 	g_object_unref (cell->priv->hal_device);
 }
 

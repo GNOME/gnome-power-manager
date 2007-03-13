@@ -57,6 +57,30 @@ gpm_cell_unit_init (GpmCellUnit *unit)
 }
 
 /**
+ * gpm_unit_print:
+ **/
+gboolean
+gpm_cell_unit_print (GpmCellUnit *unit)
+{
+	g_return_val_if_fail (unit != NULL, FALSE);
+
+	gpm_debug ("device         %s", gpm_cell_unit_get_kind_localised (unit));
+	gpm_debug ("present        %i", unit->is_present);
+	gpm_debug ("percent        %i", unit->percentage);
+	gpm_debug ("is charging    %i", unit->is_charging);
+	gpm_debug ("is discharging %i", unit->is_discharging);
+	gpm_debug ("charge current %i", unit->charge_current);
+	gpm_debug ("charge last    %i", unit->charge_last_full);
+	gpm_debug ("charge design  %i", unit->charge_design);
+	gpm_debug ("rate           %i", unit->rate);
+	gpm_debug ("time charge    %i", unit->time_charge);
+	gpm_debug ("time discharge %i", unit->time_discharge);
+	gpm_debug ("capacity       %i", unit->capacity);
+	gpm_debug ("voltage        %i", unit->voltage);
+	return TRUE;
+}
+
+/**
  * gpm_cell_unit_get_icon_index:
  * @percent: The charge of the device
  *
@@ -124,19 +148,8 @@ gpm_cell_unit_get_icon (GpmCellUnit *unit)
 
 	g_return_val_if_fail (unit != NULL, NULL);
 
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
- 		prefix = "primary";
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
- 		prefix = "ups";
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
- 		prefix = "mouse";
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
- 		prefix = "keyboard";
-	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
- 		prefix = "pda";
- 	} else {
- 		g_error ("unknown type");
-	}
+	/* get correct icon prefix */
+	prefix = gpm_cell_unit_get_kind_string (unit);
 
 	/* get the icon from some simple rules */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY ||
@@ -180,6 +193,7 @@ gboolean
 gpm_cell_unit_set_measure (GpmCellUnit *unit)
 {
 	g_return_val_if_fail (unit != NULL, FALSE);
+
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		/* true as not reporting, but charge_level */
 		unit->measure = GPM_CELL_UNIT_MWH;
@@ -191,5 +205,86 @@ gpm_cell_unit_set_measure (GpmCellUnit *unit)
 		unit->measure = GPM_CELL_UNIT_CSR;
 	}
 	return TRUE;
+}
+
+/**
+ * gpm_cell_unit_get_localised_kind:
+ **/
+const gchar *
+gpm_cell_unit_get_kind_localised (GpmCellUnit *unit)
+{
+	const gchar *str;
+
+	g_return_val_if_fail (unit != NULL, NULL);
+
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+ 		str = _("Laptop battery");
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
+ 		str = _("UPS");
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
+ 		str = _("Wireless mouse");
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+ 		str = _("Wireless keyboard");
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
+ 		str = _("PDA");
+ 	} else {
+ 		str = _("Unknown");
+	}
+	return str;
+}
+
+/**
+ * gpm_cell_unit_get_kind_string:
+ **/
+const gchar *
+gpm_cell_unit_get_kind_string (GpmCellUnit *unit)
+{
+	const gchar *str;
+
+	g_return_val_if_fail (unit != NULL, NULL);
+
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+ 		str = "primary";
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS) {
+ 		str = "ups";
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE) {
+ 		str = "mouse";
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+ 		str = "keyboard";
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
+ 		str = "pda";
+ 	} else {
+ 		str = "unknown";
+	}
+	return str;
+}
+
+/**
+ * gpm_cell_unit_set_kind:
+ **/
+gboolean
+gpm_cell_unit_set_kind (GpmCellUnit *unit, const gchar *kind)
+{
+	g_return_val_if_fail (unit != NULL, FALSE);
+
+	if (strcmp (kind, "primary") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_PRIMARY;
+		return TRUE;
+	} else if (strcmp (kind, "ups") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_UPS;
+		return TRUE;
+	} else if (strcmp (kind, "keyboard") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_KEYBOARD;
+		return TRUE;
+	} else if (strcmp (kind, "mouse") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_MOUSE;
+		return TRUE;
+	} else if (strcmp (kind, "pda") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_PDA;
+		return TRUE;
+	}
+
+	gpm_warning ("battery type %s unknown", kind);
+	return FALSE;
 }
 

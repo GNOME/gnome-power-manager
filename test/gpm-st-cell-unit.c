@@ -31,15 +31,24 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	GpmCellUnit unit_d;
 	GpmCellUnit *unit = &unit_d;
 	gchar *value;
+	const gchar *cvalue;
 	gboolean ret;
 	test->type = "GpmCellUnit      ";
 
 	gpm_cell_unit_init (unit);
 
 	/************************************************************/
+	gpm_st_title (test, "make sure hal type set correct");
+	gpm_cell_unit_set_kind (unit, "primary");
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		gpm_st_success (test, "type correct");
+	} else {
+		gpm_st_failed (test, "type incorrect");
+	}
+
+	/************************************************************/
 	gpm_st_title (test, "make sure full battery isn't charged");
 	unit->percentage = 100;
-	unit->kind = GPM_CELL_UNIT_KIND_PRIMARY;
 	unit->is_charging = FALSE;
 	unit->is_discharging = TRUE;
 	ret = gpm_cell_unit_is_charged (unit);
@@ -47,6 +56,24 @@ gpm_st_cell_unit (GpmSelfTest *test)
 		gpm_st_success (test, "not charged");
 	} else {
 		gpm_st_failed (test, "declaring charged");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure string type is okay");
+	cvalue = gpm_cell_unit_get_kind_string (unit);
+	if (strcmp (cvalue, "primary") == 0) {
+		gpm_st_success (test, "string type okay");
+	} else {
+		gpm_st_failed (test, "string type not okay: %s", cvalue);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure localised type is okay");
+	cvalue = gpm_cell_unit_get_kind_localised (unit);
+	if (strcmp (cvalue, "Laptop battery") == 0) {
+		gpm_st_success (test, "localised type okay");
+	} else {
+		gpm_st_failed (test, "localised type not okay: %s", cvalue);
 	}
 
 	/************************************************************/

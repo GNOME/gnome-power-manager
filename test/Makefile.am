@@ -55,6 +55,14 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-dbus-monitor.c			\
 	../src/gpm-marshal.h				\
 	../src/gpm-marshal.c				\
+	../src/gpm-profile.h				\
+	../src/gpm-profile.c				\
+	../src/gpm-load.h				\
+	../src/gpm-load.c				\
+	../src/gpm-dpms.h				\
+	../src/gpm-dpms.c				\
+	../src/gpm-ac-adapter.h				\
+	../src/gpm-ac-adapter.c				\
 	../src/gpm-cell.h				\
 	../src/gpm-cell.c				\
 	../src/gpm-cell-unit.h				\

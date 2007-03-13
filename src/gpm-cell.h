@@ -64,6 +64,8 @@ GpmCellUnit	*gpm_cell_get_unit			(GpmCell	*cell);
 gboolean	 gpm_cell_set_type			(GpmCell	*cell,
 							 GpmCellUnitKind type,
 							 const gchar	*udi);
+guint		 gpm_cell_get_time_charge		(GpmCell	*cell);
+guint		 gpm_cell_get_time_discharge		(GpmCell	*cell);
 gchar		*gpm_cell_get_description		(GpmCell	*cell);
 
 G_END_DECLS
