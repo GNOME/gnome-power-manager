@@ -75,8 +75,25 @@ main (int argc, char **argv)
 	GOptionContext  *context;
  	GnomeProgram    *program;
 	int retval;
+	gboolean interactive = FALSE;
+	gboolean automatic = FALSE;
+	gboolean debug = FALSE;
+	gboolean all = FALSE;
+
+	const GOptionEntry options[] = {
+		{ "interactive", '\0', 0, G_OPTION_ARG_NONE, &interactive,
+		  N_("Run only the interactive tests"), NULL },
+		{ "automatic", '\0', 0, G_OPTION_ARG_NONE, &automatic,
+		  N_("Run only the automatic tests"), NULL },
+		{ "debug", '\0', 0, G_OPTION_ARG_NONE, &debug,
+		  N_("Show extra debugging information"), NULL },
+		{ "all", '\0', 0, G_OPTION_ARG_NONE, &all,
+		  N_("Run all available tests"), NULL },
+		{ NULL}
+	};
 
 	context = g_option_context_new ("GNOME Power Manager Self Test");
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
 			    argc, argv,
 			    GNOME_PROGRAM_STANDARD_PROPERTIES,
@@ -84,7 +101,7 @@ main (int argc, char **argv)
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
 			    "Power Inhibit Test",
 			    NULL);
-	gpm_debug_init (FALSE);
+	gpm_debug_init (debug);
 
 	GpmSelfTest ttest;
 	GpmSelfTest *test = &ttest;
@@ -92,17 +109,26 @@ main (int argc, char **argv)
 	test->succeeded = 0;
 	test->type = NULL;
 
-	gpm_st_common (test);
-	gpm_st_array (test);
-	gpm_st_inhibit (test);
-	gpm_st_proxy (test);
-	gpm_st_hal_power (test);
-	gpm_st_hal_manager (test);
-	gpm_st_hal_device (test);
-	gpm_st_hal_devicestore (test);
-	gpm_st_cell_unit (test);
-	gpm_st_cell (test);
-	gpm_st_cell_array (test);
+	/* default to all for no options */
+	if (automatic == FALSE && interactive == FALSE && all == FALSE) {
+		g_print ("*** You need to specify some options! ***\n");
+		all = TRUE;
+	}
+	if (automatic == TRUE || all == TRUE) {
+		gpm_st_common (test);
+		gpm_st_array (test);
+		gpm_st_inhibit (test);
+		gpm_st_proxy (test);
+		gpm_st_hal_power (test);
+		gpm_st_hal_manager (test);
+		gpm_st_hal_device (test);
+		gpm_st_hal_devicestore (test);
+	}
+	if (interactive == TRUE || all == TRUE) {
+		gpm_st_cell_unit (test);
+		gpm_st_cell (test);
+		gpm_st_cell_array (test);
+	}
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);
 	if (test->succeeded == test->total) {

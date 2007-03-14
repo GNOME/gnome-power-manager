@@ -1,5 +1,14 @@
 2007-03-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-profile.c:
+	Fix the battery charged before 100% case, as it was being marked as
+	invalid.
+
+	* test/gpm-st-main.c: (main):
+	Add command line arguments for the type of tests to be run.
+
+2007-03-14  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c: (gpm_profile_register_percentage):
 	Only allow accuracy to get to 100%
 

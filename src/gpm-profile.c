@@ -57,7 +57,8 @@ static void     gpm_profile_finalize   (GObject	       *object);
 #define GPM_PROFILE_SECONDS_PER_PERCENT		72
 
 /* nicely smoothed, but still pretty fast */
-#define GPM_PROFILE_SMOOTH_SLEW_RATE		8
+#define GPM_PROFILE_SMOOTH_VIEW_SLEW		8
+#define GPM_PROFILE_SMOOTH_SAVE_PERCENT		80
 
 struct GpmProfilePrivate
 {
@@ -218,7 +219,7 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 	}
 
 	/* smooth data using moving average algorithm */
-	gpm_array_compute_uwe_self (profile->priv->array_battery, GPM_PROFILE_SMOOTH_SLEW_RATE);
+	gpm_array_compute_uwe_self (profile->priv->array_battery, GPM_PROFILE_SMOOTH_VIEW_SLEW);
 }
 
 /**
@@ -249,7 +250,7 @@ gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
 	}
 
 	/* smooth data using moving average algorithm */
-	gpm_array_compute_uwe_self (profile->priv->array_accuracy, GPM_PROFILE_SMOOTH_SLEW_RATE);
+	gpm_array_compute_uwe_self (profile->priv->array_accuracy, GPM_PROFILE_SMOOTH_VIEW_SLEW);
 }
 
 /**
@@ -316,6 +317,43 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 
 
 /**
+ * gpm_profile_save_percentage:
+ *
+ * @profile: This class
+ * @percentage: new percentage value
+ */
+static void
+gpm_profile_save_percentage (GpmProfile *profile, guint percentage, guint data, guint accuracy)
+{
+	GpmArrayPoint *point;
+	GpmArray *array;
+	gchar *filename;
+
+	/* get the correct data */
+	array = gpm_profile_get_data_array (profile, profile->priv->discharging);
+	point = gpm_array_get (array, percentage);
+
+	/* if we have no data, then just use the new value */
+	if (point->y == 0) {
+		point->y = data;
+	} else {
+		/* average the data so we converge to a common point */
+		point->y = gpm_exponential_average (point->y, data, GPM_PROFILE_SMOOTH_SAVE_PERCENT);
+	}
+
+	/* save new accuracy (max gain is 20%, but less if the load was higher) */
+	point->data += accuracy / 5;
+	if (point->data > 100) {
+		point->data = 100;
+	}
+
+	/* save data file when idle */
+	filename = gpm_profile_get_data_file (profile, "profile-battery", profile->priv->discharging);
+	gpm_array_save_to_file (array, filename);
+	g_free (filename);
+}
+
+/**
  * gpm_profile_register_percentage:
  *
  * @profile: This class
@@ -328,10 +366,6 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	gdouble elapsed;
 	gdouble load;
 	guint accuracy;
-	guint data;
-	GpmArray *array;
-	GpmArrayPoint *point;
-	gchar *filename;
 	guint array_percentage;
 
 	/* turn the load into a nice scaled percentage */
@@ -369,10 +403,6 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		return;
 	}
 
-	data = (guint) elapsed;
-	/* get the correct data */
-	array = gpm_profile_get_data_array (profile, profile->priv->discharging);
-
 	/* If we are discharging, 99-0 is valid, but when we are charging,
 	 * 1-100 is valid. Be careful how we index the arrays in this case */
 	if (profile->priv->discharging == TRUE) {
@@ -384,30 +414,13 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		}
 		array_percentage = percentage - 1;
 	}
-	point = gpm_array_get (array, array_percentage);
 
 	/* save the last valid percent so we can cope with batteries that
 	   stop charging at < 100% */
 	profile->priv->last_percentage = array_percentage;
 
-	/* if we have no data, then just use the new value */
-	if (point->y == 0) {
-		point->y = data;
-	} else {
-		/* average the data so we converge to a common point */
-		point->y = gpm_exponential_average (point->y, data, 80);
-	}
-
-	/* save new accuracy (max gain is 20%, but less if the load was higher) */
-	point->data += accuracy / 5;
-	if (point->data > 100) {
-		point->data = 100;
-	}
-
-	/* save data file when idle */
-	filename = gpm_profile_get_data_file (profile, "profile-battery", profile->priv->discharging);
-	gpm_array_save_to_file (array, filename);
-	g_free (filename);
+	/* save new data as we passed all tests */
+	gpm_profile_save_percentage (profile, array_percentage, (guint) elapsed, accuracy);
 }
 
 /**
@@ -432,7 +445,8 @@ gpm_profile_register_charging (GpmProfile *profile,
 	   values to zero for the correct rates. */
 	if (profile->priv->last_percentage != 100) {
 		for (i=profile->priv->last_percentage; i<100; i++) {
-			gpm_profile_register_percentage (profile, i);
+			/* set percentage i to zero with accuracy 100 */
+			gpm_profile_save_percentage (profile, i, 0, 100);
 			gpm_debug ("set percentage %i to zero", i);
 		}
 	}
@@ -474,7 +488,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 	}
 	if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_gdevice_get_bool (device, key, &is_charging, NULL);
-		gpm_profile_register_charging(profile, is_charging);
+		gpm_profile_register_charging (profile, is_charging);
 	}
 }
 
