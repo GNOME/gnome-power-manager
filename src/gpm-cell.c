@@ -542,7 +542,7 @@ gpm_cell_class_init (GpmCellClass *klass)
 	g_type_class_add_private (klass, sizeof (GpmCellPrivate));
 
 	signals [PERCENT_CHANGED] =
-		g_signal_new ("percentage-changed",
+		g_signal_new ("percent-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellClass, percent_changed),
@@ -550,7 +550,7 @@ gpm_cell_class_init (GpmCellClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
-	signals [PERCENT_CHANGED] =
+	signals [STATUS_CHANGED] =
 		g_signal_new ("status-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,

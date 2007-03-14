@@ -296,7 +296,8 @@ hal_gdevicestore_finalize (GObject *object)
 	for (i=0;i<length;i++) {
 		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
 		g_object_unref (d);
-	}	
+	}
+	g_ptr_array_free (devicestore->priv->array, TRUE);
 
 	G_OBJECT_CLASS (hal_gdevicestore_parent_class)->finalize (object);
 }

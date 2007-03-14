@@ -28,8 +28,6 @@
 #include "gpm-cell-unit.h"
 #include "gpm-debug.h"
 
-#define GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE	90
-
 /**
  * gpm_unit_init:
  **/

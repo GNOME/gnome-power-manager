@@ -1,3 +1,23 @@
+2007-03-14  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_finalize):
+	Free the device array.
+
+	* src/gpm-cell-array.c:
+	* src/gpm-cell-array.h:
+	* src/gpm-cell-unit.c:
+	* src/gpm-cell-unit.h:
+	Add GpmCellArray class to manage sets of GpmCells.
+
+	* src/gpm-cell.c: (gpm_cell_class_init):
+	Correct signal ID.
+
+	* test/Makefile.am:
+	* test/gpm-st-cell-array.c:
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-main.h:
+	Add test case for GpmCellArray.
+
 2007-03-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell.c: (gpm_cell_get_icon):
