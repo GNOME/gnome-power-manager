@@ -400,6 +400,9 @@ gpm_profile_register_percentage (GpmProfile *profile,
 
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
 	point->data += accuracy / 5;
+	if (point->data > 100) {
+		point->data = 100;
+	}
 
 	/* save data file when idle */
 	filename = gpm_profile_get_data_file (profile, "profile-battery", profile->priv->discharging);
