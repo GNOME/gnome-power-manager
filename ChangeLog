@@ -1,5 +1,18 @@
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_index_udi),
+	(gpm_check_device_key), (gpm_cell_array_add),
+	(gpm_cell_array_set_type), (hal_device_removed_cb),
+	(hal_new_capability_cb), (hal_device_added_cb),
+	(gpm_cell_array_init):
+	Add code to detect batteries plugged in or removed at runtime.
+
+	* src/gpm-cell.c: (gpm_cell_get_udi):
+	* src/gpm-cell.h:
+	Add required method to check for duplicates.
+
+2007-03-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_show),
 	(gpm_tray_icon_set_image_from_stock), (gpm_tray_icon_sync):
 	Simplify the icon display code. Fixes g-p-m on the KDE tray.

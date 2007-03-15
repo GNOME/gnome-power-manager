@@ -347,15 +347,93 @@ gpm_cell_status_changed_cb (GpmCell *cell, gboolean is_charging, gboolean is_dis
 }
 
 /**
- * gpm_cell_array_add:
+ * gpm_cell_array_index_udi:
+ *
+ * Returns -1 if not found
  */
-static void
-gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
+static gint
+gpm_cell_array_index_udi (GpmCellArray *cell_array, const gchar *udi)
 {
-	GpmCellUnit *unit;
+	gint i;
+	guint length;
 	GpmCell *cell;
 
+	length = cell_array->priv->array->len;
+	for (i=0;i<length;i++) {
+		cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, i);
+		if (strcmp (gpm_cell_get_udi (cell), udi) == 0) {
+			gpm_debug ("Found %s with udi check", udi);
+			return i;
+		}
+	}
+	gpm_debug ("Did not find %s", udi);
+	return -1;
+}
+
+/**
+ * gpm_check_device_key:
+ **/
+static gboolean
+gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *key, const gchar *value)
+{
+	HalGDevice *device;
+	gboolean ret;
+	gboolean matches = FALSE;
+	gchar *rettype;
+
+	device = hal_gdevice_new ();
+	ret = hal_gdevice_set_udi (device, udi);
+	if (ret == FALSE) {
+		gpm_warning ("failed to set UDI %s", udi);
+		return FALSE;
+	}
+
+	/* check type */
+	ret = hal_gdevice_get_string (device, key, &rettype, NULL);
+	if (ret == FALSE || rettype == NULL) {
+		gpm_warning ("failed to get %s", key);
+		return FALSE;
+	}
+	gpm_debug ("checking %s against %s", rettype, value);
+	if (strcmp (rettype, value) == 0) {
+		matches = TRUE;
+	}
+	g_free (rettype);
+	g_object_unref (device);
+	return matches;
+}
+
+/**
+ * gpm_cell_array_add:
+ */
+static gboolean
+gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
+{
+	GpmCell *cell;
+	GpmCellUnit *unit;
+	gint index;
+	const gchar *kind_string;
+	gboolean ret;
+
 	unit = &(cell_array->priv->unit);
+
+	/* check type */
+	kind_string = gpm_cell_unit_get_kind_string (unit);
+	ret = gpm_check_device_key (cell_array, udi, "battery.type", kind_string);
+	if (ret == FALSE) {
+		gpm_debug ("not adding %s for %s", udi, kind_string);
+		return FALSE;
+	}
+
+	/* is this UDI in our array? */
+	index = gpm_cell_array_index_udi (cell_array, udi);
+	if (index != -1) {
+		/* already added */
+		gpm_debug ("already added %s", udi);
+		return FALSE;
+	}
+
+	gpm_debug ("adding the right kind of battery: %s", kind_string);
 
 	cell = gpm_cell_new ();
 	g_signal_connect (cell, "perhaps-recall",
@@ -369,6 +447,7 @@ gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
 	gpm_cell_set_type (cell, unit->kind, udi);
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
+	return TRUE;
 }
 
 /**
@@ -380,11 +459,8 @@ gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 	/* get all the hal devices of this type */
 	guint i;
 	gchar **device_names = NULL;
-	gboolean ret;
 	GError *error;
-	const gchar *kind_string;
-	gchar *rettype;
-	HalGDevice *device;
+	gboolean ret;
 	GpmCellUnit *unit;
 
 	g_return_val_if_fail (cell_array != NULL, 0);
@@ -403,30 +479,10 @@ gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 
 	/* get the correct type */
 	unit->kind = kind;
-	kind_string = gpm_cell_unit_get_kind_string (unit);
 
-	/* only add device names that are the correct type */
+	/* Try to add all, the add will fail for batteries not of the correct type */
 	for (i=0; device_names[i]; i++) {
-		device = hal_gdevice_new ();
-		ret = hal_gdevice_set_udi (device, device_names[i]);
-		if (ret == FALSE) {
-			gpm_warning ("failed to set UDI %s", device_names[i]);
-			continue;
-		}
-
-		/* check type */
-		ret = hal_gdevice_get_string (device, "battery.type", &rettype, NULL);
-		if (ret == FALSE || rettype == FALSE) {
-			gpm_warning ("failed to get battery.type");
-		} else {
-			gpm_debug ("checking %s against %s", rettype, kind_string);
-			if (strcmp (rettype, kind_string) == 0) {
-				gpm_warning ("adding the right kind of battery: %s", rettype);
-				gpm_cell_array_add (cell_array, device_names[i]);
-			}
-			g_free (rettype);
-		}
-		g_object_unref (device);
+		gpm_cell_array_add (cell_array, device_names[i]);
 	}
 
 	hal_gmanager_free_capability (device_names);
@@ -523,6 +579,95 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 }
 
 /**
+ * hal_device_removed_cb:
+ *
+ * @hal: The hal instance
+ * @udi: The HAL UDI
+ * @cell_array: This cell_array instance
+ */
+static gboolean
+hal_device_removed_cb (HalGManager  *hal_manager,
+		       const gchar  *udi,
+		       GpmCellArray *cell_array)
+{
+	gint index;
+	GpmCell *cell;
+
+	/* is this UDI in our array? */
+	index = gpm_cell_array_index_udi (cell_array, udi);
+	if (index == -1) {
+		/* nope */
+		return FALSE;
+	}
+
+	gpm_debug ("Removing udi=%s", udi);
+
+	/* we unref as the device has gone away */
+	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, index);
+	g_object_unref (cell);
+
+	/* remove from the devicestore */
+	g_ptr_array_remove_index (cell_array->priv->array, index);
+
+	return TRUE;
+}
+
+/**
+ * hal_new_capability_cb:
+ *
+ * @hal: The hal instance
+ * @udi: The HAL UDI
+ * @capability: the capability, e.g. "battery"
+ * @cell_array: This cell_array instance
+ */
+static void
+hal_new_capability_cb (HalGManager  *hal_manager,
+		       const gchar  *udi,
+		       const gchar  *capability,
+		       GpmCellArray *cell_array)
+{
+	gpm_debug ("udi=%s, capability=%s", udi, capability);
+
+	if (strcmp (capability, "battery") == 0) {
+		gpm_cell_array_add (cell_array, udi);
+	}
+}
+
+/**
+ * hal_device_added_cb:
+ *
+ * @hal: The hal instance
+ * @udi: The HAL UDI
+ * @cell_array: This cell_array instance
+ */
+static void
+hal_device_added_cb (HalGManager  *hal_manager,
+		     const gchar  *udi,
+		     GpmCellArray *cell_array)
+{
+	gboolean is_battery;
+	gboolean dummy;
+	HalGDevice *device;
+
+	/* find out if the new device has capability battery
+	   this might fail for CSR as the addon is weird */
+	device = hal_gdevice_new ();
+	hal_gdevice_set_udi (device, udi);
+	hal_gdevice_query_capability (device, "battery", &is_battery, NULL);
+
+	/* try harder */
+	if (is_battery == FALSE) {
+		is_battery = hal_gdevice_get_bool (device, "battery.present", &dummy, NULL);
+	}
+
+	/* if a battery, then add */
+	if (is_battery == TRUE) {
+		gpm_cell_array_add (cell_array, udi);
+	}
+	g_object_unref (device);
+}
+
+/**
  * gpm_cell_array_class_init:
  * @cell_array: This class instance
  **/
@@ -586,6 +731,13 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	cell_array->priv->done_capacity = FALSE;
 	cell_array->priv->ac_adapter = gpm_ac_adapter_new ();
 	cell_array->priv->hal_manager = hal_gmanager_new ();
+	g_signal_connect (cell_array->priv->hal_manager, "device-added",
+			  G_CALLBACK (hal_device_added_cb), cell_array);
+	g_signal_connect (cell_array->priv->hal_manager, "device-removed",
+			  G_CALLBACK (hal_device_removed_cb), cell_array);
+	g_signal_connect (cell_array->priv->hal_manager, "new-capability",
+			  G_CALLBACK (hal_new_capability_cb), cell_array);
+
 	gpm_cell_unit_init (&cell_array->priv->unit);
 }
 

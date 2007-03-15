@@ -384,6 +384,18 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind type, const gchar *udi)
 }
 
 /**
+ * gpm_cell_get_udi:
+ **/
+const gchar *
+gpm_cell_get_udi (GpmCell *cell)
+{
+	g_return_val_if_fail (cell != NULL, NULL);
+	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
+
+	return hal_gdevice_get_udi (cell->priv->hal_device);
+}
+
+/**
  * gpm_cell_get_icon:
  **/
 gchar *

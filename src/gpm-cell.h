@@ -66,6 +66,7 @@ gboolean	 gpm_cell_set_type			(GpmCell	*cell,
 							 const gchar	*udi);
 guint		 gpm_cell_get_time_charge		(GpmCell	*cell);
 guint		 gpm_cell_get_time_discharge		(GpmCell	*cell);
+const gchar	*gpm_cell_get_udi			(GpmCell	*cell);
 gchar		*gpm_cell_get_icon			(GpmCell	*cell);
 gchar		*gpm_cell_get_description		(GpmCell	*cell);
 
