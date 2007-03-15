@@ -571,6 +571,8 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	cairo_save (cr);
 
 	cairo_set_font_options (cr, graph->priv->options);
+	cairo_select_font_face(cr, _("Sans"), CAIRO_FONT_SLANT_NORMAL,
+					CAIRO_FONT_WEIGHT_NORMAL);
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);
@@ -1181,6 +1183,8 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	cairo_set_font_options (cr, graph->priv->options);
+	cairo_select_font_face(cr, _("Sans"), CAIRO_FONT_SLANT_NORMAL,
+					CAIRO_FONT_WEIGHT_NORMAL);
 
 	guint a;
 	GpmGraphWidgetKeyItem *keyitem;
@@ -1253,6 +1257,9 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_widget_legend_calculate_size (graph, cr, &legend_width, &legend_height);
 
 	cairo_save (cr);
+
+	cairo_select_font_face(cr, _("Sans"), CAIRO_FONT_SLANT_NORMAL,
+					CAIRO_FONT_WEIGHT_NORMAL);
 
 	graph->priv->box_x = 35;
 	graph->priv->box_y = 5;

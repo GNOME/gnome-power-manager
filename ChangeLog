@@ -1,5 +1,15 @@
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_labels),
+	(gpm_graph_widget_legend_calculate_size),
+	(gpm_graph_widget_draw_graph):
+	Set font face that translatable in graph widget.
+	Patch from Young-Ho Cha, many thanks. The other patch in bugzilla
+	adds pango support, and we should play with it on trunk and then
+	backport it if it proves stable. Fixes #418605
+
+2007-03-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-statistics-core.c:
 	(gpm_statistics_type_combo_changed_cb):
 	Don't assert if we try to run an older g-p-s with a newer g-p-m.
