@@ -125,6 +125,21 @@ gpm_tray_icon_enable_hibernate (GpmTrayIcon *icon,
 }
 
 /**
+ * gpm_tray_icon_show:
+ * @icon: This TrayIcon class instance
+ * @enabled: If we should show the tray
+ **/
+static void
+gpm_tray_icon_show (GpmTrayIcon *icon,
+		    gboolean     enabled)
+{
+	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
+
+	gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), enabled);
+	icon->priv->is_visible = enabled != FALSE;
+}
+
+/**
  * gpm_tray_icon_set_tooltip:
  * @icon: This TrayIcon class instance
  * @tooltip: The tooltip text, e.g. "Batteries fully charged"
@@ -160,14 +175,18 @@ gpm_tray_icon_set_image_from_stock (GpmTrayIcon *icon,
 		if (strcmp (icon->priv->stock_id, stock_id) != 0) {
 			gpm_debug ("Setting icon to %s", stock_id);
 			gtk_status_icon_set_from_icon_name (GTK_STATUS_ICON (icon->priv->status_icon), stock_id);
-			gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), TRUE);
 			/* don't keep trying to set the same icon */
 		        g_free (icon->priv->stock_id);
 			icon->priv->stock_id = g_strdup (stock_id);
 		}
+		/* make sure that we are visible */
+		gpm_tray_icon_show (icon, TRUE);
 	} else {
-		/* get rid of the icon */
-		gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), FALSE);
+		/* remove icon */
+		gpm_debug ("no icon will be displayed");
+
+		/* make sure that we are hidden */
+		gpm_tray_icon_show (icon, FALSE);
 	}
 }
 
@@ -427,21 +446,6 @@ gpm_tray_icon_class_init (GpmTrayIconClass *klass)
 			      g_cclosure_marshal_VOID__STRING,
 			      G_TYPE_NONE,
 			      1, G_TYPE_STRING);
-}
-
-/**
- * gpm_tray_icon_show:
- * @icon: This TrayIcon class instance
- * @enabled: If we should show the tray
- **/
-static void
-gpm_tray_icon_show (GpmTrayIcon *icon,
-		    gboolean     enabled)
-{
-	g_return_if_fail (GPM_IS_TRAY_ICON (icon));
-
-	gtk_status_icon_set_visible (GTK_STATUS_ICON (icon->priv->status_icon), enabled);
-	icon->priv->is_visible = enabled != FALSE;
 }
 
 /**
@@ -757,13 +761,11 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 
 	gpm_debug ("Going to use stock id: %s", stock_id);
 
+	gpm_tray_icon_set_image_from_stock (icon, stock_id);
+
 	/* only create if we have a valid filename */
 	if (stock_id) {
 		gchar *tooltip = NULL;
-
-		gpm_tray_icon_set_image_from_stock (icon, stock_id);
-		/* make sure that we are visible */
-		gpm_tray_icon_show (icon, TRUE);
 
 		gpm_debug ("emitting description-changed %s", stock_id);
 		g_signal_emit (icon, signals [DESCRIPTION_CHANGED], 0, stock_id);
@@ -773,12 +775,6 @@ gpm_tray_icon_sync (GpmTrayIcon *icon)
 
 		gpm_tray_icon_set_tooltip (icon, tooltip);
 		g_free (tooltip);
-	} else {
-		/* remove icon */
-		gpm_debug ("no icon will be displayed");
-
-		/* make sure that we are hidden */
-		gpm_tray_icon_show (icon, FALSE);
 	}
 }
 

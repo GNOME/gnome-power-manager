@@ -1,5 +1,12 @@
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-tray-icon.c: (gpm_tray_icon_show),
+	(gpm_tray_icon_set_image_from_stock), (gpm_tray_icon_sync):
+	Simplify the icon display code. Fixes g-p-m on the KDE tray.
+	Many thank to Pascal Terjan for the patch. Fixes #414032
+
+2007-03-15  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	More spelling and grammer mistakes. Fixes #393388
 
