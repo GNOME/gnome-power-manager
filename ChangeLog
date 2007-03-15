@@ -1,5 +1,11 @@
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-statistics-core.c:
+	(gpm_statistics_type_combo_changed_cb):
+	Don't assert if we try to run an older g-p-s with a newer g-p-m.
+
+2007-03-15  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	Turn off -Werror to fix #418282
 

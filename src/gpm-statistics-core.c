@@ -580,7 +580,8 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	} else if (strcmp (value, ACTION_VOLTAGE_TEXT) == 0) {
 		type = ACTION_VOLTAGE;
 	} else {
-		g_assert (FALSE);
+		gpm_debug ("type not known, ignoring");
+		return;
 	}
 	g_free (value);
 
