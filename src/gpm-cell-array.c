@@ -49,12 +49,14 @@ struct GpmCellArrayPrivate
 	GpmCellUnit	 unit;
 	GpmAcAdapter	*ac_adapter;
 	GPtrArray	*array;
+	gboolean	 done_fully_charged;
 	gboolean	 done_recall;
 	gboolean	 done_capacity;
 };
 
 enum {
 	PERCENT_CHANGED,
+	FULLY_CHARGED,
 	STATUS_CHANGED,
 	PERHAPS_RECALL,
 	LOW_CAPACITY,
@@ -330,6 +332,23 @@ gpm_cell_percent_changed_cb (GpmCell *cell, guint percent, GpmCellArray *cell_ar
 	/* proxy to engine if different */
 	if (old_percent != unit->percentage) {
 		g_signal_emit (cell_array, signals [PERCENT_CHANGED], 0, unit->percentage);
+
+		/* only emit if all devices are fully charged */
+		if (cell_array->priv->done_fully_charged == FALSE &&
+		    gpm_cell_unit_is_charged (unit) == TRUE) {
+			g_signal_emit (cell_array, signals [FULLY_CHARGED], 0);
+			cell_array->priv->done_fully_charged = TRUE;
+		}
+
+		/* We only re-enable the fully charged notification when the battery
+		   drops down to 95% as some batteries charge to 100% and then fluctuate
+		   from ~98% to 100%. See #338281 for details */
+		if (cell_array->priv->done_fully_charged == TRUE &&
+		    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
+		    gpm_cell_unit_is_charged (unit) == FALSE) {
+			cell_array->priv->done_fully_charged = FALSE;
+		}
+
 	}
 }
 
@@ -715,6 +734,15 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      gpm_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_STRING);
+	signals [FULLY_CHARGED] =
+		g_signal_new ("fully-charged",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellArrayClass, fully_charged),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 }
 
 /**
@@ -729,6 +757,7 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	cell_array->priv->array = g_ptr_array_new ();
 	cell_array->priv->done_recall = FALSE;
 	cell_array->priv->done_capacity = FALSE;
+	cell_array->priv->done_fully_charged = FALSE;
 	cell_array->priv->ac_adapter = gpm_ac_adapter_new ();
 	cell_array->priv->hal_manager = hal_gmanager_new ();
 	g_signal_connect (cell_array->priv->hal_manager, "device-added",

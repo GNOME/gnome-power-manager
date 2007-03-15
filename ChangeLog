@@ -1,5 +1,18 @@
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_percent_changed_cb),
+	(gpm_cell_array_class_init), (gpm_cell_array_init):
+	* src/gpm-cell-array.h:
+	Add the fully charged logic.
+
+	* src/gpm-conf.h:
+	* src/gpm-notify.c: (notify_recall_action_cb):
+	* src/gpm-power.c: (battery_device_cache_entry_update_all):
+	Add an extra key, and change the defined name of another.
+	FIXME: Add into schema.
+
+2007-03-15  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (gpm_cell_array_index_udi),
 	(gpm_check_device_key), (gpm_cell_array_add),
 	(gpm_cell_array_set_type), (hal_device_removed_cb),

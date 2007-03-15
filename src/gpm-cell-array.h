@@ -56,6 +56,7 @@ typedef struct
 						 const gchar	*website);
 	void		(* low_capacity)	(GpmCellArray	*cell_array,
 						 guint		 capacity);
+	void		(* fully_charged)	(GpmCellArray	*cell_array);
 } GpmCellArrayClass;
 
 GType		 gpm_cell_array_get_type		(void);

@@ -316,7 +316,7 @@ battery_device_cache_entry_update_all (GpmPower *power, GpmPowerDevice *entry)
 	hal_gdevice_get_bool (device, "info.is_recalled", &perhaps_recall, NULL);
 
 	/* do we show the notification? */
-	gpm_conf_get_bool (power->priv->conf, GPM_CONF_SHOW_BATTERY_WARNING, &show_recall);
+	gpm_conf_get_bool (power->priv->conf, GPM_CONF_SHOW_RECALL_WARNING, &show_recall);
 
 	if (perhaps_recall == TRUE && show_recall == TRUE) {
 		gchar *oem_vendor;

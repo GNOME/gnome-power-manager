@@ -290,7 +290,7 @@ notify_recall_action_cb (NotifyNotification *libnotify,
 	} else if (strcmp (action, "dont-show-again") == 0) {
 		gpm_debug ("not showing warning anymore!");
 		gpm_conf_set_bool (notify->priv->conf,
-				   GPM_CONF_SHOW_BATTERY_WARNING, FALSE);
+				   GPM_CONF_SHOW_RECALL_WARNING, FALSE);
 	}
 }
 
