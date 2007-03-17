@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.gnome-2-18.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-05 03:23+0000\n"
-"PO-Revision-Date: 2007-03-06 19:55+0100\n"
+"POT-Creation-Date: 2007-03-16 03:19+0000\n"
+"PO-Revision-Date: 2007-03-17 23:38+0100\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
@@ -405,15 +405,18 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If we should show the CPU frequency scaling in the UI"
-msgstr "Дали да се прикаже намалувањето на фреквенцијата на процесорот во корисничкиот интерфејс"
+msgstr ""
+"Дали да се прикаже намалувањето на фреквенцијата на процесорот во "
+"корисничкиот интерфејс"
 
 #: ../data/gnome-power-manager.schemas.in.h:45
 msgid ""
 "If we should show the CPU frequency scaling in the UI. Some people need to "
 "configure this for specific systems."
 msgstr ""
-"Дали да се прикаже намалувањето на фреквенцијата на процесорот во корисничкиот интерфејс. Некои "
-"треба да го конфигурираат ова за одредени системи."
+"Дали да се прикаже намалувањето на фреквенцијата на процесорот во "
+"корисничкиот интерфејс. Некои треба да го конфигурираат ова за одредени "
+"системи."
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid "If we should show the recalled battery warning for a broken battery"
@@ -1289,6 +1292,11 @@ msgstr "%iW"
 msgid "%iV"
 msgstr "%iV"
 
+#: ../src/gpm-graph-widget.c:574 ../src/gpm-graph-widget.c:1186
+#: ../src/gpm-graph-widget.c:1261
+msgid "Sans"
+msgstr "Sans"
+
 #: ../src/gpm-info.c:112
 #, c-format
 msgid "%s because %s"
@@ -1648,7 +1656,7 @@ msgstr "Безжична тастатура"
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:638
+#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:639
 msgid "Unknown"
 msgstr "Непознато"
 
@@ -1809,7 +1817,7 @@ msgid "Ask me"
 msgstr "Прашај ме"
 
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:765
+#: ../src/gpm-statistics-core.c:766
 msgid "Suspend"
 msgstr "Суспендирај"
 
@@ -1818,7 +1826,7 @@ msgid "Shutdown"
 msgstr "Исклучи"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:775
+#: ../src/gpm-statistics-core.c:776
 msgid "Hibernate"
 msgstr "Хибернирај"
 
@@ -1868,59 +1876,59 @@ msgstr "Историја на волтажата"
 msgid "Estimated Time History"
 msgstr "Пресметано време на историјата"
 
-#: ../src/gpm-statistics-core.c:708
+#: ../src/gpm-statistics-core.c:709
 msgid "Could not connect to GNOME Power Manager."
 msgstr "Не можам да се поврзам со менаџерот за енергија на GNOME."
 
-#: ../src/gpm-statistics-core.c:709
+#: ../src/gpm-statistics-core.c:710
 msgid "Perhaps the program is not running or you are using an old version?"
 msgstr "Можеби програмата не се извршува или користите стара верзија?"
 
-#: ../src/gpm-statistics-core.c:745
+#: ../src/gpm-statistics-core.c:746
 msgid "On AC"
 msgstr "На адаптер"
 
-#: ../src/gpm-statistics-core.c:750
+#: ../src/gpm-statistics-core.c:751
 msgid "On battery"
 msgstr "На батерија"
 
-#: ../src/gpm-statistics-core.c:755
+#: ../src/gpm-statistics-core.c:756
 msgid "Session idle"
 msgstr "Сесијата е неактивна"
 
-#: ../src/gpm-statistics-core.c:760
+#: ../src/gpm-statistics-core.c:761
 msgid "Session active"
 msgstr "Сесијата е активна"
 
-#: ../src/gpm-statistics-core.c:770
+#: ../src/gpm-statistics-core.c:771
 msgid "Resume"
 msgstr "Продолжи со работа"
 
-#: ../src/gpm-statistics-core.c:780
+#: ../src/gpm-statistics-core.c:781
 msgid "Lid closed"
 msgstr "Лаптопот е затворен"
 
-#: ../src/gpm-statistics-core.c:785
+#: ../src/gpm-statistics-core.c:786
 msgid "Lid opened"
 msgstr "Лаптопот е отворен"
 
-#: ../src/gpm-statistics-core.c:790
+#: ../src/gpm-statistics-core.c:791
 msgid "Notification"
 msgstr "Известување"
 
-#: ../src/gpm-statistics-core.c:795
+#: ../src/gpm-statistics-core.c:796
 msgid "DPMS On"
 msgstr "DPMS е приклучен"
 
-#: ../src/gpm-statistics-core.c:800
+#: ../src/gpm-statistics-core.c:801
 msgid "DPMS Standby"
 msgstr "DPMS мирува"
 
-#: ../src/gpm-statistics-core.c:805
+#: ../src/gpm-statistics-core.c:806
 msgid "DPMS Suspend"
 msgstr "DPMS суспендирај"
 
-#: ../src/gpm-statistics-core.c:810
+#: ../src/gpm-statistics-core.c:811
 msgid "DPMS Off"
 msgstr "DPMS е исклучен"
 
