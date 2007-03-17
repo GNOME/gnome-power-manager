@@ -1,5 +1,34 @@
 2007-03-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-ac-adapter.c: (gpm_ac_adapter_is_present),
+	(hal_device_property_modified_cb):
+	* src/gpm-ac-adapter.h:
+	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
+	(conf_key_changed_cb), (ac_adapter_changed_cb), (idle_changed_cb),
+	(gpm_backlight_init):
+	* src/gpm-cell-array.c: (gpm_cell_array_update):
+	* src/gpm-cpufreq.c: (gpm_cpufreq_sync_policy):
+	* src/gpm-info.c: (ac_adapter_changed_cb):
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	(gpm_manager_get_on_ac), (gpm_manager_get_low_power_mode),
+	(idle_do_sleep), (lid_button_pressed), (ac_adapter_changed_cb),
+	(battery_status_changed_primary), (gpm_manager_init):
+	* src/gpm-notify.c: (ac_adapter_changed_cb):
+	* src/gpm-power.c: (battery_kind_cache_update),
+	(power_get_summary_for_battery_kind),
+	(gpm_power_get_status_summary), (ac_adaptor_changed_cb):
+	* src/gpm-profile.c: (ac_adaptor_changed_cb), (gpm_profile_init):
+	* src/gpm-sound.c: (ac_adapter_changed_cb):
+	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
+	(ac_adapter_changed_cb):
+	* src/gpm-srv-screensaver.c: (update_ac_throttle),
+	(ac_adapter_changed_cb), (gpm_srv_screensaver_init):
+	* src/gpm-tray-icon.c: (ac_adapter_changed_cb):
+	Make the ac adapter state easier to get. We never return "unknown",
+	so don't pretend we can generate it.
+
+2007-03-17  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	* data/Makefile.am:
 	* data/gnome-power-manager.conf:

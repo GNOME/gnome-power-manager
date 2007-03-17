@@ -70,8 +70,7 @@ G_DEFINE_TYPE (GpmAcAdapter, gpm_ac_adapter, G_TYPE_OBJECT)
  * Gets the current state of the AC adapter
  **/
 gboolean
-gpm_ac_adapter_get_state (GpmAcAdapter      *ac_adapter,
-		          GpmAcAdapterState *state)
+gpm_ac_adapter_is_present (GpmAcAdapter *ac_adapter)
 {
 	gboolean is_on_ac;
 	GError *error;
@@ -81,7 +80,6 @@ gpm_ac_adapter_get_state (GpmAcAdapter      *ac_adapter,
 
 	/* bodge for now, PC's are considered on AC power */
 	if (ac_adapter->priv->has_hardware == FALSE) {
-		*state = GPM_AC_ADAPTER_PRESENT;
 		return TRUE;
 	}
 
@@ -94,11 +92,9 @@ gpm_ac_adapter_get_state (GpmAcAdapter      *ac_adapter,
 	}
 
 	if (is_on_ac == TRUE) {
-		*state = GPM_AC_ADAPTER_PRESENT;
-	} else {
-		*state = GPM_AC_ADAPTER_MISSING;
+		return TRUE;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 /**
@@ -120,10 +116,10 @@ hal_device_property_modified_cb (HalGDevice   *hal_device,
 				 gboolean      finally,
 				 GpmAcAdapter *ac_adapter)
 {
-	GpmAcAdapterState state;
+	gboolean on_ac;
 	if (strcmp (key, "ac_adapter.present") == 0) {
-		gpm_ac_adapter_get_state (ac_adapter, &state);
-		g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, state);
+		on_ac = gpm_ac_adapter_is_present (ac_adapter);
+		g_signal_emit (ac_adapter, signals [AC_ADAPTER_CHANGED], 0, on_ac);
 		return;
 	}
 }

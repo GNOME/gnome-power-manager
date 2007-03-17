@@ -80,21 +80,21 @@ conf_key_changed_cb (GpmConf          *conf,
 		     GpmSrvBrightnessKbd *srv_brightness)
 {
 	gint value;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
-	gpm_ac_adapter_get_state (srv_brightness->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (srv_brightness->priv->ac_adapter);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS_KBD) == 0) {
 
 		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
+		if (on_ac == TRUE) {
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
 	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS_KBD) == 0) {
 
 		gpm_conf_get_int (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		if (state == GPM_AC_ADAPTER_MISSING) {
+		if (on_ac == FALSE) {
 			gpm_brightness_kbd_set_std (srv_brightness->priv->brightness, value);
 		}
 
@@ -111,12 +111,12 @@ conf_key_changed_cb (GpmConf          *conf,
  **/
 static void
 ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
-			GpmAcAdapterState state,
+			gboolean	  on_ac,
 			GpmSrvBrightnessKbd *srv_brightness)
 {
 	guint value;
 
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_AC_BRIGHTNESS_KBD, &value);
 	} else {
 		gpm_conf_get_uint (srv_brightness->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS_KBD, &value);

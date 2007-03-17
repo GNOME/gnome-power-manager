@@ -278,13 +278,13 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	    unit->is_discharging == FALSE &&
 	    unit->percentage > 0 &&
 	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE) {
-		GpmAcAdapterState state;
+		gboolean on_ac;
 
 		/* get the ac state */
-		gpm_ac_adapter_get_state (cell_array->priv->ac_adapter, &state);
+		on_ac = gpm_ac_adapter_is_present (cell_array->priv->ac_adapter);
 		gpm_debug ("Battery is neither charging nor discharging, "
-			   "using ac_adaptor value %i", state);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
+			   "using ac_adaptor value %i", on_ac);
+		if (on_ac == TRUE) {
 			unit->is_charging = TRUE;
 			unit->is_discharging = FALSE;
 		} else {

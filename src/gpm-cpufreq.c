@@ -61,14 +61,14 @@ static gboolean
 gpm_cpufreq_sync_policy (GpmCpufreq *cpufreq)
 {
 	gboolean cpufreq_consider_nice;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 	guint cpufreq_performance;
 	gchar *cpufreq_policy;
 	HalGCpufreqType cpufreq_type;
 
-	gpm_ac_adapter_get_state (cpufreq->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (cpufreq->priv->ac_adapter);
 
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
 		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
 		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);

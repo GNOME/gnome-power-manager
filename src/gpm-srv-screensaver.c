@@ -114,11 +114,11 @@ update_dpms_throttle (GpmSrvScreensaver *srv_screensaver)
 
 static void
 update_ac_throttle (GpmSrvScreensaver *srv_screensaver,
-		    GpmAcAdapterState state)
+		    gboolean	       on_ac)
 {
 	/* Throttle the srv_screensaver when we are not on AC power so we don't
 	   waste the battery */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		if (srv_screensaver->priv->ac_throttle_id != 0) {
 			gpm_screensaver_remove_throttle (srv_screensaver->priv->screensaver, srv_screensaver->priv->ac_throttle_id);
 			srv_screensaver->priv->ac_throttle_id = 0;
@@ -214,10 +214,10 @@ dpms_mode_changed_cb (GpmDpms        *dpms,
  **/
 static void
 ac_adapter_changed_cb (GpmAcAdapter      *ac_adapter,
-		       GpmAcAdapterState  state,
+		       gboolean		  on_ac,
 		       GpmSrvScreensaver *srv_screensaver)
 {
-	update_ac_throttle (srv_screensaver, state);
+	update_ac_throttle (srv_screensaver, on_ac);
 
 	/* simulate user input, but only when the lid is open */
 	if (gpm_button_is_lid_closed (srv_screensaver->priv->button) == FALSE) {
@@ -245,7 +245,7 @@ gpm_srv_screensaver_class_init (GpmSrvScreensaverClass *klass)
 static void
 gpm_srv_screensaver_init (GpmSrvScreensaver *srv_screensaver)
 {
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
 	srv_screensaver->priv = GPM_SRV_SCREENSAVER_GET_PRIVATE (srv_screensaver);
 
@@ -280,8 +280,8 @@ gpm_srv_screensaver_init (GpmSrvScreensaver *srv_screensaver)
 	srv_screensaver->priv->lid_throttle_id = 0;
 
 	/* update ac throttle */
-	gpm_ac_adapter_get_state (srv_screensaver->priv->ac_adapter, &state);
-	update_ac_throttle (srv_screensaver, state);
+	on_ac = gpm_ac_adapter_is_present (srv_screensaver->priv->ac_adapter);
+	update_ac_throttle (srv_screensaver, on_ac);
 
 }
 

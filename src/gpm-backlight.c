@@ -117,7 +117,7 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 	guint    off = 0;
 	gchar   *dpms_method;
 	GpmDpmsMethod method;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
 	/* no point processing if we can't do the dpms action */
 	if (backlight->priv->can_dpms == FALSE) {
@@ -125,11 +125,11 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 	}
 
 	/* get the ac state */
-	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
 	error = NULL;
 
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
 		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
 	} else {
@@ -329,15 +329,15 @@ conf_key_changed_cb (GpmConf      *conf,
 		     GpmBacklight *backlight)
 {
 	gint value;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
-	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
 	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
 
 		if (backlight->priv->can_dim == TRUE) {
 			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-			if (state == GPM_AC_ADAPTER_PRESENT) {
+			if (on_ac == TRUE) {
 				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 			}
 		}
@@ -346,7 +346,7 @@ conf_key_changed_cb (GpmConf      *conf,
 
 		if (backlight->priv->can_dim == TRUE) {
 			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
-			if (state == GPM_AC_ADAPTER_MISSING) {
+			if (on_ac == FALSE) {
 				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 			}
 		}
@@ -377,13 +377,13 @@ conf_key_changed_cb (GpmConf      *conf,
  **/
 static void
 ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
+		       gboolean		 on_ac,
 		       GpmBacklight     *backlight)
 {
 	gboolean do_laptop_lcd;
 	guint value;
 
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 	} else {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
@@ -448,12 +448,12 @@ idle_changed_cb (GpmIdle      *idle,
 		 GpmIdleMode   mode,
 		 GpmBacklight *backlight)
 {
-	GpmAcAdapterState state;
+	gboolean on_ac;
 	gboolean laptop_do_dim;
 	GError *error;
 
-	gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+	if (on_ac == TRUE) {
 		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
 	} else {
 		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
@@ -637,7 +637,7 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 static void
 gpm_backlight_init (GpmBacklight *backlight)
 {
-	GpmAcAdapterState state;
+	gboolean on_ac;
 	HalGManager *hal_manager;
 	guint value;
 
@@ -674,8 +674,8 @@ gpm_backlight_init (GpmBacklight *backlight)
 				  G_CALLBACK (brightness_changed_cb), backlight);
 
 		/* set the standard setting */
-		gpm_ac_adapter_get_state (backlight->priv->ac_adapter, &state);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
+		on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+		if (on_ac == TRUE) {
 			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		} else {
 			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);

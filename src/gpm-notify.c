@@ -246,13 +246,13 @@ gpm_notify_cancel (GpmNotify *notify)
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmNotify        *notify)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean      on_ac,
+		       GpmNotify    *notify)
 {
 	/* for where we add back the ac_adapter before the "AC Power unplugged"
 	 * message times out. */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_debug ("clearing notify due ac being present");
 		gpm_notify_cancel (notify);
 	}

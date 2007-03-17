@@ -1140,13 +1140,13 @@ battery_kind_cache_update (GpmPower		 *power,
 	    type_status->is_discharging == FALSE &&
 	    type_status->percentage_charge > 0 &&
 	    type_status->percentage_charge < GPM_POWER_MIN_CHARGED_PERCENTAGE) {
-		GpmAcAdapterState state;
+		gboolean on_ac;
 
 		/* get the ac state */
-		gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
+		on_ac = gpm_ac_adapter_is_present (power->priv->ac_adapter);
 		gpm_debug ("Battery is neither charging nor discharging, "
-			   "using ac_adaptor value %i", state);
-		if (state == GPM_AC_ADAPTER_PRESENT) {
+			   "using ac_adaptor value %i", on_ac);
+		if (on_ac == TRUE) {
 			type_status->is_charging = TRUE;
 			type_status->is_discharging = FALSE;
 		} else {
@@ -1325,10 +1325,10 @@ power_get_summary_for_battery_kind (GpmPower	 *power,
 	GpmPowerStatus *status;
 	const gchar *type_desc = NULL;
 	gchar *timestring;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
 	/* get the ac status */
-	gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (power->priv->ac_adapter);
 
 	entry = battery_kind_cache_find (power, battery_kind);
 
@@ -1338,7 +1338,7 @@ power_get_summary_for_battery_kind (GpmPower	 *power,
 
 	status = &entry->battery_status;
 
-	if (! status->is_present) {
+	if (status->is_present == FALSE) {
 		return;
 	}
 
@@ -1376,7 +1376,7 @@ power_get_summary_for_battery_kind (GpmPower	 *power,
 						type_desc, status->percentage_charge);
 		}
 
-	} else if (status->is_charging || state == GPM_AC_ADAPTER_PRESENT) {
+	} else if (status->is_charging || on_ac == TRUE) {
 
 		if (status->remaining_time > 60) {
 			g_string_append_printf (summary, _("%s %s until charged (%i%%)\n"),
@@ -1410,10 +1410,10 @@ gpm_power_get_status_summary (GpmPower *power,
 	GString *summary = NULL;
 	gboolean ups_present;
 	GpmPowerStatus status;
-	GpmAcAdapterState state;
+	gboolean on_ac;
 
 	/* get the ac state */
-	gpm_ac_adapter_get_state (power->priv->ac_adapter, &state);
+	on_ac = gpm_ac_adapter_is_present (power->priv->ac_adapter);
 
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_POWER (power), FALSE);
@@ -1433,7 +1433,7 @@ gpm_power_get_status_summary (GpmPower *power,
 		   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
 		summary = g_string_new (_("Computer is running on backup power\n"));
 
-	} else if (state == GPM_AC_ADAPTER_PRESENT) {
+	} else if (on_ac == TRUE) {
 		summary = g_string_new (_("Computer is running on AC power\n"));
 
 	} else {
@@ -1533,7 +1533,7 @@ gpm_power_class_init (GpmPowerClass *klass)
  **/
 static void
 ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
-		       GpmAcAdapterState state,
+		       gboolean state,
 		       GpmPower *power)
 {
 	/* update the caches */

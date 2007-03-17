@@ -820,9 +820,9 @@ gpm_ui_get_icon (GpmTrayIcon  *icon,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmTrayIcon      *icon)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean      on_ac,
+		       GpmTrayIcon  *icon)
 {
 	gpm_tray_icon_sync (icon);
 }

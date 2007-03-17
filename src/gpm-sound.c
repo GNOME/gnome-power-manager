@@ -130,11 +130,11 @@ conf_key_changed_cb (GpmConf     *conf,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmSound         *sound)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean      on_ac,
+		       GpmSound     *sound)
 {
-	if (state == GPM_AC_ADAPTER_MISSING) {
+	if (on_ac == FALSE) {
 		gpm_sound_event (sound, GPM_SOUND_AC_UNPLUGGED);
 	}
 }

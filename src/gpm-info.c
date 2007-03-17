@@ -468,11 +468,11 @@ gpm_info_log_do_poll (gpointer data)
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmInfo          *info)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean      on_ac,
+		       GpmInfo      *info)
 {
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_info_event_log (info, GPM_EVENT_ON_AC,
 				    _("AC adapter inserted"));
 	} else {

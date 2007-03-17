@@ -34,12 +34,6 @@ G_BEGIN_DECLS
 #define GPM_IS_AC_ADAPTER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_AC_ADAPTER))
 #define GPM_AC_ADAPTER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_AC_ADAPTER, GpmAcAdapterClass))
 
-typedef enum {
-	GPM_AC_ADAPTER_MISSING = 0,
-	GPM_AC_ADAPTER_PRESENT = 1,
-	GPM_AC_ADAPTER_UNKNOWN,
-} GpmAcAdapterState;
-
 typedef struct GpmAcAdapterPrivate GpmAcAdapterPrivate;
 
 typedef struct
@@ -51,15 +45,14 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* ac_adapter_changed)	(GpmAcAdapter		*ac_adapter,
-						 GpmAcAdapterState	 status);
+	void		(* ac_adapter_changed)	(GpmAcAdapter	*ac_adapter,
+						 gboolean	 status);
 } GpmAcAdapterClass;
 
 GType		 gpm_ac_adapter_get_type	(void);
 GpmAcAdapter	*gpm_ac_adapter_new		(void);
 
-gboolean	 gpm_ac_adapter_get_state	(GpmAcAdapter		*ac_adapter,
-						 GpmAcAdapterState	*state);
+gboolean	 gpm_ac_adapter_is_present	(GpmAcAdapter	*ac_adapter);
 
 G_END_DECLS
 

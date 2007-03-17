@@ -499,14 +499,14 @@ hal_device_property_modified_cb (HalGDevice   *device,
  **/
 static void
 ac_adaptor_changed_cb (GpmAcAdapter *ac_adapter,
-		       GpmAcAdapterState state,
-		       GpmProfile *profile)
+		       gboolean      on_ac,
+		       GpmProfile   *profile)
 {
 	/* we might be halfway through a percentage change */
 	profile->priv->data_valid = FALSE;
 
 	/* check AC state */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
@@ -650,11 +650,11 @@ gpm_profile_init (GpmProfile *profile)
 	}
 
 	/* coldplug the AC state */
-	GpmAcAdapterState state;
-	gpm_ac_adapter_get_state (profile->priv->ac_adapter, &state);
+	gboolean on_ac;
+	on_ac = gpm_ac_adapter_is_present (profile->priv->ac_adapter);
 
 	/* check AC state */
-	if (state == GPM_AC_ADAPTER_PRESENT) {
+	if (on_ac == TRUE) {
 		gpm_debug ("on AC");
 		profile->priv->discharging = FALSE;
 	} else {
