@@ -39,7 +39,7 @@
 
 static void     gpm_cell_array_class_init (GpmCellArrayClass *klass);
 static void     gpm_cell_array_init       (GpmCellArray      *cell_array);
-static void     gpm_cell_array_finalize   (GObject	  *object);
+static void     gpm_cell_array_finalize   (GObject	     *object);
 
 #define GPM_CELL_ARRAY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CELL_ARRAY, GpmCellArrayPrivate))
 
@@ -59,6 +59,9 @@ enum {
 	FULLY_CHARGED,
 	STATUS_CHANGED,
 	PERHAPS_RECALL,
+	CHARGE_WARNING, //fixme
+	CHARGE_CRITICAL, //fixme
+	CHARGE_ACTION, //fixme
 	LOW_CAPACITY,
 	LAST_SIGNAL
 };
@@ -313,6 +316,36 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 }
 
 /**
+ * gpm_cell_array_percent_changed:
+ *
+ * Do the clever actions here.
+ *
+ */
+static void
+gpm_cell_array_percent_changed (GpmCellArray *cell_array)
+{
+	GpmCellUnit *unit;
+
+	unit = &(cell_array->priv->unit);
+
+	/* only emit if all devices are fully charged */
+	if (cell_array->priv->done_fully_charged == FALSE &&
+	    gpm_cell_unit_is_charged (unit) == TRUE) {
+		g_signal_emit (cell_array, signals [FULLY_CHARGED], 0);
+		cell_array->priv->done_fully_charged = TRUE;
+	}
+
+	/* We only re-enable the fully charged notification when the battery
+	   drops down to 95% as some batteries charge to 100% and then fluctuate
+	   from ~98% to 100%. See #338281 for details */
+	if (cell_array->priv->done_fully_charged == TRUE &&
+	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
+	    gpm_cell_unit_is_charged (unit) == FALSE) {
+		cell_array->priv->done_fully_charged = FALSE;
+	}
+}
+
+/**
  * gpm_cell_percent_changed_cb:
  */
 static void
@@ -332,23 +365,7 @@ gpm_cell_percent_changed_cb (GpmCell *cell, guint percent, GpmCellArray *cell_ar
 	/* proxy to engine if different */
 	if (old_percent != unit->percentage) {
 		g_signal_emit (cell_array, signals [PERCENT_CHANGED], 0, unit->percentage);
-
-		/* only emit if all devices are fully charged */
-		if (cell_array->priv->done_fully_charged == FALSE &&
-		    gpm_cell_unit_is_charged (unit) == TRUE) {
-			g_signal_emit (cell_array, signals [FULLY_CHARGED], 0);
-			cell_array->priv->done_fully_charged = TRUE;
-		}
-
-		/* We only re-enable the fully charged notification when the battery
-		   drops down to 95% as some batteries charge to 100% and then fluctuate
-		   from ~98% to 100%. See #338281 for details */
-		if (cell_array->priv->done_fully_charged == TRUE &&
-		    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
-		    gpm_cell_unit_is_charged (unit) == FALSE) {
-			cell_array->priv->done_fully_charged = FALSE;
-		}
-
+		gpm_cell_array_percent_changed (cell_array);
 	}
 }
 
@@ -743,6 +760,33 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
+	signals [CHARGE_ACTION] =
+		g_signal_new ("charge-action",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_action),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
+	signals [CHARGE_WARNING] =
+		g_signal_new ("charge-warning",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_warning),
+			      NULL,
+			      NULL,
+			      gpm_marshal_VOID__BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_BOOLEAN);
+	signals [CHARGE_CRITICAL] =
+		g_signal_new ("charge-critical",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_critical),
+			      NULL,
+			      NULL,
+			      gpm_marshal_VOID__BOOLEAN_BOOLEAN,
+			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_BOOLEAN);
 }
 
 /**

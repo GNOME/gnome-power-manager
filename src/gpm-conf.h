@@ -76,6 +76,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_NETWORKMANAGER_SLEEP	GPM_CONF_DIR "/networkmanager_sleep"
 #define GPM_CONF_SHOW_RECALL_WARNING	GPM_CONF_DIR "/show_recalled_battery_warning"
 #define GPM_CONF_SHOW_CAPACITY_WARNING	GPM_CONF_DIR "/show_capacity_warning"
+#define GPM_CONF_SHOW_CHARGE_WARNING	GPM_CONF_DIR "/show_charge_warning"
 
 #define GPM_CONF_LOCK_USE_SCREENSAVER	GPM_CONF_DIR "/lock_use_screensaver_settings"
 /* These are only effective if the system default is turned off. See bug #331164 */

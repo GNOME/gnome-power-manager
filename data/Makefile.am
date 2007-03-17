@@ -15,9 +15,6 @@ autostartdir = $(datadir)/gnome/autostart
 autostart_in_files = gnome-power-manager.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 
-dbusconfdir = $(DBUS_SYS_DIR)
-dbusconf_DATA = gnome-power-manager.conf
-
 servicedir       = $(DBUS_SERVICES_DIR)
 service_in_files = gnome-power-manager.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
@@ -37,8 +34,7 @@ EXTRA_DIST =						\
 	$(desktop_in_files)				\
 	$(autostart_in_files)				\
 	$(service_in_files)				\
-	$(pkgdata_DATA)					\
-	$(dbusconf_DATA)
+	$(pkgdata_DATA)
 
 if GCONF_SCHEMAS_INSTALL
 install-data-local:

@@ -1,3 +1,17 @@
+2007-03-17  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	* data/Makefile.am:
+	* data/gnome-power-manager.conf:
+	Remove this file. We are not starting on the system bus and this should
+	not be ever installed.
+
+	* src/gpm-cell-array.c: (gpm_cell_array_percent_changed),
+	(gpm_cell_percent_changed_cb), (gpm_cell_array_class_init):
+	* src/gpm-cell-array.h:
+	* src/gpm-conf.h:
+	Add fully charged notification into the array, not the manager...
+
 2007-03-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (gpm_cell_percent_changed_cb),

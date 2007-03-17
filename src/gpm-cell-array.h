@@ -56,6 +56,13 @@ typedef struct
 						 const gchar	*website);
 	void		(* low_capacity)	(GpmCellArray	*cell_array,
 						 guint		 capacity);
+	void		(* charge_warning)	(GpmCellArray	*cell_array,
+						 guint		 value,
+						 gboolean	 use_time);
+	void		(* charge_critical)	(GpmCellArray	*cell_array,
+						 guint		 value,
+						 gboolean	 use_time);
+	void		(* charge_action)	(GpmCellArray	*cell_array);
 	void		(* fully_charged)	(GpmCellArray	*cell_array);
 } GpmCellArrayClass;
 
