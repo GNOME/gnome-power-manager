@@ -6,11 +6,14 @@ SUBDIRS =						\
 	man						\
 	data						\
 	help						\
-	test						\
 	tools
 
 if HAVE_APPLETS
 SUBDIRS += applets
+endif
+
+if HAVE_TESTS
+SUBDIRS += test
 endif
 
 EXTRA_DIST =						\
