@@ -43,7 +43,6 @@
 #include <libhal-gpower.h>
 
 #include "gpm-ac-adapter.h"
-#include "gpm-battery.h"
 #include "gpm-button.h"
 #include "gpm-conf.h"
 #include "gpm-control.h"
@@ -56,7 +55,6 @@
 #include "gpm-inhibit.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
-#include "gpm-power.h"
 #include "gpm-powermanager.h"
 #include "gpm-prefs.h"
 #include "gpm-profile.h"
@@ -67,12 +65,11 @@
 #include "gpm-stock-icons.h"
 #include "gpm-sound.h"
 #include "gpm-tray-icon.h"
-#include "gpm-warning.h"
+#include "gpm-engine.h"
 
 #include "dbus/gpm-dbus-control.h"
 #include "dbus/gpm-dbus-statistics.h"
 #include "dbus/gpm-dbus-backlight.h"
-#include "dbus/gpm-dbus-ui.h"
 #include "dbus/gpm-dbus-inhibit.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
@@ -80,9 +77,7 @@ static void     gpm_manager_init	(GpmManager      *manager);
 static void     gpm_manager_finalize	(GObject	 *object);
 
 #define GPM_MANAGER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_MANAGER, GpmManagerPrivate))
-
-#define GPM_NOTIFY_TIMEOUT_LONG		20	/* seconds */
-#define GPM_NOTIFY_TIMEOUT_SHORT	5	/* seconds */
+#define GPM_MANAGER_RECALL_DELAY		1000*10
 
 struct GpmManagerPrivate
 {
@@ -94,14 +89,12 @@ struct GpmManagerPrivate
 	GpmInfo			*info;
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
-	GpmPower		*power;
 	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmSound 		*sound;
 	GpmTrayIcon		*tray_icon;
-	GpmWarning		*warning;
-
+	GpmEngine		*engine;
 	HalGPower		*hal_power;
 
 	/* interactive services */
@@ -109,14 +102,6 @@ struct GpmManagerPrivate
 	GpmSrvBrightnessKbd	*srv_brightness_kbd;
 	GpmCpufreq	 	*cpufreq;
 	GpmSrvScreensaver 	*srv_screensaver;
-
-	GpmWarningState		 last_primary;
-	GpmWarningState		 last_ups;
-	GpmWarningState		 last_mouse;
-	GpmWarningState		 last_keyboard;
-	GpmWarningState		 last_pda;
-
-	gboolean		 done_notify_fully_charged;
 };
 
 enum {
@@ -209,9 +194,9 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &sleep_display);
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
 	} else {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_COMPUTER, &sleep_computer);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &sleep_display);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATT_SLEEP_COMPUTER, &sleep_computer);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATT_SLEEP_DISPLAY, &sleep_display);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
 	}
 
 	hal_gpower_enable_power_save (manager->priv->hal_power, power_save);
@@ -306,7 +291,7 @@ manager_policy_do (GpmManager  *manager,
 	if (action == NULL) {
 		return;
 	}
-	if (gpm_control_is_policy_timout_valid (manager->priv->control, "policy event") == FALSE) {
+	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		return;
 	}
 
@@ -396,7 +381,7 @@ gpm_manager_get_low_power_mode (GpmManager  *manager,
 	if (on_ac == TRUE) {
 		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
 	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &power_save);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
 	}
 	*retval = power_save;
 
@@ -423,7 +408,7 @@ idle_do_sleep (GpmManager *manager)
 	if (on_ac == TRUE) {
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_SLEEP_TYPE, &action);
 	} else {
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_SLEEP_TYPE, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_SLEEP_TYPE, &action);
 	}
 
 	if (action == NULL) {
@@ -510,7 +495,7 @@ idle_changed_cb (GpmIdle    *idle,
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "timeout action")) {
+		if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
 			return;
 		}
 		if (! gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action")) {
@@ -529,9 +514,9 @@ idle_changed_cb (GpmIdle    *idle,
 static void
 battery_button_pressed (GpmManager *manager)
 {
-	char *message;
+	gchar *message;
 
-	gpm_power_get_status_summary (manager->priv->power, &message, NULL);
+	message = gpm_engine_get_summary (manager->priv->engine);
 
 	gpm_notify_display (manager->priv->notify,
 			      _("Power Information"),
@@ -551,7 +536,7 @@ battery_button_pressed (GpmManager *manager)
 static void
 power_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "power button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "power button press")) {
@@ -570,7 +555,7 @@ power_button_pressed (GpmManager *manager)
 static void
 suspend_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "suspend button press")) {
@@ -589,15 +574,13 @@ suspend_button_pressed (GpmManager *manager)
 static void
 hibernate_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate button press")) {
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
 		return;
 	}
 	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate button press")) {
 		return;
 	}
-	manager_policy_do (manager,
-			   GPM_CONF_BUTTON_HIBERNATE,
-			   _("the hibernate button has been pressed"));
+	manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("the hibernate button has been pressed"));
 }
 
 /**
@@ -616,16 +599,14 @@ lid_button_pressed (GpmManager *manager,
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
-	if (pressed) {
+	if (pressed == TRUE) {
 		if (on_ac == TRUE) {
 			gpm_debug ("Performing AC policy");
-			manager_policy_do (manager,
-					   GPM_CONF_AC_BUTTON_LID,
+			manager_policy_do (manager, GPM_CONF_AC_BUTTON_LID,
 					   _("the lid has been closed on ac power"));
 		} else {
 			gpm_debug ("Performing battery policy");
-			manager_policy_do (manager,
-					   GPM_CONF_BATTERY_BUTTON_LID,
+			manager_policy_do (manager, GPM_CONF_BATT_BUTTON_LID,
 					   _("the lid has been closed on battery power"));
 		}
 	} else {
@@ -680,19 +661,13 @@ button_pressed_cb (GpmButton   *button,
  * Does the actions when the ac power source is inserted/removed.
  **/
 static void
-ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
-		       gboolean		 on_ac,
-		       GpmManager       *manager)
+ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
+		       gboolean	     on_ac,
+		       GpmManager   *manager)
 {
 	gboolean event_when_closed;
 
 	gpm_debug ("Setting on-ac: %d", on_ac);
-
-	/* If we are on AC power we should show warnings again */
-	if (on_ac == TRUE) {
-		gpm_debug ("Resetting warning to NONE as on AC power");
-		manager->priv->last_primary = GPM_WARNING_NONE;
-	}
 
 	gpm_manager_sync_policy_sleep (manager);
 
@@ -713,8 +688,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	if (event_when_closed == TRUE &&
 	    on_ac == FALSE &&
 	    gpm_button_is_lid_closed (manager->priv->button)) {
-		manager_policy_do (manager,
-				   GPM_CONF_BATTERY_BUTTON_LID,
+		manager_policy_do (manager, GPM_CONF_BATT_BUTTON_LID,
 				   _("the lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)"));
 	}
@@ -737,414 +711,31 @@ static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
 	manager_policy_do (manager,
-			   GPM_CONF_BATTERY_CRITICAL,
+			   GPM_CONF_BATT_CRITICAL,
 			   _("battery is critically low"));
 	return FALSE;
 }
 
+#if 0
 /**
  * battery_status_changed_primary:
- * @manager: This class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_PRIMARY
- * @battery_status: The battery status information
- *
- * Hander for the battery status changed event for primary devices
- * (laptop batteries). We notify of increasing power notification levels,
- * and also do the critical actions here.
  **/
 static void
 battery_status_changed_primary (GpmManager     *manager,
 				GpmPowerKind    battery_kind,
 				GpmPowerStatus *battery_status)
 {
-	GpmWarningState warning_type;
-	gboolean show_notify;
-	gchar *message = NULL;
-	gchar *remaining = NULL;
-	const gchar *title = NULL;
-	gint timeout = 0;
-	gboolean on_ac;
-
 	/* Wait until data is trusted... */
-	if (gpm_power_get_data_is_trusted (manager->priv->power) == FALSE) {
+	if (gpm_engine_get_data_is_trusted (manager->priv->engine) == FALSE) {
 		gpm_debug ("Data is not yet trusted.. wait..");
 		return;
 	}
 
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-
-	/* If we are charging we should show warnings again as soon as we discharge again */
-	if (battery_status->is_charging) {
-		gpm_debug ("Resetting warning to NONE as charging");
-		manager->priv->last_primary = GPM_WARNING_NONE;
-	}
-
-	/* We use the hardware charged state instead of the old 99%->100%
-	 * percentage charge method, as the icon must disappear when this
-	 * notification is shown (if we set to the display policy "charging")
-	 * and also the fact that some ACPI batteries don't make it to 100% */
-	if (manager->priv->done_notify_fully_charged == FALSE &&
-	    gpm_power_battery_is_charged (battery_status)) {
-
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_BATTCHARGED, &show_notify);
-		if (show_notify) {
-			message = _("Your battery is now fully charged");
-			title = _("Battery Charged");
-			gpm_notify_display (manager->priv->notify,
-					      title,
-					      message,
-					      GPM_NOTIFY_TIMEOUT_SHORT,
-					      GPM_STOCK_BATTERY_CHARGED,
-					      GPM_NOTIFY_URGENCY_LOW);
-			gpm_info_event_log (manager->priv->info,
-					    GPM_EVENT_NOTIFICATION,
-					    title);
-		}
-		manager->priv->done_notify_fully_charged = TRUE;
-	}
-
-	/* We only re-enable the fully charged notification when the battery
-	   drops down to 95% as some batteries charge to 100% and then fluctuate
-	   from ~98% to 100%. See #338281 for details */
-	if (battery_status->percentage_charge < 95 &&
-	    battery_status->percentage_charge > 0 &&
-	    gpm_power_battery_is_charged (battery_status) == FALSE) {
-		manager->priv->done_notify_fully_charged = FALSE;
-	}
-
-	if (! battery_status->is_discharging) {
-		gpm_debug ("%s is not discharging", gpm_power_kind_to_localised_string (battery_kind));
+	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
 		return;
-	}
-
-	if (on_ac == TRUE) {
-		gpm_debug ("Computer marked as on_ac.");
-		return;
-	}
-
-	warning_type = gpm_warning_get_state (manager->priv->warning,
-					     battery_status, GPM_WARNING_AUTO);
-
-	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE) {
-		gpm_debug ("No warning");
-		return;
-	}
-
-	/* Always check if we already notified the user */
-	if (warning_type <= manager->priv->last_primary) {
-		gpm_debug ("Already notified %i", warning_type);
-		return;
-	}
-
-	/* As the level is more critical than the last warning, save it */
-	manager->priv->last_primary = warning_type;
-
-	/* Do different warnings for each GPM_WARNING_* */
-	if (warning_type == GPM_WARNING_ACTION) {
-		gchar *action;
-		timeout = GPM_NOTIFY_TIMEOUT_LONG;
-
-		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "critical action")) {
-			return;
-		}
-
-		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATTERY_CRITICAL, &action);
-
-		/* TODO: we should probably convert to an ENUM type, and use that */
-		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer will <b>power-off</b> when the "
-					      "battery becomes completely empty."));
-
-		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to suspend.<br>"
-					      "<b>NOTE:</b> A small amount of power is required "
-					      "to keep your computer in a suspended state."));
-
-		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to hibernate."));
-
-		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = g_strdup (_("The battery is below the critical level and "
-					      "this computer is about to shutdown."));
-		}
-
-		g_free (action);
-		/* wait 10 seconds for user-panic */
-		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
-
-	} else if (warning_type == GPM_WARNING_DISCHARGING) {
-
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_ACADAPTER, &show_notify);
-		if (show_notify) {
-			message = g_strdup (_("The AC Power has been unplugged. "
-					      "The system is now using battery power."));
-			timeout = GPM_NOTIFY_TIMEOUT_SHORT;
-		}
-
-	} else {
-
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_LOW_POWER, &show_notify);
-		if (show_notify) {
-			remaining = gpm_get_timestring (battery_status->remaining_time);
-			message = g_strdup_printf (_("You have approximately <b>%s</b> "
-						     "of remaining battery life (%d%%). "
-						     "Plug in your AC Adapter to avoid losing data."),
-						   remaining, battery_status->percentage_charge);
-			timeout = GPM_NOTIFY_TIMEOUT_LONG;
-			g_free (remaining);
-		}
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
-	}
-
-	/* If we had a message, print it as a notification */
-	if (message) {
-		gchar *icon;
-		title = gpm_warning_get_title (warning_type);
-		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-		gpm_notify_display (manager->priv->notify,
-				      title, message, timeout,
-				      icon, GPM_NOTIFY_URGENCY_NORMAL);
-		g_free (icon);
-		gpm_info_event_log (manager->priv->info,
-				    GPM_EVENT_NOTIFICATION,
-				    title);
-		g_free (message);
 	}
 }
-
-/**
- * battery_status_changed_ups:
- * @manager: This class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_UPS
- * @battery_status: The battery status information
- *
- * Hander for the battery status changed event for UPS devices.
- * At the moment we only notify, but we should put some shutdown handlers in.
- **/
-static void
-battery_status_changed_ups (GpmManager	   *manager,
-			    GpmPowerKind    battery_kind,
-			    GpmPowerStatus *battery_status)
-{
-	GpmWarningState warning_type;
-	gchar *message = NULL;
-	gchar *remaining = NULL;
-	const gchar *title = NULL;
-
-	/* If we are charging we should show warnings again as soon as we discharge again */
-	if (battery_status->is_charging) {
-		manager->priv->last_ups = GPM_WARNING_NONE;
-	}
-
-	if (! battery_status->is_discharging) {
-		gpm_debug ("%s is not discharging", gpm_power_kind_to_localised_string(battery_kind));
-		return;
-	}
-
-	warning_type = gpm_warning_get_state (manager->priv->warning,
-					     battery_status, GPM_WARNING_AUTO);
-
-	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE) {
-		gpm_debug ("No warning");
-		return;
-	}
-
-	/* Always check if we already notified the user */
-	if (warning_type <= manager->priv->last_ups) {
-		gpm_debug ("Already notified %i", warning_type);
-		return;
-	}
-
-	/* As the level is more critical than the last warning, save it */
-	manager->priv->last_ups = warning_type;
-
-	if (warning_type == GPM_WARNING_ACTION) {
-		char *action;
-
-		if (! gpm_control_is_policy_timout_valid (manager->priv->control, "critical action")) {
-			return;
-		}
-
-		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_UPS_CRITICAL, &action);
-
-		/* FIXME: we should probably convert to an ENUM type, and use that */
-		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer will <b>power-off</b> when the "
-				    "UPS becomes completely empty.");
-
-		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to hibernate.");
-
-		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = _("The UPS is below the critical level and "
-				    "this computer is about to shutdown.");
-		}
-
-		g_free (action);
-		/* TODO: need to add 10 second delay so we get notification */
-		manager_policy_do (manager, GPM_CONF_UPS_CRITICAL,
-				   _("UPS is critically low"));
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
-
-	} else if (warning_type == GPM_WARNING_DISCHARGING) {
-		message = g_strdup_printf (_("Your system is running on backup power!"));
-
-	} else {
-		remaining = gpm_get_timestring (battery_status->remaining_time);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> "
-					     "of remaining UPS power (%d%%). "
-					     "Restore power to your computer to "
-					     "avoid losing data."),
-					   remaining, battery_status->percentage_charge);
-		g_free (remaining);
-		gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
-	}
-
-	/* If we had a message, print it as a notification */
-	if (message) {
-		gchar *icon;
-		title = gpm_warning_get_title (warning_type);
-		icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-		gpm_notify_display (manager->priv->notify,
-				      title, message, GPM_NOTIFY_TIMEOUT_LONG,
-				      icon, GPM_NOTIFY_URGENCY_NORMAL);
-		gpm_info_event_log (manager->priv->info,
-				    GPM_EVENT_NOTIFICATION,
-				    title);
-		g_free (icon);
-		g_free (message);
-	}
-}
-
-/**
- * battery_status_changed_misc:
- * @manager: This class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
- * @battery_status: The battery status information
- *
- * Hander for the battery status changed event for misc devices such as MOUSE
- * KEYBOARD or PDA. We only do warning notifications here as the devices
- * are not critical to the system power state.
- **/
-static void
-battery_status_changed_misc (GpmManager	    *manager,
-			     GpmPowerKind    battery_kind,
-			     GpmPowerStatus *battery_status)
-{
-	GpmWarningState warning_type;
-	gchar *message = NULL;
-	const gchar *title = NULL;
-	const gchar *name;
-	gchar *icon;
-
-	/* mouse, keyboard and PDA have no time, just percentage */
-	warning_type = gpm_warning_get_state (manager->priv->warning, battery_status,
-					      GPM_WARNING_PERCENTAGE);
-
-	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE ||
-	    warning_type == GPM_WARNING_DISCHARGING) {
-		gpm_debug ("No warning");
-		return;
-	}
-
-	/* Always check if we already notified the user */
-	if (battery_kind == GPM_POWER_KIND_MOUSE) {
-		if (warning_type > manager->priv->last_mouse) {
-			manager->priv->last_mouse = warning_type;
-		} else {
-			warning_type = GPM_WARNING_NONE;
-		}
-	} else if (battery_kind == GPM_POWER_KIND_KEYBOARD) {
-		if (warning_type > manager->priv->last_keyboard) {
-			manager->priv->last_keyboard = warning_type;
-		} else {
-			warning_type = GPM_WARNING_NONE;
-		}
-	} else if (battery_kind == GPM_POWER_KIND_PDA) {
-		if (warning_type > manager->priv->last_pda) {
-			manager->priv->last_pda = warning_type;
-		} else {
-			warning_type = GPM_WARNING_NONE;
-		}
-	}
-
-	/* no point continuing, we are not going to match */
-	if (warning_type == GPM_WARNING_NONE) {
-		gpm_debug ("No warning of type");
-		return;
-	}
-
-	manager->priv->last_ups = warning_type;
-	name = gpm_power_kind_to_localised_string (battery_kind);
-
-	title = gpm_warning_get_title (warning_type);
-
-	message = g_strdup_printf (_("The %s device attached to this computer "
-				     "is low in power (%d%%). "
-				     "This device will soon stop functioning "
-				     "if not charged."),
-				   name, battery_status->percentage_charge);
-
-	icon = gpm_power_get_icon_from_status (battery_status, battery_kind);
-	gpm_notify_display (manager->priv->notify,
-			      title, message, GPM_NOTIFY_TIMEOUT_LONG,
-			      icon, GPM_NOTIFY_URGENCY_NORMAL);
-
-	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
-	gpm_info_event_log (manager->priv->info, GPM_EVENT_NOTIFICATION, title);
-
-	g_free (icon);
-	g_free (message);
-}
-
-/**
- * power_battery_status_changed_cb:
- * @power: The power class instance
- * @battery_kind: The battery kind, e.g. GPM_POWER_KIND_MOUSE
- * @manager: This class instance
- *
- * This function splits up the battery status changed callback, and calls
- * different functions for each of the device types.
- **/
-static void
-power_battery_status_changed_cb (GpmPower    *power,
-				 GpmPowerKind battery_kind,
-				 GpmManager  *manager)
-{
-	GpmPowerStatus battery_status;
-
-	gpm_tray_icon_sync (manager->priv->tray_icon);
-
-	gpm_power_get_battery_status (manager->priv->power, battery_kind, &battery_status);
-
-	if (battery_kind == GPM_POWER_KIND_PRIMARY) {
-
-		/* PRIMARY is special as there is lots of twisted logic */
-		battery_status_changed_primary (manager, battery_kind, &battery_status);
-
-	} else if (battery_kind == GPM_POWER_KIND_UPS) {
-
-		/* UPS is special as it's being used on desktops */
-		battery_status_changed_ups (manager, battery_kind, &battery_status);
-
-	} else if (battery_kind == GPM_POWER_KIND_MOUSE ||
-		   battery_kind == GPM_POWER_KIND_KEYBOARD ||
-		   battery_kind == GPM_POWER_KIND_PDA) {
-
-		/* MOUSE, KEYBOARD, and PDA only do low power warnings */
-		battery_status_changed_misc (manager, battery_kind, &battery_status);
-	}
-}
+#endif
 
 /**
  * gpm_manager_class_init:
@@ -1153,9 +744,9 @@ power_battery_status_changed_cb (GpmPower    *power,
 static void
 gpm_manager_class_init (GpmManagerClass *klass)
 {
-	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize	   = gpm_manager_finalize;
+	object_class->finalize = gpm_manager_finalize;
 
 	signals [ON_AC_CHANGED] =
 		g_signal_new ("on-ac-changed",
@@ -1181,7 +772,7 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmManager  *manager)
 {
-	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_COMPUTER) == 0 ||
+	if (strcmp (key, GPM_CONF_BATT_SLEEP_COMPUTER) == 0 ||
 		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
@@ -1197,13 +788,13 @@ conf_key_changed_cb (GpmConf     *conf,
  * the inhibit states are valid.
  **/
 static void
-gpm_manager_tray_icon_hibernate (GpmManager   *manager,
-				 GpmTrayIcon  *tray)
+gpm_manager_tray_icon_hibernate (GpmManager  *manager,
+				 GpmTrayIcon *tray)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "hibernate signal")) {
+	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate")) {
+	if (gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate") == FALSE) {
 		return;
 	}
 
@@ -1226,10 +817,10 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control, "suspend signal")) {
+	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 		return;
 	}
-	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "suspend")) {
+	if (gpm_manager_is_inhibit_valid (manager, TRUE, "suspend") == FALSE) {
 		return;
 	}
 	gpm_info_explain_reason (manager->priv->info,
@@ -1250,33 +841,15 @@ gpm_manager_check_sleep_errors (GpmManager *manager)
 {
 	gboolean suspend_error;
 	gboolean hibernate_error;
-	const gchar *error_title = NULL;
-	const gchar *error_body = NULL;
-	gchar *error_msg;
 
 	hal_gpower_has_suspend_error (manager->priv->hal_power, &suspend_error);
 	hal_gpower_has_hibernate_error (manager->priv->hal_power, &hibernate_error);
 
 	if (suspend_error == TRUE) {
-		error_title = _("Suspend failure");
-		error_body = _("Your computer did not appear to resume correctly from suspend.");
+		gpm_notify_sleep_failed (manager->priv->notify, FALSE);
 	}
 	if (hibernate_error == TRUE) {
-		error_title = _("Hibernate failure");
-		error_body = _("Your computer did not appear to resume correctly from hibernate.");
-	}
-
-	if (suspend_error == TRUE || hibernate_error == TRUE) {
-		error_msg = g_strdup_printf ("%s\n%s\n%s", error_body,
-					     _("This may be a driver or hardware problem."),
-					     _("Check the GNOME Power Manager manual for common problems."));
-		gpm_notify_display (manager->priv->notify,
-				      error_title,
-				      error_msg,
-				      GPM_NOTIFY_TIMEOUT_LONG,
-				      GTK_STOCK_DIALOG_WARNING,
-				      GPM_NOTIFY_URGENCY_NORMAL);
-		g_free (error_msg);
+		gpm_notify_sleep_failed (manager->priv->notify, TRUE);
 	}
 }
 
@@ -1328,6 +901,311 @@ gpm_manager_at_exit (void)
 }
 
 /**
+ * gpm_manager_perhaps_recall:
+ */
+static gboolean
+gpm_manager_perhaps_recall (GpmManager *manager)
+{
+	gchar *oem_vendor;
+	gchar *oem_website;
+	oem_vendor = (gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-vendor");
+	oem_website = (gchar *) g_object_get_data (G_OBJECT (manager), "recall-oem-website");
+	gpm_notify_perhaps_recall (manager->priv->notify, oem_vendor, oem_website);
+	g_free (oem_vendor);
+	g_free (oem_website);
+	return FALSE;
+}
+
+/**
+ * gpm_engine_perhaps_recall_cb:
+ */
+static void
+gpm_engine_perhaps_recall_cb (GpmEngine      *engine,
+			      GpmCellUnitKind kind,
+			      gchar          *oem_vendor,
+			      gchar          *website,
+			      GpmManager     *manager)
+{
+	g_object_set_data (G_OBJECT (manager), "recall-oem-vendor", (gpointer) g_strdup (oem_vendor));
+	g_object_set_data (G_OBJECT (manager), "recall-oem-website", (gpointer) g_strdup (website));
+	/* delay by a few seconds so the panel can load */
+	g_timeout_add (GPM_MANAGER_RECALL_DELAY, (GSourceFunc) gpm_manager_perhaps_recall, manager);
+}
+
+/**
+ * gpm_engine_low_capacity_cb:
+ */
+static void
+gpm_engine_low_capacity_cb (GpmEngine      *engine,
+			    GpmCellUnitKind kind,
+			    guint           capacity,
+			    GpmManager     *manager)
+{
+	/* We should notify the user if the battery has a low capacity,
+	 * where capacity is the ratio of the last_full capacity with that of
+	 * the design capacity. (#326740) */
+	gpm_notify_low_capacity (manager->priv->notify, capacity);
+}
+
+/**
+ * gpm_engine_icon_changed_cb:
+ */
+static void
+gpm_engine_icon_changed_cb (GpmEngine  *engine,
+			    gchar      *icon,
+			    GpmManager *manager)
+{
+	gpm_tray_icon_set_icon (manager->priv->tray_icon, icon);
+}
+
+/**
+ * gpm_engine_summary_changed_cb:
+ */
+static void
+gpm_engine_summary_changed_cb (GpmEngine  *engine,
+			       gchar      *summary,
+			       GpmManager *manager)
+{
+	gpm_tray_icon_set_tooltip (manager->priv->tray_icon, summary);
+}
+
+/**
+ * gpm_engine_low_capacity_cb:
+ */
+static void
+gpm_engine_fully_charged_cb (GpmEngine      *engine,
+			     GpmCellUnitKind kind,
+			     guint           capacity,
+			     GpmManager     *manager)
+{
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		gpm_notify_fully_charged_primary (manager->priv->notify);
+	}
+}
+
+/**
+ * gpm_engine_low_capacity_cb:
+ */
+static void
+gpm_engine_discharging_cb (GpmEngine      *engine,
+			   GpmCellUnitKind kind,
+			   GpmManager     *manager)
+{
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		gpm_notify_discharging_primary (manager->priv->notify);
+	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+		gpm_notify_discharging_ups (manager->priv->notify);
+	}
+}
+
+/**
+ * control_sleep_failure_cb:
+ **/
+static void
+control_sleep_failure_cb (GpmControl      *control,
+			  GpmControlAction action,
+		          GpmManager      *manager)
+{
+	gboolean show_sleep_failed;
+
+	/* only show this if specified in gconf */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_SLEEP_FAILED, &show_sleep_failed);
+
+	/* only emit if in GConf */
+	if (show_sleep_failed == TRUE) {
+		if (action == GPM_CONTROL_ACTION_SUSPEND) {
+			gpm_syslog ("suspend failed");
+			gpm_notify_sleep_failed (manager->priv->notify, FALSE);
+		} else {
+			gpm_syslog ("hibernate failed");
+			gpm_notify_sleep_failed (manager->priv->notify, TRUE);
+		}
+	}
+}
+
+/**
+ * gpm_engine_charge_low_cb:
+ */
+static void
+gpm_engine_charge_low_cb (GpmEngine      *engine,
+			  GpmCellUnitKind kind,
+			  GpmCellUnit    *unit,
+			  GpmManager     *manager)
+{
+	const gchar *title = NULL;
+	gchar *message = NULL;
+	gchar *remaining;
+	gchar *icon;
+
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		title = _("Laptop battery low");
+		remaining = gpm_get_timestring (unit->time_discharge);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%)"),
+					   remaining, unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+		title = _("UPS low");
+		remaining = gpm_get_timestring (unit->time_discharge);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"),
+					   remaining, unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
+		title = _("Mouse battery low");
+		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%d%%)"), unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+		title = _("Keyboard battery low");
+		message = g_strdup_printf (_("The wireless keyboard attached to this computer is low in power (%d%%)"), unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
+		title = _("PDA battery low");
+		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%d%%)"), unit->percentage);
+	}
+
+	/* get correct icon */
+	icon = gpm_cell_unit_get_icon (unit);
+	gpm_notify_display (manager->priv->notify,
+			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
+			    icon, GPM_NOTIFY_URGENCY_NORMAL);
+	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	g_free (icon);
+	g_free (message);
+}
+
+/**
+ * gpm_engine_charge_critical_cb:
+ */
+static void
+gpm_engine_charge_critical_cb (GpmEngine      *engine,
+			       GpmCellUnitKind kind,
+			       GpmCellUnit    *unit,
+			       GpmManager     *manager)
+{
+	const gchar *title = NULL;
+	gchar *message = NULL;
+	gchar *remaining;
+	gchar *icon;
+
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		title = _("Laptop battery critically low");
+		remaining = gpm_get_timestring (unit->time_discharge);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+					     "Plug in your AC adapter to avoid losing data."),
+					   remaining, unit->percentage);
+		g_free (remaining);
+	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+		title = _("UPS critically low");
+		remaining = gpm_get_timestring (unit->time_discharge);
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%d%%). "
+					     "Restore AC power to your computer to avoid losing data."),
+					   remaining, unit->percentage);
+		g_free (remaining);
+	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
+		title = _("Mouse battery low");
+		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%d%%). "
+					     "This device will soon stop functioning if not charged."),
+					   unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
+		title = _("Keyboard battery low");
+		message = g_strdup_printf (_("The wireless keyboard attached to this computer is very low in power (%d%%). "
+					     "This device will soon stop functioning if not charged."),
+					   unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
+		title = _("PDA battery low");
+		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%d%%). "
+					     "This device will soon stop functioning if not charged."),
+					   unit->percentage);
+	}
+
+	/* get correct icon */
+	icon = gpm_cell_unit_get_icon (unit);
+	gpm_notify_display (manager->priv->notify,
+			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
+			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
+	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	g_free (icon);
+	g_free (message);
+}
+
+/**
+ * gpm_engine_charge_action_cb:
+ */
+static void
+gpm_engine_charge_action_cb (GpmEngine      *engine,
+			     GpmCellUnitKind kind,
+			     guint           percentage,
+			     GpmManager     *manager)
+{
+	const gchar *title = NULL;
+	gchar *action;
+	gchar *message = NULL;
+	gchar *icon = g_strdup ("moo");
+
+	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		title = _("Laptop battery critically low");
+
+		/* we have to do different warnings depending on the policy */
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
+
+		/* TODO: we should probably convert to an ENUM type, and use that */
+		if (strcmp (action, ACTION_NOTHING) == 0) {
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer will <b>power-off</b> when the "
+					      "battery becomes completely empty."));
+
+		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to suspend.<br>"
+					      "<b>NOTE:</b> A small amount of power is required "
+					      "to keep your computer in a suspended state."));
+
+		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to hibernate."));
+
+		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+			message = g_strdup (_("The battery is below the critical level and "
+					      "this computer is about to shutdown."));
+		}
+
+		g_free (action);
+
+		/* wait 10 seconds for user-panic */
+if (0)		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
+
+	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
+		title = _("UPS critically low");
+
+		/* we have to do different warnings depending on the policy */
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_UPS_CRITICAL, &action);
+
+		/* FIXME: we should probably convert to an ENUM type, and use that */
+		if (strcmp (action, ACTION_NOTHING) == 0) {
+			message = _("The UPS is below the critical level and "
+				    "this computer will <b>power-off</b> when the "
+				    "UPS becomes completely empty.");
+
+		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+			message = _("The UPS is below the critical level and "
+				    "this computer is about to hibernate.");
+
+		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+			message = _("The UPS is below the critical level and "
+				    "this computer is about to shutdown.");
+		}
+
+		g_free (action);
+	}
+
+	/* not all types have actions */
+	if (title == NULL) {
+		return;
+	}
+	gpm_notify_display (manager->priv->notify,
+			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
+			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
+	gpm_sound_event (manager->priv->sound, GPM_SOUND_POWER_LOW);
+	g_free (icon);
+	g_free (message);
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1341,13 +1219,6 @@ gpm_manager_init (GpmManager *manager)
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-
-	/* we want all notifications */
-	manager->priv->last_ups = GPM_WARNING_NONE;
-	manager->priv->last_mouse = GPM_WARNING_NONE;
-	manager->priv->last_keyboard = GPM_WARNING_NONE;
-	manager->priv->last_pda = GPM_WARNING_NONE;
-	manager->priv->last_primary = GPM_WARNING_NONE;
 
 	/* do some actions even when killed */
 	g_atexit (gpm_manager_at_exit);
@@ -1363,28 +1234,12 @@ gpm_manager_init (GpmManager *manager)
 
 	/* coldplug so we are in the correct state at startup */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	manager->priv->done_notify_fully_charged = FALSE;
-
-	/* Don't notify on startup if we are on battery power */
-	if (on_ac == FALSE) {
-		manager->priv->last_primary = GPM_WARNING_DISCHARGING;
-	}
-
-	/* Don't notify at startup if we are fully charged on AC */
-	if (on_ac == TRUE) {
-		manager->priv->done_notify_fully_charged = TRUE;
-	}
-
-	manager->priv->power = gpm_power_new ();
-	g_signal_connect (manager->priv->power, "battery-status-changed",
-			  G_CALLBACK (power_battery_status_changed_cb), manager);
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
 			  G_CALLBACK (button_pressed_cb), manager);
 
 	manager->priv->hal_power = hal_gpower_new ();
-	manager->priv->warning = gpm_warning_new ();
 	manager->priv->sound = gpm_sound_new ();
 
 	/* try and start an interactive service */
@@ -1433,22 +1288,22 @@ gpm_manager_init (GpmManager *manager)
 	/* use the control object */
 	gpm_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
-	if (manager->priv->control != NULL) {
-		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_CONTROL,
-						 &dbus_glib_gpm_control_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_CONTROL,
-						     G_OBJECT (manager->priv->control));
-	}
+	g_signal_connect (manager->priv->control, "sleep-failure",
+			  G_CALLBACK (control_sleep_failure_cb), manager);
+	/* add the new brightness lcd DBUS interface */
+	dbus_g_object_type_install_info (GPM_TYPE_CONTROL,
+					 &dbus_glib_gpm_control_object_info);
+	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_CONTROL,
+					     G_OBJECT (manager->priv->control));
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();
-	if (manager->priv->tray_icon != NULL) {
-		dbus_g_object_type_install_info (GPM_TYPE_TRAY_ICON,
-						 &dbus_glib_gpm_ui_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_UI,
-						     G_OBJECT (manager->priv->tray_icon));
-	}
+	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
+				 "suspend", G_CALLBACK (gpm_manager_tray_icon_suspend),
+				 manager, G_CONNECT_SWAPPED);
+	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
+				 "hibernate", G_CALLBACK (gpm_manager_tray_icon_hibernate),
+				 manager, G_CONNECT_SWAPPED);
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
@@ -1472,22 +1327,37 @@ gpm_manager_init (GpmManager *manager)
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_STATS,
 					     G_OBJECT (manager->priv->info));
 
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "suspend",
-				 G_CALLBACK (gpm_manager_tray_icon_suspend),
-				 manager,
-				 G_CONNECT_SWAPPED);
-	g_signal_connect_object (G_OBJECT (manager->priv->tray_icon),
-				 "hibernate",
-				 G_CALLBACK (gpm_manager_tray_icon_hibernate),
-				 manager,
-				 G_CONNECT_SWAPPED);
-
 	gpm_manager_sync_policy_sleep (manager);
-	gpm_tray_icon_sync (manager->priv->tray_icon);
 
 	/* on startup, check if there are suspend errors left */
 	gpm_manager_check_sleep_errors (manager);
+
+	manager->priv->engine = gpm_engine_new ();
+	g_signal_connect (manager->priv->engine, "perhaps-recall",
+			  G_CALLBACK (gpm_engine_perhaps_recall_cb), manager);
+	g_signal_connect (manager->priv->engine, "low-capacity",
+			  G_CALLBACK (gpm_engine_low_capacity_cb), manager);
+	g_signal_connect (manager->priv->engine, "icon-changed",
+			  G_CALLBACK (gpm_engine_icon_changed_cb), manager);
+	g_signal_connect (manager->priv->engine, "summary-changed",
+			  G_CALLBACK (gpm_engine_summary_changed_cb), manager);
+	g_signal_connect (manager->priv->engine, "fully-charged",
+			  G_CALLBACK (gpm_engine_fully_charged_cb), manager);
+	g_signal_connect (manager->priv->engine, "discharging",
+			  G_CALLBACK (gpm_engine_discharging_cb), manager);
+	g_signal_connect (manager->priv->engine, "charge-low",
+			  G_CALLBACK (gpm_engine_charge_low_cb), manager);
+	g_signal_connect (manager->priv->engine, "charge-critical",
+			  G_CALLBACK (gpm_engine_charge_critical_cb), manager);
+	g_signal_connect (manager->priv->engine, "charge-action",
+			  G_CALLBACK (gpm_engine_charge_action_cb), manager);
+
+	gpm_engine_start (manager->priv->engine);
+
+	GpmEngineCollection *collection;
+	collection = gpm_engine_get_collection (manager->priv->engine);
+	gpm_tray_icon_set_collection_data (manager->priv->tray_icon, collection);
+	gpm_info_set_collection_data (manager->priv->info, collection);
 }
 
 /**
@@ -1512,11 +1382,10 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->conf);
 	g_object_unref (manager->priv->hal_power);
 	g_object_unref (manager->priv->sound);
-	g_object_unref (manager->priv->warning);
 	g_object_unref (manager->priv->dpms);
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
-	g_object_unref (manager->priv->power);
+	g_object_unref (manager->priv->engine);
 	g_object_unref (manager->priv->profile);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);

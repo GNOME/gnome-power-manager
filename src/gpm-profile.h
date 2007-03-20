@@ -50,7 +50,9 @@ typedef struct
 GType			 gpm_profile_get_type			(void);
 GpmProfile		*gpm_profile_new			(void);
 
-gboolean		 gpm_profile_provide_data		(GpmProfile	*profile,
+gboolean		 gpm_profile_register_charging		(GpmProfile	*profile,
+								 gboolean	 is_charging);
+gboolean		 gpm_profile_register_percentage	(GpmProfile	*profile,
 								 guint		 percentage);
 GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile,
 								 gboolean	 discharging);

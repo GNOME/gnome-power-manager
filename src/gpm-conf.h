@@ -33,100 +33,87 @@ G_BEGIN_DECLS
 #define GPM_IS_CONF_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_CONF))
 #define GPM_CONF_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_CONF, GpmConfClass))
 
-
 #define GPM_CONF_DIR 			"/apps/gnome-power-manager"
 
-#define GPM_CONF_AC_SLEEP_COMPUTER	GPM_CONF_DIR "/ac_sleep_computer"
-#define GPM_CONF_AC_SLEEP_DISPLAY	GPM_CONF_DIR "/ac_sleep_display"
-#define GPM_CONF_AC_DPMS_METHOD		GPM_CONF_DIR "/ac_dpms_sleep_method"
-#define GPM_CONF_AC_BRIGHTNESS		GPM_CONF_DIR "/ac_brightness"
-#define GPM_CONF_AC_BRIGHTNESS_KBD	GPM_CONF_DIR "/ac_brightness_kbd"
-#define GPM_CONF_AC_IDLE_DIM		GPM_CONF_DIR "/ac_dim_on_idle"
-#define GPM_CONF_BATTERY_SLEEP_COMPUTER	GPM_CONF_DIR "/battery_sleep_computer"
-#define GPM_CONF_BATTERY_SLEEP_DISPLAY	GPM_CONF_DIR "/battery_sleep_display"
-#define GPM_CONF_BATTERY_DPMS_METHOD	GPM_CONF_DIR "/battery_dpms_sleep_method"
-#define GPM_CONF_BATTERY_BRIGHTNESS	GPM_CONF_DIR "/battery_brightness"
-#define GPM_CONF_BATTERY_BRIGHTNESS_KBD	GPM_CONF_DIR "/battery_brightness_kbd"
-#define GPM_CONF_BATTERY_IDLE_DIM	GPM_CONF_DIR "/battery_dim_on_idle"
+#define GPM_CONF_NOTIFY_PERHAPS_RECALL	GPM_CONF_DIR "/notify/perhaps_recall"
+#define GPM_CONF_NOTIFY_LOW_CAPACITY	GPM_CONF_DIR "/notify/low_capacity"
+#define GPM_CONF_NOTIFY_DISCHARGING	GPM_CONF_DIR "/notify/discharging"
+#define GPM_CONF_NOTIFY_FULLY_CHARGED	GPM_CONF_DIR "/notify/fully_charged"
+#define GPM_CONF_NOTIFY_SLEEP_FAILED	GPM_CONF_DIR "/notify/sleep_failed"
+#define GPM_CONF_NOTIFY_LOW_POWER	GPM_CONF_DIR "/notify/low_power"
 
+#define GPM_CONF_LOW_PERCENTAGE		GPM_CONF_DIR "/thresholds/percentage_low"
+#define GPM_CONF_CRITICAL_PERCENTAGE	GPM_CONF_DIR "/thresholds/percentage_critical"
+#define GPM_CONF_ACTION_PERCENTAGE	GPM_CONF_DIR "/thresholds/percentage_action"
+#define GPM_CONF_LOW_TIME		GPM_CONF_DIR "/thresholds/time_low"
+#define GPM_CONF_CRITICAL_TIME		GPM_CONF_DIR "/thresholds/time_critical"
+#define GPM_CONF_ACTION_TIME		GPM_CONF_DIR "/thresholds/time_action"
+
+#define GPM_CONF_AC_SLEEP_TYPE		GPM_CONF_DIR "/ac/sleep_type"
+#define GPM_CONF_AC_BUTTON_LID		GPM_CONF_DIR "/ac/button_lid"
+#define GPM_CONF_AC_SLEEP_COMPUTER	GPM_CONF_DIR "/ac/sleep_computer"
+#define GPM_CONF_AC_SLEEP_DISPLAY	GPM_CONF_DIR "/ac/sleep_display"
+#define GPM_CONF_AC_DPMS_METHOD		GPM_CONF_DIR "/ac/dpms_sleep_method"
+#define GPM_CONF_AC_BRIGHTNESS		GPM_CONF_DIR "/ac/brightness"
+#define GPM_CONF_AC_BRIGHTNESS_KBD	GPM_CONF_DIR "/ac/brightness_kbd"
+#define GPM_CONF_AC_IDLE_DIM		GPM_CONF_DIR "/ac/dim_on_idle"
+#define GPM_CONF_AC_CPUFREQ_POLICY	GPM_CONF_DIR "/ac/cpufreq_policy"
+#define GPM_CONF_AC_CPUFREQ_VALUE	GPM_CONF_DIR "/ac/cpufreq_performance"
+#define GPM_CONF_AC_LOWPOWER		GPM_CONF_DIR "/ac/use_lowpower"
+
+#define GPM_CONF_BATT_SLEEP_TYPE	GPM_CONF_DIR "/battery/sleep_type"
+#define GPM_CONF_BATT_BUTTON_LID	GPM_CONF_DIR "/battery/button_lid"
+#define GPM_CONF_BATT_CRITICAL		GPM_CONF_DIR "/battery/critical"
+#define GPM_CONF_BATT_SLEEP_COMPUTER	GPM_CONF_DIR "/battery/sleep_computer"
+#define GPM_CONF_BATT_SLEEP_DISPLAY	GPM_CONF_DIR "/battery/sleep_display"
+#define GPM_CONF_BATT_DPMS_METHOD	GPM_CONF_DIR "/battery/dpms_sleep_method"
+#define GPM_CONF_BATT_BRIGHTNESS	GPM_CONF_DIR "/battery/brightness"
+#define GPM_CONF_BATT_BRIGHTNESS_KBD	GPM_CONF_DIR "/battery/brightness_kbd"
+#define GPM_CONF_BATT_IDLE_DIM		GPM_CONF_DIR "/battery/dim_on_idle"
+#define GPM_CONF_BATT_CPUFREQ_POLICY	GPM_CONF_DIR "/battery/cpufreq_policy"
+#define GPM_CONF_BATT_CPUFREQ_VALUE	GPM_CONF_DIR "/battery/cpufreq_performance"
+#define GPM_CONF_BATT_EVENT_WHEN_CLOSED	GPM_CONF_DIR "/battery/event_when_closed"
+#define GPM_CONF_BATT_LOWPOWER		GPM_CONF_DIR "/battery/use_lowpower"
+
+#define GPM_CONF_UPS_CRITICAL		GPM_CONF_DIR "/ups/critical"
+#define GPM_CONF_UPS_LOW		GPM_CONF_DIR "/ups/low"
+#define GPM_CONF_UPS_LOWPOWER		GPM_CONF_DIR "/ups/use_lowpower"
+
+#define GPM_CONF_BUTTON_SUSPEND		GPM_CONF_DIR "/buttons/suspend"
+#define GPM_CONF_BUTTON_HIBERNATE	GPM_CONF_DIR "/buttons/hibernate"
+#define GPM_CONF_BUTTON_POWER		GPM_CONF_DIR "/buttons/power"
+
+/* These are only effective if the system default is turned off. See bug #331164 */
+#define GPM_CONF_LOCK_USE_SCREENSAVER	GPM_CONF_DIR "/lock/use_screensaver_settings"
+#define GPM_CONF_LOCK_ON_BLANK_SCREEN	GPM_CONF_DIR "/lock/blank_screen"
+#define GPM_CONF_LOCK_ON_SUSPEND	GPM_CONF_DIR "/lock/suspend"
+#define GPM_CONF_LOCK_ON_HIBERNATE	GPM_CONF_DIR "/lock/hibernate"
+
+#define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics/show_legend"
+#define GPM_CONF_STAT_SHOW_AXIS_LABELS	GPM_CONF_DIR "/statistics/show_axis_labels"
+#define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics/show_events"
+#define GPM_CONF_STAT_GRAPH_TYPE	GPM_CONF_DIR "/statistics/graph_type"
+#define GPM_CONF_GRAPH_DATA_MAX_TIME	GPM_CONF_DIR "/statistics/data_max_time"
+
+#define GPM_CONF_ICON_POLICY		GPM_CONF_DIR "/ui/display_icon_policy"
+#define GPM_CONF_UI_SHOW_CPUFREQ	GPM_CONF_DIR "/ui/cpufreq_show"
+#define GPM_CONF_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
+#define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/ui/enable_sound"
+
+#define GPM_CONF_USE_NICE		GPM_CONF_DIR "/cpufreq_consider_nice"
 #define GPM_CONF_DISPLAY_STATE_CHANGE	GPM_CONF_DIR "/display_state_change"
-#define GPM_CONF_DISPLAY_AMBIENT	GPM_CONF_DIR "/display_ambient"
-
-#define GPM_CONF_AC_SLEEP_TYPE		GPM_CONF_DIR "/action_ac_sleep_type"
-#define GPM_CONF_BATTERY_SLEEP_TYPE	GPM_CONF_DIR "/action_battery_sleep_type"
-#define GPM_CONF_BUTTON_SUSPEND		GPM_CONF_DIR "/action_button_suspend"
-#define GPM_CONF_BUTTON_HIBERNATE	GPM_CONF_DIR "/action_button_hibernate"
-#define GPM_CONF_BUTTON_POWER		GPM_CONF_DIR "/action_button_power"
-#define GPM_CONF_AC_BUTTON_LID		GPM_CONF_DIR "/action_ac_button_lid"
-#define GPM_CONF_BATTERY_BUTTON_LID	GPM_CONF_DIR "/action_battery_button_lid"
-#define GPM_CONF_BATTERY_CRITICAL	GPM_CONF_DIR "/action_battery_critical"
-#define GPM_CONF_UPS_CRITICAL		GPM_CONF_DIR "/action_ups_critical"
-#define GPM_CONF_UPS_LOW		GPM_CONF_DIR "/action_ups_low"
-
-#define GPM_CONF_USE_TIME_POLICY	GPM_CONF_DIR "/use_time_for_policy"
-#define GPM_CONF_ICON_POLICY		GPM_CONF_DIR "/display_icon_policy"
-#define GPM_CONF_NOTIFY_ACADAPTER	GPM_CONF_DIR "/notify_ac_adapter"
-#define GPM_CONF_NOTIFY_BATTCHARGED	GPM_CONF_DIR "/notify_fully_charged"
-#define GPM_CONF_NOTIFY_HAL_ERROR	GPM_CONF_DIR "/notify_hal_error"
-#define GPM_CONF_NOTIFY_LOW_POWER	GPM_CONF_DIR "/notify_low_power"
-
 #define GPM_CONF_CAN_SUSPEND		GPM_CONF_DIR "/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE		GPM_CONF_DIR "/can_hibernate"
-
-#define GPM_CONF_NETWORKMANAGER_SLEEP	GPM_CONF_DIR "/networkmanager_sleep"
-#define GPM_CONF_SHOW_RECALL_WARNING	GPM_CONF_DIR "/show_recalled_battery_warning"
-#define GPM_CONF_SHOW_CAPACITY_WARNING	GPM_CONF_DIR "/show_capacity_warning"
-#define GPM_CONF_SHOW_CHARGE_WARNING	GPM_CONF_DIR "/show_charge_warning"
-
-#define GPM_CONF_LOCK_USE_SCREENSAVER	GPM_CONF_DIR "/lock_use_screensaver_settings"
-/* These are only effective if the system default is turned off. See bug #331164 */
-#define GPM_CONF_LOCK_ON_BLANK_SCREEN	GPM_CONF_DIR "/lock_on_blank_screen"
-#define GPM_CONF_LOCK_ON_SUSPEND	GPM_CONF_DIR "/lock_on_suspend"
-#define GPM_CONF_LOCK_ON_HIBERNATE	GPM_CONF_DIR "/lock_on_hibernate"
-
+#define GPM_CONF_DISPLAY_AMBIENT	GPM_CONF_DIR "/display_ambient"
+#define GPM_CONF_PANEL_DIM_BRIGHTNESS	GPM_CONF_DIR "/laptop_panel_dim_brightness"
+#define GPM_CONF_USE_TIME_POLICY	GPM_CONF_DIR "/use_time_for_policy"
+#define GPM_CONF_USE_PROFILE_TIME	GPM_CONF_DIR "/use_profile_time"
+#define GPM_CONF_NETWORKMANAGER_SLEEP	GPM_CONF_DIR "/network_sleep"
 #define GPM_CONF_IDLE_CHECK_CPU		GPM_CONF_DIR "/check_type_cpu"
 #define GPM_CONF_INVALID_TIMEOUT	GPM_CONF_DIR "/invalid_timeout"
-
-#define GPM_CONF_LAPTOP_USES_EXT_MON	GPM_CONF_DIR "/laptop_uses_external_monitor"
-
-/* This allows us to ignore policy on resume for a bit */
+#define GPM_CONF_LAPTOP_USES_EXT_MON	GPM_CONF_DIR "/using_external_monitor"
 #define GPM_CONF_POLICY_TIMEOUT		GPM_CONF_DIR "/policy_suppression_timeout"
-
-/* only valid when use_time_for_policy FALSE */
-#define GPM_CONF_LOW_PERCENTAGE		GPM_CONF_DIR "/battery_percentage_low"
-#define GPM_CONF_VERY_LOW_PERCENTAGE	GPM_CONF_DIR "/battery_percentage_very_low"
-#define GPM_CONF_CRITICAL_PERCENTAGE	GPM_CONF_DIR "/battery_percentage_critical"
-#define GPM_CONF_ACTION_PERCENTAGE	GPM_CONF_DIR "/battery_percentage_action"
-
-/* only valid when use_time_for_policy TRUE */
-#define GPM_CONF_LOW_TIME		GPM_CONF_DIR "/battery_time_low"
-#define GPM_CONF_VERY_LOW_TIME		GPM_CONF_DIR "/battery_time_very_low"
-#define GPM_CONF_CRITICAL_TIME		GPM_CONF_DIR "/battery_time_critical"
-#define GPM_CONF_ACTION_TIME		GPM_CONF_DIR "/battery_time_action"
-
-#define GPM_CONF_PANEL_DIM_BRIGHTNESS	GPM_CONF_DIR "/laptop_panel_dim_brightness"
-#define GPM_CONF_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/show_actions_in_menu"
-#define GPM_CONF_RATE_EXP_AVE_FACTOR	GPM_CONF_DIR "/rate_exponential_average_factor"
-#define GPM_CONF_BATT_EVENT_WHEN_CLOSED	GPM_CONF_DIR "/battery_event_when_closed"
-#define GPM_CONF_GRAPH_DATA_MAX_TIME	GPM_CONF_DIR "/graph_data_max_time"
-#define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/enable_sounds"
 #define GPM_CONF_IGNORE_INHIBITS	GPM_CONF_DIR "/ignore_inhibit_requests"
-
-#define GPM_CONF_AC_LOWPOWER		GPM_CONF_DIR "/use_lowpower_ac"
-#define GPM_CONF_UPS_LOWPOWER		GPM_CONF_DIR "/use_lowpower_ups"
-#define GPM_CONF_BATTERY_LOWPOWER	GPM_CONF_DIR "/use_lowpower_battery"
-
-#define GPM_CONF_AC_CPUFREQ_POLICY	GPM_CONF_DIR "/cpufreq_ac_policy"
-#define GPM_CONF_AC_CPUFREQ_VALUE	GPM_CONF_DIR "/cpufreq_ac_performance"
-#define GPM_CONF_BATTERY_CPUFREQ_POLICY	GPM_CONF_DIR "/cpufreq_battery_policy"
-#define GPM_CONF_BATTERY_CPUFREQ_VALUE	GPM_CONF_DIR "/cpufreq_battery_performance"
-#define GPM_CONF_USE_NICE		GPM_CONF_DIR "/cpufreq_consider_nice"
-#define GPM_CONF_SHOW_CPUFREQ_UI	GPM_CONF_DIR "/show_cpufreq_ui"
-
-#define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics_show_legend"
-#define GPM_CONF_STAT_SHOW_AXIS_LABELS	GPM_CONF_DIR "/statistics_show_axis_labels"
-#define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics_show_events"
-#define GPM_CONF_STAT_GRAPH_TYPE	GPM_CONF_DIR "/statistics_graph_type"
 
 /* we use the gnome-session key now */
 #define GPM_CONF_SESSION_REQUEST_SAVE	"/apps/gnome-session/options/auto_save_session"

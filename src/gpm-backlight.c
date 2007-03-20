@@ -133,8 +133,8 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
 		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
 	} else {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BATTERY_DPMS_METHOD, &dpms_method);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_SLEEP_DISPLAY, &timeout);
+		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BATT_DPMS_METHOD, &dpms_method);
 	}
 
 	/* convert the string types to standard types */
@@ -342,10 +342,10 @@ conf_key_changed_cb (GpmConf      *conf,
 			}
 		}
 
-	} else if (strcmp (key, GPM_CONF_BATTERY_BRIGHTNESS) == 0) {
+	} else if (strcmp (key, GPM_CONF_BATT_BRIGHTNESS) == 0) {
 
 		if (backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
 			if (on_ac == FALSE) {
 				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 			}
@@ -359,10 +359,10 @@ conf_key_changed_cb (GpmConf      *conf,
 		}
 	}
 
-	if (strcmp (key, GPM_CONF_BATTERY_SLEEP_DISPLAY) == 0 ||
+	if (strcmp (key, GPM_CONF_BATT_SLEEP_DISPLAY) == 0 ||
 	    strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
 	    strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
-	    strcmp (key, GPM_CONF_BATTERY_DPMS_METHOD) == 0) {
+	    strcmp (key, GPM_CONF_BATT_DPMS_METHOD) == 0) {
 		gpm_backlight_sync_policy (backlight);
 	}
 }
@@ -386,7 +386,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 	if (on_ac == TRUE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 	} else {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
 	}
 
 	/* only do brightness changes if we have the hardware */
@@ -456,7 +456,7 @@ idle_changed_cb (GpmIdle      *idle,
 	if (on_ac == TRUE) {
 		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
 	} else {
-		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATTERY_IDLE_DIM, &laptop_do_dim);
+		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATT_IDLE_DIM, &laptop_do_dim);
 	}
 
 	/* don't dim or undim the screen when the lid is closed */
@@ -678,7 +678,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 		if (on_ac == TRUE) {
 			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 		} else {
-			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATTERY_BRIGHTNESS, &value);
+			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
 		}
 		gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
 

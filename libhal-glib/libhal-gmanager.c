@@ -484,7 +484,7 @@ hal_gmanager_init (HalGManager *manager)
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_critical_error ("Either HAL or DBUS are not working!");
+		gpm_error ("Either HAL or DBUS are not working!");
 	}
 
 	g_signal_connect (manager->priv->gproxy, "proxy-status",

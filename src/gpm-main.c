@@ -192,13 +192,13 @@ main (int argc, char *argv[])
 	/* Add all of the options specified on the --debug line */
 	if (debugoptions) {
 		for (i = 0; debugoptions[i]; i++) {
-			gpm_add_debug_option (debugoptions[i]);
+			gpm_debug_add_option (debugoptions[i]);
 		}
 	}
 
 	/* we need to daemonize before we get a system connection to fix #366057 */
-	if (! no_daemon && daemon (0, 0)) {
-		gpm_critical_error ("Could not daemonize: %s", g_strerror (errno));
+	if (no_daemon == FALSE && daemon (0, 0)) {
+		gpm_error ("Could not daemonize: %s", g_strerror (errno));
 	}
 
 	gpm_debug ("GNOME %s %s", GPM_NAME, VERSION);
@@ -208,30 +208,27 @@ main (int argc, char *argv[])
 	if (error) {
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
-		gpm_critical_error ("This program cannot start until you start "
-				    "the dbus system service.\n"
-				    "It is <b>strongly recommended</b> you reboot "
-				    "your computer after starting this service.");
-		/* abort at this point */
-		exit (1);
+		gpm_error ("This program cannot start until you start "
+			   "the dbus system service.\n"
+			   "It is <b>strongly recommended</b> you reboot "
+			   "your computer after starting this service.");
 	}
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
 		gpm_warning ("%s", error->message);
 		g_error_free (error);
-		gpm_critical_error ("This program cannot start until you start the "
-				    "dbus session service.\n\n"
-				    "This is usually started automatically in X "
-				    "or gnome startup when you start a new session.");
-		/* abort at this point */
-		exit (1);
+		gpm_error ("This program cannot start until you start the "
+			   "dbus session service.\n\n"
+			   "This is usually started automatically in X "
+			   "or gnome startup when you start a new session.");
 	}
 
-	if (! gpm_stock_icons_init()) {
-		gpm_critical_error ("Cannot continue without stock icons");
+	if (gpm_stock_icons_init() == FALSE) {
+		gpm_error ("Cannot continue without stock icons");
 	}
 
+	/* create a new gui object */
 	manager = gpm_manager_new ();
 
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
@@ -243,7 +240,7 @@ main (int argc, char *argv[])
 
 	/* Only timeout and close the mainloop if we have specified it
 	 * on the command line */
-	if (timed_exit) {
+	if (timed_exit == TRUE) {
 		g_timeout_add (1000 * 20, (GSourceFunc) timed_exit_cb, loop);
 	}
 

@@ -74,8 +74,8 @@ gpm_cpufreq_sync_policy (GpmCpufreq *cpufreq)
 		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
 	} else {
 		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_BATTERY_CPUFREQ_VALUE, &cpufreq_performance);
+		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_BATT_CPUFREQ_POLICY, &cpufreq_policy);
+		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_BATT_CPUFREQ_VALUE, &cpufreq_performance);
 	}
 
 	/* use enumerated value */
@@ -102,8 +102,8 @@ conf_key_changed_cb (GpmConf     *conf,
 	/* if any change, just resync the whole lot */
 	if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
 	    strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
-	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_POLICY) == 0 ||
-	    strcmp (key, GPM_CONF_BATTERY_CPUFREQ_VALUE) == 0 ||
+	    strcmp (key, GPM_CONF_BATT_CPUFREQ_POLICY) == 0 ||
+	    strcmp (key, GPM_CONF_BATT_CPUFREQ_VALUE) == 0 ||
 	    strcmp (key, GPM_CONF_USE_NICE) == 0) {
 
 		gpm_cpufreq_sync_policy (cpufreq);

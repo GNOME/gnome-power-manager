@@ -41,7 +41,7 @@
 #include "gpm-common.h"
 #include "gpm-conf.h"
 #include "gpm-debug.h"
-#include "gpm-power.h"
+#include "gpm-cell-unit.h"
 #include "gpm-warning.h"
 
 #define GPM_WARNING_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_WARNING, GpmWarningPrivate))
@@ -49,15 +49,13 @@
 struct GpmWarningPrivate
 {
 	GpmConf			*conf;
-	gboolean		 use_time;
+	gboolean		 use_time_primary;
 
 	guint			 low_percentage;
-	guint			 very_low_percentage;
 	guint			 critical_percentage;
 	guint			 action_percentage;
 
 	guint			 low_time;
-	guint			 very_low_time;
 	guint			 critical_time;
 	guint			 action_time;
 };
@@ -65,6 +63,46 @@ struct GpmWarningPrivate
 G_DEFINE_TYPE (GpmWarning, gpm_warning, G_TYPE_OBJECT)
 
 static gpointer gpm_warning_object = NULL;
+
+static GpmWarningState
+gpm_warning_get_state_csr (GpmWarning  *warning,
+		           GpmCellUnit *unit)
+{
+	if (unit->charge_current == 2) {
+		return GPM_WARNING_LOW;
+	} else if (unit->charge_current == 1) {
+		return GPM_WARNING_CRITICAL;
+	}
+	return GPM_WARNING_NONE;
+}
+
+static GpmWarningState
+gpm_warning_get_state_time (GpmWarning  *warning,
+		            GpmCellUnit *unit)
+{
+	if (unit->time_discharge <= warning->priv->action_time) {
+		return GPM_WARNING_ACTION;
+	} else if (unit->time_discharge <= warning->priv->critical_time) {
+		return GPM_WARNING_CRITICAL;
+	} else if (unit->time_discharge <= warning->priv->low_time) {
+		return GPM_WARNING_LOW;
+	}
+	return GPM_WARNING_NONE;
+}
+
+static GpmWarningState
+gpm_warning_get_state_percentage (GpmWarning  *warning,
+		                  GpmCellUnit *unit)
+{
+	if (unit->percentage <= warning->priv->action_percentage) {
+		return GPM_WARNING_ACTION;
+	} else if (unit->percentage <= warning->priv->critical_percentage) {
+		return GPM_WARNING_CRITICAL;
+	} else if (unit->percentage <= warning->priv->low_percentage) {
+		return GPM_WARNING_LOW;
+	}
+	return GPM_WARNING_NONE;
+}
 
 /**
  * gpm_warning_get_state:
@@ -78,9 +116,8 @@ static gpointer gpm_warning_object = NULL;
  * Return value: A GpmWarning state, e.g. GPM_WARNING_VERY_LOW
  **/
 GpmWarningState
-gpm_warning_get_state (GpmWarning       *warning,
-		      GpmPowerStatus   *status,
-		      GpmWarningPolicy  policy)
+gpm_warning_get_state (GpmWarning  *warning,
+		       GpmCellUnit *unit)
 {
 	GpmWarningState type;
 
@@ -89,51 +126,30 @@ gpm_warning_get_state (GpmWarning       *warning,
 	/* default to no warning */
 	type = GPM_WARNING_NONE;
 
-	/* get from gconf */
-	if (policy == GPM_WARNING_AUTO) {
-		policy = warning->priv->use_time;
-	}
+	if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE ||
+	    unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD) {
 
-	/* this is a CSR mouse */
-	if (status->design_charge == 7) {
-		if (status->current_charge == 2) {
-			type = GPM_WARNING_LOW;
-		} else if (status->current_charge == 1) {
-			type = GPM_WARNING_VERY_LOW;
-		}
-	} else if (policy == GPM_WARNING_TIME) {
-		if (status->remaining_time <= 0) {
-			type = GPM_WARNING_NONE;
-		} else if (status->remaining_time <= warning->priv->action_time) {
-			type = GPM_WARNING_ACTION;
-		} else if (status->remaining_time <= warning->priv->critical_time) {
-			type = GPM_WARNING_CRITICAL;
-		} else if (status->remaining_time <= warning->priv->very_low_time) {
-			type = GPM_WARNING_VERY_LOW;
-		} else if (status->remaining_time <= warning->priv->low_time) {
-			type = GPM_WARNING_LOW;
-		}
-	} else {
-		if (status->percentage_charge <= 0) {
-			type = GPM_WARNING_NONE;
-			gpm_warning ("Your hardware is reporting a percentage "
-				     "charge of %i, which is impossible. "
-				     "WARNING_ACTION will *not* be reported.",
-				     status->percentage_charge);
-		} else if (status->percentage_charge <= warning->priv->action_percentage) {
-			type = GPM_WARNING_ACTION;
-		} else if (status->percentage_charge <= warning->priv->critical_percentage) {
-			type = GPM_WARNING_CRITICAL;
-		} else if (status->percentage_charge <= warning->priv->very_low_percentage) {
-			type = GPM_WARNING_VERY_LOW;
-		} else if (status->percentage_charge <= warning->priv->low_percentage) {
-			type = GPM_WARNING_LOW;
-		}
+		type = gpm_warning_get_state_csr (warning, unit);
+
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_UPS ||
+		   unit->kind == GPM_CELL_UNIT_KIND_PDA) {
+
+		type = gpm_warning_get_state_percentage (warning, unit);
+
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
+		   warning->priv->use_time_primary == TRUE) {
+
+		type = gpm_warning_get_state_time (warning, unit);
+
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
+		   warning->priv->use_time_primary == FALSE) {
+
+		type = gpm_warning_get_state_percentage (warning, unit);
 	}
 
 	/* If we have no important warnings, we should test for discharging */
 	if (type == GPM_WARNING_NONE) {
-		if (status->is_discharging) {
+		if (unit->is_discharging) {
 			type = GPM_WARNING_DISCHARGING;
 		}
 	}
@@ -141,38 +157,14 @@ gpm_warning_get_state (GpmWarning       *warning,
 }
 
 /**
- * gpm_warning_get_title:
- * @warning_type: The warning type, e.g. GPM_WARNING_VERY_LOW
- * Return value: the title text according to the warning type.
- **/
-const gchar *
-gpm_warning_get_title (GpmWarningState warning_type)
-{
-	char *title = NULL;
-
-	if (warning_type == GPM_WARNING_ACTION ||
-	    warning_type == GPM_WARNING_CRITICAL) {
-		title = _("Power Critically Low");
-	} else if (warning_type == GPM_WARNING_VERY_LOW) {
-		title = _("Power Very Low");
-	} else if (warning_type == GPM_WARNING_LOW) {
-		title = _("Power Low");
-	} else if (warning_type == GPM_WARNING_DISCHARGING) {
-		title = _("Power Information");
-	}
-
-	return title;
-}
-
-/**
  * gpm_warning_constructor:
  **/
 static GObject *
-gpm_warning_constructor (GType		  type,
-			      guint		  n_construct_properties,
-			      GObjectConstructParam *construct_properties)
+gpm_warning_constructor (GType type,
+			 guint n_construct_properties,
+			 GObjectConstructParam *construct_properties)
 {
-	GpmWarning      *warning;
+	GpmWarning *warning;
 	GpmWarningClass *klass;
 	klass = GPM_WARNING_CLASS (g_type_class_peek (GPM_TYPE_WARNING));
 	warning = GPM_WARNING (G_OBJECT_CLASS (gpm_warning_parent_class)->constructor
@@ -209,7 +201,7 @@ gconf_key_changed_cb (GpmConf     *conf,
 	if (strcmp (key, GPM_CONF_USE_TIME_POLICY) == 0) {
 		gpm_conf_get_bool (warning->priv->conf,
 				   GPM_CONF_USE_TIME_POLICY,
-				   &warning->priv->use_time);
+				   &warning->priv->use_time_primary);
 	}
 }
 
@@ -245,20 +237,18 @@ gpm_warning_init (GpmWarning *warning)
 
 	/* get percentage policy */
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_LOW_PERCENTAGE, &warning->priv->low_percentage);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_VERY_LOW_PERCENTAGE, &warning->priv->very_low_percentage);
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_CRITICAL_PERCENTAGE, &warning->priv->critical_percentage);
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &warning->priv->action_percentage);
 
 	/* get time policy */
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_LOW_TIME, &warning->priv->low_time);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_VERY_LOW_TIME, &warning->priv->very_low_time);
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_CRITICAL_TIME, &warning->priv->critical_time);
 	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_ACTION_TIME, &warning->priv->action_time);
 
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
-	gpm_conf_get_bool (warning->priv->conf, GPM_CONF_USE_TIME_POLICY, &warning->priv->use_time);
-	if (warning->priv->use_time) {
+	gpm_conf_get_bool (warning->priv->conf, GPM_CONF_USE_TIME_POLICY, &warning->priv->use_time_primary);
+	if (warning->priv->use_time_primary) {
 		gpm_debug ("Using per-time notification policy");
 	} else {
 		gpm_debug ("Using percentage notification policy");
@@ -280,3 +270,4 @@ gpm_warning_new (void)
 	}
 	return GPM_WARNING (gpm_warning_object);
 }
+

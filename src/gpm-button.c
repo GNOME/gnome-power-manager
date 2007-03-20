@@ -281,7 +281,10 @@ emit_button_pressed (GpmButton   *button,
 		   for type 1 buttons */
 		hal_gdevice_get_string (device, "button.type", &type, NULL);
 		/* hal may no longer be there */
-		g_return_if_fail (type != NULL);
+		if (type == NULL) {
+			gpm_warning ("cannot get button type for %s", hal_gdevice_get_udi (device));
+			return;
+		}
 	} else {
 		type = g_strdup (details);
 	}

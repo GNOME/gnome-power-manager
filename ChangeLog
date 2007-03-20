@@ -1,3 +1,75 @@
+2007-03-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-power.c:
+	* src/gpm-power.h:
+	* src/gpm-battery.c:
+	* src/gpm-battery.h:
+	Remove this crappy code.
+
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-engine.c: (ac_adaptor_changed_cb),
+	* src/gpm-engine.h:
+	* src/gpm-main.c: (main):
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	* src/gpm-info.c: (gpm_info_set_collection_data),
+	* src/gpm-info.h:
+	* src/gpm-marshal.list:
+	* src/gpm-tray-icon.c: (gpm_tray_icon_set_collection_data),
+	* src/gpm-tray-icon.h:
+	* src/gpm-warning.c: (gpm_warning_get_state_csr),
+	* src/gpm-warning.h:
+	* src/gpm-cell-array.c: (gpm_cell_array_get_unit),
+	* src/gpm-cell-array.h:
+	* src/gpm-cell.c: (gpm_cell_refresh_all),
+	* test/Makefile.am:
+	Add the engine component, so we can remove GpmBattery and GpmPower.
+
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_init):
+
+	* src/gpm-conf.h:
+	* data/gnome-power-manager.schemas.in:
+	Re-organsise the schema with better names, and with a tree structure.
+	We have lots of keys, these need some structure.
+	Yes, I'm aware we are not migrating settings, this is a major change.
+
+	* docs/dbus-interface.xml:
+	Correct some spelling error.
+
+	* src/gpm-ac-adapter.h:
+	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
+	* src/gpm-button.c: (emit_button_pressed):
+	* src/gpm-cpufreq.c: (gpm_cpufreq_sync_policy),
+	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
+	Make the AcAdapter callback simpler.
+
+	* src/gdb-gpm.sh:
+	Add this file so I can lauch gdb with fewer keystrokes. Yes, I'm lazy.
+
+	* src/gpm-array.c: (gpm_array_compute_integral):
+	Don't assert if we try to integrate from X->X, i.e. the same number.
+
+	* src/gpm-cell.h:
+	* src/gpm-control.c:
+	* src/gpm-control.h:
+	* src/gpm-feedback-widget.c: (gpm_feedback_init):
+	* src/gpm-prefs-core.c: (gpm_prefs_setup_action_combo),
+	* src/gpm-statistics-core.c: (gpm_statistics_init):
+	General tidyups.
+
+	* src/gpm-debug.c: (gpm_debug_add_option), (gpm_error_real),
+	* src/gpm-debug.h:
+	Don't use GTK+ error dialogues for errors, just print to the console.
+
+	* src/gpm-profile.c: (gpm_profile_get_time),
+	* src/gpm-profile.h:
+	Use the engine, don't connect to HAL ourselves.
+
+	* src/gpm-notify.c: (notify_closed_cb), (gpm_notify_create),
+	* src/gpm-notify.h:
+	Make many more dialogues interactive. We still don't handle multiple
+	dialogs well, this to to fix real soon.
+
 2007-03-19  Richard Hughes  <richard@hughsie.com>
 
 	* Makefile.am:
@@ -274,7 +346,7 @@
 	* src/gpm-array.h:
 	* test/gpm-self-test.c: (test_gpm_array):
 	Create some new functions to help us with the data smoothing.
-	
+
 	* src/gpm-profile.c: (gpm_profile_get_data_time_percent),
 	(gpm_profile_get_data_accuracy_percent):
 	* src/gpm-statistics-core.c:
@@ -333,7 +405,7 @@
 
 	* src/gpm-array.c:
 	Comment fix.
-	
+
 	* src/gpm-graph-widget.c:
 	Add better checks for empty arrays.
 
@@ -347,7 +419,7 @@
 
 	* po/POTFILES.in:
 	Fix make distcheck. Oops.
-	
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
 	Allow down to 4 minutes in the y autoscale.
 
@@ -1343,7 +1415,7 @@
 
 	* src/dbus/gpm-dbus-inhibit.xml:
 	* src/dbus/gpm-dbus-statistics.xml:
-	Add some more comments, no functional changes.	
+	Add some more comments, no functional changes.
 
 2007-01-08  Richard Hughes  <richard@hughsie.com>
 
@@ -2157,7 +2229,7 @@
 	* docs/index.html:
 	* docs/sleep-names.html:
 	Regenerate.
-	
+
 	* src/.cvsignore:
 	* src/run-gpm.sh:
 	* src/valgrind-gpm.sh:
@@ -2171,10 +2243,10 @@
 	* src/gpm-brightness-lcd.c:
 	* src/gpm-brightness-lcd.h:
 	Send a signal when the brightness is manually changed.
-	
+
 	* src/gpm-hal.c:
 	Only try to clear the error if we are using a new HAL.
-	
+
 	* src/gpm-manager.c:
 	Don't re-use the manager object on atexit as it produces an
 	invalid read using valgrind.
@@ -2487,7 +2559,7 @@
 
 	* src/gpm-power.c:
 	Change the settling timeout to be 500ms so we don't get so much of
-	a delay on unplug before we hear the click.	
+	a delay on unplug before we hear the click.
 
 	* src/gpm-tray-icon.c:
 	Make sure we actually get rid of any notification on AC.
@@ -2586,7 +2658,7 @@
 	Move some more functionality away from the manager class into the
 	screensaver class. The idea is that GpmScreensaver should handle
 	all interactions with the screensaver, even dimming and undimming the
-	screen when the screensaver wants.	
+	screen when the screensaver wants.
 
 	* src/gpm-brightness-lcd.c:
 	Make into a singleton so we can use this in the screensaver class.
@@ -2654,7 +2726,7 @@
 
 	* configure.in:
 	Bump to 2.17.3, this was never done after the bodge release.
-	
+
 	* src/gpm-button.c: (gpm_button_new):
 	Make into a singleton for future work.
 

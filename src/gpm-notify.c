@@ -44,8 +44,8 @@
 #include "gpm-common.h"
 #include "gpm-conf.h"
 #include "gpm-debug.h"
-#include "gpm-power.h"
 #include "gpm-notify.h"
+#include "gpm-stock-icons.h"
 
 #ifdef HAVE_LIBNOTIFY
 #include <libnotify/notify.h>
@@ -57,9 +57,9 @@ struct GpmNotifyPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
-	GpmPower		*power;
 	GtkStatusIcon		*status_icon;
 	gchar			*recall_website;
+	const gchar		*do_not_show_gconf;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification	*libnotify;
 #endif
@@ -87,7 +87,7 @@ notify_closed_cb (NotifyNotification *libnotify,
 {
 	/* just invalidate the pointer */
 	gpm_debug ("caught notification closed signal");
-	notify->priv->libnotify = NULL;
+//	notify->priv->libnotify = NULL;
 }
 
 static gboolean
@@ -99,8 +99,8 @@ gpm_notify_create (GpmNotify 	 *notify,
 		   GpmNotifyUrgency urgency)
 {
 	if (notify->priv->libnotify != NULL) {
-		notify_notification_close (notify->priv->libnotify, NULL);
-		notify->priv->libnotify = NULL;
+//		notify_notification_close (notify->priv->libnotify, NULL);
+//		notify->priv->libnotify = NULL;
 	}
 
 	if (notify->priv->status_icon != NULL &&
@@ -271,14 +271,21 @@ gpm_notify_use_status_icon (GpmNotify *notify, GtkStatusIcon *status_icon)
 
 #ifdef HAVE_LIBNOTIFY
 static void
-notify_recall_action_cb (NotifyNotification *libnotify,
-                         gchar *action, GpmNotify *notify)
+notify_general_clicked_cb (NotifyNotification *libnotify,
+                           gchar *action, GpmNotify *notify)
 {
-	GError *error = NULL;
 	gboolean ret;
+	GError *error;
 
+	if (strcmp (action, "dont-show-again") == 0) {
+		gpm_debug ("not showing warning anymore for %s!", notify->priv->do_not_show_gconf);
+		gpm_conf_set_bool (notify->priv->conf, notify->priv->do_not_show_gconf, FALSE);
+		notify->priv->do_not_show_gconf = NULL;
+		return;
+	}
 	if (strcmp (action, "visit-website") == 0) {
 		gpm_debug ("autovisit website %s", notify->priv->recall_website);
+		error = NULL;
 		ret = gnome_url_show (notify->priv->recall_website, &error);
 		if (ret == FALSE) {
 			gpm_debug ("failed to show url: %s", error->message);
@@ -287,41 +294,24 @@ notify_recall_action_cb (NotifyNotification *libnotify,
 		/* free the stored string */
 		g_free (notify->priv->recall_website);
 		notify->priv->recall_website = NULL;
-	} else if (strcmp (action, "dont-show-again") == 0) {
-		gpm_debug ("not showing warning anymore!");
-		gpm_conf_set_bool (notify->priv->conf,
-				   GPM_CONF_SHOW_RECALL_WARNING, FALSE);
+		return;
 	}
+	gpm_debug ("action %s unknown", action);
 }
+#endif
 
 /**
- * power_perhaps_recall_cb:
- * @power: The power class instance
- * @vendor: The battery vendor, e.g. "DELL"
- * @manager: This class instance
- *
- * This function splits up the battery status changed callback, and calls
- * different functions for each of the device types.
+ * gpm_notify_perhaps_recall:
  **/
-static void
-power_perhaps_recall_cb (GpmPower    *power,
-			 const gchar *oem_vendor,
-			 const gchar *website,
-			 GpmNotify   *notify)
+gboolean
+gpm_notify_perhaps_recall (GpmNotify   *notify,
+			   const gchar *oem_vendor,
+			   const gchar *website)
 {
 	gchar *msg;
 	const gchar *title;
 
-	/* check to see if HAL has given us all the right info */
-	if (oem_vendor == NULL || website == NULL) {
-		gpm_warning ("Possibly a potential critical hardware problem, "
-			     "but not enough data from HAL to report to the user");
-		return;
-	}
-
 	/* save in state */
-	notify->priv->recall_website = g_strdup (website);
-
 	title = _("Battery may be recalled");
 	msg = g_strdup_printf (_("The battery in your computer may have been "
 			       "recalled by %s and you may be "
@@ -334,20 +324,185 @@ power_perhaps_recall_cb (GpmPower    *power,
 			   GPM_NOTIFY_URGENCY_CRITICAL);
 
 	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->recall_website = g_strdup (website);
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "visit-website",
 	                                 _("Visit recall website"),
-	                                 (NotifyActionCallback) notify_recall_action_cb,
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_PERHAPS_RECALL;
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
-	                                 (NotifyActionCallback) notify_recall_action_cb,
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
+#endif
+
 	gpm_notify_show (notify);
 	g_free (msg);
+	return TRUE;
 }
+
+/**
+ * gpm_notify_low_capacity:
+ **/
+gboolean
+gpm_notify_low_capacity (GpmNotify *notify,
+			 guint      capacity)
+{
+	gchar *msg;
+	const gchar *title;
+
+	title = _("Battery may be invalid");
+	msg = g_strdup_printf (_("Your battery has a very low capacity (%i%%), "
+				 "which means that it may be old or broken."),
+			       capacity);
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_LONG,
+			   GTK_STOCK_DIALOG_WARNING,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_LOW_CAPACITY;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
 #endif
+
+	gpm_notify_show (notify);
+	g_free (msg);
+	return TRUE;
+}
+
+/**
+ * gpm_notify_fully_charged_primary:
+ **/
+gboolean
+gpm_notify_fully_charged_primary (GpmNotify *notify)
+{
+	const gchar *msg;
+	const gchar *title;
+
+	title = _("Battery Charged");
+	msg = _("Your laptop battery is now fully charged");
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
+			   GTK_STOCK_DIALOG_WARNING,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_FULLY_CHARGED;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+#endif
+
+	gpm_notify_show (notify);
+	return TRUE;
+}
+
+/**
+ * gpm_notify_discharging_primary:
+ **/
+gboolean
+gpm_notify_discharging_primary (GpmNotify *notify)
+{
+	const gchar *msg;
+	const gchar *title;
+
+	title = _("Battery Discharging");
+	msg = _("The AC power has been unplugged. The system is now using battery power.");
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
+			   GTK_STOCK_DIALOG_WARNING,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_DISCHARGING;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+#endif
+
+	gpm_notify_show (notify);
+	return TRUE;
+}
+
+/**
+ * gpm_notify_discharging_ups:
+ **/
+gboolean
+gpm_notify_discharging_ups (GpmNotify *notify)
+{
+	const gchar *msg;
+	const gchar *title;
+
+	title = _("UPS Discharging");
+	msg = _("The AC power has been unplugged. The system is now using backup power.");
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
+			   GTK_STOCK_DIALOG_WARNING,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_DISCHARGING;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+#endif
+
+	gpm_notify_show (notify);
+	return TRUE;
+}
+
+/**
+ * gpm_notify_sleep_failed:
+ **/
+gboolean
+gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
+{
+	const gchar *msg;
+	const gchar *title;
+	const gchar *icon;
+
+	title = _("Sleep Problem");
+	if (hibernate == TRUE) {
+		msg = _("Your computer failed to hibernate.\nCheck the help file for common problems.");
+		icon = GPM_STOCK_HIBERNATE;
+	} else {
+		msg = _("Your computer failed to suspend.\nCheck the help file for common problems.");
+		icon = GPM_STOCK_SUSPEND;
+	}
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_LONG, icon,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_SLEEP_FAILED;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+#endif
+
+	gpm_notify_show (notify);
+	return TRUE;
+}
 
 /**
  * gpm_notify_constructor:
@@ -382,7 +537,6 @@ gpm_notify_finalize (GObject *object)
 		notify_notification_close (notify->priv->libnotify, NULL);
 	}
 #endif
-	g_object_unref (notify->priv->power);
 	g_object_unref (notify->priv->conf);
 	if (notify->priv->ac_adapter != NULL) {
 		g_object_unref (notify->priv->ac_adapter);
@@ -418,11 +572,7 @@ gpm_notify_init (GpmNotify *notify)
 	notify->priv = GPM_NOTIFY_GET_PRIVATE (notify);
 
 	notify->priv->conf = gpm_conf_new ();
-	notify->priv->power = gpm_power_new ();
-#ifdef HAVE_LIBNOTIFY
-	g_signal_connect (notify->priv->power, "battery-perhaps-recall",
-			  G_CALLBACK (power_perhaps_recall_cb), notify);
-#endif
+	notify->priv->do_not_show_gconf = NULL;
 
 	/* we use ac_adapter so we can log the event */
 	notify->priv->ac_adapter = gpm_ac_adapter_new ();

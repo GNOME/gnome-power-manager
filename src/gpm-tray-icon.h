@@ -24,6 +24,7 @@
 #define __GPM_TRAY_ICON_H
 
 #include <glib-object.h>
+#include "gpm-engine.h"
 
 G_BEGIN_DECLS
 
@@ -47,29 +48,17 @@ typedef struct
 	GObjectClass	parent_class;
 	void	(* suspend)				(GpmTrayIcon	*tray_icon);
 	void	(* hibernate)				(GpmTrayIcon	*tray_icon);
-	void	(* description_changed)			(GpmTrayIcon	*tray_icon,
-							 const gchar	**description);
-	void	(* icon_changed)			(GpmTrayIcon	*tray_icon,
-							 const gchar	**icon);
 } GpmTrayIconClass;
 
 GType		 gpm_tray_icon_get_type			(void);
 GpmTrayIcon	*gpm_tray_icon_new			(void);
 
-void		 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
+gboolean	 gpm_tray_icon_set_tooltip		(GpmTrayIcon	*icon,
 							 const gchar	*tooltip);
-void		 gpm_tray_icon_set_image_from_stock	(GpmTrayIcon	*icon,
-							 const gchar	*stock_id);
-void		 gpm_tray_icon_sync			(GpmTrayIcon	*icon);
-
-gboolean
-gpm_ui_get_description (GpmTrayIcon  *icon,
-		        gchar **mode_str,
-		        GError      **error);
-gboolean
-gpm_ui_get_icon (GpmTrayIcon  *icon,
-		 gchar **mode_str,
-		 GError      **error);
+gboolean	 gpm_tray_icon_set_icon			(GpmTrayIcon	*icon,
+							 const gchar	*filename);
+gboolean	 gpm_tray_icon_set_collection_data	(GpmTrayIcon	*icon,
+							 GpmEngineCollection *collection);
 
 G_END_DECLS
 

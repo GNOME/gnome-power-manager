@@ -46,7 +46,7 @@ typedef struct
 {
 	GObjectClass	parent_class;
 	void		(* ac_adapter_changed)	(GpmAcAdapter	*ac_adapter,
-						 gboolean	 status);
+						 gboolean	 on_ac);
 } GpmAcAdapterClass;
 
 GType		 gpm_ac_adapter_get_type	(void);

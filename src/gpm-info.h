@@ -24,6 +24,7 @@
 
 #include <glib-object.h>
 #include "gpm-graph-widget.h"
+#include "gpm-engine.h"
 
 G_BEGIN_DECLS
 
@@ -80,7 +81,7 @@ GQuark		 gpm_info_error_quark			(void);
 
 void		 gpm_info_show_window			(GpmInfo	*info);
 void		 gpm_info_event_log			(GpmInfo	*info,
-							 GpmGraphWidgetEvent	 event,
+							 GpmGraphWidgetEvent event,
 							 const gchar	*desc);
 
 gboolean	 gpm_statistics_get_data_types		(GpmInfo	*info,
@@ -104,6 +105,8 @@ void		 gpm_info_explain_reason		(GpmInfo	*info,
 							 GpmGraphWidgetEvent event,
 							 const gchar	*pre,
 							 const gchar	*post);
+gboolean	 gpm_info_set_collection_data		(GpmInfo	*info,
+							 GpmEngineCollection *collection);
 
 G_END_DECLS
 

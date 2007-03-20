@@ -41,7 +41,7 @@
 #include "gpm-info.h"
 #include "gpm-profile.h"
 #include "gpm-array.h"
-#include "gpm-power.h"
+#include "gpm-engine.h"
 #include "gpm-stock-icons.h"
 #include "gpm-idle.h"
 
@@ -65,8 +65,8 @@ struct GpmInfoPrivate
 	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
-	GpmPower		*power;
 	GpmProfile		*profile;
+	GpmEngineCollection	*collection;
 
 	GpmArray		*events;
 	GpmArray		*rate_data;
@@ -407,6 +407,21 @@ gpm_info_event_log (GpmInfo	       *info,
 }
 
 /**
+ * gpm_info_set_collection_data:
+ **/
+gboolean
+gpm_info_set_collection_data (GpmInfo             *info,
+			      GpmEngineCollection *collection)
+{
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+
+	info->priv->collection = collection;
+	return TRUE;
+}
+
+
+/**
  * gpm_info_log_do_poll:
  * @data: gpointer to this info class instance
  *
@@ -417,55 +432,52 @@ static gboolean
 gpm_info_log_do_poll (gpointer data)
 {
 	GpmInfo *info = (GpmInfo*) data;
+	GpmCellArray *array;
+	GpmCellUnit *unit;
 
 	int value_x;
 	int colour;
 
-	GpmPowerStatus battery_status;
-	gpm_power_get_battery_status (info->priv->power,
-				      GPM_POWER_KIND_PRIMARY,
-				      &battery_status);
+	array = info->priv->collection->primary;
+	unit = gpm_cell_array_get_unit (array);
 
 	if (info->priv->is_laptop == TRUE) {
 		/* work out seconds elapsed */
 		value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
 
 		/* set the correct colours */
-		if (battery_status.is_discharging) {
+		if (unit->is_discharging) {
 			colour = GPM_COLOUR_DISCHARGING;
-		} else if (battery_status.is_charging) {
+		} else if (unit->is_charging) {
 			colour = GPM_COLOUR_CHARGING;
 		} else {
 			colour = GPM_COLOUR_CHARGED;
 		}
 
 		gpm_array_add (info->priv->percentage_data, value_x,
-			       battery_status.percentage_charge, colour);
+			       unit->percentage, colour);
 
 		/* sanity check to less than 100W */
-		if (battery_status.charge_rate_raw < 100000) {
+		if (unit->rate < 100000) {
 			gpm_array_add (info->priv->rate_data, value_x,
-				       battery_status.charge_rate_raw, colour);
+				       unit->rate, colour);
 		}
 
 		/* sanity check to less than 10 hours */
-		if (battery_status.remaining_time < 10*60*60) {
+		if (unit->time_discharge < 10*60*60) {
 			gpm_array_add (info->priv->time_data, value_x,
-					   battery_status.remaining_time, colour);
+					   unit->time_discharge, colour);
 		}
 		gpm_array_add (info->priv->voltage_data, value_x,
-			       battery_status.voltage, colour);
+			       unit->voltage, colour);
 	}
 	return TRUE;
 }
 
 /**
- * power_on_ac_changed_cb:
- * @power: The power class instance
- * @on_ac: if we are on AC power
- * @manager: This class instance
+ * ac_adapter_changed_cb:
  *
- * Does the actions when the ac power source is inserted/removed.
+ * Does the actions when the ac source is inserted/removed.
  **/
 static void
 ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
@@ -483,13 +495,12 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 /**
  * button_pressed_cb:
- * @power: The power class instance
  * @type: The button type, e.g. "power"
  * @state: The state, where TRUE is depressed or closed
  * @brightness: This class instance
  **/
 static void
-button_pressed_cb (GpmButton   *power,
+button_pressed_cb (GpmButton   *button,
 		   const gchar *type,
 		   GpmInfo     *info)
 {
@@ -629,9 +640,6 @@ gpm_info_init (GpmInfo *info)
 	info->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
 
-	/* singleton, so okay */
-	info->priv->power = gpm_power_new ();
-
 	/* set default, we have to set these from the manager */
 	info->priv->profile = gpm_profile_new ();
 
@@ -723,7 +731,6 @@ gpm_info_finalize (GObject *object)
 	g_object_unref (info->priv->ac_adapter);
 	g_object_unref (info->priv->idle);
 	g_object_unref (info->priv->events);
-	g_object_unref (info->priv->power);
 	g_object_unref (info->priv->profile);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);

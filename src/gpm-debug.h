@@ -31,12 +31,15 @@ G_BEGIN_DECLS
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 #define gpm_debug(...) gpm_debug_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_warning(...) gpm_warning_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_error(...) gpm_error_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
 #elif defined(__GNUC__) && __GNUC__ >= 3
 #define gpm_debug(...) gpm_debug_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_warning(...) gpm_warning_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_error(...) gpm_error_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #else
 #define gpm_debug
 #define gpm_warning
+#define gpm_error
 #endif
 
 void		gpm_debug_init			(gboolean	 debug);
@@ -49,10 +52,12 @@ void		gpm_warning_real		(const gchar	*func,
 						 const gchar	*file,
 						 int		 line,
 						 const gchar	*format, ...);
+void		gpm_error_real			(const gchar	*func,
+						 const gchar	*file,
+						 int		 line,
+						 const gchar	*format, ...);
 void		gpm_syslog			(const gchar	*format, ...);
-void		gpm_critical_error		(const gchar	*format, ...);
-void		gpm_bugzilla			(void);
-void		gpm_add_debug_option		(const gchar	*option);
+void		gpm_debug_add_option		(const gchar	*option);
 
 G_END_DECLS
 

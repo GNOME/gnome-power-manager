@@ -28,7 +28,6 @@
 #include <libhal-gdevice.h>
 
 #include "gpm-common.h"
-#include "gpm-profile.h"
 #include "gpm-marshal.h"
 #include "gpm-cell.h"
 #include "gpm-cell-unit.h"
@@ -44,7 +43,6 @@ struct GpmCellPrivate
 {
 	HalGDevice	*hal_device;
 	GpmCellUnit	 unit;
-	GpmProfile	*profile;
 	gchar		*product;
 	gchar		*vendor;
 	gchar		*technology;
@@ -54,7 +52,8 @@ struct GpmCellPrivate
 
 enum {
 	PERCENT_CHANGED,
-	STATUS_CHANGED,
+	CHARGING_CHANGED,
+	DISCHARGING_CHANGED,
 	PERHAPS_RECALL,
 	LOW_CAPACITY,
 	LAST_SIGNAL
@@ -78,54 +77,6 @@ gpm_cell_get_unit (GpmCell *cell)
 	unit = &(cell->priv->unit);
 
 	return unit;
-}
-
-/**
- * gpm_cell_get_time_discharge:
- **/
-guint 
-gpm_cell_get_time_discharge (GpmCell *cell)
-{
-	GpmCellUnit *unit;
-	guint time;
-
-	g_return_val_if_fail (cell != NULL, 0);
-	g_return_val_if_fail (GPM_IS_CELL (cell), 0);
-
-	unit = &(cell->priv->unit);
-
-	/* primary has special profiling class */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		time = gpm_profile_get_time (cell->priv->profile, unit->percentage, TRUE);
-	} else {
-		time = unit->time_discharge;
-	}
-
-	return time;
-}
-
-/**
- * gpm_cell_get_time_charge:
- **/
-guint 
-gpm_cell_get_time_charge (GpmCell *cell)
-{
-	GpmCellUnit *unit;
-	guint time;
-
-	g_return_val_if_fail (cell != NULL, 0);
-	g_return_val_if_fail (GPM_IS_CELL (cell), 0);
-
-	unit = &(cell->priv->unit);
-
-	/* primary has special profiling class */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		time = gpm_profile_get_time (cell->priv->profile, unit->percentage, FALSE);
-	} else {
-		time = unit->time_charge;
-	}
-
-	return time;
 }
 
 /**
@@ -197,7 +148,7 @@ gpm_cell_refresh_all (GpmCell *cell)
 	}
 
 	/* calculate the batteries capacity if it is primary and present */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY && unit->is_present) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY && unit->is_present == TRUE) {
 		if (unit->charge_design > 0 && unit->charge_last_full > 0) {
 			if (unit->charge_design != unit->charge_last_full) {
 				float capacity;
@@ -210,6 +161,7 @@ gpm_cell_refresh_all (GpmCell *cell)
 				}
 				if (unit->capacity > 0 && unit->capacity < 50) {
 					gpm_warning ("battery has a low capacity");
+					gpm_debug ("** EMIT: low-capacity");
 					g_signal_emit (cell, signals [LOW_CAPACITY], 0, unit->capacity);
 				}
 			}
@@ -232,6 +184,7 @@ gpm_cell_refresh_all (GpmCell *cell)
 		hal_gdevice_get_string (device, "info.recall.vendor", &oem_vendor, NULL);
 		hal_gdevice_get_string (device, "info.recall.website_url", &website, NULL);
 		gpm_warning ("battery is recalled");
+		gpm_debug ("** EMIT: perhaps-recall");
 		g_signal_emit (cell, signals [PERHAPS_RECALL], 0, oem_vendor, website);
 		g_free (oem_vendor);
 		g_free (website);
@@ -281,6 +234,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 {
 	GpmCellUnit *unit = &(cell->priv->unit);
 	const gchar *udi = hal_gdevice_get_udi (device);
+	guint time_hal;
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
@@ -300,9 +254,21 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_charging, NULL);
+		gpm_debug ("** EMIT: charging-changed: %i", unit->is_charging);
+		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, unit->is_charging);
+		/* reset the time, as we really can't guess this without profiling */
+		if (unit->is_charging == TRUE) {
+			unit->time_discharge = 0;
+		}
 
 	} else if (strcmp (key, "battery.rechargeable.is_discharging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_discharging, NULL);
+		gpm_debug ("** EMIT: discharging-changed: %i", unit->is_discharging);
+		g_signal_emit (cell, signals [DISCHARGING_CHANGED], 0, unit->is_discharging);
+		/* reset the time, as we really can't guess this without profiling */
+		if (unit->is_discharging == TRUE) {
+			unit->time_charge = 0;
+		}
 
 	} else if (strcmp (key, "battery.charge_level.design") == 0) {
 		hal_gdevice_get_uint (device, key, &unit->charge_design, NULL);
@@ -318,9 +284,18 @@ hal_device_property_modified_cb (HalGDevice   *device,
 
 	} else if (strcmp (key, "battery.charge_level.percentage") == 0) {
 		hal_gdevice_get_uint (device, key, &unit->percentage, NULL);
+		gpm_debug ("** EMIT: percent-changed: %i", unit->percentage);
+		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, unit->percentage);
 
 	} else if (strcmp (key, "battery.remaining_time") == 0) {
-		hal_gdevice_get_uint (device, key, &unit->time_charge, NULL);
+		hal_gdevice_get_uint (device, key, &time_hal, NULL);
+		/* Gahh. We have to multiplex the time as HAL shares a key. */
+		if (unit->is_charging == TRUE) {
+			unit->time_charge = time_hal;
+		}
+		if (unit->is_discharging == TRUE) {
+			unit->time_discharge = time_hal;
+		}
 
 	} else if (strcmp (key, "battery.voltage.current") == 0) {
 		hal_gdevice_get_uint (device, key, &unit->voltage, NULL);
@@ -361,6 +336,9 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind type, const gchar *udi)
 		gpm_warning ("cannot set udi");
 		return FALSE;
 	}
+
+	/* watch for changes */
+	hal_gdevice_watch_property_modified (device);
 	g_signal_connect (device, "property-modified",
 			  G_CALLBACK (hal_device_property_modified_cb), cell);
 
@@ -408,6 +386,22 @@ gpm_cell_get_icon (GpmCell *cell)
 
 	unit = &(cell->priv->unit);
 	return gpm_cell_unit_get_icon (unit);
+}
+
+/**
+ * gpm_cell_print:
+ **/
+gboolean
+gpm_cell_print (GpmCell *cell)
+{
+	GpmCellUnit *unit;
+
+	g_return_val_if_fail (cell != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
+
+	unit = &(cell->priv->unit);
+	gpm_cell_unit_print (unit);
+	return TRUE;
 }
 
 /**
@@ -562,15 +556,24 @@ gpm_cell_class_init (GpmCellClass *klass)
 			      NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
-	signals [STATUS_CHANGED] =
-		g_signal_new ("status-changed",
+	signals [DISCHARGING_CHANGED] =
+		g_signal_new ("discharging-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmCellClass, status_changed),
+			      G_STRUCT_OFFSET (GpmCellClass, discharging_changed),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__BOOLEAN_BOOLEAN,
-			      G_TYPE_NONE, 2, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CHARGING_CHANGED] =
+		g_signal_new ("charging-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellClass, charging_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	signals [LOW_CAPACITY] =
 		g_signal_new ("low-capacity",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -602,7 +605,6 @@ gpm_cell_init (GpmCell *cell)
 	cell->priv = GPM_CELL_GET_PRIVATE (cell);
 
 	cell->priv->hal_device = hal_gdevice_new ();
-	cell->priv->profile = gpm_profile_new ();
 	cell->priv->product = NULL;
 	cell->priv->vendor = NULL;
 	cell->priv->technology = NULL;
@@ -630,7 +632,6 @@ gpm_cell_finalize (GObject *object)
 	g_free (cell->priv->technology);
 	g_free (cell->priv->serial);
 	g_free (cell->priv->model);
-	g_object_unref (cell->priv->profile);
 	g_object_unref (cell->priv->hal_device);
 }
 

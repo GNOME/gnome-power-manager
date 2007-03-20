@@ -2,20 +2,8 @@
   <schemalist>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/show_cpufreq_ui</key>
-      <applyto>/apps/gnome-power-manager/show_cpufreq_ui</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If we should show the CPU frequency scaling in the UI</short>
-        <long>If we should show the CPU frequency scaling in the UI. Some people need to configure this for specific systems.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/show_recalled_battery_warning</key>
-      <applyto>/apps/gnome-power-manager/show_recalled_battery_warning</applyto>
+      <key>/schemas/apps/gnome-power-manager/notify/perhaps_recall</key>
+      <applyto>/apps/gnome-power-manager/notify/perhaps_recall</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -26,20 +14,444 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/laptop_uses_external_monitor</key>
-      <applyto>/apps/gnome-power-manager/laptop_uses_external_monitor</applyto>
+      <key>/schemas/apps/gnome-power-manager/notify/low_capacity</key>
+      <applyto>/apps/gnome-power-manager/notify/low_capacity</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
-      <default>false</default>
+      <default>true</default>
       <locale name="C">
-        <short>If the laptop should be configured as if it is using a permanent external monitor</short>
-        <long>If the laptop should be configured disable both dimming actions and DPMS when using a dock or external monitor. Most laptop and desktop users should select FALSE here.</long>
+        <short>If we should show the low capacity warning for a broken battery</short>
+        <long>If we should show the low capacity warning for a broken battery.</long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/statistics_show_axis_labels</key>
-      <applyto>/apps/gnome-power-manager/statistics_show_axis_labels</applyto>
+      <key>/schemas/apps/gnome-power-manager/notify/discharging</key>
+      <applyto>/apps/gnome-power-manager/notify/discharging</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify when AC adapter is disconnected</short>
+        <long>If the user should be notified when the AC adapter is disconnected.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/fully_charged</key>
+      <applyto>/apps/gnome-power-manager/notify/fully_charged</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify when fully charged</short>
+        <long>If a notification message should be displayed when the battery is fully charged.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/sleep_failed</key>
+      <applyto>/apps/gnome-power-manager/notify/sleep_failed</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify on a sleep failure</short>
+        <long>If a notification message should be displayed after suspend or hibernate failed.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/low_power</key>
+      <applyto>/apps/gnome-power-manager/notify/low_power</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify on a low power</short>
+        <long>If a notification message should be displayed when the battery is getting low.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/percentage_low</key>
+      <applyto>/apps/gnome-power-manager/thresholds/percentage_low</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>10</default>
+      <locale name="C">
+        <short>Percentage considered low</short>
+        <long>The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/percentage_critical</key>
+      <applyto>/apps/gnome-power-manager/thresholds/percentage_critical</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>3</default>
+      <locale name="C">
+        <short>Percentage considered critical</short>
+        <long>The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/percentage_action</key>
+      <applyto>/apps/gnome-power-manager/thresholds/percentage_action</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>2</default>
+      <locale name="C">
+        <short>Percentage action is taken</short>
+        <long>The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/time_low</key>
+      <applyto>/apps/gnome-power-manager/thresholds/time_low</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>1200</default>
+      <locale name="C">
+        <short>The time remaining when low</short>
+        <long>The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/time_critical</key>
+      <applyto>/apps/gnome-power-manager/thresholds/time_critical</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>300</default>
+      <locale name="C">
+        <short>The time remaining when critical</short>
+        <long>The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/thresholds/time_action</key>
+      <applyto>/apps/gnome-power-manager/thresholds/time_action</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>int</type>
+      <default>120</default>
+      <locale name="C">
+        <short>The time remaining when action is taken</short>
+        <long>The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/sleep_type</key>
+      <applyto>/apps/gnome-power-manager/battery/sleep_type</applyto>
+      <type>string</type>
+      <default>hibernate</default>
+      <locale name="C">
+        <short>Whether to hibernate, suspend or do nothing when inactive</short>
+        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/critical</key>
+      <applyto>/apps/gnome-power-manager/battery/critical</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>Battery critical low action</short>
+        <long>The action to take when the battery is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/event_when_closed</key>
+      <applyto>/apps/gnome-power-manager/battery/event_when_closed</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the battery event should occur when the lid is shut and the power disconnected</short>
+        <long>If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/battery/dim_on_idle</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Dim the screen after a period of inactivity when on battery power</short>
+        <long>If the screen should be dimmed to save power when the computer is idle when on battery power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/brightness</key>
+      <applyto>/apps/gnome-power-manager/battery/brightness</applyto>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>LCD brightness when on battery</short>
+        <long>The brightness of the display when on battery power. Possible values are between 0 and 100.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/brightness_kbd</key>
+      <applyto>/apps/gnome-power-manager/battery/brightness_kbd</applyto>
+      <type>int</type>
+      <default>50</default>
+      <locale name="C">
+        <short>Keyboard brightness when on battery</short>
+        <long>The brightness of the keyboard when on battery power. Possible values are between 0 and 100.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/sleep_computer</key>
+      <applyto>/apps/gnome-power-manager/battery/sleep_computer</applyto>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Sleep timeout computer when on battery</short>
+        <long>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/sleep_display</key>
+      <applyto>/apps/gnome-power-manager/battery/sleep_display</applyto>
+      <type>int</type>
+      <default>300</default>
+      <locale name="C">
+        <short>Sleep timeout display when on battery</short>
+        <long>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/dpms_sleep_method</key>
+      <applyto>/apps/gnome-power-manager/battery/dpms_sleep_method</applyto>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>Method used to blank screen on battery</short>
+        <long>The DPMS method used to blank the screen when on battery power. Possible values are "default", "standby", "suspend" and "off".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/battery/button_lid</key>
+      <applyto>/apps/gnome-power-manager/battery/button_lid</applyto>
+      <type>string</type>
+      <default>suspend</default>
+      <locale name="C">
+        <short>Laptop lid close action on battery</short>
+        <long>The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are "suspend", "hibernate", "blank", and "nothing".</long>
+     </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/button_lid</key>
+      <applyto>/apps/gnome-power-manager/ac/button_lid</applyto>
+      <type>string</type>
+      <default>blank</default>
+      <locale name="C">
+        <short>Laptop lid close action when on AC</short>
+        <long>The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are "suspend", "hibernate", "blank" and "nothing".</long>
+     </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/dim_on_idle</key>
+      <applyto>/apps/gnome-power-manager/ac/dim_on_idle</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Dim the screen after a period of inactivity when on AC power</short>
+        <long>If the screen should be dimmed to save power when the computer is idle when on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/brightness</key>
+      <applyto>/apps/gnome-power-manager/ac/brightness</applyto>
+      <type>int</type>
+      <default>100</default>
+      <locale name="C">
+        <short>LCD brightness when on AC</short>
+        <long>The brightness of the display when on AC power. Possible values are between 0 and 100.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/brightness_kbd</key>
+      <applyto>/apps/gnome-power-manager/ac/brightness_kbd</applyto>
+      <type>int</type>
+      <default>100</default>
+      <locale name="C">
+        <short>Keyboard brightness when on AC</short>
+        <long>The brightness of the keyboard when on AC power. Possible values are between 0 and 100.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/sleep_computer</key>
+      <applyto>/apps/gnome-power-manager/ac/sleep_computer</applyto>
+      <type>int</type>
+      <default>0</default>
+      <locale name="C">
+        <short>Sleep timeout computer when on AC</short>
+        <long>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/sleep_display</key>
+      <applyto>/apps/gnome-power-manager/ac/sleep_display</applyto>
+      <type>int</type>
+      <default>1800</default>
+      <locale name="C">
+        <short>Sleep timeout display when on AC</short>
+        <long>The amount of time in seconds before the display goes to sleep when the computer is on AC power.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/dpms_sleep_method</key>
+      <applyto>/apps/gnome-power-manager/ac/dpms_sleep_method</applyto>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>Method used to blank screen on AC</short>
+        <long>The DPMS method used to blank the screen when on AC power. Possible values are "default", "standby", "suspend" and "off".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ac/sleep_type</key>
+      <applyto>/apps/gnome-power-manager/ac/sleep_type</applyto>
+      <type>string</type>
+      <default>suspend</default>
+      <locale name="C">
+        <short>Whether to hibernate, suspend or do nothing when inactive</short>
+        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ups/critical</key>
+      <applyto>/apps/gnome-power-manager/ups/critical</applyto>
+      <type>string</type>
+      <default>shutdown</default>
+      <locale name="C">
+        <short>UPS critical low action</short>
+        <long>The action to take when the UPS is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ups/low</key>
+      <applyto>/apps/gnome-power-manager/ups/low</applyto>
+      <type>string</type>
+      <default>nothing</default>
+      <locale name="C">
+        <short>UPS low power action</short>
+        <long>The action to take when the UPS is low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/buttons/suspend</key>
+      <applyto>/apps/gnome-power-manager/buttons/suspend</applyto>
+      <type>string</type>
+      <default>suspend</default>
+      <locale name="C">
+        <short>Suspend button action</short>
+        <long>The action to take when the system suspend button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/buttons/hibernate</key>
+      <applyto>/apps/gnome-power-manager/buttons/hibernate</applyto>
+      <type>string</type>
+      <default>hibernate</default>
+      <locale name="C">
+        <short>Hibernate button action</short>
+        <long>The action to take when the system hibernate button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/buttons/power</key>
+      <applyto>/apps/gnome-power-manager/buttons/power</applyto>
+      <type>string</type>
+      <default>interactive</default>
+      <locale name="C">
+        <short>Power button action</short>
+        <long>The action to take when the system power button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/use_screensaver_settings</key>
+      <applyto>/apps/gnome-power-manager/lock/use_screensaver_settings</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Use gnome-screensaver lock setting</short>
+        <long>If to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/blank_screen</key>
+      <applyto>/apps/gnome-power-manager/lock/blank_screen</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen when blanked</short>
+        <long>If the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/suspend</key>
+      <applyto>/apps/gnome-power-manager/lock/suspend</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen on suspend</short>
+        <long>If to lock the screen when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/hibernate</key>
+      <applyto>/apps/gnome-power-manager/lock/hibernate</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock screen on hibernate</short>
+        <long>If to lock the screen when the computer wakes up from a hibernate.  Only used if lock_use_screensaver_settings is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/statistics/show_axis_labels</key>
+      <applyto>/apps/gnome-power-manager/statistics/show_axis_labels</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>false</default>
@@ -50,8 +462,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/statistics_show_legend</key>
-      <applyto>/apps/gnome-power-manager/statistics_show_legend</applyto>
+      <key>/schemas/apps/gnome-power-manager/statistics/show_legend</key>
+      <applyto>/apps/gnome-power-manager/statistics/show_legend</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -62,8 +474,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/statistics_show_events</key>
-      <applyto>/apps/gnome-power-manager/statistics_show_events</applyto>
+      <key>/schemas/apps/gnome-power-manager/statistics/show_events</key>
+      <applyto>/apps/gnome-power-manager/statistics/show_events</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -74,8 +486,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/statistics_graph_type</key>
-      <applyto>/apps/gnome-power-manager/statistics_graph_type</applyto>
+      <key>/schemas/apps/gnome-power-manager/statistics/graph_type</key>
+      <applyto>/apps/gnome-power-manager/statistics/graph_type</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
       <default>power</default>
@@ -98,8 +510,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/cpufreq_ac_policy</key>
-      <applyto>/apps/gnome-power-manager/cpufreq_ac_policy</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac/cpufreq_policy</key>
+      <applyto>/apps/gnome-power-manager/ac/cpufreq_policy</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
       <default>ondemand</default>
@@ -110,8 +522,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/cpufreq_ac_performance</key>
-      <applyto>/apps/gnome-power-manager/cpufreq_ac_performance</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac/cpufreq_performance</key>
+      <applyto>/apps/gnome-power-manager/ac/cpufreq_performance</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
       <default>85</default>
@@ -122,8 +534,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/cpufreq_battery_policy</key>
-      <applyto>/apps/gnome-power-manager/cpufreq_battery_policy</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery/cpufreq_policy</key>
+      <applyto>/apps/gnome-power-manager/battery/cpufreq_policy</applyto>
       <owner>gnome-power-manager</owner>
       <type>string</type>
       <default>ondemand</default>
@@ -134,8 +546,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/cpufreq_battery_performance</key>
-      <applyto>/apps/gnome-power-manager/cpufreq_battery_performance</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery/cpufreq_performance</key>
+      <applyto>/apps/gnome-power-manager/battery/cpufreq_performance</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
       <default>25</default>
@@ -146,14 +558,74 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/enable_sounds</key>
-      <applyto>/apps/gnome-power-manager/enable_sounds</applyto>
+      <key>/schemas/apps/gnome-power-manager/ui/cpufreq_show</key>
+      <applyto>/apps/gnome-power-manager/ui/cpufreq_show</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If we should show the CPU frequency scaling in the UI</short>
+        <long>If we should show the CPU frequency scaling in the UI. Some people need to configure this for specific systems.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ui/enable_sound</key>
+      <applyto>/apps/gnome-power-manager/ui/enable_sound</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
         <short>If sounds should be used</short>
         <long>If sounds should be used when the power is critically low, or inhibit requests have stopped the policy action.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ui/show_actions_in_menu</key>
+      <applyto>/apps/gnome-power-manager/ui/show_actions_in_menu</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Allow Suspend and Hibernate in the menu</short>
+        <long>If the Suspend and Hibernate options should be allowed in the notification area drop down menu.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ui/display_icon_policy</key>
+      <applyto>/apps/gnome-power-manager/ui/display_icon_policy</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>present</default>
+      <locale name="C">
+        <short>When to show the notification icon</short>
+        <long>Display options for the notification icon. Valid options are "never", "critical", "charge", "present" and "always".</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/use_profile_time</key>
+      <applyto>/apps/gnome-power-manager/use_profile_time</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If the learnt profile should be used to calculate the time remaining</short>
+        <long>If the learnt profile should be used to calculate the time remaining. Only turn this off for debugging.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/using_external_monitor</key>
+      <applyto>/apps/gnome-power-manager/using_external_monitor</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If the laptop should be configured as if it is using a permanent external monitor</short>
+        <long>If the laptop should be configured disable both dimming actions and DPMS when using a dock or external monitor. Most laptop and desktop users should select FALSE here.</long>
       </locale>
     </schema>
 
@@ -182,20 +654,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_event_when_closed</key>
-      <applyto>/apps/gnome-power-manager/battery_event_when_closed</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If the battery event should occur when the lid is shut and the power disconnected</short>
-        <long>If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/use_lowpower_ac</key>
-      <applyto>/apps/gnome-power-manager/use_lowpower_ac</applyto>
+      <key>/schemas/apps/gnome-power-manager/ac/use_lowpower</key>
+      <applyto>/apps/gnome-power-manager/ac/use_lowpower</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>false</default>
@@ -206,8 +666,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/use_lowpower_ups</key>
-      <applyto>/apps/gnome-power-manager/use_lowpower_ups</applyto>
+      <key>/schemas/apps/gnome-power-manager/ups/use_lowpower</key>
+      <applyto>/apps/gnome-power-manager/ups/use_lowpower</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -218,8 +678,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/use_lowpower_battery</key>
-      <applyto>/apps/gnome-power-manager/use_lowpower_battery</applyto>
+      <key>/schemas/apps/gnome-power-manager/battery/use_lowpower</key>
+      <applyto>/apps/gnome-power-manager/battery/use_lowpower</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>
@@ -230,38 +690,14 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/rate_exponential_average_factor</key>
-      <applyto>/apps/gnome-power-manager/rate_exponential_average_factor</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>80</default>
-      <locale name="C">
-        <short>The damping factor for the rate</short>
-        <long>The value of the damping factor used when calculating the exponentially weighted average of the rate. Increasing this value will increase the damping effect of the rate calculations, which makes the time remaining more accurate, but the graphs less responsive.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/graph_data_max_time</key>
-      <applyto>/apps/gnome-power-manager/graph_data_max_time</applyto>
+      <key>/schemas/apps/gnome-power-manager/statistics/data_max_time</key>
+      <applyto>/apps/gnome-power-manager/statistics/data_max_time</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
       <default>21600</default>
       <locale name="C">
         <short>The maximum time displayed on the graph</short>
         <long>The maximum duration of time displayed on the x-axis of the graph.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/show_actions_in_menu</key>
-      <applyto>/apps/gnome-power-manager/show_actions_in_menu</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Allow Suspend and Hibernate in the menu</short>
-        <long>If the Suspend and Hibernate options should be allowed in the notification area drop down menu.</long>
       </locale>
     </schema>
 
@@ -297,30 +733,6 @@
       <locale name="C">
         <short>Check CPU load before sleeping</short>
         <long>If the CPU load should be checked before doing the idle action.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_dim_on_idle</key>
-      <applyto>/apps/gnome-power-manager/ac_dim_on_idle</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>Dim the screen after a period of inactivity when on AC power</short>
-        <long>If the screen should be dimmed to save power when the computer is idle when on AC power.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_dim_on_idle</key>
-      <applyto>/apps/gnome-power-manager/battery_dim_on_idle</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Dim the screen after a period of inactivity when on battery power</short>
-        <long>If the screen should be dimmed to save power when the computer is idle when on battery power.</long>
       </locale>
     </schema>
 
@@ -373,430 +785,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/notify_ac_adapter</key>
-      <applyto>/apps/gnome-power-manager/notify_ac_adapter</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Notify when AC adapter is disconnected</short>
-        <long>If the user should be notified when the AC adapter is disconnected.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/notify_fully_charged</key>
-      <applyto>/apps/gnome-power-manager/notify_fully_charged</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Notify when fully charged</short>
-        <long>If a notification message should be displayed when the battery is fully charged.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/notify_hal_error</key>
-      <applyto>/apps/gnome-power-manager/notify_hal_error</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Notify on a HAL error</short>
-        <long>If a notification message should be displayed after the suspend or hibernate failed.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/notify_low_power</key>
-      <applyto>/apps/gnome-power-manager/notify_low_power</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Notify on a low power</short>
-        <long>If a notification message should be displayed when the battery is getting low.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/display_icon_policy</key>
-      <applyto>/apps/gnome-power-manager/display_icon_policy</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>string</type>
-      <default>present</default>
-      <locale name="C">
-        <short>When to show the notification icon</short>
-        <long>Display options for the notification icon. Valid options are "never", "critical", "charge", "present" and "always".</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_brightness</key>
-      <applyto>/apps/gnome-power-manager/ac_brightness</applyto>
-      <type>int</type>
-      <default>100</default>
-      <locale name="C">
-        <short>LCD brightness when on AC</short>
-        <long>The brightness of the display when on AC power. Possible values are between 0 and 100.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_brightness_kbd</key>
-      <applyto>/apps/gnome-power-manager/ac_brightness_kbd</applyto>
-      <type>int</type>
-      <default>100</default>
-      <locale name="C">
-        <short>Keyboard brightness when on AC</short>
-        <long>The brightness of the keyboard when on AC power. Possible values are between 0 and 100.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_sleep_computer</key>
-      <applyto>/apps/gnome-power-manager/ac_sleep_computer</applyto>
-      <type>int</type>
-      <default>0</default>
-      <locale name="C">
-        <short>Sleep timeout computer when on AC</short>
-        <long>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_sleep_display</key>
-      <applyto>/apps/gnome-power-manager/ac_sleep_display</applyto>
-      <type>int</type>
-      <default>1800</default>
-      <locale name="C">
-        <short>Sleep timeout display when on AC</short>
-        <long>The amount of time in seconds before the display goes to sleep when the computer is on AC power.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/ac_dpms_sleep_method</key>
-      <applyto>/apps/gnome-power-manager/ac_dpms_sleep_method</applyto>
-      <type>string</type>
-      <default>default</default>
-      <locale name="C">
-        <short>Method used to blank screen on AC</short>
-        <long>The DPMS method used to blank the screen when on AC power. Possible values are "default", "standby", "suspend" and "off".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_brightness</key>
-      <applyto>/apps/gnome-power-manager/battery_brightness</applyto>
-      <type>int</type>
-      <default>50</default>
-      <locale name="C">
-        <short>LCD brightness when on battery</short>
-        <long>The brightness of the display when on battery power. Possible values are between 0 and 100.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_brightness_kbd</key>
-      <applyto>/apps/gnome-power-manager/battery_brightness_kbd</applyto>
-      <type>int</type>
-      <default>50</default>
-      <locale name="C">
-        <short>Keyboard brightness when on battery</short>
-        <long>The brightness of the keyboard when on battery power. Possible values are between 0 and 100.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_sleep_computer</key>
-      <applyto>/apps/gnome-power-manager/battery_sleep_computer</applyto>
-      <type>int</type>
-      <default>0</default>
-      <locale name="C">
-        <short>Sleep timeout computer when on battery</short>
-        <long>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_sleep_display</key>
-      <applyto>/apps/gnome-power-manager/battery_sleep_display</applyto>
-      <type>int</type>
-      <default>300</default>
-      <locale name="C">
-        <short>Sleep timeout display when on battery</short>
-        <long>The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep.</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_dpms_sleep_method</key>
-      <applyto>/apps/gnome-power-manager/battery_dpms_sleep_method</applyto>
-      <type>string</type>
-      <default>default</default>
-      <locale name="C">
-        <short>Method used to blank screen on battery</short>
-        <long>The DPMS method used to blank the screen when on battery power. Possible values are "default", "standby", "suspend" and "off".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_button_suspend</key>
-      <applyto>/apps/gnome-power-manager/action_button_suspend</applyto>
-      <type>string</type>
-      <default>suspend</default>
-      <locale name="C">
-        <short>Suspend button action</short>
-        <long>The action to take when the system suspend button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_button_hibernate</key>
-      <applyto>/apps/gnome-power-manager/action_button_hibernate</applyto>
-      <type>string</type>
-      <default>hibernate</default>
-      <locale name="C">
-        <short>Hibernate button action</short>
-        <long>The action to take when the system hibernate button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_button_power</key>
-      <applyto>/apps/gnome-power-manager/action_button_power</applyto>
-      <type>string</type>
-      <default>interactive</default>
-      <locale name="C">
-        <short>Power button action</short>
-        <long>The action to take when the system power button is pressed. Possible values are "suspend", "hibernate", "interactive", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_ac_button_lid</key>
-      <applyto>/apps/gnome-power-manager/action_ac_button_lid</applyto>
-      <type>string</type>
-      <default>blank</default>
-      <locale name="C">
-        <short>Laptop lid close action when on AC</short>
-        <long>The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are "suspend", "hibernate", "blank" and "nothing".</long>
-     </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_battery_button_lid</key>
-      <applyto>/apps/gnome-power-manager/action_battery_button_lid</applyto>
-      <type>string</type>
-      <default>suspend</default>
-      <locale name="C">
-        <short>Laptop lid close action on battery</short>
-        <long>The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are "suspend", "hibernate", "blank", and "nothing".</long>
-     </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_ac_sleep_type</key>
-      <applyto>/apps/gnome-power-manager/action_ac_sleep_type</applyto>
-      <type>string</type>
-      <default>suspend</default>
-      <locale name="C">
-        <short>Whether to hibernate, suspend or do nothing when inactive</short>
-        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_battery_sleep_type</key>
-      <applyto>/apps/gnome-power-manager/action_battery_sleep_type</applyto>
-      <type>string</type>
-      <default>hibernate</default>
-      <locale name="C">
-        <short>Whether to hibernate, suspend or do nothing when inactive</short>
-        <long>The type of sleeping that should be performed when the computer is inactive. Possible values are "hibernate", "suspend" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_battery_critical</key>
-      <applyto>/apps/gnome-power-manager/action_battery_critical</applyto>
-      <type>string</type>
-      <default>shutdown</default>
-      <locale name="C">
-        <short>Battery critical low action</short>
-        <long>The action to take when the battery is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_ups_critical</key>
-      <applyto>/apps/gnome-power-manager/action_ups_critical</applyto>
-      <type>string</type>
-      <default>shutdown</default>
-      <locale name="C">
-        <short>UPS critical low action</short>
-        <long>The action to take when the UPS is critically low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/action_ups_low</key>
-      <applyto>/apps/gnome-power-manager/action_ups_low</applyto>
-      <type>string</type>
-      <default>nothing</default>
-      <locale name="C">
-        <short>UPS low power action</short>
-        <long>The action to take when the UPS is low. Possible values are "hibernate", "suspend", "shutdown" and "nothing".</long>
-      </locale>
-   </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_use_screensaver_settings</key>
-      <applyto>/apps/gnome-power-manager/lock_use_screensaver_settings</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Use gnome-screensaver lock setting</short>
-        <long>If to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_on_blank_screen</key>
-      <applyto>/apps/gnome-power-manager/lock_on_blank_screen</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Lock screen when blanked</short>
-        <long>If the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_on_suspend</key>
-      <applyto>/apps/gnome-power-manager/lock_on_suspend</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Lock screen on suspend</short>
-        <long>If to lock the screen when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/lock_on_hibernate</key>
-      <applyto>/apps/gnome-power-manager/lock_on_hibernate</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>true</default>
-      <locale name="C">
-        <short>Lock screen on hibernate</short>
-        <long>If to lock the screen when the computer wakes up from a hibernate.  Only used if lock_use_screensaver_settings is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_percentage_low</key>
-      <applyto>/apps/gnome-power-manager/battery_percentage_low</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>10</default>
-      <locale name="C">
-        <short>Percentage considered low</short>
-        <long>The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_percentage_very_low</key>
-      <applyto>/apps/gnome-power-manager/battery_percentage_very_low</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>5</default>
-      <locale name="C">
-        <short>Percentage considered very low</short>
-        <long>The percentage of the battery when it is considered very low. Only valid when use_time_for_policy is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_percentage_critical</key>
-      <applyto>/apps/gnome-power-manager/battery_percentage_critical</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>3</default>
-      <locale name="C">
-        <short>Percentage considered critical</short>
-        <long>The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_percentage_action</key>
-      <applyto>/apps/gnome-power-manager/battery_percentage_action</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>2</default>
-      <locale name="C">
-        <short>Percentage action is taken</short>
-        <long>The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_time_low</key>
-      <applyto>/apps/gnome-power-manager/battery_time_low</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>1200</default>
-      <locale name="C">
-        <short>The time remaining when low</short>
-        <long>The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_time_very_low</key>
-      <applyto>/apps/gnome-power-manager/battery_time_very_low</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>600</default>
-      <locale name="C">
-        <short>The time remaining when very low</short>
-        <long>The time remaining in seconds of the battery when it is considered very low. Only valid when use_time_for_policy is true.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_time_critical</key>
-      <applyto>/apps/gnome-power-manager/battery_time_critical</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>300</default>
-      <locale name="C">
-        <short>The time remaining when critical</short>
-        <long>The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/battery_time_action</key>
-      <applyto>/apps/gnome-power-manager/battery_time_action</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>int</type>
-      <default>120</default>
-      <locale name="C">
-        <short>The time remaining when action is taken</short>
-        <long>The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnome-power-manager/laptop_panel_dim_brightness</key>
       <applyto>/apps/gnome-power-manager/laptop_panel_dim_brightness</applyto>
       <owner>gnome-power-manager</owner>
@@ -809,8 +797,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/networkmanager_sleep</key>
-      <applyto>/apps/gnome-power-manager/networkmanager_sleep</applyto>
+      <key>/schemas/apps/gnome-power-manager/network_sleep</key>
+      <applyto>/apps/gnome-power-manager/network_sleep</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>true</default>

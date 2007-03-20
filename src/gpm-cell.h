@@ -47,9 +47,10 @@ typedef struct
 	GObjectClass	parent_class;
 	void		(* percent_changed)	(GpmCell	*cell,
 						 guint		 percent);
-	void		(* status_changed)	(GpmCell	*cell,
-						 gboolean	 is_charging,
-						 gboolean	 is_discharging);
+	void		(* charging_changed)	(GpmCell	*cell,
+						 gboolean	 charging);
+	void		(* discharging_changed)	(GpmCell	*cell,
+						 gboolean	 discharging);
 	void		(* perhaps_recall)	(GpmCell	*cell,
 						 const gchar	*oem_vendor,
 						 const gchar	*website);
@@ -64,10 +65,9 @@ GpmCellUnit	*gpm_cell_get_unit			(GpmCell	*cell);
 gboolean	 gpm_cell_set_type			(GpmCell	*cell,
 							 GpmCellUnitKind type,
 							 const gchar	*udi);
-guint		 gpm_cell_get_time_charge		(GpmCell	*cell);
-guint		 gpm_cell_get_time_discharge		(GpmCell	*cell);
 const gchar	*gpm_cell_get_udi			(GpmCell	*cell);
 gchar		*gpm_cell_get_icon			(GpmCell	*cell);
+gboolean	 gpm_cell_print				(GpmCell	*cell);
 gchar		*gpm_cell_get_description		(GpmCell	*cell);
 
 G_END_DECLS

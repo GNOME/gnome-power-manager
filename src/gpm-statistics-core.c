@@ -724,8 +724,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
 	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
-		gpm_critical_error ("%s\n%s", _("Could not connect to GNOME Power Manager."),
-				    _("Perhaps the program is not running or you are using an old version?"));
+		gpm_error (_("Could not connect to GNOME Power Manager."));
 	}
 
 	statistics->priv->graph_type = NULL;

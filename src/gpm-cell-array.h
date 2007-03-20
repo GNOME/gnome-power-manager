@@ -48,22 +48,23 @@ typedef struct
 	GObjectClass	parent_class;
 	void		(* percent_changed)	(GpmCellArray	*cell_array,
 						 guint		 percent);
-	void		(* status_changed)	(GpmCellArray	*cell_array,
-						 gboolean	 is_charging,
-						 gboolean	 is_discharging);
+	void		(* charging_changed)	(GpmCellArray	*cell_array,
+						 gboolean	 charging);
+	void		(* discharging_changed)	(GpmCellArray	*cell_array,
+						 gboolean	 discharging);
 	void		(* perhaps_recall)	(GpmCellArray	*cell_array,
 						 const gchar	*oem_vendor,
 						 const gchar	*website);
 	void		(* low_capacity)	(GpmCellArray	*cell_array,
 						 guint		 capacity);
-	void		(* charge_warning)	(GpmCellArray	*cell_array,
-						 guint		 value,
-						 gboolean	 use_time);
+	void		(* charge_low)		(GpmCellArray	*cell_array,
+						 guint		 percent);
 	void		(* charge_critical)	(GpmCellArray	*cell_array,
-						 guint		 value,
-						 gboolean	 use_time);
-	void		(* charge_action)	(GpmCellArray	*cell_array);
+						 guint		 percent);
+	void		(* charge_action)	(GpmCellArray	*cell_array,
+						 guint		 percent);
 	void		(* fully_charged)	(GpmCellArray	*cell_array);
+	void		(* discharging)		(GpmCellArray	*cell_array);
 } GpmCellArrayClass;
 
 GType		 gpm_cell_array_get_type		(void);
@@ -73,12 +74,12 @@ gboolean	 gpm_cell_array_set_type		(GpmCellArray	*cell_array,
 							 GpmCellUnitKind type);
 GpmCellUnit	*gpm_cell_array_get_unit		(GpmCellArray	*cell_array);
 gchar		*gpm_cell_array_get_icon		(GpmCellArray	*cell_array);
+GpmCellUnitKind	 gpm_cell_array_get_kind		(GpmCellArray	*cell_array);
 GpmCell		*gpm_cell_array_get_cell		(GpmCellArray	*cell_array,
 							 guint		 id);
 guint		 gpm_cell_array_get_num_cells		(GpmCellArray	*cell_array);
-guint		 gpm_cell_array_get_time_charge		(GpmCellArray	*cell_array);
-guint		 gpm_cell_array_get_time_discharge	(GpmCellArray	*cell_array);
 gchar		*gpm_cell_array_get_description		(GpmCellArray	*cell_array);
+gboolean	 gpm_cell_array_refresh			(GpmCellArray	*cell_array);
 
 G_END_DECLS
 

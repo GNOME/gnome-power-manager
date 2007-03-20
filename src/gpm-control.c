@@ -114,10 +114,8 @@ gpm_control_error_quark (void)
  * Return value: TRUE if we can perform the action.
  **/
 gboolean
-gpm_control_is_policy_timout_valid (GpmControl  *control,
-				    const gchar *action)
+gpm_control_is_policy_timout_valid (GpmControl *control)
 {
-	gchar *message;
 #ifdef HAVE_CHECK_FG
 	gchar *argv[] = { "check-foreground-console", NULL };
 	int retcode;
@@ -125,9 +123,7 @@ gpm_control_is_policy_timout_valid (GpmControl  *control,
 
 	if ((time (NULL) - control->priv->last_resume_event) <=
 	    control->priv->suppress_policy_timeout) {
-		message = g_strdup_printf ("Skipping suppressed %s", action);
-		gpm_debug (message);
-		g_free (message);
+		gpm_debug ("Skipping suppressed action");
 		return FALSE;
 	}
 
@@ -196,7 +192,7 @@ gpm_control_find_cookie (GpmControl *control, guint32 cookie)
 	GSList	       *ret;
 	ret = g_slist_find_custom (control->priv->list, &cookie,
 				   gpm_control_cookie_compare_func);
-	if (! ret) {
+	if (ret == FALSE) {
 		return NULL;
 	}
 	data = (GpmControlData *) ret->data;

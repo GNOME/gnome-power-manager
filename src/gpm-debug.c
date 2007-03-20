@@ -23,10 +23,10 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <signal.h>
 #include <time.h>
 #include <syslog.h>
@@ -40,10 +40,10 @@ static GSList *list = NULL;
 static gchar va_args_buffer [1025];
 
 /**
- * gpm_add_debug_option:
+ * gpm_debug_add_option:
  **/
 void
-gpm_add_debug_option (const gchar *option)
+gpm_debug_add_option (const gchar *option)
 {
 	/* adding debug option to list */
 	list = g_slist_prepend (list, (gpointer) option);
@@ -156,17 +156,28 @@ gpm_warning_real (const gchar *func,
 }
 
 /**
- * gpm_bugzilla:
- *
- * Asks the user to consult and add to bugzilla.
+ * gpm_error_real:
  **/
 void
-gpm_bugzilla (void)
+gpm_error_real (const gchar *func,
+		const gchar *file,
+		const int    line,
+		const gchar *format, ...)
 {
-	fprintf (stderr, "%s has encountered a non-critical warning.\n"
-		 "Consult %s for any known issues or a possible fix.\n"
-		 "Please file a bug with this complete message if not present\n",
-		 "GNOME Power Manager", GPM_BUGZILLA_URL);
+	va_list args;
+
+	if (do_verbose == FALSE) {
+		return;
+	}
+
+	va_start (args, format);
+	g_vsnprintf (va_args_buffer, 1024, format, args);
+	va_end (args);
+
+	/* do extra stuff for a warning */
+	fprintf (stderr, "*** ERROR ***\n");
+	gpm_print_line (func, file, line, va_args_buffer);
+	exit (0);
 }
 
 /**
@@ -221,47 +232,12 @@ gpm_debug_init (gboolean debug)
 }
 
 /**
- * gpm_critical_error:
- * @content: The content to show, e.g. "No icons detected"
- *
- * Shows a gtk critical error and logs to syslog.
- * NOTE: we will lose memory, but since this program is a critical error
- * that is the least of our problems...
- **/
-void
-gpm_critical_error (const gchar *format, ...)
-{
-	va_list args;
-	GtkWidget *dialog;
-
-	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
-	va_end (args);
-
-	gpm_syslog_internal (va_args_buffer);
-	dialog = gtk_message_dialog_new_with_markup (NULL,
-						     GTK_DIALOG_MODAL,
-						     GTK_MESSAGE_WARNING,
-						     GTK_BUTTONS_OK,
-						     "<span size='larger'><b>%s</b></span>",
-						     GPM_NAME);
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-						    va_args_buffer);
-	/* we close the gtk loop when the user clicks ok */
-	g_signal_connect_swapped (dialog,
-				  "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  dialog);
-	gtk_widget_show (dialog);
-}
-
-/**
  * gpm_debug_shutdown:
  **/
 void
 gpm_debug_shutdown (void)
 {
-	if (! is_init) {
+	if (is_init == FALSE) {
 		return;
 	}
 

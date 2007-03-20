@@ -74,6 +74,16 @@ gboolean	 gpm_notify_display		(GpmNotify 		*notify,
 void		 gpm_notify_cancel		(GpmNotify		*notify);
 void		 gpm_notify_use_status_icon	(GpmNotify		*notify,
 						 GtkStatusIcon		*status_icon);
+gboolean	 gpm_notify_perhaps_recall	(GpmNotify		*notify,
+						 const gchar		*oem_vendor,
+						 const gchar		*website);
+gboolean	 gpm_notify_low_capacity	(GpmNotify		*notify,
+						 guint			 capacity);
+gboolean	 gpm_notify_fully_charged_primary (GpmNotify		*notify);
+gboolean	 gpm_notify_discharging_primary	(GpmNotify		*notify);
+gboolean	 gpm_notify_discharging_ups	(GpmNotify		*notify);
+gboolean	 gpm_notify_sleep_failed	(GpmNotify		*notify,
+						 gboolean		 hibernate);
 
 G_END_DECLS
 

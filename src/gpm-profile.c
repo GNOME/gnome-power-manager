@@ -35,9 +35,6 @@
 
 #include <glib/gi18n.h>
 
-#include <libhal-gdevice.h>
-#include <libhal-gmanager.h>
-
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"
 #include "gpm-dpms.h"
@@ -62,7 +59,6 @@ static void     gpm_profile_finalize   (GObject	       *object);
 
 struct GpmProfilePrivate
 {
-	HalGDevice		*hal_device;
 	GpmAcAdapter		*ac_adapter;
 	GpmLoad			*load;
 	GpmDpms			*dpms;
@@ -93,23 +89,6 @@ gpm_profile_class_init (GpmProfileClass *klass)
 	object_class->finalize = gpm_profile_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmProfilePrivate));
-}
-
-
-/**
- * gpm_profile_provide_data:
- *
- * Provide the profiler (this class!) with data.
- * WILL ONLY BE USED WHEN HOOKED UP TO GPM-POWER
- *
- * @profile: This class
- */
-gboolean
-gpm_profile_provide_data (GpmProfile *profile, guint percentage)
-{
-	g_return_val_if_fail (profile != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
-	return TRUE;
 }
 
 /**
@@ -302,6 +281,12 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
 
+	/* check we can give a decent reading */
+	if (percentage > 99) {
+		gpm_debug ("percentage = %i, returning zero", percentage);
+		return 0;
+	}
+
 	/* recompute */
 	gpm_profile_compute_data_battery (profile, discharge);
 
@@ -359,7 +344,7 @@ gpm_profile_save_percentage (GpmProfile *profile, guint percentage, guint data, 
  * @profile: This class
  * @percentage: new percentage value
  */
-static void
+gboolean
 gpm_profile_register_percentage (GpmProfile *profile,
 				 guint	     percentage)
 {
@@ -367,6 +352,9 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	gdouble load;
 	guint accuracy;
 	guint array_percentage;
+
+	g_return_val_if_fail (profile != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
 
 	/* turn the load into a nice scaled percentage */
 	load = gpm_load_get_current (profile->priv->load);
@@ -390,17 +378,17 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	if (profile->priv->data_valid == FALSE) {
 		gpm_debug ("data is not valid, will process next");
 		profile->priv->data_valid = TRUE;
-		return;
+		return FALSE;
 	}
 
 	if (accuracy < 20) {
 		gpm_debug ("not accurate enough");
-		return;
+		return FALSE;
 	}
 
 	if (profile->priv->lcd_on == FALSE) {
 		gpm_debug ("screen blanked, so not representative - ignoring");
-		return;
+		return FALSE;
 	}
 
 	/* If we are discharging, 99-0 is valid, but when we are charging,
@@ -410,7 +398,7 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	} else {
 		if (percentage == 0) {
 			gpm_debug ("ignoring percentage zero when charging");
-			return;
+			return FALSE;
 		}
 		array_percentage = percentage - 1;
 	}
@@ -421,24 +409,29 @@ gpm_profile_register_percentage (GpmProfile *profile,
 
 	/* save new data as we passed all tests */
 	gpm_profile_save_percentage (profile, array_percentage, (guint) elapsed, accuracy);
+	return TRUE;
 }
 
 /**
  * gpm_profile_register_charging:
  */
-static void
+gboolean
 gpm_profile_register_charging (GpmProfile *profile,
 			       gboolean    is_charging)
 {
 	guint i;
+
+	g_return_val_if_fail (profile != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
+
 	if (is_charging == TRUE) {
 		/* uninteresting case */
-		return;
+		return FALSE;
 	}
 	if (profile->priv->discharging == TRUE) {
 		/* normal case, the ac_adapter has been removed half way
 		   through charging, and we really don't care */
-		return;
+		return FALSE;
 	}
 	/* for batteries that stop charging before they
 	   get to 100% we have to set the last charging
@@ -450,46 +443,7 @@ gpm_profile_register_charging (GpmProfile *profile,
 			gpm_debug ("set percentage %i to zero", i);
 		}
 	}
-}
-
-/**
- * hal_device_property_modified_cb:
- *
- * @udi: The HAL UDI
- * @key: Property key
- * @is_added: If the key was added
- * @is_removed: If the key was removed
- *
- * Invoked when a property of a device in the Global Device List is
- * changed, and we have we have subscribed to changes for that device.
- */
-static void
-hal_device_property_modified_cb (HalGDevice   *device,
-				 const gchar  *key,
-				 gboolean      is_added,
-				 gboolean      is_removed,
-				 gboolean      finally,
-				 GpmProfile   *profile)
-{
-	const gchar *udi = hal_gdevice_get_udi (device);
-	guint percentage;
-	gboolean is_charging;
-	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
-		   udi, key, is_added, is_removed, finally);
-
-	/* do not process keys that have been removed */
-	if (is_removed == TRUE) {
-		return;
-	}
-
-	if (strcmp (key, "battery.charge_level.percentage") == 0) {
-		hal_gdevice_get_uint (device, key, &percentage, NULL);
-		gpm_profile_register_percentage (profile, percentage);
-	}
-	if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
-		hal_gdevice_get_bool (device, key, &is_charging, NULL);
-		gpm_profile_register_charging (profile, is_charging);
-	}
+	return TRUE;
 }
 
 /**
@@ -590,11 +544,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 static void
 gpm_profile_init (GpmProfile *profile)
 {
-	GError *error;
-	HalGManager *hal_manager;
-	gchar **device_names;
-	gboolean ret;
-	const gchar *udi;
+	gboolean on_ac;
 
 	profile->priv = GPM_PROFILE_GET_PRIVATE (profile);
 
@@ -629,28 +579,7 @@ gpm_profile_init (GpmProfile *profile)
 	/* we might be halfway through a percentage change */
 	profile->priv->data_valid = FALSE;
 
-	/* find, and add a single device */
-	hal_manager = hal_gmanager_new ();
-	error = NULL;
-	ret = hal_gmanager_find_capability (hal_manager, "battery", &device_names, &error);
-	if (ret == FALSE) {
-		gpm_warning ("Couldn't obtain list of AC adapters: %s", error->message);
-		g_error_free (error);
-	}
-	if (device_names[0] != NULL) {
-		udi = device_names[0];
-		gpm_debug ("using %s", udi);
-		profile->priv->hal_device = hal_gdevice_new ();
-		hal_gdevice_set_udi (profile->priv->hal_device, udi);
-		hal_gdevice_watch_property_modified (profile->priv->hal_device);
-		g_signal_connect (profile->priv->hal_device, "property-modified",
-				  G_CALLBACK (hal_device_property_modified_cb), profile);
-	} else {
-		gpm_debug ("No devices of capability ac_adapter");
-	}
-
 	/* coldplug the AC state */
-	gboolean on_ac;
 	on_ac = gpm_ac_adapter_is_present (profile->priv->ac_adapter);
 
 	/* check AC state */
@@ -661,9 +590,6 @@ gpm_profile_init (GpmProfile *profile)
 		gpm_debug ("on battery");
 		profile->priv->discharging = TRUE;
 	}
-
-	hal_gmanager_free_capability (device_names);
-	g_object_unref (hal_manager);
 
 	/* get initial data */
 	gpm_profile_load_data (profile, TRUE);
@@ -687,7 +613,6 @@ gpm_profile_finalize (GObject *object)
 
 	g_return_if_fail (profile->priv != NULL);
 
-	g_object_unref (profile->priv->hal_device);
 	g_object_unref (profile->priv->load);
 	g_object_unref (profile->priv->dpms);
 	g_object_unref (profile->priv->ac_adapter);

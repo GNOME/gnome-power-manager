@@ -118,14 +118,20 @@ endif
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-battery.h					\
-	gpm-battery.c					\
 	gpm-dbus-monitor.h				\
 	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-notify.h					\
 	gpm-notify.c					\
+	gpm-engine.h					\
+	gpm-engine.c					\
+	gpm-cell.h					\
+	gpm-cell.c					\
+	gpm-cell-unit.h					\
+	gpm-cell-unit.c					\
+	gpm-cell-array.h				\
+	gpm-cell-array.c				\
 	gpm-warning.h					\
 	gpm-warning.c					\
 	gpm-backlight.h					\
@@ -166,8 +172,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-manager.c					\
 	gpm-ac-adapter.h				\
 	gpm-ac-adapter.c				\
-	gpm-power.h					\
-	gpm-power.c					\
 	gpm-tray-icon.h					\
 	gpm-tray-icon.c					\
 	gpm-marshal.h					\

@@ -133,8 +133,8 @@ gpm_feedback_init (GpmFeedback *feedback)
 
 	/* initialise the window */
 	feedback->priv->xml = glade_xml_new (GPM_DATA "/gpm-feedback-widget.glade", NULL, NULL);
-	if (! feedback->priv->xml) {
-		gpm_critical_error ("Can't find gpm-feedback-widget.glade");
+	if (feedback->priv->xml == NULL) {
+		gpm_error ("Can't find gpm-feedback-widget.glade");
 	}
 	feedback->priv->main_window = glade_xml_get_widget (feedback->priv->xml, "main_window");
 

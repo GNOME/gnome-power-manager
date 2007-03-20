@@ -484,8 +484,7 @@ gpm_prefs_setup_action_combo (GpmPrefs     *prefs,
 						   ACTION_NOTHING_TEXT);
 			n_added++;
 		} else {
-			gpm_critical_error ("Unknown action read from conf: %s",
-					    actions[i]);
+			gpm_error ("Unknown action read from conf: %s", actions[i]);
 		}
 
 		if (strcmp (value, actions[i]) == 0)
@@ -638,8 +637,8 @@ conf_key_changed_cb (GpmConf     *conf,
 		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UPS_LOWPOWER, &enabled);
 		gpm_debug ("need to enable checkbox");
 
-	} else if (strcmp (key, GPM_CONF_BATTERY_LOWPOWER) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_BATTERY_LOWPOWER, &enabled);
+	} else if (strcmp (key, GPM_CONF_BATT_LOWPOWER) == 0) {
+		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_BATT_LOWPOWER, &enabled);
 		gpm_debug ("need to enable checkbox");
 	}
 }
@@ -903,7 +902,7 @@ prefs_setup_ac (GpmPrefs *prefs)
 		gtk_widget_hide_all (widget);
 	}
 
-	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_SHOW_CPUFREQ_UI, &show_cpufreq);
+	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UI_SHOW_CPUFREQ, &show_cpufreq);
 	if (show_cpufreq == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_cpu");
 		gtk_widget_hide_all (widget);
@@ -941,19 +940,19 @@ prefs_setup_battery (GpmPrefs *prefs)
 	}
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_lid",
-				      GPM_CONF_BATTERY_BUTTON_LID,
+				      GPM_CONF_BATT_BUTTON_LID,
 				      button_lid_actions);
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
-				      GPM_CONF_BATTERY_CRITICAL,
+				      GPM_CONF_BATT_CRITICAL,
 				      battery_critical_actions);
 	gpm_prefs_setup_processor_combo (prefs, "combobox_battery_cpu",
-					 GPM_CONF_BATTERY_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+					 GPM_CONF_BATT_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
-				      GPM_CONF_BATTERY_SLEEP_COMPUTER);
+				      GPM_CONF_BATT_SLEEP_COMPUTER);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
-				      GPM_CONF_BATTERY_SLEEP_DISPLAY);
+				      GPM_CONF_BATT_SLEEP_DISPLAY);
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
-					   GPM_CONF_BATTERY_BRIGHTNESS);
+					   GPM_CONF_BATT_BRIGHTNESS);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
@@ -971,7 +970,7 @@ prefs_setup_battery (GpmPrefs *prefs)
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_brightness");
 		gtk_widget_hide_all (widget);
 	}
-	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_SHOW_CPUFREQ_UI, &show_cpufreq);
+	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UI_SHOW_CPUFREQ, &show_cpufreq);
 	if (show_cpufreq == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_cpu");
 		gtk_widget_hide_all (widget);
@@ -1007,7 +1006,7 @@ prefs_setup_ups (GpmPrefs *prefs)
 				      GPM_CONF_UPS_CRITICAL,
 				      ups_low_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ups_computer",
-				      GPM_CONF_BATTERY_SLEEP_COMPUTER);
+				      GPM_CONF_BATT_SLEEP_COMPUTER);
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_ups_computer", delay);
 }

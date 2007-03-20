@@ -24,6 +24,7 @@
 #define __GPM_WARNING_H
 
 #include <glib-object.h>
+#include "gpm-cell-unit.h"
 
 G_BEGIN_DECLS
 
@@ -38,16 +39,9 @@ typedef enum {
 	GPM_WARNING_NONE = 0,
 	GPM_WARNING_DISCHARGING = 1,
 	GPM_WARNING_LOW = 2,
-	GPM_WARNING_VERY_LOW = 3,
-	GPM_WARNING_CRITICAL = 4,
-	GPM_WARNING_ACTION = 5
+	GPM_WARNING_CRITICAL = 3,
+	GPM_WARNING_ACTION = 4
 } GpmWarningState;
-
-typedef enum {
-	GPM_WARNING_TIME = 0,
-	GPM_WARNING_PERCENTAGE = 1,
-	GPM_WARNING_AUTO = 2
-} GpmWarningPolicy;
 
 typedef struct GpmWarningPrivate GpmWarningPrivate;
 
@@ -66,9 +60,7 @@ GType		 gpm_warning_get_type	(void);
 GpmWarning	*gpm_warning_new	(void);
 
 GpmWarningState	 gpm_warning_get_state	(GpmWarning		*warning,
-					 GpmPowerStatus		*status,
-					 GpmWarningPolicy	 policy);
-const gchar	*gpm_warning_get_title	(GpmWarningState	 warning_type);
+					 GpmCellUnit		*unit);
 
 G_END_DECLS
 

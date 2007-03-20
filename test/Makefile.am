@@ -78,6 +78,10 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-proxy.c				\
 	../src/gpm-powermanager.h			\
 	../src/gpm-powermanager.c			\
+	../src/gpm-warning.h				\
+	../src/gpm-warning.c				\
+	../src/gpm-conf.h				\
+	../src/gpm-conf.c				\
 	../src/gpm-debug.h				\
 	../src/gpm-debug.c				\
 	$(NULL)
