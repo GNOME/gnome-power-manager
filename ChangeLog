@@ -1,3 +1,11 @@
+2007-03-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-button.c: (emit_button_pressed):
+	Don't assert if we cannot get the type of button from HAL for a
+	ButtonPressed device condition, just print an error and ignore.
+	Should fix #420491, although I'm not sure why HAL isn't providing the
+	data when we need it. It may be some sort of resume race.
+
 2007-03-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_labels),
