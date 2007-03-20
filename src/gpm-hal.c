@@ -25,6 +25,7 @@
 
 #include <string.h>
 #include <glib.h>
+#include <stdlib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
@@ -74,6 +75,20 @@ enum {
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmHal, gpm_hal, G_TYPE_OBJECT)
+
+/**
+ * gpm_hal_error_quark:
+ * Return value: Our personal error quark.
+ **/
+GQuark
+gpm_hal_error_quark (void)
+{
+	static GQuark quark = 0;
+	if (!quark) {
+		quark = g_quark_from_static_string ("gpm_hal_error");
+	}
+	return quark;
+}
 
 /**
  * gpm_hal_is_running:
@@ -1031,7 +1046,8 @@ gpm_hal_init (GpmHal *hal)
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);
 	if (proxy == NULL) {
-		gpm_critical_error ("Either HAL or DBUS are not working!");
+		gpm_warning ("Either HAL or DBUS are not working!\n");
+		exit (0);
 	}
 
 	/* get the power connection */
@@ -1042,7 +1058,8 @@ gpm_hal_init (GpmHal *hal)
 				  HAL_ROOT_COMPUTER,
 				  HAL_DBUS_INTERFACE_POWER);
 	if (proxy == NULL) {
-		gpm_critical_error ("HAL does not support power management!");
+		gpm_warning ("HAL does not support power management, exiting!\n");
+		exit (0);
 	}
 
 	g_signal_connect (hal->priv->gproxy_manager, "proxy-status",
@@ -1471,6 +1488,9 @@ gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 	proxy = gpm_proxy_get_proxy (hal->priv->gproxy_power);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
+		*error = g_error_new (gpm_hal_error_quark (),
+				      GPM_HAL_NOT_CONNECTED,
+				      "Not connected");
 		return FALSE;
 	}
 

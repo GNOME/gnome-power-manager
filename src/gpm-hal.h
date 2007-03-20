@@ -52,6 +52,12 @@ typedef struct
 	GpmHalPrivate	*priv;
 } GpmHal;
 
+typedef enum
+{
+	 GPM_HAL_NOT_CONNECTED,
+	 GPM_HAL_LAST
+} GpmHalError;
+
 /* Signals emitted from GpmHal are:
  *
  * device-added

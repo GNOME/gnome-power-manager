@@ -1,5 +1,15 @@
 2007-03-20  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-hal.c: (gpm_hal_init):
+	Exit on startup if HAL is not running. We can't do anything.
+
+	* src/gpm-hal.c: (gpm_hal_error_quark), (gpm_hal_clear_suspend_error):
+	* src/gpm-hal.h:
+	Set an error if HAL is not running. Fixes #84997 and lots of duplicates. 
+	Many thanks to Ed Martin for the debuging information.
+
+2007-03-20  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-button.c: (emit_button_pressed):
 	Don't assert if we cannot get the type of button from HAL for a
 	ButtonPressed device condition, just print an error and ignore.
