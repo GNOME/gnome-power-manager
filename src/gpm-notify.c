@@ -115,9 +115,9 @@ gpm_notify_create (GpmNotify 	 *notify,
 	if (timeout == GPM_NOTIFY_TIMEOUT_NEVER) {
 		notify_notification_set_timeout (notify->priv->libnotify, 0);
 	} else if (timeout == GPM_NOTIFY_TIMEOUT_LONG) {
-		notify_notification_set_timeout (notify->priv->libnotify, 20 * 1000);
+		notify_notification_set_timeout (notify->priv->libnotify, 30 * 1000);
 	} else if (timeout == GPM_NOTIFY_TIMEOUT_SHORT) {
-		notify_notification_set_timeout (notify->priv->libnotify, 5 * 1000);
+		notify_notification_set_timeout (notify->priv->libnotify, 10 * 1000);
 	}
 
 	if (urgency == GPM_NOTIFY_URGENCY_CRITICAL) {

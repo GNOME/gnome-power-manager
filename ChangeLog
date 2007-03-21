@@ -1,5 +1,16 @@
 2007-03-21  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	Only show provides text if over 10 minutes.
+
+	* src/gpm-engine.c: (gpm_engine_class_init):
+	Correct the signal type.
+
+	* src/gpm-notify.c: (gpm_notify_create):
+	Make notifications longer.
+
+2007-03-21  Richard Hughes  <richard@hughsie.com>
+
 	* BRANCHES:
 	Add some info about 2-19.
 

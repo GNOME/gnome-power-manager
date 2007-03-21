@@ -828,7 +828,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 	} else if (unit->is_charging == TRUE) {
 
-		if (unit->time_charge > 120 && unit->time_discharge > 120) {
+		if (unit->time_charge > 120 && unit->time_discharge > 10*60) {
 			/* display both discharge and charge time */
 			charge_timestring = gpm_get_timestring (unit->time_charge);
 			discharge_timestring = gpm_get_timestring (unit->time_discharge);

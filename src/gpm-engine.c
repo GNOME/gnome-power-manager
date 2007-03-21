@@ -224,8 +224,8 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      G_STRUCT_OFFSET (GpmEngineClass, charge_critical),
 			      NULL,
 			      NULL,
-			      gpm_marshal_VOID__UINT_UINT,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+			      gpm_marshal_VOID__UINT_POINTER,
+			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
 }
 
 /**
