@@ -161,6 +161,53 @@ gpm_cell_array_get_cell (GpmCellArray *cell_array, guint id)
 /**
  * gpm_cell_perhaps_recall_cb:
  */
+guint
+gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
+{
+	GpmCellUnit *unit;
+	gboolean use_time_primary;
+	guint action_percentage;
+	guint action_time;
+	gint difference;
+
+	/* clear old values (except previous charge rate) */
+	unit = &(cell_array->priv->unit);
+	gpm_cell_unit_init (unit);
+
+	/* not valid */
+	if (unit->is_charging == TRUE || unit->is_discharging == FALSE) {
+		return 0;
+	}
+
+	/* only calculate for primary */
+	if (unit->kind != GPM_CELL_UNIT_KIND_PRIMARY) {
+		return 0;
+	}
+
+	/* calculate! */
+	gpm_conf_get_bool (cell_array->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time_primary);
+	if (use_time_primary == TRUE) {
+		/* simple subtraction */
+		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_TIME, &action_time);
+		difference = (gint) unit->time_discharge - (gint) action_time;
+	} else {
+		/* we have to work out the time for this percentage */
+		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &action_percentage);
+		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
+		difference = (gint) unit->time_discharge - (gint) action_time;	
+	}
+
+	/* if invalid, don't return junk */
+	if (difference < 0) {
+		gpm_debug ("difference negative, now %i, action %i", unit->time_discharge, action_time);
+		return 0;
+	}
+	return difference;
+}
+
+/**
+ * gpm_cell_perhaps_recall_cb:
+ */
 static void
 gpm_cell_perhaps_recall_cb (GpmCell *cell, gchar *oem_vendor, gchar *website, GpmCellArray *cell_array)
 {
@@ -392,7 +439,7 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 	if (cell_array->priv->done_fully_charged == TRUE &&
 	    unit->percentage < GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE &&
 	    gpm_cell_unit_is_charged (unit) == FALSE) {
-		gpm_debug ("re-enabled fully charged");
+		gpm_debug ("enabled fully charged");
 		cell_array->priv->done_fully_charged = FALSE;
 	}
 
@@ -1063,7 +1110,9 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 
 	cell_array->priv->done_recall = FALSE;
 	cell_array->priv->done_capacity = FALSE;
-	cell_array->priv->done_fully_charged = FALSE;
+
+	/* we don't notify on initial startup */
+	cell_array->priv->done_fully_charged = TRUE;
 
 	cell_array->priv->ac_adapter = gpm_ac_adapter_new ();
 	cell_array->priv->warning = gpm_warning_new ();

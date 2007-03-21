@@ -1,3 +1,13 @@
+2007-03-21  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (gpm_engine_fully_charged_cb),
+	Correct a signal prototype, and don't notify by default on startup.
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action):
+	* src/gpm-cell-array.h:
+	* src/gpm-warning.c: (gpm_warning_init):
+	Print the time remaining on the critical warning. Lots of new strings.
+
 2007-03-20  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-power.c:

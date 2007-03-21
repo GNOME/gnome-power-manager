@@ -975,7 +975,6 @@ gpm_engine_summary_changed_cb (GpmEngine  *engine,
 static void
 gpm_engine_fully_charged_cb (GpmEngine      *engine,
 			     GpmCellUnitKind kind,
-			     guint           capacity,
 			     GpmManager     *manager)
 {
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
@@ -1078,17 +1077,55 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 			       GpmManager     *manager)
 {
 	const gchar *title = NULL;
+	guint time_until_critical;
 	gchar *message = NULL;
 	gchar *remaining;
+	gchar *action;
 	gchar *icon;
+	gchar *critical_time_text;
+	GpmEngineCollection *collection;
+	collection = gpm_engine_get_collection (manager->priv->engine);
 
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery critically low");
 		remaining = gpm_get_timestring (unit->time_discharge);
-		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
-					     "Plug in your AC adapter to avoid losing data."),
-					   remaining, unit->percentage);
+
+		/* we should tell the user how much time they have */
+		time_until_critical = gpm_cell_array_get_time_until_action (collection->primary);
+		if (time_until_critical == 0) {
+			critical_time_text = g_strdup (_("a short time"));
+		} else {
+			critical_time_text = gpm_get_timestring (time_until_critical);
+		}
+
+		/* we have to do different warnings depending on the policy */
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
+
+		/* use different text for different actions */
+		if (strcmp (action, ACTION_NOTHING) == 0) {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+						     "Plug in your AC adapter to avoid losing data."),
+						   remaining, unit->percentage);
+
+		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+						     "This computer will suspend in %s if the AC is not connected."),
+						   remaining, unit->percentage, critical_time_text);
+
+		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+						     "This computer will hibernate in %s if the AC is not connected."),
+						   remaining, unit->percentage, critical_time_text);
+
+		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
+			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
+						     "This computer will shutdown in %s if the AC is not connected."),
+						   remaining, unit->percentage, critical_time_text);
+		}
+
+		g_free (action);
 		g_free (remaining);
+		g_free (critical_time_text);
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
 		remaining = gpm_get_timestring (unit->time_discharge);
@@ -1129,13 +1166,13 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 static void
 gpm_engine_charge_action_cb (GpmEngine      *engine,
 			     GpmCellUnitKind kind,
-			     guint           percentage,
+			     GpmCellUnit    *unit,
 			     GpmManager     *manager)
 {
 	const gchar *title = NULL;
 	gchar *action;
 	gchar *message = NULL;
-	gchar *icon = g_strdup ("moo");
+	gchar *icon;
 
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery critically low");
@@ -1143,7 +1180,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		/* we have to do different warnings depending on the policy */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
 
-		/* TODO: we should probably convert to an ENUM type, and use that */
+		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
 			message = g_strdup (_("The battery is below the critical level and "
 					      "this computer will <b>power-off</b> when the "
@@ -1167,7 +1204,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		g_free (action);
 
 		/* wait 10 seconds for user-panic */
-if (0)		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
+		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manager);
 
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
@@ -1175,7 +1212,7 @@ if (0)		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manage
 		/* we have to do different warnings depending on the policy */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_UPS_CRITICAL, &action);
 
-		/* FIXME: we should probably convert to an ENUM type, and use that */
+		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
 			message = _("The UPS is below the critical level and "
 				    "this computer will <b>power-off</b> when the "
@@ -1197,6 +1234,9 @@ if (0)		g_timeout_add (1000*10, (GSourceFunc) manager_critical_action_do, manage
 	if (title == NULL) {
 		return;
 	}
+
+	/* get correct icon */
+	icon = gpm_cell_unit_get_icon (unit);
 	gpm_notify_display (manager->priv->notify,
 			    title, message, GPM_NOTIFY_TIMEOUT_LONG,
 			    icon, GPM_NOTIFY_URGENCY_CRITICAL);
@@ -1214,6 +1254,7 @@ gpm_manager_init (GpmManager *manager)
 {
 	gboolean check_type_cpu;
 	DBusGConnection *connection;
+	GpmEngineCollection *collection;
 	GError *error = NULL;
 	gboolean on_ac;
 
@@ -1354,7 +1395,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_engine_start (manager->priv->engine);
 
-	GpmEngineCollection *collection;
 	collection = gpm_engine_get_collection (manager->priv->engine);
 	gpm_tray_icon_set_collection_data (manager->priv->tray_icon, collection);
 	gpm_info_set_collection_data (manager->priv->info, collection);

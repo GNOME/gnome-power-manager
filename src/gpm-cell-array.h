@@ -77,6 +77,7 @@ gchar		*gpm_cell_array_get_icon		(GpmCellArray	*cell_array);
 GpmCellUnitKind	 gpm_cell_array_get_kind		(GpmCellArray	*cell_array);
 GpmCell		*gpm_cell_array_get_cell		(GpmCellArray	*cell_array,
 							 guint		 id);
+guint		 gpm_cell_array_get_time_until_action	(GpmCellArray	*cell_array);
 guint		 gpm_cell_array_get_num_cells		(GpmCellArray	*cell_array);
 gchar		*gpm_cell_array_get_description		(GpmCellArray	*cell_array);
 gboolean	 gpm_cell_array_refresh			(GpmCellArray	*cell_array);

@@ -248,7 +248,7 @@ gpm_warning_init (GpmWarning *warning)
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */
 	gpm_conf_get_bool (warning->priv->conf, GPM_CONF_USE_TIME_POLICY, &warning->priv->use_time_primary);
-	if (warning->priv->use_time_primary) {
+	if (warning->priv->use_time_primary == TRUE) {
 		gpm_debug ("Using per-time notification policy");
 	} else {
 		gpm_debug ("Using percentage notification policy");
