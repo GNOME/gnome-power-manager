@@ -1033,19 +1033,19 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 {
 	const gchar *title = NULL;
 	gchar *message = NULL;
-	gchar *remaining;
+	gchar *remaining_text;
 	gchar *icon;
 
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery low");
-		remaining = gpm_get_timestring (unit->time_discharge);
+		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%)"),
-					   remaining, unit->percentage);
+					   remaining_text, unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS low");
-		remaining = gpm_get_timestring (unit->time_discharge);
+		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"),
-					   remaining, unit->percentage);
+					   remaining_text, unit->percentage);
 	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is low in power (%d%%)"), unit->percentage);
@@ -1068,6 +1068,25 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 }
 
 /**
+ * gpm_manager_get_time_until_action_text:
+ */
+static gchar *
+gpm_manager_get_time_until_action_text (GpmManager *manager)
+{
+	guint time;
+	GpmEngineCollection *collection;
+
+	collection = gpm_engine_get_collection (manager->priv->engine);
+
+	/* we should tell the user how much time they have */
+	time = gpm_cell_array_get_time_until_action (collection->primary);
+	if (time == 0) {
+		return g_strdup (_("a short time"));
+	}
+	return gpm_get_timestring (time);
+}
+
+/**
  * gpm_engine_charge_critical_cb:
  */
 static void
@@ -1077,62 +1096,49 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 			       GpmManager     *manager)
 {
 	const gchar *title = NULL;
-	guint time_until_critical;
 	gchar *message = NULL;
-	gchar *remaining;
+	gchar *action_text = NULL;
+	gchar *remaining_text;
 	gchar *action;
 	gchar *icon;
-	gchar *critical_time_text;
-	GpmEngineCollection *collection;
-	collection = gpm_engine_get_collection (manager->priv->engine);
+	gchar *time_text;
 
 	if (kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		title = _("Laptop battery critically low");
-		remaining = gpm_get_timestring (unit->time_discharge);
-
-		/* we should tell the user how much time they have */
-		time_until_critical = gpm_cell_array_get_time_until_action (collection->primary);
-		if (time_until_critical == 0) {
-			critical_time_text = g_strdup (_("a short time"));
-		} else {
-			critical_time_text = gpm_get_timestring (time_until_critical);
-		}
+		remaining_text = gpm_get_timestring (unit->time_discharge);
+		time_text = gpm_manager_get_time_until_action_text (manager);
 
 		/* we have to do different warnings depending on the policy */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
-			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
-						     "Plug in your AC adapter to avoid losing data."),
-						   remaining, unit->percentage);
+			action_text = g_strdup_printf (_("Plug in your AC adapter to avoid losing data."));
 
 		} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
-						     "This computer will suspend in %s if the AC is not connected."),
-						   remaining, unit->percentage, critical_time_text);
+			action_text = g_strdup_printf (_("This computer will suspend in %s if the AC is not connected."), time_text);
 
 		} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
-						     "This computer will hibernate in %s if the AC is not connected."),
-						   remaining, unit->percentage, critical_time_text);
+			action_text = g_strdup_printf (_("This computer will hibernate in %s if the AC is not connected."), time_text);
 
 		} else if (strcmp (action, ACTION_SHUTDOWN) == 0) {
-			message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). "
-						     "This computer will shutdown in %s if the AC is not connected."),
-						   remaining, unit->percentage, critical_time_text);
+			action_text = g_strdup_printf (_("This computer will shutdown in %s if the AC is not connected."), time_text);
 		}
 
+		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining battery life (%d%%). %s"),
+					   remaining_text, unit->percentage, action_text);
+
 		g_free (action);
-		g_free (remaining);
-		g_free (critical_time_text);
+		g_free (action_text);
+		g_free (remaining_text);
+		g_free (time_text);
 	} else if (kind == GPM_CELL_UNIT_KIND_UPS) {
 		title = _("UPS critically low");
-		remaining = gpm_get_timestring (unit->time_discharge);
+		remaining_text = gpm_get_timestring (unit->time_discharge);
 		message = g_strdup_printf (_("You have approximately <b>%s</b> of remaining UPS power (%d%%). "
 					     "Restore AC power to your computer to avoid losing data."),
-					   remaining, unit->percentage);
-		g_free (remaining);
+					   remaining_text, unit->percentage);
+		g_free (remaining_text);
 	} else if (kind == GPM_CELL_UNIT_KIND_MOUSE) {
 		title = _("Mouse battery low");
 		message = g_strdup_printf (_("The wireless mouse attached to this computer is very low in power (%d%%). "
