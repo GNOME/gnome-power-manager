@@ -238,19 +238,16 @@ hal_device_property_modified_cb (HalGDevice   *device,
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
-	/* do not process keys that have been removed */
-	if (is_removed == TRUE) {
-		return;
-	}
-
 	/* only match battery* values */
 	if (strncmp (key, "battery", 7) != 0) {
 		gpm_debug ("not battery key");
 		return;
 	}
+
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_present, NULL);
+		gpm_cell_refresh_all (cell);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_charging, NULL);
