@@ -1478,7 +1478,7 @@ gpm_hal_has_hibernate_error (GpmHal *hal, gboolean *state)
 gboolean
 gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 {
-#if HAVE_HAL_NEW
+#if 0
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -1513,7 +1513,7 @@ gpm_hal_clear_suspend_error (GpmHal *hal, GError **error)
 gboolean
 gpm_hal_clear_hibernate_error (GpmHal *hal, GError **error)
 {
-#if HAVE_HAL_NEW
+#if 0
 	gboolean ret;
 	DBusGProxy *proxy;
 
