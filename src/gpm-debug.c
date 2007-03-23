@@ -232,27 +232,12 @@ void
 gpm_critical_error (const gchar *format, ...)
 {
 	va_list args;
-	GtkWidget *dialog;
 
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 
-	gpm_syslog_internal (va_args_buffer);
-	dialog = gtk_message_dialog_new_with_markup (NULL,
-						     GTK_DIALOG_MODAL,
-						     GTK_MESSAGE_WARNING,
-						     GTK_BUTTONS_OK,
-						     "<span size='larger'><b>%s</b></span>",
-						     GPM_NAME);
-	gtk_message_dialog_format_secondary_markup (GTK_MESSAGE_DIALOG (dialog),
-						    va_args_buffer);
-	/* we close the gtk loop when the user clicks ok */
-	g_signal_connect_swapped (dialog,
-				  "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  dialog);
-	gtk_widget_show (dialog);
+	g_warning (va_args_buffer);
 }
 
 /**

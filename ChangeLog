@@ -1,5 +1,14 @@
 2007-03-23  Richard Hughes  <richard@hughsie.com>
 
+	==== Version 2.18.1 ====
+
+2007-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-debug.c: (gpm_critical_error):
+	Don't put up a GTK dialogue on critical error. Fixes rh#233689
+
+2007-03-23  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-hal.c: (gpm_hal_clear_suspend_error),
 	(gpm_hal_clear_hibernate_error):
 	Disable these two methods as they are causing errors. Fixes #420491
