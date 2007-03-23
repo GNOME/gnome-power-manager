@@ -45,7 +45,7 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* profile_created)	(GpmProfile	*profile);
+	void		(* estimated_data)			(GpmProfile	*profile);
 } GpmProfileClass;
 
 GType			 gpm_profile_get_type			(void);

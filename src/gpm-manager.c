@@ -1167,6 +1167,17 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 }
 
 /**
+ * gpm_profile_estimated_data_cb:
+ */
+static void
+gpm_profile_estimated_data_cb (GpmProfile *profile,
+			       GpmManager *manager)
+{
+	/* explain to the user */
+	gpm_notify_estimated_data (manager->priv->notify);
+}
+
+/**
  * gpm_engine_charge_action_cb:
  */
 static void
@@ -1355,6 +1366,8 @@ gpm_manager_init (GpmManager *manager)
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
 	manager->priv->profile = gpm_profile_new ();
+	g_signal_connect (manager->priv->profile, "estimated-data",
+			  G_CALLBACK (gpm_profile_estimated_data_cb), manager);
 
 	/* do debugging self tests */
 	guint time;

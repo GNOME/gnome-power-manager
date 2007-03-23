@@ -74,6 +74,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/estimated_data</key>
+      <applyto>/apps/gnome-power-manager/notify/estimated_data</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Notify when the profile data is guessed</short>
+        <long>If a notification message should be displayed when the profile data is guessed.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/thresholds/percentage_low</key>
       <applyto>/apps/gnome-power-manager/thresholds/percentage_low</applyto>
       <owner>gnome-power-manager</owner>

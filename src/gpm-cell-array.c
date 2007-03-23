@@ -783,6 +783,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	gchar *discharge_timestring;
 	gchar *description = NULL;
 	guint accuracy;
+	guint time;
 	GpmCellUnit *unit;
 	gboolean plural = FALSE;
 
@@ -818,9 +819,9 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	if (gpm_cell_unit_is_charged (unit) == TRUE) {
 
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
-		    unit->time_discharge> GPM_CELL_ARRAY_TEXT_MIN_TIME &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
-			discharge_timestring = gpm_get_timestring (unit->time_discharge);
+			time = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
+			discharge_timestring = gpm_get_timestring (time);
 			description = g_strdup_printf (_("%s fully charged (%i%%)\nTypically provides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);
 			g_free (discharge_timestring);

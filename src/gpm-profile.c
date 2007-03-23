@@ -74,7 +74,7 @@ struct GpmProfilePrivate
 };
 
 enum {
-	PROFILE_CREATED,
+	ESTIMATED_DATA,
 	LAST_SIGNAL
 };
 
@@ -97,11 +97,11 @@ gpm_profile_class_init (GpmProfileClass *klass)
 
 	g_type_class_add_private (klass, sizeof (GpmProfilePrivate));
 
-	signals [PROFILE_CREATED] =
-		g_signal_new ("profile-created",
+	signals [ESTIMATED_DATA] =
+		g_signal_new ("estimated-data",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmProfileClass, profile_created),
+			      G_STRUCT_OFFSET (GpmProfileClass, estimated_data),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID,
@@ -300,8 +300,8 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 
 	/* check we can give a decent reading */
 	if (percentage > 99) {
-		gpm_debug ("percentage = %i, returning zero", percentage);
-		return 0;
+		gpm_debug ("percentage = %i, correcting to 99%", percentage);
+		percentage = 99;
 	}
 
 	/* recompute */
@@ -515,6 +515,18 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 /**
+ * gpm_profile_estimated_data:
+ */
+static gboolean
+gpm_profile_estimated_data (GpmProfile *profile)
+{
+	/* we proxy this to the GUI layer */
+	gpm_debug ("** EMIT: estimated-data");
+	g_signal_emit (profile, signals [ESTIMATED_DATA], 0);
+	return FALSE;
+}
+
+/**
  * gpm_profile_load_data:
  */
 static void
@@ -537,9 +549,8 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
 
-		/* we proxy this to the GUI layer */
-		gpm_debug ("** EMIT: profile-created");
-		g_signal_emit (profile, signals [PROFILE_CREATED], 0);
+		/* we have to delay the notification in case we are in _init */
+		g_timeout_add (20*1000, (GSourceFunc) gpm_profile_estimated_data, profile);
 
 		/* directory might not exist */
 		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
@@ -574,7 +585,7 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 
 	if (percentage > 99) {
 		percentage = 99;
-		gpm_warning ("corrected percentage...");
+		gpm_debug ("corrected percentage...");
 	}
 
 	/* recompute */

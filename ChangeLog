@@ -1,6 +1,22 @@
 2007-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	Make the fully charged time remaining work.
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-manager.c: (gpm_profile_estimated_data_cb):
+	* src/gpm-notify.c: (gpm_notify_estimated_data):
+	* src/gpm-notify.h:
+	* src/gpm-profile.c: (gpm_profile_class_init),
+	(gpm_profile_get_time), (gpm_profile_estimated_data),
+	(gpm_profile_load_data), (gpm_profile_get_accuracy):
+	* src/gpm-profile.h:
+	Emit a warning if we have not got enough profile data.
+
+2007-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
 	Display how much time we have, even with a fully charged battery.
 
 	* src/gpm-profile.c: (gpm_profile_class_init),
