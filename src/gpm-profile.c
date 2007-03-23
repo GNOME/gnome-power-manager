@@ -73,6 +73,13 @@ struct GpmProfilePrivate
 	guint			 last_percentage;
 };
 
+enum {
+	PROFILE_CREATED,
+	LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL] = { 0, };
+
 static gpointer gpm_profile_object = NULL;
 
 G_DEFINE_TYPE (GpmProfile, gpm_profile, G_TYPE_OBJECT)
@@ -89,6 +96,16 @@ gpm_profile_class_init (GpmProfileClass *klass)
 	object_class->finalize = gpm_profile_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmProfilePrivate));
+
+	signals [PROFILE_CREATED] =
+		g_signal_new ("profile-created",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmProfileClass, profile_created),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 }
 
 /**
@@ -519,6 +536,11 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
+
+		/* we proxy this to the GUI layer */
+		gpm_debug ("** EMIT: profile-created");
+		g_signal_emit (profile, signals [PROFILE_CREATED], 0);
+
 		/* directory might not exist */
 		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
 		g_mkdir_with_parents (path, 744);
@@ -536,6 +558,31 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		}
 	}
 	g_free (filename);
+}
+
+/**
+ * gpm_profile_get_accuracy:
+ */
+guint
+gpm_profile_get_accuracy (GpmProfile *profile,
+			  guint	      percentage)
+{
+	GpmArrayPoint *point;
+
+	g_return_val_if_fail (profile != NULL, 0);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
+
+	if (percentage > 99) {
+		percentage = 99;
+		gpm_warning ("corrected percentage...");
+	}
+
+	/* recompute */
+	gpm_profile_compute_data_accuracy (profile, profile->priv->discharging);
+
+	point = gpm_array_get (profile->priv->array_accuracy, percentage);
+
+	return point->y;
 }
 
 /**

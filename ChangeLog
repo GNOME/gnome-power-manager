@@ -1,3 +1,14 @@
+2007-03-23  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	Display how much time we have, even with a fully charged battery.
+
+	* src/gpm-profile.c: (gpm_profile_class_init),
+	(gpm_profile_load_data), (gpm_profile_get_accuracy):
+	* src/gpm-profile.h:
+	Emit a signal when we create a file. Also provide a way to get the
+	accuracy so we don't show stuff in the tooltip we can't justify.
+
 2007-03-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (gpm_cell_array_get_description):

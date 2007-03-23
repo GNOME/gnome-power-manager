@@ -45,6 +45,7 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* profile_created)	(GpmProfile	*profile);
 } GpmProfileClass;
 
 GType			 gpm_profile_get_type			(void);
@@ -53,6 +54,8 @@ GpmProfile		*gpm_profile_new			(void);
 gboolean		 gpm_profile_register_charging		(GpmProfile	*profile,
 								 gboolean	 is_charging);
 gboolean		 gpm_profile_register_percentage	(GpmProfile	*profile,
+								 guint		 percentage);
+guint			 gpm_profile_get_accuracy		(GpmProfile	*profile,
 								 guint		 percentage);
 GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile,
 								 gboolean	 discharging);
