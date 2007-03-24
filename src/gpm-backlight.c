@@ -708,6 +708,9 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->idle = gpm_idle_new ();
 	g_signal_connect (backlight->priv->idle, "idle-changed",
 			  G_CALLBACK (idle_changed_cb), backlight);
+
+	/* sync at startup */
+	gpm_backlight_sync_policy (backlight);
 }
 
 /**
