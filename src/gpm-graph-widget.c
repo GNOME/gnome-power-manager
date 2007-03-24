@@ -38,7 +38,6 @@ struct GpmGraphWidgetPrivate
 {
 	gboolean		 use_grid;
 	gboolean		 use_legend;
-	gboolean		 use_axis_labels;
 	gboolean		 use_events;
 
 	gboolean		 invert_x;
@@ -61,8 +60,6 @@ struct GpmGraphWidgetPrivate
 
 	GpmGraphWidgetAxisType	 axis_type_x;
 	GpmGraphWidgetAxisType	 axis_type_y;
-	const gchar		*axis_label_x;
-	const gchar		*axis_label_y;
 	gchar			*title;
 
 	cairo_t			*cr;
@@ -139,8 +136,6 @@ gpm_graph_widget_key_add (GpmGraphWidget       *graph,
 	return TRUE;
 }
 
-
-
 /**
  * gpm_graph_widget_string_to_axis_type:
  * @graph: This class instance
@@ -152,7 +147,6 @@ GpmGraphWidgetAxisType
 gpm_graph_widget_string_to_axis_type (const gchar *type)
 {
 	GpmGraphWidgetAxisType ret;
-	g_return_val_if_fail (type != NULL, GPM_GRAPH_WIDGET_TYPE_INVALID);
 
 	ret = GPM_GRAPH_WIDGET_TYPE_INVALID;
 	if (strcmp (type, "percentage") == 0) {
@@ -166,55 +160,6 @@ gpm_graph_widget_string_to_axis_type (const gchar *type)
 	}
 
 	return ret;
-}
-
-/**
- * gpm_graph_widget_get_axis_label_y:
- * @graph: This class instance
- * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
- **/
-static const gchar *
-gpm_graph_widget_get_axis_label_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType type)
-{
-	g_return_val_if_fail (graph != NULL, NULL);
-	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
-
-	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		return _("Charge percentage");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		return _("Time remaining");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		return _("Power");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		return _("Cell Voltage");
-	}
-	return _("Unknown caption");
-}
-
-/**
- * gpm_graph_widget_get_axis_label_x:
- * @graph: This class instance
- * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
- **/
-static const gchar *
-gpm_graph_widget_get_axis_label_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType type)
-{
-	g_return_val_if_fail (graph != NULL, NULL);
-	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), NULL);
-
-	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		return _("Battery percentage");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		/* I want this translated please */
-		const char *moo;
-		moo = _("Time");
-		return _("Time since startup");
-	}
-	return _("Unknown caption");
 }
 
 /**
@@ -244,7 +189,6 @@ gpm_graph_widget_set_axis_type_x (GpmGraphWidget *graph, GpmGraphWidgetAxisType 
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->axis_type_x = axis;
-	graph->priv->axis_label_x = gpm_graph_widget_get_axis_label_x (graph, axis);
 }
 
 /**
@@ -258,7 +202,6 @@ gpm_graph_widget_set_axis_type_y (GpmGraphWidget *graph, GpmGraphWidgetAxisType 
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->axis_type_y = axis;
-	graph->priv->axis_label_y = gpm_graph_widget_get_axis_label_y (graph, axis);
 }
 
 /**
@@ -272,22 +215,6 @@ gpm_graph_widget_enable_legend (GpmGraphWidget *graph, gboolean enable)
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 	graph->priv->use_legend = enable;
-
-	gtk_widget_hide (GTK_WIDGET (graph));
-	gtk_widget_show (GTK_WIDGET (graph));
-}
-
-/**
- * gpm_graph_widget_enable_axis_labels:
- * @graph: This class instance
- * @enable: If we should show the axis labels
- **/
-void
-gpm_graph_widget_enable_axis_labels (GpmGraphWidget *graph, gboolean enable)
-{
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	graph->priv->use_axis_labels = enable;
 
 	gtk_widget_hide (GTK_WIDGET (graph));
 	gtk_widget_show (GTK_WIDGET (graph));
@@ -341,12 +268,9 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
-	graph->priv->use_axis_labels = FALSE;
 	graph->priv->autorange_x = TRUE;
 	graph->priv->data_list = g_ptr_array_new ();
 	graph->priv->keyvals = NULL;
-	graph->priv->axis_label_x = NULL;
-	graph->priv->axis_label_y = NULL;
 	graph->priv->title = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
@@ -623,7 +547,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 			offsety = (extents.height / 2.0f);
 		}
 		offsetx = extents.width + 5;
-		cairo_move_to (cr, graph->priv->box_x - offsetx, b + offsety);
+		cairo_move_to (cr, graph->priv->box_x - offsetx - 2, b + offsety);
 		cairo_show_text (cr, text);
 		g_free (text);
 	}
@@ -1197,8 +1121,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	guint legend_width = 0;
 	gint data_x;
 	gint data_y;
-	cairo_text_extents_t extents_axis_label_x;
-	cairo_text_extents_t extents_axis_label_y;
 	cairo_text_extents_t extents_title;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
@@ -1218,19 +1140,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	}
 
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
-
-	/* make size adjustment for axis labels */
-	if (graph->priv->use_axis_labels) {
-		/* get the size of the x axis text */
-		cairo_save (cr);
-		cairo_set_font_size (cr, 12);
-		cairo_text_extents (cr, graph->priv->axis_label_x, &extents_axis_label_x);
-		cairo_text_extents (cr, graph->priv->axis_label_y, &extents_axis_label_y);
-		cairo_restore (cr);
-
-		graph->priv->box_height -= (extents_axis_label_x.height + 2);
-		graph->priv->box_x += (extents_axis_label_y.height + 2);
-	}
 
 	/* make size adjustment for legend */
 	if (graph->priv->use_legend) {
@@ -1266,20 +1175,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->unit_y = (float)(graph->priv->box_height - 3) / (float) data_y;
 
 	gpm_graph_widget_draw_labels (graph, cr);
-
-	if (graph->priv->use_axis_labels) {
-		/* horizontal axis label */
-		cairo_save (cr);
-		cairo_set_font_size (cr, 12);
-		cairo_move_to (cr, graph->priv->box_x + ((graph->priv->box_width - extents_axis_label_x.width)/2), graph_widget->allocation.height - 3);
-		cairo_show_text (cr, graph->priv->axis_label_x);
-		/* vertical axis label */
-		cairo_move_to (cr, extents_axis_label_y.height, ((graph->priv->box_height + extents_axis_label_y.width) / 2) - graph->priv->box_y);
-		cairo_rotate (cr, -3.1415927 / 2.0);
-		cairo_show_text (cr, graph->priv->axis_label_y);
-		cairo_restore (cr);
-	}
-
 	gpm_graph_widget_draw_line (graph, cr);
 
 	if (graph->priv->use_events) {

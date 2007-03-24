@@ -75,6 +75,8 @@ struct GpmStatisticsPrivate
 	GpmArray		*events;
 	GpmArray		*data;
 	const gchar		*graph_type;
+	GpmGraphWidgetAxisType	 axis_x;
+	GpmGraphWidgetAxisType	 axis_y;
 };
 
 enum {
@@ -333,13 +335,88 @@ gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
 }
 
 /**
+ * gpm_statistics_get_axis_label_x:
+ * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ **/
+static const gchar *
+gpm_statistics_get_axis_label_x (GpmGraphWidgetAxisType type)
+{
+	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		return _("Battery percentage");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		/* I want this translated please */
+		const char *moo;
+		moo = _("Time");
+		return _("Time since startup");
+	}
+	return _("Unknown caption");
+}
+
+/**
+ * gpm_statistics_get_axis_label_y:
+ * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
+ **/
+static const gchar *
+gpm_statistics_get_axis_label_y (GpmGraphWidgetAxisType type)
+{
+	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		return _("Charge percentage");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		return _("Time remaining");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_POWER) {
+		return _("Power");
+	}
+	if (type == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		return _("Cell Voltage");
+	}
+	return _("Unknown caption");
+}
+
+/**
+ * gpm_statistics_refresh_axis_labels:
+ **/
+static void
+gpm_statistics_refresh_axis_labels (GpmStatistics *statistics)
+{
+	gboolean show;
+	GtkWidget *widget1;
+	GtkWidget *widget2;
+	const gchar *caption;
+
+	/* save to gconf so we open next time with the correct setting */
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, &show);
+
+	if (show == FALSE) {
+		widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
+		widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
+
+		gtk_widget_hide (widget1);
+		gtk_widget_hide (widget2);
+	} else {
+		widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
+		caption = gpm_statistics_get_axis_label_x (statistics->priv->axis_x);
+		gtk_label_set_text (GTK_LABEL (widget1), caption);
+
+		widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
+		caption = gpm_statistics_get_axis_label_y (statistics->priv->axis_y);
+		gtk_label_set_text (GTK_LABEL (widget2), caption);
+
+		gtk_widget_show (widget1);
+		gtk_widget_show (widget2);
+	}
+}
+
+/**
  * gpm_statistics_checkbox_axis_labels_cb:
  * @widget: The GtkWidget object
  * @gpm_pref_key: The GConf key for this preference setting.
  **/
 static void
-gpm_statistics_checkbox_axis_labels_cb (GtkWidget *widget,
-			    GpmStatistics  *statistics)
+gpm_statistics_checkbox_axis_labels_cb (GtkWidget      *widget,
+			                GpmStatistics  *statistics)
 {
 	gboolean checked;
 
@@ -349,7 +426,8 @@ gpm_statistics_checkbox_axis_labels_cb (GtkWidget *widget,
 	/* save to gconf so we open next time with the correct setting */
 	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, checked);
 
-	gpm_graph_widget_enable_axis_labels (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), checked);
+	/* refresh the axis */
+	gpm_statistics_refresh_axis_labels (statistics);
 }
 
 /**
@@ -565,8 +643,6 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 {
 	gchar *value;
 	gchar *type = NULL;
-	GpmGraphWidgetAxisType axis_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
-	GpmGraphWidgetAxisType axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	value = gtk_combo_box_get_active_text (GTK_COMBO_BOX (widget));
 	if (value == NULL) {
@@ -595,9 +671,10 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	g_free (value);
 
 	/* find out what sort of grid axis we need */
-	gpm_statistics_get_axis_type_dbus (statistics, type, &axis_x, &axis_y);
-	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_x);
-	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_y);
+	gpm_statistics_get_axis_type_dbus (statistics, type, &statistics->priv->axis_x, &statistics->priv->axis_y);
+
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_x);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_y);
 
 	/* const, so no need to free */
 	statistics->priv->graph_type = type;
@@ -607,6 +684,9 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
+
+	/* refresh the axis */
+	gpm_statistics_refresh_axis_labels (statistics);
 }
 
 static void
@@ -726,6 +806,9 @@ gpm_statistics_init (GpmStatistics *statistics)
 	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
 		gpm_error (_("Could not connect to GNOME Power Manager."));
 	}
+
+	statistics->priv->axis_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
+	statistics->priv->axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	statistics->priv->graph_type = NULL;
 	statistics->priv->events = gpm_array_new ();
@@ -861,7 +944,8 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_axis_labels_cb), statistics);
-	gpm_statistics_checkbox_axis_labels_cb (widget, statistics);
+	/* refresh the axis */
+	gpm_statistics_refresh_axis_labels (statistics);
 
 	gtk_widget_show (main_window);
 	g_timeout_add (GPM_STATISTICS_POLL_INTERVAL,

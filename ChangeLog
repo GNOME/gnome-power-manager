@@ -1,3 +1,13 @@
+2007-03-24  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-graph.glade:
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-statistics-core.c:
+	Move the axis labels into the glade file so we can do the rotation
+	there. This removes loads of complexity, and should make the upcoming
+	pango-ification much easier.
+
 2007-03-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
