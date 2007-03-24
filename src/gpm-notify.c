@@ -418,8 +418,7 @@ gpm_notify_estimated_data (GpmNotify *notify)
 	const gchar *title;
 
 	title = _("Battery profile created");
-	msg = _("GNOME Power Manager does not have a charge or discharge profile for your battery.\n"
-		"The time remaining until charged or discharged may be inaccurate until we can collect enough data to make an accurate guess.");
+	msg = _("The predicted times may be inaccurate until the next complete discharge.");
 
 	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
 			   GTK_STOCK_DIALOG_WARNING,
