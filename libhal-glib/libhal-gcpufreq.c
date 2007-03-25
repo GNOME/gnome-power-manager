@@ -62,8 +62,10 @@ HalGCpufreqType
 hal_gcpufreq_string_to_enum (const gchar *governor)
 {
 	HalGCpufreqType cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
-	g_return_val_if_fail (governor != NULL, FALSE);
-	if (strcmp (governor, CODE_CPUFREQ_ONDEMAND) == 0) {
+	if (governor == NULL) {
+		gpm_warning ("governor NULL!");
+		cpufreq_type = LIBHAL_CPUFREQ_NOTHING;
+	} else if (strcmp (governor, CODE_CPUFREQ_ONDEMAND) == 0) {
 		cpufreq_type = LIBHAL_CPUFREQ_ONDEMAND;
 	} else if (strcmp (governor, CODE_CPUFREQ_CONSERVATIVE) == 0) {
 		cpufreq_type = LIBHAL_CPUFREQ_CONSERVATIVE;

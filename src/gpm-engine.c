@@ -296,7 +296,7 @@ gpm_engine_get_summary (GpmEngine *engine)
 	/* if we have limited accuracy, add this to the tooltip */
 	unit = gpm_cell_array_get_unit (collection->primary);
 	accuracy = gpm_profile_get_accuracy (engine->priv->profile, unit->percentage);
-	if (accuracy < GPM_ENGINE_WARN_ACCURACY) {
+	if (accuracy < GPM_ENGINE_WARN_ACCURACY && unit->is_present == TRUE) {
 		tooltip = g_string_append (tooltip, _("Battery charge profile is estimated\n"));
 	}
 

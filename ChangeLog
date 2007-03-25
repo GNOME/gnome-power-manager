@@ -1,5 +1,21 @@
 2007-03-25  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_string_to_enum):
+	Don't assert if there is no CPU frequency scalers.
+
+	* src/gpm-engine.c: (gpm_engine_get_summary):
+	Only show accuracy unit when we have a primary battery installed.
+
+	* src/gpm-info.c: (gpm_statistics_get_data_types):
+	Don't segfault when we have no valid array.
+
+	* src/gpm-notify.c: (gpm_notify_show), (gpm_notify_create):
+	Fix compilation when we don't have libnotify.
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	Don't show the left click menu if there's nothing there.
+
+2007-03-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_get_summary), (gpm_engine_init),
 	(gpm_engine_finalize):

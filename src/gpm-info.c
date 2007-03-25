@@ -161,32 +161,36 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	g_return_val_if_fail (types != NULL, FALSE);
 
 	/* only return the type if we have sufficient data */
-	if (gpm_array_get_size (info->priv->rate_data) > 2) {
+	array = info->priv->rate_data;
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "power");
 	}
-	if (gpm_array_get_size (info->priv->time_data) > 2) {
+	array = info->priv->time_data;
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "time");
 	}
-	if (gpm_array_get_size (info->priv->percentage_data) > 2) {
+	array = info->priv->percentage_data;
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "charge");
 	}
-	if (gpm_array_get_size (info->priv->voltage_data) > 2) {
+	array = info->priv->voltage_data;
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "voltage");
 	}
 	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, FALSE);
-	if (gpm_array_get_size (array) > 2) {
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-accuracy");
 	}
 	array = gpm_profile_get_data_time_percent (info->priv->profile, FALSE);
-	if (gpm_array_get_size (array) > 2) {
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-time");
 	}
 	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, TRUE);
-	if (gpm_array_get_size (array) > 2) {
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-discharge-accuracy");
 	}
 	array = gpm_profile_get_data_time_percent (info->priv->profile, TRUE);
-	if (gpm_array_get_size (array) > 2) {
+	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-discharge-time");
 	}
 

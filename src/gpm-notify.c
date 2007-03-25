@@ -169,6 +169,34 @@ gpm_notify_display (GpmNotify 	 *notify,
 #else
 
 /**
+ * gpm_notify_show:
+ *
+ * Stub.
+ **/
+static gboolean
+gpm_notify_show (GpmNotify *notify)
+{
+	return TRUE;
+}
+
+/**
+ * gpm_notify_create:
+ *
+ * Stub.
+ **/
+gboolean
+gpm_notify_create (GpmNotify 	 *notify,
+	 	   const gchar	 *title,
+		   const gchar	 *content,
+		   GpmNotifyTimeout timeout,
+		   const gchar	 *msgicon,
+		   GpmNotifyUrgency urgency)
+{
+	gpm_notify_display (notify, title, content, timeout, msgicon, urgency);
+	return TRUE;
+}
+
+/**
  * gpm_notify_display:
  * @notify: This class instance
  * @title: The title, e.g. "Battery Low"
