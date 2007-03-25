@@ -1,5 +1,18 @@
 2007-03-25  Richard Hughes  <richard@hughsie.com>
 
+
+	* src/gpm-engine.c: (gpm_engine_get_summary), (gpm_engine_init),
+	(gpm_engine_finalize):
+	* src/gpm-manager.c: (gpm_manager_init):
+	* src/gpm-notify.c:
+	* src/gpm-notify.h:
+	* src/gpm-profile.c: (gpm_profile_class_init),
+	(gpm_profile_load_data):
+	* src/gpm-profile.h:
+	Move the libnotify cracktastic notifiaction window to a simple tooltip.
+
+2007-03-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell.c: (gpm_cell_refresh_all):
 	Mark wireless devices as always discharging, so the notices work.
 

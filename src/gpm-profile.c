@@ -74,11 +74,8 @@ struct GpmProfilePrivate
 };
 
 enum {
-	ESTIMATED_DATA,
 	LAST_SIGNAL
 };
-
-static guint signals [LAST_SIGNAL] = { 0, };
 
 static gpointer gpm_profile_object = NULL;
 
@@ -96,16 +93,6 @@ gpm_profile_class_init (GpmProfileClass *klass)
 	object_class->finalize = gpm_profile_finalize;
 
 	g_type_class_add_private (klass, sizeof (GpmProfilePrivate));
-
-	signals [ESTIMATED_DATA] =
-		g_signal_new ("estimated-data",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmProfileClass, estimated_data),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
 }
 
 /**
@@ -515,18 +502,6 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 /**
- * gpm_profile_estimated_data:
- */
-static gboolean
-gpm_profile_estimated_data (GpmProfile *profile)
-{
-	/* we proxy this to the GUI layer */
-	gpm_debug ("** EMIT: estimated-data");
-	g_signal_emit (profile, signals [ESTIMATED_DATA], 0);
-	return FALSE;
-}
-
-/**
  * gpm_profile_load_data:
  */
 static void
@@ -548,9 +523,6 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 	/* if not found, then generate a new one with a low propability */
 	if (ret == FALSE) {
-
-		/* we have to delay the notification in case we are in _init */
-		g_timeout_add (20*1000, (GSourceFunc) gpm_profile_estimated_data, profile);
 
 		/* directory might not exist */
 		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);

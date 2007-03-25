@@ -48,12 +48,15 @@ static void     gpm_engine_finalize   (GObject	  *object);
 
 #define GPM_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_ENGINE, GpmEnginePrivate))
 #define GPM_ENGINE_RESUME_DELAY		2*1000
+#define GPM_ENGINE_WARN_ACCURACY	20
+
 
 struct GpmEnginePrivate
 {
 	GpmConf			*conf;
 	GpmWarning		*warning;
 	GpmIconPolicy		 icon_policy;
+	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmAcAdapter		*ac_adapter;
 	GpmEngineCollection	 collection;
@@ -255,8 +258,9 @@ gchar *
 gpm_engine_get_summary (GpmEngine *engine)
 {
 	GString *tooltip = NULL;
-	GpmCellUnit *unit_ups;
+	GpmCellUnit *unit;
 	GpmEngineCollection *collection;
+	guint accuracy;
 	gboolean on_ac;
 	gchar *part;
 
@@ -269,9 +273,9 @@ gpm_engine_get_summary (GpmEngine *engine)
 	/* get the ac state */
 	on_ac = gpm_ac_adapter_is_present (engine->priv->ac_adapter);
 
-	unit_ups = gpm_cell_array_get_unit (collection->ups);
+	unit = gpm_cell_array_get_unit (collection->ups);
 
-	if (unit_ups->is_present == TRUE && unit_ups->is_discharging == TRUE) {
+	if (unit->is_present == TRUE && unit->is_discharging == TRUE) {
 		/* only enable this if discharging on UPS  */
 		tooltip = g_string_new (_("Computer is running on backup power\n"));
 
@@ -287,22 +291,35 @@ gpm_engine_get_summary (GpmEngine *engine)
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
+	g_free (part);
+
+	/* if we have limited accuracy, add this to the tooltip */
+	unit = gpm_cell_array_get_unit (collection->primary);
+	accuracy = gpm_profile_get_accuracy (engine->priv->profile, unit->percentage);
+	if (accuracy < GPM_ENGINE_WARN_ACCURACY) {
+		tooltip = g_string_append (tooltip, _("Battery charge profile is estimated\n"));
+	}
+
 	part = gpm_cell_array_get_description (collection->ups);
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
+	g_free (part);
 	part = gpm_cell_array_get_description (collection->mouse);
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
+	g_free (part);
 	part = gpm_cell_array_get_description (collection->keyboard);
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
+	g_free (part);
 	part = gpm_cell_array_get_description (collection->ups);
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
+	g_free (part);
 
 	/* remove the last \n */
 	g_string_truncate (tooltip, tooltip->len-1);
@@ -806,6 +823,7 @@ gpm_engine_init (GpmEngine *engine)
 			  G_CALLBACK (conf_key_changed_cb), engine);
 
 	engine->priv->warning = gpm_warning_new ();
+	engine->priv->profile = gpm_profile_new ();
 
 	engine->priv->previous_icon = NULL;
 	engine->priv->previous_summary = NULL;
@@ -945,12 +963,13 @@ gpm_engine_finalize (GObject *object)
 	/* grab a reference to the collection */
 	collection = &engine->priv->collection;
 
-	g_object_unref (engine->priv->hal_manager);
 	g_object_unref (collection->primary);
 	g_object_unref (collection->ups);
 	g_object_unref (collection->mouse);
 	g_object_unref (collection->keyboard);
 	g_object_unref (collection->pda);
+	g_object_unref (engine->priv->hal_manager);
+	g_object_unref (engine->priv->profile);
 	g_object_unref (engine->priv->warning);
 	g_object_unref (engine->priv->ac_adapter);
 	g_object_unref (engine->priv->control);

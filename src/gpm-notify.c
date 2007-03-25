@@ -409,41 +409,6 @@ gpm_notify_fully_charged_primary (GpmNotify *notify)
 }
 
 /**
- * gpm_notify_estimated_data:
- **/
-gboolean
-gpm_notify_estimated_data (GpmNotify *notify)
-{
-	const gchar *msg;
-	const gchar *title;
-
-	title = _("Battery profile created");
-	msg = _("The predicted times may be inaccurate until the next complete discharge.");
-
-	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_SHORT,
-			   GTK_STOCK_DIALOG_WARNING,
-			   GPM_NOTIFY_URGENCY_CRITICAL);
-
-	/* add extra stuff */
-#ifdef HAVE_LIBNOTIFY
-	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_ESTIMATED_DATA;
-	notify_notification_add_action  (notify->priv->libnotify,
-	                                 "dont-show-again",
-	                                 _("Do not show me this again"),
-	                                 (NotifyActionCallback) notify_general_clicked_cb,
-	                                 notify, NULL);
-	notify_notification_add_action  (notify->priv->libnotify,
-	                                 "explain-estimated-data",
-	                                 _("Explain more"),
-	                                 (NotifyActionCallback) notify_general_clicked_cb,
-	                                 notify, NULL);
-#endif
-
-	gpm_notify_show (notify);
-	return TRUE;
-}
-
-/**
  * gpm_notify_discharging_primary:
  **/
 gboolean

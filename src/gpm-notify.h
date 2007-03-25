@@ -82,7 +82,6 @@ gboolean	 gpm_notify_low_capacity	(GpmNotify		*notify,
 gboolean	 gpm_notify_fully_charged_primary (GpmNotify		*notify);
 gboolean	 gpm_notify_discharging_primary	(GpmNotify		*notify);
 gboolean	 gpm_notify_discharging_ups	(GpmNotify		*notify);
-gboolean	 gpm_notify_estimated_data	(GpmNotify		*notify);
 gboolean	 gpm_notify_sleep_failed	(GpmNotify		*notify,
 						 gboolean		 hibernate);
 
