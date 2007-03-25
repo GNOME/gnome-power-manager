@@ -1,3 +1,10 @@
+2007-03-25  Loïc Minier  <lool@dooz.org>
+
+	* applets/brightness/Makefile.am:
+	* applets/inhibit/Makefile.am:
+	Link applets against dbus-glib to fix build with non-dbus gnome-vfs;
+	fixes #422345.
+
 2007-03-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (gpm_backlight_init):

@@ -25,7 +25,9 @@ SRCDEPS=../../src/gpm-powermanager.c 	\
 	../../src/gpm-marshal.c
 
 gnome_inhibit_applet_SOURCES=inhibit-applet.c inhibit-applet.h $(SRCDEPS)
-gnome_inhibit_applet_LDADD=$(GNOME_LIBS)
+gnome_inhibit_applet_LDADD=	\
+	$(DBUS_LIBS)		\
+	$(GNOME_LIBS)
 
 serverdir       = $(libdir)/bonobo/servers
 server_in_files = GNOME_InhibitApplet.server.in
