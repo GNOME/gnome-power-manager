@@ -119,13 +119,17 @@ gpm_cell_refresh_all (GpmCell *cell)
 			hal_gdevice_get_bool (device, "battery.rechargeable.is_discharging",
 						&unit->is_discharging, NULL);
 		}
+	} else {
+		/* devices cannot charge, well, at least not while being used */
+		unit->is_discharging = TRUE;
+		unit->is_charging = FALSE;
 	}
 
 	/* sanity check that charge_level.rate exists (if it should) */
 	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
 		exists = hal_gdevice_get_uint (device, "battery.charge_level.rate",
 						  &unit->rate, NULL);
-		if (!exists && (unit->is_discharging || unit->is_charging)) {
+		if (exists == FALSE && (unit->is_discharging == TRUE || unit->is_charging == TRUE)) {
 			gpm_warning ("could not read your battery's charge rate");
 		}
 	}
@@ -133,7 +137,7 @@ gpm_cell_refresh_all (GpmCell *cell)
 	/* sanity check that charge_level.percentage exists (if it should) */
 	exists = hal_gdevice_get_uint (device, "battery.charge_level.percentage",
 					  &unit->percentage, NULL);
-	if (!exists && (unit->is_discharging || unit->is_charging)) {
+	if (exists == FALSE) {
 		gpm_warning ("could not read your battery's percentage charge.");
 	}
 

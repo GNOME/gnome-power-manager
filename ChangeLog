@@ -1,3 +1,15 @@
+2007-03-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell.c: (gpm_cell_refresh_all):
+	Mark wireless devices as always discharging, so the notices work.
+
+	* src/gpm-cell-array.c:
+	* src/gpm-cell-array.h:
+	* src/gpm-engine.c: (gpm_cell_array_charging_changed_cb):
+	* src/gpm-proxy.c: (gpm_proxy_connect), (gpm_proxy_disconnect):
+	Add a collection changed signal so we deal with hotplugged wireless
+	devices.
+
 2007-03-25  Loïc Minier  <lool@dooz.org>
 
 	* applets/brightness/Makefile.am:

@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define GPM_TYPE_CELL_ARRAY		(gpm_cell_array_get_type ())
 #define GPM_CELL_ARRAY(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_CELL_ARRAY, GpmCellArray))
-#define GPM_CELL_ARRAY_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_CELL_ARRAY, GpmCellArrayClass))
+#define GPM_CELL_ARRAY_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_CELL_ARRAY, GpmCellArrayClass))
 #define GPM_IS_CELL_ARRAY(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_CELL_ARRAY))
 #define GPM_IS_CELL_ARRAY_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_CELL_ARRAY))
 #define GPM_CELL_ARRAY_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_CELL_ARRAY, GpmCellArrayClass))
@@ -64,6 +64,7 @@ typedef struct
 	void		(* charge_action)	(GpmCellArray	*cell_array,
 						 guint		 percent);
 	void		(* fully_charged)	(GpmCellArray	*cell_array);
+	void		(* collection_changed)	(GpmCellArray	*cell_array);
 	void		(* discharging)		(GpmCellArray	*cell_array);
 } GpmCellArrayClass;
 

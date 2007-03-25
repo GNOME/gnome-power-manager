@@ -98,7 +98,7 @@ gpm_proxy_connect (GpmProxy *gproxy)
 		return FALSE;
 	}
 
-	gpm_debug ("emitting proxy-status TRUE: %s", gproxy->priv->service);
+//	gpm_debug ("emitting proxy-status TRUE: %s", gproxy->priv->service);
 	g_signal_emit (gproxy, signals [PROXY_STATUS], 0, TRUE);
 
 	return TRUE;
@@ -120,7 +120,7 @@ gpm_proxy_disconnect (GpmProxy *gproxy)
 		return FALSE;
 	}
 
-	gpm_debug ("emitting proxy-status FALSE: %s", gproxy->priv->service);
+//	gpm_debug ("emitting proxy-status FALSE: %s", gproxy->priv->service);
 	g_signal_emit (gproxy, signals [PROXY_STATUS], 0, FALSE);
 
 	g_object_unref (gproxy->priv->proxy);

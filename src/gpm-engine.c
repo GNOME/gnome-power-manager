@@ -585,7 +585,9 @@ hal_daemon_stop_cb (HalGManager *hal_manager,
  * gpm_cell_charging_changed_cb:
  */
 static void
-gpm_cell_array_charging_changed_cb (GpmCellArray *cell_array, gboolean charging, GpmEngine *engine)
+gpm_cell_array_charging_changed_cb (GpmCellArray *cell_array,
+				    gboolean      charging,
+				    GpmEngine    *engine)
 {
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (GPM_IS_ENGINE (engine));
@@ -598,7 +600,9 @@ gpm_cell_array_charging_changed_cb (GpmCellArray *cell_array, gboolean charging,
  * gpm_cell_discharging_changed_cb:
  */
 static void
-gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array, gboolean discharging, GpmEngine *engine)
+gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array,
+				       gboolean      discharging,
+				       GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
 	gboolean show_discharging;
@@ -633,7 +637,23 @@ gpm_cell_array_discharging_changed_cb (GpmCellArray *cell_array, gboolean discha
  * gpm_cell_status_changed_cb:
  */
 static void
-gpm_cell_array_percent_changed_cb (GpmCellArray *cell_array, guint percent, GpmEngine *engine)
+gpm_cell_array_percent_changed_cb (GpmCellArray *cell_array,
+				   guint         percent,
+				   GpmEngine    *engine)
+{
+	g_return_if_fail (engine != NULL);
+	g_return_if_fail (GPM_IS_ENGINE (engine));
+
+	/* change icon or summary */
+	gpm_engine_recalculate_state (engine);
+}
+
+/**
+ * gpm_cell_array_collection_changed_cb:
+ */
+static void
+gpm_cell_array_collection_changed_cb (GpmCellArray *cell_array,
+				 GpmEngine    *engine)
 {
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (GPM_IS_ENGINE (engine));
@@ -646,7 +666,8 @@ gpm_cell_array_percent_changed_cb (GpmCellArray *cell_array, guint percent, GpmE
  * gpm_cell_fully_charged_cb:
  */
 static void
-gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array, GpmEngine *engine)
+gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array,
+				 GpmEngine    *engine)
 {
 	gboolean show_fully_charged;
 	GpmCellUnitKind kind;
@@ -675,7 +696,9 @@ gpm_cell_array_fully_charged_cb (GpmCellArray *cell_array, GpmEngine *engine)
  * gpm_cell_charge_low_cb:
  */
 static void
-gpm_cell_array_charge_low_cb (GpmCellArray *cell_array, guint percent, GpmEngine *engine)
+gpm_cell_array_charge_low_cb (GpmCellArray *cell_array,
+			      guint         percent,
+			      GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
 	GpmCellUnit *unit;
@@ -699,7 +722,9 @@ gpm_cell_array_charge_low_cb (GpmCellArray *cell_array, guint percent, GpmEngine
  * gpm_cell_charge_critical_cb:
  */
 static void
-gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array, guint percent, GpmEngine *engine)
+gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array,
+				   guint         percent,
+				   GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
 	GpmCellUnit *unit;
@@ -723,7 +748,9 @@ gpm_cell_array_charge_critical_cb (GpmCellArray *cell_array, guint percent, GpmE
  * gpm_cell_charge_action_cb:
  */
 static void
-gpm_cell_array_charge_action_cb (GpmCellArray *cell_array, guint percent, GpmEngine *engine)
+gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
+				 guint         percent,
+				 GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
 
@@ -813,6 +840,8 @@ gpm_engine_init (GpmEngine *engine)
 	collection->pda = gpm_cell_array_new ();
 	engine->priv->ac_adapter = gpm_ac_adapter_new ();
 
+	g_signal_connect (collection->primary, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
 	g_signal_connect (collection->primary, "perhaps-recall",
 			  G_CALLBACK (gpm_cell_array_perhaps_recall_cb), engine);
 	g_signal_connect (collection->primary, "low-capacity",
@@ -830,6 +859,48 @@ gpm_engine_init (GpmEngine *engine)
 	g_signal_connect (collection->primary, "charge-critical",
 			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
 	g_signal_connect (collection->primary, "charge-action",
+			  G_CALLBACK (gpm_cell_array_charge_action_cb), engine);
+
+	g_signal_connect (collection->mouse, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
+	g_signal_connect (collection->mouse, "percent-changed",
+			  G_CALLBACK (gpm_cell_array_percent_changed_cb), engine);
+	g_signal_connect (collection->mouse, "charge-low",
+			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
+	g_signal_connect (collection->mouse, "charge-critical",
+			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
+
+	g_signal_connect (collection->keyboard, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
+	g_signal_connect (collection->keyboard, "percent-changed",
+			  G_CALLBACK (gpm_cell_array_percent_changed_cb), engine);
+	g_signal_connect (collection->keyboard, "charge-low",
+			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
+	g_signal_connect (collection->keyboard, "charge-critical",
+			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
+
+	g_signal_connect (collection->pda, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
+	g_signal_connect (collection->pda, "percent-changed",
+			  G_CALLBACK (gpm_cell_array_percent_changed_cb), engine);
+	g_signal_connect (collection->pda, "charge-low",
+			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
+	g_signal_connect (collection->pda, "charge-critical",
+			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
+
+	g_signal_connect (collection->ups, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
+	g_signal_connect (collection->ups, "charging-changed",
+			  G_CALLBACK (gpm_cell_array_charging_changed_cb), engine);
+	g_signal_connect (collection->ups, "discharging-changed",
+			  G_CALLBACK (gpm_cell_array_discharging_changed_cb), engine);
+	g_signal_connect (collection->ups, "percent-changed",
+			  G_CALLBACK (gpm_cell_array_percent_changed_cb), engine);
+	g_signal_connect (collection->ups, "charge-low",
+			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
+	g_signal_connect (collection->ups, "charge-critical",
+			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
+	g_signal_connect (collection->ups, "charge-action",
 			  G_CALLBACK (gpm_cell_array_charge_action_cb), engine);
 }
 

@@ -65,6 +65,7 @@ struct GpmCellArrayPrivate
 };
 
 enum {
+	COLLECTION_CHANGED,
 	PERCENT_CHANGED,
 	FULLY_CHARGED,
 	CHARGING_CHANGED,
@@ -196,7 +197,7 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 		/* we have to work out the time for this percentage */
 		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &action_percentage);
 		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
-		difference = (gint) unit->time_discharge - (gint) action_time;	
+		difference = (gint) unit->time_discharge - (gint) action_time;
 	}
 
 	/* if invalid, don't return junk */
@@ -675,8 +676,14 @@ gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
 
-	/* print */
-	
+	/* recalculate */
+	gpm_cell_array_update (cell_array);
+
+	/* emit */
+	gpm_debug ("** EMIT: collection-changed");
+	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0, unit->percentage);
+	gpm_cell_array_percent_changed (cell_array);
+
 	return TRUE;
 }
 
@@ -905,6 +912,14 @@ hal_device_removed_cb (HalGManager  *hal_manager,
 	/* remove from the devicestore */
 	g_ptr_array_remove_index (cell_array->priv->array, index);
 
+	/* recalculate */
+	gpm_cell_array_update (cell_array);
+
+	/* emit */
+	gpm_debug ("** EMIT: collection-changed");
+	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0);
+	gpm_cell_array_percent_changed (cell_array);
+
 	return TRUE;
 }
 
@@ -1069,6 +1084,15 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, fully_charged),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
+	signals [COLLECTION_CHANGED] =
+		g_signal_new ("collection-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmCellArrayClass, collection_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__VOID,
