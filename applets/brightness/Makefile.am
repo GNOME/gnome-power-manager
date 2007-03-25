@@ -25,7 +25,9 @@ SRCDEPS=../../src/gpm-powermanager.c 	\
 	../../src/gpm-marshal.c
 
 gnome_brightness_applet_SOURCES=brightness-applet.c brightness-applet.h $(SRCDEPS)
-gnome_brightness_applet_LDADD=$(GNOME_LIBS)
+gnome_brightness_applet_LDADD=	\
+	$(DBUS_LIBS)		\
+	$(GNOME_LIBS)
 
 serverdir       = $(libdir)/bonobo/servers
 server_in_files = GNOME_BrightnessApplet.server.in
