@@ -457,7 +457,19 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen on hibernate</short>
-        <long>If to lock the screen when the computer wakes up from a hibernate.  Only used if lock_use_screensaver_settings is false.</long>
+        <long>If to lock the screen when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/gnome_keyring</key>
+      <applyto>/apps/gnome-power-manager/lock/gnome_keyring</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Lock GNOME keyring on sleep</short>
+        <long>If to lock the GNOME keyring before the computer enters sleep. This means you have to unlock the keyring on resume.</long>
       </locale>
     </schema>
 

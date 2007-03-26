@@ -89,6 +89,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_ON_BLANK_SCREEN	GPM_CONF_DIR "/lock/blank_screen"
 #define GPM_CONF_LOCK_ON_SUSPEND	GPM_CONF_DIR "/lock/suspend"
 #define GPM_CONF_LOCK_ON_HIBERNATE	GPM_CONF_DIR "/lock/hibernate"
+#define GPM_CONF_LOCK_GNOME_KEYRING	GPM_CONF_DIR "/lock/gnome_keyring"
 
 #define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics/show_legend"
 #define GPM_CONF_STAT_SHOW_AXIS_LABELS	GPM_CONF_DIR "/statistics/show_axis_labels"

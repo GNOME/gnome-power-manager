@@ -1,3 +1,13 @@
+2007-03-26  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-control.c: (gpm_control_suspend),
+	(gpm_control_hibernate):
+	Add a configurable lock/gnome_keyring so we can disable the lock
+	of the GNOME keyring at run time. Defaults to false for now.
+	See http://hughsient.livejournal.com/19481.html for reasoning.
+
 2007-03-25  Richard Hughes  <richard@hughsie.com>
 
 	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_string_to_enum):

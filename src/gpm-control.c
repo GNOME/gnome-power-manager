@@ -286,8 +286,8 @@ gpm_control_free_data_object (GpmControlData *data)
  **/
 gboolean
 gpm_control_un_register (GpmControl  *control,
-		         guint32      cookie,
-		         GError     **error)
+			 guint32      cookie,
+			 GError     **error)
 {
 	GpmControlData *data;
 
@@ -595,6 +595,7 @@ gpm_control_suspend (GpmControl *control,
 	gboolean ret;
 	gboolean do_lock;
 	gboolean nm_sleep;
+	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
 
@@ -611,10 +612,13 @@ gpm_control_suspend (GpmControl *control,
 		return FALSE;
 	}
 
-	/* we should lock keyrings when sleeping #375681 */
-	keyres = gnome_keyring_lock_all_sync ();
-	if (keyres != GNOME_KEYRING_RESULT_OK) {
-		gpm_debug ("could not lock keyring");
+	/* we should perhaps lock keyrings when sleeping #375681 */
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING, &lock_gnome_keyring);
+	if (lock_gnome_keyring == TRUE) {
+		keyres = gnome_keyring_lock_all_sync ();
+		if (keyres != GNOME_KEYRING_RESULT_OK) {
+			gpm_warning ("could not lock keyring");
+		}
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
@@ -662,7 +666,8 @@ gpm_control_hibernate (GpmControl *control,
 	gboolean allowed;
 	gboolean ret;
 	gboolean do_lock;
-        gboolean nm_sleep;
+	gboolean nm_sleep;
+	gboolean lock_gnome_keyring;
 	GnomeKeyringResult keyres;
 	GpmScreensaver *screensaver;
 
@@ -680,10 +685,13 @@ gpm_control_hibernate (GpmControl *control,
 		return FALSE;
 	}
 
-	/* we should lock keyrings when sleeping #375681 */
-	keyres = gnome_keyring_lock_all_sync ();
-	if (keyres != GNOME_KEYRING_RESULT_OK) {
-		gpm_debug ("could not lock keyring");
+	/* we should perhaps lock keyrings when sleeping #375681 */
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING, &lock_gnome_keyring);
+	if (lock_gnome_keyring == TRUE) {
+		keyres = gnome_keyring_lock_all_sync ();
+		if (keyres != GNOME_KEYRING_RESULT_OK) {
+			gpm_warning ("could not lock keyring");
+		}
 	}
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
