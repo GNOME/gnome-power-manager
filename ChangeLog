@@ -1,3 +1,12 @@
+2007-03-26  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	* src/gpm-control.c: (gpm_control_suspend),
+	(gpm_control_hibernate):
+	Add a configurable --enable-keyring so we can disable the lock
+	of the GNOME keyring at build time. Defaults to off for now.
+	See http://hughsient.livejournal.com/19481.html for reasoning.
+
 2007-03-25  Loïc Minier  <lool@dooz.org>
 
 	* applets/brightness/Makefile.am:

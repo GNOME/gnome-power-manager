@@ -597,7 +597,9 @@ gpm_control_suspend (GpmControl *control,
 	gboolean ret;
 	gboolean do_lock;
 	gboolean nm_sleep;
+#if HAVE_GNOME_KEYRING
 	GnomeKeyringResult keyres;
+#endif
 	GpmScreensaver *screensaver;
 	
 	screensaver = gpm_screensaver_new ();
@@ -613,11 +615,13 @@ gpm_control_suspend (GpmControl *control,
 		return FALSE;
 	}
 
+#if HAVE_GNOME_KEYRING
 	/* we should lock keyrings when sleeping #375681 */
 	keyres = gnome_keyring_lock_all_sync ();
 	if (keyres != GNOME_KEYRING_RESULT_OK) {
 		gpm_debug ("could not lock keyring");
 	}
+#endif
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_SUSPEND);
 	if (do_lock == TRUE) {
@@ -665,7 +669,9 @@ gpm_control_hibernate (GpmControl *control,
 	gboolean ret;
 	gboolean do_lock;
         gboolean nm_sleep;
+#if HAVE_GNOME_KEYRING
 	GnomeKeyringResult keyres;
+#endif
 	GpmScreensaver *screensaver;
 	
 	screensaver = gpm_screensaver_new ();
@@ -682,11 +688,13 @@ gpm_control_hibernate (GpmControl *control,
 		return FALSE;
 	}
 
+#if HAVE_GNOME_KEYRING
 	/* we should lock keyrings when sleeping #375681 */
 	keyres = gnome_keyring_lock_all_sync ();
 	if (keyres != GNOME_KEYRING_RESULT_OK) {
 		gpm_debug ("could not lock keyring");
 	}
+#endif
 
 	do_lock = gpm_control_get_lock_policy (control, GPM_CONF_LOCK_ON_HIBERNATE);
 	if (do_lock == TRUE) {

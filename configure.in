@@ -166,6 +166,18 @@ fi
 #AC_MSG_RESULT(yes)
 
 dnl ---------------------------------------------------------------------------
+dnl - Lock GNOME keyring on suspend and hibernate?
+dnl ---------------------------------------------------------------------------
+AC_ARG_ENABLE(keyring, [  --enable-keyring        Lock gnome-keyring on suspend and hibernate],enable_keyring=$enableval,enable_keyring=no)
+AC_MSG_CHECKING([whether to use gnome-keyring])
+have_keyring=no
+if test x$enable_keyring = xyes ; then
+    have_keyring=yes
+    AC_DEFINE(HAVE_GNOME_KEYRING, 1, [Define if we want to lock gnome-keyring on suspend and hibernate])
+fi
+#AC_MSG_RESULT(yes)
+
+dnl ---------------------------------------------------------------------------
 dnl - Respond to XEvents
 dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE(xevents, [  --enable-xevents        Support XEVENTS (requires a new x.org)],enable_xevents=$enableval,enable_xevents=no)
