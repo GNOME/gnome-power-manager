@@ -1,0 +1,44 @@
+* Icon Naming Scheme *
+
+Icons need to be present in tango style and in 16x16, 22x22, and svg versions.
+
+** Icon indexes **
+
+A percentage scale is divided into 6 index groups:
+
+000 = 0%  - 10%
+020 = 11% - 30%
+040 = 31% - 50%
+060 = 51% - 70%
+080 = 71% - 90%
+100 = 91% - 100%
+
+A wireless device scale is divided into 4 csr groups:
+
+000 = CSR0,CSR1
+030 = CSR2,CSR3
+060 = CSR4,CSR5
+100 = CSR6,CSR7
+
+** Icon Names **
+
+These are the icon names.
+
+gpm-ac-adapter = AC adapter icon
+gpm-primary-{index} = Laptop battery icon
+gpm-primary-{index}-charging = Laptop battery icon, on AC power
+gpm-primary-charged = Laptop battery icon 100% fill, on AC power
+gpm-primary-missing = Laptop battery missing or state invalid
+gpm-ups-{index} = UPS battery icon
+gpm-ups-{index}-charging = UPS battery icon, charging
+gpm-ups-charged = UPS battery icon 100% fill, on AC power
+gpm-ups-missing = UPS battery missing or state invalid
+gpm-mouse-{wireless} = CSR mouse icon
+gpm-keyboard-{wireless} = CSR keyboard icon
+gpm-hibernate = Hibernate icon
+gpm-suspend = Suspend icon
+gpm-brightness-lcd = LCD brightness icon
+gpm-brightness-kbd = Keyboard brightness icon
+gpm-brightness-lcd-disabled = LCD brightness icon when disabled or hardware not available
+gpm-brightness-kbd-disabled = Keyboard brightness icon when disabled or hardware not available
+
