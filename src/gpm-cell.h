@@ -67,6 +67,7 @@ gboolean	 gpm_cell_set_type			(GpmCell	*cell,
 							 const gchar	*udi);
 const gchar	*gpm_cell_get_udi			(GpmCell	*cell);
 gchar		*gpm_cell_get_icon			(GpmCell	*cell);
+gchar		*gpm_cell_get_id			(GpmCell	*cell);
 gboolean	 gpm_cell_print				(GpmCell	*cell);
 gchar		*gpm_cell_get_description		(GpmCell	*cell);
 

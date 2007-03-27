@@ -1,3 +1,16 @@
+2007-03-27  Richard Hughes  <richard@hughsie.com>
+
+	* docs/sleep-names.xml:
+	Spelling corrections.
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_profile_id),
+	(gpm_cell_array_set_type), (gpm_cell_array_get_description):
+	* src/gpm-cell.c: (gpm_cell_get_id):
+	* src/gpm-cell.h:
+	* test/gpm-st-cell.c: (gpm_st_cell):
+	Get a profile string, which represents the connection of different
+	batteries in a system. Only useful for primary battery profiling code.
+
 2007-03-26  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:

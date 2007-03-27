@@ -105,6 +105,15 @@ gpm_st_cell (GpmSelfTest *test)
 		gpm_st_failed (test, "could not get correct voltage %i", unit->voltage);
 	}
 
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a id");
+	desc = gpm_cell_get_id (cell);
+	if (desc != NULL) {
+		gpm_st_success (test, "got valid id %s", desc);
+	} else {
+		gpm_st_failed (test, "could not get valid id");
+	}
+
 	g_object_unref (cell);
 }
 

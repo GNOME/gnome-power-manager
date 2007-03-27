@@ -412,6 +412,56 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 }
 
 /**
+ * gpm_cell_array_get_profile_id:
+ *
+ * Gets an ID that represents the battery state of the system, typically
+ * which will consist of all the serial numbers of primary batteries in the
+ * system joined together.
+ */
+static gchar *
+gpm_cell_array_get_profile_id (GpmCellArray *cell_array)
+{
+	GpmCellUnit *unit;
+	GpmCell *cell;
+	gchar *id;
+	gchar *array_id = NULL;
+	gchar *new;
+	guint length;
+	guint i;
+
+	unit = &(cell_array->priv->unit);
+
+	/* invalid if not primary */
+	if (unit->kind != GPM_CELL_UNIT_KIND_PRIMARY) {
+		gpm_warning ("only valid for primary");
+		return NULL;
+	}
+
+	length = cell_array->priv->array->len;
+	/* if we have no devices, don't try to get id */
+	if (length == 0) {
+		gpm_debug ("no devices of type primary");
+		return NULL;
+	}
+
+	/* iterate thru all the devices */
+	for (i=0;i<length;i++) {
+		/* get the correct cell */
+		cell = gpm_cell_array_get_cell (cell_array, i);
+		id = gpm_cell_get_id (cell);
+		if (array_id == NULL) {
+			array_id = id;
+		} else {
+			new = g_strjoin ("-", array_id, id, NULL);
+			g_free (array_id);
+			g_free (id);
+			array_id = new;
+		}
+	}
+	return array_id;
+}
+
+/**
  * gpm_cell_array_percent_changed:
  *
  * Do the clever actions here.
@@ -723,6 +773,7 @@ gboolean
 gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 {
 	GpmCellUnit *unit;
+	gchar *profile_id;
 
 	g_return_val_if_fail (cell_array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
@@ -737,6 +788,13 @@ gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
+
+	/* set the profile if primary */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		profile_id = gpm_cell_array_get_profile_id (cell_array);
+		gpm_debug ("profile_id = %s", profile_id);
+		g_free (profile_id);
+	}
 
 	return TRUE;
 }
@@ -820,7 +878,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, unit->percentage);
 	gpm_debug ("accuracy = %i", accuracy);
 
-	/* We always display "Laptop Battery 16 minutes remaining" as we need
+	/* We always display "Laptop battery 16 minutes remaining" as we need
 	   to clarify what device we are refering to. For details see :
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
 	if (gpm_cell_unit_is_charged (unit) == TRUE) {
@@ -829,7 +887,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			time = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
 			discharge_timestring = gpm_get_timestring (time);
-			description = g_strdup_printf (_("%s fully charged (%i%%)\nTypically provides %s battery runtime\n"),
+			description = g_strdup_printf (_("%s fully charged (%i%%)\nProvides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);
 			g_free (discharge_timestring);
 		} else {
