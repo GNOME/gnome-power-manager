@@ -1,24 +1,19 @@
 SPEC_XML_FILES =			\
 	gnome-power-manager.xml		\
 	dbus-interface.xml		\
-	sleep-names.xml			\
 	faq.xml				\
 	icon-scheme.xml
 
 SPEC_HTML_FILES =			\
-	dbus-interface.html		\
-	faq.html			\
-	icon-scheme.html		\
-	index.html			\
-	sleep-names.html
+	gnome-power-manager.html
 
 if DOCBOOK_DOCS_ENABLED
 
 htmldocdir = $(DOCDIR)/spec
-htmldoc_DATA = index.html
+htmldoc_DATA = gnome-power-manager.html
 
-index.html : dbus-interface.xml
-	$(XMLTO) html -m config.xsl gnome-power-manager.xml
+gnome-power-manager.html : dbus-interface.xml
+	$(XMLTO) html-nochunks -m config.xsl gnome-power-manager.xml
 
 endif # DOCBOOK_DOCS_ENABLED
 
@@ -32,3 +27,4 @@ EXTRA_DIST = 				\
 	docbook.css			\
 	$(SPEC_XML_FILES)		\
 	$(SPEC_HTML_FILES)
+
