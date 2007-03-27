@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-10 15:26+0100\n"
+"POT-Creation-Date: 2007-03-27 11:28+0200\n"
 "PO-Revision-Date: 2007-03-10 15:45+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -258,7 +258,7 @@ msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
-"Legt fest, ob in den Akkumodus gewechselt werden soll, wenn der Deckel des "
+"Legt fest, ob in den Akkubetrieb gewechselt werden soll, wenn der Deckel des "
 "Laptops geschlossen und das Stromkabel entfernt wird."
 
 #: ../data/gnome-power-manager.schemas.in.h:23
@@ -546,7 +546,7 @@ msgstr "Zeitspanne bis zum Abdunkeln des Bildschirms bei Akkuversorgung"
 
 #: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Suspend button action"
-msgstr "Aktion bei Betätigung des Schalters für den Ruhemodus"
+msgstr "Aktion bei Betätigung des Schalters für Bereitschaft"
 
 #: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Suspend enabled"
@@ -624,7 +624,7 @@ msgid ""
 "values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
 "\"nothing\"."
 msgstr ""
-"Die auszuführende Aktion bei Betätigung des Schalters für den Ruhemodus. "
+"Die auszuführende Aktion bei Betätigung des Schalters für Bereitschaft. "
 "Mögliche Werte sind »hibernate« (Ruhezustand), »suspend« (Bereitschaft), "
 "»interactive« (Interaktiv), »shutdown« (Ausschalten) und »nothing« (nichts)."
 
@@ -1677,7 +1677,7 @@ msgstr "Drahtlose Tastatur"
 msgid "PDA"
 msgstr "PDA"
 
-#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:638
+#: ../src/gpm-power.c:528 ../src/gpm-statistics-core.c:639
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1838,7 +1838,7 @@ msgid "Ask me"
 msgstr "Nachfragen"
 
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:765
+#: ../src/gpm-statistics-core.c:766
 msgid "Suspend"
 msgstr "Bereitschaft"
 
@@ -1847,7 +1847,7 @@ msgid "Shutdown"
 msgstr "Herunterfahren"
 
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:775
+#: ../src/gpm-statistics-core.c:776
 msgid "Hibernate"
 msgstr "Ruhezustand"
 
@@ -1897,61 +1897,61 @@ msgstr "Chronik der Spannung"
 msgid "Estimated Time History"
 msgstr "Chronik der verbleibenden Zeit"
 
-#: ../src/gpm-statistics-core.c:708
+#: ../src/gpm-statistics-core.c:709
 msgid "Could not connect to GNOME Power Manager."
 msgstr "Verbindung zur GNOME-Energieverwaltung schlug fehl"
 
-#: ../src/gpm-statistics-core.c:709
+#: ../src/gpm-statistics-core.c:710
 msgid "Perhaps the program is not running or you are using an old version?"
 msgstr ""
 "Überprüfen Sie, ob das Programm läuft und Sie eine aktuelle Version "
 "verwenden."
 
-#: ../src/gpm-statistics-core.c:745
+#: ../src/gpm-statistics-core.c:746
 msgid "On AC"
 msgstr "Netzbetrieb"
 
-#: ../src/gpm-statistics-core.c:750
+#: ../src/gpm-statistics-core.c:751
 msgid "On battery"
 msgstr "Akkubetrieb"
 
-#: ../src/gpm-statistics-core.c:755
+#: ../src/gpm-statistics-core.c:756
 msgid "Session idle"
 msgstr "Leerlauf"
 
-#: ../src/gpm-statistics-core.c:760
+#: ../src/gpm-statistics-core.c:761
 msgid "Session active"
 msgstr "Aktivität"
 
-#: ../src/gpm-statistics-core.c:770
+#: ../src/gpm-statistics-core.c:771
 msgid "Resume"
 msgstr "Rückkehr"
 
-#: ../src/gpm-statistics-core.c:780
+#: ../src/gpm-statistics-core.c:781
 msgid "Lid closed"
 msgstr "Deckel geschlossen"
 
-#: ../src/gpm-statistics-core.c:785
+#: ../src/gpm-statistics-core.c:786
 msgid "Lid opened"
 msgstr "Deckel geöffnet"
 
-#: ../src/gpm-statistics-core.c:790
+#: ../src/gpm-statistics-core.c:791
 msgid "Notification"
 msgstr "Benachrichtigung"
 
-#: ../src/gpm-statistics-core.c:795
+#: ../src/gpm-statistics-core.c:796
 msgid "DPMS On"
 msgstr "DPMS aktiviert"
 
-#: ../src/gpm-statistics-core.c:800
+#: ../src/gpm-statistics-core.c:801
 msgid "DPMS Standby"
 msgstr "DPMS Bereitschaft"
 
-#: ../src/gpm-statistics-core.c:805
+#: ../src/gpm-statistics-core.c:806
 msgid "DPMS Suspend"
 msgstr "DPMS Ruhezustand"
 
-#: ../src/gpm-statistics-core.c:810
+#: ../src/gpm-statistics-core.c:811
 msgid "DPMS Off"
 msgstr "DPMS deaktiviert"
 
@@ -2003,7 +2003,7 @@ msgstr "_Bereitschaft"
 
 #: ../src/gpm-tray-icon.c:616
 msgid "Hi_bernate"
-msgstr "_Ruhemodus"
+msgstr "_Ruhezustand"
 
 #: ../src/gpm-tray-icon.c:921
 #, c-format
