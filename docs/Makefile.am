@@ -1,7 +1,6 @@
 SPEC_XML_FILES =			\
 	gnome-power-manager.xml		\
-	dbus-interface.xml		\
-	faq.xml
+	dbus-interface.xml
 
 SPEC_HTML_FILES =			\
 	gnome-power-manager.html
