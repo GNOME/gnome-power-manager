@@ -165,8 +165,8 @@ gpm_dbus_method_bool (const gchar *method)
 
 	proxy = dbus_g_proxy_new_for_name (connection,
 					   GPM_DBUS_SERVICE,
-					   GPM_DBUS_PATH_CONTROL,
-					   GPM_DBUS_INTERFACE_CONTROL);
+					   GPM_DBUS_PATH,
+					   GPM_DBUS_INTERFACE);
 	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, &value,
@@ -1084,8 +1084,8 @@ gpm_prefs_init (GpmPrefs *prefs)
 							"suspend") > 0;
 	g_object_unref (hal_manager);
 
-	prefs->priv->can_suspend = gpm_dbus_method_bool ("AllowedSuspend");
-	prefs->priv->can_hibernate = gpm_dbus_method_bool ("AllowedHibernate");
+	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
+	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
 
 	/* only enable cpufreq stuff if we have the hardware */
 	if (prefs->priv->hal_cpufreq) {

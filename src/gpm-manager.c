@@ -67,10 +67,9 @@
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
 
-#include "dbus/gpm-dbus-control.h"
-#include "dbus/gpm-dbus-statistics.h"
-#include "dbus/gpm-dbus-backlight.h"
-#include "dbus/gpm-dbus-inhibit.h"
+#include "dbus/xdg-power-management-stats.h"
+#include "dbus/xdg-power-management-inhibit.h"
+#include "dbus/xdg-power-management-backlight.h"
 
 static void     gpm_manager_class_init	(GpmManagerClass *klass);
 static void     gpm_manager_init	(GpmManager      *manager);
@@ -96,6 +95,7 @@ struct GpmManagerPrivate
 	GpmTrayIcon		*tray_icon;
 	GpmEngine		*engine;
 	HalGPower		*hal_power;
+	gboolean		 low_power;
 
 	/* interactive services */
 	GpmBacklight		*backlight;
@@ -105,13 +105,22 @@ struct GpmManagerPrivate
 };
 
 enum {
-	ON_AC_CHANGED,
+	BATTERY_STATE_CHANGED,
+	POWER_SAVE_STATUS_CHANGED,
+	CAN_STANDBY_CHANGED,
+	CAN_SUSPEND_CHANGED,
+	CAN_HIBERNATE_CHANGED,
+	CAN_SHUTDOWN_CHANGED,
+	CAN_REBOOT_CHANGED,
 	LAST_SIGNAL
 };
 
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
+
+//g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Do not have standby hardware");
+//return FALSE;
 
 /**
  * gpm_manager_error_quark:
@@ -125,6 +134,27 @@ gpm_manager_error_quark (void)
 		quark = g_quark_from_static_string ("gpm_manager_error");
 	}
 	return quark;
+}
+
+/**
+ * gpm_manager_error_get_type:
+ **/
+#define ENUM_ENTRY(NAME, DESC) { NAME, "" #NAME "", DESC }
+GType
+gpm_manager_error_get_type (void)
+{
+	static GType etype = 0;
+
+	if (etype == 0) {
+		static const GEnumValue values[] =
+		{
+			ENUM_ENTRY (GPM_MANAGER_ERROR_DENIED, "DeniedByPolicy"),
+			ENUM_ENTRY (GPM_MANAGER_ERROR_NO_HW, "NoHardwareSupport"),
+			{ 0, 0, 0 }
+		};
+		etype = g_enum_register_static ("GpmManagerError", values);
+	}
+	return etype;
 }
 
 /**
@@ -331,60 +361,194 @@ manager_policy_do (GpmManager  *manager,
 }
 
 /**
- * gpm_manager_get_on_ac:
- * @manager: This class instance
- * @retval: TRUE if we are on AC power
+ * gpm_manager_standby:
+ *
+ * Attempt to standby the system.
  **/
 gboolean
-gpm_manager_get_on_ac (GpmManager  *manager,
-			gboolean   *retval,
+gpm_manager_standby (GpmManager *manager,
+		     GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return TRUE;
+}
+
+/**
+ * gpm_manager_suspend:
+ *
+ * Attempt to suspend the system.
+ **/
+gboolean
+gpm_manager_suspend (GpmManager *manager,
+		     GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_suspend (manager->priv->control, error);
+}
+
+/**
+ * gpm_manager_hibernate:
+ *
+ * Attempt to hibernate the system.
+ **/
+gboolean
+gpm_manager_hibernate (GpmManager *manager,
+		       GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_hibernate (manager->priv->control, error);
+}
+
+/**
+ * gpm_manager_reboot:
+ *
+ * Attempt to restart the system.
+ **/
+gboolean
+gpm_manager_reboot (GpmManager *manager,
+		    GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_reboot (manager->priv->control, error);
+}
+
+/**
+ * gpm_manager_shutdown:
+ *
+ * Attempt to shutdown the system.
+ **/
+gboolean
+gpm_manager_shutdown (GpmManager *manager,
+		      GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_shutdown (manager->priv->control, error);
+}
+
+/**
+ * gpm_manager_can_standby:
+ *
+ * If the current session user is able to standby.
+ **/
+gboolean
+gpm_manager_can_standby (GpmManager *manager,
+			 gboolean   *can_standby,
+			 GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	*can_standby = FALSE;
+	return TRUE;
+}
+
+/**
+ * gpm_manager_can_suspend:
+ *
+ * If the current session user is able to suspend.
+ **/
+gboolean
+gpm_manager_can_suspend (GpmManager *manager,
+			 gboolean   *can_suspend,
+			 GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_allowed_suspend (manager->priv->control, can_suspend, error);
+}
+
+/**
+ * gpm_manager_can_hibernate:
+ *
+ * If the current session user is able to hibernate.
+ **/
+gboolean
+gpm_manager_can_hibernate (GpmManager *manager,
+			   gboolean   *can_hibernate,
+			   GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_allowed_hibernate (manager->priv->control, can_hibernate, error);
+}
+
+/**
+ * gpm_manager_can_reboot:
+ *
+ * If the current session user is able to reboot.
+ **/
+gboolean
+gpm_manager_can_reboot (GpmManager *manager,
+			gboolean   *can_reboot,
 			GError    **error)
 {
-	gboolean on_ac;
-
+	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_allowed_reboot (manager->priv->control, can_reboot, error);
+}
 
-	if (retval == NULL) {
-		return FALSE;
-	}
+/**
+ * gpm_manager_can_shutdown:
+ *
+ * If the current session user is able to shutdown.
+ **/
+gboolean
+gpm_manager_can_shutdown (GpmManager *manager,
+			  gboolean   *can_shutdown,
+			  GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_control_allowed_shutdown (manager->priv->control, can_shutdown, error);
+}
 
-	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
-	if (on_ac == TRUE) {
-		*retval = TRUE;
-	} else {
-		*retval = FALSE;
-	}
+/**
+ * gpm_manager_get_power_save_status:
+ *
+ * Returns true if low power mode has been set.
+ * This may be set on AC or battery power, both, or neither depending on
+ * the users policy setting.
+ * This setting may also change with the battery level changing.
+ * Programs should respect this value for the session.
+ **/
+gboolean
+gpm_manager_get_power_save_status (GpmManager *manager,
+				   gboolean   *low_power,
+				   GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	*low_power = manager->priv->low_power;
 
 	return TRUE;
 }
 
 /**
- * gpm_manager_get_low_power_mode:
- * @manager: This class instance
- * @retval: TRUE if we are on low power mode
+ * gpm_manager_get_battery_state:
+ *
+ * Returns the system AC state, i.e. if we are not running on battery
+ * power.
+ * Note: This method may still return false on AC using a desktop system
+ * if the computer is using backup power from a monitored UPS.
  **/
 gboolean
-gpm_manager_get_low_power_mode (GpmManager  *manager,
-				gboolean    *retval,
-				GError     **error)
+gpm_manager_get_battery_state (GpmManager *manager,
+			       gboolean   *on_battery,
+			       GError    **error)
 {
-	gboolean power_save;
 	gboolean on_ac;
-
+	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-
-	if (retval == NULL) {
-		return FALSE;
-	}
-
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 	if (on_ac == TRUE) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
+		*on_battery = FALSE;
 	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
+		*on_battery = TRUE;
 	}
-	*retval = power_save;
-
 	return TRUE;
 }
 
@@ -666,6 +830,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 		       GpmManager   *manager)
 {
 	gboolean event_when_closed;
+	gboolean power_save;
 
 	gpm_debug ("Setting on-ac: %d", on_ac);
 
@@ -673,10 +838,21 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	if (on_ac == TRUE) {
-		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, TRUE);
+		g_signal_emit (manager, signals [BATTERY_STATE_CHANGED], 0, FALSE);
 	} else {
-		g_signal_emit (manager, signals [ON_AC_CHANGED], 0, FALSE);
+		g_signal_emit (manager, signals [BATTERY_STATE_CHANGED], 0, TRUE);
 	}
+
+	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+	if (on_ac == TRUE) {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
+	} else {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
+	}
+	if (manager->priv->low_power != power_save) {
+		g_signal_emit (manager, signals [POWER_SAVE_STATUS_CHANGED], 0, power_save);
+	}
+	manager->priv->low_power = power_save;
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
@@ -716,27 +892,6 @@ manager_critical_action_do (GpmManager *manager)
 	return FALSE;
 }
 
-#if 0
-/**
- * battery_status_changed_primary:
- **/
-static void
-battery_status_changed_primary (GpmManager     *manager,
-				GpmPowerKind    battery_kind,
-				GpmPowerStatus *battery_status)
-{
-	/* Wait until data is trusted... */
-	if (gpm_engine_get_data_is_trusted (manager->priv->engine) == FALSE) {
-		gpm_debug ("Data is not yet trusted.. wait..");
-		return;
-	}
-
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
-		return;
-	}
-}
-#endif
-
 /**
  * gpm_manager_class_init:
  * @klass: The GpmManagerClass
@@ -748,16 +903,48 @@ gpm_manager_class_init (GpmManagerClass *klass)
 
 	object_class->finalize = gpm_manager_finalize;
 
-	signals [ON_AC_CHANGED] =
-		g_signal_new ("on-ac-changed",
-			      G_TYPE_FROM_CLASS (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, on_ac_changed),
-			      NULL,
-			      NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
+	signals [BATTERY_STATE_CHANGED] =
+		g_signal_new ("battery-state-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, battery_state_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [POWER_SAVE_STATUS_CHANGED] =
+		g_signal_new ("power-save-status-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, power_save_status_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CAN_STANDBY_CHANGED] =
+		g_signal_new ("can-standby-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, can_standby_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CAN_SUSPEND_CHANGED] =
+		g_signal_new ("can-suspend-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, can_suspend_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CAN_HIBERNATE_CHANGED] =
+		g_signal_new ("can-hibernate-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, can_hibernate_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CAN_SHUTDOWN_CHANGED] =
+		g_signal_new ("can-shutdown-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, can_shutdown_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [CAN_REBOOT_CHANGED] =
+		g_signal_new ("can-reboot-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, can_reboot_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (klass, sizeof (GpmManagerPrivate));
 }
@@ -1281,6 +1468,11 @@ gpm_manager_init (GpmManager *manager)
 
 	/* coldplug so we are in the correct state at startup */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
+	if (on_ac == TRUE) {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &manager->priv->low_power);
+	} else {
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &manager->priv->low_power);
+	}
 
 	manager->priv->button = gpm_button_new ();
 	g_signal_connect (manager->priv->button, "button-pressed",
@@ -1324,24 +1516,16 @@ gpm_manager_init (GpmManager *manager)
 	/* use a class to handle the complex stuff */
 	gpm_debug ("creating new inhibit instance");
 	manager->priv->inhibit = gpm_inhibit_new ();
-	if (manager->priv->inhibit != NULL) {
-		/* add the new brightness lcd DBUS interface */
-		dbus_g_object_type_install_info (GPM_TYPE_INHIBIT,
-						 &dbus_glib_gpm_inhibit_object_info);
-		dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_INHIBIT,
-						     G_OBJECT (manager->priv->inhibit));
-	}
+	/* add the interface */
+	dbus_g_object_type_install_info (GPM_TYPE_INHIBIT, &dbus_glib_gpm_inhibit_object_info);
+	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_INHIBIT,
+					     G_OBJECT (manager->priv->inhibit));
 
 	/* use the control object */
 	gpm_debug ("creating new control instance");
 	manager->priv->control = gpm_control_new ();
 	g_signal_connect (manager->priv->control, "sleep-failure",
 			  G_CALLBACK (control_sleep_failure_cb), manager);
-	/* add the new brightness lcd DBUS interface */
-	dbus_g_object_type_install_info (GPM_TYPE_CONTROL,
-					 &dbus_glib_gpm_control_object_info);
-	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_CONTROL,
-					     G_OBJECT (manager->priv->control));
 
 	gpm_debug ("creating new tray icon");
 	manager->priv->tray_icon = gpm_tray_icon_new ();

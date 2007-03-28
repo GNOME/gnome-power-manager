@@ -39,7 +39,8 @@
 #include "gpm-debug.h"
 
 #include "gpm-manager.h"
-#include "dbus/gpm-dbus-manager.h"
+#include "dbus/xdg-power-management-core.h"
+//#include "dbus/xdg-power-management-widget.h"
 
 static void gpm_exit (GpmManager *manager);
 
@@ -92,6 +93,7 @@ gpm_object_register (DBusGConnection *connection,
 	}
 
 	dbus_g_object_type_install_info (GPM_TYPE_MANAGER, &dbus_glib_gpm_manager_object_info);
+	dbus_g_error_domain_register (GPM_MANAGER_ERROR, NULL, GPM_MANAGER_TYPE_ERROR);
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH, object);
 
 	return TRUE;

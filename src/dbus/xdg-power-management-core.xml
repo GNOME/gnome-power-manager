@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<node name="/">
+  <interface name="org.freedesktop.PowerManagement">
+    <method name="Standby"></method>
+    <method name="Suspend"></method>
+    <method name="Hibernate"></method>
+    <method name="Reboot"></method>
+    <method name="Shutdown"></method>
+    <method name="CanStandby">
+      <arg type="b" name="can_standby" direction="out"/>
+    </method>
+    <method name="CanSuspend">
+      <arg type="b" name="can_suspend" direction="out"/>
+    </method>
+    <method name="CanHibernate">
+      <arg type="b" name="can_hibernate" direction="out"/>
+    </method>
+    <method name="CanReboot">
+      <arg type="b" name="can_reboot" direction="out"/>
+    </method>
+    <method name="CanShutdown">
+      <arg type="b" name="can_shutdown" direction="out"/>
+    </method>
+    <method name="GetPowerSaveStatus">
+      <arg type="b" name="save_power" direction="out"/>
+    </method>
+    <method name="GetBatteryState">
+      <arg type="b" name="on_battery" direction="out"/>
+    </method>
+    <signal name="CanStandbyChanged">
+      <arg type="b" name="can_standby" direction="out"/>
+    </signal>
+    <signal name="CanSuspendChanged">
+      <arg type="b" name="can_suspend" direction="out"/>
+    </signal>
+    <signal name="CanHibernateChanged">
+      <arg type="b" name="can_hibernate" direction="out"/>
+    </signal>
+    <signal name="CanShutdownChanged">
+      <arg type="b" name="can_shutdown" direction="out"/>
+    </signal>
+    <signal name="CanRebootChanged">
+      <arg type="b" name="can_reboot" direction="out"/>
+    </signal>
+    <signal name="BatteryStateChanged">
+      <arg type="b" name="on_battery" direction="out"/>
+    </signal>
+    <signal name="PowerSaveStatusChanged">
+      <arg type="b" name="low_power" direction="out"/>
+    </signal>
+  </interface>
+</node>
+

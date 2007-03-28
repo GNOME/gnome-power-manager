@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <interface name="org.gnome.PowerManager.Statistics">
+  <!-- ************ THIS IS NOT STANDARDISED. DO NOT USE. ************ -->
+  <interface name="org.freedesktop.PowerManagement.Statistics">
     <method name="GetDataTypes">
       <arg type="as" name="types" direction="out"/>
     </method>
@@ -20,3 +21,4 @@
     </method>
   </interface>
 </node>
+

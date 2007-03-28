@@ -62,10 +62,10 @@ GType		 gpm_backlight_get_type			(void);
 GQuark		 gpm_backlight_error_quark		(void);
 GpmBacklight	*gpm_backlight_new			(void);
 
-gboolean	gpm_backlight_get_brightness		(GpmBacklight	*backlight,
+gboolean	 gpm_backlight_get_brightness		(GpmBacklight	*backlight,
 							 guint		*brightness,
 							 GError		**error);
-gboolean	gpm_backlight_set_brightness		(GpmBacklight	*backlight,
+gboolean	 gpm_backlight_set_brightness		(GpmBacklight	*backlight,
 							 guint		 brightness,
 							 GError		**error);
 gboolean	 gpm_backlight_get_mode			(GpmBacklight	*backlight,

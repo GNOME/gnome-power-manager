@@ -50,25 +50,15 @@
 #include "gpm-debug.h"
 #include "gpm-control.h"
 #include "gpm-polkit.h"
-#include "gpm-dbus-monitor.h"
 #include "gpm-networkmanager.h"
 
 #define GPM_CONTROL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CONTROL, GpmControlPrivate))
-
-typedef struct
-{
-	gchar			*application;
-	gchar			*connection;
-	guint32			 cookie;
-} GpmControlData;
 
 struct GpmControlPrivate
 {
 	GpmConf			*conf;
 	HalGPower		*hal_power;
 	GpmPolkit		*polkit;
-	GSList			*list;
-	GpmDbusMonitor		*dbus_monitor;
 	time_t			 last_resume_event;
 	guint			 suppress_policy_timeout;
 };
@@ -153,222 +143,6 @@ void
 gpm_control_reset_event_time (GpmControl *control)
 {
 	control->priv->last_resume_event = time (NULL);
-}
-
-/**
- * gpm_control_cookie_compare_func
- * @a: Pointer to the data to test
- * @b: Pointer to a cookie to compare
- *
- * A GCompareFunc for comparing a cookie to a list.
- *
- * Return value: 0 if cookie matches
- **/
-static gint
-gpm_control_cookie_compare_func (gconstpointer a, gconstpointer b)
-{
-	GpmControlData *data;
-	guint32		cookie;
-	data = (GpmControlData*) a;
-	cookie = *((guint32*) b);
-	if (cookie == data->cookie)
-		return 0;
-	return 1;
-}
-
-/**
- * gpm_control_find_cookie:
- * @control: This control instance
- * @cookie: The cookie we are looking for
- *
- * Finds the data in the cookie list.
- *
- * Return value: The cookie data, or NULL if not found
- **/
-static GpmControlData *
-gpm_control_find_cookie (GpmControl *control, guint32 cookie)
-{
-	GpmControlData *data;
-	GSList	       *ret;
-	ret = g_slist_find_custom (control->priv->list, &cookie,
-				   gpm_control_cookie_compare_func);
-	if (ret == FALSE) {
-		return NULL;
-	}
-	data = (GpmControlData *) ret->data;
-	return data;
-}
-
-/**
- * gpm_control_generate_cookie:
- * @control: This control instance
- *
- * Returns a random cookie not already allocated.
- *
- * Return value: a new random cookie.
- **/
-static guint32
-gpm_control_generate_cookie (GpmControl *control)
-{
-	guint32		cookie;
-
-	/* Iterate until we have a unique cookie */
-	do {
-		cookie = (guint32) g_random_int_range (1, G_MAXINT32);
-	} while (gpm_control_find_cookie (control, cookie));
-	return cookie;
-}
-
-/**
- * gpm_control_request_cookie:
- * @connection: Connection name, e.g. ":0.13"
- * @application:	Application name, e.g. "Nautilus"
- * @reason: Reason for controling, e.g. "Copying files"
- *
- * Allocates a random cookie used to identify the connection, as multiple
- * control requests can come from one caller sharing a dbus connection.
- * We need to refcount internally, and data is saved in the GpmControlData
- * struct.
- *
- * Return value: a new random cookie.
- **/
-void
-gpm_control_register (GpmControl  *control,
-		      const gchar *application,
-		      DBusGMethodInvocation *context,
-		      GError	**error)
-{
-	const gchar *connection;
-	GpmControlData *data;
-
-	/* as we are async, we can get the sender */
-	connection = dbus_g_method_get_sender (context);
-
-	/* handle where the application does not add required data */
-	if (connection == NULL ||
-	    application == NULL) {
-		gpm_warning ("Recieved Actions, but application "
-			     "did not set the parameters correctly");
-		dbus_g_method_return (context, -1);
-		return;
-	}
-
-	/* seems okay, add to list */
-	data = g_new (GpmControlData, 1);
-	data->cookie = gpm_control_generate_cookie (control);
-	data->application = g_strdup (application);
-	data->connection = g_strdup (connection);
-
-	control->priv->list = g_slist_append (control->priv->list,
-					      (gpointer) data);
-
-	gpm_debug ("Recieved Actions from '%s' (%s) saving as #%i",
-		   data->application, data->connection, data->cookie);
-
-	dbus_g_method_return (context, data->cookie);
-}
-
-/* free one element in GpmControlData struct */
-static void
-gpm_control_free_data_object (GpmControlData *data)
-{
-	g_free (data->application);
-	g_free (data->connection);
-	g_free (data);
-}
-
-/**
- * gpm_control_clear_cookie:
- * @application:	Application name
- * @cookie: The cookie that we used to register
- *
- * Removes a cookie and associated data from the GpmControlData struct.
- **/
-gboolean
-gpm_control_un_register (GpmControl  *control,
-			 guint32      cookie,
-			 GError     **error)
-{
-	GpmControlData *data;
-
-	/* Only remove the correct cookie */
-	data = gpm_control_find_cookie (control, cookie);
-	if (data == NULL) {
-		gpm_warning ("Cannot find registered program for #%i, so "
-			     "cannot do UnActions", cookie);
-		return FALSE;
-	}
-	gpm_debug ("UnActions okay #%i", cookie);
-	gpm_control_free_data_object (data);
-	control->priv->list = g_slist_remove (control->priv->list,
-					      (gconstpointer) data);
-	return TRUE;
-}
-
-/**
- * gpm_control_get_requests:
- *
- * Gets a list of controls.
- **/
-gboolean
-gpm_control_policy (GpmControl *control,
-		    guint32	cookie,
-		    gboolean	allowed,
-		    GError    **error)
-{
-	gpm_warning ("Not implimented");
-	return FALSE;
-}
-
-/**
- * gpm_control_remove_dbus:
- * @connection: Connection name
- * @application:	Application name
- * @cookie: The cookie that we used to register
- *
- * Checks to see if the dbus closed session is registered, in which case
- * unregister it.
- **/
-static void
-gpm_control_remove_dbus (GpmControl  *control,
-			 const gchar *connection)
-{
-	int a;
-	GpmControlData *data;
-	/* Remove *any* connections that match the connection */
-	for (a=0; a<g_slist_length (control->priv->list); a++) {
-		data = (GpmControlData *) g_slist_nth_data (control->priv->list, a);
-		if (strcmp (data->connection, connection) == 0) {
-			gpm_debug ("Auto-revoked idle control on '%s'.",
-				   data->application);
-			gpm_control_free_data_object (data);
-			control->priv->list = g_slist_remove (control->priv->list,
-							      (gconstpointer) data);
-		}
-	}
-	return;
-}
-
-/**
- * dbus_noc_session_cb:
- * @power: The power class instance
- * @name: The DBUS name, e.g. hal.freedesktop.org
- * @prev: The previous name, e.g. :0.13
- * @new: The new name, e.g. :0.14
- * @control: This control class instance
- *
- * The noc session DBUS callback.
- **/
-static void
-dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
-		     const gchar    *name,
-		     const gchar    *prev,
-		     const gchar    *new,
-		     GpmControl	    *control)
-{
-	if (strlen (new) == 0) {
-		gpm_control_remove_dbus (control, name);
-	}
 }
 
 /**
@@ -754,8 +528,6 @@ static void
 gpm_control_finalize (GObject *object)
 {
 	GpmControl *control;
-	guint a;
-	GpmControlData *data;
 
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_CONTROL (object));
@@ -766,15 +538,6 @@ gpm_control_finalize (GObject *object)
 	if (control->priv->polkit) {
 		g_object_unref (control->priv->polkit);
 	}
-
-	/* remove items in list and free */
-	for (a=0; a<g_slist_length (control->priv->list); a++) {
-		data = (GpmControlData *) g_slist_nth_data (control->priv->list, a);
-		gpm_control_free_data_object (data);
-	}
-	g_slist_free (control->priv->list);
-
-	g_object_unref (control->priv->dbus_monitor);
 
 	g_return_if_fail (control->priv != NULL);
 	G_OBJECT_CLASS (gpm_control_parent_class)->finalize (object);
@@ -846,9 +609,6 @@ gpm_control_init (GpmControl *control)
 	/* this will be NULL if we don't compile in support */
 	control->priv->polkit = gpm_polkit_new ();
 	control->priv->hal_power = hal_gpower_new ();
-	control->priv->dbus_monitor = gpm_dbus_monitor_new ();
-	g_signal_connect (control->priv->dbus_monitor, "noc-session",
-			  G_CALLBACK (dbus_noc_session_cb), control);
 
 	control->priv->conf = gpm_conf_new ();
 	gpm_conf_get_uint (control->priv->conf, GPM_CONF_POLICY_TIMEOUT,

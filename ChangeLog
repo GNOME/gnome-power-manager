@@ -1,3 +1,36 @@
+2007-03-28  Richard Hughes  <richard@hughsie.com>
+
+	* docs/config.xsl:
+	Output in UTF-8.
+
+	* docs/dbus-interface.html:
+	* docs/dbus-interface.xml:
+	Update with latest from 0.1 of the spec.
+
+	* docs/dbus-test-inhibit.py:
+	* src/dbus/Makefile.am:
+	* src/dbus/gpm-dbus-backlight.xml:
+	* src/dbus/gpm-dbus-control.xml:
+	* src/dbus/gpm-dbus-inhibit.xml:
+	* src/dbus/gpm-dbus-manager.xml:
+	* src/dbus/gpm-dbus-statistics.xml:
+	* src/dbus/gpm-dbus-ui.xml:
+	* src/dbus/xdg-power-management-backlight.xml:
+	* src/dbus/xdg-power-management-core.xml:
+	* src/dbus/xdg-power-management-inhibit.xml:
+	* src/dbus/xdg-power-management-stats.xml:
+	* src/dbus/xdg-power-management-widget.xml:
+	* src/gpm-control.c: (gpm_control_finalize), (gpm_control_init):
+	* src/gpm-main.c: (gpm_object_register):
+	* src/gpm-manager.c: (gpm_manager_error_get_type):
+	* src/gpm-manager.h:
+	* src/gpm-powermanager.h:
+	* src/gpm-prefs-core.c: (gpm_dbus_method_bool), (gpm_prefs_init):
+	Use the power management spec as per defined by freedesktop:
+	http://www.freedesktop.org/wiki/Specifications
+	This means our service name and interface names have changed.
+	PLEASE UPDATE PROGRAMS THAT USE THE CORE INTERFACE OF G-P-M.
+
 2007-03-27  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:

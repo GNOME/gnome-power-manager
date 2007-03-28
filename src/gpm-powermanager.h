@@ -33,17 +33,17 @@ G_BEGIN_DECLS
 #define GPM_IS_POWERMANAGER_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_POWERMANAGER))
 #define GPM_POWERMANAGER_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_POWERMANAGER, GpmPowermanagerClass))
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_INTERFACE_STATS	"org.gnome.PowerManager.Statistics"
-#define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.gnome.PowerManager.Backlight"
-#define	GPM_DBUS_INTERFACE_UI		"org.gnome.PowerManager.UI"
-#define	GPM_DBUS_INTERFACE_INHIBIT	"org.gnome.PowerManager.Inhibit"
-#define	GPM_DBUS_INTERFACE_CONTROL	"org.gnome.PowerManager.Control"
-#define	GPM_DBUS_PATH_STATS		"/org/gnome/PowerManager/Statistics"
-#define	GPM_DBUS_PATH_BACKLIGHT		"/org/gnome/PowerManager/Backlight"
-#define	GPM_DBUS_PATH_UI		"/org/gnome/PowerManager/UI"
-#define	GPM_DBUS_PATH_INHIBIT		"/org/gnome/PowerManager/Inhibit"
-#define	GPM_DBUS_PATH_CONTROL		"/org/gnome/PowerManager/Control"
+#define	GPM_DBUS_SERVICE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_INTERFACE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_INTERFACE_WIDGET	"org.freedesktop.PowerManagement.Widget"
+#define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.freedesktop.PowerManagement.Backlight"
+#define	GPM_DBUS_INTERFACE_STATS	"org.freedesktop.PowerManagement.Statistics"
+#define	GPM_DBUS_INTERFACE_INHIBIT	"org.freedesktop.PowerManagement.Inhibit"
+#define	GPM_DBUS_PATH			"/org/freedesktop/PowerManagement"
+#define	GPM_DBUS_PATH_BACKLIGHT		"/org/freedesktop/PowerManagement/Backlight"
+#define	GPM_DBUS_PATH_WIDGET		"/org/freedesktop/PowerManagement/Widget"
+#define	GPM_DBUS_PATH_STATS		"/org/freedesktop/PowerManagement/Statistics"
+#define	GPM_DBUS_PATH_INHIBIT		"/org/freedesktop/PowerManagement/Inhibit"
 
 typedef struct GpmPowermanagerPrivate GpmPowermanagerPrivate;
 

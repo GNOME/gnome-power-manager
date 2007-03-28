@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <interface name="org.gnome.PowerManager.Inhibit">
+  <!-- ************ THIS IS NOT STANDARDISED. DO NOT USE. ************ -->
+  <interface name="org.freedesktop.PowerManagement.Inhibit">
      <method name="InhibitAuto">
       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
       <arg type="s" name="application" direction="in"/>
@@ -23,8 +24,7 @@
     <method name="GetRequests">
       <arg type="ass" name="requests" direction="out"/>
     </method>
-<!--
     <signal name="IsValidChanged"/>
--->
   </interface>
 </node>
+

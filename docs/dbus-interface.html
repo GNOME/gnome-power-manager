@@ -1,40 +1,53 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Power Management Specification (WITH GNOME ADDITIONS)</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>Power Management Specification (WITH GNOME ADDITIONS)</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
-            <code class="email">&lt;<a href="mailto:richard@hughsie.com">richard@hughsie.com</a>&gt;</code><br>
-          </p></div></div></div></div></div><div><p class="releaseinfo">Version CRACKtastic</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#dbus">DBUS API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#dbus-methods">Methods</a></span></dt><dt><span class="sect2"><a href="#dbus-signals">Signals</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dbus"></a>DBUS API</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>DRAFT Power Management Specification (WITH CRAZY ADDITIONS)</title><link rel="stylesheet" href="docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.72.0"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="index"></a>DRAFT Power Management Specification (WITH CRAZY ADDITIONS)</h1></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Richard</span> <span class="surname">Hughes</span></h3><div class="affiliation"><div class="address"><p><br>
+Â Â Â Â Â Â Â Â Â Â Â Â <code class="email">&lt;<a href="mailto:richard@hughsie.com">richard@hughsie.com</a>&gt;</code><br>
+Â Â Â Â Â Â Â Â Â Â </p></div></div></div></div></div><div><p class="releaseinfo">Version CRACKtastic</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#overview">Overview</a></span></dt><dt><span class="sect1"><a href="#dbus">DBUS API</a></span></dt><dd><dl><dt><span class="sect2"><a href="#dbus-core">Compulsory Basic Interface</a></span></dt><dt><span class="sect2"><a href="#dbus-backlight">Optional Backlight Interface</a></span></dt><dt><span class="sect2"><a href="#dbus-widget">Optional Widget Interface</a></span></dt><dt><span class="sect2"><a href="#dbus-inhibit">Optional Inhibit Interface</a></span></dt><dt><span class="sect2"><a href="#dbus-statistics">Optional Statistics Interface</a></span></dt></dl></dd><dt><span class="sect1"><a href="#names">Standard Nomenclature</a></span></dt><dd><dl><dt><span class="sect2"><a href="#names-standby">Standby</a></span></dt><dt><span class="sect2"><a href="#names-suspend">Suspend</a></span></dt><dt><span class="sect2"><a href="#names-hibernate">Hibernate</a></span></dt></dl></dd><dt><span class="appendix"><a href="#changelog">A. Change History</a></span></dt></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="overview"></a>Overview</h2></div></div></div><p>
+      A Power Management specification has been in used informally used for
+      a few years on the GNOME desktop. There has never been any standardised
+      nomenclature or API to allow desktops such as KDE and XFCE to interoperate.
+      This has lead to technologies that have often been incompatible and
+      resulted in poor integration of power management into desktop applications.
+    </p><p>
+      This specification aims to help this problem, by defining a standard
+      API that can be implemented by desktop session daemons to integrate
+      with existing infrastructure.
+      This can be used by desktop applications to become more power aware.
+    </p><p>
+        <code class="literal">org.freedesktop.PowerManagement</code> is the only
+        compulsory interface to implement, although other optional interfaces
+        may be proposed in the future for other aspects of session power management.
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dbus"></a>DBUS API</h2></div></div></div><p>
       The interfaces are session-wide.
-    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.freedesktop.PowerManagement</code></td></tr><tr><td>DBUS Path:</td><td><code class="literal">/org/freedesktop/PowerManagement</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-methods"></a>Methods</h3></div></div></div><p>
+    </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>DBUS Service:</td><td><code class="literal">org.freedesktop.PowerManagement</code></td></tr><tr><td>DBUS Path:</td><td><code class="literal">/org/freedesktop/PowerManagement</code></td></tr></tbody></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-core"></a>Compulsory Basic Interface</h3></div></div></div><p>
         Methods on interface <code class="literal">org.freedesktop.PowerManagement</code>
-        define a base layer for interoperability.
-        Other optional interfaces may be proposed in the future for other
-        aspects of session power management.
-      </p><div class="table"><a name="dbus-methods-core"></a><p class="title"><b>Table 1. Methods on interface <code class="literal">org.freedesktop.PowerManagement</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">Standby</code></td><td> </td><td> </td><td>Attempt to put the system in standby.</td></tr><tr><td><code class="literal">Suspend</code></td><td> </td><td> </td><td>Attempt to suspend the system.</td></tr><tr><td><code class="literal">Hibernate</code></td><td> </td><td> </td><td>Attempt to hibernate the system.</td></tr><tr><td><code class="literal">Shutdown</code></td><td> </td><td> </td><td>Attempt to shutdown the system.</td></tr><tr><td><code class="literal">Reboot</code></td><td> </td><td> </td><td>Attempt to reboot the system.</td></tr><tr><td><code class="literal">CanStandby</code></td><td> </td><td><code class="literal">bool</code> can_standby</td><td>If the current session user is able to put the system in standby.</td></tr><tr><td><code class="literal">CanSuspend</code></td><td> </td><td><code class="literal">bool</code> can_suspend</td><td>If the current session user is able to suspend the system.</td></tr><tr><td><code class="literal">CanHibernate</code></td><td> </td><td><code class="literal">bool</code> can_hibernate</td><td>If the current session user is able to hibernate the system.</td></tr><tr><td><code class="literal">CanShutdown</code></td><td> </td><td><code class="literal">bool</code> can_shutdown</td><td>If the current session user is able to shutdown the system.</td></tr><tr><td><code class="literal">CanReboot</code></td><td> </td><td><code class="literal">bool</code> can_reboot</td><td>If the current session user is able to reboot the system.</td></tr><tr><td><code class="literal">GetPowerSaveStatus</code></td><td> </td><td><code class="literal">bool</code> save_power</td><td>
+        define a compulsory base layer for interoperability.
+      </p><div class="table"><a name="dbus-core-methods"></a><p class="title"><b>TableÂ 1.Â Methods on interface <code class="literal">org.freedesktop.PowerManagement</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Throws Error</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">Standby</code></td><td>Â </td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>Attempt to put the system in standby.</td></tr><tr><td><code class="literal">Suspend</code></td><td>Â </td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>Attempt to suspend the system.</td></tr><tr><td><code class="literal">Hibernate</code></td><td>Â </td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>Attempt to hibernate the system.</td></tr><tr><td><code class="literal">Shutdown</code></td><td>Â </td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>Attempt to shutdown the system.</td></tr><tr><td><code class="literal">Reboot</code></td><td>Â </td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>Attempt to reboot the system.</td></tr><tr><td><code class="literal">CanStandby</code></td><td>Â </td><td><code class="literal">bool</code> can_standby</td><td>Â </td><td>If the current session user is able to put the system in standby.</td></tr><tr><td><code class="literal">CanSuspend</code></td><td>Â </td><td><code class="literal">bool</code> can_suspend</td><td>Â </td><td>If the current session user is able to suspend the system.</td></tr><tr><td><code class="literal">CanHibernate</code></td><td>Â </td><td><code class="literal">bool</code> can_hibernate</td><td>Â </td><td>If the current session user is able to hibernate the system.</td></tr><tr><td><code class="literal">CanShutdown</code></td><td>Â </td><td><code class="literal">bool</code> can_shutdown</td><td>Â </td><td>If the current session user is able to shutdown the system.</td></tr><tr><td><code class="literal">CanReboot</code></td><td>Â </td><td><code class="literal">bool</code> can_reboot</td><td>Â </td><td>If the current session user is able to reboot the system.</td></tr><tr><td><code class="literal">GetPowerSaveStatus</code></td><td>Â </td><td><code class="literal">bool</code> save_power</td><td>Â </td><td>
                 This may be set on AC or battery power, both, or neither
                 depending on the users preference setting.
                 This setting may also change with the battery level changing.
                 Programs should respect this value and not perform non-essential
                 tasks when we are trying to save power.
-              </td></tr><tr><td><code class="literal">GetBatteryState</code></td><td> </td><td><code class="literal">bool</code> on_battery</td><td>
+              </td></tr><tr><td><code class="literal">GetBatteryState</code></td><td>Â </td><td><code class="literal">bool</code> on_battery</td><td>Â </td><td>
                 Returns the system power state, i.e. if we are running on
                 battery power.
                 This method may still return true on AC using a desktop system
                 if the computer is using backup power from a monitored UPS.
-              </td></tr></tbody></table></div></div><br class="table-break"><p>
+              </td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="dbus-core-signals"></a><p class="title"><b>TableÂ 2.Â Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">CanStandbyChanged</code></td><td><code class="literal">bool</code> can_standby</td><td>Signals the standby status has changed.</td></tr><tr><td><code class="literal">CanSuspendChanged</code></td><td><code class="literal">bool</code> can_suspend</td><td>Signals the suspend status has changed.</td></tr><tr><td><code class="literal">CanHibernateChanged</code></td><td><code class="literal">bool</code> can_hibernate</td><td>Signals the hibernate status has changed.</td></tr><tr><td><code class="literal">CanShutdownChanged</code></td><td><code class="literal">bool</code> can_shutdown</td><td>Signals the shutdown status has changed.</td></tr><tr><td><code class="literal">CanRebootChanged</code></td><td><code class="literal">bool</code> can_reboot</td><td>Signals the reboot status has changed.</td></tr><tr><td><code class="literal">PowerSaveStatusChanged</code></td><td><code class="literal">bool</code> save_power</td><td>Signals the low power mode has changed..</td></tr><tr><td><code class="literal">BatteryStateChanged</code></td><td><code class="literal">bool</code> on_battery</td><td>Signals the battery state has changed.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-backlight"></a>Optional Backlight Interface</h3></div></div></div><p>
         <span class="emphasis"><em>NON STANDARDISED API</em></span>
       </p><p>
-        The <code class="literal">org.freedesktop.PowerManagement.XXXBacklight</code>
+        The <code class="literal">org.freedesktop.PowerManagement.Backlight</code>
         interface is optional, and allows a UI element to interact with
         the session daemon without using HAL directly.
       </p><p>
         By using the session dameon, rather than HAL any UI can have
         preference settings saved, without two policies being forced on one device.
-      </p><div class="table"><a name="dbus-methods-backlight"></a><p class="title"><b>Table 2. Methods on interface <code class="literal">org.freedesktop.PowerManagement.XXXBacklight</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.XXXBacklight" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetBacklightBrightness</code></td><td> </td><td><code class="literal">uint</code> percentage_brightness</td><td>Returns the current backlight brightness as a percentage.</td></tr><tr><td><code class="literal">SetBacklightBrightness</code></td><td><code class="literal">uint</code> percentage_brightness</td><td> </td><td>
+      </p><div class="table"><a name="dbus-backlight-methods"></a><p class="title"><b>TableÂ 3.Â Methods on interface <code class="literal">org.freedesktop.PowerManagement.Backlight</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.Backlight" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Throws Error</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetBrightness</code></td><td>Â </td><td><code class="literal">uint</code> percentage_brightness</td><td><code class="literal">NoHardwareSupport</code></td><td>Returns the current backlight brightness as a percentage.</td></tr><tr><td><code class="literal">SetBrightness</code></td><td><code class="literal">uint</code> percentage_brightness</td><td>Â </td><td><code class="literal">DeniedByPolicy</code>, <code class="literal">NoHardwareSupport</code></td><td>
                 This may not immediately set the brightness if we are in a
                 low power sleep mode, if the panel is switched off, or if the
                 panel is in an idle dim state.
-              </td></tr></tbody></table></div></div><br class="table-break"><p>
+              </td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="dbus-backlight-signals"></a><p class="title"><b>TableÂ 4.Â Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.Backlight</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.Backlight" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">BrightnessChanged</code></td><td><code class="literal">uint</code> percentage_brightness</td><td>Signals the value of the current brightness has changed.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-widget"></a>Optional Widget Interface</h3></div></div></div><p>
         <span class="emphasis"><em>NON STANDARDISED API</em></span>
       </p><p>
-        The <code class="literal">org.freedesktop.PowerManagement.XXXWidget</code>
+        The <code class="literal">org.freedesktop.PowerManagement.Widget</code>
         interface is optional, and allows a UI element to display the state
         of the system.
       </p><p>
@@ -42,71 +55,119 @@
         of any power manager and system state will have to be transmitted
         over DBUS.
       </p><p>
-        Only the final 'result' (the icon and description) is exported
-        as presenting an abstract power interface is wrong for this functionality.
-        These are the required DBUS methods for presenting an interface to the
-        user.
-      </p><div class="table"><a name="dbus-methods-widget"></a><p class="title"><b>Table 3. Methods on interface <code class="literal">org.freedesktop.PowerManagement.XXXWidget</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.XXXWidget" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetDescription</code></td><td> </td><td><code class="literal">string</code> description</td><td>System state description, e.g. Laptop battery 34 minutes until charged (34%).</td></tr><tr><td><code class="literal">GetIcon</code></td><td> </td><td><code class="literal">string</code> icon</td><td>Icon name, e.g. gpm-primary-080-charging</td></tr></tbody></table></div></div><br class="table-break"><p>
+        Only the final icon and description are exported over DBUS as
+        presenting an abstract power interface is wrong for this trivial functionality.
+      </p><div class="table"><a name="dbus-widget-methods"></a><p class="title"><b>TableÂ 5.Â Methods on interface <code class="literal">org.freedesktop.PowerManagement.Widget</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.Widget" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Throws Error</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetDescription</code></td><td>Â </td><td><code class="literal">string</code> description</td><td>Â </td><td>Returns the system state description, e.g. Laptop battery 34 minutes until charged (34%).</td></tr><tr><td><code class="literal">GetIcon</code></td><td>Â </td><td><code class="literal">string</code> icon</td><td>Â </td><td>Returns the icon name, e.g. primary-080-charging</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="dbus-widget-signals"></a><p class="title"><b>TableÂ 6.Â Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.Widget</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.Widget" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">DescriptionChanged</code></td><td><code class="literal">string</code> description</td><td>Signals the system state description has changed.</td></tr><tr><td><code class="literal">IconChanged</code></td><td><code class="literal">string</code> icon</td><td>Signals the system icon has changed.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-inhibit"></a>Optional Inhibit Interface</h3></div></div></div><p>
         <span class="emphasis"><em>NON STANDARDISED API</em></span>
       </p><p>
         When the power manager detects an idle session and system, it can perform
         a system suspend or hibernate, known as a system sleep.
-        We can prevent the power manager doing this action, if for instance
-        we are doing a slow network copy that will take many hours.
-        These are the required DBUS methods for inhibiting system sleep.
+        We can prevent the session power manager daemon from doing this action
+        using the inhibit interface. 
       </p><p>
-        A cookie is a random 32bit unsigned integer used to identify the inhibit.
+        An automatic inhibit should be taken by the file manager if there is a
+        slow network copy that will take many minutes to complete.
+        A manual inhibit should be taken by a program that wants to prevent
+        an automatic idle sleep, <span class="emphasis"><em>and</em></span> a manual action such
+        as pressing the suspend button or clicking the hibernate icon.
+        Manual inhibits should be taken for tasks that cannot be interrupted,
+        like saving a large data file.
+      </p><p>
+        A cookie is a randomly assigned 32bit unsigned integer used to identify
+        the inhibit.
         It is required as the same application may want to call inhibit
         multiple times, without managing the inhibit calls itself.
-      </p><div class="table"><a name="dbus-methods-inhibit"></a><p class="title"><b>Table 4. Methods on interface <code class="literal">org.freedesktop.PowerManagement.XXXInhibit</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.XXXInhibit" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">InhibitAuto</code></td><td><code class="literal">string</code> application, <code class="literal">string</code> reason</td><td><code class="literal">uint</code> cookie</td><td>
+      </p><p>
+        InhibitAuto and UnInhibit are easy to use, requiring only the cookie
+        to be stored in the client application.
+        Below is a simple python demonstration showing two inhibit actions.
+      </p><pre class="programlisting">
+#!/usr/bin/python
+import dbus
+import time
+
+bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
+devobj = bus.get_object('org.freedesktop.PowerManagement', '/org/freedesktop/PowerManagement')
+dev = dbus.Interface (devobj, "org.freedesktop.PowerManagement.Inhibit")
+
+cookie = dev.InhibitAuto('Nautilus', 'Copying files')
+cookie2 = dev.InhibitManual('SELinux', 'Performing database relabel')
+
+time.sleep(10)
+
+dev.UnInhibit(cookie)
+dev.UnInhibit(cookie2)
+</pre><div class="table"><a name="dbus-inhibit-methods"></a><p class="title"><b>TableÂ 7.Â Methods on interface <code class="literal">org.freedesktop.PowerManagement.Inhibit</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.Inhibit" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Throws Error</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">InhibitAuto</code></td><td><code class="literal">string</code> application, <code class="literal">string</code> reason</td><td><code class="literal">uint</code> cookie</td><td><code class="literal">PermissionDenied</code></td><td>
                 Inhibits the computer from performing the idle sleep action.
                 Useful if you want to do an operation of long duration without the
                 computer suspending.
                 Reason and application should be translated strings where possible.
-              </td></tr><tr><td><code class="literal">InhibitManual</code></td><td><code class="literal">string</code> application, <code class="literal">string</code> reason</td><td><code class="literal">uint</code> cookie</td><td>
+              </td></tr><tr><td><code class="literal">InhibitManual</code></td><td><code class="literal">string</code> application, <code class="literal">string</code> reason</td><td><code class="literal">uint</code> cookie</td><td><code class="literal">PermissionDenied</code></td><td>
                 Inhibits the computer from performing the any sleep or shutdown action.
                 Useful if you want to perform an operation that cannot be interrupted like
                 a firmware re-flash or RPM transaction.
-              </td></tr><tr><td><code class="literal">UnInhibit</code></td><td><code class="literal">uint</code> cookie</td><td> </td><td>
-                Allows the computer to perform the idle sleep or user action is the
+              </td></tr><tr><td><code class="literal">UnInhibit</code></td><td><code class="literal">uint</code> cookie</td><td>Â </td><td><code class="literal">CookieNotFound</code></td><td>
+                Allows the computer to perform the idle sleep or user action if the
                 number of inhibit calls is zero.
                 If there are multiple cookies outstanding, clearing one cookie
   	        does not allow the action to happen.
-                If the program holding the cookie exits from the system bus without
+                If the program holding the cookie exits from the session bus without
                 calling <code class="literal">UnInhibit()</code> then it is automatically removed.
-              </td></tr><tr><td><code class="literal">IsValid</code></td><td> </td><td><code class="literal">bool</code> valid</td><td>
+              </td></tr><tr><td><code class="literal">IsValid</code></td><td>Â </td><td><code class="literal">bool</code> valid</td><td>Â </td><td>
                 Returns true if we have no valid manual or automatic inhibitors.
                 This will return false if the number of inhibit cookies
                 is greater than zero.
-              </td></tr></tbody></table></div></div><br class="table-break"><p>
+              </td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="dbus-inhibit-signals"></a><p class="title"><b>TableÂ 8.Â Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.Inhibit</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.Inhibit" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">IsValidChanged</code></td><td><code class="literal">bool</code> is_valid</td><td>Signals the inhibit valid state has changed.</td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-statistics"></a>Optional Statistics Interface</h3></div></div></div><p>
         <span class="emphasis"><em>NON STANDARDISED API</em></span>
       </p><p>
-        Statistics data is values that can be collected by the power manager
+        Statistics data are values that can be collected by the power manager
         for review or profiling.
-        These are important (but not required) methods allow the profiling
-        of power saving methods, for instance showing on a graph that 20% more
-        power is saved using certain CPU schedulers.
-        These are optional DBUS methods for getting system statistics.
-      </p><div class="table"><a name="dbus-methods-statistics"></a><p class="title"><b>Table 5. Methods on interface <code class="literal">org.freedesktop.PowerManagement.XXXStatistics</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.XXXStatistics" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetDataTypes</code></td><td> </td><td><code class="literal">list of strings [as]</code> types</td><td>
+        These allow the user to profile power saving methods, usually shown
+        to the user in the form of a graph.
+      </p><div class="table"><a name="dbus-statistics-methods"></a><p class="title"><b>TableÂ 9.Â Methods on interface <code class="literal">org.freedesktop.PowerManagement.Statistics</code></b></p><div class="table-contents"><table summary="Methods on interface org.freedesktop.PowerManagement.Statistics" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Name</th><th>Input Parameters</th><th>Return Values</th><th>Throws Error</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">GetDataTypes</code></td><td>Â </td><td><code class="literal">list of strings [as]</code> types</td><td>Â </td><td>
                 Gets a list of the types of data available.
                 Data types are single strings that represent the complete data
                 and do not indicate the axis, e.g. [ 'voltage', 'power', 'percentage' ]
-              </td></tr><tr><td><code class="literal">GetAxisTypes</code></td><td><code class="literal">string</code> data_type</td><td><code class="literal">string</code> x_axis, <code class="literal">string</code> y_axis</td><td>
+              </td></tr><tr><td><code class="literal">GetAxisTypes</code></td><td><code class="literal">string</code> data_type</td><td><code class="literal">string</code> x_axis, <code class="literal">string</code> y_axis</td><td>Â </td><td>
                 For some presentations, for example graphs we can present the data in
                 many different ways.
                 This method returns the type of data that is recorded for each axis,
                 e.g. x_axis might return 'percentage'
-              </td></tr><tr><td><code class="literal">GetData</code></td><td><code class="literal">uint</code> seconds, <code class="literal">string</code> data_type</td><td><code class="literal">array of 3-integers [a(iii)]</code> data</td><td>
+              </td></tr><tr><td><code class="literal">GetData</code></td><td><code class="literal">uint</code> seconds, <code class="literal">string</code> data_type</td><td><code class="literal">array of 3-integers [a(iii)]</code> data</td><td>Â </td><td>
                 Gets the data for a given type.
                 In the return data the 3-integers represent the X value, Y value
                 and data value respectively.
                 The seconds parameter is how much data we should get.
-              </td></tr></tbody></table></div></div><br class="table-break"></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="dbus-signals"></a>Signals</h3></div></div></div><p>
-        Signals are emitted from interface <code class="literal">org.freedesktop.PowerManagement</code>.
-      </p><div class="table"><a name="dbus-signals-core"></a><p class="title"><b>Table 6. Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">CanStandbyChanged</code></td><td><code class="literal">bool</code> can_standby</td><td>Signals the standby status has changed.</td></tr><tr><td><code class="literal">CanSuspendChanged</code></td><td><code class="literal">bool</code> can_suspend</td><td>Signals the suspend status has changed.</td></tr><tr><td><code class="literal">CanHibernateChanged</code></td><td><code class="literal">bool</code> can_hibernate</td><td>Signals the hibernate status has changed.</td></tr><tr><td><code class="literal">CanShutdownChanged</code></td><td><code class="literal">bool</code> can_shutdown</td><td>Signals the shutdown status has changed.</td></tr><tr><td><code class="literal">CanRebootChanged</code></td><td><code class="literal">bool</code> can_reboot</td><td>Signals the reboot status has changed.</td></tr><tr><td><code class="literal">PowerSaveStatusChanged</code></td><td><code class="literal">bool</code> save_power</td><td>Signals the low power mode has changed..</td></tr><tr><td><code class="literal">BatteryStateChanged</code></td><td><code class="literal">bool</code> on_battery</td><td>Signals the battery state has changed.</td></tr></tbody></table></div></div><br class="table-break"><p>
-        <span class="emphasis"><em>NON STANDARDISED API</em></span>
-      </p><div class="table"><a name="dbus-signals-backlight"></a><p class="title"><b>Table 7. Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.XXXBacklight</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.XXXBacklight" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">BacklightBrightnessChanged</code></td><td><code class="literal">uint</code> percentage_brightness</td><td>Signals the value of the current brightness has changed.</td></tr></tbody></table></div></div><br class="table-break"><p>
-        <span class="emphasis"><em>NON STANDARDISED API</em></span>
-      </p><div class="table"><a name="dbus-signals-widget"></a><p class="title"><b>Table 8. Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.XXXWidget</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.XXXWidget" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">DescriptionChanged</code></td><td><code class="literal">string</code> description</td><td>Signals the system state description has changed.</td></tr><tr><td><code class="literal">IconChanged</code></td><td><code class="literal">string</code> icon</td><td>Signals the system icon has changed.</td></tr></tbody></table></div></div><br class="table-break"><p>
-        <span class="emphasis"><em>NON STANDARDISED API</em></span>
-      </p><div class="table"><a name="dbus-signals-inhibit"></a><p class="title"><b>Table 9. Signals emitted from interface <code class="literal">org.freedesktop.PowerManagement.XXXInhibit</code></b></p><div class="table-contents"><table summary="Signals emitted from interface org.freedesktop.PowerManagement.XXXInhibit" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Name</th><th>Return Values</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">IsValidChanged</code></td><td><code class="literal">bool</code> is_valid</td><td>Signals the inhibit valid state has changed.</td></tr></tbody></table></div></div><br class="table-break"></div></div></div></body></html>
+              </td></tr></tbody></table></div></div><br class="table-break"></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="names"></a>Standard Nomenclature</h2></div></div></div><p>
+      This section describes the standard nomenclature that should be used by
+      programmers when implementing the Power Management Specification.
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="names-standby"></a>Standby</h3></div></div></div><p>
+        Standby is the action where the CPU is held in a low power state, and
+        the display turned off, but no data is saved to the hard disk.
+        The exact behavior of standby can depend on your BIOS and hardware.
+        It normally takes a split second to standby and resume.
+        You cannot remove the battery when on laptop power or work will be lost.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>Forward action:</td><td><span class="emphasis"><em>STANDBY</em></span></td></tr><tr><td>Reverse action:</td><td><span class="emphasis"><em>CONTINUE</em></span></td></tr></tbody></table></div><p>
+        Other valid names for standby are <code class="literal">ACPI S1</code>.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="names-suspend"></a>Suspend</h3></div></div></div><p>
+        Suspend is the action where the computer freezes all activity, and copies
+        working data to memory.
+        It then turns off the screen, and goes into a low-power mode.
+        It normally takes a few seconds to suspend and a few seconds to resume.
+        You cannot remove the battery when on battery power or work will be lost.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>Forward action:</td><td><span class="emphasis"><em>SUSPEND</em></span></td></tr><tr><td>Reverse action:</td><td><span class="emphasis"><em>RESUME</em></span></td></tr></tbody></table></div><p>
+        Other valid names for standby are <code class="literal">ACPI S3</code> and
+        <code class="literal">suspend-to-ram</code>.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="names-hibernate"></a>Hibernate</h3></div></div></div><p>
+        Hibernate is the action where the computer freezes all activity and
+        swaps data to disk, turns off the screen and powers down.
+        This takes over one minute to swap the complete memory to disk, and
+        nearly one minute to thaw.
+      </p><div class="informaltable"><table border="1"><colgroup><col><col></colgroup><tbody><tr><td>Forward action:</td><td><span class="emphasis"><em>HIBERNATE</em></span></td></tr><tr><td>Reverse action:</td><td><span class="emphasis"><em>THAW</em></span></td></tr></tbody></table></div><p>
+        Other valid names for standby are <code class="literal">ACPI S4</code> and
+        <code class="literal">suspend-to-disk</code>.
+      </p></div></div><div class="appendix" lang="en"><h2 class="title" style="clear: both"><a name="changelog"></a>A.Â Change History</h2><p><b>Version 0.1, 26 March 2007, Richard Hughes.Â </b>
+        </p><div class="itemizedlist"><ul type="disc"><li><p>
+              Initial version for review.
+            </p></li></ul></div><p>
+      </p></div></div></body></html>
