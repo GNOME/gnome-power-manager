@@ -33,7 +33,6 @@
 #include "libhal-gdevice.h"
 #include "libhal-gcpufreq.h"
 #include "libhal-gmanager.h"
-#include "../src/gpm-debug.h"
 #include "../src/gpm-proxy.h"
 
 static void     hal_gcpufreq_class_init (HalGCpufreqClass *klass);
@@ -63,7 +62,6 @@ hal_gcpufreq_string_to_enum (const gchar *governor)
 {
 	HalGCpufreqType cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
 	if (governor == NULL) {
-		gpm_warning ("governor NULL!");
 		cpufreq_type = LIBHAL_CPUFREQ_NOTHING;
 	} else if (strcmp (governor, CODE_CPUFREQ_ONDEMAND) == 0) {
 		cpufreq_type = LIBHAL_CPUFREQ_ONDEMAND;
@@ -128,8 +126,6 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
 	g_return_val_if_fail (performance >= 0, FALSE);
 	g_return_val_if_fail (performance <= 100, FALSE);
 
-	gpm_debug ("Doing SetCPUFreqPerformance (%i)", performance);
-
 	/* we need to find the current governor to see if it's sane */
 	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_UNKNOWN) {
 		hal_gcpufreq_get_governor (cpufreq, &cpufreq_type);
@@ -138,13 +134,12 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
 	/* only applies to some governors */
 	if (cpufreq->priv->current_governor == LIBHAL_CPUFREQ_PERFORMANCE ||
 	    cpufreq->priv->current_governor == LIBHAL_CPUFREQ_POWERSAVE) {
-		gpm_debug ("not valid for current governor!");
 		return FALSE;
 	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -153,12 +148,11 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetCPUFreqPerformance failed!");
 		return FALSE;
 	}
 	return TRUE;
@@ -189,22 +183,20 @@ hal_gcpufreq_set_governor (HalGCpufreq    *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing SetCPUFreqGovernor (%s)", governor);
 	ret = dbus_g_proxy_call (proxy, "SetCPUFreqGovernor", &error,
 				 G_TYPE_STRING, governor,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetCPUFreqGovernor failed!");
 		return FALSE;
 	}
 
@@ -237,23 +229,21 @@ hal_gcpufreq_get_governors (HalGCpufreq     *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
 		return FALSE;
 	}
 
-	gpm_debug ("Doing GetCPUFreqAvailableGovernors");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqAvailableGovernors", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRV, &strlist,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetCPUFreqAvailableGovernors failed!");
 		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
 		return FALSE;
 	}
@@ -330,29 +320,26 @@ hal_gcpufreq_get_consider_nice (HalGCpufreq *cpufreq,
 	/* only applies to some governors */
 	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_ONDEMAND &&
 	    cpufreq->priv->current_governor != LIBHAL_CPUFREQ_CONSERVATIVE) {
-		gpm_debug ("not valid for current governor!");
 		*consider_nice = FALSE;
 		return FALSE;
 	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing GetCPUFreqConsiderNice");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqConsiderNice", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, consider_nice,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetCPUFreqConsiderNice failed!");
 		return FALSE;
 	}
 	return TRUE;
@@ -385,29 +372,26 @@ hal_gcpufreq_get_performance (HalGCpufreq *cpufreq,
 
 	/* only applies to some governors */
 	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_USERSPACE) {
-		gpm_debug ("not valid for current governor!");
 		*performance = -1;
 		return FALSE;
 	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing GetCPUFreqPerformance");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqPerformance", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_INT, performance,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetCPUFreqPerformance failed!");
 		return FALSE;
 	}
 	return TRUE;
@@ -442,22 +426,20 @@ hal_gcpufreq_get_governor (HalGCpufreq     *cpufreq,
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing GetCPUFreqGovernor");
 	ret = dbus_g_proxy_call (proxy, "GetCPUFreqGovernor", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_STRING, &governor,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetCPUFreqGovernor failed!");
 		return FALSE;
 	}
 
@@ -498,28 +480,25 @@ hal_gcpufreq_set_consider_nice (HalGCpufreq *cpufreq,
 	/* only applies to some governors */
 	if (cpufreq->priv->current_governor != LIBHAL_CPUFREQ_ONDEMAND &&
 	    cpufreq->priv->current_governor != LIBHAL_CPUFREQ_CONSERVATIVE) {
-		gpm_debug ("not valid for current governor!");
 		return FALSE;
 	}
 
 	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing SetCPUFreqConsiderNice (%i)", consider_nice);
 	ret = dbus_g_proxy_call (proxy, "SetCPUFreqConsiderNice", &error,
 				 G_TYPE_BOOLEAN, consider_nice,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetCPUFreqConsiderNice failed!");
 		return FALSE;
 	}
 	return TRUE;

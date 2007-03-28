@@ -24,7 +24,9 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
-	-I$(top_srcdir) -I$(top_srcdir)/libhal-glib	\
+	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libhal-glib			\
+	-I$(top_srcdir)/libgpm-glib			\
 	$(NULL)
 
 LIBHAL_LIBS =						\
@@ -33,6 +35,9 @@ LIBHAL_LIBS =						\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
 	$(top_builddir)/libhal-glib/libhal-gcpufreq.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
+
+LIBGPM_LIBS =						\
+	$(top_builddir)/libgpm-glib/libgpm.la
  
 bin_PROGRAMS =						\
 	gnome-power-manager				\
@@ -58,10 +63,11 @@ gnome_power_statistics_SOURCES =			\
 	gpm-common.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
-	gpm-powermanager.h				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	$(NULL)
+
+#	gpm-powermanager.h
 
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
@@ -89,7 +95,6 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs.c					\
 	gpm-prefs-core.h				\
 	gpm-prefs-core.c				\
-	gpm-powermanager.h				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
 	gpm-dbus-monitor.h				\
@@ -101,6 +106,8 @@ gnome_power_preferences_SOURCES =			\
 	gpm-screensaver.h				\
 	gpm-screensaver.c				\
 	$(NULL)
+
+#	gpm-powermanager.h
 
 gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS)					\
@@ -154,7 +161,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-control.c					\
 	gpm-proxy.h					\
 	gpm-proxy.c					\
-	gpm-powermanager.h				\
 	gpm-refcount.h					\
 	gpm-refcount.c					\
 	gpm-button.h					\
@@ -197,6 +203,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
 	$(NULL)
+
+#	gpm-powermanager.h
 
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\

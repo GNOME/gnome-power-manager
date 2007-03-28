@@ -31,6 +31,7 @@
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
+#include <libgpm.h>
 #include "brightness-applet.h"
 #include "../../src/gpm-common.h"
 

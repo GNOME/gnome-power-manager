@@ -34,6 +34,7 @@
 
 #include <libhal-gmanager.h>
 #include <libhal-gcpufreq.h>
+#include <libgpm.h>
 
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"
@@ -43,7 +44,6 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-screensaver.h"
-#include "gpm-powermanager.h"
 
 static void     gpm_prefs_class_init (GpmPrefsClass *klass);
 static void     gpm_prefs_init       (GpmPrefs      *prefs);

@@ -1,5 +1,6 @@
 SUBDIRS =						\
 	libhal-glib					\
+	libgpm-glib					\
 	src						\
 	po						\
 	docs						\

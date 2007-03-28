@@ -21,10 +21,10 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include <libgpm.h>
 #include "gpm-st-main.h"
 
 #include "../src/gpm-proxy.h"
-#include "../src/gpm-powermanager.h"
 
 void
 gpm_st_proxy (GpmSelfTest *test)

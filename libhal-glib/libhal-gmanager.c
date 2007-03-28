@@ -24,6 +24,7 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
@@ -33,7 +34,6 @@
 #include "libhal-gdevice.h"
 #include "libhal-gmanager.h"
 
-#include "../src/gpm-debug.h"
 #include "../src/gpm-proxy.h"
 
 static void     hal_gmanager_class_init (HalGManagerClass *klass);
@@ -173,13 +173,11 @@ hal_gmanager_num_devices_of_capability (HalGManager *manager,
 
 	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
 	if (ret == FALSE) {
-		gpm_debug ("No devices of capability %s", capability);
 		return 0;
 	}
 	/* iterate to find number of items */
 	for (i = 0; names[i]; i++) {};
 	hal_gmanager_free_capability (names);
-	gpm_debug ("%i devices of capability %s", i, capability);
 	return i;
 }
 
@@ -213,7 +211,6 @@ hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 
 	ret = hal_gmanager_find_capability (manager, capability, &names, NULL);
 	if (ret == FALSE) {
-		gpm_debug ("No devices of capability %s", capability);
 		return 0;
 	}
 	for (i = 0; names[i]; i++) {
@@ -229,8 +226,6 @@ hal_gmanager_num_devices_of_capability_with_value (HalGManager *manager,
 		}
 	}
 	hal_gmanager_free_capability (names);
-	gpm_debug ("%i devices of capability %s where %s is %s",
-		   valid, capability, key, value);
 	return valid;
 }
 
@@ -322,7 +317,6 @@ hal_gmanager_device_added_cb (DBusGProxy  *proxy,
 		              const gchar *udi,
 		              HalGManager *manager)
 {
-	gpm_debug ("emitting device-added : %s", udi);
 	g_signal_emit (manager, signals [DEVICE_ADDED], 0, udi);
 }
 
@@ -340,7 +334,6 @@ hal_gmanager_device_removed_cb (DBusGProxy  *proxy,
 		                const gchar *udi,
 		                HalGManager *manager)
 {
-	gpm_debug ("emitting device-removed : %s", udi);
 	g_signal_emit (manager, signals [DEVICE_REMOVED], 0, udi);
 }
 
@@ -360,7 +353,6 @@ hal_gmanager_new_capability_cb (DBusGProxy  *proxy,
 		                const gchar *capability,
 		                HalGManager *manager)
 {
-	gpm_debug ("emitting new-capability : %s, %s", udi, capability);
 	g_signal_emit (manager, signals [NEW_CAPABILITY], 0, udi, capability);
 }
 
@@ -381,7 +373,7 @@ hal_gmanager_proxy_connect_more (HalGManager *manager)
 
 	proxy = gpm_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -423,7 +415,7 @@ hal_gmanager_proxy_disconnect_more (HalGManager *manager)
 
 	proxy = gpm_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -472,7 +464,7 @@ hal_gmanager_init (HalGManager *manager)
 
 	manager->priv->connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
-		gpm_warning ("%s", error->message);
+		g_warning ("%s", error->message);
 		g_error_free (error);
 	}
 
@@ -484,7 +476,8 @@ hal_gmanager_init (HalGManager *manager)
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_error ("Either HAL or DBUS are not working!");
+		g_warning ("Either HAL or DBUS are not working!");
+		exit (0);
 	}
 
 	g_signal_connect (manager->priv->gproxy, "proxy-status",
@@ -494,7 +487,7 @@ hal_gmanager_init (HalGManager *manager)
 	manager->priv->computer = hal_gdevice_new();
 	ret = hal_gdevice_set_udi (manager->priv->computer, HAL_ROOT_COMPUTER);
 	if (ret == FALSE) {
-		gpm_warning ("failed to get Computer root object");
+		g_warning ("failed to get Computer root object");
 	}
 
 	/* blindly try to connect, assuming HAL is alive */
@@ -520,12 +513,11 @@ hal_gmanager_is_laptop (HalGManager *manager)
 	/* always present */
 	hal_gdevice_get_string (manager->priv->computer, "system.formfactor", &formfactor, NULL);
 	if (formfactor == NULL) {
-		gpm_debug ("system.formfactor not set!");
 		/* no need to free */
 		return FALSE;
 	}
 	if (strcmp (formfactor, "laptop") != 0) {
-		gpm_debug ("This machine is not identified as a laptop."
+		g_warning ("This machine is not identified as a laptop."
 			   "system.formfactor is %s.", formfactor);
 		ret = FALSE;
 	}

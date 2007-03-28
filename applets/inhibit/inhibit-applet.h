@@ -27,8 +27,6 @@
 #include <glib-object.h>
 #include <panel-applet.h>
 
-#include "../../src/gpm-powermanager.h"
-
 G_BEGIN_DECLS
 
 #define GPM_TYPE_INHIBIT_APPLET		(gpm_inhibit_applet_get_type ())

@@ -20,10 +20,10 @@
  */
 
 #include <glib.h>
+#include <libgpm.h>
 #include "gpm-st-main.h"
 
 #include "../src/gpm-inhibit.h"
-#include "../src/gpm-powermanager.h"
 
 void
 gpm_st_inhibit (GpmSelfTest *test)

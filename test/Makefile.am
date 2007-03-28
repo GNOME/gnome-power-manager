@@ -15,6 +15,7 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
 	-I$(top_srcdir) -I$(top_srcdir)/libhal-glib	\
+	-I$(top_srcdir)/libgpm-glib			\
 	$(NULL)
 
 LIBHAL_LIBS =						\
@@ -22,6 +23,9 @@ LIBHAL_LIBS =						\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
+
+LIBGPM_LIBS =						\
+	$(top_builddir)/libgpm-glib/libgpm.la
 
 noinst_PROGRAMS =					\
 	gnome-power-inhibit-test			\
@@ -76,8 +80,6 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-common.c				\
 	../src/gpm-proxy.h				\
 	../src/gpm-proxy.c				\
-	../src/gpm-powermanager.h			\
-	../src/gpm-powermanager.c			\
 	../src/gpm-warning.h				\
 	../src/gpm-warning.c				\
 	../src/gpm-conf.h				\
@@ -91,6 +93,7 @@ gnome_power_self_test_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(LIBHAL_LIBS)					\
+	$(LIBGPM_LIBS)					\
 	$(NULL)
 
 clean-local:

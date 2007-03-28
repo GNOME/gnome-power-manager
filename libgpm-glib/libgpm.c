@@ -26,9 +26,8 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "gpm-powermanager.h"
-#include "gpm-debug.h"
-#include "gpm-proxy.h"
+#include "libgpm.h"
+#include "../src/gpm-proxy.h"
 
 static void     gpm_powermanager_class_init (GpmPowermanagerClass *klass);
 static void     gpm_powermanager_init       (GpmPowermanager      *powermanager);
@@ -62,7 +61,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_brightness);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -71,14 +70,14 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 				 G_TYPE_UINT, &policy_brightness,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == TRUE) {
 		*brightness = policy_brightness;
 	} else {
 		/* abort as the DBUS method failed */
-		gpm_warning ("GetBrightness failed!");
+		g_warning ("GetBrightness failed!");
 	}
 
 	return ret;
@@ -100,7 +99,7 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_brightness);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -109,12 +108,12 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetBrightness failed!");
+		g_warning ("SetBrightness failed!");
 	}
 
 	return ret;
@@ -136,7 +135,7 @@ gpm_powermanager_inhibit_auto (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -147,13 +146,13 @@ gpm_powermanager_inhibit_auto (GpmPowermanager *powermanager,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 		*cookie = 0;
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("InhibitAuto failed!");
+		g_warning ("InhibitAuto failed!");
 	}
 
 	return ret;
@@ -175,7 +174,7 @@ gpm_powermanager_inhibit_manual (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -186,13 +185,13 @@ gpm_powermanager_inhibit_manual (GpmPowermanager *powermanager,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 		*cookie = 0;
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("InhibitManual failed!");
+		g_warning ("InhibitManual failed!");
 	}
 
 	return ret;
@@ -210,7 +209,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -219,12 +218,12 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("UnInhibit failed!");
+		g_warning ("UnInhibit failed!");
 	}
 
 	return ret;
@@ -243,7 +242,7 @@ gpm_powermanager_is_valid (GpmPowermanager *powermanager,
 
 	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -253,12 +252,12 @@ gpm_powermanager_is_valid (GpmPowermanager *powermanager,
 				 G_TYPE_BOOLEAN, valid,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("IsValid failed!");
+		g_warning ("IsValid failed!");
 	}
 
 	return ret;

@@ -41,6 +41,7 @@
 #include <libgnomeui/gnome-client.h>
 
 #include <libhal-gpower.h>
+#include <libgpm.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
@@ -55,7 +56,6 @@
 #include "gpm-inhibit.h"
 #include "gpm-manager.h"
 #include "gpm-notify.h"
-#include "gpm-powermanager.h"
 #include "gpm-prefs.h"
 #include "gpm-profile.h"
 #include "gpm-screensaver.h"

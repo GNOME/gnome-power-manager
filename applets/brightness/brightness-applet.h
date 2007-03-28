@@ -26,8 +26,6 @@
 #include <glib-object.h>
 #include <panel-applet.h>
 
-#include "../../src/gpm-powermanager.h"
-
 G_BEGIN_DECLS
 
 #define GPM_TYPE_BRIGHTNESS_APPLET		(gpm_brightness_applet_get_type ())

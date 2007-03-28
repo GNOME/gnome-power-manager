@@ -30,6 +30,8 @@
 #include <math.h>
 #include <string.h>
 
+#include <libgpm.h>
+
 #include "gpm-array.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
@@ -39,7 +41,6 @@
 #include "gpm-stock-icons.h"
 #include "gpm-info.h"
 #include "gpm-proxy.h"
-#include "gpm-powermanager.h"
 
 static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
 static void     gpm_statistics_init       (GpmStatistics      *statistics);

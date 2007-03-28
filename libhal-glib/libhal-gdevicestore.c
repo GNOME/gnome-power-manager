@@ -30,7 +30,6 @@
 #include "libhal-marshal.h"
 #include "libhal-gdevice.h"
 #include "libhal-gdevicestore.h"
-#include "../src/gpm-debug.h"
 
 static void     hal_gdevicestore_class_init (HalGDevicestoreClass *klass);
 static void     hal_gdevicestore_init       (HalGDevicestore      *devicestore);
@@ -71,11 +70,9 @@ hal_gdevicestore_index_udi (HalGDevicestore *devicestore, const gchar *udi)
 	for (i=0;i<length;i++) {
 		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
 		if (strcmp (hal_gdevice_get_udi (d), udi) == 0) {
-			gpm_debug ("Found %s with udi check", udi);
 			return i;
 		}
 	}
-	gpm_debug ("Did not find %s", udi);
 	return -1;
 }
 
@@ -100,13 +97,11 @@ hal_gdevicestore_index (HalGDevicestore *devicestore, HalGDevice *device)
 
 	length = devicestore->priv->array->len;
 	udi = hal_gdevice_get_udi (device);
-	gpm_debug ("is %s present in %p", udi, devicestore);
 
 	/* trivial check, is instance the same (FAST) */
 	for (i=0;i<length;i++) {
 		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
 		if (d == device) {
-			gpm_debug ("Found %s with trivial check", udi);
 			return i;
 		}
 	}
@@ -133,7 +128,6 @@ hal_gdevicestore_find_udi (HalGDevicestore *devicestore, const gchar *udi)
 
 	index = hal_gdevicestore_index_udi (devicestore, udi);
 	if (index == -1) {
-		gpm_debug ("not found");
 		return NULL;
 	}
 
@@ -173,7 +167,6 @@ hal_gdevicestore_insert (HalGDevicestore *devicestore, HalGDevice *device)
 	g_return_val_if_fail (LIBHAL_IS_GDEVICE (device), FALSE);
 
 	if (hal_gdevicestore_present (devicestore, device) == TRUE) {
-		gpm_warning ("already present, cannot add");
 		return FALSE;
 	}
 
@@ -198,7 +191,6 @@ hal_gdevicestore_remove (HalGDevicestore *devicestore, HalGDevice *device)
 
 	index = hal_gdevicestore_index (devicestore, device);
 	if (index == -1) {
-		gpm_warning ("device not present, cannot remove");
 		return FALSE;
 	}
 
@@ -227,10 +219,10 @@ hal_gdevicestore_print (HalGDevicestore *devicestore)
 	g_return_val_if_fail (LIBHAL_IS_GDEVICESTORE (devicestore), FALSE);
 
 	length = devicestore->priv->array->len;
-	gpm_debug ("Printing device list in %p", devicestore);
+	g_print ("Printing device list in %p\n", devicestore);
 	for (i=0;i<length;i++) {
 		d = (HalGDevice *) g_ptr_array_index (devicestore->priv->array, i);
-		gpm_debug ("%i: %s", i, hal_gdevice_get_udi (d));
+		g_print ("%i: %s\n", i, hal_gdevice_get_udi (d));
 	}	
 
 	return TRUE;

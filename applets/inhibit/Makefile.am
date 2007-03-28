@@ -14,18 +14,22 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
+	-I$(top_srcdir)/libgpm-glib			\
 	$(NULL)
+
+LIBGPM_LIBS =						\
+	$(top_builddir)/libgpm-glib/libgpm.la
 
 bin_PROGRAMS=gnome-inhibit-applet
 
-SRCDEPS=../../src/gpm-powermanager.c 	\
-	../../src/gpm-proxy.c 		\
+SRCDEPS=../../src/gpm-proxy.c 		\
 	../../src/gpm-debug.c 		\
 	../../src/gpm-dbus-monitor.c 	\
 	../../src/gpm-marshal.c
 
 gnome_inhibit_applet_SOURCES=inhibit-applet.c inhibit-applet.h $(SRCDEPS)
 gnome_inhibit_applet_LDADD=	\
+	$(LIBGPM_LIBS)		\
 	$(DBUS_LIBS)		\
 	$(GNOME_LIBS)
 

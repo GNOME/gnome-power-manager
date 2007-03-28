@@ -1,5 +1,37 @@
 2007-03-28  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_string_to_enum),
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_set_udi),
+	* libhal-glib/libhal-gdevicestore.c: (hal_gdevicestore_index_udi),
+	* libhal-glib/libhal-gmanager.c:
+	* libhal-glib/libhal-gpower.c: (hal_gpower_init),
+	Don't use gpm_debug, it means looking in the src/ tree.
+
+	* Makefile.am:
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	* applets/brightness/brightness-applet.h:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c:
+	* applets/inhibit/inhibit-applet.h:
+	* configure.in:
+	* libgpm-glib/Makefile.am:
+	* libgpm-glib/libgpm.c:
+	* libgpm-glib/libgpm.h:
+	* src/Makefile.am:
+	* src/gpm-manager.c:
+	* src/gpm-powermanager.c:
+	* src/gpm-powermanager.h:
+	* src/gpm-prefs-core.c:
+	* src/gpm-statistics-core.c:
+	* test/Makefile.am:
+	* test/gpm-st-inhibit.c:
+	* test/gpm-st-proxy.c:
+	Abstact out gpm-powermanager into a static library, so we don't build
+	-four- copies of this file on every build.
+
+2007-03-28  Richard Hughes  <richard@hughsie.com>
+
 	* docs/config.xsl:
 	Output in UTF-8.
 

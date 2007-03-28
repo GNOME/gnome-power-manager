@@ -31,6 +31,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
+#include <libgpm.h>
 
 #include "inhibit-applet.h"
 #include "../../src/gpm-common.h"

@@ -32,7 +32,6 @@
 #include "libhal-gpower.h"
 #include "libhal-gdevice.h"
 #include "libhal-gmanager.h"
-#include "../src/gpm-debug.h"
 #include "../src/gpm-proxy.h"
 
 static void     hal_gpower_class_init (HalGPowerClass *klass);
@@ -80,7 +79,7 @@ hal_gpower_init (HalGPower *power)
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_POWER);
 	if (power->priv->gproxy == NULL) {
-		gpm_warning ("HAL does not support power management!");
+		g_warning ("HAL does not support power management!");
 	}
 
 	power->priv->computer = hal_gdevice_new ();
@@ -106,12 +105,11 @@ hal_gpower_is_laptop (HalGPower *power)
 	/* always present */
 	hal_gdevice_get_string (power->priv->computer, "system.formfactor", &formfactor, NULL);
 	if (formfactor == NULL) {
-		gpm_debug ("system.formfactor not set!");
 		/* no need to free */
 		return FALSE;
 	}
 	if (strcmp (formfactor, "laptop") != 0) {
-		gpm_debug ("This machine is not identified as a laptop."
+		g_debug ("This machine is not identified as a laptop."
 			   "system.formfactor is %s.", formfactor);
 		ret = FALSE;
 	}
@@ -137,7 +135,7 @@ hal_gpower_has_support (HalGPower *power)
 	hal_gdevice_get_string (power->priv->computer, "power_management.type", &type, NULL);
 	/* this key only has to exist to be pm okay */
 	if (type != NULL) {
-		gpm_debug ("Power management type : %s", type);
+		g_debug ("Power management type : %s", type);
 		g_free (type);
 		return TRUE;
 	}
@@ -165,7 +163,7 @@ hal_gpower_can_suspend (HalGPower *power)
 					  "power_management.can_suspend",
 					  &can_suspend, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("Key can_suspend missing");
+		g_warning ("Key can_suspend missing");
 		return FALSE;
 	}
 	return can_suspend;
@@ -192,7 +190,7 @@ hal_gpower_can_hibernate (HalGPower *power)
 					  "power_management.can_hibernate",
 					  &can_hibernate, NULL);
 	if (exists == FALSE) {
-		gpm_warning ("Key can_hibernate missing");
+		g_warning ("Key can_hibernate missing");
 		return FALSE;
 	}
 	return can_hibernate;
@@ -214,15 +212,12 @@ hal_gpower_filter_error (GError **error)
 	/* DBUS might time out, which is okay. We can remove this code
 	   when the dbus glib bindings are fixed. See #332888 */
 	if (g_error_matches (*error, DBUS_GERROR, DBUS_GERROR_NO_REPLY)) {
-		gpm_syslog ("DBUS timed out, but recovering");
+		g_warning ("DBUS timed out, but recovering");
 		g_error_free (*error);
 		*error = NULL;
 		return TRUE;
 	}
-	gpm_warning ("Method failed\n(%s)",
-		     (*error)->message);
-	gpm_syslog ("%s code='%i' quark='%s'", (*error)->message,
-		    (*error)->code, g_quark_to_string ((*error)->domain));
+	g_warning ("Method failed\n(%s)",  (*error)->message);
 	return FALSE;
 }
 
@@ -245,11 +240,9 @@ hal_gpower_suspend (HalGPower *power, guint wakeup)
 
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	gpm_debug ("Try to suspend...");
-
 	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
@@ -263,12 +256,12 @@ hal_gpower_suspend (HalGPower *power, guint wakeup)
 		return TRUE;
 	}
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("Suspend failed!");
+		g_warning ("Suspend failed!");
 		return FALSE;
 	}
 	return TRUE;
@@ -297,11 +290,11 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
 
 	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("not connected");
+		g_warning ("not connected");
 		return FALSE;
 	}
 
@@ -314,12 +307,12 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
 		return TRUE;
 	}
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("%s failed!", method);
+		g_warning ("%s failed!", method);
 		return FALSE;
 	}
 	return TRUE;
@@ -337,7 +330,6 @@ gboolean
 hal_gpower_hibernate (HalGPower *power)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	gpm_debug ("Try to hibernate...");
 	return hal_gpower_pm_method_void (power, "Hibernate");
 }
 
@@ -352,7 +344,6 @@ gboolean
 hal_gpower_shutdown (HalGPower *power)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	gpm_debug ("Try to shutdown...");
 	return hal_gpower_pm_method_void (power, "Shutdown");
 }
 
@@ -368,7 +359,6 @@ gboolean
 hal_gpower_reboot (HalGPower *power)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	gpm_debug ("Try to reboot...");
 	return hal_gpower_pm_method_void (power, "Reboot");
 }
 
@@ -394,29 +384,28 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 
 	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
 	/* abort if we are not a "qualified" laptop */
 	if (hal_gpower_is_laptop (power) == FALSE) {
-		gpm_debug ("We are not a laptop, so not even trying");
+		g_debug ("We are not a laptop, so not even trying");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing SetPowerSave (%i)", enable);
 	ret = dbus_g_proxy_call (proxy, "SetPowerSave", &error,
 				 G_TYPE_BOOLEAN, enable,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
 	if (error) {
-		gpm_debug ("ERROR: %s", error->message);
+		g_warning ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
-		gpm_warning ("SetPowerSave failed!");
+		g_warning ("SetPowerSave failed!");
 		return FALSE;
 	}
 	return TRUE;
@@ -479,11 +468,10 @@ hal_gpower_clear_suspend_error (HalGPower *power, GError **error)
 
 	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing SuspendClearError");
 	ret = dbus_g_proxy_call (proxy, "SuspendClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
@@ -508,11 +496,10 @@ hal_gpower_clear_hibernate_error (HalGPower *power, GError **error)
 
 	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
-		gpm_warning ("proxy NULL!!");
+		g_warning ("proxy NULL!!");
 		return FALSE;
 	}
 
-	gpm_debug ("Doing HibernateClearError");
 	ret = dbus_g_proxy_call (proxy, "HibernateClearError", error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
 	return ret;
