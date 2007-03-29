@@ -27,12 +27,12 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
 #include "libhal-gdevice.h"
 #include "libhal-gmanager.h"
-#include "../src/gpm-proxy.h"
 
 static void     hal_gpower_class_init (HalGPowerClass *klass);
 static void     hal_gpower_init       (HalGPower      *power);
@@ -43,7 +43,7 @@ static void     hal_gpower_finalize   (GObject	      *object);
 struct HalGPowerPrivate
 {
 	HalGDevice		*computer;
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 };
 
 static gpointer hal_gpower_object = NULL;
@@ -72,9 +72,9 @@ hal_gpower_init (HalGPower *power)
 	power->priv = LIBHAL_GPOWER_GET_PRIVATE (power);
 
 	/* get the power connection */
-	power->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (power->priv->gproxy,
-			  GPM_PROXY_SYSTEM,
+	power->priv->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (power->priv->gproxy,
+			  DBUS_PROXY_SYSTEM,
 			  HAL_DBUS_SERVICE,
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_POWER);
@@ -240,7 +240,7 @@ hal_gpower_suspend (HalGPower *power, guint wakeup)
 
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -288,7 +288,7 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 	g_return_val_if_fail (method != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -382,7 +382,7 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -466,7 +466,7 @@ hal_gpower_clear_suspend_error (HalGPower *power, GError **error)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -494,7 +494,7 @@ hal_gpower_clear_hibernate_error (HalGPower *power, GError **error)
 	g_return_val_if_fail (power != NULL, FALSE);
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
 
-	proxy = gpm_proxy_get_proxy (power->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (power->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;

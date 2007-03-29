@@ -44,7 +44,7 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-light-sensor.h"
-#include "gpm-proxy.h"
+#include <libdbus-proxy.h>
 #include "gpm-marshal.h"
 
 #define POLL_INTERVAL		10000 /* ms */
@@ -56,7 +56,7 @@ struct GpmLightSensorPrivate
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
 	gchar			*udi;
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 };
 
 enum {
@@ -90,7 +90,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (brightness), FALSE);
 
-	proxy = gpm_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
@@ -278,9 +278,9 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 	hal_gmanager_free_capability (names);
 
 	/* get a managed proxy */
-	brightness->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (brightness->priv->gproxy,
-			  GPM_PROXY_SYSTEM,
+	brightness->priv->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (brightness->priv->gproxy,
+			  DBUS_PROXY_SYSTEM,
 			  HAL_DBUS_SERVICE,
 			  brightness->priv->udi,
 			  HAL_DBUS_INTERFACE_LIGHT_SENSOR);

@@ -25,9 +25,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 
 #include "gpm-polkit.h"
-#include "gpm-proxy.h"
 #include "gpm-debug.h"
 
 static void     gpm_polkit_class_init (GpmPolkitClass *klass);
@@ -42,7 +42,7 @@ static void     gpm_polkit_finalize   (GObject		   *object);
 
 struct GpmPolkitPrivate
 {
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 };
 
 G_DEFINE_TYPE (GpmPolkit, gpm_polkit, G_TYPE_OBJECT)
@@ -68,7 +68,7 @@ gpm_polkit_is_user_privileged (GpmPolkit   *polkit,
 
 	g_return_val_if_fail (GPM_IS_POLKIT (polkit), FALSE);
 
-	proxy = gpm_proxy_get_proxy (polkit->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (polkit->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -119,9 +119,9 @@ gpm_polkit_init (GpmPolkit *polkit)
 {
 	polkit->priv = GPM_POLKIT_GET_PRIVATE (polkit);
 
-	polkit->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (polkit->priv->gproxy,
-			  GPM_PROXY_SYSTEM,
+	polkit->priv->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (polkit->priv->gproxy,
+			  DBUS_PROXY_SYSTEM,
 			  POLKITD_SERVICE,
 			  POLKITD_MANAGER_PATH,
 			  POLKITD_MANAGER_INTERFACE);

@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define DBUS_TYPE_MONITOR_SYSTEM		(gpm_monitor_system_get_type ())
+#define DBUS_TYPE_MONITOR_SYSTEM		(dbus_monitor_system_get_type ())
 #define DBUS_MONITOR_SYSTEM(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), DBUS_TYPE_MONITOR_SYSTEM, DbusMonitorSystem))
 #define DBUS_MONITOR_SYSTEM_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), DBUS_TYPE_MONITOR_SYSTEM, DbusMonitorSystemClass))
 #define DBUS_IS_MONITOR_SYSTEM(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), DBUS_TYPE_MONITOR_SYSTEM))

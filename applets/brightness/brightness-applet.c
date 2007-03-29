@@ -32,8 +32,8 @@
 #include <libgnomeui/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
 #include <libgpm.h>
+
 #include "brightness-applet.h"
-#include "../../src/gpm-common.h"
 
 static void      gpm_brightness_applet_class_init (GpmBrightnessAppletClass *klass);
 static void      gpm_brightness_applet_init       (GpmBrightnessApplet *applet);

@@ -21,22 +21,21 @@
 
 #include <glib.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 #include <libgpm.h>
 #include "gpm-st-main.h"
-
-#include "../src/gpm-proxy.h"
 
 void
 gpm_st_proxy (GpmSelfTest *test)
 {
-	GpmProxy *gproxy = NULL;
+	DbusProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	test->type = "GpmProxy         ";
+	test->type = "DbusProxy         ";
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we can get a new gproxy");
-	gproxy = gpm_proxy_new ();
+	gproxy = dbus_proxy_new ();
 	if (gproxy != NULL) {
 		gpm_st_success (test, "got gproxy");
 	} else {
@@ -45,7 +44,7 @@ gpm_st_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure proxy if NULL when no assign");
-	proxy = gpm_proxy_get_proxy (gproxy);
+	proxy = dbus_proxy_get_proxy (gproxy);
 	if (proxy == NULL) {
 		gpm_st_success (test, "got NULL proxy");
 	} else {
@@ -54,8 +53,8 @@ gpm_st_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we can assign and connect");
-	proxy = gpm_proxy_assign (gproxy,
-				  GPM_PROXY_SESSION,
+	proxy = dbus_proxy_assign (gproxy,
+				  DBUS_PROXY_SESSION,
 				  GPM_DBUS_SERVICE,
 				  GPM_DBUS_PATH_INHIBIT,
 				  GPM_DBUS_INTERFACE_INHIBIT);
@@ -67,7 +66,7 @@ gpm_st_proxy (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure proxy non NULL when assigned");
-	proxy = gpm_proxy_get_proxy (gproxy);
+	proxy = dbus_proxy_get_proxy (gproxy);
 	if (proxy != NULL) {
 		gpm_st_success (test, "got valid proxy");
 	} else {

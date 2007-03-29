@@ -40,6 +40,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkstatusicon.h>
 #include <libgnomeui/gnome-help.h>
+#include <libgpm.h>
 
 #include "gpm-conf.h"
 #include "gpm-control.h"

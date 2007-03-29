@@ -34,6 +34,7 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
+#include <libgpm.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"

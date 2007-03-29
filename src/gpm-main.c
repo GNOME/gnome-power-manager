@@ -33,6 +33,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
+#include <libgpm.h>
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"

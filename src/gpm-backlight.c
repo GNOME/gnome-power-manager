@@ -54,7 +54,6 @@
 #include "gpm-idle.h"
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
-#include "gpm-proxy.h"
 #include "gpm-stock-icons.h"
 
 #define DIM_INTERVAL		10 /* ms */

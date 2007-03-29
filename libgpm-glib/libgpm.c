@@ -25,9 +25,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 
 #include "libgpm.h"
-#include "../src/gpm-proxy.h"
 
 static void     gpm_powermanager_class_init (GpmPowermanagerClass *klass);
 static void     gpm_powermanager_init       (GpmPowermanager      *powermanager);
@@ -37,8 +37,8 @@ static void     gpm_powermanager_finalize   (GObject		  *object);
 
 struct GpmPowermanagerPrivate
 {
-	GpmProxy		*gproxy_brightness;
-	GpmProxy		*gproxy_inhibit;
+	DbusProxy		*gproxy_brightness;
+	DbusProxy		*gproxy_inhibit;
 };
 
 G_DEFINE_TYPE (GpmPowermanager, gpm_powermanager, G_TYPE_OBJECT)
@@ -59,7 +59,7 @@ gpm_powermanager_get_brightness_lcd (GpmPowermanager *powermanager,
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 	g_return_val_if_fail (brightness != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_brightness);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_brightness);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -97,7 +97,7 @@ gpm_powermanager_set_brightness_lcd (GpmPowermanager *powermanager,
 
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_brightness);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_brightness);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -133,7 +133,7 @@ gpm_powermanager_inhibit_auto (GpmPowermanager *powermanager,
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 	g_return_val_if_fail (cookie != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -172,7 +172,7 @@ gpm_powermanager_inhibit_manual (GpmPowermanager *powermanager,
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 	g_return_val_if_fail (cookie != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -207,7 +207,7 @@ gpm_powermanager_uninhibit (GpmPowermanager *powermanager,
 
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -240,7 +240,7 @@ gpm_powermanager_is_valid (GpmPowermanager *powermanager,
 
 	g_return_val_if_fail (GPM_IS_POWERMANAGER (powermanager), FALSE);
 
-	proxy = gpm_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
+	proxy = dbus_proxy_get_proxy (powermanager->priv->gproxy_inhibit);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -286,18 +286,18 @@ gpm_powermanager_init (GpmPowermanager *powermanager)
 
 	powermanager->priv = GPM_POWERMANAGER_GET_PRIVATE (powermanager);
 
-	powermanager->priv->gproxy_brightness = gpm_proxy_new ();
-	proxy = gpm_proxy_assign (powermanager->priv->gproxy_brightness,
-				  GPM_PROXY_SESSION,
-				  GPM_DBUS_SERVICE,
-				  GPM_DBUS_PATH_BACKLIGHT,
-				  GPM_DBUS_INTERFACE_BACKLIGHT);
-	powermanager->priv->gproxy_inhibit = gpm_proxy_new ();
-	proxy = gpm_proxy_assign (powermanager->priv->gproxy_inhibit,
-				  GPM_PROXY_SESSION,
-				  GPM_DBUS_SERVICE,
-				  GPM_DBUS_PATH_INHIBIT,
-				  GPM_DBUS_INTERFACE_INHIBIT);
+	powermanager->priv->gproxy_brightness = dbus_proxy_new ();
+	proxy = dbus_proxy_assign (powermanager->priv->gproxy_brightness,
+				   DBUS_PROXY_SESSION,
+				   GPM_DBUS_SERVICE,
+				   GPM_DBUS_PATH_BACKLIGHT,
+				   GPM_DBUS_INTERFACE_BACKLIGHT);
+	powermanager->priv->gproxy_inhibit = dbus_proxy_new ();
+	proxy = dbus_proxy_assign (powermanager->priv->gproxy_inhibit,
+				   DBUS_PROXY_SESSION,
+				   GPM_DBUS_SERVICE,
+				   GPM_DBUS_PATH_INHIBIT,
+				   GPM_DBUS_INTERFACE_INHIBIT);
 }
 
 /**

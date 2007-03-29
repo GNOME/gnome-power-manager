@@ -28,13 +28,12 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
 #include "libhal-gdevice.h"
 #include "libhal-gmanager.h"
-
-#include "../src/gpm-proxy.h"
 
 static void     hal_gmanager_class_init (HalGManagerClass *klass);
 static void     hal_gmanager_init       (HalGManager      *hal_gmanager);
@@ -46,7 +45,7 @@ struct HalGManagerPrivate
 {
 	DBusGConnection		*connection;
 	HalGDevice		*computer;
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 };
 
 /* Signals emitted from HalGManager are:
@@ -371,7 +370,7 @@ hal_gmanager_proxy_connect_more (HalGManager *manager)
 
 	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
 
-	proxy = gpm_proxy_get_proxy (manager->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -413,7 +412,7 @@ hal_gmanager_proxy_disconnect_more (HalGManager *manager)
 
 	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
 
-	proxy = gpm_proxy_get_proxy (manager->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (manager->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -469,9 +468,9 @@ hal_gmanager_init (HalGManager *manager)
 	}
 
 	/* get the manager connection */
-	manager->priv->gproxy = gpm_proxy_new ();
-	proxy = gpm_proxy_assign (manager->priv->gproxy,
-				  GPM_PROXY_SYSTEM,
+	manager->priv->gproxy = dbus_proxy_new ();
+	proxy = dbus_proxy_assign (manager->priv->gproxy,
+				  DBUS_PROXY_SYSTEM,
 				  HAL_DBUS_SERVICE,
 				  HAL_DBUS_PATH_MANAGER,
 				  HAL_DBUS_INTERFACE_MANAGER);

@@ -40,7 +40,7 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-info.h"
-#include "gpm-proxy.h"
+#include <libdbus-proxy.h>
 
 static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
 static void     gpm_statistics_init       (GpmStatistics      *statistics);
@@ -72,7 +72,7 @@ struct GpmStatisticsPrivate
 	GladeXML		*glade_xml;
 	GtkWidget		*graph_widget;
 	GpmConf			*conf;
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 	GpmArray		*events;
 	GpmArray		*data;
 	const gchar		*graph_type;
@@ -230,7 +230,7 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
 
-	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -458,7 +458,7 @@ gpm_statistics_find_types (GpmStatistics *statistics,
 	gchar **strlist;
 	DBusGProxy *proxy;
 
-	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -521,7 +521,7 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
 	g_return_val_if_fail (type != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -591,7 +591,7 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 	g_return_val_if_fail (x != NULL, FALSE);
 	g_return_val_if_fail (y != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (statistics->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected");
 		return FALSE;
@@ -796,15 +796,15 @@ gpm_statistics_init (GpmStatistics *statistics)
 
 	glade_set_custom_handler (gpm_graph_widget_custom_handler, statistics);
 
-	statistics->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (statistics->priv->gproxy,
-			  GPM_PROXY_SESSION,
+	statistics->priv->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (statistics->priv->gproxy,
+			  DBUS_PROXY_SESSION,
 			  GPM_DBUS_SERVICE,
 			  GPM_DBUS_PATH_STATS,
 			  GPM_DBUS_INTERFACE_STATS);
 
 	/* would happen if not using g-p-m or using an old version of g-p-m */
-	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
+	if (dbus_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
 		gpm_error (_("Could not connect to GNOME Power Manager."));
 	}
 

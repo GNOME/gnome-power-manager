@@ -27,13 +27,13 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <glib/gi18n.h>
+#include <libdbus-proxy.h>
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
 #include "libhal-gdevice.h"
 #include "libhal-gcpufreq.h"
 #include "libhal-gmanager.h"
-#include "../src/gpm-proxy.h"
 
 static void     hal_gcpufreq_class_init (HalGCpufreqClass *klass);
 static void     hal_gcpufreq_init       (HalGCpufreq      *hal);
@@ -43,7 +43,7 @@ static void     hal_gcpufreq_finalize   (GObject	  *object);
 
 struct HalGCpufreqPrivate
 {
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 	guint			 available_governors;
 	HalGCpufreqType		 current_governor;
 };
@@ -137,7 +137,7 @@ hal_gcpufreq_set_performance (HalGCpufreq *cpufreq, guint performance)
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -181,7 +181,7 @@ hal_gcpufreq_set_governor (HalGCpufreq    *cpufreq,
 	governor = hal_gcpufreq_enum_to_string (cpufreq_type);
 	g_return_val_if_fail (governor != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -227,7 +227,7 @@ hal_gcpufreq_get_governors (HalGCpufreq     *cpufreq,
 	g_return_val_if_fail (LIBHAL_IS_CPUFREQ (cpufreq), FALSE);
 	g_return_val_if_fail (cpufreq_type != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		*cpufreq_type = LIBHAL_CPUFREQ_UNKNOWN;
@@ -324,7 +324,7 @@ hal_gcpufreq_get_consider_nice (HalGCpufreq *cpufreq,
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -376,7 +376,7 @@ hal_gcpufreq_get_performance (HalGCpufreq *cpufreq,
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -424,7 +424,7 @@ hal_gcpufreq_get_governor (HalGCpufreq     *cpufreq,
 		return cpufreq->priv->current_governor;
 	}
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -483,7 +483,7 @@ hal_gcpufreq_set_consider_nice (HalGCpufreq *cpufreq,
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_get_proxy (cpufreq->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (cpufreq->priv->gproxy);
 	if (proxy == NULL) {
 		g_warning ("not connected");
 		return FALSE;
@@ -526,9 +526,9 @@ hal_gcpufreq_init (HalGCpufreq *cpufreq)
 {
 	cpufreq->priv = LIBHAL_CPUFREQ_GET_PRIVATE (cpufreq);
 
-	cpufreq->priv->gproxy = gpm_proxy_new ();
-	gpm_proxy_assign (cpufreq->priv->gproxy,
-			  GPM_PROXY_SYSTEM,
+	cpufreq->priv->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (cpufreq->priv->gproxy,
+			  DBUS_PROXY_SYSTEM,
 			  HAL_DBUS_SERVICE,
 			  HAL_ROOT_COMPUTER,
 			  HAL_DBUS_INTERFACE_CPUFREQ);

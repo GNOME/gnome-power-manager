@@ -26,9 +26,10 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <glib/gi18n.h>
 #include <string.h>
+#include <libdbus-monitor-session.h>
+
 #include "gpm-inhibit.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-monitor.h"
 #include "gpm-conf.h"
 
 static void     gpm_inhibit_class_init (GpmInhibitClass *klass);
@@ -50,7 +51,7 @@ struct GpmInhibitPrivate
 {
 	GSList			*list_auto;
 	GSList			*list_manual;
-	GpmDbusMonitor		*dbus_monitor;
+	DbusMonitorSession	*dbus_monitor;
 	GpmConf			*conf;
 	gboolean		 ignore_inhibits;
 };
@@ -332,7 +333,7 @@ gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
  * The noc session DBUS callback.
  **/
 static void
-dbus_noc_session_cb (GpmDbusMonitor *dbus_monitor,
+dbus_noc_session_cb (DbusMonitorSession *dbus_monitor,
 		     const gchar    *name,
 		     const gchar    *prev,
 		     const gchar    *new,
@@ -466,8 +467,8 @@ gpm_inhibit_init (GpmInhibit *inhibit)
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 	inhibit->priv->list_auto = NULL;
 	inhibit->priv->list_manual = NULL;
-	inhibit->priv->dbus_monitor = gpm_dbus_monitor_new ();
-	g_signal_connect (inhibit->priv->dbus_monitor, "noc-session",
+	inhibit->priv->dbus_monitor = dbus_monitor_session_new ();
+	g_signal_connect (inhibit->priv->dbus_monitor, "name-owner-changed",
 			  G_CALLBACK (dbus_noc_session_cb), inhibit);
 
 	inhibit->priv->conf = gpm_conf_new ();

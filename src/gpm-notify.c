@@ -39,6 +39,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
+#include <libgpm.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"

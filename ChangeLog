@@ -1,5 +1,51 @@
 2007-03-29  Richard Hughes  <richard@hughsie.com>
 
+	* Makefile.am:
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	* applets/brightness/brightness-applet.h:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c:
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/libdbus-monitor-session.c:
+	* libdbus-glib/libdbus-monitor-session.h:
+	* libdbus-glib/libdbus-monitor-system.c:
+	* libdbus-glib/libdbus-monitor-system.h:
+	* libdbus-glib/libdbus-proxy.c: (dbus_noc_session_cb),
+	* libdbus-glib/libdbus-proxy.h:
+	* libgpm-glib/Makefile.am:
+	* libgpm-glib/libgpm.c: (gpm_powermanager_get_brightness_lcd),
+	* libgpm-glib/libgpm.h:
+	* libhal-glib/Makefile.am:
+	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_set_performance),
+	* libhal-glib/libhal-gdevice.c: (hal_gdevice_set_udi),
+	* libhal-glib/libhal-gmanager.c: (hal_gmanager_proxy_connect_more),
+	* libhal-glib/libhal-gpower.c: (hal_gpower_init),
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-backlight.c:
+	* src/gpm-brightness-kbd.c: (gpm_brightness_kbd_get_hw),
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw),
+	* src/gpm-common.h:
+	* src/gpm-dbus-monitor.c:
+	* src/gpm-dbus-monitor.h:
+	* src/gpm-inhibit.c: (dbus_noc_session_cb), (gpm_inhibit_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw),
+	* src/gpm-main.c:
+	* src/gpm-notify.c:
+	* src/gpm-polkit.c: (gpm_polkit_is_user_privileged),
+	* src/gpm-profile.c:
+	* src/gpm-proxy.c:
+	* src/gpm-proxy.h:
+	* src/gpm-screensaver.c: (gpm_screensaver_proxy_connect_more),
+	* src/gpm-statistics-core.c: (gpm_statistics_get_events),
+	* src/gpm-tray-icon.c:
+	* test/Makefile.am:
+	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	Don't make gpm-proxy multiple times, use dbus_proxy.
+
+2007-03-29  Richard Hughes  <richard@hughsie.com>
+
 	* configure.in:
 	* data/icons/48x48/Makefile.am:
 	* data/icons/Makefile.am:

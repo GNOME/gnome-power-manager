@@ -1,21 +1,21 @@
-INCLUDES =						\
-	-I. -I$(srcdir) 				\
-	$(GLIB_CFLAGS)					\
-	$(HAL_CFLAGS)					\
-	$(DBUS_CFLAGS)					\
-	$(GNOME_CFLAGS)					\
-	$(LIBNOTIFY_CFLAGS)				\
-	$(GTKUNIQUE_CFLAGS)				\
-	-DBINDIR=\"$(bindir)\"			 	\
-	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
-	-DDATADIR=\"$(datadir)\"			\
-	-DPREFIX=\""$(prefix)"\" 			\
-	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
-	-DLIBDIR=\""$(libdir)"\" 			\
-	-DVERSION="\"$(VERSION)\"" 			\
-	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
-	-I$(top_srcdir)/libgpm-glib			\
-	-I$(top_srcdir)/libdbus-glib			\
+INCLUDES =							\
+	-I. -I$(srcdir) 					\
+	$(GLIB_CFLAGS)						\
+	$(HAL_CFLAGS)						\
+	$(DBUS_CFLAGS)						\
+	$(GNOME_CFLAGS)						\
+	$(LIBNOTIFY_CFLAGS)					\
+	$(GTKUNIQUE_CFLAGS)					\
+	-DBINDIR=\"$(bindir)\"			 		\
+	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	 	\
+	-DDATADIR=\"$(datadir)\"				\
+	-DPREFIX=\""$(prefix)"\" 				\
+	-DSYSCONFDIR=\""$(sysconfdir)"\" 			\
+	-DLIBDIR=\""$(libdir)"\" 				\
+	-DVERSION="\"$(VERSION)\"" 				\
+	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"	\
+	-I$(top_srcdir)/libdbus-glib				\
+	-I$(top_srcdir)/libgpm-glib				\
 	$(NULL)
 
 LOCAL_LIBGPM_LIBS =						\
@@ -28,16 +28,11 @@ LOCAL_LIBDBUS_LIBS =						\
 
 bin_PROGRAMS=gnome-brightness-applet
 
-SRCDEPS=../../src/gpm-proxy.c 		\
-	../../src/gpm-debug.c 		\
-	../../src/gpm-dbus-monitor.c 	\
-	../../src/gpm-marshal.c
-
-gnome_brightness_applet_SOURCES=brightness-applet.c brightness-applet.h $(SRCDEPS)
-gnome_brightness_applet_LDADD=		\
-	$(LOCAL_LIBGPM_LIBS)		\
-	$(LOCAL_LIBDBUS_LIBS)		\
-	$(DBUS_LIBS)			\
+gnome_brightness_applet_SOURCES = brightness-applet.c brightness-applet.h
+gnome_brightness_applet_LDADD =					\
+	$(LOCAL_LIBDBUS_LIBS)					\
+	$(LOCAL_LIBGPM_LIBS)					\
+	$(DBUS_LIBS)						\
 	$(GNOME_LIBS)
 
 serverdir       = $(libdir)/bonobo/servers

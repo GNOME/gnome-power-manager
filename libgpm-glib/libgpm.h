@@ -45,6 +45,15 @@ G_BEGIN_DECLS
 #define	GPM_DBUS_PATH_STATS		"/org/freedesktop/PowerManagement/Statistics"
 #define	GPM_DBUS_PATH_INHIBIT		"/org/freedesktop/PowerManagement/Inhibit"
 
+/* common descriptions of this program */
+#define GPM_NAME 			_("Power Manager")
+#define GPM_DESCRIPTION 		_("Power Manager for the GNOME desktop")
+
+/* help location */
+#define GPM_HOMEPAGE_URL	 	"http://www.gnome.org/projects/gnome-power-manager/"
+#define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
+#define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
+
 typedef struct GpmPowermanagerPrivate GpmPowermanagerPrivate;
 
 typedef struct

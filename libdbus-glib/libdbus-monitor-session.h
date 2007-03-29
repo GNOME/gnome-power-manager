@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define DBUS_TYPE_MONITOR_SESSION		(gpm_monitor_session_get_type ())
+#define DBUS_TYPE_MONITOR_SESSION		(dbus_monitor_session_get_type ())
 #define DBUS_MONITOR_SESSION(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), DBUS_TYPE_MONITOR_SESSION, DbusMonitorSession))
 #define DBUS_MONITOR_SESSION_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), DBUS_TYPE_MONITOR_SESSION, DbusMonitorSessionClass))
 #define DBUS_IS_MONITOR_SESSION(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), DBUS_TYPE_MONITOR_SESSION))

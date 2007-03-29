@@ -28,12 +28,12 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include "libdbus-marshal.h"
-#include "libdbus-monitor-session.h"
+#include <libdbus-marshal.h>
+#include <libdbus-monitor-session.h>
 
-static void     gpm_monitor_session_class_init (DbusMonitorSessionClass *klass);
-static void     gpm_monitor_session_init       (DbusMonitorSession      *dbus_session_monitor);
-static void     gpm_monitor_session_finalize   (GObject		 	*object);
+static void     dbus_monitor_session_class_init (DbusMonitorSessionClass *klass);
+static void     dbus_monitor_session_init       (DbusMonitorSession      *dbus_session_monitor);
+static void     dbus_monitor_session_finalize   (GObject		 *object);
 
 #define DBUS_MONITOR_SESSION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), DBUS_TYPE_MONITOR_SESSION, DbusMonitorSessionPrivate))
 
@@ -43,24 +43,24 @@ struct DbusMonitorSessionPrivate
 };
 
 enum {
-	NAME_CHANGED,
+	NAME_OWNER_CHANGED,
 	LAST_SIGNAL
 };
 
 static guint signals [LAST_SIGNAL] = { 0, };
-static gpointer gpm_monitor_session = NULL;
+static gpointer dbus_monitor_session = NULL;
 
-G_DEFINE_TYPE (DbusMonitorSession, gpm_monitor_session, G_TYPE_OBJECT)
+G_DEFINE_TYPE (DbusMonitorSession, dbus_monitor_session, G_TYPE_OBJECT)
 
 static void
-gpm_monitor_session_class_init (DbusMonitorSessionClass *klass)
+dbus_monitor_session_class_init (DbusMonitorSessionClass *klass)
 {
 	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-	object_class->finalize	   = gpm_monitor_session_finalize;
+	object_class->finalize = dbus_monitor_session_finalize;
 	g_type_class_add_private (klass, sizeof (DbusMonitorSessionPrivate));
 
-	signals [NAME_CHANGED] =
-		g_signal_new ("name-changed",
+	signals [NAME_OWNER_CHANGED] =
+		g_signal_new ("name-owner-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (DbusMonitorSessionClass, name_owner_changed),
@@ -77,11 +77,11 @@ name_owner_changed_cb (DBusGProxy     *proxy,
 		       const gchar    *new,
 		       DbusMonitorSession *monitor)
 {
-	g_signal_emit (monitor, signals [NAME_CHANGED], 0, name, prev, new);
+	g_signal_emit (monitor, signals [NAME_OWNER_CHANGED], 0, name, prev, new);
 }
 
 static void
-gpm_monitor_session_init (DbusMonitorSession *monitor)
+dbus_monitor_session_init (DbusMonitorSession *monitor)
 {
 	GError *error = NULL;
 	DBusGConnection *connection;
@@ -112,7 +112,7 @@ gpm_monitor_session_init (DbusMonitorSession *monitor)
 }
 
 static void
-gpm_monitor_session_finalize (GObject *object)
+dbus_monitor_session_finalize (GObject *object)
 {
 	DbusMonitorSession *monitor;
 
@@ -123,17 +123,18 @@ gpm_monitor_session_finalize (GObject *object)
 	if (monitor->priv->proxy != NULL) {
 		g_object_unref (monitor->priv->proxy);
 	}
-	G_OBJECT_CLASS (gpm_monitor_session_parent_class)->finalize (object);
+	G_OBJECT_CLASS (dbus_monitor_session_parent_class)->finalize (object);
 }
 
 DbusMonitorSession *
-gpm_monitor_session_new (void)
+dbus_monitor_session_new (void)
 {
-	if (gpm_monitor_session != NULL) {
-		g_object_ref (gpm_monitor_session);
+	if (dbus_monitor_session != NULL) {
+		g_object_ref (dbus_monitor_session);
 	} else {
-		gpm_monitor_session = g_object_new (DBUS_TYPE_MONITOR_SESSION, NULL);
-		g_object_add_weak_pointer (gpm_monitor_session, &gpm_monitor_session);
+		dbus_monitor_session = g_object_new (DBUS_TYPE_MONITOR_SESSION, NULL);
+		g_object_add_weak_pointer (dbus_monitor_session, &dbus_monitor_session);
 	}
-	return DBUS_MONITOR_SESSION (gpm_monitor_session);
+	return DBUS_MONITOR_SESSION (dbus_monitor_session);
 }
+

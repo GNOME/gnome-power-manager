@@ -34,7 +34,6 @@
 #include <libgpm.h>
 
 #include "inhibit-applet.h"
-#include "../../src/gpm-common.h"
 
 static void      gpm_inhibit_applet_class_init (GpmInhibitAppletClass *klass);
 static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);

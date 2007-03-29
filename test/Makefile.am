@@ -14,7 +14,9 @@ INCLUDES =						\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
-	-I$(top_srcdir) -I$(top_srcdir)/libhal-glib	\
+	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libhal-glib			\
+	-I$(top_srcdir)/libdbus-glib			\
 	-I$(top_srcdir)/libgpm-glib			\
 	$(NULL)
 
@@ -56,8 +58,6 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-hal-device.c				\
 	gpm-st-hal-devicestore.c			\
 	gpm-st-hal-manager.c				\
-	../src/gpm-dbus-monitor.h			\
-	../src/gpm-dbus-monitor.c			\
 	../src/gpm-marshal.h				\
 	../src/gpm-marshal.c				\
 	../src/gpm-profile.h				\
@@ -78,8 +78,6 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-array.c				\
 	../src/gpm-common.h				\
 	../src/gpm-common.c				\
-	../src/gpm-proxy.h				\
-	../src/gpm-proxy.c				\
 	../src/gpm-warning.h				\
 	../src/gpm-warning.c				\
 	../src/gpm-conf.h				\

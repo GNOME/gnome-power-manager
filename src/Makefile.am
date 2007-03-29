@@ -61,14 +61,10 @@ gnome_power_statistics_SOURCES =			\
 	gpm-graph-widget.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-dbus-monitor.h				\
-	gpm-dbus-monitor.c				\
 	gpm-conf.h					\
 	gpm-conf.c					\
 	gpm-common.h					\
 	gpm-common.c					\
-	gpm-proxy.h					\
-	gpm-proxy.c					\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	$(NULL)
@@ -102,10 +98,6 @@ gnome_power_preferences_SOURCES =			\
 	gpm-prefs-core.c				\
 	gpm-marshal.h					\
 	gpm-marshal.c					\
-	gpm-dbus-monitor.h				\
-	gpm-dbus-monitor.c				\
-	gpm-proxy.h					\
-	gpm-proxy.c					\
 	gpm-common.h					\
 	gpm-common.c					\
 	gpm-screensaver.h				\
@@ -129,8 +121,6 @@ endif
 gnome_power_manager_SOURCES =				\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
-	gpm-dbus-monitor.h				\
-	gpm-dbus-monitor.c				\
 	gpm-debug.h					\
 	gpm-debug.c					\
 	gpm-notify.h					\
@@ -163,8 +153,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-profile.c					\
 	gpm-control.h					\
 	gpm-control.c					\
-	gpm-proxy.h					\
-	gpm-proxy.c					\
 	gpm-refcount.h					\
 	gpm-refcount.c					\
 	gpm-button.h					\

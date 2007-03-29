@@ -27,12 +27,12 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <libdbus-proxy.h>
 
 #include "libhal-marshal.h"
 #include "libhal-gpower.h"
 #include "libhal-gdevice.h"
 #include "libhal-gmanager.h"
-#include "../src/gpm-proxy.h"
 
 static void     hal_gdevice_class_init (HalGDeviceClass *klass);
 static void     hal_gdevice_init       (HalGDevice      *device);
@@ -45,7 +45,7 @@ struct HalGDevicePrivate
 	DBusGConnection		*connection;
 	gboolean		 use_property_modified;
 	gboolean		 use_condition;
-	GpmProxy		*gproxy;
+	DbusProxy		*gproxy;
 	gchar			*udi;
 };
 
@@ -89,8 +89,8 @@ hal_gdevice_set_udi (HalGDevice  *device,
 		return FALSE;
 	}
 
-	proxy = gpm_proxy_assign (device->priv->gproxy,
-				  GPM_PROXY_SYSTEM,
+	proxy = dbus_proxy_assign (device->priv->gproxy,
+				  DBUS_PROXY_SYSTEM,
 				  HAL_DBUS_SERVICE,
 				  udi,
 				  HAL_DBUS_INTERFACE_DEVICE);
@@ -138,7 +138,7 @@ hal_gdevice_get_bool (HalGDevice  *device,
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -178,7 +178,7 @@ hal_gdevice_get_string (HalGDevice   *device,
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -216,7 +216,7 @@ hal_gdevice_get_int (HalGDevice   *device,
 	g_return_val_if_fail (value != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -274,7 +274,7 @@ hal_gdevice_query_capability (HalGDevice  *device,
 	g_return_val_if_fail (has_capability != NULL, FALSE);
 	g_return_val_if_fail (device->priv->udi != NULL, FALSE);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -394,7 +394,7 @@ hal_gdevice_watch_property_modified (HalGDevice *device)
 					   G_TYPE_NONE, G_TYPE_INT,
 					   struct_array_type, G_TYPE_INVALID);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -449,7 +449,7 @@ hal_gdevice_watch_condition (HalGDevice *device)
 					   G_TYPE_NONE, G_TYPE_STRING, G_TYPE_STRING,
 					   G_TYPE_INVALID);
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -480,7 +480,7 @@ hal_gdevice_remove_condition (HalGDevice *device)
 
 	device->priv->use_condition = FALSE;
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -509,7 +509,7 @@ hal_gdevice_remove_property_modified (HalGDevice *device)
 
 	device->priv->use_property_modified = FALSE;
 
-	proxy = gpm_proxy_get_proxy (device->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (device->priv->gproxy);
 	if (DBUS_IS_G_PROXY (proxy) == FALSE) {
 		g_warning ("proxy NULL!!");
 		return FALSE;
@@ -592,7 +592,7 @@ hal_gdevice_init (HalGDevice *device)
 	device->priv->use_condition = FALSE;
 
 	/* get the manager connection */
-	device->priv->gproxy = gpm_proxy_new ();
+	device->priv->gproxy = dbus_proxy_new ();
 	g_signal_connect (device->priv->gproxy, "proxy-status",
 			  G_CALLBACK (proxy_status_cb), device);
 }

@@ -62,3 +62,4 @@ GType                gpm_brightness_applet_get_type  (void);
 G_END_DECLS
 
 #endif /* __BRIGHTNESS_APPLET_H */
+
