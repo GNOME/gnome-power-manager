@@ -27,7 +27,6 @@
 
 #include "gpm-refcount.h"
 #include "gpm-debug.h"
-#include "gpm-dbus-monitor.h"
 
 static void     gpm_refcount_class_init (GpmRefcountClass *klass);
 static void     gpm_refcount_init       (GpmRefcount      *refcount);

@@ -15,10 +15,16 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
 	-I$(top_srcdir)/libgpm-glib			\
+	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
 
-LIBGPM_LIBS =						\
+LOCAL_LIBGPM_LIBS =						\
 	$(top_builddir)/libgpm-glib/libgpm.la
+
+LOCAL_LIBDBUS_LIBS =						\
+	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
+	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
+	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
 bin_PROGRAMS=gnome-brightness-applet
 
@@ -28,9 +34,10 @@ SRCDEPS=../../src/gpm-proxy.c 		\
 	../../src/gpm-marshal.c
 
 gnome_brightness_applet_SOURCES=brightness-applet.c brightness-applet.h $(SRCDEPS)
-gnome_brightness_applet_LDADD=	\
-	$(LIBGPM_LIBS)		\
-	$(DBUS_LIBS)		\
+gnome_brightness_applet_LDADD=		\
+	$(LOCAL_LIBGPM_LIBS)		\
+	$(LOCAL_LIBDBUS_LIBS)		\
+	$(DBUS_LIBS)			\
 	$(GNOME_LIBS)
 
 serverdir       = $(libdir)/bonobo/servers

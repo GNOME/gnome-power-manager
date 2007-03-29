@@ -1,6 +1,7 @@
 SUBDIRS =						\
 	libhal-glib					\
 	libgpm-glib					\
+	libdbus-glib					\
 	src						\
 	po						\
 	docs						\
@@ -37,3 +38,4 @@ DISTCLEANFILES =					\
 	gnome-power-manager-*.tar.gz
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-schemas-install --disable-scrollkeeper --disable-applets
+

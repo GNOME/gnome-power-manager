@@ -27,18 +27,24 @@ INCLUDES =						\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libgpm-glib			\
+	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
 
-LIBHAL_LIBS =						\
+LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
 	$(top_builddir)/libhal-glib/libhal-gcpufreq.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
 
-LIBGPM_LIBS =						\
+LOCAL_LIBGPM_LIBS =					\
 	$(top_builddir)/libgpm-glib/libgpm.la
  
+LOCAL_LIBDBUS_LIBS =						\
+	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
+	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
+	$(top_builddir)/libdbus-glib/libdbus-proxy.la
+
 bin_PROGRAMS =						\
 	gnome-power-manager				\
 	gnome-power-preferences				\
@@ -67,12 +73,11 @@ gnome_power_statistics_SOURCES =			\
 	gpm-debug.c					\
 	$(NULL)
 
-#	gpm-powermanager.h
-
 gnome_power_statistics_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_GTKUNIQUE
@@ -107,14 +112,13 @@ gnome_power_preferences_SOURCES =			\
 	gpm-screensaver.c				\
 	$(NULL)
 
-#	gpm-powermanager.h
-
 gnome_power_preferences_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
-	$(LIBHAL_LIBS)					\
+	$(LOCAL_LIBHAL_LIBS)				\
+	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_GTKUNIQUE
@@ -212,7 +216,8 @@ gnome_power_manager_LDADD =				\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
 	$(GPM_EXTRA_LIBS)				\
-	$(LIBHAL_LIBS)					\
+	$(LOCAL_LIBHAL_LIBS)				\
+	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
 
 if HAVE_LIBNOTIFY

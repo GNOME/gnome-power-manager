@@ -1,3 +1,26 @@
+2007-03-29  Richard Hughes  <richard@hughsie.com>
+
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/libdbus-marshal.list:
+	* libdbus-glib/libdbus-monitor-session.c:
+	* libdbus-glib/libdbus-monitor-session.h:
+	* libdbus-glib/libdbus-monitor-system.c:
+	* libdbus-glib/libdbus-monitor-system.h:
+	* libdbus-glib/libdbus-proxy.c:
+	* libdbus-glib/libdbus-proxy.h:
+	Add a new abstract dbus local library.
+
+	* Makefile.am:
+	* applets/brightness/Makefile.am:
+	* applets/inhibit/Makefile.am:
+	* configure.in:
+	* src/Makefile.am:
+	* test/Makefile.am:
+	Include the new library, although nothing uses it yet.
+
+	* src/gpm-refcount.c:
+	Remove non-required include.
+
 2007-03-28  Richard Hughes  <richard@hughsie.com>
 
 	* libhal-glib/libhal-gcpufreq.c: (hal_gcpufreq_string_to_enum),
