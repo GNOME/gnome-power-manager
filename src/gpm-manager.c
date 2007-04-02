@@ -105,7 +105,8 @@ struct GpmManagerPrivate
 };
 
 enum {
-	BATTERY_STATE_CHANGED,
+	ON_BATTERY_CHANGED,
+	LOW_BATTERY_CHANGED,
 	POWER_SAVE_STATUS_CHANGED,
 	CAN_STANDBY_CHANGED,
 	CAN_SUSPEND_CHANGED,
@@ -148,7 +149,7 @@ gpm_manager_error_get_type (void)
 	if (etype == 0) {
 		static const GEnumValue values[] =
 		{
-			ENUM_ENTRY (GPM_MANAGER_ERROR_DENIED, "DeniedByPolicy"),
+			ENUM_ENTRY (GPM_MANAGER_ERROR_DENIED, "PermissionDenied"),
 			ENUM_ENTRY (GPM_MANAGER_ERROR_NO_HW, "NoHardwareSupport"),
 			{ 0, 0, 0 }
 		};
@@ -173,13 +174,13 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 			      gboolean	  user_action,
 			      const char *action)
 {
-	gboolean valid;
+	gboolean has_inihibit;
 	gchar *title;
 
 	/* We have to decide on whether this is a idle action or a user keypress */
-	gpm_inhibit_is_valid (manager->priv->inhibit, user_action, &valid, NULL);
+	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inihibit, NULL);
 
-	if (valid == FALSE) {
+	if (has_inihibit == TRUE) {
 		GString *message = g_string_new ("");
 		const char *msg;
 
@@ -196,7 +197,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
-	return valid;
+	return !has_inihibit;
 }
 
 /**
@@ -528,7 +529,7 @@ gpm_manager_get_power_save_status (GpmManager *manager,
 }
 
 /**
- * gpm_manager_get_battery_state:
+ * gpm_manager_get_on_battery:
  *
  * Returns the system AC state, i.e. if we are not running on battery
  * power.
@@ -536,7 +537,7 @@ gpm_manager_get_power_save_status (GpmManager *manager,
  * if the computer is using backup power from a monitored UPS.
  **/
 gboolean
-gpm_manager_get_battery_state (GpmManager *manager,
+gpm_manager_get_on_battery (GpmManager *manager,
 			       gboolean   *on_battery,
 			       GError    **error)
 {
@@ -549,6 +550,22 @@ gpm_manager_get_battery_state (GpmManager *manager,
 	} else {
 		*on_battery = TRUE;
 	}
+	return TRUE;
+}
+
+/**
+ * gpm_manager_get_low_battery:
+ **/
+gboolean
+gpm_manager_get_low_battery (GpmManager *manager,
+			     gboolean   *low_battery,
+			     GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* TODO */	
+	*low_battery = FALSE;
 	return TRUE;
 }
 
@@ -838,9 +855,9 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 	gpm_debug ("emitting on-ac-changed : %i", on_ac);
 	if (on_ac == TRUE) {
-		g_signal_emit (manager, signals [BATTERY_STATE_CHANGED], 0, FALSE);
+		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, FALSE);
 	} else {
-		g_signal_emit (manager, signals [BATTERY_STATE_CHANGED], 0, TRUE);
+		g_signal_emit (manager, signals [ON_BATTERY_CHANGED], 0, TRUE);
 	}
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
@@ -903,10 +920,16 @@ gpm_manager_class_init (GpmManagerClass *klass)
 
 	object_class->finalize = gpm_manager_finalize;
 
-	signals [BATTERY_STATE_CHANGED] =
-		g_signal_new ("battery-state-changed",
+	signals [ON_BATTERY_CHANGED] =
+		g_signal_new ("on-battery-changed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, battery_state_changed),
+			      G_STRUCT_OFFSET (GpmManagerClass, on_battery_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [LOW_BATTERY_CHANGED] =
+		g_signal_new ("low-battery-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmManagerClass, low_battery_changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	signals [POWER_SAVE_STATUS_CHANGED] =

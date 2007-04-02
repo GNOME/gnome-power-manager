@@ -4,8 +4,8 @@
 ]>
 <article id="index">
   <articleinfo>
-    <title>DRAFT Power Management Specification (WITH CRAZY ADDITIONS)</title>
-    <releaseinfo>Version CRACKtastic</releaseinfo>
+    <title>GNOME Power Management Specification (with additions)</title>
+    <releaseinfo>Version 2.19.x</releaseinfo>
     <date>March 26 2007</date>
     <authorgroup>
       <author>
@@ -29,17 +29,6 @@
       This has lead to technologies that have often been incompatible and
       resulted in poor integration of power management into desktop applications.
     </para>
-    <para>
-      This specification aims to help this problem, by defining a standard
-      API that can be implemented by desktop session daemons to integrate
-      with existing infrastructure.
-      This can be used by desktop applications to become more power aware.
-    </para>
-    <para>
-        <literal>org.freedesktop.PowerManagement</literal> is the only
-        compulsory interface to implement, although other optional interfaces
-        may be proposed in the future for other aspects of session power management.
-    </para>
   </sect1>
 
   <sect1 id="dbus">
@@ -55,16 +44,26 @@
             <entry>DBUS Service:</entry>
             <entry><literal>org.freedesktop.PowerManagement</literal></entry>
           </row>
-          <row>
-            <entry>DBUS Path:</entry>
-            <entry><literal>/org/freedesktop/PowerManagement</literal></entry>
-          </row>
         </tbody>
       </tgroup>
     </informaltable>
 
     <sect2 id="dbus-core">
       <title>Compulsory Basic Interface</title>
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>DBUS Interface:</entry>
+              <entry><literal>org.freedesktop.PowerManagement</literal></entry>
+            </row>
+            <row>
+              <entry>DBUS Path:</entry>
+              <entry><literal>/org/freedesktop/PowerManagement</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
       <para>
         Methods on interface <literal>org.freedesktop.PowerManagement</literal>
         define a compulsory base layer for interoperability.
@@ -84,46 +83,32 @@
           </thead>
           <tbody>
             <row>
-              <entry><literal>Standby</literal></entry>
-              <entry></entry>
-              <entry></entry>
-              <entry><literal>DeniedByPolicy</literal>, <literal>NoHardwareSupport</literal></entry>
-              <entry>Attempt to put the system in standby.</entry>
-            </row>
-            <row>
               <entry><literal>Suspend</literal></entry>
               <entry></entry>
               <entry></entry>
-              <entry><literal>DeniedByPolicy</literal>, <literal>NoHardwareSupport</literal></entry>
+              <entry><literal>PermissionDenied</literal>, <literal>NoHardwareSupport</literal></entry>
               <entry>Attempt to suspend the system.</entry>
             </row>
             <row>
               <entry><literal>Hibernate</literal></entry>
               <entry></entry>
               <entry></entry>
-              <entry><literal>DeniedByPolicy</literal>, <literal>NoHardwareSupport</literal></entry>
+              <entry><literal>PermissionDenied</literal>, <literal>NoHardwareSupport</literal></entry>
               <entry>Attempt to hibernate the system.</entry>
             </row>
             <row>
               <entry><literal>Shutdown</literal></entry>
               <entry></entry>
               <entry></entry>
-              <entry><literal>DeniedByPolicy</literal>, <literal>NoHardwareSupport</literal></entry>
+              <entry><literal>PermissionDenied</literal>, <literal>NoHardwareSupport</literal></entry>
               <entry>Attempt to shutdown the system.</entry>
             </row>
             <row>
               <entry><literal>Reboot</literal></entry>
               <entry></entry>
               <entry></entry>
-              <entry><literal>DeniedByPolicy</literal>, <literal>NoHardwareSupport</literal></entry>
+              <entry><literal>PermissionDenied</literal>, <literal>NoHardwareSupport</literal></entry>
               <entry>Attempt to reboot the system.</entry>
-            </row>
-            <row>
-              <entry><literal>CanStandby</literal></entry>
-              <entry></entry>
-              <entry><literal>bool</literal> can_standby</entry>
-              <entry></entry>
-              <entry>If the current session user is able to put the system in standby.</entry>
             </row>
             <row>
               <entry><literal>CanSuspend</literal></entry>
@@ -167,7 +152,7 @@
               </entry>
             </row>
             <row>
-              <entry><literal>GetBatteryState</literal></entry>
+              <entry><literal>GetOnBattery</literal></entry>
               <entry></entry>
               <entry><literal>bool</literal> on_battery</entry>
               <entry></entry>
@@ -176,6 +161,19 @@
                 battery power.
                 This method may still return true on AC using a desktop system
                 if the computer is using backup power from a monitored UPS.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>GetLowBattery</literal></entry>
+              <entry></entry>
+              <entry><literal>bool</literal> low_battery</entry>
+              <entry></entry>
+              <entry>
+                Returns true if the battery is low and discharging.
+                This may be measured with time remaining or percentage change,
+                and the exact threshold level is an implementation detail.
+                Programs that cannot deal with a low power action such as
+                suspend or hibernate should not run if this method returns true.
               </entry>
             </row>
           </tbody>
@@ -192,11 +190,6 @@
             </row>
           </thead>
           <tbody>
-            <row>
-              <entry><literal>CanStandbyChanged</literal></entry>
-              <entry><literal>bool</literal> can_standby</entry>
-              <entry>Signals the standby status has changed.</entry>
-            </row>
             <row>
               <entry><literal>CanSuspendChanged</literal></entry>
               <entry><literal>bool</literal> can_suspend</entry>
@@ -223,9 +216,14 @@
               <entry>Signals the low power mode has changed..</entry>
             </row>
             <row>
-              <entry><literal>BatteryStateChanged</literal></entry>
+              <entry><literal>OnBatteryChanged</literal></entry>
               <entry><literal>bool</literal> on_battery</entry>
-              <entry>Signals the battery state has changed.</entry>
+              <entry>Signals the battery discharge state has changed.</entry>
+            </row>
+            <row>
+              <entry><literal>LowBatteryChanged</literal></entry>
+              <entry><literal>bool</literal> on_battery</entry>
+              <entry>Signals the battery low power state has changed.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -238,6 +236,20 @@
         <emphasis>NON STANDARDISED API</emphasis>
       </para>
       <para>
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>DBUS Interface:</entry>
+              <entry><literal>org.freedesktop.PowerManagement.Backlight</literal></entry>
+            </row>
+            <row>
+              <entry>DBUS Path:</entry>
+              <entry><literal>/org/freedesktop/PowerManagement/Backlight</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
         The <literal>org.freedesktop.PowerManagement.Backlight</literal>
         interface is optional, and allows a UI element to interact with
         the session daemon without using HAL directly.
@@ -307,6 +319,20 @@
       <para>
         <emphasis>NON STANDARDISED API</emphasis>
       </para>
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>DBUS Interface:</entry>
+              <entry><literal>org.freedesktop.PowerManagement.Widget</literal></entry>
+            </row>
+            <row>
+              <entry>DBUS Path:</entry>
+              <entry><literal>/org/freedesktop/PowerManagement/Widget</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
       <para>
         The <literal>org.freedesktop.PowerManagement.Widget</literal>
         interface is optional, and allows a UI element to display the state
@@ -383,20 +409,29 @@
       <para>
         <emphasis>NON STANDARDISED API</emphasis>
       </para>
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>DBUS Interface:</entry>
+              <entry><literal>org.freedesktop.PowerManagement.Inhibit</literal></entry>
+            </row>
+            <row>
+              <entry>DBUS Path:</entry>
+              <entry><literal>/org/freedesktop/PowerManagement/Inhibit</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
       <para>
         When the power manager detects an idle session and system, it can perform
-        a system suspend or hibernate, known as a system sleep.
+        a system suspend or hibernate, known as an idle sleep action.
         We can prevent the session power manager daemon from doing this action
-        using the inhibit interface. 
+        using the inhibit interface.
       </para>
       <para>
         An automatic inhibit should be taken by the file manager if there is a
         slow network copy that will take many minutes to complete.
-        A manual inhibit should be taken by a program that wants to prevent
-        an automatic idle sleep, <emphasis>and</emphasis> a manual action such
-        as pressing the suspend button or clicking the hibernate icon.
-        Manual inhibits should be taken for tasks that cannot be interrupted,
-        like saving a large data file.
       </para>
       <para>
         A cookie is a randomly assigned 32bit unsigned integer used to identify
@@ -405,26 +440,20 @@
         multiple times, without managing the inhibit calls itself.
       </para>
       <para>
-        InhibitAuto and UnInhibit are easy to use, requiring only the cookie
+        Inhibit and UnInhibit are easy to use, requiring only the cookie
         to be stored in the client application.
-        Below is a simple python demonstration showing two inhibit actions.
+        Below is a simple python demonstration showing an inhibit action.
       </para>
 <programlisting>
 #!/usr/bin/python
 import dbus
 import time
-
 bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
 devobj = bus.get_object('org.freedesktop.PowerManagement', '/org/freedesktop/PowerManagement')
 dev = dbus.Interface (devobj, "org.freedesktop.PowerManagement.Inhibit")
-
-cookie = dev.InhibitAuto('Nautilus', 'Copying files')
-cookie2 = dev.InhibitManual('SELinux', 'Performing database relabel')
-
+cookie = dev.Inhibit('Nautilus', 'Copying files from /media/SANVOL')
 time.sleep(10)
-
 dev.UnInhibit(cookie)
-dev.UnInhibit(cookie2)
 </programlisting>
       <table id="dbus-inhibit-methods">
         <title>Methods on interface <literal>org.freedesktop.PowerManagement.Inhibit</literal></title>
@@ -440,26 +469,15 @@ dev.UnInhibit(cookie2)
           </thead>
           <tbody>
             <row>
-              <entry><literal>InhibitAuto</literal></entry>
+              <entry><literal>Inhibit</literal></entry>
               <entry><literal>string</literal> application, <literal>string</literal> reason</entry>
               <entry><literal>uint</literal> cookie</entry>
               <entry><literal>PermissionDenied</literal></entry>
               <entry>
-                Inhibits the computer from performing the idle sleep action.
+                Inhibits the computer from performing an idle sleep action.
                 Useful if you want to do an operation of long duration without the
                 computer suspending.
                 Reason and application should be translated strings where possible.
-              </entry>
-            </row>
-            <row>
-              <entry><literal>InhibitManual</literal></entry>
-              <entry><literal>string</literal> application, <literal>string</literal> reason</entry>
-              <entry><literal>uint</literal> cookie</entry>
-              <entry><literal>PermissionDenied</literal></entry>
-              <entry>
-                Inhibits the computer from performing the any sleep or shutdown action.
-                Useful if you want to perform an operation that cannot be interrupted like
-                a firmware re-flash or RPM transaction.
               </entry>
             </row>
             <row>
@@ -471,19 +489,19 @@ dev.UnInhibit(cookie2)
                 Allows the computer to perform the idle sleep or user action if the
                 number of inhibit calls is zero.
                 If there are multiple cookies outstanding, clearing one cookie
-  	        does not allow the action to happen.
+                does not allow the action to happen.
                 If the program holding the cookie exits from the session bus without
                 calling <literal>UnInhibit()</literal> then it is automatically removed.
               </entry>
             </row>
             <row>
-              <entry><literal>IsValid</literal></entry>
+              <entry><literal>HasInhibit</literal></entry>
               <entry></entry>
-              <entry><literal>bool</literal> valid</entry>
+              <entry><literal>bool</literal> has_inhibit</entry>
               <entry></entry>
               <entry>
-                Returns true if we have no valid manual or automatic inhibitors.
-                This will return false if the number of inhibit cookies
+                Returns false if we have no valid inhibits.
+                This will return true if the number of inhibit cookies
                 is greater than zero.
               </entry>
             </row>
@@ -502,8 +520,8 @@ dev.UnInhibit(cookie2)
           </thead>
           <tbody>
             <row>
-              <entry><literal>IsValidChanged</literal></entry>
-              <entry><literal>bool</literal> is_valid</entry>
+              <entry><literal>HasInhibitChanged</literal></entry>
+              <entry><literal>bool</literal> has_inhibit</entry>
               <entry>Signals the inhibit valid state has changed.</entry>
             </row>
           </tbody>
@@ -516,6 +534,20 @@ dev.UnInhibit(cookie2)
       <para>
         <emphasis>NON STANDARDISED API</emphasis>
       </para>
+      <informaltable>
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry>DBUS Interface:</entry>
+              <entry><literal>org.freedesktop.PowerManagement.Statistics</literal></entry>
+            </row>
+            <row>
+              <entry>DBUS Path:</entry>
+              <entry><literal>/org/freedesktop/PowerManagement/Statistics</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
       <para>
         Statistics data are values that can be collected by the power manager
         for review or profiling.
@@ -576,113 +608,5 @@ dev.UnInhibit(cookie2)
       </table>
     </sect2>
   </sect1>
-
-  <sect1 id="names">
-    <title>Standard Nomenclature</title>
-
-    <para>
-      This section describes the standard nomenclature that should be used by
-      programmers when implementing the Power Management Specification.
-    </para>
-
-    <sect2 id="names-standby">
-      <title>Standby</title>
-      <para>
-        Standby is the action where the CPU is held in a low power state, and
-        the display turned off, but no data is saved to the hard disk.
-        The exact behavior of standby can depend on your BIOS and hardware.
-        It normally takes a split second to standby and resume.
-        You cannot remove the battery when on laptop power or work will be lost.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>Forward action:</entry>
-              <entry><emphasis>STANDBY</emphasis></entry>
-            </row>
-            <row>
-              <entry>Reverse action:</entry>
-              <entry><emphasis>CONTINUE</emphasis></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-      <para>
-        Other valid names for standby are <literal>ACPI S1</literal>.
-      </para>
-    </sect2>
-    <sect2 id="names-suspend">
-      <title>Suspend</title>
-      <para>
-        Suspend is the action where the computer freezes all activity, and copies
-        working data to memory.
-        It then turns off the screen, and goes into a low-power mode.
-        It normally takes a few seconds to suspend and a few seconds to resume.
-        You cannot remove the battery when on battery power or work will be lost.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>Forward action:</entry>
-              <entry><emphasis>SUSPEND</emphasis></entry>
-            </row>
-            <row>
-              <entry>Reverse action:</entry>
-              <entry><emphasis>RESUME</emphasis></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-      <para>
-        Other valid names for standby are <literal>ACPI S3</literal> and
-        <literal>suspend-to-ram</literal>.
-      </para>
-    </sect2>
-    <sect2 id="names-hibernate">
-      <title>Hibernate</title>
-      <para>
-        Hibernate is the action where the computer freezes all activity and
-        swaps data to disk, turns off the screen and powers down.
-        This takes over one minute to swap the complete memory to disk, and
-        nearly one minute to thaw.
-      </para>
-      <informaltable>
-        <tgroup cols="2">
-          <tbody>
-            <row>
-              <entry>Forward action:</entry>
-              <entry><emphasis>HIBERNATE</emphasis></entry>
-            </row>
-            <row>
-              <entry>Reverse action:</entry>
-              <entry><emphasis>THAW</emphasis></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </informaltable>
-      <para>
-        Other valid names for standby are <literal>ACPI S4</literal> and
-        <literal>suspend-to-disk</literal>.
-      </para>
-    </sect2>
-  </sect1>
-
-  <appendix id="changelog">
-    <title>Change History</title>
-    <formalpara>
-      <title>Version 0.1, 26 March 2007, Richard Hughes</title>    
-      <para>
-        <itemizedlist>
-          <listitem>
-            <para>
-              Initial version for review.
-            </para>
-          </listitem>
-        </itemizedlist>
-      </para>
-    </formalpara>
-  </appendix>
 </article>
 

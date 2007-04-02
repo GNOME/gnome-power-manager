@@ -24,7 +24,10 @@
     <method name="GetPowerSaveStatus">
       <arg type="b" name="save_power" direction="out"/>
     </method>
-    <method name="GetBatteryState">
+    <method name="GetOnBattery">
+      <arg type="b" name="on_battery" direction="out"/>
+    </method>
+    <method name="GetLowBattery">
       <arg type="b" name="on_battery" direction="out"/>
     </method>
     <signal name="CanStandbyChanged">
@@ -42,7 +45,10 @@
     <signal name="CanRebootChanged">
       <arg type="b" name="can_reboot" direction="out"/>
     </signal>
-    <signal name="BatteryStateChanged">
+    <signal name="OnBatteryChanged">
+      <arg type="b" name="on_battery" direction="out"/>
+    </signal>
+    <signal name="LowBatteryChanged">
       <arg type="b" name="on_battery" direction="out"/>
     </signal>
     <signal name="PowerSaveStatusChanged">

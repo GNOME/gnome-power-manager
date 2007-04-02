@@ -44,10 +44,10 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are not inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
+	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
+	} else if (valid == TRUE) {
 		gpm_st_failed (test, "Already inhibited");
 	} else {
 		gpm_st_success (test, NULL);
@@ -64,7 +64,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "get auto cookie 1");
-	ret = gpm_powermanager_inhibit_auto (powermanager,
+	ret = gpm_powermanager_inhibit (powermanager,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie1);
@@ -78,29 +78,18 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are auto inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
+	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
+	} else if (valid == TRUE) {
 		gpm_st_success (test, "inhibited");
 	} else {
 		gpm_st_failed (test, "inhibit failed");
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we are not manual inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, TRUE, &valid);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == TRUE) {
-		gpm_st_success (test, "not inhibited for manual action");
-	} else {
-		gpm_st_failed (test, "inhibited auto but manual not valid");
-	}
-
-	/************************************************************/
 	gpm_st_title (test, "get cookie 2");
-	ret = gpm_powermanager_inhibit_auto (powermanager,
+	ret = gpm_powermanager_inhibit (powermanager,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie2);
@@ -123,10 +112,10 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are still inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
+	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
+	} else if (valid == TRUE) {
 		gpm_st_success (test, "inhibited");
 	} else {
 		gpm_st_failed (test, "inhibit failed");
@@ -141,72 +130,6 @@ gpm_st_inhibit (GpmSelfTest *test)
 		gpm_st_success (test, NULL);
 	}
 
-	/************************************************************/
-	gpm_st_title (test, "make sure we are not auto inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
-		gpm_st_failed (test, "Auto inhibited when we shouldn't be");
-	} else {
-		gpm_st_success (test, NULL);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "make sure we are not manual inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, TRUE, &valid);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
-		gpm_st_failed (test, "Manual inhibited when we shouldn't be");
-	} else {
-		gpm_st_success (test, NULL);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "get manual cookie 1");
-	ret = gpm_powermanager_inhibit_manual (powermanager,
-				  "gnome-power-self-test",
-				  "test inhibit",
-				  &cookie1);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to manual inhibit");
-	} else if (cookie1 == 0) {
-		gpm_st_failed (test, "Cookie invalid (cookie: %u)", cookie1);
-	} else {
-		gpm_st_success (test, "cookie: %u", cookie1);
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "make sure we are auto inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, FALSE, &valid);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
-		gpm_st_success (test, "inhibited");
-	} else {
-		gpm_st_failed (test, "inhibit failed");
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "make sure we are manual inhibited");
-	ret = gpm_powermanager_is_valid (powermanager, TRUE, &valid);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "Unable to test validity");
-	} else if (valid == FALSE) {
-		gpm_st_success (test, "inhibited");
-	} else {
-		gpm_st_failed (test, "inhibit failed");
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "clear cookie 1");
-	ret = gpm_powermanager_uninhibit (powermanager, cookie1);
-	if (ret == FALSE) {
-		gpm_st_failed (test, "cookie failed to clear");
-	} else {
-		gpm_st_success (test, NULL);
-	}
 	g_object_unref (powermanager);
 }
 

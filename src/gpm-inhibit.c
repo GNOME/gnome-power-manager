@@ -43,18 +43,23 @@ typedef struct
 	gchar			*application;
 	gchar			*reason;
 	gchar			*connection;
-	gboolean		 manual;
 	guint32			 cookie;
 } GpmInhibitData;
 
 struct GpmInhibitPrivate
 {
-	GSList			*list_auto;
-	GSList			*list_manual;
+	GSList			*list;
 	DbusMonitorSession	*dbus_monitor;
 	GpmConf			*conf;
 	gboolean		 ignore_inhibits;
 };
+
+enum {
+	HAS_INHIBIT_CHANGED,
+	LAST_SIGNAL
+};
+
+static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
 
@@ -93,14 +98,9 @@ gpm_inhibit_find_cookie (GpmInhibit *inhibit, guint32 cookie)
 {
 	GpmInhibitData *data;
 	GSList	       *ret;
-	/* search auto list */
-	ret = g_slist_find_custom (inhibit->priv->list_auto, &cookie,
+	/* search list */
+	ret = g_slist_find_custom (inhibit->priv->list, &cookie,
 				   gpm_inhibit_cookie_compare_func);
-	/* search manual list */
-	if (ret == NULL) {
-		ret = g_slist_find_custom (inhibit->priv->list_manual, &cookie,
-					   gpm_inhibit_cookie_compare_func);
-	}
 	if (ret == NULL) {
 		return NULL;
 	}
@@ -142,7 +142,7 @@ gpm_inhibit_generate_cookie (GpmInhibit *inhibit)
  * Return value: a new random cookie.
  **/
 void
-gpm_inhibit_inhibit_auto (GpmInhibit  *inhibit,
+gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 		          const gchar *application,
 		          const gchar *reason,
 		          DBusGMethodInvocation *context,
@@ -158,7 +158,7 @@ gpm_inhibit_inhibit_auto (GpmInhibit  *inhibit,
 	if (connection == NULL ||
 	    application == NULL ||
 	    reason == NULL) {
-		gpm_warning ("Recieved InhibitAuto, but application "
+		gpm_warning ("Recieved Inhibit, but application "
 			     "did not set the parameters correctly");
 		dbus_g_method_return (context, -1);
 		return;
@@ -170,63 +170,10 @@ gpm_inhibit_inhibit_auto (GpmInhibit  *inhibit,
 	data->application = g_strdup (application);
 	data->connection = g_strdup (connection);
 	data->reason = g_strdup (reason);
-	data->manual = FALSE;
 
-	inhibit->priv->list_auto = g_slist_append (inhibit->priv->list_auto, (gpointer) data);
+	inhibit->priv->list = g_slist_append (inhibit->priv->list, (gpointer) data);
 
-	gpm_debug ("Recieved InhibitAuto from '%s' (%s) because '%s' saving as #%i",
-		   data->application, data->connection, data->reason, data->cookie);
-
-	dbus_g_method_return (context, data->cookie);
-}
-
-/**
- * gpm_inhibit_inhibit_manual:
- * @connection: Connection name, e.g. ":0.13"
- * @application:	Application name, e.g. "Nautilus"
- * @reason: Reason for inhibiting, e.g. "Copying files"
- *
- * Allocates a random cookie used to identify the connection, as multiple
- * inhibit requests can come from one caller sharing a dbus connection.
- * We need to refcount internally, and data is saved in the GpmInhibitData
- * struct.
- *
- * Return value: a new random cookie.
- **/
-void
-gpm_inhibit_inhibit_manual (GpmInhibit  *inhibit,
-		            const gchar *application,
-		            const gchar *reason,
-		            DBusGMethodInvocation *context,
-		            GError     **error)
-{
-	const gchar *connection;
-	GpmInhibitData *data;
-
-	/* as we are async, we can get the sender */
-	connection = dbus_g_method_get_sender (context);
-
-	/* handle where the application does not add required data */
-	if (connection == NULL ||
-	    application == NULL ||
-	    reason == NULL) {
-		gpm_warning ("Recieved InhibitManual, but application "
-			     "did not set the parameters correctly");
-		dbus_g_method_return (context, -1);
-		return;
-	}
-
-	/* seems okay, add to list */
-	data = g_new (GpmInhibitData, 1);
-	data->cookie = gpm_inhibit_generate_cookie (inhibit);
-	data->application = g_strdup (application);
-	data->connection = g_strdup (connection);
-	data->reason = g_strdup (reason);
-	data->manual = TRUE;
-
-	inhibit->priv->list_manual = g_slist_append (inhibit->priv->list_manual, (gpointer) data);
-
-	gpm_debug ("Recieved InhibitManual from '%s' (%s) because '%s' saving as #%i",
+	gpm_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
 
 	dbus_g_method_return (context, data->cookie);
@@ -256,6 +203,9 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 {
 	GpmInhibitData *data;
 
+	/* FIXME */
+//	g_signal_emit (manager, signals [HAS_INHIBIT_CHANGED], 0, FALSE);
+
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
 	if (data == NULL) {
@@ -266,12 +216,8 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 	gpm_debug ("UnInhibit okay #%i", cookie);
 	gpm_inhibit_free_data_object (data);
 
-	/* remove it from the correct list */
-	if (data->manual == TRUE) {
-		inhibit->priv->list_manual = g_slist_remove (inhibit->priv->list_manual, (gconstpointer) data);
-	} else {
-		inhibit->priv->list_auto = g_slist_remove (inhibit->priv->list_auto, (gconstpointer) data);
-	}
+	/* remove it from the list */
+	inhibit->priv->list = g_slist_remove (inhibit->priv->list, (gconstpointer) data);
 	return TRUE;
 }
 
@@ -305,18 +251,14 @@ gpm_inhibit_remove_dbus (GpmInhibit  *inhibit,
 	int a;
 	GpmInhibitData *data;
 	/* Remove *any* connections that match the connection */
-	for (a=0; a<g_slist_length (inhibit->priv->list_auto); a++) {
-		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list_auto, a);
+	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
+		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 		if (strcmp (data->connection, connection) == 0) {
 			gpm_debug ("Auto-revoked idle inhibit on '%s'.",
 				   data->application);
 			gpm_inhibit_free_data_object (data);
-			/* remove it from the correct list */
-			if (data->manual == TRUE) {
-				inhibit->priv->list_manual = g_slist_remove (inhibit->priv->list_manual, (gconstpointer) data);
-			} else {
-				inhibit->priv->list_auto = g_slist_remove (inhibit->priv->list_auto, (gconstpointer) data);
-			}
+			/* remove it from the list */
+			inhibit->priv->list = g_slist_remove (inhibit->priv->list, (gconstpointer) data);
 		}
 	}
 	return;
@@ -345,50 +287,34 @@ dbus_noc_session_cb (DbusMonitorSession *dbus_monitor,
 }
 
 /**
- * gpm_inhibit_is_valid
+ * gpm_inhibit_has_inhibit
  *
  * Checks to see if we are being stopped from performing an action.
  *
  * TRUE if the action is OK, i.e. we have *not* been inhibited.
  **/
 gboolean
-gpm_inhibit_is_valid (GpmInhibit *inhibit,
-		      gboolean	  user_action,
-		      gboolean   *valid,
-		      GError    **error)
+gpm_inhibit_has_inhibit (GpmInhibit *inhibit,
+		         gboolean   *has_inihibit,
+		         GError    **error)
 {
-	guint length_auto;
-	guint length_manual;
+	guint length;
 
-	length_auto = g_slist_length (inhibit->priv->list_auto);
-	length_manual = g_slist_length (inhibit->priv->list_manual);
+	length = g_slist_length (inhibit->priv->list);
 
 	if (inhibit->priv->ignore_inhibits == TRUE) {
 		gpm_debug ("Inhibit ignored through gconf policy!");
-		*valid = TRUE;
+		*has_inihibit = FALSE;
 	}
 
-	if (user_action == TRUE) {
-		/* if user clicks button or closes lid then only manual inhibitors
-		   can stop the action. */
-		if (length_manual == 0) {
-			gpm_debug ("Valid as no manual inhibitors");
-			*valid = TRUE;
-		} else {
-			/* we have at least one application blocking the action */
-			gpm_debug ("We have %i valid manual inhibitors", length_manual);
-			*valid = FALSE;
-		}
+	/* An inhibit can stop the action */
+	if (length == 0) {
+		gpm_debug ("Valid as no inhibitors");
+		*has_inihibit = FALSE;
 	} else {
-		/* A manual or auto inhibit can stop the action if not consciously done. */
-		if (length_auto == 0 && length_manual == 0) {
-			gpm_debug ("Valid as no auto or manual inhibitors");
-			*valid = TRUE;
-		} else {
-			/* we have at least one application blocking the action */
-			gpm_debug ("We have %i valid auto and %i manual inhibitors", length_auto, length_manual);
-			*valid = FALSE;
-		}
+		/* we have at least one application blocking the action */
+		gpm_debug ("We have %i valid inhibitors", length);
+		*has_inihibit = TRUE;
 	}
 
 	/* we always return successful for DBUS */
@@ -413,9 +339,8 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 	guint a;
 	GpmInhibitData *data;
 
-	/* todo: use manual also */
-	if (g_slist_length (inhibit->priv->list_auto) == 1) {
-		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list_auto, 0);
+	if (g_slist_length (inhibit->priv->list) == 1) {
+		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, 0);
 		g_string_append_printf (message, "<b>%s</b> ",
 					data->application);
 		g_string_append_printf (message, _("has stopped the %s from "
@@ -426,8 +351,8 @@ gpm_inhibit_get_message (GpmInhibit  *inhibit,
 	} else {
 		g_string_append_printf (message, _("Multiple applications have stopped the "
 					"%s from taking place."), action);
-		for (a=0; a<g_slist_length (inhibit->priv->list_auto); a++) {
-			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list_auto, a);
+		for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
+			data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 			g_string_append_printf (message,
 						"\n<b>%s</b> : <i>%s</i>",
 						data->application, data->reason);
@@ -457,6 +382,13 @@ gpm_inhibit_class_init (GpmInhibitClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	object_class->finalize = gpm_inhibit_finalize;
+
+	signals [HAS_INHIBIT_CHANGED] =
+		g_signal_new ("has-inhibit-changed",
+			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmInhibitClass, has_inhibit_changed),
+			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	g_type_class_add_private (klass, sizeof (GpmInhibitPrivate));
 }
 
@@ -465,8 +397,7 @@ static void
 gpm_inhibit_init (GpmInhibit *inhibit)
 {
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
-	inhibit->priv->list_auto = NULL;
-	inhibit->priv->list_manual = NULL;
+	inhibit->priv->list = NULL;
 	inhibit->priv->dbus_monitor = dbus_monitor_session_new ();
 	g_signal_connect (inhibit->priv->dbus_monitor, "name-owner-changed",
 			  G_CALLBACK (dbus_noc_session_cb), inhibit);
@@ -493,17 +424,11 @@ gpm_inhibit_finalize (GObject *object)
 	inhibit = GPM_INHIBIT (object);
 	inhibit->priv = GPM_INHIBIT_GET_PRIVATE (inhibit);
 
-	/* remove items in list and free */
-	for (a=0; a<g_slist_length (inhibit->priv->list_manual); a++) {
-		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list_manual, a);
+	for (a=0; a<g_slist_length (inhibit->priv->list); a++) {
+		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list, a);
 		gpm_inhibit_free_data_object (data);
 	}
-	for (a=0; a<g_slist_length (inhibit->priv->list_auto); a++) {
-		data = (GpmInhibitData *) g_slist_nth_data (inhibit->priv->list_auto, a);
-		gpm_inhibit_free_data_object (data);
-	}
-	g_slist_free (inhibit->priv->list_manual);
-	g_slist_free (inhibit->priv->list_auto);
+	g_slist_free (inhibit->priv->list);
 
 	g_object_unref (inhibit->priv->conf);
 	g_object_unref (inhibit->priv->dbus_monitor);

@@ -45,24 +45,20 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
+	void		(* has_inhibit_changed)		(GpmInhibit	*inhibit,
+							 gboolean	 has_inhibit);
 } GpmInhibitClass;
 
 GpmInhibit	*gpm_inhibit_new			(void);
 GType		 gpm_inhibit_get_type			(void);
-gboolean	 gpm_inhibit_is_valid			(GpmInhibit	*inhibit,
-							 gboolean	 user_action,
+gboolean	 gpm_inhibit_has_inhibit		(GpmInhibit	*inhibit,
 							 gboolean	*valid,
 							 GError		**error);
 void		 gpm_inhibit_get_message		(GpmInhibit	*inhibit,
 							 GString	*message,
 							 const gchar	*action);
 
-void		 gpm_inhibit_inhibit_manual		(GpmInhibit	*inhibit,
-							 const gchar	*application,
-							 const gchar	*reason,
-							 DBusGMethodInvocation *context,
-							 GError		**error);
-void		 gpm_inhibit_inhibit_auto		(GpmInhibit	*inhibit,
+void		 gpm_inhibit_inhibit			(GpmInhibit	*inhibit,
 							 const gchar	*application,
 							 const gchar	*reason,
 							 DBusGMethodInvocation *context,

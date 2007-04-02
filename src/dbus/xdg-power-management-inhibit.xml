@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
-  <!-- ************ THIS IS NOT STANDARDISED. DO NOT USE. ************ -->
   <interface name="org.freedesktop.PowerManagement.Inhibit">
-     <method name="InhibitAuto">
-      <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
-      <arg type="s" name="application" direction="in"/>
-      <arg type="s" name="reason" direction="in"/>
-      <arg type="u" name="cookie" direction="out"/>
-    </method>
-     <method name="InhibitManual">
+     <method name="Inhibit">
       <annotation name="org.freedesktop.DBus.GLib.Async" value=""/>
       <arg type="s" name="application" direction="in"/>
       <arg type="s" name="reason" direction="in"/>
@@ -17,14 +10,13 @@
     <method name="UnInhibit">
       <arg type="u" name="cookie" direction="in"/>
     </method>
-    <method name="IsValid">
-      <arg type="b" name="user_action" direction="in"/>
-      <arg type="b" name="valid" direction="out"/>
+    <method name="HasInhibit">
+      <arg type="b" name="has_inhibit" direction="out"/>
     </method>
     <method name="GetRequests">
       <arg type="ass" name="requests" direction="out"/>
     </method>
-    <signal name="IsValidChanged"/>
+    <signal name="HasInhibitChanged"/>
   </interface>
 </node>
 

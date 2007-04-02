@@ -74,19 +74,14 @@ gboolean	 gpm_powermanager_get_brightness_lcd	(GpmPowermanager *powermanager,
 							 guint		 *brightness);
 gboolean	 gpm_powermanager_set_brightness_lcd	(GpmPowermanager *powermanager,
 							 guint		  brightness);
-gboolean	 gpm_powermanager_inhibit_auto		(GpmPowermanager *powermanager,
-							 const gchar     *appname,
-		   				    	 const gchar     *reason,
-						         guint	         *cookie);
-gboolean	 gpm_powermanager_inhibit_manual	(GpmPowermanager *powermanager,
+gboolean	 gpm_powermanager_inhibit		(GpmPowermanager *powermanager,
 							 const gchar     *appname,
 		   				    	 const gchar     *reason,
 						         guint	         *cookie);
 gboolean	 gpm_powermanager_uninhibit		(GpmPowermanager *powermanager,
 							 guint            cookie);
-gboolean	 gpm_powermanager_is_valid		(GpmPowermanager *powermanager,
-							 gboolean	  user_action,
-							 gboolean        *valid);
+gboolean	 gpm_powermanager_has_inhibit		(GpmPowermanager *powermanager,
+							 gboolean        *has_inhibit);
 
 G_END_DECLS
 

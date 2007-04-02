@@ -1096,8 +1096,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, percent_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [CHARGING_CHANGED] =
@@ -1105,8 +1104,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, charging_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	signals [DISCHARGING_CHANGED] =
@@ -1114,8 +1112,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, discharging_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	signals [LOW_CAPACITY] =
@@ -1123,8 +1120,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, low_capacity),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [PERHAPS_RECALL] =
@@ -1132,8 +1128,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, perhaps_recall),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__STRING_STRING,
 			      G_TYPE_NONE,
 			      2, G_TYPE_STRING, G_TYPE_STRING);
@@ -1142,8 +1137,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, fully_charged),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 	signals [COLLECTION_CHANGED] =
@@ -1151,8 +1145,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, collection_changed),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 	signals [DISCHARGING] =
@@ -1160,8 +1153,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, discharging),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 	signals [CHARGE_ACTION] =
@@ -1169,8 +1161,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_action),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [CHARGE_LOW] =
@@ -1178,8 +1169,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_low),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 	signals [CHARGE_CRITICAL] =
@@ -1187,8 +1177,7 @@ gpm_cell_array_class_init (GpmCellArrayClass *klass)
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmCellArrayClass, charge_critical),
-			      NULL,
-			      NULL,
+			      NULL, NULL,
 			      gpm_marshal_VOID__UINT,
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 }

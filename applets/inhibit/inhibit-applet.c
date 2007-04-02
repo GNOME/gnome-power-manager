@@ -219,10 +219,10 @@ click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 		applet->cookie = 0;
 	} else {
 		g_debug ("inhibiting");
-		gpm_powermanager_inhibit_auto (applet->powermanager,
-					       GPM_INHIBIT_APPLET_NAME,
-					       _("Manual inhibit"),
-					       &(applet->cookie));
+		gpm_powermanager_inhibit (applet->powermanager,
+					  GPM_INHIBIT_APPLET_NAME,
+					  _("Manual inhibit"),
+					  &(applet->cookie));
 	}
 	/* update icon */
 	retrieve_icon (applet);

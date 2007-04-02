@@ -52,8 +52,10 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* battery_state_changed)	(GpmManager	*manager,
+	void		(* on_battery_changed)		(GpmManager	*manager,
 							 gboolean	 on_battery);
+	void		(* low_battery_changed)		(GpmManager	*manager,
+							 gboolean	 low_battery);
 	void		(* power_save_status_changed)	(GpmManager	*manager,
 							 gboolean	 save_power);
 	void		(* can_standby_changed)		(GpmManager	*manager,
@@ -84,8 +86,11 @@ GpmManager	*gpm_manager_new			(void);
 gboolean	 gpm_manager_get_power_save_status	(GpmManager	*manager,
 							 gboolean	*save_power,
 							 GError		**error);
-gboolean	 gpm_manager_get_battery_state		(GpmManager	*manager,
+gboolean	 gpm_manager_get_on_battery		(GpmManager	*manager,
 							 gboolean	*on_battery,
+							 GError		**error);
+gboolean	 gpm_manager_get_low_battery		(GpmManager	*manager,
+							 gboolean	*low_battery,
 							 GError		**error);
 gboolean	 gpm_manager_standby			(GpmManager	*manager,
 							 GError		**error);
