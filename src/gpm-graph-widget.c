@@ -610,11 +610,7 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	/* do we autorange the start (so it starts at non-zero)? */
 	if (graph->priv->autorange_x) {
 		/* x is always time and always autoranges to the minute scale */
-		smallest_x = (smallest_x / 60) * 60;
-		if (smallest_x < 60) {
-			smallest_x = 0;
-		}
-		graph->priv->start_x = smallest_x;
+		graph->priv->start_x = gpm_precision_round_down (smallest_x, 10*60);
 	} else {
 		graph->priv->start_x = 0;
 	}
@@ -623,17 +619,15 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		graph->priv->stop_x = 100;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		graph->priv->stop_x = (((biggest_x - smallest_x) / (10 * 60)) + 1) * (10 * 60) + smallest_x;
+		if (biggest_x > 10*60*60) {
+			graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10*60*60) + smallest_x;
+		} else {
+			graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10*60) + smallest_x;
+		}
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		graph->priv->stop_x = (((biggest_x - smallest_x) / 10000) + 2) * 10000 + smallest_x;
-		if (graph->priv->stop_x < 10000) {
-			graph->priv->stop_x = 10000 + smallest_x;
-		}
+		graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10000) + smallest_x;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		graph->priv->stop_x = (((biggest_x - smallest_x) / 1000) + 2) * 1000 + smallest_x;
-		if (graph->priv->stop_x < 1000) {
-			graph->priv->stop_x = 1000 + smallest_x;
-		}
+		graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 1000) + smallest_x;
 	} else {
 		graph->priv->start_x = 0;
 		graph->priv->stop_x = biggest_x;
@@ -645,25 +639,17 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 		graph->priv->stop_y = 100;
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
 		graph->priv->start_y = 0;
-		graph->priv->stop_y = ((biggest_y / 60) + 2)* 60;
-		if (graph->priv->stop_y > 60) {
-			graph->priv->stop_y = ((biggest_y / (1 * 60)) + 2) * (1 * 60);
-		}
-		if (graph->priv->stop_y < 60) {
-			graph->priv->stop_y = 60;
+		if (biggest_y > 5*60*60) {
+			graph->priv->stop_y = gpm_precision_round_up (biggest_y, 5*60*60);
+		} else {
+			graph->priv->stop_y = gpm_precision_round_up (biggest_y, 5*60);
 		}
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
 		graph->priv->start_y = 0;
-		graph->priv->stop_y = ((biggest_y / 10000) + 2) * 10000;
-		if (graph->priv->stop_y < 10000) {
-			graph->priv->stop_y = 10000;
-		}
+		graph->priv->stop_y = gpm_precision_round_up (biggest_y, 10000);
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
 		graph->priv->start_y = 0;
-		graph->priv->stop_y = ((biggest_y / 1000) + 2) * 1000;
-		if (graph->priv->stop_y < 1000) {
-			graph->priv->stop_y = 1000;
-		}
+		graph->priv->stop_y = gpm_precision_round_up (biggest_y, 1000);
 	} else {
 		graph->priv->start_y = 0;
 		graph->priv->stop_y = biggest_y;

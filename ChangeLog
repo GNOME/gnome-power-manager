@@ -1,5 +1,19 @@
 2007-04-03  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-common.h:
+	* src/gpm-common.c: (gpm_precision_round_up), (gpm_precision_round_down):
+	Create two helper functions to do base rounding in a sane way.
+
+	* test/gpm-st-common.c: (gpm_st_common):
+	Test the new round up and round down code.
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
+	Use the round up and down code to make the graph scaling a bit more
+	sane, and also to limit the precision to 5 minutes in the tooltip.
+
+2007-04-03  Richard Hughes  <richard@hughsie.com>
+
 	* applets/inhibit/inhibit-applet.c: (click_cb):
 	* data/gpm-inhibit-test.glade:
 	* docs/dbus-interface.html:

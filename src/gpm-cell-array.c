@@ -47,6 +47,7 @@ static void     gpm_cell_array_finalize   (GObject	     *object);
 #define GPM_CELL_ARRAY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_CELL_ARRAY, GpmCellArrayPrivate))
 #define GPM_CELL_ARRAY_TEXT_MIN_ACCURACY	30
 #define GPM_CELL_ARRAY_TEXT_MIN_TIME		120
+#define GPM_UI_TIME_PRECISION			5*60
 
 struct GpmCellArrayPrivate
 {
@@ -886,6 +887,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			time = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
+			time = gpm_precision_round_down (time, GPM_UI_TIME_PRECISION);
 			discharge_timestring = gpm_get_timestring (time);
 			description = g_strdup_printf (_("%s fully charged (%i%%)\nProvides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);
@@ -898,7 +900,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	} else if (unit->is_discharging == TRUE) {
 
 		if (unit->time_discharge> GPM_CELL_ARRAY_TEXT_MIN_TIME) {
-			discharge_timestring = gpm_get_timestring (unit->time_discharge);
+			time = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
+			discharge_timestring = gpm_get_timestring (time);
 			description = g_strdup_printf (_("%s %s remaining (%i%%)\n"),
 						type_desc, discharge_timestring, unit->percentage);
 			g_free (discharge_timestring);
@@ -914,15 +917,18 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		    unit->time_discharge > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			/* display both discharge and charge time */
-			charge_timestring = gpm_get_timestring (unit->time_charge);
-			discharge_timestring = gpm_get_timestring (unit->time_discharge);
+			time = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
+			charge_timestring = gpm_get_timestring (time);
+			time = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
+			discharge_timestring = gpm_get_timestring (time);
 			description = g_strdup_printf (_("%s %s until charged (%i%%)\nProvides %s battery runtime\n"),
 							type_desc, charge_timestring, unit->percentage, discharge_timestring);
 			g_free (charge_timestring);
 			g_free (discharge_timestring);
 		} else if (unit->time_charge> GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			/* display only charge time */
-			charge_timestring = gpm_get_timestring (unit->time_charge);
+			time = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
+			charge_timestring = gpm_get_timestring (time);
 			description = g_strdup_printf (_("%s %s until charged (%i%%)\n"),
 						type_desc, charge_timestring, unit->percentage);
 			g_free (charge_timestring);

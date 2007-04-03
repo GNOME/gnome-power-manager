@@ -52,6 +52,10 @@ typedef enum {
 } GpmIconPolicy;
 
 gchar		*gpm_get_timestring		(guint		 time);
+guint		 gpm_precision_round_up		(guint		 value,
+						 guint		 smallest);
+guint		 gpm_precision_round_down	(guint		 value,
+						 guint		 smallest);
 guint		 gpm_percent_to_discrete	(guint		 percentage,
 						 guint		 levels);
 gint		 gpm_exponential_average	(gint		 previous,

@@ -30,11 +30,68 @@
 #include "gpm-common.h"
 
 /**
+ * gpm_precision_round_up:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	110
+ * 95,  10	100
+ * 0,   10	10
+ * 112, 10	120
+ * 100, 10	100
+ **/
+guint
+gpm_precision_round_up (guint value, guint smallest)
+{
+	guint division;
+	if (value == 0) {
+		return smallest;
+	}
+	if (smallest == 0) {
+		gpm_warning ("divisor zero");
+		return 0;
+	}
+	division = value / smallest;
+	/* add one unit to scale if we can't contain */
+	if (value % smallest != 0) {
+		division++;
+	}
+	division *= smallest;
+	return division;
+}
+
+/**
+ * gpm_precision_round_down:
+ * @value: The input value
+ * @smallest: The smallest increment allowed
+ *
+ * 101, 10	100
+ * 95,  10	90
+ * 0,   10	0
+ * 112, 10	110
+ * 100, 10	100
+ **/
+guint
+gpm_precision_round_down (guint value, guint smallest)
+{
+	guint division;
+	if (value == 0) {
+		return 0;
+	}
+	if (smallest == 0) {
+		gpm_warning ("divisor zero");
+		return 0;
+	}
+	division = value / smallest;
+	division *= smallest;
+	return division;
+}
+
+/**
  * gpm_rgb_to_colour:
  * @red: The red value
  * @green: The green value
  * @blue: The blue value
- *
  **/
 guint32
 gpm_rgb_to_colour (guint8 red, guint8 green, guint8 blue)
@@ -51,7 +108,6 @@ gpm_rgb_to_colour (guint8 red, guint8 green, guint8 blue)
  * @red: The red value
  * @green: The green value
  * @blue: The blue value
- *
  **/
 void
 gpm_colour_to_rgb (guint32 colour, guint8 *red, guint8 *green, guint8 *blue)
@@ -180,7 +236,7 @@ gpm_get_timestring (guint time_secs)
 	else
 		/* TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 		 * Swap order with "%2$s %2$i %1$s %1$i if needed */
-		timestring = g_strdup_printf (_("%i %s, %i %s"),
+		timestring = g_strdup_printf (_("%i %s %i %s"),
 				hours, ngettext ("hour", "hours", hours),
 				minutes, ngettext ("minute", "minutes", minutes));
 	return timestring;

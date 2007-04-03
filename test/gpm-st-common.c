@@ -29,6 +29,7 @@ gpm_st_common (GpmSelfTest *test)
 {
 	guint8 r, g, b;
 	guint32 colour;
+	guint value;
 	test->type = "GpmCommon        ";
 
 	/************************************************************/
@@ -110,6 +111,96 @@ gpm_st_common (GpmSelfTest *test)
 		gpm_st_success (test, "set white");
 	} else {
 		gpm_st_failed (test, "could not set white (%i)", colour);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision down 0,10");
+	value = gpm_precision_round_down (0, 10);
+	if (value == 0) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision down 4,10");
+	value = gpm_precision_round_down (4, 10);
+	if (value == 0) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision down 11,10");
+	value = gpm_precision_round_down (11, 10);
+	if (value == 10) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision down 201,2");
+	value = gpm_precision_round_down (201, 2);
+	if (value == 200) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision down 100,10");
+	value = gpm_precision_round_down (100, 10);
+	if (value == 100) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision up 0,10");
+	value = gpm_precision_round_up (0, 10);
+	if (value == 10) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision up 4,10");
+	value = gpm_precision_round_up (4, 10);
+	if (value == 10) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision up 11,10");
+	value = gpm_precision_round_up (11, 10);
+	if (value == 20) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision up 201,2");
+	value = gpm_precision_round_up (201, 2);
+	if (value == 202) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "limit precision up 100,10");
+	value = gpm_precision_round_up (100, 10);
+	if (value == 100) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "precision incorrect (%i)", value);
 	}
 }
 
