@@ -67,14 +67,30 @@ gpm_cell_unit_print (GpmCellUnit *unit)
 	gpm_debug ("percent        %i", unit->percentage);
 	gpm_debug ("is charging    %i", unit->is_charging);
 	gpm_debug ("is discharging %i", unit->is_discharging);
-	gpm_debug ("charge current %i", unit->charge_current);
-	gpm_debug ("charge last    %i", unit->charge_last_full);
-	gpm_debug ("charge design  %i", unit->charge_design);
-	gpm_debug ("rate           %i", unit->rate);
-	gpm_debug ("time charge    %i", unit->time_charge);
-	gpm_debug ("time discharge %i", unit->time_discharge);
-	gpm_debug ("capacity       %i", unit->capacity);
-	gpm_debug ("voltage        %i", unit->voltage);
+	if (unit->charge_current > 0) {
+		gpm_debug ("charge current %i", unit->charge_current);
+	}
+	if (unit->charge_last_full > 0) {
+		gpm_debug ("charge last    %i", unit->charge_last_full);
+	}
+	if (unit->charge_design > 0) {
+		gpm_debug ("charge design  %i", unit->charge_design);
+	}
+	if (unit->rate > 0) {
+		gpm_debug ("rate           %i", unit->rate);
+	}
+	if (unit->time_charge > 0) {
+		gpm_debug ("time charge    %i", unit->time_charge);
+	}
+	if (unit->time_discharge > 0) {
+		gpm_debug ("time discharge %i", unit->time_discharge);
+	}
+	if (unit->capacity > 0) {
+		gpm_debug ("capacity       %i", unit->capacity);
+	}
+	if (unit->voltage > 0) {
+		gpm_debug ("voltage        %i", unit->voltage);
+	}
 	return TRUE;
 }
 

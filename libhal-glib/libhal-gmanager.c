@@ -130,6 +130,46 @@ hal_gmanager_find_capability (HalGManager *manager,
 }
 
 /**
+ * hal_gmanager_find_device_string_match:
+ *
+ * @hal_gmanager: This class instance
+ * @key: The key, e.g. "battery.type"
+ * @value: The value, e.g. "primary"
+ * @devices: return value, passed by ref
+ * Return value: TRUE for success, FALSE for failure
+ **/
+gboolean
+hal_gmanager_find_device_string_match (HalGManager *manager,
+			               const gchar *key,
+			               const gchar *value,
+			               gchar     ***devices,
+			               GError     **error)
+{
+	DBusGProxy *proxy = NULL;
+	gboolean ret;
+
+	g_return_val_if_fail (LIBHAL_IS_GMANAGER (manager), FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+	g_return_val_if_fail (value != NULL, FALSE);
+	g_return_val_if_fail (devices != NULL, FALSE);
+
+	proxy = dbus_g_proxy_new_for_name (manager->priv->connection,
+					   HAL_DBUS_SERVICE,
+					   HAL_DBUS_PATH_MANAGER,
+					   HAL_DBUS_INTERFACE_MANAGER);
+	ret = dbus_g_proxy_call (proxy, "FindDeviceStringMatch", error,
+				 G_TYPE_STRING, key,
+				 G_TYPE_STRING, value,
+				 G_TYPE_INVALID,
+				 G_TYPE_STRV, devices,
+				 G_TYPE_INVALID);
+	if (ret == FALSE) {
+		*devices = NULL;
+	}
+	return ret;
+}
+
+/**
  * hal_gmanager_free_capability:
  *
  * @value: The list of strings to free

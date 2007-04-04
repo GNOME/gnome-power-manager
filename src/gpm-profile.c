@@ -590,6 +590,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	}
 	g_free (filename);
 
+#if 0
 	/* do debugging self tests */
 	guint time;
 	gpm_debug ("Reference times");
@@ -604,6 +605,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		time = gpm_profile_get_time (profile, 50, FALSE);
 		gpm_debug ("50-99\t%i minutes", time / 60);
 	}
+#endif
 }
 
 /**

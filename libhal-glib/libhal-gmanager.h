@@ -93,6 +93,11 @@ gboolean	 hal_gmanager_find_capability		(HalGManager	*manager,
 							 const gchar	*capability,
 							 gchar     	***value,
 							 GError		**error);
+gboolean	 hal_gmanager_find_device_string_match	(HalGManager	*manager,
+							 const gchar	*key,
+							 const gchar	*value,
+							 gchar		***devices,
+							 GError		**error);
 void		 hal_gmanager_free_capability		(gchar		**value);
 gboolean	 hal_gmanager_is_laptop			(HalGManager	*manager);
 

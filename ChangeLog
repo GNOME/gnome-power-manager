@@ -1,3 +1,23 @@
+2007-04-05  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gmanager.h:
+	* libhal-glib/libhal-gmanager.c:
+	(hal_gmanager_find_device_string_match):
+	Add another method.
+
+	* src/gpm-debug.h:
+	Add gpm_assert_run_once for debugging.
+
+	* src/gpm-cell-unit.c: (gpm_cell_unit_print):
+	Don't print zero data for some of the fields.
+
+	* src/gpm-engine.c: (gpm_engine_recalculate_state),
+	(gpm_engine_init), (gpm_engine_start):
+	Monitor when we are in coldplug to save some CPU cycles when starting.
+
+	* src/gpm-profile.c: (gpm_profile_load_data):
+	Don't print profile data, it's quite expensive.
+
 2007-04-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-main.c: (main):
@@ -83,14 +103,14 @@
 	Update to conform to the session power management spec version 0.2
 
 2007-04-02  Matthias Clasen <mclasen@redhat.com>
-	
+
 	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
 	* applets/inhibit/GNOME_BrightnessApplet.server.in.in:
 	Add bugzilla information to applet .server files.  (#425000)
 
-	* applets/brightness/Makefile.am: 
+	* applets/brightness/Makefile.am:
 	* applets/inhibit/Makefile.am: Substitute @VERSION@ in
-	.server files.  
+	.server files.
 
 2007-03-29  Richard Hughes  <richard@hughsie.com>
 
@@ -3051,7 +3071,7 @@
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-dpms.c:
-	* src/gpm-hal-monitor.c: 
+	* src/gpm-hal-monitor.c:
 	* src/gpm-hal-power.c:
 	* src/gpm-hal-power.h:
 	* src/gpm-hal.c:
@@ -3456,7 +3476,7 @@
 
 2006-10-09  Gabor Kelemen  <kelemeng@gnome.hu>
 
-	* src/gpm-graph-widget.c: 
+	* src/gpm-graph-widget.c:
 	Mark time measurement units for translation. Fix for bug #359089.
 
 2006-10-06  Richard Hughes  <richard@hughsie.com>

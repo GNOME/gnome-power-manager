@@ -62,6 +62,7 @@ struct GpmEnginePrivate
 	GpmEngineCollection	 collection;
 	HalGManager		*hal_manager;
 	gboolean		 hal_connected;
+	gboolean		 during_coldplug;
 	gchar			*previous_icon;
 	gchar			*previous_summary;
 };
@@ -575,6 +576,12 @@ gpm_engine_recalculate_state (GpmEngine *engine)
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (GPM_IS_ENGINE (engine));
 
+	/* we want to make this quicker */
+	if (engine->priv->during_coldplug == TRUE) {
+		gpm_debug ("ignoring due to coldplug");
+		return;
+	}
+
 	gpm_engine_recalculate_state_icon (engine);
 	gpm_engine_recalculate_state_summary (engine);
 }
@@ -675,7 +682,7 @@ gpm_cell_array_percent_changed_cb (GpmCellArray *cell_array,
  */
 static void
 gpm_cell_array_collection_changed_cb (GpmCellArray *cell_array,
-				 GpmEngine    *engine)
+				      GpmEngine    *engine)
 {
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (GPM_IS_ENGINE (engine));
@@ -833,6 +840,7 @@ gpm_engine_init (GpmEngine *engine)
 	engine->priv->previous_icon = NULL;
 	engine->priv->previous_summary = NULL;
 	engine->priv->hal_connected = TRUE;
+	engine->priv->during_coldplug = TRUE;
 
 	/* do we want to display the icon in the tray */
 	gpm_conf_get_string (engine->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy);
@@ -945,6 +953,10 @@ gpm_engine_start (GpmEngine *engine)
 	gpm_cell_array_set_type (collection->mouse, GPM_CELL_UNIT_KIND_MOUSE);
 	gpm_cell_array_set_type (collection->keyboard, GPM_CELL_UNIT_KIND_KEYBOARD);
 	gpm_cell_array_set_type (collection->pda, GPM_CELL_UNIT_KIND_PDA);
+
+	/* we're done */
+	engine->priv->during_coldplug = FALSE;
+
 	gpm_engine_recalculate_state (engine);
 	return TRUE;
 }

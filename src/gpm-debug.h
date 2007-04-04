@@ -32,14 +32,17 @@ G_BEGIN_DECLS
 #define gpm_debug(...) gpm_debug_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_warning(...) gpm_warning_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_error(...) gpm_error_real (__func__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_assert_run_once(x) static guint (x) = 0; if ((x)++ != 0) gpm_error ("%s, run multi!", __func__); gpm_warning ("%s, run multi!", __func__);
 #elif defined(__GNUC__) && __GNUC__ >= 3
 #define gpm_debug(...) gpm_debug_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_warning(...) gpm_warning_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #define gpm_error(...) gpm_error_real (__FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
+#define gpm_assert_run_once(x) static guint (x) = 0; if ((x)++ != 0) gpm_error ("%s, run multi!", __FUNCTION__); gpm_warning ("%s, run multi!", __FUNCTION__);
 #else
 #define gpm_debug
 #define gpm_warning
 #define gpm_error
+#define gpm_assert_run_once(x)
 #endif
 
 void		gpm_debug_init			(gboolean	 debug);
