@@ -54,6 +54,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-cell.c					\
 	gpm-st-proxy.c					\
 	gpm-st-inhibit.c				\
+	gpm-st-profile.c				\
 	gpm-st-hal-power.c				\
 	gpm-st-hal-device.c				\
 	gpm-st-hal-devicestore.c			\

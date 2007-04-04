@@ -413,14 +413,14 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 }
 
 /**
- * gpm_cell_array_get_profile_id:
+ * gpm_cell_array_get_config_id:
  *
  * Gets an ID that represents the battery state of the system, typically
  * which will consist of all the serial numbers of primary batteries in the
  * system joined together.
  */
 static gchar *
-gpm_cell_array_get_profile_id (GpmCellArray *cell_array)
+gpm_cell_array_get_config_id (GpmCellArray *cell_array)
 {
 	GpmCellUnit *unit;
 	GpmCell *cell;
@@ -680,6 +680,39 @@ gpm_check_device_key (GpmCellArray *cell_array, const gchar *udi, const gchar *k
 }
 
 /**
+ * gpm_cell_array_collection_changed:
+ *
+ * i.e. a battery was inserted or removed
+ */
+static gboolean
+gpm_cell_array_collection_changed (GpmCellArray *cell_array)
+{
+	GpmCellUnit *unit;
+	gchar *config_id;
+
+	unit = &(cell_array->priv->unit);
+
+	/* reset the profile config id if primary */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		/* we have to use a profile ID for hot-swapping batteries */
+		config_id = gpm_cell_array_get_config_id (cell_array);
+		gpm_profile_set_config_id (cell_array->priv->profile, config_id);
+		g_free (config_id);
+	}
+
+	/* recalculate */
+	gpm_cell_array_update (cell_array);
+
+	/* emit */
+	gpm_debug ("** EMIT: collection-changed");
+	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0, unit->percentage);
+
+	/* make sure */
+	gpm_cell_array_percent_changed (cell_array);
+	return TRUE;
+}
+
+/**
  * gpm_cell_array_add:
  */
 static gboolean
@@ -727,13 +760,8 @@ gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
 
-	/* recalculate */
-	gpm_cell_array_update (cell_array);
-
-	/* emit */
-	gpm_debug ("** EMIT: collection-changed");
-	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0, unit->percentage);
-	gpm_cell_array_percent_changed (cell_array);
+	/* global collection has changed */
+	gpm_cell_array_collection_changed (cell_array);
 
 	return TRUE;
 }
@@ -774,7 +802,6 @@ gboolean
 gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 {
 	GpmCellUnit *unit;
-	gchar *profile_id;
 
 	g_return_val_if_fail (cell_array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL_ARRAY (cell_array), FALSE);
@@ -789,13 +816,6 @@ gpm_cell_array_set_type (GpmCellArray *cell_array, GpmCellUnitKind kind)
 
 	/* recalculate */
 	gpm_cell_array_update (cell_array);
-
-	/* set the profile if primary */
-	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
-		profile_id = gpm_cell_array_get_profile_id (cell_array);
-		gpm_debug ("profile_id = %s", profile_id);
-		g_free (profile_id);
-	}
 
 	return TRUE;
 }
@@ -976,13 +996,8 @@ hal_device_removed_cb (HalGManager  *hal_manager,
 	/* remove from the devicestore */
 	g_ptr_array_remove_index (cell_array->priv->array, index);
 
-	/* recalculate */
-	gpm_cell_array_update (cell_array);
-
-	/* emit */
-	gpm_debug ("** EMIT: collection-changed");
-	g_signal_emit (cell_array, signals [COLLECTION_CHANGED], 0);
-	gpm_cell_array_percent_changed (cell_array);
+	/* global collection has changed */
+	gpm_cell_array_collection_changed (cell_array);
 
 	return TRUE;
 }

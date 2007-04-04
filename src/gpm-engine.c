@@ -522,7 +522,10 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
 		return TRUE;
 	}
+
 	gpm_debug ("no change");
+	/* nothing to do... */
+	g_free (icon);
 	return FALSE;
 }
 
@@ -558,6 +561,8 @@ gpm_engine_recalculate_state_summary (GpmEngine *engine)
 		return TRUE;
 	}
 	gpm_debug ("no change");
+	/* nothing to do... */
+	g_free (summary);
 	return FALSE;
 }
 
@@ -968,6 +973,10 @@ gpm_engine_finalize (GObject *object)
 	g_object_unref (collection->mouse);
 	g_object_unref (collection->keyboard);
 	g_object_unref (collection->pda);
+
+	g_free (engine->priv->previous_icon);
+	g_free (engine->priv->previous_summary);
+
 	g_object_unref (engine->priv->hal_manager);
 	g_object_unref (engine->priv->profile);
 	g_object_unref (engine->priv->warning);

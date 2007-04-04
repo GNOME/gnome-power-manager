@@ -57,7 +57,6 @@
 #include "gpm-manager.h"
 #include "gpm-notify.h"
 #include "gpm-prefs.h"
-#include "gpm-profile.h"
 #include "gpm-screensaver.h"
 #include "gpm-backlight.h"
 #include "gpm-srv-brightness-kbd.h"
@@ -88,7 +87,6 @@ struct GpmManagerPrivate
 	GpmInfo			*info;
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
-	GpmProfile		*profile;
 	GpmControl		*control;
 	GpmScreensaver 		*screensaver;
 	GpmSound 		*sound;
@@ -1561,20 +1559,6 @@ gpm_manager_init (GpmManager *manager)
 
 	gpm_debug ("initialising info infrastructure");
 	manager->priv->info = gpm_info_new ();
-	manager->priv->profile = gpm_profile_new ();
-
-	/* do debugging self tests */
-	guint time;
-	gpm_debug ("Reference times");
-	time = gpm_profile_get_time (manager->priv->profile, 99, TRUE);
-	gpm_debug ("99-0\t%i minutes", time / 60);
-	time = gpm_profile_get_time (manager->priv->profile, 50, TRUE);
-	gpm_debug ("50-0\t%i minutes", time / 60);
-
-	time = gpm_profile_get_time (manager->priv->profile, 0, FALSE);
-	gpm_debug ("0-99\t%i minutes", time / 60);
-	time = gpm_profile_get_time (manager->priv->profile, 50, FALSE);
-	gpm_debug ("50-99\t%i minutes", time / 60);
 
 	/* add the new statistics DBUS interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INFO, &dbus_glib_gpm_statistics_object_info);
@@ -1639,7 +1623,6 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->idle);
 	g_object_unref (manager->priv->info);
 	g_object_unref (manager->priv->engine);
-	g_object_unref (manager->priv->profile);
 	g_object_unref (manager->priv->tray_icon);
 	g_object_unref (manager->priv->inhibit);
 	g_object_unref (manager->priv->screensaver);

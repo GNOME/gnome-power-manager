@@ -1,3 +1,27 @@
+2007-04-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-array.c: (gpm_array_append_from_file),
+	(gpm_array_load_from_file):
+	* src/gpm-cell-array.c: (gpm_cell_array_get_config_id),
+	(gpm_cell_array_collection_changed), (gpm_cell_array_add),
+	(gpm_cell_array_set_type), (hal_device_removed_cb):
+	* src/gpm-engine.c: (gpm_engine_recalculate_state_icon),
+	(gpm_engine_recalculate_state_summary), (gpm_engine_finalize):
+	* src/gpm-manager.c: (gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-profile.c: (gpm_profile_get_data_file),
+	(gpm_profile_get_time), (gpm_profile_save_percentage),
+	(gpm_profile_delete_data), (gpm_profile_load_data),
+	(gpm_profile_set_config_id), (gpm_profile_get_accuracy),
+	(gpm_profile_init), (gpm_profile_finalize):
+	* src/gpm-profile.h:
+	Make the profile code work with multiple batteries.
+
+	* test/Makefile.am:
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-main.h:
+	* test/gpm-st-profile.c: (gpm_st_profile):
+	Add a test suite for the GpmProfile code.
+
 2007-04-03  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-common.h:

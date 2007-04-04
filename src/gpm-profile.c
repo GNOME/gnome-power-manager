@@ -34,6 +34,8 @@
 #endif /* HAVE_UNISTD_H */
 
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
+
 #include <libgpm.h>
 
 #include "gpm-ac-adapter.h"
@@ -55,7 +57,7 @@ static void     gpm_profile_finalize   (GObject	       *object);
 #define GPM_PROFILE_SECONDS_PER_PERCENT		72
 
 /* nicely smoothed, but still pretty fast */
-#define GPM_PROFILE_SMOOTH_VIEW_SLEW		8
+#define GPM_PROFILE_SMOOTH_VIEW_SLEW		10
 #define GPM_PROFILE_SMOOTH_SAVE_PERCENT		80
 
 struct GpmProfilePrivate
@@ -72,6 +74,7 @@ struct GpmProfilePrivate
 	gboolean		 lcd_on;
 	gboolean		 data_valid;
 	guint			 last_percentage;
+	gchar			*config_id;
 };
 
 enum {
@@ -104,9 +107,15 @@ gpm_profile_class_init (GpmProfileClass *klass)
  * @profile: This class
  */
 static gchar *
-gpm_profile_get_data_file (GpmProfile *profile, const gchar *prefix, gboolean discharge)
+gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 {
 	const gchar *suffix;
+
+	/* check we have a profile loaded */
+	if (profile->priv->config_id == NULL) {
+		gpm_warning ("no config id set!");
+		return NULL;
+	}
 
 	/* use home directory */
 	if (discharge == TRUE) {
@@ -115,7 +124,8 @@ gpm_profile_get_data_file (GpmProfile *profile, const gchar *prefix, gboolean di
 		suffix = "charging.csv";
 	}
 
-	return g_strdup_printf ("%s/.gnome2/gnome-power-manager/%s-%s", g_get_home_dir (), prefix, suffix);
+	return g_strdup_printf ("%s/.gnome2/gnome-power-manager/profile-%s-%s",
+				g_get_home_dir (), profile->priv->config_id, suffix);
 }
 
 /**
@@ -286,6 +296,12 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
 
+	/* check we have a profile loaded */
+	if (profile->priv->config_id == NULL) {
+		gpm_warning ("no config id set!");
+		return 0;
+	}
+
 	/* check we can give a decent reading */
 	if (percentage > 99) {
 		gpm_debug ("percentage = %i, correcting to 99%", percentage);
@@ -338,7 +354,7 @@ gpm_profile_save_percentage (GpmProfile *profile, guint percentage, guint data, 
 	}
 
 	/* save data file when idle */
-	filename = gpm_profile_get_data_file (profile, "profile-battery", profile->priv->discharging);
+	filename = gpm_profile_get_data_file (profile, profile->priv->discharging);
 	gpm_array_save_to_file (array, filename);
 	g_free (filename);
 }
@@ -503,6 +519,33 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 }
 
 /**
+ * gpm_profile_delete_data:
+ */
+gboolean
+gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
+{
+	gchar *filename;
+	gint ret;
+
+	g_return_val_if_fail (profile != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
+
+	/* check we have a profile loaded */
+	if (profile->priv->config_id == NULL) {
+		gpm_warning ("no config id set!");
+		return FALSE;
+	}
+
+	filename = gpm_profile_get_data_file (profile, discharge);
+	ret = g_unlink (filename);
+	if (ret != 0) {
+		gpm_warning ("could not delete '%s'", filename);
+		return FALSE;
+	}
+	return TRUE;
+}
+
+/**
  * gpm_profile_load_data:
  */
 static void
@@ -518,7 +561,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	array = gpm_profile_get_data_array (profile, discharge);
 
 	/* read in data profile from disk */
-	filename = gpm_profile_get_data_file (profile, "profile-battery", discharge);
+	filename = gpm_profile_get_data_file (profile, discharge);
 	gpm_debug ("loading battery data from '%s'", filename);
 	ret = gpm_array_load_from_file (array, filename);
 
@@ -542,6 +585,56 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		}
 	}
 	g_free (filename);
+
+	/* do debugging self tests */
+	guint time;
+	gpm_debug ("Reference times");
+	if (discharge == TRUE) {
+		time = gpm_profile_get_time (profile, 99, TRUE);
+		gpm_debug ("99-0\t%i minutes", time / 60);
+		time = gpm_profile_get_time (profile, 50, TRUE);
+		gpm_debug ("50-0\t%i minutes", time / 60);
+	} else {
+		time = gpm_profile_get_time (profile, 0, FALSE);
+		gpm_debug ("0-99\t%i minutes", time / 60);
+		time = gpm_profile_get_time (profile, 50, FALSE);
+		gpm_debug ("50-99\t%i minutes", time / 60);
+	}
+}
+
+/**
+ * gpm_profile_set_config_id:
+ *
+ * @profile: This class
+ * @config_id: String to represent the state of the system, used to switch
+ *             multiple profiles for multibattery laptops.
+ */
+gboolean
+gpm_profile_set_config_id (GpmProfile  *profile,
+			   const gchar *config_id)
+{
+	gboolean reload = FALSE;
+	g_return_val_if_fail (profile != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
+	g_return_val_if_fail (config_id != NULL, FALSE);
+
+	gpm_debug ("config_id = %s", config_id);
+	if (profile->priv->config_id == NULL) {
+		/* if new */
+		profile->priv->config_id = g_strdup (config_id);
+		reload = TRUE;
+	} else if (strcmp (config_id, profile->priv->config_id) != 0) {
+		/* if different */
+		g_free (profile->priv->config_id);
+		profile->priv->config_id = g_strdup (config_id);
+		reload = TRUE;
+	}
+	if (reload == TRUE) {
+		/* get initial data */
+		gpm_profile_load_data (profile, TRUE);
+		gpm_profile_load_data (profile, FALSE);
+	}
+	return TRUE;
 }
 
 /**
@@ -555,6 +648,12 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
+
+	/* check we have a profile loaded */
+	if (profile->priv->config_id == NULL) {
+		gpm_warning ("no config id set!");
+		return 0;
+	}
 
 	if (percentage > 99) {
 		percentage = 99;
@@ -581,6 +680,7 @@ gpm_profile_init (GpmProfile *profile)
 
 	profile->priv->timer = g_timer_new ();
 	profile->priv->load = gpm_load_new ();
+	profile->priv->config_id = NULL;
 
 	profile->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (profile->priv->ac_adapter, "ac-adapter-changed",
@@ -621,10 +721,6 @@ gpm_profile_init (GpmProfile *profile)
 		gpm_debug ("on battery");
 		profile->priv->discharging = TRUE;
 	}
-
-	/* get initial data */
-	gpm_profile_load_data (profile, TRUE);
-	gpm_profile_load_data (profile, FALSE);
 }
 
 /**
@@ -644,6 +740,9 @@ gpm_profile_finalize (GObject *object)
 
 	g_return_if_fail (profile->priv != NULL);
 
+	if (profile->priv->config_id != NULL) {
+		g_free (profile->priv->config_id);
+	}
 	g_object_unref (profile->priv->load);
 	g_object_unref (profile->priv->dpms);
 	g_object_unref (profile->priv->ac_adapter);

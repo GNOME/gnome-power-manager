@@ -222,7 +222,7 @@ gpm_array_append_from_file (GpmArray *array, const gchar *filename)
 
 	g_file_get_contents (filename, &contents, &length, NULL);
 	if (contents == NULL) {
-		g_warning ("cannot open file %s", filename);
+		gpm_warning ("cannot open file %s", filename);
 		return FALSE;
 	}
 
@@ -266,7 +266,7 @@ gpm_array_load_from_file (GpmArray *array, const gchar *filename)
 
 	g_file_get_contents (filename, &contents, &length, NULL);
 	if (contents == NULL) {
-		g_warning ("cannot open file %s", filename);
+		gpm_warning ("cannot open file %s", filename);
 		return FALSE;
 	}
 
