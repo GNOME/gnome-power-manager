@@ -141,6 +141,7 @@ main (int argc, char *argv[])
 	gboolean verbose = FALSE;
 	gboolean no_daemon = FALSE;
 	gboolean timed_exit = FALSE;
+	gboolean immediate_exit = FALSE;
 	GpmManager *manager = NULL;
 	GError *error = NULL;
 	GOptionContext *context;
@@ -155,6 +156,8 @@ main (int argc, char *argv[])
 		  N_("Show extra debugging information"), NULL },
 		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
 		  N_("Exit after a small delay (for debugging)"), NULL },
+		{ "immediate-exit", '\0', 0, G_OPTION_ARG_NONE, &immediate_exit,
+		  N_("Exit after a the manager has loaded (for debugging)"), NULL },
 		{ "debug", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &debugoptions,
 		  N_("Debug specific files, e.g. power"), NULL },
 		{ NULL}
@@ -247,7 +250,9 @@ main (int argc, char *argv[])
 		g_timeout_add (1000 * 20, (GSourceFunc) timed_exit_cb, loop);
 	}
 
-	g_main_loop_run (loop);
+	if (immediate_exit == FALSE) {
+		g_main_loop_run (loop);
+	}
 
 	gpm_stock_icons_shutdown ();
 	gpm_debug_shutdown ();

@@ -1,5 +1,21 @@
 2007-04-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-main.c: (main):
+	Add the --immediate-exit command line option.
+
+	* src/gpm-profile.c: (gpm_profile_compute_data_battery),
+	(gpm_profile_compute_data_accuracy), (gpm_profile_save_percentage),
+	(gpm_profile_load_data):
+	Make the array choosing more obvious.
+
+	* src/profile-gpm.sh:
+	Add a cool new script that just starts and stops g-p-m 20 times.
+
+	* src/valgrind-gpm.sh:
+	Whitespace.
+
+2007-04-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-array.c: (gpm_array_append_from_file),
 	(gpm_array_load_from_file):
 	* src/gpm-cell-array.c: (gpm_cell_array_get_config_id),

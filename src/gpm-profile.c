@@ -170,18 +170,6 @@ gpm_profile_array_get_nonzero_average (GpmArray *array, guint value)
 }
 
 /**
- * gpm_profile_get_data_array:
- */
-static GpmArray *
-gpm_profile_get_data_array (GpmProfile *profile, gboolean discharge)
-{
-	if (discharge == TRUE) {
-		return profile->priv->array_data_discharge;
-	}
-	return profile->priv->array_data_charge;
-}
-
-/**
  * gpm_profile_compute_data_battery:
  *
  * @profile: This class
@@ -195,7 +183,11 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 	GpmArrayPoint *point;
 
 	/* get the correct data */
-	array = gpm_profile_get_data_array (profile, discharge);
+	if (discharge == TRUE) {
+		array = profile->priv->array_data_discharge;
+	} else {
+		array = profile->priv->array_data_charge;
+	}
 
 	/* get the average not including the default */
 	average = gpm_profile_array_get_nonzero_average (array, GPM_PROFILE_SECONDS_PER_PERCENT);
@@ -229,7 +221,11 @@ gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
 	GpmArrayPoint *point;
 
 	/* get the correct data */
-	array = gpm_profile_get_data_array (profile, discharge);
+	if (discharge == TRUE) {
+		array = profile->priv->array_data_discharge;
+	} else {
+		array = profile->priv->array_data_charge;
+	}
 
 	/* copy the data field into the accuracy y field */
 	for (i=0; i<100; i++) {
@@ -336,7 +332,11 @@ gpm_profile_save_percentage (GpmProfile *profile, guint percentage, guint data, 
 	gchar *filename;
 
 	/* get the correct data */
-	array = gpm_profile_get_data_array (profile, profile->priv->discharging);
+	if (profile->priv->discharging == TRUE) {
+		array = profile->priv->array_data_discharge;
+	} else {
+		array = profile->priv->array_data_charge;
+	}
 	point = gpm_array_get (array, percentage);
 
 	/* if we have no data, then just use the new value */
@@ -558,7 +558,11 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	GpmArray *array;
 
 	/* get the correct data */
-	array = gpm_profile_get_data_array (profile, discharge);
+	if (discharge == TRUE) {
+		array = profile->priv->array_data_discharge;
+	} else {
+		array = profile->priv->array_data_charge;
+	}
 
 	/* read in data profile from disk */
 	filename = gpm_profile_get_data_file (profile, discharge);
