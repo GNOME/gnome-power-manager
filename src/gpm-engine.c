@@ -211,7 +211,7 @@ gpm_engine_class_init (GpmEngineClass *klass)
 			      NULL,
 			      NULL,
 			      gpm_marshal_VOID__UINT_UINT,
-			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+			      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_POINTER);
 	signals [CHARGE_LOW] =
 		g_signal_new ("charge-low",
 			      G_TYPE_FROM_CLASS (object_class),
@@ -782,6 +782,7 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 				 GpmEngine    *engine)
 {
 	GpmCellUnitKind kind;
+	GpmCellUnit *unit;
 
 	g_return_if_fail (engine != NULL);
 	g_return_if_fail (GPM_IS_ENGINE (engine));
@@ -791,10 +792,11 @@ gpm_cell_array_charge_action_cb (GpmCellArray *cell_array,
 
 	/* find the kind for easy multiplexing */
 	kind = gpm_cell_array_get_kind (cell_array);
+	unit = gpm_cell_array_get_unit (cell_array);
 
 	/* just proxy it to the GUI layer */
 	gpm_debug ("** EMIT: charge-action");
-	g_signal_emit (engine, signals [CHARGE_ACTION], 0, kind, percent);
+	g_signal_emit (engine, signals [CHARGE_ACTION], 0, kind, unit);
 }
 
 /**

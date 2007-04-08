@@ -1,3 +1,14 @@
+2007-04-08  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-engine.c: (gpm_engine_class_init),
+	(gpm_cell_array_charge_action_cb):
+	Oops. Return the unit, not the percentage charge. Should fix #427566
+
+	* src/gpm-warning.c: (gpm_warning_get_state_time),
+	(gpm_warning_get_state_percentage):
+	Don't trigger action on 0% percentage (split second on unpug), which
+	we still need to fully debug.
+
 2007-04-05  Richard Hughes  <richard@hughsie.com>
 
 	* libhal-glib/libhal-gmanager.h:

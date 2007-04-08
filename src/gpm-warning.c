@@ -80,6 +80,11 @@ static GpmWarningState
 gpm_warning_get_state_time (GpmWarning  *warning,
 		            GpmCellUnit *unit)
 {
+	if (unit->time_discharge == 0) {
+		/* this is probably an error condition */
+		gpm_warning ("time zero, something's gone wrong");
+		return GPM_WARNING_NONE;
+	}
 	if (unit->time_discharge <= warning->priv->action_time) {
 		return GPM_WARNING_ACTION;
 	} else if (unit->time_discharge <= warning->priv->critical_time) {
@@ -94,6 +99,11 @@ static GpmWarningState
 gpm_warning_get_state_percentage (GpmWarning  *warning,
 		                  GpmCellUnit *unit)
 {
+	if (unit->percentage == 0) {
+		/* this is probably an error condition */
+		gpm_warning ("percentage zero, something's gone wrong");
+		return GPM_WARNING_NONE;
+	}
 	if (unit->percentage <= warning->priv->action_percentage) {
 		return GPM_WARNING_ACTION;
 	} else if (unit->percentage <= warning->priv->critical_percentage) {
