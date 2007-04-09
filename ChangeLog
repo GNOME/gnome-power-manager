@@ -1,3 +1,9 @@
+2007-04-09  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	Do the rounding down before the time check to avoid showing Unknown
+	time remaining in the tooltip.
+
 2007-04-08  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_class_init),

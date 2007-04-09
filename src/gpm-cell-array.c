@@ -870,6 +870,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	gchar *description = NULL;
 	guint accuracy;
 	guint time;
+	guint charge_time_round;
+	guint discharge_time_round;
 	GpmCellUnit *unit;
 	gboolean plural = FALSE;
 
@@ -899,6 +901,10 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	accuracy = gpm_profile_get_accuracy (cell_array->priv->profile, unit->percentage);
 	gpm_debug ("accuracy = %i", accuracy);
 
+	/* precalculate so we don't get Unknown time remaining */
+	charge_time_round = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
+	discharge_time_round = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
+
 	/* We always display "Laptop battery 16 minutes remaining" as we need
 	   to clarify what device we are refering to. For details see :
 	   http://bugzilla.gnome.org/show_bug.cgi?id=329027 */
@@ -907,8 +913,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 		if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			time = gpm_profile_get_time (cell_array->priv->profile, unit->percentage, TRUE);
-			time = gpm_precision_round_down (time, GPM_UI_TIME_PRECISION);
-			discharge_timestring = gpm_get_timestring (time);
+			discharge_time_round = gpm_precision_round_down (time, GPM_UI_TIME_PRECISION);
+			discharge_timestring = gpm_get_timestring (discharge_time_round);
 			description = g_strdup_printf (_("%s fully charged (%i%%)\nProvides %s battery runtime\n"),
 							type_desc, unit->percentage, discharge_timestring);
 			g_free (discharge_timestring);
@@ -919,9 +925,8 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 	} else if (unit->is_discharging == TRUE) {
 
-		if (unit->time_discharge> GPM_CELL_ARRAY_TEXT_MIN_TIME) {
-			time = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
-			discharge_timestring = gpm_get_timestring (time);
+		if (discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
+			discharge_timestring = gpm_get_timestring (discharge_time_round);
 			description = g_strdup_printf (_("%s %s remaining (%i%%)\n"),
 						type_desc, discharge_timestring, unit->percentage);
 			g_free (discharge_timestring);
@@ -933,22 +938,19 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 
 	} else if (unit->is_charging == TRUE) {
 
-		if (unit->time_charge> GPM_CELL_ARRAY_TEXT_MIN_TIME &&
-		    unit->time_discharge > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
+		if (charge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
+		    discharge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME &&
 		    accuracy > GPM_CELL_ARRAY_TEXT_MIN_ACCURACY) {
 			/* display both discharge and charge time */
-			time = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
-			charge_timestring = gpm_get_timestring (time);
-			time = gpm_precision_round_down (unit->time_discharge, GPM_UI_TIME_PRECISION);
-			discharge_timestring = gpm_get_timestring (time);
+			charge_timestring = gpm_get_timestring (charge_time_round);
+			discharge_timestring = gpm_get_timestring (discharge_time_round);
 			description = g_strdup_printf (_("%s %s until charged (%i%%)\nProvides %s battery runtime\n"),
 							type_desc, charge_timestring, unit->percentage, discharge_timestring);
 			g_free (charge_timestring);
 			g_free (discharge_timestring);
-		} else if (unit->time_charge> GPM_CELL_ARRAY_TEXT_MIN_TIME) {
+		} else if (charge_time_round > GPM_CELL_ARRAY_TEXT_MIN_TIME) {
 			/* display only charge time */
-			time = gpm_precision_round_down (unit->time_charge, GPM_UI_TIME_PRECISION);
-			charge_timestring = gpm_get_timestring (time);
+			charge_timestring = gpm_get_timestring (charge_time_round);
 			description = g_strdup_printf (_("%s %s until charged (%i%%)\n"),
 						type_desc, charge_timestring, unit->percentage);
 			g_free (charge_timestring);
