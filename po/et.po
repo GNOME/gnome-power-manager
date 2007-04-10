@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Gnome Power Manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-02-12 03:21+0000\n"
-"PO-Revision-Date: 2007-03-26 17:53+0300\n"
+"PO-Revision-Date: 2007-04-09 23:57+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -406,9 +406,8 @@ msgid "Notify on a HAL error"
 msgstr "Teavitamine HAL-i vea korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:60
-#, fuzzy
 msgid "Notify on a low power"
-msgstr "Teavitamine HAL-i vea korral"
+msgstr "Teavitamine madala täituvuse korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Notify when AC adapter is disconnected"
@@ -491,13 +490,12 @@ msgstr ""
 "on \"default\", \"standby\", \"suspend\" ja \"off\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:78
-#, fuzzy
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"UPS-i kriitilise täituvuse korral ette võetav tegevus. Võimalikud väärtused "
-"on \"default\", \"standby\", \"suspend\" ja \"off\"."
+"UPS-i madala täituvuse korral ette võetav tegevus. Võimalikud väärtused "
+"on \"hibernate\", \"suspend\", \"shutdown\" ja \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:79
 msgid ""
@@ -585,7 +583,6 @@ msgstr ""
 "sajani."
 
 #: ../data/gnome-power-manager.schemas.in.h:91
-#, fuzzy
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
@@ -607,11 +604,11 @@ msgstr "Ekraani heledus jõudeoleku korral"
 
 #: ../data/gnome-power-manager.schemas.in.h:94
 msgid "The cpufreq performance value to use when on AC power"
-msgstr ""
+msgstr "Cpufreq jõudluse väärtus võrgutoite korral kasutamiseks"
 
 #: ../data/gnome-power-manager.schemas.in.h:95
 msgid "The cpufreq performance value to use when on battery power"
-msgstr ""
+msgstr "Cpufreq jõudluse väärtus akutoite korral kasutamiseks"
 
 #: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
@@ -620,40 +617,32 @@ msgid ""
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:97
-#, fuzzy
 msgid ""
 "The cpufreq performance value to used to scale the processor when on battery "
 "power."
-msgstr "kaas suleti ajal, mil arvuti oli akutoitel"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The cpufreq policy to use when on AC power"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:99
-#, fuzzy
 msgid "The cpufreq policy to use when on battery power"
-msgstr "kaas suleti ajal, mil arvuti oli akutoitel"
+msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:100
-#, fuzzy
 msgid ""
 "The cpufreq policy to used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
-"Võrgutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"default\", \"standby\", \"suspend\" ja \"off\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:101
-#, fuzzy
 msgid ""
 "The cpufreq policy to used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
-"Akutoitel töötamisel ekraani tühjendamiseks kasutatav DPMS-meetod. "
-"Võimalikud väärtused on \"default\", \"standby\", \"suspend\" ja \"off\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:102
 msgid "The damping factor for the rate"
@@ -774,9 +763,8 @@ msgid "UPS critical low action"
 msgstr "UPS-i kriitilise täituvustaseme toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:125
-#, fuzzy
 msgid "UPS low power action"
-msgstr "UPS-i kriitilise täituvustaseme toiming"
+msgstr "UPS-i madala täituvustaseme toiming"
 
 #: ../data/gnome-power-manager.schemas.in.h:126
 msgid "Use gnome-screensaver lock setting"
@@ -843,13 +831,12 @@ msgid "Power Management"
 msgstr "Vooluhaldus"
 
 #: ../data/gnome-power-statistics.desktop.in.h:1
-#, fuzzy
 msgid "Observe power management"
-msgstr "Vooluhalduse seadistamine"
+msgstr "Vooluhalduse vaatlemine"
 
 #: ../data/gnome-power-statistics.desktop.in.h:2 ../src/gpm-statistics.c:139
 msgid "Power Statistics"
-msgstr ""
+msgstr "Voolustatistika"
 
 #: ../data/gpm-feedback-widget.glade.h:1
 msgid "Brightness"
@@ -956,14 +943,12 @@ msgid "On UPS Power"
 msgstr "UPS-itoitel"
 
 #: ../data/gpm-prefs.glade.h:12
-#, fuzzy
 msgid "Only display an icon when a battery is p_resent"
-msgstr "_Kuvatakse ainult aku olemasolu korral"
+msgstr "Ikooni _kuvatakse ainult aku olemasolu korral"
 
 #: ../data/gpm-prefs.glade.h:13
-#, fuzzy
 msgid "Only display an icon when charging or _discharging"
-msgstr "_Kuvatakse ainult laadimise või tühjenemise puhul"
+msgstr "Ikooni kuvatakse ainult _laadimise või tühjenemise korral"
 
 #: ../data/gpm-prefs.glade.h:14
 msgid "Power Management Preferences"
@@ -1095,11 +1080,11 @@ msgstr "Aega jäänud"
 #: ../src/gpm-graph-widget.c:188
 #, fuzzy
 msgid "Power"
-msgstr "Halb"
+msgstr ""
 
 #: ../src/gpm-graph-widget.c:191
 msgid "Cell Voltage"
-msgstr ""
+msgstr "Elemendi pinge"
 
 #: ../src/gpm-graph-widget.c:193 ../src/gpm-graph-widget.c:213
 msgid "Unknown caption"
@@ -1714,20 +1699,19 @@ msgstr "GNOME voolustatistika"
 
 #: ../src/gpm-statistics-core.c:54
 msgid "Charge History"
-msgstr ""
+msgstr "Laadimise ajalugu"
 
 #: ../src/gpm-statistics-core.c:56
 msgid "Voltage History"
-msgstr ""
+msgstr "Pinge ajalugu"
 
 #: ../src/gpm-statistics-core.c:57
 msgid "Estimated Time History"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:708
-#, fuzzy
 msgid "Could not connect to GNOME Power Manager."
-msgstr "GNOME vooluhaldur"
+msgstr "GNOME vooluhalduriga pole võimalik ühenduda."
 
 #: ../src/gpm-statistics-core.c:709
 msgid "Perhaps the program is not running or you are using an old version?"
