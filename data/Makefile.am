@@ -42,6 +42,12 @@ install-data-local:
 	$(GCONFTOOL) --makefile-install-rule $(schema_DATA)
 endif
 
+if GCONF_SCHEMAS_INSTALL
+uninstall-local:
+	-GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) \
+	$(GCONFTOOL) --makefile-uninstall-rule $(schema_DATA)
+endif
+
 clean-local :
 	rm -f *~
 
