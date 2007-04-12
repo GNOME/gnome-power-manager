@@ -109,6 +109,7 @@ gnome_power_preferences_LDADD =				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
+	$(GPM_EXTRA_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBDBUS_LIBS)				\
 	$(NULL)
