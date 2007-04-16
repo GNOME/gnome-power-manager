@@ -414,3 +414,4 @@ gpm_conf_new (void)
 	}
 	return GPM_CONF (gpm_conf_object);
 }
+

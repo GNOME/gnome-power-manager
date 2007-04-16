@@ -1,3 +1,18 @@
+2007-04-16  Richard Hughes  <richard@hughsie.com>
+
+	* configure.in:
+	Add in gprof configure switches. Disabled by default.
+
+	* src/gpm-array.c: (gpm_array_get), (gpm_array_set),
+	(gpm_array_append), (gpm_array_invert), (gpm_array_print),
+	(gpm_array_set_data), (gpm_array_get_size):
+	Don't check the array type in the fast path.
+
+	* src/gpm-button.c:
+	* src/gpm-conf.c:
+	* src/gpm-srv-brightness-kbd.c:
+	Remove non-required defines.
+
 2007-04-12  simon.zheng  <simon.zheng@sun.com>
 	
 	reviewed by Richard Hughes

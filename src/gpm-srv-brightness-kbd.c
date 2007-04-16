@@ -43,7 +43,6 @@
 #include "gpm-button.h"
 #include "gpm-brightness-kbd.h"
 #include "gpm-srv-brightness-kbd.h"
-#include "gpm-brightness-kbd.h"
 #include "gpm-conf.h"
 #include "gpm-common.h"
 #include "gpm-debug.h"

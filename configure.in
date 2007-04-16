@@ -19,7 +19,7 @@ dnl ---------------------------------------------------------------------------
 dnl - Extra verbose warning switches
 dnl ---------------------------------------------------------------------------
 if test "$GCC" = "yes"; then
-    CPPFLAGS="$CPPFLAGS -Werror -Wall -Wcast-align -Wno-uninitialized"
+    CPPFLAGS="$CPPFLAGS -Werror -Wcast-align -Wno-uninitialized"
     #CPPFLAGS="$CPPFLAGS -Wall"
 fi
 
@@ -28,6 +28,12 @@ dnl - Debugging switches (uncomment this if you want to use gdb)
 dnl ---------------------------------------------------------------------------
 CPPFLAGS="$CPPFLAGS -g"
 CPPFLAGS="$CPPFLAGS -fexceptions"
+
+dnl ---------------------------------------------------------------------------
+dnl - GProf switches (do not use for normal building)
+dnl ---------------------------------------------------------------------------
+#CPPFLAGS="$CPPFLAGS -c -pg"
+#LDFLAGS="$LDFLAGS -pg"
 
 dnl ---------------------------------------------------------------------------
 dnl - gettext stuff

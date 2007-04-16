@@ -66,7 +66,6 @@ gpm_array_get (GpmArray *array,
 	guint length;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	length = array->priv->array->len;
 	if (i + 1 > length) {
@@ -98,7 +97,6 @@ gpm_array_set (GpmArray *array,
 	GpmArrayPoint *point;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	/* we have to add a new data point */
 	point = gpm_array_get (array, i);
@@ -126,7 +124,6 @@ gpm_array_append (GpmArray *array,
 	GpmArrayPoint *point;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	if (array->priv->fixed_size == TRUE) {
 		/* not valid as array is fixed size */
@@ -159,7 +156,6 @@ gpm_array_invert (GpmArray *array)
 	guint length;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	/* we have to add a new data point */
 	length = gpm_array_get_size (array);
@@ -186,7 +182,6 @@ gpm_array_print (GpmArray *array)
 	guint length;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	/* we have to add a new data point */
 	length = gpm_array_get_size (array);
@@ -991,7 +986,6 @@ gpm_array_set_data (GpmArray *array,
 	guint length;
 
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	/* we have to add a new data point */
 	length = gpm_array_get_size (array);
@@ -1010,7 +1004,6 @@ guint
 gpm_array_get_size (GpmArray *array)
 {
 	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
 	return array->priv->array->len;
 }
@@ -1049,7 +1042,7 @@ gpm_array_set_max_width (GpmArray *array, guint max_width)
  * gpm_array_free_point:
  * @point: A data point we want to free
  **/
-static void
+static inline void
 gpm_array_free_point (GpmArrayPoint *point)
 {
 	g_slice_free (GpmArrayPoint, point);

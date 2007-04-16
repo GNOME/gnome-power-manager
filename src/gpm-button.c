@@ -26,7 +26,6 @@
 #include <glib/gi18n.h>
 
 #include <X11/X.h>
-#include <glib/gi18n.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
 
