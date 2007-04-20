@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-03 14:01+0300\n"
-"PO-Revision-Date: 2007-04-03 15:43+0300\n"
+"POT-Creation-Date: 2007-04-20 18:53+0300\n"
+"PO-Revision-Date: 2007-04-20 19:29+0300\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
-msgstr "Atļaut partraukt un aizmigt izvēlnē"
+msgstr "Rādīt izvēlnē iesnaudināšanu un iemidzināšanu"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
 msgid "Battery critical low action"
@@ -167,7 +167,7 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate button action"
-msgstr "Iemidzināt pogu darbību"
+msgstr "Iemidzināšanas pogas darbība"
 
 #: ../data/gnome-power-manager.schemas.in.h:11
 msgid "Hibernate enabled"
@@ -176,38 +176,42 @@ msgstr "Iemidzināšana ieslēgta"
 #: ../data/gnome-power-manager.schemas.in.h:12
 msgid "If DBUS inhibit requests should be ignored from other programs."
 msgstr ""
-"Ja DBUS inhibēšanas pieprasījumiem vajadzētu tikt ignorētiem no citām "
+"Vai DBUS inhibēšanas pieprasījumiem vajadzētu tikt ignorētiem no citām "
 "programmām."
 
 #: ../data/gnome-power-manager.schemas.in.h:13
 msgid "If DBUS inhibit requests should be ignored."
-msgstr "Ja DBUS inhibēšanas pieprasījumiem vajadzētu tikt ignorētiem."
+msgstr "Vai DBUS inhibēšanas pieprasījumiem vajadzētu tikt ignorētiem."
 
 #: ../data/gnome-power-manager.schemas.in.h:14
 msgid ""
 "If a notification message should be displayed after suspend or hibernate "
 "failed."
-msgstr "Vai rādīt paziņojumu, ja atstādināšana vai iemidzināšana nav izdevusies."
+msgstr "Vai rādīt paziņojumu, ja iesnaudināšana vai iemidzināšana nav izdevusies."
 
 #: ../data/gnome-power-manager.schemas.in.h:15
 msgid ""
 "If a notification message should be displayed when the battery is fully "
 "charged."
 msgstr ""
-"Ja paziņojuma ziņojumam vajadzetu tikt attēlotam, kad baterija pilnība "
+"Vai paziņojuma ziņojumam vajadzetu tikt attēlotam, kad baterija pilnība "
 "uzlādēta."
 
 #: ../data/gnome-power-manager.schemas.in.h:16
 msgid ""
 "If a notification message should be displayed when the battery is getting "
 "low."
-msgstr "Ja paziņojuma ziņojumam vajadzetu tikt attēlotam, kad baterijas strāva tuvojas beigām."
+msgstr ""
+"Vai paziņojuma ziņojumam vajadzetu tikt attēlotam, kad baterijas strāva "
+"tuvojas beigām."
 
 #: ../data/gnome-power-manager.schemas.in.h:17
 msgid ""
 "If a notification message should be displayed when the profile data is "
 "guessed."
-msgstr "Ja paziņojuma ziņojumam vajadzetu tikt attēlotam, kad ir uzmineta profila informācija."
+msgstr ""
+"Vai paziņojuma ziņojumam vajadzetu tikt attēlotam, kad ir uzmineta profila "
+"informācija."
 
 #: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
@@ -215,7 +219,7 @@ msgid ""
 "though their absolute load percentage wouldn't trigger the scaling mechanism "
 "to switch up the frequency."
 msgstr ""
-"Ja prioritārāki (jaukāki) procei tiek ņemti vērā, tie var izraisīt "
+"Vai prioritārāki (jaukāki) procei tiek ņemti vērā, tie var izraisīt "
 "frekvences palielināšanos pat ja to absolūtā noslodze neprasa mērogošanas "
 "mehānismam to palielināt."
 
@@ -233,14 +237,14 @@ msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the CPU load should be checked before doing the idle action."
-msgstr "Ja būtu japārbauda CPU ielāde pirms veic dīkstaves darbību."
+msgstr "Vai būtu japārbauda CPU ielāde pirms veic dīkstaves darbību."
 
 #: ../data/gnome-power-manager.schemas.in.h:22
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr ""
-"Ja pārtraukšanas un aizmigšanas iespējām vajadzetu tikt atļautām paziņojumu "
+"Vai iesnaudināšanas un iemidzināšanas iespējām vajadzetu būt atļautām paziņojumu "
 "lauka izkrītošajā izvēlnē."
 
 #: ../data/gnome-power-manager.schemas.in.h:23
@@ -248,7 +252,7 @@ msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
-"Ja baterijas notikumiem vajadzetu parādīties, kad vāks ir aizvērts un strāva "
+"Vai baterijas notikumiem vajadzetu parādīties, kad vāks ir aizvērts un strāva "
 "atvienota"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
@@ -257,8 +261,8 @@ msgid ""
 "closed on battery') when the lid is previously shut and the AC power "
 "disconnected at a later time."
 msgstr ""
-"Ja baterijas vāka aizvēršanas notikumam vajadzētu parādīties (piemēram, "
-"'Pārtraukt, kad vāks baterijai aizvērts'), kad vāks iepriekš aizvērts un "
+"Vai baterijas vāka aizvēršanas notikumam vajadzētu parādīties (piemēram, "
+"'Iesnaudināt, kad vāks baterijai aizvērts'), kad vāks iepriekš aizvērts un "
 "maiņstrāva atvienota vēlākā laikā."
 
 #: ../data/gnome-power-manager.schemas.in.h:25
@@ -287,21 +291,23 @@ msgstr "Vai būtu jāizmanto apmācītais profils, lai aprēķinātu atlikušo l
 msgid ""
 "If the learnt profile should be used to calculate the time remaining. Only "
 "turn this off for debugging."
-msgstr "Vai būtu jāizmanto apmācītais profils, lai aprēķinātu atlikušo laiku. Aktivizējiet šo vienīgi atkļūdošanas vajadzībām."
+msgstr ""
+"Vai būtu jāizmanto apmācītais profils, lai aprēķinātu atlikušo laiku. "
+"Aktivizējiet šo vienīgi atkļūdošanas vajadzībām."
 
 #: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
-"Ja zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
+"Vai zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
 "maiņstrāvas"
 
 #: ../data/gnome-power-manager.schemas.in.h:30
 msgid "If the low-power mode should be enabled when on UPS"
-msgstr "Ja zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz UPS"
+msgstr "Vai zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz UPS"
 
 #: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on battery"
-msgstr "Ja zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz baterijām"
+msgstr "Vai zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz baterijām"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
 msgid ""
@@ -324,8 +330,8 @@ msgid ""
 "If the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
 msgstr ""
-"Ja ekrans ir slēgts, kad ekrāns ir izslēgts. Lietots tikai, ja "
-"slēgt_lietot_ekrānsaudzētāju_uzstadījumi ir aplami."
+"Vai ekrans ir slēgts, kad ekrāns ir izslēgts. Lietots tikai, ja "
+"lock_use_screensaver_settings ir aplami."
 
 #: ../data/gnome-power-manager.schemas.in.h:35
 msgid ""
@@ -346,37 +352,39 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:37
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
-"Ja sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
+"Vai sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
 "maiņstrāvas."
 
 #: ../data/gnome-power-manager.schemas.in.h:38
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr ""
-"Ja sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
+"Vai sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
 "UPS barošanas."
 
 #: ../data/gnome-power-manager.schemas.in.h:39
 msgid "If the system low-power mode should be enabled when on laptop battery power."
-msgstr "Ja sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz klēpjdatora baterijas strāvas."
+msgstr ""
+"Vai sistēmas zemas barošanas režīmam vajadzētu būt ieslēgtam, kad atrodas uz "
+"klēpjdatora baterijas strāvas."
 
 #: ../data/gnome-power-manager.schemas.in.h:40
 msgid "If the user is authorized to hibernate the computer."
-msgstr "Ja lietotājs ir autorizēts, iemidzināt datoru."
+msgstr "Vai lietotājs ir autorizēts, lai iemidzinātu datoru."
 
 #: ../data/gnome-power-manager.schemas.in.h:41
 msgid "If the user is authorized to suspend the computer."
-msgstr "Ja lietotājs ir autorizēts apturēt datoru."
+msgstr "Vai ļaut lietotājam iesnaudināt datoru."
 
 #: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user should be notified when the AC adapter is disconnected."
-msgstr "Ja lietotājam būtu jāpaziņo, kad maiņstrāvas adapteris ir atvienots."
+msgstr "Vai lietotājam būtu jāpaziņo, kad maiņstrāvas adapteris ir atvienots."
 
 #: ../data/gnome-power-manager.schemas.in.h:43
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
 msgstr ""
-"Ja  būtu jālieto laika balstīti paziņojumi. Ja uzstādīts uz aplams, tad tā "
+"Vai būtu jālieto laika balstīti paziņojumi. Ja uzstādīts uz aplams, tad tā "
 "vietā tiek lietotas procentuālās izmaiņas, kas var salabot salūzušo ACPI "
 "BIOS."
 
@@ -384,31 +392,33 @@ msgstr ""
 msgid ""
 "If to lock the GNOME keyring before the computer enters sleep. This means "
 "you have to unlock the keyring on resume."
-msgstr "Vai būtu jābloķē GNOME atslēgu saišķis iemidzinot datoru. Tas nozīmē, ka atkal ieslēdzot datoru jums būs jāatbloķē atslēgu saišķis."
+msgstr ""
+"Vai būtu jābloķē GNOME atslēgu saišķis iemidzinot datoru. Tas nozīmē, ka "
+"atkal ieslēdzot datoru jums būs jāatbloķē atslēgu saišķis."
 
 #: ../data/gnome-power-manager.schemas.in.h:45
 msgid ""
 "If to lock the screen when the computer wakes up from a hibernate. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
-"Ja slēgt ekrānu, kad dators pamostas no iemidzināšanas. Lietots tikai, ja "
-"slēgt_lietot_ekrānsaudzētāju_uzstādījumi ir aplami."
+"Vai slēgt ekrānu, kad dators pamostas no iemidzināšanas. Lietots tikai, ja "
+"lock_use_screensaver_settings ir aplami."
 
 #: ../data/gnome-power-manager.schemas.in.h:46
 msgid ""
 "If to lock the screen when the computer wakes up from a suspend. Only used "
 "if lock_use_screensaver_settings is false."
 msgstr ""
-"Ja slēgt ekrānu, kad dators pamostas no apturēšanas. Lietots tikai, ja "
-"slēgt_lietot_ekrānsaudzētāju_uzstādījumi ir aplami."
+"Vai saslēgt ekrānu, kad dators pamostas no iemidzināšanas. Lietots tikai, ja "
+"lock_use_screensaver_settings ir aplami."
 
 #: ../data/gnome-power-manager.schemas.in.h:47
 msgid ""
 "If to use the screen lock setting of gnome-screensaver to decide to lock the "
 "screen after a hibernate, suspend or blank screen."
 msgstr ""
-"Ja lietot gnome ekrānsaudzētāja ekrāna slēgšanas uzstādījumu, lai izlemtu "
-"par ekrāna slēgšanu pēc apturēšanas, iemidzināšanas vai tukša ekrāna."
+"Vai lietot gnome ekrānsaudzētāja ekrāna slēgšanas uzstādījumu, lai izlemtu "
+"par ekrāna slēgšanu pēc iesnaudināšanas, iemidzināšanas vai tukša ekrāna."
 
 #: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the CPU frequency scaling in the UI"
@@ -418,7 +428,9 @@ msgstr "Vai būtu jārāda CPU frekvences izmaiņas"
 msgid ""
 "If we should show the CPU frequency scaling in the UI. Some people need to "
 "configure this for specific systems."
-msgstr "Vai saskarnē būtu jārāda kā mainās CPU frekvence. Dažiem cilvēkiem šis ir jāpiskano specifiskām sistēmām."
+msgstr ""
+"Vai saskarnē būtu jārāda kā mainās CPU frekvence. Dažiem cilvēkiem šis ir "
+"jāpiskano specifiskām sistēmām."
 
 #: ../data/gnome-power-manager.schemas.in.h:50
 msgid "If we should show the low capacity warning for a broken battery"
@@ -470,11 +482,11 @@ msgstr "Iemiegot bloķēt GNOME atslēgu saisķi"
 
 #: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Lock screen on hibernate"
-msgstr "Slēgt ekrānu aizmigšanai"
+msgstr "Saslēgt ekrānu iemidzinot"
 
 #: ../data/gnome-power-manager.schemas.in.h:62
 msgid "Lock screen on suspend"
-msgstr "Slēgt ekrānu apturēšanai"
+msgstr "Slēgt ekrānu iemidzinot datoru"
 
 #: ../data/gnome-power-manager.schemas.in.h:63
 msgid "Lock screen when blanked"
@@ -546,11 +558,11 @@ msgstr "Gulēšanas starplaiks displejam, kad uz baterijas"
 
 #: ../data/gnome-power-manager.schemas.in.h:80
 msgid "Suspend button action"
-msgstr "Apturēšanas pogas darbība"
+msgstr "Iemidzināšanas pogas darbība"
 
 #: ../data/gnome-power-manager.schemas.in.h:81
 msgid "Suspend enabled"
-msgstr "Ieslēgta pārtraukšana"
+msgstr "Iemidzināšana ir aktivizēta"
 
 #: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
@@ -573,16 +585,16 @@ msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Darbība, ko pieņemt, kad UPS ir kritiski zems. Iespējamās vertības ir  "
-"\"aizmigt\", \"pārtraukt\", \"izslēgt\" un \"nekas\"."
+"Darbība, ko pieņemt, kad UPS ir kritiski zems. Iespējamās vertības ir"
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:85
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
-"Darbība, ko pieņemt, kad UPS ir zems. Iespējamās vertības ir  \"aizmigt\", "
-"\"pārtraukt\", \"izslēgt\" un \"nekas\"."
+"Darbība, ko pieņemt, kad UPS ir zems. Iespējamās vertības ir \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:86
 msgid ""
@@ -590,7 +602,7 @@ msgid ""
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr ""
 "Darbība, ko pieņemt, kad baterija ir kritiski zema. Iespējamās vertības ir  "
-"\"aizmigt\",\"pārtraukt\", \"izslēgt\" un \"nekas\"."
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:87
 msgid ""
@@ -599,8 +611,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Darbība, ko pieņemt, kad klēpjdatora vāks ir aizvērts un klēpjdators ir uz "
-"maiņstrāvas. Iespējamās vertības ir  \"aizmigt\", \"pārtraukt\", \"tukšs\" "
-"un \"nekas\"."
+"maiņstrāvas. Iespējamās vertības ir \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:88
 msgid ""
@@ -609,8 +621,8 @@ msgid ""
 "and \"nothing\"."
 msgstr ""
 "Darbība, ko pieņemt, kad klēpjdatora vāks ir aizvērts un klēpjdators "
-"darbojas uz baterijas. Iespējamās vērtības ir \"pārtraukt\", \"aizmigt\", "
-"\"tukšs\", un \"nekas\"."
+"darbojas uz baterijas. Iespējamās vērtības ir \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
@@ -619,8 +631,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Darbība, ko pieņemt, kad sistēmas iemidzināšanas poga ir nospiesta. "
-"Iespējamās vērtības ir \"pārtraukt\", \"iemidzināt\", \"interaktīvi\", "
-"\"izslēgt\" un \"nekas\"."
+"Iespējamās vērtības ir \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
@@ -629,8 +641,7 @@ msgid ""
 "\"."
 msgstr ""
 "Darbība, ko pieņemt, kad sistēmas barošanas poga ir nospiesta. Iespējamās "
-"vērtības ir  \"pārtraukt\", \"iemidzināt\", \"interaktīvi\", \"izslēgt\" un "
-"\"nekas\"."
+"vērtības ir  \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
@@ -639,8 +650,8 @@ msgid ""
 "\"nothing\"."
 msgstr ""
 "Darbība, ko pieņemt, kad sistēmas pārtraukšanas poga ir nospiesta. "
-"Iespējamās vertības ir \"pārtraukt\", \"iemidzināt\", \"interaktīvi\", "
-"\"izslēgt\" un \"nekas\"."
+"Iespējamās vertības ir \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:92
 msgid ""
@@ -852,7 +863,7 @@ msgid ""
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr ""
 "Gulēšanas tips, ko vajadzētu pielietot, kad dators ir neaktīvs. Iespējamās "
-"vērtības ir \"iemidzināt\", \"pārtraukt\" un \"nekas\"."
+"vērtības ir \"hibernate\", \"suspend\" and \"nothing\"."
 
 #: ../data/gnome-power-manager.schemas.in.h:125
 msgid ""
@@ -887,7 +898,7 @@ msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
 msgstr ""
-"Vai NetworkManager būtu jāaptur pirms atstādināšanas vai iemidzināšanas un "
+"Vai NetworkManager būtu jāaptur pirms iesnaudināšanas vai iemidzināšanas un "
 "jaatjauno atsāot darbu."
 
 #: ../data/gnome-power-manager.schemas.in.h:132
@@ -898,7 +909,7 @@ msgstr "Vai prioritārie (jaukie) procesi būtu jāņem vērā aprēķinot proce
 
 #: ../data/gnome-power-manager.schemas.in.h:133
 msgid "Whether to hibernate, suspend or do nothing when inactive"
-msgstr "Vai iemidzināt, pārtraukt vai nedarīt neko, kad neaktīvs"
+msgstr "Vai iemidzināt, iesnaudināt vai nedarīt neko, kad neaktīvs"
 
 #: ../data/gnome-power-manager.schemas.in.h:134
 msgid "Whether to use time-based notifications"
@@ -1014,7 +1025,7 @@ msgstr "<b>Pogas</b>"
 
 #: ../data/gpm-prefs.glade.h:2
 msgid "<b>Extras</b>"
-msgstr "<b>Extras</b>"
+msgstr "<b>Ekstras</b>"
 
 #: ../data/gpm-prefs.glade.h:3
 msgid "<b>Notification Area</b>"
@@ -1102,7 +1113,7 @@ msgstr "Kad k_lēpjdatora vāks ir aizvērts:"
 
 #: ../data/gpm-prefs.glade.h:24
 msgid "When the _suspend button is pressed:"
-msgstr "Kad atatādināšanas _poga ir nospiesta:"
+msgstr "Kad iesnaudināšanas _poga ir nospiesta:"
 
 #: ../data/gpm-prefs.glade.h:25
 msgid "When the power _button is pressed:"
@@ -1120,11 +1131,11 @@ msgstr "_Nekad nerādīt ikonu"
 msgid "_Only display an icon when battery power is critically low"
 msgstr "Rādīt ikonu _tikai, kad baterijas strāva ir kritiski zema"
 
-#: ../src/gpm-common.c:161
+#: ../src/gpm-common.c:217
 msgid "Unknown time"
 msgstr "Nezināms laiks"
 
-#: ../src/gpm-common.c:166
+#: ../src/gpm-common.c:222
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1132,7 +1143,7 @@ msgstr[0] "%i minūte"
 msgstr[1] "%i minūtes"
 msgstr[2] "%i minūšu"
 
-#: ../src/gpm-common.c:177
+#: ../src/gpm-common.c:233
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1142,19 +1153,19 @@ msgstr[2] "%i stundu"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:183
+#: ../src/gpm-common.c:239
 #, c-format
-msgid "%i %s, %i %s"
-msgstr "%i %s, %i %s"
+msgid "%i %s %i %s"
+msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:184
+#: ../src/gpm-common.c:240
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "stunda"
 msgstr[1] "stundas"
 msgstr[2] "stundu"
 
-#: ../src/gpm-common.c:185
+#: ../src/gpm-common.c:241
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minūte"
@@ -1276,7 +1287,7 @@ msgstr "Aizmigšanas problēma"
 
 #: ../src/gpm-info.c:607
 msgid "Suspend Problem"
-msgstr "Pārtraukšanas problēma"
+msgstr "Iesnaudināšanas problēma"
 
 #: ../src/gpm-inhibit.c:346
 #, c-format
@@ -1288,213 +1299,223 @@ msgstr "apstādināja %s no piedalīšanās : "
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Vairākas aplikācijas apstādināja %s no piedalīšanās."
 
-#: ../src/gpm-main.c:153
+#: ../src/gpm-main.c:154
 msgid "Do not daemonize"
 msgstr "Ne demonizēt"
 
-#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
+#: ../src/gpm-main.c:156 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
 #: ../test/gpm-st-main.c:89
 msgid "Show extra debugging information"
 msgstr "Rādīt papildus atkļūdošanas informāciju"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:158
 msgid "Exit after a small delay (for debugging)"
 msgstr "Iziet pēc neilgas pauzes (atkļūdošanai)"
 
-#: ../src/gpm-main.c:159
+#: ../src/gpm-main.c:160
+msgid "Exit after a the manager has loaded (for debugging)"
+msgstr "Iziet pēc tam, kad pārvaldnieks ir ielādējies (atkļūdošanai)"
+
+#: ../src/gpm-main.c:162
 msgid "Debug specific files, e.g. power"
 msgstr "Atkļūdot konkrētus failus, piem power"
 
-#: ../src/gpm-main.c:163
+#: ../src/gpm-main.c:166
 msgid "GNOME Power Manager"
 msgstr "GNOME barošanas pārvaldnieks"
 
-#: ../src/gpm-manager.c:187
+#: ../src/gpm-manager.c:185
 #, c-format
 msgid "Request to %s"
 msgstr "Pieprasīt %s"
 
 #. I want this translated
-#: ../src/gpm-manager.c:196
+#: ../src/gpm-manager.c:194
 msgid "Perform action anyway"
 msgstr "Veikt darbītu tāpat"
 
-#: ../src/gpm-manager.c:331
+#: ../src/gpm-manager.c:329
 msgid "Doing nothing"
 msgstr "Neko nedara"
 
-#: ../src/gpm-manager.c:335 ../src/gpm-manager.c:605 ../src/gpm-manager.c:1038
+#: ../src/gpm-manager.c:333 ../src/gpm-manager.c:603 ../src/gpm-manager.c:1036
 msgid "Suspending computer"
-msgstr "Pārtrauc datoru"
+msgstr "Iesnaudina datoru"
 
-#: ../src/gpm-manager.c:340 ../src/gpm-manager.c:617 ../src/gpm-manager.c:1013
+#: ../src/gpm-manager.c:338 ../src/gpm-manager.c:615 ../src/gpm-manager.c:1011
 msgid "Hibernating computer"
 msgstr "Iemidzina datoru"
 
-#: ../src/gpm-manager.c:348
+#: ../src/gpm-manager.c:346
 msgid "Shutting down computer"
 msgstr "Dators izslēdzas"
 
-#: ../src/gpm-manager.c:353
+#: ../src/gpm-manager.c:351
 msgid "GNOME interactive logout"
 msgstr "GNOME interaktīvā atslēgšanās"
 
-#: ../src/gpm-manager.c:605 ../src/gpm-manager.c:617
+#: ../src/gpm-manager.c:603 ../src/gpm-manager.c:615
 msgid "System idle"
 msgstr "Sistēmas dīkstāves"
 
-#: ../src/gpm-manager.c:703
+#: ../src/gpm-manager.c:701
 msgid "Power Information"
 msgstr "Barošanas informācija"
 
-#: ../src/gpm-manager.c:727
+#: ../src/gpm-manager.c:725
 msgid "the power button has been pressed"
 msgstr "tikusi nospiesta strāvas poga"
 
-#: ../src/gpm-manager.c:746
+#: ../src/gpm-manager.c:744
 msgid "the suspend button has been pressed"
-msgstr "tikusi nospiesta pārtraukšanas poga"
+msgstr "tikusi nospiesta iemidzināšanas poga"
 
-#: ../src/gpm-manager.c:764
+#: ../src/gpm-manager.c:762
 msgid "the hibernate button has been pressed"
-msgstr "tikusi nospiesta gulēšanas poga"
+msgstr "ir nospiesta iemigšanas poga"
 
-#: ../src/gpm-manager.c:787
+#: ../src/gpm-manager.c:785
 msgid "the lid has been closed on ac power"
 msgstr "vāks ticis aizvērts uz maiņstrāvas"
 
-#: ../src/gpm-manager.c:791
+#: ../src/gpm-manager.c:789
 msgid "the lid has been closed on battery power"
 msgstr "vāks ticis aizvērts uz baterijas strāvas"
 
-#: ../src/gpm-manager.c:885
+#: ../src/gpm-manager.c:883
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "vāks ticis aizverts un maiņstrāvas adapteris noņemts (un gconf ir kārtībā)"
 
-#: ../src/gpm-manager.c:908
+#: ../src/gpm-manager.c:906
 msgid "battery is critically low"
 msgstr "baterija ir kritiski zema"
 
-#: ../src/gpm-manager.c:1014
+#: ../src/gpm-manager.c:1012
 msgid "user clicked hibernate from tray menu"
-msgstr "lietotāja klikšķināta gulēšana paplātes izvēlnē "
+msgstr "lietotājas ir noklikšķinājis uz iemidzināšanas paplātes izvēlnē"
 
-#: ../src/gpm-manager.c:1039
+#: ../src/gpm-manager.c:1037
 msgid "user clicked suspend from tray menu"
-msgstr "lietotāja klikšķināta pārtraukšana paplātes izvēlnē "
+msgstr "lietotājas ir noklikšķinājis uz iesnaudināšanas paplātes izvēlnē"
 
-#: ../src/gpm-manager.c:1250
+#: ../src/gpm-manager.c:1248
 msgid "Laptop battery low"
 msgstr "Zema klēpjdatora baterija"
 
-#: ../src/gpm-manager.c:1252
+#: ../src/gpm-manager.c:1250
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
 msgstr "Jums ir atlikušas aptuveni <b>%s</b> no baterijas dzīves (%d%%)"
 
-#: ../src/gpm-manager.c:1255
+#: ../src/gpm-manager.c:1253
 msgid "UPS low"
 msgstr "Zema UPS"
 
-#: ../src/gpm-manager.c:1257
+#: ../src/gpm-manager.c:1255
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "Jums ir atlicis aptuveni <b>%s</b> no UPS strāvas (%d%%)"
 
-#: ../src/gpm-manager.c:1260 ../src/gpm-manager.c:1353
+#: ../src/gpm-manager.c:1258 ../src/gpm-manager.c:1351
 msgid "Mouse battery low"
 msgstr "Zema peles baterija"
 
-#: ../src/gpm-manager.c:1261
+#: ../src/gpm-manager.c:1259
 #, c-format
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr "Šim, datoram piespraustās bezvadu peles baterijas strāva ir zema (%d%%)"
 
-#: ../src/gpm-manager.c:1263 ../src/gpm-manager.c:1358
+#: ../src/gpm-manager.c:1261 ../src/gpm-manager.c:1356
 msgid "Keyboard battery low"
 msgstr "Zema klaviatūras baterija"
 
-#: ../src/gpm-manager.c:1264
+#: ../src/gpm-manager.c:1262
 #, c-format
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr "Šim, datoram piespraustās bezvadu klaviatūras baterijas strāva ir zema (%d%%)"
 
-#: ../src/gpm-manager.c:1266 ../src/gpm-manager.c:1363
+#: ../src/gpm-manager.c:1264 ../src/gpm-manager.c:1361
 msgid "PDA battery low"
 msgstr "Zema PDA baterija"
 
-#: ../src/gpm-manager.c:1267
+#: ../src/gpm-manager.c:1265
 #, c-format
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "Šim, datoram piespraustā PDA baterijas strāva ir zema (%d%%)"
 
-#: ../src/gpm-manager.c:1294
+#: ../src/gpm-manager.c:1292
 msgid "a short time"
 msgstr "īsu laiku"
 
-#: ../src/gpm-manager.c:1317 ../src/gpm-manager.c:1394
+#: ../src/gpm-manager.c:1315 ../src/gpm-manager.c:1392
 msgid "Laptop battery critically low"
 msgstr "Klēpjdatora baterija ir kritiski zema"
 
-#: ../src/gpm-manager.c:1326
+#: ../src/gpm-manager.c:1324
 msgid "Plug in your AC adapter to avoid losing data."
 msgstr "Lai izvairītos no datu zudumiem piespraudiet strāvas vadu."
 
-#: ../src/gpm-manager.c:1329
+#: ../src/gpm-manager.c:1327
 #, c-format
 msgid "This computer will suspend in %s if the AC is not connected."
 msgstr "Ja pēc %s strāvas vads netiks piesprausts, dators tiks iesnaudināts."
 
-#: ../src/gpm-manager.c:1332
+#: ../src/gpm-manager.c:1330
 #, c-format
 msgid "This computer will hibernate in %s if the AC is not connected."
 msgstr "Ja pēc %s strāvas vads netiks piesprausts, dators tiks iemidzināts."
 
-#: ../src/gpm-manager.c:1335
+#: ../src/gpm-manager.c:1333
 #, c-format
 msgid "This computer will shutdown in %s if the AC is not connected."
 msgstr "Ja pēc %s strāvas vads netiks piesprausts, dators tiks izslēgts."
 
-#: ../src/gpm-manager.c:1338
+#: ../src/gpm-manager.c:1336
 #, c-format
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "Jums ir atlikušas aptuveni <b>%s</b> no barerijas dzīves  (%d%%). %s"
 
-#: ../src/gpm-manager.c:1346 ../src/gpm-manager.c:1426
+#: ../src/gpm-manager.c:1344 ../src/gpm-manager.c:1424
 msgid "UPS critically low"
 msgstr "UPS ir kritiski zems"
 
-#: ../src/gpm-manager.c:1348
+#: ../src/gpm-manager.c:1346
 #, c-format
 msgid ""
 "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
 "power to your computer to avoid losing data."
 msgstr ""
-"Jums ir atlicis aptuveni <b>%s</b> no UPS strāvas (%d%%). "
-"Lai izvairītos no datu zaudēšanas, atjaunojiet datora strāvu."
+"Jums ir atlicis aptuveni <b>%s</b> no UPS strāvas (%d%%). Lai izvairītos no "
+"datu zaudēšanas, atjaunojiet datora strāvu."
 
-#: ../src/gpm-manager.c:1354
+#: ../src/gpm-manager.c:1352
 #, c-format
 msgid ""
 "The wireless mouse attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
-msgstr "Šim datoram piespraustās bezvadu peles baterija ir kritiski zema (%d%%). Ja tā netiks uzlādeta, ierīce pārstās darboties."
+msgstr ""
+"Šim datoram piespraustās bezvadu peles baterija ir kritiski zema (%d%%). Ja "
+"tā netiks uzlādeta, ierīce pārstās darboties."
 
-#: ../src/gpm-manager.c:1359
+#: ../src/gpm-manager.c:1357
 #, c-format
 msgid ""
 "The wireless keyboard attached to this computer is very low in power (%d%%). "
 "This device will soon stop functioning if not charged."
-msgstr "Šim datoram piespraustās bezvadu klaviatūras baterija ir kritiski zema (%d%%). Ja tā netiks uzlādeta, ierīce pārstās darboties."
+msgstr ""
+"Šim datoram piespraustās bezvadu klaviatūras baterija ir kritiski zema (%d%"
+"%). Ja tā netiks uzlādeta, ierīce pārstās darboties."
 
-#: ../src/gpm-manager.c:1364
+#: ../src/gpm-manager.c:1362
 #, c-format
 msgid ""
 "The PDA attached to this computer is very low in power (%d%%). This device "
 "will soon stop functioning if not charged."
-msgstr "Šim datoram piespraustā PDA baterija ir kritiski zema (%d%%). Ja tā netiks uzlādeta, ierīce pārstās darboties."
+msgstr ""
+"Šim datoram piespraustā PDA baterija ir kritiski zema (%d%%). Ja tā netiks "
+"uzlādeta, ierīce pārstās darboties."
 
-#: ../src/gpm-manager.c:1401
+#: ../src/gpm-manager.c:1399
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1502,29 +1523,29 @@ msgstr ""
 "Baterija ir zem kritiskā līmeņa un sis dators <b>izslēgsies</b>, kad "
 "baterija kļūs pilnībā iztukšota."
 
-#: ../src/gpm-manager.c:1406
+#: ../src/gpm-manager.c:1404
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
 "computer in a suspended state."
 msgstr ""
-"Baterija ir zem kritiskā līmeņa un šis dators drīz pārtrauks darbību. "
+"Baterija ir zem kritiskā līmeņa un šis dators drīz tiks iemidzināts. "
 "<br><b>IEGAUMĒJIET:</b> Nepieciešams neliels strāvas daudzums, lai paturētu "
 "jūsu datoru apturēšanas režīmā."
 
-#: ../src/gpm-manager.c:1412
+#: ../src/gpm-manager.c:1410
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
-msgstr "Baterija ir zem kritiskā līmeņa un šis dators drīz aizmigs."
+msgstr "Baterija ir zem kritiskā līmeņa un šis dators drīzumā tiks iemidzināts."
 
-#: ../src/gpm-manager.c:1416
+#: ../src/gpm-manager.c:1414
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Baterija ir zem kritiskā līmeņa un šis dators drīz izslēgsies."
 
-#: ../src/gpm-manager.c:1433
+#: ../src/gpm-manager.c:1431
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1532,11 +1553,11 @@ msgstr ""
 "UPS ir zem kritiskā līmeņa un šis dators <b>izslēgs strāvu</b>, kad UPS kļūs "
 "pilnībā iztukšots."
 
-#: ../src/gpm-manager.c:1438
+#: ../src/gpm-manager.c:1436
 msgid "The UPS is below the critical level and this computer is about to hibernate."
-msgstr "UPS ir zem kritiskā līmeņa un šis dators tūlīt aizmigs."
+msgstr "UPS ir zem kritiskā līmeņa, šis dators drīzumā tiks iemidzināts."
 
-#: ../src/gpm-manager.c:1442
+#: ../src/gpm-manager.c:1440
 msgid "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS ir zem kritiskā līmeņa un šis dators tūlīt izslēgsies."
 
@@ -1576,7 +1597,9 @@ msgstr "Baterija varētu būt bojāta"
 msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
 "or broken."
-msgstr "Jūsu baterijai ir ļoti zema kapacitāte (%i%%), kas var nozīmēt, ka tā ir veca vai bojāta."
+msgstr ""
+"Jūsu baterijai ir ļoti zema kapacitāte (%i%%), kas var nozīmēt, ka tā ir "
+"veca vai bojāta."
 
 #: ../src/gpm-notify.c:419
 msgid "Battery Charged"
@@ -1622,7 +1645,7 @@ msgstr ""
 "Jūsu datoram neizdevās iesnausties.\n"
 "Biežākos iemeslus meklējiet palīdzības failā."
 
-#: ../src/gpm-cell-array.c:890
+#: ../src/gpm-cell-array.c:918
 #, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
@@ -1631,23 +1654,23 @@ msgstr ""
 "%s pilnībā uzlādēts (%i%%)\n"
 "Nodrošina %s baterijas darbības laika\n"
 
-#: ../src/gpm-cell-array.c:894
+#: ../src/gpm-cell-array.c:922
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s pilnībā uzlādēts (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:902
+#: ../src/gpm-cell-array.c:930
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s atlicis (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:907
+#: ../src/gpm-cell-array.c:935
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s izlādējas (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:919
+#: ../src/gpm-cell-array.c:947
 #, c-format
 msgid ""
 "%s %s until charged (%i%%)\n"
@@ -1656,13 +1679,13 @@ msgstr ""
 "%s %s līdz uzlādei (%i%%)\n"
 "Nodrošina %s baterijas darbības laika\n"
 
-#: ../src/gpm-cell-array.c:926
+#: ../src/gpm-cell-array.c:954
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s %s līdz uzlādei (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:931
+#: ../src/gpm-cell-array.c:959
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s lādējas (%i%%)\n"
@@ -1769,48 +1792,48 @@ msgstr "Skicēta ielāde:"
 msgid "Charge rate:"
 msgstr "Lādēšanās ātrums:"
 
-#: ../src/gpm-cell-unit.c:220
+#: ../src/gpm-cell-unit.c:236
 msgid "Laptop batteries"
 msgstr "Klēpjdatora baterijas"
 
-#: ../src/gpm-cell-unit.c:222
+#: ../src/gpm-cell-unit.c:238
 msgid "UPSs"
 msgstr "UPS"
 
-#: ../src/gpm-cell-unit.c:224
+#: ../src/gpm-cell-unit.c:240
 msgid "Wireless mice"
 msgstr "Bezvadu pele"
 
-#: ../src/gpm-cell-unit.c:226
+#: ../src/gpm-cell-unit.c:242
 msgid "Wireless keyboards"
 msgstr "Bezvadu tastatūra"
 
-#: ../src/gpm-cell-unit.c:228
+#: ../src/gpm-cell-unit.c:244
 msgid "PDAs"
 msgstr "PDA"
 
-#: ../src/gpm-cell-unit.c:230 ../src/gpm-cell-unit.c:244
+#: ../src/gpm-cell-unit.c:246 ../src/gpm-cell-unit.c:260
 #: ../src/gpm-statistics-core.c:737
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: ../src/gpm-cell-unit.c:234
+#: ../src/gpm-cell-unit.c:250
 msgid "Laptop battery"
 msgstr "Klēpjdatora baterija"
 
-#: ../src/gpm-cell-unit.c:236
+#: ../src/gpm-cell-unit.c:252
 msgid "UPS"
 msgstr "UPS"
 
-#: ../src/gpm-cell-unit.c:238
+#: ../src/gpm-cell-unit.c:254
 msgid "Wireless mouse"
 msgstr "Bezvadu pele"
 
-#: ../src/gpm-cell-unit.c:240
+#: ../src/gpm-cell-unit.c:256
 msgid "Wireless keyboard"
 msgstr "Bezvadu tastatūra"
 
-#: ../src/gpm-cell-unit.c:242
+#: ../src/gpm-cell-unit.c:258
 msgid "PDA"
 msgstr "PDA"
 
@@ -1830,7 +1853,7 @@ msgstr "Vaicāt man"
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 #: ../src/gpm-statistics-core.c:867
 msgid "Suspend"
-msgstr "Pārstāt"
+msgstr "Iesnaudināt"
 
 #: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
 msgid "Shutdown"
@@ -1839,7 +1862,7 @@ msgstr "Izslēgt"
 #: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 #: ../src/gpm-statistics-core.c:877
 msgid "Hibernate"
-msgstr "Aizmigt"
+msgstr "Iemidzināt"
 
 #: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:98
 msgid "Blank screen"
@@ -2025,7 +2048,7 @@ msgstr "_Par"
 
 #: ../src/gpm-tray-icon.c:584
 msgid "_Suspend"
-msgstr "_Pārtraukt"
+msgstr "_Iesnaudināt"
 
 #: ../src/gpm-tray-icon.c:594
 msgid "Hi_bernate"
