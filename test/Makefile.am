@@ -49,6 +49,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-main.h					\
 	gpm-st-common.c					\
 	gpm-st-array.c					\
+	gpm-st-array-float.c				\
 	gpm-st-cell-unit.c				\
 	gpm-st-cell-array.c				\
 	gpm-st-cell.c					\
@@ -77,6 +78,8 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-cell-array.c				\
 	../src/gpm-array.h				\
 	../src/gpm-array.c				\
+	../src/gpm-array-float.h			\
+	../src/gpm-array-float.c			\
 	../src/gpm-common.h				\
 	../src/gpm-common.c				\
 	../src/gpm-warning.h				\

@@ -189,6 +189,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-info.c					\
 	gpm-array.h					\
 	gpm-array.c					\
+	gpm-array-float.h				\
+	gpm-array-float.c				\
 	gpm-inhibit.h					\
 	gpm-inhibit.c					\
 	gpm-graph-widget.h				\
@@ -196,8 +198,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-feedback-widget.h				\
 	gpm-feedback-widget.c				\
 	$(NULL)
-
-#	gpm-powermanager.h
 
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\

@@ -117,6 +117,7 @@ main (int argc, char **argv)
 	if (automatic == TRUE || all == TRUE) {
 		gpm_st_common (test);
 		gpm_st_array (test);
+		gpm_st_array_float (test);
 		gpm_st_inhibit (test);
 		gpm_st_proxy (test);
 		gpm_st_hal_power (test);

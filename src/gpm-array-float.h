@@ -19,30 +19,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GPM_ARRAY_FLOAT_H
+#define __GPM_ARRAY_FLOAT_H
+
 #include <glib.h>
+#include "gpm-array.h"
 
-typedef struct
-{
-	guint	total;
-	guint	succeeded;
-	gchar  *type;
-} GpmSelfTest;
+G_BEGIN_DECLS
 
-void gpm_st_title (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_success (GpmSelfTest *test, const gchar *format, ...);
-void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);
+gfloat		 gpm_array_float_guassian_value		(gfloat		 x,
+							 gfloat		 sigma);
+GArray		*gpm_array_float_convert		(GpmArray	*array);
+GArray		*gpm_array_float_compute_gaussian	(guint		 length,
+							 gfloat		 sigma);
+gboolean	 gpm_array_float_print			(GArray		*array);
+GArray		*gpm_array_float_convolve		(GArray		*data,
+							 GArray		*kernel);
 
-void gpm_st_common (GpmSelfTest *test);
-void gpm_st_profile (GpmSelfTest *test);
-void gpm_st_array (GpmSelfTest *test);
-void gpm_st_array_float (GpmSelfTest *test);
-void gpm_st_cell (GpmSelfTest *test);
-void gpm_st_cell_unit (GpmSelfTest *test);
-void gpm_st_cell_array (GpmSelfTest *test);
-void gpm_st_proxy (GpmSelfTest *test);
-void gpm_st_inhibit (GpmSelfTest *test);
-void gpm_st_hal_device (GpmSelfTest *test);
-void gpm_st_hal_devicestore (GpmSelfTest *test);
-void gpm_st_hal_power (GpmSelfTest *test);
-void gpm_st_hal_manager (GpmSelfTest *test);
+G_END_DECLS
 
+#endif /* __GPM_ARRAY_FLOAT_H */
