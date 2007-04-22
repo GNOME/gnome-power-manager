@@ -86,7 +86,7 @@ gpm_st_profile (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "could not delete");
 	}
-g_error ("kkl");
+
 	/************************************************************/
 	gpm_st_title (test, "set config id (should create file)");
 	ret = gpm_profile_set_config_id (profile, "test123");

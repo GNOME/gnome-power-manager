@@ -23,6 +23,7 @@
 #include "gpm-st-main.h"
 
 #include "../src/gpm-array.h"
+#include "../src/gpm-debug.h"
 
 void
 gpm_st_array (GpmSelfTest *test)
@@ -232,13 +233,20 @@ gpm_st_array (GpmSelfTest *test)
 	}
 
 	/*************** UWE TEST **********************************/
-	gpm_st_title (test, "uniform weighted average");
+	gpm_st_title (test, "uniform weighted average for flat data");
 	gpm_array_clear (array);
 	gpm_array_set_fixed_size (array, 10);
 	for (i=0;i<10;i++) {
 		gpm_array_set (array, i, i, 2, 3);
 	}
-	gpm_array_compute_uwe_self (array, 5);
+	gpm_debug ("flat test input");
+	gpm_array_print (array);
+
+	gpm_array_compute_uwe_self (array, 3);
+
+	gpm_debug ("flat test output");
+	gpm_array_print (array);
+
 	size = gpm_array_get_size (array);
 	x = gpm_array_get(array,0)->x;
 	y = gpm_array_get(array,9)->y;
@@ -247,6 +255,123 @@ gpm_st_array (GpmSelfTest *test)
 		gpm_st_success (test, "averaged okay");
 	} else {
 		gpm_st_failed (test, "did not average okay (%i,%i,%i)", x, y, data);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "uniform weighted average for ramp data");
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	for (i=0;i<10;i++) {
+		gpm_array_set (array, i, i, i, 3);
+	}
+	gpm_debug ("ramp test input");
+	gpm_array_print (array);
+
+	gpm_array_compute_uwe_self (array, 3);
+
+	gpm_debug ("ramp test output");
+	gpm_array_print (array);
+
+	size = gpm_array_get_size (array);
+	y = gpm_array_get(array,0)->y;
+	if (size == 10 && y == 2) {
+		gpm_st_success (test, "averaged okay");
+	} else {
+		gpm_st_failed (test, "did not average okay (%i)", x);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "uniform weighted average for dirac 1 data");
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	gpm_array_set (array, 0, 0, 100, 3);
+	gpm_array_set (array, 1, 1, 0, 3);
+	gpm_array_set (array, 2, 2, 0, 3);
+	gpm_array_set (array, 3, 3, 0, 3);
+	gpm_array_set (array, 4, 4, 0, 3);
+	gpm_array_set (array, 5, 5, 0, 3);
+	gpm_array_set (array, 6, 6, 0, 3);
+	gpm_array_set (array, 7, 7, 0, 3);
+	gpm_array_set (array, 8, 8, 0, 3);
+	gpm_array_set (array, 9, 9, 0, 3);
+
+	gpm_debug ("dirac 1 test input");
+	gpm_array_print (array);
+
+	gpm_array_compute_uwe_self (array, 3);
+
+	gpm_debug ("dirac 1 test output");
+	gpm_array_print (array);
+
+	size = gpm_array_get_size (array);
+	y = gpm_array_get(array,0)->y;
+	if (size == 10 && y == 2) {
+		gpm_st_success (test, "averaged okay");
+	} else {
+		gpm_st_failed (test, "did not average okay (%i)", x);
+	}
+
+
+	/************************************************************/
+	gpm_st_title (test, "uniform weighted average for dirac 2 data");
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	gpm_array_set (array, 0, 0, 0, 3);
+	gpm_array_set (array, 1, 1, 0, 3);
+	gpm_array_set (array, 2, 2, 0, 3);
+	gpm_array_set (array, 3, 3, 0, 3);
+	gpm_array_set (array, 4, 4, 0, 3);
+	gpm_array_set (array, 5, 5, 0, 3);
+	gpm_array_set (array, 6, 6, 0, 3);
+	gpm_array_set (array, 7, 7, 0, 3);
+	gpm_array_set (array, 8, 8, 0, 3);
+	gpm_array_set (array, 9, 9, 100, 3);
+
+	gpm_debug ("dirac 2 test input");
+	gpm_array_print (array);
+
+	gpm_array_compute_uwe_self (array, 3);
+
+	gpm_debug ("dirac 2 test output");
+	gpm_array_print (array);
+
+	size = gpm_array_get_size (array);
+	y = gpm_array_get(array,9)->y;
+	if (size == 10 && y == 2) {
+		gpm_st_success (test, "averaged okay");
+	} else {
+		gpm_st_failed (test, "did not average okay (%i)", x);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "uniform weighted average for dirac 3 data");
+	gpm_array_clear (array);
+	gpm_array_set_fixed_size (array, 10);
+	gpm_array_set (array, 0, 0, 0, 3);
+	gpm_array_set (array, 1, 1, 0, 3);
+	gpm_array_set (array, 2, 2, 0, 3);
+	gpm_array_set (array, 3, 3, 0, 3);
+	gpm_array_set (array, 4, 4, 100, 3);
+	gpm_array_set (array, 5, 5, 0, 3);
+	gpm_array_set (array, 6, 6, 0, 3);
+	gpm_array_set (array, 7, 7, 0, 3);
+	gpm_array_set (array, 8, 8, 0, 3);
+	gpm_array_set (array, 9, 9, 0, 3);
+
+	gpm_debug ("dirac 3 test input");
+	gpm_array_print (array);
+
+	gpm_array_compute_uwe_self (array, 3);
+
+	gpm_debug ("dirac 3 test output");
+	gpm_array_print (array);
+
+	size = gpm_array_get_size (array);
+	y = gpm_array_get(array,4)->y;
+	if (size == 10 && y == 2) {
+		gpm_st_success (test, "averaged okay");
+	} else {
+		gpm_st_failed (test, "did not average okay (%i)", x);
 	}
 
 	/*************** INTEGRATION TEST ************************/
