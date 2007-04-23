@@ -129,7 +129,7 @@ main (int argc, char **argv)
 		gpm_st_cell_unit (test);
 		gpm_st_cell (test);
 		gpm_st_cell_array (test);
-		gpm_st_profile (test);
+//		gpm_st_profile (test);
 	}
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);

@@ -47,7 +47,69 @@ gpm_array_float_guassian_value (gfloat x, gfloat sigma)
 }
 
 /**
- * gpm_array_float_convert:
+ * gpm_array_float_new:
+ *
+ * @length: length of array
+ * Return value: Allocate array
+ *
+ * Creates a new size array which is zeroed. Free with g_array_free();
+ **/
+GArray *
+gpm_array_float_new (guint length)
+{
+	guint i;
+	GArray *array;
+	array = g_array_sized_new (TRUE, FALSE, sizeof(gfloat), length);
+	array->len = length;
+
+	/* clear to 0.0 */
+	for (i=0; i<length; i++) {
+		g_array_index (array, gfloat, i) = 0.0;
+	}
+
+	return array;
+}
+
+/**
+ * gpm_array_float_get:
+ *
+ * @array: input array
+ **/
+inline gfloat
+gpm_array_float_get (GArray *array, guint i)
+{
+	if (i >= array->len) {
+		g_error ("above index! (%i)", i);
+	}
+	return g_array_index (array, gfloat, i);
+}
+
+/**
+ * gpm_array_float_set:
+ *
+ * @array: input array
+ **/
+inline void
+gpm_array_float_set (GArray *array, guint i, gfloat value)
+{
+	g_array_index (array, gfloat, i) = value;
+}
+
+/**
+ * gpm_array_float_free:
+ *
+ * @array: input array
+ *
+ * Frees the array, deallocating data
+ **/
+void
+gpm_array_float_free (GArray *array)
+{
+	g_array_free (array, FALSE);
+}
+
+/**
+ * gpm_array_float_convert_y:
  *
  * @array: input array
  * Return value: Same length array as input array
@@ -55,25 +117,22 @@ gpm_array_float_guassian_value (gfloat x, gfloat sigma)
  * Converts a GpmArray->y to GpmArrayFloat
  **/
 GArray *
-gpm_array_float_convert (GpmArray *array)
+gpm_array_float_convert_y (GpmArray *array)
 {
 	GpmArrayPoint *point;
 	GArray *arrayfloat;
-	gfloat *dataptr;
 	guint i;
 	guint length;
 
 	length = gpm_array_get_size (array);
 
 	/* create a new array */
-	arrayfloat = g_array_sized_new (TRUE, FALSE, sizeof(gfloat), length);
-	arrayfloat->len = length;
+	arrayfloat = gpm_array_float_new (length);
 
 	/* copy from one structure to a quick 1D array */
 	for (i=0; i<length; i++) {
 		point = gpm_array_get (array, i);
-		dataptr = &g_array_index (arrayfloat, gfloat, i);
-		*dataptr = point->y;
+		g_array_index (arrayfloat, gfloat, i) = point->y;
 	}
 	return arrayfloat;
 }
@@ -94,16 +153,12 @@ gpm_array_float_compute_gaussian (guint length, gfloat sigma)
 	gint half_length;
 	guint i;
 	gfloat div;
-//	const float gaussian_width = 4.0;
 
-	array = g_array_sized_new (TRUE, FALSE, sizeof(gfloat), length);
-	array->len = length;
+	array = gpm_array_float_new (length);
 
 	/* array positions 0..10, has to be an odd number */
 	half_length = (length / 2) + 1;
 	for (i=0; i<half_length; i++) {
-//		div = (gaussian_width / (gfloat) (half_length-1)) * (gfloat) (half_length-(i+1));
-//		div = (half_length - (i + 1)) * ((gfloat) length / (gaussian_width + 1.0));
 		div = half_length - (i + 1);
 		gpm_debug ("div=%f", div);
 		g_array_index (array, gfloat, i) = gpm_array_float_guassian_value (div, sigma);
@@ -115,6 +170,28 @@ gpm_array_float_compute_gaussian (guint length, gfloat sigma)
 		g_array_index (array, gfloat, i) = div;
 	}
 	return array;
+}
+
+/**
+ * gpm_array_float_sum:
+ *
+ * @array: input array
+ *
+ * Sum the elements of the array
+ **/
+gfloat
+gpm_array_float_sum (GArray *array)
+{
+	guint length;
+	guint i;
+	gfloat total = 0;
+
+	length = array->len;
+	/* debug out */
+	for (i=0; i<length; i++) {
+		total += g_array_index (array, gfloat, i);
+	}
+	return total;
 }
 
 /**
@@ -133,7 +210,7 @@ gpm_array_float_print (GArray *array)
 	length = array->len;
 	/* debug out */
 	for (i=0; i<length; i++) {
-		g_print ("[%i]\tval=%f\n", i, g_array_index (array, gfloat, i));
+		gpm_debug ("[%i]\tval=%f", i, g_array_index (array, gfloat, i));
 	}
 	return TRUE;
 }
@@ -151,8 +228,8 @@ gpm_array_float_print (GArray *array)
 GArray *
 gpm_array_float_convolve (GArray *data, GArray *kernel)
 {
-	guint length_data;
-	guint length_kernel;
+	gint length_data;
+	gint length_kernel;
 	GArray *result;
 	gfloat value;
 	gint i;
@@ -162,19 +239,20 @@ gpm_array_float_convolve (GArray *data, GArray *kernel)
 	length_data = data->len;
 	length_kernel = kernel->len;
 
-	result = g_array_sized_new (TRUE, FALSE, sizeof(gfloat), length_data);
-	result->len = length_data;
+	result = gpm_array_float_new (length_data);
 
 	/* convolve */
 	for (i=0;i<length_data;i++) {
 		value = 0;
 		for (j=0;j<length_kernel;j++) {
 			index = i+j-(length_kernel/2);
-			if (index > 0 && index < length_data + 1) {
-				value += g_array_index (data, gfloat, index) * g_array_index (kernel, gfloat, j);
+			if (index < 0) {
+				index = 0;
+			} else if (index >= length_data) {
+				index = length_data - 1;
 			}
+			value += g_array_index (data, gfloat, index) * g_array_index (kernel, gfloat, j);
 		}
-
 		g_array_index (result, gfloat, i) = value;
 	}
 	return result;
