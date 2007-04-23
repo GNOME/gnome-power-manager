@@ -421,7 +421,7 @@
       <default>true</default>
       <locale name="C">
         <short>Use gnome-screensaver lock setting</short>
-        <long>If to use the screen lock setting of gnome-screensaver to decide to lock the screen after a hibernate, suspend or blank screen.</long>
+        <long>Whether to use the screen lock setting of gnome-screensaver to decide if the screen is locked after a hibernate, suspend or blank screen.</long>
       </locale>
     </schema>
 
@@ -433,7 +433,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen when blanked</short>
-        <long>If the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false.</long>
+        <long>Whether the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -445,7 +445,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen on suspend</short>
-        <long>If to lock the screen when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false.</long>
+        <long>Whether the screen is locked when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -457,7 +457,7 @@
       <default>true</default>
       <locale name="C">
         <short>Lock screen on hibernate</short>
-        <long>If to lock the screen when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false.</long>
+        <long>Whether the screen is locked when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false.</long>
       </locale>
     </schema>
 
@@ -469,7 +469,7 @@
       <default>false</default>
       <locale name="C">
         <short>Lock GNOME keyring on sleep</short>
-        <long>If to lock the GNOME keyring before the computer enters sleep. This means you have to unlock the keyring on resume.</long>
+        <long>Whether the GNOME keyring is locked before the computer enters sleep. This means the the keyring will have to be unlocked on resume.</long>
       </locale>
     </schema>
 
