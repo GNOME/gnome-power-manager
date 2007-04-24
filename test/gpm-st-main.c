@@ -117,7 +117,6 @@ main (int argc, char **argv)
 	if (automatic == TRUE || all == TRUE) {
 		gpm_st_common (test);
 		gpm_st_array (test);
-		gpm_st_array_float (test);
 		gpm_st_inhibit (test);
 		gpm_st_proxy (test);
 		gpm_st_hal_power (test);
@@ -130,6 +129,7 @@ main (int argc, char **argv)
 		gpm_st_cell (test);
 		gpm_st_cell_array (test);
 //		gpm_st_profile (test);
+		gpm_st_array_float (test);
 	}
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);

@@ -32,7 +32,9 @@ void		 gpm_array_float_free			(GArray		*array);
 gfloat		 gpm_array_float_guassian_value		(gfloat		 x,
 							 gfloat		 sigma);
 gfloat		 gpm_array_float_sum			(GArray		*array);
-GArray		*gpm_array_float_convert_y		(GpmArray	*array);
+GArray		*gpm_array_float_from_array_y		(GpmArray	*array);
+gboolean	 gpm_array_float_to_array_y		(GpmArray	*array,
+							 GArray		*arrayfloat);
 GArray		*gpm_array_float_compute_gaussian	(guint		 length,
 							 gfloat		 sigma);
 gboolean	 gpm_array_float_print			(GArray		*array);

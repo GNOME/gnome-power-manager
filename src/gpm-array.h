@@ -73,7 +73,6 @@ gboolean		 gpm_array_load_from_file	(GpmArray	*array,
 							 const gchar	*filename);
 gboolean		 gpm_array_save_to_file		(GpmArray	*array,
 							 const gchar	*filename);
-gboolean		 gpm_array_interpolate_zeros	(GpmArray	*array);
 gboolean		 gpm_array_set_data		(GpmArray	*array,
 							 guint		 data);
 gboolean		 gpm_array_set_fixed_size	(GpmArray	*array,
@@ -83,17 +82,6 @@ gint			 gpm_array_interpolate		(GpmArray	*array,
 							 gint		 xintersect);
 gboolean		 gpm_array_invert		(GpmArray	*array);
 gboolean		 gpm_array_print		(GpmArray	*array);
-gboolean		 gpm_array_compute_rate_lsrl	(GpmArray	*array,
-							 GpmArray	*newarray,
-							 guint		 slew);
-gboolean		 gpm_array_compute_uwe		(GpmArray	*array,
-							 GpmArray	*newarray,
-							 guint		 slew);
-gboolean		 gpm_array_compute_uwe_self	(GpmArray	*array,
-							 guint		 slew);
-gboolean		 gpm_array_compute_relationship	(GpmArray	*array1,
-							 GpmArray	*array2,
-							 GpmArray	*newarray);
 gboolean		 gpm_array_copy			(GpmArray	*from,
 							 GpmArray	*to);
 gboolean		 gpm_array_copy_insert		(GpmArray	*from,
@@ -101,10 +89,8 @@ gboolean		 gpm_array_copy_insert		(GpmArray	*from,
 guint			 gpm_array_compute_integral	(GpmArray	*array,
 							 guint		 x1,
 							 guint		 x2);
-gboolean		 gpm_array_invert_value_y	(GpmArray	*array);
 gboolean		 gpm_array_sort_by_x		(GpmArray	*array);
 gboolean		 gpm_array_sort_by_y		(GpmArray	*array);
-gboolean		 gpm_array_ensure_unique_y	(GpmArray	*array);
 gboolean		 gpm_array_set_max_points	(GpmArray	*array,
 							 guint		 max_points);
 gboolean		 gpm_array_set_max_width	(GpmArray	*array,

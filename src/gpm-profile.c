@@ -129,47 +129,6 @@ gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 }
 
 /**
- * gpm_profile_array_get_nonzero_average:
- * @array: This class instance
- *
- * Gets the average y value, but only counting the elements not equal to a constant.
- **/
-guint
-gpm_profile_array_get_nonzero_average (GpmArray *array, guint value)
-{
-	GpmArrayPoint *point;
-	guint i;
-	guint length;
-	guint total;
-	guint average;
-	guint non_zero;
-
-	g_return_val_if_fail (array != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
-
-	/* sum all the y values that are not zero */
-	total = 0;
-	non_zero = 0;
-	length = gpm_array_get_size (array);
-	for (i=0; i < length; i++) {
-		point = gpm_array_get (array, i);
-		if (point->y != value) {
-			non_zero++;
-			total += point->y;
-		}
-	}
-
-	/* empty array */
-	if (non_zero == 0) {
-		return value;
-	}
-
-	/* divide by number elements */
-	average = (guint) ((gdouble) total / (gdouble) non_zero);
-	return average;
-}
-
-/**
  * gpm_profile_compute_data_battery:
  *
  * @profile: This class
@@ -178,7 +137,6 @@ static void
 gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 {
 	guint i;
-	guint average;
 	GpmArray *array;
 	GpmArrayPoint *point;
 
@@ -189,9 +147,6 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 		array = profile->priv->array_data_charge;
 	}
 
-	/* get the average not including the default */
-	average = gpm_profile_array_get_nonzero_average (array, GPM_PROFILE_SECONDS_PER_PERCENT);
-
 	/* copy the y data field into the y battery field */
 	for (i=0; i<100; i++) {
 		point = gpm_array_get (array, i);
@@ -200,12 +155,9 @@ gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
 			gpm_array_set (profile->priv->array_battery, i, point->x, point->y, GPM_COLOUR_BLUE);
 		} else {
 			/* set zero points a different colour, and use the average */
-			gpm_array_set (profile->priv->array_battery, i, point->x, average, GPM_COLOUR_DARK_BLUE);
+			gpm_array_set (profile->priv->array_battery, i, point->x, 0, GPM_COLOUR_DARK_BLUE);
 		}
 	}
-
-	/* smooth data using moving average algorithm */
-	gpm_array_compute_uwe_self (profile->priv->array_battery, GPM_PROFILE_SMOOTH_VIEW_SLEW);
 }
 
 /**
@@ -238,9 +190,6 @@ gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
 			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_DARK_RED);
 		}
 	}
-
-	/* smooth data using moving average algorithm */
-	gpm_array_compute_uwe_self (profile->priv->array_accuracy, GPM_PROFILE_SMOOTH_VIEW_SLEW);
 }
 
 /**
@@ -291,7 +240,7 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
-
+//xxx guess if none
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
 		gpm_warning ("no config id set!");

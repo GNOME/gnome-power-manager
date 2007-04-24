@@ -86,7 +86,7 @@ gpm_st_array_float (GpmSelfTest *test)
 	/************************************************************/
 	size = 9;
 	sigma = 1.1;
-	gpm_st_title (test, "get gaussian array (%i), sigma %f", sigma);
+	gpm_st_title (test, "get gaussian array (%i), sigma %f", size, sigma);
 	kernel = gpm_array_float_compute_gaussian (size, sigma);
 	if (kernel != NULL && kernel->len == size) {
 		gpm_st_success (test, "got correct length gaussian array");
@@ -243,6 +243,36 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_st_title (test, "make sure we get the correct array sum of convolve #4");
 	value = gpm_array_float_sum (result);
 	if (fabs(value - 100.0) < 1.0) {
+		gpm_st_success (test, "got correct (enough) sum (%f)", value);
+	} else {
+		gpm_st_failed (test, "got wrong sum (%f)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "test convolving with kernel #5");
+	gpm_array_float_set (array, 0, 10.0);
+	gpm_array_float_set (array, 1, 10.0);
+	gpm_array_float_set (array, 2, 10.0);
+	gpm_array_float_set (array, 3, 10.0);
+	gpm_array_float_set (array, 4, 0.0);
+	gpm_array_float_set (array, 5, 10.0);
+	gpm_array_float_set (array, 6, 10.0);
+	gpm_array_float_set (array, 7, 10.0);
+	gpm_array_float_set (array, 8, 10.0);
+	gpm_array_float_set (array, 9, 10.0);
+	result = gpm_array_float_convolve (array, kernel);
+	if (result->len == 10) {
+		gpm_st_success (test, "got correct size convolve product");
+	} else {
+		gpm_st_failed (test, "got incorrect size convolve product (%f)", result->len);
+	}
+	gpm_array_float_print (array);
+	gpm_array_float_print (result);
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get the correct array sum of convolve #5");
+	value = gpm_array_float_sum (result);
+	if (fabs(value - 90.0) < 1.0) {
 		gpm_st_success (test, "got correct (enough) sum (%f)", value);
 	} else {
 		gpm_st_failed (test, "got wrong sum (%f)", value);

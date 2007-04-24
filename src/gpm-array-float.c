@@ -109,7 +109,7 @@ gpm_array_float_free (GArray *array)
 }
 
 /**
- * gpm_array_float_convert_y:
+ * gpm_array_float_from_array_y:
  *
  * @array: input array
  * Return value: Same length array as input array
@@ -117,7 +117,7 @@ gpm_array_float_free (GArray *array)
  * Converts a GpmArray->y to GpmArrayFloat
  **/
 GArray *
-gpm_array_float_convert_y (GpmArray *array)
+gpm_array_float_from_array_y (GpmArray *array)
 {
 	GpmArrayPoint *point;
 	GArray *arrayfloat;
@@ -135,6 +135,30 @@ gpm_array_float_convert_y (GpmArray *array)
 		g_array_index (arrayfloat, gfloat, i) = point->y;
 	}
 	return arrayfloat;
+}
+
+/**
+ * gpm_array_float_to_array_y:
+ *
+ * @array: input array
+ * Return value: Same length array as input array
+ *
+ * Converts a GpmArray->y to GpmArrayFloat
+ **/
+gboolean
+gpm_array_float_to_array_y (GpmArray *array, GArray *arrayfloat)
+{
+	GpmArrayPoint *point;
+	guint i;
+	guint length;
+
+	length = gpm_array_get_size (array);
+	/* copy from one structure to a slow 2D array */
+	for (i=0; i<length; i++) {
+		point = gpm_array_get (array, i);
+		point->y = g_array_index (arrayfloat, gfloat, i);
+	}
+	return TRUE;
 }
 
 /**
@@ -160,7 +184,6 @@ gpm_array_float_compute_gaussian (guint length, gfloat sigma)
 	half_length = (length / 2) + 1;
 	for (i=0; i<half_length; i++) {
 		div = half_length - (i + 1);
-		gpm_debug ("div=%f", div);
 		g_array_index (array, gfloat, i) = gpm_array_float_guassian_value (div, sigma);
 	}
 

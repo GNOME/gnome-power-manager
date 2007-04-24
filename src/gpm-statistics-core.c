@@ -46,6 +46,8 @@ static void     gpm_statistics_class_init (GpmStatisticsClass *klass);
 static void     gpm_statistics_init       (GpmStatistics      *statistics);
 static void     gpm_statistics_finalize   (GObject	    *object);
 
+static void	gpm_statistics_refresh_data (GpmStatistics *statistics);
+
 #define GPM_STATISTICS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_STATISTICS, GpmStatisticsPrivate))
 
 #define ACTION_VOLTAGE				"voltage"
@@ -308,11 +310,31 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 		return;
 	}
 
-	/* refresh data automatically */
+	/* refresh events automatically */
 	gpm_statistics_refresh_events (statistics);
 
 	/* only enable the dots if the checkbox is checked */
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), TRUE);
+}
+
+/**
+ * gpm_statistics_checkbox_smooth_cb:
+ * @widget: The GtkWidget object
+ **/
+static void
+gpm_statistics_checkbox_smooth_cb (GtkWidget     *widget,
+			           GpmStatistics *statistics)
+{
+	gboolean checked;
+
+	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+	gpm_debug ("Smooth data enable %i", checked);
+
+	/* save to gconf so we open next time with the correct setting */
+	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, checked);
+
+	/* refresh data automatically */
+	gpm_statistics_refresh_data (statistics);
 }
 
 /**
@@ -623,12 +645,33 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 	return TRUE;
 }
 
+#include "gpm-array-float.h"
+
 static void
 gpm_statistics_refresh_data (GpmStatistics *statistics)
 {
+	gboolean smooth;
+
 	/* only get the data for a valid type */
 	if (statistics->priv->graph_type != NULL) {
 		gpm_statistics_get_data_dbus (statistics, statistics->priv->graph_type);
+	}
+
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, &smooth);
+	if (smooth == TRUE) {
+		GArray *arrayfloat;
+		GArray *kernel;
+		GArray *result;
+		gpm_debug ("smoothing data, slooooooow....");
+
+		arrayfloat = gpm_array_float_from_array_y (statistics->priv->data);
+		kernel = gpm_array_float_compute_gaussian (17, 4.0);
+		result = gpm_array_float_convolve (arrayfloat, kernel);
+		gpm_array_float_to_array_y (statistics->priv->data, result);
+
+		gpm_array_float_free (kernel);
+		gpm_array_float_free (arrayfloat);
+		gpm_array_float_free (result);
 	}
 
 	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
@@ -932,6 +975,13 @@ gpm_statistics_init (GpmStatistics *statistics)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);
 	gpm_statistics_checkbox_events_cb (widget, statistics);
+
+	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_smooth");
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, &checked);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
+	g_signal_connect (widget, "clicked",
+			  G_CALLBACK (gpm_statistics_checkbox_smooth_cb), statistics);
+	gpm_statistics_checkbox_smooth_cb (widget, statistics);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_legend");
 	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_LEGEND, &checked);

@@ -1,3 +1,28 @@
+2007-04-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-array.c:
+	* src/gpm-array.h:
+	Rip out some unused code. Things are simpler now.
+
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-graph.glade:
+	* src/Makefile.am:
+	* src/gpm-conf.h:
+	Add an option in g-p-s to smooth the graphs to see trends more easily.
+
+	* src/gpm-array-float.c:
+	* src/gpm-array-float.h:
+	Add a routine so we can copy back to a GpmArray.
+
+	* src/gpm-profile.c:
+	Don't smooth here, we only do the processor insive bits in the
+	presentation application.
+
+	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-main.c: (main):
+	Remove obsolete tests. Now we pass everything again.
+
 2007-04-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-array-float.c:
