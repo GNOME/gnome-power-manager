@@ -39,6 +39,16 @@ static gboolean do_verbose = FALSE;	/* if we should print out debugging */
 static GSList *list = NULL;
 static gchar va_args_buffer [1025];
 
+
+/**
+ * gpm_debug_is_verbose:
+ **/
+gboolean
+gpm_debug_is_verbose (void)
+{
+	return do_verbose;
+}
+
 /**
  * gpm_debug_add_option:
  **/

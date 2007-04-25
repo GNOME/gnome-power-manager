@@ -1,3 +1,37 @@
+2007-04-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-array.c:
+	* src/gpm-array.h:
+	* src/gpm-array-float.c:
+	* src/gpm-array-float.h:
+	Add some code to help convert to and from a GpmArray.
+
+	* src/gpm-debug.c: (gpm_debug_is_verbose):
+	* src/gpm-debug.h:
+	Add an extra method so we only do the (expensive) profiling debugging
+	when we are versbose to a console.
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action):
+	Check for a zero return value, which we can now get on empty profile.
+
+	* src/gpm-main.c:
+	Don't include stuff we don't use.
+
+	* src/gpm-statistics-core.c: (gpm_statistics_refresh_data):
+	Adjust the smoothing.
+
+	* src/gpm-profile.c:
+	Move to a 1D mapping of data, rather than the hodge-podge of refresh
+	methods that was done before. This makes querying time and data for
+	the graph program much less CPU intensive, which is good.
+	Startup time is measurably improved.
+
+	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-profile.c: (gpm_st_profile):
+	Fix all of the tests - now all work!
+
 2007-04-24  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-array.c:

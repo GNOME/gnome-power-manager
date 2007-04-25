@@ -278,6 +278,40 @@ gpm_st_array_float (GpmSelfTest *test)
 		gpm_st_failed (test, "got wrong sum (%f)", value);
 	}
 
+	/*************** INTEGRATION TEST ************************/
+	gpm_st_title (test, "integration down");
+	gpm_array_float_set (array, 0, 0.0);
+	gpm_array_float_set (array, 1, 1.0);
+	gpm_array_float_set (array, 2, 2.0);
+	gpm_array_float_set (array, 3, 3.0);
+	gpm_array_float_set (array, 4, 4.0);
+	gpm_array_float_set (array, 5, 5.0);
+	gpm_array_float_set (array, 6, 6.0);
+	gpm_array_float_set (array, 7, 7.0);
+	gpm_array_float_set (array, 8, 8.0);
+	gpm_array_float_set (array, 9, 9.0);
+	size = gpm_array_float_compute_integral (array, 0, 4);
+	if (size == 0+1+2+3+4) {
+		gpm_st_success (test, "intergrated okay");
+	} else {
+		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+	}
+	gpm_st_title (test, "integration up");
+	size = gpm_array_float_compute_integral (array, 5, 9);
+	if (size == 5+6+7+8+9) {
+		gpm_st_success (test, "intergrated okay");
+	} else {
+		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+	}
+	gpm_st_title (test, "integration all");
+	size = gpm_array_float_compute_integral (array, 0, 9);
+	if (size == 0+1+2+3+4+5+6+7+8+9) {
+		gpm_st_success (test, "intergrated okay");
+	} else {
+		gpm_st_failed (test, "did not intergrated okay (%i)", size);
+	}
+
+
 	gpm_array_float_free (result);
 	gpm_array_float_free (array);
 	gpm_array_float_free (kernel);

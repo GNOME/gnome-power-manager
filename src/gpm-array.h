@@ -86,9 +86,6 @@ gboolean		 gpm_array_copy			(GpmArray	*from,
 							 GpmArray	*to);
 gboolean		 gpm_array_copy_insert		(GpmArray	*from,
 							 GpmArray	*to);
-guint			 gpm_array_compute_integral	(GpmArray	*array,
-							 guint		 x1,
-							 guint		 x2);
 gboolean		 gpm_array_sort_by_x		(GpmArray	*array);
 gboolean		 gpm_array_sort_by_y		(GpmArray	*array);
 gboolean		 gpm_array_set_max_points	(GpmArray	*array,

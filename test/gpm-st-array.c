@@ -232,34 +232,6 @@ gpm_st_array (GpmSelfTest *test)
 		gpm_st_failed (test, "did not limit width X, size: %i (%i,%i,%i)", size, x, y, data);
 	}
 
-	/*************** INTEGRATION TEST ************************/
-	gpm_st_title (test, "integration down");
-	gpm_array_clear (array);
-	gpm_array_set_fixed_size (array, 10);
-	for (i=0;i<10;i++) {
-		gpm_array_set (array, i, i, i, 3);
-	}
-	size = gpm_array_compute_integral (array, 0, 4);
-	if (size == 0+1+2+3+4) {
-		gpm_st_success (test, "intergrated okay");
-	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
-	}
-	gpm_st_title (test, "integration up");
-	size = gpm_array_compute_integral (array, 5, 9);
-	if (size == 5+6+7+8+9) {
-		gpm_st_success (test, "intergrated okay");
-	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
-	}
-	gpm_st_title (test, "integration all");
-	size = gpm_array_compute_integral (array, 0, 9);
-	if (size == 0+1+2+3+4+5+6+7+8+9) {
-		gpm_st_success (test, "intergrated okay");
-	} else {
-		gpm_st_failed (test, "did not intergrated okay (%i)", size);
-	}
-
 	/************************************************************/
 
 	g_object_unref (array);

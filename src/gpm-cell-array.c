@@ -198,6 +198,9 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 		/* we have to work out the time for this percentage */
 		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &action_percentage);
 		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
+		if (action_time == 0) {
+			return 0;
+		}
 		difference = (gint) unit->time_discharge - (gint) action_time;
 	}
 

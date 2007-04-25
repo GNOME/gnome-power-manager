@@ -47,6 +47,7 @@ G_BEGIN_DECLS
 
 void		gpm_debug_init			(gboolean	 debug);
 void		gpm_debug_shutdown		(void);
+gboolean	gpm_debug_is_verbose		(void);
 void		gpm_debug_real			(const gchar	*func,
 						 const gchar	*file,
 						 int		 line,

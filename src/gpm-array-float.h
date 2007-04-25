@@ -32,11 +32,19 @@ void		 gpm_array_float_free			(GArray		*array);
 gfloat		 gpm_array_float_guassian_value		(gfloat		 x,
 							 gfloat		 sigma);
 gfloat		 gpm_array_float_sum			(GArray		*array);
-GArray		*gpm_array_float_from_array_y		(GpmArray	*array);
-gboolean	 gpm_array_float_to_array_y		(GpmArray	*array,
-							 GArray		*arrayfloat);
+gboolean	 gpm_array_float_from_array_y		(GArray		*arrayfloat,
+							 GpmArray	*array);
+gboolean	 gpm_array_float_from_array_z		(GArray		*arrayfloat,
+							 GpmArray	*array);
+gboolean	 gpm_array_float_to_array_y		(GArray		*arrayfloat,
+							 GpmArray	*array);
+gboolean	 gpm_array_float_to_array_z		(GArray		*arrayfloat,
+							 GpmArray	*array);
 GArray		*gpm_array_float_compute_gaussian	(guint		 length,
 							 gfloat		 sigma);
+gfloat		 gpm_array_float_compute_integral	(GArray		*array,
+							 guint		 x1,
+							 guint		 x2);
 gboolean	 gpm_array_float_print			(GArray		*array);
 GArray		*gpm_array_float_convolve		(GArray		*data,
 							 GArray		*kernel);

@@ -111,52 +111,99 @@ gpm_array_float_free (GArray *array)
 /**
  * gpm_array_float_from_array_y:
  *
- * @array: input array
- * Return value: Same length array as input array
+ * @arrayfloat: copy into
+ * @array: copy from
+ * Return value: success
  *
  * Converts a GpmArray->y to GpmArrayFloat
  **/
-GArray *
-gpm_array_float_from_array_y (GpmArray *array)
+gboolean
+gpm_array_float_from_array_y (GArray *arrayfloat, GpmArray *array)
 {
 	GpmArrayPoint *point;
-	GArray *arrayfloat;
 	guint i;
 	guint length;
 
-	length = gpm_array_get_size (array);
-
-	/* create a new array */
-	arrayfloat = gpm_array_float_new (length);
-
+	length = arrayfloat->len;
 	/* copy from one structure to a quick 1D array */
 	for (i=0; i<length; i++) {
 		point = gpm_array_get (array, i);
 		g_array_index (arrayfloat, gfloat, i) = point->y;
 	}
-	return arrayfloat;
+	return TRUE;
 }
 
 /**
- * gpm_array_float_to_array_y:
+ * gpm_array_float_from_array_z:
  *
- * @array: input array
- * Return value: Same length array as input array
+ * @arrayfloat: copy into
+ * @array: copy from
+ * Return value: success
  *
- * Converts a GpmArray->y to GpmArrayFloat
+ * Converts a GpmArray->z to GpmArrayFloat
  **/
 gboolean
-gpm_array_float_to_array_y (GpmArray *array, GArray *arrayfloat)
+gpm_array_float_from_array_z (GArray *arrayfloat, GpmArray *array)
 {
 	GpmArrayPoint *point;
 	guint i;
 	guint length;
 
-	length = gpm_array_get_size (array);
+	length = arrayfloat->len;
+	/* copy from one structure to a quick 1D array */
+	for (i=0; i<length; i++) {
+		point = gpm_array_get (array, i);
+		g_array_index (arrayfloat, gfloat, i) = point->data;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_array_float_to_array_y:
+ *
+ * @arrayfloat: copy from
+ * @array: copy into
+ * Return value: success
+ *
+ * Converts a GpmArray->y to GpmArrayFloat
+ **/
+gboolean
+gpm_array_float_to_array_y (GArray *arrayfloat, GpmArray *array)
+{
+	GpmArrayPoint *point;
+	guint i;
+	guint length;
+
+	length = arrayfloat->len;
 	/* copy from one structure to a slow 2D array */
 	for (i=0; i<length; i++) {
 		point = gpm_array_get (array, i);
 		point->y = g_array_index (arrayfloat, gfloat, i);
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_array_float_to_array_z:
+ *
+ * @arrayfloat: copy from
+ * @array: copy into
+ * Return value: success
+ *
+ * Converts a GpmArray->z to GpmArrayFloat
+ **/
+gboolean
+gpm_array_float_to_array_z (GArray *arrayfloat, GpmArray *array)
+{
+	GpmArrayPoint *point;
+	guint i;
+	guint length;
+
+	length = arrayfloat->len;
+	/* copy from one structure to a slow 2D array */
+	for (i=0; i<length; i++) {
+		point = gpm_array_get (array, i);
+		point->data = g_array_index (arrayfloat, gfloat, i);
 	}
 	return TRUE;
 }
@@ -279,5 +326,32 @@ gpm_array_float_convolve (GArray *data, GArray *kernel)
 		g_array_index (result, gfloat, i) = value;
 	}
 	return result;
+}
+
+/**
+ * gpm_array_float_compute_integral:
+ * @array: This class instance
+ *
+ * Computes complete discrete integral of dataset.
+ * Will only work with a step size of one.
+ **/
+gfloat
+gpm_array_float_compute_integral (GArray *array, guint x1, guint x2)
+{
+	gfloat value;
+	gint i;
+
+	g_return_val_if_fail (x2 >= x1, 0.0);
+
+	/* if the same point, then we have no area */
+	if (x1 == x2) {
+		return 0.0;
+	}
+
+	value = 0.0;
+	for (i=x1; i <= x2; i++) {
+		value += g_array_index (array, gfloat, i);
+	}
+	return value;
 }
 

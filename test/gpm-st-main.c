@@ -128,7 +128,7 @@ main (int argc, char **argv)
 		gpm_st_cell_unit (test);
 		gpm_st_cell (test);
 		gpm_st_cell_array (test);
-//		gpm_st_profile (test);
+		gpm_st_profile (test);
 		gpm_st_array_float (test);
 	}
 

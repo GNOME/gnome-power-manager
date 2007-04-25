@@ -41,7 +41,6 @@
 
 #include "gpm-manager.h"
 #include "dbus/xdg-power-management-core.h"
-//#include "dbus/xdg-power-management-widget.h"
 
 static void gpm_exit (GpmManager *manager);
 

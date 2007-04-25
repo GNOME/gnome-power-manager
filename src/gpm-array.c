@@ -426,38 +426,6 @@ gpm_array_sort_by_y (GpmArray *array)
 }
 
 /**
- * gpm_array_compute_integral:
- * @array: This class instance
- *
- * Computes complete discrete integral of dataset.
- * Will only work with a step size of one.
- **/
-guint
-gpm_array_compute_integral (GpmArray *array, guint x1, guint x2)
-{
-	GpmArrayPoint *point;
-	gint i;
-	guint value;
-
-	g_return_val_if_fail (array != NULL, 0);
-	g_return_val_if_fail (GPM_IS_ARRAY (array), 0);
-	g_return_val_if_fail (x2 >= x1, 0);
-
-	/* if the same point, then we have no area */
-	if (x1 == x2) {
-		return 0;
-	}
-
-	value = 0;
-	gpm_debug ("computing integral from %i to %i", x1, x2);
-	for (i=x1; i <= x2; i++) {
-		point = gpm_array_get (array, i);
-		value += point->y;
-	}
-	return value;
-}
-
-/**
  * gpm_array_copy:
  * @from: list to copy from
  * @to: list to copy to

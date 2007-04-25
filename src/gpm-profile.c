@@ -40,6 +40,7 @@
 
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"
+#include "gpm-array-float.h"
 #include "gpm-dpms.h"
 #include "gpm-common.h"
 #include "gpm-load.h"
@@ -53,9 +54,6 @@ static void     gpm_profile_finalize   (GObject	       *object);
 
 #define GPM_PROFILE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_PROFILE, GpmProfilePrivate))
 
-/* assume an average of 2 hour battery life */
-#define GPM_PROFILE_SECONDS_PER_PERCENT		72
-
 /* nicely smoothed, but still pretty fast */
 #define GPM_PROFILE_SMOOTH_VIEW_SLEW		10
 #define GPM_PROFILE_SMOOTH_SAVE_PERCENT		80
@@ -66,10 +64,14 @@ struct GpmProfilePrivate
 	GpmLoad			*load;
 	GpmDpms			*dpms;
 	GTimer			*timer;
-	GpmArray		*array_data_charge;
-	GpmArray		*array_data_discharge;
-	GpmArray		*array_accuracy;
-	GpmArray		*array_battery;
+	GpmArray		*present_array_accuracy;
+	GpmArray		*present_array_data;
+
+	GArray			*float_data_charge;
+	GArray			*float_data_discharge;
+	GArray			*float_accuracy_charge;
+	GArray			*float_accuracy_discharge;
+
 	gboolean		 discharging;
 	gboolean		 lcd_on;
 	gboolean		 data_valid;
@@ -129,70 +131,6 @@ gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 }
 
 /**
- * gpm_profile_compute_data_battery:
- *
- * @profile: This class
- */
-static void
-gpm_profile_compute_data_battery (GpmProfile *profile, gboolean discharge)
-{
-	guint i;
-	GpmArray *array;
-	GpmArrayPoint *point;
-
-	/* get the correct data */
-	if (discharge == TRUE) {
-		array = profile->priv->array_data_discharge;
-	} else {
-		array = profile->priv->array_data_charge;
-	}
-
-	/* copy the y data field into the y battery field */
-	for (i=0; i<100; i++) {
-		point = gpm_array_get (array, i);
-		/* only set points that are not zero */
-		if (point->data > 0) {
-			gpm_array_set (profile->priv->array_battery, i, point->x, point->y, GPM_COLOUR_BLUE);
-		} else {
-			/* set zero points a different colour, and use the average */
-			gpm_array_set (profile->priv->array_battery, i, point->x, 0, GPM_COLOUR_DARK_BLUE);
-		}
-	}
-}
-
-/**
- * gpm_profile_compute_data_accuracy:
- *
- * @profile: This class
- */
-static void
-gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
-{
-	guint i;
-	GpmArray *array;
-	GpmArrayPoint *point;
-
-	/* get the correct data */
-	if (discharge == TRUE) {
-		array = profile->priv->array_data_discharge;
-	} else {
-		array = profile->priv->array_data_charge;
-	}
-
-	/* copy the data field into the accuracy y field */
-	for (i=0; i<100; i++) {
-		point = gpm_array_get (array, i);
-		/* only set points that are not zero */
-		if (point->data > 0) {
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_RED);
-		} else {
-			/* set zero points a different colour */
-			gpm_array_set (profile->priv->array_accuracy, i, point->x, point->data, GPM_COLOUR_DARK_RED);
-		}
-	}
-}
-
-/**
  * gpm_profile_get_data_time_percent:
  *
  * @profile: This class
@@ -200,13 +138,33 @@ gpm_profile_compute_data_accuracy (GpmProfile *profile, gboolean discharge)
 GpmArray *
 gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 {
+	guint i;
+	GArray *array;
+	gfloat value;
+
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
-	/* recompute */
-	gpm_profile_compute_data_battery (profile, discharge);
+	/* get the correct data */
+	if (discharge == TRUE) {
+		array = profile->priv->float_data_discharge;
+	} else {
+		array = profile->priv->float_data_charge;
+	}
 
-	return profile->priv->array_battery;
+	/* copy the data field into the accuracy y field */
+	for (i=0; i<100; i++) {
+		value = gpm_array_float_get (array, i);
+		/* only set points that are not zero */
+		if (value > 0) {
+			gpm_array_set (profile->priv->present_array_data, i, i, value, GPM_COLOUR_RED);
+		} else {
+			/* set zero points a different colour */
+			gpm_array_set (profile->priv->present_array_data, i, i, value, GPM_COLOUR_DARK_RED);
+		}
+	}
+
+	return profile->priv->present_array_data;
 }
 
 /**
@@ -217,13 +175,33 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 GpmArray *
 gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 {
+	guint i;
+	GArray *array;
+	gfloat value;
+
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
-	/* recompute */
-	gpm_profile_compute_data_accuracy (profile, discharge);
+	/* get the correct data */
+	if (discharge == TRUE) {
+		array = profile->priv->float_accuracy_discharge;
+	} else {
+		array = profile->priv->float_accuracy_charge;
+	}
 
-	return profile->priv->array_accuracy;
+	/* copy the data field into the accuracy y field */
+	for (i=0; i<100; i++) {
+		value = gpm_array_float_get (array, i);
+		/* only set points that are not zero */
+		if (value > 0) {
+			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, GPM_COLOUR_RED);
+		} else {
+			/* set zero points a different colour */
+			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, GPM_COLOUR_DARK_RED);
+		}
+	}
+
+	return profile->priv->present_array_accuracy;
 }
 
 /**
@@ -240,7 +218,7 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
-//xxx guess if none
+
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
 		gpm_warning ("no config id set!");
@@ -253,14 +231,11 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 		percentage = 99;
 	}
 
-	/* recompute */
-	gpm_profile_compute_data_battery (profile, discharge);
-
 	/* compute correct area of integral */
 	if (discharge == TRUE) {
-		time = gpm_array_compute_integral (profile->priv->array_battery, 0, percentage);
+		time = gpm_array_float_compute_integral (profile->priv->float_data_discharge, 0, percentage);
 	} else {
-		time = gpm_array_compute_integral (profile->priv->array_battery, percentage, 99);
+		time = gpm_array_float_compute_integral (profile->priv->float_data_charge, percentage, 99);
 	}
 
 	return time;
@@ -274,38 +249,61 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
  * @percentage: new percentage value
  */
 static void
-gpm_profile_save_percentage (GpmProfile *profile, guint percentage, guint data, guint accuracy)
+gpm_profile_save_percentage (GpmProfile *profile,
+			     guint       percentage,
+			     guint       time,
+			     guint       measurement_accuracy)
 {
-	GpmArrayPoint *point;
-	GpmArray *array;
 	gchar *filename;
+	GpmArray *array;
+	GArray *array_data;
+	GArray *array_accuracy;
+	gfloat data;
+	gfloat accuracy;
 
 	/* get the correct data */
 	if (profile->priv->discharging == TRUE) {
-		array = profile->priv->array_data_discharge;
+		array_data = profile->priv->float_data_discharge;
+		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
-		array = profile->priv->array_data_charge;
+		array_data = profile->priv->float_data_charge;
+		array_accuracy = profile->priv->float_accuracy_charge;
 	}
-	point = gpm_array_get (array, percentage);
+
+	data = gpm_array_float_get (array_data, percentage);
+	accuracy = gpm_array_float_get (array_accuracy, percentage);
 
 	/* if we have no data, then just use the new value */
-	if (point->y == 0) {
-		point->y = data;
+	if (data == 0) {
+		data = time;
 	} else {
 		/* average the data so we converge to a common point */
-		point->y = gpm_exponential_average (point->y, data, GPM_PROFILE_SMOOTH_SAVE_PERCENT);
+		data = gpm_exponential_average (data, time, GPM_PROFILE_SMOOTH_SAVE_PERCENT);
 	}
+
+	/* save new data */
+	gpm_array_float_set (array_data, percentage, data);
 
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
-	point->data += accuracy / 5;
-	if (point->data > 100) {
-		point->data = 100;
+	accuracy += measurement_accuracy / 5;
+	if (accuracy > 100) {
+		accuracy = 100;
 	}
+	gpm_array_float_set (array_accuracy, percentage, accuracy);
 
-	/* save data file when idle */
+	/* create a temp 2D array so we can save the CSV */
+	array = gpm_array_new ();
+	gpm_array_set_fixed_size (array, 100);
+
+	/* we ignore x */
+	gpm_array_float_to_array_y (array_data, array);
+	gpm_array_float_to_array_z (array_accuracy, array);
+
+	/* save data file (when idle...) */
 	filename = gpm_profile_get_data_file (profile, profile->priv->discharging);
 	gpm_array_save_to_file (array, filename);
 	g_free (filename);
+	g_object_unref (array);
 }
 
 /**
@@ -505,12 +503,20 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 	gchar *filename;
 	gchar *path;
 	GpmArray *array;
+	GArray *array_data;
+	GArray *array_accuracy;
+
+	/* create a temp 2D array so we can load the CSV */
+	array = gpm_array_new ();
+	gpm_array_set_fixed_size (array, 100);
 
 	/* get the correct data */
 	if (discharge == TRUE) {
-		array = profile->priv->array_data_discharge;
+		array_data = profile->priv->float_data_discharge;
+		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
-		array = profile->priv->array_data_charge;
+		array_data = profile->priv->float_data_charge;
+		array_accuracy = profile->priv->float_accuracy_charge;
 	}
 
 	/* read in data profile from disk */
@@ -529,7 +535,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 		gpm_debug ("no data found, generating initial (poor) data");
 		for (i=0;i<100;i++) {
 			/* assume average battery lasts 2 hours, but we are 0% accurate */
-			gpm_array_set (array, i, i, GPM_PROFILE_SECONDS_PER_PERCENT, 0);
+			gpm_array_set (array, i, i, 0, 0);
 		}
 
 		ret = gpm_array_save_to_file (array, filename);
@@ -537,24 +543,13 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 			gpm_warning ("saving state failed. You will not get accurate time remaining calculations");
 		}
 	}
-	g_free (filename);
 
-#if 0
-	/* do debugging self tests */
-	guint time;
-	gpm_debug ("Reference times");
-	if (discharge == TRUE) {
-		time = gpm_profile_get_time (profile, 99, TRUE);
-		gpm_debug ("99-0\t%i minutes", time / 60);
-		time = gpm_profile_get_time (profile, 50, TRUE);
-		gpm_debug ("50-0\t%i minutes", time / 60);
-	} else {
-		time = gpm_profile_get_time (profile, 0, FALSE);
-		gpm_debug ("0-99\t%i minutes", time / 60);
-		time = gpm_profile_get_time (profile, 50, FALSE);
-		gpm_debug ("50-99\t%i minutes", time / 60);
-	}
-#endif
+	/* we ignore x as it's just a dummy counter */
+	gpm_array_float_from_array_y (array_data, array);
+	gpm_array_float_from_array_z (array_accuracy, array);
+
+	g_object_unref (array);
+	g_free (filename);
 }
 
 /**
@@ -569,6 +564,8 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 			   const gchar *config_id)
 {
 	gboolean reload = FALSE;
+	guint time;
+
 	g_return_val_if_fail (profile != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
 	g_return_val_if_fail (config_id != NULL, FALSE);
@@ -589,6 +586,21 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 		gpm_profile_load_data (profile, TRUE);
 		gpm_profile_load_data (profile, FALSE);
 	}
+
+	/* do debugging self tests only if verbose */
+	if (gpm_debug_is_verbose () == TRUE) {
+		gpm_debug ("Reference times");
+		time = gpm_profile_get_time (profile, 99, TRUE);
+		gpm_debug ("99-0\t%i minutes", time / 60);
+		time = gpm_profile_get_time (profile, 50, TRUE);
+		gpm_debug ("50-0\t%i minutes", time / 60);
+
+		time = gpm_profile_get_time (profile, 0, FALSE);
+		gpm_debug ("0-99\t%i minutes", time / 60);
+		time = gpm_profile_get_time (profile, 50, FALSE);
+		gpm_debug ("50-99\t%i minutes", time / 60);
+	}
+
 	return TRUE;
 }
 
@@ -599,7 +611,7 @@ guint
 gpm_profile_get_accuracy (GpmProfile *profile,
 			  guint	      percentage)
 {
-	GpmArrayPoint *point;
+	GArray *array;
 
 	g_return_val_if_fail (profile != NULL, 0);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), 0);
@@ -615,12 +627,14 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 		gpm_debug ("corrected percentage...");
 	}
 
-	/* recompute */
-	gpm_profile_compute_data_accuracy (profile, profile->priv->discharging);
+	/* get the correct data */
+	if (profile->priv->discharging == TRUE) {
+		array = profile->priv->float_accuracy_discharge;
+	} else {
+		array = profile->priv->float_accuracy_charge;
+	}
 
-	point = gpm_array_get (profile->priv->array_accuracy, percentage);
-
-	return point->y;
+	return gpm_array_float_get (array, percentage);
 }
 
 /**
@@ -647,16 +661,16 @@ gpm_profile_init (GpmProfile *profile)
 
 
 	/* used for data */
-	profile->priv->array_data_charge = gpm_array_new ();
-	profile->priv->array_data_discharge = gpm_array_new ();
-	gpm_array_set_fixed_size (profile->priv->array_data_charge, 100);
-	gpm_array_set_fixed_size (profile->priv->array_data_discharge, 100);
+	profile->priv->float_data_charge = gpm_array_float_new (100);
+	profile->priv->float_data_discharge = gpm_array_float_new (100);
+	profile->priv->float_accuracy_charge = gpm_array_float_new (100);
+	profile->priv->float_accuracy_discharge = gpm_array_float_new (100);
 
 	/* used for presentation, hence we can share */
-	profile->priv->array_accuracy = gpm_array_new ();
-	profile->priv->array_battery = gpm_array_new ();
-	gpm_array_set_fixed_size (profile->priv->array_battery, 100);
-	gpm_array_set_fixed_size (profile->priv->array_accuracy, 100);
+	profile->priv->present_array_accuracy = gpm_array_new ();
+	profile->priv->present_array_data = gpm_array_new ();
+	gpm_array_set_fixed_size (profile->priv->present_array_data, 100);
+	gpm_array_set_fixed_size (profile->priv->present_array_accuracy, 100);
 
 	/* default */
 	profile->priv->lcd_on = TRUE;
@@ -702,10 +716,13 @@ gpm_profile_finalize (GObject *object)
 	g_object_unref (profile->priv->dpms);
 	g_object_unref (profile->priv->ac_adapter);
 
-	g_object_unref (profile->priv->array_accuracy);
-	g_object_unref (profile->priv->array_battery);
-	g_object_unref (profile->priv->array_data_charge);
-	g_object_unref (profile->priv->array_data_discharge);
+	gpm_array_float_free (profile->priv->float_data_charge);
+	gpm_array_float_free (profile->priv->float_data_discharge);
+	gpm_array_float_free (profile->priv->float_accuracy_charge);
+	gpm_array_float_free (profile->priv->float_accuracy_discharge);
+
+	g_object_unref (profile->priv->present_array_accuracy);
+	g_object_unref (profile->priv->present_array_data);
 	g_timer_destroy (profile->priv->timer);
 
 	G_OBJECT_CLASS (gpm_profile_parent_class)->finalize (object);
