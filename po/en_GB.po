@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GNOME Power Manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-04-23 21:15+0100\n"
-"PO-Revision-Date: 2007-04-23 21:15-0000\n"
+"POT-Creation-Date: 2007-04-25 07:01+0100\n"
+"PO-Revision-Date: 2007-04-25 07:01-0000\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -680,6 +680,14 @@ msgstr "Whether we should show the legend in the statistics window"
 msgid "Whether we should show the legend in the statistics window."
 msgstr "Whether we should show the legend in the statistics window."
 
+#: ../data/gnome-power-manager.schemas.in.h:141
+msgid "Whether we should smooth the data in the graph"
+msgstr "Whether we should smooth the data in the graph"
+
+#: ../data/gnome-power-manager.schemas.in.h:142
+msgid "Whether we should smooth the data in the graph."
+msgstr "Whether we should smooth the data in the graph."
+
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
 msgstr "Configure power management"
@@ -714,7 +722,7 @@ msgid "Add related _events"
 msgstr "Add related _events"
 
 #: ../data/gpm-graph.glade.h:4
-#: ../src/gpm-statistics-core.c:374
+#: ../src/gpm-statistics-core.c:396
 msgid "Cell Voltage"
 msgstr "Cell Voltage"
 
@@ -727,14 +735,18 @@ msgid "Graph type:"
 msgstr "Graph type:"
 
 #: ../data/gpm-graph.glade.h:7
-#: ../src/gpm-statistics-core.c:60
+#: ../src/gpm-statistics-core.c:62
 msgid "Power History"
 msgstr "Power History"
 
 #: ../data/gpm-graph.glade.h:8
-#: ../src/gpm-statistics-core.c:352
+#: ../src/gpm-statistics-core.c:374
 msgid "Time since startup"
 msgstr "Time since startup"
+
+#: ../data/gpm-graph.glade.h:9
+msgid "_Smooth graph data"
+msgstr "_Smooth graph data"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1555,7 +1567,7 @@ msgstr "PDAs"
 
 #: ../src/gpm-cell-unit.c:246
 #: ../src/gpm-cell-unit.c:260
-#: ../src/gpm-statistics-core.c:737
+#: ../src/gpm-statistics-core.c:780
 msgid "Unknown"
 msgstr "Unknown"
 
@@ -1590,36 +1602,36 @@ msgstr "Power Preferences"
 
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:81
-#: ../src/gpm-statistics-core.c:94
+#: ../src/gpm-statistics-core.c:96
 msgid "Ask me"
 msgstr "Ask me"
 
 #: ../src/gpm-prefs-core.c:82
-#: ../src/gpm-statistics-core.c:95
-#: ../src/gpm-statistics-core.c:867
+#: ../src/gpm-statistics-core.c:97
+#: ../src/gpm-statistics-core.c:910
 msgid "Suspend"
 msgstr "Suspend"
 
 #: ../src/gpm-prefs-core.c:83
-#: ../src/gpm-statistics-core.c:96
+#: ../src/gpm-statistics-core.c:98
 msgid "Shutdown"
 msgstr "Shutdown"
 
 #: ../src/gpm-prefs-core.c:84
-#: ../src/gpm-statistics-core.c:97
-#: ../src/gpm-statistics-core.c:877
+#: ../src/gpm-statistics-core.c:99
+#: ../src/gpm-statistics-core.c:920
 msgid "Hibernate"
 msgstr "Hibernate"
 
 #: ../src/gpm-prefs-core.c:85
-#: ../src/gpm-statistics-core.c:98
+#: ../src/gpm-statistics-core.c:100
 msgid "Blank screen"
 msgstr "Blank screen"
 
 #. The text that should appear in the processor combo box
 #: ../src/gpm-prefs-core.c:86
 #: ../src/gpm-prefs-core.c:89
-#: ../src/gpm-statistics-core.c:99
+#: ../src/gpm-statistics-core.c:101
 msgid "Do nothing"
 msgstr "Do nothing"
 
@@ -1647,108 +1659,108 @@ msgstr "Never"
 msgid "GNOME Power Statistics"
 msgstr "GNOME Power Statistics"
 
-#: ../src/gpm-statistics-core.c:59
+#: ../src/gpm-statistics-core.c:61
 msgid "Charge History"
 msgstr "Charge History"
 
-#: ../src/gpm-statistics-core.c:61
+#: ../src/gpm-statistics-core.c:63
 msgid "Voltage History"
 msgstr "Voltage History"
 
-#: ../src/gpm-statistics-core.c:62
+#: ../src/gpm-statistics-core.c:64
 msgid "Estimated Time History"
 msgstr "Estimated Time History"
 
-#: ../src/gpm-statistics-core.c:63
+#: ../src/gpm-statistics-core.c:65
 msgid "Profiled Charge Time"
 msgstr "Profiled Charge Time"
 
-#: ../src/gpm-statistics-core.c:64
+#: ../src/gpm-statistics-core.c:66
 msgid "Profiled Charge Accuracy"
 msgstr "Profiled Charge Accuracy"
 
-#: ../src/gpm-statistics-core.c:65
+#: ../src/gpm-statistics-core.c:67
 msgid "Profiled Discharge Time"
 msgstr "Profiled Discharge Time"
 
-#: ../src/gpm-statistics-core.c:66
+#: ../src/gpm-statistics-core.c:68
 msgid "Profiled Discharge Accuracy"
 msgstr "Profiled Discharge Accuracy"
 
-#: ../src/gpm-statistics-core.c:346
+#: ../src/gpm-statistics-core.c:368
 msgid "Battery percentage"
 msgstr "Battery percentage"
 
-#: ../src/gpm-statistics-core.c:351
+#: ../src/gpm-statistics-core.c:373
 msgid "Time"
 msgstr "Time"
 
-#: ../src/gpm-statistics-core.c:354
 #: ../src/gpm-statistics-core.c:376
+#: ../src/gpm-statistics-core.c:398
 msgid "Unknown caption"
 msgstr "Unknown caption"
 
-#: ../src/gpm-statistics-core.c:365
+#: ../src/gpm-statistics-core.c:387
 msgid "Charge percentage"
 msgstr "Charge percentage"
 
-#: ../src/gpm-statistics-core.c:368
+#: ../src/gpm-statistics-core.c:390
 msgid "Time remaining"
 msgstr "Time remaining"
 
-#: ../src/gpm-statistics-core.c:371
+#: ../src/gpm-statistics-core.c:393
 msgid "Power"
 msgstr "Power"
 
-#: ../src/gpm-statistics-core.c:808
+#: ../src/gpm-statistics-core.c:851
 msgid "Could not connect to GNOME Power Manager."
 msgstr "Could not connect to GNOME Power Manager."
 
-#: ../src/gpm-statistics-core.c:847
+#: ../src/gpm-statistics-core.c:890
 msgid "On AC"
 msgstr "On AC"
 
-#: ../src/gpm-statistics-core.c:852
+#: ../src/gpm-statistics-core.c:895
 msgid "On battery"
 msgstr "On battery"
 
-#: ../src/gpm-statistics-core.c:857
+#: ../src/gpm-statistics-core.c:900
 msgid "Session idle"
 msgstr "Session idle"
 
-#: ../src/gpm-statistics-core.c:862
+#: ../src/gpm-statistics-core.c:905
 msgid "Session active"
 msgstr "Session active"
 
-#: ../src/gpm-statistics-core.c:872
+#: ../src/gpm-statistics-core.c:915
 msgid "Resume"
 msgstr "Resume"
 
-#: ../src/gpm-statistics-core.c:882
+#: ../src/gpm-statistics-core.c:925
 msgid "Lid closed"
 msgstr "Lid closed"
 
-#: ../src/gpm-statistics-core.c:887
+#: ../src/gpm-statistics-core.c:930
 msgid "Lid opened"
 msgstr "Lid opened"
 
-#: ../src/gpm-statistics-core.c:892
+#: ../src/gpm-statistics-core.c:935
 msgid "Notification"
 msgstr "Notification"
 
-#: ../src/gpm-statistics-core.c:897
+#: ../src/gpm-statistics-core.c:940
 msgid "DPMS On"
 msgstr "DPMS On"
 
-#: ../src/gpm-statistics-core.c:902
+#: ../src/gpm-statistics-core.c:945
 msgid "DPMS Standby"
 msgstr "DPMS Standby"
 
-#: ../src/gpm-statistics-core.c:907
+#: ../src/gpm-statistics-core.c:950
 msgid "DPMS Suspend"
 msgstr "DPMS Suspend"
 
-#: ../src/gpm-statistics-core.c:912
+#: ../src/gpm-statistics-core.c:955
 msgid "DPMS Off"
 msgstr "DPMS Off"
 
