@@ -10,13 +10,22 @@
       <arg type="s" name="axis_type_x" direction="out"/>
       <arg type="s" name="axis_type_y" direction="out"/>
     </method>
+<!--
+    <method name="GetParameters">
+      <arg type="s" name="type" direction="in"/>
+      <arg type="s" name="axis_type_x" direction="out"/>
+      <arg type="s" name="axis_type_y" direction="out"/>
+      <arg type="s" name="axis_description_x" direction="out"/>
+      <arg type="s" name="axis_description_y" direction="out"/>
+      <arg type="ai" name="key_colors" direction="out"/>
+      <arg type="as" name="key_description" direction="out"/>
+    </method>
+-->
     <method name="GetData">
-      <arg type="i" name="seconds" direction="in"/>
       <arg type="s" name="type" direction="in"/>
       <arg type="a(iii)" name="data" direction="out"/>
     </method>
     <method name="GetEventLog">
-      <arg type="i" name="seconds" direction="in"/>
       <arg type="a(ii)" name="data" direction="out"/>
     </method>
   </interface>

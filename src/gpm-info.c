@@ -273,13 +273,11 @@ gpm_statistics_get_axis_types (GpmInfo *info,
 /**
  * gpm_statistics_get_event_log:
  * @info: This class instance
- * @seconds: The amount of data to get, currently unused.
  *
  * Return value: TRUE for success
  **/
 gboolean
 gpm_statistics_get_event_log (GpmInfo    *info,
-			      gint 	  seconds,
 			      GPtrArray **array,
 			      GError    **error)
 {
@@ -311,14 +309,12 @@ gpm_statistics_get_event_log (GpmInfo    *info,
 /**
  * gpm_statistics_get_data:
  * @info: This class instance
- * @seconds: The amount of data to get, currently unused.
  * @type: The graph type, e.g. "charge", "power", "time", etc.
  *
  * Return value: TRUE for success
  **/
 gboolean
 gpm_statistics_get_data (GpmInfo     *info,
-			 gint 	      seconds,
 			 const gchar *type,
 			 GPtrArray  **array,
 			 GError	    **error)
@@ -373,7 +369,6 @@ gpm_statistics_get_data (GpmInfo     *info,
 		return FALSE;
 	}
 
-	/* TODO: process seconds */
 	length = gpm_array_get_size (events);
 	*array = g_ptr_array_sized_new (length);
 	for (i=0; i < length; i++) {

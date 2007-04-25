@@ -88,11 +88,9 @@ gboolean	 gpm_statistics_get_data_types		(GpmInfo	*info,
 							 gchar		***types,
 							 GError		**error);
 gboolean	 gpm_statistics_get_event_log		(GpmInfo	*info,
-							 gint 	    	 seconds,
 							 GPtrArray	**array,
 							 GError		**error);
 gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
-							 gint 	    	 seconds,
 							 const gchar	*type,
 							 GPtrArray	**array,
 							 GError		**error);

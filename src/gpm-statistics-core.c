@@ -33,6 +33,7 @@
 #include <libgpm.h>
 
 #include "gpm-array.h"
+#include "gpm-array-float.h"
 #include "gpm-common.h"
 #include "gpm-prefs.h"
 #include "gpm-conf.h"
@@ -227,7 +228,6 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 	gint i;
 	gint x;
 	gint event;
-	gint time = 0;
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
@@ -245,7 +245,6 @@ gpm_statistics_get_events (GpmStatistics *statistics)
 						G_TYPE_INVALID));
 
 	ret = dbus_g_proxy_call (proxy, "GetEventLog", &error,
-				 G_TYPE_INT, time,
 				 G_TYPE_INVALID,
 				 g_type_ptrarray, &ptrarray,
 				 G_TYPE_INVALID);
@@ -537,7 +536,6 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 	GType g_type_ptrarray;
 	int i;
 	int x, y, col;
-	gint time = 0;
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
@@ -557,7 +555,6 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 						G_TYPE_INVALID));
 
 	ret = dbus_g_proxy_call (proxy, "GetData", &error,
-				 G_TYPE_INT, time,
 				 G_TYPE_STRING, type,
 				 G_TYPE_INVALID,
 				 g_type_ptrarray, &ptrarray,
@@ -644,8 +641,6 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 
 	return TRUE;
 }
-
-#include "gpm-array-float.h"
 
 static void
 gpm_statistics_refresh_data (GpmStatistics *statistics)
