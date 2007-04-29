@@ -57,6 +57,8 @@ static void     gpm_info_finalize   (GObject      *object);
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
 #define GPM_DBUS_STRUCT_INT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
+#define GPM_DBUS_STRUCT_INT_STRING_BOOL (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INVALID))
 
 struct GpmInfoPrivate
 {
@@ -139,6 +141,125 @@ device_list_to_strv (GList *list)
 	}
 	value[i] = NULL;
 	return value;
+}
+
+/**
+ * gpm_statistics_add_key_element:
+ **/
+static void
+gpm_statistics_add_key_element (GPtrArray *array,
+				guint colour,
+				const gchar *description,
+				gboolean line)
+{
+	GValue *value;
+
+	value = g_new0 (GValue, 1);
+	g_value_init (value, GPM_DBUS_STRUCT_INT_STRING_BOOL);
+	g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_STRING_BOOL));
+	dbus_g_type_struct_set (value, 0, colour, 1, description, 2, line, -1);
+	g_ptr_array_add (array, g_value_get_boxed (value));
+	g_free (value);
+}
+
+/**
+ * gpm_statistics_get_parameters:
+ **/
+gboolean
+gpm_statistics_get_parameters (GpmInfo   *info,
+			       gchar	 *type,
+			       gchar	 **axis_type_x,
+			       gchar	 **axis_type_y,
+			       gchar	 **axis_desc_x,
+			       gchar	 **axis_desc_y,
+			       GPtrArray **key,
+			       GError	 **error)
+{
+	g_return_val_if_fail (info != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_INFO (info), FALSE);
+	g_return_val_if_fail (type != NULL, FALSE);
+	g_return_val_if_fail (axis_type_x != NULL, FALSE);
+	g_return_val_if_fail (axis_type_y != NULL, FALSE);
+	g_return_val_if_fail (axis_desc_x != NULL, FALSE);
+	g_return_val_if_fail (axis_desc_y != NULL, FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+
+	*key = g_ptr_array_new ();
+
+	if (strcmp (type, "power") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("power");
+		*axis_desc_x = g_strdup (_("Time since startup"));
+		*axis_desc_y = g_strdup (_("Power (mWh)"));
+		gpm_statistics_add_key_element (*key, 1, _("Power"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "time") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("time");
+		*axis_desc_x = g_strdup (_("Time since startup"));
+		*axis_desc_y = g_strdup (_("Estimated time"));
+		gpm_statistics_add_key_element (*key, 1, _("Time"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "charge") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("percentage");
+		*axis_desc_x = g_strdup (_("Time since startup"));
+		*axis_desc_y = g_strdup (_("Battery percentage"));
+		gpm_statistics_add_key_element (*key, 1, _("Percentage"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "voltage") == 0) {
+		*axis_type_x = g_strdup ("time");
+		*axis_type_y = g_strdup ("voltage");
+		*axis_desc_x = g_strdup (_("Time since startup"));
+		*axis_desc_y = g_strdup (_("Battery Voltage"));
+		gpm_statistics_add_key_element (*key, 1, _("Voltage"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "profile-charge-accuracy") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("percentage");
+		*axis_desc_x = g_strdup (_("Battery percentage"));
+		*axis_desc_y = g_strdup (_("Accuracy of reading"));
+		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
+		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "profile-charge-time") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("time");
+		*axis_desc_x = g_strdup (_("Battery percentage"));
+		*axis_desc_y = g_strdup (_("Average time elapsed"));
+		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
+		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "profile-discharge-accuracy") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("percentage");
+		*axis_desc_x = g_strdup (_("Battery percentage"));
+		*axis_desc_y = g_strdup (_("Accuracy of reading"));
+		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
+		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		return TRUE;
+	}
+	if (strcmp (type, "profile-discharge-time") == 0) {
+		*axis_type_x = g_strdup ("percentage");
+		*axis_type_y = g_strdup ("time");
+		*axis_desc_x = g_strdup (_("Battery percentage"));
+		*axis_desc_y = g_strdup (_("Average time elapsed"));
+		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
+		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		return TRUE;
+	}
+
+	/* not recognised... */
+	*error = g_error_new (gpm_info_error_quark (),
+			      GPM_INFO_ERROR_INVALID_TYPE,
+			      "Invalid type %s", type);
+	return FALSE;
 }
 
 /**
