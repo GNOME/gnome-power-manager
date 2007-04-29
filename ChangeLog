@@ -1,5 +1,14 @@
 2007-04-29  Richard Hughes  <richard@hughsie.com>
 
+	* src/dbus/xdg-power-management-core.xml:
+	* src/gpm-manager.c:
+	* src/gpm-manager.h:
+	Rip out the standby stuff as it's no longer in the spec. Also make
+	the can_X and allowed_X checking more sane with more user warnings
+	if things are denied.
+
+2007-04-29  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
 	Only do the seporator if we have at least one device and can do an
 	action.

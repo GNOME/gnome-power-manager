@@ -58,8 +58,6 @@ typedef struct
 							 gboolean	 low_battery);
 	void		(* power_save_status_changed)	(GpmManager	*manager,
 							 gboolean	 save_power);
-	void		(* can_standby_changed)		(GpmManager	*manager,
-							 gboolean	 can_standby);
 	void		(* can_suspend_changed)		(GpmManager	*manager,
 							 gboolean	 can_suspend);
 	void		(* can_hibernate_changed)	(GpmManager	*manager,
@@ -92,8 +90,6 @@ gboolean	 gpm_manager_get_on_battery		(GpmManager	*manager,
 gboolean	 gpm_manager_get_low_battery		(GpmManager	*manager,
 							 gboolean	*low_battery,
 							 GError		**error);
-gboolean	 gpm_manager_standby			(GpmManager	*manager,
-							 GError		**error);
 gboolean	 gpm_manager_suspend			(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_hibernate			(GpmManager	*manager,
@@ -101,9 +97,6 @@ gboolean	 gpm_manager_hibernate			(GpmManager	*manager,
 gboolean	 gpm_manager_reboot			(GpmManager	*manager,
 							 GError		**error);
 gboolean	 gpm_manager_shutdown			(GpmManager	*manager,
-							 GError		**error);
-gboolean	 gpm_manager_can_standby		(GpmManager	*manager,
-							 gboolean	*can_standby,
 							 GError		**error);
 gboolean	 gpm_manager_can_suspend		(GpmManager	*manager,
 							 gboolean	*can_suspend,

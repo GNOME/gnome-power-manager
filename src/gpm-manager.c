@@ -106,7 +106,6 @@ enum {
 	ON_BATTERY_CHANGED,
 	LOW_BATTERY_CHANGED,
 	POWER_SAVE_STATUS_CHANGED,
-	CAN_STANDBY_CHANGED,
 	CAN_SUSPEND_CHANGED,
 	CAN_HIBERNATE_CHANGED,
 	CAN_SHUTDOWN_CHANGED,
@@ -117,9 +116,6 @@ enum {
 static guint	     signals [LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GpmManager, gpm_manager, G_TYPE_OBJECT)
-
-//g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Do not have standby hardware");
-//return FALSE;
 
 /**
  * gpm_manager_error_quark:
@@ -172,13 +168,13 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 			      gboolean	  user_action,
 			      const char *action)
 {
-	gboolean has_inihibit;
+	gboolean has_inhibit;
 	gchar *title;
 
 	/* We have to decide on whether this is a idle action or a user keypress */
-	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inihibit, NULL);
+	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
 
-	if (has_inihibit == TRUE) {
+	if (has_inhibit == TRUE) {
 		GString *message = g_string_new ("");
 		const char *msg;
 
@@ -195,7 +191,7 @@ gpm_manager_is_inhibit_valid (GpmManager *manager,
 		g_string_free (message, TRUE);
 		g_free (title);
 	}
-	return !has_inihibit;
+	return !has_inhibit;
 }
 
 /**
@@ -300,6 +296,108 @@ gpm_manager_unblank_screen (GpmManager *manager,
 }
 
 /**
+ * gpm_manager_action_suspend:
+ **/
+static gboolean
+gpm_manager_action_suspend (GpmManager *manager, const gchar *reason)
+{
+	gboolean allowed;
+
+	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
+		/* error msg timeout not valid */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action forbidden"),
+				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* check if the admin has disabled */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &allowed);
+	if (allowed == FALSE) {
+		/* error msg as disabled in gconf */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action disallowed"),
+				    _("Suspend support has been disabled. Contact your administrator for more details."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* check if computer able to do action */
+	allowed = hal_gpower_can_suspend (manager->priv->hal_power);
+	if (allowed == FALSE) {
+		/* error msg as disabled in HAL */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action forbidden"),
+				    _("Suspend is not available on this computer."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
+				_("Suspending computer"), reason);
+	gpm_control_suspend (manager->priv->control, NULL);
+	return TRUE;
+}
+
+/**
+ * gpm_manager_action_hibernate:
+ **/
+static gboolean
+gpm_manager_action_hibernate (GpmManager *manager, const gchar *reason)
+{
+	gboolean allowed;
+
+	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
+		/* error msg timeout not valid */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action forbidden"),
+				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* check if the admin has disabled */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &allowed);
+	if (allowed == FALSE) {
+		/* error msg as disabled in gconf */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action disallowed"),
+				    _("Hibernate support has been disabled. Contact your administrator for more details."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	/* check if computer able to do action */
+	allowed = hal_gpower_can_hibernate (manager->priv->hal_power);
+	if (allowed == FALSE) {
+		/* error msg as disabled in HAL */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action forbidden"),
+				    _("Hibernate is not available on this computer."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
+				_("Hibernating computer"), reason);
+	gpm_control_hibernate (manager->priv->control, NULL);
+	return TRUE;
+}
+
+/**
  * manager_policy_do:
  * @manager: This class instance
  * @policy: The policy that we should do, e.g. "suspend"
@@ -307,7 +405,7 @@ gpm_manager_unblank_screen (GpmManager *manager,
  *
  * Does one of the policy actions specified in gconf.
  **/
-static void
+static gboolean
 manager_policy_do (GpmManager  *manager,
 		   const gchar *policy,
 		   const gchar *reason)
@@ -318,10 +416,18 @@ manager_policy_do (GpmManager  *manager,
 	gpm_conf_get_string (manager->priv->conf, policy, &action);
 
 	if (action == NULL) {
-		return;
+		return FALSE;
 	}
+
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		return;
+		/* error msg timeout not valid */
+		gpm_notify_display (manager->priv->notify,
+				    _("Action forbidden"),
+				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
+				    GPM_NOTIFY_TIMEOUT_SHORT,
+				    GPM_STOCK_APP_ICON,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
 	}
 
 	if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -329,14 +435,10 @@ manager_policy_do (GpmManager  *manager,
 					_("Doing nothing"), reason);
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_SUSPEND,
-					_("Suspending computer"), reason);
-		gpm_control_suspend (manager->priv->control, NULL);
+		gpm_manager_action_suspend (manager, "unknown");
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-		gpm_info_explain_reason (manager->priv->info, GPM_EVENT_HIBERNATE,
-					_("Hibernating computer"), reason);
-		gpm_control_hibernate (manager->priv->control, NULL);
+		gpm_manager_action_hibernate (manager, "unknown");
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
 		gpm_manager_blank_screen (manager, NULL);
@@ -357,19 +459,6 @@ manager_policy_do (GpmManager  *manager,
 	}
 
 	g_free (action);
-}
-
-/**
- * gpm_manager_standby:
- *
- * Attempt to standby the system.
- **/
-gboolean
-gpm_manager_standby (GpmManager *manager,
-		     GError    **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	return TRUE;
 }
 
@@ -382,8 +471,25 @@ gboolean
 gpm_manager_suspend (GpmManager *manager,
 		     GError    **error)
 {
+	gboolean allowed;
+
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check if the admin has disabled */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_SUSPEND, &allowed);
+	if (allowed == FALSE) {
+		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_DENIED, "Suspend denied by gconf policy");
+		return FALSE;
+	}
+
+	/* check if computer able to do action */
+	allowed = hal_gpower_can_suspend (manager->priv->hal_power);
+	if (allowed == FALSE) {
+		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Suspend is not available on this computer");
+		return FALSE;
+	}
+
 	return gpm_control_suspend (manager->priv->control, error);
 }
 
@@ -396,8 +502,25 @@ gboolean
 gpm_manager_hibernate (GpmManager *manager,
 		       GError    **error)
 {
+	gboolean allowed;
+
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+
+	/* check if the admin has disabled */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_CAN_HIBERNATE, &allowed);
+	if (allowed == FALSE) {
+		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_DENIED, "Hibernate denied by gconf policy");
+		return FALSE;
+	}
+
+	/* check if computer able to do action */
+	allowed = hal_gpower_can_hibernate (manager->priv->hal_power);
+	if (allowed == FALSE) {
+		g_set_error (error, GPM_MANAGER_ERROR, GPM_MANAGER_ERROR_NO_HW, "Hibernate is not available on this computer");
+		return FALSE;
+	}
+
 	return gpm_control_hibernate (manager->priv->control, error);
 }
 
@@ -427,22 +550,6 @@ gpm_manager_shutdown (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	return gpm_control_shutdown (manager->priv->control, error);
-}
-
-/**
- * gpm_manager_can_standby:
- *
- * If the current session user is able to standby.
- **/
-gboolean
-gpm_manager_can_standby (GpmManager *manager,
-			 gboolean   *can_standby,
-			 GError    **error)
-{
-	g_return_val_if_fail (manager != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
-	*can_standby = FALSE;
-	return TRUE;
 }
 
 /**
@@ -562,7 +669,7 @@ gpm_manager_get_low_battery (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 
-	/* TODO */	
+	/* TODO */
 	*low_battery = FALSE;
 	return TRUE;
 }
@@ -674,7 +781,7 @@ idle_changed_cb (GpmIdle    *idle,
 	} else if (mode == GPM_IDLE_MODE_SYSTEM) {
 		gpm_debug ("Idle state changed: SYSTEM");
 
-		if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
+		if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
 			return;
 		}
 		if (! gpm_manager_is_inhibit_valid (manager, FALSE, "timeout action")) {
@@ -715,13 +822,6 @@ battery_button_pressed (GpmManager *manager)
 static void
 power_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "power button press")) {
-		return;
-	}
-	gpm_debug ("power button pressed");
 	manager_policy_do (manager, GPM_CONF_BUTTON_POWER, _("the power button has been pressed"));
 }
 
@@ -734,13 +834,6 @@ power_button_pressed (GpmManager *manager)
 static void
 suspend_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "suspend button press")) {
-		return;
-	}
-	gpm_debug ("suspend button pressed");
 	manager_policy_do (manager, GPM_CONF_BUTTON_SUSPEND, _("the suspend button has been pressed"));
 }
 
@@ -753,12 +846,6 @@ suspend_button_pressed (GpmManager *manager)
 static void
 hibernate_button_pressed (GpmManager *manager)
 {
-	if (! gpm_control_is_policy_timout_valid (manager->priv->control)) {
-		return;
-	}
-	if (! gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate button press")) {
-		return;
-	}
 	manager_policy_do (manager, GPM_CONF_BUTTON_HIBERNATE, _("the hibernate button has been pressed"));
 }
 
@@ -936,12 +1023,6 @@ gpm_manager_class_init (GpmManagerClass *klass)
 			      G_STRUCT_OFFSET (GpmManagerClass, power_save_status_changed),
 			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
-	signals [CAN_STANDBY_CHANGED] =
-		g_signal_new ("can-standby-changed",
-			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmManagerClass, can_standby_changed),
-			      NULL, NULL, g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 	signals [CAN_SUSPEND_CHANGED] =
 		g_signal_new ("can-suspend-changed",
 			      G_TYPE_FROM_CLASS (object_class), G_SIGNAL_RUN_LAST,
@@ -999,18 +1080,7 @@ static void
 gpm_manager_tray_icon_hibernate (GpmManager  *manager,
 				 GpmTrayIcon *tray)
 {
-	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		return;
-	}
-	if (gpm_manager_is_inhibit_valid (manager, TRUE, "hibernate") == FALSE) {
-		return;
-	}
-
-	gpm_info_explain_reason (manager->priv->info,
-				GPM_EVENT_HIBERNATE,
-				_("Hibernating computer"),
-				_("user clicked hibernate from tray menu"));
-	gpm_control_hibernate (manager->priv->control, NULL);
+	gpm_manager_action_hibernate (manager, "clicked tray");
 }
 
 /**
@@ -1025,17 +1095,7 @@ static void
 gpm_manager_tray_icon_suspend (GpmManager   *manager,
 			       GpmTrayIcon  *tray)
 {
-	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		return;
-	}
-	if (gpm_manager_is_inhibit_valid (manager, TRUE, "suspend") == FALSE) {
-		return;
-	}
-	gpm_info_explain_reason (manager->priv->info,
-				GPM_EVENT_SUSPEND,
-				_("Suspending computer"),
-				_("user clicked suspend from tray menu"));
-	gpm_control_suspend (manager->priv->control, NULL);
+	gpm_manager_action_suspend (manager, "clicked tray");
 }
 
 /**

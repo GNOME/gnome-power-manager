@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <node name="/">
   <interface name="org.freedesktop.PowerManagement">
-    <method name="Standby"></method>
     <method name="Suspend"></method>
     <method name="Hibernate"></method>
     <method name="Reboot"></method>
     <method name="Shutdown"></method>
-    <method name="CanStandby">
-      <arg type="b" name="can_standby" direction="out"/>
-    </method>
     <method name="CanSuspend">
       <arg type="b" name="can_suspend" direction="out"/>
     </method>
@@ -30,9 +26,6 @@
     <method name="GetLowBattery">
       <arg type="b" name="on_battery" direction="out"/>
     </method>
-    <signal name="CanStandbyChanged">
-      <arg type="b" name="can_standby" direction="out"/>
-    </signal>
     <signal name="CanSuspendChanged">
       <arg type="b" name="can_suspend" direction="out"/>
     </signal>
