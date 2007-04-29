@@ -1,3 +1,9 @@
+2007-04-29  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	Only do the seporator if we have at least one device and can do an
+	action.
+
 2007-04-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/dbus/xdg-power-management-stats.xml:
