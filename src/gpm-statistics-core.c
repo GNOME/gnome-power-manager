@@ -79,8 +79,10 @@ struct GpmStatisticsPrivate
 	GpmArray		*events;
 	GpmArray		*data;
 	const gchar		*graph_type;
-	GpmGraphWidgetAxisType	 axis_x;
-	GpmGraphWidgetAxisType	 axis_y;
+	GpmGraphWidgetAxisType	 axis_type_x;
+	GpmGraphWidgetAxisType	 axis_type_y;
+	gchar			*axis_desc_x;
+	gchar			*axis_desc_y;
 };
 
 enum {
@@ -357,47 +359,6 @@ gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
 }
 
 /**
- * gpm_statistics_get_axis_label_x:
- * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
- **/
-static const gchar *
-gpm_statistics_get_axis_label_x (GpmGraphWidgetAxisType type)
-{
-	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		return _("Battery percentage");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		/* I want this translated please */
-		const char *moo;
-		moo = _("Time");
-		return _("Time since startup");
-	}
-	return _("Unknown caption");
-}
-
-/**
- * gpm_statistics_get_axis_label_y:
- * @type: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
- **/
-static const gchar *
-gpm_statistics_get_axis_label_y (GpmGraphWidgetAxisType type)
-{
-	if (type == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		return _("Charge percentage");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		return _("Time remaining");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		return _("Power");
-	}
-	if (type == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		return _("Cell Voltage");
-	}
-	return _("Unknown caption");
-}
-
-/**
  * gpm_statistics_refresh_axis_labels:
  **/
 static void
@@ -406,26 +367,19 @@ gpm_statistics_refresh_axis_labels (GpmStatistics *statistics)
 	gboolean show;
 	GtkWidget *widget1;
 	GtkWidget *widget2;
-	const gchar *caption;
 
 	/* save to gconf so we open next time with the correct setting */
 	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, &show);
 
-	if (show == FALSE) {
-		widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
-		widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
+	widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
+	widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
 
+	if (show == FALSE) {
 		gtk_widget_hide (widget1);
 		gtk_widget_hide (widget2);
 	} else {
-		widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
-		caption = gpm_statistics_get_axis_label_x (statistics->priv->axis_x);
-		gtk_label_set_text (GTK_LABEL (widget1), caption);
-
-		widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
-		caption = gpm_statistics_get_axis_label_y (statistics->priv->axis_y);
-		gtk_label_set_text (GTK_LABEL (widget2), caption);
-
+		gtk_label_set_text (GTK_LABEL (widget1), statistics->priv->axis_desc_x);
+		gtk_label_set_text (GTK_LABEL (widget2), statistics->priv->axis_desc_y);
 		gtk_widget_show (widget1);
 		gtk_widget_show (widget2);
 	}
@@ -594,21 +548,26 @@ gpm_statistics_get_data_dbus (GpmStatistics *statistics,
 }
 
 static gboolean
-gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
-			      const gchar 	     *type,
-			      GpmGraphWidgetAxisType *x,
-			      GpmGraphWidgetAxisType *y)
+gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
+			            const gchar   *type)
 {
 	GError *error = NULL;
 	gboolean ret;
 	gchar *axis_type_x;
 	gchar *axis_type_y;
 	DBusGProxy *proxy;
+	GPtrArray *ptrarray = NULL;
+	GType g_type_ptrarray;
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
-	g_return_val_if_fail (x != NULL, FALSE);
-	g_return_val_if_fail (y != NULL, FALSE);
+
+	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
+					dbus_g_type_get_struct("GValueArray",
+						G_TYPE_INT,
+						G_TYPE_STRING,
+						G_TYPE_BOOLEAN,
+						G_TYPE_INVALID));
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
 	if (proxy == NULL) {
@@ -616,11 +575,14 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "GetAxisTypes", &error,
+	ret = dbus_g_proxy_call (proxy, "GetParameters", &error,
 			         G_TYPE_STRING, type,
 			         G_TYPE_INVALID,
 			         G_TYPE_STRING, &axis_type_x,
 			         G_TYPE_STRING, &axis_type_y,
+			         G_TYPE_STRING, &statistics->priv->axis_desc_x,
+			         G_TYPE_STRING, &statistics->priv->axis_desc_y,
+				 g_type_ptrarray, &ptrarray,
 			         G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -636,8 +598,8 @@ gpm_statistics_get_axis_type_dbus (GpmStatistics          *statistics,
 	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y);
 
 	/* convert the string types to enumerated values */
-	*x = gpm_graph_widget_string_to_axis_type (axis_type_x);
-	*y = gpm_graph_widget_string_to_axis_type (axis_type_y);
+	statistics->priv->axis_type_x = gpm_graph_widget_string_to_axis_type (axis_type_x);
+	statistics->priv->axis_type_y = gpm_graph_widget_string_to_axis_type (axis_type_y);
 
 	return TRUE;
 }
@@ -711,10 +673,10 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	g_free (value);
 
 	/* find out what sort of grid axis we need */
-	gpm_statistics_get_axis_type_dbus (statistics, type, &statistics->priv->axis_x, &statistics->priv->axis_y);
+	gpm_statistics_get_parameters_dbus (statistics, type);
 
-	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_x);
-	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_y);
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_type_x);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_type_y);
 
 	/* const, so no need to free */
 	statistics->priv->graph_type = type;
@@ -725,7 +687,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
 
-	/* refresh the axis */
+	/* refresh the axis text */
 	gpm_statistics_refresh_axis_labels (statistics);
 }
 
@@ -847,8 +809,8 @@ gpm_statistics_init (GpmStatistics *statistics)
 		gpm_error (_("Could not connect to GNOME Power Manager."));
 	}
 
-	statistics->priv->axis_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
-	statistics->priv->axis_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
+	statistics->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
+	statistics->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	statistics->priv->graph_type = NULL;
 	statistics->priv->events = gpm_array_new ();

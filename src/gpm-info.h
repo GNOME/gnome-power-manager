@@ -94,11 +94,6 @@ gboolean	 gpm_statistics_get_data		(GpmInfo	*info,
 							 const gchar	*type,
 							 GPtrArray	**array,
 							 GError		**error);
-gboolean	 gpm_statistics_get_axis_types		(GpmInfo	*info,
-							 gchar		*type,
-							 gchar		**axis_type_x,
-							 gchar		**axis_type_y,
-							 GError		**error);
 gboolean	 gpm_statistics_get_parameters		(GpmInfo	*info,
 							 gchar		*type,
 							 gchar		**axis_type_x,
