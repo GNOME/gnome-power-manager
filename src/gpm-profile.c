@@ -141,9 +141,19 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 	guint i;
 	GArray *array;
 	gfloat value;
+	guint32 colour_active;
+	guint32 colour_nonactive;
 
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
+
+	if (discharge == TRUE) {
+		colour_active = GPM_COLOUR_RED;
+		colour_nonactive = GPM_COLOUR_DARK_RED;
+	} else {
+		colour_active = GPM_COLOUR_BLUE;
+		colour_nonactive = GPM_COLOUR_DARK_BLUE;
+	}
 
 	/* get the correct data */
 	if (discharge == TRUE) {
@@ -157,10 +167,10 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 		value = gpm_array_float_get (array, i);
 		/* only set points that are not zero */
 		if (value > 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value, GPM_COLOUR_RED);
+			gpm_array_set (profile->priv->present_array_data, i, i, value, colour_active);
 		} else {
 			/* set zero points a different colour */
-			gpm_array_set (profile->priv->present_array_data, i, i, value, GPM_COLOUR_DARK_RED);
+			gpm_array_set (profile->priv->present_array_data, i, i, value, colour_nonactive);
 		}
 	}
 
@@ -178,9 +188,19 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 	guint i;
 	GArray *array;
 	gfloat value;
+	guint32 colour_active;
+	guint32 colour_nonactive;
 
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
+
+	if (discharge == TRUE) {
+		colour_active = GPM_COLOUR_RED;
+		colour_nonactive = GPM_COLOUR_DARK_RED;
+	} else {
+		colour_active = GPM_COLOUR_BLUE;
+		colour_nonactive = GPM_COLOUR_DARK_BLUE;
+	}
 
 	/* get the correct data */
 	if (discharge == TRUE) {
@@ -194,10 +214,10 @@ gpm_profile_get_data_accuracy_percent (GpmProfile *profile, gboolean discharge)
 		value = gpm_array_float_get (array, i);
 		/* only set points that are not zero */
 		if (value > 0) {
-			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, GPM_COLOUR_RED);
+			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, colour_active);
 		} else {
 			/* set zero points a different colour */
-			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, GPM_COLOUR_DARK_RED);
+			gpm_array_set (profile->priv->present_array_accuracy, i, i, value, colour_nonactive);
 		}
 	}
 

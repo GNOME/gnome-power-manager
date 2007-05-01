@@ -100,7 +100,7 @@ gboolean	 gpm_statistics_get_parameters		(GpmInfo	*info,
 							 gchar		**axis_type_y,
 							 gchar		**axis_desc_x,
 							 gchar		**axis_desc_y,
-							 GPtrArray	**key,
+							 GPtrArray	**data_types,
 							 GError		**error);
 void		 gpm_info_explain_reason		(GpmInfo	*info,
 							 GpmGraphWidgetEvent event,

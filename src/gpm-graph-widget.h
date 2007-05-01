@@ -60,12 +60,19 @@ typedef enum {
 	GPM_GRAPH_WIDGET_TYPE_LAST
 } GpmGraphWidgetAxisType;
 
+/* the different kinds of dots in the key */
 typedef struct {
 	guint			 id;
 	const gchar		*name;
 	guint32			 colour;
 	GpmGraphWidgetShape	 shape;
 } GpmGraphWidgetKeyItem;
+
+/* the different kinds of lines in the key */
+typedef struct {
+	guint32			 colour;
+	const gchar		*desc;
+} GpmGraphWidgetKeyData;
 
 struct GpmGraphWidget
 {
@@ -100,7 +107,11 @@ void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
-gboolean	 gpm_graph_widget_key_add		(GpmGraphWidget	*graph,
+gboolean	 gpm_graph_widget_key_data_clear	(GpmGraphWidget	*graph);
+gboolean	 gpm_graph_widget_key_data_add		(GpmGraphWidget	*graph,
+							 guint		 colour,
+							 const gchar	*desc);
+gboolean	 gpm_graph_widget_key_add /* _event */	(GpmGraphWidget	*graph,
 							 const gchar	*name,
 							 guint		 id,
 							 guint32	 colour,

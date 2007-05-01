@@ -44,7 +44,8 @@ struct GpmGraphWidgetPrivate
 	gboolean		 autorange_x;
 	gboolean		 invert_y;
 
-	GSList			*keyvals; /* to hold all the key data */
+	GSList			*key_data; /* lines */
+	GSList			*key_event; /* dots */
 
 	gint			 stop_x;
 	gint			 stop_y;
@@ -101,7 +102,7 @@ gpm_graph_widget_key_find_id (GpmGraphWidget *graph, guint id)
 {
 	GpmGraphWidgetKeyItem *data;
 	GSList *ret;
-	ret = g_slist_find_custom (graph->priv->keyvals, &id,
+	ret = g_slist_find_custom (graph->priv->key_event, &id,
 				   gpm_graph_widget_key_compare_func);
 	if (! ret) {
 		return NULL;
@@ -132,9 +133,54 @@ gpm_graph_widget_key_add (GpmGraphWidget       *graph,
 	keyitem->colour = colour;
 	keyitem->shape = shape;
 
-	graph->priv->keyvals = g_slist_append (graph->priv->keyvals, (gpointer) keyitem);
+	graph->priv->key_event = g_slist_append (graph->priv->key_event, (gpointer) keyitem);
 	return TRUE;
 }
+
+/**
+ * gpm_graph_widget_key_data_clear:
+ **/
+gboolean
+gpm_graph_widget_key_data_clear	(GpmGraphWidget	*graph)
+{
+	GpmGraphWidgetKeyItem *keyitem;
+	guint a;
+
+	g_return_val_if_fail (graph != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+
+	/* remove items in list and free */
+	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
+		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_data, a);
+		g_free (keyitem);
+	}
+	g_slist_free (graph->priv->key_data);
+	graph->priv->key_data = NULL;
+
+	return TRUE;
+}
+
+/**
+ * gpm_graph_widget_key_data_add:
+ **/
+gboolean
+gpm_graph_widget_key_data_add (GpmGraphWidget *graph, guint colour, const gchar *desc)
+{
+	GpmGraphWidgetKeyData *keyitem;
+
+	g_return_val_if_fail (graph != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+
+	gpm_debug ("add to list %s", desc);
+	keyitem = g_new0 (GpmGraphWidgetKeyData, 1);
+
+	keyitem->colour = colour;
+	keyitem->desc = g_strdup (desc);
+
+	graph->priv->key_data = g_slist_append (graph->priv->key_data, (gpointer) keyitem);
+	return TRUE;
+}
+
 
 /**
  * gpm_graph_widget_string_to_axis_type:
@@ -270,7 +316,8 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->use_legend = FALSE;
 	graph->priv->autorange_x = TRUE;
 	graph->priv->data_list = g_ptr_array_new ();
-	graph->priv->keyvals = NULL;
+	graph->priv->key_data = NULL;
+	graph->priv->key_event = NULL;
 	graph->priv->title = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
@@ -289,13 +336,16 @@ gpm_graph_widget_finalize (GObject *object)
 	GpmGraphWidget *graph = (GpmGraphWidget*) object;
 	cairo_font_options_destroy (graph->priv->options);
 
+	/* clear key */
+	gpm_graph_widget_key_data_clear (graph);
+
 	GpmGraphWidgetKeyItem *keyitem;
 	/* remove items in list and free */
-	for (a=0; a<g_slist_length (graph->priv->keyvals); a++) {
-		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->keyvals, a);
+	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
+		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
 		g_free (keyitem);
 	}
-	g_slist_free (graph->priv->keyvals);
+	g_slist_free (graph->priv->key_event);
 	g_ptr_array_free (graph->priv->data_list, FALSE);
 
 	g_free (graph->priv->title);
@@ -1008,24 +1058,16 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 		}
 	}
 
+	GpmGraphWidgetKeyData *keydataitem;
 	/* add the line colours to the legend */
-	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_COLOUR_CHARGING);
-	cairo_move_to (cr, x + 8 + 10, y_count + 3);
-	cairo_set_source_rgb (cr, 0, 0, 0);
-	cairo_show_text (cr, GPM_CHARGING_TEXT);
-	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
-	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_COLOUR_DISCHARGING);
-	cairo_move_to (cr, x + 8 + 10, y_count + 3);
-	cairo_set_source_rgb (cr, 0, 0, 0);
-	cairo_show_text (cr, GPM_DISCHARGING_TEXT);
-	y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
-	gpm_graph_widget_draw_legend_line (cr, x + 8, y_count,
-					   GPM_COLOUR_CHARGED);
-	cairo_move_to (cr, x + 8 + 10, y_count + 3);
-	cairo_set_source_rgb (cr, 0, 0, 0);
-	cairo_show_text (cr, GPM_CHARGED_TEXT);
+	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
+		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+		gpm_graph_widget_draw_legend_line (cr, x + 8, y_count, keydataitem->colour);
+		cairo_move_to (cr, x + 8 + 10, y_count + 3);
+		cairo_set_source_rgb (cr, 0, 0, 0);
+		cairo_show_text (cr, keydataitem->desc);
+		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	}
 }
 
 /**
@@ -1053,7 +1095,7 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 
 	/* set defaults */
 	*width = 0;
-	*height = 3 * GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	*height = g_slist_length (graph->priv->key_data) * GPM_GRAPH_WIDGET_LEGEND_SPACING;
 
 	/* get the max size for the labels (may be different for non UK) */
 	cairo_text_extents (cr, GPM_CHARGED_TEXT, &extents);

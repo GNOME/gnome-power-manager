@@ -79,8 +79,6 @@ struct GpmStatisticsPrivate
 	GpmArray		*events;
 	GpmArray		*data;
 	const gchar		*graph_type;
-	GpmGraphWidgetAxisType	 axis_type_x;
-	GpmGraphWidgetAxisType	 axis_type_y;
 	gchar			*axis_desc_x;
 	gchar			*axis_desc_y;
 };
@@ -553,8 +551,10 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 {
 	GError *error = NULL;
 	gboolean ret;
-	gchar *axis_type_x;
-	gchar *axis_type_y;
+	GpmGraphWidgetAxisType axis_type_x;
+	GpmGraphWidgetAxisType axis_type_y;
+	gchar *axis_type_x_text;
+	gchar *axis_type_y_text;
 	DBusGProxy *proxy;
 	GPtrArray *ptrarray = NULL;
 	GType g_type_ptrarray;
@@ -566,7 +566,6 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 					dbus_g_type_get_struct("GValueArray",
 						G_TYPE_INT,
 						G_TYPE_STRING,
-						G_TYPE_BOOLEAN,
 						G_TYPE_INVALID));
 
 	proxy = dbus_proxy_get_proxy (statistics->priv->gproxy);
@@ -578,8 +577,8 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 	ret = dbus_g_proxy_call (proxy, "GetParameters", &error,
 			         G_TYPE_STRING, type,
 			         G_TYPE_INVALID,
-			         G_TYPE_STRING, &axis_type_x,
-			         G_TYPE_STRING, &axis_type_y,
+			         G_TYPE_STRING, &axis_type_x_text,
+			         G_TYPE_STRING, &axis_type_y_text,
 			         G_TYPE_STRING, &statistics->priv->axis_desc_x,
 			         G_TYPE_STRING, &statistics->priv->axis_desc_y,
 				 g_type_ptrarray, &ptrarray,
@@ -594,12 +593,38 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 		return FALSE;
 	}
 
-	gpm_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x);
-	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y);
+	guint i;
+	gint id;
+	GValueArray *gva;
+	GValue *gv;
+	const gchar *desc;
+
+	/* clear the key */
+	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (statistics->priv->graph_widget));
+
+	for (i=0; i< ptrarray->len; i++) {
+		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
+		gv = g_value_array_get_nth (gva, 0);
+		id = g_value_get_int (gv);
+		g_value_unset (gv);
+		gv = g_value_array_get_nth (gva, 1);
+		desc = g_value_get_string (gv);
+		/* add to the data key */
+		gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), id, desc);
+		g_value_unset (gv);
+		g_value_array_free (gva);
+	}
+	g_ptr_array_free (ptrarray, TRUE);
+
+	gpm_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x_text);
+	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y_text);
 
 	/* convert the string types to enumerated values */
-	statistics->priv->axis_type_x = gpm_graph_widget_string_to_axis_type (axis_type_x);
-	statistics->priv->axis_type_y = gpm_graph_widget_string_to_axis_type (axis_type_y);
+	axis_type_x = gpm_graph_widget_string_to_axis_type (axis_type_x_text);
+	axis_type_y = gpm_graph_widget_string_to_axis_type (axis_type_y_text);
+
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_type_x);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), axis_type_y);
 
 	return TRUE;
 }
@@ -674,9 +699,6 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 
 	/* find out what sort of grid axis we need */
 	gpm_statistics_get_parameters_dbus (statistics, type);
-
-	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_type_x);
-	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), statistics->priv->axis_type_y);
 
 	/* const, so no need to free */
 	statistics->priv->graph_type = type;
@@ -808,9 +830,6 @@ gpm_statistics_init (GpmStatistics *statistics)
 	if (dbus_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
 		gpm_error (_("Could not connect to GNOME Power Manager."));
 	}
-
-	statistics->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_INVALID;
-	statistics->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_INVALID;
 
 	statistics->priv->graph_type = NULL;
 	statistics->priv->events = gpm_array_new ();

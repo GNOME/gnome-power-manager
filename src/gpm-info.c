@@ -57,8 +57,8 @@ static void     gpm_info_finalize   (GObject      *object);
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
 #define GPM_DBUS_STRUCT_INT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))
-#define GPM_DBUS_STRUCT_INT_STRING_BOOL (dbus_g_type_get_struct ("GValueArray", \
-	G_TYPE_INT, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_INVALID))
+#define GPM_DBUS_STRUCT_INT_STRING (dbus_g_type_get_struct ("GValueArray", \
+	G_TYPE_INT, G_TYPE_STRING, G_TYPE_INVALID))
 
 struct GpmInfoPrivate
 {
@@ -144,20 +144,19 @@ device_list_to_strv (GList *list)
 }
 
 /**
- * gpm_statistics_add_key_element:
+ * gpm_statistics_add_data_type:
  **/
 static void
-gpm_statistics_add_key_element (GPtrArray *array,
-				guint colour,
-				const gchar *description,
-				gboolean line)
+gpm_statistics_add_data_type (GPtrArray *array,
+			      guint colour,
+			      const gchar *description)
 {
 	GValue *value;
 
 	value = g_new0 (GValue, 1);
-	g_value_init (value, GPM_DBUS_STRUCT_INT_STRING_BOOL);
-	g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_STRING_BOOL));
-	dbus_g_type_struct_set (value, 0, colour, 1, description, 2, line, -1);
+	g_value_init (value, GPM_DBUS_STRUCT_INT_STRING);
+	g_value_take_boxed (value, dbus_g_type_specialized_construct (GPM_DBUS_STRUCT_INT_STRING));
+	dbus_g_type_struct_set (value, 0, colour, 1, description, -1);
 	g_ptr_array_add (array, g_value_get_boxed (value));
 	g_free (value);
 }
@@ -172,7 +171,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 			       gchar	 **axis_type_y,
 			       gchar	 **axis_desc_x,
 			       gchar	 **axis_desc_y,
-			       GPtrArray **key,
+			       GPtrArray **data_types,
 			       GError	 **error)
 {
 	g_return_val_if_fail (info != NULL, FALSE);
@@ -182,16 +181,16 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 	g_return_val_if_fail (axis_type_y != NULL, FALSE);
 	g_return_val_if_fail (axis_desc_x != NULL, FALSE);
 	g_return_val_if_fail (axis_desc_y != NULL, FALSE);
-	g_return_val_if_fail (key != NULL, FALSE);
+	g_return_val_if_fail (data_types != NULL, FALSE);
 
-	*key = g_ptr_array_new ();
+	*data_types = g_ptr_array_new ();
 
 	if (strcmp (type, "power") == 0) {
 		*axis_type_x = g_strdup ("time");
 		*axis_type_y = g_strdup ("power");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Power (mWh)"));
-		gpm_statistics_add_key_element (*key, 1, _("Power"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_RED, _("Power"));
 		return TRUE;
 	}
 	if (strcmp (type, "time") == 0) {
@@ -199,7 +198,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Estimated time"));
-		gpm_statistics_add_key_element (*key, 1, _("Time"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_RED, _("Time"));
 		return TRUE;
 	}
 	if (strcmp (type, "charge") == 0) {
@@ -207,7 +206,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Battery percentage"));
-		gpm_statistics_add_key_element (*key, 1, _("Percentage"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_RED, _("Percentage"));
 		return TRUE;
 	}
 	if (strcmp (type, "voltage") == 0) {
@@ -215,7 +214,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("voltage");
 		*axis_desc_x = g_strdup (_("Time since startup"));
 		*axis_desc_y = g_strdup (_("Battery Voltage"));
-		gpm_statistics_add_key_element (*key, 1, _("Voltage"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_GREEN, _("Voltage"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-charge-accuracy") == 0) {
@@ -223,8 +222,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
-		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_BLUE, _("Valid data"));
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_DARK_BLUE, _("No data"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-charge-time") == 0) {
@@ -232,8 +231,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
-		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_BLUE, _("Valid data"));
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_DARK_BLUE, _("No data"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-accuracy") == 0) {
@@ -241,8 +240,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("percentage");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Accuracy of reading"));
-		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
-		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_DARK_RED, _("No data"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-time") == 0) {
@@ -250,8 +249,8 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_y = g_strdup ("time");
 		*axis_desc_x = g_strdup (_("Battery percentage"));
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
-		gpm_statistics_add_key_element (*key, 1, _("Data"), TRUE);
-		gpm_statistics_add_key_element (*key, 2, _("No data"), TRUE);
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_RED, _("Valid data"));
+		gpm_statistics_add_data_type (*data_types, GPM_COLOUR_DARK_RED, _("No data"));
 		return TRUE;
 	}
 
