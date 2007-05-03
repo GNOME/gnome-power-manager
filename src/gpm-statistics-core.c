@@ -556,14 +556,23 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 	gchar *axis_type_x_text;
 	gchar *axis_type_y_text;
 	DBusGProxy *proxy;
-	GPtrArray *ptrarray = NULL;
-	GType g_type_ptrarray;
+	GPtrArray *ptr_data_array = NULL;
+	GPtrArray *ptr_event_array = NULL;
+	GType g_type_ptr_data_array;
+	GType g_type_ptr_event_array;
 
 	g_return_val_if_fail (statistics != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_STATISTICS (statistics), FALSE);
 
-	g_type_ptrarray = dbus_g_type_get_collection ("GPtrArray",
+	g_type_ptr_data_array = dbus_g_type_get_collection ("GPtrArray",
 					dbus_g_type_get_struct("GValueArray",
+						G_TYPE_INT,
+						G_TYPE_STRING,
+						G_TYPE_INVALID));
+	g_type_ptr_event_array = dbus_g_type_get_collection ("GPtrArray",
+					dbus_g_type_get_struct("GValueArray",
+						G_TYPE_INT,
+						G_TYPE_INT,
 						G_TYPE_INT,
 						G_TYPE_STRING,
 						G_TYPE_INVALID));
@@ -581,7 +590,8 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 			         G_TYPE_STRING, &axis_type_y_text,
 			         G_TYPE_STRING, &statistics->priv->axis_desc_x,
 			         G_TYPE_STRING, &statistics->priv->axis_desc_y,
-				 g_type_ptrarray, &ptrarray,
+				 g_type_ptr_data_array, &ptr_data_array,
+				 g_type_ptr_event_array, &ptr_event_array,
 			         G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -595,15 +605,17 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 
 	guint i;
 	gint id;
+	gint colour;
+	gint shape;
 	GValueArray *gva;
 	GValue *gv;
 	const gchar *desc;
 
-	/* clear the key */
+	/* clear the data key */
 	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (statistics->priv->graph_widget));
 
-	for (i=0; i< ptrarray->len; i++) {
-		gva = (GValueArray *) g_ptr_array_index (ptrarray, i);
+	for (i=0; i< ptr_data_array->len; i++) {
+		gva = (GValueArray *) g_ptr_array_index (ptr_data_array, i);
 		gv = g_value_array_get_nth (gva, 0);
 		id = g_value_get_int (gv);
 		g_value_unset (gv);
@@ -614,7 +626,32 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 		g_value_unset (gv);
 		g_value_array_free (gva);
 	}
-	g_ptr_array_free (ptrarray, TRUE);
+	g_ptr_array_free (ptr_data_array, TRUE);
+
+	/* clear the events key */
+	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (statistics->priv->graph_widget));
+
+	/* process events key */
+	for (i=0; i< ptr_event_array->len; i++) {
+		gva = (GValueArray *) g_ptr_array_index (ptr_event_array, i);
+		gv = g_value_array_get_nth (gva, 0);
+		id = g_value_get_int (gv);
+		g_value_unset (gv);
+		gv = g_value_array_get_nth (gva, 1);
+		colour = g_value_get_int (gv);
+		g_value_unset (gv);
+		gv = g_value_array_get_nth (gva, 2);
+		shape = g_value_get_int (gv);
+		g_value_unset (gv);
+		gv = g_value_array_get_nth (gva, 3);
+		desc = g_value_get_string (gv);
+		/* add to the data key */
+		gpm_debug ("event key %i %i %i %s", id, colour, shape, desc);
+		gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), id, colour, shape, desc);
+		g_value_unset (gv);
+		g_value_array_free (gva);
+	}
+	g_ptr_array_free (ptr_event_array, TRUE);
 
 	gpm_debug ("graph type '%s' mapped to x-axis '%s'", type, axis_type_x_text);
 	gpm_debug ("graph type '%s' mapped to y-axis '%s'", type, axis_type_y_text);
@@ -863,76 +900,78 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
 	/* add the key items */
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+#if 0
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("On AC"),
 				  GPM_EVENT_ON_AC,
 				  GPM_COLOUR_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("On battery"),
 				  GPM_EVENT_ON_BATTERY,
 				  GPM_COLOUR_DARK_BLUE,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session idle"),
 				  GPM_EVENT_SESSION_IDLE,
 				  GPM_COLOUR_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Session active"),
 				  GPM_EVENT_SESSION_ACTIVE,
 				  GPM_COLOUR_DARK_YELLOW,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Suspend"),
 				  GPM_EVENT_SUSPEND,
 				  GPM_COLOUR_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Resume"),
 				  GPM_EVENT_RESUME,
 				  GPM_COLOUR_DARK_RED,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Hibernate"),
 				  GPM_EVENT_HIBERNATE,
 				  GPM_COLOUR_MAGENTA,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid closed"),
 				  GPM_EVENT_LID_CLOSED,
 				  GPM_COLOUR_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Lid opened"),
 				  GPM_EVENT_LID_OPENED,
 				  GPM_COLOUR_DARK_GREEN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("Notification"),
 				  GPM_EVENT_NOTIFICATION,
 				  GPM_COLOUR_GREY,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS On"),
 				  GPM_EVENT_DPMS_ON,
 				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Standby"),
 				  GPM_EVENT_DPMS_STANDBY,
 				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Suspend"),
 				  GPM_EVENT_DPMS_SUSPEND,
 				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_add (GPM_GRAPH_WIDGET (widget),
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
 				  _("DPMS Off"),
 				  GPM_EVENT_DPMS_OFF,
 				  GPM_COLOUR_CYAN,
 				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
+#endif
 
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (GTK_WIDGET (widget));

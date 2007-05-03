@@ -966,6 +966,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	} else {
 		gpm_warning ("in an undefined state we are not charging or "
 			     "discharging and the batteries are also not charged");
+		description = g_strdup (_("Battery state could not be read at this time\n"));
 	}
 	return description;
 }

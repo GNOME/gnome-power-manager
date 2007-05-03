@@ -73,11 +73,6 @@ struct GpmGraphWidgetPrivate
 static gboolean gpm_graph_widget_expose (GtkWidget *graph, GdkEventExpose *event);
 static void	gpm_graph_widget_finalize (GObject *object);
 
-#define GPM_GRAPH_WIDGET_KEY_MAX	14
-#define GPM_CHARGED_TEXT		_("Charged")
-#define GPM_CHARGING_TEXT		_("Charging")
-#define GPM_DISCHARGING_TEXT		_("Discharging")
-
 /**
  * gpm_graph_widget_key_compare_func
  * Return value: 0 if cookie matches
@@ -112,24 +107,24 @@ gpm_graph_widget_key_find_id (GpmGraphWidget *graph, guint id)
 }
 
 /**
- * gpm_graph_widget_key_add:
+ * gpm_graph_widget_key_event_add:
  **/
 gboolean
-gpm_graph_widget_key_add (GpmGraphWidget       *graph,
-			  const gchar	       *name,
+gpm_graph_widget_key_event_add (GpmGraphWidget *graph,
 			  guint		        id,
 			  guint32               colour,
-			  GpmGraphWidgetShape   shape)
+			  GpmGraphWidgetShape   shape,
+			  const gchar	       *desc)
 {
 	GpmGraphWidgetKeyItem *keyitem;
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
-	gpm_debug ("add to hashtable %s", name);
+	gpm_debug ("add to hashtable %s", desc);
 	keyitem = g_new0 (GpmGraphWidgetKeyItem, 1);
 
 	keyitem->id = id;
-	keyitem->name = name;
+	keyitem->desc = g_strdup (desc);
 	keyitem->colour = colour;
 	keyitem->shape = shape;
 
@@ -141,7 +136,31 @@ gpm_graph_widget_key_add (GpmGraphWidget       *graph,
  * gpm_graph_widget_key_data_clear:
  **/
 gboolean
-gpm_graph_widget_key_data_clear	(GpmGraphWidget	*graph)
+gpm_graph_widget_key_data_clear (GpmGraphWidget *graph)
+{
+	GpmGraphWidgetKeyData *keyitem;
+	guint a;
+
+	g_return_val_if_fail (graph != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+
+	/* remove items in list and free */
+	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
+		keyitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+		g_free (keyitem->desc);
+		g_free (keyitem);
+	}
+	g_slist_free (graph->priv->key_data);
+	graph->priv->key_data = NULL;
+
+	return TRUE;
+}
+
+/**
+ * gpm_graph_widget_key_event_clear:
+ **/
+gboolean
+gpm_graph_widget_key_event_clear (GpmGraphWidget *graph)
 {
 	GpmGraphWidgetKeyItem *keyitem;
 	guint a;
@@ -150,12 +169,13 @@ gpm_graph_widget_key_data_clear	(GpmGraphWidget	*graph)
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	/* remove items in list and free */
-	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
-		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_data, a);
+	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
+		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
+		g_free (keyitem->desc);
 		g_free (keyitem);
 	}
-	g_slist_free (graph->priv->key_data);
-	graph->priv->key_data = NULL;
+	g_slist_free (graph->priv->key_event);
+	graph->priv->key_event = NULL;
 
 	return TRUE;
 }
@@ -332,20 +352,13 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 static void
 gpm_graph_widget_finalize (GObject *object)
 {
-	guint a;
 	GpmGraphWidget *graph = (GpmGraphWidget*) object;
 	cairo_font_options_destroy (graph->priv->options);
 
 	/* clear key */
 	gpm_graph_widget_key_data_clear (graph);
+	gpm_graph_widget_key_event_clear (graph);
 
-	GpmGraphWidgetKeyItem *keyitem;
-	/* remove items in list and free */
-	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
-		keyitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
-		g_free (keyitem);
-	}
-	g_slist_free (graph->priv->key_event);
 	g_ptr_array_free (graph->priv->data_list, FALSE);
 
 	g_free (graph->priv->title);
@@ -1039,33 +1052,29 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 	cairo_t *cr = graph->priv->cr;
 	gint y_count;
 	gint a;
-	GpmGraphWidgetKeyItem *keyitem;
+	GpmGraphWidgetKeyData *keydataitem;
+	GpmGraphWidgetKeyItem *keyeventitem;
 
 	gpm_graph_widget_draw_bounding_box (cr, x, y, width, height);
 	y_count = y + 10;
-	for (a=0; a<GPM_GRAPH_WIDGET_KEY_MAX; a++) {
-		keyitem = gpm_graph_widget_key_find_id (graph, a);
-		if (keyitem == NULL) {
-			break;
-		}
-		/* only do the legend point if we have one of these dots */
-		if (gpm_graph_widget_have_key_id (graph, keyitem->id) == TRUE) {
-			gpm_graph_widget_draw_dot (cr, x + 8, y_count,
-						   keyitem->colour, keyitem->shape);
-			cairo_move_to (cr, x + 8 + 10, y_count + 3);
-			cairo_show_text (cr, keyitem->name);
-			y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
-		}
-	}
 
-	GpmGraphWidgetKeyData *keydataitem;
 	/* add the line colours to the legend */
 	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
 		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
 		gpm_graph_widget_draw_legend_line (cr, x + 8, y_count, keydataitem->colour);
-		cairo_move_to (cr, x + 8 + 10, y_count + 3);
+		cairo_move_to (cr, x + 8 + 10, y_count + 4);
 		cairo_set_source_rgb (cr, 0, 0, 0);
 		cairo_show_text (cr, keydataitem->desc);
+		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	}
+
+	/* add the events to the legend */
+	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
+		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
+		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
+					   keyeventitem->colour, keyeventitem->shape);
+		cairo_move_to (cr, x + 8 + 10, y_count + 4);
+		cairo_show_text (cr, keyeventitem->desc);
 		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	}
 }
@@ -1084,51 +1093,46 @@ static gboolean
 gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 					guint *width, guint *height)
 {
+	guint a;
+	cairo_text_extents_t extents;
+	GpmGraphWidgetKeyData *keydataitem;
+	GpmGraphWidgetKeyItem *keyeventitem;
+
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
 	cairo_set_font_options (cr, graph->priv->options);
 
-	guint a;
-	GpmGraphWidgetKeyItem *keyitem;
-	cairo_text_extents_t extents;
-
 	/* set defaults */
 	*width = 0;
-	*height = g_slist_length (graph->priv->key_data) * GPM_GRAPH_WIDGET_LEGEND_SPACING;
+	*height = 0;
 
-	/* get the max size for the labels (may be different for non UK) */
-	cairo_text_extents (cr, GPM_CHARGED_TEXT, &extents);
-	if (*width < extents.width) {
-		*width = extents.width;
-	}
-	cairo_text_extents (cr, GPM_CHARGING_TEXT, &extents);
-	if (*width < extents.width) {
-		*width = extents.width;
-	}
-	cairo_text_extents (cr, GPM_DISCHARGING_TEXT, &extents);
-	if (*width < extents.width) {
-		*width = extents.width;
-	}
-
-	/* find the width of the biggest key that is showing */
-	for (a=0; a<GPM_GRAPH_WIDGET_KEY_MAX; a++) {
-		keyitem = gpm_graph_widget_key_find_id (graph, a);
-		if (keyitem == NULL) {
-			break;
+	/* add the line colours to the legend */
+	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
+		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+		*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+		cairo_text_extents (cr, keydataitem->desc, &extents);
+		if (*width < extents.width) {
+			*width = extents.width;
 		}
-		/* only do the legend point if we have one of these dots */
-		if (gpm_graph_widget_have_key_id (graph, keyitem->id) == TRUE) {
-			*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING + 2;
-			cairo_text_extents (cr, keyitem->name, &extents);
+	}
+
+	/* add the events to the legend */
+	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
+		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
+//xxx		if (gpm_graph_widget_have_key_id (graph, keyeventitem->id) == TRUE) {
+			*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+			cairo_text_extents (cr, keyeventitem->desc, &extents);
 			if (*width < extents.width) {
 				*width = extents.width;
 			}
-		}
+//		}
 	}
+	if (0) gpm_graph_widget_have_key_id (graph, 7);
 
 	/* add for borders */
 	*width += 25;
+	*height += 3;
 
 	return TRUE;
 }

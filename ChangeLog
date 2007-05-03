@@ -1,3 +1,17 @@
+2007-05-03  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	Fix a failure in the self test program when the battery is detected
+	broken. Return 'Battery state could not be read at this time'.
+
+	* src/dbus/xdg-power-management-stats.xml:
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	* src/gpm-statistics-core.c:
+	Send the key data over DBUS. Allows us to do some cool new things.
+
 2007-05-01  Richard Hughes  <richard@hughsie.com>
 
 	* src/dbus/xdg-power-management-stats.xml:
