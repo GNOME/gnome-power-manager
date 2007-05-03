@@ -1,3 +1,114 @@
+==============
+Version 2.19.1
+==============
+
+- Fixed #359089, Time measurement units must be translatable (Richard Hughes)
+- Fixed #393388, Typos in the PO file (Richard Hughes)
+- Fixed #414032, Tray icon too complex and broken under KDE (Richard Hughes)
+
+New features:
+
+- Add over 100 unit tests and self test code (and fixes to fix the bugs exposed)
+- Make more of the HAL and DBUS stuff modular and put into libraries
+- Rewrite the engine and the cell and cell-array code.
+  Should be faster, more stable and less buggy than the cludges we had before.
+- More integration with libnotify allowing non-critical dialogues to be ignored.
+- Impliment the freedesktop PowerManagement session specification.
+  See http://www.freedesktop.org/wiki/Specifications_2fpower_2dmanagement_2dspec
+- Move the FAQ to http://live.gnome.org/GnomePowerManager/FAQ
+- Re-organsise the gconf schema with better names, and with a tree structure.
+
+Translations:
+
+- Updated fr: David Lodge
+- Updated zh_HK: Hong Kong
+- Updated zh_CN: Funda Wang
+- Updated de: Hendrik Richter
+- Updated sv: Daniel Nylander
+- Updated lv: Raivis Dejus
+- Updated lt: Gintautas Miliauskas
+- Updated ar: Djihed Afifi
+- Updated dz: David Lodge
+- Updated en_GB: David Lodge
+- Updated fi: Ilkka Tuohela
+- Updated et: Priit Laes
+- Updated zh_TW: Chao-Hsiung Liao
+- Updated es: Jorge Gonzalez
+
+==============
+Version 2.18.2
+==============
+
+- Fixed #422345, Fails to build with non-dbus gnome-vfs: undefined ref to `dbus_g_proxy_call' (Loïc Minier)
+- Fixed #425000, add bug-buddy support to the applets (Matthias Clasen)
+- Add a configurable --enable-keyring so we can disable the lock of the GNOME
+  keyring at build time. Defaults to off (Richard Hughes)
+- Sync dpms policy setting when starting (Young-Ho Cha)
+
+Translations:
+
+- Updated zh_CN: Funda Wang
+- Updated de: Hendrik Richter
+- Updated it: Alessio Frusciante
+- Updated dz: Pema Geyleg
+- Updated et: Priit Laes
+- Updated gl: Ignacio Casal Quinteiro
+- Updated ja: Takeshi AIHANA
+- Updated es: Claudio Saavedra
+
+==============
+Version 2.18.1
+==============
+
+- Fixed #418282, fails to build from source on sparc.
+- Fixed #84997, set an error if HAL is not running.
+- Fixed #420491, don't assert if we cannot get the type of button from HAL.
+- Fixed rh#233689, g-p-m modal error dialogs hide behind prefs dialog.
+
+Translations:
+
+- Updated gu: Ankit Patel
+- Updated pt: Duarte Loreto
+- Updated ca: Josep Puigdemont i Casamajó
+- Updated mk: Jovan Naumovski
+- Updated da: Peter Bach
+- Updated dz: Pema Geyleg
+
+==============
+Version 2.18.0
+==============
+
+- Fixed #412345, crash in Power Statistics: crashed on startup (Richard Hughes)
+- Fixed #414010, Notifications have arrow to notification area even when
+                 g-p-m icon is not displayed (Richard Hughes)
+- Fixed #414311, Use StartupNotify in launcher (Richard Hughes)
+
+Translations:
+
+- Updated el: Nikos Charonitakis
+- Updated gu: Ankit Patel
+- Updated ca: Josep Puigdemont i Casamajó
+- Updated ar: Djihed Afifi
+- Updated ru: Leonid Kanter
+- Updated nl: Vincent van Adrighem
+- Updated pt: Duarte Loreto
+- Updated lv: Daniel Nylander
+- Updated lt: Gintautas Miliauskas
+- Updated th: Theppitak Karoonboonyanan
+- Updated en_GB: David Lodge
+- Updated fr: Stéphane Raimbault
+- Updated bg: Alexander Shopov
+- Updated pt_BR: Leonardo Ferreira Fontenelle
+- Updated de: Hendrik Richter
+- Updated hu: Gabor Kelemen
+- Updated dz: Daniel Nylander
+- Updated sr.po, sr@Latn: Goran Rakić
+- Updated ko: Changwoo Ryu
+- Updated sv: Daniel Nylander
+- Updated mk: Jovan Naumovski
+- Updated pl: Artur Flinta
+- Updated uk: Maxim Dziumanenko, Daniel Nylander
+
 ===============
 Version 2.17.92
 ===============
