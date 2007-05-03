@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <pango/pangocairo.h>
 #include <glib/gi18n.h>
 #include <math.h>
 #include <stdlib.h>
@@ -33,6 +34,7 @@
 
 G_DEFINE_TYPE (GpmGraphWidget, gpm_graph_widget, GTK_TYPE_DRAWING_AREA);
 #define GPM_GRAPH_WIDGET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetPrivate))
+#define GPM_GRAPH_WIDGET_FONT "Sans 8"
 
 struct GpmGraphWidgetPrivate
 {
@@ -64,7 +66,7 @@ struct GpmGraphWidgetPrivate
 	gchar			*title;
 
 	cairo_t			*cr;
-	cairo_font_options_t	*options;
+	PangoLayout 		*layout;
 
 	GPtrArray		*data_list;
 	GpmArray		*events;
@@ -325,6 +327,10 @@ gpm_graph_widget_class_init (GpmGraphWidgetClass *class)
 static void
 gpm_graph_widget_init (GpmGraphWidget *graph)
 {
+	PangoFontMap *fontmap;
+	PangoContext *context;
+	PangoFontDescription *desc;
+
 	graph->priv = GPM_GRAPH_WIDGET_GET_PRIVATE (graph);
 	graph->priv->invert_x = FALSE;
 	graph->priv->invert_y = FALSE;
@@ -341,8 +347,15 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->title = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
-	/* setup font */
-	graph->priv->options = cairo_font_options_create ();
+
+	/* do pango stuff */
+	fontmap = pango_cairo_font_map_get_default ();
+	context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+	pango_context_set_base_gravity (context, PANGO_GRAVITY_AUTO);
+	graph->priv->layout = pango_layout_new (context);
+	desc = pango_font_description_from_string (GPM_GRAPH_WIDGET_FONT);
+	pango_layout_set_font_description (graph->priv->layout, desc);
+	pango_font_description_free (desc);
 }
 
 /**
@@ -352,14 +365,18 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 static void
 gpm_graph_widget_finalize (GObject *object)
 {
+	PangoContext *context;
 	GpmGraphWidget *graph = (GpmGraphWidget*) object;
-	cairo_font_options_destroy (graph->priv->options);
 
 	/* clear key */
 	gpm_graph_widget_key_data_clear (graph);
 	gpm_graph_widget_key_event_clear (graph);
 
 	g_ptr_array_free (graph->priv->data_list, FALSE);
+
+	context = pango_layout_get_context (graph->priv->layout);
+	g_object_unref (graph->priv->layout);
+	g_object_unref (context);
 
 	g_free (graph->priv->title);
 }
@@ -554,13 +571,11 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	gfloat divheight = (gfloat)graph->priv->box_height / 10.0f;
 	gint length_x = graph->priv->stop_x - graph->priv->start_x;
 	gint length_y = graph->priv->stop_y - graph->priv->start_y;
-	cairo_text_extents_t extents;
+	PangoRectangle ink_rect, logical_rect;
 	gfloat offsetx = 0;
 	gfloat offsety = 0;
 
 	cairo_save (cr);
-
-	cairo_set_font_options (cr, graph->priv->options);
 
 	/* do x text */
 	cairo_set_source_rgb (cr, 0, 0, 0);
@@ -573,20 +588,21 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 		}
 		text = gpm_get_axis_label (graph->priv->axis_type_x, value);
 
-		cairo_text_extents (cr, text, &extents);
+		pango_layout_set_text (graph->priv->layout, text, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
 		/* have data points 0 and 10 bounded, but 1..9 centered */
 		if (a == 0) {
-			offsetx = 2;
+			offsetx = 2.0;
 		} else if (a == 10) {
-			offsetx = extents.width;
+			offsetx = ink_rect.width;
 		} else {
-			offsetx = (extents.width / 2.0f);
+			offsetx = (ink_rect.width / 2.0f);
 		}
 
 		cairo_move_to (cr, b - offsetx,
-			       graph->priv->box_y + graph->priv->box_height + 15);
+			       graph->priv->box_y + graph->priv->box_height + 2.0);
 
-		cairo_show_text (cr, text);
+		pango_cairo_show_layout (cr, graph->priv->layout);
 		g_free (text);
 	}
 
@@ -600,18 +616,21 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 		}
 		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
 
-		cairo_text_extents (cr, text, &extents);
+		pango_layout_set_text (graph->priv->layout, text, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
+
 		/* have data points 0 and 10 bounded, but 1..9 centered */
 		if (a == 10) {
 			offsety = 0;
 		} else if (a == 0) {
-			offsety = extents.height;
+			offsety = ink_rect.height;
 		} else {
-			offsety = (extents.height / 2.0f);
+			offsety = (ink_rect.height / 2.0f);
 		}
-		offsetx = extents.width + 5;
+		offsetx = ink_rect.width + 7;
+		offsety -= 10;
 		cairo_move_to (cr, graph->priv->box_x - offsetx - 2, b + offsety);
-		cairo_show_text (cr, text);
+		pango_cairo_show_layout (cr, graph->priv->layout);
 		g_free (text);
 	}
 
@@ -1008,33 +1027,6 @@ gpm_graph_widget_draw_bounding_box (cairo_t *cr,
 }
 
 /**
- * gpm_graph_widget_have_key_id:
- * Finds out if we have an event of type id.
- **/
-static gboolean
-gpm_graph_widget_have_key_id (GpmGraphWidget *graph, guint id)
-{
-	guint i;
-	guint length;
-	GpmArrayPoint *point;
-
-	/* not set */
-	if (graph->priv->events == NULL) {
-		return FALSE;
-	}
-
-	length = gpm_array_get_size (graph->priv->events);
-	for (i=0; i < length; i++) {
-		point = gpm_array_get (graph->priv->events, i);
-		if (point->y == id) {
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-
-/**
  * gpm_graph_widget_draw_legend:
  * @cr: Cairo drawing context
  * @x: The X-coordinate for the top-left
@@ -1062,9 +1054,10 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
 		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
 		gpm_graph_widget_draw_legend_line (cr, x + 8, y_count, keydataitem->colour);
-		cairo_move_to (cr, x + 8 + 10, y_count + 4);
+		cairo_move_to (cr, x + 8 + 10, y_count - 6);
 		cairo_set_source_rgb (cr, 0, 0, 0);
-		cairo_show_text (cr, keydataitem->desc);
+		pango_layout_set_text (graph->priv->layout, keydataitem->desc, -1);
+		pango_cairo_show_layout (cr, graph->priv->layout);
 		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	}
 
@@ -1073,8 +1066,9 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
 		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
 					   keyeventitem->colour, keyeventitem->shape);
-		cairo_move_to (cr, x + 8 + 10, y_count + 4);
-		cairo_show_text (cr, keyeventitem->desc);
+		cairo_move_to (cr, x + 8 + 10, y_count - 6);
+		pango_layout_set_text (graph->priv->layout, keyeventitem->desc, -1);
+		pango_cairo_show_layout (cr, graph->priv->layout);
 		y_count = y_count + GPM_GRAPH_WIDGET_LEGEND_SPACING;
 	}
 }
@@ -1094,14 +1088,12 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 					guint *width, guint *height)
 {
 	guint a;
-	cairo_text_extents_t extents;
+	PangoRectangle ink_rect, logical_rect;
 	GpmGraphWidgetKeyData *keydataitem;
 	GpmGraphWidgetKeyItem *keyeventitem;
 
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
-
-	cairo_set_font_options (cr, graph->priv->options);
 
 	/* set defaults */
 	*width = 0;
@@ -1111,24 +1103,23 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
 		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
 		*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
-		cairo_text_extents (cr, keydataitem->desc, &extents);
-		if (*width < extents.width) {
-			*width = extents.width;
+		pango_layout_set_text (graph->priv->layout, keydataitem->desc, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
+		if (*width < ink_rect.width) {
+			*width = ink_rect.width;
 		}
 	}
 
 	/* add the events to the legend */
 	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
 		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
-//xxx		if (gpm_graph_widget_have_key_id (graph, keyeventitem->id) == TRUE) {
-			*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
-			cairo_text_extents (cr, keyeventitem->desc, &extents);
-			if (*width < extents.width) {
-				*width = extents.width;
-			}
-//		}
+		*height = *height + GPM_GRAPH_WIDGET_LEGEND_SPACING;
+		pango_layout_set_text (graph->priv->layout, keyeventitem->desc, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect, &logical_rect);
+		if (*width < ink_rect.width) {
+			*width = ink_rect.width;
+		}
 	}
-	if (0) gpm_graph_widget_have_key_id (graph, 7);
 
 	/* add for borders */
 	*width += 25;
@@ -1153,7 +1144,8 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	guint legend_width = 0;
 	gint data_x;
 	gint data_y;
-	cairo_text_extents_t extents_title;
+	PangoRectangle ink_rect_title;
+	PangoRectangle logical_rect;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -1167,8 +1159,9 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_y = 5;
 
 	if (graph->priv->title != NULL) {
-		cairo_text_extents (cr, graph->priv->title, &extents_title);
-		graph->priv->box_y += extents_title.height;
+		pango_layout_set_text (graph->priv->layout, graph->priv->title, -1);
+		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect_title, &logical_rect);
+		graph->priv->box_y += ink_rect_title.height;
 	}
 
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
@@ -1186,8 +1179,9 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	/* center title */
 	if (graph->priv->title != NULL) {
-		cairo_move_to (cr, graph->priv->box_x + (graph->priv->box_width-extents_title.width)/2, 9);
-		cairo_show_text (cr, graph->priv->title);
+		cairo_move_to (cr, graph->priv->box_x + (graph->priv->box_width-ink_rect_title.width)/2, 9);
+		pango_layout_set_text(graph->priv->layout, graph->priv->title, -1);
+		pango_cairo_show_layout(cr, graph->priv->layout);
 	}
 
 	/* graph background */
