@@ -91,7 +91,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_ON_HIBERNATE	GPM_CONF_DIR "/lock/hibernate"
 #define GPM_CONF_LOCK_GNOME_KEYRING	GPM_CONF_DIR "/lock/gnome_keyring"
 
-#define GPM_CONF_STAT_SHOW_LEGEND	GPM_CONF_DIR "/statistics/show_legend"
 #define GPM_CONF_STAT_SHOW_AXIS_LABELS	GPM_CONF_DIR "/statistics/show_axis_labels"
 #define GPM_CONF_STAT_SHOW_EVENTS	GPM_CONF_DIR "/statistics/show_events"
 #define GPM_CONF_STAT_SMOOTH_DATA	GPM_CONF_DIR "/statistics/smooth_data"

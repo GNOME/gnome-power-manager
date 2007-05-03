@@ -122,7 +122,7 @@ gpm_graph_widget_key_event_add (GpmGraphWidget *graph,
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
-	gpm_debug ("add to hashtable %s", desc);
+	gpm_debug ("add to hashtable '%s'", desc);
 	keyitem = g_new0 (GpmGraphWidgetKeyItem, 1);
 
 	keyitem->id = id;

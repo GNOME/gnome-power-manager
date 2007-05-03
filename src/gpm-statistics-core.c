@@ -306,6 +306,8 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 	if (checked == FALSE) {
 		/* remove the dots from the graph */
 		gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), FALSE);
+		/* disable legend  */
+		gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), FALSE);
 		return;
 	}
 
@@ -314,46 +316,9 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 
 	/* only enable the dots if the checkbox is checked */
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), TRUE);
-}
 
-/**
- * gpm_statistics_checkbox_smooth_cb:
- * @widget: The GtkWidget object
- **/
-static void
-gpm_statistics_checkbox_smooth_cb (GtkWidget     *widget,
-			           GpmStatistics *statistics)
-{
-	gboolean checked;
-
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gpm_debug ("Smooth data enable %i", checked);
-
-	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, checked);
-
-	/* refresh data automatically */
-	gpm_statistics_refresh_data (statistics);
-}
-
-/**
- * gpm_statistics_checkbox_legend_cb:
- * @widget: The GtkWidget object
- * @gpm_pref_key: The GConf key for this preference setting.
- **/
-static void
-gpm_statistics_checkbox_legend_cb (GtkWidget *widget,
-			    GpmStatistics  *statistics)
-{
-	gboolean checked;
-
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gpm_debug ("Legend enable %i", checked);
-
-	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_LEGEND, checked);
-
-	gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), checked);
+	/* enable legend  */
+	gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), TRUE);
 }
 
 /**
@@ -381,27 +346,6 @@ gpm_statistics_refresh_axis_labels (GpmStatistics *statistics)
 		gtk_widget_show (widget1);
 		gtk_widget_show (widget2);
 	}
-}
-
-/**
- * gpm_statistics_checkbox_axis_labels_cb:
- * @widget: The GtkWidget object
- * @gpm_pref_key: The GConf key for this preference setting.
- **/
-static void
-gpm_statistics_checkbox_axis_labels_cb (GtkWidget      *widget,
-			                GpmStatistics  *statistics)
-{
-	gboolean checked;
-
-	checked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	gpm_debug ("axis labels enable %i", checked);
-
-	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, checked);
-
-	/* refresh the axis */
-	gpm_statistics_refresh_axis_labels (statistics);
 }
 
 /**
@@ -646,7 +590,6 @@ gpm_statistics_get_parameters_dbus (GpmStatistics *statistics,
 		gv = g_value_array_get_nth (gva, 3);
 		desc = g_value_get_string (gv);
 		/* add to the data key */
-		gpm_debug ("event key %i %i %i %s", id, colour, shape, desc);
 		gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget), id, colour, shape, desc);
 		g_value_unset (gv);
 		g_value_array_free (gva);
@@ -899,91 +842,12 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_TIME);
 	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (widget), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
-	/* add the key items */
-#if 0
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("On AC"),
-				  GPM_EVENT_ON_AC,
-				  GPM_COLOUR_BLUE,
-				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("On battery"),
-				  GPM_EVENT_ON_BATTERY,
-				  GPM_COLOUR_DARK_BLUE,
-				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Session idle"),
-				  GPM_EVENT_SESSION_IDLE,
-				  GPM_COLOUR_YELLOW,
-				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Session active"),
-				  GPM_EVENT_SESSION_ACTIVE,
-				  GPM_COLOUR_DARK_YELLOW,
-				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Suspend"),
-				  GPM_EVENT_SUSPEND,
-				  GPM_COLOUR_RED,
-				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Resume"),
-				  GPM_EVENT_RESUME,
-				  GPM_COLOUR_DARK_RED,
-				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Hibernate"),
-				  GPM_EVENT_HIBERNATE,
-				  GPM_COLOUR_MAGENTA,
-				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Lid closed"),
-				  GPM_EVENT_LID_CLOSED,
-				  GPM_COLOUR_GREEN,
-				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Lid opened"),
-				  GPM_EVENT_LID_OPENED,
-				  GPM_COLOUR_DARK_GREEN,
-				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("Notification"),
-				  GPM_EVENT_NOTIFICATION,
-				  GPM_COLOUR_GREY,
-				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("DPMS On"),
-				  GPM_EVENT_DPMS_ON,
-				  GPM_COLOUR_CYAN,
-				  GPM_GRAPH_WIDGET_SHAPE_CIRCLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("DPMS Standby"),
-				  GPM_EVENT_DPMS_STANDBY,
-				  GPM_COLOUR_CYAN,
-				  GPM_GRAPH_WIDGET_SHAPE_TRIANGLE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("DPMS Suspend"),
-				  GPM_EVENT_DPMS_SUSPEND,
-				  GPM_COLOUR_CYAN,
-				  GPM_GRAPH_WIDGET_SHAPE_SQUARE);
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (widget),
-				  _("DPMS Off"),
-				  GPM_EVENT_DPMS_OFF,
-				  GPM_COLOUR_CYAN,
-				  GPM_GRAPH_WIDGET_SHAPE_DIAMOND);
-#endif
-
 	/* FIXME: There's got to be a better way than this */
 	gtk_widget_hide (GTK_WIDGET (widget));
 	gtk_widget_show (GTK_WIDGET (widget));
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "combobox_type");
 	gpm_statistics_populate_graph_types (statistics, widget);
-
-	widget = glade_xml_get_widget (statistics->priv->glade_xml, "combobox_device");
-	gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Default");
-	gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-	gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_events");
 	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_EVENTS, &checked);
@@ -992,25 +856,6 @@ gpm_statistics_init (GpmStatistics *statistics)
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);
 	gpm_statistics_checkbox_events_cb (widget, statistics);
 
-	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_smooth");
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, &checked);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_statistics_checkbox_smooth_cb), statistics);
-	gpm_statistics_checkbox_smooth_cb (widget, statistics);
-
-	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_legend");
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_LEGEND, &checked);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_statistics_checkbox_legend_cb), statistics);
-	gpm_statistics_checkbox_legend_cb (widget, statistics);
-
-	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_axis");
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, &checked);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
-	g_signal_connect (widget, "clicked",
-			  G_CALLBACK (gpm_statistics_checkbox_axis_labels_cb), statistics);
 	/* refresh the axis */
 	gpm_statistics_refresh_axis_labels (statistics);
 
