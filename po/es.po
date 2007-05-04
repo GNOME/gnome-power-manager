@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-02 03:20+0100\n"
-"PO-Revision-Date: 2007-05-04 13:37+0200\n"
+"POT-Creation-Date: 2007-05-04 12:40+0100\n"
+"PO-Revision-Date: 2007-05-04 13:42+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -922,25 +922,35 @@ msgstr ""
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters sleep. This "
 "means the the keyring will have to be unlocked on resume."
-msgstr "Indica si se debe o no bloquear el depósito de claves antes de pasar al reposo. Esto significa que tendrá que desbloquear el depósito al reanudar."
+msgstr ""
+"Indica si se debe o no bloquear el depósito de claves antes de pasar al "
+"reposo. Esto significa que tendrá que desbloquear el depósito al reanudar."
 
 #: ../data/gnome-power-manager.schemas.in.h:129
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
-msgstr "Indica si se debe o no bloquear la pantalla cuando el equipo se levante de una hibernación. Sólo se usa si «lock_use_screensaver_settings» está puesto a «false»."
+msgstr ""
+"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
+"una hibernación. Sólo se usa si «lock_use_screensaver_settings» está puesto "
+"a «false»."
 
 #: ../data/gnome-power-manager.schemas.in.h:130
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
-msgstr "Indica si se debe o no bloquear la pantalla cuando el equipo se levante de una suspensión. Sólo se usa si «lock_use_screensaver_settings» está puesto a «false»."
+msgstr ""
+"Indica si se debe o no bloquear la pantalla cuando el equipo se levante de "
+"una suspensión. Sólo se usa si «lock_use_screensaver_settings» está puesto a "
+"«false»."
 
 #: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
-msgstr "Indica si se debe bloquear o no la pantalla cuando ésta se apague. Sólo se usa si «lock_use_screensaver_settings» está puesto a «false»."
+msgstr ""
+"Indica si se debe bloquear o no la pantalla cuando ésta se apague. Sólo se "
+"usa si «lock_use_screensaver_settings» está puesto a «false»."
 
 #: ../data/gnome-power-manager.schemas.in.h:132
 msgid "Whether to hibernate, suspend or do nothing when inactive"
@@ -951,7 +961,8 @@ msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
 msgstr ""
-"Indica si se debe usar el ajuste de bloqueo de pantalla del salvapantallas para decidir si se debe bloquear la pantalla tras una hibernación, "
+"Indica si se debe usar el ajuste de bloqueo de pantalla del salvapantallas "
+"para decidir si se debe bloquear la pantalla tras una hibernación, "
 "suspensión u oscurecimiento de la pantalla."
 
 #: ../data/gnome-power-manager.schemas.in.h:134
@@ -960,7 +971,9 @@ msgstr "Indica si se deben usar notificaciones basadas en tiempo"
 
 #: ../data/gnome-power-manager.schemas.in.h:135
 msgid "Whether we should show the axis labels in the statistics window"
-msgstr "Indica si se deben mostrar las etiquetas de los ejes en la ventana de estadísticas"
+msgstr ""
+"Indica si se deben mostrar las etiquetas de los ejes en la ventana de "
+"estadísticas"
 
 #: ../data/gnome-power-manager.schemas.in.h:136
 msgid "Whether we should show the axis labels in the statistics window."
@@ -977,18 +990,10 @@ msgid "Whether we should show the events in the statistics window."
 msgstr "Indica si se deben mostrar los eventos en la ventana de estadísticas."
 
 #: ../data/gnome-power-manager.schemas.in.h:139
-msgid "Whether we should show the legend in the statistics window"
-msgstr "Indica si se debe mostrar la leyenda en la ventana de estadísticas"
-
-#: ../data/gnome-power-manager.schemas.in.h:140
-msgid "Whether we should show the legend in the statistics window."
-msgstr "Indica si se debe mostrar la leyenda en la ventana de estadísticas."
-
-#: ../data/gnome-power-manager.schemas.in.h:141
 msgid "Whether we should smooth the data in the graph"
 msgstr "Indica si se deben suavizar los datos en el gráfico"
 
-#: ../data/gnome-power-manager.schemas.in.h:142
+#: ../data/gnome-power-manager.schemas.in.h:140
 msgid "Whether we should smooth the data in the graph."
 msgstr "Indica si se deben suavizar los datos en el gráfico."
 
@@ -1013,41 +1018,25 @@ msgid "Brightness"
 msgstr "Brillo"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add _axis labels"
-msgstr "Añadir etiquetas de los _ejes"
-
-#: ../data/gpm-graph.glade.h:2
-msgid "Add lege_nd"
-msgstr "Añadir leye_nda"
-
-#: ../data/gpm-graph.glade.h:3
 msgid "Add related _events"
 msgstr "Añadir _eventos relacionados"
 
-#: ../data/gpm-graph.glade.h:4
+#: ../data/gpm-graph.glade.h:2
 msgid "Cell Voltage"
 msgstr "Voltaje de la batería"
 
-#: ../data/gpm-graph.glade.h:5
-msgid "Device:"
-msgstr "Dispositivo:"
-
-#: ../data/gpm-graph.glade.h:6
+#: ../data/gpm-graph.glade.h:3
 msgid "Graph type:"
 msgstr "Tipo de gráfica:"
 
-#: ../data/gpm-graph.glade.h:7 ../src/gpm-statistics-core.c:63
+#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:63
 msgid "Power History"
 msgstr "Histórico de energía"
 
-#: ../data/gpm-graph.glade.h:8 ../src/gpm-info.c:191 ../src/gpm-info.c:199
-#: ../src/gpm-info.c:207 ../src/gpm-info.c:215
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:283 ../src/gpm-info.c:292
+#: ../src/gpm-info.c:301 ../src/gpm-info.c:310
 msgid "Time since startup"
 msgstr "Tiempo desde el inicio"
-
-#: ../data/gpm-graph.glade.h:9
-msgid "_Smooth graph data"
-msgstr "_Suavizar los datos del gráfico"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -1248,171 +1237,227 @@ msgstr "El perfil de la carga de la batería es estimado\n"
 msgid "Unable to get data..."
 msgstr "No se pudo obtener la información..."
 
-#: ../src/gpm-graph-widget.c:77
-msgid "Charged"
-msgstr "Cargado"
-
-#: ../src/gpm-graph-widget.c:78
-msgid "Charging"
-msgstr "Cargando"
-
-#: ../src/gpm-graph-widget.c:79
-msgid "Discharging"
-msgstr "Descargando"
-
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:455
+#: ../src/gpm-graph-widget.c:485
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:458
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih:%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:463
+#: ../src/gpm-graph-widget.c:493
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:466
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:470
+#: ../src/gpm-graph-widget.c:500
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:474
+#: ../src/gpm-graph-widget.c:504
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:477
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%iW"
 msgstr "%iW"
 
 #. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:480
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%iV"
 msgstr "%iV"
 
-#: ../src/gpm-info.c:116
+#: ../src/gpm-info.c:118
 #, c-format
 msgid "%s because %s"
 msgstr "%s porque %s"
 
-#: ../src/gpm-info.c:192
+#: ../src/gpm-info.c:196
+msgid "On AC"
+msgstr "Con adaptador de corriente"
+
+#: ../src/gpm-info.c:200
+msgid "On battery"
+msgstr "Con batería"
+
+#: ../src/gpm-info.c:204
+msgid "Session idle"
+msgstr "Sesión inactiva"
+
+#: ../src/gpm-info.c:208
+msgid "Session active"
+msgstr "Sesión activa"
+
+#: ../src/gpm-info.c:212 ../src/gpm-prefs-core.c:82
+#: ../src/gpm-statistics-core.c:98
+msgid "Suspend"
+msgstr "Suspender"
+
+#: ../src/gpm-info.c:216
+msgid "Resume"
+msgstr "Reactivar"
+
+#: ../src/gpm-info.c:220 ../src/gpm-prefs-core.c:84
+#: ../src/gpm-statistics-core.c:100
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: ../src/gpm-info.c:224
+msgid "Lid closed"
+msgstr "Tapa cerrada"
+
+#: ../src/gpm-info.c:228
+msgid "Lid opened"
+msgstr "Tapa abierta"
+
+#: ../src/gpm-info.c:232
+msgid "Notification"
+msgstr "Notificación"
+
+#: ../src/gpm-info.c:237
+msgid "DPMS On"
+msgstr "DPMS On"
+
+#: ../src/gpm-info.c:241
+msgid "DPMS Standby"
+msgstr "DPMS Standby"
+
+#: ../src/gpm-info.c:245
+msgid "DPMS Suspend"
+msgstr "DPMS Suspend"
+
+#: ../src/gpm-info.c:249
+msgid "DPMS Off"
+msgstr "DPMS Off"
+
+#: ../src/gpm-info.c:284
 msgid "Power (mWh)"
 msgstr "Energía (mWh)"
 
-#: ../src/gpm-info.c:193
+#: ../src/gpm-info.c:285
 msgid "Power"
 msgstr "Energía"
 
-#: ../src/gpm-info.c:200
+#: ../src/gpm-info.c:293
 msgid "Estimated time"
 msgstr "Tiempo estimado"
 
-#: ../src/gpm-info.c:201
+#: ../src/gpm-info.c:294
 msgid "Time"
 msgstr "Tiempo"
 
-#: ../src/gpm-info.c:208 ../src/gpm-info.c:223 ../src/gpm-info.c:232
-#: ../src/gpm-info.c:241 ../src/gpm-info.c:250
+#: ../src/gpm-info.c:302 ../src/gpm-info.c:319 ../src/gpm-info.c:336
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:370
 msgid "Battery percentage"
 msgstr "Porcentaje de batería"
 
-#: ../src/gpm-info.c:209
+#: ../src/gpm-info.c:303
 msgid "Percentage"
 msgstr "Porcentaje"
 
-#: ../src/gpm-info.c:216
+#: ../src/gpm-info.c:311
 msgid "Battery Voltage"
 msgstr "Voltaje de la batería"
 
-#: ../src/gpm-info.c:217
+#: ../src/gpm-info.c:312
 msgid "Voltage"
 msgstr "Voltaje"
 
-#: ../src/gpm-info.c:224 ../src/gpm-info.c:242
+#: ../src/gpm-info.c:320 ../src/gpm-info.c:354
 msgid "Accuracy of reading"
 msgstr "Precisión de la lectura"
 
-#: ../src/gpm-info.c:225 ../src/gpm-info.c:234 ../src/gpm-info.c:243
-#: ../src/gpm-info.c:252
+#: ../src/gpm-info.c:321 ../src/gpm-info.c:338 ../src/gpm-info.c:355
+#: ../src/gpm-info.c:372
 msgid "Valid data"
 msgstr "Datos válidos"
 
-#: ../src/gpm-info.c:226 ../src/gpm-info.c:235 ../src/gpm-info.c:244
-#: ../src/gpm-info.c:253
+#: ../src/gpm-info.c:322 ../src/gpm-info.c:339 ../src/gpm-info.c:356
+#: ../src/gpm-info.c:373
 msgid "No data"
 msgstr "Sin datos"
 
-#: ../src/gpm-info.c:233 ../src/gpm-info.c:251
+#: ../src/gpm-info.c:326 ../src/gpm-info.c:343 ../src/gpm-info.c:360
+#: ../src/gpm-info.c:377
+msgid "Charge Void"
+msgstr "Carga vacía"
+
+#: ../src/gpm-info.c:330 ../src/gpm-info.c:347 ../src/gpm-info.c:364
+#: ../src/gpm-info.c:381
+msgid "Discharge Void"
+msgstr "Descarga vacía"
+
+#: ../src/gpm-info.c:337 ../src/gpm-info.c:371
 msgid "Average time elapsed"
 msgstr "Tiempo medio transcurrido"
 
-#: ../src/gpm-info.c:538
+#: ../src/gpm-info.c:665
 msgid "AC adapter inserted"
 msgstr "Adaptador AC enchufado"
 
-#: ../src/gpm-info.c:541
+#: ../src/gpm-info.c:668
 msgid "AC adapter removed"
 msgstr "Adaptador adaptador de corriente quitado"
 
-#: ../src/gpm-info.c:561
+#: ../src/gpm-info.c:688
 msgid "The laptop lid has been closed"
 msgstr "La tapa del portátil se ha cerrado"
 
-#: ../src/gpm-info.c:567
+#: ../src/gpm-info.c:694
 msgid "The laptop lid has been re-opened"
 msgstr "La tapa del portátil ha sido reabierta"
 
-#: ../src/gpm-info.c:589
+#: ../src/gpm-info.c:716
 msgid "idle mode ended"
 msgstr "terminó el modo inactivo"
 
-#: ../src/gpm-info.c:592
+#: ../src/gpm-info.c:719
 msgid "idle mode started"
 msgstr "empezó el modo inactivo"
 
-#: ../src/gpm-info.c:611
+#: ../src/gpm-info.c:738
 msgid "dpms on"
 msgstr "dpms on"
 
-#: ../src/gpm-info.c:613
+#: ../src/gpm-info.c:740
 msgid "dpms standby"
 msgstr "dpms standby"
 
-#: ../src/gpm-info.c:615
+#: ../src/gpm-info.c:742
 msgid "dpms suspend"
 msgstr "dpms suspend"
 
-#: ../src/gpm-info.c:617
+#: ../src/gpm-info.c:744
 msgid "dpms off"
 msgstr "dpms off"
 
-#: ../src/gpm-info.c:634
+#: ../src/gpm-info.c:761
 msgid "Resuming computer"
 msgstr "Reactivar equipo"
 
-#: ../src/gpm-info.c:650
+#: ../src/gpm-info.c:777
 msgid "Hibernate Problem"
 msgstr "Problema al hibernar"
 
-#: ../src/gpm-info.c:652
+#: ../src/gpm-info.c:779
 msgid "Suspend Problem"
 msgstr "Problema al suspender"
 
@@ -1468,7 +1513,9 @@ msgstr "Acción prohibida"
 
 #: ../src/gpm-manager.c:310 ../src/gpm-manager.c:361 ../src/gpm-manager.c:426
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
-msgstr "Política de tiempo de expiración no válida. Por favor espere unos segundos e inténtelo de nuevo."
+msgstr ""
+"Política de tiempo de expiración no válida. Por favor espere unos segundos e "
+"inténtelo de nuevo."
 
 #: ../src/gpm-manager.c:322 ../src/gpm-manager.c:373
 msgid "Action disallowed"
@@ -1478,7 +1525,9 @@ msgstr "Acción deshabilitada"
 msgid ""
 "Suspend support has been disabled. Contact your administrator for more "
 "details."
-msgstr "El soporte de suspensión ha sido desactivado. Contacte con su administrador para obtener más detalles."
+msgstr ""
+"El soporte de suspensión ha sido desactivado. Contacte con su administrador "
+"para obtener más detalles."
 
 #: ../src/gpm-manager.c:336
 msgid "Suspend is not available on this computer."
@@ -1492,7 +1541,9 @@ msgstr "Suspender el equipo"
 msgid ""
 "Hibernate support has been disabled. Contact your administrator for more "
 "details."
-msgstr "El soporte de hibernación ha sido desactivado. Contacte con su administrador para obtener más detalles."
+msgstr ""
+"El soporte de hibernación ha sido desactivado. Contacte con su administrador "
+"para obtener más detalles."
 
 #: ../src/gpm-manager.c:387
 msgid "Hibernate is not available on this computer."
@@ -1860,6 +1911,10 @@ msgstr "%s %s hasta su carga(%i%%)\n"
 msgid "%s charging (%i%%)\n"
 msgstr "%s cargando (%i%%)\n"
 
+#: ../src/gpm-cell-array.c:969
+msgid "Battery state could not be read at this time\n"
+msgstr "No se pudo leer el estado de la batería en este momento\n"
+
 #: ../src/gpm-cell.c:444
 #, c-format
 msgid "<b>Product:</b> %s\n"
@@ -1983,7 +2038,7 @@ msgid "PDAs"
 msgstr "PDA"
 
 #: ../src/gpm-cell-unit.c:246 ../src/gpm-cell-unit.c:260
-#: ../src/gpm-statistics-core.c:760
+#: ../src/gpm-statistics-core.c:740
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -2020,19 +2075,9 @@ msgstr "Preferencias de energía"
 msgid "Ask me"
 msgstr "Preguntarme"
 
-#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:98
-#: ../src/gpm-statistics-core.c:887
-msgid "Suspend"
-msgstr "Suspender"
-
 #: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:99
 msgid "Shutdown"
 msgstr "Apagar"
-
-#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:100
-#: ../src/gpm-statistics-core.c:897
-msgid "Hibernate"
-msgstr "Hibernar"
 
 #: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:101
 msgid "Blank screen"
@@ -2096,57 +2141,9 @@ msgstr "Tiempo de descarga estimado"
 msgid "Profiled Discharge Accuracy"
 msgstr "Precisión de la estimación de descarga"
 
-#: ../src/gpm-statistics-core.c:831
+#: ../src/gpm-statistics-core.c:811
 msgid "Could not connect to GNOME Power Manager."
 msgstr "No es posible conectar con el Gestor de energía de GNOME."
-
-#: ../src/gpm-statistics-core.c:867
-msgid "On AC"
-msgstr "Con adaptador de corriente"
-
-#: ../src/gpm-statistics-core.c:872
-msgid "On battery"
-msgstr "Con batería"
-
-#: ../src/gpm-statistics-core.c:877
-msgid "Session idle"
-msgstr "Sesión inactiva"
-
-#: ../src/gpm-statistics-core.c:882
-msgid "Session active"
-msgstr "Sesión activa"
-
-#: ../src/gpm-statistics-core.c:892
-msgid "Resume"
-msgstr "Reactivar"
-
-#: ../src/gpm-statistics-core.c:902
-msgid "Lid closed"
-msgstr "Tapa cerrada"
-
-#: ../src/gpm-statistics-core.c:907
-msgid "Lid opened"
-msgstr "Tapa abierta"
-
-#: ../src/gpm-statistics-core.c:912
-msgid "Notification"
-msgstr "Notificación"
-
-#: ../src/gpm-statistics-core.c:917
-msgid "DPMS On"
-msgstr "DPMS On"
-
-#: ../src/gpm-statistics-core.c:922
-msgid "DPMS Standby"
-msgstr "DPMS Standby"
-
-#: ../src/gpm-statistics-core.c:927
-msgid "DPMS Suspend"
-msgstr "DPMS Suspend"
-
-#: ../src/gpm-statistics-core.c:932
-msgid "DPMS Off"
-msgstr "DPMS Off"
 
 #: ../src/gpm-srv-screensaver.c:111
 msgid "Display DPMS activated"
