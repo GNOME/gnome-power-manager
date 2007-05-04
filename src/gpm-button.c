@@ -51,7 +51,7 @@ struct GpmButtonPrivate
 	GHashTable		*hash_to_hal;
 	gboolean		 lid_is_closed;
 	HalGManager		*hal_manager; /* remove when input events is in the kernel */
-	HalGDevicestore	*hal_devicestore;
+	HalGDevicestore		*hal_devicestore;
 };
 
 enum {
@@ -416,6 +416,66 @@ watch_add_button (GpmButton *button,
 }
 
 /**
+ * coldplug_buttons:
+ **/
+static void
+coldplug_buttons (GpmButton *button)
+{
+	int i;
+	char **device_names = NULL;
+	gboolean ret;
+	GError *error;
+
+	/* devices of type button */
+	error = NULL;
+	ret = hal_gmanager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
+	if (ret == FALSE) {
+		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
+		g_error_free (error);
+		return;
+	}
+	if (device_names[0] != NULL) {
+		/* we have found buttons */
+		for (i = 0; device_names[i]; i++) {
+			watch_add_button (button, device_names[i]);
+			gpm_debug ("Watching %s", device_names[i]);
+		}
+	} else {
+		gpm_debug ("Couldn't obtain list of buttons");
+	}
+
+	hal_gmanager_free_capability (device_names);
+}
+
+/**
+ * hal_daemon_start_cb:
+ **/
+static void
+hal_daemon_start_cb (HalGManager *hal_manager,
+		     GpmButton   *button)
+{
+	/* get new devices, hal has come back up */
+	if (button->priv->hal_devicestore == NULL) {
+		button->priv->hal_devicestore = hal_gdevicestore_new ();
+		coldplug_buttons (button);
+	}
+}
+
+/**
+ * hal_daemon_stop_cb:
+ **/
+static void
+hal_daemon_stop_cb (HalGManager *hal_manager,
+		    GpmButton   *button)
+{
+	/* clear devices, HAL is going down */
+	if (button->priv->hal_devicestore != NULL) {
+		g_object_unref (button->priv->hal_devicestore);
+		button->priv->hal_devicestore = NULL;
+	}
+}
+
+/**
  * gpm_button_init:
  * @button: This class instance
  **/
@@ -423,10 +483,6 @@ static void
 gpm_button_init (GpmButton *button)
 {
 	gboolean have_xevents = FALSE;
-	int    i;
-	char **device_names = NULL;
-	gboolean ret;
-	GError *error;
 
 	button->priv = GPM_BUTTON_GET_PRIVATE (button);
 
@@ -463,26 +519,14 @@ gpm_button_init (GpmButton *button)
 
 	/* remove when button support is out of HAL */
 	button->priv->hal_manager = hal_gmanager_new ();
+	g_signal_connect (button->priv->hal_manager, "daemon-start",
+			  G_CALLBACK (hal_daemon_start_cb), button);
+	g_signal_connect (button->priv->hal_manager, "daemon-stop",
+			  G_CALLBACK (hal_daemon_stop_cb), button);
+
 	button->priv->hal_devicestore = hal_gdevicestore_new ();
 
-	/* devices of type button */
-	error = NULL;
-	ret = hal_gmanager_find_capability (button->priv->hal_manager, "button", &device_names, &error);
-	if (ret == FALSE) {
-		gpm_warning ("Couldn't obtain list of buttons: %s", error->message);
-		g_error_free (error);
-		return;
-	}
-	if (device_names[0] != NULL) {
-		/* we have found buttons */
-		for (i = 0; device_names[i]; i++) {
-			watch_add_button (button, device_names[i]);
-		}
-	} else {
-		gpm_debug ("Couldn't obtain list of buttons");
-	}
-
-	hal_gmanager_free_capability (device_names);
+	coldplug_buttons (button);
 }
 
 /**

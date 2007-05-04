@@ -1,5 +1,11 @@
 2007-05-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (coldplug_buttons), (hal_daemon_start_cb),
+	(hal_daemon_stop_cb), (gpm_button_init):
+	Reconnect the buttons after HAL has been restarted.
+
+2007-05-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_info_event_log), (gpm_info_log_do_poll),
 	(gpm_info_init), (gpm_info_finalize):
 	Don't use gettimeofday-type functions, instead use GTimer as it now has
