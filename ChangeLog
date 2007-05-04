@@ -1,3 +1,12 @@
+2007-05-04  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: (gpm_info_event_log), (gpm_info_log_do_poll),
+	(gpm_info_init), (gpm_info_finalize):
+	Don't use gettimeofday-type functions, instead use GTimer as it now has
+	monotonic clock support. Thanks to Jon McCann for the pointer.
+	This should fix #419403 where ntp clock adjustment made the graphs
+	go screwy.
+
 2007-05-03  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:

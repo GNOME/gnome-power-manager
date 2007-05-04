@@ -26,7 +26,6 @@
 #include <glib/gprintf.h>
 
 #include <string.h>
-#include <time.h>
 #include <dbus/dbus-gtype-specialized.h>
 
 #include <libhal-gmanager.h>
@@ -79,7 +78,7 @@ struct GpmInfoPrivate
 	GpmArray		*percentage_data;
 	GpmArray		*voltage_data;
 
-	time_t			 start_time;
+	GTimer			*timer;
 	gboolean		 is_laptop;
 };
 
@@ -580,8 +579,7 @@ gpm_info_event_log (GpmInfo	       *info,
 	gpm_debug ("Adding %i to the event log", event);
 
 	gpm_array_append (info->priv->events,
-			  time (NULL) - info->priv->start_time,
-			  event, 0);
+			  g_timer_elapsed (info->priv->timer, NULL), event, 0);
 }
 
 /**
@@ -621,7 +619,7 @@ gpm_info_log_do_poll (gpointer data)
 
 	if (info->priv->is_laptop == TRUE) {
 		/* work out seconds elapsed */
-		value_x = time (NULL) - (info->priv->start_time + GPM_INFO_DATA_POLL);
+		value_x = g_timer_elapsed (info->priv->timer, NULL) - GPM_INFO_DATA_POLL;
 
 		/* set the correct colours */
 		if (unit->is_discharging) {
@@ -805,7 +803,7 @@ gpm_info_init (GpmInfo *info)
 	info->priv = GPM_INFO_GET_PRIVATE (info);
 
 	/* record our start time */
-	info->priv->start_time = time (NULL);
+	info->priv->timer = g_timer_new ();
 
 	info->priv->control = gpm_control_new ();
 	g_signal_connect (info->priv->control, "resume",
@@ -910,6 +908,8 @@ gpm_info_finalize (GObject *object)
 	g_object_unref (info->priv->idle);
 	g_object_unref (info->priv->events);
 	g_object_unref (info->priv->profile);
+
+	g_timer_destroy (info->priv->timer);
 
 	G_OBJECT_CLASS (gpm_info_parent_class)->finalize (object);
 }
