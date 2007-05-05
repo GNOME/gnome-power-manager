@@ -1,3 +1,10 @@
+2007-05-05  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_line):
+	* src/gpm-statistics-core.c: (gpm_statistics_graph_refresh):
+	Fix a crasher where g-p-s would crash when g-p-m wasn't running.
+	Should fix #434323 and quite a few duplicates.
+
 2007-04-10  Wouter Bolsterlee  <wbolster@svn.gnome.org>
 
 	reviewed by: Richard Hughes

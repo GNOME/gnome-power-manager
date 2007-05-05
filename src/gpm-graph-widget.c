@@ -991,6 +991,9 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 	for (i=0; i<graph->priv->data_list->len; i++) {
 		gpm_debug ("drawing line %i", i);
 		l = (GList *) g_ptr_array_index (graph->priv->data_list, i);
+		if (l == NULL) {
+			return;
+		}
 		new = (GpmInfoDataPoint *) l->data;
 		oldx = 0;
 		oldy = 0;

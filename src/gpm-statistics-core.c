@@ -658,6 +658,12 @@ static gboolean
 gpm_statistics_graph_refresh (gpointer data)
 {
 	GpmStatistics *statistics = GPM_STATISTICS (data);
+
+	if (gpm_proxy_is_connected (statistics->priv->gproxy) == FALSE) {
+		gpm_warning ("not connected!");
+		return FALSE;
+	}
+
 	gpm_debug ("refreshing graph type '%s'", statistics->priv->graph_type);
 	gpm_statistics_refresh_data (statistics);
 	gpm_statistics_refresh_events (statistics);
