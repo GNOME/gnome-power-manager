@@ -1,5 +1,13 @@
 2007-05-07  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-graph.glade:
+	* data/gpm-inhibit-test.glade:
+	* data/gpm-prefs.glade:
+	Hide the dialogs by default, to work around a bug in sawfish, and for a
+	small efficiency saving. Fixes #436004.
+
+2007-05-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw):
 	Initialise the brightness to zero when get brightness fails, to fix an
 	infinite loop on startup on PPC. Fixes #436570.
