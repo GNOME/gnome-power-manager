@@ -1,5 +1,11 @@
 2007-05-07  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/brightness-applet.c: (update_level):
+	Don't chicken out when brightness access fails in the addon.
+	Continue to try to connect, hopefully trying to fix #436704.
+
+2007-05-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-dpms.c: (x11_sync_server_dpms_settings), (x11_get_mode),
 	(x11_set_mode), (sync_settings), (gpm_dpms_init):
 	DPMSCapable() can never change for a given display, so cache the

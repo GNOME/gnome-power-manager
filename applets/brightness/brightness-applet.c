@@ -228,8 +228,8 @@ static void
 update_tooltip (GpmBrightnessApplet *applet)
 {
 	static gchar buf[101];
-	if (!applet->popped) {
-		if (applet->enabled) {
+	if (applet->popped == FALSE) {
+		if (applet->enabled == TRUE) {
 			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
 		} else {
 			snprintf (buf, 100, _("Cannot get laptop panel brightness"));
@@ -255,10 +255,10 @@ update_tooltip (GpmBrightnessApplet *applet)
 static void
 update_level (GpmBrightnessApplet *applet, gboolean get_hw, gboolean set_hw)
 {
-	if (applet->enabled && set_hw) {
+	if (set_hw == TRUE) {
 		applet->enabled = gpm_powermanager_set_brightness_lcd (applet->powermanager, applet->level);
 	}
-	if (get_hw) {
+	if (get_hw == TRUE) {
 		applet->enabled = gpm_powermanager_get_brightness_lcd (applet->powermanager, &applet->level);
 	}
 	if (applet->popup != NULL) {
@@ -499,7 +499,7 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 	update_level (applet, TRUE, FALSE);
 
 	/* if disabled, don't pop */
-	if (!applet->enabled) {
+	if (applet->enabled == FALSE) {
 		return TRUE;
 	}
 
