@@ -56,6 +56,7 @@ struct GpmDpmsPrivate
 {
 	gboolean		 enabled;
 	gboolean		 active;
+	gboolean		 dpms_capable;
 
 	guint			 standby_timeout;
 	guint			 suspend_timeout;
@@ -116,36 +117,14 @@ x11_sync_server_dpms_settings (Display *dpy,
 			       GError **error)
 {
 #ifdef HAVE_DPMS_EXTENSION
-
-	int	 event = 0;
-	int      err = 0;
-	BOOL	 o_enabled = FALSE;
-	CARD16	 o_power = 0;
-	CARD16	 o_standby = 0;
-	CARD16   o_suspend = 0;
-	CARD16   o_off = 0;
+	BOOL o_enabled = FALSE;
+	CARD16 o_power = 0;
+	CARD16 o_standby = 0;
+	CARD16 o_suspend = 0;
+	CARD16 o_off = 0;
 
 	gpm_debug ("Syncing DPMS settings enabled=%d timeouts=%d %d %d",
 		   enabled, standby_secs, suspend_secs, off_secs);
-
-	if (! DPMSQueryExtension (dpy, &event, &err)) {
-		gpm_debug ("XDPMS extension not supported");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "DPMS extension not supported");
-		return FALSE;
-	}
-
-	if (! DPMSCapable (dpy)) {
-		gpm_debug ("Display is not DPMS capable");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "Display is not DPMS capable");
-
-		return FALSE;
-	}
 
 	if (! DPMSInfo (dpy, &o_power, &o_enabled)) {
 		gpm_debug ("unable to get DPMS state.");
@@ -222,19 +201,12 @@ x11_get_mode (GpmDpms     *dpms,
 	      GError     **error)
 {
 	GpmDpmsMode result;
-	int	    event_number;
-	int	    error_number;
-	BOOL	    enabled = FALSE;
-	CARD16	    state;
+	BOOL enabled = FALSE;
+	CARD16 state;
 
-	if (! DPMSQueryExtension (GDK_DISPLAY (), &event_number, &error_number)) {
-		/* Server doesn't know -- assume the monitor is on. */
+	if (dpms->priv->dpms_capable == FALSE) {
+		/* Server or monitor can't DPMS -- assume the monitor is on. */
 		result = GPM_DPMS_MODE_ON;
-
-	} else if (! DPMSCapable (GDK_DISPLAY ())) {
-		/* Server says the monitor doesn't do power management -- so it's on. */
-		result = GPM_DPMS_MODE_ON;
-
 	} else {
 		DPMSInfo (GDK_DISPLAY (), &state, &enabled);
 		if (! enabled) {
@@ -274,22 +246,11 @@ x11_set_mode (GpmDpms	 *dpms,
 	      GError    **error)
 {
 	GpmDpmsMode current_mode;
-	CARD16	    state;
-	CARD16	    current_state;
-	BOOL	    current_enabled;
-	int	    event_number;
-	int	    error_number;
+	CARD16 state;
+	CARD16 current_state;
+	BOOL current_enabled;
 
-	if (! DPMSQueryExtension (GDK_DISPLAY (), &event_number, &error_number)) {
-		gpm_debug ("unable to query DPMS extention");
-		g_set_error (error,
-			     GPM_DPMS_ERROR,
-			     GPM_DPMS_ERROR_GENERAL,
-			     "DPMS extension not supported");
-		return FALSE;
-	}
-
-	if (! DPMSCapable (GDK_DISPLAY ())) {
+	if (dpms->priv->dpms_capable == FALSE) {
 		gpm_debug ("not DPMS capable");
 		g_set_error (error,
 			     GPM_DPMS_ERROR,
@@ -391,6 +352,16 @@ sync_settings (GpmDpms *dpms,
 		standby = 0;
 		suspend = 0;
 		off     = 0;
+	}
+
+	if (dpms->priv->dpms_capable == FALSE) {
+		gpm_debug ("Display is not DPMS capable");
+		g_set_error (error,
+			     GPM_DPMS_ERROR,
+			     GPM_DPMS_ERROR_GENERAL,
+			     "Display is not DPMS capable");
+
+		return FALSE;
 	}
 
 	/* We always try to keep the DPMS enabled so that
@@ -811,6 +782,9 @@ static void
 gpm_dpms_init (GpmDpms *dpms)
 {
 	dpms->priv = GPM_DPMS_GET_PRIVATE (dpms);
+
+	/* DPMSCapable() can never change for a given display */
+	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
 
 	add_poll_timer (dpms, 500);
 }

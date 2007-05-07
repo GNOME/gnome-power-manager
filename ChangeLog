@@ -1,3 +1,11 @@
+2007-05-07  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dpms.c: (x11_sync_server_dpms_settings), (x11_get_mode),
+	(x11_set_mode), (sync_settings), (gpm_dpms_init):
+	DPMSCapable() can never change for a given display, so cache the
+	result and cut our wakeups in half. Change modified from a similar patch
+	by Adam Jackson <ajax@redhat.com>, many thanks.
+
 2007-05-04  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-button.c: (coldplug_buttons), (hal_daemon_start_cb),
