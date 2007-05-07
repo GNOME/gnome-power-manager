@@ -86,7 +86,7 @@ gpm_brightness_lcd_get_hw (GpmBrightnessLcd *brightness,
 	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
-	int level;
+	int level = 0;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);

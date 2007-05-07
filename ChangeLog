@@ -1,5 +1,11 @@
 2007-05-07  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_get_hw):
+	Initialise the brightness to zero when get brightness fails, to fix an
+	infinite loop on startup on PPC. Fixes #436570.
+
+2007-05-07  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-dpms.c: (x11_sync_server_dpms_settings), (x11_get_mode),
 	(x11_set_mode), (sync_settings), (gpm_dpms_init):
 	DPMSCapable() can never change for a given display, so cache the
