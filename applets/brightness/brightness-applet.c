@@ -254,10 +254,10 @@ update_tooltip (GpmBrightnessApplet *applet)
 static void
 update_level (GpmBrightnessApplet *applet, gboolean get_hw, gboolean set_hw)
 {
-	if (applet->enabled && set_hw) {
+	if (set_hw == TRUE) {
 		applet->enabled = gpm_powermanager_set_brightness_lcd (applet->powermanager, applet->level);
 	}
-	if (get_hw) {
+	if (get_hw == TRUE) {
 		applet->enabled = gpm_powermanager_get_brightness_lcd (applet->powermanager, &applet->level);
 	}
 	if (applet->popup != NULL) {

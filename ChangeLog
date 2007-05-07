@@ -1,5 +1,11 @@
 2007-05-07  Richard Hughes  <richard@hughsie.com>
 
+	* applets/brightness/brightness-applet.c: (update_level):
+	Don't chicken out when brightness access fails in the addon.
+	Continue to try to connect, hopefully trying to fix #436704.
+
+2007-05-07  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-graph.glade:
 	* data/gpm-inhibit-test.glade:
 	* data/gpm-prefs.glade:
