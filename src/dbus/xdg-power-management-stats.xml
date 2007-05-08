@@ -16,10 +16,11 @@
     </method>
     <method name="GetData">
       <arg type="s" name="type" direction="in"/>
-      <arg type="a(iii)" name="data" direction="out"/>
+      <arg type="a(iii)" name="data" direction="out"/><!-- x, y, colour -->
     </method>
     <method name="GetEventLog">
-      <arg type="a(ii)" name="data" direction="out"/>
+<!--      <arg type="s" name="type" direction="in"/>-->
+      <arg type="a(ii)" name="data" direction="out"/><!-- x, id -->
     </method>
   </interface>
 </node>

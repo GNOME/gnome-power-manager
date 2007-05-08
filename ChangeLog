@@ -1,3 +1,11 @@
+2007-05-08  Richard Hughes  <richard@hughsie.com>
+
+	* src/dbus/xdg-power-management-stats.xml:
+	Add a comment about adding a type field.
+
+	* src/gpm-graph-widget.c: (gpm_graph_widget_draw_event_dots):
+	Fix a potential crasher where the wrong event data was being processed.
+
 2007-05-07  Richard Hughes  <richard@hughsie.com>
 
 	* applets/brightness/brightness-applet.c: (update_level):

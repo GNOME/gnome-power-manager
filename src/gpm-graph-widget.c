@@ -992,7 +992,11 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 		/* only do the event dot, if it's going to be valid on the graph */
 		if (point->x > graph->priv->start_x && newy > graph->priv->box_y) {
 			keyitem = gpm_graph_widget_key_find_id (graph, point->y);
-			gpm_graph_widget_draw_dot (cr, newx, newy, keyitem->colour, keyitem->shape);
+			if (keyitem == NULL) {
+				gpm_warning ("did not find id %i", point->y);
+			} else {
+				gpm_graph_widget_draw_dot (cr, newx, newy, keyitem->colour, keyitem->shape);
+			}
 		}
 		prevpos = newx;
 	}
