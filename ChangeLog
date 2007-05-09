@@ -1,5 +1,12 @@
 2007-05-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_dim_hw_step):
+	If we failed the last brightness set command, don't keep trying;
+	This fixes a long "hang" when we resume from suspend when on PPC,
+	although the real problem is the HAL method dying for some reason.
+
+2007-05-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_init):
 	Comment out pango_context_set_base_gravity as this requires pango 1.16
 	when FC6 only supports version 1.14
