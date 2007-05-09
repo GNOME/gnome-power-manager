@@ -1,3 +1,10 @@
+2007-05-09  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-engine.c: (gpm_engine_icon_clear_delay),
+	(gpm_engine_recalculate_state_icon):
+	Don't send the action for the icon to clear for a few seconds so that
+	any notification can be shown pointing to the icon. Fixes #437042
+
 2007-05-08  Richard Hughes  <richard@hughsie.com>
 
 	* src/dbus/xdg-power-management-stats.xml:

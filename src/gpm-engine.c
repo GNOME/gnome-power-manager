@@ -475,6 +475,21 @@ gpm_cell_array_low_capacity_cb (GpmCellArray *cell_array, guint capacity, GpmEng
 }
 
 /**
+ * gpm_engine_icon_clear_delay:
+ *
+ * We don't send the action for the icon to clear for a few seconds so that
+ * any notification can be shown pointing to the icon.
+ *
+ * Return value: FALSE, as we don't want to repeat this action.
+ **/
+static gboolean
+gpm_engine_icon_clear_delay (GpmEngine *engine)
+{
+	g_signal_emit (engine, signals [ICON_CHANGED], 0, NULL);
+	return FALSE;
+}
+
+/**
  * gpm_engine_recalculate_state_icon:
  */
 static gboolean
@@ -501,7 +516,10 @@ gpm_engine_recalculate_state_icon (GpmEngine *engine)
 		}
 		/* icon before, now none */
 		gpm_debug ("** EMIT: icon-changed: %s", icon);
-		g_signal_emit (engine, signals [ICON_CHANGED], 0, icon);
+
+		/* we let the icon stick around for a couple of seconds */
+		g_timeout_add (1000*2, (GSourceFunc) gpm_engine_icon_clear_delay, engine);
+
 		g_free (engine->priv->previous_icon);
 		engine->priv->previous_icon = NULL;
 		return TRUE;
