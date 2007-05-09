@@ -65,3 +65,10 @@ print_hal_capability "cpufreq_control"
 
 echo "Battery Information:"
 lshal | grep "battery\."
+
+echo "GNOME Power Manager Process Information:"
+ps aux --forest | grep gnome-power | grep -v grep
+
+echo "HAL Process Information:"
+ps aux --forest | grep hald | grep -v grep
+
