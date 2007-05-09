@@ -191,6 +191,7 @@ gpm_brightness_lcd_dim_hw_step (GpmBrightnessLcd *brightness,
 {
 	guint current_hw;
 	gint a;
+	gboolean ret;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
@@ -206,13 +207,21 @@ gpm_brightness_lcd_dim_hw_step (GpmBrightnessLcd *brightness,
 	if (new_level_hw > current_hw) {
 		/* going up */
 		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
-			gpm_brightness_lcd_set_hw (brightness, a);
+			ret = gpm_brightness_lcd_set_hw (brightness, a);
+			/* we failed the last brightness set command, don't keep trying */
+			if (ret == FALSE) {
+				break;
+			}
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	} else {
 		/* going down */
 		for (a=current_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
-			gpm_brightness_lcd_set_hw (brightness, a);
+			ret = gpm_brightness_lcd_set_hw (brightness, a);
+			/* we failed the last brightness set command, don't keep trying */
+			if (ret == FALSE) {
+				break;
+			}
 			g_usleep (1000 * DIM_INTERVAL);
 		}
 	}
