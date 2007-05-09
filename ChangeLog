@@ -1,5 +1,16 @@
 2007-05-09  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c: (gpm_graph_widget_init):
+	Comment out pango_context_set_base_gravity as this requires pango 1.16
+	when FC6 only supports version 1.14
+
+2007-05-09  Richard Hughes  <richard@hughsie.com>
+
+	* tools/gnome-power-bugreport.sh:
+	Add process information for HAL and g-p-m so I can see what is running.
+
+2007-05-09  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-engine.c: (gpm_engine_icon_clear_delay),
 	(gpm_engine_recalculate_state_icon):
 	Don't send the action for the icon to clear for a few seconds so that
