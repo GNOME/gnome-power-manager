@@ -1,3 +1,11 @@
+2007-05-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-load.c: (gpm_load_get_current), (gpm_load_init):
+	Fix a build failure with -Werror, where we were ignoring the return
+	value of gpm_load_get_cpu_values, possibly leading to uninitialised
+	values of the counters.
+	Thanks to Ed Catmur <ed@catmur.co.uk> for the patch. Fixes #437920.
+
 2007-05-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_dim_hw_step):

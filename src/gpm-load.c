@@ -122,9 +122,14 @@ gpm_load_get_current (GpmLoad *load)
 	long unsigned cpu_total;
 	long unsigned diff_idle;
 	long unsigned diff_total;
+	gboolean ret;
 
 	/* work out the differences */
-	gpm_load_get_cpu_values (&cpu_idle, &cpu_total);
+	ret = gpm_load_get_cpu_values (&cpu_idle, &cpu_total);
+	if (ret == FALSE) {
+		return 0.0;
+	}
+
 	diff_idle = cpu_idle - load->priv->old_idle;
 	diff_total = cpu_total - load->priv->old_total;
 
@@ -148,6 +153,9 @@ static void
 gpm_load_init (GpmLoad *load)
 {
 	load->priv = GPM_LOAD_GET_PRIVATE (load);
+
+	load->priv->old_idle = 0;
+	load->priv->old_total = 0;
 
 	/* we have to populate the values at startup */
 	gpm_load_get_cpu_values (&load->priv->old_idle, &load->priv->old_total);
