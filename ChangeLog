@@ -1,3 +1,9 @@
+2007-05-13  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-dpms.c: (gpm_dpms_init):
+	Add a note about the DPMS polling, and default to once every 10 seconds
+	rather than once every 500ms as this wakes up X a lot.
+
 2007-05-09  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_dim_hw_step):

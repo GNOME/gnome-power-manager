@@ -53,6 +53,9 @@ static void     gpm_dpms_finalize   (GObject      *object);
 
 #define GPM_DPMS_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_DPMS, GpmDpmsPrivate))
 
+/* until we get a nice event-emitting DPMS extension, we have to poll... */
+#define GPM_DPMS_POLL_TIME	10*1000
+
 struct GpmDpmsPrivate
 {
 	gboolean		 enabled;
@@ -787,7 +790,7 @@ gpm_dpms_init (GpmDpms *dpms)
 	/* DPMSCapable() can never change for a given display */
 	dpms->priv->dpms_capable = DPMSCapable (GDK_DISPLAY ());
 
-	add_poll_timer (dpms, 500);
+	add_poll_timer (dpms, GPM_DPMS_POLL_TIME);
 }
 
 static void
