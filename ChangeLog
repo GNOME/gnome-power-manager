@@ -1,5 +1,10 @@
 2007-05-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c: (gpm_array_check_max_and_size), (gpm_array_add):
+	Abstract out a method, should be no logic changes.
+
+2007-05-13  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-load.c: (gpm_load_get_current), (gpm_load_init):
 	Fix a build failure with -Werror, where we were ignoring the return
 	value of gpm_load_get_cpu_values, possibly leading to uninitialised

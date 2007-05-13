@@ -750,6 +750,46 @@ gpm_array_limit_x_width (GpmArray *array,
 }
 
 /**
+ * gpm_array_check_max_and_size:
+ * @array: This class instance
+ *
+ * Checks the maximum length and size manually.
+ **/
+static gboolean
+gpm_array_check_max_and_size (GpmArray *array)
+{
+	guint length;
+	guint diff_time;
+	GpmArrayPoint *point1;
+	GpmArrayPoint *point2;
+
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	length = gpm_array_get_size (array);
+
+	if (length > array->priv->max_points) {
+		/* We have too much data, simplify */
+		gpm_debug ("Too many points (%i/%i)", length, array->priv->max_points);
+		gpm_array_limit_x_size (array, array->priv->max_points / 2);
+	}
+
+	/* check if we need to truncate */
+	length = gpm_array_get_size (array);
+	if (length > 2) {
+		point1 = gpm_array_get (array, 0);
+		point2 = gpm_array_get (array, length-1);
+		diff_time = point2->x - point1->x;
+		if (diff_time > array->priv->max_width) {
+			gpm_debug ("Too much time (%i/%i)", diff_time, array->priv->max_width);
+			gpm_array_limit_x_width (array, array->priv->max_width / 2);
+		}
+	}
+
+	return TRUE;
+}
+
+/**
  * gpm_array_add:
  * @array: This class instance
  * @x: The X data point
@@ -766,10 +806,9 @@ gpm_array_add (GpmArray *array,
 	       guint	 y,
 	       guint	 data)
 {
+	guint length;
 	GpmArrayPoint *point1;
 	GpmArrayPoint *point2;
-	guint length;
-	guint diff_time;
 
 	g_return_val_if_fail (array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
@@ -812,23 +851,9 @@ gpm_array_add (GpmArray *array,
 		/* a list of less than 3 points always requires a data point */
 		gpm_array_append (array, x, y, data);
 	}
-	if (length > array->priv->max_points) {
-		/* We have too much data, simplify */
-		gpm_debug ("Too many points (%i/%i)", length, array->priv->max_points);
-		gpm_array_limit_x_size (array, array->priv->max_points / 2);
-	}
 
-	/* check if we need to truncate */
-	length = gpm_array_get_size (array);
-	if (length > 2) {
-		point1 = gpm_array_get (array, 0);
-		point2 = gpm_array_get (array, length-1);
-		diff_time = point2->x - point1->x;
-		if (diff_time > array->priv->max_width) {
-			gpm_debug ("Too much time (%i/%i)", diff_time, array->priv->max_width);
-			gpm_array_limit_x_width (array, array->priv->max_width / 2);
-		}
-	}
+	gpm_array_check_max_and_size (array);
+
 	return TRUE;
 }
 
