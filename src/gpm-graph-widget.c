@@ -992,7 +992,8 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		gpm_debug ("drawing line %i", i);
 		l = (GList *) g_ptr_array_index (graph->priv->data_list, i);
 		if (l == NULL) {
-			return;
+			gpm_warning ("list item NULL!");
+			break;
 		}
 		new = (GpmInfoDataPoint *) l->data;
 		oldx = 0;
@@ -1000,6 +1001,10 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 		gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &oldx, &oldy);
 		for (l=l->next; l != NULL; l=l->next) {
 			new = (GpmInfoDataPoint *) l->data;
+			if (new == NULL) {
+				gpm_warning ("new item NULL!");
+				break;
+			}
 			/* do line */
 			gpm_graph_widget_get_pos_on_graph (graph, new->time, new->value, &newx, &newy);
 			cairo_move_to (cr, oldx, oldy);
@@ -1031,6 +1036,10 @@ gpm_graph_widget_draw_line (GpmGraphWidget *graph, cairo_t *cr)
 			gint pos;
 
 			eventdata = (GpmInfoDataPoint *) l->data;
+			if (eventdata == NULL) {
+				gpm_warning ("eventdata NULL!");
+				break;
+			}
 			/* If we have valid list data, go through the list data
 			   until we get a data point time value greater than the
 			   event we have. */
