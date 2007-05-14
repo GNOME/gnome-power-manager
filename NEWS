@@ -1,4 +1,20 @@
 ==============
+Version 2.19.2
+==============
+- Fixed #418605, Change power statistics label rendering to use pangocairo (Richard Hughes)
+- Fixed #419403, Invalid statistics when computer clock changed. (Richard Hughes)
+- Fixed #437042, Tip 'battery full charged' shows on the bottom right of screen (Richard Hughes)
+- Fixed #437920, Build failure (-Werror): gpm-load.c:122: warning: ‘cpu_total’ may be used uninitialized in this function (Richard Hughes)
+- Change suspend when lid close and off AC behaviour to be true.
+- Reduce our DPMS querying to slow X wakeups. We are still waiting for a DPMS protocol bump...
+- Improve the gnome-power-statistics UI, and make more HIG compliant.
+
+Translations:
+- Updated nb: Kjartan Maraas
+- Updated es: Jorge Gonzalez
+- Added id: Mohammad DAMT
+
+==============
 Version 2.19.1
 ==============
 
