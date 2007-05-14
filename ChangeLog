@@ -1,3 +1,13 @@
+2007-05-14  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	Change the /apps/gnome-power-manager/battery/event_when_closed
+	key to default to true. This means that if you shut the lid and then
+	remove the AC power then the system will by default suspend.
+	This may make systems that have dodgey lid reporting to immediatly
+	suspend when removed from AC, but we can blacklist (or fix) them as
+	they are reported. Fixes fedora:214404
+
 2007-05-13  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-dpms.c: (gpm_dpms_init):
