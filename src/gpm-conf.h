@@ -102,6 +102,11 @@ G_BEGIN_DECLS
 #define GPM_CONF_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
 #define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/ui/enable_sound"
 
+#define GPM_CONF_AMBIENT_POLL		GPM_CONF_DIR "/ambient/poll_timeout"
+#define GPM_CONF_AMBIENT_FACTOR		GPM_CONF_DIR "/ambient/correction_factor"
+#define GPM_CONF_AMBIENT_V4L_DEVICE	GPM_CONF_DIR "/ambient/v4l_device"
+#define GPM_CONF_AMBIENT_DIM_POLICY	GPM_CONF_DIR "/ambient/dim_policy"
+
 #define GPM_CONF_USE_NICE		GPM_CONF_DIR "/cpufreq_consider_nice"
 #define GPM_CONF_DISPLAY_STATE_CHANGE	GPM_CONF_DIR "/display_state_change"
 #define GPM_CONF_CAN_SUSPEND		GPM_CONF_DIR "/can_suspend"

@@ -40,20 +40,20 @@
 
 #include <libhal-gdevice.h>
 #include <libhal-gmanager.h>
+#include <libdbus-proxy.h>
 
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-light-sensor.h"
-#include <libdbus-proxy.h>
+#include "gpm-conf.h"
 #include "gpm-marshal.h"
 #include "gpm-webcam.h"
-
-#define POLL_INTERVAL		10000 /* ms */
 
 #define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
 struct GpmLightSensorPrivate
 {
+	GpmConf			*conf;
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
 	gchar			*udi;
@@ -248,6 +248,19 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 }
 
 /**
+ * conf_key_changed_cb:
+ *
+ * We might have to do things when the gconf keys change; do them here.
+ **/
+static void
+conf_key_changed_cb (GpmConf     *conf,
+		     const gchar *key,
+		     GpmLightSensor *brightness)
+{
+	//
+}
+
+/**
  * gpm_light_sensor_init:
  * @brightness: This brightness class instance
  *
@@ -261,8 +274,13 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 	gchar **names;
 	HalGManager *manager;
 	HalGDevice *device;
+	guint timeout;
 
 	brightness->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (brightness);
+
+	brightness->priv->conf = gpm_conf_new ();
+	g_signal_connect (brightness->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), brightness);
 
 	/* get devices of light sensor type */
 	manager = hal_gmanager_new ();
@@ -305,7 +323,9 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 	/* this changes under our feet */
 	gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
 
-	g_timeout_add (2000, gpm_light_sensor_poll_cb, brightness);
+	/* get poll timeout */
+	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AMBIENT_POLL, &timeout);
+	g_timeout_add (timeout, gpm_light_sensor_poll_cb, brightness);
 }
 
 /**
