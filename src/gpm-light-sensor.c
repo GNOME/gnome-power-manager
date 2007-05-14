@@ -46,6 +46,7 @@
 #include "gpm-light-sensor.h"
 #include <libdbus-proxy.h>
 #include "gpm-marshal.h"
+#include "gpm-webcam.h"
 
 #define POLL_INTERVAL		10000 /* ms */
 
@@ -273,6 +274,15 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 		return;
 	}
 
+#if 0
+	GpmWebcam *webcam;
+	webcam = gpm_webcam_new ();
+	gfloat bright;
+	gboolean ret;
+	ret = gpm_webcam_get_brightness (webcam, &bright);
+	gpm_error ("brightness = %lf", bright);
+#endif
+
 	/* We only want first light_sensor object (should only be one) */
 	brightness->priv->udi = g_strdup (names[0]);
 	hal_gmanager_free_capability (names);
@@ -307,9 +317,11 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 static gboolean
 gpm_light_sensor_has_hw (void)
 {
+	GpmWebcam *webcam;
 	HalGManager *manager;
 	gchar **names;
 	gboolean ret = TRUE;
+	gboolean has_webcam;
 
 	/* okay, as singleton - so we don't allocate more memory */
 	manager = hal_gmanager_new ();
@@ -320,8 +332,17 @@ gpm_light_sensor_has_hw (void)
 	if (names == NULL || names[0] == NULL) {
 		ret = FALSE;
 	}
-
 	hal_gmanager_free_capability (names);
+
+	/* look for v4l integrated webcam */
+	webcam = gpm_webcam_new ();
+	gfloat bright;
+	has_webcam = gpm_webcam_get_brightness (webcam, &bright);
+	if (has_webcam == TRUE) {
+		gpm_error ("Using v4l backup device");
+		ret = TRUE;
+	}
+
 	return ret;
 }
 

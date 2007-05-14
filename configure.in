@@ -60,6 +60,7 @@ LIBWNCK_REQUIRED=2.10.0
 CAIRO_REQUIRED=1.0.0
 GTKUNIQUE_REQUIRED=0.9.1
 LIBPANEL_REQUIRED=2.0.0
+GSTREAMER_REQUIRED=0.10
 
 dnl ---------------------------------------------------------------------------
 dnl - Make above strings available for packaging files (e.g. rpm spec files)
@@ -76,6 +77,7 @@ AC_SUBST(LIBWNCK_REQUIRED)
 AC_SUBST(CAIRO_REQUIRED)
 AC_SUBST(GTKUNIQUE_REQUIRED)
 AC_SUBST(LIBPANEL_REQUIRED)
+AC_SUBST(GSTREAMER_REQUIRED)
 
 dnl ---------------------------------------------------------------------------
 dnl - Check library dependencies
@@ -87,6 +89,10 @@ AC_SUBST(GLIB_LIBS)
 PKG_CHECK_MODULES(HAL, hal >= $HAL_REQUIRED)
 AC_SUBST(HAL_CFLAGS)
 AC_SUBST(HAL_LIBS)
+
+PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.10 >= $GSTREAMER_REQUIRED)
+AC_SUBST(GSTREAMER_CFLAGS)
+AC_SUBST(GSTREAMER_LIBS)
 
 PKG_CHECK_MODULES(DBUS, \
  dbus-glib-1 >= $DBUS_REQUIRED \

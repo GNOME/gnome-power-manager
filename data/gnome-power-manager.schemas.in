@@ -773,6 +773,54 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/ambient/dim_policy</key>
+      <applyto>/apps/gnome-power-manager/ambient/dim_policy</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>none</default>
+      <locale name="C">
+        <short>Change the brightness automatically using the ambient light sensors</short>
+        <long>If the screen brightness should be changed automatically using the ambient light sensors. Valid is 'none', 'light' and 'dark'</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ambient/v4l_device</key>
+      <applyto>/apps/gnome-power-manager/ambient/v4l_device</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>string</type>
+      <default>default</default>
+      <locale name="C">
+        <short>The device name for the v4l device used as a brightness sensor backup</short>
+        <long>The device name for the v4l device used as a brightness sensor backup. A value of 'default' uses the first discovered sensor, or devices can be specified, e.g. 'video0'</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ambient/poll_timeout</key>
+      <applyto>/apps/gnome-power-manager/ambient/poll_timeout</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>integer</type>
+      <default>60</default>
+      <locale name="C">
+        <short>The interval the ambient light sensors should be polled</short>
+        <long>The interval the ambient light sensors should be polled in seconds.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/ambient/correction_factor</key>
+      <applyto>/apps/gnome-power-manager/ambient/correction_factor</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>float</type>
+      <default>0.5</default>
+      <locale name="C">
+        <short>The amount the light sensors should contribute to the brightness</short>
+        <long>The amount the light sensors should contribute to the brightness.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/display_ambient</key>
       <applyto>/apps/gnome-power-manager/display_ambient</applyto>
       <owner>gnome-power-manager</owner>

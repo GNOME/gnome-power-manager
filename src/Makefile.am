@@ -16,6 +16,7 @@ INCLUDES =						\
 	$(GNOME_CFLAGS)					\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(GTKUNIQUE_CFLAGS)				\
+	$(GSTREAMER_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
 	-DDATADIR=\"$(datadir)\"			\
@@ -122,6 +123,8 @@ gnome_power_preferences_LDADD +=			\
 endif
 
 gnome_power_manager_SOURCES =				\
+	gpm-webcam.h					\
+	gpm-webcam.c					\
 	gpm-dpms.h					\
 	gpm-dpms.c					\
 	gpm-debug.h					\
@@ -203,6 +206,7 @@ gnome_power_manager_SOURCES =				\
 
 gnome_power_manager_LDADD =				\
 	$(GLIB_LIBS)					\
+	$(GSTREAMER_LIBS)				\
 	$(GNOME_LIBS)					\
 	$(HAL_LIBS)					\
 	$(DBUS_LIBS)					\
