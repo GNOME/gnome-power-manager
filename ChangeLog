@@ -1,5 +1,10 @@
 2007-05-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c:
+	Make 400% sure we can't dereference a null pointer.
+
+2007-05-14  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	Change the /apps/gnome-power-manager/battery/event_when_closed
 	key to default to true. This means that if you shut the lid and then

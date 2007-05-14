@@ -976,6 +976,11 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 
 	for (i=0; i < length; i++) {
 		point = gpm_array_get (graph->priv->events, i);
+		if (point == NULL) {
+			/* this shouldn't ever happen */
+			gpm_warning ("point NULL!");
+			break;
+		}
 		/* try to position the point on the line, or at zero if there is no line */
 		if (array == NULL) {
 			dot = 0;
@@ -1060,6 +1065,11 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 	/* add the line colours to the legend */
 	for (a=0; a<g_slist_length (graph->priv->key_data); a++) {
 		keydataitem = (GpmGraphWidgetKeyData *) g_slist_nth_data (graph->priv->key_data, a);
+		if (keydataitem == NULL) {
+			/* this shouldn't ever happen */
+			gpm_warning ("keydataitem NULL!");
+			break;
+		}
 		gpm_graph_widget_draw_legend_line (cr, x + 8, y_count, keydataitem->colour);
 		cairo_move_to (cr, x + 8 + 10, y_count - 6);
 		cairo_set_source_rgb (cr, 0, 0, 0);
@@ -1071,6 +1081,11 @@ gpm_graph_widget_draw_legend (GpmGraphWidget *graph,
 	/* add the events to the legend */
 	for (a=0; a<g_slist_length (graph->priv->key_event); a++) {
 		keyeventitem = (GpmGraphWidgetKeyItem *) g_slist_nth_data (graph->priv->key_event, a);
+		if (keyeventitem == NULL) {
+			/* this shouldn't ever happen */
+			gpm_warning ("keyeventitem NULL!");
+			break;
+		}
 		gpm_graph_widget_draw_dot (cr, x + 8, y_count,
 					   keyeventitem->colour, keyeventitem->shape);
 		cairo_move_to (cr, x + 8 + 10, y_count - 6);
