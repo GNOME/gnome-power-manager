@@ -34,6 +34,7 @@ void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);
 
 void gpm_st_common (GpmSelfTest *test);
 void gpm_st_profile (GpmSelfTest *test);
+void gpm_st_webcam (GpmSelfTest *test);
 void gpm_st_array (GpmSelfTest *test);
 void gpm_st_array_float (GpmSelfTest *test);
 void gpm_st_cell (GpmSelfTest *test);

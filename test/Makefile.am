@@ -5,6 +5,7 @@ INCLUDES =						\
 	$(HAL_CFLAGS)					\
 	$(DBUS_CFLAGS)					\
 	$(GNOME_CFLAGS)					\
+	$(GSTREAMER_CFLAGS)				\
 	$(GTKUNIQUE_CFLAGS)				\
 	-DBINDIR=\"$(bindir)\"			 	\
 	-DGNOMELOCALEDIR=\""$(datadir)/locale"\"	\
@@ -53,6 +54,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-cell-unit.c				\
 	gpm-st-cell-array.c				\
 	gpm-st-cell.c					\
+	gpm-st-webcam.c					\
 	gpm-st-proxy.c					\
 	gpm-st-inhibit.c				\
 	gpm-st-profile.c				\
@@ -64,6 +66,8 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-marshal.c				\
 	../src/gpm-profile.h				\
 	../src/gpm-profile.c				\
+	../src/gpm-webcam.h				\
+	../src/gpm-webcam.c				\
 	../src/gpm-load.h				\
 	../src/gpm-load.c				\
 	../src/gpm-dpms.h				\
@@ -93,6 +97,7 @@ gnome_power_self_test_SOURCES =				\
 gnome_power_self_test_LDADD =				\
 	$(GLIB_LIBS)					\
 	$(GNOME_LIBS)					\
+	$(GSTREAMER_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(LOCAL_LIBGPM_LIBS)				\

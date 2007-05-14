@@ -37,7 +37,7 @@ typedef struct GpmWebcamPrivate GpmWebcamPrivate;
 
 typedef struct
 {
-	GObject		      parent;
+	GObject		  parent;
 	GpmWebcamPrivate *priv;
 } GpmWebcam;
 
@@ -51,7 +51,6 @@ GpmWebcam	*gpm_webcam_new			(void);
 
 gboolean	 gpm_webcam_get_brightness	(GpmWebcam	*webcam,
 						 gfloat		*brightness);
-gboolean	 gpm_webcam_has_hardware	(void);
 
 G_END_DECLS
 

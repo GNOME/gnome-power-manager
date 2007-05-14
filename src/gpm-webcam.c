@@ -50,7 +50,8 @@
 
 struct GpmWebcamPrivate
 {
-	gboolean		 enable_beeping;
+	gchar		 	*device;
+	gchar		 	*filename;
 	GpmConf			*conf;
 };
 
@@ -68,7 +69,7 @@ static gpointer gpm_webcam_object = NULL;
  *
  **/
 static gboolean
-gpm_webcam_get_image (GpmWebcam *webcam, const gchar *filename)
+gpm_webcam_get_image (GpmWebcam *webcam)
 {
 	gboolean ret;
 	gboolean did_we_get_an_image = TRUE;
@@ -79,6 +80,11 @@ gpm_webcam_get_image (GpmWebcam *webcam, const gchar *filename)
 	GstElement *sink;
 	GstStateChangeReturn retval;
 
+	g_return_val_if_fail (webcam != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_WEBCAM (webcam), FALSE);
+	g_return_val_if_fail (webcam->priv->filename != NULL, FALSE);
+	g_return_val_if_fail (webcam->priv->device != NULL, FALSE);
+
 	/* initialize GStreamer */
 //	gst_init (&argc, &argv);
 	gst_init (NULL, NULL);
@@ -86,16 +92,17 @@ gpm_webcam_get_image (GpmWebcam *webcam, const gchar *filename)
 	/* create elements */
 	pipeline = gst_pipeline_new ("webcam");
 
-	gpm_debug ("Creating source");
+	gpm_debug ("Creating source %s", webcam->priv->device);
 	source = gst_element_factory_make ("v4lsrc", NULL);
-	// USE HAL TO GET DEFAULT DEVICE!
-	g_object_set (G_OBJECT (source), "device", "/dev/video0", NULL);
+	g_object_set (G_OBJECT (source), "device", webcam->priv->device, NULL);
 	g_object_set (G_OBJECT (source), "autoprobe-fps", FALSE, NULL);
 
 	colorspace = gst_element_factory_make ("ffmpegcolorspace", NULL);
 	pngenc = gst_element_factory_make ("pngenc", NULL);
+
+	gpm_debug ("Creating sink %s", webcam->priv->filename);
 	sink = gst_element_factory_make ("filesink", NULL);
-	g_object_set (G_OBJECT (sink), "location", filename, NULL);
+	g_object_set (G_OBJECT (sink), "location", webcam->priv->filename, NULL);
 
 	/* add items to bin */
 	gst_bin_add_many (GST_BIN (pipeline), source, colorspace, pngenc, sink, NULL);
@@ -117,7 +124,7 @@ gpm_webcam_get_image (GpmWebcam *webcam, const gchar *filename)
 	}
 	/* assume async */
 
-	retval = gst_element_get_state  (pipeline, NULL, NULL, 1000*1000*1000);
+	retval = gst_element_get_state  (pipeline, NULL, NULL, 2000*1000*1000);
 	if (retval == GST_STATE_CHANGE_SUCCESS) {
 		gpm_debug ("finished!");
 		did_we_get_an_image = TRUE;
@@ -158,6 +165,9 @@ gpm_webcam_get_average_brightness_of_pixbuf (GdkPixbuf *pixbuf, gfloat *brightne
 	gfloat pixel;
 	gfloat average = 0;
 
+	g_return_val_if_fail (pixbuf != NULL, FALSE);
+	g_return_val_if_fail (brightness != NULL, FALSE);
+
 	/* parse the data */
 	width = gdk_pixbuf_get_width (pixbuf);
 	height = gdk_pixbuf_get_height (pixbuf);
@@ -175,7 +185,6 @@ gpm_webcam_get_average_brightness_of_pixbuf (GdkPixbuf *pixbuf, gfloat *brightne
 		/* average per stride */
 		stride /= width;
 		average += stride;
-		gpm_debug ("stride = %f", stride);
 	}
 	average /= height;
 	/* average per pixel */
@@ -202,37 +211,31 @@ gpm_webcam_get_brightness (GpmWebcam *webcam, gfloat *brightness)
 	gboolean ret;
 	GdkPixbuf *pixbuf;
 	GError *error = NULL;
-	const gchar *filename = "/tmp/woot.png";
+
+	g_return_val_if_fail (webcam != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_WEBCAM (webcam), FALSE);
+	g_return_val_if_fail (brightness != NULL, FALSE);
 
 	/* try to get a fresh image */
-	ret = gpm_webcam_get_image (webcam, filename);
+	ret = gpm_webcam_get_image (webcam);
 	if (ret == FALSE) {
 		*brightness = 0.0;
 		return FALSE;
 	}
 
 	/* open the file we just took */
-	pixbuf = gdk_pixbuf_new_from_file (filename, &error);
+	pixbuf = gdk_pixbuf_new_from_file (webcam->priv->filename, &error);
 	if (error != NULL) {
-		gpm_error ("error set");
+		gpm_error ("error set: %s", error->message);
+		g_error_free (error);
 	}
 
 	ret = gpm_webcam_get_average_brightness_of_pixbuf (pixbuf, brightness);
 
 	/* delete the file */
-	g_unlink (filename);
+	g_unlink (webcam->priv->filename);
 
 	return ret;
-}
-
-/**
- * gpm_webcam_has_hardware:
- * @webcam: This class instance
- **/
-gboolean
-gpm_webcam_has_hardware (void)
-{
-	return TRUE;
 }
 
 /**
@@ -247,6 +250,8 @@ gpm_webcam_finalize (GObject *object)
 	webcam = GPM_WEBCAM (object);
 
 	g_object_unref (webcam->priv->conf);
+	g_free (webcam->priv->filename);
+	g_free (webcam->priv->device);
 
 	G_OBJECT_CLASS (gpm_webcam_parent_class)->finalize (object);
 }
@@ -273,12 +278,27 @@ gpm_webcam_class_init (GpmWebcamClass *klass)
 static void
 gpm_webcam_init (GpmWebcam *webcam)
 {
+	gchar *device;
 	webcam->priv = GPM_WEBCAM_GET_PRIVATE (webcam);
 
 	webcam->priv->conf = gpm_conf_new ();
 
-	/* do we beep? */
-	gpm_conf_get_bool (webcam->priv->conf, GPM_CONF_ENABLE_BEEPING, &webcam->priv->enable_beeping);
+	/* we can't use /tmp as it's global read write and may be information leak */
+	webcam->priv->filename = g_strdup_printf ("%s/.gnome2/gnome-power-manager/webcam.png", g_get_home_dir ());
+
+	/* what device do we use? */
+	gpm_conf_get_string (webcam->priv->conf, GPM_CONF_AMBIENT_V4L_DEVICE, &device);
+	if (device == NULL) {
+		gpm_warning ("invalid gconf schema!");
+		return;
+	}
+	if (strcmp (device, "default") == 0) {
+		// USE HAL TO GET DEFAULT DEVICE!
+		webcam->priv->device = g_strdup ("/dev/video0");
+	} else {
+		webcam->priv->device = g_strdup (device);
+	}
+	g_free (device);
 }
 
 /**
@@ -296,3 +316,4 @@ gpm_webcam_new (void)
 	}
 	return GPM_WEBCAM (gpm_webcam_object);
 }
+
