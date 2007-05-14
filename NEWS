@@ -1,4 +1,20 @@
 ==============
+Version 2.18.3
+==============
+
+- Fixed #434323, crash in Power Statistics: just launched it for the... (Richard Hughes)
+- Fixed #436004, gpm windows/dialogs are shown and hidden and then shown again when they are created (Richard Hughes)
+- Fixed #436570, endless loop on startup (Richard Hughes)
+- Don't poll quite so frequently to avoid waking up X. (Richard Hughes)
+- Don't keep querying DPMS status from X, instead we can cache it. (Richard Hughes)
+- Added uninstall rule for gconf schemas. (Wouter Bolsterlee)
+- Don't chicken out when brightness access fails in the addon. (Richard Hughes)
+
+Translations:
+- Updated eu: Inaki Larranaga Murgoitio
+- Updated et: Priit Laes
+
+==============
 Version 2.18.2
 ==============
 
