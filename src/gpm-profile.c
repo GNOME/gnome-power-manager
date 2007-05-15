@@ -549,7 +549,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 		/* directory might not exist */
 		path = g_build_filename (g_get_home_dir (), ".gnome2", "gnome-power-manager", NULL);
-		g_mkdir_with_parents (path, 744);
+		g_mkdir_with_parents (path, 0770);
 		g_free (path);
 
 		gpm_debug ("no data found, generating initial (poor) data");
