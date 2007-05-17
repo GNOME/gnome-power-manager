@@ -1,5 +1,22 @@
 2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
 
+	* applets/brightness/brightness-applet.c: (gpm_applet_get_icon),
+	(gpm_applet_check_size), (gpm_applet_draw_cb),
+	(gpm_applet_destroy_popup_cb), (gpm_applet_update_tooltip),
+	(gpm_applet_update_popup_level), (gpm_applet_plus_cb),
+	(gpm_applet_minus_cb), (gpm_applet_slide_cb),
+	(gpm_applet_key_press_cb), (gpm_applet_scroll_cb),
+	(gpm_applet_create_popup), (gpm_applet_popup_cb),
+	(gpm_applet_dialog_about_cb), (gpm_applet_destroy_cb),
+	(brightness_changed_cb), (gpm_brightness_applet_init),
+	(gpm_applet_bonobo_cb):
+	Don't reduce the brightness when clicking on the icon. Fixes #428401
+
+	* src/gpm-backlight.c: (conf_key_changed_cb):
+	Emit BrightnessChanged events when the conf key changes.	
+
+2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+
 	* Makefile.am:
 	* applets/brightness/Makefile.am:
 	* applets/brightness/brightness-applet.c:

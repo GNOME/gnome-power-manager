@@ -41,22 +41,22 @@ static void      gpm_brightness_applet_init       (GpmBrightnessApplet *applet);
 
 G_DEFINE_TYPE (GpmBrightnessApplet, gpm_brightness_applet, PANEL_TYPE_APPLET)
 
-static void      retrieve_icon                    (GpmBrightnessApplet *applet);
-static void      check_size                       (GpmBrightnessApplet *applet);
-static gboolean  draw_applet_cb                   (GpmBrightnessApplet *applet);
-static gboolean  destroy_popup_cb                 (GpmBrightnessApplet *applet);
-static void      update_tooltip                   (GpmBrightnessApplet *applet);
-static void      update_level                     (GpmBrightnessApplet *applet, gboolean hw_get, gboolean hw_set);
-static gboolean  plus_cb                          (GtkWidget *w, GpmBrightnessApplet *applet);
-static gboolean  minus_cb                         (GtkWidget *w, GpmBrightnessApplet *applet);
-static gboolean  key_press_cb                     (GpmBrightnessApplet *applet, GdkEventKey   *event);
-static gboolean  scroll_cb                        (GpmBrightnessApplet *applet, GdkEventScroll *event);
-static gboolean  slide_cb                         (GtkWidget *w, GpmBrightnessApplet *applet);
-static void      create_popup                     (GpmBrightnessApplet *applet);
-static gboolean  popup_cb                         (GpmBrightnessApplet *applet, GdkEventButton *event);
-static void      dialog_about_cb                  (BonoboUIComponent *uic, gpointer data, const gchar *verbname);
-static gboolean  bonobo_cb                        (PanelApplet *_applet, const gchar *iid, gpointer data);
-static void      destroy_cb                       (GtkObject *object);
+static void      gpm_applet_get_icon              (GpmBrightnessApplet *applet);
+static void      gpm_applet_check_size            (GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_draw_cb               (GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_destroy_popup_cb      (GpmBrightnessApplet *applet);
+static void      gpm_applet_update_tooltip        (GpmBrightnessApplet *applet);
+static void      gpm_applet_update_popup_level    (GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_plus_cb               (GtkWidget *w, GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_minus_cb              (GtkWidget *w, GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_key_press_cb          (GpmBrightnessApplet *applet, GdkEventKey *event);
+static gboolean  gpm_applet_scroll_cb             (GpmBrightnessApplet *applet, GdkEventScroll *event);
+static gboolean  gpm_applet_slide_cb              (GtkWidget *w, GpmBrightnessApplet *applet);
+static void      gpm_applet_create_popup          (GpmBrightnessApplet *applet);
+static gboolean  gpm_applet_popup_cb              (GpmBrightnessApplet *applet, GdkEventButton *event);
+static void      gpm_applet_dialog_about_cb       (BonoboUIComponent *uic, gpointer data, const gchar *verbname);
+static gboolean  gpm_applet_bonobo_cb             (PanelApplet *_applet, const gchar *iid, gpointer data);
+static void      gpm_applet_destroy_cb            (GtkObject *object);
 
 #define GPM_BRIGHTNESS_APPLET_OAFID		"OAFIID:GNOME_BrightnessApplet"
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
@@ -140,13 +140,13 @@ gpm_applet_set_brightness (GpmBrightnessApplet *applet)
 }
 
 /**
- * retrieve_icon:
+ * gpm_applet_get_icon:
  * @applet: Brightness applet instance
  *
  * retrieve an icon from stock with a size adapted to panel
  **/
 static void
-retrieve_icon (GpmBrightnessApplet *applet)
+gpm_applet_get_icon (GpmBrightnessApplet *applet)
 {
 	const gchar *icon;
 
@@ -179,39 +179,39 @@ retrieve_icon (GpmBrightnessApplet *applet)
 }
 
 /**
- * check_size:
+ * gpm_applet_check_size:
  * @applet: Brightness applet instance
  *
  * check if panel size has changed and applet adapt size
  **/
 static void
-check_size (GpmBrightnessApplet *applet)
+gpm_applet_check_size (GpmBrightnessApplet *applet)
 {
 	/* we don't use the size function here, but the yet allocated size because the
 	   size value is false (kind of rounded) */
 	if (PANEL_APPLET_VERTICAL(panel_applet_get_orient (PANEL_APPLET (applet)))) {
 		if (applet->size != GTK_WIDGET(applet)->allocation.width) {
 			applet->size = GTK_WIDGET(applet)->allocation.width;
-			retrieve_icon (applet);
+			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 	} else {
 		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
 			applet->size = GTK_WIDGET(applet)->allocation.height;
-			retrieve_icon (applet);
+			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 	}
 }
 
 /**
- * draw_applet_cb:
+ * gpm_applet_draw_cb:
  * @applet: Brightness applet instance
  *
  * draws applet content (background + icon)
  **/
 static gboolean
-draw_applet_cb (GpmBrightnessApplet *applet)
+gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 {
 	gint w, h, bg_type;
 
@@ -224,7 +224,7 @@ draw_applet_cb (GpmBrightnessApplet *applet)
 	}
 
 	/* retrieve applet size */
-	check_size (applet);
+	gpm_applet_check_size (applet);
 	if (applet->size <= 2) {
 		return FALSE;
 	}
@@ -275,13 +275,13 @@ draw_applet_cb (GpmBrightnessApplet *applet)
 }
 
 /**
- * destroy_popup_cb:
+ * gpm_applet_destroy_popup_cb:
  * @applet: Brightness applet instance
  *
  * destroys the popup (called if orientation has changed)
  **/
 static gboolean
-destroy_popup_cb (GpmBrightnessApplet *applet)
+gpm_applet_destroy_popup_cb (GpmBrightnessApplet *applet)
 {
 	if (applet->popup != NULL) {
 		gtk_widget_set_parent (applet->popup, NULL);
@@ -292,13 +292,13 @@ destroy_popup_cb (GpmBrightnessApplet *applet)
 }
 
 /**
- * update_tooltip:
+ * gpm_applet_update_tooltip:
  * @applet: Brightness applet instance
  *
  * sets tooltip's content (percentage or disabled)
  **/
 static void
-update_tooltip (GpmBrightnessApplet *applet)
+gpm_applet_update_tooltip (GpmBrightnessApplet *applet)
 {
 	static gchar buf[101];
 	if (applet->popped == FALSE) {
@@ -314,7 +314,7 @@ update_tooltip (GpmBrightnessApplet *applet)
 }
 
 /**
- * update_level:
+ * gpm_applet_update_popup_level:
  * @applet: Brightness applet instance
  * @get_hw: set UI value from HW value
  * @set_hw: set HW value from UI value
@@ -326,77 +326,70 @@ update_tooltip (GpmBrightnessApplet *applet)
  * FALSE TRUE  -> set HW from UI value
  **/
 static void
-update_level (GpmBrightnessApplet *applet, gboolean get_hw, gboolean set_hw)
+gpm_applet_update_popup_level (GpmBrightnessApplet *applet)
 {
-	if (set_hw == TRUE) {
-		printf ("set applet->level=%i\n", applet->level);
-		applet->enabled = gpm_applet_set_brightness (applet);
-	}
-	if (get_hw == TRUE) {
-		applet->enabled = gpm_applet_get_brightness (applet);
-		printf ("get applet->level=%i\n", applet->level);
-	}
 	if (applet->popup != NULL) {
-		gtk_widget_set_sensitive (applet->btn_plus,applet->level < 99);
-		gtk_widget_set_sensitive (applet->btn_minus,applet->level > 0);
-
-
+		gtk_widget_set_sensitive (applet->btn_plus, applet->level < 99);
+		gtk_widget_set_sensitive (applet->btn_minus, applet->level > 0);
 		gtk_range_set_value (GTK_RANGE(applet->slider), (guint) applet->level);
 	}
-	update_tooltip (applet);
+	gpm_applet_update_tooltip (applet);
 }
 
 /**
- * plus_cb:
+ * gpm_applet_plus_cb:
  * @widget: The sending widget (plus button)
  * @applet: Brightness applet instance
  *
  * callback for the plus button
  **/
 static gboolean
-plus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
+gpm_applet_plus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 {
 	if (applet->level < 99) {
 		applet->level++;
 	}
-	update_level (applet, FALSE, TRUE);
+	applet->enabled = gpm_applet_set_brightness (applet);
+	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
 
 /**
- * minus_cb:
+ * gpm_applet_minus_cb:
  * @widget: The sending widget (minus button)
  * @applet: Brightness applet instance
  *
  * callback for the minus button
  **/
 static gboolean
-minus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
+gpm_applet_minus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 {
 	if (applet->level > 0) {
 		applet->level--;
 	}
-	update_level (applet, FALSE, TRUE);
+	applet->enabled = gpm_applet_set_brightness (applet);
+	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
 
 /**
- * slide_cb:
+ * gpm_applet_slide_cb:
  * @widget: The sending widget (slider)
  * @applet: Brightness applet instance
  *
  * callback for the slider
  **/
 static gboolean
-slide_cb (GtkWidget *w, GpmBrightnessApplet *applet)
+gpm_applet_slide_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 {
 	applet->level = gtk_range_get_value (GTK_RANGE(applet->slider));
-	update_level (applet, FALSE, TRUE);
+	applet->enabled = gpm_applet_set_brightness (applet);
+	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
 
 /**
- * slide_cb:
+ * gpm_applet_slide_cb:
  * @applet: Brightness applet instance
  * @event: The key press event
  *
@@ -404,7 +397,7 @@ slide_cb (GtkWidget *w, GpmBrightnessApplet *applet)
  * mainly escape to unpop and arrows to change brightness
  **/
 static gboolean
-key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
+gpm_applet_key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 {
 	int i;
 
@@ -424,8 +417,8 @@ key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 			gtk_widget_set_state (GTK_WIDGET(applet), GTK_STATE_NORMAL);
 			gtk_widget_hide (applet->popup);
 			applet->popped = FALSE;
-			draw_applet_cb (applet);
-			update_tooltip (applet);
+			gpm_applet_draw_cb (applet);
+			gpm_applet_update_tooltip (applet);
 			return TRUE;
 		} else {
 			return FALSE;
@@ -433,24 +426,24 @@ key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 		break;
 	case GDK_Page_Up:
 		for (i = 0;i < 10;i++) {
-			plus_cb (NULL, applet);
+			gpm_applet_plus_cb (NULL, applet);
 		}
 		return TRUE;
 		break;
 	case GDK_Left:
 	case GDK_Up:
-		plus_cb (NULL, applet);
+		gpm_applet_plus_cb (NULL, applet);
 		return TRUE;
 		break;
 	case GDK_Page_Down:
 		for (i = 0;i < 10;i++) {
-			minus_cb (NULL, applet);
+			gpm_applet_minus_cb (NULL, applet);
 		}
 		return TRUE;
 		break;
 	case GDK_Right:
 	case GDK_Down:
-		minus_cb (NULL, applet);
+		gpm_applet_minus_cb (NULL, applet);
 		return TRUE;
 		break;
 	default:
@@ -462,7 +455,7 @@ key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 }
 
 /**
- * scroll_cb:
+ * gpm_applet_scroll_cb:
  * @applet: Brightness applet instance
  * @event: The scroll event
  *
@@ -471,13 +464,13 @@ key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
  * the applet is popped and no matter where the mouse is
  **/
 static gboolean
-scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
+gpm_applet_scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
 {
 	if (event->type == GDK_SCROLL) {
 		if (event->direction == GDK_SCROLL_UP) {
-			plus_cb (NULL, applet);
+			gpm_applet_plus_cb (NULL, applet);
 		} else {
-			minus_cb (NULL, applet);
+			gpm_applet_minus_cb (NULL, applet);
 		}
 		return TRUE;
 	}
@@ -485,18 +478,18 @@ scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
 }
 
 /**
- * create_popup:
+ * gpm_applet_create_popup:
  * @applet: Brightness applet instance
  *
  * cretes a new popup according to orientation of panel
  **/
 static void
-create_popup (GpmBrightnessApplet *applet)
+gpm_applet_create_popup (GpmBrightnessApplet *applet)
 {
 	static GtkWidget *box, *frame;
 	gint orientation = panel_applet_get_orient (PANEL_APPLET (PANEL_APPLET (applet)));
 
-	destroy_popup_cb (applet);
+	gpm_applet_destroy_popup_cb (applet);
 
 	/* slider */
 	if (PANEL_APPLET_VERTICAL(orientation)) {
@@ -509,17 +502,17 @@ create_popup (GpmBrightnessApplet *applet)
 	gtk_range_set_inverted (GTK_RANGE(applet->slider), TRUE);
 	gtk_scale_set_draw_value (GTK_SCALE(applet->slider), FALSE);
 	gtk_range_set_value (GTK_RANGE(applet->slider), applet->level);
-	g_signal_connect (G_OBJECT(applet->slider), "value-changed", G_CALLBACK(slide_cb), applet);
+	g_signal_connect (G_OBJECT(applet->slider), "value-changed", G_CALLBACK(gpm_applet_slide_cb), applet);
 
 	/* minus button */
 	applet->btn_minus = gtk_button_new_with_label ("\342\210\222"); /* U+2212 MINUS SIGN */
 	gtk_button_set_relief (GTK_BUTTON(applet->btn_minus), GTK_RELIEF_NONE);
-	g_signal_connect (G_OBJECT(applet->btn_minus), "pressed", G_CALLBACK(minus_cb), applet);
+	g_signal_connect (G_OBJECT(applet->btn_minus), "pressed", G_CALLBACK(gpm_applet_minus_cb), applet);
 
 	/* plus button */
 	applet->btn_plus = gtk_button_new_with_label ("+");
 	gtk_button_set_relief (GTK_BUTTON(applet->btn_plus), GTK_RELIEF_NONE);
-	g_signal_connect (G_OBJECT(applet->btn_plus), "pressed", G_CALLBACK(plus_cb), applet);
+	g_signal_connect (G_OBJECT(applet->btn_plus), "pressed", G_CALLBACK(gpm_applet_plus_cb), applet);
 
 	/* box */
 	if (PANEL_APPLET_VERTICAL(orientation)) {
@@ -544,13 +537,13 @@ create_popup (GpmBrightnessApplet *applet)
 }
 
 /**
- * popup_cb:
+ * gpm_applet_popup_cb:
  * @applet: Brightness applet instance
  *
  * pops and unpops
  **/
 static gboolean
-popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
+gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 {
 	gint orientation, x, y;
 
@@ -567,13 +560,13 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 		gtk_widget_set_state (GTK_WIDGET(applet), GTK_STATE_NORMAL);
 		gtk_widget_hide (applet->popup);
 		applet->popped = FALSE;
-		draw_applet_cb (applet);
-		update_tooltip (applet);
+		gpm_applet_draw_cb (applet);
+		gpm_applet_update_tooltip (applet);
 		return TRUE;
 	}
 
 	/* update UI for current brightness */
-	update_level (applet, TRUE, FALSE);
+	gpm_applet_update_popup_level (applet);
 
 	/* if disabled, don't pop */
 	if (applet->enabled == FALSE) {
@@ -582,15 +575,15 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 
 	/* otherwise pop */
 	applet->popped = TRUE;
-	draw_applet_cb (applet);
+	gpm_applet_draw_cb (applet);
 
 	/* create a new popup (initial or if panel parameters changed) */
 	if (applet->popup == NULL) {
-		create_popup (applet);
+		gpm_applet_create_popup (applet);
 	}
 
 	/* update UI for current brightness */
-	update_level (applet, FALSE, FALSE);
+	gpm_applet_update_popup_level (applet);
 
 	gtk_widget_show_all (applet->popup);
 
@@ -649,12 +642,12 @@ popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 }
 
 /**
- * dialog_about_cb:
+ * gpm_applet_dialog_about_cb:
  *
  * displays about dialog
  **/
 static void
-dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
+gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GtkAboutDialog *about;
 
@@ -742,11 +735,11 @@ help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 }
 
 /**
- * destroy_cb:
+ * gpm_applet_destroy_cb:
  * @object: Class instance to destroy
  **/
 static void
-destroy_cb (GtkObject *object)
+gpm_applet_destroy_cb (GtkObject *object)
 {
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(object);
 
@@ -768,6 +761,15 @@ gpm_brightness_applet_class_init (GpmBrightnessAppletClass *class)
 	/* nothing to do here */
 }
 
+static void
+brightness_changed_cb (DBusGProxy          *proxy,
+		       guint	            brightness,
+		       GpmBrightnessApplet *applet)
+{
+	g_debug ("BrightnessChanged detected: %i\n", brightness);
+	applet->level = brightness;
+}
+
 /**
  * gpm_brightness_applet_init:
  * @applet: Brightness applet instance
@@ -775,6 +777,8 @@ gpm_brightness_applet_class_init (GpmBrightnessAppletClass *class)
 static void
 gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 {
+	DBusGProxy *proxy;
+
 	/* initialize fields */
 	applet->size = 0;
 	applet->enabled = FALSE;
@@ -784,13 +788,20 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	applet->tooltip = gtk_tooltips_new ();
 
 	applet->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (applet->gproxy,
-			   DBUS_PROXY_SESSION,
-			   GPM_DBUS_SERVICE,
-			   GPM_DBUS_PATH_BACKLIGHT,
-			   GPM_DBUS_INTERFACE_BACKLIGHT);
+	proxy = dbus_proxy_assign (applet->gproxy,
+				   DBUS_PROXY_SESSION,
+				   GPM_DBUS_SERVICE,
+				   GPM_DBUS_PATH_BACKLIGHT,
+				   GPM_DBUS_INTERFACE_BACKLIGHT);
+	dbus_g_proxy_add_signal (proxy, "BrightnessChanged",
+				 G_TYPE_UINT, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy, "BrightnessChanged",
+				     G_CALLBACK (brightness_changed_cb),
+				     applet, NULL);
 
-	update_level (applet, TRUE, FALSE);
+	/* coldplug */
+	applet->enabled = gpm_applet_get_brightness (applet);
+	gpm_applet_update_popup_level (applet);
 
 	/* prepare */
 	panel_applet_set_flags (PANEL_APPLET (applet), PANEL_APPLET_EXPAND_MINOR);
@@ -799,49 +810,49 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	gtk_widget_show_all (GTK_WIDGET(applet));
 
 	/* set appropriate size and load icon accordingly */
-	check_size (applet);
-	draw_applet_cb (applet);
+	gpm_applet_check_size (applet);
+	gpm_applet_draw_cb (applet);
 
 	/* connect */
 	g_signal_connect (G_OBJECT(applet), "button-press-event",
-			  G_CALLBACK(popup_cb), NULL);
+			  G_CALLBACK(gpm_applet_popup_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "scroll-event",
-			  G_CALLBACK(scroll_cb), NULL);
+			  G_CALLBACK(gpm_applet_scroll_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "key-press-event",
-			  G_CALLBACK(key_press_cb), NULL);
+			  G_CALLBACK(gpm_applet_key_press_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "expose-event",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-background",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-orient",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-orient",
-			  G_CALLBACK(destroy_popup_cb), NULL);
+			  G_CALLBACK(gpm_applet_destroy_popup_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "destroy",
-			  G_CALLBACK(destroy_cb), NULL);
+			  G_CALLBACK(gpm_applet_destroy_cb), NULL);
 }
 
 /**
- * bonobo_cb:
+ * gpm_applet_bonobo_cb:
  * @_applet: GpmBrightnessApplet instance created by the bonobo factory
  * @iid: Bonobo id
  *
  * the function called by bonobo factory after creation
  **/
 static gboolean
-bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
+gpm_applet_bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
 {
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(_applet);
 
 	static BonoboUIVerb verbs [] = {
-		BONOBO_UI_VERB ("About", dialog_about_cb),
+		BONOBO_UI_VERB ("About", gpm_applet_dialog_about_cb),
 		BONOBO_UI_VERB ("Help", help_cb),
 		BONOBO_UI_VERB_END
 	};
@@ -854,7 +865,7 @@ bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
 					   DATADIR,
 					   "GNOME_BrightnessApplet.xml",
 					   NULL, verbs, applet);
-	draw_applet_cb (applet);
+	gpm_applet_draw_cb (applet);
 	return TRUE;
 }
 
@@ -869,4 +880,4 @@ PANEL_APPLET_BONOBO_FACTORY
  /* the applet name and version */
  "BrightnessApplet", VERSION,
  /* our callback (with no user data) */
- bonobo_cb, NULL);
+ gpm_applet_bonobo_cb, NULL);

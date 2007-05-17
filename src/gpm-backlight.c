@@ -338,6 +338,10 @@ conf_key_changed_cb (GpmConf      *conf,
 			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
 			if (on_ac == TRUE) {
 				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
+
+				/* we emit a signal for the brightness applet */
+				gpm_debug ("emitting brightness-changed : %i", value);
+				g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
 			}
 		}
 
@@ -347,6 +351,10 @@ conf_key_changed_cb (GpmConf      *conf,
 			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
 			if (on_ac == FALSE) {
 				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
+
+				/* we emit a signal for the brightness applet */
+				gpm_debug ("emitting brightness-changed : %i", value);
+				g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
 			}
 		}
 
