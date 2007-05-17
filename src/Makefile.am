@@ -27,7 +27,6 @@ INCLUDES =						\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libhal-glib			\
-	-I$(top_srcdir)/libgpm-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
 
@@ -38,9 +37,6 @@ LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal-gcpufreq.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
 
-LOCAL_LIBGPM_LIBS =					\
-	$(top_builddir)/libgpm-glib/libgpm.la
- 
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\

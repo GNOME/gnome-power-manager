@@ -34,7 +34,6 @@
 
 #include <libhal-gmanager.h>
 #include <libhal-gcpufreq.h>
-#include <libgpm.h>
 
 #include "gpm-tray-icon.h"
 #include "gpm-common.h"

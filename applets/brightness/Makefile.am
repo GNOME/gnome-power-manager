@@ -15,11 +15,7 @@ INCLUDES =							\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"	\
 	-I$(top_srcdir)/libdbus-glib				\
-	-I$(top_srcdir)/libgpm-glib				\
 	$(NULL)
-
-LOCAL_LIBGPM_LIBS =						\
-	$(top_builddir)/libgpm-glib/libgpm.la
 
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
@@ -31,7 +27,6 @@ bin_PROGRAMS=gnome-brightness-applet
 gnome_brightness_applet_SOURCES = brightness-applet.c brightness-applet.h
 gnome_brightness_applet_LDADD =					\
 	$(LOCAL_LIBDBUS_LIBS)					\
-	$(LOCAL_LIBGPM_LIBS)					\
 	$(DBUS_LIBS)						\
 	$(GNOME_LIBS)
 

@@ -31,9 +31,10 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
-#include <libgpm.h>
+#include <libdbus-proxy.h>
 
 #include "inhibit-applet.h"
+#include "../src/gpm-common.h"
 
 static void      gpm_inhibit_applet_class_init (GpmInhibitAppletClass *klass);
 static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);
@@ -57,6 +58,106 @@ static void      destroy_cb                       (GtkObject *object);
 #define GPM_INHIBIT_APPLET_DESC			_("Allows user to inhibit automatic power saving.")
 #define PANEL_APPLET_VERTICAL(p)					\
 	 (((p) == PANEL_APPLET_ORIENT_LEFT) || ((p) == PANEL_APPLET_ORIENT_RIGHT))
+
+
+/** cookie is returned as an unsigned integer */
+static gboolean
+gpm_applet_inhibit (GpmInhibitApplet *applet,
+			  const gchar     *appname,
+		          const gchar     *reason,
+		          guint           *cookie)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (cookie != NULL, FALSE);
+
+	proxy = dbus_proxy_get_proxy (applet->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "Inhibit", &error,
+				 G_TYPE_STRING, appname,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+		*cookie = 0;
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("Inhibit failed!");
+	}
+
+	return ret;
+}
+
+static gboolean
+gpm_applet_uninhibit (GpmInhibitApplet *applet,
+			    guint            cookie)
+{
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	proxy = dbus_proxy_get_proxy (applet->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("UnInhibit failed!");
+	}
+
+	return ret;
+}
+#if 0
+static gboolean
+gpm_applet_has_inhibit (GpmInhibitApplet *applet,
+			gboolean        *has_inhibit)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	proxy = dbus_proxy_get_proxy (applet->gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "HasInhibit", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, has_inhibit,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("HasInhibit failed!");
+	}
+
+	return ret;
+}
+#endif
 
 /**
  * retrieve_icon:
@@ -215,11 +316,11 @@ click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 
 	if (applet->cookie > 0) {
 		g_debug ("uninhibiting %u", applet->cookie);
-		gpm_powermanager_uninhibit (applet->powermanager, applet->cookie);
+		gpm_applet_uninhibit (applet, applet->cookie);
 		applet->cookie = 0;
 	} else {
 		g_debug ("inhibiting");
-		gpm_powermanager_inhibit (applet->powermanager,
+		gpm_applet_inhibit (applet,
 					  GPM_INHIBIT_APPLET_NAME,
 					  _("Manual inhibit"),
 					  &(applet->cookie));
@@ -334,8 +435,8 @@ destroy_cb (GtkObject *object)
 {
 	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(object);
 
-	if (applet->powermanager != NULL) {
-		g_object_unref (applet->powermanager);
+	if (applet->gproxy != NULL) {
+		g_object_unref (applet->gproxy);
 	}
 	if (applet->icon != NULL) {
 		gdk_pixbuf_unref (applet->icon);
@@ -364,7 +465,14 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->icon = NULL;
 	applet->cookie = 0;
 	applet->tooltip = gtk_tooltips_new ();
-	applet->powermanager = gpm_powermanager_new ();
+
+	applet->gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (applet->gproxy,
+				   DBUS_PROXY_SESSION,
+				   GPM_DBUS_SERVICE,
+				   GPM_DBUS_PATH_INHIBIT,
+				   GPM_DBUS_INTERFACE_INHIBIT);
+
 	update_tooltip (applet);
 
 	/* prepare */

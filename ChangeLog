@@ -1,3 +1,36 @@
+2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+
+	* Makefile.am:
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	(gpm_applet_get_brightness), (gpm_applet_set_brightness),
+	(update_level), (destroy_cb), (gpm_brightness_applet_init):
+	* applets/brightness/brightness-applet.h:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_inhibit),
+	(gpm_applet_uninhibit), (gpm_applet_has_inhibit), (click_cb),
+	(destroy_cb), (gpm_inhibit_applet_init):
+	* applets/inhibit/inhibit-applet.h:
+	* configure.in:
+	* libgpm-glib/Makefile.am:
+	* libgpm-glib/libgpm.c:
+	* libgpm-glib/libgpm.h:
+	* src/Makefile.am:
+	* src/gpm-common.h:
+	* src/gpm-main.c:
+	* src/gpm-manager.c:
+	* src/gpm-notify.c:
+	* src/gpm-prefs-core.c:
+	* src/gpm-profile.c:
+	* src/gpm-statistics-core.c:
+	* src/gpm-tray-icon.c:
+	* test/Makefile.am:
+	* test/gpm-st-inhibit.c: (inhibit), (uninhibit), (has_inhibit),
+	(gpm_st_inhibit):
+	* test/gpm-st-proxy.c:
+	Remove libgpm, it's only used properly in one place. Also lets us solve
+	the brghtness bug easily (to follow).
+
 2007-05-15  Richard Hughes  <set EMAIL_ADDRESS environment variable>
 
 	* src/gpm-profile.c: (gpm_profile_load_data):

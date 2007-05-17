@@ -26,6 +26,28 @@
 
 G_BEGIN_DECLS
 
+
+#define	GPM_DBUS_SERVICE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_INTERFACE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_INTERFACE_WIDGET	"org.freedesktop.PowerManagement.Widget"
+#define	GPM_DBUS_INTERFACE_BACKLIGHT	"org.freedesktop.PowerManagement.Backlight"
+#define	GPM_DBUS_INTERFACE_STATS	"org.freedesktop.PowerManagement.Statistics"
+#define	GPM_DBUS_INTERFACE_INHIBIT	"org.freedesktop.PowerManagement.Inhibit"
+#define	GPM_DBUS_PATH			"/org/freedesktop/PowerManagement"
+#define	GPM_DBUS_PATH_BACKLIGHT		"/org/freedesktop/PowerManagement/Backlight"
+#define	GPM_DBUS_PATH_WIDGET		"/org/freedesktop/PowerManagement/Widget"
+#define	GPM_DBUS_PATH_STATS		"/org/freedesktop/PowerManagement/Statistics"
+#define	GPM_DBUS_PATH_INHIBIT		"/org/freedesktop/PowerManagement/Inhibit"
+
+/* common descriptions of this program */
+#define GPM_NAME 			_("Power Manager")
+#define GPM_DESCRIPTION 		_("Power Manager for the GNOME desktop")
+
+/* help location */
+#define GPM_HOMEPAGE_URL	 	"http://www.gnome.org/projects/gnome-power-manager/"
+#define GPM_BUGZILLA_URL		"http://bugzilla.gnome.org/buglist.cgi?product=gnome-power-manager"
+#define GPM_FAQ_URL			"http://live.gnome.org/GnomePowerManager/Faq"
+
 #define	GPM_COLOUR_WHITE		0xffffff
 #define	GPM_COLOUR_BLACK		0x000000
 #define	GPM_COLOUR_RED			0xff0000

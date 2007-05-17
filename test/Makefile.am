@@ -18,7 +18,6 @@ INCLUDES =						\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
-	-I$(top_srcdir)/libgpm-glib			\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
@@ -26,9 +25,6 @@ LOCAL_LIBHAL_LIBS =					\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
 	$(top_builddir)/libhal-glib/libhal-gpower.la
-
-LOCAL_LIBGPM_LIBS =					\
-	$(top_builddir)/libgpm-glib/libgpm.la
 
 noinst_PROGRAMS =					\
 	gnome-power-inhibit-test			\
@@ -100,7 +96,6 @@ gnome_power_self_test_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LOCAL_LIBHAL_LIBS)				\
-	$(LOCAL_LIBGPM_LIBS)				\
 	$(NULL)
 
 clean-local:

@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include <panel-applet.h>
+#include <libdbus-proxy.h>
 
 G_BEGIN_DECLS
 
@@ -44,8 +45,8 @@ typedef struct{
 	/* the icon and a cache for size*/
 	GdkPixbuf *icon;
 	gint icon_width, icon_height;
-	/* inhibit */
-	GpmPowermanager *powermanager;
+	/* connection to g-p-m */
+	DbusProxy *gproxy;
 	guint level;
 	/* a cache for panel size */
 	gint size;

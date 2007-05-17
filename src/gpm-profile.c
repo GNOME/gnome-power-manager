@@ -35,9 +35,9 @@
 
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
+#include <libdbus-proxy.h>
 
-#include <libgpm.h>
-
+#include "gpm-common.h"
 #include "gpm-ac-adapter.h"
 #include "gpm-array.h"
 #include "gpm-array-float.h"

@@ -22,8 +22,8 @@
 #include <glib.h>
 #include <dbus/dbus-glib.h>
 #include <libdbus-proxy.h>
-#include <libgpm.h>
 #include "gpm-st-main.h"
+#include "../src/gpm-common.h"
 
 void
 gpm_st_proxy (GpmSelfTest *test)

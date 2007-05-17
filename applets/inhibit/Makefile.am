@@ -14,12 +14,8 @@ INCLUDES =							\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"	\
-	-I$(top_srcdir)/libgpm-glib				\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
-
-LOCAL_LIBGPM_LIBS =						\
-	$(top_builddir)/libgpm-glib/libgpm.la
 
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
@@ -30,7 +26,6 @@ bin_PROGRAMS=gnome-inhibit-applet
 
 gnome_inhibit_applet_SOURCES = inhibit-applet.c inhibit-applet.h
 gnome_inhibit_applet_LDADD =					\
-	$(LOCAL_LIBGPM_LIBS)					\
 	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\
 	$(GNOME_LIBS)

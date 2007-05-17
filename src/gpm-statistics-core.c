@@ -30,8 +30,6 @@
 #include <math.h>
 #include <string.h>
 
-#include <libgpm.h>
-
 #include "gpm-array.h"
 #include "gpm-array-float.h"
 #include "gpm-common.h"

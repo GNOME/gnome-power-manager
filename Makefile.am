@@ -1,7 +1,6 @@
 SUBDIRS =						\
 	libdbus-glib					\
 	libhal-glib					\
-	libgpm-glib					\
 	src						\
 	po						\
 	docs						\

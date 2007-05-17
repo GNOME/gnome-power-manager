@@ -20,10 +20,109 @@
  */
 
 #include <glib.h>
-#include <libgpm.h>
 #include "gpm-st-main.h"
+#include <libdbus-proxy.h>
 
+#include "../src/gpm-common.h"
 #include "../src/gpm-inhibit.h"
+
+/** cookie is returned as an unsigned integer */
+static gboolean
+inhibit (DbusProxy *gproxy,
+			  const gchar     *appname,
+		          const gchar     *reason,
+		          guint           *cookie)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	g_return_val_if_fail (cookie != NULL, FALSE);
+
+	proxy = dbus_proxy_get_proxy (gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "Inhibit", &error,
+				 G_TYPE_STRING, appname,
+				 G_TYPE_STRING, reason,
+				 G_TYPE_INVALID,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+		*cookie = 0;
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("Inhibit failed!");
+	}
+
+	return ret;
+}
+
+static gboolean
+uninhibit (DbusProxy *gproxy,
+			    guint            cookie)
+{
+	GError *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	proxy = dbus_proxy_get_proxy (gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
+				 G_TYPE_UINT, cookie,
+				 G_TYPE_INVALID,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("UnInhibit failed!");
+	}
+
+	return ret;
+}
+
+static gboolean
+has_inhibit (DbusProxy *gproxy,
+			      gboolean        *has_inhibit)
+{
+	GError  *error = NULL;
+	gboolean ret;
+	DBusGProxy *proxy;
+
+	proxy = dbus_proxy_get_proxy (gproxy);
+	if (proxy == NULL) {
+		g_warning ("not connected");
+		return FALSE;
+	}
+
+	ret = dbus_g_proxy_call (proxy, "HasInhibit", &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_BOOLEAN, has_inhibit,
+				 G_TYPE_INVALID);
+	if (error) {
+		g_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		g_warning ("HasInhibit failed!");
+	}
+
+	return ret;
+}
 
 void
 gpm_st_inhibit (GpmSelfTest *test)
@@ -32,19 +131,23 @@ gpm_st_inhibit (GpmSelfTest *test)
 	gboolean valid;
 	guint cookie1 = 0;
 	guint cookie2 = 0;
-	GpmPowermanager *powermanager;
+	DbusProxy *gproxy;
 
 	test->type = "GpmInhibit       ";
+	gproxy = dbus_proxy_new ();
+	dbus_proxy_assign (gproxy, DBUS_PROXY_SESSION,
+				   GPM_DBUS_SERVICE,
+				   GPM_DBUS_PATH_INHIBIT,
+				   GPM_DBUS_INTERFACE_INHIBIT);
 
-	powermanager = gpm_powermanager_new ();
-	if (powermanager == NULL) {
+	if (gproxy == NULL) {
 		g_warning ("Unable to get connection to power manager");
 		return;
 	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are not inhibited");
-	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
+	ret = has_inhibit (gproxy, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
 	} else if (valid == TRUE) {
@@ -55,7 +158,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "clear an invalid cookie");
-	ret = gpm_powermanager_uninhibit (powermanager, 123456);
+	ret = uninhibit (gproxy, 123456);
 	if (ret == FALSE) {
 		gpm_st_success (test, "invalid cookie failed as expected");
 	} else {
@@ -64,7 +167,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "get auto cookie 1");
-	ret = gpm_powermanager_inhibit (powermanager,
+	ret = inhibit (gproxy,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie1);
@@ -78,7 +181,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are auto inhibited");
-	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
+	ret = has_inhibit (gproxy, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
 	} else if (valid == TRUE) {
@@ -89,7 +192,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "get cookie 2");
-	ret = gpm_powermanager_inhibit (powermanager,
+	ret = inhibit (gproxy,
 				  "gnome-power-self-test",
 				  "test inhibit",
 				  &cookie2);
@@ -103,7 +206,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "clear cookie 1");
-	ret = gpm_powermanager_uninhibit (powermanager, cookie1);
+	ret = uninhibit (gproxy, cookie1);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "cookie failed to clear");
 	} else {
@@ -112,7 +215,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we are still inhibited");
-	ret = gpm_powermanager_has_inhibit (powermanager, &valid);
+	ret = has_inhibit (gproxy, &valid);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "Unable to test validity");
 	} else if (valid == TRUE) {
@@ -123,13 +226,13 @@ gpm_st_inhibit (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "clear cookie 2");
-	ret = gpm_powermanager_uninhibit (powermanager, cookie2);
+	ret = uninhibit (gproxy, cookie2);
 	if (ret == FALSE) {
 		gpm_st_failed (test, "cookie failed to clear");
 	} else {
 		gpm_st_success (test, NULL);
 	}
 
-	g_object_unref (powermanager);
+	g_object_unref (gproxy);
 }
 
