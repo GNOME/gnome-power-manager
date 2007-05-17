@@ -1,5 +1,13 @@
 2007-05-17  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-backlight.c: (idle_changed_cb):
+	* src/gpm-idle.c: (session_idle_changed_cb),
+	(powersave_idle_changed_cb), (gpm_idle_init):
+	* src/gpm-idle.h:
+	Dim the screen after a few seconds.
+
+2007-05-17  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/Makefile.am:
 	* applets/brightness/brightness-applet.c:
 	* applets/brightness/brightness-applet.h:

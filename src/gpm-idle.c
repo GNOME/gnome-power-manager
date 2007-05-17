@@ -308,10 +308,35 @@ session_idle_changed_cb (GpmScreensaver *screensaver,
 {
 	GpmIdleMode mode;
 
-	gpm_debug ("Received GS idle changed: %d", is_idle);
+	gpm_debug ("Received GS session idle changed: %d", is_idle);
 
 	if (is_idle == TRUE) {
 		mode = GPM_IDLE_MODE_SESSION;
+	} else {
+		mode = GPM_IDLE_MODE_NORMAL;
+	}
+
+	gpm_idle_set_mode (idle, mode);
+}
+
+/**
+ * powersave_idle_changed_cb:
+ * @is_idle: If the session is idle
+ * @idle: This class instance
+ *
+ * The SessionIdleChanged callback from gnome-screensaver.
+ **/
+static void
+powersave_idle_changed_cb (GpmScreensaver *screensaver,
+			  gboolean	 is_idle,
+			  GpmIdle	*idle)
+{
+	GpmIdleMode mode;
+
+	gpm_debug ("Received GS powesave idle changed: %d", is_idle);
+
+	if (is_idle == TRUE) {
+		mode = GPM_IDLE_MODE_POWERSAVE;
 	} else {
 		mode = GPM_IDLE_MODE_NORMAL;
 	}
@@ -384,6 +409,8 @@ gpm_idle_init (GpmIdle *idle)
 	idle->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (idle->priv->screensaver, "session-idle-changed",
 			  G_CALLBACK (session_idle_changed_cb), idle);
+	g_signal_connect (idle->priv->screensaver, "powersave-idle-changed",
+			  G_CALLBACK (powersave_idle_changed_cb), idle);
 }
 
 /**

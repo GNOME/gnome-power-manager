@@ -505,6 +505,8 @@ idle_changed_cb (GpmIdle      *idle,
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
 
+	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
+
 		/* Dim the screen, fixes #328564 */
 		if (laptop_do_dim == TRUE && backlight->priv->can_dim == TRUE) {
 			gpm_brightness_lcd_dim (backlight->priv->brightness);
