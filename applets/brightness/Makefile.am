@@ -20,7 +20,7 @@ INCLUDES =							\
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
-	$(top_builddir)/libdbus-glib/libdbus-proxy.la
+	$(top_builddir)/libdbus-glib/libdbus-watch.la
 
 bin_PROGRAMS=gnome-brightness-applet
 

@@ -2,6 +2,7 @@
  *
  * GNOME Power Manager Brightness Applet
  * Copyright (C) 2006 Benjamin Canou <bookeldor@gmail.com>
+ * Copyright (C) 2007 Richard Hughes <richard@hughsie.com>
  *
  * Licensed under the GNU General Public License Version 2
  *
@@ -31,7 +32,7 @@
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
-#include <libdbus-proxy.h>
+#include <libdbus-watch.h>
 
 #include "brightness-applet.h"
 #include "../src/gpm-common.h"
@@ -76,31 +77,26 @@ gpm_applet_get_brightness (GpmBrightnessApplet *applet)
 {
 	GError  *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 	guint policy_brightness;
 
-	proxy = dbus_proxy_get_proxy (applet->gproxy);
-	if (proxy == NULL) {
-		g_warning ("not connected");
-		printf ("jjk");
+	if (applet->proxy == NULL) {
+		printf ("WARNING: not connected\n");
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "GetBrightness", &error,
+	ret = dbus_g_proxy_call (applet->proxy, "GetBrightness", &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &policy_brightness,
 				 G_TYPE_INVALID);
 	if (error) {
-		g_debug ("ERROR: %s", error->message);
-		printf ("jjk");
+		printf ("DEBUG: ERROR: %s\n", error->message);
 		g_error_free (error);
 	}
 	if (ret == TRUE) {
 		applet->level = policy_brightness;
 	} else {
 		/* abort as the DBUS method failed */
-		printf ("jjk");
-		g_warning ("GetBrightness failed!");
+		printf ("WARNING: GetBrightness failed!\n");
 	}
 
 	return ret;
@@ -115,25 +111,23 @@ gpm_applet_set_brightness (GpmBrightnessApplet *applet)
 {
 	GError  *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (applet->gproxy);
-	if (proxy == NULL) {
-		g_warning ("not connected");
+	if (applet->proxy == NULL) {
+		printf ("WARNING: not connected");
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "SetBrightness", &error,
+	ret = dbus_g_proxy_call (applet->proxy, "SetBrightness", &error,
 				 G_TYPE_UINT, applet->level,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		g_debug ("ERROR: %s", error->message);
+		printf ("DEBUG: ERROR: %s", error->message);
 		g_error_free (error);
 	}
 	if (ret == FALSE) {
 		/* abort as the DBUS method failed */
-		g_warning ("SetBrightness failed!");
+		printf ("WARNING: SetBrightness failed!");
 	}
 
 	return ret;
@@ -161,17 +155,21 @@ gpm_applet_get_icon (GpmBrightnessApplet *applet)
 	}
 
 	/* get icon */
-	if (applet->enabled == TRUE) {
-		icon = GPM_BRIGHTNESS_APPLET_ICON;
-	} else {
+	if (applet->proxy == NULL) {
 		icon = GPM_BRIGHTNESS_APPLET_ICON_DISABLED;
+	} else if (applet->call_worked == FALSE) {
+		icon = GPM_BRIGHTNESS_APPLET_ICON_DISABLED;
+	} else {
+		icon = GPM_BRIGHTNESS_APPLET_ICON;
 	}
+
 	applet->icon = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
 						 icon, applet->size - 2, 0, NULL);
 
 	if (applet->icon == NULL) {
-		g_warning ("Cannot find %s!", icon);
+		printf ("WARNING: Cannot find %s!\n", icon);
 	} else {
+		printf ("DEBUG: got icon %s!\n", icon);
 		/* update size cache */
 		applet->icon_height = gdk_pixbuf_get_height (applet->icon);
 		applet->icon_width = gdk_pixbuf_get_width (applet->icon);
@@ -224,6 +222,7 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 	}
 
 	/* retrieve applet size */
+	gpm_applet_get_icon (applet);
 	gpm_applet_check_size (applet);
 	if (applet->size <= 2) {
 		return FALSE;
@@ -302,10 +301,12 @@ gpm_applet_update_tooltip (GpmBrightnessApplet *applet)
 {
 	static gchar buf[101];
 	if (applet->popped == FALSE) {
-		if (applet->enabled == TRUE) {
-			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
-		} else {
+		if (applet->proxy == NULL) {
+			snprintf (buf, 100, _("Cannot connect to gnome-power-manager"));
+		} else if (applet->call_worked == FALSE) {
 			snprintf (buf, 100, _("Cannot get laptop panel brightness"));
+		} else {
+			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
 		}
 		gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
 	} else {
@@ -349,7 +350,7 @@ gpm_applet_plus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 	if (applet->level < 99) {
 		applet->level++;
 	}
-	applet->enabled = gpm_applet_set_brightness (applet);
+	applet->call_worked = gpm_applet_set_brightness (applet);
 	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
@@ -367,7 +368,7 @@ gpm_applet_minus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 	if (applet->level > 0) {
 		applet->level--;
 	}
-	applet->enabled = gpm_applet_set_brightness (applet);
+	applet->call_worked = gpm_applet_set_brightness (applet);
 	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
@@ -383,7 +384,7 @@ static gboolean
 gpm_applet_slide_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 {
 	applet->level = gtk_range_get_value (GTK_RANGE(applet->slider));
-	applet->enabled = gpm_applet_set_brightness (applet);
+	applet->call_worked = gpm_applet_set_brightness (applet);
 	gpm_applet_update_popup_level (applet);
 	return TRUE;
 }
@@ -568,11 +569,6 @@ gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 	/* update UI for current brightness */
 	gpm_applet_update_popup_level (applet);
 
-	/* if disabled, don't pop */
-	if (applet->enabled == FALSE) {
-		return TRUE;
-	}
-
 	/* otherwise pop */
 	applet->popped = TRUE;
 	gpm_applet_draw_cb (applet);
@@ -743,8 +739,8 @@ gpm_applet_destroy_cb (GtkObject *object)
 {
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(object);
 
-	if (applet->gproxy != NULL) {
-		g_object_unref (applet->gproxy);
+	if (applet->watch != NULL) {
+		g_object_unref (applet->watch);
 	}
 	if (applet->icon != NULL) {
 		gdk_pixbuf_unref (applet->icon);
@@ -766,9 +762,90 @@ brightness_changed_cb (DBusGProxy          *proxy,
 		       guint	            brightness,
 		       GpmBrightnessApplet *applet)
 {
-	g_debug ("BrightnessChanged detected: %i\n", brightness);
+	printf ("DEBUG: BrightnessChanged detected: %i\n", brightness);
 	applet->level = brightness;
 }
+
+/**
+ * gpm_brightness_applet_dbus_connect:
+ **/
+gboolean
+gpm_brightness_applet_dbus_connect (GpmBrightnessApplet *applet)
+{
+	GError *error = NULL;
+
+	if (applet->connection == NULL) {
+		printf ("DEBUG: get connection\n");
+		g_clear_error (&error);
+		applet->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+		if (error != NULL) {
+			printf ("WARNING: Could not connect to DBUS daemon: %s", error->message);
+			g_error_free (error);
+			applet->connection = NULL;
+			return FALSE;
+		}
+	}
+	if (applet->proxy == NULL) {
+		printf ("DEBUG: get proxy\n");
+		g_clear_error (&error);
+		applet->proxy = dbus_g_proxy_new_for_name_owner (applet->connection,
+							 GPM_DBUS_SERVICE,
+							 GPM_DBUS_PATH_BACKLIGHT,
+							 GPM_DBUS_INTERFACE_BACKLIGHT,
+							 &error);
+		if (error) {
+			printf ("WARNING: Cannot connect, maybe the daemon is not running: %s\n", error->message);
+			g_error_free (error);
+			applet->proxy = NULL;
+			return FALSE;
+		}
+		dbus_g_proxy_add_signal (applet->proxy, "BrightnessChanged",
+					 G_TYPE_UINT, G_TYPE_INVALID);
+		dbus_g_proxy_connect_signal (applet->proxy, "BrightnessChanged",
+					     G_CALLBACK (brightness_changed_cb),
+					     applet, NULL);
+		/* reset, we might be starting race */
+		applet->call_worked = TRUE;
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_brightness_applet_dbus_connect:
+ **/
+gboolean
+gpm_brightness_applet_dbus_disconnect (GpmBrightnessApplet *applet)
+{
+	if (applet->proxy != NULL) {
+		printf ("DEBUG: removing proxy\n");
+		g_object_unref (applet->proxy);
+		applet->proxy = NULL;
+	}
+	return TRUE;
+}
+
+/**
+ * watch_connection_cb:
+ * @proxy: The dbus raw proxy
+ * @status: The status of the service, where TRUE is connected
+ * @screensaver: This class instance
+ **/
+static void
+watch_connection_cb (DbusWatch           *watch,
+		     gboolean	          status,
+		     GpmBrightnessApplet *applet)
+{
+	if (status) {
+		gpm_brightness_applet_dbus_connect (applet);
+		gpm_applet_update_tooltip (applet);
+		gpm_applet_draw_cb (applet);
+	} else {
+		gpm_brightness_applet_dbus_disconnect (applet);
+		gpm_applet_update_tooltip (applet);
+		gpm_applet_draw_cb (applet);
+	}
+}
+
 
 /**
  * gpm_brightness_applet_init:
@@ -777,30 +854,24 @@ brightness_changed_cb (DBusGProxy          *proxy,
 static void
 gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 {
-	DBusGProxy *proxy;
-
 	/* initialize fields */
 	applet->size = 0;
-	applet->enabled = FALSE;
+	applet->call_worked = TRUE;
 	applet->popped = FALSE;
 	applet->popup = NULL;
 	applet->icon = NULL;
+	applet->connection = NULL;
+	applet->proxy = NULL;
 	applet->tooltip = gtk_tooltips_new ();
 
-	applet->gproxy = dbus_proxy_new ();
-	proxy = dbus_proxy_assign (applet->gproxy,
-				   DBUS_PROXY_SESSION,
-				   GPM_DBUS_SERVICE,
-				   GPM_DBUS_PATH_BACKLIGHT,
-				   GPM_DBUS_INTERFACE_BACKLIGHT);
-	dbus_g_proxy_add_signal (proxy, "BrightnessChanged",
-				 G_TYPE_UINT, G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (proxy, "BrightnessChanged",
-				     G_CALLBACK (brightness_changed_cb),
-				     applet, NULL);
+	applet->watch = dbus_watch_new ();
+	g_signal_connect (applet->watch, "connection-changed",
+			  G_CALLBACK (watch_connection_cb), applet);
+	dbus_watch_assign (applet->watch, DBUS_WATCH_SESSION, GPM_DBUS_SERVICE);
+	gpm_brightness_applet_dbus_connect (applet);
 
 	/* coldplug */
-	applet->enabled = gpm_applet_get_brightness (applet);
+	applet->call_worked = gpm_applet_get_brightness (applet);
 	gpm_applet_update_popup_level (applet);
 
 	/* prepare */
@@ -810,7 +881,6 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	gtk_widget_show_all (GTK_WIDGET(applet));
 
 	/* set appropriate size and load icon accordingly */
-	gpm_applet_check_size (applet);
 	gpm_applet_draw_cb (applet);
 
 	/* connect */

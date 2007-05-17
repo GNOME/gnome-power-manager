@@ -7,8 +7,20 @@ INCLUDES = \
 
 noinst_LTLIBRARIES =						\
 	libdbus-proxy.la					\
+	libdbus-watch.la					\
 	libdbus-monitor-session.la				\
 	libdbus-monitor-system.la
+
+libdbus_watch_la_SOURCES =					\
+	libdbus-marshal.h					\
+	libdbus-marshal.c					\
+	libdbus-monitor-session.c				\
+	libdbus-monitor-session.h				\
+	libdbus-monitor-system.c				\
+	libdbus-monitor-system.h				\
+	libdbus-watch.c						\
+	libdbus-watch.h
+libdbus_watch_la_LIBADD = @DBUS_LIBS@ $(INTLLIBS) $(GLIB_LIBS)
 
 libdbus_proxy_la_SOURCES =					\
 	libdbus-marshal.h					\

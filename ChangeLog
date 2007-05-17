@@ -1,4 +1,21 @@
-2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+2007-05-17  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	* applets/brightness/brightness-applet.h:
+	Use DbusWatch.
+
+	* libdbus-glib/Makefile.am:
+	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_disconnect):
+	* libdbus-glib/libdbus-watch.c:
+	Add new class, not wrapping the proxy. Simple.
+
+	* src/gpm-idle.c: (gpm_idle_init):
+	* src/gpm-screensaver.c:
+	* src/gpm-screensaver.h:
+	Add idle reporting for powersave.
+
+2007-05-17  Richard Hughes  <richard@hughsie.com>
 
 	* applets/brightness/brightness-applet.c: (gpm_applet_get_icon),
 	(gpm_applet_check_size), (gpm_applet_draw_cb),
@@ -15,7 +32,7 @@
 	* src/gpm-backlight.c: (conf_key_changed_cb):
 	Emit BrightnessChanged events when the conf key changes.	
 
-2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+2007-05-17  Richard Hughes  <richard@hughsie.com>
 
 	* Makefile.am:
 	* applets/brightness/Makefile.am:
@@ -48,7 +65,7 @@
 	Remove libgpm, it's only used properly in one place. Also lets us solve
 	the brghtness bug easily (to follow).
 
-2007-05-15  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+2007-05-15  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-profile.c: (gpm_profile_load_data):
 	Create the data directory with the correct permissions.

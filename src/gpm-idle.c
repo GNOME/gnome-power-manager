@@ -382,7 +382,7 @@ gpm_idle_init (GpmIdle *idle)
 
 	idle->priv->load = gpm_load_new ();
 	idle->priv->screensaver = gpm_screensaver_new ();
-	g_signal_connect (idle->priv->screensaver, "idle-changed",
+	g_signal_connect (idle->priv->screensaver, "session-idle-changed",
 			  G_CALLBACK (session_idle_changed_cb), idle);
 }
 

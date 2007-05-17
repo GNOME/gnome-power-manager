@@ -58,7 +58,9 @@ typedef struct
 					    		 gboolean	 connected);
 	void		(* auth_request)		(GpmScreensaver	*screensaver,
 					    		 gboolean	 auth);
-	void		(* idle_changed)		(GpmScreensaver	*screensaver,
+	void		(* session_idle_changed)	(GpmScreensaver	*screensaver,
+					    		 gboolean	 is_idle);
+	void		(* powersave_idle_changed)	(GpmScreensaver	*screensaver,
 					    		 gboolean	 is_idle);
 } GpmScreensaverClass;
 

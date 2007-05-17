@@ -47,7 +47,8 @@ struct GpmScreensaverPrivate
 enum {
 	GS_DELAY_CHANGED,
 	CONNECTION_CHANGED,
-	IDLE_CHANGED,
+	SESSION_IDLE_CHANGED,
+	POWERSAVE_IDLE_CHANGED,
 	AUTH_REQUEST,
 	LAST_SIGNAL
 };
@@ -83,12 +84,23 @@ gpm_screensaver_auth_end (DBusGProxy     *proxy,
  *  has entered a valid password or re-authenticated.
  */
 static void
-gpm_screensaver_idle_changed (DBusGProxy     *proxy,
+gpm_screensaver_session_idle_changed (DBusGProxy     *proxy,
 			      gboolean        is_idle,
 			      GpmScreensaver *screensaver)
 {
-	gpm_debug ("emitting idle-changed : (%i)", is_idle);
-	g_signal_emit (screensaver, signals [IDLE_CHANGED], 0, is_idle);
+	gpm_debug ("emitting session-idle-changed : (%i)", is_idle);
+	g_signal_emit (screensaver, signals [SESSION_IDLE_CHANGED], 0, is_idle);
+}
+
+/** Invoked after a short delay
+ */
+static void
+gpm_screensaver_powersave_idle_changed (DBusGProxy     *proxy,
+			                gboolean        is_idle,
+			                GpmScreensaver *screensaver)
+{
+	gpm_debug ("emitting powersave-idle-changed : (%i)", is_idle);
+	g_signal_emit (screensaver, signals [POWERSAVE_IDLE_CHANGED], 0, is_idle);
 }
 
 /**
@@ -128,7 +140,14 @@ gpm_screensaver_proxy_connect_more (GpmScreensaver *screensaver)
 	dbus_g_proxy_add_signal (proxy, "SessionIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
 	dbus_g_proxy_connect_signal (proxy,
 				     "SessionIdleChanged",
-				     G_CALLBACK (gpm_screensaver_idle_changed),
+				     G_CALLBACK (gpm_screensaver_session_idle_changed),
+				     screensaver, NULL);
+
+	/* get SessionIdleChanged */
+	dbus_g_proxy_add_signal (proxy, "SessionPowerManagementIdleChanged", G_TYPE_BOOLEAN, G_TYPE_INVALID);
+	dbus_g_proxy_connect_signal (proxy,
+				     "SessionPowerManagementIdleChanged",
+				     G_CALLBACK (gpm_screensaver_powersave_idle_changed),
 				     screensaver, NULL);
 
 	return TRUE;
@@ -474,11 +493,20 @@ gpm_screensaver_class_init (GpmScreensaverClass *klass)
 			      g_cclosure_marshal_VOID__BOOLEAN,
 			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 
-	signals [IDLE_CHANGED] =
-		g_signal_new ("idle-changed",
+	signals [SESSION_IDLE_CHANGED] =
+		g_signal_new ("session-idle-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmScreensaverClass, idle_changed),
+			      G_STRUCT_OFFSET (GpmScreensaverClass, session_idle_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
+	signals [POWERSAVE_IDLE_CHANGED] =
+		g_signal_new ("powersave-idle-changed",
+			      G_TYPE_FROM_CLASS (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      G_STRUCT_OFFSET (GpmScreensaverClass, session_idle_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__BOOLEAN,
