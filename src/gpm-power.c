@@ -736,26 +736,12 @@ gpm_power_status_for_device (GpmPowerDevice *device)
 	g_return_val_if_fail (device != NULL, NULL);
 
 	status = &device->battery_status;
-	details = g_string_new ("");
+	/* Not a new string, from src/gpm-manager.c:678
+	 * I had to move the markup as a bug got fixed in
+	 * notification daemon to not allow markup in the title 
+	 * see https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=240258 */
+	details = g_string_new (_("Power Information"));
 
-	if (device->product) {
-		g_string_append_printf (details, _("<b>Product:</b> %s\n"), device->product);
-	}
-	if (status->is_present == FALSE) {
-		g_string_append (details, _("<b>Status:</b> Missing\n"));
-	} else if (gpm_power_battery_is_charged (status)) {
-		g_string_append (details, _("<b>Status:</b> Charged\n"));
-	} else if (status->is_charging) {
-		g_string_append (details, _("<b>Status:</b> Charging\n"));
-	} else if (status->is_discharging) {
-		g_string_append (details, _("<b>Status:</b> Discharging\n"));
-	}
-	if (status->percentage_charge >= 0) {
-		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
-					status->percentage_charge);
-	}
-	/* remove the last \n */
-	g_string_truncate (details, details->len-1);
 	return details;
 }
 
@@ -778,6 +764,22 @@ gpm_power_status_for_device_more (GpmPowerDevice *device)
 	status = &device->battery_status;
 	details = g_string_new ("");
 
+	if (device->product) {
+		g_string_append_printf (details, _("<b>Product:</b> %s\n"), device->product);
+	}
+	if (status->is_present == FALSE) {
+		g_string_append (details, _("<b>Status:</b> Missing\n"));
+	} else if (gpm_power_battery_is_charged (status)) {
+		g_string_append (details, _("<b>Status:</b> Charged\n"));
+	} else if (status->is_charging) {
+		g_string_append (details, _("<b>Status:</b> Charging\n"));
+	} else if (status->is_discharging) {
+		g_string_append (details, _("<b>Status:</b> Discharging\n"));
+	}
+	if (status->percentage_charge >= 0) {
+		g_string_append_printf (details, _("<b>Percentage charge:</b> %i%%\n"),
+					status->percentage_charge);
+	}
 	if (device->vendor) {
 		g_string_append_printf (details, "<b>%s</b> %s\n",
 					_("Vendor:"), device->vendor);

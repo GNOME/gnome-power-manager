@@ -1,3 +1,14 @@
+2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
+
+	* src/gpm-power.c: (gpm_power_status_for_device),
+	(gpm_power_status_for_device_more):
+	Fix a bug where there was markup shown the the title of the libnotify
+	notification. This is bcause of a change in rule of notification-daemon.
+	Basically, do the same fix as I did in head a few weeks ago.
+	It looks like I'm adding a new string but it's actually already
+	from src/gpm-manager.c:678.
+	Fixes https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=240258
+
 2007-05-14  Richard Hughes  <richard@hughsie.com>
 
 	* configure.in:
