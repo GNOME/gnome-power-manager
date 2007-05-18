@@ -71,7 +71,9 @@ struct GpmBacklightPrivate
 	GpmControl		*control;
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
+	GpmLightSensor		*light_sensor;
 	gboolean		 can_dim;
+	gboolean		 can_sense;
 	gboolean		 can_dpms;
 	gboolean		 is_laptop;
 };
@@ -292,9 +294,10 @@ gpm_backlight_get_brightness (GpmBacklight *backlight,
 /**
  * gpm_backlight_set_brightness:
  **/
-gboolean gpm_backlight_set_brightness (GpmBacklight *backlight,
-				       guint	     brightness,
-				       GError	   **error)
+gboolean
+gpm_backlight_set_brightness (GpmBacklight *backlight,
+			      guint	    brightness,
+			      GError	   **error)
 {
 	gboolean ret;
 	g_return_val_if_fail (backlight != NULL, FALSE);
@@ -553,6 +556,24 @@ brightness_changed_cb (GpmBrightnessLcd *brightness,
 }
 
 /**
+ * brightness_changed_cb:
+ * @brightness: The GpmBrightnessLcd class instance
+ * @percentage: The new percentage brightness
+ * @brightness: This class instance
+ *
+ * This callback is called when the brightness value changes.
+ **/
+static void
+sensor_changed_cb (GpmLightSensor *sensor,
+		   guint           percentage,
+		   GpmBacklight   *backlight)
+{
+	gpm_debug ("Need to display ambient feedback value %i", percentage);
+//	gpm_feedback_display_value (backlight->priv->feedback, (float) percentage / 100.0f);
+//	gpm_brightness_lcd_set_std (backlight->priv->brightness, percentage);
+}
+
+/**
  * control_resume_cb:
  * @control: The control class instance
  * @power: This power class instance
@@ -578,6 +599,9 @@ gpm_backlight_finalize (GObject *object)
 	g_return_if_fail (GPM_IS_BACKLIGHT (object));
 	backlight = GPM_BACKLIGHT (object);
 
+	if (backlight->priv->light_sensor != NULL) {
+		g_object_unref (backlight->priv->light_sensor);
+	}
 	if (backlight->priv->feedback != NULL) {
 		g_object_unref (backlight->priv->feedback);
 	}
@@ -654,9 +678,15 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
 
+	/* this has a delay.. */
+	backlight->priv->light_sensor = gpm_light_sensor_new ();
+	g_signal_connect (backlight->priv->light_sensor, "sensor-changed",
+			  G_CALLBACK (sensor_changed_cb), backlight);
+
 	/* gets caps */
 	backlight->priv->can_dim = gpm_brightness_lcd_has_hw ();
 	backlight->priv->can_dpms = gpm_dpms_has_hw ();
+	backlight->priv->can_sense = gpm_light_sensor_has_hw (backlight->priv->light_sensor);
 
 	/* we use hal to see if we are a laptop */
 	hal_manager = hal_gmanager_new ();
@@ -670,6 +700,9 @@ gpm_backlight_init (GpmBacklight *backlight)
 	}
 	if (backlight->priv->can_dim == TRUE) {
 		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BACKLIGHT);
+	}
+	if (backlight->priv->can_sense == TRUE) {
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_AMBIENT);
 	}
 	g_object_unref (prefs_server);
 

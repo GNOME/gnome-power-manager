@@ -102,6 +102,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_SHOW_ACTIONS_IN_MENU	GPM_CONF_DIR "/ui/show_actions_in_menu"
 #define GPM_CONF_ENABLE_BEEPING		GPM_CONF_DIR "/ui/enable_sound"
 
+#define GPM_CONF_AMBIENT_ENABLE		GPM_CONF_DIR "/ambient/enable"
 #define GPM_CONF_AMBIENT_POLL		GPM_CONF_DIR "/ambient/poll_timeout"
 #define GPM_CONF_AMBIENT_FACTOR		GPM_CONF_DIR "/ambient/correction_factor"
 #define GPM_CONF_AMBIENT_V4L_DEVICE	GPM_CONF_DIR "/ambient/v4l_device"
@@ -111,7 +112,6 @@ G_BEGIN_DECLS
 #define GPM_CONF_DISPLAY_STATE_CHANGE	GPM_CONF_DIR "/display_state_change"
 #define GPM_CONF_CAN_SUSPEND		GPM_CONF_DIR "/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE		GPM_CONF_DIR "/can_hibernate"
-#define GPM_CONF_DISPLAY_AMBIENT	GPM_CONF_DIR "/display_ambient"
 #define GPM_CONF_PANEL_DIM_BRIGHTNESS	GPM_CONF_DIR "/laptop_panel_dim_brightness"
 #define GPM_CONF_USE_TIME_POLICY	GPM_CONF_DIR "/use_time_for_policy"
 #define GPM_CONF_USE_PROFILE_TIME	GPM_CONF_DIR "/use_profile_time"

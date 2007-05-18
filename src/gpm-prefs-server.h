@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define GPM_PREFS_SERVER_LID		4
 #define GPM_PREFS_SERVER_BATTERY	8
 #define GPM_PREFS_SERVER_UPS		16
+#define GPM_PREFS_SERVER_KEYLIGHT	32
 
 typedef struct GpmPrefsServerPrivate GpmPrefsServerPrivate;
 

@@ -45,17 +45,16 @@ typedef struct
 typedef struct
 {
 	GObjectClass	parent_class;
-	void		(* brightness_changed)		(GpmLightSensor	*brightness_sensor,
+	void		(* sensor_changed)		(GpmLightSensor	*brightness_sensor,
 							 guint	         brightness_level);
 } GpmLightSensorClass;
 
 GType		 gpm_light_sensor_get_type		(void);
 GpmLightSensor *gpm_light_sensor_new			(void);
 
-gboolean         gpm_light_sensor_poll_hardware 	(GpmLightSensor *brightness);
-
 gboolean	 gpm_light_sensor_get			(GpmLightSensor	*brightness,
 							 guint		*brightness_level);
+gboolean	 gpm_light_sensor_has_hw		(GpmLightSensor *sensor);
 
 G_END_DECLS
 

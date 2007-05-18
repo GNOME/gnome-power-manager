@@ -48,7 +48,6 @@
 #include "gpm-conf.h"
 #include "gpm-marshal.h"
 #include "gpm-webcam.h"
-#include "gpm-prefs-server.h"
 
 #define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
@@ -58,41 +57,44 @@ struct GpmLightSensorPrivate
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
 	gchar			*udi;
+	gboolean		 has_sensor;
+	gboolean		 has_webcam;
 	DbusProxy		*gproxy;
+	GpmWebcam		*webcam;
 };
 
 enum {
-	BRIGHTNESS_CHANGED,
+	SENSOR_CHANGED,
 	LAST_SIGNAL
 };
 
 static guint signals [LAST_SIGNAL] = { 0, };
-static gpointer gpm_brightness_object = NULL;
+static gpointer gpm_sensor_object = NULL;
 
 G_DEFINE_TYPE (GpmLightSensor, gpm_light_sensor, G_TYPE_OBJECT)
 
 /**
  * gpm_light_sensor_get_hw:
- * @brightness: This brightness class instance
+ * @sensor: This sensor class instance
  *
  * Updates the private local value of brightness_level_hw as it may have
  * changed on some h/w
  * Return value: Success.
  **/
 static gboolean
-gpm_light_sensor_get_hw (GpmLightSensor *brightness,
-		         guint	        *brightness_level_hw)
+gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 {
+	guint	    sensor_level_hw;
 	GError     *error = NULL;
 	gboolean    ret;
 	DBusGProxy *proxy;
 	GArray     *levels;
 	int         i;
 
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (brightness), FALSE);
+	g_return_val_if_fail (sensor != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	proxy = dbus_proxy_get_proxy (brightness->priv->gproxy);
+	proxy = dbus_proxy_get_proxy (sensor->priv->gproxy);
 	if (proxy == NULL) {
 		gpm_warning ("not connected to HAL");
 		return FALSE;
@@ -112,11 +114,15 @@ gpm_light_sensor_get_hw (GpmLightSensor *brightness,
 		return FALSE;
 	}
 
-	*brightness_level_hw = 0;
+	/* work out average */
+	sensor_level_hw = 0;
 	for (i = 0; i < levels->len; i++ ) {
-		*brightness_level_hw += g_array_index (levels, gint, i);
+		sensor_level_hw += g_array_index (levels, gint, i);
 	}
-	*brightness_level_hw /= levels->len;
+	sensor_level_hw /= levels->len;
+
+	/* save */
+	sensor->priv->current_hw = sensor_level_hw;
 
 	g_array_free (levels, TRUE);
 
@@ -125,24 +131,24 @@ gpm_light_sensor_get_hw (GpmLightSensor *brightness,
 
 /**
  * gpm_light_sensor_get:
- * @brightness: This brightness class instance
+ * @sensor: This sensor class instance
  * Return value: The percentage brightness, or -1 for no hardware or error
  *
  * Gets the current (or at least what this class thinks is current) percentage
  * brightness. This is quick as no HAL inquiry is done.
  **/
 gboolean
-gpm_light_sensor_get (GpmLightSensor *brightness,
-		      guint	     *brightness_level)
+gpm_light_sensor_get (GpmLightSensor *sensor,
+		      guint	     *sensor_level)
 {
 	gint percentage;
 
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (brightness), FALSE);
+	g_return_val_if_fail (sensor != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
-					      brightness->priv->levels);
-	*brightness_level = percentage;
+	percentage = gpm_discrete_to_percent (sensor->priv->current_hw,
+					      sensor->priv->levels);
+	*sensor_level = percentage;
 	return TRUE;
 }
 
@@ -154,12 +160,12 @@ gpm_light_sensor_constructor (GType		  type,
 			      guint		  n_construct_properties,
 			      GObjectConstructParam *construct_properties)
 {
-	GpmLightSensor      *brightness;
+	GpmLightSensor      *sensor;
 	GpmLightSensorClass *klass;
 	klass = GPM_LIGHT_SENSOR_CLASS (g_type_class_peek (GPM_TYPE_LIGHT_SENSOR));
-	brightness = GPM_LIGHT_SENSOR (G_OBJECT_CLASS (gpm_light_sensor_parent_class)->constructor
+	sensor = GPM_LIGHT_SENSOR (G_OBJECT_CLASS (gpm_light_sensor_parent_class)->constructor
 			      		     (type, n_construct_properties, construct_properties));
-	return G_OBJECT (brightness);
+	return G_OBJECT (sensor);
 }
 
 /**
@@ -168,15 +174,20 @@ gpm_light_sensor_constructor (GType		  type,
 static void
 gpm_light_sensor_finalize (GObject *object)
 {
-	GpmLightSensor *brightness;
+	GpmLightSensor *sensor;
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_LIGHT_SENSOR (object));
-	brightness = GPM_LIGHT_SENSOR (object);
+	sensor = GPM_LIGHT_SENSOR (object);
 
-	g_free (brightness->priv->udi);
-	g_object_unref (brightness->priv->gproxy);
+	g_free (sensor->priv->udi);
+	if (sensor->priv->gproxy != NULL) {
+		g_object_unref (sensor->priv->gproxy);
+	}
+	if (sensor->priv->webcam != NULL) {
+		g_object_unref (sensor->priv->webcam);
+	}
 
-	g_return_if_fail (brightness->priv != NULL);
+	g_return_if_fail (sensor->priv != NULL);
 	G_OBJECT_CLASS (gpm_light_sensor_parent_class)->finalize (object);
 }
 
@@ -190,11 +201,11 @@ gpm_light_sensor_class_init (GpmLightSensorClass *klass)
 	object_class->finalize	   = gpm_light_sensor_finalize;
 	object_class->constructor  = gpm_light_sensor_constructor;
 
-	signals [BRIGHTNESS_CHANGED] =
-		g_signal_new ("brightness-changed",
+	signals [SENSOR_CHANGED] =
+		g_signal_new ("sensor-changed",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
-			      G_STRUCT_OFFSET (GpmLightSensorClass, brightness_changed),
+			      G_STRUCT_OFFSET (GpmLightSensorClass, sensor_changed),
 			      NULL,
 			      NULL,
 			      g_cclosure_marshal_VOID__UINT,
@@ -206,44 +217,60 @@ gpm_light_sensor_class_init (GpmLightSensorClass *klass)
 }
 
 /**
- * gpm_light_sensor_poll_hardware
- * @brightness: This brightness class instance
+ * gpm_light_sensor_has_hw:
  */
 gboolean
-gpm_light_sensor_poll_hardware (GpmLightSensor *brightness)
+gpm_light_sensor_has_hw (GpmLightSensor *sensor)
 {
-	gboolean ret;
-	guint old;
-	guint new;
-
-	gpm_light_sensor_get (brightness, &old);
-
-	ret = gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
-
-	if (ret) {
-		gpm_light_sensor_get (brightness, &new);
-		if (new != old) {
-			g_signal_emit (brightness,
-				       signals [BRIGHTNESS_CHANGED], 0, new, old);
-		}
+	g_return_val_if_fail (sensor != NULL, FALSE);
+	if (sensor->priv->has_sensor) {
+		return TRUE;
 	}
-
-	return ret;
+	if (sensor->priv->has_webcam) {
+		return TRUE;
+	}
+	return FALSE;
 }
 
 /**
  * gpm_light_sensor_poll_cb:
- * @userdata: userdata; a brightness sensor class instance
+ * @userdata: userdata; a sensor sensor class instance
  */
 static gboolean
 gpm_light_sensor_poll_cb (gpointer userdata)
 {
-	GpmLightSensor *brightness;
-	g_return_val_if_fail (userdata != NULL, TRUE);
-	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (userdata), TRUE);
-	brightness = GPM_LIGHT_SENSOR (userdata);
+	guint new;
+	gboolean ret;
+	GpmLightSensor *sensor;
+	gfloat bright;
 
-	gpm_light_sensor_poll_hardware (brightness);
+	g_return_val_if_fail (userdata != NULL, TRUE);
+
+	sensor = GPM_LIGHT_SENSOR (userdata);
+
+	if (sensor->priv->has_sensor == TRUE) {
+		/* fairly slow */
+		ret = gpm_light_sensor_get_hw (sensor);
+
+		/* this could fail if hal refuses us */
+		if (ret == TRUE) {
+			gpm_light_sensor_get (sensor, &new);
+			gpm_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
+			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, new);
+		}
+	}
+	if (sensor->priv->has_webcam == TRUE) {
+		/* open device, and get new reading SLOW */
+		ret = gpm_webcam_get_brightness (sensor->priv->webcam, &bright);
+
+		/* this could fail if the user is going ekiga or something */
+		if (ret == TRUE) {
+			sensor->priv->current_hw = bright * 100;
+			//need to do uwme
+			gpm_debug ("brightness = %f, %i", bright, sensor->priv->current_hw);
+			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, sensor->priv->current_hw);
+		}
+	}
 
 	return TRUE;
 }
@@ -256,138 +283,106 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 static void
 conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
-		     GpmLightSensor *brightness)
+		     GpmLightSensor *sensor)
 {
 	//
 }
 
 /**
  * gpm_light_sensor_init:
- * @brightness: This brightness class instance
+ * @sensor: This sensor class instance
  *
- * initialises the brightness class. NOTE: We expect light_sensor objects
+ * initialises the sensor class. NOTE: We expect light_sensor objects
  * to *NOT* be removed or added during the session.
  * We only control the first light_sensor object if there are more than one.
  **/
 static void
-gpm_light_sensor_init (GpmLightSensor *brightness)
+gpm_light_sensor_init (GpmLightSensor *sensor)
 {
 	gchar **names;
 	HalGManager *manager;
 	HalGDevice *device;
 	guint timeout;
-	GpmPrefsServer *prefs_server;
+	gfloat bright;
 
-	brightness->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (brightness);
+	sensor->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (sensor);
+	sensor->priv->udi = NULL;
+	sensor->priv->gproxy = NULL;
+	sensor->priv->udi = NULL;
+	sensor->priv->webcam = NULL;
 
-	brightness->priv->conf = gpm_conf_new ();
-	g_signal_connect (brightness->priv->conf, "value-changed",
-			  G_CALLBACK (conf_key_changed_cb), brightness);
+	sensor->priv->conf = gpm_conf_new ();
+	g_signal_connect (sensor->priv->conf, "value-changed",
+			  G_CALLBACK (conf_key_changed_cb), sensor);
 
-	/* get devices of light sensor type */
+	/* see if we can find  */
 	manager = hal_gmanager_new ();
 	hal_gmanager_find_capability (manager, "light_sensor", &names, NULL);
 	g_object_unref (manager);
 
-	if (names == NULL || names[0] == NULL) {
-		gpm_warning ("No devices of capability light_sensor");
-		return;
-	}
-	prefs_server = gpm_prefs_server_new ();
-	gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_AMBIENT);
-	g_object_unref (prefs_server);
-
-
-#if 0
-	GpmWebcam *webcam;
-	webcam = gpm_webcam_new ();
-	gfloat bright;
-	gboolean ret;
-	ret = gpm_webcam_get_brightness (webcam, &bright);
-	gpm_error ("brightness = %lf", bright);
-#endif
-
-	/* We only want first light_sensor object (should only be one) */
-	brightness->priv->udi = g_strdup (names[0]);
-	hal_gmanager_free_capability (names);
-
-	/* get a managed proxy */
-	brightness->priv->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (brightness->priv->gproxy,
-			  DBUS_PROXY_SYSTEM,
-			  HAL_DBUS_SERVICE,
-			  brightness->priv->udi,
-			  HAL_DBUS_INTERFACE_LIGHT_SENSOR);
-
-	/* get levels that the adapter supports -- this does not change ever */
-	device = hal_gdevice_new ();
-	hal_gdevice_set_udi (device, brightness->priv->udi);
-	hal_gdevice_get_uint (device, "light_sensor.num_levels",
-			      &brightness->priv->levels, NULL);
-	g_object_unref (device);
-
-	/* this changes under our feet */
-	gpm_light_sensor_get_hw (brightness, &brightness->priv->current_hw);
-
-	/* get poll timeout */
-	gpm_conf_get_uint (brightness->priv->conf, GPM_CONF_AMBIENT_POLL, &timeout);
-	g_timeout_add (timeout, gpm_light_sensor_poll_cb, brightness);
-}
-
-/**
- * gpm_light_sensor_has_hw:
- *
- * Self contained function that works out if we have the hardware.
- * If not, we return FALSE and the module is unloaded.
- **/
-static gboolean
-gpm_light_sensor_has_hw (void)
-{
-	GpmWebcam *webcam;
-	HalGManager *manager;
-	gchar **names;
-	gboolean ret = TRUE;
-	gboolean has_webcam;
-
-	/* okay, as singleton - so we don't allocate more memory */
-	manager = hal_gmanager_new ();
-	hal_gmanager_find_capability (manager, "light_sensor", &names, NULL);
-	g_object_unref (manager);
-
-	/* nothing found */
-	if (names == NULL || names[0] == NULL) {
-		ret = FALSE;
+	/* Significant found */
+	if (names != NULL && names[0] != NULL) {
+		/* We only want first light_sensor object (should only be one) */
+		sensor->priv->udi = g_strdup (names[0]);
+		sensor->priv->has_sensor = TRUE;
 	}
 	hal_gmanager_free_capability (names);
 
-	/* look for v4l integrated webcam */
-	webcam = gpm_webcam_new ();
-	gfloat bright;
-	has_webcam = gpm_webcam_get_brightness (webcam, &bright);
-	if (has_webcam == TRUE) {
-		gpm_error ("Using v4l backup device");
-		ret = TRUE;
+	/* look for v4l integrated webcam if no sensor */
+	if (sensor->priv->has_sensor == FALSE /* && usewebcam == TRUE */) {
+		sensor->priv->webcam = gpm_webcam_new ();
+		sensor->priv->has_webcam = gpm_webcam_get_brightness (sensor->priv->webcam, &bright);
 	}
 
-	return ret;
+	/* connect to the devices */
+	if (sensor->priv->has_sensor == TRUE) {
+		gpm_debug ("Using proper brightness sensor");
+		/* get a managed proxy */
+		sensor->priv->gproxy = dbus_proxy_new ();
+		dbus_proxy_assign (sensor->priv->gproxy,
+				  DBUS_PROXY_SYSTEM,
+				  HAL_DBUS_SERVICE,
+				  sensor->priv->udi,
+				  HAL_DBUS_INTERFACE_LIGHT_SENSOR);
+
+		/* get levels that the adapter supports -- this does not change ever */
+		device = hal_gdevice_new ();
+		hal_gdevice_set_udi (device, sensor->priv->udi);
+		hal_gdevice_get_uint (device, "light_sensor.num_levels",
+				      &sensor->priv->levels, NULL);
+		g_object_unref (device);
+
+		/* this changes under our feet */
+		gpm_light_sensor_get_hw (sensor);
+	}
+	if (sensor->priv->has_webcam == TRUE) {
+		gpm_debug ("Using v4l backup device");
+		sensor->priv->current_hw = bright * 100;
+	}
+
+	/* do we have a info source? */
+	if (sensor->priv->has_sensor == TRUE || sensor->priv->has_webcam == TRUE) {
+		gpm_debug ("current brightness is %i%%", sensor->priv->current_hw);
+
+		/* get poll timeout */
+		gpm_conf_get_uint (sensor->priv->conf, GPM_CONF_AMBIENT_POLL, &timeout);
+		g_timeout_add (timeout * 1000, gpm_light_sensor_poll_cb, sensor);
+	}
 }
 
 /**
  * gpm_light_sensor_new:
- * Return value: A new brightness class instance.
+ * Return value: A new sensor class instance.
  * Can return NULL if no suitable hardware is found.
  **/
 GpmLightSensor *
 gpm_light_sensor_new (void)
 {
-	if (gpm_brightness_object != NULL) {
-		g_object_ref (gpm_brightness_object);
+	if (gpm_sensor_object != NULL) {
+		g_object_ref (gpm_sensor_object);
 	} else {
-		if (gpm_light_sensor_has_hw () == FALSE) {
-			return NULL;
-		}
-		gpm_brightness_object = g_object_new (GPM_TYPE_LIGHT_SENSOR, NULL);
-		g_object_add_weak_pointer (gpm_brightness_object, &gpm_brightness_object);
+		gpm_sensor_object = g_object_new (GPM_TYPE_LIGHT_SENSOR, NULL);
+		g_object_add_weak_pointer (gpm_sensor_object, &gpm_sensor_object);
 	}
-	return GPM_LIGHT_SENSOR (gpm_brightness_object);
+	return GPM_LIGHT_SENSOR (gpm_sensor_object);
 }

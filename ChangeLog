@@ -1,5 +1,26 @@
 2007-05-18  Richard Hughes  <richard@hughsie.com>
 
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* src/gpm-backlight.c: (gpm_backlight_set_brightness),
+	(sensor_changed_cb), (gpm_backlight_finalize),
+	(gpm_backlight_init):
+	* src/gpm-conf.h:
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_hw),
+	(gpm_light_sensor_get), (gpm_light_sensor_constructor),
+	(gpm_light_sensor_finalize), (gpm_light_sensor_class_init),
+	(gpm_light_sensor_has_hw), (gpm_light_sensor_poll_cb),
+	(conf_key_changed_cb), (gpm_light_sensor_init),
+	(gpm_light_sensor_new):
+	* src/gpm-light-sensor.h:
+	* src/gpm-prefs-core.c: (prefs_setup_general), (gpm_prefs_init):
+	* src/gpm-prefs-server.h:
+	Make the ambient light sensor do something interesting, and remove the
+	UI from the prefs program. We should just choose good defaults, and
+	then just learn what the user wants.
+
+2007-05-18  Richard Hughes  <richard@hughsie.com>
+
 	* applets/brightness/brightness-applet.c:
 	* src/Makefile.am:
 	* src/dbus/xdg-power-management-core.xml:

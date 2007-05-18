@@ -1057,22 +1057,6 @@ prefs_setup_ups (GpmPrefs *prefs)
 }
 
 static void
-prefs_setup_ambient (GpmPrefs *prefs)
-{
-	GtkWidget *widget;
-	GtkWidget *notebook;
-	gint page;
-
-	if (prefs->priv->has_ambient == FALSE) {
-		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
-		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_ambient");
-		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
-		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
-		return;
-	}
-}
-
-static void
 prefs_setup_general (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
@@ -1095,10 +1079,12 @@ prefs_setup_general (GpmPrefs *prefs)
 				      GPM_CONF_BUTTON_SUSPEND,
 				      suspend_button_actions);
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_general_ambient",
-				  GPM_CONF_DISPLAY_STATE_CHANGE);
-	/* for now, hide */
-	widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_general_ambient");
-	gtk_widget_hide_all (widget);
+				  GPM_CONF_AMBIENT_ENABLE);
+
+	if (prefs->priv->has_ambient == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_general_ambient");
+		gtk_widget_hide_all (widget);
+	}
 
 	if (prefs->priv->has_button_suspend == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_general_suspend");
@@ -1175,7 +1161,6 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs_setup_ac (prefs);
 	prefs_setup_battery (prefs);
 	prefs_setup_ups (prefs);
-	prefs_setup_ambient (prefs);
 	prefs_setup_general (prefs);
 	prefs_setup_notification (prefs);
 
