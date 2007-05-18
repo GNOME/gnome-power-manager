@@ -43,6 +43,7 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-screensaver.h"
+#include "gpm-prefs-server.h"
 
 static void     gpm_prefs_class_init (GpmPrefsClass *klass);
 static void     gpm_prefs_init       (GpmPrefs      *prefs);
@@ -56,6 +57,7 @@ struct GpmPrefsPrivate
 	gboolean		 has_batteries;
 	gboolean		 has_lcd;
 	gboolean		 has_ups;
+	gboolean		 has_ambient;
 	gboolean		 has_button_lid;
 	gboolean		 has_button_suspend;
 	gboolean		 can_suspend;
@@ -169,6 +171,50 @@ gpm_dbus_method_bool (const gchar *method)
 	ret = dbus_g_proxy_call (proxy, method, &error,
 				 G_TYPE_INVALID,
 				 G_TYPE_BOOLEAN, &value,
+				 G_TYPE_INVALID);
+	if (error) {
+		gpm_debug ("ERROR: %s", error->message);
+		g_error_free (error);
+	}
+	if (ret == FALSE) {
+		/* abort as the DBUS method failed */
+		gpm_warning ("%s failed!", method);
+		return FALSE;
+	}
+	g_object_unref (proxy);
+	return value;
+}
+
+/**
+ * gpm_dbus_method_int:
+ * @method: The g-p-m DBUS method name, e.g. "AllowedSuspend"
+ **/
+static gint
+gpm_dbus_method_int (const gchar *method)
+{
+	DBusGConnection *connection;
+	DBusGProxy *proxy;
+	GError *error;
+	gboolean ret;
+	gint value = 0;
+	error = NULL;
+	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+	if (connection == NULL) {
+		if (error) {
+			gpm_warning ("Couldn't connect to PowerManager %s",
+				     error->message);
+			g_error_free (error);
+		}
+		return FALSE;
+	}
+
+	proxy = dbus_g_proxy_new_for_name (connection,
+					   GPM_DBUS_SERVICE,
+					   GPM_DBUS_PATH,
+					   GPM_DBUS_INTERFACE);
+	ret = dbus_g_proxy_call (proxy, method, &error,
+				 G_TYPE_INVALID,
+				 G_TYPE_INT, &value,
 				 G_TYPE_INVALID);
 	if (error) {
 		gpm_debug ("ERROR: %s", error->message);
@@ -1011,6 +1057,22 @@ prefs_setup_ups (GpmPrefs *prefs)
 }
 
 static void
+prefs_setup_ambient (GpmPrefs *prefs)
+{
+	GtkWidget *widget;
+	GtkWidget *notebook;
+	gint page;
+
+	if (prefs->priv->has_ambient == FALSE) {
+		notebook = glade_xml_get_widget (prefs->priv->glade_xml, "notebook_preferences");
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "vbox_ambient");
+		page = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), GTK_WIDGET (widget));
+		gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page);
+		return;
+	}
+}
+
+static void
 prefs_setup_general (GpmPrefs *prefs)
 {
 	GtkWidget *widget;
@@ -1053,7 +1115,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 {
 	GtkWidget *main_window;
 	GtkWidget *widget;
-	HalGManager *hal_manager;
+	gint caps;
 
 	prefs->priv = GPM_PREFS_GET_PRIVATE (prefs);
 
@@ -1067,24 +1129,16 @@ gpm_prefs_init (GpmPrefs *prefs)
 	g_signal_connect (prefs->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), prefs);
 
-	hal_manager = hal_gmanager_new ();
-	prefs->priv->has_lcd = hal_gmanager_num_devices_of_capability (hal_manager, "laptop_panel") > 0;
-	prefs->priv->has_batteries = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "battery",
-							"battery.type",
-							"primary") > 0;
-	prefs->priv->has_ups = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "battery",
-							"battery.type",
-							"ups") > 0;
-	prefs->priv->has_button_lid = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "button",
-							"button.type",
-							"lid") > 0;
-	prefs->priv->has_button_suspend = hal_gmanager_num_devices_of_capability_with_value (hal_manager, "button",
-							"button.type",
-							"suspend") > 0;
-	g_object_unref (hal_manager);
-
+	caps = gpm_dbus_method_int ("GetPreferencesOptions");
+	prefs->priv->has_batteries = ((caps & GPM_PREFS_SERVER_BATTERY) > 0);
+	prefs->priv->has_ups = ((caps & GPM_PREFS_SERVER_UPS) > 0);
+	prefs->priv->has_lcd = ((caps & GPM_PREFS_SERVER_BACKLIGHT) > 0);
+	prefs->priv->has_ambient = ((caps & GPM_PREFS_SERVER_AMBIENT) > 0);
+	prefs->priv->has_button_lid = ((caps & GPM_PREFS_SERVER_LID) > 0);
+	prefs->priv->has_button_suspend = TRUE;
 	prefs->priv->can_suspend = gpm_dbus_method_bool ("CanSuspend");
 	prefs->priv->can_hibernate = gpm_dbus_method_bool ("CanHibernate");
+	gpm_debug ("caps=%i", caps);
 
 	/* only enable cpufreq stuff if we have the hardware */
 	if (prefs->priv->hal_cpufreq) {
@@ -1121,6 +1175,7 @@ gpm_prefs_init (GpmPrefs *prefs)
 	prefs_setup_ac (prefs);
 	prefs_setup_battery (prefs);
 	prefs_setup_ups (prefs);
+	prefs_setup_ambient (prefs);
 	prefs_setup_general (prefs);
 	prefs_setup_notification (prefs);
 

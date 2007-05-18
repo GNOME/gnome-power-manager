@@ -17,6 +17,10 @@
     <method name="CanShutdown">
       <arg type="b" name="can_shutdown" direction="out"/>
     </method>
+    <!-- G-P-M SPECIFIC -->
+    <method name="GetPreferencesOptions">
+      <arg type="i" name="capability" direction="out"/>
+    </method>
     <method name="GetPowerSaveStatus">
       <arg type="b" name="save_power" direction="out"/>
     </method>

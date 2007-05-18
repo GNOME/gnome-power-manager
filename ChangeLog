@@ -1,3 +1,23 @@
+2007-05-18  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/brightness-applet.c:
+	* src/Makefile.am:
+	* src/dbus/xdg-power-management-core.xml:
+	* src/gpm-backlight.c: (gpm_backlight_init):
+	* src/gpm-engine.c: (gpm_engine_start):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_init):
+	* src/gpm-manager.c: (gpm_manager_get_preferences_options),
+	(gpm_manager_init), (gpm_manager_finalize):
+	* src/gpm-manager.h:
+	* src/gpm-prefs-core.c: (gpm_dbus_method_int),
+	(prefs_setup_ambient), (gpm_prefs_init):
+	* src/gpm-prefs-server.c: (gpm_prefs_server_get_capability),
+	(gpm_prefs_server_set_capability), (gpm_prefs_server_class_init),
+	(gpm_prefs_server_init), (gpm_prefs_server_new):
+	* src/gpm-prefs-server.h:
+	Move the capabilities detection to the daemon, don't try to second guess
+	the information in the prefs tool.
+
 2007-05-17  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (idle_changed_cb):

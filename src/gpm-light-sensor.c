@@ -48,6 +48,7 @@
 #include "gpm-conf.h"
 #include "gpm-marshal.h"
 #include "gpm-webcam.h"
+#include "gpm-prefs-server.h"
 
 #define GPM_LIGHT_SENSOR_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_LIGHT_SENSOR, GpmLightSensorPrivate))
 
@@ -275,6 +276,7 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 	HalGManager *manager;
 	HalGDevice *device;
 	guint timeout;
+	GpmPrefsServer *prefs_server;
 
 	brightness->priv = GPM_LIGHT_SENSOR_GET_PRIVATE (brightness);
 
@@ -291,6 +293,10 @@ gpm_light_sensor_init (GpmLightSensor *brightness)
 		gpm_warning ("No devices of capability light_sensor");
 		return;
 	}
+	prefs_server = gpm_prefs_server_new ();
+	gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_AMBIENT);
+	g_object_unref (prefs_server);
+
 
 #if 0
 	GpmWebcam *webcam;

@@ -61,6 +61,7 @@
 #include "gpm-srv-brightness-kbd.h"
 #include "gpm-srv-screensaver.h"
 #include "gpm-stock-icons.h"
+#include "gpm-prefs-server.h"
 #include "gpm-sound.h"
 #include "gpm-tray-icon.h"
 #include "gpm-engine.h"
@@ -84,6 +85,7 @@ struct GpmManagerPrivate
 	GpmDpms			*dpms;
 	GpmIdle			*idle;
 	GpmInfo			*info;
+	GpmPrefsServer		*prefs_server;
 	GpmInhibit		*inhibit;
 	GpmNotify		*notify;
 	GpmControl		*control;
@@ -609,6 +611,19 @@ gpm_manager_can_shutdown (GpmManager *manager,
 	g_return_val_if_fail (manager != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
 	return gpm_control_allowed_shutdown (manager->priv->control, can_shutdown, error);
+}
+
+/**
+ * gpm_manager_get_preferences_options:
+ **/
+gboolean
+gpm_manager_get_preferences_options (GpmManager *manager,
+				     gint       *capability,
+				     GError    **error)
+{
+	g_return_val_if_fail (manager != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_MANAGER (manager), FALSE);
+	return gpm_prefs_server_get_capability (manager->priv->prefs_server, capability);
 }
 
 /**
@@ -1537,6 +1552,9 @@ gpm_manager_init (GpmManager *manager)
 	/* do some actions even when killed */
 	g_atexit (gpm_manager_at_exit);
 
+	/* this is a singleton, so we keep a master copy open here */
+	manager->priv->prefs_server = gpm_prefs_server_new ();
+
 	manager->priv->conf = gpm_conf_new ();
 	g_signal_connect (manager->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), manager);
@@ -1687,6 +1705,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->screensaver);
 	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->srv_screensaver);
+	g_object_unref (manager->priv->prefs_server);
 
 	/* optional gobjects */
 	if (manager->priv->button) {

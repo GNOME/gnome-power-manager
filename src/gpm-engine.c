@@ -41,6 +41,7 @@
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
 #include "gpm-warning.h"
+#include "gpm-prefs-server.h"
 
 static void     gpm_engine_class_init (GpmEngineClass *klass);
 static void     gpm_engine_init       (GpmEngine      *engine);
@@ -962,6 +963,7 @@ gboolean
 gpm_engine_start (GpmEngine *engine)
 {
 	GpmEngineCollection *collection;
+	GpmPrefsServer *prefs_server;
 
 	g_return_val_if_fail (engine != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ENGINE (engine), FALSE);
@@ -973,6 +975,16 @@ gpm_engine_start (GpmEngine *engine)
 	gpm_cell_array_set_type (collection->mouse, GPM_CELL_UNIT_KIND_MOUSE);
 	gpm_cell_array_set_type (collection->keyboard, GPM_CELL_UNIT_KIND_KEYBOARD);
 	gpm_cell_array_set_type (collection->pda, GPM_CELL_UNIT_KIND_PDA);
+
+	/* only show the battery prefs section if we have batteries */
+	prefs_server = gpm_prefs_server_new ();
+	if (gpm_cell_array_get_num_cells (collection->primary) > 0) {
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BATTERY);
+	}
+	if (gpm_cell_array_get_num_cells (collection->ups) > 0) {
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_UPS);
+	}
+	g_object_unref (prefs_server);
 
 	/* we're done */
 	engine->priv->during_coldplug = FALSE;

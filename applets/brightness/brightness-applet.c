@@ -811,7 +811,7 @@ gpm_brightness_applet_dbus_connect (GpmBrightnessApplet *applet)
 }
 
 /**
- * gpm_brightness_applet_dbus_connect:
+ * gpm_brightness_applet_dbus_disconnect:
  **/
 gboolean
 gpm_brightness_applet_dbus_disconnect (GpmBrightnessApplet *applet)

@@ -110,6 +110,9 @@ gboolean	 gpm_manager_can_reboot			(GpmManager	*manager,
 gboolean	 gpm_manager_can_shutdown		(GpmManager	*manager,
 							 gboolean	*can_shutdown,
 							 GError		**error);
+gboolean	 gpm_manager_get_preferences_options	(GpmManager	*manager,
+							 gint		*capability,
+							 GError		**error);
 
 G_END_DECLS
 

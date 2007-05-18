@@ -55,6 +55,7 @@
 #include "gpm-light-sensor.h"
 #include "gpm-marshal.h"
 #include "gpm-stock-icons.h"
+#include "gpm-prefs-server.h"
 
 #define DIM_INTERVAL		10 /* ms */
 
@@ -649,6 +650,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 	gboolean on_ac;
 	HalGManager *hal_manager;
 	guint value;
+	GpmPrefsServer *prefs_server;
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
 
@@ -660,6 +662,16 @@ gpm_backlight_init (GpmBacklight *backlight)
 	hal_manager = hal_gmanager_new ();
 	backlight->priv->is_laptop = hal_gmanager_is_laptop (hal_manager);
 	g_object_unref (hal_manager);
+
+	/* expose ui in prefs program */
+	prefs_server = gpm_prefs_server_new ();
+	if (backlight->priv->is_laptop == TRUE) {
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_LID);
+	}
+	if (backlight->priv->can_dim == TRUE) {
+		gpm_prefs_server_set_capability (prefs_server, GPM_PREFS_SERVER_BACKLIGHT);
+	}
+	g_object_unref (prefs_server);
 
 	/* watch for dim value changes */
 	backlight->priv->conf = gpm_conf_new ();
