@@ -176,10 +176,6 @@ gpm_error_real (const gchar *func,
 {
 	va_list args;
 
-	if (do_verbose == FALSE) {
-		return;
-	}
-
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
