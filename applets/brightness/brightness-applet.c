@@ -45,6 +45,11 @@ G_DEFINE_TYPE (GpmBrightnessApplet, gpm_brightness_applet, PANEL_TYPE_APPLET)
 static void      gpm_applet_get_icon              (GpmBrightnessApplet *applet);
 static void      gpm_applet_check_size            (GpmBrightnessApplet *applet);
 static gboolean  gpm_applet_draw_cb               (GpmBrightnessApplet *applet);
+static void      gpm_applet_change_background_cb  (GpmBrightnessApplet *applet,
+						   PanelAppletBackgroundType arg1,
+						   GdkColor *arg2, GdkPixmap *arg3, gpointer data);
+static void      gpm_applet_theme_change_cb (GtkIconTheme *icon_theme, gpointer data);
+static void      gpm_applet_stop_scroll_events_cb (GtkWidget *widget, GdkEvent  *event);
 static gboolean  gpm_applet_destroy_popup_cb      (GpmBrightnessApplet *applet);
 static void      gpm_applet_update_tooltip        (GpmBrightnessApplet *applet);
 static void      gpm_applet_update_popup_level    (GpmBrightnessApplet *applet);
@@ -212,10 +217,9 @@ static gboolean
 gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 {
 	gint w, h, bg_type;
-
 	GdkColor color;
-	GdkPixmap *backbuf, *background;
-	GdkGC *gc_backbuf, *gc_widget;
+	GdkGC *gc;
+	GdkPixmap *background;
 
 	if (GTK_WIDGET(applet)->window == NULL) {
 		return FALSE;
@@ -236,41 +240,50 @@ gpm_applet_draw_cb (GpmBrightnessApplet *applet)
 	w = GTK_WIDGET(applet)->allocation.width;
 	h = GTK_WIDGET(applet)->allocation.height;
 
-	/* draw background */
-	backbuf = gdk_pixmap_new (GTK_WIDGET(applet)->window, w, h, -1);
-	gc_backbuf = gdk_gc_new (backbuf);
+	gc = gdk_gc_new (GTK_WIDGET(applet)->window);
 
+	/* draw pixmap background */
 	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
 	if (bg_type == PANEL_PIXMAP_BACKGROUND && !applet->popped) {
 		/* fill with given background pixmap */
-		gdk_draw_drawable (backbuf, gc_backbuf, background, 0, 0, 0, 0, w, h);
-	} else {
-		/* fill with appropriate color */
-		if (applet->popped) {
-			color = gtk_rc_get_style (GTK_WIDGET(applet))->bg[GTK_STATE_SELECTED];
-		} else {
-			if (bg_type == PANEL_NO_BACKGROUND) {
-				color = gtk_rc_get_style (GTK_WIDGET(applet))->bg[GTK_STATE_NORMAL];
-			}
-		}
-		gdk_gc_set_rgb_fg_color (gc_backbuf,&color);
-		gdk_gc_set_fill (gc_backbuf,GDK_SOLID);
-		gdk_draw_rectangle (backbuf, gc_backbuf, TRUE, 0, 0, w, h);
+		gdk_draw_drawable (GTK_WIDGET(applet)->window, gc, background, 0, 0, 0, 0, w, h);
+	}
+	
+	/* draw color background */
+	if (bg_type == PANEL_COLOR_BACKGROUND && !applet->popped) {
+		gdk_gc_set_rgb_fg_color (gc,&color);
+		gdk_gc_set_fill (gc,GDK_SOLID);
+		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
+	}
+
+	/* fill with selected color if popped */
+	if (applet->popped) {
+		color = gtk_rc_get_style (GTK_WIDGET(applet))->bg[GTK_STATE_SELECTED];
+		gdk_gc_set_rgb_fg_color (gc,&color);
+		gdk_gc_set_fill (gc,GDK_SOLID);
+		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
 	}
 
 	/* draw icon at center */
-	gdk_draw_pixbuf (backbuf, gc_backbuf, applet->icon,
+	gdk_draw_pixbuf (GTK_WIDGET(applet)->window, gc, applet->icon,
 			 0, 0, (w - applet->icon_width)/2, (h - applet->icon_height)/2,
 			 applet->icon_width, applet->icon_height,
 			 GDK_RGB_DITHER_NONE, 0, 0);
 
-	/* blit back buffer to applet */
-	gc_widget = gdk_gc_new (GTK_WIDGET(applet)->window);
-	gdk_draw_drawable (GTK_WIDGET(applet)->window,
-			   gc_widget, backbuf,
-			   0, 0, 0, 0, w, h);
-
 	return TRUE;
+}
+
+/**
+ * gpm_applet_change_background_cb:
+ *
+ * Enqueues an expose event (don't know why it's not the default behaviour)
+ **/
+static void
+gpm_applet_change_background_cb (GpmBrightnessApplet *applet,
+				 PanelAppletBackgroundType arg1,
+				 GdkColor *arg2, GdkPixmap *arg3, gpointer data)
+{
+	gtk_widget_queue_draw (GTK_WIDGET (applet));
 }
 
 /**
@@ -330,7 +343,7 @@ static void
 gpm_applet_update_popup_level (GpmBrightnessApplet *applet)
 {
 	if (applet->popup != NULL) {
-		gtk_widget_set_sensitive (applet->btn_plus, applet->level < 99);
+		gtk_widget_set_sensitive (applet->btn_plus, applet->level < 100);
 		gtk_widget_set_sensitive (applet->btn_minus, applet->level > 0);
 		gtk_range_set_value (GTK_RANGE(applet->slider), (guint) applet->level);
 	}
@@ -347,7 +360,7 @@ gpm_applet_update_popup_level (GpmBrightnessApplet *applet)
 static gboolean
 gpm_applet_plus_cb (GtkWidget *w, GpmBrightnessApplet *applet)
 {
-	if (applet->level < 99) {
+	if (applet->level < 100) {
 		applet->level++;
 	}
 	applet->call_worked = gpm_applet_set_brightness (applet);
@@ -401,7 +414,7 @@ static gboolean
 gpm_applet_key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
 {
 	int i;
-
+	
 	switch (event->keyval) {
 	case GDK_KP_Enter:
 	case GDK_ISO_Enter:
@@ -462,19 +475,27 @@ gpm_applet_key_press_cb (GpmBrightnessApplet *applet, GdkEventKey *event)
  *
  * callback handling mouse scrolls, either when the applet
  * is not popped and the mouse is over the applet, or when
- * the applet is popped and no matter where the mouse is
+ * the applet is popped and no matter where the mouse is.
  **/
 static gboolean
 gpm_applet_scroll_cb (GpmBrightnessApplet *applet, GdkEventScroll *event)
 {
+	int i;
+
 	if (event->type == GDK_SCROLL) {
 		if (event->direction == GDK_SCROLL_UP) {
-			gpm_applet_plus_cb (NULL, applet);
+			for (i = 0;i < 5;i++) {
+				gpm_applet_plus_cb (NULL, applet);
+			}
+			
 		} else {
-			gpm_applet_minus_cb (NULL, applet);
+			for (i = 0;i < 5;i++) {
+				gpm_applet_minus_cb (NULL, applet);
+			}
 		}
 		return TRUE;
 	}
+
 	return FALSE;
 }
 
@@ -635,6 +656,30 @@ gpm_applet_popup_cb (GpmBrightnessApplet *applet, GdkEventButton *event)
 	gtk_widget_set_state (GTK_WIDGET(applet), GTK_STATE_SELECTED);
 
 	return TRUE;
+}
+
+/**
+ * gpm_applet_theme_change_cb:
+ *
+ * Updtes icon when theme changes
+ **/
+static void
+gpm_applet_theme_change_cb (GtkIconTheme *icon_theme, gpointer data)
+{
+	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET (data);
+	gpm_applet_get_icon (applet);
+}
+
+/**
+ * gpm_applet_stop_scroll_events_cb:
+ *
+ * Prevents scroll events from reaching the tooltip
+ **/
+static void
+gpm_applet_stop_scroll_events_cb (GtkWidget *widget, GdkEvent  *event)
+{
+	if (event->type == GDK_SCROLL)
+		g_signal_stop_emission_by_name (widget, "event-after");
 }
 
 /**
@@ -846,7 +891,6 @@ watch_connection_cb (DbusWatch           *watch,
 	}
 }
 
-
 /**
  * gpm_brightness_applet_init:
  * @applet: Brightness applet instance
@@ -893,11 +937,14 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	g_signal_connect (G_OBJECT(applet), "key-press-event",
 			  G_CALLBACK(gpm_applet_key_press_cb), NULL);
 
-	g_signal_connect (G_OBJECT(applet), "expose-event",
-			  G_CALLBACK(gpm_applet_draw_cb), NULL);
+	/* We use g_signal_connect_after because letting the panel draw
+	 * the background is the only way to have the correct
+	 * background when a theme defines a background picture. */
+	g_signal_connect_after (G_OBJECT(applet), "expose-event",
+				G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-background",
-			  G_CALLBACK(gpm_applet_draw_cb), NULL);
+			  G_CALLBACK(gpm_applet_change_background_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-orient",
 			  G_CALLBACK(gpm_applet_draw_cb), NULL);
@@ -907,6 +954,11 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 
 	g_signal_connect (G_OBJECT(applet), "destroy",
 			  G_CALLBACK(gpm_applet_destroy_cb), NULL);
+
+	/* prevent scroll events from reaching the tooltip */
+	g_signal_connect (G_OBJECT (applet), "event-after", G_CALLBACK (gpm_applet_stop_scroll_events_cb), NULL);
+
+	g_signal_connect (gtk_icon_theme_get_default (), "changed", G_CALLBACK (gpm_applet_theme_change_cb), applet);
 }
 
 /**

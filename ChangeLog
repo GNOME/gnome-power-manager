@@ -1,3 +1,14 @@
+2007-05-21  Benjamin Canou,,,  <benjamin@benjamin-laptop>
+
+	* applets/brightness/brightness-applet.c: (gpm_applet_draw_cb),
+	(gpm_applet_change_background_cb), (gpm_applet_update_popup_level),
+	(gpm_applet_plus_cb), (gpm_applet_scroll_cb),
+	(gpm_applet_theme_change_cb), (gpm_applet_stop_scroll_events_cb),
+	(gpm_brightness_applet_init):
+	Correct drawing code to handle themes with panel background picture.
+	Correct max value from 99% to 100%.
+	Correct tooltip behaviour.
+
 2007-05-21  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-debug.c: (gpm_error_real):
