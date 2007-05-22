@@ -838,7 +838,7 @@ gpm_brightness_applet_dbus_connect (GpmBrightnessApplet *applet)
 							 GPM_DBUS_PATH_BACKLIGHT,
 							 GPM_DBUS_INTERFACE_BACKLIGHT,
 							 &error);
-		if (error) {
+		if (error != NULL) {
 			printf ("WARNING: Cannot connect, maybe the daemon is not running: %s\n", error->message);
 			g_error_free (error);
 			applet->proxy = NULL;

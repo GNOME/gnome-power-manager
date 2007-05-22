@@ -67,7 +67,6 @@ struct GpmTrayIconPrivate
 	GpmEngineCollection	*collection;
 
 	GtkStatusIcon		*status_icon;
-	guint			 low_percentage;
 	gboolean		 is_visible;
 	gboolean		 show_suspend;
 	gboolean		 show_hibernate;
@@ -623,16 +622,16 @@ conf_key_changed_cb (GpmConf     *conf,
 
 	if (strcmp (key, GPM_CONF_CAN_SUSPEND) == 0) {
 		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 
 	} else if (strcmp (key, GPM_CONF_CAN_HIBERNATE) == 0) {
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_tray_icon_enable_hibernate (icon, allowed_in_menu && enabled);
 
-	} else if (strcmp (key, GPM_CONF_SHOW_ACTIONS_IN_MENU) == 0) {
-		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+	} else if (strcmp (key, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU) == 0) {
+		gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 		gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
 		gpm_tray_icon_enable_suspend (icon, allowed_in_menu && enabled);
 		gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);
@@ -666,9 +665,6 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 	g_signal_connect (icon->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), icon);
 
-	/* get percentage policy */
-	gpm_conf_get_uint (icon->priv->conf, GPM_CONF_LOW_PERCENTAGE, &icon->priv->low_percentage);
-
 	icon->priv->status_icon = gtk_status_icon_new ();
 	g_signal_connect_object (G_OBJECT (icon->priv->status_icon),
 				 "popup_menu",
@@ -682,7 +678,7 @@ gpm_tray_icon_init (GpmTrayIcon *icon)
 
 	/* only show the suspend and hibernate icons if we can do the action,
 	   and the policy allows the actions in the menu */
-	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
+	gpm_conf_get_bool (icon->priv->conf, GPM_CONF_UI_SHOW_ACTIONS_IN_MENU, &allowed_in_menu);
 	gpm_control_allowed_suspend (icon->priv->control, &enabled, NULL);
 	gpm_tray_icon_enable_suspend (icon, enabled && allowed_in_menu);
 	gpm_control_allowed_hibernate (icon->priv->control, &enabled, NULL);

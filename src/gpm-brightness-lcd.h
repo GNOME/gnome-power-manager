@@ -57,12 +57,8 @@ gboolean	 gpm_brightness_lcd_up		(GpmBrightnessLcd	*brightness);
 gboolean	 gpm_brightness_lcd_down	(GpmBrightnessLcd	*brightness);
 gboolean	 gpm_brightness_lcd_get		(GpmBrightnessLcd	*brightness,
 						 guint			*brightness_level);
-gboolean	 gpm_brightness_lcd_set_dim	(GpmBrightnessLcd	*brightness,
-						 guint			 brightness_level);
 gboolean	 gpm_brightness_lcd_set_std	(GpmBrightnessLcd	*brightness,
 						 guint			 brightness_level);
-gboolean	 gpm_brightness_lcd_dim		(GpmBrightnessLcd	*brightness);
-gboolean	 gpm_brightness_lcd_undim	(GpmBrightnessLcd	*brightness);
 
 G_END_DECLS
 

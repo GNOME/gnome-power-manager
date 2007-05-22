@@ -115,8 +115,8 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmSound    *sound)
 {
-	if (strcmp (key, GPM_CONF_ENABLE_BEEPING) == 0) {
-		gpm_conf_get_bool (sound->priv->conf, GPM_CONF_ENABLE_BEEPING,
+	if (strcmp (key, GPM_CONF_UI_ENABLE_BEEPING) == 0) {
+		gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING,
 				   &sound->priv->enable_beeping);
 	}
 }
@@ -226,7 +226,7 @@ gpm_sound_init (GpmSound *sound)
 			  G_CALLBACK (ac_adapter_changed_cb), sound);
 
 	/* do we beep? */
-	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_ENABLE_BEEPING, &sound->priv->enable_beeping);
+	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
 }
 
 /**

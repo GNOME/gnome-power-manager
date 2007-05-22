@@ -1,3 +1,51 @@
+2007-05-22  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/brightness-applet.c:
+	(gpm_brightness_applet_dbus_connect):
+	* data/gnome-power-manager.schemas.in:
+	* data/gpm-prefs.glade:
+	* src/gpm-backlight.c: (gpm_backlight_sync_policy),
+	(gpm_common_sum_scale),
+	(gpm_backlight_brightness_evaluate_and_set), (conf_key_changed_cb),
+	(ac_adapter_changed_cb), (button_pressed_cb),
+	(gpm_backlight_notify_system_idle_changed), (idle_changed_cb),
+	(sensor_changed_cb), (gpm_backlight_finalize),
+	(gpm_backlight_init):
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_dim_hw),
+	(gpm_brightness_lcd_set_std), (gpm_brightness_lcd_init):
+	* src/gpm-brightness-lcd.h:
+	* src/gpm-cell-array.c: (gpm_cell_array_get_time_until_action):
+	* src/gpm-conf.h:
+	* src/gpm-cpufreq.c: (gpm_cpufreq_sync_policy),
+	(conf_key_changed_cb):
+	* src/gpm-engine.c: (conf_key_changed_cb), (gpm_engine_init):
+	* src/gpm-info.c: (gpm_info_init):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get),
+	(gpm_light_sensor_poll_cb):
+	* src/gpm-manager.c: (gpm_manager_sync_policy_sleep),
+	(idle_do_sleep), (lid_button_pressed), (ac_adapter_changed_cb),
+	(manager_critical_action_do), (conf_key_changed_cb),
+	(gpm_engine_charge_critical_cb), (gpm_engine_charge_action_cb),
+	(gpm_manager_init):
+	* src/gpm-prefs-core.c: (gpm_prefs_icon_radio_cb),
+	(conf_key_changed_cb), (prefs_setup_notification),
+	(prefs_setup_ac), (prefs_setup_battery), (prefs_setup_ups):
+	* src/gpm-sound.c: (conf_key_changed_cb), (gpm_sound_init):
+	* src/gpm-srv-brightness-kbd.c: (conf_key_changed_cb),
+	(ac_adapter_changed_cb):
+	* src/gpm-srv-screensaver.c: (screensaver_auth_request_cb):
+	* src/gpm-statistics-core.c: (conf_key_changed_cb),
+	(gpm_statistics_checkbox_events_cb),
+	(gpm_statistics_refresh_axis_labels),
+	(gpm_statistics_refresh_data),
+	(gpm_statistics_type_combo_changed_cb),
+	(gpm_statistics_populate_graph_types), (gpm_statistics_init):
+	* src/gpm-tray-icon.c: (conf_key_changed_cb), (gpm_tray_icon_init):
+	* src/gpm-warning.c: (gpm_warning_init):
+	* test/gpm-st-webcam.c: (gpm_st_webcam):
+	Rework the brightness interactions, and rename a large part of the
+	gconf schemas. Currently unfinished.
+
 2007-05-21  Benjamin Canou,,,  <benjamin@benjamin-laptop>
 
 	* applets/brightness/brightness-applet.c: (gpm_applet_draw_cb),

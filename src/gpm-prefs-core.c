@@ -255,8 +255,8 @@ gpm_prefs_icon_radio_cb (GtkWidget *widget,
 
 	policy = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "policy"));
 	str = gpm_tray_icon_mode_to_string (policy);
-	gpm_debug ("Changing %s to %s", GPM_CONF_ICON_POLICY, str);
-	gpm_conf_set_string (prefs->priv->conf, GPM_CONF_ICON_POLICY, str);
+	gpm_debug ("Changing %s to %s", GPM_CONF_UI_ICON_POLICY, str);
+	gpm_conf_set_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, str);
 }
 
 /**
@@ -674,16 +674,16 @@ conf_key_changed_cb (GpmConf     *conf,
 {
 	gboolean  enabled;
 
-	if (strcmp (key, GPM_CONF_AC_LOWPOWER) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_AC_LOWPOWER, &enabled);
+	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
+		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
 		gpm_debug ("need to enable checkbox");
 
-	} else if (strcmp (key, GPM_CONF_UPS_LOWPOWER) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UPS_LOWPOWER, &enabled);
+	} else if (strcmp (key, GPM_CONF_LOWPOWER_UPS) == 0) {
+		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_UPS, &enabled);
 		gpm_debug ("need to enable checkbox");
 
-	} else if (strcmp (key, GPM_CONF_BATT_LOWPOWER) == 0) {
-		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_BATT_LOWPOWER, &enabled);
+	} else if (strcmp (key, GPM_CONF_LOWPOWER_BATT) == 0) {
+		gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_LOWPOWER_BATT, &enabled);
 		gpm_debug ("need to enable checkbox");
 	}
 }
@@ -829,7 +829,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	GtkWidget   *radiobutton_icon_never;
 	gboolean     is_writable;
 
-	gpm_conf_get_string (prefs->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy_str);
+	gpm_conf_get_string (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, &icon_policy_str);
 	icon_policy = gpm_tray_icon_mode_from_string (icon_policy_str);
 	g_free (icon_policy_str);
 
@@ -844,7 +844,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 	radiobutton_icon_never = glade_xml_get_widget (prefs->priv->glade_xml,
 							"radiobutton_notification_never");
 
-	gpm_conf_is_writable (prefs->priv->conf, GPM_CONF_ICON_POLICY, &is_writable);
+	gpm_conf_is_writable (prefs->priv->conf, GPM_CONF_UI_ICON_POLICY, &is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_always, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_present, is_writable);
 	gtk_widget_set_sensitive (radiobutton_icon_charge, is_writable);
@@ -888,7 +888,7 @@ prefs_setup_notification (GpmPrefs *prefs)
 
 	/* set up the sound checkbox */
 	gpm_prefs_setup_checkbox (prefs, "checkbutton_notification_sound",
-	  			  GPM_CONF_ENABLE_BEEPING);
+	  			  GPM_CONF_UI_ENABLE_BEEPING);
 
 	if (prefs->priv->has_batteries == TRUE) {
 		/* there's no use case for displaying this option */
@@ -919,16 +919,16 @@ prefs_setup_ac (GpmPrefs *prefs)
 				 NULL};
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_ac_lid",
-				      GPM_CONF_AC_BUTTON_LID,
+				      GPM_CONF_BUTTON_LID_AC,
 				      button_lid_actions);
 	gpm_prefs_setup_processor_combo (prefs, "combobox_ac_cpu",
-					 GPM_CONF_AC_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+					 GPM_CONF_CPUFREQ_POLICY_AC, prefs->priv->cpufreq_types);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_computer",
-				      GPM_CONF_AC_SLEEP_COMPUTER);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ac_display",
-				      GPM_CONF_AC_SLEEP_DISPLAY);
+				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC);
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness",
-					   GPM_CONF_AC_BRIGHTNESS);
+					   GPM_CONF_BACKLIGHT_BRIGHTNESS_AC);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
@@ -985,19 +985,19 @@ prefs_setup_battery (GpmPrefs *prefs)
 	}
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_lid",
-				      GPM_CONF_BATT_BUTTON_LID,
+				      GPM_CONF_BUTTON_LID_BATT,
 				      button_lid_actions);
 	gpm_prefs_setup_action_combo (prefs, "combobox_battery_critical",
-				      GPM_CONF_BATT_CRITICAL,
+				      GPM_CONF_ACTIONS_CRITICAL_BATT,
 				      battery_critical_actions);
 	gpm_prefs_setup_processor_combo (prefs, "combobox_battery_cpu",
-					 GPM_CONF_BATT_CPUFREQ_POLICY, prefs->priv->cpufreq_types);
+					 GPM_CONF_CPUFREQ_POLICY_BATT, prefs->priv->cpufreq_types);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_computer",
-				      GPM_CONF_BATT_SLEEP_COMPUTER);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_battery_display",
-				      GPM_CONF_BATT_SLEEP_DISPLAY);
+				      GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT);
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
-					   GPM_CONF_BATT_BRIGHTNESS);
+					   GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT);
 
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
@@ -1045,13 +1045,13 @@ prefs_setup_ups (GpmPrefs *prefs)
 	}
 
 	gpm_prefs_setup_action_combo (prefs, "combobox_ups_low",
-				      GPM_CONF_UPS_LOW,
+				      GPM_CONF_ACTIONS_LOW_UPS,
 				      ups_low_actions);
 	gpm_prefs_setup_action_combo (prefs, "combobox_ups_critical",
-				      GPM_CONF_UPS_CRITICAL,
+				      GPM_CONF_ACTIONS_CRITICAL_UPS,
 				      ups_low_actions);
 	gpm_prefs_setup_sleep_slider (prefs, "hscale_ups_computer",
-				      GPM_CONF_BATT_SLEEP_COMPUTER);
+				      GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT);
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_ups_computer", delay);
 }

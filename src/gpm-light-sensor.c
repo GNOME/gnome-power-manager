@@ -146,6 +146,11 @@ gpm_light_sensor_get (GpmLightSensor *sensor,
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
 
+	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+		gpm_warning ("no hardware!");
+		return FALSE;
+	}
+
 	percentage = gpm_discrete_to_percent (sensor->priv->current_hw,
 					      sensor->priv->levels);
 	*sensor_level = percentage;
@@ -241,12 +246,20 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 {
 	guint new;
 	gboolean ret;
+	gboolean enable;
 	GpmLightSensor *sensor;
 	gfloat bright;
 
 	g_return_val_if_fail (userdata != NULL, TRUE);
 
 	sensor = GPM_LIGHT_SENSOR (userdata);
+
+	/* check if we should poll the h/w */
+	gpm_conf_get_bool (sensor->priv->conf, GPM_CONF_AMBIENT_ENABLE, &enable);
+	if (enable == FALSE) {
+		/* don't bother polling */
+		return TRUE;
+	}
 
 	if (sensor->priv->has_sensor == TRUE) {
 		/* fairly slow */

@@ -76,7 +76,7 @@ screensaver_auth_request_cb (GpmScreensaver *screensaver,
 			 resume requests -- maybe this need a logic cleanup */
 		if (srv_screensaver->priv->brightness_lcd) {
 			gpm_debug ("undimming lcd due to auth begin");
-			gpm_brightness_lcd_undim (srv_screensaver->priv->brightness_lcd);
+//			gpm_brightness_lcd_undim (srv_screensaver->priv->brightness_lcd);
 		}
 
 		/* We turn on the monitor unconditionally, as we may be using

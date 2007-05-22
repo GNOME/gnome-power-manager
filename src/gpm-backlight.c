@@ -76,6 +76,9 @@ struct GpmBacklightPrivate
 	gboolean		 can_sense;
 	gboolean		 can_dpms;
 	gboolean		 is_laptop;
+	gboolean		 system_is_idle;
+	GTimer			*idle_timer;
+	gfloat			 ambient_sensor_value;
 };
 
 enum {
@@ -132,11 +135,11 @@ gpm_backlight_sync_policy (GpmBacklight *backlight)
 	error = NULL;
 
 	if (on_ac == TRUE) {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_AC_DPMS_METHOD, &dpms_method);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, &timeout);
+		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC, &dpms_method);
 	} else {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_SLEEP_DISPLAY, &timeout);
-		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BATT_DPMS_METHOD, &dpms_method);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, &timeout);
+		gpm_conf_get_string (backlight->priv->conf, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT, &dpms_method);
 	}
 
 	/* convert the string types to standard types */
@@ -322,6 +325,114 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 }
 
 /**
+ * gpm_common_sum_scale:
+ *
+ * Finds the average between value1 and value2 set on a scale factor
+ **/
+inline static gfloat
+gpm_common_sum_scale (gfloat value1, gfloat value2, gfloat factor)
+{
+	gfloat diff;
+	diff = value1 - value2;
+	return value2 + (diff * factor);
+}
+
+/**
+ * gpm_backlight_brightness_evaluate_and_set:
+ **/
+static gboolean
+gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean interactive)
+{
+	gfloat brightness;
+	gfloat scale;
+	gboolean on_ac;
+	gboolean do_laptop_lcd;
+	gboolean enable_action;
+	guint value;
+
+	if (backlight->priv->can_dim == FALSE) {
+		gpm_warning ("no dimming hardware");
+		return FALSE;
+	}
+
+	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_ENABLE, &do_laptop_lcd);
+	if (do_laptop_lcd == FALSE) {
+		gpm_warning ("policy is no dimming");
+		return FALSE;
+	}
+
+	/* get the 'main' brightness */
+	gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, &value);
+	brightness = value / 100.0f;
+	gpm_debug ("1. main brightness %f", brightness);
+
+	/* get AC status */
+	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
+
+	/* reduce if on battery power */
+//	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATTERY_BACKLIGHT_ENABLE, &enable_action);
+	enable_action = TRUE;
+	if (enable_action == TRUE && on_ac == FALSE) {
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT, &value);
+		scale = (100 - value) / 100.0f;
+		brightness *= scale;
+	} else {
+		scale = 1.0f;
+	}
+	gpm_debug ("2. battery scale %f, brightness %f", scale, brightness);
+
+	/* reduce if system is momentarily idle */
+	if (on_ac == TRUE) {
+		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_AC, &enable_action);
+	} else {
+		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_DIM_BATT, &enable_action);
+	}
+	if (enable_action == TRUE && backlight->priv->system_is_idle == TRUE) {
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS, &value);
+		scale = value / 100.0f;
+		brightness *= scale;
+	} else {
+		scale = 1.0f;
+	}
+	gpm_debug ("3. idle scale %f, brightness %f", scale, brightness);
+
+	/* reduce if ambient is low */
+	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_AMBIENT_ENABLE, &enable_action);
+	if (backlight->priv->can_sense == TRUE && enable_action == TRUE) {
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AMBIENT_SCALE, &value);
+		scale = backlight->priv->ambient_sensor_value * (value / 100.0f);
+		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AMBIENT_FACTOR, &value);
+		scale = gpm_common_sum_scale (brightness, scale, value / 100.0f);
+		if (scale > 1.0f) {
+			scale = 1.0f;
+		}
+		if (scale < 0.80f) {
+			brightness *= scale;
+		} else {
+			scale = 1.0f;
+		}
+	} else {
+		scale = 1.0f;
+	}
+	gpm_debug ("4. ambient scale %f, brightness %f", scale, brightness);
+
+	/* convert to percentage */
+	value = brightness * 100.0f;
+
+	/* only show dialog if interactive */
+	if (interactive == TRUE) {
+		gpm_feedback_display_value (backlight->priv->feedback, (float) brightness);
+	}
+
+	/* we emit a signal for the brightness applet */
+	gpm_debug ("emitting brightness-changed : %i", value);
+	g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
+
+	gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
+	return TRUE;
+}
+
+/**
  * conf_key_changed_cb:
  *
  * We might have to do things when the gconf keys change; do them here.
@@ -331,49 +442,29 @@ conf_key_changed_cb (GpmConf      *conf,
 		     const gchar  *key,
 		     GpmBacklight *backlight)
 {
-	gint value;
 	gboolean on_ac;
-
 	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
-	if (strcmp (key, GPM_CONF_AC_BRIGHTNESS) == 0) {
+	if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC) == 0) {
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-			if (on_ac == TRUE) {
-				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
-
-				/* we emit a signal for the brightness applet */
-				gpm_debug ("emitting brightness-changed : %i", value);
-				g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
-			}
-		}
-
-	} else if (strcmp (key, GPM_CONF_BATT_BRIGHTNESS) == 0) {
-
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
-			if (on_ac == FALSE) {
-				gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
-
-				/* we emit a signal for the brightness applet */
-				gpm_debug ("emitting brightness-changed : %i", value);
-				g_signal_emit (backlight, signals [BRIGHTNESS_CHANGED], 0, value);
-			}
-		}
-
-	} else if (strcmp (key, GPM_CONF_PANEL_DIM_BRIGHTNESS) == 0) {
-
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_conf_get_int (backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-			gpm_brightness_lcd_set_dim (backlight->priv->brightness, value);
-		}
+	} else if (strcmp (key, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT) == 0) {
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 	}
 
-	if (strcmp (key, GPM_CONF_BATT_SLEEP_DISPLAY) == 0 ||
-	    strcmp (key, GPM_CONF_AC_SLEEP_DISPLAY) == 0 ||
-	    strcmp (key, GPM_CONF_AC_DPMS_METHOD) == 0 ||
-	    strcmp (key, GPM_CONF_BATT_DPMS_METHOD) == 0) {
+	else if (strcmp (key, GPM_CONF_BACKLIGHT_IDLE_DIM_AC) == 0 ||
+	         strcmp (key, GPM_CONF_AMBIENT_ENABLE) == 0 ||
+	         strcmp (key, GPM_CONF_AMBIENT_FACTOR) == 0 ||
+	         strcmp (key, GPM_CONF_AMBIENT_SCALE) == 0 ||
+	         strcmp (key, GPM_CONF_BACKLIGHT_ENABLE) == 0 ||
+	         strcmp (key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
+	         strcmp (key, GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS) == 0) {
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
+
+	} else if (strcmp (key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT) == 0 ||
+	           strcmp (key, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC) == 0 ||
+	           strcmp (key, GPM_CONF_BACKLIGHT_DPMS_METHOD_AC) == 0 ||
+	           strcmp (key, GPM_CONF_BACKLIGHT_DPMS_METHOD_BATT) == 0) {
 		gpm_backlight_sync_policy (backlight);
 	}
 }
@@ -391,20 +482,7 @@ ac_adapter_changed_cb (GpmAcAdapter     *ac_adapter,
 		       gboolean		 on_ac,
 		       GpmBacklight     *backlight)
 {
-	gboolean do_laptop_lcd;
-	guint value;
-
-	if (on_ac == TRUE) {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-	} else {
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
-	}
-
-	/* only do brightness changes if we have the hardware */
-	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_DISPLAY_STATE_CHANGE, &do_laptop_lcd);
-	if (do_laptop_lcd == TRUE && backlight->priv->can_dim == TRUE) {
-		gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
-	}
+	gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 }
 
 /**
@@ -436,11 +514,44 @@ button_pressed_cb (GpmButton    *button,
 	} else if (strcmp (type, GPM_BUTTON_LID_OPEN) == 0) {
 
 		/* make sure we undim when we lift the lid */
-		if (backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_undim (backlight->priv->brightness);
-		}
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 		gpm_backlight_sync_policy (backlight);
 	}
+}
+
+/**
+ * gpm_backlight_notify_system_idle_changed:
+ **/
+static gboolean
+gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_idle)
+{
+	gdouble elapsed;
+
+	if (backlight->priv->system_is_idle == is_idle) {
+		gpm_warning ("state not changed");
+		return FALSE;
+	}
+
+	elapsed = g_timer_elapsed (backlight->priv->idle_timer, NULL);
+	if (is_idle == FALSE) {
+		gpm_warning ("we have just been were idle for %lfs", elapsed);
+		/* The user immediatly undimmed the screen!
+		 * We should double the timeout to avoid this happening again */
+		if (elapsed < 10) {
+			//
+		}
+		/* We reset the dimming after 60 seconds of idle,
+		 * as the user will have changed tasks */
+		if (elapsed > 60) {
+			//
+		}
+	} else {
+		gpm_warning ("we were active for %lfs", elapsed);
+	}
+
+	gpm_debug ("changing powersave idle status to %i", is_idle);
+	backlight->priv->system_is_idle = is_idle;
+	return TRUE;
 }
 
 /**
@@ -459,16 +570,7 @@ idle_changed_cb (GpmIdle      *idle,
 		 GpmIdleMode   mode,
 		 GpmBacklight *backlight)
 {
-	gboolean on_ac;
-	gboolean laptop_do_dim;
 	GError *error;
-
-	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
-	if (on_ac == TRUE) {
-		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_AC_IDLE_DIM, &laptop_do_dim);
-	} else {
-		gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATT_IDLE_DIM, &laptop_do_dim);
-	}
 
 	/* don't dim or undim the screen when the lid is closed */
 	if (gpm_button_is_lid_closed (backlight->priv->button) == TRUE) {
@@ -487,12 +589,12 @@ idle_changed_cb (GpmIdle      *idle,
 			}
 		}
 
+		/* sync lcd brightness */
+		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
+		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
-
-		if (laptop_do_dim == TRUE && backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_undim (backlight->priv->brightness);
-		}
 
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 
@@ -506,15 +608,18 @@ idle_changed_cb (GpmIdle      *idle,
 			}
 		}
 
+		/* sync lcd brightness */
+		backlight->priv->system_is_idle = FALSE;
+		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
 
 	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
 
-		/* Dim the screen, fixes #328564 */
-		if (laptop_do_dim == TRUE && backlight->priv->can_dim == TRUE) {
-			gpm_brightness_lcd_dim (backlight->priv->brightness);
-		}
+		/* sync lcd brightness */
+		backlight->priv->system_is_idle = TRUE;
+		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 	}
 }
 
@@ -568,9 +673,9 @@ sensor_changed_cb (GpmLightSensor *sensor,
 		   guint           percentage,
 		   GpmBacklight   *backlight)
 {
-	gpm_debug ("Need to display ambient feedback value %i", percentage);
-//	gpm_feedback_display_value (backlight->priv->feedback, (float) percentage / 100.0f);
-//	gpm_brightness_lcd_set_std (backlight->priv->brightness, percentage);
+	gpm_debug ("sensor changed! %i", percentage);
+	backlight->priv->ambient_sensor_value = percentage / 100.0f;
+	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 }
 
 /**
@@ -598,6 +703,8 @@ gpm_backlight_finalize (GObject *object)
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (GPM_IS_BACKLIGHT (object));
 	backlight = GPM_BACKLIGHT (object);
+
+	g_timer_destroy (backlight->priv->idle_timer);
 
 	if (backlight->priv->light_sensor != NULL) {
 		g_object_unref (backlight->priv->light_sensor);
@@ -671,12 +778,16 @@ gpm_backlight_class_init (GpmBacklightClass *klass)
 static void
 gpm_backlight_init (GpmBacklight *backlight)
 {
-	gboolean on_ac;
 	HalGManager *hal_manager;
 	guint value;
 	GpmPrefsServer *prefs_server;
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
+
+	/* assumption */
+	backlight->priv->system_is_idle = FALSE;
+	/* record our idle time */
+	backlight->priv->idle_timer = g_timer_new ();
 
 	/* this has a delay.. */
 	backlight->priv->light_sensor = gpm_light_sensor_new ();
@@ -727,19 +838,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 		g_signal_connect (backlight->priv->brightness, "brightness-changed",
 				  G_CALLBACK (brightness_changed_cb), backlight);
 
-		/* set the standard setting */
-		on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
-		if (on_ac == TRUE) {
-			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_AC_BRIGHTNESS, &value);
-		} else {
-			gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BATT_BRIGHTNESS, &value);
-		}
-		gpm_brightness_lcd_set_std (backlight->priv->brightness, value);
-
-		/* set the default dim */
-		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_PANEL_DIM_BRIGHTNESS, &value);
-		gpm_brightness_lcd_set_dim (backlight->priv->brightness, value);
-
 		/* use a visual widget */
 		backlight->priv->feedback = gpm_feedback_new ();
 		gpm_feedback_set_icon_name (backlight->priv->feedback,
@@ -764,6 +862,9 @@ gpm_backlight_init (GpmBacklight *backlight)
 			  G_CALLBACK (idle_changed_cb), backlight);
 
 	/* sync at startup */
+	gpm_light_sensor_get (backlight->priv->light_sensor, &value);
+	backlight->priv->ambient_sensor_value = value / 100.0f;
+	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 	gpm_backlight_sync_policy (backlight);
 }
 

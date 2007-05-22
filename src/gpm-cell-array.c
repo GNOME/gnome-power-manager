@@ -192,11 +192,11 @@ gpm_cell_array_get_time_until_action (GpmCellArray *cell_array)
 	gpm_conf_get_bool (cell_array->priv->conf, GPM_CONF_USE_TIME_POLICY, &use_time_primary);
 	if (use_time_primary == TRUE) {
 		/* simple subtraction */
-		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_TIME, &action_time);
+		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_THRESH_TIME_ACTION, &action_time);
 		difference = (gint) unit->time_discharge - (gint) action_time;
 	} else {
 		/* we have to work out the time for this percentage */
-		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &action_percentage);
+		gpm_conf_get_uint (cell_array->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, &action_percentage);
 		action_time = gpm_profile_get_time (cell_array->priv->profile, action_percentage, TRUE);
 		if (action_time == 0) {
 			return 0;

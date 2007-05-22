@@ -58,7 +58,7 @@ gpm_st_webcam (GpmSelfTest *test)
 		gpm_st_failed (test, "did not get correct sample");
 	}
 
-#if 0
+#if 1
 	do {
 		/************************************************************/
 		gpm_st_title (test, "make sure we get a valid sample");

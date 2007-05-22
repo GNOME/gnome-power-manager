@@ -827,10 +827,10 @@ conf_key_changed_cb (GpmConf     *conf,
 		     GpmEngine   *engine)
 {
 	gchar *icon_policy;
-	if (strcmp (key, GPM_CONF_ICON_POLICY) == 0) {
+	if (strcmp (key, GPM_CONF_UI_ICON_POLICY) == 0) {
 
 		/* do we want to display the icon in the tray */
-		gpm_conf_get_string (conf, GPM_CONF_ICON_POLICY, &icon_policy);
+		gpm_conf_get_string (conf, GPM_CONF_UI_ICON_POLICY, &icon_policy);
 		engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
 		g_free (icon_policy);
 
@@ -864,7 +864,7 @@ gpm_engine_init (GpmEngine *engine)
 	engine->priv->during_coldplug = TRUE;
 
 	/* do we want to display the icon in the tray */
-	gpm_conf_get_string (engine->priv->conf, GPM_CONF_ICON_POLICY, &icon_policy);
+	gpm_conf_get_string (engine->priv->conf, GPM_CONF_UI_ICON_POLICY, &icon_policy);
 	engine->priv->icon_policy = gpm_tray_icon_mode_from_string (icon_policy);
 	g_free (icon_policy);
 

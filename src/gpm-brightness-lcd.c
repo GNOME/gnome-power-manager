@@ -55,9 +55,7 @@ struct GpmBrightnessLcdPrivate
 {
 	gboolean		 does_own_updates;	/* keys are hardwired */
 	gboolean		 does_own_dimming;	/* hardware auto-fades */
-	gboolean		 is_dimmed;
 	guint			 current_hw;		/* hardware */
-	guint			 level_dim_hw;
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
@@ -180,7 +178,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 }
 
 /**
- * gpm_brightness_lcd_dim_hw:
+ * gpm_brightness_lcd_dim_hw_step:
  * @brightness: This brightness class instance
  * @new_level_hw: The new hardware level
  *
@@ -278,45 +276,7 @@ gpm_brightness_lcd_dim_hw (GpmBrightnessLcd *brightness,
 
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
 	step = gpm_brightness_lcd_get_step (brightness);
-	gpm_brightness_lcd_dim_hw_step (brightness, new_level_hw, step);
-
-	return TRUE;
-}
-
-/**
- * gpm_brightness_lcd_set_dim:
- * @brightness: This brightness class instance
- * @brightness_level: The percentage brightness
- **/
-gboolean
-gpm_brightness_lcd_set_dim (GpmBrightnessLcd *brightness,
-			    guint             brightness_level)
-{
-	guint level_hw;
-
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
-
-	level_hw = gpm_percent_to_discrete (brightness_level,
-					    brightness->priv->levels);
-
-	/* If the current brightness is less than the dim brightness then just
-	 * use the current brightness so that we don't *increase* in brightness
-	 * on idle. See #338630 for more details */
-	if (brightness->priv->level_std_hw > level_hw) {
-		brightness->priv->level_dim_hw = level_hw;
-	} else {
-		gpm_debug ("Current brightness is %i, dim brightness is %i, "
-			   "so we'll use the current as the dim brightness.",
-			   brightness->priv->level_std_hw, level_hw);
-		brightness->priv->level_dim_hw = brightness->priv->level_std_hw;
-	}
-
-	/* if in this state, then update */
-	if (brightness->priv->is_dimmed == TRUE) {
-		gpm_brightness_lcd_dim_hw (brightness, brightness->priv->level_dim_hw);
-	}
-	return TRUE;
+	return gpm_brightness_lcd_dim_hw_step (brightness, new_level_hw, step);
 }
 
 /**
@@ -336,53 +296,8 @@ gpm_brightness_lcd_set_std (GpmBrightnessLcd *brightness,
 	level_hw = gpm_percent_to_discrete (brightness_level, brightness->priv->levels);
 	brightness->priv->level_std_hw = level_hw;
 
-	/* if in this state, then update */
-	if (brightness->priv->is_dimmed == FALSE) {
-		gpm_brightness_lcd_dim_hw (brightness, level_hw);
-	}
-	return TRUE;
-}
-
-/**
- * gpm_brightness_lcd_dim:
- * @brightness: This brightness class instance
- *
- * Sets the screen into dim mode, where the dim brightness is used.
- **/
-gboolean
-gpm_brightness_lcd_dim (GpmBrightnessLcd *brightness)
-{
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
-
-	/* check to see if we are already dimmed */
-	if (brightness->priv->is_dimmed == TRUE) {
-		gpm_warning ("already dim'ed");
-		return FALSE;
-	}
-	brightness->priv->is_dimmed = TRUE;
-	return gpm_brightness_lcd_dim_hw (brightness, brightness->priv->level_dim_hw);
-}
-
-/**
- * gpm_brightness_lcd_undim:
- * @brightness: This brightness class instance
- *
- * Sets the screen into normal mode, where the startdard brightness is used.
- **/
-gboolean
-gpm_brightness_lcd_undim (GpmBrightnessLcd *brightness)
-{
-	g_return_val_if_fail (brightness != NULL, FALSE);
-	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
-
-	/* check to see if we are already dimmed */
-	if (brightness->priv->is_dimmed == FALSE) {
-		gpm_warning ("already undim'ed");
-		return FALSE;
-	}
-	brightness->priv->is_dimmed = FALSE;
-	return gpm_brightness_lcd_dim_hw (brightness, brightness->priv->level_std_hw);
+	/* update */
+	return gpm_brightness_lcd_dim_hw (brightness, level_hw);
 }
 
 /**
@@ -607,10 +522,8 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 
 	/* this changes under our feet */
 	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
-	gpm_debug ("current hw brightness: %i", brightness->priv->current_hw);
 
 	/* set to known value */
-	brightness->priv->level_dim_hw = 0;
 	brightness->priv->level_std_hw = 0;
 
 	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,

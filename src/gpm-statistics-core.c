@@ -183,8 +183,8 @@ conf_key_changed_cb (GpmConf       *conf,
 {
 	gboolean  enabled;
 
-	if (strcmp (key, GPM_CONF_AC_LOWPOWER) == 0) {
-		gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_AC_LOWPOWER, &enabled);
+	if (strcmp (key, GPM_CONF_LOWPOWER_AC) == 0) {
+		gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_LOWPOWER_AC, &enabled);
 		gpm_debug ("need to enable checkbox");
 	}
 }
@@ -299,7 +299,7 @@ gpm_statistics_checkbox_events_cb (GtkWidget     *widget,
 	gpm_debug ("Events enable %i", checked);
 
 	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_EVENTS, checked);
+	gpm_conf_set_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, checked);
 
 	if (checked == FALSE) {
 		/* remove the dots from the graph */
@@ -330,7 +330,7 @@ gpm_statistics_refresh_axis_labels (GpmStatistics *statistics)
 	GtkWidget *widget2;
 
 	/* save to gconf so we open next time with the correct setting */
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_AXIS_LABELS, &show);
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_AXIS_LABELS, &show);
 
 	widget1 = glade_xml_get_widget (statistics->priv->glade_xml, "label_x_axis");
 	widget2 = glade_xml_get_widget (statistics->priv->glade_xml, "label_y_axis");
@@ -617,7 +617,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 		gpm_statistics_get_data_dbus (statistics, statistics->priv->graph_type);
 	}
 
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SMOOTH_DATA, &smooth);
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SMOOTH_DATA, &smooth);
 	if (smooth == TRUE) {
 		GArray *arrayfloat;
 		GArray *kernel;
@@ -682,7 +682,7 @@ gpm_statistics_type_combo_changed_cb (GtkWidget      *widget,
 	statistics->priv->graph_type = type;
 
 	/* save in gconf so we choose the correct graph type on next startup */
-	gpm_conf_set_string (statistics->priv->conf, GPM_CONF_STAT_GRAPH_TYPE, type);
+	gpm_conf_set_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, type);
 
 	/* refresh data automatically */
 	gpm_statistics_refresh_data (statistics);
@@ -708,7 +708,7 @@ gpm_statistics_populate_graph_types (GpmStatistics *statistics,
 		return;
 	}
 
-	gpm_conf_get_string (statistics->priv->conf, GPM_CONF_STAT_GRAPH_TYPE, &saved);
+	gpm_conf_get_string (statistics->priv->conf, GPM_CONF_STATS_GRAPH_TYPE, &saved);
 	/* gconf error, bahh */
 	if (saved == NULL) {
 		saved = g_strdup ("power");
@@ -848,7 +848,7 @@ gpm_statistics_init (GpmStatistics *statistics)
 	gpm_statistics_populate_graph_types (statistics, widget);
 
 	widget = glade_xml_get_widget (statistics->priv->glade_xml, "checkbutton_events");
-	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STAT_SHOW_EVENTS, &checked);
+	gpm_conf_get_bool (statistics->priv->conf, GPM_CONF_STATS_SHOW_EVENTS, &checked);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), checked);
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (gpm_statistics_checkbox_events_cb), statistics);

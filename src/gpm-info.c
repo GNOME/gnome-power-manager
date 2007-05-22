@@ -861,7 +861,7 @@ gpm_info_init (GpmInfo *info)
 		/* get the maximum x-axis size from gconf */
 		GpmConf *conf = gpm_conf_new ();
 		guint max_time;
-		gpm_conf_get_uint (conf, GPM_CONF_GRAPH_DATA_MAX_TIME, &max_time);
+		gpm_conf_get_uint (conf, GPM_CONF_STATS_MAX_TIME, &max_time);
 		g_object_unref (conf);
 
 		gpm_array_set_max_width (info->priv->events, max_time);

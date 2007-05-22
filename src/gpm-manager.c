@@ -216,13 +216,13 @@ gpm_manager_sync_policy_sleep (GpmManager *manager)
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
 	if (on_ac == TRUE) {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_COMPUTER, &sleep_computer);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_AC_SLEEP_DISPLAY, &sleep_display);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC, &sleep_computer);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_AC, &sleep_display);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
 	} else {
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATT_SLEEP_COMPUTER, &sleep_computer);
-		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_BATT_SLEEP_DISPLAY, &sleep_display);
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT, &sleep_computer);
+		gpm_conf_get_uint (manager->priv->conf, GPM_CONF_TIMEOUT_SLEEP_DISPLAY_BATT, &sleep_display);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &power_save);
 	}
 
 	hal_gpower_enable_power_save (manager->priv->hal_power, power_save);
@@ -706,9 +706,9 @@ idle_do_sleep (GpmManager *manager)
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
 	if (on_ac == TRUE) {
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_AC_SLEEP_TYPE, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_AC, &action);
 	} else {
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_SLEEP_TYPE, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_TYPE_BATT, &action);
 	}
 
 	if (action == NULL) {
@@ -882,11 +882,11 @@ lid_button_pressed (GpmManager *manager,
 	if (pressed == TRUE) {
 		if (on_ac == TRUE) {
 			gpm_debug ("Performing AC policy");
-			manager_policy_do (manager, GPM_CONF_AC_BUTTON_LID,
+			manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
 					   _("the lid has been closed on ac power"));
 		} else {
 			gpm_debug ("Performing battery policy");
-			manager_policy_do (manager, GPM_CONF_BATT_BUTTON_LID,
+			manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 					   _("the lid has been closed on battery power"));
 		}
 	} else {
@@ -961,9 +961,9 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 	if (on_ac == TRUE) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &power_save);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &power_save);
 	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &power_save);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &power_save);
 	}
 	if (manager->priv->low_power != power_save) {
 		g_signal_emit (manager, signals [POWER_SAVE_STATUS_CHANGED], 0, power_save);
@@ -972,7 +972,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 
 	/* We do the lid close on battery action if the ac_adapter is removed
 	   when the laptop is closed and on battery. Fixes #331655 */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_EVENT_WHEN_CLOSED, &event_when_closed);
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_ACTIONS_SLEEP_WHEN_CLOSED, &event_when_closed);
 
 	/* We keep track of the lid state so we can do the
 	   lid close on battery action if the ac_adapter is removed when the laptop
@@ -980,7 +980,7 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
 	if (event_when_closed == TRUE &&
 	    on_ac == FALSE &&
 	    gpm_button_is_lid_closed (manager->priv->button)) {
-		manager_policy_do (manager, GPM_CONF_BATT_BUTTON_LID,
+		manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
 				   _("the lid has been closed, and the ac adapter "
 				     "removed (and gconf is okay)"));
 	}
@@ -1003,7 +1003,7 @@ static gboolean
 manager_critical_action_do (GpmManager *manager)
 {
 	manager_policy_do (manager,
-			   GPM_CONF_BATT_CRITICAL,
+			   GPM_CONF_ACTIONS_CRITICAL_BATT,
 			   _("battery is critically low"));
 	return FALSE;
 }
@@ -1075,8 +1075,8 @@ conf_key_changed_cb (GpmConf     *conf,
 		     const gchar *key,
 		     GpmManager  *manager)
 {
-	if (strcmp (key, GPM_CONF_BATT_SLEEP_COMPUTER) == 0 ||
-		   strcmp (key, GPM_CONF_AC_SLEEP_COMPUTER) == 0) {
+	if (strcmp (key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_BATT) == 0 ||
+		   strcmp (key, GPM_CONF_TIMEOUT_SLEEP_COMPUTER_AC) == 0) {
 
 		gpm_manager_sync_policy_sleep (manager);
 	}
@@ -1391,7 +1391,7 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 		time_text = gpm_manager_get_time_until_action_text (manager);
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -1466,7 +1466,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		title = _("Laptop battery critically low");
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BATT_CRITICAL, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -1498,7 +1498,7 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 		title = _("UPS critically low");
 
 		/* we have to do different warnings depending on the policy */
-		gpm_conf_get_string (manager->priv->conf, GPM_CONF_UPS_CRITICAL, &action);
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_UPS, &action);
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
@@ -1567,9 +1567,9 @@ gpm_manager_init (GpmManager *manager)
 	/* coldplug so we are in the correct state at startup */
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 	if (on_ac == TRUE) {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_AC_LOWPOWER, &manager->priv->low_power);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_AC, &manager->priv->low_power);
 	} else {
-		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_BATT_LOWPOWER, &manager->priv->low_power);
+		gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LOWPOWER_BATT, &manager->priv->low_power);
 	}
 
 	manager->priv->button = gpm_button_new ();

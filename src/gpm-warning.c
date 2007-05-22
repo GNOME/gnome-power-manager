@@ -246,14 +246,14 @@ gpm_warning_init (GpmWarning *warning)
 			  G_CALLBACK (gconf_key_changed_cb), warning);
 
 	/* get percentage policy */
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_LOW_PERCENTAGE, &warning->priv->low_percentage);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_CRITICAL_PERCENTAGE, &warning->priv->critical_percentage);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_ACTION_PERCENTAGE, &warning->priv->action_percentage);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_PERCENTAGE_LOW, &warning->priv->low_percentage);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_PERCENTAGE_CRITICAL, &warning->priv->critical_percentage);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_PERCENTAGE_ACTION, &warning->priv->action_percentage);
 
 	/* get time policy */
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_LOW_TIME, &warning->priv->low_time);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_CRITICAL_TIME, &warning->priv->critical_time);
-	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_ACTION_TIME, &warning->priv->action_time);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_TIME_LOW, &warning->priv->low_time);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_TIME_CRITICAL, &warning->priv->critical_time);
+	gpm_conf_get_uint (warning->priv->conf, GPM_CONF_THRESH_TIME_ACTION, &warning->priv->action_time);
 
 	/* We can disable this if the ACPI BIOS is broken, and the
 	   time_remaining is therefore inaccurate or just plain wrong. */

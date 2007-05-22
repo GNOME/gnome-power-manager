@@ -69,13 +69,13 @@ gpm_cpufreq_sync_policy (GpmCpufreq *cpufreq)
 	on_ac = gpm_ac_adapter_is_present (cpufreq->priv->ac_adapter);
 
 	if (on_ac == TRUE) {
-		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_AC_CPUFREQ_VALUE, &cpufreq_performance);
+		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_CPUFREQ_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_CPUFREQ_POLICY_AC, &cpufreq_policy);
+		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_CPUFREQ_PERFORMANCE_AC, &cpufreq_performance);
 	} else {
-		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_USE_NICE, &cpufreq_consider_nice);
-		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_BATT_CPUFREQ_POLICY, &cpufreq_policy);
-		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_BATT_CPUFREQ_VALUE, &cpufreq_performance);
+		gpm_conf_get_bool (cpufreq->priv->conf, GPM_CONF_CPUFREQ_USE_NICE, &cpufreq_consider_nice);
+		gpm_conf_get_string (cpufreq->priv->conf, GPM_CONF_CPUFREQ_POLICY_BATT, &cpufreq_policy);
+		gpm_conf_get_uint (cpufreq->priv->conf, GPM_CONF_CPUFREQ_PERFORMANCE_BATT, &cpufreq_performance);
 	}
 
 	/* use enumerated value */
@@ -100,11 +100,11 @@ conf_key_changed_cb (GpmConf     *conf,
 		     GpmCpufreq  *cpufreq)
 {
 	/* if any change, just resync the whole lot */
-	if (strcmp (key, GPM_CONF_AC_CPUFREQ_POLICY) == 0 ||
-	    strcmp (key, GPM_CONF_AC_CPUFREQ_VALUE) == 0 ||
-	    strcmp (key, GPM_CONF_BATT_CPUFREQ_POLICY) == 0 ||
-	    strcmp (key, GPM_CONF_BATT_CPUFREQ_VALUE) == 0 ||
-	    strcmp (key, GPM_CONF_USE_NICE) == 0) {
+	if (strcmp (key, GPM_CONF_CPUFREQ_POLICY_AC) == 0 ||
+	    strcmp (key, GPM_CONF_CPUFREQ_PERFORMANCE_AC) == 0 ||
+	    strcmp (key, GPM_CONF_CPUFREQ_POLICY_BATT) == 0 ||
+	    strcmp (key, GPM_CONF_CPUFREQ_PERFORMANCE_BATT) == 0 ||
+	    strcmp (key, GPM_CONF_CPUFREQ_USE_NICE) == 0) {
 
 		gpm_cpufreq_sync_policy (cpufreq);
 	}
