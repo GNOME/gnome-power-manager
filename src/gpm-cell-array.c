@@ -37,7 +37,7 @@
 #include "gpm-cell-unit.h"
 #include "gpm-cell.h"
 #include "gpm-debug.h"
-#include "gpm-warning.h"
+#include "gpm-warnings.h"
 #include "gpm-profile.h"
 
 static void     gpm_cell_array_class_init (GpmCellArrayClass *klass);
@@ -56,8 +56,8 @@ struct GpmCellArrayPrivate
 	GpmAcAdapter	*ac_adapter;
 	GpmProfile	*profile;
 	GpmConf		*conf;
-	GpmWarning	*warning;
-	GpmWarningState	 warning_state;
+	GpmWarnings	*warnings;
+	GpmWarningsState warnings_state;
 	GPtrArray	*array;
 	gboolean	 use_profile_calc;
 	gboolean	 done_fully_charged;
@@ -474,7 +474,7 @@ gpm_cell_array_get_config_id (GpmCellArray *cell_array)
 static void
 gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 {
-	GpmWarningState warning_state;
+	GpmWarningsState warnings_state;
 	GpmCellUnit *unit;
 
 	unit = &(cell_array->priv->unit);
@@ -502,34 +502,34 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 
 	/* only get a warning state if we are discharging */
 	if (unit->is_discharging == TRUE) {
-		warning_state = gpm_warning_get_state (cell_array->priv->warning, unit);
+		warnings_state = gpm_warnings_get_state (cell_array->priv->warnings, unit);
 	} else {
-		warning_state = GPM_WARNING_NONE;
+		warnings_state = GPM_WARNINGS_NONE;
 	}
 
 	/* see if we need to issue a warning */
-	if (warning_state == GPM_WARNING_NONE) {
+	if (warnings_state == GPM_WARNINGS_NONE) {
 		gpm_debug ("No warning");
 	} else {
 		/* Always check if we already notified the user */
-		if (warning_state <= cell_array->priv->warning_state) {
-			gpm_debug ("Already notified %i", warning_state);
+		if (warnings_state <= cell_array->priv->warnings_state) {
+			gpm_debug ("Already notified %i", warnings_state);
 		} else {
 
 			/* As the level is more critical than the last warning, save it */
-			cell_array->priv->warning_state = warning_state;
+			cell_array->priv->warnings_state = warnings_state;
 
-			gpm_debug ("warning state = %i", warning_state);
-			if (warning_state == GPM_WARNING_ACTION) {
+			gpm_debug ("warning state = %i", warnings_state);
+			if (warnings_state == GPM_WARNINGS_ACTION) {
 				gpm_debug ("** EMIT: charge-action");
 				g_signal_emit (cell_array, signals [CHARGE_ACTION], 0, unit->percentage);
-			} else if (warning_state == GPM_WARNING_CRITICAL) {
+			} else if (warnings_state == GPM_WARNINGS_CRITICAL) {
 				gpm_debug ("** EMIT: charge-critical");
 				g_signal_emit (cell_array, signals [CHARGE_CRITICAL], 0, unit->percentage);
-			} else if (warning_state == GPM_WARNING_LOW) {
+			} else if (warnings_state == GPM_WARNINGS_LOW) {
 				gpm_debug ("** EMIT: charge-low");
 				g_signal_emit (cell_array, signals [CHARGE_LOW], 0, unit->percentage);
-			} else if (warning_state == GPM_WARNING_DISCHARGING) {
+			} else if (warnings_state == GPM_WARNINGS_DISCHARGING) {
 				gpm_debug ("** EMIT: discharging");
 				g_signal_emit (cell_array, signals [DISCHARGING], 0, unit->percentage);
 			}
@@ -586,7 +586,7 @@ gpm_cell_charging_changed_cb (GpmCell *cell, gboolean charging, GpmCellArray *ce
 	/* invalidate warning */
 	if (unit->is_discharging == FALSE || unit->is_charging == TRUE) {
 		gpm_debug ("warning state invalidated");
-		cell_array->priv->warning_state = GPM_WARNING_NONE;
+		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
 	}
 
 	/* provide data if we are primary. */
@@ -617,7 +617,7 @@ gpm_cell_discharging_changed_cb (GpmCell *cell, gboolean discharging, GpmCellArr
 
 	/* invalidate warning */
 	if (unit->is_discharging == FALSE || unit->is_charging == TRUE) {
-		cell_array->priv->warning_state = GPM_WARNING_NONE;
+		cell_array->priv->warnings_state = GPM_WARNINGS_NONE;
 	}
 
 	/* proxy to engine */
@@ -1232,7 +1232,7 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	cell_array->priv->done_fully_charged = TRUE;
 
 	cell_array->priv->ac_adapter = gpm_ac_adapter_new ();
-	cell_array->priv->warning = gpm_warning_new ();
+	cell_array->priv->warnings = gpm_warnings_new ();
 	cell_array->priv->hal_manager = hal_gmanager_new ();
 	g_signal_connect (cell_array->priv->hal_manager, "device-added",
 			  G_CALLBACK (hal_device_added_cb), cell_array);
@@ -1267,7 +1267,7 @@ gpm_cell_array_finalize (GObject *object)
 	g_ptr_array_free (cell_array->priv->array, TRUE);
 
 	g_object_unref (cell_array->priv->ac_adapter);
-	g_object_unref (cell_array->priv->warning);
+	g_object_unref (cell_array->priv->warnings);
 	g_object_unref (cell_array->priv->hal_manager);
 	g_object_unref (cell_array->priv->profile);
 	g_object_unref (cell_array->priv->conf);

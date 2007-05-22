@@ -40,7 +40,7 @@
 #include "gpm-cell.h"
 #include "gpm-debug.h"
 #include "gpm-stock-icons.h"
-#include "gpm-warning.h"
+#include "gpm-warnings.h"
 #include "gpm-prefs-server.h"
 
 static void     gpm_engine_class_init (GpmEngineClass *klass);
@@ -55,7 +55,7 @@ static void     gpm_engine_finalize   (GObject	  *object);
 struct GpmEnginePrivate
 {
 	GpmConf			*conf;
-	GpmWarning		*warning;
+	GpmWarnings		*warnings;
 	GpmIconPolicy		 icon_policy;
 	GpmProfile		*profile;
 	GpmControl		*control;
@@ -344,7 +344,7 @@ gpm_engine_get_icon (GpmEngine *engine)
 	GpmCellUnit *unit_mouse;
 	GpmCellUnit *unit_keyboard;
 	GpmEngineCollection *collection;
-	GpmWarningState state;
+	GpmWarningsState state;
 
 	/* grab a reference to the collection */
 	collection = &engine->priv->collection;
@@ -365,20 +365,20 @@ gpm_engine_get_icon (GpmEngine *engine)
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
-	state = gpm_warning_get_state (engine->priv->warning, unit_primary);
-	if (unit_primary->is_present == TRUE && state == GPM_WARNING_CRITICAL) {
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_primary);
+	if (unit_primary->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->primary);
 	}
-	state = gpm_warning_get_state (engine->priv->warning, unit_ups); 
-	if (unit_ups->is_present == TRUE && state == GPM_WARNING_CRITICAL) {
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_ups); 
+	if (unit_ups->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->ups);
 	}
-	state = gpm_warning_get_state (engine->priv->warning, unit_mouse);
-	if (unit_mouse->is_present == TRUE && state == GPM_WARNING_CRITICAL) {
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
+	if (unit_mouse->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->mouse);
 	}
-	state = gpm_warning_get_state (engine->priv->warning, unit_keyboard);
-	if (unit_keyboard->is_present == TRUE && state == GPM_WARNING_CRITICAL) {
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
+	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->keyboard);
 	}
 
@@ -855,7 +855,7 @@ gpm_engine_init (GpmEngine *engine)
 	g_signal_connect (engine->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), engine);
 
-	engine->priv->warning = gpm_warning_new ();
+	engine->priv->warnings = gpm_warnings_new ();
 	engine->priv->profile = gpm_profile_new ();
 
 	engine->priv->previous_icon = NULL;
@@ -1023,7 +1023,7 @@ gpm_engine_finalize (GObject *object)
 
 	g_object_unref (engine->priv->hal_manager);
 	g_object_unref (engine->priv->profile);
-	g_object_unref (engine->priv->warning);
+	g_object_unref (engine->priv->warnings);
 	g_object_unref (engine->priv->ac_adapter);
 	g_object_unref (engine->priv->control);
 }

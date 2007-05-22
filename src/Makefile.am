@@ -135,8 +135,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-cell-unit.c					\
 	gpm-cell-array.h				\
 	gpm-cell-array.c				\
-	gpm-warning.h					\
-	gpm-warning.c					\
+	gpm-warnings.h					\
+	gpm-warnings.c					\
 	gpm-backlight.h					\
 	gpm-backlight.c					\
 	gpm-prefs-server.h				\

@@ -82,8 +82,8 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-array-float.c			\
 	../src/gpm-common.h				\
 	../src/gpm-common.c				\
-	../src/gpm-warning.h				\
-	../src/gpm-warning.c				\
+	../src/gpm-warnings.h				\
+	../src/gpm-warnings.c				\
 	../src/gpm-conf.h				\
 	../src/gpm-conf.c				\
 	../src/gpm-debug.h				\
