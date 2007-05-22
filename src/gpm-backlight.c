@@ -79,6 +79,7 @@ struct GpmBacklightPrivate
 	gboolean		 system_is_idle;
 	GTimer			*idle_timer;
 	gfloat			 ambient_sensor_value;
+	guint			 idle_dim_timeout;
 };
 
 enum {
@@ -349,6 +350,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	gboolean do_laptop_lcd;
 	gboolean enable_action;
 	guint value;
+	guint old_value;
 
 	if (backlight->priv->can_dim == FALSE) {
 		gpm_warning ("no dimming hardware");
@@ -370,9 +372,7 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 	on_ac = gpm_ac_adapter_is_present (backlight->priv->ac_adapter);
 
 	/* reduce if on battery power */
-//	gpm_conf_get_bool (backlight->priv->conf, GPM_CONF_BATTERY_BACKLIGHT_ENABLE, &enable_action);
-	enable_action = TRUE;
-	if (enable_action == TRUE && on_ac == FALSE) {
+	if (on_ac == FALSE) {
 		gpm_conf_get_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT, &value);
 		scale = (100 - value) / 100.0f;
 		brightness *= scale;
@@ -418,6 +418,13 @@ gpm_backlight_brightness_evaluate_and_set (GpmBacklight *backlight, gboolean int
 
 	/* convert to percentage */
 	value = brightness * 100.0f;
+
+	/* only do stuff if the brightness is different */
+	gpm_brightness_lcd_get (backlight->priv->brightness, &old_value);
+	if (old_value == value) {
+		gpm_debug ("values are the same, no action");
+		return FALSE;
+	}
 
 	/* only show dialog if interactive */
 	if (interactive == TRUE) {
@@ -527,26 +534,46 @@ gpm_backlight_notify_system_idle_changed (GpmBacklight *backlight, gboolean is_i
 {
 	gdouble elapsed;
 
+	/* no point continuing */
 	if (backlight->priv->system_is_idle == is_idle) {
-		gpm_warning ("state not changed");
+		gpm_debug ("state not changed");
 		return FALSE;
 	}
 
+	/* get elapsed time and reset timer */
 	elapsed = g_timer_elapsed (backlight->priv->idle_timer, NULL);
+	g_timer_reset (backlight->priv->idle_timer);
+
 	if (is_idle == FALSE) {
-		gpm_warning ("we have just been were idle for %lfs", elapsed);
+		gpm_debug ("we have just been idle for %lfs", elapsed);
+
 		/* The user immediatly undimmed the screen!
 		 * We should double the timeout to avoid this happening again */
 		if (elapsed < 10) {
-			//
+			/* double the event time */
+			backlight->priv->idle_dim_timeout *= 2.0;
+			gpm_conf_set_uint (backlight->priv->conf,
+					   GPM_CONF_GNOME_SS_PM_DELAY,
+					   backlight->priv->idle_dim_timeout);
+			gpm_debug ("increasing idle dim time to %is",
+				   backlight->priv->idle_dim_timeout);
 		}
-		/* We reset the dimming after 60 seconds of idle,
+
+		/* We reset the dimming after 2 minutes of idle,
 		 * as the user will have changed tasks */
-		if (elapsed > 60) {
-			//
+		if (elapsed > 2*60) {
+			/* reset back to our default dimming */
+			gpm_conf_get_uint (backlight->priv->conf,
+					   GPM_CONF_BACKLIGHT_IDLE_DIM_TIME,
+					   &backlight->priv->idle_dim_timeout);
+			gpm_conf_set_uint (backlight->priv->conf,
+					   GPM_CONF_GNOME_SS_PM_DELAY,
+					   backlight->priv->idle_dim_timeout);
+			gpm_debug ("resetting idle dim time to %is",
+				   backlight->priv->idle_dim_timeout);
 		}
 	} else {
-		gpm_warning ("we were active for %lfs", elapsed);
+		gpm_debug ("we were active for %lfs", elapsed);
 	}
 
 	gpm_debug ("changing powersave idle status to %i", is_idle);
@@ -609,7 +636,7 @@ idle_changed_cb (GpmIdle      *idle,
 		}
 
 		/* sync lcd brightness */
-		backlight->priv->system_is_idle = FALSE;
+		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 
 		/* sync timeouts */
@@ -618,7 +645,7 @@ idle_changed_cb (GpmIdle      *idle,
 	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
 
 		/* sync lcd brightness */
-		backlight->priv->system_is_idle = TRUE;
+		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
 		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
 	}
 }
@@ -784,8 +811,6 @@ gpm_backlight_init (GpmBacklight *backlight)
 
 	backlight->priv = GPM_BACKLIGHT_GET_PRIVATE (backlight);
 
-	/* assumption */
-	backlight->priv->system_is_idle = FALSE;
 	/* record our idle time */
 	backlight->priv->idle_timer = g_timer_new ();
 
@@ -822,6 +847,14 @@ gpm_backlight_init (GpmBacklight *backlight)
 	g_signal_connect (backlight->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), backlight);
 
+	/* get and set the default idle dim timeout */
+	gpm_conf_get_uint (backlight->priv->conf,
+			   GPM_CONF_BACKLIGHT_IDLE_DIM_TIME,
+			   &backlight->priv->idle_dim_timeout);
+	gpm_conf_set_uint (backlight->priv->conf,
+			   GPM_CONF_GNOME_SS_PM_DELAY,
+			   backlight->priv->idle_dim_timeout);
+
 	/* watch for brightness up and down buttons and also check lid state */
 	backlight->priv->button = gpm_button_new ();
 	g_signal_connect (backlight->priv->button, "button-pressed",
@@ -831,6 +864,15 @@ gpm_backlight_init (GpmBacklight *backlight)
 	backlight->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (backlight->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), backlight);
+
+	/* assumption */
+	backlight->priv->system_is_idle = FALSE;
+	gpm_conf_get_uint (backlight->priv->conf,
+			   GPM_CONF_BACKLIGHT_IDLE_DIM_TIME,
+			   &backlight->priv->idle_dim_timeout);
+	gpm_conf_set_uint (backlight->priv->conf,
+			   GPM_CONF_GNOME_SS_PM_DELAY,
+			   backlight->priv->idle_dim_timeout);
 
 	if (backlight->priv->can_dim == TRUE) {
 		/* watch for manual brightness changes (for the feedback widget) */

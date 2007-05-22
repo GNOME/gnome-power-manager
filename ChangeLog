@@ -1,6 +1,16 @@
 2007-05-22  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
+	* src/gpm-backlight.c: (gpm_backlight_brightness_evaluate_and_set),
+	(gpm_backlight_notify_system_idle_changed), (idle_changed_cb),
+	(gpm_backlight_init):
+	* src/gpm-conf.h:
+	Make the brightness dim code "learn" to take longer to dim if you keep
+	undimming the screen shortly after auto-dimming it.
+
+2007-05-22  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
 	Correct key typo.
 
 2007-05-22  Richard Hughes  <richard@hughsie.com>

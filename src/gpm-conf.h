@@ -58,6 +58,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_BACKLIGHT_IDLE_BRIGHTNESS	GPM_CONF_DIR "/backlight/idle_brightness"
 #define GPM_CONF_BACKLIGHT_IDLE_DIM_AC		GPM_CONF_DIR "/backlight/idle_dim_ac"
 #define GPM_CONF_BACKLIGHT_IDLE_DIM_BATT	GPM_CONF_DIR "/backlight/idle_dim_battery"
+#define GPM_CONF_BACKLIGHT_IDLE_DIM_TIME	GPM_CONF_DIR "/backlight/idle_dim_time"
 #define GPM_CONF_BACKLIGHT_BRIGHTNESS_AC	GPM_CONF_DIR "/backlight/brightness_ac"
 #define GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT	GPM_CONF_DIR "/backlight/brightness_battery"
 
@@ -140,7 +141,10 @@ G_BEGIN_DECLS
 #define GPM_CONF_UI_ENABLE_BEEPING		GPM_CONF_DIR "/ui/enable_sound"
 
 /* we use the gnome-session key now */
-#define GPM_CONF_SESSION_REQUEST_SAVE	"/apps/gnome-session/options/auto_save_session"
+#define GPM_CONF_SESSION_REQUEST_SAVE		"/apps/gnome-session/options/auto_save_session"
+
+/* okay to change at runtime */
+#define GPM_CONF_GNOME_SS_PM_DELAY		"/apps/gnome-screensaver/power_management_delay"
 
 typedef struct GpmConfPrivate GpmConfPrivate;
 
