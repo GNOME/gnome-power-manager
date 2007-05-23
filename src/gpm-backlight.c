@@ -303,7 +303,6 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 			      guint	    brightness,
 			      GError	   **error)
 {
-	gboolean ret;
 	g_return_val_if_fail (backlight != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BACKLIGHT (backlight), FALSE);
 
@@ -315,6 +314,10 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 		return FALSE;
 	}
 
+	/* just set the AC brightness for now, don't try to be clever */
+	gpm_conf_set_uint (backlight->priv->conf, GPM_CONF_BACKLIGHT_BRIGHTNESS_AC, brightness);
+#if 0
+	gboolean ret;
 	/* sets the current policy brightness */
 	ret = gpm_brightness_lcd_set_std (backlight->priv->brightness, brightness);
 	if (ret == FALSE) {
@@ -322,7 +325,9 @@ gpm_backlight_set_brightness (GpmBacklight *backlight,
 				      GPM_BACKLIGHT_ERROR_GENERAL,
 				      "Cannot set policy brightness");
 	}
-	return ret;
+#endif
+
+	return TRUE;
 }
 
 /**
