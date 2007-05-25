@@ -1,3 +1,8 @@
+2007-05-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-manager.c: (gpm_engine_charge_critical_cb):
+	Don't segfault if the schema is invalid.
+
 2007-05-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-backlight.c: (gpm_backlight_set_brightness):

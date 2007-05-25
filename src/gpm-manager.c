@@ -1392,6 +1392,10 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 
 		/* we have to do different warnings depending on the policy */
 		gpm_conf_get_string (manager->priv->conf, GPM_CONF_ACTIONS_CRITICAL_BATT, &action);
+		if (action == NULL) {
+			gpm_warning ("schema invalid!");
+			action = g_strdup (ACTION_NOTHING);
+		}
 
 		/* use different text for different actions */
 		if (strcmp (action, ACTION_NOTHING) == 0) {
