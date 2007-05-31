@@ -1,3 +1,10 @@
+2007-05-31  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	Don't display the drop down menu if we can't suspend or hibernate, and
+	we have no active devices. This patch is backported from trunk, and
+	fixes #442323.
+
 2007-05-17  Richard Hughes  <set EMAIL_ADDRESS environment variable>
 
 	* src/gpm-power.c: (gpm_power_status_for_device),

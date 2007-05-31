@@ -595,6 +595,13 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, GPM_POWER_KIND_UPS);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, GPM_POWER_KIND_MOUSE);
 
+	if (dev_cnt == 0 &&
+	    icon->priv->show_suspend == FALSE &&
+	    icon->priv->show_hibernate == FALSE) {
+		/* nothing to display! */
+		return;
+	}
+
 	/* only do the seporator if we have at least one device */
 	if (dev_cnt != 0) {
 		item = gtk_separator_menu_item_new ();
