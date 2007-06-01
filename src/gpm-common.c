@@ -195,6 +195,30 @@ gpm_discrete_to_percent (guint discrete,
 }
 
 /**
+ * gpm_discrete_to_fraction:
+ * @hw: The discrete level
+ * @levels: The number of discrete levels
+ *
+ * We have to be careful when converting from discrete->fractions.
+ *
+ * Return value: The floating point fraction (0..1) for this discrete value.
+ **/
+gfloat
+gpm_discrete_to_fraction (guint discrete,
+			  guint levels)
+{
+	/* check we are in range */
+	if (discrete > levels) {
+		return 1.0;
+	}
+	if (levels == 0) {
+		gpm_warning ("levels is 0!");
+		return 0.0;
+	}
+	return (guint) ((float) discrete / ((float) (levels - 1)));
+}
+
+/**
  * gpm_get_timestring:
  * @time_secs: The time value to convert in seconds
  * @cookie: The cookie we are looking for

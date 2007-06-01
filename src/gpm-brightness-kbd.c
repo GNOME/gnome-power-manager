@@ -570,7 +570,7 @@ adjust_kbd_brightness_according_to_ambient_light (GpmBrightnessKbd *brightness,
 		return FALSE;
 	}
 
-	gpm_light_sensor_get (brightness->priv->sensor, &ambient_light);
+	gpm_light_sensor_get_absolute (brightness->priv->sensor, &ambient_light);
 
 	/* this is also used if user reenables the keyboard backlight */
 	if (startup) {

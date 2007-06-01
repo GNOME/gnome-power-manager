@@ -1,3 +1,26 @@
+2007-06-01  Richard Hughes  <richard@hughsie.com>
+
+	* data/gpm-prefs.glade:
+	* src/gpm-prefs-core.c: (prefs_setup_ac), (prefs_setup_battery):
+	Move the headings around, and also include a dim-on-idle checkbox for
+	each battery-ac state.
+
+	* src/gpm-common.c: (gpm_discrete_to_fraction):
+	* src/gpm-common.h:
+	* test/gpm-st-common.c: (gpm_st_common):
+	Add a new function and test it.
+
+	* src/gpm-backlight.c: (gpm_backlight_init):
+	* src/gpm-brightness-kbd.c:
+	(adjust_kbd_brightness_according_to_ambient_light):
+	* src/gpm-light-sensor.c: (gpm_light_sensor_get_absolute),
+	(gpm_light_sensor_calibrate), (gpm_light_sensor_get_relative),
+	(gpm_light_sensor_poll_cb), (gpm_light_sensor_init):
+	* src/gpm-light-sensor.h:
+	* src/gpm-webcam.c:
+	Add in functionality so we can get relative brightness readings after
+	an initial calibration has been done.
+
 2007-05-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-manager.c: (gpm_engine_charge_critical_cb):

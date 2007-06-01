@@ -43,17 +43,17 @@
 	      <property name="spacing">6</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox_ac_computer">
+		<widget class="GtkVBox" id="vbox_ac_actions">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_ac_computer">
+		    <widget class="GtkLabel" id="label_ac_actions_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -61,7 +61,6 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_ac_computer</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -70,26 +69,196 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkHScale" id="hscale_ac_computer">
-		      <property name="width_request">200</property>
+		    <widget class="GtkAlignment" id="alignment45">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">1 1 61 1 5 0</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
+
+		      <child>
+			<widget class="GtkVBox" id="vbox79">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ac_computer">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ac_computer">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_ac_computer</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_ac_computer">
+				  <property name="width_request">200</property>
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">1 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ac_lid">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ac_lid">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When laptop lid is cl_osed:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_ac_lid">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ac_cpu">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ac_cpu">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Computer sp_eed policy:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_ac_cpu">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -101,131 +270,17 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox_ac_display">
+		<widget class="GtkVBox" id="vbox_ac_display">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_ac_display">
+		    <widget class="GtkLabel" id="label_ac_display_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_ac_display</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_ac_display">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">23 1 61 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_ac_brightness">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_ac_brightness">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Set display _brightness to:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_ac_brightness</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_ac_brightness">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">41 0 100 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_ac_cpu">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_ac_cpu">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Computer sp_eed policy:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Display&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -241,68 +296,162 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="combobox_ac_cpu">
+		    <widget class="GtkAlignment" id="alignment46">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_ac_lid">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_ac_lid">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When laptop lid is cl_osed:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
+		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
 
-		  <child>
-		    <widget class="GtkComboBox" id="combobox_ac_lid">
-		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
+		      <child>
+			<widget class="GtkVBox" id="vbox83">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ac_display">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ac_display">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_ac_display</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_ac_display">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">23 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ac_brightness">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ac_brightness">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Set display _brightness to:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_ac_brightness</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_ac_brightness">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">41 0 100 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="checkbutton_ac_display_dim">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Dim display when idle</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -355,17 +504,17 @@
 	      <property name="spacing">6</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox_battery_computer">
+		<widget class="GtkVBox" id="vbox_battery_actions">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_battery_computer">
+		    <widget class="GtkLabel" id="label_battery_actions_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -373,7 +522,6 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">0</property>
 		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_battery_computer</property>
 		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
 		      <property name="width_chars">-1</property>
 		      <property name="single_line_mode">False</property>
@@ -382,26 +530,248 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkHScale" id="hscale_battery_computer">
-		      <property name="width_request">200</property>
+		    <widget class="GtkAlignment" id="alignment47">
 		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">1 1 61 1 5 0</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
+
+		      <child>
+			<widget class="GtkVBox" id="vbox86">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_battery_computer">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_battery_computer">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_battery_computer</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_battery_computer">
+				  <property name="width_request">200</property>
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">1 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_battery_lid">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_battery_lid">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When laptop lid is cl_osed:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_battery_lid">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox20">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label121">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When battery po_wer is critically low:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_battery_critical">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_battery_cpu">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_battery_cpu">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Computer sp_eed policy:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_battery_cpu">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -413,131 +783,17 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox_battery_display">
+		<widget class="GtkVBox" id="vbox_battery_display">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_battery_display">
+		    <widget class="GtkLabel" id="label_battery_display_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_battery_display</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_battery_display">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">23 1 61 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_battery_brightness">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_battery_brightness">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Dim display _brightness by:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_battery_brightness</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_battery_brightness">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">41 0 100 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_battery_cpu">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_battery_cpu">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Computer sp_eed policy:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Display&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -553,120 +809,162 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="combobox_battery_cpu">
+		    <widget class="GtkAlignment" id="alignment48">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_battery_lid">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_battery_lid">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When laptop lid is cl_osed:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
+		      <property name="xalign">0.5</property>
 		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
 
-		  <child>
-		    <widget class="GtkComboBox" id="combobox_battery_lid">
-		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
+		      <child>
+			<widget class="GtkVBox" id="vbox88">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
 
-	      <child>
-		<widget class="GtkHBox" id="hbox20">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+			  <child>
+			    <widget class="GtkHBox" id="hbox_battery_display">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
 
-		  <child>
-		    <widget class="GtkLabel" id="label121">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When battery po_wer is critically low:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
+			      <child>
+				<widget class="GtkLabel" id="label_battery_display">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_battery_display</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
 
-		  <child>
-		    <widget class="GtkComboBox" id="combobox_battery_critical">
-		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
+			      <child>
+				<widget class="GtkHScale" id="hscale_battery_display">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">23 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_battery_brightness">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_battery_brightness">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Dim display _brightness by:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_battery_brightness</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_battery_brightness">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">41 0 100 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="checkbutton_battery_display_dim">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Dim display when idle</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -719,132 +1017,17 @@
 	      <property name="spacing">6</property>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox_ups_computer">
+		<widget class="GtkVBox" id="vbox_ups_actions">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_ups_computer">
+		    <widget class="GtkLabel" id="label_ups_actions_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_ups_computer</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_ups_computer">
-		      <property name="width_request">200</property>
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">1 1 61 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox_ups_display">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_ups_display">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
-		      <property name="justify">GTK_JUSTIFY_LEFT</property>
-		      <property name="wrap">False</property>
-		      <property name="selectable">False</property>
-		      <property name="xalign">0</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xpad">0</property>
-		      <property name="ypad">0</property>
-		      <property name="mnemonic_widget">hscale_ups_display</property>
-		      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		      <property name="width_chars">-1</property>
-		      <property name="single_line_mode">False</property>
-		      <property name="angle">0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">False</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-
-		  <child>
-		    <widget class="GtkHScale" id="hscale_ups_display">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="draw_value">True</property>
-		      <property name="value_pos">GTK_POS_BOTTOM</property>
-		      <property name="digits">0</property>
-		      <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
-		      <property name="inverted">False</property>
-		      <property name="adjustment">23 1 61 1 5 0</property>
-		    </widget>
-		    <packing>
-		      <property name="padding">0</property>
-		      <property name="expand">True</property>
-		      <property name="fill">True</property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkHBox" id="hbox18">
-		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
-
-		  <child>
-		    <widget class="GtkLabel" id="label_ups_low">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When UPS power is l_ow:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -860,21 +1043,215 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="combobox_ups_low">
+		    <widget class="GtkAlignment" id="alignment49">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
+
+		      <child>
+			<widget class="GtkVBox" id="vbox91">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ups_computer">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ups_computer">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put computer to _sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_ups_computer</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_ups_computer">
+				  <property name="width_request">200</property>
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">1 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox18">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ups_low">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When UPS power is l_ow:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_ups_low">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox19">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ups_critical">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">When UPS power is _critically low:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkComboBox" id="combobox_ups_critical">
+				  <property name="visible">True</property>
+				  <property name="items" translatable="yes"></property>
+				  <property name="add_tearoffs">False</property>
+				  <property name="focus_on_click">True</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+
+			  <child>
+			    <widget class="GtkCheckButton" id="checkbutton_actions_ups_alarm">
+			      <property name="visible">True</property>
+			      <property name="can_focus">True</property>
+			      <property name="label" translatable="yes">Enable UPS discharge _alarm</property>
+			      <property name="use_underline">True</property>
+			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
+			      <property name="active">False</property>
+			      <property name="inconsistent">False</property>
+			      <property name="draw_indicator">True</property>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">False</property>
+			      <property name="fill">False</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">True</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 		</widget>
@@ -886,17 +1263,17 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkHBox" id="hbox19">
+		<widget class="GtkVBox" id="vbox_ups_display">
 		  <property name="visible">True</property>
-		  <property name="homogeneous">True</property>
-		  <property name="spacing">12</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">6</property>
 
 		  <child>
-		    <widget class="GtkLabel" id="label_ups_critical">
+		    <widget class="GtkLabel" id="label_ups_display_sect">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">When UPS power is _critically low:</property>
-		      <property name="use_underline">True</property>
-		      <property name="use_markup">False</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Display&lt;/b&gt;</property>
+		      <property name="use_underline">False</property>
+		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap">False</property>
 		      <property name="selectable">False</property>
@@ -912,16 +1289,86 @@
 		    <packing>
 		      <property name="padding">0</property>
 		      <property name="expand">False</property>
-		      <property name="fill">True</property>
+		      <property name="fill">False</property>
 		    </packing>
 		  </child>
 
 		  <child>
-		    <widget class="GtkComboBox" id="combobox_ups_critical">
+		    <widget class="GtkAlignment" id="alignment50">
 		      <property name="visible">True</property>
-		      <property name="items" translatable="yes"></property>
-		      <property name="add_tearoffs">False</property>
-		      <property name="focus_on_click">True</property>
+		      <property name="xalign">0.5</property>
+		      <property name="yalign">0.5</property>
+		      <property name="xscale">1</property>
+		      <property name="yscale">1</property>
+		      <property name="top_padding">0</property>
+		      <property name="bottom_padding">0</property>
+		      <property name="left_padding">12</property>
+		      <property name="right_padding">0</property>
+
+		      <child>
+			<widget class="GtkVBox" id="vbox93">
+			  <property name="visible">True</property>
+			  <property name="homogeneous">False</property>
+			  <property name="spacing">5</property>
+
+			  <child>
+			    <widget class="GtkHBox" id="hbox_ups_display">
+			      <property name="visible">True</property>
+			      <property name="homogeneous">True</property>
+			      <property name="spacing">12</property>
+
+			      <child>
+				<widget class="GtkLabel" id="label_ups_display">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">Put _display to sleep when inactive for:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">hscale_ups_display</property>
+				  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
+				  <property name="width_chars">-1</property>
+				  <property name="single_line_mode">False</property>
+				  <property name="angle">0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">False</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="hscale_ups_display">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">0</property>
+				  <property name="update_policy">GTK_UPDATE_CONTINUOUS</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">23 1 61 1 5 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">0</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
+			    </widget>
+			    <packing>
+			      <property name="padding">0</property>
+			      <property name="expand">True</property>
+			      <property name="fill">True</property>
+			    </packing>
+			  </child>
+			</widget>
+		      </child>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -934,25 +1381,6 @@
 		  <property name="padding">0</property>
 		  <property name="expand">False</property>
 		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkCheckButton" id="checkbutton_actions_ups_alarm">
-		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Enable UPS discharge _alarm</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
-		  <property name="active">False</property>
-		  <property name="inconsistent">False</property>
-		  <property name="draw_indicator">True</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
 		</packing>
 	      </child>
 	    </widget>
@@ -1001,7 +1429,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="label122">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">&lt;b&gt;Buttons&lt;/b&gt;</property>
+		      <property name="label" translatable="yes">&lt;b&gt;Actions&lt;/b&gt;</property>
 		      <property name="use_underline">False</property>
 		      <property name="use_markup">True</property>
 		      <property name="justify">GTK_JUSTIFY_LEFT</property>

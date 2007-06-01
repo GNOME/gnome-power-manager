@@ -52,8 +52,11 @@ typedef struct
 GType		 gpm_light_sensor_get_type		(void);
 GpmLightSensor *gpm_light_sensor_new			(void);
 
-gboolean	 gpm_light_sensor_get			(GpmLightSensor	*brightness,
+gboolean	 gpm_light_sensor_get_absolute		(GpmLightSensor	*brightness,
 							 guint		*brightness_level);
+gboolean	 gpm_light_sensor_get_relative		(GpmLightSensor	*brightness,
+							 gfloat		*difference);
+gboolean	 gpm_light_sensor_calibrate		(GpmLightSensor	*brightness);
 gboolean	 gpm_light_sensor_has_hw		(GpmLightSensor *sensor);
 
 G_END_DECLS

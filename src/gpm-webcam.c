@@ -153,7 +153,7 @@ Cleanup:
  * @brightness: average brightness retval
  *
  **/
-gboolean
+static gboolean
 gpm_webcam_get_average_brightness_of_pixbuf (GdkPixbuf *pixbuf, gfloat *brightness)
 {
 	guint width;

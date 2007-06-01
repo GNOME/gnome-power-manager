@@ -85,6 +85,8 @@ gint		 gpm_exponential_average	(gint		 previous,
 						 guint		 slew);
 guint		 gpm_discrete_to_percent	(guint		 discrete,
 						 guint		 levels);
+gfloat		 gpm_discrete_to_fraction	(guint		 discrete,
+						 guint		 levels);
 guint32		 gpm_rgb_to_colour		(guint8		 red,
 						 guint8		 green,
 						 guint8		 blue);

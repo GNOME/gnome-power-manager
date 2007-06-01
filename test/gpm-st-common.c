@@ -30,6 +30,7 @@ gpm_st_common (GpmSelfTest *test)
 	guint8 r, g, b;
 	guint32 colour;
 	guint value;
+	gfloat fvalue;
 	test->type = "GpmCommon        ";
 
 	/************************************************************/
@@ -201,6 +202,51 @@ gpm_st_common (GpmSelfTest *test)
 		gpm_st_success (test, "got %i", value);
 	} else {
 		gpm_st_failed (test, "precision incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "convert discrete 0/10 levels");
+	value = gpm_discrete_to_percent (0, 10);
+	if (value == 0) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "conversion incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "convert discrete 9/10 levels");
+	value = gpm_discrete_to_percent (9, 10);
+	if (value == 100) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "conversion incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "convert discrete 20/10 levels");
+	value = gpm_discrete_to_percent (20, 10);
+	if (value == 100) {
+		gpm_st_success (test, "got %i", value);
+	} else {
+		gpm_st_failed (test, "conversion incorrect (%i)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "convert discrete 0/10 levels");
+	fvalue = gpm_discrete_to_fraction (0, 10);
+	if (fvalue > -0.01 && fvalue < 0.01) {
+		gpm_st_success (test, "got %f", fvalue);
+	} else {
+		gpm_st_failed (test, "conversion incorrect (%f)", fvalue);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "convert discrete 9/10 levels");
+	fvalue = gpm_discrete_to_fraction (9, 10);
+	if (fvalue > -1.01 && fvalue < 1.01) {
+		gpm_st_success (test, "got %f", fvalue);
+	} else {
+		gpm_st_failed (test, "conversion incorrect (%f)", fvalue);
 	}
 }
 

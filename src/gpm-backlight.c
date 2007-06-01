@@ -909,7 +909,7 @@ gpm_backlight_init (GpmBacklight *backlight)
 			  G_CALLBACK (idle_changed_cb), backlight);
 
 	/* sync at startup */
-	gpm_light_sensor_get (backlight->priv->light_sensor, &value);
+	gpm_light_sensor_get_absolute (backlight->priv->light_sensor, &value);
 	backlight->priv->ambient_sensor_value = value / 100.0f;
 	gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 	gpm_backlight_sync_policy (backlight);

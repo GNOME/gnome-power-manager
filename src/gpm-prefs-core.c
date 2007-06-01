@@ -930,6 +930,9 @@ prefs_setup_ac (GpmPrefs *prefs)
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_ac_brightness",
 					   GPM_CONF_BACKLIGHT_BRIGHTNESS_AC);
 
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_ac_display_dim",
+				  GPM_CONF_BACKLIGHT_IDLE_DIM_AC);
+
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_ac_computer", delay);
 	set_idle_hscale_stops (prefs, "hscale_ac_display", delay);
@@ -944,6 +947,8 @@ prefs_setup_ac (GpmPrefs *prefs)
 	}
 	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_ac_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_ac_display_dim");
 		gtk_widget_hide_all (widget);
 	}
 
@@ -999,6 +1004,14 @@ prefs_setup_battery (GpmPrefs *prefs)
 	gpm_prefs_setup_brightness_slider (prefs, "hscale_battery_brightness",
 					   GPM_CONF_BACKLIGHT_BRIGHTNESS_BATT);
 
+	gpm_prefs_setup_checkbox (prefs, "checkbutton_battery_display_dim",
+				  GPM_CONF_BACKLIGHT_IDLE_DIM_BATT);
+
+	if (prefs->priv->has_ambient == FALSE) {
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_general_ambient");
+		gtk_widget_hide_all (widget);
+	}
+
 	delay = gpm_screensaver_get_delay (prefs->priv->screensaver);
 	set_idle_hscale_stops (prefs, "hscale_battery_computer", delay);
 	set_idle_hscale_stops (prefs, "hscale_battery_display", delay);
@@ -1013,6 +1026,8 @@ prefs_setup_battery (GpmPrefs *prefs)
 	}
 	if (prefs->priv->has_lcd == FALSE) {
 		widget = glade_xml_get_widget (prefs->priv->glade_xml, "hbox_battery_brightness");
+		gtk_widget_hide_all (widget);
+		widget = glade_xml_get_widget (prefs->priv->glade_xml, "checkbutton_battery_display_dim");
 		gtk_widget_hide_all (widget);
 	}
 	gpm_conf_get_bool (prefs->priv->conf, GPM_CONF_UI_SHOW_CPUFREQ, &show_cpufreq);

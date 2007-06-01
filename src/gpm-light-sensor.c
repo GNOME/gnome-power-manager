@@ -56,6 +56,7 @@ struct GpmLightSensorPrivate
 	GpmConf			*conf;
 	guint			 current_hw;		/* hardware */
 	guint			 levels;
+	gfloat			 calibration_abs;
 	gchar			*udi;
 	gboolean		 has_sensor;
 	gboolean		 has_webcam;
@@ -130,7 +131,7 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
 }
 
 /**
- * gpm_light_sensor_get:
+ * gpm_light_sensor_get_absolute:
  * @sensor: This sensor class instance
  * Return value: The percentage brightness, or -1 for no hardware or error
  *
@@ -138,10 +139,32 @@ gpm_light_sensor_get_hw (GpmLightSensor *sensor)
  * brightness. This is quick as no HAL inquiry is done.
  **/
 gboolean
-gpm_light_sensor_get (GpmLightSensor *sensor,
-		      guint	     *sensor_level)
+gpm_light_sensor_get_absolute (GpmLightSensor *sensor,
+			       guint	      *sensor_level)
 {
-	gint percentage;
+	g_return_val_if_fail (sensor != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
+
+	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+		gpm_warning ("no hardware!");
+		return FALSE;
+	}
+
+	*sensor_level = gpm_discrete_to_percent (sensor->priv->current_hw,
+					         sensor->priv->levels);
+	return TRUE;
+}
+
+/**
+ * gpm_light_sensor_calibrate:
+ * @sensor: This sensor class instance
+ *
+ * Calibrates the initial reading for relative changes.
+ **/
+gboolean
+gpm_light_sensor_calibrate (GpmLightSensor *sensor)
+{
+	gfloat fraction;
 
 	g_return_val_if_fail (sensor != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
@@ -151,9 +174,39 @@ gpm_light_sensor_get (GpmLightSensor *sensor,
 		return FALSE;
 	}
 
-	percentage = gpm_discrete_to_percent (sensor->priv->current_hw,
-					      sensor->priv->levels);
-	*sensor_level = percentage;
+	fraction = gpm_discrete_to_fraction (sensor->priv->current_hw,
+					     sensor->priv->levels);
+	sensor->priv->calibration_abs = fraction;
+	gpm_debug ("calibrating to %f", fraction);
+	return TRUE;
+}
+
+/**
+ * gpm_light_sensor_get_relative:
+ * @sensor: This sensor class instance
+ *
+ * Gets the relative brightness, centered around 1.0.
+ **/
+gboolean
+gpm_light_sensor_get_relative (GpmLightSensor *sensor,
+			       gfloat	      *difference)
+{
+	gfloat absolute;
+	g_return_val_if_fail (sensor != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_LIGHT_SENSOR (sensor), FALSE);
+
+	if (sensor->priv->has_sensor == FALSE && sensor->priv->has_webcam == FALSE) {
+		gpm_warning ("no hardware!");
+		return FALSE;
+	}
+	if (sensor->priv->calibration_abs < 0.01 && sensor->priv->calibration_abs > -0.01) {
+		gpm_warning ("not calibrated!");
+		return FALSE;
+	}
+
+	absolute = gpm_discrete_to_percent (sensor->priv->current_hw,
+					    sensor->priv->levels);
+	*difference = (absolute - sensor->priv->calibration_abs) + 1.0;
 	return TRUE;
 }
 
@@ -267,7 +320,7 @@ gpm_light_sensor_poll_cb (gpointer userdata)
 
 		/* this could fail if hal refuses us */
 		if (ret == TRUE) {
-			gpm_light_sensor_get (sensor, &new);
+			gpm_light_sensor_get_absolute (sensor, &new);
 			gpm_debug ("brightness = %i, %i", sensor->priv->current_hw, new);
 			g_signal_emit (sensor, signals [SENSOR_CHANGED], 0, new);
 		}
@@ -323,6 +376,7 @@ gpm_light_sensor_init (GpmLightSensor *sensor)
 	sensor->priv->gproxy = NULL;
 	sensor->priv->udi = NULL;
 	sensor->priv->webcam = NULL;
+	sensor->priv->calibration_abs = 0.0f;
 
 	sensor->priv->conf = gpm_conf_new ();
 	g_signal_connect (sensor->priv->conf, "value-changed",
