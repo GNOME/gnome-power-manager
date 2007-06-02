@@ -1177,7 +1177,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 
 	cairo_save (cr);
 
-	graph->priv->box_x = 35;
+	graph->priv->box_x = 45;
 	graph->priv->box_y = 5;
 
 	if (graph->priv->title != NULL) {
