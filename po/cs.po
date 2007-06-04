@@ -1,3 +1,4 @@
+# translation of cs.po to Czech
 # translation of cs.po to
 # translation of gnome-power-manager.HEAD.po to
 # Czech translation of gnome-power-manager
@@ -5,46 +6,52 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Tomas Kyjovsky <tomas.kyjovsky@mail.muni.cz>, 2006.
-# Jakub Friedl <jfriedl@suse.cz>, 2006.
+# Jakub Friedl <jfriedl@suse.cz>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-12-18 00:05+0000\n"
-"PO-Revision-Date: 2006-12-15 15:28+0100\n"
+"POT-Creation-Date: 2007-06-04 18:46+0200\n"
+"PO-Revision-Date: 2007-06-04 18:46+0200\n"
 "Last-Translator: Jakub Friedl <jfriedl@suse.cz>\n"
-"Language-Team:  <cs@li.org>\n"
+"Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../applets/brightness/brightness-applet.c:60
-msgid "Power Manger Brightness Applet"
+#: ../applets/brightness/brightness-applet.c:71
+#, fuzzy
+msgid "Power Manager Brightness Applet"
 msgstr "Applet Správce napájení pro ovládání jasu"
 
-#: ../applets/brightness/brightness-applet.c:61
+#: ../applets/brightness/brightness-applet.c:72
 msgid "Adjusts laptop panel brightness."
 msgstr "Upravuje jas displeje laptopu."
 
-#: ../applets/brightness/brightness-applet.c:215
-#, c-format
-msgid "LCD brightness : %d%%"
-msgstr "Jas LCD: %d%%"
+#: ../applets/brightness/brightness-applet.c:318
+#, fuzzy, c-format
+msgid "Cannot connect to gnome-power-manager"
+msgstr "Nelze se připojit ke GNOME Správci napájení."
 
-#: ../applets/brightness/brightness-applet.c:217
+#: ../applets/brightness/brightness-applet.c:320
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "Nelze zjistit jas displeje laptopu"
 
-#: ../applets/brightness/brightness-applet.c:487
-#: ../applets/inhibit/inhibit-applet.c:259 ../src/gpm-tray-icon.c:299
+#: ../applets/brightness/brightness-applet.c:322
+#, c-format
+msgid "LCD brightness : %d%%"
+msgstr "Jas LCD: %d%%"
+
+#: ../applets/brightness/brightness-applet.c:709
+#: ../applets/inhibit/inhibit-applet.c:360 ../src/gpm-tray-icon.c:309
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licencováno pod licencí GNU General Public Licence Verze 2"
 
-#: ../applets/brightness/brightness-applet.c:488
-#: ../applets/inhibit/inhibit-applet.c:260 ../src/gpm-tray-icon.c:300
+#: ../applets/brightness/brightness-applet.c:710
+#: ../applets/inhibit/inhibit-applet.c:361 ../src/gpm-tray-icon.c:310
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -56,8 +63,8 @@ msgstr ""
 "publikované organizací Free Software Foundation; buď verze 2\n"
 "této licence, nebo (podle vaší volby) jekékoli pozděší verze."
 
-#: ../applets/brightness/brightness-applet.c:492
-#: ../applets/inhibit/inhibit-applet.c:264 ../src/gpm-tray-icon.c:304
+#: ../applets/brightness/brightness-applet.c:714
+#: ../applets/inhibit/inhibit-applet.c:365 ../src/gpm-tray-icon.c:314
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -69,8 +76,8 @@ msgstr ""
 "záruky PRODEJNOSTI nebo VHODNOSTI PRO KONKRÉTNÍ ÚČEL.  Pro více\n"
 "detailů se podívejte do licence GNU General Public License."
 
-#: ../applets/brightness/brightness-applet.c:496
-#: ../applets/inhibit/inhibit-applet.c:268 ../src/gpm-tray-icon.c:308
+#: ../applets/brightness/brightness-applet.c:718
+#: ../applets/inhibit/inhibit-applet.c:369 ../src/gpm-tray-icon.c:318
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -82,38 +89,39 @@ msgstr ""
 "Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
 "Boston, MA 02110-1301, USA."
 
-#: ../applets/brightness/brightness-applet.c:510
+#: ../applets/brightness/brightness-applet.c:732
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
-#: ../applets/inhibit/inhibit-applet.c:56
-msgid "Power Manger Inhibit Applet"
+#: ../applets/inhibit/inhibit-applet.c:57
+#, fuzzy
+msgid "Power Manager Inhibit Applet"
 msgstr "Applet Správce napájení pro zákaz šetření energií"
 
-#: ../applets/inhibit/inhibit-applet.c:57
+#: ../applets/inhibit/inhibit-applet.c:58
 msgid "Allows user to inhibit automatic power saving."
 msgstr "Umožňuje uživateli zakázat automatické šetření energií."
 
-#: ../applets/inhibit/inhibit-applet.c:195
+#: ../applets/inhibit/inhibit-applet.c:296
 #, c-format
 msgid "Automatic sleep inhibited"
 msgstr "Zakázáno automatické uspávání"
 
-#: ../applets/inhibit/inhibit-applet.c:197
+#: ../applets/inhibit/inhibit-applet.c:298
 #, c-format
 msgid "Automatic sleep enabled"
 msgstr "Povoleno automatické uspávání"
 
-#: ../applets/inhibit/inhibit-applet.c:224
+#: ../applets/inhibit/inhibit-applet.c:325
 msgid "Manual inhibit"
 msgstr "Manuální zákaz"
 
-#: ../applets/inhibit/inhibit-applet.c:282
-msgid "Copyright © 2006 Richard Hughes"
-msgstr "Copyright © 2006 Richard Hughes"
+#: ../applets/inhibit/inhibit-applet.c:383
+msgid "Copyright © 2006-2007 Richard Hughes"
+msgstr "Copyright © 2006-2007 Richard Hughes"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:30
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "Správce napájení"
 
@@ -138,30 +146,28 @@ msgid "Allow Suspend and Hibernate in the menu"
 msgstr "Suspendovat Hibernovat"
 
 #: ../data/gnome-power-manager.schemas.in.h:3
+msgid "Allow backlight brightness adjustment"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:4
 msgid "Battery critical low action"
 msgstr "Kriticky nízký stav baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:4
-msgid "Change the brightness to a preset level on AC state change"
-msgstr ""
-
 #: ../data/gnome-power-manager.schemas.in.h:5
-msgid "Change the brightness to automatically using the ambient light sensors"
-msgstr ""
+msgid "Change the brightness automatically using the ambient light sensors"
+msgstr "Upravit automaticky jas s pomocí čidel okolního světla"
 
 #: ../data/gnome-power-manager.schemas.in.h:6
 msgid "Check CPU load before sleeping"
 msgstr "Před uspáním zkontrolovat zatížení CPU"
 
 #: ../data/gnome-power-manager.schemas.in.h:7
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on AC power"
-msgstr "Ztlumit obrazovku po době neaktivity"
+msgstr "Ztlumit obrazovku po době nečinnosti při napájení ze sítě"
 
 #: ../data/gnome-power-manager.schemas.in.h:8
-#, fuzzy
 msgid "Dim the screen after a period of inactivity when on battery power"
-msgstr "Ztlumit obrazovku po době neaktivity"
+msgstr "Ztlumit obrazovku po době nečinnosti při napájení z baterie"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
 #, fuzzy
@@ -190,7 +196,7 @@ msgstr ""
 #: ../data/gnome-power-manager.schemas.in.h:14
 #, fuzzy
 msgid ""
-"If a notification message should be displayed after the suspend or hibernate "
+"If a notification message should be displayed after suspend or hibernate "
 "failed."
 msgstr "uspání hibernaci."
 
@@ -202,41 +208,55 @@ msgid ""
 msgstr "Zda máme upozornit uživatele na to, že baterie je plně nabita"
 
 #: ../data/gnome-power-manager.schemas.in.h:16
+#, fuzzy
+msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
+msgstr "Zda máme upozornit uživatele na to, že baterie je plně nabita"
+
+#: ../data/gnome-power-manager.schemas.in.h:17
+#, fuzzy
+msgid ""
+"If a notification message should be displayed when the profile data is "
+"guessed."
+msgstr "Zda máme upozornit uživatele na to, že baterie je plně nabita"
+
+#: ../data/gnome-power-manager.schemas.in.h:18
 msgid ""
 "If niced processes are considered, they can cause a frequency increment even "
 "though their absolute load percentage wouldn't trigger the scaling mechanism "
 "to switch up the frequency."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:17
+#: ../data/gnome-power-manager.schemas.in.h:19
 msgid "If sounds should be used"
 msgstr "Zda má být používán zvuk"
 
-#: ../data/gnome-power-manager.schemas.in.h:18
+#: ../data/gnome-power-manager.schemas.in.h:20
 #, fuzzy
 msgid ""
 "If sounds should be used when the power is critically low, or inhibit "
 "requests have stopped the policy action."
 msgstr "Zda má být "
 
-#: ../data/gnome-power-manager.schemas.in.h:19
+#: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If the CPU load should be checked before doing the idle action."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:20
+#: ../data/gnome-power-manager.schemas.in.h:22
 #, fuzzy
 msgid ""
 "If the Suspend and Hibernate options should be allowed in the notification "
 "area drop down menu."
 msgstr "Suspendovat Hibernovat."
 
-#: ../data/gnome-power-manager.schemas.in.h:21
+#: ../data/gnome-power-manager.schemas.in.h:23
 msgid ""
 "If the battery event should occur when the lid is shut and the power "
 "disconnected"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:22
+#: ../data/gnome-power-manager.schemas.in.h:24
 #, fuzzy
 msgid ""
 "If the battery lid close event should occur (for example 'Suspend when lid "
@@ -244,52 +264,62 @@ msgid ""
 "disconnected at a later time."
 msgstr "Suspendovat."
 
-#: ../data/gnome-power-manager.schemas.in.h:23
+#: ../data/gnome-power-manager.schemas.in.h:25
 msgid ""
-"If the laptop should be configured as if it is using an permanent external "
+"If the laptop should be configured as if it is using a permanent external "
 "monitor"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:24
+#: ../data/gnome-power-manager.schemas.in.h:26
 msgid ""
-"If the laptop should be configured to not do dimming actions and DPMS off if "
-"it is using a dock or external monitor. Most laptop and desktop users should "
+"If the laptop should be configured disable both dimming actions and DPMS "
+"when using a dock or external monitor. Most laptop and desktop users should "
 "select FALSE here."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:25
+#: ../data/gnome-power-manager.schemas.in.h:27
+msgid "If the learnt profile should be used to calculate the time remaining"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:28
+msgid ""
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:29
 msgid "If the low-power mode should be enabled when on AC"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:26
+#: ../data/gnome-power-manager.schemas.in.h:30
 #, fuzzy
 msgid "If the low-power mode should be enabled when on UPS"
 msgstr "UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:27
+#: ../data/gnome-power-manager.schemas.in.h:31
 msgid "If the low-power mode should be enabled when on battery"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:28
+#: ../data/gnome-power-manager.schemas.in.h:32
+#, fuzzy
+msgid ""
+"If the screen brightness can be changed when switching between AC and "
+"battery power and by ambient light sensors."
+msgstr "Zda máme upozornit uživatele na to, že adaptér napájení byl odpojen"
+
+#: ../data/gnome-power-manager.schemas.in.h:33
 msgid ""
 "If the screen brightness should be changed automatically using the ambient "
 "light sensors."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:29
-#, fuzzy
+#: ../data/gnome-power-manager.schemas.in.h:34
 msgid ""
-"If the screen brightness should be changed when switching between AC and "
-"battery power."
-msgstr "Zda máme upozornit uživatele na to, že adaptér napájení byl odpojen"
-
-#: ../data/gnome-power-manager.schemas.in.h:30
-msgid ""
-"If the screen is locked when the screen is turned off. Only used if "
-"lock_use_screensaver_settings is false."
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors. Valid is 'none', 'light' and 'dark'"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:31
+#: ../data/gnome-power-manager.schemas.in.h:35
 #, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
@@ -298,7 +328,7 @@ msgstr ""
 "Doba prodlevy v sekundách před tím, než se displej pokusí přejít do režimu "
 "spánku, je-li napájen ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:32
+#: ../data/gnome-power-manager.schemas.in.h:36
 #, fuzzy
 msgid ""
 "If the screen should be dimmed to save power when the computer is idle when "
@@ -307,34 +337,34 @@ msgstr ""
 "Doba prodlevy v sekundách před tím, než se displej pokusí přejít do režimu "
 "spánku, je-li napájen ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:33
+#: ../data/gnome-power-manager.schemas.in.h:37
 msgid "If the system low-power mode should be enabled when on AC power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:34
+#: ../data/gnome-power-manager.schemas.in.h:38
 #, fuzzy
 msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "UPS."
 
-#: ../data/gnome-power-manager.schemas.in.h:35
+#: ../data/gnome-power-manager.schemas.in.h:39
 msgid ""
 "If the system low-power mode should be enabled when on laptop battery power."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:36
+#: ../data/gnome-power-manager.schemas.in.h:40
 #, fuzzy
 msgid "If the user is authorized to hibernate the computer."
 msgstr "hibernaci."
 
-#: ../data/gnome-power-manager.schemas.in.h:37
+#: ../data/gnome-power-manager.schemas.in.h:41
 msgid "If the user is authorized to suspend the computer."
 msgstr "Zda musí být uživatel pro uspání počítače autorizován."
 
-#: ../data/gnome-power-manager.schemas.in.h:38
+#: ../data/gnome-power-manager.schemas.in.h:42
 msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "Zda má být uživatel upozorněn na odpojení síťového adaptéru."
 
-#: ../data/gnome-power-manager.schemas.in.h:39
+#: ../data/gnome-power-manager.schemas.in.h:43
 msgid ""
 "If time based notifications should be used. If set to false, then the "
 "percentage change is used instead, which may fix a broken ACPI BIOS."
@@ -343,35 +373,36 @@ msgstr ""
 "negativně, budou používány procentuální změny, což může pomoci v případě "
 "vadného ACPI BIOSu."
 
-#: ../data/gnome-power-manager.schemas.in.h:40
-msgid ""
-"If to lock the screen when the computer wakes up from a hibernate. Only used "
-"if lock_use_screensaver_settings is false."
-msgstr ""
-"Zda má být po probuzení počítače z hibernace uzamčena obrazovka. Používáno "
-"pouze je-li lock_use_screensaver_settings nepravdivé."
-
-#: ../data/gnome-power-manager.schemas.in.h:41
-msgid ""
-"If to lock the screen when the computer wakes up from a suspend. Only used "
-"if lock_use_screensaver_settings is false."
-msgstr ""
-"Zda má být po probuzení počítače z uspání uzamčena obrazovka. Používáno "
-"pouze je-li lock_use_screensaver_settings nepravdivé."
-
-#: ../data/gnome-power-manager.schemas.in.h:42
+#: ../data/gnome-power-manager.schemas.in.h:44
 #, fuzzy
-msgid ""
-"If to use the screen lock setting of gnome-screensaver to decide to lock the "
-"screen after a hibernate, suspend or blank screen."
-msgstr "hibernaci uspání."
+msgid "If we should show the CPU frequency scaling in the UI"
+msgstr ""
+"Zda se má v případě vadné baterie zobrazovat varování o stahování baterií"
 
-#: ../data/gnome-power-manager.schemas.in.h:43
+#: ../data/gnome-power-manager.schemas.in.h:45
+msgid ""
+"If we should show the CPU frequency scaling in the UI. Some people need to "
+"configure this for specific systems."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:46
+#, fuzzy
+msgid "If we should show the low capacity warning for a broken battery"
+msgstr ""
+"Zda se má v případě vadné baterie zobrazovat varování o stahování baterií"
+
+#: ../data/gnome-power-manager.schemas.in.h:47
+#, fuzzy
+msgid "If we should show the low capacity warning for a broken battery."
+msgstr ""
+"Zda se má v případě vadné baterie zobrazovat varování o stahování baterií"
+
+#: ../data/gnome-power-manager.schemas.in.h:48
 msgid "If we should show the recalled battery warning for a broken battery"
 msgstr ""
 "Zda se má v případě vadné baterie zobrazovat varování o stahování baterií"
 
-#: ../data/gnome-power-manager.schemas.in.h:44
+#: ../data/gnome-power-manager.schemas.in.h:49
 msgid ""
 "If we should show the recalled battery warning for a broken battery. Set "
 "this to false only if you know your battery is okay."
@@ -379,132 +410,143 @@ msgstr ""
 "Zda se má v případě vadné baterie zobrazovat varování o stahování baterií. "
 "Nastavte záporně pouze pokud jste si jisti, že je vaše baterie v pořádku."
 
-#: ../data/gnome-power-manager.schemas.in.h:45
+#: ../data/gnome-power-manager.schemas.in.h:50
 msgid "Keyboard brightness when on AC"
 msgstr "Jas klávesnice při napájení ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:46
+#: ../data/gnome-power-manager.schemas.in.h:51
 msgid "Keyboard brightness when on battery"
 msgstr "Jas klávesnice při napájení z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:47
+#: ../data/gnome-power-manager.schemas.in.h:52
 msgid "LCD brightness when on AC"
 msgstr "Jas LCD při napájení ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:48
+#: ../data/gnome-power-manager.schemas.in.h:53
 msgid "LCD brightness when on battery"
 msgstr "Jas LCD při napájení z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:49
+#: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Laptop lid close action on battery"
 msgstr "Akce uzavření víka laptopu při běhu na baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:50
+#: ../data/gnome-power-manager.schemas.in.h:55
 msgid "Laptop lid close action when on AC"
 msgstr "Akce uzavření víka laptopu při běhu ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:51
+#: ../data/gnome-power-manager.schemas.in.h:56
+msgid "Lock GNOME keyring on sleep"
+msgstr "Při usnutí uzamknout GNOME klíčenku"
+
+#: ../data/gnome-power-manager.schemas.in.h:57
 msgid "Lock screen on hibernate"
 msgstr "Uzamknout obrazovku při hibernaci"
 
-#: ../data/gnome-power-manager.schemas.in.h:52
+#: ../data/gnome-power-manager.schemas.in.h:58
 msgid "Lock screen on suspend"
 msgstr "Uzamknout obrazovku při uspání do RAM"
 
-#: ../data/gnome-power-manager.schemas.in.h:53
+#: ../data/gnome-power-manager.schemas.in.h:59
 msgid "Lock screen when blanked"
 msgstr "Uzamknout obrazovku při jejím smazání"
 
-#: ../data/gnome-power-manager.schemas.in.h:54
+#: ../data/gnome-power-manager.schemas.in.h:60
 msgid "Method used to blank screen on AC"
 msgstr "Metoda mazání obrazovky při běhu ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:55
+#: ../data/gnome-power-manager.schemas.in.h:61
 msgid "Method used to blank screen on battery"
 msgstr "Metoda mazání obrazovky při běhu z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:56
-msgid "Notify on a HAL error"
+#: ../data/gnome-power-manager.schemas.in.h:62
+#, fuzzy
+msgid "Notify on a low power"
 msgstr "Upozornit na chybu HAL"
 
-#: ../data/gnome-power-manager.schemas.in.h:57
+#: ../data/gnome-power-manager.schemas.in.h:63
+#, fuzzy
+msgid "Notify on a sleep failure"
+msgstr "Upozornit na chybu HAL"
+
+#: ../data/gnome-power-manager.schemas.in.h:64
 msgid "Notify when AC adapter is disconnected"
 msgstr "Upozornit na odpojení sí%tového adaptéru"
 
-#: ../data/gnome-power-manager.schemas.in.h:58
+#: ../data/gnome-power-manager.schemas.in.h:65
 msgid "Notify when fully charged"
 msgstr "Upozornit na plné dobití"
 
-#: ../data/gnome-power-manager.schemas.in.h:59
+#: ../data/gnome-power-manager.schemas.in.h:66
+#, fuzzy
+msgid "Notify when the profile data is guessed"
+msgstr "Při stisku tlačítka _napájení:"
+
+#: ../data/gnome-power-manager.schemas.in.h:67
 msgid "Number of seconds to suppress policy after resume"
 msgstr "Počet sekund potlačení politiky po probuzení"
 
-#: ../data/gnome-power-manager.schemas.in.h:60
+#: ../data/gnome-power-manager.schemas.in.h:68
 msgid "Percentage action is taken"
 msgstr "Je vykonána akce založená na procentech"
 
-#: ../data/gnome-power-manager.schemas.in.h:61
+#: ../data/gnome-power-manager.schemas.in.h:69
 msgid "Percentage considered critical"
 msgstr "Procento považované za kritické"
 
-#: ../data/gnome-power-manager.schemas.in.h:62
+#: ../data/gnome-power-manager.schemas.in.h:70
 msgid "Percentage considered low"
 msgstr "Procento považované za nízké"
 
-#: ../data/gnome-power-manager.schemas.in.h:63
-msgid "Percentage considered very low"
-msgstr "Procento považované za velmi nízké"
-
-#: ../data/gnome-power-manager.schemas.in.h:64
+#: ../data/gnome-power-manager.schemas.in.h:71
 msgid "Power button action"
 msgstr "Akce tlačítka napájení"
 
-#: ../data/gnome-power-manager.schemas.in.h:65
+#: ../data/gnome-power-manager.schemas.in.h:72
 msgid "Sleep timeout computer when on AC"
 msgstr "Čas pro uspání počítače při běhu ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:66
+#: ../data/gnome-power-manager.schemas.in.h:73
 msgid "Sleep timeout computer when on battery"
 msgstr "Čas pro uspání počítače při běhu z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:67
+#: ../data/gnome-power-manager.schemas.in.h:74
 msgid "Sleep timeout display when on AC"
 msgstr "Čas pro uspání displeje při běhu ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:68
+#: ../data/gnome-power-manager.schemas.in.h:75
 msgid "Sleep timeout display when on battery"
 msgstr "Čas pro uspání displeje při běhu z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:69
+#: ../data/gnome-power-manager.schemas.in.h:76
 msgid "Suspend button action"
 msgstr "Akce při stisknutí tlačítka režimu spánku"
 
-#: ../data/gnome-power-manager.schemas.in.h:70
+#: ../data/gnome-power-manager.schemas.in.h:77
 msgid "Suspend enabled"
 msgstr "Uspání povoleno"
 
-#: ../data/gnome-power-manager.schemas.in.h:71
+#: ../data/gnome-power-manager.schemas.in.h:78
 #, fuzzy
 msgid ""
 "The DPMS method used to blank the screen when on AC power. Possible values "
 "are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr "UPS hibernaci uspání."
 
-#: ../data/gnome-power-manager.schemas.in.h:72
+#: ../data/gnome-power-manager.schemas.in.h:79
 #, fuzzy
 msgid ""
 "The DPMS method used to blank the screen when on battery power. Possible "
 "values are \"default\", \"standby\", \"suspend\" and \"off\"."
 msgstr "hibernaci uspání."
 
-#: ../data/gnome-power-manager.schemas.in.h:73
+#: ../data/gnome-power-manager.schemas.in.h:80
 #, fuzzy
 msgid ""
 "The action to take when the UPS is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
 msgstr "Akce "
 
-#: ../data/gnome-power-manager.schemas.in.h:74
+#: ../data/gnome-power-manager.schemas.in.h:81
 msgid ""
 "The action to take when the UPS is low. Possible values are \"hibernate\", "
 "\"suspend\", \"shutdown\" and \"nothing\"."
@@ -512,7 +554,7 @@ msgstr ""
 "Akce při nízkém stavu UPS. Možné hodnoty jsou \"hibernovat\", \"suspendovat"
 "\", \"vypnout\" a \"nic\","
 
-#: ../data/gnome-power-manager.schemas.in.h:75
+#: ../data/gnome-power-manager.schemas.in.h:82
 msgid ""
 "The action to take when the battery is critically low. Possible values are "
 "\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
@@ -520,7 +562,7 @@ msgstr ""
 "hibernaci uspání.Akce při kriticky nízkém stavu baterie. Možné hodnoty jsou "
 "\"hibernovat\", \"suspendovat\", \"vypnout\" a \"nic\","
 
-#: ../data/gnome-power-manager.schemas.in.h:76
+#: ../data/gnome-power-manager.schemas.in.h:83
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on AC "
 "power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
@@ -529,7 +571,7 @@ msgstr ""
 "Akce při zavření víka laptopu při napájení ze sítě. Možné hodnoty jsou "
 "\"hibernovat\", \"suspendovat\", \"smazat\" a \"nic\","
 
-#: ../data/gnome-power-manager.schemas.in.h:77
+#: ../data/gnome-power-manager.schemas.in.h:84
 msgid ""
 "The action to take when the laptop lid is closed and the laptop is on "
 "battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
@@ -538,7 +580,7 @@ msgstr ""
 "Akce při zavření víka laptopu při napájení z baterie. Možné hodnoty jsou "
 "\"hibernovat\", \"suspendovat\", \"smazat\" a \"nic\","
 
-#: ../data/gnome-power-manager.schemas.in.h:78
+#: ../data/gnome-power-manager.schemas.in.h:85
 #, fuzzy
 msgid ""
 "The action to take when the system hibernate button is pressed. Possible "
@@ -546,7 +588,7 @@ msgid ""
 "\"nothing\"."
 msgstr "hibernaci uspání hibernaci."
 
-#: ../data/gnome-power-manager.schemas.in.h:79
+#: ../data/gnome-power-manager.schemas.in.h:86
 #, fuzzy
 msgid ""
 "The action to take when the system power button is pressed. Possible values "
@@ -554,7 +596,7 @@ msgid ""
 "\"."
 msgstr "uspání hibernaci."
 
-#: ../data/gnome-power-manager.schemas.in.h:80
+#: ../data/gnome-power-manager.schemas.in.h:87
 #, fuzzy
 msgid ""
 "The action to take when the system suspend button is pressed. Possible "
@@ -562,7 +604,7 @@ msgid ""
 "\"nothing\"."
 msgstr "uspání uspání hibernaci."
 
-#: ../data/gnome-power-manager.schemas.in.h:81
+#: ../data/gnome-power-manager.schemas.in.h:88
 #, fuzzy
 msgid ""
 "The amount of time in seconds before the display goes to sleep when the "
@@ -571,20 +613,20 @@ msgstr ""
 "Doba prodlevy v sekundách před tím, než se displej pokusí přejít do režimu "
 "spánku, je-li napájen ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:82
+#: ../data/gnome-power-manager.schemas.in.h:89
 msgid ""
 "The amount of time in seconds the computer on AC power needs to be inactive "
 "before it goes to sleep."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:83
+#: ../data/gnome-power-manager.schemas.in.h:90
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before it goes to sleep."
 msgstr ""
 "Doba inaktivity počítače napájeného ze sítě v sekundách před jeho uspáním."
 
-#: ../data/gnome-power-manager.schemas.in.h:84
+#: ../data/gnome-power-manager.schemas.in.h:91
 msgid ""
 "The amount of time in seconds the computer on battery power needs to be "
 "inactive before the display goes to sleep."
@@ -592,102 +634,148 @@ msgstr ""
 "Doba inaktivity počítače napájeného ze sítě v sekundách před uspáním jeho "
 "displeje."
 
-#: ../data/gnome-power-manager.schemas.in.h:85
+#: ../data/gnome-power-manager.schemas.in.h:92
+msgid "The amount the light sensors should contribute to the brightness"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:93
+msgid "The amount the light sensors should contribute to the brightness."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:94
 msgid ""
 "The brightness of the display when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
 "Jas displeje při napájení ze sítě. Možné jsou hodnoty v rozsahu 0 až 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:86
+#: ../data/gnome-power-manager.schemas.in.h:95
 msgid ""
 "The brightness of the display when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "Jas displeje při napájení z baterie. Možné jsou hodnoty v rozsahu 0 až 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:87
+#: ../data/gnome-power-manager.schemas.in.h:96
 msgid ""
 "The brightness of the keyboard when on AC power. Possible values are between "
 "0 and 100."
 msgstr ""
 "Jas klávesnice při napájení ze sítě. Možné jsou hodnoty v rozsahu 0 až 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:88
+#: ../data/gnome-power-manager.schemas.in.h:97
 msgid ""
 "The brightness of the keyboard when on battery power. Possible values are "
 "between 0 and 100."
 msgstr ""
 "Jas klávesnice při napájení z baterie. Možné jsou hodnoty v rozsahu 0 až 100."
 
-#: ../data/gnome-power-manager.schemas.in.h:89
+#: ../data/gnome-power-manager.schemas.in.h:98
 msgid "The brightness of the screen when idle"
 msgstr "Jas obrazovky během nečinnosti"
 
-#: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The cpufreq custom performance value to use when on AC power"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The cpufreq custom performance value to use when on battery power"
-msgstr ""
-
-#: ../data/gnome-power-manager.schemas.in.h:92
+#: ../data/gnome-power-manager.schemas.in.h:99
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"AC power."
+"The calibration of the light sensors so that the screen is bright enough"
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:93
+#: ../data/gnome-power-manager.schemas.in.h:100
 msgid ""
-"The cpufreq custom performance value to used to scale the processor when on "
-"battery power."
+"The calibration of the light sensors so that the screen is bright enough, in "
+"percent."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:94
+#: ../data/gnome-power-manager.schemas.in.h:101
+#, fuzzy
+msgid "The cpufreq performance value to use when on AC power"
+msgstr "Politika frekvence procesoru při napájení ze sítě"
+
+#: ../data/gnome-power-manager.schemas.in.h:102
+#, fuzzy
+msgid "The cpufreq performance value to use when on battery power"
+msgstr "Politika frekvence procesoru při napájení z baterie"
+
+#: ../data/gnome-power-manager.schemas.in.h:103
+#, fuzzy
+msgid ""
+"The cpufreq performance value used to scale the processor when on AC power."
+msgstr "Politika frekvence procesoru při napájení ze sítě"
+
+#: ../data/gnome-power-manager.schemas.in.h:104
+#, fuzzy
+msgid ""
+"The cpufreq performance value used to scale the processor when on battery "
+"power."
+msgstr "Politika frekvence procesoru při napájení z baterie"
+
+#: ../data/gnome-power-manager.schemas.in.h:105
 msgid "The cpufreq policy to use when on AC power"
 msgstr "Politika frekvence procesoru při napájení ze sítě"
 
-#: ../data/gnome-power-manager.schemas.in.h:95
+#: ../data/gnome-power-manager.schemas.in.h:106
 msgid "The cpufreq policy to use when on battery power"
 msgstr "Politika frekvence procesoru při napájení z baterie"
 
-#: ../data/gnome-power-manager.schemas.in.h:96
+#: ../data/gnome-power-manager.schemas.in.h:107
+#, fuzzy
 msgid ""
-"The cpufreq policy to used to scale the processor when on AC power. Possible "
+"The cpufreq policy used to scale the processor when on AC power. Possible "
 "values are ondemand, conservative, powersave, userspace, performance, "
 "nothing."
 msgstr ""
 "Politika frekvence procesoru při napájení ze sítě. Možné hodnoty jsou "
 "ondemand, conservative, powersave, userspace, performance, nothing."
 
-#: ../data/gnome-power-manager.schemas.in.h:97
+#: ../data/gnome-power-manager.schemas.in.h:108
+#, fuzzy
 msgid ""
-"The cpufreq policy to used to scale the processor when on battery power. "
+"The cpufreq policy used to scale the processor when on battery power. "
 "Possible values are ondemand, conservative, powersave, userspace, "
 "performance, nothing."
 msgstr ""
 "Politika frekvence procesoru při napájení z baterie. Možné hodnoty jsou "
 "ondemand, conservative, powersave, userspace, performance, nothing."
 
-#: ../data/gnome-power-manager.schemas.in.h:98
-#, fuzzy
-msgid "The damping factor for the rate"
-msgstr "Orientace lišty."
+#: ../data/gnome-power-manager.schemas.in.h:109
+msgid "The default amount of time to dim the screen after idle"
+msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:99
+#: ../data/gnome-power-manager.schemas.in.h:110
+msgid "The default amount of time to dim the screen after idle."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The default graph type to show in the statistics window"
 msgstr "Výchozí typ grafu pro zobrazení v okně statistik"
 
-#: ../data/gnome-power-manager.schemas.in.h:100
+#: ../data/gnome-power-manager.schemas.in.h:112
 msgid "The default graph type to show in the statistics window."
 msgstr "Výchozí typ grafu pro zobrazení v okně statistik."
 
-#: ../data/gnome-power-manager.schemas.in.h:101
+#: ../data/gnome-power-manager.schemas.in.h:113
+msgid "The device name for the v4l device used as a brightness sensor backup"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:114
+msgid ""
+"The device name for the v4l device used as a brightness sensor backup. A "
+"value of 'default' uses the first discovered sensor, or devices can be "
+"specified, e.g. '/dev/video0'"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:115
+msgid "The interval the ambient light sensors should be polled"
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:116
+msgid "The interval the ambient light sensors should be polled in seconds."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:117
 msgid "The invalid timeout for power actions"
 msgstr "Neplatná lhůta vypršení pro akce napájení"
 
-#: ../data/gnome-power-manager.schemas.in.h:102
+#: ../data/gnome-power-manager.schemas.in.h:118
 msgid ""
 "The invalid timeout in ms for power actions. Set this longer if you get "
 "'battery critical' messages when you unplug."
@@ -695,15 +783,15 @@ msgstr ""
 "Platný čas vypršení v ms pro akce napájení. Nastavte delší čas, pokud při "
 "odpojení dostáváte zprávy o kritickém stavu baterie."
 
-#: ../data/gnome-power-manager.schemas.in.h:103
+#: ../data/gnome-power-manager.schemas.in.h:119
 msgid "The maximum duration of time displayed on the x-axis of the graph."
 msgstr "Maximílní délka času zobrazená na ose X grafu."
 
-#: ../data/gnome-power-manager.schemas.in.h:104
+#: ../data/gnome-power-manager.schemas.in.h:120
 msgid "The maximum time displayed on the graph"
 msgstr "Maximální čas zobrazený na grafu"
 
-#: ../data/gnome-power-manager.schemas.in.h:105
+#: ../data/gnome-power-manager.schemas.in.h:121
 msgid ""
 "The percentage of the battery when it is considered critical. Only valid "
 "when use_time_for_policy is false."
@@ -711,7 +799,7 @@ msgstr ""
 "Procento nabití baterie považované za kritické. Platné pouze pokud je "
 "use_time_for_policy nastaveno jako nepravdivé."
 
-#: ../data/gnome-power-manager.schemas.in.h:106
+#: ../data/gnome-power-manager.schemas.in.h:122
 msgid ""
 "The percentage of the battery when it is considered low. Only valid when "
 "use_time_for_policy is false."
@@ -719,15 +807,7 @@ msgstr ""
 "Procento nabití baterie považované za nízké. Platné pouze pokud je "
 "use_time_for_policy nastaveno jako nepravdivé."
 
-#: ../data/gnome-power-manager.schemas.in.h:107
-msgid ""
-"The percentage of the battery when it is considered very low. Only valid "
-"when use_time_for_policy is false."
-msgstr ""
-"Procento nabití baterie považované za velmi nízké. Platné pouze pokud je "
-"use_time_for_policy nastaveno jako nepravdivé."
-
-#: ../data/gnome-power-manager.schemas.in.h:108
+#: ../data/gnome-power-manager.schemas.in.h:123
 msgid ""
 "The percentage of the battery when the critical action is performed. Only "
 "valid when use_time_for_policy is false."
@@ -735,128 +815,159 @@ msgstr ""
 "Procento nabití baterie při kterém je provedena kritická akce. Platné pouze "
 "pokud je use_time_for_policy nastaveno jako nepravdivé."
 
-#: ../data/gnome-power-manager.schemas.in.h:109
+#: ../data/gnome-power-manager.schemas.in.h:124
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when critical action is taken. "
 "Only valid when use_time_for_policy is true."
 msgstr "zbývající."
 
-#: ../data/gnome-power-manager.schemas.in.h:110
+#: ../data/gnome-power-manager.schemas.in.h:125
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered critical. "
 "Only valid when use_time_for_policy is true."
 msgstr "zbývající."
 
-#: ../data/gnome-power-manager.schemas.in.h:111
+#: ../data/gnome-power-manager.schemas.in.h:126
 #, fuzzy
 msgid ""
 "The time remaining in seconds of the battery when it is considered low. Only "
 "valid when use_time_for_policy is true."
 msgstr "zbývající."
 
-#: ../data/gnome-power-manager.schemas.in.h:112
-#, fuzzy
-msgid ""
-"The time remaining in seconds of the battery when it is considered very low. "
-"Only valid when use_time_for_policy is true."
-msgstr "zbývající."
-
-#: ../data/gnome-power-manager.schemas.in.h:113
+#: ../data/gnome-power-manager.schemas.in.h:127
 msgid "The time remaining when action is taken"
 msgstr "Zbývající čas při vykonání akce"
 
-#: ../data/gnome-power-manager.schemas.in.h:114
+#: ../data/gnome-power-manager.schemas.in.h:128
 msgid "The time remaining when critical"
 msgstr "Zbývající čas při kritickém stavu"
 
-#: ../data/gnome-power-manager.schemas.in.h:115
+#: ../data/gnome-power-manager.schemas.in.h:129
 msgid "The time remaining when low"
 msgstr "Zbývající čas při nízkém stavu"
 
-#: ../data/gnome-power-manager.schemas.in.h:116
-msgid "The time remaining when very low"
-msgstr "Zbývající čas při velmi nízkém stavu"
-
-#: ../data/gnome-power-manager.schemas.in.h:117
+#: ../data/gnome-power-manager.schemas.in.h:130
 #, fuzzy
 msgid ""
 "The type of sleeping that should be performed when the computer is inactive. "
 "Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
 msgstr "hibernaci uspání."
 
-#: ../data/gnome-power-manager.schemas.in.h:118
-#, fuzzy
-msgid ""
-"The value of the damping factor used when calculating the exponentially "
-"weighted average of the rate. Increasing this value will increase the "
-"damping effect of the rate calculations, which makes the time remaining more "
-"accurate, but the graphs less responsive."
-msgstr "zbývající."
-
-#: ../data/gnome-power-manager.schemas.in.h:119
+#: ../data/gnome-power-manager.schemas.in.h:131
 msgid ""
 "This is the laptop panel screen brightness used when the session is idle. "
 "Only valid when use_time_for_policy is true."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:120
+#: ../data/gnome-power-manager.schemas.in.h:132
 #, fuzzy
 msgid "UPS critical low action"
 msgstr "UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:121
+#: ../data/gnome-power-manager.schemas.in.h:133
 msgid "UPS low power action"
 msgstr "Akce nízkého stavu UPS"
 
-#: ../data/gnome-power-manager.schemas.in.h:122
+#: ../data/gnome-power-manager.schemas.in.h:134
 msgid "Use gnome-screensaver lock setting"
 msgstr "Používat nastavení zamykání GNOME šetřiče obrazovky"
 
-#: ../data/gnome-power-manager.schemas.in.h:123
+#: ../data/gnome-power-manager.schemas.in.h:135
 msgid "When to show the notification icon"
 msgstr "Kdy zobrazit oznamovací ikonu"
 
-#: ../data/gnome-power-manager.schemas.in.h:124
+#: ../data/gnome-power-manager.schemas.in.h:136
 msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "Zda má být při uspávání připojován a odpojován NetworkManager."
 
-#: ../data/gnome-power-manager.schemas.in.h:125
+#: ../data/gnome-power-manager.schemas.in.h:137
 msgid ""
 "Whether NetworkManager should disconnect before suspending or hibernating "
 "and connect on resume."
 msgstr ""
 
-#: ../data/gnome-power-manager.schemas.in.h:126
+#: ../data/gnome-power-manager.schemas.in.h:138
 msgid ""
 "Whether or not niced processes should be considered on processor load "
 "calculation"
 msgstr "Zda mají být nice procesy brány v potaz při výpočtu zatížení procesoru"
 
-#: ../data/gnome-power-manager.schemas.in.h:127
+#: ../data/gnome-power-manager.schemas.in.h:139
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters sleep. This "
+"means the the keyring will have to be unlocked on resume."
+msgstr ""
+
+#: ../data/gnome-power-manager.schemas.in.h:140
+#, fuzzy
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"Zda má být po probuzení počítače z hibernace uzamčena obrazovka. Používáno "
+"pouze je-li lock_use_screensaver_settings nepravdivé."
+
+#: ../data/gnome-power-manager.schemas.in.h:141
+#, fuzzy
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"Zda má být po probuzení počítače z uspání uzamčena obrazovka. Používáno "
+"pouze je-li lock_use_screensaver_settings nepravdivé."
+
+#: ../data/gnome-power-manager.schemas.in.h:142
+#, fuzzy
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"Zda má být po probuzení počítače z uspání uzamčena obrazovka. Používáno "
+"pouze je-li lock_use_screensaver_settings nepravdivé."
+
+#: ../data/gnome-power-manager.schemas.in.h:143
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "Zda při neaktivitě počítač hibernovat, uspat či nedělat nic"
 
-#: ../data/gnome-power-manager.schemas.in.h:128
+#: ../data/gnome-power-manager.schemas.in.h:144
+#, fuzzy
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr "hibernaci uspání."
+
+#: ../data/gnome-power-manager.schemas.in.h:145
 msgid "Whether to use time-based notifications"
 msgstr "Kdy zobrazit oznamovací ikonu"
 
-#: ../data/gnome-power-manager.schemas.in.h:129
+#: ../data/gnome-power-manager.schemas.in.h:146
+#, fuzzy
+msgid "Whether we should show the axis labels in the statistics window"
+msgstr "Zda mají být události zobrazovány v okně statistiky"
+
+#: ../data/gnome-power-manager.schemas.in.h:147
+#, fuzzy
+msgid "Whether we should show the axis labels in the statistics window."
+msgstr "Zda mají být události zobrazovány v okně statistiky."
+
+#: ../data/gnome-power-manager.schemas.in.h:148
 msgid "Whether we should show the events in the statistics window"
 msgstr "Zda mají být události zobrazovány v okně statistiky"
 
-#: ../data/gnome-power-manager.schemas.in.h:130
+#: ../data/gnome-power-manager.schemas.in.h:149
 msgid "Whether we should show the events in the statistics window."
 msgstr "Zda mají být události zobrazovány v okně statistiky."
 
-#: ../data/gnome-power-manager.schemas.in.h:131
-msgid "Whether we should show the legend in the statistics window"
-msgstr "Zda má být v okně statistiky zobrazována legenda"
+#: ../data/gnome-power-manager.schemas.in.h:150
+#, fuzzy
+msgid "Whether we should smooth the data in the graph"
+msgstr "Zda mají být události zobrazovány v okně statistiky"
 
-#: ../data/gnome-power-manager.schemas.in.h:132
-msgid "Whether we should show the legend in the statistics window."
-msgstr "Zda má být v okně statistiky zobrazována legenda."
+#: ../data/gnome-power-manager.schemas.in.h:151
+msgid "Whether we should smooth the data in the graph."
+msgstr "Zda mají být data v grafu vyhlazována."
 
 #: ../data/gnome-power-preferences.desktop.in.h:1
 msgid "Configure power management"
@@ -879,24 +990,25 @@ msgid "Brightness"
 msgstr "Jas"
 
 #: ../data/gpm-graph.glade.h:1
-msgid "Add legend"
-msgstr "Přidat legendu"
+msgid "Add related _events"
+msgstr "Přidat související _události"
 
 #: ../data/gpm-graph.glade.h:2
-msgid "Add related events"
-msgstr "Přidat související události"
+msgid "Cell Voltage"
+msgstr "Napětí baterie"
 
 #: ../data/gpm-graph.glade.h:3
-msgid "Device:"
-msgstr "Zařízení:"
-
-#: ../data/gpm-graph.glade.h:4
 msgid "Graph type:"
 msgstr "Typ grafu:"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-statistics-core.c:55
+#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
 msgid "Power History"
 msgstr "Historie napájení"
+
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:283 ../src/gpm-info.c:292
+#: ../src/gpm-info.c:301 ../src/gpm-info.c:310
+msgid "Time since startup"
+msgstr "Čas od spuštění"
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
@@ -907,156 +1019,168 @@ msgid "Burning DVD, titled \"My Photos\""
 msgstr "Vypalování DVD s názvem \"Mé fotky\""
 
 #: ../data/gpm-inhibit-test.glade.h:3
-msgid "GNOME Acme Foo"
-msgstr "GNOME Acme Foo"
-
-#: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit"
 msgstr "Inhibovat"
 
-#: ../data/gpm-inhibit-test.glade.h:5
+#: ../data/gpm-inhibit-test.glade.h:4
 msgid "Inhibit Tester"
 msgstr ""
 
-#: ../data/gpm-inhibit-test.glade.h:6
+#: ../data/gpm-inhibit-test.glade.h:5
 msgid "Reason:"
 msgstr "Důvod:"
 
-#: ../data/gpm-inhibit-test.glade.h:7
+#: ../data/gpm-inhibit-test.glade.h:6
 msgid "UnInhibit"
 msgstr "Zrušit inhibici"
 
-#: ../data/gpm-prefs.glade.h:1
+#: ../data/gpm-inhibit-test.glade.h:7
 #, fuzzy
-msgid "<b>Buttons</b>"
-msgstr "<b>Zvuky</b>"
+msgid "Vendor Acme Foo"
+msgstr "GNOME Acme Foo"
+
+#: ../data/gpm-prefs.glade.h:1
+msgid "<b>Actions</b>"
+msgstr "<b>Akce</b>"
 
 #: ../data/gpm-prefs.glade.h:2
+msgid "<b>Display</b>"
+msgstr "<b>Obrazovka</b>"
+
+#: ../data/gpm-prefs.glade.h:3
 #, fuzzy
 msgid "<b>Extras</b>"
 msgstr "<b>Zvuky</b>"
 
-#: ../data/gpm-prefs.glade.h:3
+#: ../data/gpm-prefs.glade.h:4
 msgid "<b>Notification Area</b>"
 msgstr "<b>Oznamovací oblast</b>"
 
-#: ../data/gpm-prefs.glade.h:4
-msgid "Always sleep when the _lid is closed"
+#: ../data/gpm-prefs.glade.h:5
+msgid "Always sleep when the lid is _closed"
 msgstr "Při zavření víka laptopu vždy u_spat"
 
-#: ../data/gpm-prefs.glade.h:5
-msgid "Computer _speed policy:"
+#: ../data/gpm-prefs.glade.h:6
+msgid "Computer sp_eed policy:"
 msgstr "Politika _rychlosti počítače:"
 
-#: ../data/gpm-prefs.glade.h:6
+#: ../data/gpm-prefs.glade.h:7
+msgid "Dim display _brightness by:"
+msgstr "Ztlumit _jas monitoru o:"
+
+#: ../data/gpm-prefs.glade.h:8
+msgid "Dim display when idle"
+msgstr "Ztlumit monitor při nečinnosti"
+
+#: ../data/gpm-prefs.glade.h:9
 msgid "Enable UPS discharge _alarm"
 msgstr "Povolit _alarm vybíjení UPS"
 
-#: ../data/gpm-prefs.glade.h:7
+#: ../data/gpm-prefs.glade.h:10
 msgid "General"
 msgstr "Obecné"
 
-#: ../data/gpm-prefs.glade.h:8
+#: ../data/gpm-prefs.glade.h:11
 msgid "Make _default"
 msgstr "Nastavit jako _výchozí"
 
-#: ../data/gpm-prefs.glade.h:9
+#: ../data/gpm-prefs.glade.h:12
 msgid "On AC Power"
 msgstr "V síti"
 
-#: ../data/gpm-prefs.glade.h:10
+#: ../data/gpm-prefs.glade.h:13
 msgid "On Battery Power"
 msgstr "Při napájení z baterie"
 
-#: ../data/gpm-prefs.glade.h:11
+#: ../data/gpm-prefs.glade.h:14
 msgid "On UPS Power"
 msgstr "Při napájení z UPS"
 
-#: ../data/gpm-prefs.glade.h:12
+#: ../data/gpm-prefs.glade.h:15
 #, fuzzy
-msgid "Only display an icon when a _battery is present"
+msgid "Only display an icon when a battery is p_resent"
 msgstr "Zobrazit pouze, je-li _přítomna baterie"
 
-#: ../data/gpm-prefs.glade.h:13
+#: ../data/gpm-prefs.glade.h:16
 #, fuzzy
 msgid "Only display an icon when charging or _discharging"
 msgstr "Zobrazit pouze pokud se baterie nabíjí nebo _vybíjí"
 
-#: ../data/gpm-prefs.glade.h:14
+#: ../data/gpm-prefs.glade.h:17
 msgid "Power Management Preferences"
 msgstr "Předvolby správy napájení"
 
-#: ../data/gpm-prefs.glade.h:15
-msgid "Put _computer to sleep when inactive for:"
-msgstr "Uspat _počítač, je-li neaktivní po:"
-
-#: ../data/gpm-prefs.glade.h:16
+#: ../data/gpm-prefs.glade.h:18
 msgid "Put _display to sleep when inactive for:"
 msgstr "Uspat _displej, je-li počítač neaktivní po:"
 
-#: ../data/gpm-prefs.glade.h:17
+#: ../data/gpm-prefs.glade.h:19
+#, fuzzy
+msgid "Put computer to _sleep when inactive for:"
+msgstr "Uspat _počítač, je-li neaktivní po:"
+
+#: ../data/gpm-prefs.glade.h:20
 msgid "Set display _brightness to:"
 msgstr "Nastavit _jas monitoru na:"
 
-#: ../data/gpm-prefs.glade.h:18
+#: ../data/gpm-prefs.glade.h:21
+msgid "Turn on keyboard light when light level is low"
+msgstr "Zapnout podsvícení klávesnice"
+
+#: ../data/gpm-prefs.glade.h:22
 #, fuzzy
 msgid "Use _ambient light to adjust LCD brightness"
 msgstr "Použít _okolní světlo pro nastavení jasu"
 
-#: ../data/gpm-prefs.glade.h:19
+#: ../data/gpm-prefs.glade.h:23
 #, fuzzy
 msgid "Use _sound to notify in event of an error"
 msgstr "Použít _zvuk pro upozornění na chybu"
 
-#: ../data/gpm-prefs.glade.h:20
-#, fuzzy
-msgid "When UPS power is _critically low:"
-msgstr "UPS je kriticky vybitá"
-
-#: ../data/gpm-prefs.glade.h:21
-#, fuzzy
-msgid "When UPS power is _low:"
-msgstr "Při _nízkém stavu UPS:"
-
-#: ../data/gpm-prefs.glade.h:22
-#, fuzzy
-msgid "When battery _power is critically low:"
-msgstr "_Při kritickém stavu baterie:"
-
-#: ../data/gpm-prefs.glade.h:23
-msgid "When laptop _lid is closed:"
-msgstr "Při zavření _víka laptopu:"
-
 #: ../data/gpm-prefs.glade.h:24
-#, fuzzy
-msgid "When the _power button is pressed:"
-msgstr "Při stisku tlačítka _napájení:"
+msgid "When UPS power is _critically low:"
+msgstr "Je-li UPS _kriticky vybitá"
 
 #: ../data/gpm-prefs.glade.h:25
+#, fuzzy
+msgid "When UPS power is l_ow:"
+msgstr "Při _nízkém stavu UPS:"
+
+#: ../data/gpm-prefs.glade.h:26
+#, fuzzy
+msgid "When battery po_wer is critically low:"
+msgstr "_Při kritickém stavu baterie:"
+
+#: ../data/gpm-prefs.glade.h:27
+msgid "When laptop lid is cl_osed:"
+msgstr "Při zavření _víka laptopu:"
+
+#: ../data/gpm-prefs.glade.h:28
 #, fuzzy
 msgid "When the _suspend button is pressed:"
 msgstr "Při stisku tlačítka režimu _spánku:"
 
-#: ../data/gpm-prefs.glade.h:26
-#, fuzzy
+#: ../data/gpm-prefs.glade.h:29
+msgid "When the power _button is pressed:"
+msgstr "Při stisku tlačítka _napájení:"
+
+#: ../data/gpm-prefs.glade.h:30
 msgid "_Always display an icon"
 msgstr "_Vždy zobrazit ikonu"
 
-#: ../data/gpm-prefs.glade.h:27
-#, fuzzy
+#: ../data/gpm-prefs.glade.h:31
 msgid "_Never display an icon"
 msgstr "_Nikdy nezobrazovat ikonu"
 
-#: ../data/gpm-prefs.glade.h:28
-#, fuzzy
+#: ../data/gpm-prefs.glade.h:32
 msgid "_Only display an icon when battery power is critically low"
-msgstr "Zobrazit p_ouze je-li stav baterie kritický"
+msgstr "Zobrazit ikonu p_ouze je-li stav baterie kritický"
 
-#: ../src/gpm-common.c:93
+#: ../src/gpm-common.c:241
 msgid "Unknown time"
 msgstr "Neznámý čas"
 
-#: ../src/gpm-common.c:98
+#: ../src/gpm-common.c:246
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
@@ -1064,7 +1188,7 @@ msgstr[0] "%i minuta"
 msgstr[1] "%i minuty"
 msgstr[2] "%i minut"
 
-#: ../src/gpm-common.c:109
+#: ../src/gpm-common.c:257
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1074,304 +1198,547 @@ msgstr[2] "%i hodin"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: ../src/gpm-common.c:115
+#: ../src/gpm-common.c:263
 #, c-format
-msgid "%i %s, %i %s"
-msgstr "%i %s, %i %s"
+msgid "%i %s %i %s"
+msgstr "%i %s %i %s"
 
-#: ../src/gpm-common.c:116
+#: ../src/gpm-common.c:264
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "hodina"
 msgstr[1] "hodiny"
 msgstr[2] "hodin"
 
-#: ../src/gpm-common.c:117
+#: ../src/gpm-common.c:265
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "minuta"
 msgstr[1] "minuty"
 msgstr[2] "minut"
 
-#: ../src/gpm-common.h:31
+#: ../src/gpm-common.h:44
 msgid "Power Manager for the GNOME desktop"
 msgstr "Správce napájení pro pracovní plochu GNOME"
 
-#: ../src/gpm-graph-widget.c:73 ../src/gpm-power.c:727
-msgid "Charged"
-msgstr "Nabito"
+#. only enable this if discharging on UPS
+#: ../src/gpm-engine.c:282
+msgid "Computer is running on backup power\n"
+msgstr "Počítač běží ze záložního zdroje\n"
 
-#: ../src/gpm-graph-widget.c:74 ../src/gpm-power.c:730
-msgid "Charging"
-msgstr "Nabíjí se"
+#: ../src/gpm-engine.c:285
+msgid "Computer is running on AC power\n"
+msgstr "Počítač je napájen ze sítě\n"
 
-#: ../src/gpm-graph-widget.c:75 ../src/gpm-power.c:733
-msgid "Discharging"
-msgstr "Vybíjí se"
+#: ../src/gpm-engine.c:288
+msgid "Computer is running on battery power\n"
+msgstr "Počítač je napájen z baterie\n"
+
+#: ../src/gpm-engine.c:302
+msgid "Battery charge profile is estimated\n"
+msgstr ""
+
+#. show a AC icon
+#: ../src/gpm-engine.c:566
+msgid "Unable to get data..."
+msgstr "Nelze získat data..."
 
 #. Translators: This is %i hours
-#: ../src/gpm-graph-widget.c:379
+#: ../src/gpm-graph-widget.c:488
 #, c-format
 msgid "%ih"
 msgstr "%ih"
 
 #. Translators: This is %i hours %02i minutes
-#: ../src/gpm-graph-widget.c:382
+#: ../src/gpm-graph-widget.c:491
 #, c-format
 msgid "%ih%02i"
 msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
-#: ../src/gpm-graph-widget.c:387
+#: ../src/gpm-graph-widget.c:496
 #, c-format
 msgid "%2im"
 msgstr "%2im"
 
 #. Translators: This is %2i minutes %02i seconds
-#: ../src/gpm-graph-widget.c:390
+#: ../src/gpm-graph-widget.c:499
 #, c-format
 msgid "%2im%02i"
 msgstr "%2im%02i"
 
 #. Translators: This is %2i seconds
-#: ../src/gpm-graph-widget.c:394
+#: ../src/gpm-graph-widget.c:503
 #, c-format
 msgid "%2is"
 msgstr "%2is"
 
 #. Translators: This is %i Percentage
-#: ../src/gpm-graph-widget.c:398
+#: ../src/gpm-graph-widget.c:507
 #, c-format
 msgid "%i%%"
 msgstr "%i%%"
 
 #. Translators: This is %i Watts
-#: ../src/gpm-graph-widget.c:401
+#: ../src/gpm-graph-widget.c:510
 #, c-format
 msgid "%iW"
 msgstr "%iW"
 
 #. Translators: This is %i Volts
-#: ../src/gpm-graph-widget.c:404
+#: ../src/gpm-graph-widget.c:513
 #, c-format
 msgid "%iV"
 msgstr "%iV"
 
-#: ../src/gpm-info.c:388
+#: ../src/gpm-info.c:118
+#, c-format
+msgid "%s because %s"
+msgstr "%s protože %s"
+
+#: ../src/gpm-info.c:196
+msgid "On AC"
+msgstr "V síti"
+
+#: ../src/gpm-info.c:200
+msgid "On battery"
+msgstr "Na baterii"
+
+#: ../src/gpm-info.c:204
+msgid "Session idle"
+msgstr "Sezení je nečinné"
+
+#: ../src/gpm-info.c:208
+msgid "Session active"
+msgstr "Sezení je aktivní"
+
+#: ../src/gpm-info.c:212 ../src/gpm-prefs-core.c:83
+#: ../src/gpm-statistics-core.c:96
+msgid "Suspend"
+msgstr "Suspendovat"
+
+#: ../src/gpm-info.c:216
+msgid "Resume"
+msgstr "Probuzení"
+
+#: ../src/gpm-info.c:220 ../src/gpm-prefs-core.c:85
+#: ../src/gpm-statistics-core.c:98
+msgid "Hibernate"
+msgstr "Hibernovat"
+
+#: ../src/gpm-info.c:224
+msgid "Lid closed"
+msgstr "Víko zavřeno"
+
+#: ../src/gpm-info.c:228
+msgid "Lid opened"
+msgstr "Víko je otevřeno"
+
+#: ../src/gpm-info.c:232
+msgid "Notification"
+msgstr "Oznámení"
+
+#: ../src/gpm-info.c:237
+msgid "DPMS On"
+msgstr "DPMS zapnuto"
+
+#: ../src/gpm-info.c:241
+msgid "DPMS Standby"
+msgstr "DPMS Standby"
+
+#: ../src/gpm-info.c:245
+msgid "DPMS Suspend"
+msgstr "DPMS Suspend"
+
+#: ../src/gpm-info.c:249
+msgid "DPMS Off"
+msgstr "DPMS Vypnuto"
+
+#: ../src/gpm-info.c:284
+#, fuzzy
+msgid "Power (mWh)"
+msgstr "Nízký stav baterie"
+
+#: ../src/gpm-info.c:285
+#, fuzzy
+msgid "Power"
+msgstr "Nízký stav baterie"
+
+#: ../src/gpm-info.c:293
+msgid "Estimated time"
+msgstr "Odhadovaný čas"
+
+#: ../src/gpm-info.c:294
+msgid "Time"
+msgstr "Čas"
+
+#: ../src/gpm-info.c:302 ../src/gpm-info.c:319 ../src/gpm-info.c:336
+#: ../src/gpm-info.c:353 ../src/gpm-info.c:370
+#, fuzzy
+msgid "Battery percentage"
+msgstr "Baterie dobita"
+
+#: ../src/gpm-info.c:303
+msgid "Percentage"
+msgstr "Procento"
+
+#: ../src/gpm-info.c:311
+msgid "Battery Voltage"
+msgstr "Napětí baterie"
+
+#: ../src/gpm-info.c:312
+msgid "Voltage"
+msgstr "Napětí"
+
+#: ../src/gpm-info.c:320 ../src/gpm-info.c:354
+msgid "Accuracy of reading"
+msgstr "Přesnost čtení"
+
+#: ../src/gpm-info.c:321 ../src/gpm-info.c:338 ../src/gpm-info.c:355
+#: ../src/gpm-info.c:372
+msgid "Valid data"
+msgstr "Platná data"
+
+#: ../src/gpm-info.c:322 ../src/gpm-info.c:339 ../src/gpm-info.c:356
+#: ../src/gpm-info.c:373
+msgid "No data"
+msgstr "Žádná data"
+
+#: ../src/gpm-info.c:326 ../src/gpm-info.c:343 ../src/gpm-info.c:360
+#: ../src/gpm-info.c:377
+#, fuzzy
+msgid "Charge Void"
+msgstr "Nabito"
+
+#: ../src/gpm-info.c:330 ../src/gpm-info.c:347 ../src/gpm-info.c:364
+#: ../src/gpm-info.c:381
+#, fuzzy
+msgid "Discharge Void"
+msgstr "Vybíjí se"
+
+#: ../src/gpm-info.c:337 ../src/gpm-info.c:371
+msgid "Average time elapsed"
+msgstr ""
+
+#: ../src/gpm-info.c:665
 msgid "AC adapter inserted"
 msgstr "Síťový adaptér připojen"
 
-#: ../src/gpm-info.c:391
+#: ../src/gpm-info.c:668
 msgid "AC adapter removed"
 msgstr "Síťový adaptér odpojen"
 
-#: ../src/gpm-info.c:412
+#: ../src/gpm-info.c:688
 msgid "The laptop lid has been closed"
 msgstr "Víko laptopu bylo zavřeno"
 
-#: ../src/gpm-info.c:418
+#: ../src/gpm-info.c:694
 msgid "The laptop lid has been re-opened"
 msgstr "Víko laptopu bylo znovu otevřeno"
 
-#: ../src/gpm-info.c:440
+#: ../src/gpm-info.c:716
 msgid "idle mode ended"
 msgstr "režim nečinnosti ukončen"
 
-#: ../src/gpm-info.c:443
+#: ../src/gpm-info.c:719
 msgid "idle mode started"
 msgstr "režim nečinnosti zahájen"
 
-#: ../src/gpm-info.c:462
+#: ../src/gpm-info.c:738
 msgid "dpms on"
 msgstr "DPMS zapnuto"
 
-#: ../src/gpm-info.c:464
+#: ../src/gpm-info.c:740
 msgid "dpms standby"
 msgstr "DPMS standby"
 
-#: ../src/gpm-info.c:466
+#: ../src/gpm-info.c:742
 msgid "dpms suspend"
 msgstr "DPMS uspání"
 
-#: ../src/gpm-info.c:468
+#: ../src/gpm-info.c:744
 msgid "dpms off"
 msgstr "DPMS vypnuto"
 
-#: ../src/gpm-inhibit.c:300
+#: ../src/gpm-info.c:761
+msgid "Resuming computer"
+msgstr "Probuzení počítače"
+
+#: ../src/gpm-info.c:777
+msgid "Hibernate Problem"
+msgstr "Problém s hibernací"
+
+#: ../src/gpm-info.c:779
+msgid "Suspend Problem"
+msgstr "Problém s uspáním"
+
+#: ../src/gpm-inhibit.c:346
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr ""
 
-#: ../src/gpm-inhibit.c:306
+#: ../src/gpm-inhibit.c:352
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Několik aplikací zabránilo uskutečnění %s."
 
-#: ../src/gpm-inhibit-test.c:188 ../src/gpm-prefs.c:119
-msgid "GNOME Power Preferences"
-msgstr "GNOME Nastavení napájení"
-
-#: ../src/gpm-inhibit-test.c:194
-msgid "Power Inhibit Test"
-msgstr "Test inhibice napájení"
-
-#: ../src/gpm-main.c:151
+#: ../src/gpm-main.c:152
 msgid "Do not daemonize"
 msgstr "Nedemonizujte"
 
-#: ../src/gpm-main.c:153 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
+#: ../src/gpm-main.c:154 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
+#: ../test/gpm-st-main.c:89
 msgid "Show extra debugging information"
 msgstr "Zobrazit dodatečné ladící informace"
 
-#: ../src/gpm-main.c:155
+#: ../src/gpm-main.c:156
 msgid "Exit after a small delay (for debugging)"
 msgstr "Ukončit po malé prodlevě (pro ladění)"
 
-#: ../src/gpm-main.c:157
+#: ../src/gpm-main.c:158
+#, fuzzy
+msgid "Exit after a the manager has loaded (for debugging)"
+msgstr "Ukončit po malé prodlevě (pro ladění)"
+
+#: ../src/gpm-main.c:160
 msgid "Debug specific files, e.g. power"
 msgstr "Ladit specifické soubory, např. power"
 
-#: ../src/gpm-main.c:161
+#: ../src/gpm-main.c:164
 msgid "GNOME Power Manager"
 msgstr "GNOME Správce napájení"
 
-#: ../src/gpm-manager.c:213
+#: ../src/gpm-manager.c:182
 #, c-format
 msgid "Request to %s"
 msgstr "Požadavek na %s"
 
 #. I want this translated
-#: ../src/gpm-manager.c:222
+#: ../src/gpm-manager.c:191
 msgid "Perform action anyway"
 msgstr "Akci přesto vykonat"
 
-#: ../src/gpm-manager.c:447
-#, c-format
-msgid "%s because %s"
-msgstr "%s protože %s"
+#: ../src/gpm-manager.c:310 ../src/gpm-manager.c:336 ../src/gpm-manager.c:361
+#: ../src/gpm-manager.c:387 ../src/gpm-manager.c:426
+msgid "Action forbidden"
+msgstr "Akce je zakázána"
 
-#: ../src/gpm-manager.c:483
-msgid "Doing nothing"
-msgstr "Nedělá se nic"
+#: ../src/gpm-manager.c:311 ../src/gpm-manager.c:362 ../src/gpm-manager.c:427
+msgid "Policy timeout is not valid. Please wait a few seconds and try again."
+msgstr ""
 
-#: ../src/gpm-manager.c:487 ../src/gpm-manager.c:906 ../src/gpm-manager.c:988
-#: ../src/gpm-manager.c:1787
+#: ../src/gpm-manager.c:323 ../src/gpm-manager.c:374
+msgid "Action disallowed"
+msgstr "Akce není povolena"
+
+#: ../src/gpm-manager.c:324
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+
+#: ../src/gpm-manager.c:337
+msgid "Suspend is not available on this computer."
+msgstr ""
+
+#: ../src/gpm-manager.c:345 ../src/gpm-manager.c:724
 msgid "Suspending computer"
 msgstr "Uspává se počítač"
 
-#: ../src/gpm-manager.c:492 ../src/gpm-manager.c:920 ../src/gpm-manager.c:1000
-#: ../src/gpm-manager.c:1762
+#: ../src/gpm-manager.c:375
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
+msgstr ""
+
+#: ../src/gpm-manager.c:388
+msgid "Hibernate is not available on this computer."
+msgstr ""
+
+#: ../src/gpm-manager.c:396 ../src/gpm-manager.c:736
 msgid "Hibernating computer"
 msgstr "Hibernuje se počítač"
 
-#: ../src/gpm-manager.c:500 ../src/gpm-manager.c:935
+#: ../src/gpm-manager.c:436
+msgid "Doing nothing"
+msgstr "Nedělá se nic"
+
+#: ../src/gpm-manager.c:449
 msgid "Shutting down computer"
 msgstr "Vypíná se počítač"
 
-#: ../src/gpm-manager.c:505
+#: ../src/gpm-manager.c:454
 msgid "GNOME interactive logout"
 msgstr "GNOME interaktivní odhlášení"
 
-#: ../src/gpm-manager.c:745 ../src/gpm-manager.c:845
-msgid "Resuming computer"
-msgstr "Probuzení počítače"
-
-#: ../src/gpm-manager.c:759
-msgid "Hibernate Problem"
-msgstr "Problém s hibernací"
-
-#: ../src/gpm-manager.c:760
-#, c-format
-msgid "HAL failed to %s. Check the help file for common problems."
-msgstr ""
-"HAL neuspěl při %s. Řešení běžných problémů naleznete v souboru s nápovědou."
-
-#: ../src/gpm-manager.c:762
-msgid "hibernate"
-msgstr "hibernaci"
-
-#: ../src/gpm-manager.c:860
-#, c-format
-msgid ""
-"Your computer failed to %s.\n"
-"Check the help file for common problems."
-msgstr ""
-"Váš počítač neuspěl při %s.\n"
-"Řešení běžných problémů naleznete v souboru nápovědy."
-
-#: ../src/gpm-manager.c:862
-msgid "suspend"
-msgstr "uspání"
-
-#: ../src/gpm-manager.c:863
-msgid "Suspend Problem"
-msgstr "Problém s uspáním"
-
-#: ../src/gpm-manager.c:907
-msgid "the DBUS method Suspend() was invoked"
-msgstr "byla zavolána DBUS metoda Suspend()"
-
-#: ../src/gpm-manager.c:921
-msgid "the DBUS method Hibernate() was invoked"
-msgstr "byla zavolána DBUS metoda Hibernate()"
-
-#: ../src/gpm-manager.c:936
-msgid "the DBUS method Shutdown() was invoked"
-msgstr "byla zavolána DBUS metoda Shutdown()"
-
-#: ../src/gpm-manager.c:950
-msgid "Rebooting computer"
-msgstr "Restartuje se počítač"
-
-#: ../src/gpm-manager.c:951
-msgid "the DBUS method Reboot() was invoked"
-msgstr "byla zavolána DBUS metoda Reboot()"
-
-#: ../src/gpm-manager.c:988 ../src/gpm-manager.c:1000
+#: ../src/gpm-manager.c:724 ../src/gpm-manager.c:736
 msgid "System idle"
 msgstr "Systém nečinný"
 
-#: ../src/gpm-manager.c:1086 ../src/gpm-warning.c:159
+#: ../src/gpm-manager.c:822
 msgid "Power Information"
 msgstr "Informace o napájení"
 
-#: ../src/gpm-manager.c:1110
+#: ../src/gpm-manager.c:839
 msgid "the power button has been pressed"
 msgstr "Bylo stisknuto tlačítko napájení"
 
-#: ../src/gpm-manager.c:1129
+#: ../src/gpm-manager.c:851
 msgid "the suspend button has been pressed"
 msgstr "tlačítko spánku bylo stisknuto"
 
-#: ../src/gpm-manager.c:1149
+#: ../src/gpm-manager.c:863
 msgid "the hibernate button has been pressed"
 msgstr "tlačítko hibernace bylo stisknuto"
 
-#: ../src/gpm-manager.c:1173
+#: ../src/gpm-manager.c:886
 msgid "the lid has been closed on ac power"
 msgstr "víko bylo zavřeno během napájení ze sítě"
 
-#: ../src/gpm-manager.c:1178
+#: ../src/gpm-manager.c:890
 msgid "the lid has been closed on battery power"
 msgstr "víko bylo zavřeno během napájení z baterie"
 
-#: ../src/gpm-manager.c:1267
+#: ../src/gpm-manager.c:984
 msgid "the lid has been closed, and the ac adapter removed (and gconf is okay)"
 msgstr "víko bylo zavřeno a síťový adaptér odstraněn (gconf je v pořádku)"
 
-#: ../src/gpm-manager.c:1290
+#: ../src/gpm-manager.c:1007
 msgid "battery is critically low"
 msgstr "kriticky nízký stav baterie"
 
-#: ../src/gpm-manager.c:1340
-msgid "Your battery is now fully charged"
-msgstr "Vaše baterie je nyní plně nabita"
+#: ../src/gpm-manager.c:1322
+#, fuzzy
+msgid "Laptop battery low"
+msgstr "Baterie laptopu"
 
-#: ../src/gpm-manager.c:1341
-msgid "Battery Charged"
-msgstr "Baterie dobita"
+#: ../src/gpm-manager.c:1324
+#, fuzzy, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%)"
+msgstr ""
+"Zbývá vám přibližně <b>%s</b> života baterie (%d%%). Zapojte adaptér "
+"napájení ze sítě, abyste předešli ztrátě dat."
 
-#: ../src/gpm-manager.c:1406
+#: ../src/gpm-manager.c:1327
+#, fuzzy
+msgid "UPS low"
+msgstr "Při napájení z UPS"
+
+#: ../src/gpm-manager.c:1329
+#, fuzzy, c-format
+msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
+msgstr ""
+"Zbývá vám přibližně <b>%s</b> energie UPS (%d%%). Obnovte napájení počítače, "
+"abyste předešli ztrátě dat."
+
+#: ../src/gpm-manager.c:1332 ../src/gpm-manager.c:1429
+#, fuzzy
+msgid "Mouse battery low"
+msgstr "Při napájení z baterie"
+
+#: ../src/gpm-manager.c:1333
+#, fuzzy, c-format
+msgid "The wireless mouse attached to this computer is low in power (%d%%)"
+msgstr ""
+"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
+"zařízení, nebude-li dobyto, přestane brzy pracovat."
+
+#: ../src/gpm-manager.c:1335 ../src/gpm-manager.c:1434
+#, fuzzy
+msgid "Keyboard battery low"
+msgstr "Při napájení z baterie"
+
+#: ../src/gpm-manager.c:1336
+#, c-format
+msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
+msgstr ""
+
+#: ../src/gpm-manager.c:1338 ../src/gpm-manager.c:1439
+msgid "PDA battery low"
+msgstr "Nízký stav baterie PDA"
+
+#: ../src/gpm-manager.c:1339
+#, fuzzy, c-format
+msgid "The PDA attached to this computer is low in power (%d%%)"
+msgstr ""
+"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
+"zařízení, nebude-li dobyto, přestane brzy pracovat."
+
+#: ../src/gpm-manager.c:1366
+msgid "a short time"
+msgstr "krátký čas"
+
+#: ../src/gpm-manager.c:1389 ../src/gpm-manager.c:1470
+msgid "Laptop battery critically low"
+msgstr "Kriticky nízký stav baterie laptopu"
+
+#: ../src/gpm-manager.c:1402
+msgid "Plug in your AC adapter to avoid losing data."
+msgstr ""
+
+#: ../src/gpm-manager.c:1405
+#, c-format
+msgid "This computer will suspend in %s if the AC is not connected."
+msgstr ""
+
+#: ../src/gpm-manager.c:1408
+#, c-format
+msgid "This computer will hibernate in %s if the AC is not connected."
+msgstr ""
+
+#: ../src/gpm-manager.c:1411
+#, c-format
+msgid "This computer will shutdown in %s if the AC is not connected."
+msgstr ""
+
+#: ../src/gpm-manager.c:1414
+#, fuzzy, c-format
+msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
+msgstr ""
+"Zbývá vám přibližně <b>%s</b> života baterie (%d%%). Zapojte adaptér "
+"napájení ze sítě, abyste předešli ztrátě dat."
+
+#: ../src/gpm-manager.c:1422 ../src/gpm-manager.c:1502
+msgid "UPS critically low"
+msgstr "Kriticky nízký stav UPS"
+
+#: ../src/gpm-manager.c:1424
+#, fuzzy, c-format
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"Zbývá vám přibližně <b>%s</b> energie UPS (%d%%). Obnovte napájení počítače, "
+"abyste předešli ztrátě dat."
+
+#: ../src/gpm-manager.c:1430
+#, fuzzy, c-format
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
+"zařízení, nebude-li dobyto, přestane brzy pracovat."
+
+#: ../src/gpm-manager.c:1435
+#, fuzzy, c-format
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
+"zařízení, nebude-li dobyto, přestane brzy pracovat."
+
+#: ../src/gpm-manager.c:1440
+#, fuzzy, c-format
+msgid ""
+"The PDA attached to this computer is very low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
+"zařízení, nebude-li dobyto, přestane brzy pracovat."
+
+#: ../src/gpm-manager.c:1477
 msgid ""
 "The battery is below the critical level and this computer will <b>power-off</"
 "b> when the battery becomes completely empty."
@@ -1379,7 +1746,7 @@ msgstr ""
 "Baterie je pod kritickou úrovní; jakmile se baterie zcela vyprázdní bude "
 "<b>přerušeno napájení</b> počítače."
 
-#: ../src/gpm-manager.c:1411
+#: ../src/gpm-manager.c:1482
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
@@ -1389,33 +1756,19 @@ msgstr ""
 "udržení počítače v uspaném stavu je třeba stálý přísun malého množství "
 "energie."
 
-#: ../src/gpm-manager.c:1417
+#: ../src/gpm-manager.c:1488
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "hibernate."
 msgstr "Baterie je pod kritickou úrovní a počítač bude hibernován."
 
-#: ../src/gpm-manager.c:1421
+#: ../src/gpm-manager.c:1492
 msgid ""
 "The battery is below the critical level and this computer is about to "
 "shutdown."
 msgstr "Baterie je pod kritickou úrovní a počítač bude vypnut."
 
-#: ../src/gpm-manager.c:1433
-msgid "The AC Power has been unplugged. The system is now using battery power."
-msgstr ""
-"Bylo odpojeno napájení ze sítě. Systém nyní používá napájení z baterie."
-
-#: ../src/gpm-manager.c:1440
-#, c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining battery life (%d%%). Plug in "
-"your AC Adapter to avoid losing data."
-msgstr ""
-"Zbývá vám přibližně <b>%s</b> života baterie (%d%%). Zapojte adaptér "
-"napájení ze sítě, abyste předešli ztrátě dat."
-
-#: ../src/gpm-manager.c:1524
+#: ../src/gpm-manager.c:1509
 msgid ""
 "The UPS is below the critical level and this computer will <b>power-off</b> "
 "when the UPS becomes completely empty."
@@ -1423,81 +1776,22 @@ msgstr ""
 "UPS je pod kritickou úrovní; jakmile se UPS zcela vyprázdní bude "
 "<b>přerušeno napájení</b> počítače."
 
-#: ../src/gpm-manager.c:1529
+#: ../src/gpm-manager.c:1514
 msgid ""
 "The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS je pod kritickou úrovní nabití a počítač bude brzy hibernován."
 
-#: ../src/gpm-manager.c:1533
+#: ../src/gpm-manager.c:1518
 msgid ""
 "The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS je pod kritickou úrovní nabití a počítač bude brzy vypnut."
 
-#: ../src/gpm-manager.c:1540
-msgid "UPS is critically low"
-msgstr "UPS je kriticky vybitá"
-
-#: ../src/gpm-manager.c:1544
-msgid "Your system is running on backup power!"
-msgstr "Váš počítač je napájen ze záložního zdroje!"
-
-#: ../src/gpm-manager.c:1548
-#, c-format
-msgid ""
-"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore "
-"power to your computer to avoid losing data."
-msgstr ""
-"Zbývá vám přibližně <b>%s</b> energie UPS (%d%%). Obnovte napájení počítače, "
-"abyste předešli ztrátě dat."
-
-#: ../src/gpm-manager.c:1637
-#, c-format
-msgid ""
-"The %s device attached to this computer is low in power (%d%%). This device "
-"will soon stop functioning if not charged."
-msgstr ""
-"Zařízení %s připojené k tomuto počítači má málo energie (%d%%). Toto "
-"zařízení, nebude-li dobyto, přestane brzy pracovat."
-
-#: ../src/gpm-manager.c:1763
-msgid "user clicked hibernate from tray menu"
-msgstr "uživatel kliknul na hibernaci v nabídce panelu"
-
-#: ../src/gpm-manager.c:1788
-msgid "user clicked suspend from tray menu"
-msgstr "uživatel kliknul na uspání v nabídce panelu"
-
-#: ../src/gpm-manager.c:1811
-msgid "Suspend failure"
-msgstr "Uspání selhalo"
-
-#: ../src/gpm-manager.c:1812
-msgid "Your computer did not appear to resume correctly from suspend."
-msgstr "Váš počítač se zřejmě správně neprobudil ze spánku."
-
-#: ../src/gpm-manager.c:1815
-msgid "Hibernate failure"
-msgstr "Hibernace selhala"
-
-#: ../src/gpm-manager.c:1816
-msgid "Your computer did not appear to resume correctly from hibernate."
-msgstr "Váš počítač se zřejmě správně neprobudil z hibernace."
-
-#: ../src/gpm-manager.c:1821
-msgid "This may be a driver or hardware problem."
-msgstr "Může se jednat o problém s ovladači nebo hardwarem."
-
-#: ../src/gpm-manager.c:1822
-msgid "Check the GNOME Power Manager manual for common problems."
-msgstr ""
-"V manuálu aplikace GNOME Správce napájení naleznete popis nejčastějších "
-"problémů."
-
-#: ../src/gpm-notify.c:328
+#. save in state
+#: ../src/gpm-notify.c:343
 msgid "Battery may be recalled"
 msgstr "Baterie můře být stahována"
 
-#: ../src/gpm-notify.c:329
+#: ../src/gpm-notify.c:344
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1510,246 +1804,322 @@ msgstr ""
 "\n"
 "Více informací získáte na webu věnovaném stahování baterií %s."
 
-#: ../src/gpm-notify.c:342
+#: ../src/gpm-notify.c:359
 msgid "Visit recall website"
 msgstr "Navštívit web stahování baterií"
 
-#: ../src/gpm-notify.c:347
+#: ../src/gpm-notify.c:365 ../src/gpm-notify.c:399 ../src/gpm-notify.c:430
+#: ../src/gpm-notify.c:460 ../src/gpm-notify.c:490 ../src/gpm-notify.c:526
 msgid "Do not show me this again"
 msgstr "Znovu nezobrazovat"
 
-#: ../src/gpm-power.c:495
-msgid "Laptop battery"
-msgstr "Baterie laptopu"
+#: ../src/gpm-notify.c:385
+msgid "Battery may be invalid"
+msgstr "Baterie může být poškozená"
 
-#: ../src/gpm-power.c:497
-msgid "UPS"
-msgstr "UPS"
+#: ../src/gpm-notify.c:386
+#, c-format
+msgid ""
+"Your battery has a very low capacity (%i%%), which means that it may be old "
+"or broken."
+msgstr ""
 
-#: ../src/gpm-power.c:499
-msgid "Wireless mouse"
-msgstr "Bezdrátová myš"
+#: ../src/gpm-notify.c:418
+msgid "Battery Charged"
+msgstr "Baterie dobita"
 
-#: ../src/gpm-power.c:501
-msgid "Wireless keyboard"
-msgstr "Bezdrátová klávesnice"
+#: ../src/gpm-notify.c:419
+msgid "Your laptop battery is now fully charged"
+msgstr "Bateria vašeho laptopu je nyní plně dobita"
 
-#: ../src/gpm-power.c:503
-msgid "PDA"
-msgstr "PDA"
+#: ../src/gpm-notify.c:448
+msgid "Battery Discharging"
+msgstr "Baterie se vybíjí"
 
-#: ../src/gpm-power.c:505 ../src/gpm-statistics-core.c:618
-msgid "Unknown"
-msgstr "Neznámý"
-
-#: ../src/gpm-power.c:523
-msgid "ups"
-msgstr "ups"
-
-#: ../src/gpm-power.c:525
-msgid "mouse"
-msgstr "myš"
-
-#: ../src/gpm-power.c:527
-msgid "keyboard"
-msgstr "klávesnice"
-
-#: ../src/gpm-power.c:529
-msgid "pda"
-msgstr "PDA"
-
-#: ../src/gpm-power.c:531
-msgid "unknown"
-msgstr "neznámý"
-
-#: ../src/gpm-power.c:720
-msgid "Product:"
-msgstr "Produkt:"
-
-#: ../src/gpm-power.c:724 ../src/gpm-power.c:727 ../src/gpm-power.c:730
-#: ../src/gpm-power.c:733
-msgid "Status:"
-msgstr "Stav:"
-
-#: ../src/gpm-power.c:724
-msgid "Missing"
-msgstr "Chybí"
-
-#: ../src/gpm-power.c:737
-msgid "Percentage charge:"
-msgstr "Procento nabití:"
-
-#: ../src/gpm-power.c:766
-msgid "Vendor:"
-msgstr "Dodavatel:"
-
-#: ../src/gpm-power.c:774 ../src/gpm-power.c:779
-msgid "Lithium ion"
-msgstr "Li-Ion"
-
-#: ../src/gpm-power.c:776 ../src/gpm-power.c:781
-msgid "Lead acid"
-msgstr "Olověný"
-
-#: ../src/gpm-power.c:783
-msgid "Lithium polymer"
-msgstr "Li-Poly"
-
-#: ../src/gpm-power.c:785
-msgid "Nickel metal hydride"
-msgstr "NiMH"
-
-#: ../src/gpm-power.c:792
-msgid "Technology:"
-msgstr "Technologie:"
-
-#: ../src/gpm-power.c:796
-msgid "Serial number:"
-msgstr "Sériové číslo:"
-
-#: ../src/gpm-power.c:800
-msgid "Model:"
-msgstr "Model:"
-
-#: ../src/gpm-power.c:806
-msgid "Remaining time:"
-msgstr "Zbývající čas:"
-
-#: ../src/gpm-power.c:812
-msgid "Excellent"
-msgstr "Vynikající"
-
-#: ../src/gpm-power.c:814
-msgid "Good"
-msgstr "Dobrý"
-
-#: ../src/gpm-power.c:816
-msgid "Fair"
-msgstr "Slušný"
-
-#: ../src/gpm-power.c:818
-msgid "Poor"
-msgstr "Špatný"
-
-#: ../src/gpm-power.c:821
-msgid "Capacity:"
-msgstr "Kapacita:"
-
-#: ../src/gpm-power.c:827 ../src/gpm-power.c:855
-msgid "Current charge:"
-msgstr "Aktuální nabití:"
-
-#: ../src/gpm-power.c:833
-msgid "Last full charge:"
-msgstr "Poslední úplné dobití:"
-
-#: ../src/gpm-power.c:838 ../src/gpm-power.c:860
+#: ../src/gpm-notify.c:449
 #, fuzzy
-msgid "Design charge:"
-msgstr "dokud nedobito"
+msgid "The AC power has been unplugged. The system is now using battery power."
+msgstr ""
+"Bylo odpojeno napájení ze sítě. Systém nyní používá napájení z baterie."
 
-#: ../src/gpm-power.c:843
-msgid "Charge rate (raw):"
-msgstr "Rychlost nabíjení (surová)"
+#: ../src/gpm-notify.c:478
+msgid "UPS Discharging"
+msgstr "UPS se vybíjí"
 
-#: ../src/gpm-power.c:848
-msgid "Charge rate (smoothed):"
-msgstr "Rychlost nabíjení (vyhlazená):"
+#: ../src/gpm-notify.c:479
+#, fuzzy
+msgid "The AC power has been unplugged. The system is now using backup power."
+msgstr ""
+"Bylo odpojeno napájení ze sítě. Systém nyní používá napájení z baterie."
 
-#: ../src/gpm-power.c:1346
+#: ../src/gpm-notify.c:509
+#, fuzzy
+msgid "Sleep Problem"
+msgstr "Problém s uspáním"
+
+#: ../src/gpm-notify.c:511
+#, fuzzy
+msgid ""
+"Your computer failed to hibernate.\n"
+"Check the help file for common problems."
+msgstr ""
+"Váš počítač neuspěl při %s.\n"
+"Řešení běžných problémů naleznete v souboru nápovědy."
+
+#: ../src/gpm-notify.c:514
+#, fuzzy
+msgid ""
+"Your computer failed to suspend.\n"
+"Check the help file for common problems."
+msgstr ""
+"Váš počítač neuspěl při %s.\n"
+"Řešení běžných problémů naleznete v souboru nápovědy."
+
+#: ../src/gpm-cell-array.c:921
+#, fuzzy, c-format
+msgid ""
+"%s fully charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr "%s plně nabito (%i%%)\n"
+
+#: ../src/gpm-cell-array.c:925
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s plně nabito (%i%%)\n"
 
-#: ../src/gpm-power.c:1352
+#: ../src/gpm-cell-array.c:933
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s zbývá (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1356
+#: ../src/gpm-cell-array.c:938
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s se vybíjí (%i%%)\n"
 
-#: ../src/gpm-power.c:1363
+#: ../src/gpm-cell-array.c:950
+#, fuzzy, c-format
+msgid ""
+"%s %s until charged (%i%%)\n"
+"Provides %s battery runtime\n"
+msgstr "%s %s dokud nedobito (%i%%)\n"
+
+#: ../src/gpm-cell-array.c:957
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s %s dokud nedobito (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-power.c:1367
+#: ../src/gpm-cell-array.c:962
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s se nabíjí (%i%%)\n"
 
-#: ../src/gpm-power.c:1404
-msgid "Recalculating information..."
-msgstr "Přepočítávají se informace..."
+#: ../src/gpm-cell-array.c:969
+msgid "Battery state could not be read at this time\n"
+msgstr ""
 
-#. only enable this if discharging on UPS, for details see:
-#. http://bugzilla.gnome.org/show_bug.cgi?id=329027
-#: ../src/gpm-power.c:1415
-msgid "Computer is running on backup power\n"
-msgstr "Počítač běží ze záložního zdroje\n"
+#: ../src/gpm-cell.c:444
+#, c-format
+msgid "<b>Product:</b> %s\n"
+msgstr ""
 
-#: ../src/gpm-power.c:1418
-msgid "Computer is running on AC power\n"
-msgstr "Počítač je napájen ze sítě\n"
+#: ../src/gpm-cell.c:447
+msgid "<b>Status:</b> Missing\n"
+msgstr ""
 
-#: ../src/gpm-power.c:1421
-msgid "Computer is running on battery power\n"
-msgstr "Počítač je napájen z baterie\n"
+#: ../src/gpm-cell.c:449
+msgid "<b>Status:</b> Charged\n"
+msgstr ""
+
+#: ../src/gpm-cell.c:451
+msgid "<b>Status:</b> Charging\n"
+msgstr ""
+
+#: ../src/gpm-cell.c:453
+msgid "<b>Status:</b> Discharging\n"
+msgstr ""
+
+#: ../src/gpm-cell.c:456
+#, fuzzy, c-format
+msgid "<b>Percentage charge:</b> %i%%\n"
+msgstr "Procento nabití:"
+
+#: ../src/gpm-cell.c:461
+msgid "Vendor:"
+msgstr "Dodavatel:"
+
+#: ../src/gpm-cell.c:466
+msgid "Lithium ion"
+msgstr "Li-Ion"
+
+#: ../src/gpm-cell.c:468
+msgid "Lead acid"
+msgstr "Olověný"
+
+#: ../src/gpm-cell.c:470
+msgid "Lithium polymer"
+msgstr "Li-Poly"
+
+#: ../src/gpm-cell.c:472
+msgid "Nickel metal hydride"
+msgstr "NiMH"
+
+#: ../src/gpm-cell.c:479
+msgid "Technology:"
+msgstr "Technologie:"
+
+#: ../src/gpm-cell.c:483
+msgid "Serial number:"
+msgstr "Sériové číslo:"
+
+#: ../src/gpm-cell.c:487
+msgid "Model:"
+msgstr "Model:"
+
+#: ../src/gpm-cell.c:493
+#, fuzzy
+msgid "Charge time:"
+msgstr "Rychlost nabíjení (surová)"
+
+#: ../src/gpm-cell.c:500
+#, fuzzy
+msgid "Discharge time:"
+msgstr "Vybíjí se"
+
+#: ../src/gpm-cell.c:506
+msgid "Excellent"
+msgstr "Vynikající"
+
+#: ../src/gpm-cell.c:508
+msgid "Good"
+msgstr "Dobrý"
+
+#: ../src/gpm-cell.c:510
+msgid "Fair"
+msgstr "Slušný"
+
+#: ../src/gpm-cell.c:512
+msgid "Poor"
+msgstr "Špatný"
+
+#: ../src/gpm-cell.c:515
+msgid "Capacity:"
+msgstr "Kapacita:"
+
+#: ../src/gpm-cell.c:521 ../src/gpm-cell.c:544
+msgid "Current charge:"
+msgstr "Aktuální nabití:"
+
+#: ../src/gpm-cell.c:527
+msgid "Last full charge:"
+msgstr "Poslední úplné dobití:"
+
+#: ../src/gpm-cell.c:532 ../src/gpm-cell.c:549
+#, fuzzy
+msgid "Design charge:"
+msgstr "dokud nedobito"
+
+#: ../src/gpm-cell.c:537
+#, fuzzy
+msgid "Charge rate:"
+msgstr "Rychlost nabíjení (surová)"
+
+#: ../src/gpm-cell-unit.c:236
+#, fuzzy
+msgid "Laptop batteries"
+msgstr "Baterie laptopu"
+
+#: ../src/gpm-cell-unit.c:238
+#, fuzzy
+msgid "UPSs"
+msgstr "UPS"
+
+#: ../src/gpm-cell-unit.c:240
+#, fuzzy
+msgid "Wireless mice"
+msgstr "Bezdrátová myš"
+
+#: ../src/gpm-cell-unit.c:242
+#, fuzzy
+msgid "Wireless keyboards"
+msgstr "Bezdrátová klávesnice"
+
+#: ../src/gpm-cell-unit.c:244
+#, fuzzy
+msgid "PDAs"
+msgstr "PDA"
+
+#: ../src/gpm-cell-unit.c:246 ../src/gpm-cell-unit.c:260
+#: ../src/gpm-statistics-core.c:738
+msgid "Unknown"
+msgstr "Neznámý"
+
+#: ../src/gpm-cell-unit.c:250
+msgid "Laptop battery"
+msgstr "Baterie laptopu"
+
+#: ../src/gpm-cell-unit.c:252
+msgid "UPS"
+msgstr "UPS"
+
+#: ../src/gpm-cell-unit.c:254
+msgid "Wireless mouse"
+msgstr "Bezdrátová myš"
+
+#: ../src/gpm-cell-unit.c:256
+msgid "Wireless keyboard"
+msgstr "Bezdrátová klávesnice"
+
+#: ../src/gpm-cell-unit.c:258
+msgid "PDA"
+msgstr "PDA"
+
+#: ../src/gpm-prefs.c:119 ../test/gpm-inhibit-test.c:188
+msgid "GNOME Power Preferences"
+msgstr "GNOME Nastavení napájení"
 
 #: ../src/gpm-prefs.c:141
 msgid "Power Preferences"
 msgstr "Nastavení napájení"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:81 ../src/gpm-statistics-core.c:83
+#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
 msgstr "Zeptat se"
 
-#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:84
-#: ../src/gpm-statistics-core.c:744
-msgid "Suspend"
-msgstr "Suspendovat"
-
-#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:85
+#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
 msgstr "Vypnout"
 
-#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:86
-#: ../src/gpm-statistics-core.c:754
-msgid "Hibernate"
-msgstr "Hibernovat"
-
-#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:87
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
 msgstr "Smazat obrazovku"
 
-#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:88
+#. The text that should appear in the processor combo box
+#: ../src/gpm-prefs-core.c:87 ../src/gpm-prefs-core.c:90
+#: ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
 msgstr "Nedělat nic"
 
-#. The text that should appear in the processor combo box
-#: ../src/gpm-prefs-core.c:89
+#: ../src/gpm-prefs-core.c:91
 msgid "Based on processor load"
 msgstr "Na základě zatížení procesoru"
 
-#: ../src/gpm-prefs-core.c:90
+#: ../src/gpm-prefs-core.c:92
 msgid "Automatic power saving"
 msgstr "Automatické šetření energií"
 
-#: ../src/gpm-prefs-core.c:91
+#: ../src/gpm-prefs-core.c:93
 msgid "Maximum power saving"
 msgstr "Maximální šetření energií"
 
-#: ../src/gpm-prefs-core.c:92
+#: ../src/gpm-prefs-core.c:94
 msgid "Always maximum speed"
 msgstr "Vždy maximální rychlost"
 
-#: ../src/gpm-prefs-core.c:241
+#: ../src/gpm-prefs-core.c:287
 msgid "Never"
 msgstr "Nikdy"
 
@@ -1757,73 +2127,37 @@ msgstr "Nikdy"
 msgid "GNOME Power Statistics"
 msgstr "GNOME Statistika napájení"
 
-#: ../src/gpm-statistics-core.c:54
+#: ../src/gpm-statistics-core.c:60
 msgid "Charge History"
 msgstr "Historie nabití"
 
-#: ../src/gpm-statistics-core.c:56
+#: ../src/gpm-statistics-core.c:62
 msgid "Voltage History"
 msgstr "Historie nabití"
 
-#: ../src/gpm-statistics-core.c:57
+#: ../src/gpm-statistics-core.c:63
 msgid "Estimated Time History"
 msgstr "Historie odhadovaného času"
 
-#: ../src/gpm-statistics-core.c:688
+#: ../src/gpm-statistics-core.c:64
+msgid "Profiled Charge Time"
+msgstr ""
+
+#: ../src/gpm-statistics-core.c:65
+msgid "Profiled Charge Accuracy"
+msgstr ""
+
+#: ../src/gpm-statistics-core.c:66
+msgid "Profiled Discharge Time"
+msgstr ""
+
+#: ../src/gpm-statistics-core.c:67
+msgid "Profiled Discharge Accuracy"
+msgstr ""
+
+#: ../src/gpm-statistics-core.c:809
 msgid "Could not connect to GNOME Power Manager."
 msgstr "Nelze se připojit ke GNOME Správci napájení."
-
-#: ../src/gpm-statistics-core.c:689
-msgid "Perhaps the program is not running or you are using an old version?"
-msgstr "Program zřejmě neběží nebo používáte starou verzi?"
-
-#: ../src/gpm-statistics-core.c:724
-msgid "On AC"
-msgstr "V síti"
-
-#: ../src/gpm-statistics-core.c:729
-msgid "On battery"
-msgstr "Na baterii"
-
-#: ../src/gpm-statistics-core.c:734
-msgid "Session idle"
-msgstr "Sezení je nečinné"
-
-#: ../src/gpm-statistics-core.c:739
-msgid "Session active"
-msgstr "Sezení je aktivní"
-
-#: ../src/gpm-statistics-core.c:749
-msgid "Resume"
-msgstr "Probuzení"
-
-#: ../src/gpm-statistics-core.c:759
-msgid "Lid closed"
-msgstr "Víko zavřeno"
-
-#: ../src/gpm-statistics-core.c:764
-msgid "Lid opened"
-msgstr "Víko je otevřeno"
-
-#: ../src/gpm-statistics-core.c:769
-msgid "Notification"
-msgstr "Oznámení"
-
-#: ../src/gpm-statistics-core.c:774
-msgid "DPMS On"
-msgstr "DPMS zapnuto"
-
-#: ../src/gpm-statistics-core.c:779
-msgid "DPMS Standby"
-msgstr "DPMS Standby"
-
-#: ../src/gpm-statistics-core.c:784
-msgid "DPMS Suspend"
-msgstr "DPMS Suspend"
-
-#: ../src/gpm-statistics-core.c:789
-msgid "DPMS Off"
-msgstr "DPMS Vypnuto"
 
 #: ../src/gpm-srv-screensaver.c:111
 msgid "Display DPMS activated"
@@ -1837,60 +2171,59 @@ msgstr "Při napájení z baterie"
 msgid "Laptop lid is closed"
 msgstr "Víko latopu zavřeno"
 
-#: ../src/gpm-tray-icon.c:313
+#: ../src/gpm-tray-icon.c:208
+#, fuzzy
+msgid "Device information"
+msgstr "Informace o napájení"
+
+#: ../src/gpm-tray-icon.c:323
 msgid "translator-credits"
 msgstr "Jakub Friedl <jfriedl@suse.cz>"
 
 #. Preferences
-#: ../src/gpm-tray-icon.c:449
+#: ../src/gpm-tray-icon.c:441
 msgid "_Preferences"
 msgstr "_Nastavení"
 
 #. Statistics
-#: ../src/gpm-tray-icon.c:457
+#: ../src/gpm-tray-icon.c:449
 msgid "Power _History"
 msgstr "_Historie napájení"
 
 #. Help
-#: ../src/gpm-tray-icon.c:469
+#: ../src/gpm-tray-icon.c:461
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "Ná_pověda"
 
 #. About
-#: ../src/gpm-tray-icon.c:477
+#: ../src/gpm-tray-icon.c:469
 #: ../applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: ../applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "_O programu"
 
-#: ../src/gpm-tray-icon.c:580
+#: ../src/gpm-tray-icon.c:582
 msgid "_Suspend"
 msgstr "_Suspendovat"
 
-#: ../src/gpm-tray-icon.c:590
+#: ../src/gpm-tray-icon.c:592
 msgid "Hi_bernate"
 msgstr "Hi_bernovat"
 
-#: ../src/gpm-warning.c:153
-msgid "Power Critically Low"
-msgstr "Kritický stav baterie"
+#: ../test/gpm-inhibit-test.c:194
+msgid "Power Inhibit Test"
+msgstr "Test inhibice napájení"
 
-#: ../src/gpm-warning.c:155
-msgid "Power Very Low"
-msgstr "Velmi nízký stav baterie"
+#: ../test/gpm-st-main.c:85
+msgid "Run only the interactive tests"
+msgstr ""
 
-#: ../src/gpm-warning.c:157
-msgid "Power Low"
-msgstr "Nízký stav baterie"
+#: ../test/gpm-st-main.c:87
+msgid "Run only the automatic tests"
+msgstr ""
 
-#~ msgid ""
-#~ "Whether we should save the GNOME session state when performing a shutdown."
-#~ msgstr "Zda má být uloženo sezení GNOME před vypnutím počítače."
-
-#~ msgid "Whether we should save the session when performing a shutdown"
-#~ msgstr "Zda má být uloženo sezení před vypnutím počítače"
-
-#~ msgid "When UPS _critical:"
-#~ msgstr "_Při kritickém stavu UPS:"
+#: ../test/gpm-st-main.c:91
+msgid "Run all available tests"
+msgstr ""
