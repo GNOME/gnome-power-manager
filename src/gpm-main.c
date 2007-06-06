@@ -33,6 +33,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <libgnomeui/libgnomeui.h>
 #include <glade/glade.h>
+#include <gst/gst.h>
 
 #include "gpm-stock-icons.h"
 #include "gpm-common.h"
@@ -231,6 +232,9 @@ main (int argc, char *argv[])
 	if (gpm_stock_icons_init() == FALSE) {
 		gpm_error ("Cannot continue without stock icons");
 	}
+
+	/* initialise gstreamer */
+	gst_init (&argc, &argv);
 
 	/* create a new gui object */
 	manager = gpm_manager_new ();

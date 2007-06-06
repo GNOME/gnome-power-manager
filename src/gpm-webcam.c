@@ -85,10 +85,6 @@ gpm_webcam_get_image (GpmWebcam *webcam)
 	g_return_val_if_fail (webcam->priv->filename != NULL, FALSE);
 	g_return_val_if_fail (webcam->priv->device != NULL, FALSE);
 
-	/* initialize GStreamer */
-//	gst_init (&argc, &argv);
-	gst_init (NULL, NULL);
-
 	/* create elements */
 	pipeline = gst_pipeline_new ("webcam");
 
