@@ -1,6 +1,36 @@
 ==============
+Version 2.19.3
+==============
+
+- Fixed #428401, Clicking the brightness applet dims the screen (Benjamin Canou)
+- Fixed #438838, crash when g-p-m can't connect with assertion enabled (Richard Hughes)
+- Fixed #440409, Failed to build when using SUN C compiler (Richard Hughes)
+- Fixed #445173, Strings in server.in files are not marked for translation (Gabor Kelemen)
+- Don't try to do the policy action when the average accuracy is low. (Richard Hughes)
+- Make the brightness dim code "learn" to take longer to dim if you keep
+  undimming the screen shortly after auto-dimming it. (Richard Hughes)
+- Change default of /apps/gnome-power-manager/general/network_sleep to
+  false, as we now do the system action in pm-utils. (Richard Hughes)
+- Add initial code to use a webcam as a brightness sensor. (Richard Hughes)
+- Rework the brightness interactions, and rename a large part of the
+  gconf schemas. (Richard Hughes)
+
+Translations:
+- Updated pt: Duarte Loreto
+- Updated sv: Daniel Nylander
+- Updated hu: Gabor Kelemen
+- Updated en_GB: David Lodge
+- Updated dz: Pema Geyleg
+- Updated pl: Artur Flinta
+- Updated th: Theppitak Karoonboonyanan
+- Updated cs: Jakub Friedl
+- Updated id: Mohammad DAMT
+- Updated es: Jorge Gonzalez
+
+==============
 Version 2.19.2
 ==============
+
 - Fixed #418605, Change power statistics label rendering to use pangocairo (Richard Hughes)
 - Fixed #419403, Invalid statistics when computer clock changed. (Richard Hughes)
 - Fixed #437042, Tip 'battery full charged' shows on the bottom right of screen (Richard Hughes)
