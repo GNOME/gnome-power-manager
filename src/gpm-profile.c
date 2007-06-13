@@ -178,6 +178,34 @@ gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 }
 
 /**
+ * gpm_profile_get_accuracy_average:
+ *
+ * @profile: This class
+ *
+ * Gets the average value of the accuracy, i.e. whether this discharge profile
+ * is to be trusted. We have the situation where if a user repeatedly charges
+ * from 30% to 100% and then from 100% to 30% then g-p-m assumes that <30%
+ * is impossible and uses the 30% as the lowest point of the integral.
+ * Working out the average gives us a good ballpart for the system.
+ * Generally, a 40%+ average is good enough for a policy decision.
+ * (use GPM_PROFILE_GOOD_TRUST for value)
+ */
+gfloat
+gpm_profile_get_accuracy_average (GpmProfile *profile, gboolean discharge)
+{
+	GArray *array;
+
+	/* get the correct data */
+	if (discharge == TRUE) {
+		array = profile->priv->float_accuracy_discharge;
+	} else {
+		array = profile->priv->float_accuracy_charge;
+	}
+
+	return gpm_array_float_get_average (array);
+}
+
+/**
  * gpm_profile_get_data_accuracy_percent:
  *
  * @profile: This class

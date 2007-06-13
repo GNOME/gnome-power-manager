@@ -67,6 +67,7 @@ gpm_st_failed (GpmSelfTest *test, const gchar *format, ...)
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 	g_print ("...FAILED [%s]\n", va_args_buffer);
+	exit (1);
 }
 
 int
@@ -112,7 +113,7 @@ main (int argc, char **argv)
 	/* default to all for no options */
 	if (automatic == FALSE && interactive == FALSE && all == FALSE) {
 		g_print ("*** You need to specify some options! ***\n");
-		all = TRUE;
+		automatic = TRUE;
 	}
 	if (automatic == TRUE || all == TRUE) {
 		gpm_st_common (test);
@@ -123,13 +124,13 @@ main (int argc, char **argv)
 		gpm_st_hal_manager (test);
 		gpm_st_hal_device (test);
 		gpm_st_hal_devicestore (test);
-	}
-	if (interactive == TRUE || all == TRUE) {
 		gpm_st_cell_unit (test);
 		gpm_st_cell (test);
 		gpm_st_cell_array (test);
-//		gpm_st_profile (test);
 		gpm_st_array_float (test);
+	}
+	if (interactive == TRUE || all == TRUE) {
+		gpm_st_profile (test);
 		gpm_st_webcam (test);
 	}
 

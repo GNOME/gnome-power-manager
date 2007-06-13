@@ -45,6 +45,7 @@ GArray		*gpm_array_float_compute_gaussian	(guint		 length,
 gfloat		 gpm_array_float_compute_integral	(GArray		*array,
 							 guint		 x1,
 							 guint		 x2);
+gfloat		 gpm_array_float_get_average		(GArray		*array);
 gboolean	 gpm_array_float_print			(GArray		*array);
 GArray		*gpm_array_float_convolve		(GArray		*data,
 							 GArray		*kernel);

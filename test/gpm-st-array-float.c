@@ -311,6 +311,24 @@ gpm_st_array_float (GpmSelfTest *test)
 		gpm_st_failed (test, "did not intergrated okay (%i)", size);
 	}
 
+	/*************** AVERAGE TEST ************************/
+	gpm_st_title (test, "average");
+	gpm_array_float_set (array, 0, 0.0);
+	gpm_array_float_set (array, 1, 1.0);
+	gpm_array_float_set (array, 2, 2.0);
+	gpm_array_float_set (array, 3, 3.0);
+	gpm_array_float_set (array, 4, 4.0);
+	gpm_array_float_set (array, 5, 5.0);
+	gpm_array_float_set (array, 6, 6.0);
+	gpm_array_float_set (array, 7, 7.0);
+	gpm_array_float_set (array, 8, 8.0);
+	gpm_array_float_set (array, 9, 9.0);
+	value = gpm_array_float_get_average (array);
+	if (value == 4.5) {
+		gpm_st_success (test, "averaged okay");
+	} else {
+		gpm_st_failed (test, "did not average okay (%i)", value);
+	}
 
 	gpm_array_float_free (result);
 	gpm_array_float_free (array);

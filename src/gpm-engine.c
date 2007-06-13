@@ -297,9 +297,15 @@ gpm_engine_get_summary (GpmEngine *engine)
 
 	/* if we have limited accuracy, add this to the tooltip */
 	unit = gpm_cell_array_get_unit (collection->primary);
-	accuracy = gpm_profile_get_accuracy (engine->priv->profile, unit->percentage);
-	if (accuracy < GPM_ENGINE_WARN_ACCURACY && unit->is_present == TRUE) {
-		tooltip = g_string_append (tooltip, _("Battery charge profile is estimated\n"));
+	accuracy = gpm_profile_get_accuracy_average (engine->priv->profile,
+						     unit->is_discharging);
+	if (accuracy < GPM_PROFILE_GOOD_TRUST && unit->is_present == TRUE) {
+		if (unit->is_discharging) {
+			tooltip = g_string_append (tooltip, _("Battery discharge profile is estimated\n"));
+			tooltip = g_string_append (tooltip, _("Policy actions will not be performed until battery profiled\n"));
+		} else {
+			tooltip = g_string_append (tooltip, _("Battery charge profile is estimated\n"));
+		}
 	}
 
 	part = gpm_cell_array_get_description (collection->ups);

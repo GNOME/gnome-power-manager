@@ -34,6 +34,8 @@ G_BEGIN_DECLS
 #define GPM_IS_PROFILE_CLASS(k)		(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_PROFILE))
 #define GPM_PROFILE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_PROFILE, GpmProfileClass))
 
+#define GPM_PROFILE_GOOD_TRUST	40
+
 typedef struct GpmProfilePrivate GpmProfilePrivate;
 
 typedef struct
@@ -63,6 +65,8 @@ guint			 gpm_profile_get_accuracy		(GpmProfile	*profile,
 GpmArray		*gpm_profile_get_data_time_percent	(GpmProfile	*profile,
 								 gboolean	 discharging);
 GpmArray		*gpm_profile_get_data_accuracy_percent	(GpmProfile	*profile,
+								 gboolean	 discharging);
+gfloat			 gpm_profile_get_accuracy_average	(GpmProfile	*profile,
 								 gboolean	 discharging);
 guint			 gpm_profile_get_time			(GpmProfile	*profile,
 								 guint		 percentage,

@@ -466,6 +466,43 @@ gpm_cell_array_get_config_id (GpmCellArray *cell_array)
 }
 
 /**
+ * gpm_cell_array_emit_system_action:
+ *
+ * Do the emits here. Probably.
+ */
+static gboolean
+gpm_cell_array_emit_system_action (GpmCellArray	   *cell_array,
+				   GpmWarningsState warnings_state)
+{
+	gfloat accuracy;
+	GpmCellUnit *unit;
+
+	/* do we trust the profile enough to make a decision? */
+	unit = &(cell_array->priv->unit);
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY) {
+		accuracy = gpm_profile_get_accuracy_average (cell_array->priv->profile,
+							     unit->is_discharging);
+		if (accuracy < GPM_PROFILE_GOOD_TRUST) {
+			gpm_debug ("profile is not accurate. Not doing policy action");
+			return FALSE;
+		}
+	}
+
+	/* we are not primary, or we are primary with a trusted profile */
+	if (warnings_state == GPM_WARNINGS_ACTION) {
+		gpm_debug ("** EMIT: charge-action");
+		g_signal_emit (cell_array, signals [CHARGE_ACTION], 0, unit->percentage);
+	} else if (warnings_state == GPM_WARNINGS_CRITICAL) {
+		gpm_debug ("** EMIT: charge-critical");
+		g_signal_emit (cell_array, signals [CHARGE_CRITICAL], 0, unit->percentage);
+	} else if (warnings_state == GPM_WARNINGS_LOW) {
+		gpm_debug ("** EMIT: charge-low");
+		g_signal_emit (cell_array, signals [CHARGE_LOW], 0, unit->percentage);
+	}
+	return TRUE;
+}
+
+/**
  * gpm_cell_array_percent_changed:
  *
  * Do the clever actions here.
@@ -520,18 +557,12 @@ gpm_cell_array_percent_changed (GpmCellArray *cell_array)
 			cell_array->priv->warnings_state = warnings_state;
 
 			gpm_debug ("warning state = %i", warnings_state);
-			if (warnings_state == GPM_WARNINGS_ACTION) {
-				gpm_debug ("** EMIT: charge-action");
-				g_signal_emit (cell_array, signals [CHARGE_ACTION], 0, unit->percentage);
-			} else if (warnings_state == GPM_WARNINGS_CRITICAL) {
-				gpm_debug ("** EMIT: charge-critical");
-				g_signal_emit (cell_array, signals [CHARGE_CRITICAL], 0, unit->percentage);
-			} else if (warnings_state == GPM_WARNINGS_LOW) {
-				gpm_debug ("** EMIT: charge-low");
-				g_signal_emit (cell_array, signals [CHARGE_LOW], 0, unit->percentage);
-			} else if (warnings_state == GPM_WARNINGS_DISCHARGING) {
+			if (warnings_state == GPM_WARNINGS_DISCHARGING) {
+				/* we emit this, even if the profile is crap */
 				gpm_debug ("** EMIT: discharging");
 				g_signal_emit (cell_array, signals [DISCHARGING], 0, unit->percentage);
+			} else {
+				gpm_cell_array_emit_system_action (cell_array, warnings_state);
 			}
 		}
 	}

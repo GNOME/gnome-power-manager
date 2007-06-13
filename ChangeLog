@@ -1,5 +1,32 @@
 2007-06-13  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_emit_system_action),
+	(gpm_cell_array_percent_changed):
+	* src/gpm-engine.c: (gpm_engine_get_summary):
+	* src/gpm-profile.c: (gpm_profile_get_accuracy_average):
+	* src/gpm-profile.h:
+	Don't try to do the policy acton when the average accuracy is low.
+	This should solve the problem where g-p-m shuts down when the profile
+	is very new, and g-p-m has not "seen" the lower states.
+	Should fix #446895 and other duplicates.
+
+	* src/gpm-array-float.c: (gpm_array_float_get_average):
+	* src/gpm-array-float.h:
+	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	Add code to compute the average of a float list.
+
+	* test/gpm-selftest-hal-devices.fdi:
+	Use BAT0.
+
+	* test/gpm-st-cell.c: (gpm_cell_get_battery), (gpm_st_cell):
+	* test/gpm-st-main.c: (gpm_st_failed), (main):
+	Stop the checks when an error happens.
+
+	* test/install-fdi.sh:
+	Restart HAL to get the new fdi set.
+
+2007-06-13  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-conf.h:
 	Add in /apps/gnome-power-manager/general/debug for the future.
