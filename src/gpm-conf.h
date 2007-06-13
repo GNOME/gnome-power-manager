@@ -77,6 +77,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_CPUFREQ_USE_NICE		GPM_CONF_DIR "/cpufreq/consider_nice"
 
 /* general */
+#define GPM_CONF_DEBUG				GPM_CONF_DIR "/general/debug"
 #define GPM_CONF_CAN_SUSPEND			GPM_CONF_DIR "/general/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE			GPM_CONF_DIR "/general/can_hibernate"
 #define GPM_CONF_USE_TIME_POLICY		GPM_CONF_DIR "/general/use_time_for_policy"

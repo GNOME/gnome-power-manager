@@ -361,6 +361,18 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-power-manager/general/debug</key>
+      <applyto>/apps/gnome-power-manager/general/debug</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>If extra debugging messages should be used</short>
+        <long>If extra debugging messages should be used. Only turn this on for debugging.</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnome-power-manager/general/use_profile_time</key>
       <applyto>/apps/gnome-power-manager/general/use_profile_time</applyto>
       <owner>gnome-power-manager</owner>
