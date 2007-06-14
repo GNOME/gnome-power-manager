@@ -1,5 +1,20 @@
 2007-06-14  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-idle.c: (gpm_idle_init):
+	Initialise a variable to maybe fix #446496.
+
+2007-06-14  Richard Hughes  <richard@hughsie.com>
+
+	* applets/brightness/brightness-applet.c (gpm_applet_get_icon):
+        Use the new invalid icon when g-p-m is not running. Fixes #433367
+
+	* applets/brightness/brightness-applet.c
+	(gpm_brightness_applet_dbus_connect):
+	Refresh the value when g-p-m re-appears back on the bus, so the value
+	on the slider is correct.
+
+2007-06-14  Richard Hughes  <richard@hughsie.com>
+
 	* docs/backlight-interactions.svg:
 	Add this useful diagram.
 

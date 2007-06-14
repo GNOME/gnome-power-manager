@@ -68,6 +68,7 @@ static void      gpm_applet_destroy_cb            (GtkObject *object);
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
 #define GPM_BRIGHTNESS_APPLET_ICON		"gpm-brightness-lcd"
 #define GPM_BRIGHTNESS_APPLET_ICON_DISABLED	"gpm-brightness-lcd-disabled"
+#define GPM_BRIGHTNESS_APPLET_ICON_INVALID	"gpm-brightness-lcd-invalid"
 #define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manager Brightness Applet")
 #define GPM_BRIGHTNESS_APPLET_DESC		_("Adjusts laptop panel brightness.")
 #define PANEL_APPLET_VERTICAL(p)					\
@@ -161,7 +162,7 @@ gpm_applet_get_icon (GpmBrightnessApplet *applet)
 
 	/* get icon */
 	if (applet->proxy == NULL) {
-		icon = GPM_BRIGHTNESS_APPLET_ICON_DISABLED;
+		icon = GPM_BRIGHTNESS_APPLET_ICON_INVALID;
 	} else if (applet->call_worked == FALSE) {
 		icon = GPM_BRIGHTNESS_APPLET_ICON_DISABLED;
 	} else {
@@ -850,7 +851,7 @@ gpm_brightness_applet_dbus_connect (GpmBrightnessApplet *applet)
 					     G_CALLBACK (brightness_changed_cb),
 					     applet, NULL);
 		/* reset, we might be starting race */
-		applet->call_worked = TRUE;
+		applet->call_worked = gpm_applet_get_brightness (applet);
 	}
 	return TRUE;
 }

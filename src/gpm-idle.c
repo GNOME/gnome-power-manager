@@ -285,7 +285,6 @@ gpm_idle_set_system_timeout (GpmIdle	*idle,
 	g_return_if_fail (GPM_IS_IDLE (idle));
 
 	gpm_debug ("Setting system idle timeout: %d", timeout);
-
 	if (idle->priv->system_timeout != timeout) {
 		idle->priv->system_timeout = timeout;
 
@@ -405,6 +404,7 @@ gpm_idle_init (GpmIdle *idle)
 {
 	idle->priv = GPM_IDLE_GET_PRIVATE (idle);
 
+	idle->priv->system_timeout = G_MAXUINT;
 	idle->priv->load = gpm_load_new ();
 	idle->priv->screensaver = gpm_screensaver_new ();
 	g_signal_connect (idle->priv->screensaver, "session-idle-changed",
