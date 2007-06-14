@@ -9,6 +9,8 @@ Data_DATA =				\
 	gpm-brightness-kbd.svg		\
 	gpm-brightness-lcd-disabled.svg	\
 	gpm-brightness-kbd-disabled.svg	\
+	gpm-brightness-lcd-invalid.svg	\
+	gpm-brightness-kbd-invalid.svg	\
 	gpm-hibernate.svg		\
 	gpm-suspend.svg			\
 	gpm-inhibit.svg			\
