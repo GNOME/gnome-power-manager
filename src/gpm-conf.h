@@ -147,6 +147,11 @@ G_BEGIN_DECLS
 /* okay to change at runtime */
 #define GPM_CONF_GNOME_SS_PM_DELAY		"/apps/gnome-screensaver/power_management_delay"
 
+/* gnome-screensaver */
+#define GS_CONF_DIR				"/apps/gnome-screensaver"
+#define GS_PREF_LOCK_ENABLED			GS_CONF_DIR "/lock_enabled"
+#define GS_PREF_IDLE_DELAY			GS_CONF_DIR "/idle_delay"
+
 typedef struct GpmConfPrivate GpmConfPrivate;
 
 typedef struct

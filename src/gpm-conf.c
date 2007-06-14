@@ -368,16 +368,25 @@ gpm_conf_init (GpmConf *conf)
 
 	conf->priv->gconf_client = gconf_client_get_default ();
 
+	/* watch gnome-power-manager keys */
 	gconf_client_add_dir (conf->priv->gconf_client,
 			      GPM_CONF_DIR,
 			      GCONF_CLIENT_PRELOAD_NONE,
 			      NULL);
-
 	gconf_client_notify_add (conf->priv->gconf_client,
 				 GPM_CONF_DIR,
 				 gconf_key_changed_cb,
 				 conf, NULL, NULL);
 
+	/* watch gnome-screensaver keys */
+	gconf_client_add_dir (conf->priv->gconf_client,
+			      GS_CONF_DIR,
+			      GCONF_CLIENT_PRELOAD_NONE,
+			      NULL);
+	gconf_client_notify_add (conf->priv->gconf_client,
+				 GS_CONF_DIR,
+				 gconf_key_changed_cb,
+				 conf, NULL, NULL);
 }
 
 /**

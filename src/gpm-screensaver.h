@@ -37,10 +37,6 @@ G_BEGIN_DECLS
 #define GS_LISTENER_PATH	"/org/gnome/ScreenSaver"
 #define GS_LISTENER_INTERFACE	"org.gnome.ScreenSaver"
 
-#define GS_PREF_DIR		"/apps/gnome-screensaver"
-#define GS_PREF_LOCK_ENABLED	GS_PREF_DIR "/lock_enabled"
-#define GS_PREF_IDLE_DELAY	GS_PREF_DIR "/idle_delay"
-
 typedef struct GpmScreensaverPrivate GpmScreensaverPrivate;
 
 typedef struct

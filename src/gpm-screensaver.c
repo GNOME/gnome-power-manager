@@ -178,6 +178,7 @@ gconf_key_changed_cb (GpmConf        *conf,
 		      GpmScreensaver *screensaver)
 {
 	g_return_if_fail (GPM_IS_SCREENSAVER (screensaver));
+	gpm_debug ("key : %s", key);
 
 	if (strcmp (key, GS_PREF_IDLE_DELAY) == 0) {
 		gpm_conf_get_uint (screensaver->priv->conf, key, &screensaver->priv->idle_delay);
