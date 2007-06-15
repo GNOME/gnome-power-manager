@@ -75,6 +75,10 @@ gpm_sound_force (GpmSound       *sound,
 		filename = "gpm-critical-power.wav";
 	} else if (action == GPM_SOUND_SUSPEND_FAILURE) {
 		filename = "gpm-suspend-failure.wav";
+	} else if (action == GPM_SOUND_LID_UP) {
+		filename = "gpm-lid-up.wav";
+	} else if (action == GPM_SOUND_LID_DOWN) {
+		filename = "gpm-lid-down.wav";
 	} else {
 		g_error ("enum %i not known", action);
 	}
