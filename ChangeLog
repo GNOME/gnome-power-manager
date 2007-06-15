@@ -1,5 +1,14 @@
 2007-06-15  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-button.c: (emit_button_pressed):
+	Only do the sound if we configured sound effects to be on.
+
+	* src/gpm-sound.c: (gpm_sound_play), (gpm_sound_force),
+	(gpm_sound_finalize), (gpm_sound_init):
+	Do the sounds in-process, rather than executing gst-launch.
+
+2007-06-15  Richard Hughes  <richard@hughsie.com>
+
 	* data/sounds/Makefile.am:
 	* src/gpm-button.c: (emit_button_pressed), (gpm_button_init),
 	(gpm_button_finalize):

@@ -37,6 +37,7 @@
 
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
+#include <gst/gst.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-common.h"
@@ -53,6 +54,7 @@ struct GpmSoundPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
 	GpmControl		*control;
+	GstElement		*playbin;
 };
 
 G_DEFINE_TYPE (GpmSound, gpm_sound, G_TYPE_OBJECT)
@@ -62,11 +64,32 @@ static gpointer gpm_sound_object = NULL;
  * gpm_sound_force:
  * @sound: This class instance
  **/
+static gboolean
+gpm_sound_play (GpmSound   *sound,
+		const char *filename)
+{
+	char *uri;
+
+	/* prepend the path to form a URI */
+	uri = g_strdup_printf ("file:///%s%s",  GPM_DATA, filename);
+
+	/* set up new playbin source */
+	gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
+	g_object_set (G_OBJECT (sound->priv->playbin), "uri", uri, NULL);
+	gst_element_set_state (sound->priv->playbin, GST_STATE_PLAYING);
+
+	g_free (uri);
+	return TRUE;
+}
+
+/**
+ * gpm_sound_force:
+ * @sound: This class instance
+ **/
 gboolean
 gpm_sound_force (GpmSound       *sound,
 		 GpmSoundAction  action)
 {
-	char *command;
 	const char *filename = NULL;
 
 	if (action == GPM_SOUND_AC_UNPLUGGED) {
@@ -83,20 +106,12 @@ gpm_sound_force (GpmSound       *sound,
 		g_error ("enum %i not known", action);
 	}
 
-	command = g_strdup_printf ("gst-launch filesrc location=%s%s ! "
-				   "decodebin ! audioconvert ! gconfaudiosink",
-				   GPM_DATA, filename);
-
-	if (! g_spawn_command_line_async (command, NULL)) {
-		gpm_warning ("Couldn't execute command: %s", command);
-	}
-
-	g_free (command);
+	gpm_sound_play (sound, filename);
 	return TRUE;
 }
 
 /**
- * gpm_sound_force:
+ * gpm_sound_event:
  * @sound: This class instance
  **/
 gboolean
@@ -150,8 +165,8 @@ ac_adapter_changed_cb (GpmAcAdapter *ac_adapter,
  **/
 static void
 control_sleep_failure_cb (GpmControl      *control,
-		          GpmControlAction action,
-		          GpmSound        *sound)
+			  GpmControlAction action,
+			  GpmSound	  *sound)
 {
 	gpm_sound_event (sound, GPM_SOUND_SUSPEND_FAILURE);
 }
@@ -186,6 +201,10 @@ gpm_sound_finalize (GObject *object)
 	g_object_unref (sound->priv->conf);
 	g_object_unref (sound->priv->ac_adapter);
 	g_object_unref (sound->priv->control);
+
+	/* stop and close */
+	gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
+	gst_object_unref (GST_OBJECT (sound->priv->playbin));
 
 	G_OBJECT_CLASS (gpm_sound_parent_class)->finalize (object);
 }
@@ -228,6 +247,9 @@ gpm_sound_init (GpmSound *sound)
 	sound->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (sound->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), sound);
+
+	/* we keep this alive for speed */
+	sound->priv->playbin = gst_element_factory_make ("playbin", "play");
 
 	/* do we beep? */
 	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
