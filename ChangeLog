@@ -1,3 +1,13 @@
+2007-06-17  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-manager.c: (gpm_manager_init):
+	Add a special key to detect if the gconf schema has been correctly
+	installed. I'm getting more and more bugreports from people compiling
+	g-p-m from source, but not installing the default schema and thus
+	getting odd unreproducable crashes.
+
 2007-06-17  Stéphane Raimbault  <stephane.raimbault@gmail.com>
 
 	* src/gpm-info.c: (gpm_statistics_add_events_typical):

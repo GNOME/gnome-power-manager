@@ -1549,6 +1549,8 @@ gpm_manager_init (GpmManager *manager)
 	GpmEngineCollection *collection;
 	GError *error = NULL;
 	gboolean on_ac;
+	gboolean ret;
+	guint version;
 
 	manager->priv = GPM_MANAGER_GET_PRIVATE (manager);
 	connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
@@ -1559,9 +1561,23 @@ gpm_manager_init (GpmManager *manager)
 	/* this is a singleton, so we keep a master copy open here */
 	manager->priv->prefs_server = gpm_prefs_server_new ();
 
+	manager->priv->notify = gpm_notify_new ();
 	manager->priv->conf = gpm_conf_new ();
 	g_signal_connect (manager->priv->conf, "value-changed",
 			  G_CALLBACK (conf_key_changed_cb), manager);
+
+	/* check to see if the user has installed the schema properly */
+	ret = gpm_conf_get_uint (manager->priv->conf, GPM_CONF_SCHEMA_VERSION, &version);
+	if (ret == FALSE || version != GPM_CONF_SCHEMA_ID) {
+		gpm_notify_display (manager->priv->notify,
+				    _("Install problem!"),
+				    _("The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
+				      "Please contact your computer administrator."),
+				    GPM_NOTIFY_TIMEOUT_LONG,
+				    GTK_STOCK_DIALOG_WARNING,
+				    GPM_NOTIFY_URGENCY_NORMAL);
+		gpm_error ("no gconf schema installed!");
+	}
 
 	/* we use ac_adapter so we can poke the screensaver and throttle */
 	manager->priv->ac_adapter = gpm_ac_adapter_new ();
@@ -1613,7 +1629,6 @@ gpm_manager_init (GpmManager *manager)
 	gpm_idle_set_check_cpu (manager->priv->idle, check_type_cpu);
 
 	manager->priv->dpms = gpm_dpms_new ();
-	manager->priv->notify = gpm_notify_new ();
 
 	/* use a class to handle the complex stuff */
 	gpm_debug ("creating new inhibit instance");

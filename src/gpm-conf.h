@@ -26,6 +26,9 @@
 
 G_BEGIN_DECLS
 
+/* change this whenever adding or moving keys */
+#define GPM_CONF_SCHEMA_ID	2
+
 #define GPM_TYPE_CONF		(gpm_conf_get_type ())
 #define GPM_CONF(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_CONF, GpmConf))
 #define GPM_CONF_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_CONF, GpmConfClass))
@@ -78,6 +81,7 @@ G_BEGIN_DECLS
 
 /* general */
 #define GPM_CONF_DEBUG				GPM_CONF_DIR "/general/debug"
+#define GPM_CONF_SCHEMA_VERSION			GPM_CONF_DIR "/general/installed_schema"
 #define GPM_CONF_CAN_SUSPEND			GPM_CONF_DIR "/general/can_suspend"
 #define GPM_CONF_CAN_HIBERNATE			GPM_CONF_DIR "/general/can_hibernate"
 #define GPM_CONF_USE_TIME_POLICY		GPM_CONF_DIR "/general/use_time_for_policy"
