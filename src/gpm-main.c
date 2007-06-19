@@ -176,6 +176,7 @@ main (int argc, char *argv[])
 			    	      GNOME_PARAM_GOPTION_CONTEXT, context,
 			    	      GNOME_PARAM_HUMAN_READABLE_NAME, GPM_NAME,
 			    	      NULL);
+	g_set_application_name (GPM_NAME);
 
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);

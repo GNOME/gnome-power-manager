@@ -333,10 +333,10 @@ gpm_tray_icon_show_about_cb (GtkMenuItem *item, gpointer data)
 
 	gtk_window_set_default_icon_name (GPM_STOCK_APP_ICON);
 	gtk_show_about_dialog (NULL,
-			       "name", GPM_NAME,
 			       "version", VERSION,
 			       "copyright", "Copyright \xc2\xa9 2005-2007 Richard Hughes",
 			       "license", license_trans,
+			       "website-label", _("GNOME Power Manager Website"),
 			       "website", GPM_HOMEPAGE_URL,
 			       "comments", GPM_DESCRIPTION,
 			       "authors", authors,

@@ -1,3 +1,11 @@
+2007-06-19  Jaap Haitsma  <jaap@haitsma.org>
+
+	* src/gpm-main.c: (main):
+	Add g_set_application_name
+	* src/gpm-trayicon.c: (gpm_tray_icon_show_about_cb):
+	Make about dialog work with GTK 2.12 
+	Add website label. Closed #448570
+
 2007-06-17  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
