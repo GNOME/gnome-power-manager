@@ -281,7 +281,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_type_x = g_strdup ("time");
 		*axis_type_y = g_strdup ("power");
 		*axis_desc_x = g_strdup (_("Time since startup"));
-		*axis_desc_y = g_strdup (_("Power (mWh)"));
+		*axis_desc_y = g_strdup (_("Power"));
 		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Power"));
 		gpm_statistics_add_events_typical (*key_event);
 		return TRUE;
