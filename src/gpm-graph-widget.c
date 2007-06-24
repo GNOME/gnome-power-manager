@@ -319,7 +319,6 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->stop_y = 100;
 	graph->priv->use_grid = TRUE;
 	graph->priv->use_legend = FALSE;
-	graph->priv->autorange_x = TRUE;
 	graph->priv->data_list = g_ptr_array_new ();
 	graph->priv->key_data = NULL;
 	graph->priv->key_event = NULL;
@@ -361,14 +360,13 @@ gpm_graph_widget_finalize (GObject *object)
 }
 
 /**
- * gpm_graph_widget_set_data:
+ * gpm_graph_widget_data_add:
  * @graph: This class instance
- * @list: The GList values to be plotted on the graph
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
 void
-gpm_graph_widget_set_data (GpmGraphWidget *graph, GpmArray *array, guint id)
+gpm_graph_widget_data_add (GpmGraphWidget *graph, GpmArray *array, guint id)
 {
 	g_return_if_fail (array != NULL);
 	g_return_if_fail (graph != NULL);
@@ -388,7 +386,25 @@ gpm_graph_widget_set_data (GpmGraphWidget *graph, GpmArray *array, guint id)
 		g_ptr_array_remove_index (graph->priv->data_list, id);
 		g_ptr_array_add (graph->priv->data_list, (gpointer) array);
 	}
+}
 
+/**
+ * gpm_graph_widget_data_add:
+ * @graph: This class instance
+ *
+ * Sets the data for the graph. You MUST NOT free the list before the widget.
+ **/
+void
+gpm_graph_widget_data_clear (GpmGraphWidget *graph)
+{
+	guint i;
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+
+	/* fresh list */
+	for (i=0; i <= graph->priv->data_list->len; i++) {
+		gpm_debug ("Removing dataset %i", i);
+		g_ptr_array_remove_index_fast (graph->priv->data_list, 0);
+	}
 }
 
 /**
@@ -452,11 +468,11 @@ gpm_get_axis_label (GpmGraphWidgetAxisType axis, gint value)
 		/*Translators: This is %i Percentage*/
 		text = g_strdup_printf (_("%i%%"), value);
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		/*Translators: This is %i Watts*/
-		text = g_strdup_printf (_("%iW"), value / 1000);
+		/*Translators: This is %.1f Watts*/
+		text = g_strdup_printf (_("%.1fW"), (gfloat) value / 1000.0);
 	} else if (axis == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		/*Translators: This is %i Volts*/
-		text = g_strdup_printf (_("%iV"), value / 1000);
+		/*Translators: This is %.1f Volts*/
+		text = g_strdup_printf (_("%.1fV"), (gfloat) value / 1000.0);
 	} else {
 		text = g_strdup_printf ("%i", value);
 	}
@@ -593,6 +609,8 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	gint biggest_y = 0;
 	gint smallest_x = 999999;
 	gint smallest_y = 999999;
+	guint rounding_x = 1;
+	guint rounding_y = 1;
 	GpmArray *array;
 	GpmArrayPoint *point;
 	guint i;
@@ -630,53 +648,56 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	}
 	gpm_debug ("Data range is %i<x<%i, %i<y<%i", smallest_x, biggest_x, smallest_y, biggest_y);
 
-	/* do we autorange the start (so it starts at non-zero)? */
-	if (graph->priv->autorange_x) {
-		/* x is always time and always autoranges to the minute scale */
-		graph->priv->start_x = gpm_precision_round_down (smallest_x, 10*60);
-	} else {
-		graph->priv->start_x = 0;
-	}
-
-	/* x */
 	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		graph->priv->stop_x = 100;
-	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		if (biggest_x > 10*60*60) {
-			graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10*60*60) + smallest_x;
-		} else {
-			graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10*60) + smallest_x;
-		}
+		rounding_x = 10;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 10000) + smallest_x;
+		rounding_x = 1000;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		graph->priv->stop_x = gpm_precision_round_up ((biggest_x - smallest_x), 1000) + smallest_x;
-	} else {
-		graph->priv->start_x = 0;
-		graph->priv->stop_x = biggest_x;
+		rounding_x = 1000;
+	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		rounding_x = 10 * 60;
+	}
+	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		rounding_y = 10;
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
+		rounding_y = 1000;
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
+		rounding_y = 1000;
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		rounding_y = 10 * 60;
 	}
 
-	/* y */
-	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
-		graph->priv->start_y = 0;
-		graph->priv->stop_y = 100;
-	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		graph->priv->start_y = 0;
-		if (biggest_y > 5*60*60) {
-			graph->priv->stop_y = gpm_precision_round_up (biggest_y, 5*60*60);
-		} else {
-			graph->priv->stop_y = gpm_precision_round_up (biggest_y, 5*60);
+	graph->priv->start_x = gpm_precision_round_down (smallest_x, rounding_x);
+	graph->priv->start_y = gpm_precision_round_down (smallest_y, rounding_y);
+	graph->priv->stop_x = gpm_precision_round_up (biggest_x, rounding_x);
+	graph->priv->stop_y = gpm_precision_round_up (biggest_y, rounding_y);
+
+	/* if percentage, and close to the end points, then extend */
+	if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		if (graph->priv->stop_x >= 90) {
+			graph->priv->stop_x = 100;
 		}
-	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_POWER) {
-		graph->priv->start_y = 0;
-		graph->priv->stop_y = gpm_precision_round_up (biggest_y, 10000);
-	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
-		graph->priv->start_y = 0;
-		graph->priv->stop_y = gpm_precision_round_up (biggest_y, 1000);
-	} else {
-		graph->priv->start_y = 0;
-		graph->priv->stop_y = biggest_y;
+		if (graph->priv->start_x <= 10) {
+			graph->priv->start_x = 0;
+		}
+	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		if (graph->priv->start_x <= 60*10) {
+			graph->priv->start_x = 0;
+		}
 	}
+	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
+		if (graph->priv->stop_y >= 90) {
+			graph->priv->stop_y = 100;
+		}
+		if (graph->priv->start_y <= 10) {
+			graph->priv->start_y = 0;
+		}
+	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
+		if (graph->priv->start_y <= 60*10) {
+			graph->priv->start_y = 0;
+		}
+	}
+
 	gpm_debug ("Processed range is %i<x<%i, %i<y<%i",
 		   graph->priv->start_x, graph->priv->stop_x,
 		   graph->priv->start_y, graph->priv->stop_y);
@@ -1081,6 +1102,11 @@ gpm_graph_widget_legend_calculate_size (GpmGraphWidget *graph, cairo_t *cr,
 		}
 	}
 
+	/* have we got no entries? */
+	if (*width == 0 && *height == 0) {
+		return TRUE;
+	}
+
 	/* add for borders */
 	*width += 25;
 	*height += 3;
@@ -1119,7 +1145,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* make size adjustment for legend */
-	if (graph->priv->use_legend) {
+	if (graph->priv->use_legend && legend_height > 0) {
 		graph->priv->box_width = graph_widget->allocation.width -
 					 (3 + legend_width + 5 + graph->priv->box_x);
 		legend_x = graph->priv->box_x + graph->priv->box_width + 6;
@@ -1152,7 +1178,7 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 		gpm_graph_widget_draw_event_dots (graph, cr);
 	}
 
-	if (graph->priv->use_legend) {
+	if (graph->priv->use_legend && legend_height > 0) {
 		gpm_graph_widget_draw_legend (graph, legend_x, legend_y, legend_width, legend_height);
 	}
 

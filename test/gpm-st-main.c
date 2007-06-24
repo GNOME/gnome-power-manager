@@ -63,10 +63,15 @@ gpm_st_failed (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
+	if (format == NULL) {
+		g_print ("...FAILED\n");
+		goto failed;
+	}
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
 	g_print ("...FAILED [%s]\n", va_args_buffer);
+failed:
 	exit (1);
 }
 

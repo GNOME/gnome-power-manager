@@ -34,9 +34,6 @@ G_BEGIN_DECLS
 #define GPM_IS_GRAPH_WIDGET_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), EFF_TYPE_GRAPH_WIDGET))
 #define GPM_GRAPH_WIDGET_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GPM_TYPE_GRAPH_WIDGET, GpmGraphWidgetClass))
 
-#define GPM_COLOUR_CHARGING			GPM_COLOUR_BLUE
-#define GPM_COLOUR_DISCHARGING			GPM_COLOUR_DARK_RED
-#define GPM_COLOUR_CHARGED			GPM_COLOUR_GREEN
 #define GPM_GRAPH_WIDGET_LEGEND_SPACING		17
 
 typedef struct GpmGraphWidget		GpmGraphWidget;
@@ -92,9 +89,10 @@ void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
 void		 gpm_graph_widget_enable_events		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
-void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
+void		 gpm_graph_widget_data_add		(GpmGraphWidget	*graph,
 							 GpmArray	*array,
 							 guint		 id);
+void		 gpm_graph_widget_data_clear		(GpmGraphWidget	*graph);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
 							 GpmArray	*array);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,

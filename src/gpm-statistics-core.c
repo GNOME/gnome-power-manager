@@ -635,7 +635,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 		gpm_array_float_free (result);
 	}
 
-	gpm_graph_widget_set_data (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
 				   statistics->priv->data, 0);
 
 	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));

@@ -1,3 +1,20 @@
+2007-06-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c:
+	Move the colour defines here.
+
+	* src/gpm-statistics-core.c: (gpm_statistics_refresh_data):
+	* src/gpm-graph-widget.h:
+	Allow the graph data to be cleared, so rename the function to create.
+
+	* test/gpm-st-graph-widget.c: (gpm_st_graph_widget):
+	* test/gpm-st-main.c: (gpm_st_failed):
+	Add lots more tests.
+
+	* src/gpm-graph-widget.c:
+	Fix the no-legend bug, and the autoranging bugs. We need more
+	unit-tests, but this should fix the most glaring errors.
+
 2007-06-24  Gabor Kelemen  <kelemeng@gnome.hu>
 	* src/gpm-main.c:
 	* src/gpm-statistics.c:

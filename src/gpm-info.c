@@ -52,6 +52,9 @@ static void     gpm_info_finalize   (GObject      *object);
 #define GPM_INFO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_INFO, GpmInfoPrivate))
 
 #define GPM_INFO_DATA_POLL		5	/* seconds */
+#define GPM_COLOUR_CHARGING			GPM_COLOUR_BLUE
+#define GPM_COLOUR_DISCHARGING			GPM_COLOUR_DARK_RED
+#define GPM_COLOUR_CHARGED			GPM_COLOUR_GREEN
 
 #define GPM_DBUS_STRUCT_INT_INT (dbus_g_type_get_struct ("GValueArray", \
 	G_TYPE_INT, G_TYPE_INT, G_TYPE_INVALID))

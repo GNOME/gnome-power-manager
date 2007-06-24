@@ -25,6 +25,8 @@
 
 #include "../src/gpm-graph-widget.h"
 #include "../src/gpm-debug.h"
+#include "../src/gpm-array.h"
+#include "../src/gpm-common.h"
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -115,6 +117,10 @@ gpm_st_title_graph (GpmSelfTest *test, const gchar *format, ...)
 void
 gpm_st_graph_widget (GpmSelfTest *test)
 {
+	GpmArray *data;
+	GpmArray *data_more;
+	GpmArray *events;
+
 	test->type = "GpmGraphWidget   ";
 
 	create_graph_window (test);
@@ -122,19 +128,19 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_enable_events (GPM_GRAPH_WIDGET (graph), TRUE);
 
 	/********** TYPES *************/
-	gpm_st_title_graph (test, "graph loaded, visible, and set to y=percent x=time");
+	gpm_st_title_graph (test, "graph loaded, visible, no key, and set to y=percent x=time");
 	wait_for_input (test);
 
 	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_TIME);
 
-	gpm_st_title_graph (test, "graph loaded, visible, and set to y=time x=percent");
+	gpm_st_title_graph (test, "now set to y=time x=percent");
 	wait_for_input (test);
 
 	/********** KEY DATA *************/
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), 0xff0000, "red data");
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), 0x00ff00, "blue data");
-	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), 0x0000ff, "green data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_GREEN, "green data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_BLUE, "blue data");
 
 	gpm_st_title_graph (test, "red green blue key data added");
 	wait_for_input (test);
@@ -145,10 +151,22 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	wait_for_input (test);
 
 	/********** KEY EVENT *************/
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, 0xff0000, GPM_GRAPH_WIDGET_SHAPE_CIRCLE, "red circle");
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 1, 0x00ff00, GPM_GRAPH_WIDGET_SHAPE_SQUARE, "green square");
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 2, 0x0000ff, GPM_GRAPH_WIDGET_SHAPE_TRIANGLE, "blue triangle");
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3, 0xffffff, GPM_GRAPH_WIDGET_SHAPE_DIAMOND, "white diamond");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0,
+					GPM_COLOUR_RED,
+					GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
+					"red circle");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 1,
+					GPM_COLOUR_GREEN,
+					GPM_GRAPH_WIDGET_SHAPE_SQUARE,
+					"green square");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 2,
+					GPM_COLOUR_BLUE,
+					GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
+					"blue triangle");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3,
+					GPM_COLOUR_WHITE,
+					GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
+					"white diamond");
 	/* todo, check if id's are not repeating... */
 
 	gpm_st_title_graph (test, "red green blue white key events added");
@@ -159,6 +177,80 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_st_title_graph (test, "event items cleared, no key remains");
 	wait_for_input (test);
 
+	/********** DATA *************/
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	gpm_graph_widget_set_axis_type_y (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
 
+	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_BLUE, "blue data");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, GPM_COLOUR_WHITE, GPM_GRAPH_WIDGET_SHAPE_DIAMOND, "white diamond");
+	
+	data = gpm_array_new ();
+	gpm_array_append (data, 0, 0, GPM_COLOUR_RED);
+	gpm_array_append (data, 100, 100, GPM_COLOUR_RED);
+	/* todo; check to see that x axis is increasing */
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+
+	gpm_st_title_graph (test, "red line shown gradient up");
+	wait_for_input (test);
+
+	/*********** second line **************/
+	data_more = gpm_array_new ();
+	gpm_array_append (data_more, 0, 100, GPM_COLOUR_BLUE);
+	gpm_array_append (data_more, 100, 0, GPM_COLOUR_BLUE);
+	/* todo; check to see that x axis is increasing */
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data_more, 1);
+
+	gpm_st_title_graph (test, "red line shown gradient up, blue gradient down");
+	wait_for_input (test);
+
+	/*********** dots **************/
+	events = gpm_array_new ();
+	gpm_array_append (events, 25, 0, 0);
+	gpm_array_append (events, 50, 0, 0);
+	gpm_array_append (events, 75, 0, 0);
+	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph), events);
+
+	gpm_st_title_graph (test, "events follow red line (primary)");
+	wait_for_input (test);
+
+	/*********** stacked dots **************/
+	gpm_array_append (events, 76, 0, 0);
+	gpm_array_append (events, 77, 0, 0);
+	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph), events);
+
+	gpm_st_title_graph (test, "three events stacked at ~75");
+	wait_for_input (test);
+
+	/*********** data lines removed **************/
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_st_title_graph (test, "all lines removed");
+	wait_for_input (test);
+
+	/********** AUTORANGING PERCENT (close) *************/
+	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
+	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
+	data = gpm_array_new ();
+	gpm_array_append (data, 0, 75, GPM_COLOUR_RED);
+	gpm_array_append (data, 20, 78, GPM_COLOUR_RED);
+	gpm_array_append (data, 40, 74, GPM_COLOUR_RED);
+	gpm_array_append (data, 60, 72, GPM_COLOUR_RED);
+	gpm_array_append (data, 80, 78, GPM_COLOUR_RED);
+	gpm_array_append (data, 100, 79, GPM_COLOUR_RED);
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+	gpm_st_title_graph (test, "autorange y axis between 70 and 80");
+	wait_for_input (test);
+
+	/********** AUTORANGING PERCENT (extreams) *************/
+	data = gpm_array_new ();
+	gpm_array_append (data, 0, 6, GPM_COLOUR_RED);
+	gpm_array_append (data, 100, 85, GPM_COLOUR_RED);
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+	gpm_st_title_graph (test, "autorange y axis between 0 and 100");
+	wait_for_input (test);
 }
 
