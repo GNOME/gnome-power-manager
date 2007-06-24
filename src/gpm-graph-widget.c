@@ -655,7 +655,13 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
 		rounding_x = 1000;
 	} else if (graph->priv->axis_type_x == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		rounding_x = 10 * 60;
+		if (biggest_x < 150) {
+			rounding_x = 150;
+		} else if (biggest_x < 5*60) {
+			rounding_x = 5 * 60;
+		} else {
+			rounding_x = 10 * 60;
+		}
 	}
 	if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_PERCENTAGE) {
 		rounding_y = 10;
@@ -664,7 +670,13 @@ gpm_graph_widget_auto_range (GpmGraphWidget *graph)
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_VOLTAGE) {
 		rounding_y = 1000;
 	} else if (graph->priv->axis_type_y == GPM_GRAPH_WIDGET_TYPE_TIME) {
-		rounding_y = 10 * 60;
+		if (biggest_y < 150) {
+			rounding_y = 150;
+		} else if (biggest_y < 5*60) {
+			rounding_y = 5 * 60;
+		} else {
+			rounding_y = 10 * 60;
+		}
 	}
 
 	graph->priv->start_x = gpm_precision_round_down (smallest_x, rounding_x);
