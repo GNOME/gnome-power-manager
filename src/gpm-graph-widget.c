@@ -41,10 +41,7 @@ struct GpmGraphWidgetPrivate
 	gboolean		 use_grid;
 	gboolean		 use_legend;
 	gboolean		 use_events;
-
-	gboolean		 invert_x;
 	gboolean		 autorange_x;
-	gboolean		 invert_y;
 
 	GSList			*key_data; /* lines */
 	GSList			*key_event; /* dots */
@@ -231,22 +228,6 @@ gpm_graph_widget_string_to_axis_type (const gchar *type)
 }
 
 /**
- * gpm_graph_widget_set_title:
- * @graph: This class instance
- * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
- **/
-void
-gpm_graph_widget_set_title (GpmGraphWidget *graph, const gchar *title)
-{
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	if (graph->priv->title != NULL) {
-		g_free (graph->priv->title);
-	}
-	graph->priv->title = g_strdup (title);
-}
-
-/**
  * gpm_graph_widget_set_axis_type_x:
  * @graph: This class instance
  * @axis: The axis type, e.g. GPM_GRAPH_WIDGET_TYPE_TIME
@@ -332,8 +313,6 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	PangoFontDescription *desc;
 
 	graph->priv = GPM_GRAPH_WIDGET_GET_PRIVATE (graph);
-	graph->priv->invert_x = FALSE;
-	graph->priv->invert_y = FALSE;
 	graph->priv->start_x = 0;
 	graph->priv->start_y = 0;
 	graph->priv->stop_x = 60;
@@ -344,7 +323,6 @@ gpm_graph_widget_init (GpmGraphWidget *graph)
 	graph->priv->data_list = g_ptr_array_new ();
 	graph->priv->key_data = NULL;
 	graph->priv->key_event = NULL;
-	graph->priv->title = NULL;
 	graph->priv->axis_type_x = GPM_GRAPH_WIDGET_TYPE_TIME;
 	graph->priv->axis_type_y = GPM_GRAPH_WIDGET_TYPE_PERCENTAGE;
 
@@ -380,38 +358,6 @@ gpm_graph_widget_finalize (GObject *object)
 	context = pango_layout_get_context (graph->priv->layout);
 	g_object_unref (graph->priv->layout);
 	g_object_unref (context);
-
-	g_free (graph->priv->title);
-}
-
-/**
- * gpm_graph_widget_set_invert_x:
- * @graph: This class instance
- * @inv: If we should invert the axis
- *
- * Sets the inverse policy for the X axis, i.e. to count from 0..X or X..0
- **/
-void
-gpm_graph_widget_set_invert_x (GpmGraphWidget *graph, gboolean inv)
-{
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	graph->priv->invert_x = inv;
-}
-
-/**
- * gpm_graph_widget_set_invert_y:
- * @graph: This class instance
- * @inv: If we should invert the axis
- *
- * Sets the inverse policy for the Y axis, i.e. to count from 0..Y or Y..0
- **/
-void
-gpm_graph_widget_set_invert_y (GpmGraphWidget *graph, gboolean inv)
-{
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
-	graph->priv->invert_y = inv;
 }
 
 /**
@@ -584,11 +530,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	cairo_set_source_rgb (cr, 0, 0, 0);
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_x + (a * divwidth);
-		if (graph->priv->invert_x) {
-			value = (length_x / 10) * (10 - a) + graph->priv->start_x;
-		} else {
-			value = ((length_x / 10) * a) + graph->priv->start_x;
-		}
+		value = ((length_x / 10) * a) + graph->priv->start_x;
 		text = gpm_get_axis_label (graph->priv->axis_type_x, value);
 
 		pango_layout_set_text (graph->priv->layout, text, -1);
@@ -612,11 +554,7 @@ gpm_graph_widget_draw_labels (GpmGraphWidget *graph, cairo_t *cr)
 	/* do y text */
 	for (a=0; a<11; a++) {
 		b = graph->priv->box_y + (a * divheight);
-		if (graph->priv->invert_y) {
-			value = (length_y / 10) * a + graph->priv->start_y;
-		} else {
-			value = (length_y / 10) * (10 - a) + graph->priv->start_y;
-		}
+		value = (length_y / 10) * (10 - a) + graph->priv->start_y;
 		text = gpm_get_axis_label (graph->priv->axis_type_y, value);
 
 		pango_layout_set_text (graph->priv->layout, text, -1);
@@ -1166,8 +1104,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	guint legend_width = 0;
 	gint data_x;
 	gint data_y;
-	PangoRectangle ink_rect_title;
-	PangoRectangle logical_rect;
 
 	GpmGraphWidget *graph = (GpmGraphWidget*) graph_widget;
 	g_return_if_fail (graph != NULL);
@@ -1180,12 +1116,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	graph->priv->box_x = 45;
 	graph->priv->box_y = 5;
 
-	if (graph->priv->title != NULL) {
-		pango_layout_set_text (graph->priv->layout, graph->priv->title, -1);
-		pango_layout_get_pixel_extents (graph->priv->layout, &ink_rect_title, &logical_rect);
-		graph->priv->box_y += ink_rect_title.height;
-	}
-
 	graph->priv->box_height = graph_widget->allocation.height - (20 + graph->priv->box_y);
 
 	/* make size adjustment for legend */
@@ -1197,13 +1127,6 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	} else {
 		graph->priv->box_width = graph_widget->allocation.width -
 					 (3 + graph->priv->box_x);
-	}
-
-	/* center title */
-	if (graph->priv->title != NULL) {
-		cairo_move_to (cr, graph->priv->box_x + (graph->priv->box_width-ink_rect_title.width)/2, 9);
-		pango_layout_set_text(graph->priv->layout, graph->priv->title, -1);
-		pango_cairo_show_layout(cr, graph->priv->layout);
 	}
 
 	/* graph background */

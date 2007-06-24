@@ -1,3 +1,16 @@
+2007-06-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-graph-widget.c:
+	* src/gpm-graph-widget.h:
+	Rip out some unused API.
+
+	* test/Makefile.am:
+	* test/gpm-st-graph-widget.c:
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-main.h:
+	Add a self test module for the graph. It's incomplete, and already
+	shows numerous bugs with the graphing code. More to come.
+
 2007-06-23  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-info.c: (gpm_statistics_get_parameters):

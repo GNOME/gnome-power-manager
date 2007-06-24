@@ -46,4 +46,5 @@ void gpm_st_hal_device (GpmSelfTest *test);
 void gpm_st_hal_devicestore (GpmSelfTest *test);
 void gpm_st_hal_power (GpmSelfTest *test);
 void gpm_st_hal_manager (GpmSelfTest *test);
+void gpm_st_graph_widget (GpmSelfTest *test);
 

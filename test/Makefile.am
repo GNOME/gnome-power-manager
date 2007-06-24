@@ -54,10 +54,13 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-proxy.c					\
 	gpm-st-inhibit.c				\
 	gpm-st-profile.c				\
+	gpm-st-graph-widget.c				\
 	gpm-st-hal-power.c				\
 	gpm-st-hal-device.c				\
 	gpm-st-hal-devicestore.c			\
 	gpm-st-hal-manager.c				\
+	../src/gpm-graph-widget.h			\
+	../src/gpm-graph-widget.c			\
 	../src/gpm-marshal.h				\
 	../src/gpm-marshal.c				\
 	../src/gpm-profile.h				\

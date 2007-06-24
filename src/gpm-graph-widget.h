@@ -88,21 +88,15 @@ struct GpmGraphWidgetClass
 GType		 gpm_graph_widget_get_type		(void);
 GtkWidget	*gpm_graph_widget_new			(void);
 
-void		 gpm_graph_widget_set_invert_x		(GpmGraphWidget	*graph,
-							 gboolean	 inv);
 void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
 void		 gpm_graph_widget_enable_events		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
-void		 gpm_graph_widget_set_invert_y		(GpmGraphWidget	*graph,
-							 gboolean	 inv);
 void		 gpm_graph_widget_set_data		(GpmGraphWidget	*graph,
 							 GpmArray	*array,
 							 guint		 id);
 void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
 							 GpmArray	*array);
-void		 gpm_graph_widget_set_title		(GpmGraphWidget	*graph,
-							 const gchar	*title);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,
