@@ -89,12 +89,12 @@ void		 gpm_graph_widget_enable_legend		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
 void		 gpm_graph_widget_enable_events		(GpmGraphWidget	*graph,
 							 gboolean	 enable);
-void		 gpm_graph_widget_data_add		(GpmGraphWidget	*graph,
-							 GpmArray	*array,
-							 guint		 id);
-void		 gpm_graph_widget_data_clear		(GpmGraphWidget	*graph);
-void		 gpm_graph_widget_set_events		(GpmGraphWidget	*graph,
+gboolean	 gpm_graph_widget_data_add		(GpmGraphWidget	*graph,
 							 GpmArray	*array);
+void		 gpm_graph_widget_data_clear		(GpmGraphWidget	*graph);
+void		 gpm_graph_widget_events_add		(GpmGraphWidget	*graph,
+							 GpmArray	*array);
+void		 gpm_graph_widget_events_clear		(GpmGraphWidget	*graph);
 void		 gpm_graph_widget_set_axis_type_x	(GpmGraphWidget	*graph,
 							 GpmGraphWidgetAxisType axis);
 void		 gpm_graph_widget_set_axis_type_y	(GpmGraphWidget	*graph,

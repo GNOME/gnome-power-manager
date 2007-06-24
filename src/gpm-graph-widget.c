@@ -98,7 +98,7 @@ gpm_graph_widget_key_find_id (GpmGraphWidget *graph, guint id)
 	GSList *ret;
 	ret = g_slist_find_custom (graph->priv->key_event, &id,
 				   gpm_graph_widget_key_compare_func);
-	if (! ret) {
+	if (ret == NULL) {
 		return NULL;
 	}
 	data = (GpmGraphWidgetKeyItem *) ret->data;
@@ -119,9 +119,14 @@ gpm_graph_widget_key_event_add (GpmGraphWidget *graph,
 	g_return_val_if_fail (graph != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
 
+	keyitem = gpm_graph_widget_key_find_id (graph, id);
+	if (keyitem != NULL) {
+		gpm_warning ("keyitem %i already in use", id);
+		return FALSE;
+	}
+
 	gpm_debug ("add to hashtable '%s'", desc);
 	keyitem = g_new0 (GpmGraphWidgetKeyItem, 1);
-
 	keyitem->id = id;
 	keyitem->desc = g_strdup (desc);
 	keyitem->colour = colour;
@@ -365,31 +370,44 @@ gpm_graph_widget_finalize (GObject *object)
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
  **/
-void
-gpm_graph_widget_data_add (GpmGraphWidget *graph, GpmArray *array, guint id)
+gboolean
+gpm_graph_widget_data_add (GpmGraphWidget *graph, GpmArray *array)
 {
-	g_return_if_fail (array != NULL);
-	g_return_if_fail (graph != NULL);
-	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	GpmArrayPoint *point;
+	guint length;
+	guint i;
+	guint oldx;
 
-	if (gpm_array_get_size (array) == 0) {
+	g_return_val_if_fail (array != NULL, FALSE);
+	g_return_val_if_fail (graph != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_GRAPH_WIDGET (graph), FALSE);
+	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
+
+	/* check size is not zero */
+	length = gpm_array_get_size (array);
+	if (length == 0) {
 		gpm_warning ("Trying to assign a zero length array");
-		return;
+		return FALSE;
 	}
 
-	/* fresh list */
-	if (graph->priv->data_list->len == 0 || graph->priv->data_list->len < id + 1) {
-		g_ptr_array_add (graph->priv->data_list, (gpointer) array);
-	} else {
-		/* remove existing, and add new */
-		gpm_debug ("Re-assigning dataset");
-		g_ptr_array_remove_index (graph->priv->data_list, id);
-		g_ptr_array_add (graph->priv->data_list, (gpointer) array);
+	/* check X is only monotomically increasing */
+	oldx = 0;
+	for (i=0; i < length; i++) {
+		point = gpm_array_get (array, i);
+		if (point->x < oldx) {
+			/* going backwards! */
+			return FALSE;
+		}
+		oldx = point->x;
 	}
+
+	/* always add, never remove in this function */
+	g_ptr_array_add (graph->priv->data_list, (gpointer) array);
+	return TRUE;
 }
 
 /**
- * gpm_graph_widget_data_add:
+ * gpm_graph_widget_data_clear:
  * @graph: This class instance
  *
  * Sets the data for the graph. You MUST NOT free the list before the widget.
@@ -398,29 +416,45 @@ void
 gpm_graph_widget_data_clear (GpmGraphWidget *graph)
 {
 	guint i;
+	guint length;
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
-	/* fresh list */
-	for (i=0; i <= graph->priv->data_list->len; i++) {
+	/* remove all in list */
+	length = graph->priv->data_list->len;
+	for (i=0; i < length; i++) {
 		gpm_debug ("Removing dataset %i", i);
 		g_ptr_array_remove_index_fast (graph->priv->data_list, 0);
 	}
 }
 
 /**
- * gpm_graph_widget_set_events:
+ * gpm_graph_widget_events_add:
  * @graph: This class instance
  * @list: The GList events to be plotted on the graph
  *
- * Sets the data for the graph. You MUST NOT free the list before the widget.
+ * Sets the data for the graph. You MUST NOT free the array before the widget.
  **/
 void
-gpm_graph_widget_set_events (GpmGraphWidget *graph, GpmArray *array)
+gpm_graph_widget_events_add (GpmGraphWidget *graph, GpmArray *array)
 {
 	g_return_if_fail (graph != NULL);
 	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
 
 	graph->priv->events = array;
+}
+
+/**
+ * gpm_graph_widget_events_clear:
+ * @graph: This class instance
+ *
+ * Clears the data for the graph.
+ **/
+void
+gpm_graph_widget_events_clear (GpmGraphWidget *graph)
+{
+	g_return_if_fail (GPM_IS_GRAPH_WIDGET (graph));
+	/* this is managed externally, so just set to NULL */
+	graph->priv->events = NULL;
 }
 
 /**
@@ -927,9 +961,8 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 	GpmArray *array = NULL;
 	GpmArrayPoint *point;
 	gint dot;
-	guint previous_point = 0;
 	gint prevpos = -1;
-
+	guint previous_y = 0;
 
 	if (graph->priv->events == NULL) {
 		/* we have no events */
@@ -962,11 +995,11 @@ gpm_graph_widget_draw_event_dots (GpmGraphWidget *graph, cairo_t *cr)
 
 		/* don't overlay the points, stack vertically */
 		if (abs (newx - prevpos) < 10) {
-			previous_point++;
-		} else {
-			previous_point = 0;
+			newy = previous_y - 8;
 		}
-		newy -= (8 * previous_point);
+
+		/* save the last y point */
+		previous_y = newy;
 
 		/* only do the event dot, if it's going to be valid on the graph */
 		if (point->x > graph->priv->start_x && newy > graph->priv->box_y) {
@@ -1186,11 +1219,11 @@ gpm_graph_widget_draw_graph (GtkWidget *graph_widget, cairo_t *cr)
 	gpm_graph_widget_draw_labels (graph, cr);
 	gpm_graph_widget_draw_line (graph, cr);
 
-	if (graph->priv->use_events) {
+	if (graph->priv->use_events == TRUE) {
 		gpm_graph_widget_draw_event_dots (graph, cr);
 	}
 
-	if (graph->priv->use_legend && legend_height > 0) {
+	if (graph->priv->use_legend == TRUE && legend_height > 0) {
 		gpm_graph_widget_draw_legend (graph, legend_x, legend_y, legend_width, legend_height);
 	}
 

@@ -281,7 +281,7 @@ static void
 gpm_statistics_refresh_events (GpmStatistics *statistics)
 {
 	gpm_statistics_get_events (statistics);
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
+	gpm_graph_widget_events_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
 				     statistics->priv->events);
 }
 
@@ -635,8 +635,9 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 		gpm_array_float_free (result);
 	}
 
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (statistics->priv->graph_widget));
 	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (statistics->priv->graph_widget),
-				   statistics->priv->data, 0);
+				   statistics->priv->data);
 
 	gtk_widget_hide (GTK_WIDGET (statistics->priv->graph_widget));
 	gtk_widget_show (GTK_WIDGET (statistics->priv->graph_widget));

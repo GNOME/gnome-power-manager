@@ -120,6 +120,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	GpmArray *data;
 	GpmArray *data_more;
 	GpmArray *events;
+	gboolean ret;
 
 	test->type = "GpmGraphWidget   ";
 
@@ -167,10 +168,22 @@ gpm_st_graph_widget (GpmSelfTest *test)
 					GPM_COLOUR_WHITE,
 					GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
 					"white diamond");
-	/* todo, check if id's are not repeating... */
 
 	gpm_st_title_graph (test, "red green blue white key events added");
 	wait_for_input (test);
+
+
+	/********** KEY EVENT duplicate test *************/
+	gpm_st_title (test, "duplicate key event test");
+	ret = gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 3,
+					      GPM_COLOUR_WHITE,
+					      GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
+					      "white diamond");
+	if (ret == FALSE) {
+		gpm_st_success (test, "refused duplicate id");
+	} else {
+		gpm_st_failed (test, "added duplicate ID!");
+	}
 
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
 
@@ -185,14 +198,47 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
 	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_BLUE, "blue data");
-	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, GPM_COLOUR_WHITE, GPM_GRAPH_WIDGET_SHAPE_DIAMOND, "white diamond");
+	gpm_graph_widget_key_event_add (GPM_GRAPH_WIDGET (graph), 0, GPM_COLOUR_GREEN, GPM_GRAPH_WIDGET_SHAPE_SQUARE, "green square");
 	
+	/********** ADD INVALID DATA *************/
+	data = gpm_array_new ();
+	gpm_array_append (data, 50, 0, GPM_COLOUR_RED);
+	gpm_array_append (data, 40, 100, GPM_COLOUR_RED);
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_st_title (test, "add invalid data");
+	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
+	if (ret == FALSE) {
+		gpm_st_success (test, "ignored");
+	} else {
+		gpm_st_failed (test, "failed to ignore invalid data");
+	}
+	g_object_unref (data);
+
+	/********** ADD NO DATA *************/
+	data = gpm_array_new ();
+	gpm_st_title (test, "add zero data");
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
+	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
+	if (ret == FALSE) {
+		gpm_st_success (test, "ignored");
+	} else {
+		gpm_st_failed (test, "failed to ignore zero data");
+	}
+	g_object_unref (data);
+
+	/********** ADD VALID DATA *************/
 	data = gpm_array_new ();
 	gpm_array_append (data, 0, 0, GPM_COLOUR_RED);
 	gpm_array_append (data, 100, 100, GPM_COLOUR_RED);
-	/* todo; check to see that x axis is increasing */
-	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+	gpm_st_title (test, "add valid data");
+	ret = gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
+	if (ret == TRUE) {
+		gpm_st_success (test, NULL);
+	} else {
+		gpm_st_failed (test, "failed to add valid data");
+	}
 
+	/********** SHOW VALID DATA *************/
 	gpm_st_title_graph (test, "red line shown gradient up");
 	wait_for_input (test);
 
@@ -200,8 +246,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	data_more = gpm_array_new ();
 	gpm_array_append (data_more, 0, 100, GPM_COLOUR_BLUE);
 	gpm_array_append (data_more, 100, 0, GPM_COLOUR_BLUE);
-	/* todo; check to see that x axis is increasing */
-	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data_more, 1);
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data_more);
 
 	gpm_st_title_graph (test, "red line shown gradient up, blue gradient down");
 	wait_for_input (test);
@@ -211,7 +256,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (events, 25, 0, 0);
 	gpm_array_append (events, 50, 0, 0);
 	gpm_array_append (events, 75, 0, 0);
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph), events);
+	gpm_graph_widget_events_add (GPM_GRAPH_WIDGET (graph), events);
 
 	gpm_st_title_graph (test, "events follow red line (primary)");
 	wait_for_input (test);
@@ -219,20 +264,29 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	/*********** stacked dots **************/
 	gpm_array_append (events, 76, 0, 0);
 	gpm_array_append (events, 77, 0, 0);
-	gpm_graph_widget_set_events (GPM_GRAPH_WIDGET (graph), events);
+	gpm_graph_widget_events_add (GPM_GRAPH_WIDGET (graph), events);
 
 	gpm_st_title_graph (test, "three events stacked at ~75");
 	wait_for_input (test);
 
+	/*********** events removed **************/
+	gpm_graph_widget_events_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_st_title_graph (test, "events removed");
+	wait_for_input (test);
+
 	/*********** data lines removed **************/
 	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
-	gpm_st_title_graph (test, "all lines removed");
+	gpm_st_title_graph (test, "all lines and event removed");
 	wait_for_input (test);
+
+	g_object_unref (events);
+	g_object_unref (data);
+	g_object_unref (data_more);
 
 	/********** AUTORANGING PERCENT (close) *************/
 	gpm_graph_widget_set_axis_type_x (GPM_GRAPH_WIDGET (graph), GPM_GRAPH_WIDGET_TYPE_PERCENTAGE);
-	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_key_event_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_key_data_clear (GPM_GRAPH_WIDGET (graph));
 	gpm_graph_widget_key_data_add (GPM_GRAPH_WIDGET (graph), GPM_COLOUR_RED, "red data");
 	data = gpm_array_new ();
 	gpm_array_append (data, 0, 75, GPM_COLOUR_RED);
@@ -241,16 +295,19 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_array_append (data, 60, 72, GPM_COLOUR_RED);
 	gpm_array_append (data, 80, 78, GPM_COLOUR_RED);
 	gpm_array_append (data, 100, 79, GPM_COLOUR_RED);
-	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	gpm_st_title_graph (test, "autorange y axis between 70 and 80");
 	wait_for_input (test);
+	g_object_unref (data);
 
 	/********** AUTORANGING PERCENT (extreams) *************/
 	data = gpm_array_new ();
 	gpm_array_append (data, 0, 6, GPM_COLOUR_RED);
 	gpm_array_append (data, 100, 85, GPM_COLOUR_RED);
-	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data, 0);
+	gpm_graph_widget_data_clear (GPM_GRAPH_WIDGET (graph));
+	gpm_graph_widget_data_add (GPM_GRAPH_WIDGET (graph), data);
 	gpm_st_title_graph (test, "autorange y axis between 0 and 100");
 	wait_for_input (test);
+	g_object_unref (data);
 }
 

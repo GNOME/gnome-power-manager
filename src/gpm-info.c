@@ -201,6 +201,10 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 				       GPM_COLOUR_DARK_BLUE,
 				       GPM_GRAPH_WIDGET_SHAPE_CIRCLE,
 				       _("On battery"));
+	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_POWERSAVE,
+				       GPM_COLOUR_WHITE,
+				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
+				       _("Session powersave"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_SESSION_IDLE,
 				       GPM_COLOUR_YELLOW,
 				       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
@@ -717,9 +721,10 @@ idle_changed_cb (GpmIdle     *idle,
 {
 	if (mode == GPM_IDLE_MODE_NORMAL) {
 		gpm_info_event_log (info, GPM_EVENT_SESSION_ACTIVE, _("idle mode ended"));
-
 	} else if (mode == GPM_IDLE_MODE_SESSION) {
 		gpm_info_event_log (info, GPM_EVENT_SESSION_IDLE, _("idle mode started"));
+	} else if (mode == GPM_IDLE_MODE_POWERSAVE) {
+		gpm_info_event_log (info, GPM_EVENT_SESSION_POWERSAVE, _("powersave mode started"));
 	}
 }
 

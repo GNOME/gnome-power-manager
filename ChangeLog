@@ -1,5 +1,19 @@
 2007-06-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-graph-widget.c:
+	Fix the event dot stacking.
+
+	* src/gpm-info.c:
+	* src/gpm-info.h:
+	Monitor and log powersave events.
+
+	* src/gpm-graph-widget.h:
+	* src/gpm-statistics-core.c: (gpm_statistics_refresh_events):
+	* test/gpm-st-graph-widget.c: (gpm_st_graph_widget):
+	Allow clearing of the event data.
+
+2007-06-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-graph-widget.c: (gpm_graph_widget_auto_range):
 	Cosmetic adjustments to ranging for time.
 
