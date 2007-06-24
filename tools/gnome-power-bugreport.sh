@@ -41,6 +41,9 @@ cat /etc/*-release | uniq
 echo -n "Kernel version:       "
 uname -r
 
+echo -n "g-p-m version:        "
+gnome-power-manager --version | cut -f2 -d" "
+
 echo -n "HAL version:          "
 lshal -V | cut -f3 -d" "
 

@@ -138,6 +138,7 @@ main (int argc, char *argv[])
 	DBusGConnection *system_connection;
 	DBusGConnection *session_connection;
 	gboolean verbose = FALSE;
+	gboolean version = FALSE;
 	gboolean no_daemon = FALSE;
 	gboolean timed_exit = FALSE;
 	gboolean immediate_exit = FALSE;
@@ -153,6 +154,8 @@ main (int argc, char *argv[])
 		  N_("Do not daemonize"), NULL },
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
 		  N_("Show extra debugging information"), NULL },
+		{ "version", '\0', 0, G_OPTION_ARG_NONE, &version,
+		  N_("Show version of installed program and exit"), NULL },
 		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
 		  N_("Exit after a small delay (for debugging)"), NULL },
 		{ "immediate-exit", '\0', 0, G_OPTION_ARG_NONE, &immediate_exit,
@@ -169,7 +172,6 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
-
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
 
 	program = gnome_program_init (argv[0], VERSION,
@@ -182,6 +184,11 @@ main (int argc, char *argv[])
 
 	master = gnome_master_client ();
 	flags = gnome_client_get_flags (master);
+
+	if (version == TRUE) {
+		g_print ("Version %s\n", VERSION);
+		goto unref_program;
+	}
 
 	if (flags & GNOME_CLIENT_IS_CONNECTED) {
 		/* We'll disable this as users are getting constant crashes */
@@ -263,6 +270,7 @@ main (int argc, char *argv[])
 	gpm_debug_shutdown ();
 
 	g_object_unref (manager);
+unref_program:
 	g_object_unref (program);
 	/*
 	In uncommented, valgrind reports an invalid read
