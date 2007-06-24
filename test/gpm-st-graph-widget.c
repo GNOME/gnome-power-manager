@@ -300,7 +300,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	wait_for_input (test);
 	g_object_unref (data);
 
-	/********** AUTORANGING PERCENT (extreams) *************/
+	/********** AUTORANGING PERCENT (extremes) *************/
 	data = gpm_array_new ();
 	gpm_array_append (data, 0, 6, GPM_COLOUR_RED);
 	gpm_array_append (data, 100, 85, GPM_COLOUR_RED);
@@ -309,5 +309,8 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	gpm_st_title_graph (test, "autorange y axis between 0 and 100");
 	wait_for_input (test);
 	g_object_unref (data);
+
+	/* hide window */
+	gtk_widget_hide_all (window);
 }
 

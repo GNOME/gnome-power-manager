@@ -136,7 +136,6 @@ main (int argc, char **argv)
 	}
 	if (interactive == TRUE || all == TRUE) {
 		gpm_st_graph_widget (test);
-		return 0;
 		gpm_st_profile (test);
 		gpm_st_webcam (test);
 	}
