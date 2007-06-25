@@ -424,7 +424,9 @@ gpm_profile_register_percentage (GpmProfile *profile,
 	profile->priv->last_percentage = array_percentage;
 
 	/* save new data as we passed all tests */
-	gpm_profile_save_percentage (profile, array_percentage, (guint) elapsed, accuracy);
+	if (array_percentage < 100) {
+		gpm_profile_save_percentage (profile, array_percentage, (guint) elapsed, accuracy);
+	}
 	return TRUE;
 }
 

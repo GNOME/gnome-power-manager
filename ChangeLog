@@ -1,3 +1,10 @@
+2007-06-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-profile.c: (gpm_profile_register_percentage):
+	Don't try to save the 100% profile point, which can happen the moment
+	the percentage charge hits 100% from 99% a split second before being
+	marked as non-discharging.
+
 2007-06-24  Richard Hughes  <richard@hughsie.com>
 
 	* test/gpm-selftest-hal-devices.fdi:
