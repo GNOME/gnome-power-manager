@@ -165,7 +165,7 @@ gpm_st_array (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "get file appended size");
 	size = gpm_array_get_size (array);
-	if (size == 99) {
+	if (size == 100) {
 		gpm_st_success (test, "get size passed");
 	} else {
 		gpm_st_failed (test, "get size failed: %i", size);

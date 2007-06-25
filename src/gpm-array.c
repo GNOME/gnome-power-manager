@@ -796,9 +796,7 @@ gpm_array_check_max_and_size (GpmArray *array)
  * @y: The Y data point or event type
  * @data: The data
  *
- * Adds an x-y point to a list. We have to save the X value as an integer, as
- * when we prune the values (when we have over 100) the X and Y values are
- * lost, and the data-points becomes non-uniform.
+ * Adds an x-y point to a list making sure we don't exceed the maximum size.
  **/
 gboolean
 gpm_array_add (GpmArray *array,
@@ -806,10 +804,6 @@ gpm_array_add (GpmArray *array,
 	       guint	 y,
 	       guint	 data)
 {
-	guint length;
-	GpmArrayPoint *point1;
-	GpmArrayPoint *point2;
-
 	g_return_val_if_fail (array != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_ARRAY (array), FALSE);
 
@@ -818,40 +812,7 @@ gpm_array_add (GpmArray *array,
 		return FALSE;
 	}
 
-	length = gpm_array_get_size (array);
-
-	/* there is no point storing leading zeros data */
-	if (array->priv->has_data == FALSE && y == 0) {
-		return FALSE;
-	}
-
-	/* mark that we now have good data */
-	array->priv->has_data = TRUE;
-
-	if (length > 3) {
-		point1 = gpm_array_get (array, length-1);
-		point2 = gpm_array_get (array, length-2);
-		if (point1->y == y && point2->y == y) {
-			/* we are the same as we were before and not the first or
-			   second point, just side the data time across without
-			   making a new point */
-			point1->x = x;
-		} else {
-			/* we have to add a new data point as value is different */
-			gpm_array_append (array, x, y, data);
-			if (y == 0) {
-				/* if the rate suddenly drops we want a line
-				   going down, then across, not a diagonal line.
-				   Add an extra point so that we extend it horiz. */
-				gpm_array_append (array, x, y, data);
-			}
-			gpm_debug ("Using %i elements", length);
-		}
-	} else {
-		/* a list of less than 3 points always requires a data point */
-		gpm_array_append (array, x, y, data);
-	}
-
+	gpm_array_append (array, x, y, data);
 	gpm_array_check_max_and_size (array);
 
 	return TRUE;

@@ -626,7 +626,7 @@ gpm_statistics_refresh_data (GpmStatistics *statistics)
 
 		arrayfloat = gpm_array_float_new (gpm_array_get_size (statistics->priv->data));
 		gpm_array_float_from_array_y (arrayfloat, statistics->priv->data);
-		kernel = gpm_array_float_compute_gaussian (17, 4.0);
+		kernel = gpm_array_float_compute_gaussian (35, 4.5);
 		result = gpm_array_float_convolve (arrayfloat, kernel);
 		gpm_array_float_to_array_y (result, statistics->priv->data);
 

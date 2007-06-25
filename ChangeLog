@@ -1,5 +1,17 @@
 2007-06-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array.c: (gpm_array_add):
+	Don't do crazy things when adding points. We already do clever things
+	to remove points, so just add them.
+
+	* src/gpm-statistics-core.c: (gpm_statistics_refresh_data):
+	Increase the size of the gaussian array to further smooth the data.
+
+	* test/gpm-st-array.c: (gpm_st_array):
+	Correct a typo. We should never not add, even when zero.
+
+2007-06-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c: (gpm_profile_register_percentage):
 	Don't try to save the 100% profile point, which can happen the moment
 	the percentage charge hits 100% from 99% a split second before being
