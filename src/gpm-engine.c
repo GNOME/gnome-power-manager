@@ -301,10 +301,9 @@ gpm_engine_get_summary (GpmEngine *engine)
 						     unit->is_discharging);
 	if (accuracy < GPM_PROFILE_GOOD_TRUST && unit->is_present == TRUE) {
 		if (unit->is_discharging) {
-			tooltip = g_string_append (tooltip, _("Battery discharge profile is estimated\n"));
-			tooltip = g_string_append (tooltip, _("Warning: there is not enough information about the battery to warn about low charge\n"));
+			tooltip = g_string_append (tooltip, _("Battery discharge time is estimated\n"));
 		} else {
-			tooltip = g_string_append (tooltip, _("Battery charge profile is estimated\n"));
+			tooltip = g_string_append (tooltip, _("Battery charge time is estimated\n"));
 		}
 	}
 
