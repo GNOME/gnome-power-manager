@@ -222,11 +222,12 @@ gpm_webcam_get_brightness (GpmWebcam *webcam, gfloat *brightness)
 	/* open the file we just took */
 	pixbuf = gdk_pixbuf_new_from_file (webcam->priv->filename, &error);
 	if (error != NULL) {
-		gpm_error ("error set: %s", error->message);
+		gpm_debug ("error set: %s", error->message);
 		g_error_free (error);
+		ret = FALSE;
+	} else {
+		ret = gpm_webcam_get_average_brightness_of_pixbuf (pixbuf, brightness);
 	}
-
-	ret = gpm_webcam_get_average_brightness_of_pixbuf (pixbuf, brightness);
 
 	/* delete the file */
 	g_unlink (webcam->priv->filename);

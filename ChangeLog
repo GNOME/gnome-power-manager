@@ -1,3 +1,10 @@
+2007-06-26  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-webcam.c: (gpm_webcam_get_brightness):
+	If the webcam brightness capture fails we exit because the image
+	generated in ~/.gnome2/gnome-power-manager/webcam.png has zero length.
+	Patch by nadir@users.sourceforge.net, many thanks. Fixes #451241.
+
 2007-06-25  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-engine.c: (gpm_engine_get_summary):
