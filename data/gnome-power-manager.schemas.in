@@ -365,7 +365,7 @@
       <applyto>/apps/gnome-power-manager/general/installed_schema</applyto>
       <owner>gnome-power-manager</owner>
       <type>int</type>
-      <default>2</default>
+      <default>3</default>
       <locale name="C">
         <short>The default configuration version.</short>
         <long>The version of the installed version of the schema. Do not edit this value, it is used so that configure changes between versions can be detected.</long>
@@ -630,6 +630,18 @@
       <locale name="C">
         <short>If we should show the recalled battery warning for a broken battery</short>
         <long>If we should show the recalled battery warning for a broken battery. Set this to false only if you know your battery is okay.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/notify/inhibit_lid</key>
+      <applyto>/apps/gnome-power-manager/notify/inhibit_lid</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>If we should show the warning when we have a valid inhibit and configured to sleep on lid close</short>
+        <long>If we should show the warning when we have a valid inhibit and configured to sleep on lid close.</long>
       </locale>
     </schema>
 

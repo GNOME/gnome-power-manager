@@ -79,6 +79,7 @@ gboolean	 gpm_notify_perhaps_recall	(GpmNotify		*notify,
 						 const gchar		*website);
 gboolean	 gpm_notify_low_capacity	(GpmNotify		*notify,
 						 guint			 capacity);
+gboolean	 gpm_notify_inhibit_lid		(GpmNotify		*notify);
 gboolean	 gpm_notify_fully_charged_primary (GpmNotify		*notify);
 gboolean	 gpm_notify_discharging_primary	(GpmNotify		*notify);
 gboolean	 gpm_notify_discharging_ups	(GpmNotify		*notify);

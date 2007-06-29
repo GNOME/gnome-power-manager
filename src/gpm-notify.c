@@ -407,6 +407,40 @@ gpm_notify_low_capacity (GpmNotify *notify,
 }
 
 /**
+ * gpm_notify_inhibit_lid:
+ **/
+gboolean
+gpm_notify_inhibit_lid (GpmNotify *notify)
+{
+	gchar *msg;
+	const gchar *title;
+
+	title = _("Inhibit warning!");
+	msg = g_strdup_printf (_("Your laptop will not sleep if you shut the "
+				 "lid as it is currently inhibited.\n"
+				 "Some laptops can overheat if they do not sleep "
+				 "when the lid is closed."));
+
+	gpm_notify_create (notify, title, msg, GPM_NOTIFY_TIMEOUT_LONG,
+			   GPM_STOCK_INHIBIT,
+			   GPM_NOTIFY_URGENCY_CRITICAL);
+
+	/* add extra stuff */
+#ifdef HAVE_LIBNOTIFY
+	notify->priv->do_not_show_gconf = GPM_CONF_NOTIFY_INHIBIT_LID;
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "dont-show-again",
+	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+#endif
+
+	gpm_notify_show (notify);
+	g_free (msg);
+	return TRUE;
+}
+
+/**
  * gpm_notify_fully_charged_primary:
  **/
 gboolean

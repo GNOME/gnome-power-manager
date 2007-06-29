@@ -41,6 +41,7 @@
 #include <libgnomeui/gnome-client.h>
 
 #include <libhal-gpower.h>
+#include <libhal-gmanager.h>
 
 #include "gpm-ac-adapter.h"
 #include "gpm-button.h"
@@ -413,21 +414,21 @@ manager_policy_do (GpmManager  *manager,
 {
 	gchar *action = NULL;
 
-	gpm_debug ("policy: %s", policy);
-	gpm_conf_get_string (manager->priv->conf, policy, &action);
-
-	if (action == NULL) {
-		return FALSE;
-	}
-
+	/* error msg timeout not valid */
 	if (gpm_control_is_policy_timout_valid (manager->priv->control) == FALSE) {
-		/* error msg timeout not valid */
 		gpm_notify_display (manager->priv->notify,
 				    _("Action forbidden"),
 				    _("Policy timeout is not valid. Please wait a few seconds and try again."),
 				    GPM_NOTIFY_TIMEOUT_SHORT,
 				    GPM_STOCK_APP_ICON,
 				    GPM_NOTIFY_URGENCY_NORMAL);
+		return FALSE;
+	}
+
+	gpm_debug ("policy: %s", policy);
+	gpm_conf_get_string (manager->priv->conf, policy, &action);
+
+	if (action == NULL) {
 		return FALSE;
 	}
 
@@ -876,23 +877,52 @@ lid_button_pressed (GpmManager *manager,
 		    gboolean    pressed)
 {
 	gboolean on_ac;
+	gboolean has_inhibit;
+	gboolean do_policy;
+	gchar *action;
 
 	on_ac = gpm_ac_adapter_is_present (manager->priv->ac_adapter);
 
-	if (pressed == TRUE) {
-		if (on_ac == TRUE) {
-			gpm_debug ("Performing AC policy");
-			manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
-					   _("the lid has been closed on ac power"));
-		} else {
-			gpm_debug ("Performing battery policy");
-			manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
-					   _("the lid has been closed on battery power"));
-		}
-	} else {
+	if (pressed == FALSE) {
 		/* we turn the lid dpms back on unconditionally */
 		gpm_manager_unblank_screen (manager, NULL);
+		return;
 	}
+
+	if (on_ac == TRUE) {
+		gpm_debug ("Performing AC policy");
+		manager_policy_do (manager, GPM_CONF_BUTTON_LID_AC,
+				   _("the lid has been closed on ac power"));
+		return;
+	}
+
+	/* default */
+	do_policy = TRUE;
+
+	/* are we inhibited? */
+	gpm_inhibit_has_inhibit (manager->priv->inhibit, &has_inhibit, NULL);
+
+	/* do not do lid close action if suspend (or hibernate) */
+	if (has_inhibit == TRUE) {
+		/* get the policy action for battery */
+		gpm_conf_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, &action);
+
+		/* if we are trying to suspend or hibernate then don't do action */
+		if ((strcmp (action, ACTION_SUSPEND) == 0) ||
+		    (strcmp (action, ACTION_HIBERNATE) == 0)) {
+			do_policy = FALSE;
+		}
+		g_free (action);
+	}
+
+	if (do_policy == FALSE) {
+		gpm_debug ("Not doing lid policy action as inhibited as set to sleep");
+		return;
+	}
+
+	gpm_debug ("Performing battery policy");
+	manager_policy_do (manager, GPM_CONF_BUTTON_LID_BATT,
+			   _("the lid has been closed on battery power"));
 }
 
 /**
@@ -1538,6 +1568,57 @@ gpm_engine_charge_action_cb (GpmEngine      *engine,
 }
 
 /**
+ * has_inhibit_changed_cb:
+ **/
+static void
+has_inhibit_changed_cb (GpmInhibit *inhibit,
+			gboolean    has_inhibit,
+		        GpmManager *manager)
+{
+	HalGManager *hal_manager;
+	gboolean is_laptop;
+	gboolean show_inhibit_lid;
+	gchar *action = NULL;
+
+	/* we don't care about uninhibits */
+	if (has_inhibit == FALSE) {
+		return;
+	}
+
+	/* only show this if specified in gconf */
+	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_NOTIFY_INHIBIT_LID, &show_inhibit_lid);
+
+	/* we've already shown the UI and been clicked */
+	if (show_inhibit_lid == FALSE) {
+		return;
+	}
+
+	hal_manager = hal_gmanager_new ();
+	is_laptop = hal_gmanager_is_laptop (hal_manager);
+	g_object_unref (hal_manager);
+
+	/* we don't warn for desktops, as they do not have a lid... */
+	if (is_laptop == FALSE) {
+		return;
+	}
+
+	/* get the policy action for battery */
+	gpm_conf_get_string (manager->priv->conf, GPM_CONF_BUTTON_LID_BATT, &action);
+
+	if (action == NULL) {
+		return;
+	}
+
+	/* if the policy on lid close is sleep then show a warning */
+	if ((strcmp (action, ACTION_SUSPEND) == 0) ||
+	    (strcmp (action, ACTION_HIBERNATE) == 0)) {
+		gpm_notify_inhibit_lid (manager->priv->notify);
+	}
+
+	g_free (action);
+}
+
+/**
  * gpm_manager_init:
  * @manager: This class instance
  **/
@@ -1633,6 +1714,8 @@ gpm_manager_init (GpmManager *manager)
 	/* use a class to handle the complex stuff */
 	gpm_debug ("creating new inhibit instance");
 	manager->priv->inhibit = gpm_inhibit_new ();
+	g_signal_connect (manager->priv->inhibit, "has-inhibit-changed",
+			  G_CALLBACK (has_inhibit_changed_cb), manager);
 	/* add the interface */
 	dbus_g_object_type_install_info (GPM_TYPE_INHIBIT, &dbus_glib_gpm_inhibit_object_info);
 	dbus_g_connection_register_g_object (connection, GPM_DBUS_PATH_INHIBIT,

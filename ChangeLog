@@ -1,3 +1,17 @@
+2007-06-29  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-inhibit.c: (gpm_inhibit_inhibit),
+	(gpm_inhibit_un_inhibit):
+	* src/gpm-manager.c: (manager_policy_do), (has_inhibit_changed_cb),
+	(gpm_manager_init):
+	* src/gpm-notify.c: (gpm_notify_inhibit_lid):
+	* src/gpm-notify.h:
+	* src/gpm-stock-icons.h:
+	Add functionality so that g-p-m warns the user when manually inhibited
+	and the lid action on battery is suspend or hibernate. Fixes #452244
+
 2007-06-26  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-webcam.c: (gpm_webcam_get_brightness):

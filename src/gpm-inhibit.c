@@ -176,6 +176,11 @@ gpm_inhibit_inhibit (GpmInhibit  *inhibit,
 	gpm_debug ("Recieved Inhibit from '%s' (%s) because '%s' saving as #%i",
 		   data->application, data->connection, data->reason, data->cookie);
 
+	/* only emit event on the first one */
+	if (g_slist_length (inhibit->priv->list) == 1) {
+		g_signal_emit (inhibit, signals [HAS_INHIBIT_CHANGED], 0, TRUE);
+	}
+
 	dbus_g_method_return (context, data->cookie);
 }
 
@@ -203,9 +208,6 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 {
 	GpmInhibitData *data;
 
-	/* FIXME */
-//	g_signal_emit (manager, signals [HAS_INHIBIT_CHANGED], 0, FALSE);
-
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
 	if (data == NULL) {
@@ -218,6 +220,12 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 
 	/* remove it from the list */
 	inhibit->priv->list = g_slist_remove (inhibit->priv->list, (gconstpointer) data);
+
+	/* only emit event on the last one */
+	if (g_slist_length (inhibit->priv->list) == 0) {
+		g_signal_emit (inhibit, signals [HAS_INHIBIT_CHANGED], 0, FALSE);
+	}
+
 	return TRUE;
 }
 

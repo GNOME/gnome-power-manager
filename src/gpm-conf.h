@@ -26,8 +26,8 @@
 
 G_BEGIN_DECLS
 
-/* change this whenever adding or moving keys */
-#define GPM_CONF_SCHEMA_ID	2
+/* change general/installed_schema whenever adding or moving keys */
+#define GPM_CONF_SCHEMA_ID	3
 
 #define GPM_TYPE_CONF		(gpm_conf_get_type ())
 #define GPM_CONF(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_CONF, GpmConf))
@@ -117,6 +117,7 @@ G_BEGIN_DECLS
 #define GPM_CONF_NOTIFY_SLEEP_FAILED		GPM_CONF_DIR "/notify/sleep_failed"
 #define GPM_CONF_NOTIFY_LOW_POWER		GPM_CONF_DIR "/notify/low_power"
 #define GPM_CONF_NOTIFY_ESTIMATED_DATA		GPM_CONF_DIR "/notify/estimated_data"
+#define GPM_CONF_NOTIFY_INHIBIT_LID		GPM_CONF_DIR "/notify/inhibit_lid"
 
 /* statistics */
 #define GPM_CONF_STATS_SHOW_AXIS_LABELS		GPM_CONF_DIR "/statistics/show_axis_labels"
