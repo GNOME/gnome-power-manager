@@ -30,7 +30,10 @@ gpm_st_webcam (GpmSelfTest *test)
 	GpmWebcam *webcam;
 	gfloat brightness;
 	gboolean ret;
-	test->type = "GpmWebcam        ";
+
+	if (gpm_st_start (test, "GpmWebcam", CLASS_MANUAL) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null webcam");
@@ -71,5 +74,7 @@ gpm_st_webcam (GpmSelfTest *test)
 	} while (TRUE);
 #endif
 	g_object_unref (webcam);
+
+	gpm_st_end (test);
 }
 

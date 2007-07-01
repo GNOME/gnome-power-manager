@@ -34,7 +34,10 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	HalGDevice *device2;
 	HalGDevice *device3;
 	gboolean ret;
-	test->type = "HalGDevicestore  ";
+
+	if (gpm_st_start (test, "HalGDevicestore", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null devicestore");
@@ -134,5 +137,7 @@ gpm_st_hal_devicestore (GpmSelfTest *test)
 	g_object_unref (device);
 	g_object_unref (device2);
 	g_object_unref (devicestore);
+
+	gpm_st_end (test);
 }
 

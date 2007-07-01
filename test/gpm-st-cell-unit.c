@@ -33,7 +33,10 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	gchar *value;
 	const gchar *cvalue;
 	gboolean ret;
-	test->type = "GpmCellUnit      ";
+
+	if (gpm_st_start (test, "GpmCellUnit", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	gpm_cell_unit_init (unit);
 
@@ -167,5 +170,7 @@ gpm_st_cell_unit (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "measre not correct: %s", unit->measure);
 	}
+
+	gpm_st_end (test);
 }
 

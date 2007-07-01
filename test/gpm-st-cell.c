@@ -61,7 +61,10 @@ gpm_st_cell (GpmSelfTest *test)
 	gchar *desc;
 	gboolean ret;
 	gchar *udi;
-	test->type = "GpmCell          ";
+
+	if (gpm_st_start (test, "GpmCell", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/* get battery */
 	udi = gpm_cell_get_battery ();
@@ -144,5 +147,7 @@ gpm_st_cell (GpmSelfTest *test)
 
 	g_free (udi);
 	g_object_unref (cell);
+
+	gpm_st_end (test);
 }
 

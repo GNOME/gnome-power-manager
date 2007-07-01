@@ -35,8 +35,11 @@ gpm_st_array (GpmSelfTest *test)
 	guint x, y, data;
 	GpmArrayPoint *point;
 	gint svalue;
-	test->type = "GpmArray         ";
 	guint i;
+
+	if (gpm_st_start (test, "GpmArray", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null array");
@@ -236,5 +239,7 @@ gpm_st_array (GpmSelfTest *test)
 
 	g_object_unref (array);
 	g_object_unref (array2);
+
+	gpm_st_end (test);
 }
 

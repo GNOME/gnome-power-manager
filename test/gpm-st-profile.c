@@ -27,11 +27,14 @@
 void
 gpm_st_profile (GpmSelfTest *test)
 {
-	test->type = "GpmProfile       ";
 	GpmProfile *profile;
 	gboolean ret;
 	guint i;
 	guint value;
+
+	if (gpm_st_start (test, "GpmProfile", CLASS_MANUAL) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null profile");
@@ -167,5 +170,7 @@ gpm_st_profile (GpmSelfTest *test)
 	gpm_profile_delete_data (profile, TRUE);
 
 	g_object_unref (profile);
+
+	gpm_st_end (test);
 }
 

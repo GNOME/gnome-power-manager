@@ -29,7 +29,10 @@ gpm_st_hal_manager (GpmSelfTest *test)
 {
 	HalGManager *manager;
 	gboolean ret;
-	test->type = "HalGManager      ";
+
+	if (gpm_st_start (test, "HalGManager", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null device");
@@ -62,5 +65,7 @@ gpm_st_hal_manager (GpmSelfTest *test)
 	hal_gmanager_free_capability (value);
 
 	g_object_unref (manager);
+
+	gpm_st_end (test);
 }
 

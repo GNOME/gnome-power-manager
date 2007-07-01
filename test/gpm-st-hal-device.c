@@ -33,7 +33,10 @@ gpm_st_hal_device (GpmSelfTest *test)
 	const char *udi;
 	char *retstr;
 	gboolean ret;
-	test->type = "HalGDevice       ";
+
+	if (gpm_st_start (test, "HalGDevice", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null device");
@@ -126,5 +129,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	}
 
 	g_object_unref (device);
+
+	gpm_st_end (test);
 }
 

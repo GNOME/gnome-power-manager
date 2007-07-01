@@ -31,7 +31,10 @@ gpm_st_common (GpmSelfTest *test)
 	guint32 colour;
 	guint value;
 	gfloat fvalue;
-	test->type = "GpmCommon        ";
+
+	if (gpm_st_start (test, "GpmCommon", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "get red");
@@ -248,5 +251,7 @@ gpm_st_common (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "conversion incorrect (%f)", fvalue);
 	}
+
+	gpm_st_end (test);
 }
 

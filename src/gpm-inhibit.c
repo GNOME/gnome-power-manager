@@ -64,6 +64,20 @@ static guint	     signals [LAST_SIGNAL] = { 0, };
 G_DEFINE_TYPE (GpmInhibit, gpm_inhibit, G_TYPE_OBJECT)
 
 /**
+ * gpm_inhibit_error_quark:
+ * Return value: Our personal error quark.
+ **/
+GQuark
+gpm_inhibit_error_quark (void)
+{
+	static GQuark quark = 0;
+	if (!quark) {
+		quark = g_quark_from_static_string ("gpm_inhibit_error");
+	}
+	return quark;
+}
+
+/**
  * gpm_inhibit_cookie_compare_func
  * @a: Pointer to the data to test
  * @b: Pointer to a cookie to compare
@@ -211,8 +225,10 @@ gpm_inhibit_un_inhibit (GpmInhibit  *inhibit,
 	/* Only remove the correct cookie */
 	data = gpm_inhibit_find_cookie (inhibit, cookie);
 	if (data == NULL) {
-		gpm_warning ("Cannot find registered program for #%i, so "
-			     "cannot do UnInhibit", cookie);
+		*error = g_error_new (gpm_inhibit_error_quark (),
+				      GPM_INHIBIT_ERROR_GENERAL,
+				      "Cannot find registered program for #%i, so "
+				      "cannot do UnInhibit!", cookie);
 		return FALSE;
 	}
 	gpm_debug ("UnInhibit okay #%i", cookie);

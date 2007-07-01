@@ -49,8 +49,14 @@ typedef struct
 							 gboolean	 has_inhibit);
 } GpmInhibitClass;
 
+typedef enum
+{
+	 GPM_INHIBIT_ERROR_GENERAL
+} GpmInhibitError;
+
 GpmInhibit	*gpm_inhibit_new			(void);
 GType		 gpm_inhibit_get_type			(void);
+GQuark		 gpm_inhibit_error_quark		(void);
 gboolean	 gpm_inhibit_has_inhibit		(GpmInhibit	*inhibit,
 							 gboolean	*valid,
 							 GError		**error);

@@ -98,7 +98,6 @@ dbus_proxy_connect (DbusProxy *dbus_proxy)
 		return FALSE;
 	}
 
-//	g_debug ("emitting proxy-status TRUE: %s", dbus_proxy->priv->service);
 	g_signal_emit (dbus_proxy, signals [PROXY_STATUS], 0, TRUE);
 
 	return TRUE;
@@ -120,7 +119,6 @@ dbus_proxy_disconnect (DbusProxy *dbus_proxy)
 		return FALSE;
 	}
 
-	g_debug ("emitting proxy-status FALSE: %s", dbus_proxy->priv->service);
 	g_signal_emit (dbus_proxy, signals [PROXY_STATUS], 0, FALSE);
 
 	g_object_unref (dbus_proxy->priv->proxy);
@@ -285,7 +283,6 @@ dbus_proxy_get_proxy (DbusProxy *dbus_proxy)
 {
 	g_return_val_if_fail (DBUS_IS_PROXY (dbus_proxy), NULL);
 	if (dbus_proxy->priv->assigned == FALSE) {
-		g_warning ("Cannot get proxy, not assigned");
 		return NULL;
 	}
 	return dbus_proxy->priv->proxy;

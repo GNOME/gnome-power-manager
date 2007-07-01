@@ -1,3 +1,37 @@
+2007-07-01  Richard Hughes  <richard@hughsie.com>
+
+	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_connect),
+	(dbus_proxy_disconnect), (dbus_proxy_get_proxy):
+	* libhal-glib/libhal-gpower.c: (hal_gpower_has_support):
+	* src/gpm-array.c: (gpm_array_get):
+	Don't push debugging text to stderr.
+
+	* src/gpm-inhibit.c: (gpm_inhibit_error_quark),
+	(gpm_inhibit_un_inhibit):
+	* src/gpm-inhibit.h:
+	Set an error when we return false for the UnInhibit.
+
+	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-array.c: (gpm_st_array):
+	* test/gpm-st-cell-array.c: (gpm_st_cell_array):
+	* test/gpm-st-cell-unit.c: (gpm_st_cell_unit):
+	* test/gpm-st-cell.c: (gpm_st_cell):
+	* test/gpm-st-common.c: (gpm_st_common):
+	* test/gpm-st-graph-widget.c: (clicked_passed_cb),
+	(clicked_failed_cb), (gpm_st_title_graph), (gpm_st_graph_widget):
+	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	* test/gpm-st-hal-devicestore.c: (gpm_st_hal_devicestore):
+	* test/gpm-st-hal-manager.c: (gpm_st_hal_manager):
+	* test/gpm-st-hal-power.c: (gpm_st_hal_power):
+	* test/gpm-st-inhibit.c: (uninhibit), (gpm_st_inhibit):
+	* test/gpm-st-main.c: (gpm_st_start), (gpm_st_end), (gpm_st_title),
+	(gpm_st_success), (gpm_st_failed), (gpm_st_run_test), (main):
+	* test/gpm-st-main.h:
+	* test/gpm-st-profile.c: (gpm_st_profile):
+	* test/gpm-st-proxy.c: (gpm_st_proxy):
+	* test/gpm-st-webcam.c: (gpm_st_webcam):
+	Try a better infrastructure for the self tests. It's better. Trust me.
+
 2007-06-29  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:

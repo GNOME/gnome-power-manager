@@ -46,7 +46,6 @@ static void
 clicked_passed_cb (GtkWidget *widget, gpointer gdata)
 {
 	GpmSelfTest *test = (GpmSelfTest *) gdata;
-//	g_print("Passed was clicked.\n");
 	gpm_st_success (test, NULL);
 	gtk_main_quit ();
 }
@@ -55,7 +54,6 @@ static void
 clicked_failed_cb (GtkWidget *widget, gpointer gdata)
 {
 	GpmSelfTest *test = (GpmSelfTest *) gdata;
-//	g_print("Failed was clicked.\n");
 	gpm_st_failed (test, NULL);
 	gtk_main_quit ();
 }
@@ -109,9 +107,10 @@ gpm_st_title_graph (GpmSelfTest *test, const gchar *format, ...)
 	va_start (args, format);
 	g_vsnprintf (va_args_buffer, 1024, format, args);
 	va_end (args);
+	gpm_st_title (test, va_args_buffer);
 	gtk_label_set_label (GTK_LABEL (label), va_args_buffer);
-	g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
-	test->total++;
+//	g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
+//	test->total++;
 }
 
 void
@@ -122,7 +121,9 @@ gpm_st_graph_widget (GpmSelfTest *test)
 	GpmArray *events;
 	gboolean ret;
 
-	test->type = "GpmGraphWidget   ";
+	if (gpm_st_start (test, "GpmGraphWidget", CLASS_MANUAL) == FALSE) {
+		return;
+	}
 
 	create_graph_window (test);
 	gpm_graph_widget_enable_legend (GPM_GRAPH_WIDGET (graph), TRUE);
@@ -312,5 +313,7 @@ gpm_st_graph_widget (GpmSelfTest *test)
 
 	/* hide window */
 	gtk_widget_hide_all (window);
+
+	gpm_st_end (test);
 }
 

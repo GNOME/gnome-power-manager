@@ -135,7 +135,6 @@ hal_gpower_has_support (HalGPower *power)
 	hal_gdevice_get_string (power->priv->computer, "power_management.type", &type, NULL);
 	/* this key only has to exist to be pm okay */
 	if (type != NULL) {
-		g_debug ("Power management type : %s", type);
 		g_free (type);
 		return TRUE;
 	}

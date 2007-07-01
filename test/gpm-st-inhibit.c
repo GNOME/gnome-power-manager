@@ -23,6 +23,7 @@
 #include "gpm-st-main.h"
 #include <libdbus-proxy.h>
 
+#include "../src/gpm-debug.h"
 #include "../src/gpm-common.h"
 #include "../src/gpm-inhibit.h"
 
@@ -66,7 +67,7 @@ inhibit (DbusProxy *gproxy,
 
 static gboolean
 uninhibit (DbusProxy *gproxy,
-			    guint            cookie)
+	   guint      cookie)
 {
 	GError *error = NULL;
 	gboolean ret;
@@ -83,14 +84,9 @@ uninhibit (DbusProxy *gproxy,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
 	if (error) {
-		g_debug ("ERROR: %s", error->message);
+		gpm_debug ("ERROR: %s", error->message);
 		g_error_free (error);
 	}
-	if (ret == FALSE) {
-		/* abort as the DBUS method failed */
-		g_warning ("UnInhibit failed!");
-	}
-
 	return ret;
 }
 
@@ -133,7 +129,10 @@ gpm_st_inhibit (GpmSelfTest *test)
 	guint cookie2 = 0;
 	DbusProxy *gproxy;
 
-	test->type = "GpmInhibit       ";
+	if (gpm_st_start (test, "GpmInhibit", CLASS_AUTO) == FALSE) {
+		return;
+	}
+
 	gproxy = dbus_proxy_new ();
 	dbus_proxy_assign (gproxy, DBUS_PROXY_SESSION,
 				   GPM_DBUS_SERVICE,
@@ -234,5 +233,7 @@ gpm_st_inhibit (GpmSelfTest *test)
 	}
 
 	g_object_unref (gproxy);
+
+	gpm_st_end (test);
 }
 

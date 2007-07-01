@@ -30,15 +30,52 @@
 
 #include "gpm-st-main.h"
 
+gboolean
+gpm_st_start (GpmSelfTest *test, const gchar *name, GpmSelfTestClass class)
+{
+	if (class == CLASS_AUTO && test->class == CLASS_MANUAL) {
+		return FALSE;
+	}
+	if (class == CLASS_MANUAL && test->class == CLASS_AUTO) {
+		return FALSE;
+	}
+	if (test->started == TRUE) {
+		g_print ("Not ended test! Cannot start!\n");
+		exit (1);
+	}	
+	test->type = g_strdup (name);
+	test->started = TRUE;
+	if (test->level == LEVEL_NORMAL) {
+		g_print ("%s...", test->type);
+	}
+	return TRUE;
+}
+
+void
+gpm_st_end (GpmSelfTest *test)
+{
+	if (test->started == FALSE) {
+		g_print ("Not started test! Cannot finish!\n");
+		exit (1);
+	}	
+	if (test->level == LEVEL_NORMAL) {
+		g_print ("OK\n");
+	}
+	test->started = FALSE;
+	g_free (test->type);
+}
+
 void
 gpm_st_title (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
-	va_end (args);
-	g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
+	if (test->level == LEVEL_ALL) {
+		va_start (args, format);
+		g_vsnprintf (va_args_buffer, 1024, format, args);
+		va_end (args);
+		g_print ("> check #%u\t%s: \t%s...", test->total+1, test->type, va_args_buffer);
+	}
 	test->total++;
 }
 
@@ -47,15 +84,17 @@ gpm_st_success (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	test->succeeded++;
-	if (format == NULL) {
-		g_print ("...OK\n");
-		return;
+	if (test->level == LEVEL_ALL) {
+		if (format == NULL) {
+			g_print ("...OK\n");
+			return;
+		}
+		va_start (args, format);
+		g_vsnprintf (va_args_buffer, 1024, format, args);
+		va_end (args);
+		g_print ("...OK [%s]\n", va_args_buffer);
 	}
-	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
-	va_end (args);
-	g_print ("...OK [%s]\n", va_args_buffer);
+	test->succeeded++;
 }
 
 void
@@ -63,16 +102,24 @@ gpm_st_failed (GpmSelfTest *test, const gchar *format, ...)
 {
 	va_list args;
 	gchar va_args_buffer [1025];
-	if (format == NULL) {
-		g_print ("...FAILED\n");
-		goto failed;
+	if (test->level == LEVEL_ALL || test->level == LEVEL_NORMAL) {
+		if (format == NULL) {
+			g_print ("FAILED\n");
+			goto failed;
+		}
+		va_start (args, format);
+		g_vsnprintf (va_args_buffer, 1024, format, args);
+		va_end (args);
+		g_print ("FAILED [%s]\n", va_args_buffer);
 	}
-	va_start (args, format);
-	g_vsnprintf (va_args_buffer, 1024, format, args);
-	va_end (args);
-	g_print ("...FAILED [%s]\n", va_args_buffer);
 failed:
 	exit (1);
+}
+
+static void
+gpm_st_run_test (GpmSelfTest *test, GpmSelfTestFunc func)
+{
+	func (test);
 }
 
 int
@@ -81,20 +128,22 @@ main (int argc, char **argv)
 	GOptionContext  *context;
  	GnomeProgram    *program;
 	int retval;
-	gboolean interactive = FALSE;
-	gboolean automatic = FALSE;
-	gboolean debug = FALSE;
-	gboolean all = FALSE;
+
+	gboolean verbose = FALSE;
+	char *class = NULL;
+	char *level = NULL;
+	char **tests = NULL;
 
 	const GOptionEntry options[] = {
-		{ "interactive", '\0', 0, G_OPTION_ARG_NONE, &interactive,
-		  N_("Run only the interactive tests"), NULL },
-		{ "automatic", '\0', 0, G_OPTION_ARG_NONE, &automatic,
-		  N_("Run only the automatic tests"), NULL },
-		{ "debug", '\0', 0, G_OPTION_ARG_NONE, &debug,
-		  N_("Show extra debugging information"), NULL },
-		{ "all", '\0', 0, G_OPTION_ARG_NONE, &all,
-		  N_("Run all available tests"), NULL },
+
+		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
+		  N_("Show verbose debugging information"), NULL },
+		{ "class", '\0', 0, G_OPTION_ARG_STRING, &class,
+		  N_("Debug class, [manual|auto|all]"), NULL },
+		{ "level", '\0', 0, G_OPTION_ARG_STRING, &level,
+		  N_("Set the printing level, [quiet|normal|all]"), NULL },
+		{ "tests", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &tests,
+		  N_("Debug specific modules, [common,webcam,arrayfloat]"), NULL },
 		{ NULL}
 	};
 
@@ -107,38 +156,58 @@ main (int argc, char **argv)
 			    GNOME_PARAM_HUMAN_READABLE_NAME,
 			    "Power Inhibit Test",
 			    NULL);
-	gpm_debug_init (debug);
+	gpm_debug_init (verbose);
 
 	GpmSelfTest ttest;
 	GpmSelfTest *test = &ttest;
 	test->total = 0;
 	test->succeeded = 0;
 	test->type = NULL;
+	test->started = FALSE;
+	test->class = CLASS_AUTO;
+	test->level = LEVEL_QUIET;
 
-	/* default to all for no options */
-	if (automatic == FALSE && interactive == FALSE && all == FALSE) {
-		g_print ("*** You need to specify some options! ***\n");
-		automatic = TRUE;
+	if (class != NULL) {
+		if (strcmp (class, "auto") == 0) {
+			test->class = CLASS_AUTO;
+		} else if (strcmp (class, "all") == 0) {
+			test->class = CLASS_ALL;
+		} else if (strcmp (class, "manual") == 0) {
+			test->class = CLASS_MANUAL;
+		} else {
+			g_print ("Invalid class specified\n");
+			exit (1);
+		}
 	}
-	if (automatic == TRUE || all == TRUE) {
-		gpm_st_common (test);
-		gpm_st_array (test);
-		gpm_st_inhibit (test);
-		gpm_st_proxy (test);
-		gpm_st_hal_power (test);
-		gpm_st_hal_manager (test);
-		gpm_st_hal_device (test);
-		gpm_st_hal_devicestore (test);
-		gpm_st_cell_unit (test);
-		gpm_st_cell (test);
-		gpm_st_cell_array (test);
-		gpm_st_array_float (test);
+
+	if (level != NULL) {
+		if (strcmp (level, "quiet") == 0) {
+			test->level = LEVEL_QUIET;
+		} else if (strcmp (level, "normal") == 0) {
+			test->level = LEVEL_NORMAL;
+		} else if (strcmp (level, "all") == 0) {
+			test->level = LEVEL_ALL;
+		} else {
+			g_print ("Invalid level specified\n");
+			exit (1);
+		}
 	}
-	if (interactive == TRUE || all == TRUE) {
-		gpm_st_graph_widget (test);
-		gpm_st_profile (test);
-		gpm_st_webcam (test);
-	}
+
+	gpm_st_run_test (test, gpm_st_common);
+	gpm_st_run_test (test, gpm_st_array);
+	gpm_st_run_test (test, gpm_st_inhibit);
+	gpm_st_run_test (test, gpm_st_proxy);
+	gpm_st_run_test (test, gpm_st_hal_power);
+	gpm_st_run_test (test, gpm_st_hal_manager);
+	gpm_st_run_test (test, gpm_st_hal_device);
+	gpm_st_run_test (test, gpm_st_hal_devicestore);
+	gpm_st_run_test (test, gpm_st_cell_unit);
+	gpm_st_run_test (test, gpm_st_cell);
+	gpm_st_run_test (test, gpm_st_cell_array);
+	gpm_st_run_test (test, gpm_st_array_float);
+	gpm_st_run_test (test, gpm_st_graph_widget);
+	gpm_st_run_test (test, gpm_st_profile);
+	gpm_st_run_test (test, gpm_st_webcam);
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);
 	if (test->succeeded == test->total) {

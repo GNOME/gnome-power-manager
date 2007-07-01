@@ -69,7 +69,7 @@ gpm_array_get (GpmArray *array,
 
 	length = array->priv->array->len;
 	if (i + 1 > length) {
-		g_warning ("out of bounds %i of %i", i, length);
+		gpm_warning ("out of bounds %i of %i", i, length);
 		return NULL;
 	}
 	point = g_ptr_array_index (array->priv->array, i);

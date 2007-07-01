@@ -29,7 +29,10 @@ gpm_st_hal_power (GpmSelfTest *test)
 {
 	HalGPower *power;
 	gboolean ret;
-	test->type = "HalGPower        ";
+
+	if (gpm_st_start (test, "HalGPower", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null device");
@@ -50,5 +53,7 @@ gpm_st_hal_power (GpmSelfTest *test)
 	}
 
 	g_object_unref (power);
+
+	gpm_st_end (test);
 }
 

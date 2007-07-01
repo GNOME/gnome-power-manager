@@ -41,7 +41,10 @@ gpm_st_cell_array (GpmSelfTest *test)
 	gchar *desc;
 	gboolean ret;
 	guint count;
-	test->type = "GpmCellArray     ";
+
+	if (gpm_st_start (test, "GpmCellArray", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null cell array");
@@ -99,5 +102,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	}
 
 	g_object_unref (cell_array);
+
+	gpm_st_end (test);
 }
 

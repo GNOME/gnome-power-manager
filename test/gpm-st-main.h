@@ -21,13 +21,36 @@
 
 #include <glib.h>
 
+typedef enum
+{
+	CLASS_ALL,
+	CLASS_AUTO,
+	CLASS_MANUAL,
+	CLASS_LAST
+} GpmSelfTestClass;
+
+typedef enum
+{
+	LEVEL_QUIET,
+	LEVEL_NORMAL,
+	LEVEL_ALL,
+	LEVEL_LAST
+} GpmSelfTestLevel;
+
 typedef struct
 {
-	guint	total;
-	guint	succeeded;
-	gchar  *type;
+	guint		 total;
+	guint		 succeeded;
+	gboolean	 started;
+	GpmSelfTestClass class;
+	GpmSelfTestLevel level;
+	gchar		*type;
 } GpmSelfTest;
 
+typedef void (*GpmSelfTestFunc) (GpmSelfTest *test);
+
+gboolean gpm_st_start (GpmSelfTest *test, const gchar *name, GpmSelfTestClass class);
+void gpm_st_end (GpmSelfTest *test);
 void gpm_st_title (GpmSelfTest *test, const gchar *format, ...);
 void gpm_st_success (GpmSelfTest *test, const gchar *format, ...);
 void gpm_st_failed (GpmSelfTest *test, const gchar *format, ...);

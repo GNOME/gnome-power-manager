@@ -31,7 +31,9 @@ gpm_st_proxy (GpmSelfTest *test)
 	DbusProxy *gproxy = NULL;
 	DBusGProxy *proxy = NULL;
 
-	test->type = "DbusProxy         ";
+	if (gpm_st_start (test, "DbusProxy", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we can get a new gproxy");
@@ -74,5 +76,7 @@ gpm_st_proxy (GpmSelfTest *test)
 	}
 
 	g_object_unref (gproxy);
+
+	gpm_st_end (test);
 }
 

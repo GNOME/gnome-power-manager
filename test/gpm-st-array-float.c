@@ -29,13 +29,16 @@
 void
 gpm_st_array_float (GpmSelfTest *test)
 {
-	test->type = "GpmArrayFloat    ";
 	GArray *array;
 	GArray *kernel;
 	GArray *result;
 	gfloat value;
 	gfloat sigma;
 	guint size;
+
+	if (gpm_st_start (test, "GpmArrayFloat", CLASS_AUTO) == FALSE) {
+		return;
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a non null array");
@@ -333,5 +336,7 @@ gpm_st_array_float (GpmSelfTest *test)
 	gpm_array_float_free (result);
 	gpm_array_float_free (array);
 	gpm_array_float_free (kernel);
+
+	gpm_st_end (test);
 }
 
