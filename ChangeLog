@@ -1,5 +1,15 @@
 2007-07-01  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-array-float.c: (gpm_array_float_free):
+	* src/gpm-main.c: (main):
+	* test/gpm-st-array-float.c: (gpm_st_array_float):
+	* test/gpm-st-cell-array.c: (gpm_st_cell_array):
+	* test/gpm-st-cell.c: (gpm_st_cell):
+	* test/gpm-st-hal-device.c: (gpm_st_hal_device):
+	Fix some memory leaks.
+
+2007-07-01  Richard Hughes  <richard@hughsie.com>
+
 	* libdbus-glib/libdbus-proxy.c: (dbus_proxy_connect),
 	(dbus_proxy_disconnect), (dbus_proxy_get_proxy):
 	* libhal-glib/libhal-gpower.c: (hal_gpower_has_support):

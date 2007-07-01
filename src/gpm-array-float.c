@@ -105,7 +105,7 @@ gpm_array_float_set (GArray *array, guint i, gfloat value)
 void
 gpm_array_float_free (GArray *array)
 {
-	g_array_free (array, FALSE);
+	g_array_free (array, TRUE);
 }
 
 /**

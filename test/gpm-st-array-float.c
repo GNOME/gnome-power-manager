@@ -49,6 +49,7 @@ gpm_st_array_float (GpmSelfTest *test)
 		gpm_st_failed (test, "could not get GArray");
 	}
 	gpm_array_float_print (array);
+	gpm_array_float_free (array);
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get the correct length array");

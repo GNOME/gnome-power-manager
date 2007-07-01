@@ -266,16 +266,16 @@ main (int argc, char *argv[])
 		g_main_loop_run (loop);
 	}
 
+	g_main_loop_unref (loop);
 	gpm_stock_icons_shutdown ();
 	gpm_debug_shutdown ();
 
+	/* rip down gstreamer */
+	gst_deinit ();
 	g_object_unref (manager);
 unref_program:
 	g_object_unref (program);
-	/*
-	In uncommented, valgrind reports an invalid read
 	g_option_context_free (context);
-	*/
 
 	return 0;
 }

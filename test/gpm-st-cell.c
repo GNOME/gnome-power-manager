@@ -97,6 +97,7 @@ gpm_st_cell (GpmSelfTest *test)
 	desc = gpm_cell_get_description (cell);
 	if (desc != NULL) {
 		gpm_st_success (test, "got description %s", desc);
+		g_free (desc);
 	} else {
 		gpm_st_failed (test, "could not get description");
 	}
@@ -123,6 +124,7 @@ gpm_st_cell (GpmSelfTest *test)
 	desc = gpm_cell_get_description (cell);
 	if (desc != NULL) {
 		gpm_st_success (test, "got description %s", desc);
+		g_free (desc);
 	} else {
 		gpm_st_failed (test, "could not get description");
 	}

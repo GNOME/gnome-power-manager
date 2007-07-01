@@ -88,6 +88,7 @@ gpm_st_cell_array (GpmSelfTest *test)
 	desc = gpm_cell_array_get_description (cell_array);
 	if (desc != NULL) {
 		gpm_st_success (test, "got description %s", desc);
+		g_free (desc);
 	} else {
 		gpm_st_failed (test, "could not get description");
 	}

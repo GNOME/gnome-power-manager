@@ -91,6 +91,7 @@ gpm_st_hal_device (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "got invalid key");
 	}
+	g_free (retstr);
 
 	/************************************************************/
 	gpm_st_title (test, "try to get property modified events");
