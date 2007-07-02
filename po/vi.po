@@ -6,8 +6,8 @@ msgid ""
 ""
 msgstr "Project-Id-Version: gnome-power-manager 2.19.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-30 03:22+0100\n"
-"PO-Revision-Date: 2007-06-30 18:37+0930\n"
+"POT-Creation-Date: 2007-07-01 03:21+0100\n"
+"PO-Revision-Date: 2007-07-02 22:42+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -444,13 +444,15 @@ msgstr "Có nên hiển thị cảnh báo hủy bỏ pin cho pin hỏng hóc hay
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
-msgstr "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để ngủ khi đóng nắp, hay không."
+msgstr "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để "
+"ngủ khi đóng nắp, hay không."
 
 #: ../data/gnome-power-manager.schemas.in.h:53
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
-msgstr "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để ngủ khi đóng nắp, hay không."
+msgstr "Có nên hiển thị cảnh báo khi có giá trị thu hồi hợp lệ và được cấu hình để "
+"ngủ khi đóng nắp, hay không."
 
 #: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Keyboard brightness when on AC"
@@ -1560,12 +1562,12 @@ msgstr "Lỗi ngủ đông"
 msgid "Suspend Problem"
 msgstr "Lỗi ngưng"
 
-#: ../src/gpm-inhibit.c:354
+#: ../src/gpm-inhibit.c:370
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "đã ngăn cản %s xảy ra: "
 
-#: ../src/gpm-inhibit.c:360
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Nhiều ứng dụng đã ngăn cản %s xảy ra."
@@ -1579,7 +1581,6 @@ msgstr "Đừng chạy trong nền"
 #: ../src/gpm-main.c:156
 #: ../src/gpm-prefs.c:115
 #: ../src/gpm-statistics.c:113
-#: ../test/gpm-st-main.c:95
 msgid "Show extra debugging information"
 msgstr "Hiển thị thông tin gỡ lỗi thêm"
 
@@ -1934,8 +1935,10 @@ msgid ""
 "Your laptop will not sleep if you shut the lid as it is currently "
 "inhibited.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
-msgstr "Máy tính xách tay của bạn sẽ không ngủ nếu bạn đóng nắp, vì nó hiện thời bị thu hồi.\n"
-"Một số máy tính xách tay riêng có thể trở nên quá nóng nếu máy không ngủ khi nắp được đóng."
+msgstr "Máy tính xách tay của bạn sẽ không ngủ nếu bạn đóng nắp, vì nó hiện thời bị "
+"thu hồi.\n"
+"Một số máy tính xách tay riêng có thể trở nên quá nóng nếu máy không ngủ khi "
+"nắp được đóng."
 
 #: ../src/gpm-notify.c:452
 msgid "Battery Charged"
@@ -2334,17 +2337,39 @@ msgstr "Ngủ _đông"
 msgid "Power Inhibit Test"
 msgstr "Thử ra ngăn chặn điện năng"
 
-#: ../test/gpm-st-main.c:91
-msgid "Run only the interactive tests"
-msgstr "Chạy chỉ các việc thử ra tương tác"
+#: ../test/gpm-st-main.c:140
+msgid "Show verbose debugging information"
+msgstr "Hiển thị thông tin gỡ lỗi chi tiết"
 
-#: ../test/gpm-st-main.c:93
-msgid "Run only the automatic tests"
-msgstr "Chạy chỉ các việc thử ra tự động"
+#: ../test/gpm-st-main.c:142
+msgid "Debug class, [manual|auto|all]"
+msgstr "Hạng gỡ lỗi:\n"
+" • manual	bằng tay\n"
+" • auto		tự động\n"
+" • all			tất cả."
 
-#: ../test/gpm-st-main.c:97
-msgid "Run all available tests"
-msgstr "Chạy mọi việc thử ra sẵn sàng"
+#: ../test/gpm-st-main.c:144
+msgid "Set the printing level, [quiet|normal|all]"
+msgstr "Đặt cấp in:\n"
+" • quiet		im\n"
+" • normal		chuẩn\n"
+" • all			tất cả."
+
+#: ../test/gpm-st-main.c:146
+msgid "Debug specific modules, [common,webcam,arrayfloat]"
+msgstr "Gỡ lỗi mô-đun riêng:\n"
+" • common	dùng chung\n"
+" • webcam	máy ảnh Mạng\n"
+" • arrayfloat	mảng nổi."
+
+#~ msgid "Run only the interactive tests"
+#~ msgstr "Chạy chỉ các việc thử ra tương tác"
+
+#~ msgid "Run only the automatic tests"
+#~ msgstr "Chạy chỉ các việc thử ra tự động"
+
+#~ msgid "Run all available tests"
+#~ msgstr "Chạy mọi việc thử ra sẵn sàng"
 
 #~ msgid "Change the brightness to a preset level on AC state change"
 #~ msgstr "Thay đổi độ sáng thành một mức định sẵn khi tình trạng điện chính thay đổi"
