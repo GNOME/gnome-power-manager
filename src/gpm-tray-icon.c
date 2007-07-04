@@ -46,7 +46,6 @@
 #include "gpm-common.h"
 #include "gpm-debug.h"
 #include "gpm-notify.h"
-#include "gpm-control.h"
 #include "gpm-cell-array.h"
 #include "gpm-cell.h"
 #include "gpm-cell-unit.h"

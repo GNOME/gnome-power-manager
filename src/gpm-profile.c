@@ -42,7 +42,6 @@
 #include "gpm-array.h"
 #include "gpm-array-float.h"
 #include "gpm-dpms.h"
-#include "gpm-common.h"
 #include "gpm-load.h"
 #include "gpm-debug.h"
 
