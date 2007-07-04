@@ -52,13 +52,14 @@
 #endif
 
 #define GPM_NOTIFY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_NOTIFY, GpmNotifyPrivate))
+#define QUIRK_WEBSITE	"http://people.freedesktop.org/~hughsient/quirk/"
 
 struct GpmNotifyPrivate
 {
 	GpmAcAdapter		*ac_adapter;
 	GpmConf			*conf;
 	GtkStatusIcon		*status_icon;
-	gchar			*recall_website;
+	gchar			*internet_url;
 	const gchar		*do_not_show_gconf;
 #ifdef HAVE_LIBNOTIFY
 	NotifyNotification	*libnotify;
@@ -312,16 +313,16 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 		return;
 	}
 	if (strcmp (action, "visit-website") == 0) {
-		gpm_debug ("autovisit website %s", notify->priv->recall_website);
+		gpm_debug ("autovisit website %s", notify->priv->internet_url);
 		error = NULL;
-		ret = gnome_url_show (notify->priv->recall_website, &error);
+		ret = gnome_url_show (notify->priv->internet_url, &error);
 		if (ret == FALSE) {
 			gpm_debug ("failed to show url: %s", error->message);
 			g_error_free (error);
 		}
 		/* free the stored string */
-		g_free (notify->priv->recall_website);
-		notify->priv->recall_website = NULL;
+		g_free (notify->priv->internet_url);
+		notify->priv->internet_url = NULL;
 		return;
 	}
 	gpm_debug ("action %s unknown", action);
@@ -353,7 +354,7 @@ gpm_notify_perhaps_recall (GpmNotify   *notify,
 
 	/* add extra stuff */
 #ifdef HAVE_LIBNOTIFY
-	notify->priv->recall_website = g_strdup (website);
+	notify->priv->internet_url = g_strdup (website);
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "visit-website",
 	                                 _("Visit recall website"),
@@ -558,6 +559,13 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "dont-show-again",
 	                                 _("Do not show me this again"),
+	                                 (NotifyActionCallback) notify_general_clicked_cb,
+	                                 notify, NULL);
+
+	notify->priv->internet_url = g_strdup (QUIRK_WEBSITE);
+	notify_notification_add_action  (notify->priv->libnotify,
+	                                 "visit-website",
+	                                 _("Visit quirk website"),
 	                                 (NotifyActionCallback) notify_general_clicked_cb,
 	                                 notify, NULL);
 #endif
