@@ -1,5 +1,11 @@
 2007-07-04  Richard Hughes  <richard@hughsie.com>
 
+	* test/gpm-st-main.c: (main):
+	Don't mark text translatable. This program is not installed, and is not
+	used by end users. Fixes #453721
+
+2007-07-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-unit.h:
 	Lower the value of GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE to 60 to cope
 	with really broken batteries, or when using smapi-tools. Fixes #411932

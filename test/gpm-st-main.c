@@ -137,13 +137,13 @@ main (int argc, char **argv)
 	const GOptionEntry options[] = {
 
 		{ "verbose", '\0', 0, G_OPTION_ARG_NONE, &verbose,
-		  N_("Show verbose debugging information"), NULL },
+		  "Show verbose debugging information", NULL },
 		{ "class", '\0', 0, G_OPTION_ARG_STRING, &class,
-		  N_("Debug class, [manual|auto|all]"), NULL },
+		  "Debug class, [manual|auto|all]", NULL },
 		{ "level", '\0', 0, G_OPTION_ARG_STRING, &level,
-		  N_("Set the printing level, [quiet|normal|all]"), NULL },
+		  "Set the printing level, [quiet|normal|all]", NULL },
 		{ "tests", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &tests,
-		  N_("Debug specific modules, [common,webcam,arrayfloat]"), NULL },
+		  "Debug specific modules, [common,webcam,arrayfloat]", NULL },
 		{ NULL}
 	};
 
