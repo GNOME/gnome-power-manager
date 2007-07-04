@@ -1,5 +1,11 @@
 2007-07-04  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-unit.h:
+	Lower the value of GPM_CELL_UNIT_MIN_CHARGED_PERCENTAGE to 60 to cope
+	with really broken batteries, or when using smapi-tools. Fixes #411932
+
+2007-07-04  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-notify.c: (notify_general_clicked_cb),
 	(gpm_notify_perhaps_recall), (gpm_notify_sleep_failed):
 	Provide a link to the quirk self-help site when sleep fails.
