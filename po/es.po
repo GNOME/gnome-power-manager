@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-06-30 03:22+0100\n"
-"PO-Revision-Date: 2007-06-30 14:51+0200\n"
+"POT-Creation-Date: 2007-07-01 03:21+0100\n"
+"PO-Revision-Date: 2007-07-04 16:54+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -493,13 +493,17 @@ msgstr ""
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close"
-msgstr "Si se debe mostrar la advertencia cuando el valor de inhibir es válido y está configurado para pasar a reposo al cerrar la tapa"
+msgstr ""
+"Si se debe mostrar la advertencia cuando el valor de inhibir es válido y "
+"está configurado para pasar a reposo al cerrar la tapa"
 
 #: ../data/gnome-power-manager.schemas.in.h:53
 msgid ""
 "If we should show the warning when we have a valid inhibit and configured to "
 "sleep on lid close."
-msgstr "Si se debe mostrar la advertencia cuando el valor de inhibir es válido y está configurado para pasar a reposo al cerrar la tapa."
+msgstr ""
+"Si se debe mostrar la advertencia cuando el valor de inhibir es válido y "
+"está configurado para pasar a reposo al cerrar la tapa."
 
 #: ../data/gnome-power-manager.schemas.in.h:54
 msgid "Keyboard brightness when on AC"
@@ -1625,12 +1629,12 @@ msgstr "Problema al hibernar"
 msgid "Suspend Problem"
 msgstr "Problema al suspender"
 
-#: ../src/gpm-inhibit.c:354
+#: ../src/gpm-inhibit.c:370
 #, c-format
 msgid "has stopped the %s from taking place : "
 msgstr "ha parado la %s de tener lugar: "
 
-#: ../src/gpm-inhibit.c:360
+#: ../src/gpm-inhibit.c:376
 #, c-format
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "Varias aplicaciones han parado la %s de tener lugar."
@@ -1640,7 +1644,6 @@ msgid "Do not daemonize"
 msgstr "No demonizar"
 
 #: ../src/gpm-main.c:156 ../src/gpm-prefs.c:115 ../src/gpm-statistics.c:113
-#: ../test/gpm-st-main.c:95
 msgid "Show extra debugging information"
 msgstr "Muestra información adicional de depuración"
 
@@ -2011,8 +2014,10 @@ msgid ""
 "inhibited.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
-"Su portátil no pasará a reposo si cierra la tapa ya que actualmente está inhibida.\n"
-"Algunos portátiles pueden recalentarse si no pasan a reposo cuando se cierra la tapa."
+"Su portátil no pasará a reposo si cierra la tapa ya que actualmente está "
+"inhibida.\n"
+"Algunos portátiles pueden recalentarse si no pasan a reposo cuando se cierra "
+"la tapa."
 
 #: ../src/gpm-notify.c:452
 msgid "Battery Charged"
@@ -2411,15 +2416,19 @@ msgstr "_Hibernar"
 msgid "Power Inhibit Test"
 msgstr "Test de inhibición de energía"
 
-#: ../test/gpm-st-main.c:91
-msgid "Run only the interactive tests"
-msgstr "Ejecutar sólo las pruebas interactivas"
+#: ../test/gpm-st-main.c:140
+msgid "Show verbose debugging information"
+msgstr "Muestra información detallada de depuración"
 
-#: ../test/gpm-st-main.c:93
-msgid "Run only the automatic tests"
-msgstr "Ejecutar sólo las pruebas automáticas"
+#: ../test/gpm-st-main.c:142
+msgid "Debug class, [manual|auto|all]"
+msgstr "Clase de depuración, [manual|auto|all]"
 
-#: ../test/gpm-st-main.c:97
-msgid "Run all available tests"
-msgstr "Ejecutar todas las pruebas disponibles"
+#: ../test/gpm-st-main.c:144
+msgid "Set the printing level, [quiet|normal|all]"
+msgstr "Ajustar el nivel de impresión, [quiet|normal|all]"
+
+#: ../test/gpm-st-main.c:146
+msgid "Debug specific modules, [common,webcam,arrayfloat]"
+msgstr "Depurar módulos específicos, [common,webcam,arrayfloat]"
 
