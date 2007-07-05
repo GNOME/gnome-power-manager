@@ -65,6 +65,14 @@ gnome_power_self_test_SOURCES =				\
 	../src/gpm-marshal.c				\
 	../src/gpm-profile.h				\
 	../src/gpm-profile.c				\
+	../src/gpm-control.h				\
+	../src/gpm-control.c				\
+	../src/gpm-polkit.h				\
+	../src/gpm-polkit.c				\
+	../src/gpm-screensaver.h			\
+	../src/gpm-screensaver.c			\
+	../src/gpm-networkmanager.h			\
+	../src/gpm-networkmanager.c			\
 	../src/gpm-webcam.h				\
 	../src/gpm-webcam.c				\
 	../src/gpm-load.h				\

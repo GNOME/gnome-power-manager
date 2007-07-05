@@ -44,6 +44,7 @@
 #include "gpm-dpms.h"
 #include "gpm-load.h"
 #include "gpm-debug.h"
+#include "gpm-control.h"
 
 #include "gpm-profile.h"
 
@@ -62,6 +63,7 @@ struct GpmProfilePrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmLoad			*load;
 	GpmDpms			*dpms;
+	GpmControl		*control;
 	GTimer			*timer;
 	GpmArray		*present_array_accuracy;
 	GpmArray		*present_array_data;
@@ -687,6 +689,18 @@ gpm_profile_get_accuracy (GpmProfile *profile,
 }
 
 /**
+ * control_sleep_action_cb:
+ **/
+static void
+control_sleep_action_cb (GpmControl      *control,
+			 GpmControlAction action,
+		         GpmProfile      *profile)
+{
+	/* the charge might have changed when suspended or hibernated */
+	profile->priv->data_valid = FALSE;
+}
+
+/**
  * gpm_profile_init:
  */
 static void
@@ -720,6 +734,17 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->present_array_data = gpm_array_new ();
 	gpm_array_set_fixed_size (profile->priv->present_array_data, 100);
 	gpm_array_set_fixed_size (profile->priv->present_array_accuracy, 100);
+
+	/* use the control object so we don't save new percentage points
+	 * after suspend or hibernate */
+	gpm_debug ("creating new control instance");
+	profile->priv->control = gpm_control_new ();
+	g_signal_connect (profile->priv->control, "sleep",
+			  G_CALLBACK (control_sleep_action_cb), profile);
+	g_signal_connect (profile->priv->control, "resume",
+			  G_CALLBACK (control_sleep_action_cb), profile);
+	g_signal_connect (profile->priv->control, "sleep-failure",
+			  G_CALLBACK (control_sleep_action_cb), profile);
 
 	/* default */
 	profile->priv->lcd_on = TRUE;
@@ -764,6 +789,7 @@ gpm_profile_finalize (GObject *object)
 	g_object_unref (profile->priv->load);
 	g_object_unref (profile->priv->dpms);
 	g_object_unref (profile->priv->ac_adapter);
+	g_object_unref (profile->priv->control);
 
 	gpm_array_float_free (profile->priv->float_data_charge);
 	gpm_array_float_free (profile->priv->float_data_discharge);
