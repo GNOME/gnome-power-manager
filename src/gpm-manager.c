@@ -1808,6 +1808,7 @@ gpm_manager_finalize (GObject *object)
 	g_object_unref (manager->priv->notify);
 	g_object_unref (manager->priv->srv_screensaver);
 	g_object_unref (manager->priv->prefs_server);
+	g_object_unref (manager->priv->control);
 
 	/* optional gobjects */
 	if (manager->priv->button) {
