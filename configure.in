@@ -49,6 +49,7 @@ dnl - Library dependencies
 dnl ---------------------------------------------------------------------------
 GLIB_REQUIRED=2.6.0
 GTK_REQUIRED=2.10.0
+GDK_REQUIRED=2.10.0
 GNOME_KEYRING_REQUIRED=0.6.0
 LIBGNOME_REQUIRED=2.14.0
 LIBGNOMEUI_REQUIRED=2.14.0
@@ -67,6 +68,7 @@ dnl - Make above strings available for packaging files (e.g. rpm spec files)
 dnl ---------------------------------------------------------------------------
 AC_SUBST(GLIB_REQUIRED)
 AC_SUBST(GTK_REQUIRED)
+AC_SUBST(GDK_REQUIRED)
 AC_SUBST(LIBGNOME_REQUIRED)
 AC_SUBST(LIBGNOMEUI_REQUIRED)
 AC_SUBST(HAL_REQUIRED)
@@ -111,6 +113,12 @@ PKG_CHECK_MODULES(GNOME, \
  cairo >= $CAIRO_REQUIRED)
 AC_SUBST(GNOME_CFLAGS)
 AC_SUBST(GNOME_LIBS)
+
+PKG_CHECK_MODULES(GDK, \
+ gdk-2.0 >= $GDK_REQUIRED \
+ gdk-x11-2.0 >= $GDK_REQUIRED)
+AC_SUBST(GDK_CFLAGS)
+AC_SUBST(GDK_LIBS)
 
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
@@ -511,6 +519,7 @@ applets/brightness/Makefile
 applets/inhibit/Makefile
 libhal-glib/Makefile
 libdbus-glib/Makefile
+libidletime/Makefile
 docs/Makefile
 man/Makefile
 help/Makefile

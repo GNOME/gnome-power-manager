@@ -16,11 +16,13 @@ INCLUDES =						\
 	-DVERSION="\"$(VERSION)\"" 			\
 	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
 	-I$(top_srcdir)					\
+	-I$(top_srcdir)/libidletime			\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
 	$(NULL)
 
 LOCAL_LIBHAL_LIBS =					\
+	$(top_builddir)/libidletime/libidletime.la	\
 	$(top_builddir)/libhal-glib/libhal-gdevice.la	\
 	$(top_builddir)/libhal-glib/libhal-gdevicestore.la	\
 	$(top_builddir)/libhal-glib/libhal-gmanager.la	\
@@ -51,6 +53,7 @@ gnome_power_self_test_SOURCES =				\
 	gpm-st-cell-array.c				\
 	gpm-st-cell.c					\
 	gpm-st-webcam.c					\
+	gpm-st-idletime.c				\
 	gpm-st-proxy.c					\
 	gpm-st-inhibit.c				\
 	gpm-st-profile.c				\

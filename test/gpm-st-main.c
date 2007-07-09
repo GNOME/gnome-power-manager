@@ -87,13 +87,14 @@ gpm_st_success (GpmSelfTest *test, const gchar *format, ...)
 	if (test->level == LEVEL_ALL) {
 		if (format == NULL) {
 			g_print ("...OK\n");
-			return;
+			goto finish;
 		}
 		va_start (args, format);
 		g_vsnprintf (va_args_buffer, 1024, format, args);
 		va_end (args);
 		g_print ("...OK [%s]\n", va_args_buffer);
 	}
+finish:
 	test->succeeded++;
 }
 
@@ -193,6 +194,8 @@ main (int argc, char **argv)
 		}
 	}
 
+	gpm_st_run_test (test, gpm_st_idletime);
+#if 0
 	gpm_st_run_test (test, gpm_st_common);
 	gpm_st_run_test (test, gpm_st_array);
 	gpm_st_run_test (test, gpm_st_inhibit);
@@ -208,6 +211,7 @@ main (int argc, char **argv)
 	gpm_st_run_test (test, gpm_st_graph_widget);
 	gpm_st_run_test (test, gpm_st_profile);
 	gpm_st_run_test (test, gpm_st_webcam);
+#endif
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);
 	if (test->succeeded == test->total) {
