@@ -623,7 +623,7 @@ idle_changed_cb (GpmIdle      *idle,
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
-		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
@@ -642,7 +642,7 @@ idle_changed_cb (GpmIdle      *idle,
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, FALSE);
-		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 
 		/* sync timeouts */
 		gpm_backlight_sync_policy (backlight);
@@ -651,7 +651,7 @@ idle_changed_cb (GpmIdle      *idle,
 
 		/* sync lcd brightness */
 		gpm_backlight_notify_system_idle_changed (backlight, TRUE);
-		gpm_backlight_brightness_evaluate_and_set (backlight, TRUE);
+		gpm_backlight_brightness_evaluate_and_set (backlight, FALSE);
 	}
 }
 
