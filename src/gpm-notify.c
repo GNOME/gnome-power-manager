@@ -563,6 +563,12 @@ gpm_notify_sleep_failed (GpmNotify *notify, gboolean hibernate)
 	                                 notify, NULL);
 
 	notify->priv->internet_url = g_strdup (QUIRK_WEBSITE);
+	/* Translator: Quirks refer to strange/weird/undocumented behaviour of
+	 * hardware.  Because the manufacturers do not provide the necessary
+	 * information for non-FOSS software support, it is up to the users to
+	 * supply the info by following the procedures outlined in the "Quirks
+	 * website" at http://people.freedesktop.org/~hughsient/quirk/.
+	 */
 	notify_notification_add_action  (notify->priv->libnotify,
 	                                 "visit-website",
 	                                 _("Visit quirk website"),
