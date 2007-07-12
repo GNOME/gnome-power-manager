@@ -68,10 +68,16 @@ static gboolean
 gpm_sound_play (GpmSound   *sound,
 		const char *filename)
 {
-	char *uri;
+	char *uri, *fname;
 
-	/* prepend the path to form a URI */
-	uri = g_strdup_printf ("file:///%s%s",  GPM_DATA, filename);
+	/* Build the URI from the filename */
+	fname = g_build_filename (GPM_DATA, filename, NULL);
+	if (fname == NULL)
+		return FALSE;
+	uri = g_filename_to_uri (filename, NULL, NULL);
+	g_free (fname);
+	if (uri == NULL)
+		return FALSE;
 
 	/* set up new playbin source */
 	gst_element_set_state (sound->priv->playbin, GST_STATE_NULL);
@@ -233,6 +239,8 @@ gpm_sound_class_init (GpmSoundClass *klass)
 static void
 gpm_sound_init (GpmSound *sound)
 {
+	GstElement *audio_sink;
+
 	sound->priv = GPM_SOUND_GET_PRIVATE (sound);
 
 	sound->priv->conf = gpm_conf_new ();
@@ -248,8 +256,17 @@ gpm_sound_init (GpmSound *sound)
 	g_signal_connect (sound->priv->ac_adapter, "ac-adapter-changed",
 			  G_CALLBACK (ac_adapter_changed_cb), sound);
 
+	/* Instatiate the audio sink ourselves, and set the profile
+	 * so the right output is used */
+	audio_sink = gst_element_factory_make ("gconfaudiosink", "audio-sink");
+	if (audio_sink == NULL)
+		audio_sink = gst_element_factory_make ("autoaudiosink", "audio-sink");
+	if (audio_sink != NULL && g_object_class_find_property (G_OBJECT_GET_CLASS (audio_sink), "profile"))
+		g_object_set (G_OBJECT (audio_sink), "profile", 0, NULL);
 	/* we keep this alive for speed */
 	sound->priv->playbin = gst_element_factory_make ("playbin", "play");
+	if (audio_sink != NULL)
+	g_object_set (bvw->priv->play, "audio-sink", audio_sink, NULL);
 
 	/* do we beep? */
 	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
