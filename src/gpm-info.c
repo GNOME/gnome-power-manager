@@ -344,6 +344,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
 		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_BLUE, _("Valid data"));
 		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_BLUE, _("No data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_YELLOW, _("Extrapolated data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
@@ -378,6 +379,7 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		*axis_desc_y = g_strdup (_("Average time elapsed"));
 		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_RED, _("Valid data"));
 		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_RED, _("No data"));
+		gpm_statistics_add_data_type (*key_data, GPM_COLOUR_DARK_MAGENTA, _("Extrapolated data"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,

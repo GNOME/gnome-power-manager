@@ -1,3 +1,11 @@
+2007-07-16  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: (gpm_statistics_get_parameters):
+	Add the guessed data into the key.
+
+	* src/gpm-sound.c: (gpm_sound_init):
+	Fix the build. Fixes #457414.
+
 2007-07-12  Bastien Nocera  <hadess@hadess.net>
 
 	* src/gpm-sound.c: (gpm_sound_play), (gpm_sound_init):

@@ -266,7 +266,7 @@ gpm_sound_init (GpmSound *sound)
 	/* we keep this alive for speed */
 	sound->priv->playbin = gst_element_factory_make ("playbin", "play");
 	if (audio_sink != NULL)
-	g_object_set (bvw->priv->play, "audio-sink", audio_sink, NULL);
+	g_object_set (sound->priv->playbin, "audio-sink", audio_sink, NULL);
 
 	/* do we beep? */
 	gpm_conf_get_bool (sound->priv->conf, GPM_CONF_UI_ENABLE_BEEPING, &sound->priv->enable_beeping);
