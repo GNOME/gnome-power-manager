@@ -195,6 +195,17 @@ gpm_cell_unit_get_icon (GpmCellUnit *unit)
 			index_str = "100";
 		}
 		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+		if (unit->charge_current < 26) {
+			index_str = "000";
+		} else if (unit->charge_current < 51) {
+			index_str = "030";
+		} else if (unit->charge_current < 76) {
+			index_str = "060";
+		} else {
+			index_str = "100";
+		}
+		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 	}
 	gpm_debug ("got filename: %s", filename);
 	return filename;
@@ -283,6 +294,8 @@ gpm_cell_unit_get_kind_string (GpmCellUnit *unit)
  		str = "keyboard";
 	} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
  		str = "pda";
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+ 		str = "phone";
  	} else {
  		str = "unknown";
 	}
@@ -311,6 +324,9 @@ gpm_cell_unit_set_kind (GpmCellUnit *unit, const gchar *kind)
 		return TRUE;
 	} else if (strcmp (kind, "pda") == 0) {
 		unit->kind = GPM_CELL_UNIT_KIND_PDA;
+		return TRUE;
+	} else if (strcmp (kind, "phone") == 0) {
+		unit->kind = GPM_CELL_UNIT_KIND_PHONE;
 		return TRUE;
 	}
 

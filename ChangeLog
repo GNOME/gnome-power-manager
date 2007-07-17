@@ -1,5 +1,26 @@
 2007-07-16  Richard Hughes  <richard@hughsie.com>
 
+	* docs/icon-naming.txt:
+	* src/gpm-cell-array.c: (gpm_cell_array_get_description):
+	* src/gpm-cell-unit.c: (gpm_cell_unit_get_icon),
+	(gpm_cell_unit_get_kind_string), (gpm_cell_unit_set_kind):
+	* src/gpm-cell-unit.h:
+	* src/gpm-engine.c: (gpm_engine_delayed_refresh),
+	(gpm_engine_get_summary), (gpm_engine_get_icon), (gpm_engine_init),
+	(gpm_engine_start), (gpm_engine_finalize):
+	* src/gpm-engine.h:
+	* src/gpm-manager.c: (gpm_engine_charge_low_cb),
+	(gpm_engine_charge_critical_cb):
+	* src/gpm-tray-icon.c: (gpm_tray_icon_activate_cb):
+	* src/gpm-warnings.c: (gpm_warnings_get_state):
+	* test/gpm-st-idletime.c: (gpm_st_idletime):
+	* test/gpm-st-main.c: (main):
+	Add the initial phone code for mobile phone support.
+	No backend stuff yet, I need to write the backend stuff before it will
+	work.
+
+2007-07-16  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-info.c: (gpm_statistics_get_parameters):
 	Add the guessed data into the key.
 

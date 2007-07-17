@@ -50,6 +50,7 @@ typedef struct
 	GpmCellArray		*mouse;
 	GpmCellArray		*keyboard;
 	GpmCellArray		*pda;
+	GpmCellArray		*phone;
 } GpmEngineCollection;
 
 typedef struct

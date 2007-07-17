@@ -146,6 +146,10 @@ gpm_warnings_get_state (GpmWarnings  *warnings,
 
 		type = gpm_warnings_get_state_percentage (warnings, unit);
 
+	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+
+		type = gpm_warnings_get_state_percentage (warnings, unit);
+
 	} else if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
 		   warnings->priv->use_time_primary == TRUE) {
 

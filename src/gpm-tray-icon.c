@@ -559,6 +559,7 @@ gpm_tray_icon_activate_cb (GtkStatusIcon *status_icon,
 	/* add all device types to the drop down menu */
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->primary);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->ups);
+	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->phone);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->mouse);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->keyboard);
 	dev_cnt += gpm_tray_icon_add_device (icon, menu, icon->priv->collection->pda);

@@ -1367,6 +1367,9 @@ gpm_engine_charge_low_cb (GpmEngine      *engine,
 	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is low in power (%d%%)"), unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
+		title = _("Cell phone battery low");
+		message = g_strdup_printf (_("The cell phone attached to this computer is low in power (%d%%)"), unit->percentage);
 	}
 
 	/* get correct icon */
@@ -1468,6 +1471,11 @@ gpm_engine_charge_critical_cb (GpmEngine      *engine,
 	} else if (kind == GPM_CELL_UNIT_KIND_PDA) {
 		title = _("PDA battery low");
 		message = g_strdup_printf (_("The PDA attached to this computer is very low in power (%d%%). "
+					     "This device will soon stop functioning if not charged."),
+					   unit->percentage);
+	} else if (kind == GPM_CELL_UNIT_KIND_PHONE) {
+		title = _("Cell phone battery low");
+		message = g_strdup_printf (_("Your cell phone is very low in power (%d%%). "
 					     "This device will soon stop functioning if not charged."),
 					   unit->percentage);
 	}

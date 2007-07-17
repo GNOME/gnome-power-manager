@@ -119,6 +119,7 @@ gpm_engine_delayed_refresh (GpmEngine *engine)
 	gpm_cell_array_refresh (collection->mouse);
 	gpm_cell_array_refresh (collection->keyboard);
 	gpm_cell_array_refresh (collection->pda);
+	gpm_cell_array_refresh (collection->phone);
 	return FALSE;
 }
 
@@ -322,7 +323,12 @@ gpm_engine_get_summary (GpmEngine *engine)
 		tooltip = g_string_append (tooltip, part);
 	}
 	g_free (part);
-	part = gpm_cell_array_get_description (collection->ups);
+	part = gpm_cell_array_get_description (collection->phone);
+	if (part != NULL) {
+		tooltip = g_string_append (tooltip, part);
+	}
+	g_free (part);
+	part = gpm_cell_array_get_description (collection->pda);
 	if (part != NULL) {
 		tooltip = g_string_append (tooltip, part);
 	}
@@ -348,6 +354,8 @@ gpm_engine_get_icon (GpmEngine *engine)
 	GpmCellUnit *unit_ups;
 	GpmCellUnit *unit_mouse;
 	GpmCellUnit *unit_keyboard;
+	GpmCellUnit *unit_pda;
+	GpmCellUnit *unit_phone;
 	GpmEngineCollection *collection;
 	GpmWarningsState state;
 
@@ -367,6 +375,8 @@ gpm_engine_get_icon (GpmEngine *engine)
 	unit_ups = gpm_cell_array_get_unit (collection->ups);
 	unit_mouse = gpm_cell_array_get_unit (collection->mouse);
 	unit_keyboard = gpm_cell_array_get_unit (collection->keyboard);
+	unit_pda = gpm_cell_array_get_unit (collection->pda);
+	unit_phone = gpm_cell_array_get_unit (collection->phone);
 
 	/* we try CRITICAL: PRIMARY, UPS, MOUSE, KEYBOARD */
 	gpm_debug ("Trying CRITICAL icon: primary, ups, mouse, keyboard");
@@ -378,6 +388,10 @@ gpm_engine_get_icon (GpmEngine *engine)
 	if (unit_ups->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->ups);
 	}
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_phone);
+	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
+		return gpm_cell_array_get_icon (collection->phone);
+	}
 	state = gpm_warnings_get_state (engine->priv->warnings, unit_mouse);
 	if (unit_mouse->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->mouse);
@@ -385,6 +399,10 @@ gpm_engine_get_icon (GpmEngine *engine)
 	state = gpm_warnings_get_state (engine->priv->warnings, unit_keyboard);
 	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
 		return gpm_cell_array_get_icon (collection->keyboard);
+	}
+	state = gpm_warnings_get_state (engine->priv->warnings, unit_pda);
+	if (unit_keyboard->is_present == TRUE && state == GPM_WARNINGS_CRITICAL) {
+		return gpm_cell_array_get_icon (collection->pda);
 	}
 
 	if (engine->priv->icon_policy == GPM_ICON_POLICY_CRITICAL) {
@@ -895,6 +913,7 @@ gpm_engine_init (GpmEngine *engine)
 	collection->mouse = gpm_cell_array_new ();
 	collection->keyboard = gpm_cell_array_new ();
 	collection->pda = gpm_cell_array_new ();
+	collection->phone = gpm_cell_array_new ();
 	engine->priv->ac_adapter = gpm_ac_adapter_new ();
 
 	g_signal_connect (collection->primary, "collection-changed",
@@ -925,6 +944,15 @@ gpm_engine_init (GpmEngine *engine)
 	g_signal_connect (collection->mouse, "charge-low",
 			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
 	g_signal_connect (collection->mouse, "charge-critical",
+			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
+
+	g_signal_connect (collection->phone, "collection-changed",
+			  G_CALLBACK (gpm_cell_array_collection_changed_cb), engine);
+	g_signal_connect (collection->phone, "percent-changed",
+			  G_CALLBACK (gpm_cell_array_percent_changed_cb), engine);
+	g_signal_connect (collection->phone, "charge-low",
+			  G_CALLBACK (gpm_cell_array_charge_low_cb), engine);
+	g_signal_connect (collection->phone, "charge-critical",
 			  G_CALLBACK (gpm_cell_array_charge_critical_cb), engine);
 
 	g_signal_connect (collection->keyboard, "collection-changed",
@@ -980,6 +1008,7 @@ gpm_engine_start (GpmEngine *engine)
 	gpm_cell_array_set_type (collection->mouse, GPM_CELL_UNIT_KIND_MOUSE);
 	gpm_cell_array_set_type (collection->keyboard, GPM_CELL_UNIT_KIND_KEYBOARD);
 	gpm_cell_array_set_type (collection->pda, GPM_CELL_UNIT_KIND_PDA);
+	gpm_cell_array_set_type (collection->phone, GPM_CELL_UNIT_KIND_PHONE);
 
 	/* only show the battery prefs section if we have batteries */
 	prefs_server = gpm_prefs_server_new ();
@@ -1022,6 +1051,7 @@ gpm_engine_finalize (GObject *object)
 	g_object_unref (collection->mouse);
 	g_object_unref (collection->keyboard);
 	g_object_unref (collection->pda);
+	g_object_unref (collection->phone);
 
 	g_free (engine->priv->previous_icon);
 	g_free (engine->priv->previous_summary);

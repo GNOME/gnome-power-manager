@@ -927,6 +927,7 @@ gpm_cell_array_get_description (GpmCellArray *cell_array)
 	/* don't display all the extra stuff for keyboards and mice */
 	if (unit->kind == GPM_CELL_UNIT_KIND_MOUSE ||
 	    unit->kind == GPM_CELL_UNIT_KIND_KEYBOARD ||
+	    unit->kind == GPM_CELL_UNIT_KIND_PHONE ||
 	    unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 		return g_strdup_printf ("%s (%i%%)\n", type_desc, unit->percentage);
 	}

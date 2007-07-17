@@ -218,7 +218,7 @@ gpm_st_idletime (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "check if we can remove an invalid alarm");
-	ret = idletime_alarm_free_id (idletime, 202);
+	ret = idletime_alarm_remove (idletime, 202);
 	if (ret == FALSE) {
 		gpm_st_success (test, "ignored invalid alarm");
 	} else {
@@ -227,7 +227,7 @@ gpm_st_idletime (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "check if we can remove an valid alarm");
-	ret = idletime_alarm_free_id (idletime, 101);
+	ret = idletime_alarm_remove (idletime, 101);
 	if (ret == TRUE) {
 		gpm_st_success (test, "removed valid alarm");
 	} else {
