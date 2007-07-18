@@ -1,5 +1,10 @@
 2007-07-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-debug.c: (gpm_syslog_internal), (gpm_error_real):
+	Log to syslog when we exit because of an error.
+
+2007-07-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-main.c: (main):
 	Temporarily don't do the system bus check for gdm session activation.
 

@@ -166,6 +166,20 @@ gpm_warning_real (const gchar *func,
 }
 
 /**
+ * gpm_syslog:
+ * @format: This va format string, e.g. ("test %s", hello)
+ *
+ * Logs some text to the syslog, usually in /var/log/messages
+ **/
+static void
+gpm_syslog_internal (const gchar *string)
+{
+	fprintf (stderr, "Saving to syslog: %s", string);
+	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), string);
+}
+
+
+/**
  * gpm_error_real:
  **/
 void
@@ -183,20 +197,8 @@ gpm_error_real (const gchar *func,
 	/* do extra stuff for a warning */
 	fprintf (stderr, "*** ERROR ***\n");
 	gpm_print_line (func, file, line, va_args_buffer);
+	gpm_syslog_internal (va_args_buffer);
 	exit (0);
-}
-
-/**
- * gpm_syslog:
- * @format: This va format string, e.g. ("test %s", hello)
- *
- * Logs some text to the syslog, usually in /var/log/messages
- **/
-static void
-gpm_syslog_internal (const gchar *string)
-{
-	fprintf (stderr, "Saving to syslog: %s", string);
-	syslog (LOG_NOTICE, "(%s) %s", g_get_user_name (), string);
 }
 
 /**
