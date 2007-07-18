@@ -722,7 +722,6 @@ gpm_profile_init (GpmProfile *profile)
 	g_signal_connect (profile->priv->dpms, "mode-changed",
 			  G_CALLBACK (dpms_mode_changed_cb), profile);
 
-
 	/* used for data */
 	profile->priv->float_data_charge = gpm_array_float_new (100);
 	profile->priv->float_data_discharge = gpm_array_float_new (100);

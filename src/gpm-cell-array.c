@@ -36,6 +36,7 @@
 #include "gpm-conf.h"
 #include "gpm-cell-unit.h"
 #include "gpm-cell.h"
+#include "gpm-control.h"
 #include "gpm-debug.h"
 #include "gpm-warnings.h"
 #include "gpm-profile.h"
@@ -51,18 +52,19 @@ static void     gpm_cell_array_finalize   (GObject	     *object);
 
 struct GpmCellArrayPrivate
 {
-	HalGManager	*hal_manager;
-	GpmCellUnit	 unit;
-	GpmAcAdapter	*ac_adapter;
-	GpmProfile	*profile;
-	GpmConf		*conf;
-	GpmWarnings	*warnings;
-	GpmWarningsState warnings_state;
-	GPtrArray	*array;
-	gboolean	 use_profile_calc;
-	gboolean	 done_fully_charged;
-	gboolean	 done_recall;
-	gboolean	 done_capacity;
+	HalGManager		*hal_manager;
+	GpmCellUnit		 unit;
+	GpmAcAdapter		*ac_adapter;
+	GpmProfile		*profile;
+	GpmConf			*conf;
+	GpmControl		*control;
+	GpmWarnings		*warnings;
+	GpmWarningsState	 warnings_state;
+	GPtrArray		*array;
+	gboolean		 use_profile_calc;
+	gboolean		 done_fully_charged;
+	gboolean		 done_recall;
+	gboolean		 done_capacity;
 };
 
 enum {
@@ -1140,6 +1142,19 @@ hal_daemon_stop_cb (HalGManager  *hal_manager,
 }
 
 /**
+ * control_sleep_action_cb:
+ **/
+static void
+control_sleep_action_cb (GpmControl      *control,
+			 GpmControlAction action,
+		         GpmCellArray    *cell_array)
+{
+	/* we rescan all cells on resume as the battery may have been
+	 * removed or changed whilst we were asleep */
+	gpm_cell_array_collection_changed (cell_array);
+}
+
+/**
  * gpm_cell_array_class_init:
  * @cell_array: This class instance
  **/
@@ -1277,6 +1292,11 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	g_signal_connect (cell_array->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), cell_array);
 
+	/* use the control object  */
+	cell_array->priv->control = gpm_control_new ();
+	g_signal_connect (cell_array->priv->control, "resume",
+			  G_CALLBACK (control_sleep_action_cb), cell_array);
+
 	gpm_cell_unit_init (&cell_array->priv->unit);
 }
 
@@ -1303,6 +1323,7 @@ gpm_cell_array_finalize (GObject *object)
 	g_object_unref (cell_array->priv->hal_manager);
 	g_object_unref (cell_array->priv->profile);
 	g_object_unref (cell_array->priv->conf);
+	g_object_unref (cell_array->priv->control);
 }
 
 /**

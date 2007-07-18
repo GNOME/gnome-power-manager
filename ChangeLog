@@ -1,5 +1,19 @@
 2007-07-18  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (control_sleep_action_cb),
+	(gpm_cell_array_init), (gpm_cell_array_finalize):
+	Rescan the cell array when we resume as the primary battery may have
+	been changed or removed. This hopefully fixes the big where the wrong
+	profile is used when the battery is swapped whilst hibernating.
+
+	* src/gpm-profile.c: (gpm_profile_init):
+	Cosmetic whitespace fix.
+
+	* test/gpm-st-main.c: (main):
+	Uncomment the test so we do the whole suite.
+
+2007-07-18  Richard Hughes  <richard@hughsie.com>
+
 	* applets/inhibit/inhibit-applet.c:
 	* applets/inhibit/inhibit-applet.h:
 	Cosmetic changes.
