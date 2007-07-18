@@ -218,6 +218,7 @@ main (int argc, char *argv[])
 
 	gpm_debug ("GNOME %s %s", GPM_NAME, VERSION);
 
+if (0) {
 	/* check dbus connections, exit if not valid */
 	system_connection = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (error) {
@@ -228,6 +229,7 @@ main (int argc, char *argv[])
 			   "It is <b>strongly recommended</b> you reboot "
 			   "your computer after starting this service.");
 	}
+}
 
 	session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
 	if (error) {
