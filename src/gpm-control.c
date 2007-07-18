@@ -302,7 +302,6 @@ gpm_control_reboot (GpmControl *control,
 		    GError    **error)
 {
 	gboolean allowed;
-	gboolean ret;
 	gboolean save_session;
 
 	gpm_control_allowed_reboot (control, &allowed, error);
