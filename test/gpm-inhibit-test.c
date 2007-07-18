@@ -28,9 +28,9 @@
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
 
-#define	GPM_DBUS_SERVICE		"org.gnome.PowerManager"
-#define	GPM_DBUS_INHIBIT_PATH		"/org/gnome/PowerManager/Inhibit"
-#define	GPM_DBUS_INHIBIT_INTERFACE	"org.gnome.PowerManager.Inhibit"
+#define	GPM_DBUS_SERVICE		"org.freedesktop.PowerManagement"
+#define	GPM_DBUS_INHIBIT_PATH		"/org/freedesktop/PowerManagement/Inhibit"
+#define	GPM_DBUS_INHIBIT_INTERFACE	"org.freedesktop.PowerManagement.Inhibit"
 
 /* imagine this in a GObject private struct... */
 guint appcookie = -1;

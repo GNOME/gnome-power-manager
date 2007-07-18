@@ -980,8 +980,8 @@ killall -HUP gconfd-2
 import dbus
 import time
 bus = dbus.Bus(dbus.Bus.TYPE_SESSION)
-devobj = bus.get_object('org.gnome.PowerManager', '/org/gnome/PowerManager')
-dev = dbus.Interface(devobj, "org.gnome.PowerManager")
+devobj = bus.get_object('org.freedesktop.PowerManagement', '/org/freedesktop/PowerManagement/Inhibit')
+dev = dbus.Interface(devobj, "org.freedesktop.PowerManagement.Inhibit")
 cookie = dev.Inhibit('Nautilus', 'Copying files')
 time.sleep(100)
 dev.UnInhibit(cookie)
@@ -1135,12 +1135,12 @@ Sleep				0.1W	NC
     </para>
 <programlisting>
 dbus-send --session \
-	  --dest=org.gnome.PowerManager \
+	  --dest=org.freedesktop.PowerManagement \
 	  --type=method_call \
 	  --print-reply \
 	  --reply-timeout=2000 \
-	  /org/gnome/PowerManager \
-	  org.gnome.PowerManager.SetDpmsMode \
+	  /org/freedesktop/PowerManagement \
+	  org.freedesktop.PowerManagement.SetDpmsMode \
 	  string:suspend
 </programlisting>
     <para>
@@ -1148,12 +1148,12 @@ dbus-send --session \
     </para>
 <programlisting>
 dbus-send --session \
-	  --dest=org.gnome.PowerManager \
+	  --dest=org.freedesktop.PowerManagement \
 	  --type=method_call \
 	  --print-reply \
 	  --reply-timeout=2000 \
-	  /org/gnome/PowerManager \
-	  org.gnome.PowerManager.Hibernate
+	  /org/freedesktop/PowerManagement \
+	  org.freedesktop.PowerManagement.Hibernate
 </programlisting>
     <para>
       See the developers guide file in CVS for the full list.

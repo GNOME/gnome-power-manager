@@ -49,7 +49,7 @@ static void gpm_exit (GpmManager *manager);
  * @connection: What we want to register to
  * @object: The GObject we want to register
  *
- * Register org.gnome.PowerManager on the session bus.
+ * Register org.freedesktop.PowerManagement on the session bus.
  * This function MUST be called before DBUS service will work.
  *
  * Return value: success

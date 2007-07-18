@@ -15,10 +15,10 @@
 #$1 = method name
 execute_dbus_method ()
 {
-	dbus-send --session --dest=org.gnome.PowerManager		\
+	dbus-send --session --dest=org.freedesktop.PowerManagement		\
 		  --type=method_call --print-reply --reply-timeout=2000	\
-		  /org/gnome/PowerManager/Control 			\
-		  org.gnome.PowerManager.Control.$1
+		  /org/freedesktop/PowerManagement 			\
+		  org.freedesktop.PowerManagement.$1
 	if [ $? -eq 0 ]; then
 		echo "Failed"
 	fi 

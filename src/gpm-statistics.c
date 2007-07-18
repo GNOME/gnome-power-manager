@@ -147,7 +147,7 @@ main (int argc, char **argv)
 	gpm_debug ("Using GtkUnique support.");
 
 	/* Arrr! Until we depend on gtk+2 2.12 we can't just use gtk_unique_app_new */
-	uniqueapp = gtk_unique_app_new_with_id ("org.gnome.PowerManager.Statistics", startup_id);
+	uniqueapp = gtk_unique_app_new_with_id ("org.freedesktop.PowerManagement.Statistics", startup_id);
 	/* check to see if the user has another prefs window open */
 	if (gtk_unique_app_is_running (uniqueapp)) {
 		gpm_warning ("You have another instance running. "
