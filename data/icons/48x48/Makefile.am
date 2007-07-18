@@ -14,6 +14,7 @@ Data_DATA =				\
 	gpm-hibernate.png		\
 	gpm-suspend.png			\
 	gpm-inhibit.png			\
+	gpm-inhibit-invalid.png		\
 	gpm-statistics.png		\
 	gpm-keyboard-000.png		\
 	gpm-keyboard-030.png		\

@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*-
  *
- * GNOME Power Manager / Brightness Applet
+ * GNOME Power Manager Brightness Applet
  * Copyright (C) 2006 Benjamin Canou <bookeldor@gmail.com>
  *
  * Licensed under the GNU General Public License Version 2

@@ -1,3 +1,23 @@
+2007-07-18  Richard Hughes  <richard@hughsie.com>
+
+	* applets/inhibit/inhibit-applet.c:
+	* applets/inhibit/inhibit-applet.h:
+	Cosmetic changes.
+
+	* applets/brightness/brightness-applet.c:
+	* applets/brightness/brightness-applet.h:
+	Watch the session bus for g-p-m, which prevents a race at startup.
+
+	* applets/inhibit/Makefile.am:
+	* data/icons/16x16/Makefile.am:
+	* data/icons/22x22/Makefile.am:
+	* data/icons/24x24/Makefile.am:
+	* data/icons/48x48/Makefile.am:
+	* data/icons/scalable/Makefile.am:
+	* data/icons/scalable/gpm-inhibit-invalid.svg:
+	* docs/icon-naming.txt:
+	Add another icon to signify the inhibit applet is unable to connect.
+
 2007-07-16  Richard Hughes  <richard@hughsie.com>
 
 	* docs/icon-naming.txt:

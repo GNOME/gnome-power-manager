@@ -31,7 +31,7 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
-#include <libdbus-proxy.h>
+#include <libdbus-watch.h>
 
 #include "inhibit-applet.h"
 #include "../src/gpm-common.h"
@@ -41,18 +41,19 @@ static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);
 
 G_DEFINE_TYPE (GpmInhibitApplet, gpm_inhibit_applet, PANEL_TYPE_APPLET)
 
-static void      retrieve_icon                    (GpmInhibitApplet *applet);
-static void      check_size                       (GpmInhibitApplet *applet);
-static gboolean  draw_applet_cb                   (GpmInhibitApplet *applet);
-static void      update_tooltip                   (GpmInhibitApplet *applet);
-static gboolean  click_cb                         (GpmInhibitApplet *applet, GdkEventButton *event);
-static void      dialog_about_cb                  (BonoboUIComponent *uic, gpointer data, const gchar *verbname);
-static gboolean  bonobo_cb                        (PanelApplet *_applet, const gchar *iid, gpointer data);
-static void      destroy_cb                       (GtkObject *object);
+static void	gpm_applet_get_icon		(GpmInhibitApplet *applet);
+static void	gpm_applet_check_size		(GpmInhibitApplet *applet);
+static gboolean	gpm_applet_draw_cb		(GpmInhibitApplet *applet);
+static void	gpm_applet_update_tooltip	(GpmInhibitApplet *applet);
+static gboolean	gpm_applet_click_cb		(GpmInhibitApplet *applet, GdkEventButton *event);
+static void	gpm_applet_dialog_about_cb	(BonoboUIComponent *uic, gpointer data, const gchar *verbname);
+static gboolean	gpm_applet_bonobo_cb		(PanelApplet *_applet, const gchar *iid, gpointer data);
+static void	gpm_applet_destroy_cb		(GtkObject *object);
 
 #define GPM_INHIBIT_APPLET_OAFID		"OAFIID:GNOME_InhibitApplet"
 #define GPM_INHIBIT_APPLET_FACTORY_OAFID	"OAFIID:GNOME_InhibitApplet_Factory"
 #define GPM_INHIBIT_APPLET_ICON_INHIBIT		"gpm-inhibit"
+#define GPM_INHIBIT_APPLET_ICON_INVALID		"gpm-inhibit-invalid"
 #define GPM_INHIBIT_APPLET_ICON_UNINHIBIT	"gpm-hibernate"
 #define GPM_INHIBIT_APPLET_NAME			_("Power Manager Inhibit Applet")
 #define GPM_INHIBIT_APPLET_DESC			_("Allows user to inhibit automatic power saving.")
@@ -63,23 +64,21 @@ static void      destroy_cb                       (GtkObject *object);
 /** cookie is returned as an unsigned integer */
 static gboolean
 gpm_applet_inhibit (GpmInhibitApplet *applet,
-			  const gchar     *appname,
-		          const gchar     *reason,
-		          guint           *cookie)
+		    const gchar     *appname,
+		    const gchar     *reason,
+		    guint           *cookie)
 {
 	GError  *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 
 	g_return_val_if_fail (cookie != NULL, FALSE);
 
-	proxy = dbus_proxy_get_proxy (applet->gproxy);
-	if (proxy == NULL) {
-		g_warning ("not connected");
+	if (applet->proxy == NULL) {
+		printf ("WARNING: not connected\n");
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "Inhibit", &error,
+	ret = dbus_g_proxy_call (applet->proxy, "Inhibit", &error,
 				 G_TYPE_STRING, appname,
 				 G_TYPE_STRING, reason,
 				 G_TYPE_INVALID,
@@ -100,19 +99,17 @@ gpm_applet_inhibit (GpmInhibitApplet *applet,
 
 static gboolean
 gpm_applet_uninhibit (GpmInhibitApplet *applet,
-			    guint            cookie)
+		      guint            cookie)
 {
 	GError *error = NULL;
 	gboolean ret;
-	DBusGProxy *proxy;
 
-	proxy = dbus_proxy_get_proxy (applet->gproxy);
-	if (proxy == NULL) {
-		g_warning ("not connected");
+	if (applet->proxy == NULL) {
+		printf ("WARNING: not connected");
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "UnInhibit", &error,
+	ret = dbus_g_proxy_call (applet->proxy, "UnInhibit", &error,
 				 G_TYPE_UINT, cookie,
 				 G_TYPE_INVALID,
 				 G_TYPE_INVALID);
@@ -160,13 +157,13 @@ gpm_applet_has_inhibit (GpmInhibitApplet *applet,
 #endif
 
 /**
- * retrieve_icon:
+ * gpm_applet_get_icon:
  * @applet: Inhibit applet instance
  *
  * retrieve an icon from stock with a size adapted to panel
  **/
 static void
-retrieve_icon (GpmInhibitApplet *applet)
+gpm_applet_get_icon (GpmInhibitApplet *applet)
 {
 	const gchar *icon;
 
@@ -181,7 +178,9 @@ retrieve_icon (GpmInhibitApplet *applet)
 	}
 
 	/* get icon */
-	if (applet->cookie > 0) {
+	if (applet->proxy == NULL) {
+		icon = GPM_INHIBIT_APPLET_ICON_INVALID;
+	} else if (applet->cookie > 0) {
 		icon = GPM_INHIBIT_APPLET_ICON_INHIBIT;
 	} else {
 		icon = GPM_INHIBIT_APPLET_ICON_UNINHIBIT;
@@ -198,116 +197,132 @@ retrieve_icon (GpmInhibitApplet *applet)
 }
 
 /**
- * check_size:
+ * gpm_applet_check_size:
  * @applet: Inhibit applet instance
  *
  * check if panel size has changed and applet adapt size
  **/
 static void
-check_size (GpmInhibitApplet *applet)
+gpm_applet_check_size (GpmInhibitApplet *applet)
 {
 	/* we don't use the size function here, but the yet allocated size because the
 	   size value is false (kind of rounded) */
 	if (PANEL_APPLET_VERTICAL(panel_applet_get_orient (PANEL_APPLET (applet)))) {
 		if (applet->size != GTK_WIDGET(applet)->allocation.width) {
 			applet->size = GTK_WIDGET(applet)->allocation.width;
-			retrieve_icon (applet);
+			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->size, applet->icon_height + 2);
 		}
 	} else {
 		if (applet->size != GTK_WIDGET(applet)->allocation.height) {
 			applet->size = GTK_WIDGET(applet)->allocation.height;
-			retrieve_icon (applet);
+			gpm_applet_get_icon (applet);
 			gtk_widget_set_size_request (GTK_WIDGET(applet), applet->icon_width + 2, applet->size);
 		}
 	}
 }
 
 /**
- * draw_applet_cb:
+ * gpm_applet_draw_cb:
  * @applet: Inhibit applet instance
  *
  * draws applet content (background + icon)
  **/
 static gboolean
-draw_applet_cb (GpmInhibitApplet *applet)
+gpm_applet_draw_cb (GpmInhibitApplet *applet)
 {
 	gint w, h, bg_type;
-
 	GdkColor color;
-	GdkPixmap *backbuf, *background;
-	GdkGC *gc_backbuf, *gc_widget;
+	GdkGC *gc;
+	GdkPixmap *background;
 
 	if (GTK_WIDGET(applet)->window == NULL) {
 		return FALSE;
 	}
 
 	/* retrieve applet size */
-	check_size (applet);
+	gpm_applet_get_icon (applet);
+	gpm_applet_check_size (applet);
 	if (applet->size <= 2) {
+		return FALSE;
+	}
+
+	/* if no icon, then don't try to display */
+	if (applet->icon == NULL) {
 		return FALSE;
 	}
 
 	w = GTK_WIDGET(applet)->allocation.width;
 	h = GTK_WIDGET(applet)->allocation.height;
 
-	/* draw background */
-	backbuf = gdk_pixmap_new (GTK_WIDGET(applet)->window, w, h, -1);
-	gc_backbuf = gdk_gc_new (backbuf);
+	gc = gdk_gc_new (GTK_WIDGET(applet)->window);
 
+	/* draw pixmap background */
 	bg_type = panel_applet_get_background (PANEL_APPLET (applet), &color, &background);
 	if (bg_type == PANEL_PIXMAP_BACKGROUND) {
 		/* fill with given background pixmap */
-		gdk_draw_drawable (backbuf, gc_backbuf, background, 0, 0, 0, 0, w, h);
-	} else {
-		/* fill with appropriate color */
-		color = gtk_rc_get_style (GTK_WIDGET(applet))->bg[GTK_STATE_NORMAL];
-		gdk_gc_set_rgb_fg_color (gc_backbuf,&color);
-		gdk_gc_set_fill (gc_backbuf,GDK_SOLID);
-		gdk_draw_rectangle (backbuf, gc_backbuf, TRUE, 0, 0, w, h);
+		gdk_draw_drawable (GTK_WIDGET(applet)->window, gc, background, 0, 0, 0, 0, w, h);
+	}
+	
+	/* draw color background */
+	if (bg_type == PANEL_COLOR_BACKGROUND) {
+		gdk_gc_set_rgb_fg_color (gc,&color);
+		gdk_gc_set_fill (gc,GDK_SOLID);
+		gdk_draw_rectangle (GTK_WIDGET(applet)->window, gc, TRUE, 0, 0, w, h);
 	}
 
 	/* draw icon at center */
-	gdk_draw_pixbuf (backbuf, gc_backbuf, applet->icon,
+	gdk_draw_pixbuf (GTK_WIDGET(applet)->window, gc, applet->icon,
 			 0, 0, (w - applet->icon_width)/2, (h - applet->icon_height)/2,
 			 applet->icon_width, applet->icon_height,
 			 GDK_RGB_DITHER_NONE, 0, 0);
-
-	/* blit back buffer to applet */
-	gc_widget = gdk_gc_new (GTK_WIDGET(applet)->window);
-	gdk_draw_drawable (GTK_WIDGET(applet)->window,
-			   gc_widget, backbuf,
-			   0, 0, 0, 0, w, h);
 
 	return TRUE;
 }
 
 /**
- * update_tooltip:
+ * gpm_applet_change_background_cb:
+ *
+ * Enqueues an expose event (don't know why it's not the default behaviour)
+ **/
+static void
+gpm_applet_change_background_cb (GpmInhibitApplet *applet,
+				 PanelAppletBackgroundType arg1,
+				 GdkColor *arg2, GdkPixmap *arg3, gpointer data)
+{
+	gtk_widget_queue_draw (GTK_WIDGET (applet));
+}
+
+/**
+ * gpm_applet_update_tooltip:
  * @applet: Inhibit applet instance
  *
  * sets tooltip's content (percentage or disabled)
  **/
 static void
-update_tooltip (GpmInhibitApplet *applet)
+gpm_applet_update_tooltip (GpmInhibitApplet *applet)
 {
 	static gchar buf[101];
-	if (applet->cookie > 0) {
-		snprintf (buf, 100, _("Automatic sleep inhibited"));
+	if (applet->proxy == NULL) {
+		snprintf (buf, 100, _("Cannot connect to gnome-power-manager"));
 	} else {
-		snprintf (buf, 100, _("Automatic sleep enabled"));
+		if (applet->cookie > 0) {
+			snprintf (buf, 100, _("Automatic sleep inhibited"));
+		} else {
+			snprintf (buf, 100, _("Automatic sleep enabled"));
+		}
 	}
 	gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
 }
 
 /**
- * click_cb:
+ * gpm_applet_click_cb:
  * @applet: Inhibit applet instance
  *
  * pops and unpops
  **/
 static gboolean
-click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
+gpm_applet_click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 {
 	/* react only to left mouse button */
 	if (event->button != 1) {
@@ -326,20 +341,20 @@ click_cb (GpmInhibitApplet *applet, GdkEventButton *event)
 					  &(applet->cookie));
 	}
 	/* update icon */
-	retrieve_icon (applet);
-	update_tooltip (applet);
-	draw_applet_cb (applet);
+	gpm_applet_get_icon (applet);
+	gpm_applet_update_tooltip (applet);
+	gpm_applet_draw_cb (applet);
 
 	return TRUE;
 }
 
 /**
- * dialog_about_cb:
+ * gpm_applet_dialog_about_cb:
  *
  * displays about dialog
  **/
 static void
-dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
+gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GtkAboutDialog *about;
 
@@ -399,12 +414,12 @@ dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 }
 
 /**
- * help_cb:
+ * gpm_applet_help_cb:
  *
  * open gpm help
  **/
 static void
-help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
+gpm_applet_help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GError *error = NULL;
 	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(data);
@@ -427,16 +442,16 @@ help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 }
 
 /**
- * destroy_cb:
+ * gpm_applet_destroy_cb:
  * @object: Class instance to destroy
  **/
 static void
-destroy_cb (GtkObject *object)
+gpm_applet_destroy_cb (GtkObject *object)
 {
 	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(object);
 
-	if (applet->gproxy != NULL) {
-		g_object_unref (applet->gproxy);
+	if (applet->watch != NULL) {
+		g_object_unref (applet->watch);
 	}
 	if (applet->icon != NULL) {
 		gdk_pixbuf_unref (applet->icon);
@@ -453,6 +468,82 @@ gpm_inhibit_applet_class_init (GpmInhibitAppletClass *class)
 	/* nothing to do here */
 }
 
+
+/**
+ * gpm_inhibit_applet_dbus_connect:
+ **/
+gboolean
+gpm_inhibit_applet_dbus_connect (GpmInhibitApplet *applet)
+{
+	GError *error = NULL;
+
+	if (applet->connection == NULL) {
+		printf ("DEBUG: get connection\n");
+		g_clear_error (&error);
+		applet->connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+		if (error != NULL) {
+			printf ("WARNING: Could not connect to DBUS daemon: %s", error->message);
+			g_error_free (error);
+			applet->connection = NULL;
+			return FALSE;
+		}
+	}
+	if (applet->proxy == NULL) {
+		printf ("DEBUG: get proxy\n");
+		g_clear_error (&error);
+		applet->proxy = dbus_g_proxy_new_for_name_owner (applet->connection,
+							 GPM_DBUS_SERVICE,
+							 GPM_DBUS_PATH_INHIBIT,
+							 GPM_DBUS_INTERFACE_INHIBIT,
+							 &error);
+		if (error != NULL) {
+			printf ("WARNING: Cannot connect, maybe the daemon is not running: %s\n", error->message);
+			g_error_free (error);
+			applet->proxy = NULL;
+			return FALSE;
+		}
+	}
+	return TRUE;
+}
+
+/**
+ * gpm_inhibit_applet_dbus_disconnect:
+ **/
+gboolean
+gpm_inhibit_applet_dbus_disconnect (GpmInhibitApplet *applet)
+{
+	if (applet->proxy != NULL) {
+		printf ("DEBUG: removing proxy\n");
+		g_object_unref (applet->proxy);
+		applet->proxy = NULL;
+	}
+	return TRUE;
+}
+
+/**
+ * watch_connection_cb:
+ * @proxy: The dbus raw proxy
+ * @status: The status of the service, where TRUE is connected
+ * @screensaver: This class instance
+ **/
+static void
+watch_connection_cb (DbusWatch           *watch,
+		     gboolean	          status,
+		     GpmInhibitApplet *applet)
+{
+	if (status) {
+		gpm_inhibit_applet_dbus_connect (applet);
+		gpm_applet_update_tooltip (applet);
+		gpm_applet_get_icon (applet);
+		gpm_applet_draw_cb (applet);
+	} else {
+		gpm_inhibit_applet_dbus_disconnect (applet);
+		gpm_applet_update_tooltip (applet);
+		gpm_applet_get_icon (applet);
+		gpm_applet_draw_cb (applet);
+	}
+}
+
 /**
  * gpm_inhibit_applet_init:
  * @applet: Inhibit applet instance
@@ -464,16 +555,15 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->size = 0;
 	applet->icon = NULL;
 	applet->cookie = 0;
+	applet->connection = NULL;
+	applet->proxy = NULL;
 	applet->tooltip = gtk_tooltips_new ();
 
-	applet->gproxy = dbus_proxy_new ();
-	dbus_proxy_assign (applet->gproxy,
-				   DBUS_PROXY_SESSION,
-				   GPM_DBUS_SERVICE,
-				   GPM_DBUS_PATH_INHIBIT,
-				   GPM_DBUS_INTERFACE_INHIBIT);
-
-	update_tooltip (applet);
+	applet->watch = dbus_watch_new ();
+	g_signal_connect (applet->watch, "connection-changed",
+			  G_CALLBACK (watch_connection_cb), applet);
+	dbus_watch_assign (applet->watch, DBUS_WATCH_SESSION, GPM_DBUS_SERVICE);
+	gpm_inhibit_applet_dbus_connect (applet);
 
 	/* prepare */
 	panel_applet_set_flags (PANEL_APPLET (applet), PANEL_APPLET_EXPAND_MINOR);
@@ -482,41 +572,46 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	gtk_widget_show_all (GTK_WIDGET(applet));
 
 	/* set appropriate size and load icon accordingly */
-	check_size (applet);
-	draw_applet_cb (applet);
+	gpm_applet_draw_cb (applet);
 
 	/* connect */
 	g_signal_connect (G_OBJECT(applet), "button-press-event",
-			  G_CALLBACK(click_cb), NULL);
+			  G_CALLBACK(gpm_applet_click_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "expose-event",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_draw_cb), NULL);
+
+	/* We use g_signal_connect_after because letting the panel draw
+	 * the background is the only way to have the correct
+	 * background when a theme defines a background picture. */
+	g_signal_connect_after (G_OBJECT(applet), "expose-event",
+				G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-background",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_change_background_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "change-orient",
-			  G_CALLBACK(draw_applet_cb), NULL);
+			  G_CALLBACK(gpm_applet_draw_cb), NULL);
 
 	g_signal_connect (G_OBJECT(applet), "destroy",
-			  G_CALLBACK(destroy_cb), NULL);
+			  G_CALLBACK(gpm_applet_destroy_cb), NULL);
 }
 
 /**
- * bonobo_cb:
+ * gpm_applet_bonobo_cb:
  * @_applet: GpmInhibitApplet instance created by the bonobo factory
  * @iid: Bonobo id
  *
  * the function called by bonobo factory after creation
  **/
 static gboolean
-bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
+gpm_applet_bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
 {
 	GpmInhibitApplet *applet = GPM_INHIBIT_APPLET(_applet);
 
 	static BonoboUIVerb verbs [] = {
-		BONOBO_UI_VERB ("About", dialog_about_cb),
-		BONOBO_UI_VERB ("Help", help_cb),
+		BONOBO_UI_VERB ("About", gpm_applet_dialog_about_cb),
+		BONOBO_UI_VERB ("Help", gpm_applet_help_cb),
 		BONOBO_UI_VERB_END
 	};
 
@@ -528,7 +623,7 @@ bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
 					   DATADIR,
 					   "GNOME_InhibitApplet.xml",
 					   NULL, verbs, applet);
-	draw_applet_cb (applet);
+	gpm_applet_draw_cb (applet);
 	return TRUE;
 }
 
@@ -543,4 +638,4 @@ PANEL_APPLET_BONOBO_FACTORY
  /* the applet name and version */
  "InhibitApplet", VERSION,
  /* our callback (with no user data) */
- bonobo_cb, NULL);
+ gpm_applet_bonobo_cb, NULL);

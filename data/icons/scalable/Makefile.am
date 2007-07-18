@@ -14,6 +14,7 @@ Data_DATA =				\
 	gpm-hibernate.svg		\
 	gpm-suspend.svg			\
 	gpm-inhibit.svg			\
+	gpm-inhibit-invalid.svg		\
 	gpm-statistics.svg		\
 	gpm-keyboard-000.svg		\
 	gpm-keyboard-030.svg		\

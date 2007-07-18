@@ -749,12 +749,12 @@ gpm_applet_dialog_about_cb (BonoboUIComponent *uic, gpointer data, const gchar *
 }
 
 /**
- * help_cb:
+ * gpm_applet_help_cb:
  *
  * open gpm help
  **/
 static void
-help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
+gpm_applet_help_cb (BonoboUIComponent *uic, gpointer data, const gchar *verbname)
 {
 	GError *error = NULL;
 	GpmBrightnessApplet *applet = GPM_BRIGHTNESS_APPLET(data);
@@ -976,7 +976,7 @@ gpm_applet_bonobo_cb (PanelApplet *_applet, const gchar *iid, gpointer data)
 
 	static BonoboUIVerb verbs [] = {
 		BONOBO_UI_VERB ("About", gpm_applet_dialog_about_cb),
-		BONOBO_UI_VERB ("Help", help_cb),
+		BONOBO_UI_VERB ("Help", gpm_applet_help_cb),
 		BONOBO_UI_VERB_END
 	};
 
