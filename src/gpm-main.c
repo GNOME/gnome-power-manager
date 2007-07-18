@@ -252,7 +252,7 @@ if (0) {
 	manager = gpm_manager_new ();
 
 	if (!gpm_object_register (session_connection, G_OBJECT (manager))) {
-		gpm_warning ("%s is already running in this session.", GPM_NAME);
+		gpm_error ("%s is already running in this session.", GPM_NAME);
 		return 0;
 	}
 
