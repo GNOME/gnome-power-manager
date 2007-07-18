@@ -290,6 +290,55 @@ gpm_profile_get_time (GpmProfile *profile, guint percentage, gboolean discharge)
 	return time;
 }
 
+/**
+ * gpm_profile_get_nonzero_accuracy_percent:
+ *
+ * @profile: This class
+ */
+static float
+gpm_profile_get_nonzero_accuracy_percent (GArray *array_data, GArray *array_accuracy)
+{
+	/* find the average "non-zero accuracy" data */
+	guint i;
+	guint length;
+	gfloat data;
+	gfloat accuracy;
+	guint length_average = 0;
+	gfloat average = 0;
+
+	length = array_data->len;
+	for (i=0; i<length; i++) {
+		data = g_array_index (array_data, gfloat, i);
+		accuracy = g_array_index (array_accuracy, gfloat, i);
+		if (accuracy > 0) {
+			average += data;
+			length_average++;
+		}
+	}
+	return average / (gfloat) length_average;
+}
+
+/**
+ * gpm_profile_set_zero_accuracy_average:
+ *
+ * @profile: This class
+ */
+static void
+gpm_profile_set_zero_accuracy_average (GArray *array_data, GArray *array_accuracy, gfloat average)
+{
+	/* find the average "non-zero accuracy" data */
+	guint i;
+	guint length;
+	gfloat accuracy;
+
+	length = array_data->len;
+	for (i=0; i<length; i++) {
+		accuracy = g_array_index (array_accuracy, gfloat, i);
+		if (accuracy == 0) {
+			g_array_index (array_data, gfloat, i) = average;
+		}
+	}
+}
 
 /**
  * gpm_profile_save_percentage:
@@ -332,6 +381,16 @@ gpm_profile_save_percentage (GpmProfile *profile,
 
 	/* save new data */
 	gpm_array_float_set (array_data, percentage, data);
+
+if (0) {
+	/* find the data average of the non zero accuracy points */
+	float average;
+	average = gpm_profile_get_nonzero_accuracy_percent (array_data, array_accuracy);
+	gpm_debug ("estimated average = %f", average);
+
+	/* set the zero accuracy data to the average */
+	gpm_profile_set_zero_accuracy_average (array_data, array_accuracy, average);
+}
 
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
 	accuracy += measurement_accuracy / 5;

@@ -53,10 +53,14 @@ gboolean	 hal_gpower_has_support			(HalGPower	*power);
 gboolean	 hal_gpower_can_suspend			(HalGPower	*power);
 gboolean	 hal_gpower_can_hibernate		(HalGPower	*power);
 gboolean	 hal_gpower_suspend			(HalGPower	*power,
-							 guint		 wakeup);
-gboolean	 hal_gpower_hibernate			(HalGPower	*power);
-gboolean	 hal_gpower_shutdown			(HalGPower	*power);
-gboolean	 hal_gpower_reboot			(HalGPower	*power);
+							 guint		 wakeup,
+							 GError		**error);
+gboolean	 hal_gpower_hibernate			(HalGPower	*power,
+							 GError		**error);
+gboolean	 hal_gpower_shutdown			(HalGPower	*power,
+							 GError		**error);
+gboolean	 hal_gpower_reboot			(HalGPower	*power,
+							 GError		**error);
 gboolean	 hal_gpower_has_suspend_error		(HalGPower	*power,
 							 gboolean	*state);
 gboolean	 hal_gpower_has_hibernate_error		(HalGPower	*power,

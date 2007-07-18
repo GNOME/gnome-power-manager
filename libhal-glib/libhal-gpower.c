@@ -230,10 +230,9 @@ hal_gpower_filter_error (GError **error)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Suspend ()
  **/
 gboolean
-hal_gpower_suspend (HalGPower *power, guint wakeup)
+hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 {
 	guint retval = 0;
-	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -245,18 +244,14 @@ hal_gpower_suspend (HalGPower *power, guint wakeup)
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, "Suspend", &error,
+	ret = dbus_g_proxy_call (proxy, "Suspend", error,
 				 G_TYPE_INT, wakeup,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (hal_gpower_filter_error (&error)) {
+	if (hal_gpower_filter_error (error)) {
 		return TRUE;
-	}
-	if (error) {
-		g_warning ("ERROR: %s", error->message);
-		g_error_free (error);
 	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
@@ -277,10 +272,9 @@ hal_gpower_suspend (HalGPower *power, guint wakeup)
  * with no arguments.
  **/
 static gboolean
-hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
+hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error)
 {
 	guint retval = 0;
-	GError *error = NULL;
 	gboolean ret;
 	DBusGProxy *proxy;
 
@@ -297,17 +291,13 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
 		return FALSE;
 	}
 
-	ret = dbus_g_proxy_call (proxy, method, &error,
+	ret = dbus_g_proxy_call (proxy, method, error,
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (hal_gpower_filter_error (&error)) {
+	if (hal_gpower_filter_error (error)) {
 		return TRUE;
-	}
-	if (error) {
-		g_warning ("ERROR: %s", error->message);
-		g_error_free (error);
 	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
@@ -326,10 +316,10 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Hibernate ()
  **/
 gboolean
-hal_gpower_hibernate (HalGPower *power)
+hal_gpower_hibernate (HalGPower *power, GError **error)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	return hal_gpower_pm_method_void (power, "Hibernate");
+	return hal_gpower_pm_method_void (power, "Hibernate", error);
 }
 
 /**
@@ -340,10 +330,10 @@ hal_gpower_hibernate (HalGPower *power)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Shutdown ()
  **/
 gboolean
-hal_gpower_shutdown (HalGPower *power)
+hal_gpower_shutdown (HalGPower *power, GError **error)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	return hal_gpower_pm_method_void (power, "Shutdown");
+	return hal_gpower_pm_method_void (power, "Shutdown", error);
 }
 
 /**
@@ -355,10 +345,10 @@ hal_gpower_shutdown (HalGPower *power)
  * Uses org.freedesktop.Hal.Device.SystemPowerManagement.Reboot ()
  **/
 gboolean
-hal_gpower_reboot (HalGPower *power)
+hal_gpower_reboot (HalGPower *power, GError **error)
 {
 	g_return_val_if_fail (LIBHAL_IS_GPOWER (power), FALSE);
-	return hal_gpower_pm_method_void (power, "Reboot");
+	return hal_gpower_pm_method_void (power, "Reboot", error);
 }
 
 /**

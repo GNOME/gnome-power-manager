@@ -1,5 +1,20 @@
 2007-07-18  Richard Hughes  <richard@hughsie.com>
 
+	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
+	(hal_gpower_pm_method_void), (hal_gpower_hibernate),
+	(hal_gpower_shutdown), (hal_gpower_reboot):
+	* libhal-glib/libhal-gpower.h:
+	* src/gpm-control.c: (gpm_control_shutdown), (gpm_control_reboot),
+	(gpm_control_suspend), (gpm_control_hibernate):
+	Propogate the error from hal to the session DBUS.
+
+	* src/gpm-profile.c: (gpm_profile_get_nonzero_accuracy_percent),
+	(gpm_profile_set_zero_accuracy_average),
+	(gpm_profile_save_percentage):
+	Try setting profile code from average. Nothing works yet.
+
+2007-07-18  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell-array.c: (control_sleep_action_cb),
 	(gpm_cell_array_init), (gpm_cell_array_finalize):
 	Rescan the cell array when we resume as the primary battery may have

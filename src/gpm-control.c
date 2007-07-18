@@ -285,7 +285,7 @@ gpm_control_shutdown (GpmControl *control,
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
-	hal_gpower_shutdown (control->priv->hal_power);
+	hal_gpower_shutdown (control->priv->hal_power, error);
 	ret = TRUE;
 
 	return ret;
@@ -324,10 +324,7 @@ gpm_control_reboot (GpmControl *control,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
 
-	hal_gpower_reboot (control->priv->hal_power);
-	ret = TRUE;
-
-	return ret;
+	return hal_gpower_reboot (control->priv->hal_power, error);
 }
 
 /**
@@ -408,7 +405,7 @@ gpm_control_suspend (GpmControl *control,
 	/* Do the suspend */
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
-	ret = hal_gpower_suspend (control->priv->hal_power, 0);
+	ret = hal_gpower_suspend (control->priv->hal_power, 0, error);
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
@@ -480,7 +477,7 @@ gpm_control_hibernate (GpmControl *control,
 
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
-	ret = hal_gpower_hibernate (control->priv->hal_power);
+	ret = hal_gpower_hibernate (control->priv->hal_power, error);
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
