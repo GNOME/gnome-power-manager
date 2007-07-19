@@ -71,6 +71,16 @@ gfloat			 gpm_profile_get_accuracy_average	(GpmProfile	*profile,
 guint			 gpm_profile_get_time			(GpmProfile	*profile,
 								 guint		 percentage,
 								 gboolean	 discharging);
+void			 gpm_profile_print			(GpmProfile	*profile);
+
+/* ONLY USED FOR THE TEST SUITE */
+void			 gpm_test_profile_save_percentage	(GpmProfile	*profile,
+								 guint		 percentage,
+								 guint		 time,
+								 guint		 measurement_accuracy);
+void			 gpm_profile_test_force_discharging	(GpmProfile	*profile,
+								 gboolean	 is_discharging);
+
 
 G_END_DECLS
 

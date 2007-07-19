@@ -32,7 +32,7 @@ gpm_st_profile (GpmSelfTest *test)
 	guint i;
 	guint value;
 
-	if (gpm_st_start (test, "GpmProfile", CLASS_MANUAL) == FALSE) {
+	if (gpm_st_start (test, "GpmProfile", CLASS_AUTO) == FALSE) {
 		return;
 	}
 
@@ -108,14 +108,14 @@ gpm_st_profile (GpmSelfTest *test)
 		gpm_st_failed (test, "got %i", value);
 	}
 
+	/************************************************************
+	 **                TYPICAL DISCHARGE                       **
+	 ************************************************************/
+
 	/************************************************************/
-	gpm_st_title (test, "register discharging");
-	ret = gpm_profile_register_charging (profile, FALSE);
-	if (ret == TRUE) {
-		gpm_st_success (test, "set discharging");
-	} else {
-		gpm_st_failed (test, "could not set discharging");
-	}
+	gpm_st_title (test, "force discharging");
+	gpm_profile_test_force_discharging (profile, TRUE);
+	gpm_st_success (test, NULL);
 
 	/************************************************************/
 	gpm_st_title (test, "ignore first point");
@@ -125,6 +125,37 @@ gpm_st_profile (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "ignored second");
 	}
+
+	/************************************************************/
+	gpm_st_title (test, "make up discharging dataset (perfect accuracy)");
+	for (i=98; i>0; i--) {
+		gpm_test_profile_save_percentage (profile, i, 120, 100);
+	}
+	gpm_st_success (test, "put dataset");
+
+	gpm_profile_print (profile);
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a non-zero accuracy when a complete dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value != 0) {
+		gpm_st_success (test, "got non zero %i", value);
+	} else {
+		gpm_st_failed (test, "got %i", value);
+	}
+
+	goto unref;
+
+#if 0
+	/************************************************************/
+	gpm_st_title (test, "ignore first point");
+	ret = gpm_profile_register_percentage (profile, 99);
+	if (ret == FALSE) {
+		gpm_st_success (test, "ignored first");
+	} else {
+		gpm_st_failed (test, "ignored second");
+	}
+#endif
 
 	/************************************************************/
 	gpm_st_title (test, "make up discharging dataset");
@@ -165,6 +196,7 @@ gpm_st_profile (GpmSelfTest *test)
 		gpm_st_failed (test, "got %i", value);
 	}
 
+unref:
 	/************************************************************/
 	gpm_profile_delete_data (profile, FALSE);
 	gpm_profile_delete_data (profile, TRUE);

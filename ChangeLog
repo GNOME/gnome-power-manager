@@ -1,5 +1,37 @@
 2007-07-19  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-profile.c: (gpm_profile_print),
+	(gpm_profile_get_data_time_percent),
+	(gpm_profile_set_zero_accuracy_average),
+	(gpm_profile_set_average_no_accuracy),
+	(gpm_profile_save_percentage), (gpm_test_profile_save_percentage),
+	(gpm_profile_test_force_discharging):
+	* src/gpm-profile.h:
+	Add new functionality. It doesn't work.
+
+2007-07-19  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gpower.c: (hal_gpower_enable_power_save):
+	Don't unref the error, we pass it back.
+
+2007-07-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-info.c: (gpm_statistics_get_parameters):
+	* src/gpm-profile.c: (gpm_profile_get_data_time_percent):
+	Correct the colours to be more bold, and support the extrapolated data.
+
+2007-07-19  Richard Hughes  <richard@hughsie.com>
+
+	* test/gpm-st-main.c: (main):
+	Rearrange some tests.
+
+2007-07-19  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-engine.c: (gpm_engine_get_summary):
+	Add better wording when accuracy is truely zero.
+
+2007-07-19  Richard Hughes  <richard@hughsie.com>
+
 	* help/C/gnome-power-manager.xml:
 	* src/gpm-main.c:
 	* src/gpm-prefs.c:

@@ -166,7 +166,7 @@ main (int argc, char **argv)
 	test->type = NULL;
 	test->started = FALSE;
 	test->class = CLASS_AUTO;
-	test->level = LEVEL_QUIET;
+	test->level = LEVEL_ALL;
 
 	if (class != NULL) {
 		if (strcmp (class, "auto") == 0) {
@@ -194,6 +194,7 @@ main (int argc, char **argv)
 		}
 	}
 
+	gpm_st_run_test (test, gpm_st_profile);
 	gpm_st_run_test (test, gpm_st_common);
 	gpm_st_run_test (test, gpm_st_array);
 	gpm_st_run_test (test, gpm_st_inhibit);
@@ -207,9 +208,8 @@ main (int argc, char **argv)
 	gpm_st_run_test (test, gpm_st_cell_array);
 	gpm_st_run_test (test, gpm_st_array_float);
 	gpm_st_run_test (test, gpm_st_graph_widget);
-	gpm_st_run_test (test, gpm_st_profile);
-	gpm_st_run_test (test, gpm_st_webcam);
-	gpm_st_run_test (test, gpm_st_idletime);
+//	gpm_st_run_test (test, gpm_st_webcam);
+//	gpm_st_run_test (test, gpm_st_idletime);
 
 	g_print ("test passes (%u/%u) : ", test->succeeded, test->total);
 	if (test->succeeded == test->total) {

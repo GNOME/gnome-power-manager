@@ -388,10 +388,6 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
-	if (error) {
-		g_warning ("ERROR: %s", error->message);
-		g_error_free (error);
-	}
 	if (ret == FALSE || retval != 0) {
 		/* abort as the DBUS method failed */
 		g_warning ("SetPowerSave failed!");

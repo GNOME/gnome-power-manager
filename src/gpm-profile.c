@@ -132,6 +132,40 @@ gpm_profile_get_data_file (GpmProfile *profile, gboolean discharge)
 }
 
 /**
+ * gpm_profile_print:
+ *
+ * @profile: This class
+ */
+void
+gpm_profile_print (GpmProfile *profile)
+{
+	guint i;
+	GArray *array_data;
+	GArray *array_accuracy;
+	gfloat value_data;
+	gfloat value_accuracy;
+
+	g_return_if_fail (profile != NULL);
+	g_return_if_fail (GPM_IS_PROFILE (profile));
+
+	/* get the correct data */
+	if (profile->priv->discharging == TRUE) {
+		array_data = profile->priv->float_data_discharge;
+		array_accuracy = profile->priv->float_accuracy_discharge;
+	} else {
+		array_data = profile->priv->float_data_charge;
+		array_accuracy = profile->priv->float_accuracy_charge;
+	}
+
+	/* copy the data field into the accuracy y field */
+	for (i=0; i<100; i++) {
+		value_data = gpm_array_float_get (array_data, i);
+		value_accuracy = gpm_array_float_get (array_accuracy, i);
+		g_print ("data=%f, value=%f\n", value_data, value_accuracy);
+	}
+}
+
+/**
  * gpm_profile_get_data_time_percent:
  *
  * @profile: This class
@@ -140,38 +174,34 @@ GpmArray *
 gpm_profile_get_data_time_percent (GpmProfile *profile, gboolean discharge)
 {
 	guint i;
-	GArray *array;
-	gfloat value;
-	guint32 colour_active;
-	guint32 colour_nonactive;
+	GArray *array_data;
+	GArray *array_accuracy;
+	gfloat value_data;
+	gfloat value_accuracy;
 
 	g_return_val_if_fail (profile != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), NULL);
 
-	if (discharge == TRUE) {
-		colour_active = GPM_COLOUR_RED;
-		colour_nonactive = GPM_COLOUR_DARK_RED;
-	} else {
-		colour_active = GPM_COLOUR_BLUE;
-		colour_nonactive = GPM_COLOUR_DARK_BLUE;
-	}
-
 	/* get the correct data */
 	if (discharge == TRUE) {
-		array = profile->priv->float_data_discharge;
+		array_data = profile->priv->float_data_discharge;
+		array_accuracy = profile->priv->float_accuracy_discharge;
 	} else {
-		array = profile->priv->float_data_charge;
+		array_data = profile->priv->float_data_charge;
+		array_accuracy = profile->priv->float_accuracy_charge;
 	}
 
 	/* copy the data field into the accuracy y field */
 	for (i=0; i<100; i++) {
-		value = gpm_array_float_get (array, i);
+		value_data = gpm_array_float_get (array_data, i);
+		value_accuracy = gpm_array_float_get (array_accuracy, i);
 		/* only set points that are not zero */
-		if (value > 0) {
-			gpm_array_set (profile->priv->present_array_data, i, i, value, colour_active);
-		} else {
-			/* set zero points a different colour */
-			gpm_array_set (profile->priv->present_array_data, i, i, value, colour_nonactive);
+		if (value_data == 0) {
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_BLUE);
+		} else if (value_accuracy == 0) {
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_DARK_GREY);
+		} else if (value_data > 0) {
+			gpm_array_set (profile->priv->present_array_data, i, i, value_data, GPM_COLOUR_RED);
 		}
 	}
 
@@ -324,20 +354,64 @@ gpm_profile_get_nonzero_accuracy_percent (GArray *array_data, GArray *array_accu
  * @profile: This class
  */
 static void
-gpm_profile_set_zero_accuracy_average (GArray *array_data, GArray *array_accuracy, gfloat average)
+gpm_profile_set_zero_accuracy_average (GArray *array_data,
+				       GArray *array_accuracy,
+				       gfloat  average,
+				       guint   start,
+				       guint   stop)
 {
-	/* find the average "non-zero accuracy" data */
+	/* set the zero accuracy points to the average value over a range */
 	guint i;
 	guint length;
 	gfloat accuracy;
+	guint width = 0;
 
 	length = array_data->len;
-	for (i=0; i<length; i++) {
+	if (stop > length) {
+		stop = length;
+	}
+	for (i=start; i<stop; i++) {
 		accuracy = g_array_index (array_accuracy, gfloat, i);
 		if (accuracy == 0) {
-			g_array_index (array_data, gfloat, i) = average;
+			/* we only do this if the width is not just one reading
+			   as some batteries map 64 states into percent */
+			if (width > 0) {
+				g_array_index (array_data, gfloat, i) = average;
+			}
+			width++;
+		} else {
+			width = 0;
 		}
 	}
+}
+
+/**
+ * gpm_profile_set_average_no_accuracy:
+ *
+ * @profile: This class
+ */
+static void
+gpm_profile_set_average_no_accuracy (GpmProfile *profile)
+{
+	GArray *array_data;
+	GArray *array_accuracy;
+	gfloat average;
+
+	/* get the correct data */
+	if (profile->priv->discharging == TRUE) {
+		array_data = profile->priv->float_data_discharge;
+		array_accuracy = profile->priv->float_accuracy_discharge;
+	} else {
+		array_data = profile->priv->float_data_charge;
+		array_accuracy = profile->priv->float_accuracy_charge;
+	}
+
+	/* find the data average of the non zero accuracy points */
+	average = gpm_profile_get_nonzero_accuracy_percent (array_data, array_accuracy);
+	gpm_debug ("estimated average = %f", average);
+
+	/* set the zero accuracy data to the average */
+	gpm_profile_set_zero_accuracy_average (array_data, array_accuracy, average, 5, 95);
 }
 
 /**
@@ -345,6 +419,9 @@ gpm_profile_set_zero_accuracy_average (GArray *array_data, GArray *array_accurac
  *
  * @profile: This class
  * @percentage: new percentage value
+ * @time: seconds elapsed
+ * @measurement_accuracy: the percentage accuracy, where 100% is the
+ *			  best we can get...
  */
 static void
 gpm_profile_save_percentage (GpmProfile *profile,
@@ -371,8 +448,8 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	data = gpm_array_float_get (array_data, percentage);
 	accuracy = gpm_array_float_get (array_accuracy, percentage);
 
-	/* if we have no data, then just use the new value */
-	if (data == 0) {
+	/* if we have no accuracy, then just use the new value */
+	if (accuracy == 0) {
 		data = time;
 	} else {
 		/* average the data so we converge to a common point */
@@ -382,15 +459,8 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	/* save new data */
 	gpm_array_float_set (array_data, percentage, data);
 
-if (0) {
-	/* find the data average of the non zero accuracy points */
-	float average;
-	average = gpm_profile_get_nonzero_accuracy_percent (array_data, array_accuracy);
-	gpm_debug ("estimated average = %f", average);
-
-	/* set the zero accuracy data to the average */
-	gpm_profile_set_zero_accuracy_average (array_data, array_accuracy, average);
-}
+	/* guess missing data between 5 and 95 */
+	if (0) gpm_profile_set_average_no_accuracy (profile);
 
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
 	accuracy += measurement_accuracy / 5;
@@ -412,6 +482,21 @@ if (0) {
 	gpm_array_save_to_file (array, filename);
 	g_free (filename);
 	g_object_unref (array);
+}
+
+/**
+ * gpm_test_profile_save_percentage:
+ *
+ * @profile: This class
+ * @percentage: new percentage value
+ */
+void
+gpm_test_profile_save_percentage (GpmProfile *profile,
+			   	  guint       percentage,
+			 	  guint       time,
+			 	  guint       measurement_accuracy)
+{
+	gpm_test_profile_save_percentage (profile, percentage, time, measurement_accuracy);
 }
 
 /**
@@ -488,6 +573,16 @@ gpm_profile_register_percentage (GpmProfile *profile,
 		gpm_profile_save_percentage (profile, array_percentage, (guint) elapsed, accuracy);
 	}
 	return TRUE;
+}
+
+/**
+ * gpm_profile_test_force_discharging:
+ */
+void
+gpm_profile_test_force_discharging (GpmProfile *profile,
+				    gboolean    is_discharging)
+{
+	profile->priv->discharging = is_discharging;
 }
 
 /**

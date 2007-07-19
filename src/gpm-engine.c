@@ -300,11 +300,20 @@ gpm_engine_get_summary (GpmEngine *engine)
 	unit = gpm_cell_array_get_unit (collection->primary);
 	accuracy = gpm_profile_get_accuracy_average (engine->priv->profile,
 						     unit->is_discharging);
-	if (accuracy < GPM_PROFILE_GOOD_TRUST && unit->is_present == TRUE) {
-		if (unit->is_discharging) {
-			tooltip = g_string_append (tooltip, _("Battery discharge time is estimated\n"));
-		} else {
-			tooltip = g_string_append (tooltip, _("Battery charge time is estimated\n"));
+
+	if (unit->is_present == TRUE) {
+		if (accuracy == 0) {
+			if (unit->is_discharging) {
+				tooltip = g_string_append (tooltip, _("Battery discharge time is currently unknown\n"));
+			} else {
+				tooltip = g_string_append (tooltip, _("Battery charge time is currently unknown\n"));
+			}
+		} else if (accuracy < GPM_PROFILE_GOOD_TRUST) {
+			if (unit->is_discharging) {
+				tooltip = g_string_append (tooltip, _("Battery discharge time is estimated\n"));
+			} else {
+				tooltip = g_string_append (tooltip, _("Battery charge time is estimated\n"));
+			}
 		}
 	}
 
