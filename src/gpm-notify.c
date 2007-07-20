@@ -383,7 +383,7 @@ gpm_notify_low_capacity (GpmNotify *notify,
 	gchar *msg;
 	const gchar *title;
 
-	title = _("Battery may be invalid");
+	title = _("Battery may be broken");
 	msg = g_strdup_printf (_("Your battery has a very low capacity (%i%%), "
 				 "which means that it may be old or broken."),
 			       capacity);
