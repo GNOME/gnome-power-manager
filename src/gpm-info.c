@@ -330,11 +330,11 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Charge Void"));
+				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
 					       GPM_COLOUR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Discharge Void"));
+				 	      _("Stop point"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-charge-time") == 0) {
@@ -348,11 +348,11 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Charge Void"));
+				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
 					       GPM_COLOUR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Discharge Void"));
+				 	      _("Stop point"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-accuracy") == 0) {
@@ -365,11 +365,11 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Charge Void"));
+				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
 					       GPM_COLOUR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Discharge Void"));
+				 	      _("Stop point"));
 		return TRUE;
 	}
 	if (strcmp (type, "profile-discharge-time") == 0) {
@@ -383,11 +383,11 @@ gpm_statistics_get_parameters (GpmInfo   *info,
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_HIBERNATE,
 					       GPM_COLOUR_CYAN,
 					       GPM_GRAPH_WIDGET_SHAPE_SQUARE,
-				 	      _("Charge Void"));
+				 	      _("Start point"));
 		gpm_statistics_add_event_type (*key_event, GPM_EVENT_SUSPEND,
 					       GPM_COLOUR_YELLOW,
 					       GPM_GRAPH_WIDGET_SHAPE_TRIANGLE,
-				 	      _("Discharge Void"));
+				 	      _("Stop point"));
 		return TRUE;
 	}
 
