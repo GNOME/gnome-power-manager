@@ -1,3 +1,13 @@
+2007-07-20  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-profile.c: (gpm_profile_print),
+	(gpm_test_profile_save_percentage):
+	OOps. Don't recurse.
+
+	* test/gpm-st-main.c: (main):
+	* test/gpm-st-profile.c: (gpm_st_profile):
+	Correct test, and make more specific. Test now passes.
+
 2007-07-19  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-profile.c: (gpm_profile_print),

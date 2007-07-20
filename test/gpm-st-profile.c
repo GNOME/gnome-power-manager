@@ -29,7 +29,7 @@ gpm_st_profile (GpmSelfTest *test)
 {
 	GpmProfile *profile;
 	gboolean ret;
-	guint i;
+	gint i;
 	guint value;
 
 	if (gpm_st_start (test, "GpmProfile", CLASS_AUTO) == FALSE) {
@@ -128,7 +128,7 @@ gpm_st_profile (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "make up discharging dataset (perfect accuracy)");
-	for (i=98; i>0; i--) {
+	for (i=98; i>=0; i--) {
 		gpm_test_profile_save_percentage (profile, i, 120, 100);
 	}
 	gpm_st_success (test, "put dataset");
@@ -136,26 +136,24 @@ gpm_st_profile (GpmSelfTest *test)
 	gpm_profile_print (profile);
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non-zero accuracy when a complete dataset");
+	gpm_st_title (test, "make sure we get a correct accuracy when a complete dataset");
 	value = gpm_profile_get_accuracy (profile, 50);
-	if (value != 0) {
-		gpm_st_success (test, "got non zero %i", value);
+	if (value == 20) {
+		gpm_st_success (test, "got correct average %i", value);
 	} else {
-		gpm_st_failed (test, "got %i", value);
+		gpm_st_failed (test, "got incorrect average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct time when set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 6120) {
+		gpm_st_success (test, "got correct time %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect time %i", value);
 	}
 
 	goto unref;
-
-#if 0
-	/************************************************************/
-	gpm_st_title (test, "ignore first point");
-	ret = gpm_profile_register_percentage (profile, 99);
-	if (ret == FALSE) {
-		gpm_st_success (test, "ignored first");
-	} else {
-		gpm_st_failed (test, "ignored second");
-	}
-#endif
 
 	/************************************************************/
 	gpm_st_title (test, "make up discharging dataset");

@@ -161,7 +161,7 @@ gpm_profile_print (GpmProfile *profile)
 	for (i=0; i<100; i++) {
 		value_data = gpm_array_float_get (array_data, i);
 		value_accuracy = gpm_array_float_get (array_accuracy, i);
-		g_print ("data=%f, value=%f\n", value_data, value_accuracy);
+		g_print ("[%i], %f (%f)\n", i, value_data, value_accuracy);
 	}
 }
 
@@ -496,7 +496,7 @@ gpm_test_profile_save_percentage (GpmProfile *profile,
 			 	  guint       time,
 			 	  guint       measurement_accuracy)
 {
-	gpm_test_profile_save_percentage (profile, percentage, time, measurement_accuracy);
+	gpm_profile_save_percentage (profile, percentage, time, measurement_accuracy);
 }
 
 /**
