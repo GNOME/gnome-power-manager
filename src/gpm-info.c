@@ -216,14 +216,17 @@ gpm_statistics_add_events_typical (GPtrArray *array)
 	gpm_statistics_add_event_type (array, GPM_EVENT_SUSPEND,
 				       GPM_COLOUR_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
+				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Suspend"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_RESUME,
 				       GPM_COLOUR_DARK_RED,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
+				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Resume"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_HIBERNATE,
 				       GPM_COLOUR_MAGENTA,
 				       GPM_GRAPH_WIDGET_SHAPE_DIAMOND,
+				/* Translators: translate ONLY the string part after the |*/
 				       Q_("label shown on graph|Hibernate"));
 	gpm_statistics_add_event_type (array, GPM_EVENT_LID_CLOSED,
 				       GPM_COLOUR_GREEN,
