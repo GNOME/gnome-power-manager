@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-17 11:33+0100\n"
-"PO-Revision-Date: 2007-07-17 13:00+0200\n"
+"POT-Creation-Date: 2007-07-21 03:48+0100\n"
+"PO-Revision-Date: 2007-07-21 14:33+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,6 +27,7 @@ msgid "Adjusts laptop panel brightness."
 msgstr "Ajusta el brillo del panel del portátil."
 
 #: ../applets/brightness/brightness-applet.c:319
+#: ../applets/inhibit/inhibit-applet.c:307
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "No es posible conectar con el Gestor de energía de GNOME"
@@ -42,12 +43,12 @@ msgid "LCD brightness : %d%%"
 msgstr "Brillo del LCD : %d%%"
 
 #: ../applets/brightness/brightness-applet.c:710
-#: ../applets/inhibit/inhibit-applet.c:360 ../src/gpm-tray-icon.c:308
+#: ../applets/inhibit/inhibit-applet.c:375 ../src/gpm-tray-icon.c:308
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "Licenciado bajo la Licencia Pública General GNU Versión 2"
 
 #: ../applets/brightness/brightness-applet.c:711
-#: ../applets/inhibit/inhibit-applet.c:361 ../src/gpm-tray-icon.c:309
+#: ../applets/inhibit/inhibit-applet.c:376 ../src/gpm-tray-icon.c:309
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -60,7 +61,7 @@ msgstr ""
 "de la Licencia, o (a su opción) cualquier versión posterior."
 
 #: ../applets/brightness/brightness-applet.c:715
-#: ../applets/inhibit/inhibit-applet.c:365 ../src/gpm-tray-icon.c:313
+#: ../applets/inhibit/inhibit-applet.c:380 ../src/gpm-tray-icon.c:313
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -73,7 +74,7 @@ msgstr ""
 "Licencia Pública General GNU para más detalles."
 
 #: ../applets/brightness/brightness-applet.c:719
-#: ../applets/inhibit/inhibit-applet.c:369 ../src/gpm-tray-icon.c:317
+#: ../applets/inhibit/inhibit-applet.c:384 ../src/gpm-tray-icon.c:317
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -104,29 +105,29 @@ msgstr "Fábrica de la miniaplicación de brillo"
 msgid "Factory for Brightness Applet"
 msgstr "Fábrica para la miniaplicación de brillo"
 
-#: ../applets/inhibit/inhibit-applet.c:57
+#: ../applets/inhibit/inhibit-applet.c:58
 msgid "Power Manager Inhibit Applet"
 msgstr "Miniaplicación de inhibición del gestor de energía"
 
-#: ../applets/inhibit/inhibit-applet.c:58
+#: ../applets/inhibit/inhibit-applet.c:59
 msgid "Allows user to inhibit automatic power saving."
 msgstr "Permite al usuario inhibir el ahorro de energía automático."
 
-#: ../applets/inhibit/inhibit-applet.c:296
+#: ../applets/inhibit/inhibit-applet.c:310
 #, c-format
 msgid "Automatic sleep inhibited"
 msgstr "Paso a reposo automático inhibido"
 
-#: ../applets/inhibit/inhibit-applet.c:298
+#: ../applets/inhibit/inhibit-applet.c:312
 #, c-format
 msgid "Automatic sleep enabled"
 msgstr "Paso a reposo automático activado"
 
-#: ../applets/inhibit/inhibit-applet.c:325
+#: ../applets/inhibit/inhibit-applet.c:340
 msgid "Manual inhibit"
 msgstr "Inhibición manual"
 
-#: ../applets/inhibit/inhibit-applet.c:383
+#: ../applets/inhibit/inhibit-applet.c:398
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Copyright © 2006-2007 Richard Hughes"
 
@@ -1175,8 +1176,8 @@ msgstr "Tipo de gráfica:"
 msgid "Power History"
 msgstr "Histórico de energía"
 
-#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:290 ../src/gpm-info.c:299
-#: ../src/gpm-info.c:308 ../src/gpm-info.c:317
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:293 ../src/gpm-info.c:302
+#: ../src/gpm-info.c:311 ../src/gpm-info.c:320
 msgid "Time since startup"
 msgstr "Tiempo desde el inicio"
 
@@ -1390,16 +1391,24 @@ msgstr "El equipo está funcionando con el adaptador de corriente\n"
 msgid "Computer is running on battery power\n"
 msgstr "El equipo está funcionando con la batería\n"
 
-#: ../src/gpm-engine.c:305
+#: ../src/gpm-engine.c:307
+msgid "Battery discharge time is currently unknown\n"
+msgstr "Se desconoce el tiempo de descarga de la batería\n"
+
+#: ../src/gpm-engine.c:309
+msgid "Battery charge time is currently unknown\n"
+msgstr "Se desconoce el tiempo de carga de la batería\n"
+
+#: ../src/gpm-engine.c:313
 msgid "Battery discharge time is estimated\n"
 msgstr "El tiempo de descarga de la batería es estimado\n"
 
-#: ../src/gpm-engine.c:307
+#: ../src/gpm-engine.c:315
 msgid "Battery charge time is estimated\n"
 msgstr "El tiempo de carga de la batería es estimado\n"
 
 #. show a AC icon
-#: ../src/gpm-engine.c:589
+#: ../src/gpm-engine.c:598
 msgid "Unable to get data..."
 msgstr "No se pudo obtener la información..."
 
@@ -1476,160 +1485,163 @@ msgstr "Sesión inactiva"
 msgid "Session active"
 msgstr "Sesión activa"
 
-#: ../src/gpm-info.c:219
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:220
 msgid "label shown on graph|Suspend"
 msgstr "Suspender"
 
-#: ../src/gpm-info.c:223
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:225
 msgid "label shown on graph|Resume"
 msgstr "Resumir"
 
-#: ../src/gpm-info.c:227
+#. Translators: translate ONLY the string part after the |
+#: ../src/gpm-info.c:230
 msgid "label shown on graph|Hibernate"
 msgstr "Hibernar"
 
-#: ../src/gpm-info.c:231
+#: ../src/gpm-info.c:234
 msgid "Lid closed"
 msgstr "Tapa cerrada"
 
-#: ../src/gpm-info.c:235
+#: ../src/gpm-info.c:238
 msgid "Lid opened"
 msgstr "Tapa abierta"
 
-#: ../src/gpm-info.c:239
+#: ../src/gpm-info.c:242
 msgid "Notification"
 msgstr "Notificación"
 
-#: ../src/gpm-info.c:244
+#: ../src/gpm-info.c:247
 msgid "DPMS On"
 msgstr "DPMS On"
 
-#: ../src/gpm-info.c:248
+#: ../src/gpm-info.c:251
 msgid "DPMS Standby"
 msgstr "DPMS Standby"
 
-#: ../src/gpm-info.c:252
+#: ../src/gpm-info.c:255
 msgid "DPMS Suspend"
 msgstr "DPMS Suspend"
 
-#: ../src/gpm-info.c:256
+#: ../src/gpm-info.c:259
 msgid "DPMS Off"
 msgstr "DPMS Off"
 
-#: ../src/gpm-info.c:291 ../src/gpm-info.c:292
+#: ../src/gpm-info.c:294 ../src/gpm-info.c:295
 msgid "Power"
 msgstr "Energía"
 
-#: ../src/gpm-info.c:300
+#: ../src/gpm-info.c:303
 msgid "Estimated time"
 msgstr "Tiempo estimado"
 
-#: ../src/gpm-info.c:301
+#: ../src/gpm-info.c:304
 msgid "Time"
 msgstr "Tiempo"
 
-#: ../src/gpm-info.c:309 ../src/gpm-info.c:326 ../src/gpm-info.c:343
-#: ../src/gpm-info.c:361 ../src/gpm-info.c:378
+#: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
+#: ../src/gpm-info.c:364 ../src/gpm-info.c:381
 msgid "Battery percentage"
 msgstr "Porcentaje de batería"
 
-#: ../src/gpm-info.c:310
+#: ../src/gpm-info.c:313
 msgid "Percentage"
 msgstr "Porcentaje"
 
-#: ../src/gpm-info.c:318
+#: ../src/gpm-info.c:321
 msgid "Battery Voltage"
 msgstr "Voltaje de la batería"
 
-#: ../src/gpm-info.c:319
+#: ../src/gpm-info.c:322
 msgid "Voltage"
 msgstr "Voltaje"
 
-#: ../src/gpm-info.c:327 ../src/gpm-info.c:362
+#: ../src/gpm-info.c:330 ../src/gpm-info.c:365
 msgid "Accuracy of reading"
 msgstr "Precisión de la lectura"
 
-#: ../src/gpm-info.c:328 ../src/gpm-info.c:345 ../src/gpm-info.c:363
-#: ../src/gpm-info.c:380
+#: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
+#: ../src/gpm-info.c:383
 msgid "Valid data"
 msgstr "Datos válidos"
 
-#: ../src/gpm-info.c:329 ../src/gpm-info.c:346 ../src/gpm-info.c:364
-#: ../src/gpm-info.c:381
+#: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
+#: ../src/gpm-info.c:384
 msgid "No data"
 msgstr "Sin datos"
 
-#: ../src/gpm-info.c:333 ../src/gpm-info.c:351 ../src/gpm-info.c:368
-#: ../src/gpm-info.c:386
-msgid "Charge Void"
-msgstr "Carga vacía"
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
+#: ../src/gpm-info.c:389
+msgid "Start point"
+msgstr "Punto de inicio"
 
-#: ../src/gpm-info.c:337 ../src/gpm-info.c:355 ../src/gpm-info.c:372
-#: ../src/gpm-info.c:390
-msgid "Discharge Void"
-msgstr "Descarga vacía"
+#: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
+#: ../src/gpm-info.c:393
+msgid "Stop point"
+msgstr "Punto de parada"
 
-#: ../src/gpm-info.c:344 ../src/gpm-info.c:379
+#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
 msgid "Average time elapsed"
 msgstr "Tiempo medio transcurrido"
 
-#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
 msgid "Extrapolated data"
 msgstr "Datos extrapolados"
 
-#: ../src/gpm-info.c:674
+#: ../src/gpm-info.c:677
 msgid "AC adapter inserted"
 msgstr "Adaptador AC enchufado"
 
-#: ../src/gpm-info.c:677
+#: ../src/gpm-info.c:680
 msgid "AC adapter removed"
 msgstr "Adaptador adaptador de corriente quitado"
 
-#: ../src/gpm-info.c:697
+#: ../src/gpm-info.c:700
 msgid "The laptop lid has been closed"
 msgstr "La tapa del portátil se ha cerrado"
 
-#: ../src/gpm-info.c:703
+#: ../src/gpm-info.c:706
 msgid "The laptop lid has been re-opened"
 msgstr "La tapa del portátil ha sido reabierta"
 
-#: ../src/gpm-info.c:725
+#: ../src/gpm-info.c:728
 msgid "idle mode ended"
 msgstr "terminó el modo inactivo"
 
-#: ../src/gpm-info.c:727
+#: ../src/gpm-info.c:730
 msgid "idle mode started"
 msgstr "empezó el modo inactivo"
 
-#: ../src/gpm-info.c:729
+#: ../src/gpm-info.c:732
 msgid "powersave mode started"
 msgstr "modo ahorro de energía iniciado"
 
-#: ../src/gpm-info.c:748
+#: ../src/gpm-info.c:751
 msgid "dpms on"
 msgstr "dpms on"
 
-#: ../src/gpm-info.c:750
+#: ../src/gpm-info.c:753
 msgid "dpms standby"
 msgstr "dpms standby"
 
-#: ../src/gpm-info.c:752
+#: ../src/gpm-info.c:755
 msgid "dpms suspend"
 msgstr "dpms suspend"
 
-#: ../src/gpm-info.c:754
+#: ../src/gpm-info.c:757
 msgid "dpms off"
 msgstr "dpms off"
 
-#: ../src/gpm-info.c:771
+#: ../src/gpm-info.c:774
 msgid "Resuming computer"
 msgstr "Reactivar equipo"
 
-#: ../src/gpm-info.c:787
+#: ../src/gpm-info.c:790
 msgid "Hibernate Problem"
 msgstr "Problema al hibernar"
 
-#: ../src/gpm-info.c:789
+#: ../src/gpm-info.c:792
 msgid "Suspend Problem"
 msgstr "Problema al suspender"
 
@@ -2014,8 +2026,8 @@ msgid "Do not show me this again"
 msgstr "No mostrar esto más"
 
 #: ../src/gpm-notify.c:386
-msgid "Battery may be invalid"
-msgstr "La batería podría no ser válida"
+msgid "Battery may be broken"
+msgstr "La batería podría estar estropeada"
 
 #: ../src/gpm-notify.c:387
 #, c-format
@@ -2093,7 +2105,7 @@ msgstr ""
 msgid "Visit quirk website"
 msgstr "Visitar sitio web de peculiaridades"
 
-#: ../src/gpm-cell-array.c:953
+#: ../src/gpm-cell-array.c:955
 #, c-format
 msgid ""
 "%s fully charged (%i%%)\n"
@@ -2102,23 +2114,23 @@ msgstr ""
 "%s totalmente cargada (%i%%)\n"
 "Proporciona %s tiempo de uso de batería\n"
 
-#: ../src/gpm-cell-array.c:957
+#: ../src/gpm-cell-array.c:959
 #, c-format
 msgid "%s fully charged (%i%%)\n"
 msgstr "%s totalmente cargada (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:965
+#: ../src/gpm-cell-array.c:967
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
 msgstr "%s %s restantes (%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:970
+#: ../src/gpm-cell-array.c:972
 #, c-format
 msgid "%s discharging (%i%%)\n"
 msgstr "%s descargándose (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:982
+#: ../src/gpm-cell-array.c:984
 #, c-format
 msgid ""
 "%s %s until charged (%i%%)\n"
@@ -2127,18 +2139,18 @@ msgstr ""
 "%s %s hasta su carga(%i%%)\n"
 "Proporciona %s tiempo de uso de batería\n"
 
-#: ../src/gpm-cell-array.c:989
+#: ../src/gpm-cell-array.c:991
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
 msgstr "%s %s hasta su carga(%i%%)\n"
 
 #. don't display "Unknown remaining"
-#: ../src/gpm-cell-array.c:994
+#: ../src/gpm-cell-array.c:996
 #, c-format
 msgid "%s charging (%i%%)\n"
 msgstr "%s cargando (%i%%)\n"
 
-#: ../src/gpm-cell-array.c:1001
+#: ../src/gpm-cell-array.c:1003
 msgid "Battery state could not be read at this time\n"
 msgstr "No se pudo leer el estado de la batería en este momento\n"
 
