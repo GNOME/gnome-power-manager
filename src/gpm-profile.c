@@ -460,7 +460,7 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	gpm_array_float_set (array_data, percentage, data);
 
 	/* guess missing data between 5 and 95 */
-	if (0) gpm_profile_set_average_no_accuracy (profile);
+if (0)	gpm_profile_set_average_no_accuracy (profile);
 
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
 	accuracy += measurement_accuracy / 5;

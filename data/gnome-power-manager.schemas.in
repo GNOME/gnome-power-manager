@@ -1,7 +1,6 @@
 <gconfschemafile>
   <schemalist>
 
-
     <schema>
       <key>/schemas/apps/gnome-power-manager/ambient/dim_policy</key>
       <applyto>/apps/gnome-power-manager/ambient/dim_policy</applyto>
@@ -393,18 +392,6 @@
       <locale name="C">
         <short>If the learnt profile should be used to calculate the time remaining</short>
         <long>If the learnt profile should be used to calculate the time remaining. Only turn this off for debugging.</long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/gnome-power-manager/general/using_external_monitor</key>
-      <applyto>/apps/gnome-power-manager/general/using_external_monitor</applyto>
-      <owner>gnome-power-manager</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-        <short>If the laptop should be configured as if it is using a permanent external monitor</short>
-        <long>If the laptop should be configured disable both dimming actions and DPMS when using a dock or external monitor. Most laptop and desktop users should select FALSE here.</long>
       </locale>
     </schema>
 

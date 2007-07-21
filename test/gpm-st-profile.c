@@ -153,6 +153,44 @@ gpm_st_profile (GpmSelfTest *test)
 		gpm_st_failed (test, "got incorrect time %i", value);
 	}
 
+	g_object_unref (profile);
+	profile = gpm_profile_new ();
+
+	/************************************************************/
+	gpm_st_title (test, "single point of accuracy (new profile)");
+	gpm_test_profile_save_percentage (profile, 45, 120, 100);
+	gpm_test_profile_save_percentage (profile, 46, 120, 100);
+	gpm_st_success (test, "put dataset");
+
+	gpm_profile_print (profile);
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value == 20) {
+		gpm_st_success (test, "got correct average %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct time when set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 6120) {
+		gpm_st_success (test, "got correct time %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect time %i", value);
+	}
+
+
+
+
+
+
+
+
+
+
 	goto unref;
 
 	/************************************************************/

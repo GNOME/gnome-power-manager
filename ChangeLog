@@ -1,7 +1,19 @@
+2007-07-21  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-manager.c: (idle_changed_cb):
+	* src/gpm-srv-screensaver.c: (update_lid_throttle):
+	Remove a broken string that we don't ever use. Fixes #459099
+
+	* src/gpm-profile.c: (gpm_profile_save_percentage):
+	* test/gpm-st-profile.c: (gpm_st_profile):
+	Add some more tests.
+
 2007-07-20  Gabor Kelemen  <kelemeng@gnome.hu>
 
-	* src/gpm-info.c: Add translator comment before the occurrences of the Q_ macro.
-			  Fixes #458609.
+	* src/gpm-info.c:
+	Add translator comment before the occurrences of the Q_ macro.
+	Fixes #458609.
 
 2007-07-20  Richard Hughes  <richard@hughsie.com>
 
@@ -407,7 +419,7 @@
 2007-06-24  Gabor Kelemen  <kelemeng@gnome.hu>
 	* src/gpm-main.c:
 	* src/gpm-statistics.c:
-	* src/gpm-prefs.c: use g_option_context_set_translation_domain to translate 
+	* src/gpm-prefs.c: use g_option_context_set_translation_domain to translate
 	application description. Closes bug #450154.
 
 2007-06-24  Richard Hughes  <richard@hughsie.com>
@@ -433,7 +445,7 @@
 	* src/gpm-main.c: (main):
 	Add g_set_application_name
 	* src/gpm-trayicon.c: (gpm_tray_icon_show_about_cb):
-	Make about dialog work with GTK 2.12 
+	Make about dialog work with GTK 2.12
 	Add website label. Closed #448570
 
 2007-06-17  Richard Hughes  <richard@hughsie.com>
@@ -559,8 +571,8 @@
 
 2007-06-07  Gabor Kelemen  <kelemeng@gnome.hu>
 
-	* applets/brightness/GNOME_BrightnessApplet.server.in.in: 
-	* applets/inhibit/GNOME_InhibitApplet.server.in.in: Mark descriptions for translation. 
+	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
+	* applets/inhibit/GNOME_InhibitApplet.server.in.in: Mark descriptions for translation.
 	  Fixes #445173
 
 2007-06-06  Richard Hughes  <richard@hughsie.com>
@@ -797,7 +809,7 @@
 	Don't reduce the brightness when clicking on the icon. Fixes #428401
 
 	* src/gpm-backlight.c: (conf_key_changed_cb):
-	Emit BrightnessChanged events when the conf key changes.	
+	Emit BrightnessChanged events when the conf key changes.
 
 2007-05-17  Richard Hughes  <richard@hughsie.com>
 
@@ -1179,7 +1191,7 @@
 	Remove non-required defines.
 
 2007-04-12  simon.zheng  <simon.zheng@sun.com>
-	
+
 	reviewed by Richard Hughes
 
 	* src/Makefile.am:

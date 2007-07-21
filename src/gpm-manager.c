@@ -763,24 +763,12 @@ idle_changed_cb (GpmIdle    *idle,
 		 GpmIdleMode mode,
 		 GpmManager *manager)
 {
-	gboolean laptop_using_ext_mon;
-
-	/*
-	 * If external monitor connected we shouldn't ignore idle when lid closed.
-	 * Until HAL is able to detect which monitors are connected, control
-	 * behavior through gconf-key.
-	 * Details here: http://bugzilla.gnome.org/show_bug.cgi?id=365016
-	 */
-	gpm_conf_get_bool (manager->priv->conf, GPM_CONF_LAPTOP_USES_EXT_MON, &laptop_using_ext_mon);
-
-	/*
-	 * Ignore timeout events when the lid is closed, as the DPMS is
+	/* Ignore timeout events when the lid is closed, as the DPMS is
 	 * already off, and we don't want to perform policy actions or re-enable
 	 * the screen when the user moves the mouse on systems that do not
 	 * support hardware blanking.
-	 * Details are here: https://launchpad.net/malone/bugs/22522
-	 */
-	if (gpm_button_is_lid_closed (manager->priv->button) == TRUE && laptop_using_ext_mon == FALSE) {
+	 * Details are here: https://launchpad.net/malone/bugs/22522 */
+	if (gpm_button_is_lid_closed (manager->priv->button) == TRUE) {
 		gpm_debug ("lid is closed, so we are ignoring idle state changes");
 		return;
 	}
