@@ -253,12 +253,10 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 	if (hal_gpower_filter_error (error)) {
 		return TRUE;
 	}
-	if (ret == FALSE || retval != 0) {
-		/* abort as the DBUS method failed */
-		g_warning ("Suspend failed!");
-		return FALSE;
+	if (retval != 0) {
+		g_warning ("Suspend failed in a horrible way!");
 	}
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -299,12 +297,10 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 	if (hal_gpower_filter_error (error)) {
 		return TRUE;
 	}
-	if (ret == FALSE || retval != 0) {
-		/* abort as the DBUS method failed */
-		g_warning ("%s failed!", method);
-		return FALSE;
+	if (retval != 0) {
+		g_warning ("%s failed in a horrible way!", method);
 	}
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -388,12 +384,10 @@ hal_gpower_enable_power_save (HalGPower *power, gboolean enable)
 				 G_TYPE_INVALID,
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
-	if (ret == FALSE || retval != 0) {
-		/* abort as the DBUS method failed */
-		g_warning ("SetPowerSave failed!");
-		return FALSE;
+	if (retval != 0) {
+		g_warning ("SetPowerSave failed in a horrible way!");
 	}
-	return TRUE;
+	return ret;
 }
 
 /**

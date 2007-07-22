@@ -1,3 +1,10 @@
+2007-07-22  Richard Hughes  <richard@hughsie.com>
+
+	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
+	(hal_gpower_pm_method_void), (hal_gpower_enable_power_save):
+	Be more careful with errors. retval != 0 doesn't mean that an error
+	is set.
+
 2007-07-21  Richard Hughes  <richard@hughsie.com>
 
 	* data/gnome-power-manager.schemas.in:
