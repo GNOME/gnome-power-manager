@@ -1,5 +1,12 @@
 2007-07-22  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-control.c: (gpm_control_convert_hal_error),
+	(gpm_control_shutdown), (gpm_control_suspend),
+	(gpm_control_hibernate):
+	Convert the HAL error to a localised error to avoid a crash in GDM.
+
+2007-07-22  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gpower.c: (hal_gpower_suspend),
 	(hal_gpower_pm_method_void), (hal_gpower_enable_power_save):
 	Be more careful with errors. retval != 0 doesn't mean that an error

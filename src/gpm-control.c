@@ -253,6 +253,37 @@ gpm_control_allowed_reboot (GpmControl *control,
 	return TRUE;
 }
 
+/* convert the HAL error to a local error */
+static void
+gpm_control_convert_hal_error (GpmControl *control,
+			       GError    **error)
+{
+	gint code;
+	gchar *message;
+	if (error == NULL) {
+		return;
+	}
+
+	/* copy out the needed data */
+	code = (*error)->code;
+	message = g_strdup ((*error)->message);
+
+	/* clear the old HAL error */
+	g_error_free (*error);
+	*error = NULL;
+
+	/* localize */
+	if (code == 9) {
+		/* DBUS security prevents sending */
+		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
+			     _("The message was not sent due to DBUS security rules"));
+	} else {
+		g_set_error (error, GPM_CONTROL_ERROR, GPM_CONTROL_ERROR_GENERAL,
+			     _("General failure: %s"), message);
+	}
+	g_free (message);
+}
+
 /**
  * gpm_control_shutdown:
  * @control: This class instance
@@ -285,8 +316,9 @@ gpm_control_shutdown (GpmControl *control,
 					   GNOME_SAVE_GLOBAL,
 					   FALSE, GNOME_INTERACT_NONE, FALSE,  TRUE);
 	}
-	hal_gpower_shutdown (control->priv->hal_power, error);
-	ret = TRUE;
+
+	ret = hal_gpower_shutdown (control->priv->hal_power, error);
+	gpm_control_convert_hal_error (control, error);
 
 	return ret;
 }
@@ -377,7 +409,7 @@ gpm_control_suspend (GpmControl *control,
 		g_set_error (error,
 			     GPM_CONTROL_ERROR,
 			     GPM_CONTROL_ERROR_GENERAL,
-			     "Cannot suspend");
+			     "Cannot suspend as not allowed from policy");
 		g_signal_emit (control, signals [SLEEP_FAILURE], 0, GPM_CONTROL_ACTION_SUSPEND);
 		return FALSE;
 	}
@@ -404,7 +436,10 @@ gpm_control_suspend (GpmControl *control,
 	/* Do the suspend */
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_SUSPEND);
+
 	ret = hal_gpower_suspend (control->priv->hal_power, 0, error);
+	gpm_control_convert_hal_error (control, error);
+
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_SUSPEND);
 
@@ -476,7 +511,10 @@ gpm_control_hibernate (GpmControl *control,
 
 	gpm_debug ("emitting sleep");
 	g_signal_emit (control, signals [SLEEP], 0, GPM_CONTROL_ACTION_HIBERNATE);
+
 	ret = hal_gpower_hibernate (control->priv->hal_power, error);
+	gpm_control_convert_hal_error (control, error);
+
 	gpm_debug ("emitting resume");
 	g_signal_emit (control, signals [RESUME], 0, GPM_CONTROL_ACTION_HIBERNATE);
 
