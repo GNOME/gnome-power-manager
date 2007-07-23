@@ -40,6 +40,7 @@ LOCAL_LIBHAL_LIBS =					\
 LOCAL_LIBDBUS_LIBS =						\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-session.la	\
 	$(top_builddir)/libdbus-glib/libdbus-monitor-system.la	\
+	$(top_builddir)/libdbus-glib/libdbus-watch.la		\
 	$(top_builddir)/libdbus-glib/libdbus-proxy.la
 
 bin_PROGRAMS =						\
@@ -249,6 +250,8 @@ gnome_power_self_test_SOURCES =				\
 	gpm-engine.c					\
 	gpm-polkit.h					\
 	gpm-polkit.c					\
+	gpm-phone.h					\
+	gpm-phone.c					\
 	gpm-cell.h					\
 	gpm-cell.c					\
 	gpm-cell-unit.h					\
@@ -291,6 +294,7 @@ gnome_power_self_test_LDADD =				\
 	$(GSTREAMER_LIBS)				\
 	$(DBUS_LIBS)					\
 	$(LIBNOTIFY_LIBS)				\
+	$(LOCAL_LIBDBUS_LIBS)				\
 	$(LOCAL_LIBHAL_LIBS)				\
 	$(NULL)
 
