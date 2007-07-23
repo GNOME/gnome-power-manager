@@ -1,5 +1,15 @@
 2007-07-23  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_add_hal_udi),
+	(gpm_cell_array_coldplug), (hal_new_capability_cb),
+	(hal_device_added_cb):
+	* src/gpm-cell.c: (gpm_cell_set_type), (gpm_cell_set_hal_udi),
+	(gpm_st_cell):
+	* src/gpm-cell.h:
+	Rename some methods to allow gnome-phone-manager integration.
+
+2007-07-23  Richard Hughes  <richard@hughsie.com>
+
 	* po/POTFILES.in:
 	* src/Makefile.am:
 	* src/gpm-array-float.c: (gpm_st_array_float):

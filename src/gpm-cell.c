@@ -80,7 +80,7 @@ gpm_cell_get_unit (GpmCell *cell)
 }
 
 /**
- * gpm_cell_set_type:
+ * gpm_cell_refresh_all:
  **/
 static gboolean
 gpm_cell_refresh_all (GpmCell *cell)
@@ -319,7 +319,23 @@ hal_device_property_modified_cb (HalGDevice   *device,
  * gpm_cell_set_type:
  **/
 gboolean
-gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind type, const gchar *udi)
+gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind kind)
+{
+	GpmCellUnit *unit;
+
+	g_return_val_if_fail (cell != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
+
+	unit = &(cell->priv->unit);
+	unit->kind = kind;
+	return TRUE;
+}
+
+/**
+ * gpm_cell_set_hal_udi:
+ **/
+gboolean
+gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
 {
 	gboolean ret;
 	HalGDevice *device;
@@ -754,7 +770,7 @@ gpm_st_cell (GpmSelfTest *test)
 
 	/************************************************************/
 	gpm_st_title (test, "can we assign device");
-	ret = gpm_cell_set_type (cell, GPM_CELL_UNIT_KIND_PRIMARY, udi);
+	ret = gpm_cell_set_hal_udi (cell, udi);
 	if (ret == TRUE) {
 		gpm_st_success (test, "set type okay");
 	} else {

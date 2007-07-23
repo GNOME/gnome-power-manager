@@ -749,10 +749,10 @@ gpm_cell_array_collection_changed (GpmCellArray *cell_array)
 }
 
 /**
- * gpm_cell_array_add:
+ * gpm_cell_array_add_hal_udi:
  */
 static gboolean
-gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
+gpm_cell_array_add_hal_udi (GpmCellArray *cell_array, const gchar *udi)
 {
 	GpmCell *cell;
 	GpmCellUnit *unit;
@@ -791,7 +791,7 @@ gpm_cell_array_add (GpmCellArray *cell_array, const gchar *udi)
 			  G_CALLBACK (gpm_cell_charging_changed_cb), cell_array);
 	g_signal_connect (cell, "discharging-changed",
 			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell_array);
-	gpm_cell_set_type (cell, unit->kind, udi);
+	gpm_cell_set_hal_udi (cell, udi);
 	gpm_cell_print (cell);
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
@@ -824,7 +824,7 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 
 	/* Try to add all, the add will fail for batteries not of the correct type */
 	for (i=0; device_names[i]; i++) {
-		gpm_cell_array_add (cell_array, device_names[i]);
+		gpm_cell_array_add_hal_udi (cell_array, device_names[i]);
 	}
 
 	hal_gmanager_free_capability (device_names);
@@ -1059,7 +1059,7 @@ hal_new_capability_cb (HalGManager  *hal_manager,
 	gpm_debug ("udi=%s, capability=%s", udi, capability);
 
 	if (strcmp (capability, "battery") == 0) {
-		gpm_cell_array_add (cell_array, udi);
+		gpm_cell_array_add_hal_udi (cell_array, udi);
 	}
 }
 
@@ -1092,7 +1092,7 @@ hal_device_added_cb (HalGManager  *hal_manager,
 
 	/* if a battery, then add */
 	if (is_battery == TRUE) {
-		gpm_cell_array_add (cell_array, udi);
+		gpm_cell_array_add_hal_udi (cell_array, udi);
 	}
 	g_object_unref (device);
 }

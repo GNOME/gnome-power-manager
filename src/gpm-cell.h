@@ -63,7 +63,8 @@ GpmCell		*gpm_cell_new				(void);
 
 GpmCellUnit	*gpm_cell_get_unit			(GpmCell	*cell);
 gboolean	 gpm_cell_set_type			(GpmCell	*cell,
-							 GpmCellUnitKind type,
+							 GpmCellUnitKind kind);
+gboolean	 gpm_cell_set_hal_udi			(GpmCell	*cell,
 							 const gchar	*udi);
 const gchar	*gpm_cell_get_udi			(GpmCell	*cell);
 gchar		*gpm_cell_get_icon			(GpmCell	*cell);
