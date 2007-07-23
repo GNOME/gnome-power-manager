@@ -1,5 +1,41 @@
 2007-07-23  Richard Hughes  <richard@hughsie.com>
 
+	* po/POTFILES.in:
+	* src/Makefile.am:
+	* src/gpm-array-float.c: (gpm_st_array_float):
+	* src/gpm-array.c: (gpm_st_array):
+	* src/gpm-cell-array.c: (gpm_cell_array_perhaps_recall_cb),
+	(gpm_st_cell_array):
+	* src/gpm-cell-unit.c: (gpm_st_cell_unit):
+	* src/gpm-cell.c: (gpm_cell_perhaps_recall_cb),
+	(gpm_cell_get_battery), (gpm_st_cell):
+	* src/gpm-common.c: (gpm_st_common):
+	* src/gpm-graph-widget.c: (close_handler), (clicked_passed_cb),
+	(clicked_failed_cb), (create_graph_window), (wait_for_input),
+	(gpm_st_title_graph), (gpm_st_graph_widget):
+	* src/gpm-inhibit.c: (inhibit), (uninhibit), (has_inhibit),
+	(gpm_st_inhibit):
+	* src/gpm-profile.c: (gpm_st_profile):
+	* src/gpm-webcam.c: (gpm_st_webcam):
+	* test/Makefile.am:
+	* test/gpm-selftest-hal-devices.fdi:
+	* test/gpm-st-array-float.c:
+	* test/gpm-st-array.c:
+	* test/gpm-st-cell-array.c:
+	* test/gpm-st-cell-unit.c:
+	* test/gpm-st-cell.c:
+	* test/gpm-st-common.c:
+	* test/gpm-st-graph-widget.c:
+	* test/gpm-st-inhibit.c:
+	* test/gpm-st-main.c:
+	* test/gpm-st-main.h:
+	* test/gpm-st-profile.c:
+	* test/gpm-st-webcam.c:
+	* test/install-fdi.sh:
+	Move the tests into src/ to be able to to run make check.
+
+2007-07-23  Richard Hughes  <richard@hughsie.com>
+
 	* data/icons/48x48/Makefile.am:
 	* data/icons/scalable/Makefile.am:
 	* data/icons/scalable/gpm-phone-000.svg:

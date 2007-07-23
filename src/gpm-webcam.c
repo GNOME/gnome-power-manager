@@ -314,3 +314,65 @@ gpm_webcam_new (void)
 	return GPM_WEBCAM (gpm_webcam_object);
 }
 
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef GPM_BUILD_TESTS
+#include "gpm-self-test.h"
+
+void
+gpm_st_webcam (GpmSelfTest *test)
+{
+	GpmWebcam *webcam;
+	gfloat brightness;
+	gboolean ret;
+
+	if (gpm_st_start (test, "GpmWebcam", CLASS_MANUAL) == FALSE) {
+		return;
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a non null webcam");
+	webcam = gpm_webcam_new ();
+	if (webcam != NULL) {
+		gpm_st_success (test, "got GpmWebcam");
+	} else {
+		gpm_st_failed (test, "could not get GpmWebcam");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a valid sample");
+	ret = gpm_webcam_get_brightness (webcam, &brightness);
+	if (ret == TRUE) {
+		gpm_st_success (test, "got sample %f", brightness);
+	} else {
+		gpm_st_failed (test, "did not get sample");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get valid data");
+	if (brightness > 0 && brightness < 1) {
+		gpm_st_success (test, "got correct sample %f", brightness);
+	} else {
+		gpm_st_failed (test, "did not get correct sample");
+	}
+
+#if 1
+	do {
+		/************************************************************/
+		gpm_st_title (test, "make sure we get a valid sample");
+		ret = gpm_webcam_get_brightness (webcam, &brightness);
+		if (ret == TRUE) {
+			gpm_st_success (test, "got sample %f", brightness);
+		} else {
+			gpm_st_failed (test, "did not get sample");
+		}
+	} while (TRUE);
+#endif
+	g_object_unref (webcam);
+
+	gpm_st_end (test);
+}
+
+#endif
+

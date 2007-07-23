@@ -48,6 +48,9 @@ bin_PROGRAMS =						\
 	gnome-power-statistics				\
 	$(NULL)
 
+check_PROGRAMS =					\
+	gnome-power-self-test
+
 gnome_power_statistics_SOURCES =			\
 	gpm-statistics.c				\
 	gpm-statistics-core.h				\
@@ -219,6 +222,81 @@ gnome_power_manager_LDADD +=				\
 	$(NULL)
 endif
 
+gnome_power_self_test_SOURCES =				\
+	gpm-ac-adapter.h				\
+	gpm-ac-adapter.c				\
+	gpm-prefs-server.h				\
+	gpm-prefs-server.c				\
+	gpm-control.h					\
+	gpm-control.c					\
+	gpm-self-test.c					\
+	gpm-self-test.h					\
+	gpm-webcam.h					\
+	gpm-webcam.c					\
+	gpm-networkmanager.h				\
+	gpm-networkmanager.c				\
+	gpm-dpms.h					\
+	gpm-dpms.c					\
+	gpm-button.h					\
+	gpm-button.c					\
+	gpm-debug.h					\
+	gpm-debug.c					\
+	gpm-notify.h					\
+	gpm-notify.c					\
+	gpm-screensaver.h				\
+	gpm-screensaver.c				\
+	gpm-engine.h					\
+	gpm-engine.c					\
+	gpm-polkit.h					\
+	gpm-polkit.c					\
+	gpm-cell.h					\
+	gpm-cell.c					\
+	gpm-cell-unit.h					\
+	gpm-cell-unit.c					\
+	gpm-cell-array.h				\
+	gpm-cell-array.c				\
+	gpm-warnings.h					\
+	gpm-warnings.c					\
+	gpm-cpufreq.h					\
+	gpm-cpufreq.c					\
+	gpm-conf.h					\
+	gpm-conf.c					\
+	gpm-idle.h					\
+	gpm-idle.c					\
+	gpm-load.h					\
+	gpm-load.c					\
+	gpm-profile.h					\
+	gpm-profile.c					\
+	gpm-marshal.h					\
+	gpm-marshal.c					\
+	gpm-common.h					\
+	gpm-common.c					\
+	gpm-sound.h					\
+	gpm-sound.c					\
+	gpm-info.h					\
+	gpm-info.c					\
+	gpm-array.h					\
+	gpm-array.c					\
+	gpm-array-float.h				\
+	gpm-array-float.c				\
+	gpm-inhibit.h					\
+	gpm-inhibit.c					\
+	gpm-graph-widget.h				\
+	gpm-graph-widget.c				\
+	$(NULL)
+
+gnome_power_self_test_LDADD =				\
+	$(GLIB_LIBS)					\
+	$(GNOME_LIBS)					\
+	$(GSTREAMER_LIBS)				\
+	$(DBUS_LIBS)					\
+	$(LIBNOTIFY_LIBS)				\
+	$(LOCAL_LIBHAL_LIBS)				\
+	$(NULL)
+
+gnome_power_self_test_CPPFLAGS=	\
+	-DGPM_BUILD_TESTS
+
 BUILT_SOURCES = 					\
 	gpm-marshal.c					\
 	gpm-marshal.h					\
@@ -236,6 +314,8 @@ clean-local:
 	rm -f gpm-marshal.c gpm-marshal.h
 
 CLEANFILES = $(BUILT_SOURCES)
+
+TESTS = gnome-power-self-test
 
 MAINTAINERCLEANFILES =					\
 	*~			      			\

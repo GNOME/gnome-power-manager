@@ -972,3 +972,187 @@ gpm_profile_new (void)
 	return GPM_PROFILE (gpm_profile_object);
 }
 
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef GPM_BUILD_TESTS
+#include "gpm-self-test.h"
+
+void
+gpm_st_profile (GpmSelfTest *test)
+{
+	GpmProfile *profile;
+	gboolean ret;
+	gint i;
+	guint value;
+
+	if (gpm_st_start (test, "GpmProfile", CLASS_AUTO) == FALSE) {
+		return;
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a non null profile");
+	profile = gpm_profile_new ();
+	if (profile != NULL) {
+		gpm_st_success (test, "got GpmProfile");
+	} else {
+		gpm_st_failed (test, "could not get GpmProfile");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a zero accuracy when non-set");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value == 0) {
+		gpm_st_success (test, "got zero");
+	} else {
+		gpm_st_failed (test, "got %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "set config id");
+	ret = gpm_profile_set_config_id (profile, "test123");
+	if (ret == TRUE) {
+		gpm_st_success (test, "set type");
+	} else {
+		gpm_st_failed (test, "could not set type");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "delete old charging data");
+	ret = gpm_profile_delete_data (profile, FALSE);
+	if (ret == TRUE) {
+		gpm_st_success (test, "deleted");
+	} else {
+		gpm_st_failed (test, "could not delete");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "delete old discharging data");
+	ret = gpm_profile_delete_data (profile, TRUE);
+	if (ret == TRUE) {
+		gpm_st_success (test, "deleted");
+	} else {
+		gpm_st_failed (test, "could not delete");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "set config id (should create file)");
+	ret = gpm_profile_set_config_id (profile, "test123");
+	if (ret == TRUE) {
+		gpm_st_success (test, "set type");
+	} else {
+		gpm_st_failed (test, "could not set type");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a zero accuracy with a new dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value == 0) {
+		gpm_st_success (test, "got non zero");
+	} else {
+		gpm_st_failed (test, "got %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a zero time when non-set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 0) {
+		gpm_st_success (test, "got zero");
+	} else {
+		gpm_st_failed (test, "got %i", value);
+	}
+
+	/************************************************************
+	 **                TYPICAL DISCHARGE                       **
+	 ************************************************************/
+
+	/************************************************************/
+	gpm_st_title (test, "force discharging");
+	gpm_profile_test_force_discharging (profile, TRUE);
+	gpm_st_success (test, NULL);
+
+	/************************************************************/
+	gpm_st_title (test, "ignore first point");
+	ret = gpm_profile_register_percentage (profile, 99);
+	if (ret == FALSE) {
+		gpm_st_success (test, "ignored first");
+	} else {
+		gpm_st_failed (test, "ignored second");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make up discharging dataset (perfect accuracy)");
+	for (i=98; i>=0; i--) {
+		gpm_test_profile_save_percentage (profile, i, 120, 100);
+	}
+	gpm_st_success (test, "put dataset");
+
+	gpm_profile_print (profile);
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct accuracy when a complete dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value == 20) {
+		gpm_st_success (test, "got correct average %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct time when set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 6120) {
+		gpm_st_success (test, "got correct time %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect time %i", value);
+	}
+
+	g_object_unref (profile);
+	profile = gpm_profile_new ();
+
+	/************************************************************/
+	gpm_st_title (test, "single point of accuracy (new profile)");
+	gpm_test_profile_save_percentage (profile, 45, 120, 100);
+	gpm_test_profile_save_percentage (profile, 46, 120, 100);
+	gpm_st_success (test, "put dataset");
+
+	gpm_profile_print (profile);
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value == 20) {
+		gpm_st_success (test, "got correct average %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct time when set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 6120) {
+		gpm_st_success (test, "got correct time %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect time %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a non-zero accuracy when a complete dataset");
+	value = gpm_profile_get_accuracy (profile, 50);
+	if (value != 0) {
+		gpm_st_success (test, "got non zero %i", value);
+	} else {
+		gpm_st_failed (test, "got %i", value);
+	}
+
+	/************************************************************/
+	gpm_profile_delete_data (profile, FALSE);
+	gpm_profile_delete_data (profile, TRUE);
+
+	g_object_unref (profile);
+
+	gpm_st_end (test);
+}
+
+#endif
+
