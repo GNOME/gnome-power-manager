@@ -20,6 +20,10 @@ Data_DATA =				\
 	gpm-keyboard-030.svg		\
 	gpm-keyboard-060.svg		\
 	gpm-keyboard-100.svg		\
+	gpm-phone-000.svg		\
+	gpm-phone-030.svg		\
+	gpm-phone-060.svg		\
+	gpm-phone-100.svg		\
 	gpm-mouse-000.svg		\
 	gpm-mouse-030.svg		\
 	gpm-mouse-060.svg		\
