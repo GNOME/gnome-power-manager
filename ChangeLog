@@ -1,3 +1,13 @@
+2007-07-23  Richard Hughes  <richard@hughsie.com>
+
+	* data/icons/16x16/Makefile.am:
+	* data/icons/22x22/Makefile.am:
+	Add some more phone icons.
+
+	* src/gpm-control.c: (gpm_control_shutdown), (gpm_control_suspend),
+	(gpm_control_hibernate):
+	Only do gpm_control_convert_hal_error if false.
+
 2007-07-22  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-control.c: (gpm_control_convert_hal_error),

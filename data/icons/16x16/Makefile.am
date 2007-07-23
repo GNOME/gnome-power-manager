@@ -20,6 +20,10 @@ Data_DATA =				\
 	gpm-keyboard-030.png		\
 	gpm-keyboard-060.png		\
 	gpm-keyboard-100.png		\
+	gpm-phone-000.png		\
+	gpm-phone-030.png		\
+	gpm-phone-060.png		\
+	gpm-phone-100.png		\
 	gpm-mouse-000.png		\
 	gpm-mouse-030.png		\
 	gpm-mouse-060.png		\
