@@ -1,5 +1,11 @@
 2007-07-24  Richard Hughes  <richard@hughsie.com>
 
+	* applets/inhibit/inhibit-applet.c:
+	(gpm_inhibit_applet_dbus_disconnect):
+	Drop the inhibit when gnome-power-manager disconnects from the bus.
+
+2007-07-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell.c: (gpm_st_cell):
 	Fix a memory leak. 14 bytes.
 
