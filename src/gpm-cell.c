@@ -814,6 +814,7 @@ gpm_st_cell (GpmSelfTest *test)
 	}
 
 	g_free (udi);
+	g_free (desc);
 	g_object_unref (cell);
 
 	gpm_st_end (test);

@@ -1,5 +1,17 @@
 2007-07-24  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell.c: (gpm_st_cell):
+	Fix a memory leak. 14 bytes.
+
+	* src/gpm-main.c: (main):
+	Don't unref the context, it makes valgrind unhappy.
+
+	* src/gpm-profile.c: (gpm_profile_delete_data),
+	(gpm_profile_load_data), (gpm_st_profile):
+	Add some more tests.
+
+2007-07-24  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-profile.c: (gpm_profile_get_nonzero_accuracy_percent),
 	(gpm_profile_save_percentage), (gpm_profile_delete_data),
 	(gpm_profile_use_guessing), (gpm_profile_init), (reset_profile),

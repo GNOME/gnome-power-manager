@@ -277,7 +277,9 @@ if (0) {
 	g_object_unref (manager);
 unref_program:
 	g_object_unref (program);
+/*
 	g_option_context_free (context);
+*/
 
 	return 0;
 }

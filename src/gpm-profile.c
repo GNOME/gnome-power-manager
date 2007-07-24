@@ -671,7 +671,8 @@ gboolean
 gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 {
 	gchar *filename;
-	gint ret;
+	gboolean ret;
+	gint retval = TRUE;
 
 	g_return_val_if_fail (profile != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
@@ -682,14 +683,23 @@ gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 		return FALSE;
 	}
 
+	/* create filename and check is exists */
 	filename = gpm_profile_get_data_file (profile, discharge);
-	ret = g_unlink (filename);
-	if (ret != 0) {
-		gpm_warning ("could not delete '%s'", filename);
-		/* FIXME: return true if file not found */
+	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE) {
+		g_free (filename);
+		/* seems insane, but we need this for the test suite */
 		return TRUE;
 	}
-	return TRUE;
+
+	/* try to delete file */
+	retval = g_unlink (filename);
+	if (retval != 0) {
+		gpm_warning ("could not delete '%s'", filename);
+		ret = FALSE;
+	}
+
+	g_free (filename);
+	return ret;
 }
 
 /**
@@ -734,7 +744,7 @@ gpm_profile_load_data (GpmProfile *profile, gboolean discharge)
 
 		gpm_debug ("no data found, generating initial (poor) data");
 		for (i=0;i<100;i++) {
-			/* assume average battery lasts 2 hours, but we are 0% accurate */
+			/* just set data to zero as we have _no_ idea */
 			gpm_array_set (array, i, i, 0, 0);
 		}
 
@@ -999,6 +1009,7 @@ gpm_st_profile (GpmSelfTest *test)
 {
 	GpmProfile *profile;
 	gboolean ret;
+	gchar *filename;
 	gint i;
 	guint value;
 	gfloat fvalue;
@@ -1033,6 +1044,31 @@ gpm_st_profile (GpmSelfTest *test)
 	} else {
 		gpm_st_failed (test, "could not set type");
 	}
+
+
+	/************************************************************
+	 **              UTILITY FUNCTIONS                         **
+	 ************************************************************/
+
+	/************************************************************/
+	gpm_st_title (test, "get correct charging filename");
+	filename = gpm_profile_get_data_file (profile, FALSE);
+	if (strstr (filename, "/.gnome2/gnome-power-manager/profile-test123-charging.csv") != NULL) {
+		gpm_st_success (test, "got correct filename");
+	} else {
+		gpm_st_failed (test, "got incorrect filename: %s", filename);
+	}
+	g_free (filename);
+
+	/************************************************************/
+	gpm_st_title (test, "get correct discharging filename");
+	filename = gpm_profile_get_data_file (profile, TRUE);
+	if (strstr (filename, "/.gnome2/gnome-power-manager/profile-test123-discharging.csv") != NULL) {
+		gpm_st_success (test, "got correct filename");
+	} else {
+		gpm_st_failed (test, "got incorrect filename: %s", filename);
+	}
+	g_free (filename);
 
 	/* clear old profile */
 	reset_profile (profile);
