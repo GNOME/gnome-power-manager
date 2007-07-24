@@ -54,6 +54,8 @@ GpmProfile		*gpm_profile_new			(void);
 
 gboolean		 gpm_profile_set_config_id		(GpmProfile	*profile,
 								 const gchar	*config_id);
+gboolean		 gpm_profile_use_guessing		(GpmProfile	*profile,
+								 gboolean	 use_guessing);
 gboolean		 gpm_profile_register_charging		(GpmProfile	*profile,
 								 gboolean	 is_charging);
 gboolean		 gpm_profile_register_percentage	(GpmProfile	*profile,
@@ -72,15 +74,6 @@ guint			 gpm_profile_get_time			(GpmProfile	*profile,
 								 guint		 percentage,
 								 gboolean	 discharging);
 void			 gpm_profile_print			(GpmProfile	*profile);
-
-/* ONLY USED FOR THE TEST SUITE */
-void			 gpm_test_profile_save_percentage	(GpmProfile	*profile,
-								 guint		 percentage,
-								 guint		 time,
-								 guint		 measurement_accuracy);
-void			 gpm_profile_test_force_discharging	(GpmProfile	*profile,
-								 gboolean	 is_discharging);
-
 
 G_END_DECLS
 

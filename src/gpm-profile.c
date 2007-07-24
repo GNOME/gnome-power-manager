@@ -76,6 +76,7 @@ struct GpmProfilePrivate
 	gboolean		 discharging;
 	gboolean		 lcd_on;
 	gboolean		 data_valid;
+	gboolean		 use_guessing;
 	guint			 last_percentage;
 	gchar			*config_id;
 };
@@ -345,6 +346,12 @@ gpm_profile_get_nonzero_accuracy_percent (GArray *array_data, GArray *array_accu
 			length_average++;
 		}
 	}
+	gpm_debug ("average=%f, length_average=%i", average, length_average);
+	if (average == 0 || length_average == 0) {
+		/* no data with accuracy */
+		gpm_warning ("no data");
+		return 0;
+	}
 	return average / (gfloat) length_average;
 }
 
@@ -459,15 +466,17 @@ gpm_profile_save_percentage (GpmProfile *profile,
 	/* save new data */
 	gpm_array_float_set (array_data, percentage, data);
 
-	/* guess missing data between 5 and 95 */
-if (0)	gpm_profile_set_average_no_accuracy (profile);
-
 	/* save new accuracy (max gain is 20%, but less if the load was higher) */
 	accuracy += measurement_accuracy / 5;
 	if (accuracy > 100) {
 		accuracy = 100;
 	}
 	gpm_array_float_set (array_accuracy, percentage, accuracy);
+
+	/* guess missing data between 5 and 95 */
+	if (profile->priv->use_guessing == TRUE) {
+		gpm_profile_set_average_no_accuracy (profile);
+	}
 
 	/* create a temp 2D array so we can save the CSV */
 	array = gpm_array_new ();
@@ -482,21 +491,6 @@ if (0)	gpm_profile_set_average_no_accuracy (profile);
 	gpm_array_save_to_file (array, filename);
 	g_free (filename);
 	g_object_unref (array);
-}
-
-/**
- * gpm_test_profile_save_percentage:
- *
- * @profile: This class
- * @percentage: new percentage value
- */
-void
-gpm_test_profile_save_percentage (GpmProfile *profile,
-			   	  guint       percentage,
-			 	  guint       time,
-			 	  guint       measurement_accuracy)
-{
-	gpm_profile_save_percentage (profile, percentage, time, measurement_accuracy);
 }
 
 /**
@@ -692,7 +686,8 @@ gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 	ret = g_unlink (filename);
 	if (ret != 0) {
 		gpm_warning ("could not delete '%s'", filename);
-		return FALSE;
+		/* FIXME: return true if file not found */
+		return TRUE;
 	}
 	return TRUE;
 }
@@ -810,6 +805,17 @@ gpm_profile_set_config_id (GpmProfile  *profile,
 }
 
 /**
+ * gpm_profile_use_guessing:
+ */
+gboolean
+gpm_profile_use_guessing (GpmProfile *profile,
+			  gboolean    use_guessing)
+{
+	profile->priv->use_guessing = use_guessing;
+	return TRUE;
+}
+
+/**
  * gpm_profile_get_accuracy:
  */
 guint
@@ -867,6 +873,7 @@ gpm_profile_init (GpmProfile *profile)
 	profile->priv->timer = g_timer_new ();
 	profile->priv->load = gpm_load_new ();
 	profile->priv->config_id = NULL;
+	profile->priv->use_guessing = TRUE;
 
 	profile->priv->ac_adapter = gpm_ac_adapter_new ();
 	g_signal_connect (profile->priv->ac_adapter, "ac-adapter-changed",
@@ -978,6 +985,15 @@ gpm_profile_new (void)
 #ifdef GPM_BUILD_TESTS
 #include "gpm-self-test.h"
 
+static void
+reset_profile (GpmProfile *profile)
+{
+	gpm_profile_delete_data (profile, TRUE);
+	gpm_profile_delete_data (profile, FALSE);
+	gpm_profile_load_data (profile, TRUE);
+	gpm_profile_load_data (profile, FALSE);
+}
+
 void
 gpm_st_profile (GpmSelfTest *test)
 {
@@ -985,6 +1001,7 @@ gpm_st_profile (GpmSelfTest *test)
 	gboolean ret;
 	gint i;
 	guint value;
+	gfloat fvalue;
 
 	if (gpm_st_start (test, "GpmProfile", CLASS_AUTO) == FALSE) {
 		return;
@@ -1000,7 +1017,7 @@ gpm_st_profile (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a zero accuracy when non-set");
+	gpm_st_title (test, "make sure we get a zero accuracy when no-id");
 	value = gpm_profile_get_accuracy (profile, 50);
 	if (value == 0) {
 		gpm_st_success (test, "got zero");
@@ -1017,44 +1034,20 @@ gpm_st_profile (GpmSelfTest *test)
 		gpm_st_failed (test, "could not set type");
 	}
 
-	/************************************************************/
-	gpm_st_title (test, "delete old charging data");
-	ret = gpm_profile_delete_data (profile, FALSE);
-	if (ret == TRUE) {
-		gpm_st_success (test, "deleted");
-	} else {
-		gpm_st_failed (test, "could not delete");
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "delete old discharging data");
-	ret = gpm_profile_delete_data (profile, TRUE);
-	if (ret == TRUE) {
-		gpm_st_success (test, "deleted");
-	} else {
-		gpm_st_failed (test, "could not delete");
-	}
-
-	/************************************************************/
-	gpm_st_title (test, "set config id (should create file)");
-	ret = gpm_profile_set_config_id (profile, "test123");
-	if (ret == TRUE) {
-		gpm_st_success (test, "set type");
-	} else {
-		gpm_st_failed (test, "could not set type");
-	}
+	/* clear old profile */
+	reset_profile (profile);
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a zero accuracy with a new dataset");
 	value = gpm_profile_get_accuracy (profile, 50);
 	if (value == 0) {
-		gpm_st_success (test, "got non zero");
+		gpm_st_success (test, "got zero");
 	} else {
-		gpm_st_failed (test, "got %i", value);
+		gpm_st_failed (test, "got %i (not zero!)", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a zero time when non-set");
+	gpm_st_title (test, "make sure we get a zero time with a new dataset");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 0) {
 		gpm_st_success (test, "got zero");
@@ -1081,13 +1074,11 @@ gpm_st_profile (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make up discharging dataset (perfect accuracy)");
+	gpm_st_title (test, "make up discharging dataset 98-0 (perfect accuracy)");
 	for (i=98; i>=0; i--) {
-		gpm_test_profile_save_percentage (profile, i, 120, 100);
+		gpm_profile_save_percentage (profile, i, 120, 100);
 	}
 	gpm_st_success (test, "put dataset");
-
-	gpm_profile_print (profile);
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a correct accuracy when a complete dataset");
@@ -1099,7 +1090,7 @@ gpm_st_profile (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a correct time when set");
+	gpm_st_title (test, "make sure we get a correct discharge time when set");
 	value = gpm_profile_get_time (profile, 50, TRUE);
 	if (value == 6120) {
 		gpm_st_success (test, "got correct time %i", value);
@@ -1107,20 +1098,22 @@ gpm_st_profile (GpmSelfTest *test)
 		gpm_st_failed (test, "got incorrect time %i", value);
 	}
 
-	g_object_unref (profile);
-	profile = gpm_profile_new ();
+	/************************************************************
+	 **                  NO PROFILE TEST                       **
+	 ************************************************************/
+
+	/* clear old profile */
+	reset_profile (profile);
 
 	/************************************************************/
-	gpm_st_title (test, "single point of accuracy (new profile)");
-	gpm_test_profile_save_percentage (profile, 45, 120, 100);
-	gpm_test_profile_save_percentage (profile, 46, 120, 100);
-	gpm_st_success (test, "put dataset");
-
-	gpm_profile_print (profile);
+	gpm_st_title (test, "single point of accuracy with no guessing (new profile)");
+	gpm_profile_use_guessing (profile, FALSE);
+	gpm_profile_save_percentage (profile, 45, 120, 100);
+	gpm_st_success (test, "put single point");
 
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
-	value = gpm_profile_get_accuracy (profile, 50);
+	value = gpm_profile_get_accuracy (profile, 45);
 	if (value == 20) {
 		gpm_st_success (test, "got correct average %i", value);
 	} else {
@@ -1130,19 +1123,59 @@ gpm_st_profile (GpmSelfTest *test)
 	/************************************************************/
 	gpm_st_title (test, "make sure we get a correct time when set");
 	value = gpm_profile_get_time (profile, 50, TRUE);
-	if (value == 6120) {
+	if (value == 120) {
 		gpm_st_success (test, "got correct time %i", value);
 	} else {
 		gpm_st_failed (test, "got incorrect time %i", value);
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we get a non-zero accuracy when a complete dataset");
-	value = gpm_profile_get_accuracy (profile, 50);
-	if (value != 0) {
-		gpm_st_success (test, "got non zero %i", value);
+	gpm_st_title (test, "make sure we get a non-zero average accuracy when some data present");
+	fvalue = gpm_profile_get_accuracy_average (profile, TRUE);
+	if (fvalue < 0.21 && fvalue > 0.19) {
+		gpm_st_success (test, "got non zero %f", fvalue);
 	} else {
-		gpm_st_failed (test, "got %i", value);
+		gpm_st_failed (test, "got %f", fvalue);
+	}
+
+	/************************************************************
+	 **                  NO PROFILE TEST 2                     **
+	 ************************************************************/
+
+	/* clear old profile */
+	reset_profile (profile);
+
+	/************************************************************/
+	gpm_st_title (test, "single point of accuracy with guessing (new profile)");
+	gpm_profile_use_guessing (profile, TRUE);
+	gpm_profile_save_percentage (profile, 45, 120, 100);
+	gpm_st_success (test, "put single point");
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct accuracy when a single point dataset");
+	value = gpm_profile_get_accuracy (profile, 45);
+	if (value == 20) {
+		gpm_st_success (test, "got correct average %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure the point after the guessed point isn't guessed");
+	value = gpm_profile_get_accuracy (profile, 46);
+	if (value == 0) {
+		gpm_st_success (test, "didn't try to guess point after set", value);
+	} else {
+		gpm_st_failed (test, "got accuracy average %i", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a correct time when set");
+	value = gpm_profile_get_time (profile, 50, TRUE);
+	if (value == 5280) {
+		gpm_st_success (test, "got correct time %i", value);
+	} else {
+		gpm_st_failed (test, "got incorrect time!!! %i", value);
 	}
 
 	/************************************************************/

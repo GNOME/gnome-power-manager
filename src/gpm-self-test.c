@@ -201,7 +201,7 @@ main (int argc, char **argv)
 	gpm_st_run_test (test, gpm_st_cell);
 	gpm_st_run_test (test, gpm_st_cell_array);
 	gpm_st_run_test (test, gpm_st_inhibit);
-//	gpm_st_run_test (test, gpm_st_profile);
+	gpm_st_run_test (test, gpm_st_profile);
 
 	/* manual */
 	gpm_st_run_test (test, gpm_st_graph_widget);

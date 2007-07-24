@@ -1,3 +1,14 @@
+2007-07-24  Richard Hughes  <richard@hughsie.com>
+
+	* src/gpm-profile.c: (gpm_profile_get_nonzero_accuracy_percent),
+	(gpm_profile_save_percentage), (gpm_profile_delete_data),
+	(gpm_profile_use_guessing), (gpm_profile_init), (reset_profile),
+	(gpm_st_profile):
+	* src/gpm-profile.h:
+	* src/gpm-self-test.c: (main):
+	Fix the profile test. Also default to estimating the 5-95% data for
+	unknown profile data.
+
 2007-07-23  Richard Hughes  <richard@hughsie.com>
 
 	* po/POTFILES.skip:
