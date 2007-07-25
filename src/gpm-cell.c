@@ -402,6 +402,7 @@ gpm_cell_set_phone_index (GpmCell *cell, guint index)
 	unit->is_present = TRUE;
 	unit->percentage = gpm_phone_get_percentage (cell->priv->phone, 0);
 	unit->is_charging = gpm_phone_get_on_ac (cell->priv->phone, 0);
+	unit->is_discharging = !unit->is_charging;
 	return TRUE;
 }
 
@@ -626,6 +627,7 @@ phone_device_refresh_cb (GpmPhone     *phone,
 
 	if (unit->is_charging != is_charging) {
 		unit->is_charging = is_charging;
+		unit->is_discharging = !is_charging;
 		gpm_debug ("** EMIT: charging-changed: %i", is_charging);
 		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, is_charging);
 	}
