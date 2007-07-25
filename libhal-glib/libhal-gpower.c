@@ -204,7 +204,7 @@ static gboolean
 hal_gpower_filter_error (GError **error)
 {
 	/* short cut for speed, no error */
-	if (*error == NULL) {
+	if (error == NULL || *error == NULL) {
 		return FALSE;
 	}
 
@@ -250,7 +250,7 @@ hal_gpower_suspend (HalGPower *power, guint wakeup, GError **error)
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (hal_gpower_filter_error (error)) {
+	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
 		return TRUE;
 	}
 	if (retval != 0) {
@@ -294,7 +294,7 @@ hal_gpower_pm_method_void (HalGPower *power, const gchar *method, GError **error
 				 G_TYPE_UINT, &retval,
 				 G_TYPE_INVALID);
 	/* we might have to ignore the error */
-	if (hal_gpower_filter_error (error)) {
+	if (error != NULL && hal_gpower_filter_error (error) == TRUE) {
 		return TRUE;
 	}
 	if (retval != 0) {
