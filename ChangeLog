@@ -1,5 +1,22 @@
 2007-07-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(hal_device_property_modified_cb), (gpm_cell_set_type),
+	(gpm_cell_set_hal_udi), (gpm_cell_set_phone_index),
+	(gpm_cell_get_icon), (gpm_cell_print), (gpm_cell_get_description),
+	(phone_device_refresh_cb), (gpm_cell_init), (gpm_cell_finalize):
+	* src/gpm-phone.c: (gpm_phone_coldplug), (gpm_phone_get_present),
+	(gpm_phone_get_percentage), (gpm_phone_get_on_ac),
+	(gpm_phone_get_num_batteries), (gpm_phone_battery_state_changed),
+	(gpm_phone_num_batteries_changed), (gpm_phone_dbus_connect),
+	(gpm_phone_dbus_disconnect), (phone_device_refresh_cb),
+	(gpm_st_phone):
+	Add in checks for the object type, and also remember to disconnect the
+	signal when GpmCell is unref'ed, else we segfault on phone connect,
+	disconnect, connect.
+
+2007-07-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-cell.c: (phone_device_refresh_cb):
 	Correct the function type to correct a crash.
 

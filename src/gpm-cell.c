@@ -50,6 +50,7 @@ struct GpmCellPrivate
 	gchar		*technology;
 	gchar		*serial;
 	gchar		*model;
+	gulong		 sig_device_refresh;
 };
 
 enum {
@@ -93,7 +94,7 @@ gpm_cell_refresh_hal_all (GpmCell *cell)
 	gboolean is_recalled;
 
 	device = cell->priv->hal_device;
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 
 	/* batteries might be missing */
 	hal_gdevice_get_bool (device, "battery.present", &unit->is_present, NULL);
@@ -238,9 +239,12 @@ hal_device_property_modified_cb (HalGDevice   *device,
 				 gboolean      finally,
 				 GpmCell      *cell)
 {
-	GpmCellUnit *unit = &(cell->priv->unit);
+	GpmCellUnit *unit;
 	const gchar *udi = hal_gdevice_get_udi (device);
 	guint time_hal;
+
+	unit = gpm_cell_get_unit (cell);
+
 	gpm_debug ("udi=%s, key=%s, added=%i, removed=%i, finally=%i",
 		   udi, key, is_added, is_removed, finally);
 
@@ -328,7 +332,7 @@ gpm_cell_set_type (GpmCell *cell, GpmCellUnitKind kind)
 	g_return_val_if_fail (cell != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 	unit->kind = kind;
 	return TRUE;
 }
@@ -347,7 +351,7 @@ gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
 	g_return_val_if_fail (cell != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 	device = cell->priv->hal_device;
 
 	ret = hal_gdevice_set_udi (device, udi);
@@ -391,7 +395,7 @@ gpm_cell_set_phone_index (GpmCell *cell, guint index)
 	g_return_val_if_fail (cell != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 	unit->kind = GPM_CELL_UNIT_KIND_PHONE;
 
 	unit->is_discharging = TRUE;
@@ -424,7 +428,7 @@ gpm_cell_get_icon (GpmCell *cell)
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 	return gpm_cell_unit_get_icon (unit);
 }
 
@@ -459,7 +463,7 @@ gpm_cell_print (GpmCell *cell)
 	g_return_val_if_fail (cell != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 	gpm_cell_unit_print (unit);
 	return TRUE;
 }
@@ -476,7 +480,7 @@ gpm_cell_get_description (GpmCell *cell)
 	g_return_val_if_fail (cell != NULL, NULL);
 	g_return_val_if_fail (GPM_IS_CELL (cell), NULL);
 
-	unit = &(cell->priv->unit);
+	unit = gpm_cell_get_unit (cell);
 
 	details = g_string_new ("");
 	if (cell->priv->product) {
@@ -607,7 +611,10 @@ phone_device_refresh_cb (GpmPhone     *phone,
 	gboolean is_charging;
 	guint percentage;
 
-	unit = &(cell->priv->unit);
+	g_return_if_fail (cell != NULL);
+	g_return_if_fail (GPM_IS_CELL (cell));
+
+	unit = gpm_cell_get_unit (cell);
 
 	/* ignore non-phones */
 	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
@@ -705,11 +712,12 @@ gpm_cell_init (GpmCell *cell)
 	cell->priv->serial = NULL;
 	cell->priv->model = NULL;
 
-	cell->priv->phone = gpm_phone_new ();
-	g_signal_connect (cell->priv->phone, "device-refresh",
-			  G_CALLBACK (phone_device_refresh_cb), cell);
-
 	gpm_cell_unit_init (&cell->priv->unit);
+
+	cell->priv->phone = gpm_phone_new ();
+	cell->priv->sig_device_refresh =
+		g_signal_connect (cell->priv->phone, "device-refresh",
+	 			  G_CALLBACK (phone_device_refresh_cb), cell);
 }
 
 /**
@@ -725,6 +733,9 @@ gpm_cell_finalize (GObject *object)
 
 	cell = GPM_CELL (object);
 	cell->priv = GPM_CELL_GET_PRIVATE (cell);
+
+	/* we need to do this in case the device goes away and comes back */
+	g_signal_handler_disconnect (cell->priv->phone, cell->priv->sig_device_refresh);
 
 	g_free (cell->priv->product);
 	g_free (cell->priv->vendor);

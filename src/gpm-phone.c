@@ -72,6 +72,9 @@ gpm_phone_coldplug (GpmPhone *phone)
 	GError  *error = NULL;
 	gboolean ret;
 
+	g_return_val_if_fail (phone != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
+
 	if (phone->priv->proxy == NULL) {
 		gpm_warning ("not connected\n");
 		return FALSE;
@@ -94,6 +97,8 @@ gpm_phone_coldplug (GpmPhone *phone)
 gboolean
 gpm_phone_get_present (GpmPhone	*phone, guint index)
 {
+	g_return_val_if_fail (phone != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 	return phone->priv->present;
 }
 
@@ -104,6 +109,8 @@ gpm_phone_get_present (GpmPhone	*phone, guint index)
 guint
 gpm_phone_get_percentage (GpmPhone *phone, guint index)
 {
+	g_return_val_if_fail (phone != NULL, 0);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), 0);
 	return phone->priv->percentage;
 }
 
@@ -114,6 +121,8 @@ gpm_phone_get_percentage (GpmPhone *phone, guint index)
 gboolean
 gpm_phone_get_on_ac (GpmPhone *phone, guint index)
 {
+	g_return_val_if_fail (phone != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
 	return phone->priv->onac;
 }
 
@@ -124,6 +133,8 @@ gpm_phone_get_on_ac (GpmPhone *phone, guint index)
 guint
 gpm_phone_get_num_batteries (GpmPhone *phone)
 {
+	g_return_val_if_fail (phone != NULL, 0);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), 0);
 	if (phone->priv->present == TRUE) {
 		return 1;
 	}
@@ -139,6 +150,9 @@ gpm_phone_battery_state_changed (DBusGProxy     *proxy,
 				 gboolean        on_ac,
 				 GpmPhone	*phone)
 {
+	g_return_if_fail (phone != NULL);
+	g_return_if_fail (GPM_IS_PHONE (phone));
+
 	gpm_debug ("got BatteryStateChanged %i = %i (%i)", index, percentage, on_ac);
 	phone->priv->percentage = percentage;
 	phone->priv->onac = on_ac;
@@ -154,6 +168,9 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 			         guint           number,
 			         GpmPhone	*phone)
 {
+	g_return_if_fail (phone != NULL);
+	g_return_if_fail (GPM_IS_PHONE (phone));
+
 	gpm_debug ("got NumberBatteriesChanged %i", number);
 	if (number > 1) {
 		gpm_warning ("number not 0 or 1, not valid!");
@@ -238,6 +255,9 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 {
 	GError *error = NULL;
 
+	g_return_val_if_fail (phone != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
+
 	if (phone->priv->connection == NULL) {
 		gpm_debug ("get connection\n");
 		g_clear_error (&error);
@@ -293,6 +313,9 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 gboolean
 gpm_phone_dbus_disconnect (GpmPhone *phone)
 {
+	g_return_val_if_fail (phone != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_PHONE (phone), FALSE);
+
 	if (phone->priv->proxy != NULL) {
 		gpm_debug ("removing proxy\n");
 		g_object_unref (phone->priv->proxy);
@@ -391,6 +414,8 @@ gpm_phone_new (void)
 #ifdef GPM_BUILD_TESTS
 #include "gpm-self-test.h"
 
+static gboolean test_got_refresh = FALSE;
+
 static void
 gpm_st_mainloop_wait (guint ms)
 {
@@ -398,6 +423,17 @@ gpm_st_mainloop_wait (guint ms)
 	loop = g_main_loop_new (NULL, FALSE);
 	g_timeout_add (ms, (GSourceFunc) g_main_loop_quit, loop);
 	g_main_loop_run (loop);
+}
+
+static void
+phone_device_refresh_cb (GpmPhone     *phone,
+		         guint         index,
+		         gpointer     *data)
+{
+	g_debug ("index refresh = %i", index);
+	if (index == 0 && GPOINTER_TO_UINT (data) == 44) {
+		test_got_refresh = TRUE;
+	}
 }
 
 void
@@ -420,6 +456,10 @@ gpm_st_phone (GpmSelfTest *test)
 		gpm_st_failed (test, "could not get GpmPhone");
 	}
 
+	/* connect signals */
+	g_signal_connect (phone, "device-refresh",
+			  G_CALLBACK (phone_device_refresh_cb), GUINT_TO_POINTER(44));
+
 	/************************************************************/
 	gpm_st_title (test, "make sure we got a connection");
 	if (phone->priv->proxy != NULL) {
@@ -438,6 +478,14 @@ gpm_st_phone (GpmSelfTest *test)
 	}
 
 	gpm_st_mainloop_wait (500);
+
+	/************************************************************/
+	gpm_st_title (test, "got refresh");
+	if (test_got_refresh == TRUE) {
+		gpm_st_success (test, NULL);
+	} else {
+		gpm_st_failed (test, "did not get refresh");
+	}
 
 	/************************************************************/
 	gpm_st_title (test, "check the connected phones");
