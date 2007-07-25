@@ -82,10 +82,10 @@ gpm_cell_get_unit (GpmCell *cell)
 }
 
 /**
- * gpm_cell_refresh_all:
+ * gpm_cell_refresh_hal_all:
  **/
 static gboolean
-gpm_cell_refresh_all (GpmCell *cell)
+gpm_cell_refresh_hal_all (GpmCell *cell)
 {
 	HalGDevice *device;
 	GpmCellUnit *unit;
@@ -253,7 +253,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 	/* update values in the struct */
 	if (strcmp (key, "battery.present") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_present, NULL);
-		gpm_cell_refresh_all (cell);
+		gpm_cell_refresh_hal_all (cell);
 
 	} else if (strcmp (key, "battery.rechargeable.is_charging") == 0) {
 		hal_gdevice_get_bool (device, key, &unit->is_charging, NULL);
@@ -312,7 +312,7 @@ hal_device_property_modified_cb (HalGDevice   *device,
 		    battery_key_changed (device, "battery.serial", cell->priv->serial) ||
 		    battery_key_changed (device, "battery.model", cell->priv->model)) {
 		    	/* we have to refresh all, as it might be a different battery */
-			gpm_cell_refresh_all (cell);
+			gpm_cell_refresh_hal_all (cell);
 		}
 	}
 }
@@ -375,8 +375,29 @@ gpm_cell_set_hal_udi (GpmCell *cell, const gchar *udi)
 	}
 	g_free (battery_kind_str);
 
-	gpm_cell_refresh_all (cell);
+	gpm_cell_refresh_hal_all (cell);
 
+	return TRUE;
+}
+
+/**
+ * gpm_cell_set_phone_index:
+ **/
+gboolean
+gpm_cell_set_phone_index (GpmCell *cell, guint index)
+{
+	GpmCellUnit *unit;
+
+	g_return_val_if_fail (cell != NULL, FALSE);
+	g_return_val_if_fail (GPM_IS_CELL (cell), FALSE);
+
+	unit = &(cell->priv->unit);
+	unit->kind = GPM_CELL_UNIT_KIND_PHONE;
+
+	unit->is_discharging = TRUE;
+	unit->is_present = TRUE;
+	unit->percentage = gpm_phone_get_percentage (cell->priv->phone, 0);
+	unit->is_charging = gpm_phone_get_on_ac (cell->priv->phone, 0);
 	return TRUE;
 }
 
@@ -583,6 +604,8 @@ phone_device_refresh_cb (GpmPhone     *phone,
 		         GpmCell      *cell)
 {
 	GpmCellUnit *unit;
+	gboolean is_charging;
+	guint percentage;
 
 	unit = &(cell->priv->unit);
 
@@ -590,22 +613,21 @@ phone_device_refresh_cb (GpmPhone     *phone,
 	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
 		return;
 	}
-#if 0
-	cell = gpm_cell_new ();
-	g_signal_connect (cell, "percent-changed",
-			  G_CALLBACK (gpm_cell_percent_changed_cb), cell);
-	g_signal_connect (cell, "charging-changed",
-			  G_CALLBACK (gpm_cell_charging_changed_cb), cell);
-	g_signal_connect (cell, "discharging-changed",
-			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell);
-//	gpm_cell_set_phone_index (cell, 0);
-	gpm_cell_print (cell);
 
-	g_ptr_array_add (cell->priv->array, (gpointer) cell);
+	percentage = gpm_phone_get_percentage (cell->priv->phone, 0);
+	is_charging = gpm_phone_get_on_ac (cell->priv->phone, 0);
 
-	/* global collection has changed */
-	gpm_cell_collection_changed (cell);
-#endif
+	if (unit->is_charging != is_charging) {
+		unit->is_charging = is_charging;
+		gpm_debug ("** EMIT: charging-changed: %i", is_charging);
+		g_signal_emit (cell, signals [CHARGING_CHANGED], 0, is_charging);
+	}
+
+	if (percentage != unit->percentage) {
+		unit->percentage = percentage;
+		gpm_debug ("** EMIT: percent-changed: %i", percentage);
+		g_signal_emit (cell, signals [PERCENT_CHANGED], 0, percentage);
+	}
 }
 
 /**

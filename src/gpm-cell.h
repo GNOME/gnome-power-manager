@@ -66,6 +66,8 @@ gboolean	 gpm_cell_set_type			(GpmCell	*cell,
 							 GpmCellUnitKind kind);
 gboolean	 gpm_cell_set_hal_udi			(GpmCell	*cell,
 							 const gchar	*udi);
+gboolean	 gpm_cell_set_phone_index		(GpmCell	*cell,
+							 guint		 index);
 const gchar	*gpm_cell_get_udi			(GpmCell	*cell);
 gchar		*gpm_cell_get_icon			(GpmCell	*cell);
 gchar		*gpm_cell_get_id			(GpmCell	*cell);

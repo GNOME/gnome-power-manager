@@ -346,7 +346,8 @@ gpm_cell_array_update (GpmCellArray *cell_array)
 	/* Perform following calculations with floating point otherwise we might
 	 * get an with batteries which have a very small charge unit and consequently
 	 * a very high charge. Fixes bug #327471 */
-	if (unit->kind != GPM_CELL_UNIT_KIND_PRIMARY) {
+	if (unit->kind == GPM_CELL_UNIT_KIND_PRIMARY &&
+	    unit->charge_current > 0 && unit->charge_last_full > 0) {
 		gint pc = 100 * ((gfloat)unit->charge_current /
 				(gfloat)unit->charge_last_full);
 		if (pc < 0) {
@@ -1158,7 +1159,7 @@ phone_device_added_cb (GpmPhone     *phone,
 			  G_CALLBACK (gpm_cell_charging_changed_cb), cell_array);
 	g_signal_connect (cell, "discharging-changed",
 			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell_array);
-//	gpm_cell_set_phone_index (cell, 0);
+	gpm_cell_set_phone_index (cell, 0);
 	gpm_cell_print (cell);
 
 	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);

@@ -1,5 +1,23 @@
 2007-07-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-cell-array.c: (gpm_cell_array_update),
+	(phone_device_added_cb):
+	Only do the percentage override if we have enough data on a primary
+	battery. Pretty major bugfix, not sure why we haven't hit this.
+
+	* src/gpm-cell-unit.c: (gpm_cell_unit_get_icon),
+	(gpm_cell_unit_get_kind_localised):
+	Use the percentage, not the charge level. Also add translation.
+
+	* src/gpm-cell.c: (gpm_cell_refresh_hal_all),
+	(hal_device_property_modified_cb), (gpm_cell_set_hal_udi),
+	(gpm_cell_set_phone_index), (phone_device_refresh_cb):
+	* src/gpm-cell.h:
+	Support the correct methods to update the icon when the phone device
+	changes.
+
+2007-07-25  Richard Hughes  <richard@hughsie.com>
+
 	* src/Makefile.am:
 	* src/gpm-cell.c:
 	* src/gpm-cell-array.c: (gpm_cell_array_index_udi),

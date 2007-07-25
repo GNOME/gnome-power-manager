@@ -196,11 +196,11 @@ gpm_cell_unit_get_icon (GpmCellUnit *unit)
 		}
 		filename = g_strdup_printf ("gpm-%s-%s", prefix, index_str);
 	} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-		if (unit->charge_current < 26) {
+		if (unit->percentage < 26) {
 			index_str = "000";
-		} else if (unit->charge_current < 51) {
+		} else if (unit->percentage < 51) {
 			index_str = "030";
-		} else if (unit->charge_current < 76) {
+		} else if (unit->percentage < 76) {
 			index_str = "060";
 		} else {
 			index_str = "100";
@@ -253,6 +253,8 @@ gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 	 		str = _("Wireless keyboards");
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 	 		str = _("PDAs");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+	 		str = _("Cell Phones");
 	 	} else {
 	 		str = _("Unknown");
 		}
@@ -267,6 +269,8 @@ gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 	 		str = _("Wireless keyboard");
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 	 		str = _("PDA");
+		} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+	 		str = _("Cell Phone");
 	 	} else {
 	 		str = _("Unknown");
 		}
