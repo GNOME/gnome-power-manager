@@ -254,7 +254,7 @@ gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 	 		str = _("PDAs");
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-	 		str = _("Cell Phones");
+	 		str = _("Cell phones");
 	 	} else {
 	 		str = _("Unknown");
 		}
@@ -270,7 +270,7 @@ gpm_cell_unit_get_kind_localised (GpmCellUnit *unit, gboolean plural)
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PDA) {
 	 		str = _("PDA");
 		} else if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
-	 		str = _("Cell Phone");
+	 		str = _("Cell phone");
 	 	} else {
 	 		str = _("Unknown");
 		}
