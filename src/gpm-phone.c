@@ -29,6 +29,8 @@
 #include "gpm-conf.h"
 #include "gpm-phone.h"
 #include "gpm-debug.h"
+#include "gpm-marshal.h"
+
 #include <libdbus-watch.h>
 
 static void     gpm_phone_class_init (GpmPhoneClass *klass);
@@ -77,12 +79,12 @@ gpm_phone_coldplug (GpmPhone *phone)
 
 	ret = dbus_g_proxy_call (phone->priv->proxy, "Coldplug", &error,
 				 G_TYPE_INVALID, G_TYPE_INVALID);
-	if (error) {
+	if (error != NULL) {
 		gpm_warning ("DEBUG: ERROR: %s", error->message);
 		g_error_free (error);
 	}
 
-	return TRUE;
+	return ret;
 }
 
 /**
@@ -140,6 +142,7 @@ gpm_phone_battery_state_changed (DBusGProxy     *proxy,
 	gpm_debug ("got BatteryStateChanged %i = %i (%i)", index, percentage, on_ac);
 	phone->priv->percentage = percentage;
 	phone->priv->onac = on_ac;
+	phone->priv->present = TRUE;
 	gpm_debug ("emitting device-refresh : (%i)", index);
 	g_signal_emit (phone, signals [DEVICE_REFRESH], 0, index);
 }
@@ -148,20 +151,22 @@ gpm_phone_battery_state_changed (DBusGProxy     *proxy,
  */
 static void
 gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
-			         guint           index,
+			         guint           number,
 			         GpmPhone	*phone)
 {
-	gpm_debug ("got NumberBatteriesChanged %i", index);
-	if (index > 1) {
-		gpm_warning ("index not 0 or 1, not valid!");
+	gpm_debug ("got NumberBatteriesChanged %i", number);
+	if (number > 1) {
+		gpm_warning ("number not 0 or 1, not valid!");
 		return;
 	}
 
 	/* are we removed? */
-	if (index == 0) {
+	if (number == 0) {
 		phone->priv->present = FALSE;
 		phone->priv->percentage = 0;
 		phone->priv->onac = FALSE;
+		gpm_debug ("emitting device-removed : (%i)", 0);
+		g_signal_emit (phone, signals [DEVICE_REMOVED], 0, 0);
 		return;
 	}
 
@@ -169,6 +174,8 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 	phone->priv->present = TRUE;
 	phone->priv->percentage = 0;
 	phone->priv->onac = FALSE;
+	gpm_debug ("emitting device-added : (%i)", 0);
+	g_signal_emit (phone, signals [DEVICE_ADDED], 0, 0);
 }
 
 /**
@@ -203,7 +210,7 @@ gpm_phone_class_init (GpmPhoneClass *klass)
 			      G_TYPE_NONE, 1, G_TYPE_UINT);
 
 	signals [DEVICE_REFRESH] =
-		g_signal_new ("device-removed",
+		g_signal_new ("device-refresh",
 			      G_TYPE_FROM_CLASS (object_class),
 			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GpmPhoneClass, device_refresh),
@@ -257,6 +264,11 @@ gpm_phone_dbus_connect (GpmPhone *phone)
 			return FALSE;
 		}
 
+		/* complicated type. ick */
+		dbus_g_object_register_marshaller(gpm_marshal_VOID__UINT_UINT_BOOLEAN,
+						  G_TYPE_NONE, G_TYPE_UINT, G_TYPE_UINT,
+						  G_TYPE_BOOLEAN, G_TYPE_INVALID);
+
 		/* get BatteryStateChanged */
 		dbus_g_proxy_add_signal (phone->priv->proxy, "BatteryStateChanged",
 					 G_TYPE_UINT, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_INVALID);
@@ -285,6 +297,12 @@ gpm_phone_dbus_disconnect (GpmPhone *phone)
 		gpm_debug ("removing proxy\n");
 		g_object_unref (phone->priv->proxy);
 		phone->priv->proxy = NULL;
+		if (phone->priv->present == TRUE) {
+			phone->priv->present = FALSE;
+			phone->priv->percentage = 0;
+			gpm_debug ("emitting device-removed : (%i)", 0);
+			g_signal_emit (phone, signals [DEVICE_REMOVED], 0, 0);
+		}
 	}
 	return TRUE;
 }
@@ -366,3 +384,101 @@ gpm_phone_new (void)
 	}
 	return GPM_PHONE (gpm_phone_object);
 }
+
+/***************************************************************************
+ ***                          MAKE CHECK TESTS                           ***
+ ***************************************************************************/
+#ifdef GPM_BUILD_TESTS
+#include "gpm-self-test.h"
+
+static void
+gpm_st_mainloop_wait (guint ms)
+{
+	GMainLoop *loop;
+	loop = g_main_loop_new (NULL, FALSE);
+	g_timeout_add (ms, (GSourceFunc) g_main_loop_quit, loop);
+	g_main_loop_run (loop);
+}
+
+void
+gpm_st_phone (GpmSelfTest *test)
+{
+	GpmPhone *phone;
+	guint value;
+	gboolean ret;
+
+	if (gpm_st_start (test, "GpmPhone", CLASS_AUTO) == FALSE) {
+		return;
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we get a non null phone");
+	phone = gpm_phone_new ();
+	if (phone != NULL) {
+		gpm_st_success (test, "got GpmPhone");
+	} else {
+		gpm_st_failed (test, "could not get GpmPhone");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "make sure we got a connection");
+	if (phone->priv->proxy != NULL) {
+		gpm_st_success (test, "got connection");
+	} else {
+		gpm_st_failed (test, "could not get a connection!");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "coldplug the data");
+	ret = gpm_phone_coldplug (phone);
+	if (ret == TRUE) {
+		gpm_st_success (test, "coldplug okay");
+	} else {
+		gpm_st_failed (test, "could not coldplug");
+	}
+
+	gpm_st_mainloop_wait (500);
+
+	/************************************************************/
+	gpm_st_title (test, "check the connected phones");
+	value = gpm_phone_get_num_batteries (phone);
+	if (value == 1) {
+		gpm_st_success (test, "connected phone");
+	} else {
+		gpm_st_failed (test, "not connected with %i (phone not connected?)", value);
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "check the present value");
+	ret = gpm_phone_get_present (phone, 0);
+	if (ret == TRUE) {
+		gpm_st_success (test, "we are here!");
+	} else {
+		gpm_st_failed (test, "not here...");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "check the percentage");
+	value = gpm_phone_get_percentage (phone, 0);
+	if (value != 0) {
+		gpm_st_success (test, "percentage is %i", phone->priv->percentage);
+	} else {
+		gpm_st_failed (test, "could not get value");
+	}
+
+	/************************************************************/
+	gpm_st_title (test, "check the ac value");
+	ret = gpm_phone_get_on_ac (phone, 0);
+	if (ret == FALSE) {
+		gpm_st_success (test, "not charging, correct");
+	} else {
+		gpm_st_failed (test, "charging?");
+	}
+
+	g_object_unref (phone);
+
+	gpm_st_end (test);
+}
+
+#endif
+

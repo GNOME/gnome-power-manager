@@ -36,6 +36,7 @@
 #include "gpm-conf.h"
 #include "gpm-cell-unit.h"
 #include "gpm-cell.h"
+#include "gpm-phone.h"
 #include "gpm-control.h"
 #include "gpm-debug.h"
 #include "gpm-warnings.h"
@@ -57,6 +58,7 @@ struct GpmCellArrayPrivate
 	GpmAcAdapter		*ac_adapter;
 	GpmProfile		*profile;
 	GpmConf			*conf;
+	GpmPhone		*phone;
 	GpmControl		*control;
 	GpmWarnings		*warnings;
 	GpmWarningsState	 warnings_state;
@@ -668,12 +670,14 @@ gpm_cell_array_index_udi (GpmCellArray *cell_array, const gchar *udi)
 {
 	gint i;
 	guint length;
+	const gchar *cell_udi;
 	GpmCell *cell;
 
 	length = cell_array->priv->array->len;
 	for (i=0;i<length;i++) {
 		cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, i);
-		if (strcmp (gpm_cell_get_udi (cell), udi) == 0) {
+		cell_udi = gpm_cell_get_udi (cell);
+		if (cell_udi != NULL && strcmp (cell_udi, udi) == 0) {
 			gpm_debug ("Found %s with udi check", udi);
 			return i;
 		}
@@ -812,6 +816,15 @@ gpm_cell_array_coldplug (GpmCellArray *cell_array)
 	GError *error;
 	gchar **device_names = NULL;
 	gboolean ret;
+	GpmCellUnit *unit;
+
+	unit = &(cell_array->priv->unit);
+
+	/* we treat phones as hotpluggable devices only */
+	if (unit->kind == GPM_CELL_UNIT_KIND_PHONE) {
+		gpm_phone_coldplug (cell_array->priv->phone);
+		return TRUE;
+	}
 
 	/* get all the hal devices of this type */
 	error = NULL;
@@ -1120,6 +1133,70 @@ conf_key_changed_cb (GpmConf      *conf,
 }
 
 /**
+ * phone_device_added_cb:
+ **/
+static void
+phone_device_added_cb (GpmPhone     *phone,
+		       guint        *index,
+		       GpmCellArray *cell_array)
+{
+
+	GpmCell *cell;
+	GpmCellUnit *unit;
+
+	unit = &(cell_array->priv->unit);
+
+	/* ignore non-phones */
+	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
+		return;
+	}
+
+	cell = gpm_cell_new ();
+	g_signal_connect (cell, "percent-changed",
+			  G_CALLBACK (gpm_cell_percent_changed_cb), cell_array);
+	g_signal_connect (cell, "charging-changed",
+			  G_CALLBACK (gpm_cell_charging_changed_cb), cell_array);
+	g_signal_connect (cell, "discharging-changed",
+			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell_array);
+//	gpm_cell_set_phone_index (cell, 0);
+	gpm_cell_print (cell);
+
+	g_ptr_array_add (cell_array->priv->array, (gpointer) cell);
+
+	/* global collection has changed */
+	gpm_cell_array_collection_changed (cell_array);
+}
+
+/**
+ * phone_device_removed_cb:
+ **/
+static void
+phone_device_removed_cb (GpmPhone     *phone,
+		         guint         index,
+		         GpmCellArray *cell_array)
+{
+	GpmCell *cell;
+	GpmCellUnit *unit;
+
+	unit = &(cell_array->priv->unit);
+
+	/* ignore non-phones */
+	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
+		return;
+	}
+
+	/* we unref as the device has gone away (only support one phone) */
+	cell = (GpmCell *) g_ptr_array_index (cell_array->priv->array, 0);
+	g_object_unref (cell);
+
+	/* remove from the devicestore */
+	g_ptr_array_remove_index (cell_array->priv->array, index);
+
+	/* global collection has changed */
+	gpm_cell_array_collection_changed (cell_array);
+}
+
+/**
  * hal_daemon_start_cb:
  **/
 static void
@@ -1292,6 +1369,12 @@ gpm_cell_array_init (GpmCellArray *cell_array)
 	g_signal_connect (cell_array->priv->hal_manager, "daemon-stop",
 			  G_CALLBACK (hal_daemon_stop_cb), cell_array);
 
+	cell_array->priv->phone = gpm_phone_new ();
+	g_signal_connect (cell_array->priv->phone, "device-added",
+			  G_CALLBACK (phone_device_added_cb), cell_array);
+	g_signal_connect (cell_array->priv->phone, "device-removed",
+			  G_CALLBACK (phone_device_removed_cb), cell_array);
+
 	/* use the control object  */
 	cell_array->priv->control = gpm_control_new ();
 	g_signal_connect (cell_array->priv->control, "resume",
@@ -1318,6 +1401,7 @@ gpm_cell_array_finalize (GObject *object)
 	gpm_cell_array_free (cell_array);
 	g_ptr_array_free (cell_array->priv->array, TRUE);
 
+	g_object_unref (cell_array->priv->phone);
 	g_object_unref (cell_array->priv->ac_adapter);
 	g_object_unref (cell_array->priv->warnings);
 	g_object_unref (cell_array->priv->hal_manager);

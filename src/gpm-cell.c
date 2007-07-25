@@ -32,6 +32,7 @@
 #include "gpm-cell.h"
 #include "gpm-cell-unit.h"
 #include "gpm-debug.h"
+#include "gpm-phone.h"
 
 static void     gpm_cell_class_init (GpmCellClass *klass);
 static void     gpm_cell_init       (GpmCell      *cell);
@@ -43,6 +44,7 @@ struct GpmCellPrivate
 {
 	HalGDevice	*hal_device;
 	GpmCellUnit	 unit;
+	GpmPhone	*phone;
 	gchar		*product;
 	gchar		*vendor;
 	gchar		*technology;
@@ -572,6 +574,39 @@ gpm_cell_get_description (GpmCell *cell)
 	return g_string_free (details, FALSE);
 }
 
+/**
+ * phone_device_refresh_cb:
+ **/
+static void
+phone_device_refresh_cb (GpmPhone     *phone,
+		         guint        *index,
+		         GpmCell      *cell)
+{
+	GpmCellUnit *unit;
+
+	unit = &(cell->priv->unit);
+
+	/* ignore non-phones */
+	if (unit->kind != GPM_CELL_UNIT_KIND_PHONE) {
+		return;
+	}
+#if 0
+	cell = gpm_cell_new ();
+	g_signal_connect (cell, "percent-changed",
+			  G_CALLBACK (gpm_cell_percent_changed_cb), cell);
+	g_signal_connect (cell, "charging-changed",
+			  G_CALLBACK (gpm_cell_charging_changed_cb), cell);
+	g_signal_connect (cell, "discharging-changed",
+			  G_CALLBACK (gpm_cell_discharging_changed_cb), cell);
+//	gpm_cell_set_phone_index (cell, 0);
+	gpm_cell_print (cell);
+
+	g_ptr_array_add (cell->priv->array, (gpointer) cell);
+
+	/* global collection has changed */
+	gpm_cell_collection_changed (cell);
+#endif
+}
 
 /**
  * gpm_cell_class_init:
@@ -647,6 +682,11 @@ gpm_cell_init (GpmCell *cell)
 	cell->priv->technology = NULL;
 	cell->priv->serial = NULL;
 	cell->priv->model = NULL;
+
+	cell->priv->phone = gpm_phone_new ();
+	g_signal_connect (cell->priv->phone, "device-refresh",
+			  G_CALLBACK (phone_device_refresh_cb), cell);
+
 	gpm_cell_unit_init (&cell->priv->unit);
 }
 
@@ -669,6 +709,7 @@ gpm_cell_finalize (GObject *object)
 	g_free (cell->priv->technology);
 	g_free (cell->priv->serial);
 	g_free (cell->priv->model);
+	g_object_unref (cell->priv->phone);
 	g_object_unref (cell->priv->hal_device);
 }
 

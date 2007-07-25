@@ -1,3 +1,26 @@
+2007-07-25  Richard Hughes  <richard@hughsie.com>
+
+	* src/Makefile.am:
+	* src/gpm-cell.c:
+	* src/gpm-cell-array.c: (gpm_cell_array_index_udi),
+	(gpm_cell_array_coldplug), (phone_device_added_cb),
+	(phone_device_removed_cb), (gpm_cell_array_init),
+	(gpm_cell_array_finalize):
+	Add support for GpmPhone devices. These show as laptop batteries for
+	now, soon to be fixed.
+
+	* src/gpm-marshal.list:
+	* src/gpm-phone.c: (gpm_phone_coldplug),
+	(gpm_phone_battery_state_changed),
+	(gpm_phone_num_batteries_changed), (gpm_phone_class_init),
+	(gpm_phone_dbus_connect), (gpm_phone_dbus_disconnect),
+	(gpm_st_mainloop_wait), (gpm_st_phone):
+	Listen for the correct signals, and add the correct GpmCell device.
+
+	* src/gpm-self-test.c: (main):
+	* src/gpm-self-test.h:
+	Add the phone self-checks.
+
 2007-07-24  Richard Hughes  <richard@hughsie.com>
 
 	* applets/inhibit/inhibit-applet.c:

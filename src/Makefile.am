@@ -133,6 +133,8 @@ gnome_power_manager_SOURCES =				\
 	gpm-notify.c					\
 	gpm-engine.h					\
 	gpm-engine.c					\
+	gpm-phone.h					\
+	gpm-phone.c					\
 	gpm-cell.h					\
 	gpm-cell.c					\
 	gpm-cell-unit.h					\
