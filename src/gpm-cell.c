@@ -600,7 +600,7 @@ gpm_cell_get_description (GpmCell *cell)
  **/
 static void
 phone_device_refresh_cb (GpmPhone     *phone,
-		         guint        *index,
+		         guint         index,
 		         GpmCell      *cell)
 {
 	GpmCellUnit *unit;
