@@ -1,5 +1,10 @@
 2007-07-25  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-manager.c: (manager_policy_do):
+	Pass the reason on. Needed to debug #456489
+
+2007-07-25  Richard Hughes  <richard@hughsie.com>
+
 	* libhal-glib/libhal-gpower.c: (hal_gpower_filter_error),
 	(hal_gpower_suspend), (hal_gpower_pm_method_void):
 	Fix a potential crasher after resume.

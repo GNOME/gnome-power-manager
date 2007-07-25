@@ -437,10 +437,10 @@ manager_policy_do (GpmManager  *manager,
 					_("Doing nothing"), reason);
 
 	} else if (strcmp (action, ACTION_SUSPEND) == 0) {
-		gpm_manager_action_suspend (manager, "unknown");
+		gpm_manager_action_suspend (manager, reason);
 
 	} else if (strcmp (action, ACTION_HIBERNATE) == 0) {
-		gpm_manager_action_hibernate (manager, "unknown");
+		gpm_manager_action_hibernate (manager, reason);
 
 	} else if (strcmp (action, ACTION_BLANK) == 0) {
 		gpm_manager_blank_screen (manager, NULL);
