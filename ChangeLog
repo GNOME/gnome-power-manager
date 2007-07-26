@@ -1,5 +1,11 @@
 2007-07-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-phone.c: (gpm_phone_num_batteries_changed):
+	Ignore second coldplug, which can happen if you run make check and
+	g-p-m at the same time.
+
+2007-07-26  Richard Hughes  <richard@hughsie.com>
+
 	* data/gpm-feedback-widget.glade:
 	* src/gpm-feedback-widget.c: (gpm_feedback_show),
 	(gpm_feedback_display_value):

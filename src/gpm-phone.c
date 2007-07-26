@@ -187,6 +187,11 @@ gpm_phone_num_batteries_changed (DBusGProxy     *proxy,
 		return;
 	}
 
+	if (phone->priv->present == TRUE) {
+		gpm_warning ("duplicate NumberBatteriesChanged with no change");
+		return;
+	}
+
 	/* reset to defaults until we get BatteryStateChanged */
 	phone->priv->present = TRUE;
 	phone->priv->percentage = 0;
