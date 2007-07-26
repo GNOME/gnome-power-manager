@@ -561,14 +561,26 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnome-power-manager/lock/gnome_keyring</key>
-      <applyto>/apps/gnome-power-manager/lock/gnome_keyring</applyto>
+      <key>/schemas/apps/gnome-power-manager/lock/gnome_keyring_suspend</key>
+      <applyto>/apps/gnome-power-manager/lock/gnome_keyring_suspend</applyto>
       <owner>gnome-power-manager</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
         <short>Lock GNOME keyring on sleep</short>
-        <long>Whether the GNOME keyring is locked before the computer enters sleep. This means the the keyring will have to be unlocked on resume.</long>
+        <long>Whether the GNOME keyring is locked before the computer enters suspend. This means the the keyring will have to be unlocked on resume.</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-power-manager/lock/gnome_keyring_hibernate</key>
+      <applyto>/apps/gnome-power-manager/lock/gnome_keyring_hibernate</applyto>
+      <owner>gnome-power-manager</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Lock GNOME keyring on sleep</short>
+        <long>Whether the GNOME keyring is locked before the computer enters hibernate. This means the the keyring will have to be unlocked on resume.</long>
       </locale>
     </schema>
 

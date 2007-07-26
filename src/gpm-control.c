@@ -417,7 +417,7 @@ gpm_control_suspend (GpmControl *control,
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING, &lock_gnome_keyring);
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND, &lock_gnome_keyring);
 	if (lock_gnome_keyring == TRUE) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {
@@ -495,7 +495,7 @@ gpm_control_hibernate (GpmControl *control,
 	}
 
 	/* we should perhaps lock keyrings when sleeping #375681 */
-	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING, &lock_gnome_keyring);
+	gpm_conf_get_bool (control->priv->conf, GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE, &lock_gnome_keyring);
 	if (lock_gnome_keyring == TRUE) {
 		keyres = gnome_keyring_lock_all_sync ();
 		if (keyres != GNOME_KEYRING_RESULT_OK) {

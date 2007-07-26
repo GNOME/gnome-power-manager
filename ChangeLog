@@ -1,3 +1,13 @@
+2007-07-26  Richard Hughes  <richard@hughsie.com>
+
+	* data/gnome-power-manager.schemas.in:
+	* src/gpm-conf.h:
+	* src/gpm-control.c: (gpm_control_suspend),
+	(gpm_control_hibernate):
+	Split up the lock/gnome_keyring options into lock/gnome_keyring_suspend
+	and lock/gnome_keyring_hibernate to fix #459747.
+	We default to off for suspend and on for hibernate.
+
 2007-07-25  Richard Hughes  <richard@hughsie.com>
 
 	* data/icons/scalable/gpm-phone-000.svg:

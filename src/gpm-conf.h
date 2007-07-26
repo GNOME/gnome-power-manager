@@ -102,7 +102,8 @@ G_BEGIN_DECLS
 #define GPM_CONF_LOCK_ON_BLANK_SCREEN		GPM_CONF_DIR "/lock/blank_screen"
 #define GPM_CONF_LOCK_ON_SUSPEND		GPM_CONF_DIR "/lock/suspend"
 #define GPM_CONF_LOCK_ON_HIBERNATE		GPM_CONF_DIR "/lock/hibernate"
-#define GPM_CONF_LOCK_GNOME_KEYRING		GPM_CONF_DIR "/lock/gnome_keyring"
+#define GPM_CONF_LOCK_GNOME_KEYRING_SUSPEND	GPM_CONF_DIR "/lock/gnome_keyring_suspend"
+#define GPM_CONF_LOCK_GNOME_KEYRING_HIBERNATE	GPM_CONF_DIR "/lock/gnome_keyring_hibernate"
 
 /* low power */
 #define GPM_CONF_LOWPOWER_AC			GPM_CONF_DIR "/lowpower/on_ac"
