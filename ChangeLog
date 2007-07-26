@@ -1,5 +1,13 @@
 2007-07-26  Richard Hughes  <richard@hughsie.com>
 
+	* data/gpm-feedback-widget.glade:
+	* src/gpm-feedback-widget.c: (gpm_feedback_show),
+	(gpm_feedback_display_value):
+	Apply a patch from Cosimo Cecchi <anarki@lilik.it> to fix the position
+	and the style of the brightness widget. Fixes #405421
+
+2007-07-26  Richard Hughes  <richard@hughsie.com>
+
 	* data/gnome-power-manager.schemas.in:
 	* src/gpm-conf.h:
 	* src/gpm-control.c: (gpm_control_suspend),

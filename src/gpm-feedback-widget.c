@@ -25,6 +25,7 @@
 
 #include <glade/glade.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #include "gpm-feedback-widget.h"
 #include "gpm-stock-icons.h"
@@ -34,6 +35,7 @@
 static void     gpm_feedback_class_init (GpmFeedbackClass *klass);
 static void     gpm_feedback_init       (GpmFeedback      *feedback);
 static void     gpm_feedback_finalize   (GObject	  *object);
+static void	gpm_feedback_show	(GtkWidget 	  *widget);
 
 #define GPM_FEEDBACK_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GPM_TYPE_FEEDBACK, GpmFeedbackPrivate))
 
@@ -63,6 +65,65 @@ gpm_feedback_class_init (GpmFeedbackClass *klass)
 }
 
 /**
+ * gpm_feedback_show:
+ **/
+static void
+gpm_feedback_show (GtkWidget *widget)
+{
+	
+	int orig_w, orig_h;
+	int screen_w, screen_h;
+	int x, y;
+	int pointer_x, pointer_y;
+	GtkRequisition win_req;
+	GdkScreen *pointer_screen;
+	GdkRectangle geometry;
+	int monitor;
+	GdkScreen *current_screen;
+	
+	current_screen = gdk_screen_get_default();
+
+	gtk_window_set_screen (GTK_WINDOW (widget), current_screen);
+
+	/* get the window size - if the window hasn't been mapped, it doesn't
+	 * necessarily know its true size, yet, so we need to jump through hoops */
+	gtk_window_get_default_size (GTK_WINDOW (widget), &orig_w, &orig_h);
+	gtk_widget_size_request (widget, &win_req);
+
+	if (win_req.width > orig_w) {
+		orig_w = win_req.width;
+	}
+	if (win_req.height > orig_h) {
+		orig_h = win_req.height;
+	}
+
+	pointer_screen = NULL;
+	gdk_display_get_pointer (gdk_screen_get_display (current_screen),
+				 &pointer_screen, &pointer_x, &pointer_y, NULL);
+	if (pointer_screen != current_screen) {
+		/* The pointer isn't on the current screen, so just
+		 * assume the default monitor */
+		monitor = 0;
+	} else {
+		monitor = gdk_screen_get_monitor_at_point (current_screen,
+							   pointer_x, pointer_y);
+	}
+
+	gdk_screen_get_monitor_geometry (current_screen, monitor, &geometry);
+
+	screen_w = geometry.width;
+	screen_h = geometry.height;
+
+	x = ((screen_w - orig_w) / 2) + geometry.x;
+	y = geometry.y + (screen_h / 2) + (screen_h / 2 - orig_h) / 2;
+
+	gtk_window_move (GTK_WINDOW (widget), x, y);
+
+	gtk_widget_show (widget);
+	gdk_display_sync (gdk_screen_get_display (current_screen));
+}
+
+/**
  * gpm_feedback_close_window:
  * @data: gpointer to this class instance
  **/
@@ -82,7 +143,7 @@ gpm_feedback_display_value (GpmFeedback *feedback, gfloat value)
 
 	gpm_debug ("Displaying %f on feedback widget", value);
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (feedback->priv->progress), value);
-	gtk_widget_show_all (feedback->priv->main_window);
+	gpm_feedback_show (feedback->priv->main_window);
 
 	/* set up the window auto-close */
 	gpm_refcount_add (feedback->priv->refcount);
