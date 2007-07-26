@@ -53,9 +53,7 @@
 
 struct GpmBrightnessLcdPrivate
 {
-	gboolean		 does_own_updates;	/* keys are hardwired */
-	gboolean		 does_own_dimming;	/* hardware auto-fades */
-	guint			 current_hw;		/* hardware */
+	guint			 last_set_hw;		/* hardware */
 	guint			 level_std_hw;
 	guint			 levels;
 	gchar			*udi;
@@ -173,7 +171,7 @@ gpm_brightness_lcd_set_hw (GpmBrightnessLcd *brightness,
 		return FALSE;
 	}
 
-	brightness->priv->current_hw = brightness_level_hw;
+	brightness->priv->last_set_hw = brightness_level_hw;
 	return TRUE;
 }
 
@@ -189,24 +187,24 @@ gpm_brightness_lcd_dim_hw_step (GpmBrightnessLcd *brightness,
 				guint             new_level_hw,
 				guint		  step_interval)
 {
-	guint current_hw;
+	guint last_set_hw;
 	gint a;
 	gboolean ret;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	current_hw = brightness->priv->current_hw;
-	gpm_debug ("new_level_hw=%i, current_hw=%i", new_level_hw, current_hw);
+	last_set_hw = brightness->priv->last_set_hw;
+	gpm_debug ("new_level_hw=%i, last_set_hw=%i", new_level_hw, last_set_hw);
 
 	/* we do the step interval as we can have insane levels of brightness */
-	if (new_level_hw == current_hw) {
+	if (new_level_hw == last_set_hw) {
 		return FALSE;
 	}
 
-	if (new_level_hw > current_hw) {
+	if (new_level_hw > last_set_hw) {
 		/* going up */
-		for (a=current_hw; a <= new_level_hw; a+=step_interval) {
+		for (a=last_set_hw; a <= new_level_hw; a+=step_interval) {
 			ret = gpm_brightness_lcd_set_hw (brightness, a);
 			/* we failed the last brightness set command, don't keep trying */
 			if (ret == FALSE) {
@@ -216,7 +214,7 @@ gpm_brightness_lcd_dim_hw_step (GpmBrightnessLcd *brightness,
 		}
 	} else {
 		/* going down */
-		for (a=current_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
+		for (a=last_set_hw; (gint) (a + 1) > (gint) new_level_hw; a-=step_interval) {
 			ret = gpm_brightness_lcd_set_hw (brightness, a);
 			/* we failed the last brightness set command, don't keep trying */
 			if (ret == FALSE) {
@@ -268,12 +266,6 @@ gpm_brightness_lcd_dim_hw (GpmBrightnessLcd *brightness,
 
 	gpm_debug ("new_level_hw=%i", new_level_hw);
 
-	/* some machines don't take kindly to auto-dimming */
-	if (brightness->priv->does_own_dimming) {
-		gpm_brightness_lcd_set_hw (brightness, new_level_hw);
-		return FALSE;
-	}
-
 	/* macbook pro has a bazzillion brightness levels, be a bit clever */
 	step = gpm_brightness_lcd_get_step (brightness);
 	return gpm_brightness_lcd_dim_hw_step (brightness, new_level_hw, step);
@@ -317,7 +309,7 @@ gpm_brightness_lcd_get (GpmBrightnessLcd *brightness,
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
 					      brightness->priv->levels);
 	*brightness_level = percentage;
 	return TRUE;
@@ -334,24 +326,28 @@ gpm_brightness_lcd_up (GpmBrightnessLcd *brightness)
 {
 	gint step;
 	gint percentage;
+	guint current_hw;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
+	/* check to see if the panel has changed */
+	gpm_brightness_lcd_get_hw (brightness, &current_hw);
+
+	/* the panel has been updated in firmware */
+	if (current_hw != brightness->priv->last_set_hw) {
+		brightness->priv->last_set_hw = current_hw;
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_lcd_get_step (brightness);
 		/* don't overflow */
-		if (brightness->priv->current_hw + step > brightness->priv->levels - 1) {
-			step = (brightness->priv->levels - 1) - brightness->priv->current_hw;
+		if (brightness->priv->last_set_hw + step > brightness->priv->levels - 1) {
+			step = (brightness->priv->levels - 1) - brightness->priv->last_set_hw;
 		}
-		gpm_brightness_lcd_set_hw (brightness, brightness->priv->current_hw + step);
+		gpm_brightness_lcd_set_hw (brightness, brightness->priv->last_set_hw + step);
 	}
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
 					      brightness->priv->levels);
 	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
@@ -370,24 +366,28 @@ gpm_brightness_lcd_down (GpmBrightnessLcd *brightness)
 {
 	gint step;
 	gint percentage;
+	guint current_hw;
 
 	g_return_val_if_fail (brightness != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_BRIGHTNESS_LCD (brightness), FALSE);
 
-	/* Do we find the new value, or set the new value */
-	if (brightness->priv->does_own_updates) {
-		gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
+	/* check to see if the panel has changed */
+	gpm_brightness_lcd_get_hw (brightness, &current_hw);
+
+	/* the panel has been updated in firmware */
+	if (current_hw != brightness->priv->last_set_hw) {
+		gpm_brightness_lcd_get_hw (brightness, &brightness->priv->last_set_hw);
 	} else {
 		/* macbook pro has a bazzillion brightness levels, be a bit clever */
 		step = gpm_brightness_lcd_get_step (brightness);
 		/* don't underflow */
-		if (brightness->priv->current_hw < step) {
-			step = brightness->priv->current_hw;
+		if (brightness->priv->last_set_hw < step) {
+			step = brightness->priv->last_set_hw;
 		}
-		gpm_brightness_lcd_set_hw (brightness, brightness->priv->current_hw - step);
+		gpm_brightness_lcd_set_hw (brightness, brightness->priv->last_set_hw - step);
 	}
 
-	percentage = gpm_discrete_to_percent (brightness->priv->current_hw,
+	percentage = gpm_discrete_to_percent (brightness->priv->last_set_hw,
 					      brightness->priv->levels);
 	gpm_debug ("emitting brightness-changed (%i)", percentage);
 	g_signal_emit (brightness, signals [BRIGHTNESS_CHANGED], 0, percentage);
@@ -469,7 +469,6 @@ static void
 gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 {
 	gchar **names;
-	gboolean res;
 	HalGManager *manager;
 	HalGDevice *device;
 
@@ -488,20 +487,8 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 	brightness->priv->udi = g_strdup (names[0]);
 	hal_gmanager_free_capability (names);
 
-	/* FIXME: This should be a HAL property */
-	brightness->priv->does_own_dimming = FALSE;
-
 	device = hal_gdevice_new ();
 	hal_gdevice_set_udi (device, brightness->priv->udi);
-	/* We only want to change the brightness if the machine does not
-	   do it on it's own updates, as this can make the panel flash in a
-	   feedback loop. */
-	res = hal_gdevice_get_bool (device, "laptop_panel.brightness_in_hardware",
-				    &brightness->priv->does_own_updates, NULL);
-	/* This key does not exist on normal machines */
-	if (res == FALSE) {
-		brightness->priv->does_own_updates = FALSE;
-	}
 
 	/* get levels that the adapter supports -- this does not change ever */
 	hal_gdevice_get_uint (device, "laptop_panel.num_levels",
@@ -521,12 +508,12 @@ gpm_brightness_lcd_init (GpmBrightnessLcd *brightness)
 			  HAL_DBUS_INTERFACE_LAPTOP_PANEL);
 
 	/* this changes under our feet */
-	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->current_hw);
+	gpm_brightness_lcd_get_hw (brightness, &brightness->priv->last_set_hw);
 
 	/* set to known value */
 	brightness->priv->level_std_hw = 0;
 
-	gpm_debug ("Starting: (%i of %i)", brightness->priv->current_hw,
+	gpm_debug ("Starting: (%i of %i)", brightness->priv->last_set_hw,
 		   brightness->priv->levels - 1);
 }
 

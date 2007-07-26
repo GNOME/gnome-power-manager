@@ -1,5 +1,15 @@
 2007-07-26  Richard Hughes  <richard@hughsie.com>
 
+	* src/gpm-brightness-lcd.c: (gpm_brightness_lcd_set_hw),
+	(gpm_brightness_lcd_dim_hw_step), (gpm_brightness_lcd_dim_hw),
+	(gpm_brightness_lcd_get), (gpm_brightness_lcd_up),
+	(gpm_brightness_lcd_down), (gpm_brightness_lcd_init):
+	Try to discover the laptop backlight type by checking the backlight
+	state before we try and set it. Fixes #436717
+	If this breaks for people with 2.19.6, I'll revert it for 2.20.
+
+2007-07-26  Richard Hughes  <richard@hughsie.com>
+
 	* src/gpm-phone.c: (gpm_phone_num_batteries_changed):
 	Ignore second coldplug, which can happen if you run make check and
 	g-p-m at the same time.
