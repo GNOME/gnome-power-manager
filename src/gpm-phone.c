@@ -448,7 +448,7 @@ gpm_st_phone (GpmSelfTest *test)
 	guint value;
 	gboolean ret;
 
-	if (gpm_st_start (test, "GpmPhone", CLASS_AUTO) == FALSE) {
+	if (gpm_st_start (test, "GpmPhone", CLASS_MANUAL) == FALSE) {
 		return;
 	}
 
