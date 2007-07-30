@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-26 14:36+0700\n"
-"PO-Revision-Date: 2007-07-26 14:37+0700\n"
+"POT-Creation-Date: 2007-07-30 15:05+0700\n"
+"PO-Revision-Date: 2007-07-30 15:07+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -939,13 +939,21 @@ msgstr "จะพิจารณาโพรเซส nice ขณะคำนว
 
 #: data/gnome-power-manager.schemas.in.h:143
 msgid ""
-"Whether the GNOME keyring is locked before the computer enters sleep. This "
-"means the the keyring will have to be unlocked on resume."
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the the keyring will have to be unlocked on resume."
 msgstr ""
-"กำหนดว่าจะล็อคพวงกุญแจของ GNOME ก่อนที่คอมพิวเตอร์จะหลับหรือไม่ การล็อคนี้ "
+"กำหนดว่าจะล็อคพวงกุญแจของ GNOME ก่อนที่คอมพิวเตอร์จะจำศีลหรือไม่ การล็อคนี้ "
 "หมายความว่าจะต้องปลดล็อคพวงกุญแจเมื่อเครื่องกลับมาทำงานใหม่ด้วย"
 
 #: data/gnome-power-manager.schemas.in.h:144
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the the keyring will have to be unlocked on resume."
+msgstr ""
+"กำหนดว่าจะล็อคพวงกุญแจของ GNOME ก่อนที่คอมพิวเตอร์จะพักเครื่องหรือไม่ การล็อคนี้ "
+"หมายความว่าจะต้องปลดล็อคพวงกุญแจเมื่อเครื่องกลับมาทำงานใหม่ด้วย"
+
+#: data/gnome-power-manager.schemas.in.h:145
 msgid ""
 "Whether the screen is locked when the computer wakes up from a hibernate. "
 "Only used if lock_use_screensaver_settings is false."
@@ -953,7 +961,7 @@ msgstr ""
 "กำหนดว่า จะล็อคจอเมื่อคอมพิวเตอร์ตื่นขึ้นมาจากการจำศีลหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: data/gnome-power-manager.schemas.in.h:145
+#: data/gnome-power-manager.schemas.in.h:146
 msgid ""
 "Whether the screen is locked when the computer wakes up from a suspend. Only "
 "used if lock_use_screensaver_settings is false."
@@ -961,7 +969,7 @@ msgstr ""
 "กำหนดว่า จะล็อคจอเมื่อคอมพิวเตอร์ตื่นขึ้นมาจากการพักเครื่องหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: data/gnome-power-manager.schemas.in.h:146
+#: data/gnome-power-manager.schemas.in.h:147
 msgid ""
 "Whether the screen is locked when the screen is turned off. Only used if "
 "lock_use_screensaver_settings is false."
@@ -969,11 +977,11 @@ msgstr ""
 "กำหนดว่า จะล็อคจอภาพพร้อมกับการดับจอหรือไม่ ตัวเลือกนี้จะถูกใช้ก็ต่อเมื่อค่าของ "
 "lock_use_screensaver_settings เป็นเท็จเท่านั้น"
 
-#: data/gnome-power-manager.schemas.in.h:147
+#: data/gnome-power-manager.schemas.in.h:148
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "จำศีล พักเครื่อง หรือไม่ต้องหลับ เมื่อคอมพิวเตอร์ไม่มีการใช้งาน"
 
-#: data/gnome-power-manager.schemas.in.h:148
+#: data/gnome-power-manager.schemas.in.h:149
 msgid ""
 "Whether to use the screen lock setting of gnome-screensaver to decide if the "
 "screen is locked after a hibernate, suspend or blank screen."
@@ -981,31 +989,31 @@ msgstr ""
 "กำหนดว่า จะใช้ค่าตั้งการล็อคจอของ gnome-screensaver หรือไม่ "
 "ในการตัดสินใจล็อคจอหลังการจำศีล พักเครื่อง หรือดับจอ"
 
-#: data/gnome-power-manager.schemas.in.h:149
+#: data/gnome-power-manager.schemas.in.h:150
 msgid "Whether to use time-based notifications"
 msgstr "ใช้การแจ้งเตือนแบบบอกเวลาหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:150
+#: data/gnome-power-manager.schemas.in.h:151
 msgid "Whether we should show the axis labels in the statistics window"
 msgstr "ควรแสดงข้อความกำกับแกนต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:151
+#: data/gnome-power-manager.schemas.in.h:152
 msgid "Whether we should show the axis labels in the statistics window."
 msgstr "ควรแสดงข้อความกำกับแกนต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:152
+#: data/gnome-power-manager.schemas.in.h:153
 msgid "Whether we should show the events in the statistics window"
 msgstr "ควรแสดงเหตุการณ์ต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:153
+#: data/gnome-power-manager.schemas.in.h:154
 msgid "Whether we should show the events in the statistics window."
 msgstr "ควรแสดงเหตุการณ์ต่างๆ ในหน้าต่างกราฟหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:154
+#: data/gnome-power-manager.schemas.in.h:155
 msgid "Whether we should smooth the data in the graph"
 msgstr "ควรเกลี่ยข้อมูลของเส้นกราฟหรือไม่"
 
-#: data/gnome-power-manager.schemas.in.h:155
+#: data/gnome-power-manager.schemas.in.h:156
 msgid "Whether we should smooth the data in the graph."
 msgstr "ควรเกลี่ยข้อมูลของเส้นกราฟหรือไม่"
 
