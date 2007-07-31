@@ -1,7 +1,7 @@
 EXTRA_DIST =				\
 	$(Data_DATA)
 
-Datadir = $(datadir)/gnome-power-manager
+Datadir = $(pkgdatadir)
 
 Data_DATA =				\
 	gpm-lid-up.wav  		\
