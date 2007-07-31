@@ -561,6 +561,10 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->proxy = NULL;
 	applet->tooltip = gtk_tooltips_new ();
 
+	/* Add application specific icons to search path */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+
 	applet->watch = dbus_watch_new ();
 	g_signal_connect (applet->watch, "connection-changed",
 			  G_CALLBACK (watch_connection_cb), applet);

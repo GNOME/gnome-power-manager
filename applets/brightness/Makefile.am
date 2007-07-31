@@ -13,7 +13,7 @@ INCLUDES =							\
 	-DSYSCONFDIR=\""$(sysconfdir)"\" 			\
 	-DLIBDIR=\""$(libdir)"\" 				\
 	-DVERSION="\"$(VERSION)\"" 				\
-	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"	\
+	-DGPM_DATA=\"$(pkgdatadir)\"				\
 	-I$(top_srcdir)/libdbus-glib				\
 	$(NULL)
 

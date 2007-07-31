@@ -106,7 +106,6 @@ gpm_object_register (DBusGConnection *connection,
 static void
 gpm_exit (GpmManager *manager)
 {
-	gpm_stock_icons_shutdown ();
 	gpm_debug_shutdown ();
 	exit (0);
 }
@@ -241,9 +240,9 @@ if (0) {
 			   "or gnome startup when you start a new session.");
 	}
 
-	if (gpm_stock_icons_init() == FALSE) {
-		gpm_error ("Cannot continue without stock icons");
-	}
+	/* Add application specific icons to search path */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
 
 	/* initialise gstreamer */
 	gst_init (&argc, &argv);
@@ -269,7 +268,6 @@ if (0) {
 	}
 
 	g_main_loop_unref (loop);
-	gpm_stock_icons_shutdown ();
 	gpm_debug_shutdown ();
 
 	/* rip down gstreamer */

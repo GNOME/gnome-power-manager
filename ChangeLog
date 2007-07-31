@@ -1,3 +1,55 @@
+2007-07-31  Jaap Haitsma  <jaap@haitsma.org>
+
+	* applets/brightness/GNOME_BrightnessApplet.server.in.in:
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.c:
+	(gpm_brightness_applet_init):
+	* applets/inhibit/GNOME_InhibitApplet.server.in.in:
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.c: (gpm_inhibit_applet_init):
+	* configure.in:
+	* data/gnome-power-manager.desktop.in:
+	* data/gnome-power-statistics.desktop.in:
+	* data/icons/16x16/Makefile.am:
+	* data/icons/16x16/actions/Makefile.am:
+	* data/icons/16x16/apps/Makefile.am:
+	* data/icons/16x16/status/Makefile.am:
+	* data/icons/22x22/Makefile.am:
+	* data/icons/22x22/actions/Makefile.am:
+	* data/icons/22x22/apps/Makefile.am:
+	* data/icons/22x22/status/Makefile.am:
+	* data/icons/24x24/Makefile.am:
+	* data/icons/24x24/actions/Makefile.am:
+	* data/icons/24x24/apps/Makefile.am:
+	* data/icons/24x24/status/Makefile.am:
+	* data/icons/48x48/Makefile.am:
+	* data/icons/48x48/actions/Makefile.am:
+	* data/icons/48x48/apps/Makefile.am:
+	* data/icons/48x48/status/Makefile.am:
+	* data/icons/generate_24x24_icons.sh:
+	* data/icons/generate_48x48_icons.sh:
+	* data/icons/scalable/Makefile.am:
+	* data/icons/scalable/actions/Makefile.am:
+	* data/icons/scalable/apps/Makefile.am:
+	* data/icons/scalable/apps/gnome-brightness-applet.svg:
+	* data/icons/scalable/apps/gnome-inhibit-applet.svg:
+	* data/icons/scalable/apps/gnome-power-manager.svg:
+	* data/icons/scalable/gpm-brightness-kbd-disabled.svg:
+	* data/icons/scalable/gpm-brightness-kbd-invalid.svg:
+	* data/icons/scalable/gpm-brightness-lcd-disabled.svg:
+	* data/icons/scalable/gpm-brightness-lcd-invalid.svg:
+	* data/icons/scalable/gpm-inhibit-invalid.svg:
+	* data/icons/scalable/gpm-phone-000.svg:
+	* data/icons/scalable/gpm-phone-030.svg:
+	* data/icons/scalable/gpm-phone-060.svg:
+	* data/icons/scalable/gpm-phone-100.svg:
+	* data/icons/scalable/status/Makefile.am:
+	* src/Makefile.am:
+	* src/gpm-main.c: (gpm_exit), (main):
+	* src/gpm-stock-icons.c:
+	* src/gpm-stock-icons.h:
+	Use application specific icons in the recommended way. Fixes bug #449274
+
 2007-07-30  Jaap Haitsma  <jaap@haitsma.org>
 
 	* applets/brightness/GNOME_BrightnessApplet.xml:

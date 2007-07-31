@@ -66,7 +66,7 @@ static void      gpm_applet_destroy_cb            (GtkObject *object);
 
 #define GPM_BRIGHTNESS_APPLET_OAFID		"OAFIID:GNOME_BrightnessApplet"
 #define GPM_BRIGHTNESS_APPLET_FACTORY_OAFID	"OAFIID:GNOME_BrightnessApplet_Factory"
-#define GPM_BRIGHTNESS_APPLET_ICON		"gpm-brightness-lcd"
+#define GPM_BRIGHTNESS_APPLET_ICON		"gnome-brightness-applet"
 #define GPM_BRIGHTNESS_APPLET_ICON_DISABLED	"gpm-brightness-lcd-disabled"
 #define GPM_BRIGHTNESS_APPLET_ICON_INVALID	"gpm-brightness-lcd-invalid"
 #define GPM_BRIGHTNESS_APPLET_NAME		_("Power Manager Brightness Applet")
@@ -908,6 +908,11 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	applet->connection = NULL;
 	applet->proxy = NULL;
 	applet->tooltip = gtk_tooltips_new ();
+
+	/* Add application specific icons to search path */
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+                                           GPM_DATA G_DIR_SEPARATOR_S "icons");
+
 
 	applet->watch = dbus_watch_new ();
 	g_signal_connect (applet->watch, "connection-changed",

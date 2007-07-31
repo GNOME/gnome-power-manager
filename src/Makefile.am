@@ -24,7 +24,7 @@ INCLUDES =						\
 	-DSYSCONFDIR=\""$(sysconfdir)"\" 		\
 	-DLIBDIR=\""$(libdir)"\" 			\
 	-DVERSION="\"$(VERSION)\"" 			\
-	-DGPM_DATA=\""$(datadir)/gnome-power-manager/"\"\
+	-DGPM_DATA=\"$(pkgdatadir)\"			\
 	-I$(top_srcdir)					\
 	-I$(top_srcdir)/libhal-glib			\
 	-I$(top_srcdir)/libdbus-glib			\
@@ -193,7 +193,6 @@ gnome_power_manager_SOURCES =				\
 	gpm-networkmanager.h				\
 	gpm-networkmanager.c				\
 	gpm-stock-icons.h				\
-	gpm-stock-icons.c				\
 	gpm-info.h					\
 	gpm-info.c					\
 	gpm-array.h					\
