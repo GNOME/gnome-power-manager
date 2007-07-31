@@ -36,9 +36,6 @@ G_BEGIN_DECLS
 #define GPM_STOCK_BRIGHTNESS_KBD		"gpm-brightness-kbd"
 #define GPM_STOCK_INHIBIT			"gpm-inhibit"
 
-gboolean	gpm_stock_icons_init			(void);
-void		gpm_stock_icons_shutdown		(void);
-
 G_END_DECLS
 
 #endif /* __GPM_STOCK_ICONS_H */
