@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define GPM_STOCK_BATTERY_CHARGED		"gpm-primary-charged"
 #define GPM_STOCK_HIBERNATE			"gpm-hibernate"
 #define GPM_STOCK_SUSPEND			"gpm-suspend"
-#define GPM_STOCK_STATISTICS			"gpm-statistics"
+#define GPM_STOCK_STATISTICS			"gnome-power-statistics"
 #define GPM_STOCK_BRIGHTNESS_LCD		"gpm-brightness-lcd"
 #define GPM_STOCK_BRIGHTNESS_KBD		"gpm-brightness-kbd"
 #define GPM_STOCK_INHIBIT			"gpm-inhibit"
