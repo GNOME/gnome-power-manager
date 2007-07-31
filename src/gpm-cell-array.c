@@ -1487,10 +1487,10 @@ gpm_st_cell_array (GpmSelfTest *test)
 	}
 
 	/************************************************************/
-	gpm_st_title (test, "make sure we got 1 cell");
+	gpm_st_title (test, "make sure we got at least 1 cell");
 	count = gpm_cell_array_get_num_cells (cell_array);
-	if (count == 1) {
-		gpm_st_success (test, "got 1 cell");
+	if (count >= 1) {
+	gpm_st_success (test, "got %d cell(s)", count);
 	} else {
 		gpm_st_failed (test, "got %i cells", count);
 	}
