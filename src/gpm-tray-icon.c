@@ -39,7 +39,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkstatusicon.h>
-#include <libgnomeui/gnome-help.h>
 
 #include "gpm-conf.h"
 #include "gpm-control.h"
@@ -275,13 +274,7 @@ gpm_tray_icon_show_preferences_cb (GtkMenuItem *item, gpointer data)
 static void
 gpm_tray_icon_show_help_cb (GtkMenuItem *item, gpointer data)
 {
-	GError *error = NULL;
-
-	gnome_help_display ("gnome-power-manager.xml", NULL, &error);
-	if (error != NULL) {
-		gpm_warning (error->message);
-		g_error_free (error);
-	}
+	gpm_help_display (NULL);
 }
 
 /**

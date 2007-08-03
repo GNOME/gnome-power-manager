@@ -1,3 +1,19 @@
+2007-08-03  Jani Monoses  <jani@ubuntu.com>
+
+	* src/gpm-notify.c:
+	Replace gnome_url_show() with calls to gnome-open or xdg-open.
+	* src/gpm-common.h:
+	* src/gpm-common.c:
+	* src/gpm-statistics.c:
+	* src/gpm-prefs.c:
+	* src/gpm-tray-icon.c:
+	Replace gnome_help_display() with calls to gnome-open.
+	* src/gpm-statistics.c:
+	* src/gpm-prefs.c:
+	* src/gpm-self-test.c:
+	* test/gpm-inhibit-test.c:
+	Drop gnome_program_init(), handle "destroy" signal in the test window.
+
 2007-07-31  Richard Hughes  <richard@hughsie.com>
 
 	* src/gpm-stock-icons.h:

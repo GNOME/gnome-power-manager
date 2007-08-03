@@ -25,6 +25,7 @@
 #include <string.h>
 #include <glib/gi18n.h>
 #include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 #include "gpm-debug.h"
 #include "gpm-common.h"
@@ -304,6 +305,64 @@ gpm_tray_icon_mode_to_string (GpmIconPolicy mode)
 	} else {
 		return "never";
 	}
+}
+
+/**
+ * gpm_help_display:
+ * @link_id: Subsection of gnome-power-manager help section
+ **/
+void
+gpm_help_display (char * link_id)
+{
+	GError *error = NULL;
+	char *command;
+	const char *lang;
+	char *uri = NULL;
+	GdkScreen *gscreen;
+
+	int i;
+
+	const char * const * langs = g_get_language_names ();
+
+	for (i = 0; langs[i]; i++) {
+		lang = langs[i];
+		if (strchr (lang, '.')) {
+			continue;
+		}
+
+		uri = g_build_filename(DATADIR,
+				       "/gnome/help/gnome-power-manager/",
+					lang,
+				       "/gnome-power-manager.xml",
+					NULL);
+					
+		if (g_file_test (uri, G_FILE_TEST_EXISTS)) {
+                    break;
+		}
+	}
+	
+	if (link_id) {
+		command = g_strconcat ("gnome-open ghelp://", uri, "?", link_id, NULL);
+	} else {
+		command = g_strconcat ("gnome-open ghelp://", uri,  NULL);
+	}
+
+	gscreen = gdk_screen_get_default();
+	gdk_spawn_command_line_on_screen (gscreen, command, &error);
+	if (error != NULL) {
+		GtkWidget *d;
+
+		d = gtk_message_dialog_new(NULL,
+				GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+				error->message);
+		gtk_dialog_run(GTK_DIALOG(d));
+		gtk_widget_destroy(d);
+		g_error_free(error);
+	}
+
+	g_free (command);
+	g_free (uri);
 }
 
 /***************************************************************************

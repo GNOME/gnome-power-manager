@@ -26,13 +26,13 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-ui-init.h>
-#include <libgnomeui/gnome-help.h>
+#include <gtk/gtk.h>
 
 #if HAVE_GTKUNIQUE
 #include <gtkunique/gtkunique.h>
 #endif
 
+#include "gpm-common.h"
 #include "gpm-conf.h"
 #include "gpm-debug.h"
 #include "gpm-statistics-core.h"
@@ -46,14 +46,7 @@
 static void
 gpm_statistics_help_cb (GpmStatistics *statistics)
 {
-	GError *error = NULL;
-
-	gnome_help_display_with_doc_id (NULL, "gnome-power-manager",
-					"gnome-power-manager.xml", NULL, &error);
-	if (error != NULL) {
-		gpm_warning (error->message);
-		g_error_free (error);
-	}
+	gpm_help_display ("statistics");
 }
 
 /**
@@ -100,7 +93,6 @@ main (int argc, char **argv)
 {
 	gboolean	 verbose = FALSE;
 	GOptionContext  *context;
- 	GnomeProgram    *program;
 	GpmStatistics	*statistics = NULL;
 	GMainLoop       *loop;
 #if HAVE_GTKUNIQUE
@@ -122,8 +114,6 @@ main (int argc, char **argv)
 
 	g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
 
-	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
-
 #if HAVE_GTKUNIQUE
 	/* FIXME: We don't need to get the startup id once we can
 	 * depend on gtk+-2.12.  Until then we must get it BEFORE
@@ -132,14 +122,10 @@ main (int argc, char **argv)
 	 */
 	startup_id = g_getenv ("DESKTOP_STARTUP_ID");
 #endif
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+	g_option_context_add_group (context, gtk_get_option_group (FALSE));
+	g_option_context_parse (context, &argc, &argv, NULL);
 
-	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
-			    argc, argv,
-			    GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    GNOME_PARAM_GOPTION_CONTEXT, context,
-			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    _("Power Statistics"),
-			    NULL);
 
 	gpm_debug_init (verbose);
 
@@ -190,7 +176,6 @@ main (int argc, char **argv)
 	g_object_unref (uniqueapp);
 #endif
 
-	g_object_unref (program);
 /* seems to not work...
 	g_option_context_free (context); */
 

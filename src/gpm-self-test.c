@@ -24,7 +24,7 @@
 #include <glib.h>
 #include <string.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-ui-init.h>
+#include <gtk/gtk.h>
 
 #include "gpm-debug.h"
 #include "gpm-self-test.h"
@@ -126,7 +126,6 @@ int
 main (int argc, char **argv)
 {
 	GOptionContext  *context;
- 	GnomeProgram    *program;
 	int retval;
 
 	gboolean verbose = FALSE;
@@ -149,13 +148,10 @@ main (int argc, char **argv)
 
 	context = g_option_context_new ("GNOME Power Manager Self Test");
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
-	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
-			    argc, argv,
-			    GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    GNOME_PARAM_GOPTION_CONTEXT, context,
-			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    "Power Inhibit Test",
-			    NULL);
+	g_option_context_add_group (context, gtk_get_option_group (FALSE));
+	g_option_context_parse (context, &argc, &argv, NULL);
+	gtk_init (&argc, &argv);
+
 	gpm_debug_init (verbose);
 
 	GpmSelfTest ttest;
@@ -226,7 +222,6 @@ main (int argc, char **argv)
 		retval = 1;
 	}
 
-//	g_object_unref (program);
 	g_option_context_free (context);
 	return retval;
 }

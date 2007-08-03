@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <libgnomeui/gnome-ui-init.h>
 #include <glade/glade.h>
 #include <dbus/dbus-glib.h>
 #include <gtk/gtk.h>
@@ -180,19 +179,14 @@ int
 main (int argc, char **argv)
 {
 	GOptionContext  *context;
- 	GnomeProgram    *program;
 	GMainLoop       *loop = NULL;
 	GtkWidget	*widget = NULL;
 	GladeXML	*glade_xml = NULL;
 
 	context = g_option_context_new (_("GNOME Power Preferences"));
-	program = gnome_program_init (argv[0], VERSION, LIBGNOMEUI_MODULE,
-			    argc, argv,
-			    GNOME_PROGRAM_STANDARD_PROPERTIES,
-			    GNOME_PARAM_GOPTION_CONTEXT, context,
-			    GNOME_PARAM_HUMAN_READABLE_NAME,
-			    _("Power Inhibit Test"),
-			    NULL);
+	g_option_context_add_group (context, gtk_get_option_group (FALSE));
+	g_option_context_parse (context, &argc, &argv, NULL);
+	gtk_init (&argc, &argv);
 
 	/* load the glade file, and setup the callbacks */
 	glade_xml = glade_xml_new (GPM_DATA "/gpm-inhibit-test.glade", NULL, NULL);
@@ -206,12 +200,13 @@ main (int argc, char **argv)
 	g_signal_connect (widget, "clicked",
 			  G_CALLBACK (widget_uninhibit_cb), glade_xml);
 	widget = glade_xml_get_widget (glade_xml, "window_inhibit");
+	g_signal_connect (widget, "destroy",
+			  G_CALLBACK (window_close_cb), glade_xml);
 	gtk_widget_show (widget);
 
 	/* main loop */
 	loop = g_main_loop_new (NULL, FALSE);
 	g_main_loop_run (loop);
-	g_object_unref (program);
 	g_option_context_free (context);
 	return 0;
 }

@@ -34,7 +34,6 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-#include <libgnome/libgnome.h>
 
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
@@ -305,6 +304,11 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 {
 	gboolean ret;
 	GError *error;
+ 	char *cmdline;
+	GdkScreen *gscreen;
+	GtkWidget *error_dialog;
+
+	gscreen = gdk_screen_get_default();
 
 	if (strcmp (action, "dont-show-again") == 0) {
 		gpm_debug ("not showing warning anymore for %s!", notify->priv->do_not_show_gconf);
@@ -315,11 +319,27 @@ notify_general_clicked_cb (NotifyNotification *libnotify,
 	if (strcmp (action, "visit-website") == 0) {
 		gpm_debug ("autovisit website %s", notify->priv->internet_url);
 		error = NULL;
-		ret = gnome_url_show (notify->priv->internet_url, &error);
+
+ 		cmdline = g_strconcat ("gnome-open ", notify->priv->internet_url, NULL);
+		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
+		g_free (cmdline);
+
+		if (ret == TRUE)
+			return;
+
+		g_error_free (error);
+		error = NULL;
+
+ 		cmdline = g_strconcat ("xdg-open ", notify->priv->internet_url, NULL);
+		ret = gdk_spawn_command_line_on_screen (gscreen, cmdline, &error);
+		g_free (cmdline);
+
 		if (ret == FALSE) {
-			gpm_debug ("failed to show url: %s", error->message);
+			error_dialog = gtk_message_dialog_new ( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "Failed to show url %s", error->message); 
+			gtk_dialog_run (GTK_DIALOG (error_dialog));
 			g_error_free (error);
 		}
+
 		/* free the stored string */
 		g_free (notify->priv->internet_url);
 		notify->priv->internet_url = NULL;
