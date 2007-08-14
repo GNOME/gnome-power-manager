@@ -1,5 +1,24 @@
 2007-08-14  Jaap Haitsma  <jaap@haitsma.org>
 
+	* applets/brightness/Makefile.am:
+	* applets/brightness/brightness-applet.h: 
+	* applets/brightness/brightness-applet.c:
+	(gpm_applet_update_tooltip), (gpm_brightness_applet_init):
+	Removed brightness-applet.h as we do not need to export anything.
+	Use new tooltip object of GTK 2.12
+ 
+	* applets/inhibit/Makefile.am:
+	* applets/inhibit/inhibit-applet.h:
+	* applets/inhibit/inhibit-applet.c: (gpm_applet_update_tooltip),
+	(gpm_inhibit_applet_init):
+	Removed inhibit-applet.h as we do not need to export anything.
+	Use new tooltip object of GTK 2.12
+
+	* configure.in: bump GTK requirement to 2.11 and glib to 2.13
+	Fixes bug #462347
+
+2007-08-14  Jaap Haitsma  <jaap@haitsma.org>
+
 	* MAINTAINERS: Update to new format
 
 2007-08-03  Jani Monoses  <jani@ubuntu.com>

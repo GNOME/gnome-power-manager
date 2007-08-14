@@ -24,7 +24,7 @@ LOCAL_LIBDBUS_LIBS =						\
 
 bin_PROGRAMS=gnome-inhibit-applet
 
-gnome_inhibit_applet_SOURCES = inhibit-applet.c inhibit-applet.h
+gnome_inhibit_applet_SOURCES = inhibit-applet.c
 gnome_inhibit_applet_LDADD =					\
 	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\

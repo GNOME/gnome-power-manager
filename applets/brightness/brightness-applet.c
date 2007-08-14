@@ -33,9 +33,43 @@
 #include <libgnomeui/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
 #include <libdbus-watch.h>
+#include <glib-object.h>
+#include <dbus/dbus-glib.h>
 
-#include "brightness-applet.h"
 #include "../src/gpm-common.h"
+
+#define GPM_TYPE_BRIGHTNESS_APPLET		(gpm_brightness_applet_get_type ())
+#define GPM_BRIGHTNESS_APPLET(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_BRIGHTNESS_APPLET, GpmBrightnessApplet))
+#define GPM_BRIGHTNESS_APPLET_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_BRIGHTNESS_APPLET, GpmBrightnessAppletClass))
+#define GPM_IS_BRIGHTNESS_APPLET(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_BRIGHTNESS_APPLET))
+#define GPM_IS_BRIGHTNESS_APPLET_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_BRIGHTNESS_APPLET))
+#define GPM_BRIGHTNESS_APPLET_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_BRIGHTNESS_APPLET, GpmBrightnessAppletClass))
+
+typedef struct{
+	PanelApplet parent;
+	/* applet state */
+	gboolean call_worked; /* g-p-m refusing action */
+	gboolean popped; /* the popup is shown */
+	/* the popup and its widgets */
+	GtkWidget *popup, *slider, *btn_plus, *btn_minus;
+	/* the icon and a cache for size*/
+	GdkPixbuf *icon;
+	gint icon_width, icon_height;
+	/* connection to g-p-m */
+	DBusGProxy *proxy;
+	DBusGConnection *connection;
+	DbusWatch *watch;
+	guint level;
+	/* a cache for panel size */
+	gint size;
+} GpmBrightnessApplet;
+
+typedef struct{
+	PanelAppletClass	parent_class;
+} GpmBrightnessAppletClass;
+
+GType                gpm_brightness_applet_get_type  (void);
+
 
 static void      gpm_brightness_applet_class_init (GpmBrightnessAppletClass *klass);
 static void      gpm_brightness_applet_init       (GpmBrightnessApplet *applet);
@@ -322,9 +356,9 @@ gpm_applet_update_tooltip (GpmBrightnessApplet *applet)
 		} else {
 			snprintf (buf, 100, _("LCD brightness : %d%%"), applet->level);
 		}
-		gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
+		gtk_widget_set_tooltip_text (GTK_WIDGET(applet), buf);
 	} else {
-		gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), NULL, NULL);
+		gtk_widget_set_tooltip_text (GTK_WIDGET(applet), NULL);
 	}
 }
 
@@ -907,7 +941,6 @@ gpm_brightness_applet_init (GpmBrightnessApplet *applet)
 	applet->icon = NULL;
 	applet->connection = NULL;
 	applet->proxy = NULL;
-	applet->tooltip = gtk_tooltips_new ();
 
 	/* Add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),

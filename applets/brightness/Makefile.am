@@ -24,7 +24,7 @@ LOCAL_LIBDBUS_LIBS =						\
 
 bin_PROGRAMS=gnome-brightness-applet
 
-gnome_brightness_applet_SOURCES = brightness-applet.c brightness-applet.h
+gnome_brightness_applet_SOURCES = brightness-applet.c
 gnome_brightness_applet_LDADD =					\
 	$(LOCAL_LIBDBUS_LIBS)					\
 	$(DBUS_LIBS)						\

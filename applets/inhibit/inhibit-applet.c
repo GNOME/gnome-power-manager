@@ -32,9 +32,40 @@
 #include <gtk/gtkbox.h>
 #include <libgnomeui/gnome-help.h>
 #include <libdbus-watch.h>
+#include <glib-object.h>
+#include <dbus/dbus-glib.h>
 
-#include "inhibit-applet.h"
 #include "../src/gpm-common.h"
+
+#define GPM_TYPE_INHIBIT_APPLET		(gpm_inhibit_applet_get_type ())
+#define GPM_INHIBIT_APPLET(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GPM_TYPE_INHIBIT_APPLET, GpmInhibitApplet))
+#define GPM_INHIBIT_APPLET_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST((k), GPM_TYPE_INHIBIT_APPLET, GpmInhibitAppletClass))
+#define GPM_IS_INHIBIT_APPLET(o)	(G_TYPE_CHECK_INSTANCE_TYPE ((o), GPM_TYPE_INHIBIT_APPLET))
+#define GPM_IS_INHIBIT_APPLET_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GPM_TYPE_INHIBIT_APPLET))
+#define GPM_INHIBIT_APPLET_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GPM_TYPE_INHIBIT_APPLET, GpmInhibitAppletClass))
+
+typedef struct{
+	PanelApplet parent;
+	/* applet state */
+	guint cookie;
+	/* the icon and a cache for size*/
+	GdkPixbuf *icon;
+	gint icon_width, icon_height;
+	/* connection to g-p-m */
+	DBusGProxy *proxy;
+	DBusGConnection *connection;
+	DbusWatch *watch;
+	guint level;
+	/* a cache for panel size */
+	gint size;
+} GpmInhibitApplet;
+
+typedef struct{
+	PanelAppletClass	parent_class;
+} GpmInhibitAppletClass;
+
+GType                gpm_inhibit_applet_get_type  (void);
+
 
 static void      gpm_inhibit_applet_class_init (GpmInhibitAppletClass *klass);
 static void      gpm_inhibit_applet_init       (GpmInhibitApplet *applet);
@@ -312,7 +343,7 @@ gpm_applet_update_tooltip (GpmInhibitApplet *applet)
 			snprintf (buf, 100, _("Automatic sleep enabled"));
 		}
 	}
-	gtk_tooltips_set_tip (applet->tooltip, GTK_WIDGET(applet), buf, NULL);
+	gtk_widget_set_tooltip_text (GTK_WIDGET(applet), buf);
 }
 
 /**
@@ -559,7 +590,6 @@ gpm_inhibit_applet_init (GpmInhibitApplet *applet)
 	applet->cookie = 0;
 	applet->connection = NULL;
 	applet->proxy = NULL;
-	applet->tooltip = gtk_tooltips_new ();
 
 	/* Add application specific icons to search path */
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
