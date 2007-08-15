@@ -1,16 +1,17 @@
 SUBDIRS = icons sounds
 
+@INTLTOOL_SCHEMAS_RULE@
 schemadir = $(sysconfdir)/gconf/schemas
 schema_in_files = gnome-power-manager.schemas.in
 schema_DATA = $(schema_in_files:.schemas.in=.schemas)
-@INTLTOOL_SCHEMAS_RULE@
 
+@INTLTOOL_DESKTOP_RULE@
 desktopdir = $(datadir)/applications
 desktop_in_files = gnome-power-preferences.desktop.in \
 		   gnome-power-statistics.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
 
+@INTLTOOL_DESKTOP_RULE@
 autostartdir = $(datadir)/gnome/autostart
 autostart_in_files = gnome-power-manager.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
