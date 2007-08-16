@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-power-manager 0.3.2\n"
+"Project-Id-Version: gnome-power-manager 2.19.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 15:05+0700\n"
-"PO-Revision-Date: 2007-07-30 15:07+0700\n"
+"POT-Creation-Date: 2007-08-16 16:31+0700\n"
+"PO-Revision-Date: 2007-08-16 16:33+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -18,37 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: applets/brightness/brightness-applet.c:72
+#: applets/brightness/brightness-applet.c:106
 msgid "Power Manager Brightness Applet"
 msgstr "แอพเพล็ตปรับความสว่างของระบบจัดการพลังงาน"
 
-#: applets/brightness/brightness-applet.c:73
+#: applets/brightness/brightness-applet.c:107
 msgid "Adjusts laptop panel brightness."
 msgstr "ปรับความสว่างของจอภาพแล็ปท็อป"
 
-#: applets/brightness/brightness-applet.c:319
-#: applets/inhibit/inhibit-applet.c:307
+#: applets/brightness/brightness-applet.c:353
+#: applets/inhibit/inhibit-applet.c:338
 #, c-format
 msgid "Cannot connect to gnome-power-manager"
 msgstr "ไม่สามารถติดต่อไปยังเครื่องมือจัดการการใช้พลังงานของ GNOME"
 
-#: applets/brightness/brightness-applet.c:321
+#: applets/brightness/brightness-applet.c:355
 #, c-format
 msgid "Cannot get laptop panel brightness"
 msgstr "ไม่สามารถอ่านค่าความสว่างของจอภาพแล็ปท็อป"
 
-#: applets/brightness/brightness-applet.c:323
+#: applets/brightness/brightness-applet.c:357
 #, c-format
 msgid "LCD brightness : %d%%"
 msgstr "ความสว่างของจอ LCD : %d%%"
 
-#: applets/brightness/brightness-applet.c:710
-#: applets/inhibit/inhibit-applet.c:375 src/gpm-tray-icon.c:308
+#: applets/brightness/brightness-applet.c:744
+#: applets/inhibit/inhibit-applet.c:406 src/gpm-tray-icon.c:301
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "อนุญาตภายใต้เงื่อนไข GNU General Public License รุ่นที่ 2"
 
-#: applets/brightness/brightness-applet.c:711
-#: applets/inhibit/inhibit-applet.c:376 src/gpm-tray-icon.c:309
+#: applets/brightness/brightness-applet.c:745
+#: applets/inhibit/inhibit-applet.c:407 src/gpm-tray-icon.c:302
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
@@ -60,8 +60,8 @@ msgstr ""
 "ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา\n"
 "(ตามแต่คุณจะเลือก)"
 
-#: applets/brightness/brightness-applet.c:715
-#: applets/inhibit/inhibit-applet.c:380 src/gpm-tray-icon.c:313
+#: applets/brightness/brightness-applet.c:749
+#: applets/inhibit/inhibit-applet.c:411 src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -73,8 +73,8 @@ msgstr ""
 "***อรรถประโยชน์เชิงพาณิชย์*** หรือ ***ความเหมาะสมสำหรับวัตถุประสงค์\n"
 "เฉพาะกิจใดๆ*** กรุณาอ่าน GNU General Public License เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: applets/brightness/brightness-applet.c:719
-#: applets/inhibit/inhibit-applet.c:384 src/gpm-tray-icon.c:317
+#: applets/brightness/brightness-applet.c:753
+#: applets/inhibit/inhibit-applet.c:415 src/gpm-tray-icon.c:310
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
@@ -85,7 +85,7 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc.,\n"
 "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: applets/brightness/brightness-applet.c:733
+#: applets/brightness/brightness-applet.c:767
 msgid "Copyright © 2006 Benjamin Canou"
 msgstr "Copyright © 2006 Benjamin Canou"
 
@@ -105,29 +105,29 @@ msgstr "โรงงานแอพเพล็ตปรับความสว
 msgid "Factory for Brightness Applet"
 msgstr "โรงงานสำหรับสร้างแอพเพล็ตปรับความสว่าง"
 
-#: applets/inhibit/inhibit-applet.c:58
+#: applets/inhibit/inhibit-applet.c:89
 msgid "Power Manager Inhibit Applet"
 msgstr "แอพเพล็ตระงับการจัดการพลังงาน"
 
-#: applets/inhibit/inhibit-applet.c:59
+#: applets/inhibit/inhibit-applet.c:90
 msgid "Allows user to inhibit automatic power saving."
 msgstr "ให้ผู้ใช้ระงับการประหยัดพลังงานอัตโนมัติได้"
 
-#: applets/inhibit/inhibit-applet.c:310
+#: applets/inhibit/inhibit-applet.c:341
 #, c-format
 msgid "Automatic sleep inhibited"
 msgstr "ระงับการหลับอัตโนมัติแล้ว"
 
-#: applets/inhibit/inhibit-applet.c:312
+#: applets/inhibit/inhibit-applet.c:343
 #, c-format
 msgid "Automatic sleep enabled"
 msgstr "เปิดใช้การหลับอัตโนมัติแล้ว"
 
-#: applets/inhibit/inhibit-applet.c:340
+#: applets/inhibit/inhibit-applet.c:371
 msgid "Manual inhibit"
 msgstr "ระงับตามสั่ง"
 
-#: applets/inhibit/inhibit-applet.c:398
+#: applets/inhibit/inhibit-applet.c:429
 msgid "Copyright © 2006-2007 Richard Hughes"
 msgstr "Copyright © 2006-2007 Richard Hughes"
 
@@ -940,7 +940,7 @@ msgstr "จะพิจารณาโพรเซส nice ขณะคำนว
 #: data/gnome-power-manager.schemas.in.h:143
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
-"This means the the keyring will have to be unlocked on resume."
+"This means the keyring will have to be unlocked on resume."
 msgstr ""
 "กำหนดว่าจะล็อคพวงกุญแจของ GNOME ก่อนที่คอมพิวเตอร์จะจำศีลหรือไม่ การล็อคนี้ "
 "หมายความว่าจะต้องปลดล็อคพวงกุญแจเมื่อเครื่องกลับมาทำงานใหม่ด้วย"
@@ -948,7 +948,7 @@ msgstr ""
 #: data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
-"means the the keyring will have to be unlocked on resume."
+"means the keyring will have to be unlocked on resume."
 msgstr ""
 "กำหนดว่าจะล็อคพวงกุญแจของ GNOME ก่อนที่คอมพิวเตอร์จะพักเครื่องหรือไม่ การล็อคนี้ "
 "หมายความว่าจะต้องปลดล็อคพวงกุญแจเมื่อเครื่องกลับมาทำงานใหม่ด้วย"
@@ -1029,7 +1029,7 @@ msgstr "การใช้พลังงาน"
 msgid "Observe power management"
 msgstr "ตรวจสอบการใช้พลังงาน"
 
-#: data/gnome-power-statistics.desktop.in.h:2 src/gpm-statistics.c:141
+#: data/gnome-power-statistics.desktop.in.h:2
 msgid "Power Statistics"
 msgstr "กราฟการใช้พลังงาน"
 
@@ -1224,18 +1224,18 @@ msgstr "ไม่ได้ส่งข้อความเนื่องจา
 msgid "General failure: %s"
 msgstr "ข้อผิดพลาดทั่วไป: %s"
 
-#: src/gpm-common.c:241
+#: src/gpm-common.c:242
 #, c-format
 msgid "Unknown time"
 msgstr "ไม่ทราบกำหนดเวลา"
 
-#: src/gpm-common.c:246
+#: src/gpm-common.c:247
 #, c-format
 msgid "%i minute"
 msgid_plural "%i minutes"
 msgstr[0] "%i นาที"
 
-#: src/gpm-common.c:257
+#: src/gpm-common.c:258
 #, c-format
 msgid "%i hour"
 msgid_plural "%i hours"
@@ -1243,17 +1243,17 @@ msgstr[0] "%i ชั่วโมง"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
-#: src/gpm-common.c:263
+#: src/gpm-common.c:264
 #, c-format
 msgid "%i %s %i %s"
 msgstr "%i %s %i %s"
 
-#: src/gpm-common.c:264
+#: src/gpm-common.c:265
 msgid "hour"
 msgid_plural "hours"
 msgstr[0] "ชั่วโมง"
 
-#: src/gpm-common.c:265
+#: src/gpm-common.c:266
 msgid "minute"
 msgid_plural "minutes"
 msgstr[0] "นาที"
@@ -1424,8 +1424,8 @@ msgstr "เวลาประเมิน"
 msgid "Time"
 msgstr "เวลา"
 
-#: src/gpm-info.c:312 src/gpm-info.c:329 src/gpm-info.c:346 src/gpm-info.c:364
-#: src/gpm-info.c:381
+#: src/gpm-info.c:312 src/gpm-info.c:329 src/gpm-info.c:346
+#: src/gpm-info.c:364 src/gpm-info.c:381
 msgid "Battery percentage"
 msgstr "เปอร์เซ็นต์แบตเตอรี่"
 
@@ -1445,19 +1445,23 @@ msgstr "ศักย์ไฟฟ้า"
 msgid "Accuracy of reading"
 msgstr "ความละเอียดของค่า"
 
-#: src/gpm-info.c:331 src/gpm-info.c:348 src/gpm-info.c:366 src/gpm-info.c:383
+#: src/gpm-info.c:331 src/gpm-info.c:348 src/gpm-info.c:366
+#: src/gpm-info.c:383
 msgid "Valid data"
 msgstr "ข้อมูลใช้การได้"
 
-#: src/gpm-info.c:332 src/gpm-info.c:349 src/gpm-info.c:367 src/gpm-info.c:384
+#: src/gpm-info.c:332 src/gpm-info.c:349 src/gpm-info.c:367
+#: src/gpm-info.c:384
 msgid "No data"
 msgstr "ไม่มีข้อมูล"
 
-#: src/gpm-info.c:336 src/gpm-info.c:354 src/gpm-info.c:371 src/gpm-info.c:389
+#: src/gpm-info.c:336 src/gpm-info.c:354 src/gpm-info.c:371
+#: src/gpm-info.c:389
 msgid "Start point"
 msgstr "จุดเริ่ม"
 
-#: src/gpm-info.c:340 src/gpm-info.c:358 src/gpm-info.c:375 src/gpm-info.c:393
+#: src/gpm-info.c:340 src/gpm-info.c:358 src/gpm-info.c:375
+#: src/gpm-info.c:393
 msgid "Stop point"
 msgstr "จุดสิ้นสุด"
 
@@ -1535,31 +1539,31 @@ msgstr "ได้หยุด %s ไม่ให้เกิดขึ้น : "
 msgid "Multiple applications have stopped the %s from taking place."
 msgstr "มีหลายโปรแกรมได้หยุด %s ไม่ให้เกิดขึ้น"
 
-#: src/gpm-main.c:154
+#: src/gpm-main.c:153
 msgid "Do not daemonize"
 msgstr "ไม่ต้องแปลงเป็นดีมอน"
 
-#: src/gpm-main.c:156 src/gpm-prefs.c:115 src/gpm-statistics.c:113
+#: src/gpm-main.c:155 src/gpm-prefs.c:107 src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "แสดงข้อมูลดีบั๊กเพิ่มเติม"
 
-#: src/gpm-main.c:158
+#: src/gpm-main.c:157
 msgid "Show version of installed program and exit"
 msgstr "แสดงรุ่นของโปรแกรมที่ติดตั้งไว้แล้วจบการทำงาน"
 
-#: src/gpm-main.c:160
+#: src/gpm-main.c:159
 msgid "Exit after a small delay (for debugging)"
 msgstr "ออกจากโปรแกรมหลังหน่วงเวลาเล็กน้อย (สำหรับดีบั๊ก)"
 
-#: src/gpm-main.c:162
+#: src/gpm-main.c:161
 msgid "Exit after a the manager has loaded (for debugging)"
 msgstr "ออกจากโปรแกรมหลังโหลดโปรแกรมจัดการพลังงานเสร็จ (สำหรับดีบั๊ก)"
 
-#: src/gpm-main.c:164
+#: src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
 msgstr "ดีบั๊กเจาะจงแฟ้ม เช่น power"
 
-#: src/gpm-main.c:168
+#: src/gpm-main.c:167
 msgid "GNOME Power Manager"
 msgstr "โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
@@ -1855,11 +1859,11 @@ msgstr ""
 "กรุณาติดต่อผู้ดูแลระบบของคุณ"
 
 #. save in state
-#: src/gpm-notify.c:344
+#: src/gpm-notify.c:364
 msgid "Battery may be recalled"
 msgstr "แบตเตอรี่อาจถูกเรียกคืน"
 
-#: src/gpm-notify.c:345
+#: src/gpm-notify.c:365
 #, c-format
 msgid ""
 "The battery in your computer may have been recalled by %s and you may be at "
@@ -1871,32 +1875,32 @@ msgstr ""
 "\n"
 "กรุณาตรวจสอบเว็บเรียกคืนแบตเตอรี่ของ %s เพื่ออ่านข้อมูลเพิ่มเติม"
 
-#: src/gpm-notify.c:360
+#: src/gpm-notify.c:380
 msgid "Visit recall website"
 msgstr "ไปที่เว็บเรียกคืน"
 
-#: src/gpm-notify.c:366 src/gpm-notify.c:400 src/gpm-notify.c:434
-#: src/gpm-notify.c:465 src/gpm-notify.c:495 src/gpm-notify.c:525
-#: src/gpm-notify.c:561
+#: src/gpm-notify.c:386 src/gpm-notify.c:420 src/gpm-notify.c:454
+#: src/gpm-notify.c:485 src/gpm-notify.c:515 src/gpm-notify.c:545
+#: src/gpm-notify.c:581
 msgid "Do not show me this again"
 msgstr "ไม่ต้องแสดงข้อความนี้อีก"
 
-#: src/gpm-notify.c:386
+#: src/gpm-notify.c:406
 msgid "Battery may be broken"
 msgstr "แบตเตอรี่อาจจะเสีย"
 
-#: src/gpm-notify.c:387
+#: src/gpm-notify.c:407
 #, c-format
 msgid ""
 "Your battery has a very low capacity (%i%%), which means that it may be old "
 "or broken."
 msgstr "แบตเตอรี่ของคุณมีความจุต่ำมาก (%i%%) ซึ่งอาจหมายความว่าแบตเตอรี่นี้เก่าหรือเสียแล้ว"
 
-#: src/gpm-notify.c:419
+#: src/gpm-notify.c:439
 msgid "Inhibit warning!"
 msgstr "คำเตือนของการระงับ!"
 
-#: src/gpm-notify.c:420
+#: src/gpm-notify.c:440
 #, c-format
 msgid ""
 "Your laptop will not sleep if you shut the lid as it is currently "
@@ -1906,35 +1910,35 @@ msgstr ""
 "แล็ปท็อปของคุณจะไม่หลับถ้าคุณปิดฝาเครื่อง เพราะมีการระงับการจัดการพลังงานอยู่\n"
 "แล็ปท็อปบางรุ่นอาจเกิดความร้อนสูงถ้าไม่มีการหลับเมื่อปิดฝาเครื่อง"
 
-#: src/gpm-notify.c:453
+#: src/gpm-notify.c:473
 msgid "Battery Charged"
 msgstr "ประจุแบตเตอรี่เสร็จแล้ว"
 
-#: src/gpm-notify.c:454
+#: src/gpm-notify.c:474
 msgid "Your laptop battery is now fully charged"
 msgstr "แบตเตอรี่แล็ปท็อปของคุณประจุไฟเต็มแล้ว"
 
-#: src/gpm-notify.c:483
+#: src/gpm-notify.c:503
 msgid "Battery Discharging"
 msgstr "แบตเตอรี่กำลังจ่ายไฟ"
 
-#: src/gpm-notify.c:484
+#: src/gpm-notify.c:504
 msgid "The AC power has been unplugged. The system is now using battery power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแบตเตอรี่"
 
-#: src/gpm-notify.c:513
+#: src/gpm-notify.c:533
 msgid "UPS Discharging"
 msgstr "UPS กำลังจ่ายไฟ"
 
-#: src/gpm-notify.c:514
+#: src/gpm-notify.c:534
 msgid "The AC power has been unplugged. The system is now using backup power."
 msgstr "ปลั๊กไฟ AC ถูกถอดออก ระบบกำลังใช้พลังงานจากแหล่งจ่ายสำรอง"
 
-#: src/gpm-notify.c:544
+#: src/gpm-notify.c:564
 msgid "Sleep Problem"
 msgstr "เกิดปัญหาในการพักเครื่อง"
 
-#: src/gpm-notify.c:546
+#: src/gpm-notify.c:566
 msgid ""
 "Your computer failed to hibernate.\n"
 "Check the help file for common problems."
@@ -1942,7 +1946,7 @@ msgstr ""
 "เครื่องคอมพิวเตอร์ไม่สามารถจำศีลได้\n"
 "กรุณาอ่านคู่มือวิธีใช้ เกี่ยวกับปัญหาที่พบบ่อย"
 
-#: src/gpm-notify.c:549
+#: src/gpm-notify.c:569
 msgid ""
 "Your computer failed to suspend.\n"
 "Check the help file for common problems."
@@ -1950,7 +1954,7 @@ msgstr ""
 "เครื่องคอมพิวเตอร์ไม่สามารถพักเครื่องได้\n"
 "กรุณาอ่านคู่มือวิธีใช้ เกี่ยวกับปัญหาที่พบบ่อย"
 
-#: src/gpm-notify.c:574
+#: src/gpm-notify.c:594
 msgid "Visit quirk website"
 msgstr "ไปที่เว็บแหล่งรวมการแก้ขัด"
 
@@ -2158,13 +2162,9 @@ msgstr "PDA"
 msgid "Cell phone"
 msgstr "โทรศัพท์มือถือ"
 
-#: src/gpm-prefs.c:119 test/gpm-inhibit-test.c:188
+#: src/gpm-prefs.c:111 test/gpm-inhibit-test.c:186
 msgid "GNOME Power Preferences"
 msgstr "ปรับแต่งการจัดการพลังงานของ GNOME"
-
-#: src/gpm-prefs.c:143
-msgid "Power Preferences"
-msgstr "ปรับแต่งการใช้พลังงาน"
 
 #. The text that should appear in the action combo boxes
 #: src/gpm-prefs-core.c:82 src/gpm-statistics-core.c:95
@@ -2213,7 +2213,7 @@ msgstr "ความเร็วสูงสุดเสมอ"
 msgid "Never"
 msgstr "ไม่ต้อง"
 
-#: src/gpm-statistics.c:117
+#: src/gpm-statistics.c:109
 msgid "GNOME Power Statistics"
 msgstr "กราฟการใช้พลังงานของ GNOME"
 
@@ -2261,51 +2261,55 @@ msgstr "ใช้ไฟจากแบตเตอรี่"
 msgid "Laptop lid is closed"
 msgstr "แล็ปท็อปถูกพับเก็บ"
 
-#: src/gpm-tray-icon.c:207
+#: src/gpm-tray-icon.c:206
 msgid "Device information"
 msgstr "ข้อมูลอุปกรณ์"
 
-#: src/gpm-tray-icon.c:322
+#: src/gpm-tray-icon.c:315
 msgid "translator-credits"
 msgstr "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
 
-#: src/gpm-tray-icon.c:338
+#: src/gpm-tray-icon.c:331
 msgid "GNOME Power Manager Website"
 msgstr "เว็บไซต์โปรแกรมจัดการการใช้พลังงานของ GNOME"
 
 #. Preferences
-#: src/gpm-tray-icon.c:440
+#: src/gpm-tray-icon.c:433
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
 #. Statistics
-#: src/gpm-tray-icon.c:448
+#: src/gpm-tray-icon.c:441
 msgid "Power _History"
 msgstr "_กราฟการใช้พลังงาน"
 
 #. Help
-#: src/gpm-tray-icon.c:460 applets/brightness/GNOME_BrightnessApplet.xml.h:2
+#: src/gpm-tray-icon.c:453
+#: applets/brightness/GNOME_BrightnessApplet.xml.h:2
 #: applets/inhibit/GNOME_InhibitApplet.xml.h:2
 msgid "_Help"
 msgstr "_วิธีใช้"
 
 #. About
-#: src/gpm-tray-icon.c:468 applets/brightness/GNOME_BrightnessApplet.xml.h:1
+#: src/gpm-tray-icon.c:461
+#: applets/brightness/GNOME_BrightnessApplet.xml.h:1
 #: applets/inhibit/GNOME_InhibitApplet.xml.h:1
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: src/gpm-tray-icon.c:582
+#: src/gpm-tray-icon.c:575
 msgid "_Suspend"
 msgstr "_พักเครื่อง"
 
-#: src/gpm-tray-icon.c:592
+#: src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "_จำศีลเครื่อง"
 
-#: test/gpm-inhibit-test.c:194
-msgid "Power Inhibit Test"
-msgstr "สอบถามการระงับการจัดการพลังงาน"
+#~ msgid "Power Preferences"
+#~ msgstr "ปรับแต่งการใช้พลังงาน"
+
+#~ msgid "Power Inhibit Test"
+#~ msgstr "สอบถามการระงับการจัดการพลังงาน"
 
 #~ msgid ""
 #~ "If the laptop should be configured as if it is using a permanent external "
