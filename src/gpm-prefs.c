@@ -128,7 +128,7 @@ main (int argc, char **argv)
 	g_option_context_add_group (context, gtk_get_option_group (FALSE));
 	g_option_context_parse (context, &argc, &argv, NULL);
 
-
+	gtk_init (&argc, &argv);
 	gpm_debug_init (verbose);
 
 #if HAVE_GTKUNIQUE
