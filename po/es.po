@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:26+0100\n"
-"PO-Revision-Date: 2007-08-16 21:33+0200\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
+"PO-Revision-Date: 2007-08-22 00:25+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1047,16 +1047,16 @@ msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
 msgstr ""
-"Indica si el depósito de claves está bloqueado antes de que el equipo pase a hibernar. "
-"Esto significa que tendrá que desbloquear el depósito al reanudar."
+"Indica si el depósito de claves está bloqueado antes de que el equipo pase a "
+"hibernar. Esto significa que tendrá que desbloquear el depósito al reanudar."
 
 #: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
 msgstr ""
-"Indica si el depósito de claves está bloqueado antes de que el equipo se suspenda. "
-"Esto significa que tendrá que desbloquear el depósito al reanudar."
+"Indica si el depósito de claves está bloqueado antes de que el equipo se "
+"suspenda. Esto significa que tendrá que desbloquear el depósito al reanudar."
 
 #: ../data/gnome-power-manager.schemas.in.h:145
 msgid ""
@@ -1161,7 +1161,7 @@ msgstr "Voltaje de la batería"
 msgid "Graph type:"
 msgstr "Tipo de gráfica:"
 
-#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "Histórico de energía"
 
@@ -1670,7 +1670,7 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "Salir tras un pequeño retardo (para depurar)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
+msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Salir después de que el gestor se haya cargado (para depurar)"
 
 #: ../src/gpm-main.c:163
@@ -2363,32 +2363,36 @@ msgid "GNOME Power Statistics"
 msgstr "Estadísticas de energía de GNOME"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
-msgstr "Histórico de carga"
+msgid "Charge history"
+msgstr "Cargar el histórico"
+
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "Histórico de energía"
 
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr "Histórico de voltaje"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "Histórico del tiempo estimado"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "Tiempo de carga estimado"
+msgid "Charge time profile"
+msgstr "Perfil del tiempo de carga"
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "Precisión de la estimación de carga"
+msgid "Discharge time profile"
+msgstr "Perfil del tiempo de descarga"
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "Tiempo de descarga estimado"
+msgid "Charge time accuracy profile"
+msgstr "Perfil de precisión del tiempo de carga"
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "Precisión de la estimación de descarga"
+msgid "Discharge time accuracy profile"
+msgstr "Perfil de precisión del tiempo de descarga"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
