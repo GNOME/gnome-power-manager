@@ -1,0 +1,754 @@
+### this file contains suppressions for valgrind when running
+### the gibber/telepathy-salut unit tests based on the gstreamer one
+
+### syscall suppressions
+
+{
+   <clone on Wim's Debian>
+   Memcheck:Param
+   clone(parent_tidptr)
+   fun:clone
+   fun:clone
+}
+
+{
+   <clone on Wim's Debian>
+   Memcheck:Param
+   clone(child_tidptr)
+   fun:clone
+   fun:clone
+}
+
+{
+   <clone on Wim's Debian>
+   Memcheck:Param
+   clone(tlsinfo)
+   fun:clone
+   fun:clone
+}
+
+### glibc suppressions
+
+{
+   <conditional jump on wim's debian 2/2/06>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+# glibc does not deallocate thread-local storage
+
+{
+   <tls>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@*
+}
+
+# I get an extra stack entry on x86/dapper
+{
+   <tls>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_allocate_tls
+   fun:pthread_create@@*
+}
+
+
+{
+   <pthread strstr>
+   Memcheck:Cond
+   fun:strstr
+   fun:__pthread_initialize_minimal
+   obj:/lib/libpthread-*.so
+   obj:/lib/libpthread-*.so
+   fun:call_init
+   fun:_dl_init
+   obj:/lib/ld-*.so
+}
+
+# a thread-related free problem in glibc from Edgard
+{
+   __libc_freeres_rw_acess
+   Memcheck:Addr4
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:__libc_freeres
+}
+
+{
+   <a conditional jump on wim's debian>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+}
+
+# g_module_open-related problems
+{
+   <started showing up on fc4-quick>
+   Memcheck:Addr2
+   fun:memcpy
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <started showing up on fc4-quick>
+   Memcheck:Addr4
+   fun:memcpy
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <g_module_open on wim's debian>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:do_sym
+   fun:_dl_sym
+   fun:dlsym_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlsym
+   fun:g_module_symbol
+   fun:g_module_open
+}
+
+{
+   <g_module_open on wim's debian>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+{
+   <g_module_open on wim's debian>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <leak on wim's debian in g_module_open>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <invalid read on wim's debian>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+}
+
+{
+   <invalid read on wim's debian>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+}
+
+{
+   <invalid read on wim's debian - 2006-02-02>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <invalid read on wim's debian - 2006-02-02>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:dl_open_worker
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   fun:dlopen_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <invalid read on wim's debian - 2006-02-02>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:do_sym
+   fun:_dl_sym
+   fun:dlsym_doit
+   obj:/lib/ld-2.3.*.so
+   fun:_dlerror_run
+   fun:dlsym
+   fun:g_module_symbol
+   fun:g_module_open
+}
+
+{
+   <futex on Andy's 64-bit ubuntu>
+   Memcheck:Param
+   futex(uaddr2)
+   fun:pthread_once
+   obj:/lib/libc-2.3.*.so
+   obj:/lib/libc-2.3.*.so
+   fun:mbsnrtowcs
+   fun:vfprintf
+   fun:vsprintf
+   fun:sprintf
+   obj:/lib/libc-2.3.*.so
+}
+
+# valgrind doesn't allow me to specify a suppression for Addr1, Addr2, Addr4
+# as Addr*, so 3 copies for that; and then 2 of each for that pesky memcpy
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr1
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr2
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr4
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr1
+   fun:memcpy
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr2
+   fun:memcpy
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+{
+   <Invalid read of size 1, 2, 4 on thomas's FC4>
+   Memcheck:Addr4
+   fun:memcpy
+   fun:_dl_signal_error
+   fun:_dl_map_object_deps
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+   fun:g_module_open
+}
+
+{
+   <Addr8 on Andy's AMD64 ubuntu in dl_open>
+   Memcheck:Addr8
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/libc-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   obj:/lib/libdl-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+}
+
+{
+   <Conditional jump on Andy's AMD64 ubuntu>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/libc-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   fun:_dl_open
+   obj:/lib/libdl-2.3.*.so
+   obj:/lib/ld-2.3.*.so
+   obj:/lib/libdl-2.3.*.so
+   fun:dlopen
+   fun:g_module_open
+}
+
+{
+   <Mike's x86 dapper>
+   Memcheck:Addr4
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libc-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   fun:_dl_open
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   fun:dlopen
+}
+
+{
+   <Mike's x86 dapper>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libc-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   fun:_dl_open
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   fun:dlopen
+}
+
+{
+   <Another dapper one>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libc-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   fun:_dl_open
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/tls/i686/cmov/libdl-2.3.6.so
+   fun:dlopen
+}
+
+### glib suppressions
+{
+   <g_parse_debug_string>
+   Memcheck:Cond
+   fun:g_parse_debug_string
+   obj:/usr/lib*/libglib-2.0.so.*
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+}
+
+{
+   <g_type_init malloc>
+   Memcheck:Leak
+   fun:malloc
+   fun:g_malloc
+   fun:g_strdup
+   fun:g_quark_from_string
+   obj:*
+   obj:*
+   fun:g_type_register_fundamental
+   obj:*
+   fun:g_type_init_with_debug_flags
+   fun:g_type_init
+}
+
+{
+   <g_type_init calloc>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   obj:*
+   obj:*
+   fun:g_type_register_fundamental
+}
+
+{
+   <g_type_init calloc 2>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   obj:*
+   obj:*
+   fun:g_type_init_with_debug_flags
+}
+
+{
+   <g_type_init calloc 3, GSlice version>
+   Memcheck:Leak
+   fun:calloc
+   fun:g_malloc0
+   fun:g_slice_alloc
+   obj:*
+   obj:*
+   fun:g_type_init_with_debug_flags
+}
+
+#pthread memleaks
+
+{
+   Thread creation leak
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate*
+   fun:_dl_allocate*
+   fun:__pthread_initialize_minimal
+}
+
+{
+   Thread management leak
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate*
+   fun:_dl_allocate*
+   fun:__pthread_*
+}
+
+{
+   Thread management leak 2
+   Memcheck:Leak
+   fun:memalign
+   fun:_dl_allocate*
+   fun:_dl_allocate*
+   fun:__pthread_*
+}
+
+{
+   pthread_create Syscall param write(buf) points to uninitialised byte(s)
+   Memcheck:Param
+   write(buf)
+   fun:pthread_create@@GLIBC_2.2.5
+   fun:g_thread_create*
+
+}
+
+# nss_parse_* memleak (used by g_option_context_parse)
+{
+   nss_parse_* memleak
+   Memcheck:Leak
+   fun:malloc
+   fun:nss_parse_service_list
+   fun:__nss_database_lookup
+}
+
+{
+   <annoying read error inside dlopen stuff on Ubuntu Dapper x86_64>
+   Memcheck:Addr8
+   obj:/lib/ld-2.3.6.so
+}
+
+{
+   <Ubuntu Dapper x86_64>
+   Memcheck:Param
+   futex(uaddr2)
+   fun:pthread_once
+   obj:/lib/libc-2.3.6.so
+   obj:/lib/libc-2.3.6.so
+   fun:setlocale
+   fun:init_pre
+   fun:g_option_context_parse
+}
+
+{
+   <Ubuntu Dapper x86_64 dlopen stuff again>
+   Memcheck:Cond
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   fun:_dl_open
+   obj:/lib/libdl-2.3.6.so
+   obj:/lib/ld-2.3.6.so
+   obj:/lib/libdl-2.3.6.so
+   fun:dlopen
+   fun:g_module_open
+}
+# this exists in a bunch of different variations, hence the short tail/trace
+{
+   <dlopen invalid read of size 4 suppression on tpm's Ubuntu edgy/x86>
+   Memcheck:Addr4
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+}
+{
+   <and the same for 64bit systems>
+   Memcheck:Addr8
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+}
+
+# More edgy suppressions (Mike)
+{  
+   <dlopen Condition jump suppressions for Ubuntu Edgy/x86>
+   Memcheck:Cond
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   fun:dlopen_doit
+   obj:/lib/ld-2.4.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+
+{  
+   <dlopen Condition jump suppressions for Ubuntu Edgy/x86>
+   Memcheck:Cond
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   fun:dlopen_doit
+   obj:/lib/ld-2.4.so
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+
+{  
+   <dlopen Condition jump suppressions for Ubuntu Edgy/x86>
+   Memcheck:Cond
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   fun:do_sym
+   fun:_dl_sym
+}
+
+# This one's overly general, but there's zero other information in the stack
+# trace - just these five lines!
+{  
+   <dlopen Condition jump suppressions for Ubuntu Edgy/x86>
+   Memcheck:Cond
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+   obj:/lib/ld-2.4.so
+}
+
+{
+   <tls leaks on Edgy/x86>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.4.so
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+}
+
+{
+   <libcdio 0.76 leak>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/libcdio.so.6.0.1
+   fun:cdio_open_am_linux
+   obj:/usr/lib/libcdio.so.6.0.1
+   fun:cdio_open_am
+}
+
+# TLS leaks for feisty/x86
+{
+   <tls leaks on Feisty/x86>
+   Memcheck:Leak
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+}
+
+{
+   <Addr8 on Jan's AMD64 ubuntu Feisty in dl_open>
+   Memcheck:Addr8
+   obj:/lib/ld-2.5.so
+}
+
+{
+   <GLib caching the home dir>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-*.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwnam_r
+   fun:g_get_any_init_do
+   fun:g_get_home_dir
+}
+{
+   <GLib caching the user name>
+   Memcheck:Leak
+   fun:malloc
+   obj:/lib/libc-*.so
+   fun:__nss_database_lookup
+   obj:*
+   obj:*
+   fun:getpwnam_r
+   fun:g_get_any_init_do
+   fun:g_get_user_name
+}
+
+{
+   <thread specific buffer in dlerror_run, Ubuntu Feisty>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+
+{
+   <addition to global symbol space, Ubuntu Feisty>
+   Memcheck:Leak
+   fun:realloc
+   fun:add_to_global
+   fun:dl_open_worker
+   fun:_dl_catch_error
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.1
+}
+
+{
+   <gquark setup>
+   Memcheck:Leak
+   fun:malloc
+   fun:realloc
+   fun:g_realloc
+   fun:g_quark_from_static_string
+}
+
+{
+   <gtype setup>
+   Memcheck:Leak
+   fun:realloc
+   fun:g_realloc
+   fun:type_node_any_new_W
+   fun:type_node_new_W
+   fun:g_type_register_static
+}
+
+
