@@ -158,7 +158,7 @@ main (int argc, char *argv[])
 		{ "timed-exit", '\0', 0, G_OPTION_ARG_NONE, &timed_exit,
 		  N_("Exit after a small delay (for debugging)"), NULL },
 		{ "immediate-exit", '\0', 0, G_OPTION_ARG_NONE, &immediate_exit,
-		  N_("Exit after a the manager has loaded (for debugging)"), NULL },
+		  N_("Exit after the manager has loaded (for debugging)"), NULL },
 		{ "debug", '\0', 0, G_OPTION_ARG_STRING_ARRAY, &debugoptions,
 		  N_("Debug specific files, e.g. power"), NULL },
 		{ NULL}

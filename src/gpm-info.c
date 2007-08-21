@@ -437,21 +437,21 @@ gpm_statistics_get_data_types (GpmInfo  *info,
 	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "voltage");
 	}
-	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, FALSE);
-	if (array != NULL && gpm_array_get_size (array) > 2) {
-		list = g_list_append (list, "profile-charge-accuracy");
-	}
 	array = gpm_profile_get_data_time_percent (info->priv->profile, FALSE);
 	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-charge-time");
 	}
-	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, TRUE);
-	if (array != NULL && gpm_array_get_size (array) > 2) {
-		list = g_list_append (list, "profile-discharge-accuracy");
-	}
 	array = gpm_profile_get_data_time_percent (info->priv->profile, TRUE);
 	if (array != NULL && gpm_array_get_size (array) > 2) {
 		list = g_list_append (list, "profile-discharge-time");
+	}
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, FALSE);
+	if (array != NULL && gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-charge-accuracy");
+	}
+	array = gpm_profile_get_data_accuracy_percent (info->priv->profile, TRUE);
+	if (array != NULL && gpm_array_get_size (array) > 2) {
+		list = g_list_append (list, "profile-discharge-accuracy");
 	}
 
 	*types = device_list_to_strv (list);

@@ -57,14 +57,14 @@ static void	gpm_statistics_refresh_data (GpmStatistics *statistics);
 #define ACTION_PROFILE_CHARGE_ACCURACY		"profile-charge-accuracy"
 #define ACTION_PROFILE_DISCHARGE_TIME		"profile-discharge-time"
 #define ACTION_PROFILE_DISCHARGE_ACCURACY	"profile-discharge-accuracy"
-#define ACTION_CHARGE_TEXT			_("Charge History")
-#define ACTION_POWER_TEXT			_("Power History")
-#define ACTION_VOLTAGE_TEXT			_("Voltage History")
-#define ACTION_TIME_TEXT			_("Estimated Time History")
-#define ACTION_PROFILE_CHARGE_TIME_TEXT		_("Profiled Charge Time")
-#define ACTION_PROFILE_CHARGE_ACCURACY_TEXT	_("Profiled Charge Accuracy")
-#define ACTION_PROFILE_DISCHARGE_TIME_TEXT	_("Profiled Discharge Time")
-#define ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT	_("Profiled Discharge Accuracy")
+#define ACTION_CHARGE_TEXT			_("Charge history")
+#define ACTION_POWER_TEXT			_("Power history")
+#define ACTION_VOLTAGE_TEXT			_("Voltage history")
+#define ACTION_TIME_TEXT			_("Estimated time history")
+#define ACTION_PROFILE_CHARGE_TIME_TEXT		_("Charge time profile")
+#define ACTION_PROFILE_DISCHARGE_TIME_TEXT	_("Discharge time profile")
+#define ACTION_PROFILE_CHARGE_ACCURACY_TEXT	_("Charge time accuracy profile")
+#define ACTION_PROFILE_DISCHARGE_ACCURACY_TEXT	_("Discharge time accuracy profile")
 
 #define GPM_STATISTICS_POLL_INTERVAL	15000 /* ms */
 
