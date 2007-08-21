@@ -331,7 +331,7 @@
       battery.
       This line represents the amount of time required until charged, or the
       amount of time until discharge.
-      This line should go proportionally up when the power decreases and down
+      This line should go proportionally up when the rate decreases and down
       when the rate increases.
       A legend is shown with this graph when data events have been received.
     </para>
@@ -416,13 +416,13 @@
       The following processors are known to support frequency scaling:
       <itemizedlist>
         <listitem>
-          <para>All Pentium 4 - M's</para>
+          <para>All Pentium 4 - Ms</para>
         </listitem>
         <listitem>
-          <para>Pentium III M's 600MHz to 1GHz</para>
+          <para>Pentium III Ms 600MHz to 1GHz</para>
         </listitem>
         <listitem>
-          <para>Pentium III M's 700+ MHz</para>
+          <para>Pentium III Ms 700+ MHz</para>
         </listitem>
       </itemizedlist>
       Intel Mobile Celeron processors do not have the required functionality
@@ -544,7 +544,7 @@
       </screenshot>
     </figure>
     <para>
-      As soon as the session is marked at idle, &application; starts it's own
+      As soon as the session is marked at idle, &application; starts its own
       'system' timer.
       When the timeout set in <command>gnome-power-preferences</command> is reached,
       and the CPU load is idle, then the idle action is
@@ -583,7 +583,7 @@
       hibernate action.
     </para>
     <para>
-      There is a complex locking scheme available for power-users that allows
+      There is a complex locking scheme available for power users that allows
       locking policy to change for the lid, suspend and hibernate actions.
       To enable this complex mode, you will have to disable the GConf key:
     </para>
@@ -696,8 +696,8 @@
   <section id="faq-capacity">
     <title>What is battery capacity?</title>
     <para>
-      Capacity is how much charge your battery can store compare to it's
-      manufacturers guidelines.
+      Capacity is how much charge your battery can store compared to its
+      manufacturer's guidelines.
     </para>
     <figure>
       <title>
@@ -718,7 +718,7 @@
     <title>What's the difference between suspend and hibernate?</title>
     <para>
       The Suspend state is a power saving feature which is the lowest level of
-      power consumption that preserves program data in the computers memory.
+      power consumption that preserves program data in the computer's memory.
       When your computer is in the Suspended state, computation will not be
       performed until normal activity is resumed.
       It will not resume until signaled by an external event such as a keyboard
@@ -776,7 +776,7 @@
     </para>
     <para>
       As soon as the session is marked at idle, &application; starts
-      it's own 'system' timer. When the timeout set in gnome-power-preferences
+      its own 'system' timer. When the timeout set in gnome-power-preferences
       is reached, and the CPU load is idle, then the idle
       action is performed, which is usually to turn off the screen, or to
       suspend or hibernate.
@@ -987,7 +987,7 @@ time.sleep(100)
 dev.UnInhibit(cookie)
 </programlisting>
     <para>
-      There is an <ulink url="http://cvs.gnome.org/viewcvs/*checkout*/gnome-power-manager/src/gpm-inhibit-test.c">example</ulink>
+      There is an <ulink url="http://svn.gnome.org/viewcvs/gnome-power-manager/trunk/test/gpm-inhibit-test.c?view=markup">example</ulink>
       which shows developers how to add Inhibit and UnInhibit DBUS methods
       into existing programs.
     </para>
@@ -1027,7 +1027,7 @@ dev.UnInhibit(cookie)
     <para>
       After numerous debates, the consensus was that is was not a good idea
       to add this functionality to HAL.
-      It's was decided user-configurable power management was not really
+      It was decided user-configurable power management was not really
       required when modern hard disks have really intelligent power management.
     </para>
     <para>
@@ -1185,7 +1185,7 @@ dbus-send --session \
       <para>
         Using the new pm-utils should make all this stuff just work in the
         future using HAL fdi matching against machine DMI and video card vendor
-        and product ID's.
+        and product IDs.
       </para>
     </note>
   </section>
