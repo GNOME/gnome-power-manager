@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 11:07+0300\n"
+"POT-Creation-Date: 2007-08-22 16:10+0300\n"
 "PO-Revision-Date: 2007-06-15 20:05+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -1090,7 +1090,7 @@ msgstr "Solun jännite"
 msgid "Graph type:"
 msgstr "käyrän tyyppi:"
 
-#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "Virrankäytön historia"
 
@@ -1601,8 +1601,8 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "Sulje pienen viiveen jälkeen (tarkoitettu vianetsintään)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
-msgstr "Sulje hallintaohjelman käynnistyttty (tarkoitettu vianetsintään)"
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "Sulje hallintaohjelman käynnistyttyä (tarkoitettu vianetsintään)"
 
 #: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
@@ -2281,32 +2281,36 @@ msgid "GNOME Power Statistics"
 msgstr "Gnomen virranhallinta tilastot"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
 msgstr "Lataushistoria"
 
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "Virrankäytön historia"
+
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr "Jännitehistoria"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "Arvioidun keston historia"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "Arvioitu latausaika"
+msgid "Charge time profile"
+msgstr "Latausajan profiili"
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "Arvioidun latauksen tarkkuus"
+msgid "Discharge time profile"
+msgstr "Purkautumisajan profiili"
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "Arvioitu purkautumisaika"
+msgid "Charge time accuracy profile"
+msgstr "Latausajan tarkkusprofiili"
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "Arvioidun purkautumisen tarkkuus"
+msgid "Discharge time accuracy profile"
+msgstr "Purkautumisajan tarkkuusprofiili"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2370,6 +2374,18 @@ msgstr "_Keskeytystila"
 #: ../src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "_Lepotila"
+
+#~ msgid "Profiled Charge Time"
+#~ msgstr "Arvioitu latausaika"
+
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "Arvioidun latauksen tarkkuus"
+
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "Arvioitu purkautumisaika"
+
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "Arvioidun purkautumisen tarkkuus"
 
 #~ msgid ""
 #~ "If the laptop should be configured as if it is using a permanent external "
