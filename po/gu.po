@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:26+0100\n"
-"PO-Revision-Date: 2007-08-16 13:26+0530\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
+"PO-Revision-Date: 2007-08-23 17:40+0530\n"
 "Last-Translator: Ankit Patel <ankit@redhat.com>\n"
 "Language-Team: Gujarati <fedora-trans-gu@redhat.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -963,13 +964,17 @@ msgstr "પ્રોસેસર ભાર ગણતરી પર શું nice
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters hibernate. "
 "This means the keyring will have to be unlocked on resume."
-msgstr "શું કમ્પ્યૂટર હાયબરનેટમાં દાખલ થાય તે પહેલાં જીનોમ કીરીંગને તાળું મરાયેલ છે. આનો અર્થ એ થાય કે કીરીંગ ફરીથી ચાલુ કરવા પર ખૂલી જવી જોઈએ."
+msgstr ""
+"શું કમ્પ્યૂટર હાયબરનેટમાં દાખલ થાય તે પહેલાં જીનોમ કીરીંગને તાળું મરાયેલ છે. આનો અર્થ એ થાય કે "
+"કીરીંગ ફરીથી ચાલુ કરવા પર ખૂલી જવી જોઈએ."
 
 #: ../data/gnome-power-manager.schemas.in.h:144
 msgid ""
 "Whether the GNOME keyring is locked before the computer enters suspend. This "
 "means the keyring will have to be unlocked on resume."
-msgstr "શું કમ્પ્યૂટર સસ્પેન્ડ થાય તે પહેલાં શું જીનોમ કીરીંગને તાળું મરાયેલ છે. આનો અર્થ એ થાય કે કીરીંગ ફરીથી ચાલુ કરવા પર ખૂલી જવી જોઈએ."
+msgstr ""
+"શું કમ્પ્યૂટર સસ્પેન્ડ થાય તે પહેલાં શું જીનોમ કીરીંગને તાળું મરાયેલ છે. આનો અર્થ એ થાય કે કીરીંગ "
+"ફરીથી ચાલુ કરવા પર ખૂલી જવી જોઈએ."
 
 #: ../data/gnome-power-manager.schemas.in.h:145
 msgid ""
@@ -1067,7 +1072,7 @@ msgstr "સેલ વોલ્ટેજ"
 msgid "Graph type:"
 msgstr "ગ્રાફ પ્રકાર:"
 
-#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "પાવર ઈતિહાસ"
 
@@ -1576,8 +1581,8 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "નાના વિલંબ પછી બહાર નીકળો (ડિબગીંગ માટે)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
-msgstr "વ્યવસ્થાપક લવાઈ જાય પછી બહાર નીકળો (ડિબગીંગ માટે)"
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "વ્યવસ્થાપક લોડ થઈ જાય પછી બંધ કરો (ડિબગીંગ માટે)"
 
 #: ../src/gpm-main.c:163
 msgid "Debug specific files, e.g. power"
@@ -2240,32 +2245,36 @@ msgid "GNOME Power Statistics"
 msgstr "જીનોમ પાવર પરિસ્થિતિઓ"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
 msgstr "ભાર ઈતિહાસ"
+
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "પાવર ઈતિહાસ"
 
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
-msgstr "ભાર ઈતિહાસ"
+msgid "Voltage history"
+msgstr "વોલ્ટેજ ઈતિહાસ"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "અંદાજીત સમય ઈતિહાસ"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "રૂપરેખાવાળો ભાર સમય"
+msgid "Charge time profile"
+msgstr "ભાર સમય રૂપરેખા"
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "રૂપરેખાવાળી ભાર ચોકસાઈ"
+msgid "Discharge time profile"
+msgstr "ડિસ્ચાર્જ સમય રૂપરેખા"
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "રૂપરેખાવાળો ભાર સમય"
+msgid "Charge time accuracy profile"
+msgstr "ચાર્જ સમય ચોકસાઈ રૂપરેખા"
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "રૂપરેખાવાળી ડિસ્ચાર્જ ચોકસાઈ"
+msgid "Discharge time accuracy profile"
+msgstr "ડિસ્ચાર્જ સમય ચોકસાઈ રૂપરેખા"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
