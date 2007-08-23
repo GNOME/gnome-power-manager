@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-18 23:43+0200\n"
-"PO-Revision-Date: 2007-08-18 23:43+0100\n"
+"POT-Creation-Date: 2007-08-23 07:54+0200\n"
+"PO-Revision-Date: 2007-08-23 08:02+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -819,7 +819,6 @@ msgid "Graph type:"
 msgstr "Diagramtyp:"
 
 #: ../data/gpm-graph.glade.h:4
-#: ../src/gpm-statistics-core.c:61
 msgid "Power History"
 msgstr "Strömhistorik"
 
@@ -1351,8 +1350,8 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "Avsluta efter en liten fördröjning (för felsökning)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
-msgstr "Avsluta efter att en hanterare har lästs in (för felsökning)"
+msgid "Exit after the manager has loaded (for debugging)"
+msgstr "Avsluta efter att hanteraren har lästs in (för felsökning)"
 
 # Antar att "power" är en fil
 #: ../src/gpm-main.c:163
@@ -2000,32 +1999,36 @@ msgid "GNOME Power Statistics"
 msgstr "GNOME-strömstatistik"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
 msgstr "Laddningshistorik"
 
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "Strömhistorik"
+
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr "Volthistorik"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "Historik för beräknad tid"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "Profilerad laddningstid"
+msgid "Charge time profile"
+msgstr "Profil för laddningstid"
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "Profilerad laddningsprecision"
+msgid "Discharge time profile"
+msgstr "Profil för urladdningstid"
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "Profilerad urladdningstid"
+msgid "Charge time accuracy profile"
+msgstr "Ändra tidsprecisionsprofil"
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "Profilerad urladdningsprecision"
+msgid "Discharge time accuracy profile"
+msgstr "Precisionsprofil för urladdningstid:"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2096,6 +2099,14 @@ msgstr "Vä_nteläge"
 msgid "Hi_bernate"
 msgstr "_Viloläge"
 
+#~ msgid "Profiled Charge Time"
+#~ msgstr "Profilerad laddningstid"
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "Profilerad laddningsprecision"
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "Profilerad urladdningstid"
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "Profilerad urladdningsprecision"
 #~ msgid "Power Preferences"
 #~ msgstr "Ströminställningar"
 #~ msgid "Power Inhibit Test"
