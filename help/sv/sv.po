@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager doc\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2007-07-19 03:24+0100\n"
-"PO-Revision-Date: 2007-07-30 08:49+0100\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
+"PO-Revision-Date: 2007-08-23 08:17+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -320,8 +320,8 @@ msgid "Estimated Time History"
 msgstr "Beräknad tidshistorik"
 
 #: C/gnome-power-manager.xml:329(para)
-msgid "This graph shows the estimated charge history for the composite primary battery. This line represents the amount of time required until charged, or the amount of time until discharge. This line should go proportionally up when the power decreases and down when the rate increases. A legend is shown with this graph when data events have been received."
-msgstr "Det här diagrammet visar den beräknade laddningshistoriken för det primära batteriet. Den här linjen representerar mängden tid som krävs för att ladda upp, eller mängden tid till urladdning. Den här linjen bör gå proportionellt upp när spänningen minskar och ner när hastigheten ökar. En förklaring visas tillsammans med diagrammet när datahändelser har tagits emot."
+msgid "This graph shows the estimated charge history for the composite primary battery. This line represents the amount of time required until charged, or the amount of time until discharge. This line should go proportionally up when the rate decreases and down when the rate increases. A legend is shown with this graph when data events have been received."
+msgstr "Det här diagrammet visar den beräknade laddningshistoriken för det primära batteriet. Den här linjen representerar mängden tid som krävs för att ladda upp, eller mängden tid till urladdning. Den här linjen bör gå proportionellt upp när spänningen minskar och ner när frekvensen ökar. En förklaring visas tillsammans med diagrammet när datahändelser har tagits emot."
 
 #: C/gnome-power-manager.xml:342(title)
 msgid "Preferences"
@@ -372,15 +372,15 @@ msgid "Modern computers allow the speed of the processor to be reduced to save p
 msgstr "Moderna datorer tillåter att processorns hastighet kan minskas ner för att spara ström. Det här tillåter en kraftfull dator att minska strömkonsumtionen när den här inaktiv, eller när fullständig kapacitet inte krävs. Det här ökar batteriets livstid markant eftersom processorn inte kontinuerligt kör på 100%."
 
 #: C/gnome-power-manager.xml:419(para)
-msgid "All Pentium 4 - M's"
+msgid "All Pentium 4 - Ms"
 msgstr "Alla Pentium 4 - M-processorer"
 
 #: C/gnome-power-manager.xml:422(para)
-msgid "Pentium III M's 600MHz to 1GHz"
+msgid "Pentium III Ms 600MHz to 1GHz"
 msgstr "Pentium III M-processorer från 600 Mhz till 1Ghz"
 
 #: C/gnome-power-manager.xml:425(para)
-msgid "Pentium III M's 700+ MHz"
+msgid "Pentium III Ms 700+ MHz"
 msgstr "Pentium III M-processorer 700+ MHz"
 
 #: C/gnome-power-manager.xml:412(para)
@@ -436,8 +436,8 @@ msgid "Changing the session idle timeout in <command>gnome-screensaver-preferenc
 msgstr "Ändring av tidsgränsen för sessionsinaktivitet i <command>gnome-screensaver-preferences</command>"
 
 #: C/gnome-power-manager.xml:546(para)
-msgid "As soon as the session is marked at idle, <application>GNOME Power Manager</application> starts it's own 'system' timer. When the timeout set in <command>gnome-power-preferences</command> is reached, and the CPU load is idle, then the idle action is performed, which is usually to turn off the screen, or to suspend or hibernate."
-msgstr "Så snart som sessionen har markerats som inaktiv kommer <application>GNOME-strömhanterare</application> att starta sin egna \"system\"-tidtagare. När tidsgränsen som har ställs in i <command>gnome-power-preferences</command> uppnås, <emphasis>och</emphasis> processorbelastningen är inaktiv, kommer inaktivitetsåtgärden att genomföras, vilken vanligtvis är att stänga av skärmen, eller att försätta datorn i vänte- eller viloläge."
+msgid "As soon as the session is marked at idle, <application>GNOME Power Manager</application> starts its own 'system' timer. When the timeout set in <command>gnome-power-preferences</command> is reached, and the CPU load is idle, then the idle action is performed, which is usually to turn off the screen, or to suspend or hibernate."
+msgstr "Så snart som sessionen har markerats som inaktiv kommer <application>GNOME-strömhanterare</application> att starta sin egna \"system\"-tidtagare. När tidsgränsen som har ställs in i <command>gnome-power-preferences</command> uppnås och processorbelastningen är minimal, kommer inaktivitetsåtgärden att genomföras, vilken vanligtvis är att stänga av skärmen, eller att försätta datorn i vänte- eller viloläge."
 
 #: C/gnome-power-manager.xml:553(para)
 msgid "To make this clearer, the sliders in <command>gnome-power-preferences</command> are set to start at the value of the session-timeout + 1 minute, as we cannot logically trigger before the session is marked as idle. If you adjust the value of the 'session idle' timeout in <command>gnome-screensaver-preferences</command> then the start of the sliders in <command>gnome-power-preferences</command> will change accordingly."
@@ -464,7 +464,7 @@ msgid "By default, <application>GNOME Power Manager</application> supports a sim
 msgstr "Som standard har GNOME-strömhanterare stöd för ett enkelt låsningsschema. Detta betyder att skärmen låses om den är inställd till \"Lås skärmen\" i gnome-screensaver när locket är stängt, eller om systemet genomför en vänte- eller vilolägesåtgärd."
 
 #: C/gnome-power-manager.xml:585(para)
-msgid "There is a complex locking scheme available for power-users that allows locking policy to change for the lid, suspend and hibernate actions. To enable this complex mode, you will have to disable the GConf key:"
+msgid "There is a complex locking scheme available for power users that allows locking policy to change for the lid, suspend and hibernate actions. To enable this complex mode, you will have to disable the GConf key:"
 msgstr "Det finns ett komplext låsningsschema tillgängligt för erfarna användare som tillåter ändring av låsningspolicy för locket, vilo- och väntelägesåtgärder. För att aktivera detta komplexa läge behöver du inaktivera GConf-nyckeln:"
 
 #: C/gnome-power-manager.xml:594(command)
@@ -540,8 +540,8 @@ msgid "What is battery capacity?"
 msgstr "Vad är batterikapacitet?"
 
 #: C/gnome-power-manager.xml:698(para)
-msgid "Capacity is how much charge your battery can store compare to it's manufacturers guidelines."
-msgstr "Kapacitet är hur mycket spänning som ditt batteri kan lagra jämfört med tillverkarens riktlinjer."
+msgid "Capacity is how much charge your battery can store compared to its manufacturer's guidelines."
+msgstr "Kapacitet är hur mycket spänning ditt batteri kan lagra jämfört med tillverkarens riktlinjer."
 
 #: C/gnome-power-manager.xml:703(title)
 msgid "This graph shows the capacity of a typical lithium ion battery over a few hundred charge-discharge cycles."
@@ -552,8 +552,8 @@ msgid "What's the difference between suspend and hibernate?"
 msgstr "Vad är skillnaden mellan vänteläge och viloläge?"
 
 #: C/gnome-power-manager.xml:719(para)
-msgid "The Suspend state is a power saving feature which is the lowest level of power consumption that preserves program data in the computers memory. When your computer is in the Suspended state, computation will not be performed until normal activity is resumed. It will not resume until signaled by an external event such as a keyboard button press. It generally takes a few seconds to suspend and then resume your computer."
-msgstr "Väntetillståndet är en strömsparningsfunktion som är den lägsta nivån av strömkonsumtion som behåller programdata i datorns minne. När din dator befinner sig i väntetillstånd genomförs inga beräkningar tills normal aktivitet har återupptagits. Den kommer inte att återupptas förrän den har signalerats av en extern händelse såsom en tangenttryckning. Det tar vanligtvis ett par sekunder för din dator att försättas i vänteläge och sedan återuppta normalt läge."
+msgid "The Suspend state is a power saving feature which is the lowest level of power consumption that preserves program data in the computer's memory. When your computer is in the Suspended state, computation will not be performed until normal activity is resumed. It will not resume until signaled by an external event such as a keyboard button press. It generally takes a few seconds to suspend and then resume your computer."
+msgstr "Väntetillståndet är en strömsparningsfunktion vilket är den lägsta nivån av strömkonsumtion som behåller programdata i datorns minne. När din dator befinner sig i väntetillstånd genomförs inga beräkningar tills normal aktivitet har återupptagits. Den kommer inte att återupptas förrän den har signalerats av en extern händelse såsom en tangenttryckning. Det tar vanligtvis ett par sekunder för din dator att försättas i vänteläge och sedan återuppta normalt läge."
 
 #: C/gnome-power-manager.xml:729(para)
 msgid "You still use a small amount of battery power whilst suspended, so is not recommended for the low power action. If you remove AC power on a desktop, or run out of battery power on a laptop then you will lose your work."
@@ -580,8 +580,8 @@ msgid "gnome-screensaver is a session daemon that monitors user input, and if th
 msgstr "<command>gnome-screensaver</command> är en sessionsdemon som övervakar användarinmatning, och om musen inte har flyttats, eller att tangentbordet har använts kommer den att påbörja en tidsgräns. När värdet för den här tidsgränsen når det värde som ställts in i <command>gnome-screensaver-preferences</command>, kommer inloggningen markeras som \"sessionsinaktivitet\". Det är när <application>GNOME-strömhanterare</application> genomgör alla de sessionsinaktiva åtgärder såsom aktivera lågströmsläge och sänker ljusstyrkan på bärbara datorers skärm."
 
 #: C/gnome-power-manager.xml:777(para)
-msgid "As soon as the session is marked at idle, <application>GNOME Power Manager</application> starts it's own 'system' timer. When the timeout set in gnome-power-preferences is reached, and the CPU load is idle, then the idle action is performed, which is usually to turn off the screen, or to suspend or hibernate."
-msgstr "Så snart som sessionen har markerats som inaktiv kommer <application>GNOME-strömhanterare</application> att starta sin egna \"system\"-tidtagare. När tidsgränsen som har ställs in i <command>gnome-power-preferences</command> uppnås, <emphasis>och</emphasis> processorbelastningen är inaktiv, kommer inaktivitetsåtgärden att genomföras, vilken vanligtvis är att stänga av skärmen, eller att försätta datorn i vänte- eller viloläge."
+msgid "As soon as the session is marked at idle, <application>GNOME Power Manager</application> starts its own 'system' timer. When the timeout set in gnome-power-preferences is reached, and the CPU load is idle, then the idle action is performed, which is usually to turn off the screen, or to suspend or hibernate."
+msgstr "Så snart som sessionen har markerats som inaktiv kommer <application>GNOME-strömhanterare</application> att starta sin egna \"system\"-tidtagare. När tidsgränsen som har ställs in i gnome-power-preferences uppnås, och processorbelastningen är minimal, kommer inaktivitetsåtgärden att genomföras, vilken vanligtvis är att stänga av skärmen, eller att försätta datorn i vänte- eller viloläge."
 
 #: C/gnome-power-manager.xml:784(para)
 msgid "In <application>GNOME Power Manager</application> 2.14 the timeouts were not obviously linked to gnome-screensaver, but the timeouts are linked in reality. This is because the gnome-screensaver declares the session \"idle\" and then <application>GNOME Power Manager</application> starts. Therefore the real time to suspend is actually the GNOME Screensaver timeout PLUS the <application>GNOME Power Manager</application> time."
@@ -758,8 +758,8 @@ msgstr ""
 "dev.UnInhibit(cookie)\n"
 
 #: C/gnome-power-manager.xml:989(para)
-msgid "There is an <ulink url=\"http://cvs.gnome.org/viewcvs/*checkout*/gnome-power-manager/src/gpm-inhibit-test.c\">example</ulink> which shows developers how to add Inhibit and UnInhibit DBUS methods into existing programs."
-msgstr "Det finns ett <ulink url=\"http://cvs.gnome.org/viewcvs/*checkout*/gnome-power-manager/src/gpm-inhibit-test.c\">exempel</ulink> vilket visar utvecklare hur man lägger till DBUS-metoderna Inhibit och UnInhibit i befintliga program."
+msgid "There is an <ulink url=\"http://svn.gnome.org/viewcvs/gnome-power-manager/trunk/test/gpm-inhibit-test.c?view=markup\">example</ulink> which shows developers how to add Inhibit and UnInhibit DBUS methods into existing programs."
+msgstr "Det finns ett <ulink url=\"http://svn.gnome.org/viewcvs/gnome-power-manager/trunk/test/gpm-inhibit-test.c?view=markup\">exempel</ulink> som visar utvecklare hur man lägger till DBUS-metoderna Inhibit och UnInhibit i befintliga program."
 
 #: C/gnome-power-manager.xml:997(title)
 msgid "Are <application>GNOME Power Manager</application> and GNOME Screensaver inhibit methods the same?"
@@ -782,8 +782,8 @@ msgid "<application>GNOME Power Manager</application> does not spin down my hard
 msgstr "<application>GNOME-strömhanterare</application> varvar inte ner min hårddisk!"
 
 #: C/gnome-power-manager.xml:1027(para)
-msgid "After numerous debates, the consensus was that is was not a good idea to add this functionality to HAL. It's was decided user-configurable power management was not really required when modern hard disks have really intelligent power management."
-msgstr "Efter otaliga debatter blev slutsatsen att det inte var en bra idé att lägga till den här funktionaliteten i HAL. Det bestämdes att användarkonfigurerbar strömhantering inte var ett krav när moderna hårddiskar har mycket intelligent strömhantering."
+msgid "After numerous debates, the consensus was that is was not a good idea to add this functionality to HAL. It was decided user-configurable power management was not really required when modern hard disks have really intelligent power management."
+msgstr "Efter otaliga debatter blev slutsatsen att det inte var en bra idé att lägga till den här funktionaliteten i HAL. Det bestämdes att användarkonfigurerbar strömhantering inte var ett krav eftersom moderna hårddiskar redan har intelligent strömhantering."
 
 #: C/gnome-power-manager.xml:1033(para)
 msgid "Here the power consumption data for a typical notebook hard disk (IDE/SATA):"
@@ -937,7 +937,7 @@ msgid "You may need to add a s3 command to your kernel boot string so that the k
 msgstr "Du kanske behöver lägga till ett s3-kommando till din kärnuppstartssträng så att kärnan kan återinitiera ditt grafikkort. Se <ulink url=\"http://www.kernel.org/git/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;hb=HEAD;f=Documentation/power/video.txt\">det här dokumentet</ulink> för fler detaljer, eller för att se om ditt system har identifierats som att det behöver extra växlar."
 
 #: C/gnome-power-manager.xml:1185(para)
-msgid "Using the new pm-utils should make all this stuff just work in the future using HAL fdi matching against machine DMI and video card vendor and product ID's."
+msgid "Using the new pm-utils should make all this stuff just work in the future using HAL fdi matching against machine DMI and video card vendor and product IDs."
 msgstr "Med det nya pm-utils bör allt det här fungera i framtiden med HAL fdi som matchas mot maskinens DMI och grafikkortets tillverkare och produkt-id."
 
 #: C/gnome-power-manager.xml:1195(title)
