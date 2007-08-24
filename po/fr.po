@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 09:12+0200\n"
-"PO-Revision-Date: 2007-08-16 09:12+0200\n"
+"POT-Creation-Date: 2007-08-24 22:01+0200\n"
+"PO-Revision-Date: 2007-08-24 22:01+0200\n"
 "Last-Translator: Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -1196,7 +1196,7 @@ msgstr "Tension de cellule"
 msgid "Graph type:"
 msgstr "Type de graphique :"
 
-#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "Historique de l'alimentation"
 
@@ -1706,7 +1706,7 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "Quitte après un court délai (pour débogage)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
+msgid "Exit after the manager has loaded (for debugging)"
 msgstr "Quitte après le chargement du gestionnaire (pour débogage)"
 
 #: ../src/gpm-main.c:163
@@ -2411,32 +2411,36 @@ msgid "GNOME Power Statistics"
 msgstr "Statistiques du gestionnaire d'énergie de GNOME"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
 msgstr "Historique de la charge"
 
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "Historique de l'alimentation"
+
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr "Historique de la tension"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "Historique du temps estimé"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "Courbe du temps de charge"
+msgid "Charge time profile"
+msgstr "Profil du temps de charge"
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "Courbe de l'exactitude de la charge"
+msgid "Discharge time profile"
+msgstr "Profil du temps de décharge"
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "Courbe du temps de décharge"
+msgid "Charge time accuracy profile"
+msgstr "Profil de la précision du temps de charge"
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "Courbe de l'exactitude de la décharge"
+msgid "Discharge time accuracy profile"
+msgstr "Profil de la précision du temps de décharge"
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2504,3 +2508,15 @@ msgstr "_Mettre en veille"
 #: ../src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "Hi_berner"
+
+#~ msgid "Profiled Charge Time"
+#~ msgstr "Courbe du temps de charge"
+
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "Courbe de l'exactitude de la charge"
+
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "Courbe du temps de décharge"
+
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "Courbe de l'exactitude de la décharge"
