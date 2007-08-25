@@ -1,0 +1,1346 @@
+# Occitan translation of gnome-power-manager documentation.
+# Copyright (C) 2006-2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gnome-power-manager
+# documentation package.
+#
+# Yannig MARCHEGAY (yannig@marchegay.org) - 2006-2007
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-power-manager.HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-03-30 22:12+0200\n"
+"PO-Revision-Date: 2007-08-25 20:49+0200\n"
+"Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
+"Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
+
+# Mentions légales
+#: ../C/legal.xml:2(para) ../C/gnome-power-manager.xml:2(para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any "
+"later version published by the Free Software Foundation with no Invariant "
+"Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy "
+"of the GFDL at this <ulink type=\"help\" url=\"ghelp:fdl\">link</ulink> or "
+"in the file COPYING-DOCS distributed with this manual."
+msgstr ""
+
+#: ../C/legal.xml:12(para) ../C/gnome-power-manager.xml:12(para)
+msgid ""
+"This manual is part of a collection of GNOME manuals distributed under the "
+"GFDL. If you want to distribute this manual separately from the collection, "
+"you can do so by adding a copy of the license to the manual, as described in "
+"section 6 of the license."
+msgstr ""
+
+#: ../C/legal.xml:19(para) ../C/gnome-power-manager.xml:19(para)
+msgid ""
+"Many of the names used by companies to distinguish their products and "
+"services are claimed as trademarks. Where those names appear in any GNOME "
+"documentation, and the members of the GNOME Documentation Project are made "
+"aware of those trademarks, then the names are in capital letters or initial "
+"capital letters."
+msgstr ""
+
+#: ../C/legal.xml:35(para) ../C/gnome-power-manager.xml:35(para)
+msgid ""
+"DOCUMENT IS PROVIDED ON AN \"AS IS\" BASIS, WITHOUT WARRANTY OF ANY KIND, "
+"EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT "
+"THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS "
+"MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE "
+"RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR "
+"MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR "
+"MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL "
+"WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY "
+"SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN "
+"ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION "
+"OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND"
+msgstr ""
+
+#: ../C/legal.xml:55(para) ../C/gnome-power-manager.xml:55(para)
+msgid ""
+"UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING "
+"NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY "
+"CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE "
+"DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON "
+"FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF "
+"ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, "
+"WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES "
+"OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED "
+"VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE "
+"POSSIBILITY OF SUCH DAMAGES."
+msgstr ""
+
+#: ../C/legal.xml:28(para) ../C/gnome-power-manager.xml:28(para)
+msgid ""
+"DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS "
+"OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT: "
+"<placeholder-1/>"
+msgstr ""
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:162(None)
+msgid ""
+"@@image: 'figures/gpm-unplugged.png'; md5=e9e38fa48737547a19b20af6a15d9e95"
+msgstr ""
+"@@image: 'figures/gpm-unplugged.png'; md5=e9e38fa48737547a19b20af6a15d9e95"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:182(None)
+msgid ""
+"@@image: 'figures/gpm-charged.png'; md5=bfdfc5dbe4a51f993f59aadef35707d6"
+msgstr ""
+"@@image: 'figures/gpm-charged.png'; md5=bfdfc5dbe4a51f993f59aadef35707d6"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:214(None)
+msgid "@@image: 'figures/gpm-low.png'; md5=6cd86acf26f251d78060dd2ecb6b6506"
+msgstr "@@image: 'figures/gpm-low.png'; md5=6cd86acf26f251d78060dd2ecb6b6506"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:233(None)
+msgid ""
+"@@image: 'figures/gpm-critical.png'; md5=77b0848ed3bd0510b65f89e0d07a2fed"
+msgstr ""
+"@@image: 'figures/gpm-critical.png'; md5=77b0848ed3bd0510b65f89e0d07a2fed"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:252(None)
+msgid ""
+"@@image: 'figures/gpm-suspend-problem.png'; "
+"md5=4e4c1fafda61c5ace02f957717ea7ce6"
+msgstr ""
+"@@image: 'figures/gpm-suspend-problem.png'; "
+"md5=4e4c1fafda61c5ace02f957717ea7ce6"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:278(None)
+msgid ""
+"@@image: 'figures/gpm-stats-graph.png'; md5=75c81029ce17746af7ea57fd0637d27b"
+msgstr ""
+"@@image: 'figures/gpm-stats-graph.png'; md5=75c81029ce17746af7ea57fd0637d27b"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:384(None)
+msgid ""
+"@@image: 'figures/gpm-prefs-ac.png'; md5=1fa2bebdf4c21f46a803d2946f717642"
+msgstr ""
+"@@image: 'figures/gpm-prefs-ac.png'; md5=1fa2bebdf4c21f46a803d2946f717642"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:398(None)
+msgid ""
+"@@image: 'figures/gpm-prefs-battery.png'; "
+"md5=42dd086571ffdeebc021b57b93846478"
+msgstr ""
+"@@image: 'figures/gpm-prefs-battery.png'; "
+"md5=42dd086571ffdeebc021b57b93846478"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:514(None)
+msgid ""
+"@@image: 'figures/gpm-prefs-general.png'; "
+"md5=57143cf4820ffa42856e4138fac70f18"
+msgstr ""
+"@@image: 'figures/gpm-prefs-general.png'; "
+"md5=57143cf4820ffa42856e4138fac70f18"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:541(None)
+msgid "@@image: 'figures/gs-prefs.png'; md5=edaf461e61b3d8c5c87f58b00581d0fa"
+msgstr "@@image: 'figures/gs-prefs.png'; md5=edaf461e61b3d8c5c87f58b00581d0fa"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:648(None)
+msgid ""
+"@@image: 'figures/applet-brightness.png'; "
+"md5=e2a0a772f3e5908648cabe468f7b7991"
+msgstr ""
+"@@image: 'figures/applet-brightness.png'; "
+"md5=e2a0a772f3e5908648cabe468f7b7991"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:676(None)
+msgid ""
+"@@image: 'figures/applet-inhibit.png'; md5=44199e392cc0698076a1326048104484"
+msgstr ""
+"@@image: 'figures/applet-inhibit.png'; md5=44199e392cc0698076a1326048104484"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: ../C/gnome-power-manager.xml:710(None)
+msgid ""
+"@@image: 'figures/gpm-cell-capacity.png'; "
+"md5=7635c3b846f39faf7b16a921a6ebb55c"
+msgstr ""
+"@@image: 'figures/gpm-cell-capacity.png'; "
+"md5=7635c3b846f39faf7b16a921a6ebb55c"
+
+#: ../C/gnome-power-manager.xml:25(title)
+msgid "<application>GNOME Power Manager</application> Manual"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:27(para)
+msgid ""
+"<application>GNOME Power Manager</application> is a session daemon for the "
+"GNOME Desktop that manages the power settings for your laptop or desktop "
+"computer."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:33(year)
+msgid "2006"
+msgstr "2006"
+
+#: ../C/gnome-power-manager.xml:34(holder)
+msgid "Richard Hughes (richard@hughsie.com)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:50(publishername)
+#: ../C/gnome-power-manager.xml:86(para)
+msgid "Richard Hughes"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:60(firstname)
+msgid "Richard"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:61(surname)
+msgid "Hughes"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:62(email)
+msgid "richard@hughsie.com"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:80(revnumber)
+msgid "2.0"
+msgstr "2.0"
+
+#: ../C/gnome-power-manager.xml:81(date)
+msgid "2006-08-30"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:83(para)
+msgid "Richard Hughes <email>richard@hughsie.com</email>"
+msgstr ""
+
+# Autres chaînes
+#: ../C/gnome-power-manager.xml:92(title)
+msgid "Feedback"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:93(para)
+msgid ""
+"To report a bug or make a suggestion regarding the GNOME Power Manager "
+"application or this manual, follow the directions in the <ulink url=\"http://"
+"www.gnome.org/projects/gnome-power-manager/\" type=\"http"
+"\"><application>GNOME Power Manager</application> Contact Page</ulink>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:0(application)
+msgid "GNOME Power Manager"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:107(primary)
+#: ../C/gnome-power-manager.xml:120(tertiary)
+msgid "gnome-power-manager"
+msgstr "gnome-power-manager"
+
+#: ../C/gnome-power-manager.xml:113(title)
+msgid "Introduction"
+msgstr "Introduccion"
+
+#: ../C/gnome-power-manager.xml:119(secondary)
+msgid "Manual"
+msgstr "Manual"
+
+#: ../C/gnome-power-manager.xml:123(para)
+msgid ""
+"The GNOME Power Manager session daemon is a power management daemon for the "
+"<systemitem>GNOME desktop</systemitem>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:131(title)
+msgid "Usage"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:132(para)
+msgid ""
+"<application>GNOME Power Manager</application> is usually started in GNOME "
+"startup, but you can manually start <application>GNOME Power Manager</"
+"application> by doing:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:138(term)
+msgid "Command line"
+msgstr "Linha de comanda"
+
+#: ../C/gnome-power-manager.xml:140(para)
+msgid ""
+"Type <command>gnome-power-manager --verbose --no-daemon</command>, then "
+"press <keycap>Return</keycap>:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:150(title)
+msgid "Notification Messages"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:151(para)
+msgid ""
+"When <application>GNOME Power Manager</application> has started, the "
+"following notifications may be displayed."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:156(title)
+msgid "AC Adapter Unplugged"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:158(title)
+msgid "GNOME Power Manager Notification when AC adapter is removed"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:168(para)
+msgid ""
+"You can disable this notification by changing the GConf key <command>/apps/"
+"gnome-power-manager/notify_ac_adapter</command>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:176(title)
+msgid "Fully Charged"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:178(title)
+msgid ""
+"GNOME Power Manager Notification when laptop primary battery is fully charged"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:188(para)
+msgid ""
+"You can disable this notification by changing the GConf key <command>/apps/"
+"gnome-power-manager/notify_fully_charged</command>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:194(para)
+msgid ""
+"You will only get a repeat notification if your battery percentage charge "
+"drops below 95% and then is again fully charged. This prevents some machines "
+"from showing unwanted repeat notifications if the battery is incorrectly "
+"reporting the charged status."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:204(title)
+msgid "Power Low"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:205(para)
+msgid ""
+"When the battery is low, you will receive the following notification. You "
+"should consider switching to AC power really soon."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:210(title)
+msgid "GNOME Power Manager Notification when battery power is low"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:222(title)
+msgid "Power Critical"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:223(para)
+msgid ""
+"When the computer has run out of power, it will show this notification "
+"explaining what action is required. You can change the critical low action "
+"using the preferences tool."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:229(title)
+msgid ""
+"GNOME Power Manager Notification when the system power is critically low"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:241(title)
+msgid "Suspend Failure"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:242(para)
+msgid ""
+"When a suspend failure occurs you may get this following warning. The most "
+"common reason for this notification is that the current user does not have "
+"permission to suspend or hibernate the computer."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:248(title)
+msgid "GNOME Power Manager Notification when suspend failure occurs"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:261(title)
+msgid "Statistics"
+msgstr "Estadisticas"
+
+#: ../C/gnome-power-manager.xml:262(para)
+msgid ""
+"The statistics program allows you to visualize the power consumption of your "
+"laptop hardware."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:267(para)
+msgid ""
+"This has been removed from the information window of previous versions of "
+"GNOME Power Manager as the data interface is now using DBUS rather than "
+"internal IPC. This allows other applications to query and display the data "
+"if required."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:274(title)
+msgid "Power History going from battery power to AC"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:284(para)
+msgid ""
+"You may not see some options or graphs if your computer does not have the "
+"required hardware. You may also see other hardware not shown here (for "
+"example UPS devices) but these are treated the same way as other devices."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:293(title)
+msgid "Charge History"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:294(para)
+msgid ""
+"This graph shows the percentage charge available for the composite primary "
+"battery, so if you have a main laptop battery and an auxiliary battery then "
+"only the averaged value will be shown. A legend is not shown with this graph."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:303(title)
+msgid "Power History"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:304(para)
+msgid ""
+"This graph shows the power history charge used by the composite primary "
+"battery. This line represents the amount of power that is either being used "
+"to charge the batteries in the system, or the power being used by the system "
+"from the batteries. You should see the line go up when processor intensive "
+"tasks are performed, and down when the system is at idle, or when the screen "
+"is dimmed. A legend is shown with this graph when data events have been "
+"received."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:317(para)
+msgid ""
+"You do will not receive rate data from your computer if it is not charging "
+"or discharging, or if the computer is suspended. This is due to hardware "
+"limitations where the rate is only sent from the battery management chip, "
+"rather than the power management chip on the motherboard."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:328(title)
+msgid "Estimated Time History"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:329(para)
+msgid ""
+"This graph shows the estimated charge history for the composite primary "
+"battery. This line represents the amount of time required until charged, or "
+"the amount of time until discharge. This line should go proportionally up "
+"when the power decreases and down when the rate increases. A legend is shown "
+"with this graph when data events have been received."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:342(title)
+msgid "Preferences"
+msgstr "Preferéncias"
+
+#: ../C/gnome-power-manager.xml:344(para)
+msgid "The preferences window allows you to control:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:348(para)
+msgid "The LCD brightness when on AC and battery power"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:353(para)
+msgid "The idle time for the screen power-down and suspend action"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:358(para)
+msgid "The actions to perform when the laptop lid is closed"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:363(para)
+msgid "The notification area icon policy"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:370(para)
+msgid ""
+"Some sliders or option boxes may be disabled if the GConf policy keys are "
+"not writable. This allows administrators to lock-down the actions that a "
+"user can select."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:378(title)
+msgid "AC Preferences"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:380(title)
+msgid "GNOME Power Manager AC tab"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:392(title)
+msgid "Battery Preferences"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:394(title)
+msgid "GNOME Power Manager battery tab"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:403(para)
+msgid ""
+"Modern computers allow the speed of the processor to be reduced to save "
+"power. This allows a powerful computer to reduce the power usage when idle, "
+"or when the full capabilities are not required. This dramatically increases "
+"battery life as the processor is not running continuously at 100%."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:419(para)
+msgid "All Pentium 4 - M's"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:422(para)
+msgid "Pentium III M's 600MHz to 1GHz"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:425(para)
+msgid "Pentium III M's 700+ MHz"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:412(para)
+msgid ""
+"Not all processors support speed control, and you will not see the options "
+"to select a policy if your computer does not have a compatible processor "
+"installed. The following processors are known to support frequency scaling: "
+"<placeholder-1/> Intel Mobile Celeron processors do not have the required "
+"functionality and the frequency cannot be controlled."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:432(para)
+msgid ""
+"There are several ways to control the power consumption of the processor. "
+"You can have profiles, for example, to select maximum performance on AC "
+"power and maximum power saving on battery power. The easiest way to control "
+"the power saving is set the policy to \"Automatic\" as this will adjust the "
+"speed of the processor to the current state of the system automatically."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:445(para)
+msgid ""
+"Maximum power saving: This sets the computer operating speed always to the "
+"lowest available setting to save battery power. (Linux kernel name: "
+"<command>powersave</command>.)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:453(para)
+msgid ""
+"Maximum performance: This governor sets the processor operating speed to the "
+"highest available. (Linux kernel name: <command>performance</command>.)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:461(para)
+msgid ""
+"Automatic power saving: This option changes the frequency of the processor "
+"in relation to current processor load. If the processor is being used, then "
+"the frequency will increase, but if it is not then will slowly reduce. This "
+"provides a nice middle ground between power saving and application speed. "
+"This option will keep the processor at high frequency for a few seconds "
+"after recent processor activity. This governor may not work correctly on "
+"older notebook computers. (Linux kernel name: <command>conservative</"
+"command>.)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:476(para)
+msgid ""
+"Based on processor load: This driver is a dynamic processor frequency "
+"policy. It will change the frequency of the processor in direct relation to "
+"processor load. Due to the number of frequency changes, this may not work "
+"reliably for older notebook computers. (Linux kernel name: "
+"<command>ondemand</command>.)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:441(para)
+msgid "You may not have all the options listed below: <placeholder-1/>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:490(para)
+msgid ""
+"Some policies (ondemand and conservative) only increase the processor "
+"frequency from minimum when a process has a positive nice value even though "
+"a load greater than 1 occurs. This means user applications work well as the "
+"processor speed automatically increases. This can however result in a "
+"significant performance reduction for system daemons and some background "
+"session services. To rectify this, use another policy (e.g. Maximum "
+"Performance) or set the following GConf key: <command>/apps/gnome-power-"
+"manager/cpufreq_consider_nice</command>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:508(title)
+msgid "General Preferences"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:510(title)
+msgid "GNOME Power Manager general tab"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:522(title)
+msgid "Session and system idle times"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:523(para)
+msgid ""
+"<command>gnome-screensaver</command> is a session daemon that monitors user "
+"input, and if the mouse has not been moved, or the keyboard been pressed "
+"then it starts a timeout. When the value of this timeout reaches the value "
+"set in <command>gnome-screensaver-preferences</command>, then the login is "
+"marked as 'session idle'. This is when <application>GNOME Power Manager</"
+"application> performs all the session idle actions such as enabling low-"
+"power mode and lowering the laptop panel brightness."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:535(title)
+msgid ""
+"Changing the session idle timeout in <command>gnome-screensaver-preferences</"
+"command>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:546(para)
+msgid ""
+"As soon as the session is marked at idle, <application>GNOME Power Manager</"
+"application> starts it's own 'system' timer. When the timeout set in "
+"<command>gnome-power-preferences</command> is reached, and the CPU load is "
+"idle, then the idle action is performed, which is usually to turn off the "
+"screen, or to suspend or hibernate."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:553(para)
+msgid ""
+"To make this clearer, the sliders in <command>gnome-power-preferences</"
+"command> are set to start at the value of the session-timeout + 1 minute, as "
+"we cannot logically trigger before the session is marked as idle. If you "
+"adjust the value of the 'session idle' timeout in <command>gnome-screensaver-"
+"preferences</command> then the start of the sliders in <command>gnome-power-"
+"preferences</command> will change accordingly."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:565(title)
+msgid "Advanced Preferences"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:568(title)
+msgid "Screen Dim Brightness"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:570(para)
+msgid ""
+"You can change the idle laptop panel brightness by changing the GConf key "
+"<command>/apps/gnome-power-manager/laptop_panel_dim_brightness</command>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:578(title)
+msgid "Screen Locking"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:579(para)
+msgid ""
+"By default, <application>GNOME Power Manager</application> supports a simple "
+"locking scheme. This means that the screen will lock if set to \"Lock screen"
+"\" in gnome-screensaver when the lid is closed, or the system performs a "
+"suspend or hibernate action."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:585(para)
+msgid ""
+"There is a complex locking scheme available for power-users that allows "
+"locking policy to change for the lid, suspend and hibernate actions. To "
+"enable this complex mode, you will have to disable the GConf key:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:594(command)
+msgid "/apps/gnome-power-manager/lock_use_screensaver_settings"
+msgstr "/apps/gnome-power-manager/lock_use_screensaver_settings"
+
+#: ../C/gnome-power-manager.xml:598(para)
+msgid ""
+"Then the policy keys can be set to force a gnome-screensaver lock and unlock "
+"when the action is performed:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:606(command)
+msgid "/apps/gnome-power-manager/lock_on_blank_screen"
+msgstr "/apps/gnome-power-manager/lock_on_blank_screen"
+
+#: ../C/gnome-power-manager.xml:611(command)
+msgid "/apps/gnome-power-manager/lock_on_suspend"
+msgstr "/apps/gnome-power-manager/lock_on_suspend"
+
+#: ../C/gnome-power-manager.xml:616(command)
+msgid "/apps/gnome-power-manager/lock_on_hibernate"
+msgstr "/apps/gnome-power-manager/lock_on_hibernate"
+
+#: ../C/gnome-power-manager.xml:622(para)
+msgid ""
+"The lock policy for gnome-screensaver is ignored until the simple mode is re-"
+"enabled."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:631(title)
+msgid "GNOME Power Applets"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:634(title)
+msgid "Brightness Applet"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:635(para)
+msgid ""
+"The brightness applet allows the user to change the brightness temporarily "
+"without changing the default policy. This may be useful if you have got a "
+"laptop without brightness buttons, as you can now change the brightness "
+"easily."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:642(title)
+msgid "Brightness applet drop-down."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:654(para)
+msgid "You will not get the slider if your hardware is not supported."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:661(title)
+msgid "Inhibit Applet"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:662(para)
+msgid ""
+"The inhibit applet allows the user to prevent the computer auto-sleeping "
+"when inactive. This may be required with old or proprietary programs such as "
+"VMWare or Matlab. Just click the icon for the auto-suspend to be inhibited, "
+"and click it again for normal operation."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:670(title)
+msgid "Inhibit applet in inhibited state."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:682(para)
+msgid ""
+"Don't use this applet if you just use GNOME software, instead file a bug to "
+"make the application use the Inhibit() and UnInhibit() methods as this "
+"should 'just work'."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:692(title)
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:693(para)
+msgid "These are questions the mailing list gets asked frequently."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:697(title)
+msgid "What is battery capacity?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:698(para)
+msgid ""
+"Capacity is how much charge your battery can store compare to it's "
+"manufacturers guidelines."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:703(title)
+msgid ""
+"This graph shows the capacity of a typical lithium ion battery over a few "
+"hundred charge-discharge cycles."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:718(title)
+msgid "What's the difference between suspend and hibernate?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:719(para)
+msgid ""
+"The Suspend state is a power saving feature which is the lowest level of "
+"power consumption that preserves program data in the computers memory. When "
+"your computer is in the Suspended state, computation will not be performed "
+"until normal activity is resumed. It will not resume until signaled by an "
+"external event such as a keyboard button press. It generally takes a few "
+"seconds to suspend and then resume your computer."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:729(para)
+msgid ""
+"You still use a small amount of battery power whilst suspended, so is not "
+"recommended for the low power action. If you remove AC power on a desktop, "
+"or run out of battery power on a laptop then you will lose your work."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:736(para)
+msgid ""
+"The Hibernation state saves the complete state of the computer to hard disk "
+"and turns off the power, so that the computer appears to be off. It will not "
+"resume until signaled by an external event such as a keyboard button press. "
+"This is the lowest power sleeping state available. If you remove AC power on "
+"a desktop, or run out of battery power on a laptop then work will not be "
+"lost. It can take up to a minute or more to hibernate and wake your computer."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:749(title)
+msgid ""
+"My monitor is broken and treats DPMS standby and off states as 'no-signal' "
+"which leaves the monitor powered on."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:753(para)
+msgid ""
+"You have to change the DPMS suspend mode <application>GNOME Power Manager</"
+"application> uses. Open <command>gconf-editor</command>, and then change the "
+"keys <literal>/apps/gnome-power-manager/ac_dpms_sleep_method</literal> and "
+"<literal>/apps/gnome-power-manager/battery_dpms_sleep_method</literal> to "
+"one of the modes that work, e.g. standby, suspend or off."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:763(title)
+msgid ""
+"I've set the computer inactive timeout to one minute and it still takes "
+"longer than that to suspend."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:767(para)
+msgid ""
+"gnome-screensaver is a session daemon that monitors user input, and if the "
+"mouse has not been moved, or the keyboard been pressed then it starts a "
+"timeout. When the value of this timeout reaches the value set in gnome-"
+"screensaver-preferences, then the login is marked as 'session idle'. This is "
+"when <application>GNOME Power Manager</application> performs all the session "
+"idle actions such as enabling low-power mode and lowering the laptop panel "
+"brightness."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:777(para)
+msgid ""
+"As soon as the session is marked at idle, <application>GNOME Power Manager</"
+"application> starts it's own 'system' timer. When the timeout set in gnome-"
+"power-preferences is reached, and the CPU load is idle, then the idle action "
+"is performed, which is usually to turn off the screen, or to suspend or "
+"hibernate."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:784(para)
+msgid ""
+"In <application>GNOME Power Manager</application> 2.14 the timeouts were not "
+"obviously linked to gnome-screensaver, but the timeouts are linked in "
+"reality. This is because the gnome-screensaver declares the session \"idle\" "
+"and then <application>GNOME Power Manager</application> starts. Therefore "
+"the real time to suspend is actually the GNOME Screensaver timeout PLUS the "
+"<application>GNOME Power Manager</application> time."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:792(para)
+msgid ""
+"In <application>GNOME Power Manager</application> 2.16, the sliders in "
+"<command>gnome-power-preferences</command> are set to start at the value of "
+"the session-timeout + 1 minute, as we cannot logically trigger before the "
+"session is marked as idle. If you adjust the value of the 'session idle' "
+"timeout in <command>gnome-screensaver-preferences</command> then the start "
+"of the sliders in <command>gnome-power-preferences</command> will change "
+"accordingly. This makes it more obvious for new users."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:805(title)
+msgid ""
+"My time to discharge is always incorrect due to a faulty battery, what can I "
+"do?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:809(para)
+msgid ""
+"You might be able to use the percentage charge for g-p-m to use as the "
+"policy data. Open <command>gconf-editor</command>, and then change the key "
+"<command>/apps/gnome-power-manager/use_time_for_policy</command> to false. "
+"You can do this easily by doing: <command> gconftool-2 --set --type bool /"
+"apps/gnome-power-manager/use_time_for_policy false </command>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:820(para)
+msgid ""
+"This should get the policy actions working for you, but of course the time "
+"remaining will still be incorrect."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:827(title)
+msgid ""
+"Why does not my IBM laptop have the brightness sliders in Power Preferences?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:831(para)
+msgid ""
+"You need to add to <command>/etc/modprobe.conf</command> the following text: "
+"<command>options ibm_acpi experimental=1</command>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:835(para)
+msgid "This will enable the experimental features and make the LCD work."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:839(para)
+msgid "You will have to use sudo or a root account to edit this file."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:846(title)
+msgid ""
+"Why does my lid state get confused after suspending or hibernating? (and) My "
+"laptop suspended when I didn't expect it to when I removed the power cord!"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:851(para)
+msgid ""
+"When you suspend and then resume, ACPI does not seem to send the \"lid open"
+"\" event like it should, which I presume is because userspace is not in a "
+"position to handle the kernel event when we start to thaw userspace "
+"processes."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:857(para)
+msgid ""
+"What we have to do it manually refresh the lid device using HAL when we "
+"resume, so that the new \"lid open\" value is propagated to "
+"<application>GNOME Power Manager</application>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:862(para)
+msgid ""
+"You need to update to a newer version of HAL, or use your updated "
+"distribution bug-fix packages."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:869(title)
+msgid "Does <application>GNOME Power Manager</application> support APM?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:870(para)
+msgid ""
+"It supports whatever backends HAL supports! At the moment this includes:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:876(para)
+msgid "APM (Pre-2000 Intel computers)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:879(para)
+msgid "ACPI (most modern Intel compatible computers)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:882(para)
+msgid "PMU (Powerbook, and iBook PPC computers)"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:888(title)
+msgid ""
+"Why does <application>GNOME Power Manager</application> not let me suspend "
+"or hibernate?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:889(para)
+msgid ""
+"Before showing items such as \"Suspend\" and \"Hibernate\" in the menu g-p-m "
+"checks two things:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:896(para)
+msgid ""
+"If HAL can detect a sleep handler in the kernel. You can test this doing "
+"<command>lshal | grep can_suspend</command>. HAL works this out from looking "
+"at <command>/sys/power/state</command>, and also checking for the presence "
+"of suspend2."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:904(para)
+msgid ""
+"If your administrator (or you!) has disabled the ability to do a certain "
+"action. You can test this using <command>gconftool-2 -R /apps/gnome-power-"
+"manager | grep can</command> and change the values to be something more "
+"suitable."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:912(para)
+msgid ""
+"For instance, my PowerBook reports from HAL that it can suspend and "
+"hibernate, but because I know my hibernate does not work, I can disable it "
+"in <command>gconf-editor</command> removing the option from <command>gnome-"
+"power-preferences</command> and the drop-down menu."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:918(para)
+msgid ""
+"If HAL does not list the options you want, then maybe you need to check your "
+"BIOS to check that it's running in the correct mode, and also that you have "
+"compiled your kernel with the correct options."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:923(para)
+msgid ""
+"If there are no gconf keys returned by the second check above, you need to "
+"reinstall your gconf schema as per gnomebug:341256: (as root):"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:928(programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"export GCONF_CONFIG_SOURCE=`gconftool-2 --get-default-source`\n"
+"gconftool-2 --makefile-install-rule data/gnome-power-manager.schemas\n"
+"killall -HUP gconfd-2\n"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:936(title)
+msgid ""
+"Why does my screen dim or screensaver start even when I'm clicking the mouse?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:940(para)
+msgid ""
+"If you click the mouse, or scroll the scroll-wheel without moving the "
+"pointer, then gnome-screensaver will detect the session as being idle. This "
+"is a limitation of X.org, but is worked around in newer versions of gnome-"
+"screensaver."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:949(title)
+msgid "How do I make my application stop the computer auto-suspending?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:952(para)
+msgid ""
+"If your application is doing a long operation, you might want to disable the "
+"ability to suspend for a little while. You should use this method if you "
+"really don't want the user to be able to suspend, or for the computer to "
+"save power by hibernating or suspending during:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:961(para)
+msgid "Copying files in Nautilus"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:964(para)
+msgid "Doing a long kernel compile or Matlab simulation"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:967(para)
+msgid "During a SELinux relabel"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:970(para)
+msgid "Many others..."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:973(para)
+msgid ""
+"Then you can use the Inhibit() and UnInhibit() DBUS methods built into the "
+"newest versions of <application>GNOME Power Manager</application>. Here is a "
+"simple demonstration in python:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:978(programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"#!/usr/bin/python\n"
+"import dbus\n"
+"import time\n"
+"bus = dbus.Bus(dbus.Bus.TYPE_SESSION)\n"
+"devobj = bus.get_object('org.gnome.PowerManager', '/org/gnome/PowerManager')\n"
+"dev = dbus.Interface(devobj, \"org.gnome.PowerManager\")\n"
+"cookie = dev.Inhibit('Nautilus', 'Copying files')\n"
+"time.sleep(100)\n"
+"dev.UnInhibit(cookie)\n"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:989(para)
+msgid ""
+"There is an <ulink url=\"http://cvs.gnome.org/viewcvs/*checkout*/gnome-power-"
+"manager/src/gpm-inhibit-test.c\">example</ulink> which shows developers how "
+"to add Inhibit and UnInhibit DBUS methods into existing programs."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:997(title)
+msgid ""
+"Are <application>GNOME Power Manager</application> and GNOME Screensaver "
+"inhibit methods the same?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1000(para)
+msgid ""
+"If you call the inhibit methods on gnome-screensaver, then gnome-screensaver "
+"will not mark your session as idle. This means that the screen will not dim, "
+"the screensaver will not start and the computer will not suspend "
+"automatically."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1006(para)
+msgid ""
+"While playing a movie full-screen, totem should use the gnome-screensaver "
+"inhibit methods. The idea is that totem does not have to worry at all about "
+"power management. The only thing it wants to assert is that even though "
+"there are no key presses or mouse movements, the session is still being used."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1014(para)
+msgid ""
+"The only applications that should use the <application>GNOME Power Manager</"
+"application> inhibit method are things that want to assert that the session "
+"can be marked as idle, but important things are still happening, so it "
+"should not power down. For example, when copying 4.5GB of files in Nautilus, "
+"you want the screensaver to display, and the LCD panel to dim, but you don't "
+"want the computer to think that it is idle and shutdown, suspend or "
+"hibernate."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1026(title)
+msgid ""
+"<application>GNOME Power Manager</application> does not spin down my hard-"
+"drive!"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1027(para)
+msgid ""
+"After numerous debates, the consensus was that is was not a good idea to add "
+"this functionality to HAL. It's was decided user-configurable power "
+"management was not really required when modern hard disks have really "
+"intelligent power management."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1033(para)
+msgid ""
+"Here the power consumption data for a typical notebook hard disk (IDE/SATA):"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1038(programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"Startup (peak, max.)\t\t5.5W \tNC\n"
+"Seek\t\t\t\t2.3W\t2.7W\n"
+"Read (avg.)\t\t\t2.0W\t2.3W\n"
+"Write (avg.)\t\t\t2.0W\t2.3W\n"
+"Active idle (avg.)\t\t1.1W\t1.2W\n"
+"Low power idle (avg.)\t\t0.85W\t0.9W\n"
+"Standby (avg.)\t\t\t0.2W\t0.25W\n"
+"Sleep\t\t\t\t0.1W\tNC\n"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1048(para)
+msgid "The conclusions you can take from this are:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1053(para)
+msgid ""
+"A disk on Low Power idle need less than 1 Watt per hour. For a normal "
+"battery with 50000mWh you could run the hard disk for over 50 hours."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1060(para)
+msgid ""
+"If you do not read/write from/to the hard disk the disk regulates power, but "
+"never shuts down the device. The reason is easy: you lost more power with "
+"each startup than to leave the hard disk online somewhere between 'Active "
+"idle' and 'Low power idle' (depends on the model/manufacturer)."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1069(para)
+msgid ""
+"The other reason to leave this to the internal power management of the disk "
+"is: the time needed to reactivate the device. You lose more performance than "
+"you lose power between 'Active idle' and 'Low power idle'."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1077(para)
+msgid ""
+"If you use a journaling file system you normally need to flush periodically. "
+"This could run in a race between shut down device and restart device by "
+"system to flush. This means more power consumption as you change nothing."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1086(para)
+msgid ""
+"You can't set power management for external USB hard disks, because you "
+"can't send the needed commands over the USB link to the disk."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1095(title)
+msgid ""
+"I'm running ACPI. Why do events (such as removing the AC adapter) take so "
+"long to register?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1099(para)
+msgid "One of two things might be the problem."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1104(para)
+msgid "HAL might not be running the addon that captures the ACPI event."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1109(para)
+msgid ""
+"You BIOS could be faulty, and might need a work-around. Please send a bug "
+"report."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1115(para)
+msgid ""
+"For the first case, try to find the HAL processes that are running: "
+"<command>ps -eaf | grep hal</command>"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1119(para)
+msgid ""
+"And check for the process <command>hald-addon-acpi</command>. If it is not "
+"being run, then please make sure that HAL is being run with the <command>--"
+"retain-privileges</command> option in the <command>haldaemon</command> "
+"initscript. An alternative to this is to use acpid, rather than the kernel "
+"proc file."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1129(title)
+msgid ""
+"How do I query or do actions on <application>GNOME Power Manager</"
+"application> from my shell script?"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1132(para)
+msgid ""
+"You can use the dbus-send program. For example, you can set the DPMS mode by "
+"running the following:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1136(programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"dbus-send --session \\\n"
+"\t  --dest=org.gnome.PowerManager \\\n"
+"\t  --type=method_call \\\n"
+"\t  --print-reply \\\n"
+"\t  --reply-timeout=2000 \\\n"
+"\t  /org/gnome/PowerManager \\\n"
+"\t  org.gnome.PowerManager.SetDpmsMode \\\n"
+"\t  string:suspend\n"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1146(para)
+msgid "You can put the system into hibernation using the following:"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1149(programlisting)
+#, no-wrap
+msgid ""
+"\n"
+"dbus-send --session \\\n"
+"\t  --dest=org.gnome.PowerManager \\\n"
+"\t  --type=method_call \\\n"
+"\t  --print-reply \\\n"
+"\t  --reply-timeout=2000 \\\n"
+"\t  /org/gnome/PowerManager \\\n"
+"\t  org.gnome.PowerManager.Hibernate\n"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1158(para)
+msgid "See the developers guide file in CVS for the full list."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1164(title)
+msgid "Nothing happens when I click suspend or hibernate!"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1165(para)
+msgid ""
+"HAL might not *yet* support your distro, or you might have found a bug in "
+"<application>GNOME Power Manager</application>. Refer to the reporting bugs "
+"section."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1173(title)
+msgid ""
+"Why does not my video adaptor come back after a suspend? It just displays "
+"black!"
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1177(para)
+msgid ""
+"You may need to add a s3 command to your kernel boot string so that the "
+"kernel can re-initialize your video card. See <ulink url=\"http://www.kernel."
+"org/git/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;hb=HEAD;"
+"f=Documentation/power/video.txt\">this document</ulink> for more details, or "
+"to see if your system has been identified as needing any extra switches."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1185(para)
+msgid ""
+"Using the new pm-utils should make all this stuff just work in the future "
+"using HAL fdi matching against machine DMI and video card vendor and product "
+"ID's."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1195(title)
+msgid "About"
+msgstr "A prepaus de"
+
+#: ../C/gnome-power-manager.xml:1196(para)
+msgid ""
+"GNOME Power Manager was written by Richard Hughes <email>richard@hughsie."
+"com</email>. To find more information about GNOME Power Manager, please "
+"visit the <ulink url=\"http://www.gnome.org/projects/gnome-power-manager\" "
+"type=\"http\"><application>GNOME Power Manager</application> web page</"
+"ulink>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1202(para)
+msgid ""
+"To report a bug or make a suggestion regarding this application or this "
+"manual, follow the directions at the <ulink url=\"http://www.gnome.org/"
+"projects/gnome-power-manager/bugs.html\" type=\"http\"><application>GNOME "
+"Power Manager</application> Bug Page</ulink>."
+msgstr ""
+
+#: ../C/gnome-power-manager.xml:1208(para)
+msgid ""
+"This program is distributed under the terms of the GNU General Public "
+"license as published by the Free Software Foundation; either version 2 of "
+"the License, or (at your option) any later version. A copy of this license "
+"can be found at this <ulink url=\"gnome-power-manager:gpl\" type=\"help"
+"\">link</ulink>, or in the file COPYING included with the source code of "
+"this program."
+msgstr ""
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
+#: ../C/gnome-power-manager.xml:0(None)
+msgid "translator-credits"
+msgstr "La còla occitana de revirada d'Ubuntu, 2007 - ubuntu-l10n-oci@lists.ubuntu.com"
+
