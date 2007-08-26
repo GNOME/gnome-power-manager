@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.19.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 16:31+0700\n"
-"PO-Revision-Date: 2007-08-16 16:33+0700\n"
+"POT-Creation-Date: 2007-08-26 22:28+0700\n"
+"PO-Revision-Date: 2007-08-26 22:35+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1049,7 +1049,7 @@ msgstr "ศักย์ไฟฟ้าแบตเตอรี่"
 msgid "Graph type:"
 msgstr "ชนิดของกราฟ:"
 
-#: data/gpm-graph.glade.h:4 src/gpm-statistics-core.c:61
+#: data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr "กราฟการใช้พลังงาน"
 
@@ -1556,7 +1556,7 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "ออกจากโปรแกรมหลังหน่วงเวลาเล็กน้อย (สำหรับดีบั๊ก)"
 
 #: src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
+msgid "Exit after the manager has loaded (for debugging)"
 msgstr "ออกจากโปรแกรมหลังโหลดโปรแกรมจัดการพลังงานเสร็จ (สำหรับดีบั๊ก)"
 
 #: src/gpm-main.c:163
@@ -2218,32 +2218,36 @@ msgid "GNOME Power Statistics"
 msgstr "กราฟการใช้พลังงานของ GNOME"
 
 #: src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
 msgstr "กราฟประจุไฟ"
 
+#: src/gpm-statistics-core.c:61
+msgid "Power history"
+msgstr "กราฟการใช้พลังงาน"
+
 #: src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr "กราฟศักย์ไฟฟ้า"
 
 #: src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr "กราฟเวลาประเมิน"
 
 #: src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "เวลาประจุที่วัดได้"
+msgid "Charge time profile"
+msgstr "โพรไฟล์เวลาประจุ"
 
 #: src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "ความละเอียดของเวลาประจุที่วัดได้"
+msgid "Discharge time profile"
+msgstr "โพรไฟล์เวลาจ่ายไฟ"
 
 #: src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "เวลาจ่ายไฟที่วัดได้"
+msgid "Charge time accuracy profile"
+msgstr "โพรไฟล์ความละเอียดของเวลาประจุ"
 
 #: src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "ความละเอียดของเวลาจ่ายไฟที่วัดได้"
+msgid "Discharge time accuracy profile"
+msgstr "โพรไฟล์ความละเอียดของเวลาจ่ายไฟ"
 
 #: src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2304,6 +2308,18 @@ msgstr "_พักเครื่อง"
 #: src/gpm-tray-icon.c:585
 msgid "Hi_bernate"
 msgstr "_จำศีลเครื่อง"
+
+#~ msgid "Profiled Charge Time"
+#~ msgstr "เวลาประจุที่วัดได้"
+
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "ความละเอียดของเวลาประจุที่วัดได้"
+
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "เวลาจ่ายไฟที่วัดได้"
+
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "ความละเอียดของเวลาจ่ายไฟที่วัดได้"
 
 #~ msgid "Power Preferences"
 #~ msgstr "ปรับแต่งการใช้พลังงาน"
