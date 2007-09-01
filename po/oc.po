@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager 2.16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-18 03:28+0100\n"
-"PO-Revision-Date: 2007-08-21 00:09+0200\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
+"PO-Revision-Date: 2007-09-01 20:06+0200\n"
 "Last-Translator: Yannig MARCHEGAY (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: ../applets/brightness/brightness-applet.c:767
 msgid "Copyright © 2006 Benjamin Canou"
-msgstr ""
+msgstr "Copyright © 2006 Benjamin Canou"
 
 #: ../applets/brightness/GNOME_BrightnessApplet.server.in.in.h:1
 msgid "Adjusts Laptop panel brightness"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: ../applets/inhibit/inhibit-applet.c:429
 msgid "Copyright © 2006-2007 Richard Hughes"
-msgstr ""
+msgstr "Copyright © 2006-2007 Richard Hughes"
 
 #: ../applets/inhibit/GNOME_InhibitApplet.server.in.in.h:1
 msgid "Allows user to inhibit automatic power saving"
@@ -941,7 +941,7 @@ msgstr ""
 msgid "Graph type:"
 msgstr ""
 
-#: ../data/gpm-graph.glade.h:4 ../src/gpm-statistics-core.c:61
+#: ../data/gpm-graph.glade.h:4
 msgid "Power History"
 msgstr ""
 
@@ -952,7 +952,7 @@ msgstr ""
 
 #: ../data/gpm-inhibit-test.glade.h:1
 msgid "Application:"
-msgstr ""
+msgstr "Aplicacion :"
 
 #: ../data/gpm-inhibit-test.glade.h:2
 msgid "Burning DVD, titled \"My Photos\""
@@ -1122,12 +1122,16 @@ msgstr ""
 #: ../src/gpm-common.c:247
 #, c-format
 msgid "%i minute"
-msgstr "%i minuta"
+msgid_plural "%i minutes"
+msgstr[0] "%i minuta"
+msgstr[1] "%i minutas"
 
 #: ../src/gpm-common.c:258
 #, c-format
 msgid "%i hour"
-msgstr "%i ora"
+msgid_plural "%i hours"
+msgstr[0] "%i ora"
+msgstr[1] "%i oras"
 
 #. TRANSLATOR: "%i %s %i %s" are "%i hours %i minutes"
 #. * Swap order with "%2$s %2$i %1$s %1$i if needed
@@ -1196,7 +1200,7 @@ msgstr "%i o"
 #: ../src/gpm-graph-widget.c:487
 #, c-format
 msgid "%ih%02i"
-msgstr ""
+msgstr "%ih%02i"
 
 #. Translators: This is %2i minutes
 #: ../src/gpm-graph-widget.c:492
@@ -1446,7 +1450,7 @@ msgid "Exit after a small delay (for debugging)"
 msgstr ""
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
+msgid "Exit after the manager has loaded (for debugging)"
 msgstr ""
 
 #: ../src/gpm-main.c:163
@@ -1838,7 +1842,7 @@ msgstr ""
 #: ../src/gpm-cell-array.c:988
 #, c-format
 msgid "%s %s remaining (%i%%)\n"
-msgstr ""
+msgstr "Demòra(n) %s %s (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:993
@@ -1856,7 +1860,7 @@ msgstr ""
 #: ../src/gpm-cell-array.c:1012
 #, c-format
 msgid "%s %s until charged (%i%%)\n"
-msgstr ""
+msgstr "Fin de la carga dins %s %s (%i%%)\n"
 
 #. don't display "Unknown remaining"
 #: ../src/gpm-cell-array.c:1017
@@ -1916,7 +1920,7 @@ msgstr ""
 
 #: ../src/gpm-cell.c:523
 msgid "Technology:"
-msgstr ""
+msgstr "Tecnologia :"
 
 #: ../src/gpm-cell.c:527
 msgid "Serial number:"
@@ -2032,7 +2036,7 @@ msgstr ""
 #. The text that should appear in the action combo boxes
 #: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
-msgstr ""
+msgstr "Me demandar"
 
 # VOIR BUG #413642
 #: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
@@ -2082,31 +2086,35 @@ msgid "GNOME Power Statistics"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+msgid "Charge history"
+msgstr ""
+
+#: ../src/gpm-statistics-core.c:61
+msgid "Power history"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+msgid "Voltage history"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+msgid "Estimated time history"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
+msgid "Charge time profile"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
+msgid "Discharge time profile"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
+msgid "Charge time accuracy profile"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
+msgid "Discharge time accuracy profile"
 msgstr ""
 
 #: ../src/gpm-statistics-core.c:810
@@ -2131,7 +2139,9 @@ msgstr ""
 
 #: ../src/gpm-tray-icon.c:315
 msgid "translator-credits"
-msgstr "La còla occitana de revirada d'Ubuntu, 2007 - ubuntu-l10n-oci@lists.ubuntu.com"
+msgstr ""
+"La còla occitana de revirada d'Ubuntu, 2007 - ubuntu-l10n-oci@lists.ubuntu."
+"com"
 
 #: ../src/gpm-tray-icon.c:331
 msgid "GNOME Power Manager Website"
