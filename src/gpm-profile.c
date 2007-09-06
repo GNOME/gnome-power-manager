@@ -670,9 +670,8 @@ dpms_mode_changed_cb (GpmDpms    *dpms,
 gboolean
 gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 {
-	gchar *filename;
-	gboolean ret;
-	gint retval = TRUE;
+	gchar *filename = NULL;
+	gboolean ret = FALSE;
 
 	g_return_val_if_fail (profile != NULL, FALSE);
 	g_return_val_if_fail (GPM_IS_PROFILE (profile), FALSE);
@@ -680,24 +679,24 @@ gpm_profile_delete_data (GpmProfile *profile, gboolean discharge)
 	/* check we have a profile loaded */
 	if (profile->priv->config_id == NULL) {
 		gpm_warning ("no config id set!");
-		return FALSE;
+		goto out;
 	}
 
 	/* create filename and check is exists */
 	filename = gpm_profile_get_data_file (profile, discharge);
 	if (g_file_test (filename, G_FILE_TEST_EXISTS) == FALSE) {
-		g_free (filename);
 		/* seems insane, but we need this for the test suite */
-		return TRUE;
+		ret = TRUE;
+		goto out;
 	}
 
 	/* try to delete file */
-	retval = g_unlink (filename);
-	if (retval != 0) {
+	if (g_unlink (filename) != 0) {
 		gpm_warning ("could not delete '%s'", filename);
-		ret = FALSE;
+		goto out;
 	}
-
+	ret = TRUE;
+out:
 	g_free (filename);
 	return ret;
 }
