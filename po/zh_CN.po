@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-power-manager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-16 03:26+0100\n"
-"PO-Revision-Date: 2007-08-17 14:51+0700\n"
+"POT-Creation-Date: 2007-08-21 22:19+0100\n"
+"PO-Revision-Date: 2007-09-04 20:53+0800\n"
 "Last-Translator: Yang Zhang <zyangmath@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -41,40 +41,44 @@ msgid "LCD brightness : %d%%"
 msgstr "LCD 亮度：%d%%"
 
 #: ../applets/brightness/brightness-applet.c:744
-#: ../applets/inhibit/inhibit-applet.c:406
-#: ../src/gpm-tray-icon.c:301
+#: ../applets/inhibit/inhibit-applet.c:406 ../src/gpm-tray-icon.c:301
 msgid "Licensed under the GNU General Public License Version 2"
 msgstr "在 GNU General Public License Version 2 (GPL V2) 许可下授权"
 
 #: ../applets/brightness/brightness-applet.c:745
-#: ../applets/inhibit/inhibit-applet.c:407
-#: ../src/gpm-tray-icon.c:302
+#: ../applets/inhibit/inhibit-applet.c:407 ../src/gpm-tray-icon.c:302
 msgid ""
 "Power Manager is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU General Public License\n"
 "as published by the Free Software Foundation; either version 2\n"
 "of the License, or (at your option) any later version."
-msgstr "电源管理器是自由软件；您可以按照自由软件基金会所发表的 GNU GPL 协议自由发放和/或修改它；GPL 协议应该采用第二版或以后的任何版本。"
+msgstr ""
+"电源管理器是自由软件；您可以按照自由软件基金会所发表的 GNU GPL 协议自由发放"
+"和/或修改它；GPL 协议应该采用第二版或以后的任何版本。"
 
 #: ../applets/brightness/brightness-applet.c:749
-#: ../applets/inhibit/inhibit-applet.c:411
-#: ../src/gpm-tray-icon.c:306
+#: ../applets/inhibit/inhibit-applet.c:411 ../src/gpm-tray-icon.c:306
 msgid ""
 "Power Manager is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
 "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
 "GNU General Public License for more details."
-msgstr "电源管理器发表的目的是希望它能够对您有用，但我们没有任何保证；对于以任何用途使用它所造成的任何直接或间接后果都不承担任何责任。请参看 GNU GPL 协议中的细节。"
+msgstr ""
+"电源管理器发表的目的是希望它能够对您有用，但我们没有任何保证；对于以任何用途"
+"使用它所造成的任何直接或间接后果都不承担任何责任。请参看 GNU GPL 协议中的细"
+"节。"
 
 #: ../applets/brightness/brightness-applet.c:753
-#: ../applets/inhibit/inhibit-applet.c:415
-#: ../src/gpm-tray-icon.c:310
+#: ../applets/inhibit/inhibit-applet.c:415 ../src/gpm-tray-icon.c:310
 msgid ""
 "You should have received a copy of the GNU General Public License\n"
 "along with this program; if not, write to the Free Software\n"
 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
-msgstr "您应该在本程序的同时收到了 GNU GPL 协议的副本；如果您没有收到的话，请给自由软件基金会写信，地址是 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA。"
+msgstr ""
+"您应该在本程序的同时收到了 GNU GPL 协议的副本；如果您没有收到的话，请给自由软"
+"件基金会写信，地址是 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
+"USA。"
 
 #: ../applets/brightness/brightness-applet.c:767
 msgid "Copyright © 2006 Benjamin Canou"
@@ -139,8 +143,7 @@ msgid "Inhibit Applet Factory"
 msgstr "抑制管理小程序工厂"
 
 #. common descriptions of this program
-#: ../data/gnome-power-manager.desktop.in.h:1
-#: ../src/gpm-common.h:43
+#: ../data/gnome-power-manager.desktop.in.h:1 ../src/gpm-common.h:43
 msgid "Power Manager"
 msgstr "电源管理器"
 
@@ -149,8 +152,13 @@ msgid "Power management daemon"
 msgstr "电源管理守护程序"
 
 #: ../data/gnome-power-manager.schemas.in.h:1
-msgid "After resume, gnome-power-manager will suppress policy actions for a number of seconds to allow messages to settle and HAL to refresh. Commonly five seconds is enough while not being so long that the user gets confused."
-msgstr "恢复后，gnome-power-manager 将在一定时间内禁止执行策略动作，以便让消息稳定下来，HAL 也能刷新完毕。通常五秒钟已经足够了，而用户也不觉得太长。"
+msgid ""
+"After resume, gnome-power-manager will suppress policy actions for a number "
+"of seconds to allow messages to settle and HAL to refresh. Commonly five "
+"seconds is enough while not being so long that the user gets confused."
+msgstr ""
+"恢复后，gnome-power-manager 将在一定时间内禁止执行策略动作，以便让消息稳定下"
+"来，HAL 也能刷新完毕。通常五秒钟已经足够了，而用户也不觉得太长。"
 
 #: ../data/gnome-power-manager.schemas.in.h:2
 msgid "Allow Suspend and Hibernate in the menu"
@@ -181,8 +189,12 @@ msgid "Dim the screen after a period of inactivity when on battery power"
 msgstr "一段时间内不活动后将屏幕变暗(使用电池时)"
 
 #: ../data/gnome-power-manager.schemas.in.h:9
-msgid "Display options for the notification icon. Valid options are \"never\", \"critical\", \"charge\", \"present\" and \"always\"."
-msgstr "通知图标的显示选项。可供选择的选项有“never”、“critical”、“charge”、“present”和“always”。"
+msgid ""
+"Display options for the notification icon. Valid options are \"never\", "
+"\"critical\", \"charge\", \"present\" and \"always\"."
+msgstr ""
+"通知图标的显示选项。可供选择的选项"
+"有“never”、“critical”、“charge”、“present”和“always”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:10
 msgid "Hibernate button action"
@@ -201,19 +213,27 @@ msgid "If DBUS inhibit requests should be ignored."
 msgstr "是否忽略 DBUS 的抑制请求。"
 
 #: ../data/gnome-power-manager.schemas.in.h:14
-msgid "If a notification message should be displayed after suspend or hibernate failed."
+msgid ""
+"If a notification message should be displayed after suspend or hibernate "
+"failed."
 msgstr "挂起或休眠失败后是否应显示通知消息。"
 
 #: ../data/gnome-power-manager.schemas.in.h:15
-msgid "If a notification message should be displayed when the battery is fully charged."
+msgid ""
+"If a notification message should be displayed when the battery is fully "
+"charged."
 msgstr "电池充满电时是否应显示通知消息。"
 
 #: ../data/gnome-power-manager.schemas.in.h:16
-msgid "If a notification message should be displayed when the battery is getting low."
+msgid ""
+"If a notification message should be displayed when the battery is getting "
+"low."
 msgstr "电池电量低时是否应显示通知消息。"
 
 #: ../data/gnome-power-manager.schemas.in.h:17
-msgid "If a notification message should be displayed when the profile data is guessed."
+msgid ""
+"If a notification message should be displayed when the profile data is "
+"guessed."
 msgstr "图示数据为猜测值时是否应显示通知消息。"
 
 #: ../data/gnome-power-manager.schemas.in.h:18
@@ -221,19 +241,27 @@ msgid "If extra debugging messages should be used"
 msgstr "是否使用额外的调试消息"
 
 #: ../data/gnome-power-manager.schemas.in.h:19
-msgid "If extra debugging messages should be used. Only turn this on for debugging."
-msgstr ""
+msgid ""
+"If extra debugging messages should be used. Only turn this on for debugging."
+msgstr "是否使用调试信息。只应在调试时打开此项。"
 
 #: ../data/gnome-power-manager.schemas.in.h:20
-msgid "If niced processes are considered, they can cause a frequency increment even though their absolute load percentage wouldn't trigger the scaling mechanism to switch up the frequency."
-msgstr "优先级提高 (niced) 的进程可能会导致频率的提高，即使其绝对负载未达到能触发频率调节机制调高频率的百分比。"
+msgid ""
+"If niced processes are considered, they can cause a frequency increment even "
+"though their absolute load percentage wouldn't trigger the scaling mechanism "
+"to switch up the frequency."
+msgstr ""
+"优先级提高 (niced) 的进程可能会导致频率的提高，即使其绝对负载未达到能触发频率"
+"调节机制调高频率的百分比。"
 
 #: ../data/gnome-power-manager.schemas.in.h:21
 msgid "If sounds should be used"
 msgstr "是否使用声音"
 
 #: ../data/gnome-power-manager.schemas.in.h:22
-msgid "If sounds should be used when the power is critically low, or inhibit requests have stopped the policy action."
+msgid ""
+"If sounds should be used when the power is critically low, or inhibit "
+"requests have stopped the policy action."
 msgstr "在电量将用尽或抑制请求已阻止某策略动作是否使用声音通知。"
 
 #: ../data/gnome-power-manager.schemas.in.h:23
@@ -241,23 +269,34 @@ msgid "If the CPU load should be checked before doing the idle action."
 msgstr "在执行空闲动作时是否检查 CPU 负载。"
 
 #: ../data/gnome-power-manager.schemas.in.h:24
-msgid "If the Suspend and Hibernate options should be allowed in the notification area drop down menu."
+msgid ""
+"If the Suspend and Hibernate options should be allowed in the notification "
+"area drop down menu."
 msgstr "是否在通知区域下拉菜单中显示休眠和挂起选项。"
 
 #: ../data/gnome-power-manager.schemas.in.h:25
-msgid "If the battery event should occur when the lid is shut and the power disconnected"
+msgid ""
+"If the battery event should occur when the lid is shut and the power "
+"disconnected"
 msgstr "上盖关闭且交流电源被移除时是否发生电池事件"
 
 #: ../data/gnome-power-manager.schemas.in.h:26
-msgid "If the battery lid close event should occur (for example 'Suspend when lid closed on battery') when the lid is previously shut and the AC power disconnected at a later time."
-msgstr "在先前上盖已关闭，而后交流电源也被移除时是否发生“上盖已关闭(使用电池时)”的相应事件，如‘在使用电池时如果上盖关闭则挂起’。"
+msgid ""
+"If the battery lid close event should occur (for example 'Suspend when lid "
+"closed on battery') when the lid is previously shut and the AC power "
+"disconnected at a later time."
+msgstr ""
+"在先前上盖已关闭，而后交流电源也被移除时是否发生“上盖已关闭(使用电池时)”的相"
+"应事件，如‘在使用电池时如果上盖关闭则挂起’。"
 
 #: ../data/gnome-power-manager.schemas.in.h:27
 msgid "If the learnt profile should be used to calculate the time remaining"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:28
-msgid "If the learnt profile should be used to calculate the time remaining. Only turn this off for debugging."
+msgid ""
+"If the learnt profile should be used to calculate the time remaining. Only "
+"turn this off for debugging."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:29
@@ -273,23 +312,33 @@ msgid "If the low-power mode should be enabled when on battery"
 msgstr "使用电池时是否启用低电量模式"
 
 #: ../data/gnome-power-manager.schemas.in.h:32
-msgid "If the screen brightness can be changed when switching between AC and battery power and by ambient light sensors."
+msgid ""
+"If the screen brightness can be changed when switching between AC and "
+"battery power and by ambient light sensors."
 msgstr "交流电源与电池切换时或使用环境光传感器时是否能改变屏幕亮度。"
 
 #: ../data/gnome-power-manager.schemas.in.h:33
-msgid "If the screen brightness should be changed automatically using the ambient light sensors."
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors."
 msgstr "是否使用环境光传感器自动调整屏幕亮度。"
 
 #: ../data/gnome-power-manager.schemas.in.h:34
-msgid "If the screen brightness should be changed automatically using the ambient light sensors. Valid is 'none', 'light' and 'dark'"
+msgid ""
+"If the screen brightness should be changed automatically using the ambient "
+"light sensors. Valid is 'none', 'light' and 'dark'"
 msgstr "是否使用环境光传感器自动调整屏幕亮度。可用的值为 none、light 和 dark。"
 
 #: ../data/gnome-power-manager.schemas.in.h:35
-msgid "If the screen should be dimmed to save power when the computer is idle when on AC power."
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on AC power."
 msgstr "使用交流电供电时计算机空闲时屏幕是否应变暗以省电。"
 
 #: ../data/gnome-power-manager.schemas.in.h:36
-msgid "If the screen should be dimmed to save power when the computer is idle when on battery power."
+msgid ""
+"If the screen should be dimmed to save power when the computer is idle when "
+"on battery power."
 msgstr "使用电池供电时计算机空闲时屏幕是否应变暗以省电。"
 
 #: ../data/gnome-power-manager.schemas.in.h:37
@@ -301,7 +350,8 @@ msgid "If the system low-power mode should be enabled when on UPS power."
 msgstr "在使用 UPS 电源时是否启用系统的低电量模式。"
 
 #: ../data/gnome-power-manager.schemas.in.h:39
-msgid "If the system low-power mode should be enabled when on laptop battery power."
+msgid ""
+"If the system low-power mode should be enabled when on laptop battery power."
 msgstr "在使用电池时是否启用系统的低电量模式。"
 
 #: ../data/gnome-power-manager.schemas.in.h:40
@@ -317,15 +367,21 @@ msgid "If the user should be notified when the AC adapter is disconnected."
 msgstr "移除交流电源适配器时是否应通知用户"
 
 #: ../data/gnome-power-manager.schemas.in.h:43
-msgid "If time based notifications should be used. If set to false, then the percentage change is used instead, which may fix a broken ACPI BIOS."
-msgstr "是否使用基于时间的通知。如果此选项被设定为 false，那么将会使用百分比改变来代替，这样可能能修正某些有问题的 ACPI BIOS。"
+msgid ""
+"If time based notifications should be used. If set to false, then the "
+"percentage change is used instead, which may fix a broken ACPI BIOS."
+msgstr ""
+"是否使用基于时间的通知。如果此选项被设定为 false，那么将会使用百分比改变来代"
+"替，这样可能能修正某些有问题的 ACPI BIOS。"
 
 #: ../data/gnome-power-manager.schemas.in.h:44
 msgid "If we should show the CPU frequency scaling in the UI"
 msgstr "是否在用户界面中显示 CPU 频率调节"
 
 #: ../data/gnome-power-manager.schemas.in.h:45
-msgid "If we should show the CPU frequency scaling in the UI. Some people need to configure this for specific systems."
+msgid ""
+"If we should show the CPU frequency scaling in the UI. Some people need to "
+"configure this for specific systems."
 msgstr "是否在用户界面中显示 CPU 频率调节。一些人需要为特定的系统作此配置。"
 
 #: ../data/gnome-power-manager.schemas.in.h:46
@@ -341,15 +397,22 @@ msgid "If we should show the recalled battery warning for a broken battery"
 msgstr "是否为问题电池显示电池召回警告"
 
 #: ../data/gnome-power-manager.schemas.in.h:49
-msgid "If we should show the recalled battery warning for a broken battery. Set this to false only if you know your battery is okay."
-msgstr "是否为问题电池显示电池召回警告。如果您确知您的电池完好，将此项设置为 false。"
+msgid ""
+"If we should show the recalled battery warning for a broken battery. Set "
+"this to false only if you know your battery is okay."
+msgstr ""
+"是否为问题电池显示电池召回警告。如果您确知您的电池完好，将此项设置为 false。"
 
 #: ../data/gnome-power-manager.schemas.in.h:50
-msgid "If we should show the warning when we have a valid inhibit and configured to sleep on lid close"
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:51
-msgid "If we should show the warning when we have a valid inhibit and configured to sleep on lid close."
+msgid ""
+"If we should show the warning when we have a valid inhibit and configured to "
+"sleep on lid close."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:52
@@ -465,59 +528,112 @@ msgid "Suspend enabled"
 msgstr "挂起已启用"
 
 #: ../data/gnome-power-manager.schemas.in.h:80
-msgid "The DPMS method used to blank the screen when on AC power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "在使用交流电时使用的 DMPS 黑屏方法。可供选择的值有“default”、“standby”、“suspend”和“off”。"
+msgid ""
+"The DPMS method used to blank the screen when on AC power. Possible values "
+"are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"在使用交流电时使用的 DMPS 黑屏方法。可供选择的值"
+"有“default”、“standby”、“suspend”和“off”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:81
-msgid "The DPMS method used to blank the screen when on battery power. Possible values are \"default\", \"standby\", \"suspend\" and \"off\"."
-msgstr "在使用电池时使用的 DMPS 黑屏方法。可供选择的值有“default”、“standby”、“suspend”和“off”。"
+msgid ""
+"The DPMS method used to blank the screen when on battery power. Possible "
+"values are \"default\", \"standby\", \"suspend\" and \"off\"."
+msgstr ""
+"在使用电池时使用的 DMPS 黑屏方法。可供选择的值"
+"有“default”、“standby”、“suspend”和“off”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:82
-msgid "The action to take when the UPS is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "当 UPS 电量即将用尽时执行的动作。可供选择的值有“hibernate”、“suspend”、“shutdown”和“nothing”。"
+msgid ""
+"The action to take when the UPS is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"当 UPS 电量即将用尽时执行的动作。可供选择的值"
+"有“hibernate”、“suspend”、“shutdown”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:83
-msgid "The action to take when the UPS is low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "当 UPS 电量低时执行的动作。可供选择的值有“hibernate”、“suspend”、“shutdown”和“nothing”。"
+msgid ""
+"The action to take when the UPS is low. Possible values are \"hibernate\", "
+"\"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"当 UPS 电量低时执行的动作。可供选择的值"
+"有“hibernate”、“suspend”、“shutdown”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:84
-msgid "The action to take when the battery is critically low. Possible values are \"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
-msgstr "当电池电量即将用尽时执行的动作。可供选择的值有“hibernate”、“suspend”、“shutdown”和“nothing”"
+msgid ""
+"The action to take when the battery is critically low. Possible values are "
+"\"hibernate\", \"suspend\", \"shutdown\" and \"nothing\"."
+msgstr ""
+"当电池电量即将用尽时执行的动作。可供选择的值"
+"有“hibernate”、“suspend”、“shutdown”和“nothing”"
 
 #: ../data/gnome-power-manager.schemas.in.h:85
-msgid "The action to take when the laptop lid is closed and the laptop is on AC power. Possible values are \"suspend\", \"hibernate\", \"blank\" and \"nothing\"."
-msgstr "关闭笔记本上盖且笔记本正使用交流电源时应执行的动作。可供选择的值有“suspend”、“hibernate”、“blank”和“nothing”。"
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on AC "
+"power. Possible values are \"suspend\", \"hibernate\", \"blank\" and "
+"\"nothing\"."
+msgstr ""
+"关闭笔记本上盖且笔记本正使用交流电源时应执行的动作。可供选择的值"
+"有“suspend”、“hibernate”、“blank”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:86
-msgid "The action to take when the laptop lid is closed and the laptop is on battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", and \"nothing\"."
-msgstr "关闭笔记本上盖且笔记本正使用电池供电时应执行的动作。可供选择的值有“suspend”、“hibernate”、“blank”和“nothing”。"
+msgid ""
+"The action to take when the laptop lid is closed and the laptop is on "
+"battery power. Possible values are \"suspend\", \"hibernate\", \"blank\", "
+"and \"nothing\"."
+msgstr ""
+"关闭笔记本上盖且笔记本正使用电池供电时应执行的动作。可供选择的值"
+"有“suspend”、“hibernate”、“blank”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:87
-msgid "The action to take when the system hibernate button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "按下系统休眠按钮时应执行的动作。可供选择的值有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
+msgid ""
+"The action to take when the system hibernate button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"按下系统休眠按钮时应执行的动作。可供选择的值"
+"有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:88
-msgid "The action to take when the system power button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "按下系统电源按钮时应执行的动作。可供选择的值有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
+msgid ""
+"The action to take when the system power button is pressed. Possible values "
+"are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing"
+"\"."
+msgstr ""
+"按下系统电源按钮时应执行的动作。可供选择的值"
+"有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:89
-msgid "The action to take when the system suspend button is pressed. Possible values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and \"nothing\"."
-msgstr "按下系统挂起按钮时应执行的动作。可供选择的值有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
+msgid ""
+"The action to take when the system suspend button is pressed. Possible "
+"values are \"suspend\", \"hibernate\", \"interactive\", \"shutdown\" and "
+"\"nothing\"."
+msgstr ""
+"按下系统挂起按钮时应执行的动作。可供选择的值"
+"有“suspend”、“hibernate”、“interactive”、“shutdown”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:90
-msgid "The amount of time in seconds before the display goes to sleep when the computer is on AC power."
+msgid ""
+"The amount of time in seconds before the display goes to sleep when the "
+"computer is on AC power."
 msgstr "使用交流电源时显示器转入睡眠状态前等待的时间秒数"
 
 #: ../data/gnome-power-manager.schemas.in.h:91
-msgid "The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep."
+msgid ""
+"The amount of time in seconds the computer on AC power needs to be inactive "
+"before it goes to sleep."
 msgstr "使用交流电源时在转入睡眠状态前计算机需空闲的时间秒数。"
 
 #: ../data/gnome-power-manager.schemas.in.h:92
-msgid "The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep."
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before it goes to sleep."
 msgstr "使用电池时在转入睡眠状态前计算机需空闲的时间秒数。"
 
 #: ../data/gnome-power-manager.schemas.in.h:93
-msgid "The amount of time in seconds the computer on battery power needs to be inactive before the display goes to sleep."
+msgid ""
+"The amount of time in seconds the computer on battery power needs to be "
+"inactive before the display goes to sleep."
 msgstr "使用电池时在显示器转入睡眠状态前计算机需空闲的时间秒数。"
 
 #: ../data/gnome-power-manager.schemas.in.h:94
@@ -529,19 +645,27 @@ msgid "The amount the light sensors should contribute to the brightness."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:96
-msgid "The brightness of the display when on AC power. Possible values are between 0 and 100."
+msgid ""
+"The brightness of the display when on AC power. Possible values are between "
+"0 and 100."
 msgstr "使用交流电源时显示屏的亮度。有效值可从 0 到 100。"
 
 #: ../data/gnome-power-manager.schemas.in.h:97
-msgid "The brightness of the display when on battery power. Possible values are between 0 and 100."
+msgid ""
+"The brightness of the display when on battery power. Possible values are "
+"between 0 and 100."
 msgstr "使用电池供电时显示屏的亮度。有效值可从 0 到 100。"
 
 #: ../data/gnome-power-manager.schemas.in.h:98
-msgid "The brightness of the keyboard when on AC power. Possible values are between 0 and 100."
+msgid ""
+"The brightness of the keyboard when on AC power. Possible values are between "
+"0 and 100."
 msgstr "使用交流电源时键盘的亮度。有效值可从 0 到 100。"
 
 #: ../data/gnome-power-manager.schemas.in.h:99
-msgid "The brightness of the keyboard when on battery power. Possible values are between 0 and 100."
+msgid ""
+"The brightness of the keyboard when on battery power. Possible values are "
+"between 0 and 100."
 msgstr "使用电池供电时键盘的亮度。有效值可从 0 到 100。"
 
 #: ../data/gnome-power-manager.schemas.in.h:100
@@ -549,11 +673,14 @@ msgid "The brightness of the screen when idle"
 msgstr "空闲时的屏幕亮度"
 
 #: ../data/gnome-power-manager.schemas.in.h:101
-msgid "The calibration of the light sensors so that the screen is bright enough"
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:102
-msgid "The calibration of the light sensors so that the screen is bright enough, in percent."
+msgid ""
+"The calibration of the light sensors so that the screen is bright enough, in "
+"percent."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:103
@@ -565,11 +692,14 @@ msgid "The cpufreq performance value to use when on battery power"
 msgstr "使用电池供电时的 cpufreq 性能值"
 
 #: ../data/gnome-power-manager.schemas.in.h:105
-msgid "The cpufreq performance value used to scale the processor when on AC power."
+msgid ""
+"The cpufreq performance value used to scale the processor when on AC power."
 msgstr "使用交流电源时用以调节处理器的 cpufreq 性能值。"
 
 #: ../data/gnome-power-manager.schemas.in.h:106
-msgid "The cpufreq performance value used to scale the processor when on battery power."
+msgid ""
+"The cpufreq performance value used to scale the processor when on battery "
+"power."
 msgstr "使用电池供电时用以调节处理器的 cpufreq 性能值。"
 
 #: ../data/gnome-power-manager.schemas.in.h:107
@@ -581,12 +711,22 @@ msgid "The cpufreq policy to use when on battery power"
 msgstr "使用电池供电时的 cpufreq 策略"
 
 #: ../data/gnome-power-manager.schemas.in.h:109
-msgid "The cpufreq policy used to scale the processor when on AC power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing."
-msgstr "使用交流电源时用以调节处理器的 cpufreq 策略。可供选择的值有 ondemand、conservative、powersave、userspace、performance 和 nothing。"
+msgid ""
+"The cpufreq policy used to scale the processor when on AC power. Possible "
+"values are ondemand, conservative, powersave, userspace, performance, "
+"nothing."
+msgstr ""
+"使用交流电源时用以调节处理器的 cpufreq 策略。可供选择的值有 ondemand、"
+"conservative、powersave、userspace、performance 和 nothing。"
 
 #: ../data/gnome-power-manager.schemas.in.h:110
-msgid "The cpufreq policy used to scale the processor when on battery power. Possible values are ondemand, conservative, powersave, userspace, performance, nothing."
-msgstr "使用电池供电时用以调节处理器的 cpufreq 策略。可供选择的值有 ondemand、conservative、powersave、userspace、performance 和 nothing。"
+msgid ""
+"The cpufreq policy used to scale the processor when on battery power. "
+"Possible values are ondemand, conservative, powersave, userspace, "
+"performance, nothing."
+msgstr ""
+"使用电池供电时用以调节处理器的 cpufreq 策略。可供选择的值有 ondemand、"
+"conservative、powersave、userspace、performance 和 nothing。"
 
 #: ../data/gnome-power-manager.schemas.in.h:111
 msgid "The default amount of time to dim the screen after idle"
@@ -613,7 +753,10 @@ msgid "The device name for the v4l device used as a brightness sensor backup"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:117
-msgid "The device name for the v4l device used as a brightness sensor backup. A value of 'default' uses the first discovered sensor, or devices can be specified, e.g. '/dev/video0'"
+msgid ""
+"The device name for the v4l device used as a brightness sensor backup. A "
+"value of 'default' uses the first discovered sensor, or devices can be "
+"specified, e.g. '/dev/video0'"
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:118
@@ -629,8 +772,12 @@ msgid "The invalid timeout for power actions"
 msgstr "电源动作的超时时间"
 
 #: ../data/gnome-power-manager.schemas.in.h:121
-msgid "The invalid timeout in ms for power actions. Set this longer if you get 'battery critical' messages when you unplug."
-msgstr "电源动作的超时时间(以毫秒记)。如果您在拔掉插头后收到‘电量极低’消息，请将此值设得更长一些。"
+msgid ""
+"The invalid timeout in ms for power actions. Set this longer if you get "
+"'battery critical' messages when you unplug."
+msgstr ""
+"电源动作的超时时间(以毫秒记)。如果您在拔掉插头后收到‘电量极低’消息，请将此值"
+"设得更长一些。"
 
 #: ../data/gnome-power-manager.schemas.in.h:122
 msgid "The maximum duration of time displayed on the x-axis of the graph."
@@ -641,28 +788,52 @@ msgid "The maximum time displayed on the graph"
 msgstr "图表显示的时间上限"
 
 #: ../data/gnome-power-manager.schemas.in.h:124
-msgid "The percentage of the battery when it is considered critical. Only valid when use_time_for_policy is false."
-msgstr "电池被视为电量将用尽时的电量百分比。仅在 use_time_for_policy 为 false 时有效。"
+msgid ""
+"The percentage of the battery when it is considered critical. Only valid "
+"when use_time_for_policy is false."
+msgstr ""
+"电池被视为电量将用尽时的电量百分比。仅在 use_time_for_policy 为 false 时有"
+"效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:125
-msgid "The percentage of the battery when it is considered low. Only valid when use_time_for_policy is false."
-msgstr "电池被视为低电量时的电量百分比。仅在 use_time_for_policy 被设定为 false 时有效。"
+msgid ""
+"The percentage of the battery when it is considered low. Only valid when "
+"use_time_for_policy is false."
+msgstr ""
+"电池被视为低电量时的电量百分比。仅在 use_time_for_policy 被设定为 false 时有"
+"效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:126
-msgid "The percentage of the battery when the critical action is performed. Only valid when use_time_for_policy is false."
-msgstr "执行电量将用尽动作时的电池电量百分比。仅在 use_time_for_policy 被设定为 false 时有效。"
+msgid ""
+"The percentage of the battery when the critical action is performed. Only "
+"valid when use_time_for_policy is false."
+msgstr ""
+"执行电量将用尽动作时的电池电量百分比。仅在 use_time_for_policy 被设定为 "
+"false 时有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:127
-msgid "The time remaining in seconds of the battery when critical action is taken. Only valid when use_time_for_policy is true."
-msgstr "执行电量将用尽动作时的电池剩余时间秒数。仅在 use_time_for_policy 被设定为 true 时有效。"
+msgid ""
+"The time remaining in seconds of the battery when critical action is taken. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"执行电量将用尽动作时的电池剩余时间秒数。仅在 use_time_for_policy 被设定为 "
+"true 时有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:128
-msgid "The time remaining in seconds of the battery when it is considered critical. Only valid when use_time_for_policy is true."
-msgstr "电池被视为电量将用尽时的剩余时间秒数。仅在 use_time_for_policy 被设定为 true 时有效。"
+msgid ""
+"The time remaining in seconds of the battery when it is considered critical. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"电池被视为电量将用尽时的剩余时间秒数。仅在 use_time_for_policy 被设定为 true "
+"时有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:129
-msgid "The time remaining in seconds of the battery when it is considered low. Only valid when use_time_for_policy is true."
-msgstr "电池被视为低电量时的剩余时间秒数。仅在 use_time_for_policy 被设定为 true 时有效。"
+msgid ""
+"The time remaining in seconds of the battery when it is considered low. Only "
+"valid when use_time_for_policy is true."
+msgstr ""
+"电池被视为低电量时的剩余时间秒数。仅在 use_time_for_policy 被设定为 true 时有"
+"效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:130
 msgid "The time remaining when action is taken"
@@ -677,16 +848,26 @@ msgid "The time remaining when low"
 msgstr "视为低电量时的剩余时间"
 
 #: ../data/gnome-power-manager.schemas.in.h:133
-msgid "The type of sleeping that should be performed when the computer is inactive. Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
-msgstr "计算机空闲时执行的睡眠动作类型。可供选的值有“hibernate”、“suspend”和“nothing”。"
+msgid ""
+"The type of sleeping that should be performed when the computer is inactive. "
+"Possible values are \"hibernate\", \"suspend\" and \"nothing\"."
+msgstr ""
+"计算机空闲时执行的睡眠动作类型。可供选的值"
+"有“hibernate”、“suspend”和“nothing”。"
 
 #: ../data/gnome-power-manager.schemas.in.h:134
-msgid "The version of the installed version of the schema. Do not edit this value, it is used so that configure changes between versions can be detected."
+msgid ""
+"The version of the installed version of the schema. Do not edit this value, "
+"it is used so that configure changes between versions can be detected."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:135
-msgid "This is the laptop panel screen brightness used when the session is idle. Only valid when use_time_for_policy is true."
-msgstr "这是在会话空闲时使用的笔记本电脑屏幕亮度值。仅在 use_time_for_policy 为 true 时有效。"
+msgid ""
+"This is the laptop panel screen brightness used when the session is idle. "
+"Only valid when use_time_for_policy is true."
+msgstr ""
+"这是在会话空闲时使用的笔记本电脑屏幕亮度值。仅在 use_time_for_policy 为 true "
+"时有效。"
 
 #: ../data/gnome-power-manager.schemas.in.h:136
 msgid "UPS critical low action"
@@ -709,40 +890,64 @@ msgid "Whether NetworkManager should be connected and disconnected on sleep."
 msgstr "睡眠时网络管理器是否应当连接或断开连接。"
 
 #: ../data/gnome-power-manager.schemas.in.h:141
-msgid "Whether NetworkManager should disconnect before suspending or hibernating and connect on resume."
+msgid ""
+"Whether NetworkManager should disconnect before suspending or hibernating "
+"and connect on resume."
 msgstr "网络管理器是否应当在挂起或休眠前断开网络连接，并在唤醒时恢复连接。"
 
 #: ../data/gnome-power-manager.schemas.in.h:142
-msgid "Whether or not niced processes should be considered on processor load calculation"
+msgid ""
+"Whether or not niced processes should be considered on processor load "
+"calculation"
 msgstr "在计算处理器负载时是否考虑优先级被提高的进程"
 
 #: ../data/gnome-power-manager.schemas.in.h:143
-msgid "Whether the GNOME keyring is locked before the computer enters hibernate. This means the keyring will have to be unlocked on resume."
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters hibernate. "
+"This means the keyring will have to be unlocked on resume."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:144
-msgid "Whether the GNOME keyring is locked before the computer enters suspend. This means the keyring will have to be unlocked on resume."
+msgid ""
+"Whether the GNOME keyring is locked before the computer enters suspend. This "
+"means the keyring will have to be unlocked on resume."
 msgstr ""
 
 #: ../data/gnome-power-manager.schemas.in.h:145
-msgid "Whether the screen is locked when the computer wakes up from a hibernate. Only used if lock_use_screensaver_settings is false."
-msgstr "计算机从休眠中恢复时是否锁定屏幕。仅在 lock_use_screensaver_settings 为 false 时使用。"
+msgid ""
+"Whether the screen is locked when the computer wakes up from a hibernate. "
+"Only used if lock_use_screensaver_settings is false."
+msgstr ""
+"计算机从休眠中恢复时是否锁定屏幕。仅在 lock_use_screensaver_settings 为 "
+"false 时使用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:146
-msgid "Whether the screen is locked when the computer wakes up from a suspend. Only used if lock_use_screensaver_settings is false."
-msgstr "计算机从挂起中恢复时是否锁定屏幕。仅在 lock_use_screensaver_settings 为 false 时使用。"
+msgid ""
+"Whether the screen is locked when the computer wakes up from a suspend. Only "
+"used if lock_use_screensaver_settings is false."
+msgstr ""
+"计算机从挂起中恢复时是否锁定屏幕。仅在 lock_use_screensaver_settings 为 "
+"false 时使用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:147
-msgid "Whether the screen is locked when the screen is turned off. Only used if lock_use_screensaver_settings is false."
-msgstr "在关闭显示器时是否锁定屏幕。仅当 lock_use_screensaver_settings 为 false 时使用。"
+msgid ""
+"Whether the screen is locked when the screen is turned off. Only used if "
+"lock_use_screensaver_settings is false."
+msgstr ""
+"在关闭显示器时是否锁定屏幕。仅当 lock_use_screensaver_settings 为 false 时使"
+"用。"
 
 #: ../data/gnome-power-manager.schemas.in.h:148
 msgid "Whether to hibernate, suspend or do nothing when inactive"
 msgstr "在空闲时是 hibernate，suspend 还是什么也不做"
 
 #: ../data/gnome-power-manager.schemas.in.h:149
-msgid "Whether to use the screen lock setting of gnome-screensaver to decide if the screen is locked after a hibernate, suspend or blank screen."
-msgstr "是否使用 gnome-screensaver 的屏幕锁定设置来决定在休眠、挂起或黑屏后是否锁定屏幕。"
+msgid ""
+"Whether to use the screen lock setting of gnome-screensaver to decide if the "
+"screen is locked after a hibernate, suspend or blank screen."
+msgstr ""
+"是否使用 gnome-screensaver 的屏幕锁定设置来决定在休眠、挂起或黑屏后是否锁定屏"
+"幕。"
 
 #: ../data/gnome-power-manager.schemas.in.h:150
 msgid "Whether to use time-based notifications"
@@ -805,15 +1010,11 @@ msgid "Graph type:"
 msgstr "图表类型："
 
 #: ../data/gpm-graph.glade.h:4
-#: ../src/gpm-statistics-core.c:61
 msgid "Power History"
 msgstr "电源历史"
 
-#: ../data/gpm-graph.glade.h:5
-#: ../src/gpm-info.c:293
-#: ../src/gpm-info.c:302
-#: ../src/gpm-info.c:311
-#: ../src/gpm-info.c:320
+#: ../data/gpm-graph.glade.h:5 ../src/gpm-info.c:293 ../src/gpm-info.c:302
+#: ../src/gpm-info.c:311 ../src/gpm-info.c:320
 msgid "Time since startup"
 msgstr "启动后的时间"
 
@@ -1169,8 +1370,7 @@ msgstr "DPMS 挂起"
 msgid "DPMS Off"
 msgstr "DPMS 关"
 
-#: ../src/gpm-info.c:294
-#: ../src/gpm-info.c:295
+#: ../src/gpm-info.c:294 ../src/gpm-info.c:295
 msgid "Power"
 msgstr "电量"
 
@@ -1182,11 +1382,8 @@ msgstr "预计时间"
 msgid "Time"
 msgstr "时间"
 
-#: ../src/gpm-info.c:312
-#: ../src/gpm-info.c:329
-#: ../src/gpm-info.c:346
-#: ../src/gpm-info.c:364
-#: ../src/gpm-info.c:381
+#: ../src/gpm-info.c:312 ../src/gpm-info.c:329 ../src/gpm-info.c:346
+#: ../src/gpm-info.c:364 ../src/gpm-info.c:381
 msgid "Battery percentage"
 msgstr "电量百分比"
 
@@ -1202,46 +1399,35 @@ msgstr "电池电压"
 msgid "Voltage"
 msgstr "电压"
 
-#: ../src/gpm-info.c:330
-#: ../src/gpm-info.c:365
+#: ../src/gpm-info.c:330 ../src/gpm-info.c:365
 msgid "Accuracy of reading"
 msgstr "读取精度"
 
-#: ../src/gpm-info.c:331
-#: ../src/gpm-info.c:348
-#: ../src/gpm-info.c:366
+#: ../src/gpm-info.c:331 ../src/gpm-info.c:348 ../src/gpm-info.c:366
 #: ../src/gpm-info.c:383
 msgid "Valid data"
 msgstr "可用数据"
 
-#: ../src/gpm-info.c:332
-#: ../src/gpm-info.c:349
-#: ../src/gpm-info.c:367
+#: ../src/gpm-info.c:332 ../src/gpm-info.c:349 ../src/gpm-info.c:367
 #: ../src/gpm-info.c:384
 msgid "No data"
 msgstr "无数据"
 
-#: ../src/gpm-info.c:336
-#: ../src/gpm-info.c:354
-#: ../src/gpm-info.c:371
+#: ../src/gpm-info.c:336 ../src/gpm-info.c:354 ../src/gpm-info.c:371
 #: ../src/gpm-info.c:389
 msgid "Start point"
 msgstr "起点"
 
-#: ../src/gpm-info.c:340
-#: ../src/gpm-info.c:358
-#: ../src/gpm-info.c:375
+#: ../src/gpm-info.c:340 ../src/gpm-info.c:358 ../src/gpm-info.c:375
 #: ../src/gpm-info.c:393
 msgid "Stop point"
 msgstr "终点"
 
-#: ../src/gpm-info.c:347
-#: ../src/gpm-info.c:382
+#: ../src/gpm-info.c:347 ../src/gpm-info.c:382
 msgid "Average time elapsed"
 msgstr ""
 
-#: ../src/gpm-info.c:350
-#: ../src/gpm-info.c:385
+#: ../src/gpm-info.c:350 ../src/gpm-info.c:385
 msgid "Extrapolated data"
 msgstr ""
 
@@ -1315,9 +1501,7 @@ msgstr "多个应用程序已阻止 %s 发生。"
 msgid "Do not daemonize"
 msgstr "不运行守护程序"
 
-#: ../src/gpm-main.c:155
-#: ../src/gpm-prefs.c:107
-#: ../src/gpm-statistics.c:105
+#: ../src/gpm-main.c:155 ../src/gpm-prefs.c:107 ../src/gpm-statistics.c:105
 msgid "Show extra debugging information"
 msgstr "显示额外的调试信息"
 
@@ -1330,7 +1514,8 @@ msgid "Exit after a small delay (for debugging)"
 msgstr "在短暂暂停后退出(用于调试)"
 
 #: ../src/gpm-main.c:161
-msgid "Exit after a the manager has loaded (for debugging)"
+#, fuzzy
+msgid "Exit after the manager has loaded (for debugging)"
 msgstr "在管理器加载后退出(用于调试)"
 
 #: ../src/gpm-main.c:163
@@ -1351,48 +1536,44 @@ msgstr "请求 %s"
 msgid "Perform action anyway"
 msgstr "无论如何均执行动作"
 
-#: ../src/gpm-manager.c:311
-#: ../src/gpm-manager.c:337
-#: ../src/gpm-manager.c:362
-#: ../src/gpm-manager.c:388
-#: ../src/gpm-manager.c:420
+#: ../src/gpm-manager.c:311 ../src/gpm-manager.c:337 ../src/gpm-manager.c:362
+#: ../src/gpm-manager.c:388 ../src/gpm-manager.c:420
 msgid "Action forbidden"
 msgstr "动作已被禁用"
 
-#: ../src/gpm-manager.c:312
-#: ../src/gpm-manager.c:363
-#: ../src/gpm-manager.c:421
+#: ../src/gpm-manager.c:312 ../src/gpm-manager.c:363 ../src/gpm-manager.c:421
 msgid "Policy timeout is not valid. Please wait a few seconds and try again."
 msgstr ""
 
-#: ../src/gpm-manager.c:324
-#: ../src/gpm-manager.c:375
+#: ../src/gpm-manager.c:324 ../src/gpm-manager.c:375
 msgid "Action disallowed"
 msgstr "动作不被许可"
 
 #: ../src/gpm-manager.c:325
-msgid "Suspend support has been disabled. Contact your administrator for more details."
+msgid ""
+"Suspend support has been disabled. Contact your administrator for more "
+"details."
 msgstr ""
 
 #: ../src/gpm-manager.c:338
 msgid "Suspend is not available on this computer."
 msgstr "此计算机上挂起不可用。"
 
-#: ../src/gpm-manager.c:346
-#: ../src/gpm-manager.c:725
+#: ../src/gpm-manager.c:346 ../src/gpm-manager.c:725
 msgid "Suspending computer"
 msgstr "挂起计算机"
 
 #: ../src/gpm-manager.c:376
-msgid "Hibernate support has been disabled. Contact your administrator for more details."
+msgid ""
+"Hibernate support has been disabled. Contact your administrator for more "
+"details."
 msgstr ""
 
 #: ../src/gpm-manager.c:389
 msgid "Hibernate is not available on this computer."
 msgstr "此计算机上休眠不可用。"
 
-#: ../src/gpm-manager.c:397
-#: ../src/gpm-manager.c:737
+#: ../src/gpm-manager.c:397 ../src/gpm-manager.c:737
 msgid "Hibernating computer"
 msgstr "休眠计算机"
 
@@ -1408,8 +1589,7 @@ msgstr "关闭计算机"
 msgid "GNOME interactive logout"
 msgstr "GNOME 交互式注销"
 
-#: ../src/gpm-manager.c:725
-#: ../src/gpm-manager.c:737
+#: ../src/gpm-manager.c:725 ../src/gpm-manager.c:737
 msgid "System idle"
 msgstr "系统空闲"
 
@@ -1463,8 +1643,7 @@ msgstr "UPS 电量低"
 msgid "You have approximately <b>%s</b> of remaining UPS backup power (%d%%)"
 msgstr "您的 UPS 备用电源的剩余电量大约可维持 <b>%s</b>，为总电量的 %d%%"
 
-#: ../src/gpm-manager.c:1350
-#: ../src/gpm-manager.c:1450
+#: ../src/gpm-manager.c:1350 ../src/gpm-manager.c:1450
 msgid "Mouse battery low"
 msgstr "鼠标电量低"
 
@@ -1473,8 +1652,7 @@ msgstr "鼠标电量低"
 msgid "The wireless mouse attached to this computer is low in power (%d%%)"
 msgstr "连接到此计算机的无线鼠标电量不足(仅剩 %d%%)"
 
-#: ../src/gpm-manager.c:1353
-#: ../src/gpm-manager.c:1455
+#: ../src/gpm-manager.c:1353 ../src/gpm-manager.c:1455
 msgid "Keyboard battery low"
 msgstr "键盘电量低"
 
@@ -1483,8 +1661,7 @@ msgstr "键盘电量低"
 msgid "The wireless keyboard attached to this computer is low in power (%d%%)"
 msgstr "连接到此计算机的无线键盘电量不足(仅剩 %d%%)"
 
-#: ../src/gpm-manager.c:1356
-#: ../src/gpm-manager.c:1460
+#: ../src/gpm-manager.c:1356 ../src/gpm-manager.c:1460
 msgid "PDA battery low"
 msgstr "PDA 电量低"
 
@@ -1493,8 +1670,7 @@ msgstr "PDA 电量低"
 msgid "The PDA attached to this computer is low in power (%d%%)"
 msgstr "连接到此计算机的 PDA 电量不足(仅剩 %d%%)"
 
-#: ../src/gpm-manager.c:1359
-#: ../src/gpm-manager.c:1465
+#: ../src/gpm-manager.c:1359 ../src/gpm-manager.c:1465
 msgid "Cell phone battery low"
 msgstr "手机电池电量低"
 
@@ -1507,8 +1683,7 @@ msgstr "连接到此计算机的手机电量不足(仅剩 %d%%)"
 msgid "a short time"
 msgstr ""
 
-#: ../src/gpm-manager.c:1410
-#: ../src/gpm-manager.c:1496
+#: ../src/gpm-manager.c:1410 ../src/gpm-manager.c:1496
 msgid "Laptop battery critically low"
 msgstr "笔记本电池电量将用尽"
 
@@ -1536,62 +1711,95 @@ msgstr ""
 msgid "You have approximately <b>%s</b> of remaining battery life (%d%%). %s"
 msgstr "您的电池剩余电量大约还可维持 <b>%s</b>，为总电量的 %d%%。%s"
 
-#: ../src/gpm-manager.c:1443
-#: ../src/gpm-manager.c:1528
+#: ../src/gpm-manager.c:1443 ../src/gpm-manager.c:1528
 msgid "UPS critically low"
 msgstr "UPS 电量将用尽"
 
 #: ../src/gpm-manager.c:1445
 #, c-format
-msgid "You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC power to your computer to avoid losing data."
-msgstr "您的 UPS 剩余电量大约可维持 <b>%s</b>，为总电量的 %d%%。请恢复交流电源以避免丢失数据。"
+msgid ""
+"You have approximately <b>%s</b> of remaining UPS power (%d%%). Restore AC "
+"power to your computer to avoid losing data."
+msgstr ""
+"您的 UPS 剩余电量大约可维持 <b>%s</b>，为总电量的 %d%%。请恢复交流电源以避免"
+"丢失数据。"
 
 #: ../src/gpm-manager.c:1451
 #, c-format
-msgid "The wireless mouse attached to this computer is very low in power (%d%%). This device will soon stop functioning if not charged."
-msgstr "连接到此计算机的无线鼠标电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快停止工作。"
+msgid ""
+"The wireless mouse attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"连接到此计算机的无线鼠标电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很"
+"快停止工作。"
 
 #: ../src/gpm-manager.c:1456
 #, c-format
-msgid "The wireless keyboard attached to this computer is very low in power (%d%%). This device will soon stop functioning if not charged."
-msgstr "连接到此计算机的无线键盘电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快停止工作。"
+msgid ""
+"The wireless keyboard attached to this computer is very low in power (%d%%). "
+"This device will soon stop functioning if not charged."
+msgstr ""
+"连接到此计算机的无线键盘电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很"
+"快停止工作。"
 
 #: ../src/gpm-manager.c:1461
 #, c-format
-msgid "The PDA attached to this computer is very low in power (%d%%). This device will soon stop functioning if not charged."
-msgstr "连接到此计算机的 PDA 电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快停止工作。"
+msgid ""
+"The PDA attached to this computer is very low in power (%d%%). This device "
+"will soon stop functioning if not charged."
+msgstr ""
+"连接到此计算机的 PDA 电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快"
+"停止工作。"
 
 #: ../src/gpm-manager.c:1466
 #, c-format
-msgid "Your cell phone is very low in power (%d%%). This device will soon stop functioning if not charged."
-msgstr "您的手机电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快停止工作。"
+msgid ""
+"Your cell phone is very low in power (%d%%). This device will soon stop "
+"functioning if not charged."
+msgstr ""
+"您的手机电量严重不足(仅剩 %d%%)。如果不充电的话，此设备将会很快停止工作。"
 
 #: ../src/gpm-manager.c:1503
-msgid "The battery is below the critical level and this computer will <b>power-off</b> when the battery becomes completely empty."
+msgid ""
+"The battery is below the critical level and this computer will <b>power-off</"
+"b> when the battery becomes completely empty."
 msgstr "电池的电量将用尽，电池的电量完全用尽时计算机将会<b>关机</b>。"
 
 #: ../src/gpm-manager.c:1508
-msgid "The battery is below the critical level and this computer is about to suspend.<br><b>NOTE:</b> A small amount of power is required to keep your computer in a suspended state."
-msgstr "电池的电量将用尽，计算机将开始挂起。<br><b>注意：</b>将您的计算机保持在挂起状态也需要一点电量。"
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"suspend.<br><b>NOTE:</b> A small amount of power is required to keep your "
+"computer in a suspended state."
+msgstr ""
+"电池的电量将用尽，计算机将开始挂起。<br><b>注意：</b>将您的计算机保持在挂起状"
+"态也需要一点电量。"
 
 #: ../src/gpm-manager.c:1514
-msgid "The battery is below the critical level and this computer is about to hibernate."
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"hibernate."
 msgstr "电池的电量将用尽，计算机将开始休眠。"
 
 #: ../src/gpm-manager.c:1518
-msgid "The battery is below the critical level and this computer is about to shutdown."
+msgid ""
+"The battery is below the critical level and this computer is about to "
+"shutdown."
 msgstr "电池的电量将用尽，计算机将开始关机。"
 
 #: ../src/gpm-manager.c:1535
-msgid "The UPS is below the critical level and this computer will <b>power-off</b> when the UPS becomes completely empty."
+msgid ""
+"The UPS is below the critical level and this computer will <b>power-off</b> "
+"when the UPS becomes completely empty."
 msgstr "UPS 电量将用尽。UPS 电量完全用尽时计算将会<b>关机</b>。"
 
 #: ../src/gpm-manager.c:1540
-msgid "The UPS is below the critical level and this computer is about to hibernate."
+msgid ""
+"The UPS is below the critical level and this computer is about to hibernate."
 msgstr "UPS 电量将用尽，计算机将开始休眠到硬盘。"
 
 #: ../src/gpm-manager.c:1544
-msgid "The UPS is below the critical level and this computer is about to shutdown."
+msgid ""
+"The UPS is below the critical level and this computer is about to shutdown."
 msgstr "UPS 电量将用尽，计算机将开始关机。"
 
 #: ../src/gpm-manager.c:1650
@@ -1600,7 +1808,8 @@ msgstr "安装问题！"
 
 #: ../src/gpm-manager.c:1651
 msgid ""
-"The configuration defaults for GNOME Power Manager have not been installed correctly.\n"
+"The configuration defaults for GNOME Power Manager have not been installed "
+"correctly.\n"
 "Please contact your computer administrator."
 msgstr ""
 
@@ -1612,7 +1821,8 @@ msgstr "电池可能已召回"
 #: ../src/gpm-notify.c:365
 #, c-format
 msgid ""
-"The battery in your computer may have been recalled by %s and you may be at risk.\n"
+"The battery in your computer may have been recalled by %s and you may be at "
+"risk.\n"
 "\n"
 "For more information visit the %s battery recall website."
 msgstr ""
@@ -1624,12 +1834,8 @@ msgstr ""
 msgid "Visit recall website"
 msgstr "浏览召回网站"
 
-#: ../src/gpm-notify.c:386
-#: ../src/gpm-notify.c:420
-#: ../src/gpm-notify.c:454
-#: ../src/gpm-notify.c:485
-#: ../src/gpm-notify.c:515
-#: ../src/gpm-notify.c:545
+#: ../src/gpm-notify.c:386 ../src/gpm-notify.c:420 ../src/gpm-notify.c:454
+#: ../src/gpm-notify.c:485 ../src/gpm-notify.c:515 ../src/gpm-notify.c:545
 #: ../src/gpm-notify.c:581
 msgid "Do not show me this again"
 msgstr "不要再显示此消息"
@@ -1640,7 +1846,9 @@ msgstr "电池可能已损坏"
 
 #: ../src/gpm-notify.c:407
 #, c-format
-msgid "Your battery has a very low capacity (%i%%), which means that it may be old or broken."
+msgid ""
+"Your battery has a very low capacity (%i%%), which means that it may be old "
+"or broken."
 msgstr ""
 
 #: ../src/gpm-notify.c:439
@@ -1649,7 +1857,8 @@ msgstr "抑制警告！"
 
 #: ../src/gpm-notify.c:440
 msgid ""
-"Your laptop will not sleep if you shut the lid as it is currently inhibited.\n"
+"Your laptop will not sleep if you shut the lid as it is currently "
+"inhibited.\n"
 "Some laptops can overheat if they do not sleep when the lid is closed."
 msgstr ""
 
@@ -1836,8 +2045,7 @@ msgstr "不好"
 msgid "Capacity:"
 msgstr "容量："
 
-#: ../src/gpm-cell.c:565
-#: ../src/gpm-cell.c:588
+#: ../src/gpm-cell.c:565 ../src/gpm-cell.c:588
 msgid "Current charge:"
 msgstr "当前电量："
 
@@ -1845,8 +2053,7 @@ msgstr "当前电量："
 msgid "Last full charge:"
 msgstr "上次充满："
 
-#: ../src/gpm-cell.c:576
-#: ../src/gpm-cell.c:593
+#: ../src/gpm-cell.c:576 ../src/gpm-cell.c:593
 msgid "Design charge:"
 msgstr "设计充电："
 
@@ -1878,8 +2085,7 @@ msgstr "PDA"
 msgid "Cell phones"
 msgstr "手机"
 
-#: ../src/gpm-cell-unit.c:259
-#: ../src/gpm-cell-unit.c:275
+#: ../src/gpm-cell-unit.c:259 ../src/gpm-cell-unit.c:275
 #: ../src/gpm-statistics-core.c:739
 msgid "Unknown"
 msgstr "未知"
@@ -1908,40 +2114,33 @@ msgstr "PDA"
 msgid "Cell phone"
 msgstr "手机"
 
-#: ../src/gpm-prefs.c:111
-#: ../test/gpm-inhibit-test.c:186
+#: ../src/gpm-prefs.c:111 ../test/gpm-inhibit-test.c:186
 msgid "GNOME Power Preferences"
 msgstr "GNOME 电源首选项"
 
 #. The text that should appear in the action combo boxes
-#: ../src/gpm-prefs-core.c:82
-#: ../src/gpm-statistics-core.c:95
+#: ../src/gpm-prefs-core.c:82 ../src/gpm-statistics-core.c:95
 msgid "Ask me"
 msgstr "询问"
 
-#: ../src/gpm-prefs-core.c:83
-#: ../src/gpm-statistics-core.c:96
+#: ../src/gpm-prefs-core.c:83 ../src/gpm-statistics-core.c:96
 msgid "Suspend"
 msgstr "挂起"
 
-#: ../src/gpm-prefs-core.c:84
-#: ../src/gpm-statistics-core.c:97
+#: ../src/gpm-prefs-core.c:84 ../src/gpm-statistics-core.c:97
 msgid "Shutdown"
 msgstr "关机"
 
-#: ../src/gpm-prefs-core.c:85
-#: ../src/gpm-statistics-core.c:98
+#: ../src/gpm-prefs-core.c:85 ../src/gpm-statistics-core.c:98
 msgid "Hibernate"
 msgstr "休眠"
 
-#: ../src/gpm-prefs-core.c:86
-#: ../src/gpm-statistics-core.c:99
+#: ../src/gpm-prefs-core.c:86 ../src/gpm-statistics-core.c:99
 msgid "Blank screen"
 msgstr "黑屏"
 
 #. The text that should appear in the processor combo box
-#: ../src/gpm-prefs-core.c:87
-#: ../src/gpm-prefs-core.c:90
+#: ../src/gpm-prefs-core.c:87 ../src/gpm-prefs-core.c:90
 #: ../src/gpm-statistics-core.c:100
 msgid "Do nothing"
 msgstr "不执行动作"
@@ -1971,32 +2170,43 @@ msgid "GNOME Power Statistics"
 msgstr "GNOME 电源统计"
 
 #: ../src/gpm-statistics-core.c:60
-msgid "Charge History"
+#, fuzzy
+msgid "Charge history"
 msgstr "充电历史"
 
+#: ../src/gpm-statistics-core.c:61
+#, fuzzy
+msgid "Power history"
+msgstr "电源历史"
+
 #: ../src/gpm-statistics-core.c:62
-msgid "Voltage History"
+#, fuzzy
+msgid "Voltage history"
 msgstr "电压历史"
 
 #: ../src/gpm-statistics-core.c:63
-msgid "Estimated Time History"
+#, fuzzy
+msgid "Estimated time history"
 msgstr "预计时间历史"
 
 #: ../src/gpm-statistics-core.c:64
-msgid "Profiled Charge Time"
-msgstr "充电时间图示"
+#, fuzzy
+msgid "Charge time profile"
+msgstr "充电时间："
 
 #: ../src/gpm-statistics-core.c:65
-msgid "Profiled Charge Accuracy"
-msgstr "充电精度图示"
+#, fuzzy
+msgid "Discharge time profile"
+msgstr "放电时间："
 
 #: ../src/gpm-statistics-core.c:66
-msgid "Profiled Discharge Time"
-msgstr "放电时间图示"
+msgid "Charge time accuracy profile"
+msgstr ""
 
 #: ../src/gpm-statistics-core.c:67
-msgid "Profiled Discharge Accuracy"
-msgstr "放电精度图示"
+#, fuzzy
+msgid "Discharge time accuracy profile"
+msgstr "放电时间："
 
 #: ../src/gpm-statistics-core.c:810
 msgid "Could not connect to GNOME Power Manager."
@@ -2060,6 +2270,18 @@ msgstr "挂起(_S)"
 msgid "Hi_bernate"
 msgstr "休眠(_B)"
 
+#~ msgid "Profiled Charge Time"
+#~ msgstr "充电时间图示"
+
+#~ msgid "Profiled Charge Accuracy"
+#~ msgstr "充电精度图示"
+
+#~ msgid "Profiled Discharge Time"
+#~ msgstr "放电时间图示"
+
+#~ msgid "Profiled Discharge Accuracy"
+#~ msgstr "放电精度图示"
+
 #~ msgid ""
 #~ "If the laptop should be configured as if it is using a permanent external "
 #~ "monitor"
@@ -2073,12 +2295,16 @@ msgstr "休眠(_B)"
 #~ msgstr ""
 #~ "是否将笔记本电脑配置成在使用扩充座或外接显示器时不执行变暗和 DPMS 关的动"
 #~ "作。大多数笔记本电脑和台式机用户应当选择 FALSE。"
+
 #~ msgid "%iW"
 #~ msgstr "%iW"
+
 #~ msgid "%iV"
 #~ msgstr "%iV"
+
 #~ msgid "Resume"
 #~ msgstr "唤醒"
+
 #~ msgid "Power (mWh)"
 #~ msgstr "电量(mWh)"
 
@@ -2093,8 +2319,9 @@ msgstr "休眠(_B)"
 #, fuzzy
 #~ msgid "Battery may be invalid"
 #~ msgstr "电池可能已召回"
+
 #~ msgid "Power Preferences"
 #~ msgstr "电源首选项"
+
 #~ msgid "Power Inhibit Test"
 #~ msgstr "电源管理抑制测试"
-
