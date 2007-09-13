@@ -28,6 +28,9 @@
     <oaf_attribute name="bugzilla:product" type="string" value="gnome-power-manager"/>
     <oaf_attribute name="bugzilla:component" type="string" value="applets"/>
     <oaf_attribute name="bugzilla:version" type="string" value="@VERSION@"/>
-    <oaf_attribute name="bugzilla:other_binaries" type="string" value="gnome-brightness-applet"/>
+	<oaf_attribute name="bugzilla:other_binaries" type="string" value="gnome-brightness-applet"/>
+	<oaf_attribute name="bonobo:environment" type="stringv">
+		<item value="DBUS_SESSION_BUS_ADDRESS"/>
+	</oaf_attribute>
   </oaf_server>
 </oaf_info>
