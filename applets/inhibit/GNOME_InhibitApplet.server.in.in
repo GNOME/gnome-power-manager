@@ -13,6 +13,9 @@
     <oaf_attribute name="bugzilla:component" type="string" value="applets"/>
     <oaf_attribute name="bugzilla:version" type="string" value="@VERSION@"/>
     <oaf_attribute name="bugzilla:other_binaries" type="string" value="gnome-inhibit-applet"/>
+    <oaf_attribute name="bonobo:environment" type="stringv">
+        <item value="DBUS_SESSION_BUS_ADDRESS"/>
+    </oaf_attribute>
   </oaf_server>
   <oaf_server iid="OAFIID:GNOME_InhibitApplet" type="factory" location="OAFIID:GNOME_InhibitApplet_Factory">
     <oaf_attribute name="repo_ids" type="stringv">
